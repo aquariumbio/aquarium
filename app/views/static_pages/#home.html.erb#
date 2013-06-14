@@ -3,7 +3,6 @@
   <h1>BIOTURK</h1>
   <p>Your Protocols will be assimilated. Resistance is futile.</p>
 
-  <%= link_to "Log in", signin_path, class: "btn btn-large btn-primary" %>
   <%= link_to "Add New User", signup_path, class: "btn btn-large btn-primary" %>
 
 </div>
