@@ -1,0 +1,31 @@
+<h1>Objects</h1>
+
+<table class="table">
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Min</th>
+    <th>Max</th>
+    <th>Handler</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @object_types.each do |object_type| %>
+  <tr>
+    <td><%= object_type.name %></td>
+    <td><%= object_type.description %></td>
+    <td><%= object_type.min %></td>
+    <td><%= object_type.max %></td>
+    <td><%= object_type.handler %></td>
+    <td><%= link_to 'Show', object_type %></td>
+    <td><%= link_to 'Edit', edit_object_type_path(object_type) %></td>
+    <td><%= link_to 'Destroy', object_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Object type', new_object_type_path %>

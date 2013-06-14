@@ -1,5 +1,9 @@
 Bioturk::Application.routes.draw do
 
+  resources :object_types do 
+    resources :items
+  end
+
   root to: 'static_pages#home'
 
   match '/', to: 'static_pages#home'

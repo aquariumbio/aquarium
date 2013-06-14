@@ -189,3 +189,56 @@ input {
   }
 }
 
+/* objects */
+
+.object-description {
+  border: 1pt solid #999;
+  padding: 10px;
+  border-radius: 10px;
+  display: inline-block;
+  margin: 10px;
+}
+
+/* items */
+
+#current-inventory {
+  border: 1pt solid #999;
+  padding: 10px;
+  border-radius: 10px;
+  display: inline-block;
+  margin: 10px;
+
+  h3 {
+    font-size: 12pt;
+    text-align: center;
+  }
+}
+
+#add-to-inventory {
+  border: 1pt solid #999;
+  padding: 10px;
+  border-radius: 10px;
+  display: inline-block;
+  margin: 10px;
+
+  h3 {
+    font-size: 12pt;
+    text-align: center;
+  }
+
+  .field {
+    display: inline-block;
+    margin-right: 10px
+  }
+}
+
+.itemtable {
+  margin: 500;
+  width: 400px;
+}
+
+.new_item {
+  .field {
+    width: 100px;
+  }
+}

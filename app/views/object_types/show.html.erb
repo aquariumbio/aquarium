@@ -1,0 +1,92 @@
+<p id="notice"><%= notice %></p>
+
+<div class="object-description">
+
+<h1><%= @object_type.name %></h1>
+
+<p>
+  <b>Description:</b>
+  <%= @object_type.description %>
+</p>
+
+<p>
+  <b>Min:</b>
+  <%= @object_type.min %>
+</p>
+
+<p>
+  <b>Max:</b>
+  <%= @object_type.max %>
+</p>
+
+<p>
+  <b>Handler:</b>
+  <%= @object_type.handler %>
+</p>
+
+<p>
+  <b>Safety:</b>
+  <%= @object_type.safety %>
+</p>
+
+<p>
+  <b>Cleanup:</b>
+  <%= @object_type.cleanup %>
+</p>
+
+<p>
+  <b>Data:</b>
+  <%= @object_type.data %>
+</p>
+
+<p>
+  <b>Vendor:</b>
+  <%= @object_type.vendor %>
+</p>
+
+</div>
+
+<br />
+
+  <div id="current-inventory">
+    <h3>Current Inventory</h3>
+    <table class="table itemtable">
+      <tr>
+        <th>Location</th>
+        <th>Quantity</th>
+        <th></th>
+      </tr>
+    <% @object_type.items.each do |i| %>
+      <tr>
+        <td><%= i.location %></td>
+        <td><%= i.quantity %></td>
+        <td><%= link_to "delete", [@object_type, i], method: :delete, 
+                                  data: { confirm: "Really delete item?" } %>
+      </tr>
+    <% end %>
+    </table>
+  </div>
+
+  <br />
+
+  <div id="add-to-inventory">
+    <h3>Add to inventory</h3>
+    <%= form_for([@object_type, @object_type.items.build]) do |f| %>
+      <div class="field">
+        <%= f.label :location %>
+        <%= f.text_field :location %>
+      </div>
+      <div class="field">
+        <%= f.label :quantity %>
+        <%= f.number_field :quantity, value: 0 %>
+      </div>
+      <div class="actions">
+        <%= f.submit class: "btn btn-small" %>
+      </div>
+    <% end %>
+  </div>
+
+  <br />
+
+<%= link_to 'Edit', edit_object_type_path(@object_type) %> |
+<%= link_to 'Back', object_types_path %>

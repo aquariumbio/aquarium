@@ -1,0 +1,53 @@
+<%= form_for(@object_type) do |f| %>
+  <% if @object_type.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@object_type.errors.count, "error") %> prohibited this object_type from being saved:</h2>
+
+      <ul>
+      <% @object_type.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_field :description %>
+  </div>
+  <div class="field">
+    <%= f.label :min %><br />
+    <%= f.number_field :min %>
+  </div>
+  <div class="field">
+    <%= f.label :max %><br />
+    <%= f.number_field :max %>
+  </div>
+  <div class="field">
+    <%= f.label :handler %><br />
+    <%= f.text_field :handler %>
+  </div>
+  <div class="field">
+    <%= f.label :safety %><br />
+    <%= f.text_area :safety %>
+  </div>
+  <div class="field">
+    <%= f.label :cleanup %><br />
+    <%= f.text_area :cleanup %>
+  </div>
+  <div class="field">
+    <%= f.label :data %><br />
+    <%= f.text_area :data %>
+  </div>
+  <div class="field">
+    <%= f.label :vendor %><br />
+    <%= f.text_area :vendor %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

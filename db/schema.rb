@@ -11,7 +11,31 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130614163738) do
+ActiveRecord::Schema.define(:version => 20130614174803) do
+
+  create_table "items", :force => true do |t|
+    t.string   "location"
+    t.integer  "quantity"
+    t.integer  "object_type_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "items", ["object_type_id"], :name => "index_items_on_object_type_id"
+
+  create_table "object_types", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.integer  "min"
+    t.integer  "max"
+    t.string   "handler"
+    t.text     "safety"
+    t.text     "cleanup"
+    t.text     "data"
+    t.text     "vendor"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.string   "name"
