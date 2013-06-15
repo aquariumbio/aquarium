@@ -27,12 +27,22 @@ class ObjectTypesController < ApplicationController
   # GET /object_types/new
   # GET /object_types/new.json
   def new
+
     @object_type = ObjectType.new
+
+    @object_type.handler = "generic"
+    @object_type.min = 0
+    @object_type.max = 1
+    @object_type.safety = "No safety information"
+    @object_type.cleanup = "No cleanup information"
+    @object_type.data = "No data"
+    @object_type.vendor = "No vendor information"
 
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @object_type }
     end
+
   end
 
   # GET /object_types/1/edit
