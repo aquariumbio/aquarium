@@ -1,49 +1,13 @@
-<p id="notice"><%= notice %></p>
-
 <div class="object-description">
-
-<h1><%= @object_type.name %></h1>
-
-<p>
-  <b>Description:</b>
-  <%= @object_type.description %>
-</p>
-
-<p>
-  <b>Min:</b>
-  <%= @object_type.min %>
-</p>
-
-<p>
-  <b>Max:</b>
-  <%= @object_type.max %>
-</p>
-
-<p>
-  <b>Handler:</b>
-  <%= @object_type.handler %>
-</p>
-
-<p>
-  <b>Safety:</b>
-  <%= @object_type.safety %>
-</p>
-
-<p>
-  <b>Cleanup:</b>
-  <%= @object_type.cleanup %>
-</p>
-
-<p>
-  <b>Data:</b>
-  <%= @object_type.data %>
-</p>
-
-<p>
-  <b>Vendor:</b>
-  <%= @object_type.vendor %>
-</p>
-
+  <h1><%= @object_type.name %></h1>
+  <p><b>Description: </b><%= @object_type.description %></p>
+  <p><b>Min: </b>        <%= @object_type.min %></p>
+  <p><b>Max: </b>        <%= @object_type.max %></p>
+  <p><b>Handler: </b>    <%= @object_type.handler %></p>
+  <p><b>Safety: </b>     <%= @object_type.safety %></p>
+  <p><b>Cleanup: </b>    <%= @object_type.cleanup %></p>
+  <p><b>Data: </b>       <%= @object_type.data %></p>
+  <p><b>Vendor: </b>     <%= @object_type.vendor %></p>
 </div>
 
 <br />
@@ -59,9 +23,18 @@
     <% @object_type.items.each do |i| %>
       <tr>
         <td><%= i.location %></td>
-        <td><%= i.quantity %></td>
+        <td>
+          <%= form_tag(raw "/item?id="+i.id.to_s+"&oid="+@object_type.id.to_s) %>
+            <input name="quantity" 
+                   class="small-input" 
+                   type="number" 
+                   value=<%= i.quantity %>></input>
+            <input type="submit" name="quantity_update" 
+                   class="btn btn-small" value="update"></input>
+          </form>
+        </td>
         <td><%= link_to "delete", [@object_type, i], method: :delete, 
-                                  data: { confirm: "Really delete item?" } %>
+                                  data: { confirm: "Really delete item?" } %></td>
       </tr>
     <% end %>
     </table>

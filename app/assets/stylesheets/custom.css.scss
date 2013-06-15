@@ -242,6 +242,15 @@ input {
     font-size: 12pt;
     text-align: center;
   }
+
+  .small-input {
+    padding: 2px 2px 2px 8px;
+    border-radius: 5px;
+    width: 100px;
+  }
+  td {
+    padding: 5px 10px 0px 10px;
+  }
 }
 
 #add-to-inventory {
