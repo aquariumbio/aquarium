@@ -199,6 +199,36 @@ input {
   margin: 10px;
 }
 
+.new-object {
+  #name {
+    width: 200px;
+  }
+  #min {
+    width: 50px;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  #max {
+    width: 50px;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  #handler {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  .label {
+    padding-bottom: 0px;
+  }
+  .field {
+    margin: 0px;
+    line-height: 1px;
+  }
+  textarea {
+    height: 100px;
+  }  
+}
+
 /* items */
 
 #current-inventory {

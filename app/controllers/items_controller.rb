@@ -1,5 +1,7 @@
 class ItemsController < ApplicationController
 
+  before_filter :signed_in_user
+
   def create
     @object_type = ObjectType.find(params[:object_type_id])
     @item = @object_type.items.create(params[:item])

@@ -1,4 +1,7 @@
 class ObjectTypesController < ApplicationController
+
+  before_filter :signed_in_user
+
   # GET /object_types
   # GET /object_types.json
   def index
