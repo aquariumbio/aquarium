@@ -197,6 +197,9 @@ input {
   border-radius: 10px;
   display: inline-block;
   margin: 10px;
+  p {
+    line-height: 16px;
+  }
 }
 
 .new-object {
@@ -246,10 +249,17 @@ input {
   .small-input {
     padding: 2px 2px 2px 8px;
     border-radius: 5px;
-    width: 100px;
+    width: 60px;
+    margin: 0px 5px 0px 0px;
+  }
+  table {
+    margin-bottom: 0px;
   }
   td {
     padding: 5px 10px 0px 10px;
+  }
+  form {
+    height: 12px;
   }
 }
 
