@@ -192,7 +192,9 @@ input {
 /* objects */
 
 .object-description {
-  border: 1pt solid #999;
+
+  width: 100%;
+  border: 1pt solid #bbb;
   padding: 10px;
   border-radius: 10px;
   display: inline-block;
@@ -235,7 +237,8 @@ input {
 /* items */
 
 #current-inventory {
-  border: 1pt solid #999;
+  width: 95%;
+  border: 1pt solid #bbb;
   padding: 10px;
   border-radius: 10px;
   display: inline-block;
@@ -254,6 +257,7 @@ input {
   }
   table {
     margin-bottom: 0px;
+    width: 100%;
   }
   td {
     padding: 5px 10px 0px 10px;
@@ -264,7 +268,9 @@ input {
 }
 
 #add-to-inventory {
-  border: 1pt solid #999;
+
+  width: 100%;
+  border: 1pt solid #bbb;
   padding: 10px;
   border-radius: 10px;
   display: inline-block;
