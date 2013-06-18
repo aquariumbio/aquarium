@@ -21,12 +21,14 @@
     <h3>Current Inventory</h3>
     <table class="table itemtable">
       <tr>
+        <th>ID</th>
         <th>Location</th>
         <th>Quantity</th>
         <th></th>
       </tr>
     <% @object_type.items.each do |i| %>
       <tr>
+        <td><%= "%05d" % i.id %></td>
         <td><%= i.location %></td>
         <td>
           <%= form_tag(raw "/item?id="+i.id.to_s+"&oid="+@object_type.id.to_s) %>

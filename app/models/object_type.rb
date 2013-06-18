@@ -1,4 +1,5 @@
 class ObjectType < ActiveRecord::Base
+
   attr_accessible :cleanup, :data, :description, :handler, :max, :min, :name, :safety, :vendor
 
   validates :name, :presence => true
@@ -13,5 +14,13 @@ class ObjectType < ActiveRecord::Base
   end
 
   has_many :items, dependent: :destroy
+
+  def quantity
+    q = 0
+    self.items.each { |i|
+      q += i.quantity
+    }
+    return q
+  end
 
 end
