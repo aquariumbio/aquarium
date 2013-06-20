@@ -1,8 +1,9 @@
 class ObjectType < ActiveRecord::Base
 
-  attr_accessible :cleanup, :data, :description, :handler, :max, :min, :name, :safety, :vendor
+  attr_accessible :cleanup, :data, :description, :handler, :max, :min, :name, :safety, :vendor, :unit
 
   validates :name, :presence => true
+  validates :unit, :presence => true
   validates :min, :presence => true
   validates :max, :presence => true
   validates :description, :presence => true
