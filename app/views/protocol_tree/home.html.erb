@@ -1,0 +1,29 @@
+<h1>Protocol Tree</h1>
+
+<%= link_to "Run some js", "subtree", remote: true %>
+
+<p>
+  <%= link_to "Latest commit", @commits.first.html_url %>
+</p>
+
+<ul>
+  <% @tree.each do |x| %>
+
+    <% case x.type 
+
+      when 'blob' %>
+        <% if /\.pdl/.match(x.path) %>
+          <li>
+            <%= x.path %>
+          </li>
+        <% end %>
+
+      <% when 'tree' %>
+         <li>
+           <%= x.path %>/
+         </li>
+
+    <% end %>
+
+  <% end %>
+</ul>

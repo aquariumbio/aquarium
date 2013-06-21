@@ -1,5 +1,11 @@
 Bioturk::Application.routes.draw do
 
+  get "protocol_tree/home"
+
+  get "protocol_tree/subtree"
+
+  get "protocol_tree/raw"
+
   get "liason/get"
   get "liason/put"
   get "liason/adjust"

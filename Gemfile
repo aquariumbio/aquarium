@@ -13,6 +13,7 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
   gem 'bcrypt-ruby'
   gem 'will_paginate'
+  gem 'octokit'
 end
 
 gem 'jquery-rails'
