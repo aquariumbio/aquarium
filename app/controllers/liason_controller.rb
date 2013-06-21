@@ -1,6 +1,6 @@
 class LiasonController < ApplicationController
 
-  def get
+  def select
 
     @x = ObjectType.find_by_name(params[:name])
 
@@ -17,7 +17,7 @@ class LiasonController < ApplicationController
 
   end
 
-  def put
+  def update
 
     @x = ObjectType.find_by_name(params[:name])
 
@@ -29,11 +29,25 @@ class LiasonController < ApplicationController
         if !@item
           @item = { error: "item #{params[:item_id]} not found in db" }
         else
-          @item.quantity = params[:quantity]
+          if params[:quantity]
+            @item.quantity = params[:quantity]
+          else
+            @item.quantity = 0
+          end
           @item.save
         end
       else
-        @item = @x.items.create(location: params[:location], quantity: params[:quantity])
+        if params[:location]
+          loc = params[:location]
+        else
+          loc = "B1.000"
+        end
+        if params[:quantity]
+          q = params[:quantity]
+        else
+          q = 0
+        end
+        @item = @x.items.create(location: loc, quantity: q)
       end
     end
 

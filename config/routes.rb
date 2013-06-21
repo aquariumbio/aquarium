@@ -1,8 +1,7 @@
 Bioturk::Application.routes.draw do
 
-  get "liason/get"
-  get "liason/put"
-  get "liason/adjust"
+  get "liason/select"
+  get "liason/update"
 
   resources :object_types do 
     resources :items do
