@@ -1,31 +1,7 @@
 <h1>Protocol Tree</h1>
 
-<%= link_to "Run some js", "subtree", remote: true %>
+<div id=<%= htmlstring(@sha) %>></div>
 
-<p>
-  <%= link_to "Latest commit", @commits.first.html_url %>
-</p>
-
-<ul>
-  <% @tree.each do |x| %>
-
-    <% case x.type 
-
-      when 'blob' %>
-        <% if /\.pdl/.match(x.path) %>
-          <li>
-            <%= x.path %>
-          </li>
-        <% end %>
-
-      <% when 'tree' %>
-         <li>
-           <div id=<%= raw("\"" + x.sha  + "\"") %>>
-             <%= link_to x.path, "subtree", remote: true, sha: x.sha %>/
-           </div>
-         </li>
-
-    <% end %>
-
-  <% end %>
-</ul>
+<script>
+<%= render( partial: 'protocol_tree/subtree.js.erb', formats: :js, remote: true ) %>
+</script>

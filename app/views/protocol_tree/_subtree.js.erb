@@ -1,0 +1,25 @@
+  html = "<ul>";
+
+  <% @tree.each do |x| %>
+
+    <% case x.type 
+
+      when 'blob' %>
+        <% if /\.pdl/.match(x.path) %>
+          html += "<li>" + <%= htmlstring(x.path) %> + "</li>";
+        <% end %>
+
+      <% when 'tree' %>
+         html += "<li>";
+           html += "<div id=" + <%= htmlstring(x.sha) %> + ">";
+           html += '<%= link_to x.path, protocol_tree_subtree_path(sha: x.sha), remote: true %>' + "/";
+           html +="</div>";
+         html += "</li>";
+
+    <% end %>
+
+  <% end %>
+
+  html += "</ul>";
+
+document.getElementById(<%= htmlstring(@sha) %>).innerHTML += html;

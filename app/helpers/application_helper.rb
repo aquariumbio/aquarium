@@ -10,4 +10,8 @@ module ApplicationHelper
     end
   end
 
+  def htmlstring x
+    raw("\""+x+"\"")
+  end
+
 end
