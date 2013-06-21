@@ -1,10 +1,9 @@
 Bioturk::Application.routes.draw do
 
   get "protocol_tree/home"
-
   get "protocol_tree/subtree"
-
   get "protocol_tree/raw"
+  #match '/protocol_tree/home', to: 'protocol_tree#home'
 
   get "liason/get"
   get "liason/put"

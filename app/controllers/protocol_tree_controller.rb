@@ -1,5 +1,7 @@
 class ProtocolTreeController < ApplicationController
 
+  before_filter :signed_in_user
+
   def home
 
     client = Octokit::Client.new(login:'klavins',password:'a22imil@te')

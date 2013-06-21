@@ -20,7 +20,9 @@
 
       <% when 'tree' %>
          <li>
-           <%= x.path %>/
+           <div id=<%= raw("\"" + x.sha  + "\"") %>>
+             <%= link_to x.path, "subtree", remote: true, sha: x.sha %>/
+           </div>
          </li>
 
     <% end %>
