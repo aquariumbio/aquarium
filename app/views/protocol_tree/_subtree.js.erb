@@ -1,3 +1,8 @@
+
+el = document.getElementById(<%= htmlstring(@sha) %>);
+
+if ( el.className != 'open-directory' ) {
+
   html = "<ul>";
 
   <% @tree.each do |x| %>
@@ -6,14 +11,15 @@
 
       when 'blob' %>
         <% if /\.pdl/.match(x.path) %>
-          html += "<li>" + <%= htmlstring(x.path) %> + "</li>";
+          html += "<li>" 
+                + '<%= link_to x.path, protocol_tree_raw_path(sha: x.sha, format: 'xml'), target: 'pdl' %>' + "</li>";
         <% end %>
 
       <% when 'tree' %>
          html += "<li>";
-           html += "<div id=" + <%= htmlstring(x.sha) %> + ">";
-           html += '<%= link_to x.path, protocol_tree_subtree_path(sha: x.sha), remote: true %>' + "/";
-           html +="</div>";
+           html += "<div class='closed-directory' id=" + <%= htmlstring(x.sha) %> + ">";
+           html += '<%= link_to x.path, protocol_tree_subtree_path(sha: x.sha,open: 'no'), remote: true %>';
+           html += "</div>";
          html += "</li>";
 
     <% end %>
@@ -22,4 +28,15 @@
 
   html += "</ul>";
 
-document.getElementById(<%= htmlstring(@sha) %>).innerHTML += html;
+  el.className = 'open-directory';
+  el.innerHTML = el.innerHTML.replace('open=no','open=yes');
+  el.innerHTML += html;
+
+} else {
+
+  u = el.getElementsByTagName('ul')[0];
+  el.removeChild(u);
+  el.className = 'nav-header';
+  el.innerHTML = el.innerHTML.replace('open=yes','open=no');
+
+}
