@@ -1,7 +1,12 @@
 Bioturk::Application.routes.draw do
 
+
   get "liason/select"
   get "liason/update"
+
+  get "protocol_tree/home"
+  get "protocol_tree/subtree"
+  get "protocol_tree/raw"
 
   resources :object_types do 
     resources :items do

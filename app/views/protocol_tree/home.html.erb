@@ -1,0 +1,9 @@
+<h1>Protocol Tree</h1>
+
+<div class='protocol-directory'>
+  <div id=<%= htmlstring(@sha) %>></div>
+</div>
+
+<script>
+<%= render( partial: 'protocol_tree/subtree.js.erb', formats: :js, remote: true ) %>
+</script>
