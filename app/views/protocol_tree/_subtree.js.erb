@@ -1,42 +1,58 @@
 
 el = document.getElementById(<%= htmlstring(@sha) %>);
 
+if ( !el ) {
+  el = document.getElementById('root');
+  el.id = <%= htmlstring(@sha) %>;
+}
+
 if ( el.className != 'open-directory' ) {
 
-  html = "<ul>";
+  <% if @tree.length > 0 %>
 
-  <% @tree.each do |x| %>
+    html = "<ul>";
 
-    <% case x.type 
+    <% @tree.each do |x| %>
 
-      when 'blob' %>
-        <% if /\.pdl/.match(x.path) %>
-          html += "<li>" 
-                + '<%= link_to x.path, protocol_tree_raw_path(sha: x.sha, format: 'xml'), target: 'pdl' %>' + "</li>";
-        <% end %>
+      <% case x.type 
 
-      <% when 'tree' %>
-         html += "<li>";
-           html += "<div class='closed-directory' id=" + <%= htmlstring(x.sha) %> + ">";
-           html += '<%= link_to x.path, protocol_tree_subtree_path(sha: x.sha,open: 'no'), remote: true %>';
-           html += "</div>";
-         html += "</li>";
+        when 'blob' %>
+          <% if /\.pdl/.match(x.path) %>
+            html += "<li>" 
+                  + '<%= link_to x.path, protocol_tree_raw_path(sha: x.sha, format: 'xml'), target: 'pdl' %>' + "</li>";
+          <% end %>
+
+        <% when 'tree' %>
+           html += "<li>";
+             html += "<div class='closed-directory' id=" + <%= htmlstring(x.sha) %> + ">";
+             html += '<%= link_to x.path, protocol_tree_subtree_path(sha: x.sha,open: 'no'), 
+                          remote: true, onclick: "document.getElementById('loading-status').style.display='block'" %>';
+             html += "</div>";
+           html += "</li>";
+
+      <% end %>
 
     <% end %>
 
+    html += "</ul>";
+
+    el.className = 'open-directory';
+    el.innerHTML = el.innerHTML.replace('open=no','open=yes');
+    el.innerHTML += html;
+
+  <% else %>
+
+    console.log ( 'empty tree' + <%= htmlstring(@github) %> );
+
   <% end %>
-
-  html += "</ul>";
-
-  el.className = 'open-directory';
-  el.innerHTML = el.innerHTML.replace('open=no','open=yes');
-  el.innerHTML += html;
 
 } else {
 
   u = el.getElementsByTagName('ul')[0];
   el.removeChild(u);
-  el.className = 'nav-header';
+  el.className = '';
   el.innerHTML = el.innerHTML.replace('open=yes','open=no');
 
 }
+
+document.getElementById('loading-status').style.display = 'none';

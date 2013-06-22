@@ -1,9 +1,11 @@
 <h1>Protocol Tree</h1>
 
+<div id='loading-status' style='display:none;'><%= image_tag 'waiting_animation.gif' %></div>
+
 <div class='protocol-directory'>
-  <div id=<%= htmlstring(@sha) %>></div>
+  <div id='root'>
+    <%= link_to 'Protocols', protocol_tree_subtree_path(open: 'no'), 
+                remote: true, onclick: "document.getElementById('loading-status').style.display='block'" %>  
+  </div>
 </div>
 
-<script>
-<%= render( partial: 'protocol_tree/subtree.js.erb', formats: :js, remote: true ) %>
-</script>

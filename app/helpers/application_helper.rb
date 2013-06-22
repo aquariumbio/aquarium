@@ -11,7 +11,7 @@ module ApplicationHelper
   end
 
   def htmlstring x
-    raw("\""+x+"\"")
+    raw("\""+x.to_s+"\"")
   end
 
 end
