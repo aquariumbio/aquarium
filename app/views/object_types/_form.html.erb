@@ -32,13 +32,17 @@
     <%= f.label :unit %><br />
     <%= f.text_field :unit %>
   </div>
+  <div class="field" id="cost">
+    <%= f.label 'Cost per unit' %><br />
+    <div class="input-prepend">
+      <span class="add-on">$</span>
+        <%= f.text_field :cost, class:'span2' %>
+      </span>
+    </div>
+  </div>
   <div class="field" id="handler">
     <%= f.label :handler %><br />
     <%= f.text_field :handler %>
-  </div>
-  <div class="field" id="image">
-    <%= f.label :image %><br />
-    <%= f.file_field :image %>
   </div>
   <ul class="nav nav-tabs" id="detail_tabs">
     <li><a href="#safety" data-toggle="tab">Safety</a></li>
@@ -69,6 +73,11 @@
       <%= f.text_area :vendor %>
   </div></div>
 
+  </div>
+
+  <div class="field" id="image">
+    <%= f.label :image %><br />
+    <%= f.file_field :image %>
   </div>
 
 <script>

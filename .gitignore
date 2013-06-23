@@ -14,6 +14,9 @@
 /log/*.log
 /tmp
 
+# Ignore paperclip files
+/public/system/
+
 # temporary emacs files
 *~
 [#]*[#]

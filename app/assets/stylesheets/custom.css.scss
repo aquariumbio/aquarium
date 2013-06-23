@@ -219,16 +219,21 @@ input {
     width: 200px;
   }
   #min {
-    width: 50px;
+    width: 80px;
     display: inline-block;
     margin-right: 10px;
   }
   #max {
-    width: 50px;
+    width: 80px;
     display: inline-block;
     margin-right: 10px;
   }
   #unit {
+    width: 150px;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  #cost {
     width: 150px;
     display: inline-block;
     margin-right: 10px;

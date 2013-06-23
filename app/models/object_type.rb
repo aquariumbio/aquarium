@@ -1,6 +1,6 @@
 class ObjectType < ActiveRecord::Base
 
-  attr_accessible :cleanup, :data, :description, :handler, :max, :min, :name, :safety, :vendor, :unit, :image
+  attr_accessible :cleanup, :data, :description, :handler, :max, :min, :name, :safety, :vendor, :unit, :image, :cost
 
   has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "150x150>" }, 
                     :default_url => "/images/:style/no-image.png"
