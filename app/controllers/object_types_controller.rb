@@ -30,6 +30,7 @@ class ObjectTypesController < ApplicationController
 
     @object_type = ObjectType.new
 
+    # pretty sure these defaults should go in the model and not here
     @object_type.handler = "generic"
     @object_type.min = 0
     @object_type.max = 1
@@ -37,6 +38,7 @@ class ObjectTypesController < ApplicationController
     @object_type.cleanup = "No cleanup information"
     @object_type.data = "No data"
     @object_type.vendor = "No vendor information"
+    @object_type.cost = 0.01
 
     respond_to do |format|
       format.html # new.html.erb

@@ -11,10 +11,17 @@ class ObjectType < ActiveRecord::Base
   validates :max, :presence => true
   validates :description, :presence => true
   validate :min_and_max
+  validates :cost, :presence => true
+  validate :pos
 
   def min_and_max
     errors.add(:min, "min must be greater than zero and less than or equal to max") unless
       self.min && self.max && self.min >= 0 && self.min <= self.max
+  end
+
+  def pos
+    errors.add(:cost, "must be at least $0.01" ) unless
+      self.cost && self.cost >= 0.01
   end
 
   has_many :items, dependent: :destroy
