@@ -1,11 +1,15 @@
 <h1>Protocol Tree</h1>
 
-<div id='loading-status' style='display:none;'><%= image_tag 'waiting_animation.gif' %></div>
+<div id='notice'></div>
+
+<div id='loading-status' style='display:block;'><%= image_tag 'waiting_animation.gif' %></div>
 
 <div class='protocol-directory'>
-  <div id='root'>
-    <%= link_to 'Protocols', protocol_tree_subtree_path(open: 'no'), 
-                remote: true, onclick: "document.getElementById('loading-status').style.display='block'" %>  
-  </div>
+  <div id='root'></div>
 </div>
 
+<script>
+$.ajax({
+  url: 'subtree.js?open=no'
+});
+</script>

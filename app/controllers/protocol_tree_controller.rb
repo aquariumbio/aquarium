@@ -2,10 +2,6 @@ class ProtocolTreeController < ApplicationController
 
   before_filter :signed_in_user
 
-  def home
-    @tree = [];
-  end
-
   def get_client
 
    logger.debug "SUBTREE: attempting to get client"
@@ -64,35 +60,26 @@ class ProtocolTreeController < ApplicationController
 
   def subtree
 
-   logger.debug "SUBTREE: start"
+    logger.debug "SUBTREE: start"
 
     @sha = params[:sha]
 
-    if !@sha
+    if params[:open] == 'no'
 
       get_client
-
-      if ( @client )
-
-        get_commits
-
-        if @commits
-          @sha = @commits.first.sha
-          get_subtree
-        else
-          @tree = []
-        end
-
-      else
-        @tree = []
-      end
-
-    elsif params[:open] == 'no'
-
-      get_client
-
       if @client
-        get_subtree
+        if !@sha
+          get_commits
+          if @commits
+            @sha = @commits.first.sha
+            get_subtree
+          else
+            @github = nil
+            @tree = []
+          end
+        else
+          get_subtree
+        end
       else
         @github = nil
         @tree = []  
@@ -100,18 +87,31 @@ class ProtocolTreeController < ApplicationController
 
     else 
 
+      if !params[:sha]
+        @sha = 'root'
+        logger.debug "SUBTREE: closing root"
+      end
+
+      logger.debug "SUBTREE: closeing a subtree"
       @tree = []
 
     end
 
-    logger.debug "SUBTREE: middle"
-
     respond_to do |format|  
       format.html 
-      format.js   { render( partial: 'protocol_tree/subtree.js.erb', formats: :js, remote: true ) }
+      format.js   { logger.debug render( partial: 'protocol_tree/subtree.js.erb', formats: :js, remote: true ).inspect }
     end
 
     logger.debug "SUBTREE: end"
+
+  end
+
+  def home
+
+    get_client
+    get_commits
+    @sha = @commits.first.sha
+    get_subtree
 
   end
 

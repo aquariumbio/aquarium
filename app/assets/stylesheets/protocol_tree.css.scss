@@ -2,3 +2,46 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+
+
+.protocol-directory {
+
+  margin-left: 50px;
+
+  ul {
+    list-style: none;
+    position: relative;
+    margin: 0 0 0 2px;
+    a {
+      text-transform:capitalize;
+      position: relative;
+      padding-left: 5px;
+    }
+    li {
+      list-style-type: none;
+      margin-left: 10px;
+      margin-bottom: 0px;
+      margin-top: 0px;
+    }
+  }
+
+  .closed-directory {
+    &:before {
+      content: '\229E';
+      font-size: 14pt;
+    }
+  }
+
+  .open-directory {
+    &:before {
+      content: '\229F';
+    }
+  }
+
+}
+
+#loading-status {
+  position: absolute;
+  top: 70px;
+}
+

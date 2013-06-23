@@ -1,9 +1,7 @@
-
 el = document.getElementById(<%= htmlstring(@sha) %>);
 
 if ( !el ) {
   el = document.getElementById('root');
-  el.id = <%= htmlstring(@sha) %>;
 }
 
 if ( el.className != 'open-directory' ) {
@@ -36,7 +34,9 @@ if ( el.className != 'open-directory' ) {
 
     html += "</ul>";
 
-    el.className = 'open-directory';
+    if ( el.id != 'root' ) {
+      el.className = 'open-directory';
+    }
     el.innerHTML = el.innerHTML.replace('open=no','open=yes');
     el.innerHTML += html;
 
@@ -48,11 +48,17 @@ if ( el.className != 'open-directory' ) {
 
 } else {
 
+  console.log('closing');
   u = el.getElementsByTagName('ul')[0];
   el.removeChild(u);
-  el.className = '';
+  el.className = 'closed-directory';
   el.innerHTML = el.innerHTML.replace('open=yes','open=no');
 
 }
 
 document.getElementById('loading-status').style.display = 'none';
+
+<% if flash[:error] %>
+  document.getElementById('notice').innerHTML = <%= htmlstring(flash[:error]) %>
+<% end %>
+
