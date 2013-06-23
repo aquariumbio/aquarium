@@ -107,12 +107,6 @@ class ProtocolTreeController < ApplicationController
   end
 
   def home
-
-    get_client
-    get_commits
-    @sha = @commits.first.sha
-    get_subtree
-
   end
 
   def raw
