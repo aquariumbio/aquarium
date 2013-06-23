@@ -14,6 +14,7 @@ group :assets do
   gem 'bcrypt-ruby'
   gem 'will_paginate'
   gem 'octokit'
+  gem 'paperclip'
 end
 
 gem 'jquery-rails'

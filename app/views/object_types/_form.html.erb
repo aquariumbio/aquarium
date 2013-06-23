@@ -36,7 +36,10 @@
     <%= f.label :handler %><br />
     <%= f.text_field :handler %>
   </div>
-
+  <div class="field" id="image">
+    <%= f.label :image %><br />
+    <%= f.file_field :image %>
+  </div>
   <ul class="nav nav-tabs" id="detail_tabs">
     <li><a href="#safety" data-toggle="tab">Safety</a></li>
     <li><a href="#cleanup" data-toggle="tab">Cleanup</a></li>

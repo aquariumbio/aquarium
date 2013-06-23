@@ -192,6 +192,15 @@ input {
 
 /* objects */
 
+.object-image {
+  width: 90%;
+  border: 1pt solid #bbb;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 10px;
+  height: auto;
+}
+
 .object-description {
 
   width: 100%;
@@ -239,6 +248,11 @@ input {
   textarea {
     height: 100px;
   }  
+  #image {
+    input {
+      border-radius: 5px;
+    }
+  }
 }
 
 /* items */
@@ -262,16 +276,16 @@ input {
     width: 60px;
     margin: 0px 5px 0px 0px;
   }
+
   table {
     margin-bottom: 0px;
     width: 100%;
   }
+
   td {
     padding: 5px 10px 0px 10px;
   }
-  form {
-    height: 12px;
-  }
+
 }
 
 #add-to-inventory {

@@ -17,7 +17,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
     if @user.save
-      flash[:success] = "Welcome to BIOTURK. All of your uniqueness will be absorbed into our own."
+      flash[:success] = "#{params[:user][:name]} has been assimilated."
       redirect_to @user
     else
       render 'new'
@@ -43,7 +43,7 @@ class UsersController < ApplicationController
 
   def destroy
     User.find(params[:id]).destroy
-    flash[:success] = "User destroyed."
+    flash[:success] = "The user has been disconnected. Why did he resist? We only wish to raise quality of life for all species."
     redirect_to users_url
   end
 

@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
     user = User.find_by_login(params[:session][:login].downcase)
     if user && user.authenticate(params[:session][:password])
       sign_in user
-      flash[:success] = 'Now logged in as ' + user.login + '.'
+      flash[:success] = "Welcome to BioTurk, #{user.login}. Your biological and technological distinctiveness will be added to our own. Resistance is futile."
       redirect_back_or user
     else
       flash.now[:error] = 'Invalid login/password combination'

@@ -1,6 +1,9 @@
 class ObjectType < ActiveRecord::Base
 
-  attr_accessible :cleanup, :data, :description, :handler, :max, :min, :name, :safety, :vendor, :unit
+  attr_accessible :cleanup, :data, :description, :handler, :max, :min, :name, :safety, :vendor, :unit, :image
+
+  has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "150x150>" }, 
+                    :default_url => "/images/:style/no-image.png"
 
   validates :name, :presence => true
   validates :unit, :presence => true

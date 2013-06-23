@@ -1,8 +1,17 @@
+<h1><%= @object_type.name %></h1>
+
 <div class="row">
-<div class="span11">
+
+<div class="span3">
+  <div class="object-image">
+    <%= image_tag @object_type.image.url(:medium) %>
+  </div>
+</div>
+
+<div class="span8">
 
 <div class="object-description">
-  <h1><%= @object_type.name %></h1>
+
   <p><b>Description: </b><%= @object_type.description %></p>
   <p><b>Min: </b>        <%= @object_type.min %></p>
   <p><b>Max: </b>        <%= @object_type.max %></p>
@@ -14,11 +23,16 @@
   <p><b>Vendor: </b>     <%= @object_type.vendor %></p>
 </div>
 
+</div>
+
+</div>
+
   <div class="row">
 
   <div class="span7">
 
   <div id="current-inventory">
+
     <h3>Current Inventory</h3>
     <table class="table itemtable">
       <tr>
