@@ -16,7 +16,7 @@ if ( el.className != 'open-directory' ) {
 
         when 'blob' %>
           <% if /\.pdl/.match(x.path) %>
-            html += "<li>" 
+            html += "<li class='file'>" 
                   + '<%= link_to x.path, protocol_tree_raw_path(sha: x.sha, format: 'xml'), target: 'pdl' %>' + "</li>";
           <% end %>
 

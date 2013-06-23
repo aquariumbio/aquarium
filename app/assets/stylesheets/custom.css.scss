@@ -120,6 +120,7 @@ $grayMediumLight: #eaeaea;
   font-size: 9pt;
   margin: 50px 50px 50px 50px;
   @include box_sizing;
+  display: none;
 }
 
 /* sidebar */
