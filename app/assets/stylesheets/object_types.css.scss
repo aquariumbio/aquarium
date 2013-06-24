@@ -1,3 +1,143 @@
 // Place all the styles related to the ObjectTypes controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+/* showing objects */
+
+.object-image {
+  border: 0pt solid #bbb;
+  padding: 10px;
+  border-radius: 10px;
+  height: auto;
+}
+
+.object-description {
+
+  border: 0pt solid #bbb;
+  padding: 10px;
+  border-radius: 10px;
+  display: inline-block;
+  height: auto;
+  p {
+    line-height: 16px;
+  }
+}
+
+.new-object {
+  #name {
+    width: 200px;
+  }
+  #min {
+    width: 80px;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  #max {
+    width: 80px;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  #unit {
+    width: 150px;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  #cost {
+    width: 150px;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  #handler {
+    width: 150px;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  .label {
+    padding-bottom: 0px;
+  }
+  .field {
+    margin: 0px;
+    line-height: 1px;
+  }
+  textarea {
+    height: 100px;
+  }  
+  #image {
+    input {
+      border-radius: 5px;
+    }
+  }
+}
+
+/* showing items */
+
+.current-inventory {
+  border: 1pt solid #bbb;
+  padding: 10px;
+  border-radius: 10px;
+  display: inline-block;
+
+  h3 {
+    font-size: 12pt;
+    text-align: center;
+  }
+
+  .small-input {
+    padding: 2px 2px 2px 8px;
+    border-radius: 5px;
+    width: 60px;
+    margin: 0px 5px 0px 0px;
+  }
+
+  table {
+    margin-bottom: 0px;
+    width: 100%;
+  }
+
+  td {
+    padding: 5px 10px 0px 10px;
+  }
+
+}
+
+.add-to-inventory {
+
+  border: 1pt solid #bbb;
+  padding: 10px;
+  border-radius: 10px;
+
+  .form {
+    margin: 0;
+  }
+
+  h3 {
+    font-size: 12pt;
+    text-align: center;
+  }
+  .field {
+
+    margin-right: 10px;
+    float: left;
+  }
+  .actions {
+    width: 60px;
+
+
+  }
+  .input {
+    width: 60px;
+  }
+}
+
+.itemtable {
+  margin: 500;
+  width: 400px;
+}
+
+.new_item {
+  .field {
+    width: 100px;
+  }
+}
+
+

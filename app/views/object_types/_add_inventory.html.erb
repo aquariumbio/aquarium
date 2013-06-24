@@ -1,0 +1,23 @@
+<h3>Add to inventory</h3>
+
+  <%= form_for([@object_type, @object_type.items.build]) do |f| %>
+
+  <table>
+    <tr>
+    <td><div class="field">
+      <%= f.label :location %>
+      <%= f.text_field :location %>
+    </div></td>
+
+    <td><div class="field">
+      <%= f.label :quantity %>
+       <%= f.number_field :quantity, value: 0 %>
+    </div></td>
+
+    <td><div class="actions">
+      <br />
+      <%= f.submit class: "btn btn-small", value: "Add"  %>
+    </div></td>
+  </table>
+
+  <% end %>

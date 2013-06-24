@@ -1,106 +1,32 @@
 <h1><%= @object_type.name %></h1>
 
-<div class="row">
+<div class="row-fluid">
 
-<div class="span3">
-  <div class="object-image">
+  <div class="span3 object-image">
     <%= image_tag @object_type.image.url(:medium) %>
   </div>
-</div>
 
-<div class="span9">
-
-<div class="object-description">
-
-  <p><b>Description: </b><%= @object_type.description %></p>
-  <p><b>Min/Max:</b>     <%= @object_type.min %>/<%= @object_type.max %></p>
-  <p><b>Unit: </b>       <%= @object_type.unit %> (<%= number_to_currency(@object_type.cost)%> each)</p>
-  <p><b>Handler: </b>    <%= @object_type.handler %></p>
-  <p><b>Safety: </b>     <%= @object_type.safety %></p>
-  <p><b>Cleanup: </b>    <%= @object_type.cleanup %></p>
-  <p><b>Data: </b>       <%= @object_type.data %></p>
-  <p><b>Vendor: </b>     <%= @object_type.vendor %></p>
-</div>
+  <div class="span9 object-description">
+    <%= render 'description' %>
+  </div>
 
 </div>
 
+<br />
+
+<div class="row-fluid">
+
+  <div class="span8 current-inventory">
+    <%= render 'current_inventory' %>
+  </div>
+
+  <div class="span4 add-to-inventory">
+    <%= render 'add_inventory' %>
+  </div>
+
 </div>
 
-  <div class="row">
+<br />
 
-  <div class="span8">
-
-  <div id="current-inventory">
-
-    <h3>Current Inventory</h3>
-    <table class="table itemtable">
-      <tr>
-        <th>ID</th>
-        <th>Location</th>
-        <th>Quantity</th>
-        <th>In Use</th>
-        <th></th>
-      </tr>
-    <% @object_type.items.each do |i| %>
-      <tr>
-        <td><%= "%05d" % i.id %></td>
-        <td><%= i.location %></td>
-
-        <td>
-          <%= form_tag(raw "/item?id="+i.id.to_s+"&oid="+@object_type.id.to_s) %>
-            <input name="quantity" 
-                   class="small-input" 
-                   type="number" 
-                   value=<%= i.quantity %>></input>
-            <input type="submit" name="update_action" 
-                   class="btn btn-small" value="update"></input>
-          </form>
-        </td>
-
-        <td>
-          <%= form_tag(raw "/item?id="+i.id.to_s+"&oid="+@object_type.id.to_s) %>
-            <input name="inuse" 
-                   class="small-input" 
-                   type="number" 
-                   value=<%= i.inuse %>></input>
-            <input type="submit" name="update_action" 
-                   class="btn btn-small" value="take"></input>
-          </form>
-        </td>
-
-        <td><%= link_to "delete", [@object_type, i], method: :delete, 
-                                  data: { confirm: "Really delete item?" } %></td>
-      </tr>
-    <% end %>
-    </table>
-  </div>
-
-  </div>
-  <div class="span4">
-
-  <div id="add-to-inventory">
-    <h3>Add to inventory</h3>
-    <%= form_for([@object_type, @object_type.items.build]) do |f| %>
-      <div class="field">
-        <%= f.label :location %>
-        <%= f.text_field :location %>
-      </div>
-      <div class="field">
-        <%= f.label :quantity %>
-        <%= f.number_field :quantity, value: 0 %>
-      </div>
-      <div class="actions">
-        <%= f.submit class: "btn btn-small" %>
-      </div>
-    <% end %>
-  </div>
-
-  </div>
-  </div>
-
-  <div class="span12">
-<%= link_to 'Edit', edit_object_type_path(@object_type) %> |
-<%= link_to 'Back', object_types_path %>
-  </div>
-  </div>
-
+<%= link_to 'Edit Object Type', edit_object_type_path(@object_type), class: "btn" %>
+<%= link_to 'Done', object_types_path, class: "btn" %>
