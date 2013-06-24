@@ -19,7 +19,7 @@ class LiaisonController < ApplicationController
 
   def take
 
-    @x = Item.find_by_id(params[:item])
+    @x = Item.find_by_id(params[:id])
 
     if !@x
       @x = { error: 'Item' + params[:id].to_s + " not found in db" }
@@ -45,13 +45,13 @@ class LiaisonController < ApplicationController
     if !@x
       @item = { error: params[:name].to_s + " not found in db" }
     else
-      if params[:item_id]
-        @item = Item.find_by_id(params[:item_id])
+      if params[:id]
+        @item = Item.find_by_id(params[:id])
         if !@item
           @item = { error: "item #{params[:item_id]} not found in db" }
         else
           if params[:quantity]
-            @item.quantity = params[:quantity]
+            @item.quantity += params[:quantity].to_i
           else
             @item.quantity = 1
           end
@@ -81,10 +81,39 @@ class LiaisonController < ApplicationController
 
   def release
 
-    @x = ObjectType.find_by_name(params[:name])
+    @x = Item.find_by_id(params[:id])
 
     if !@x
-      @x =  { error: params[:name].to_s + " not found in db" }
+      @x = { error: 'Item' + params[:id].to_s + " not found in db" }
+    else
+
+      m = @x.object_type.release_method
+      if m == 'query'
+        m = params[:method]
+      end
+
+      case m
+
+        when 'return'
+          @x.inuse -= params[:quantity].to_i
+
+        when 'dispose'
+          @x.inuse    -= params[:quantity].to_i
+          @x.quantity -= params[:quantity].to_i
+
+      end
+
+      @x.save
+
+      if @x.errors.size > 0 
+        @x = { error: @x.errors }
+      end
+
+    end
+
+    respond_to do |format|
+      format.html # get.html.erb
+      format.json { render json: @x }
     end
 
   end
