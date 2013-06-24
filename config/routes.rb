@@ -1,7 +1,9 @@
 Bioturk::Application.routes.draw do
 
-  get "liason/select"
-  get "liason/update"
+  get "liaison/info"
+  get "liaison/take"
+  get "liaison/release"
+  get "liaison/produce"
 
   get "protocol_tree/home"
   get "protocol_tree/subtree"

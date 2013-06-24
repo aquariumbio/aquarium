@@ -1,6 +1,6 @@
-class LiasonController < ApplicationController
+class LiaisonController < ApplicationController
 
-  def select
+  def info
 
     @x = ObjectType.find_by_name(params[:name])
 
@@ -17,7 +17,28 @@ class LiasonController < ApplicationController
 
   end
 
-  def update
+  def take
+
+    @x = Item.find_by_id(params[:item])
+
+    if !@x
+      @x = { error: 'Item' + params[:id].to_s + " not found in db" }
+    else
+      @x.inuse += params[:quantity].to_i
+      @x.save
+      if @x.errors.size > 0 
+        @x = { error: @x.errors }
+      end
+    end
+
+    respond_to do |format|
+      format.html # get.html.erb
+      format.json { render json: @x }
+    end
+
+  end
+
+  def produce
 
     @x = ObjectType.find_by_name(params[:name])
 
@@ -32,7 +53,7 @@ class LiasonController < ApplicationController
           if params[:quantity]
             @item.quantity = params[:quantity]
           else
-            @item.quantity = 0
+            @item.quantity = 1
           end
           @item.save
         end
@@ -45,7 +66,7 @@ class LiasonController < ApplicationController
         if params[:quantity]
           q = params[:quantity]
         else
-          q = 0
+          q = 1
         end
         @item = @x.items.create(location: loc, quantity: q)
       end
@@ -58,7 +79,14 @@ class LiasonController < ApplicationController
 
   end
 
-  def adjust
+  def release
+
+    @x = ObjectType.find_by_name(params[:name])
+
+    if !@x
+      @x =  { error: params[:name].to_s + " not found in db" }
+    end
+
   end
 
 end
