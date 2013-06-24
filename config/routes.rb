@@ -1,6 +1,5 @@
 Bioturk::Application.routes.draw do
 
-
   get "liason/select"
   get "liason/update"
 
