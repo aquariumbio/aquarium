@@ -44,7 +44,13 @@
     <%= f.label :handler %><br />
     <%= f.text_field :handler %>
   </div>
+  <div class="field" id="release_method">
+    <%= f.label 'Release method' %><br />
+    <%= select_tag('object_type[[release_method]',
+        ('<option value="return">Return</option><option value="dispose">Dispose</option><option value="query">Query</option>').html_safe ) %>
+  </div>
   <ul class="nav nav-tabs" id="detail_tabs">
+    <li><a href="#release_description" data-toggle="tab">Resease Description</a></li>
     <li><a href="#safety" data-toggle="tab">Safety</a></li>
     <li><a href="#cleanup" data-toggle="tab">Cleanup</a></li>
     <li><a href="#data" data-toggle="tab">Data</a></li>
@@ -52,6 +58,11 @@
   </ul>
 
   <div class="tab-content">
+
+  <div class="tab-pane active" id="release_description">
+    <div class="field">
+      <%= f.text_area :release_description %>
+    </div></div>
 
   <div class="tab-pane active" id="safety">
     <div class="field">
