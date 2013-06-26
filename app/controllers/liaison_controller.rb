@@ -101,6 +101,9 @@ class LiaisonController < ApplicationController
           @x.inuse    -= params[:quantity].to_i
           @x.quantity -= params[:quantity].to_i
 
+        else
+          raise 'unknown method in release'
+
       end
 
       @x.save
