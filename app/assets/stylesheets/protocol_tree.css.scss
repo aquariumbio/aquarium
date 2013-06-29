@@ -49,3 +49,225 @@
   right: 50%;
 }
 
+@mixin nice-box {
+  margin: 10px 0px 10px 20px;
+  padding: 10px;
+  display: block; 
+}
+
+@mixin small-box {
+  margin: 10px 0px 10px 20px;
+  padding: 0 0 0 10px;
+  display: block; 
+}
+
+@mixin rounded-box {
+  @include nice-box;
+  border: 1px solid #aaa;
+  border-radius: 10px;
+}
+
+information {
+  font-size: 14pt;
+  @include rounded-box;
+}
+
+$argument-color: #fee;
+$take-color: #ffe;
+$assign-color: #eff;
+$step-color: #efe;
+
+argument {
+
+  @include small-box;
+
+  var {
+    font-weight: bold;
+    &:before {
+      content: "Argument: ";
+      font-weight: normal;
+      font-style: normal;
+    }
+    &:after {
+      content: " - ";
+    }
+  }
+
+  description {
+    font-weight: normal;
+  }
+ 
+  margin-bottom: 20px;  
+
+}
+
+take {
+
+  &:before {
+    content: "Take :";
+
+    border-bottom: 1pt solid #aaa;
+  }
+
+  object {
+    display: block;
+    &:after {
+      content: '. ';
+    }
+  }
+
+  quantity {
+    &:before {
+      content: 'Quantity:  ';
+    }
+   &:after {
+      content: '. ';
+    }
+  }
+
+  var {
+    &:before {
+      content: " Call this object ";
+    }
+   &:after {
+      content: '. ';
+    }
+  }
+  
+  font-size: 14pt;
+  @include rounded-box;
+  background: $take-color;
+
+
+}
+
+release {
+  var {
+    &:before {
+      content: " Release: ";
+    }
+  }
+  @include rounded-box;
+  background: $take-color;
+}
+
+produce {
+  object {
+    &:before {
+      content: " Produce: ";
+    }
+  }
+
+  @include small-box;
+
+
+}
+
+assign {
+  &:before {
+    content: "Assign: ";
+  }
+  var {
+
+  }
+  value {
+    &:before {
+      content: " = ";
+    }
+  }
+  @include small-box;
+
+}
+
+step {
+  @include rounded-box;
+  background: $step-color;
+  &:before {
+    content: "Step: ";
+    border-bottom: 1pt solid #aaa;
+    font-size: 14pt;
+    margin-bottom: 5px;
+  }
+  description {
+    font-size: 14pt;
+    display: block;
+  }
+  note {
+    &:before {
+      content: 'Note: ';
+      color: #aaa;
+    }
+    display: block;
+  }
+  getdata {
+    var {
+      &:before {
+        content: 'Get data: ';
+        color: #aaa;
+      }
+    }
+    description {
+      &:before {
+        content: ': ';
+      }
+      display: inline;
+    }
+    display: block;
+  }
+}
+
+while {
+  @include nice-box;
+  condition {
+    @include nice-box;
+    margin-left: 0px;
+    &:before {
+      content: "While ";
+      font-weight: bold;
+    }
+    font-weight: bold;
+  }
+  do {
+    @include nice-box;
+    &:before {
+      content: "do";
+    }
+  }
+}
+
+if {
+  @include small-box;
+  condition {
+    @include nice-box;
+    margin-left: 0px;
+    &:before {
+      content: "If ";
+      font-weight: bold;
+    }
+    font-weight: bold;
+  }
+  then {
+    @include nice-box;
+    &:before {
+      content: "Then";
+      font-weight: bold;
+    }
+  }
+  else {
+    @include nice-box;
+    &:before {
+      content: "Else";
+      font-weight: bold;
+    }
+  }
+}
+
+log {
+  type {
+    &:before {
+      content: 'Log: ';
+    }
+    display: block
+  }
+  @include small-box;
+}

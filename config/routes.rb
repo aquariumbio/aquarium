@@ -8,6 +8,7 @@ Bioturk::Application.routes.draw do
   get "protocol_tree/home"
   get "protocol_tree/subtree"
   get "protocol_tree/raw"
+  get "protocol_tree/pretty"
 
   resources :object_types do 
     resources :items do

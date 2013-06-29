@@ -122,4 +122,17 @@ class ProtocolTreeController < ApplicationController
 
   end
 
+  def pretty
+
+    @sha = params[:sha]
+    @path = params[:path]
+    client = Octokit::Client.new(login:'klavins',password:'a22imil@te')
+    @protocol = Base64.decode64(client.blob('klavinslab/protocols',@sha).content);
+
+    respond_to do |format|
+      format.html
+    end
+
+  end
+
 end
