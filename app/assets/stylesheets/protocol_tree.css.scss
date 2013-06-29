@@ -3,9 +3,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .protocol-directory {
-
   background: #fff;
-
   ul {
     list-style: none;
     position: relative;
@@ -26,21 +24,18 @@
       }
     }
   }
-
   .closed-directory {
     &:before {
       content: '\229E';
       font-size: 9pt;
     }
   }
-
   .open-directory {
     &:before {
       content: '\229F';
       font-size: 9pt;
     }
   }
-
 }
 
 #loading-status {
@@ -55,6 +50,12 @@
   display: block; 
 }
 
+@mixin control-box {
+  margin: 0px 0px 0px 20px;
+  padding: 10px;
+  display: block;
+}
+
 @mixin small-box {
   margin: 10px 0px 10px 20px;
   padding: 0 0 0 10px;
@@ -64,7 +65,8 @@
 @mixin rounded-box {
   @include nice-box;
   border: 1px solid #aaa;
-  border-radius: 10px;
+  border-radius: 5px;
+  line-height: 150%;
 }
 
 information {
@@ -105,7 +107,6 @@ take {
 
   &:before {
     content: "Take :";
-
     border-bottom: 1pt solid #aaa;
   }
 
@@ -142,12 +143,15 @@ take {
 }
 
 release {
+  &:before {
+    content: " Release: ";
+    border-bottom: 1pt solid #aaa;
+  }
   var {
-    &:before {
-      content: " Release: ";
-    }
+    display: block;
   }
   @include rounded-box;
+  font-size: 14pt;
   background: $take-color;
 }
 
@@ -158,7 +162,8 @@ produce {
     }
   }
 
-  @include small-box;
+  @include rounded-box;
+  background: $take-color;
 
 
 }
@@ -217,9 +222,9 @@ step {
 }
 
 while {
-  @include nice-box;
+  @include control-box;
   condition {
-    @include nice-box;
+    @include control-box;
     margin-left: 0px;
     &:before {
       content: "While ";
@@ -228,17 +233,18 @@ while {
     font-weight: bold;
   }
   do {
-    @include nice-box;
+    @include control-box;
+    border-left: 1pt solid #aaa;
     &:before {
       content: "do";
+      font-weight: bold;
     }
   }
 }
 
 if {
-  @include small-box;
+  @include control-box;
   condition {
-    @include nice-box;
     margin-left: 0px;
     &:before {
       content: "If ";
@@ -247,14 +253,17 @@ if {
     font-weight: bold;
   }
   then {
-    @include nice-box;
+    border-left: 1pt solid #aaa;
+    @include control-box;
     &:before {
+      position:relative;
       content: "Then";
       font-weight: bold;
     }
   }
   else {
-    @include nice-box;
+    @include control-box;
+    border-left: 1pt solid #aaa;
     &:before {
       content: "Else";
       font-weight: bold;
