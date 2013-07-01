@@ -4,6 +4,7 @@ include REXML
 class Protocol
 
   attr_reader :program, :include_stack, :args
+  attr_writer :file
 
   def initialize
     @program = []
@@ -41,18 +42,20 @@ class Protocol
       puts "Could not find file '#{path}'."
       return false
     end
+    
+    parse_xml file
+
+  end
+
+  def parse_xml file
 
     begin
       xml = Document.new(file)
     rescue REXML::ParseException => ex
-      puts "A parse error in #{path} was encountered."
+      puts "A parse error was encountered."
       puts ex.to_s #.match(/Line:.*/)
       return false
     end
-
-    @log_path = path.split("/").last
-    @log_path = @log_path.split(".").first
-    @log_path = "log/"+@log_path+".txt"
 
     @include_stack.push( { xmldoc: xml, ce: xml.root.elements.first } )
     return true
@@ -83,11 +86,6 @@ class Protocol
   end
 
   def parse
-
-    File.new(@log_path, "w")
-    log_file = File.open(@log_path, "w")
-    log_file.puts("Date/Time \t\t\t Type \t\t Data\n")
-
 
     while @include_stack.any?
 
@@ -228,7 +226,7 @@ class Protocol
 
           when 'log'
             c = children_as_text e
-            push LogInstruction.new c[:type], c[:data], log_file
+            push LogInstruction.new c[:type], c[:data], 'log_file'
             e = increment e
 
           else

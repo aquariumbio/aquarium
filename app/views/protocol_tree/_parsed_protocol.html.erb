@@ -1,14 +1,7 @@
-<html>
-
-<head>
-  <link rel="stylesheet" type="text/css" href="drawing.css">
-</head>
-
-<body>
-
+<div>
 
   <svg xmlns="http://www.w3.org/2000/svg" version="1.1" id='svgcode'
-    width='500' height='3000' viewBox="-90 0 500 3000" >
+    width='500' height='5000' viewBox="-90 0 500 5000" >
     <marker id="triangle"
       viewBox="0 0 10 10" refX="0" refY="5"
       markerUnits="strokeWidth"
@@ -17,14 +10,15 @@
       <path d="M 0 0 L 10 5 L 0 10 z" />
     </marker>
   </svg>
-
   
-<div id='drawing' style='position: absolute; top: 10px; left: 100px; z-index: -1;'>
+<div id='drawing' style='position: absolute; top: 198px; left: 163px; z-index: -1;'>
 
   <% pc = 0 %>
   <% arrows = [] %>
   <% edges = [] %>
-  <% @proto.program.each do |i| %>
+
+  <% @protocol.program.each do |i| %>
+
     <div class='instruction <%= i.name %>' id='pc_<%= pc %>'>
       <div class="pc"><%= pc.to_s + ":" + i.name %></div>
       <div class="body"><%= i.to_html %></div>
@@ -38,11 +32,15 @@
           edges.push( {type: 'serial', from: pc, to: i.true_pc} )
           edges.push( {type: 'goto', from: pc, to: i.false_pc, side: 'left' } )
         else
-          edges.push( {type: 'serial', from: pc, to: pc+1} ) if pc < @proto.program.length - 1
+          edges.push( {type: 'serial', from: pc, to: pc+1} ) if pc < @protocol.program.length - 1
         end
       %>
       <%  pc += 1 %>
-    </div><div class="connector"></div>
+
+    </div>
+
+    <div class="connector"></div>
+
   <% end %>
     
 </div>
@@ -134,6 +132,4 @@
 
 </script>
 
-</body>
-
-</html>
+</div>
