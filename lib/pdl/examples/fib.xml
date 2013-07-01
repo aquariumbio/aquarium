@@ -1,0 +1,24 @@
+<protocol>
+
+  <step>
+    <description>Now lets print out the first few numbers in the Fibonacci sequence.</description>
+  </step>
+
+  <assign><var>x</var><value>0</value></assign>
+  <assign><var>y</var><value>1</value></assign>
+
+  <while>
+    <condition>%{y} != 89</condition>
+    <do>
+      <step><description>y = %{y}</description></step>
+      <assign><var>temp</var><value>%{x}+%{y}</value></assign>
+      <assign><var>x</var><value>%{y}</value></assign>
+      <assign><var>y</var><value>%{temp}</value></assign>
+    </do>
+  </while>
+
+  <step>
+    <description>All done. Thank you for running this protocol.</description>
+  </step>
+
+</protocol>

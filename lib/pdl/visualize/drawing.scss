@@ -1,0 +1,81 @@
+$info-color: #fff;
+$take-color: #eff;
+$step-color: #efe;
+
+.instruction {
+  border: 1px solid #aaa;
+  width: 250px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.information {
+  background: $info-color;
+}
+
+.take {
+  background: $take-color;
+}
+
+.release {
+  background: $take-color;
+  height: 38px;
+}
+
+.assign {
+  width: 250px;
+  height: 38px;
+  padding: 5px;
+}
+
+@mixin condition {
+  width: 180px;
+  height: 38px;
+  padding: 5px;
+  border-radius: 25px;
+  padding: 5px 5px 5px 15px;
+  position: relative;
+  left: 31px;
+}
+
+.if {
+  @include condition;
+}
+
+.while {
+  @include condition
+}
+
+.goto {
+  width: 80px;
+  height: 38px;
+  padding: 5px 5px 5px 5px;
+  border-radius: 25px;
+  position: relative;
+  left: 81px;
+  text-align: center;
+  font-family: "courier";
+  font-weight: bold;
+}
+
+.step {
+  background: $step-color;
+  .note {
+    font-size: 10pt;
+    display: block;
+  }
+  .getdata {
+    display: block;
+  }
+}
+
+.pc {
+  font-weight: bold;
+  font-family: "courier";
+  color: #acc;
+}
+
+.connector {
+  width: 262px;
+  height: 25px;
+}

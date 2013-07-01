@@ -1,0 +1,25 @@
+<protocol>
+
+  <argument>
+    <var>y</var>
+    <description>The first argument</description>
+  </argument>
+
+  <argument>
+    <var>z</var>
+    <description>The second argument</description>
+  </argument>
+
+  <assign><var>x</var><value>%{y}+%{z}</value></assign>
+
+  <include>
+    <path>examples/another_included_file.xml</path>
+    <setarg><var>z</var><value>3</value></setarg>
+    <return><var>w</var><value>%{x}</value></return>
+  </include>
+
+  <step>
+    <description>In the included file, x=%{x}, y=%{y}, and z=%{z}</description>
+  </step>
+
+</protocol>

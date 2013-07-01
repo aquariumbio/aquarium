@@ -1,0 +1,105 @@
+<protocol>
+
+  <argument>
+    <var>object_name</var>
+    <description>The name of object type you would like this protocol to use</description>
+  </argument>
+
+  <information>This protocol tests a few things, and will start with helping you take and release %{object_name}.</information>
+
+  <take>
+    <object>%{object_name}</object>
+    <quantity>1</quantity>
+    <var>b</var>
+  </take>
+
+  <assign><var>name</var><value>%{b}.object[:name]</value></assign>
+  <assign><var>loc</var> <value>%{b}.item[:location]</value></assign>
+
+  <step>
+    <description>You took an object of type %{name} from location %{loc}</description>
+  </step>
+
+  <!-- Should the release tag be an expression instead of a var? -->
+  <release>
+    <var>%{b}</var>
+  </release>
+
+  <step>
+    <description>Thank you for returning the %{name}.</description>
+    <note>That was very respectful of you.</note>
+  </step>
+
+  <step>
+    <description>Would you like to produce a bottle?</description>
+    <getdata>
+      <var>answer</var>
+      <description>Enter yes or no</description>
+    </getdata>
+  </step>
+
+  <if>
+
+    <condition>%{answer} == 'yes'</condition>
+
+    <then>
+
+      <step>
+        <description>Enter the location you will put the bottle.</description>
+        <getdata>
+          <var>new_location</var>
+          <description>Enter location</description>
+        </getdata>
+      </step>
+
+      <produce>
+        <object>1000 mL Bottle</object>
+        <location>%{new_location}</location>
+        <quantity>1</quantity>
+      </produce>
+
+      <step>
+        <description>Ok! Check the inventory. There should be a new bottle at %{new_location}</description>
+      </step>
+
+    </then>
+
+    <else>
+
+      <step>
+        <description>Suit yourself. No bottles will be produced.</description>
+      </step>
+
+    </else>
+
+  </if>
+
+  <step>
+    <description>Now let's print out the first few numbers in the Fibonacci sequence.</description>
+  </step>
+
+  <assign><var>x</var><value>0</value></assign>
+  <assign><var>y</var><value>1</value></assign>
+
+  <while>
+    <condition>%{y} &lt; 100</condition>
+    <do>
+      <step><description>y = %{y}</description></step>
+      <if>
+        <condition>%{y} &gt; 50</condition>
+        <then><step><description>Hey! y is getting pretty big!</description></step></then>
+        <else><step><description>y is not such a big number ... yet!</description></step></else>
+      </if>
+      <assign><var>temp</var><value>%{x}+%{y}</value></assign>
+      <assign><var>x</var><value>%{y}</value></assign>
+      <assign><var>y</var><value>%{temp}</value></assign>
+    </do>
+  </while>
+
+  <log><type>FIBONACCI_REPORT</type><data>We computed the sequence all the way up to %{y}!</data></log>
+
+  <step>
+    <description>All done. Thank you for running this protocol.</description>
+  </step>
+
+</protocol>

@@ -1,0 +1,66 @@
+.instruction {
+  border: 1px solid #aaa;
+  width: 250px;
+  padding: 5px;
+  border-radius: 5px; }
+
+.information {
+  background: white; }
+
+.take {
+  background: #eeffff; }
+
+.release {
+  background: #eeffff;
+  height: 38px; }
+
+.assign {
+  width: 250px;
+  height: 38px;
+  padding: 5px; }
+
+.if {
+  width: 180px;
+  height: 38px;
+  padding: 5px;
+  border-radius: 25px;
+  padding: 5px 5px 5px 15px;
+  position: relative;
+  left: 31px; }
+
+.while {
+  width: 180px;
+  height: 38px;
+  padding: 5px;
+  border-radius: 25px;
+  padding: 5px 5px 5px 15px;
+  position: relative;
+  left: 31px; }
+
+.goto {
+  width: 80px;
+  height: 38px;
+  padding: 5px 5px 5px 5px;
+  border-radius: 25px;
+  position: relative;
+  left: 81px;
+  text-align: center;
+  font-family: "courier";
+  font-weight: bold; }
+
+.step {
+  background: #eeffee; }
+  .step .note {
+    font-size: 10pt;
+    display: block; }
+  .step .getdata {
+    display: block; }
+
+.pc {
+  font-weight: bold;
+  font-family: "courier";
+  color: #acc; }
+
+.connector {
+  width: 262px;
+  height: 25px; }

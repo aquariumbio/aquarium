@@ -1,0 +1,2 @@
+Date/Time 			 Type 		 Data
+2013-06-27 15:23:02 -0700	localvar	%{x}=1

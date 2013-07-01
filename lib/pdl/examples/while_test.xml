@@ -1,0 +1,24 @@
+<protocol>
+
+  <information>A test of the while statement</information>
+
+  <assign><var>x</var><value>2</value></assign>
+
+  <while>
+    <condition>%{x}>0</condition>
+    <do>
+      <assign><var>y</var><value>2</value></assign>
+      <while>
+        <condition>%{y}>0</condition>
+        <do>
+          <step><description>In nested while statement, x = %{x} and y = %{y}.</description></step>
+          <assign><var>y</var><value>%{y}-1</value></assign>
+        </do>
+      </while>
+      <assign><var>x</var><value>%{x}-1</value></assign>
+    </do>
+  </while>
+
+  <step><description>Done</description></step>
+
+</protocol>

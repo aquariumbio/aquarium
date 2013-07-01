@@ -1,0 +1,28 @@
+<protocol>
+
+  <information>This file contains a test protocol</information>
+
+  <step>
+    <description>This step has very thin description.</description>
+    <note>And it has a completely uninformative note!</note>
+    <warning>This is a warning.</warning>
+    <getdata><var>test1</var><description>associated description for test1 input</description></getdata>
+    <getdata><var>test2</var><description>associated description for test2 input</description></getdata>
+  </step>
+
+  <assign>
+    <var>x</var>
+    <value>1</value>
+  </assign>
+
+  <step>
+    <description>This step refers to the value of x+1, which is #{%{x}+1}.</description>
+    <note>Test1 = %{test1} and  Test2 = %{test2} </note>
+    <getdata><var>new_test</var><description>data for a new test input</description></getdata>
+  </step>
+
+  <step>
+    <description>This step is going to show you new test = %{new_test}</description>
+  </step>
+
+</protocol>
