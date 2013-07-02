@@ -1,5 +1,8 @@
 @import "bootstrap";
 
+@media (min-width: 980px) {
+}
+
 $lightGray: #999;
 
 /* universal */
@@ -10,6 +13,7 @@ html {
 
 body {
   padding-top: 60px;
+  padding-bottom: 40px;
 }
 
 section {
@@ -77,8 +81,8 @@ p {
 
 footer {
   margin-top: 45px;
-  margin-left: 50px;
-  margin-right: 50px;
+  margin-left: 20px;
+  margin-right: 20px;
   padding-top: 5px;
   border-top: 1px solid #eaeaea;
   color: $lightGray;
