@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  user_id: MyString
+  sha: MyString
+  arguments: MyText
+  state: MyText
+
+two:
+  user_id: MyString
+  sha: MyString
+  arguments: MyText
+  state: MyText

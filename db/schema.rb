@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130624223430) do
+ActiveRecord::Schema.define(:version => 20130702181533) do
 
   create_table "items", :force => true do |t|
     t.string   "location"
@@ -23,6 +23,15 @@ ActiveRecord::Schema.define(:version => 20130624223430) do
   end
 
   add_index "items", ["object_type_id"], :name => "index_items_on_object_type_id"
+
+  create_table "jobs", :force => true do |t|
+    t.string   "user_id"
+    t.string   "sha"
+    t.text     "arguments"
+    t.text     "state"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "object_types", :force => true do |t|
     t.string   "name"

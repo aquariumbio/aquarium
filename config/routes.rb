@@ -1,5 +1,7 @@
 Bioturk::Application.routes.draw do
 
+  get "jobs/index"
+
   get "liaison/info"
   get "liaison/take"
   get "liaison/release"
@@ -32,6 +34,8 @@ Bioturk::Application.routes.draw do
   resources :users
 
   resources :sessions, only: [:new, :create, :destroy]
+
+  resources :jobs, only: [:index]
 
   match '/item', to: 'items#update'
 

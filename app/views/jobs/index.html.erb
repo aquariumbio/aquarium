@@ -1,0 +1,23 @@
+<h1>Jobs</h1>
+
+<table class='table'>
+
+  <th>
+    <td>User</td>
+    <td>Github sha</td>
+    <td>State</td>
+  </th>
+
+<% @jobs.each do |j| %>
+
+  <tr>
+    <td><%= j.id %></td>
+    <td><%= User.find(j.user_id).login %></td>
+    <td><%= j.sha %></td>
+    <td><%= j.state %></td>
+  </tr>
+
+<% end %>
+
+</table>
+
