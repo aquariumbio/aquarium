@@ -21,7 +21,7 @@
 
     <div class='instruction <%= i.name %>' id='pc_<%= pc %>'>
       <div class="pc"><%= pc.to_s + ":" + i.name %></div>
-      <div class="body"><%= i.to_html %></div>
+      <div class="body"><%= i.to_html.html_safe %></div>
       <% case i.name 
         when 'goto'
           edges.push( {type: 'goto', from: pc, to: i.destination } )
