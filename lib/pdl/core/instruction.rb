@@ -11,7 +11,7 @@ class Instruction
   end
 
   def liaison verb, args
-    uri = URI("http://bioturk.ee.washington.edu:3000/liaison/#{verb}.json")
+    uri = URI("http://bioturk.ee.washington.edu:3010/liaison/#{verb}.json")
     uri.query = URI.encode_www_form(args)
     result = Net::HTTP.get_response(uri)
     JSON.parse(result.body, {:symbolize_names => true})

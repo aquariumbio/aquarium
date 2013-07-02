@@ -1,8 +1,11 @@
-require './lib/pdl/core/protocol'
-require './lib/pdl/core/scope'
-require './lib/pdl/core/interpreter'
-require './lib/pdl/core/pdl_item'
+puts "#{File.dirname(__FILE__)}"
 
-Dir["./lib/pdl/core/*instruction.rb"].each { |file| require file }
+require_relative 'protocol'
+require_relative 'scope'
+require_relative 'interpreter'
+require_relative 'pdl_item'
 
-require './lib/pdl/core/viewer'
+Dir["#{File.dirname(__FILE__)}/*instruction.rb"].each { |file| require file }
+
+require_relative 'viewer'
+

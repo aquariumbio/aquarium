@@ -1,4 +1,4 @@
-require './lib/pdl'
+require './core/pdl'
 
 proto = Protocol.new 
 proto.open ARGV.shift
