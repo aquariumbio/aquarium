@@ -1,0 +1,30 @@
+<h4>Initializing Arguments for <%= @path %></h4>
+
+<% if @parse_errors != "" %>
+
+  <p>There were parse errors for <%= @sha %><br /><%= @parse_errors %></p>
+
+<% else %>
+
+  <div class='argument-form' style='width: 50%'>
+
+    <%= form_tag("/interpreter/submit", :method => "get" ) do %>
+  
+      <%= hidden_field_tag 'sha', @sha %>
+      <%= hidden_field_tag 'path', @path %>
+
+      <% @protocol.args.each do |a| %>
+        <b><%= a.var %></b>
+        <%= label_tag(a.var.to_sym, a.description ) %>
+        <%= text_field_tag( a.var.to_sym ) %>
+      <% end %>
+
+      <%= submit_tag("Submit Job", :class => "btn" ) %>
+
+    <% end %>
+
+  </div>
+
+<% end %>
+
+

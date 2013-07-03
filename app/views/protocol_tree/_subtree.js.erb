@@ -19,7 +19,8 @@ if ( el.className != 'open-directory' ) {
             html += "<li class='file'>" 
                   + '<%= link_to x.path, protocol_tree_raw_path(sha: x.sha, format: 'xml'), target: x.path %>' 
                   + '&nbsp;&nbsp;&nbsp;<%= link_to "<i class=\"icon-eye-open\"></i>".html_safe, protocol_tree_pretty_path(sha: x.sha, path: x.path), target: x.path + '_pretty' %>' 
-                  + '&nbsp;&nbsp;&nbsp;<%= link_to "<i class=\"icon-question-sign\"></i>".html_safe, protocol_tree_parse_path(sha: x.sha, path: x.path), target: x.path + '_parse' %>' 
+                  + '<%= link_to "<i class=\"icon-question-sign\"></i>".html_safe, protocol_tree_parse_path(sha: x.sha, path: x.path), target: x.path + '_parse' %>' 
+                  + '<%= link_to "<i class=\"icon-play\"></i>".html_safe, interpreter_arguments_path(sha: x.sha, path: x.path) %>' 
             html += "</li>";
           <% end %>
 

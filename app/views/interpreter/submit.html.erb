@@ -1,0 +1,8 @@
+<h1>Submit</h1>
+
+<ul>
+<% @protocol.args.each do |a| %>
+<li><%= a.var %> = <%= params[a.var.to_sym] %></li>
+<% end %>
+</ul>
+
