@@ -1,8 +1,26 @@
-<h1>Submit</h1>
+<h1>Job Scheduled</h1>
 
-<ul>
-<% @protocol.args.each do |a| %>
-<li><%= a.var %> = <%= params[a.var.to_sym] %></li>
+<h4><%= @path %></h4>
+
+<h4>Job Number <%= @job.id %></h4>
+
+<h4>Argument List</h4>
+
+<% if @protocol.args.length > 0 %>
+
+  <ul>
+    <% @protocol.args.each do |a| %>
+      <li><%= a.var %> = <%= params[a.var.to_sym] %></li>
+    <% end %>
+  </ul>
+
+<% else %>
+
+  <p>No arguments.</p>
+
 <% end %>
-</ul>
+
+<%= link_to "Start", interpreter_next_path(job:@job.id), class: "btn btn-primary" %>
+<%= link_to "Job List", jobs_path, class: "btn" %>
+
 

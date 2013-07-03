@@ -7,7 +7,15 @@
           <li><%= link_to "Home", root_path %></li>
           <li><%= link_to "Help", help_path %></li>
           <li><%= link_to "Inventory", object_types_path %></li>
-          <li><%= link_to "Protocols", protocol_tree_home_path %></li>
+
+          <li id="fat-menu" class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Protocols<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><%= link_to "Protocols", protocol_tree_home_path %></li>
+              <li><%= link_to "Jobs", jobs_path %></li>
+            </ul>
+          </li>
+
           <% if signed_in? %>
             <li><%= link_to "Users", users_path %></li>
             <li id="fat-menu" class="dropdown">

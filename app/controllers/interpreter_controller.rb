@@ -22,18 +22,38 @@ class InterpreterController < ApplicationController
       @parse_errors = e
     end
 
+  end
+
+  def arguments
+
+    parse
+
     respond_to do |format|
       format.html
     end
 
   end
 
-  def arguments
-    parse
-  end
-
   def submit
+
     parse
+    scope = Scope.new
+
+    @protocol.args.each do |a|
+      scope.set a.var.to_sym, params[a.var.to_sym]
+    end
+
+    @job = Job.new
+    @job.sha = @sha
+    @job.path = @path
+    @job.user_id = current_user.id
+    @job.state = { pc: 0, scope: scope }.to_json
+    @job.save
+
+    respond_to do |format|
+      format.html
+    end
+
   end
 
   def next

@@ -2,19 +2,26 @@
 
 <table class='table'>
 
-  <th>
-    <td>User</td>
-    <td>Github sha</td>
-    <td>State</td>
-  </th>
+  <tr>
+    <th>Job</th>
+    <th>Protocol</th>
+    <th>Github Id</th>
+    <th>User</th>
+    <th>Program Counter</th>
+    <th></th>
+    <th></th>
+  </tr>
 
 <% @jobs.each do |j| %>
 
   <tr>
     <td><%= j.id %></td>
-    <td><%= User.find(j.user_id).login %></td>
+    <td><%= j.path %>
     <td><%= j.sha %></td>
-    <td><%= j.state %></td>
+    <td><%= User.find(j.user_id).login %></td>
+    <td><%= (JSON.parse(j.state))['pc'] %></td>
+    <td><%= link_to 'run', interpreter_next_path(job:j.id) %></td>
+    <td><%= link_to 'cancel', j, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
 
 <% end %>

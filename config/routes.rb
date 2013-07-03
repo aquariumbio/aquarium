@@ -43,7 +43,7 @@ Bioturk::Application.routes.draw do
 
   resources :sessions, only: [:new, :create, :destroy]
 
-  resources :jobs, only: [:index]
+  resources :jobs, only: [:index, :destroy]
 
   match '/item', to: 'items#update'
 
