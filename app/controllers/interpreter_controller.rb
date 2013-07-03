@@ -2,8 +2,6 @@ class InterpreterController < ApplicationController
 
   def parse
 
-    @sha = params[:sha]
-    @path = params[:path]
     client = Octokit::Client.new(login:'klavins',password:'a22imil@te')
     file = Base64.decode64(client.blob('klavinslab/protocols',@sha).content);
 
@@ -26,6 +24,8 @@ class InterpreterController < ApplicationController
 
   def arguments
 
+    @sha = params[:sha]
+    @path = params[:path]
     parse
 
     respond_to do |format|
@@ -36,7 +36,10 @@ class InterpreterController < ApplicationController
 
   def submit
 
+    @sha = params[:sha]
+    @path = params[:path]
     parse
+
     scope = Scope.new
 
     @protocol.args.each do |a|

@@ -6,8 +6,10 @@
     <th>Job</th>
     <th>Protocol</th>
     <th>Github Id</th>
-    <th>User</th>
-    <th>Program Counter</th>
+    <th>Submitted by...</th>
+    <th>Program<br />Counter</th>
+    <th>Started</th>
+    <th>Last updated</th>
     <th></th>
     <th></th>
   </tr>
@@ -20,6 +22,8 @@
     <td><%= j.sha %></td>
     <td><%= User.find(j.user_id).login %></td>
     <td><%= (JSON.parse(j.state))['pc'] %></td>
+    <td><%= j.created_at.to_formatted_s(:short) %></td>
+    <td><%= j.updated_at.to_formatted_s(:short) %></td>
     <td><%= link_to 'run', interpreter_next_path(job:j.id) %></td>
     <td><%= link_to 'cancel', j, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>

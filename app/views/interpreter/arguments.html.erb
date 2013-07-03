@@ -1,4 +1,6 @@
-<h4>Initializing Arguments for <%= @path %></h4>
+<h4>Initializing <%= @path %></h4>
+
+<p><%= @protocol.info %></p>
 
 <% if @parse_errors != "" %>
 
@@ -13,10 +15,18 @@
       <%= hidden_field_tag 'sha', @sha %>
       <%= hidden_field_tag 'path', @path %>
 
-      <% @protocol.args.each do |a| %>
-        <b><%= a.var %></b>
-        <%= label_tag(a.var.to_sym, a.description ) %>
-        <%= text_field_tag( a.var.to_sym ) %>
+      <% if @protocol.args.length > 0 %>
+
+        <% @protocol.args.each do |a| %>
+          <b><%= a.var %></b>
+          <%= label_tag(a.var.to_sym, a.description ) %>
+          <%= text_field_tag( a.var.to_sym ) %>
+        <% end %>
+
+      <% else %>
+
+        <p>(This protocol takes no arguments)</p>
+
       <% end %>
 
       <%= submit_tag("Submit Job", :class => "btn" ) %>

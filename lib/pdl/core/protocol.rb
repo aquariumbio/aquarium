@@ -34,6 +34,14 @@ class Protocol
     end
   end
 
+  def info
+    str = ""
+    @program.each do |i|
+      str = str + i.content if i.name == 'information'
+    end
+    str
+  end
+
   def open path
 
     begin
