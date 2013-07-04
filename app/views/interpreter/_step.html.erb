@@ -1,0 +1,38 @@
+<!-- DESCRIPTION ------------------------------------------------------->
+<h1>
+  <%= @scope.substitute @instruction.description %>
+</h1>
+
+<!-- NOTE -------------------------------------------------------------->
+<p>
+  <%= @scope.substitute @instruction.note %>
+</p>
+
+<!-- WARNINGS ---------------------------------------------------------->
+<% @instruction.warnings.each do |w| %>
+
+  <div class="alert">
+    <%= @scope.substitute w %>
+  </div>
+
+<% end %>
+
+<!-- GETDATAS and BUTTONS ---------------------------------------------->
+
+<%= form_tag("/interpreter/submit", :method => "get" ) do %>  
+
+  <%= hidden_field_tag 'job', @job.id %>
+
+  <% if @instruction.getdatas.length > 0 %>
+
+    <% @instruction.getdatas.each do |g| %>
+      <b><%= g[:var] %></b>
+      <%= label_tag(g[:var], g[:description] )%>
+      <%= text_field_tag( g[:var] ) %>
+    <% end %>
+
+  <% end %>
+
+  <%= submit_tag("Next", :class => "btn" ) %>
+
+<% end %>

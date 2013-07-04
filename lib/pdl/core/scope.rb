@@ -1,10 +1,16 @@
 class Scope 
 
+  attr_reader :stack;
+
   def initialize(opts={})
     o = {
       base: {}
     }.merge opts
     @stack = [o[:base]]
+  end
+
+  def set_stack stack
+    @stack = stack
   end
 
   def set symbol, value

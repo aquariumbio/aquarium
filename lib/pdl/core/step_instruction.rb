@@ -75,4 +75,36 @@ class StepInstruction < Instruction
   
   end
 
+  def description 
+    str = ""
+    @parts.each do |a|
+      str = a[:description] if a.has_key?(:description)
+    end
+    str
+  end
+
+  def note
+    str = ""
+    @parts.each do |a|
+      str = a[:note] if a.has_key?(:note)
+    end
+    str
+  end
+
+  def warnings
+    w = []
+    @parts.each do |a|
+      w.push a[:warning] if a.has_key?(:warning)
+    end
+    w
+  end
+
+  def getdatas
+    g = []
+    @parts.each do |a|
+      g.push a[:getdata] if a.has_key?(:getdata)
+    end
+    g
+  end
+
 end

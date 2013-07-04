@@ -5,9 +5,9 @@
   <tr>
     <th>Job</th>
     <th>Protocol</th>
-    <th>Github Id</th>
-    <th>Submitted by...</th>
     <th>Program<br />Counter</th>
+    <th>Arguments</th>
+    <th>Submitted by ...</th>
     <th>Started</th>
     <th>Last updated</th>
     <th></th>
@@ -18,10 +18,19 @@
 
   <tr>
     <td><%= j.id %></td>
-    <td><%= j.path %>
-    <td><%= j.sha %></td>
-    <td><%= User.find(j.user_id).login %></td>
+    <td><%= link_to j.path, protocol_tree_raw_path(sha: j.sha, format: 'xml'), target: j.path %></td>
     <td><%= (JSON.parse(j.state))['pc'] %></td>
+    <td>
+      <% args = (JSON.parse(j.state))['stack'].first %>
+      <% if args.length > 0 %>
+          <% args.each do |k,v| %>
+            <%= ("<b>" + k + "</b>: " + v).html_safe %><br />
+          <% end %>
+      <% else %>
+        -
+      <% end %>
+    </td>
+    <td><%= User.find(j.user_id).login %></td>
     <td><%= j.created_at.to_formatted_s(:short) %></td>
     <td><%= j.updated_at.to_formatted_s(:short) %></td>
     <td><%= link_to 'run', interpreter_next_path(job:j.id) %></td>

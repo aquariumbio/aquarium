@@ -50,7 +50,7 @@ class InterpreterController < ApplicationController
     @job.sha = @sha
     @job.path = @path
     @job.user_id = current_user.id
-    @job.state = { pc: 0, scope: scope }.to_json
+    @job.state = { pc: 0, stack: scope.stack }.to_json
     @job.save
 
     respond_to do |format|
@@ -60,6 +60,22 @@ class InterpreterController < ApplicationController
   end
 
   def next
+ 
+    # Get the job
+    @job = Job.find(params[:job])
+    state = JSON.parse(@job.state, {:symbolize_names => true} )
+
+    # Get the protocol
+    @sha = @job.sha
+    @path = @job.path
+    parse
+
+    # Get the pc and scope
+    @pc = state[:pc]
+    @scope = Scope.new
+    @scope.set_stack state[:stack]
+    @instruction = @protocol.program[@pc]
+
   end
 
   def abort

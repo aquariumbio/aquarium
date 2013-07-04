@@ -1,9 +1,19 @@
 <div class="row-fluid">
+
+  <!-- FLOW CHART ----------------------------------------------------->
   <div class="span2 interpreter-flow-chart">
     Flow chart here.
   </div>
-  <div class="span9 interpreter-main">Step Description Here</div>
-  <div class="span1 interpreter-next">Buttons Here</div>
+
+  <!-- MAIN ----------------------------------------------------------->
+  <div class="span9 interpreter-main">
+    <%= render @instruction.name %>
+  </div>
+
+  <!-- BUTTONS -------------------------------------------------------->
+  <div class="span1 interpreter-next">
+    Buttons Here
+  </div>
 
 </div>
 
