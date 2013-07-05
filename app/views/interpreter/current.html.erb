@@ -2,7 +2,7 @@
 
   <!-- FLOW CHART ----------------------------------------------------->
   <div class="span2 interpreter-flow-chart">
-    Flow chart here.
+    PC: <%= @pc %>
   </div>
 
   <!-- MAIN ----------------------------------------------------------->
@@ -12,7 +12,7 @@
 
   <!-- BUTTONS -------------------------------------------------------->
   <div class="span1 interpreter-next">
-    Buttons Here
+    <%= link_to 'Next', interpreter_advance_path(job: @job.id), class: 'btn' %>
   </div>
 
 </div>

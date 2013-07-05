@@ -1,11 +1,9 @@
 Bioturk::Application.routes.draw do
 
   get "interpreter/arguments"
-
   get "interpreter/submit"
-
-  get "interpreter/next"
-
+  get "interpreter/current"
+  get "interpreter/advance"
   get "interpreter/abort"
 
   get "jobs/index"

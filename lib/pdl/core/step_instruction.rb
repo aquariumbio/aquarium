@@ -6,6 +6,7 @@ class StepInstruction < Instruction
   def initialize parts
     super 'step'
     @parts = parts
+    @renderable = true
   end
 
   def render_description d, scope 

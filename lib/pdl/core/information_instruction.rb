@@ -5,6 +5,7 @@ class InformationInstruction < Instruction
   def initialize content
     super 'information'
     @content = content
+    @renderable = true
   end
 
   def render scope
