@@ -43,4 +43,12 @@ class ObjectType < ActiveRecord::Base
     return q
   end
 
+  def in_use
+    q = 0
+    self.items.each { |i|
+      q += i.inuse
+    }
+    return q
+  end
+
 end

@@ -3,12 +3,15 @@ require 'json'
 
 class TakeInstruction < Instruction
 
+  attr_reader :object_type, :quantity, :var
+
   def initialize object_type, quantity, var
     @object_type = object_type
     @quantity = quantity
     @num_taken = 0
     @var = var
     @url = 'http://bioturk.ee.washington.edu:3000/liaison/'
+    @renderable = true
     super 'take'
   end
 

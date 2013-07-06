@@ -1,1 +1,59 @@
-<%= @instruction.name %>
+<%
+  name = @scope.substitute @instruction.object_type
+  object = ObjectType.find_by_name(name)
+  num = @instruction.quantity
+%>
+
+<h1>You will need 
+  <%= num %> 
+  <%= name.pluralize(num) %>.</h1>
+
+<div class='row-fluid'>
+
+  <div class="span4 object-image">
+    <%= image_tag object.image.url(:medium) %>
+  </div>
+
+  <div class="span8 object-image">
+    <h4>Choose <%= num %> <%= "item".pluralize(num) %>:</h4>
+    <ul>
+      <% object.items.each do |i| %>
+        <li>
+          <%= i.location %>
+          <input name='<%= i.location %>' class="small-input" type="number" value="0" onchange='update_total()'>
+          of <%= i.quantity - i.inuse %> available.
+        </li>  
+      <% end %>
+      <li>Total: <span id='total'>0</span> of <%= num %></li>
+    </ul>
+    <p>Choose location(s), place the object(s) at your station, and click next.</p>
+  </div>
+
+</div>
+
+<script>
+
+  function update_total() {
+
+    total = 0;
+
+    items = document.getElementsByClassName('small-input');
+    for(i=0; i<items.length; i++) {
+      if ( parseInt(items[i].value) < 0 ) {
+        items[i].value = 0;
+      }
+      total += parseInt(items[i].value);
+    }
+
+    el = document.getElementById('total');
+    el.innerHTML = total;
+
+    if ( total == <%= num %> ) {
+      document.getElementById('advance-button').style.display = 'block';
+    } else {
+      document.getElementById('advance-button').style.display = 'none';
+    }
+
+  }
+
+</script>

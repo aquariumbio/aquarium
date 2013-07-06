@@ -2,17 +2,26 @@
 
   <!-- FLOW CHART ----------------------------------------------------->
   <div class="span2 interpreter-flow-chart">
-    PC: <%= @pc %>
+    <% if @pc %>
+      PC: <%= @pc %>
+    <% end %>
   </div>
 
   <!-- MAIN ----------------------------------------------------------->
   <div class="span9 interpreter-main">
-    <%= render @instruction.name %>
+    <% if @pc != nil %>
+      <%= render @instruction.name %>
+    <% else %>
+      THIS PROTOCOL HAS BEEN COMPLETED.
+    <% end %>
   </div>
 
   <!-- BUTTONS -------------------------------------------------------->
   <div class="span1 interpreter-next">
-    <%= link_to 'Next', interpreter_advance_path(job: @job.id), class: 'btn' %>
+    <% if @pc != nil %>
+      <%= link_to 'Next', interpreter_advance_path(job: @job.id), class: 'btn' %>
+      <button class='btn btn-primary' id='advance-button'>NEXT</button>
+    <% end %>
   </div>
 
 </div>

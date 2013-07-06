@@ -9,13 +9,40 @@
 }
 
 .interpreter-main {
+
   border: 1pt solid #aaa;
   border-radius: 10px;
   height: 600px;
   padding: 10px;
+
+  h4 {
+    font-size: 18pt;
+    margin-bottom: 14px;
+  }
+
+  li {
+
+    font-size: 18pt;
+
+    .small-input {
+      &:before {
+        content: '&nbsp;&nbsp;';
+      }
+      width: 50px;
+    }
+
+  }
+
 }
 
 .interpreter-next {
+
   height: 600px;
   padding: 10px;
+
+  button {
+    display: none;
+  }
+
 }
+

@@ -63,7 +63,7 @@ class InterpreterController < ApplicationController
 
   end
 
-  def current
+  def get_current
  
     # Get the job
     @job = Job.find(params[:job])
@@ -80,27 +80,20 @@ class InterpreterController < ApplicationController
     @scope.set_stack state[:stack]
     @instruction = @protocol.program[@pc]
 
-    # Call instruction's pre_render method
-    @instruction.pre_render @scope if @instruction.respond_to?('pre_render')
+  end
+
+  def current
+
+    get_current
+    logger.info "current: pc = #{@pc}: #{@instruction.name}"
 
   end
 
   def advance
 
-    # Get the job
-    @job = Job.find(params[:job])
-    state = JSON.parse(@job.state, {:symbolize_names => true} )
+    get_current
 
-    # Get the protocol
-    @sha = @job.sha
-    @path = @job.path
-    parse
-
-    # Get the pc and scope
-    @pc = state[:pc]
-    @scope = Scope.new
-    @scope.set_stack state[:stack]
-    @instruction = @protocol.program[@pc]
+    logger.info "advance: pc = #{@pc}: #{@instruction.name}"
 
     # execute the current instruction
     if @pc >= 0
@@ -113,35 +106,48 @@ class InterpreterController < ApplicationController
     else
       @pc = 0
     end
- 
-    @instruction = @protocol.program[@pc]
 
-    # while instruction at pc is not renderable
-    while !(@instruction.renderable)
-
-      logger.info "In while loop: #{@instruction.name}."
-
-      # execute the instruction
-      @instruction.bt_execute @scope if @instruction.respond_to?('bt_execute')
-
-      # increment the pc
-      if @instruction.respond_to?('set_pc')
-        @pc = @instruction.set_pc @scope
-      else
-        @pc += 1
-      end
+    # continue through instructions that are not renderable
+    if @pc < @protocol.program.length
 
       @instruction = @protocol.program[@pc]
 
+      # while instruction at pc is not renderable
+      while !@instruction.renderable && @pc < @protocol.program.length
+
+        logger.info "advance: in while loop: #{@instruction.name}."
+
+        # execute the instruction
+        @instruction.bt_execute @scope if @instruction.respond_to?('bt_execute')
+
+        # increment the pc
+        if @instruction.respond_to?('set_pc')
+          @pc = @instruction.set_pc @scope
+        else
+          @pc += 1
+        end
+
+        @instruction = @protocol.program[@pc] if @pc < @protocol.program.length
+
+      end
+
     end
 
-    # save the new pc and stack in the job record
-    @job.state = { pc: @pc, stack: @scope.stack }.to_json
-    @job.save
+    if @pc < @protocol.program.length
 
-    # if there are more insructions
-    @instruction = @protocol.program[@pc]
-    render 'current'
+      @job.state = { pc: @pc, stack: @scope.stack }.to_json
+      @job.save
+      @instruction = @protocol.program[@pc]
+      render 'current' #note: this does not call the render method above
+
+    else
+
+      @pc = nil
+      @job.state = { pc: @pc, stack: @scope.stack }.to_json
+      @job.save
+      render 'current'
+
+    end
 
   end
 
