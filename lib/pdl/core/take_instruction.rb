@@ -84,4 +84,19 @@ class TakeInstruction < Instruction
 
   end  
 
+  def bt_execute scope, params
+    scope.set @var.to_sym, []
+    i = 0
+    while params.has_key?("i#{i}")
+      @item = Item.find(params["i#{i}"]).attributes.symbolize_keys
+      @obj = ObjectType.find_by_name(scope.substitute @object_type).attributes.symbolize_keys
+      v = scope.get ( @var.to_sym )
+      scope.set( @var.to_sym, v.push( PdlItem.new( @obj, @item ) ) )
+      i += 1
+    end
+    if @quantity == 1
+      scope.set( @var.to_sym, scope.get(@var.to_sym).first )
+    end
+  end
+
 end

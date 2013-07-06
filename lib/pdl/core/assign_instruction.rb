@@ -14,7 +14,7 @@ class AssignInstruction < Instruction
     scope.set( var.to_sym, scope.evaluate( @value ) )
   end
 
-  def bt_execute scope
+  def bt_execute scope, params
     scope.set( var.to_sym, scope.evaluate( @value ) )
   end
 

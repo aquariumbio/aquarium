@@ -86,6 +86,7 @@ class InterpreterController < ApplicationController
 
     get_current
     logger.info "current: pc = #{@pc}: #{@instruction.name}"
+    logger.info @scope.to_s
 
   end
 
@@ -94,10 +95,11 @@ class InterpreterController < ApplicationController
     get_current
 
     logger.info "advance: pc = #{@pc}: #{@instruction.name}"
+    logger.info @scope.to_s
 
     # execute the current instruction
     if @pc >= 0
-      @instruction.bt_execute @scope if @instruction.respond_to?('bt_execute')
+      @instruction.bt_execute @scope, params if @instruction.respond_to?('bt_execute')
       if @instruction.respond_to?("set_pc")
         @pc = ins.set_pc @scope
       else
@@ -118,7 +120,7 @@ class InterpreterController < ApplicationController
         logger.info "advance: in while loop: #{@instruction.name}."
 
         # execute the instruction
-        @instruction.bt_execute @scope if @instruction.respond_to?('bt_execute')
+        @instruction.bt_execute @scope, params if @instruction.respond_to?('bt_execute')
 
         # increment the pc
         if @instruction.respond_to?('set_pc')

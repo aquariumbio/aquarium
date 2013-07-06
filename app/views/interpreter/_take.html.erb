@@ -20,7 +20,7 @@
       <% object.items.each do |i| %>
         <li>
           <%= i.location %>
-          <input name='<%= i.location %>' class="small-input" type="number" value="0" onchange='update_total()'>
+          <input name='<%= i.id %>' class="small-input" type="number" value="0" onchange='update_total()'>
           of <%= i.quantity - i.inuse %> available.
         </li>  
       <% end %>
@@ -54,6 +54,17 @@
       document.getElementById('advance-button').style.display = 'none';
     }
 
+  }
+
+  window.onload = function() {
+    document.getElementById('advance-button').addEventListener('click', function() {
+      query="";
+      items = document.getElementsByClassName('small-input');
+      for(i=0; i<items.length; i++) {
+        query += "&i" + i + "=" + items[i].name + "&q" + i + "=" + items[i].value;
+      }
+      window.location = '/interpreter/advance?job=<%= @job.id %>' + query;
+    } );
   }
 
 </script>
