@@ -1,14 +1,17 @@
 <!-- DESCRIPTION ------------------------------------------------------->
+
 <h1>
   <%= @scope.substitute @instruction.description %>
 </h1>
 
 <!-- NOTE -------------------------------------------------------------->
+
 <p>
   <%= @scope.substitute @instruction.note %>
 </p>
 
 <!-- WARNINGS ---------------------------------------------------------->
+
 <% @instruction.warnings.each do |w| %>
 
   <div class="alert">
@@ -22,11 +25,25 @@
   <% if @instruction.getdatas.length > 0 %>
 
     <% @instruction.getdatas.each do |g| %>
-      <b><%= g[:var] %></b>
       <%= label_tag(g[:var], g[:description] )%>
       <%= text_field_tag( g[:var] ) %>
     <% end %>
 
   <% end %>
 
+<!-- NEXT BUTTON ------------------------------------------------------->
 
+<script>
+
+  window.onload = function() {
+    document.getElementById('advance-button').style.display = 'block';
+    q = "";
+    document.getElementById('advance-button').addEventListener('click', function() {
+      <% @instruction.getdatas.each do |g| %>
+        q += '&<%= g[:var] %>=' + document.getElementById('<%= g[:var] %>').value;
+      <% end %>
+      window.location = '/interpreter/advance?job=<%= @job.id %>' + q;
+    } );
+  }
+
+</script>

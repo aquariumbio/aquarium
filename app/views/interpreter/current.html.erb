@@ -19,7 +19,6 @@
   <!-- BUTTONS -------------------------------------------------------->
   <div class="span1 interpreter-next">
     <% if @pc != nil %>
-      <%= link_to 'Next', interpreter_advance_path(job: @job.id), class: 'btn' %>
       <button class='btn btn-primary' id='advance-button'>NEXT</button>
     <% end %>
   </div>

@@ -62,6 +62,17 @@ class StepInstruction < Instruction
 
   end
 
+  def bt_execute scope, params
+
+    # all get_datas should be in the parameters
+    params.each do |k,v|
+      if k != 'job'
+        scope.set k.to_sym, v
+      end
+    end
+
+  end
+
   def execute scope
    
     @parts.each do |a|

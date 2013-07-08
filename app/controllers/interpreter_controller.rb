@@ -90,24 +90,32 @@ class InterpreterController < ApplicationController
 
   end
 
+  def execute
+
+    @instruction.bt_execute @scope, params if @instruction.respond_to?('bt_execute')
+
+    if @instruction.respond_to?("set_pc")
+      @pc = @instruction.set_pc @scope
+    else
+      @pc += 1
+    end
+
+  end
+
   def advance
 
     get_current
 
     logger.info "advance: pc = #{@pc}: #{@instruction.name}"
-    logger.info @scope.to_s
+    logger.info "before execute: " + @scope.to_s
 
-    # execute the current instruction
     if @pc >= 0
-      @instruction.bt_execute @scope, params if @instruction.respond_to?('bt_execute')
-      if @instruction.respond_to?("set_pc")
-        @pc = ins.set_pc @scope
-      else
-        @pc += 1
-      end
+      execute
     else
       @pc = 0
     end
+
+    logger.info "after execute: " + @scope.to_s
 
     # continue through instructions that are not renderable
     if @pc < @protocol.program.length
@@ -117,18 +125,7 @@ class InterpreterController < ApplicationController
       # while instruction at pc is not renderable
       while !@instruction.renderable && @pc < @protocol.program.length
 
-        logger.info "advance: in while loop: #{@instruction.name}."
-
-        # execute the instruction
-        @instruction.bt_execute @scope, params if @instruction.respond_to?('bt_execute')
-
-        # increment the pc
-        if @instruction.respond_to?('set_pc')
-          @pc = @instruction.set_pc @scope
-        else
-          @pc += 1
-        end
-
+        execute
         @instruction = @protocol.program[@pc] if @pc < @protocol.program.length
 
       end

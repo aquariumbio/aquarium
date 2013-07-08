@@ -1,3 +1,14 @@
 <h1>INFORMATION</h1>
 
 <p><%= @scope.substitute @instruction.content %></p>
+
+<script>
+
+  window.onload = function() {
+    document.getElementById('advance-button').style.display = 'block';
+    document.getElementById('advance-button').addEventListener('click', function() {
+      window.location = '/interpreter/advance?job=<%= @job.id %>';
+    } );
+  }
+
+</script>
