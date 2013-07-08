@@ -19,10 +19,6 @@
 
 <!-- GETDATAS and BUTTONS ---------------------------------------------->
 
-<%= form_tag("/interpreter/submit", :method => "get" ) do %>  
-
-  <%= hidden_field_tag 'job', @job.id %>
-
   <% if @instruction.getdatas.length > 0 %>
 
     <% @instruction.getdatas.each do |g| %>
@@ -33,6 +29,4 @@
 
   <% end %>
 
-  <%= submit_tag("Next", :class => "btn" ) %>
 
-<% end %>

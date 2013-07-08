@@ -91,7 +91,7 @@ class TakeInstruction < Instruction
       @item = Item.find(params["i#{i}"]).attributes.symbolize_keys
       @obj = ObjectType.find_by_name(scope.substitute @object_type).attributes.symbolize_keys
       v = scope.get ( @var.to_sym )
-      scope.set( @var.to_sym, v.push( PdlItem.new( @obj, @item ) ) )
+      scope.set( @var.to_sym, v.push( { object: @obj, item: @item } ) )
       i += 1
     end
     if @quantity == 1

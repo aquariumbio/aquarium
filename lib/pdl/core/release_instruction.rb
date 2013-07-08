@@ -1,8 +1,11 @@
 class ReleaseInstruction < Instruction
 
+  attr_reader :expr;
+
   def initialize expr
     @expr = expr
     super 'release'
+    @renderable = true
   end
 
   def render scope

@@ -1,1 +1,47 @@
-<%= @instruction.name %>
+
+<% pi = @scope.evaluate( @instruction.expr )
+   nm     = pi[:object][:name]
+   loc    = pi[:item][:location]
+   method = pi[:object][:release_description] %>
+
+<% case pi[:object][:release_method]
+
+  when 'return' %>
+    <h1>Please return the <%= nm %> taken from <%= loc %>.</h1>
+    <p>Details: <%= method %></p>
+
+<% when 'dispose' %>
+    <h1>Please dispose of the <%= nm %> taken from <%= loc %>.</h1>
+    <p>Details: <%= method %></p>
+
+<% when 'query' %>
+    <h1>Return or dispose the <%= nm %> taken from <%= loc %>?</h1>
+    <p>Details: <%= method %></p>
+    <div class="yesorno">
+      <label class="radio inline">
+        <input type="radio" id="return-yes" checked name="yn">Yes
+      </label>
+      <label class="radio inline">
+        <input type="radio" id="return-no" name="yn">No
+      </label>
+    </div>
+
+<% end %>
+
+<script>
+  window.onload = function() {
+    document.getElementById('advance-button').style.display = 'block';
+    document.getElementById('advance-button').addEventListener('click', function() {
+      <% if pi[:object][:release_method] == 'query' %>
+        if ( document.getElementById('return-yes').checked ) {
+          m = 'return';
+        } else {
+          m = 'dispose';
+        }
+      <% else %>
+        m = <%= pi[:object][:release_method] %> 
+      <% end %>
+      window.location = '/interpreter/advance?job=<%= @job.id %>' + "&method=" + m;
+    } );
+  }
+</script>
