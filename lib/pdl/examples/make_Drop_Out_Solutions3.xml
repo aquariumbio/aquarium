@@ -1,0 +1,384 @@
+<protocol name="Yeast Dropout Solutions">
+
+    <argument>
+      <var>Trp</var>
+      <type>num</type>
+      <description>Enter the number of bottles of Trp you wish to make.</description>
+    </argument>
+
+    <argument>
+      <var>His</var>
+      <type>num</type>
+      <description>Enter the number of bottles of His you wish to make.</description>
+    </argument>
+
+    <argument>
+      <var>Leu</var>
+      <type>num</type>
+      <description>Enter the number of bottles of Leu you wish to make.</description>
+    </argument>
+
+    <argument>
+      <var>Ura</var>
+      <type>num</type>
+      <description>Enter the number of bottles of Ura you wish to make.</description>
+    </argument>
+
+    <information>
+        This protocols describes how to make solutions of Tryptophan, Histidine, Leucine, and Uracil, which
+        are used to make selective media and/or plates for yeast. The amino acid solutions are 10 mg / mL
+        and the Uracil solution is 2.5 mg / mL.
+    </information>
+
+  <assign><var>x</var><value>0</value></assign>
+  <assign><var>y</var><value>1</value></assign>
+
+  <assign><var>ingredients</var><value>[]</value></assign>
+
+  <assign><var>temp</var><value>%{x}+%{y}</value></assign>
+  <assign><var>labels</var><value>[]</value></assign>
+  <assign><var>amounts</var><value>[]</value></assign>
+
+    <assign>
+        <var>total</var>
+        <value>%{Trp}+%{His}+%{Leu}+%{Ura}</value>
+    </assign>
+
+    <take>
+	<object>500 mL Bottle</object>
+	<quantity>%{total}</quantity>
+        <var>bottles</var>
+    </take>
+
+    <take>
+        <object>Weigh Boat (L)</object>
+        <quantity>%{total}</quantity>
+        <var>boats</var>
+    </take>
+
+    <take>
+        <object>1L Bottle Top Filter</object>
+        <quantity>1</quantity>
+        <var>filter</var>
+    </take> 
+
+    <if>
+      <condition>%{Trp} &gt; 0</condition>
+      <then>
+        <take>
+            <object>Tryptophan Powder</object>
+            <quantity>1</quantity>
+            <var>trp_powder</var>
+        </take>
+
+	<step>
+	    <description>Put a temporary label on the lid of %{Trp} of the 500 mL bottles.</description>
+       	    <note>
+             Label the bottles Trp
+            </note>
+            <warning>Put the labels on the tops of the bottles, not on the sides. If not, the
+            	      labels may come off when the bottles are put in the heat bath.
+            </warning>
+	</step>
+        <assign>
+            <var>ingredients</var>
+	    <value>%{ingredients}.push('Tryptophan')</value>
+        </assign>
+        <assign>
+            <var>labels</var>
+	    <value>%{labels}.push('Trp')</value>
+        </assign>
+        <assign>
+            <var>amounts</var>
+	    <value>%{amounts}.push('5g')</value>
+        </assign>
+      </then>
+      <else>
+	<step><description>Not making any Trp</description></step>
+      </else>
+    </if>
+
+    <if>
+      <condition>%{His} &gt; 0</condition>
+      <then>
+        <take>
+            <object>Histidine Powder</object>
+            <quantity>1</quantity>
+            <var>his_powder</var>
+        </take>
+
+	<step>
+	    <description>Put a temporary label on the lid of %{His} of the 500 mL bottles.</description>
+       	    <note>
+             Label the bottles His
+            </note>
+            <warning>Put the labels on the tops of the bottles, not on the sides. If not, the
+            	      labels may come off when the bottles are put in the heat bath.
+            </warning>
+	</step>
+        <assign>
+            <var>ingredients</var>
+	    <value>%{ingredients}.push('Histidine')</value>
+        </assign>
+        <assign>
+            <var>labels</var>
+	    <value>%{labels}.push('His')</value>
+        </assign>
+        <assign>
+            <var>amounts</var>
+	    <value>%{amounts}.push('5g')</value>
+        </assign>
+      </then>
+      <else>
+	<step><description>Not making any His</description></step>
+      </else>
+    </if>
+
+    <if>
+      <condition>%{Leu} &gt; 0</condition>
+      <then>
+        <take>
+            <object>Leucine Powder</object>
+            <quantity>1</quantity>
+            <var>leu_powder</var>
+        </take>
+
+	<step>
+	    <description>Put a temporary label on the lid of %{Leu} of the 500 mL bottles.</description>
+       	    <note>
+             Label the bottles Leu
+            </note>
+            <warning>Put the labels on the tops of the bottles, not on the sides. If not, the
+            	      labels may come off when the bottles are put in the heat bath.
+            </warning>
+	</step>
+
+        <assign>
+            <var>ingredients</var>
+	    <value>%{ingredients}.push('Leucine')</value>
+        </assign>
+        <assign>
+            <var>labels</var>
+	    <value>%{labels}.push('Leu')</value>
+        </assign>
+        <assign>
+            <var>amounts</var>
+	    <value>%{amounts}.push('5g')</value>
+        </assign>
+      </then>
+      <else>
+	<step><description>Not making any Leu</description></step>
+      </else>
+    </if>
+
+    <if>
+      <condition>%{Ura} &gt; 0</condition>
+      <then>
+        <take>
+            <object>Uracil Powder</object>
+            <quantity>1</quantity>
+            <var>ura_powder</var>
+        </take>
+	<step>
+	    <description>Put a temporary label on the lid of %{Ura} of the 500 mL bottles.</description>
+       	    <note>
+             Label the bottles Ura
+            </note>
+            <warning>Put the labels on the tops of the bottles, not on the sides. If not, the
+            	      labels may come off when the bottles are put in the heat bath.
+            </warning>
+	</step>
+        <assign>
+            <var>ingredients</var>
+	    <value>%{ingredients}.push('Uracine')</value>
+        </assign>
+        <assign>
+            <var>labels</var>
+	    <value>%{labels}.push('Ura')</value>
+        </assign>
+        <assign>
+            <var>amounts</var>
+	    <value>%{amounts}.push('2.5g')</value>
+        </assign>
+      </then>
+      <else>
+	<step><description>Not making any Ura</description></step>
+      </else>
+    </if>
+
+    <comment> loop over Trp, His, Leu, and Ura independently and with a step label a bottle
+	of each of those types for each iteration
+	also push the label into the label array each time
+	and push the ingredient into the ingredients array
+	and push the amount into the amounts array
+    </comment>
+ 
+    <assign>
+	<var>count</var>
+	<value>0</value>
+    </assign>
+
+    <assign><var>i</var><value>0</value></assign>
+    
+
+    <comment>while condition below should be %{i}!=#{labels.length}</comment>
+
+    <while>    
+        <condition>%{i}!= %{labels}.length</condition>    
+        <do>
+        
+            <step>
+                <description>Measure #{%{amounts}[%{i}]} of #{%{ingredients}[%{i}]}</description>
+                <note>Place the plastic boat on the scale. Zero the scale. 
+		      Using the spatula, measure #{%{amounts}[%{i}]} of #{%{ingredients}[%{i}]} 
+		      into the plastic boat.
+                      Use a kimwipe to clean the spatula.
+		</note>
+                <image>WeighDryIngredient</image>
+            </step>
+                
+            <step>
+                <description>
+                    Transfer the #{%{ingredients}[%{i}]} to the bottle labeled #{%{labels}[%{i}]}.
+                </description>
+                <note>
+                Remove the top of the 500 mL bottle labeled #{%{labels}[%{i}]} and pour
+                the #{%{ingredients}[%{i}]} into the bottle. Dispose of the plastic boat.
+                </note>
+                <image>PourDry500mL</image>
+            </step>
+                
+            <step>
+                <description>
+                    Fill the graduated cylinder with di Water to 500 mL
+                </description>
+                <image>Fill1000mLGraduated</image>
+            </step>
+
+            <step>
+                <description>
+                    Transfer and mix.            
+                </description>
+                <note>
+                    Pour the water from the cylinder into the bottle labeled #{%{labels}[%{i}]},
+                    return the top, and shake the bottle to mix in the #{%{ingredients}[%{i}]}.
+                </note>
+                <image>TransferGraduatedTo500mL</image>
+            </step>
+            
+            <assign><var>i</var><value>%{i}+2</value></assign>
+            
+        </do>
+        
+    </while>
+    
+    <step>
+        <description>Put all bottles in the heat bath.</description>
+        <note>Place all four of the bottles in the heat bath for approximately 20 minutes.
+            Make sure that the heat bath isat 65 C. Cover the heat bath for faster heating.
+            Go can go on to the next step now, but you should periodically remove each bottle,
+            swirl it, and check whether the powders have dissolved.
+        </note>
+        <image>HeatBathWithAminoAcids</image>
+    </step>
+    
+    <step>
+        <description>Prepare bottle top filters.</description>
+        <note>While the powders are dissolving, attach the four bottle top filters to 
+            the four remaining (sterile!) bottles. You will need to attache the white plastic hose adapter
+            to each filter as well. Be careful to keep the inside of the filter cap and the bottle
+            sterile.
+        </note>
+        <image>BottleFilterOnBottle</image>
+    </step>
+    
+    <step>
+        <description>Remove filter and cap bottles</description>
+        <note>Remove the filter and cap the bottles, making sure to keep everthing sterile.</note>
+        <image>BottleFilterOnBottle</image>
+    </step>
+    
+    <comment>Each produce statement should be wrapped in an if statement, 
+	because we dont want to produce 0</comment>
+ 
+    <produce>
+        <object>Tryptophan Solution</object>
+	<location>B0.101</location>
+        <quantity>%{Trp}</quantity>
+    </produce>    
+
+    <produce>
+        <object>Histidine Solution</object>
+	<location>B0.102</location>
+        <quantity>%{His}</quantity>
+    </produce>    
+
+    <produce>
+        <object>Leucine Solution</object>
+	<location>B0.103</location>
+        <quantity>%{Leu}</quantity>
+    </produce>    
+
+    <produce>
+        <object>Uracil Solution</object>
+	<location>B0.104</location>
+        <quantity>%{Ura}</quantity>
+    </produce>    
+
+
+    <release>
+        <var>%{boats}[0]</var>
+    </release>
+    <release>
+	<var>%{bottles}[0]</var>
+    </release>
+    <release>
+        <var>%{filter}</var>
+    </release>
+
+    <if>
+      <condition>%{Trp} &gt; 0</condition>
+      <then>
+        <release>
+            <var>%{trp_powder}[0]</var>
+        </release>
+      </then>
+      <else>
+	<step><description>Protocol did not make any Trp</description></step>
+      </else>
+    </if>
+    <if>
+      <condition>%{His} &gt; 0</condition>
+      <then>
+        <release>
+            <var>%{his_powder}[0]</var>
+        </release>
+      </then>
+      <else>
+	<step><description>Protocol did not make any His</description></step>
+      </else>
+    </if>
+    <if>
+      <condition>%{Leu} &gt; 0</condition>
+      <then>
+        <release>
+            <var>%{leu_powder}[0]</var>
+        </release>
+      </then>
+      <else>
+	<step><description>Protocol did not make any Leu</description></step>
+      </else>
+    </if>
+    <if>
+      <condition>%{Ura} &gt; 0</condition>
+      <then>
+        <release>
+            <var>%{ura_powder}[0]</var>
+        </release>
+      </then>
+      <else>
+	<step><description>Protocol did not make any Ura</description></step>
+      </else>
+    </if>
+
+</protocol>

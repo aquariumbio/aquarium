@@ -2,6 +2,7 @@
 
   <argument>
     <var>object_name</var>
+    <type>string</type>
     <description>The name of object type you would like this protocol to use</description>
   </argument>
 
@@ -12,9 +13,13 @@
     <quantity>1</quantity>
     <var>b</var>
   </take>
-
-  <assign><var>name</var><value>%{b}.object[:name]</value></assign>
-  <assign><var>loc</var> <value>%{b}.item[:location]</value></assign>
+  <take>
+    <object>%{object_name}</object>
+    <quantity>1</quantity>
+    <var>c</var>
+  </take>
+  <assign><var>name</var><value>%{b}</value></assign>
+  <assign><var>loc</var> <value>%{b}</value></assign>
 
   <step>
     <description>You took an object of type %{name} from location %{loc}</description>
@@ -22,7 +27,7 @@
 
   <!-- Should the release tag be an expression instead of a var? -->
   <release>
-    <var>%{b}</var>
+    <var>%{b}[0]</var>
   </release>
 
   <step>

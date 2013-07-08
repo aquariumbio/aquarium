@@ -1,0 +1,23 @@
+<protocol> 
+
+  <information> This protocol tests out the take tag </information>
+
+  <assign>
+    <var>count</var>
+    <value>1</value>
+  </assign>
+
+  <assign>
+     <var>ingredients</var>
+     <value>['111','222','333','444']</value>
+  </assign>
+
+  <step>
+    <description>First ingredient is #{%{ingredients}[0]}</description>
+  </step>
+
+  <step>
+    <description>end</description>
+  </step>
+
+</protocol>

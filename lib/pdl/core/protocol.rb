@@ -119,7 +119,9 @@ class Protocol
 
           when 'argument'
             c = children_as_text e
-            push_arg ArgumentInstruction.new c[:var], c[:description]
+		puts "In PROTOCOL Arg type is "
+		puts c[:type]
+            push_arg ArgumentInstruction.new c[:var], c[:type], c[:description]
             e = increment e
 
           when 'include'
@@ -211,7 +213,7 @@ class Protocol
 
           when 'take'
             c = children_as_text e
-            push(TakeInstruction.new c[:object], c[:quantity].to_i, c[:var])
+            push(TakeInstruction.new c[:object], c[:quantity], c[:var])
             e = increment e
 
           when 'release'
