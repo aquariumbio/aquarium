@@ -2,8 +2,17 @@
 
   <!-- FLOW CHART ----------------------------------------------------->
   <div class="span2 interpreter-flow-chart">
+    <h1><%= @job.path %></h1>
     <% if @pc %>
-      PC: <%= @pc %>
+      <% (0..@protocol.program.length-1).each do |p| %>
+        <% if p == @pc %>
+          <div class='pc_at'>
+        <% else %>
+          <div class='pc_notat'>
+        <% end %>
+        <%= "<b>#{p}:</b>   #{@protocol.program[p].name}".html_safe %>
+        </div>
+      <% end %>
     <% end %>
   </div>
 

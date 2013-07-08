@@ -10,11 +10,11 @@
 
 <div class='row-fluid'>
 
-  <div class="span4 object-image">
+  <div class="span3 object-image">
     <%= image_tag object.image.url(:medium) %>
   </div>
 
-  <div class="span8 object-image">
+  <div class="span9 object-image">
     <h4>Choose <%= num %> <%= "item".pluralize(num) %>:</h4>
     <ul>
       <% object.items.each do |i| %>

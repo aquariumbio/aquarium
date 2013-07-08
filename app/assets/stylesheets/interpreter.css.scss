@@ -3,21 +3,55 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .interpreter-flow-chart {
-  background: #eee;
-  height: 600px;
+
+  height: 900px;
   padding: 10px;
+
+  h1 {
+    font-size: 12pt;
+    font-style: plain;
+    font-family: courier;
+    margin: 102x;
+  }
+
+  .pc_notat {
+    padding: 2px 2px 2px 10px;
+    margin: 2px;
+    width: 100%;
+    background: #eee;
+    color: #666;
+    font-size: 9pt;
+    border-radius: 4px;
+    font-family: courier;
+  }
+
+  .pc_at {
+    padding: 2px 2px 2px 10px;
+    margin: 2px;
+    width: 100%;
+    background: #111;       
+    color: #fff;
+    font-size: 9pt;
+    border-radius: 4px;
+    font-family: courier;
+  }
+
 }
 
 .interpreter-main {
 
   border: 1pt solid #aaa;
   border-radius: 10px;
-  height: 600px;
+  height: 900px;
   padding: 10px;
 
   h4 {
     font-size: 18pt;
     margin-bottom: 14px;
+  }
+
+  h1 {
+    font-size: 42pt;
   }
 
   li {
@@ -41,11 +75,16 @@
     }
   }
 
+  p {
+    font-size: 18pt;
+    padding: 18px;
+  }
+
 }
 
 .interpreter-next {
 
-  height: 600px;
+  height: 900px;
   padding: 10px;
 
   button {

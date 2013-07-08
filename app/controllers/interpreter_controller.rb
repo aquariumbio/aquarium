@@ -106,47 +106,33 @@ class InterpreterController < ApplicationController
 
     get_current
 
-    logger.info "advance: pc = #{@pc}: #{@instruction.name}"
-    logger.info "before execute: " + @scope.to_s
-
     if @pc >= 0
       execute
     else
       @pc = 0
     end
 
-    logger.info "after execute: " + @scope.to_s
-
     # continue through instructions that are not renderable
     if @pc < @protocol.program.length
 
       @instruction = @protocol.program[@pc]
-
-      # while instruction at pc is not renderable
       while !@instruction.renderable && @pc < @protocol.program.length
-
         execute
         @instruction = @protocol.program[@pc] if @pc < @protocol.program.length
-
       end
 
     end
 
     if @pc < @protocol.program.length
-
-      @job.state = { pc: @pc, stack: @scope.stack }.to_json
-      @job.save
       @instruction = @protocol.program[@pc]
-      render 'current' #note: this does not call the render method above
-
     else
-
       @pc = nil
-      @job.state = { pc: @pc, stack: @scope.stack }.to_json
-      @job.save
-      render 'current'
-
     end
+
+    @job.state = { pc: @pc, stack: @scope.stack }.to_json
+    @job.save
+
+    render 'current' #note: this does not call the render method above, just the erb
 
   end
 
