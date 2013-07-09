@@ -3,7 +3,7 @@
   <!-- FLOW CHART ----------------------------------------------------->
   <div class="span2 interpreter-flow-chart">
     <h1><%= @job.path %></h1>
-    <% if @pc %>
+    <% if @pc != nil %>
       <% (0..@protocol.program.length-1).each do |p| %>
         <% if p == @pc %>
           <div class='pc_at'>
@@ -23,7 +23,7 @@
     <% elsif @pc != nil %>
       <%= render @instruction.name %>
     <% else %>
-      THIS PROTOCOL HAS BEEN COMPLETED.
+      <div class="alert alert-info">THIS PROTOCOL IS NO LONGER ACTIVE</div>
     <% end %>
   </div>
 

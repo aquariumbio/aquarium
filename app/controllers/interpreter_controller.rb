@@ -76,9 +76,12 @@ class InterpreterController < ApplicationController
 
     # Get the pc and scope
     @pc = state[:pc]
-    @scope = Scope.new
-    @scope.set_stack state[:stack]
-    @instruction = @protocol.program[@pc]
+
+    if @pc != nil
+      @scope = Scope.new
+      @scope.set_stack state[:stack]
+      @instruction = @protocol.program[@pc]
+    end
 
   end
 
@@ -124,34 +127,39 @@ class InterpreterController < ApplicationController
 
     get_current
 
-    if @pc >= 0
-      execute
-    else
-      @pc = 0
-    end
+    if @pc != nil
 
-    # continue through instructions that are not renderable
-    if @pc < @protocol.program.length
-
-      @instruction = @protocol.program[@pc]
-      while !@instruction.renderable && @pc < @protocol.program.length
+      if @pc >= 0
         execute
-        @instruction = @protocol.program[@pc] if @pc < @protocol.program.length
+      else
+        @pc = 0
       end
 
+      # continue through instructions that are not renderable
+      if @pc < @protocol.program.length
+
+        @instruction = @protocol.program[@pc]
+        while !@instruction.renderable && @pc < @protocol.program.length
+          execute
+          @instruction = @protocol.program[@pc] if @pc < @protocol.program.length
+        end
+
+      end
+
+      if @pc < @protocol.program.length
+        @instruction = @protocol.program[@pc]
+      else
+        @pc = nil
+      end
+
+      @job.state = { pc: @pc, stack: @scope.stack }.to_json
+      @job.save
+
+      pre_render
+  
     end
 
-    if @pc < @protocol.program.length
-      @instruction = @protocol.program[@pc]
-    else
-      @pc = nil
-    end
-
-    @job.state = { pc: @pc, stack: @scope.stack }.to_json
-    @job.save
-
-    pre_render
-    render 'current' #note: this does not call the render method above, just the erb
+    render 'current'
 
   end
 

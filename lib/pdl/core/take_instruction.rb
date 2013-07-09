@@ -88,7 +88,7 @@ class TakeInstruction < Instruction
     @name = scope.substitute @object_type
     @object = ObjectType.find_by_name(@name)
     if !@object
-      raise "Could not find object of type '#{@object_type}'"
+      raise "In <take>: Could not find object of type '#{@object_type}'"
     end
   end
 
