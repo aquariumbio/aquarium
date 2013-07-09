@@ -11,7 +11,7 @@ class Interpreter
   end
 
   def clear
-    print "\e[2J\e[f"
+    #print "\e[2J\e[f"
   end
 
   def banner
@@ -48,7 +48,16 @@ class Interpreter
       banner
       print "Enter value for #{arg.var} (#{arg.description}): "
       input = gets
-      @scope.set arg.var.to_sym, input.chomp
+	puts "In interpreter ARG TYPE is "
+	puts arg.type
+      if arg.type == "num"
+        puts "The arg is a NUM"
+        @scope.set arg.var.to_sym, input.chomp.to_i
+      
+      elsif arg.type == "string"
+        puts "The arg is a STRING"
+        @scope.set arg.var.to_sym, input.chomp
+      end
     end
 
     # run program
