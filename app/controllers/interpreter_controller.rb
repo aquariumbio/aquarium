@@ -2,8 +2,7 @@ class InterpreterController < ApplicationController
 
   def parse
 
-    client = Octokit::Client.new(login:'klavins',password:'a22imil@te')
-    file = Base64.decode64(client.blob('klavinslab/protocols',@sha).content);
+    file = ( Blob.get @sha, params[:path] ).xml
 
     @protocol = Protocol.new
     @parse_errors = ""

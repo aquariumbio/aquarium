@@ -112,8 +112,7 @@ class ProtocolTreeController < ApplicationController
   def raw
 
     @sha = params[:sha]
-    client = Octokit::Client.new(login:'klavins',password:'a22imil@te')
-    @protocol = Base64.decode64(client.blob('klavinslab/protocols',@sha).content);
+    @protocol = ( Blob.get @sha, '' ).xml
 
     respond_to do |format|
       format.html
@@ -126,8 +125,7 @@ class ProtocolTreeController < ApplicationController
 
     @sha = params[:sha]
     @path = params[:path]
-    client = Octokit::Client.new(login:'klavins',password:'a22imil@te')
-    @protocol = Base64.decode64(client.blob('klavinslab/protocols',@sha).content);
+    @protocol = ( Blob.get @sha, @path ).xml
 
     respond_to do |format|
       format.html
@@ -139,8 +137,7 @@ class ProtocolTreeController < ApplicationController
 
     @sha = params[:sha]
     @path = params[:path]
-    client = Octokit::Client.new(login:'klavins',password:'a22imil@te')
-    file = Base64.decode64(client.blob('klavinslab/protocols',@sha).content);
+    file = ( Blob.get @sha, @path ).xml
 
     @protocol = Protocol.new
     @errors = ""

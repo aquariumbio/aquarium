@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  sha: MyString
+  path: MyString
+  xml: MyText
+
+two:
+  sha: MyString
+  path: MyString
+  xml: MyText
