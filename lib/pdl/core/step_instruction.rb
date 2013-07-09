@@ -119,4 +119,22 @@ class StepInstruction < Instruction
     g
   end
 
+  def pre_render scope, params
+    newparts = []
+    @parts.each do |a|
+      a.each do |k,v|
+        begin
+          if k != :getdata
+            newparts.push( k => scope.substitute( v ) )
+          else
+            newparts.push( getdata: { var: v[:var], description: scope.substitute( v[:description] ) } )
+          end
+        rescue Exception => e
+          raise "In <step>: " + e.to_s
+        end
+      end
+    end
+    @parts = newparts
+  end
+
 end

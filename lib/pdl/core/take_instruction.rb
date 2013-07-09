@@ -3,7 +3,7 @@ require 'json'
 
 class TakeInstruction < Instruction
 
-  attr_reader :object_type, :quantity, :var, :object, :name
+  attr_reader :object_type, :quantity, :var, :object, :object_name
 
   def initialize object_type, quantity, var
     @object_type = object_type
@@ -85,8 +85,8 @@ class TakeInstruction < Instruction
   end  
 
   def pre_render scope, params
-    @name = scope.substitute @object_type
-    @object = ObjectType.find_by_name(@name)
+    @object_name = scope.substitute @object_type
+    @object = ObjectType.find_by_name(@object_name)
     if !@object
       raise "In <take>: Could not find object of type '#{@object_type}'"
     end

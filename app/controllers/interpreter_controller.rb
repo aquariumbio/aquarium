@@ -95,7 +95,8 @@ class InterpreterController < ApplicationController
       @instruction.pre_render @scope, params if @instruction.respond_to?('pre_render')
     rescue Exception => e
       @exception = true
-      @error = e
+      @error = "Error in pre_render of step: " + e.to_s
+      @error_pc = @pc
       @pc = nil
       @job.state = { pc: @pc, stack: @scope.stack }.to_json
       @job.save

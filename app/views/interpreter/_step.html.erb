@@ -1,13 +1,13 @@
 <!-- DESCRIPTION ------------------------------------------------------->
 
 <h1>
-  <%= @scope.substitute @instruction.description %>
+  <%= @instruction.description %>
 </h1>
 
 <!-- NOTE -------------------------------------------------------------->
 
 <p>
-  <%= @scope.substitute @instruction.note %>
+  <%= @instruction.note %>
 </p>
 
 <!-- WARNINGS ---------------------------------------------------------->
@@ -15,7 +15,7 @@
 <% @instruction.warnings.each do |w| %>
 
   <div class="alert">
-    <%= @scope.substitute w %>
+    <%= w %>
   </div>
 
 <% end %>
