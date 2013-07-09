@@ -127,6 +127,9 @@ class InterpreterController < ApplicationController
 
     get_current
 
+    logger.info @instruction.name
+    logger.info @scope.to_s
+
     if @pc != nil
 
       if @pc >= 0
@@ -139,8 +142,24 @@ class InterpreterController < ApplicationController
       if @pc < @protocol.program.length
 
         @instruction = @protocol.program[@pc]
+
+        logger.info @instruction.name
+        logger.info @scope.to_s
+
         while !@instruction.renderable && @pc < @protocol.program.length
-          execute
+          begin
+            execute
+          rescue Exception => e
+            @exception = true
+            @error = "Error executing #{@instruction.name}: " + e.to_s
+            @error_pc = @pc
+            @pc = nil
+            @job.state = { pc: @pc, stack: @scope.stack }.to_json
+            @job.save
+            pre_render
+            render 'current'
+            return
+          end
           @instruction = @protocol.program[@pc] if @pc < @protocol.program.length
         end
 

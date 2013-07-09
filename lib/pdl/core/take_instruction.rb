@@ -12,7 +12,6 @@ class TakeInstruction < Instruction
     @var = var
     @renderable = true
     @url = 'http://bioturk.ee.washington.edu:3010/liaison/'
-
     super 'take'
   end
 
@@ -111,8 +110,8 @@ class TakeInstruction < Instruction
 
     while params.has_key?("i#{i}")
 
-      if params["q#{i}"]
-
+      if params["q#{i}"].to_i > 0
+      
         @item = Item.find(params["i#{i}"])
         @obj = ObjectType.find_by_name(scope.substitute @object_type)
         v = scope.get ( @var.to_sym )
@@ -122,13 +121,14 @@ class TakeInstruction < Instruction
           quantity: params["q#{i}"].to_i } ) )
         @item.inuse += params["q#{i}"].to_i
         @item.save
-        i += 1
-
+      
       end
+      
+      i += 1
 
     end
 
-    if @quantity == 1
+    if @quantity.to_i == 1
       scope.set( @var.to_sym, scope.get(@var.to_sym).first )
     end
 

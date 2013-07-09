@@ -54,7 +54,13 @@ class Scope
   end
 
   def evaluate str
-    eval ( str % symbol_subs )
+    expr = str % symbol_subs 
+    begin
+      result = eval(expr)
+    rescue Exception => e
+      raise "Could not evaluate #{expr}: " + e.message
+    end
+    result
   end
 
   def to_s
