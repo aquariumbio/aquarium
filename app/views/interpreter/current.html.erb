@@ -2,7 +2,7 @@
 
   <!-- FLOW CHART ----------------------------------------------------->
   <div class="span2 interpreter-flow-chart">
-    <h1><%= @job.path %></h1>
+
     <% if @pc != nil %>
       <% (0..@protocol.program.length-1).each do |p| %>
         <% if p == @pc %>
@@ -36,3 +36,6 @@
 
 </div>
 
+<script>
+  document.getElementById('info-area').innerHTML = '<%= @job.path %>';
+</script>
