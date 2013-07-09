@@ -82,11 +82,29 @@ class InterpreterController < ApplicationController
 
   end
 
+  def error
+      render 'error'
+  end
+
+  def pre_render
+
+   begin
+      @instruction.pre_render @scope, params if @instruction.respond_to?('pre_render')
+    rescue Exception => e
+      @exception = true
+      @error = e
+      @pc = nil
+      @job.state = { pc: @pc, stack: @scope.stack }.to_json
+      @job.save
+    end  
+
+  end
+
   def current
 
     get_current
-    logger.info "current: pc = #{@pc}: #{@instruction.name}"
-    logger.info @scope.to_s
+    pre_render
+    render 'current'
 
   end
 
@@ -132,6 +150,7 @@ class InterpreterController < ApplicationController
     @job.state = { pc: @pc, stack: @scope.stack }.to_json
     @job.save
 
+    pre_render
     render 'current' #note: this does not call the render method above, just the erb
 
   end

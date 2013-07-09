@@ -18,7 +18,9 @@
 
   <!-- MAIN ----------------------------------------------------------->
   <div class="span9 interpreter-main">
-    <% if @pc != nil %>
+    <% if @exception %>
+       <%= render 'error' %>
+    <% elsif @pc != nil %>
       <%= render @instruction.name %>
     <% else %>
       THIS PROTOCOL HAS BEEN COMPLETED.
