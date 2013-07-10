@@ -84,8 +84,13 @@ class InterpreterController < ApplicationController
 
   end
 
-  def error
-      render 'error'
+  def process_error msg
+    @exception = true
+    @error = msg
+    @error_pc = @pc
+    @pc = nil
+    @job.state = { pc: @pc, stack: @scope.stack }.to_json
+    @job.save
   end
 
   def pre_render
@@ -93,12 +98,7 @@ class InterpreterController < ApplicationController
    begin
       @instruction.pre_render @scope, params if @instruction.respond_to?('pre_render')
     rescue Exception => e
-      @exception = true
-      @error = "Error in pre_render of step: " + e.to_s
-      @error_pc = @pc
-      @pc = nil
-      @job.state = { pc: @pc, stack: @scope.stack }.to_json
-      @job.save
+      process_error "Error in pre_render of step: " + e.to_s
     end  
 
   end
@@ -127,13 +127,16 @@ class InterpreterController < ApplicationController
 
     get_current
 
-    logger.info @instruction.name
-    logger.info @scope.to_s
-
     if @pc != nil
 
       if @pc >= 0
-        execute
+        begin
+          execute
+        rescue Exception => e
+          process_error "Error executing #{@instruction.name}: " + e.to_s
+          render 'current'
+          return
+        end        
       else
         @pc = 0
       end
@@ -143,20 +146,11 @@ class InterpreterController < ApplicationController
 
         @instruction = @protocol.program[@pc]
 
-        logger.info @instruction.name
-        logger.info @scope.to_s
-
         while !@instruction.renderable && @pc < @protocol.program.length
           begin
             execute
           rescue Exception => e
-            @exception = true
-            @error = "Error executing #{@instruction.name}: " + e.to_s
-            @error_pc = @pc
-            @pc = nil
-            @job.state = { pc: @pc, stack: @scope.stack }.to_json
-            @job.save
-            pre_render
+            process_error "Error executing #{@instruction.name}: " + e.to_s
             render 'current'
             return
           end
