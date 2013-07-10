@@ -98,6 +98,7 @@ class TakeInstruction < Instruction
   def pre_render scope, params
     @object_name = scope.substitute @object_type
     @object = ObjectType.find_by_name(@object_name)
+    @quantity = scope.evaluate @quantity
     if !@object
       raise "In <take>: Could not find object of type '#{@object_type}'"
     end
