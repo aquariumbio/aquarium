@@ -1,4 +1,4 @@
-<header class="navbar navbar-fixed-top navbar-inverse">
+<header class="navbar navbar-fixed-top navbar-inverse" id="header">
   <div class="navbar-inner">
     <div class="container-fluid">
       <%= link_to "BIOTURK", root_path, id: "logo" %>
@@ -46,3 +46,8 @@
   </div>
 </header>
 
+<script>
+  if ( /3011/.exec(document.URL) ) {
+    document.getElementById('logo').style.color = 'orange';
+  }
+</script>
