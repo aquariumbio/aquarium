@@ -1,9 +1,9 @@
 class ProduceInstruction < Instruction
 
-  def initialize object_type_name, location, quantity
+  def initialize object_type_name, quantity
     @object_type_name = object_type_name
-    @location = location
     @quantity = quantity
+    @location = 'B0.000'
     super 'produce'
   end
 
@@ -14,9 +14,17 @@ class ProduceInstruction < Instruction
     
   end
 
-  def execute scope
+  def render scope
 
-    result = liaison 'produce', { name: @object_type_name, location:( scope.substitute @location ) }
+    #Ask the use where they put the produced object
+    puts "Please enter the new location of #{@object_type_name} and press return: "
+
+  end
+
+  def execute scope
+    
+    location = gets.chomp
+    result = liaison 'produce', { name: @object_type_name, location: location, quantity: (scope.evaluate @quantity) }
 
     if result[:error]
       raise result[:error]

@@ -89,9 +89,9 @@ class TakeInstruction < Instruction
     end while @num_taken < @quantity
 
     # if only one object, return it instead of an array containing it
-    if @quantity == 1 
-      scope.set( @var.to_sym, scope.get(@var.to_sym).first )
-    end
+    #if @quantity == 1 
+    #  scope.set( @var.to_sym, scope.get(@var.to_sym).first )
+    #end
 
   end  
 

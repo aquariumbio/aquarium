@@ -303,25 +303,21 @@
  
     <produce>
         <object>Tryptophan Solution</object>
-	<location>B0.101</location>
         <quantity>%{Trp}</quantity>
     </produce>    
 
     <produce>
         <object>Histidine Solution</object>
-	<location>B0.102</location>
         <quantity>%{His}</quantity>
     </produce>    
 
     <produce>
         <object>Leucine Solution</object>
-	<location>B0.103</location>
         <quantity>%{Leu}</quantity>
     </produce>    
 
     <produce>
         <object>Uracil Solution</object>
-	<location>B0.104</location>
         <quantity>%{Ura}</quantity>
     </produce>    
 

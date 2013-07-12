@@ -231,7 +231,7 @@ class Protocol
 
           when 'produce'
             c = children_as_text e
-            push ProduceInstruction.new c[:object], c[:location], c[:quantity]
+            push ProduceInstruction.new c[:object], c[:quantity]
             e = increment e
 
           when 'log'

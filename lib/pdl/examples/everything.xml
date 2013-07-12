@@ -10,14 +10,10 @@
 
   <take>
     <object>%{object_name}</object>
-    <quantity>1</quantity>
+    <quantity>2</quantity>
     <var>b</var>
   </take>
-  <take>
-    <object>%{object_name}</object>
-    <quantity>1</quantity>
-    <var>c</var>
-  </take>
+
   <assign><var>name</var><value>%{b}</value></assign>
   <assign><var>loc</var> <value>%{b}</value></assign>
 
@@ -27,7 +23,7 @@
 
   <!-- Should the release tag be an expression instead of a var? -->
   <release>
-    <var>%{b}[0]</var>
+    <var>%{b}</var>
   </release>
 
   <step>
@@ -49,17 +45,8 @@
 
     <then>
 
-      <step>
-        <description>Enter the location you will put the bottle.</description>
-        <getdata>
-          <var>new_location</var>
-          <description>Enter location</description>
-        </getdata>
-      </step>
-
       <produce>
         <object>1000 mL Bottle</object>
-        <location>%{new_location}</location>
         <quantity>1</quantity>
       </produce>
 
