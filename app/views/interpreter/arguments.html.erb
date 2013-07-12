@@ -18,9 +18,8 @@
       <% if @protocol.args.length > 0 %>
 
         <% @protocol.args.each do |a| %>
-          <b><%= a.var %></b>
-          <%= label_tag(a.var.to_sym, a.description ) %>
-          <%= text_field_tag( a.var.to_sym ) %>
+          <%= label_tag(a.name.to_sym, a.description ) %>
+          <%= text_field_tag( a.name.to_sym ) %>
         <% end %>
 
       <% else %>

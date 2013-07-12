@@ -43,7 +43,14 @@ class InterpreterController < ApplicationController
 
     # push arguments
     @protocol.args.each do |a|
-      scope.set a.var.to_sym, params[a.var.to_sym]
+      val = params[a.name.to_sym]
+      if a.type == 'number' && val.to_i == val.to_f
+        scope.set a.name.to_sym, val.to_i
+      elsif a.type == 'number' && val.to_i != val.to_f
+        scope.set a.name.to_sym, val.to_f
+      else
+        scope.set a.name.to_sym, val
+      end
     end
 
     # push new scope so top level variables are not in same scope as arguments

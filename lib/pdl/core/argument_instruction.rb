@@ -2,9 +2,9 @@ class ArgumentInstruction < Instruction
 
   attr_reader :var, :type, :description
 
-  def initialize var, type, description
+  def initialize name, type, description
     super 'argument'
-    @var = var
+    @name = name
     @type = type
     @description = description
   end

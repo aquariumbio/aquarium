@@ -10,7 +10,7 @@
 
   <ul>
     <% @protocol.args.each do |a| %>
-      <li><%= a.var %> = <%= params[a.var.to_sym] %></li>
+      <li><%= a.name %> = <%= params[a.name.to_sym] %></li>
     <% end %>
   </ul>
 

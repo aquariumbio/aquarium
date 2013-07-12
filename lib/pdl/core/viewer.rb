@@ -6,7 +6,7 @@ end
 
 class TakeInstruction 
   def to_html
-    "Take #{@quantity} of <i>#{@object_type}</i> and refer to it as #{@var}."
+    "Take #{@quantity_expr} of <i>#{@object_type_expr}</i> and refer to it as #{@var}."
   end
 end
 
@@ -24,7 +24,7 @@ end
 
 class AssignInstruction 
   def to_html
-    "#{@var} := #{@value}"
+    "#{@lhs} := #{@rhs}"
   end
 end
 

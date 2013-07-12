@@ -2,22 +2,24 @@ class AssignInstruction < Instruction
 
   attr_reader :var, :value
 
-  def initialize var, value
+  def initialize lhs, rhs
     super 'assign'
-    @var = var
-    @value = value
+    @lhs = lhs
+    @rhs = rhs
     @renderable = false
   end
 
-  def execute scope
-    #puts "setting " + @var + " to " + @value + " with substitution " + scope.evaluate(scope.substitute( @value )).to_s
-    
-    puts "setting " + @var + " to " + @value + " with evaluation " + scope.evaluate( @value ).to_s
-    scope.set( var.to_sym, scope.evaluate( @value ) )
-  end
+  # RAILS ###########################################################################################
 
   def bt_execute scope, params
-    scope.set( var.to_sym, scope.evaluate( @value ) )
+    scope.set( @lhs.to_sym, scope.evaluate( @rhs ) )
+  end
+
+  # TERMINAL #########################################################################################
+
+  def execute scope
+    puts "setting " + @lhs + " to " + @rhs + " with evaluation " + scope.evaluate( @rhs ).to_s
+    scope.set( @lhs.to_sym, scope.evaluate( @rhs ) )
   end
 
 end

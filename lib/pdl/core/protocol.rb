@@ -121,15 +121,39 @@ class Protocol
             e = increment e
 
           when 'assign'
+
             c = children_as_text e
-            push AssignInstruction.new c[:var], c[:value]
+
+            if c[:lhs]
+              lhs = c[:lhs]
+            else
+              raise "Parse error: no lhs subtag in assignment."
+            end
+
+            if c[:rhs]
+              rhs = c[:rhs]
+            else
+              raise "Parse error: no rhs subtag in assignment."
+            end
+
+            push AssignInstruction.new lhs, rhs
             e = increment e
 
           when 'argument'
+
             c = children_as_text e
-		puts "In PROTOCOL Arg type is "
-		puts c[:type]
-            push_arg ArgumentInstruction.new c[:var], c[:type], c[:description]
+
+            if c[:name]
+              name = c[:name]
+            else
+              raise "Parse Error: No name specified for argument."
+            end
+
+            unless c[:type] && ( c[:type] == 'number' || c[:type] == 'string' ) 
+              raise "Parse Error: No valid type (number or string) specified for argument."
+            end
+
+            push_arg ArgumentInstruction.new name, c[:type], c[:description]
             e = increment e
 
           when 'include'
@@ -221,6 +245,9 @@ class Protocol
 
           when 'take'
             c = children_as_text e
+            unless c[:object] && c[:quantity] && c[:var]
+              raise "Protocol error: take sub-tags not present"
+            end
             push(TakeInstruction.new c[:object], c[:quantity], c[:var])
             e = increment e
 
