@@ -1,12 +1,64 @@
 class ReleaseInstruction < Instruction
 
-  attr_reader :expr;
+  attr_reader :expr, :object_list
 
   def initialize expr
+
     @expr = expr
-    super 'release'
     @renderable = true
+    super 'release'
+
   end
+
+
+  # RAILS ###########################################################################################
+
+  def pre_render scope, params
+
+    @object_list = scope.evaluate @expr
+
+    @object_list.each do |object|
+      unless object[:object] && object[:item]
+        raise "Release error: %{object_list} does not appear to quack like an object."
+      end
+    end
+
+  end
+
+  def bt_execute scope, params
+
+    pre_render
+
+    pi = scope.evaluate @expr
+
+    if pi[:object][:release_method] == 'query'
+      m = params[:method]
+    else
+      m = pi[:object][:release_method]
+    end
+
+    x = Item.find_by_id(pi[:item][:id])
+    raise 'no such object' if !x
+
+    case m
+
+      when 'return'
+        x.inuse -= pi[:quantity]
+
+      when 'dispose'
+        x.inuse    -= pi[:quantity]
+        x.quantity -= pi[:quantity]
+
+      else
+        raise 'unknown method in release'
+
+    end
+
+    x.save 
+  
+  end
+
+  # TERMINAL ########################################################################################
 
   def render scope
  

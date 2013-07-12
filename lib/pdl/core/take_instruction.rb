@@ -40,33 +40,45 @@ class TakeInstruction < Instruction
 
     pre_render scope, params
 
-    scope.set @var.to_sym, []
-    i = 0
+    result = []
+    asd = ""
 
-    while params.has_key?("i#{i}")
+    params.each do |k,v|
 
-      if params["q#{i}"].to_i > 0
+      asd += k + ", "
+
+      if k[0] == 'i'
+
+        str = String.new(k)
+        str[0] = ''
+        i = str.to_i
+
+        if params["q#{i}"].to_i > 0
       
-        @item = Item.find(params["i#{i}"])
-        if !@item
-          raise "In <take>: Could not find item of type " + params["i#{i}"]
+          @item = Item.find(params["i#{i}"])
+          if !@item
+            raise "In <take>: Could not find item of type " + params["i#{i}"]
+          end
+
+          q = params["q#{i}"].to_i
+
+          (1..q).each do |x|
+            result.push( { 
+              object: @object.attributes.symbolize_keys, 
+              item: @item.attributes.symbolize_keys,
+              quantity: 1 } ) 
+          end
+
+          @item.inuse += params["q#{i}"].to_i
+          @item.save
+      
         end
 
-        v = scope.get ( @var.to_sym )
-
-        scope.set( @var.to_sym, v.push( { 
-          object: @object.attributes.symbolize_keys, 
-          item: @item.attributes.symbolize_keys,
-          quantity: params["q#{i}"].to_i } ) )
-
-        @item.inuse += params["q#{i}"].to_i
-        @item.save
-      
       end
       
-      i += 1
-
     end
+
+    scope.set( @var.to_sym, result )
 
   end
 

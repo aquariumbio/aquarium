@@ -42,7 +42,7 @@ class Scope
   end
 
   def substitute str
-    return str % collapse
+    str % collapse
   end
 
   def symbol_subs

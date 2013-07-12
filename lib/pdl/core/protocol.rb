@@ -252,8 +252,7 @@ class Protocol
             e = increment e
 
           when 'release'
-            c = children_as_text e
-            push ReleaseInstruction.new c[:var]
+            push ReleaseInstruction.new e.text
             e = increment e
 
           when 'produce'

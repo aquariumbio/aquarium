@@ -1,45 +1,55 @@
+<h1>Release <%= @instruction.object_list.length %> Objects</h1>
 
-<% pi = @scope.evaluate( @instruction.expr )
-   nm     = pi[:object][:name]
-   loc    = pi[:item][:location]
-   method = pi[:object][:release_description] %>
+<% @instruction.object_list.each do |pi| %>
 
-<% case pi[:object][:release_method]
+  <% nm     = pi[:object][:name]
+     loc    = pi[:item][:location]
+     method = pi[:object][:release_description] %>
 
-  when 'return' %>
-    <h1>Please return the <%= nm %> taken from <%= loc %>.</h1>
-    <p>Details: <%= method %></p>
+  <% case pi[:object][:release_method]
 
-<% when 'dispose' %>
-    <h1>Please dispose of the <%= nm %> taken from <%= loc %>.</h1>
-    <p>Details: <%= method %></p>
+    when 'return' %>
+      <h4><input type='checkbox' id='returned'></input> Please return the <%= nm %> taken from <%= loc %>.</h4>
+      <p>Details: <%= method %></p>
 
-<% when 'query' %>
-    <h1>Return or dispose the <%= nm %> taken from <%= loc %>?</h1>
-    <p>Details: <%= method %></p>
-    <div class="yesorno">
-      <label class="radio inline">
-        <input type="radio" id="return-yes" checked name="yn">Return
-      </label>
-      <label class="radio inline">
-        <input type="radio" id="return-no" name="yn">Dispose
-      </label>
-    </div>
+  <% when 'dispose' %>
+      <h4><input type='checkbox' id='returned'></input> Please dispose of the <%= nm %> taken from <%= loc %>.</h4>
+      <p>Details: <%= method %></p>
+      <input type='checkbox' id='returned'></input>
+
+  <% when 'query' %>
+      <h4>Return or dispose the <%= nm %> taken from <%= loc %>?</h4>
+      <p>Details: <%= method %></p>
+      <div class="yesorno">
+        <label class="radio inline">
+          <input type="radio" id="return-yes" checked name="yn">Return
+        </label>
+        <label class="radio inline">
+          <input type="radio" id="return-no" name="yn">Dispose
+        </label>
+      </div>
+
+  <% end %>
 
 <% end %>
 
 <script>
   window.onload = function() {
+
     document.getElementById('advance-button').style.display = 'block';
+
     document.getElementById('advance-button').addEventListener('click', function() {
-      <% if pi[:object][:release_method] == 'query' %>
-        if ( document.getElementById('return-yes').checked ) {
-          m = 'return';
-        } else {
-          m = 'dispose';
-        }
-      <% else %>
-        m = '<%= pi[:object][:release_method] %>';
+
+      <% @instruction.object_list.each do |pi| %>
+        <% if pi[:object][:release_method] == 'query' %>
+          if ( document.getElementById('return-yes').checked ) {
+            m = 'return';
+          } else {
+            m = 'dispose';
+          }
+        <% else %>
+          m = '<%= pi[:object][:release_method] %>';
+        <% end %>
       <% end %>
       window.location = '/interpreter/advance?job=<%= @job.id %>' + "&method=" + m;
     } );
