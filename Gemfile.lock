@@ -134,7 +134,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt-ruby
   bootstrap-sass
-  coffee-rails (~> 3.2.1)
+  coffee-rails
   jquery-rails
   octokit
   paperclip

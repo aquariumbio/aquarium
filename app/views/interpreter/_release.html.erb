@@ -39,7 +39,7 @@
           m = 'dispose';
         }
       <% else %>
-        m = <%= pi[:object][:release_method] %> 
+        m = '<%= pi[:object][:release_method] %>';
       <% end %>
       window.location = '/interpreter/advance?job=<%= @job.id %>' + "&method=" + m;
     } );
