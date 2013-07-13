@@ -1,5 +1,8 @@
 <h1>Release <%= @instruction.object_list.length %> Objects</h1>
 
+<% i = 0 %>
+<% next_check_list = [] %>
+
 <% @instruction.object_list.each do |pi| %>
 
   <% nm     = pi[:object][:name]
@@ -8,41 +11,68 @@
 
   <% case pi[:object][:release_method]
 
-    when 'return' %>
-      <h4><input type='checkbox' id='returned'></input> Please return the <%= nm %> taken from <%= loc %>.</h4>
-      <p>Details: <%= method %></p>
+     when 'return' %>
+      <h4><input type='checkbox' id='<%=i %>-returned' onchange='update_next_button(<%=i %>)'></input>
+          Please return the <%= nm %> taken from <%= loc %>.</h4>
+      <p><%= method %></p>
+      <% next_check_list.push(i) %>
 
   <% when 'dispose' %>
-      <h4><input type='checkbox' id='returned'></input> Please dispose of the <%= nm %> taken from <%= loc %>.</h4>
-      <p>Details: <%= method %></p>
-      <input type='checkbox' id='returned'></input>
+      <h4><input type='checkbox' id='<%=i %>-returned' onchange='update_next_button(<%=i %>)'></input> 
+          Please dispose of the <%= nm %> taken from <%= loc %>.</h4>
+      <p><%= method %></p>
+      <% next_check_list.push(i) %>
 
   <% when 'query' %>
       <h4>Return or dispose the <%= nm %> taken from <%= loc %>?</h4>
-      <p>Details: <%= method %></p>
+      <p><%= method %></p>
       <div class="yesorno">
         <label class="radio inline">
-          <input type="radio" id="return-yes" checked name="yn">Return
+          <input type="radio" id='<%=i %>-return-yes' checked name='<%=i %>-yn'>Return
         </label>
         <label class="radio inline">
-          <input type="radio" id="return-no" name="yn">Dispose
+          <input type="radio" id='<%=i %>-return-no' name='<%=i %>-yn'>Dispose
         </label>
       </div>
 
+  <br />
+
   <% end %>
+
+  <% i += 1 %>
 
 <% end %>
 
 <script>
+
+  function update_next_button(i) {
+    list = <%= next_check_list %>;
+    show=true;
+    for ( i=0; i<list.length; i++ ) {
+      show = show && ( document.getElementById(list[i]+'-returned').checked );
+    }
+    if ( show ) {
+      document.getElementById('advance-button').style.display ='block'
+    } else {
+      document.getElementById('advance-button').style.display = 'none';
+    }
+  }
+
   window.onload = function() {
 
-    document.getElementById('advance-button').style.display = 'block';
+    document.getElementById('advance-button').style.display = 'none';
 
     document.getElementById('advance-button').addEventListener('click', function() {
 
+      i = 0;
+      q = '';
+
       <% @instruction.object_list.each do |pi| %>
+
+        <% id = pi[:object][:id] %>
+
         <% if pi[:object][:release_method] == 'query' %>
-          if ( document.getElementById('return-yes').checked ) {
+          if ( document.getElementById('<%=id %>-return-yes').checked ) {
             m = 'return';
           } else {
             m = 'dispose';
@@ -50,8 +80,16 @@
         <% else %>
           m = '<%= pi[:object][:release_method] %>';
         <% end %>
+
+        q += "&method_" + i + '=' + m;
+
+        i += 1;
+
       <% end %>
-      window.location = '/interpreter/advance?job=<%= @job.id %>' + "&method=" + m;
+
+      window.location = '/interpreter/advance?job=<%= @job.id %>' + q;
+
     } );
   }
 </script>
+

@@ -47,7 +47,7 @@
 
   h4 {
     font-size: 18pt;
-    margin-bottom: 14px;
+    margin-bottom: 2px;
   }
 
   h1 {
@@ -57,7 +57,6 @@
   li {
 
     font-size: 18pt;
-
     .small-input {
       &:before {
         content: '&nbsp;&nbsp;';
@@ -68,16 +67,16 @@
   }
 
   .yesorno {
-    margin: 50px;
+    margin: 0 0 20px 18px;
     label {
       font-size: 18pt;
-      margin-bottom: 20px;
     }
   }
 
   p {
     font-size: 18pt;
-    padding: 18px;
+    padding: 0 0 0 0;
+    margin: 0 0 0 20px;
   }
 
 }
