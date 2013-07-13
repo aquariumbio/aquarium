@@ -27,34 +27,32 @@ class ReleaseInstruction < Instruction
 
   def bt_execute scope, params
 
-    pre_render
+    pre_render scope, params
+    i = 0
 
-    pi = scope.evaluate @expr
+    @object_list.each do |pi|
 
-    if pi[:object][:release_method] == 'query'
-      m = params[:method]
-    else
-      m = pi[:object][:release_method]
+      m = params["method_#{i}"]
+      x = Item.find_by_id(pi[:item][:id])
+      raise 'no such object:' + pi[:object][:name] if !x 
+
+      case m
+
+        when 'return'
+          x.inuse -= 1
+
+        when 'dispose'
+          x.inuse    -= 1
+          x.quantity -= 1
+
+        else
+          raise 'unknown method in release'
+
+      end
+
+      x.save 
+
     end
-
-    x = Item.find_by_id(pi[:item][:id])
-    raise 'no such object' if !x
-
-    case m
-
-      when 'return'
-        x.inuse -= pi[:quantity]
-
-      when 'dispose'
-        x.inuse    -= pi[:quantity]
-        x.quantity -= pi[:quantity]
-
-      else
-        raise 'unknown method in release'
-
-    end
-
-    x.save 
   
   end
 
@@ -133,37 +131,6 @@ class ReleaseInstruction < Instruction
       
     end
 
-  end
-
-  def bt_execute scope, params
-
-    pi = scope.evaluate @expr
-
-    if pi[:object][:release_method] == 'query'
-      m = params[:method]
-    else
-      m = pi[:object][:release_method]
-    end
-
-    x = Item.find_by_id(pi[:item][:id])
-    raise 'no such object' if !x
-
-    case m
-
-      when 'return'
-        x.inuse -= pi[:quantity]
-
-      when 'dispose'
-        x.inuse    -= pi[:quantity]
-        x.quantity -= pi[:quantity]
-
-      else
-        raise 'unknown method in release'
-
-    end
-
-    x.save 
-  
   end
 
 end
