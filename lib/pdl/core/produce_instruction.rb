@@ -1,18 +1,44 @@
 class ProduceInstruction < Instruction
 
-  def initialize object_type_name, quantity
-    @object_type_name = object_type_name
-    @quantity = quantity
-    @location = 'B0.000'
+  attr_reader :object_type, :quantity
+
+  def initialize object_type_expr, quantity_expr
+
+    @object_type_expr = object_type_expr
+    @quantity_expr = quantity_expr
+    @renderable = true
     super 'produce'
+
+    @location = 'B0.000'
+
+  end
+
+  # TERMINAL ###########################################################################################
+
+  def pre_render scope, params
+    @object_type = scope.substitute @object_type_expr
+    @quantity = scope.evaluate @quantity_expr
   end
 
   def bt_execute scope, params
 
-    x = ObjectType.find_by_name(@object_type_name)
-    x.items.create(location: (scope.substitute @location), quantity: @quantity)
-    
+    pre_render scope, params
+
+    begin
+      x = ObjectType.find_by_name(@object_type)
+    rescue Exception => e
+      raise "Could not find object type #{object_type}: " + e.message
+    end
+
+    begin
+      x.items.create(location: params['location'], quantity: @quantity)
+    rescue Exception => e
+      raise "Could not add item of type #{object_type}: " + e.message
+    end
+
   end
+
+  # TERMINAL ###########################################################################################
 
   def render scope
 

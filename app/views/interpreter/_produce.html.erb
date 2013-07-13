@@ -1,1 +1,33 @@
-<%= @instruction.name %>
+<h1>Store New <%= @instruction.object_type %></h1>
+
+<p>Enter location:<br />
+<input id='location' oninput='check_format()'
+       class='input-medium'></input></p>
+
+<br />
+<br />
+<p class='note'>Note: Locations have the form A1.234</p>
+
+<script>
+
+  function check_format() {
+    var p = /[A-Z][1-9][0-9]*\.[1-9][0-9][0-9]$/;
+    var loc = document.getElementById('location').value;
+    if ( p.test(loc) ) {
+      document.getElementById('advance-button').style.display = 'block';
+    } else {
+      console.log('still not ok');
+    }
+  }
+
+  window.onload = function() {
+    document.getElementById('advance-button').style.display = 'none';
+    document.getElementById('advance-button').addEventListener('click', function() {
+      var m = document.getElementById('location').value;
+      window.location = '/interpreter/advance?job=<%= @job.id %>&location=' + m;
+    } );
+  }
+
+</script>
+
+
