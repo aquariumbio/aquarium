@@ -217,7 +217,13 @@ class Protocol
           when 'if'
             condition = e.elements.first
             thenpart = condition.next_element
-            elsepart = thenpart.next_element
+
+            elsepart = thenpart.next_element          
+            unless elsepart
+              ep = REXML::Element.new
+              ep.name = 'else'
+              e.insert_after(thenpart,ep)
+            end
 
             @control_stack.push @program.length
             push IfInstruction.new condition.text
@@ -244,7 +250,11 @@ class Protocol
 
           when 'else'
             program[@control_stack.last].mark_else @program.length
-            e = e.elements.first
+            if e.elements.first
+              e = e.elements.first
+            else
+              e = increment e
+            end
 
           when 'end_else'
             # tell the end_then goto statement where to go
