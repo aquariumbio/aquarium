@@ -18,8 +18,9 @@ class AssignInstruction < Instruction
   # TERMINAL #########################################################################################
 
   def execute scope
-    puts "setting " + @lhs + " to " + @rhs + " with evaluation " + scope.evaluate( @rhs ).to_s
-    scope.set( @lhs.to_sym, scope.evaluate( @rhs ) )
+    x = scope.evaluate( @rhs )
+    puts "setting " + @lhs + " to " + @rhs + " with evaluation " + x.to_s
+    scope.set( @lhs.to_sym, x )
   end
 
 end
