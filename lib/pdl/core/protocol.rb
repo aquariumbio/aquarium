@@ -285,6 +285,9 @@ class Protocol
             e = increment e
 
           when 'release'
+            unless e.text && e.elements.empty?
+              raise "Protocol error: No expression found in <release> (note: do not use subtags for this tag)"
+            end
             push ReleaseInstruction.new e.text
             e = increment e
 

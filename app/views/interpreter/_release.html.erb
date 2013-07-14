@@ -60,19 +60,23 @@
 
   window.onload = function() {
 
-    document.getElementById('advance-button').style.display = 'none';
+    <% if next_check_list.empty? %>
+      document.getElementById('advance-button').style.display = 'block';
+    <% else %>
+      document.getElementById('advance-button').style.display = 'none';
+    <% end %>
 
     document.getElementById('advance-button').addEventListener('click', function() {
 
-      i = 0;
-      q = '';
+      var i = 0;
+      var q = '';
 
       <% @instruction.object_list.each do |pi| %>
 
         <% id = pi[:object][:id] %>
 
         <% if pi[:object][:release_method] == 'query' %>
-          if ( document.getElementById('<%=id %>-return-yes').checked ) {
+          if ( document.getElementById(i+'-return-yes').checked ) {
             m = 'return';
           } else {
             m = 'dispose';
@@ -82,7 +86,6 @@
         <% end %>
 
         q += "&method_" + i + '=' + m;
-
         i += 1;
 
       <% end %>

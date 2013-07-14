@@ -15,7 +15,15 @@ class ReleaseInstruction < Instruction
 
   def pre_render scope, params
 
-    @object_list = scope.evaluate @expr
+    begin
+      @object_list = scope.evaluate @expr
+    rescue Exception => e
+      raise "In <release>: Could not evaluate object list (" + @expr + "): " 
+    end
+
+    unless @object_list 
+      raise "In <release>: object list evaluated to nil (" + @expr + "): " 
+    end
 
     @object_list.each do |object|
       unless object[:object] && object[:item]

@@ -105,7 +105,7 @@ class InterpreterController < ApplicationController
    begin
       @instruction.pre_render @scope, params if @instruction.respond_to?('pre_render')
     rescue Exception => e
-      process_error "Error in pre_render of step: " + e.to_s
+      process_error "Error in pre_render of " + @instruction.name + ": " + e.to_s
     end  
 
   end
