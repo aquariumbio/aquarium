@@ -1,6 +1,6 @@
 <% provide(:title, @path) %>
 
-<div class="row-fluid">
+<div class="row-fluid" id="interpreter">
 
   <!-- FLOW CHART ----------------------------------------------------->
   <div class="span2 interpreter-flow-chart">
@@ -39,5 +39,16 @@
 </div>
 
 <script>
-  document.getElementById('info-area').innerHTML = '<%= @job.path %>';
+
+  document.getElementById('info-area').innerHTML   = '<%= @job.path %>';
+
+
+  function fix_height() {
+    document.getElementById('interpreter').style.height = window.innerHeight - 120 + 'px';
+  }
+
+  fix_height();
+
+  window.onresize = fix_height;
+
 </script>

@@ -2,48 +2,48 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+$outlineStyle: #f00 dotted 0px;
+
+#interpreter {
+  outline: $outlineStyle;
+}
+
 .interpreter-flow-chart {
 
-  height: 900px;
-  padding: 10px;
-
-  h1 {
-    font-size: 12pt;
-    font-style: plain;
-    font-family: courier;
-    margin: 102x;
-  }
+  height: 100%;
+  outline: $outlineStyle;
 
   .pc_notat {
-    padding: 2px 2px 2px 10px;
-    margin: 2px;
-    width: 100%;
+    padding: 1px 2px 1px 10px;
+    width: 92%;
     background: #eee;
     color: #666;
     font-size: 9pt;
     border-radius: 4px;
     font-family: courier;
+    margin-bottom: 1px;
   }
 
   .pc_at {
-    padding: 2px 2px 2px 10px;
-    margin: 2px;
-    width: 100%;
+    padding: 1px 2px 1px 10px;
+    width: 92%;
     background: #111;       
     color: #fff;
     font-size: 9pt;
     border-radius: 4px;
     font-family: courier;
+    margin-bottom: 1px;
   }
 
 }
 
 .interpreter-main {
 
+  height: 100%;
+  outline: $outlineStyle;
   border: 1pt solid #aaa;
   border-radius: 10px;
-  height: 900px;
-  padding: 10px;
+  padding: 10px 20px 10px 24px;
 
   h4 {
     font-size: 18pt;
@@ -90,11 +90,15 @@
 
 .interpreter-next {
 
-  height: 900px;
-  padding: 10px;
+  height: 100%;
+  padding: 0px;
+  outline: $outlineStyle;
 
   button {
     display: none;
+    width: 100%;
+    height: 60px;
+    margin-bottom: 10px;
   }
 
 }
