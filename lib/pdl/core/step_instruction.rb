@@ -2,12 +2,104 @@ class StepInstruction < Instruction
 
   attr_reader :parts
 
-  # argument should be a hash as in [ description: string, ...]
-  def initialize parts
-    super 'step'
-    @parts = parts
+  def initialize part_exprs
+
+    @part_exprs = part_exprs
     @renderable = true
+    super 'step'
+
+    # TERMINAL
+    @parts = part_exprs
+
   end
+
+  # RAILS #############################################################################################
+
+  def description 
+    str = ""
+    @parts.each do |a|
+      str = a[:description] if a.has_key?(:description)
+    end
+    str
+  end
+
+  def note
+    str = ""
+    @parts.each do |a|
+      str = a[:note] if a.has_key?(:note)
+    end
+    str
+  end
+
+  def warnings
+    w = []
+    @parts.each do |a|
+      w.push a[:warning] if a.has_key?(:warning)
+    end
+    w
+  end
+
+  def getdatas
+    g = []
+    @parts.each do |a|
+      g.push a[:getdata] if a.has_key?(:getdata)
+    end
+    g
+  end
+
+  def selects
+    g = []
+    @parts.each do |a|
+      g.push a[:select] if a.has_key?(:select)
+    end
+    g
+  end
+
+  def pre_render scope, params
+
+    @parts = []
+
+    @part_exprs.each do |a|
+      a.each do |k,v|
+        begin
+          if k == :getdata
+            @parts.push( getdata: { var: v[:var], type: v[:type], description: scope.substitute( v[:description] ) } )
+          elsif k == :select
+            choice_evals = []
+            v[:choices].each do |c|
+              choice_evals.push scope.substitute c
+            end
+            @parts.push( select: { var: v[:var], description: scope.substitute( v[:description] ), choices: choice_evals } ) # TODO: Add Choices
+          else
+            @parts.push( k => scope.substitute( v ) )
+          end
+        rescue Exception => e
+          raise "In <step>: " + e.to_s
+        end
+      end
+    end
+
+  end
+
+  def bt_execute scope, params
+
+    getdatas.each do |g|
+      if g[:type] == 'number' && params[g[:var]].to_i == params[g[:var]].to_f
+        scope.set g[:var].to_sym, params[g[:var]].to_i
+      elsif g[:type] == 'number'
+        scope.set g[:var].to_sym, params[g[:var]].to_f
+      else
+        scope.set g[:var].to_sym, params[g[:var]]
+      end
+    end
+
+    selects.each do |s|
+      scope.set s[:var].to_sym, params[s[:var]]
+    end
+
+  end
+
+  # TERMINAL ##########################################################################################
 
   def render_description d, scope 
     return "  Description: " +  (scope.substitute d) + "\n"
@@ -62,17 +154,6 @@ class StepInstruction < Instruction
 
   end
 
-  def bt_execute scope, params
-
-    # all get_datas should be in the parameters
-    params.each do |k,v|
-      if k != 'job'
-        scope.set k.to_sym, v
-      end
-    end
-
-  end
-
   def execute scope
    
     @parts.each do |a|
@@ -85,56 +166,6 @@ class StepInstruction < Instruction
       gets
     end
   
-  end
-
-  def description 
-    str = ""
-    @parts.each do |a|
-      str = a[:description] if a.has_key?(:description)
-    end
-    str
-  end
-
-  def note
-    str = ""
-    @parts.each do |a|
-      str = a[:note] if a.has_key?(:note)
-    end
-    str
-  end
-
-  def warnings
-    w = []
-    @parts.each do |a|
-      w.push a[:warning] if a.has_key?(:warning)
-    end
-    w
-  end
-
-  def getdatas
-    g = []
-    @parts.each do |a|
-      g.push a[:getdata] if a.has_key?(:getdata)
-    end
-    g
-  end
-
-  def pre_render scope, params
-    newparts = []
-    @parts.each do |a|
-      a.each do |k,v|
-        begin
-          if k != :getdata
-            newparts.push( k => scope.substitute( v ) )
-          else
-            newparts.push( getdata: { var: v[:var], description: scope.substitute( v[:description] ) } )
-          end
-        rescue Exception => e
-          raise "In <step>: " + e.to_s
-        end
-      end
-    end
-    @parts = newparts
   end
 
 end

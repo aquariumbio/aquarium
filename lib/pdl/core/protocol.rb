@@ -108,16 +108,49 @@ class Protocol
             e = increment e
 
           when 'step'
+
             parts = []
+
             e.elements.each do |tag|
+
               case tag.name
+
                 when 'getdata'
+                  cat = children_as_text tag
+                  unless cat[:var] && cat[:type] && cat[:description]
+                    raise "In <getdata>: Missing subtags"
+                  end
                   parts.push({:getdata =>  (children_as_text tag)} )
+
+                when 'select'
+                  choices = []
+                  v = nil
+                  d = nil
+                  msg = ""
+                  tag.elements.each do |el|
+                    msg += el.name + ' '
+                    if el.name == 'var'
+                      v = el.text
+                    elsif el.name == 'description'
+                      d = el.text
+                    elsif el.name == 'choice'
+                      choices.push( el.text )
+                    end
+                  end                  
+                  unless v && d && choices.length > 0
+                    raise "In <select>: Missing subtags: " + v.to_s + ' ' + d.to_s + ' ' + choices.to_s + ' ' + msg
+                  end
+                  parts.push({:select =>  { var: v, description: d, choices: choices }})
+
 		else 
 		  parts.push({tag.name.to_sym => tag.text})
+
               end
+
             end
+
             push StepInstruction.new parts
+
             e = increment e
 
           when 'assign'

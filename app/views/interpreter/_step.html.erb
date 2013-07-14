@@ -20,12 +20,25 @@
 
 <% end %>
 
-<!-- GETDATAS and BUTTONS ---------------------------------------------->
+<!-- SELECTS ----------------------------------------------------------->
+
+  <% if @instruction.selects.length > 0 %>
+    <% @instruction.selects.each do |s| %>
+      <%= label_tag(s[:var], s[:description] )%>
+      <select id='<%= s[:var] %>'>
+        <% s[:choices].each do |c| %>
+          <option><%= c %></option>
+        <% end %>
+      </select>
+    <% end %>
+  <% end %>
+
+<!-- GETDATAS ------------------------------------------------------------>
 
   <% if @instruction.getdatas.length > 0 %>
 
     <% @instruction.getdatas.each do |g| %>
-      <%= label_tag(g[:var], g[:description] )%>
+      <%= label_tag(g[:var], g[:description] + ' (' + g[:type] + ')' )%>
       <%= text_field_tag( g[:var] ) %>
     <% end %>
 
@@ -41,6 +54,9 @@
     document.getElementById('advance-button').addEventListener('click', function() {
       <% @instruction.getdatas.each do |g| %>
         q += '&<%= g[:var] %>=' + document.getElementById('<%= g[:var] %>').value;
+      <% end %>
+      <% @instruction.selects.each do |s| %>
+        q += '&<%=s[:var] %>=' + document.getElementById('<%= s[:var] %>').value;
       <% end %>
       window.location = '/interpreter/advance?job=<%= @job.id %>' + q;
     } );
