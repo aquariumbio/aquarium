@@ -40,8 +40,9 @@
 
 <script>
 
-  document.getElementById('info-area').innerHTML   = '<%= @job.path %>';
-
+  <% if @job %>
+    document.getElementById('info-area').innerHTML   = '<%= @job.path %>';
+  <% end %>
 
   function fix_height() {
     document.getElementById('interpreter').style.height = window.innerHeight - 120 + 'px';

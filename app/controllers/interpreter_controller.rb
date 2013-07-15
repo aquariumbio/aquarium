@@ -60,7 +60,8 @@ class InterpreterController < ApplicationController
     @job.sha = @sha
     @job.path = @path
     @job.user_id = current_user.id
-    @job.state = { pc: -1, stack: scope.stack }.to_json
+    @job.pc = -1
+    @job.state = { stack: scope.stack }.to_json
     @job.save
 
     respond_to do |format|
@@ -72,7 +73,14 @@ class InterpreterController < ApplicationController
   def get_current
  
     # Get the job
-    @job = Job.find(params[:job])
+
+    begin
+      @job = Job.find(params[:job])
+    rescue Exception => e
+      process_error "Job #{params[:job]} is no longer active"
+      return
+    end
+
     state = JSON.parse(@job.state, {:symbolize_names => true} )
 
     # Get the protocol
@@ -81,13 +89,11 @@ class InterpreterController < ApplicationController
     parse
 
     # Get the pc and scope
-    @pc = state[:pc]
+    @pc = @job.pc
 
-    if @pc != nil
-      @scope = Scope.new
-      @scope.set_stack state[:stack]
-      @instruction = @protocol.program[@pc]
-    end
+    @scope = Scope.new
+    @scope.set_stack state[:stack]
+    @instruction = @protocol.program[@pc]
 
   end
 
@@ -96,13 +102,12 @@ class InterpreterController < ApplicationController
     @error = msg
     @error_pc = @pc
     @pc = nil
-    @job.state = { pc: @pc, stack: @scope.stack }.to_json
-    @job.save
+    @job.destroy if @job
   end
 
   def pre_render
 
-   begin
+    begin
       @instruction.pre_render @scope, params if @instruction.respond_to?('pre_render')
     rescue Exception => e
       process_error "Error in pre_render of " + @instruction.name + ": " + e.to_s
@@ -172,8 +177,13 @@ class InterpreterController < ApplicationController
         @pc = nil
       end
 
-      @job.state = { pc: @pc, stack: @scope.stack }.to_json
-      @job.save
+      if @pc == nil
+        @job.destroy
+      else
+        @job.pc = @pc
+        @job.state = { stack: @scope.stack }.to_json
+        @job.save
+      end
 
       pre_render
   
