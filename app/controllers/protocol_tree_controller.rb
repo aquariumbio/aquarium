@@ -22,21 +22,12 @@ class ProtocolTreeController < ApplicationController
 
   def get_subtree 
 
-    logger.debug "SUBTREE: attempting to get tree"
-
     begin
-      @github = (@client.tree 'klavinslab/protocols', @sha )
-    rescue
-      logger.debug "SUBTREE: failed to get tree"
-      flash.now[:error] = "could not get github tree"
+      @tree = Blob.get_tree @sha
+    rescue Exception => e
+      logger.debug "SUBTREE: failed to get tree: " + e.message
+      flash.now[:error] = "could not get github tree: " + e.message
       @github = nil
-    end
-
-    if @github
-      logger.debug "SUBTREE: sucessfully retreived tree #{@github.inspect}"
-      @tree = @github.tree
-    else
-      @tree = []
     end
 
   end
@@ -64,7 +55,11 @@ class ProtocolTreeController < ApplicationController
 
     @sha = params[:sha]
 
-    if params[:open] == 'no'
+    if @sha && params[:open] == 'no'
+
+      @tree = Blob.get_tree @sha
+
+    elsif params[:open] == 'no'
 
       get_client
       if @client
@@ -92,7 +87,7 @@ class ProtocolTreeController < ApplicationController
         logger.debug "SUBTREE: closing root"
       end
 
-      logger.debug "SUBTREE: closeing a subtree"
+      logger.debug "SUBTREE: closing a subtree"
       @tree = []
 
     end

@@ -1,6 +1,6 @@
 class Blob < ActiveRecord::Base
 
-  attr_accessible :path, :sha, :xml
+  attr_accessible :path, :sha, :xml, :dir
 
   def self.get sha, path
 
@@ -19,6 +19,32 @@ class Blob < ActiveRecord::Base
     end
 
     return b
+
+  end
+
+  def self.get_tree sha
+  
+    b  = self.find_by_sha ( sha )
+
+    if b
+ 
+      result = YAML.load(b.dir).tree
+
+    else 
+
+      client = Octokit::Client.new(login:'klavins',password:'a22imil@te')
+      gh = (client.tree 'klavinslab/protocols', sha)
+
+      b = self.new
+      b.sha = sha
+      b.dir = gh.to_yaml
+      b.save
+
+      result = gh.tree
+
+    end
+
+    return result
 
   end
 
