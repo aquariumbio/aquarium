@@ -27,7 +27,7 @@ class ObjectType < ActiveRecord::Base
   end
 
   def proper_release_method
-    errros.add(:release_method, "must be either return, dispose, or query") unless
+    errors.add(:release_method, "must be either return, dispose, or query") unless
       self.release_method && ( self.release_method == 'return'  || 
                                self.release_method == 'dispose' || 
                                self.release_method == 'query' )
