@@ -20,7 +20,7 @@
       <% object.items.each do |i| %>
         <li>
           <%= i.location %>
-          <input name='<%= i.id %>' class="small-input" type="number" value="0" onchange='update_total()'>
+          <input name='<%= i.id %>' class="small-input" type="number" value="0" onchange='update_total(<%= i.id %>,<%= i.quantity - i.inuse %>)'>
           of <%= i.quantity - i.inuse %> available.
         </li>  
       <% end %>
@@ -33,7 +33,7 @@
 
 <script>
 
-  function update_total() {
+  function update_total(index,available) {
 
     total = 0;
 
@@ -41,6 +41,9 @@
     for(i=0; i<items.length; i++) {
       if ( parseInt(items[i].value) < 0 ) {
         items[i].value = 0;
+      }
+      if ( items[i].name == index && parseInt(items[i].value) > available ) {
+        items[i].value = available;
       }
       total += parseInt(items[i].value);
     }
