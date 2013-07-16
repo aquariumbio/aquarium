@@ -1,6 +1,5 @@
 require 'time'
 
-
 class LogInstruction < Instruction
 
   attr_reader :type, :data, :log_file
@@ -25,7 +24,7 @@ class LogInstruction < Instruction
     data_value = scope.evaluate @data
 
     log = Log.new
-    log.job = params[:job]
+    log.job_id = params[:job]
     log.user = opts[:user]
     log.entry_type = @type
     log.data = data_value.to_json
