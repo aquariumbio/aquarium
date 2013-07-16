@@ -21,7 +21,7 @@
   <% args = (JSON.parse(j.state))['stack'].first %>
 
   <tr>
-    <td><%= j.id %></td>
+    <td><%= link_to j.id.to_s, j %></td>
     <td><%= link_to j.path, protocol_tree_raw_path(sha: j.sha, format: 'xml'), target: j.path %></td>
     <td>
         <% if j.pc == Job.NOT_STARTED %>

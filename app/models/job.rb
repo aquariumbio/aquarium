@@ -10,4 +10,6 @@ class Job < ActiveRecord::Base
     -2
   end
 
+  has_many :logs
+
 end
