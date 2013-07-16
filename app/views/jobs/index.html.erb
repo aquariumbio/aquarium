@@ -2,64 +2,100 @@
 
 <h1>Jobs</h1>
 
-<table class='table'>
+<h4>Active Jobs Submitted by 
+<span class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @user.login %><b class="caret"></b></a>
+<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+<% User.all.sort.each do |u| %>
+  <li><%= link_to u.login, '/jobs?user_id=' + u.id.to_s %></li>
+<% end %>
+</ul>
+</span>
+</h4>
 
+
+<table class='table'>
   <tr>
     <th>Job</th>
     <th>Protocol</th>
     <th>Status</th>
     <th>Arguments</th>
-    <th>Submitted by ...</th>
     <th>Started</th>
     <th>Last updated</th>
     <th></th>
     <th></th>
   </tr>
 
-<% @jobs.each do |j| %>
+<% @active_jobs.each do |j| %>
 
-  <% pc = (JSON.parse(j.state))['pc'] %>
   <% args = (JSON.parse(j.state))['stack'].first %>
 
-  <tr>
-    <td><%= j.id %></td>
-    <td><%= link_to j.path, protocol_tree_raw_path(sha: j.sha, format: 'xml'), target: j.path %></td>
-    <td>
-      <% if pc != nil %>
-        <% if pc < 0 %>
-          not yet started
-        <% else %>
-          pc = <%= pc %>
-        <% end %>
-      <% else %>
-         completed
-      <% end %>
-    </td>
-    <td>
-      <% if args.length > 0 %>
-          <% args.each do |k,v| %>
-            <%= ("<b>" + k.to_s + "</b>: " + v.to_s).html_safe %><br />
+    <tr>
+      <td><%= j.id %></td>
+      <td><%= link_to j.path, protocol_tree_raw_path(sha: j.sha, format: 'xml'), target: j.path %></td>
+      <td>
+          <% if j.pc == Job.NOT_STARTED %>
+            not yet started
+          <% elsif j.pc == Job.COMPLETED %>
+            completed
+          <% else %>
+            pc = <%= j.pc %>
           <% end %>
-      <% else %>
-        -
-      <% end %>
-    </td>
-    <td><%= User.find(j.user_id).login %></td>
-    <td><%= j.created_at.to_formatted_s(:short) %></td>
-    <td><%= j.updated_at.to_formatted_s(:short) %></td>
-    <td>
-      <% if pc != nil %>
-        <% if pc.to_i < 0 %>
-          <%= link_to 'run', interpreter_advance_path(job:j.id) %>
+      </td>
+      <td>
+        <% if args.length > 0 %>
+            <% args.each do |k,v| %>
+              <%= ("<b>" + k.to_s + "</b>: " + v.to_s).html_safe %><br />
+            <% end %>
         <% else %>
-          <%= link_to 'resume', interpreter_current_path(job:j.id) %>
+          -
         <% end %>
-      <% end %>
-    </td>
-    <td><%= link_to 'delete', j, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </td>
+      <td><%= j.created_at.to_formatted_s(:short) %></td>
+      <td><%= j.updated_at.to_formatted_s(:short) %></td>
+      <td>
+          <% if j.pc == Job.NOT_STARTED %>
+            <%= link_to 'run', interpreter_advance_path(job:j.id) %>
+          <% elsif j.pc != Job.COMPLETED %>
+            <%= link_to 'resume', interpreter_current_path(job:j.id) %>
+          <% end %>
+      </td>
+      <td><%= link_to 'cancel', j, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+
+  <% end %>
+
+</table>
+
+<br />
+
+<h4>Completed Jobs <span style="color: #bbb">(Click Job Number for Log)</span></h4>
+
+<table class='table' style='width:50%'>
+  <tr>
+    <th>Job</th>
+    <th>Protocol</th>
+    <th>Arguments</th>
+    <th>Completed</th>
   </tr>
 
-<% end %>
+  <% @completed_jobs.each do |j| %>
+    <% args = (JSON.parse(j.state))['stack'].first %>
+    <tr>
+      <td><%= link_to j.id.to_s, j %></td>
+      <td><%= link_to j.path, protocol_tree_raw_path(sha: j.sha, format:'xml'), target: j.path %></td>
+      <td>
+        <% if args.length > 0 %>
+            <% args.each do |k,v| %>
+              <%= ("<b>" + k.to_s + "</b>: " + v.to_s).html_safe %><br />
+            <% end %>
+        <% else %>
+          -
+        <% end %>
+      </td>
+      <td><%= j.updated_at.to_formatted_s(:short) %></td>
+    </tr>
+  <% end %>
 
 </table>
 

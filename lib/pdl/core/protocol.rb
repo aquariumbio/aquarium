@@ -308,6 +308,9 @@ class Protocol
 
           when 'log'
             c = children_as_text e
+            unless c && c[:type] && c[:data]
+              raise "In log: missing sub-tags"
+            end
             push LogInstruction.new c[:type], c[:data], 'log_file'
             e = increment e
 

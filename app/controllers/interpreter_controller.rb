@@ -10,13 +10,13 @@ class InterpreterController < ApplicationController
     begin
       @protocol.parse_xml file
     rescue Exception => e
-      @parse_errors = e
+      @parse_errors = e.message
     end
 
     begin
       @protocol.parse
     rescue Exception => e
-      @parse_errors = e
+      @parse_errors = e.message # + ": " + e.backtrace.to_s
     end
 
   end
@@ -60,7 +60,8 @@ class InterpreterController < ApplicationController
     @job.sha = @sha
     @job.path = @path
     @job.user_id = current_user.id
-    @job.state = { pc: -1, stack: scope.stack }.to_json
+    @job.pc = Job.NOT_STARTED
+    @job.state = { stack: scope.stack }.to_json
     @job.save
 
     respond_to do |format|
@@ -72,7 +73,14 @@ class InterpreterController < ApplicationController
   def get_current
  
     # Get the job
-    @job = Job.find(params[:job])
+
+    begin
+      @job = Job.find(params[:job])
+    rescue Exception => e
+      process_error "Job #{params[:job]} is no longer active"
+      return
+    end
+
     state = JSON.parse(@job.state, {:symbolize_names => true} )
 
     # Get the protocol
@@ -81,13 +89,11 @@ class InterpreterController < ApplicationController
     parse
 
     # Get the pc and scope
-    @pc = state[:pc]
+    @pc = @job.pc
 
-    if @pc != nil
-      @scope = Scope.new
-      @scope.set_stack state[:stack]
-      @instruction = @protocol.program[@pc]
-    end
+    @scope = Scope.new
+    @scope.set_stack state[:stack]
+    @instruction = @protocol.program[@pc]
 
   end
 
@@ -95,14 +101,15 @@ class InterpreterController < ApplicationController
     @exception = true
     @error = msg
     @error_pc = @pc
-    @pc = nil
-    @job.state = { pc: @pc, stack: @scope.stack }.to_json
+    @pc = Job.COMPLETED
+    @job.pc = @pc
+    @job.state = { stack: @scope.stack }.to_json
     @job.save
   end
 
   def pre_render
 
-   begin
+    begin
       @instruction.pre_render @scope, params if @instruction.respond_to?('pre_render')
     rescue Exception => e
       process_error "Error in pre_render of " + @instruction.name + ": " + e.to_s
@@ -120,7 +127,13 @@ class InterpreterController < ApplicationController
 
   def execute
 
-    @instruction.bt_execute @scope, params if @instruction.respond_to?('bt_execute')
+    if @instruction.respond_to?('bt_execute')
+      if @instruction.name == 'log'
+        @instruction.bt_execute @scope, params, user: current_user
+      else
+        @instruction.bt_execute @scope, params
+      end
+    end
 
     if @instruction.respond_to?("set_pc")
       @pc = @instruction.set_pc @scope
@@ -134,7 +147,7 @@ class InterpreterController < ApplicationController
 
     get_current
 
-    if @pc != nil
+    if @pc != Job.COMPLETED
 
       if @pc >= 0
         begin
@@ -166,13 +179,15 @@ class InterpreterController < ApplicationController
 
       end
 
+      # check if protocol is finished
       if @pc < @protocol.program.length
         @instruction = @protocol.program[@pc]
       else
-        @pc = nil
+        @pc = Job.COMPLETED
       end
 
-      @job.state = { pc: @pc, stack: @scope.stack }.to_json
+      @job.pc = @pc
+      @job.state = { stack: @scope.stack }.to_json
       @job.save
 
       pre_render

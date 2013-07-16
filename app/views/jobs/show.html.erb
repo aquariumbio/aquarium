@@ -1,0 +1,42 @@
+<h1>Job <%= @job.id %> : <%= @job.path %></h1>
+
+<h4>Job Information</h4>
+
+<ul>
+  <li>Submitted by: <b><%= User.find(@job.user_id).name %></b></li>
+  <li>Submitted: <%= @job.created_at.to_formatted_s(:short) %></li>
+  <li>Last Updated: <%= @job.updated_at.to_formatted_s(:short) %></li>
+  <li>
+      <% args = (JSON.parse(@job.state))['stack'].first %>
+      <% if args.length > 0 %>
+          Arguments:<ul>
+          <% args.each do |k,v| %>
+            <%= ("<li><b>" + k.to_s + "</b>: " + v.to_s).html_safe %></li>
+          <% end %>
+          </ul>
+      <% else %>
+        No Arguments
+      <% end %>
+  </li>
+  <li>Version of <%= @job.path %> used: <%= link_to @job.sha, protocol_tree_raw_path(sha: @job.sha, format: 'xml'), target: @job.id.to_s + ":" + @job.path %></li>
+</ul>
+
+<h4>Log</h4>
+
+<table class='table'>
+  <tr>
+    <th>Time</th>
+    <th>User</th>
+    <th>Entry Type</th>
+    <th>Data</th>
+  </tr>
+
+<% @job.logs.each do |entry| %>
+  <tr>
+    <td><%= entry.created_at.to_formatted_s(:short) %></td>
+    <td><%= User.find(entry.user).login %></td>
+    <td><%= entry.entry_type %></td>
+    <td><%= entry.data %></td>
+  </tr>
+<% end %>
+</table>

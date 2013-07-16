@@ -1,0 +1,23 @@
+<h1>Log</h1>
+
+<table class='table'>
+  <tr>
+    <th>Job</th>
+    <th>User</th>
+    <th>Entry Type</th>
+    <th>Data</th>
+    <th></th>
+  </tr>
+
+<% @logs.each do |log| %>
+  <tr>
+    <td><%= log.job_id %></td>
+    <td><%= log.user %></td>
+    <td><%= log.entry_type %></td>
+    <td><%= log.data %></td>
+    <td><%= link_to 'Show', log %></td>
+  </tr>
+<% end %>
+</table>
+
+

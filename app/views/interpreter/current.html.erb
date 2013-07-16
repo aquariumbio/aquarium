@@ -5,7 +5,7 @@
   <!-- FLOW CHART ----------------------------------------------------->
   <div class="span2 interpreter-flow-chart">
 
-    <% if @pc != nil %>
+    <% if @pc != Job.COMPLETED %>
       <% (0..@protocol.program.length-1).each do |p| %>
         <% if p == @pc %>
           <div class='pc_at'>
@@ -22,7 +22,7 @@
   <div class="span9 interpreter-main">
     <% if @exception %>
        <%= render 'error' %>
-    <% elsif @pc != nil %>
+    <% elsif @pc != Job.COMPLETED %>
       <%= render @instruction.name %>
     <% else %>
       <div class="alert alert-info">THIS PROTOCOL IS NO LONGER ACTIVE</div>
@@ -31,7 +31,7 @@
 
   <!-- BUTTONS -------------------------------------------------------->
   <div class="span1 interpreter-next">
-    <% if @pc != nil %>
+    <% if @pc != Job.COMPLETED %>
       <button class='btn btn-primary' id='advance-button'>NEXT</button>
     <% end %>
   </div>
@@ -40,8 +40,9 @@
 
 <script>
 
-  document.getElementById('info-area').innerHTML   = '<%= @job.path %>';
-
+  <% if @job %>
+    document.getElementById('info-area').innerHTML   = '<%= @job.path %>';
+  <% end %>
 
   function fix_height() {
     document.getElementById('interpreter').style.height = window.innerHeight - 120 + 'px';
