@@ -39,10 +39,9 @@ Bioturk::Application.routes.draw do
   match '/signup', to: 'users#new'
 
   resources :users
-
   resources :sessions, only: [:new, :create, :destroy]
-
   resources :jobs, only: [:index, :destroy]
+  resources :logs, only: [:index, :show]
 
   match '/item', to: 'items#update'
 

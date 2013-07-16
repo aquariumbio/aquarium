@@ -10,13 +10,13 @@ class InterpreterController < ApplicationController
     begin
       @protocol.parse_xml file
     rescue Exception => e
-      @parse_errors = e
+      @parse_errors = e.message
     end
 
     begin
       @protocol.parse
     rescue Exception => e
-      @parse_errors = e
+      @parse_errors = e.message # + ": " + e.backtrace.to_s
     end
 
   end
@@ -60,7 +60,7 @@ class InterpreterController < ApplicationController
     @job.sha = @sha
     @job.path = @path
     @job.user_id = current_user.id
-    @job.pc = -1
+    @job.pc = Job.NOT_STARTED
     @job.state = { stack: scope.stack }.to_json
     @job.save
 
@@ -101,8 +101,10 @@ class InterpreterController < ApplicationController
     @exception = true
     @error = msg
     @error_pc = @pc
-    @pc = nil
-    @job.destroy if @job
+    @pc = Job.COMPLETED
+    @job.pc = @pc
+    @job.state = { stack: @scope.stack }.to_json
+    @job.save
   end
 
   def pre_render
@@ -125,7 +127,13 @@ class InterpreterController < ApplicationController
 
   def execute
 
-    @instruction.bt_execute @scope, params if @instruction.respond_to?('bt_execute')
+    if @instruction.respond_to?('bt_execute')
+      if @instruction.name == 'log'
+        @instruction.bt_execute @scope, params, user: current_user
+      else
+        @instruction.bt_execute @scope, params
+      end
+    end
 
     if @instruction.respond_to?("set_pc")
       @pc = @instruction.set_pc @scope
@@ -139,7 +147,7 @@ class InterpreterController < ApplicationController
 
     get_current
 
-    if @pc != nil
+    if @pc != Job.COMPLETED
 
       if @pc >= 0
         begin
@@ -171,19 +179,16 @@ class InterpreterController < ApplicationController
 
       end
 
+      # check if protocol is finished
       if @pc < @protocol.program.length
         @instruction = @protocol.program[@pc]
       else
-        @pc = nil
+        @pc = Job.COMPLETED
       end
 
-      if @pc == nil
-        @job.destroy
-      else
-        @job.pc = @pc
-        @job.state = { stack: @scope.stack }.to_json
-        @job.save
-      end
+      @job.pc = @pc
+      @job.state = { stack: @scope.stack }.to_json
+      @job.save
 
       pre_render
   

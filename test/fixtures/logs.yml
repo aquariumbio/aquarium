@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  job: 1
+  protocol_sha: MyString
+  protcol_name: MyString
+  user: MyString
+  type: 
+  data: MyText
+
+two:
+  job: 1
+  protocol_sha: MyString
+  protcol_name: MyString
+  user: MyString
+  type: 
+  data: MyText
