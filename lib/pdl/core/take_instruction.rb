@@ -48,7 +48,7 @@ class TakeInstruction < Instruction
     log.job_id = params[:job]
     log.user_id = scope.stack.first[:user_id]
     log.entry_type = 'TAKE'
-    log.data = { var: var, list: data }.to_json
+    log.data = { pc: @pc, var: var, objects: data }.to_json
     log.save
 
   end

@@ -21,6 +21,19 @@
   <li>Version of <%= @job.path %> used: <%= link_to @job.sha, protocol_tree_raw_path(sha: @job.sha, format: 'xml'), target: @job.id.to_s + ":" + @job.path %></li>
 </ul>
 
+<h4>Timing</h4>
+
+<div>
+  <% ( @job.logs.reject { |l| l.entry_type != 'NEXT' } ).each do |entry| %>
+    <span class='timing-block'>
+      <div class='pc'><%= JSON.parse(entry.data)['pc'] %></div>
+      <div class='time'><%= entry.created_at.strftime("%H:%M:%S") %></div>
+    </span>
+  <% end %>
+</div>
+
+<div class='clear'></div>
+
 <h4>Log</h4>
 
 <table class='table'>
@@ -28,10 +41,10 @@
     <th>Time</th>
     <th>User</th>
     <th>Entry Type</th>
-    <th>Data</th>
+    <th style='width:61.8%'>Data</th>
   </tr>
 
-<% @job.logs.each do |entry| %>
+<% ( @job.logs.reject { |l| l.entry_type == 'NEXT' } ).each do |entry| %>
   <tr>
     <td><%= entry.created_at.to_formatted_s(:short) %></td>
     <td><%= User.find(entry.user_id).login %></td>

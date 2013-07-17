@@ -1,3 +1,28 @@
 // Place all the styles related to the jobs controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.timing-block {
+  float: left; 
+  display:'block';
+  margin: 2px;
+  padding: 3px;
+  border-radius: 3px; 
+  background: #eee;
+    .pc {
+       margin: 0;
+       line-height: 10pt;
+       font-size: 9pt;
+     }
+    .time {
+      font-size: 9pt;
+      margin: 0;
+      line-height: 10pt;
+    }
+}
+
+.clear {
+  clear: both; 
+  display: block; 
+  position: relative;
+}

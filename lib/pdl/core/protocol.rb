@@ -15,6 +15,7 @@ class Protocol
   end
 
   def push i
+    i.pc = @program.length
     @program.push i
   end
     

@@ -1,6 +1,7 @@
 class Instruction
  
   attr_reader :name, :renderable
+  attr_writer :pc
 
   def initialize name
     @name = name

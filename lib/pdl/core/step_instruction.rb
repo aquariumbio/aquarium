@@ -108,7 +108,7 @@ class StepInstruction < Instruction
       log.job_id = params[:job]
       log.user_id = scope.stack.first[:user_id]
       log.entry_type = 'GETDATA'
-      log.data = log_data.to_json
+      log.data = {pc: @pc, getdatas: log_data}.to_json
       log.save
     end
 
