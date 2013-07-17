@@ -7,7 +7,7 @@
   <li>Submitted: <%= @job.created_at.to_formatted_s(:short) %></li>
   <li>Last Updated: <%= @job.updated_at.to_formatted_s(:short) %></li>
   <li>
-      <% args = (JSON.parse(@job.state))['stack'].first %>
+      <% args = (JSON.parse(@job.state))['stack'].first.reject { |k,v| k == 'user_id' } %>
       <% if args.length > 0 %>
           Arguments:<ul>
           <% args.each do |k,v| %>
