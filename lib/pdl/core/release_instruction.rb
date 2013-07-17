@@ -37,6 +37,7 @@ class ReleaseInstruction < Instruction
 
     pre_render scope, params
     i = 0
+    log_data = []
 
     @object_list.each do |pi|
 
@@ -59,9 +60,17 @@ class ReleaseInstruction < Instruction
       end
 
       x.save 
+      log_data.push object_type: pi[:object][:name], item_id: pi[:item][:id], quantity: 1, method: m
 
     end
-  
+
+    log = Log.new
+    log.job_id = params[:job]
+    log.user_id = scope.stack.first[:user_id]
+    log.entry_type = 'RELEASE'
+    log.data = { pc: @pc, objects: log_data }.to_json
+    log.save
+
   end
 
   # TERMINAL ########################################################################################
