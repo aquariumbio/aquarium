@@ -17,6 +17,10 @@ class Scope
     @stack.last[symbol] = value
   end
 
+  def set_base_symbol symbol, value
+    @stack.first[symbol] = value
+  end
+
   def push 
     @stack.push( {} )
   end

@@ -36,6 +36,23 @@ class TakeInstruction < Instruction
 
   end
 
+  def log var, r, scope, params
+
+    data = []
+
+    r.each do |ob|
+      data.push object_type: ob[:object][:name], item_id: ob[:item][:id], quantity: 1
+    end
+
+    log = Log.new
+    log.job_id = params[:job]
+    log.user_id = scope.stack.first[:user_id]
+    log.entry_type = 'TAKE'
+    log.data = { var: var, list: data }.to_json
+    log.save
+
+  end
+
   def bt_execute scope, params
 
     pre_render scope, params
@@ -79,6 +96,7 @@ class TakeInstruction < Instruction
     end
 
     scope.set( @var.to_sym, result )
+    log var, result, scope, params
 
   end
 

@@ -93,6 +93,7 @@ class InterpreterController < ApplicationController
 
     @scope = Scope.new
     @scope.set_stack state[:stack]
+    @scope.set_base_symbol :user_id, current_user.id
     @instruction = @protocol.program[@pc]
 
   end
@@ -101,6 +102,7 @@ class InterpreterController < ApplicationController
     @exception = true
     @error = msg
     @error_pc = @pc
+    log "ERROR", { pc: @pc, message: msg, instruction: @instruction.name }
     @pc = Job.COMPLETED
     @job.pc = @pc
     @job.state = { stack: @scope.stack }.to_json
@@ -128,11 +130,7 @@ class InterpreterController < ApplicationController
   def execute
 
     if @instruction.respond_to?('bt_execute')
-      if @instruction.name == 'log'
-        @instruction.bt_execute @scope, params, user: current_user
-      else
-        @instruction.bt_execute @scope, params
-      end
+      @instruction.bt_execute @scope, params
     end
 
     if @instruction.respond_to?("set_pc")
@@ -143,6 +141,15 @@ class InterpreterController < ApplicationController
 
   end
 
+  def log type, data
+    log = Log.new
+    log.job_id = @job.id
+    log.user_id = current_user.id
+    log.entry_type = type
+    log.data = data.to_json
+    log.save
+  end
+
   def advance
 
     get_current
@@ -150,14 +157,16 @@ class InterpreterController < ApplicationController
     if @pc != Job.COMPLETED
 
       if @pc >= 0
+        log "NEXT", { pc: @pc, instruction: @instruction.name }
         begin
           execute
         rescue Exception => e
           process_error "Error executing #{@instruction.name}: " + e.to_s + ": "+  e.backtrace.inspect
           render 'current'
           return
-        end        
+        end
       else
+        log "START", {}
         @pc = 0
       end
 
@@ -184,6 +193,7 @@ class InterpreterController < ApplicationController
         @instruction = @protocol.program[@pc]
       else
         @pc = Job.COMPLETED
+        log "STOP", {}
       end
 
       @job.pc = @pc

@@ -17,15 +17,13 @@ class LogInstruction < Instruction
 
   # RAILS ###################################################################################################
 
-  def bt_execute scope, params, options={}
-
-    opts = { user: 'unknown' }.merge(options)
+  def bt_execute scope, params
 
     data_value = scope.evaluate @data
-
+  
     log = Log.new
     log.job_id = params[:job]
-    log.user = opts[:user]
+    log.user_id = scope.stack.first[:user_id]
     log.entry_type = @type
     log.data = data_value.to_json
     log.save

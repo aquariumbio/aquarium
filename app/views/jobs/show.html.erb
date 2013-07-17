@@ -34,7 +34,7 @@
 <% @job.logs.each do |entry| %>
   <tr>
     <td><%= entry.created_at.to_formatted_s(:short) %></td>
-    <td><%= User.find(entry.user).login %></td>
+    <td><%= User.find(entry.user_id).login %></td>
     <td><%= entry.entry_type %></td>
     <td><%= entry.data %></td>
   </tr>

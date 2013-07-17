@@ -69,7 +69,7 @@ class StepInstruction < Instruction
             v[:choices].each do |c|
               choice_evals.push scope.substitute c
             end
-            @parts.push( select: { var: v[:var], description: scope.substitute( v[:description] ), choices: choice_evals } ) # TODO: Add Choices
+            @parts.push( select: { var: v[:var], description: scope.substitute( v[:description] ), choices: choice_evals } )
           else
             @parts.push( k => scope.substitute( v ) )
           end
@@ -83,18 +83,33 @@ class StepInstruction < Instruction
 
   def bt_execute scope, params
 
+    log_data = {}
+
     getdatas.each do |g|
+      sym = g[:var].to_sym
       if g[:type] == 'number' && params[g[:var]].to_i == params[g[:var]].to_f
-        scope.set g[:var].to_sym, params[g[:var]].to_i
+        scope.set sym, params[g[:var]].to_i
       elsif g[:type] == 'number'
-        scope.set g[:var].to_sym, params[g[:var]].to_f
+        scope.set sym, params[g[:var]].to_f
       else
-        scope.set g[:var].to_sym, params[g[:var]]
+        scope.set sym, params[g[:var]]
       end
+      log_data[sym] = scope.get sym
     end
 
     selects.each do |s|
-      scope.set s[:var].to_sym, params[s[:var]]
+      sym = s[:var].to_sym
+      scope.set sym, params[s[:var]]
+      log_data[sym] = scope.get sym
+    end
+
+    unless log_data.empty?
+      log = Log.new
+      log.job_id = params[:job]
+      log.user_id = scope.stack.first[:user_id]
+      log.entry_type = 'GETDATA'
+      log.data = log_data.to_json
+      log.save
     end
 
   end
