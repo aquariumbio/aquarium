@@ -13,7 +13,7 @@ class ProduceInstruction < Instruction
 
   end
 
-  # TERMINAL ###########################################################################################
+  # RAILS ##############################################################################################
 
   def pre_render scope, params
     @object_type = scope.substitute @object_type_expr
@@ -31,10 +31,17 @@ class ProduceInstruction < Instruction
     end
 
     begin
-      x.items.create(location: params['location'], quantity: @quantity)
+      item = x.items.create(location: params['location'], quantity: @quantity)
     rescue Exception => e
       raise "Could not add item of type #{object_type}: " + e.message
     end
+
+    log = Log.new
+    log.job_id = params[:job]
+    log.user_id = scope.stack.first[:user_id]
+    log.entry_type = 'PRODUCE'
+    log.data = { pc: @pc, object: { object_type: @object_type, location: item.location, item_id: item.id, quantity: 1 } }.to_json
+    log.save
 
   end
 
