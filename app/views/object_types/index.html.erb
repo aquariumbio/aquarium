@@ -2,13 +2,23 @@
 
 <h1>Objects</h1>
 
+
+
 <table class="table">
   <tr>
     <th>Name</th>
     <th>Description</th>
     <th>Quantity</th>
     <th>Range</th>
-    <th>Handler</th>
+    <th><span class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @handler %><b class="caret"></b></a>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+      <% @all_handlers.sort.each do |u| %>
+        <li><%= link_to u, '/object_types?handler=' + u %></li>
+      <% end %>
+    </ul>
+  </span>
+</th>
     <th></th>
     <th></th>
     <th></th>

@@ -5,7 +5,10 @@ class ObjectTypesController < ApplicationController
   # GET /object_types
   # GET /object_types.json
   def index
-    @object_types = ObjectType.all
+
+    @handler = params[:handler] ? params[:handler] : 'glassware'
+    @all_handlers = ObjectType.uniq.pluck(:handler)
+    @object_types = ObjectType.where("handler = ?", @handler)
 
     respond_to do |format|
       format.html # index.html.erb

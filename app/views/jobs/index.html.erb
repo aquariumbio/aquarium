@@ -2,16 +2,14 @@
 
 <h1>Jobs</h1>
 
-<h4>Active Jobs Submitted by 
-<span class="dropdown">
-<a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @user.login %><b class="caret"></b></a>
-<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-<% User.all.sort.each do |u| %>
-  <li><%= link_to u.login, '/jobs?user_id=' + u.id.to_s %></li>
-<% end %>
-</ul>
-</span>
-</h4>
+<h4>Active Jobs Submitted by <span class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @user.login %><b class="caret"></b></a>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+      <% User.all.sort.each do |u| %>
+        <li><%= link_to u.login, '/jobs?user_id=' + u.id.to_s %></li>
+      <% end %>
+    </ul>
+</span></h4>
 
 
 <table class='table'>
