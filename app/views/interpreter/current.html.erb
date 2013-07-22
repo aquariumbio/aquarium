@@ -24,6 +24,11 @@
        <%= render 'error' %>
     <% elsif @pc != Job.COMPLETED %>
       <%= render @instruction.name %>
+      <div id='note' style='display: none'>
+        <hr />
+        <p>Add a note to the log for this step</p>
+        <textarea rows="3" id='note-textarea'></textarea>
+      </div>
     <% else %>
       <div class="alert alert-info">THIS JOB IS NO LONGER ACTIVE</div>
       <p><%= link_to 'View Log for Job ' + @job.id.to_s, @job %></p>
@@ -31,10 +36,12 @@
   </div>
 
   <!-- BUTTONS -------------------------------------------------------->
-  <div class="span1 interpreter-next">
+  <div class="span1 interpreter-buttons">
     <% if @pc != Job.COMPLETED %>
-      <button class='btn btn-primary' id='advance-button'>NEXT</button>
+      <button class='btn btn-primary' id='advance-button' disabled>NEXT</button>
+      <button class='btn'             id='note-button'>NOTE</button>
     <% end %>
+
   </div>
 
 </div>
@@ -42,7 +49,7 @@
 <script>
 
   <% if @job %>
-    document.getElementById('info-area').innerHTML   = '<%= @job.path %>';
+    document.getElementById('info-area').innerHTML = '<%= @job.path %>';
   <% end %>
 
   function fix_height() {
@@ -50,7 +57,30 @@
   }
 
   fix_height();
-
   window.onresize = fix_height;
+
+  document.getElementById('note-button').addEventListener('click', function() {
+
+    var note = document.getElementById('note');
+
+    if ( note.style.display == 'block' ) {
+       note.style.display = 'none';
+    } else {
+       note.style.display = 'block';
+    }
+
+    console.log('asd');
+
+  } );
+
+  advance_url = function() {
+    url = '/interpreter/advance?job=<%= @job.id %>';
+    var note = document.getElementById('note-textarea');
+    if ( note.value ) {
+      url += '&lognote=' + note.value;
+    }
+    return url;
+  }
+
 
 </script>

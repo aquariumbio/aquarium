@@ -5,10 +5,11 @@
 <script>
 
   window.onload = function() {
-    document.getElementById('advance-button').style.display = 'block';
+    document.getElementById('advance-button').disabled = false;
     document.getElementById('advance-button').addEventListener('click', function() {
-      window.location = '/interpreter/advance?job=<%= @job.id %>';
+      window.location = advance_url();
     } );
+
   }
 
 </script>

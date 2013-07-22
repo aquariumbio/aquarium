@@ -52,9 +52,9 @@
     el.innerHTML = total;
 
     if ( total == <%= num %> ) {
-      document.getElementById('advance-button').style.display = 'block';
+      document.getElementById('advance-button').disabled = false;
     } else {
-      document.getElementById('advance-button').style.display = 'none';
+      document.getElementById('advance-button').disabled = true;
     }
 
   }
@@ -66,7 +66,7 @@
       for(i=0; i<items.length; i++) {
         query += "&i" + i + "=" + items[i].name + "&q" + i + "=" + items[i].value;
       }
-      window.location = '/interpreter/advance?job=<%= @job.id %>' + query;
+      window.location = advance_url() + query;
     } );
   }
 

@@ -49,7 +49,7 @@
 <script>
 
   window.onload = function() {
-    document.getElementById('advance-button').style.display = 'block';
+    document.getElementById('advance-button').disabled = false;
     q = "";
     document.getElementById('advance-button').addEventListener('click', function() {
       <% @instruction.getdatas.each do |g| %>
@@ -58,7 +58,7 @@
       <% @instruction.selects.each do |s| %>
         q += '&<%=s[:var] %>=' + document.getElementById('<%= s[:var] %>').value;
       <% end %>
-      window.location = '/interpreter/advance?job=<%= @job.id %>' + q;
+      window.location = advance_url() + q;
     } );
   }
 

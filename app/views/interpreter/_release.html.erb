@@ -52,18 +52,18 @@
       show = show && ( document.getElementById(list[i]+'-returned').checked );
     }
     if ( show ) {
-      document.getElementById('advance-button').style.display ='block'
+      document.getElementById('advance-button').disabled = false;
     } else {
-      document.getElementById('advance-button').style.display = 'none';
+      document.getElementById('advance-button').disabled = true;
     }
   }
 
   window.onload = function() {
 
     <% if next_check_list.empty? %>
-      document.getElementById('advance-button').style.display = 'block';
+      document.getElementById('advance-button').disabled = false;
     <% else %>
-      document.getElementById('advance-button').style.display = 'none';
+      document.getElementById('advance-button').disabled = true;
     <% end %>
 
     document.getElementById('advance-button').addEventListener('click', function() {
@@ -90,7 +90,7 @@
 
       <% end %>
 
-      window.location = '/interpreter/advance?job=<%= @job.id %>' + q;
+      window.location = advance_url() + q;
 
     } );
   }

@@ -158,6 +158,9 @@ class InterpreterController < ApplicationController
 
       if @pc >= 0
         log "NEXT", { pc: @pc, instruction: @instruction.name }
+        if params[:lognote]
+          log "NOTE", { pc: @pc, content: params[:lognote] }
+        end
         begin
           execute
         rescue Exception => e
