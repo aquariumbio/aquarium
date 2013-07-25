@@ -6,7 +6,7 @@ end
 
 class TakeInstruction 
   def to_html
-    "Take #{@quantity_expr} of <i>#{@object_type_expr}</i> and refer to it as #{@var}."
+    @item_list_expr.to_s
   end
 end
 

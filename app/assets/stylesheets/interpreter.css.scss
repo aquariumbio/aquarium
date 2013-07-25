@@ -103,4 +103,23 @@ $outlineStyle: #f00 dotted 0px;
 
 }
 
+.take_object_select {
 
+}
+
+.take_choice_box {
+  border: 1pt solid red;
+  width: 75%;
+}
+
+.take_item_select {
+  display: inline-block;
+  width: 25%;
+  margin: 10px 10px 0px 10px;
+}
+
+.take_item_quantity {
+  display: inline-block; 
+  width: 25%; 
+  margin: 10px 10px 0px 10px;
+}

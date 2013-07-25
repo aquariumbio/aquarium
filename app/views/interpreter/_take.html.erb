@@ -1,73 +1,77 @@
-<%
-  name = @instruction.object_type
-  object = @instruction.object
-  num = @instruction.quantity
-%>
+<h1>Gather the following items.</h1>
 
-<h1>You will need 
-  <%= num %> 
-  <%= name.pluralize(num) %>.</h1>
+<% logger.info @instruction.item_list.to_s %>
 
-<div class='row-fluid'>
+<% for i in 0..((@instruction.item_list.length) - 1) %>
 
-  <div class="span3 object-image">
-    <%= image_tag object.image.url(:medium) %>
+  <% q = @instruction.item_list[i][:quantity] %>
+  <% type = @instruction.item_list[i][:type]  %>
+  <% ob = @instruction.object_list[i] %>
+
+  <div class='row-fluid'>
+
+    <div class="span2 object-image">
+      <%= image_tag @instruction.object_list[i].image.url(:medium) %>
+    </div>
+
+    <div class="span10 object-image">
+      <h4>Take <%= q %> <%= type.pluralize(q) %>:</h4>
+      <div class='take_object_select' id='object_select_<%= i %>'></div>
+      <button class='btn btn-link' style='margin-top:20px; display: inline-block' onclick='add_choice_<%= i %>()'>
+                <i class="icon-plus-sign"></i>
+      </button>
+    </div>
   </div>
 
-  <div class="span9 object-image">
-    <h4>Choose <%= num %> <%= "item".pluralize(num) %>:</h4>
-    <ul>
-      <% object.items.each do |i| %>
-        <li>
-          <%= i.location %>
-          <input name='<%= i.id %>' class="small-input" type="number" value="0" onchange='update_total(<%= i.id %>,<%= i.quantity - i.inuse %>)'>
-          of <%= i.quantity - i.inuse %> available.
-        </li>  
-      <% end %>
-      <li>Total: <span id='total'>0</span> of <%= num %></li>
-    </ul>
-    <p>Choose location(s), place the object(s) at your station, and click next.</p>
-  </div>
-
-</div>
+<% end %>
 
 <script>
 
-  function update_total(index,available) {
-
-    total = 0;
-
-    items = document.getElementsByClassName('small-input');
-    for(i=0; i<items.length; i++) {
-      if ( parseInt(items[i].value) < 0 ) {
-        items[i].value = 0;
-      }
-      if ( items[i].name == index && parseInt(items[i].value) > available ) {
-        items[i].value = available;
-      }
-      total += parseInt(items[i].value);
-    }
-
-    el = document.getElementById('total');
-    el.innerHTML = total;
-
-    if ( total == <%= num %> ) {
-      document.getElementById('advance-button').disabled = false;
-    } else {
-      document.getElementById('advance-button').disabled = true;
-    }
+  function update_totals() {
 
   }
 
+
+  <% for i in 0..((@instruction.item_list.length) - 1) %>
+  
+    <% object = @instruction.object_list[i] %>
+
+    function add_choice_<%= i %>() {
+
+      html = "";
+      html += "<div class='take_choice_box'><div class='take_item_select'>"
+            + "  Location:<br />"
+            + "  <select class='item_select'>"
+            + "    <option></option>";
+
+      <% object.items.each do |item| %>
+        html += '  <option><%= item.location %> (<%= item.quantity - item.inuse %> available) </option>';
+      <% end %>
+   
+      html += "  </select>"
+            + "</div>"
+            + "<div class='take_item_quantity' '>"
+            + "  Quantity:<br />"
+            + "  <input name='quantity<%= i %>' class='small-input' type='number' value='0' onchange='update_totals()'>"
+            + "</div></div></div>";
+
+      document.getElementById('object_select_' + <%= i %>).innerHTML += html;
+
+    }
+
+  <% end %>
+
   window.onload = function() {
+
     document.getElementById('advance-button').addEventListener('click', function() {
       query="";
-      items = document.getElementsByClassName('small-input');
-      for(i=0; i<items.length; i++) {
-        query += "&i" + i + "=" + items[i].name + "&q" + i + "=" + items[i].value;
-      }
       window.location = advance_url() + query;
     } );
+
+   <% for i in 0..((@instruction.item_list.length) - 1) %>
+     add_choice_<%= i %>();
+   <% end %>
+
   }
 
 </script>

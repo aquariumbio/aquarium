@@ -288,11 +288,26 @@ class Protocol
             e = increment e
 
           when 'take'
-            c = children_as_text e
-            unless c[:object] && c[:quantity] && c[:var]
-              raise "Protocol error: take sub-tags not present"
+
+            item_tag = e.elements.first
+            item_list_expr = []
+
+            while item_tag
+
+              c = children_as_text item_tag
+
+              unless c[:type] && c[:quantity] && c[:var]
+                raise "Protocol error: take/item sub-tags (type, quantity, var) not present"
+              end
+
+              item_list_expr.push( { type: c[:type], quantity: c[:quantity], var: c[:var] } )
+
+              item_tag = item_tag.next_element
+
             end
-            push(TakeInstruction.new c[:object], c[:quantity], c[:var])
+
+            push TakeInstruction.new item_list_expr
+
             e = increment e
 
           when 'release'

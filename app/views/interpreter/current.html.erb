@@ -69,8 +69,6 @@
        note.style.display = 'block';
     }
 
-    console.log('asd');
-
   } );
 
   advance_url = function() {
@@ -82,5 +80,6 @@
     return url;
   }
 
+  window.history.replaceState ( null, 'bioturk interpreter', 'current?job=<%= @job.id %>' );
 
 </script>

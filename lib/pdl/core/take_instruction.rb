@@ -3,13 +3,11 @@ require 'json'
 
 class TakeInstruction < Instruction
 
-  attr_reader :object_type, :quantity, :var, :object, :object_name
+  attr_reader :item_list, :object_list
 
-  def initialize object_type_expr, quantity_expr, var
+  def initialize item_list_expr
 
-    @object_type_expr = object_type_expr
-    @quantity_expr = quantity_expr
-    @var = var
+    @item_list_expr = item_list_expr
     @renderable = true
     super 'take'
 
@@ -24,16 +22,23 @@ class TakeInstruction < Instruction
   def pre_render scope, params
 
     # Evaluate expressions to get actual values
-    @object_type = scope.substitute @object_type_expr
-    @quantity    = (scope.evaluate @quantity_expr).to_i
+    @item_list = []
+    @object_list = []
 
-    # Find the object in the db
-    @object = ObjectType.find_by_name(@object_type)
-
-    if !@object
-      raise "In <take>: Could not find object of type '#{@object_type}'"
+    @item_list_expr.each do |item_expr|
+      @item_list.push( { type: (scope.substitute item_expr[:type]),
+        quantity: (scope.evaluate item_expr[:quantity]).to_i,
+        var: item_expr[:var] } )
     end
 
+    # Find the actual objects in the db
+    @item_list.each do |i|
+      ob = ObjectType.find_by_name(i[:type])
+      unless ob
+        raise "In <take>: Could not find object of type '#{@object_type}'"
+      end
+      @object_list.push( ob )
+    end
   end
 
   def log var, r, scope, params
