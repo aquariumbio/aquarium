@@ -61,47 +61,29 @@ class TakeInstruction < Instruction
   def bt_execute scope, params
 
     pre_render scope, params
+    choices = JSON.parse(params[:choices])
 
-    result = []
-    asd = ""
+    for j in 0..( (@object_list.length) - 1 ) 
 
-    params.each do |k,v|
+      result = []
+      choices[j].each do |k,q| 
 
-      asd += k + ", "
+        i = k.to_i
+        item = Item.find(i)
 
-      if k[0] == 'i'
-
-        str = String.new(k)
-        str[0] = ''
-        i = str.to_i
-
-        if params["q#{i}"].to_i > 0
-      
-          @item = Item.find(params["i#{i}"])
-          if !@item
-            raise "In <take>: Could not find item of type " + params["i#{i}"]
-          end
-
-          q = params["q#{i}"].to_i
-
-          (1..q).each do |x|
-            result.push( { 
-              object: @object.attributes.symbolize_keys, 
-              item: @item.attributes.symbolize_keys,
-              quantity: 1 } ) 
-          end
-
-          @item.inuse += params["q#{i}"].to_i
-          @item.save
-      
-        end
+        result.push( { 
+          object: @object_list[j].attributes.symbolize_keys, 
+          item: item.attributes.symbolize_keys,
+          quantity: q } ) 
+ 
+        item.inuse += q
+        item.save
 
       end
-      
-    end
 
-    scope.set( @var.to_sym, result )
-    log var, result, scope, params
+      scope.set( @item_list[j][:var].to_sym, result )
+
+    end
 
   end
 

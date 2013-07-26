@@ -108,18 +108,38 @@ $outlineStyle: #f00 dotted 0px;
 }
 
 .take_choice_box {
-  border: 1pt solid red;
-  width: 75%;
+# border: 1pt solid red;
+# width: 75%;
+  margin: 0;
+  padding: 0;
 }
 
 .take_item_select {
   display: inline-block;
   width: 25%;
   margin: 10px 10px 0px 10px;
+  padding: 0;
+# border: 1pt solid blue;
+  select {
+    margin: 0;
+    passing: 0;
+  }
 }
 
 .take_item_quantity {
   display: inline-block; 
   width: 25%; 
   margin: 10px 10px 0px 10px;
+  padding: 0;
+# border: 1pt solid blue;
+  input {
+    margin: 0;
+    passing: 0;
+  }
+}
+
+.btn-more {
+  margin: 0 0 0 10px; 
+  padding: 0; 
+  #border: 1pt solid blue;
 }

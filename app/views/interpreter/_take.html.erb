@@ -8,18 +8,20 @@
   <% type = @instruction.item_list[i][:type]  %>
   <% ob = @instruction.object_list[i] %>
 
+  <h4>Take <%= q %> <%= type.pluralize(q) %>:</h4>
+
   <div class='row-fluid'>
 
     <div class="span2 object-image">
       <%= image_tag @instruction.object_list[i].image.url(:medium) %>
     </div>
 
-    <div class="span10 object-image">
-      <h4>Take <%= q %> <%= type.pluralize(q) %>:</h4>
+    <div class="span10">
+
       <div class='take_object_select' id='object_select_<%= i %>'></div>
-      <button class='btn btn-link' style='margin-top:20px; display: inline-block' onclick='add_choice_<%= i %>()'>
-                <i class="icon-plus-sign"></i>
-      </button>
+        <button class='btn btn-link btn-more' onclick='add_choice_<%= i %>()'>
+                  <i class="icon-plus-sign"></i>
+        </button>
     </div>
   </div>
 
@@ -27,35 +29,96 @@
 
 <script>
 
-  function update_totals() {
+  query = [];
+
+  function update_totals(object,item) {
+
+    var base        = '_object_' + object + '_item_' + item;
+    var select_id   = 'select'   + base;
+    var quantity_id = 'quantity' + base;
+
+    var selection = document.getElementById(select_id).value;
+    var quantity  = parseInt(document.getElementById(quantity_id).value);
+
+    if ( quantity < 0 ) {
+      document.getElementById(quantity_id).value = 0;
+      quantity = 0;
+    }
+
+    if ( quantity > max[selection]) {
+      document.getElementById(quantity_id).value = max[selection];
+      quantity = max[selection];
+    }
+
+    console.log ( object, item );
+    quantities[object][selection] = quantity;
+    okay = true;
+    query = [];
+
+    <% for i in 0..((@instruction.item_list.length) - 1) %>
+
+      <% q = @instruction.item_list[i][:quantity] %>
+
+      tot = 0;
+      query[<%= i %>] = {};
+
+      for ( var j in quantities[<%= i %>] ) {
+        if ( quantities[<%= i %>][j] > 0 ) {
+          query[<%= i %>][j] = quantities[<%= i %>][j];
+          tot += quantities[<%= i %>][j]; 
+        }
+      }
+
+      if ( tot != <%= q %> ) {
+        okay = false;
+      }
+
+    <% end %>
+
+    console.log ( JSON.stringify(query) );
+
+    if ( okay ) {
+      document.getElementById('advance-button').disabled = false;
+    } else {
+      document.getElementById('advance-button').disabled = true;
+    }
 
   }
 
+  max = [];
+  quantities = [];
 
   <% for i in 0..((@instruction.item_list.length) - 1) %>
   
     <% object = @instruction.object_list[i] %>
+    num_choices_<%= i %> = 0;
+    quantities[<%= i %>] = [];
 
     function add_choice_<%= i %>() {
 
       html = "";
       html += "<div class='take_choice_box'><div class='take_item_select'>"
             + "  Location:<br />"
-            + "  <select class='item_select'>"
-            + "    <option></option>";
+            + "  <select class='item_select' id='select_object_" 
+            + <%= i %> + "_item_" + num_choices_<%= i %> + "' onchange='update_totals(<%= i %>," + num_choices_<%= i %> + ")' >"
+            + "    <option value='-1'></option>";
 
       <% object.items.each do |item| %>
-        html += '  <option><%= item.location %> (<%= item.quantity - item.inuse %> available) </option>';
+        html += '  <option value=<%= item.id %>><%= item.location %> (<%= item.quantity - item.inuse %> available) </option>';
+        max[<%= item.id %>] = <%= item.quantity - item.inuse %>;
+        quantities[<%= i %>][<%= item.id %>] = 0;
       <% end %>
    
       html += "  </select>"
             + "</div>"
             + "<div class='take_item_quantity' '>"
             + "  Quantity:<br />"
-            + "  <input name='quantity<%= i %>' class='small-input' type='number' value='0' onchange='update_totals()'>"
+            + "  <input id='quantity_object_" + <%= i %> + "_item_" + num_choices_<%= i %> + "'"
+            + "         class='small-input' type='number' value='0' onchange='update_totals(<%= i %>," + num_choices_<%= i %> + ")'>"
             + "</div></div></div>";
 
-      document.getElementById('object_select_' + <%= i %>).innerHTML += html;
+      document.getElementById('object_select_' + <%= i %>).insertAdjacentHTML( "beforeend", html );
+      num_choices_<%= i %> ++;
 
     }
 
@@ -64,8 +127,7 @@
   window.onload = function() {
 
     document.getElementById('advance-button').addEventListener('click', function() {
-      query="";
-      window.location = advance_url() + query;
+      window.location = advance_url() + '&choices=' + encodeURIComponent(JSON.stringify(query));
     } );
 
    <% for i in 0..((@instruction.item_list.length) - 1) %>
