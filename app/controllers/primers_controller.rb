@@ -6,7 +6,7 @@ class PrimersController < ApplicationController
     @user_id = params[:user_id] ? params[:user_id] : current_user.id
     @user = User.find(@user_id)
 
-    @primers = Primer.where("owner == ?", @user_id).order('id DESC')
+    @primers = Primer.paginate(page: params[:page], :per_page => 20).where("owner == ?", @user_id).order('id DESC')
 
     respond_to do |format|
       format.html # index.html.erb

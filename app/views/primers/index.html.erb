@@ -1,22 +1,19 @@
 <h1>Primers </h1>
 
-<h4>
-<span class="dropdown">
+<% Date::DATE_FORMATS[:pdate] = "%B %d, %Y" %>
+<% Time::DATE_FORMATS[:pdate] = "%B %d, %Y" %>
+
+<%= will_paginate %>
+
+<table class='table'>
+  <tr>
+    <th>Description [<span class="dropdown">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @user.login %><b class="caret"></b></a>
       <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
         <% User.all.sort.each do |u| %>
           <li><%= link_to u.login, '/primers?user_id=' + u.id.to_s %></li>
         <% end %>
-      </ul>
-</span>
-</h4>
-
-<% Date::DATE_FORMATS[:pdate] = "%B %d, %Y" %>
-<% Time::DATE_FORMATS[:pdate] = "%B %d, %Y" %>
-
-<table class='table'>
-  <tr>
-    <th>Description</th>
+      </ul></span>]</th>
     <th>Sequence</th>
     <th>Tm</th>
     <th>Date</th>
@@ -26,7 +23,7 @@
   <tr>
     <td><%= link_to primer.description, primer %></td>
     <td><span style='color: #ddd'>5'-</span>
-        <span style='color: #aaf; font-size: 8pt;'><%= primer.overhang %></span><span style='font-size: 8pt;'><%= primer.annealing %></span>
+        <span style='color: #aaf; font-size: 10pt;'><%= primer.overhang %></span><span style='font-size: 10pt;'><%= primer.annealing %></span>
         <span style='color: #ddd'>-3'</span>
     </td>
     <td><%= primer.tm %></td>
@@ -35,6 +32,8 @@
 <% end %>
 </table>
 
+<%= will_paginate %>
+
 <br />
 
-<%= link_to 'New Primer', new_primer_path %>
+<%= link_to 'New', new_primer_path, class: 'btn' %>
