@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Description:</b>
+  <%= @primer.description %>
+</p>
+
+<p>
+  <b>Annealing:</b>
+  <%= @primer.annealing %>
+</p>
+
+<p>
+  <b>Overhang:</b>
+  <%= @primer.overhang %>
+</p>
+
+<p>
+  <b>Tm:</b>
+  <%= @primer.tm %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%= @primer.notes %>
+</p>
+
+<p>
+  <b>Project:</b>
+  <%= @primer.project %>
+</p>
+
+<p>
+  <b>Owner:</b>
+  <%= @primer.owner %>
+</p>
+
+
+<%= link_to 'Edit', edit_primer_path(@primer) %> |
+<%= link_to 'Back', primers_path %>

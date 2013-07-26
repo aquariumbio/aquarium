@@ -1,0 +1,45 @@
+<%= form_for(@primer) do |f| %>
+  <% if @primer.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@primer.errors.count, "error") %> prohibited this primer from being saved:</h2>
+
+      <ul>
+      <% @primer.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_field :description %>
+  </div>
+  <div class="field">
+    <%= f.label :annealing %><br />
+    <%= f.text_field :annealing %>
+  </div>
+  <div class="field">
+    <%= f.label :overhang %><br />
+    <%= f.text_field :overhang %>
+  </div>
+  <div class="field">
+    <%= f.label :tm %><br />
+    <%= f.text_field :tm %>
+  </div>
+  <div class="field">
+    <%= f.label :notes %><br />
+    <%= f.text_area :notes %>
+  </div>
+  <div class="field">
+    <%= f.label :project %><br />
+    <%= f.number_field :project %>
+  </div>
+  <div class="field">
+    <%= f.label :owner %><br />
+    <%= f.number_field :owner %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

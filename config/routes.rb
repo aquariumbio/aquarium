@@ -1,5 +1,8 @@
 Bioturk::Application.routes.draw do
 
+  resources :primers
+
+
   get "interpreter/arguments"
   get "interpreter/submit"
   get "interpreter/current"

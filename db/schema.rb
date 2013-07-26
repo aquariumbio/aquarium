@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130716230636) do
+ActiveRecord::Schema.define(:version => 20130726214810) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -73,6 +73,18 @@ ActiveRecord::Schema.define(:version => 20130716230636) do
     t.float    "cost"
     t.string   "release_method",      :default => "return"
     t.text     "release_description", :default => "Replace this item"
+  end
+
+  create_table "primers", :force => true do |t|
+    t.string   "description"
+    t.string   "annealing"
+    t.string   "overhang"
+    t.float    "tm"
+    t.text     "notes"
+    t.integer  "project"
+    t.integer  "owner"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "users", :force => true do |t|

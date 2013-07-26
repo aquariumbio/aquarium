@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  description: MyString
+  annealing: MyString
+  overhang: MyString
+  tm: 1.5
+  notes: MyText
+  project: 1
+  owner: 1
+
+two:
+  description: MyString
+  annealing: MyString
+  overhang: MyString
+  tm: 1.5
+  notes: MyText
+  project: 1
+  owner: 1
