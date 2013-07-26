@@ -30,14 +30,28 @@
 <script>
 
   query = [];
+  quantities = [];
+  num_choices = [];
+
+  function make_id(str,a,b) {
+    return str + '_object_' + a + '_item_' + b;
+  }
+
+  function compute_quantities() {
+    <% for i in 0..((@instruction.item_list.length) - 1) %>
+      quantities[<%= i %>] = [];
+      for ( var j=0; j<num_choices[<%= i %>]; j++ ) {
+        var selection = parseInt(document.getElementById(make_id('select',<%= i %>,j)).value);
+        quantities[<%= i %>][selection] = parseInt(document.getElementById(make_id('quantity',<%= i %>, j)).value);
+      }
+    <% end %>
+  }
 
   function update_totals(object,item) {
 
-    var base        = '_object_' + object + '_item_' + item;
-    var select_id   = 'select'   + base;
-    var quantity_id = 'quantity' + base;
-
-    var selection = document.getElementById(select_id).value;
+    var select_id   = make_id('select',object,item);
+    var quantity_id = make_id('quantity',object,item);
+    var selection = parseInt(document.getElementById(select_id).value);
     var quantity  = parseInt(document.getElementById(quantity_id).value);
 
     if ( quantity < 0 ) {
@@ -50,18 +64,17 @@
       quantity = max[selection];
     }
 
-    console.log ( object, item );
-    quantities[object][selection] = quantity;
+    compute_quantities();
     okay = true;
     query = [];
 
     <% for i in 0..((@instruction.item_list.length) - 1) %>
 
+      query[<%= i %>] = {};
+
       <% q = @instruction.item_list[i][:quantity] %>
 
       tot = 0;
-      query[<%= i %>] = {};
-
       for ( var j in quantities[<%= i %>] ) {
         if ( quantities[<%= i %>][j] > 0 ) {
           query[<%= i %>][j] = quantities[<%= i %>][j];
@@ -75,24 +88,17 @@
 
     <% end %>
 
-    console.log ( JSON.stringify(query) );
-
-    if ( okay ) {
-      document.getElementById('advance-button').disabled = false;
-    } else {
-      document.getElementById('advance-button').disabled = true;
-    }
+    document.getElementById('advance-button').disabled = !okay;
 
   }
 
   max = [];
-  quantities = [];
+  num_choices = [];
 
   <% for i in 0..((@instruction.item_list.length) - 1) %>
   
     <% object = @instruction.object_list[i] %>
-    num_choices_<%= i %> = 0;
-    quantities[<%= i %>] = [];
+    num_choices[<%= i %>] = 0;
 
     function add_choice_<%= i %>() {
 
@@ -100,25 +106,24 @@
       html += "<div class='take_choice_box'><div class='take_item_select'>"
             + "  Location:<br />"
             + "  <select class='item_select' id='select_object_" 
-            + <%= i %> + "_item_" + num_choices_<%= i %> + "' onchange='update_totals(<%= i %>," + num_choices_<%= i %> + ")' >"
+            + <%= i %> + "_item_" + num_choices[<%= i %>] + "' onchange='update_totals(<%= i %>," + num_choices[<%= i %>] + ")' >"
             + "    <option value='-1'></option>";
 
       <% object.items.each do |item| %>
         html += '  <option value=<%= item.id %>><%= item.location %> (<%= item.quantity - item.inuse %> available) </option>';
         max[<%= item.id %>] = <%= item.quantity - item.inuse %>;
-        quantities[<%= i %>][<%= item.id %>] = 0;
       <% end %>
    
       html += "  </select>"
             + "</div>"
             + "<div class='take_item_quantity' '>"
             + "  Quantity:<br />"
-            + "  <input id='quantity_object_" + <%= i %> + "_item_" + num_choices_<%= i %> + "'"
-            + "         class='small-input' type='number' value='0' onchange='update_totals(<%= i %>," + num_choices_<%= i %> + ")'>"
+            + "  <input id='quantity_object_" + <%= i %> + "_item_" + num_choices[<%= i %>] + "'"
+            + "         class='small-input' type='number' value='0' onchange='update_totals(<%= i %>," + num_choices[<%= i %>] + ")'>"
             + "</div></div></div>";
 
       document.getElementById('object_select_' + <%= i %>).insertAdjacentHTML( "beforeend", html );
-      num_choices_<%= i %> ++;
+      num_choices[<%= i %>] ++;
 
     }
 

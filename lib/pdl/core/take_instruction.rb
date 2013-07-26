@@ -46,7 +46,7 @@ class TakeInstruction < Instruction
     data = []
 
     r.each do |ob|
-      data.push object_type: ob[:object][:name], item_id: ob[:item][:id], quantity: 1
+      data.push object_type: ob[:object][:name], item_id: ob[:item][:id], quantity: ob[:quantity]
     end
 
     log = Log.new
@@ -82,6 +82,7 @@ class TakeInstruction < Instruction
       end
 
       scope.set( @item_list[j][:var].to_sym, result )
+      log @item_list[j][:var], result, scope, params
 
     end
 
