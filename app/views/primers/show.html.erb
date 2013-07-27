@@ -1,38 +1,26 @@
-<p id="notice"><%= notice %></p>
+<h1>Primer <%= @primer.id %>: <%= @primer.description %></h1>
 
 <p>
-  <b>Description:</b>
-  <%= @primer.description %>
+<span style='color: #ddd'>5'-</span>
+<span style='color: #aaf; font-size: 12pt;'><%= @primer.overhang %></span><span style='font-size: 12pt;'><%= @primer.annealing %></span>
+<span style='color: #ddd'>-3'</span>
 </p>
 
 <p>
-  <b>Annealing:</b>
-  <%= @primer.annealing %>
-</p>
-
-<p>
-  <b>Overhang:</b>
-  <%= @primer.overhang %>
-</p>
-
-<p>
-  <b>Tm:</b>
+  <b>Melting Temperature(Tm):</b>
   <%= @primer.tm %>
 </p>
 
+<% if @primer.notes != "" %>
 <p>
   <b>Notes:</b>
   <%= @primer.notes %>
 </p>
-
-<p>
-  <b>Project:</b>
-  <%= @primer.project %>
-</p>
+<% end %> 
 
 <p>
   <b>Owner:</b>
-  <%= @primer.owner %>
+  <%= User.find(@primer.owner).name %> (<%= User.find(@primer.owner).login %>)
 </p>
 
 

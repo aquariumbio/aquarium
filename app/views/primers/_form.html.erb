@@ -12,34 +12,30 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :description %><br />
+    <%= f.label :description %>
     <%= f.text_field :description %>
   </div>
-  <div class="field">
-    <%= f.label :annealing %><br />
-    <%= f.text_field :annealing %>
-  </div>
-  <div class="field">
-    <%= f.label :overhang %><br />
+
+  <span style='color: #ddd'>5'-</span>
+  <div class="field" style='display:inline-block; width: 45%'>
+    <%= f.label :overhang %>
     <%= f.text_field :overhang %>
   </div>
+  <div class="field" style='display:inline-block; width: 45%'>
+    <%= f.label :annealing %>
+    <%= f.text_field :annealing %>
+  </div>
+  <span style='color: #ddd'>-3'</span>
+
   <div class="field">
-    <%= f.label :tm %><br />
+    <%= f.label :tm %>
     <%= f.text_field :tm %>
   </div>
   <div class="field">
-    <%= f.label :notes %><br />
-    <%= f.text_area :notes %>
-  </div>
-  <div class="field">
-    <%= f.label :project %><br />
-    <%= f.number_field :project %>
-  </div>
-  <div class="field">
-    <%= f.label :owner %><br />
-    <%= f.number_field :owner %>
+    <%= f.label :notes %>
+    <%= f.text_area :notes, style: 'height: 150px' %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit class: "btn btn-small" %>
   </div>
 <% end %>
