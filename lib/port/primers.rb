@@ -2,11 +2,9 @@ require 'CSV'
 require 'port/user'
 
 def import_primers
-  data = []
-  i = 0
   CSV.foreach('/Users/ericklavins/Development/bioturk/lib/port/primers.csv',"r") do |row|
-    if i < 250
       p = Primer.new
+      p.id          = row[0].to_i
       p.description = row[1]
       p.annealing   = row[2]
       p.overhang    = row[3]
@@ -17,8 +15,5 @@ def import_primers
       p.project     = row[8].to_i
       p.owner       = new_user_id(row[9].to_i)
       p.save
-    end
-    i += 1
   end
-  data
 end
