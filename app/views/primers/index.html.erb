@@ -18,6 +18,7 @@
     <th>Sequence</th>
     <th>Tm</th>
     <th>Date</th>
+    <th></th>
   </tr>
 
 <% @primers.each do |primer| %>
@@ -30,6 +31,7 @@
     </td>
     <td><%= primer.tm %></td>
     <td><%= primer.created_at.to_formatted_s(:pdate) %></td>
+    <td><%= link_to 'x', primer, method: :delete, data: { confirm: "Really delete primer #{primer.description}?" } %></td>
   </tr>
 <% end %>
 </table>
