@@ -84,4 +84,44 @@ class PrimersController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def stock
+
+    @primer = Primer.find(params[:id])
+
+    case params[:button]
+
+      when 'Add Lyophilized Primer'
+        @object = ObjectType.find_by_name('Lyophilized Primer')
+
+      when 'Add Primer Stock'
+        @object = ObjectType.find_by_name('Primer Stock')
+
+      when 'Add Primer Aliquot'
+        @object = ObjectType.find_by_name('Primer Aliquot')
+
+    end
+
+    if !@object
+
+      flash[:error] = "Could not find object type for primer in object type database. Inventory not updated."
+      redirect_to @primer
+
+    else
+
+      @item = @object.items.create({
+        table:  'primer',
+        table_entry_id: params[:id].to_i,
+        location: params[:item][:location],
+        quantity: 1,
+        inuse: 0
+       })
+      @item.save
+
+      redirect_to @primer, notice: "Inventory updated."
+
+    end
+
+  end
+
 end

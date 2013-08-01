@@ -1,0 +1,24 @@
+<hr />
+
+<h3>New Inventory</h3>
+
+  <%= form_for(:item) do |f| %>
+
+    <div class="field" style='width: 200px;'>
+      <%= f.label :location %>
+      <%= f.text_field :location %>
+    </div>
+
+    <div class="actions">
+      <br />
+      <%= f.submit class: "btn btn-small", value: "Add Lyophilized Primer", name: 'button' %>
+      <%= f.submit class: "btn btn-small", value: "Add Primer Stock", name: 'button'  %>
+      <%= f.submit class: "btn btn-small", value: "Add Primer Aliquot", name: 'button'  %>
+    </div>
+
+  <% end %>
+
+<hr />
+
+<p>Note: Eventually this interface will compute the location that you should put the primer.</p>
+

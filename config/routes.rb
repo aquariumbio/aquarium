@@ -1,7 +1,7 @@
 Bioturk::Application.routes.draw do
 
   resources :primers
-
+  match "primers/:id", to: 'primers#stock', via: [:post]
 
   get "interpreter/arguments"
   get "interpreter/submit"
