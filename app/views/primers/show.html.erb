@@ -23,6 +23,8 @@
   <%= User.find(@primer.owner).name %> (<%= User.find(@primer.owner).login %>)
 </p>
 
+<%= render 'primer_locations' %>
+
 <%= render 'add_inventory' %>
 
 <%= link_to 'Edit', edit_primer_path(@primer) %> |

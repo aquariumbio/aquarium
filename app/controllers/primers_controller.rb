@@ -8,21 +8,46 @@ class PrimersController < ApplicationController
 
     @primers = Primer.paginate(page: params[:page], :per_page => 20).where("owner == ?", @user_id).order('id DESC')
 
-    respond_to do |format|
+     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @primers }
     end
+
   end
 
   # GET /primers/1
   # GET /primers/1.json
   def show
-    @primer = Primer.find(params[:id])
+ 
+   @primer = Primer.find(params[:id])
+
+    lp = ObjectType.find_by_name('Lyophilized Primer')
+    ps = ObjectType.find_by_name('Primer Stock')
+    pa = ObjectType.find_by_name('Primer Aliquot')
+
+    if lp 
+      @lp_items = Item.where('object_type_id == ? AND table_entry_id == ?', lp.id, params[:id])
+    else
+      @lp_items = []
+    end
+
+    if ps 
+      @ps_items = Item.where('object_type_id == ? AND table_entry_id == ?', ps.id, params[:id])
+    else
+      @ps_items = []
+    end
+
+    if pa 
+      @pa_items = Item.where('object_type_id == ? AND table_entry_id == ?', pa.id, params[:id])
+    else
+      @pa_items = []
+    end
 
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @primer }
     end
+
   end
 
   # GET /primers/new
@@ -118,10 +143,16 @@ class PrimersController < ApplicationController
        })
       @item.save
 
-      redirect_to @primer, notice: "Inventory updated."
+      redirect_to @primer
 
     end
 
+  end
+
+  def delete_stock
+    @primer = Primer.find(params[:id])
+    Item.find(params[:item_id]).destroy
+    redirect_to @primer
   end
 
 end
