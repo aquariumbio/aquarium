@@ -16,21 +16,25 @@
 
 <br />
 
-<div class="row-fluid">
+<% if @object_type.handler == 'primer' %>
 
-  <div class="span8 current-inventory">
-    <%= render 'current_inventory' %>
-  </div>
+  <%= render 'add_primer' %>  
 
-  <div class="span4 add-to-inventory">
-    <% if @object_type.handler == 'primer' %>
-      <%= render 'add_primer' %>    
-    <% else %>
+<% else %>
+
+  <div class="row-fluid">
+
+    <div class="span8 current-inventory">
+      <%= render 'current_inventory' %>
+    </div>
+
+    <div class="span4 add-to-inventory">
       <%= render 'add_inventory' %>
-    <% end %>
+    </div>
+
   </div>
 
-</div>
+<% end %>
 
 <br />
 
