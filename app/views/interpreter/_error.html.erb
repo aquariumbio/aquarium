@@ -10,3 +10,4 @@
   <pre><%= @protocol.program[@error_pc].to_html.html_safe %></pre>
 <% end %>
 
+<p><%= link_to 'View Log for Job ' + @job.id.to_s, @job %></p>

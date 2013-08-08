@@ -1,3 +1,5 @@
+require 'socket'
+
 class InterpreterController < ApplicationController
 
   def parse
@@ -103,7 +105,7 @@ class InterpreterController < ApplicationController
     @error = msg
     @error_pc = @pc
     log "ERROR", { pc: @pc, message: msg, instruction: @instruction.name }
-    @pc = Job.COMPLETED
+    stop
     @job.pc = @pc
     @job.state = { stack: @scope.stack }.to_json
     @job.save
@@ -150,6 +152,42 @@ class InterpreterController < ApplicationController
     log.save
   end
 
+  def start
+
+    # initialize
+    log "START", {}
+    @pc = 0
+
+    # tell manta we're starting a protocol
+    Thread.new do
+      url= URI.parse("http://istc.cs.washington.edu:8800/start?&job=#{@job.id}&server=" + Socket.gethostname + ":" + request.port.to_s + "&user=" + current_user.login + "&protocol=#{@path}")
+      req = Net::HTTP::Get.new(url.path)
+      res = Net::HTTP.start(url.host, url.port) {|http|
+        http.request(req)
+      }
+      logger.info "Message from MANTA: " + res.body
+    end
+
+  end
+
+  def stop
+  
+    # finalize stuff
+    @pc = Job.COMPLETED
+    log "STOP", {}
+
+    # tell manta we're done
+    Thread.new do
+      url = URI.parse("http://istc.cs.washington.edu:8800/stop?&job=#{@job.id}&server=" + Socket.gethostname + ":" + request.port.to_s + "&abort=" + ( @exception ? 'true' : 'false' ))
+      req = Net::HTTP::Get.new(url.path)
+      res = Net::HTTP.start(url.host, url.port) {|http|
+        http.request(req)
+      }
+      logger.info "Message from MANTA: " + res.body
+    end
+
+  end
+
   def advance
 
     get_current
@@ -169,8 +207,7 @@ class InterpreterController < ApplicationController
           return
         end
       else
-        log "START", {}
-        @pc = 0
+        start
       end
 
       # continue through instructions that are not renderable
@@ -195,8 +232,7 @@ class InterpreterController < ApplicationController
       if @pc < @protocol.program.length
         @instruction = @protocol.program[@pc]
       else
-        @pc = Job.COMPLETED
-        log "STOP", {}
+        stop
       end
 
       @job.pc = @pc
