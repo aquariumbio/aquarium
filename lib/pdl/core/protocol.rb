@@ -300,8 +300,19 @@ class Protocol
                 raise "Protocol error: take/item sub-tags (type, quantity, var) not present"
               end
 
-              item_list_expr.push( { type: c[:type], quantity: c[:quantity], var: c[:var] } )
+              details = {}
 
+              item_tag.elements.each do |el|
+
+                if el.name != 'type' && el.name != 'quantity' && el.name != 'var'
+                   details[:table] = el.name
+                   details[:field] = el.elements.first.name
+                   details[:field_value] = el.elements.first.text
+                end
+
+              end
+
+              item_list_expr.push( { type: c[:type], quantity: c[:quantity], var: c[:var] }.merge details )
               item_tag = item_tag.next_element
 
             end
