@@ -68,6 +68,7 @@ GEM
     mime-types (1.23)
     multi_json (1.7.7)
     multipart-post (1.2.0)
+    mysql2 (0.3.13)
     netrc (0.7.7)
     octokit (1.24.0)
       addressable (~> 2.2)
@@ -139,6 +140,7 @@ DEPENDENCIES
   bootstrap-will_paginate
   coffee-rails
   jquery-rails
+  mysql2
   octokit
   paperclip
   rails (= 3.2.13)
