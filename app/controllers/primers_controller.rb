@@ -69,11 +69,11 @@ class PrimersController < ApplicationController
   # POST /primers
   # POST /primers.json
   def create
-    @primer = Primer.new(params[:primer])
+    @primer = Primer.new((params[:primer]).merge({owner: current_user.id}))
 
     respond_to do |format|
       if @primer.save
-        format.html { redirect_to @primer, notice: 'Primer was successfully created.' }
+        format.html { redirect_to @primer, notice: 'Primer was successfully created.'}
         format.json { render json: @primer, status: :created, location: @primer }
       else
         format.html { render action: "new" }

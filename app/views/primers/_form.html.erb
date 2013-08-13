@@ -1,4 +1,5 @@
 <%= form_for(@primer) do |f| %>
+
   <% if @primer.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@primer.errors.count, "error") %> prohibited this primer from being saved:</h2>
@@ -38,4 +39,5 @@
   <div class="actions">
     <%= f.submit class: "btn btn-small" %>
   </div>
+
 <% end %>
