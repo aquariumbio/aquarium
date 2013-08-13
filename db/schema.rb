@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130728175955) do
+ActiveRecord::Schema.define(:version => 20130813203610) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -65,16 +65,16 @@ ActiveRecord::Schema.define(:version => 20130728175955) do
     t.text     "cleanup"
     t.text     "data"
     t.text     "vendor"
-    t.datetime "created_at",                                           :null => false
-    t.datetime "updated_at",                                           :null => false
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
     t.string   "unit"
     t.string   "image_file_name"
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
     t.float    "cost"
-    t.string   "release_method",      :default => "return"
-    t.text     "release_description", :default => "Replace this item"
+    t.string   "release_method"
+    t.text     "release_description"
   end
 
   create_table "primers", :force => true do |t|

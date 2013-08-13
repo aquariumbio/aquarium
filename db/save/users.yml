@@ -1,0 +1,173 @@
+
+---
+users:
+  columns:
+  - id
+  - name
+  - login
+  - created_at
+  - updated_at
+  - password_digest
+  - remember_token
+  - admin
+  records: 
+  - - 1
+    - Eric Klavins
+    - klavins
+    - '2013-06-16 17:26:54.685710'
+    - '2013-06-16 17:27:33.651876'
+    - $2a$10$.KxYZP32kCylaVs9mNxVzu4vyXq5p115E3rrSLAwA8DONO1Ji3l5m
+    - _vfss-nRqQK6kbsBBBhZHQ
+    - true
+  - - 4
+    - Nick Bolten
+    - bolten
+    - '2013-06-19 03:07:57.058235'
+    - '2013-06-19 03:26:41.387647'
+    - $2a$10$0dCgxJV3JPUYyrTwhldJd.n43gA3AHdNfYe2pBo9.zMsnx6RIU.WG
+    - 8y9ayUEso6uY3kvsogItdw
+    - false
+  - - 5
+    - Michelle Parks
+    - parks
+    - '2013-06-19 03:08:27.654776'
+    - '2013-06-19 03:08:27.654776'
+    - $2a$10$mICYBapFul4JAPUenUx.uO6vX9pNSBw2fxfM8v5NEApaG7blm16zC
+    - XWeHEJvrQT0oB3a2eujk_A
+    - false
+  - - 6
+    - Felix Ekness
+    - ekness
+    - '2013-06-19 03:09:02.116439'
+    - '2013-06-19 03:09:02.116439'
+    - $2a$10$J58a6dP7icbPUn7coWRxE.1IsG/TcU2YliQHKhEZhfDVoCQOKyjVK
+    - 19SmRzIaKLaLpq36JvGDmw
+    - false
+  - - 7
+    - Rahul Brito
+    - brito
+    - '2013-06-19 03:09:40.577491'
+    - '2013-06-19 03:09:40.577491'
+    - $2a$10$boxXFTCD183kJ8kO//zQM.qufZJr8kvPLmqncqHO/BcWQkuze4ZOO
+    - sg7Qvux0k0JOba9ks-6ZKA
+    - false
+  - - 8
+    - Seunghee Shelly Jang
+    - jang
+    - '2013-06-19 03:11:59.420219'
+    - '2013-06-19 03:11:59.420219'
+    - $2a$10$HrrGRDcy7Kawek4NZnG9ZuMebCptINgtjefLAVkIpXTTRc5EMOddC
+    - hQK8jMt6qTnaPMD0Dk_0yQ
+    - false
+  - - 11
+    - Tileli Amimeur
+    - tamimeur
+    - '2013-06-26 20:44:37.853377'
+    - '2013-06-26 20:44:37.853377'
+    - $2a$10$MZmRfX2XU0F3s2Dm8spu2ekwcdIjONdXGOIPC5aAlMRMoEsrxsnJe
+    - 0511nb2PClO_dICw9rx6wQ
+    - false
+  - - 12
+    - David Zong
+    - zong
+    - '2013-06-30 22:23:05.679170'
+    - '2013-06-30 22:23:05.679170'
+    - $2a$10$1OBvv96Lp3Ku7Db8K85SPeXUacIPyJEF.llGBtaiFVypZFwztRXgi
+    - lq_SMvztpcZIi8XA25NbVA
+    - false
+  - - 13
+    - David Younger
+    - younger
+    - '2013-06-30 22:23:34.771806'
+    - '2013-06-30 22:23:34.771806'
+    - $2a$10$0OhPajJebIHzgk4h8OuPreQKCXkt6/sdFiU8nyxiwC4Fj2vdP9hNW
+    - dU8JN-ngbyB_QjRRylJzrg
+    - false
+  - - 14
+    - Rada Jumroon
+    - jumroon
+    - '2013-06-30 22:24:46.884706'
+    - '2013-07-01 13:26:21.646475'
+    - $2a$10$11GFiNpnFyX2OkWzENu5bu.bcw4bIUThgE0lkuIFiTK2Qb0mOExPy
+    - Z3PywZboM8La_UhGNM9kJQ
+    - false
+  - - 15
+    - Kevin Oishi
+    - oishi
+    - '2013-06-30 22:26:00.353688'
+    - '2013-06-30 22:26:00.353688'
+    - $2a$10$H8UVhJMXYNgWviiUlInBfONCHqJXhRG05douuK0pjNaqobNa9jVT6
+    - O1e1TECkwdU1D5SucNA4jg
+    - false
+  - - 16
+    - Leandra Brettner
+    - brettner
+    - '2013-06-30 22:26:17.256171'
+    - '2013-06-30 22:26:17.256171'
+    - $2a$10$RDi7HgodkuerCgkL.6D04OPBTBq7yxKQGkaIO/6V5zvrxCPnTBBLi
+    - tyXTFmNecaHhFWsmsYrDNw
+    - false
+  - - 17
+    - Miles Gander
+    - gander
+    - '2013-06-30 22:26:59.994650'
+    - '2013-06-30 22:26:59.994650'
+    - $2a$10$OZvh.68.7oZNAbEqkc3Wm.EKO/yq/nAMabwmWmNzVBWHHr0Ib3cEO
+    - 6a-Wm9Fi4B0c76qi_DJK3Q
+    - false
+  - - 18
+    - Robert Egbert
+    - egbert
+    - '2013-06-30 22:27:20.659098'
+    - '2013-06-30 22:56:10.896889'
+    - $2a$10$KFXd9NdJ3jwR97hUeonkB.ixCAGzmXxWMudo65wbBfvw7NYjbkKX.
+    - tG5PGmTMx3Ty_Znp0FHncA
+    - false
+  - - 19
+    - Sundipta Rao
+    - sundipta
+    - '2013-06-30 22:27:43.717468'
+    - '2013-06-30 23:22:12.892907'
+    - $2a$10$roGo.0X8gmNbyE6lexBxue5/FUG73ytq8If/O4MeLvl9l580R.v1u
+    - HFDtzCGOMLVWQkvFckpa6A
+    - false
+  - - 20
+    - Yaoyu Yang
+    - yang
+    - '2013-06-30 22:28:25.337160'
+    - '2013-06-30 22:28:25.337160'
+    - $2a$10$NbLSY5CPRE65yEJ5uZUzruywAwhmMkvZcw4.fczfIz54xfq.KGrSC
+    - 7TZuVc24640NbFpmyEUm5w
+    - false
+  - - 21
+    - Anthony LeMarca
+    - lamarca
+    - '2013-07-01 19:42:49.246382'
+    - '2013-08-13 00:48:13.294497'
+    - $2a$10$Yo14LueNTIe6IN2tCU17de2VMCVjqceKXuUa.sl00iEVNjJGlmJs6
+    - BW9uEdLMhTVKrV8o4F6YZw
+    - false
+  - - 22
+    - Chris Takahashi
+    - takahashi
+    - '2013-07-16 03:07:47.140348'
+    - '2013-07-16 03:07:47.140348'
+    - $2a$10$ioccwa40Yws3.PpfHcMd/.WNfGHsTL0Hcm5PciqY2oFFPPa3eZ3QG
+    - dCqKMgeyNzhwZM5Bnyv57A
+    - false
+  - - 23
+    - Jeffrey Scofield
+    - scofield
+    - '2013-08-12 23:21:17.925656'
+    - '2013-08-12 23:21:17.925656'
+    - $2a$10$CenAkbzjbQg/gUKQ5s7o5.29cwyD3/xMFwnbwm2An6lb856TAOEU.
+    - Cs8xQ3v7aUtZp0aTL6ykNA
+    - false
+  - - 24
+    - Joseph Garret Sullivan
+    - jgs
+    - '2013-08-12 23:24:16.184241'
+    - '2013-08-12 23:24:16.184241'
+    - $2a$10$0Wb74pguZAg68OSJM5Ffx.OIsvwpEZQNS6AabMhJdtJksYqKOLtAO
+    - xEVzjqspf61ZQ7G0IEkdpQ
+    - false

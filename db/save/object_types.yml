@@ -1,0 +1,3377 @@
+
+---
+object_types:
+  columns:
+  - id
+  - name
+  - description
+  - min
+  - max
+  - handler
+  - safety
+  - cleanup
+  - data
+  - vendor
+  - created_at
+  - updated_at
+  - unit
+  - image_file_name
+  - image_content_type
+  - image_file_size
+  - image_updated_at
+  - cost
+  - release_method
+  - release_description
+  records: 
+  - - 3
+    - 1000 mL Bottle
+    - Autoclaved; Used primarily for media
+    - 10
+    - 50
+    - glassware
+    - Don't drop it.
+    - If you do drop it, clean up the broken shards carefully, and put them in a sharps
+      container.
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: FB-800-1000; Purchase Quantity:
+      1 case of 10 ($81.46); Available at Chem Store (Store Number: 2830; Price: $5.60
+      each) '
+    - '2013-06-17 00:12:23.459142'
+    - '2013-07-31 04:22:05.188401'
+    - bottle
+    - Laboratory_glass_bottle-1000ml.jpg
+    - image/jpeg
+    - 20597
+    - '2013-06-23 16:35:48.028425'
+    - 8.15
+    - return
+    - ! 'It gets consumed. '
+  - - 4
+    - 500 mL Bottle
+    - Autoclaved; Used primarily for media
+    - 10
+    - 15
+    - glassware
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-06-17 04:05:51.181771'
+    - '2013-07-31 04:22:27.407830'
+    - bottle
+    - H_302187.gif
+    - image/gif
+    - 20284
+    - '2013-06-23 16:36:46.669052'
+    - 6.7
+    - return
+    - ! 'Vendor: Fisher Scientific; Catalog Number: FB-800-500; Purchase Quantity:
+      1 case of 10 ($66.97); Available at Chem Store (Store Number: 2829; Price: $4.01
+      each)'
+  - - 7
+    - LB Media Powder
+    - Powder used to make LB media
+    - 1
+    - 5
+    - drychem
+    - No safety information
+    - If empty throw away, else return.
+    - No data
+    - ! 'Vendor: VWR; Catalog Number: 90003-350; Purchase Quantity: 1;'
+    - '2013-07-01 06:26:29.867690'
+    - '2013-08-05 22:12:53.762130'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 49.15
+    - return
+    - Replace this item, unless empty, then dispose into biohazard trash
+  - - 9
+    - 1000 mL LB Liquid Media (unsterile)
+    - 1000 mL LB Liquid Media (unsterile)
+    - 2
+    - 5
+    - liquidmedia
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-01 07:26:03.043843'
+    - '2013-08-05 22:29:21.489599'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 10
+    - 1 L Bottle Top Filter
+    - Used for sterilizing;
+    - 13
+    - 30
+    - plastics
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-02 23:55:24.192819'
+    - '2013-08-02 03:23:56.846055'
+    - filter
+    - 
+    - 
+    - 
+    - 
+    - 9.73
+    - return
+    - ! 'Vendor: VWR; Catalog Number: 29442-978; Purchase Quantity: 1 case of 12 ($116.77)'
+  - - 12
+    - Histidine Powder
+    - 100g; Used in SC and SDO
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: BP382-100'
+    - '2013-07-03 19:16:40.305736'
+    - '2013-07-29 17:25:28.711790'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - If empty then dispose, else return to it's location.
+  - - 13
+    - Leucine Powder
+    - 100g; Used in SC and SDO
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: BP385-100; Purchase Quantity:
+      1'
+    - '2013-07-03 19:17:30.085713'
+    - '2013-07-29 17:26:45.796074'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - If empty then dispose, else return to it's location.
+  - - 14
+    - Uracil Powder
+    - 25g; Used to make SC and SDO
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: 157300250; Purchase Quantity:
+      1'
+    - '2013-07-03 19:18:13.976596'
+    - '2013-07-29 17:33:17.943091'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 31.46
+    - return
+    - If empty then dispose, else return to it's location.
+  - - 15
+    - Tryptophan Solution
+    - Yeast dropout solution
+    - 10
+    - 20
+    - liquidchem
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-03 20:28:56.975885'
+    - '2013-07-25 05:39:14.294010'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 16
+    - Histidine Solution
+    - Yeast dropout solution
+    - 10
+    - 20
+    - liquidchem
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-03 20:29:25.554852'
+    - '2013-07-25 05:39:34.488266'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 17
+    - Leucine Solution
+    - Yeast dropout solution
+    - 10
+    - 20
+    - liquidchem
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-03 20:34:46.812563'
+    - '2013-07-25 05:40:33.733303'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 18
+    - Uracil Solution
+    - Yeast dropout solution
+    - 1
+    - 3
+    - liquidchem
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-03 20:35:11.874936'
+    - '2013-08-06 21:44:26.293012'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 19
+    - Petri Dish
+    - 100 x 15 mm petri dish; sterile; fully stackable
+    - 27
+    - 750
+    - plastics
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: VWR; Catalog Number: 25384-342; Price: 1 case of 500 ($218.33); Available
+      at Biochem Store (Store Number: 0875712; Price: $82.46 per box)'
+    - '2013-07-08 17:09:44.932957'
+    - '2013-07-26 06:29:29.670583'
+    - plate
+    - 
+    - 
+    - 
+    - 
+    - 0.44
+    - return
+    - Replace this item
+  - - 20
+    - Autoclave Tape
+    - Autoclave Tape
+    - 1
+    - 5
+    - generic
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Chemistry Store; Store Number: 15903; '
+    - '2013-07-08 17:11:11.190250'
+    - '2013-08-05 22:19:33.150581'
+    - roll
+    - 
+    - 
+    - 
+    - 
+    - 6.9
+    - return
+    - Replace this item
+  - - 21
+    - ! 'Sharpie Pen: Black'
+    - Black Sharpie, fine point
+    - 1
+    - 10
+    - officesupplies
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-08 17:12:33.737761'
+    - '2013-08-05 22:31:19.205810'
+    - sharpie
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 22
+    - 14 mL Falcon Tube
+    - Round-Bottom 14 mL Falcon Tubes; Sterile
+    - 15
+    - 1000
+    - plastics
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Fisher Scientific: Catalog Number: 14-959-11B; Purchase Quantity: 2 cases
+      of 500 ($90.00 per case); Available at Chem Store (Store Number: X; Price: X)'
+    - '2013-07-08 17:14:44.232282'
+    - '2013-08-05 22:37:21.240921'
+    - tube
+    - 
+    - 
+    - 
+    - 
+    - 0.18
+    - return
+    - Dispose into biohazard trash
+  - - 24
+    - Kimwipes
+    - KimWipes; 4.4 x 8.4 in
+    - 3
+    - 300
+    - generic
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Fisher Scientific; Catalog Number: 06-666-A; Purchase Quantity: 1 pack of
+      60 ($79.48); Available at Chem Store'
+    - '2013-07-08 17:20:42.281131'
+    - '2013-08-02 04:00:34.056868'
+    - box
+    - 
+    - 
+    - 
+    - 
+    - 1.33
+    - return
+    - Dispose into trash/biohazard trash
+  - - 26
+    - ! 'Sharpie Pen (Ultra Fine): Black'
+    - Black Sharpie, ultra fine point
+    - 1
+    - 10
+    - officesupplies
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-09 00:28:33.317716'
+    - '2013-08-05 22:31:29.436893'
+    - sharpie
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 27
+    - ! 'Sharpie Pen: Red'
+    - Red Sharpie, fine point
+    - 1
+    - 10
+    - officesupplies
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-09 00:31:32.482133'
+    - '2013-08-05 22:31:40.685715'
+    - sharpie
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 28
+    - ! 'Sharpie Pen (Ultra Fine): Red, Retractable'
+    - Red Sharpie, ultra fine point, retractable
+    - 1
+    - 10
+    - officesupplies
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-09 00:34:26.515384'
+    - '2013-08-05 22:31:53.939748'
+    - sharpie
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 29
+    - ! 'Sharpie Pen: Green'
+    - Green Sharpie, fine point
+    - 1
+    - 10
+    - officesupplies
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-09 00:35:18.483727'
+    - '2013-08-05 22:32:14.581520'
+    - sharpie
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 30
+    - ! 'Sharpie Pen (Ultra Fine): Green'
+    - Green Sharpie, ultra fine point
+    - 1
+    - 10
+    - officesupplies
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-09 00:36:19.560931'
+    - '2013-08-05 22:32:25.171539'
+    - sharpie
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 31
+    - ! 'Sharpie Pen (Super Permanent): Black'
+    - Black Sharpie, fine point, industrial super permanent ink
+    - 1
+    - 10
+    - officesupplies
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-09 00:38:43.811329'
+    - '2013-08-05 22:32:35.336815'
+    - sharpie
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 32
+    - ! 'Sharpie Pen: Blue'
+    - Blue Sharpie, fine point
+    - 1
+    - 10
+    - officesupplies
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-09 00:40:09.880865'
+    - '2013-08-05 22:32:44.695985'
+    - sharpie
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 33
+    - ! 'Sharpie Pen: Purple'
+    - Purple Sharpie, fine point
+    - 1
+    - 10
+    - officesupplies
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-09 00:41:10.813470'
+    - '2013-08-05 22:32:57.761520'
+    - sharpie
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 34
+    - 5mL Culture Tubes With Closures
+    - 12 x 75mm culture tubes with closures; 5mL; Clear; Sterile
+    - 5
+    - 150
+    - plastics
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'VWR; Catalog Number: 60818-496; Purchase Quantity: 1 case of 1000 ($105.04)'
+    - '2013-07-12 17:03:52.357604'
+    - '2013-08-05 22:37:44.238008'
+    - tube
+    - 
+    - 
+    - 
+    - 
+    - 0.11
+    - return
+    - Dispose into biohazard trash.
+  - - 35
+    - 125mL Flask Closure
+    - Flask cap for 125mL flasks; 25mm
+    - 5
+    - 500
+    - glassware
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Fisher Scientific; Catalog Number: 14-957-85E; Purchase Quantity: 1 case
+      of 100 ($68.52)'
+    - '2013-07-12 17:16:16.014330'
+    - '2013-07-26 06:44:47.895705'
+    - cap
+    - 
+    - 
+    - 
+    - 
+    - 0.69
+    - return
+    - Replace this item
+  - - 36
+    - 250 mL Flask Closure
+    - Flask cap for 250mL flasks; 38mm
+    - 12
+    - 500
+    - glassware
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Fisher Scientific; Catalog Number: 14-957-85J; Purchase Quantity: 1 case
+      of 500 ($127.56)'
+    - '2013-07-12 17:18:02.635538'
+    - '2013-07-26 06:45:24.584800'
+    - cap
+    - 
+    - 
+    - 
+    - 
+    - 1.28
+    - return
+    - Replace this item
+  - - 37
+    - 50mL Falcon Tubes
+    - Centrifuge Tubes; 50mL; Sterile
+    - 15
+    - 1000
+    - plastics
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: 14-959-49A; Purchase Quantity:
+      1 pack of 500 ($80.00); Available at Chem Store (Store Number:X; Price: X)'
+    - '2013-07-12 17:23:35.964876'
+    - '2013-08-05 22:39:20.512374'
+    - tube
+    - 
+    - 
+    - 
+    - 
+    - 0.16
+    - return
+    - Dispose of in Biohazard trash OR return to dishwashing station when finished.
+  - - 38
+    - Sterilization Pouch
+    - Instant sealing sterilization pouches ; 5.25 x 10 in.
+    - 1
+    - 15
+    - generic
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Fisher Scientific; Catalog Number: 01-812-54; Purchase Quantity: 1 pack of
+      200 ($32.23)'
+    - '2013-07-12 17:37:06.501034'
+    - '2013-08-05 22:19:51.996382'
+    - pouch
+    - 
+    - 
+    - 
+    - 
+    - 0.16
+    - return
+    - Replace this item
+  - - 39
+    - Small Petri Dish
+    - 60 x 15 mm petri dish; sterile
+    - 5
+    - 40
+    - plastics
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Chemistry Store; Store Number: 2973; Purchase Quantity: 3 packs of 20 ($3.88
+      each)'
+    - '2013-07-12 17:44:11.210250'
+    - '2013-08-05 22:40:00.686000'
+    - plate
+    - 
+    - 
+    - 
+    - 
+    - 0.19
+    - return
+    - Dispose in Biohazard trash
+  - - 40
+    - 0.5mL Black Microcentrifuge Tubes
+    - 0.5mL Black Microcentrifuge Tubes; Sterile
+    - 5
+    - 2000
+    - plastics
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'VWR; Catalog Number: 80078-648; Purchase Quantity: 1 pack of 500 ($23.35)'
+    - '2013-07-12 17:48:07.625568'
+    - '2013-08-05 22:40:41.157349'
+    - tube
+    - 
+    - 
+    - 
+    - 
+    - 0.05
+    - return
+    - Dispose into biohazard trash
+  - - 41
+    - 14 mL/20 mL Test Tube Caps
+    - Lids for 20mL and 14mL test tubes
+    - 14
+    - 300
+    - glassware
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 18:08:43.449736'
+    - '2013-08-05 22:12:26.964077'
+    - lid
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 42
+    - ! 'Sharpie Pen (Extra Fine): Red'
+    - Red Sharpie, ultra fine point
+    - 1
+    - 10
+    - officesupplies
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 18:14:19.627167'
+    - '2013-08-05 22:33:09.768755'
+    - sharpie
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 43
+    - ! 'Sharpie Pen (Ultra Fine): Blue, Retractable'
+    - Blue Sharpie, ultra fine point, retractable
+    - 1
+    - 8
+    - officesupplies
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 18:16:30.889140'
+    - '2013-08-05 22:33:19.979256'
+    - sharpie
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 44
+    - Lab Tape
+    - Assorted color lap tape; 19mm x 12.7mm
+    - 2
+    - 25
+    - generic
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'VWR; Catalog Number: 89097-990; Purchase Quantity: 1 case of 16 ($50.26);
+      Available at Chem Store'
+    - '2013-07-12 18:19:10.132197'
+    - '2013-08-05 22:20:09.932051'
+    - roll
+    - 
+    - 
+    - 
+    - 
+    - 3.14
+    - return
+    - Replace this item
+  - - 45
+    - Autoclave
+    - ! 'Autoclave A1; '
+    - 1
+    - 1
+    - equipment
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 21:27:58.812569'
+    - '2013-08-05 22:15:05.672059'
+    - autoclave
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 46
+    - 1.5mL Tube Box
+    - Box of autoclaved 1.5mL tubes
+    - 1
+    - 10
+    - plastics
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 21:30:52.968022'
+    - '2013-08-05 22:40:58.027393'
+    - box
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Dispose into biohazard waste
+  - - 47
+    - Rainin 10µL Pipette Tip Box
+    - Red box of 10µl Rainin pipette tips
+    - 20
+    - 200
+    - pipetting
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 21:37:05.585224'
+    - '2013-08-05 22:34:02.377672'
+    - box
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Return to tip loading station when empty
+  - - 48
+    - Rainin 100µl Pipette Tip Box
+    - Green box of 100µl autoclaved Rainin pipette tips
+    - 10
+    - 150
+    - pipetting
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 21:39:17.139220'
+    - '2013-08-05 22:34:36.249980'
+    - box
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Return to tip loading station when empty
+  - - 49
+    - Rainin 1000µl Pipette Tip Box
+    - Blue box of 1000µl autoclaved Rainin pipette tips
+    - 20
+    - 200
+    - pipetting
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 21:41:11.879798'
+    - '2013-08-05 22:34:59.090378'
+    - box
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Return to tip loading station when empty
+  - - 50
+    - Woodpecker 10µl Pipette Tip Box
+    - Box of 10µl autoclaved Woodpecker pipette tips
+    - 5
+    - 100
+    - pipetting
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 21:48:21.275752'
+    - '2013-08-05 22:35:12.274688'
+    - box
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Return to tip loading station when empty
+  - - 51
+    - Woodpecker 100µl Pipette Tip Box
+    - Box of 100µl autoclaved Woodpecker pipette tips
+    - 20
+    - 200
+    - pipetting
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 21:50:53.556061'
+    - '2013-08-05 22:35:34.272461'
+    - box
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Return to tip reloading station when empty
+  - - 52
+    - Woodpecker 1000µl Pipette Tip Box
+    - Box of 1000µl autoclaved Woodpecker pipette tips
+    - 5
+    - 100
+    - pipetting
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 21:51:55.092716'
+    - '2013-08-05 22:35:52.615143'
+    - box
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Return to tip loading station when empty
+  - - 53
+    - Microwave
+    - Microwave
+    - 1
+    - 1
+    - equipment
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 21:53:18.575610'
+    - '2013-08-05 22:15:16.755315'
+    - microwave
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 54
+    - Heat Bath
+    - Heat Bath
+    - 1
+    - 2
+    - equipment
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 21:54:07.403323'
+    - '2013-08-05 22:15:27.274519'
+    - heat bath
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 55
+    - Hot/Stir Plate
+    - Hot/Stir Plate
+    - 1
+    - 3
+    - equipment
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 21:55:22.785208'
+    - '2013-08-05 22:18:25.264173'
+    - hot/stir plate
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 56
+    - Small Weigh Boat
+    - Weighing boats; 3.5 in x 3.5 in
+    - 5
+    - 200
+    - plastics
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Chemistry Store; Store Number: 3716; Purchase Quantity: 2 stacks of X ($6.23);'
+    - '2013-07-12 21:57:49.888183'
+    - '2013-08-05 22:41:14.824172'
+    - boat
+    - 
+    - 
+    - 
+    - 
+    - 6.23
+    - return
+    - Dispose into biohazard trash
+  - - 57
+    - Large Weigh Boat
+    - Weighing boat; 5.5 in x 5.5 in
+    - 5
+    - 200
+    - plastics
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Chemistry Store; Store Number: 3717; Purchase Quantity: 1 stack of X ($27.07)'
+    - '2013-07-12 21:59:16.108578'
+    - '2013-08-05 22:41:36.670173'
+    - boat
+    - 
+    - 
+    - 
+    - 
+    - 27.07
+    - return
+    - Dispose into biohazard trash
+  - - 58
+    - Weigh Paper
+    - ! 'Weighing paper; 4 in x 4 in '
+    - 10
+    - 200
+    - generic
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Fisher Scientific; Catalog Number: 09-898-12B; Purchase Quantity: 1 box of
+      200 ($14.57); Available at Chem Store'
+    - '2013-07-12 22:01:30.511994'
+    - '2013-08-05 22:20:31.684939'
+    - paper
+    - 
+    - 
+    - 
+    - 
+    - 0.03
+    - return
+    - Dispose into biohazard trash
+  - - 59
+    - Scale
+    - Weighing scale
+    - 1
+    - 2
+    - equipment
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 22:04:37.744771'
+    - '2013-08-05 22:18:39.157930'
+    - scale
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 60
+    - ! 'Vortexer '
+    - Vortexer
+    - 1
+    - 12
+    - equipment
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 22:05:31.037740'
+    - '2013-08-05 22:19:18.858805'
+    - vortexer
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 61
+    - Dextrose
+    - Dextrose (D-Glucose) Anhydrous; 3kg
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Fisher Scientific; Catalog Number: D16-3; Purchase Quantity: 1; '
+    - '2013-07-12 22:08:05.531123'
+    - '2013-08-05 22:13:10.767431'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 102.46
+    - return
+    - Replace this item
+  - - 62
+    - Table-Top Centrifuge
+    - Table-Top Centrifuge
+    - 1
+    - 12
+    - equipment
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 22:10:09.868974'
+    - '2013-08-05 22:19:04.201655'
+    - centrifuge
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 63
+    - Tip Waste Box
+    - Box of tip waste
+    - 1
+    - 30
+    - generic
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 22:13:01.961989'
+    - '2013-08-05 22:21:31.773166'
+    - box
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Dispose contents into biohazard trash when full
+  - - 64
+    - Denville 10µl Pipette
+    - 10µl Denville pipette that fits Woodpecker pipette tips
+    - 1
+    - 3
+    - pipetting
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 22:15:38.667002'
+    - '2013-08-05 22:36:11.772728'
+    - pipette
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 65
+    - Denville 100µl Pipette
+    - 100µl Denville pipette that fits Woodpecker pipette tips
+    - 1
+    - 5
+    - pipetting
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 22:18:13.414303'
+    - '2013-08-05 22:36:32.217254'
+    - pipette
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 66
+    - Denville 1000µl Pipette
+    - 1000µl Denville pipette that fits Woodpecker pipette tips
+    - 1
+    - 4
+    - pipetting
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 22:19:24.870675'
+    - '2013-08-05 22:36:44.932938'
+    - pipette
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 67
+    - VWR 1000µl Pipette
+    - 1000µl VWR pipette that fits Denville pipette tips
+    - 1
+    - 3
+    - pipetting
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-12 22:20:57.679337'
+    - '2013-08-05 22:36:58.428452'
+    - pipette
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 68
+    - ! 'Nitrile Gloves: S'
+    - Purple nitrile gloves; size small
+    - 300
+    - 800
+    - generic
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Chemistry Store; Store Number: 4006; Purchase Quantity: 1 box of 100 ($12.89
+      each)'
+    - '2013-07-12 22:26:14.189264'
+    - '2013-08-05 22:26:15.196863'
+    - glove
+    - 
+    - 
+    - 
+    - 
+    - 0.13
+    - return
+    - Dispose into biohazard trash
+  - - 69
+    - ! 'Nitrile Gloves: M'
+    - Purple nitrile gloves; size medium
+    - 300
+    - 900
+    - generic
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Chemistry Store; Store Number: 4002; Purchase Quantity: 1 box of 100 ($12.00
+      each)'
+    - '2013-07-12 22:27:31.240793'
+    - '2013-08-05 22:27:15.233807'
+    - glove
+    - 
+    - 
+    - 
+    - 
+    - 0.12
+    - return
+    - Dispose into biohazard trash
+  - - 70
+    - ! 'Nitrile Gloves: L'
+    - Purple nitrile gloves; size large
+    - 300
+    - 900
+    - generic
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Chemistry Store; Store Number: 4004; Purchase Quantity: 1 box of 100 ($12.50
+      each)'
+    - '2013-07-12 22:28:50.057585'
+    - '2013-08-05 22:28:01.501264'
+    - glove
+    - 
+    - 
+    - 
+    - 
+    - 0.125
+    - return
+    - Dispose into biohazard trash
+  - - 71
+    - 250 mL Bottle
+    - Autoclaved; Used primarily for media
+    - 2
+    - 50
+    - glassware
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Fisher Scientific; Catalog Number: FB-800-250; Purchase Quantity: 1 pack
+      of 10 ($56.01); Available at Chem Store (Store Number: 2828; Price: $3.19 each)'
+    - '2013-07-16 07:21:56.666922'
+    - '2013-08-05 22:12:36.496555'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 5.6
+    - return
+    - Return to dishwashing station when dirty.
+  - - 72
+    - ! 'LB Agar: 200mL'
+    - ! 'Autoclaved LB agar used for making plates: 200mL'
+    - 2
+    - 7
+    - solidmedia
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-16 07:26:24.275248'
+    - '2013-07-25 05:08:56.620239'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Return empty bottle to dishwashing station when empty
+  - - 73
+    - ! 'LB Agar: 400mL'
+    - ! 'Autoclaved LB agar used for making plates: 400mL'
+    - 1
+    - 4
+    - solidmedia
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-16 07:29:42.553436'
+    - '2013-07-25 05:09:16.283071'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Return bottle to dishwashing station when empty.
+  - - 74
+    - ! 'SDO Agar: 200mL'
+    - ! 'Autoclaved SDO used for making plates: 200mL'
+    - 1
+    - 5
+    - solidmedia
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-16 23:36:56.822881'
+    - '2013-07-25 05:09:30.061353'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Return bottle to dishwashing station when empty.
+  - - 75
+    - ! 'YPAD Agar: 200mL'
+    - ! 'Autoclaved YPAD agar used for making plates: 200mL'
+    - 1
+    - 6
+    - solidmedia
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-16 23:38:57.847872'
+    - '2013-07-25 05:09:46.654221'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Return bottle to dishwashing station when empty.
+  - - 76
+    - Bacto Yeast Extract
+    - 500g bottle of yeast extract; used for making LB, TB, YPAD
+    - 1
+    - 5
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Fisher Scientific; Catalog Number: DF0127-17-9; Purchase Quantity: 2; Available
+      at Biochem Store.'
+    - '2013-07-16 23:47:38.028576'
+    - '2013-07-25 05:18:42.636293'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 94.8
+    - return
+    - Replace this item
+  - - 77
+    - Bacto Tryptone
+    - 500g bottle of tryptone; used for making TB, LB, YPAD
+    - 1
+    - 5
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Fisher Scientific; Catalog Number: DF0123-17-3; Purchase Quantity: 2; Available
+      at Biochem Store.'
+    - '2013-07-17 00:04:50.919174'
+    - '2013-07-25 05:20:17.523394'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 67.64
+    - return
+    - Replace this item
+  - - 78
+    - Potassium Phosphate Solution
+    - Sterile; Used in TB
+    - 1
+    - 2
+    - liquidchem
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-29 16:51:22.295821'
+    - '2013-08-05 22:28:41.087481'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 79
+    - Sodium Chloride
+    - NaCl; 3 kg; Used to make LB
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: S271-3; Purchase Quantity: 1;
+      Available at Chemistry Store'
+    - '2013-07-29 17:01:07.806368'
+    - '2013-08-05 22:13:27.705049'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 26.17
+    - return
+    - Replace this item
+  - - 80
+    - Sodium Chloride
+    - NaCl; 500 g; Used to make LB
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Chemistry Store; Store Number: 2546; Purchase Quantity: 1;'
+    - '2013-07-29 17:03:56.492915'
+    - '2013-08-05 22:13:53.487425'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 7.34
+    - return
+    - Replace this item
+  - - 81
+    - Potassium Phosphate, Dibasic
+    - KH2P4; Used to make Potassium Phosphate Solution for TB
+    - 1
+    - 3
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Chemistry Store; Store Number: 2442; Purchase Quantity: 1'
+    - '2013-07-29 17:14:54.514690'
+    - '2013-08-05 22:14:05.419247'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 20.96
+    - return
+    - Replace this item
+  - - 82
+    - Potassium Phosphate, Monobasic
+    - 500g; Used to make Potassium Phosphate Solution for TB
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Chemistry Store; Store Number: 2440; Purchase Quantity: 1'
+    - '2013-07-29 17:16:10.956535'
+    - '2013-08-05 22:14:32.189371'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 16.62
+    - return
+    - Replace this item
+  - - 83
+    - Tryptophan Powder
+    - 100g; Used in SC and SDO
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: BP395-100; Purchase Quantity:
+      1'
+    - '2013-07-29 17:29:14.995775'
+    - '2013-07-29 17:29:14.995775'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 84
+    - Adenine Powder
+    - 25g; Used to make SC and SDO
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: 147440250; Purchase Quantity:
+      1'
+    - '2013-07-29 17:35:37.101315'
+    - '2013-07-29 17:35:37.101315'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 73.39
+    - return
+    - Replace this item
+  - - 85
+    - Yeast Synthetic Drop-out Medium Supplement
+    - 20 g; Used for SDO
+    - 1
+    - 10
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Sigma-Aldrich; Catalog Number: Y2001-20G; Purchase Quantity: 2'
+    - '2013-07-29 17:41:50.464222'
+    - '2013-07-29 17:41:50.464222'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 79.5
+    - return
+    - Replace this item
+  - - 86
+    - Lithium Acetate
+    - 100 g; Used to make 1M Lithium Acetate
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Sigma-Aldrich; Catalog Number: 517992-100G; Purchase Quantity: 1'
+    - '2013-07-29 17:46:46.064843'
+    - '2013-08-05 22:14:22.632117'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 79.5
+    - return
+    - Replace this item
+  - - 87
+    - Yeast Media, Amino Acid Dropout Mixes
+    - DO Supplement –His/–Leu/–Trp/–Ura; 10 g; Used for SDO
+    - 1
+    - 7
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Clontech; Catalog Number: 630425; Purchase Quantity: 1'
+    - '2013-07-29 17:53:11.812575'
+    - '2013-07-29 17:53:11.812575'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 49.0
+    - return
+    - Replace this item
+  - - 88
+    - Yeast Nitrogen Base Without Amino Acids and Ammonium Sulfate
+    - 100 g
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Sigma-Aldrich; Catalog Number: Y1251-100G; Purchase Quantity: 1'
+    - '2013-07-29 17:57:36.449103'
+    - '2013-07-29 17:57:36.449103'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 177.5
+    - return
+    - Replace this item
+  - - 89
+    - Yeast Nitrogen Base Without Amino Acids
+    - 250 g; Used to make SC and SDO
+    - 1
+    - 3
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Sigma-Aldrich; Catalog Number: Y0626-250G; Purchase Quantity: 2'
+    - '2013-07-29 18:00:56.838914'
+    - '2013-07-29 18:00:56.838914'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 128.5
+    - return
+    - Replace this item
+  - - 90
+    - Calcium Chloride, Pellets
+    - ! '500 g; '
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: VWR; Catalog Number: JT1313-1; Purchase Quantity: 1; Available at
+      Chem Store (Store Number: 1494; Price: $17.58; Purchase Quantity:1)'
+    - '2013-07-29 18:07:11.844417'
+    - '2013-07-29 18:07:11.844417'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 15.9
+    - return
+    - Replace this item
+  - - 91
+    - Glycerol
+    - 100% glycerol; anydrous; 500mL; Used for TB
+    - 1
+    - 5
+    - liquidchem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Chemistry Store; Store Number: 1836; Purchase Quantity: 2'
+    - '2013-07-29 18:50:06.450096'
+    - '2013-07-29 18:50:06.450096'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 15.73
+    - return
+    - Replace this item
+  - - 92
+    - Touch Screen
+    - Used for bioturk
+    - 1
+    - 12
+    - equipment
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-29 18:52:33.958336'
+    - '2013-07-29 18:52:33.958336'
+    - screen
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 93
+    - 14 mL Test Tubes
+    - With Caps; Autoclaved;
+    - 5
+    - 111
+    - glassware
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: 14-957F; Purchase Quantity: 1
+      pack of 72 ($54.20)'
+    - '2013-07-29 19:01:20.294433'
+    - '2013-08-06 00:04:09.637445'
+    - tube
+    - 
+    - 
+    - 
+    - 
+    - 0.75
+    - return
+    - Return to dishwashing station when finished.
+  - - 94
+    - 20 mL Test Tubes
+    - With Caps; Autoclaved;
+    - 5
+    - 100
+    - glassware
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: 14-957H; Purchase Quantity: 1
+      pack of 72 ($86.10)'
+    - '2013-07-29 19:03:02.378649'
+    - '2013-07-29 19:09:31.438936'
+    - tube
+    - 
+    - 
+    - 
+    - 
+    - 1.2
+    - return
+    - Return to dishwashing station when finished.
+  - - 95
+    - Ethanol Spray Bottle
+    - 70% Ethanol; Used to sterilize;
+    - 1
+    - 15
+    - liquidchem
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-29 19:05:00.946213'
+    - '2013-07-29 19:05:00.946213'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 96
+    - Serological Pipette
+    - With charger;
+    - 1
+    - 1
+    - pipetting
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-29 19:07:32.518010'
+    - '2013-07-29 19:07:32.518010'
+    - pipette
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 97
+    - 14 mL IAA Test Tubes
+    - With Caps; Autoclaved;
+    - 6
+    - 50
+    - glassware
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: 14-957C; Purchase Quantity: 1
+      pack of 72 ($54.20)'
+    - '2013-07-29 19:10:22.662724'
+    - '2013-07-29 19:10:45.972354'
+    - tube
+    - 
+    - 
+    - 
+    - 
+    - 0.75
+    - return
+    - Return to dishwashing station when finished.
+  - - 98
+    - 20 mL IAA Test Tubes
+    - With Caps; Autoclaved;
+    - 4
+    - 30
+    - glassware
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: 14-957H; Purchase Quantity: 1
+      pack of 72 ($86.10)'
+    - '2013-07-29 19:12:12.609328'
+    - '2013-07-29 19:12:12.609328'
+    - tube
+    - 
+    - 
+    - 
+    - 
+    - 1.2
+    - return
+    - Return to dishwashing station when finished.
+  - - 99
+    - 2 mL Serological Pipette Tips
+    - ! 'Sterile; '
+    - 5
+    - 30
+    - pipetting
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: 13-675-17; Purchase Quantity:
+      1 case of 1000 ($176.10);'
+    - '2013-07-29 19:48:32.919381'
+    - '2013-07-29 19:48:32.919381'
+    - tip
+    - 
+    - 
+    - 
+    - 
+    - 0.18
+    - return
+    - Dispose into biohazard trash when finished.
+  - - 100
+    - Sodium Phosphate, Dibasic
+    - ! 'KNa2HPO4; 500g; '
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Chemistry Store; Store Number: 2590; Purchase Quantity: 1'
+    - '2013-07-31 03:50:55.376655'
+    - '2013-07-31 03:50:55.376655'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 18.64
+    - return
+    - Replace this item
+  - - 101
+    - 5 mL Serological Pipette Tips
+    - Sterile;
+    - 10
+    - 200
+    - pipetting
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: 13-675-22; Purchase Quantity:
+      2 cases of 200 ($24.32 each)'
+    - '2013-07-31 03:54:26.773181'
+    - '2013-07-31 03:54:26.773181'
+    - tip
+    - 
+    - 
+    - 
+    - 
+    - 0.12
+    - dispose
+    - Dispose into biohazard trash when finished.
+  - - 102
+    - 10 mL Serological Pipette Tips
+    - Sterile;
+    - 10
+    - 150
+    - pipetting
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: 13-675-20; Purchase Quantity:
+      4 cases of 200 ($26.60 each)'
+    - '2013-07-31 03:57:27.408415'
+    - '2013-07-31 03:57:27.408415'
+    - tip
+    - 
+    - 
+    - 
+    - 
+    - 0.13
+    - dispose
+    - Dispose into biohazard trash when finished.
+  - - 103
+    - 25 mL Serological Pipette Tips
+    - Sterile;
+    - 10
+    - 400
+    - pipetting
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: 13-668-2; Purchase Quantity: 5
+      cases of 200 ($67.80 each)'
+    - '2013-07-31 03:59:57.650414'
+    - '2013-07-31 04:02:15.980736'
+    - tip
+    - 
+    - 
+    - 
+    - 
+    - 0.34
+    - return
+    - Dispose into biohazard trash when finished
+  - - 104
+    - Manual Serological Pipette Bulbs
+    - Sterile
+    - 5
+    - 200
+    - pipetting
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-31 04:06:09.435646'
+    - '2013-07-31 04:06:09.435646'
+    - bulb
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - dispose
+    - Dispose into biohazard trash when finished.
+  - - 105
+    - 800 mL Sterile LB
+    - ! 'Autoclaved; '
+    - 2
+    - 5
+    - liquidmedia
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-31 04:09:09.330415'
+    - '2013-08-05 22:30:18.413644'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item unless empty, then return to dishwashing station.
+  - - 106
+    - 890 mL Sterile TB
+    - Autoclaved; Potassium Phosphate Solution added
+    - 2
+    - 5
+    - liquidmedia
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-31 04:11:16.594454'
+    - '2013-08-05 22:30:28.644618'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item, unless empty then return to dishwashing station.
+  - - 107
+    - 800 mL Sterile YPAD
+    - Autoclaved
+    - 2
+    - 6
+    - liquidmedia
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-31 04:13:18.732614'
+    - '2013-08-05 22:30:45.773625'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item, unless empty, then return to dishwashing station.
+  - - 108
+    - 800 mL Sterile SC
+    - Autoclaved;
+    - 2
+    - 5
+    - liquidmedia
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-31 04:14:27.646911'
+    - '2013-08-05 22:30:57.300281'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item, unless empty, then return to dishwashing station.
+  - - 109
+    - 125 mL Baffled Flask
+    - Autoclaved;
+    - 2
+    - 7
+    - glassware
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-31 04:21:06.764836'
+    - '2013-07-31 04:21:06.764836'
+    - flask
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Return to dishwashing station when finished.
+  - - 110
+    - 250 mL Baffled Flask
+    - Autoclaved;
+    - 2
+    - 13
+    - glassware
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-31 04:23:19.791049'
+    - '2013-07-31 04:23:19.791049'
+    - flask
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Return to dishwashing station when finished.
+  - - 111
+    - LB Agar, Miller
+    - ! '500g; '
+    - 1
+    - 4
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: VWR; Catalog Number: EM1.10283.0500; Purchase Quantity: 2'
+    - '2013-07-31 04:33:43.232179'
+    - '2013-07-31 04:34:42.419905'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 56.21
+    - return
+    - Replace this item, unless empty, then dispose into biohazard trash.
+  - - 113
+    - Sodium Hydroxide, Powder
+    - 500 g;
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Chemistry Store; Store Number: 2564; Purchase Quantity: 1'
+    - '2013-07-31 04:40:07.023690'
+    - '2013-07-31 04:40:07.023690'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 10.51
+    - return
+    - Replace this item, unless empty, then dispose into biohazard trash
+  - - 114
+    - Bacto Agar
+    - 500 g;
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-07-31 04:52:42.942214'
+    - '2013-07-31 04:52:42.942214'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item, unless empty, then dispose into biohazard trash.
+  - - 115
+    - Bacto Casamino Acids
+    - 500 g;
+    - 1
+    - 3
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: DF0231-17-2; Purchase Quantity:
+      1'
+    - '2013-07-31 04:59:05.820659'
+    - '2013-07-31 04:59:05.820659'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 81.89
+    - return
+    - Replace this item, unless empty, then dispose into biohazard trash
+  - - 116
+    - Lactose
+    - Lactose Monohydrate; Difco; 500 g
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: DF0156-17-3; Purchase Quantity:
+      1;'
+    - '2013-07-31 05:04:41.861378'
+    - '2013-07-31 05:04:41.861378'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 29.83
+    - return
+    - Replace this item, unless empty, then dispose into biohazard trash
+  - - 117
+    - Boric Acid, Crystals
+    - ! '500 g; '
+    - 1
+    - 1
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Chemistry Store; Store Number: 1460; Purchase Quantity: 1;'
+    - '2013-07-31 05:15:56.273953'
+    - '2013-08-05 23:10:33.542647'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 12.46
+    - return
+    - Replace this item, unless empty, then dispose into biohazard trash.
+  - - 118
+    - Magnesium Sulfate, Anhydrous
+    - 500 g;
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: VWR; Catalog Number: EM-MX0075-1; Purchase Quantity: 1; Available
+      at Chemistry Store (Store Number: 2022; Price: $16.50; Purchase Quantity: 1)'
+    - '2013-07-31 05:23:01.963679'
+    - '2013-08-05 23:37:00.149732'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 19.85
+    - return
+    - Replace this item, unless empty, then dispose into biohazard trash
+  - - 119
+    - Sodium Acetate Trihydrate
+    - 500 g; Crystal
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: VWR; Catalog Number: MK736404; Purchase Quantity: 1; Available at
+      Biochem Store (Store Number: MK736404; Price: $16.20; Purchase Quantity: 1);
+      Available at Chemistry Store (Store Number: 2506, Price: $15.60; Purchase Quantity:
+      1)'
+    - '2013-07-31 05:35:35.141746'
+    - '2013-08-05 23:16:45.359698'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 14.8
+    - return
+    - Replace this item, unless empty, then return to dishwashing station
+  - - 120
+    - Galactose Solution, 20%
+    - 250 mL; Sterile;
+    - 1
+    - 2
+    - liquidchem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Teknova; Catalog Number: G0505; Purchase Quantity: 1'
+    - '2013-07-31 05:39:17.527872'
+    - '2013-08-05 23:17:41.813139'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 38.9
+    - return
+    - Replace this item, unless empty, then dispose into biohazard trash.
+  - - 121
+    - Galactose, 99%
+    - 100 g;
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: AC15061-1000; Purchase Quantity:
+      1;'
+    - '2013-07-31 08:57:16.867951'
+    - '2013-07-31 08:57:16.867951'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 34.45
+    - return
+    - Replace this item, unless empty, then return to dishwashing station
+  - - 122
+    - Urea
+    - 30 mL; 1x TBE-urea sample loading buffer, premixed, for denaturing ssDNA and
+      RNA, pH 8.0
+    - 1
+    - 2
+    - liquidchem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Bio Rad; Catalog Number: 161-0768; Purchase Quantity: 1'
+    - '2013-08-01 01:50:22.915330'
+    - '2013-08-01 01:50:22.915330'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 29.0
+    - return
+    - Replace this item, unless empty, then dispose into biohazard trash
+  - - 123
+    - EDTA
+    - Ethylenediaminetetraacetic acid disodium salt dihydrate; 500 g; Reagent grade
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Sigma-Aldrich; Catalog Number: E4884-500G; Purchase Quantity: 1'
+    - '2013-08-02 02:14:36.796230'
+    - '2013-08-05 23:23:55.803003'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 92.2
+    - return
+    - Replace this item, unless empty, then dipsose into biohazard trash.
+  - - 124
+    - Raffinose Pentahydrate
+    - 100 g;
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Sigma-Aldrich; Catalog Number: R0250-100G; Purchase Quantity: 1'
+    - '2013-08-02 02:18:04.458128'
+    - '2013-08-02 02:19:10.467013'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 198.5
+    - return
+    - Replace this item, unless empty, then dispose into biohazard trash.
+  - - 125
+    - Potassium Chloride
+    - Crystals; 500 g
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: VWR; Catalog Number: EM-PX1405-1; Purchase Quantity; Available at
+      Chemistry Store (Store Number: 2404; Price: $24.36; Purchase Quantity: 1)'
+    - '2013-08-02 02:27:55.648779'
+    - '2013-08-02 02:27:55.648779'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 14.06
+    - return
+    - Replace this item, unless empty, then dispose into biohazard trash
+  - - 126
+    - ! 'Chloramphenicol '
+    - 25 g; Used to make chlor stock solution and aliquot for plates
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Biochemistry Store; Store Number: C028-25G; Purchase Quantity: 1'
+    - '2013-08-02 02:45:28.230404'
+    - '2013-08-02 02:45:28.230404'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 44.19
+    - return
+    - ! 'Replace this item, unless empty, then dispose into sharps container. '
+  - - 127
+    - Tetracycline, Hydrochloride
+    - 25 g;
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: VWR; Catalog Number: 80058-724; Purchase Quantity: 1'
+    - '2013-08-02 02:52:29.723163'
+    - '2013-08-05 23:41:49.105683'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 47.03
+    - return
+    - Replace this item, unless empty, then dispose into biohazard trash.
+  - - 128
+    - 30 mL Syringe
+    - 30 mL
+    - 5
+    - 300
+    - plastics
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: 22-124-969; Purchase Quanity:
+      4 cases of 56 ($74.02 total)'
+    - '2013-08-02 03:16:01.324612'
+    - '2013-08-02 03:16:01.324612'
+    - syringe
+    - 
+    - 
+    - 
+    - 
+    - 0.33
+    - dispose
+    - Dispose into biohazard trash when finished.
+  - - 129
+    - 25 mm Syringe FIlter
+    - Diameter of 25 mm
+    - 8
+    - 45
+    - plastics
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: VWR; Catalog Number: 28145-477; Purchase Quantity: 2 cases of 50
+      ($48.27 each); Available at Chemistry Store and Biochemistry Store'
+    - '2013-08-02 03:20:02.697358'
+    - '2013-08-02 03:20:02.697358'
+    - filter
+    - 
+    - 
+    - 
+    - 
+    - 0.97
+    - dispose
+    - Dispose into biohazard trash when finished.
+  - - 130
+    - Molecular Biology Grade Water;
+    - 1000 mL; Sterile;
+    - 1
+    - 11
+    - liquidchem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: SH30538.03; Purchase Quantity:
+      3; Available at Biochemistry Store (Store Number: MT46000CM; Price: $9.31; Purchase
+      Quantity: 1)'
+    - '2013-08-02 03:36:11.514413'
+    - '2013-08-02 03:36:11.514413'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 8.91
+    - return
+    - Replace this item, unless empty, then dispose into recycling
+  - - 131
+    - OmniTray
+    - ! 'With lid; Working volume: 35 mL'
+    - 3
+    - 12
+    - plastics
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: 12-565-296; Purchase Quantity:
+      4 cases of 60 ($106.18 each)'
+    - '2013-08-02 03:48:36.696863'
+    - '2013-08-02 03:48:36.696863'
+    - tray
+    - 
+    - 
+    - 
+    - 
+    - 1.77
+    - return
+    - Replace this item
+  - - 132
+    - Folder
+    - empty
+    - 1
+    - 5
+    - officesupplies
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-08-02 04:05:46.825372'
+    - '2013-08-02 04:05:46.825372'
+    - folder
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 133
+    - Notebook
+    - Empty
+    - 1
+    - 6
+    - officesupplies
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-08-02 04:06:34.960623'
+    - '2013-08-02 04:06:34.960623'
+    - notebook
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item
+  - - 134
+    - Lactose
+    - ! 'Difco*; 500 g; '
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Fisher Scientific; Catalog Number: DF0156-17-3; Purchase Quantity:
+      1'
+    - '2013-08-05 22:58:11.733654'
+    - '2013-08-05 22:58:11.733654'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 29.83
+    - return
+    - Replace this item, unless empty, then dispose into biohazard trash.
+  - - 135
+    - M9 Minimal Salts, 5x
+    - Difco*; 500 g;
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: VWR; Catalog Number: 90003-416; Purchase Quantity: 1;'
+    - '2013-08-05 23:02:07.850632'
+    - '2013-08-05 23:02:07.850632'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 71.47
+    - return
+    - Replace this item, unless empty, then dispose into biohazard trash.
+  - - 136
+    - DI Water, Sterile
+    - 800 mL; Autoclaved
+    - 1
+    - 4
+    - liquidchem
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-08-05 23:07:23.448660'
+    - '2013-08-05 23:07:23.448660'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item, unless empty, then return to dishwashing station
+  - - 137
+    - Magnesium Sulfate, Heptahydrate
+    - 500 g;
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-08-05 23:12:53.434181'
+    - '2013-08-05 23:12:53.434181'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item, unless empty, then dispose into biohazard trash.
+  - - 138
+    - Urea
+    - 500 g;
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Chemistry Store; Store Number: 2718; Purchase Quantity:1'
+    - '2013-08-05 23:21:53.875575'
+    - '2013-08-05 23:21:53.875575'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 18.96
+    - return
+    - Replace this item, unless empty, then dispose into biohazard trash.
+  - - 139
+    - EDTA Disodium Salt
+    - Ethylenediaminetetraacetic Acid, Di Na Salt Dihydr, Crystalline Powder, Electrophoresis
+      Grade
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-08-05 23:28:42.968804'
+    - '2013-08-05 23:28:42.968804'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 30.23
+    - return
+    - Replace this item, unless empty, then dispose into sharps container
+  - - 140
+    - Mannose
+    - 25 g;
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Sigma-Aldrich; Catalog Number: M6020-25G; Purchase Quantity: 1'
+    - '2013-08-05 23:34:48.006747'
+    - '2013-08-05 23:34:48.006747'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 42.1
+    - return
+    - Replace this item, unless empty, then dispose into biohazard trash
+  - - 141
+    - Minimal M9 Broth
+    - 1000 mL; Sterile
+    - 1
+    - 3
+    - liquidmedia
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Teknova; Catalog Number: M8000; Purchase Quantity: 2'
+    - '2013-08-06 21:31:08.884348'
+    - '2013-08-06 21:52:41.119419'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 26.0
+    - return
+    - Replace this item, unless empty, then rinse and dispose into recycling.
+  - - 142
+    - Cellulose
+    - Sterile; In 250 mL bottle
+    - 1
+    - 4
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-08-06 21:32:55.399010'
+    - '2013-08-06 22:34:11.338725'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item, unless empty, then return to dishwashing station
+  - - 143
+    - Magnesium Sulfate, Nonsterile
+    - 1M MgSO4; 1000x; in 250 mL bottle
+    - 1
+    - 4
+    - liquidchem
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-08-06 21:35:42.636602'
+    - '2013-08-06 21:35:42.636602'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item, unless empty, then return to dishwashing station
+  - - 144
+    - 5x M9 Salts
+    - Autoclaved; In media bottle
+    - 1
+    - 5
+    - liquidmedia
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-08-06 21:37:35.924374'
+    - '2013-08-06 21:37:35.924374'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item, unless empty, then return to dishwashing station
+  - - 145
+    - M9 No Carbon + Biotin + MgSO4/CaCl2
+    - Sterile; In media bottle
+    - 1
+    - 4
+    - liquidmedia
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-08-06 21:39:46.465534'
+    - '2013-08-06 21:39:46.465534'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item, unless empty, then return to dishwashing station
+  - - 146
+    - M9 No Carbon + Biotin + Mg2+/Ca2+
+    - Sterile; In media bottle
+    - 1
+    - 3
+    - liquidmedia
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-08-06 21:40:51.102301'
+    - '2013-08-06 21:40:51.102301'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item, unless empty, then return to dishwashing station
+  - - 147
+    - 1% Yeast Extract
+    - Sterile; In media bottle
+    - 1
+    - 4
+    - liquidmedia
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-08-06 21:41:26.879826'
+    - '2013-08-06 21:41:26.879826'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item, unless empty, then return to dishwashing station
+  - - 148
+    - 5% Xylan
+    - Autoclaved dry in bottle; In media bottle
+    - 1
+    - 5
+    - liquidmedia
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-08-06 21:42:40.604180'
+    - '2013-08-06 21:42:40.604180'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item, unless empty, then return to dishwashing station
+  - - 149
+    - EDTA, 0.5M
+    - Sterile; In media bottle
+    - 1
+    - 4
+    - liquidchem
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-08-06 21:45:30.880595'
+    - '2013-08-06 21:45:30.880595'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item, unless empty, then return to dishwashing statin
+  - - 150
+    - M9CA Broth
+    - 1000 mL; Sterile
+    - 1
+    - 3
+    - liquidmedia
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Technova; Catalog Number: M8010; Purchase Quantity: 2'
+    - '2013-08-06 21:51:30.709783'
+    - '2013-08-06 21:52:10.839875'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 28.0
+    - return
+    - Replace this item, unless empty, then rinse and dispose into recycling
+  - - 151
+    - TB Powder
+    - TB modified; 1 kg; Used to make TB
+    - 1
+    - 3
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Sigma-Aldrich; Catalog Number: T0918-1KG; Purchase Quantity: 1'
+    - '2013-08-06 22:01:04.514606'
+    - '2013-08-06 22:01:04.514606'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 142.0
+    - return
+    - Replace this item, unless empty, then rinse and dispose into recycling.
+  - - 152
+    - Sigmacell Cellulose Powder
+    - 500 g; Type 20, 20 μm
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Sigma-Aldrich; Catalog Number: S3504-500G; Purchase Quantity: 1'
+    - '2013-08-06 22:03:44.210452'
+    - '2013-08-06 22:03:44.210452'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 43.7
+    - return
+    - Replace this item, unless empty, then rinse and dispose into recycling.
+  - - 153
+    - D-(+)-Xylose Powder
+    - 500 g; ≥99%;
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-08-06 22:21:38.959306'
+    - '2013-08-06 22:21:38.959306'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 104.0
+    - return
+    - Replace this item, unless empty, then rinse and dispose into recycling.
+  - - 154
+    - D-(+)-Cellobiose
+    - 250 g; ≥99.0%
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Sigma-Aldrich; Catalog Number: 22150-250G; Purchase Quantity: 1'
+    - '2013-08-06 22:23:26.895448'
+    - '2013-08-06 22:24:11.742102'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 397.5
+    - return
+    - Replace this item, unless empty, then rinse and dispose into recycling (glass)
+  - - 155
+    - Sodium Carboxymethyl Cellulose
+    - ! '100 g; '
+    - 0
+    - 1
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-08-06 22:25:37.954327'
+    - '2013-08-06 22:25:37.954327'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 38.8
+    - return
+    - Replace this item, unless empty, then rinse and dispose into recycling (plastic)
+  - - 156
+    - Congo Red
+    - ! '25 g; '
+    - 1
+    - 2
+    - drychem
+    - ! 'ALWAYS WEAR GLOVES WHEN HANDLING '
+    - DISPOSE SPILLS INTO CONGO RED WASTE
+    - No data
+    - ! 'Vendor: Sigma-Aldrich; Catalog Number: C6767-25G; Purchase Quantity: 1'
+    - '2013-08-06 22:28:48.934638'
+    - '2013-08-06 22:28:48.934638'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 16.1
+    - return
+    - Replace this item, unless empty, then dispose into special congo red waste
+  - - 157
+    - Xylan
+    - From beachwood; 25 g; ≥90% (HPLC), cell wall polysaccharide
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Sigma-Aldrich; Catalog Number: X4252-25G; Purchase Quantity: 1'
+    - '2013-08-06 22:31:07.533382'
+    - '2013-08-06 22:31:07.533382'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 63.2
+    - return
+    - Replace this item, unless empty, then rinse and dispose into recycling (plastic)
+  - - 158
+    - L-(+)-Arabinose
+    - 25 g; 98%
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Sigma-Aldrich; Catalog Number: A91906-25G-A; Purchase Quantity: 1'
+    - '2013-08-06 22:33:24.477684'
+    - '2013-08-06 22:33:24.477684'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 51.8
+    - return
+    - Replace this item, unless empty, then rinse and dispose into recycling (plastic)
+  - - 159
+    - ! 'Biotin '
+    - ≥99% (TLC), lyophilized powder; 1 g;
+    - 1
+    - 4
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Sigma-Aldrich; Catalog Number: B4501-1G; Purchase Quantity: 2'
+    - '2013-08-06 22:36:17.047072'
+    - '2013-08-06 22:36:17.047072'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 59.2
+    - return
+    - Replace this item, unless empty, then rinse and dispose into biohazard trash
+  - - 160
+    - 2-Deoxy-D-galactose
+    - 1 g; 98%
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Sigma-Aldrich; Catalog Number: D4407-1G-A; Purchase Quantity: 1'
+    - '2013-08-06 22:39:00.897926'
+    - '2013-08-06 22:39:00.897926'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 75.4
+    - return
+    - Replace this item, unless empty, then dispose into sharps container
+  - - 161
+    - Sodium Carbonate, Anhydrous
+    - 300 g; Powder
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Chemistry Store; Store Number: 2534; Purchase Quantity: 1'
+    - '2013-08-06 22:43:46.567779'
+    - '2013-08-06 22:43:46.567779'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 13.85
+    - return
+    - Replace this item, unless empty, then rinse and dispose into recycling
+  - - 162
+    - PEG 8000
+    - ! '500 g; Powder; '
+    - 0
+    - 1
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-08-06 23:11:00.376981'
+    - '2013-08-06 23:11:00.376981'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 93.03
+    - return
+    - Replace this item, unless empty, then rinse and dispose into recycling (glass)
+  - - 163
+    - Manganese(II) Chloride Flakes
+    - 97%; 500g; MnCl2
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Sigma-Aldrich; Catalog Number: 416479-500G; Purchase Quantity: 1'
+    - '2013-08-06 23:32:58.236074'
+    - '2013-08-06 23:32:58.236074'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 28.5
+    - return
+    - Replace this item, unless empty, then dispose into biohazard trash
+  - - 164
+    - Poly[di(ethylene glycol) adipate]
+    - 250 mL;
+    - 0
+    - 1
+    - liquidchem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Sigma-Aldrich; Catalog Number: 458392-250ML; Purchase Quantity: 1'
+    - '2013-08-06 23:35:09.980701'
+    - '2013-08-06 23:35:09.980701'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 47.7
+    - return
+    - Replace this item, unless empty, then rinse and dispose into recycling (plastic)
+  - - 165
+    - Crystal Violet
+    - 25 g;
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Sigma-Aldrich; Catalog Number: C3886-25G; Purchase Quantity: 1'
+    - '2013-08-06 23:36:23.142685'
+    - '2013-08-06 23:36:50.485940'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 26.0
+    - return
+    - Replace this item, unless empty, then dispose
+  - - 166
+    - Dimethyl Sulphoxide (DMSO)
+    - 100 mL;
+    - 1
+    - 4
+    - liquidchem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Simga-Aldrich; Catalog Number: D2650-100ML; Purchase Quantity: 2'
+    - '2013-08-06 23:39:09.179697'
+    - '2013-08-06 23:39:09.179697'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 156.0
+    - return
+    - Replace this item, unless empty, then dispose
+  - - 167
+    - Sodium L-lactate
+    - ! '10 g; '
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Sigma-Aldrich; Catalog Number: 71718-10G; Purchase Quantity: 1'
+    - '2013-08-06 23:40:40.433655'
+    - '2013-08-06 23:40:40.433655'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 79.5
+    - return
+    - Replace this item, unless empty, then dispose
+  - - 168
+    - Ethylene Glycol
+    - ! '1 L; '
+    - 1
+    - 2
+    - liquidchem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Chemistry Store; Store Number: 1782; Purchase Quantity: 1;'
+    - '2013-08-06 23:42:19.711277'
+    - '2013-08-06 23:42:19.711277'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 14.89
+    - return
+    - Replace this item, unless empty, then dispose
+  - - 169
+    - Magnesium Chloride Hexahydrate
+    - 500 g;
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Chemistry Store; Store Number: 2006; Purchase Quantity: 1'
+    - '2013-08-06 23:44:32.602568'
+    - '2013-08-06 23:44:32.602568'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 14.18
+    - return
+    - Replace this item, unless empty, then dispose
+  - - 170
+    - Manganous Chloride
+    - 4-Hydrate; Crystal; 500 g
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Chemistry Store; Store Number: 2036; Purchase Quantity: 1'
+    - '2013-08-06 23:45:53.534869'
+    - '2013-08-06 23:45:53.534869'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 31.02
+    - return
+    - Replace this item, unless empty, then dispose
+  - - 171
+    - Methylsulfoxide
+    - DMSO; 500 mL
+    - 1
+    - 2
+    - liquidchem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: Chemistry Store; Store Number: 1709; Purchase Quantity: 1'
+    - '2013-08-06 23:48:13.528452'
+    - '2013-08-06 23:48:13.528452'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 15.74
+    - return
+    - Replace this item, unless empty, then dispose
+  - - 172
+    - Thiamine Hydrochloride
+    - ! '25 g; '
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - No vendor information
+    - '2013-08-06 23:50:37.360133'
+    - '2013-08-06 23:50:37.360133'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 0.01
+    - return
+    - Replace this item, unless empty, then dispose
+  - - 173
+    - Magnesium Chloride Hexahydrate
+    - ! '100 g; '
+    - 1
+    - 2
+    - drychem
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: VWR; Catalog Number: 97061-352; Purchase Quantity: 1'
+    - '2013-08-06 23:52:59.361527'
+    - '2013-08-06 23:52:59.361527'
+    - bottle
+    - 
+    - 
+    - 
+    - 
+    - 23.18
+    - return
+    - Replace this item, unless empty, then dispose
+  - - 174
+    - 0.2 mL PCR 12-Well Tube Strips
+    - ! 'With caps; Sterile; '
+    - 48
+    - 800
+    - plastics
+    - No safety information
+    - No cleanup information
+    - No data
+    - ! 'Vendor: VWR; Catalog Number: 53509-306; Purchase Quantity: 1 case of 800
+      ($635.00)'
+    - '2013-08-11 06:25:07.083411'
+    - '2013-08-11 06:25:07.083411'
+    - tube
+    - 
+    - 
+    - 
+    - 
+    - 0.79
+    - return
+    - Dispose of into biohazard trash when finished.

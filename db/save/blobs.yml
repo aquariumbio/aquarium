@@ -1,0 +1,347 @@
+
+---
+blobs:
+  columns:
+  - id
+  - sha
+  - path
+  - xml
+  - created_at
+  - updated_at
+  - dir
+  records: 
+  - - 1
+    - 420f521710918e1834e9d3794162133ec886028e
+    - 
+    - 
+    - '2013-07-17 22:59:01.133290'
+    - '2013-07-17 22:59:01.133290'
+    - ! "--- !ruby/hash:Hashie::Mash\nsha: 420f521710918e1834e9d3794162133ec886028e\nurl:
+      https://api.github.com/repos/klavinslab/protocols/git/trees/420f521710918e1834e9d3794162133ec886028e\ntree:\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: dca0213d4ad80c03de3267f17feb4cfff817a593\n
+      \ path: .gitignore\n  size: 20\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/dca0213d4ad80c03de3267f17feb4cfff817a593\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 32d284f7c49d26d5ff269a30832573591eba3683\n
+      \ path: README.md\n  size: 1745\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/32d284f7c49d26d5ff269a30832573591eba3683\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: fafb39a014b559fac4e125facf442293f043042d\n
+      \ path: admin\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/fafb39a014b559fac4e125facf442293f043042d\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: e330ea6b9e94004aa2565ef613d7087e7033447e\n
+      \ path: cloning\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/e330ea6b9e94004aa2565ef613d7087e7033447e\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 6d49f702824517dadf9becb238acdadae2114afb\n
+      \ path: culturing\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/6d49f702824517dadf9becb238acdadae2114afb\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 0a2d76ec42b748758a4e6c43852ee7f404d813d4\n
+      \ path: emergency\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/0a2d76ec42b748758a4e6c43852ee7f404d813d4\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 2169fba044d2576fa3a5697f4261d9fab5df2b81\n
+      \ path: equipment\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/2169fba044d2576fa3a5697f4261d9fab5df2b81\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 7bb069b8e9ca92c5b78eb60cf001e21b61a6b74b\n
+      \ path: materials_prep\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/7bb069b8e9ca92c5b78eb60cf001e21b61a6b74b\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 0eb8324272bf92759decc72e2f359d7948480f7c\n
+      \ path: md_template.md\n  size: 2489\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/0eb8324272bf92759decc72e2f359d7948480f7c\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: d10b912a1df1f3e291595a0e7cadca01f2f8867d\n
+      \ path: structure.md\n  size: 292\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/d10b912a1df1f3e291595a0e7cadca01f2f8867d\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: c71de2e4e60b86b57916b24ec4ffff5bf55f38a6\n
+      \ path: testing\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/c71de2e4e60b86b57916b24ec4ffff5bf55f38a6\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 76b688ed24717ccb13b3fa56323f9a0756ccab34\n
+      \ path: training\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/76b688ed24717ccb13b3fa56323f9a0756ccab34\n"
+  - - 2
+    - c71de2e4e60b86b57916b24ec4ffff5bf55f38a6
+    - 
+    - 
+    - '2013-07-17 22:59:09.977359'
+    - '2013-07-17 22:59:09.977359'
+    - ! "--- !ruby/hash:Hashie::Mash\nsha: c71de2e4e60b86b57916b24ec4ffff5bf55f38a6\nurl:
+      https://api.github.com/repos/klavinslab/protocols/git/trees/c71de2e4e60b86b57916b24ec4ffff5bf55f38a6\ntree:\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: cab70e701b8cde900dd93d9d7b70a3e83e13e7e8\n
+      \ path: argument_error.pdl\n  size: 239\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/cab70e701b8cde900dd93d9d7b70a3e83e13e7e8\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 95e47c42a6a840ac674d4c40c39d70409dc1295b\n
+      \ path: arguments.pdl\n  size: 536\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/95e47c42a6a840ac674d4c40c39d70409dc1295b\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: c214fac384eb5bf5b0d608a0dde1fc5948c9019c\n
+      \ path: array-push.pdl\n  size: 228\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/c214fac384eb5bf5b0d608a0dde1fc5948c9019c\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 85ea456556d9deaaec6cc5137b3955663fbba96f\n
+      \ path: assign.pdl\n  size: 390\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/85ea456556d9deaaec6cc5137b3955663fbba96f\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: d4a7a1ac2f562a8a3e5bc7f3612aadba914c323a\n
+      \ path: everything.pdl\n  size: 2556\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/d4a7a1ac2f562a8a3e5bc7f3612aadba914c323a\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: d6734833e98efbbb1c21a1f404271415c8ebcd45\n
+      \ path: if-else.pdl\n  size: 839\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/d6734833e98efbbb1c21a1f404271415c8ebcd45\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 335d2ab6aba9a2d18a3304856454d2fdbdf9a4dc\n
+      \ path: info.pdl\n  size: 79\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/335d2ab6aba9a2d18a3304856454d2fdbdf9a4dc\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 24c55cc8b60601c00aff0d8c6ddbcbdb9cd23b01\n
+      \ path: log.pdl\n  size: 621\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/24c55cc8b60601c00aff0d8c6ddbcbdb9cd23b01\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: f14f17274b183e02c265dcad0a1af697663c0539\n
+      \ path: produce.pdl\n  size: 119\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/f14f17274b183e02c265dcad0a1af697663c0539\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 5c7b9f90c63a40bd0e4c4ee7293a16015510548d\n
+      \ path: release.pdl\n  size: 550\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/5c7b9f90c63a40bd0e4c4ee7293a16015510548d\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 909ba8e6d581915cecfe4714d269df570ce01aba\n
+      \ path: step.pdl\n  size: 1291\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/909ba8e6d581915cecfe4714d269df570ce01aba\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: ee27f5a395e528eb827238ecfd36e6f43dd16c10\n
+      \ path: take.pdl\n  size: 484\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/ee27f5a395e528eb827238ecfd36e6f43dd16c10\n"
+  - - 3
+    - 95e47c42a6a840ac674d4c40c39d70409dc1295b
+    - arguments.pdl
+    - !binary |-
+      PHByb3RvY29sPgoKICA8YXJndW1lbnQ+CiAgICA8bmFtZT54PC9uYW1lPgog
+      ICAgPHR5cGU+bnVtYmVyPC90eXBlPgogICAgPGRlc2NyaXB0aW9uPkFuIGlu
+      dGVncmFsIGFyZ3VtZW50IHRvIHRoZSBwcm90b2NvbDwvZGVzY3JpcHRpb24+
+      CiAgPC9hcmd1bWVudD4KCiAgPGFyZ3VtZW50PgogICAgPG5hbWU+eTwvbmFt
+      ZT4KICAgIDx0eXBlPm51bWJlcjwvdHlwZT4KICAgIDxkZXNjcmlwdGlvbj5B
+      IGZsb2F0IGFyZ3VtZW50IHRvIHRoZSBwcm90b2NvbDwvZGVzY3JpcHRpb24+
+      CiAgPC9hcmd1bWVudD4KCiAgPGFyZ3VtZW50PgogICAgPG5hbWU+czwvbmFt
+      ZT4KICAgIDx0eXBlPnN0cmluZzwvdHlwZT4KICAgIDxkZXNjcmlwdGlvbj5B
+      IHN0cmluZyBhcmd1bWVudCB0byB0aGUgcHJvdG9jb2w8L2Rlc2NyaXB0aW9u
+      PgogIDwvYXJndW1lbnQ+CgogIDxpbmZvcm1hdGlvbj5UaGUgYXJndW1lbnRz
+      IGdpdmVuIHRvIHRoaXMgcHJvdG9jb2wgd2VyZSB4PSV7eH0sIHkgPSAle3l9
+      LCBhbmQgcz0le3h9LjwvaW5mb3JtYXRpb24+Cgo8L3Byb3RvY29sPgo=
+    - '2013-07-17 22:59:11.962235'
+    - '2013-07-17 22:59:11.962235'
+    - 
+  - - 4
+    - ee27f5a395e528eb827238ecfd36e6f43dd16c10
+    - take.pdl
+    - !binary |-
+      PHByb3RvY29sPgoKICAgIDxhcmd1bWVudD4KICAgICAgPG5hbWU+b2JqZWN0
+      PC9uYW1lPgogICAgICA8dHlwZT5zdHJpbmc8L3R5cGU+CiAgICAgIDxkZXNj
+      cmlwdGlvbj5BbiBvYmplY3QgdG8gdGFrZSBmcm9tIHRoZSBJTVM8L2Rlc2Ny
+      aXB0aW9uPgogICAgPC9hcmd1bWVudD4KCiAgICA8dGFrZT4KICAgICAgICA8
+      b2JqZWN0PiV7b2JqZWN0fTwvb2JqZWN0PgogICAgICAgIDxxdWFudGl0eT4y
+      PC9xdWFudGl0eT4KICAgICAgICA8dmFyPkE8L3Zhcj4KICAgIDwvdGFrZT4K
+      CiAgICA8dGFrZT4KICAgICAgICA8b2JqZWN0PjEwMDAgbUwgQm90dGxlPC9v
+      YmplY3Q+CiAgICAgICAgPHF1YW50aXR5PjI8L3F1YW50aXR5PgogICAgICAg
+      IDx2YXI+QjwvdmFyPgogICAgPC90YWtlPgogICAgCiAgICA8aW5mb3JtYXRp
+      b24+T2JqZWN0IGluZm9ybWF0aW9uIGFycmF5OiBBID0gJXtBfSBhbmQgQj0l
+      e0J9LjwvaW5mb3JtYXRpb24+CiAgCjwvcHJvdG9jb2w+Cg==
+    - '2013-07-17 23:03:45.613555'
+    - '2013-07-17 23:03:45.613555'
+    - 
+  - - 5
+    - cb92848a317c319a7d1757bde3d95f013533078e
+    - 
+    - 
+    - '2013-07-18 19:43:17.303694'
+    - '2013-07-18 19:43:17.303694'
+    - ! "--- !ruby/hash:Hashie::Mash\nsha: cb92848a317c319a7d1757bde3d95f013533078e\nurl:
+      https://api.github.com/repos/klavinslab/protocols/git/trees/cb92848a317c319a7d1757bde3d95f013533078e\ntree:\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: dca0213d4ad80c03de3267f17feb4cfff817a593\n
+      \ path: .gitignore\n  size: 20\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/dca0213d4ad80c03de3267f17feb4cfff817a593\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 32d284f7c49d26d5ff269a30832573591eba3683\n
+      \ path: README.md\n  size: 1745\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/32d284f7c49d26d5ff269a30832573591eba3683\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: a18ade675c7da90241a79d1bdbe00700db3ac5f6\n
+      \ path: admin\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/a18ade675c7da90241a79d1bdbe00700db3ac5f6\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: eb949534df85011761a3f9580666a0cc13c5830b\n
+      \ path: cloning\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/eb949534df85011761a3f9580666a0cc13c5830b\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 6d49f702824517dadf9becb238acdadae2114afb\n
+      \ path: culturing\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/6d49f702824517dadf9becb238acdadae2114afb\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 0a2d76ec42b748758a4e6c43852ee7f404d813d4\n
+      \ path: emergency\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/0a2d76ec42b748758a4e6c43852ee7f404d813d4\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 2169fba044d2576fa3a5697f4261d9fab5df2b81\n
+      \ path: equipment\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/2169fba044d2576fa3a5697f4261d9fab5df2b81\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 7bb069b8e9ca92c5b78eb60cf001e21b61a6b74b\n
+      \ path: materials_prep\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/7bb069b8e9ca92c5b78eb60cf001e21b61a6b74b\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 0eb8324272bf92759decc72e2f359d7948480f7c\n
+      \ path: md_template.md\n  size: 2489\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/0eb8324272bf92759decc72e2f359d7948480f7c\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: d10b912a1df1f3e291595a0e7cadca01f2f8867d\n
+      \ path: structure.md\n  size: 292\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/d10b912a1df1f3e291595a0e7cadca01f2f8867d\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: c71de2e4e60b86b57916b24ec4ffff5bf55f38a6\n
+      \ path: testing\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/c71de2e4e60b86b57916b24ec4ffff5bf55f38a6\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 76b688ed24717ccb13b3fa56323f9a0756ccab34\n
+      \ path: training\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/76b688ed24717ccb13b3fa56323f9a0756ccab34\n"
+  - - 6
+    - 6d49f702824517dadf9becb238acdadae2114afb
+    - 
+    - 
+    - '2013-07-18 19:43:20.454395'
+    - '2013-07-18 19:43:20.454395'
+    - ! "--- !ruby/hash:Hashie::Mash\nsha: 6d49f702824517dadf9becb238acdadae2114afb\nurl:
+      https://api.github.com/repos/klavinslab/protocols/git/trees/6d49f702824517dadf9becb238acdadae2114afb\ntree:\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: c2228fbcc19c3d54a4414dad23515c01ee41208e\n
+      \ path: culturing.md\n  size: 13\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/c2228fbcc19c3d54a4414dad23515c01ee41208e\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: ec0b320262c5d8884fd89f20f5146c0d7db73f5a\n
+      \ path: start_overnight.md\n  size: 2486\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/ec0b320262c5d8884fd89f20f5146c0d7db73f5a\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 1695716d50205e4e86fc5c51b7f4ffda443e0e5d\n
+      \ path: start_overnight.pdl\n  size: 1483\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/1695716d50205e4e86fc5c51b7f4ffda443e0e5d\n"
+  - - 7
+    - 2169fba044d2576fa3a5697f4261d9fab5df2b81
+    - 
+    - 
+    - '2013-07-18 19:43:25.791697'
+    - '2013-07-18 19:43:25.791697'
+    - ! "--- !ruby/hash:Hashie::Mash\nsha: 2169fba044d2576fa3a5697f4261d9fab5df2b81\nurl:
+      https://api.github.com/repos/klavinslab/protocols/git/trees/2169fba044d2576fa3a5697f4261d9fab5df2b81\ntree:\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 0bb4c7eb5939a9f0db886973df1f3b88db8bc64d\n
+      \ path: README.md\n  size: 494\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/0bb4c7eb5939a9f0db886973df1f3b88db8bc64d\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 9ec81e27d08ece3dfdf6bc4073e43eadd0da9eff\n
+      \ path: autoclave\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/9ec81e27d08ece3dfdf6bc4073e43eadd0da9eff\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: a670020989671f6879246288c394f1c3ba72d674\n
+      \ path: camera\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/a670020989671f6879246288c394f1c3ba72d674\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: fd8a98450953e833ed19b523d782432c7f417fc5\n
+      \ path: cellASIC\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/fd8a98450953e833ed19b523d782432c7f417fc5\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: b27b44374d7aec1f99165deb19a142b257bbfa75\n
+      \ path: centrifuge\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/b27b44374d7aec1f99165deb19a142b257bbfa75\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 26546f13919e65620aeea7e7a66c6981dfd2a80a\n
+      \ path: cytometer\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/26546f13919e65620aeea7e7a66c6981dfd2a80a\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: a2575b6425a5f9572130e2df5dd0e1258cfd6dea\n
+      \ path: deli_fridge\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/a2575b6425a5f9572130e2df5dd0e1258cfd6dea\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: a563027ae1e5e8481de543e92a95a2f5c3b71439\n
+      \ path: electroporator\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/a563027ae1e5e8481de543e92a95a2f5c3b71439\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 6423f019e8fda65aeccc13a568db867d863d3ca0\n
+      \ path: fume_hood\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/6423f019e8fda65aeccc13a568db867d863d3ca0\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 879b381da778f5f1fa8fef4ad6060c97132fc487\n
+      \ path: gel_box\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/879b381da778f5f1fa8fef4ad6060c97132fc487\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 69f8ae30371646bb2a39c9ac447e5b8431488c3d\n
+      \ path: heatblock\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/69f8ae30371646bb2a39c9ac447e5b8431488c3d\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 3f82331d22bf2b99d31c16adcc371a8f0d9a5355\n
+      \ path: hot_plate\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/3f82331d22bf2b99d31c16adcc371a8f0d9a5355\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: ac01902d4cc3b52d94aef6cc1bd318b4fcb52e83\n
+      \ path: incubator\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/ac01902d4cc3b52d94aef6cc1bd318b4fcb52e83\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 3e9adb1daac885a3f2706f3289dcb0fe35798980\n
+      \ path: microcentrifuge\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/3e9adb1daac885a3f2706f3289dcb0fe35798980\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 7f6cb1db1730deaa6ec6e04f142627d0bf80981d\n
+      \ path: microscope\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/7f6cb1db1730deaa6ec6e04f142627d0bf80981d\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: d5be7b459716100ed663c4c4716422fc773313fd\n
+      \ path: microwave\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/d5be7b459716100ed663c4c4716422fc773313fd\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 3993d600da094597eb8d094a8e6192a53cce633f\n
+      \ path: minifuge\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/3993d600da094597eb8d094a8e6192a53cce633f\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 7fc7c0de0422ccadc96e428897ae15a2c99d1a97\n
+      \ path: minus_20_freezer\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/7fc7c0de0422ccadc96e428897ae15a2c99d1a97\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: da4addd542f82ac1cb3ffcb36e9a901df355357b\n
+      \ path: minus_80_freezer\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/da4addd542f82ac1cb3ffcb36e9a901df355357b\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 44ea0e9d6e7dda96da3860bcf959d83786d8aed9\n
+      \ path: nanodrop\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/44ea0e9d6e7dda96da3860bcf959d83786d8aed9\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 7482cc4b5d6f2fbe25a9d4943cf7344492714150\n
+      \ path: pipettor\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/7482cc4b5d6f2fbe25a9d4943cf7344492714150\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 53a3c1eabe7dadf574418407ea7357ca674953b9\n
+      \ path: plate_reader\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/53a3c1eabe7dadf574418407ea7357ca674953b9\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: f47fcf4d67ffadb05eeb52c86221ae591fc06e42\n
+      \ path: power_supply\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/f47fcf4d67ffadb05eeb52c86221ae591fc06e42\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 7f90a4a56d339b70c45cc3bfc6723c92471b6b95\n
+      \ path: shaker\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/7f90a4a56d339b70c45cc3bfc6723c92471b6b95\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 7aeb5be933973f734aa92c602e196d89d5933293\n
+      \ path: sonicator\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/7aeb5be933973f734aa92c602e196d89d5933293\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: b314293d4f0a061c08c8135b97bf35e241fc7a32\n
+      \ path: spectrofluorometer\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/b314293d4f0a061c08c8135b97bf35e241fc7a32\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 729262688a6e4cf85d57d4b8d572ab1e7125da72\n
+      \ path: spectrophotometer\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/729262688a6e4cf85d57d4b8d572ab1e7125da72\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 0b2a2ce552954fc1e986cacc1991f5559615acec\n
+      \ path: stir_plate\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/0b2a2ce552954fc1e986cacc1991f5559615acec\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 972a67a4e8cbd70b055fafba760a44dfe778dcb0\n
+      \ path: thermocycler\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/972a67a4e8cbd70b055fafba760a44dfe778dcb0\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: f8c24b719dbabcdcc901499ff6edcd2ae70e7704\n
+      \ path: transilluminator\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/f8c24b719dbabcdcc901499ff6edcd2ae70e7704\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: bfe1c8d967cfa95779114fd9a8af224235ac0923\n
+      \ path: turbiostat\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/bfe1c8d967cfa95779114fd9a8af224235ac0923\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 94660b6996378f513fd4bcf3eaee4e98f24c90d2\n
+      \ path: vortexer\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/94660b6996378f513fd4bcf3eaee4e98f24c90d2\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: fc72c799fb050a0b48d358628c20ffb8034ebb5e\n
+      \ path: water_bath\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/fc72c799fb050a0b48d358628c20ffb8034ebb5e\n"
+  - - 8
+    - fa797c7f15cb88e7d34f0b0386d596d8a59d7aab
+    - 
+    - 
+    - '2013-07-18 19:45:44.610016'
+    - '2013-07-18 19:45:44.610016'
+    - ! "--- !ruby/hash:Hashie::Mash\nsha: fa797c7f15cb88e7d34f0b0386d596d8a59d7aab\nurl:
+      https://api.github.com/repos/klavinslab/protocols/git/trees/fa797c7f15cb88e7d34f0b0386d596d8a59d7aab\ntree:\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: dca0213d4ad80c03de3267f17feb4cfff817a593\n
+      \ path: .gitignore\n  size: 20\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/dca0213d4ad80c03de3267f17feb4cfff817a593\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 32d284f7c49d26d5ff269a30832573591eba3683\n
+      \ path: README.md\n  size: 1745\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/32d284f7c49d26d5ff269a30832573591eba3683\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: a18ade675c7da90241a79d1bdbe00700db3ac5f6\n
+      \ path: admin\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/a18ade675c7da90241a79d1bdbe00700db3ac5f6\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: e615fd9ce0116d915a0e442cc30b2de5f4a29ce4\n
+      \ path: assays\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/e615fd9ce0116d915a0e442cc30b2de5f4a29ce4\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: eb949534df85011761a3f9580666a0cc13c5830b\n
+      \ path: cloning\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/eb949534df85011761a3f9580666a0cc13c5830b\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 6d49f702824517dadf9becb238acdadae2114afb\n
+      \ path: culturing\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/6d49f702824517dadf9becb238acdadae2114afb\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 0a2d76ec42b748758a4e6c43852ee7f404d813d4\n
+      \ path: emergency\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/0a2d76ec42b748758a4e6c43852ee7f404d813d4\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 2169fba044d2576fa3a5697f4261d9fab5df2b81\n
+      \ path: equipment\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/2169fba044d2576fa3a5697f4261d9fab5df2b81\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 7bb069b8e9ca92c5b78eb60cf001e21b61a6b74b\n
+      \ path: materials_prep\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/7bb069b8e9ca92c5b78eb60cf001e21b61a6b74b\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 0eb8324272bf92759decc72e2f359d7948480f7c\n
+      \ path: md_template.md\n  size: 2489\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/0eb8324272bf92759decc72e2f359d7948480f7c\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: d10b912a1df1f3e291595a0e7cadca01f2f8867d\n
+      \ path: structure.md\n  size: 292\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/d10b912a1df1f3e291595a0e7cadca01f2f8867d\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: c71de2e4e60b86b57916b24ec4ffff5bf55f38a6\n
+      \ path: testing\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/c71de2e4e60b86b57916b24ec4ffff5bf55f38a6\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 76b688ed24717ccb13b3fa56323f9a0756ccab34\n
+      \ path: training\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/76b688ed24717ccb13b3fa56323f9a0756ccab34\n"
+  - - 9
+    - e615fd9ce0116d915a0e442cc30b2de5f4a29ce4
+    - 
+    - 
+    - '2013-07-18 19:45:46.963397'
+    - '2013-07-18 19:45:46.963397'
+    - ! "--- !ruby/hash:Hashie::Mash\nsha: e615fd9ce0116d915a0e442cc30b2de5f4a29ce4\nurl:
+      https://api.github.com/repos/klavinslab/protocols/git/trees/e615fd9ce0116d915a0e442cc30b2de5f4a29ce4\ntree:\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: e69de29bb2d1d6434b8b29ae775ad8c2e48c5391\n
+      \ path: detector_spotting_assay.md\n  size: 0\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391\n"
+  - - 10
+    - d6f25cdc0cb6427e52f116940fc74e4310b85096
+    - 
+    - 
+    - '2013-08-13 19:36:48.053915'
+    - '2013-08-13 19:36:48.053915'
+    - ! "--- !ruby/hash:Hashie::Mash\nsha: d6f25cdc0cb6427e52f116940fc74e4310b85096\nurl:
+      https://api.github.com/repos/klavinslab/protocols/git/trees/d6f25cdc0cb6427e52f116940fc74e4310b85096\ntree:\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: dca0213d4ad80c03de3267f17feb4cfff817a593\n
+      \ path: .gitignore\n  size: 20\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/dca0213d4ad80c03de3267f17feb4cfff817a593\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 32d284f7c49d26d5ff269a30832573591eba3683\n
+      \ path: README.md\n  size: 1745\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/32d284f7c49d26d5ff269a30832573591eba3683\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: a18ade675c7da90241a79d1bdbe00700db3ac5f6\n
+      \ path: admin\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/a18ade675c7da90241a79d1bdbe00700db3ac5f6\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 2f63e5d7b51a03f3532207b85bf54eecf12fe369\n
+      \ path: assays\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/2f63e5d7b51a03f3532207b85bf54eecf12fe369\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: a764df10aa963c53c07033166761c78813b7df3c\n
+      \ path: cloning\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/a764df10aa963c53c07033166761c78813b7df3c\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 2052a8374b9c4138971593f80da0d803b3cfde56\n
+      \ path: culturing\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/2052a8374b9c4138971593f80da0d803b3cfde56\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 0a2d76ec42b748758a4e6c43852ee7f404d813d4\n
+      \ path: emergency\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/0a2d76ec42b748758a4e6c43852ee7f404d813d4\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 5d46a99239056b32bd6bcec4380d88153781a648\n
+      \ path: equipment\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/5d46a99239056b32bd6bcec4380d88153781a648\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 92f2cc74c94d3dcbef757bd48ab29fbd4371f92f\n
+      \ path: issues\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/92f2cc74c94d3dcbef757bd48ab29fbd4371f92f\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 6b0e72ffc04ed3bb5254e56e9e92e0cefb6261f6\n
+      \ path: materials_prep\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/6b0e72ffc04ed3bb5254e56e9e92e0cefb6261f6\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 0eb8324272bf92759decc72e2f359d7948480f7c\n
+      \ path: md_template.md\n  size: 2489\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/0eb8324272bf92759decc72e2f359d7948480f7c\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: d10b912a1df1f3e291595a0e7cadca01f2f8867d\n
+      \ path: structure.md\n  size: 292\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/d10b912a1df1f3e291595a0e7cadca01f2f8867d\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: c9b34f2104f6c58b8b2dc56e3f119e38c423013c\n
+      \ path: testing\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/c9b34f2104f6c58b8b2dc56e3f119e38c423013c\n-
+      !ruby/hash:Hashie::Mash\n  mode: '040000'\n  type: tree\n  sha: 8fe740e83cffb60bbea78270fd6f5b30a2fd467f\n
+      \ path: training\n  url: https://api.github.com/repos/klavinslab/protocols/git/trees/8fe740e83cffb60bbea78270fd6f5b30a2fd467f\n"
+  - - 11
+    - c9b34f2104f6c58b8b2dc56e3f119e38c423013c
+    - 
+    - 
+    - '2013-08-13 19:36:52.903614'
+    - '2013-08-13 19:36:52.903614'
+    - ! "--- !ruby/hash:Hashie::Mash\nsha: c9b34f2104f6c58b8b2dc56e3f119e38c423013c\nurl:
+      https://api.github.com/repos/klavinslab/protocols/git/trees/c9b34f2104f6c58b8b2dc56e3f119e38c423013c\ntree:\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: cab70e701b8cde900dd93d9d7b70a3e83e13e7e8\n
+      \ path: argument_error.pdl\n  size: 239\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/cab70e701b8cde900dd93d9d7b70a3e83e13e7e8\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 95e47c42a6a840ac674d4c40c39d70409dc1295b\n
+      \ path: arguments.pdl\n  size: 536\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/95e47c42a6a840ac674d4c40c39d70409dc1295b\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: c214fac384eb5bf5b0d608a0dde1fc5948c9019c\n
+      \ path: array-push.pdl\n  size: 228\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/c214fac384eb5bf5b0d608a0dde1fc5948c9019c\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 85ea456556d9deaaec6cc5137b3955663fbba96f\n
+      \ path: assign.pdl\n  size: 390\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/85ea456556d9deaaec6cc5137b3955663fbba96f\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: d4a7a1ac2f562a8a3e5bc7f3612aadba914c323a\n
+      \ path: everything.pdl\n  size: 2556\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/d4a7a1ac2f562a8a3e5bc7f3612aadba914c323a\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: d6734833e98efbbb1c21a1f404271415c8ebcd45\n
+      \ path: if-else.pdl\n  size: 839\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/d6734833e98efbbb1c21a1f404271415c8ebcd45\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 335d2ab6aba9a2d18a3304856454d2fdbdf9a4dc\n
+      \ path: info.pdl\n  size: 79\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/335d2ab6aba9a2d18a3304856454d2fdbdf9a4dc\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 24c55cc8b60601c00aff0d8c6ddbcbdb9cd23b01\n
+      \ path: log.pdl\n  size: 621\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/24c55cc8b60601c00aff0d8c6ddbcbdb9cd23b01\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 5874985242466f881370e9834dce1536d3834916\n
+      \ path: primer.pdl\n  size: 504\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/5874985242466f881370e9834dce1536d3834916\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: f14f17274b183e02c265dcad0a1af697663c0539\n
+      \ path: produce.pdl\n  size: 119\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/f14f17274b183e02c265dcad0a1af697663c0539\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 5c7b9f90c63a40bd0e4c4ee7293a16015510548d\n
+      \ path: release.pdl\n  size: 550\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/5c7b9f90c63a40bd0e4c4ee7293a16015510548d\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 909ba8e6d581915cecfe4714d269df570ce01aba\n
+      \ path: step.pdl\n  size: 1291\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/909ba8e6d581915cecfe4714d269df570ce01aba\n-
+      !ruby/hash:Hashie::Mash\n  mode: '100644'\n  type: blob\n  sha: 15356f9929e1457f70a20f6f861def769097927c\n
+      \ path: take.pdl\n  size: 509\n  url: https://api.github.com/repos/klavinslab/protocols/git/blobs/15356f9929e1457f70a20f6f861def769097927c\n"
