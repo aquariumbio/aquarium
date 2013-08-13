@@ -39,9 +39,12 @@ rehearse:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  host: somewhere.cse.washington.edu
+  host: istcsrv.cs.washington.edu
   port: 3306
   database: rehearse
   pool: 5
-  username: bioturk
-  password: jeanlucpicard
+  username: klavins
+  password: "236236"
+
+#  username: bioturk
+#  password: jeanlucpicard

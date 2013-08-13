@@ -1,8 +1,8 @@
-require 'CSV'
+require 'csv'
 require 'port/user'
 
 def import_primers
-  CSV.foreach('/Users/ericklavins/Development/bioturk/lib/port/primers.csv',"r") do |row|
+  CSV.foreach('/var/rails/btor_test/lib/port/primers.csv',"r") do |row|
       p = Primer.new
       p.id          = row[0].to_i
       p.description = row[1]
