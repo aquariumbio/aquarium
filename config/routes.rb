@@ -3,6 +3,7 @@ Bioturk::Application.routes.draw do
   resources :primers
   match "primers/:id", to: 'primers#stock', via: [:post]
   match "primers/:id/delete_stock/:item_id", to: 'primers#delete_stock', via: [:get,:post]
+  match "interpreter/open_local_file", to: 'interpreter#open_local_file', via: [:post]
 
   get "interpreter/arguments"
   get "interpreter/submit"

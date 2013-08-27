@@ -2,8 +2,13 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.protocol-directory {
+.well {
   background: #fff;
+  margin-bottom: 20px;
+}
+
+.protocol-directory {
+  position: relative;
   ul {
     list-style: none;
     position: relative;
@@ -44,12 +49,16 @@
     }
   }
 
+  .small {
+    margin: 20px 0 10px 30px;
+  }
+
 }
 
 #loading-status {
   position: absolute;
-  top: 145px;
-  right: 50%;
+  top: 20px;
+  left: 20px;
 }
 
 @mixin nice-box {

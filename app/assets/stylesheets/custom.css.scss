@@ -131,6 +131,44 @@ input[type=checkbox] {
   }
 }
 
+.file_upload {
+#  outline: 1pt dashed red;
+  input[type=file] {
+    display: none;
+    height: 0px;
+    width:0px;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.file_upload{
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 0;
+}
+
+.choose_file {
+  padding: 0;
+  margin: 0;
+  .choose_file_name {
+    width: 100%;
+    font-size: $btSmall;
+    float: left;
+    height: 40px;
+    border-radius: 4px;
+  }
+  .choose_file_btn {
+    font-size: $btNormal;
+    vertical-align: 50%;
+    margin: 0 20px 0 20px;
+  }
+  .choose_file_sub {
+    font-size: $btNormal;
+
+    margin: 0 20px 0 20px;
+  }
+}
 
 /* header */
 

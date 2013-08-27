@@ -1,0 +1,8 @@
+<h1><%= params[:protocol_file].original_filename %></h1>
+
+<p>
+<% contents = params[:protocol_file].read %>
+<%= contents %>
+<%= blob_name = 'local_file_' + session[:session_id].to_s + '_' + Time.hash.to_s %>
+</p>
+

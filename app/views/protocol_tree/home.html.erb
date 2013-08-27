@@ -1,19 +1,75 @@
 <% provide(:title, 'Protocols') %>
 
-<h1>Protocol Tree</h1>
+<h1>Protocols</h1>
 
 <div id='notice'></div>
 
-<div class='protocol-directory well'>
-  <div id='loading-status' style='display:block;'><%= image_tag 'waiting_animation.gif' %></div>
-  <div id='root'></div>
+<div class='row-fluid'>
+
+  <div class='span5'>
+
+    <div class='row-fluid'> 
+      <div class='span12 well'>
+        <h2>Recent</h2>
+        <p class='muted small'>Not yet implemented.</p>
+      </div>
+   </div>
+
+    <div class='row-fluid'> 
+      <div class='span12 well'>
+        <h2>From File</h2>
+
+        <% if Rails.env != 'production' %>
+
+          <%= form_tag(interpreter_open_local_file_path, multipart: true, class: 'file_upload') do %>
+
+            <%= file_field_tag 'protocol_file', onchange: "updateFileName()" %><br />
+            <div class='choose_file'>
+              <input id='file_name' class='choose_file_name' value=''></input>
+              <br />
+              <div class='row-fluid'>
+                <div class='span3'>
+                  <div id="get_file" class='btn btn-small choose_file_btn' onclick="getFile()" >Choose</div>
+                </div>
+                <div class='span9'>
+                  <%= submit_tag("Run", class: 'btn btn-small choose_file_sub') %>
+                </div>
+               </div>
+            </div>
+          <% end %>
+        <% else %>
+          <p class='muted small'>Not available in production mode.</p>
+        <% end %>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class='span7 protocol-directory well'>
+    <h2>From GITHUB: klavinslab/protocols</h2>
+    <div id='loading-status' style='display:block;'><%= image_tag 'waiting_animation.gif' %></div>
+    <div id='root'></div>
+    <p class='muted small'>
+      Note: If your protocol is not looking current, you may need to
+      reload this page to get a link to the latest version.
+    </p>
+  </div>
+
 </div>
 
-<p>Note: If your protocol is not looking current, you may need to
-  reload this page to get a link to the latest version.</p>
-
 <script>
-$.ajax({
-  url: 'subtree.js?open=no'
-});
+
+  $.ajax({
+    url: 'subtree.js?open=no'
+  });
+
+  function getFile(){
+    document.getElementById("protocol_file").click();
+  }
+  function updateFileName() {
+    console.log(document.getElementById("protocol_file").value);
+    document.getElementById("file_name").value = document.getElementById("protocol_file").value.replace("C:\\fakepath\\", "");
+  }
+
 </script>

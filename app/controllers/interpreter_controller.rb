@@ -35,6 +35,23 @@ class InterpreterController < ApplicationController
 
   end
 
+  def open_local_file
+
+    @path = params[:protocol_file].original_filename;
+    @sha = 'local_file_' + session[:session_id].to_s + '_' + Time.hash.to_s;
+
+    blob = Blob.new
+    blob.path = @path
+    blob.sha = @sha
+    blob.xml = params[:protocol_file].read
+    blob.save
+
+    parse
+
+    render 'arguments'
+
+  end
+
   def submit
 
     @sha = params[:sha]
