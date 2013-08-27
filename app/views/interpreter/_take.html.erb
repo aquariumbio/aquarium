@@ -19,9 +19,7 @@
     <div class="span10">
 
       <div class='take_object_select' id='object_select_<%= i %>'></div>
-        <button class='btn btn-link btn-more' onclick='add_choice_<%= i %>()'>
-                  <i class="icon-plus-sign"></i>
-        </button>
+       <button class='btn btn-link btn-more' onclick='add_choice_<%= i %>()' style='font-size: 12pt'>More locations</button>
     </div>
   </div>
 
@@ -107,7 +105,7 @@
             + "  Location:<br />"
             + "  <select class='item_select' id='select_object_" 
             + <%= i %> + "_item_" + num_choices[<%= i %>] + "' onchange='update_totals(<%= i %>," + num_choices[<%= i %>] + ")' >"
-            + "    <option value='-1'></option>";
+            + "    <option value='-1'>&nbsp;</option>";
 
       <% object.items.each do |item| %>
         html += '  <option value=<%= item.id %>><%= item.location %> (<%= item.quantity - item.inuse %> available) </option>';

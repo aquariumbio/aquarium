@@ -2,15 +2,15 @@
 
 <h1>Job Scheduled</h1>
 
-<h4><%= @path %></h4>
+<h3>Protocol Name: <%= @path %></h3>
 
-<h4>Job Number <%= @job.id %></h4>
+<h3>Job Number: <%= @job.id %></h3>
 
-<h4>Argument List</h4>
+<h3>Argument List:</h3>
 
 <% if @protocol.args.length > 0 %>
 
-  <ul>
+  <ul class='list'>
     <% @protocol.args.each do |a| %>
       <li><%= a.name %> = <%= params[a.name.to_sym] %></li>
     <% end %>

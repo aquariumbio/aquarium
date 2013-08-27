@@ -1,13 +1,5 @@
 <footer class="footer">
-  <small>
+  <p>
     BIOTURK is a product of the <a href="http://depts.washington.edu/soslab">Klavins Lab.</a>
-  </small>
-  <nav>
-    <ul>
-      <li><%= link_to "About",   about_path %></li>
-      <% if current_user && current_user.admin? %>
-         <li><%= link_to "New", signup_path %></li>
-      <% end %>
-    </ul>
-  </nav>
+  </p>
 </footer>

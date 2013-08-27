@@ -1,8 +1,8 @@
 <h1>Job <%= @job.id %> : <%= @job.path %></h1>
 
-<h4>Job Information</h4>
+<h3>Job Information</h3>
 
-<ul>
+<ul class='list'>
   <li>Submitted by: <b><%= User.find(@job.user_id).name %></b></li>
   <li>Submitted: <%= @job.created_at.to_formatted_s(:short) %></li>
   <li>Last Updated: <%= @job.updated_at.to_formatted_s(:short) %></li>
@@ -21,7 +21,7 @@
   <li>Version of <%= @job.path %> used: <%= link_to @job.sha, protocol_tree_raw_path(sha: @job.sha, format: 'xml'), target: @job.id.to_s + ":" + @job.path %></li>
 </ul>
 
-<h4>Timing</h4>
+<h3>Timing</h3>
 
 <div>
   <% ( @job.logs.reject { |l| l.entry_type != 'NEXT' } ).each do |entry| %>
@@ -34,7 +34,7 @@
 
 <div class='clear'></div>
 
-<h4>Log</h4>
+<h3>Log</h3>
 
 <table class='table'>
   <tr>

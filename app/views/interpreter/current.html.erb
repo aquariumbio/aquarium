@@ -1,21 +1,14 @@
 <% provide(:title, @path) %>
 
-<div class="row-fluid" id="interpreter">
+<div class="row-fluid interpreter-container" id="interpreter">
 
   <!-- FLOW CHART ----------------------------------------------------->
-  <div class="span2 interpreter-flow-chart">
+  <div class="span1 interpreter-flow-chart">
 
-    <% if @pc != Job.COMPLETED %>
-      <% (0..@protocol.program.length-1).each do |p| %>
-        <% if p == @pc %>
-          <div class='pc_at'>
-        <% else %>
-          <div class='pc_notat'>
-        <% end %>
-        <%= "<b>#{p}:</b>   #{@protocol.program[p].name}".html_safe %>
-        </div>
-      <% end %>
-    <% end %>
+     <p>HISTORY</p>
+     <p class='small'>(Not yet implemented)</p>
+     <p class='small'>pc:<%= @pc %></p>
+
   </div>
 
   <!-- MAIN ----------------------------------------------------------->
@@ -36,7 +29,7 @@
   </div>
 
   <!-- BUTTONS -------------------------------------------------------->
-  <div class="span1 interpreter-buttons">
+  <div class="span2 interpreter-buttons">
     <% if @pc != Job.COMPLETED %>
       <button class='btn btn-primary' id='advance-button' disabled>NEXT</button>
       <button class='btn'             id='note-button'>NOTE</button>

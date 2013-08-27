@@ -1,9 +1,10 @@
 @import "bootstrap";
+@import "variables";
 
 @media (min-width: 980px) {
 }
 
-$lightGray: #999;
+
 
 /* universal */
 
@@ -14,6 +15,8 @@ html {
 body {
   padding-top: 60px;
   padding-bottom: 0px;
+  font-size: $btNormal;
+  line-height: $btLineHeight;
 }
 
 section {
@@ -39,14 +42,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 3em;
+  font-size: $btBig;
   letter-spacing: -2px;
   margin-bottom: 30px;
   text-align: center;
 }
 
 h2 {
-  font-size: 1.7em;
+  font-size: $btNormal;
   letter-spacing: -1px;
   margin-bottom: 30px;
   text-align: center;
@@ -54,27 +57,114 @@ h2 {
   color: $lightGray;
 }
 
-p {
-  font-size: 1.1em;
-  line-height: 1.7em;
+h3 {
+  font-size: $btSmall;
+  margin: 16px 0 10px 0;
 }
+
+h4  {
+
+  font-size: $btTiny;
+}
+
+p {
+  font-size: $btNormal;
+  line-height:2;
+}
+
+.small {
+  font-size: $btTiny;
+  line-height: $btLineHeight;
+}
+
+.list {
+  li {
+    margin-left: 26px;
+    font-size: $btSmall;
+    line-height: $btLineHeight;
+  }
+}
+
+.btn {
+  font-size: $btNormal;
+  padding: $btNormal;
+}
+
+.btn-small {
+  font-size: $btTiny;
+  padding: 10px;;
+  line-height: $btLineHeight;
+}
+
+.table {
+  tr {
+    th {
+      font-size: $btSmall;
+      line-height: $btLineHeight;
+    }
+    td {
+      font-size: $btSmall;
+      line-height: $btLineHeight;
+    }
+  }
+}
+
+input {
+    font-size: $btNormal !important;
+    line-height: $btLineHeight !important;
+    padding: 10px !important;
+}
+
+input[type=checkbox] {
+  -moz-appearance:none;
+  -webkit-appearance:none;
+  -o-appearance:none;
+
+  padding: 10px;
+  margin: 20px;
+  border-radius: 4px;
+  height: 40px !important;
+  width: 40px !important;
+  border: 1pt solid #000;
+  &:checked {
+    background: #00a;
+  }
+}
+
 
 /* header */
 
 #logo {
   float: left;
   margin-right: 10px;
-  font-size: 1.7em;
+  font-size: $btNormal;
   color: #aaa;
   text-transform: uppercase;
   letter-spacing: -1px;
-  padding-top: 9px;
+  padding: 8px 0 8px 0;
   font-weight: bold;
-  line-height: 1;
+  line-height: $btLineHeight;
   &:hover {
     color: #fff;
     text-decoration: none;
   }
+}
+
+.dropdown-menu {
+  li {
+   line-height: 3;
+   margin: 10px 0px 10px 0px;
+  }
+}
+
+.dropdown {
+  padding: 8px 0 8px 0;
+}
+
+.caret {
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-top: 9px solid #000000;
 }
 
 #info-area {
@@ -85,7 +175,7 @@ p {
   font-family: courier;
   color: #aaa;
   letter-spacing: -1px;
-  padding-top: 13px;
+  padding: 10px 0 10px 0;
   font-weight: bold;
   line-height: 1;
 }
@@ -93,6 +183,9 @@ p {
 /* footer */
 
 footer {
+  position: fixed; 
+  bottom: 0;
+  display: none;
   margin-top: 15px;
   margin-left: 20px;
   margin-right: 20px;
@@ -105,8 +198,9 @@ footer {
       color: #222;
     }
   }  
-  small { 
+  p { 
     float: left; 
+    font-size: $btTiny;
   }
   ul {
     float: right;
