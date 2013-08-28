@@ -5,26 +5,27 @@
 
 <% @instruction.object_list.each do |pi| %>
 
-  <% nm     = pi[:object][:name]
-     loc    = pi[:item][:location]
-     method = pi[:object][:release_description] %>
+  <% nm       = pi[:object][:name]
+     loc      = pi[:item][:location]
+     method   = pi[:object][:release_description]
+     quantity = pi[:quantity] %>
 
   <% case pi[:object][:release_method]
 
      when 'return' %>
       <h4><input type='checkbox' id='<%=i %>-returned' onchange='update_next_button(<%=i %>)'></input>
-          Please return the <%= nm %> taken from <%= loc %>.</h4>
+          Please return <%= pluralize(quantity,nm) %>.</h4>
       <p><%= method %></p>
       <% next_check_list.push(i) %>
 
   <% when 'dispose' %>
       <h4><input type='checkbox' id='<%=i %>-returned' onchange='update_next_button(<%=i %>)'></input> 
-          Please dispose of the <%= nm %> taken from <%= loc %>.</h4>
+          Please dispose of <%= pluralize(quantity,nm) %>.</h4>
       <p><%= method %></p>
       <% next_check_list.push(i) %>
 
   <% when 'query' %>
-      <h4>Return or dispose the <%= nm %> taken from <%= loc %>?</h4>
+      <h4>Return or dispose <%= pluralize(quantity,nm) %>?</h4>
       <p><%= method %></p>
       <div class="yesorno">
         <label class="radio inline">

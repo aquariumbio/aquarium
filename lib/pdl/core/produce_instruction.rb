@@ -62,7 +62,10 @@ class ProduceInstruction < Instruction
     log.job_id = params[:job]
     log.user_id = scope.stack.first[:user_id]
     log.entry_type = 'PRODUCE'
-    log.data = { pc: @pc, object: { object_type: @object_type, location: item.location, item_id: item.id, quantity: 1 }, release: release_data }.to_json
+    log.data = { pc: @pc, 
+                 object: { object_type: @object_type, location: item.location, item_id: item.id, quantity: 1 }, 
+                 release: release_data 
+                }.to_json
     log.save
 
   end

@@ -48,11 +48,11 @@ class ReleaseInstruction < Instruction
       case m
 
         when 'return'
-          x.inuse -= 1
+          x.inuse -= pi[:quantity]
 
         when 'dispose'
-          x.inuse    -= 1
-          x.quantity -= 1
+          x.inuse    -= pi[:quantity]
+          x.quantity -= pi[:quantity]
 
         else
           raise 'unknown method in release'
@@ -60,7 +60,7 @@ class ReleaseInstruction < Instruction
       end
 
       x.save 
-      log_data.push object_type: pi[:object][:name], item_id: pi[:item][:id], quantity: 1, method: m
+      log_data.push object_type: pi[:object][:name], item_id: pi[:item][:id], quantity: pi[:quantity], method: m
 
     end
 
