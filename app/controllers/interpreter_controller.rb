@@ -179,12 +179,10 @@ class InterpreterController < ApplicationController
 
     # tell manta we're starting a protocol
     Thread.new do
-      url= URI.parse("http://istc.cs.washington.edu:8800/start?&job=#{@job.id}&server=" + Socket.gethostname + ":" + request.port.to_s + "&user=" + current_user.login + "&protocol=#{@path}")
-      req = Net::HTTP::Get.new(url.path)
-      res = Net::HTTP.start(url.host, url.port) {|http|
-        http.request(req)
-      }
-      logger.info "Message from MANTA: " + res.body
+      uri= URI("http://istc.cs.washington.edu:8800/start?&job=#{@job.id}&server=" + Socket.gethostname + ":" + request.port.to_s + "&user=" + current_user.login + "&protocol=#{@path}")
+      res = Net::HTTP.get(uri)
+      logger.info "Message to MANTA: " + uri.to_s
+      logger.info "Message from MANTA: " + res
     end
 
   end
@@ -197,12 +195,9 @@ class InterpreterController < ApplicationController
 
     # tell manta we're done
     Thread.new do
-      url = URI.parse("http://istc.cs.washington.edu:8800/stop?&job=#{@job.id}&server=" + Socket.gethostname + ":" + request.port.to_s + "&abort=" + ( @exception ? 'true' : 'false' ))
-      req = Net::HTTP::Get.new(url.path)
-      res = Net::HTTP.start(url.host, url.port) {|http|
-        http.request(req)
-      }
-      logger.info "Message from MANTA: " + res.body
+      uri = URI("http://istc.cs.washington.edu:8800/stop?&job=#{@job.id}&server=" + Socket.gethostname + ":" + request.port.to_s + "&abort=" + ( @exception ? 'true' : 'false' ))
+      res = Net::HTTP.get(uri)
+      logger.info "Message from MANTA: " + res
     end
 
   end

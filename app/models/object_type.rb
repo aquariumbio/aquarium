@@ -1,6 +1,7 @@
 class ObjectType < ActiveRecord::Base
 
-  attr_accessible :cleanup, :data, :description, :handler, :max, :min, :name, :safety, :vendor, :unit, :image, :cost, :release_method, :release_description
+  attr_accessible :cleanup, :data, :description, :handler, :max, :min, :name, :safety, 
+                  :vendor, :unit, :image, :cost, :release_method, :release_description
 
   has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "150x150>" }, 
                     :default_url => "/images/:style/no-image.png"
@@ -49,6 +50,27 @@ class ObjectType < ActiveRecord::Base
       q += i.inuse
     }
     return q
+  end
+
+  def save_as_test_type name
+    self.name = name
+    self.handler = "generic"
+    self.unit = 'object'
+    self.min = 0
+    self.max = 100
+    self.safety = "No safety information"
+    self.cleanup = "No cleanup information"
+    self.data = "No data"
+    self.vendor = "No vendor information"
+    self.cost = 0.01
+    self.release_method = "return"
+    self.description = "An object type made on the fly."
+    self.save
+    i = self.items.new
+    i.quantity = 1000
+    i.inuse = 0
+    i.location = 'A0.000'
+    i.save
   end
 
 end

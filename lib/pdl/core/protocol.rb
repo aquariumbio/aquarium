@@ -346,7 +346,7 @@ class Protocol
           ##########################################################################################
           when 'produce'
             c = children_as_text e
-            push ProduceInstruction.new c[:object], c[:quantity]
+            push ProduceInstruction.new c[:object], c[:quantity], c[:release]
             e = increment e
 
           ##########################################################################################

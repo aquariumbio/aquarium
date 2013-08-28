@@ -18,7 +18,7 @@ class ReleaseInstruction < Instruction
     begin
       @object_list = scope.evaluate @expr
     rescue Exception => e
-      raise "In <release>: Could not evaluate object list (" + @expr + "): " 
+      raise "In <release>: Could not evaluate object list (" + @expr + "): " + e.message 
     end
 
     unless @object_list 

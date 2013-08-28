@@ -34,8 +34,11 @@ class TakeInstruction < Instruction
     # Find the actual objects in the db
     @item_list.each do |i|
       ob = ObjectType.find_by_name(i[:type])
-      unless ob
-        raise "In <take>: Could not find object of type '#{@object_type}'"
+      if !ob && Rails.env != 'production'
+        ob = ObjectType.new
+        ob.save_as_test_type i[:type]
+      elsif !ob
+        raise "In <take>: Could not find object of type '#{@object_type}', which is not okay in production mode."
       end
       @object_list.push( ob )
     end

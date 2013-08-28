@@ -18,7 +18,13 @@
         No Arguments
       <% end %>
   </li>
-  <li>Version of <%= @job.path %> used: <%= link_to @job.sha, protocol_tree_raw_path(sha: @job.sha, format: 'xml'), target: @job.id.to_s + ":" + @job.path %></li>
+  <li>Version of <%= @job.path %> used: <%= link_to @job.sha,
+  protocol_tree_raw_path(sha: @job.sha, format: 'xml'), target:
+  @job.id.to_s + ":" + @job.path %> (
+  <a href='<%= "/interpreter/arguments?path=" + @job.path + "&sha=" + @job.sha %>'>
+    Run again
+  </a>)
+  </li>
 </ul>
 
 <h3>Timing</h3>

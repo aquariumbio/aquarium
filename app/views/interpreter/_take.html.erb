@@ -104,8 +104,7 @@
       html += "<div class='take_choice_box'><div class='take_item_select'>"
             + "  Location:<br />"
             + "  <select class='item_select' id='select_object_" 
-            + <%= i %> + "_item_" + num_choices[<%= i %>] + "' onchange='update_totals(<%= i %>," + num_choices[<%= i %>] + ")' >"
-            + "    <option value='-1'>&nbsp;</option>";
+            + <%= i %> + "_item_" + num_choices[<%= i %>] + "' onchange='update_totals(<%= i %>," + num_choices[<%= i %>] + ")' >";
 
       <% object.items.each do |item| %>
         html += '  <option value=<%= item.id %>><%= item.location %> (<%= item.quantity - item.inuse %> available) </option>';
