@@ -14,7 +14,7 @@
 
      when 'return' %>
       <h4><input type='checkbox' id='<%=i %>-returned' onchange='update_next_button(<%=i %>)'></input>
-          Please return <%= pluralize(quantity,nm) %>.</h4>
+          Please return <%= pluralize(quantity,nm) %> to <%= loc %>.</h4>
       <p><%= method %></p>
       <% next_check_list.push(i) %>
 
@@ -29,7 +29,7 @@
       <p><%= method %></p>
       <div class="yesorno">
         <label class="radio inline">
-          <input type="radio" id='<%=i %>-return-yes' checked name='<%=i %>-yn'>Return
+          <input type="radio" id='<%=i %>-return-yes' checked name='<%=i %>-yn'>Return to  to <%= loc %>
         </label>
         <label class="radio inline">
           <input type="radio" id='<%=i %>-return-no' name='<%=i %>-yn'>Dispose
