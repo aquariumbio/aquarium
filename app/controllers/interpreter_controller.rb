@@ -38,7 +38,9 @@ class InterpreterController < ApplicationController
   def open_local_file
 
     @path = params[:protocol_file].original_filename;
-    @sha = 'local_file_' + session[:session_id].to_s + '_' + Time.hash.to_s;
+    @sha = 'local_file_' + session[:session_id].to_s + '_' + Time.now.to_i.to_s;
+
+    logger.info 'local file: ' + @sha;
 
     blob = Blob.new
     blob.path = @path

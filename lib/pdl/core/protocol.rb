@@ -104,10 +104,12 @@ class Protocol
 
         case e.name
 
-          when 'information'
+          ##########################################################################################
+          when 'information' 
             push InformationInstruction.new e.text  
             e = increment e
 
+          ##########################################################################################
           when 'step'
 
             parts = []
@@ -116,14 +118,14 @@ class Protocol
 
               case tag.name
 
-                when 'getdata'
+                when 'getdata' #####################################################################
                   cat = children_as_text tag
                   unless cat[:var] && cat[:type] && cat[:description]
                     raise "In <getdata>: Missing subtags"
                   end
                   parts.push({:getdata =>  (children_as_text tag)} )
 
-                when 'select'
+                when 'select' ######################################################################
                   choices = []
                   v = nil
                   d = nil
@@ -143,7 +145,7 @@ class Protocol
                   end
                   parts.push({:select =>  { var: v, description: d, choices: choices }})
 
-		else 
+		else ###############################################################################
 		  parts.push({tag.name.to_sym => tag.text})
 
               end
@@ -154,6 +156,7 @@ class Protocol
 
             e = increment e
 
+          ##########################################################################################
           when 'assign'
 
             c = children_as_text e
@@ -173,6 +176,7 @@ class Protocol
             push AssignInstruction.new lhs, rhs
             e = increment e
 
+          ##########################################################################################
           when 'argument'
 
             c = children_as_text e
@@ -190,6 +194,7 @@ class Protocol
             push_arg ArgumentInstruction.new name, c[:type], c[:description]
             e = increment e
 
+          ##########################################################################################
           when 'include'
             args = []
             file = ""
@@ -215,6 +220,7 @@ class Protocol
             push StartIncludeInstruction.new args, file
             @include_stack.last[:end_include] = EndIncludeInstruction.new rsym, rval
 
+          ##########################################################################################
           when 'if'
             condition = e.elements.first
             thenpart = condition.next_element
@@ -239,16 +245,19 @@ class Protocol
 
             e = thenpart
 
+          ##########################################################################################
           when 'then'
             program[@control_stack.last].mark_then @program.length
             e = e.elements.first
 
+          ##########################################################################################
           when 'end_then'
             g = GotoInstruction.new
             program[@control_stack.last].mark_end_then @program.length  # tell if statement where its end_then
             push g
             e = increment e
 
+          ##########################################################################################
           when 'else'
             program[@control_stack.last].mark_else @program.length
             if e.elements.first
@@ -257,12 +266,14 @@ class Protocol
               e = increment e
             end
 
+          ##########################################################################################
           when 'end_else'
             # tell the end_then goto statement where to go
             program[program[@control_stack.last].end_then_pc].mark_destination @program.length
             @control_stack.pop
             e = increment e
 
+          ##########################################################################################
           when 'while'
             condition = e.elements.first  # get condition and do
             do_ = condition.next_element
@@ -276,9 +287,11 @@ class Protocol
 
             e = do_
 
+          ##########################################################################################
           when 'do'
             e = e.elements.first
 
+          ##########################################################################################
           when 'end_while'
             g = GotoInstruction.new
             g.mark_destination @control_stack.last
@@ -287,6 +300,7 @@ class Protocol
             @control_stack.pop
             e = increment e
 
+          ##########################################################################################
           when 'take'
 
             item_tag = e.elements.first
@@ -321,6 +335,7 @@ class Protocol
 
             e = increment e
 
+          ##########################################################################################
           when 'release'
             unless e.text && e.elements.empty?
               raise "Protocol error: No expression found in <release> (note: do not use subtags for this tag)"
@@ -328,11 +343,13 @@ class Protocol
             push ReleaseInstruction.new e.text
             e = increment e
 
+          ##########################################################################################
           when 'produce'
             c = children_as_text e
             push ProduceInstruction.new c[:object], c[:quantity]
             e = increment e
 
+          ##########################################################################################
           when 'log'
             c = children_as_text e
             unless c && c[:type] && c[:data]
@@ -341,6 +358,7 @@ class Protocol
             push LogInstruction.new c[:type], c[:data], 'log_file'
             e = increment e
 
+          ##########################################################################################
           else
             e = increment e
 
