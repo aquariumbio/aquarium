@@ -85,6 +85,16 @@ p {
   }
 }
 
+.pagination {
+  ul {
+    li {
+      a {
+        line-height: $btLineHeight;
+      }
+    }
+  }
+}
+
 .btn {
   font-size: $btNormal;
   padding: $btNormal;
