@@ -359,6 +359,38 @@ class Protocol
             e = increment e
 
           ##########################################################################################
+          when 'http'
+
+            child = e.elements.first
+            info = { 
+              host: '',
+              port: '80',
+              path: '/',
+              query: {},
+              body: 'body',
+              status: 'status'
+            } 
+
+            while child
+
+              if child.name != 'query'
+                info[child.name.to_sym] = child.text
+              else
+                a = child.elements.first
+                while a
+                  info[:query][a.name.to_sym] = a.text
+                  a = a.next_element
+                end
+              end
+
+              child = child.next_element              
+
+            end
+
+            push HTTPInstruction.new info
+            e = increment e
+
+          ##########################################################################################
           else
             e = increment e
 

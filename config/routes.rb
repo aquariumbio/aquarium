@@ -40,6 +40,7 @@ Bioturk::Application.routes.draw do
   match '/about',   to: 'static_pages#about'
   match '/signin',  to: 'sessions#new'
   match '/signout', to: 'sessions#destroy', via: :delete
+  match '/status',  to: 'static_pages#status'
   
   match '/signup', to: 'users#new'
 
