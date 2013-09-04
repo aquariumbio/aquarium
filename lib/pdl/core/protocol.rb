@@ -46,13 +46,13 @@ class Protocol
   def open path
 
     begin
-      file = File.new(path)
-    rescue 
-      puts "Could not find file '#{path}'."
-      return false
+      file = Blob.get_file path
+    rescue Exception => e
+      raise "Could not find file '#{path}': " + e.message
     end
     
-    parse_xml file
+    parse_xml file[:content]
+    return file[:sha]
 
   end
 
@@ -191,7 +191,9 @@ class Protocol
               raise "Parse Error: No valid type (number or string) specified for argument."
             end
 
-            push_arg ArgumentInstruction.new name, c[:type], c[:description]
+            if @include_stack.length == 0
+              push_arg ArgumentInstruction.new name, c[:type], c[:description]
+            end
             e = increment e
 
           ##########################################################################################
@@ -200,12 +202,13 @@ class Protocol
             file = ""
             rsym = nil
             rval = ""
+            sha = ''
             e.elements.each do |tag|
               case tag.name
                 when 'path'
                   file = tag.text
                   @include_stack.last[:ce] = e.next_element
-                  self.open tag.text
+                  sha = self.open tag.text
                   e = @include_stack.last[:ce]
                 when 'setarg'
                   args.push( children_as_text tag )
@@ -217,7 +220,7 @@ class Protocol
               
             end
 
-            push StartIncludeInstruction.new args, file
+            push StartIncludeInstruction.new args, file, sha
             @include_stack.last[:end_include] = EndIncludeInstruction.new rsym, rval
 
           ##########################################################################################

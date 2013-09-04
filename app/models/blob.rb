@@ -48,4 +48,12 @@ class Blob < ActiveRecord::Base
 
   end
 
+  def self.get_file fullpath
+
+    client = Octokit::Client.new(login:'klavins',password:'a22imil@te')
+    file = client.contents 'klavinslab/protocols', :path => fullpath
+    { content: ( Base64.decode64 (client.blob 'klavinslab/protocols', file.sha ).content ), sha: file.sha }
+
+  end
+
 end

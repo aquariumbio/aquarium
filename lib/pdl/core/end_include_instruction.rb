@@ -6,14 +6,17 @@ class EndIncludeInstruction < Instruction
     super 'end_include'
     @return_symbol = rsym
     @return_value = rval
+    @renderable = false
   end
 
-  def execute scope
-    eval_return_val = eval(scope.substitute return_value)
+  def bt_execute scope, params
+    eval_return_val = scope.evaluate return_value
     scope.pop
     scope.set return_symbol, eval_return_val
-    puts "debug: scope is now:"
-    puts scope.to_s
+  end
+
+  def to_html
+    "end include"
   end
 
 end
