@@ -11,3 +11,152 @@
   <li><%= Log.all.length %> log entries</li>
   <li><%= Blob.all.length %> github sha tags cached</li>
 </ul>
+
+<h2>Job Activity</h2>
+
+<% 
+  
+  Job.all.each do |j| 
+
+    start_entry = j.logs.reject { |l| l.entry_type != 'START' }
+    stop_entry = j.logs.reject { |l| l.entry_type != 'STOP' }
+
+    if start_entry.length > 0 
+      j[:start] = start_entry.first.created_at
+    else
+      j[:start] = "0"
+    end
+
+    if stop_entry.length > 0 
+      j[:stop] = start_entry.first.created_at
+    else
+      j[:stop] = "0"
+    end
+
+  end %>
+
+<style>
+
+.job_chart {
+  width: 100%;
+  height: 300px;
+  background: #fff;
+  border: 1pt solid #bbb;
+  position: relative;
+}
+
+.bar {
+  position: absolute;
+}
+
+.control {
+  float: left;
+  width: 14px;
+  height: 14px;
+  padding: 5px;
+  margin: 5px;
+  border: 1pt solid #bbb;
+  border-radius: 2px;
+  background: #fff;
+}
+
+.control:active {
+  background: #ccc;
+}
+
+</style>
+
+<div id="activity" class="job_chart">
+  <a id="back" class='control' href="#"><i class='icon-arrow-left'></i></a>
+  <a id="zoom_in" class='control' href="#"><i class='icon-zoom-in'></i></a>
+  <a id="zoom_out" class='control' href="#"><i class='icon-zoom-out'></i></a>
+  <a id="forward" class='control' href="#"><i class='icon-arrow-right'></i></a>
+</div>
+
+<script>
+
+  function JobChart(id) {
+
+    var that = this;
+    this.div = document.getElementById(id);
+
+    this.min = -1;  // where to start display, in number of days from midnight tonight
+    this.days = 1;  // number of days to show
+
+    this.forward = document.getElementById('forward');
+    this.forward.addEventListener ( 'click', function() {
+      that.min++;
+      console.log ( "min: " + that.min + ", days: " + that.days );
+    } );
+
+    this.zoom_in = document.getElementById('zoom_in');
+    this.zoom_in.addEventListener ( 'click', function() {
+      that.days = that.days > 1 ? that.days-1 : 1;
+      console.log ( "min: " + that.min + ", days: " + that.days );
+    } );
+
+    this.back = document.getElementById('back');
+    this.back.addEventListener ( 'click', function() {
+      that.min--;
+      console.log ( "min: " + that.min + ", days: " + that.days );
+    } );
+
+    this.zoom_out = document.getElementById('zoom_out');
+    this.zoom_out.addEventListener ( 'click', function() {
+      that.days++;
+      console.log ( "min: " + that.min + ", days: " + that.days );
+    } );
+
+
+  }
+
+  JobChart.prototype.compute_dates
+
+  JobChart.prototype.compute_dates = function () {
+
+    this.now  = new Date();
+
+    this.morning = new Date();
+    this.morning.setHours(0);
+    this.morning.setMinutes(0);
+
+    this.tomorrow_morning = new Date();
+    this.tomorrow_morning.setDate(now.getDate()+1);
+    this.tomorrow_morning.setHours(0);
+    this.tomorrow_morning.setMinutes(0);
+
+  }
+
+  JobChart.prototype.timestamp_to_day = function (d) {
+
+    now  = new Date();
+
+    morning = new Date();
+    morning.setHours(0);
+    morning.setMinutes(0);
+
+    tomorrow_morning = new Date();
+    tomorrow_morning.setDate(now.getDate()+1);
+    tomorrow_morning.setHours(0);
+    tomorrow_morning.setMinutes(0);
+
+  }
+
+  JobChart.prototype.bar = function(x,y,w,h,col) {
+
+    var b = document.createElement ( 'div' );
+    b.className = 'bar';
+    b.style.left = x + 'px'; 
+    b.style.top = y + 'px';
+    b.style.width = w + 'px';
+    b.style.height = h + 'px';
+    b.style.background = col;
+    this.div.appendChild(b);
+
+  }
+
+  jc = new JobChart('activity');
+  jc.bar ( 100, 50, 40, 10, "#123" );
+  jc.timestamp_to_day();
+
+</script>

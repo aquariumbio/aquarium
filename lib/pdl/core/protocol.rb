@@ -191,7 +191,7 @@ class Protocol
               raise "Parse Error: No valid type (number or string) specified for argument."
             end
 
-            if @include_stack.length == 0
+            if @include_stack.length <= 1
               push_arg ArgumentInstruction.new name, c[:type], c[:description]
             end
             e = increment e
