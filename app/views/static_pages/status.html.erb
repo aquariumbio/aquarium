@@ -1,39 +1,4 @@
-<h1>Status</h1>
-
-<h2>Database sizes</h2>
-
-<ul class='list'>
-  <li><%= User.all.length %> users</li>
-  <li><%= ObjectType.all.length %> object types</li>
-  <li><%= Item.all.length %> items</li>
-  <li><%= Primer.all.length %> primers</li>
-  <li><%= Job.all.length %> jobs</li>
-  <li><%= Log.all.length %> log entries</li>
-  <li><%= Blob.all.length %> github sha tags cached</li>
-</ul>
-
 <h2>Job Activity</h2>
-
-<% 
-  
-  Job.all.each do |j| 
-
-    start_entry = j.logs.reject { |l| l.entry_type != 'START' }
-    stop_entry = j.logs.reject { |l| l.entry_type != 'STOP' }
-
-    if start_entry.length > 0 
-      j[:start] = start_entry.first.created_at
-    else
-      j[:start] = "0"
-    end
-
-    if stop_entry.length > 0 
-      j[:stop] = start_entry.first.created_at
-    else
-      j[:stop] = "0"
-    end
-
-  end %>
 
 <style>
 
@@ -41,12 +6,19 @@
   width: 100%;
   height: 300px;
   background: #fff;
-  border: 1pt solid #bbb;
+  border: 1pt solid #eee;
   position: relative;
 }
 
 .bar {
   position: absolute;
+}
+
+.text {
+  position: absolute;
+  font-size: 16pt;
+  line-height: 16pt;
+  text-align: right;
 }
 
 .control {
@@ -66,51 +38,146 @@
 
 </style>
 
+
 <div id="activity" class="job_chart">
+</div>
+
   <a id="back" class='control' href="#"><i class='icon-arrow-left'></i></a>
   <a id="zoom_in" class='control' href="#"><i class='icon-zoom-in'></i></a>
   <a id="zoom_out" class='control' href="#"><i class='icon-zoom-out'></i></a>
   <a id="forward" class='control' href="#"><i class='icon-arrow-right'></i></a>
-</div>
 
 <script>
 
+  function Row() {
+    this.items = [];
+  }
+ 
   function JobChart(id) {
 
     var that = this;
     this.div = document.getElementById(id);
 
+    this.rows = new Object();
+
     this.min = -1;  // where to start display, in number of days from midnight tonight
-    this.days = 1;  // number of days to show
+    this.days = 5;  // number of days to show
 
     this.forward = document.getElementById('forward');
     this.forward.addEventListener ( 'click', function() {
       that.min++;
-      console.log ( "min: " + that.min + ", days: " + that.days );
+      that.render();
     } );
 
     this.zoom_in = document.getElementById('zoom_in');
     this.zoom_in.addEventListener ( 'click', function() {
       that.days = that.days > 1 ? that.days-1 : 1;
-      console.log ( "min: " + that.min + ", days: " + that.days );
+      that.render();
     } );
 
     this.back = document.getElementById('back');
     this.back.addEventListener ( 'click', function() {
       that.min--;
-      console.log ( "min: " + that.min + ", days: " + that.days );
+      that.render();
     } );
 
     this.zoom_out = document.getElementById('zoom_out');
     this.zoom_out.addEventListener ( 'click', function() {
       that.days++;
-      console.log ( "min: " + that.min + ", days: " + that.days );
+      that.render();
     } );
-
 
   }
 
-  JobChart.prototype.compute_dates
+  JobChart.prototype.add_item = function(rowname,item) {
+
+    if ( !this.rows[rowname] ) {
+      this.rows[rowname] = new Row();
+    }
+
+    this.rows[rowname].items.push(item);
+
+  }
+
+  JobChart.prototype.compute_sizes = function() {
+
+    this.x_offset = 120;
+    this.y_offset = 10;
+
+    this.width = this.div.offsetWidth - this.x_offset - 10;
+    this.height = this.div.offsetHeight - this.y_offset - 30;
+
+  }
+
+  JobChart.prototype.render_background = function() {
+
+    this.compute_dates();
+
+    for ( var i=0; i<this.days; i++ ) {
+
+      this.bar ( 
+        this.x_offset + i * this.width / this.days, 
+        this.y_offset,   
+        this.width / this.days, 
+        this.height, 
+        (i-this.min)%2 == 0 ? "#ffe" : "#eee" );
+
+      var d = new Date();
+      d.setDate(now.getDate()-this.days+i+this.min+1);
+
+      this.text (
+        this.x_offset + i * this.width / this.days,
+        this.height + this.y_offset + 2,
+        this.width / this.days, 
+        20,
+        (d.getMonth()+1) + "/" + (d.getDay()+1) );
+
+    }
+  }
+
+  JobChart.prototype.render_rows = function() {
+
+    var i = 0;
+
+    for ( var login in this.rows ) {
+
+      this.text (
+        10, 
+        20*i + this.y_offset,
+        this.x_offset - 20,
+        20,
+        login );
+
+      var items = this.rows[login].items;
+
+      for ( var j=0; j<items.length; j++ ) {
+        var p = (items[j].start - this.morning.getTime()/1000) / this.seconds_per_day; // fraction for start
+        var q = (items[j].stop - this.morning.getTime()/1000) / this.seconds_per_day; // fraction for stop
+        
+        var x = this.x_offset + (this.days-1) * this.width / this.days + p*this.width/this.days;
+        var y = 20*i + this.y_offset;
+        var w = Math.max ( (q-p)*this.width/this.days, 1.0 );
+        var h = 20;
+
+	console.log ( "w = " + w );
+
+        this.bar(x,y,w,h,"#234");
+      }
+
+      i += 1;
+
+    }
+
+  }
+
+  JobChart.prototype.render = function() {
+    while ( this.div.hasChildNodes()) {
+      this.div.removeChild(this.div.lastChild);
+    }  
+    this.compute_sizes();
+    this.render_background();
+    this.render_rows();
+  }
 
   JobChart.prototype.compute_dates = function () {
 
@@ -124,6 +191,8 @@
     this.tomorrow_morning.setDate(now.getDate()+1);
     this.tomorrow_morning.setHours(0);
     this.tomorrow_morning.setMinutes(0);
+
+    this.seconds_per_day = ( this.tomorrow_morning.getTime() - this.morning.getTime() ) / 1000;
 
   }
 
@@ -142,21 +211,85 @@
 
   }
 
-  JobChart.prototype.bar = function(x,y,w,h,col) {
+  JobChart.prototype.new_div = function(x,y,w,h,classname) {
 
     var b = document.createElement ( 'div' );
-    b.className = 'bar';
+    b.className = classname;
     b.style.left = x + 'px'; 
     b.style.top = y + 'px';
     b.style.width = w + 'px';
     b.style.height = h + 'px';
+    return b;
+
+  }
+
+  JobChart.prototype.bar = function(x,y,w,h,col) {
+
+    var b = this.new_div(x,y,w,h,'bar');
     b.style.background = col;
     this.div.appendChild(b);
+    return b;
+
+  }
+
+  JobChart.prototype.text = function(x,y,w,h,str) {
+
+    var b = this.new_div(x,y,w,h,'text');
+    b.innerHTML = str;
+    this.div.appendChild(b);
+    return b;
 
   }
 
   jc = new JobChart('activity');
-  jc.bar ( 100, 50, 40, 10, "#123" );
+  
   jc.timestamp_to_day();
+  jc.add_item('klavins', { start: 1378485113, stop: 1378485832 } );
+
+  <% 
+  
+  Job.all.each do |j| 
+
+    start_entry = j.logs.reject { |l| l.entry_type != 'START' }
+    stop_entry = j.logs.reject { |l| l.entry_type != 'STOP' }
+
+    if start_entry.length > 0 
+      j[:start] = start_entry.first.created_at.to_i
+    else
+      j[:start] = "0"
+    end
+
+    if stop_entry.length > 0 
+      j[:stop] = stop_entry.first.created_at.to_i
+    else
+      j[:stop] = "0"
+    end
+
+  %>
+
+  jc.add_item ( '<%= j[:user_id] %>', { job: <%= j[:id] %>, start: <%= j[:start] %>, stop: <%= j[:stop] %> } ); 
+
+  <% end %>
+
+
+  jc.render();
+
+  window.onresize = function() {
+    jc.render();
+  }
 
 </script>
+
+<br />
+
+<h2></h2>
+
+<ul class='list'>
+  <li><%= User.all.length %> users</li>
+  <li><%= ObjectType.all.length %> object types</li>
+  <li><%= Item.all.length %> items</li>
+  <li><%= Primer.all.length %> primers</li>
+  <li><%= Job.all.length %> jobs</li>
+  <li><%= Log.all.length %> log entries</li>
+  <li><%= Blob.all.length %> github sha tags cached</li>
+</ul>
