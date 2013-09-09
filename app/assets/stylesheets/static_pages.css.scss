@@ -1,3 +1,50 @@
 // Place all the styles related to the StaticPages controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.job_chart {
+  width: 100%;
+  height: 300px;
+  background: #fff;
+  border: 0pt solid #eee;
+  position: relative;
+}
+
+.bar {
+  position: absolute;
+}
+
+.text {
+  position: absolute;
+  font-size: 14pt;
+  line-height: 16pt;
+  text-align: center;
+  padding: 5pt;
+}
+
+.smalltext {
+  position: absolute;
+  font-size: 10pt;
+  line-height: 16pt;
+  text-align: center;
+}
+
+.line {
+  position: absolute;
+  background: red;
+}
+
+.control {
+  float: left;
+  width: 14px;
+  height: 14px;
+  padding: 5px;
+  margin: 5px;
+  border: 1pt solid #bbb;
+  border-radius: 2px;
+  background: #fff;
+}
+
+.control:active {
+  background: #ccc;
+}
