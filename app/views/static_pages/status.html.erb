@@ -149,7 +149,8 @@
     this.y_offset = 10;
     this.width = this.div.offsetWidth - this.x_offset - 10;
     this.height = this.div.offsetHeight - this.y_offset - 30;
-    this.num_rows = 10;    
+    this.num_rows = Object.keys(this.rows).length;
+    this.div.style.height = ( 20*(2.5+this.num_rows) + 2*this.y_offset ) + 'px';
 
   }
 
@@ -182,6 +183,10 @@
     }
 
     this.bar ( this.now.getTime()/1000,0,1,this.num_rows, "#f00" );
+    var t = this.text ( this.now.getTime()/1000,0,HOUR,this.num_rows, this.now.getHours() + ':' + this.now.getMinutes() );
+    t.style.color = '#f00';
+    t.style.fontSize = '10pt';
+    t.style.padding = 0;
 
   }
 
@@ -229,6 +234,7 @@
     this.compute_sizes();
     this.render_background();
     this.render_rows();
+    
   }
 
   JobChart.prototype.compute_dates = function () {
