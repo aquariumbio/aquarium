@@ -85,7 +85,12 @@
 
     // Set up cursor and zoom
     this.compute_dates(); 
-    this.cursor = this.tomorrow_morning.getTime()/1000; // The right side of the viewer
+    temp = this.now;
+    temp.setHours(this.now.getHours() + 1);
+    temp.setMinutes(0);
+    temp.setSeconds(0);
+
+    this.cursor = temp.getTime()/1000; // The right side of the viewer
     this.zoom = 24; // number of hours in the vierwer
     
     var that = this;
@@ -133,6 +138,9 @@
 
     this.rows[rowname].items.push(item);
 
+    this.num_rows = Object.keys(this.rows).length;
+    console.log ( 'num_rows = ' + this.num_rows );
+
   }
 
   JobChart.prototype.compute_sizes = function() {
@@ -172,6 +180,8 @@
       }
 
     }
+
+    this.bar ( this.now.getTime()/1000,0,1,this.num_rows, "#f00" );
 
   }
 
@@ -318,9 +328,6 @@ JobChart.prototype.text = function(x,y,w,h,str,scale) {
 
   jc = new JobChart('activity');
   
-  jc.timestamp_to_day();
-  jc.add_item('klavins', { start: 1378485113, stop: 1378485832 } );
-
   <% 
   
   Job.all.each do |j| 
@@ -340,11 +347,18 @@ JobChart.prototype.text = function(x,y,w,h,str,scale) {
       j[:stop] = "0"
     end
 
+    begin
+      login = User.find(j[:user_id]).login
+    rescue
+      login = 'unknown'
+    end
+
   %>
 
-  jc.add_item ( '<%= j[:user_id] %>', { job: <%= j[:id] %>, start: <%= j[:start] %>, stop: <%= j[:stop] %> } ); 
+  jc.add_item ( '<%= login %>', { job: <%= j[:id] %>, start: <%= j[:start] %>, stop: <%= j[:stop] %> } ); 
 
   <% end %>
+
   jc.render();
 
   window.onresize = function() {
