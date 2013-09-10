@@ -95,7 +95,6 @@
     }
 
     this.rows[rowname].items.push(item);
-
     this.num_rows = Object.keys(this.rows).length;
 
   }
@@ -229,9 +228,6 @@
 
         for ( var j=0; j<items.length; j++ ) {
 
-          var p = (items[j].start - this.morning.getTime()/1000) / this.seconds_per_day; // fraction for start
-          var q = (items[j].stop - this.morning.getTime()/1000) / this.seconds_per_day; // fraction for stop
-        
           var x = this.x_offset + (this.days-this.min-2) * this.width / this.days + p*this.width/this.days;
           var y = 20*i + this.y_offset;
           var w = Math.max ( (q-p)*this.width/this.days, 10.0 );
@@ -261,31 +257,6 @@
   JobChart.prototype.compute_dates = function () {
 
     this.now  = new Date();
-
-    this.morning = new Date();
-    this.morning.setHours(0);
-    this.morning.setMinutes(0);
-
-    this.tomorrow_morning = new Date();
-    this.tomorrow_morning.setDate(this.now.getDate()+1);
-    this.tomorrow_morning.setHours(0);
-    this.tomorrow_morning.setMinutes(0);
-    this.tomorrow_morning.setSeconds(0);
-
-  }
-
-  JobChart.prototype.timestamp_to_day = function (d) {
-
-    now  = new Date();
-
-    morning = new Date();
-    morning.setHours(0);
-    morning.setMinutes(0);
-
-    tomorrow_morning = new Date();
-    tomorrow_morning.setDate(now.getDate()+1);
-    tomorrow_morning.setHours(0);
-    tomorrow_morning.setMinutes(0);
 
   }
 
@@ -321,10 +292,6 @@
 
   }
 
-  JobChart.prototype.vertical_line = function(x,y,h,col) {
-    return this.bar (x,y,1,h,col);
-  }
-
   JobChart.prototype.bar = function(x,y,w,h,col) {
 
     var b = this.new_div(x,y,w,h,'bar');
@@ -343,12 +310,3 @@
 
   }
 
-  JobChart.prototype.smalltext = function(x,y,w,h,str) {
-
-    var b = this.new_div(x,y,w,h,'smalltext');
-    b.innerHTML = str;
-    b.style.color = "#555";
-    this.div.appendChild(b);
-    return b;
-
-  }
