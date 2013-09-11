@@ -47,6 +47,9 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.2)
+    db-charmer (1.8.4)
+      activerecord (<= 3.2.13)
+      activesupport (<= 3.2.13)
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
@@ -140,6 +143,7 @@ DEPENDENCIES
   bootstrap-sass
   bootstrap-will_paginate
   coffee-rails
+  db-charmer
   jquery-rails
   mysql2
   octokit

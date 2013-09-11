@@ -42,7 +42,11 @@ Bioturk::Application.routes.draw do
   match '/signout', to: 'sessions#destroy', via: :delete
   match '/status',  to: 'static_pages#status'
   match '/jobchart', to: 'static_pages#jobchart'
-  
+
+  get '/production_interface', to: 'object_types#production_interface'
+  get '/delete_inventory', to: 'object_types#delete_inventory'
+  get '/copy_inventory_from_production', to: 'object_types#copy_inventory_from_production'
+
   match '/signup', to: 'users#new'
 
   resources :users

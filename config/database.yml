@@ -5,22 +5,33 @@
 #   gem 'sqlite3'
 
 development:
+
   adapter: sqlite3
   database: db/development.sqlite3
   pool: 5
   timeout: 5000
 
-# Warning: The database defined as "test" will be erased and
-# re-generated from your development database when you run "rake".
-# Do not set this db to the same as development or production.
+  production_server: # Listed so that the development server can copy inventory db items from the production server
+
+    adapter: mysql2
+    encoding: utf8
+    reconnect: false
+    host: istcsrv.cs.washington.edu
+    port: 3306
+    database: production
+    pool: 5
+    username: klavins
+    password: "236236"
 
 test:
+
   adapter: sqlite3
   database: db/test.sqlite3
   pool: 5
   timeout: 5000
 
 production:
+
   adapter: mysql2
   encoding: utf8
   reconnect: false
@@ -31,11 +42,8 @@ production:
   username: klavins
   password: "236236"
 
-#  username: bioturk
-#  password: jeanlucpicard
-
-
 rehearse:
+
   adapter: mysql2
   encoding: utf8
   reconnect: false
@@ -46,5 +54,13 @@ rehearse:
   username: klavins
   password: "236236"
 
-#  username: bioturk
-#  password: jeanlucpicard
+  production_server: # Listed so that the rehearsal server can copy inventory db items from the production server
+    adapter: mysql2
+    encoding: utf8
+    reconnect: false
+    host: istcsrv.cs.washington.edu
+    port: 3306
+    database: production
+    pool: 5
+    username: klavins
+    password: "236236"

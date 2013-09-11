@@ -8,6 +8,7 @@ gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'octokit'
 gem 'sass-rails',   '~> 3.2.3'
+gem 'db-charmer', :require => 'db_charmer'
 
 group :development do
   gem 'sqlite3'

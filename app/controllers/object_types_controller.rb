@@ -1,3 +1,9 @@
+class ProductionObjectType < ObjectType
+end
+
+class ProductionItem < Item
+end
+
 class ObjectTypesController < ApplicationController
 
   before_filter :signed_in_user
@@ -98,4 +104,56 @@ class ObjectTypesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def production_interface
+
+    respond_to do |format|
+      format.html
+    end
+
+  end
+
+  def delete_inventory
+
+    num_objects = 0
+    num_items = 0
+
+    ObjectType.all.each do |ob|
+      num_objects += 1
+      num_items += ob.items.length
+      ob.destroy
+    end  
+
+    redirect_to production_interface_path, notice: "Deleted #{num_objects} object types and #{num_items} items from the inventory."
+
+  end
+
+  def copy_inventory_from_production
+
+    num_objects = 0
+    num_items = 0
+
+    ProductionObjectType.switch_connection_to(:production_server)
+    ProductionItem.switch_connection_to(:production_server)
+
+    ProductionObjectType.all.each do |ot|
+
+      num_objects += 1
+
+      # copy object type to local server
+      new_ot = ObjectType.new(ot.attributes.except("id","image_file_name","image_content_type","image_file_size","image_updated_at","created_at","updated_at"))
+      new_ot.save
+
+      # copy all the items to the local server
+      ProductionItem.where("object_type_id = ?", ot.id ).each do |i|
+        new_ot.items.create(i.attributes.except("id","object_type_id","created_at","updated_at"))
+        num_items += 1
+      end
+
+    end
+
+    redirect_to object_types_path, notice: "Copied #{num_objects} object types and #{num_items} items from the production inventory."
+
+  end
+
 end
