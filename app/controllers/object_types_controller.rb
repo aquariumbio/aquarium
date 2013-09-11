@@ -115,44 +115,60 @@ class ObjectTypesController < ApplicationController
 
   def delete_inventory
 
-    num_objects = 0
-    num_items = 0
+    if Rails.env != 'production'
 
-    ObjectType.all.each do |ob|
-      num_objects += 1
-      num_items += ob.items.length
-      ob.destroy
-    end  
+      num_objects = 0
+      num_items = 0
+ 
+      ObjectType.all.each do |ob|
+        num_objects += 1
+        num_items += ob.items.length
+        ob.destroy
+      end  
 
-    redirect_to production_interface_path, notice: "Deleted #{num_objects} object types and #{num_items} items from the inventory."
+      redirect_to production_interface_path, notice: "Deleted #{num_objects} object types and #{num_items} items from the inventory."
+
+    else
+
+      redirect_to production_interface_path, notice: "This functionality is not available in production mode."
+
+    end
 
   end
 
   def copy_inventory_from_production
 
-    num_objects = 0
-    num_items = 0
+    if Rails.env != 'production'
 
-    ProductionObjectType.switch_connection_to(:production_server)
-    ProductionItem.switch_connection_to(:production_server)
+      num_objects = 0
+      num_items = 0
 
-    ProductionObjectType.all.each do |ot|
+      ProductionObjectType.switch_connection_to(:production_server)
+      ProductionItem.switch_connection_to(:production_server)
 
-      num_objects += 1
+      ProductionObjectType.all.each do |ot|
 
-      # copy object type to local server
-      new_ot = ObjectType.new(ot.attributes.except("id","image_file_name","image_content_type","image_file_size","image_updated_at","created_at","updated_at"))
-      new_ot.save
+        num_objects += 1
 
-      # copy all the items to the local server
-      ProductionItem.where("object_type_id = ?", ot.id ).each do |i|
-        new_ot.items.create(i.attributes.except("id","object_type_id","created_at","updated_at"))
-        num_items += 1
+        # copy object type to local server
+        new_ot = ObjectType.new(ot.attributes.except("id","image_file_name","image_content_type","image_file_size","image_updated_at","created_at","updated_at"))
+        new_ot.save
+
+        # copy all the items to the local server
+        ProductionItem.where("object_type_id = ?", ot.id ).each do |i|
+          new_ot.items.create(i.attributes.except("id","object_type_id","created_at","updated_at"))
+          num_items += 1
+        end
+
       end
 
-    end
+      redirect_to object_types_path, notice: "Copied #{num_objects} object types and #{num_items} items from the production inventory."
 
-    redirect_to object_types_path, notice: "Copied #{num_objects} object types and #{num_items} items from the production inventory."
+    else
+
+      redirect_to production_interface_path, notice: "This functionality is not available in production mode."
+
+    end
 
   end
 
