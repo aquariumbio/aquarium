@@ -1,6 +1,8 @@
 
 <h2>Production Inventory Interface</h2>
 
+<% if Rails.env != 'production' %>
+
 <div class='row-fluid'>
 
   <div class='span1'></div>
@@ -51,3 +53,9 @@
   <div class='span1'></div>
 
 </div>
+
+<% else %>
+
+This functionality is not available in production mode.
+
+<% end %>
