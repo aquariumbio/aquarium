@@ -53,8 +53,9 @@ class ObjectType < ActiveRecord::Base
   end
 
   def save_as_test_type name
+
     self.name = name
-    self.handler = "generic"
+    self.handler = "temporary"
     self.unit = 'object'
     self.min = 0
     self.max = 100
@@ -71,6 +72,7 @@ class ObjectType < ActiveRecord::Base
     i.inuse = 0
     i.location = 'A0.000'
     i.save
+
   end
 
 end
