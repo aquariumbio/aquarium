@@ -37,11 +37,13 @@ class TakeInstruction < Instruction
       if !ob && Rails.env != 'production'
         ob = ObjectType.new
         ob.save_as_test_type i[:type]
+        @flash += "Warning: Created new object type #{i[:type]}.<br />"
       elsif !ob
         raise "In <take>: Could not find object of type '#{@object_type}', which is not okay in production mode."
       end
       @object_list.push( ob )
     end
+
   end
 
   def log var, r, scope, params

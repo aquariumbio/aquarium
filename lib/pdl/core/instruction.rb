@@ -1,10 +1,11 @@
 class Instruction
  
-  attr_reader :name, :renderable
+  attr_reader :name, :renderable, :flash
   attr_writer :pc
 
   def initialize name
     @name = name
+    @flash = ""
   end
 
   def clear

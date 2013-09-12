@@ -33,6 +33,7 @@ class ProduceInstruction < Instruction
     if !x && Rails.env != 'production'
       x = ObjectType.new
       x.save_as_test_type @object_type
+      @flash += "Warning: Created new object type: #{@object_type}.<br />"
     elsif !x
       raise "Could not find object type #{object_type}, which is not okay in the production server." 
     end

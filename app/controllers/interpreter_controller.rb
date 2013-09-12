@@ -134,6 +134,9 @@ class InterpreterController < ApplicationController
 
     begin
       @instruction.pre_render @scope, params if @instruction.respond_to?('pre_render')
+      if @instruction.flash != "" 
+        flash[:alert] = @instruction.flash.html_safe
+      end
     rescue Exception => e
       process_error "Error in pre_render of " + @instruction.name + ": " + e.to_s
     end  
@@ -152,6 +155,9 @@ class InterpreterController < ApplicationController
 
     if @instruction.respond_to?('bt_execute')
       @instruction.bt_execute @scope, params
+      if @instruction.flash != "" 
+        flash[:alert] = @instruction.flash.html_safe
+      end
     end
 
     if @instruction.respond_to?("set_pc")
