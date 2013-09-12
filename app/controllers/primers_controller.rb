@@ -1,4 +1,7 @@
 class PrimersController < ApplicationController
+
+  before_filter :signed_in_user
+
   # GET /primers
   # GET /primers.json
   def index

@@ -109,7 +109,8 @@
     var url = "jobchart.json"
             + "?oldmin=" + Math.floor(this.min) 
             + "&newmin=" + Math.floor(newmin) 
-            + "&max=" + Math.floor(this.last_update);
+            + "&max=" + Math.floor(this.last_update)
+            + "&authenticity_token=" + AUTH_TOKEN
 
     this.last_update = this.now.getTime() / 1000;
 
@@ -227,11 +228,6 @@
       var items = this.rows[login].items;
 
         for ( var j=0; j<items.length; j++ ) {
-
-          var x = this.x_offset + (this.days-this.min-2) * this.width / this.days + p*this.width/this.days;
-          var y = 20*i + this.y_offset;
-          var w = Math.max ( (q-p)*this.width/this.days, 10.0 );
-          var h = 20;
 
           this.bar(items[j].start,i,items[j].stop-items[j].start,1,"#234");
 

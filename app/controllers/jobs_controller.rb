@@ -1,5 +1,7 @@
 class JobsController < ApplicationController
 
+  before_filter :signed_in_user
+
   def index
     @user_id = params[:user_id] ? params[:user_id] : current_user.id
     @user = User.find(@user_id)
