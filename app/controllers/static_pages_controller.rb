@@ -25,6 +25,8 @@ class StaticPagesController < ApplicationController
       start_entry = j.logs.reject { |l| l.entry_type != 'START' }
       stop_entry = j.logs.reject { |l| l.entry_type != 'STOP' }
 
+      info = { job_id: j[:id], path: j[:path], submitted_by: User.find(j[:user_id]).login, performed_by: User.find(start_entry.first.user_id).login }
+
       if start_entry.length > 0 
         j[:start] = start_entry.first.created_at.to_i
       else
@@ -47,7 +49,7 @@ class StaticPagesController < ApplicationController
         result[login] = []
       end
 
-      result[login].push( { job: j[:id], start: j[:start], stop: j[:stop] } )
+      result[login].push( { job: j[:id], start: j[:start], stop: j[:stop], info: info } )
 
     end
 

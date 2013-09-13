@@ -228,10 +228,20 @@
       var items = this.rows[login].items;
 
         for ( var j=0; j<items.length; j++ ) {
-
-          this.bar(items[j].start,i,items[j].stop-items[j].start,1,"#234");
-
-      }
+          var b = this.bar(items[j].start,i,items[j].stop-items[j].start,1,"#234");
+          b.style.cursor = 'pointer';
+          $(b).popover({ 
+            title: 'Job ' + items[j].info.job_id, 
+            content: '<p class="message" style="font-size: 12pt; line-height: 1.2"><b>'+items[j].info.path+'</b><br /><br />'
+                   + 'submitter: <i>'+items[j].info.submitted_by+'</i><br />'
+                   + 'performer: <i>'+items[j].info.performed_by+'</i></p>',
+            html: true,
+            placement: 'bottom',
+            trigger: 'hover'
+          });
+          b.setAttribute('job', items[j].info.job_id );
+          $(b).click(function(evt) { window.location = '/jobs/' + evt.target.getAttribute('job'); });
+        }
 
       i += 1;
 

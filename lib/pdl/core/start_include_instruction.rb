@@ -12,16 +12,15 @@ class StartIncludeInstruction < Instruction
 
   def bt_execute scope, params
 
-    eval_args = []
-
-    arguments.each do |a|
-      eval_args.push({ var: a[:var], value: eval(scope.substitute a[:value]) })
-    end
+    # push a new scope so we don't overwrite the variables in the including file
     scope.push
+
+    # take the evaluated args and push then onto the scope
     arguments.each do |a|
-      scope.set a[:var].to_sym, eval(scope.substitute a[:value])
+      scope.set a[:var].to_sym, scope.evaluate( a[:value] )
     end
 
+    # log the result
     log = Log.new
     log.job_id = params[:job]
     log.user_id = scope.stack.first[:user_id]
