@@ -56,4 +56,9 @@ Bioturk::Application.routes.draw do
 
   match '/item', to: 'items#update'
 
+  get "oyster/ping"
+  get "oyster/submit"
+  get "oyster/status"
+  get "oyster/log"
+
 end
