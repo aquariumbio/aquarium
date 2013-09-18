@@ -6,17 +6,37 @@ class OysterController < ApplicationController
   #
   def submit
 
-    sha = params[:sha]
-    path = params[:path]
     error = false
     error_msg = ""
 
-    begin
-      blob = Blob.get sha, params[:path]
-      file = ( blob ).xml
-    rescue Exception => e
+    if params[:sha]
+
+      begin
+        sha = params[:sha]
+        blob = Blob.get sha, ""
+        file = ( blob ).xml
+      rescue Exception => e
+        error = true
+        error_msg += "Could not find protocol by sha. " 
+      end
+
+    elsif params[:path]
+
+      begin
+        path = params[:path]
+        b = Blob.get_file path
+        file = b[:content]
+        sha = b[:sha]
+      rescue Exception => e
+        error = true
+        error_msg += "Could not find protocol with path #{params[:path]}. " + e.to_s + ". " + "Here, b = " + b.to_s + ". "
+      end
+
+    else
+
       error = true
-      error_msg += "Could not find protocol by sha. " 
+      error_msg += "Could not find protocol because neither the path nor the sha were specified." 
+
     end
    
     protocol = Protocol.new
@@ -63,7 +83,7 @@ class OysterController < ApplicationController
 
       job = Job.new
       job.sha = sha
-      job.path = blob.path
+      job.path = path
       job.user_id = user_id
       job.pc = Job.NOT_STARTED
       job.state = { stack: scope.stack }.to_json
@@ -111,6 +131,10 @@ class OysterController < ApplicationController
 
   end
 
+  def convert_log log
+    log.attributes.merge( { data: JSON.parse(log.data) } )
+  end
+
   def log
 
     error = false
@@ -125,7 +149,7 @@ class OysterController < ApplicationController
     if error 
       render json: { action: "log", error: error_msg } 
     else
-      render json: { action: "log", log: j.logs }
+      render json: { action: "log", log: j.logs.map { |l| convert_log l } }
     end
 
   end
