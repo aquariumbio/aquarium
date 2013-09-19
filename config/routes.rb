@@ -60,5 +60,7 @@ Bioturk::Application.routes.draw do
   get "oyster/submit"
   get "oyster/status"
   get "oyster/log"
+  get "oyster/info"
+  get "oyster/items"
 
 end

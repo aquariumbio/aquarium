@@ -1,5 +1,9 @@
 class OysterController < ApplicationController
 
+  ######################################################################################################################
+  # JOBS INTERFACE                                                                                                     #
+  ######################################################################################################################
+
   #
   # Attempts to find the protocol, parse the protocol, and submit the job.
   # Returns the job number of the submitted protocol, or an error.
@@ -162,6 +166,54 @@ class OysterController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render json: { action: "ping", host: request.host_with_port, env: Rails.env } }
+    end
+
+  end
+
+  ######################################################################################################################
+  # INVENTORY INTERFACE                                                                                                #
+  ######################################################################################################################
+
+  #
+  # Returns basic information about the object, if it exists or an error otherwise.
+  #
+
+  def info
+
+    error = false
+
+    o = ObjectType.find_by_name(params[:type])
+
+    if !o
+      error = true
+      error_msg = "Could not find object type #{params[:type]}"
+    end
+ 
+    if error 
+      render json: { action: "info", error: error_msg } 
+    else
+      render json: { action: "info", info: o.attributes }
+    end
+
+  end
+
+  def items
+
+    error = false
+
+    o = ObjectType.find_by_name(params[:type])
+
+    if !o
+      error = true
+      error_msg = "Could not find object type #{params[:type]}"
+    end
+
+    i = o.items.collect { |j| j.attributes }
+ 
+    if error 
+      render json: { action: "items", error: error_msg } 
+    else
+      render json: { action: "items", items: i }
     end
 
   end
