@@ -61,9 +61,7 @@ class Protocol
     begin
       xml = Document.new(file)
     rescue REXML::ParseException => ex
-      puts "A parse error was encountered."
-      puts ex.to_s #.match(/Line:.*/)
-      return false
+      raise "XML Error: Please check for improperly formated or imbalanced tags"
     end
 
     @include_stack.push( { xmldoc: xml, ce: xml.root.elements.first } )

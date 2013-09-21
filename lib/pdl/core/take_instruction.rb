@@ -46,6 +46,14 @@ class TakeInstruction < Instruction
 
   end
 
+  def html
+    h = "<b>take</b>"
+    @item_list_expr.each do |ie|
+      h += ie[:type] + ", "
+    end
+    return h[0..-3]
+  end
+
   def log var, r, scope, params
 
     data = []

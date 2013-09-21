@@ -14,4 +14,8 @@ class GotoInstruction < Instruction
     return @destination
   end
 
+  def html
+    "goto #{@destination}"
+  end
+
 end

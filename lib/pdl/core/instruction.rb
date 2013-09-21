@@ -23,5 +23,16 @@ class Instruction
     @name + "\n  " + ( instance_variables.map { |i| "#{i}: " + (instance_variable_get i).to_s } ).join("\n  ")
   end
 
+  def html
+    h = "<b>#{@name}</b><ul class='list'>"
+    instance_variables.each { |i| 
+      h += "<li>#{i}: #{instance_variable_get i}</li>"
+    }
+    h += "</ul>"
+    return h
+  end
+  
+
+
 end
 

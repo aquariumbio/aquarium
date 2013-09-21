@@ -4,13 +4,13 @@ class InterpreterController < ApplicationController
 
   def parse
 
-    file = ( Blob.get @sha, params[:path] ).xml
+    @file = ( Blob.get @sha, params[:path] ).xml
 
     @protocol = Protocol.new
     @parse_errors = ""
 
     begin
-      @protocol.parse_xml file
+      @protocol.parse_xml @file
     rescue Exception => e
       @parse_errors = e.message
     end

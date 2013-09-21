@@ -36,6 +36,46 @@
 
   </div>
 
+  <hr />
+
+  <button id='details-button' class='btn btn-small' onClick="toggle_details()">
+    Show Details
+  </button>
+
+  <div id='details' style='display: none'>
+
+    <h2>Parsed Protocol</h2>
+    <div id='parsed-protocol'>
+        <table class='table'>
+        <% (0..@protocol.program.length-1).each do |p| %>
+          <%= "<tr><td>#{p}</td><td>#{@protocol.program[p].html}</td></tr>".html_safe %>
+        <% end %>
+        </table>
+    </div>
+ 
+    <br />
+ 
+    <h2>Raw XML</h2>
+    <div id='raw-xml'>
+        <pre><%= @file %></pre>
+    </div>
+
+  </div>
+
+  <script>
+  function toggle_details() {
+    s = document.getElementById('details').style.display;
+    if ( s == 'none' ) {
+      document.getElementById('details').style.display = 'block';
+      document.getElementById('details-button').innerHTML = 'Hide Details';      
+    } else {
+      document.getElementById('details').style.display = 'none';
+      document.getElementById('details-button').innerHTML = 'Show Details';      
+    }
+  
+  }
+  </script>
+
 <% end %>
 
 

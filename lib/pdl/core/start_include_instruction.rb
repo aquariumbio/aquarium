@@ -30,6 +30,14 @@ class StartIncludeInstruction < Instruction
     
   end
 
+  def html
+    h = "<b>start include</b> #{@filename}, <b>args</b>: "
+    @arguments.each do |a|
+      h += "#{a[:var]}=#{a[:value]}, "
+    end
+    return h[0..-3]
+  end
+
   def to_html
     "start include " + @filename
   end

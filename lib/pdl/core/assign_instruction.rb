@@ -15,6 +15,10 @@ class AssignInstruction < Instruction
     scope.set( @lhs.to_sym, scope.evaluate( @rhs ) )
   end
 
+  def html
+    "<b>assign</b> #{@lhs} = #{@rhs}"
+  end
+
   # TERMINAL #########################################################################################
 
   def execute scope
@@ -22,5 +26,6 @@ class AssignInstruction < Instruction
     puts "setting " + @lhs + " to " + @rhs + " with evaluation " + x.to_s
     scope.set( @lhs.to_sym, x )
   end
+  
 
 end
