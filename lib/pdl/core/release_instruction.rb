@@ -73,6 +73,10 @@ class ReleaseInstruction < Instruction
 
   end
 
+  def html
+    "<b>release</b>: #{@expr}"
+  end
+
   # TERMINAL ########################################################################################
 
   def render scope

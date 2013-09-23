@@ -15,8 +15,8 @@ class EndIncludeInstruction < Instruction
     scope.set return_symbol, eval_return_val
   end
 
-  def to_html
-    "end include"
+  def html
+    "<b>end include</b> (return #{return_symbol}=#{return_value})"
   end
 
 end

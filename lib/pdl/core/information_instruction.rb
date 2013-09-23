@@ -20,6 +20,10 @@ class InformationInstruction < Instruction
     end
   end
 
+  def html
+    "<b>information</b>"
+  end
+
   # TERMINAL ########################################################################################
 
   def render scope

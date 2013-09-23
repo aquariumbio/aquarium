@@ -114,6 +114,10 @@ class StepInstruction < Instruction
 
   end
 
+  def html
+    "<b>step</b>: " + description
+  end
+
   # TERMINAL ##########################################################################################
 
   def render_description d, scope 

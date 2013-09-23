@@ -27,4 +27,8 @@ class IfInstruction < Instruction
     end
   end
 
+  def html
+    "<b>if</b> #{@condition} <b>goto</b> #{@then_pc} <b>else goto</b> #{@else_pc} (end_then = #{@end_then_pc})"
+  end
+
 end

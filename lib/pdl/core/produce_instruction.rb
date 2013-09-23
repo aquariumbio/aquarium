@@ -71,6 +71,11 @@ class ProduceInstruction < Instruction
 
   end
 
+  def html
+    x = @release ? @release : 'nothing'
+    h = "<b>produce</b> #{@quantity_expr} #{@object_type_expr}, releasing #{x}"
+  end
+
   # TERMINAL ###########################################################################################
 
   def render scope
