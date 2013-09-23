@@ -3,7 +3,7 @@ include REXML
 
 class Protocol
 
-  attr_reader :program, :include_stack, :args
+  attr_reader :program, :include_stack, :args, :debug
   attr_writer :file
 
   def initialize
@@ -12,6 +12,11 @@ class Protocol
     @include_stack = []; # has the form [ { xmldoc: x , ce: c }, ... ]
     @control_stack = [];
     @log_path = ""
+    @debug = "New protocol<br />"
+  end
+
+  def write_debug msg
+    @debug += ("<span style='width: 20px'>&nbsp;</span>" * (@include_stack.length)) + msg + "<br />"
   end
 
   def push i
@@ -45,6 +50,8 @@ class Protocol
 
   def open path
 
+    write_debug "Open: #{path}"
+
     begin
       file = Blob.get_file path
     rescue Exception => e
@@ -71,6 +78,8 @@ class Protocol
 
   def increment el
 
+    msg = "Increment: #{el.name} --> "
+
     e = el
 
     if !e.next_element 
@@ -87,6 +96,14 @@ class Protocol
     else
       e = e.next_element
     end
+
+    if e
+      msg += "#{e.name}."
+    else
+      msg += "EOF."
+    end
+
+    write_debug msg
 
     return e
 
@@ -205,7 +222,7 @@ class Protocol
               case tag.name
                 when 'path'
                   file = tag.text
-                  @include_stack.last[:ce] = e.next_element
+                  @include_stack.last[:ce] = increment e # e.next_element
                   sha = self.open tag.text
                   e = @include_stack.last[:ce]
                 when 'setarg'
@@ -395,16 +412,21 @@ class Protocol
           else
             e = increment e
 
-        end
+        end # case
 
-      end
+      end # while e
 
       if @include_stack.length > 1 
+        # when length is 1, we have just finished parsing the main file, so no end_include statement needed
+        # when length is > 1, we have just finished parsing an included file, so we need an end_include statement
         push @include_stack.last[:end_include]
       end
+
+      # Done with current included file, pop it and move on.
       @include_stack.pop
+      write_debug "EOF"
  
-    end
+    end # while include_stack is not empty
 
     return true
 
