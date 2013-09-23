@@ -16,7 +16,7 @@ class EndIncludeInstruction < Instruction
   end
 
   def html
-    "<b>end include</b> (return #{return_symbol}={#return_value})"
+    "<b>end include</b> (return #{return_symbol}=#{return_value})"
   end
 
 end

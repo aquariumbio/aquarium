@@ -48,7 +48,7 @@ class Protocol
     begin
       file = Blob.get_file path
     rescue Exception => e
-      raise "Could not find file '#{path}': " + e.message
+      raise "Could not find file '#{path}' " + e.message
     end
     
     parse_xml file[:content]
@@ -61,7 +61,7 @@ class Protocol
     begin
       xml = Document.new(file)
     rescue REXML::ParseException => ex
-      raise "XML Error: Please check for improperly formated or imbalanced tags"
+      raise "XML Error: " + ex.message[0..120] + " ..."
     end
 
     @include_stack.push( { xmldoc: xml, ce: xml.root.elements.first } )
