@@ -32,7 +32,9 @@ class Instruction
     return h
   end
   
-
+  def do_not_render
+    @renderable = false
+  end
 
 end
 

@@ -1,12 +1,13 @@
 class ProduceInstruction < Instruction
 
-  attr_reader :object_type, :quantity, :release
+  attr_reader :object_type, :quantity, :release, :var
 
-  def initialize object_type_expr, quantity_expr, release_expr
+  def initialize object_type_expr, quantity_expr, release_expr, var
 
     @object_type_expr = object_type_expr
     @quantity_expr = quantity_expr
     @release_expr = release_expr
+    @result_var = var
 
     @renderable = true
     super 'produce'
@@ -39,14 +40,18 @@ class ProduceInstruction < Instruction
     end
 
     # make a new item and save it
+    loc = params['location'] ? params['location'] : x.location_wizard;
     begin
-      item = x.items.create(location: params['location'], quantity: @quantity)
+      item = x.items.create(location: loc, quantity: @quantity)
     rescue Exception => e
       raise "Could not add item of type #{object_type}: " + e.message
     end
 
-    release_data = []
+    scope.set( @result_var.to_sym, item )
+
     # release anything that needs to be released
+    release_data = []
+
     if @release
       @release.each do |pi|
         x = Item.find_by_id(pi[:item][:id])

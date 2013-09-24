@@ -232,7 +232,7 @@ class Protocol
                   rsym = r[:var].to_sym
                   rval = r[:value]
               end
-              
+             
             end
 
             push StartIncludeInstruction.new args, file, sha
@@ -364,7 +364,20 @@ class Protocol
           ##########################################################################################
           when 'produce'
             c = children_as_text e
-            push ProduceInstruction.new c[:object], c[:quantity], c[:release]
+            result_name = c[:var] ? c[:var] : "_most_recently_produced_item"
+            instruction = ProduceInstruction.new c[:object], c[:quantity], c[:release], result_name
+
+            write_debug 'produce has attributes ' + e.attributes.to_s
+            if e.attributes['render'] && e.attributes['render'] == 'false'
+              instruction.do_not_render
+            end
+
+            push instruction
+            e = increment e
+
+          when 'move'
+            c = children_as_text e
+            push MoveInstruction.new c[:item], c[:location]
             e = increment e
 
           ##########################################################################################

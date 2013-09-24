@@ -75,4 +75,8 @@ class ObjectType < ActiveRecord::Base
 
   end
 
+  def location_wizard
+    "A1.100"
+  end
+
 end
