@@ -94,7 +94,7 @@ class ProtocolTreeController < ApplicationController
 
     respond_to do |format|  
       format.html 
-      format.js   { logger.debug render( partial: 'protocol_tree/subtree.js.erb', formats: :js, remote: true ).inspect }
+      format.js   { render( partial: 'protocol_tree/subtree.js.erb', formats: :js, remote: true ).inspect }
     end
 
     logger.debug "SUBTREE: end"

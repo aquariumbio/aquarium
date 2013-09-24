@@ -1,11 +1,12 @@
 class Instruction
  
-  attr_reader :name, :renderable, :flash
+  attr_reader :name, :renderable, :flash, :console_messages
   attr_writer :pc
 
   def initialize name
     @name = name
     @flash = ""
+    @console_messages = []
   end
 
   def clear
@@ -34,6 +35,10 @@ class Instruction
   
   def do_not_render
     @renderable = false
+  end
+
+  def console msg
+    @console_messages.push msg
   end
 
 end

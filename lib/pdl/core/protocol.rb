@@ -377,7 +377,8 @@ class Protocol
 
           when 'move'
             c = children_as_text e
-            push MoveInstruction.new c[:item], c[:location]
+            result_name = c[:var] ? c[:var] : "_most_recently_moved_item"
+            push MoveInstruction.new c[:item], c[:location], result_name
             e = increment e
 
           ##########################################################################################

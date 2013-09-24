@@ -1,24 +1,37 @@
 class MoveInstruction < Instruction
 
-  def initialize item_expr, location_expr
+  def initialize item_expr, location_expr, var
     @item_expr = item_expr
     @location_expr = location_expr
     @renderable = false
+    @var = var
     super 'move'
   end
 
   # RAILS ##################################################################################
 
-  def bt_execute
+  def bt_execute scope, params
 
-    # TODO: Fix error slient-produce.pdl
-    #       Make a return var to hold the new item
-    #       Make sure only the quantity in the specified item is moved, not the whole item
+    begin
+      item_hash = scope.evaluate @item_expr
+      location = scope.evaluate @location_expr
+    rescue Exception => e
+      raise "Move: item and/or location expressions did not evaluate correctly. The item should be an item returned by produce, for example. The location should evaluate to a string (you might need quotes around string constants). Check the syntax. " + e.message 
+    end
 
-    item_hash = scope.evaluate @item_expr
+    c = item_hash.class
+    console "Attempting move #{item_hash.to_s} to #{@location_expr}"
+
+    unless item_hash.class == Hash
+      raise "#{@item_expr} evaluates to #{item_hash.to_s}, which is not a Hash describing an item."
+    end
 
     unless item_hash[:id] 
       raise "Could not <move> #{@item_expr} to #{@location_expr}"
+    end
+
+    unless location.class == String
+      raise "#{@location_expr} evaluates to #{location_expr.to_s}, which is not a String"
     end
 
     begin
@@ -29,6 +42,8 @@ class MoveInstruction < Instruction
 
     item.location = scope.evaluate @location_expr
     item.save
+
+    scope.set( @var.to_sym, item )
 
   end
 

@@ -11,3 +11,9 @@
 <% end %>
 
 <p><%= link_to 'View Log for Job ' + @job.id.to_s, @job %></p>
+
+<script>
+  <% @instruction.console_messages.each do |m| %>
+    console.log ( "PDL: " + '<%= m.html_safe %>' );
+  <% end %>
+</script>
