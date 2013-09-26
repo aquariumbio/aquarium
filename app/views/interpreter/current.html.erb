@@ -81,8 +81,10 @@
 
   window.history.replaceState ( null, 'bioturk interpreter', 'current?job=<%= @job.id %>' );
 
-  <% @instruction.console_messages.each do |m| %>
-    console.log ( "PDL:" + '<%= m.html_safe %>' );
-  <% end %>
+  <% if @instruction
+      @instruction.console_messages.each do |m| %>
+      console.log ( "PDL:" + '<%= m.html_safe %>' );
+  <% end
+      end %>
 
 </script>

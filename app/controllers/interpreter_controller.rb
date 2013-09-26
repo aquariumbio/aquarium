@@ -146,7 +146,9 @@ class InterpreterController < ApplicationController
   def current
 
     get_current
-    pre_render
+    unless @pc == Job.COMPLETED
+      pre_render
+    end
     render 'current'
 
   end

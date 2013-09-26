@@ -6,7 +6,7 @@ class ReleaseInstruction < Instruction
 
     @expr = expr
     @renderable = true
-    super 'release'
+    super 'release (deprecated)'
 
   end
 

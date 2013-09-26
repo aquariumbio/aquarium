@@ -1,16 +1,19 @@
-<h1>Release <%= @instruction.object_list.length %> Objects</h1>
+<h1>Release <%= @instruction.item_list.length %> Objects</h1>
 
 <% i = 0 %>
 <% next_check_list = [] %>
 
-<% @instruction.object_list.each do |pi| %>
+<% @instruction.item_list.each do |pi| %>
 
-  <% nm       = pi[:object][:name]
-     loc      = pi[:item][:location]
-     method   = pi[:object][:release_description]
-     quantity = pi[:quantity] %>
+  <% it = Item.find(pi[:id])
+     ob = it.object_type %>
 
-  <% case pi[:object][:release_method]
+  <% nm       = ob.name
+     loc      = it.location
+     method   = ob.release_description
+     quantity = 1 %>
+
+  <% case ob.release_method
 
      when 'return' %>
       <h4><input type='checkbox' id='<%=i %>-returned' onchange='update_next_button(<%=i %>)'></input>
@@ -72,18 +75,18 @@
       var i = 0;
       var q = '';
 
-      <% @instruction.object_list.each do |pi| %>
+      <% @instruction.item_list.each do |pi| %>
 
-        <% id = pi[:object][:id] %>
-
-        <% if pi[:object][:release_method] == 'query' %>
+        <% id = pi[:id] %>
+        <% rm = Item.find(pi[:id]).object_type.release_method %>
+        <% if rm == 'query' %>
           if ( document.getElementById(i+'-return-yes').checked ) {
             m = 'return';
           } else {
             m = 'dispose';
           }
         <% else %>
-          m = '<%= pi[:object][:release_method] %>';
+          m = '<%= rm %>';
         <% end %>
 
         q += "&method_" + i + '=' + m;
