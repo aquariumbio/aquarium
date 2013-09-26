@@ -63,36 +63,3 @@
   <% end %>
 
 </table>
-
-<br />
-
-<h4>Completed Jobs <span style="color: #bbb">(Click Job Number for Log)</span></h4>
-
-<table class='table' style='width:50%'>
-  <tr>
-    <th>Job</th>
-    <th>Protocol</th>
-    <th>Arguments</th>
-    <th>Completed</th>
-  </tr>
-
-  <% @completed_jobs.each do |j| %>
-    <% args = (JSON.parse(j.state))['stack'].first.reject { |k,v| k == 'user_id' } %>
-    <tr>
-      <td><%= link_to j.id.to_s, j %></td>
-      <td><%= link_to j.path, protocol_tree_raw_path(sha: j.sha, format:'xml'), target: j.path %></td>
-      <td>
-        <% if args.length > 0 %>
-            <% args.each do |k,v| %>
-              <%= ("<b>" + k.to_s + "</b>: " + v.to_s).html_safe %><br />
-            <% end %>
-        <% else %>
-          -
-        <% end %>
-      </td>
-      <td><%= j.updated_at.to_formatted_s(:short) %></td>
-    </tr>
-  <% end %>
-
-</table>
-

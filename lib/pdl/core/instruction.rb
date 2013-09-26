@@ -41,5 +41,13 @@ class Instruction
     @console_messages.push msg
   end
 
+  def pdl_item item
+    if item.class != Item
+      raise "Could not convert argument to PDL item, because it was not a Rails Item to start with."
+    else
+      return { id: item.id, name: item.object_type.name }
+    end
+  end
+
 end
 

@@ -1,23 +1,44 @@
-<h1>Log</h1>
+<h3> Log for <span class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @user.login %><b class="caret"></b></a>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+      <% (User.all.sort { |x,y| x.login <=> y.login}).each do |u| %>
+        <li><%= link_to u.login, '/logs?user_id=' + u.id.to_s %></li>
+      <% end %>
+    </ul>
+</span></h3>
 
-<table class='table'>
+<table class='table' style='width:50%'>
   <tr>
     <th>Job</th>
-    <th>User</th>
-    <th>Entry Type</th>
-    <th>Data</th>
-    <th></th>
+    <th>Protocol</th>
+    <th>Arguments</th>
+    <th>Completed</th>
   </tr>
 
-<% @logs.each do |log| %>
-  <tr>
-    <td><%= log.job_id %></td>
-    <td><%= log.user %></td>
-    <td><%= log.entry_type %></td>
-    <td><%= log.data %></td>
-    <td><%= link_to 'Show', log %></td>
-  </tr>
-<% end %>
+<center>
+<%= will_paginate @completed_jobs %>
+</center>
+
+  <% @completed_jobs.each do |j| %>
+    <% args = (JSON.parse(j.state))['stack'].first.reject { |k,v| k == 'user_id' } %>
+    <tr>
+      <td><%= link_to j.id.to_s, j %></td>
+      <td><%= link_to j.path, protocol_tree_raw_path(sha: j.sha, format:'xml'), target: j.path %></td>
+      <td>
+        <% if args.length > 0 %>
+            <% args.each do |k,v| %>
+              <%= ("<b>" + k.to_s + "</b>: " + v.to_s).html_safe %><br />
+            <% end %>
+        <% else %>
+          -
+        <% end %>
+      </td>
+      <td><%= j.updated_at.to_formatted_s(:short) %></td>
+    </tr>
+  <% end %>
+
 </table>
 
-
+<center>
+<%= will_paginate @completed_jobs %>
+</center>

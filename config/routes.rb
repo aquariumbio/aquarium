@@ -25,6 +25,9 @@ Bioturk::Application.routes.draw do
   get "protocol_tree/pretty"
   get "protocol_tree/parse"
 
+  get "protocol_tree/file"
+  get "protocol_tree/recent"
+
   resources :object_types do 
     resources :items do
       collection do

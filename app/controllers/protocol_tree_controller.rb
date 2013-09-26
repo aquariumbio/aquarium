@@ -104,6 +104,12 @@ class ProtocolTreeController < ApplicationController
   def home
   end
 
+  def file
+  end
+
+  def recent
+  end
+
   def raw
 
     @sha = params[:sha]

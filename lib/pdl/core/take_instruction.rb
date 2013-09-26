@@ -58,36 +58,37 @@ class TakeInstruction < Instruction
 
     data = []
 
-    r.each do |ob|
-      data.push object_type: ob[:object][:name], item_id: ob[:item][:id], quantity: ob[:quantity]
-    end
-
     log = Log.new
     log.job_id = params[:job]
     log.user_id = scope.stack.first[:user_id]
     log.entry_type = 'TAKE'
-    log.data = { pc: @pc, var: var, objects: data }.to_json
+    log.data = { pc: @pc, var: var, items: r }.to_json
     log.save
 
   end
 
   def bt_execute scope, params
 
+    # Evalute @object_list in current scope
     pre_render scope, params
+
+    # Get the users choices of particular items
     choices = JSON.parse(params[:choices])
 
+    # Iterate over all items to be taken
     for j in 0..( (@object_list.length) - 1 ) 
 
-      result = []
+      result = [] 
+
+      # Iterate over each choice
       choices[j].each do |k,q| 
 
-        i = k.to_i
+        i = k.to_i 
         item = Item.find(i)
 
-        result.push( { 
-          object: @object_list[j].attributes.symbolize_keys, 
-          item: item.attributes.symbolize_keys,
-          quantity: q } ) 
+        q.times do
+          result.push( pdl_item item ) 
+        end
  
         item.inuse += q
         item.save
