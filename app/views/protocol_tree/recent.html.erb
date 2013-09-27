@@ -1,4 +1,38 @@
 <h1>Recently Run Protocols</h1>
 
-<p class='muted small'>Not yet implemented.</p>
+<div class='row-fluid'>
 
+<div class='span2'></div>
+
+<div class='span8'>
+
+<table class='table'>
+
+  <tr>
+    <th>Protocol</th>
+    <th>Version</th>
+    <th></th>
+    <th></th>
+  </tr>
+
+  <% @recents.each do |r| %>
+
+    <tr>
+      <td><b><%= r[:path].chomp('.pdl') %></b> (
+      <% r[:args].each do |k,v| %>
+        <b style='color: #aaa'><%= k %></b>: <%= v.class == String ? '"' + v + '"' : v %>
+      <% end %>
+      )</td>
+      <td>...<%= r[:sha][-10,10] %></td>
+      <td><%= link_to "run", interpreter_arguments_path(sha: r[:sha], path: r[:path])  %> </td>
+      <td><%= link_to "resubmit", interpreter_submit_path( { sha: r[:sha], path: r[:path] }.merge(r[:args]) )  %></td>
+    </tr>
+  <% end %>
+
+</table>
+
+</div>
+
+<div class='span2'></div>
+
+</div>
