@@ -1,0 +1,34 @@
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+
+
+<style type="text/css">
+div.mybar {
+    display: inline-block;
+    width: 1px;
+    height: 75px;   /* We'll override height later */
+    background-color: red;
+    margin-right: 1pt;
+}
+</style>
+
+<div id="display" class='well'></div>
+
+<script>
+
+var dataset = [
+
+<% @jobs.each do |j| %>
+  { id: <%= j.id %>, date: <%= j.created_at.to_i %> },
+<% end %>
+
+];
+
+d3.select("#display").selectAll("div")
+  .data(dataset)
+  .enter()
+  .append("div")
+  .attr("class","mybar")
+  .style("height", function(d) { return 0.25*d.id + "px"; } );
+
+</script>

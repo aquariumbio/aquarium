@@ -44,6 +44,7 @@ Bioturk::Application.routes.draw do
   match '/signin',  to: 'sessions#new'
   match '/signout', to: 'sessions#destroy', via: :delete
   match '/status',  to: 'static_pages#status'
+  match '/analytics',  to: 'static_pages#analytics'
   match '/jobchart', to: 'static_pages#jobchart'
 
   get '/production_interface', to: 'object_types#production_interface'

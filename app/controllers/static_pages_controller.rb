@@ -60,4 +60,8 @@ class StaticPagesController < ApplicationController
 
   end
 
+  def analytics
+    @jobs = Job.where("created_at >= :date", date: Time.now.weeks_ago(2))
+  end
+
 end

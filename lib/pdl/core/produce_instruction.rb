@@ -53,13 +53,13 @@ class ProduceInstruction < Instruction
     release_data = []
 
     if @release
-      @release.each do |pi|
-        x = Item.find_by_id(pi[:item][:id])
-        raise 'no such object:' + pi[:object][:name] if !x 
-        x.quantity -= x.inuse
+      @release.each do |item|
+        x = Item.find_by_id(item[:id])
+        raise 'no such object:' + item[:name] if !x 
+        x.quantity -= 1
         x.inuse = 0
         x.save
-        release_data.push object_type: pi[:object][:name], item_id: pi[:item][:id]
+        release_data.push object_type: item[:name], item_id: item[:id]
       end
     end
 

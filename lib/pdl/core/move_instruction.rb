@@ -40,10 +40,18 @@ class MoveInstruction < Instruction
       raise "Could not find item with #{item[:id]}"
     end
 
+    old_location = item.location
     item.location = scope.evaluate @location_expr
     item.save
 
-    scope.set( @var.to_sym, item )
+    scope.set( @var.to_sym, pdl_item( item ) )
+
+    log = Log.new
+    log.job_id = params[:job]
+    log.user_id = scope.stack.first[:user_id]
+    log.entry_type = 'MOVE'
+    log.data = { pc: @pc, item_id: item_hash[:id], from: old_location, to: item.location }.to_json
+    log.save
 
   end
 
