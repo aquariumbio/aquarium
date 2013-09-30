@@ -1,6 +1,6 @@
 class Blob < ActiveRecord::Base
 
-  attr_accessible :path, :sha, :xml, :dir
+  attr_accessible :path, :sha, :xml, :dir, :job_id
 
   def self.get sha, path
 
