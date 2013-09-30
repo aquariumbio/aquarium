@@ -92,14 +92,12 @@ $outlineStyle: #f00 dotted 0px;
 }
 
 #note-textarea {
-    font-size: $btSmall !important;
 }
 
 
 .interpreter-buttons {
 
   height: 100%;
-  padding: 0px;
   outline: $outlineStyle;
 
   button {
@@ -108,6 +106,10 @@ $outlineStyle: #f00 dotted 0px;
     width: 100%;
   }
 
+}
+
+.btn-interpreter {
+  padding: 25px 0 25px 0;
 }
 
 .take_object_select {
@@ -128,8 +130,6 @@ $outlineStyle: #f00 dotted 0px;
   margin: 0px 10px 0px 0px;
   padding-right: 10px !important;
 
-  font-size: $btNormal !important;
-  line-height: $btLineHeight !important;
 
   .item_select {
 
@@ -137,11 +137,8 @@ $outlineStyle: #f00 dotted 0px;
     margin: 10px 0 20px 0 !important;
     padding: 10px !important;
     passing: 0;
-    font-size: $btNormal !important;
-    line-height: $btLineHeight !important;
 
   option {
-    font-size: $btNormal !important;
     padding: 10px !important;
   }
   }
@@ -153,11 +150,7 @@ $outlineStyle: #f00 dotted 0px;
     margin: 10px 0 20px 0 !important;
     padding: 10px !important;
     passing: 0;
-    font-size: $btNormal !important;
-    line-height: $btLineHeight !important;
-
   option {
-    font-size: $btNormal !important;
     padding: 10px !important;
   }
 }

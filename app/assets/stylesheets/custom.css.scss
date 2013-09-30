@@ -4,8 +4,6 @@
 @media (min-width: 980px) {
 }
 
-
-
 /* universal */
 
 html {
@@ -15,8 +13,6 @@ html {
 body {
   padding-top: 60px;
   padding-bottom: 0px;
-  font-size: $btNormal;
-  line-height: $btLineHeight;
 }
 
 section {
@@ -43,7 +39,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: $btBig;
   letter-spacing: -2px;
   margin-bottom: 30px;
   text-align: center;
@@ -51,7 +46,6 @@ h1 {
 }
 
 h2 {
-  font-size: $btNormal;
   letter-spacing: -1px;
   margin-bottom: 30px;
   text-align: center;
@@ -61,30 +55,22 @@ h2 {
 }
 
 h3 {
-  font-size: $btSmall;
   margin: 16px 0 10px 0;
 }
 
 h4  {
-
-  font-size: $btTiny;
 }
 
 p {
-  font-size: $btNormal;
   line-height:2;
 }
 
 .small {
-  font-size: $btTiny;
-  line-height: $btLineHeight;
 }
 
 .list {
   li {
     margin-left: 26px;
-    font-size: $btSmall;
-    line-height: $btLineHeight;
   }
 }
 
@@ -92,7 +78,6 @@ p {
   ul {
     li {
       a {
-        line-height: $btLineHeight;
       }
     }
   }
@@ -101,36 +86,25 @@ p {
 .message {
   padding: 0;
   margin: 0;
-  font-size: $btTiny;
 }
 
 .btn {
-  font-size: $btNormal;
-  padding: $btNormal;
 }
 
 .btn-small {
-  font-size: $btTiny;
   padding: 10px;;
-  line-height: $btLineHeight;
 }
 
 .table {
   tr {
     th {
-      font-size: $btSmall;
-      line-height: $btLineHeight;
     }
     td {
-      font-size: $btSmall;
-      line-height: $btLineHeight;
     }
   }
 }
 
 input {
-    font-size: $btNormal !important;
-    line-height: $btLineHeight !important;
     padding: 10px !important;
 }
 
@@ -172,19 +146,15 @@ input[type=checkbox] {
   margin: 0;
   .choose_file_name {
     width: 100%;
-    font-size: $btSmall;
     float: left;
     height: 40px;
     border-radius: 4px;
   }
   .choose_file_btn {
-    font-size: $btNormal;
     vertical-align: 50%;
     margin: 0 20px 0 20px;
   }
   .choose_file_sub {
-    font-size: $btNormal;
-
     margin: 0 20px 0 20px;
   }
 }
@@ -193,14 +163,14 @@ input[type=checkbox] {
 
 #logo {
   float: left;
-  margin-right: 10px;
-  font-size: $btNormal;
+  margin: 0 10px 0 0;
   color: #aaa;
   text-transform: uppercase;
   letter-spacing: -1px;
   padding: 8px 0 8px 0;
   font-weight: bold;
-  line-height: $btLineHeight;
+  font-size: 24pt;
+  line-height: 1;
   &:hover {
     color: #fff;
     text-decoration: none;
@@ -209,19 +179,14 @@ input[type=checkbox] {
 
 .dropdown-menu {
   li {
-   line-height: 3;
-   margin: 10px 0px 10px 0px;
   }
 }
 
 .dropdown {
-  padding: 8px 0 8px 0;
+  padding: 4px 0 4px 0;
 }
 
 .caret {
-    border-left: 9px solid transparent;
-    border-right: 9px solid transparent;
-    border-top: 9px solid #000000;
 }
 
 #info-area {
@@ -257,7 +222,6 @@ footer {
   }  
   p { 
     float: left; 
-    font-size: $btTiny;
   }
   ul {
     float: right;

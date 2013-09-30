@@ -96,8 +96,8 @@
   <% for i in 0..((@instruction.item_list.length) - 1) %>
   
     <% object = @instruction.object_list[i] %>
-    num_choices[<%= i %>] = 0;
 
+    num_choices[<%= i %>] = 0;
     function add_choice_<%= i %>() {
 
       html = "";
@@ -107,8 +107,10 @@
             + <%= i %> + "_item_" + num_choices[<%= i %>] + "' onchange='update_totals(<%= i %>," + num_choices[<%= i %>] + ")' >";
 
       <% object.items.each do |item| %>
-        html += '  <option value=<%= item.id %>><%= item.location %> (<%= item.quantity - item.inuse %> available) </option>';
-        max[<%= item.id %>] = <%= item.quantity - item.inuse %>;
+        <% if item.quantity - item.inuse > 0 %>
+          html += '  <option value=<%= item.id %>><%= item.location %> (<%= item.quantity - item.inuse %> available) </option>';
+          max[<%= item.id %>] = <%= item.quantity - item.inuse %>;
+        <% end %>
       <% end %>
    
       html += "  </select>"

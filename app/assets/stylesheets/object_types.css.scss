@@ -21,8 +21,6 @@
   display: inline-block;
   height: auto;
   p {
-    font-size: $btSmall;
-    line-height: $btLineHeight;
   }
 }
 
@@ -62,11 +60,9 @@
     width: 150px;
     display: inline-block;
     margin-right: 10px; 
-    font-size: $btNormal !important;
   }
   .label {
     padding-bottom: 0px;
-    font-size: $btTiny !important;
   }
   .field {
     margin: 0px;
@@ -74,7 +70,6 @@
   }
   textarea {
     height: 100px;
-    font-size: $btTiny;
   }  
   #image {
     input {
@@ -83,7 +78,6 @@
   }
   #detail_tabs {
     margin: 10px 0 0 0;
-    font-size: $btTiny;
   }
 }
 
@@ -101,7 +95,6 @@
   }
 
   .small-input {
-    font-size: $btNormal;
     padding: 2px 2px 2px 8px;
     border-radius: 5px;
     width: 120px;

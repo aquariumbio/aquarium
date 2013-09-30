@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130813203610) do
+ActiveRecord::Schema.define(:version => 20130930164148) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(:version => 20130813203610) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.text     "dir"
+    t.integer  "job_id"
   end
 
   create_table "items", :force => true do |t|

@@ -1,34 +1,137 @@
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
-
-
 <style type="text/css">
-div.mybar {
-    display: inline-block;
-    width: 1px;
-    height: 75px;   /* We'll override height later */
-    background-color: red;
-    margin-right: 1pt;
+
+.axis path,
+
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
 }
+
+.axis text {
+    font-family: sans-serif;
+    font-size: 16pt;
+}
+
 </style>
 
-<div id="display" class='well'></div>
+<div id="svgwell" class='well'></div>
 
 <script>
 
-var dataset = [
+var data = [
 
 <% @jobs.each do |j| %>
-  { id: <%= j.id %>, date: <%= j.created_at.to_i %> },
+  { id: <%= j.id %>, date: <%= j.created_at.to_i %>*1000, path: '<%= j.path %>', 
+    log: [ 
+      <% j.logs.each do |log| %> 
+        { entry_type: '<%= log.entry_type %>',
+          user: '<%= User.find(log.user_id).login %>',
+          created_at: <%= log.created_at.to_i %>*1000
+        },
+      <% end %> 
+    ] },
 <% end %>
 
 ];
 
-d3.select("#display").selectAll("div")
-  .data(dataset)
-  .enter()
-  .append("div")
-  .attr("class","mybar")
-  .style("height", function(d) { return 0.25*d.id + "px"; } );
+function job_plot(dataset) {
+
+  // dimensions
+  var w = 1600;
+  var h = 600;
+  var highlight = 25;
+  var pad = { left: 60, right: 60, bottom: 40, top: 40 };
+
+  var id = function(d) { return d.id; };
+  var date = function(d) { return d.date; };
+
+  // scales
+  var xscale = d3.time.scale()
+    .domain([d3.min(dataset,date),d3.max(dataset,date)])
+    .range([pad.left,w-pad.right]);
+
+  var yscale = d3.scale.linear()
+    .domain([d3.min(dataset,id),d3.max(dataset,id)])
+    .range([h-pad.bottom,pad.top]);
+
+  // plot
+  var svg = d3.select('#svgwell').append('svg').attr('width',w).attr('height',h);
+
+  var circles = svg.selectAll('circle')
+    .data(dataset)
+    .enter()
+    .append('circle');
+
+  circles
+    .style('opacity',0.25)
+    .attr({
+       cx: function(d,i) { return xscale(d.date); }, 
+       cy: function(d,i) { return yscale(d.id); },
+       r: 5,
+       fill: 'yellow',
+       stroke: '#000',
+       strokeWidth: 1
+    })
+
+    .on("mouseover", function(d) {
+
+       var x = parseFloat(d3.select(this).attr("cx"));
+       var y = parseFloat(d3.select(this).attr("cy")) - 30;
+
+       d3.select(this)
+        .transition()
+        .duration(50)
+        .attr("r",10).attr('fill','red');
+ 
+       svg.append("text")
+         .attr("id", "tooltip")
+         .attr("x", x)
+         .attr("y", y)
+         .attr("text-anchor", "middle")
+         .attr("font-family", "courier")
+         .attr("font-size", "18pt")
+         .attr("font-weight", "bold")
+         .attr("fill", "black")
+         .text(d.path);
+
+     })
+
+    .on("mouseout", function(d) {
+       d3.select(this)
+        .transition()
+        .duration(50)
+        .attr("r",5).attr('fill','yellow');
+
+       d3.select("#tooltip")
+         .remove();
+     });
+
+  // axes
+  var xaxis = d3.svg.axis()
+    .scale(xscale)
+    .ticks(5)
+    .orient('bottom');
+
+  svg.append("g")
+    .attr('class','axis')
+    .attr("transform", "translate(0," + (h - pad.bottom) + ")")
+    .call(xaxis);
+
+  var yaxis = d3.svg.axis()
+    .scale(yscale)
+    .ticks(5)
+    .orient('left');
+
+  svg.append("g")
+    .attr('class','axis')
+    .attr("transform", "translate("+pad.left+",0)")
+    .call(yaxis);
+
+}
+
+job_plot(data);
 
 </script>

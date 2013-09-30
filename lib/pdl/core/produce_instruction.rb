@@ -19,15 +19,10 @@ class ProduceInstruction < Instruction
   # RAILS ##############################################################################################
 
   def pre_render scope, params
+
     @object_type = scope.substitute @object_type_expr
     @quantity = scope.evaluate @quantity_expr
     @release = ( @release_expr ? ( scope.evaluate @release_expr ) : nil )
-  end
-
-  def bt_execute scope, params
-
-    # evaluate the expressions for object_type and quantity
-    pre_render scope, params
 
     # find the object, or report an error
     x = ObjectType.find_by_name(@object_type)
@@ -38,6 +33,15 @@ class ProduceInstruction < Instruction
     elsif !x
       raise "Could not find object type #{object_type}, which is not okay in the production server." 
     end
+
+  end
+
+  def bt_execute scope, params
+
+    # evaluate the expressions for object_type and quantity
+    pre_render scope, params
+
+    x = ObjectType.find_by_name(@object_type)
 
     # make a new item and save it
     loc = params['location'] ? params['location'] : x.location_wizard;

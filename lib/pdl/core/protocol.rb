@@ -4,7 +4,7 @@ include REXML
 class Protocol
 
   attr_reader :program, :include_stack, :args, :debug
-  attr_writer :file
+  attr_writer :file, :job_id
 
   def initialize
     @program = []
@@ -13,6 +13,7 @@ class Protocol
     @control_stack = [];
     @log_path = ""
     @debug = "New protocol<br />"
+    @job_id = -1
   end
 
   def write_debug msg
@@ -53,9 +54,9 @@ class Protocol
     write_debug "Open: #{path}"
 
     begin
-      file = Blob.get_file path
+      file = Blob.get_file @job_id, path
     rescue Exception => e
-      raise "Could not find file '#{path}' " + e.message
+      raise "Could not find file '#{path}': " + e.to_s
     end
     
     parse_xml file[:content]
@@ -106,6 +107,28 @@ class Protocol
     write_debug msg
 
     return e
+
+  end
+
+  def parse_arguments_only
+
+    e = @include_stack.last[:ce]
+    while e
+      if e.name == 'argument'
+        c = children_as_text e
+        if c[:name]
+          name = c[:name]
+        else
+          raise "Parse Error: No name specified for argument."
+        end
+
+        unless c[:type] && ( c[:type] == 'number' || c[:type] == 'string' ) 
+          raise "Parse Error: No valid type (number or string) specified for argument."
+        end
+        push_arg ArgumentInstruction.new name, c[:type], c[:description]
+      end
+      e = increment e
+    end
 
   end
 

@@ -15,6 +15,8 @@
   <div class="span9 interpreter-main">
     <% if @exception %>
        <%= render 'error' %>
+    <% elsif @parse_errors != "" %>
+       <p>ERROR: <%= @parse_errors %></p>
     <% elsif @pc != Job.COMPLETED %>
       <%= render @instruction.name %>
       <div id='note' style='display: none'>
@@ -32,12 +34,16 @@
   <!-- BUTTONS -------------------------------------------------------->
   <div class="span2 interpreter-buttons">
     <% if @pc != Job.COMPLETED %>
-      <button class='btn btn-primary' id='advance-button' disabled>NEXT</button>
-      <button class='btn'             id='note-button'>NOTE</button>
+      <button class='btn btn-primary btn-interpreter' id='advance-button' disabled>NEXT</button>
+      <button class='btn btn-interpreter'             id='note-button'>NOTE</button>
     <% end %>
   </div>
 
 </div>
+
+<% if @pc == 0 %>
+  <%= render 'details' %>
+<% end %>
 
 <script>
 
