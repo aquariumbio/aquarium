@@ -58,7 +58,7 @@ class Blob < ActiveRecord::Base
       blist = []
     else
       logger.info "#########seeing if blobs are available for job #{job_id.to_s}"
-      blist = self.where("job_id == :j AND path == :p", { j: job_id, p: fullpath })
+      blist = self.where("job_id = :j AND path = :p", { j: job_id, p: fullpath })
       logger.info "#########found #{blist.length} blobs"
     end
 
