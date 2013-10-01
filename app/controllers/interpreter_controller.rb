@@ -30,7 +30,7 @@ class InterpreterController < ApplicationController
     begin
       @protocol.parse
     rescue Exception => e
-      @parse_errors = "Error parsing" + e.message # + ": " + e.backtrace.to_s
+      @parse_errors = "Error while parsing. " + e.message # + ": " + e.backtrace.to_s
     end
 
   end
@@ -42,7 +42,7 @@ class InterpreterController < ApplicationController
     begin
       @protocol.parse_arguments_only
     rescue Exception => e
-      @parse_errors = "Error parsing arguments" + e.message # + ": " + e.backtrace.to_s
+      @parse_errors = "Error while parsing arguments. " + e.message # + ": " + e.backtrace.to_s
     end
 
   end
