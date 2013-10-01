@@ -20,7 +20,8 @@
             data-toggle="dropdown">Inventory<b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><%= link_to "Basic", object_types_path %></li>
-              <li><%= link_to "Primers", primers_path %></li>
+              <li><%= link_to "Samples", root_path %></li>
+              <li><%= link_to "Sample Types", root_path %></li>
               <% if Rails.env != 'production' %>
                 <li class="divider"></li>
                 <li><%= link_to "Manipulate", production_interface_path %></li>

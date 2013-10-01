@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130930164148) do
+ActiveRecord::Schema.define(:version => 20131001154059) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -30,8 +30,6 @@ ActiveRecord::Schema.define(:version => 20130930164148) do
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
     t.integer  "inuse",          :default => 0
-    t.string   "table"
-    t.integer  "table_entry_id"
   end
 
   add_index "items", ["object_type_id"], :name => "index_items_on_object_type_id"
@@ -76,18 +74,6 @@ ActiveRecord::Schema.define(:version => 20130930164148) do
     t.float    "cost"
     t.string   "release_method"
     t.text     "release_description"
-  end
-
-  create_table "primers", :force => true do |t|
-    t.string   "description"
-    t.string   "annealing"
-    t.string   "overhang"
-    t.float    "tm"
-    t.text     "notes"
-    t.integer  "project"
-    t.integer  "owner"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
   end
 
   create_table "users", :force => true do |t|
