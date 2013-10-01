@@ -15,6 +15,8 @@
   <div class="span9 interpreter-main">
     <% if @exception %>
        <%= render 'error' %>
+    <% elsif @parse_errors != "" %>
+       <p>ERROR: <%= @parse_errors %></p>
     <% elsif @pc != Job.COMPLETED %>
       <%= render @instruction.name %>
       <div id='note' style='display: none'>
@@ -25,19 +27,23 @@
     <% else %>
       <div class="alert alert-info">THIS JOB IS NO LONGER ACTIVE</div>
       <p><%= link_to 'View Log for Job ' + @job.id.to_s, @job %></p>
+      <%= render 'more_jobs' %>
     <% end %>
   </div>
 
   <!-- BUTTONS -------------------------------------------------------->
   <div class="span2 interpreter-buttons">
     <% if @pc != Job.COMPLETED %>
-      <button class='btn btn-primary' id='advance-button' disabled>NEXT</button>
-      <button class='btn'             id='note-button'>NOTE</button>
+      <button class='btn btn-primary btn-interpreter' id='advance-button' disabled>NEXT</button>
+      <button class='btn btn-interpreter'             id='note-button'>NOTE</button>
     <% end %>
-
   </div>
 
 </div>
+
+<% if @pc == 0 %>
+  <%= render 'details' %>
+<% end %>
 
 <script>
 
@@ -52,17 +58,23 @@
   fix_height();
   window.onresize = fix_height;
 
-  document.getElementById('note-button').addEventListener('click', function() {
+  nb = document.getElementById('note-button');
 
-    var note = document.getElementById('note');
+  if ( nb ) {
 
-    if ( note.style.display == 'block' ) {
-       note.style.display = 'none';
-    } else {
-       note.style.display = 'block';
-    }
+    nb.addEventListener('click', function() {
 
-  } );
+      var note = document.getElementById('note');
+
+      if ( note.style.display == 'block' ) {
+         note.style.display = 'none';
+      } else {
+         note.style.display = 'block';
+      }
+
+    } );
+
+  }
 
   advance_url = function() {
     url = '/interpreter/advance?job=<%= @job.id %>';
@@ -74,5 +86,11 @@
   }
 
   window.history.replaceState ( null, 'bioturk interpreter', 'current?job=<%= @job.id %>' );
+
+  <% if @instruction
+      @instruction.console_messages.each do |m| %>
+      console.log ( "PDL:" + '<%= m.html_safe %>' );
+  <% end
+      end %>
 
 </script>

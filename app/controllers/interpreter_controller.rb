@@ -2,11 +2,17 @@ require 'socket'
 
 class InterpreterController < ApplicationController
 
-  def parse
+  def get_blob
 
     @file = ( Blob.get @sha, params[:path] ).xml
 
     @protocol = Protocol.new
+    if params[:job]
+      @protocol.job_id = params[:job].to_i
+    else
+      @protocol.job_id = -1
+    end
+
     @parse_errors = ""
 
     begin
@@ -15,10 +21,28 @@ class InterpreterController < ApplicationController
       @parse_errors = e.message
     end
 
+  end
+
+  def parse
+
+    get_blob
+
     begin
       @protocol.parse
     rescue Exception => e
-      @parse_errors = e.message # + ": " + e.backtrace.to_s
+      @parse_errors = "Error while parsing. " + e.message # + ": " + e.backtrace.to_s
+    end
+
+  end
+
+  def parse_args_only
+
+    get_blob
+
+    begin
+      @protocol.parse_arguments_only
+    rescue Exception => e
+      @parse_errors = "Error while parsing arguments. " + e.message # + ": " + e.backtrace.to_s
     end
 
   end
@@ -27,7 +51,7 @@ class InterpreterController < ApplicationController
 
     @sha = params[:sha]
     @path = params[:path]
-    parse
+    parse_args_only
 
     respond_to do |format|
       format.html
@@ -58,7 +82,7 @@ class InterpreterController < ApplicationController
 
     @sha = params[:sha]
     @path = params[:path]
-    parse
+    parse_args_only
 
     scope = Scope.new {}
 
@@ -146,7 +170,9 @@ class InterpreterController < ApplicationController
   def current
 
     get_current
-    pre_render
+    unless @pc == Job.COMPLETED
+      pre_render
+    end
     render 'current'
 
   end

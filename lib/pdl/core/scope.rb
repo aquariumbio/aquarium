@@ -62,7 +62,7 @@ class Scope
     begin
       result = eval(expr)
     rescue Exception => e
-      raise "Could not evaluate #{expr}: " + e.message
+      raise "Could not evaluate #{expr} due to either a syntax error or undefined symbol. " + e.message
     end
     result
   end

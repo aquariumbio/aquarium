@@ -1,12 +1,13 @@
 class ProduceInstruction < Instruction
 
-  attr_reader :object_type, :quantity, :release
+  attr_reader :object_type, :quantity, :release, :var
 
-  def initialize object_type_expr, quantity_expr, release_expr
+  def initialize object_type_expr, quantity_expr, release_expr, var
 
     @object_type_expr = object_type_expr
     @quantity_expr = quantity_expr
     @release_expr = release_expr
+    @result_var = var
 
     @renderable = true
     super 'produce'
@@ -18,15 +19,10 @@ class ProduceInstruction < Instruction
   # RAILS ##############################################################################################
 
   def pre_render scope, params
+
     @object_type = scope.substitute @object_type_expr
     @quantity = scope.evaluate @quantity_expr
     @release = ( @release_expr ? ( scope.evaluate @release_expr ) : nil )
-  end
-
-  def bt_execute scope, params
-
-    # evaluate the expressions for object_type and quantity
-    pre_render scope, params
 
     # find the object, or report an error
     x = ObjectType.find_by_name(@object_type)
@@ -38,23 +34,36 @@ class ProduceInstruction < Instruction
       raise "Could not find object type #{object_type}, which is not okay in the production server." 
     end
 
+  end
+
+  def bt_execute scope, params
+
+    # evaluate the expressions for object_type and quantity
+    pre_render scope, params
+
+    x = ObjectType.find_by_name(@object_type)
+
     # make a new item and save it
+    loc = params['location'] ? params['location'] : x.location_wizard;
     begin
-      item = x.items.create(location: params['location'], quantity: @quantity)
+      item = x.items.create(location: loc, quantity: @quantity)
     rescue Exception => e
       raise "Could not add item of type #{object_type}: " + e.message
     end
 
-    release_data = []
+    scope.set( @result_var.to_sym, item )
+
     # release anything that needs to be released
+    release_data = []
+
     if @release
-      @release.each do |pi|
-        x = Item.find_by_id(pi[:item][:id])
-        raise 'no such object:' + pi[:object][:name] if !x 
-        x.quantity -= x.inuse
+      @release.each do |item|
+        x = Item.find_by_id(item[:id])
+        raise 'no such object:' + item[:name] if !x 
+        x.quantity -= 1
         x.inuse = 0
         x.save
-        release_data.push object_type: pi[:object][:name], item_id: pi[:item][:id]
+        release_data.push object_type: item[:name], item_id: item[:id]
       end
     end
 

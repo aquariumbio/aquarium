@@ -25,6 +25,9 @@ Bioturk::Application.routes.draw do
   get "protocol_tree/pretty"
   get "protocol_tree/parse"
 
+  get "protocol_tree/file"
+  get "protocol_tree/recent"
+
   resources :object_types do 
     resources :items do
       collection do
@@ -41,6 +44,7 @@ Bioturk::Application.routes.draw do
   match '/signin',  to: 'sessions#new'
   match '/signout', to: 'sessions#destroy', via: :delete
   match '/status',  to: 'static_pages#status'
+  match '/analytics',  to: 'static_pages#analytics'
   match '/jobchart', to: 'static_pages#jobchart'
 
   get '/production_interface', to: 'object_types#production_interface'

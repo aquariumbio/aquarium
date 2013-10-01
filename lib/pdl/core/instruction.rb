@@ -1,11 +1,12 @@
 class Instruction
  
-  attr_reader :name, :renderable, :flash
+  attr_reader :name, :renderable, :flash, :console_messages
   attr_writer :pc
 
   def initialize name
     @name = name
     @flash = ""
+    @console_messages = []
   end
 
   def clear
@@ -32,7 +33,21 @@ class Instruction
     return h
   end
   
+  def do_not_render
+    @renderable = false
+  end
 
+  def console msg
+    @console_messages.push msg
+  end
+
+  def pdl_item item
+    if item.class != Item
+      raise "Could not convert argument to PDL item, because it was not a Rails Item to start with."
+    else
+      return { id: item.id, name: item.object_type.name }
+    end
+  end
 
 end
 

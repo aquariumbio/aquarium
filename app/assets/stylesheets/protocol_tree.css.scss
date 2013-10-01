@@ -19,8 +19,6 @@
 
     }
     li {
-      font-size: 24pt;
-      line-height: 1.2;
       list-style-type: none;
       margin-left: 20px;
       margin-bottom: 0px;
@@ -36,16 +34,14 @@
   .closed-directory {
     &:before {
       content: '\229E';
-      font-size: 14pt;
-      vertical-align: 20%;
+      vertical-align: 0%;
     }
   }
 
   .open-directory {
     &:before {
       content: '\229F';
-      font-size: 14pt;
-      vertical-align: 20%;
+      vertical-align: 00%;
     }
   }
 

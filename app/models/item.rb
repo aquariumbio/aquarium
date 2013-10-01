@@ -20,5 +20,5 @@ class Item < ActiveRecord::Base
     errors.add(:inuse, "must non-negative and not greater than the quantity." ) unless
       self.quantity && self.inuse && self.inuse >= 0 && self.inuse <= self.quantity
   end
- 
+
 end

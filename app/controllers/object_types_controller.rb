@@ -13,7 +13,7 @@ class ObjectTypesController < ApplicationController
   def index
 
     @handler = params[:handler] ? params[:handler] : 'glassware'
-    @all_handlers = ObjectType.uniq.pluck(:handler)
+    @all_handlers = ObjectType.pluck(:handler).uniq
     @object_types = ObjectType.where("handler = ?", @handler)
 
     respond_to do |format|

@@ -1,0 +1,48 @@
+<h1>Open a Protocol Stored on Your Computer</h1>
+
+<div class='row-fluid'>
+
+  <div class='span2'></div>
+
+  <div class='span8 well'>
+
+   <% if Rails.env != 'production' %>
+
+          <%= form_tag(interpreter_open_local_file_path, multipart: true, class: 'file_upload') do %>
+
+            <%= file_field_tag 'protocol_file', onchange: "updateFileName()" %><br />
+            <div class='choose_file'>
+              <p>File name</p>
+              <input id='file_name' class='choose_file_name' value=''></input>
+              <br />
+              <div class='row-fluid'>
+                <div class='span3'>
+                  <div id="get_file" class='btn btn-small choose_file_btn' onclick="getFile()" >Choose</div>
+                </div>
+                <div class='span9'>
+                  <%= submit_tag("Run", class: 'btn btn-small choose_file_sub') %>
+                </div>
+               </div>
+            </div>
+          <% end %>
+        <% else %>
+          <p class='muted small'>Not available in production mode.</p>
+    <% end %>
+
+  </div>
+
+  <div class='span2'></div>
+
+</div>
+
+<script>
+
+  function getFile(){
+    document.getElementById("protocol_file").click();
+  }
+  function updateFileName() {
+    console.log(document.getElementById("protocol_file").value);
+    document.getElementById("file_name").value = document.getElementById("protocol_file").value.replace("C:\\fakepath\\", "");
+  }
+
+</script>

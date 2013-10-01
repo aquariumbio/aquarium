@@ -22,7 +22,24 @@
 
 <% end %>
 
-<%= link_to "Start", interpreter_advance_path(job:@job.id), class: "btn btn-primary" %>
+<%= link_to "Start", interpreter_advance_path(job:@job.id), class: "btn btn-primary", onclick: "splash_parsing_alert()" %>
 <%= link_to "Job List", jobs_path, class: "btn" %>
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h3 id="myModalLabel">Parsing <%= @path %></h3>
+  </div>
+  <div class="modal-body">
+    <p>This should only take a few seconds. (Each include statement
+    requires a separate call to github).</p>
+    <center><%= image_tag 'waiting_animation.gif' %></center>
+  </div>
+</div>
+
+<script>
+function splash_parsing_alert() {
+  $('#myModal').modal();
+}
+</script>
 
 

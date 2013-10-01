@@ -4,7 +4,7 @@ include REXML
 class Protocol
 
   attr_reader :program, :include_stack, :args, :debug
-  attr_writer :file
+  attr_writer :file, :job_id
 
   def initialize
     @program = []
@@ -13,6 +13,7 @@ class Protocol
     @control_stack = [];
     @log_path = ""
     @debug = "New protocol<br />"
+    @job_id = -1
   end
 
   def write_debug msg
@@ -53,9 +54,9 @@ class Protocol
     write_debug "Open: #{path}"
 
     begin
-      file = Blob.get_file path
+      file = Blob.get_file @job_id, path
     rescue Exception => e
-      raise "Could not find file '#{path}' " + e.message
+      raise "Could not find file '#{path}': " + e.to_s
     end
     
     parse_xml file[:content]
@@ -106,6 +107,28 @@ class Protocol
     write_debug msg
 
     return e
+
+  end
+
+  def parse_arguments_only
+
+    e = @include_stack.last[:ce]
+    while e
+      if e.name == 'argument'
+        c = children_as_text e
+        if c[:name]
+          name = c[:name]
+        else
+          raise "Parse Error: No name specified for argument."
+        end
+
+        unless c[:type] && ( c[:type] == 'number' || c[:type] == 'string' ) 
+          raise "Parse Error: No valid type (number or string) specified for argument."
+        end
+        push_arg ArgumentInstruction.new name, c[:type], c[:description]
+      end
+      e = increment e
+    end
 
   end
 
@@ -232,7 +255,7 @@ class Protocol
                   rsym = r[:var].to_sym
                   rval = r[:value]
               end
-              
+             
             end
 
             push StartIncludeInstruction.new args, file, sha
@@ -364,7 +387,21 @@ class Protocol
           ##########################################################################################
           when 'produce'
             c = children_as_text e
-            push ProduceInstruction.new c[:object], c[:quantity], c[:release]
+            result_name = c[:var] ? c[:var] : "_most_recently_produced_item"
+            instruction = ProduceInstruction.new c[:object], c[:quantity], c[:release], result_name
+
+            write_debug 'produce has attributes ' + e.attributes.to_s
+            if e.attributes['render'] && e.attributes['render'] == 'false'
+              instruction.do_not_render
+            end
+
+            push instruction
+            e = increment e
+
+          when 'move'
+            c = children_as_text e
+            result_name = c[:var] ? c[:var] : "_most_recently_moved_item"
+            push MoveInstruction.new c[:item], c[:location], result_name
             e = increment e
 
           ##########################################################################################
