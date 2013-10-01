@@ -3,10 +3,13 @@ class JobsController < ApplicationController
   before_filter :signed_in_user
 
   def index
+
     @user_id = params[:user_id] ? params[:user_id] : current_user.id
     @user = User.find(@user_id)
+
     @active_jobs = Job.where("user_id = ? AND pc >= -1", @user_id)
     @completed_jobs = Job.where("user_id = ? AND pc = -2", @user_id).order('id DESC')
+
   end
 
   def show

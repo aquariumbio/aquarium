@@ -1,0 +1,57 @@
+<%= form_for(@sample_type) do |f| %>
+  <% if @sample_type.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@sample_type.errors.count, "error") %> prohibited this sample_type from being saved:</h2>
+
+      <ul>
+      <% @sample_type.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_field :description %>
+  </div>
+  <div class="field">
+    <%= f.label :field1name %><br />
+    <%= f.text_field :field1name %>
+  </div>
+  <div class="field">
+    <%= f.label :field1type %><br />
+    <%= f.text_field :field1type %>
+  </div>
+  <div class="field">
+    <%= f.label :field2name %><br />
+    <%= f.text_field :field2name %>
+  </div>
+  <div class="field">
+    <%= f.label :field2type %><br />
+    <%= f.text_field :field2type %>
+  </div>
+  <div class="field">
+    <%= f.label :field3name %><br />
+    <%= f.text_field :field3name %>
+  </div>
+  <div class="field">
+    <%= f.label :field3type %><br />
+    <%= f.text_field :field3type %>
+  </div>
+  <div class="field">
+    <%= f.label :field4name %><br />
+    <%= f.text_field :field4name %>
+  </div>
+  <div class="field">
+    <%= f.label :field4type %><br />
+    <%= f.text_field :field4type %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

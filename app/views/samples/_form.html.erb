@@ -1,0 +1,49 @@
+<%= form_for(@sample) do |f| %>
+  <% if @sample.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@sample.errors.count, "error") %> prohibited this sample from being saved:</h2>
+
+      <ul>
+      <% @sample.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :sample_type_id %><br />
+    <%= f.number_field :sample_type_id %>
+  </div>
+  <div class="field">
+    <%= f.label :owner %><br />
+    <%= f.text_field :owner %>
+  </div>
+  <div class="field">
+    <%= f.label :project %><br />
+    <%= f.text_field :project %>
+  </div>
+  <div class="field">
+    <%= f.label :field1 %><br />
+    <%= f.text_field :field1 %>
+  </div>
+  <div class="field">
+    <%= f.label :field2 %><br />
+    <%= f.text_field :field2 %>
+  </div>
+  <div class="field">
+    <%= f.label :field3 %><br />
+    <%= f.text_field :field3 %>
+  </div>
+  <div class="field">
+    <%= f.label :field4 %><br />
+    <%= f.text_field :field4 %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

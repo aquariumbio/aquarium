@@ -1,0 +1,74 @@
+<% provide(:title, 'Samples') %>
+
+<h1>Samples</h1>
+
+<h4>Type: <span class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @sample_type.name %><b class="caret"></b></a>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+      <% (@all_sample_types.sort { |x,y| x.name <=> y.name}).each do |s| %>
+        <li><a href="#" onclick="update_type(<%= s.id %>)"><%= s.name %></a></li>
+      <% end %>
+    </ul>
+</span></h4>
+
+<h4>Owner: <span class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @user.login %><b class="caret"></b></a>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+      <% (User.all.sort { |x,y| x.login <=> y.login}).each do |u| %>
+        <li><a href="#" onclick="update_user(<%= u.id %>)"><%= u.login %></a></li>
+      <% end %>
+    </ul>
+</span></h4>
+
+<table class='table'>
+  <tr>
+    <th>Name</th>
+    <th>Project</th>
+    <% if @sample_type.field1name != '' %><th><%= @sample_type.field1name %></th><% end %>
+    <% if @sample_type.field2name != '' %><th><%= @sample_type.field2name %></th><% end %>
+    <% if @sample_type.field3name != '' %><th><%= @sample_type.field3name %></th><% end %>
+    <% if @sample_type.field4name != '' %><th><%= @sample_type.field4name %></th><% end %>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @samples.each do |sample| %>
+  <tr>
+    <td><%= sample.name %></td>
+    <td><%= sample.project %></td>
+    <% if @sample_type.field1name != '' %><th><%= sample.field1 %></th><% end %>
+    <% if @sample_type.field2name != '' %><th><%= sample.field2 %></th><% end %>
+    <% if @sample_type.field3name != '' %><th><%= sample.field3 %></th><% end %>
+    <% if @sample_type.field4name != '' %><th><%= sample.field4 %></th><% end %>
+    <td><%= link_to 'Show', sample %></td>
+    <td><%= link_to 'Edit', edit_sample_path(sample) %></td>
+    <td><%= link_to 'Destroy', sample, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Sample', new_sample_path %>
+
+<script>
+
+var sample_type_id = <%= @sample_type_id %>;
+var user_id = <%= @user_id %>;
+
+function update_type(i) {
+  sample_type_id = i;
+  reload();
+}
+
+function update_user(i) {
+  user_id = i;
+  reload();
+}
+
+function reload() {
+  window.location = 'samples?user_id=' + user_id + '&' + 'sample_type_id=' + sample_type_id;
+}
+
+</script>

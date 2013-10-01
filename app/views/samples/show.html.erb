@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @sample.name %>
+</p>
+
+<p>
+  <b>Sample type:</b>
+  <%= @sample.sample_type_id %>
+</p>
+
+<p>
+  <b>Owner:</b>
+  <%= @sample.owner %>
+</p>
+
+<p>
+  <b>Project:</b>
+  <%= @sample.project %>
+</p>
+
+<p>
+  <b>Field1:</b>
+  <%= @sample.field1 %>
+</p>
+
+<p>
+  <b>Field2:</b>
+  <%= @sample.field2 %>
+</p>
+
+<p>
+  <b>Field3:</b>
+  <%= @sample.field3 %>
+</p>
+
+<p>
+  <b>Field4:</b>
+  <%= @sample.field4 %>
+</p>
+
+
+<%= link_to 'Edit', edit_sample_path(@sample) %> |
+<%= link_to 'Back', samples_path %>

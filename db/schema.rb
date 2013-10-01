@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131001154059) do
+ActiveRecord::Schema.define(:version => 20131001164018) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -74,6 +74,34 @@ ActiveRecord::Schema.define(:version => 20131001154059) do
     t.float    "cost"
     t.string   "release_method"
     t.text     "release_description"
+  end
+
+  create_table "sample_types", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "field1name"
+    t.string   "field1type"
+    t.string   "field2name"
+    t.string   "field2type"
+    t.string   "field3name"
+    t.string   "field3type"
+    t.string   "field4name"
+    t.string   "field4type"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "samples", :force => true do |t|
+    t.string   "name"
+    t.integer  "sample_type_id"
+    t.string   "owner"
+    t.string   "project"
+    t.string   "field1"
+    t.string   "field2"
+    t.string   "field3"
+    t.string   "field4"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "users", :force => true do |t|
