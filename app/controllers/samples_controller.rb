@@ -26,6 +26,7 @@ class SamplesController < ApplicationController
   # GET /samples/1.json
   def show
     @sample = Sample.find(params[:id])
+    @sample_type = @sample.sample_type
 
     respond_to do |format|
       format.html # show.html.erb
@@ -37,6 +38,10 @@ class SamplesController < ApplicationController
   # GET /samples/new.json
   def new
     @sample = Sample.new
+    @user = User.find(current_user)
+    @sample.sample_type_id = params[:sample_type]
+    @sample_type = @sample.sample_type
+
 
     respond_to do |format|
       format.html # new.html.erb
@@ -47,6 +52,8 @@ class SamplesController < ApplicationController
   # GET /samples/1/edit
   def edit
     @sample = Sample.find(params[:id])
+    @user = User.find(current_user)
+    @sample_type = @sample.sample_type
   end
 
   # POST /samples

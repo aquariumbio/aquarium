@@ -1,6 +1,8 @@
 <%= form_for(@sample_type) do |f| %>
   <% if @sample_type.errors.any? %>
+
     <div id="error_explanation">
+
       <h2><%= pluralize(@sample_type.errors.count, "error") %> prohibited this sample_type from being saved:</h2>
 
       <ul>
@@ -8,50 +10,82 @@
         <li><%= msg %></li>
       <% end %>
       </ul>
+
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
+  <div class='row-fluid'>
+   <div class='span3'>
+     <label>Name</label>
+     <%= f.text_field :name, placeholder: 'Name' %>
+   </div>
+   <div class='span9'>
+     <label>Description</label>
+     <%= f.text_field :description, placeholder: 'Short description' %>
+   </div>
   </div>
-  <div class="field">
-    <%= f.label :description %><br />
-    <%= f.text_field :description %>
+
+  <hr />
+
+  <div class='row-fluid'>
+
+    <div class='span1'></div>
+    <div class='span2'>
+      <label>Field Names</label>
+      <%= f.text_field :field1name, placeholder: 'Field 1 Name' %>
+    </div>
+    <div class='span2'>
+      <label>Field Types</label>
+      <%= f.select(:field1type, [['string','string'],['number','number'],['url','url']]) %>
+    </div>
+    <div class='span7'></div>
+
   </div>
-  <div class="field">
-    <%= f.label :field1name %><br />
-    <%= f.text_field :field1name %>
+
+  <div class='row-fluid'>
+
+    <div class='span1'></div>
+    <div class='span2'>
+      <%= f.text_field :field2name, placeholder: 'Field 2 Name' %>
+    </div>
+    <div class='span2'>
+      <%= f.select(:field2type, [['string','string'],['number','number'],['url','url']]) %>
+    </div>
+    <div class='span7'></div>
+
   </div>
-  <div class="field">
-    <%= f.label :field1type %><br />
-    <%= f.text_field :field1type %>
+
+  <div class='row-fluid'>
+
+    <div class='span1'></div>
+    <div class='span2'>
+      <%= f.text_field :field3name, placeholder: 'Field 3 Name' %>
+    </div>
+    <div class='span2'>
+      <%= f.select(:field3type, [['string','string'],['number','number'],['url','url']]) %>
+    </div>
+    <div class='span7'></div>
+
   </div>
-  <div class="field">
-    <%= f.label :field2name %><br />
-    <%= f.text_field :field2name %>
+
+  <div class='row-fluid'>
+
+    <div class='span1'></div>
+    <div class='span2'>
+      <%= f.text_field :field4name, placeholder: 'Field 4 Name' %>
+    </div>
+    <div class='span2'>
+      <%= f.select(:field4type, [['string','string'],['number','number'],['url','url']]) %>
+    </div>
+    <div class='span7'></div>
+
   </div>
-  <div class="field">
-    <%= f.label :field2type %><br />
-    <%= f.text_field :field2type %>
-  </div>
-  <div class="field">
-    <%= f.label :field3name %><br />
-    <%= f.text_field :field3name %>
-  </div>
-  <div class="field">
-    <%= f.label :field3type %><br />
-    <%= f.text_field :field3type %>
-  </div>
-  <div class="field">
-    <%= f.label :field4name %><br />
-    <%= f.text_field :field4name %>
-  </div>
-  <div class="field">
-    <%= f.label :field4type %><br />
-    <%= f.text_field :field4type %>
-  </div>
+
+
+  <hr />
+
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "Save Sample Type", class: 'btn' %>
   </div>
+
 <% end %>

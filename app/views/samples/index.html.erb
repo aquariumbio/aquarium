@@ -50,7 +50,7 @@
 
 <br />
 
-<%= link_to 'New Sample', new_sample_path %>
+<%= link_to "New #{@sample_type.name}", new_sample_path(sample_type: @sample_type_id), class: 'btn' %>
 
 <script>
 

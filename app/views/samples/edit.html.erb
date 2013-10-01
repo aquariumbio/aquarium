@@ -1,6 +1,5 @@
-<h1>Editing sample</h1>
+<h1>Editing <%= @sample.sample_type.name %></h1>
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @sample %> |
-<%= link_to 'Back', samples_path %>
+<%= link_to 'Cancel', samples_path, class: 'btn' %>

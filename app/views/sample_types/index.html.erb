@@ -1,14 +1,24 @@
 <% provide(:title, 'Sample Types') %>
 
-<h1>Sample Types</h1>
+<h1>Sample Type Definitions</h1>
+
+<div class='alert alert-info'>
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Note:</strong> Each entry on this list describes a type of
+  sample. The name is used to distinguish different kinds of samples
+  in item, object type, and interpreter views. The field names and
+  types are used when index, viewing, and editing samples of a given
+  type. When in doubt, do not create a new sample type. Instead, see
+  if your sample type is close enough to an existing sample type and
+  use that.
+</div>
 
 <table class='table'>
   <tr>
     <th>Name</th>
     <th>Description</th>
     <th>Fields</th>
-    <th>Samples</th>
-    <th></th>
+    <th>Quantity</th>
     <th></th>
     <th></th>
   </tr>
@@ -31,8 +41,9 @@
          <b><%= sample_type.field4name %></b>: <%= sample_type.field4type %></br>
        <% end %>
     </td>
-    <td><%= link_to 'xxx samples', root_path %></td>
-    <td><%= link_to 'Show', sample_type %></td>
+    <% n = sample_type.samples.all.length
+       s = pluralize n, sample_type.name %>
+    <td><%= link_to s, samples_path( sample_type_id: sample_type.id )%></td>
     <td><%= link_to 'Edit', edit_sample_type_path(sample_type) %></td>
     <td><%= link_to 'Destroy', sample_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
@@ -41,4 +52,4 @@
 
 <br />
 
-<%= link_to 'New Sample type', new_sample_type_path %>
+<%= link_to 'New Sample type', new_sample_type_path, class: 'btn' %>

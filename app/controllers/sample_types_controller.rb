@@ -10,17 +10,6 @@ class SampleTypesController < ApplicationController
     end
   end
 
-  # GET /sample_types/1
-  # GET /sample_types/1.json
-  def show
-    @sample_type = SampleType.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @sample_type }
-    end
-  end
-
   # GET /sample_types/new
   # GET /sample_types/new.json
   def new
@@ -44,7 +33,7 @@ class SampleTypesController < ApplicationController
 
     respond_to do |format|
       if @sample_type.save
-        format.html { redirect_to @sample_type, notice: 'Sample type was successfully created.' }
+        format.html { redirect_to action: 'index', notice: 'Sample type was successfully created.' }
         format.json { render json: @sample_type, status: :created, location: @sample_type }
       else
         format.html { render action: "new" }
@@ -60,7 +49,7 @@ class SampleTypesController < ApplicationController
 
     respond_to do |format|
       if @sample_type.update_attributes(params[:sample_type])
-        format.html { redirect_to @sample_type, notice: 'Sample type was successfully updated.' }
+        format.html { redirect_to action: 'index', notice: 'Sample type was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

@@ -11,39 +11,60 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :sample_type_id %><br />
-    <%= f.number_field :sample_type_id %>
-  </div>
-  <div class="field">
-    <%= f.label :owner %><br />
-    <%= f.text_field :owner %>
-  </div>
-  <div class="field">
-    <%= f.label :project %><br />
+   <div class='row-fluid'>
+
+    <div class='span3'>    
+
+     <label>Name</label>
+     <%= f.text_field :name %>
+
+   </div><div class='span3'>    
+
+    <label>Project </label>
     <%= f.text_field :project %>
+
+   </div><div class='span3'>    
+
+     <label>Owner</label>
+     <%= f.select( :owner, User.all.collect { |u| [ u.login, u.login ] } ) %>
+
+   </div><div class='span3'>    
+
+     <div style='display: none'>
+       <label>Type</label>
+       <%= f.select( :sample_type_id, SampleType.all.collect { |st| [ st.name, st.id ] } ) %>
+     </div> 
+
+   </div>
+
   </div>
-  <div class="field">
-    <%= f.label :field1 %><br />
-    <%= f.text_field :field1 %>
-  </div>
-  <div class="field">
-    <%= f.label :field2 %><br />
-    <%= f.text_field :field2 %>
-  </div>
-  <div class="field">
-    <%= f.label :field3 %><br />
-    <%= f.text_field :field3 %>
-  </div>
-  <div class="field">
-    <%= f.label :field4 %><br />
-    <%= f.text_field :field4 %>
-  </div>
+
+  <hr />
+
+    <% if @sample_type.field1name != '' %>
+      <label><%= @sample_type.field1name %></label>
+      <%= f.text_field :field1 %>
+    <% end %>
+
+    <% if @sample_type.field2name != '' %>
+      <label><%= @sample_type.field2name %></label>
+      <%= f.text_field :field2 %>
+    <% end %>
+
+    <% if @sample_type.field3name != '' %>
+      <label><%= @sample_type.field3name %></label>
+      <%= f.text_field :field3 %>
+    <% end %>
+
+    <% if @sample_type.field4name != '' %>
+      <label><%= @sample_type.field4name %></label>
+      <%= f.text_field :field4 %>
+    <% end %>
+
+  <hr />
+
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "Save Sample Information", class: 'btn' %>
   </div>
+
 <% end %>
