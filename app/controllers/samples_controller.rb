@@ -14,7 +14,7 @@ class SamplesController < ApplicationController
     @user_id = params[:user_id] ? params[:user_id] : current_user.id
     @user = User.find(@user_id)
 
-    @samples = Sample.where("sample_type_id = :s AND owner = :u", { s: @sample_type_id, u: @user.login })
+    @samples = Sample.where("sample_type_id = :s AND user_id = :u", { s: @sample_type_id, u: @user.id })
 
     respond_to do |format|
       format.html # index.html.erb
@@ -37,16 +37,17 @@ class SamplesController < ApplicationController
   # GET /samples/new
   # GET /samples/new.json
   def new
+
     @sample = Sample.new
     @user = User.find(current_user)
     @sample.sample_type_id = params[:sample_type]
     @sample_type = @sample.sample_type
 
-
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @sample }
     end
+
   end
 
   # GET /samples/1/edit

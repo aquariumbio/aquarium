@@ -26,7 +26,7 @@
    </div><div class='span3'>    
 
      <label>Owner</label>
-     <%= f.select( :owner, User.all.collect { |u| [ u.login, u.login ] } ) %>
+     <%= f.select( :user_id, User.all.collect { |u| [ u.login, u.id ] } ) %>
 
    </div><div class='span3'>    
 

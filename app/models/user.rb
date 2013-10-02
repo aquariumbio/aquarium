@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
 
   attr_accessible :login, :name, :password, :password_confirmation
   has_secure_password
+  has_many :samples
+  has_many :logs
 
   # Q: Why not = user.login.downcase?
   before_save { |user| user.login = login.downcase } 
