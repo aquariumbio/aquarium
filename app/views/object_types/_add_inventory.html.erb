@@ -1,5 +1,7 @@
 <h3>Add to inventory</h3>
 
+<% if @object_type.handler != 'sample_container' %>
+
   <%= form_for([@object_type, @object_type.items.build]) do |f| %>
 
   <table>
@@ -21,3 +23,21 @@
   </table>
 
   <% end %>
+
+<% else %>
+
+  <%= form_for([@object_type, @object_type.items.build]) do |f| %>
+
+    <label><%= @sample_type.name %></label>
+    <%= f.select( :sample_id, @sample_type.samples.collect { |s| 
+          [ s.name, s.id ] 
+    } ) %>
+
+    <label>Location</label>
+    <%= f.text_field :location, value: @object_type.location_wizard %>
+    <%= f.number_field :quantity, value: 1, style: 'display: none' %>
+    <%= f.submit class: "btn btn-small", value: "Add New #{@object_type.name}"  %>
+
+  <% end %>
+
+<% end %>

@@ -21,6 +21,7 @@
     <th>Quantity</th>
     <th></th>
     <th></th>
+    <th></th>
   </tr>
 
 <% @sample_types.each do |sample_type| %>
@@ -28,22 +29,18 @@
     <td><b><%= sample_type.name %></b></td>
     <td><%= sample_type.description %></td>
     <td>
-       <% if sample_type.field1name != '' %>
-         <b><%= sample_type.field1name %></b>: <%= sample_type.field1type %></br>
-       <% end %>
-       <% if sample_type.field2name != '' %>
-         <b><%= sample_type.field2name %></b>: <%= sample_type.field2type %></br>
-       <% end %>
-       <% if sample_type.field3name != '' %>
-         <b><%= sample_type.field3name %></b>: <%= sample_type.field3type %></br>
-       <% end %>
-       <% if sample_type.field4name != '' %>
-         <b><%= sample_type.field4name %></b>: <%= sample_type.field4type %></br>
-       <% end %>
+      <% (1..4).each do |i| %>
+        <% fn = "field#{i}name".to_sym
+           ft = "field#{i}type".to_sym %>
+        <% if sample_type[fn] != '' %>
+           <b><%= sample_type[fn] %></b>: <%= sample_type[ft] %></br>
+        <% end %>
+      <% end %>
     </td>
     <% n = sample_type.samples.all.length
        s = pluralize n, sample_type.name %>
     <td><%= link_to s, samples_path( sample_type_id: sample_type.id )%></td>
+    <td><%= link_to 'Show', sample_type %></td>
     <td><%= link_to 'Edit', edit_sample_type_path(sample_type) %></td>
     <td><%= link_to 'Destroy', sample_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>

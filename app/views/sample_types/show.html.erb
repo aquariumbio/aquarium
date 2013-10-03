@@ -1,0 +1,32 @@
+<% provide(:title, @sample_type.name + ' Definition' ) %>
+
+<h1>Sample Type: <%= @sample_type.name %></h1>
+
+<h3>Fields</h3>
+
+<ul class='list'>
+  <li><b>Description</b>: <%= @sample_type.description %></li>
+  <% (1..4).each do |i| %>
+    <% fn = "field#{i}name".to_sym
+       ft = "field#{i}type".to_sym %>
+    <% if @sample_type[fn] != '' %>
+      <li><b><%= @sample_type[fn] %></b>: <%= @sample_type[ft] %></li>
+    <% end %>
+  <% end %>
+</ul>
+
+<h3>Containers</h3>
+
+<ul class='list'>
+  <% @sample_type.object_types.each do |ot| %>
+    <li><b> <%= link_to ot.name, ot %></b>: <%= ot.description %></li>
+  <% end %>
+</ul>
+
+<% if @sample_type.object_types.length == 0 %>
+  No containers.
+<% end %>
+
+<hr />
+
+<%= link_to 'List all Types', sample_types_path, class: 'btn' %> 

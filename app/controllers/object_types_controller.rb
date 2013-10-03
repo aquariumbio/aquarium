@@ -25,12 +25,18 @@ class ObjectTypesController < ApplicationController
   # GET /object_types/1
   # GET /object_types/1.json
   def show
+
     @object_type = ObjectType.find(params[:id])
+
+    if @object_type.handler == 'sample_container'
+      @sample_type = SampleType.find(@object_type.sample_type_id)
+    end
 
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @object_type }
     end
+
   end
 
   # GET /object_types/new

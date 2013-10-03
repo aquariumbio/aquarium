@@ -10,6 +10,14 @@ class SampleTypesController < ApplicationController
     end
   end
 
+  def show
+    @sample_type = SampleType.find(params[:id])
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @sample }
+    end
+  end
+
   # GET /sample_types/new
   # GET /sample_types/new.json
   def new
