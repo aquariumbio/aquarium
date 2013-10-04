@@ -28,10 +28,12 @@
     <%= f.label :max %><br />
     <%= f.number_field :max %>
   </div>
-  <div class="field" id="unit">
+
+  <div class="field" id="unit" <%= @sample_type ? "style='display:none'".html_safe : '' %>>
     <%= f.label :unit %><br />
     <%= f.text_field :unit %>
   </div>
+
   <div class="field" id="cost">
     <%= f.label 'Cost per unit' %><br />
     <div class="input-prepend">
@@ -40,10 +42,15 @@
       </span>
     </div>
   </div>
-  <div class="field" id="handler">
+
+  <div class="field" id="handler" <%= @sample_type ? "style='display:none'".html_safe : '' %>>
     <%= f.label :handler %><br />
     <%= f.text_field :handler %>
   </div>
+
+  <% if @sample_type %>
+    <%= f.text_field :sample_type_id %>
+  <% end %>
 
   <%
     s1 = "<option value='return'  #{@object_type[:release_method] == 'return' ? ' selected' : ' '}>Return</option>";

@@ -31,4 +31,9 @@
 <br />
 
 <%= link_to 'Edit Object Type', edit_object_type_path(@object_type), class: "btn" %>
-<%= link_to 'Done', object_types_path, class: "btn" %>
+
+<% if @object_type.handler == 'sample_container' %>
+  <%= link_to 'Done', @object_type.sample_type, class: "btn" %>
+<% else %>
+  <%= link_to 'Done', object_types_path, class: "btn" %>
+<% end %>

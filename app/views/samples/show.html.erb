@@ -1,3 +1,5 @@
+<% provide(:title, @sample_type.name + '|' + @sample.name ) %>
+
 <p id="notice"><%= notice %></p>
 
 <h1><%= @sample_type.name %>: <%= @sample.name %></h1>
@@ -12,26 +14,52 @@
   <%= @sample.project %>
 </p>
 
-<% if @sample_type.field1name != '' %>
-  <p><b><%= @sample_type.field1name %>:</b>
-      <%= @sample.field1 %></p>
+    <% (1..4).each do |i| 
+       fn = "field#{i}name".to_sym
+       ft = "field#{i}type".to_sym 
+       f = "field#{i}".to_sym %>
+      <% if @sample_type[ft] != 'not used' %>
+        <p><b><%= @sample_type[fn] %>: </b><%= @sample[f] %></p>
+      <% end %>
+    <% end %>
+
+<hr />
+
+<% @sample_type.object_types.each do |ot| %>
+  <div class='sample-object'>
+    <h4><%= link_to pluralize(2,ot.name)[2..-1], ot %></h4>
+    <% ot.items.each do |i| %>
+      <%= render partial: '/samples/item', locals: { item: i } %>
+    <% end %>
+    <br />
+    <%= render partial: '/samples/new_item', locals: { object_type: ot, sample: @sample } %>
+  </div>
+  <hr />
 <% end %>
 
-<% if @sample_type.field2name != '' %>
-  <p><b><%= @sample_type.field2name %>:</b>
-      <%= @sample.field2 %></p>
-<% end %>
+<%= link_to "Edit #{@sample_type.name} Information", edit_sample_path(@sample), class: 'btn' %> 
+<%= link_to 'Back to List', samples_path, class: 'btn' %>
 
-<% if @sample_type.field3name != '' %>
-  <p><b><%= @sample_type.field3name %>:</b>
-      <%= @sample.field3 %></p>
-<% end %>
+<script>
 
-<% if @sample_type.field4name != '' %>
-  <p><b><%= @sample_type.field4name %>:</b>
-      <%= @sample.field4 %></p>
-<% end %>
+ window.history.replaceState ( null, '', '/samples/<%= @sample.id %>' );
 
+ function toggle_change_location_form(i) {
 
-<%= link_to 'Edit', edit_sample_path(@sample), class: 'btn' %> 
-<%= link_to 'Back', samples_path, class: 'btn' %>
+   a = document.getElementById('sample-item-loc-'+i);
+   b = document.getElementById('sample-item-loc-edit-'+i);
+   c = document.getElementById('sample-item-'+i);
+
+   if ( a.style.display == 'none' ) {
+     a.style.display = 'block';
+     b.style.display = 'none';
+     c.style.width = '80px';
+   } else {
+     a.style.display = 'none';
+     b.style.display = 'block';
+     c.style.width = '200px';
+   }
+
+  }
+
+</script>

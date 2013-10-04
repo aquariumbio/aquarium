@@ -24,10 +24,13 @@
   <tr>
     <th>Name</th>
     <th>Project</th>
-    <% if @sample_type.field1name != '' %><th><%= @sample_type.field1name %></th><% end %>
-    <% if @sample_type.field2name != '' %><th><%= @sample_type.field2name %></th><% end %>
-    <% if @sample_type.field3name != '' %><th><%= @sample_type.field3name %></th><% end %>
-    <% if @sample_type.field4name != '' %><th><%= @sample_type.field4name %></th><% end %>
+
+    <% (1..4).each do |i| 
+       fn = "field#{i}name".to_sym
+       ft = "field#{i}type".to_sym %>
+       <% if @sample_type[ft] != 'not used' %><th><%= @sample_type[fn] %></th><% end %>
+    <% end %>
+
     <th></th>
     <th></th>
     <th></th>
@@ -37,10 +40,14 @@
   <tr>
     <td><%= sample.name %></td>
     <td><%= sample.project %></td>
-    <% if @sample_type.field1name != '' %><th><%= sample.field1 %></th><% end %>
-    <% if @sample_type.field2name != '' %><th><%= sample.field2 %></th><% end %>
-    <% if @sample_type.field3name != '' %><th><%= sample.field3 %></th><% end %>
-    <% if @sample_type.field4name != '' %><th><%= sample.field4 %></th><% end %>
+
+    <% (1..4).each do |i| 
+       fn = "field#{i}name".to_sym
+       ft = "field#{i}type".to_sym 
+       f = "field#{i}".to_sym %>
+       <% if @sample_type[ft] != 'not used' %><th><%= sample[f] %></th><% end %>
+    <% end %>
+
     <td><%= link_to 'Show', sample %></td>
     <td><%= link_to 'Edit', edit_sample_path(sample) %></td>
     <td><%= link_to 'Destroy', sample, method: :delete, data: { confirm: 'Are you sure?' } %></td>

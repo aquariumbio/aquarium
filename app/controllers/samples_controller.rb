@@ -25,8 +25,19 @@ class SamplesController < ApplicationController
   # GET /samples/1
   # GET /samples/1.json
   def show
+
     @sample = Sample.find(params[:id])
     @sample_type = @sample.sample_type
+
+    if params[:toggle] 
+      @item = Item.find(params[:toggle])
+      @item.inuse = @item.inuse > 0 ? 0 : 1;
+      @item.save
+    end
+
+    if params[:delete] 
+      Item.find(params[:delete]).destroy
+    end
 
     respond_to do |format|
       format.html # show.html.erb

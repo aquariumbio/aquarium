@@ -2,7 +2,6 @@
   <% if @sample.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@sample.errors.count, "error") %> prohibited this sample from being saved:</h2>
-
       <ul>
       <% @sample.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
@@ -41,24 +40,14 @@
 
   <hr />
 
-    <% if @sample_type.field1name != '' %>
-      <label><%= @sample_type.field1name %></label>
-      <%= f.text_field :field1 %>
-    <% end %>
-
-    <% if @sample_type.field2name != '' %>
-      <label><%= @sample_type.field2name %></label>
-      <%= f.text_field :field2 %>
-    <% end %>
-
-    <% if @sample_type.field3name != '' %>
-      <label><%= @sample_type.field3name %></label>
-      <%= f.text_field :field3 %>
-    <% end %>
-
-    <% if @sample_type.field4name != '' %>
-      <label><%= @sample_type.field4name %></label>
-      <%= f.text_field :field4 %>
+    <% (1..4).each do |i| 
+       fn = "field#{i}name".to_sym
+       ft = "field#{i}type".to_sym 
+       ff = "field#{i}".to_sym %>
+      <% if @sample_type[ft] != 'not used' %>
+        <label><%= @sample_type[fn] %></label>
+        <%= f.text_field ff %>
+      <% end %>
     <% end %>
 
   <hr />

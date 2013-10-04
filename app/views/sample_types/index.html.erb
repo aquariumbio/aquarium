@@ -32,7 +32,7 @@
       <% (1..4).each do |i| %>
         <% fn = "field#{i}name".to_sym
            ft = "field#{i}type".to_sym %>
-        <% if sample_type[fn] != '' %>
+        <% if sample_type[ft] != 'not used' %>
            <b><%= sample_type[fn] %></b>: <%= sample_type[ft] %></br>
         <% end %>
       <% end %>
@@ -50,3 +50,5 @@
 <br />
 
 <%= link_to 'New Sample type', new_sample_type_path, class: 'btn' %>
+
+

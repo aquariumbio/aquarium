@@ -36,6 +36,7 @@ class ObjectType < ActiveRecord::Base
   end
 
   has_many :items, dependent: :destroy
+  belongs_to :sample_type
 
   def quantity
     q = 0

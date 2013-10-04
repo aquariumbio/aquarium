@@ -1,0 +1,36 @@
+<% if item.inuse > 0
+     c = 'item-in-use'
+   else
+     c = 'item-available'
+    end %>
+
+<div class='sample-item <%= c %>' id='sample-item-<%= item.id %>'>
+
+  <div class='id'><%= item.id %></div>
+
+  <div class='loc' id='sample-item-loc-<%= item.id %>'>
+    <%= item.location %>
+    <a href="#" onclick='toggle_change_location_form(<%= item.id %>)'><i class='icon-edit'></i></a>
+  </div>
+
+  <div class='changeloc' id='sample-item-loc-edit-<%= item.id %>'>
+    <%= render partial: '/samples/update_item', locals: { item: item } %>
+    <a href="#" onclick='toggle_change_location_form(<%= item.id %>)'><i class='icon-edit'></i></a>
+  </div>
+
+  <div class='use'>
+    <%= item.inuse > 0 ? 'in use' : 'available' %>
+    <%= link_to sample_path(@sample,toggle: item.id) do %>
+      <i class='icon-refresh'></i>
+    <% end %>
+  </div>
+  
+  <div class='delete'>
+    <%= link_to sample_path(@sample,delete: item.id), data: { confirm: "Are you sure you want to delete this sample of #{@sample.name}?" } do %>
+      <i class='icon-remove'></i>
+    <% end %>
+  </div>
+
+</div>
+
+
