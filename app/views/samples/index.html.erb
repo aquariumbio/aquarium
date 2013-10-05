@@ -1,15 +1,6 @@
 <% provide(:title, 'Samples') %>
 
-<h1>Samples</h1>
-
-<h4>Type: <span class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @sample_type.name %><b class="caret"></b></a>
-    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-      <% (@all_sample_types.sort { |x,y| x.name <=> y.name}).each do |s| %>
-        <li><a href="#" onclick="update_type(<%= s.id %>)"><%= s.name %></a></li>
-      <% end %>
-    </ul>
-</span></h4>
+<h1><%= pluralize(2,@sample_type.name)[2..-1]%></h1>
 
 <h4>Owner: <span class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @user.login %><b class="caret"></b></a>
@@ -45,7 +36,20 @@
        fn = "field#{i}name".to_sym
        ft = "field#{i}type".to_sym 
        f = "field#{i}".to_sym %>
-       <% if @sample_type[ft] != 'not used' %><th><%= sample[f] %></th><% end %>
+
+      <% if @sample_type[ft] != 'not used' %>
+        <% if @sample_type[ft] == 'url' %>
+          <td><a href='<%= sample[f] %>'><%= sample[f][0..20] %> ...</a></td>
+        <% elsif @sample_type[ft] == 'number' %>
+          <td><%= sample[f] %></td>
+        <% elsif @sample_type[ft] == 'string' %>
+          <td><%= sample[f] %></td>
+        <% else %>
+          <td><%= link_to sample[f], Sample.find_by_name(sample[f]) %></td>
+        <% end %>
+      <% end %>
+
+
     <% end %>
 
     <td><%= link_to 'Show', sample %></td>

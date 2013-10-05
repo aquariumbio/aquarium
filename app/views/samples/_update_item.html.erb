@@ -1,5 +1,5 @@
   <%= form_for(item, html: { class: 'input-append'}) do |f| %>
     <%= f.number_field :id, style: 'display: none'  %>
     <%= f.text_field :location, value: item.location, class: 'input-small'  %>
-    <%= f.submit class: "btn btn-small", value: "update" %>
+    <%= f.submit class: "btn", value: "move" %>
   <% end %>
