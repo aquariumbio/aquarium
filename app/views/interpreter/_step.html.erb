@@ -1,3 +1,12 @@
+<!-- IMAGE ------------------------------------------------------------->
+<% if @instruction.image != "" %>
+  <div class='row-fluid'>
+    <div class='span5 well'>
+      <img src='<%= @instruction.image %>'></img>
+    </div>
+    <div class='span7'>
+<% end %>
+
 <!-- DESCRIPTION ------------------------------------------------------->
 
 <h1>
@@ -43,6 +52,14 @@
     <% end %>
 
   <% end %>
+
+<!-- CLOSE IMAGE TAGS IF PRESENT --
+  -- --------------------------------------->
+
+<% if @instruction.image != "" %>
+    </div></div>
+<% end %>
+
 
 <!-- NEXT BUTTON ------------------------------------------------------->
 

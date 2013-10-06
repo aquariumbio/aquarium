@@ -47,7 +47,7 @@
       <% if @sample_type[ft] != 'not used' %>
         <label><%= @sample_type[fn] %> (<%= @sample_type[ft] %>)</label>
         <% if @sample_type[ft] == 'url' %>
-          <%= f.url_field ff, value: 'http://' %>
+          <%= f.url_field ff %>
         <% elsif @sample_type[ft] == 'number' %>
           <%= f.text_field ff %>
         <% elsif @sample_type[ft] == 'string' %>

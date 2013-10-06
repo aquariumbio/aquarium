@@ -19,9 +19,19 @@
        fn = "field#{i}name".to_sym
        ft = "field#{i}type".to_sym 
        f = "field#{i}".to_sym %>
-      <% if @sample_type[ft] != 'not used' %>
-        <li><b><%= @sample_type[fn] %>: </b><%= @sample[f] %></li>
+
+       <% if @sample_type[ft] != 'not used' %>
+        <% if @sample_type[ft] == 'url' %>
+          <li><%= @sample_type[fn] %>: <a href='<%= @sample[f] %>'><%= @sample[f][0..100] %></a></li>
+        <% elsif @sample_type[ft] == 'number' %>
+          <li><%= @sample_type[fn] %>: <%= @sample[f] %></li>
+        <% elsif @sample_type[ft] == 'string' %>
+          <li><%= @sample_type[fn] %>: <%= @sample[f] %></li>
+        <% else %>
+          <li><%= @sample_type[fn] %>: <%= link_to @sample[f], Sample.find_by_name(@sample[f]) %></li>
+        <% end %>
       <% end %>
+
     <% end %>
   </ul>
 
