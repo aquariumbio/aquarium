@@ -29,7 +29,7 @@
     <td><b><%= sample_type.name %></b></td>
     <td><%= sample_type.description %></td>
     <td>
-      <% (1..4).each do |i| %>
+      <% (1..6).each do |i| %>
         <% fn = "field#{i}name".to_sym
            ft = "field#{i}type".to_sym %>
         <% if sample_type[ft] != 'not used' %>

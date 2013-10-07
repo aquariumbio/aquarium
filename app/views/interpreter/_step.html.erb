@@ -1,10 +1,11 @@
 <!-- IMAGE ------------------------------------------------------------->
 <% if @instruction.image != "" %>
   <div class='row-fluid'>
-    <div class='span5 well'>
+    <div class='span5'>
       <img src='<%= @instruction.image %>'></img>
     </div>
     <div class='span7'>
+  <script>console.log('<%= @instruction.image %>');</script>
 <% end %>
 
 <!-- DESCRIPTION ------------------------------------------------------->

@@ -71,7 +71,10 @@ class SamplesController < ApplicationController
   # POST /samples
   # POST /samples.json
   def create
+
     @sample = Sample.new(params[:sample])
+    @user = User.find(current_user)
+    @sample_type = @sample.sample_type
 
     respond_to do |format|
       if @sample.save
@@ -104,10 +107,11 @@ class SamplesController < ApplicationController
   # DELETE /samples/1.json
   def destroy
     @sample = Sample.find(params[:id])
+    id = @sample.sample_type_id
     @sample.destroy
 
     respond_to do |format|
-      format.html { redirect_to samples_url }
+      format.html { redirect_to samples_url(sample_type_id: id) }
       format.json { head :no_content }
     end
   end

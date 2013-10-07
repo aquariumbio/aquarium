@@ -16,7 +16,7 @@
     <th>Name</th>
     <th>Project</th>
 
-    <% (1..4).each do |i| 
+    <% (1..6).each do |i| 
        fn = "field#{i}name".to_sym
        ft = "field#{i}type".to_sym %>
        <% if @sample_type[ft] != 'not used' %><th><%= @sample_type[fn] %></th><% end %>
@@ -32,7 +32,7 @@
     <td><%= sample.name %></td>
     <td><%= sample.project %></td>
 
-    <% (1..4).each do |i| 
+    <% (1..6).each do |i| 
        fn = "field#{i}name".to_sym
        ft = "field#{i}type".to_sym 
        f = "field#{i}".to_sym %>
