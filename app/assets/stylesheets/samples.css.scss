@@ -1,0 +1,63 @@
+// Place all the styles related to the Samples controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import "bootstrap";
+
+.sample-object {
+  br {
+    clear: both;
+  }
+
+}
+
+.item-in-use {
+  background: #ffe;
+}
+
+.item-available {
+  background: #def;
+}
+
+
+.sample-item {
+
+  border: 1pt solid #ccc;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  width: 80px;
+  float: left;
+  display: block;
+  position: relative;
+  font-size: 10pt;
+
+  .id {
+    font-weight: bold;
+  }
+
+  .loc {
+    font-weight: normal;
+    a {
+      margin: 0;    
+    }
+  }
+
+  .changeloc {
+    display: none;
+  }
+
+  .use {
+  }
+
+  .delete {
+    position: absolute;
+    top: 0px;
+    right: 5px;
+  }
+
+}
+
+.new-sample-item {
+  padding: 3pt;
+}

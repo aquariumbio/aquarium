@@ -1,8 +1,9 @@
 Bioturk::Application.routes.draw do
 
-  resources :primers
-  match "primers/:id", to: 'primers#stock', via: [:post]
-  match "primers/:id/delete_stock/:item_id", to: 'primers#delete_stock', via: [:get,:post]
+  resources :samples
+
+  resources :sample_types
+
   match "interpreter/open_local_file", to: 'interpreter#open_local_file', via: [:post]
 
   get "interpreter/arguments"
@@ -27,6 +28,8 @@ Bioturk::Application.routes.draw do
 
   get "protocol_tree/file"
   get "protocol_tree/recent"
+
+  resources :items
 
   resources :object_types do 
     resources :items do

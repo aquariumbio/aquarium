@@ -53,6 +53,12 @@ class ProduceInstruction < Instruction
 
     scope.set( @result_var.to_sym, item )
 
+    # touch the item, for tracking purposes
+    t = Touch.new
+    t.job_id = params[:job]
+    t.item_id = item.id
+    t.save
+
     # release anything that needs to be released
     release_data = []
 

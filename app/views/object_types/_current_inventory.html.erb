@@ -4,8 +4,13 @@
 
       <tr>
         <th>ID</th>
+        <% if @object_type.handler == 'sample_container' %>
+          <th>Sample Name</th>
+        <% end %>
         <th>Location</th>
-        <th>Quantity</th>
+        <% if @object_type.handler != 'sample_container' %>
+          <th>Quantity</th>
+        <% end %>
         <th>In Use</th>
         <th></th>
       </tr>
@@ -13,30 +18,42 @@
     <% @object_type.items.each do |i| %>
 
       <tr>
-        <td><%= "%05d" % i.id %></td>
+        <td><%= link_to "%05d" % i.id, i %></td>
+
+        <% if @object_type.handler == 'sample_container' %>
+          <td><%= link_to i.sample.name, i.sample %></td>
+        <% end %>
+
         <td><%= i.location %></td>
 
-        <td>
-          <%= form_tag(raw "/item?id="+i.id.to_s+"&oid="+@object_type.id.to_s) %>
-            <input name="quantity" 
-                   class="small-input" 
-                   type="number" 
-                   value=<%= i.quantity %>></input>
-            <input type="submit" name="update_action" 
-                   class="btn btn-small" value="update"></input>
-          </form>
-        </td>
+        <% if @object_type.handler != 'sample_container' %>
+          <td>
+            <%= form_tag(raw "/item?id="+i.id.to_s+"&oid="+@object_type.id.to_s) %>
+              <input name="quantity" 
+                     class="small-input" 
+                     type="number" 
+                     value=<%= i.quantity %>></input>
+              <input type="submit" name="update_action" 
+                     class="btn btn-small" value="update"></input>
+            </form>
+          </td>
 
-        <td>
-          <%= form_tag(raw "/item?id="+i.id.to_s+"&oid="+@object_type.id.to_s) %>
-            <input name="inuse" 
-                   class="small-input" 
-                   type="number" 
-                   value=<%= i.inuse %>></input>
-            <input type="submit" name="update_action" 
-                   class="btn btn-small" value="take"></input>
-          </form>
-        </td>
+          <td>
+            <%= form_tag(raw "/item?id="+i.id.to_s+"&oid="+@object_type.id.to_s) %>
+              <input name="inuse" 
+                     class="small-input" 
+                     type="number" 
+                     value=<%= i.inuse %>></input>
+              <input type="submit" name="update_action" 
+                     class="btn btn-small" value="take"></input>
+            </form>
+          </td>
+
+        <% else %>
+
+           <td><%= i.inuse != 0 ? 'yes' : 'no' %></td>
+
+        <% end %>
 
         <td><%= link_to "delete", [@object_type, i], method: :delete, 
                                   data: { confirm: "Really delete item?" } %></td>

@@ -105,7 +105,7 @@ p {
 }
 
 input {
-    padding: 10px !important;
+#    padding: 10px !important;
 }
 
 input[type=checkbox] {
@@ -113,11 +113,11 @@ input[type=checkbox] {
   -webkit-appearance:none;
   -o-appearance:none;
 
-  padding: 10px;
-  margin: 20px;
+#  padding: 10px;
+#  margin: 20px;
   border-radius: 4px;
-  height: 40px !important;
-  width: 40px !important;
+  height: 30px !important;
+  width: 30px !important;
   border: 1pt solid #000;
   &:checked {
     background: #00a;
@@ -125,7 +125,7 @@ input[type=checkbox] {
 }
 
 .file_upload {
-#  outline: 1pt dashed red;
+  #outline: 1pt dashed red;
   input[type=file] {
     display: none;
     height: 0px;
@@ -326,3 +326,8 @@ input {
   margin-top: 12px;
 }
 
+img {
+  border-radius: 5px;
+  margin-top:15px; 
+  border: 1pt solid grey;
+}

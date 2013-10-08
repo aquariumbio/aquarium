@@ -1,7 +1,10 @@
 class Item < ActiveRecord::Base
 
   belongs_to :object_type
-  attr_accessible :location, :quantity, :table, :table_entry_id, :inuse
+  belongs_to :sample
+  has_many :touches
+
+  attr_accessible :location, :quantity, :table, :table_entry_id, :inuse, :sample_id
 
   validates :location, :presence => true
 

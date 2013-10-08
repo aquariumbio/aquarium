@@ -1,7 +1,11 @@
-<% provide(:title, 'Inventory|New') %>
+<% provide(:title, 'New Object Type') %>
 
-<h2>New Object Type</h2>
+<% if @sample_type %>
+  <h2>New Sample Container for <b><%= pluralize(2, @sample_type.name)[2..-1] %></b></h2>
+<% else %>
+  <h2>New Object Type</h2>
+<% end %>
 
 <%= render 'form' %>
 
-<%= link_to 'Back', object_types_path %>
+<%= link_to 'Back', object_types_path, class: 'btn' %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130930164148) do
+ActiveRecord::Schema.define(:version => 20131007221832) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -30,8 +30,7 @@ ActiveRecord::Schema.define(:version => 20130930164148) do
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
     t.integer  "inuse",          :default => 0
-    t.string   "table"
-    t.integer  "table_entry_id"
+    t.integer  "sample_id"
   end
 
   add_index "items", ["object_type_id"], :name => "index_items_on_object_type_id"
@@ -76,19 +75,52 @@ ActiveRecord::Schema.define(:version => 20130930164148) do
     t.float    "cost"
     t.string   "release_method"
     t.text     "release_description"
+    t.integer  "sample_type_id"
   end
 
-  create_table "primers", :force => true do |t|
+  create_table "sample_types", :force => true do |t|
+    t.string   "name"
     t.string   "description"
-    t.string   "annealing"
-    t.string   "overhang"
-    t.float    "tm"
-    t.text     "notes"
-    t.integer  "project"
-    t.integer  "owner"
+    t.string   "field1name"
+    t.string   "field1type"
+    t.string   "field2name"
+    t.string   "field2type"
+    t.string   "field3name"
+    t.string   "field3type"
+    t.string   "field4name"
+    t.string   "field4type"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+    t.string   "field5name"
+    t.string   "field5type"
+    t.string   "field6name"
+    t.string   "field6type"
   end
+
+  create_table "samples", :force => true do |t|
+    t.string   "name"
+    t.integer  "sample_type_id"
+    t.string   "project"
+    t.string   "field1"
+    t.string   "field2"
+    t.string   "field3"
+    t.string   "field4"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.integer  "user_id"
+    t.string   "field5"
+    t.string   "field6"
+  end
+
+  create_table "touches", :force => true do |t|
+    t.integer  "item_id"
+    t.integer  "job_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "touches", ["item_id"], :name => "index_touches_on_item_id"
+  add_index "touches", ["job_id"], :name => "index_touches_on_job_id"
 
   create_table "users", :force => true do |t|
     t.string   "name"

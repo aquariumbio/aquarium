@@ -25,12 +25,18 @@ class ObjectTypesController < ApplicationController
   # GET /object_types/1
   # GET /object_types/1.json
   def show
+
     @object_type = ObjectType.find(params[:id])
+
+    if @object_type.handler == 'sample_container'
+      @sample_type = SampleType.find(@object_type.sample_type_id)
+    end
 
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @object_type }
     end
+
   end
 
   # GET /object_types/new
@@ -39,8 +45,16 @@ class ObjectTypesController < ApplicationController
 
     @object_type = ObjectType.new
 
+    if params[:sample_type_id]
+      @sample_type = SampleType.find(params[:sample_type_id])
+      @object_type.unit = @sample_type.name
+      @object_type.handler = "sample_container"
+      @object_type.sample_type_id = params[:sample_type_id]
+    else
+      @object_type.handler = "generic"
+    end
+
     # pretty sure these defaults should go in the model and not here
-    @object_type.handler = "generic"
     @object_type.min = 0
     @object_type.max = 1
     @object_type.safety = "No safety information"
@@ -84,8 +98,13 @@ class ObjectTypesController < ApplicationController
 
     respond_to do |format|
       if @object_type.update_attributes(params[:object_type])
-        format.html { redirect_to @object_type, notice: 'Object type was successfully updated.' }
-        format.json { head :no_content }
+        if @object_type.handler == 'sample_container'
+          format.html { redirect_to @object_type.sample_type, notice: 'Object type was successfully updated.' }
+          format.json { head :no_content }
+        else
+          format.html { redirect_to @object_type, notice: 'Object type was successfully updated.' }
+          format.json { head :no_content }
+        end
       else
         format.html { render action: "edit" }
         format.json { render json: @object_type.errors, status: :unprocessable_entity }

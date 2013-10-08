@@ -1,0 +1,68 @@
+<%= form_for(@sample) do |f| %>
+  <% if @sample.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@sample.errors.count, "error") %> prohibited this sample from being saved:</h2>
+      <ul>
+      <% @sample.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+   <div class='row-fluid'>
+
+    <div class='span3'>    
+
+     <label>Name</label>
+     <%= f.text_field :name %>
+
+   </div><div class='span3'>    
+
+    <label>Project </label>
+    <%= f.text_field :project %>
+
+   </div><div class='span3'>    
+
+     <label>Owner</label>
+     <%= f.select( :user_id, User.all.collect { |u| [ u.login, u.id ] } ) %>
+
+   </div><div class='span3'>    
+
+     <div style='display: none'>
+       <label>Type</label>
+       <%= f.select( :sample_type_id, SampleType.all.collect { |st| [ st.name, st.id ] } ) %>
+     </div> 
+
+   </div>
+
+  </div>
+
+  <hr />
+
+    <% (1..6).each do |i| 
+       fn = "field#{i}name".to_sym
+       ft = "field#{i}type".to_sym 
+       ff = "field#{i}".to_sym %>
+      <% if @sample_type[ft] != 'not used' %>
+        <label><%= @sample_type[fn] %> (<%= @sample_type[ft] %>)</label>
+        <% if @sample_type[ft] == 'url' %>
+          <%= f.url_field ff %>
+        <% elsif @sample_type[ft] == 'number' %>
+          <%= f.text_field ff %>
+        <% elsif @sample_type[ft] == 'string' %>
+          <%= f.text_field ff %>
+        <% else %>
+          <% choices = SampleType.find_by_name(@sample_type[ft]).samples.collect { |s| [ s.name, s.name ] } %>
+          <%= f.select ff, choices %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+  <hr />
+
+  <div class="actions">
+    <%= f.submit "Save Sample Information", class: 'btn' %>
+  </div>
+
+<% end %>

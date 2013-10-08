@@ -8,7 +8,15 @@
   <% type = @instruction.item_list[i][:type]  %>
   <% ob = @instruction.object_list[i] %>
 
-  <h4>Take <%= q %> <%= type.pluralize(q) %>:</h4>
+
+  <h4><%= q %> <%= type.pluralize(q) %>
+
+  <% if ob.handler == 'sample_container' %>
+    containing the
+      <%= ob.sample_type.name %>
+      <%= @instruction.item_list[i][:name] %>
+  <% end %>
+  :</h4>
 
   <div class='row-fluid'>
 
@@ -17,10 +25,10 @@
     </div>
 
     <div class="span10">
-
       <div class='take_object_select' id='object_select_<%= i %>'></div>
-       <button class='btn btn-link btn-more' onclick='add_choice_<%= i %>()' style='font-size: 12pt'>More locations</button>
+      <button class='btn btn-link btn-more' onclick='add_choice_<%= i %>()' style='font-size: 12pt'>More locations</button>
     </div>
+
   </div>
 
 <% end %>
@@ -96,6 +104,8 @@
   <% for i in 0..((@instruction.item_list.length) - 1) %>
   
     <% object = @instruction.object_list[i] %>
+    <% fields = @instruction.item_list[i] %>
+    console.log('<%= fields.to_s %>');
 
     num_choices[<%= i %>] = 0;
     function add_choice_<%= i %>() {
@@ -106,11 +116,26 @@
             + "  <select class='item_select' id='select_object_" 
             + <%= i %> + "_item_" + num_choices[<%= i %>] + "' onchange='update_totals(<%= i %>," + num_choices[<%= i %>] + ")' >";
 
-      <% object.items.each do |item| %>
-        <% if item.quantity - item.inuse > 0 %>
-          html += '  <option value=<%= item.id %>><%= item.location %> (<%= item.quantity - item.inuse %> available) </option>';
-          max[<%= item.id %>] = <%= item.quantity - item.inuse %>;
+      <% if object.handler != 'sample_container' %>
+
+        <% object.items.each do |item| %>
+          <% if item.quantity - item.inuse > 0 %>
+            html += '  <option value=<%= item.id %>><%= item.location %> (<%= item.quantity - item.inuse %> available) </option>';
+            max[<%= item.id %>] = <%= item.quantity - item.inuse %>;
+          <% end %>
         <% end %>
+
+      <% else %>
+
+        <% object.items.each do |item| %>
+          <% if item.sample.name == fields[:name] && item.sample.project == fields[:project] %>
+            <% if item.quantity - item.inuse > 0 %>
+              html += '  <option value=<%= item.id %>>Sample id: <%= item.id %> at <%= item.location %> </option>';
+              max[<%= item.id %>] = <%= item.quantity - item.inuse %>;
+            <% end %>
+          <% end %>
+        <% end %>
+
       <% end %>
    
       html += "  </select>"

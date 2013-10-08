@@ -2,6 +2,18 @@ class ItemsController < ApplicationController
 
   before_filter :signed_in_user
 
+  def show
+
+    @item = Item.find(params[:id])
+    @touches = @item.touches
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @item }
+    end
+
+  end
+
   def create
     @object_type = ObjectType.find(params[:object_type_id])
     @item = @object_type.items.create(params[:item])
@@ -13,7 +25,12 @@ class ItemsController < ApplicationController
       end
     end
 
-    redirect_to object_type_path(@object_type)
+    if @object_type.handler == 'sample_container'
+      redirect_to sample_path(@item.sample)     
+    else
+      redirect_to object_type_path(@object_type)
+    end
+
   end
 
   def destroy
@@ -23,6 +40,15 @@ class ItemsController < ApplicationController
   end
 
   def update
+
+    if params[:item] # called from sample page
+
+       i = Item.find(params[:item][:id])
+       i.location = params[:item][:location]
+       i.save
+       redirect_to sample_url id: i.sample_id
+
+    else
 
     i = Item.find(params[:id])
 
@@ -46,6 +72,8 @@ class ItemsController < ApplicationController
     end
 
     redirect_to object_type_url :id => params[:oid]
+
+    end
 
   end
 

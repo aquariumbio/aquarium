@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  sample_type_id: 1
+  owner: MyString
+  project: MyString
+  field1: MyString
+  field2: MyString
+  field3: MyString
+  field4: MyString
+
+two:
+  name: MyString
+  sample_type_id: 1
+  owner: MyString
+  project: MyString
+  field1: MyString
+  field2: MyString
+  field3: MyString
+  field4: MyString
