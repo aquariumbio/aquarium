@@ -113,11 +113,11 @@ input[type=checkbox] {
   -webkit-appearance:none;
   -o-appearance:none;
 
-  padding: 10px;
-  margin: 20px;
+#  padding: 10px;
+#  margin: 20px;
   border-radius: 4px;
-  height: 40px !important;
-  width: 40px !important;
+  height: 30px !important;
+  width: 30px !important;
   border: 1pt solid #000;
   &:checked {
     background: #00a;
