@@ -21,19 +21,39 @@ class TakeInstruction < Instruction
 
   def pre_render scope, params
 
-    # Evaluate expressions to get actual values
+    # To render the list of items to be taken, we have to evaluate item_list_expr, in case
+    # involves complicated expressions and nost just string constants describing the items.
+    # We also have to figure out all the object types associated with those items, so that
+    # we have pictures, etc. to show.
+
     @item_list = []
     @object_list = []
 
+    # make a list of the evaluated expressions for each item in the list to be taken
     @item_list_expr.each do |item_expr|
-      @item_list.push( { type: (scope.substitute item_expr[:type]),
-        quantity: (scope.evaluate item_expr[:quantity]).to_i,
-        var: item_expr[:var] } )
+      if item_expr[:name]
+        @item_list.push( { 
+          type: (scope.substitute item_expr[:type]),
+          quantity: (scope.evaluate item_expr[:quantity]).to_i,
+          var: item_expr[:var],
+          name: (scope.substitute item_expr[:name]),
+          project: (scope.substitute item_expr[:project])
+        } )
+      else
+        @item_list.push( { 
+          type: (scope.substitute item_expr[:type]),
+          quantity: (scope.evaluate item_expr[:quantity]).to_i,
+          var: item_expr[:var]
+        } )
+      end
     end
 
-    # Find the actual objects in the db
+    # Find the objects associated with the :type specifications in the db
     @item_list.each do |i|
+
       ob = ObjectType.find_by_name(i[:type])
+
+      # make a new object if one doesn't exist (and we're not in production mode)
       if !ob && Rails.env != 'production'
         ob = ObjectType.new
         ob.save_as_test_type i[:type]
@@ -41,7 +61,9 @@ class TakeInstruction < Instruction
       elsif !ob
         raise "In <take>: Could not find object of type '#{@object_type}', which is not okay in production mode."
       end
+
       @object_list.push( ob )
+
     end
 
   end

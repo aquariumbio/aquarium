@@ -40,7 +40,9 @@
 <% @sample_type.object_types.each do |ot| %>
   <div class='sample-object'>
     <h4><%= link_to pluralize(2,ot.name)[2..-1], ot %></h4>
-    <% ot.items.each do |i| %>
+    <!-- WARNING: I THINK THIS REJECT IS SLOW COMPARED TO SOME KIND OF --
+      -- DB QUERY                                                      -->
+    <% (ot.items.reject { |i| i.sample_id != @sample.id } ).each do |i| %>
       <%= render partial: '/samples/item', locals: { item: i } %>
     <% end %>
     <br />

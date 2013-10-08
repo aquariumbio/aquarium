@@ -11,5 +11,6 @@ class Job < ActiveRecord::Base
   end
 
   has_many :logs
+  has_many :touches
 
 end

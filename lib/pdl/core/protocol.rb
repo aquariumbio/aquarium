@@ -347,7 +347,7 @@ class Protocol
             item_tag = e.elements.first
             item_list_expr = []
 
-            while item_tag
+            while item_tag 
 
               c = children_as_text item_tag
 
@@ -355,19 +355,13 @@ class Protocol
                 raise "Protocol error: take/item sub-tags (type, quantity, var) not present"
               end
 
-              details = {}
-
-              item_tag.elements.each do |el|
-
-                if el.name != 'type' && el.name != 'quantity' && el.name != 'var'
-                   details[:table] = el.name
-                   details[:field] = el.elements.first.name
-                   details[:field_value] = el.elements.first.text
+              if c[:name] || c[:project]
+                unless  c[:name] && c[:project]
+                  raise "Protocol error: when taking an item either both or neither name and project should be specified"
                 end
-
               end
 
-              item_list_expr.push( { type: c[:type], quantity: c[:quantity], var: c[:var] }.merge details )
+              item_list_expr.push( c )
               item_tag = item_tag.next_element
 
             end
