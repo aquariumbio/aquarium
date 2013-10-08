@@ -18,7 +18,7 @@
     <% @object_type.items.each do |i| %>
 
       <tr>
-        <td><%= "%05d" % i.id %></td>
+        <td><%= link_to "%05d" % i.id, i %></td>
 
         <% if @object_type.handler == 'sample_container' %>
           <td><%= link_to i.sample.name, i.sample %></td>

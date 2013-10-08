@@ -6,7 +6,7 @@
 
 <div class='sample-item <%= c %>' id='sample-item-<%= item.id %>'>
 
-  <div class='id'><%= item.id %></div>
+  <div class='id'><%= link_to item.id, item %></div>
 
   <div class='loc' id='sample-item-loc-<%= item.id %>'>
     <%= item.location %>

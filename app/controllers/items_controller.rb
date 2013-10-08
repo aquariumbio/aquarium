@@ -2,6 +2,18 @@ class ItemsController < ApplicationController
 
   before_filter :signed_in_user
 
+  def show
+
+    @item = Item.find(params[:id])
+    @touches = @item.touches
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @item }
+    end
+
+  end
+
   def create
     @object_type = ObjectType.find(params[:object_type_id])
     @item = @object_type.items.create(params[:item])

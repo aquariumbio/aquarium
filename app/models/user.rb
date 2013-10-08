@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   has_secure_password
   has_many :samples
   has_many :logs
+  has_many :jobs
 
   # Q: Why not = user.login.downcase?
   before_save { |user| user.login = login.downcase } 

@@ -114,6 +114,12 @@ class TakeInstruction < Instruction
  
         item.inuse += q
         item.save
+ 
+        # touch the item, for tracking purposes
+        t = Touch.new
+        t.job_id = params[:job]
+        t.item_id = item.id
+        t.save
 
       end
 

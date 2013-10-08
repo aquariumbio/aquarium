@@ -2,7 +2,6 @@ Bioturk::Application.routes.draw do
 
   resources :samples
 
-
   resources :sample_types
 
   match "interpreter/open_local_file", to: 'interpreter#open_local_file', via: [:post]
@@ -29,6 +28,8 @@ Bioturk::Application.routes.draw do
 
   get "protocol_tree/file"
   get "protocol_tree/recent"
+
+  resources :items
 
   resources :object_types do 
     resources :items do
