@@ -1,0 +1,85 @@
+<% provide(:title, 'Samples') %>
+
+<h1><%= pluralize(2,@sample_type.name)[2..-1]%></h1>
+
+<h4>Owner: <span class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @user.login %><b class="caret"></b></a>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+      <% (User.all.sort { |x,y| x.login <=> y.login}).each do |u| %>
+        <li><a href="#" onclick="update_user(<%= u.id %>)"><%= u.login %></a></li>
+      <% end %>
+    </ul>
+</span></h4>
+
+<table class='table'>
+  <tr>
+    <th>Name</th>
+    <th>Project</th>
+
+    <% (1..6).each do |i| 
+       fn = "field#{i}name".to_sym
+       ft = "field#{i}type".to_sym %>
+       <% if @sample_type[ft] != 'not used' %><th><%= @sample_type[fn] %></th><% end %>
+    <% end %>
+
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @samples.each do |sample| %>
+  <tr>
+    <td><%= sample.name %></td>
+    <td><%= sample.project %></td>
+
+    <% (1..6).each do |i| 
+       fn = "field#{i}name".to_sym
+       ft = "field#{i}type".to_sym 
+       f = "field#{i}".to_sym %>
+
+      <% if @sample_type[ft] != 'not used' %>
+        <% if @sample_type[ft] == 'url' %>
+          <td><a href='<%= sample[f] %>'><%= sample[f][0..20] %> ...</a></td>
+        <% elsif @sample_type[ft] == 'number' %>
+          <td><%= sample[f] %></td>
+        <% elsif @sample_type[ft] == 'string' %>
+          <td><%= sample[f] %></td>
+        <% else %>
+          <td><%= link_to sample[f], Sample.find_by_name(sample[f]) %></td>
+        <% end %>
+      <% end %>
+
+
+    <% end %>
+
+    <td><%= link_to 'Show', sample %></td>
+    <td><%= link_to 'Edit', edit_sample_path(sample) %></td>
+    <td><%= link_to 'Destroy', sample, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to "New #{@sample_type.name}", new_sample_path(sample_type: @sample_type_id), class: 'btn' %>
+
+<script>
+
+var sample_type_id = <%= @sample_type_id %>;
+var user_id = <%= @user_id %>;
+
+function update_type(i) {
+  sample_type_id = i;
+  reload();
+}
+
+function update_user(i) {
+  user_id = i;
+  reload();
+}
+
+function reload() {
+  window.location = 'samples?user_id=' + user_id + '&' + 'sample_type_id=' + sample_type_id;
+}
+
+</script>

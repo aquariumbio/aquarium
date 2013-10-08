@@ -11,51 +11,67 @@
     </div>
   <% end %>
 
-  <div class="new-object">
-  <div class="field" id="name">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </div>
-  <div class="field" id="description">
-    <%= f.label :description %><br />
-    <%= f.text_field :description %>
-  </div>
-  <div class="field" id="min">
-    <%= f.label :min %><br />
-    <%= f.number_field :min %>
-  </div>
-  <div class="field" id="max">
-    <%= f.label :max %><br />
-    <%= f.number_field :max %>
-  </div>
-  <div class="field" id="unit">
-    <%= f.label :unit %><br />
-    <%= f.text_field :unit %>
-  </div>
-  <div class="field" id="cost">
-    <%= f.label 'Cost per unit' %><br />
-    <div class="input-prepend">
-      <span class="add-on">$</span>
-        <%= f.text_field :cost, class:'span2' %>
-      </span>
+  <div class='new-object'>
+  <div class='row-fluid'>
+
+    <div class="span3">
+      <%= f.label :name %>
+      <%= f.text_field :name, class: 'span12' %>
     </div>
-  </div>
-  <div class="field" id="handler">
-    <%= f.label :handler %><br />
-    <%= f.text_field :handler %>
+
+    <div class="span9" >
+      <%= f.label :description %>
+      <%= f.text_field :description, class: 'span12' %>
+    </div>
+
   </div>
 
-  <%
-    s1 = "<option value='return'  #{@object_type[:release_method] == 'return' ? ' selected' : ' '}>Return</option>";
-    s2 = "<option value='dispose' #{@object_type[:release_method] == 'dispose' ? ' selected' : ' '}>Dispose</option>";
-    s3 = "<option value='query'   #{@object_type[:release_method] == 'query' ? ' selected' : ' '}>Query</option>";
-    s = s1+s2+s3;
-  %>
+  <div class='row-fluid'>
 
-  <div class="field" id="release_method">
-    <%= f.label 'Release method' %><br />
-    <%= select_tag('object_type[[release_method]', s.html_safe ) %>
+    <div class="span1">
+      <%= f.label :min %>
+      <%= f.number_field :min, class: 'span12' %>
+    </div>
+
+    <div class="span1">
+      <%= f.label :max %>
+      <%= f.number_field :max, class: 'span12' %>
+    </div>
+
+    <div class="span2"<%= @sample_type ? "style='display:none'".html_safe : '' %>>
+      <%= f.label :unit %>
+      <%= f.text_field :unit, class: 'span12' %>
+    </div>
+
+    <div class="span2">
+      <%= f.label 'Cost per unit' %>
+      <div class="input-prepend">
+        <span class="add-on">$</span>
+          <%= f.text_field :cost, class: 'span10' %>
+        </span>
+      </div>
+    </div>
+
+    <div class="span2" id="handler" <%= @sample_type ? "style='display:none'".html_safe : '' %>>
+      <%= f.label :handler %>
+      <%= f.text_field :handler, class: 'span12' %>
+    </div>
+
+    <%
+      s1 = "<option value='return'  #{@object_type[:release_method] == 'return' ? ' selected' : ' '}>Return</option>";
+      s2 = "<option value='dispose' #{@object_type[:release_method] == 'dispose' ? ' selected' : ' '}>Dispose</option>";
+      s3 = "<option value='query'   #{@object_type[:release_method] == 'query' ? ' selected' : ' '}>Query</option>";
+      s = s1+s2+s3;
+    %>
+
+    <div class="span2" >
+      <%= f.label 'Release method' %>
+      <%= select_tag('object_type[[release_method]', s.html_safe, class: 'span12') %>
+    </div>
+
   </div>
+
+  <br />
 
   <ul class="nav nav-tabs" id="detail_tabs">
     <li><a href="#release_description" data-toggle="tab">Resease Description</a></li>
@@ -99,15 +115,22 @@
     <%= f.file_field :image %>
   </div>
 
-<script>
-  $(function () {
-    $('#detail_tabs a:first').tab('show');
-  })
-</script>
+  <% if @sample_type %>
+      <%= f.text_field :sample_type_id, style: 'display:none' %>
+  <% end %>
+
+  <script>
+    $(function () {
+      $('#detail_tabs a:first').tab('show');
+    })
+  </script>
+
+  <br />
 
   <div class="actions">
-    <%= f.submit class: "btn btn-small" %>
+    <%= f.submit class: "btn" %>
   </div>
+  
+  <br />
 
-  </div>
 <% end %>

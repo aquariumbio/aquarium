@@ -1,9 +1,24 @@
-<p><b>Description: </b><%= @object_type.description %></p>
-<p><b>Min/Max:</b>     <%= @object_type.min %>/<%= @object_type.max %></p>
-<p><b>Unit: </b>       <%= @object_type.unit %> (<%= number_to_currency(@object_type.cost)%> each)</p>
-<p><b>Handler: </b>    <%= @object_type.handler %></p>
-<p><b>Release(<%= @object_type.release_method.capitalize %>): </b><%= @object_type.release_description %></p>
-<p><b>Safety: </b>     <%= @object_type.safety %></p>
-<p><b>Cleanup: </b>    <%= @object_type.cleanup %></p>
-<p><b>Data: </b>       <%= @object_type.data %></p>
-<p><b>Vendor: </b>     <%= @object_type.vendor %></p>
+<% if  @object_type.handler == 'sample_container' %>
+  <div class='alert alert-info'>
+    <p>Objects of this type contain samples of type
+       <b><%= @sample_type.name %></b>. <br />
+       Description: <%= @sample_type.description %>
+    </p>
+  </div>
+<% end %>
+
+<ul class='list'>
+<li><b>Description: </b><%= @object_type.description %></li>
+<li><b>Min/Max:</b>     <%= @object_type.min %>/<%= @object_type.max %></li>
+<li><b>Unit: </b>       <%= @object_type.unit %>(<%= number_to_currency(@object_type.cost)%> each)</li>
+
+<% unless  @object_type.handler == 'sample_container' %>
+  <li><b>Handler: </b><%= @object_type.handler %></li>
+<% end %>
+
+<li><b>Release(<%= @object_type.release_method.capitalize %>): </b><%= @object_type.release_description %></li>
+<li><b>Safety: </b>     <%= @object_type.safety %></li>
+<li><b>Cleanup: </b>    <%= @object_type.cleanup %></li>
+<li><b>Data: </b>       <%= @object_type.data %></li>
+<li><b>Vendor: </b>     <%= @object_type.vendor %></li>
+</ul>

@@ -31,6 +31,16 @@ class StepInstruction < Instruction
     str
   end
 
+  def image
+    str = ""
+    @parts.each do |a|
+      if a.has_key?(:image)
+        str = "http://bioturk.ee.washington.edu:3012/bioturk/image?name=#{a[:image]}"
+      end
+    end
+    str
+  end
+
   def warnings
     w = []
     @parts.each do |a|

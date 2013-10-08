@@ -1,0 +1,70 @@
+<%= form_for(@sample_type) do |f| %>
+  <% if @sample_type.errors.any? %>
+
+    <div id="error_explanation">
+      <h2><%= pluralize(@sample_type.errors.count, "error") %> prohibited this sample_type from being saved:</h2>
+      <ul>
+      <% @sample_type.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+
+    </div>
+  <% end %>
+
+  <div class='row-fluid'>
+   <div class='span1'></div>
+   <div class='span3'>
+     <label>Name</label>
+     <%= f.text_field :name, placeholder: 'Name' %>
+   </div>
+   <div class='span8'>
+     <label>Description</label>
+     <%= f.text_field :description, placeholder: 'Short description', class: 'input-xxlarge' %>
+   </div>
+  </div>
+
+  <hr />
+
+    <% types = [['not used','not used'],['string','string'],['number','number'],['url','url']] 
+       SampleType.all.each do |st|
+         types.push [ 'link to ' + st.name.downcase, st.name ]
+       end
+    %>
+
+
+
+    <div class='row-fluid'>
+      <div class='span1'></div>
+      <label class='span3'>Field Names</label>
+      <label class='span3'>Field Types</label>
+      <div class='span5'></div>
+    </div>
+
+      <% (1..6).each do |i| %>
+
+        <div class='row-fluid'>
+         
+        <% fn = "field#{i}name".to_sym
+           ft = "field#{i}type".to_sym %>
+
+           <div class='span1'></div>
+           <div class='span3'>
+             <%= f.text_field fn, placeholder: "Field #{i} Name" %>
+           </div>
+           <div class='span3'>
+             <%= f.select(ft,types) %>
+           </div>
+           <div class='span5'></div>
+
+        </div>
+
+      <% end %>
+
+  <hr />
+
+  <div class="actions">
+    <%= f.submit "Save Sample Type", class: 'btn' %>
+  </div>
+
+<% end %>

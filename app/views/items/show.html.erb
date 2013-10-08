@@ -1,0 +1,21 @@
+<h1>Item <%= @item.id %> (<%= @item.object_type.name %>)</h1>
+
+<h2>History</h2>
+
+<table class='table'>
+  <tr>
+    <th>Date/Time</th>
+    <th>Job</th>
+    <th>Protocol</th>
+    <th>User</th>
+  </tr>
+<% @touches.each do |t| %>
+  <% j = Job.find(t.job_id) %>
+  <tr>
+    <td><%= j.created_at.to_formatted_s(:short) %></td>
+    <td><%= link_to j.id, j %></td>
+    <td><%= j.path %></td>
+    <td><%= j.user.login %></td>
+  </tr>
+<% end %>
+</ul>

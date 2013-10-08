@@ -20,7 +20,13 @@
             data-toggle="dropdown">Inventory<b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><%= link_to "Basic", object_types_path %></li>
-              <li><%= link_to "Primers", primers_path %></li>
+              <li class="divider"></li>
+              <% SampleType.all.each do |st| %>
+                <% name = pluralize(2,st.name)[2..-1] %>
+                <li><%= link_to name, samples_path(sample_type_id: st.id) %></li>
+              <% end %>
+              <li class="divider"></li>
+              <li><%= link_to "Sample Type Definitions", sample_types_path %></li>
               <% if Rails.env != 'production' %>
                 <li class="divider"></li>
                 <li><%= link_to "Manipulate", production_interface_path %></li>
@@ -34,6 +40,7 @@
               <li><%= link_to "Github", protocol_tree_home_path %></li>
               <li><%= link_to "Local", protocol_tree_file_path %></li>
               <li><%= link_to "Recent", protocol_tree_recent_path %></li>
+              <li class="divider"></li>
               <li><%= link_to "Pending Jobs", jobs_path %></li>
             </ul>
           </li>

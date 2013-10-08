@@ -55,8 +55,8 @@ $outlineStyle: #f00 dotted 0px;
   }
 
   h1 {
-    font-size: 42pt;
-    text-align: left;
+#    font-size: 42pt;
+   text-align: left;
   }
 
   li {
@@ -81,7 +81,8 @@ $outlineStyle: #f00 dotted 0px;
   p {
     font-size: 18pt;
     padding: 0 0 0 0;
-    margin: 0 0 0 20px;
+#    margin: 0 0 0 10px;
+    line-height: 1.3;
   }
 
    .note {
@@ -133,10 +134,10 @@ $outlineStyle: #f00 dotted 0px;
 
   .item_select {
 
-    height: 58px;
-    margin: 10px 0 20px 0 !important;
-    padding: 10px !important;
-    passing: 0;
+    #height: 58px;
+    #margin: 10px 0 20px 0 !important;
+    #padding: 10px !important;
+    #passing: 0;
 
   option {
     padding: 10px !important;

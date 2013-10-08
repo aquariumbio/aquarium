@@ -17,18 +17,18 @@
 
      when 'return' %>
       <h4><input type='checkbox' id='<%=i %>-returned' onchange='update_next_button(<%=i %>)'></input>
-          Please return <%= pluralize(quantity,nm) %> to <%= loc %>.</h4>
+          Please return item <%= it.id %> (<%= nm %>) to <%= loc %>.</h4>
       <p><%= method %></p>
       <% next_check_list.push(i) %>
 
   <% when 'dispose' %>
       <h4><input type='checkbox' id='<%=i %>-returned' onchange='update_next_button(<%=i %>)'></input> 
-          Please dispose of <%= pluralize(quantity,nm) %>.</h4>
+          Please dispose of item <%= it.id %> (<%= nm %>).</h4>
       <p><%= method %></p>
       <% next_check_list.push(i) %>
 
   <% when 'query' %>
-      <h4>Return or dispose <%= pluralize(quantity,nm) %>?</h4>
+      <h4>Return or dispose item <%= it.id %> (<%= nm %>)?</h4>
       <p><%= method %></p>
       <div class="yesorno">
         <label class="radio inline">

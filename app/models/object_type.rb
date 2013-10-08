@@ -1,7 +1,8 @@
 class ObjectType < ActiveRecord::Base
 
   attr_accessible :cleanup, :data, :description, :handler, :max, :min, :name, :safety, 
-                  :vendor, :unit, :image, :cost, :release_method, :release_description
+                  :vendor, :unit, :image, :cost, :release_method, :release_description,
+                  :sample_type_id
 
   has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "150x150>" }, 
                     :default_url => "/images/:style/no-image.png"
@@ -35,6 +36,7 @@ class ObjectType < ActiveRecord::Base
   end
 
   has_many :items, dependent: :destroy
+  belongs_to :sample_type
 
   def quantity
     q = 0
