@@ -2,8 +2,8 @@ class GotoInstruction < Instruction
 
   attr_reader :destination
 
-  def initialize 
-    super 'goto'
+  def initialize options = {}
+    super 'goto', options
   end
 
   def mark_destination dest

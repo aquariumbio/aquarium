@@ -5,11 +5,11 @@ class TakeInstruction < Instruction
 
   attr_reader :item_list, :object_list
 
-  def initialize item_list_expr
+  def initialize item_list_expr, options = {}
 
     @item_list_expr = item_list_expr
     @renderable = true
-    super 'take'
+    super 'take', options
 
     # TERMINAL 
     @num_taken = 0

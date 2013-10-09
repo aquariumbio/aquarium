@@ -3,7 +3,7 @@ class ProduceInstruction < Instruction
   attr_reader :object_type, :quantity, :release, :var
   attr_accessor :sample_expr
 
-  def initialize object_type_expr, quantity_expr, release_expr, var
+  def initialize object_type_expr, quantity_expr, release_expr, var, options = {}
 
     @object_type_expr = object_type_expr
     @quantity_expr = quantity_expr
@@ -12,7 +12,7 @@ class ProduceInstruction < Instruction
     @sample_expr = nil
 
     @renderable = true
-    super 'produce'
+    super 'produce', options
 
     @location = 'B0.000'
 

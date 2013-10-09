@@ -2,9 +2,9 @@ class HTTPInstruction < Instruction
 
   attr_reader :info_expr
 
-  def initialize info_expr
+  def initialize info_expr, options = {}
 
-    super 'http'
+    super 'http', options
     @info_expr = info_expr
     @renderable = false
 

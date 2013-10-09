@@ -1,11 +1,11 @@
 class MoveInstruction < Instruction
 
-  def initialize item_expr, location_expr, var
+  def initialize item_expr, location_expr, var, options = {}
     @item_expr = item_expr
     @location_expr = location_expr
     @renderable = false
     @var = var
-    super 'move'
+    super 'move', options
   end
 
   # RAILS ##################################################################################

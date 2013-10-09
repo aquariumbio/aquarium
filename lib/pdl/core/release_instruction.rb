@@ -2,11 +2,11 @@ class ReleaseInstruction < Instruction
 
   attr_reader :expr, :item_list
 
-  def initialize expr
+  def initialize expr, options = {}
 
     @expr = expr
     @renderable = true
-    super 'release'
+    super 'release', options
 
   end
 

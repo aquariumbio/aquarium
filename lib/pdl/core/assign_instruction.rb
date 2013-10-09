@@ -2,8 +2,8 @@ class AssignInstruction < Instruction
 
   attr_reader :var, :value
 
-  def initialize lhs, rhs
-    super 'assign'
+  def initialize lhs, rhs, options = {}
+    super 'assign', options
     @lhs = lhs
     @rhs = rhs
     @renderable = false

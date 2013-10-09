@@ -2,9 +2,9 @@ class IfInstruction < Instruction
 
   attr_reader :end_then_pc, :then_pc, :else_pc
 
-  def initialize condition
+  def initialize condition, options = {}
     @condition = condition
-    super 'if'
+    super 'if', options
   end
 
   def mark_then pc

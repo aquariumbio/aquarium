@@ -2,12 +2,13 @@
 
 <div class="alert alert-block">
 <h4>An error was encountered</h4>
-<%= params[:choices] %>
-<%= @error %> 
+<p><%= params[:choices] %></p>
+<p><%= @error %> </p>
 </div>
 
-<% if @protocol %>
-  <pre><%= @protocol.program[@error_pc].html.html_safe %></pre>
+<% if @protocol && @protocol.program[@error_pc] %>
+  <h4>Offending XML</h4>
+  <pre><%= @protocol.program[@error_pc].xml.to_s %></pre>
 <% end %>
 
 <p><%= link_to 'View Log for Job ' + @job.id.to_s, @job %></p>

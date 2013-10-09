@@ -4,9 +4,9 @@ class LogInstruction < Instruction
 
   attr_reader :type, :data, :log_file
 
-  def initialize type, data, log_file
+  def initialize type, data, log_file, options = {}
 
-    super 'log'
+    super 'log', options
     @type = type
     @data = data
 

@@ -151,7 +151,7 @@ class Protocol
 
           ##########################################################################################
           when 'information' 
-            push InformationInstruction.new e.text  
+            push InformationInstruction.new e.text, xml: e
             e = increment e
 
           ##########################################################################################
@@ -199,7 +199,7 @@ class Protocol
 
             end
 
-            push StepInstruction.new parts
+            push StepInstruction.new parts, xml: e
 
             e = increment e
 
@@ -222,7 +222,7 @@ class Protocol
               raise "Parse error: no rhs subtag in assignment."
             end
 
-            push AssignInstruction.new lhs, rhs
+            push AssignInstruction.new lhs, rhs, xml: e
             e = increment e
 
           ##########################################################################################
@@ -243,7 +243,7 @@ class Protocol
             end
 
             if @include_stack.length <= 1
-              push_arg ArgumentInstruction.new name, c[:type], c[:description]
+              push_arg ArgumentInstruction.new name, c[:type], c[:description], xml: e
             end
             e = increment e
 
@@ -254,6 +254,7 @@ class Protocol
             rsym = nil
             rval = ""
             sha = ''
+            temp = e
             e.elements.each do |tag|
               case tag.name
                 when 'path'
@@ -271,7 +272,7 @@ class Protocol
              
             end
 
-            push StartIncludeInstruction.new args, file, sha
+            push StartIncludeInstruction.new args, file, sha, xml: temp
             @include_stack.last[:end_include] = EndIncludeInstruction.new rsym, rval
 
           ##########################################################################################
@@ -287,7 +288,7 @@ class Protocol
             end
 
             @control_stack.push @program.length
-            push IfInstruction.new condition.text
+            push IfInstruction.new condition.text, xml: e
 
             et = REXML::Element.new           # push an end_then statement after the then part
             et.name = 'end_then'
@@ -306,7 +307,7 @@ class Protocol
 
           ##########################################################################################
           when 'end_then'
-            g = GotoInstruction.new
+            g = GotoInstruction.new xml: e
             program[@control_stack.last].mark_end_then @program.length  # tell if statement where its end_then
             push g
             e = increment e
@@ -332,8 +333,8 @@ class Protocol
             condition = e.elements.first  # get condition and do
             do_ = condition.next_element
 
-            @control_stack.push @program.length                           # save location of while
-            push WhileInstruction.new condition.text, @program.length + 1 # push new while instruction
+            @control_stack.push @program.length                                   # save location of while
+            push WhileInstruction.new condition.text, @program.length + 1, xml: e # push new while instruction
 
             ew = REXML::Element.new     # add an end_while statement to the xmldoc
             ew.name = 'end_while'
@@ -347,7 +348,7 @@ class Protocol
 
           ##########################################################################################
           when 'end_while'
-            g = GotoInstruction.new
+            g = GotoInstruction.new xml: e
             g.mark_destination @control_stack.last
             push g
             program[@control_stack.last].mark_false @program.length
@@ -386,7 +387,7 @@ class Protocol
 
             end
 
-            push TakeInstruction.new item_list_expr
+            push TakeInstruction.new item_list_expr, xml: e
 
             e = increment e
 
@@ -396,7 +397,7 @@ class Protocol
               @bad_xml = e
               raise "Protocol error: No expression found in <release> (note: do not use subtags for this tag)"
             end
-            push ReleaseInstruction.new e.text
+            push ReleaseInstruction.new e.text, xml: e
             e = increment e
 
           ##########################################################################################
@@ -404,7 +405,7 @@ class Protocol
 
             c = children_as_text e
             result_name = c[:var] ? c[:var] : "_most_recently_produced_item"
-            instruction = ProduceInstruction.new c[:object], c[:quantity], c[:release], result_name
+            instruction = ProduceInstruction.new c[:object], c[:quantity], c[:release], result_name, xml: e
 
             if c[:sample] # if the item is a sample
               instruction.sample_expr = c[:sample]
@@ -418,10 +419,11 @@ class Protocol
             push instruction
             e = increment e
 
+          ##########################################################################################
           when 'move'
             c = children_as_text e
             result_name = c[:var] ? c[:var] : "_most_recently_moved_item"
-            push MoveInstruction.new c[:item], c[:location], result_name
+            push MoveInstruction.new c[:item], c[:location], result_name, xml: e
             e = increment e
 
           ##########################################################################################
@@ -431,7 +433,7 @@ class Protocol
               @bad_xml = e
               raise "In log: missing sub-tags"
             end
-            push LogInstruction.new c[:type], c[:data], 'log_file'
+            push LogInstruction.new c[:type], c[:data], 'log_file', xml: e
             e = increment e
 
           ##########################################################################################
@@ -463,7 +465,7 @@ class Protocol
 
             end
 
-            push HTTPInstruction.new info
+            push HTTPInstruction.new info, xml: e
             e = increment e
 
           ##########################################################################################
