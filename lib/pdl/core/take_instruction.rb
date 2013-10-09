@@ -31,21 +31,27 @@ class TakeInstruction < Instruction
 
     # make a list of the evaluated expressions for each item in the list to be taken
     @item_list_expr.each do |item_expr|
+
+      # description
+      description = { 
+        type: (scope.substitute item_expr[:type]),
+        quantity: (scope.evaluate item_expr[:quantity]).to_i,
+        var: item_expr[:var]
+      }
+
+      # if its a sample
       if item_expr[:name]
-        @item_list.push( { 
-          type: (scope.substitute item_expr[:type]),
-          quantity: (scope.evaluate item_expr[:quantity]).to_i,
-          var: item_expr[:var],
-          name: (scope.substitute item_expr[:name]),
-          project: (scope.substitute item_expr[:project])
-        } )
-      else
-        @item_list.push( { 
-          type: (scope.substitute item_expr[:type]),
-          quantity: (scope.evaluate item_expr[:quantity]).to_i,
-          var: item_expr[:var]
-        } )
+        description[:name] =  (scope.substitute item_expr[:name])
+        description[:project] = (scope.substitute item_expr[:project])
       end
+        
+      # if a particular id is specified
+      if item_expr[:id]
+        description[:id] = (scope.evaluate item_expr[:id]).to_i
+      end
+
+      @item_list.push( description )
+
     end
 
     # Find the objects associated with the :type specifications in the db

@@ -129,7 +129,7 @@
 
         <% object.items.each do |item| %>
           <% if item.sample.name == fields[:name] && item.sample.project == fields[:project] %>
-            <% if item.quantity - item.inuse > 0 %>
+            <% if item.quantity - item.inuse > 0 && ( !fields[:id] || fields[:id] == item.id ) %>
               html += '  <option value=<%= item.id %>>Sample id: <%= item.id %> at <%= item.location %> </option>';
               max[<%= item.id %>] = <%= item.quantity - item.inuse %>;
             <% end %>
