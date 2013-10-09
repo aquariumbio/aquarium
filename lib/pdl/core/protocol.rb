@@ -349,6 +349,10 @@ class Protocol
 
             while item_tag 
 
+              unless item_tag.name == 'item'
+                raise "Unknown subtag <#{item_tag.name}> in <take> instruction. "
+              end
+
               c = children_as_text item_tag
 
               unless c[:type] && c[:quantity] && c[:var]

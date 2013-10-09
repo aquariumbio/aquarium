@@ -27,6 +27,10 @@ class ProduceInstruction < Instruction
     @quantity = scope.evaluate @quantity_expr
     @release = ( @release_expr ? ( scope.evaluate @release_expr ) : nil )
 
+    if @release && @release.class != Array 
+      raise "Could not release #{@release_expr} because it does not evaluate to an array of items."
+    end
+
     if @sample_expr
       begin
         sample_item = scope.evaluate @sample_expr
