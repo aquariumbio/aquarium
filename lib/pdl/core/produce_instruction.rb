@@ -1,7 +1,7 @@
 class ProduceInstruction < Instruction
 
-  attr_reader :object_type, :quantity, :release, :var
-  attr_accessor :sample_expr
+  attr_reader :object_type, :quantity, :release, :var, :item
+  attr_accessor :sample_expr, :note
 
   def initialize object_type_expr, quantity_expr, release_expr, var, options = {}
 
@@ -19,7 +19,6 @@ class ProduceInstruction < Instruction
   end
 
   # RAILS ##############################################################################################
-
  
   def pre_render scope, params
 
@@ -54,6 +53,26 @@ class ProduceInstruction < Instruction
       raise "Could not find object type #{object_type}, which is not okay in the production server." 
     end
 
+    if !params[:new_item_id] # this should be true when rendering the first time, but when pre_render is called from bt_execute
+
+      loc = params['location'] ? params['location'] : x.location_wizard;
+      begin
+        @item = x.items.create(location: loc, quantity: @quantity)
+      rescue Exception => e
+        raise "Could not add item of type #{object_type}: " + e.message
+      end
+
+      if @sample
+        @item.sample_id = @sample.id
+        @item.save
+      end
+
+    else 
+
+      @item = Item.find(params[:new_item_id])
+
+    end
+
   end
 
   def bt_execute scope, params
@@ -61,20 +80,9 @@ class ProduceInstruction < Instruction
     # evaluate the expressions for object_type and quantity
     pre_render scope, params
 
-    x = ObjectType.find_by_name(@object_type)
-
-    # make a new item and save it
-    loc = params['location'] ? params['location'] : x.location_wizard;
-    begin
-      item = x.items.create(location: loc, quantity: @quantity)
-    rescue Exception => e
-      raise "Could not add item of type #{object_type}: " + e.message
-    end
-
-    if @sample
-      item.sample_id = @sample.id
-      item.save
-    end
+    item = Item.find(params[:new_item_id])
+    item.location = params['location'] ? params['location'] : x.location_wizard;
+    item.save
 
     scope.set( @result_var.to_sym, pdl_item(item) )
 

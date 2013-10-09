@@ -1,12 +1,17 @@
-<h1>Store New <%= @instruction.object_type %></h1>
+<h1>Store Item <%= @instruction.item.id %> (<%= @instruction.object_type %>)</h1>
 
-<p>Enter/edit location:<br />
+<p>Make sure the item number is written on the <%= @instruction.object_type %>.</p>
+
+<p>Enter/edit location where the item will be stored or placed:</p>
+<p>
   <input id='location' oninput='check_format()' class='input-medium'
     value = '<%= ObjectType.find_by_name(@instruction.object_type).location_wizard %>'>
   </input>
 </p>
 
-
+<% if @instruction.note %>
+  <p><%= @instruction.note %></p>
+<% end %>
 
 <script>
 
@@ -23,10 +28,13 @@
   window.onload = function() {
     document.getElementById('advance-button').addEventListener('click', function() {
       var m = document.getElementById('location').value;
-      window.location = advance_url() + '&location=' + m;
+      window.location = advance_url() + '&location=' + m + '&new_item_id=' + <%= @instruction.item.id %>;
     } );
     check_format();
+    window.history.replaceState ( null, '', '/interpreter/current?job=<%= @job.id %>&new_item_id=<%= @instruction.item.id %>' );
   }
+
+  
 
 </script>
 
