@@ -51,7 +51,7 @@ class ProduceInstruction < Instruction
       raise "Could not add item of type #{object_type}: " + e.message
     end
 
-    scope.set( @result_var.to_sym, item )
+    scope.set( @result_var.to_sym, pdl_item(item) )
 
     # touch the item, for tracking purposes
     t = Touch.new
