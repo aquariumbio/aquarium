@@ -3,7 +3,7 @@ include REXML
 
 class Protocol
 
-  attr_reader :program, :include_stack, :args, :debug
+  attr_reader :program, :include_stack, :args, :debug, :bad_xml
   attr_writer :file, :job_id
 
   def initialize
@@ -30,7 +30,12 @@ class Protocol
   end
 
   def children_as_text e
-    e.elements.collect { |p| { p.name.to_sym => p.text } }.reduce :merge
+    result = e.elements.collect { |p| { p.name.to_sym => p.text } }.reduce :merge
+    if !result
+      @bad_xml = e
+      raise "No children present in tag."
+    end
+    result
   end
 
   def show
@@ -119,10 +124,12 @@ class Protocol
         if c[:name]
           name = c[:name]
         else
+          @bad_xml = e
           raise "Parse Error: No name specified for argument."
         end
 
         unless c[:type] && ( c[:type] == 'number' || c[:type] == 'string' ) 
+          @bad_xml = e
           raise "Parse Error: No valid type (number or string) specified for argument."
         end
         push_arg ArgumentInstruction.new name, c[:type], c[:description]
@@ -159,6 +166,7 @@ class Protocol
                 when 'getdata' #####################################################################
                   cat = children_as_text tag
                   unless cat[:var] && cat[:type] && cat[:description]
+                    @bad_xml = tag
                     raise "In <getdata>: Missing subtags"
                   end
                   parts.push({:getdata =>  (children_as_text tag)} )
@@ -179,7 +187,8 @@ class Protocol
                     end
                   end                  
                   unless v && d && choices.length > 0
-                    raise "In <select>: Missing subtags: " + v.to_s + ' ' + d.to_s + ' ' + choices.to_s + ' ' + msg
+                    @bad_xml = tag
+                    raise "In <select>: Missing subtags. Select should have a var, description, and at least one choice"
                   end
                   parts.push({:select =>  { var: v, description: d, choices: choices }})
 
@@ -202,12 +211,14 @@ class Protocol
             if c[:lhs]
               lhs = c[:lhs]
             else
+              @bad_xml = e
               raise "Parse error: no lhs subtag in assignment."
             end
 
             if c[:rhs]
               rhs = c[:rhs]
             else
+              @bad_xml = e
               raise "Parse error: no rhs subtag in assignment."
             end
 
@@ -222,10 +233,12 @@ class Protocol
             if c[:name]
               name = c[:name]
             else
+              @bad_xml = e
               raise "Parse Error: No name specified for argument."
             end
 
-            unless c[:type] && ( c[:type] == 'number' || c[:type] == 'string' ) 
+            unless c[:type] && ( c[:type] == 'number' || c[:type] == 'string' )   
+              @bad_xml = e
               raise "Parse Error: No valid type (number or string) specified for argument."
             end
 
@@ -350,18 +363,21 @@ class Protocol
             while item_tag 
 
               unless item_tag.name == 'item'
+                @bad_xml = item_tag
                 raise "Unknown subtag <#{item_tag.name}> in <take> instruction. "
               end
 
               c = children_as_text item_tag
 
               unless c[:type] && c[:quantity] && c[:var]
-                raise "Protocol error: take/item sub-tags (type, quantity, var) not present"
+                @bad_xml = item_tag
+                raise "Protocol error: take/item sub-tags (type, quantity, var) not present."
               end
 
               if c[:name] || c[:project]
                 unless  c[:name] && c[:project]
-                  raise "Protocol error: when taking an item either both or neither name and project should be specified"
+                  @bad_xml = item_tag
+                  raise "Protocol error: when taking an item either both or neither name and project should be specified."
                 end
               end
 
@@ -377,6 +393,7 @@ class Protocol
           ##########################################################################################
           when 'release'
             unless e.text && e.elements.empty?
+              @bad_xml = e
               raise "Protocol error: No expression found in <release> (note: do not use subtags for this tag)"
             end
             push ReleaseInstruction.new e.text
@@ -411,6 +428,7 @@ class Protocol
           when 'log'
             c = children_as_text e
             unless c && c[:type] && c[:data]
+              @bad_xml = e
               raise "In log: missing sub-tags"
             end
             push LogInstruction.new c[:type], c[:data], 'log_file'
