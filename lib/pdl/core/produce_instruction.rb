@@ -1,6 +1,7 @@
 class ProduceInstruction < Instruction
 
   attr_reader :object_type, :quantity, :release, :var
+  attr_accessor :sample_expr
 
   def initialize object_type_expr, quantity_expr, release_expr, var
 
@@ -8,6 +9,7 @@ class ProduceInstruction < Instruction
     @quantity_expr = quantity_expr
     @release_expr = release_expr
     @result_var = var
+    @sample_expr = nil
 
     @renderable = true
     super 'produce'
@@ -18,14 +20,28 @@ class ProduceInstruction < Instruction
 
   # RAILS ##############################################################################################
 
+ 
   def pre_render scope, params
 
     @object_type = scope.substitute @object_type_expr
     @quantity = scope.evaluate @quantity_expr
     @release = ( @release_expr ? ( scope.evaluate @release_expr ) : nil )
 
+    if @sample_expr
+      begin
+        sample_item = scope.evaluate @sample_expr
+        if sample_item.class != Hash || !sample_item[:id]
+          raise "In produce #{@sample_expr} does not refer to a single item."
+        end
+        @sample = Item.find(sample_item[:id]).sample
+      rescue Exception => e
+        raise "Could not find sample #{@sample_expr} => #{sample_item.to_s} for produce instruction. " + e.message
+      end
+    end
+
     # find the object, or report an error
     x = ObjectType.find_by_name(@object_type)
+
     if !x && Rails.env != 'production'
       x = ObjectType.new
       x.save_as_test_type @object_type
@@ -49,6 +65,11 @@ class ProduceInstruction < Instruction
       item = x.items.create(location: loc, quantity: @quantity)
     rescue Exception => e
       raise "Could not add item of type #{object_type}: " + e.message
+    end
+
+    if @sample
+      item.sample_id = @sample.id
+      item.save
     end
 
     scope.set( @result_var.to_sym, pdl_item(item) )

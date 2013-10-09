@@ -24,7 +24,7 @@
 
     <th></th>
     <th></th>
-    <th></th>
+
   </tr>
 
 <% @samples.each do |sample| %>
@@ -54,7 +54,7 @@
 
     <td><%= link_to 'Show', sample %></td>
     <td><%= link_to 'Edit', edit_sample_path(sample) %></td>
-    <td><%= link_to 'Destroy', sample, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    
   </tr>
 <% end %>
 </table>

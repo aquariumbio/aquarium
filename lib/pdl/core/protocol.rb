@@ -380,9 +380,14 @@ class Protocol
 
           ##########################################################################################
           when 'produce'
+
             c = children_as_text e
             result_name = c[:var] ? c[:var] : "_most_recently_produced_item"
             instruction = ProduceInstruction.new c[:object], c[:quantity], c[:release], result_name
+
+            if c[:sample] # if the item is a sample
+              instruction.sample_expr = c[:sample]
+            end
 
             write_debug 'produce has attributes ' + e.attributes.to_s
             if e.attributes['render'] && e.attributes['render'] == 'false'

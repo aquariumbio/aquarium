@@ -21,7 +21,11 @@
         <td><%= link_to "%05d" % i.id, i %></td>
 
         <% if @object_type.handler == 'sample_container' %>
-          <td><%= link_to i.sample.name, i.sample %></td>
+          <% if i.sample %>
+            <td><%= link_to i.sample.name, i.sample %></td>
+          <% else %>
+            <td>???</td>
+          <% end %>
         <% end %>
 
         <td><%= i.location %></td>
