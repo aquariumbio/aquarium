@@ -38,6 +38,7 @@
   query = [];
   quantities = [];
   num_choices = [];
+  none_available_error = false;
 
   function make_id(str,a,b) {
     return str + '_object_' + a + '_item_' + b;
@@ -94,7 +95,7 @@
 
     <% end %>
 
-    document.getElementById('advance-button').disabled = !okay;
+    document.getElementById('advance-button').disabled = !okay || none_available_error;
 
   }
 
@@ -116,12 +117,15 @@
             + "  <select class='item_select' id='select_object_" 
             + <%= i %> + "_item_" + num_choices[<%= i %>] + "' onchange='update_totals(<%= i %>," + num_choices[<%= i %>] + ")' >";
 
+      <% num = 0 %>
+
       <% if object.handler != 'sample_container' %>
 
         <% object.items.each do |item| %>
           <% if item.quantity - item.inuse > 0 %>
             html += '  <option value=<%= item.id %>><%= item.location %> (<%= item.quantity - item.inuse %> available) </option>';
             max[<%= item.id %>] = <%= item.quantity - item.inuse %>;
+            <% num += 1 %>
           <% end %>
         <% end %>
 
@@ -132,10 +136,16 @@
             <% if item.quantity - item.inuse > 0 && ( !fields[:id] || fields[:id] == item.id ) %>
               html += '  <option value=<%= item.id %>>Sample id: <%= item.id %> at <%= item.location %> </option>';
               max[<%= item.id %>] = <%= item.quantity - item.inuse %>;
+              <% num += 1 %>
             <% end %>
           <% end %>
         <% end %>
 
+      <% end %>
+
+      <% if num == 0 %>
+        html += "<option value='-1'>NONE AVAILABLE!</option>";
+        none_available_error = true;
       <% end %>
    
       html += "  </select>"

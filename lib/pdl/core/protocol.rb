@@ -77,6 +77,10 @@ class Protocol
       raise "XML Error: " + ex.message[0..120] + " ..."
     end
 
+    unless xml.root
+      raise "The PDL program is empty. No identifiable tags. Nothing."
+    end
+
     @include_stack.push( { xmldoc: xml, ce: xml.root.elements.first } )
     return true
 
@@ -144,6 +148,10 @@ class Protocol
     while @include_stack.any?
 
       e = @include_stack.last[:ce]
+
+      unless e
+        raise "Protocol is empty. "
+      end
 
       while e
 

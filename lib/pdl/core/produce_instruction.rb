@@ -22,7 +22,7 @@ class ProduceInstruction < Instruction
  
   def pre_render scope, params
 
-    @object_type = scope.substitute @object_type_expr
+    @object_type_name = scope.substitute @object_type_expr
     @quantity = scope.evaluate @quantity_expr
     @release = ( @release_expr ? ( scope.evaluate @release_expr ) : nil )
 
@@ -43,23 +43,24 @@ class ProduceInstruction < Instruction
     end
 
     # find the object, or report an error
-    x = ObjectType.find_by_name(@object_type)
+    @object_type = ObjectType.find_by_name(@object_type_name)
 
-    if !x && Rails.env != 'production'
-      x = ObjectType.new
-      x.save_as_test_type @object_type
-      @flash += "Warning: Created new object type: #{@object_type}.<br />"
-    elsif !x
-      raise "Could not find object type #{object_type}, which is not okay in the production server." 
+    if !@object_type && Rails.env != 'production'
+      @object_type = ObjectType.new
+      @object_type.save_as_test_type @object_type_name
+      @flash += "Warning: Created new object type: #{@object_type_name}.<br />"
+    elsif !@object_type
+      raise "Could not find object type #{object_type_name}, which is not okay in the production server." 
     end
 
-    if !params[:new_item_id] # this should be true when rendering the first time, but when pre_render is called from bt_execute
+    if !params[:new_item_id] # this should be true when rendering the first time, but not when pre_render is called from bt_execute
+                             # unless render = false
 
-      loc = params['location'] ? params['location'] : x.location_wizard;
+      loc = params['location'] ? params['location'] : @object_type.location_wizard;
       begin
-        @item = x.items.create(location: loc, quantity: @quantity)
+        @item = @object_type.items.create(location: loc, quantity: @quantity)
       rescue Exception => e
-        raise "Could not add item of type #{object_type}: " + e.message
+        raise "Could not add item of type #{object_type_name}: " + e.message
       end
 
       if @sample
@@ -80,16 +81,15 @@ class ProduceInstruction < Instruction
     # evaluate the expressions for object_type and quantity
     pre_render scope, params
 
-    item = Item.find(params[:new_item_id])
-    item.location = params['location'] ? params['location'] : x.location_wizard;
-    item.save
+    @item.location = params['location'] ? params['location'] : @object_type.location_wizard;
+    @item.save
 
-    scope.set( @result_var.to_sym, pdl_item(item) )
+    scope.set( @result_var.to_sym, pdl_item(@item) )
 
     # touch the item, for tracking purposes
     t = Touch.new
     t.job_id = params[:job]
-    t.item_id = item.id
+    t.item_id = @item.id
     t.save
 
     # release anything that needs to be released
@@ -97,11 +97,11 @@ class ProduceInstruction < Instruction
 
     if @release
       @release.each do |item|
-        x = Item.find_by_id(item[:id])
-        raise 'no such object:' + item[:name] if !x 
-        x.quantity -= 1
-        x.inuse = 0
-        x.save
+        y = Item.find_by_id(item[:id])
+        raise 'no such object:' + item[:name] if !y 
+        y.quantity -= 1
+        y.inuse = 0
+        y.save
         release_data.push object_type: item[:name], item_id: item[:id]
       end
     end
@@ -112,7 +112,7 @@ class ProduceInstruction < Instruction
     log.user_id = scope.stack.first[:user_id]
     log.entry_type = 'PRODUCE'
     log.data = { pc: @pc, 
-                 object: { object_type: @object_type, location: item.location, item_id: item.id, quantity: 1 }, 
+                 object: { object_type: @object_type, location: @item.location, item_id: @item.id, quantity: 1 }, 
                  release: release_data 
                 }.to_json
     log.save
