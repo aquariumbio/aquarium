@@ -57,7 +57,7 @@
             <%= link_to 'resume', interpreter_current_path(job:j.id) %>
           <% end %>
       </td>
-      <td><%= link_to 'cancel', j, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <td><%= link_to 'cancel', 'interpreter/cancel?job=' + j.id.to_s, data: { confirm: 'Are you sure?' } %></td>
     </tr>
 
   <% end %>

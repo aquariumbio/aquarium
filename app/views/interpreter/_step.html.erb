@@ -17,7 +17,7 @@
 <!-- NOTE -------------------------------------------------------------->
 
 <p>
-  <%= @instruction.note %>
+  <%= @instruction.note.gsub(/\\t/, '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;').gsub(/\\n/, '<br \>').html_safe %>
 </p>
 
 <!-- WARNINGS ---------------------------------------------------------->

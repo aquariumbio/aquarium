@@ -46,7 +46,11 @@ class Scope
   end
 
   def substitute str
-    str % collapse
+    begin
+      str % collapse
+    rescue Exception => e
+      raise "Unkown symbol in text. " + e.message.sub('key','%')
+    end
   end
 
   def symbol_subs
@@ -58,11 +62,15 @@ class Scope
   end
 
   def evaluate str
-    expr = str % symbol_subs 
+    begin 
+      expr = str % symbol_subs 
+    rescue Exception => e
+      raise "Unknown symbol in expression. " + e.message.sub('key','%')
+    end
     begin
       result = eval(expr)
     rescue Exception => e
-      raise "Could not evaluate #{expr} due to either a syntax error or undefined symbol. " + e.message
+      raise "Could not evaluate #{str}. " + e.message
     end
     result
   end
@@ -76,10 +84,10 @@ class Scope
         if value.kind_of?(Array)
           s += "\n"
           value.each do |el|
-            s += indent + indent + el.to_s + "\n"
+            s += indent + indent + el.to_s + "<br />"
           end
         else
-          s += value.to_s + "\n"
+          s += value.to_s + "<br />"
         end
       end
       indent += "  "

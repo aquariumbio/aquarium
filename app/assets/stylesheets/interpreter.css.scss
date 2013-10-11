@@ -100,17 +100,18 @@ $outlineStyle: #f00 dotted 0px;
 
   height: 100%;
   outline: $outlineStyle;
+  padding: 0;
 
   button {
     display: block;
-    margin: 0 0 20px 0;
+    margin: 0 0 30px 0;
     width: 100%;
   }
 
 }
 
 .btn-interpreter {
-  padding: 25px 0 25px 0;
+  padding: 15px 0 15px 0 !important;
 }
 
 .take_object_select {

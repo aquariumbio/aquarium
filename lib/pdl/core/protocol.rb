@@ -77,8 +77,12 @@ class Protocol
       raise "XML Error: " + ex.message[0..120] + " ..."
     end
 
-    unless xml.root
+    unless xml && xml.root 
       raise "The PDL program is empty. No identifiable tags. Nothing."
+    end
+
+    unless xml.root.elements.first
+      raise "The protocol does not have any content."
     end
 
     @include_stack.push( { xmldoc: xml, ce: xml.root.elements.first } )
@@ -122,6 +126,7 @@ class Protocol
   def parse_arguments_only
 
     e = @include_stack.last[:ce]
+
     while e
       if e.name == 'argument'
         c = children_as_text e
@@ -148,10 +153,6 @@ class Protocol
     while @include_stack.any?
 
       e = @include_stack.last[:ce]
-
-      unless e
-        raise "Protocol is empty. "
-      end
 
       while e
 
@@ -268,7 +269,13 @@ class Protocol
                 when 'path'
                   file = tag.text
                   @include_stack.last[:ce] = increment e # e.next_element
-                  sha = self.open tag.text
+                  begin
+                    sha = self.open tag.text
+                  rescue Exception => ex
+                    @bad_xml = e
+                    push StartIncludeInstruction.new args, file, sha, xml: temp
+                    raise "Could not include file. " + ex.message
+                  end
                   e = @include_stack.last[:ce]
                 when 'setarg'
                   args.push( children_as_text tag )

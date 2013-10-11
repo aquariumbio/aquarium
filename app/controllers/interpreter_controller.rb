@@ -39,10 +39,14 @@ class InterpreterController < ApplicationController
 
     get_blob
 
-    begin
-      @protocol.parse_arguments_only
-    rescue Exception => e
-      @parse_errors = "Error while parsing arguments. " + e.message # + ": " + e.backtrace.to_s
+    if @parse_errors == ""
+
+      begin
+        @protocol.parse_arguments_only
+      rescue Exception => e
+        @parse_errors = "Error while parsing arguments. " + e.message # + ": " + e.backtrace.to_s
+      end
+
     end
 
   end
@@ -131,7 +135,11 @@ class InterpreterController < ApplicationController
     # Get the protocol
     @sha = @job.sha
     @path = @job.path
+
     parse
+    if @parse_errors != ""
+      log 'ERROR', { error: @parse_errors, pc: @job.pc }
+    end
 
     # Get the pc and scope
     @pc = @job.pc
@@ -144,6 +152,7 @@ class InterpreterController < ApplicationController
   end
 
   def process_error msg
+
     @exception = true
     @error = msg
     @error_pc = @pc
@@ -152,6 +161,7 @@ class InterpreterController < ApplicationController
     @job.pc = @pc
     @job.state = { stack: @scope.stack }.to_json
     @job.save
+
   end
 
   def pre_render
@@ -215,6 +225,10 @@ class InterpreterController < ApplicationController
       res = Net::HTTP.get(uri)
       logger.info "Message to MANTA: " + uri.to_s
       logger.info "Message from MANTA: " + res
+    end
+
+    if @parse_errors != ""
+      stop
     end
 
   end
@@ -294,6 +308,26 @@ class InterpreterController < ApplicationController
   end
 
   def abort
+   @job = Job.find(params[:job])
+   if @job.pc != Job.COMPLETED
+     @job.pc = Job.COMPLETED
+     @job.save
+     @pc = Job.COMPLETED
+     log "ABORT", {}
+   end
+   render 'abort'
+  end
+
+  def cancel
+   @job = Job.find(params[:job])
+   if @job.pc != Job.COMPLETED
+     @job.pc = Job.COMPLETED
+     @job.save
+     @pc = Job.COMPLETED
+     log "CANCEL", {}
+   end
+   flash[:success] = "Job #{params[:job]} has been cancelled."
+   redirect_to jobs_url
   end
 
 end

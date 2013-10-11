@@ -11,6 +11,7 @@ Bioturk::Application.routes.draw do
   get "interpreter/current"
   get "interpreter/advance"
   get "interpreter/abort"
+  get "interpreter/cancel"
   get "interpreter/error"
 
   get "jobs/index"
