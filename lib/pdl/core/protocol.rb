@@ -137,10 +137,15 @@ class Protocol
           raise "Parse Error: No name specified for argument."
         end
 
-        unless c[:type] && ( c[:type] == 'number' || c[:type] == 'string' ) 
+        if c[:type] == 'number' || c[:type] == 'sample'
+          type = 'number'
+        elsif c[:type] == 'string' || c[:type] == 'objecttype'
+          type = 'string'
+        else
           @bad_xml = e
-          raise "Parse Error: No valid type (number or string) specified for argument."
+          raise "Parse Error: No valid type (number, string, sample, or objecttype) specified for argument."
         end
+          
         push_arg ArgumentInstruction.new name, c[:type], c[:description]
       end
       e = increment e
@@ -246,14 +251,19 @@ class Protocol
               raise "Parse Error: No name specified for argument."
             end
 
-            unless c[:type] && ( c[:type] == 'number' || c[:type] == 'string' )   
+            if c[:type] == 'number' || c[:type] == 'sample'
+              type = 'number'
+            elsif c[:type] == 'string' || c[:type] == 'objecttype'
+              type = 'string'
+            else
               @bad_xml = e
-              raise "Parse Error: No valid type (number or string) specified for argument."
+              raise "Parse Error: No valid type (number, string, sample, or objecttype) specified for argument."
             end
 
             if @include_stack.length <= 1
               push_arg ArgumentInstruction.new name, c[:type], c[:description], xml: e
             end
+
             e = increment e
 
           ##########################################################################################
@@ -385,9 +395,9 @@ class Protocol
 
               c = children_as_text item_tag
 
-              unless c[:type] && c[:quantity] && c[:var]
+              unless ( c[:id] && c[:var] )|| ( c[:type] && c[:quantity] && c[:var] )
                 @bad_xml = item_tag
-                raise "Protocol error: take/item sub-tags (type, quantity, var) not present."
+                raise "Protocol error: take/item sub-tags (type, quantity, var) or id not present."
               end
 
               if c[:name] || c[:project]

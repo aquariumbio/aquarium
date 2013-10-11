@@ -32,12 +32,15 @@ class TakeInstruction < Instruction
     # make a list of the evaluated expressions for each item in the list to be taken
     @item_list_expr.each do |item_expr|
 
-      # description
-      description = { 
-        type: (scope.substitute item_expr[:type]),
-        quantity: (scope.evaluate item_expr[:quantity]).to_i,
-        var: item_expr[:var]
-      }
+      if item_expr[:type]
+        description = {
+          type: (scope.substitute item_expr[:type]),
+          quantity: (scope.evaluate item_expr[:quantity]).to_i,
+          var: item_expr[:var]
+        }
+      else 
+        description = {}
+      end
 
       # if its a sample
       if item_expr[:name]
@@ -46,8 +49,20 @@ class TakeInstruction < Instruction
       end
         
       # if a particular id is specified
-      if item_expr[:id]
-        description[:id] = (scope.evaluate item_expr[:id]).to_i
+      if item_expr[:id] 
+        val = (scope.evaluate item_expr[:id]).to_i
+        i = Item.find(val)
+        unless i
+          raise "Could not find item with id = #{item_expr[:id]} = #{val}. "
+        end
+        description[:id] = val
+        description[:type] = i.object_type.name
+        description[:quantity] = 1
+        description[:var] = item_expr[:var]
+        if i.object_type.handler = 'sample_container'
+          description[:name] = i.sample.name
+          description[:project] = i.sample.project
+        end
       end
 
       @item_list.push( description )
@@ -77,7 +92,11 @@ class TakeInstruction < Instruction
   def html
     h = "<b>take</b>"
     @item_list_expr.each do |ie|
-      h += ie[:type] + ", "
+      if ie[:type]
+        h += ie[:type] + ", "
+      else 
+        h += '[only id specified], '
+      end
     end
     return h[0..-3]
   end

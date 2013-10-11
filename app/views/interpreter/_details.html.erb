@@ -10,7 +10,8 @@
     <div id='parsed-protocol'>
         <table class='table'>
         <% (0..@protocol.program.length-1).each do |p| %>
-          <%= "<tr><td>#{p}</td><td>#{@protocol.program[p].html}</td></tr>".html_safe %>
+          <% html = @protocol.program[p].html %>
+          <%= "<tr><td>#{p}</td><td>#{html}</td></tr>".html_safe %>
         <% end %>
         </table>
     </div>

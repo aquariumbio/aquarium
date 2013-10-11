@@ -1,6 +1,6 @@
 <% provide(:title, @path) %>
 
-<h4>Initializing <%= @path %></h4>
+<h4>Please input arguments for <%= @path %></h4>
 
 <p><%= @protocol.info %></p>
 
@@ -26,8 +26,24 @@
       <% if @protocol.args.length > 0 %>
 
         <% @protocol.args.each do |a| %>
-          <%= label_tag(a.name.to_sym, a.description ) %>
-          <%= text_field_tag( a.name.to_sym ) %>
+
+          <% if a.type == 'sample' %>
+
+            <%= render partial: 'sample_arg', locals: { arg: a } %>
+
+          <% elsif a.type == 'objecttype' %>
+
+            <%= render partial: 'object_type_arg', locals: { arg: a } %>
+
+          <% else %>
+
+            <div class='well row-fluid'>
+              <%= label_tag(a.name.to_sym, a.description ) %>
+              <%= text_field_tag( a.name.to_sym ) %>
+            </div>
+
+          <% end %>  
+
         <% end %>
 
       <% else %>
