@@ -59,7 +59,12 @@ class ReleaseInstruction < Instruction
 
       end
 
-      x.save 
+      if x.quantity <= 0
+        x.destroy
+      else
+        x.save 
+      end
+      
       log_data.push object_type: item[:name], item_id: item[:id], method: m
 
     end

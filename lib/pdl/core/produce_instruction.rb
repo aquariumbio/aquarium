@@ -101,7 +101,11 @@ class ProduceInstruction < Instruction
         raise 'no such object:' + item[:name] if !y 
         y.quantity -= 1
         y.inuse = 0
-        y.save
+        if y.quantity <= 0
+          y.destroy
+        else
+          y.save
+        end
         release_data.push object_type: item[:name], item_id: item[:id]
       end
     end

@@ -22,7 +22,7 @@
 
   </div><div class='span6'>
 
-    <% projects = (SampleType.find(1).samples.collect { |x| x.project }).uniq %>
+    <% projects = (SampleType.all.first.samples.collect { |x| x.project }).uniq %>
 
     <label>Project</label>
     <select id='<%= arg.name + '_project' %>' onchange="filter_by_sample_project('<%= arg.name %>')">
