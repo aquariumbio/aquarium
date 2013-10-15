@@ -160,7 +160,7 @@ class ObjectTypesController < ApplicationController
         st.destroy
       end
 
-      Touches.all.each do |t|
+      Touch.all.each do |t|
         num_touches += 1
         t.destroy()
       end
@@ -182,7 +182,7 @@ class ObjectTypesController < ApplicationController
       num_objects = 0
       num_items = 0
       num_sample_types = 0
-      num_sampls = 0
+      num_samples = 0
 
       ProductionObjectType.switch_connection_to(:production_server)
       ProductionItem.switch_connection_to(:production_server)
@@ -212,13 +212,13 @@ class ObjectTypesController < ApplicationController
         num_sample_types += 1
 
         # copy sample types
-        new_st = SampleType.new(st.attributes.except("id"))
+        new_st = SampleType.new(st.attributes.except("id","created_at","updated_at"))
         new_st.save
 
         # copy samples
         ProductionSample.where("sample_type_id = ?", st.id).each do |s|
           num_samples += 1
-          new_st.samples.create(s.attributed.except("id","sample_type_id"))
+          new_st.samples.create(s.attributes.except("id","sample_type_id","created_at","updated_at"))
         end
 
       end
