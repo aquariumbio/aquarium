@@ -2,10 +2,10 @@ class WhileInstruction < Instruction
 
   attr_reader :true_pc, :false_pc
 
-  def initialize condition, tpc
+  def initialize condition, tpc, options = {}
     @condition = condition
     @true_pc = tpc
-    super 'while'
+    super 'while', options
   end
 
   def mark_false pc

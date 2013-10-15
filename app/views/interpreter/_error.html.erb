@@ -1,14 +1,28 @@
 <h1>ERROR</h1>
 
 <div class="alert alert-block">
-<h4>An error was encountered</h4>
-<%= params[:choices] %>
-<%= @error %> 
+<p><%= @error %> </p>
 </div>
 
-<% if @protocol %>
-  <pre><%= @protocol.program[@error_pc].html.html_safe %></pre>
+<% if @protocol && @protocol.program[@error_pc] %>
+  <h4>Offending XML</h4>
+  <pre><%= @protocol.program[@error_pc].xml.to_s %></pre>
 <% end %>
+
+
+<br />
+  <button id='details-button' class='btn btn-small' onClick="toggle_details()">
+    Show Current Variables
+  </button>
+
+  <div id='details' style='display: none'>
+    <br />
+    <p>
+      <%= @scope.to_s.html_safe %>
+    </p>
+  </div>
+
+<br />
 
 <p><%= link_to 'View Log for Job ' + @job.id.to_s, @job %></p>
 
@@ -16,4 +30,18 @@
   <% @instruction.console_messages.each do |m| %>
     console.log ( "PDL: " + '<%= m.html_safe %>' );
   <% end %>
+</script>
+
+<script>
+  function toggle_details() {
+    s = document.getElementById('details').style.display;
+    if ( s == 'none' ) {
+      document.getElementById('details').style.display = 'block';
+      document.getElementById('details-button').innerHTML = 'Hide Current Variables';      
+    } else {
+      document.getElementById('details').style.display = 'none';
+      document.getElementById('details-button').innerHTML = 'Show Current Variables';      
+    }
+  
+  }
 </script>

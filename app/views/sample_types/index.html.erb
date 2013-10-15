@@ -42,9 +42,11 @@
     <td><%= link_to s, samples_path( sample_type_id: sample_type.id )%></td>
     <td><%= link_to 'Show', sample_type %></td>
     <td><%= link_to 'Edit', edit_sample_type_path(sample_type) %></td>
-    <td><%= link_to 'Destroy', sample_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <td><%= link_to 'Destroy', sample_type, method: :delete, data: {
+    confirm: 'Are you sure you want to delete this sample type definition? All information about samples of this type will be broken as a result.' } %></td>
   </tr>
 <% end %>
+
 </table>
 
 <br />

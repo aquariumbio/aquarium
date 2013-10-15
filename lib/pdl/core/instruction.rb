@@ -1,12 +1,13 @@
 class Instruction
  
-  attr_reader :name, :renderable, :flash, :console_messages
+  attr_reader :name, :renderable, :flash, :console_messages, :xml
   attr_writer :pc
 
-  def initialize name
+  def initialize name, options = {}
     @name = name
     @flash = ""
     @console_messages = []
+    @xml = options[:xml]
   end
 
   def clear

@@ -5,11 +5,11 @@ class TakeInstruction < Instruction
 
   attr_reader :item_list, :object_list
 
-  def initialize item_list_expr
+  def initialize item_list_expr, options = {}
 
     @item_list_expr = item_list_expr
     @renderable = true
-    super 'take'
+    super 'take', options
 
     # TERMINAL 
     @num_taken = 0
@@ -31,21 +31,42 @@ class TakeInstruction < Instruction
 
     # make a list of the evaluated expressions for each item in the list to be taken
     @item_list_expr.each do |item_expr|
-      if item_expr[:name]
-        @item_list.push( { 
-          type: (scope.substitute item_expr[:type]),
-          quantity: (scope.evaluate item_expr[:quantity]).to_i,
-          var: item_expr[:var],
-          name: (scope.substitute item_expr[:name]),
-          project: (scope.substitute item_expr[:project])
-        } )
-      else
-        @item_list.push( { 
+
+      if item_expr[:type]
+        description = {
           type: (scope.substitute item_expr[:type]),
           quantity: (scope.evaluate item_expr[:quantity]).to_i,
           var: item_expr[:var]
-        } )
+        }
+      else 
+        description = {}
       end
+
+      # if its a sample
+      if item_expr[:name]
+        description[:name] =  (scope.substitute item_expr[:name])
+        description[:project] = (scope.substitute item_expr[:project])
+      end
+        
+      # if a particular id is specified
+      if item_expr[:id] 
+        val = (scope.evaluate item_expr[:id]).to_i
+        i = Item.find(val)
+        unless i
+          raise "Could not find item with id = #{item_expr[:id]} = #{val}. "
+        end
+        description[:id] = val
+        description[:type] = i.object_type.name
+        description[:quantity] = 1
+        description[:var] = item_expr[:var]
+        if i.object_type.handler = 'sample_container'
+          description[:name] = i.sample.name
+          description[:project] = i.sample.project
+        end
+      end
+
+      @item_list.push( description )
+
     end
 
     # Find the objects associated with the :type specifications in the db
@@ -71,7 +92,11 @@ class TakeInstruction < Instruction
   def html
     h = "<b>take</b>"
     @item_list_expr.each do |ie|
-      h += ie[:type] + ", "
+      if ie[:type]
+        h += ie[:type] + ", "
+      else 
+        h += '[only id specified], '
+      end
     end
     return h[0..-3]
   end

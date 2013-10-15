@@ -14,7 +14,14 @@
     <% if @exception %>
        <%= render 'error' %>
     <% elsif @parse_errors != "" %>
-       <p>ERROR: <%= @parse_errors %></p>
+
+       <h4>Parse Error (Sorry for not catching this earlier):</h4>
+       <p class='alert'><%= @parse_errors %></p>
+       <% if @protocol && @protocol.bad_xml %>
+         <h4>Offending XML</h4>
+         <pre><%= @protocol.bad_xml %></pre>
+       <% end %>
+
     <% elsif @pc != Job.COMPLETED %>
       <%= render @instruction.name %>
       <div id='note' style='display: none'>
@@ -30,10 +37,11 @@
   </div>
 
   <!-- BUTTONS -------------------------------------------------------->
-  <div class="span2 interpreter-buttons">
+  <div class="span2 interpreter-buttons" style='position: relative'>
     <% if @pc != Job.COMPLETED %>
-      <button class='btn btn-primary btn-interpreter' id='advance-button' disabled>NEXT</button>
-      <button class='btn btn-interpreter'             id='note-button'>NOTE</button>
+      <button class='btn btn-success btn-interpreter' id='advance-button' disabled>NEXT</button>
+      <button class='btn btn-interpreter' id='note-button'>ADD NOTES</button>
+      <button class='btn btn-danger btn-interpreter' id='abort-button' style='position: absolute; margin: 0; bottom: 0; left: 0;'>ABORT</button>
     <% end %>
   </div>
 
@@ -74,6 +82,14 @@
 
   }
 
+  a = document.getElementById('abort-button');
+  
+  if ( a ) {
+     a.addEventListener('click', function() {
+       window.location = 'abort?job=' + <%= @job.id %>
+     });
+  }
+
   advance_url = function() {
     url = '/interpreter/advance?job=<%= @job.id %>';
     var note = document.getElementById('note-textarea');
@@ -85,10 +101,10 @@
 
   window.history.replaceState ( null, 'bioturk interpreter', 'current?job=<%= @job.id %>' );
 
-  <% if @instruction
-      @instruction.console_messages.each do |m| %>
+  <% if @instruction %>
+    <% @instruction.console_messages.each do |m| %>
       console.log ( "PDL:" + '<%= m.html_safe %>' );
-  <% end
-      end %>
+    <% end %>
+  <% end %>
 
 </script>

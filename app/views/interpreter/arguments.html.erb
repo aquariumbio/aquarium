@@ -1,12 +1,18 @@
 <% provide(:title, @path) %>
 
-<h4>Initializing <%= @path %></h4>
+<h4>Please input arguments for <%= @path %></h4>
 
 <p><%= @protocol.info %></p>
 
 <% if @parse_errors != "" %>
 
-  <p>There were parse errors for <%= @sha %><br /><%= @parse_errors %></p>
+  <h4>Parse error</h4>
+  <p class='alert'><%= @parse_errors %></p>
+
+  <% if @protocol.bad_xml %>
+    <h4>Offending XML</h4>
+    <pre><%= @protocol.bad_xml.to_s %></pre>
+  <% end %>
 
 <% else %>
 
@@ -20,8 +26,24 @@
       <% if @protocol.args.length > 0 %>
 
         <% @protocol.args.each do |a| %>
-          <%= label_tag(a.name.to_sym, a.description ) %>
-          <%= text_field_tag( a.name.to_sym ) %>
+
+          <% if a.type == 'sample' %>
+
+            <%= render partial: 'sample_arg', locals: { arg: a } %>
+
+          <% elsif a.type == 'objecttype' %>
+
+            <%= render partial: 'object_type_arg', locals: { arg: a } %>
+
+          <% else %>
+
+            <div class='well row-fluid'>
+              <%= label_tag(a.name.to_sym, a.description ) %>
+              <%= text_field_tag( a.name.to_sym ) %>
+            </div>
+
+          <% end %>  
+
         <% end %>
 
       <% else %>

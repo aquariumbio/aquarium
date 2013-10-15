@@ -3,7 +3,7 @@ include REXML
 
 class Protocol
 
-  attr_reader :program, :include_stack, :args, :debug
+  attr_reader :program, :include_stack, :args, :debug, :bad_xml
   attr_writer :file, :job_id
 
   def initialize
@@ -30,7 +30,12 @@ class Protocol
   end
 
   def children_as_text e
-    e.elements.collect { |p| { p.name.to_sym => p.text } }.reduce :merge
+    result = e.elements.collect { |p| { p.name.to_sym => p.text } }.reduce :merge
+    if !result
+      @bad_xml = e
+      raise "No children present in tag."
+    end
+    result
   end
 
   def show
@@ -70,6 +75,14 @@ class Protocol
       xml = Document.new(file)
     rescue REXML::ParseException => ex
       raise "XML Error: " + ex.message[0..120] + " ..."
+    end
+
+    unless xml && xml.root 
+      raise "The PDL program is empty. No identifiable tags. Nothing."
+    end
+
+    unless xml.root.elements.first
+      raise "The protocol does not have any content."
     end
 
     @include_stack.push( { xmldoc: xml, ce: xml.root.elements.first } )
@@ -113,18 +126,26 @@ class Protocol
   def parse_arguments_only
 
     e = @include_stack.last[:ce]
+
     while e
       if e.name == 'argument'
         c = children_as_text e
         if c[:name]
           name = c[:name]
         else
+          @bad_xml = e
           raise "Parse Error: No name specified for argument."
         end
 
-        unless c[:type] && ( c[:type] == 'number' || c[:type] == 'string' ) 
-          raise "Parse Error: No valid type (number or string) specified for argument."
+        if c[:type] == 'number' || c[:type] == 'sample'
+          type = 'number'
+        elsif c[:type] == 'string' || c[:type] == 'objecttype'
+          type = 'string'
+        else
+          @bad_xml = e
+          raise "Parse Error: No valid type (number, string, sample, or objecttype) specified for argument."
         end
+          
         push_arg ArgumentInstruction.new name, c[:type], c[:description]
       end
       e = increment e
@@ -144,7 +165,7 @@ class Protocol
 
           ##########################################################################################
           when 'information' 
-            push InformationInstruction.new e.text  
+            push InformationInstruction.new e.text, xml: e
             e = increment e
 
           ##########################################################################################
@@ -159,6 +180,7 @@ class Protocol
                 when 'getdata' #####################################################################
                   cat = children_as_text tag
                   unless cat[:var] && cat[:type] && cat[:description]
+                    @bad_xml = tag
                     raise "In <getdata>: Missing subtags"
                   end
                   parts.push({:getdata =>  (children_as_text tag)} )
@@ -179,7 +201,8 @@ class Protocol
                     end
                   end                  
                   unless v && d && choices.length > 0
-                    raise "In <select>: Missing subtags: " + v.to_s + ' ' + d.to_s + ' ' + choices.to_s + ' ' + msg
+                    @bad_xml = tag
+                    raise "In <select>: Missing subtags. Select should have a var, description, and at least one choice"
                   end
                   parts.push({:select =>  { var: v, description: d, choices: choices }})
 
@@ -190,7 +213,7 @@ class Protocol
 
             end
 
-            push StepInstruction.new parts
+            push StepInstruction.new parts, xml: e
 
             e = increment e
 
@@ -202,16 +225,18 @@ class Protocol
             if c[:lhs]
               lhs = c[:lhs]
             else
+              @bad_xml = e
               raise "Parse error: no lhs subtag in assignment."
             end
 
             if c[:rhs]
               rhs = c[:rhs]
             else
+              @bad_xml = e
               raise "Parse error: no rhs subtag in assignment."
             end
 
-            push AssignInstruction.new lhs, rhs
+            push AssignInstruction.new lhs, rhs, xml: e
             e = increment e
 
           ##########################################################################################
@@ -222,16 +247,23 @@ class Protocol
             if c[:name]
               name = c[:name]
             else
+              @bad_xml = e
               raise "Parse Error: No name specified for argument."
             end
 
-            unless c[:type] && ( c[:type] == 'number' || c[:type] == 'string' ) 
-              raise "Parse Error: No valid type (number or string) specified for argument."
+            if c[:type] == 'number' || c[:type] == 'sample'
+              type = 'number'
+            elsif c[:type] == 'string' || c[:type] == 'objecttype'
+              type = 'string'
+            else
+              @bad_xml = e
+              raise "Parse Error: No valid type (number, string, sample, or objecttype) specified for argument."
             end
 
             if @include_stack.length <= 1
-              push_arg ArgumentInstruction.new name, c[:type], c[:description]
+              push_arg ArgumentInstruction.new name, c[:type], c[:description], xml: e
             end
+
             e = increment e
 
           ##########################################################################################
@@ -241,12 +273,19 @@ class Protocol
             rsym = nil
             rval = ""
             sha = ''
+            temp = e
             e.elements.each do |tag|
               case tag.name
                 when 'path'
                   file = tag.text
                   @include_stack.last[:ce] = increment e # e.next_element
-                  sha = self.open tag.text
+                  begin
+                    sha = self.open tag.text
+                  rescue Exception => ex
+                    @bad_xml = e
+                    push StartIncludeInstruction.new args, file, sha, xml: temp
+                    raise "Could not include file. " + ex.message
+                  end
                   e = @include_stack.last[:ce]
                 when 'setarg'
                   args.push( children_as_text tag )
@@ -258,7 +297,7 @@ class Protocol
              
             end
 
-            push StartIncludeInstruction.new args, file, sha
+            push StartIncludeInstruction.new args, file, sha, xml: temp
             @include_stack.last[:end_include] = EndIncludeInstruction.new rsym, rval
 
           ##########################################################################################
@@ -274,7 +313,7 @@ class Protocol
             end
 
             @control_stack.push @program.length
-            push IfInstruction.new condition.text
+            push IfInstruction.new condition.text, xml: e
 
             et = REXML::Element.new           # push an end_then statement after the then part
             et.name = 'end_then'
@@ -293,7 +332,7 @@ class Protocol
 
           ##########################################################################################
           when 'end_then'
-            g = GotoInstruction.new
+            g = GotoInstruction.new xml: e
             program[@control_stack.last].mark_end_then @program.length  # tell if statement where its end_then
             push g
             e = increment e
@@ -319,8 +358,8 @@ class Protocol
             condition = e.elements.first  # get condition and do
             do_ = condition.next_element
 
-            @control_stack.push @program.length                           # save location of while
-            push WhileInstruction.new condition.text, @program.length + 1 # push new while instruction
+            @control_stack.push @program.length                                   # save location of while
+            push WhileInstruction.new condition.text, @program.length + 1, xml: e # push new while instruction
 
             ew = REXML::Element.new     # add an end_while statement to the xmldoc
             ew.name = 'end_while'
@@ -334,7 +373,7 @@ class Protocol
 
           ##########################################################################################
           when 'end_while'
-            g = GotoInstruction.new
+            g = GotoInstruction.new xml: e
             g.mark_destination @control_stack.last
             push g
             program[@control_stack.last].mark_false @program.length
@@ -349,15 +388,22 @@ class Protocol
 
             while item_tag 
 
+              unless item_tag.name == 'item'
+                @bad_xml = item_tag
+                raise "Unknown subtag <#{item_tag.name}> in <take> instruction. "
+              end
+
               c = children_as_text item_tag
 
-              unless c[:type] && c[:quantity] && c[:var]
-                raise "Protocol error: take/item sub-tags (type, quantity, var) not present"
+              unless ( c[:id] && c[:var] )|| ( c[:type] && c[:quantity] && c[:var] )
+                @bad_xml = item_tag
+                raise "Protocol error: take/item sub-tags (type, quantity, var) or id not present."
               end
 
               if c[:name] || c[:project]
                 unless  c[:name] && c[:project]
-                  raise "Protocol error: when taking an item either both or neither name and project should be specified"
+                  @bad_xml = item_tag
+                  raise "Protocol error: when taking an item either both or neither name and project should be specified."
                 end
               end
 
@@ -366,23 +412,33 @@ class Protocol
 
             end
 
-            push TakeInstruction.new item_list_expr
+            push TakeInstruction.new item_list_expr, xml: e
 
             e = increment e
 
           ##########################################################################################
           when 'release'
             unless e.text && e.elements.empty?
+              @bad_xml = e
               raise "Protocol error: No expression found in <release> (note: do not use subtags for this tag)"
             end
-            push ReleaseInstruction.new e.text
+            push ReleaseInstruction.new e.text, xml: e
             e = increment e
 
           ##########################################################################################
           when 'produce'
+
             c = children_as_text e
             result_name = c[:var] ? c[:var] : "_most_recently_produced_item"
-            instruction = ProduceInstruction.new c[:object], c[:quantity], c[:release], result_name
+            instruction = ProduceInstruction.new c[:object], c[:quantity], c[:release], result_name, xml: e
+
+            if c[:sample] # if the item is a sample
+              instruction.sample_expr = c[:sample]
+            end
+
+            if c[:note] # if there is a note.
+              instruction.note = c[:note]
+            end
 
             write_debug 'produce has attributes ' + e.attributes.to_s
             if e.attributes['render'] && e.attributes['render'] == 'false'
@@ -392,19 +448,21 @@ class Protocol
             push instruction
             e = increment e
 
+          ##########################################################################################
           when 'move'
             c = children_as_text e
             result_name = c[:var] ? c[:var] : "_most_recently_moved_item"
-            push MoveInstruction.new c[:item], c[:location], result_name
+            push MoveInstruction.new c[:item], c[:location], result_name, xml: e
             e = increment e
 
           ##########################################################################################
           when 'log'
             c = children_as_text e
             unless c && c[:type] && c[:data]
+              @bad_xml = e
               raise "In log: missing sub-tags"
             end
-            push LogInstruction.new c[:type], c[:data], 'log_file'
+            push LogInstruction.new c[:type], c[:data], 'log_file', xml: e
             e = increment e
 
           ##########################################################################################
@@ -436,7 +494,7 @@ class Protocol
 
             end
 
-            push HTTPInstruction.new info
+            push HTTPInstruction.new info, xml: e
             e = increment e
 
           ##########################################################################################

@@ -2,9 +2,9 @@ class InformationInstruction < Instruction
 
   attr_reader :content
 
-  def initialize content
+  def initialize content, options = {}
 
-    super 'information'
+    super 'information', options
     @content = content
     @renderable = true
 

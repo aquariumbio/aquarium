@@ -2,8 +2,8 @@ class StartIncludeInstruction < Instruction
 
   attr_reader :arguments, :filename
 
-  def initialize args, file, sha
-    super 'start_include'
+  def initialize args, file, sha, options = {}
+    super 'start_include', options
     @arguments = args
     @filename = file
     @renderable = false

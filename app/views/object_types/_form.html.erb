@@ -54,7 +54,8 @@
 
     <div class="span2" id="handler" <%= @sample_type ? "style='display:none'".html_safe : '' %>>
       <%= f.label :handler %>
-      <%= f.text_field :handler, class: 'span12' %>
+      <%= f.text_field :handler, class: 'span12', onchange: 'check_if_sample_container()', onkeypress: 'this.onchange()',
+      onpaste: 'this.onchange()', oninput: 'this.onchange()' %>
     </div>
 
     <%
@@ -70,6 +71,8 @@
     </div>
 
   </div>
+
+  <div id='sample_type_selector' style='display: none'>Sample type selector</div>
 
   <br />
 
@@ -132,5 +135,23 @@
   </div>
   
   <br />
+
+  <script>
+    function check_if_sample_container() {
+      var d = document.getElementById('sample_type_selector');
+      if ( document.getElementById('object_type_handler').value == 'sample_container' ) {
+        d.style.display = 'block';
+        txt = '<%= f.label :sample_type %><select id="object_type_sample_type_id" name="object_type[sample_type_id]">';
+        <% SampleType.all.each do |st| %>
+          txt += '<option value=<%= st.id %>><%= st.name.downcase %></option>';
+        <% end %>
+        d.innerHTML = txt + '</select>';
+        console.log('asd');
+      } else {
+        d.style.display = 'none';
+        d.innerHTML = "";
+      }
+    }
+  </script>
 
 <% end %>

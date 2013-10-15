@@ -4,6 +4,12 @@ end
 class ProductionItem < Item
 end
 
+class ProductionSampleType < SampleType
+end
+
+class ProductionSample < Sample
+end
+
 class ObjectTypesController < ApplicationController
 
   before_filter :signed_in_user
@@ -138,14 +144,28 @@ class ObjectTypesController < ApplicationController
 
       num_objects = 0
       num_items = 0
- 
+      num_sample_types = 0
+      num_samples = 0     
+      num_touches = 0
+
       ObjectType.all.each do |ob|
         num_objects += 1
         num_items += ob.items.length
         ob.destroy
-      end  
+      end
 
-      redirect_to production_interface_path, notice: "Deleted #{num_objects} object types and #{num_items} items from the inventory."
+      SampleType.all.each do |st|
+        num_sample_types += 1
+        num_samples += st.samples.length
+        st.destroy
+      end
+
+      Touches.all.each do |t|
+        num_touches += 1
+        t.destroy()
+      end
+
+      redirect_to production_interface_path, notice: "Deleted #{num_objects} object types, #{num_items} items, #{num_sample_types} sample type definitions, and #{num_samples} samples from the inventory. Also deleted were #{num_touches} touches."
 
     else
 
@@ -161,10 +181,15 @@ class ObjectTypesController < ApplicationController
 
       num_objects = 0
       num_items = 0
+      num_sample_types = 0
+      num_sampls = 0
 
       ProductionObjectType.switch_connection_to(:production_server)
       ProductionItem.switch_connection_to(:production_server)
+      ProductionSampleType.switch_connection_to(:production_server)
+      ProductionSample.switch_connection_to(:production_server)
 
+      # loop on object types
       ProductionObjectType.all.each do |ot|
 
         num_objects += 1
@@ -181,7 +206,24 @@ class ObjectTypesController < ApplicationController
 
       end
 
-      redirect_to object_types_path, notice: "Copied #{num_objects} object types and #{num_items} items from the production inventory."
+      # loop on sample types
+      ProductionSampleType.all.each do |st|
+
+        num_sample_types += 1
+
+        # copy sample types
+        new_st = SampleType.new(st.attributes.except("id"))
+        new_st.save
+
+        # copy samples
+        ProductionSample.where("sample_type_id = ?", st.id).each do |s|
+          num_samples += 1
+          new_st.samples.create(s.attributed.except("id","sample_type_id"))
+        end
+
+      end
+
+      redirect_to object_types_path, notice: "Copied #{num_objects} object types, #{num_items} items, #{num_sample_types} sample type definitions, and #{num_samples} samples from the production inventory."
 
     else
 

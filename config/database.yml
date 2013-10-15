@@ -40,7 +40,7 @@ production:
   database: production
   pool: 5
   username: klavins
-  password: "236236"
+  password: "236236not"
 
 rehearse:
 
@@ -52,7 +52,7 @@ rehearse:
   database: rehearse
   pool: 5
   username: klavins
-  password: "236236"
+  password: "236236not"
 
   production_server: # Listed so that the rehearsal server can copy inventory db items from the production server
     adapter: mysql2

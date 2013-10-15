@@ -2,11 +2,11 @@ class StepInstruction < Instruction
 
   attr_reader :parts
 
-  def initialize part_exprs
+  def initialize part_exprs, options = {}
 
     @part_exprs = part_exprs
     @renderable = true
-    super 'step'
+    super 'step', options
 
     # TERMINAL
     @parts = part_exprs

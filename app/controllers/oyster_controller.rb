@@ -28,7 +28,7 @@ class OysterController < ApplicationController
 
       begin
         path = params[:path]
-        b = Blob.get_file path
+        b = Blob.get_file -1, path
         file = b[:content]
         sha = b[:sha]
       rescue Exception => e
