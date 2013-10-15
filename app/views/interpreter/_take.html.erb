@@ -8,10 +8,9 @@
   <% type = @instruction.item_list[i][:type]  %>
   <% ob = @instruction.object_list[i] %>
 
-
   <h4><%= q %> <%= type.pluralize(q) %>
 
-  <% if ob.handler == 'sample_container' %>
+  <% if ob.handler == 'sample_container' && ob.sample_type %>
     containing the
       <%= ob.sample_type.name %>
       <%= @instruction.item_list[i][:name] %>
@@ -119,7 +118,7 @@
 
       <% num = 0 %>
 
-      <% if object.handler != 'sample_container' %>
+      <% if object.handler != 'sample_container'  %>
 
         <% object.items.each do |item| %>
           <% if item.quantity - item.inuse > 0 %>
@@ -132,7 +131,7 @@
       <% else %>
 
         <% object.items.each do |item| %>
-          <% if !fields[:name] || ( item.sample.name == fields[:name] && item.sample.project == fields[:project] ) %>
+          <% if !fields[:name] || ( item.sample && ( item.sample.name == fields[:name] && item.sample.project == fields[:project] )) %>
             <% if item.quantity - item.inuse > 0 && ( !fields[:id] || fields[:id] == item.id ) %>
               html += '  <option value=<%= item.id %>>Sample id: <%= item.id %> at <%= item.location %> </option>';
               max[<%= item.id %>] = <%= item.quantity - item.inuse %>;

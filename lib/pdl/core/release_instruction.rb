@@ -65,7 +65,7 @@ class ReleaseInstruction < Instruction
         x.save 
       end
       
-      log_data.push object_type: item[:name], item_id: item[:id], method: m
+      log_data.push id: x[:id], method: m, location: x[:location]
 
     end
 
@@ -73,7 +73,7 @@ class ReleaseInstruction < Instruction
     log.job_id = params[:job]
     log.user_id = scope.stack.first[:user_id]
     log.entry_type = 'RELEASE'
-    log.data = { pc: @pc, objects: log_data }.to_json
+    log.data = { pc: @pc, items: log_data }.to_json
     log.save
 
   end

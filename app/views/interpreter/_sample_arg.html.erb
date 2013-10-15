@@ -72,7 +72,6 @@
         s.appendChild(t.children[0]);
       }
     }
-
   }
 
  <% if st %>
@@ -80,3 +79,18 @@
  <% end %>
 
 </script>
+
+<script>
+
+sample_items = [
+<% SampleType.all.each do |st| %>
+  <% st.samples.each do |s| %>
+    <% s.items.each do |i| %>
+      { id: <%= i.id %>, name: '<%= s.id %>', project: '<%=s.project %>', object_type: '<%= i.object_type.name %>'},
+    <% end %>
+  <% end %>
+<% end %>
+];
+
+</script>
+

@@ -154,10 +154,20 @@ class ObjectTypesController < ApplicationController
         ob.destroy
       end
 
+      Item.all.each do |i| # this should destroy any orphans
+        num_items += 1
+        i.destroy
+      end
+
       SampleType.all.each do |st|
         num_sample_types += 1
         num_samples += st.samples.length
         st.destroy
+      end
+
+      Sample.all.each do |s| # this should destroy any orphans
+        num_samples += 1
+        s.destroy
       end
 
       Touch.all.each do |t|
@@ -189,37 +199,42 @@ class ObjectTypesController < ApplicationController
       ProductionSampleType.switch_connection_to(:production_server)
       ProductionSample.switch_connection_to(:production_server)
 
-      # loop on object types
       ProductionObjectType.all.each do |ot|
 
         num_objects += 1
-
-        # copy object type to local server
-        new_ot = ObjectType.new(ot.attributes.except("id","image_file_name","image_content_type","image_file_size","image_updated_at","created_at","updated_at"))
+        new_ot = ObjectType.new(ot.attributes.except("image_file_name","image_content_type","image_file_size","image_updated_at","created_at","updated_at"))
+        new_ot.id = ot.id
         new_ot.save
-
-        # copy all the items to the local server
-        ProductionItem.where("object_type_id = ?", ot.id ).each do |i|
-          new_ot.items.create(i.attributes.except("id","object_type_id","created_at","updated_at"))
-          num_items += 1
-        end
 
       end
 
-      # loop on sample types
+      ProductionItem.all.each do |i|
+
+        new_item = Item.new(i.attributes.except("object_type_id","created_at","updated_at"))
+        new_item.id = i.id
+        new_item.object_type_id = i.object_type_id
+        new_item.sample_id = i.sample_id
+        new_item.save
+        num_items += 1
+
+      end
+
       ProductionSampleType.all.each do |st|
 
         num_sample_types += 1
-
-        # copy sample types
-        new_st = SampleType.new(st.attributes.except("id","created_at","updated_at"))
+        new_st = SampleType.new(st.attributes.except("created_at","updated_at"))
+        new_st.id = st.id
         new_st.save
 
-        # copy samples
-        ProductionSample.where("sample_type_id = ?", st.id).each do |s|
-          num_samples += 1
-          new_st.samples.create(s.attributes.except("id","sample_type_id","created_at","updated_at"))
-        end
+     end
+
+     ProductionSample.all.each do |s|
+
+        num_samples += 1
+        new_sample = Sample.new(s.attributes.except("sample_type_id","created_at","updated_at"))
+        new_sample.sample_type_id = s.sample_type_id
+        new_sample.id = s.id
+        new_sample.save
 
       end
 
