@@ -262,7 +262,7 @@ class InterpreterController < ApplicationController
         begin
           execute
         rescue Exception => e
-          process_error "Error executing #{@instruction.name}: " + e.to_s + ": "+  e.backtrace.inspect
+          process_error "Error executing #{@instruction.name}: " + e.to_s
           render 'current'
           return
         end
