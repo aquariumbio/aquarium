@@ -46,7 +46,8 @@ class Instruction
     if item.class != Item
       raise "Could not convert argument to PDL item, because it was not a Rails Item to start with."
     else
-      return { id: item.id, name: item.object_type.name }
+      d = item.data ? item.data : "{}";
+      return { id: item.id, name: item.object_type.name, data: JSON.parse(d) }
     end
   end
 

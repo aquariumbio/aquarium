@@ -1,7 +1,7 @@
 class ProduceInstruction < Instruction
 
   attr_reader :object_type_name, :quantity, :release, :var, :item
-  attr_accessor :sample_expr, :note
+  attr_accessor :sample_expr, :data_expr, :note
 
   def initialize object_type_expr, quantity_expr, release_expr, var, options = {}
 
@@ -10,6 +10,7 @@ class ProduceInstruction < Instruction
     @release_expr = release_expr
     @result_var = var
     @sample_expr = nil
+    @data_expr = nil
 
     @renderable = true
     super 'produce', options
@@ -42,6 +43,12 @@ class ProduceInstruction < Instruction
       end
     end
 
+    if @data_expr
+      @data = (scope.evaluate @data_expr).to_json
+    else
+      @data = {}
+    end
+ 
     # find the object, or report an error
     @object_type = ObjectType.find_by_name(@object_type_name)
 
@@ -58,7 +65,7 @@ class ProduceInstruction < Instruction
 
       loc = params['location'] ? params['location'] : @object_type.location_wizard;
       begin
-        @item = @object_type.items.create(location: loc, quantity: @quantity)
+        @item = @object_type.items.create(location: loc, quantity: @quantity, data: @data)
       rescue Exception => e
         raise "Could not add item of type #{object_type_name}: " + e.message
       end
@@ -116,7 +123,7 @@ class ProduceInstruction < Instruction
     log.user_id = scope.stack.first[:user_id]
     log.entry_type = 'PRODUCE'
     log.data = { pc: @pc, 
-                 item: { location: @item.location, id: @item.id, quantity: 1 }, 
+                 item: { location: @item.location, id: @item.id, quantity: 1, data: @data }, 
                  release: release_data 
                 }.to_json
     log.save

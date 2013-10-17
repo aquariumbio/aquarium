@@ -440,6 +440,10 @@ class Protocol
               instruction.note = c[:note]
             end
 
+            if c[:data] # there is data
+              instruction.data_expr = c[:data]
+            end
+
             write_debug 'produce has attributes ' + e.attributes.to_s
             if e.attributes['render'] && e.attributes['render'] == 'false'
               instruction.do_not_render
