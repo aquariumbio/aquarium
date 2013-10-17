@@ -59,7 +59,10 @@ class TakeInstruction < Instruction
         description[:type] = i.object_type.name
         description[:quantity] = 1
         description[:var] = item_expr[:var]
-        if i.object_type.handler = 'sample_container'
+        if i.object_type.handler == 'sample_container'
+          unless i.sample
+            raise "Item #{val} has object type sample_container, but does not point to a sample"
+          end
           description[:name] = i.sample.name
           description[:project] = i.sample.project
         end

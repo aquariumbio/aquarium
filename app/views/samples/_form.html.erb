@@ -54,6 +54,7 @@
           <%= f.text_field ff %>
         <% else %>
           <% choices = SampleType.find_by_name(@sample_type[ft]).samples.collect { |s| [ s.name, s.name ] } %>
+          <% choices.insert(0,[ '-none-', '-none-' ]) %>
           <%= f.select ff, choices %>
         <% end %>
       <% end %>

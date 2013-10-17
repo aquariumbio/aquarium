@@ -39,11 +39,17 @@
 
       <% if @sample_type[ft] != 'not used' %>
         <% if @sample_type[ft] == 'url' %>
-          <td><a href='<%= sample[f] %>'><%= sample[f][0..20] %> ...</a></td>
+          <% if sample[f] != '' %>
+            <td><a href='<%= sample[f] %>'><%= sample[f][0..20] %> ...</a></td>
+          <% else %>
+            <td>-</td>
+          <% end %>
         <% elsif @sample_type[ft] == 'number' %>
           <td><%= sample[f] %></td>
         <% elsif @sample_type[ft] == 'string' %>
           <td><%= sample[f] %></td>
+        <% elsif sample[f] == '-none-' %>
+          <td>-</td>
         <% else %>
           <td><%= link_to sample[f], Sample.find_by_name(sample[f]) %></td>
         <% end %>
