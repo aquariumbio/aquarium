@@ -6,10 +6,10 @@
 
 <ul class='list'>
   <li><b>Description</b>: <%= @sample_type.description %></li>
-  <% (1..6).each do |i| %>
+  <% (1..8).each do |i| %>
     <% fn = "field#{i}name".to_sym
        ft = "field#{i}type".to_sym %>
-    <% if @sample_type[ft] != 'not used' %>
+    <% if @sample_type[ft] != 'not used' && @sample_type[ft] != nil %>
       <li><b><%= @sample_type[fn] %></b>: <%= @sample_type[ft] %></li>
     <% end %>
   <% end %>

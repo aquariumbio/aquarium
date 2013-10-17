@@ -41,7 +41,7 @@
       <div class='span5'></div>
     </div>
 
-      <% (1..6).each do |i| %>
+      <% (1..8).each do |i| %>
 
         <div class='row-fluid'>
          
@@ -55,8 +55,13 @@
            <div class='span3'>
              <%= f.select(ft,types) %>
            </div>
+          <% if i==1 %>
+           <div class='span4'><b>Note:</b> All samples automatically
+           get a Name, Project, and Description field. </div>
+           <div class='span1'></div>
+          <% else %>
            <div class='span5'></div>
-
+          <% end %>
         </div>
 
       <% end %>

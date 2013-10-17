@@ -5,6 +5,11 @@
 <h1><%= @sample_type.name %>: <%= @sample.name %></h1>
 
 <p>
+  <b>Description:</b>
+  <%= @sample.description %>
+</p>
+
+<p>
   <b>Owner:</b>
   <%= @sample.user.login %>
 </p>
@@ -15,12 +20,12 @@
 </p>
 
   <ul class='list'>
-    <% (1..6).each do |i| 
+    <% (1..8).each do |i| 
        fn = "field#{i}name".to_sym
        ft = "field#{i}type".to_sym 
        f = "field#{i}".to_sym %>
 
-       <% if @sample_type[ft] != 'not used' %>
+       <% if @sample_type[ft] != 'not used' && @sample_type[ft] !=nil %>
         <% if @sample_type[ft] == 'url' %>
           <li><%= @sample_type[fn] %>: <a href='<%= @sample[f] %>'><%= @sample[f][0..100] %></a></li>
         <% elsif @sample_type[ft] == 'number' %>

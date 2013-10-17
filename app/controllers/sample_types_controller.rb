@@ -1,4 +1,7 @@
 class SampleTypesController < ApplicationController
+
+  before_filter :signed_in_user
+
   # GET /sample_types
   # GET /sample_types.json
   def index

@@ -25,7 +25,7 @@
    </div><div class='span3'>    
 
      <label>Owner</label>
-     <%= f.select( :user_id, User.all.collect { |u| [ u.login, u.id ] } ) %>
+     <%= f.select( :user_id, (User.all.collect { |u| [ u.login, u.id ]}).sort, selected: current_user.id ) %>
 
    </div><div class='span3'>    
 
@@ -38,13 +38,20 @@
 
   </div>
 
+   <div class='row-fluid'>
+     <div class='span9'>    
+       <label>Description</label>
+       <%= f.text_area :description, style: 'width: 100%;' ,rows: 1 %>
+    </div>
+  </div>
+
   <hr />
 
-    <% (1..6).each do |i| 
+    <% (1..8).each do |i| 
        fn = "field#{i}name".to_sym
        ft = "field#{i}type".to_sym 
        ff = "field#{i}".to_sym %>
-      <% if @sample_type[ft] != 'not used' %>
+      <% if @sample_type[ft] != 'not used' && @sample_type[ft] != nil %>
         <label><%= @sample_type[fn] %> (<%= @sample_type[ft] %>)</label>
         <% if @sample_type[ft] == 'url' %>
           <%= f.url_field ff %>

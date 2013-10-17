@@ -2,10 +2,13 @@
 
 <h1><%= pluralize(2,@sample_type.name)[2..-1]%></h1>
 
-<h4>Owner: <span class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @user.login %><b class="caret"></b></a>
+<h4><span class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @user ? @user.login : "all users" %><b class="caret"></b></a>
     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-      <% (User.all.sort { |x,y| x.login <=> y.login}).each do |u| %>
+      <li><a href="#" onclick="update_user(-1)">all users</a></li>
+      <li class="divider"></li>
+      <% choices = (User.all.sort { |x,y| x.login <=> y.login}) %> 
+      <% choices.each do |u| %>
         <li><a href="#" onclick="update_user(<%= u.id %>)"><%= u.login %></a></li>
       <% end %>
     </ul>
@@ -16,10 +19,14 @@
     <th>Name</th>
     <th>Project</th>
 
-    <% (1..6).each do |i| 
+    <% unless @user %>
+      <th>Owner</th>
+    <% end %>
+
+    <% (1..8).each do |i| 
        fn = "field#{i}name".to_sym
        ft = "field#{i}type".to_sym %>
-       <% if @sample_type[ft] != 'not used' %><th><%= @sample_type[fn] %></th><% end %>
+       <% if @sample_type[ft] != 'not used' && @sample_type[ft] != nil %><th><%= @sample_type[fn] %></th><% end %>
     <% end %>
 
     <th></th>
@@ -32,12 +39,16 @@
     <td><%= sample.name %></td>
     <td><%= sample.project %></td>
 
-    <% (1..6).each do |i| 
+    <% unless @user %>
+      <td><%= User.find(sample.user_id).login %></td>
+    <% end %>
+
+    <% (1..8).each do |i| 
        fn = "field#{i}name".to_sym
        ft = "field#{i}type".to_sym 
        f = "field#{i}".to_sym %>
 
-      <% if @sample_type[ft] != 'not used' %>
+      <% if @sample_type[ft] != 'not used' && @sample_type[ft] != nil %>
         <% if @sample_type[ft] == 'url' %>
           <% if sample[f] != '' %>
             <td><a href='<%= sample[f] %>'><%= sample[f][0..20] %> ...</a></td>

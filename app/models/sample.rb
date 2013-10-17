@@ -1,6 +1,6 @@
 class Sample < ActiveRecord::Base
 
-  attr_accessible :field1, :field2, :field3, :field4, :field5, :field6, :name, :user_id, :project, :sample_type_id, :user_id
+  attr_accessible :field1, :field2, :field3, :field4, :field5, :field7, :field6, :field8, :name, :user_id, :project, :sample_type_id, :user_id, :description
   belongs_to :sample_type
   belongs_to :user
   has_many :items
