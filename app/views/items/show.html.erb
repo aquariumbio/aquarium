@@ -6,7 +6,13 @@
   <h2><%= link_to @item.object_type.name, @item.object_type %></h2>
 <% end %>
 
-<h3>History</h3>
+<p><%= @item.sample.description %></p>
+
+<% if @item.data && @item.data != "" %>
+  <p>Data: <%= @item.data %></p>
+<% end %>
+
+<h4>History</h4>
 
 <table class='table'>
   <tr>

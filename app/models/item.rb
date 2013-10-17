@@ -4,7 +4,7 @@ class Item < ActiveRecord::Base
   belongs_to :sample
   has_many :touches
 
-  attr_accessible :location, :quantity, :table, :table_entry_id, :inuse, :sample_id
+  attr_accessible :location, :quantity, :table, :table_entry_id, :inuse, :sample_id, :data
 
   validates :location, :presence => true
 

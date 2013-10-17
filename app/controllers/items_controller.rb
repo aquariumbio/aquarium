@@ -5,6 +5,7 @@ class ItemsController < ApplicationController
   def show
 
     @item = Item.find(params[:id])
+    @active_item = params[:active_item]
     @touches = @item.touches
 
     respond_to do |format|
@@ -41,14 +42,15 @@ class ItemsController < ApplicationController
 
   def update
 
-    if params[:item] # called from sample page
+   if params[:item] # called from sample page
 
        i = Item.find(params[:item][:id])
        i.location = params[:item][:location]
+       i.data = params[:item][:data]
        i.save
-       redirect_to sample_url id: i.sample_id
+       redirect_to sample_url( { id: i.sample_id, active_item: i.id } )
 
-    else
+   else
 
     i = Item.find(params[:id])
 
@@ -62,7 +64,7 @@ class ItemsController < ApplicationController
         i.inuse = params[:inuse]
         flash[:success] = "Number of items at location " + i.location + " updated to " + i.inuse.to_s if i.save
 
-    end
+   end
 
     if ( i.errors.size > 0 )
       flash[:error] = ""

@@ -65,22 +65,33 @@
 
  window.history.replaceState ( null, '', '/samples/<%= @sample.id %>' );
 
- function toggle_change_location_form(i) {
+ function toggle_change_details_form(i) {
 
    a = document.getElementById('sample-item-loc-'+i);
    b = document.getElementById('sample-item-loc-edit-'+i);
    c = document.getElementById('sample-item-'+i);
+   d = document.getElementById('icon-'+i);
 
    if ( a.style.display == 'none' ) {
      a.style.display = 'block';
      b.style.display = 'none';
      c.style.width = '80px';
+     d.className = 'icon-chevron-down';
    } else {
      a.style.display = 'none';
      b.style.display = 'block';
-     c.style.width = '200px';
+     c.style.width = '215px';
+     d.className = 'icon-chevron-up';
    }
 
   }
+
+  function turn_on_submit_button(i) {
+     document.getElementById('submit-'+i).disabled = false;
+  }
+
+  <% if params[:active_item] %>
+    toggle_change_details_form(<%= params[:active_item] %>);
+  <% end %>
 
 </script>

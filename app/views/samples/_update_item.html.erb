@@ -1,5 +1,13 @@
-  <%= form_for(item, html: { class: 'input-append'}) do |f| %>
+
+  <%= form_for(item) do |f| %>
     <%= f.number_field :id, style: 'display: none'  %>
-    <%= f.text_field :location, value: item.location, class: 'input-small'  %>
-    <%= f.submit class: "btn", value: "move" %>
+    <label>Location:</label>
+    <%= f.text_field :location, value: item.location, class:
+    'input-small', onkeydown: "turn_on_submit_button(#{item.id})"  %>
+    <br />
+    <label>Data:</label>
+    <%= f.text_field :data, value: item.data, onkeydown: "turn_on_submit_button(#{item.id})" %>
+    <br />
+    <%= f.submit class: "btn", value: "update", disabled: true, id: 'submit-'+item.id.to_s %>
   <% end %>
+

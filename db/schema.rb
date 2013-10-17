@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131017153859) do
+ActiveRecord::Schema.define(:version => 20131017195843) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(:version => 20131017153859) do
     t.datetime "updated_at",                    :null => false
     t.integer  "inuse",          :default => 0
     t.integer  "sample_id"
+    t.string   "data"
   end
 
   add_index "items", ["object_type_id"], :name => "index_items_on_object_type_id"
