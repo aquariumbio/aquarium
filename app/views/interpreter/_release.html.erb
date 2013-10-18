@@ -5,6 +5,8 @@
 
 <% @instruction.item_list.each do |pi| %>
 
+  <br />
+
   <% it = Item.find(pi[:id])
      ob = it.object_type %>
 
@@ -24,12 +26,12 @@
   <% when 'dispose' %>
       <h4><input type='checkbox' id='<%=i %>-returned' onchange='update_next_button(<%=i %>)'></input> 
           Please dispose of item <%= it.id %> (<%= nm %>).</h4>
-      <p><%= method %></p>
+      <p><small><%= method %></small></p>
       <% next_check_list.push(i) %>
 
   <% when 'query' %>
       <h4>Return or dispose item <%= it.id %> (<%= nm %>)?</h4>
-      <p><%= method %></p>
+      <p><small>Details: <%= method %></small></p>
       <div class="yesorno">
         <label class="radio inline">
           <input type="radio" id='<%=i %>-return-yes' checked name='<%=i %>-yn'>Return to  to <%= loc %>

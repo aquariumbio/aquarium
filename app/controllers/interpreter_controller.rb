@@ -55,6 +55,7 @@ class InterpreterController < ApplicationController
 
     @sha = params[:sha]
     @path = params[:path]
+    @user = current_user
     parse_args_only
 
     respond_to do |format|

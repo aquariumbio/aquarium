@@ -21,8 +21,9 @@
 
   <tr>
     <th>Item</th>
-    <th>Container</th>
+    <th>Location</th>
     <th>Sample</th>
+    <th>Container</th>
     <th>Data</th>
     <th></th>
   </tr>
@@ -31,12 +32,14 @@
   <tr>
     <td><%= link_to cart_item.item_id, cart_item.item %></td>
 
-    <td>
-      <%= link_to cart_item.item.object_type.name, cart_item.item.object_type %>
-    </td>
+    <td><%= cart_item.item.location %></td>
 
     <td>
       <%= link_to cart_item.item.sample.name, cart_item.item.sample %>
+    </td>
+
+    <td>
+      <%= link_to cart_item.item.object_type.name, cart_item.item.object_type %>
     </td>
 
     <td>

@@ -1,96 +1,50 @@
 <div class='well row-fluid'>
 
-<% type = arg.name.sub('_id','').capitalize %>
+<% type = arg.name.sub( /_.*/, '' ).capitalize %>
 <% st = SampleType.find_by_name(type) %>
 
 <% if st %>
 
-  <div class='span6'>
-    
-    <div id='<%= arg.name + "_temp" %>' style='display: none'></div>
+  <div class='row-fluid'>
 
-    <%= label_tag(arg.name.to_sym,arg.description+' ('+type+')' ) %>
-    <select id='<%= arg.name %>' name='<%= arg.name %>'>
-      <% st.samples.each do |s| %>
-        <% s.items.each do |i| %>
-          <option value='<%= i.id %>' project='<%= s.project %>'><%= "#{i.id}: #{s.name}" %></option>
+    <div class='span6'>
+
+      <%= label_tag(arg.name.to_sym,arg.description+' ('+type+')' ) %>
+
+      <select id='<%= arg.name %>' name='<%= arg.name %>'>
+        <% (current_user.cart_items.reject { |ci| ci.item.sample.sample_type.id != st.id }).each do |ci| %>
+            <option value='<%= ci.item.id %>'><%= "#{ci.item.id}: #{ci.item.sample.name} #{ci.item.object_type.name}" %></option>
         <% end %>
-      <% end %>
-    </select>
+     </select>
 
-    <select id='<%= arg.name + '_hidden' %>' style='display:none'></select>
-
-  </div><div class='span6'>
-
-    <% projects = (SampleType.all.first.samples.collect { |x| x.project }).uniq %>
-
-    <label>Project</label>
-    <select id='<%= arg.name + '_project' %>' onchange="filter_by_sample_project('<%= arg.name %>')">
-      <% projects.each do |p| %>
-        <option value=<%= p %>><%= p %></option>
-      <% end %>
-    </select>
+    </div><div class='span6'>
+       The choices listed for this argument include only the items in your <%= link_to "cart", cart_items_path %> containing <%= pluralize(2,st.name.downcase)[2..-1] %>.
+    </div>
 
   </div>
 
 <% else %>
 
-  <%= label_tag(arg.name.to_sym, arg.description ) %>
-  <%= text_field_tag( arg.name.to_sym ) %>
+  <div class='row-fluid'>
+
+    <div class='span6'>
+
+      <%= label_tag(arg.name.to_sym,arg.description ) %>
+
+      <select id='<%= arg.name %>' name='<%= arg.name %>'>
+        <% current_user.cart_items.each do |ci| %>
+            <option value='<%= ci.item.id %>'><%= "#{ci.item.id}: #{ci.item.sample.name} #{ci.item.object_type.name}" %></option>
+        <% end %>
+      </select>
+
+    </div><div class='span6'>
+       The choices listed for this argument include all items in your <%= link_to "cart", cart_items_path %>.
+    </div>
+
+  </div>
 
 <% end %>
 
 </div>
 
-<script>
-
-  function filter_by_sample_project(arg_name) {
-
-    s = document.getElementById(arg_name);
-    h = document.getElementById(arg_name+'_hidden');
-    p = document.getElementById(arg_name+'_project');
-    t = document.getElementById(arg_name+'_temp');
-
-    project = p.options[p.selectedIndex].value;
-
-    //console.log(arg_name + " => " + project);
-
-    while ( s.children.length > 0 ) {
-      //console.log ( s.children[0].getAttribute('project') );
-      t.appendChild(s.children[0]);
-    }
-
-    while ( h.children.length > 0 ) {
-      t.appendChild(h.children[0]);
-    }
-
-    while ( t.children.length > 0 )  {
-     // console.log ( t.children[0].getAttribute('project') );
-      if ( t.children[0].getAttribute('project') != project ) {
-        h.appendChild(t.children[0]);
-      } else {
-        s.appendChild(t.children[0]);
-      }
-    }
-  }
-
- <% if st %>
-   filter_by_sample_project('<%= arg.name %>');
- <% end %>
-
-</script>
-
-<script>
-
-sample_items = [
-<% SampleType.all.each do |st| %>
-  <% st.samples.each do |s| %>
-    <% s.items.each do |i| %>
-      { id: <%= i.id %>, name: '<%= s.id %>', project: '<%=s.project %>', object_type: '<%= i.object_type.name %>'},
-    <% end %>
-  <% end %>
-<% end %>
-];
-
-</script>
 
