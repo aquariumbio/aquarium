@@ -10,9 +10,29 @@
 
 </div>
 
-<div class='well' style='background: white'>
-<h4>Features released on Oct. 15</h4>
-<ul>
+<div class='row-fluid'>
+<div class='span6'>
+
+<h3>Latest Changes (Oct. 18)</h3>
+<ul class='list'>
+  <li>Sample fields that link to ther samples can now be empty.</li>
+  <li>Samples now have up to eight fields (was six)</li>
+  <li>Samples now automatically have a description field.</li>
+  <li>You can view you samples, anyone elses samples, or everyone's samples.</li>
+  <li>You can store data with a sample. Data can be added directly to
+    items on the sample page for that item, or can be specified during a
+    &lt;produce&gt;. Items in PDL have a data field now that has this data in
+    it. See generic/siso.pdl for an
+    example. </li>
+  <li>Items can be put into a virtual "cart" (for lack of a better
+    word). These items are available in a drop down menu when filling
+    in arguments of type sample for protocols.</li>
+</ul>
+
+<h3>Previous Changes</h3>
+
+<h4>Oct. 15</h4>
+<ul class='list'>
   <li>Fixed a bug that incorrectly cloned the production server data
   and resulted in incorrect links between items, samples, object
   types, and sample types. The db clone will now have exactly the same ids
@@ -20,24 +40,27 @@
   <li>Somewhat more pronouced color differences between production and
   rehearsal servers.</li>
 </ul>
-</div>
 
-<div class='well' style='background: white'>
-<h4>Features released on Oct. 14</h4>
-<ul>
+<h4>Oct. 14</h4>
+<ul class='list'>
   <li>Improved error reporting. More errors are caught, are better explained, and in many
-  cases the offending PDL code is shown.</li>
+    cases the offending PDL code is shown.</li>
   <li>Produce now tells you the id of the item you are producing, and
-  you can add a note to show on the produce page.</li>
+    you can add a note to show on the produce page.</li>
   <li>Every job that touched a particular item is now show, and vice
-  verse. Look at the log page after running a protocol to see how.</li>
+    verse. Look at the log page after running a protocol to see how.</li>
   <li>In take, you can specify a particular item by using its id.</li>
   <li>Arguments can have type <b>sample</b> or type <b>objecttype</b>
-  in addition to the old string and number. For arguments named, for
-  example, primer_id, BioTurk will know you want an item id that
-  refers to a primer and give you a list of projects and samples to
-  select from when starting the protocol.</li>
+    in addition to the old string and number. For arguments named, for
+    example, primer_id, BioTurk will know you want an item id that
+    refers to a primer and give you a list of projects and samples to
+    select from when starting the protocol.</li>
   <li>When copying the production db to your local copy of bioturk,
-  you get the sample types and samples too.</li>
+    you get the sample types and samples too.</li>
 </ul>
+
+</div>
+
+<div class='span6'></div>
+
 </div>
