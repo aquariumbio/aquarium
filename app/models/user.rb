@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   has_many :samples
   has_many :logs
   has_many :jobs
+  has_many :cart_items
 
   # Q: Why not = user.login.downcase?
   before_save { |user| user.login = login.downcase } 
@@ -22,3 +23,5 @@ class User < ActiveRecord::Base
     end
 
 end
+
+

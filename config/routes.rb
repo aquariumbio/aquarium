@@ -1,7 +1,7 @@
 Bioturk::Application.routes.draw do
 
+  resources :cart_items, only: [ :index, :new, :destroy ]
   resources :samples
-
   resources :sample_types
 
   match "interpreter/open_local_file", to: 'interpreter#open_local_file', via: [:post]

@@ -72,7 +72,12 @@
             <li><%= current_user %>
           <% end %>
 
-          <li class='dropdown'><%= link_to "Help", help_path %></li>
+           <li class='dropdown'><%= link_to "Help", help_path %></li>
+
+           <li class='dropdown'><%= link_to cart_items_path do %>
+               <i class='icon-shopping-cart icon-white'></i>
+             <% end %>
+           </li>
 
         </ul>
       </nav>

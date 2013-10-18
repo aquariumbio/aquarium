@@ -9,14 +9,28 @@
 <p><%= @item.sample.description %></p>
 
 <% if @item.data && @item.data != "" %>
-  <p>Data: <%= @item.data %></p>
+  <h4>Data</h4> <ul class='list'>
+      <% begin
+                data = JSON.parse(@item.data) 
+              rescue
+                data = {}
+              end
+         %>
+
+        <% if data.class == Hash %> 
+          <% data.each do |k,v| %>
+            <li><%= k %>: <%=  v %></li>
+          <% end %>
+        <% end %>
+
+</ul>
 <% end %>
 
 <h4>History</h4>
 
 <table class='table'>
   <tr>
-    <th>Date/Time</th>
+    <th >Date/Time</th>
     <th>Job</th>
     <th>Protocol</th>
     <th>User</th>
@@ -30,4 +44,4 @@
     <td><%= j.user.login %></td>
   </tr>
 <% end %>
-</ul>
+</table>

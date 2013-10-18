@@ -1,46 +1,58 @@
 <% provide(:title, @sample_type.name + '|' + @sample.name ) %>
 
-<p id="notice"><%= notice %></p>
-
 <h1><%= @sample_type.name %>: <%= @sample.name %></h1>
 
-<p>
-  <b>Description:</b>
-  <%= @sample.description %>
-</p>
+<div class='row-fluid'>
 
-<p>
-  <b>Owner:</b>
-  <%= @sample.user.login %>
-</p>
+  <div class='span6'>
 
-<p> 
-  <b>Project:</b>
-  <%= @sample.project %>
-</p>
+    <p>
+      <b>Description:</b>
+      <%= @sample.description %>
+    </p>
 
-  <ul class='list'>
-    <% (1..8).each do |i| 
-       fn = "field#{i}name".to_sym
-       ft = "field#{i}type".to_sym 
-       f = "field#{i}".to_sym %>
+    <p>
+      <b>Owner:</b>
+      <%= @sample.user.login %>
+    </p>
 
-       <% if @sample_type[ft] != 'not used' && @sample_type[ft] !=nil %>
-        <% if @sample_type[ft] == 'url' %>
-          <li><%= @sample_type[fn] %>: <a href='<%= @sample[f] %>'><%= @sample[f][0..100] %></a></li>
-        <% elsif @sample_type[ft] == 'number' %>
-          <li><%= @sample_type[fn] %>: <%= @sample[f] %></li>
-        <% elsif @sample_type[ft] == 'string' %>
-          <li><%= @sample_type[fn] %>: <%= @sample[f] %></li>
-        <% elsif @sample[f] == '-none-' %>
-          <li><%= @sample_type[fn] %>:</li>
-        <% else %>
-          <li><%= @sample_type[fn] %>: <%= link_to @sample[f], Sample.find_by_name(@sample[f]) %></li>
+    <p> 
+      <b>Project:</b>
+      <%= @sample.project %>
+    </p>
+
+      <ul class='list'>
+        <% (1..8).each do |i| 
+           fn = "field#{i}name".to_sym
+           ft = "field#{i}type".to_sym 
+            f = "field#{i}".to_sym %>
+
+           <% if @sample_type[ft] != 'not used' && @sample_type[ft] !=nil %>
+            <% if @sample_type[ft] == 'url' %>
+              <li><%= @sample_type[fn] %>: <a href='<%= @sample[f] %>'><%= @sample[f][0..100] %></a></li>
+            <% elsif @sample_type[ft] == 'number' %>
+              <li><%= @sample_type[fn] %>: <%= @sample[f] %></li>
+            <% elsif @sample_type[ft] == 'string' %>
+              <li><%= @sample_type[fn] %>: <%= @sample[f] %></li>
+            <% elsif @sample[f] == '-none-' %>
+              <li><%= @sample_type[fn] %>:</li>
+            <% else %>
+              <li><%= @sample_type[fn] %>: <%= link_to @sample[f], Sample.find_by_name(@sample[f]) %></li>
+            <% end %>
+          <% end %>
+
         <% end %>
-      <% end %>
+      </ul>
 
-    <% end %>
-  </ul>
+  </div><div class='span3'></div><div class='span3 well'>
+      <i class='icon-chevron-down'></i> Show details</br>
+      <i class='icon-shopping-cart'></i> Add to cart</br>
+      <i class='icon-refresh'></i> Toggle availability</br>
+      <i class='icon-remove'></i> Delete the item</br>
+    </p>
+  </div>
+
+</div>
 
 <hr />
 
@@ -75,7 +87,7 @@
    if ( a.style.display == 'none' ) {
      a.style.display = 'block';
      b.style.display = 'none';
-     c.style.width = '80px';
+     c.style.width = '100px';
      d.className = 'icon-chevron-down';
    } else {
      a.style.display = 'none';

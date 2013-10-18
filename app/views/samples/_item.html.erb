@@ -9,6 +9,21 @@
   <div class='id'>
      <%= link_to item.id, item %>
      <a href="#" onclick='toggle_change_details_form(<%= item.id %>)'><i id='icon-<%= item.id %>' class='icon-chevron-down'></i></a>
+
+     <%= link_to new_cart_item_path(item_id: item.id) do %>
+       <i class='icon-shopping-cart'></i>
+     <% end %>
+
+    <%= link_to sample_path(@sample,toggle: item.id) do %>
+      <i class='icon-refresh'></i>
+    <% end %>
+
+     <%= link_to sample_path(@sample,delete: item.id), data: { 
+            confirm: "Are you sure you want to delete this sample of #{@sample.name}?" 
+     } do %>
+        <i class='icon-remove'></i>
+     <% end %>
+
   </div>
 
   <div class='loc' id='sample-item-loc-<%= item.id %>'>
@@ -21,19 +36,8 @@
 
   <div class='use'>
     <%= item.inuse > 0 ? 'in use' : 'available' %>
-    <%= link_to sample_path(@sample,toggle: item.id) do %>
-      <i class='icon-refresh'></i>
-    <% end %>
   </div>
   
-  <div class='delete'>
-    <%= link_to sample_path(@sample,delete: item.id), data: { 
-            confirm: "Are you sure you want to delete this sample of #{@sample.name}?" 
-    } do %>
-      <i class='icon-remove'></i>
-    <% end %>
-  </div>
-
 </div>
 
 
