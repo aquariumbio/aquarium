@@ -46,7 +46,7 @@ class ProduceInstruction < Instruction
     if @data_expr
       @data = (scope.evaluate @data_expr).to_json
     else
-      @data = {}
+      @data = "{}"
     end
  
     # find the object, or report an error
@@ -100,8 +100,8 @@ class ProduceInstruction < Instruction
     t.save
 
     # release anything that needs to be released
-    release_data = []
 
+    release_data = []
     if @release
       @release.each do |item|
         y = Item.find_by_id(item[:id])
