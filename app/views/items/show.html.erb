@@ -2,11 +2,10 @@
 
 <% if @item.object_type.handler == 'sample_container' %>
   <h2><%= link_to @item.sample.name, @item.sample %> - <span style='color: #aaa'><%= @item.object_type.name %></span></h2>
+  <p><%= @item.sample.description %></p>
 <% else %>
   <h2><%= link_to @item.object_type.name, @item.object_type %></h2>
 <% end %>
-
-<p><%= @item.sample.description %></p>
 
 <% if @item.data && @item.data != "" %>
   <h4>Data</h4> <ul class='list'>
