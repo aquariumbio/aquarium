@@ -140,15 +140,15 @@ class InterpreterController < ApplicationController
     parse
     if @parse_errors != ""
       log 'ERROR', { error: @parse_errors, pc: @job.pc }
+      @pc = Job.COMPLETED
+    else
+      # Get the pc and scope
+      @pc = @job.pc
+      @scope = Scope.new
+      @scope.set_stack state[:stack]
+      @scope.set_base_symbol :user_id, current_user.id
+      @instruction = @protocol.program[@pc]
     end
-
-    # Get the pc and scope
-    @pc = @job.pc
-
-    @scope = Scope.new
-    @scope.set_stack state[:stack]
-    @scope.set_base_symbol :user_id, current_user.id
-    @instruction = @protocol.program[@pc]
 
   end
 
