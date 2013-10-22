@@ -20,7 +20,9 @@
   <div class='row-fluid'>
 
     <div class="span2 object-image">
-      <%= image_tag @instruction.object_list[i].image.url(:medium) %>
+      <% if ob.image %>
+        <img src='http://bioturk.ee.washington.edu:3012/bioturk/image?name=<%= ob.image %>'></img>
+      <% end %>
     </div>
 
     <div class="span10">

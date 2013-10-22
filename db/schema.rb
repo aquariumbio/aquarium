@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131017223325) do
+ActiveRecord::Schema.define(:version => 20131022161712) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -76,14 +76,12 @@ ActiveRecord::Schema.define(:version => 20131017223325) do
     t.datetime "created_at",          :null => false
     t.datetime "updated_at",          :null => false
     t.string   "unit"
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
     t.datetime "image_updated_at"
     t.float    "cost"
     t.string   "release_method"
     t.text     "release_description"
     t.integer  "sample_type_id"
+    t.string   "image"
   end
 
   create_table "sample_types", :force => true do |t|

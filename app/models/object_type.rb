@@ -4,9 +4,6 @@ class ObjectType < ActiveRecord::Base
                   :vendor, :unit, :image, :cost, :release_method, :release_description,
                   :sample_type_id
 
-  has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "150x150>" }, 
-                    :default_url => "/images/:style/no-image.png"
-
   validates :name, :presence => true
   validates :unit, :presence => true
   validates :min, :presence => true

@@ -114,8 +114,11 @@
   </div>
 
   <div class="field" id="image">
-    <%= f.label :image %><br />
-    <%= f.file_field :image %>
+     <label>Image name
+     from <a href='http://bioturk.ee.washington.edu:3012/folders/2'
+     target="_blank">Angler</a>. Do not include the file type
+     (e.g. .jpg, .gif, etc.) in the name.</label>
+     <%= f.text_field :image, class: 'span12' %>
   </div>
 
   <% if @sample_type %>

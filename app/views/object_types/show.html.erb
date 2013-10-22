@@ -5,7 +5,7 @@
 <div class="row-fluid">
 
   <div class="span3 object-image">
-    <%= image_tag @object_type.image.url(:medium) %>
+    <img src='http://bioturk.ee.washington.edu:3012/bioturk/image?name=<%= @object_type.image %>'></img>
   </div>
 
   <div class="span9 object-description">

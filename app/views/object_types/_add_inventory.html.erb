@@ -4,23 +4,13 @@
 
   <%= form_for([@object_type, @object_type.items.build]) do |f| %>
 
-  <table>
-    <tr>
-    <td><div class="field">
-      <%= f.label :location %>
-      <%= f.text_field :location %>
-    </div></td>
-
-    <td><div class="field">
-      <%= f.label :quantity %>
-       <%= f.number_field :quantity, value: 0 %>
-    </div></td>
-
-    <td><div class="actions">
-      <%= f.submit class: "btn btn-small", value: "Add"  %>
-    </div></td>
-    </tr>
-  </table>
+        <%= f.label :location %>
+        <%= f.text_field :location %>
+     <br />
+         <%= f.label :quantity %>
+         <%= f.number_field :quantity, value: 0 %>
+     <br />
+    <%= f.submit class: "btn btn-small", value: "Add"  %>
 
   <% end %>
 
