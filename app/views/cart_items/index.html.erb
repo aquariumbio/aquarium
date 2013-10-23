@@ -27,42 +27,55 @@
 
 <% @cart_items.each do |cart_item| %>
   <tr>
-    <td><%= link_to cart_item.item_id, cart_item.item %></td>
 
-    <td><%= cart_item.item.location %></td>
+    <% if cart_item.item %>
 
-    <td>
-      <%= link_to cart_item.item.sample.name, cart_item.item.sample %>
-    </td>
+      <td><%= link_to cart_item.item_id, cart_item.item %></td>
 
-    <td>
-      <%= link_to cart_item.item.object_type.name, cart_item.item.object_type %>
-    </td>
+      <td><%= cart_item.item.location %></td>
 
-    <td>
-      <% if cart_item.item.data %>
+      <td>
+        <%= link_to cart_item.item.sample.name, cart_item.item.sample %>
+      </td>
 
-        <% begin
-                data = JSON.parse(cart_item.item.data) 
-              rescue
-                data = {}
-              end
-         %>
+      <td>
+        <%= link_to cart_item.item.object_type.name, cart_item.item.object_type %>
+      </td>
 
-        <% if data.class == Hash %> 
-          <% data.each do |k,v| %>
-            <%= k %>: <%=  v %><br />
+      <td>
+        <% if cart_item.item.data %>
+
+          <% begin
+                  data = JSON.parse(cart_item.item.data) 
+                rescue
+                  data = {}
+                end
+           %>
+
+          <% if data.class == Hash %> 
+            <% data.each do |k,v| %>
+              <%= k %>: <%=  v %><br />
+            <% end %>
           <% end %>
         <% end %>
-      <% end %>
 
-    </td>
+      </td>
 
-    <td><%= link_to(cart_item, method: :delete) do %>
-               <i class='icon-remove'></i>
-             <% end %>
+     <% else %>
+        <td class='text-error'><%= cart_item.item_id %></td>
+        <td class='text-error'>This item no longer exists</td>
+        <td></td>
+        <td></td>
+        <td></td>
 
-    </td>
+     <% end %>
+
+      <td><%= link_to(cart_item, method: :delete) do %>
+                 <i class='icon-remove'></i>
+               <% end %>
+      </td>
+
+
   </tr>
 <% end %>
 </table>

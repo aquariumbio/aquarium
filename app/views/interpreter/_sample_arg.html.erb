@@ -12,7 +12,7 @@
       <%= label_tag(arg.name.to_sym,arg.description+' ('+type+')' ) %>
 
       <select id='<%= arg.name %>' name='<%= arg.name %>'>
-        <% (current_user.cart_items.reject { |ci| ci.item.sample.sample_type.id != st.id }).each do |ci| %>
+        <% (current_user.cart_items.reject { |ci| !ci.item || ci.item.sample.sample_type.id != st.id }).each do |ci| %>
             <option value='<%= ci.item.id %>'><%= "#{ci.item.id}: #{ci.item.sample.name} #{ci.item.object_type.name}" %></option>
         <% end %>
      </select>
@@ -32,7 +32,7 @@
       <%= label_tag(arg.name.to_sym,arg.description ) %>
 
       <select id='<%= arg.name %>' name='<%= arg.name %>'>
-        <% current_user.cart_items.each do |ci| %>
+        <% (current_user.cart_items.reject { |ci| !ci.item }).each do |ci| %>
             <option value='<%= ci.item.id %>'><%= "#{ci.item.id}: #{ci.item.sample.name} #{ci.item.object_type.name}" %></option>
         <% end %>
       </select>
