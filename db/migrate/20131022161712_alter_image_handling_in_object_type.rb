@@ -4,7 +4,7 @@ class AlterImageHandlingInObjectType < ActiveRecord::Migration
     remove_column :object_types, :image_file_name
     remove_column :object_types, :image_content_type
     remove_column :object_types, :image_file_size
-    remove_column :object_types, :image_update_at
+    remove_column :object_types, :image_updated_at
     add_column :object_types, :image, :string
   end
 
