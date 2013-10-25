@@ -444,7 +444,16 @@ class Protocol
               instruction.data_expr = c[:data]
             end
 
-            write_debug 'produce has attributes ' + e.attributes.to_s
+            if c[:sample_name] || c[:sample_project]
+              if !(c[:sample_name] && c[:sample_project])
+                @bad_xml = e
+                raise "Both a sample name or sample project must be specified if either is specified"
+              else
+                instruction.sample_name_expr = c[:sample_name]
+                instruction.sample_project_expr = c[:sample_project]
+              end
+            end
+
             if e.attributes['render'] && e.attributes['render'] == 'false'
               instruction.do_not_render
             end

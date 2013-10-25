@@ -1,7 +1,7 @@
 class ProduceInstruction < Instruction
 
   attr_reader :object_type_name, :quantity, :release, :var, :item
-  attr_accessor :sample_expr, :data_expr, :note
+  attr_accessor :sample_expr, :data_expr, :note, :sample_name_expr, :sample_project_expr
 
   def initialize object_type_expr, quantity_expr, release_expr, var, options = {}
 
@@ -11,6 +11,8 @@ class ProduceInstruction < Instruction
     @result_var = var
     @sample_expr = nil
     @data_expr = nil
+    @sample_name_expr = nil
+    @sample_project_expr = nil
 
     @renderable = true
     super 'produce', options
@@ -40,6 +42,19 @@ class ProduceInstruction < Instruction
         @sample = Item.find(sample_item[:id]).sample
       rescue Exception => e
         raise "Could not find sample #{@sample_expr} => #{sample_item.to_s} for produce instruction. " + e.message
+      end
+    end
+
+    if @sample_name_expr
+        @sample_name = scope.substitute @sample_name_expr
+        @sample_project = scope.substitute @sample_project_expr
+      begin
+        if @sample_name.class != String || @sample_project.class != String
+          raise "Sample name and project must be strings"      
+        end
+        @sample = Sample.find_by_name_and_project(@sample_name,@sample_project)
+      rescue Exception => e
+        raise "Could not find sample with name=#{@sample_name} and project=#{@sample_project}."
       end
     end
 
