@@ -1,5 +1,6 @@
 Bioturk::Application.routes.draw do
 
+  resources :collections
   resources :cart_items, only: [ :index, :new, :destroy ]
   resources :samples
   resources :sample_types

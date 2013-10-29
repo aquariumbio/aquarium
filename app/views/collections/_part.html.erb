@@ -1,0 +1,21 @@
+<h4>Part <%= row %>, <%= col %></h4>
+
+<% if @matrix[row-1][col-1].length > 0 %>
+
+  <% part = @matrix[row-1][col-1].first %>
+
+  <ul>
+
+    <li><%= part.item.id %></li>
+ 
+    <% if part.item.sample %>
+      <li><%= part.item.sample.name %></li>
+      <li><%= part.item.sample.project %></li>
+      <li><%= part.item.data %></li>
+    <% end %>
+
+  </ul>
+
+<% else %>
+  Empty.
+<% end %>

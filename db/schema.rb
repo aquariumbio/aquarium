@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131022161712) do
+ActiveRecord::Schema.define(:version => 20131029153634) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -28,6 +28,16 @@ ActiveRecord::Schema.define(:version => 20131022161712) do
     t.integer  "item_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "collections", :force => true do |t|
+    t.string   "name"
+    t.string   "project"
+    t.integer  "object_type_id"
+    t.integer  "rows"
+    t.integer  "columns"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "items", :force => true do |t|
@@ -82,6 +92,15 @@ ActiveRecord::Schema.define(:version => 20131022161712) do
     t.text     "release_description"
     t.integer  "sample_type_id"
     t.string   "image"
+  end
+
+  create_table "parts", :force => true do |t|
+    t.integer  "collection_id"
+    t.integer  "item_id"
+    t.integer  "row"
+    t.integer  "column"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "sample_types", :force => true do |t|

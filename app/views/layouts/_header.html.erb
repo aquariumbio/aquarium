@@ -2,6 +2,7 @@
   <div class="navbar-inner">
     <div class="container-fluid" id="header-bar">
       <%= link_to "BIOTURK", root_path, id: "logo" %>
+      <div id='environment'><%= Rails.env %></div>
       <div class='info' id="info-area"></div>
       <nav>
         <ul class="nav pull-right">
@@ -25,6 +26,8 @@
                 <% name = pluralize(2,st.name)[2..-1] %>
                 <li><%= link_to name, samples_path(sample_type_id: st.id) %></li>
               <% end %>
+              <li class="divider"></li>
+              <li><%= link_to "Collections", collections_path %></li>
               <li class="divider"></li>
               <li><%= link_to "Sample Type Definitions", sample_types_path %></li>
               <% if Rails.env != 'production' %>

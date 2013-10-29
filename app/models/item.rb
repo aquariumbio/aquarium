@@ -3,6 +3,7 @@ class Item < ActiveRecord::Base
   belongs_to :object_type
   belongs_to :sample
   has_many :touches
+  belongs_to :part
 
   attr_accessible :location, :quantity, :table, :table_entry_id, :inuse, :sample_id, :data
 

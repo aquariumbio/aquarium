@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  project: MyString
+  object_type_id: 1
+  rows: 1
+  columns: 1
+
+two:
+  name: MyString
+  project: MyString
+  object_type_id: 1
+  rows: 1
+  columns: 1
