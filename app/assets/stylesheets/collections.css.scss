@@ -1,0 +1,78 @@
+.collection {
+  border: 1pt solid black;
+  display: inline-block;
+  padding: 10px 20px 20px 10px;
+}
+
+.part {
+  width: 14px;
+  height: 14px;
+  margin: 2px; 
+  display: inline;
+  float: left;
+  line-height: 1;
+  padding: 10px;
+  font-size: 12pt;
+  border-radius: 0px;
+}
+
+.part_header {
+  background: #fff;
+}
+
+.part_occupied {
+  background: #444;
+}
+
+.part_empty {
+  background: #ddd;
+}
+
+.part_details {
+  display: none;
+  border: 1pt solid #aaa;
+  padding: 10px;
+}
+
+.plain {
+  list-style-type: none;
+  padding:0;
+  margin: 10px 0 0 0;
+}
+
+
+.select-root {
+
+  .select-column {
+
+    ul {
+      border-left: 1pt solid #aaa;
+      height: 100%;
+    }
+
+    .btn {
+      margin-left: 3px;;
+    }
+
+    h1 {
+      font-size: 14pt;
+      text-align: left;
+      letter-spacing: 0em;
+    }
+
+  }
+
+  .select-link {
+    cursor: pointer; 
+    cursor: hand;
+    color: #999;
+    padding: 1pt 5pt 1pt 5pt;
+    width: 100%;
+  }
+
+  .selected {
+     color: #000;
+     background: yellow;
+  }
+
+}

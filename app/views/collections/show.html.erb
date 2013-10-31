@@ -3,48 +3,8 @@
 <h2><%= @collection.object_type.name %>: <%= @collection.name %></h2>
 <h2>Project: <%= @collection.project %></h2>
 
-<style>
-
-.collection {
-  border: 1pt solid black;
-  display: inline-block;
-  padding: 10px 20px 20px 10px;
-}
-
-.part {
-  width: 12px;
-  height: 12px;
-  margin: 2px; 
-  display: inline;
-  float: left;
-  line-height: 1;
-  padding: 10px;
-  font-size: 12pt;
-  border-radius: 0px;
-}
-
-.part_header {
-  background: #fff;
-}
-
-.part_occupied {
-  background: #444;
-}
-
-.part_empty {
-  background: #ddd;
-}
-
-.part_details {
-  display: none;
-  border: 1pt solid #aaa;
-  padding: 10px;
-}
-
-</style>
-
-<div class='row-fluid'>
-  <div class='span5'>
+<div class='row-fluid' style="outline: 0pt dashed red">
+  <div class='span5' style="outline: 0pt dashed red">
     <span class='collection'>
       <% (0..@collection.rows).each do |r| %>
         <% (0..@collection.columns).each do |c| %>
@@ -55,34 +15,75 @@
           <% elsif r == 0 && c == 0 %>
             <div class='part part_header'></div>
           <% elsif @matrix[r-1][c-1].length > 0 %>
-            <div class='part part_occupied' id='<%= "part_#{r}_#{c}" %>' onclick='show_part(<%= r %>,<%= c %>)'></div>
+            <% part = @matrix[r-1][c-1].first 
+               item = part.item
+               sample = part.item.sample
+               project = part.item.sample.project
+               sample_type = sample.sample_type
+               container = part.item.object_type
+               description = "{ type: '#{sample_type.name}', project: '#{sample.project}', sample: '#{sample.name}', container: '#{container.name}', item: '#{item.id}' }"
+            %>
+            <div class='part part_occupied' id='<%= "part_#{r}_#{c}" %>' onclick='show_part( <%= r %>, <%= c %>, <%= description %> )'></div>
           <% else %>
-            <div class='part part_empty'    id='<%= "part_#{r}_#{c}" %>' onclick='show_part(<%= r %>,<%= c %>)'></div>
+            <div class='part part_empty'    id='<%= "part_#{r}_#{c}" %>' onclick='show_part( <%= r %>, <%= c %>, null )'></div>
           <% end %>
         <% end %>
         <div class='clear'></div>
       <% end %>
     </span>
   </div>
-  <div class='span5'>
-    <% (1..@collection.rows).each do |r| %>
-      <% (1..@collection.columns).each do |c| %>
-        <span class='part_details' id='<%= "details_#{r}_#{c}" %>'>
-          <%= render partial: '/collections/part', locals: { row: r, col: c } %>
-        </span>
-      <% end %>
-    <% end %>
-  </div>
-  <div class='span2'></div>
+  <div id='item-selector' class='span7' style='outline: 0pt dashed red'></div>
 </div>
-
-<br />
 
 <%= link_to 'Back to List', collections_path, class: 'btn' %>
 
 <script>
 
-function show_part(r,c) {
+samples = {
+    <% SampleType.all.each do |st| %>
+        "<%= st.name %>" : {
+          <% st.samples.pluck(:project).uniq.each do |p| %>
+              "<%= p %>" : {
+                <% (st.samples.reject { |s| s.project != p }).each do |s| %>
+                    "<%= s.name %>" :{
+                      <% st.object_types.each do |ot| %>
+                        "<%= ot.name %>" : {
+                          <% ot.items.each do |i| %>
+                            "<%= i.id %>" : "<%= i.data %>",
+                          <% end %> },
+                      <% end %> },
+                <% end %> },
+          <% end %> },
+    <% end %>
+};
+
+function show_part(r,c,sample_type) {
+
+  part = document.getElementById("part_"+r+"_"+c);
+
+  for ( var i=1; i<=<%= @collection.rows %>; i++ ) {
+    for ( var j=1; j<=<%= @collection.columns %>; j++ ) {
+      document.getElementById("part_"+i+"_"+j).style.outline = '0pt solid red';
+    }
+  }
+
+  part.style.outline = '3pt solid red';  
+
+  types = document.getElementById('types');
+  types.innerHTML = "";
+  for ( var st in samples ) {
+    li = document.createElement("li");
+    if ( st == sample_type ) {
+      li.innerHTML = "<b style='color: red'>"+st+"</b>";
+    } else {
+      li.innerHTML = st;
+    }
+    types.appendChild(li);
+  }
+  
+}
+
+function show_part_old(r,c) {
   
   for ( var i=1; i<=<%= @collection.rows %>; i++ ) {
     for ( var j=1; j<=<%= @collection.columns %>; j++ ) {
@@ -100,6 +101,184 @@ function show_part(r,c) {
 
     }
   }
+}
+
+function ItemSelector ( tag ) {
+
+  this.root_tag = tag;
+  this.root_el = document.getElementById ( tag );
+  
+  var html  = "<div class='row-fluid select-root'>";
+      html +=   "<div class='span2 select-column'><h1>Type</h1><ul id='select-types' class='plain'></ul></div>";
+      html +=   "<div class='span3 select-column'><h1>Project</h1><ul id='select-projects' class='plain'></ul></div>";
+      html +=   "<div class='span2 select-column'><h1>Sample</h1><ul id='select-samples' class='plain'></ul></div>";
+      html +=   "<div class='span3 select-column'><h1>Container</h1><ul id='select-containers' class='plain'></ul></div>";
+      html +=   "<div class='span2 select-column'><h1>Item</h1><ul id='select-items' class='plain'></ul></div>";
+      html += "</div>"
+
+  this.root_el.innerHTML = html;
+
+  this.types      = document.getElementById('select-types');
+  this.projects   = document.getElementById('select-projects');
+  this.samples    = document.getElementById('select-samples');
+  this.containers = document.getElementById('select-containers');
+  this.items      = document.getElementById('select-items');
+  
+}
+
+ItemSelector.prototype.show_entry = function(category,name,selection) {
+
+  var li = document.createElement("li");
+
+  if ( name == selection ) {
+    li.innerHTML = "<span class='select-link selected'>"+name+"</span>";
+  } else {
+    li.innerHTML = "<span class='select-link'>"+name+"</span>";
+  }
+
+  category.appendChild(li);
+
+  return li;
+
+}
+
+ItemSelector.prototype.show_types = function(type) {
+
+  var that = this;
+  this.types.innerHTML = "";
+  this.projects.innerHTML = "";
+  this.samples.innerHTML = "";
+  this.containers.innerHTML = "";
+  this.items.innerHTML = "";
+
+  for ( var st in samples ) {
+
+    var li = this.show_entry ( this.types, st, type );
+
+    (function(st) {
+      li.addEventListener('click', function() {
+        that.show_types(st);
+        that.show_projects(st,'');
+      });
+    })(st);
+ 
+  }
+
+}
+
+ItemSelector.prototype.show_projects = function(type,project) {
+
+  var that = this;
+  this.projects.innerHTML = "";
+  this.samples.innerHTML = "";
+  this.containers.innerHTML = "";
+  this.items.innerHTML = "";
+
+  for ( var p in samples[type] ) {
+
+    var li = this.show_entry ( this.projects, p, project );
+
+    (function(p) {
+      li.addEventListener('click', function() {
+        that.show_projects(type,p);
+        that.show_samples(type,p,'');
+      });
+    })(p);
+
+  }
+
+}
+
+ItemSelector.prototype.show_samples = function(type,project,sample) {
+
+  var that = this;
+  this.samples.innerHTML = "";
+  this.containers.innerHTML = "";
+  this.items.innerHTML = "";
+
+  for ( var s in samples[type][project] ) {
+
+    var li = this.show_entry ( this.samples, s, sample );
+
+    (function(s) {
+      li.addEventListener('click', function() {
+        that.show_samples(type,project,s);
+        that.show_containers(type,project,s,'');
+      });
+    })(s);
+
+  }
+
+}
+
+ItemSelector.prototype.show_containers = function(type,project,sample,container) {
+
+  var that = this;
+  this.containers.innerHTML = "";
+  this.items.innerHTML = "";
+
+  for ( var c in samples[type][project][sample] ) {
+
+    var li = this.show_entry ( this.containers, c, container );
+
+    (function(c) {
+      li.addEventListener('click', function() {
+        that.show_containers(type,project,sample,c);
+        that.show_items(type,project,sample,c,'');
+      });
+    })(c);
+
+  }
+
+}
+
+ItemSelector.prototype.show_items = function(type,project,sample,container,item) {
+
+  var that = this;
+  this.items.innerHTML = "";
+
+  for ( var i in samples[type][project][sample][container] ) {
+
+    var li = this.show_entry ( this.items, i, item );
+
+    (function(i) {
+      li.addEventListener('click', function() {
+        that.show_items(type,project,sample,container,i);
+      });
+    })(i);
+
+  }
+
+  li = document.createElement('li');
+  b = document.createElement('button');
+  b.innerHTML = 'new';
+  b.className = 'btn btn-mini';
+  li.appendChild(b);
+  that.items.appendChild(li);
+
+}
+
+ItemSelector.prototype.select = function(type,project,sample,container,item) {
+
+  this.show_types(type);
+  this.show_projects(type,project);
+  this.show_samples(type,project,sample);
+  this.show_containers(type,project,sample,container);
+  this.show_items(type,project,sample,container,item);
+
+}
+
+IS = new ItemSelector('item-selector');
+IS.show_types();
+
+function show_part(r,c,d) {
+
+  if ( d == null ) {
+    IS.show_types();
+  } else {
+    IS.select ( d.type, d.project, d.sample, d.container, d.item );
+  }
+
 }
 
 </script>

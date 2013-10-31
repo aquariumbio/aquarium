@@ -19,16 +19,7 @@ class CollectionsController < ApplicationController
   def show
 
     @collection = Collection.find(params[:id])
-
-    @matrix = []
-    @collection.rows.times { @matrix.push [] }
-
-    (1..@collection.rows).each do |r|
-      (1..@collection.columns).each do |c|
-        parts = @collection.parts.reject { |p| p.row != r || p.column != c }
-        @matrix[r-1][c-1] = parts
-      end
-    end
+    @matrix = @collection.matrix
     
   end
 
