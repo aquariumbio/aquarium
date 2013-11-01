@@ -8,48 +8,78 @@
     <span class='collection'>
       <% (0..@collection.rows).each do |r| %>
         <% (0..@collection.columns).each do |c| %>
+
           <% if r == 0 && c != 0 %>
+
             <div class='part part_header'><%= c %></div>
+
           <% elsif r != 0 && c == 0 %>
+
             <div class='part part_header'><%= r %></div>
+
           <% elsif r == 0 && c == 0 %>
+
             <div class='part part_header'></div>
+
           <% elsif @matrix[r-1][c-1].length > 0 %>
+
             <% part = @matrix[r-1][c-1].first 
-               item = part.item
+
                sample = part.item.sample
-               project = part.item.sample.project
-               sample_type = sample.sample_type
                container = part.item.object_type
-               description = "{ type: '#{sample_type.name}', project: '#{sample.project}', sample: '#{sample.name}', container: '#{container.name}', item: '#{item.id}' }"
-            %>
-            <div class='part part_occupied' id='<%= "part_#{r}_#{c}" %>' onclick='show_part( <%= r %>, <%= c %>, <%= description %> )'></div>
+
+               description  = "{ type:   '#{sample.sample_type.name}', project: '#{sample.project}', "
+               description += "  sample: '#{sample.name}',             container: '#{container.name}', "
+               description += "  item:   '#{part.item.id}' }" %>
+
+            <div class='part part_occupied' id='<%= "part_#{r}_#{c}" %>' 
+                 onclick='show_part( <%= r %>, <%= c %>, <%= description %> )'></div>
+
           <% else %>
-            <div class='part part_empty'    id='<%= "part_#{r}_#{c}" %>' onclick='show_part( <%= r %>, <%= c %>, null )'></div>
+
+            <div class='part part_empty'    id='<%= "part_#{r}_#{c}" %>' 
+                 onclick='show_part( <%= r %>, <%= c %>, null )'></div>
+
           <% end %>
+
         <% end %>
+
         <div class='clear'></div>
       <% end %>
     </span>
   </div>
-  <div id='item-selector' class='span7' style='outline: 0pt dashed red'></div>
+
+  <div class='span7'>
+    <br />
+    <div class='row-fluid'>
+      <div class='span6 infobox' id='current-part'><p>No part selected.</p></div>
+      <div class='span6 infobox' id='current-item'><p>No item selected.</p></div>
+    </div>
+
+    <div id='item-selector' style='outline: 0pt dashed red'></div>
+
+  </div>
+
 </div>
 
 <%= link_to 'Back to List', collections_path, class: 'btn' %>
 
 <script>
 
+window.history.replaceState ( null, 'Collection', '/collections/' + <%= params[:id] %> );
+
 samples = {
     <% SampleType.all.each do |st| %>
-        "<%= st.name %>" : {
+       "<%= st.name %>" : {
           <% st.samples.pluck(:project).uniq.each do |p| %>
               "<%= p %>" : {
                 <% (st.samples.reject { |s| s.project != p }).each do |s| %>
                     "<%= s.name %>" :{
                       <% st.object_types.each do |ot| %>
                         "<%= ot.name %>" : {
-                          <% ot.items.each do |i| %>
-                            "<%= i.id %>" : "<%= i.data %>",
+                          <% (ot.items.reject { |i| i.sample_id != s.id }).each do |i| %>
+                            "<%= i.id %>" : { data: '<%= i.data %>', location: '<%= i.location %>', 
+                                              sample_id: <%= s.id %>, object_type_id: <%= ot.id %> },
                           <% end %> },
                       <% end %> },
                 <% end %> },
@@ -57,227 +87,85 @@ samples = {
     <% end %>
 };
 
-function show_part(r,c,sample_type) {
+IS = new ItemSelector('item-selector','current-item');
 
-  part = document.getElementById("part_"+r+"_"+c);
+IS.new_item_callback = function() {
+    window.location = '/collections/<%= params[:id] %>/newitem?' 
+                    + hash2query(IS.current_selection) + '&'
+                    + 'r=' + active_part.r + '&c=' + active_part.c;
+};
 
-  for ( var i=1; i<=<%= @collection.rows %>; i++ ) {
-    for ( var j=1; j<=<%= @collection.columns %>; j++ ) {
-      document.getElementById("part_"+i+"_"+j).style.outline = '0pt solid red';
-    }
-  }
 
-  part.style.outline = '3pt solid red';  
+<% if params[:r] %>
+  active_part = { r:<%= params[:r] %>,c:<%= params[:c] %> };
+  show_part(<%= params[:r] %>,<%= params[:c] %>,null);
+<% else %>
+  active_part = null;
+<% end %>
 
-  types = document.getElementById('types');
-  types.innerHTML = "";
-  for ( var st in samples ) {
-    li = document.createElement("li");
-    if ( st == sample_type ) {
-      li.innerHTML = "<b style='color: red'>"+st+"</b>";
-    } else {
-      li.innerHTML = st;
-    }
-    types.appendChild(li);
-  }
-  
-}
+<% if params[:item] %>
+  IS.select ( '<%= params[:type] %>',
+                  '<%= params[:project] %>',
+                  '<%= params[:sample] %>',
+                  '<%= params[:container] %>',
+                  <%= params[:item] %> );
 
-function show_part_old(r,c) {
-  
-  for ( var i=1; i<=<%= @collection.rows %>; i++ ) {
-    for ( var j=1; j<=<%= @collection.columns %>; j++ ) {
-
-      part = document.getElementById("part_"+i+"_"+j);
-      details = document.getElementById("details_"+i+"_"+j);
-
-      if ( i==r && j==c ) {
-        part.style.outline = '3pt solid red';  
-        details.style.display = 'block';  
-      } else {
-        part.style.outline = '0pt solid red';  
-        details.style.display = 'none';  
-      }
-
-    }
-  }
-}
-
-function ItemSelector ( tag ) {
-
-  this.root_tag = tag;
-  this.root_el = document.getElementById ( tag );
-  
-  var html  = "<div class='row-fluid select-root'>";
-      html +=   "<div class='span2 select-column'><h1>Type</h1><ul id='select-types' class='plain'></ul></div>";
-      html +=   "<div class='span3 select-column'><h1>Project</h1><ul id='select-projects' class='plain'></ul></div>";
-      html +=   "<div class='span2 select-column'><h1>Sample</h1><ul id='select-samples' class='plain'></ul></div>";
-      html +=   "<div class='span3 select-column'><h1>Container</h1><ul id='select-containers' class='plain'></ul></div>";
-      html +=   "<div class='span2 select-column'><h1>Item</h1><ul id='select-items' class='plain'></ul></div>";
-      html += "</div>"
-
-  this.root_el.innerHTML = html;
-
-  this.types      = document.getElementById('select-types');
-  this.projects   = document.getElementById('select-projects');
-  this.samples    = document.getElementById('select-samples');
-  this.containers = document.getElementById('select-containers');
-  this.items      = document.getElementById('select-items');
-  
-}
-
-ItemSelector.prototype.show_entry = function(category,name,selection) {
-
-  var li = document.createElement("li");
-
-  if ( name == selection ) {
-    li.innerHTML = "<span class='select-link selected'>"+name+"</span>";
-  } else {
-    li.innerHTML = "<span class='select-link'>"+name+"</span>";
-  }
-
-  category.appendChild(li);
-
-  return li;
-
-}
-
-ItemSelector.prototype.show_types = function(type) {
-
-  var that = this;
-  this.types.innerHTML = "";
-  this.projects.innerHTML = "";
-  this.samples.innerHTML = "";
-  this.containers.innerHTML = "";
-  this.items.innerHTML = "";
-
-  for ( var st in samples ) {
-
-    var li = this.show_entry ( this.types, st, type );
-
-    (function(st) {
-      li.addEventListener('click', function() {
-        that.show_types(st);
-        that.show_projects(st,'');
-      });
-    })(st);
- 
-  }
-
-}
-
-ItemSelector.prototype.show_projects = function(type,project) {
-
-  var that = this;
-  this.projects.innerHTML = "";
-  this.samples.innerHTML = "";
-  this.containers.innerHTML = "";
-  this.items.innerHTML = "";
-
-  for ( var p in samples[type] ) {
-
-    var li = this.show_entry ( this.projects, p, project );
-
-    (function(p) {
-      li.addEventListener('click', function() {
-        that.show_projects(type,p);
-        that.show_samples(type,p,'');
-      });
-    })(p);
-
-  }
-
-}
-
-ItemSelector.prototype.show_samples = function(type,project,sample) {
-
-  var that = this;
-  this.samples.innerHTML = "";
-  this.containers.innerHTML = "";
-  this.items.innerHTML = "";
-
-  for ( var s in samples[type][project] ) {
-
-    var li = this.show_entry ( this.samples, s, sample );
-
-    (function(s) {
-      li.addEventListener('click', function() {
-        that.show_samples(type,project,s);
-        that.show_containers(type,project,s,'');
-      });
-    })(s);
-
-  }
-
-}
-
-ItemSelector.prototype.show_containers = function(type,project,sample,container) {
-
-  var that = this;
-  this.containers.innerHTML = "";
-  this.items.innerHTML = "";
-
-  for ( var c in samples[type][project][sample] ) {
-
-    var li = this.show_entry ( this.containers, c, container );
-
-    (function(c) {
-      li.addEventListener('click', function() {
-        that.show_containers(type,project,sample,c);
-        that.show_items(type,project,sample,c,'');
-      });
-    })(c);
-
-  }
-
-}
-
-ItemSelector.prototype.show_items = function(type,project,sample,container,item) {
-
-  var that = this;
-  this.items.innerHTML = "";
-
-  for ( var i in samples[type][project][sample][container] ) {
-
-    var li = this.show_entry ( this.items, i, item );
-
-    (function(i) {
-      li.addEventListener('click', function() {
-        that.show_items(type,project,sample,container,i);
-      });
-    })(i);
-
-  }
-
-  li = document.createElement('li');
-  b = document.createElement('button');
-  b.innerHTML = 'new';
-  b.className = 'btn btn-mini';
-  li.appendChild(b);
-  that.items.appendChild(li);
-
-}
-
-ItemSelector.prototype.select = function(type,project,sample,container,item) {
-
-  this.show_types(type);
-  this.show_projects(type,project);
-  this.show_samples(type,project,sample);
-  this.show_containers(type,project,sample,container);
-  this.show_items(type,project,sample,container,item);
-
-}
-
-IS = new ItemSelector('item-selector');
-IS.show_types();
+<% else %>
+  IS.show_types();
+<% end %>
 
 function show_part(r,c,d) {
 
+  if ( active_part ) {
+    document.getElementById('part_'+active_part.r+'_'+active_part.c).style.outline = '0pt';
+  }
+
+  document.getElementById('part_'+r+'_'+c).style.outline = '3pt solid red';
+  active_part = { r: r, c: c, d: d };
+
+  el = document.getElementById ( 'current-part' );
+
+  var html = "";
+
   if ( d == null ) {
-    IS.show_types();
+    html += "<h4>( " + r + ", " + c + " ) &larr; &empty;</h4>";
+    var action = "associate("+r+","+c+")";
+    html += "<button class='btn' onclick='"+action+"'>Associate</button>";
+    IS.clear_item_info();
   } else {
+    html += "<h4>( " + r + ", " + c + " ) &larr; " + d.item + "</h4>";
+    var action = "dissociate("+r+","+c+")";
+    html += "<button class='btn' onclick='"+action+"'>Disassociate</button>";
     IS.select ( d.type, d.project, d.sample, d.container, d.item );
   }
+
+  el.innerHTML = html;
+
+}
+
+function associate(r,c) {
+  
+  if ( IS.showing_active_item ) {
+
+    window.location = '/collections/<%= params[:id] %>/associate?' 
+                    + hash2query(IS.current_selection) + '&'
+                    + 'r=' + r + '&c=' + c;
+
+  } else {
+    alert ( "Select an item before clicking 'Associate'" );
+  }
+
+}
+
+function dissociate(r,c) {
+  
+  if ( IS.showing_active_item ) {
+
+    window.location = '/collections/<%= params[:id] %>/dissociate?' 
+                    + hash2query(IS.current_selection) + '&'
+                    + 'r=' + r + '&c=' + c;
+
+  } 
 
 }
 
