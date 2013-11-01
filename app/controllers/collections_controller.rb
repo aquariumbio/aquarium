@@ -41,7 +41,7 @@ class CollectionsController < ApplicationController
       p.item_id = @item.id
       p.save
 
-      flash[:notice] = "Associated item #{@item.id} with (#{params[:r]},#{params[:c]})."
+      #flash[:notice] = "Associated item #{@item.id} with (#{params[:r]},#{params[:c]})."
 
     else
 
@@ -86,7 +86,7 @@ class CollectionsController < ApplicationController
       i.object_type_id = ots.first.id
       i.data = "{}"
       i.save
-      flash[:notice] = "Created new item #{i.attributes.to_s}"
+      params[:item] = i.id
     else 
       flash[:error] = "Could not make new item for collection"
     end
