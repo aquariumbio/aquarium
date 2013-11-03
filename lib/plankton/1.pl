@@ -1,6 +1,7 @@
-##############
-# Example 1
-#
+
+  ################################### 
+  # Example 1
+  #
 
   argument
     x : string, "Name"
@@ -9,7 +10,7 @@
     q : object, "Container"
   end
 
-  n = w + [1, 2] / 3.14159 + { a: 1, v : { c: "asd" } }
+  n = 1
 
   step
     description : "This is a great step"

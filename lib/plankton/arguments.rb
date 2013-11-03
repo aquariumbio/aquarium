@@ -2,24 +2,32 @@ module Plankton
 
   class Parser
 
-    def initialize str
-      @tok = Tokenizer.new ( str )
-    end
-
     def argument
   
       var =  @tok.eat_a_variable
              @tok.eat_a ':'
       type = @tok.eat_a_argtype
+      
+      if type == 'object' # convert to old type specifier for object types
+         type = 'objecttype'
+      end
 
       if @tok.current == ','
         @tok.eat
-        comment = @tok.eat_a_string.remove_quotes
+        description = @tok.eat_a_string.remove_quotes
       else
-        comment = ""
+        description = ""
       end
 
-      puts "ARG: #{var} : #{type}, #{comment}"
+      if !@include_stack
+        raise "For some reason the include stack is not defined"
+      end
+
+      if @include_stack.length <= 1
+        push_arg ArgumentInstruction.new var, type, description
+      end
+  
+      # puts "ARG: #{var} : #{type}, #{description}"
 
     end # argument
 
@@ -35,6 +43,22 @@ module Plankton
 
     end # argument_list
 
-  end
+    def parse_arguments_only
+
+      while @tok.current != 'EOF'
+
+        while @tok.current != 'EOF' && @tok.current != 'argument'
+          @tok.eat
+        end
+
+        if @tok.current == 'argument'
+          argument_list
+        end
+
+      end
+
+    end # arguments_only
+
+  end 
 
 end

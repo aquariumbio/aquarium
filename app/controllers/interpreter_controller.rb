@@ -2,40 +2,75 @@ require 'socket'
 
 class InterpreterController < ApplicationController
 
-  def get_blob
+  def get_blob 
 
-    @file = ( Blob.get @sha, params[:path] ).xml
+    # Gets a blob from the db and parses the xml to check for errors.
+    # When parse_xml is called, the resulting xml is associated with the
+    # protocol, so that it can later be parsed into a program
 
-    @protocol = Protocol.new
-    if params[:job]
-      @protocol.job_id = params[:job].to_i
-    else
-      @protocol.job_id = -1
-    end
+    blob = Blob.get @sha, params[:path]
 
-    @parse_errors = ""
+    @file = blob.xml
+    @path = blob.path
 
-    begin
-      @protocol.parse_xml @file
-    rescue Exception => e
-      @parse_errors = e.message
-    end
+    if /\.pl$/.match @path # it's a plankton file ##########################
+
+      logger.info "Opening a plankton file!"
+
+      @protocol = Plankton::Parser.new @file
+
+      logger.info "And " + @protocol.class.to_s
+
+      @parse_errors = ""
+
+      if params[:job]
+        @protocol.job_id = params[:job].to_i
+      else
+        @protocol.job_id = -1
+      end
+
+    else # it's a pdl file ##################################################
+
+      logger.info "Opening a boring old xml file named #{@path}"
+
+      @protocol = Protocol.new
+      if params[:job]
+        @protocol.job_id = params[:job].to_i
+      else
+        @protocol.job_id = -1
+      end
+
+      @parse_errors = ""
+
+      begin
+        @protocol.parse_xml @file
+      rescue Exception => e
+        @parse_errors = e.message
+      end
+
+    end    
 
   end
 
   def parse
+
+    # Creates a protocol via get_blob, which uses params[:path] to determine which file to use, 
+    # and then parses the file to get a @protocol.progrom, which has a list of instructions.
 
     get_blob
 
     begin
       @protocol.parse
     rescue Exception => e
-      @parse_errors = "Error while parsing. " + e.message # + ": " + e.backtrace.to_s
+      @parse_errors = "Error while parsing. " + e.message  + ": " + e.backtrace.to_s
     end
 
   end
 
   def parse_args_only
+
+    # Parses only the arguments of a protocol (to avoid descending into included files) so 
+    # that the protocol object can be used to display arguments to the user.
 
     get_blob
 
@@ -53,6 +88,8 @@ class InterpreterController < ApplicationController
 
   def arguments
 
+    # Shows the argument dialog to the user
+
     @sha = params[:sha]
     @path = params[:path]
     @user = current_user
@@ -66,6 +103,10 @@ class InterpreterController < ApplicationController
 
   def open_local_file
 
+    # Opens a local file specified in params. Each local file opening, whether the file
+    # has changes or not, creates a new Blob. Once the blob is made, it is parsed and the
+    # arguments dialog is shown.
+
     @path = params[:protocol_file].original_filename;
     @sha = 'local_file_' + session[:session_id].to_s + '_' + Time.now.to_i.to_s;
 
@@ -77,9 +118,9 @@ class InterpreterController < ApplicationController
     blob.xml = params[:protocol_file].read
     blob.save
 
-    parse
+    parse # why is this not parse_args_only?
 
-    render 'arguments'
+    render 'arguments' 
 
   end
 

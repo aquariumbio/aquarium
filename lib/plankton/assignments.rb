@@ -4,11 +4,11 @@ module Plankton
 
     def assign
     
-      var = @tok.eat_a_variable
+      lhs = @tok.eat_a_variable
       @tok.eat_a '='
       rhs = expr
 
-      puts "ASSIGN: #{var} = #{rhs}"
+      push AssignInstruction.new lhs, rhs
 
     end
 

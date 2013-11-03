@@ -2,33 +2,38 @@ module Plankton
 
   class Parser
 
-    def initialize str
-      @tok = Tokenizer.new ( str )
+    attr_reader :program, :args, :info, :bad_xml, :include_stack
+    attr_writer :job_id
+
+    def initialize file
+      @tok = Tokenizer.new ( file )
+      @program = []
+      @args = []
+      @include_stack = []
+      @info = ""
+      @bad_xml = "BioTurk thinks plankton uses xml. Silly bioturk."
+    end
+
+    def push i
+      i.pc = @program.length
+      @program.push i
+    end
+    
+    def push_arg a
+      @args.push a
+    end
+
+    def show
+      pc = 0
+      @program.each do |i|
+        puts pc.to_s + ": " + i.to_s
+        pc += 1
+      end
     end
 
     def parse
-
-      while @tok.current != 'EOF'
-
-        case @tok.current
-
-          when 'argument'
-            argument_list
-
-          when 'step'
-            step
-
-          when @tok.variable
-            assign
-       
-          else
-            raise 'Could not find the next statement to parse'
-
-        end
-
-      end
-
-    end # parse
+      statement_list
+    end
 
   end
 

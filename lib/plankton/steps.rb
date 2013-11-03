@@ -3,7 +3,8 @@ module Plankton
   class Parser
 
     def step
-      
+
+      parts = []      
       description = ''
       note = ''
       warnings = []
@@ -17,17 +18,17 @@ module Plankton
           when 'description'
             @tok.eat_a 'description'
             @tok.eat_a ':'
-            description = @tok.eat_a_string.remove_quotes
+            parts.push({description: @tok.eat_a_string.remove_quotes})
 
           when 'note'
             @tok.eat_a 'note'
             @tok.eat_a ':'
-            note = @tok.eat_a_string.remove_quotes
+            parts.push({note: @tok.eat_a_string.remove_quotes})
 
           when 'warning'
             @tok.eat_a 'warning'
             @tok.eat_a ':'
-            warnings.push @tok.eat_a_string.remove_quotes
+            parts.push({warning: @tok.eat_a_string.remove_quotes})
 
         end
 
@@ -35,7 +36,7 @@ module Plankton
 
       @tok.eat_a 'end'
 
-      puts "STEP: #{description}, #{note}, #{warnings}"
+      push StepInstruction.new parts
 
     end
 

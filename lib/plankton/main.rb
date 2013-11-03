@@ -1,17 +1,14 @@
-require './meta'
-require './tokenizer'
-require './parser'
-require './strings'
-require './arguments'
-require './steps'
-require './assignments'
-require './expressions'
+require './plankton'
 
 p = Plankton::Parser.new File.read ARGV.shift 
 
 begin
-  p.parse
+  p.statement_list
 rescue Exception => e
   puts "Parse error: #{e}"
+  exit
 end
 
+puts p.args
+puts '-----------------'
+p.show
