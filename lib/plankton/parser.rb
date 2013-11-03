@@ -2,7 +2,7 @@ module Plankton
 
   class Parser
 
-    attr_reader :program, :args, :info, :bad_xml, :include_stack
+    attr_reader :program, :args, :info, :bad_xml, :include_stack, :debug
     attr_writer :job_id
 
     def initialize file
@@ -12,6 +12,7 @@ module Plankton
       @include_stack = []
       @info = ""
       @bad_xml = "BioTurk thinks plankton uses xml. Silly bioturk."
+      @debug = "No debug info available"
     end
 
     def push i

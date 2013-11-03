@@ -5,7 +5,7 @@ p = Plankton::Parser.new File.read ARGV.shift
 begin
   p.statement_list
 rescue Exception => e
-  puts "Parse error: #{e}"
+  puts "Plankton encountered a parse error: #{e}"
   exit
 end
 

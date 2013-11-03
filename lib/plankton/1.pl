@@ -1,26 +1,30 @@
 
   ################################### 
-  # Example 1
+  # Example 1 : A Plankton Protocol 
   #
 
   argument
-    x : string, "Name"
-    y : number, "Mass"
-    z : sample  # no description string here, just for testing
-    q : object, "Container"
+    x: string, "Name"
+    y: number, "Mass"
+    z: sample  
+    q: object, "Container"
   end
 
-  n = 1
+  m = y
+  n = m+y
 
   step
-    description : "This is a great step"
-    note : "
-      This is a note in which n = %{n}.
-      And on another line, we say something else.
+    description: "The first step"
+    note: "
+      In this step, n = %{n}.
     "
-    warning : "Careful!"
-    warning : "Really!"
+    warning: "Careful!"
+    warning: "Really!"
   end
 
+  n = n+1
 
-
+  step
+    description: "The second step"
+    note: "Now n = %{n}."
+  end

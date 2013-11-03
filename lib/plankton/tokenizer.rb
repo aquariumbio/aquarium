@@ -30,7 +30,7 @@ module Plankton
 
     def eat
       t = current
-      #puts '--> ' + t
+      puts '--> ' + t
       @i += 1
       return t
     end
@@ -47,7 +47,7 @@ module Plankton
     # Regexps
 
     def keyword
-      /argument|end|step|description|note|warning/
+      /argument|end|step|description|note|warning|getdata|select/
     end
 
     def boolean
