@@ -14,6 +14,9 @@ module Plankton
           when 'step'
             step
 
+          when 'take'
+            take
+
           when @tok.variable
             assign
        

@@ -7,8 +7,8 @@ module Plankton
       @str = str
       @tokens = str.scan(re).reject { |t| comment.match t }
       @i = 0
-      #puts @tokens
-      #puts '-----------'
+      puts @tokens
+      puts '-----------'
 
     end
 
@@ -37,7 +37,7 @@ module Plankton
 
     def eat_a thing
       if current != thing
-        raise "Expected '#{thing}' at '#{@tokens[@i]}'"
+        raise "Expected '#{thing}' at '#{@tokens[@i]}'."
       else
         return eat
       end
@@ -47,7 +47,7 @@ module Plankton
     # Regexps
 
     def keyword
-      /argument|end|step|description|note|warning|getdata|select/
+      /argument|end|step|description|note|warning|getdata|select|take/
     end
 
     def boolean
@@ -67,7 +67,11 @@ module Plankton
     end
 
     def operator  
-      /\+|-|\/|\*|<|>|<=|>=|==|!=|\|\||&&/
+      /\+|-|\/|\*|<=|>=|<|>|==|!=|\|\||&&/
+    end
+
+    def take_ops
+      /<-/
     end
 
     def equals
@@ -86,7 +90,13 @@ module Plankton
       /[0-9]+\.[0-9]*|[0-9]*\.[0-9]+|[0-9]+/
     end
 
-    checker :string, :keyword, :variable, :argtype, :operator, :equals, :punctuation, :comment, :number, :boolean
+    checker :string, :variable, :keyword, :argtype, :take_ops, :operator, :equals, :punctuation, :comment, :number, :boolean
+
+    # unilities   
+    def positive_integer
+      /^[1-9][0-9]*$/.match current
+    end
+
 
   end
 

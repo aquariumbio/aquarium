@@ -21,15 +21,6 @@ module Plankton
       "<b>assign</b> #{@lhs} = #{@rhs}"
     end
 
-    # TERMINAL #########################################################################################
-
-    def execute scope
-      x = scope.evaluate( @rhs )
-      puts "setting " + @lhs + " to " + @rhs + " with evaluation " + x.to_s
-      scope.set( @lhs.to_sym, x )
-    end
-
-
   end
 
 end

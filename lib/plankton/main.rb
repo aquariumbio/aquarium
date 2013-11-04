@@ -2,12 +2,8 @@ require './plankton'
 
 p = Plankton::Parser.new File.read ARGV.shift 
 
-begin
-  p.statement_list
-rescue Exception => e
-  puts "Plankton encountered a parse error: #{e}"
-  exit
-end
+
+p.statement_list
 
 puts p.args
 puts '-----------------'

@@ -86,6 +86,9 @@ module Plankton
 
           when 'getdata'
             parts.concat getdata
+
+          else
+            raise "Expect 'description', 'note', 'warning', 'getdata', or 'image' at '#{@tok.current}'."
          
         end
 

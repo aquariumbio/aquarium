@@ -1,0 +1,81 @@
+module Plankton
+
+  class Parser
+
+    def item_expr ################################################################################################
+
+      # TODO THIS PART SHOULD BE AN EXPRESSION
+      @tok.eat_a 'item'
+      return expr     
+
+    end # item_expr
+
+    def object_expr ##############################################################################################
+
+      quantity = expr
+
+      type = @tok.eat_a_string.remove_quotes
+      return { quantity: quantity, type: type }
+
+    end # object_expr
+
+    def take_assign ##############################################################################################
+
+      var = @tok.eat_a_variable
+
+      if @tok.current == '=' || @tok.current == '<-'
+        op = @tok.eat
+      else
+        raise "Expected '=' or '<-' at '#{@tok.current}'."
+      end
+
+      if @tok.current == 'item'
+        item = item_expr
+        return { var: var, op: op, item: item }
+      else
+        ob = object_expr
+        return { var: var, op: op, object: ob }
+      end
+
+    end # take_assign
+
+    def take ######################################################################################################
+
+      @tok.eat_a 'take'
+      items = []
+
+      while @tok.current != 'end' && @tok.current != 'EOF'
+
+        case @tok.current
+
+          when 'item'
+            items.push( { var: "most_recently_taken_item", id: item_expr } )
+
+          when @tok.string, /[1-9][0-9]*/
+            ob = object_expr
+            items.push( { var: "most_recently_taken_item", quantity: ob[:quantity], type: ob[:type] } )
+
+          when @tok.variable
+            ta = take_assign
+            if ta[:object]
+              items.push( { var: ta[:var], op: ta[:op], quantity: ta[:object][:quantity], type: ta[:object][:type] } )
+            else
+              items.push( { var: ta[:var], op: ta[:op], id: ta[:item] } )
+            end
+
+          else
+            raise "Syntax error in take expression at '#{@tok.current}'."
+
+        end
+
+      end
+
+      @tok.eat_a 'end'
+
+      push TakeInstruction.new items
+
+    end
+
+  end # take
+
+end

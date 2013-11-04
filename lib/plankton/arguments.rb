@@ -34,7 +34,7 @@ module Plankton
     def argument_list
       
       @tok.eat_a 'argument'
-      while @tok.current != 'end'
+      while @tok.current != 'end' && @tok.current != 'EOF'
         argument
       end
       @tok.eat_a 'end'
