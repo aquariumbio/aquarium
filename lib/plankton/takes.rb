@@ -46,25 +46,23 @@ module Plankton
 
       while @tok.current != 'end' && @tok.current != 'EOF'
 
-        case @tok.current
+        if @tok.current == 'item'
 
-          when 'item'
-            items.push( { var: "most_recently_taken_item", id: item_expr } )
+          items.push( { var: "most_recently_taken_item", id: item_expr } )
 
-          when @tok.string, /[1-9][0-9]*/
-            ob = object_expr
-            items.push( { var: "most_recently_taken_item", quantity: ob[:quantity], type: ob[:type] } )
+        elsif @tok.next == '=' || @tok.next == '<-'
 
-          when @tok.variable
-            ta = take_assign
-            if ta[:object]
-              items.push( { var: ta[:var], op: ta[:op], quantity: ta[:object][:quantity], type: ta[:object][:type] } )
-            else
-              items.push( { var: ta[:var], op: ta[:op], id: ta[:item] } )
-            end
-
+          ta = take_assign
+          if ta[:object]
+            items.push( { var: ta[:var], op: ta[:op], quantity: ta[:object][:quantity], type: ta[:object][:type] } )
           else
-            raise "Syntax error in take expression at '#{@tok.current}'."
+            items.push( { var: ta[:var], op: ta[:op], id: ta[:item] } )
+          end
+
+        else
+
+          ob = object_expr
+          items.push( { var: "most_recently_taken_item", quantity: ob[:quantity], type: ob[:type] } )
 
         end
 

@@ -13,6 +13,7 @@ require_relative 'assignments'
 require_relative 'expressions'
 require_relative 'statements'
 require_relative 'takes'
+require_relative 'produces'
 
 # Instructions
 require_relative './instructions/instruction'

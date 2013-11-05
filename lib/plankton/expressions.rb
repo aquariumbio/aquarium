@@ -37,7 +37,7 @@ module Plankton
 
      end
 
-     def factor
+     def primary
 
        case @tok.current
 
@@ -55,7 +55,7 @@ module Plankton
 
          when '('
            @tok.eat
-           f = expr
+           f = '(' + expr + ')'
            @tok.eat_a ')'
 
          when '['
@@ -71,21 +71,54 @@ module Plankton
 
        return f
 
-     end
+     end # primary
+
+     def accessor
+
+       f = primary
+
+       while @tok.current == '['
+         @tok.eat_a '['
+         f += '[' + index + ']'
+         @tok.eat_a ']'
+       end
+
+       return f
+
+     end # accessor
+
+     def index
+ 
+       if @tok.current == ':' 
+         @tok.eat_a ':'
+         f = ':' + @tok.eat_a_variable
+       else
+         f = expr
+       end
+
+       return f
+
+     end # index
+
+     def unary 
+
+       if @tok.current == '!'
+         f = '!' + accessor
+       else
+         f = accessor
+       end
+
+       return f
+
+     end # unary
 
      def expr
 
-       e = ""
-
-       if @tok.current == '-' || @tok.current == '+'
-         e += @tok.eat
-       end
-
-       e += factor
+       e = unary
 
        while @tok.is_operator
          e += @tok.eat
-         e += factor
+         e += unary
        end
 
        return e

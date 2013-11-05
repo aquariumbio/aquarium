@@ -7,8 +7,8 @@ module Plankton
       @str = str
       @tokens = str.scan(re).reject { |t| comment.match t }
       @i = 0
-      puts @tokens
-      puts '-----------'
+      #puts @tokens
+      #puts '-----------'
 
     end
 
@@ -47,7 +47,7 @@ module Plankton
     # Regexps
 
     def keyword
-      /argument|end|step|description|note|warning|getdata|select|take/
+      /argument|end|step|description|note|warning|getdata|select|take|produce|data|release/
     end
 
     def boolean
@@ -67,7 +67,7 @@ module Plankton
     end
 
     def operator  
-      /\+|-|\/|\*|<=|>=|<|>|==|!=|\|\||&&/
+      /\+|-|\/|\*\*|\*|<=|>=|<|>|==|!=|\|\||&&|!/
     end
 
     def take_ops

@@ -93,6 +93,7 @@ class ProduceInstruction < Instruction
     else 
 
       @item = Item.find(params[:new_item_id])
+      params.delete :new_item_id
 
     end
 

@@ -17,6 +17,12 @@ module Plankton
           when 'take'
             take
 
+          when 'produce'
+            produce
+
+          when 'release'
+            release
+
           when @tok.variable
             assign
        
