@@ -1,7 +1,7 @@
 # Changes to Class
 require_relative 'meta'
 
-# Generic
+# Tokenizer
 require_relative 'tokenizer'
 
 # Parser
@@ -14,6 +14,7 @@ require_relative 'expressions'
 require_relative 'statements'
 require_relative 'takes'
 require_relative 'produces'
+require_relative 'log'
 
 # Instructions
 require_relative './instructions/instruction'

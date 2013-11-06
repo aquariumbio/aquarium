@@ -4,7 +4,7 @@
 
 step
 
-  description: "A Full Step
+  description: "A Full Step"
   note: "This step has all the sub fields."
   warning: "Even a warning."
 

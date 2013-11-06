@@ -2,7 +2,7 @@ module Plankton
 
   class Parser
 
-     def array_expr
+     def array_expr ###################################################################################
 
        e = @tok.eat_a '['
        while @tok.current != ']'
@@ -16,7 +16,7 @@ module Plankton
 
      end
 
-     def hash_expr
+     def hash_expr ####################################################################################
      
        e = @tok.eat_a '{'
     
@@ -37,7 +37,7 @@ module Plankton
 
      end
 
-     def primary
+     def primary ######################################################################################
 
        case @tok.current
 
@@ -65,7 +65,7 @@ module Plankton
             f = hash_expr
 
          else
-           raise "Expected atomic expression at #{@tok.current}"
+           raise "Expected atomic expression at '#{@tok.current}'"
 
        end
 
@@ -73,7 +73,7 @@ module Plankton
 
      end # primary
 
-     def accessor
+     def accessor ######################################################################################
 
        f = primary
 
@@ -87,7 +87,7 @@ module Plankton
 
      end # accessor
 
-     def index
+     def index #########################################################################################
  
        if @tok.current == ':' 
          @tok.eat_a ':'
@@ -100,10 +100,10 @@ module Plankton
 
      end # index
 
-     def unary 
+     def unary #########################################################################################
 
-       if @tok.current == '!'
-         f = '!' + accessor
+       if @tok.current == '!' || @tok.current == '-'
+         f = (@tok.eat) + accessor
        else
          f = accessor
        end
@@ -112,7 +112,7 @@ module Plankton
 
      end # unary
 
-     def expr
+     def expr ###########################################################################################
 
        e = unary
 

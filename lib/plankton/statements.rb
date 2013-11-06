@@ -23,6 +23,9 @@ module Plankton
           when 'release'
             release
 
+          when 'log'
+            log
+
           when @tok.variable
             assign
        
