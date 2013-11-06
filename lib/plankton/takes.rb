@@ -14,7 +14,7 @@ module Plankton
 
       quantity = expr
 
-      type = @tok.eat_a_string.remove_quotes
+      type = expr
       return { quantity: quantity, type: type }
 
     end # object_expr
