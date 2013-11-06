@@ -47,7 +47,7 @@ module Plankton
     # Regexps
 
     def keyword
-      /argument|end|step|description|note|warning|getdata|select|take|produce|data|release/
+      /argument|end|step|description|note|warning|getdata|select|take|produce|data|release|if|else|elsif/
     end
 
     def boolean

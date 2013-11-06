@@ -2,7 +2,7 @@ require './plankton'
 
 p = Plankton::Parser.new File.read ARGV.shift 
 
-p.statement_list
+p.parse
 
 puts p.args
 puts '-----------------'

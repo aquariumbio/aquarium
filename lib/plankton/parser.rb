@@ -15,6 +15,10 @@ module Plankton
       @debug = "No debug info available"
     end
 
+    def pc
+      @program.length
+    end
+
     def push i
       i.pc = @program.length
       @program.push i
@@ -33,7 +37,7 @@ module Plankton
     end
 
     def parse
-      statement_list
+      statements
     end
 
   end

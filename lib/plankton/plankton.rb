@@ -15,6 +15,7 @@ require_relative 'statements'
 require_relative 'takes'
 require_relative 'produces'
 require_relative 'log'
+require_relative 'controls'
 
 # Instructions
 require_relative './instructions/instruction'

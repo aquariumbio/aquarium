@@ -2,9 +2,9 @@ module Plankton
 
   class Parser
 
-    def statement_list
+    def statements
 
-      while @tok.current != 'EOF'
+      while @tok.current != 'EOF' && @tok.current != 'end' && @tok.current != 'elsif' && @tok.current != 'else'
 
         case @tok.current
 
@@ -25,6 +25,9 @@ module Plankton
 
           when 'log'
             log
+
+          when 'if'
+            if_block
 
           when @tok.variable
             assign
