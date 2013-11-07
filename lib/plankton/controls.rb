@@ -2,7 +2,7 @@ module Plankton
 
   class Parser
 
-    def if_block
+    def if_block #################################################################################
 
       gotos = []
 
@@ -47,6 +47,21 @@ module Plankton
       end
 
     end # if_block
+
+    def while_block ###############################################################################
+
+      @tok.eat_a 'while'
+      while_pc = pc
+      ins = WhileInstruction.new expr, pc+1
+      push ins
+      statements
+      gins = GotoInstruction.new
+      gins.mark_destination while_pc
+      push gins
+      ins.mark_false pc
+      @tok.eat_a 'end'
+
+    end # while_block
 
   end
 

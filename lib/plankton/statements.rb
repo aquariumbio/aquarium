@@ -8,6 +8,9 @@ module Plankton
 
         case @tok.current
 
+          when 'information'
+            information
+
           when 'argument'
             argument_list
 
@@ -29,6 +32,12 @@ module Plankton
           when 'if'
             if_block
 
+          when 'while'
+            while_block
+
+          when 'http'
+            http
+
           when @tok.variable
             assign
        
@@ -40,6 +49,13 @@ module Plankton
       end
 
     end # parse
+
+    def information
+   
+      @tok.eat_a 'information'
+      push InformationInstruction.new string_expr
+
+    end # information
 
   end
 
