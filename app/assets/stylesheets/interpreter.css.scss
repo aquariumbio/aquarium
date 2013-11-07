@@ -62,12 +62,6 @@ $outlineStyle: #f00 dotted 0px;
   li {
 
     font-size: 18pt;
-    .small-input {
-      &:before {
-        content: '&nbsp;&nbsp;';
-      }
-      width: 50px;
-    }
 
   }
 
@@ -90,6 +84,27 @@ $outlineStyle: #f00 dotted 0px;
     margin: 0 0 0 20px;
   }
 
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.number-cntl {
+  float: left;
+  margin: 20px 0 10px 0;
+}
+
+.input-large[class=input-large] {
+
+#  height: 44px !important;
+
+  &:before {
+     content: '&nbsp;&nbsp;';
+   }
+  
 }
 
 #note-textarea {
@@ -123,52 +138,55 @@ $outlineStyle: #f00 dotted 0px;
 .take_choice_box {
 # border: 1pt solid red;
 # width: 75%;
-  margin: 0;
-  padding: 0;
+  margin-top: 10px;
+#  padding: 0;
 }
 
 .take_item_select {
 
-  display: inline-block;
-  width: 45%;
+  #display: inline-block;
+  #width: 45%;
   margin: 0px 10px 0px 0px;
-  padding-right: 10px !important;
+  #padding-right: 10px !important;
 
 
   .item_select {
 
     #height: 58px;
-    #margin: 10px 0 20px 0 !important;
+    margin: 5px 0 20px 0 !important;
     #padding: 10px !important;
     #passing: 0;
+    height: 100%;
 
-  option {
-    padding: 10px !important;
-  }
+    option {
+      padding: 10px !important;
+    }
+
   }
 
 }
 
 .interpreter-select {
+
     #height: 58px;
-    #margin: 10px 0 20px 0 !important;
-    #padding: 10px !important;
+    margin: 10px 0 20px 0 !important;
+    padding: 10px !important;
     passing: 0;
-  option {
-    #padding: 10px !important;
-  }
+
+    option {
+      padding: 10px !important;
+    }
+
 }
 
-
 .take_item_quantity {
-  display: inline-block; 
-  width: 25%; 
-  margin: 0px 10px 0px 0px;
-  padding: 10px;
+  #display: inline-block; 
+  #width: 25%; 
+  #margin: 0px 10px 0px 0px;
+  #padding: 10px;
 # border: 1pt solid blue;
   input {
-    margin: 10px 0 20px 0 !important;
-
+    #margin: 10px 0 20px 0 !important;
     passing: 0;
   }
 }

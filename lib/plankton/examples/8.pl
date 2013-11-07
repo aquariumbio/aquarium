@@ -8,5 +8,5 @@ http
 end
 
 step
-  description: "Google returned status %{s}"
+  description: "Google returned status %{s}."
 end
