@@ -7,6 +7,7 @@ step
   description: "A Full Step"
   note: "This step has all the sub fields."
   warning: "Even a warning."
+  image: "1000 mL Bottle"
 
   getdata
     x: number, "A number"

@@ -87,6 +87,11 @@ module Plankton
           when 'getdata'
             parts.concat getdata
 
+          when 'image'
+            @tok.eat_a 'image'
+            @tok.eat_a ':'
+            parts.push( { image: expr } )
+
           else
             raise "Expect 'description', 'note', 'warning', 'getdata', or 'image' at '#{@tok.current}'."
          
