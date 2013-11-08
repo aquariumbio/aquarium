@@ -17,6 +17,7 @@ require_relative 'produces'
 require_relative 'log'
 require_relative 'controls'
 require_relative 'https'
+require_relative 'modifies'
 
 # Instructions
 require_relative './instructions/instruction'

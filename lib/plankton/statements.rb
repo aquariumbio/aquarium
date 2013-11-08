@@ -23,6 +23,9 @@ module Plankton
           when 'produce'
             produce
 
+          when 'modify'
+            modify
+
           when 'release'
             release
 

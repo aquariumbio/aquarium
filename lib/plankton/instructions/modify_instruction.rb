@@ -1,12 +1,10 @@
 module Plankton
 
-  class MoveInstruction < Instruction
+  class ModifyInstruction < Instruction
 
-    def initialize item_expr, location_expr, var, options = {}
-      @item_expr = item_expr
-      @location_expr = location_expr
+    def initialize info, options = {}
+      @info_expr = info
       @renderable = false
-      @var = var
       super 'move', options
     end
 
@@ -14,51 +12,74 @@ module Plankton
 
     def bt_execute scope, params
 
-      begin
-        item_hash = scope.evaluate @item_expr
-        location = scope.evaluate @location_expr
-      rescue Exception => e
-        raise "Move: item and/or location expressions did not evaluate correctly. The item should be an item returned by produce, for example. The location should evaluate to a string (you might need quotes around string constants). Check the syntax. " + e.message 
-      end
-
-      c = item_hash.class
-      console "Attempting move #{item_hash.to_s} to #{@location_expr}"
-
-      unless item_hash.class == Hash
-        raise "#{@item_expr} evaluates to #{item_hash.to_s}, which is not a Hash describing an item."
-      end
-
-      unless item_hash[:id] 
-        raise "Could not <move> #{@item_expr} to #{@location_expr}"
-      end
-
-      unless location.class == String
-        raise "#{@location_expr} evaluates to #{location_expr.to_s}, which is not a String"
-      end
+      @info = {}
 
       begin
-        item = Item.find(item_hash[:id])
+        @info[:item] = scope.evaluate @info_expr[:item]
       rescue Exception => e
-        raise "Could not find item with #{item[:id]}"
+        raise "Could not evaluate '#{@info_expr[:item]}' in modify block." + e.message
       end
 
+      if @info[:item].class != Hash || @info[:item][:id] == nil
+        raise "Item expression '#{@info[:item]}' is not an item hash."
+      end
+
+      if @info_expr[:location]
+
+        begin
+          @info[:location] = scope.evaluate @info_expr[:location]
+        rescue Exception => e
+          raise "Location expression '#{@info_expr[:location]}' did not evaluate correctly."
+        end
+
+        if @info[:location].class != String
+          raise "Location expression '#{@info_expr[:location]}' did not evaluate to a string."
+        end
+
+      end
+
+      if @info_expr[:inuse]
+
+        begin
+          @info[:inuse] = (scope.evaluate @info_expr[:inuse]).to_i
+        rescue Exception => e
+          raise "Inuse expression '#{@info_expr[:inuse]}' did not evaluate correctly."
+        end
+
+      end
+
+      begin
+        item = Item.find(@info[:item][:id])
+      rescue Exception => e
+        raise "Could not find item with #{@info[:item][:id]}"
+      end
+
+      old_inuse = item.inuse
       old_location = item.location
-      item.location = scope.evaluate @location_expr
-      item.save
 
-      scope.set( @var.to_sym, pdl_item( item ) )
+      if @info[:location]
+        item.location = @info[:location]
+      end
+
+      if @info[:inuse]
+        item.inuse = @info[:inuse]
+      end
+
+      item.save
 
       log = Log.new
       log.job_id = params[:job]
       log.user_id = scope.stack.first[:user_id]
-      log.entry_type = 'MOVE'
-      log.data = { pc: @pc, item_id: item_hash[:id], from: old_location, to: item.location }.to_json
+      log.entry_type = 'MODIFY'
+      log.data = { pc: @pc, item_id: @info[:item][:id], 
+                   old: { location: old_location, inuse: old_inuse }, 
+                   new: { location: item.location, inuse: item.inuse } }.to_json
       log.save
 
     end
 
     def html
-      "<b>move</b> #{@item_expr} to #{@location_expr}"
+      "<b>modify</b> #{@info_expr}"
     end
 
   end
