@@ -41,6 +41,9 @@ module Plankton
           when 'http'
             http
 
+          when 'include'
+            include
+
           when @tok.variable
             assign
        
