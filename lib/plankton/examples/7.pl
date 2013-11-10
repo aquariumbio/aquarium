@@ -12,7 +12,7 @@ while x < 3
       description: "%{x},%{y}"
     end
 
-    if x==2 && y==2 
+    if x==2 && ( y==2 )
 
       step
         description: "Last time!"

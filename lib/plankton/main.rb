@@ -1,8 +1,16 @@
 require './plankton'
 
-p = Plankton::Parser.new File.read ARGV.shift 
+path = ARGV.shift
+contents =  File.read path
+p = Plankton::Parser.new( path, contents )
 
-p.parse
+begin
+  p.parse
+rescue Exception => e
+  puts e
+  puts p.get_line
+  exit
+end
 
 puts p.args
 puts '-----------------'

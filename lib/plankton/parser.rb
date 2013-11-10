@@ -5,15 +5,15 @@ module Plankton
     attr_reader :program, :args, :info, :bad_xml, :include_stack, :debug
     attr_writer :job_id
 
-    def initialize file
-      @tok = Tokenizer.new ( file )
+    def initialize name, contents
+      @tok = Tokenizer.new ( contents )
       @program = []
       @args = []
-      @include_stack = [ { tokens: @tok, path: '', returns: [] } ]
+      @include_stack = [ { tokens: @tok, path: name, returns: [] } ]
       @info = ""
       @bad_xml = "BioTurk thinks plankton uses xml. Silly bioturk."
       @debug = "No debug info available"
-      @job_id = 0
+      @job_id = -1
     end
 
     def pc
@@ -55,6 +55,10 @@ module Plankton
 
     end
 
+    def get_line
+      @include_stack.last[:path] + ': ' + @tok.get_line
+    end
+
     def get_file path
  
       begin
@@ -70,3 +74,4 @@ module Plankton
   end
 
 end
+
