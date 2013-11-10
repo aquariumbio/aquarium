@@ -17,7 +17,7 @@ class InterpreterController < ApplicationController
 
       logger.info "Opening a plankton file!"
 
-      @protocol = Plankton::Parser.new @file
+      @protocol = Plankton::Parser.new( @path, @file )
 
       logger.info "And " + @protocol.class.to_s
 
