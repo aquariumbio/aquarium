@@ -2,16 +2,15 @@
   <b>Members:</b>
 </p>
 
-<table class='table' style='width: 50%'>
+<table class='table' style='margin-left: 20px; width: 50%'>
 
-  <% @group.memberships.sort.each do |m| %>
-    <% u = User.find(m.user_id) %>
+  <% @group.memberships.each do |m| %>
     <tr>
-      <td><%= u.name %></td>
-      <td><%= u.login %></td>
+      <td><%= m.user.name %></td>
+      <td><%= m.user.login %></td>
       <td>
-        <%= link_to group_path(@group) + '?drop_user=' + u.id.to_s do %>
-          <i class='icon-remove-sign'></i>
+        <%= link_to group_path(@group) + '?drop_user=' + m.user.id.to_s do %>
+          <i class='icon-remove'></i>
         <% end %>
       </td>
     </tr>
@@ -25,7 +24,7 @@
         <li><%= link_to u.login, group_path(@group) + '?user_id=' + u.id.to_s %></li>
       <% end %>
     </ul>
-  </span></td><td></td></tr>
+  </span></td><td></td><td></td></tr>
 
 
 

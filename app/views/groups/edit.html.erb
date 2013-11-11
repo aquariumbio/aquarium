@@ -1,6 +1,8 @@
-<h1>Editing group</h1>
+<% provide(:title, @group.name) %>
+
+<h1>Group <%= @group.name %></h1>
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @group %> |
-<%= link_to 'Back', groups_path %>
+<%= link_to 'Show Group', @group, class: 'btn' %> 
+<%= link_to 'List', groups_path, class: 'btn' %>
