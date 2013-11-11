@@ -61,6 +61,9 @@
                 <li><%= link_to "Profile", current_user %></li>
                 <li><%= link_to "Settings", edit_user_path(current_user) %></li>
                 <li><%= link_to "All Users", users_path %></li>
+                <li class="divider"></li>
+                <li><%= link_to "Groups", groups_path %></li>
+                <li class="divider"></li>
                 <% if current_user && current_user.admin? %>
                   <li><%= link_to "New", signup_path %></li>
                 <% end %>

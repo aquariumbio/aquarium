@@ -1,0 +1,34 @@
+<p>
+  <b>Members:</b>
+</p>
+
+<table class='table' style='width: 50%'>
+
+  <% @group.memberships.sort.each do |m| %>
+    <% u = User.find(m.user_id) %>
+    <tr>
+      <td><%= u.name %></td>
+      <td><%= u.login %></td>
+      <td>
+        <%= link_to group_path(@group) + '?drop_user=' + u.id.to_s do %>
+          <i class='icon-remove-sign'></i>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+
+  <tr><td>
+  <span class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Add<b class="caret"></b></a>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+      <% (User.all.sort { |x,y| x.login <=> y.login}).each do |u| %>
+        <li><%= link_to u.login, group_path(@group) + '?user_id=' + u.id.to_s %></li>
+      <% end %>
+    </ul>
+  </span></td><td></td></tr>
+
+
+
+</table>
+
+  

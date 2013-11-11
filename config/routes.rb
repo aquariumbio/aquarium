@@ -1,5 +1,8 @@
 Bioturk::Application.routes.draw do
 
+  resources :groups
+
+
   resources :collections do
     member do
       get 'associate'
