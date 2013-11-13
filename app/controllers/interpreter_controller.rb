@@ -263,7 +263,8 @@ class InterpreterController < ApplicationController
 
     # tell manta we're starting a protocol
     Thread.new do
-      uri= URI("http://istc.cs.washington.edu:8800/start?&job=#{@job.id}&server=" + Socket.gethostname + ":" + request.port.to_s + "&user=" + current_user.login + "&protocol=#{@path}")
+      @manta = "http://istc.cs.washington.edu:8800/start?&job=#{@job.id}&server=" + Socket.gethostname + ":" + request.port.to_s + "&user=" + current_user.login + "&protocol=#{@path}"
+      uri= URI(@manta)
       res = Net::HTTP.get(uri)
       logger.info "Message to MANTA: " + uri.to_s
       logger.info "Message from MANTA: " + res

@@ -5,7 +5,7 @@
 <h3>Job Information</h3>
 
 <ul class='list'>
-  <li>Submitted by: <b><%= User.find(@job.user_id).name %></b></li>
+  <li>Submitted by: <b><%= @job.user.name %></b></li>
   <li>Submitted: <%= @job.created_at.to_formatted_s(:short) %></li>
   <li>Last Updated: <%= @job.updated_at.to_formatted_s(:short) %></li>
   <li>
