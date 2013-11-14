@@ -126,8 +126,14 @@ class InterpreterController < ApplicationController
 
   def submit
 
+    # Submits the job
+
     @sha = params[:sha]
     @path = params[:path]
+    @desired = Job.params_to_time(params[:Desired])
+    @latest = Job.params_to_time(params[:Latest])
+    @group = Group.find_by_name(params[:Group])
+
     parse_args_only
 
     scope = Scope.new {}
@@ -207,6 +213,8 @@ class InterpreterController < ApplicationController
   end
 
   def pre_render
+
+    # Calls pre-render for the current instruction
 
     begin
       @instruction.pre_render @scope, params if @instruction.respond_to?('pre_render')

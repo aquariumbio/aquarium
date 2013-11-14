@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131111143621) do
+ActiveRecord::Schema.define(:version => 20131113181345) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -65,10 +65,14 @@ ActiveRecord::Schema.define(:version => 20131111143621) do
     t.string   "sha"
     t.text     "arguments"
     t.text     "state"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
     t.string   "path"
     t.integer  "pc"
+    t.integer  "group_id"
+    t.integer  "submitted_by"
+    t.datetime "desired_start_time"
+    t.datetime "latest_start_time"
   end
 
   create_table "logs", :force => true do |t|

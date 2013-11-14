@@ -1,0 +1,17 @@
+<label><%= name %> start time</label>
+
+<style>
+.datetime {
+  width: 70px;
+}
+</style>
+
+<% if name == 'Desired' %>
+  <%= datetime_select(name,'dt',
+    {:order => [:month, :day, :year], :start_year => 2013, :end_year => 2020, :use_short_month => true},
+    {:class => "datetime"} ) %>
+<% else %>
+  <%= datetime_select(name,'dt',
+    {:order => [:month, :day, :year], :start_year => 2013, :end_year => 2020, :use_short_month => true, default: 1.days.from_now},
+    {:class => "datetime"} ) %>
+<% end %>
