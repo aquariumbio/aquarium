@@ -14,11 +14,13 @@
   <tr>
     <td><%= link_to group.name, group %></td>
     <td><%= group.description %></td>
-    <td><%= link_to edit_group_path(group) do %>
-          <icon class='icon-pencil'></icon>
+    <td><% if current_user && current_user.is_admin %>
+          <%= link_to edit_group_path(group) do %>
+            <icon class='icon-pencil'></icon>
+          <% end %>
         <% end %>
     </td>
-    <td><% if current_user && current_user.admin? %>
+    <td><% if current_user && current_user.is_admin %>
           <%= link_to group, method: :delete, data: {confirm: 'Are you sure?' } do %>
             <icon class='icon-remove'></icon>
           <% end %>

@@ -26,3 +26,19 @@
   display: block; 
   position: relative;
 }
+
+#active-jobs {
+  background: #ff9;
+}
+
+#urgent-jobs {
+  background: #fcc;
+}
+
+#pending-jobs {
+  background: #cfc;
+}
+
+#future-jobs {
+  background: #eee;
+}

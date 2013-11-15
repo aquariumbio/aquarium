@@ -8,9 +8,10 @@ class JobsController < ApplicationController
     @user = User.find(@user_id)
 
     now = Time.now
-    @urgent_jobs = (Job.where("pc >= -1 AND latest_start_time < ?", now).reject { |j| ! ( Group.find(j.group_id).member? @user_id ) })
-    @active_jobs = (Job.where("pc >= -1 AND desired_start_time < ? AND ? <= latest_start_time", now, now).reject { |j| ! ( Group.find(j.group_id).member? @user_id ) })
-    @later_jobs  = (Job.where("pc >= -1 AND ? <= desired_start_time", now).reject { |j| ! ( Group.find(j.group_id).member? @user_id ) })
+    @active_jobs = (Job.where("pc >= 0").reject { |j| ! ( Group.find(j.group_id).member? @user_id ) })
+    @urgent_jobs = (Job.where("pc = -1 AND latest_start_time < ?", now).reject { |j| ! ( Group.find(j.group_id).member? @user_id ) })
+    @pending_jobs = (Job.where("pc = -1 AND desired_start_time < ? AND ? <= latest_start_time", now, now).reject { |j| ! ( Group.find(j.group_id).member? @user_id ) })
+    @later_jobs  = (Job.where("pc = -1 AND ? <= desired_start_time", now).reject { |j| ! ( Group.find(j.group_id).member? @user_id ) })
 
   end
 

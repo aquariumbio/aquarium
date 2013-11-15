@@ -4,11 +4,10 @@
     <th>Job</th>
     <th>Protocol</th>
     <th>Group</th>
-    <th>Status</th>
     <th>Arguments</th>
     <th>Desired Start Time</th>
     <th>Latest Start Time</th>
-    <th>Last updated</th>
+    <% if last_updated %><th>Last updated</th><% end %>
     <th></th>
     <th></th>
   </tr>
@@ -22,15 +21,6 @@
       <td><%= link_to j.path, protocol_tree_raw_path(sha: j.sha, format: 'xml'), target: j.path %></td>
       <td><%= g = Group.find(j.group_id); link_to g.name, g %></td>
       <td>
-          <% if j.pc == Job.NOT_STARTED %>
-            not yet started
-          <% elsif j.pc == Job.COMPLETED %>
-            completed
-          <% else %>
-            pc = <%= j.pc %>
-          <% end %>
-      </td>
-      <td>
         <% if args.length > 0 %>
             <% args.each do |k,v| %>
               <%= ("<b>" + k.to_s + "</b>: " + v.to_s).html_safe %><br />
@@ -41,19 +31,25 @@
       </td>
       <td><%= j.desired_start_time.to_formatted_s(:short) %></td>
       <td><%= j.latest_start_time.to_formatted_s(:short) %></td>
-      <td><%= j.updated_at.to_formatted_s(:short) %></td>
+      <% if last_updated %><td><%= j.updated_at.to_formatted_s(:short) %></td><% end %>
       <% if runnable %>
         <td>
           <% if j.pc == Job.NOT_STARTED %>
-            <%= link_to 'run', interpreter_advance_path(job:j.id) %>
+            <%= link_to interpreter_advance_path(job:j.id) do %>
+              <i class='icon-play'></i>         
+            <% end %>
           <% elsif j.pc != Job.COMPLETED %>
-            <%= link_to 'resume', interpreter_current_path(job:j.id) %>
+            <%= link_to interpreter_current_path(job:j.id) do %>
+              <i class='icon-play'></i>
+            <% end %>
           <% end %>
        </td>
       <% else %>
          <td></td>
       <% end %>
-      <td><%= link_to 'cancel', 'interpreter/cancel?job=' + j.id.to_s, data: { confirm: 'Are you sure?' } %></td>
+      <td><%= link_to 'interpreter/cancel?job=' + j.id.to_s, data: { confirm: 'Are you sure?' } do %>
+        <i class='icon-remove'></i>
+      <% end %></td>
     </tr>
 
   <% end %>
