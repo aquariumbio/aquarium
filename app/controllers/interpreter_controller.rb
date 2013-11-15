@@ -131,7 +131,8 @@ class InterpreterController < ApplicationController
     @sha = params[:sha]
     @path = params[:path]
     @desired = Job.params_to_time(params[:Desired])
-    @latest = Job.params_to_time(params[:Latest])
+    @window = params[:window].to_f
+    @latest = @desired + @window.hours
     @group = Group.find_by_name(params[:Group])
 
     parse_args_only
@@ -156,9 +157,15 @@ class InterpreterController < ApplicationController
     @job = Job.new
     @job.sha = @sha
     @job.path = @path
-    @job.user_id = current_user.id
+    @job.user_id = -1
     @job.pc = Job.NOT_STARTED
     @job.state = { stack: scope.stack }.to_json
+
+    @job.group_id = @group.id
+    @job.submitted_by = current_user.id
+    @job.desired_start_time = @desired
+    @job.latest_start_time = @latest
+
     @job.save
 
     respond_to do |format|
@@ -268,6 +275,7 @@ class InterpreterController < ApplicationController
     # initialize
     log "START", {}
     @pc = 0
+    @job.user_id = current_user.id
 
     # tell manta we're starting a protocol
     Thread.new do

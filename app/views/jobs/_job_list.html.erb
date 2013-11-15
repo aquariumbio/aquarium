@@ -1,0 +1,61 @@
+
+<table class='table'>
+  <tr>
+    <th>Job</th>
+    <th>Protocol</th>
+    <th>Group</th>
+    <th>Status</th>
+    <th>Arguments</th>
+    <th>Desired Start Time</th>
+    <th>Latest Start Time</th>
+    <th>Last updated</th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% jobs.each do |j| %>
+
+  <% args = (JSON.parse(j.state))['stack'].first.reject { |k,v| k == 'user_id' } %>
+
+    <tr>
+      <td><%= link_to j.id.to_s, j %></td>
+      <td><%= link_to j.path, protocol_tree_raw_path(sha: j.sha, format: 'xml'), target: j.path %></td>
+      <td><%= g = Group.find(j.group_id); link_to g.name, g %></td>
+      <td>
+          <% if j.pc == Job.NOT_STARTED %>
+            not yet started
+          <% elsif j.pc == Job.COMPLETED %>
+            completed
+          <% else %>
+            pc = <%= j.pc %>
+          <% end %>
+      </td>
+      <td>
+        <% if args.length > 0 %>
+            <% args.each do |k,v| %>
+              <%= ("<b>" + k.to_s + "</b>: " + v.to_s).html_safe %><br />
+            <% end %>
+        <% else %>
+          -
+        <% end %>
+      </td>
+      <td><%= j.desired_start_time.to_formatted_s(:short) %></td>
+      <td><%= j.latest_start_time.to_formatted_s(:short) %></td>
+      <td><%= j.updated_at.to_formatted_s(:short) %></td>
+      <% if runnable %>
+        <td>
+          <% if j.pc == Job.NOT_STARTED %>
+            <%= link_to 'run', interpreter_advance_path(job:j.id) %>
+          <% elsif j.pc != Job.COMPLETED %>
+            <%= link_to 'resume', interpreter_current_path(job:j.id) %>
+          <% end %>
+       </td>
+      <% else %>
+         <td></td>
+      <% end %>
+      <td><%= link_to 'cancel', 'interpreter/cancel?job=' + j.id.to_s, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+
+  <% end %>
+
+</table>

@@ -11,4 +11,8 @@ class Group < ActiveRecord::Base
     { groups: groups, users: users }
   end
 
+  def member? uid
+    (self.memberships.select { |m| m.user_id == uid }) != []
+  end
+
 end

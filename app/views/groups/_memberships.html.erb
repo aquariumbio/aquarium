@@ -4,7 +4,7 @@
 
 <table class='table' style='margin-left: 20px; width: 50%'>
 
-  <% @group.memberships.each do |m| %>
+  <% (@group.memberships.reject { |m| !m.user }).each do |m| %>
     <tr>
       <td><%= m.user.name %></td>
       <td><%= m.user.login %></td>

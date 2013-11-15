@@ -26,8 +26,8 @@
 
 <ul class='list'>
   <li><b>Group/User</b>: <%= @group.name %> ( <%= @group.description %> )</li>
-  <li><b>Desired Start</b>: <%= @desired.asctime %></li>
-  <li><b>Latest Start</b>: <%= @latest.asctime %></li>
+  <li><b>Desired Start</b>: <%= @desired.strftime("%a %b %e, %k:%M")  %> ( Complete within <%= @window %> hr )</li>
+  <li><b>Latest Start</b>: <%= @latest.strftime("%a %b %e, %k:%M") %></li>
 </ul>
 
 <hr />
