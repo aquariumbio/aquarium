@@ -18,7 +18,8 @@ class User < ActiveRecord::Base
   validates :password_confirmation, presence: true
 
   def is_admin
-    Group.find_by_name('admin').member?(id)
+    g = Group.find_by_name('admin')
+    return (!g || g.memberships.length == 0 || g.member?(id))
   end
 
   private
