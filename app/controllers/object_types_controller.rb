@@ -211,7 +211,7 @@ class ObjectTypesController < ApplicationController
       ProductionItem.all.each do |i|
 
         new_item = Item.new(i.attributes.except("object_type_id","created_at","updated_at"))
-        new_item.id = i.id
+        new_item.id = i.id + 1
         new_item.object_type_id = i.object_type_id
         new_item.sample_id = i.sample_id
         new_item.save

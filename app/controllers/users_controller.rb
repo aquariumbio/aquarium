@@ -1,3 +1,12 @@
+class ProductionUser < User
+end
+
+class ProductionGroup < Group
+end
+
+class ProductionMembership < Membership
+end
+
 class UsersController < ApplicationController
 
   before_filter :signed_in_user, only: [:edit, :update]
@@ -17,6 +26,14 @@ class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
     if @user.save
+      @group = Group.new
+      @group.name = @user.login
+      @group.description = "A group containing only user #{@user.name}"
+      @group.save
+      m = Membership.new
+      m.group_id = @group.id
+      m.user_id = @user.id
+      m.save
       flash[:success] = "#{params[:user][:name]} has been assimilated."
       redirect_to @user
     else
@@ -45,6 +62,56 @@ class UsersController < ApplicationController
     User.find(params[:id]).destroy
     flash[:success] = "The user has been disconnected. Why did he resist? We only wish to raise quality of life for all species."
     redirect_to users_url
+  end
+
+  def copy_users_from_production
+    
+    if Rails.env != 'production'
+
+      # Delete current users 
+      User.all.each do |u|
+        u.destroy
+      end
+    
+      # Delete current groups
+      Group.all.each do |g|
+        g.destroy # should destroy memberships too
+      end
+
+      # Copy users
+      ProductionUser.switch_connection_to(:production_server)
+
+      ProductionUser.all.each do |u|
+        new_user = User.new
+        new_user.copy u
+      end
+
+      # Copy groups
+      ProductionGroup.switch_connection_to(:production_server)
+
+      ProductionGroup.all.each do |g|
+        new_group = Group.new(g.attributes.except("created_at","updated_at"))
+        new_group.id = g.id
+        new_group.save
+      end
+
+      # Copy memberships
+      ProductionMembership.switch_connection_to(:production_server)
+
+      ProductionMembership.all.each do |m|
+        new_mem = Membership.new(m.attributes.except("created_at","updated_at"))
+        new_mem.id = m.id
+        new_mem.save
+      end
+
+      redirect_to production_interface_path, notice: "#{User.all.length} users and #{Group.all.length} groups copied."
+
+    else
+   
+      redirect_to production_interface_path, notice: "This functionality is not available in production mode."
+
+    end
+
   end
 
   private

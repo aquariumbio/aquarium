@@ -14,8 +14,6 @@
 
 <%= render 'memberships' %>
 
-
-
 <% if current_user && current_user.is_admin %>
   <hr />
   <%= link_to 'Edit details', edit_group_path(@group), class: 'btn' %> 

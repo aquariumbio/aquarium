@@ -9,9 +9,11 @@
       <td><%= m.user.name %></td>
       <td><%= m.user.login %></td>
       <td>
+      <% if current_user && current_user.is_admin %>
         <%= link_to group_path(@group) + '?drop_user=' + m.user.id.to_s do %>
           <i class='icon-remove'></i>
         <% end %>
+      <% end %>in
       </td>
     </tr>
   <% end %>

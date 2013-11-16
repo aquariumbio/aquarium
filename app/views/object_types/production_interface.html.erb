@@ -1,6 +1,6 @@
 <% provide(:title,  "Inventory Manipulation") %>
 
-<h2>Inventory Manipulation Interface</h2>
+<h2>Administrative Tools</h2>
 
 <% if Rails.env != 'production' %>
 
@@ -54,6 +54,32 @@
   <div class='span1'></div>
 
 </div>
+
+<br />
+
+<div class='row-fluid'>
+
+  <div class='span1'></div>
+
+  <div class='span2' style='padding: 6pt;'>
+
+    <%= link_to 'Copy Users and Groups from Production Server',
+	copy_users_from_production_path, 
+        data: { confirm: 'Are you sure you want to copy all the users and groups from the production server? Doing so will erase all user and group information in this server.' },
+        class: 'btn btn-small', style: 'width: 100%'%> </p>
+
+  </div>
+
+  <div class='span8'>
+
+    <p class='message'>Copies user and group information from the production server.</p>
+
+  </div>
+
+  <div class='span1'></div>
+
+</div>
+
 
 <% else %> 
 
