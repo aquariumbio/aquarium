@@ -2,13 +2,18 @@ module Oyster
 
   class Transition
 
-    attr_accessor :firing, :parent, :condition, :children
+    attr_accessor :firing, :parents, :condition, :children
 
-    def initialize parent
-      @parent = parent   # A place
-      @children = []     # A set of places
+    def initialize 
+      @parents = []      # A list of places
+      @children = []     # A list of places
       @condition = ""    # A string that evaluates to true of false to determine whether to fire the transitions
-      @firing = false     # Whether the transition is firing.
+      @firing = false    # Whether the transition is firing.
+    end
+
+    def parent p
+      @parents.push p
+      self
     end
 
     def child c
@@ -19,6 +24,14 @@ module Oyster
     def cond c
       @condition = c
       self
+    end
+
+    def completed j
+      if j < @parents.length
+        @parents[j].completed?
+      else
+        false
+      end
     end
 
     def check_condition

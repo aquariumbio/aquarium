@@ -12,6 +12,7 @@ module Lang
          end
        end
        e += @tok.eat_a ']'
+
        return e
  
      end

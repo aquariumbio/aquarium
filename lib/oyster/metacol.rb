@@ -36,7 +36,8 @@ module Oyster
     def check_transitions
 
       @transitions.each do |t| 
-        t.firing = t.parent.marking > 0 && t.check_condition
+        markings = t.parents.collect { |p| p.marking }
+        t.firing = markings.inject(:*) > 0 && t.check_condition
       end
 
     end # check_transitions
@@ -47,7 +48,7 @@ module Oyster
 
         if t.firing
 
-          t.parent.unmark
+          t.parents.each { |p| p.unmark }
           t.children.each do |c|
             c.mark
             set_arguments c

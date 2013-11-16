@@ -12,7 +12,7 @@ module Oyster
 
   end
 
-  def submit sha, path, args
+  def submit sha, path, args, scheduling
 
     # get the blob and parse its arguments
     blob = Blob.get sha, path
@@ -41,6 +41,9 @@ module Oyster
     job = Job.new
     job.sha = sha
     job.path = path
+    job.desired_start_time = scheduling[:desired]
+    job.latest_start_time = scheduling[:latest]
+    job.group_id = Group.find_by_name(scheduling[:group]).id
     job.user_id = 1
     job.pc = Job.NOT_STARTED
     job.state = { stack: scope.stack }.to_json

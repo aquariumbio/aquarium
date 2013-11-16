@@ -36,7 +36,7 @@ module Oyster
     def start
       puts "Starting #{@protocol} with sha = #{@sha}"
       begin
-        @jobs.push( submit @sha, @protocol, @arguments )
+        @jobs.push( submit @sha, @protocol, @arguments, { desired: Time.now, latest: Time.now + 1.day, group: 'klavins' } )
       rescue Exception => e
         raise "Could not submit protocol #{@protocol}. " + e.to_s + e.backtrace.to_s
         @marking -= 1
