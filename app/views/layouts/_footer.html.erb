@@ -3,3 +3,19 @@
     BIOTURK is a product of the <a href="http://depts.washington.edu/soslab">Klavins Lab.</a>
   </p>
 </footer>
+
+<style>
+#login {
+  font-size: 120pt;
+  font-weight: bold;
+  color: #efc;
+  position:absolute;
+  left:0px;
+  bottom:85px;
+  letter-spacing:-10px
+}
+</style>
+
+<footer class="footer" style='  z-index: -2 !important;'>
+  <div id='login'><%= current_user ? current_user.login : '' %></div>
+</footer>
