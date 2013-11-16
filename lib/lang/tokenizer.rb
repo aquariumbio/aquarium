@@ -1,4 +1,4 @@
-module Plankton
+module Lang
 
   class Tokenizer
 
@@ -103,10 +103,6 @@ module Plankton
       /\s/
     end
 
-    def keyword
-      /argument|end|step|description|note|warning|getdata|select|take|produce|data|release|if|else|elsif|information/
-    end
-
     def boolean
        /true|false/
     end
@@ -151,7 +147,7 @@ module Plankton
       /@|&|\|/
     end
 
-    checker :string, :whitespace, :variable, :keyword, :argtype, :take_ops, :operator, :equals, :punctuation, :comment, :number, :boolean, :junk
+    checker :string, :whitespace, :variable, :argtype, :take_ops, :operator, :equals, :punctuation, :comment, :number, :boolean, :junk
 
     # unilities   
     def positive_integer

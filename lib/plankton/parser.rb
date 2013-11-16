@@ -1,12 +1,12 @@
 module Plankton
 
-  class Parser
+  class Parser < Lang::Parser
 
     attr_reader :program, :args, :info, :bad_xml, :include_stack, :debug
     attr_writer :job_id
 
     def initialize name, contents
-      @tok = Tokenizer.new ( contents )
+      @tok = Lang::Tokenizer.new ( contents )
       @program = []
       @args = []
       @include_stack = [ { tokens: @tok, path: name, returns: [] } ]

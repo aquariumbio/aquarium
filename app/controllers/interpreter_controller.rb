@@ -137,7 +137,7 @@ class InterpreterController < ApplicationController
 
     parse_args_only
 
-    scope = Scope.new {}
+    scope = Lang::Scope.new {}
 
     # push arguments
     @protocol.args.each do |a|
@@ -198,7 +198,7 @@ class InterpreterController < ApplicationController
     else
       # Get the pc and scope
       @pc = @job.pc
-      @scope = Scope.new
+      @scope = Lang::Scope.new
       @scope.set_stack state[:stack]
       @scope.set_base_symbol :user_id, current_user.id
       @instruction = @protocol.program[@pc]

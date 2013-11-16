@@ -1,8 +1,5 @@
-# Changes to Class
-require_relative 'meta'
-
-# Tokenizer
-require_relative 'tokenizer'
+# Language Tools
+require_relative '../lang/lang'
 
 # Parser
 require_relative 'parser'
@@ -10,7 +7,6 @@ require_relative 'strings'
 require_relative 'arguments'
 require_relative 'steps'
 require_relative 'assignments'
-require_relative 'expressions'
 require_relative 'statements'
 require_relative 'takes'
 require_relative 'produces'
