@@ -3,13 +3,16 @@ module Oyster
   class Place
 
     attr_reader :jobs
-    attr_accessor :marking, :arguments, :protocol
+    attr_accessor :marking, :arg_expressions, :arguments, :protocol
 
     def initialize
 
       @protocol = ''     # The path to the protocol in github
-      @arguments = {}    # A hash or argument names and values to send to the protocol when starting.
-                         # Any argument not supplied here, must be set using a wire (see below).
+      @arguments = {}    # A hash or argument names and values to send to the protocol when starting.                     
+
+      @arg_expressions = {}  # Unevaluated expressions. Any argument not supplied here, 
+                             # must be set using a wire (see below).
+
       @jobs = []         # A list of job ids associated with this place. Every time a place becomes
                          # active, a new job id is pushed onto the stack.
       @marking = 0       # How many marks the place has (in the Petri Net sense)
@@ -59,14 +62,6 @@ module Oyster
       self
     end
 
-    def clean_args
-      a = {}
-      @arguments.each do |k,h|
-       a[k] = h[:v]
-      end
-      a
-    end
-
     def start who
 
       puts "Starting #{@protocol} with sha = #{@sha}"
@@ -76,7 +71,7 @@ module Oyster
         @jobs.push( Oyster.submit( {
           sha: @sha, 
           path: @protocol, 
-          args: clean_args,
+          args: @arguments,
           desired: eval(@desired_start), 
           latest: eval(@latest_start), 
           group: @group ? @group : who,

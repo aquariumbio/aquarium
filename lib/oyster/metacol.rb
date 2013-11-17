@@ -61,6 +61,7 @@ module Oyster
           t.children.each do |c|
             c.mark
             set_arguments c
+            set_wires c
             c.start @who
           end
 
@@ -78,36 +79,24 @@ module Oyster
       @places.collect { |p| p.marking }
     end
 
-    def find_wire_to p, s
-      @wires.each do |w|
-        if w.dest[:place] == p && w.dest[:name].to_sym == s
-          return w
-        end
-      end
-      return nil
-    end
-
     def set_arguments p
 
-      p.arguments.each do |k,h|
-        w = find_wire_to p, k
-        if w # if wire, then get the value
-          p.arguments[k][:v] = w.source[:place].return_value[w.source[:name].to_sym]
-        else # otherwise evaluate with current scope
-          p.arguments[k][:v] = @scope.evaluate p.arguments[k][:e]
-        end
+      puts "Arguments for place are #{p.arguments}"
+
+      p.arg_expressions.each do |k,h|
+         p.arguments[k] = @scope.evaluate p.arg_expressions[k]
       end
 
       puts "Arguments set to #{p.arguments}"
 
     end
 
-    def set_arguments_old p
+    def set_wires p
 
-      (@wires.reject { |w| w.dest[:place] != p }).each do |w|
+      (@wires.reject { |w| @places[w.dest[:place]] != p }).each do |w|
 
-        if w.source[:place].completed?
-          p.arguments[w.dest[:name].to_sym] = w.source[:place].return_value[w.source[:name].to_sym]
+        if @places[w.source[:place]].completed?
+          p.arguments[w.dest[:name].to_sym] = @places[w.source[:place]].return_value[w.source[:name].to_sym]
           puts "Arguments set to #{p.arguments}"
         else
           raise "Source place for wire has no jobs"

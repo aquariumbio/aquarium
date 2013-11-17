@@ -21,8 +21,7 @@ module Oyster
       while @tok.current != 'end' && @tok.current != 'EOF'
         sym = @tok.eat_a_variable.to_sym
         @tok.eat_a ':'
-        args[sym] = { e: expr, v: nil } # expression(e) kept so it can be reevaluated over and over
-                                        # value(v) not found until submission time
+        args[sym] = expr
       end
 
       @tok.eat_a 'end'
@@ -63,7 +62,7 @@ module Oyster
             end
 
           when 'argument'
-             p.arguments = arg_list
+             p.arg_expressions = arg_list
 
           else
             raise "Unknown field '#{@tok.current}"

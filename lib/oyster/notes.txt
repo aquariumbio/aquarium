@@ -2,12 +2,14 @@
 * Assignments outside of transitions evaluate when parsed. They are used mainly to set
   up global vars, arguments to protocols, etc.
 
-- Condition and action expressions should evaulate when the transition fires.
-  - Therefore, the metacol needs the scope and may update the scope when firing.
+x Condition and action expressions should evaulate when the transition fires.
+  x Therefore, the metacol needs the scope and may update the scope when firing.
 
-- Actions in transitions (sets of assignments, evaluated when firing)
+x Actions in transitions (sets of assignments, evaluated when firing)
 
-- Arguments to protocols
+x Arguments to protocols
+
+- When a protocol is canceled ror reaches an error, metacol should handle it nicely
 
 - Timing info for protocols (delayed evals)
 
