@@ -11,6 +11,10 @@ module Oyster
                           # and which argument it corresponds to.
     end
 
+    def to_s
+      "#{source} => #{@dest}"
+    end
+
   end
 
 end

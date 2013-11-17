@@ -70,9 +70,6 @@ module Lang
 
        case @tok.current
 
-         when @tok.number
-           f = @tok.eat
-
          when @tok.string
            f = @tok.eat
 
@@ -85,6 +82,9 @@ module Lang
            else
              f = '%{' + @tok.eat + '}'
            end
+
+         when @tok.number
+           f = @tok.eat
 
          when '('
            @tok.eat

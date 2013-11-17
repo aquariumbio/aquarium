@@ -3,8 +3,7 @@ module Oyster
   class Place
 
     attr_reader :jobs
-    attr_writer :protocol
-    attr_accessor :marking, :arguments
+    attr_accessor :marking, :arguments, :protocol
 
     def initialize
 
@@ -103,6 +102,10 @@ module Oyster
       else
         return nil
       end
+    end
+
+    def to_s
+      "#{@protocol} for #{@group}"
     end
 
   end

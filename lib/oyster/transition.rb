@@ -38,6 +38,12 @@ module Oyster
       eval @condition
     end
 
+    def to_s 
+      p = parents.collect { |p| p.protocol }
+      c = children.collect { |p| p.protocol }
+      "#{p} => #{c} when #{@condition}"
+    end
+
   end
 
 end

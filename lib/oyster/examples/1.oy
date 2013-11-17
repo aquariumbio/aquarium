@@ -9,7 +9,7 @@ place p1
 end
 
 place p2
-  protocol: "plankton/one.pl"
+  protocol: "plankton/two.pl"
   group: "klavins"
   marked: false
 end
@@ -19,7 +19,7 @@ end
 #
 
 [ p1 ] => [ p2 ] when completed(0) end
-[ p1 ] => [ p2 ] when completed(0) end
+[ p2 ] => [ p1 ] when completed(0) end
   
 ###########################################################
 # Wires

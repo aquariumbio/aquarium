@@ -17,6 +17,7 @@ module Oyster
     end
 
     def transition t
+      puts "Added transition with condition #{t.condition}"
       @transitions.push t
       t
     end
@@ -92,11 +93,28 @@ module Oyster
 
     end
 
-  end
+    def update
+      check_transitions  
+      fire
+    end
 
-  def update
-    check_transitions  
-    fire
+    def to_s
+      s = ""
+      @places.each do |p|
+        s += p.to_s + "\n"
+      end
+
+      @transitions.each do |t|
+        s += t.to_s + "\n"
+      end
+
+      @wires.each do |w|
+        s += w.to_s + "\n"
+      end
+      s
+    end
+       
+
   end
 
 end
