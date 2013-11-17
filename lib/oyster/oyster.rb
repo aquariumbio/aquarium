@@ -8,7 +8,6 @@ require_relative '../lang/lang'
 require_relative 'parser'
 
 p = Oyster::Parser.new( File.read './lib/oyster/examples/1.oy' )
-#p = Oyster::Parser.new( File.read 'examples/1.oy' )
 
 m = p.parse
 

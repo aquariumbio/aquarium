@@ -2,13 +2,14 @@ module Oyster
 
   class Metacol
 
-    attr_accessor :places, :transitions, :wires
+    attr_accessor :places, :transitions, :wires, :scope
 
     def initialize
       @places = []
       @transitions = []
       @wires = []
       @who = ''
+      @scope = Lang::Scope.new
     end
 
     def place p
@@ -44,7 +45,7 @@ module Oyster
 
       @transitions.each do |t| 
         markings = t.parents.collect { |p| p.marking }
-        t.firing = markings.inject(:*) > 0 && t.check_condition
+        t.firing = markings.inject(:*) > 0 && ( t.check_condition @scope )
       end
 
     end # check_transitions
@@ -56,6 +57,7 @@ module Oyster
         if t.firing
 
           t.parents.each { |p| p.unmark }
+          t.run_program @scope
           t.children.each do |c|
             c.mark
             set_arguments c
@@ -76,7 +78,31 @@ module Oyster
       @places.collect { |p| p.marking }
     end
 
+    def find_wire_to p, s
+      @wires.each do |w|
+        if w.dest[:place] == p && w.dest[:name].to_sym == s
+          return w
+        end
+      end
+      return nil
+    end
+
     def set_arguments p
+
+      p.arguments.each do |k,h|
+        w = find_wire_to p, k
+        if w # if wire, then get the value
+          p.arguments[k][:v] = w.source[:place].return_value[w.source[:name].to_sym]
+        else # otherwise evaluate with current scope
+          p.arguments[k][:v] = @scope.evaluate p.arguments[k][:e]
+        end
+      end
+
+      puts "Arguments set to #{p.arguments}"
+
+    end
+
+    def set_arguments_old p
 
       (@wires.reject { |w| w.dest[:place] != p }).each do |w|
 

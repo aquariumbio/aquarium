@@ -1,0 +1,30 @@
+
+* Assignments outside of transitions evaluate when parsed. They are used mainly to set
+  up global vars, arguments to protocols, etc.
+
+- Condition and action expressions should evaulate when the transition fires.
+  - Therefore, the metacol needs the scope and may update the scope when firing.
+
+- Actions in transitions (sets of assignments, evaluated when firing)
+
+- Arguments to protocols
+
+- Timing info for protocols (delayed evals)
+
+- To save the state of the metacol, save:
+  - scope
+  - marking for each place
+  - job list for each place
+
+- To update a metacol from bioturk
+  - Parse it to obtain a metacol object
+  - Get the scope, marking, and joblist from the db
+  - Set the "    , "      , "   "       of the metacol, overriding whatever it is upon first parse
+  - Take a step (call Metacol.update)
+  - Save the scope, marking, and joblist to the db
+
+- To avoid talking to github, I could
+  - a) Cache protocols for a given metacol (like I do for jobs)
+  - b) Finally make a local directory version of the github repo
+  - c) To just make things more fluid, I could get the blob when starting, instead of when parsing
+        - would not catch errors up front though

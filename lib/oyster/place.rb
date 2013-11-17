@@ -59,6 +59,14 @@ module Oyster
       self
     end
 
+    def clean_args
+      a = {}
+      @arguments.each do |k,h|
+       a[k] = h[:v]
+      end
+      a
+    end
+
     def start who
 
       puts "Starting #{@protocol} with sha = #{@sha}"
@@ -68,7 +76,7 @@ module Oyster
         @jobs.push( Oyster.submit( {
           sha: @sha, 
           path: @protocol, 
-          args: @arguments, 
+          args: clean_args,
           desired: eval(@desired_start), 
           latest: eval(@latest_start), 
           group: @group ? @group : who,

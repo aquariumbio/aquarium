@@ -8,8 +8,13 @@ place p1
   marked: true
 end
 
+num = 0
+
 place p2
   protocol: "plankton/two.pl"
+  argument
+    y: num
+  end
   group: "klavins"
   marked: false
 end
@@ -18,11 +23,16 @@ end
 # Transitions
 #
 
-[ p1 ] => [ p2 ] when completed(0) end
-[ p2 ] => [ p1 ] when completed(0) end
+transition [ p1 ] => [ p2 ] 
+  when completed(0) && num<3 do
+    num = num + 1
+  end
+end
+
+transition [ p2 ] => [ p1 ] when completed(0) end
   
 ###########################################################
 # Wires
 #
 
-(p1,"n") => (p2,"x")
+wire (p1,"n") => (p2,"x")
