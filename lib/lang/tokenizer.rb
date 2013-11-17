@@ -62,7 +62,7 @@ module Lang
 
     def eat
       t = current
-      #puts '--> ' + t
+      puts '--> ' + t
       advance
       return t
     end
@@ -123,6 +123,10 @@ module Lang
       /\+|-|\/|\*\*|\*|<=|>=|<|>|==|!=|\|\||&&|!/
     end
 
+    def trans_op
+      /=>/
+    end
+
     def take_ops
       /<-/
     end
@@ -147,7 +151,7 @@ module Lang
       /@|&|\|/
     end
 
-    checker :string, :whitespace, :variable, :argtype, :take_ops, :operator, :equals, :punctuation, :comment, :number, :boolean, :junk
+    checker :string, :whitespace, :variable, :argtype, :take_ops, :trans_op, :operator, :equals, :punctuation, :comment, :number, :boolean, :junk
 
     # unilities   
     def positive_integer

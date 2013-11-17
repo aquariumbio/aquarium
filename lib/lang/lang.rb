@@ -1,3 +1,4 @@
+require 'strscan'
 require_relative 'meta'
 require_relative 'tokenizer'
 require_relative 'scope'

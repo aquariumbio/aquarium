@@ -8,6 +8,7 @@ module Oyster
       @places = []
       @transitions = []
       @wires = []
+      @who = ''
     end
 
     def place p
@@ -25,10 +26,15 @@ module Oyster
       self
     end
 
+    def who u
+      @who = u
+      self
+    end
+
     def start
       @places.each do |p|
         if p.marking > 0
-          p.start
+          p.start @who
         end
       end
     end
@@ -52,7 +58,7 @@ module Oyster
           t.children.each do |c|
             c.mark
             set_arguments c
-            c.start
+            c.start @who
           end
 
         end

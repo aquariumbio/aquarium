@@ -2,6 +2,13 @@ module Lang
 
   class Parser
 
+     def add_function name, num_args
+       if !@functions
+         @functions = {}
+       end
+       @functions[name] = num_args
+     end
+
      def array_expr ###################################################################################
 
        e = @tok.eat_a '['
@@ -38,6 +45,27 @@ module Lang
 
      end
 
+     def app ##########################################################################################
+       
+       if @functions
+         name = @tok.eat_a_variable
+         e = name
+         e += @tok.eat_a '('
+           (1..@functions[name.to_sym]).each do |i|
+             e += expr
+             if i < @functions[name.to_sym]
+               e += @tok.eat_a ','
+             end
+           end
+         e += @tok.eat_a ')'
+       else
+         raise "No function names defined at #{@tok}"
+       end
+
+       return e
+
+     end
+
      def primary ######################################################################################
 
        case @tok.current
@@ -52,7 +80,11 @@ module Lang
            f = @tok.eat
 
          when @tok.variable
-           f = '%{' + @tok.eat + '}'
+           if @tok.next == '('
+             f = app
+           else
+             f = '%{' + @tok.eat + '}'
+           end
 
          when '('
            @tok.eat

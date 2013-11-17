@@ -3,6 +3,7 @@
   <tr>
     <th>Job</th>
     <th>Protocol</th>
+    <th>Submitted by</th>
     <th>Group</th>
     <th>Arguments</th>
     <th>Desired Start Time</th>
@@ -19,6 +20,7 @@
     <tr>
       <td><%= link_to j.id.to_s, j %></td>
       <td><%= link_to j.path, protocol_tree_raw_path(sha: j.sha, format: 'xml'), target: j.path %></td>
+      <td><%= u = User.find_by_id(j.submitted_by); u ? u.login : 'nobody' %></td>
       <td><%= g = Group.find_by_id(j.group_id); g ? (link_to g.name, g) : 'no group' %></td>
       <td>
         <% if args.length > 0 %>

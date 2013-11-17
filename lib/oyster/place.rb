@@ -7,6 +7,7 @@ module Oyster
     attr_accessor :marking, :arguments
 
     def initialize
+
       @protocol = ''     # The path to the protocol in github
       @arguments = {}    # A hash or argument names and values to send to the protocol when starting.
                          # Any argument not supplied here, must be set using a wire (see below).
@@ -14,7 +15,12 @@ module Oyster
                          # active, a new job id is pushed onto the stack.
       @marking = 0       # How many marks the place has (in the Petri Net sense)
       @log = {}          # The log of the most recent job
+
+      @desired_start = "now"        # When the job should be started
+      @latest_start = "tomorrow"    # Latest time the job should be started
+
       self
+
     end
     
     def mark
@@ -29,18 +35,51 @@ module Oyster
 
     def proto p
       @protocol = p
-      @sha = get_sha p
+      @sha = Oyster.get_sha p
       self
     end
 
-    def start
+    def now
+      Time.now
+    end
+
+    def tomorrow
+      Time.now + 1.day
+    end
+
+    def desired exp
+      @desired_start = exp
+    end
+
+    def latest exp
+      @latest_start = exp
+    end
+
+    def group g
+      @group = g
+      self
+    end
+
+    def start who
+
       puts "Starting #{@protocol} with sha = #{@sha}"
+
       begin
-        @jobs.push( submit @sha, @protocol, @arguments, { desired: Time.now, latest: Time.now + 1.day, group: 'klavins' } )
+
+        @jobs.push( Oyster.submit( {
+          sha: @sha, 
+          path: @protocol, 
+          args: @arguments, 
+          desired: eval(@desired_start), 
+          latest: eval(@latest_start), 
+          group: @group ? @group : who,
+          who: who } ) )
+
       rescue Exception => e
         raise "Could not submit protocol #{@protocol}. " + e.to_s + e.backtrace.to_s
         @marking -= 1
       end
+
     end
 
     def completed?
