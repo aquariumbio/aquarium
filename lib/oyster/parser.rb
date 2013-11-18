@@ -4,9 +4,14 @@ module Oyster
 
     def initialize contents
       @tok = Lang::Tokenizer.new contents 
-      add_function :completed, 1
       @metacol = Metacol.new
+      functions
     end   
+
+    def functions
+      add_function :completed, 1
+      add_function :error, 1
+    end
 
     def parse
       statements
@@ -83,9 +88,9 @@ module Oyster
 
       pl = []
       @tok.eat_a '['
-      while @tok.current != ']'
+      while @tok.current != ']' && @tok.current != 'EOF'
         pl.push @metacol.scope.evaluate expr
-        if @current == ','
+        if @tok.current != ']'
           @tok.eat_a ','
         end
       end

@@ -41,11 +41,22 @@ module Oyster
       end
     end
 
+    def markings t
+      t.parents.collect { |p| p.marking }
+    end
+
+    def all_markings
+      @places.collect { |p| p.marking }
+    end
+
+    def done?
+      all_markings.inject(:+) == 0
+    end
+
     def check_transitions
 
       @transitions.each do |t| 
-        markings = t.parents.collect { |p| p.marking }
-        t.firing = markings.inject(:*) > 0 && ( t.check_condition @scope )
+        t.firing = markings(t).inject(:*) > 0 && ( t.check_condition @scope )
       end
 
     end # check_transitions
@@ -81,13 +92,9 @@ module Oyster
 
     def set_arguments p
 
-      puts "Arguments for place are #{p.arguments}"
-
       p.arg_expressions.each do |k,h|
          p.arguments[k] = @scope.evaluate p.arg_expressions[k]
       end
-
-      puts "Arguments set to #{p.arguments}"
 
     end
 
@@ -96,8 +103,10 @@ module Oyster
       (@wires.reject { |w| @places[w.dest[:place]] != p }).each do |w|
 
         if @places[w.source[:place]].completed?
-          p.arguments[w.dest[:name].to_sym] = @places[w.source[:place]].return_value[w.source[:name].to_sym]
-          puts "Arguments set to #{p.arguments}"
+          r = @places[w.source[:place]].return_value
+          if r
+            p.arguments[w.dest[:name].to_sym] = r[w.source[:name].to_sym]
+          end
         else
           raise "Source place for wire has no jobs"
         end

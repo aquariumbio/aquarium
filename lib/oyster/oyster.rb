@@ -18,6 +18,9 @@ m.start
 while true
   sleep 1
   m.update
+  if m.done?
+    exit
+  end
 end
 
 

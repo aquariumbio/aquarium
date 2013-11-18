@@ -46,6 +46,14 @@ module Oyster
       end
     end
 
+    def error j
+      if j < @parents.length
+        @parents[j].error?
+      else
+        false
+      end
+    end
+
     def check_condition scope
       ans = eval( scope.substitute @condition )
       puts "#{condition} --> #{ans}"
