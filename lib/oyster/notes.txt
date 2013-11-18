@@ -21,6 +21,7 @@ x Protocols should exit when no places are marked
   - job list for each place
 
 - To update a metacol from bioturk
+  - Add a metacol_id field to jobs
   - Parse it to obtain a metacol object
   - Get the scope, marking, and joblist from the db
   - Set the "    , "      , "   "       of the metacol, overriding whatever it is upon first parse

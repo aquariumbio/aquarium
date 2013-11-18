@@ -6,6 +6,7 @@ require_relative 'metacol'
 
 require_relative '../lang/lang'
 require_relative 'parser'
+require_relative 'time'
 
 p = Oyster::Parser.new( File.read './lib/oyster/examples/1.oy' )
 
@@ -22,8 +23,3 @@ while true
     exit
   end
 end
-
-
-
-
-

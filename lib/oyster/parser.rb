@@ -6,6 +6,7 @@ module Oyster
       @tok = Lang::Tokenizer.new contents 
       @metacol = Metacol.new
       functions
+      time_functions
     end   
 
     def functions
@@ -39,7 +40,6 @@ module Oyster
        
       @tok.eat_a 'place'
       p = Place.new
-
       v = @tok.eat_a_variable
 
       while @tok.current != 'end' && @tok.current != 'EOF'
@@ -65,6 +65,18 @@ module Oyster
             if @metacol.scope.evaluate expr
               p.mark
             end
+
+          when 'start'
+
+            @tok.eat_a 'start'            
+            @tok.eat_a ':'
+            p.desired time
+
+          when 'window'
+
+            @tok.eat_a 'window'
+            @tok.eat_a ':'
+            p.latest time
 
           when 'argument'
              p.arg_expressions = arg_list

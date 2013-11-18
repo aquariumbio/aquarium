@@ -6,6 +6,8 @@ place p1
   protocol: "plankton/one.pl"
   group: "admin"
   marked: true
+  start: now()
+  window: minutes(30)
 end
 
 num = 0
@@ -17,6 +19,8 @@ place p2
   end
   group: "klavins"
   marked: false
+  start: tomorrow_at(8,0)
+  window: hours(8)
 end
 
 ###########################################################

@@ -41,14 +41,6 @@ module Oyster
       self
     end
 
-    def now
-      Time.now
-    end
-
-    def tomorrow
-      Time.now + 1.day
-    end
-
     def desired exp
       @desired_start = exp
     end
@@ -119,6 +111,38 @@ module Oyster
 
     def to_s
       "#{@protocol} for #{@group}"
+    end
+
+    #################################################################################################
+    # Time
+    #
+
+    def now
+      Time.now
+    end
+
+    def today_at h, m
+      Time.now.midnight + h.hours + m.minutes
+    end
+
+    def tomorrow
+      Time.now + 1.day
+    end
+
+    def tomorrow_at h, m
+      Time.now.midnight + 1.day + h.hours + m.minutes
+    end
+
+    def minutes n
+      Time.now + n.minutes
+    end
+
+    def hours n
+      Time.now + n.hours
+    end
+
+    def days n
+      Time.now + n.days
     end
 
   end

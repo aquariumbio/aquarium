@@ -148,6 +148,10 @@ class ObjectTypesController < ApplicationController
       num_samples = 0     
       num_touches = 0
 
+      CartItem.all.each do |c|
+        c.destroy
+      end
+
       ObjectType.all.each do |ob|
         num_objects += 1
         num_items += ob.items.length
@@ -175,7 +179,7 @@ class ObjectTypesController < ApplicationController
         t.destroy()
       end
 
-      redirect_to production_interface_path, notice: "Deleted #{num_objects} object types, #{num_items} items, #{num_sample_types} sample type definitions, and #{num_samples} samples from the inventory. Also deleted were #{num_touches} touches."
+      redirect_to production_interface_path, notice: "Deleted #{num_objects} object types, #{num_items} items, #{num_sample_types} sample type definitions, and #{num_samples} samples from the inventory. All users carts were emptied. Also deleted were #{num_touches} touches."
 
     else
 
