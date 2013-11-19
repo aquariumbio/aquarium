@@ -2,8 +2,7 @@ module Oyster
 
   class Place
 
-    attr_reader :jobs
-    attr_accessor :marking, :arg_expressions, :arguments, :protocol
+    attr_accessor :jobs, :marking, :arg_expressions, :arguments, :protocol, :sha
 
     def initialize
 
@@ -16,10 +15,11 @@ module Oyster
       @jobs = []         # A list of job ids associated with this place. Every time a place becomes
                          # active, a new job id is pushed onto the stack.
       @marking = 0       # How many marks the place has (in the Petri Net sense)
-      @log = {}          # The log of the most recent job
 
       @desired_start = "now"        # When the job should be started
       @latest_start = "tomorrow"    # Latest time the job should be started
+
+      @sha = nil
 
       self
 
@@ -37,7 +37,6 @@ module Oyster
 
     def proto p
       @protocol = p
-      @sha = Oyster.get_sha p
       self
     end
 
@@ -59,6 +58,10 @@ module Oyster
       puts "Starting #{@protocol} with sha = #{@sha}"
 
       begin
+
+        if @sha == nil
+          @sha = Oyster.get_sha @protocol
+        end
 
         @jobs.push( Oyster.submit( {
           sha: @sha, 

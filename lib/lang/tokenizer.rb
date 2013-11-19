@@ -62,7 +62,7 @@ module Lang
 
     def eat
       t = current
-      puts '--> ' + t
+      #puts '--> ' + t
       advance
       return t
     end

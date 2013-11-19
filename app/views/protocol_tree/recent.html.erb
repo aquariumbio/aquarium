@@ -18,7 +18,7 @@
   <% @recents.each do |r| %>
 
     <tr>
-      <td><b><%= r[:path].chomp('.pdl') %></b> (
+      <td><b><%= r[:path] ? r[:path].chomp('.pdl') : 'unkown' %></b> (
       <% r[:args].each do |k,v| %>
         <b style='color: #aaa'><%= k %></b>: <%= v.class == String ? '"' + v + '"' : v %>
       <% end %>
@@ -27,6 +27,7 @@
       <td><%= link_to "run", interpreter_arguments_path(sha: r[:sha], path: r[:path])  %> </td>
       <td><%= link_to "resubmit", interpreter_submit_path( { sha: r[:sha], path: r[:path] }.merge(r[:args]) )  %></td>
     </tr>
+
   <% end %>
 
 </table>

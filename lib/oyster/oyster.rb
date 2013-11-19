@@ -9,17 +9,22 @@ require_relative 'parser'
 require_relative 'time'
 
 p = Oyster::Parser.new( File.read './lib/oyster/examples/1.oy' )
-
 m = p.parse
 
-puts m.to_s
-
 m.start
+s = m.state.to_json
 
 while true
+
   sleep 1
+
+  m = Oyster::Parser.new( File.read './lib/oyster/examples/1.oy' ).parse
+  m.set_state( JSON.parse s, :symbolize_names => true )
   m.update
+  s = m.state.to_json
+
   if m.done?
     exit
   end
+
 end

@@ -136,6 +136,9 @@ module Oyster
       @tok.eat_a '=>'
       children = place_list
       @tok.eat_a 'when'
+      if @tok.current == ':'
+        @tok.eat_a ':'
+      end
       cond = expr
 
       if @tok.current == 'do'

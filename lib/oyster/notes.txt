@@ -9,11 +9,11 @@ x Actions in transitions (sets of assignments, evaluated when firing)
 
 x Arguments to protocols
 
-x When a protocol is canceled ror reaches an error, metacol should handle it nicely
+x When a protocol is canceled or reaches an error, metacol should handle it nicely
 
 x Protocols should exit when no places are marked
 
-- Timing info for protocols (delayed evals)
+x Timing info for protocols (delayed evals)
 
 - To save the state of the metacol, save:
   - scope

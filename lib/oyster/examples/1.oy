@@ -18,8 +18,7 @@ place p2
     y: num
   end
   group: "klavins"
-  marked: false
-  start: tomorrow_at(8,0)
+  start: now()
   window: hours(8)
 end
 
@@ -28,7 +27,8 @@ end
 #
 
 transition [ p1 ] => [ p2 ] 
-  when !error(0) && completed(0) && num<3 do
+  when !error(0) && completed(0) && num<3 
+  do
     num = num + 1
   end
 end

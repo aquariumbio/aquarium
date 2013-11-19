@@ -137,7 +137,28 @@ module Oyster
       end
       s
     end
-       
+
+    def state
+
+      { 
+        places: @places.collect { |p| { marking: p.marking, jobs: p.jobs, sha: p.sha } },
+        stack: @scope.stack
+      }
+
+    end
+
+    def set_state s
+
+      for i in 0..(@places.length-1)
+        @places[i].marking = s[:places][i][:marking]
+        @places[i].jobs = s[:places][i][:jobs]
+        @places[i].sha = s[:places][i][:sha]
+      end
+
+      @scope = Scope.new
+      @scope.set_stack s[:stack]
+
+    end
 
   end
 
