@@ -1,9 +1,9 @@
-module Plankton
+module Oyster
 
   class Parser
 
     def argument
-  
+
       var =  @tok.eat_a_variable
              @tok.eat_a ':'
       type = @tok.eat_a_argtype
@@ -11,7 +11,7 @@ module Plankton
       unless type == 'number' || type == 'string' || type == 'sample' || type == 'object'
         raise "Unknown type '#{type}' in argument"
       end
- 
+
       if type == 'object' # convert to old type specifier for object types
          type = 'objecttype'
       end
@@ -23,17 +23,11 @@ module Plankton
         description = ""
       end
 
-      if !@include_stack
-        raise "For some reason the include stack is not defined"
-      end
-
-      if @include_stack.length <= 1
-        push_arg ArgumentInstruction.new var, type, description
-      end
+      @metacol.arguments.push( { name: var, type: type, description: description } )
   
-    end # argument
+    end
 
-    def argument_list
+    def arguments
       
       @tok.eat_a 'argument'
       while @tok.current != 'end' && @tok.current != 'EOF'
@@ -41,26 +35,8 @@ module Plankton
       end
       @tok.eat_a 'end'
 
-      return true
+    end
 
-    end # argument_list
-
-    def parse_arguments_only
-
-      while @tok.current != 'EOF'
-
-        while @tok.current != 'EOF' && @tok.current != 'argument'
-          @tok.eat
-        end
-
-        if @tok.current == 'argument'
-          argument_list
-        end
-
-      end
-
-    end # arguments_only
-
-  end 
+  end
 
 end

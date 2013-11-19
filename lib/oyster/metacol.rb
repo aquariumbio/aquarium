@@ -2,9 +2,10 @@ module Oyster
 
   class Metacol
 
-    attr_accessor :places, :transitions, :wires, :scope
+    attr_accessor :places, :transitions, :wires, :scope, :arguments
 
     def initialize
+      @arguments = []
       @places = []
       @transitions = []
       @wires = []
@@ -33,12 +34,20 @@ module Oyster
       self
     end
 
-    def start
+    def start args
+
+      # Set argument values in scope
+      args.each do |k,v|
+        @scope.set k, v
+      end
+
+      # Start all marked places
       @places.each do |p|
         if p.marking > 0
           p.start @who
         end
       end
+
     end
 
     def markings t

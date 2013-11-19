@@ -15,12 +15,16 @@ x Protocols should exit when no places are marked
 
 x Timing info for protocols (delayed evals)
 
-- To save the state of the metacol, save:
-  - scope
-  - marking for each place
-  - job list for each place
+x To save the state of the metacol, save:
+  x scope
+  x marking for each place
+  x job list for each place
+  x sha for each plate ( so you don't have to ask github again )
 
-- To update a metacol from bioturk
+- Metacols should take arguments of the same types as protocols
+
+- UI 
+  - Add a metacol scaffold
   - Add a metacol_id field to jobs
   - Parse it to obtain a metacol object
   - Get the scope, marking, and joblist from the db

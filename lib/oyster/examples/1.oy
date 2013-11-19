@@ -1,3 +1,7 @@
+argument
+  nmax: number, "The number of cycles"
+end
+
 ###########################################################
 # Places
 #
@@ -27,15 +31,14 @@ end
 #
 
 transition [ p1 ] => [ p2 ] 
-  when !error(0) && completed(0) && num<3 
+  when !error(0) && completed(0) && num<nmax
   do
     num = num + 1
   end
 end
 
 transition [ p2 ] => [ p1 ] when !error(0) && completed(0) end
-
-transition [ p1 ] => [] when error(0) end
+transition [ p1 ] => [] when error(0) || num >= nmax end
 transition [ p2 ] => [] when error(0) end
   
 ###########################################################
