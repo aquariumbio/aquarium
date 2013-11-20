@@ -15,9 +15,16 @@ if ( el.className != 'open-directory' ) {
       <% case x.type 
 
         when 'blob' %>
+
           <% if /\.pdl|\.pl/.match(x.path) %>
             html += "<li class='file'>" 
                   + '<%= link_to x.path, interpreter_arguments_path(sha: x.sha, path: x.path) %>'
+            html += "</li>";
+          <% end %>
+
+          <% if /\.oy/.match(x.path) %>
+            html += "<li class='file'>" 
+                  + '<%= link_to x.path, arguments_new_metacol_path(sha: x.sha, path: x.path) %>'
             html += "</li>";
           <% end %>
 

@@ -90,7 +90,7 @@ module Plankton
           when 'image'
             @tok.eat_a 'image'
             @tok.eat_a ':'
-            parts.push( { image: expr } )
+            parts.push( { image: @tok.eat_a_string.remove_quotes } )
 
           else
             raise "Expect 'description', 'note', 'warning', 'getdata', or 'image' at '#{@tok.current}'."

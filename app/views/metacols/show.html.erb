@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Path:</b>
+  <%= @mc.path %>
+</p>
+
+<p>
+  <b>Sha:</b>
+  <%= @mc.sha %>
+</p>
+
+<p>
+  <b>State:</b>
+  <%= @mc.state %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= User.find(@mc.user_id).login %>
+</p>
+
+<p>
+  <b>Status:</b>
+  <%= @mc.status %>
+</p>
+
+
+<%= link_to 'List', metacols_path, class: 'btn' %>

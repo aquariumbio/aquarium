@@ -1,0 +1,17 @@
+argument
+  n: number, "Your favorite number"
+end
+
+place p2
+  protocol: "plankton/two.pl"
+  argument
+    x: n
+    y: 1
+  end
+  group: "klavins"
+  start: now()
+  window: hours(8)
+  marked: true
+end
+
+transition [p2] => [] when completed(0) end

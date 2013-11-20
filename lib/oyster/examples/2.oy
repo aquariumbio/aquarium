@@ -1,0 +1,18 @@
+argument
+  n: number
+  q: string
+  s: sample
+  o: object
+end
+
+place p
+  protocol: "plankton/1.p1"
+  argument
+    x: q
+    y: n
+    z: s
+    q: o
+  end
+  group: "klavins"
+  marked: true
+end

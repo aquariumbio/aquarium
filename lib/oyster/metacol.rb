@@ -1,5 +1,14 @@
 module Oyster
 
+  class Argument # used for compatability with protocol arguments
+    attr_reader :name, :type, :description
+    def initialize n, t, d
+      @name = n
+      @type = t
+      @description = d
+    end
+  end
+
   class Metacol
 
     attr_accessor :places, :transitions, :wires, :scope, :arguments
@@ -11,6 +20,10 @@ module Oyster
       @wires = []
       @who = ''
       @scope = Lang::Scope.new
+    end
+
+    def args
+      @arguments.collect { |a| Argument.new a[:name], a[:type], a[:description] }
     end
 
     def place p
@@ -44,7 +57,7 @@ module Oyster
       # Start all marked places
       @places.each do |p|
         if p.marking > 0
-          p.start @who
+          p.start @who, @scope
         end
       end
 
@@ -82,7 +95,7 @@ module Oyster
             c.mark
             set_arguments c
             set_wires c
-            c.start @who
+            c.start @who, @scope
           end
 
         end

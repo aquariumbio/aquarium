@@ -1,0 +1,35 @@
+<hr />
+
+<button id='details-button' class='btn btn-small' onClick="toggle_details()">
+  Details
+</button>
+
+<div id='details' style='display: none'>
+
+  <h4>Parsing results</h4>
+
+  <ul class='list'>
+    <li><%= pluralize(@metacol.places.length, 'place') %></li>
+    <li><%= pluralize(@metacol.transitions.length, 'transitions') %></li>
+    <li><%= pluralize(@metacol.wires.length, 'wire') %></li>
+  </ul>
+  </p>
+
+  <h4>Code</h4>
+  <pre><%= @content %></pre> 
+
+</div>
+
+<script>
+  function toggle_details() {
+    s = document.getElementById('details').style.display;
+    if ( s == 'none' ) {
+      document.getElementById('details').style.display = 'block';
+      document.getElementById('details-button').innerHTML = 'Hide Details';      
+    } else {
+      document.getElementById('details').style.display = 'none';
+      document.getElementById('details-button').innerHTML = 'Show Details';      
+    }
+  
+  }
+</script>

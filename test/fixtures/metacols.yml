@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  path: MyString
+  sha: MyString
+  state: MyText
+  user_id: 1
+  status: MyString
+
+two:
+  path: MyString
+  sha: MyString
+  state: MyText
+  user_id: 1
+  status: MyString

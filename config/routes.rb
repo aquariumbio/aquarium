@@ -1,7 +1,12 @@
 Bioturk::Application.routes.draw do
 
-  resources :groups
+  resources :metacols, only: [ :index, :show, :new ] do
+      get 'arguments', on: :new
+      get 'launch', on: :new
+      get 'stop'
+  end
 
+  resources :groups
 
   resources :collections do
     member do

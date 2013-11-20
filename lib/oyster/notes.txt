@@ -21,11 +21,14 @@ x To save the state of the metacol, save:
   x job list for each place
   x sha for each plate ( so you don't have to ask github again )
 
-- Metacols should take arguments of the same types as protocols
+x Metacols should take arguments of the same types as protocols
+
+x rails generate scaffold metacol path:string sha:string state:text user_id:integer status:string
+x rails generate migration add metacol_id_to_jobs
 
 - UI 
-  - Add a metacol scaffold
-  - Add a metacol_id field to jobs
+  x Add a metacol scaffold
+  x Add a metacol_id field to jobs
   - Parse it to obtain a metacol object
   - Get the scope, marking, and joblist from the db
   - Set the "    , "      , "   "       of the metacol, overriding whatever it is upon first parse

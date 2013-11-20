@@ -1,0 +1,68 @@
+<h1>Start Metacol: <%= params[:path] %></h1>
+
+<% if @errors != "" %>
+
+  <h4>Error</h4>
+
+  <div id='well'>
+    <p><%= @errors %></p>
+  </div>
+
+<% else %>
+
+ <h4>Arguments</h4>
+
+ <div class='argument-form' style='width: 50%'>
+
+    <%= form_tag("/metacols/new/launch", :method => "get" ) do %>
+  
+      <%= hidden_field_tag 'sha', @sha %>
+      <%= hidden_field_tag 'path', @path %>
+
+      <% if @metacol.arguments.length > 0 %>
+
+        <% @metacol.args.each do |a| %>
+
+          <% if a.type == 'sample' %>
+
+            <%= render partial: 'interpreter/sample_arg', locals: { arg: a } %>
+
+          <% elsif a.type == 'objecttype' %>
+
+            <%= render partial: 'interpreter/object_type_arg', locals: { arg: a } %>
+
+          <% else %>
+
+            <div class='well row-fluid'>
+              <%= label_tag(a.name.to_sym, a.description ) %>
+              <%= text_field_tag( a.name.to_sym ) %>
+            </div>
+
+          <% end %>  
+
+        <% end %>
+
+      <% else %>
+
+        <p>(This protocol takes no arguments)</p>
+
+      <% end %>
+
+      <%= render partial: 'interpreter/group_chooser' %><br />
+
+      <select id='anyall' name='anyall'>
+        <option value='any'>Any user in group</option>
+        <option value='all'>All users in group</option>
+      </select>
+      <br />
+
+      <%= submit_tag "Launch!", class: 'btn btn-primary' %>
+
+    <% end %>
+
+  </div>
+
+  <%= render 'details' %>
+
+<% end %>
+

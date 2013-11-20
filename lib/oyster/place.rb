@@ -8,7 +8,6 @@ module Oyster
 
       @protocol = ''     # The path to the protocol in github
       @arguments = {}    # A hash or argument names and values to send to the protocol when starting.                     
-
       @arg_expressions = {}  # Unevaluated expressions. Any argument not supplied here, 
                              # must be set using a wire (see below).
 
@@ -53,7 +52,15 @@ module Oyster
       self
     end
 
-    def start who
+    def evaluated_arguments scope
+      args = {}
+      @arg_expressions.each do |v,e|
+        args[v] = scope.evaluate e
+      end
+      args
+    end
+
+    def start who, scope
 
       puts "Starting #{@protocol} with sha = #{@sha}"
 
@@ -66,7 +73,7 @@ module Oyster
         @jobs.push( Oyster.submit( {
           sha: @sha, 
           path: @protocol, 
-          args: @arguments,
+          args: evaluated_arguments(scope),
           desired: eval(@desired_start), 
           latest: eval(@latest_start), 
           group: @group ? @group : who,
