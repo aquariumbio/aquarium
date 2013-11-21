@@ -4,22 +4,18 @@
   <tr>
     <th>Metacol</th>
     <th>Path</th>
-    <th>State</th>
     <th>User</th>
     <th>Status</th>
-    <th></th>
     <th></th>
     <th></th>
   </tr>
 
 <% @metacols.each do |metacol| %>
   <tr>
-    <td><%= metacol.id %></td>
+    <td><%= link_to metacol.id, metacol %></td>
     <td><%= metacol.path %></td>
-    <td><%= metacol.state %></td>
-    <td><%= metacol.user_id %></td>
+    <td><%= User.find(metacol.user_id).login %></td>
     <td><%= metacol.status %></td>
-    <td><%= link_to 'Show', metacol %></td>
     <td><%= link_to 'Stop', metacols_path, data: { confirm: 'Are you sure?' } %></td>
     <td><%= link_to 'Delete', metacol, method: :delete %></td>
   </tr>

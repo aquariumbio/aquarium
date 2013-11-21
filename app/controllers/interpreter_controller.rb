@@ -229,7 +229,7 @@ class InterpreterController < ApplicationController
         flash[:alert] = @instruction.flash.html_safe
       end
     rescue Exception => e
-      process_error "Error in pre_render of " + @instruction.name + ": " + e.to_s + ", " + e.backtrace.to_s
+      process_error "Error in pre_render of " + @instruction.name + ": " + e.to_s # + ", " + e.backtrace.to_s
     end  
 
   end
@@ -321,7 +321,7 @@ class InterpreterController < ApplicationController
         begin
           execute
         rescue Exception => e
-          process_error "Error executing #{@instruction.name}: " + e.to_s + ', ' + e.backtrace.to_s
+          process_error "Error executing #{@instruction.name}: " + e.to_s # + ', ' + e.backtrace.to_s
           render 'current'
           return
         end
@@ -338,7 +338,7 @@ class InterpreterController < ApplicationController
           begin
             execute
           rescue Exception => e
-            process_error "Error executing #{@instruction.name}: " + e.to_s + ', ' + e.backtrace.to_s
+            process_error "Error executing #{@instruction.name}: " + e.to_s # + ', ' + e.backtrace.to_s
             render 'current'
             return
           end

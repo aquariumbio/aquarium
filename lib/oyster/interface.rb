@@ -25,7 +25,6 @@ module Oyster
 
     protocol.args.each do |a|
       val = h[:args][a.name.to_sym]
-      puts " ====> #{a.name} -> #{val}"
       if a.type == 'number' && val.to_i == val.to_f
         scope.set a.name.to_sym, val.to_i
       elsif a.type == 'number' && val.to_i != val.to_f

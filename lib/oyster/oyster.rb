@@ -11,3 +11,5 @@ require_relative 'parse_trans'
 require_relative 'parse_wire'
 require_relative 'parse_args'
 require_relative 'time'
+
+require_relative 'daemon.rb'

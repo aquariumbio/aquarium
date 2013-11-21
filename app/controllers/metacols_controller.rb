@@ -71,7 +71,7 @@ class MetacolsController < ApplicationController
     @mc.path = params[:path]
     @mc.sha = params[:sha]
     @mc.user_id = current_user.id
-    @mc.status = 'RUNNING'
+    @mc.status = 'STARTING'
     @mc.state = @metacol.state.to_json
 
     @mc.save # save to get an id
@@ -80,6 +80,7 @@ class MetacolsController < ApplicationController
     @metacol.start args
     @mc.state = @metacol.state.to_json
 
+    @mc.status = 'RUNNING'
     @mc.save # save again for state info
 
     redirect_to @mc
