@@ -6,7 +6,18 @@
 
 <ul class='list'>
 
-  <li>Submitted by: <b><%= @submitter ? @submitter.login : 'nobody' %></b></li>
+  <li>Submitted by:
+
+  <% if @job.metacol_id %>
+        <% m = Metacol.find_by_id(@job.metacol_id) %>
+        <% if m %>
+          <td>Metacol <%= link_to "#{@job.metacol_id}", m %></td>
+        <% else %>
+          <td>Unkown metacol</td>
+        <% end %>
+      <% else %>
+        <td><%= u = User.find_by_id(@job.submitted_by); u ? u.login : 'nobody' %></td>
+      <% end %></li>
 
   <li>Assigned to Group: <b><%= @group ? (link_to @group.name, @group) : 'no group' %></b></li>
 

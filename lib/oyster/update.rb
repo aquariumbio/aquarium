@@ -7,18 +7,35 @@ while true
     blob = Blob.get process.sha, process.path
     content = blob.xml
 
-    m = Oyster::Parser.new(content).parse
-    m.set_state( JSON.parse process.state, :symbolize_names => true )
-
-    m.update
-
-    process.state = m.state.to_json
-
-    if m.done?
-      process.status = "DONE"
+    error = false
+    begin
+      m = Oyster::Parser.new(content).parse
+    rescue Exception => e
+      error = true
+      puts "Warning: " + e
     end
 
-    process.save
+    if !error
+
+      m.set_state( JSON.parse process.state, :symbolize_names => true )
+      m.id = process.id
+
+      m.update
+
+      process.state = m.state.to_json
+
+      if m.done?
+        process.status = "DONE"
+      end
+
+      process.save
+
+    else
+
+      process.status = "ERROR"
+      process.save
+
+    end
 
   end
 

@@ -6,6 +6,11 @@
 
 <div id='details' style='display: none'>
 
+  <% if @mc %>
+    <p><b>Sha:</b><%= @mc.sha %></p>
+    <p><b>State:</b><%= @mc.state %></p>
+  <% end %>
+
   <h4>Parsing results</h4>
 
   <ul class='list'>

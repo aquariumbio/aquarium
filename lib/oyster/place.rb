@@ -60,7 +60,7 @@ module Oyster
       args
     end
 
-    def start who, scope
+    def start who, scope, id
 
       puts "Starting #{@protocol} with sha = #{@sha}"
 
@@ -77,6 +77,7 @@ module Oyster
           desired: eval(@desired_start), 
           latest: eval(@latest_start), 
           group: @group ? @group : who,
+          metacol_id: id,
           who: who } ) )
 
       rescue Exception => e

@@ -9,6 +9,7 @@
     <th>Status</th>
     <th></th>
     <th></th>
+    <th></th>
   </tr>
 
 <% @metacols.each do |metacol| %>
@@ -20,6 +21,7 @@
     <td><%= metacol.status %></td>
     <td><%= link_to 'Show', metacol %></td>
     <td><%= link_to 'Stop', metacols_path, data: { confirm: 'Are you sure?' } %></td>
+    <td><%= link_to 'Delete', metacol, method: :delete %></td>
   </tr>
 <% end %>
 </table>

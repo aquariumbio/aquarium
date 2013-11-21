@@ -50,6 +50,7 @@ module Oyster
     job.user_id = 1
     job.pc = Job.NOT_STARTED
     job.state = { stack: scope.stack }.to_json
+    job.metacol_id = h[:metacol_id]
     job.save
 
     job.id

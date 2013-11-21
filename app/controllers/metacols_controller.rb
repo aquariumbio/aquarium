@@ -12,6 +12,9 @@ class MetacolsController < ApplicationController
   def show
 
     @mc = Metacol.find(params[:id])
+    parse @mc.sha, @mc.path
+    @metacol.set_state JSON.parse(@mc.state, :symbolize_names => true )
+    @metacol.id = @mc.id
 
     respond_to do |format|
       format.html # show.html.erb
@@ -20,12 +23,11 @@ class MetacolsController < ApplicationController
 
   end
 
-  def parse
+  def parse sha, path
 
-    @sha = params[:sha]
-    @path = params[:path]
-
-    @blob = Blob.get @sha, @path
+    @blob = Blob.get sha, path
+    @sha = sha
+    @path = path
     @content = @blob.xml
     @errors = ""
 
@@ -39,7 +41,7 @@ class MetacolsController < ApplicationController
 
   def arguments
 
-    parse
+    parse params[:sha], params[:path]
 
     respond_to do |format|
       format.html # arguments.html.erb
@@ -50,9 +52,10 @@ class MetacolsController < ApplicationController
 
   def launch
 
-    parse
+    parse params[:sha], params[:path]
 
     args = {}
+
     @metacol.arguments.each do |a|
       if a[:type] == 'string' || a[:type] == 'objecttype'
         args[a[:name].to_sym] = params[a[:name].to_sym]
@@ -61,7 +64,7 @@ class MetacolsController < ApplicationController
       end
     end
 
-    @metacol.start args
+
 
     # Save in db
     @mc = Metacol.new
@@ -70,8 +73,15 @@ class MetacolsController < ApplicationController
     @mc.user_id = current_user.id
     @mc.status = 'RUNNING'
     @mc.state = @metacol.state.to_json
-    @mc.save
-  
+
+    @mc.save # save to get an id
+
+    @metacol.id = @mc.id
+    @metacol.start args
+    @mc.state = @metacol.state.to_json
+
+    @mc.save # save again for state info
+
     redirect_to @mc
 
   end
@@ -79,11 +89,21 @@ class MetacolsController < ApplicationController
   def stop
 
     @metacol = Metacol.find(params[:id])
+    @metacol.status = "DONE"
+    @metacol.save
 
     respond_to do |format|
       format.html { redirect_to metacols_url }
       format.json { head :no_content }
     end
+  end
+
+  def destroy
+
+    Metacol.find(params[:id]).destroy
+
+    redirect_to metacols_url
+
   end
 
 end

@@ -11,7 +11,7 @@ module Oyster
 
   class Metacol
 
-    attr_accessor :places, :transitions, :wires, :scope, :arguments
+    attr_accessor :places, :transitions, :wires, :scope, :arguments, :id
 
     def initialize
       @arguments = []
@@ -20,6 +20,7 @@ module Oyster
       @wires = []
       @who = ''
       @scope = Lang::Scope.new
+      @id = -1
     end
 
     def args
@@ -32,7 +33,7 @@ module Oyster
     end
 
     def transition t
-      puts "Added transition with condition #{t.condition}"
+      #puts "Added transition with condition #{t.condition}"
       @transitions.push t
       t
     end
@@ -57,7 +58,7 @@ module Oyster
       # Start all marked places
       @places.each do |p|
         if p.marking > 0
-          p.start @who, @scope
+          p.start @who, @scope, @id
         end
       end
 
@@ -95,7 +96,7 @@ module Oyster
             c.mark
             set_arguments c
             set_wires c
-            c.start @who, @scope
+            c.start @who, @scope, @id
           end
 
         end
@@ -127,7 +128,7 @@ module Oyster
         if @places[w.source[:place]].completed?
           r = @places[w.source[:place]].return_value
           if r
-            p.arguments[w.dest[:name].to_sym] = r[w.source[:name].to_sym]
+            p.arg_expressions[w.dest[:name].to_sym] = "#{r[w.source[:name].to_sym]}"
           end
         else
           raise "Source place for wire has no jobs"
@@ -135,7 +136,7 @@ module Oyster
 
       end
 
-      puts "Arguments set to #{p.arguments}"
+      #puts "Arguments set to #{p.arguments}"
 
     end
 

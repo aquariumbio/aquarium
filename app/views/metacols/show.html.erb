@@ -1,29 +1,53 @@
+<style>
+
+.status {
+  color: #ccc;
+}
+
+</style>
+
 <p id="notice"><%= notice %></p>
 
-<p>
-  <b>Path:</b>
-  <%= @mc.path %>
+<h1>Metacol Process <%= @mc.id %>: <%= @mc.path %> <span class='status'>(<%= @mc.status.downcase %>)</span></h1>
+
+<p><b>Started:</b>
+  <%= time_ago_in_words(@mc.created_at).capitalize %> ago by
+  <i><%= User.find(@mc.user_id).login %></i>
 </p>
 
-<p>
-  <b>Sha:</b>
-  <%= @mc.sha %>
+<p><b>Last updated:</b>
+  <%= time_ago_in_words(@mc.updated_at).capitalize %> ago 
 </p>
 
-<p>
-  <b>State:</b>
-  <%= @mc.state %>
-</p>
+<% @metacol.places.each do |p| %>
 
-<p>
-  <b>User:</b>
-  <%= User.find(@mc.user_id).login %>
-</p>
+  <div class='well'>
 
-<p>
-  <b>Status:</b>
-  <%= @mc.status %>
-</p>
+    <p><b><%= p.protocol %></b></p>
+
+    <% pending = @mc.jobs.reject { |j| j.pc == Job.COMPLETED || (!p.jobs.include? j.id) } %>
+    <% completed = @mc.jobs.reject { |j| j.pc != Job.COMPLETED || (!p.jobs.include? j.id) } %>
+
+    <% if pending.length > 0 %>
+      <h4>Pending or Active</h4>
+      <%= render partial: 'jobs/job_list', locals: { 
+          jobs: pending,
+          last_updated: true, 
+          runnable: false, 
+      } %>
+    <% end %>
+
+    <% if completed.length > 0 %>
+      <h4>Completed:
+      <% p.jobs.each do |j|%>
+        <%= link_to "#{j}", Job.find_by_id(j) %>
+      <% end %>
+    <% end %></h4>
+
+  </div>
+
+<% end %>
+
+<%= render 'details' %>
 
 
-<%= link_to 'List', metacols_path, class: 'btn' %>

@@ -1,6 +1,6 @@
 class Job < ActiveRecord::Base
 
-  attr_accessible :arguments, :sha, :state, :user_id, :pc, :submitted_by, :group_id, :desired_start_time, :latest_start_time
+  attr_accessible :arguments, :sha, :state, :user_id, :pc, :submitted_by, :group_id, :desired_start_time, :latest_start_time, :metacol_id
 
   def self.NOT_STARTED
     -1
@@ -13,6 +13,7 @@ class Job < ActiveRecord::Base
   has_many :logs
   has_many :touches
   belongs_to :user
+  belongs_to :metacol
 
   def self.params_to_time p
 

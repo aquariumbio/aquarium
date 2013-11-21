@@ -56,7 +56,7 @@ module Oyster
 
     def check_condition scope
       ans = eval( scope.substitute @condition )
-      puts "#{condition} --> #{ans}"
+      #puts "#{condition} --> #{ans}"
       ans
     end
 

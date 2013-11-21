@@ -14,7 +14,7 @@ module Oyster
       end
 
       @tok.eat_a 'end'
-      puts "returning #{args}"
+      #puts "returning #{args}"
       args
 
     end
@@ -73,7 +73,7 @@ module Oyster
 
       @metacol.scope.set v.to_sym, @metacol.places.length
       @metacol.place p
-      puts "added a place: #{p.protocol}"
+      #puts "added a place: #{p.protocol}"
 
       @tok.eat_a 'end'
 

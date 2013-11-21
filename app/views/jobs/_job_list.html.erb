@@ -6,9 +6,9 @@
     <th>Submitted by</th>
     <th>Group</th>
     <th>Arguments</th>
-    <th>Desired Start Time</th>
-    <th>Latest Start Time</th>
-    <% if last_updated %><th>Last updated</th><% end %>
+    <th>Desired Start</th>
+    <th>Latest Start</th>
+    <% if last_updated %><th>Last Update</th><% end %>
     <th></th>
     <th></th>
   </tr>
@@ -20,7 +20,17 @@
     <tr>
       <td><%= link_to j.id.to_s, j %></td>
       <td><%= link_to j.path, protocol_tree_raw_path(sha: j.sha, format: 'xml'), target: j.path %></td>
-      <td><%= u = User.find_by_id(j.submitted_by); u ? u.login : 'nobody' %></td>
+
+      <% if j.metacol_id %>
+        <% m = Metacol.find_by_id(j.metacol_id) %>
+        <% if m %>
+          <td>Metacol <%= link_to "#{j.metacol_id}", m %></td>
+        <% else %>
+          <td>Unkown metacol</td>
+        <% end %>
+      <% else %>
+        <td><%= u = User.find_by_id(j.submitted_by); u ? u.login : 'nobody' %></td>
+      <% end %>
       <td><%= g = Group.find_by_id(j.group_id); g ? (link_to g.name, g) : 'no group' %></td>
       <td>
         <% if args.length > 0 %>
@@ -33,7 +43,16 @@
       </td>
       <td><%= j.desired_start_time.to_formatted_s(:short) %></td>
       <td><%= j.latest_start_time.to_formatted_s(:short) %></td>
-      <% if last_updated %><td><%= j.updated_at.to_formatted_s(:short) %></td><% end %>
+      <% if last_updated && j.updated_at != j.created_at %>
+        <td>
+          <%= time_ago_in_words(j.updated_at)%> ago
+          <% if j.user_id %>
+            by <%= User.find(j.user_id).login %>
+          <% end %>
+        </td>
+      <% else %>
+        <td>-</td>
+      <% end %>
       <% if runnable %>
         <td>
           <% if j.pc == Job.NOT_STARTED %>

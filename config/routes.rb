@@ -1,6 +1,6 @@
 Bioturk::Application.routes.draw do
 
-  resources :metacols, only: [ :index, :show, :new ] do
+  resources :metacols do
       get 'arguments', on: :new
       get 'launch', on: :new
       get 'stop'
