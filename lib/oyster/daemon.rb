@@ -15,7 +15,10 @@
           m = Oyster::Parser.new(content).parse
         rescue Exception => e
           error = true
-          puts "Warning: " + e
+          process.message = "Error parsing #{process.path}: " + e
+          puts process.message
+          process.status = "ERROR"
+          process.save
         end
 
         if !error
@@ -26,8 +29,10 @@
           begin
             m.update
           rescue Exception => e
-            puts "Error updating process: " + e
+            process.message = "Error updating process: " + e.message
+            puts process.message
             process.status = "ERROR"
+            process.save
           end
 
           process.state = m.state.to_json
@@ -36,11 +41,6 @@
             process.status = "DONE"
           end
 
-          process.save
-
-        else
-
-          process.status = "ERROR"
           process.save
 
         end

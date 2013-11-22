@@ -16,7 +16,7 @@
     <td><%= metacol.path %></td>
     <td><%= User.find(metacol.user_id).login %></td>
     <td><%= metacol.status %></td>
-    <td><%= link_to 'Stop', metacols_path, data: { confirm: 'Are you sure?' } %></td>
+    <td><%= link_to 'Stop', metacol_stop_path(metacol), data: { confirm: 'Are you sure?' } %></td>
     <td><%= link_to 'Delete', metacol, method: :delete %></td>
   </tr>
 <% end %>

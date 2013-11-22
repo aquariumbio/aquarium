@@ -19,6 +19,10 @@
   <%= time_ago_in_words(@mc.updated_at).capitalize %> ago 
 </p>
 
+<% if @mc.message %>
+<p class="alert"><%= @mc.message %></p>
+<% end %>
+
 <% @metacol.places.each do |p| %>
 
   <div class='well'>
@@ -47,6 +51,8 @@
   </div>
 
 <% end %>
+
+<%= link_to 'List All', metacols_path, class: 'btn' %>
 
 <%= render 'details' %>
 

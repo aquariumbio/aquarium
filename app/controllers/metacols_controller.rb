@@ -64,8 +64,6 @@ class MetacolsController < ApplicationController
       end
     end
 
-
-
     # Save in db
     @mc = Metacol.new
     @mc.path = params[:path]
@@ -89,7 +87,7 @@ class MetacolsController < ApplicationController
 
   def stop
 
-    @metacol = Metacol.find(params[:id])
+    @metacol = Metacol.find(params[:metacol_id])
     @metacol.status = "DONE"
     @metacol.save
 

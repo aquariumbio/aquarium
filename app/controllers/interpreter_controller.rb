@@ -110,17 +110,22 @@ class InterpreterController < ApplicationController
     @path = params[:protocol_file].original_filename;
     @sha = 'local_file_' + session[:session_id].to_s + '_' + Time.now.to_i.to_s;
 
-    logger.info 'local file: ' + @sha;
-
     blob = Blob.new
     blob.path = @path
     blob.sha = @sha
     blob.xml = params[:protocol_file].read
     blob.save
 
-    parse # why is this not parse_args_only?
+    if /\.oy$/.match @path # its a metacol
 
-    render 'arguments' 
+      redirect_to arguments_new_metacol_path(sha: @sha, path: @path) 
+
+    else # its a protocol
+
+      parse # why is this not parse_args_only?
+      render 'arguments' 
+
+    end
 
   end
 
@@ -130,10 +135,17 @@ class InterpreterController < ApplicationController
 
     @sha = params[:sha]
     @path = params[:path]
-    @desired = Job.params_to_time(params[:Desired])
-    @window = params[:window].to_f
-    @latest = @desired + @window.hours
-    @group = Group.find_by_name(params[:Group])
+    if params[:Desired]
+      @desired = Job.params_to_time(params[:Desired])
+      @window = params[:window].to_f
+      @latest = @desired + @window.hours
+      @group = Group.find_by_name(params[:Group])
+    else
+      @desired = Time.now()
+      @latest = Time.now() + 1.day
+      @group = Group.find_by_name(current_user.login)
+      @window = 24
+    end
 
     parse_args_only
 
@@ -190,18 +202,29 @@ class InterpreterController < ApplicationController
     # Get the protocol
     @sha = @job.sha
     @path = @job.path
+    @pc = @job.pc
 
-    parse
-    if @parse_errors != ""
-      log 'ERROR', { error: @parse_errors, pc: @job.pc }
-      @pc = Job.COMPLETED
+    if @pc != Job.COMPLETED
+
+      parse
+ 
+      if @parse_errors != ""
+        log 'ERROR', { error: @parse_errors, pc: @job.pc }
+        @pc = Job.COMPLETED
+        @job.pc = Job.COMPLETED
+        @job.save
+      else
+        # Get the pc and scope
+        @scope = Lang::Scope.new
+        @scope.set_stack state[:stack]
+        @scope.set_base_symbol :user_id, current_user.id
+        @instruction = @protocol.program[@pc]
+      end
+
     else
-      # Get the pc and scope
-      @pc = @job.pc
-      @scope = Lang::Scope.new
-      @scope.set_stack state[:stack]
-      @scope.set_base_symbol :user_id, current_user.id
-      @instruction = @protocol.program[@pc]
+
+      @parse_errors = ""
+
     end
 
   end
@@ -237,9 +260,11 @@ class InterpreterController < ApplicationController
   def current
 
     get_current
+
     unless @pc == Job.COMPLETED
       pre_render
     end
+
     render 'current'
 
   end

@@ -94,7 +94,6 @@ module Oyster
           t.run_program @scope
           t.children.each do |c|
             c.mark
-            set_arguments c
             set_wires c
             c.start @who, @scope, @id
           end
@@ -113,25 +112,18 @@ module Oyster
       @places.collect { |p| p.marking }
     end
 
-    def set_arguments p
-
-      p.arg_expressions.each do |k,h|
-         p.arguments[k] = @scope.evaluate p.arg_expressions[k]
-      end
-
-    end
-
     def set_wires p
 
       (@wires.reject { |w| @places[w.dest[:place]] != p }).each do |w|
-
         if @places[w.source[:place]].completed?
           r = @places[w.source[:place]].return_value
           if r
             p.arg_expressions[w.dest[:name].to_sym] = "#{r[w.source[:name].to_sym]}"
           end
         else
-          raise "Source place for wire has no jobs"
+          j = @places[w.source[:place]].jobs.last
+          pc = Job.find(j).pc
+          raise "Source place for wire #{w.pretty @places} has uncompleted job #{j} with pc=#{pc}}."
         end
 
       end

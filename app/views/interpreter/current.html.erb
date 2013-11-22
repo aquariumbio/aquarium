@@ -5,35 +5,47 @@
   <!-- FLOW CHART ----------------------------------------------------->
   <div class="span1 interpreter-flow-chart">
 
-     <p class='small'>pc:<%= @pc %></p>
+     <% if @pc != Job.COMPLETED %>
+       <p class='small'>pc:<%= @pc %></p>
+     <% end %>
 
   </div>
 
   <!-- MAIN ----------------------------------------------------------->
   <div class="span9 interpreter-main">
-    <% if @exception %>
-       <%= render 'error' %>
-    <% elsif @parse_errors != "" %>
 
-       <h4>Parse Error (Sorry for not catching this earlier):</h4>
-       <p class='alert'><%= @parse_errors %></p>
-       <% if @protocol && @protocol.bad_xml %>
-         <h4>Offending XML</h4>
-         <pre><%= @protocol.bad_xml %></pre>
-       <% end %>
+    <% if @pc == Job.COMPLETED %>
+
+      <% if @parse_errors != "" %>
+
+        <h4>Parse Error (Sorry for not catching this earlier):</h4>
+        <p class='alert'><%= @parse_errors %></p>
+        <% if @protocol && @protocol.bad_xml %>
+          <h4>Offending XML</h4>
+          <pre><%= @protocol.bad_xml %></pre>
+        <% end %>
+
+     <% end %>
+
+      <div class="alert alert-info">THIS JOB IS NO LONGER ACTIVE</div>
+      <p><%= link_to 'View Log for Job ' + @job.id.to_s, @job %></p>
+      <p><%= link_to "View Pending Jobs", jobs_path %>
+
+    <% elsif @exception %>
+
+       <%= render 'error' %>
 
     <% elsif @pc != Job.COMPLETED %>
+
       <%= render @instruction.name %>
       <div id='note' style='display: none'>
         <hr />
         <p>Add a note to the log for this step</p>
         <textarea rows="3" id='note-textarea'></textarea>
       </div>
-    <% else %>
-      <div class="alert alert-info">THIS JOB IS NO LONGER ACTIVE</div>
-      <p><%= link_to 'View Log for Job ' + @job.id.to_s, @job %></p>
-      <p><%= link_to "View Pending Jobs", jobs_path %>
+
     <% end %>
+
   </div>
 
   <!-- BUTTONS -------------------------------------------------------->

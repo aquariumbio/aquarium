@@ -15,6 +15,10 @@ module Oyster
       "#{source} => #{@dest}"
     end
 
+    def pretty places
+      "(#{places[source[:place]].protocol},#{source[:name]}) --> (#{places[dest[:place]].protocol},#{dest[:name]})"
+    end
+
   end
 
 end

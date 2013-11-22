@@ -62,13 +62,13 @@ module Oyster
 
     def start who, scope, id
 
-      puts "Starting #{@protocol} with sha = #{@sha}"
-
       begin
 
         if @sha == nil
           @sha = Oyster.get_sha @protocol
         end
+
+        puts "#{id}: Starting #{@protocol}, with sha = #{@sha}"  
 
         @jobs.push( Oyster.submit( {
           sha: @sha, 
