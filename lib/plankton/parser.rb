@@ -2,7 +2,7 @@ module Plankton
 
   class Parser < Lang::Parser
 
-    attr_reader :program, :args, :info, :bad_xml, :include_stack, :debug
+    attr_reader :program, :args, :info, :include_stack, :debug
     attr_writer :job_id
 
     def initialize name, contents
@@ -11,9 +11,16 @@ module Plankton
       @args = []
       @include_stack = [ { tokens: @tok, path: name, returns: [] } ]
       @info = ""
-      @bad_xml = "BioTurk thinks plankton uses xml. Silly bioturk."
       @debug = "No debug info available"
       @job_id = -1
+    end
+
+    def bad_xml
+      line.to_s + ": " + @tok.get_line
+    end
+
+    def line
+      @tok.line
     end
 
     def pc

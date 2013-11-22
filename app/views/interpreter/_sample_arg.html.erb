@@ -1,6 +1,6 @@
 <div class='well row-fluid'>
 
-<% type = arg.name.sub( /_.*/, '' ).capitalize %>
+<% type = arg.name.sub( /_[^_]*\z/, '' ).gsub( /_/, ' ').capitalize %>
 <% st = SampleType.find_by_name(type) %>
 
 <% if st %>

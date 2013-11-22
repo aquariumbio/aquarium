@@ -2,12 +2,14 @@ module Lang
 
   class Tokenizer
 
+    attr_reader :line
+
     def initialize str 
 
       @str = str
       @tokens = str.scan(re).reject { |t| comment.match t }
       @i = -1
-      @line = 1
+      @line = 0
 
       advance
       i=0
@@ -23,8 +25,13 @@ module Lang
 
     end
 
+    def num_newlines t
+      t.scan(/\n|\r/).length
+    end
+
     def advance
 
+      @line += num_newlines( @tokens[@i] )
       @i=@i+1
 
       while /^\s$/.match( @tokens[@i] )
@@ -88,7 +95,9 @@ module Lang
         k += 1
       end
 
-      return @tokens[j+1,k-j-1].join
+      @line_elements = @tokens[j+1,k-j-1]
+      @line_elements[@i-j-1] = "<span style='font-weight: bold; color: red'>" + @line_elements[@i-j-1] + "</span>"
+      @line_elements.join
 
     end
 

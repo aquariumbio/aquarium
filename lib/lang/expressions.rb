@@ -98,7 +98,7 @@ module Lang
             f = hash_expr
 
          else
-           raise "Expected atomic expression at '#{@tok.current}'"
+           @tok.error "Expected atomic expression at '#{@tok.current}'."
 
        end
 

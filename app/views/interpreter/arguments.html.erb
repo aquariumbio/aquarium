@@ -10,8 +10,8 @@
   <p class='alert'><%= @parse_errors %></p>
 
   <% if @protocol.bad_xml %>
-    <h4>Offending XML</h4>
-    <pre><%= @protocol.bad_xml.to_s %></pre>
+    <h4>Offending Code</h4>
+    <pre><%= @protocol.bad_xml.to_s.html_safe %></pre>
   <% end %>
 
 <% else %>

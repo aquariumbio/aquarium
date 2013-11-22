@@ -23,7 +23,7 @@
  
     <h2>Raw XML</h2>
     <div id='raw-xml'>
-        <pre><%= @file.force_encoding("UTF-8") %></pre>
+        <pre><%= @file.to_s.force_encoding("UTF-8") %></pre>
     </div>
 
     <br />
