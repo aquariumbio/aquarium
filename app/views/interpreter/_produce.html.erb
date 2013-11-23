@@ -1,6 +1,15 @@
-<h1>Store Item <%= @instruction.item.id %> (<%= @instruction.object_type_name %>)</h1>
+<h1>Store the new <%= @instruction.object_type_name %></h1>
 
-<p>Make sure the item number is written on the <%= @instruction.object_type_name %>.</p>
+<div class='alert'>
+  <p>This item has id <b><%= @instruction.item.id %></b>.<br />
+     Make sure this number is written on the item!</p>
+</div>
+
+<% if @instruction.note != "" %>
+  <p><%= @instruction.note %></p>
+<% end %>
+
+<hr />
 
 <p>Enter/edit location where the item will be stored or placed:</p>
 <p>
@@ -8,10 +17,6 @@
     value = '<%= ObjectType.find_by_name(@instruction.object_type_name).location_wizard %>'>
   </input>
 </p>
-
-<% if @instruction.note %>
-  <p><%= @instruction.note %></p>
-<% end %>
 
 <script>
 

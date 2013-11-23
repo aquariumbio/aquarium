@@ -42,3 +42,31 @@
 #future-jobs {
   background: #eee;
 }
+
+.job_status {
+  position: absolute;
+  top: 80px;
+  left: 20px;
+  font-size: 30pt;
+  font-weight: bold;
+}
+
+.error {
+  color: red;
+}
+
+.canceled {
+  color: orange;
+}
+
+.aborted {
+  color: orange;
+}
+
+.pending {
+  color: blue;
+}
+
+.active {
+  color: #0d0;
+}

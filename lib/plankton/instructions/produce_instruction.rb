@@ -2,8 +2,8 @@ module Plankton
 
   class ProduceInstruction < Instruction
 
-    attr_reader :object_type_name, :quantity, :release, :var, :item
-    attr_accessor :sample_expr, :data_expr, :note, :sample_name_expr, :sample_project_expr
+    attr_reader :object_type_name, :quantity, :release, :var, :item, :note
+    attr_accessor :sample_expr, :data_expr, :sample_name_expr, :sample_project_expr, :note_expr
 
     def initialize object_type_expr, quantity_expr, release_expr, var, options = {}  
 
@@ -27,9 +27,10 @@ module Plankton
 
     def pre_render scope, params
 
-      @object_type_name = scope.substitute @object_type_expr
+      @object_type_name = scope.evaluate @object_type_expr
       @quantity = scope.evaluate @quantity_expr
       @release = ( @release_expr ? ( scope.evaluate @release_expr ) : nil )
+      @note = scope.evaluate @note_expr
 
       if @release && @release.class != Array 
         @release = [ @release ]
@@ -154,7 +155,7 @@ module Plankton
 
     def html
       x = @release ? @release : 'nothing'
-      h = "<b>produce</b> #{@quantity_expr} #{@object_type_expr}, releasing #{x}"
+      h = "<b>produce</b> #{@quantity_expr} #{@object_type_expr}, releasing #{x}. #{@note_expr}"
     end
 
   end

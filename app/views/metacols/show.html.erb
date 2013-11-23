@@ -42,9 +42,13 @@
     <% end %>
 
     <% if completed.length > 0 %>
-      <h4>Completed:
-      <% p.jobs.each do |j|%>
-        <%= link_to "#{j}", Job.find_by_id(j) %>
+      <h4>Completed Jobs:
+      <% completed.each do |j|%>
+        <% s = j.status.downcase %>
+        <div class='<%= s %>'>
+          <%= link_to "#{j.id}", j %> 
+          <% if s != 'completed' %>(<%= s %>)<% end %>
+        </div>
       <% end %>
     <% end %></h4>
 

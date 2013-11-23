@@ -38,6 +38,8 @@ class JobsController < ApplicationController
       @submitter = nil
     end
 
+    @status = @job.status
+
   end
 
   def destroy

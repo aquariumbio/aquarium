@@ -61,20 +61,16 @@
 
       </td>
 
-     <% else %>
-        <td class='text-error'><%= cart_item.item_id %></td>
-        <td class='text-error'>This item no longer exists</td>
-        <td></td>
-        <td></td>
-        <td></td>
-
-     <% end %>
-
       <td><%= link_to(cart_item, method: :delete) do %>
                  <i class='icon-remove'></i>
                <% end %>
       </td>
 
+     <% else %>
+
+        <% cart_item.destroy %>
+
+     <% end %>
 
   </tr>
 <% end %>

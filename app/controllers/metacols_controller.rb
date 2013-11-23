@@ -75,10 +75,22 @@ class MetacolsController < ApplicationController
     @mc.save # save to get an id
 
     @metacol.id = @mc.id
-    @metacol.start args
-    @mc.state = @metacol.state.to_json
+   
+    error = nil
+    begin
+      @metacol.start args
+    rescue Exception => e
+      error = e
+    end
 
-    @mc.status = 'RUNNING'
+    if !error
+      @mc.state = @metacol.state.to_json
+      @mc.status = 'RUNNING'
+    else
+      @mc.message = "On start: " + e.message.split('[')[0]
+      @mc.status = 'ERROR'
+    end
+
     @mc.save # save again for state info
 
     redirect_to @mc

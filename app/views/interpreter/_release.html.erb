@@ -19,13 +19,13 @@
 
      when 'return' %>
       <h4><input type='checkbox' id='<%=i %>-returned' onchange='update_next_button(<%=i %>)'></input>
-          Please return item <%= it.id %> (<%= nm %>) to <%= loc %>.</h4>
+          Return item <%= it.id %> (<%= nm %>) to <%= loc %>.</h4>
       <p><%= method %></p>
       <% next_check_list.push(i) %>
 
   <% when 'dispose' %>
       <h4><input type='checkbox' id='<%=i %>-returned' onchange='update_next_button(<%=i %>)'></input> 
-          Please dispose of item <%= it.id %> (<%= nm %>).</h4>
+          Dispose of item <%= it.id %> (<%= nm %>).</h4>
       <p><small><%= method %></small></p>
       <% next_check_list.push(i) %>
 

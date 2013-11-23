@@ -29,7 +29,7 @@
           begin
             m.update
           rescue Exception => e
-            process.message = "Error updating process: " + e.message
+            process.message = "On update: " + e.message.split('[')[0]
             puts process.message
             process.status = "ERROR"
             process.save

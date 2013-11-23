@@ -1,5 +1,7 @@
 <% provide(:title,  "Job " + @job.id.to_s + ": " + @job.path) %>
 
+<div class='job_status <%= @status.downcase %>'><%= @status %></div>
+
 <h1>Job <%= @job.id %> : <%= @job.path %></h1>
 
 <h3>Job Information</h3>

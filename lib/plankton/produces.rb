@@ -22,6 +22,8 @@ module Plankton
         sample = expr
       end
 
+      note = ""
+
       while @tok.current != 'end' && @tok.current != 'EOF'
 
         if @tok.current == 'data'
@@ -45,6 +47,14 @@ module Plankton
           end
           rel = expr
 
+        elsif @tok.current == 'note'
+
+          @tok.eat_a 'note'
+          if @tok.current == ':' 
+            @tok.eat_a ':'
+          end
+          note = expr
+
         else
 
           raise "Unknown directive in 'produce' at #{@tok.current}"
@@ -58,6 +68,7 @@ module Plankton
       ins = ProduceInstruction.new ob[:type], ob[:quantity], rel, var
       ins.data_expr = data
       ins.sample_expr = sample
+      ins.note_expr = note
       push ins
 
     end # produce

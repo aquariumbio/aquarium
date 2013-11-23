@@ -26,4 +26,22 @@ class Job < ActiveRecord::Base
 
   end
 
+  def status
+    if self.pc >= 0
+      status = 'ACTIVE'
+    elsif self.pc == Job.NOT_STARTED
+      status = 'PENDING'
+    else
+      entries = (self.logs.reject { |log| 
+        log.entry_type != 'ERROR' && log.entry_type != 'ABORT' && log.entry_type != 'CANCEL' 
+      }).collect { |log| log.entry_type }
+      if entries.length > 0
+        status = entries[0] == 'ERROR' ? entries[0] : entries[0] + "ED"
+      else
+        status = "COMPLETED"
+      end
+    end
+    return status
+  end
+
 end
