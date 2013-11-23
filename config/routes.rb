@@ -29,6 +29,7 @@ Bioturk::Application.routes.draw do
   get "interpreter/abort"
   get "interpreter/cancel"
   get "interpreter/error"
+  get "interpreter/release"
 
   get "jobs/index"
 

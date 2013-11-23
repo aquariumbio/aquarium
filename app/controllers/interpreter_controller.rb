@@ -10,7 +10,7 @@ class InterpreterController < ApplicationController
 
     blob = Blob.get @sha, params[:path]
 
-    @file = blob.xml
+    @file = blob.xml.force_encoding('UTF-8')
     @path = blob.path
 
     if /\.pl$/.match @path # it's a plankton file ##########################
@@ -412,6 +412,16 @@ class InterpreterController < ApplicationController
    end
    flash[:success] = "Job #{params[:job]} has been cancelled."
    redirect_to jobs_url
+  end
+
+  def release
+    i = Item.find_by_id(params[:item])
+    if i
+      i.inuse = 0
+      i.save
+      flash[:success] = "Item #{params[:item]} has been released."
+    end
+    current
   end
 
 end
