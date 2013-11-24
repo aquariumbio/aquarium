@@ -1,7 +1,8 @@
 class MetacolsController < ApplicationController
 
   def index
-    @metacols = Metacol.all
+    @active_metacols = Metacol.where("status = 'RUNNING'")
+    @completed_metacols = Metacol.paginate(page: params[:page], :per_page => 5).where("status != 'RUNNING'")
 
     respond_to do |format|
       format.html # index.html.erb

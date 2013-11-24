@@ -10,8 +10,12 @@
      <%= link_to item.id, item %>
      <a href="#" onclick='toggle_change_details_form(<%= item.id %>)'><i id='icon-<%= item.id %>' class='icon-chevron-down'></i></a>
 
-     <%= link_to new_cart_item_path(item_id: item.id) do %>
-       <i class='icon-shopping-cart'></i>
+     <% if (current_user.cart_items.select { |ci| ci.item_id == item.id }).length == 0 %>
+       <%= link_to new_cart_item_path(item_id: item.id) do %>
+         <i class='icon-shopping-cart'></i>
+       <% end %>
+     <% else %>
+         <i class='icon-shopping-cart icon-white'></i>
      <% end %>
 
     <%= link_to sample_path(@sample,toggle: item.id) do %>

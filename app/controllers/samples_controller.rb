@@ -15,7 +15,7 @@ class SamplesController < ApplicationController
     @sample_type = SampleType.find(@sample_type_id)
 
     # Figure out which user's samples we're looking at
-    @user_id = params[:user_id] ? params[:user_id].to_i : current_user.id
+    @user_id = params[:user_id] ? params[:user_id].to_i : -1
 
     if @user_id >= 0
       @user = User.find(@user_id)

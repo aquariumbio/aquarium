@@ -4,6 +4,7 @@ class Item < ActiveRecord::Base
   belongs_to :sample
   has_many :touches
   has_one :part
+  has_many :cart_items
 
   attr_accessible :location, :quantity, :inuse, :sample_id, :data, :object_type_id
 

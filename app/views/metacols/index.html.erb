@@ -1,27 +1,16 @@
-<h1>Active Metacols</h1>
+<h4>Active Metacols</h4>
 
-<table class='table'>
-  <tr>
-    <th>Metacol</th>
-    <th>Path</th>
-    <th>User</th>
-    <th>Status</th>
-    <th></th>
-    <th></th>
-  </tr>
+<%= render partial: 'list', locals: { metacols: @active_metacols, status: false } %>
 
-<% @metacols.each do |metacol| %>
-  <tr>
-    <td><%= link_to metacol.id, metacol %></td>
-    <td><%= metacol.path %></td>
-    <td><%= User.find(metacol.user_id).login %></td>
-    <td><%= metacol.status %></td>
-    <td><%= link_to 'Stop', metacol_stop_path(metacol), data: { confirm: 'Are you sure?' } %></td>
-    <td><%= link_to 'Delete', metacol, method: :delete %></td>
-  </tr>
-<% end %>
-</table>
+<h4>Completed Metacols 
+</h4>
 
-<br />
+  
+  <%= render partial: 'list', locals: { metacols: @completed_metacols, status: true } %>
 
-<%= link_to 'Start a Metacol', protocol_tree_home_path %>
+  <% @completed_metacols.current_page %>
+
+  <center>
+    <%= will_paginate @completed_metacols %>
+  </center>
+

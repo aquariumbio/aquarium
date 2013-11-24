@@ -1,0 +1,39 @@
+<table class='table'>
+  <tr>
+    <th>Metacol</th>
+    <th>Path</th>
+    <% if status %>
+      <th>Status</th>
+    <% end %>
+    <th>Total Jobs</th>
+    <th>Active Jobs</th>
+    <th>Pending Jobs</th>
+    <th>User</th>
+    <% if !status %>
+      <th></th>
+    <% end %>
+    <th></th>
+  </tr>
+
+<% metacols.each do  |metacol| %>
+  <tr>
+    <td><%= link_to metacol.id, metacol %></td>
+    <td><%= metacol.path %></td>
+    <% if status %>
+      <td><%= metacol.status %></td>
+    <% end %>
+    <td><%= metacol.jobs.length %></td>
+    <td><%= (metacol.jobs.select { |j| j.pc >= 0 }).length %></td>
+    <td><%= (metacol.jobs.select { |j| j.pc == Job.NOT_STARTED }).length %></td>
+    <td><%= User.find(metacol.user_id).login %></td>
+    <% if !status %>
+      <td><%= link_to metacol_stop_path(metacol), data: { confirm: 'Stop metacol process? It cannot be restarted!' } do %>
+        <i class='icon-stop'></i>
+      <% end %></td>
+    <% end %>
+    <td><%= link_to metacol, method: :delete, data: { confirm: 'Delete metacol process?' } do %>
+      <i class='icon-trash'></i>
+    <% end %></td>
+  </tr>
+<% end %>
+</table>
