@@ -2,10 +2,11 @@ module Oyster
 
   class Place
 
-    attr_accessor :jobs, :marking, :arg_expressions, :arguments, :protocol, :sha
+    attr_accessor :jobs, :marking, :arg_expressions, :arguments, :protocol, :sha, :name
 
     def initialize
 
+      @name = ''         # The name of the place
       @protocol = ''     # The path to the protocol in github
       @arguments = {}    # A hash or argument names and values to send to the protocol when starting.                     
       @arg_expressions = {}  # Unevaluated expressions. Any argument not supplied here, 
@@ -27,6 +28,10 @@ module Oyster
     def mark
       @marking += 1
       self
+    end
+
+    def marked?
+      @marking > 0
     end
 
     def unmark
@@ -62,35 +67,41 @@ module Oyster
 
     def start who, scope, id
 
-      begin
+      if @protocol != ''
 
-        if @sha == nil
-          @sha = Oyster.get_sha @protocol
+        begin
+
+          if @sha == nil
+            @sha = Oyster.get_sha @protocol
+          end
+
+          puts "#{id}: Starting #{@protocol}, with sha = #{@sha}"  
+
+          @jobs.push( Oyster.submit( {
+            sha: @sha, 
+            path: @protocol, 
+            args: evaluated_arguments(scope),
+            desired: eval(@desired_start), 
+            latest: eval(@latest_start), 
+            group: @group ? @group : who,
+            metacol_id: id,
+            who: who } ) )
+
+        rescue Exception => e
+          raise "Could not submit protocol #{@protocol}. " + e.to_s + e.backtrace.to_s
+          @marking -= 1
         end
 
-        puts "#{id}: Starting #{@protocol}, with sha = #{@sha}"  
-
-        @jobs.push( Oyster.submit( {
-          sha: @sha, 
-          path: @protocol, 
-          args: evaluated_arguments(scope),
-          desired: eval(@desired_start), 
-          latest: eval(@latest_start), 
-          group: @group ? @group : who,
-          metacol_id: id,
-          who: who } ) )
-
-      rescue Exception => e
-        raise "Could not submit protocol #{@protocol}. " + e.to_s + e.backtrace.to_s
-        @marking -= 1
       end
 
     end
 
     def completed?
-      if @jobs.length > 0
+      if @protocol != '' && @jobs.length > 0
         j = Job.find(@jobs.last)
         return( j.pc == Job.COMPLETED )
+      elsif @protocol == ''
+        return true
       else
         return false
       end

@@ -12,6 +12,9 @@ module Oyster
     def functions
       add_function :completed, 1
       add_function :error, 1
+      add_function :quantity, 1
+      add_function :min_quantity, 1
+      add_function :max_quantity, 1
     end
 
     def parse

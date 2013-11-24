@@ -24,6 +24,7 @@ module Oyster
       @tok.eat_a 'place'
       p = Place.new
       v = @tok.eat_a_variable
+      p.name = v
 
       while @tok.current != 'end' && @tok.current != 'EOF'
 

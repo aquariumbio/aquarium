@@ -9,7 +9,7 @@ module Oyster
       @children = []     # A list of places
       @condition = ""    # A string that evaluates to true of false to determine whether to fire the transitions
       @firing = false    # Whether the transition is firing.
-      @program = []         # An array of assignments that should be run before starting children.
+      @program = []      # An array of assignments that should be run before starting children.
     end
 
     def parent p
@@ -38,6 +38,22 @@ module Oyster
       end
     end
 
+    def check_condition scope
+      ans = eval( scope.substitute @condition )
+      #puts "#{condition} --> #{ans}"
+      ans
+    end
+
+    def to_s 
+      p = parents.collect { |p| p.protocol }
+      c = children.collect { |p| p.protocol }
+      "#{p} => #{c} when #{@condition}"
+    end
+
+    ###################################################################################
+    # functions available in transition expressions
+    #
+
     def completed j
       if j < @parents.length
         @parents[j].completed?
@@ -54,17 +70,33 @@ module Oyster
       end
     end
 
-    def check_condition scope
-      ans = eval( scope.substitute @condition )
-      #puts "#{condition} --> #{ans}"
-      ans
+    def quantity obj
+      o = ObjectType.find_by_name(obj)
+      if o
+        o.quantity
+      else
+        0
+      end
     end
 
-    def to_s 
-      p = parents.collect { |p| p.protocol }
-      c = children.collect { |p| p.protocol }
-      "#{p} => #{c} when #{@condition}"
+    def min_quantity obj
+      o = ObjectType.find_by_name(obj)
+      if o
+        o.min
+      else
+        0
+      end
     end
+
+    def max_quantity obj
+      o = ObjectType.find_by_name(obj)
+      if o
+        o.max
+      else
+        0
+      end
+    end
+
 
   end
 

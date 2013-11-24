@@ -14,6 +14,11 @@ module Oyster
 
   def Oyster.submit h 
 
+    group = Group.find_by_name(h[:group])
+    unless group
+      raise "No group specified when submitting '#{h[:path]}'"
+    end
+
     # get the blob and parse its arguments
     blob = Blob.get h[:sha], h[:path]
     protocol = Plankton::Parser.new( h[:path], blob.xml )
@@ -44,7 +49,7 @@ module Oyster
     job.path = h[:path]
     job.desired_start_time = h[:desired]
     job.latest_start_time = h[:latest]
-    job.group_id = Group.find_by_name(h[:group]).id
+    job.group_id = group.id
     job.submitted_by = sub ? sub.id : 0
     job.user_id = 1
     job.pc = Job.NOT_STARTED

@@ -25,9 +25,13 @@
 
 <% @metacol.places.each do |p| %>
 
-  <div class='well'>
+  <% if p.marked? %>
+    <div class='well marked'>
+  <% else %>
+    <div class='well unmarked'> 
+  <% end %>
 
-    <p><b><%= p.protocol %></b></p>
+    <p><b><%= p.name.capitalize %>.</b> <i><%= p.protocol %></i></p>
 
     <% pending = @mc.jobs.reject { |j| j.pc == Job.COMPLETED || (!p.jobs.include? j.id) } %>
     <% completed = @mc.jobs.reject { |j| j.pc != Job.COMPLETED || (!p.jobs.include? j.id) } %>
