@@ -2,7 +2,7 @@ class MetacolsController < ApplicationController
 
   def index
     @active_metacols = Metacol.where("status = 'RUNNING'")
-    @completed_metacols = Metacol.paginate(page: params[:page], :per_page => 5).where("status != 'RUNNING'")
+    @completed_metacols = Metacol.paginate(page: params[:page], :per_page => 10).where("status != 'RUNNING'")
 
     respond_to do |format|
       format.html # index.html.erb
@@ -98,14 +98,29 @@ class MetacolsController < ApplicationController
 
   end
 
+  def log job, type, data
+    log = Log.new
+    log.job_id = job.id
+    log.user_id = current_user.id
+    log.entry_type = type
+    log.data = data.to_json
+    log.save
+  end
+
   def stop
 
     @metacol = Metacol.find(params[:metacol_id])
     @metacol.status = "DONE"
     @metacol.save
 
+    (@metacol.jobs.select { |j| j.pc == Job.NOT_STARTED }).each do |j|
+     j.pc = Job.COMPLETED
+     j.save
+     log j, "CANCEL", {}
+    end
+
     respond_to do |format|
-      format.html { redirect_to metacols_url }
+      format.html { redirect_to @metacol }
       format.json { head :no_content }
     end
   end

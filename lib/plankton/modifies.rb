@@ -22,8 +22,14 @@ module Plankton
            @tok.eat_a ':'
            info[:inuse] = expr
 
+        elsif @tok.current == 'quantity'
+
+           @tok.eat_a 'quantity'
+           @tok.eat_a ':'
+           info[:quantity] = expr
+
         else
-          raise "Expected either 'location' or 'inuse' field in 'modify' block at #{@tok.current}."
+          raise "Expected either 'location', 'inuse', or 'quantity' field in 'modify' block at #{@tok.current}."
         end
 
       end

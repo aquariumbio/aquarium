@@ -22,18 +22,9 @@ module Plankton
     def optional_choices
       if @tok.current == ','
         @tok.eat
-        choices = []
-        @tok.eat_a '['
-        while @tok.current != ']'
-          choices.push( @tok.eat_a_string )
-          if @tok.current == ','
-            @tok.eat_a ','
-          end
-        end
-        @tok.eat_a ']'
-        return choices
+        return expr
       else
-        return []
+        return nil
       end
     end
 
@@ -52,7 +43,7 @@ module Plankton
         description = optional_description
         choices = optional_choices
  
-        if choices.length == 0
+        if !choices
           getdatas.push( { getdata: { var: var, type: type, description: description } } )
         else
           getdatas.push ( { select: { var: var, type: type, description: description, choices: choices } } )

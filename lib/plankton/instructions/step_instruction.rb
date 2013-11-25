@@ -77,10 +77,7 @@ module Plankton
             if k == :getdata
               @parts.push( getdata: { var: v[:var], type: v[:type], description: scope.substitute( v[:description] ) } )
             elsif k == :select
-              choice_evals = []
-              v[:choices].each do |c|
-                choice_evals.push scope.substitute c
-              end
+              choice_evals = scope.evaluate v[:choices]
               @parts.push( select: { var: v[:var], description: scope.substitute( v[:description] ), choices: choice_evals } )
             else
               @parts.push( k => scope.substitute( v ) )

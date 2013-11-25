@@ -1,16 +1,21 @@
-<h4>Active Metacols</h4>
 
-<%= render partial: 'list', locals: { metacols: @active_metacols, status: false } %>
+<% if params[:active] %>
 
-<h4>Completed Metacols 
-</h4>
+  <h4>Active Metacols</h4>
+  <%= render partial: 'list', locals: { metacols: @active_metacols, status: false } %>
+  <%= link_to "Show Completed", metacols_path, class: 'btn btn-small' %>
 
+<% else %>
+
+  <h4>Completed Metacols</h4>
   
   <%= render partial: 'list', locals: { metacols: @completed_metacols, status: true } %>
-
-  <% @completed_metacols.current_page %>
 
   <center>
     <%= will_paginate @completed_metacols %>
   </center>
+
+  <%= link_to "Show Active", metacols_path(active: true), class: 'btn btn-small' %>
+
+<% end %>
 

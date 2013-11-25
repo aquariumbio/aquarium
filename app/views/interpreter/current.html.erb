@@ -25,17 +25,17 @@
           <pre><%= @protocol.bad_xml %></pre>
         <% end %>
 
-     <% end %>
+      <% elsif @exception %>
 
-      <div class="alert alert-info">THIS JOB IS NO LONGER ACTIVE</div>
-      <p><%= link_to 'View Log for Job ' + @job.id.to_s, @job %></p>
-      <p><%= link_to "View Pending Jobs", jobs_path %>
+         <%= render 'error' %>
 
-    <% elsif @exception %>
+      <% end %>
 
-       <%= render 'error' %>
+        <div class="alert alert-info">THIS JOB IS NO LONGER ACTIVE</div>
+        <p><%= link_to 'View Log for Job ' + @job.id.to_s, @job %></p>
+        <p><%= link_to "View Pending Jobs", jobs_path %>
 
-    <% elsif @pc != Job.COMPLETED %>
+      <% elsif @pc != Job.COMPLETED %>
 
       <%= render @instruction.name %>
       <div id='note' style='display: none'>

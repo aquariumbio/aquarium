@@ -72,7 +72,7 @@ module Lang
       begin
         result = eval(expr)
       rescue Exception => e
-        raise "Could not evaluate #{str}. " + e.message
+        raise "Could not evaluate #{str} => #{expr}. " + e.message
       end
       result
     end

@@ -48,6 +48,16 @@ module Plankton
 
       end
 
+      if @info_expr[:quantity]
+
+        begin
+          @info[:quantity] = (scope.evaluate @info_expr[:quantity]).to_i
+        rescue Exception => e
+          raise "Inuse expression '#{@info_expr[:quantity]}' did not evaluate correctly."
+        end
+
+      end
+
       begin
         item = Item.find(@info[:item][:id])
       rescue Exception => e
@@ -66,6 +76,13 @@ module Plankton
       end
 
       item.save
+
+      if @info[:quantity]
+        item.quantity = @info[:quantity]
+        if item.quantity == 0
+          item.destroy
+        end
+      end
 
       log = Log.new
       log.job_id = params[:job]

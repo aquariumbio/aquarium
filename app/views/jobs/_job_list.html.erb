@@ -68,7 +68,7 @@
       <% else %>
          <td></td>
       <% end %>
-      <td><%= link_to 'interpreter/cancel?job=' + j.id.to_s, data: { confirm: 'Are you sure?' } do %>
+      <td><%= link_to '/interpreter/cancel?job=' + j.id.to_s, data: { confirm: 'Are you sure?' } do %>
         <i class='icon-remove'></i>
       <% end %></td>
     </tr>

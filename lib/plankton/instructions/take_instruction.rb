@@ -36,7 +36,7 @@ module Plankton
 
         if item_expr[:type]
           description = {
-            type: (scope.substitute item_expr[:type]),
+            type: (scope.evaluate item_expr[:type]),
             quantity: (scope.evaluate item_expr[:quantity]).to_i,
             var: item_expr[:var]
           }

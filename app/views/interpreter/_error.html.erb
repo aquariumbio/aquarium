@@ -5,7 +5,7 @@
 </div>
 
 <% if @protocol && @protocol.program[@error_pc] %>
-  <h4>Offending XML</h4>
+  <h4>Offending Code</h4>
   <pre><%= @protocol.program[@error_pc].xml.to_s %></pre>
 <% end %>
 
