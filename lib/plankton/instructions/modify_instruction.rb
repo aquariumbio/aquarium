@@ -72,9 +72,10 @@ module Plankton
 
       item.save
 
-      if item.quantity == 0
-        item.destroy
-      end
+      # Probably should not delete items because then you can't get their histories
+      #if item.quantity == 0
+      #  item.destroy
+      #end
 
       log = Log.new
       log.job_id = params[:job]
