@@ -8,28 +8,20 @@ module Plankton
 
       info = { item: expr }
 
+      keys = [ :location, :inuse, :dinuse, :iinuse, :quantity, :dquantity, :iquantity ]
+
       while @tok.current != 'end' && @tok.current != 'EOF'
 
-        if @tok.current == 'location'
+        if keys.include? @tok.current.to_sym
 
-           @tok.eat_a 'location'
-           @tok.eat_a ':'
-           info[:location] = expr
- 
-        elsif @tok.current == 'inuse'
-
-           @tok.eat_a 'inuse'
-           @tok.eat_a ':'
-           info[:inuse] = expr
-
-        elsif @tok.current == 'quantity'
-
-           @tok.eat_a 'quantity'
-           @tok.eat_a ':'
-           info[:quantity] = expr
+          k = @tok.eat.to_sym
+          @tok.eat_a ':'
+          info[k] = expr
 
         else
-          raise "Expected either 'location', 'inuse', or 'quantity' field in 'modify' block at #{@tok.current}."
+ 
+          raise "Expected #{keys} in 'modify' block at #{@tok.current}."
+
         end
 
       end

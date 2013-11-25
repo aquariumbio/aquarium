@@ -38,22 +38,18 @@ module Plankton
 
       end
 
-      if @info_expr[:inuse]
+      keys = [ :inuse, :dinuse, :iinuse, :quantity, :dquantity, :iquantity ]
 
-        begin
-          @info[:inuse] = (scope.evaluate @info_expr[:inuse]).to_i
-        rescue Exception => e
-          raise "Inuse expression '#{@info_expr[:inuse]}' did not evaluate correctly."
-        end
+      keys.each do |key|
 
-      end
+        if @info_expr[key]
 
-      if @info_expr[:quantity]
+          begin
+            @info[key] = (scope.evaluate @info_expr[key]).to_i
+          rescue Exception => e
+            raise "Inuse expression '#{@info_expr[key]}' did not evaluate correctly."
+          end
 
-        begin
-          @info[:quantity] = (scope.evaluate @info_expr[:quantity]).to_i
-        rescue Exception => e
-          raise "Inuse expression '#{@info_expr[:quantity]}' did not evaluate correctly."
         end
 
       end
@@ -64,24 +60,20 @@ module Plankton
         raise "Could not find item with #{@info[:item][:id]}"
       end
 
-      old_inuse = item.inuse
-      old_location = item.location
+      old = { location: item.location, inuse: item.inuse, quantity: item.quantity }
 
-      if @info[:location]
-        item.location = @info[:location]
-      end
-
-      if @info[:inuse]
-        item.inuse = @info[:inuse]
-      end
+      if @info[:location];  item.location  = @info[:location];  end
+      if @info[:inuse];     item.inuse     = @info[:inuse];     end
+      if @info[:dinuse];    item.inuse    -= @info[:dinuse];    end
+      if @info[:iinuse];    item.inuse    += @info[:iinuse];    end
+      if @info[:quantity];  item.quantity  = @info[:quantity];  end
+      if @info[:dquantity]; item.quantity -= @info[:dquantity]; end
+      if @info[:iquantity]; item.quantity += @info[:iquantity]; end
 
       item.save
 
-      if @info[:quantity]
-        item.quantity = @info[:quantity]
-        if item.quantity == 0
-          item.destroy
-        end
+      if item.quantity == 0
+        item.destroy
       end
 
       log = Log.new
@@ -89,8 +81,8 @@ module Plankton
       log.user_id = scope.stack.first[:user_id]
       log.entry_type = 'MODIFY'
       log.data = { pc: @pc, item_id: @info[:item][:id], 
-                   old: { location: old_location, inuse: old_inuse }, 
-                   new: { location: item.location, inuse: item.inuse } }.to_json
+                   old: old.to_json, 
+                   new: { location: item.location, inuse: item.inuse, quantity: item.quantity } }.to_json
       log.save
 
     end
