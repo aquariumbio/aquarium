@@ -13,14 +13,10 @@ class InterpreterController < ApplicationController
     @file = blob.xml.force_encoding('UTF-8')
     @path = blob.path
 
-    if /\.pl$/.match @path # it's a plankton file ##########################
+    if /\.pl/.match @path # it's a plankton file ##########################
 
       logger.info "Opening a plankton file: #{@path}!"
-
       @protocol = Plankton::Parser.new( @path, @file )
-
-      logger.info "And " + @protocol.class.to_s
-
       @parse_errors = ""
 
       if params[:job]
@@ -32,8 +28,6 @@ class InterpreterController < ApplicationController
     else # it's a pdl file ##################################################
 
       logger.info "Opening a boring old xml file named #{@path}"
-
-      logger.info "Opening a PDL file: #{@path}."
 
       @protocol = Protocol.new
       if params[:job]

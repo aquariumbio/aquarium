@@ -16,7 +16,7 @@ module Oyster
 
     group = Group.find_by_name(h[:group])
     unless group
-      raise "No group specified when submitting '#{h[:path]}'"
+      raise "No valid group specified when submitting '#{h[:path]}'"
     end
 
     # get the blob and parse its arguments
