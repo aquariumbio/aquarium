@@ -112,7 +112,8 @@ input[type=checkbox] {
   -moz-appearance:none;
   -webkit-appearance:none;
   -o-appearance:none;
-
+top:50% !important;
+margin-top:-4px !important;
 #  padding: 10px;
 #  margin: 20px;
   border-radius: 4px;

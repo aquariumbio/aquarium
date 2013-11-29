@@ -44,15 +44,19 @@ module Plankton
         choices = optional_choices
  
         if !choices
-          getdatas.push( { getdata: { var: var, type: type, description: description } } )
+          getdatas.push( { getdata: { var: var, 
+                                      type: type, 
+                                      description: description } } )
         else
-          getdatas.push ( { select: { var: var, type: type, description: description, choices: choices } } )
+          getdatas.push ( { select: { var: var, 
+                                      type: type, 
+                                      description: description, 
+                                      choices: choices } } )
         end
 
       end
 
       @tok.eat_a 'end'
-
       return getdatas
 
     end # getdata
@@ -70,7 +74,7 @@ module Plankton
 
         case @tok.current
 
-          when 'description', 'note', 'warning'
+          when 'description', 'note', 'warning', 'bullet', 'check'
             field = @tok.eat.to_sym
             @tok.eat_a ':'
             parts.push({ field => @tok.eat_a_string.remove_quotes})
@@ -84,7 +88,8 @@ module Plankton
             parts.push( { image: @tok.eat_a_string.remove_quotes } )
 
           else
-            raise "Expect 'description', 'note', 'warning', 'getdata', or 'image' at '#{@tok.current}'."
+            raise "Expected 'description', 'note', 'bullet', 'check', 'warning', 'getdata', "
+                + "or 'image' at '#{@tok.current}'."
          
         end
 

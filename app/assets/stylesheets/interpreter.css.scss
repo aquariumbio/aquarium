@@ -197,3 +197,10 @@ input::-webkit-inner-spin-button {
   #border: 1pt solid blue;
   vertical-align: -75%
 }
+
+.warning {
+  color: red !important;
+  font-size: 18pt;
+  background: yellow !important;
+  font-weight: bold;
+}

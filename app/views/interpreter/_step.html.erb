@@ -1,4 +1,4 @@
-<!-- IMAGE ------------------------------------------------------------->
+
 <% if @instruction.image != "" %>
   <div class='row-fluid'>
     <div class='span5'>
@@ -8,66 +8,101 @@
   <script>console.log('<%= @instruction.image %>');</script>
 <% end %>
 
-<!-- DESCRIPTION ------------------------------------------------------->
-
 <h1>
   <%= @instruction.description %>
 </h1>
 
-<!-- NOTE -------------------------------------------------------------->
+<% getdata_num = 0
+   getdata_vars = []
+   check_num = 0 %>
 
-<p>
-  <%= @instruction.note.gsub(/\\t/, '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;').gsub(/\\n/, '<br \>').html_safe %>
-</p>
+<% @instruction.parts.each do |part| %>
+ 
+  <% part.each do |key,val| %>
 
-<!-- WARNINGS ---------------------------------------------------------->
+    <% if key == :note %>
 
-<% @instruction.warnings.each do |w| %>
+      <p>
+	<%= val.gsub(
+	   /\\t/, '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;').gsub(
+	   /\\n/, '<br \>').html_safe %>
+      </p>
 
-  <div class="alert">
-    <%= w %>
-  </div>
+    <% elsif key == :bullet %>
+
+      <ul class='list'><li><%= val %></li></ul>
+
+    <% elsif key == :check %>
+
+      <p><input type='checkbox' 
+                id='check_<%= check_num %>' 
+                onchange='validate_input()'></input>
+         &nbsp;<%= val %>
+      </p>
+
+      <% check_num += 1 %>
+
+    <% elsif key == :warning %>
+
+      <div class="alert warning"><%= val %></div>
+
+    <% elsif key == :select %>
+
+      <%= label_tag(val[:var], val[:description] )%>
+      <select id='<%= val[:var] %>' class='interpreter-select'>
+	<% val[:choices].each do |c| %>
+	  <option><%= c %></option>
+	<% end %>
+      </select>
+
+    <% elsif key == :getdata %>
+
+      <%= label_tag(val[:var], val[:description] + ' (' + val[:type] + ')' )%>
+      <%= text_field_tag( val[:var], '', onchange: 'validate_input()' ) %>
+      <% getdata_vars.push val[:var] %>
+      <% getdata_num += 1 %>
+
+    <% end %>
+
+  <% end %>
 
 <% end %>
 
-<!-- SELECTS ----------------------------------------------------------->
-
-  <% if @instruction.selects.length > 0 %>
-    <% @instruction.selects.each do |s| %>
-      <%= label_tag(s[:var], s[:description] )%>
-      <select id='<%= s[:var] %>' class='interpreter-select'>
-        <% s[:choices].each do |c| %>
-          <option><%= c %></option>
-        <% end %>
-      </select>
-    <% end %>
-  <% end %>
-
-<!-- GETDATAS ------------------------------------------------------------>
-
-  <% if @instruction.getdatas.length > 0 %>
-
-    <% @instruction.getdatas.each do |g| %>
-      <%= label_tag(g[:var], g[:description] + ' (' + g[:type] + ')' )%>
-      <%= text_field_tag( g[:var] ) %>
-    <% end %>
-
-  <% end %>
-
-<!-- CLOSE IMAGE TAGS IF PRESENT --
-  -- --------------------------------------->
+<!-- CLOSE IMAGE TAGS IF PRESENT ----------------------------------------->
 
 <% if @instruction.image != "" %>
     </div></div>
 <% end %>
 
 
-<!-- NEXT BUTTON ------------------------------------------------------->
+<!-- NEXT BUTTON ---------------------------------------------------------->
 
 <script>
 
+  function validate_input() {
+
+    ok = true;
+
+    <% (0..check_num-1).each do |c| %>
+      ok = ok && document.getElementById('check_<%= c %>').checked;
+    <% end %>
+
+    <% getdata_vars.each do |v| %>
+      ok = ok && (document.getElementById('<%= v %>').value != '');
+    <% end %>
+
+    document.getElementById('advance-button').disabled = !ok;
+
+  }
+
   window.onload = function() {
-    document.getElementById('advance-button').disabled = false;
+
+    <% if check_num == 0 && getdata_num == 0 %>
+      document.getElementById('advance-button').disabled = false;
+    <% else %>
+      document.getElementById('advance-button').disabled = true;
+    <% end %>
+
     q = "";
     document.getElementById('advance-button').addEventListener('click', function() {
       <% @instruction.getdatas.each do |g| %>

@@ -15,7 +15,7 @@ module Plankton
 
     end
 
-    # RAILS #############################################################################################
+    # RAILS ################################################################################
 
     def description 
       str = ""
@@ -72,20 +72,35 @@ module Plankton
       @parts = []
 
       @part_exprs.each do |a|
+
         a.each do |k,v|
+
           begin
+
             if k == :getdata
-              @parts.push( getdata: { var: v[:var], type: v[:type], description: scope.substitute( v[:description] ) } )
+              @parts.push( getdata: { 
+                 var: v[:var], 
+                 type: v[:type], 
+                 description: scope.substitute( v[:description] ) } )
+
             elsif k == :select
               choice_evals = scope.evaluate v[:choices]
-              @parts.push( select: { var: v[:var], description: scope.substitute( v[:description] ), choices: choice_evals } )
+              @parts.push( select: { 
+                 var: v[:var], 
+                 description: scope.substitute( v[:description] ), 
+                 choices: choice_evals } )
+
             else
               @parts.push( k => scope.substitute( v ) )
+
             end
+
           rescue Exception => e
             raise "In <step>: " + e.to_s
           end
+
         end
+
       end
 
     end
