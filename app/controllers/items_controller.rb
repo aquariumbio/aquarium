@@ -64,6 +64,11 @@ class ItemsController < ApplicationController
         i.inuse = params[:inuse]
         flash[:success] = "Number of items at location " + i.location + " updated to " + i.inuse.to_s if i.save
 
+      when 'move'
+        old_loc = i.location
+        i.location = params[:location]
+        flash[:success] = "Item #{i.id} moved from #{old_loc} to #{i.location}" if i.save
+
    end
 
     if ( i.errors.size > 0 )

@@ -28,9 +28,19 @@
           <% end %>
         <% end %>
 
-        <td><%= i.location %></td>
+         <% if @object_type.handler != 'sample_container' %>
 
-        <% if @object_type.handler != 'sample_container' %>
+          <td>
+            <%= form_tag(raw "/item?id="+i.id.to_s+"&oid="+@object_type.id.to_s) %>
+              <input name="location" 
+                     class="small-input" 
+                     type="text" 
+                     value=<%= i.location %>></input>
+              <input type="submit" name="update_action" 
+                     class="btn btn-small" value="move"></input>
+            </form>
+          </td>
+
           <td>
             <%= form_tag(raw "/item?id="+i.id.to_s+"&oid="+@object_type.id.to_s) %>
               <input name="quantity" 
@@ -55,6 +65,7 @@
 
         <% else %>
 
+           <td><%= i.location %></td>
            <td><%= i.inuse != 0 ? 'yes' : 'no' %></td>
 
         <% end %>

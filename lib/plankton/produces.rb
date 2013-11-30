@@ -23,6 +23,7 @@ module Plankton
       end
 
       note = ""
+      location = ""
 
       while @tok.current != 'end' && @tok.current != 'EOF'
 
@@ -55,6 +56,14 @@ module Plankton
           end
           note = expr
 
+        elsif @tok.current == 'location'
+
+          @tok.eat_a 'location'
+          if @tok.current == ':' 
+            @tok.eat_a ':'
+          end
+          location = expr
+
         else
 
           raise "Unknown directive in 'produce' at #{@tok.current}"
@@ -69,6 +78,7 @@ module Plankton
       ins.data_expr = data
       ins.sample_expr = sample
       ins.note_expr = note
+      ins.loc_expr = location
       push ins
 
     end # produce

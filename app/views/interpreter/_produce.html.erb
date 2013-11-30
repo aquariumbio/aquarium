@@ -14,7 +14,11 @@
 <p>Enter/edit location where the item will be stored or placed:</p>
 <p>
   <input id='location' oninput='check_format()' class='input-medium'
-    value = '<%= ObjectType.find_by_name(@instruction.object_type_name).location_wizard %>'>
+    <% if @instruction.location.to_s != "" %>
+      value = '<%= @instruction.location %>'
+    <% else %>
+      value = '<%= ObjectType.find_by_name(@instruction.object_type_name).location_wizard %>'>
+    <% end %>
   </input>
 </p>
 
@@ -23,7 +27,7 @@
   function check_format() {
     var p = /[A-Z][1-9][0-9]*\.[1-9][0-9][0-9]$/;
     var loc = document.getElementById('location').value;
-    if ( p.test(loc) ) {
+    if ( true || p.test(loc) ) { // punting on location format for now
       document.getElementById('advance-button').disabled = false;
     } else {
       document.getElementById('advance-button').disabled = true;

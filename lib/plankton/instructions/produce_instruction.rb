@@ -2,8 +2,8 @@ module Plankton
 
   class ProduceInstruction < Instruction
 
-    attr_reader :object_type_name, :quantity, :release, :var, :item, :note
-    attr_accessor :sample_expr, :data_expr, :sample_name_expr, :sample_project_expr, :note_expr
+    attr_reader :object_type_name, :quantity, :release, :var, :item, :note, :location
+    attr_accessor :sample_expr, :data_expr, :sample_name_expr, :sample_project_expr, :note_expr, :loc_expr
 
     def initialize object_type_expr, quantity_expr, release_expr, var, options = {}  
 
@@ -19,7 +19,8 @@ module Plankton
       @renderable = true
       super 'produce', options
 
-      @location = 'B0.000'
+      @loc_expr = ""
+      @location = ""
 
     end
 
@@ -103,6 +104,8 @@ module Plankton
         end
 
       end
+
+      @location = scope.evaluate @loc_expr
 
     end
 
