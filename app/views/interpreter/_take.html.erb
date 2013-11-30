@@ -1,4 +1,8 @@
-<h1>Gather the following items.</h1>
+<h1>Gather the following items</h1>
+
+<% if @instruction.note != "" %>
+  <p><%= @instruction.note %></p>
+<% end %>
 
 <% logger.info @instruction.item_list.to_s %>
 
@@ -116,10 +120,12 @@
       // <%= (object.items.collect { |i| i.id }).join(',') %>
 
       html = "";
-      html += "<div class='take_choice_box row-fluid' style='outline: 0pt solid red;'><div class='take_item_select span4' style='outline: 0pt solid orange;'>"
+      html += "<div class='take_choice_box row-fluid' style='outline: 0pt solid red;'>"
+            + "<div class='take_item_select span4' style='outline: 0pt solid orange;'>"
             + "  Location:<br />"
             + "  <select class='item_select' id='select_object_" 
-            + <%= i %> + "_item_" + num_choices[<%= i %>] + "' onchange='update_totals(<%= i %>," + num_choices[<%= i %>] + ")' >";
+            + <%= i %> + "_item_" + num_choices[<%= i %>] 
+            + "' onchange='update_totals(<%= i %>," + num_choices[<%= i %>] + ")' >";
 
       <% num = 0 %>
 
@@ -127,7 +133,8 @@
 
         <% object.items.each do |item| %>
           <% if item.quantity - item.inuse > 0 %>
-            html += '  <option value=<%= item.id %>><%= item.location %> (<%= item.quantity - item.inuse %> available) </option>';
+            html += "  <option value=<%= item.id %>><%= item.location %>"
+                  + " (<%= item.quantity - item.inuse %> available) </option>";
             max[<%= item.id %>] = <%= item.quantity - item.inuse %>;
             <% num += 1 %>
           <% end %>

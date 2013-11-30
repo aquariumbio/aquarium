@@ -82,15 +82,12 @@
   function validate_input() {
 
     ok = true;
-
     <% (0..check_num-1).each do |c| %>
       ok = ok && document.getElementById('check_<%= c %>').checked;
     <% end %>
-
     <% getdata_vars.each do |v| %>
       ok = ok && (document.getElementById('<%= v %>').value != '');
     <% end %>
-
     document.getElementById('advance-button').disabled = !ok;
 
   }

@@ -5,10 +5,13 @@ module Plankton
 
   class TakeInstruction < Instruction
 
-    attr_reader :item_list, :object_list
+    attr_reader :item_list, :object_list, :note
+    attr_writer :note_expr
 
     def initialize item_list_expr, options = {}
 
+      @note_expr = ""
+      @note = ""
       @item_list_expr = item_list_expr
       @renderable = true
       super 'take', options
@@ -91,6 +94,8 @@ module Plankton
         @object_list.push( ob )
 
       end
+
+      @note = scope.substitute @note_expr
 
     end
 
