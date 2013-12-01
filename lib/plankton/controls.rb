@@ -6,9 +6,15 @@ module Plankton
 
       gotos = []
 
+      lines = {}
+      lines[:startline] = @tok.line
+
       @tok.eat_a 'if'
-      ins = IfInstruction.new expr
+      cond = expr
+      lines[:endline] = @tok.line
+      ins = IfInstruction.new cond, lines
       ins.mark_then pc + 1
+
       push ins
 
       statements
@@ -19,9 +25,13 @@ module Plankton
 
       while @tok.current == 'elsif'
 
+        lines = {}
+        lines[:startline] = @tok.line
         @tok.eat_a 'elsif'
         ins.mark_else pc
-        ins = IfInstruction.new expr
+        cond = expr
+        lines[:endline] = @tok.line
+        ins = IfInstruction.new cond, lines
         ins.mark_then pc + 1
         push ins
 
@@ -50,9 +60,13 @@ module Plankton
 
     def while_block ###############################################################################
 
+      lines = {}
+      lines[:startline] = @tok.line
       @tok.eat_a 'while'
       while_pc = pc
-      ins = WhileInstruction.new expr, pc+1
+      cond = expr
+      lines[:endline] = @tok.line
+      ins = WhileInstruction.new cond, pc+1, lines
       push ins
       statements
       gins = GotoInstruction.new

@@ -58,7 +58,7 @@ class InterpreterController < ApplicationController
     begin
       @protocol.parse
     rescue Exception => e
-      @parse_errors = "Error while parsing. " + e.message #  + ": " + e.backtrace.to_s
+      @parse_errors = "Error while parsing. " + e.message # + ": " + e.backtrace.to_s
     end
 
   end

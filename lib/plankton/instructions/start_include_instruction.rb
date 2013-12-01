@@ -18,7 +18,7 @@ module Plankton
       scope.push
 
       # take the evaluated args and push then onto the scope
-      arguments.each do |var,expr|
+      @arguments.each do |var,expr|
         begin
           scope.set var.to_sym, scope.evaluate( expr )
         rescue Exception => e
@@ -38,8 +38,8 @@ module Plankton
 
     def html
       h = "<b>start include</b> #{@filename}, <b>args</b>: "
-      @arguments.each do |a|
-        h += "#{a[:var]}=#{a[:value]}, "
+      @arguments.each do |var,expr|
+        h += "#{var} = #{expr}, "
       end
       return h[0..-3]
     end

@@ -4,6 +4,9 @@ module Plankton
 
     def include
 
+      lines = {}
+      lines[:startline] = @tok.line
+
       @tok.eat_a 'include'
       path = @tok.eat_a_string.remove_quotes
 
@@ -30,15 +33,16 @@ module Plankton
 
       end
 
+      lines[:endline] = @tok.line
       @tok.eat_a 'end'
 
       file = get_file path
       puts "Just before include, current = #{@tok.current}"
 
-      @tok = Tokenizer.new file[:content]
+      @tok = Lang::Tokenizer.new file[:content]
       @include_stack.push( { tokens: @tok, path: path, returns: rets } )
 
-      push StartIncludeInstruction.new args, path, file[:sha]
+      push StartIncludeInstruction.new args, path, file[:sha], lines
 
     end # include
 

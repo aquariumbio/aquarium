@@ -13,6 +13,8 @@ module Plankton
         status: 'status'
       } 
 
+      lines = {}
+      lines[:startline] = @tok.line
       @tok.eat_a 'http'
 
       while @tok.current != 'end' && @tok.current != 'EOF'
@@ -43,9 +45,10 @@ module Plankton
 
       end
 
+      lines[:endline] = @tok.line
       @tok.eat_a 'end'
 
-      push HTTPInstruction.new info
+      push HTTPInstruction.new info, lines
 
     end
 

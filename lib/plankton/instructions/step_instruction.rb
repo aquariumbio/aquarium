@@ -96,7 +96,7 @@ module Plankton
             end
 
           rescue Exception => e
-            raise "In <step>: " + e.to_s
+            raise "In step: " + e.to_s
           end
 
         end

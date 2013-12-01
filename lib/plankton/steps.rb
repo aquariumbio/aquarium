@@ -68,6 +68,8 @@ module Plankton
       note = ''
       warnings = []
 
+      lines = {}
+      lines[:startline] = @tok.line
       @tok.eat_a 'step'
 
       while @tok.current != 'end'
@@ -95,9 +97,10 @@ module Plankton
 
       end
 
+      lines[:endline] = @tok.line
       @tok.eat_a 'end'
 
-      push StepInstruction.new parts
+      push StepInstruction.new parts, lines
 
     end
 

@@ -4,6 +4,9 @@ module Plankton
 
     def produce ####################################################################################
 
+      lines = {}
+      lines[:startline] = @tok.line
+
       @tok.eat_a 'produce'
       data = {}
       rel = nil
@@ -72,9 +75,10 @@ module Plankton
 
       end
 
+      lines[:endline] = @tok.line
       @tok.eat_a 'end'
 
-      ins = ProduceInstruction.new ob[:type], ob[:quantity], rel, var
+      ins = ProduceInstruction.new ob[:type], ob[:quantity], rel, var, lines
       ins.data_expr = data
       ins.sample_expr = sample
       ins.note_expr = note

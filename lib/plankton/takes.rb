@@ -41,6 +41,9 @@ module Plankton
 
     def take #################################################################################
 
+      lines = {}
+      lines[:startline] = @tok.line
+
       @tok.eat_a 'take'
       items = []
       note = ""
@@ -85,9 +88,10 @@ module Plankton
 
       end
 
+      lines[:endline] = @tok.line
       @tok.eat_a 'end'
 
-      ti = TakeInstruction.new items
+      ti = TakeInstruction.new items, lines
       ti.note_expr = note
       push ti
 

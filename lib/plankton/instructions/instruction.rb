@@ -2,14 +2,15 @@ module Plankton
 
 class Instruction
  
-    attr_reader :name, :renderable, :flash, :console_messages, :xml
+    attr_reader :name, :renderable, :flash, :console_messages, :startline, :endline
     attr_writer :pc
 
     def initialize name, options = {}
       @name = name
       @flash = ""
       @console_messages = []
-      @xml = options[:xml]
+      @startline = options[:startline]
+      @endline = options[:endline]
     end
 
     def clear

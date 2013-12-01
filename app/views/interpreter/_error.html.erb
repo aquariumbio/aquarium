@@ -5,10 +5,10 @@
 </div>
 
 <% if @protocol && @protocol.program[@error_pc] %>
-  <h4>Offending Code</h4>
-  <pre><%= @protocol.program[@error_pc].xml.to_s %></pre>
+  <h4>Check offending '<%= @protocol.program[@error_pc].name %>' near lines
+       <%= @protocol.program[@error_pc].startline %> - 
+       <%= @protocol.program[@error_pc].endline %>.</h4>
 <% end %>
-
 
 <br />
   <button id='details-button' class='btn btn-small' onClick="toggle_details()">
@@ -23,8 +23,6 @@
   </div>
 
 <br />
-
-<p><%= link_to 'View Log for Job ' + @job.id.to_s, @job %></p>
 
 <script>
   <% @instruction.console_messages.each do |m| %>

@@ -8,9 +8,12 @@ module Plankton
 
       while @tok.current != 'end' && @tok.current != 'EOF'
 
+        lines = {}
+        lines[:startline] = @tok.line
         key = @tok.eat_a_variable
         @tok.eat_a ':'
-        push LogInstruction.new key, expr, 'log_file'
+        lines[:endline] = @tok.line
+        push LogInstruction.new key, expr, 'log_file', lines
        
       end
 

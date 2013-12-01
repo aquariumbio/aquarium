@@ -4,6 +4,8 @@ module Plankton
 
     def modify
 
+      lines = {}
+      lines[:startline] = @tok.line
       @tok.eat_a 'modify'
 
       info = { item: expr }
@@ -26,9 +28,10 @@ module Plankton
 
       end
 
+      lines[:endline] = @tok.line
       @tok.eat_a 'end'
 
-      push ModifyInstruction.new info
+      push ModifyInstruction.new info, lines
 
     end # modify
 
