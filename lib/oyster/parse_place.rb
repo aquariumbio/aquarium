@@ -60,7 +60,7 @@ module Oyster
 
             @tok.eat_a 'window'
             @tok.eat_a ':'
-            p.latest time
+            p.window time
 
           when 'argument'
              p.arg_expressions = arg_list

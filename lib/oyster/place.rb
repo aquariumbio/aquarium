@@ -16,8 +16,8 @@ module Oyster
                          # active, a new job id is pushed onto the stack.
       @marking = 0       # How many marks the place has (in the Petri Net sense)
 
-      @desired_start = "now"        # When the job should be started
-      @latest_start = "tomorrow"    # Latest time the job should be started
+      @desired_start = "now()"      # When the job should be started
+      @window =        "days(1)"    # Latest time the job should be started
 
       @sha = nil
 
@@ -48,8 +48,8 @@ module Oyster
       @desired_start = exp
     end
 
-    def latest exp
-      @latest_start = exp
+    def window exp
+      @window = exp
     end
 
     def group g
@@ -77,12 +77,20 @@ module Oyster
 
           puts "#{id}: Starting #{@protocol}, with sha = #{@sha}"  
 
+          desired = eval(@desired_start)
+          if desired < Time.now.to_i - 1.day # meaning that the user entered something like
+                                        # minutes(10), hours(4), or days(9) and we need to
+                                        # add Time.now to get the right time
+
+            desired = Time.now + eval(@desired_start)
+          end
+
           @jobs.push( Oyster.submit( {
             sha: @sha, 
             path: @protocol, 
             args: evaluated_arguments(scope),
-            desired: eval(@desired_start), 
-            latest: eval(@latest_start), 
+            desired: desired, 
+            latest: desired + eval(@window), 
             group: @group ? @group : who,
             metacol_id: id,
             who: who } ) )
@@ -156,15 +164,15 @@ module Oyster
     end
 
     def minutes n
-      Time.now + n.minutes
+      n.minutes
     end
 
     def hours n
-      Time.now + n.hours
+      n.hours
     end
 
     def days n
-      Time.now + n.days
+      n.days
     end
 
   end
