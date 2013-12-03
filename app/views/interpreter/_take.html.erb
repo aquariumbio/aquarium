@@ -1,6 +1,6 @@
 <h1>Gather the following items</h1>
 
-<% if @instruction.note != "" %>
+<% if (@instruction.respond_to? :note) && @instruction.note != "" %>
   <p><%= @instruction.note %></p>
 <% end %>
 
