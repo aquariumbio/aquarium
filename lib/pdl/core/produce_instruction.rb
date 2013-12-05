@@ -1,6 +1,6 @@
 class ProduceInstruction < Instruction
 
-  attr_reader :object_type_name, :quantity, :release, :var, :item
+  attr_reader :object_type_name, :quantity, :release, :var, :item, :location
   attr_accessor :sample_expr, :data_expr, :note, :sample_name_expr, :sample_project_expr
 
   def initialize object_type_expr, quantity_expr, release_expr, var, options = {}
