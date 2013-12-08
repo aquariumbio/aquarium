@@ -28,45 +28,50 @@
 <p class="alert"><%= @mc.message %></p>
 <% end %>
 
-<% @metacol.places.each do |p| %>
+<% if @errors == "" %>
 
-  <% if p.marked? %>
-    <div class='well marked'>
-  <% else %>
-    <div class='well unmarked'> 
-  <% end %>
+  <% @metacol.places.each do |p| %>
 
-    <p><b><%= p.name.capitalize %>.</b> <i><%= p.protocol %></i></p>
-
-    <% pending = @mc.jobs.reject { |j| j.pc == Job.COMPLETED || (!p.jobs.include? j.id) } %>
-    <% completed = @mc.jobs.reject { |j| j.pc != Job.COMPLETED || (!p.jobs.include? j.id) } %>
-
-    <% if pending.length > 0 %>
-      <h4>Pending or Active</h4>
-      <%= render partial: 'jobs/job_list', locals: { 
-          jobs: pending,
-          last_updated: true, 
-          runnable: false, 
-      } %>
+    <% if p.marked? %>
+      <div class='well marked'>
+    <% else %>
+      <div class='well unmarked'> 
     <% end %>
 
-    <% if completed.length > 0 %>
-      <h4>Completed Jobs:
-      <% completed.each do |j|%>
-        <% s = j.status.downcase %>
-        <div class='<%= s %>'>
-          <%= link_to "#{j.id}", j %> 
-          <% if s != 'completed' %>(<%= s %>)<% end %>
-        </div>
+      <p><b><%= p.name.capitalize %>.</b> <i><%= p.protocol %></i></p>
+
+      <% pending = @mc.jobs.reject { |j| j.pc == Job.COMPLETED || (!p.jobs.include? j.id) } %>
+      <% completed = @mc.jobs.reject { |j| j.pc != Job.COMPLETED || (!p.jobs.include? j.id) } %>
+
+      <% if pending.length > 0 %>
+	<h4>Pending or Active</h4>
+	<%= render partial: 'jobs/job_list', locals: { 
+	    jobs: pending,
+	    last_updated: true, 
+	    runnable: false, 
+	} %>
       <% end %>
-    <% end %></h4>
 
-  </div>
+      <% if completed.length > 0 %>
+	<h4>Completed Jobs:
+	<% completed.each do |j|%>
+	  <% s = j.status.downcase %>
+	  <div class='<%= s %>'>
+	    <%= link_to "#{j.id}", j %> 
+	    <% if s != 'completed' %>(<%= s %>)<% end %>
+	  </div>
+	<% end %>
+      <% end %></h4>
 
+    </div>
+
+  <% end %>
+
+  <%= link_to 'List All', metacols_path, class: 'btn' %>
+
+  <%= render 'details' %>
+
+<% else %>
+  <p>Details about this metacol are no longer available.</p>
 <% end %>
-
-<%= link_to 'List All', metacols_path, class: 'btn' %>
-
-<%= render 'details' %>
-
 

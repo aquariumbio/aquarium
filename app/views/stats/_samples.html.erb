@@ -1,0 +1,49 @@
+
+<div id="sample_stats" style='height: 300px'></div>
+
+<script>
+
+  var nms, dta;
+
+  $.ajax({
+    type: 'GET',
+    url: '/stats/samples',
+    dataType: "json",
+    success: function(data,status) {
+ 
+      dta = data;
+
+      names = [];
+      n = [];
+      m = [];
+      for ( var st in data ) {
+          names.push(st);
+          n.push(data[st][0]);
+          m.push(data[st][1]);
+      }
+
+      nms = names;
+
+      $('#sample_stats').css('height',100+45*names.length);
+
+      $(function () { 
+	  $('#sample_stats').highcharts({
+	      chart: { type: 'bar', animation: false },
+              title: { text: 'Sample Inventory' },
+	      xAxis: { categories: names },
+	      yAxis: { title: { text: 'Number'} },
+              credits: { enabled: false },
+              plotOptions: { series: { animation: false } },
+	      series: [{
+                  name: 'Samples',
+		  data: n
+	      }, {
+                  name: 'Items',
+                  data: m
+              }]
+	  });
+      });
+    }
+  });
+
+</script>

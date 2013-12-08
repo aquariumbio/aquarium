@@ -1,0 +1,120 @@
+<div style='border: 1pt solid #aaa; border-radius: 5pt; padding: 5px; margin: 5px;'>
+
+
+  <h4 style='text-align: center'>Older Changes
+    <button id='details-button' class='btn btn-small' onClick="toggle_details()">
+      Show
+    </button>
+</h4>
+
+  <div id='details' style='display: none'>
+
+    <h4>Nov. 25</h4>
+    <ul class='list'>
+      <li>Metacols in oyster can now be started from files or github. A
+      background process automatically updates them. Metacols are likely
+      quite buggy right now.</li>
+      <li>Users in the 'admin' group have special privileges.</li>
+      <li>The current user's login is shown in the background.</li>
+      <li>Job logs show the job status.</li>
+      <li>Plankton errors tell you what line number generated the error
+      and show that line (usually).</li>
+      <li>In use items can be released with the click of a button while
+      rehearsing a protocol.</li>
+      <li>Cart icon is white for icons already in your cart.</li>
+      <li>Modify has new fields: quantity, dquantity, iquantity, iiunse,
+      and dinuse.</li>
+    </ul>
+
+    <h4>Nov. 15</h4>
+    <ul class='list'>
+      <li>Users can now be organized into groups.</li>
+      <li>Jobs can be submitted to specific groups or users.</li>
+      <li>Jobs can be submitted at certain times and certain time
+      windows.</li>
+      <li>Pending jobs shows jobs in various categories: Running, urgent, pending, future.</li>
+    </ul>
+
+    <h4>Nov. 10</h4>
+    <ul class='list'>
+      <li>Metacol library now included in BioTurk. You can't use it yet,
+      except from the command line, but you will be able to soon.</li>
+      <li>Bigger buttons for editing the number of items being taken.</li>
+      <li>New file format, called Plankton, for
+      protocols. See <a href="https://github.com/klavinslab/specifications/blob/master/Languages/Plankton.md">the
+      Plankton specification</a> for details.</li>
+      <li>There is a basic editor for collections. You can make them,
+      edit them, but you can't do anything with them yet. Updates soon.</li>
+    </ul>
+
+    <h4>Oct. 23</h4>
+    <ul class='list'>
+      <li>Images for inventory items now link to Angler.</li>
+      <li>Fixed a bug that would render your cart unviewable, and
+      protocols taking samples as arguments unstartable due to missing
+      items.</li>
+    </ul>
+
+    <h4>Oct. 18</h4>
+    <ul class='list'>
+      <li>Sample fields that link to ther samples can now be empty.</li>
+      <li>Samples now have up to eight fields (was six)</li>
+      <li>Samples now automatically have a description field.</li>
+      <li>You can view you samples, anyone elses samples, or everyone's samples.</li>
+      <li>You can store data with a sample. Data can be added directly to
+	items on the sample page for that item, or can be specified during a
+	&lt;produce&gt;. Items in PDL have a data field now that has this data in
+	it. See generic/siso.pdl for an
+	example. </li>
+      <li>Items can be put into a virtual "cart" (for lack of a better
+	word). These items are available in a drop down menu when filling
+	in arguments of type sample for protocols.</li>
+    </ul>
+
+    <h4>Oct. 15</h4>
+    <ul class='list'>
+      <li>Fixed a bug that incorrectly cloned the production server data
+      and resulted in incorrect links between items, samples, object
+      types, and sample types. The db clone will now have exactly the same ids
+      as the production server has.</li>
+      <li>Somewhat more pronouced color differences between production and
+      rehearsal servers.</li>
+    </ul>
+
+    <h4>Oct. 14</h4>
+    <ul class='list'>
+      <li>Improved error reporting. More errors are caught, are better explained, and in many
+	cases the offending PDL code is shown.</li>
+      <li>Produce now tells you the id of the item you are producing, and
+	you can add a note to show on the produce page.</li>
+      <li>Every job that touched a particular item is now show, and vice
+	verse. Look at the log page after running a protocol to see how.</li>
+      <li>In take, you can specify a particular item by using its id.</li>
+      <li>Arguments can have type <b>sample</b> or type <b>objecttype</b>
+	in addition to the old string and number. For arguments named, for
+	example, primer_id, BioTurk will know you want an item id that
+	refers to a primer and give you a list of projects and samples to
+	select from when starting the protocol.</li>
+      <li>When copying the production db to your local copy of bioturk,
+	you get the sample types and samples too.</li>
+    </ul>
+
+  </div>
+
+</div> 
+
+<script>
+
+  function toggle_details() {
+    s = document.getElementById('details').style.display;
+    if ( s == 'none' ) {
+      document.getElementById('details').style.display = 'block';
+      document.getElementById('details-button').innerHTML = 'Hide';      
+    } else {
+      document.getElementById('details').style.display = 'none';
+      document.getElementById('details-button').innerHTML = 'Show';      
+    }
+  
+  }
+
+</script>

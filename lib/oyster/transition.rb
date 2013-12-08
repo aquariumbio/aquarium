@@ -97,6 +97,10 @@ module Oyster
       end
     end
 
+    def return_value name
+      # TODO: Get the value returned by the latest job
+    end
+
 
   end
 

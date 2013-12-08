@@ -1,0 +1,41 @@
+
+<div id="user_stats" style='height: 300px'></div>
+
+<script>
+
+
+  $.ajax({
+    type: 'GET',
+    url: '/stats/users',
+    dataType: "json",
+    success: function(data,status) {
+ 
+      logins = [];
+      nums = [];
+      for ( var login in data ) {
+        if ( data[login] > 0 ) {
+          logins.push(login);
+          nums.push(data[login]);
+        }
+      }
+
+      $('#user_stats').css('height',100+30*nums.length);
+
+      $(function () { 
+	  $('#user_stats').highcharts({
+	      chart: { type: 'bar' },
+              title: { text: 'User Activity' },
+	      xAxis: { categories: logins },
+	      yAxis: { title: { text: 'Jobs (past 7 days)'} },
+              credits: { enabled: false },
+              plotOptions: { series: { animation: false } },
+	      series: [{
+                  showInLegend: false,
+		  data: nums
+	      }]
+	  });
+      });
+    }
+  });
+
+</script>

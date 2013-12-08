@@ -14,8 +14,11 @@ class MetacolsController < ApplicationController
 
     @mc = Metacol.find(params[:id])
     parse @mc.sha, @mc.path
-    @metacol.set_state JSON.parse(@mc.state, :symbolize_names => true )
-    @metacol.id = @mc.id
+
+    if @errors==""
+      @metacol.set_state JSON.parse(@mc.state, :symbolize_names => true )
+      @metacol.id = @mc.id
+    end
 
     respond_to do |format|
       format.html # show.html.erb

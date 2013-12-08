@@ -1,0 +1,36 @@
+
+<div id="outcome_stats" style='height: 250px; border: 0pt solid red'></div>
+<script>
+
+  $.ajax({
+    type: 'GET',
+    url: '/stats/outcomes',
+    dataType: "json",
+    success: function(data,status) {
+
+      names = [];
+      nums = [];
+      tot = 0;
+      for ( var i=0; i<data.length; i++ ) {
+        names.push(data[i][0]);
+        nums.push(data[i][1]);
+        tot += data[i][1];
+      }
+
+      $(function () { 
+	  $('#outcome_stats').highcharts({
+	      chart: { type: 'pie' },
+              title: { text: 'Outcomes (' + tot + ' Jobs in Last 7 Days)' },
+              credits: { enabled: false },
+              plotOptions: { series: { animation: false } },
+	      series: [{
+                data: data
+	      }]
+	  });
+      });
+
+
+    }
+  });
+
+</script>

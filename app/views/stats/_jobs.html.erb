@@ -1,0 +1,34 @@
+<div id="job_stats"  style='height: 220px'></div>
+
+<script>
+
+  var thing;
+
+  $.ajax({
+    type: 'GET',
+    url: '/stats/jobs',
+    dataType: "json",
+    success: function(data,status) {
+      $(function () { 
+	  $('#job_stats').highcharts({
+	      chart: { type: 'bar' },
+	      title: { text: 'Current Queue' },
+	      xAxis: { categories: ['Active', 'Urgent', 'Pending', 'Future'] },
+	      yAxis: { title: { text: 'Current Jobs (All Users)'} },
+              credits: { enabled: false },
+              plotOptions: { series: { animation: false } },
+	      series: [{
+                  showInLegend: false,
+		  data: [
+                    { y: data.active.length, color: 'orange' },
+                    { y: data.urgent.length, color: 'red' },
+                    { y: data.pending.length, color: 'green' },
+                    { y: data.later.length, color: 'grey' } ]
+	      }]
+	  });
+      });
+    }
+  });
+
+
+</script>

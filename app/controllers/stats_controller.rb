@@ -1,0 +1,130 @@
+class StatsController < ApplicationController
+
+  def jobs
+
+    now = Time.now
+
+    @active = 
+    @urgent = 
+    @pending = 
+    @later  = 
+
+    render json: { 
+      active: Job.where("pc >= 0"),
+      urgent: Job.where("pc = -1 AND latest_start_time < ?", now),
+      pending: Job.where("pc = -1 AND desired_start_time < ? AND ? <= latest_start_time", now, now),
+      later: Job.where("pc = -1 AND ? <= desired_start_time", now)
+    }
+
+  end
+
+  def users
+
+    data = {}
+    now = Time.now
+
+    User.all.each do |u|
+      data[u.login] = (u.jobs.select { |j| j.created_at > now - 7.days }).length
+    end
+
+    render json: data
+
+  end
+
+  def protocols
+
+    now = Time.now
+
+    p = {}
+    Job.where("created_at > ?", now - 7.days).each do |j|
+      if j.path
+        path = j.path.split('/').last
+      else
+        path = 'unknown'
+      end
+      if p[path]
+        p[path] += 1
+      else
+        p[path] = 1
+      end
+    end
+
+    render json: p.sort_by {|_key, value| -value}
+
+  end
+
+  def outcomes
+
+    now = Time.now
+
+    r = { "ERROR" => 0, "ABORTED" => 0, "COMPLETED" => 0, "CANCELED" => 0 }
+    Job.where("pc = -2 AND created_at > ?", now - 7.days).each do |j|
+      r[j.status] += 1
+    end
+
+    render json: r.sort
+
+  end
+
+  def samples
+
+    r = {}
+
+    data = SampleType.all.collect do |st|
+      num_items = 0;
+      st.samples.each do |s|
+        num_items += s.items.length
+      end
+      r[st.name] = [ st.samples.length, num_items ]
+    end
+
+    render json: r
+
+  end
+
+  def objects
+    
+    t = ObjectType.first.created_at
+    now = Time.now
+
+    objects = []
+    items = []
+
+    while t < now
+      tnew = t + 1.day
+      objects.push( [ 1000*t.to_i, ObjectType.where("created_at < ?", tnew).length ] )
+      items.push( [ 1000*t.to_i, Item.where("created_at < ?", tnew).length  ] )
+      t = tnew
+    end
+
+    render json: { objects: objects, items: items }
+
+  end
+
+  def processes
+
+    names = []
+    active = []
+    pending = []
+    completed = []
+
+    Metacol.where("status='RUNNING'").each do |m|
+        login = User.find_by_id(m.user_id).login
+        name = m.path.split('.').first
+        names.push( "#{m.id}:#{name}<br />(#{login})" )
+        active.push( (m.jobs.select { |j| j.pc >= 0 }).length )
+        pending.push( (m.jobs.select { |j| j.pc >= -1 }).length )
+        completed.push( (m.jobs.select { |j| j.pc >= -2 }).length )
+    end
+
+    render json: { names: names, active: active, pending: pending, completed: completed }
+
+  end
+
+  def empty
+
+    render json: ( ObjectType.all.select { |ot| ot.quantity < ot.min } ).collect { |ot| view_context.link_to( ot.name, ot) }
+
+  end
+
+end

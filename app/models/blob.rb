@@ -8,15 +8,23 @@ class Blob < ActiveRecord::Base
 
     if !b 
 
-      logger.info "Connecting to github to get #{sha}"
+      if !/local/.match sha
 
-      client = Octokit::Client.new(login:'klavins',password:'a22imil@te')
+        logger.info "Connecting to github to get #{sha}"
 
-      b = self.new
-      b.sha = sha
-      b.path = path
-      b.xml = Base64.decode64(client.blob('klavinslab/protocols',sha).content);
-      b.save
+        client = Octokit::Client.new(login:'klavins',password:'a22imil@te')
+
+        b = self.new
+        b.sha = sha
+        b.path = path
+        b.xml = Base64.decode64(client.blob('klavinslab/protocols',sha).content);
+        b.save
+
+      else
+
+        b = Blob.new
+
+      end
 
     end
 

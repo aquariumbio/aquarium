@@ -1,0 +1,37 @@
+<div id="process_stats"  style='height: 220px'></div>
+
+<script>
+
+  $.ajax({
+    type: 'GET',
+    url: '/stats/processes',
+    dataType: "json",
+
+    success: function(data,status) {
+      $('#process_stats').css('height',100+60*data.names.length);
+      $(function () { 
+	  $('#process_stats').highcharts({
+	      chart: { type: 'bar' },
+	      title: { text: 'Processes' },
+	      xAxis: { categories: data.names },
+	      yAxis: { title: { text: 'Current Jobs (All Users)' }, allowDecimals: false },
+              credits: { enabled: false },
+              plotOptions: { series: { animation: false } },
+	      series: [{
+                  name: "Active",
+                  data: data.names
+                },{
+                  name: "Pending",
+                  data: data.pending
+                },{
+                  name: "Completed",
+                  data: data.completed
+                }
+              ]
+	  });
+      });
+    }
+  });
+
+
+</script>

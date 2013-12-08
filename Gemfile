@@ -9,6 +9,7 @@ gem 'bootstrap-will_paginate'
 gem 'octokit'
 gem 'sass-rails',   '~> 3.2.3'
 gem 'db-charmer', :require => 'db_charmer'
+gem "highcharts-rails", "~> 3.0.0"
 
 group :development do
   gem 'sqlite3'

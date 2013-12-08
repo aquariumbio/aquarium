@@ -1,0 +1,36 @@
+<h4 style='text-align: center; color: #888'>Critical Inventory (Quantity < Min)</h4>
+
+<div id='critical'>None.</div>
+
+<script>
+
+  $.ajax({
+    type: 'GET',
+    url: '/stats/empty',
+    dataType: "json",
+    success: function(data,status) {
+
+      str = "<table class='table'>";
+      for ( var i=0; i<data.length; i += 3 ) {
+        str += "<tr>";
+        str += "<td>" + data[i] + "</td>";
+        if ( i+1 < data.length ) {
+          str += "<td>" + data[i+1] + "</td>";
+        } else {
+          str += "<td></td>";
+        }
+        if ( i+2 < data.length ) {
+          str += "<td>" + data[i+2] + "</td>";
+        } else {
+          str += "<td></td>";
+        }
+        str += "</tr>";
+      }
+      str += "</table>";
+
+      $('#critical').html(str);
+
+    }
+  });
+
+</script>

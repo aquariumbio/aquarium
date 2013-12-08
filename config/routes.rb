@@ -31,6 +31,15 @@ Bioturk::Application.routes.draw do
   get "interpreter/error"
   get "interpreter/release"
 
+  get "stats/jobs"
+  get "stats/users"
+  get "stats/protocols"
+  get "stats/outcomes"
+  get "stats/samples"
+  get "stats/objects"
+  get "stats/processes"
+  get "stats/empty"
+
   get "jobs/index"
 
   get "liaison/info"
@@ -67,6 +76,7 @@ Bioturk::Application.routes.draw do
   match '/status',  to: 'static_pages#status'
   match '/analytics',  to: 'static_pages#analytics'
   match '/jobchart', to: 'static_pages#jobchart'
+  match '/changes', to: 'static_pages#changes'
 
   get '/production_interface', to: 'object_types#production_interface'
   get '/delete_inventory', to: 'object_types#delete_inventory'
