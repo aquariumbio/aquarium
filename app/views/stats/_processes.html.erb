@@ -2,6 +2,8 @@
 
 <script>
 
+function displayProcesses() {
+
   $.ajax({
     type: 'GET',
     url: '/stats/processes',
@@ -14,7 +16,7 @@
 	      chart: { type: 'bar' },
 	      title: { text: 'Processes' },
 	      xAxis: { categories: data.names },
-	      yAxis: { title: { text: 'Current Jobs (All Users)' }, allowDecimals: false },
+	      yAxis: { title: { text: 'Current Processes (All Users)' }, allowDecimals: false },
               credits: { enabled: false },
               plotOptions: { series: { animation: false } },
 	      series: [{
@@ -33,5 +35,10 @@
     }
   });
 
+  setTimeout(displayProcesses,DISPLAY_PROCESSES_PERIOD);
+
+}
+
+displayProcesses();
 
 </script>

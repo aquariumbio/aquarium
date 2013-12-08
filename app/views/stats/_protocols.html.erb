@@ -3,6 +3,7 @@
 
 <script>
 
+function displayProtocols() {
 
   $.ajax({
     type: 'GET',
@@ -37,5 +38,11 @@
 
     }
   });
+
+  setTimeout(displayProtocols,DISPLAY_PROTOCOLS_PERIOD);
+
+}
+
+displayProtocols();
 
 </script>

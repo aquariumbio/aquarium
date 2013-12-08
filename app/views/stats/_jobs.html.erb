@@ -2,13 +2,14 @@
 
 <script>
 
-  var thing;
+function displayJobs() {
 
   $.ajax({
     type: 'GET',
     url: '/stats/jobs',
     dataType: "json",
     success: function(data,status) {
+
       $(function () { 
 	  $('#job_stats').highcharts({
 	      chart: { type: 'bar' },
@@ -29,6 +30,12 @@
       });
     }
   });
+
+  setTimeout(displayJobs,DISPLAY_JOBS_PERIOD);
+
+}
+
+displayJobs();
 
 
 </script>

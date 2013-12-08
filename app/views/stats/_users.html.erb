@@ -3,6 +3,7 @@
 
 <script>
 
+function displayUsers() {
 
   $.ajax({
     type: 'GET',
@@ -37,5 +38,11 @@
       });
     }
   });
+
+  setTimeout(displayUsers,DISPLAY_USERS_PERIOD);
+
+}
+
+displayUsers();
 
 </script>

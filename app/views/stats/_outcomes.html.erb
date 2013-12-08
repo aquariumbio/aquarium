@@ -2,6 +2,8 @@
 <div id="outcome_stats" style='height: 250px; border: 0pt solid red'></div>
 <script>
 
+function displayOutcomes() {
+
   $.ajax({
     type: 'GET',
     url: '/stats/outcomes',
@@ -20,7 +22,7 @@
       $(function () { 
 	  $('#outcome_stats').highcharts({
 	      chart: { type: 'pie' },
-              title: { text: 'Outcomes (' + tot + ' Jobs in Last 7 Days)' },
+              title: { text: 'Outcomes (' + tot + ' Outcomes in Last 7 Days)' },
               credits: { enabled: false },
               plotOptions: { series: { animation: false } },
 	      series: [{
@@ -28,9 +30,13 @@
 	      }]
 	  });
       });
-
-
     }
   });
+
+  setTimeout(displayOutcomes,DISPLAY_OUTCOMES_PERIOD);
+
+}
+
+displayOutcomes();
 
 </script>

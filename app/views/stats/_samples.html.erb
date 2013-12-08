@@ -3,7 +3,7 @@
 
 <script>
 
-  var nms, dta;
+function displaySamples() {
 
   $.ajax({
     type: 'GET',
@@ -11,8 +11,6 @@
     dataType: "json",
     success: function(data,status) {
  
-      dta = data;
-
       names = [];
       n = [];
       m = [];
@@ -45,5 +43,11 @@
       });
     }
   });
+
+  setTimeout(displaySamples,DISPLAY_SAMPLES_PERIOD);
+
+}
+
+displaySamples();
 
 </script>

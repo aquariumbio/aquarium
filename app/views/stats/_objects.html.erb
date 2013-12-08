@@ -1,16 +1,16 @@
 
-<div id="object_stats" style='height: 300px'></div>
+<div id="object_stats" style='height: 350px'></div>
 
 <script>
 
-  var d;
+function displayObjects() {
 
   $.ajax({
     type: 'GET',
     url: '/stats/objects',
     dataType: "json",
     success: function(data,status) {
-      d = data;
+
       $(function () { 
 	  $('#object_stats').highcharts({
 	      chart: { },
@@ -35,5 +35,11 @@
       });
     }
   });
+
+  setTimeout(displayObjects,DISPLAY_OBJECTS_PERIOD);
+
+}
+
+displayObjects();
 
 </script>
