@@ -52,7 +52,7 @@ class Instruction
         d = item.data ? item.data : "{}";
         begin
           json_string = JSON.parse(d)
-        rescue Expection => e
+        rescue Exception => e
           raise "JSON Error: Could not parse data for item #{item.id}"
         end
         return { id: item.id, name: item.object_type.name, data: json_string }
