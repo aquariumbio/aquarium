@@ -50,7 +50,12 @@ class Instruction
         raise "Could not convert argument to PDL item, because it was not a Rails Item to start with."
       else
         d = item.data ? item.data : "{}";
-        return { id: item.id, name: item.object_type.name, data: JSON.parse(d) }
+        begin
+          json_string = JSON.parse(d)
+        rescue Expection => e
+          raise "JSON Error: Could not parse data for item #{item.id}"
+        end
+        return { id: item.id, name: item.object_type.name, data: json_string }
       end
     end
 
