@@ -2,6 +2,8 @@ require 'socket'
 
 class InterpreterController < ApplicationController
 
+  before_filter :signed_in_user
+
   def get_blob 
 
     # Gets a blob from the db and parses the xml to check for errors.

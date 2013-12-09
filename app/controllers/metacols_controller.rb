@@ -1,5 +1,7 @@
 class MetacolsController < ApplicationController
 
+  before_filter :signed_in_user
+
   def index
     @active_metacols = Metacol.where("status = 'RUNNING'")
     @completed_metacols = Metacol.paginate(page: params[:page], :per_page => 10).where("status != 'RUNNING'")

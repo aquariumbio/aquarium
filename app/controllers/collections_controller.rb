@@ -2,6 +2,8 @@ require 'matrix'
 
 class CollectionsController < ApplicationController
 
+  before_filter :signed_in_user
+
   def index
     @collections = Collection.all
   end
