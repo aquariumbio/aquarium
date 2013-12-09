@@ -35,7 +35,9 @@
       <p><%= link_to 'View Log for Job ' + @job.id.to_s, @job %></p>
       <p><%= link_to "View Other Pending Jobs", jobs_path %>
 
-      <%= render 'check_for_metacol_jobs' %>
+      <% if !@exception %>
+        <%= render 'check_for_metacol_jobs' %> 
+      <% end %>
 
     <% elsif @pc != Job.COMPLETED %>
 
