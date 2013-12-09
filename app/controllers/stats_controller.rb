@@ -127,4 +127,12 @@ class StatsController < ApplicationController
 
   end
 
+  def timing
+
+    @job = params[:job]
+
+    render json: (Log.where("job_id = ? AND entry_type = 'NEXT'",@job).collect { |log| [ 1000*(log.created_at.to_i), JSON.parse(log.data)['pc'] ] })
+
+  end
+
 end

@@ -39,6 +39,7 @@ Bioturk::Application.routes.draw do
   get "stats/objects"
   get "stats/processes"
   get "stats/empty"
+  get "stats/timing"
 
   get "jobs/index"
 

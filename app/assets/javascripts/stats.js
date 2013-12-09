@@ -3,21 +3,21 @@ function seconds(n) {
 }
 
 function minutes(n) {
-    return seconds(60);
+    return seconds(60*n);
 }
 
 function hours(n) {
-    return minutes(60);
+    return minutes(60*n);
 }
 
 function days(n) {
-    return hours(24);
+    return hours(24*n);
 }
 
 //
 // Times are staggered to avoid simultaneous requests
 //
-var DISPLAY_JOB_PERIOD = seconds(91);
+var DISPLAY_JOBS_PERIOD = seconds(91);
 var DISPLAY_EMPTY_PERIOD = hours(1) + minutes(1);
 var DISPLAY_OBJECTS_PERIOD = days(1) + minutes(11);
 var DISPLAY_SAMPLES_PERIOD = days(1) + minutes(13);

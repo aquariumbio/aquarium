@@ -1,0 +1,51 @@
+<% if @job.metacol_id != nil %>
+
+  <style>
+    .checker {
+      background: white;
+     }
+  </style>
+
+  <% now = Time.now
+     jobs = Job.where('pc = -1 AND desired_start_time < ? AND metacol_id = ?', now, @job.metacol_id).reject { |j| !current_user.member?( j.group_id ) } %>
+
+  <% if jobs.length > 0 %>
+
+   <% params[:numchecks] = 8 %>
+
+    <div class='well checker' id="more-jobs">
+      <h1>More metacol <%= @job.metacol_id %> jobs to do:</h1>
+      <%= render partial: 'jobs/job_list', locals: { jobs: jobs, runnable: true, last_updated: true } %>
+    </div>
+
+  <% elsif params[:numchecks].to_i >= 8 && jobs.length == 0 %>
+
+    <div class='well checker' id="more-jobs">
+      <h1>No pending jobs for metacol <%= @job.metacol_id %> found.</h1>
+      <p>There may be jobs for this metacol scheduled for the future, so check your pending jobs later.</p>
+    </div>
+
+  <% else %>
+
+    <div class='well checker' id="more-jobs">
+      <h1><%= image_tag 'waiting_animation.gif' %> Checking for more jobs related to metacol <%= @job.metacol_id %>.</h1>
+    </div>
+
+  <% end %>
+
+  <script>
+
+    function reloadPage() {
+
+      numchecks = <%= params[:numchecks] ? params[:numchecks].to_i + 1 : 0 %>;
+      window.location = 'current?job=<%= @job.id %>&numchecks='+numchecks;
+
+    }
+
+    <% if params[:numchecks].to_i < 8 %>
+      setTimeout(reloadPage, 1000); 
+    <% end %>
+
+  </script>
+
+<% end %>

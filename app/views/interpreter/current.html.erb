@@ -33,11 +33,14 @@
 
       <div class="alert alert-info">THIS JOB IS NO LONGER ACTIVE</div>
       <p><%= link_to 'View Log for Job ' + @job.id.to_s, @job %></p>
-      <p><%= link_to "View Pending Jobs", jobs_path %>
+      <p><%= link_to "View Other Pending Jobs", jobs_path %>
+
+      <%= render 'check_for_metacol_jobs' %>
 
     <% elsif @pc != Job.COMPLETED %>
 
       <%= render @instruction.name %>
+
       <div id='note' style='display: none'>
         <hr />
         <p>Add a note to the log for this step</p>
