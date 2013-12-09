@@ -130,7 +130,11 @@ module Plankton
       pre_render scope, params
 
       # Get the users choices of particular items
-      choices = JSON.parse(params[:choices])
+      begin
+        choices = JSON.parse(params[:choices])
+      rescue Expection => e
+        raise "JSON error while parsing take choices"
+      end
 
       # Iterate over all items to be taken
       for j in 0..( (@object_list.length) - 1 ) 
@@ -146,7 +150,6 @@ module Plankton
           q.times do
             result.push( pdl_item item ) 
           end
-
           item.inuse += q
           item.save
 
