@@ -6,7 +6,7 @@ class Item < ActiveRecord::Base
   has_one :part
   has_many :cart_items
 
-  attr_accessible :location, :quantity, :inuse, :sample_id, :data, :object_type_id
+  attr_accessible :location, :quantity, :inuse, :sample_id, :data, :object_type_id, :created_at
 
   validates :location, :presence => true
 

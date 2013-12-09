@@ -97,10 +97,13 @@ module Oyster
       end
     end
 
-    def return_value name
-      # TODO: Get the value returned by the latest job
+    def return_value j, name
+      if j < @parents.length
+        @parents[j].return_value[name.to_sym]
+      else
+        false
+      end
     end
-
 
   end
 

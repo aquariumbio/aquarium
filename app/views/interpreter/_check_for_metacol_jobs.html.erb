@@ -11,18 +11,18 @@
 
   <% if jobs.length > 0 %>
 
-   <% params[:numchecks] = 8 %>
+   <% params[:numchecks] = 5 %>
 
     <div class='well checker' id="more-jobs">
       <h1>More metacol <%= @job.metacol_id %> jobs to do:</h1>
       <%= render partial: 'jobs/job_list', locals: { jobs: jobs, runnable: true, last_updated: true } %>
     </div>
 
-  <% elsif params[:numchecks].to_i >= 8 && jobs.length == 0 %>
+  <% elsif params[:numchecks].to_i >= 5 && jobs.length == 0 %>
 
     <div class='well checker' id="more-jobs">
       <h1>No pending jobs for metacol <%= @job.metacol_id %> found.</h1>
-      <p>There may be jobs for this metacol scheduled for the future, so check your pending jobs later.</p>
+      <p>There may be jobs for this metacol scheduled for the future, so check your pending jobs later or reload this page.</p>
     </div>
 
   <% else %>
@@ -42,7 +42,7 @@
 
     }
 
-    <% if params[:numchecks].to_i < 8 %>
+    <% if params[:numchecks].to_i < 5 %>
       setTimeout(reloadPage, 1000); 
     <% end %>
 

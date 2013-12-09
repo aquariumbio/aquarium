@@ -2,7 +2,7 @@ class ObjectType < ActiveRecord::Base
 
   attr_accessible :cleanup, :data, :description, :handler, :max, :min, :name, :safety, 
                   :vendor, :unit, :image, :cost, :release_method, :release_description,
-                  :sample_type_id
+                  :sample_type_id, :created_at
 
   validates :name, :presence => true
   validates :unit, :presence => true

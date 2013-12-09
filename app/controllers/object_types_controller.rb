@@ -206,7 +206,7 @@ class ObjectTypesController < ApplicationController
       ProductionObjectType.all.each do |ot|
 
         num_objects += 1
-        new_ot = ObjectType.new(ot.attributes.except("image_file_name","image_content_type","image_file_size","image_updated_at","created_at","updated_at"))
+        new_ot = ObjectType.new(ot.attributes.except("image_file_name","image_content_type","image_file_size","image_updated_at","updated_at"))
         new_ot.id = ot.id
         new_ot.save
 
@@ -214,7 +214,7 @@ class ObjectTypesController < ApplicationController
 
       ProductionItem.all.each do |i|
 
-        new_item = Item.new(i.attributes.except("object_type_id","created_at","updated_at"))
+        new_item = Item.new(i.attributes.except("object_type_id","updated_at"))
         new_item.id = i.id + 1
         new_item.object_type_id = i.object_type_id
         new_item.sample_id = i.sample_id

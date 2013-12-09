@@ -15,6 +15,7 @@ module Oyster
       add_function :quantity, 1
       add_function :min_quantity, 1
       add_function :max_quantity, 1
+      add_function :return_value, 2
     end
 
     def parse

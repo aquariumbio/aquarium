@@ -1,0 +1,20 @@
+
+########################################################### 
+# Places
+#
+
+place one
+  protocol: "plankton/one.pl"
+  group: "admin"
+  marked: true
+  start: now()
+  window: minutes(30)
+end
+
+###########################################################
+# Transitions
+#
+
+transition [ one ] => [ one ] when !error(0) && completed(0) && return_value(0,"n") != 1 end
+transition [ one ] => [] when !error(0) && completed(0) && return_value(0,"n") == 1 end
+  
