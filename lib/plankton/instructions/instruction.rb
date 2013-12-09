@@ -51,11 +51,11 @@ class Instruction
       else
         d = item.data ? item.data : "{}";
         begin
-          json_string = JSON.parse(d)
+          data = JSON.parse(d)
         rescue Exception => e
-          raise "JSON Error: Could not parse data for item #{item.id}"
+          data = {}
         end
-        return { id: item.id, name: item.object_type.name, data: json_string }
+        return { id: item.id, name: item.object_type.name, data: data }
       end
     end
 
