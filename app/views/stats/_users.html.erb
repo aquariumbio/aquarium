@@ -27,7 +27,7 @@ function displayUsers() {
 	      chart: { type: 'bar' },
               title: { text: 'User Activity' },
 	      xAxis: { categories: logins },
-	      yAxis: { title: { text: 'Jobs (past 7 days)'} },
+	      yAxis: { title: { text: 'Jobs (past 7 days)'}, allowDecimals: false },
               credits: { enabled: false },
               plotOptions: { series: { animation: false } },
 	      series: [{

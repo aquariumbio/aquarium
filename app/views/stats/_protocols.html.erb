@@ -25,7 +25,7 @@ function displayProtocols() {
 	      chart: { type: 'bar' },
               title: { text: 'Protocol Usage' },
 	      xAxis: { categories: names },
-	      yAxis: { title: { text: 'Jobs (past 7 days)'} },
+	      yAxis: { title: { text: 'Jobs (past 7 days)'}, allowDecimals: false },
               credits: { enabled: false },
               plotOptions: { series: { animation: false } },
 	      series: [{

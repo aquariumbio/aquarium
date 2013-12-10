@@ -15,7 +15,7 @@ function displayJobs() {
 	      chart: { type: 'bar' },
 	      title: { text: 'Current Queue' },
 	      xAxis: { categories: ['Active', 'Urgent', 'Pending', 'Future'] },
-	      yAxis: { title: { text: 'Current Jobs (All Users)'} },
+	      yAxis: { title: { text: 'Current Jobs (All Users)'}, allowDecimals: false },
               credits: { enabled: false },
               plotOptions: { series: { animation: false } },
 	      series: [{
