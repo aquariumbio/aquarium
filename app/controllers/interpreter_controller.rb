@@ -121,7 +121,7 @@ class InterpreterController < ApplicationController
     else # its a protocol
 
       parse # why is this not parse_args_only?
-      render 'arguments' 
+      render 'narguments' 
 
     end
 

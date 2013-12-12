@@ -16,6 +16,11 @@ module Plankton
          type = 'objecttype'
       end
 
+      if @tok.current == 'array'
+        @tok.eat
+        type += '_array'
+      end
+
       if @tok.current == ','
         @tok.eat
         description = @tok.eat_a_string.remove_quotes

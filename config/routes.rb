@@ -2,6 +2,7 @@ Bioturk::Application.routes.draw do
 
   resources :metacols do
       get 'arguments', on: :new
+      get 'narguments', on: :new
       get 'launch', on: :new
       get 'stop'
   end
@@ -23,6 +24,7 @@ Bioturk::Application.routes.draw do
   match "interpreter/open_local_file", to: 'interpreter#open_local_file', via: [:post]
 
   get "interpreter/arguments"
+  get "interpreter/narguments"
   get "interpreter/submit"
   get "interpreter/current"
   get "interpreter/advance"

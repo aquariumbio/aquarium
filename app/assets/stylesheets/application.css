@@ -11,6 +11,8 @@
  *= require_self
  *= require_tree .
  *= require bootstrap-responsive.css
+ *= require jquery.ui.datepicker
+ *= require jquery.ui.menu
  */
 
 

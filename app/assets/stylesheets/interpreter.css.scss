@@ -204,3 +204,50 @@ input::-webkit-inner-spin-button {
   background: yellow !important;
   font-weight: bold;
 }
+
+.choice {
+  border: 1pt solid #ccc;
+  background: white;
+  height: 30px;
+  width: 250px;
+  border-radius: 5px;
+  padding-left: 5px;
+  margin-bottom: 20px;
+
+}
+
+.object-menu {
+
+  overflow: visible;
+   ul {
+
+     display: block;
+     position: relative;
+     list-style: none;
+     width: 180px;
+
+     ul { 
+       width: 200px;
+
+       ul { 
+         width: 380px;
+       }
+
+     }
+
+  }
+
+}
+
+.argument {
+  background: #eee;
+  padding: 20px;
+  margin: 10px;
+  border: 1pt solid #ddd;
+  border-radius: 10px;
+}
+
+.sep {
+  display: block;
+  margin-left: 10px;
+}

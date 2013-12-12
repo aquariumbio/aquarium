@@ -1,0 +1,78 @@
+<% provide(:title, @path) %>
+
+<p><%= @protocol.info %></p>
+
+<% if @parse_errors != "" %>
+
+  <h4>Parse error</h4>
+  <p class='alert'><%= @parse_errors %></p>
+
+  <% if @protocol.bad_xml %>
+    <h4>Offending Code</h4>
+    <pre><%= @protocol.bad_xml.to_s.html_safe %></pre>
+  <% end %>
+
+<% else %>
+
+  <h1>Initialize Job Parameters for <%= @path %></h1>
+
+  <% if @protocol.args.length > 0 %>
+
+    <h4>Arguments</h4>
+
+    <div id='argument-chooser'></div>
+
+  <% end %>
+
+  <h4>Scheduling Information</h4>
+
+  <label>Group/User</label>
+  <div id='group-chooser'>Group/User Chooser Here</div>
+
+  <label>Desired Start Time</label>
+  <div id='time-chooser'>Time Chooser Here</div>
+
+  <label>Complete Within</label>
+  <div id='duration-chooser'>Duration Chooser Here</div>
+
+  <div id='button-area'></div>
+
+<% end %>
+
+<script>
+
+// get arguments
+var args = [];
+<% @protocol.args.each do |a| %>
+  args.push({
+    name: '<%= a.name %>', 
+    description: '<%= a.description %>',
+    type: '<%= a.type %>'
+  });
+<% end %>
+
+// get cart
+var cart = [];
+  <% current_user.cart_items.each do |c| %>
+  cart.push({
+    id: <%= c.item.id %>,
+    sample_name: '<%= c.item.sample.name %>',
+    sample_type: '<%= c.item.sample.sample_type.name %>'
+  });
+  <% end %>
+
+// build object types list
+var objects = {};
+<% ObjectType.all.each do |o| %>
+  if ( objects.<%= o.handler %> ) {
+    objects.<%= o.handler %>.push('<%= o.name %>');
+  } else {
+    objects.<%= o.handler %> = [ '<%= o.name %>' ];
+  }
+<% end %>
+
+
+// run javascript ui maker thingy
+ac = new ArgumentUI(args,cart,objects);
+
+</script>
