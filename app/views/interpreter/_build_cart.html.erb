@@ -1,0 +1,9 @@
+// get cart
+var cart = [];
+  <% current_user.cart_items.each do |c| %>
+  cart.push({
+    id: <%= c.item.id %>,
+    sample_name: '<%= c.item.sample.name %>',
+    sample_type: '<%= c.item.sample.sample_type.name %>'
+  });
+  <% end %>

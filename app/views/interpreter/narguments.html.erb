@@ -24,16 +24,38 @@
 
   <% end %>
 
-  <h4>Scheduling Information</h4>
+  <br />
 
-  <label>Group/User</label>
-  <div id='group-chooser'>Group/User Chooser Here</div>
+  <h4>Scheduling</h4>
 
-  <label>Desired Start Time</label>
-  <div id='time-chooser'>Time Chooser Here</div>
+  <div id='time-chooser'>
 
-  <label>Complete Within</label>
-  <div id='duration-chooser'>Duration Chooser Here</div>
+    <div class='row-fluid'>
+
+      <div class='span3'>
+        <div id='group-chooser'></div>
+      </div>
+
+      <div class='span3'>
+        <label>Date</label>
+        <div id="choose-date"></div>
+      </div>
+
+      <div class='span3'>
+        <label>Time</label>
+        <div id="choose-time"></div>
+      </div>
+
+      <div class='span3'>
+        <label>Window</label>
+        <div id="choose-window"></div>
+      </div>
+
+      <div class='span3'></span>
+
+    </div>
+
+  </div>
 
   <div id='button-area'></div>
 
@@ -51,28 +73,15 @@ var args = [];
   });
 <% end %>
 
-// get cart
-var cart = [];
-  <% current_user.cart_items.each do |c| %>
-  cart.push({
-    id: <%= c.item.id %>,
-    sample_name: '<%= c.item.sample.name %>',
-    sample_type: '<%= c.item.sample.sample_type.name %>'
-  });
-  <% end %>
-
-// build object types list
-var objects = {};
-<% ObjectType.all.each do |o| %>
-  if ( objects.<%= o.handler %> ) {
-    objects.<%= o.handler %>.push('<%= o.name %>');
-  } else {
-    objects.<%= o.handler %> = [ '<%= o.name %>' ];
-  }
-<% end %>
-
+<%= render partial: 'build_cart' %>
+<%= render partial: 'build_objects' %>
+<%= render partial: 'build_groups' %>
 
 // run javascript ui maker thingy
 ac = new ArgumentUI(args,cart,objects);
+
+ac.display_form();
+ac.display_groups(groups,users,'<%= current_user.login %>');
+ac.display_timing();
 
 </script>

@@ -1,0 +1,11 @@
+// build user and group lists
+var groups = [];
+<% list = Group.list %>
+<% list[:groups].each do |g| %>
+  groups.push('<%= g %>');
+<% end %>
+
+var users = [];
+<% list[:users].each do |g| %>
+  users.push('<%= g %>')
+<% end %>

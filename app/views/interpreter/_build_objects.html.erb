@@ -1,0 +1,9 @@
+// build object types list
+var objects = {};
+<% ObjectType.all.each do |o| %>
+  if ( objects.<%= o.handler %> ) {
+    objects.<%= o.handler %>.push('<%= o.name %>');
+  } else {
+    objects.<%= o.handler %> = [ '<%= o.name %>' ];
+  }
+<% end %>

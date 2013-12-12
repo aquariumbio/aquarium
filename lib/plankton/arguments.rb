@@ -9,7 +9,7 @@ module Plankton
       type = @tok.eat_a_argtype
       
       unless type == 'number' || type == 'string' || type == 'sample' || type == 'object'
-        raise "Unknown type '#{type}' in argument"
+        raise "Unknown type '#{type}' in argument."
       end
  
       if type == 'object' # convert to old type specifier for object types
@@ -17,8 +17,12 @@ module Plankton
       end
 
       if @tok.current == 'array'
-        @tok.eat
-        type += '_array'
+        if type != 'objecttype'
+          @tok.eat
+          type += '_array'
+        else
+          raise "Cannot have 'objecttype arrays' as arguments."
+        end
       end
 
       if @tok.current == ','
@@ -29,7 +33,7 @@ module Plankton
       end
 
       if !@include_stack
-        raise "For some reason the include stack is not defined"
+        raise "For some reason the include stack is not defined."
       end
 
       if @include_stack.length <= 1
