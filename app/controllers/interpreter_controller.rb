@@ -121,7 +121,7 @@ class InterpreterController < ApplicationController
     else # its a protocol
 
       parse # why is this not parse_args_only?
-      render 'narguments' 
+      render 'arguments' 
 
     end
 
@@ -133,17 +133,16 @@ class InterpreterController < ApplicationController
 
     @sha = params[:sha]
     @path = params[:path]
-    if params[:Desired]
-      @desired = Job.params_to_time(params[:Desired])
-      @window = params[:window].to_f
-      @latest = @desired + @window.hours
-      @group = Group.find_by_name(params[:Group])
-    else
-      @desired = Time.now()
-      @latest = Time.now() + 1.day
-      @group = Group.find_by_name(current_user.login)
-      @window = 24
-    end
+
+    @info = JSON.parse(params[:info],:symbolize_names => true)
+
+    @desired = @info[:date]
+    @window = @info[:window].to_f
+
+    logger.info "#{@desired} + #{@window.to_f.hours}"
+    
+    @latest = @desired + @window.hours
+    @group = Group.find_by_name(@info[:group])
 
     parse_args_only
 
@@ -151,7 +150,7 @@ class InterpreterController < ApplicationController
 
     # push arguments
     @protocol.args.each do |a|
-      val = params[a.name.to_sym]
+      val = @info[:args][a.name.to_sym]
       if a.type == 'number' && val.to_i == val.to_f
         scope.set a.name.to_sym, val.to_i
       elsif a.type == 'number' && val.to_i != val.to_f

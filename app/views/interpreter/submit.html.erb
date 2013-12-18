@@ -12,7 +12,7 @@
 
   <ul class='list'>
     <% @protocol.args.each do |a| %>
-      <li><%= a.name %> = <%= params[a.name.to_sym] %></li>
+      <li><%= a.name %> = <%= @info[:args][a.name.to_sym] %></li>
     <% end %>
   </ul>
 
@@ -26,8 +26,8 @@
 
 <ul class='list'>
   <li><b>Group/User</b>: <%= @group.name %> ( <%= @group.description %> )</li>
-  <li><b>Desired Start</b>: <%= @desired.strftime("%a %b %e, %k:%M")  %> ( Complete within <%= @window %> hr )</li>
-  <li><b>Latest Start</b>: <%= @latest.strftime("%a %b %e, %k:%M") %></li>
+  <li><b>Desired Start</b>: <%= Time.at(@desired).to_formatted_s(:long)  %> ( Complete within <%= @window %> hr )</li>
+  <li><b>Latest Start</b>: <%= Time.at(@latest).to_formatted_s(:long) %></li>
 </ul>
 
 <hr />

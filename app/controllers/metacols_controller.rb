@@ -138,4 +138,10 @@ class MetacolsController < ApplicationController
 
   end
 
+  def draw
+
+    render 'draw'
+
+  end
+
 end

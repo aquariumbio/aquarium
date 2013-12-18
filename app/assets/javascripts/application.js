@@ -17,3 +17,4 @@
 //= require highcharts
 //= require jquery.ui.datepicker
 //= require jquery.ui.menu
+//= require d3

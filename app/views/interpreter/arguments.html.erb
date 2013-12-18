@@ -1,7 +1,5 @@
 <% provide(:title, @path) %>
 
-<h4>Please input arguments for <%= @path %></h4>
-
 <p><%= @protocol.info %></p>
 
 <% if @parse_errors != "" %>
@@ -16,61 +14,74 @@
 
 <% else %>
 
-  <div class='argument-form' style='width: 50%'>
+  <h1>Initialize Job Parameters for <%= @path %></h1>
 
-    <%= form_tag("/interpreter/submit", :method => "get" ) do %>
-  
-      <%= hidden_field_tag 'sha', @sha %>
-      <%= hidden_field_tag 'path', @path %>
+  <% if @protocol.args.length > 0 %>
 
-      <% if @protocol.args.length > 0 %>
+    <h4>Arguments</h4>
 
-        <% @protocol.args.each do |a| %>
+    <div id='argument-chooser'></div>
 
-          <% if a.type == 'sample' %>
+  <% end %>
 
-            <%= render partial: 'sample_arg', locals: { arg: a } %>
+  <br />
 
-          <% elsif a.type == 'objecttype' %>
+  <h4>Scheduling</h4>
 
-            <%= render partial: 'object_type_arg', locals: { arg: a } %>
+  <div id='time-chooser'>
 
-          <% else %>
+    <div class='row-fluid'>
 
-            <div class='well row-fluid'>
-              <%= label_tag(a.name.to_sym, a.description ) %>
-              <%= text_field_tag( a.name.to_sym ) %>
-            </div>
+      <div class='span3'>
+        <div id='group-chooser'></div>
+      </div>
 
-          <% end %>  
+      <div class='span3'>
+        <label>Date</label>
+        <div id="choose-date"></div>
+      </div>
 
-        <% end %>
+      <div class='span3'>
+        <label>Time</label>
+        <div id="choose-time"></div>
+      </div>
 
-      <% else %>
+      <div class='span3'>
+        <label>Window</label>
+        <div id="choose-window"></div>
+      </div>
 
-        <p>(This protocol takes no arguments)</p>
+      <div class='span3'></span>
 
-      <% end %>
+    </div>
 
   </div>
 
-      <hr />
-
-      <h4>Scheduling Information</h4>
-
-        <%= render partial: 'group_chooser' %><br />
-        <%= render partial: 'time_chooser' %> <br />
-
-      <hr />
-
-
-
-      <%= submit_tag("Submit Job", :class => "btn" ) %>
-
-    <% end %>
-
-
+  <div id='button-area'></div>
 
 <% end %>
 
+<script>
 
+// get arguments
+var args = [];
+<% @protocol.args.each do |a| %>
+  args.push({
+    name: '<%= a.name %>', 
+    description: '<%= a.description %>',
+    type: '<%= a.type %>'
+  });
+<% end %>
+
+<%= render partial: 'build_cart' %>
+<%= render partial: 'build_objects' %>
+<%= render partial: 'build_groups' %>
+
+// run javascript ui maker thingy
+ac = new ArgumentUI('<%= @sha %>',args,cart,objects);
+
+ac.display_form();
+ac.display_groups(groups,users,'<%= current_user.login %>');
+ac.display_timing();
+
+</script>

@@ -1,12 +1,13 @@
 
-function ArgumentUI(args,cart,objects) {
+function ArgumentUI(sha,args,cart,objects) {
 
-
+    this.sha = sha;
     this.args = args;
     this.cart = cart;
     this.objects = objects;
     this.groups = [];
     this.users = [];
+    this.timing = false;
 
 }
 
@@ -55,8 +56,17 @@ ArgumentUI.prototype.submit = function() {
     }
 
     // Timing
+    if ( this.timing ) {
+	var date = $('#datepicker').val();
+        var hours = $('#hours').val();
+        var minutes = $('#minutes').val();
+        info.date = (new Date(hours + ":" + minutes + ' ' + date )).getTime()/1000;
+        info.window = $('#window').val();
+    }
 
-    console.log(info);
+    window.location = 'submit?sha=' + this.sha + '&info=' + encodeURIComponent(JSON.stringify(info));
+
+    // console.log(info);
 
 }
 
@@ -69,7 +79,7 @@ ArgumentUI.prototype.get_string = function(arg) {
 }
 
 ArgumentUI.prototype.get_sample = function(arg) {
-    return $('#arg-'+arg.name).val();
+    return parseInt($('#arg-'+arg.name).val());
 }
 
 ArgumentUI.prototype.get_objecttype = function(arg) {
@@ -103,7 +113,7 @@ ArgumentUI.prototype.get_sample_array = function(arg) {
    var sa = [];
 
    $('#arg-'+arg.name).find('ol').find('li').each(function(e){ 
-       sa.push($(this).find('select').val());
+     sa.push(parseInt($(this).find('select').val()));
    });
 
     return sa;
@@ -269,6 +279,8 @@ ArgumentUI.prototype.display_groups = function(groups,users,current) {
 }
 
 ArgumentUI.prototype.display_timing = function() {
+
+    this.timing = true;
 
     var d = new Date(),
       output = [

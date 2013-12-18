@@ -22,7 +22,6 @@ end
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-
   gem 'coffee-rails'
   gem 'uglifier', '>= 1.0.3'
   gem 'bcrypt-ruby'
@@ -30,3 +29,5 @@ end
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
+
+gem 'd3-rails'
