@@ -83,7 +83,7 @@ class TakeInstruction < Instruction
         ob.save_as_test_type i[:type]
         @flash += "Warning: Created new object type #{i[:type]}.<br />"
       elsif !ob
-        raise "In <take>: Could not find object of type '#{@object_type}', which is not okay in production mode."
+        raise "In <take>: Could not find object of type '#{i[:type]}', which is not okay in production mode."
       end
 
       @object_list.push( ob )

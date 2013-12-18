@@ -126,8 +126,7 @@ class MetacolsController < ApplicationController
   def destroy
 
     Metacol.find(params[:id]).destroy
-
-    redirect_to metacols_url
+    redirect_to metacols_url(active: 'true')
 
   end
 

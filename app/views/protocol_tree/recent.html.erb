@@ -25,7 +25,10 @@
       )</td>
       <td>...<%= r[:sha][-10,10] %></td>
       <td><%= link_to "run", interpreter_arguments_path(sha: r[:sha], path: r[:path])  %> </td>
-      <td><%= link_to "resubmit", interpreter_submit_path( { sha: r[:sha], path: r[:path] }.merge(r[:args]) )  %></td>
+      <td><%= link_to "resubmit", interpreter_submit_path( { 
+           sha: r[:sha], 
+           path: r[:path],
+           info: ({ args: r[:args],  date: Time.now.to_i, window: "24", group: current_user.login  }).to_json } ) %></td> 
     </tr>
 
   <% end %>

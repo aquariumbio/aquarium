@@ -111,7 +111,10 @@ class ProtocolTreeController < ApplicationController
     @jobs = Job.where("user_id = :user AND created_at >= :date", { user: current_user, date: Time.now.weeks_ago(1) } ).reverse_order
     @recents = []
     @jobs.each do |j|
-      @recents.push( { path: j.path, sha: j.sha, args: args = (JSON.parse(j.state))['stack'].first.reject { |k,v| k == 'user_id' } } )
+      @recents.push( { 
+        path: j.path, 
+        sha: j.sha, 
+        args: args = (JSON.parse(j.state))['stack'].first.reject { |k,v| k == 'user_id' } } )
     end
 
     @recents.uniq!

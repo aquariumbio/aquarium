@@ -110,7 +110,11 @@ class StatsController < ApplicationController
 
     Metacol.where("status='RUNNING'").each do |m|
         login = User.find_by_id(m.user_id).login
-        name = m.path.split('.').first
+        if m.path
+          name = m.path.split('.').first
+        else
+          name = "unkown"
+        end
         names.push( "#{m.id}:#{name}<br />(#{login})" )
         active.push( (m.jobs.select { |j| j.pc >= 0 }).length )
         pending.push( (m.jobs.select { |j| j.pc >= -1 }).length )

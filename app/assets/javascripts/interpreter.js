@@ -78,7 +78,7 @@ ArgumentUI.prototype.submit = function() {
 
     if ( this.metacol ) {
 
-      window.location = 'launch?sha=' + this.sha + '&info=' + encodeURIComponent(JSON.stringify(info));
+      window.location = 'launch?sha=' + this.sha + '&path=' + this.path + '&info=' + encodeURIComponent(JSON.stringify(info));
 
     } else {
 

@@ -8,6 +8,8 @@ class Instruction
     @flash = ""
     @console_messages = []
     @xml = options[:xml]
+    @startline = 0
+    @endline = 0
   end
 
   def clear
