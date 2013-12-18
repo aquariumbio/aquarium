@@ -16,6 +16,15 @@ module Oyster
          type = 'objecttype'
       end
 
+      if @tok.current == 'array'
+        if type != 'objecttype'
+          @tok.eat
+          type += '_array'
+        else
+          raise "Cannot have 'objecttype arrays' as arguments."
+        end
+      end
+
       if @tok.current == ','
         @tok.eat
         description = @tok.eat_a_string.remove_quotes

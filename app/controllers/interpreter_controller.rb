@@ -136,12 +136,12 @@ class InterpreterController < ApplicationController
 
     @info = JSON.parse(params[:info],:symbolize_names => true)
 
-    @desired = @info[:date]
+    @desired = Time.at(@info[:date])
     @window = @info[:window].to_f
 
     logger.info "#{@desired} + #{@window.to_f.hours}"
     
-    @latest = @desired + @window.hours
+    @latest = Time.at(@desired + @window.hours)
     @group = Group.find_by_name(@info[:group])
 
     parse_args_only

@@ -31,11 +31,23 @@ ArgumentUI.prototype.display_form = function() {
 
     }
 
-    $('#button-area').append(
-	$('<button>Scheule New Job</button>')
-            .addClass('btn btn-primary')
-            .click(function(e){that.submit()})
-    );
+    if ( this.metacol ) {
+
+      $('#button-area').append(
+	  $('<button>Launch!</button>')
+              .addClass('btn btn-primary')
+              .click(function(e){that.submit()})
+      );
+
+    } else {
+
+      $('#button-area').append(
+	  $('<button>Scheule New Job</button>')
+              .addClass('btn btn-primary')
+              .click(function(e){that.submit()})
+      );
+
+    }
 
 }
 
@@ -51,7 +63,7 @@ ArgumentUI.prototype.submit = function() {
     info.args = argvals;
 
     // Group
-    if ( groups != [] ) {
+    if ( this.groups && this.groups != [] ) {
         info.group = $('#group-chooser').find('select').val();
     }
 
@@ -64,9 +76,15 @@ ArgumentUI.prototype.submit = function() {
         info.window = $('#window').val();
     }
 
-    window.location = 'submit?sha=' + this.sha + '&info=' + encodeURIComponent(JSON.stringify(info));
+    if ( this.metacol ) {
 
-    // console.log(info);
+      window.location = 'launch?sha=' + this.sha + '&info=' + encodeURIComponent(JSON.stringify(info));
+
+    } else {
+
+      window.location = 'submit?sha=' + this.sha + '&info=' + encodeURIComponent(JSON.stringify(info));
+
+    }
 
 }
 
@@ -314,7 +332,7 @@ ArgumentUI.prototype.display_timing = function() {
     }
 
 
-    $('#choose-time').append( hours, $('<span> : </span>'), minutes );
+   $('#choose-time').append( hours, $('<span> : </span>'), minutes );
 
    $('#choose-window').append(
      $("<select id='window' name='window'>"

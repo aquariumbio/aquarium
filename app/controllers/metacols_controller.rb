@@ -60,15 +60,8 @@ class MetacolsController < ApplicationController
 
     parse params[:sha], params[:path]
 
-    args = {}
-
-    @metacol.arguments.each do |a|
-      if a[:type] == 'string' || a[:type] == 'objecttype'
-        args[a[:name].to_sym] = params[a[:name].to_sym]
-      else
-        args[a[:name].to_sym] = params[a[:name].to_sym].to_i
-      end
-    end
+    args = JSON.parse(params[:info],:symbolize_names => true)[:args]
+    logger.info "Args: #{args.to_s}"
 
     # Save in db
     @mc = Metacol.new
