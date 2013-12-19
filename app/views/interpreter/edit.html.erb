@@ -63,7 +63,7 @@ var args = [];
   <% elsif a.type == 'sample_array' %>
     sample = [];
    <% @current_args[a.name.to_sym].each do |b| %>
-    sample.push( '<%= Item.find(b).sample.name %>' );
+    sample.push( '<%= Item.find(b).sample.name %>' ); 
    <% end %>
   <% else %>
     sample = '';
@@ -86,6 +86,7 @@ var args = [];
 // run javascript ui maker thingy
 ac = new ArgumentUI('<%= @sha %>',args,cart,objects);
 ac.edit = true;
+ac.job = <%= @job.id %>;
 ac.display_form();
 
 </script>

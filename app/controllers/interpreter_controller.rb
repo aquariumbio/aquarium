@@ -144,6 +144,40 @@ class InterpreterController < ApplicationController
 
   end
 
+  def resubmit
+
+    @info = JSON.parse(params[:info],:symbolize_names => true)
+
+    @job = Job.find(params[:job])
+    @sha = @job.sha
+    @path = @job.path
+    @user = current_user
+
+    parse_args_only
+
+    scope = Lang::Scope.new {}
+
+    # push arguments
+    @protocol.args.each do |a|
+      val = @info[:args][a.name.to_sym]
+      if a.type == 'number' && val.to_i == val.to_f
+        scope.set a.name.to_sym, val.to_i
+      elsif a.type == 'number' && val.to_i != val.to_f
+        scope.set a.name.to_sym, val.to_f
+      else
+        scope.set a.name.to_sym, val
+      end
+    end
+
+    # push new scope so top level variables are not in same scope as arguments
+    scope.push
+    @job.state = { stack: scope.stack }.to_json
+    @job.save
+
+    redirect_to jobs_url
+
+  end
+
   def submit
 
     # Submits the job
@@ -156,9 +190,6 @@ class InterpreterController < ApplicationController
     @desired = Time.at(@info[:date])
     @window = @info[:window].to_f
     @latest = Time.at(@desired + @window.hours)
-
-    logger.info "GROUP = #{@info[:group]}"    
-
     @group = Group.find_by_name(@info[:group])
 
     parse_args_only
