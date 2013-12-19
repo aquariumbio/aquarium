@@ -39,6 +39,14 @@ ArgumentUI.prototype.display_form = function() {
               .click(function(e){that.submit()})
       );
 
+    } else if ( this.edit ) {
+
+      $('#button-area').append(
+	  $('<button>Save New Arguments</button>')
+              .addClass('btn btn-primary')
+              .click(function(e){that.submit()})
+      );
+
     } else {
 
       $('#button-area').append(
@@ -77,13 +85,11 @@ ArgumentUI.prototype.submit = function() {
     }
 
     if ( this.metacol ) {
-
       window.location = 'launch?sha=' + this.sha + '&path=' + this.path + '&info=' + encodeURIComponent(JSON.stringify(info));
-
+    } else if ( this.edit ) {
+      window.location = 'resubmit?sha=' + this.sha + '&info=' + encodeURIComponent(JSON.stringify(info));
     } else {
-
       window.location = 'submit?sha=' + this.sha + '&info=' + encodeURIComponent(JSON.stringify(info));
-
     }
 
 }
@@ -106,13 +112,13 @@ ArgumentUI.prototype.get_objecttype = function(arg) {
 
 ArgumentUI.prototype.get_number_array = function(arg) {
 
-    var na = [];
+   var na = [];
 
    $('#arg-'+arg.name).find('ol').find('li').each(function(e){ 
        na.push(parseFloat($(this).find('input').val()));
    });
 
-    return na;
+   return na;
 }
 
 ArgumentUI.prototype.get_string_array = function(arg) {
@@ -139,7 +145,7 @@ ArgumentUI.prototype.get_sample_array = function(arg) {
 }
 
 ArgumentUI.prototype.get_array = function(arg) {
-    list = $('#arg-'+arg.name).find('ol');
+    var list = $('#arg-'+arg.name).find('ol');
 }
 
 ArgumentUI.prototype.label = function(arg) {
@@ -153,27 +159,44 @@ ArgumentUI.prototype.label = function(arg) {
 
 ArgumentUI.prototype.number = function(arg) {
 
-    x = $('<input />');
+    var x = $('<input></input>');
     x[0].type = 'number';
     x[0].step = 'any';
+    if ( arg.current ) { 
+      x[0].value = arg.current;
+    }
     return x;
 
 }
 
 ArgumentUI.prototype.string = function(arg) {
 
-    x = $('<input />');
+    var x = $('<input />');
     x[0].type = 'text';
+    if ( arg.current ) { 
+      x[0].value = arg.current;
+    }
     return x;
 
 }
 
 ArgumentUI.prototype.sample = function(arg) {
 
-    x = $('<select />');
-    
+    var x = $('<select />');
+
+    var found = false;
+ 
     for ( var i in this.cart ) {
+      if ( arg.current && arg.current == this.cart[i].id ) {
+        found = true;
+	x.append('<option selected value=' + this.cart[i].id + '>' + this.cart[i].id + ': ' + this.cart[i].sample_name + '</option>' );
+      } else {
 	x.append('<option value=' + this.cart[i].id + '>' + this.cart[i].id + ': ' + this.cart[i].sample_name + '</option>' );
+      }
+    }
+
+    if ( arg.current && !found ) {
+      x.append('<option selected value=' + arg.current + '>' + arg.current + ': ' + arg.sample + '</option>' );
     }
 
     return x;
@@ -184,7 +207,13 @@ ArgumentUI.prototype.objecttype = function(arg) {
 
     var x = $('<div class="object-menu" />');
     var choice = $('<div class="choice"/>');
-    choice.append('<p class="object-name">1 L Bottle</p>');
+
+    if ( arg.current ) {
+      choice.append('<p class="object-name">' + arg.current + '</p>');
+    } else {
+      choice.append('<p class="object-name">1 L Bottle</p>');
+    }
+
     x.append(choice);    
 
     var top = $('<ul />');
@@ -242,16 +271,33 @@ ArgumentUI.prototype.array = function(arg,base) {
     var that = this;
    
     var l = $('<ol start="0" />');
-    var li = $('<li />');
-    li.append(this[base](arg));
-    l.append(li);
+
+    if ( !arg.current ) {
+      var li = $('<li />');
+      li.append(this[base](arg));
+      l.append(li);
+    } else {
+      var a = eval(arg.current.replace(/&quot;/g, '"'));
+      if ( base == 'sample' ) {
+        var names = eval(arg.sample);
+      }
+      for ( var i in a ) {
+        var li = $('<li />');
+        if ( base == 'sample' ) {
+          li.append(this[base]({current: a[i], sample: names[i]}));
+        } else {
+          li.append(this[base]({current: a[i]}));
+        }
+        l.append(li);
+      }
+    }
 
     var more = $('<button>+</button>');
     more.addClass('btn btn-small sep');
 
     more.click(function(e){
         var li = $('<li />');
-	li.append(that[base](arg))
+        li.append(that[base]({}));
         l.append(li);
     });
 

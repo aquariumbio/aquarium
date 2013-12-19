@@ -51,7 +51,7 @@
           <% end %>
         </td>
       <% else %>
-        <td>-</td>
+        <td></td>
       <% end %>
       <% if runnable %>
         <td>
@@ -66,7 +66,9 @@
           <% end %>
        </td>
       <% else %>
-         <td></td>
+         <td><%= link_to interpreter_edit_path(job:j.id) do %>
+           <i class='icon-edit'></i>
+         <% end %></td>
       <% end %>
       <td><%= link_to '/interpreter/cancel?job=' + j.id.to_s, data: { confirm: 'Are you sure?' } do %>
         <i class='icon-remove'></i>

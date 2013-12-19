@@ -49,9 +49,9 @@ class Instruction
       if item.class != Item
         raise "Could not convert argument to PDL item, because it was not a Rails Item to start with."
       else
-        d = item.data ? item.data : "{}";
+        d = item.data ? item.data : '{ "error": "Could not parse json data" }'
         begin
-          data = JSON.parse(d)
+          data = JSON.parse(d,:symbolize_names => true)
         rescue Exception => e
           data = {}
         end

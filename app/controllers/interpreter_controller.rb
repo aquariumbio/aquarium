@@ -127,13 +127,29 @@ class InterpreterController < ApplicationController
 
   end
 
+  def edit
+
+    @job = Job.find(params[:job])
+    @sha = @job.sha
+    @path = @job.path
+    @user = current_user
+
+    @current_args = JSON.parse(@job.state, {:symbolize_names => true} )[:stack][0]
+
+    parse_args_only
+
+    respond_to do |format|
+      format.html
+    end
+
+  end
+
   def submit
 
     # Submits the job
 
     @sha = params[:sha]
     @path = params[:path]
-
 
     @info = JSON.parse(params[:info],:symbolize_names => true)
 
