@@ -149,7 +149,8 @@ module Lang
 
        e = unary
 
-       while @tok.is_operator
+       while @tok.isa_operator
+         # puts "eating operator"
          e += @tok.eat
          e += unary
        end

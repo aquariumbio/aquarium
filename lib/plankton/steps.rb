@@ -62,7 +62,7 @@ module Plankton
     end # getdata
 
     def step
-
+puts "starting step"
       parts = []      
       description = ''
       note = ''

@@ -12,9 +12,10 @@ module Lang
       @line = 0
 
       advance
-      i=0
+
+      #i=0
       #while i<@tokens.length
-      #  if /\n|\r/.match(@tokens[i])
+      #  if /^\n|^\r/.match(@tokens[i])
       #    puts "#{i}: \\n"
       #  else
       #    puts "#{i}: #{@tokens[i]}"
@@ -132,6 +133,10 @@ module Lang
       /\+|-|\/|\*\*|\*|<=|>=|<|>|==|!=|\|\||&&|!/
     end
 
+    def isa_operator
+      /^(\+|-|\/|\*\*|\*|<=|>=|<|>|==|!=|\|\||&&|!)$/.match(self.current) != nil
+    end
+
     def trans_op
       /=>/
     end
@@ -149,7 +154,7 @@ module Lang
     end
 
     def comment
-      /#.*/
+      /#[^#\n\r]*/
     end
 
     def number
@@ -160,9 +165,9 @@ module Lang
       /@|&|\|/
     end
 
-    checker :string, :whitespace, :variable, :argtype, :take_ops, :trans_op, :operator, :equals, :punctuation, :comment, :number, :boolean, :junk
+    checker :string, :whitespace, :variable, :argtype, :take_ops, :trans_op, :operator, :equals, :punctuation, :number, :boolean, :junk, :comment
 
-    # unilities   
+    # utilities   
     def positive_integer
       /^[1-9][0-9]*$/.match current
     end

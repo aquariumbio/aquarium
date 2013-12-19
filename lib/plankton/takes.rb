@@ -13,7 +13,6 @@ module Plankton
     def object_expr ##############################################################################################
 
       quantity = expr
-
       type = expr
       return { quantity: quantity, type: type }
 
