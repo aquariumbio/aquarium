@@ -37,10 +37,12 @@ module Plankton
       @tok.eat_a 'end'
 
       file = get_file path
-      puts "Just before include, current = #{@tok.current}"
+
 
       @tok = Lang::Tokenizer.new file[:content]
       @include_stack.push( { tokens: @tok, path: path, returns: rets } )
+
+      #puts "Just before beginning included file, current = #{@tok.current}"
 
       push StartIncludeInstruction.new args, path, file[:sha], lines
 

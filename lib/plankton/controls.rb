@@ -4,6 +4,8 @@ module Plankton
 
     def if_block #################################################################################
 
+      #puts "starting if"
+
       gotos = []
 
       lines = {}
@@ -14,10 +16,13 @@ module Plankton
       lines[:endline] = @tok.line
       ins = IfInstruction.new cond, lines
       ins.mark_then pc + 1
-
       push ins
 
+      #puts "read condition, starting statements"
+
       statements
+
+      #puts "finished statements"
 
       g = GotoInstruction.new 
       push g
@@ -50,7 +55,11 @@ module Plankton
         statements
       end 
 
+      #puts "looking for the end"
+
       @tok.eat_a 'end'
+
+      #puts "found the end"
 
       gotos.each do |g|
         g.mark_destination pc

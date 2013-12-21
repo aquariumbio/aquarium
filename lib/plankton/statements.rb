@@ -4,7 +4,22 @@ module Plankton
 
     def statements
 
-      while @tok.current != 'EOF' && @tok.current != 'end' && @tok.current != 'elsif' && @tok.current != 'else'
+      while @tok.current != 'end' && @tok.current != 'elsif' && @tok.current != 'else'
+
+        if @tok.current == 'EOF' && @include_stack.length > 1
+
+          #puts "about to pop with current = '#{@tok.current}'"
+          p = @include_stack.pop
+
+          @tok = @include_stack.last[:tokens]
+          push EndIncludeInstruction.new p[:returns]
+          #puts "popped, now inc length = #{@include_stack.length} with current = '#{@tok.current}'"
+
+        elsif @tok.current == 'EOF' 
+
+          return
+
+        end
 
         case @tok.current
 
@@ -44,6 +59,9 @@ module Plankton
           when 'include'
             include
 
+          when 'end', 'elsif', 'else'
+            return
+
           when @tok.variable
             assign
        
@@ -54,7 +72,7 @@ module Plankton
 
       end
 
-    end # parse
+    end # statements
 
     def information
    

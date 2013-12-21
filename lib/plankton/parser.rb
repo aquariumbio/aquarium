@@ -45,21 +45,7 @@ module Plankton
     end
 
     def parse
-
-      while @include_stack.length > 0
-
-        statements
-
-        p = @include_stack.pop
-
-        if @include_stack.length > 0
-          @tok = @include_stack.last[:tokens]
-          push EndIncludeInstruction.new p[:returns]
-          puts "inc length = #{@include_stack.length} with current = #{@tok.current}"
-        end
-
-      end
-
+      statements
     end
 
     def get_line

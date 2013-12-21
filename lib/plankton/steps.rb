@@ -63,6 +63,8 @@ module Plankton
 
     def step
 
+      #puts "starting step"
+      
       parts = []      
       description = ''
       note = ''
@@ -101,6 +103,8 @@ module Plankton
       @tok.eat_a 'end'
 
       push StepInstruction.new parts, lines
+
+      #puts "done with step"
 
     end
 
