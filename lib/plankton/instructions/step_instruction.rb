@@ -87,6 +87,7 @@ module Plankton
               choice_evals = scope.evaluate v[:choices]
               @parts.push( select: { 
                  var: v[:var], 
+                 type: v[:type],
                  description: scope.substitute( v[:description] ), 
                  choices: choice_evals } )
 
@@ -123,7 +124,13 @@ module Plankton
 
       selects.each do |s|
         sym = s[:var].to_sym
-        scope.set sym, params[s[:var]]
+        if s[:type] == 'number' && params[s[:var]].to_i == params[s[:var]].to_f
+          scope.set sym, params[s[:var]].to_i
+        elsif g[:type] == 'number'
+          scope.set sym, params[s[:var]].to_f
+        else
+          scope.set sym, params[s[:var]]
+        end
         log_data[sym] = scope.get sym
       end
 
