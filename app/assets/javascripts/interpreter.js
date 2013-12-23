@@ -140,7 +140,7 @@ ArgumentUI.prototype.get_sample_array = function(arg) {
      sa.push(parseInt($(this).find('select').val()));
    });
 
-    return sa;
+   return sa;
 
 }
 
@@ -183,16 +183,27 @@ ArgumentUI.prototype.string = function(arg) {
 ArgumentUI.prototype.sample = function(arg) {
 
     var x = $('<select />');
+   
+    var sample_type = arg.name.replace(/_[^_]*$/,'').replace(/_/g,' ');
+
+    if ( sample_type != arg.name ) {
+       sample_type = sample_type.charAt(0).toUpperCase() + sample_type.slice(1);
+       console.log(sample_type);
+    }
 
     var found = false;
  
     for ( var i in this.cart ) {
-      if ( arg.current && arg.current == this.cart[i].id ) {
-        found = true;
-	x.append('<option selected value=' + this.cart[i].id + '>' + this.cart[i].id + ': ' + this.cart[i].sample_name + '</option>' );
-      } else {
-	x.append('<option value=' + this.cart[i].id + '>' + this.cart[i].id + ': ' + this.cart[i].sample_name + '</option>' );
+
+      if ( sample_type == arg.name || sample_type == this.cart[i].sample_type ) {
+        if ( arg.current && arg.current == this.cart[i].id ) {
+          found = true;
+  	  x.append('<option selected value=' + this.cart[i].id + '>' + this.cart[i].id + ': ' + this.cart[i].sample_name + '</option>' );
+        } else {
+   	  x.append('<option value=' + this.cart[i].id + '>' + this.cart[i].id + ': ' + this.cart[i].sample_name + '</option>' );
+        }
       }
+
     }
 
     if ( arg.current && !found ) {
