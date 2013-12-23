@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131122032927) do
+ActiveRecord::Schema.define(:version => 20131223192901) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -122,6 +122,7 @@ ActiveRecord::Schema.define(:version => 20131122032927) do
     t.text     "release_description"
     t.integer  "sample_type_id"
     t.string   "image"
+    t.string   "prefix"
   end
 
   create_table "parts", :force => true do |t|
