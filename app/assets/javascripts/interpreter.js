@@ -307,7 +307,7 @@ ArgumentUI.prototype.array = function(arg,base) {
 
     more.click(function(e){
         var li = $('<li />');
-        li.append(that[base]({}));
+        li.append(that[base](arg));
         l.append(li);
     });
 
