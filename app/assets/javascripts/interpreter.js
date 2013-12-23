@@ -188,7 +188,6 @@ ArgumentUI.prototype.sample = function(arg) {
 
     if ( sample_type != arg.name ) {
        sample_type = sample_type.charAt(0).toUpperCase() + sample_type.slice(1);
-       console.log(sample_type);
     }
 
     var found = false;
