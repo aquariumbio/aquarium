@@ -126,7 +126,7 @@ module Plankton
         sym = s[:var].to_sym
         if s[:type] == 'number' && params[s[:var]].to_i == params[s[:var]].to_f
           scope.set sym, params[s[:var]].to_i
-        elsif g[:type] == 'number'
+        elsif s[:type] == 'number'
           scope.set sym, params[s[:var]].to_f
         else
           scope.set sym, params[s[:var]]
