@@ -1,17 +1,17 @@
 module Plankton
 
   class Parser
-  
+
     def http
 
-      info = { 
+      info = {
         host: '',
         port: '80',
         path: '/',
         query: {},
         body: 'body',
         status: 'status'
-      } 
+      }
 
       lines = {}
       lines[:startline] = @tok.line
@@ -36,7 +36,7 @@ module Plankton
           while @tok.current != 'end' && @tok.current != 'EOF'
             q = @tok.eat_a_variable.to_sym
             @tok.eat_a ':'
-            info[:query][key] = string_expr
+            info[:query][q] = string_expr
           end
 
           @tok.eat_a 'end'
