@@ -74,8 +74,46 @@ class ObjectType < ActiveRecord::Base
 
   end
 
-  def location_wizard
-    "A1.100"
+  def location_wizard details = {}
+
+    info = { project: 'unknown' }.merge details
+
+    case prefix
+    
+      when 'M20'
+
+        objects = ObjectType.where("prefix = 'M20'")
+
+        # Find all items with same project as current item
+        items_in_project = (objects.collect { |ot| 
+          ot.items.reject { |i|
+             /M20\.[0-9]+\.[0-9]+\.[0-9]+/.match(i.location) == nil ||
+             i.sample.project != info[:project]
+          } 
+        }).flatten.collect{ |i| 
+          i.location
+        }
+
+        puts "LOCATION WIZARD: Samples in project '#{info[:project]}': #{items_in_project}"
+
+       "M20.0.0.0"
+
+      when 'M80'
+        "M80.0.0.0"
+
+      else
+        "Bench"
+
+    end
+
   end
 
 end
+
+
+        #parts = prefix.split('.')
+        #hotel = parts[1].to_i
+        #box = parts[2].to_i
+        #slot = parts[3].to_i
+
+        #"M20.#{hotel}.#{box}.#{slot+1}"

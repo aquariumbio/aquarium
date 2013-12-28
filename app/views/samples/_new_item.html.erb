@@ -1,7 +1,7 @@
 <div class='new-sample-item'>
 
   <%= form_for([object_type, object_type.items.build], html: { class: 'input-append'}) do |f| %>
-    <%= f.text_field :location, value: object_type.location_wizard, class: 'input-small'  %>
+    <%= f.text_field :location, value: object_type.location_wizard({project: @sample.project}), class: 'input-small'  %>
     <%= f.number_field :quantity, value: 1, style: 'display: none' %>
     <%= f.number_field :sample_id, value: sample.id, style: 'display: none' %>
     <%= f.submit class: "btn", value: "new" %>
