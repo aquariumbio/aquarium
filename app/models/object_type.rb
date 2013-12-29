@@ -74,6 +74,42 @@ class ObjectType < ActiveRecord::Base
 
   end
 
+  def sort_locations locs 
+
+    locs.sort do |a,b|
+      x = a.split('.')
+      y = b.split('.')
+      if x[1].to_i != y[1].to_i
+        x[1].to_i - y[1].to_i
+      elsif x[2].to_i != y[1].to_i
+        x[2].to_i - y[2].to_i
+      else 
+        x[3].to_i - y[3].to_i
+      end
+    end
+
+  end
+
+  def next_location locs
+    x = (sort_locations locs).last.split('.')
+    "#{x[0]}.#{x[1]}.#{x[2]}.#{x[3].to_i+1}"
+  end
+
+  def items_in_project prefix, project
+
+    objects = ObjectType.where("prefix = ?", prefix)
+
+    (objects.collect { |ot| 
+      ot.items.reject { |i|
+         /M20\.[0-9]+\.[0-9]+\.[0-9]+/.match(i.location) == nil ||
+         i.sample.project != project
+      } 
+    }).flatten.collect{ |i| 
+      i.location
+    }
+  
+  end
+
   def location_wizard details = {}
 
     info = { project: 'unknown' }.merge details
@@ -82,21 +118,7 @@ class ObjectType < ActiveRecord::Base
     
       when 'M20'
 
-        objects = ObjectType.where("prefix = 'M20'")
-
-        # Find all items with same project as current item
-        items_in_project = (objects.collect { |ot| 
-          ot.items.reject { |i|
-             /M20\.[0-9]+\.[0-9]+\.[0-9]+/.match(i.location) == nil ||
-             i.sample.project != info[:project]
-          } 
-        }).flatten.collect{ |i| 
-          i.location
-        }
-
-        puts "LOCATION WIZARD: Samples in project '#{info[:project]}': #{items_in_project}"
-
-       "M20.0.0.0"
+        next_location( items_in_project 'M20', info[:project] )
 
       when 'M80'
         "M80.0.0.0"
@@ -111,9 +133,4 @@ class ObjectType < ActiveRecord::Base
 end
 
 
-        #parts = prefix.split('.')
-        #hotel = parts[1].to_i
-        #box = parts[2].to_i
-        #slot = parts[3].to_i
-
-        #"M20.#{hotel}.#{box}.#{slot+1}"
+ 

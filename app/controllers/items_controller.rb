@@ -18,6 +18,8 @@ class ItemsController < ApplicationController
   def create
     @object_type = ObjectType.find(params[:object_type_id])
     @item = @object_type.items.create(params[:item])
+    @item.location = @object_type.location_wizard({project: @item.sample.project})
+    @item.save
 
     if (@item.errors.size > 0 )
       flash[:error] = ""
