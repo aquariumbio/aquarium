@@ -91,7 +91,7 @@ module Oyster
             args: evaluated_arguments(scope),
             desired: desired, 
             latest: desired + eval(@window), 
-            group: @group ? @group : who,
+            group: @group ? scope.evaluate(@group) : who,
             metacol_id: id,
             who: who } ) )
 

@@ -40,7 +40,7 @@ module Oyster
 
             @tok.eat_a 'group'
             @tok.eat_a ':'
-            p.group( @metacol.scope.evaluate expr)
+            p.group(expr)
 
           when 'marked'
 
