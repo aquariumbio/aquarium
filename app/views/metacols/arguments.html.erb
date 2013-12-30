@@ -12,14 +12,18 @@
 
 <% else %>
 
- <h4>Arguments</h4>
+<h4>Arguments</h4>
+<div id='argument-chooser'></div>
 
-  <div class='argument-form'>
+<br />
 
-    <div id='argument-chooser'></div>
-    <div id='button-area'></div>
+<h4>Group</h4>
+<div id='group-chooser'></div>
 
-  </div>
+<br />
+<div id='button-area'></div>
+
+
 
   <%= render 'details' %>
 
@@ -39,11 +43,13 @@ var args = [];
 
 <%= render partial: 'interpreter/build_cart' %>
 <%= render partial: 'interpreter/build_objects' %>
+<%= render partial: 'interpreter/build_groups' %>
 
 // run javascript ui maker thingy
 ac = new ArgumentUI('<%= @sha %>',args,cart,objects);
 ac.metacol = true;
 ac.path = '<%= @path %>';
 ac.display_form();
+ac.display_groups(groups,users,'<%= current_user.login %>');
 
 </script>

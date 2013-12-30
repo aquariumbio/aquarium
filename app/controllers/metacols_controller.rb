@@ -60,39 +60,47 @@ class MetacolsController < ApplicationController
 
     parse params[:sha], params[:path]
 
-    args = JSON.parse(params[:info],:symbolize_names => true)[:args]
-    logger.info "Args: #{args.to_s}"
+    info = JSON.parse(params[:info],:symbolize_names => true)
+    args = info[:args]
+    group = Group.find_by_name(info[:group])
+    flash[:notice] = "Starting metacol for each member in group '#{group.name}'"
 
-    # Save in db
-    @mc = Metacol.new
-    @mc.path = params[:path]
-    @mc.sha = params[:sha]
-    @mc.user_id = current_user.id
-    @mc.status = 'STARTING'
-    @mc.state = @metacol.state.to_json
+    group.memberships.each do |m|
 
-    @mc.save # save to get an id
+      user = m.user
 
-    @metacol.id = @mc.id
+      # Save in db
+      mc = Metacol.new
+      mc.path = params[:path]
+      mc.sha = params[:sha]
+      mc.user_id = user.id
+      mc.status = 'STARTING'
+      mc.state = @metacol.state.to_json
+
+      mc.save # save to get an id
+
+      @metacol.id = mc.id
    
-    error = nil
-    begin
-      @metacol.start args
-    rescue Exception => e
-      error = e
+      error = nil
+      begin
+        @metacol.start args
+      rescue Exception => e
+        error = e
+      end
+
+      if !error
+        mc.state = @metacol.state.to_json
+        mc.status = 'RUNNING'
+      else
+        mc.message = "On start: " + e.message.split('[')[0]
+        mc.status = 'ERROR'
+      end
+
+      mc.save # save again for state info
+
     end
 
-    if !error
-      @mc.state = @metacol.state.to_json
-      @mc.status = 'RUNNING'
-    else
-      @mc.message = "On start: " + e.message.split('[')[0]
-      @mc.status = 'ERROR'
-    end
-
-    @mc.save # save again for state info
-
-    redirect_to @mc
+    redirect_to metacols_path( active: true )
 
   end
 
