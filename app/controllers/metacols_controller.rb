@@ -68,6 +68,7 @@ class MetacolsController < ApplicationController
     group.memberships.each do |m|
 
       user = m.user
+      args[:aquarium_user] = user.login
 
       # Save in db
       mc = Metacol.new
