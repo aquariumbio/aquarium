@@ -74,6 +74,29 @@ class ObjectType < ActiveRecord::Base
 
   end
 
+  def next_empty_box prefix
+
+    items = (ObjectType.where("prefix = ?", prefix).collect { |ot| ot.items }).flatten.reject { |i| 
+      /M[2,8]0\.[0-9]+\.[0-9]+\.[0-9]+/.match(i.location) == nil 
+    }
+
+    if items.length == 0
+      "0.0"
+    else
+      box = (items.collect { |i| 
+        loc = i.location.split('.')
+        [ loc[1].to_i, loc[2].to_i ]
+      }).sort.last
+
+      if box[1] == 15
+        "#{box[0]+1}.0"
+      else
+        "#{box[0]}.#{box[1]+1}"      
+      end
+   end
+
+  end
+
   def sort_locations locs 
 
     locs.sort do |a,b|
@@ -90,9 +113,26 @@ class ObjectType < ActiveRecord::Base
 
   end
 
-  def next_location locs
-    x = (sort_locations locs).last.split('.')
-    "#{x[0]}.#{x[1]}.#{x[2]}.#{x[3].to_i+1}"
+  def next_location locs, prefix
+
+    puts "LOCS = #{locs}"
+
+    if locs.length == 0 # a totally new project!
+
+      "#{prefix}.#{next_empty_box prefix}.0"
+
+    else # an existing project
+
+      x = (sort_locations locs).last.split('.')
+
+      if x[3].to_i == 99 
+        "#{prefix}.#{next_empty_box prefix}.0"
+      else
+        "#{x[0]}.#{x[1]}.#{x[2]}.#{x[3].to_i+1}"
+      end
+
+    end
+
   end
 
   def items_in_project prefix, project
@@ -101,7 +141,7 @@ class ObjectType < ActiveRecord::Base
 
     (objects.collect { |ot| 
       ot.items.reject { |i|
-         /M20\.[0-9]+\.[0-9]+\.[0-9]+/.match(i.location) == nil ||
+         /M[2,8]0\.[0-9]+\.[0-9]+\.[0-9]+/.match(i.location) == nil ||
          i.sample.project != project
       } 
     }).flatten.collect{ |i| 
@@ -117,11 +157,10 @@ class ObjectType < ActiveRecord::Base
     case prefix
     
       when 'M20'
-
-        next_location( items_in_project 'M20', info[:project] )
+        next_location( (items_in_project 'M20', details[:project]), 'M20' )
 
       when 'M80'
-        "M80.0.0.0"
+        next_location( (items_in_project 'M80', details[:project]), 'M80' )
 
       else
         "Bench"

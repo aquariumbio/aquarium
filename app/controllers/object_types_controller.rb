@@ -100,6 +100,7 @@ class ObjectTypesController < ApplicationController
   # PUT /object_types/1
   # PUT /object_types/1.json
   def update
+
     @object_type = ObjectType.find(params[:id])
 
     respond_to do |format|
@@ -116,6 +117,7 @@ class ObjectTypesController < ApplicationController
         format.json { render json: @object_type.errors, status: :unprocessable_entity }
       end
     end
+
   end
 
   # DELETE /object_types/1

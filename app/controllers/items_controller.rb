@@ -15,7 +15,18 @@ class ItemsController < ApplicationController
 
   end
 
+  def check_sample_collision loc # raises a warning if two or more items are in the given location
+
+    items = Item.where('location = ?', loc)
+    if items.length > 1
+      ids = items.collect{|i|i.id}
+      flash[:error] = "WARNING: Sample items #{ids} have the same location, #{loc}. Please correct this problem immediately!"
+    end
+
+  end
+
   def create
+
     @object_type = ObjectType.find(params[:object_type_id])
     @item = @object_type.items.create(params[:item])
     @item.location = @object_type.location_wizard({project: @item.sample.project})
@@ -29,9 +40,14 @@ class ItemsController < ApplicationController
     end
 
     if @object_type.handler == 'sample_container'
+
+      check_sample_collision( @item.location )
       redirect_to sample_path(@item.sample)     
+
     else
+
       redirect_to object_type_path(@object_type)
+
     end
 
   end
@@ -50,6 +66,7 @@ class ItemsController < ApplicationController
        i.location = params[:item][:location]
        i.data = params[:item][:data]
        i.save
+       check_sample_collision( i.location )
        redirect_to sample_url( { id: i.sample_id, active_item: i.id } )
 
    else
@@ -70,6 +87,9 @@ class ItemsController < ApplicationController
         old_loc = i.location
         i.location = params[:location]
         flash[:success] = "Item #{i.id} moved from #{old_loc} to #{i.location}" if i.save
+        if @object_type.handler == 'sample_container'
+          check_sample_collision( i.location )
+        end
 
    end
 
