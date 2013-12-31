@@ -169,8 +169,11 @@ class ObjectType < ActiveRecord::Base
       when 'M20', 'M80'
         next_location params
 
-      when /SF[0-9]/
+      when /^SF[0-9]/
         next_location( { boxes_per_hotel: 24 }.merge params )
+
+      when /^FIX*/
+        prefix.split(":").last
 
       else
         "Bench"

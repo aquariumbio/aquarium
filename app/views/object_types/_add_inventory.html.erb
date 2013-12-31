@@ -5,12 +5,13 @@
   <%= form_for([@object_type, @object_type.items.build]) do |f| %>
 
         <%= f.label :location %>
-        <%= f.text_field :location %>
+        <%= f.text_field :location, value: @object_type.location_wizard %>
      <br />
          <%= f.label :quantity %>
          <%= f.number_field :quantity, value: 0 %>
      <br />
-    <%= f.submit class: "btn btn-small", value: "Add"  %>
+
+     <%= f.submit class: "btn btn-small", value: "Add"  %>
 
   <% end %>
 

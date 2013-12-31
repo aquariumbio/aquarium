@@ -29,7 +29,7 @@ class ItemsController < ApplicationController
 
     @object_type = ObjectType.find(params[:object_type_id])
     @item = @object_type.items.create(params[:item])
-    @item.location = @object_type.location_wizard({project: @item.sample.project})
+    @item.location = @object_type.location_wizard({project: @item.sample ? @item.sample.project : 'unknown' })
     @item.save
 
     if (@item.errors.size > 0 )
