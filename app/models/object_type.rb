@@ -74,10 +74,17 @@ class ObjectType < ActiveRecord::Base
 
   end
 
-  def next_empty_box prefix
+  ##############################################################################################################
+  #
+  #  Location Wizard for Freezers
+  #
 
-    items = (ObjectType.where("prefix = ?", prefix).collect { |ot| ot.items }).flatten.reject { |i| 
-      /M[2,8]0\.[0-9]+\.[0-9]+\.[0-9]+/.match(i.location) == nil 
+  def next_empty_box params
+
+    r = Regexp.new ( params[:prefix] + '\.[0-9]+\.[0-9]+\.[0-9]+' )
+
+    items = (ObjectType.where("prefix = ?", params[:prefix]).collect { |ot| ot.items }).flatten.reject { |i| 
+      r.match(i.location) == nil 
     }
 
     if items.length == 0
@@ -88,7 +95,7 @@ class ObjectType < ActiveRecord::Base
         [ loc[1].to_i, loc[2].to_i ]
       }).sort.last
 
-      if box[1] == 15
+      if box[1] == params[:boxes_per_hotel] - 1
         "#{box[0]+1}.0"
       else
         "#{box[0]}.#{box[1]+1}"      
@@ -104,7 +111,7 @@ class ObjectType < ActiveRecord::Base
       y = b.split('.')
       if x[1].to_i != y[1].to_i
         x[1].to_i - y[1].to_i
-      elsif x[2].to_i != y[1].to_i
+      elsif x[2].to_i != y[2].to_i
         x[2].to_i - y[2].to_i
       else 
         x[3].to_i - y[3].to_i
@@ -113,36 +120,16 @@ class ObjectType < ActiveRecord::Base
 
   end
 
-  def next_location locs, prefix
+  def items_in_project params
 
-    puts "LOCS = #{locs}"
+    objects = ObjectType.where("prefix = ?", params[:prefix])
 
-    if locs.length == 0 # a totally new project!
-
-      "#{prefix}.#{next_empty_box prefix}.0"
-
-    else # an existing project
-
-      x = (sort_locations locs).last.split('.')
-
-      if x[3].to_i == 99 
-        "#{prefix}.#{next_empty_box prefix}.0"
-      else
-        "#{x[0]}.#{x[1]}.#{x[2]}.#{x[3].to_i+1}"
-      end
-
-    end
-
-  end
-
-  def items_in_project prefix, project
-
-    objects = ObjectType.where("prefix = ?", prefix)
+    r = Regexp.new ( params[:prefix] + '\.[0-9]+\.[0-9]+\.[0-9]+' )
 
     (objects.collect { |ot| 
       ot.items.reject { |i|
-         /M[2,8]0\.[0-9]+\.[0-9]+\.[0-9]+/.match(i.location) == nil ||
-         i.sample.project != project
+         r.match(i.location) == nil ||
+         i.sample.project != params[:project]
       } 
     }).flatten.collect{ |i| 
       i.location
@@ -150,17 +137,41 @@ class ObjectType < ActiveRecord::Base
   
   end
 
+  def next_location p = {}
+
+    params = { boxes_per_hotel: 16 }.merge p
+
+    locs = items_in_project params
+
+    if locs.length == 0 # a totally new project!
+
+      "#{prefix}.#{next_empty_box params}.0"
+
+    else # an existing project
+
+      x = (sort_locations locs).last.split('.')
+
+      if x[3].to_i == 99 
+        "#{prefix}.#{next_empty_box params}.0"
+      else
+        "#{x[0]}.#{x[1]}.#{x[2]}.#{x[3].to_i+1}"
+      end
+
+    end
+
+  end 
+
   def location_wizard details = {}
 
-    info = { project: 'unknown' }.merge details
+    params = { prefix: prefix, project: 'unknown' }.merge details
 
     case prefix
     
-      when 'M20'
-        next_location( (items_in_project 'M20', details[:project]), 'M20' )
+      when 'M20', 'M80'
+        next_location params
 
-      when 'M80'
-        next_location( (items_in_project 'M80', details[:project]), 'M80' )
+      when /SF[0-9]/
+        next_location( { boxes_per_hotel: 24 }.merge params )
 
       else
         "Bench"

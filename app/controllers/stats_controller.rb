@@ -73,7 +73,7 @@ class StatsController < ApplicationController
     data = SampleType.all.collect do |st|
       num_items = 0;
       st.samples.each do |s|
-        num_items += s.items.length
+        num_items += (s.items.reject { |i| i.quantity <= 0 }).length
       end
       r[st.name] = [ st.samples.length, num_items ]
     end
@@ -91,9 +91,9 @@ class StatsController < ApplicationController
     items = []
 
     while t < now
-      tnew = t + 7.days
+      tnew = t + 14.days
       objects.push( [ 1000*t.to_i, ObjectType.where("created_at < ?", tnew).length ] )
-      items.push( [ 1000*t.to_i, Item.where("created_at < ?", tnew).length  ] )
+      items.push( [ 1000*t.to_i, Item.where("created_at < ? AND quantity >= 0", tnew).length  ] )
       t = tnew
     end
 

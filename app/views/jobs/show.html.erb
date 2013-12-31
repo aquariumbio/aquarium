@@ -71,6 +71,7 @@
       <table class='table' style='width: 100%'>
 	<tr>
 	  <th>Id</th>
+	  <th>Location</th>
 	  <th>Type</th>
 	</tr>
 
@@ -78,6 +79,7 @@
 	  <% if t.item %>
 	    <tr>
 	      <td><%= link_to t.item.id, t.item %></td>
+	      <td><%= t.item.location %></td>
 	      <% if t.item.sample_id %>
 		<td><%= link_to t.item.object_type.name, t.item.object_type %>
 		    containing 

@@ -18,12 +18,12 @@ class Item < ActiveRecord::Base
 
   def quantity_nonneg
     errors.add(:quantity, "Must be non-negative." ) unless
-      self.quantity && self.quantity >= 0 
+      self.quantity && self.quantity >= -1 
   end
 
   def inuse_less_than_quantity
     errors.add(:inuse, "must non-negative and not greater than the quantity." ) unless
-      self.quantity && self.inuse && self.inuse >= 0 && self.inuse <= self.quantity
+      self.quantity && self.inuse && self.inuse >= -1 && self.inuse <= self.quantity
   end
 
 end

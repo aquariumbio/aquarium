@@ -46,13 +46,20 @@ class SamplesController < ApplicationController
     end
 
     if params[:delete] 
-      Item.find(params[:delete]).destroy
+      i = Item.find(params[:delete])
+      puts "DELETING ITEM #{i.id}"
+      flash[:notice] = "Deleted item #{i.id}"
+      i.quantity = -1
+      i.inuse = -1
+      i.location = 'deleted'
+      i.save!
     end
 
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @sample }
     end
+
   end
 
   # GET /samples/new
