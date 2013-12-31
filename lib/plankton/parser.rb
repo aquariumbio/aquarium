@@ -6,6 +6,7 @@ module Plankton
     attr_writer :job_id
 
     def initialize name, contents
+
       @tok = Lang::Tokenizer.new ( contents )
       @program = []
       @args = []
@@ -13,6 +14,10 @@ module Plankton
       @info = ""
       @debug = "No debug info available"
       @job_id = -1
+
+      add_function :length, 1
+      add_function :append, 2
+
     end
 
     def bad_xml

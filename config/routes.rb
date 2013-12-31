@@ -85,6 +85,9 @@ Bioturk::Application.routes.draw do
   match '/jobchart', to: 'static_pages#jobchart'
   match '/changes', to: 'static_pages#changes'
 
+  match '/inventory_stats', to: 'static_pages#inventory_stats'
+  match '/inventory_critical', to: 'static_pages#inventory_critical'
+
   get '/production_interface', to: 'object_types#production_interface'
   get '/delete_inventory', to: 'object_types#delete_inventory'
   get '/copy_inventory_from_production', to: 'object_types#copy_inventory_from_production'

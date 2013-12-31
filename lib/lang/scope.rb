@@ -97,6 +97,33 @@ module Lang
       return s
     end
 
+
+
+    ############################################################################
+    # functions callable from plankton
+
+    def length a
+
+      if a.class == Array
+        a.length
+      else
+        raise "Attempted to take length of non-array #{a}"
+      end
+
+    end
+
+    def append a, x
+
+      if a.class == Array
+        b = a.dup
+        b.push x
+        b
+      else
+        raise "Attempted to take append #{x} to non-array #{a}"
+      end
+
+    end
+
   end
 
 end

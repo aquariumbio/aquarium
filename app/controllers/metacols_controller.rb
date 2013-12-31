@@ -127,7 +127,7 @@ class MetacolsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to @metacol }
+      format.html { redirect_to metacols_path( active: true ) }
       format.json { head :no_content }
     end
   end

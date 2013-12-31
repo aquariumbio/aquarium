@@ -5,6 +5,12 @@ class StaticPagesController < ApplicationController
   def home
   end
 
+  def inventory_stats
+  end
+
+  def inventory_critical
+  end
+
   def help
   end
 
