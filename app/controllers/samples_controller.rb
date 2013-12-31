@@ -123,9 +123,15 @@ class SamplesController < ApplicationController
   # DELETE /samples/1
   # DELETE /samples/1.json
   def destroy
+
     @sample = Sample.find(params[:id])
     id = @sample.sample_type_id
-    @sample.destroy
+
+    if @sample.items.length > 0 
+      flash[:notice] = "Could not delete sample #{@sample.name} because there are items associated with it."
+    else
+      @sample.destroy
+    end
 
     respond_to do |format|
       format.html { redirect_to samples_url(sample_type_id: id) }

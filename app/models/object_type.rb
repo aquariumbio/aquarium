@@ -128,8 +128,7 @@ class ObjectType < ActiveRecord::Base
 
     (objects.collect { |ot| 
       ot.items.reject { |i|
-         r.match(i.location) == nil ||
-         i.sample.project != params[:project]
+         r.match(i.location) == nil || ( i.sample && i.sample.project != params[:project] )
       } 
     }).flatten.collect{ |i| 
       i.location

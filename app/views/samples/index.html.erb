@@ -31,6 +31,7 @@
 
     <th></th>
     <th></th>
+    <th></th>
 
   </tr>
 
@@ -71,6 +72,8 @@
 
     <td><%= link_to 'Show', sample %></td>
     <td><%= link_to 'Edit', edit_sample_path(sample) %></td>
+    <td><%= link_to 'x', sample, method: :delete, data: { confirm: 'Are
+    you sure you want to delete this sample definition? Note, deleting will fail if there are an items associated with this sample.' } %></td>
     
   </tr>
 <% end %>

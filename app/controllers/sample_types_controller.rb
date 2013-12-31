@@ -72,8 +72,14 @@ class SampleTypesController < ApplicationController
   # DELETE /sample_types/1
   # DELETE /sample_types/1.json
   def destroy
+
     @sample_type = SampleType.find(params[:id])
-    @sample_type.destroy
+
+    if @sample_type.samples.length > 0
+      flash[:notice] = "Could not delete sample type definition #{@sample_type.name} because it has samples associated with it."
+    else
+      @sample_type.destroy
+    end
 
     respond_to do |format|
       format.html { redirect_to sample_types_url }
