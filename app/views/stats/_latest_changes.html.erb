@@ -1,19 +1,17 @@
 <div style='border: 1pt solid #aaa; border-radius: 5pt; padding: 5px; margin: 5px;'>
 
-    <h4 style='text-align: center'>Latest Changes (Dec.23)</h4>
+    <h4 style='text-align: center'>Latest Changes (Dec.30)</h4>
     <ul class='list'>
-      <li>Plankton and oyster now take array arguments, as in "number
-      array", "string array", and "sample array" (no objecttype
-      arrays). The argument input UI has been updated to reflect this
-      change as well.</li>
-      <li>You can edit the arguments of jobs that are scheduled for
-      the future (which could be useful for daily minipreps).</li>
-      <li>The daemon should crash less often now due to a fix that
-      helps it recover from failed communications with the database server.</li>
-      <li>Fixed bug where number choices in getdatas were interpreted as strings.</li>
-      <li>Fixed bug where choices in numerical getdatas are
-      interpreted as strings.</li>
-      <li>Fixed bug where operators in strings resulted in parse errors.</li>
+      <li>You can get the length of an array and append an element to
+      an array in Plankton. See
+      the <a href="https://github.com/klavinslab/specifications/blob/master/Languages/Plankton.md">documentation</a>.</li>
+      <li>Can now start one instance of a metacol for each user in a
+      group. The login user for which the metacol was started is
+      available in the aquarium_user variable within oyster.</li>
+      <li>The -20C and -80C freezers now have location wizards. To
+      make an object type use the wizard, you have to set its prefix
+      (on the edit object type page) to M20 or M80 respectively.</li>
+      <li>Fixed bug in parsing http queries in Plankton (Thanks Nick!)</li>
     </ul>
 
 </div>
