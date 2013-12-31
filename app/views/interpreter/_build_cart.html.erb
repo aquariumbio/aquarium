@@ -4,7 +4,7 @@
 
   <% current_user.cart_items.each do |c| %>
 
-    if c.item != nil
+    <% if c.item != nil %>
 
       cart.push({
         id: <%= c.item.id %>,
@@ -12,6 +12,6 @@
         sample_type: '<%= c.item.sample.sample_type.name %>'
       });
 
-    end
+    <% end %>
   
   <% end %>
