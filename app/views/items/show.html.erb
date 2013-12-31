@@ -1,8 +1,8 @@
 <h1>Item <%= @item.id %></h1>
 
 <% if @item.object_type.handler == 'sample_container' %>
-  <h2><%= link_to @item.sample.name, @item.sample %> - <span style='color: #aaa'><%= @item.object_type.name %></span></h2>
-  <p><%= @item.sample.description %></p>
+  <h2><%= @item.sample ? (link_to @item.sample.name, @item.sample) : "???" %> - <span style='color: #aaa'><%= @item.object_type.name %></span></h2>
+  <p><%= @item.sample ? ( @item.sample.description ) : "???" %></p>
 <% else %>
   <h2><%= link_to @item.object_type.name, @item.object_type %></h2>
 <% end %>

@@ -38,7 +38,9 @@ class ObjectType < ActiveRecord::Base
   def quantity
     q = 0
     self.items.each { |i|
-      q += i.quantity
+      if i.quantity >= 0 
+        q += i.quantity
+      end
     }
     return q
   end
