@@ -36,7 +36,7 @@ module Plankton
           while @tok.current != 'end' && @tok.current != 'EOF'
             q = @tok.eat_a_variable.to_sym
             @tok.eat_a ':'
-            info[:query][q] = string_expr
+            info[:query][q] = expr
           end
 
           @tok.eat_a 'end'
