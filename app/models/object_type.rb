@@ -178,6 +178,12 @@ class ObjectType < ActiveRecord::Base
       when /^FIX*/
         prefix.split(":").last
 
+      when 'DFP' # Deli frig plate
+        'DFP.0.0.0'
+
+      when 'DFB' # Deli frig box
+        'DFB.0.0.0'
+
       else
         "Bench"
 
