@@ -17,7 +17,7 @@
     <% if @instruction.location.to_s != "" %>
       value = '<%= @instruction.location %>'
     <% else %>
-      value = '<%= ObjectType.find_by_name(@instruction.object_type_name).location_wizard %>'>
+      value = '<%= @instruction.item.location %>'>
     <% end %>
   </input>
 </p>

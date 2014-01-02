@@ -91,7 +91,8 @@ module Plankton
 
       else
 
-        loc = params['location'] ? params['location'] : @object_type.location_wizard;
+        loc = params['location'] ? params['location'] : @object_type.location_wizard( { project: @sample ? @sample.project : 'unknown' } )
+
         begin
           @item = @object_type.items.create(location: loc, quantity: @quantity, data: @data)
         rescue Exception => e
@@ -114,8 +115,10 @@ module Plankton
       # evaluate the expressions for object_type and quantity
       pre_render scope, params
 
-      @item.location = params['location'] ? params['location'] : @object_type.location_wizard;
-      @item.save
+      if params['location']
+        @item.location = params['location']
+        @item.save
+      end
 
       scope.set( @result_var.to_sym, pdl_item(@item) )
 

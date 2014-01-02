@@ -14,6 +14,7 @@ class ObjectType < ActiveRecord::Base
   validates :cost, :presence => true
   validate :pos
   validate :proper_release_method
+  validates_uniqueness_of :name
 
   def min_and_max
     errors.add(:min, "min must be greater than zero and less than or equal to max") unless
