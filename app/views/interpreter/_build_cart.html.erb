@@ -9,7 +9,8 @@
       cart.push({
         id: <%= c.item.id %>,
         sample_name: '<%= c.item.sample.name %>',
-        sample_type: '<%= c.item.sample.sample_type.name %>'
+        sample_type: '<%= c.item.sample.sample_type.name %>',
+        container: '<%= c.item.object_type.name %>'
       });
 
     <% end %>

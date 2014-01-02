@@ -182,7 +182,7 @@ ArgumentUI.prototype.string = function(arg) {
 
 ArgumentUI.prototype.sample = function(arg) {
 
-    var x = $('<select />');
+    var x = $("<select class='argument-select' />");
    
     var sample_type = arg.name.replace(/_[^_]*$/,'').replace(/_/g,' ');
 
@@ -197,10 +197,11 @@ ArgumentUI.prototype.sample = function(arg) {
       if ( sample_type == arg.name || sample_type == this.cart[i].sample_type ) {
         if ( arg.current && arg.current == this.cart[i].id ) {
           found = true;
-  	  x.append('<option selected value=' + this.cart[i].id + '>' + this.cart[i].id + ': ' + this.cart[i].sample_name + '</option>' );
+  	  x.append('<option selected value=' + this.cart[i].id + '>' + this.cart[i].id + ': ' + this.cart[i].sample_name + ' (' + this.cart[i].container + ')' + '</option>' );
         } else {
-   	  x.append('<option value=' + this.cart[i].id + '>' + this.cart[i].id + ': ' + this.cart[i].sample_name + '</option>' );
+   	  x.append('<option value=' + this.cart[i].id + '>' + this.cart[i].id + ': ' + this.cart[i].sample_name + ' (' + this.cart[i].container + ')' + '</option>' );
         }
+
       }
 
     }
