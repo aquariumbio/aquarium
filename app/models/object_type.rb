@@ -169,7 +169,7 @@ class ObjectType < ActiveRecord::Base
 
     case prefix
     
-      when 'M20', 'M80'
+      when 'M20', 'M80', 'DFS'
         next_location params
 
       when /^SF[0-9]/
@@ -180,9 +180,6 @@ class ObjectType < ActiveRecord::Base
 
       when 'DFP' # Deli frig plate
         'DFP.0.0.0'
-
-      when 'DFB' # Deli frig box
-        'DFB.0.0.0'
 
       else
         "Bench"
