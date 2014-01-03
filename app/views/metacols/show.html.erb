@@ -41,7 +41,7 @@
       <p>
         <b><%= p.name.capitalize %>.
         </b> <i><%= p.protocol %></i>
-        <% if p.marked? %>
+        <% if p.marked? && p.started %>
           [<%= Time.at(p.started).to_formatted_s(:short) %>]
         <% end %>
       </p> 
