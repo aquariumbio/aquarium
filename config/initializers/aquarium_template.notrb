@@ -1,0 +1,9 @@
+#
+# Installation specific stuff here
+#
+
+Bioturk::Application.config.protocol_repo = 'your github repo'
+Bioturk::Application.config.repo_user = 'your github username'
+Bioturk::Application.config.repo_password = 'your github password'
+
+

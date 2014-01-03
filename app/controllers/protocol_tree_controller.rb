@@ -7,7 +7,7 @@ class ProtocolTreeController < ApplicationController
    logger.debug "SUBTREE: attempting to get client"
 
     begin
-      @client = Octokit::Client.new(login:'klavins',password:'a22imil@te')
+      @client = Octokit::Client.new(login: Bioturk::Application.config.repo_user, password: Bioturk::Application.config.repo_password)
     rescue
       logger.debug "SUBTREE: failed to get client"
       flash.now[:error] = "could not set up github client"
@@ -37,7 +37,7 @@ class ProtocolTreeController < ApplicationController
     logger.debug "SUBTREE: attempting to get commits"
 
     begin
-      @commits = @client.list_commits('klavinslab/protocols')
+      @commits = @client.list_commits(Bioturk::Application.config.protocol_repo)
     rescue
       @logger.debug "SUBTREE: could not get commits"
       @commits = nil

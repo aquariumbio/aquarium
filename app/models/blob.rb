@@ -12,12 +12,12 @@ class Blob < ActiveRecord::Base
 
         logger.info "Connecting to github to get #{sha}"
 
-        client = Octokit::Client.new(login:'klavins',password:'a22imil@te')
+        client = Octokit::Client.new(login:Bioturk::Application.config.repo_user,password:Bioturk::Application.config.repo_password)
 
         b = self.new
         b.sha = sha
         b.path = path
-        b.xml = Base64.decode64(client.blob('klavinslab/protocols',sha).content);
+        b.xml = Base64.decode64(client.blob(Bioturk::Application.config.protocol_repo,sha).content);
         b.save
 
       else
@@ -42,8 +42,8 @@ class Blob < ActiveRecord::Base
 
     else 
 
-      client = Octokit::Client.new(login:'klavins',password:'a22imil@te')
-      gh = (client.tree 'klavinslab/protocols', sha)
+      client = Octokit::Client.new(login: Bioturk::Application.config.repo_user, password: Bioturk::Application.config.repo_password)
+      gh = (client.tree Bioturk::Application.config.protocol_repo, sha)
 
       b = self.new
       b.sha = sha
@@ -74,8 +74,8 @@ class Blob < ActiveRecord::Base
 
       # Ask github for the protocol
       logger.info "#########Connecting to github to get sha #{fullpath} for job #{job_id} because blist.length = #{blist.length}."
-      client = Octokit::Client.new(login:'klavins',password:'a22imil@te')
-      file = client.contents 'klavinslab/protocols', :path => fullpath
+      client = Octokit::Client.new(login: Bioturk::Application.config.repo_user, password: Bioturk::Application.config.repo_password)
+      file = client.contents Bioturk::Application.config.protocol_repo, :path => fullpath
       logger.info "#########Done getting blob sha: #{file.sha} for job " + job_id.to_s
 
       # make a new blob
@@ -83,7 +83,7 @@ class Blob < ActiveRecord::Base
       b.sha = file.sha
       b.path = fullpath
       b.job_id = job_id
-      b.xml = Base64.decode64(client.blob('klavinslab/protocols',file.sha).content);
+      b.xml = Base64.decode64(client.blob(Bioturk::Application.config.protocol_repo, file.sha).content);
 
       # only store if called from a job
       if job_id >= 0
