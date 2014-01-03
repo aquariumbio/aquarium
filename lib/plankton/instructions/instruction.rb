@@ -51,7 +51,7 @@ class Instruction
       else
         d = item.data ? item.data : '{ "error": "Could not parse json data" }'
         begin
-          data = JSON.parse(d,:symbolize_names => true)
+          data = JSON.parse(d.gsub(/\b0*(\d+)/, '\1'),:symbolize_names => true)
         rescue Exception => e
           data = {}
         end

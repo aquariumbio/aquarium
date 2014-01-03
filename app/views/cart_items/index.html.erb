@@ -46,7 +46,7 @@
         <% if cart_item.item.data %>
 
           <% begin
-                  data = JSON.parse(cart_item.item.data) 
+                  data = JSON.parse(cart_item.item.data.gsub(/\b0*(\d+)/, '\1')) 
                 rescue
                   data = {}
                 end

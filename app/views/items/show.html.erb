@@ -12,7 +12,7 @@
 <% if @item.data && @item.data != "" %>
   <h4>Data</h4> <ul class='list'>
       <% begin
-                data = JSON.parse(@item.data) 
+                data = JSON.parse(@item.data.gsub(/\b0*(\d+)/, '\1')) 
               rescue
                 data = {}
               end
