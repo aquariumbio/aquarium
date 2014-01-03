@@ -50,13 +50,12 @@ module Plankton
       end
 
       if @sample_name_expr
-          @sample_name = scope.substitute @sample_name_expr
-          @sample_project = scope.substitute @sample_project_expr
+          @sample_name = scope.evaluate @sample_name_expr
         begin
-          if @sample_name.class != String || @sample_project.class != String
-            raise "Sample name and project must be strings"      
+          if @sample_name.class != String
+            raise "Sample name must be a string"      
           end
-          @sample = Sample.find_by_name_and_project(@sample_name,@sample_project)
+          @sample = Sample.find_by_name(@sample_name)
         rescue Exception => e
           raise "Could not find sample with name=#{@sample_name} and project=#{@sample_project}."
         end
@@ -84,12 +83,17 @@ module Plankton
         raise "Could not find object type #{object_type_name}, which is not okay in the production server." 
       end
 
+      puts "IN PRODUCE PRE_RENDER: params = #{params}"
+
       if params[:new_item_id] 
 
+        puts "IN PRODUCE PRE_RENDER: FINDING ITEM"
         @item = Item.find(params[:new_item_id])
         params.delete :new_item_id
 
       else
+
+        puts "IN PRODUCE PRE_RENDER: CREATING NEW ITEM"
 
         loc = params['location'] ? params['location'] : @object_type.location_wizard( { project: @sample ? @sample.project : 'unknown' } )
 

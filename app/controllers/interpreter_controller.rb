@@ -428,7 +428,9 @@ class InterpreterController < ApplicationController
       @job.state = { stack: @scope.stack }.to_json
       @job.save
 
-      pre_render
+      if @pc != Job.COMPLETED
+        pre_render
+      end
   
     end
 

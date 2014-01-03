@@ -25,6 +25,11 @@ module Plankton
         sample = expr
       end
 
+      if @tok.current == 'of'
+        @tok.eat_a 'of'
+        sample_name = expr
+      end
+
       note = ""
       location = ""
 
@@ -81,6 +86,7 @@ module Plankton
       ins = ProduceInstruction.new ob[:type], ob[:quantity], rel, var, lines
       ins.data_expr = data
       ins.sample_expr = sample
+      ins.sample_name_expr = sample_name
       ins.note_expr = note
       ins.loc_expr = location
       push ins
