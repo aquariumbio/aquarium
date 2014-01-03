@@ -1,0 +1,62 @@
+# Edit this file and copy it to config/database.yml
+
+development:
+
+  adapter: sqlite3
+  database: db/development.sqlite3
+  pool: 5
+  timeout: 5000
+
+  production_server: # Listed here so that the development server can copy inventory db items from the production server
+
+    adapter: mysql2
+    encoding: utf8
+    reconnect: false
+    host: your.mysqlerver.com
+    port: 3306
+    database: production
+    pool: 5
+    username: yourusername
+    password: "yourpassword"
+
+test:
+
+  adapter: sqlite3
+  database: db/test.sqlite3
+  pool: 5
+  timeout: 5000
+
+production:
+
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  host: your.mysqlerver.com
+  port: 3306
+  database: production
+  pool: 5
+  username: yourusername
+  password: "yourpassword"
+
+rehearse:
+
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  host: your.mysqlerver.com
+  port: 3306
+  database: rehearse
+  pool: 5
+  username: yourusername
+  password: "yourpassword"
+
+  production_server: # Listed so that the rehearsal server can copy inventory db items from the production server
+    adapter: mysql2
+    encoding: utf8
+    reconnect: false
+    host: your.mysqlerver.com
+    port: 3306
+    database: production
+    pool: 5
+    username: yourusername
+    password: "yourpassword"
