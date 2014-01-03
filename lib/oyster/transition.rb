@@ -105,6 +105,23 @@ module Oyster
       end
     end
 
+    def hours_elapsed j, h
+      if j < @parents.length
+        return Time.now.to_i - @parents[j].started >= h.hours.to_i
+      else
+        return false
+      end
+    end
+
+    def minutes_elapsed j, m
+     
+      if j < @parents.length
+        return Time.now.to_i - @parents[j].started >= m.minutes.to_i
+      else
+        return false
+      end
+    end
+
   end
 
 end

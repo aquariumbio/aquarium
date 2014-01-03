@@ -2,7 +2,7 @@ module Oyster
 
   class Place
 
-    attr_accessor :jobs, :marking, :arg_expressions, :arguments, :protocol, :sha, :name
+    attr_accessor :jobs, :marking, :arg_expressions, :arguments, :protocol, :sha, :name, :started
 
     def initialize
 
@@ -15,6 +15,8 @@ module Oyster
       @jobs = []         # A list of job ids associated with this place. Every time a place becomes
                          # active, a new job id is pushed onto the stack.
       @marking = 0       # How many marks the place has (in the Petri Net sense)
+
+      @started = Time.now.to_i  # Time when the place was started
 
       @desired_start = "now()"      # When the job should be started
       @window =        "days(1)"    # Latest time the job should be started
@@ -67,6 +69,8 @@ module Oyster
 
     def start who, scope, id
 
+      @started = Time.now.to_i
+
       if @protocol != ''
 
         begin
@@ -105,6 +109,7 @@ module Oyster
     end
 
     def completed?
+
       if @protocol != '' && @jobs.length > 0
         j = Job.find(@jobs.last)
         return( j.pc == Job.COMPLETED )
@@ -113,6 +118,7 @@ module Oyster
       else
         return false
       end
+
     end
 
     def error?

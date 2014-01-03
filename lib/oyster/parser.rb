@@ -16,6 +16,8 @@ module Oyster
       add_function :min_quantity, 1
       add_function :max_quantity, 1
       add_function :return_value, 2
+      add_function :hours_elapsed, 2
+      add_function :minutes_elapsed, 2
     end
 
     def parse

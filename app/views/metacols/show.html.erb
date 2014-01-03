@@ -38,7 +38,13 @@
       <div class='well unmarked'> 
     <% end %>
 
-      <p><b><%= p.name.capitalize %>.</b> <i><%= p.protocol %></i></p>
+      <p>
+        <b><%= p.name.capitalize %>.
+        </b> <i><%= p.protocol %></i>
+        <% if p.marked? %>
+          [<%= Time.at(p.started).to_formatted_s(:short) %>]
+        <% end %>
+      </p> 
 
       <% pending = @mc.jobs.reject { |j| j.pc == Job.COMPLETED || (!p.jobs.include? j.id) } %>
       <% completed = @mc.jobs.reject { |j| j.pc != Job.COMPLETED || (!p.jobs.include? j.id) } %>
