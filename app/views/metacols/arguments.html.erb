@@ -2,6 +2,14 @@
 
 <h1>Start Metacol: <%= params[:path] %></h1>
 
+<% if Rails.env == 'production' %>
+  <center>
+  <p><span class="alert alert-error">Note: You should only start a
+    metacol on the production server if you are physically in the lab
+    at the bench working.</span></p>
+  </center>
+<% end %>
+
 <% if @errors != "" %>
 
   <h4>Error</h4>
@@ -22,9 +30,7 @@
 
 <br />
 <div id='button-area'></div>
-
   <%= render 'details' %>
-
 <% end %>
 
 <script>

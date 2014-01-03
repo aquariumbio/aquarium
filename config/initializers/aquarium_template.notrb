@@ -1,5 +1,5 @@
 #
-# Installation specific stuff here
+# Installation specific stuff here. It needs to be moved to config/initializers/aquarium.rb to work.
 #
 
 Bioturk::Application.config.protocol_repo = 'your github repo'
