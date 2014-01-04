@@ -51,19 +51,21 @@ class ReleaseInstruction < Instruction
           x.inuse -= 1
 
         when 'dispose'
-          x.inuse    -= 1
-          x.quantity -= 1
+          if x.sample 
+             x.inuse    = -1
+             x.quantity = -1
+             x.location = 'deleted'
+           else
+             x.inuse    -= 1
+             x.quantity -= 1
+           end
 
         else
           raise 'unknown method in release'
 
       end
 
-      if x.quantity <= 0
-        x.destroy
-      else
-        x.save 
-      end
+      x.save 
       
       log_data.push id: x[:id], method: m, location: x[:location]
 
