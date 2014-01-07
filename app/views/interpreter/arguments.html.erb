@@ -57,11 +57,7 @@
 
   </div>
 
-  <% if Rails.env == 'production' && current_user && !current_user.is_admin %>
-    <p>Note: User <%= current_user.login %> cannot start jobs directly on the production server.</p>
-  <% else %>
-    <div id='button-area'></div>
-  <% end %>
+  <div id='button-area'></div>
 
 <% end %>
 
