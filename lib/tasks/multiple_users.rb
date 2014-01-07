@@ -1,7 +1,7 @@
 names = [
   ["Borgman", "Joshua"], 
   ["Chavali", "Venkata"], 
-  ["Hassanzadah", "Pegah"], 
+  ["Hassanzadeh", "Pegah"], 
   ["Jain", "Sonal"], 
   ["Lavania", "Chandashekhar"], 
   ["Ma", "Patrick"], 
