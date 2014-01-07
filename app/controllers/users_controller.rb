@@ -19,26 +19,50 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
+  def password
+    @user = User.new
+    render 'password'
+  end
+
   def show
     @user = User.find(params[:id])
   end
 
   def create
-    @user = User.new(params[:user])
-    if @user.save
-      @group = Group.new
-      @group.name = @user.login
-      @group.description = "A group containing only user #{@user.name}"
-      @group.save
-      m = Membership.new
-      m.group_id = @group.id
-      m.user_id = @user.id
-      m.save
-      flash[:success] = "#{params[:user][:name]} has been assimilated."
-      redirect_to @user
+
+    if params[:change_password]
+
+      @user = User.new(params[:user])
+      if @user.save
+        @group = Group.new
+        @group.name = @user.login
+        @group.description = "A group containing only user #{@user.name}"
+        @group.save
+        m = Membership.new
+        m.group_id = @group.id
+        m.user_id = @user.id
+        m.save
+        flash[:success] = "#{params[:user][:name]} has been assimilated."
+        redirect_to @user
+      else
+        render 'new'
+      end
+ 
     else
-      render 'new'
+
+      @user = User.find_by_login(params[:user][:login])
+      @user.password = params[:user][:password]
+      @user.password_confirmation = params[:user][:password_confirmation]
+      if @user.save
+        flash[:success] = "#{params[:user][:login]}'s password changed."
+        redirect_to @user
+      else
+        flash[:error] = "#{params[:user][:login]}'s password not changed."
+        redirect_to password_path
+      end
+
     end
+
   end
 
   def edit

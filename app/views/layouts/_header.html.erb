@@ -71,6 +71,7 @@
                 <% if current_user && current_user.is_admin %>
                   <li class="divider"></li>
                   <li><%= link_to "New", signup_path %></li>
+                  <li><%= link_to "Change a Password", password_path %></li>
                 <% end %>
                 <li class="divider"></li>
                 <li>

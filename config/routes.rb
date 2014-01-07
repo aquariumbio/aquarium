@@ -95,8 +95,12 @@ Bioturk::Application.routes.draw do
   get '/copy_users_from_production', to: 'users#copy_users_from_production'
 
   match '/signup', to: 'users#new'
+  match '/password', to: 'users#password'
 
-  resources :users
+  resources :users do 
+    get 'change_password'
+  end
+
   resources :sessions, only: [:new, :create, :destroy]
   resources :jobs, only: [:index, :destroy, :show]
   resources :logs, only: [:index, :show]
