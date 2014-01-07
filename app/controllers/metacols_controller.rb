@@ -7,9 +7,10 @@ class MetacolsController < ApplicationController
     @active_metacols = Metacol.where("status = 'RUNNING'").order('id DESC')
     @completed_metacols = Metacol.paginate(page: params[:page], :per_page => 10).where("status != 'RUNNING'").order('id DESC')
 
-   @daemon_status = ""
-   IO.popen("ps a | grep [r]unner") { |f| f.each_line { |l| @daemon_status += l } } 
-
+    @daemon_status = ""
+    if current_user && current_user.is_admin 
+      IO.popen("ps a | grep [r]unner") { |f| f.each_line { |l| @daemon_status += l } } 
+    end
 
     respond_to do |format|
       format.html # index.html.erb

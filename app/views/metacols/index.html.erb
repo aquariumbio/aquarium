@@ -23,6 +23,8 @@
 <br />
 <br />
 
-<pre>
-<%= @daemon_status %>
-</pre>
+<% if current_user && current_user.is_admin %>
+  <pre>
+    <%= @daemon_status %>
+  </pre>
+<% end %>
