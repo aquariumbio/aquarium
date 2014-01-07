@@ -26,11 +26,18 @@ names.each do |name|
   #u.save
 
   login = name[0].downcase
+  #u = User.find_by_login(login)
+  #g = Group.new
+  #g.name = login
+  #g.description = "A group containing only user #{login}"
+  #g.save
+
+  m = Membership.new
   u = User.find_by_login(login)
-  g = Group.new
-  g.name = login
-  g.description = "A group containing only user #{login}"
-  g.save
+  g = Group.find_by_login(login)
+  m.user_id = u.id
+  m.group_id = g.id
+  m.save
 
 end 
 
