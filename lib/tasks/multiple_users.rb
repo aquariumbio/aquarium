@@ -13,7 +13,7 @@ names = [
   ["Kim", "Bonghoe"], 
   ["Nelson", "Gregory"], 
   ["Rollins", "Nathanael"], 
-  ["Startebaum", "David"]
+  ["Starkebaum", "David"]
 ]
 
 names.each do |name|
