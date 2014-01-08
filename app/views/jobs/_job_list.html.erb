@@ -19,7 +19,7 @@
 
     <tr>
       <td><%= link_to j.id.to_s, j %></td>
-      <td><%= link_to j.path, protocol_tree_raw_path(sha: j.sha, format: 'xml'), target: j.path %></td>
+      <td><%= j.path %></td>
 
       <% if j.metacol_id %>
         <% m = Metacol.find_by_id(j.metacol_id) %>

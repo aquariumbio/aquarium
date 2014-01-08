@@ -14,7 +14,6 @@
     <% if !status %>
       <th></th>
     <% end %>
-    <th></th>
   </tr>
 
 <% metacols.each do  |metacol| %>
@@ -36,9 +35,6 @@
         <i class='icon-stop'></i>
       <% end %></td>
     <% end %>
-    <td><%= link_to metacol, method: :delete, data: { confirm: 'Delete metacol process?' } do %>
-      <i class='icon-trash'></i>
-    <% end %></td>
   </tr>
 <% end %>
 </table>
