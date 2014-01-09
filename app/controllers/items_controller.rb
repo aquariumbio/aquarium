@@ -87,7 +87,7 @@ class ItemsController < ApplicationController
         old_loc = i.location
         i.location = params[:location]
         flash[:success] = "Item #{i.id} moved from #{old_loc} to #{i.location}" if i.save
-        if @object_type.handler == 'sample_container'
+        if @object_type && @object_type.handler == 'sample_container'
           check_sample_collision( i.location )
         end
 
