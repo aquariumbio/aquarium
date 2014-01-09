@@ -28,6 +28,7 @@ module Plankton
 
     def pre_render scope, params
 
+      # Evaluate arguments
       @object_type_name = scope.evaluate @object_type_expr
       @quantity = scope.evaluate @quantity_expr
       @release = ( @release_expr ? ( scope.evaluate @release_expr ) : nil )
@@ -37,6 +38,7 @@ module Plankton
         @release = [ @release ]
       end
 
+      # If derived from a sample, then figure out which one and put it in @sample
       if @sample_expr
         begin
           sample_item = scope.evaluate @sample_expr
@@ -49,6 +51,7 @@ module Plankton
         end
       end
 
+      # If a sample name has been provided, figure out which one and put it in @sample
       if @sample_name_expr
           @sample_name = scope.evaluate @sample_name_expr
         begin
@@ -61,7 +64,7 @@ module Plankton
         end
       end
 
-      # TODO: Parse the data expression
+      # Parse the data expression
       if @data_expr
         temp = {}
         @data_expr.each do |k,v|
@@ -83,14 +86,14 @@ module Plankton
         raise "Could not find object type #{object_type_name}, which is not okay in the production server." 
       end
 
-      puts "IN PRODUCE PRE_RENDER: params = #{params}"
-
+      # If pre-render has already been called, just find the item
       if params[:new_item_id] 
 
         puts "IN PRODUCE PRE_RENDER: FINDING ITEM"
         @item = Item.find(params[:new_item_id])
         params.delete :new_item_id
 
+      # Otherwise make a new item
       else
 
         puts "IN PRODUCE PRE_RENDER: CREATING NEW ITEM"
@@ -116,14 +119,16 @@ module Plankton
 
     def bt_execute scope, params
 
-      # evaluate the expressions for object_type and quantity
+      # evaluate the expressions to get the item produced when the page was first rendered
       pre_render scope, params
 
+      # change the location if necessary
       if params['location']
         @item.location = params['location']
         @item.save
       end
 
+      # put the resulting item in the desired variable
       scope.set( @result_var.to_sym, pdl_item(@item) )
 
       # touch the item, for tracking purposes
@@ -133,7 +138,6 @@ module Plankton
       t.save
 
       # release anything that needs to be released
-
       release_data = []
       if @release
         @release.each do |item|
