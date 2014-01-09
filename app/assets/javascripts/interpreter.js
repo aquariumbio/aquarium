@@ -17,12 +17,14 @@ ArgumentUI.prototype.display_form = function() {
 
     for ( var i in args ) {
 
+	console.log ( "processing " + args[i].name );
+
         var label = this.label(args[i]);
-        var type = args[i]; 
-
+        console.log("calling " + args[i].type);
         var form = this[args[i].type](args[i]);
-        form.attr('id','arg-'+args[i].name);
+        console.log("here");
 
+        form.attr('id','arg-'+args[i].name);
         var well = $('<div></div>');
         well.addClass('argument');
         well.append(label,form);
@@ -184,6 +186,7 @@ ArgumentUI.prototype.sample = function(arg) {
 
     var x = $("<select class='argument-select' />");
    
+    console.log(arg);
     var sample_type = arg.name.replace(/_[^_]*$/,'').replace(/_/g,' ');
 
     if ( sample_type != arg.name ) {
@@ -295,7 +298,7 @@ ArgumentUI.prototype.array = function(arg,base) {
       for ( var i in a ) {
         var li = $('<li />');
         if ( base == 'sample' ) {
-          li.append(this[base]({current: a[i], sample: names[i]}));
+            li.append(this[base]({current: a[i], sample: names[i], name: arg.name}));
         } else {
           li.append(this[base]({current: a[i]}));
         }
@@ -308,6 +311,8 @@ ArgumentUI.prototype.array = function(arg,base) {
 
     more.click(function(e){
         var li = $('<li />');
+        console.log("appending " + base );
+        delete arg.current;
         li.append(that[base](arg));
         l.append(li);
     });
