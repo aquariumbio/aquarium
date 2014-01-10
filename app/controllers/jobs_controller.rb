@@ -5,14 +5,28 @@ class JobsController < ApplicationController
   def index
 
     @user_id = params[:user_id] ? params[:user_id].to_i : current_user.id
-    @user = User.find(@user_id)
 
-    now = Time.now
+    if @user_id == -1
 
-    @active_jobs = (Job.where("pc >= 0").reject { |j| !@user.member? j.group_id } )
-    @urgent_jobs = (Job.where("pc = -1 AND latest_start_time < ?", now).reject { |j|  !@user.member? j.group_id })
-    @pending_jobs = (Job.where("pc = -1 AND desired_start_time < ? AND ? <= latest_start_time", now, now).reject { |j|  !@user.member? j.group_id })
-    @later_jobs  = (Job.where("pc = -1 AND ? <= desired_start_time", now).reject { |j|  !@user.member? j.group_id })
+      now = Time.now
+
+      @active_jobs =  Job.where("pc >= 0")
+      @urgent_jobs =  Job.where("pc = -1 AND latest_start_time < ?", now)
+      @pending_jobs = Job.where("pc = -1 AND desired_start_time < ? AND ? <= latest_start_time", now, now)
+      @later_jobs  =  Job.where("pc = -1 AND ? <= desired_start_time", now)
+
+    else
+
+      @user = User.find(@user_id)
+
+      now = Time.now
+
+      @active_jobs =  (Job.where("pc >= 0").reject { |j| !@user.member? j.group_id } )
+      @urgent_jobs =  (Job.where("pc = -1 AND latest_start_time < ?", now).reject { |j|  !@user.member? j.group_id })
+      @pending_jobs = (Job.where("pc = -1 AND desired_start_time < ? AND ? <= latest_start_time", now, now).reject { |j|  !@user.member? j.group_id })
+      @later_jobs  =  (Job.where("pc = -1 AND ? <= desired_start_time", now).reject { |j|  !@user.member? j.group_id })
+
+    end
 
   end
 

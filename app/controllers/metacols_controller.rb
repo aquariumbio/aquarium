@@ -4,8 +4,20 @@ class MetacolsController < ApplicationController
 
   def index
 
-    @active_metacols = Metacol.where("status = 'RUNNING'").order('id DESC')
-    @completed_metacols = Metacol.paginate(page: params[:page], :per_page => 10).where("status != 'RUNNING'").order('id DESC')
+    @user_id = params[:user_id] ? params[:user_id].to_i : current_user.id
+
+    if @user_id >= 0
+
+      @user = User.find(@user_id)
+      @active_metacols = Metacol.where("status = 'RUNNING' AND user_id = ?", @user_id).order('id DESC')
+      @completed_metacols = Metacol.paginate(page: params[:page], :per_page => 10).where("status != 'RUNNING' AND user_id = ?", @user_id).order('id DESC')
+
+    else
+
+      @active_metacols = Metacol.where("status = 'RUNNING'").order('id DESC')
+      @completed_metacols = Metacol.paginate(page: params[:page], :per_page => 10).where("status != 'RUNNING'").order('id DESC')
+
+    end
 
     @daemon_status = ""
     if current_user && current_user.is_admin 

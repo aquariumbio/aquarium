@@ -1,4 +1,16 @@
 
+<h2>Metacols for <span class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @user? @user.login : 'all users' %><b class="caret"></b></a>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+      <% if current_user && current_user.is_admin %>
+        <li><a href='/metacols?user_id=-1&active=<%= (params[:active]?'true':'false') %>'>all users</a></li>
+      <% end %>
+      <% (User.all.sort { |x,y| x.login <=> y.login}).each do |u| %>
+        <li><%= link_to u.login, '/metacols?active=' + (params[:active]?'true':'false') + '&user_id=' + u.id.to_s %></li>
+      <% end %>
+    </ul>
+</span></h2>
+
 <% if params[:active] %>
 
   <h4>Active Metacols</h4>
