@@ -11,11 +11,11 @@
     </ul>
 </span></h2>
 
-<% if params[:active] %>
+<% if params[:active] && params[:active] == 'true' %>
 
   <h4>Active Metacols</h4>
   <%= render partial: 'list', locals: { metacols: @active_metacols, status: false } %>
-  <%= link_to "Show Completed", metacols_path, class: 'btn btn-small' %>
+  <%= link_to "Show Completed", metacols_path(user_id: @user_id), class: 'btn btn-small' %>
 
 <% else %>
 
@@ -27,7 +27,7 @@
     <%= will_paginate @completed_metacols %>
   </center>
 
-  <%= link_to "Show Active", metacols_path(active: true), class: 'btn btn-small' %>
+  <%= link_to "Show Active", metacols_path(active: true,user_id: @user_id), class: 'btn btn-small' %>
 
 <% end %>
 
