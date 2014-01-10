@@ -49,7 +49,7 @@
     <% elsif key == :select %>
 
       <%= label_tag(val[:var], val[:description] )%>
-      <select id='<%= val[:var] %>' class='interpreter-select'>
+      <select id='<%= val[:var] %>'>
 	<% val[:choices].each do |c| %>
 	  <option><%= c %></option>
 	<% end %>
