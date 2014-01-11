@@ -81,7 +81,7 @@ class MetacolsController < ApplicationController
     info = JSON.parse(params[:info],:symbolize_names => true)
     args = info[:args]
     group = Group.find_by_name(info[:group])
-    flash[:notice] = "Starting metacol for each member in group '#{group.name}'"
+    flash[:notice] = "Starting metacol for each member in group '#{group.name}'. Go to 'Protocols/Pending Jobs' to see jobs started by this metacol."
 
     group.memberships.each do |m|
 

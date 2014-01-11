@@ -65,6 +65,8 @@ Bioturk::Application.routes.draw do
 
   resources :items
 
+  match "project", to: 'samples#project'
+
   resources :object_types do 
     resources :items do
       collection do

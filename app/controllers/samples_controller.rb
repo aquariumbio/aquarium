@@ -138,4 +138,21 @@ class SamplesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def project
+
+    if !params[:name]
+
+      @projects = Sample.uniq.pluck(:project).sort
+
+    else
+
+      @samples = Sample.where('project = ?', params[:name]).sort { |a,b|
+        [ a.sample_type.name, a.name ] <=> [ b.sample_type.name, b.name ]
+      }
+
+    end
+
+  end
+
 end

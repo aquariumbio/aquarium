@@ -38,7 +38,7 @@
 <% @samples.each do |sample| %>
   <tr>
     <td><%= sample.name %></td>
-    <td><%= sample.project %></td>
+    <td><%= link_to sample.project, project_url(name: sample.project) %></td>
 
     <% unless @user %>
       <td><%= User.find(sample.user_id).login %></td>

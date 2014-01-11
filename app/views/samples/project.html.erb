@@ -1,0 +1,40 @@
+
+<% if !params[:name] %>
+
+  <% provide(:title, "Projects") %>
+  <h1>All Projects</h1>
+
+  <ul>
+  <% @projects.each do |p| %>
+    <li><%= link_to p, project_url(name: p) %></li>
+  <% end %>
+  </ul>
+
+<% else %>
+
+  <% provide(:title, "Project " + params[:name]) %>
+  <h1>Samples for Project <%= params[:name] %></h1>
+
+  <table class='table'>
+
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Owner</th>
+      <th>Description</th>
+    </tr>
+
+    <% @samples.each do |s| %>
+      <tr>
+        <td><%= link_to s.name, s %></td>
+        <td><%= s.sample_type.name %></td>
+        <td><%= User.find(s.user_id).login %></td>
+        <td><%= s.description %></td>
+      <tr>
+    <% end %>
+
+  <table>
+
+  <%= link_to "Back", project_url, class: 'btn' %>
+
+<% end %>
