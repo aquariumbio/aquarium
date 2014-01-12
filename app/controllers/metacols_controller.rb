@@ -163,4 +163,7 @@ class MetacolsController < ApplicationController
 
   end
 
+  def viewer
+  end
+
 end

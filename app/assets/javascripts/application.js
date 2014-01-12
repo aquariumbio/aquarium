@@ -13,8 +13,10 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap
-//= require_tree .
 //= require highcharts
 //= require jquery.ui.datepicker
 //= require jquery.ui.menu
 //= require d3
+//= require joint.nojquery
+//= require joint.layout.DirectedGraph
+//= require_tree .

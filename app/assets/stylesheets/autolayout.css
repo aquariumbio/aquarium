@@ -1,0 +1,15 @@
+#paper {
+#  border: 1pt solid #eee;
+   position: relative;
+#  width: 100%;
+#  height: 400;
+   overflow: scroll;
+#  border-radius: 5px;
+}
+
+.element.basic.Rect rect {
+   /* Webkit */
+   -webkit-svg-shadow: 2px 2px 5px gray;
+   /* FF */
+   filter: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='dropshadow' width='150%' height='150%'><feGaussianBlur in='SourceAlpha' stdDeviation='4'/><feOffset dx='3' dy='3' result='offsetblur'/><feFlood flood-color='gray' /><feComposite in2='offsetblur' operator='in' /><feMerge><feMergeNode /><feMergeNode in='SourceGraphic' /></feMerge></filter></svg>#dropshadow");
+}

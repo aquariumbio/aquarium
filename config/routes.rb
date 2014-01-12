@@ -1,6 +1,7 @@
 Bioturk::Application.routes.draw do
 
   get "metacols/draw"
+   match 'viewer',        to: 'metacols#viewer'
 
   resources :metacols do
       get 'arguments', on: :new

@@ -162,6 +162,13 @@ module Oyster
 
     end
 
+    def for_layout
+      { 
+        places: @places.collect { |p| { name: p.name, marking: p.marking } },
+        transitions: @transitions.collect { |t| { preset: t.parents.collect { |p| p.name }, postset: t.children.collect { |c| c.name } } }
+      }
+    end
+
     def set_state s
 
       for i in 0..(@places.length-1)

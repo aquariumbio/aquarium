@@ -1,9 +1,7 @@
 <style>
-
 .status {
   color: #ccc;
 }
-
 </style>
 
 <% if @mc.num_pending_jobs > 10 %>
@@ -27,6 +25,12 @@
 <% if @mc.message %>
 <p class="alert"><%= @mc.message %></p>
 <% end %>
+
+<div class='row-fluid'>
+
+  <div class='span3' id='paper'></div>
+
+  <div class='span9'>
 
 <% if @errors == "" %>
 
@@ -81,3 +85,11 @@
   <p>Details about this metacol are no longer available.</p>
 <% end %>
 
+  </div>
+
+</div>
+
+<script>
+  pn = new PN();
+  pn.layout(<%= @metacol.for_layout.to_json.html_safe %>);
+</script>
