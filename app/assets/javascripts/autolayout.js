@@ -94,8 +94,8 @@ PN.prototype.layout = function(pn) {
 
     var paper = new joint.dia.Paper({ 
         el: $('#paper'),
-        width: 1000,
-        height: 2000,
+        width: 500,
+        height: 1200,
         gridSize: 1,
         model: graph
     });

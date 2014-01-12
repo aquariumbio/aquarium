@@ -7,6 +7,8 @@
 #  border-radius: 5px;
 }
 
+.link-tools .tool-remove { display: none }
+
 .element.basic.Rect rect {
    /* Webkit */
    -webkit-svg-shadow: 2px 2px 5px gray;
