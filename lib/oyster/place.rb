@@ -82,6 +82,7 @@ module Oyster
           puts "#{id}: Starting #{@protocol}, with sha = #{@sha}"  
 
           desired = eval(@desired_start)
+
           if desired.to_i < Time.now.to_i - 1.day # meaning that the user entered something like
                                         # minutes(10), hours(4), or days(9) and we need to
                                         # add Time.now to get the right time

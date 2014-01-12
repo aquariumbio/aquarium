@@ -25,16 +25,6 @@ module Oyster
       @metacol
     end
 
-    def pair
-      p = {}
-      @tok.eat_a '('
-      p[:place] = @metacol.scope.evaluate expr
-      @tok.eat_a ','
-      p[:arg] = @metacol.scope.evaluate expr
-      @tok.eat_a ')'
-      p
-    end
-
     def statements
 
       while @tok.current != 'EOF'

@@ -114,11 +114,17 @@ module Oyster
 
     def set_wires p
 
-      (@wires.reject { |w| @places[w.dest[:place]] != p }).each do |w|
+      (@wires.reject { |w| puts "#{w.dest[:place]}"; @places[w.dest[:place]] != p }).each do |w|
+
         if @places[w.source[:place]].completed?
           r = @places[w.source[:place]].return_value
           if r
-            p.arg_expressions[w.dest[:name].to_sym] = "#{r[w.source[:name].to_sym]}"
+            value = r[w.source[:name].to_sym]
+            if value.class == String
+              p.arg_expressions[w.dest[:name].to_sym] = '"' + value + '"'
+            else
+              p.arg_expressions[w.dest[:name].to_sym] = "#{value}"
+            end
           end
         else
           j = @places[w.source[:place]].jobs.last
@@ -128,7 +134,7 @@ module Oyster
 
       end
 
-      #puts "Arguments set to #{p.arguments}"
+      puts "Arguments set to #{p.arg_expressions}"
 
     end
 
