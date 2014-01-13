@@ -114,7 +114,7 @@ module Oyster
 
     def set_wires p
 
-      (@wires.reject { |w| puts "#{w.dest[:place]}"; @places[w.dest[:place]] != p }).each do |w|
+      (@wires.reject { |w| puts @places[w.dest[:place]] != p }).each do |w|
 
         if @places[w.source[:place]].completed?
           r = @places[w.source[:place]].return_value
