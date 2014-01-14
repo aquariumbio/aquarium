@@ -114,7 +114,9 @@ module Oyster
 
     def set_wires p
 
-      (@wires.reject { |w| puts @places[w.dest[:place]] != p }).each do |w|
+      (@wires.reject { |w| @places[w.dest[:place]] != p }).each do |w|
+
+        puts "Considering wire #{w} with dest #{@places[w.dest[:place]]} for place #{p}!"
 
         if @places[w.source[:place]].completed?
           r = @places[w.source[:place]].return_value
@@ -129,7 +131,7 @@ module Oyster
         else
           j = @places[w.source[:place]].jobs.last
           pc = Job.find(j).pc
-          raise "Source place for wire #{w.pretty @places} has uncompleted job #{j} with pc=#{pc}}."
+          raise "Source place for wire #{w.pretty @places} has uncompleted #{j} with pc=#{pc}}."
         end
 
       end
