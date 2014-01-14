@@ -20,19 +20,24 @@ class ItemsController < ApplicationController
     items = Item.where('location = ?', loc)
     if items.length > 1
       ids = items.collect{|i|i.id}
-      flash[:error] = "WARNING: Sample items #{ids} have the same location, #{loc}. Please correct this problem immediately!"
+      if loc != "Bench"
+        flash[:error] = "WARNING: Sample items #{ids} have the same location, #{loc}. Please correct this problem immediately!"
+      end
     end
 
   end
 
   def create
 
-
-
     @object_type = ObjectType.find(params[:object_type_id])
 
     if !params[:item][:location] 
-      !params[:item][:location] = @object_type.location_wizard
+      if params[:item][:sample_id]
+        @sample = Sample.find(params[:item][:sample_id])
+        params[:item][:location] = @object_type.location_wizard( { project: @sample ? @sample.project : 'unknown' } )
+      else
+        params[:item][:location] = @object_type.location_wizard
+      end
     end
 
     @item = @object_type.items.create(params[:item])
