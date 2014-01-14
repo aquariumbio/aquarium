@@ -27,7 +27,14 @@ class ItemsController < ApplicationController
 
   def create
 
+
+
     @object_type = ObjectType.find(params[:object_type_id])
+
+    if !params[:item][:location] 
+      !params[:item][:location] = @object_type.location_wizard
+    end
+
     @item = @object_type.items.create(params[:item])
     @item.save
 
