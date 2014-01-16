@@ -64,8 +64,12 @@ class ItemsController < ApplicationController
   end
 
   def destroy
-    Item.find(params[:id]).destroy
-    flash[:success] = "Item deleted."
+    x = Item.find(params[:id])
+    x.inuse    = -1
+    x.quantity = -1
+    x.location = 'deleted'
+    x.save
+    flash[:success] = "Item #{params[:id]} has been #{x.location}."
     redirect_to object_type_url :id => params[:object_type_id]
   end
 
