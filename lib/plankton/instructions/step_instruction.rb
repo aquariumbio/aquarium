@@ -43,6 +43,16 @@ module Plankton
       str
     end
 
+    def timer
+      spec = { hours: 0, minutes: 0, seconds: 0 }
+      @parts.each do |a|
+        if a.has_key?(:timer)
+          spec.merge! a[:timer]
+        end
+      end
+      spec
+    end
+
     def warnings
       w = []
       @parts.each do |a|

@@ -91,8 +91,13 @@ module Plankton
             @tok.eat_a ':'
             parts.push( { image: @tok.eat_a_string.remove_quotes } )
 
+          when 'timer'
+            @tok.eat_a 'timer'
+            @tok.eat_a ':'
+            parts.push( { timer: expr } )
+
           else
-            raise "Expected 'description', 'note', 'bullet', 'check', 'warning', 'getdata', "
+            raise "Expected 'description', 'note', 'bullet', 'check', 'warning', 'getdata', 'timer'"
                 + "or 'image' at '#{@tok.current}'."
          
         end

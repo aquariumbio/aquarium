@@ -55,6 +55,14 @@
 	<% end %>
       </select>
 
+    <% elsif key == :timer %>
+
+      <div id='timer'></div>
+      <script>
+        T = new StepTimer(<%= val %>);
+        T.start();
+      </script>
+
     <% elsif key == :getdata %>
 
       <%= label_tag(val[:var], val[:description] + ' (' + val[:type] + ')' )%>
@@ -110,6 +118,7 @@
       <% end %>
       window.location = advance_url() + q;
     } );
+
   }
 
 </script>
