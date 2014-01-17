@@ -33,7 +33,18 @@
   <%= render 'details' %>
 <% end %>
 
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h4 id="myModalLabel">Launching <%= @path %></h4>
+  </div>
+  <div class="modal-body">
+    <center><%= image_tag 'waiting_animation.gif' %></center>
+  </div>
+</div>
+
 <script>
+
 
 <% if @errors == "" %>
 
@@ -57,6 +68,12 @@
   ac.path = '<%= @path %>';
   ac.display_form();
   ac.display_groups(groups,users,'<%= current_user.login %>');
+
+  document.getElementById('launch-button').onclick = splash_launch_alert;
+
+  function splash_launch_alert() {
+    $('#myModal').modal();
+  }
 
 <% end %>
 

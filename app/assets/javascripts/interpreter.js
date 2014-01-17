@@ -36,7 +36,7 @@ ArgumentUI.prototype.display_form = function() {
     if ( this.metacol ) {
 
       $('#button-area').append(
-	  $('<button>Launch!</button>')
+	  $('<button id="launch-button">Launch!</button>')
               .addClass('btn btn-primary')
               .click(function(e){that.submit()})
       );
