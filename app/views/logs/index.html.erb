@@ -23,7 +23,7 @@
     <% args = (JSON.parse(j.state))['stack'].first.reject { |k,v| k == 'user_id' } %>
     <tr>
       <td><%= link_to j.id.to_s, j %></td>
-      <td><%= link_to j.path, protocol_tree_raw_path(sha: j.sha, format:'xml'), target: j.path %></td>
+      <td><%= link_to j.path,  jobs_summary_url(path: j.path) %></td>
       <td>
         <% if args.length > 0 %>
             <% args.each do |k,v| %>

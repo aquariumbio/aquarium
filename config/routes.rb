@@ -49,6 +49,7 @@ Bioturk::Application.routes.draw do
   get "stats/timing"
 
   get "jobs/index"
+  get "jobs/summary"
 
   get "liaison/info"
   get "liaison/take"

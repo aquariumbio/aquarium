@@ -1,0 +1,54 @@
+<% if params[:sha] %>
+
+  <h1>Jobs Associated with <%= params[:path] %></h1>
+  <h3 style='text-align: center'>Version: <%= params[:sha] %></h3>
+
+  <p><b>Jobs:</b> &nbsp;
+    <% @jobs.each do |j| %>
+      <%= link_to j.id, j %> &nbsp;
+    <% end %>
+  </p>
+
+  <h4>Code:</h4>
+  <pre>
+<%= @content %>
+  </pre>
+
+<% elsif params[:path] %>
+
+  <h1>Versions of <%= params[:path] %></h1>
+
+  <% if @infos.length > 0 %>
+
+    <table class='table'>
+      <tr>
+        <th>Version</th>
+        <th>Number of Jobs</th>
+        <th>First run</th>
+        <th>Last run</th>
+      </tr>
+      <% @infos.each do |i| %>
+        <tr>
+          <td><%= link_to i[:sha], jobs_summary_url(path: params[:path], sha: i[:sha]) %></td>
+          <td><%= i[:num] %></td>
+          <td><%= time_ago_in_words(i[:first]) %> ago</td>
+          <td><%= time_ago_in_words(i[:last]) %> ago</td>
+        </tr>
+      <% end %>
+    </table>
+
+  <% else %>
+
+    <p>Only local versions of this protocol have been run, for which data is not summarized.</p>
+
+  <% end %>
+
+<% else %>
+
+  <ul>
+  <% @paths.each do |p| %>
+       <li><%= link_to p, jobs_summary_url(path: p) %></li>
+  <% end %>
+  </ul>
+
+<% end %>

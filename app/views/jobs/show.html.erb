@@ -47,10 +47,9 @@
 
   <br />
 
-  <li>Version of <%= @job.path %> used: <%= link_to @job.sha,
-  protocol_tree_raw_path(sha: @job.sha, format: 'xml'), target:
-  @job.id.to_s + ":" + @job.path %> (
-  <a href='<%= "/interpreter/arguments?path=" + @job.path + "&sha=" + @job.sha %>'> Run again </a>)
+<li>Version of <%= link_to @job.path, jobs_summary_path(path: @job.path) %> used:
+               <%= link_to @job.sha, jobs_summary_url(path: @job.path, sha: @job.sha) %>
+  (<a href='<%= "/interpreter/arguments?path=" + @job.path + "&sha=" + @job.sha %>'> Run again </a>)
   </li>
 
   <br />
@@ -119,7 +118,7 @@
 <% ( @job.logs.reject { |l| l.entry_type == 'NEXT' } ).each do |entry| %>
   <tr>
     <td><%= entry.created_at.to_formatted_s(:short) %></td>
-    <td><%= User.find(entry.user_id).login %></td>
+    <td><%= u = User.find_by_id(@job.submitted_by); u ? u.login : 'nobody' %></td>
     <td><%= entry.entry_type %></td>
     <td><%= entry.data %></td>
   </tr>

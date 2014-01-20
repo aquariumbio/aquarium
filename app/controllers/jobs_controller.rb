@@ -62,4 +62,34 @@ class JobsController < ApplicationController
     redirect_to jobs_url
   end
 
+  def summary
+
+    if params[:sha]
+
+      @jobs = Job.where( 'path = ? AND sha = ?', params[:path], params[:sha] )
+
+      @blob = Blob.get( params[:sha], params[:path] )
+      @content = @blob.xml
+
+    elsif params[:path]
+
+      @shas = Job.where('path = ?', params[:path]).uniq.pluck(:sha) #.reject { |s| /local/.match s }
+      @infos = @shas.collect do |s|
+        jobs = Job.where( 'path = ? AND sha = ?', params[:path], s ).sort { |j,k| j.created_at <=> k.created_at }
+        { 
+          sha: s,
+          num: jobs.length,
+          first: jobs.first.created_at,
+          last: jobs.last.created_at
+        }
+      end
+
+    else
+
+      @paths = (Job.uniq.pluck(:path).reject { |p| !p }).sort
+
+    end
+
+  end
+
 end
