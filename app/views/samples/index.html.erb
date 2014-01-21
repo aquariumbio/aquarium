@@ -51,7 +51,7 @@
 
       <% if @sample_type[ft] != 'not used' && @sample_type[ft] != nil %>
         <% if @sample_type[ft] == 'url' %>
-          <% if sample[f] != '' %>
+          <% if sample[f] != '' && sample[f] != nil %>
             <td><a href='<%= sample[f] %>'><%= sample[f][0..20] %> ...</a></td>
           <% else %>
             <td>-</td>
