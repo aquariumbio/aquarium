@@ -44,14 +44,14 @@ module Plankton
       lines[:startline] = @tok.line
 
       @tok.eat_a 'take'
-      items = []
+      entry_list = []
       note = ""
 
       while @tok.current != 'end' && @tok.current != 'EOF'
 
         if @tok.current == 'item'
 
-          items.push( { var: "most_recently_taken_item", id: item_expr } )
+          entry_list.push TakeEntry.new var: "most_recently_taken_item", item_expr: item_expr
 
         elsif @tok.current == 'note'
 
@@ -59,29 +59,36 @@ module Plankton
           @tok.eat_a ':'
           note = @tok.eat_a_string.remove_quotes
 
-        elsif @tok.next == '=' || @tok.next == '<-'
+        elsif @tok.next == '='
 
           ta = take_assign
+   
           if ta[:object]
-            items.push( { 
+            puts "C"
+            entry_list.push TakeEntry.new({
               var: ta[:var], 
-              op: ta[:op], 
-              quantity: ta[:object][:quantity], 
-              type: ta[:object][:type] } )
+              quantity_expr: ta[:object][:quantity], 
+              type_expr: ta[:object][:type]
+            })
+
           else
-            items.push( { 
+
+            entry_list.push TakeEntry.new({
               var: ta[:var], 
-              op: ta[:op], 
-              id: ta[:item] } )
+              item_expr: ta[:item]
+            })
+
           end
 
         else
 
           ob = object_expr
-          items.push( { 
+
+          entry_list.push TakeEntry.new({
             var: "most_recently_taken_item", 
-            quantity: ob[:quantity], 
-            type: ob[:type] } )
+            quantity_expr: ob[:quantity], 
+            type_expr: ob[:type]
+          })
 
         end
 
@@ -90,7 +97,7 @@ module Plankton
       lines[:endline] = @tok.line
       @tok.eat_a 'end'
 
-      ti = TakeInstruction.new items, lines
+      ti = TakeInstruction.new entry_list, lines
       ti.note_expr = note
       push ti
 
