@@ -44,6 +44,27 @@
       background: #ff9;
       border: 1pt solid #ddd;
     }
+    .inuse {
+      line-height: 50px;
+      height: 50px;
+      width: 210px;
+      float: left;
+      margin: 0;
+      padding: 0 0 0 15px;
+      background: #f44;
+      border: 1pt solid #ddd;
+      position: relative;
+    }
+    .release {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      font-size: 8pt;
+      height: 14px;
+      padding: 0;
+      margin: 0;
+      line-height: 14px;
+    }
     .description {
       line-height: 50px;
       height: 50px;

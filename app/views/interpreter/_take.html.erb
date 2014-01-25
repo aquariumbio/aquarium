@@ -9,7 +9,11 @@
 <script>
 
   
-ti = new TakeUI(<%= @instruction.entry_list.to_json.html_safe %>, 'takeui');
+ti = new TakeUI(
+  <%= @instruction.entry_list.to_json.html_safe %>, 
+  'takeui', 
+  <%= params[:job] %>, 
+  '<%= Rails.env %>' );
 ti.show();
 
  window.onload = function() {

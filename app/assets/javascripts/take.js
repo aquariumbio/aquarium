@@ -1,8 +1,12 @@
 
-function TakeUI(entries, tag) {
+function TakeUI(entries, tag, job, env) {
 
   this.entries = entries;
   this.tag = '#' + tag;
+  this.job = job;
+  this.env = env;
+
+  console.log(this.env);
 
 }
 
@@ -28,13 +32,26 @@ TakeUI.prototype.item_html = function(item,i,j) {
   var el =  $('<li class="take_item"></li>'), 
     id = this.tospan(item,'id'),
     description = this.tospan(item,'objecttype'),
+    ch = this.check(i,j),
+    that = this;
+
+  if ( item.inuse == 0 ) {
     loc = this.tospan(item,'location');
+  } else {
+    loc = $("<span class='inuse'>Not available</span>");
+    if ( this.env != 'production' ) {
+      rel = $("<div class='release'><a href='#'>RELEASE</a></div>");
+      rel.click(function() { window.location = 'release?item=' + item.id + '&job=' + that.job; } );
+      loc.append(rel);
+    }
+    $(ch).attr("disabled", true);
+  }
 
   if ( item.sample_name ) {
       description = $('<span class="description">' + item.objecttype + ' : ' + item.sample_name + '</span>' );
   }
 
-  el.append(this.check(i,j)).append(id).append(loc).append(description);
+  el.append(ch).append(id).append(loc).append(description);
 
   return el;
 
@@ -48,11 +65,11 @@ TakeUI.prototype.object_html = function(object,i,j) {
        name = this.tospan(object,'name'),
        ch = this.check(i,j);
 
-    for ( var k in object.locations ) {
-	sel.append('<option value=' + object.locations[k].id + '>' + object.locations[k].loc + '</option>');
+    for ( var k in object.items ) {
+	sel.append('<option value=' + object.items[k].id + '>' + object.items[k].location + '</option>');
     }
 
-    if ( object.locations.length == 0 ) {
+    if ( object.items.length == 0 ) {
 	$(ch).attr("disabled", true);
     }
 

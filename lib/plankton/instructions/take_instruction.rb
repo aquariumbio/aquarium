@@ -23,7 +23,6 @@ module Plankton
 
   end
 
-
   class TakeInstruction < Instruction
 
     attr_reader :entry_list, :note
@@ -103,6 +102,7 @@ module Plankton
               id: item_id,
               objecttype: i.object_type.name,
               quantity: 1, 
+              inuse: i.inuse,
               var: e.var,
               location: i.location
             }
@@ -132,7 +132,7 @@ module Plankton
               raise "In <take>: Could not find object of type '#{type}', which is not okay in production mode."
             end
 
-            ob[:locations] = ob.items.collect { |i| { id: i.id, loc: i.location } }
+            ob[:items] = ob.items.collect { |i| { id: i.id, loc: i.location, quantity: i.quantity, inuse: i.inuse } }
             ob[:desired_quantity] = e.quantity_value[i]
             e.object_list.push ob
 
