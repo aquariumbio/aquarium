@@ -1,72 +1,23 @@
 <h1>Gather the following items</h1>
 
 <% if (@instruction.respond_to? :note) && @instruction.note != "" %>
-  <p><%= @instruction.note %></p>
+  <div class='take-note'><p><%= @instruction.note %></p></div>
 <% end %>
 
-<div id='takeui'></div>
-
-<hr />
-
-<%= @instruction.entry_list.to_json.html_safe %>
+<div class='take-container' id='takeui'></div>
 
 <script>
 
-function TakeUI(entries, tag) {
-
-  this.entries = entries;
-  this.tag = '#' + tag;
-
-}
-
-TakeUI.prototype.check = function(i,j) {
-
-  var ch = $("<input type='checkbox' id='check_'" + i + "_" + j + "'></input>");
-
-  return ch;
-
-}
-
-TakeUI.prototype.item_html = function(item,i,j) {
-
-  var el =  $('<li></li>');  
-
-  if ( item.sample_name ) {
-    el.append(this.check(i,j))
-      .append('<span> Sample ' + item.id + ' (' + item.objecttype + ' / ' + item.sample_name + ') at ' + item.location + '</span>' );
-  } else {
-    el.append(this.check(i,j))
-      .append('<span> Item ' + item.id + ' (' + item.objecttype + ') at ' + item.location + '</span>' );
-  }
-
-  return el;
-
-}
-
-TakeUI.prototype.show = function() {
-
-  this.list = $("<ul class='item_list'></ul>");
-  
-  for ( var i in this.entries ) {
-    var e = this.entries[i];
-    if ( e.item_value != undefined ) { // Items ////////////////////////////
-      for ( var j in e.item_list ) {
-        var el =  this.item_html ( e.item_list[j], i, j ) ;
-        this.list.append (el);
-      }
-    } else {
-      for ( var j in e.object_list ) { // Objects //////////////////////////
-        var object = e.object_list[j];
-        this.list.append('<li>object: ' + object.name + '</li>');
-      }
-    }
-  }
-
-  $(this.tag).append(this.list);
-
-}
   
 ti = new TakeUI(<%= @instruction.entry_list.to_json.html_safe %>, 'takeui');
 ti.show();
+
+ window.onload = function() {
+
+    document.getElementById('advance-button').addEventListener('click', function() {
+      window.location = advance_url() + ti.query();
+    } );
+
+  }
 
 </script>

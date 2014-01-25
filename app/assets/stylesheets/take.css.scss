@@ -1,0 +1,90 @@
+
+.take-note {
+  margin: 15px 0 15px 5px;
+}
+
+.take-container {
+  margin: 15px;
+  width: 1200px;
+}
+
+.item_list {
+  list-style: none;
+  li {
+    margin: 10px;
+#    outline: 1pt dashed blue;
+    height: 50px;
+    position: relative;
+   .check {
+     float: left;
+     margin-top: 8px !important;
+   }
+   .id {
+      margin: 0 10px 0 10px;
+      padding: 0 0 0 15px;
+      line-height: 50px;
+      font-weight: bold;
+      width: 340px !important;
+      height: 50px;
+ #     outline: 1pt dashed orange;
+      float: left;
+      background: #eee;
+      border: 1pt solid #ddd;
+    }
+    .id:before {
+      content: "Item ";
+    }
+    .location {
+      line-height: 50px;
+      height: 50px;
+      width: 210px;
+      float: left;
+      margin: 0;
+      padding: 0 0 0 15px;
+      background: #ff9;
+      border: 1pt solid #ddd;
+    }
+    .description {
+      line-height: 50px;
+      height: 50px;
+      float: left;
+      margin: 0;
+      padding: 0 0 0 10px;
+      font-size: 12pt;
+      font-style: italic;
+    }
+    .name {
+      margin: 0 10px 0 10px;
+      padding: 0 0 0 15px;
+      line-height: 50px;
+      font-weight: bold;
+      width: 340px !important;
+      height: 50px;
+ #     outline: 1pt dashed orange;
+      float: left;
+      background: #eee;
+      border: 1pt solid #ddd;
+    }
+    .take-select-container {
+      float: left;
+      height: 50px;
+      line-height: 50px;
+      width: 230px;
+      padding: 0 0 0 0;
+#     outline: 1pt dashed orange;
+    }
+    .desired_quantity {
+      line-height: 50px;
+      height: 50px;
+      float: left;
+      margin: 0;
+      padding: 0 0 0 10px;
+      font-size: 14pt;
+      font-weight: bold;
+      
+    }
+    .desired_quantity:before {
+      content: "Quantity Required: ";
+    }
+  }
+}

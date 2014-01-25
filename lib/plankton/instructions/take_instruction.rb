@@ -117,7 +117,8 @@ module Plankton
         else
 
           e.object_list = []
-          
+          i = 0
+
           e.type_value.each do |type|
 
             ob = ObjectType.find_by_name(type)
@@ -131,7 +132,11 @@ module Plankton
               raise "In <take>: Could not find object of type '#{type}', which is not okay in production mode."
             end
 
+            ob[:locations] = ob.items.collect { |i| { id: i.id, loc: i.location } }
+            ob[:desired_quantity] = e.quantity_value[i]
             e.object_list.push ob
+
+            i += 1
 
           end
 
@@ -168,6 +173,78 @@ module Plankton
 
       # Evalute @object_list in current scope
       pre_render scope, params
+
+      take = JSON.parse(params[:take],symbolize_names: true );
+      puts "TAKE: #{take}"
+
+      i = 0
+      @entry_list.each do |e|
+
+        result = []
+
+        # Items
+        if e.item_value
+
+          j = 0
+
+          e.item_value.each do |item_id|
+
+            puts "Finding #{take[i][j]}"
+            item = Item.find(take[i][j][:id])
+
+            if item.inuse == 0
+              result.push( pdl_item item )
+              item.inuse += 1
+              item.save
+            else
+              raise "Could not take item #{item.id} because it is in use (was it taken twice?)"
+            end
+
+            t = Touch.new
+            t.job_id = params[:job]
+            t.item_id = item.id
+            t.save
+
+            j += 1
+
+          end
+
+        # Objects
+        else
+
+          j = 0
+
+          e.type_value.each do |type|
+
+            puts "#{i}, #{j}: #{take[i][j]}, quantity=#{e.quantity_value[j]}"
+
+            item = Item.find(take[i][j][:id])
+
+            if item.quantity - item.inuse > e.quantity_value[j]
+              result.push( pdl_item item )
+              item.inuse += e.quantity_value[j]
+              item.save
+            else 
+              raise "Could not take #{e.type_value} (item #{item.id}) because it is in use (was it taken twice?)"
+            end
+
+            t = Touch.new
+            t.job_id = params[:job]
+            t.item_id = item.id
+            t.save
+
+            j += 1
+
+          end
+
+        end
+
+        scope.set( e.var.to_sym, result )
+        log e.var, result, scope, params
+
+        i += 1
+
+    end
 
     end # bt_execute
 

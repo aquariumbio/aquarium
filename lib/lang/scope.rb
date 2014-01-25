@@ -124,6 +124,19 @@ module Lang
 
     end
 
+    def concat a, b
+
+      if a.class == Array && b.class == Array
+        x = a.dup
+        y = b.dup
+        x.concat y
+        x
+      else
+        raise "Attempted to take concat #{a} and #{b}, which are not both arrays."
+      end
+
+    end
+
   end
 
 end
