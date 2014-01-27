@@ -1,222 +1,27 @@
 <h1>Gather the following items</h1>
 
 <% if (@instruction.respond_to? :note) && @instruction.note != "" %>
-  <p><%= @instruction.note %></p>
+  <div class='take-note'><p><%= @instruction.note %></p></div>
 <% end %>
 
-<% logger.info @instruction.item_list.to_s %>
-
-<% for i in 0..((@instruction.item_list.length) - 1) %>
-
-  <% q = @instruction.item_list[i][:quantity] %>
-  <% type = @instruction.item_list[i][:type]  %>
-  <% ob = @instruction.object_list[i] %>
-
-  <h4><%= q %> <%= type.pluralize(q) %>
-
-  <% if ob.handler == 'sample_container' && ob.sample_type %>
-    containing the
-      <%= ob.sample_type.name %>
-      <%= @instruction.item_list[i][:name] %>
-  <% end %>
-  :</h4>
-
-  <div class='row-fluid'>
-
-    <div class="span2 object-image">
-      <% if ob.image %>
-        <img src='http://bioturk.ee.washington.edu:3012/bioturk/image?name=<%= ob.image %>'></img>
-      <% end %>
-    </div>
-
-    <div class="span10">
-      <div class='take_object_select' id='object_select_<%= i %>'></div>
-      <button class='btn btn-link btn-more' onclick='add_choice_<%= i %>()' style='font-size: 12pt'>More locations</button>
-    </div>
-
-  </div>
-
-<% end %>
+<div class='take-container' id='takeui'></div>
 
 <script>
 
-  query = [];
-  quantities = [];
-  num_choices = [];
-  none_available_error = false;
-
-  function make_id(str,a,b) {
-    return str + '_object_' + a + '_item_' + b;
-  }
-
-  function compute_quantities() {
-    <% for i in 0..((@instruction.item_list.length) - 1) %>
-      quantities[<%= i %>] = [];
-      for ( var j=0; j<num_choices[<%= i %>]; j++ ) {
-        var selection = parseInt(document.getElementById(make_id('select',<%= i %>,j)).value);
-        quantities[<%= i %>][selection] = parseInt(document.getElementById(make_id('quantity',<%= i %>, j)).value);
-      }
-    <% end %>
-  }
-
-  function update_totals(object,item) {
-
-    var select_id   = make_id('select',object,item);
-    var quantity_id = make_id('quantity',object,item);
-    var selection = parseInt(document.getElementById(select_id).value);
-    var quantity  = parseInt(document.getElementById(quantity_id).value);
-
-    if ( quantity < 0 ) {
-      document.getElementById(quantity_id).value = 0;
-      quantity = 0;
-    }
-
-    if ( quantity > max[selection]) {
-      document.getElementById(quantity_id).value = max[selection];
-      quantity = max[selection];
-    }
-
-    compute_quantities();
-    okay = true;
-    query = [];
-
-    <% for i in 0..((@instruction.item_list.length) - 1) %>
-
-      query[<%= i %>] = {};
-
-      <% q = @instruction.item_list[i][:quantity] %>
-
-      tot = 0;
-      for ( var j in quantities[<%= i %>] ) {
-        if ( quantities[<%= i %>][j] > 0 ) {
-          query[<%= i %>][j] = quantities[<%= i %>][j];
-          tot += quantities[<%= i %>][j]; 
-        }
-      }
-
-      if ( tot != <%= q %> ) {
-        okay = false;
-      }
-
-    <% end %>
-
-    document.getElementById('advance-button').disabled = !okay || none_available_error;
-
-  }
-
-  max = [];
-  num_choices = [];
-
-  <% for i in 0..((@instruction.item_list.length) - 1) %>
   
-    <% object = @instruction.object_list[i] %>
-    <% fields = @instruction.item_list[i] %>
-    console.log('<%= fields.to_s %>');
+ti = new TakeUI(
+  <%= @instruction.entry_list.to_json.html_safe %>, 
+  'takeui', 
+  <%= params[:job] %>, 
+  '<%= Rails.env %>' );
+ti.show();
 
-    num_choices[<%= i %>] = 0;
-
-    function add_choice_<%= i %>() {
-
-      // <%= (object.items.collect { |i| i.id }).join(',') %>
-
-      html = "";
-      html += "<div class='take_choice_box row-fluid' style='outline: 0pt solid red;'>"
-            + "<div class='take_item_select span4' style='outline: 0pt solid orange;'>"
-            + "  Location:<br />"
-            + "  <select class='item_select' id='select_object_" 
-            + <%= i %> + "_item_" + num_choices[<%= i %>] 
-            + "' onchange='update_totals(<%= i %>," + num_choices[<%= i %>] + ")' >";
-
-      <% num = 0 %>
-
-      <% if object.handler != 'sample_container'  %>
-
-        <% object.items.each do |item| %>
-          <% if item.quantity - item.inuse > 0 %>
-            html += "  <option value=<%= item.id %>><%= item.location %>"
-                  + " (<%= item.quantity - item.inuse %> available) </option>";
-            max[<%= item.id %>] = <%= item.quantity - item.inuse %>;
-            <% num += 1 %>
-          <% end %>
-        <% end %>
-
-      <% else %>
-
-        <% object.items.each do |item| %>
-          <% if !fields[:name] || ( item.sample && ( item.sample.name == fields[:name] && item.sample.project == fields[:project] )) %>
-            <% if item.quantity - item.inuse > 0 && ( !fields[:id] || fields[:id] == item.id ) %>
-              html += '  <option value=<%= item.id %>>Sample id: <%= item.id %> at <%= item.location %> </option>';
-              max[<%= item.id %>] = <%= item.quantity - item.inuse %>;
-              <% num += 1 %>
-            <% end %>
-          <% end %>
-        <% end %>
-
-      <% end %>
-
-      <% if num == 0 %>
-        html += "<option value='-1'>NONE AVAILABLE!</option>";
-        none_available_error = true;
-      <% end %>
-
-      id = "'quantity_object_" + <%= i %> + "_item_" + num_choices[<%= i %>] + "'";
-   
-      html += "  </select>"
-            + "</div>"
-            + "<div class='take_item_quantity span4' style='outline: 0pt solid red;'>"
-            + "  Quantity:<br />"
-            + "  <input id=" + id  + " class='input-large' type='number' value='0' onchange='update_totals(<%= i %>," + num_choices[<%= i %>] + ")'>"
-            + "</div>"
-            + "<div class='span1' style='outline: 0pt dashed blue;'> <a href='#' class='btn number-cntl' onclick=increment("+id+")><i class='icon-arrow-up'>  </i></a></div>"
-            + "<div class='span1' style='outline: 0pt dashed green;'><a href='#' class='btn number-cntl' onclick=decrement("+id+")><i class='icon-arrow-down'></i></a></div>"
-
-       <% if num == 0 && Rails.env != 'production' && object.items.length > 0 %>
-         <% if object.handler == 'sample_container' %>
-           html += "<br \><div class='span1'><a href='#' class='btn btn-small' onclick=release("
-                + <%= fields[:id] %>
-                + ")>Release</a></div>";
-         <% else %>
-           html += "<br \><div class='span1'><a href='#' class='btn btn-small' onclick=release("
-                + <%= object.items.first.id %>
-                + ")>Release</a></div>";
-         <% end %>
-       <% end %>
-
-       html += "</div>";
-
-      document.getElementById('object_select_' + <%= i %>).insertAdjacentHTML( "beforeend", html );
-      num_choices[<%= i %>] ++;
-
-    }
-
-  <% end %>
-
-  function increment(id) {
-    el = document.getElementById(id);
-    el.value = parseInt(el.value) + 1;
-    el.onchange();
-  }
-
-  function decrement(id) {
-    el = document.getElementById(id);
-    el.value = parseInt(el.value) - 1;
-    el.onchange();
-  }
-
-  window.onload = function() {
+ window.onload = function() {
 
     document.getElementById('advance-button').addEventListener('click', function() {
-      window.location = advance_url() + '&choices=' + encodeURIComponent(JSON.stringify(query));
+      window.location = advance_url() + ti.query();
     } );
 
-   <% for i in 0..((@instruction.item_list.length) - 1) %>
-     add_choice_<%= i %>();
-   <% end %>
-
-  }
-
-  function release(id) {
-    window.location = 'release?item=' + id + '&job=' + <%= params[:job] %>;
   }
 
 </script>

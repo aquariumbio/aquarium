@@ -3,113 +3,157 @@ require 'json'
 
 module Plankton
 
+  class TakeEntry
+
+    attr_accessor :var,
+                  :quantity_expr,
+                  :quantity_value,
+                  :item_expr,
+                  :item_value,
+                  :item_list,
+                  :type_expr,
+                  :type_value,
+                  :object_list
+
+    def initialize x
+      x.each_pair do |key, val|
+        instance_variable_set('@' + key.to_s, val)
+      end
+    end
+
+  end
+
   class TakeInstruction < Instruction
 
-    attr_reader :item_list, :object_list, :note
+    attr_reader :entry_list, :note
     attr_writer :note_expr
 
-    def initialize item_list_expr, options = {}
+    def initialize entry_list, options = {}
 
       @note_expr = ""
       @note = ""
-      @item_list_expr = item_list_expr
+      @entry_list = entry_list
       @renderable = true
       super 'take', options
 
-      # TERMINAL 
-      @num_taken = 0
-      @url = 'http://bioturk.ee.washington.edu:3010/liaison/'
+    end # initialize
 
-    end
-
-    # RAILS ###########################################################################################
 
     def pre_render scope, params
 
-      # To render the list of items to be taken, we have to evaluate item_list_expr, in case
-      # involves complicated expressions and nost just string constants describing the items.
-      # We also have to figure out all the object types associated with those items, so that
-      # we have pictures, etc. to show.
+      # Check all evaluations ###################################################################################
+      @entry_list.each do |e|
 
-      @item_list = []
-      @object_list = []
-
-      # make a list of the evaluated expressions for each item in the list to be taken
-      @item_list_expr.each do |item_expr|
-
-        if item_expr[:type]
-          description = {
-            type: (scope.evaluate item_expr[:type]),
-            quantity: (scope.evaluate item_expr[:quantity]).to_i,
-            var: item_expr[:var]
-          }
-        else 
-          description = {}
+        if e.quantity_expr
+          e.quantity_value = scope.evaluate e.quantity_expr
         end
 
-        # if its a sample
-        if item_expr[:name]
-          description[:name] =  (scope.substitute item_expr[:name])
-          description[:project] = (scope.substitute item_expr[:project])
-        end
+        if e.item_expr
 
-        # if a particular id is specified
-        if item_expr[:id] 
-          val = (scope.evaluate item_expr[:id]).to_i
-          i = Item.find(val)
-          unless i
-            raise "Could not find item with id = #{item_expr[:id]} = #{val}. "
-          end
-          description[:id] = val
-          description[:type] = i.object_type.name
-          description[:quantity] = 1
-          description[:var] = item_expr[:var]
-          if i.object_type.handler == 'sample_container'
-            unless i.sample
-              raise "Item #{val} has object type sample_container, but does not point to a sample"
+          e.item_value = scope.evaluate e.item_expr
+
+          if e.item_value.class == Fixnum
+            e.item_value = [ e.item_value ]
+          elsif e.item_value.class == Array
+            if (e.item_value.select { |v| v.class != Fixnum }).length > 0
+              raise "Item array should be an array of numbers."
             end
-            description[:name] = i.sample.name
-            description[:project] = i.sample.project
+          else
+            raise "Item value should be an array of numbers or a number but it is an #{e.item_value.class}."
           end
+
         end
 
-        @item_list.push( description )
+        if e.type_expr
+
+          e.type_value = scope.evaluate e.type_expr
+
+          if e.type_value.class == String
+            e.type_value = [ e.type_value ]
+            e.quantity_value = [ e.quantity_value ] 
+          elsif e.type_value.class == Array
+            if (e.type_value.select { |v| v.class != String }).length > 0 ||
+               e.quantity_value.class != Array || 
+               (e.quantity_value.select { |q| q.class != Fixnum }).length > 0 ||
+               e.quantity_value.length != e.type_value.length
+              raise "Object type array should be an array of strings with a corresponding quantity array of Fixnums."
+            end
+          else
+            raise "Object type value should be an array of strings or a string but it is an #{e.type_value.class}."
+          end
+
+        end
 
       end
 
-      # Find the objects associated with the :type specifications in the db
-      @item_list.each do |i|
+      # Find all items and objects ###################################################################################
+      @entry_list.each do |e|
 
-        ob = ObjectType.find_by_name(i[:type])
+        # Items
+        if e.item_value
 
-        # make a new object if one doesn't exist (and we're not in production mode)
-        if !ob && Rails.env != 'production'
-          ob = ObjectType.new
-          ob.save_as_test_type i[:type]
-          @flash += "Warning: Created new object type #{i[:type]}.<br />"
-        elsif !ob
-          raise "In <take>: Could not find object of type '#{@object_type}', which is not okay in production mode."
+          e.item_list = []
+          e.item_value.each do |item_id|
+            i = Item.find(item_id)
+            unless i
+              raise "Could not find item with id = #{item_id}."
+            end
+            description = {
+              id: item_id,
+              objecttype: i.object_type.name,
+              quantity: 1, 
+              inuse: i.inuse,
+              var: e.var,
+              location: i.location
+            }
+            if i.object_type.handler == 'sample_container'
+              description[:sample_name] = i.sample.name
+              description[:project] = i.sample.project
+            end
+            e.item_list.push description
+          end
+
+        # Objects
+        else
+
+          e.object_list = []
+          i = 0
+
+          e.type_value.each do |type|
+
+            ob = ObjectType.find_by_name(type)
+
+            # make a new object if one doesn't exist (and we're not in production mode)
+            if !ob && Rails.env != 'production'
+              ob = ObjectType.new
+              ob.save_as_test_type type
+              @flash += "Warning: Created new object type #{type}.<br />"
+            elsif !ob
+              raise "In <take>: Could not find object of type '#{type}', which is not okay in production mode."
+            end
+
+            ob[:items] = ob.items.collect { |i| { id: i.id, loc: i.location, quantity: i.quantity, inuse: i.inuse } }
+            ob[:desired_quantity] = e.quantity_value[i]
+            e.object_list.push ob
+
+            i += 1
+
+          end
+
         end
-
-        @object_list.push( ob )
 
       end
 
+      # Evaluate the note ###########################################################################################
       @note = scope.substitute @note_expr
 
-    end
+    end # pre_render
+
 
     def html
-      h = "<b>take</b>"
-      @item_list_expr.each do |ie|
-        if ie[:type]
-          h += ie[:type] + ", "
-        else 
-          h += '[only id specified], '
-        end
-      end
-      return h[0..-3]
-    end
+      "<b>take</b>" + @entry_list.to_json
+    end # html
+
 
     def log var, r, scope, params
 
@@ -122,51 +166,88 @@ module Plankton
       log.data = { pc: @pc, var: var, items: r }.to_json
       log.save
 
-    end
+    end # log
+
 
     def bt_execute scope, params
 
       # Evalute @object_list in current scope
       pre_render scope, params
 
-      # Get the users choices of particular items
-      begin
-        choices = JSON.parse(params[:choices])
-      rescue Expection => e
-        raise "JSON error while parsing take choices"
-      end
+      take = JSON.parse(params[:take],symbolize_names: true );
+      puts "TAKE: #{take}"
 
-      # Iterate over all items to be taken
-      for j in 0..( (@object_list.length) - 1 ) 
+      i = 0
+      @entry_list.each do |e|
 
-        result = [] 
+        result = []
 
-        # Iterate over each choice
-        choices[j].each do |k,q| 
+        # Items
+        if e.item_value
 
-          i = k.to_i 
-          item = Item.find(i)
+          j = 0
 
-          q.times do
-            result.push( pdl_item item ) 
+          e.item_value.each do |item_id|
+
+            puts "Finding #{take[i][j]}"
+            item = Item.find(take[i][j][:id])
+
+            if item.inuse == 0
+              result.push( pdl_item item )
+              item.inuse += 1
+              item.save
+            else
+              raise "Could not take item #{item.id} because it is in use (was it taken twice?)"
+            end
+
+            t = Touch.new
+            t.job_id = params[:job]
+            t.item_id = item.id
+            t.save
+
+            j += 1
+
           end
-          item.inuse += q
-          item.save
 
-          # touch the item, for tracking purposes
-          t = Touch.new
-          t.job_id = params[:job]
-          t.item_id = item.id
-          t.save
+        # Objects
+        else
+
+          j = 0
+
+          e.type_value.each do |type|
+
+            puts "#{i}, #{j}: #{take[i][j]}, quantity=#{e.quantity_value[j]}"
+
+            item = Item.find(take[i][j][:id])
+
+            if item.quantity - item.inuse > e.quantity_value[j]
+              result.push( pdl_item item )
+              item.inuse += e.quantity_value[j]
+              item.save
+            else 
+              raise "Could not take #{e.type_value} (item #{item.id}) because it is in use (was it taken twice?)"
+            end
+
+            t = Touch.new
+            t.job_id = params[:job]
+            t.item_id = item.id
+            t.save
+
+            j += 1
+
+          end
 
         end
 
-        scope.set( @item_list[j][:var].to_sym, result )
-        log @item_list[j][:var], result, scope, params
+        scope.set( e.var.to_sym, result )
+        log e.var, result, scope, params
 
-      end
+        i += 1
 
     end
+
+    end # bt_execute
+
 
   end
 
