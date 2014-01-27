@@ -70,4 +70,20 @@ class StaticPagesController < ApplicationController
     @jobs = Job.where("created_at >= :date", date: Time.now.weeks_ago(0.5))
   end
 
+  def location
+    
+    if params[:name] && params[:name] != 'undefined'
+      cookies.permanent[:location] = params[:name]
+    elsif params[:name] && params[:name] == 'undefined'
+      cookies.delete :location
+    end
+
+    if cookies[:location]
+      @current_location = cookies[:location]
+    else
+      @current_location = 'undefined'
+    end
+
+  end
+
 end

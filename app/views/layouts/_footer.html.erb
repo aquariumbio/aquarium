@@ -1,5 +1,8 @@
 <footer class="footer" style='padding: 0px; right:0; margin: 0; border: 0''>
   <p style='padding: 0px; margin: 0 10px 0 0; float: right'>
+    <% if cookies[:location] %>
+      <span class='location'><%= cookies[:location] %></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    <% end %>
     AQUARIUM is a product of the <a href="http://depts.washington.edu/soslab">Klavins Lab.</a>
   </p>
 </footer>

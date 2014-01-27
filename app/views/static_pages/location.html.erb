@@ -1,0 +1,13 @@
+<h1>Set Location</h1>
+
+<p style='text-align: center'>
+  <br /><br />
+  <input id='location' type='textbox' value='<%= @current_location %>'></input> &nbsp;
+  <button onclick='set_location()' class='btn'>Set</button>
+</p> 
+
+<script>
+function set_location() {
+  window.location = '/location?name=' + $('#location').val()
+}
+</script>

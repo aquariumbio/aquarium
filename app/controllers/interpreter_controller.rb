@@ -349,11 +349,26 @@ class InterpreterController < ApplicationController
 
     # tell manta we're starting a protocol
     Thread.new do
-      @manta = "http://istc.cs.washington.edu:8800/start?&job=#{@job.id}&server=" + Socket.gethostname + ":" + request.port.to_s + "&user=" + current_user.login + "&protocol=#{@path}"
-      uri= URI(@manta)
-      res = Net::HTTP.get(uri)
-      logger.info "Message to MANTA: " + uri.to_s
-      logger.info "Message from MANTA: " + res
+
+      logger.info "Starting thread to talk to MANTA #{Socket.gethostname}:#{request.port.to_s}"
+
+      begin
+        manta = URI::escape "http://istc.cs.washington.edu:8800/start?&job=#{@job.id}&server=" + Socket.gethostname + ":" + request.port.to_s + "&user=" + (current_user.login) + "&protocol=#{@path}"  + "&location=" + ( cookies[:location] ? cookies[:location] : 'undefined' )
+      rescue Exception => e
+        logger.info "Error on setting up URI: " + e.to_s
+      end
+
+      logger.info "uri = #{manta}"
+      
+      begin
+        uri= URI(manta)
+        res = Net::HTTP.get(uri)
+        logger.info "Message to MANTA on start: " + uri.to_s
+        logger.info "Message from MANTA on start: " + res
+      rescue Exception => e
+        logger.info "Could not talk to MANTA on start: " + e.to_s
+      end
+
     end
 
     if @parse_errors != ""
@@ -372,7 +387,7 @@ class InterpreterController < ApplicationController
     Thread.new do
       uri = URI("http://istc.cs.washington.edu:8800/stop?&job=#{@job.id}&server=" + Socket.gethostname + ":" + request.port.to_s + "&abort=" + ( @exception ? 'true' : 'false' ))
       res = Net::HTTP.get(uri)
-      logger.info "Message from MANTA: " + res
+      logger.info "Message from MANTA on stop: " + res
     end
 
   end
