@@ -16,18 +16,21 @@ module Plankton
 
       info = {}
 
-      @info_expr.each do |k,v| 
+      @info_expr.each do |k,v|
 
         if k != :query
           info[k] = scope.substitute v
-        else 
+        else
           info[:query] = {}
           v.each do |q,w|
-            info[:query][q] = scope.substitute w 
+            evaled = scope.evaluate w
+            info[:query][q] = scope.substitute evaled
           end
         end
       end
 
+      puts "http-scope info_expr:"
+      puts @info_expr
       uri = URI(info[:host] + ':' + info[:port] + info[:path])
       uri.query = URI.encode_www_form(info[:query])
       res = Net::HTTP.get_response(uri)
@@ -49,7 +52,7 @@ module Plankton
 
     end
 
-    def to_html 
+    def to_html
       info_expr.to_s
     end
 
