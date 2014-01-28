@@ -63,20 +63,33 @@ TakeUI.prototype.object_html = function(object,i,j) {
        sel = $('<select id="select_' + i + '_' + j + '"></select>'),
        quantity = this.tospan(object,'desired_quantity'),
        name = this.tospan(object,'name'),
-       ch = this.check(i,j);
+       ch = this.check(i,j),
+       that = this;
 
+    var max = 0;
+    var temp = 0;
     for ( var k in object.items ) {
-	sel.append('<option value=' + object.items[k].id + '>' + object.items[k].location + '</option>');
+        temp = object.items[k].quantity - object.items[k].inuse;
+        if ( temp >= object.desired_quantity ) {
+          sel.append('<option value=' + object.items[k].id + '>' + object.items[k].location + '</option>');
+        }
+        if ( temp > max ) {
+            max = temp;
+	}
     }
 
-    if ( object.items.length == 0 ) {
+    if ( max < object.desired_quantity ) {
 	$(ch).attr("disabled", true);
+        if ( this.env != 'production' && object.items.length > 0 ) {
+          var id = object.items[0].id;
+          rel = $("<a href='#'> RELEASE</a>");
+          rel.click ( function() { window.location = 'release?item=' + id + '&job=' + that.job; } );
+          quantity.append(rel);
+        }
     }
 
     var selcontainer = $("<span class='take-select-container'></span>").append(sel);
-
     el.append(ch).append(name).append(selcontainer).append(quantity);
-
     return el;
 
 }
