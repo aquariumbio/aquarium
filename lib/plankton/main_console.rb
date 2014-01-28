@@ -1,6 +1,6 @@
 
 
-path = '/Users/ericklavins/Development/protocols/plankton/errors/include_in_if.pl'
+path = '/Users/ericklavins/Development/protocols/plankton/sandbox/printer_include_status.pl'
 contents =  File.read path
 p = Plankton::Parser.new( path, contents )
 

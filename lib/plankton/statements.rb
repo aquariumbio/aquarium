@@ -23,6 +23,9 @@ module Plankton
 
         case @tok.current
 
+          when 'EOF'
+            return
+
           when 'information'
             information
 

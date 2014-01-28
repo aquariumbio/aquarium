@@ -27,10 +27,16 @@ module Lang
     end
 
     def num_newlines t
-      t.scan(/\n|\r/).length
+      if t
+        t.scan(/\n|\r/).length
+      else
+        0
+      end
     end
 
     def advance
+
+      #puts "Advancing at #{@tokens[@i]}"
 
       @line += num_newlines( @tokens[@i] )
       @i=@i+1
