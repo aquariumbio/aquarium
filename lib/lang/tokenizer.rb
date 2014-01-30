@@ -103,8 +103,13 @@ module Lang
       end
 
       @line_elements = @tokens[j+1,k-j-1]
-      @line_elements[@i-j-1] = "<span style='font-weight: bold; color: red'>" + @line_elements[@i-j-1].to_s + "</span>"
-      @line_elements.join
+
+      if @line_elements
+        @line_elements[@i-j-1] = "<span style='font-weight: bold; color: red'>" + @line_elements[@i-j-1].to_s + "</span>"
+        @line_elements.join
+      else
+        "<span style='font-weight: bold; color: red'>Could not determine context. The error may be an unterminated string constant.</span>"
+      end
 
     end
 
