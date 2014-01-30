@@ -16,6 +16,16 @@ module Plankton
          type = 'objecttype'
       end
 
+      if type == 'sample'
+        if @tok.current == '('
+          @tok.eat_a '('
+          sample_type = @tok.eat_a_string.remove_quotes
+          @tok.eat_a ')'
+        else
+          sampe_type = ''
+        end
+      end
+
       if @tok.current == 'array'
         if type != 'objecttype'
           @tok.eat
@@ -37,7 +47,11 @@ module Plankton
       end
 
       if @include_stack.length <= 1
-        push_arg ArgumentInstruction.new var, type, description
+        a = ArgumentInstruction.new var, type, description
+        if sample_type 
+          a.sample_type = sample_type
+        end
+        push_arg a
       end
   
     end # argument
