@@ -160,7 +160,7 @@ class SamplesController < ApplicationController
 
   def schema sample_type
 
-    fields = [ 'name', 'project', 'user' ]
+    fields = [ 'name', 'project' ]
 
     (1..8).each do |i| 
       fn = "field#{i}name".to_sym
@@ -184,7 +184,7 @@ class SamplesController < ApplicationController
     samples = []
 
     if data.length == 0
-      redirect_to spreadsheet_path, notice: "File contains no parsable data"
+      redirect_to spreadsheet_path, notice: "Samples not imported. File contains no parsable data"
     end
 
     name = data.shift[0]
@@ -192,34 +192,30 @@ class SamplesController < ApplicationController
     @schema = schema @sample_type
 
     if !@sample_type
-      redirect_to spreadsheet_path, notice: "Could not find sample type #{name}"
+      redirect_to spreadsheet_path, notice: "Samples not imported. Could not find sample type #{name}"
     end
 
     data.each do |row|
 
       sample_name = row[0]
       project = row[1]
-      login = row[2]
 
       if row.length != @schema.length
-        redirect_to spreadsheet_path, notice: "This row has the wrong number of fields: #{row}."
+        redirect_to spreadsheet_path, notice: "Samples not imported. This row has the wrong number of fields: #{row}."
         return []
       elsif Sample.find_by_name(sample_name)
-        redirect_to spreadsheet_path, notice: "The sample name #{sample_name} is already taken."
-        return []
-      elsif !User.find_by_login(login)
-        redirect_to spreadsheet_path, notice: "Could not find user with login #{login}."
+        redirect_to spreadsheet_path, notice: "Samples not imported. The sample name #{sample_name} is already taken."
         return []
       end
 
       sample = Sample.new
       sample.name = sample_name
       sample.project = project
-      sample.user_id = User.find_by_login(login).id
+      sample.user_id = current_user.id
       sample.sample_type_id = @sample_type.id
 
-      (3..(@schema.length-1)).each do |i|
-        ff = "field#{i-2}".to_sym
+      (2..(@schema.length-1)).each do |i|
+        ff = "field#{i-1}".to_sym
         sample[ff] = row[i]
       end
 

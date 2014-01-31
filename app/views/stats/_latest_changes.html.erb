@@ -1,12 +1,26 @@
 <div style='border: 1pt solid #aaa; border-radius: 5pt; padding: 5px; margin: 5px;'>
 
-    <h4 style='text-align: center'>Latest Changes (Jan. 27)</h4>
+    <h4 style='text-align: center'>Latest Changes (Jan. 31)</h4>
     <ul class='list'> 
-      <li>Admins can set a location for the workstation that is
-      running the Aquarium, and that location will be sent to MANTA.</li>
-      <li>You can now take arrays of items and objects. Plus, the take
-      page has been updated to be more compact.</li>
-      <li>Items listed as deleted in your cart no longer show up in arguments.</li>
+      <li>You can now import a spreadsheet of samples.</li>
+      <li>The way to filter arguments from the user's
+      cart has been changed. Whereas before you would have to name your variable
+      something wierd, like Plasmid_id, you now do
+<pre style='margin:10px; font-size: 9pt'>argument
+    pid: sample("Plasmid"), "A helpful message here"
+    whatever: sample("Transformed E coli Strain")
+end
+</pre>
+for example. Note that the old style code will still parse, but will
+not filter from the cart. You may want to change your code to use the
+new scheme, and more reasonable sounding variable names.
+      </li>
+      <li>Fixed error where unterminated string constants would crash
+      the parser.</li>
+      <li>Fixed an error where copying the production inventory would
+      result in item numbers that are one greater than they should be.</li>
+      <li>Fixed bug where files ending in an include statement would crash.</li>
+      <li>Rows in tables highlight on mouseover.</li>
     </ul>
 
 </div>

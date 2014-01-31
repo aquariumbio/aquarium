@@ -31,13 +31,17 @@
 <p>
 The first line of the .csv file should include only the name of the sample type (e.g. Primer). All other lines are of the form
 <pre>
-  name, project, login, field1, field2, ...
+  name, project, field1, field2, ...
 </pre>
-where name is a unique, unused, sample name. Project is string. Login is the login of an existing user. The remaining columns are the fields specified by the sample type. If only three fields are specified in the sample type, then only three columns should be used after the login column.
+where name is a unique, unused, sample name. Project is string,
+preferable indicating an existing project name.
+The remaining columns are the fields specified by the sample type.
+If only three fields are specified in the sample type, then only three columns should be used after the login column.
 </p>
 
 <p>
-Use this functionality with care. If you accidentally import a bunch of sample types incorrectly, you'll be deleting each one manually later.
+Use this functionality with care. <span style='color: red'>Try importing on the rehearsal
+server first.</span> If you accidentally import a bunch of sample types incorrectly, you'll be deleting each one manually later.
 </p>
 
 <br />

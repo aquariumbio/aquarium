@@ -3,7 +3,6 @@
 <table class=table>
 
 <tr>
-  <th>Id</th>
   <th>Name</th>
   <th>Project</th>
   <th>User</th>
@@ -11,8 +10,7 @@
 
 <% @samples.each do |s| %>
   <tr>
-    <td><%= link_to s.id, s %></td>
-    <td><%= s.name %></td>
+    <td><%= link_to s.name, s %></td>
     <td><%= link_to s.project, project_url(name: s.project) %></td>
     <td><%= s.user.login %></td>
   </tr>
