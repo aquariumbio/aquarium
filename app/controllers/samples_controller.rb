@@ -235,7 +235,7 @@ class SamplesController < ApplicationController
 
       path = params[:spreadsheet].original_filename
       content = params[:spreadsheet].read
-      @data = content.split(/\n|\r/).collect do |l|
+      @data = content.split(/[\n\r]+/).collect do |l|
         l.split(/,\s*/)
       end
 

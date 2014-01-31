@@ -70,7 +70,7 @@ var args = [];
     name: '<%= a.name %>', 
     description: '<%= a.description %>',
     type: '<%= a.type %>',
-    sample_type: '<%= a.sample_type %>'
+    sample_type: '<%= a.respond_to?(:sample_type) ? a.sample_type : '' %>'
   });
 <% end %>
 
