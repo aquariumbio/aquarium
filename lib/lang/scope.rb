@@ -137,6 +137,14 @@ module Lang
 
     end
 
+    def unique a # returns an array that represents the same set, but with no repeats
+      if a.class == Array
+        a.uniq
+      else
+        raise "Attempted to apply uniqie to #{a}, which is not an array."
+      end
+    end
+
   end
 
 end

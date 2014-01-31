@@ -18,6 +18,7 @@ module Plankton
       add_function :length, 1
       add_function :append, 2
       add_function :concat, 2
+      add_function :unique, 1
 
     end
 
