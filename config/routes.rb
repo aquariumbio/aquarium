@@ -24,6 +24,9 @@ Bioturk::Application.routes.draw do
   resources :samples
   resources :sample_types
 
+  match '/spreadsheet', to: 'samples#spreadsheet'
+  match '/process_spreadsheet', to: 'samples#process_spreadsheet'
+
   match "interpreter/open_local_file", to: 'interpreter#open_local_file', via: [:post]
 
   get "interpreter/arguments"
@@ -89,7 +92,7 @@ Bioturk::Application.routes.draw do
   match '/jobchart', to: 'static_pages#jobchart'
   match '/changes', to: 'static_pages#changes'
   match '/location', to: 'static_pages#location'
-
+  
   match '/inventory_stats', to: 'static_pages#inventory_stats'
   match '/inventory_critical', to: 'static_pages#inventory_critical'
   match '/protocol_usage', to: 'static_pages#protocol_usage'

@@ -1,0 +1,19 @@
+<h1>Successfully Imported <%= @samples.length %> <%= @sample_type.name %>s</h1>
+
+<table class=table>
+
+<tr>
+  <th>Id</th>
+  <th>Name</th>
+  <th>Project</th>
+  <th>User</th>
+</tr>
+
+<% @samples.each do |s| %>
+  <tr>
+    <td><%= link_to s.id, s %></td>
+    <td><%= s.name %></td>
+    <td><%= link_to s.project, project_url(name: s.project) %></td>
+    <td><%= s.user.login %></td>
+  </tr>
+<% end %>

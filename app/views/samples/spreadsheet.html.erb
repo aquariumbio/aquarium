@@ -1,0 +1,57 @@
+<h1>Import Samples from Spreadsheet</h1>
+
+<br />
+
+<div class='row-fluid'>
+
+  <div class='span3'></div>
+  <div class='span6 well'>
+
+   <%= form_tag(process_spreadsheet_path, multipart: true, class: 'file_upload') do %>
+
+              <%= file_field_tag 'spreadsheet', onchange: "updateFileName()" %><br />
+              <label>File name:</label>
+              <div class="input-append">
+                <input id='file_name' class='choose_file_name' size=30 value='' style='padding: 4px'></input>
+                <div id='get_file' class='btn' onclick="getFile()">Choose File</div>
+              </div>
+              <br />
+              <%= submit_tag("Import", class: 'btn btn-primary') %>
+ 
+   <% end %>
+
+  </div>
+
+  <div class='span3'></div>
+
+</div>
+
+<h3>Notes</h3>
+
+<p>
+The first line of the .csv file should include only the name of the sample type (e.g. Primer). All other lines are of the form
+<pre>
+  name, project, login, field1, field2, ...
+</pre>
+where name is a unique, unused, sample name. Project is string. Login is the login of an existing user. The remaining columns are the fields specified by the sample type. If only three fields are specified in the sample type, then only three columns should be used after the login column.
+</p>
+
+<p>
+Use this functionality with care. If you accidentally import a bunch of sample types incorrectly, you'll be deleting each one manually later.
+</p>
+
+<br />
+
+<br />
+
+<script>
+
+  function getFile(){
+    document.getElementById("spreadsheet").click();
+  }
+  function updateFileName() {
+    console.log(document.getElementById("spreadsheet").value);
+    document.getElementById("file_name").value = document.getElementById("spreadsheet").value.replace("C:\\fakepath\\", "");
+  }
+
+</script>

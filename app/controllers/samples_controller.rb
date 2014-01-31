@@ -155,4 +155,105 @@ class SamplesController < ApplicationController
 
   end
 
+  def spreadsheet
+  end
+
+  def schema sample_type
+
+    fields = [ 'name', 'project', 'user' ]
+
+    (1..8).each do |i| 
+      fn = "field#{i}name".to_sym
+      ft = "field#{i}type".to_sym 
+      f = "field#{i}".to_sym 
+
+      if sample_type[ft] != 'not used' && sample_type[ft] !=nil 
+        fields.push sample_type[ft]
+      else
+        fields.push :unused
+      end
+
+    end
+
+    fields.reject { |f| f == :unused }
+
+  end
+
+  def make_samples data
+
+    samples = []
+
+    if data.length == 0
+      redirect_to spreadsheet_path, notice: "File contains no parsable data"
+    end
+
+    name = data.shift[0]
+    @sample_type = SampleType.find_by_name(name)
+    @schema = schema @sample_type
+
+    if !@sample_type
+      redirect_to spreadsheet_path, notice: "Could not find sample type #{name}"
+    end
+
+    data.each do |row|
+
+      sample_name = row[0]
+      project = row[1]
+      login = row[2]
+
+      if row.length != @schema.length
+        redirect_to spreadsheet_path, notice: "This row has the wrong number of fields: #{row}."
+        return []
+      elsif Sample.find_by_name(sample_name)
+        redirect_to spreadsheet_path, notice: "The sample name #{sample_name} is already taken."
+        return []
+      elsif !User.find_by_login(login)
+        redirect_to spreadsheet_path, notice: "Could not find user with login #{login}."
+        return []
+      end
+
+      sample = Sample.new
+      sample.name = sample_name
+      sample.project = project
+      sample.user_id = User.find_by_login(login).id
+      sample.sample_type_id = @sample_type.id
+
+      (3..(@schema.length-1)).each do |i|
+        ff = "field#{i-2}".to_sym
+        sample[ff] = row[i]
+      end
+
+      samples.push sample
+
+    end
+
+    samples
+
+  end
+
+  def process_spreadsheet
+
+    if !params[:spreadsheet]
+      redirect_to spreadsheet_path, notice: "No path specified"
+    else
+
+      path = params[:spreadsheet].original_filename
+      content = params[:spreadsheet].read
+      @data = content.split(/\n|\r/).collect do |l|
+        l.split(/,\s*/)
+      end
+
+      @samples = make_samples @data
+
+      if @samples.length > 0
+        @samples.each do |s|
+          s.save
+        end
+      end
+
+    end
+
+  end
+
 end
+
