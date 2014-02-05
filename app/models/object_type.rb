@@ -153,7 +153,7 @@ class ObjectType < ActiveRecord::Base
 
       x = (sort_locations locs).last.split('.')
 
-      if x[3].to_i == 99 
+      if x[3].to_i == 80 # Note: 9x9 grid gives a max of 0 samples per box
         "#{prefix}.#{next_empty_box params}.0"
       else
         "#{x[0]}.#{x[1]}.#{x[2]}.#{x[3].to_i+1}"

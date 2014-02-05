@@ -15,10 +15,14 @@ module Plankton
       @debug = "No debug info available"
       @job_id = -1
 
+      # Array functions
       add_function :length, 1
       add_function :append, 2
       add_function :concat, 2
       add_function :unique, 1
+      
+      # Collection functions
+      add_function :collection, 1
 
     end
 

@@ -1,0 +1,27 @@
+<h1>Collections</h1>
+
+<table class='table'>
+
+  <tr>
+    <th>Name</th>
+    <th>Project</th>
+    <th>Type</th>
+    <th>Size</th>
+    <th></th>
+  </tr>
+
+
+  <% @collections.each do |c| %>
+    <tr>
+      <td><%= link_to c.name, c %></td>
+      <td><%= c.project %></td>
+      <td><%= link_to c.object_type.name, c.object_type %></td>
+      <td><%= c.rows %> x <%= c.columns %></td>
+      <td><%= link_to(c, method: :delete) do %><i class='icon-remove'></i><% end %></td>
+    </tr>
+  <% end %>
+
+
+</table>
+
+<%= link_to 'New Collection', new_collection_path, class: "btn" %>

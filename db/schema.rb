@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131223192901) do
+ActiveRecord::Schema.define(:version => 20140131235419) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -38,6 +38,8 @@ ActiveRecord::Schema.define(:version => 20131223192901) do
     t.integer  "columns"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.string   "location"
+    t.string   "description"
   end
 
   create_table "groups", :force => true do |t|
@@ -56,6 +58,7 @@ ActiveRecord::Schema.define(:version => 20131223192901) do
     t.integer  "inuse",          :default => 0
     t.integer  "sample_id"
     t.string   "data"
+    t.integer  "collection_id"
   end
 
   add_index "items", ["object_type_id"], :name => "index_items_on_object_type_id"
@@ -127,11 +130,15 @@ ActiveRecord::Schema.define(:version => 20131223192901) do
 
   create_table "parts", :force => true do |t|
     t.integer  "collection_id"
-    t.integer  "item_id"
     t.integer  "row"
     t.integer  "column"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
+    t.integer  "item_id1"
+    t.integer  "item_id2"
+    t.integer  "item_id3"
+    t.integer  "item_id4"
+    t.string   "data"
   end
 
   create_table "sample_types", :force => true do |t|
