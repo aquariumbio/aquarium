@@ -18,7 +18,7 @@
   <tr>
     <th>Name</th>
     <th>Project</th>
-
+    <th>Description</th>
     <% unless @user %>
       <th>Owner</th>
     <% end %>
@@ -39,6 +39,7 @@
   <tr>
     <td><%= link_to sample.name, sample %></td>
     <td><%= link_to sample.project, project_url(name: sample.project) %></td>
+    <td><%= sample.description %></td>
 
     <% unless @user %>
       <td><%= User.find(sample.user_id).login %></td>
