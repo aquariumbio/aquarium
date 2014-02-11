@@ -343,7 +343,7 @@ class InterpreterController < ApplicationController
   def start
 
     # initialize
-    log "START", {}
+    log "START", { location: cookies[:location] ? cookies[:location] : 'undefined' }
     @pc = 0
     @job.user_id = current_user.id
 
@@ -381,7 +381,7 @@ class InterpreterController < ApplicationController
   
     # finalize stuff
     @pc = Job.COMPLETED
-    log "STOP", {}
+    log "STOP", { location: cookies[:location] ? cookies[:location] : 'undefined' }
 
     # tell manta we're done
     Thread.new do
