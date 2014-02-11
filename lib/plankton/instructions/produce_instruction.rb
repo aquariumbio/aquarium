@@ -3,7 +3,7 @@ module Plankton
   class ProduceInstruction < Instruction
 
     attr_reader :object_type_name, :quantity, :release, :var, :item, :note, :location
-    attr_accessor :sample_expr, :data_expr, :sample_name_expr, :sample_project_expr, :note_expr, :loc_expr
+    attr_accessor :sample_expr, :data_expr, :sample_name_expr, :sample_project_expr, :note_expr, :loc_expr, :renderable
 
     def initialize object_type_expr, quantity_expr, release_expr, var, options = {}  
 

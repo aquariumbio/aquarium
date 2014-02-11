@@ -11,6 +11,13 @@ module Plankton
       data = {}
       rel = nil
 
+      if @tok.current == 'silently'
+        @tok.eat_a 'silently'
+        render = false
+      else
+        render = true
+      end
+
       if @tok.next == '=' || @tok.next == '<-'
         var = @tok.eat_a_variable
         @tok.eat
@@ -89,6 +96,7 @@ module Plankton
       ins.sample_name_expr = sample_name
       ins.note_expr = note
       ins.loc_expr = location
+      ins.renderable = render
       push ins
 
     end # produce
