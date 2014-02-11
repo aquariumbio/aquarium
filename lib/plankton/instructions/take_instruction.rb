@@ -221,7 +221,9 @@ module Plankton
             item = Item.find(take[i][j][:id])
 
             if item.quantity - item.inuse >= e.quantity_value[j]
-              result.push( pdl_item item )
+              (1..(e.quantity_value[j])).each do |i|
+                result.push( pdl_item item )
+              end
               item.inuse += e.quantity_value[j]
               item.save
             else 
