@@ -16,6 +16,16 @@ module Oyster
          type = 'objecttype'
       end
 
+      if type == 'sample'
+        if @tok.current == '('
+          @tok.eat_a '('
+          sample_type = @tok.eat_a_string.remove_quotes
+          @tok.eat_a ')'
+        else
+          sampe_type = ''
+        end
+      end
+
       if @tok.current == 'array'
         if type != 'objecttype'
           @tok.eat
@@ -32,7 +42,7 @@ module Oyster
         description = ""
       end
 
-      @metacol.arguments.push( { name: var, type: type, description: description } )
+      @metacol.arguments.push( { name: var, type: type, description: description, sample_type: sample_type } )
   
     end
 
