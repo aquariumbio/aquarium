@@ -24,6 +24,9 @@ module Plankton
       # Collection functions
       add_function :collection, 1
 
+      # Sample functions
+      add_function :info, 1
+
     end
 
     def bad_xml
