@@ -27,6 +27,9 @@ module Plankton
       # Sample functions
       add_function :info, 1
 
+      # Temporary variables
+      @temp_variable_counter = 0
+
     end
 
     def bad_xml

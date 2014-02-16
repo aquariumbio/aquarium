@@ -22,7 +22,7 @@
         <p class='alert'><%= @parse_errors %></p>
         <% if @protocol && @protocol.bad_xml %>
           <h4>Offending Code</h4>
-          <pre><%= @protocol.bad_xml %></pre>
+          <pre><%= @protocol.bad_xml.html_safe %></pre>
         <% end %>
 
       <% elsif @exception %>
@@ -48,6 +48,8 @@
         <p>Add a note to the log for this step</p>
         <textarea rows="3" id='note-textarea'></textarea>
       </div>
+
+      <!-- <div><%= @scope.inspect %></div> -->
 
     <% end %>
 

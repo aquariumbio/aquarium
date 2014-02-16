@@ -56,6 +56,9 @@ module Plankton
           when 'while'
             while_block
 
+          when 'foreach'
+            foreach_block
+
           when 'http'
             http
 
