@@ -16,7 +16,22 @@ module Lang
     end
 
     def set symbol, value
-      @stack.last[symbol] = value
+
+      # Semantics: if symbol is already set, then reset it to value
+      #            if symbol is not set, then add it to the top of the stack and set it to the specified value
+
+      i = @stack.length - 1
+
+      while @stack[i][symbol] == nil && i >= 0
+        i -= 1
+      end
+
+      if @stack[i][symbol]
+        @stack[i][symbol] = value
+      else
+        @stack.last[symbol] = value
+      end
+
     end
 
     def set_base_symbol symbol, value
@@ -211,7 +226,7 @@ module Lang
         if !i.sample
           raise "Item #{pdl_item[:id]} in argument passed to 'info' is not a sample"
         end
-        return i.sample.attributes
+        return i.sample.attributes.symbolize_keys
       else
         raise "Argument passed to 'info' is not an item"
       end
