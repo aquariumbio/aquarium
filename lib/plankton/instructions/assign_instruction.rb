@@ -10,7 +10,7 @@ module Plankton
       @rhs = rhs
       @renderable = false
       if options[:new]
-        @new = true
+        @new = options[:new]
       else
         @new = false
       end

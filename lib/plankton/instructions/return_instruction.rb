@@ -27,10 +27,12 @@ module Plankton
 
       @destination = scope.get :__RETURN_PC__
 
-      # pop arguments and local variables
+      # pop local variables and any other scopes (e.g. if return statement is in an if or while
       while ! scope.defined_in_top :__FUNCTION_CALL_ID__
         scope.pop
       end
+
+      # pop arguments
       scope.pop
 
       puts "    After popping, scope is #{scope.inspect} (before double pop)."

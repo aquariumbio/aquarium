@@ -68,17 +68,17 @@ module Plankton
           when 'http'
             http
 
-          when 'include'
+          when 'include', 'require'
             include
 
           when 'end', 'elsif', 'else'
             return
 
-          when @tok.variable
+          when 'local'
             assign
-       
+
           else
-            raise 'Could not find the next statement to parse'
+            basic_statement
 
         end
 
