@@ -13,6 +13,10 @@ class Instruction
       @endline = options[:endline]
     end
 
+    def adjust_offset o
+      @pc += o
+    end
+
     def clear
       puts "\e[2J\e[f"
     end

@@ -30,9 +30,10 @@ class UsersController < ApplicationController
 
   def create
 
-    if params[:change_password]
+    if !params[:change_password]
 
       @user = User.new(params[:user])
+
       if @user.save
         @group = Group.new
         @group.name = @user.login

@@ -59,6 +59,12 @@ module Plankton
           when 'foreach'
             foreach_block
 
+          when 'function'
+            function_def
+
+          when 'return'
+            return_statement
+
           when 'http'
             http
 

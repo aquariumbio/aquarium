@@ -14,6 +14,12 @@ module Plankton
       @false_pc = pc
     end
 
+    def adjust_offset o
+      super o
+      @true_pc += o
+      @false_pc += o
+    end
+
     def set_pc scope
       if scope.evaluate @condition
         return @true_pc

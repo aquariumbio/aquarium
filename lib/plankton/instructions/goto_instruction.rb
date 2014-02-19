@@ -16,6 +16,11 @@ module Plankton
       return @destination
     end
 
+    def adjust_offset o
+      super o
+      @destination += o
+    end
+
     def html
       "goto #{@destination}"
     end

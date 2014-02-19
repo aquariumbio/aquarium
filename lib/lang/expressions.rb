@@ -46,8 +46,10 @@ module Lang
      end
 
      def app ##########################################################################################
+
+       name = @tok.current
        
-       if @functions
+       if @functions && @functions[name.to_sym]
          name = @tok.eat_a_variable
          e = name
          e += @tok.eat_a '('
@@ -58,6 +60,8 @@ module Lang
              end
            end
          e += @tok.eat_a ')'
+       elsif @function_callback
+         e = @function_callback.call
        else
          raise "No function names defined at #{@tok}"
        end

@@ -15,6 +15,10 @@ module Lang
       @stack = stack
     end
 
+    def set_new symbol, value
+      @stack.last[symbol] = value
+    end
+
     def set symbol, value
 
       # Semantics: if symbol is already set, then reset it to value
@@ -44,6 +48,10 @@ module Lang
 
     def pop
       @stack.pop
+    end
+
+    def defined_in_top sym
+      @stack.last[sym] != nil
     end
 
     def get symbol
@@ -107,12 +115,10 @@ module Lang
             s += value.to_s + "<br />"
           end
         end
-        indent += "  "
+        indent += "&nbsp;"
       end
       return s
     end
-
-
 
     ############################################################################
     # array functions callable from plankton

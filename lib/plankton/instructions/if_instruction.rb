@@ -21,6 +21,13 @@ module Plankton
       @end_then_pc = pc
     end
 
+    def adjust_offset o
+      super o
+      @then_pc += o
+      @else_pc += o
+      # @end_then_pc += o # legacy?
+    end
+
     def set_pc scope
       if scope.evaluate @condition
         return @then_pc

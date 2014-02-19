@@ -415,25 +415,25 @@ class InterpreterController < ApplicationController
       end
 
       # continue through instructions that are not renderable
-      if @pc < @protocol.program.length
+      if @pc < @protocol.program.length 
 
         @instruction = @protocol.program[@pc]
 
-        while !@instruction.renderable && @pc < @protocol.program.length
+        while !@instruction.renderable && @pc < @protocol.program.length && ! @instruction.respond_to?( :stop )
           begin
             execute
           rescue Exception => e
-            process_error "Error executing #{@instruction.name}: " + e.to_s # + ', ' + e.backtrace.to_s
+            process_error "Error executing #{@instruction.name}: " + e.to_s + ', ' + e.backtrace.to_s
             render 'current'
             return
           end
-          @instruction = @protocol.program[@pc] if @pc < @protocol.program.length
+          @instruction = @protocol.program[@pc] if @pc < @protocol.program.length && ! @instruction.respond_to?( :stop )
         end
 
       end
 
       # check if protocol is finished
-      if @pc < @protocol.program.length
+      if @pc < @protocol.program.length && ! @instruction.respond_to?( :stop )
         @instruction = @protocol.program[@pc]
       else
         stop

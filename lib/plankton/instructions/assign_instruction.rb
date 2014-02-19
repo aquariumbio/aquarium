@@ -9,12 +9,22 @@ module Plankton
       @lhs = lhs
       @rhs = rhs
       @renderable = false
+      if options[:new]
+        @new = true
+      else
+        @new = false
+      end
     end
 
     # RAILS ###########################################################################################
 
     def bt_execute scope, params
-      scope.set( @lhs.to_sym, scope.evaluate( @rhs ) )
+      puts "EXECUTING ASSIGN WITH new = #{@new}: #{@lhs} = #{@rhs}"
+      if @new
+        scope.set_new( @lhs.to_sym, scope.evaluate( @rhs ) )
+      else
+        scope.set( @lhs.to_sym, scope.evaluate( @rhs ) )
+      end
     end
 
     def html

@@ -52,11 +52,7 @@ module Plankton
         statements
       end 
 
-      #puts "looking for the end"
-
       @tok.eat_a 'end'
-
-      #puts "found the end"
 
       gotos.each do |g|
         g.mark_destination pc
