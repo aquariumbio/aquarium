@@ -8,7 +8,7 @@ module Plankton
       @arg_exprs = arg_exprs
       @fid = fid
       super 'function_call', options
-      puts "New function call (#{fid}) returning to #{return_to}"
+      #puts "New function call (#{fid}) returning to #{return_to}"
     end
 
     def bt_execute scope, params
@@ -24,7 +24,7 @@ module Plankton
 
       scope.push
 
-      puts "Starting function call with fid = #{@fid}. Scope is now #{scope.inspect}"
+      #puts "Starting function call with fid = #{@fid}. Scope is now #{scope.inspect}"
 
     end
 

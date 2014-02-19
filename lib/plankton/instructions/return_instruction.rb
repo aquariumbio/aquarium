@@ -17,13 +17,13 @@ module Plankton
         retvals[fid] = []
       end
  
-      puts "About to evaluate #{@ret_expr}"
+      #puts "About to evaluate #{@ret_expr}"
 
       rval = scope.evaluate @ret_expr 
       retvals[fid].push rval
       scope.set :__RETVALS__, retvals
 
-      puts "  Returning #{@ret_expr} = #{rval} from #{fid}. Scope is now #{scope.inspect} (before double pop)."
+      #puts "  Returning #{@ret_expr} = #{rval} from #{fid}. Scope is now #{scope.inspect} (before double pop)."
 
       @destination = scope.get :__RETURN_PC__
 
@@ -35,9 +35,9 @@ module Plankton
       # pop arguments
       scope.pop
 
-      puts "    After popping, scope is #{scope.inspect} (before double pop)."
+      #puts "    After popping, scope is #{scope.inspect} (before double pop)."
 
-      puts "Will return to #{@destination}"
+      #puts "Will return to #{@destination}"
 
     end
 

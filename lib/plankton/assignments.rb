@@ -15,9 +15,14 @@ module Plankton
       end
 
       lhs = @tok.eat_a_variable
-      @tok.eat_a '='
-      lines[:endline] = @tok.line
-      rhs = expr
+
+      if local && @tok.current != '='
+        rhs = 'false'
+      else
+        @tok.eat_a '='
+        lines[:endline] = @tok.line
+        rhs = expr
+      end
 
       push AssignInstruction.new lhs, rhs, lines.merge({new: local})
 
@@ -25,7 +30,7 @@ module Plankton
 
     def basic_statement
 
-      if @tok.next == '='
+      if @tok.current == 'local' || @tok.next == '='
 
         assign
 

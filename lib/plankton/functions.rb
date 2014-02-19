@@ -116,7 +116,7 @@ module Lang
 
     def __function_return_value__ fid
        
-      puts "Getting latest return value for fid = #{fid} with scope = #{inspect}"
+      # puts "Getting latest return value for fid = #{fid} with scope = #{inspect}"
 
       retvals = get :__RETVALS__
 
@@ -126,7 +126,7 @@ module Lang
 
       rval = retvals[fid].pop
 
-      puts "    Got #{rval}"
+      # puts "    Got #{rval}"
 
       set :__RETVALS__, retvals
       return rval

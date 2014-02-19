@@ -9,6 +9,31 @@
 
   <div id='details' style='display: none'>
 
+    <h4>Jan. 31</h4>
+    <ul class='list'> 
+      <li>New function. For an array x, unique(x) returns an array
+      that represents the same set, but with no repeats.</li>
+      <li>You can now import a spreadsheet of samples.</li>
+      <li>The way to filter arguments from the user's
+      cart has been changed. Whereas before you would have to name your variable
+      something wierd, like Plasmid_id, you now do
+<pre class='code'>argument
+    pid: sample("Plasmid"), "A helpful message here"
+    whatever: sample("Transformed E coli Strain")
+end
+</pre>
+for example. Note that the old style code will still parse, but will
+not filter from the cart. You may want to change your code to use the
+new scheme, and more reasonable sounding variable names.
+      </li>
+      <li>Fixed error where unterminated string constants would crash
+      the parser.</li>
+      <li>Fixed an error where copying the production inventory would
+      result in item numbers that are one greater than they should be.</li>
+      <li>Fixed bug where files ending in an include statement would crash.</li>
+      <li>Rows in tables highlight on mouseover.</li>
+    </ul>
+
     <h4>Jan. 27</h4>
     <ul class='list'> 
       <li>Admins can set a location for the workstation that is

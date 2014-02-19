@@ -1,28 +1,25 @@
 <div style='border: 1pt solid #aaa; border-radius: 5pt; padding: 5px; margin: 5px;'>
 
-    <h4 style='text-align: center'>Latest Changes (Jan. 31)</h4>
+    <h4 style='text-align: center'>Latest Changes (Feb. 19)</h4>
     <ul class='list'> 
-      <li>New function. For an array x, unique(x) returns an array
-      that represents the same set, but with no repeats.</li>
-      <li>You can now import a spreadsheet of samples.</li>
-      <li>The way to filter arguments from the user's
-      cart has been changed. Whereas before you would have to name your variable
-      something wierd, like Plasmid_id, you now do
-<pre class='code'>argument
-    pid: sample("Plasmid"), "A helpful message here"
-    whatever: sample("Transformed E coli Strain")
-end
-</pre>
-for example. Note that the old style code will still parse, but will
-not filter from the cart. You may want to change your code to use the
-new scheme, and more reasonable sounding variable names.
-      </li>
-      <li>Fixed error where unterminated string constants would crash
-      the parser.</li>
-      <li>Fixed an error where copying the production inventory would
-      result in item numbers that are one greater than they should be.</li>
-      <li>Fixed bug where files ending in an include statement would crash.</li>
-      <li>Rows in tables highlight on mouseover.</li>
+      <li>You can now define your own functions. See the
+      documentation for details and examples.</li>
+      <li>New looping construction, "foreach ... in ... end", allows you
+      to loop through arrays without bothersome while loop syntax.</li>
+      <li>To include another file without arguments, use <pre>require 'file.pl'</pre>which is shorthand for <pre>include 'file.pl' end</pre></li>
+      <li>Produce takes an optional parameter, silently, which allows
+      you to produce without displaying anything to the user.</li>
+      <li>New built in function info(i) that takes an item associated
+      with a sample and returns its information. For example, if i is
+      a Transformed E. coli Strain, then info(i)[:field2] would be
+      the name of the plasmid it contains (since field 2 is where
+      that is kept with samples of this type in our inventory).</li>
+      <li>When editing and saving changes to samples, the user is not changed.</li>
+      <li>Fixed a bug in create new user page.</li>
+      <li>Descriptions are shown in lists of samples.</li>
+      <li>Fixed a bug where items from a take with quantity more than
+      one were incorrectly returned.</li>
+      <li>Protocol start/stop logs now record the location of the workstation.</li>
     </ul>
 
 </div>

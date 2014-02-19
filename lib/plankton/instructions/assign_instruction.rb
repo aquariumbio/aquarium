@@ -19,7 +19,7 @@ module Plankton
     # RAILS ###########################################################################################
 
     def bt_execute scope, params
-      puts "EXECUTING ASSIGN WITH new = #{@new}: #{@lhs} = #{@rhs}"
+      #puts "EXECUTING ASSIGN WITH new = #{@new}: #{@lhs} = #{@rhs}"
       if @new
         scope.set_new( @lhs.to_sym, scope.evaluate( @rhs ) )
       else
