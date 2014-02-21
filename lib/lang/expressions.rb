@@ -2,7 +2,26 @@ module Lang
 
   class Parser
 
-     def add_function name, num_args
+     def initialize ###################################################################################
+
+      # Array functions
+      add_function :length, 1
+      add_function :append, 2
+      add_function :concat, 2
+      add_function :unique, 1
+
+      # String functions
+      add_function :to_string, 1
+      
+      # Collection functions
+      add_function :collection, 1
+
+      # Sample functions
+      add_function :info, 1
+
+     end
+
+     def add_function name, num_args ##################################################################
        if !@functions
          @functions = {}
        end

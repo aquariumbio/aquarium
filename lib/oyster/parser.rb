@@ -7,6 +7,7 @@ module Oyster
       @metacol = Metacol.new
       functions
       time_functions
+      super() # adds array, string, collection, sample functions
     end   
 
     def functions

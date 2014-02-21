@@ -50,6 +50,9 @@ module Plankton
           when 'log'
             log
 
+          when 'input'
+            input
+
           when 'if'
             if_block
 

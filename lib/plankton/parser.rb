@@ -24,20 +24,10 @@ module Plankton
       @in_function_def = false                    # whether parsing in or out of a function definition
       @function_call_num = 0
 
-      # Array functions
-      add_function :length, 1
-      add_function :append, 2
-      add_function :concat, 2
-      add_function :unique, 1
-      
-      # Collection functions
-      add_function :collection, 1
-
-      # Sample functions
-      add_function :info, 1
-
       # Temporary variables
       @temp_variable_counter = 0
+
+      super()
 
     end
 
