@@ -59,7 +59,7 @@ class Instruction
         rescue Exception => e
           data = {}
         end
-        return { id: item.id, name: item.object_type.name, data: data }
+        return { id: item.id, name: item.object_type.name, data: data, location: item.location }
       end
     end
 

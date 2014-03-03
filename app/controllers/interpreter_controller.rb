@@ -392,6 +392,15 @@ class InterpreterController < ApplicationController
 
   end
 
+  def clear_params
+    #
+    # This method removes keys from the query string so they don't get used again when
+    # the program counter steps to the next instruction.
+    #
+    params.delete :new_item_id
+    params.delete :location
+  end
+
   def advance
 
     get_current
@@ -418,6 +427,7 @@ class InterpreterController < ApplicationController
       if @pc < @protocol.program.length 
 
         @instruction = @protocol.program[@pc]
+        clear_params     
 
         while !@instruction.renderable && @pc < @protocol.program.length && ! @instruction.respond_to?( :stop )
           begin
@@ -427,7 +437,11 @@ class InterpreterController < ApplicationController
             render 'current'
             return
           end
-          @instruction = @protocol.program[@pc] if @pc < @protocol.program.length && ! @instruction.respond_to?( :stop )
+          if @pc < @protocol.program.length && ! @instruction.respond_to?( :stop )
+            @instruction = @protocol.program[@pc] 
+            clear_params
+          end
+          
         end
 
       end
@@ -435,6 +449,7 @@ class InterpreterController < ApplicationController
       # check if protocol is finished
       if @pc < @protocol.program.length && ! @instruction.respond_to?( :stop )
         @instruction = @protocol.program[@pc]
+        clear_params
       else
         stop
       end

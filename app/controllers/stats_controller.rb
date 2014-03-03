@@ -4,11 +4,6 @@ class StatsController < ApplicationController
 
     now = Time.now
 
-    @active = 
-    @urgent = 
-    @pending = 
-    @later  = 
-
     render json: { 
       active: Job.where("pc >= 0"),
       urgent: Job.where("pc = -1 AND latest_start_time < ?", now),

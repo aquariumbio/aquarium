@@ -28,6 +28,8 @@ module Plankton
 
     def pre_render scope, params
 
+      puts "STARTING PRODUCE PRE_RENDER WITH params=#{params}"
+
       # Evaluate arguments
       @object_type_name = scope.evaluate @object_type_expr
       @quantity = scope.evaluate @quantity_expr
@@ -115,9 +117,13 @@ module Plankton
 
       @location = scope.evaluate @loc_expr
 
+      puts "DONE WITH PRODUCE PRE_RENDER WITH params=#{params}"
+
     end
 
     def bt_execute scope, params
+
+      puts "EXECUTING PRODUCE WITH params=#{params}"
 
       # evaluate the expressions to get the item produced when the page was first rendered
       pre_render scope, params
@@ -171,6 +177,8 @@ module Plankton
                    release: release_data 
                   }.to_json
       log.save
+
+      puts "FINISHED PRODUCE WITH params=#{params}"
 
     end
 

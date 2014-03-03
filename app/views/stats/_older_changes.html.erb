@@ -9,6 +9,30 @@
 
   <div id='details' style='display: none'>
 
+    <h4>Feb. 19</h4>
+    <ul class='list'> 
+      <li>The new input method can be used to read in a json data file.</li>
+      <li>You can now define your own functions. See the
+      documentation for details and examples.</li>
+      <li>New looping construction, "foreach ... in ... end", allows you
+      to loop through arrays without bothersome while loop syntax.</li>
+      <li>To include another file without arguments, use <pre>require 'file.pl'</pre>which is shorthand for <pre>include 'file.pl' end</pre></li>
+      <li>Produce takes an optional parameter, silently, which allows
+      you to produce without displaying anything to the user.</li>
+      <li>New built in function info(i) that takes an item associated
+      with a sample and returns its information. For example, if i is
+      a Transformed E. coli Strain, then info(i)[:field2] would be
+      the name of the plasmid it contains (since field 2 is where
+      that is kept with samples of this type in our inventory).</li>
+      <li>When editing and saving changes to samples, the user is not changed.</li>
+      <li>Fixed a bug in create new user page.</li>
+      <li>Descriptions are shown in lists of samples.</li>
+      <li>Fixed a bug where items from a take with quantity more than
+      one were incorrectly returned.</li>
+      <li>Protocol start/stop logs now record the location of the workstation.</li>
+    </ul>
+
+
     <h4>Jan. 31</h4>
     <ul class='list'> 
       <li>New function. For an array x, unique(x) returns an array
