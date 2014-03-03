@@ -28,8 +28,6 @@ module Plankton
 
     def pre_render scope, params
 
-      puts "STARTING PRODUCE PRE_RENDER WITH params=#{params}"
-
       # Evaluate arguments
       @object_type_name = scope.evaluate @object_type_expr
       @quantity = scope.evaluate @quantity_expr
@@ -91,14 +89,11 @@ module Plankton
       # If pre-render has already been called, just find the item
       if params[:new_item_id] 
 
-        puts "IN PRODUCE PRE_RENDER: FINDING ITEM"
         @item = Item.find(params[:new_item_id])
         params.delete :new_item_id
 
       # Otherwise make a new item
       else
-
-        puts "IN PRODUCE PRE_RENDER: CREATING NEW ITEM"
 
         loc = params['location'] ? params['location'] : @object_type.location_wizard( { project: @sample ? @sample.project : 'unknown' } )
 
@@ -117,13 +112,9 @@ module Plankton
 
       @location = scope.evaluate @loc_expr
 
-      puts "DONE WITH PRODUCE PRE_RENDER WITH params=#{params}"
-
     end
 
     def bt_execute scope, params
-
-      puts "EXECUTING PRODUCE WITH params=#{params}"
 
       # evaluate the expressions to get the item produced when the page was first rendered
       pre_render scope, params
@@ -177,8 +168,6 @@ module Plankton
                    release: release_data 
                   }.to_json
       log.save
-
-      puts "FINISHED PRODUCE WITH params=#{params}"
 
     end
 
