@@ -42,6 +42,26 @@ module Lang
       @stack.first[symbol] = value
     end
 
+    def set_complex lhs, rhs, new ################################################################################
+
+      temp_lhs = lhs.gsub /%{([a-zA-Z][a-zA-Z0-9]*)}/, '\1'
+      temp_parser = Plankton::Parser.new( "n/a", temp_lhs )
+      parts = temp_parser.get_lhs_parts
+      puts "Setting #{lhs} = #{rhs} with parts = #{parts} and scope = #{inspect}"
+
+      # get the current value of the variable
+      v = get(parts[:var])
+      expr = "v#{parts[:accessor]} = #{rhs}" % symbol_subs
+      eval(expr)
+
+      if new
+        set_new( parts[:var].to_sym, v )
+      else
+        set( parts[:var].to_sym, v )
+      end
+
+    end # set_complex #############################################################################################
+
     def push 
       @stack.push( {} )
     end

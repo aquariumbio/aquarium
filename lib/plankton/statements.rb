@@ -78,7 +78,7 @@ module Plankton
             return
 
           when 'local'
-            assign
+            basic_statement
 
           else
             basic_statement

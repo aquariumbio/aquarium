@@ -180,7 +180,30 @@ module Lang
 
        return e
 
-     end
+     end # expr
+
+     def get_lhs_parts ####################################################################################
+
+       begin
+
+         v = @tok.eat_a_variable
+         f = ""
+
+         while @tok.current == '['
+           @tok.eat_a '['
+           f += '[' + index + ']'
+           @tok.eat_a ']'
+         end
+
+       rescue Exception => e
+
+         raise "Expression is not a proper left hand side for an assignment."
+
+       end       
+
+       return { var: v.to_sym, accessor: f }
+
+     end # is_lhs
 
   end
 

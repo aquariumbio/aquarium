@@ -7,6 +7,8 @@ module Plankton
 
     def initialize name, contents
 
+      puts "New Parser with contents = #{contents}"
+
       @tok = Lang::Tokenizer.new ( contents )
       @program = []
       @function_space = []
