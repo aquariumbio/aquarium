@@ -23,4 +23,11 @@ class Class
 
   end
 
+  def math_function(*names)
+    names.each do |name|
+      code = "def #{name} x; if x.class == Fixnum || x.class == Float; Math.#{name} x; else; " + 'raise "Attempted to apply #{name} to a #{x.class}."; end; end'
+      self.class_eval(code)
+    end
+  end
+
 end

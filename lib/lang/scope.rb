@@ -9,6 +9,7 @@ module Lang
         base: {}
       }.merge opts
       @stack = [o[:base]]
+      puts "New scope with sqrt(2) = #{sqrt(2)}"
     end
 
     def set_stack stack

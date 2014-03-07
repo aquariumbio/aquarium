@@ -20,6 +20,8 @@ module Plankton
 
     def bt_execute scope, params
 
+      puts "Assign #{@lhs} = #{@rhs} with scope.methods with sqrt(2) = #{scope.sqrt(2)}"
+
       scope.set_complex @lhs, @rhs, @new
 
     end

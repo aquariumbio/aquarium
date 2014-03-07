@@ -4,6 +4,24 @@ module Lang
 
      def initialize ###################################################################################
 
+      # Numerical functions
+      add_function :floor, 1
+      add_function :ceil, 1
+      add_function :sqrt, 1
+      add_function :log, 1
+      add_function :log2, 1
+      add_function :log10, 1
+      add_function :random, 1
+      add_function :min, 2
+      add_function :max, 2
+      add_function :cos, 1
+      add_function :sin, 1
+      add_function :tan, 1
+      add_function :acos, 1
+      add_function :asin, 1
+      add_function :atan, 1
+      add_function :atan2, 2
+
       # Array functions
       add_function :length, 1
       add_function :append, 2
