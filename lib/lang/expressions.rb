@@ -10,6 +10,12 @@ module Lang
       add_function :concat, 2
       add_function :unique, 1
 
+      # Hash functions
+      add_function :merge, 2
+      add_function :keys, 1
+      add_function :delete, 2
+      add_function :key, 2
+
       # String functions
       add_function :to_string, 1
       
@@ -98,6 +104,9 @@ module Lang
 
          when @tok.boolean 
            f = @tok.eat
+
+         when ':'
+           f = @tok.eat + @tok.eat_a_variable
 
          when @tok.variable
            if @tok.next == '('
@@ -197,7 +206,7 @@ module Lang
 
        rescue Exception => e
 
-         raise "Expression is not a proper left hand side for an assignment."
+         raise "Expression is not a proper left hand side for an assignment: " + e.to_s
 
        end       
 

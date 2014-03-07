@@ -65,7 +65,7 @@ module Plankton
       if @tok.current == '='
 
         # Check that lhs is proper. Throw away parts.
-        temp_lhs = lhs.gsub /%{([a-zA-Z][a-zA-Z0-9]*)}/, '\1'
+        temp_lhs = lhs.gsub /%{([a-zA-Z][a-zA-Z_0-9]*)}/, '\1'
         temp_parser = Plankton::Parser.new( "n/a", temp_lhs )
         temp_parser.get_lhs_parts
 
