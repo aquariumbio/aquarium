@@ -21,7 +21,9 @@ module Oyster
       add_function :minutes_elapsed, 2
     end
 
-    def parse
+    def parse args = {}
+      puts "Parsing with args = #{args}"
+      @metacol.set_args args
       statements
       @metacol
     end
@@ -56,7 +58,32 @@ module Oyster
 
       end
 
-    end
+    end # statements
+
+    def parse_arguments_only
+
+      while @tok.current != 'EOF'
+
+        while @tok.current != 'EOF' && @tok.current != 'argument' && @tok.current != 'place'
+          @tok.eat
+        end
+
+        if @tok.current == 'place'
+          while @tok.current != 'EOF'
+            @tok.eat
+          end
+        end
+
+        if @tok.current == 'argument'
+          arguments
+        end
+
+      end
+
+      @metacol.arguments
+
+    end # arguments_only
+
 
   end
 

@@ -20,13 +20,11 @@
     <th>Fields</th>
     <th>Quantity</th>
     <th></th>
-    <th></th>
-    <th></th>
   </tr>
 
 <% @sample_types.each do |sample_type| %>
   <tr>
-    <td><b><%= sample_type.name %></b></td>
+    <td><b><%= link_to sample_type.name, sample_type %></b></td>
     <td><%= sample_type.description %></td>
     <td>
       <% (1..8).each do |i| %>
@@ -40,10 +38,7 @@
     <% n = sample_type.samples.all.length
        s = pluralize n, sample_type.name %>
     <td><%= link_to s, samples_path( sample_type_id: sample_type.id )%></td>
-    <td><%= link_to 'Show', sample_type %></td>
     <td><%= link_to 'Edit', edit_sample_type_path(sample_type) %></td>
-    <td><%= link_to 'Destroy', sample_type, method: :delete, data: {
-    confirm: 'Are you sure you want to delete this sample type definition? All information about samples of this type will be broken as a result.' } %></td>
   </tr>
 <% end %>
 
@@ -51,7 +46,9 @@
 
 <br />
 
-<%= link_to 'New Sample type', new_sample_type_path, class: 'btn' %>
+<% if current_user && current_user.is_admin %>
+  <%= link_to 'New Sample type', new_sample_type_path, class: 'btn' %>
+<% end %>
 
 
 

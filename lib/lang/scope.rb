@@ -9,7 +9,6 @@ module Lang
         base: {}
       }.merge opts
       @stack = [o[:base]]
-      puts "New scope with sqrt(2) = #{sqrt(2)}"
     end
 
     def set_stack stack
@@ -48,7 +47,6 @@ module Lang
       temp_lhs = lhs.gsub /%{([a-zA-Z][a-zA-Z_0-9]*)}/, '\1'
       temp_parser = Plankton::Parser.new( "n/a", temp_lhs )
       parts = temp_parser.get_lhs_parts
-      puts "Setting #{lhs} = #{rhs} with parts = #{parts} and scope = #{inspect}"
 
       # get the current value of the variable
       v = get(parts[:var])

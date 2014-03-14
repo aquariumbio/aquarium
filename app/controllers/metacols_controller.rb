@@ -33,10 +33,20 @@ class MetacolsController < ApplicationController
   def show
 
     @mc = Metacol.find(params[:id])
-    parse @mc.sha, @mc.path
+
+    @blob = Blob.get @mc.sha, @mc.path
+    @sha = @mc.sha
+    @path = @mc.path
+    @content = @blob.xml
+    @errors = ""
+
+    begin
+      @metacol = Oyster::Parser.new(@content).parse(JSON.parse(@mc.state, :symbolize_names => true )[:stack].first)
+    rescue Exception => e
+      @errors = "ERROR: " + e
+    end
 
     if @errors==""
-      @metacol.set_state JSON.parse(@mc.state, :symbolize_names => true )
       @metacol.id = @mc.id
     end
 
@@ -47,16 +57,17 @@ class MetacolsController < ApplicationController
 
   end
 
-  def parse sha, path
+  def parse_args sha, path
 
     @blob = Blob.get sha, path
     @sha = sha
     @path = path
     @content = @blob.xml
+    @parse_errors = ""
     @errors = ""
 
     begin
-      @metacol = Oyster::Parser.new(@content).parse
+      @arguments = Oyster::Parser.new(@content).parse_arguments_only
     rescue Exception => e
       @errors = e
     end
@@ -65,7 +76,7 @@ class MetacolsController < ApplicationController
 
   def arguments
 
-    parse params[:sha], params[:path]
+    parse_args params[:sha], params[:path]
 
     respond_to do |format|
       format.html # arguments.html.erb
@@ -76,17 +87,25 @@ class MetacolsController < ApplicationController
 
   def launch
 
-    parse params[:sha], params[:path]
+    @info = JSON.parse(params[:info],:symbolize_names => true)
+    @blob = Blob.get params[:sha], params[:path]
+    @content = @blob.xml
 
-    info = JSON.parse(params[:info],:symbolize_names => true)
-    args = info[:args]
-    group = Group.find_by_name(info[:group])
+    group = Group.find_by_name(@info[:group])
     flash[:notice] = "Starting metacol for each member in group '#{group.name}'. Go to 'Protocols/Pending Jobs' to see jobs started by this metacol."
 
     group.memberships.each do |m|
 
       user = m.user
+      args = @info[:args]
       args[:aquarium_user] = user.login
+
+      begin
+        @metacol = Oyster::Parser.new(@content).parse args
+      rescue Exception => e
+        flash[:error] = "Could not start metacol due to parse error. #{@parse_errors}"
+        return redirect_to arguments_new_metacol_path(sha: @sha, path: @path) 
+      end
 
       # Save in db
       mc = Metacol.new
@@ -99,10 +118,10 @@ class MetacolsController < ApplicationController
       mc.save # save to get an id
 
       @metacol.id = mc.id
-   
+
       error = nil
       begin
-        @metacol.start args
+        @metacol.start
       rescue Exception => e
         error = e
       end
@@ -117,9 +136,9 @@ class MetacolsController < ApplicationController
 
       mc.save # save again for state info
 
-    end
+      redirect_to metacols_path( active: true )
 
-    redirect_to metacols_path( active: true )
+    end
 
   end
 

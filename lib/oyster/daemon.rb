@@ -22,7 +22,7 @@
         procs = Metacol.where("status = 'RUNNING'")
         l = procs.length # This line forces active record to query the db here, instead of at procs.each below
       rescue Exception => e
-        puts "#{Time.now}: Could not get current processes from Database Server: " + e.message.split('[')[0]
+        puts "#{Time.now}: Daemon could not get current processes from database server: " + e.message.split('[')[0]
         is_valid_query = false
       end
 
@@ -38,12 +38,13 @@
             blob = Blob.get process.sha, process.path
             content = blob.xml
             error = false
+            args = (JSON.parse process.state, :symbolize_names => true)[:stack].first
 
             begin
-              m = Oyster::Parser.new(content).parse
+              m = Oyster::Parser.new(content).parse args
             rescue Exception => e
               error = true
-              process.message = "#{Time.now}: Error while parsing #{process.path}: " + e.message.split('[')[0]
+              process.message = "#{Time.now}: Error in Daemon while parsing #{process.path}: " + e.message.split('[')[0]
               puts process.message
               process.status = "ERROR"
               process.save
@@ -59,7 +60,7 @@
               begin
                 m.update
               rescue Exception => e
-                process.message = "#{Time.now}: Error on update: " + e.message.split('[')[0]
+                process.message = "#{Time.now}: Error in Daemon on update: " + e.message.split('[')[0]
                 puts process.message
                 process.status = "ERROR"
                 process.save

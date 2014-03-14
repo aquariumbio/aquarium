@@ -1,7 +1,7 @@
 module Oyster
 
   class Argument # used for compatability with protocol arguments
-    attr_reader :name, :type, :description
+    attr_reader :name, :type, :description, :arguments
     def initialize n, t, d
       @name = n
       @type = t
@@ -48,12 +48,18 @@ module Oyster
       self
     end
 
-    def start args
+    def set_args args
 
       # Set argument values in scope
       args.each do |k,v|
         @scope.set k, v
       end
+
+      @scope.push
+
+    end
+
+    def start 
 
       # Start all marked places
       @places.each do |p|
@@ -188,7 +194,7 @@ module Oyster
 
       end
 
-      @scope = Scope.new
+      @scope = Lang::Scope.new
       @scope.set_stack s[:stack]
 
     end

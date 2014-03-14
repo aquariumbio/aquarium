@@ -2,6 +2,8 @@
 
 <h1>Start Metacol: <%= params[:path] %></h1>
 
+<p>Arguments: <%= @arguments %></p>
+
 <% if Rails.env == 'production' %>
   <center>
   <p><span class="alert alert-error">Note: You should only start a
@@ -10,12 +12,12 @@
   </center>
 <% end %>
 
-<% if @errors != "" %>
+<% if @errors != "" || @parse_errors != "" %>
 
   <h4>Error</h4>
 
   <div id='well'>
-    <p><%= @errors %></p>
+    <p><%= @parse_errors %><%= @errors %></p>
   </div>
 <pre><%= @content %></pre> 
 <% else %>
@@ -30,7 +32,7 @@
 
 <br />
 <div id='button-area'></div>
-  <%= render 'details' %>
+
 <% end %>
 
 
@@ -50,7 +52,7 @@
 
   // get arguments
   var args = [];
-  <% @metacol.arguments.each do |a| %>
+  <% @arguments.each do |a| %>
     args.push({
       name: '<%= a[:name] %>', 
       description: '<%= a[:description] %>',
