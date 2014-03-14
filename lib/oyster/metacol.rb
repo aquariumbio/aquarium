@@ -122,7 +122,7 @@ module Oyster
 
       (@wires.reject { |w| @places[w.dest[:place]] != p }).each do |w|
 
-        puts "Considering wire #{w} with dest #{@places[w.dest[:place]]} for place #{p}!"
+        # puts "Considering wire #{w} with dest #{@places[w.dest[:place]]} for place #{p}!"
 
         if @places[w.source[:place]].completed?
           r = @places[w.source[:place]].return_value
@@ -142,7 +142,7 @@ module Oyster
 
       end
 
-      puts "Arguments set to #{p.arg_expressions}"
+      # puts "Arguments set to #{p.arg_expressions}"
 
     end
 
