@@ -129,7 +129,7 @@ module Lang
     end
 
     def argtype 
-      /number|string|object|sample/ 
+      /number|string|object|sample|generic/ 
     end
 
     def variable

@@ -8,7 +8,7 @@ module Oyster
              @tok.eat_a ':'
       type = @tok.eat_a_argtype
       
-      unless type == 'number' || type == 'string' || type == 'sample' || type == 'object'
+      unless type == 'number' || type == 'string' || type == 'sample' || type == 'object' || type == 'generic'
         raise "Unknown type '#{type}' in argument"
       end
 
@@ -27,11 +27,11 @@ module Oyster
       end
 
       if @tok.current == 'array'
-        if type != 'objecttype'
+        if type != 'objecttype' && type != 'generic'
           @tok.eat
           type += '_array'
         else
-          raise "Cannot have 'objecttype arrays' as arguments."
+          raise "Cannot have 'objecttype arrays' or 'generic arrays' as arguments."
         end
       end
 

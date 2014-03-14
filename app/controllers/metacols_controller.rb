@@ -90,14 +90,33 @@ class MetacolsController < ApplicationController
     @info = JSON.parse(params[:info],:symbolize_names => true)
     @blob = Blob.get params[:sha], params[:path]
     @content = @blob.xml
+    @arguments = Oyster::Parser.new(@content).parse_arguments_only
 
     group = Group.find_by_name(@info[:group])
-    flash[:notice] = "Starting metacol for each member in group '#{group.name}'. Go to 'Protocols/Pending Jobs' to see jobs started by this metacol."
-
+    
     group.memberships.each do |m|
 
       user = m.user
-      args = @info[:args]
+      args = {}
+      @arguments.each do |a|
+        ident = a[:name].to_sym
+        val = @info[:args][ident]
+        if a[:type] == 'number' && val.to_i == val_to_f
+          args[indent] = val.to_i
+        elsif a[:type] == 'number' && val.to_i != val_to_f
+          args[indent] = val.to_f
+        elsif a[:type] == 'generic'
+          begin
+            args[ident] = JSON.parse(val,:symbolize_keys=>true)
+          rescue Exception => e
+            flash[:error] = "Could not parse json for argument #{a[:name]}: " + e.to_s
+            return redirect_to arguments_new_metacol_path(sha: params[:sha], path: params[:path]) 
+          end
+        else
+          val = @info[:args][ident]
+        end
+
+      end
       args[:aquarium_user] = user.login
 
       begin
@@ -136,9 +155,10 @@ class MetacolsController < ApplicationController
 
       mc.save # save again for state info
 
-      redirect_to metacols_path( active: true )
-
     end
+
+    flash[:notice] = "Starting metacol for each member in group '#{group.name}'. Go to 'Protocols/Pending Jobs' to see jobs started by this metacol."
+    redirect_to metacols_path( active: true )
 
   end
 

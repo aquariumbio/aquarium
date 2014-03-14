@@ -100,6 +100,10 @@ ArgumentUI.prototype.get_number = function(arg) {
     return parseFloat($('#arg-'+arg.name).val());
 }
 
+ArgumentUI.prototype.get_generic = function(arg) {
+    return $('#arg-'+arg.name).val();
+}
+
 ArgumentUI.prototype.get_string = function(arg) {
     return $('#arg-'+arg.name).val();
 }
@@ -121,6 +125,7 @@ ArgumentUI.prototype.get_number_array = function(arg) {
    });
 
    return na;
+
 }
 
 ArgumentUI.prototype.get_string_array = function(arg) {
@@ -156,6 +161,16 @@ ArgumentUI.prototype.label = function(arg) {
       .html( '<b>' + arg.name + "</b>: " 
             + arg.description 
             + ' ( ' + arg.type.replace('_', ' ') + ' ) '));
+
+}
+
+ArgumentUI.prototype.generic = function(arg) {
+
+    var x = $('<textarea style="width: 400px;"></textarea>');
+    if ( arg.current ) { 
+      x[0].value = arg.current;
+    }
+    return x;
 
 }
 

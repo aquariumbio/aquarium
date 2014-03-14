@@ -144,40 +144,6 @@ class InterpreterController < ApplicationController
 
   end
 
-  def resubmit
-
-    @info = JSON.parse(params[:info],:symbolize_names => true)
-
-    @job = Job.find(params[:job])
-    @sha = @job.sha
-    @path = @job.path
-    @user = current_user
-
-    parse_args_only
-
-    scope = Lang::Scope.new {}
-
-    # push arguments
-    @protocol.args.each do |a|
-      val = @info[:args][a.name.to_sym]
-      if a.type == 'number' && val.to_i == val.to_f
-        scope.set a.name.to_sym, val.to_i
-      elsif a.type == 'number' && val.to_i != val.to_f
-        scope.set a.name.to_sym, val.to_f
-      else
-        scope.set a.name.to_sym, val
-      end
-    end
-
-    # push new scope so top level variables are not in same scope as arguments
-    scope.push
-    @job.state = { stack: scope.stack }.to_json
-    @job.save
-
-    redirect_to jobs_url
-
-  end
-
   def submit
 
     # Submits the job
@@ -203,6 +169,17 @@ class InterpreterController < ApplicationController
         scope.set a.name.to_sym, val.to_i
       elsif a.type == 'number' && val.to_i != val.to_f
         scope.set a.name.to_sym, val.to_f
+      elsif a.type == 'generic'
+        begin
+          if val.class == String # arg was entered in by user
+            scope.set a.name.to_sym, JSON.parse(val,:symbolize_names => true)
+          else # arg was obtained from previous job's args
+            scope.set a.name.to_sym, val.symbolize_keys
+          end
+        rescue Exception => e
+          flash[:error] = "Error parsing json for generic argument #{a.name}: " + e.to_s
+          return redirect_to interpreter_arguments_path(sha: @sha, path: @path) 
+        end
       else
         scope.set a.name.to_sym, val
       end

@@ -22,7 +22,6 @@ module Oyster
     end
 
     def parse args = {}
-      puts "Parsing with args = #{args}"
       @metacol.set_args args
       statements
       @metacol
