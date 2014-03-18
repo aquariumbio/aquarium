@@ -101,10 +101,10 @@ class MetacolsController < ApplicationController
       @arguments.each do |a|
         ident = a[:name].to_sym
         val = @info[:args][ident]
-        if a[:type] == 'number' && val.to_i == val_to_f
-          args[indent] = val.to_i
-        elsif a[:type] == 'number' && val.to_i != val_to_f
-          args[indent] = val.to_f
+        if a[:type] == 'number' && val.to_i == val.to_f
+          args[ident] = val.to_i
+        elsif a[:type] == 'number' && val.to_i != val.to_f
+          args[ident] = val.to_f
         elsif a[:type] == 'generic'
           begin
             args[ident] = JSON.parse(val,:symbolize_keys=>true)
