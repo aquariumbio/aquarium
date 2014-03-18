@@ -62,6 +62,7 @@ module Oyster
     def start 
 
       # Start all marked places
+      puts "Starting metacol with scope = #{scope.inspect}"
       @places.each do |p|
         if p.marking > 0
           p.start @who, @scope, @id

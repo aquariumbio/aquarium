@@ -92,15 +92,22 @@ class MetacolsController < ApplicationController
     @content = @blob.xml
     @arguments = Oyster::Parser.new(@content).parse_arguments_only
 
+    logger.info "arguments from parse_arguments_only = #{@arguments}"
+
     group = Group.find_by_name(@info[:group])
     
     group.memberships.each do |m|
 
       user = m.user
       args = {}
+
       @arguments.each do |a|
+        
         ident = a[:name].to_sym
         val = @info[:args][ident]
+
+        logger.info "Processing arg = #{ident}, #{val}"
+
         if a[:type] == 'number' && val.to_i == val.to_f
           args[ident] = val.to_i
         elsif a[:type] == 'number' && val.to_i != val.to_f
@@ -113,10 +120,11 @@ class MetacolsController < ApplicationController
             return redirect_to arguments_new_metacol_path(sha: params[:sha], path: params[:path]) 
           end
         else
-          val = @info[:args][ident]
+          args[ident] = val
         end
 
       end
+
       args[:aquarium_user] = user.login
 
       begin
