@@ -103,6 +103,11 @@ class UsersController < ApplicationController
         g.destroy # should destroy memberships too
       end
 
+      # Delete current memberships just in case there are some left
+      Membership.all.each do |m|
+        m.destroy 
+      end
+
       # Copy users
       ProductionUser.switch_connection_to(:production_server)
 
@@ -126,7 +131,12 @@ class UsersController < ApplicationController
       ProductionMembership.all.each do |m|
         new_mem = Membership.new(m.attributes.except("created_at","updated_at"))
         new_mem.id = m.id
-        new_mem.save
+        begin
+          new_mem.save
+        rescue Exception => e
+          logger.info "ERROR: Could not insert #{new_mem.inspect}"
+          flash[:error] = "ERROR: Could not insert #{new_mem.inspect}"
+        end
       end
 
       redirect_to production_interface_path, notice: "#{User.all.length} users and #{Group.all.length} groups copied."
