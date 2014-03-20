@@ -46,6 +46,8 @@ class MetacolsController < ApplicationController
       @errors = "ERROR: " + e
     end
 
+    @metacol.set_state( JSON.parse @mc.state, :symbolize_names => true )
+
     if @errors==""
       @metacol.id = @mc.id
     end

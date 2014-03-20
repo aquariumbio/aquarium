@@ -51,6 +51,8 @@
         <% end %>
       </p> 
 
+      <% logger.info "PLACE JOBS: #{p.jobs.inspect}" %>
+
       <% pending = @mc.jobs.reject { |j| j.pc == Job.COMPLETED || (!p.jobs.include? j.id) } %>
       <% completed = @mc.jobs.reject { |j| j.pc != Job.COMPLETED || (!p.jobs.include? j.id) } %>
 
