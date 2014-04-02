@@ -1,122 +1,46 @@
+<% @instruction.evaluation.each do |statement| %>
 
-<% if @instruction.image != "" %>
-  <div class='row-fluid'>
-    <div class='span5'>
-      <img src='<%= @instruction.image %>'></img>
-    </div>
-    <div class='span7'>
-  <script>console.log('<%= @instruction.image %>');</script>
-<% end %>
-
-<h1>
-  <%= @instruction.description %>
-</h1>
-
-<% getdata_num = 0
-   getdata_vars = []
-   check_num = 0 %>
-
-<% @instruction.parts.each do |part| %>
- 
-  <% part.each do |key,val| %>
-
-    <% if key == :note %>
-
-      <p>
-	<%= val.gsub(
-	   /\\t/, '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;').gsub(
-	   /\\n/, '<br \>').html_safe %>
-      </p>
-
-    <% elsif key == :bullet %>
-
-      <ul class='list'><li><%= val %></li></ul>
-
-    <% elsif key == :check %>
-
-      <p><input type='checkbox' 
-                id='check_<%= check_num %>' 
-                onchange='validate_input()'></input>
-         &nbsp;<%= val %>
-      </p>
-
-      <% check_num += 1 %>
-
-    <% elsif key == :warning %>
-
-      <div class="alert warning"><%= val %></div>
-
-    <% elsif key == :select %>
-
-      <%= label_tag(val[:var], val[:description] )%>
-      <select id='<%= val[:var] %>'>
-	<% val[:choices].each do |c| %>
-	  <option><%= c %></option>
-	<% end %>
-      </select>
-
-    <% elsif key == :timer %>
-
-      <div id='timer'></div>
-      <script>
-        T = new StepTimer(<%= val %>);
-        T.start();
-      </script>
-
-    <% elsif key == :getdata %>
-
-      <%= label_tag(val[:var], val[:description] + ' (' + val[:type] + ')' )%>
-      <%= text_field_tag( val[:var], '', onchange: 'validate_input()' ) %>
-      <% getdata_vars.push val[:var] %>
-      <% getdata_num += 1 %>
-
-    <% end %>
-
-  <% end %>
+  <%= render partial: 'step_' + statement[:type].to_s, locals: { statement: statement } %>
 
 <% end %>
-
-<!-- CLOSE IMAGE TAGS IF PRESENT ----------------------------------------->
-
-<% if @instruction.image != "" %>
-    </div></div>
-<% end %>
-
-
-<!-- NEXT BUTTON ---------------------------------------------------------->
 
 <script>
 
   function validate_input() {
 
-    ok = true;
-    <% (0..check_num-1).each do |c| %>
-      ok = ok && document.getElementById('check_<%= c %>').checked;
-    <% end %>
-    <% getdata_vars.each do |v| %>
-      ok = ok && (document.getElementById('<%= v %>').value != '');
-    <% end %>
-    document.getElementById('advance-button').disabled = !ok;
+    var all_checked = true,
+        all_filled = true;
+
+    for ( i=0; i<$('.checkbox').length; i++ ) {
+      all_checked = all_checked && $('.checkbox')[i].checked;
+    }
+
+    for ( i=0; i<$('.getdata').length; i++ ) {
+      all_filled = all_filled && $('.getdata')[i].value != '';
+    }
+
+    document.getElementById('advance-button').disabled = !all_checked || !all_filled;
 
   }
 
   window.onload = function() {
 
-    <% if check_num == 0 && getdata_num == 0 %>
-      document.getElementById('advance-button').disabled = false;
-    <% else %>
-      document.getElementById('advance-button').disabled = true;
-    <% end %>
+    document.getElementById('advance-button').disabled = ($('.checkbox').length != 0 || $('getdata').length != 0);
 
-    q = "";
+
     document.getElementById('advance-button').addEventListener('click', function() {
-      <% @instruction.getdatas.each do |g| %>
-        q += '&<%= g[:var] %>=' + document.getElementById('<%= g[:var] %>').value;
-      <% end %>
-      <% @instruction.selects.each do |s| %>
-        q += '&<%=s[:var] %>=' + document.getElementById('<%= s[:var] %>').value;
-      <% end %>
+      var q = "";
+
+      for ( i=0; i<$('.getdata').length; i++ ) {
+        q += '&' + $('.getdata')[i].id + '=' + $('.getdata')[i].value;
+      }
+
+      for ( i=0; i<$('.select').length; i++ ) {
+        q += '&' + $('.select')[i].id + '=' + $('.select')[i].value;
+      }
+
       window.location = advance_url() + q;
+
     } );
 
   }

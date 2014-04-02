@@ -2,117 +2,105 @@ module Plankton
 
   class StepInstruction < Instruction
 
-    attr_reader :parts
+    attr_reader :statements, :evaluation
 
-    def initialize part_exprs, options = {}
+    def initialize stmts, options = {}
 
-      @part_exprs = part_exprs
+      @statements = stmts
+      @evaluation = []
+
       @renderable = true
       super 'step', options
 
-      # TERMINAL
-      @parts = part_exprs
-
     end
 
-    # RAILS ################################################################################
+    def evaluate_input_statements scope, params, s
 
-    def description 
-      str = ""
-      @parts.each do |a|
-        str = a[:description] if a.has_key?(:description)
+      e = { type: :input, parts: [] }
+
+      s[:parts].each do |p|
+
+        q = { flavor: p[:flavor], var: p[:var], type: p[:type] }
+
+        description = scope.evaluate(p[:description])
+        if description.class != String
+          description = description.to_s
+        end
+        q[:description] = description
+
+        if p[:flavor] == :select
+          q[:choices] = scope.evaluate(p[:choices])
+        end
+
+        e[:parts].push q
+
       end
-      str
+
+      e
+
     end
 
-    def note
-      str = ""
-      @parts.each do |a|
-        str = a[:note] if a.has_key?(:note)
+    def evaluate_foreach scope, params, s
+
+      e = { type: s[:type], statements: [] }
+      list = scope.evaluate( s[:list] )
+
+      if list.class != Array
+        raise "#{e[:list]} is not an array"
       end
-      str
-    end
 
-    def image
-      str = ""
-      @parts.each do |a|
-        if a.has_key?(:image)
-          str = "http://bioturk.ee.washington.edu:3012/bioturk/image?name=#{a[:image]}"
+      scope.push
+
+      list.each do |el|
+        scope.set( s[:iterator], el )
+        s[:statements].each do |t|
+          e[:statements].push( evaluate_statement scope, params, t )
         end
       end
-      str
+
+      scope.pop
+
+      e
+
     end
 
-    def timer
-      spec = { hours: 0, minutes: 0, seconds: 0 }
-      @parts.each do |a|
-        if a.has_key?(:timer)
-          spec.merge! a[:timer]
-        end
-      end
-      spec
-    end
+    def evaluate_statement scope, params, s
 
-    def warnings
-      w = []
-      @parts.each do |a|
-        w.push a[:warning] if a.has_key?(:warning)
-      end
-      w
-    end
+      e = { type: s[:type] }
 
-    def getdatas
-      g = []
-      @parts.each do |a|
-        g.push a[:getdata] if a.has_key?(:getdata)
-      end
-      g
-    end
+      case s[:type]
 
-    def selects
-      g = []
-      @parts.each do |a|
-        g.push a[:select] if a.has_key?(:select)
+        when :description, :note, :warning, :bullet, :check, :image, :timer
+
+          value = scope.evaluate( s[:expr] )
+          if value.class != String
+            value = value.to_s
+          end
+          e[:value] = value
+
+        when :input
+          e = evaluate_input_statements scope, params, s
+
+        when :foreach
+          e = evaluate_foreach scope, params, s
+
       end
-      g
+
+      e
+
     end
 
     def pre_render scope, params
 
-      @parts = []
-
-      @part_exprs.each do |a|
-
-        a.each do |k,v|
-
-          begin
-
-            if k == :getdata
-              @parts.push( getdata: { 
-                 var: v[:var], 
-                 type: v[:type], 
-                 description: scope.substitute( v[:description] ) } )
-
-            elsif k == :select
-              choice_evals = scope.evaluate v[:choices]
-              @parts.push( select: { 
-                 var: v[:var], 
-                 type: v[:type],
-                 description: scope.substitute( v[:description] ), 
-                 choices: choice_evals } )
-
-            else
-              @parts.push( k => scope.substitute( v ) )
-
-            end
-
-          rescue Exception => e
-            raise "In step: " + e.to_s
-          end
-
-        end
-
+      @statements.each do |s|
+        @evaluation.push( evaluate_statement scope, params, s )
       end
+
+    end
+
+    def process_inputs e
+
+
 
     end
 
@@ -120,43 +108,43 @@ module Plankton
 
       log_data = {}
 
-      getdatas.each do |g|
-        sym = g[:var].to_sym
-        if g[:type] == 'number' && params[g[:var]].to_i == params[g[:var]].to_f
-          scope.set sym, params[g[:var]].to_i
-        elsif g[:type] == 'number'
-          scope.set sym, params[g[:var]].to_f
-        else
-          scope.set sym, params[g[:var]]
-        end
-        log_data[sym] = scope.get sym
-      end
+      pre_render scope, params
 
-      selects.each do |s|
-        sym = s[:var].to_sym
-        if s[:type] == 'number' && params[s[:var]].to_i == params[s[:var]].to_f
-          scope.set sym, params[s[:var]].to_i
-        elsif s[:type] == 'number'
-          scope.set sym, params[s[:var]].to_f
-        else
-          scope.set sym, params[s[:var]]
+      (@evaluation.select { |s| s[:type] == :input }).each do |input|
+        input[:parts].each do |g|
+
+          sym = g[:var].to_sym
+
+          if g[:type] == 'number' && params[g[:var]].to_i == params[g[:var]].to_f
+            scope.set sym, params[g[:var]].to_i
+          elsif g[:type] == 'number'
+            scope.set sym, params[g[:var]].to_f
+          else
+            scope.set sym, params[g[:var]]
+          end
+
+          log_data[sym] = scope.get sym
+
         end
-        log_data[sym] = scope.get sym
       end
 
       unless log_data.empty?
         log = Log.new
         log.job_id = params[:job]
         log.user_id = scope.stack.first[:user_id]
-        log.entry_type = 'GETDATA'
-        log.data = {pc: @pc, getdatas: log_data}.to_json
+        log.entry_type = 'INPUT'
+        log.data = {pc: @pc, inputs: log_data}.to_json
         log.save
       end
 
     end
 
+    def to_s
+      "step\n  #{@statements}"
+    end
+
     def html
-      "<b>step</b>: " + description
+      "<b>step</b>: #{@statements}"
     end
 
   end

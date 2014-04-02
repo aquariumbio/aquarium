@@ -13,7 +13,7 @@ module Plankton
     def optional_description
       if @tok.current == ','
         @tok.eat
-        return @tok.eat_a_string.remove_quotes
+        return expr
       else
         return ""
       end
@@ -30,9 +30,13 @@ module Plankton
 
     def getdata
 
-      getdatas = []
+      parts = []
 
-      @tok.eat_a 'getdata'
+      if @tok.current == 'getdata'
+        @tok.eat_a 'getdata'
+      else
+        @tok.eat_a 'input'
+      end
 
       while @tok.current != 'end'
 
@@ -44,72 +48,82 @@ module Plankton
         choices = optional_choices
  
         if !choices
-          getdatas.push( { getdata: { var: var, 
-                                      type: type, 
-                                      description: description } } )
+          parts.push( { flavor: :get,
+                        var: var, 
+                        type: type, 
+                        description: description } )
         else
-          getdatas.push ( { select: { var: var, 
-                                      type: type, 
-                                      description: description, 
-                                      choices: choices } } )
+          parts.push ( { flavor: :select,
+                         var: var, 
+                         type: type, 
+                         description: description, 
+                         choices: choices } )
         end
 
       end
 
       @tok.eat_a 'end'
-      return getdatas
 
-    end # getdata
+      { type: :input, parts: parts }
+
+    end
+
+    def step_foreach
+
+      fe = { type: :foreach, statements: [] }
+
+      @tok.eat_a 'foreach'
+      fe[:iterator] = @tok.eat_a_variable.to_sym
+      @tok.eat_a 'in'
+      fe[:list] = expr
+  
+      while @tok.current != 'end'
+        fe[:statements].push step_statement
+      end
+
+      fe
+
+    end
+
+    def step_statement
+
+      s = {}
+
+      case @tok.current
+
+        when 'description', 'note', 'warning', 'bullet', 'check', 'image', 'timer'
+          s[:type] = @tok.eat.to_sym
+          @tok.eat_a ':'
+          s[:expr] = expr # should check that this evaluates to a string in pre_render
+
+        when 'getdata', 'input'
+          s = getdata
+
+        when 'foreach'
+          s = step_foreach
+
+      end
+
+      return s
+
+    end
 
     def step
 
-      #puts "starting step"
-      
-      parts = []      
-      description = ''
-      note = ''
-      warnings = []
+      statements = []
 
       lines = {}
       lines[:startline] = @tok.line
       @tok.eat_a 'step'
 
       while @tok.current != 'end'
-
-        case @tok.current
-
-          when 'description', 'note', 'warning', 'bullet', 'check'
-            field = @tok.eat.to_sym
-            @tok.eat_a ':'
-            parts.push({ field => @tok.eat_a_string.remove_quotes})
-
-          when 'getdata'
-            parts.concat getdata
-
-          when 'image'
-            @tok.eat_a 'image'
-            @tok.eat_a ':'
-            parts.push( { image: @tok.eat_a_string.remove_quotes } )
-
-          when 'timer'
-            @tok.eat_a 'timer'
-            @tok.eat_a ':'
-            parts.push( { timer: expr } )
-
-          else
-            raise "Expected 'description', 'note', 'bullet', 'check', 'warning', 'getdata', 'timer'"
-                + "or 'image' at '#{@tok.current}'."
-         
-        end
-
+        statements.push step_statement
       end
 
       lines[:endline] = @tok.line
       @tok.eat_a 'end'
 
-      push StepInstruction.new parts, lines
-
-      #puts "done with step"
+      push StepInstruction.new statements, lines
 
     end
 

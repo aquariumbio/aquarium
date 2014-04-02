@@ -111,6 +111,7 @@ module Lang
       rescue Exception => e
         raise "Unknown symbol in expression. " + e.message.sub('key','%')
       end
+      puts "Evaluated #{str} and got #{expr}"
       begin
         result = eval(expr)
       rescue Exception => e

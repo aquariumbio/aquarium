@@ -113,12 +113,32 @@ module Lang
 
      end
 
+     def separate_string s
+       # Note: This very poorly written method separates a string that may have
+       # things like %{x} in it into an expression where the %{x} is by itself. This
+       # makes it easier to evaluate later.
+       # For example, it turns "The answer is %{x}" into "The answer is " + %{x}.to_s
+       t = (s.gsub /(%\{[^\}]*\})/, '__PLUS__\1__PLUS__').split('__PLUS__')
+       r = "\"\""
+       t.each do |p|
+         r = r + "+"
+         if /(%\{[^\}]*\})/.match p
+           r = r + p + ".to_s"
+         else
+           r = r + "\"" + p + "\""
+         end
+       end
+       r
+     end
+
      def primary ######################################################################################
 
        case @tok.current
 
          when @tok.string
-           f = @tok.eat
+           str = @tok.eat.remove_quotes
+           f = separate_string str
+         puts "separate_string #{str} => #{f}"
 
          when @tok.boolean 
            f = @tok.eat
