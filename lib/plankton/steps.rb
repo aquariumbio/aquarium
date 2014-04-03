@@ -91,10 +91,10 @@ module Plankton
 
       case @tok.current
 
-        when 'description', 'note', 'warning', 'bullet', 'check', 'image', 'timer'
+        when 'description', 'note', 'warning', 'bullet', 'check', 'image', 'timer', 'table'
           s[:type] = @tok.eat.to_sym
           @tok.eat_a ':'
-          s[:expr] = expr # should check that this evaluates to a string in pre_render
+          s[:expr] = expr # should check that this evaluates to the right thing in pre_render
 
         when 'getdata', 'input'
           s = getdata

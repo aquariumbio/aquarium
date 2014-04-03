@@ -1,0 +1,15 @@
+<table class='table table-bordered steptable'>
+  <% statement[:value].each do |row| %>
+    <tr>
+      <% row.each do |entry| %>
+        <% if entry.class == String %>
+           <td class='steptablestring'>
+        <% else %>
+           <td class='steptablenumber'>
+        <% end %>
+        <%= entry %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>

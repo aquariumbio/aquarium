@@ -138,7 +138,6 @@ module Lang
          when @tok.string
            str = @tok.eat.remove_quotes
            f = separate_string str
-         puts "separate_string #{str} => #{f}"
 
          when @tok.boolean 
            f = @tok.eat

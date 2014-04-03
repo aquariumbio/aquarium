@@ -2,12 +2,13 @@ module Plankton
 
   class StepInstruction < Instruction
 
-    attr_reader :statements, :evaluation
+    attr_reader :statements, :evaluation, :has_image
 
     def initialize stmts, options = {}
 
       @statements = stmts
       @evaluation = []
+      @has_image = false
 
       @renderable = true
       super 'step', options
@@ -70,12 +71,45 @@ module Plankton
 
       case s[:type]
 
-        when :description, :note, :warning, :bullet, :check, :image, :timer
+        when :description, :note, :warning, :bullet, :check
 
           value = scope.evaluate( s[:expr] )
           if value.class != String
             value = value.to_s
           end
+          e[:value] = value
+
+        when :image
+          @has_image = true
+          name = scope.evaluate(s[:expr])
+          value = "http://bioturk.ee.washington.edu:3012/bioturk/image?name=#{name}"
+          if value.class != String
+            value = value.to_s
+          end
+          e[:value] = value
+
+        when :timer
+
+          spec = { hours: 0, minutes: 0, seconds: 0 }
+          e[:value] = scope.evaluate( s[:expr] )
+
+        when :table
+
+          value = scope.evaluate( s[:expr] )
+
+          if value.class != Array
+            raise "Expression for table is not an array of arrays"
+          end
+
+          if value.length > 0
+            len = value[0].length
+            value.each do |row|
+              if row.length != len
+                raise "Expression for table is not an array of equal length arrays"
+              end
+            end
+          end
+
           e[:value] = value
 
         when :input
@@ -91,6 +125,8 @@ module Plankton
     end
 
     def pre_render scope, params
+
+      @evaluation = []
 
       @statements.each do |s|
         @evaluation.push( evaluate_statement scope, params, s )

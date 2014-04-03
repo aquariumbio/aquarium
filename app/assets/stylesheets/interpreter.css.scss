@@ -265,3 +265,20 @@ input::-webkit-inner-spin-button {
   width: 240px; 
   font-size: 40pt;
 }
+
+.steptable {
+  .steptablestring {
+    font-weight: bold;
+  }
+  .steptablenumber {
+    font-weight: normal;
+  }
+  tr:hover {
+    background-color: white;
+  }
+  td:hover {
+    background-color: lightyellow;
+  }
+  margin: 10px 0px 10px 50px;
+  width: 80% !important;
+}

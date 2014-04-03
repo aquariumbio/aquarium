@@ -1,0 +1,5 @@
+<div id='timer'></div>
+<script>
+  T = new StepTimer( <%= statement[:value].to_json.html_safe %> );
+  T.start();
+</script>

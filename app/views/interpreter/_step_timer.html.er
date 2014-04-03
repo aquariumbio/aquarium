@@ -1,0 +1,5 @@
+      <div id='timer'></div>
+      <script>
+        T = new StepTimer(<%= val %>);
+        T.start();
+      </script>

@@ -1,8 +1,22 @@
+<% if @instruction.has_image %>
+
+  <div class='row-fluid'>
+    <div class='span5' id='images'></div>
+    <div class='span7'>
+
+<% end %>
+
 <% @instruction.evaluation.each do |statement| %>
 
   <%= render partial: 'step_' + statement[:type].to_s, locals: { statement: statement } %>
 
 <% end %>
+
+<% if @instruction.has_image %>
+    </div></div>
+<% end %>
+
+<!-- <p><%= @instruction.evaluation %></p> -->
 
 <script>
 
@@ -29,6 +43,7 @@
 
 
     document.getElementById('advance-button').addEventListener('click', function() {
+
       var q = "";
 
       for ( i=0; i<$('.getdata').length; i++ ) {
