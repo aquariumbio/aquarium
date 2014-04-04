@@ -15,6 +15,6 @@
   <%= @task_prototype.prototype %>
 </p>
 
-
 <%= link_to 'Edit', edit_task_prototype_path(@task_prototype), class: 'btn' %> 
+<%= link_to 'Show All Tasks of this Type', tasks_path(task_prototype_id: @task_prototype.id), class: 'btn' %> 
 

@@ -9,22 +9,26 @@
 
 <table class='table'>
   <tr>
+    <th>Id</th>
     <th>Name</th>
     <th>Specification</th>
     <th>Status</th>
-    <th></th>
-    <th></th>
+    <th>Created</th>
+    <th>Updated</th>
     <th></th>
   </tr>
 
 <% @tasks.each do |task| %>
   <tr>
-    <td><%= task.name %></td>
+    <td><b><%= task.id %></b></td>
+    <td><%= link_to task.name, edit_task_path(task) %></td>
     <td><%= task.specification %></td>
     <td><%= task.status %></td>
-    <td><%= link_to 'Show', task %></td>
-    <td><%= link_to 'Edit', edit_task_path(task) %></td>
-    <td><%= link_to 'Destroy', task, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <td><%= time_ago_in_words(task.created_at) %> ago</td>
+    <td><%= time_ago_in_words(task.updated_at) %> ago</td>
+    <td><%= link_to task, method: :delete, data: { confirm: 'Are you sure?' } do %>
+        <i class='icon-remove'></i>
+      <% end %></td>
   </tr>
 <% end %>
 </table>
