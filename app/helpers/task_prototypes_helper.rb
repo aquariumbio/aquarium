@@ -1,0 +1,2 @@
+module TaskPrototypesHelper
+end

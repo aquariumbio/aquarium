@@ -1,5 +1,9 @@
 Bioturk::Application.routes.draw do
 
+  resources :tasks
+
+  resources :task_prototypes
+
   get "metacols/draw"
    match 'viewer',        to: 'metacols#viewer'
 

@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @task_prototype.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @task_prototype.description %>
+</p>
+
+<p>
+  <b>Prototype:</b>
+  <%= @task_prototype.prototype %>
+</p>
+
+
+<%= link_to 'Edit', edit_task_prototype_path(@task_prototype), class: 'btn' %> 
+

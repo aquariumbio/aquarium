@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @task.name %>
+</p>
+
+<p>
+  <b>Specification:</b>
+  <%= @task.specification %>
+</p>
+
+<p>
+  <b>Status:</b>
+  <%= @task.status %>
+</p>
+
+<p>
+  <b>Prototype:</b>
+  <%= @task.task_prototype.name %>
+</p>
+
+<%= link_to "All", tasks_path(task_prototype_id:
+    @task.task_prototype), class: 'btn' %>
