@@ -26,6 +26,8 @@ class TasksController < ApplicationController
   # GET /tasks/new.json
   def new
     @task = Task.new
+    @task.specification = TaskPrototype.find(params[:task_prototype_id].to_i).prototype
+    @task.task_prototype_id = params[:task_prototype_id].to_i
 
     respond_to do |format|
       format.html # new.html.erb

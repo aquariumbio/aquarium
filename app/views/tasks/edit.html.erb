@@ -3,3 +3,5 @@
 <%= render 'form' %>
 
 <%= link_to 'Cancel', tasks_path(task_prototype_id: @task.task_prototype.id), class: 'btn' %>
+
+<p>Prototype: <%= @task.task_prototype.prototype %></p>

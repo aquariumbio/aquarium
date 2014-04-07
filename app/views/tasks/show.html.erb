@@ -20,5 +20,9 @@
   <%= @task.task_prototype.name %>
 </p>
 
+<%= link_to "Edit", edit_task_path(task_prototype_id:
+    @task.task_prototype), class: 'btn' %>
+
 <%= link_to "All", tasks_path(task_prototype_id:
     @task.task_prototype), class: 'btn' %>
+
