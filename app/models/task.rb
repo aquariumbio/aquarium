@@ -26,45 +26,41 @@ class Task < ActiveRecord::Base
 
   def type_check p, s
 
-    logger.info "Type checking #{p}, #{s} with class = #{p.class}"
+    case p
 
-      case p
+      when String
 
-        when String
-          logger.info "Atomic"
-          result = (s.class == String)
-          errors.add(:constant, ": Wrong atomic type encountered") unless result 
+        result = (s.class == String)
+        errors.add(:constant, ": Wrong atomic type encountered") unless result 
 
-        when Fixnum, Float
-          logger.info "Atomic"
-          result = (s.class == Fixnum || s.class == Float)
-          errors.add(:constant, ": Wrong atomic type encountered") unless result 
+      when Fixnum, Float
 
-        when Hash
+        result = (s.class == Fixnum || s.class == Float)
+        errors.add(:constant, ": Wrong atomic type encountered") unless result 
 
-          logger.info "  Hash with keys #{p.keys}"
-          result = (s.class == Hash)
-          errors.add(:hash, ": Type mismatch") unless result 
+      when Hash
 
-          # check all requred key/values are present
-          if result
-            p.keys.each do |k|
-              result = result && s.has_key?(k) && type_check( p[k], s[k] )
-              errors.add(:missing_key_value, ": Specification is missing the key #{k}, or the value for that key has the wrong type") unless result 
-            end
+        result = (s.class == Hash)
+        errors.add(:hash, ": Type mismatch") unless result 
+
+        # check all requred key/values are present
+        if result
+          p.keys.each do |k|
+            result = result && s.has_key?(k) && type_check( p[k], s[k] )
+            errors.add(:missing_key_value, ": Specification is missing the key #{k}, or the value for that key has the wrong type") unless result 
           end
+        end
 
-          # check that no other keys are present
-          if result
-              s.keys.each do |k|
-              result = result && p.has_key?(k)
-              errors.add(:extra_key, ": Specification has the key #{k} but prototype does not") unless result 
-            end
+        # check that no other keys are present
+        if result
+            s.keys.each do |k|
+            result = result && p.has_key?(k)
+            errors.add(:extra_key, ": Specification has the key #{k} but prototype does not") unless result 
           end
+        end
 
         when Array
 
-          logger.info "  Array"
           result = (s.class == Array && s.length >= p.length )
           errors.add(:array, ": #{s} is not an array, or is not an array of length at last #{p.length}") unless result 
 
