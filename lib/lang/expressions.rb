@@ -43,6 +43,9 @@ module Lang
       # Sample functions
       add_function :info, 1
 
+      # Task functions
+      add_function :tasks, 2
+
      end
 
      def add_function name, num_args ##################################################################
