@@ -21,7 +21,7 @@
 <% @tasks.each do |task| %>
   <tr>
     <td><b><%= task.id %></b></td>
-    <td><%= link_to task.name, edit_task_path(task) %></td>
+    <td><%= link_to task.name, task %></td>
     <td><%= task.specification %></td>
     <td><%= task.status %></td>
     <td><%= time_ago_in_words(task.created_at) %> ago</td>
