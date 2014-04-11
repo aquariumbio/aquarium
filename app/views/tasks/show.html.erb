@@ -12,24 +12,32 @@
   <%= @task.status %>
 </p>
 
+<% jobs =  @task.touches.collect { |t| Job.find(t.job_id) } %>
 
+<% if jobs.length > 0 %>
 
-<div class='well'>
+  <div class='well'>
 
-  <h2>Associated jobs</h2>
+    <h2>Associated jobs</h2>
 
-  <%= render partial: 'jobs/job_list', locals: { 
-	      jobs: @task.touches.collect { |t| Job.find(t.job_id) },
-	      last_updated: true, 
-	      runnable: false, 
-	      editable: false
-	  } %>
+    <%= render partial: 'jobs/job_list', locals: { 
+		jobs: @task.touches.collect { |t| Job.find(t.job_id) },
+		last_updated: true, 
+		runnable: false, 
+		editable: false
+	    } %>
 
-</div>
+  </div>
 
-<div class='well'>
-  <%= render partial: "jobs/item_touches", locals: { touches: (@task.touches.collect { |s| Job.find(s.job_id).touches.select { |t| t.item_id != nil } }).flatten } %>
-</div>
+<% end %>
+
+<% item_touches = (@task.touches.collect { |s| Job.find(s.job_id).touches.select { |t| t.item_id != nil } }).flatten %>
+
+<% if item_touches.length > 0 %>
+  <div class='well'>
+    <%= render partial: "jobs/item_touches", locals: { touches: item_touches } %>
+  </div>
+<% end %>
 
 <%= link_to "Edit", edit_task_path(task_prototype_id:
     @task.task_prototype), class: 'btn' %>
