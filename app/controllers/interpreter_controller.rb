@@ -219,6 +219,8 @@ class InterpreterController < ApplicationController
       return
     end
 
+    $CURRENT_JOB_ID = @job.id
+
     state = JSON.parse(@job.state, {:symbolize_names => true} )
 
     # Get the protocol

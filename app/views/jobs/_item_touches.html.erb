@@ -1,0 +1,33 @@
+    <% if touches.length > 0 %>
+
+      <h3>Items Touched</h3>
+
+      <table class='table' style='width: 100%'>
+	<tr>
+	  <th>Id</th>
+	  <th>Location</th>
+	  <th>Type</th>
+	</tr>
+
+	<% touches.each do |t| %>
+	  <% if t.item %>
+	    <tr>
+	      <td><%= link_to t.item.id, t.item %></td>
+	      <td><%= t.item.location %></td>
+	      <% if t.item.sample_id %>
+		<td><%= link_to t.item.object_type.name, t.item.object_type %>
+		    containing 
+		    <%= link_to t.item.sample.sample_type.name, t.item.sample.sample_type %>:
+		    <%= link_to t.item.sample.name, t.item.sample %></td>
+	      <% else %>
+		<td><%= link_to t.item.object_type.name, t.item.object_type %></td>
+	      <% end %>
+	    </tr>
+	  <% else %>
+	    <tr><td><%= t.item_id %></td><td>Deleted item</td></tr>
+	  <% end %> 
+	<% end %>
+
+      </table>
+
+    <% end %>

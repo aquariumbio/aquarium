@@ -18,6 +18,37 @@ module Lang
 
     end
 
+    def get_task_status task
+
+      t = Task.find_by_id( task[:id] )
+
+      if t
+        t.status
+      else
+        "UNKNOWN TASK"
+      end
+
+    end
+
+    def set_task_status task, status
+
+      t = Task.find_by_id( task[:id] )
+
+      if t
+
+        t.status = status
+        t.save
+        puts "Current job = %{CURRENT_JOB_ID}"
+
+        touch = Touch.new
+        touch.job_id = $CURRENT_JOB_ID
+        touch.task_id = t.id
+        touch.save
+
+      end
+
+    end
+
   end
 
 end

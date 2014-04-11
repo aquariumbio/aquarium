@@ -67,7 +67,7 @@
        </td>
       <% else %>
          <td><%= link_to interpreter_edit_path(job:j.id) do %>
-           <i class='icon-edit'></i>
+           <% if (defined? editable) && editable %><i class='icon-edit'></i><% end %>
          <% end %> &nbsp;&nbsp;
           <% if j.pc == Job.NOT_STARTED %>
             <%= link_to interpreter_advance_path(job:j.id), data: { confirm: 'This job is scheduled for the future. Are you sure you want to start it now?' } do %>
@@ -81,7 +81,7 @@
          </td>
       <% end %>
       <td><%= link_to '/interpreter/cancel?job=' + j.id.to_s, data: { confirm: 'Are you sure?' } do %>
-        <i class='icon-remove'></i>
+        <% if (defined? editable) != nil && editable %><i class='icon-remove'></i><% end %>
       <% end %></td>
     </tr>
 

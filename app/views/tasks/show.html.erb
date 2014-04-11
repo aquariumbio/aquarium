@@ -1,9 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <b>Name:</b>
-  <%= @task.name %>
-</p>
+<h1><%= @task.task_prototype.name %>: <%= @task.name %></h1>
 
 <p>
   <b>Specification:</b>
@@ -15,10 +12,24 @@
   <%= @task.status %>
 </p>
 
-<p>
-  <b>Prototype:</b>
-  <%= @task.task_prototype.name %>
-</p>
+
+
+<div class='well'>
+
+  <h2>Associated jobs</h2>
+
+  <%= render partial: 'jobs/job_list', locals: { 
+	      jobs: @task.touches.collect { |t| Job.find(t.job_id) },
+	      last_updated: true, 
+	      runnable: false, 
+	      editable: false
+	  } %>
+
+</div>
+
+<div class='well'>
+  <%= render partial: "jobs/item_touches", locals: { touches: (@task.touches.collect { |s| Job.find(s.job_id).touches.select { |t| t.item_id != nil } }).flatten } %>
+</div>
 
 <%= link_to "Edit", edit_task_path(task_prototype_id:
     @task.task_prototype), class: 'btn' %>

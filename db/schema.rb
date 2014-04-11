@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140404204258) do
+ActiveRecord::Schema.define(:version => 20140408224245) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -204,6 +204,8 @@ ActiveRecord::Schema.define(:version => 20140404204258) do
     t.integer  "job_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "task_id"
+    t.integer  "metacol_id"
   end
 
   add_index "touches", ["item_id"], :name => "index_touches_on_item_id"

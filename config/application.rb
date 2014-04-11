@@ -14,6 +14,9 @@ if defined?(Bundler)
   # Bundler.require(:default, :assets, Rails.env)
 end
 
+# This variable holds the current job id, or is negative if there is no current job
+$CURRENT_JOB_ID = -1
+
 module Bioturk
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.

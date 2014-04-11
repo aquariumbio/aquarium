@@ -45,6 +45,8 @@ module Lang
 
       # Task functions
       add_function :tasks, 2
+      add_function :get_task_status, 1
+      add_function :set_task_status, 2
 
      end
 
