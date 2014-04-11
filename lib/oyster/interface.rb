@@ -26,7 +26,7 @@ module Oyster
     protocol.parse_arguments_only
 
     # Set up a new scope and push the arguments
-    scope = Scope.new {}
+    scope = Lang::Scope.new {}
 
     protocol.args.each do |a|
       val = h[:args][a.name.to_sym]

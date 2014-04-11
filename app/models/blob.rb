@@ -15,7 +15,11 @@ class Blob < ActiveRecord::Base
         b = self.new
         b.sha = sha
         b.path = path
-        b.xml = Base64.decode64(client.blob(Bioturk::Application.config.protocol_repo,sha).content);
+        begin
+          b.xml = Base64.decode64(client.blob(Bioturk::Application.config.protocol_repo,sha).content)
+        rescue Exception => e
+          raise "Could not retrieve content for path=#{path} and sha=#{sha}"
+        end
         b.save
 
       else

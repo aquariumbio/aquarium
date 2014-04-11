@@ -61,12 +61,22 @@ class MetacolsController < ApplicationController
 
   def parse_args sha, path
 
-    @blob = Blob.get sha, path
+    logger.info "parse_args. sha = #{sha} and path = #{path}"
+
     @sha = sha
     @path = path
-    @content = @blob.xml
     @parse_errors = ""
     @errors = ""
+
+    begin
+      @blob = Blob.get sha, path
+    rescue Exception => e
+      @errors = e.to_s
+    end
+
+    if @errors == ""
+      @content = @blob.xml
+    end
 
     begin
       @arguments = Oyster::Parser.new(@content).parse_arguments_only
@@ -132,8 +142,8 @@ class MetacolsController < ApplicationController
       begin
         @metacol = Oyster::Parser.new(@content).parse args
       rescue Exception => e
-        flash[:error] = "Could not start metacol due to parse error. #{@parse_errors}"
-        return redirect_to arguments_new_metacol_path(sha: @sha, path: @path) 
+        flash[:error] = "Could not start metacol due to parse error. #{e.to_s}"
+        return redirect_to arguments_new_metacol_path(sha: params[:sha], path: params[:path]) 
       end
 
       # Save in db

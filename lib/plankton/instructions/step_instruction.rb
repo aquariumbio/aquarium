@@ -136,8 +136,6 @@ module Plankton
 
     def process_inputs e
 
-
-
     end
 
     def bt_execute scope, params

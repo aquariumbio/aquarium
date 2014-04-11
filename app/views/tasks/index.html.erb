@@ -16,6 +16,7 @@
     <th>Created</th>
     <th>Updated</th>
     <th></th>
+    <th></th>
   </tr>
 
 <% @tasks.each do |task| %>
@@ -26,9 +27,12 @@
     <td><%= task.status %></td>
     <td><%= time_ago_in_words(task.created_at) %> ago</td>
     <td><%= time_ago_in_words(task.updated_at) %> ago</td>
+    <td><%= link_to edit_task_path(task,task_prototype_id: task.task_prototype) do %>
+          <i class='icon-edit'></i>
+        <% end %></td>
     <td><%= link_to task, method: :delete, data: { confirm: 'Are you sure?' } do %>
-        <i class='icon-remove'></i>
-      <% end %></td>
+          <i class='icon-remove'></i>
+        <% end %></td>
   </tr>
 <% end %>
 </table>

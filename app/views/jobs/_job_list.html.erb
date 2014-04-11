@@ -81,7 +81,7 @@
          </td>
       <% end %>
       <td><%= link_to '/interpreter/cancel?job=' + j.id.to_s, data: { confirm: 'Are you sure?' } do %>
-        <% if (defined? editable) != nil && editable %><i class='icon-remove'></i><% end %>
+        <i class='icon-remove'></i>
       <% end %></td>
     </tr>
 

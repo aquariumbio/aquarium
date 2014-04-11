@@ -73,12 +73,16 @@ module Plankton
       end
       @tok.eat_a ')'
 
+      if !@function_specs[fname.to_sym]
+        raise "Unknown function '#{fname.to_sym}'"
+      end
+
       if @function_specs[fname.to_sym][:arg_names].length != arg_exprs.length
         raise "Wrong number of arguments to #{fname} (#{arg_exprs.length} instead of #{@function_specs[fname.to_sym][:arg_names].length})"
       end
 
       fid = function_call_id
-      push FunctionCallInstruction.new fid, pc+1, @function_specs[fname.to_sym], arg_exprs, lines
+      push FunctionCallInstruction.new fid.to_sym, pc+1, @function_specs[fname.to_sym], arg_exprs, lines
       
       lines[:endline] = @tok.line
 
@@ -120,11 +124,11 @@ module Lang
 
       retvals = get :__RETVALS__
 
-      if !retvals[fid]
-        raise "Could not find return value for #{fid} with scope = #{inspect}"
+      if !retvals[fid.to_sym]
+        raise "Could not find return value for #{fid} with revals = #{retvals} and scope = #{inspect}"
       end
 
-      rval = retvals[fid].pop
+      rval = retvals[fid.to_sym].pop
 
       # puts "    Got #{rval}"
 

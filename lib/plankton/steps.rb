@@ -81,6 +81,8 @@ module Plankton
         fe[:statements].push step_statement
       end
 
+      @tok.eat_a 'end'
+
       fe
 
     end
@@ -101,6 +103,9 @@ module Plankton
 
         when 'foreach'
           s = step_foreach
+
+        else
+          raise "Unknown field '#{@tok.current}' in step"
 
       end
 

@@ -2,6 +2,8 @@ module Lang
 
   class Parser
 
+     attr_reader :functions
+ 
      def initialize ###################################################################################
 
       # Numerical functions

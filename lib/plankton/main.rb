@@ -8,6 +8,7 @@ begin
   p.parse
 rescue Exception => e
   puts e
+  puts e.backtrace
   puts p.get_line
   exit
 end
