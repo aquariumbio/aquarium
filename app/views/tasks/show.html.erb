@@ -1,16 +1,26 @@
 <p id="notice"><%= notice %></p>
 
+
 <h1><%= @task.task_prototype.name %>: <%= @task.name %></h1>
 
-<p>
-  <b>Specification:</b>
-  <%= @task.specification %>
-</p>
-
-<p>
+<h1>
   <b>Status:</b>
   <%= @task.status %>
-</p>
+</h1>
+
+<div id="spec" class='well json_spec'></div>
+
+<div class='task_buttons'>
+  <%= link_to "Edit", edit_task_path(task_prototype_id:
+    @task.task_prototype), class: 'btn btn-primary btn-small' %>
+
+  <%= link_to "Show All #{pluralize(2,@task.task_prototype.name)[2..-1]}", tasks_path(task_prototype_id:
+    @task.task_prototype), class: 'btn btn-small' %>
+</div>
+
+<script>
+  render_json($('#spec'),JSON.parse('<%= j @task.specification.html_safe.force_encoding("UTF-8") %>'));
+</script>
 
 <% jobs =  @task.touches.collect { |t| Job.find(t.job_id) } %>
 
@@ -21,7 +31,7 @@
     <h2>Associated jobs</h2>
 
     <%= render partial: 'jobs/job_list', locals: { 
-		jobs: @task.touches.collect { |t| Job.find(t.job_id) },
+		jobs: @task.touches.reverse.collect { |t| Job.find(t.job_id) },
 		last_updated: true, 
 		runnable: false, 
 		editable: false
@@ -39,9 +49,4 @@
   </div>
 <% end %>
 
-<%= link_to "Edit", edit_task_path(task_prototype_id:
-    @task.task_prototype), class: 'btn' %>
-
-<%= link_to "All", tasks_path(task_prototype_id:
-    @task.task_prototype), class: 'btn' %>
 

@@ -11,7 +11,6 @@
   <tr>
     <th>Id</th>
     <th>Name</th>
-    <th>Specification</th>
     <th>Status</th>
     <th>Created</th>
     <th>Updated</th>
@@ -23,7 +22,6 @@
   <tr>
     <td><b><%= task.id %></b></td>
     <td><%= link_to task.name, task %></td>
-    <td><%= task.specification %></td>
     <td><%= task.status %></td>
     <td><%= time_ago_in_words(task.created_at) %> ago</td>
     <td><%= time_ago_in_words(task.updated_at) %> ago</td>
