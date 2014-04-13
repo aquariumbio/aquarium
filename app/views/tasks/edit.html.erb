@@ -1,7 +1,17 @@
 <h1>Edit Task</h1>
 
-<%= render 'form' %>
+<div id="json_editor"></div>
+
+<script>
+  render_json_editor(
+    $('#json_editor'),
+    JSON.parse('<%= j @task.specification.html_safe.force_encoding("UTF-8") %>'),
+    JSON.parse('<%= j @task.task_prototype.prototype.html_safe.force_encoding("UTF-8") %>')
+  );
+</script>
+
+<br />
 
 <%= link_to 'Cancel', tasks_path(task_prototype_id: @task.task_prototype.id), class: 'btn' %>
 
-<p>Prototype: <%= @task.task_prototype.prototype %></p>
+

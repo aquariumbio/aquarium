@@ -6,15 +6,19 @@ function render_json(tag,obj) {
 
     } else if ( obj.constructor.name == "Array" ) {
 
-	var list = $( "<ul class='json_list'/>" );
+        if ( obj.length > 0 ) {
 
-        $.each(obj, function(i,v) {
-            var li = $("<li />");
-            render_json(li,v);
-            list.append(li);      
-        });
+	    var list = $( "<ul class='json_list'/>" );
 
-        $(tag).append(list);
+	    $.each(obj, function(i,v) {
+		var li = $("<li />");
+		render_json(li,v);
+		list.append(li);      
+	    });
+
+	    $(tag).append(list);
+
+	}
 
     } else {
 
@@ -30,5 +34,96 @@ function render_json(tag,obj) {
         $(tag).append(list);
 
     }
+
+}
+
+function render_json_editor(tag,obj,proto) {
+
+    if ( typeof obj == "string" ) {
+
+        $(tag).append("<textarea class='json_edit_string'>" + obj + "</textarea>");
+
+    } else if ( typeof obj == "number" ) {
+
+        $(tag).append("<input type='number' class='json_edit_number' value=" + obj + "></input>");
+
+    } else if ( obj.constructor.name == "Array" ) {
+
+         var list = $( "<ul class='json_editor_array'/>" );
+
+         $.each(obj, function(i,v) {
+	   var li = $("<li />");
+           render_json_editor(li,v,proto[proto.length-1]);
+	   list.append(li);      
+	 });
+
+	 $(tag).append(list);
+
+         var more = $('<button>+</button>');
+         var less = $('<button>-</button>');
+
+         $(tag).append(more,less);
+         more.addClass('btn btn-small add-json-btn');
+         more.click(function(e){
+             var li = $('<li />');
+             render_json_editor(li,proto[proto.length-1],proto[proto.length-1]);
+             list.append(li);
+         });
+
+         less.addClass('btn btn-small add-json-btn');
+         less.click(function(e){
+             list.children().last().remove();
+         });
+
+    } else {
+
+      	var list = $( "<ul class='json_editor_hash'/>" );
+
+        $.each(obj, function(k,v) {
+            var li = $("<li />");
+            li.append("<span class='json_key'>" + k + "</span>");
+            render_json_editor(li,v,proto[k]);
+            list.append(li);      
+        });
+
+        $(tag).append(list);
+
+    }
+
+}
+
+function json_editor_extract(tag) {
+
+    return editor_extract_aux(tag.children().first());
+
+}
+
+function editor_extract_aux(tag) {
+
+    var x;
+
+    if ( tag.attr('class') == 'json_edit_number' || tag.attr('class') == 'json_edit_string' ) {
+
+	x = tag.val();
+
+    } else if ( tag.attr('class') == 'json_editor_array' ) {
+
+        x = [];
+        tag.children().each(function(i,v){
+            x.push(editor_extract_aux($($(v).children().first())));
+        });
+
+    } else {
+
+        x = {};
+        tag.children().each(function(i,v){
+            var key = $(v).children().first();
+            var val = $(v).children().eq(1);
+            x[key.html()] = editor_extract_aux($(val));
+        });
+
+    }
+
+    return x;
 
 }

@@ -2,23 +2,24 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.json_list {
+.json_list, .json_editor_array {
   list-style-type: none;
-  border-left: 1pt solid #eee;
-  margin: 5px;
+  border-left: 2pt solid #9ce;
+  border-radius: 5px;
+  margin: 5px 0 5px 5px;
   li {
     margin-left: 10px;
   }
 }
 
-.json_hash {
+.json_hash, .json_editor_hash {
   list-style-type: none;
-  border-left: 1pt solid #eee;
-  margin: 5px;
+  border-left: 2pt solid #8d9;
+  border-radius: 5px 0 5px 5px;
+  margin: 15px 5px 5px 5px;
   li {
     margin-left: 10px;
   }
-
 }
 
 .json_key {
@@ -33,4 +34,25 @@
 
 .task_buttons {
   margin: 0 0 20px 0;
+}
+
+.json_edit_string {
+  height: 20pt;
+  width: 90%;
+}
+
+.json_edit_number {
+  height: 20pt;
+  width: 90%;
+}
+
+#json_editor {
+}
+
+.add-json-btn {
+  font-size: 9pt;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  margin: 5px;
 }
