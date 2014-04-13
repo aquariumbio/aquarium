@@ -1,5 +1,47 @@
-<h1>New task</h1>
+<h1>New <%= @task.task_prototype.name %></h1>
 
-<%= render 'form' %>
+<div id="task_info">
+    <label><b>Name</b></label>
+    <input id="task_name" type='text' value='<%= @task.name %>'></input>
+    <label><b>Status</b></label>
+    <input id="task_status" type='text' value='<%= @task.status %>'></input>
+</div>
 
+<div id="json_editor"></div>
 
+<br />
+
+<button id='save' class='btn btn-primary'>Save</button>
+
+<script>
+
+  render_json_editor(
+    $('#json_editor'),
+    JSON.parse('<%= j @task.specification.html_safe.force_encoding("UTF-8") %>'),
+    JSON.parse('<%= j @task.task_prototype.prototype.html_safe.force_encoding("UTF-8") %>')
+  );
+
+  $('#save').click(function(){
+    var name = $('#task_name').val(),
+        stat = $('#task_status').val(),
+      spec = JSON.stringify(json_editor_extract($('#json_editor')));
+ 
+    var AUTH_TOKEN = '<%= "#{form_authenticity_token}" %>';
+
+    $.ajax({
+        type: "POST",
+        url: "/tasks",
+        dataType: 'json',
+	data: JSON.stringify({task: {name: name, status: stat,
+        specification: spec, task_prototype_id: <%= @task.task_prototype.id %>}, authenticity_token: AUTH_TOKEN}),
+        contentType: 'application/json'
+    }).done(function(data){
+        console.log(data);
+	window.location = "/tasks?task_prototype_id=" + <%= @task.task_prototype.id %>;
+    });
+
+  });
+
+</script>
+
+<%= link_to 'Cancel', tasks_path(task_prototype_id: @task.task_prototype.id), class: 'btn' %>

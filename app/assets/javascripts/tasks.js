@@ -41,11 +41,13 @@ function render_json_editor(tag,obj,proto) {
 
     if ( typeof obj == "string" ) {
 
-        $(tag).append("<textarea class='json_edit_string'>" + obj + "</textarea>");
+        var i = $("<textarea class='json_edit_string'>" + obj + "</textarea>");
+        $(tag).append(i);
 
     } else if ( typeof obj == "number" ) {
 
-        $(tag).append("<input type='number' class='json_edit_number' value=" + obj + "></input>");
+        var i = $("<input type='number' class='json_edit_number' value=" + obj + "></input>");
+        $(tag).append(i);
 
     } else if ( obj.constructor.name == "Array" ) {
 
@@ -66,7 +68,11 @@ function render_json_editor(tag,obj,proto) {
          more.addClass('btn btn-small add-json-btn');
          more.click(function(e){
              var li = $('<li />');
-             render_json_editor(li,proto[proto.length-1],proto[proto.length-1]);
+             if ( proto.length > 0 ) {
+               render_json_editor(li,proto[proto.length-1],proto[proto.length-1]);
+             } else {
+		 render_json_editor(li,"","");
+             }
              list.append(li);
          });
 
@@ -83,7 +89,7 @@ function render_json_editor(tag,obj,proto) {
             var li = $("<li />");
             li.append("<span class='json_key'>" + k + "</span>");
             render_json_editor(li,v,proto[k]);
-            list.append(li);      
+            list.append(li);
         });
 
         $(tag).append(list);
@@ -100,9 +106,21 @@ function json_editor_extract(tag) {
 
 function editor_extract_aux(tag) {
 
+    console.log(tag);
+
     var x;
 
-    if ( tag.attr('class') == 'json_edit_number' || tag.attr('class') == 'json_edit_string' ) {
+    if ( tag.attr('class') == 'json_edit_number' ) {
+
+	var s = tag.val();
+
+        if ( parseInt(s) == parseFloat(s) ) {
+            x = parseInt(s);
+        } else {
+            x = parseFloat(s);
+	}
+
+    } else if ( tag.attr('class') == 'json_edit_string' ) {
 
 	x = tag.val();
 
@@ -123,6 +141,8 @@ function editor_extract_aux(tag) {
         });
 
     }
+
+    console.log(x);
 
     return x;
 

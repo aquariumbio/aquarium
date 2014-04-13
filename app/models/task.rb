@@ -27,6 +27,8 @@ class Task < ActiveRecord::Base
 
   def type_check p, s
 
+    logger.info "CHECKING #{p}, #{s}"
+
     case p
 
       when String
@@ -38,6 +40,7 @@ class Task < ActiveRecord::Base
 
         result = (s.class == Fixnum || s.class == Float)
         errors.add(:constant, ": Wrong atomic type encountered") unless result 
+        logger.info "NUMBER: #{p.class} vs #{s.class}"
 
       when Hash
 
