@@ -44,16 +44,11 @@ class TasksController < ApplicationController
   # POST /tasks.json
   def create
     @task = Task.new(params[:task])
-    logger.info("CREATING: #{@task.inspect}")
-
     respond_to do |format|
       if @task.save
         format.html { redirect_to  tasks_url(task_prototype_id: @task.task_prototype.id), notice: "Task #{@task.name} was successfully created." }
         format.json { render json: @task, status: :created, location: @task }
       else
-        logger.info("ERROR: #{@task.errors.inspect}")
-        logger.info("NAME: #{params[:task][:name].class}")
-        logger.info("SPEC: #{params[:task][:specification].class}")
         format.html { render action: "new" }
         format.json { render json: @task.errors, status: :unprocessable_entity }
       end
@@ -63,20 +58,12 @@ class TasksController < ApplicationController
   # PUT /tasks/1
   # PUT /tasks/1.json
   def update
-
     @task = Task.find(params[:id])
-    logger.info("TASK WAS: #{@task.attributes.to_s}");
-    logger.info("params are #{params.to_s}")
-
     respond_to do |format|
       if @task.update_attributes(params[:task])
-        logger.info("TASK IS NOW: #{@task.attributes.to_s}");
         format.html { redirect_to tasks_url(task_prototype_id: @task.task_prototype.id), notice: 'Task was successfully updated.' }
         format.json { head :no_content }
       else
-        logger.info("ERROR: #{@task.errors.inspect}")
-        logger.info("NAME: #{params[:task][:name].class}")
-        logger.info("SPEC: #{params[:task][:specification].class}")
         format.html { render action: "edit" }
         format.json { render json: @task.errors, status: :unprocessable_entity }
       end

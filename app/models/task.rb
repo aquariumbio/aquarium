@@ -15,7 +15,7 @@ class Task < ActiveRecord::Base
     begin
       spec = JSON.parse self.specification, symbolize_keys: true
     rescue Exception => e
-      errors.add(:json, ": Error parsing JSON in prototype. #{e.to_s}")
+      errors.add(:task_json, ": Error parsing JSON in prototype. #{e.to_s}")
       return
     end
 
@@ -27,31 +27,28 @@ class Task < ActiveRecord::Base
 
   def type_check p, s
 
-    logger.info "CHECKING #{p}, #{s}"
-
     case p
 
       when String
 
         result = (s.class == String)
-        errors.add(:constant, ": Wrong atomic type encountered") unless result 
+        errors.add(:task_constant, ": Wrong atomic type encountered") unless result 
 
       when Fixnum, Float
 
         result = (s.class == Fixnum || s.class == Float)
-        errors.add(:constant, ": Wrong atomic type encountered") unless result 
-        logger.info "NUMBER: #{p.class} vs #{s.class}"
+        errors.add(:task_constant, ": Wrong atomic type encountered") unless result 
 
       when Hash
 
         result = (s.class == Hash)
-        errors.add(:hash, ": Type mismatch") unless result 
+        errors.add(:task_hash, ": Type mismatch") unless result 
 
         # check all requred key/values are present
         if result
           p.keys.each do |k|
             result = result && s.has_key?(k) && type_check( p[k], s[k] )
-            errors.add(:missing_key_value, ": Specification is missing the key #{k}, or the value for that key has the wrong type") unless result 
+            errors.add(:task_missing_key_value, ": Specification is missing the key #{k}, or the value for that key has the wrong type") unless result 
           end
         end
 
@@ -59,31 +56,31 @@ class Task < ActiveRecord::Base
         if result
             s.keys.each do |k|
             result = result && p.has_key?(k)
-            errors.add(:extra_key, ": Specification has the key #{k} but prototype does not") unless result 
+            errors.add(:task_extra_key, ": Specification has the key #{k} but prototype does not") unless result 
           end
         end
 
         when Array
 
           result = (s.class == Array && s.length >= p.length )
-          errors.add(:array, ": #{s} is not an array, or is not an array of length at last #{p.length}") unless result 
+          errors.add(:task_array, ": #{s} is not an array, or is not an array of length at last #{p.length}") unless result 
 
           # check that elements in spec match those in prototype 
           (0..p.length-1).each do |i|
             result = result && type_check( p[i], s[i] )
-            errors.add(:array, ": Specification has mismatch at element #{i} of #{s}") unless result 
+            errors.add(:task_array, ": Specification has mismatch at element #{i} of #{s}") unless result 
           end          
 
           # check that extra elements in spec match last in prototype
           if result && p.length > 0 && s.length > p.length
             ( p.length-1 .. s.length-1 ).each do |i|
               result = result && type_check( p.last, s[i] )
-              errors.add(:array, ": Specification has mismatch at element #{i} of #{s}. Its type should match the type of the last element of p") unless result 
+              errors.add(:task_array, ": Specification has mismatch at element #{i} of #{s}. Its type should match the type of the last element of p") unless result 
             end
           end
 
         else
-          errors.add(:type_check, ": Unknown type in task prototype: #{p.class}")
+          errors.add(:task_type_check, ": Unknown type in task prototype: #{p.class}")
           result = false
 
       end
