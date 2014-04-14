@@ -31,20 +31,30 @@ module Lang
 
     end
 
-    def set_task_status task, status
+    def set_task_status a, status
 
-      t = Task.find_by_id( task[:id] )
+      if a.class != Array
+        tasks = [ a ]
+      else
+        tasks = a
+      end
+    
+      tasks.each do |task|
 
-      if t
+        t = Task.find_by_id( task[:id] )
 
-        t.status = status
-        t.save
-        puts "Current job = %{CURRENT_JOB_ID}"
+        if t
 
-        touch = Touch.new
-        touch.job_id = $CURRENT_JOB_ID
-        touch.task_id = t.id
-        touch.save
+          t.status = status
+          t.save
+          puts "Current job = %{CURRENT_JOB_ID}"
+
+          touch = Touch.new
+          touch.job_id = $CURRENT_JOB_ID
+          touch.task_id = t.id
+          touch.save
+  
+        end
 
       end
 
