@@ -105,6 +105,7 @@ Bioturk::Application.routes.draw do
   get '/delete_inventory', to: 'object_types#delete_inventory'
   get '/copy_inventory_from_production', to: 'object_types#copy_inventory_from_production'
   get '/copy_users_from_production', to: 'users#copy_users_from_production'
+  get '/copy_tasks_from_production', to: 'tasks#copy_tasks_from_production'
 
   match '/signup', to: 'users#new'
   match '/password', to: 'users#password'

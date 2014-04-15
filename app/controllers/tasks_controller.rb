@@ -1,3 +1,9 @@
+class ProductionTask < Task
+end
+
+class ProductionTaskPrototype < TaskPrototype
+end
+
 class TasksController < ApplicationController
   # GET /tasks
   # GET /tasks.json
@@ -83,4 +89,44 @@ class TasksController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+
+  def copy_tasks_from_production
+    
+    if Rails.env != 'production'
+
+      TaskPrototype.all.each do |tp|
+        tp.destroy
+      end
+
+      Task.all.each do |t|
+        t.destroy
+      end
+
+      ProductionTaskPrototype.switch_connection_to(:production_server)
+      ProductionTaskPrototype.all.each do |tp|
+        new_tp = TaskPrototype.new(tp.attributes.except("created_at","updated_at"))
+        new_tp.id = tp.id
+        new_tp.save
+      end
+
+      ProductionTask.switch_connection_to(:production_server)
+      ProductionTask.all.each do |t|
+        new_task = Task.new(t.attributes.except("created_at","updated_at"))
+        new_task.id = t.id
+        new_task.save
+      end
+
+
+      redirect_to production_interface_path, notice: "#{TaskPrototype.all.length} task prototypes and #{Task.all.length} tasks copied."
+
+    else
+   
+      redirect_to production_interface_path, notice: "This functionality is not available in production mode."
+
+    end
+
+  end
+
 end
+

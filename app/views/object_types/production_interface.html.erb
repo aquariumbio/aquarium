@@ -81,6 +81,31 @@
 </div>
 
 
+<div class='row-fluid'>
+
+  <div class='span1'></div>
+
+  <div class='span2' style='padding: 6pt;'>
+
+    <%= link_to 'Copy Task Prototypes and Tasks from Production Server',
+	copy_tasks_from_production_path, 
+        data: { confirm: 'Are you sure you want to copy all the tasks from the production server? Doing so will erase all task information in this server.' },
+        class: 'btn btn-small', style: 'width: 100%'%> </p>
+
+  </div>
+
+  <div class='span8'>
+
+    <p class='message'>Copies tasks and task prototypes from the production server.</p>
+
+  </div>
+
+  <div class='span1'></div>
+
+</div>
+
+
+
 <% else %> 
 
 This functionality is not available in production mode.
