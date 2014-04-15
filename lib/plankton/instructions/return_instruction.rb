@@ -13,14 +13,16 @@ module Plankton
       retvals = scope.get :__RETVALS__
       fid = scope.get :__FUNCTION_CALL_ID__
 
-      if !retvals[fid]
-        retvals[fid] = []
+      puts "In Return Instruction fid.class = #{fid.class}"
+
+      if !retvals[fid.to_sym]
+        retvals[fid.to_sym] = []
       end
  
       #puts "About to evaluate #{@ret_expr}"
 
       rval = scope.evaluate @ret_expr 
-      retvals[fid].push rval
+      retvals[fid.to_sym].push rval
       scope.set :__RETVALS__, retvals
 
       #puts "  Returning #{@ret_expr} = #{rval} from #{fid}. Scope is now #{scope.inspect} (before double pop)."

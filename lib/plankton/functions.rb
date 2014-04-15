@@ -52,7 +52,7 @@ module Plankton
     end # end return_statement
 
     def function_call_id
-      fid = "fid#{@function_call_num}"
+      fid = "fid#{@function_call_num}".to_sym
       @function_call_num += 1
       return fid
     end
@@ -82,11 +82,11 @@ module Plankton
       end
 
       fid = function_call_id
-      push FunctionCallInstruction.new fid.to_sym, pc+1, @function_specs[fname.to_sym], arg_exprs, lines
+      push FunctionCallInstruction.new( fid.to_sym, pc+1, @function_specs[fname.to_sym], arg_exprs, lines )
       
       lines[:endline] = @tok.line
 
-      return "__function_return_value__(\"#{fid}\")"
+      return "__function_return_value__(:#{fid})"
 
     end # function_call
  
@@ -125,7 +125,7 @@ module Lang
       retvals = get :__RETVALS__
 
       if !retvals[fid.to_sym]
-        raise "Could not find return value for #{fid} with revals = #{retvals} and scope = #{inspect}"
+        raise "Could not find return value for #{fid} with retvals = #{retvals} and scope = #{inspect}."
       end
 
       rval = retvals[fid.to_sym].pop

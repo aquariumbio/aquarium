@@ -16,7 +16,7 @@ module Plankton
       scope.push
 
       scope.set_new :__RETURN_PC__, @return_to # used by return_instruction
-      scope.set_new :__FUNCTION_CALL_ID__, @fid # used by return_instruction
+      scope.set_new :__FUNCTION_CALL_ID__, @fid.to_sym # used by return_instruction
 
       (0..@arg_exprs.length-1).each do |i|
         scope.set_new( @fspec[:arg_names][i].to_sym, scope.evaluate( @arg_exprs[i] ) )
