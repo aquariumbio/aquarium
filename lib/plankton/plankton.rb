@@ -17,6 +17,7 @@ require_relative 'functions'
 require_relative 'https'
 require_relative 'modifies'
 require_relative 'includes'
+require_relative 'stop'
 
 # Instructions
 require_relative './instructions/instruction'

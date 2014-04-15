@@ -77,6 +77,9 @@ module Plankton
           when 'end', 'elsif', 'else'
             return
 
+          when 'stop'
+            stop
+
           when 'local'
             basic_statement
 
