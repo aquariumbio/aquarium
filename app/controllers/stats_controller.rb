@@ -26,12 +26,11 @@ class StatsController < ApplicationController
 
   end
 
-  def protocols
-
-    now = Time.now
+  def summarize_jobs jobs
 
     p = {}
-    Job.where("created_at > ?", now - 7.days).each do |j|
+
+    jobs.each do |j|
       if j.path
         path = j.path.split('/').last
       else
@@ -43,6 +42,28 @@ class StatsController < ApplicationController
         p[path] = 1
       end
     end
+
+    return p
+
+  end
+
+  def user_activity 
+
+    jobs = Job.where("user_id = ? AND pc = -2 AND created_at > ?", params[:user_id], Time.now - 14.days)
+    protocol_usage = summarize_jobs jobs
+
+    render json: {
+      protocol_usage: protocol_usage.sort_by {|_key, value| -value},
+      completions: jobs.collect { |j| { status: j.status, updated: 1000*j.updated_at.to_i } }
+    }
+
+  end
+
+  def protocols
+
+    now = Time.now
+
+    p = summarize_jobs( Job.where("created_at > ?", now - 7.days) )
 
     render json: p.sort_by {|_key, value| -value}
 

@@ -47,6 +47,7 @@ Bioturk::Application.routes.draw do
 
   get "stats/jobs"
   get "stats/users"
+  get "stats/user_activity"
   get "stats/protocols"
   get "stats/outcomes"
   get "stats/samples"

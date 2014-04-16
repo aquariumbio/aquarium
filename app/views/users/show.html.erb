@@ -1,9 +1,154 @@
 <% provide(:title, @user.name) %>
+
 <div class="row">
   <aside class="span4">
     <section>
-      <h1><%= @user.name %></h1>
-      <p><%= @user.login %></p>
+      <h1>Name: <%= @user.name %></h1>
+      <p>Login:<%= @user.login %></p>
     </section>
   </aside>
 </div>
+
+<div class='row-fluid'>
+
+  <div class='span4'>
+    <div id="protocols" style='height: 300px'>
+      <%= image_tag 'waiting_animation.gif' %>
+      <p>Protocol Usage</p>
+    </div>
+  </div>
+
+  <div class='span8'>
+    <div id="activity" style='height: 300px'>
+      <%= image_tag 'waiting_animation.gif' %>
+      <p>Activity</p>
+  </div>
+
+  <div class='span4'>
+  </div>
+
+</div>
+
+
+<script>
+
+function select_field ( results, field ) {
+ 
+  var L = [];
+
+  for ( var i=0; i<results.length; i++ ) {
+    L.push(results[i][field]);
+    console.log(results[i][field]);
+  }
+
+  return L;
+
+}
+
+function displayProtocols() {
+
+  $.ajax({
+    type: 'GET',
+    url: '/stats/user_activity?user_id=<%= @user.id %>',
+    dataType: "json",
+    success: function(data,status) {
+
+      var names = [];
+      var nums = [];
+
+      for ( var i=0; i<data.protocol_usage.length; i++ ) {
+        names.push(data.protocol_usage[i][0]);
+        nums.push(data.protocol_usage[i][1]);
+      }
+
+      $('#protocols').css('height',60+20*nums.length);
+
+      $(function () { 
+	  $('#protocols').highcharts({
+	      chart: { type: 'bar' },
+              title: { text: 'Protocols Completed' },
+	      xAxis: { categories: names },
+	      yAxis: { title: { text: 'Jobs (Past 14 days)'}, allowDecimals: false },
+              credits: { enabled: false },
+              plotOptions: { series: { animation: true } },
+	      series: [{
+                  showInLegend: false,
+		  data: nums
+	      }]
+	  });
+      });
+
+      $('#activity').css('height',60+20*nums.length);
+
+      var bins = [data.completions[0].updated], 
+          dbins = [new Date(data.completions[0].updated).toLocaleDateString()],
+          results = [{"COMPLETED":0,"ABORTED":0,"CANCELED":0,"ERROR":0}];
+      var day = 24 * 3600 * 1000;
+
+      for ( var i=0; i<data.completions.length; i++ ) {
+
+        while ( data.completions[i].updated > bins[bins.length-1] + day ) {
+          bins.push(bins[bins.length-1] + day);
+          dbins.push(new Date(bins[bins.length-1] + day).toLocaleDateString());
+          results.push({"COMPLETED":0,"ABORTED":0,"CANCELED":0,"ERROR":0});
+        }
+
+        results[results.length-1][data.completions[i].status]++;
+
+      }
+
+      $(function () {
+        $('#activity').highcharts({
+            credits: { enabled: false },
+            chart: { type: 'column' },
+            title: { text: 'Activity (Last 14 days)' },
+            xAxis: { categories: dbins, 
+                type: 'datetime',
+                labels: {
+                  rotation: -30,
+                  align: 'right',
+                  style: {
+                     fontSize: '13px',
+                          fontFamily: 'Verdana, sans-serif'
+                     }
+                  } 
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Number of Protocols'
+                }
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }, series: {
+                    stacking: 'normal'
+                }
+            },
+            series: [{
+                name: 'Completed',
+                data: select_field(results,"COMPLETED"),
+            }, {
+                name: 'Aborted',
+                data: select_field(results,"ABORTED"),
+            }, {
+                name: 'Canceled',
+                data: select_field(results,"CANCELED")
+            }, {
+                name: 'Error',
+                data: select_field(results,"ERROR")
+            }]
+        });
+    });
+    
+
+    }
+  });
+
+}
+
+displayProtocols();
+
+</script>
