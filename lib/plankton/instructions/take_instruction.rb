@@ -145,7 +145,7 @@ module Plankton
       end
 
       # Evaluate the note ###########################################################################################
-      @note = scope.substitute @note_expr
+      @note = scope.evaluate @note_expr
 
     end # pre_render
 

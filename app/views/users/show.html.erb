@@ -68,7 +68,7 @@ function displayProtocols() {
 	      chart: { type: 'bar' },
               title: { text: 'Protocols Completed' },
 	      xAxis: { categories: names },
-	      yAxis: { title: { text: 'Jobs (Past 14 days)'}, allowDecimals: false },
+	      yAxis: { title: { text: 'Jobs (Past 31 days)'}, allowDecimals: false },
               credits: { enabled: false },
               plotOptions: { series: { animation: true } },
 	      series: [{
@@ -89,7 +89,11 @@ function displayProtocols() {
 
         while ( data.completions[i].updated > bins[bins.length-1] + day ) {
           bins.push(bins[bins.length-1] + day);
-          dbins.push(new Date(bins[bins.length-1] + day).toLocaleDateString());
+          if (dbins.length % 3 == 0 ) {
+            dbins.push(new Date(bins[bins.length-1] + day).toLocaleDateString());
+          } else {
+            dbins.push("");
+          }
           results.push({"COMPLETED":0,"ABORTED":0,"CANCELED":0,"ERROR":0});
         }
 
@@ -101,11 +105,11 @@ function displayProtocols() {
         $('#activity').highcharts({
             credits: { enabled: false },
             chart: { type: 'column' },
-            title: { text: 'Activity (Last 14 days)' },
+            title: { text: 'Activity (Last 31 days)' },
             xAxis: { categories: dbins, 
                 type: 'datetime',
                 labels: {
-                  rotation: -30,
+                  rotation: -45,
                   align: 'right',
                   style: {
                      fontSize: '13px',

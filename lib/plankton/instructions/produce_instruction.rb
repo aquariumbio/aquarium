@@ -32,7 +32,7 @@ module Plankton
       @object_type_name = scope.evaluate @object_type_expr
       @quantity = scope.evaluate @quantity_expr
       @release = ( @release_expr ? ( scope.evaluate @release_expr ) : nil )
-      @note = scope.substitute @note_expr
+      @note = scope.evaluate @note_expr
 
       if @release && @release.class != Array 
         @release = [ @release ]

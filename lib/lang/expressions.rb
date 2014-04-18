@@ -44,6 +44,9 @@ module Lang
 
       # Sample functions
       add_function :info, 1
+      add_function :quantity, 1
+      add_function :min_quantity, 1
+      add_function :max_quantity, 1
 
       # Task functions
       add_function :tasks, 2

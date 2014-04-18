@@ -81,33 +81,6 @@ module Oyster
         end
       end
 
-      def quantity obj
-        o = ObjectType.find_by_name(obj)
-        if o
-          o.quantity
-        else
-          0
-        end
-      end
-
-      def min_quantity obj
-        o = ObjectType.find_by_name(obj)
-        if o
-          o.min
-        else
-          0
-        end
-      end
-
-      def max_quantity obj
-        o = ObjectType.find_by_name(obj)
-        if o
-          o.max
-        else
-          0
-        end
-      end
-
       def return_value j, name
         if j < @parents.length
           @parents[j].return_value[name.to_sym]
