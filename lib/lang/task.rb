@@ -47,12 +47,15 @@ module Lang
 
           t.status = status
           t.save
-          puts "Current job = %{CURRENT_JOB_ID}"
 
-          touch = Touch.new
-          touch.job_id = $CURRENT_JOB_ID
-          touch.task_id = t.id
-          touch.save
+          if $CURRENT_JOB_ID >= 0
+
+            touch = Touch.new
+            touch.job_id = $CURRENT_JOB_ID
+            touch.task_id = t.id
+            touch.save
+
+          end
   
         end
 
