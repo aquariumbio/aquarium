@@ -53,6 +53,9 @@ module Lang
       add_function :get_task_status, 1
       add_function :set_task_status, 2
 
+      # Time functions
+      add_function :time, 0
+
      end
 
      def add_function name, num_args ##################################################################
