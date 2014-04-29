@@ -5,11 +5,13 @@ module Lang
     def time
    
       t = Time.now
+
       return {
         seconds: t.sec,
         minutes: t.min,
         hours: t.hour,
-        day: Date::DAYNAMES[t.wday],
+        day: t.day,
+        weekday: Date::DAYNAMES[t.wday],
         month: Date::MONTHNAMES[t.month],
         year: t.year
       }
