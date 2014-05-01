@@ -57,7 +57,7 @@ module Plankton
 
           @tok.eat_a 'note'
           @tok.eat_a ':'
-          note = @tok.eat_a_string.remove_quotes
+          note = expr
 
         elsif @tok.next == '='
 
