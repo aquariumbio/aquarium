@@ -1,0 +1,51 @@
+<h1>Sample Boxes</h1>
+
+<% @result.each do |freezer,hotels| %>
+
+  <% (0..hotels.length-1).each do |h| %>
+
+    <% if hotels[h] != nil %>
+
+      <h4><%= freezer %>:<%= h %></h4>
+
+      <div class='hotel'>
+
+	<% (0..hotels[h].length-1).each do |b| %>
+
+          <% if (hotels[h][b].select { |i| i.to_i>=0 }) != [] %>
+
+	    <div class='sample_box'>
+
+	      <p>Box <%= b %><p>
+
+	      <table class='sample_box_table'>
+
+		<% (0..8).each do |row| %>
+		  <tr>
+		  <% (0..8).each do |col| %>
+		    <% if hotels[h][b][9*row+col] < 0 %>
+		      <td class='empty'></td> 
+		    <% else %>
+		      <td class='full'><%= link_to hotels[h][b][9*row+col], item_path(hotels[h][b][9*row+col]) %></td>
+		    <% end %>
+		  <% end %>
+		  </tr>
+		<% end %>
+
+	      </table>
+
+	    </div> <!--  sample_box -->
+
+          <% end %> <!-- if -->
+
+	<% end %> <!-- hotels -->
+
+      </div> <!-- hotel -->
+
+    <% end %> <!-- if -->
+
+  <% end %> <!-- hotels -->
+
+  <hr />
+
+<% end %> <!-- freezer -- >

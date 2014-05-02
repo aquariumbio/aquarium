@@ -97,6 +97,7 @@ Bioturk::Application.routes.draw do
   match '/jobchart', to: 'static_pages#jobchart'
   match '/changes', to: 'static_pages#changes'
   match '/location', to: 'static_pages#location'
+  match '/freezer', to: 'static_pages#freezer'
   
   match '/inventory_stats', to: 'static_pages#inventory_stats'
   match '/inventory_critical', to: 'static_pages#inventory_critical'

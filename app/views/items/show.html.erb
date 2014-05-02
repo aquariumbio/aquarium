@@ -1,4 +1,4 @@
-<h1>Item <%= @item.id %></h1>
+<h1>Item <%= @item.id %> at <%= @item.location %></h1>
 
 <% if @item.location == 'deleted' %>
   <h1>Deleted on <%= @item.updated_at %></h1>

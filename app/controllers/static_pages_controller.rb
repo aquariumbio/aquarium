@@ -86,4 +86,37 @@ class StaticPagesController < ApplicationController
 
   end
 
+  def freezer
+
+    @items = Item.all
+
+    @result = {}
+
+    (@items.select { |i| /^[0-9a-zA-Z]*\.[0-9]*\.[0-9]*\.[0-9]*$/ =~ i.location }).each do |i|
+
+      freezer,hotel,box,slot = i.location.split('.')
+      freezer = freezer.to_sym
+      hotel = hotel.to_i
+      box = box.to_i
+      slot = slot.to_i
+
+      if !@result[freezer]
+        @result[freezer] = Array.new(1) { Array.new(16) { Array.new(81) {-1} } }
+      end
+
+      if !@result[freezer][hotel]
+        @result[freezer][hotel] = Array.new(16) { Array.new(81) {-1} }
+      end
+
+      @result[freezer][hotel][box][slot] = i.id
+
+    end
+
+    respond_to do |format|
+      format.html
+      format.json { render json: result }
+    end
+
+  end
+
 end
