@@ -12,12 +12,16 @@
                     <% el = 9*row+col %>
 		    <% if box[el] == nil %>
 		      <td class='empty'></td> 
-		    <% elsif selected && box[el].id == selected.id %>
-                      <% tooltip = "Slot #{el}: Item #{box[el].id}. Sample #{box[el].sample.name} (#{box[el].object_type.name})" %>
-		      <td class='selected'><%= link_to box[el].id, box[el], title: tooltip, rel: "tooltip" %></td>
                     <% else %>
-                      <% tooltip = "Slot #{el}: Item #{box[el].id}. Sample #{box[el].sample.name} (#{box[el].object_type.name})" %>
-		      <td class='full'><%= link_to box[el].id, box[el], title: tooltip, rel: "tooltip" %></td>
+   		      <% if selected && box[el].id == selected.id 
+                           cla = 'selected'
+                         else 
+                           cla = 'full'
+                         end %>
+                      <% sample = box[el].sample ? box[el].sample.name : '?'
+                         obj = box[el].object_type ? box[el].object_type.name : '?'
+                         tooltip = "Slot #{el}: Item #{box[el].id}. Sample #{sample} (#{obj})" %>
+		      <td class=<%= cla %>><%= link_to box[el].id, box[el], title: tooltip, rel: "tooltip" %></td>
 		    <% end %>
 		  <% end %>
 		  </tr>
