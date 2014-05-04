@@ -108,7 +108,9 @@ class StaticPagesController < ApplicationController
         @result[freezer][hotel] = Array.new(16) { Array.new(81) {nil} }
       end
 
-      @result[freezer][hotel][box][slot] = i
+      if @result[freezer][hotel][box]
+        @result[freezer][hotel][box][slot] = i
+      end
 
     end
 
