@@ -88,11 +88,11 @@ class StaticPagesController < ApplicationController
 
   def freezer
 
-    @items = Item.all
+    @items = Item.includes(:sample)
 
     @result = {}
 
-    (@items.select { |i| /^[0-9a-zA-Z]*\.[0-9]*\.[0-9]*\.[0-9]*$/ =~ i.location }).each do |i|
+    (@items.includes(:sample).includes(:object_type).select { |i| /^[0-9a-zA-Z]*\.[0-9]*\.[0-9]*\.[0-9]*$/ =~ i.location }).each do |i|
 
       freezer,hotel,box,slot = i.location.split('.')
       freezer = freezer.to_sym
@@ -101,14 +101,14 @@ class StaticPagesController < ApplicationController
       slot = slot.to_i
 
       if !@result[freezer]
-        @result[freezer] = Array.new(1) { Array.new(16) { Array.new(81) {-1} } }
+        @result[freezer] = Array.new(1) { Array.new(16) { Array.new(81) {nil} } }
       end
 
       if !@result[freezer][hotel]
-        @result[freezer][hotel] = Array.new(16) { Array.new(81) {-1} }
+        @result[freezer][hotel] = Array.new(16) { Array.new(81) {nil} }
       end
 
-      @result[freezer][hotel][box][slot] = i.id
+      @result[freezer][hotel][box][slot] = i
 
     end
 

@@ -1,0 +1,44 @@
+<div class='sample_box'>
+
+              <% box_project = (box.select { |i| i != nil && i.sample != nil }).first.sample.project %>
+
+	      <p>Box <%= box_number %> : <%= link_to box_project, project_url(name: box_project) %><p>
+
+	      <table class='sample_box_table'>
+
+		<% (0..8).each do |row| %>
+		  <tr>
+		  <% (0..8).each do |col| %>
+                    <% el = 9*row+col %>
+		    <% if box[el] == nil %>
+		      <td class='empty'></td> 
+		    <% elsif selected && box[el].id == selected.id %>
+                      <% tooltip = "Slot #{el}: Item #{box[el].id}. Sample #{box[el].sample.name} (#{box[el].object_type.name})" %>
+		      <td class='selected'><%= link_to box[el].id, box[el], title: tooltip, rel: "tooltip" %></td>
+                    <% else %>
+                      <% tooltip = "Slot #{el}: Item #{box[el].id}. Sample #{box[el].sample.name} (#{box[el].object_type.name})" %>
+		      <td class='full'><%= link_to box[el].id, box[el], title: tooltip, rel: "tooltip" %></td>
+		    <% end %>
+		  <% end %>
+		  </tr>
+		<% end %>
+
+	      </table>
+
+              <p class='extra'>
+		<% if box.length > 81 %>
+		   Extra: <% (81..(box.length-1)).each do |slot| %>
+		     <% if box[slot] != nil %>
+		       <%= link_to box[slot].id, box[slot] %>
+		     <% end %>
+		   <% end %>
+		<% end %>
+              </p>
+
+</div> <!--  sample_box -->
+
+<script>
+  $(".tooltip").tooltip();
+  $("a[rel=tooltip]").tooltip();
+
+</script>

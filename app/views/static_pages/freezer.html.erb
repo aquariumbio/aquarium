@@ -12,29 +12,9 @@
 
 	<% (0..hotels[h].length-1).each do |b| %>
 
-          <% if (hotels[h][b].select { |i| i.to_i>=0 }) != [] %>
+          <% if (hotels[h][b].select { |i| i != nil }) != [] %>
 
-	    <div class='sample_box'>
-
-	      <p>Box <%= b %><p>
-
-	      <table class='sample_box_table'>
-
-		<% (0..8).each do |row| %>
-		  <tr>
-		  <% (0..8).each do |col| %>
-		    <% if hotels[h][b][9*row+col] < 0 %>
-		      <td class='empty'></td> 
-		    <% else %>
-		      <td class='full'><%= link_to hotels[h][b][9*row+col], item_path(hotels[h][b][9*row+col]) %></td>
-		    <% end %>
-		  <% end %>
-		  </tr>
-		<% end %>
-
-	      </table>
-
-	    </div> <!--  sample_box -->
+            <%= render partial: 'sample_box', locals: { box: hotels[h][b], box_number: b, selected: nil } %>
 
           <% end %> <!-- if -->
 

@@ -8,6 +8,16 @@ class ItemsController < ApplicationController
     @active_item = params[:active_item]
     @touches = @item.touches
 
+    if /^[0-9a-zA-Z]*\.[0-9]*\.[0-9]*\.[0-9]*$/ =~ @item.location
+      @box_name = @item.location.split('.')[0..2].join('.')
+      re = @item.location.split('.')[0..2].join('\.') + '\.'
+      @box = Array.new(81) {nil}
+      (Item.includes(:sample).includes(:object_type).select { |i| (Regexp.new re) =~ i.location }).each do |i| 
+        f,h,b,s = i.location.split('.')
+        @box[s.to_i] = i
+      end
+    end
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @item }
