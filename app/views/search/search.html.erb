@@ -1,0 +1,67 @@
+<h1>Search Inventory</h1>
+
+<br />
+
+<div class='row-fluid'>
+
+  <div class='span4 well'>
+
+    <p>Item number<br /><input id='item' name='query'  type='number'></input></p>
+    <button class='btn' id="item_goto_button">Goto Item</button>
+
+  </div>
+
+  <div class='span6 well'>
+    <p>Query string<br /><input id='query' name='query'  type='text' value='<%= @query %>'></input></p>
+    <button class='btn' id="sample_search_button">Find Samples</button>&nbsp;&nbsp;&nbsp;
+    <button class='btn' id="object_search_button">Find Object Types</button>
+  </div>
+
+</div>
+
+<% if @results != [] %>
+
+  <p><%= @results.length %> results</p>
+
+  <table class='table'>
+    <tr>
+     <th>Item</th>
+     <th>Sample</th>
+     <th>Object Type</th>
+     <th>Location</th>
+    </tr>
+
+    <% @results.each do |item| %>
+
+      <tr>
+        <td><%= link_to item.id, item %></td>
+        <td><%= link_to item.sample.name, item.sample %></td>
+        <td><%= link_to item.object_type.name,item.object_type %></td>
+        <td><%= item.location %></td>
+      </tr>
+
+    <% end %>
+
+  </table>
+
+<% elsif params[:query] != "" %>
+
+  <p>No results</p>
+
+<% end %>
+
+<script>
+
+$('#item_goto_button').click(function() {
+
+  window.location = "/items/" + parseInt($('#item').val());
+
+});
+
+$('#sample_search_button').click(function() {
+
+  window.location = encodeURI("/search?query=" + $('#query').val() + "&type=sample");
+
+});
+
+</script>
