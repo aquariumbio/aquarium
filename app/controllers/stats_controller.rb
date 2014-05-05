@@ -18,7 +18,7 @@ class StatsController < ApplicationController
     data = {}
     now = Time.now
 
-    User.all.each do |u|
+    User.includes(:jobs).each do |u|
       data[u.login] = (u.jobs.select { |j| j.created_at > now - 7.days }).length
     end
 
@@ -86,7 +86,7 @@ class StatsController < ApplicationController
 
     r = {}
 
-    data = SampleType.all.collect do |st|
+    data = SampleType.includes(samples:[:items]).collect do |st|
       num_items = 0;
       st.samples.each do |s|
         num_items += (s.items.reject { |i| i.quantity <= 0 }).length
@@ -107,7 +107,7 @@ class StatsController < ApplicationController
     items = []
 
     while t < now
-      tnew = t + 14.days
+      tnew = t + 31.days
       objects.push( [ 1000*t.to_i, ObjectType.where("created_at < ?", tnew).length ] )
       items.push( [ 1000*t.to_i, Item.where("created_at < ? AND quantity >= 0", tnew).length  ] )
       t = tnew
