@@ -31,7 +31,7 @@
     <h2>Associated jobs</h2>
 
     <%= render partial: 'jobs/job_list', locals: { 
-		jobs: @task.touches.reverse.collect { |t| Job.find(t.job_id) },
+		jobs: (@task.touches.reverse.collect { |t| Job.find(t.job_id) }).uniq,
 		last_updated: true, 
 		runnable: false, 
 		editable: false
