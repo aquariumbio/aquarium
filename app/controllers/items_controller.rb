@@ -92,7 +92,14 @@ class ItemsController < ApplicationController
        i.data = params[:item][:data]
        i.save
        check_sample_collision( i.location )
-       redirect_to sample_url( { id: i.sample_id, active_item: i.id } )
+
+     logger.info "Params = #{params.inspect}"
+
+       if params[:item][:return_page] == 'item_show'
+         redirect_to item_url :id => i.id
+       else
+         redirect_to sample_url( { id: i.sample_id, active_item: i.id } )
+       end
 
    else
 
@@ -116,7 +123,7 @@ class ItemsController < ApplicationController
           check_sample_collision( i.location )
         end
 
-   end
+    end
 
     if ( i.errors.size > 0 )
       flash[:error] = ""
@@ -125,7 +132,11 @@ class ItemsController < ApplicationController
       end
     end
 
-    redirect_to object_type_url :id => params[:oid]
+    if params[:return_page] == 'item_show'
+      redirect_to item_url :id => i.id
+    else
+      redirect_to object_type_url :id => params[:oid]
+    end
 
     end
 

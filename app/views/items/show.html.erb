@@ -11,7 +11,7 @@
 <% if @item.object_type.handler == 'sample_container' %>
   <h2><%= @item.sample ? (link_to @item.sample.name, @item.sample) : "???" %> - 
       <span style='color: #aaa'><%= @item.object_type.name %></span></h2>
-  <p><%= @item.sample ? ( @item.sample.description ) : "???" %></p>
+  <h3><%= @item.sample ? ( @item.sample.description ) : "???" %></h3>
   <p>Added: <%= @item.created_at.to_formatted_s(:short)  %></p>
   <p>Modified: <%= @item.updated_at.to_formatted_s(:short)  %></p>
 <% else %>
@@ -36,7 +36,25 @@
 </ul>
 <% end %>
 
-</div><div class='span6'>
+<div class='well'>
+  <%= form_for(@item) do |f| %>
+    <%= f.number_field :id, style: 'display: none'  %>
+    <%= f.text_field :return_page, value: "item_show", style: 'display: none'  %>
+    <label>Location:</label>
+    <%= f.text_field :location, value: @item.location, class:
+    'input-small', onkeydown: "turn_on_submit_button(#{@item.id})"  %>
+    <br />
+    <label>Data:</label>
+    <%= f.text_field :data, value: @item.data, style: "width: 400px" %>
+    <br />
+    <%= f.submit class: "btn", value: "update" %>
+  <% end %>
+
+</div>
+
+</div>
+
+<div class='span6'>
 
 <% if @box_name %>
   <%= render partial: 'static_pages/sample_box', locals: { box: @box, box_number: @box_name, selected: @item } %>

@@ -11,7 +11,7 @@
 		  <% (0..8).each do |col| %>
                     <% el = 9*row+col %>
 		    <% if box[el] == nil %>
-		      <td class='empty'></td> 
+		      <td class='empty'><%= el %></td> 
                     <% else %>
    		      <% if selected && box[el].id == selected.id 
                            cla = 'selected'
