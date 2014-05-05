@@ -49,7 +49,7 @@ class StatsController < ApplicationController
 
   def user_activity 
 
-    jobs = Job.where("user_id = ? AND pc = -2 AND created_at > ?", params[:user_id], Time.now - 31.days)
+    jobs = Job.includes(:logs).where("user_id = ? AND pc = -2 AND created_at > ?", params[:user_id], Time.now - 31.days)
     protocol_usage = summarize_jobs jobs
 
     render json: {
