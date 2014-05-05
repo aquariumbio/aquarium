@@ -28,16 +28,24 @@
      <th>Item</th>
      <th>Sample</th>
      <th>Object Type</th>
+     <th>Sample Owner</th>
      <th>Location</th>
+     <th>Added</th>
+     <th>Modified</th>
     </tr>
 
     <% @results.each do |item| %>
 
+      <% user = User.find_by_id(item.sample.user_id) %>
+
       <tr>
         <td><%= link_to item.id, item %></td>
-        <td><%= link_to item.sample.name, item.sample %></td>
+        <td><%= item.sample.sample_type.name %> <%= link_to item.sample.name, item.sample %></td>
         <td><%= link_to item.object_type.name,item.object_type %></td>
-        <td><%= item.location %></td>
+        <td><%= link_to user.login, user %></td>
+        <td><%= item.location %></td> 
+        <td><%= time_ago_in_words(item.created_at) %> ago</td>
+        <td><%= time_ago_in_words(item.updated_at) %> ago</td>
       </tr>
 
     <% end %>

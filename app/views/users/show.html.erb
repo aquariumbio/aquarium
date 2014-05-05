@@ -63,90 +63,102 @@ function displayProtocols() {
 
       $('#protocols').css('height',60+20*nums.length);
 
-      $(function () { 
-	  $('#protocols').highcharts({
-	      chart: { type: 'bar' },
-              title: { text: 'Protocols Completed' },
-	      xAxis: { categories: names },
-	      yAxis: { title: { text: 'Jobs (Past 31 days)'}, allowDecimals: false },
-              credits: { enabled: false },
-              plotOptions: { series: { animation: true } },
-	      series: [{
-                  showInLegend: false,
-		  data: nums
-	      }]
-	  });
-      });
+      if(names.length > 0 ) {
+
+	$(function () { 
+	    $('#protocols').highcharts({
+		chart: { type: 'bar' },
+		title: { text: 'Protocols Completed' },
+		xAxis: { categories: names },
+		yAxis: { title: { text: 'Jobs (Past 31 days)'}, allowDecimals: false },
+		credits: { enabled: false },
+		plotOptions: { series: { animation: true } },
+		series: [{
+		    showInLegend: false,
+		    data: nums
+		}]
+	    });
+	});
+
+      } else {
+        $('#protocols').html("No jobs in past 31 days");
+      }
 
       $('#activity').css('height',60+20*nums.length);
 
-      var bins = [data.completions[0].updated], 
-          dbins = [new Date(data.completions[0].updated).toLocaleDateString()],
-          results = [{"COMPLETED":0,"ABORTED":0,"CANCELED":0,"ERROR":0}];
-      var day = 24 * 3600 * 1000;
+      if(data.completions.length > 0 ) {
 
-      for ( var i=0; i<data.completions.length; i++ ) {
+	var bins = [data.completions[0].updated], 
+	    dbins = [new Date(data.completions[0].updated).toLocaleDateString()],
+	    results = [{"COMPLETED":0,"ABORTED":0,"CANCELED":0,"ERROR":0}];
+	var day = 24 * 3600 * 1000;
 
-        while ( data.completions[i].updated > bins[bins.length-1] + day ) {
-          bins.push(bins[bins.length-1] + day);
-          if (dbins.length % 3 == 0 ) {
-            dbins.push(new Date(bins[bins.length-1] + day).toLocaleDateString());
-          } else {
-            dbins.push("");
-          }
-          results.push({"COMPLETED":0,"ABORTED":0,"CANCELED":0,"ERROR":0});
-        }
+	for ( var i=0; i<data.completions.length; i++ ) {
 
-        results[results.length-1][data.completions[i].status]++;
+	  while ( data.completions[i].updated > bins[bins.length-1] + day ) {
+	    bins.push(bins[bins.length-1] + day);
+	    if (dbins.length % 3 == 0 ) {
+	      dbins.push(new Date(bins[bins.length-1] + day).toLocaleDateString());
+	    } else {
+	      dbins.push("");
+	    }
+	    results.push({"COMPLETED":0,"ABORTED":0,"CANCELED":0,"ERROR":0});
+	  }
 
-      }
+	  results[results.length-1][data.completions[i].status]++;
 
-      $(function () {
-        $('#activity').highcharts({
-            credits: { enabled: false },
-            chart: { type: 'column' },
-            title: { text: 'Activity (Last 31 days)' },
-            xAxis: { categories: dbins, 
-                type: 'datetime',
-                labels: {
-                  rotation: -45,
-                  align: 'right',
-                  style: {
-                     fontSize: '13px',
-                          fontFamily: 'Verdana, sans-serif'
-                     }
-                  } 
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: 'Number of Protocols'
-                }
-            },
-            plotOptions: {
-                column: {
-                    pointPadding: 0.2,
-                    borderWidth: 0
-                }, series: {
-                    stacking: 'normal'
-                }
-            },
-            series: [{
-                name: 'Completed',
-                data: select_field(results,"COMPLETED"),
-            }, {
-                name: 'Aborted',
-                data: select_field(results,"ABORTED"),
-            }, {
-                name: 'Canceled',
-                data: select_field(results,"CANCELED")
-            }, {
-                name: 'Error',
-                data: select_field(results,"ERROR")
-            }]
-        });
-    });
+	}
+
+	$(function () {
+	  $('#activity').highcharts({
+	      credits: { enabled: false },
+	      chart: { type: 'column' },
+	      title: { text: 'Activity (Last 31 days)' },
+	      xAxis: { categories: dbins, 
+		  type: 'datetime',
+		  labels: {
+		    rotation: -45,
+		    align: 'right',
+		    style: {
+		       fontSize: '13px',
+			    fontFamily: 'Verdana, sans-serif'
+		       }
+		    } 
+	      },
+	      yAxis: {
+		  min: 0,
+		  title: {
+		      text: 'Number of Protocols'
+		  }
+	      },
+	      plotOptions: {
+		  column: {
+		      pointPadding: 0.2,
+		      borderWidth: 0
+		  }, series: {
+		      stacking: 'normal'
+		  }
+	      },
+	      series: [{
+		  name: 'Completed',
+		  data: select_field(results,"COMPLETED"),
+	      }, {
+		  name: 'Aborted',
+		  data: select_field(results,"ABORTED"),
+	      }, {
+		  name: 'Canceled',
+		  data: select_field(results,"CANCELED")
+	      }, {
+		  name: 'Error',
+		  data: select_field(results,"ERROR")
+	      }]
+	  });
+      });
     
+
+    } else {
+      $('#activity').html("");
+   }
 
     }
   });
