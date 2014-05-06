@@ -109,6 +109,10 @@ class StaticPagesController < ApplicationController
       end
 
       if @result[freezer][hotel][box]
+        b = @result[freezer][hotel][box]
+        if b[slot] != nil
+          flash[:error] = "Warning. Slot #{slot} of box #{i.location} contains multiple items: #{b[slot].id} and #{i.id}"
+        end
         @result[freezer][hotel][box][slot] = i
       end
 

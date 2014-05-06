@@ -14,7 +14,7 @@
 
           <% if (hotels[h][b].select { |i| i != nil }) != [] %>
 
-            <%= render partial: 'sample_box', locals: { box: hotels[h][b], box_number: b, selected: nil } %>
+            <%= render partial: 'sample_box', locals: { box: hotels[h][b], box_number: "#{freezer}.#{h}.#{b}", selected: nil } %>
 
           <% end %> <!-- if -->
 

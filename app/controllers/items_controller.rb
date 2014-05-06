@@ -21,6 +21,9 @@ class ItemsController < ApplicationController
       @box = Array.new(81) {nil}
       (Item.includes(:sample).includes(:object_type).select { |i| (Regexp.new re) =~ i.location }).each do |i| 
         f,h,b,s = i.location.split('.')
+        if @box[s.to_i] != nil
+          flash[:error] = "Warning. Slot #{s} of box #{@box_name} contains multiple items: #{@box[s.to_i].id} and #{i.id}"
+        end
         @box[s.to_i] = i
       end
     end

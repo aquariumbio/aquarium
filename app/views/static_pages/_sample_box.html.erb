@@ -2,7 +2,7 @@
 
               <% box_project = (box.select { |i| i != nil && i.sample != nil }).first.sample.project %>
 
-	      <p>Box <%= box_number %> : <%= link_to box_project, project_url(name: box_project) %><p>
+	      <p><%= box_number %> : <%= link_to box_project, project_url(name: box_project) %><p>
 
 	      <table class='sample_box_table'>
 
