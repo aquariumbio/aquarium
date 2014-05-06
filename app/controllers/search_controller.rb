@@ -4,7 +4,7 @@ class SearchController < ApplicationController
 
   def search
 
-    # set up auto complete data here?
+    @autocomplete = (Sample.all.collect { |s| s.name }).concat(ObjectType.all.collect { |ot| ot.name })
 
     @query = params[:query] ? params[:query] : ""
 
@@ -14,8 +14,12 @@ class SearchController < ApplicationController
 
     elsif params[:type] == 'objecttype'
 
+      @results = ObjectType.all.select { |ot| Regexp.new(params[:query]) =~ ot.name }
+
     else
+
       @results = []
+
     end
 
   end

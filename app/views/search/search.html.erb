@@ -19,7 +19,7 @@
 
 </div>
 
-<% if @results != [] %>
+<% if @results != [] && params[:type] == 'sample' %>
 
   <p><%= @results.length %> results</p>
 
@@ -52,6 +52,38 @@
 
   </table>
 
+<% elsif @results != [] && params[:type] == 'objecttype' %>
+
+<table class="table">
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Quantity</th>
+    <th>Range</th>
+    <th>Handler</th>
+    <th></th>
+  </tr>
+
+<% @results.each do |object_type| %>
+  <tr>
+    <td><%= link_to object_type.name, object_type %></td>
+    <td><%= object_type.description %></td>
+    <td>
+      <% if object_type.quantity < object_type.min %>
+        <span class="text-error">
+      <% else %>
+        <span class="text-success">
+      <% end %>
+      <%= pluralize( object_type.quantity, object_type.unit ) %>
+      </span>
+    </td>
+    <td><%= "[" + object_type.min.to_s + ", " + object_type.max.to_s + "]" %></td>
+    <td><%= object_type.handler %></td>
+    <td><%= link_to 'Edit', edit_object_type_path(object_type) %></td>
+  </tr>
+<% end %>
+</table>
+
 <% elsif params[:query] != "" %>
 
   <p>No results</p>
@@ -71,5 +103,18 @@ $('#sample_search_button').click(function() {
   window.location = encodeURI("/search?query=" + $('#query').val() + "&type=sample");
 
 });
+
+$('#object_search_button').click(function() {
+
+  window.location = encodeURI("/search?query=" + $('#query').val() + "&type=objecttype");
+
+});
+
+$(function() {
+    var availableTags = <%= @autocomplete.to_s.html_safe %>;
+    $( "#query" ).autocomplete({
+      source: availableTags
+    });
+  });
 
 </script>

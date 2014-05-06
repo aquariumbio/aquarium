@@ -16,6 +16,7 @@
 //= require highcharts
 //= require jquery.ui.datepicker
 //= require jquery.ui.menu
+//= require jquery.ui.autocomplete
 //= require d3
 //= require joint.nojquery
 //= require joint.layout.DirectedGraph
