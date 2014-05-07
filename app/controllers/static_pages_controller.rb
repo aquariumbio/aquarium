@@ -92,6 +92,8 @@ class StaticPagesController < ApplicationController
 
     @result = {}
 
+    flash.delete :error
+
     (@items.includes(:sample).includes(:object_type).select { |i| /^[0-9a-zA-Z]*\.[0-9]*\.[0-9]*\.[0-9]*$/ =~ i.location }).each do |i|
 
       freezer,hotel,box,slot = i.location.split('.')
@@ -111,7 +113,10 @@ class StaticPagesController < ApplicationController
       if @result[freezer][hotel][box]
         b = @result[freezer][hotel][box]
         if b[slot] != nil
-          flash[:error] = "Warning. Slot #{slot} of box #{i.location} contains multiple items: #{b[slot].id} and #{i.id}"
+          if !flash[:error]
+            flash[:error] = ["<b>WARNING!</b>"]
+          end
+          flash[:error] << "#{i.location} contains multiple items: #{b[slot].id} and #{i.id}. "
         end
         @result[freezer][hotel][box][slot] = i
       end

@@ -15,6 +15,8 @@ class ItemsController < ApplicationController
     @active_item = params[:active_item]
     @touches = @item.touches
 
+    flash.delete :error
+
     if /^[0-9a-zA-Z]*\.[0-9]*\.[0-9]*\.[0-9]*$/ =~ @item.location
       @box_name = @item.location.split('.')[0..2].join('.')
       re = @item.location.split('.')[0..2].join('\.') + '\.'
@@ -22,7 +24,10 @@ class ItemsController < ApplicationController
       (Item.includes(:sample).includes(:object_type).select { |i| (Regexp.new re) =~ i.location }).each do |i| 
         f,h,b,s = i.location.split('.')
         if @box[s.to_i] != nil
-          flash[:error] = "Warning. Slot #{s} of box #{@box_name} contains multiple items: #{@box[s.to_i].id} and #{i.id}"
+          if !flash[:error]
+            flash[:error] = ["<b>WARNING!</b>"]
+          end
+          flash[:error] << "#{@box_name}.#{s} contains multiple items: #{@box[s.to_i].id} and #{i.id}"
         end
         @box[s.to_i] = i
       end
