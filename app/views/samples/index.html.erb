@@ -16,6 +16,7 @@
 
 <table class='table'>
   <tr>
+    <th>Id</th>
     <th>Name</th>
     <th>Project</th>
     <th>Description</th>
@@ -37,6 +38,7 @@
 
 <% @samples.each do |sample| %>
   <tr>
+    <td><b><%= sample.id %></b></td>
     <td><%= link_to sample.name, sample %></td>
     <td><%= link_to sample.project, project_url(name: sample.project) %></td>
     <td><%= sample.description %></td>

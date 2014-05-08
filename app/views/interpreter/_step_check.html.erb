@@ -1,4 +1,4 @@
 <p>
   <input type='checkbox' class='checkbox' onchange='validate_input()'></input>
-  &nbsp;<%= statement[:value] %>
+  &nbsp;<%= statement[:value].html_safe %>
 </p>
