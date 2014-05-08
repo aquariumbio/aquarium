@@ -1,8 +1,9 @@
 class Task < ActiveRecord::Base
 
-  attr_accessible :name, :specification, :status, :task_prototype_id
+  attr_accessible :name, :specification, :status, :task_prototype_id, :user_id
   belongs_to :task_prototype
   has_many :touches
+  belongs_to :user
 
   validates :name, :presence => true
   validates :status, :presence => true

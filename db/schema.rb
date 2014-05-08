@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140507230919) do
+ActiveRecord::Schema.define(:version => 20140508203643) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -195,9 +195,10 @@ ActiveRecord::Schema.define(:version => 20140507230919) do
     t.string   "name"
     t.text     "specification"
     t.string   "status"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
     t.integer  "task_prototype_id"
+    t.integer  "user_id",           :default => 0
   end
 
   create_table "touches", :force => true do |t|

@@ -5,6 +5,12 @@
     <input id="task_name" type='text' value='<%= @task.name %>'></input>
     <label><b>Status</b></label>
     <input id="task_status" type='text' value='<%= @task.status %>'></input>
+    <label><b>Task Owner</b></label>
+    <select id="task_owner">
+      <% User.all.each do |user| %>
+        <option <%= user == current_user ? 'selected' : '' %> value=<%= user.id %>><%= user.login %></option>
+      <% end %>
+    </select>
 </div>
 
 <div id="json_editor"></div>
@@ -12,8 +18,6 @@
 <br />
 
 <button id='save' class='btn btn-primary'>Save</button>
-
-
 
 <script>
 
@@ -26,7 +30,10 @@
   $('#save').click(function(){
     var name = $('#task_name').val(),
         stat = $('#task_status').val(),
-      spec = JSON.stringify(json_editor_extract($('#json_editor'))); //.replace("[", "[ ").replace("]", " ]").replace("{", "{ ").replace("}", " }");
+        owner = $('#task_owner').val(),
+        spec = JSON.stringify(json_editor_extract($('#json_editor'))); //.replace("[", "[ ").replace("]", " ]").replace("{", "{ ").replace("}", " }");
+ 
+    console.log("owner="+owner);
  
     var AUTH_TOKEN = '<%= "#{form_authenticity_token}" %>';
 
@@ -34,7 +41,7 @@
         type: "PUT",
         url: "/tasks/" + '<%= @task.id %>' + '.json',
         dataType: 'json',
-	data: JSON.stringify({task: {name: name, status: stat, specification: spec }, id: <%= @task.id %>, authenticity_token: AUTH_TOKEN}),
+	data: JSON.stringify({task: {name: name, status: stat, specification: spec, user_id: owner }, id: <%= @task.id %>, authenticity_token: AUTH_TOKEN}),
         contentType: 'application/json'
     }).done(function(data){
         console.log(data);
@@ -46,3 +53,5 @@
 </script>
 
 <%= link_to 'Cancel', tasks_path(task_prototype_id: @task.task_prototype.id), class: 'btn' %>
+
+
