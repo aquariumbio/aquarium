@@ -75,3 +75,14 @@
   height: 20px;
   margin: 5px;
 }
+
+.task-select select {
+   background: #fff;
+   padding: 0 15px 0 10px;
+   font-size: 14px;
+   border: 1pt solid #eee;
+   border-radius: 5px;
+   margin: 0;
+   -webkit-appearance: none;
+   position: relative; top: -4px;
+}

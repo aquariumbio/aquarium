@@ -22,7 +22,15 @@
   <tr>
     <td><b><%= task.id %></b></td>
     <td><%= link_to task.name, task %></td>
-    <td><%= task.status %></td>
+    <td>
+
+       <div class='task-select'><select id='<%= "status_#{task.id}" %>' class='status-select'>
+         <% @status_options.each do |opt| %>
+            <option <%= opt == task.status ? 'selected' : '' %>><%= opt %></option>
+         <% end %>
+       </select></div>
+
+    </td>
     <td><%= time_ago_in_words(task.created_at) %> ago</td>
     <td><%= time_ago_in_words(task.updated_at) %> ago</td>
     <td><%= link_to edit_task_path(task,task_prototype_id: task.task_prototype) do %>
@@ -37,4 +45,19 @@
 
 <br />
 
+<script>
+
+$.each($(".status-select"),function(index,value) {
+
+  $(value).change(function() {
+    window.location = 'tasks?task_prototype_id=<%= @task_prototype.id %>&task=' 
+                    + $(value).attr('id').split('_')[1]
+                    + "&status=" + $(value).val();
+  });
+
+});
+
+window.history.replaceState ( null, 'tasks', 'tasks?task_prototype_id=<%= @task_prototype.id %>' );
+
+</script>
 

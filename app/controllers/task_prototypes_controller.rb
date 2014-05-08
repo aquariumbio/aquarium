@@ -3,7 +3,7 @@ class TaskPrototypesController < ApplicationController
   # GET /task_prototypes.json
   def index
     @task_prototypes = TaskPrototype.all
-
+    
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @task_prototypes }

@@ -26,6 +26,11 @@
   </div>
 
   <div class="field">
+    <%= f.label :status_options %>
+    <%= f.text_field :status_options, style: 'width: 100%;' %>
+  </div>
+
+  <div class="field">
     <%= f.label "Prototype (any legal JSON string)" %> 
     <%= f.text_area :prototype, style: 'width: 100%; height: 100px;' %>
   </div>

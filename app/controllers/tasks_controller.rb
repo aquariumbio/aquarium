@@ -5,16 +5,26 @@ class ProductionTaskPrototype < TaskPrototype
 end
 
 class TasksController < ApplicationController
+
   # GET /tasks
   # GET /tasks.json
   def index
+
+    if params[:task] && params[:status]
+      t = Task.find(params[:task].to_i)
+      t.status = params[:status]
+      t.save()
+    end
+
     @task_prototype = TaskPrototype.find(params[:task_prototype_id])
     @tasks = @task_prototype.tasks
+    @status_options = @task_prototype.status_option_list
 
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @tasks }
     end
+
   end
 
   # GET /tasks/1
