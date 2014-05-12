@@ -29,6 +29,7 @@ module Lang
       add_function :append, 2
       add_function :concat, 2
       add_function :unique, 1
+      add_function :transpose, 1
 
       # Hash functions
       add_function :merge, 2
@@ -43,6 +44,7 @@ module Lang
       add_function :collection, 1
 
       # Sample functions
+      add_function :find, 2
       add_function :info, 1
       add_function :quantity, 1
       add_function :min_quantity, 1

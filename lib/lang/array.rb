@@ -45,6 +45,18 @@ module Lang
       end
     end
 
+    def transpose m # transposes the array of array M
+
+      begin
+        mt = m.transpose
+      rescue Exception => e
+        raise "Could not transpose matrix: " + e.to_s
+      end
+
+      return mt
+
+    end
+
   end
 
 end
