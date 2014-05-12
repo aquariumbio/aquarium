@@ -3,12 +3,10 @@
     <tr>
       <% row.each do |entry| %>
         <% if entry.class == String %>
-           <td class='steptablestring'>
+           <td class='steptablestring'><%= entry.html_safe %></td>
         <% else %>
-           <td class='steptablenumber'>
+           <td class='steptablenumber'><%= entry %></td>
         <% end %>
-        <%= entry %>
-        </td>
       <% end %>
     </tr>
   <% end %>
