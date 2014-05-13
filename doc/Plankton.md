@@ -81,6 +81,15 @@ Standard math fucntions include log, log2, log10, cos, sin, tan, acos, asin, ata
 	min_quantity(objecttype)	  # Returns the minimum allowable quantity of the object type.
 	
 	max_quantity(objecttype)	  # Returns the maximum desired quantity of the object type.
+	
+	find(table,spec)             # Does a general database query, to some extent subsuming the above commands, although it is
+	                             # slower. Examples
+	                             #
+  	                             #     find(:item, { id: 938 }) : finds item 938
+                                 #     find(:item, { sample: { name: "pLAB1" } }) : finds all items with sample=pLAB1
+                                 #     find(:sample, { sample_type: { name: "Plasmid" }}) : finds all plasmid samples
+                                 #     find(:task, { task_prototype: { name: "Daily" }})) : finds all Daily tasks
+	                             #
 	 
 ### Tasks ###
 
