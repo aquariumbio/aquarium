@@ -5,6 +5,8 @@ class ItemsController < ApplicationController
   def show
 
     @item = Item.find_by_id(params[:id])
+    @object_type = @item.object_type
+    @handler = view_context.make_handler @object_type
 
     if @item == nil
       flash[:error] = "Could not find item with id #{params[:id]}"

@@ -4,6 +4,7 @@
 
       <tr>
         <th>ID</th>
+        <th>Size</th>
         <th>Location</th>
         <th>In Use</th>
         <th></th>
@@ -13,6 +14,8 @@
 
       <tr>
         <td><%= link_to "%05d" % i.id, i %></td>
+
+          <td><%= r,c = @handler.size i; "#{r}&times;#{c}".html_safe %></td>           
 
           <td><%= i.location %></td>
           <td><%= i.inuse != 0 ? 'yes' : 'no' %></td>

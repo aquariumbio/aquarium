@@ -28,6 +28,10 @@ module ObjectTypesHelper
        "handlers/default_current_inventory"
     end
 
+    def show_item_partial
+      "handlers/default_show_item"
+    end
+
     def new_item params
       @object_type.items.create(params[:item])
     end
@@ -48,6 +52,10 @@ module ObjectTypesHelper
        "handlers/collection_current_inventory"
     end
 
+    def show_item_partial
+      "handlers/collection_show_item"
+    end
+
     def new_item params
 
       r = params[:item][:rows].to_i
@@ -60,6 +68,27 @@ module ObjectTypesHelper
       item.data = Array.new(r,Array.new(c,0)).to_json
       item
 
+    end
+
+    def matrix item
+
+      begin
+        m = JSON.parse item.data
+      rescue Exception => e
+        m = nil
+      end
+
+      if m.class == Array && m.length > 0 && m[0].class == Array
+        m
+      else
+        [[]]
+      end
+
+    end
+
+    def size item
+      m = matrix item
+      [ m.length, m[0].length ]
     end
 
   end
@@ -78,6 +107,9 @@ module ObjectTypesHelper
        "handlers/sample_container_current_inventory"
     end
 
+    def show_item_partial
+      "handlers/sample_container_show_item"
+    end
 
   end
 

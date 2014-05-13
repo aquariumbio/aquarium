@@ -1,0 +1,41 @@
+
+<div class='row-fluid'>
+
+  <div class='span5'>
+
+    <% if @item.location == 'deleted' %>
+      <h1>Deleted on <%= @item.updated_at %></h1>
+    <% end %>
+
+    <h2><%= link_to @item.object_type.name, @item.object_type %></h2>
+
+    <%= render partial: "handlers/item_data_form" %>
+
+  </div>
+
+  <div class='span1'></div>
+
+  <div class='span6'>
+
+    <h2>Contents</h2>
+
+    <% m = @handler.matrix @item %>
+
+    <table class='sample_box_table'>
+      <% m.each do |row| %>
+        <tr>
+          <% row.each do |sample_id| %>
+            <% if sample_id > 0 %>            
+              <td class='full'><%= sample_id %></td>
+            <% else %>
+              <td class='full'></td>
+             <% end %>
+          <% end %>
+        </tr>
+      <% end %>
+    </table>
+
+  </div>
+
+</div>
+

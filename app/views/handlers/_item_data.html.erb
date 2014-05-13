@@ -1,0 +1,17 @@
+  <% if @item.data && @item.data != "" %>
+
+    <ul class='list'>
+      <% begin
+           data = JSON.parse(@item.data.gsub(/\b0*(\d+)/, '\1')) 
+         rescue
+           data = {}
+         end
+       %>
+
+      <% if data.class == Hash %> 
+        <% data.each do |k,v| %>
+          <li><%= k %>: <%=  v %></li>
+        <% end %>
+      <% end %>
+    </ul>
+  <% end %>

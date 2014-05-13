@@ -1,67 +1,6 @@
 <h1>Item <%= @item.id %> at <%= @item.location %></h1>
 
-<div class='row-fluid'>
-
-  <div class='span6'>
-
-<% if @item.location == 'deleted' %>
-  <h1>Deleted on <%= @item.updated_at %></h1>
-<% end %>
-
-<% if @item.object_type.handler == 'sample_container' %>
-  <h2><%= @item.sample ? (link_to @item.sample.name, @item.sample) : "???" %> - 
-      <span style='color: #aaa'><%= @item.object_type.name %></span></h2>
-  <h3><%= @item.sample ? ( @item.sample.description ) : "???" %></h3>
-  <p>Added: <%= @item.created_at.to_formatted_s(:short)  %></p>
-  <p>Modified: <%= @item.updated_at.to_formatted_s(:short)  %></p>
-<% else %>
-  <h2><%= link_to @item.object_type.name, @item.object_type %></h2>
-<% end %>
-
-<% if @item.data && @item.data != "" %>
-  <h4>Data</h4> <ul class='list'>
-      <% begin
-                data = JSON.parse(@item.data.gsub(/\b0*(\d+)/, '\1')) 
-              rescue
-                data = {}
-              end
-         %>
-
-        <% if data.class == Hash %> 
-          <% data.each do |k,v| %>
-            <li><%= k %>: <%=  v %></li>
-          <% end %>
-        <% end %>
-
-</ul>
-<% end %>
-
-<div class='well'>
-  <%= form_for(@item) do |f| %>
-    <%= f.number_field :id, style: 'display: none'  %>
-    <%= f.text_field :return_page, value: "item_show", style: 'display: none'  %>
-    <label>Location:</label>
-    <%= f.text_field :location, value: @item.location, class:
-    'input-small', onkeydown: "turn_on_submit_button(#{@item.id})"  %>
-    <br />
-    <label>Data:</label>
-    <%= f.text_field :data, value: @item.data, style: "width: 400px" %>
-    <br />
-    <%= f.submit class: "btn", value: "update" %>
-  <% end %>
-
-</div>
-
-</div>
-
-<div class='span6'>
-
-<% if @box_name %>
-  <%= render partial: 'static_pages/sample_box', locals: { box: @box, box_number: @box_name, selected: @item } %>
-<% end %>
-
-</div>
-</div>
+<%= render @handler.show_item_partial %>
 
 <h4>History</h4>
 

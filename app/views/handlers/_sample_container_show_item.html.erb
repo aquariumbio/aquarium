@@ -1,0 +1,33 @@
+
+<div class='row-fluid'>
+
+  <div class='span6'>
+
+    <% if @item.location == 'deleted' %>
+      <h1>Deleted on <%= @item.updated_at %></h1>
+    <% end %>
+
+    <h2><%= @item.sample ? (link_to @item.sample.name, @item.sample) : "???" %> - 
+      <span style='color: #aaa'><%= @item.object_type.name %></span>
+    </h2>
+
+    <h3><%= @item.sample ? ( @item.sample.description ) : "???" %></h3>
+
+    <p>Added: <%= @item.created_at.to_formatted_s(:short)  %></p>
+    <p>Modified: <%= @item.updated_at.to_formatted_s(:short)  %></p>
+
+    <%= render partial: "handlers/item_data" %>
+
+    <%= render partial: "handlers/item_data_form" %>
+
+  </div>
+
+  <div class='span6'>
+
+    <% if @box_name %>
+      <%= render partial: 'static_pages/sample_box', locals: { box: @box, box_number: @box_name, selected: @item } %>
+    <% end %>
+
+  </div>
+
+</div>
