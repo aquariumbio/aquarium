@@ -65,7 +65,7 @@ module ObjectTypesHelper
       item = @object_type.items.create(params[:item])
     
       item.quantity = 1
-      item.data = Array.new(r,Array.new(c,0)).to_json
+      item.data = { matrix: Array.new(r,Array.new(c,-1)) }.to_json
       item
 
     end
@@ -73,13 +73,13 @@ module ObjectTypesHelper
     def matrix item
 
       begin
-        m = JSON.parse item.data
+        m = JSON.parse item.data, symbolize_names: true
       rescue Exception => e
         m = nil
       end
 
-      if m.class == Array && m.length > 0 && m[0].class == Array
-        m
+      if m.class == Hash && m[:matrix] && m[:matrix].class == Array && m[:matrix].length > 0 && m[:matrix][0].class == Array
+        m[:matrix]
       else
         [[]]
       end
