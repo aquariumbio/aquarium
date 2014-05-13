@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140508203643) do
+ActiveRecord::Schema.define(:version => 20140513225335) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -53,11 +53,11 @@ ActiveRecord::Schema.define(:version => 20140508203643) do
     t.string   "location"
     t.integer  "quantity"
     t.integer  "object_type_id"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
-    t.integer  "inuse",          :default => 0
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
+    t.integer  "inuse",                           :default => 0
     t.integer  "sample_id"
-    t.string   "data"
+    t.text     "data",           :limit => 65536
     t.integer  "collection_id"
   end
 
@@ -67,9 +67,9 @@ ActiveRecord::Schema.define(:version => 20140508203643) do
     t.string   "user_id"
     t.string   "sha"
     t.text     "arguments"
-    t.text     "state"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.text     "state",              :limit => 4294967295
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
     t.string   "path"
     t.integer  "pc"
     t.integer  "group_id"
