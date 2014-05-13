@@ -1,22 +1,37 @@
 <h3>Add to inventory</h3>
 
-<% if @object_type.handler != 'sample_container' %>
+  <% if @object_type.handler == 'sample_container' %>
 
-  <%= form_for([@object_type, @object_type.items.build]) do |f| %>
+    <p>Use the sample interface to add inventory for this object type.</p>
 
-        <%= f.label :location %>
-        <%= f.text_field :location, value: @object_type.location_wizard %>
-     <br />
-         <%= f.label :quantity %>
-         <%= f.number_field :quantity, value: 0 %>
-     <br />
+  <% elsif @object_type.handler == 'collection' %>
 
-     <%= f.submit class: "btn btn-small", value: "Add"  %>
+    <%= form_for([@object_type, @object_type.items.build]) do |f| %>
+
+       <%= f.label :location %>
+       <%= f.text_field :location, value: @object_type.location_wizard %>
+       <%= f.label :rows %>
+       <%= f.text_field :rows, value: 1 %>
+       <%= f.label :columns %>
+       <%= f.text_field :cols, value: 1 %><br />
+       <%= f.submit class: "btn btn-small", value: "Add"  %>
+
+    <% end %>
+
+  <% else %>
+
+    <%= form_for([@object_type, @object_type.items.build]) do |f| %>
+
+       <%= f.label :location %>
+       <%= f.text_field :location, value: @object_type.location_wizard %>
+       <br />
+       <%= f.label :quantity %>
+       <%= f.number_field :quantity, value: 0 %>
+       <br />
+
+       <%= f.submit class: "btn btn-small", value: "Add"  %>
+
+    <% end %>
 
   <% end %>
 
-<% else %>
-
-  Use the sample interface to add inventory for this object type.
-
-<% end %>

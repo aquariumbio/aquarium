@@ -1,0 +1,26 @@
+<h3>Current Inventory</h3>
+
+  <table class="table itemtable">
+
+      <tr>
+        <th>ID</th>
+        <th>Location</th>
+        <th>In Use</th>
+        <th></th>
+      </tr>
+
+    <% (@object_type.items.reject { |i| i.quantity < 0 } ).each do |i| %>
+
+      <tr>
+        <td><%= link_to "%05d" % i.id, i %></td>
+
+          <td><%= i.location %></td>
+          <td><%= i.inuse != 0 ? 'yes' : 'no' %></td>
+
+          <td><%= link_to "delete", [@object_type, i], method: :delete, 
+                                  data: { confirm: "Really delete item?" } %></td>
+      </tr>
+
+    <% end %>
+
+  </table>

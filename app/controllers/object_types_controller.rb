@@ -12,6 +12,8 @@ end
 
 class ObjectTypesController < ApplicationController
 
+  helper ObjectTypesHelper
+
   before_filter :signed_in_user
 
   # GET /object_types
@@ -33,6 +35,7 @@ class ObjectTypesController < ApplicationController
   def show
 
     @object_type = ObjectType.find(params[:id])
+    @handler = view_context.make_handler @object_type
 
     if @object_type.handler == 'sample_container'
       @sample_type = SampleType.find(@object_type.sample_type_id)

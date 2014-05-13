@@ -19,11 +19,11 @@
 <div class="row-fluid">
 
   <div class="span8 current-inventory">
-    <%= render 'current_inventory' %>
+    <%= render @handler.current_inventory_partial %>
   </div>
 
   <div class="span4 add-to-inventory">
-    <%= render 'add_inventory' %>
+    <%= render @handler.new_item_partial %>
   </div>
 
 </div>

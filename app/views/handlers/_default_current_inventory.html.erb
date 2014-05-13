@@ -4,13 +4,8 @@
 
       <tr>
         <th>ID</th>
-        <% if @object_type.handler == 'sample_container' %>
-          <th>Sample Name</th>
-        <% end %>
         <th>Location</th>
-        <% if @object_type.handler != 'sample_container' && @object_type.handler != 'collection' %>
-          <th>Quantity</th>
-        <% end %>
+        <th>Quantity</th>
         <th>In Use</th>
         <th></th>
       </tr>
@@ -19,16 +14,6 @@
 
       <tr>
         <td><%= link_to "%05d" % i.id, i %></td>
-
-        <% if @object_type.handler == 'sample_container' %>
-          <% if i.sample %>
-            <td><%= link_to i.sample.name, i.sample %></td>
-          <% else %>
-            <td>???</td>
-          <% end %>
-        <% end %>
-
-         <% if @object_type.handler != 'sample_container' %>
 
           <td>
             <%= form_tag(raw "/item?id="+i.id.to_s+"&oid="+@object_type.id.to_s) %>
@@ -41,7 +26,6 @@
             </form>
           </td>
 
-          <% if @object_type.handler != 'collection' %>
           <td>
             <%= form_tag(raw "/item?id="+i.id.to_s+"&oid="+@object_type.id.to_s) %>
               <input name="quantity" 
@@ -52,7 +36,6 @@
                      class="btn btn-small" value="update"></input>
             </form>
           </td>
-          <% end %>
 
           <td>
             <%= form_tag(raw "/item?id="+i.id.to_s+"&oid="+@object_type.id.to_s) %>
@@ -64,13 +47,6 @@
                      class="btn btn-small" value="take"></input>
             </form>
           </td>
-
-        <% else %>
-
-           <td><%= i.location %></td>
-           <td><%= i.inuse != 0 ? 'yes' : 'no' %></td>
-
-        <% end %>
 
         <td><%= link_to "delete", [@object_type, i], method: :delete, 
                                   data: { confirm: "Really delete item?" } %></td>

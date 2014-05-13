@@ -65,7 +65,9 @@ class ItemsController < ApplicationController
       end
     end
 
-    @item = @object_type.items.create(params[:item])
+    @handler = view_context.make_handler @object_type
+    @item = @handler.new_item params
+
     @item.save
 
     if (@item.errors.size > 0 )
@@ -78,7 +80,7 @@ class ItemsController < ApplicationController
     if @object_type.handler == 'sample_container'
 
       check_sample_collision( @item.location )
-      redirect_to sample_path(@item.sample)     
+      redirect_to sample_path( @item.sample )     
 
     else
 
