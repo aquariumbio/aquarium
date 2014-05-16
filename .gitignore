@@ -21,6 +21,9 @@
 /tmp
 /public/assets
 
+# Ignore protocol repos
+/repos/*
+
 # Ignore paperclip files
 /public/system/
 

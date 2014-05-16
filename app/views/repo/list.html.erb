@@ -1,0 +1,65 @@
+<ul id='nav' class="nav nav-pills"></ul>
+
+<div id='content' class="pill-content"></div>
+
+<script>
+
+  repos = JSON.parse('<%= @repos.to_json.html_safe %>');
+
+  function mkdir(path,tag,children,status) {
+
+    for(var i=0; i<children.length; i++) {
+
+      if(typeof children[i] == "string") {
+
+        tag.append($("<li></li>").append("<a href="+path+"/"+children[i]+">"+children[i]+"</a>"));
+
+      } else if ( children[i].children.length > 0 ) {
+
+        (function() { // create a closure so the click function works
+
+          var dirname = children[i].data;
+          var contents = children[i].children;
+
+	  var sublist = $("<ul id=" + dirname + "></ul>").addClass('repo-list').addClass('json_list').css('display','none');
+          var link = $("<a href='#'>" + dirname + "</a>");
+	  var name = $("<li></li>").addClass('repo-dirname').append(link).append(sublist);
+
+	  link.click(function(e){
+            e.preventDefault(); // prevents window from scrolling when directory name is clicked
+            if ( sublist.css('display') == 'none' ) {
+  	      sublist.css('display','block');
+            } else {
+  	      sublist.css('display','none');
+            }
+	  });       
+
+	  tag.append(name);
+	  mkdir(path+"/"+dirname,sublist,contents,"closed");
+
+        })();
+
+      }
+    }
+
+  }
+
+  for( var i=0; i<repos.children.length; i++ ) {
+
+    var repo_name = repos.children[i].data;
+
+    $('#nav').append("<li><a href='#"+repo_name+"'data-toggle='pill'>"+repo_name+"</a></li>");
+    $('#content').append("<div class='pill-pane' id='"+repo_name+"'></div>");
+
+    var list = $("<ul></ul>").addClass('repo-list').addClass('json_list');
+    $('#'+repo_name).append(list);
+
+    mkdir(repo_name+"::",list,repos.children[i].children,"closed");
+
+  }
+
+  $(function () {
+    $('#nav a:first').tab('show');
+  })
+
+</script>

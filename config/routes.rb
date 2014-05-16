@@ -73,6 +73,8 @@ Bioturk::Application.routes.draw do
   get "protocol_tree/file"
   get "protocol_tree/recent"
 
+  get "repo/list"
+
   resources :items
 
   match "project", to: 'samples#project'
