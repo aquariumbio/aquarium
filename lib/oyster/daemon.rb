@@ -35,13 +35,12 @@
 
             # Get the metacol and parse it, checking for parse errors along the way
 
-            blob = Blob.get process.sha, process.path
-            content = blob.xml
+            content = Repo::contents process.path, process.sha
             error = false
             args = (JSON.parse process.state, :symbolize_names => true)[:stack].first
 
             begin
-              m = Oyster::Parser.new(content).parse args
+              m = Oyster::Parser.new(process.path,content).parse args
             rescue Exception => e
               error = true
               process.message = "#{Time.now}: Error in Daemon while parsing #{process.path}: " + e.message.split('[')[0]

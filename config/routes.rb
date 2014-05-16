@@ -74,6 +74,8 @@ Bioturk::Application.routes.draw do
   get "protocol_tree/recent"
 
   get "repo/list"
+  get "repo/get"
+  get "repo/pull"
 
   resources :items
 

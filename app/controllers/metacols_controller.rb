@@ -34,14 +34,13 @@ class MetacolsController < ApplicationController
 
     @mc = Metacol.find(params[:id])
 
-    @blob = Blob.get @mc.sha, @mc.path
     @sha = @mc.sha
     @path = @mc.path
-    @content = @blob.xml
+    @content = Repo::contents @mc.path, @mc.sha
     @errors = ""
 
     begin
-      @metacol = Oyster::Parser.new(@content).parse(JSON.parse(@mc.state, :symbolize_names => true )[:stack].first)
+      @metacol = Oyster::Parser.new(@path,@content).parse(JSON.parse(@mc.state, :symbolize_names => true )[:stack].first)
     rescue Exception => e
       @errors = "ERROR: " + e
     end
@@ -69,17 +68,13 @@ class MetacolsController < ApplicationController
     @errors = ""
 
     begin
-      @blob = Blob.get sha, path
+      @content = Repo::contents path, sha
     rescue Exception => e
       @errors = e.to_s
     end
 
-    if @errors == ""
-      @content = @blob.xml
-    end
-
     begin
-      @arguments = Oyster::Parser.new(@content).parse_arguments_only
+      @arguments = Oyster::Parser.new(@path,@content).parse_arguments_only
     rescue Exception => e
       @errors = e
     end
@@ -100,9 +95,8 @@ class MetacolsController < ApplicationController
   def launch
 
     @info = JSON.parse(params[:info],:symbolize_names => true)
-    @blob = Blob.get params[:sha], params[:path]
-    @content = @blob.xml
-    @arguments = Oyster::Parser.new(@content).parse_arguments_only
+    @content = Repo::contents params[:path], params[:sha]
+    @arguments = Oyster::Parser.new(params[:path],@content).parse_arguments_only
 
     logger.info "arguments from parse_arguments_only = #{@arguments}"
 
@@ -140,7 +134,7 @@ class MetacolsController < ApplicationController
       args[:aquarium_user] = user.login
 
       begin
-        @metacol = Oyster::Parser.new(@content).parse args
+        @metacol = Oyster::Parser.new(params[:path],@content).parse args
       rescue Exception => e
         flash[:error] = "Could not start metacol due to parse error. #{e.to_s}"
         return redirect_to arguments_new_metacol_path(sha: params[:sha], path: params[:path]) 

@@ -2,9 +2,11 @@ module Oyster
 
   class Parser < Lang::Parser
 
-    def initialize contents
+    def initialize path, contents
       @tok = Lang::Tokenizer.new contents 
       @metacol = Metacol.new
+      @path = path
+      @default_repo = path.split('/')[0]
       functions
       time_functions
       super() # adds array, string, collection, sample functions

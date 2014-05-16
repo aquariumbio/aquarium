@@ -18,6 +18,7 @@ module Plankton
       @info = ""
       @debug = "No debug info available"
       @job_id = -1
+      @repo = name.split('/')[0]
 
       # user defined functions 
       @function_callback = method(:function_call) # used in the app method of expressions
@@ -95,12 +96,13 @@ module Plankton
     def get_file path
  
       begin
-        file = Blob.get_file @job_id, path
+        sha = Repo::version( @repo + "/" + path )
+        file = Repo::contents( @repo + "/" + path, sha )
       rescue Exception => e
         raise "Could not find file '#{path}': " + e.to_s
       end
-    
-      return file
+
+      return { content: file, sha: sha }
 
     end
 

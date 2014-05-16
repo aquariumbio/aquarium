@@ -59,6 +59,7 @@ GEM
       multipart-post (~> 1.1)
     faraday_middleware (0.9.0)
       faraday (>= 0.7.4, < 0.9)
+    git (1.2.6)
     hashie (2.0.5)
     highcharts-rails (3.0.7)
       railties (>= 3.1)
@@ -151,6 +152,7 @@ DEPENDENCIES
   coffee-rails
   d3-rails
   db-charmer
+  git
   highcharts-rails (~> 3.0.0)
   jquery-rails
   jquery-ui-rails

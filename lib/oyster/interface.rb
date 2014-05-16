@@ -2,13 +2,7 @@ module Oyster
 
   def Oyster.get_sha path
 
-    begin
-      file = Blob.get_file -1, path
-    rescue Exception => e
-      raise "Could not find file '#{path}' on github: " + e.to_s
-    end
-    
-    file[:sha]
+    Repo::version path
 
   end
 
@@ -20,8 +14,8 @@ module Oyster
     end
 
     # get the blob and parse its arguments
-    blob = Blob.get h[:sha], h[:path]
-    protocol = Plankton::Parser.new( h[:path], blob.xml )
+    content = Repo::contents h[:path], h[:sha]
+    protocol = Plankton::Parser.new( h[:path], content )
     # protocol.job_id = -1
     protocol.parse_arguments_only
 

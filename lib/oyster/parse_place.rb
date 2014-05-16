@@ -34,7 +34,7 @@ module Oyster
 
             @tok.eat_a 'protocol'
             @tok.eat_a ':'
-            p.proto( @metacol.scope.evaluate expr)
+            p.proto( @default_repo + "/" + (@metacol.scope.evaluate expr))
 
           when 'group'
 

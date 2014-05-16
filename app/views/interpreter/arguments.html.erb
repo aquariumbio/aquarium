@@ -1,7 +1,5 @@
 <% provide(:title, @path) %>
 
-<p><%= @protocol.info %></p>
-
 <% if @parse_errors != "" %>
 
   <h4>Parse error</h4>
@@ -80,6 +78,7 @@ var args = [];
 
 // run javascript ui maker thingy
 ac = new ArgumentUI('<%= @sha %>',args,cart,objects);
+ac.path = '<%= @path %>';
 
 ac.display_form();
 ac.display_groups(groups,users,'<%= current_user.login %>');

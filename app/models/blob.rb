@@ -1,5 +1,9 @@
 class Blob < ActiveRecord::Base
 
+  # Note: Blobs used to be used to cache local copies of things from github or local files. The new
+  # scheme is to have local github repos, so blobs are not used for that anymore. They only use for 
+  # blobs at this point is to remember the content of protocols launched from local files.
+
   attr_accessible :path, :sha, :xml, :dir, :job_id
 
   def self.get sha, path

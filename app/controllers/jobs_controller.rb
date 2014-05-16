@@ -68,8 +68,12 @@ class JobsController < ApplicationController
 
       @jobs = Job.where( 'path = ? AND sha = ?', params[:path], params[:sha] )
 
-      @blob = Blob.get( params[:sha], params[:path] )
-      @content = @blob.xml
+      if /local_file/ =~ params[:sha]
+        blob = Blob.get params[:sha], params[:path]
+        @content = blob.xml.force_encoding('UTF-8')
+      else
+        @content = Repo::contents params[:path], params[:sha] 
+      end
 
     elsif params[:path]
 

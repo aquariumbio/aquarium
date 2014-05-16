@@ -91,7 +91,7 @@ ArgumentUI.prototype.submit = function() {
     } else if ( this.edit ) {
       window.location = 'resubmit?job=' + this.job + '&info=' + encodeURIComponent(JSON.stringify(info));
     } else {
-      window.location = 'submit?sha=' + this.sha + '&info=' + encodeURIComponent(JSON.stringify(info));
+      window.location = 'submit?sha=' + this.sha + '&path=' + this.path + '&info=' + encodeURIComponent(JSON.stringify(info));
     }
 
 }

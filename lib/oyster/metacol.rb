@@ -11,7 +11,7 @@ module Oyster
 
   class Metacol
 
-    attr_accessor :places, :transitions, :wires, :scope, :arguments, :id
+    attr_accessor :places, :transitions, :wires, :scope, :arguments, :id, :path
 
     def initialize
       @arguments = []

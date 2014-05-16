@@ -31,3 +31,5 @@ gem 'jquery-rails'
 gem 'jquery-ui-rails'
 
 gem 'd3-rails'
+
+gem 'git'

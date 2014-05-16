@@ -4,10 +4,36 @@ class InterpreterController < ApplicationController
 
   before_filter :signed_in_user
 
+  def get_protocol path, sha
+
+    @path = path
+    @sha = sha
+
+    if /local_file/ =~ @sha
+      blob = Blob.get @sha, @path
+      @content = blob.xml.force_encoding('UTF-8')
+    else
+      @content = Repo::contents @path, @sha
+    end
+
+    @protocol = Plankton::Parser.new( @path, @content )
+
+    logger.info "HERE, PROTOCOL = #{@protocol}"
+
+    @parse_errors = ""
+
+    if params[:job]
+      @protocol.job_id = params[:job].to_i
+    else
+      @protocol.job_id = -1
+    end
+
+  end
+
   def get_blob 
 
-    # Gets a blob from the db and parses the xml to check for errors.
-    # When parse_xml is called, the resulting xml is associated with the
+    # Gets a blob from the db and parses the code to check for errors.
+    # When parse_xml is called, the resulting code is associated with the
     # protocol, so that it can later be parsed into a program
 
     blob = Blob.get @sha, params[:path]
@@ -55,12 +81,12 @@ class InterpreterController < ApplicationController
     # Creates a protocol via get_blob, which uses params[:path] to determine which file to use, 
     # and then parses the file to get a @protocol.progrom, which has a list of instructions.
 
-    get_blob
+    get_protocol @job.path, @job.sha
 
     begin
       @protocol.parse
     rescue Exception => e
-      @parse_errors = "Error while parsing. " + e.message # + ": " + e.backtrace.to_s
+      @parse_errors = "Error while parsing. " + e.message + ": " + e.backtrace.to_s
     end
 
   end
@@ -70,7 +96,7 @@ class InterpreterController < ApplicationController
     # Parses only the arguments of a protocol (to avoid descending into included files) so 
     # that the protocol object can be used to display arguments to the user.
 
-    get_blob
+    get_protocol params[:path], params[:sha]
 
     if @parse_errors == ""
 
@@ -91,6 +117,7 @@ class InterpreterController < ApplicationController
     @sha = params[:sha]
     @path = params[:path]
     @user = current_user
+
     parse_args_only
 
     respond_to do |format|
@@ -102,7 +129,7 @@ class InterpreterController < ApplicationController
   def open_local_file
 
     # Opens a local file specified in params. Each local file opening, whether the file
-    # has changes or not, creates a new Blob. Once the blob is made, it is parsed and the
+    # has changed or not, creates a new Blob. Once the blob is made, it is parsed and the
     # arguments dialog is shown.
 
     @path = params[:protocol_file].original_filename;
@@ -120,8 +147,8 @@ class InterpreterController < ApplicationController
 
     else # its a protocol
 
-      parse # why is this not parse_args_only?
-      render 'arguments' 
+      #parse # why is this not parse_args_only? or even just dropped since rendering arguments does a parse_args_only
+      redirect_to interpreter_arguments_path( path: @path, sha: @sha )
 
     end
 

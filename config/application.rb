@@ -6,6 +6,7 @@ require './lib/pdl/core/pdl'
 require './lib/lang/lang'
 require './lib/plankton/plankton'
 require './lib/oyster/oyster'
+require './lib/repo/repo'
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
