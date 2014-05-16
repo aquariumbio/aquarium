@@ -2,6 +2,16 @@
 
 <div id='content' class="pill-content"></div>
 
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h4 id="myModalLabel">Pulling Latest Changes from Github <%= @path %>.</h4>
+  </div>
+  <div class="modal-body">
+    <p>This proces will take a few seconds.</p>
+    <center><%= image_tag 'waiting_animation.gif' %></center>
+  </div>
+</div>
+
 <script>
 
   repos = JSON.parse('<%= @repos.to_json.html_safe %>');
@@ -77,6 +87,7 @@
     (function() {
       var name = repo_name;
       update_button.click(function() {
+        $('#myModal').modal();
         window.location="/repo/pull?name=" + name;
       });
     })();

@@ -51,8 +51,8 @@ class RepoController < ApplicationController
 
   def pull
 
-    flash[:notice] = Git.open("repos/"+params[:name]).pull()
-    logger.info flash.inspect
+    flash[:notice] = params[:name] + ": " + Git.open("repos/"+params[:name]).pull()
+    logger.info "PULLED CHANGES FOR #{params[:name]}"
     redirect_to repo_list_path( highlight: params[:name])
 
   end
