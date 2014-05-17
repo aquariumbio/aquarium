@@ -6,7 +6,6 @@ gem 'yaml_db'
 gem 'paperclip'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
-gem 'octokit'
 gem 'sass-rails',   '~> 3.2.3'
 gem 'db-charmer', :require => 'db_charmer'
 gem "highcharts-rails", "~> 3.0.0"
