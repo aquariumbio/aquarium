@@ -2,6 +2,6 @@
 # Installation specific stuff here. It needs to be moved to config/initializers/aquarium.rb to work.
 #
 
-Bioturk::Application.config.image_server_interface = 'http://bioturk.ee.washington.edu:3012/bioturk/image?name='
+Bioturk::Application.config.image_server_interface = 'http://your.image.server/image?name='
 
 
