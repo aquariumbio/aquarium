@@ -64,13 +64,6 @@ Bioturk::Application.routes.draw do
   get "liaison/release"
   get "liaison/produce"
 
-  get "protocol_tree/home"
-  get "protocol_tree/subtree"
-  get "protocol_tree/raw"
-  get "protocol_tree/pretty"
-  get "protocol_tree/parse"
-
-  get "protocol_tree/file"
   get "protocol_tree/recent"
 
   get "repo/list"

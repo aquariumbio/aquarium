@@ -14,17 +14,7 @@ class Blob < ActiveRecord::Base
 
       if !/local/.match sha
 
-        client = Octokit::Client.new(login:Bioturk::Application.config.repo_user,password:Bioturk::Application.config.repo_password)
-
-        b = self.new
-        b.sha = sha
-        b.path = path
-        begin
-          b.xml = Base64.decode64(client.blob(Bioturk::Application.config.protocol_repo,sha).content)
-        rescue Exception => e
-          raise "Could not retrieve content for path=#{path} and sha=#{sha}"
-        end
-        b.save
+        raise "Attempt to get blob from github via old octokit method, which has been removed and replaced with this message."
 
       else
 
