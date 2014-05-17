@@ -64,6 +64,7 @@ Bioturk::Application.routes.draw do
   get "liaison/release"
   get "liaison/produce"
 
+  get "protocol_tree/file"
   get "protocol_tree/recent"
 
   get "repo/list"
