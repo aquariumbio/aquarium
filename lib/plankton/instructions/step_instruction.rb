@@ -82,7 +82,8 @@ module Plankton
         when :image
           @has_image = true
           name = scope.evaluate(s[:expr])
-          value = "http://bioturk.ee.washington.edu:3012/bioturk/image?name=#{name}"
+          value = "#{Bioturk::Application.config.image_server_interface}#{name}"
+
           if value.class != String
             value = value.to_s
           end

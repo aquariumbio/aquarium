@@ -18,8 +18,6 @@ class InterpreterController < ApplicationController
 
     @protocol = Plankton::Parser.new( @path, @content )
 
-    logger.info "HERE, PROTOCOL = #{@protocol}"
-
     @parse_errors = ""
 
     if params[:job]
@@ -30,55 +28,9 @@ class InterpreterController < ApplicationController
 
   end
 
-  def get_blob 
-
-    # Gets a blob from the db and parses the code to check for errors.
-    # When parse_xml is called, the resulting code is associated with the
-    # protocol, so that it can later be parsed into a program
-
-    blob = Blob.get @sha, params[:path]
-
-    @file = blob.xml.force_encoding('UTF-8')
-    @path = blob.path
-
-    if /\.pl/.match @path # it's a plankton file ##########################
-
-      logger.info "Opening a plankton file: #{@path}!"
-      @protocol = Plankton::Parser.new( @path, @file )
-      @parse_errors = ""
-
-      if params[:job]
-        @protocol.job_id = params[:job].to_i
-      else
-        @protocol.job_id = -1
-      end
-
-    else # it's a pdl file ##################################################
-
-      logger.info "Opening a boring old xml file named #{@path}"
-
-      @protocol = Protocol.new
-      if params[:job]
-        @protocol.job_id = params[:job].to_i
-      else
-        @protocol.job_id = -1
-      end
-
-      @parse_errors = ""
-
-      begin
-        @protocol.parse_xml @file
-      rescue Exception => e
-        @parse_errors = e.message
-      end
-
-    end    
-
-  end
-
   def parse
 
-    # Creates a protocol via get_blob, which uses params[:path] to determine which file to use, 
+    # Creates a protocol via get_protocol, which uses params[:path] to determine which file to use, 
     # and then parses the file to get a @protocol.progrom, which has a list of instructions.
 
     get_protocol @job.path, @job.sha
