@@ -72,7 +72,11 @@ class JobsController < ApplicationController
         blob = Blob.get params[:sha], params[:path]
         @content = blob.xml.force_encoding('UTF-8')
       else
-        @content = Repo::contents params[:path], params[:sha] 
+        begin
+          @content = Repo::contents params[:path], params[:sha] 
+        rescue Exception => e
+          @content = "Could not find '#{params[:path]}' with sha '#{params[:sha]}'.<br />The repository information is probably not part of the path because the path was stored to the<br />database in the octokit era.".html_safe
+        end
       end
 
     elsif params[:path]

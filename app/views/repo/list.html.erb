@@ -54,7 +54,7 @@
 
   }
 
-  for( var i=0; i<repos.children.length; i++ ) {
+  for( var i = repos.children.length - 1; i >= 0; i-- ) {
 
     var repo_name = repos.children[i].data;
     var repo_info = repos.children[i].info;
@@ -67,6 +67,7 @@
     var pane = $("<div class='pill-pane row-fluid' id='"+repo_name+"'></div>");
     var info = $("<div class='span3 well repo-info'></div>")
         .append("<h3>"+repo_name+"</h3>")
+        .append("<h4>Latest update:</h4>")
         .append("<p><b>" + repo_info.message + "</b></p>")
         .append("<p>" + (new Date(repo_info.date)).toLocaleString() + "</p>")
         .append("<p>by " + repo_info.who + "</p>");

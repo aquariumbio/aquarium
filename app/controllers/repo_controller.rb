@@ -5,7 +5,7 @@ class RepoController < ApplicationController
   def directory_hash(path, name=nil)
     data = {:data => (name || path)}
     data[:children] = children = []
-    Dir.foreach(path) do |entry|
+    Dir.entries(path).sort.each do |entry|
       next if ( /^\./ =~ entry )
       full_path = File.join(path, entry)
       if File.directory?(full_path)
@@ -22,13 +22,13 @@ class RepoController < ApplicationController
     @repos = directory_hash('repos')
 
     @repos[:children].each do |r|
-      r[:info] = Repo::info( r[:data])
+      r[:info] = Repo::info( r[:data] )
     end
 
     if params[:highlight]
       @highlight = params[:highlight]
     else
-      @highlight = @repos[:children].first[:data]
+      @highlight = @repos[:children].last[:data]
     end
 
     respond_to do |format|
