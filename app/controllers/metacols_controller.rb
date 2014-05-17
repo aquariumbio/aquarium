@@ -36,7 +36,15 @@ class MetacolsController < ApplicationController
 
     @sha = @mc.sha
     @path = @mc.path
-    @content = Repo::contents @mc.path, @mc.sha
+
+    begin 
+      @content = Repo::contents @mc.path, @mc.sha
+    rescue
+      flash[:error] = "Octokit Era Problem: Could not show metacol #{@mc.path}, because the path probably has no repo information in it."
+      redirect_to metacols_path
+      return
+    end
+
     @errors = ""
 
     begin
