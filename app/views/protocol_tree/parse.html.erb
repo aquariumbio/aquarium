@@ -1,9 +1,0 @@
-<h1>Parse results</h1>
-
-<% if @errors != "" %>
-  <h2>There were parse errors.</h2>
-  <p><%= @errors %></p>
-<% else %>
-  <h2>Success</h2>
-  <%= render 'parsed_protocol' %>
-<% end %>
