@@ -71,7 +71,7 @@ module Lang
       # Define available tables. Note, no queries should be made at this point
       #
       tables = {
-        item: Item.includes(sample:[:sample_type]).includes(:object_type),
+        item: Item.where("location != 'deleted'").includes(sample:[:sample_type]).includes(:object_type),
         sample: Sample.includes(:sample_type),
         sample_type: SampleType.includes(),
         object_type: ObjectType.includes(),

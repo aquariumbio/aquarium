@@ -20,7 +20,11 @@ module Plankton
 
     def bt_execute scope, params
 
-      scope.set_complex @lhs, @rhs, @new
+      begin
+        scope.set_complex @lhs, @rhs, @new
+      rescue Exception => e
+        raise "Could not assign #{@lhs} to #{@rhs}. " + e.to_s
+      end
 
     end
 
