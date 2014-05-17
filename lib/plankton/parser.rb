@@ -94,10 +94,16 @@ module Plankton
     end
 
     def get_file path
+
+      if /:/ =~ path
+        repo_path = path.split(/:/).join('/')
+      else
+        repo_path = @repo + "/" + path
+      end
  
       begin
-        sha = Repo::version( @repo + "/" + path )
-        file = Repo::contents( @repo + "/" + path, sha )
+        sha = Repo::version( repo_path )
+        file = Repo::contents( repo_path, sha )
       rescue Exception => e
         raise "Could not find file '#{path}': " + e.to_s
       end

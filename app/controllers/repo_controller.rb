@@ -39,19 +39,25 @@ class RepoController < ApplicationController
 
   def get
 
-    @version = Repo::version(params[:path])
+    begin
+      @version = Repo::version(params[:path])
+    rescue
+      flash[:error] = "The file #{params[:path]} exists but is not under version control. Do you need to commit it?"
+      redirect_to repo_list_path
+      return
+    end
 
     if /.pl/ =~ params[:path]
       redirect_to interpreter_arguments_path(sha: @version, path: params[:path]) 
     else
-      redirect_to arguments_new_metacol_path(sha: @version, path: params[:path]) 
+      redirect_to arguments_new_metacol_path(sha: @version, path: params[:path])
     end
     
-  end
+  end 
 
   def pull
 
-    flash[:notice] = params[:name] + ": " + Git.open("repos/"+params[:name]).pull()
+    flash[:notice] = Git.open("repos/"+params[:name]).pull().gsub(/\r|\n/,"<br />").html_safe
     logger.info "PULLED CHANGES FOR #{params[:name]}"
     redirect_to repo_list_path( highlight: params[:name])
 
