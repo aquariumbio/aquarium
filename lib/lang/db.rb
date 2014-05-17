@@ -92,14 +92,7 @@ module Lang
         r
       end
 
-      #
-      # Return the only row if there is only one row, otherwise return all the rows
-      #
-      if rows.length == 1
-        complete rows[0]
-      else
-        rows.collect { |r| complete r }
-      end
+      rows.collect { |r| complete r }
 
     end
 
