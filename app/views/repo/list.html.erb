@@ -14,7 +14,7 @@
 
 <script>
 
-  repos = JSON.parse('<%= @repos.to_json.html_safe %>');
+  repos = JSON.parse('<%= escape_javascript(@repos.to_json.html_safe) %>');
 
   function mkdir(path,tag,children) {
 

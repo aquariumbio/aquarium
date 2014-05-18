@@ -35,7 +35,13 @@
 
             # Get the metacol and parse it, checking for parse errors along the way
 
-            content = Repo::contents process.path, process.sha
+            if /local_file/ =~ process.sha
+              blob = Blob.get process.sha, process.path
+              content = blob.xml.force_encoding('UTF-8')
+            else
+              content = Repo::contents process.path, process.sha
+            end
+
             error = false
             args = (JSON.parse process.state, :symbolize_names => true)[:stack].first
 

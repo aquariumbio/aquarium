@@ -34,7 +34,12 @@ module Oyster
 
             @tok.eat_a 'protocol'
             @tok.eat_a ':'
-            p.proto( @default_repo + "/" + (@metacol.scope.evaluate expr))
+            path = @metacol.scope.evaluate expr
+            if /:/ =~ path
+              p.proto ( path.split(':').join('/') )
+            else
+              p.proto( @default_repo + "/" + path )
+            end
 
           when 'group'
 

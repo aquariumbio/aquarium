@@ -2,6 +2,19 @@ class MetacolsController < ApplicationController
 
   before_filter :signed_in_user
 
+  def content sha, path
+
+    if /local_file/ =~ sha
+      blob = Blob.get sha, path
+      content = blob.xml.force_encoding('UTF-8')
+    else
+      content = Repo::contents path, sha
+    end
+
+    return content
+
+  end
+
   def index
 
     @user_id = params[:user_id] ? params[:user_id].to_i : current_user.id
@@ -37,10 +50,10 @@ class MetacolsController < ApplicationController
     @sha = @mc.sha
     @path = @mc.path
 
-    begin 
-      @content = Repo::contents @mc.path, @mc.sha
+    begin
+      @content = content @mc.sha, @mc.path
     rescue
-      flash[:error] = "Octokit Era Problem: Could not show metacol #{@mc.path}, because the path probably has no repo information in it."
+      flash[:error] = "Octokit Era Problem: Could find metacol '#{@mc.path}', because the path probably has no repo information in it."
       redirect_to metacols_path
       return
     end
@@ -50,7 +63,7 @@ class MetacolsController < ApplicationController
     begin
       @metacol = Oyster::Parser.new(@path,@content).parse(JSON.parse(@mc.state, :symbolize_names => true )[:stack].first)
     rescue Exception => e
-      @errors = "ERROR: " + e
+      @errors = "ERROR: " + e.to_s
     end
 
     @metacol.set_state( JSON.parse @mc.state, :symbolize_names => true )
@@ -75,10 +88,11 @@ class MetacolsController < ApplicationController
     @parse_errors = ""
     @errors = ""
 
-    begin
-      @content = Repo::contents path, sha
-    rescue Exception => e
-      @errors = e.to_s
+    if /local_file/ =~ @sha
+      blob = Blob.get @sha, @path
+      @content = blob.xml.force_encoding('UTF-8')
+    else
+      @content = Repo::contents @path, @sha
     end
 
     begin
@@ -102,8 +116,17 @@ class MetacolsController < ApplicationController
 
   def launch
 
+    @sha = params[:sha]
+    @path = params[:path]
     @info = JSON.parse(params[:info],:symbolize_names => true)
-    @content = Repo::contents params[:path], params[:sha]
+
+    if /local_file/ =~ @sha
+      blob = Blob.get @sha, @path
+      @content = blob.xml.force_encoding('UTF-8')
+    else
+      @content = Repo::contents @path, @sha
+    end
+
     @arguments = Oyster::Parser.new(params[:path],@content).parse_arguments_only
 
     logger.info "arguments from parse_arguments_only = #{@arguments}"

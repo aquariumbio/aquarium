@@ -121,7 +121,7 @@ module Lang
        elsif @function_callback
          e = @function_callback.call
        else
-         raise "No function names defined at #{@tok}"
+         raise "Could not find definition for '#{@tok.current}' on line #{@tok.line}."
        end
 
        return e

@@ -78,8 +78,6 @@ module Lang
         task: Task.includes(:task_prototype)
       }
 
-      puts(condition name.to_s, spec)
-
       #
       # Do the search
       #
