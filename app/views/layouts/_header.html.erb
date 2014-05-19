@@ -155,7 +155,7 @@
 
   }
 
-  <% if Rails.env == 'production' %>
+  <% if Rails.env == 'production' && Bioturk::Application.config.version_server_interface != ''%>
 
     var headerColor = document.getElementById('header-bar').style.background;
     var cameraIsOn = false;

@@ -2,6 +2,13 @@
 # Installation specific stuff here. It needs to be moved to config/initializers/aquarium.rb to work.
 #
 
+#
+# Prefix for URL for images
+#
 Bioturk::Application.config.image_server_interface = 'http://your.image.server/image?name='
 
+#
+# URL of vision server. Leave as empty string if you don't have one.
+#
+Bioturk::Application.config.version_server_interface = '' 
 
