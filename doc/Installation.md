@@ -1,7 +1,7 @@
 Installation
 ============
 
-Prerequisites (for a sqlite install)
+Prerequisites
 --
 
 	* [Ruby on rails](http://rubyonrails.org/)
@@ -15,7 +15,6 @@ Get the code
 Clone the code to your local computer using git, as in 
 
 	git clone https://github.com/klavinslab/aquarium
-
 
 Install Protocols
 --
@@ -67,6 +66,8 @@ Run
 	rails s
 	
 to start aquarium. Then go do http://localhost:3000/ and see if it works!
+
+This procedure should start a "Development" mode version with a local sqlite database in the db directory. This could be enough for some labs. However, the Klavins lab runs two versions of Aquarium using MySQL and [Phusion Passenger](https://www.phusionpassenger.com/index2). The first version is the "rehearsal" version, and the second version is the "production" version. This setup allows us to (a) periodically copy the databases from production to rehearsal servers via the ""Admin->Mirror Production" menu and (b) practice protocols without messing up our actual inventory. Details on installing Passenger can be found online.
 
 Create an Account
 --
