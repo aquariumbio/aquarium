@@ -34,52 +34,66 @@
 
 <% if @errors == "" %>
 
-  <% @metacol.places.each do |p| %>
+  <% if @metacol %>
 
-    <% if p.marked? %>
-      <div class='well marked'>
-    <% else %>
-      <div class='well unmarked'> 
-    <% end %>
+    <% @metacol.places.each do |p| %>
 
-      <p>
-        <b><%= p.name.capitalize %>.
-        </b> <i><%= p.protocol %></i>
-        <% if p.marked? && p.started %>
-          [<%= Time.at(p.started).to_formatted_s(:short) %>]
-        <% end %>
-      </p> 
-
-      <% pending = @mc.jobs.reject { |j| j.pc == Job.COMPLETED || (!p.jobs.include? j.id) } %>
-      <% completed = @mc.jobs.reject { |j| j.pc != Job.COMPLETED || (!p.jobs.include? j.id) } %>
-
-      <% if pending.length > 0 %>
-	<h4>Pending or Active</h4>
-	<%= render partial: 'jobs/job_list', locals: { 
-	    jobs: pending,
-	    last_updated: true, 
-	    runnable: false, 
-	} %>
+      <% if p.marked? %>
+	<div class='well marked'>
+      <% else %>
+	<div class='well unmarked'> 
       <% end %>
 
-      <% if completed.length > 0 %>
-	<h4>Completed Jobs:
-	<% completed.each do |j|%>
-	  <% s = j.status.downcase %>
-	  <div class='<%= s %>'>
-	    <%= link_to "#{j.id}", j %> 
-	    <% if s != 'completed' %>(<%= s %>)<% end %>
-	  </div>
-	<% end %>
-      <% end %></h4>
+	<p>
+	  <b><%= p.name.capitalize %>.
+	  </b> <i><%= p.protocol %></i>
+	  <% if p.marked? && p.started %>
+	    [<%= Time.at(p.started).to_formatted_s(:short) %>]
+	  <% end %>
+	</p> 
 
-    </div>
+	<% pending = @mc.jobs.reject { |j| j.pc == Job.COMPLETED || (!p.jobs.include? j.id) } %>
+	<% completed = @mc.jobs.reject { |j| j.pc != Job.COMPLETED || (!p.jobs.include? j.id) } %>
+
+	<% if pending.length > 0 %>
+	  <h4>Pending or Active</h4>
+	  <%= render partial: 'jobs/job_list', locals: { 
+	      jobs: pending,
+	      last_updated: true, 
+	      runnable: false
+	  } %>
+	<% end %>
+
+	<% if completed.length > 0 %>
+	  <h4>Completed Jobs:
+	  <% completed.each do |j|%>
+	    <% s = j.status.downcase %>
+	    <div class='<%= s %>'>
+	      <%= link_to "#{j.id}", j %> 
+	      <% if s != 'completed' %>(<%= s %>)<% end %>
+	    </div>
+	  <% end %>
+	<% end %></h4>
+
+      </div>
+
+    <% end %>
+
+  <% else %>
+
+    <%= render partial: 'jobs/job_list', locals: { jobs: @mc.jobs, last_updated: true, runnable: false } %>
+
+    <p>No further details available.</p>
 
   <% end %>
 
   <%= link_to 'List All', metacols_path, class: 'btn' %>
 
-  <%= render 'details' %>
+  <% if @metacol %>
+
+    <%= render 'details' %>
+
+  <% end %>
 
 <% else %>
   <p>Details about this metacol are no longer available.</p>
@@ -89,7 +103,7 @@
 
 </div>
 
-<% if @errors == "" %>
+<% if @errors == "" && @metacol %>
   <script>
     pn = new PN();
     pn.layout(<%= @metacol.for_layout.to_json.html_safe %>);

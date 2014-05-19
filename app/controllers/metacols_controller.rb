@@ -53,23 +53,30 @@ class MetacolsController < ApplicationController
     begin
       @content = content @mc.sha, @mc.path
     rescue
-      flash[:error] = "Octokit Era Problem: Could find metacol '#{@mc.path}', because the path probably has no repo information in it."
-      redirect_to metacols_path
-      return
+      flash[:error] = "Octokit Era Problem: Could not find metacol '#{@mc.path}' details, because the path probably has no repo information in it."
+      @content = nil
     end
 
     @errors = ""
 
-    begin
-      @metacol = Oyster::Parser.new(@path,@content).parse(JSON.parse(@mc.state, :symbolize_names => true )[:stack].first)
-    rescue Exception => e
-      @errors = "ERROR: " + e.to_s
-    end
+    if @content
 
-    @metacol.set_state( JSON.parse @mc.state, :symbolize_names => true )
+      begin
+        @metacol = Oyster::Parser.new(@path,@content).parse(JSON.parse(@mc.state, :symbolize_names => true )[:stack].first)
+      rescue Exception => e
+        @errors = "ERROR: " + e.to_s
+      end
 
-    if @errors==""
-      @metacol.id = @mc.id
+      @metacol.set_state( JSON.parse @mc.state, :symbolize_names => true )
+
+      if @errors==""
+        @metacol.id = @mc.id
+      end
+
+    else
+
+      @metacol = nil
+
     end
 
     respond_to do |format|

@@ -80,9 +80,9 @@
           <% end %>
          </td>
       <% end %>
-      <td><%= link_to '/interpreter/cancel?job=' + j.id.to_s, data: { confirm: 'Are you sure?' } do %>
+      <td><% if j.pc >= -1 %><%= link_to '/interpreter/cancel?job=' + j.id.to_s, data: { confirm: 'Are you sure?' } do %>
         <i class='icon-remove'></i>
-      <% end %></td>
+      <% end %><% end %></td>
     </tr>
 
   <% end %>
