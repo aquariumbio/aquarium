@@ -4,10 +4,10 @@ Installation
 Prerequisites
 --
 
-	* [Ruby on rails](http://rubyonrails.org/)
-    * [git](https://github.com/)
-    * A unix like environment, e.g. Mac OSX or Linux
-    * A MySQL server (for a proper installation)
+* [Ruby on rails](http://rubyonrails.org/)
+* [git](https://github.com/)
+* A unix like environment, e.g. Mac OSX or Linux
+* A MySQL server (optional for a full, production level installation)
     
 Get the code
 --
