@@ -60,11 +60,11 @@
     var repo_info = repos.children[i].info;
 
     // Add navigation pill
-    var li = $("<li><a id='"+repo_name+"_li' href='#"+repo_name+"'data-toggle='pill'>"+repo_name+"</a></li>");
+    var li = $("<li><a id='"+repo_name+"_li' href='#"+repo_name+"_pane' data-toggle='pill'>"+repo_name+"</a></li>");
     $('#nav').append(li);
 
     // Add pane content
-    var pane = $("<div class='pill-pane row-fluid' id='"+repo_name+"'></div>");
+    var pane = $("<div class='pill-pane row-fluid' id='"+repo_name+"_pane'></div>");
     var info = $("<div class='span3 well repo-info'></div>")
         .append("<h3>"+repo_name+"</h3>")
         .append("<h4>Latest update:</h4>")

@@ -57,8 +57,11 @@ class RepoController < ApplicationController
 
   def pull
 
-    flash[:notice] = Git.open("repos/"+params[:name]).pull().gsub(/\r|\n/,"<br />").html_safe
-    logger.info "PULLED CHANGES FOR #{params[:name]}"
+    begin
+      flash[:notice] = Git.open("repos/"+params[:name]).pull().gsub(/\r|\n/,"<br />").html_safe
+    rescue Exception => e
+      flash[:notice] = "Could not pull: this repository may not have a non-local origin associated with it."
+    end
     redirect_to repo_list_path( highlight: params[:name])
 
   end
