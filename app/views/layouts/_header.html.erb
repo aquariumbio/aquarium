@@ -155,7 +155,7 @@
 
   }
 
-  <% if Rails.env == 'production' && Bioturk::Application.config.version_server_interface != ''%>
+  <% if Rails.env == 'production' && Bioturk::Application.config.version_server_interface != '' %>
 
     var headerColor = document.getElementById('header-bar').style.background;
     var cameraIsOn = false;
@@ -186,7 +186,7 @@
 
       $.ajax({
 	type: 'GET',
-        url: 'http://istcsrv.cs.washington.edu:8800/statsum?format=json',
+        url: '<%= Bioturk::Application.config.version_server_interface %>statsum?format=json',
 	dataType: "json",
 	crossDomain: true,
 	success: function(data,status) {
