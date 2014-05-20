@@ -35,7 +35,7 @@ Then create a new file called hello.pl with the following code in it:
 		description: "Hello World"
 	end
 	
-Finally, add your new protocols to the repo
+Finally, make the repo.
 
 	git init
 	git add .
