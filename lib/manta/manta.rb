@@ -125,7 +125,7 @@ module Manta
 
   def self.sensor_data job, request
 
-    if Bioturk::Application.config.version_server_interface != ''
+    if Rails.env == 'development' && Bioturk::Application.config.version_server_interface != ''
 
       # Get recording info from Manta
       manta_recordings_url = Bioturk::Application.config.version_server_interface + "recordings?format=json"
