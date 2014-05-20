@@ -26,7 +26,7 @@ function render_json(tag,obj) {
 
         $.each(obj, function(k,v) {
             var li = $("<li />");
-            li.append("<span class='json_key'>" + k + ": </span>");
+            li.append("<span class='json_key_inline'>" + k + ": </span>");
             render_json(li,v);
             list.append(li);      
         });

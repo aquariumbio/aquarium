@@ -306,33 +306,7 @@ class InterpreterController < ApplicationController
     @job.user_id = current_user.id
 
     # tell manta we're starting a protocol
-
-    if Bioturk::Application.config.version_server_interface != ''
-
-      Thread.new do
-
-        logger.info "Starting thread to talk to MANTA #{Socket.gethostname}:#{request.port.to_s}"
-
-        begin
-          manta = URI::escape Bioturk::Application.config.version_server_interface + "start?&job=#{@job.id}&server=" + Socket.gethostname + ":" + request.port.to_s + "&user=" + (current_user.login) + "&protocol=#{@path}"  + "&location=" + ( cookies[:location] ? cookies[:location] : 'undefined' )
-        rescue Exception => e
-          logger.info "Error on setting up URI: " + e.to_s
-        end
-
-        logger.info "uri = #{manta}"
-
-        begin
-          uri= URI(manta)
-          res = Net::HTTP.get(uri)
-          logger.info "Message to MANTA on start: " + uri.to_s
-          logger.info "Message from MANTA on start: " + res
-        rescue Exception => e
-          logger.info "Could not talk to MANTA on start: " + e.to_s
-        end
-
-      end
-
-    end
+    Manta::start @job, current_user, request, cookies
 
     if @parse_errors != ""
       stop
@@ -347,13 +321,7 @@ class InterpreterController < ApplicationController
     log "STOP", { location: cookies[:location] ? cookies[:location] : 'undefined' }
 
     # tell manta we're done
-    if Bioturk::Application.config.version_server_interface != ''
-      Thread.new do
-        uri = URI(Bioturk::Application.config.version_server_interface + "stop?&job=#{@job.id}&server=" + Socket.gethostname + ":" + request.port.to_s + "&abort=" + ( @exception ? 'true' : 'false' ))
-        res = Net::HTTP.get(uri)
-        logger.info "Message from MANTA on stop: " + res
-      end
-    end
+    Manta::stop @job, request, (@exception ? 'true' : 'false')
 
   end
 

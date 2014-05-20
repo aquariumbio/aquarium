@@ -155,52 +155,7 @@
 
   }
 
-  <% if Rails.env == 'production' && Bioturk::Application.config.version_server_interface != '' %>
-
-    var headerColor = document.getElementById('header-bar').style.background;
-    var cameraIsOn = false;
-
-    function blinkHeader() {
-
-      var el = document.getElementById('header-bar');
-
-      if ( cameraIsOn ) {
-
-	if ( el.style.background == "rgb(255, 0, 0)" ) {
-	  el.style.background = headerColor;
-	} else {
-	  el.style.background = '#f00';
-	}
-
-      } else {
-	el.style.background = headerColor;
-      }
-
-      setTimeout(blinkHeader,1000); 
-
-    }
-
-    blinkHeader();
-
-    function checkCamera() {
-
-      $.ajax({
-	type: 'GET',
-        url: '<%= Bioturk::Application.config.version_server_interface %>statsum?format=json',
-	dataType: "json",
-	crossDomain: true,
-	success: function(data,status) {
-	  cameraIsOn = data.cameraIsOn;
-	}
-      });
-
-      setTimeout(checkCamera,10000); 
-
-    }
-
-    checkCamera();
-
-  <% end %>
+  <%= Manta::blinker.html_safe %>
 
 </script>
 

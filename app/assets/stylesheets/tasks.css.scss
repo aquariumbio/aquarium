@@ -6,12 +6,11 @@
   list-style-type: none;
   border-left: 2pt solid #9ce;
   border-radius: 5px;
-  margin: 5px 0px 5px 5px;
+  margin: 0px 0px 0px 0px;
 
   li {
     margin-left: 10px;
     position: relative;
-
   }
   position: relative;
 
@@ -22,7 +21,7 @@
   border-left: 2pt solid #8d9;
   border-radius: 5px 0 5px 5px;
 
-  margin: 15px 0px 5px 5px;
+  margin: 5px 0px 5px 0px;
   li {
     margin-left: 10px;
     position: relative;
@@ -36,6 +35,11 @@
   font-weight: bold;
   margin-right: 5px;
   display: block;
+}
+
+.json_key_inline {
+  font-weight: bold;
+  margin-right: 5px;
 }
 
 .json_spec {
