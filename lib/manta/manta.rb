@@ -2,7 +2,7 @@ module Manta
 
   def self.start job, user, request, cookies
 
-    if Bioturk::Application.config.version_server_interface != ''
+    if Bioturk::Application.config.vision_server_interface != ''
 
       Thread.new do
 
