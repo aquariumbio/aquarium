@@ -8,7 +8,7 @@ module Manta
 
         server = "#{Socket.gethostname}:#{request.port.to_s}"
 
-        url = Bioturk::Application.config.version_server_interface + "start?&job=#{job.id}&server=" + server + "&user=" + (user.login) + "&protocol=#{job.path}" + "&location=" + ( cookies[:location] ? cookies[:location] : 'undefined' )
+        url = Bioturk::Application.config.vision_server_interface + "start?&job=#{job.id}&server=" + server + "&user=" + (user.login) + "&protocol=#{job.path}" + "&location=" + ( cookies[:location] ? cookies[:location] : 'undefined' )
 
         begin
 
@@ -41,13 +41,13 @@ module Manta
 
   def self.stop job, request, aborted
 
-    if Bioturk::Application.config.version_server_interface != ''
+    if Bioturk::Application.config.vision_server_interface != ''
 
       Thread.new do
 
         server = "#{Socket.gethostname}:#{request.port.to_s}"
        
-        url = Bioturk::Application.config.version_server_interface + "stop?&job=#{job.id}&server=" + server + "&abort=" + aborted
+        url = Bioturk::Application.config.vision_server_interface + "stop?&job=#{job.id}&server=" + server + "&abort=" + aborted
 
         begin
 
@@ -70,7 +70,7 @@ module Manta
 
   def self.blinker
 
-    if Rails.env == 'development' && Bioturk::Application.config.version_server_interface != ''
+    if Rails.env == 'development' && Bioturk::Application.config.vision_server_interface != ''
 
       "var headerColor = document.getElementById('header-bar').style.background;
       var cameraIsOn = false;
@@ -101,7 +101,7 @@ module Manta
 
         $.ajax({
           type: 'GET',
-          url: '#{Bioturk::Application.config.version_server_interface}statsum?format=json',
+          url: '#{Bioturk::Application.config.vision_server_interface}statsum?format=json',
           dataType: 'json',
           crossDomain: true,
           success: function(data,status) {
@@ -125,10 +125,10 @@ module Manta
 
   def self.sensor_data job, request
 
-    if Rails.env == 'development' && Bioturk::Application.config.version_server_interface != ''
+    if Rails.env == 'development' && Bioturk::Application.config.vision_server_interface != ''
 
       # Get recording info from Manta
-      manta_recordings_url = Bioturk::Application.config.version_server_interface + "recordings?format=json"
+      manta_recordings_url = Bioturk::Application.config.vision_server_interface + "recordings?format=json"
       uri = URI(manta_recordings_url)
       res = Net::HTTP.get(uri)
 
