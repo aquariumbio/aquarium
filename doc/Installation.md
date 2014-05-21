@@ -12,7 +12,9 @@ Prerequisites
 Get the code
 --
 
-Clone the code to your local computer using git, as in 
+To use the latest stable release, go to the [release page](https://github.com/klavinslab/aquarium/releases) and get either the zip file or tar.gz file and unpackage it on your local computer.
+
+If you want to use the bleeding edge code, you can clone the code to your local computer using git, as in 
 
 	git clone https://github.com/klavinslab/aquarium
 
