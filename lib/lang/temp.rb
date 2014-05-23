@@ -1,4 +1,3 @@
-
     def complete x
 
       temp = x.attributes.symbolize_keys
@@ -30,35 +29,23 @@
 
     end
 
-    def fix val
+    def pluralize_table_names spec
 
-      if val.class == String
-        "'#{val}'"
-      else
-        val
-      end
-    
-    end      
+      newspec = spec.clone
 
-    def condition base, spec
+      reps =  { object_type: :object_types, 
+                sample: :samples,
+                sample_type: :sample_types,
+                task_prototype: :task_prototypes }
 
-      c = []
-
-      spec.keys.each do |k|
-
-        if spec[k].class == Hash
-          c.push( condition "#{base}.#{k}", spec[k] )
-        else # spec is number or string
-          c.push "#{base}.#{k.to_s} == #{fix(spec[k])}"
+      spec.each do |k,v|
+        if reps.has_key? k
+          newspec.delete(k)
+          newspec[reps[k]] = v
         end
+      end          
 
-      end
-
-      if c.length > 0
-        c.join(' && ')
-      else
-        "true"
-      end
+      newspec
 
     end
 
@@ -68,34 +55,18 @@
       # Define available tables. Note, no queries should be made at this point
       #
       tables = {
-        item: Item.includes(sample:[:sample_type]).includes(:object_type),
+        item: Item.includes(sample:[:sample_type]).includes(:object_type).where("location != 'deleted'"),
         sample: Sample.includes(:sample_type),
         sample_type: SampleType.includes(),
         object_type: ObjectType.includes(),
         task: Task.includes(:task_prototype)
       }
 
-      puts(condition name.to_s, spec)
-
       #
       # Do the search
       #
-      rows = tables[name].select do |x|
-        begin
-          r = eval(condition "x", spec)
-        rescue 
-          r = false # e.g. when item.sample == nil
-        end
-        r
-      end
+      rows = tables[name].where(pluralize_table_names(spec))
 
-      #
-      # Return the only row if there is only one row, otherwise return all the rows
-      #
-      if rows.length == 1
-        complete rows[0]
-      else
-        rows.collect { |r| complete r }
-      end
+      rows.collect { |r| complete r }
 
     end

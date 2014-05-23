@@ -43,25 +43,23 @@ module Lang
     
     end      
 
-    def condition base, spec
+    def pluralize_table_names spec
 
-      c = []
+      newspec = spec.clone
 
-      spec.keys.each do |k|
+      reps =  { object_type: :object_types, 
+                sample: :samples,
+                sample_type: :sample_types,
+                task_prototype: :task_prototypes }
 
-        if spec[k].class == Hash
-          c.push( condition "#{base}.#{k}", spec[k] )
-        else # spec is number or string
-          c.push "#{base}.#{k.to_s} == #{fix(spec[k])}"
+      spec.each do |k,v|
+        if reps.has_key? k
+          newspec.delete(k)
+          newspec[reps[k]] = v
         end
+      end          
 
-      end
-
-      if c.length > 0
-        c.join(' && ')
-      else
-        "true"
-      end
+      newspec
 
     end
 
@@ -71,7 +69,7 @@ module Lang
       # Define available tables. Note, no queries should be made at this point
       #
       tables = {
-        item: Item.where("location != 'deleted'").includes(sample:[:sample_type]).includes(:object_type),
+        item: Item.includes(sample:[:sample_type]).includes(:object_type).where("location != 'deleted'"),
         sample: Sample.includes(:sample_type),
         sample_type: SampleType.includes(),
         object_type: ObjectType.includes(),
@@ -81,14 +79,7 @@ module Lang
       #
       # Do the search
       #
-      rows = tables[name].select do |x|
-        begin
-          r = eval(condition "x", spec)
-        rescue 
-          r = false # e.g. when item.sample == nil
-        end
-        r
-      end
+      rows = tables[name].where(pluralize_table_names(spec))
 
       rows.collect { |r| complete r }
 
