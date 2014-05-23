@@ -16,13 +16,13 @@
   <% case ob.release_method
 
      when 'return' %>
-      <h4 class='release-check'><input type='checkbox' id='<%=i %>-returned' onchange='update_next_button(<%=i %>)'></input>
+      <h4 class='release-check'><input class='check' type='checkbox' id='<%=i %>-returned' onchange='update_next_button(<%=i %>)'></input>
           Return item <%= it.id %> (<%= nm %>) to <%= loc %>.</h4>
       <% if method != "" %><p><%= method %></p><% end %>
       <% next_check_list.push(i) %>
 
   <% when 'dispose' %>
-      <h4 class='release-check'><input type='checkbox' id='<%=i %>-returned' onchange='update_next_button(<%=i %>)'></input> 
+      <h4 class='release-check'><input class='check' type='checkbox' id='<%=i %>-returned' onchange='update_next_button(<%=i %>)'></input> 
           Dispose of item <%= it.id %> (<%= nm %>).</h4>
       <% if method != "" %><p><small><%= method %></small></p><% end %>
       <% next_check_list.push(i) %>

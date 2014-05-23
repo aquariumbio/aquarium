@@ -1,5 +1,11 @@
 <ul id='nav' class="nav nav-pills"></ul>
 
+<% if params[:from] %>
+  <div id='from'>
+    <p>Will use the output of job <%= link_to params[:from], job_path(params[:from]) %> as input.</p>
+  </div>
+<% end %>
+
 <div id='content' class="pill-content"></div>
 
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
