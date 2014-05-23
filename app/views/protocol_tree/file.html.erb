@@ -10,7 +10,7 @@
 
    <% if Rails.env != 'production' %>
 
-      <%= form_tag(interpreter_open_local_file_path, multipart: true, class: 'file_upload') do %>
+      <%= form_tag(interpreter_open_local_file_path(from: params[:from]), multipart: true, class: 'file_upload') do %>
 
               <%= file_field_tag 'protocol_file', onchange: "updateFileName()" %><br />
               <label>File name:</label>
@@ -19,6 +19,12 @@
                 <div id='get_file' class='btn' onclick="getFile()">Choose File</div>
               </div>
               <br />
+
+              <% if params[:from] %>
+                  <p>Input will be derived from the output of job <%= link_to params[:from], job_path(params[:from]) %>.</p>
+                  <input id='from' name='from' value='<%= params[:from] %>' type='hidden'></input>
+              <% end %>
+
               <%= submit_tag("Initialize", class: 'btn btn-primary') %>
  
        <% end %>

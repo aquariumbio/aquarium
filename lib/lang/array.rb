@@ -67,6 +67,19 @@ module Lang
 
     end
 
+    def range a, b, delta
+      if a.class != Fixnum || a.class != Fixnum || a.class != Fixnum
+        raise "Non-integers in call to range."
+      end
+      i = a
+      r = []
+      while i<=b
+        r.push(i)
+        i += delta
+      end
+      r
+    end
+
   end
 
 end

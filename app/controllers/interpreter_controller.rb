@@ -99,8 +99,13 @@ class InterpreterController < ApplicationController
 
     else # its a protocol
 
-      #parse # why is this not parse_args_only? or even just dropped since rendering arguments does a parse_args_only
-      redirect_to interpreter_arguments_path( path: @path, sha: @sha )
+      logger.info "PARAMS = #{params}"
+
+      if params[:from]
+        sequence_new_job @sha, @path, params[:from].to_i
+      else
+        redirect_to interpreter_arguments_path( path: @path, sha: @sha )
+      end
 
     end
 

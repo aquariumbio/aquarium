@@ -53,11 +53,15 @@
 
 </ul>
 
-<p><button id='sequence' class='btn btn-primary'>Send ...</button></p>
+<p><button id='send' class='btn btn-primary'>Send ...</button>
+   <button id='send-local' class='btn'>Send Local ...</button></p>
 
 <script>
-  $('#sequence').click(function() {
+  $('#send').click(function() {
     window.location = '/repo/list?from=' + '<%= @job.id %>';
+  });
+  $('#send-local').click(function() {
+    window.location = '/protocol_tree/file?from=' + '<%= @job.id %>';
   });
 </script>
 

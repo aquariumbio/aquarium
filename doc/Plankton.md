@@ -49,6 +49,11 @@ The following functions for manipulating standard types are available:
 	
 	unique(a)                    # Returns a new array representing the same set, but with no repeats.
 
+	transpose(M)	             # Transpose the array of arrays M. Each row needs the to have the same
+                                 # number of columns
+
+	take m, start, num           # Take num consecutive 
+
 ### Hashes ###
 
 	merge(g,h)                   # Returns a merge version of the hashes g and h, with keys in g

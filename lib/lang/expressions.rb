@@ -31,6 +31,7 @@ module Lang
       add_function :unique, 1
       add_function :transpose, 1
       add_function :take, 3
+      add_function :range, 3
 
       # Hash functions
       add_function :merge, 2
