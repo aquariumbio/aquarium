@@ -11,21 +11,21 @@
 .item_list {
   list-style: none;
   li {
-    margin: 10px;
+    margin: 3px;
 #    outline: 1pt dashed blue;
-    height: 50px;
+    height: 40px;
     position: relative;
    .check {
      float: left;
-     margin-top: 8px !important;
+     margin-top: 5px !important;
    }
    .id {
       margin: 0 10px 0 10px;
       padding: 0 0 0 15px;
-      line-height: 50px;
+      line-height: 40px;
       font-weight: bold;
       width: 340px !important;
-      height: 50px;
+      height: 40px;
  #     outline: 1pt dashed orange;
       float: left;
       background: #eee;
@@ -35,8 +35,8 @@
       content: "Item ";
     }
     .location {
-      line-height: 50px;
-      height: 50px;
+      line-height: 40px;
+      height: 40px;
       width: 210px;
       float: left;
       margin: 0;
@@ -46,8 +46,8 @@
       border: 1pt solid #ddd;
     }
     .inuse {
-      line-height: 50px;
-      height: 50px;
+      line-height: 40px;
+      height: 40px;
       width: 210px;
       float: left;
       margin: 0;
@@ -67,8 +67,8 @@
       line-height: 14px;
     }
     .description {
-      line-height: 50px;
-      height: 50px;
+      line-height: 40px;
+      height: 40px;
       float: left;
       margin: 0;
       padding: 0 0 0 10px;
@@ -78,10 +78,10 @@
     .name {
       margin: 0 10px 0 10px;
       padding: 0 0 0 15px;
-      line-height: 50px;
+      line-height: 40px;
       font-weight: bold;
       width: 340px !important;
-      height: 50px;
+      height: 40px;
  #     outline: 1pt dashed orange;
       float: left;
       background: #eee;

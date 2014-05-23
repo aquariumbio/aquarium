@@ -22,7 +22,9 @@
 
       if(typeof children[i] == "string") {
 
-        tag.append($("<li></li>").append("<a href=/repo/get?path="+path+"/"+children[i]+">"+children[i]+"</a>"));
+        var from = '<%= params[:from] ? "&from=#{params[:from]}" : "" %>';
+
+        tag.append($("<li></li>").append("<a href=/repo/get?path="+path+"/"+children[i]+from+">"+children[i]+"</a>"));
 
       } else {
 

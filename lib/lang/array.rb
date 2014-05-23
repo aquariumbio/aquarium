@@ -57,6 +57,16 @@ module Lang
 
     end
 
+    def take m, start, num # take num entries from m, starting at entry start
+
+      if m.class == Array && start.class == Fixnum && num.class == Fixnum
+        m[start,num]
+      else
+        raise "Called take with the wrong kind of arguments."
+      end
+
+    end
+
   end
 
 end

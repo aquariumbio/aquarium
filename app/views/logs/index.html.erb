@@ -26,9 +26,11 @@
       <td><%= link_to j.path,  jobs_summary_url(path: j.path) %></td>
       <td>
         <% if args.length > 0 %>
+          <span class='showhide'><span>
             <% args.each do |k,v| %>
               <%= ("<b>" + k.to_s + "</b>: " + v.to_s).html_safe %><br />
             <% end %>
+          </span></span>
         <% else %>
           -
         <% end %>
@@ -42,3 +44,7 @@
 <center>
 <%= will_paginate @completed_jobs %>
 </center>
+
+<script>
+  showhide();
+</script>

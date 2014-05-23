@@ -157,7 +157,7 @@ class ObjectTypesController < ApplicationController
         c.destroy
       end
 
-      ObjectType.all.each do |ob|
+      ObjectType.includes(:items).each do |ob|
         num_objects += 1
         num_items += ob.items.length
         ob.destroy
@@ -168,7 +168,7 @@ class ObjectTypesController < ApplicationController
         i.destroy
       end
 
-      SampleType.all.each do |st|
+      SampleType.includes(:samples).each do |st|
         num_sample_types += 1
         num_samples += st.samples.length
         st.destroy

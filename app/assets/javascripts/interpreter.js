@@ -87,7 +87,7 @@ ArgumentUI.prototype.submit = function() {
     }
 
     if ( this.metacol ) {
-        window.location = 'launch?sha=' + this.sha + '&path=' + this.path + '&info=' + encodeURIComponent(JSON.stringify(info));
+      window.location = 'launch?sha=' + this.sha + '&path=' + this.path + '&info=' + encodeURIComponent(JSON.stringify(info));
     } else if ( this.edit ) {
       window.location = 'resubmit?job=' + this.job + '&info=' + encodeURIComponent(JSON.stringify(info));
     } else {

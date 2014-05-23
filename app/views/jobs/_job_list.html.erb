@@ -34,9 +34,11 @@
       <td><%= g = Group.find_by_id(j.group_id); g ? (link_to g.name, g) : 'no group' %></td>
       <td>
         <% if args.length > 0 %>
+          <span class='showhide'><span>
             <% args.each do |k,v| %>
               <%= ("<b>" + k.to_s + "</b>: " + v.to_s).html_safe %><br />
             <% end %>
+          </span></span>
         <% else %>
           -
         <% end %>

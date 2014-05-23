@@ -30,34 +30,36 @@
     <li>Latest Start Time: <%= @job.latest_start_time.to_formatted_s(:short) %></li> 
   <% end %>
 
-  <br />
-
   <li>
       <% args = (JSON.parse(@job.state))['stack'].first.reject { |k,v| k == 'user_id' } %>
       <% if args.length > 0 %>
-          Arguments:<ul>
+          Arguments: <span class='showhide'><ul>
           <% args.each do |k,v| %>
             <%= ("<li><b>" + k.to_s + "</b>: " + v.to_s).html_safe %></li>
           <% end %>
-          </ul>
+          </ul></span>
       <% else %>
         No Arguments
       <% end %>
   </li>
-
-  <br />
 
 <li>Version of <%= link_to @job.path, jobs_summary_path(path: @job.path) %> used:
                <%= link_to @job.sha, jobs_summary_url(path: @job.path, sha: @job.sha) %>
   (<a href='<%= "/interpreter/arguments?path=" + @job.path + "&sha=" + @job.sha %>'> Run again </a>)
   </li>
 
-  <br />
-
   <li>Time Submitted: <%= @job.created_at.to_formatted_s(:short) %></li>
   <li>Last Updated: <%= @job.updated_at.to_formatted_s(:short) %></li>
 
 </ul>
+
+<p><button id='sequence' class='btn btn-primary'>Sequence</button></p>
+
+<script>
+  $('#sequence').click(function() {
+    window.location = '/repo/list?from=' + '<%= @job.id %>';
+  });
+</script>
 
 <div class='row-fluid'>
 
@@ -90,7 +92,7 @@
     <td><%= entry.created_at.to_formatted_s(:short) %></td>
     <td><%= u = User.find_by_id(@job.submitted_by); u ? u.login : 'nobody' %></td>
     <td><%= entry.entry_type %></td>
-    <td><div id='data_<%= entry.id %>' class='json_spec'></div></td>
+    <td><span class='showhide' id='data_<%= entry.id %>' class='json_spec'></span></td>
   </tr>
 <% end %>
 
@@ -101,6 +103,8 @@
   <% ( @job.logs.reject { |l| l.entry_type == 'NEXT' } ).each do |entry| %>
     render_json($('#data_<%= entry.id %>'),JSON.parse('<%= escape_javascript(entry.data.html_safe.force_encoding("UTF-8")) %>'));
   <% end %>
+
+  showhide();
 
 </script>
 

@@ -357,12 +357,22 @@ class InterpreterController < ApplicationController
       end
 
       # continue through instructions that are not renderable
+
       if @pc < @protocol.program.length 
 
         @instruction = @protocol.program[@pc]
         clear_params     
 
+        numreps = 0
+
         while !@instruction.renderable && @pc < @protocol.program.length && ! @instruction.respond_to?( :stop )
+
+          if numreps > 1000
+            process_error "Executed 1000 steps without rendering anything. You may have an infinite loop."
+            render 'current'
+            return
+          end
+
           begin
             execute
           rescue Exception => e
@@ -370,11 +380,14 @@ class InterpreterController < ApplicationController
             render 'current'
             return
           end
+
           if @pc < @protocol.program.length && ! @instruction.respond_to?( :stop )
             @instruction = @protocol.program[@pc] 
             clear_params
           end
-          
+
+          numreps += 1
+
         end
 
       end

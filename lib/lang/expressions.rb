@@ -30,6 +30,7 @@ module Lang
       add_function :concat, 2
       add_function :unique, 1
       add_function :transpose, 1
+      add_function :take, 3
 
       # Hash functions
       add_function :merge, 2

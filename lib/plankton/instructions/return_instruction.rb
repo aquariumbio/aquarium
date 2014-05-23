@@ -13,8 +13,6 @@ module Plankton
       retvals = scope.get :__RETVALS__
       fid = scope.get :__FUNCTION_CALL_ID__
 
-      puts "In Return Instruction fid.class = #{fid.class}"
-
       if !retvals[fid.to_sym]
         retvals[fid.to_sym] = []
       end
