@@ -5,6 +5,7 @@ function TakeUI(entries, tag, job, env) {
   this.tag = '#' + tag;
   this.job = job;
   this.env = env;
+  this.release = [];
 
   console.log(this.env);
 
@@ -40,6 +41,7 @@ TakeUI.prototype.item_html = function(item,i,j) {
   } else {
     loc = $("<span class='inuse'>Not available</span>");
     if ( this.env != 'production' ) {
+      this.release.push(item.id);
       rel = $("<div class='release'><a href='#'>RELEASE</a></div>");
       rel.click(function() { window.location = 'release?item=' + item.id + '&job=' + that.job; } );
       loc.append(rel);
@@ -82,6 +84,7 @@ TakeUI.prototype.object_html = function(object,i,j) {
 	$(ch).attr("disabled", true);
         if ( this.env != 'production' && object.items.length > 0 ) {
           var id = object.items[0].id;
+          this.release.push(id);
           rel = $("<a href='#'> RELEASE</a>");
           rel.click ( function() { window.location = 'release?item=' + id + '&job=' + that.job; } );
           quantity.append(rel);
@@ -115,6 +118,18 @@ TakeUI.prototype.show = function() {
   }
 
   $(this.tag).append(this.list);
+
+    console.log(this.release);
+
+    if ( this.release.length > 0 ) { 
+        var btn = $("<button>RELEASE ALL</button>").addClass("btn");
+        var that = this;
+        btn.click(function(e) {
+            e.preventDefault();
+	    window.location = "release?itemlist=[" + that.release + "]&job=" + that.job;
+	});
+        $(this.tag).append(btn);
+    }
 
 }
 

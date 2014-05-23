@@ -438,13 +438,32 @@ class InterpreterController < ApplicationController
   end
 
   def release
-    i = Item.find_by_id(params[:item])
-    if i
-      i.inuse = 0
-      i.save
-      flash[:success] = "Item #{params[:item]} has been released."
+
+    if params[:item]
+
+      i = Item.find_by_id(params[:item])
+      if i
+        i.inuse = 0
+        i.save
+        flash[:success] = "Item #{params[:item]} has been released."
+      end
+
+    elsif params[:itemlist]
+
+      JSON.parse(params[:itemlist]).each do |n|
+        i = Item.find_by_id(n)
+        if i
+          i.inuse = 0
+          i.save
+        end
+      end
+
+      flash[:success] = "Items #{params[:itemlist]} have been released."
+
     end
+
     current
+
   end
 
 end
