@@ -23,6 +23,7 @@ module Lang
       add_function :asin, 1
       add_function :atan, 1
       add_function :atan2, 2
+      add_function :mod, 2
 
       # Array functions
       add_function :length, 1

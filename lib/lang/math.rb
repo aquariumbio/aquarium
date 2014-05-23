@@ -57,6 +57,14 @@ module Lang
       end
     end
 
+    def mod x, y
+      if x.class == Fixnum || y.class == Float 
+        x % y
+      else
+        raise "Attempted to modulo non-integers."
+      end
+    end
+
   end
 
 end

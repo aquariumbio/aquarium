@@ -21,7 +21,7 @@ Array values are accessed as in A[0], A[1], etc. Hashes are delimited by curly b
 	
 The keys in hashes are called symbols and are values in and of themselves. The keys in the above hash are :x, :y, and :z. If h is the above hash, then the value for :x in h is accessed via h[:x].
 
-All the standard boolean operations are available: &&, ||, and !. All the standard numerical operators are available: +, -, *, /, %, and \*\* with \*\* representing exponentiation.
+All the standard boolean operations are available: &&, ||, and !. All the standard numerical operators are available: +, -, *, /, and \*\* with \*\* representing exponentiation. Modulo is not done with n%k but with mod(n,k).
 
 Strings can be concatenated using the + operator. Also, a string such as
 
@@ -71,7 +71,7 @@ The following functions for manipulating standard types are available:
 	
 ### Math ###
 
-Standard math fucntions include log, log2, log10, cos, sin, tan, acos, asin, atan, atan2, sqrt, max, min, floor, and ceil.
+Standard math fucntions include mod, log, log2, log10, cos, sin, tan, acos, asin, atan, atan2, sqrt, max, min, floor, and ceil.
 
 ### Samples and Items ###
 	
