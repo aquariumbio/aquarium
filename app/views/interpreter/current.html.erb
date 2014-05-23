@@ -60,7 +60,12 @@
     <% if @pc != Job.COMPLETED %>
       <button class='btn btn-success btn-interpreter' id='advance-button' disabled>NEXT</button>
       <button class='btn btn-interpreter' id='note-button'>ADD NOTES</button>
-      <button class='btn btn-danger btn-interpreter' id='abort-button' style='position: absolute; margin: 0; bottom: 0; left: 0;'>ABORT</button>
+      <% if Rails.env != 'production' %>
+        <button class='btn btn-interpreter' id='check-all'>CHECK ALL</button>
+      <% end %>
+      <button class='btn btn-danger btn-interpreter' id='abort-button'
+      style='position: absolute; margin: 0; bottom: 0; left:
+      0;'>ABORT</button>
     <% end %>
   </div>
 
@@ -125,5 +130,17 @@
       console.log ( "PDL:" + '<%= m.html_safe %>' );
     <% end %>
   <% end %>
+
+  <% if Rails.env != 'production' %>
+
+    $('#check-all').click(function(e) {
+      e.preventDefault();
+      $('.check').each(function() {
+        $(this).attr('checked', true);
+        $('#advance-button').attr('disabled',false);
+      });
+    });
+
+  <% end %>  
 
 </script>
