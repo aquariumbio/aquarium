@@ -1,7 +1,8 @@
 AQUARIUM
 =========
 
-* [Installation](https://github.com/klavinslab/aquarium/blob/master/doc/Installation.md) : How to install Aquarium
-* [Plankton](https://github.com/klavinslab/aquarium/blob/master/doc/Plankton.md) : The protocol programming language.
-* [Oyster](https://github.com/klavinslab/aquarium/blob/master/doc/Oyster.md) : The process control language.
-* [Locations](https://github.com/klavinslab/aquarium/blob/master/doc/Locations.md) : Aquarium's freezer location system.
+* [Installation](doc/Installation.md) : How to install Aquarium
+* [Plankton](doc/Plankton.md) : The protocol programming language.
+* [Oyster](doc/Oyster.md) : The process control language.
+* [Predefined Functions](doc/Predefined.md): Basic functions for manipulating hashes, arrays, samples, etc. in Plankton and Oyster.
+* [Locations](doc/Locations.md) : Aquarium's freezer location system.
