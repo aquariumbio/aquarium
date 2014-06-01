@@ -44,7 +44,12 @@ module Lang
       add_function :to_string, 1
       
       # Collection functions
-      add_function :collection, 1
+      add_function :col_dimensions, 1
+      add_function :col_get, 3
+      add_function :col_get_matrix, 1
+      add_function :col_set, 4
+      add_function :col_transfer, 2
+      add_function :col_new_matrix, 2
 
       # Sample functions
       add_function :find, 2

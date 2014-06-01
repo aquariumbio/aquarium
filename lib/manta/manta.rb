@@ -127,29 +127,35 @@ module Manta
 
     if Rails.env == 'development' && Bioturk::Application.config.vision_server_interface != ''
 
-      # Get recording info from Manta
-      manta_recordings_url = Bioturk::Application.config.vision_server_interface + "recordings?format=json"
-      uri = URI(manta_recordings_url)
-      res = Net::HTTP.get(uri)
+      begin
 
-      puts manta_recordings_url + " ==> " + res
+        # Get recording info from Manta
+        manta_recordings_url = Bioturk::Application.config.vision_server_interface + "recordings?format=json"
+        uri = URI(manta_recordings_url)
+        res = Net::HTTP.get(uri)
 
-      html = "<ul class='manta_data'>"
-      steps = job.logs.select { |log| log.entry_type == "NEXT" } 
+        puts manta_recordings_url + " ==> " + res
 
-      i = 1
-      steps.each do |step|
-        html += "<li>#{i}</li>"
-        i += 1
+        html = "<ul class='manta_data'>"
+        steps = job.logs.select { |log| log.entry_type == "NEXT" } 
+
+        i = 1
+        steps.each do |step|
+          html += "<li>#{i}</li>"
+          i += 1
+        end
+
+        html += "</ul>"
+
+        return html
+
+      rescue
+        "<!-- manta connection failed !>"
       end
-
-      html += "</ul>"
-
-      html
 
     else
 
-      "<%-- no manta data %>"
+      "<!-- no manta data !>"
 
     end
 

@@ -2,53 +2,148 @@ module Lang
 
   class Scope 
 
-    def collection spec
+   def col_find c
 
-      if spec.class == Hash
-
-        s = {
-          name: "Unknown", 
-          description: "No description provided", 
-          object_type: "Generic Collection", 
-          part_object_type: "Generic Part",
-          rows: 1, 
-          columns: 1, 
-          project: "Unknown",
-          location: "Bench" }.merge spec
-
-        collection_ot = ObjectType.find_by_name(s[:object_type])
-        part_ot = ObjectType.find_by_name(s[:part_object_type])
-
-        if !collection_ot
-          raise "Could not find object type #{s[:object_type]} when attempt to make new collection."
-        end
-
-        if !part_ot
-          raise "Could not find object type #{s[:part_object_type]} when attempt to make new collection."
-        end
-
-        c = Collection.new
-        c.name = s[:name]
-        c.object_type_id = part_ot.id
-        c.rows = s[:rows]
-        c.columns = s[:columns]
-        c.project = s[:project]
-        c.description = s[:description]
-        c.save
-
-        i = Item.new
-        i.object_type_id = collection_ot.id
-        i.location = s[:location]
-        i.quantity = 1
-        i.inuse = 1
-        i.collection_id = c.id
-        i.save
-
-        { id: i.id, name: i.object_type.name, data: "" }
-
-      else
-        raise "Invalid argument to collection. Expecting a hash with fields name, part_type, rows, cols, and project."
+      begin
+        col = Item.find c
+      rescue Exception => e
+        raise "Could not find item #{c}."
       end
+
+      if col.object_type.handler != "collection"
+        raise "#{c} does not have the 'collection' handler."
+      end
+
+      begin
+        data = JSON.parse( col.data, symbolize_names: true )
+      rescue Exception => e
+        raise "Could not parse JSON in collection #{c}."
+      end
+  
+      [ col, data[:matrix] ]
+
+    end
+
+    def col_dimensions c
+
+      c,m = col_find c
+
+      [ length(m), length(m[0]) ]
+
+    end
+
+    def col_get c, i, j
+
+      if c.class != Fixnum || c.class != Fixnum || c.class != Fixnum
+        raise "Invalid arguments to col_get(c,i,j). c should be an item id. i and j should be non-negative integers."
+      end
+  
+      c,m = col_find c
+
+      if 0 <= i && i < length(m) 
+        m[i][j]
+      else
+        nil
+      end
+
+    end
+
+    def col_get_matrix c
+
+      if c.class != Fixnum || c.class != Fixnum || c.class != Fixnum
+        raise "Invalid arguments to col_get_matrix(c). c should be an item id."
+      end
+  
+      c,mat = col_find c
+      mat
+
+    end
+
+    def col_set c, i, j, val
+
+      if c.class != Fixnum || c.class != Fixnum || c.class != Fixnum || val.class != Fixnum
+        raise "Invalid arguments to col_set(c,i,j). c should be an item id. i and j should be non-negative integers. val should be a sample id."
+      end
+  
+      c,mat = col_find c
+
+      if 0 <= i && i < length( mat )
+        mat[i][j] = val
+      end
+
+      c.data = { matrix: mat }.to_json
+      c.save
+
+      mat
+
+    end
+
+    def col_transfer sources, dests
+
+      input = sources.collect { |c|
+        c,mat = col_find c;  
+        { item: c, matrix: mat }
+      }
+
+      output = dests.collect { |c|
+        c,mat = col_find c;  
+        { item: c, matrix: mat }
+      }
+
+      n=0
+      k=0
+      l=0
+  
+      result = []
+
+      begin # transfer samples ###############################
+
+        (0..length(input)-1).each do |m|
+          (0..length(input[m][:matrix])-1).each do |i|
+            (0..length(input[m][:matrix][i])-1).each do |j|
+
+              while output[n][:matrix][k][l] != -1
+
+                l += 1
+
+                if l >= length(output[n][:matrix][k])
+                   l = 0
+                   k += 1
+                   if k >= length(output[n][:matrix])
+                     l = 0
+                     k = 0
+                     n += 1
+                     if n >= length(output[n])
+                       raise "no more destination slots at #{n},#{k},#{l}"
+                     end
+                   end
+                end
+
+              end # while
+
+              result.push [ input[m][:item].id,i,j, output[n][:item].id,k,l ]
+              output[n][:matrix][k][l] = input[m][:matrix][i][j]
+
+            end
+          end
+        end
+
+      rescue Exception => e
+        puts "Exception in col_transfer: " + e.to_s
+      end # begin #############################################
+
+      output.each do |o|
+        o[:item][:data] = ({ matrix: o[:matrix] }).to_json
+        o[:item].save
+      end
+
+      return result
+
+    end
+
+    def col_new_matrix r, c
+
+      Array.new(r,Array.new(c,-1))
 
     end
 
