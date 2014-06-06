@@ -19,13 +19,21 @@ module Lang
             temp[:object_type] = x.object_type.attributes.symbolize_keys
           end
 
+          begin
+            temp[:data] = JSON.parse( temp[:data], symbolize_names: true )
+          rescue
+            temp[:data] = { error: "Could not parse data field" }
+          end
+
         when Sample
 
           temp[:sample_type] = x.sample_type.attributes.symbolize_keys
 
-        else
+        when Task
 
-          puts "Not an item or a sample"
+          temp[:task_prototype] = x.task_prototype.attributes.symbolize_keys
+          temp[:specification] = JSON.parse( temp[:specification], symbolize_names: true )
+          temp[:task_prototype][:prototype] = JSON.parse( temp[:task_prototype][:prototype], symbolize_names: true )
 
       end
 
