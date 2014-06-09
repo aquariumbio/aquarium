@@ -1,5 +1,7 @@
 <h1>New <%= @task.task_prototype.name %></h1>
 
+<div id='fail-message'></div>
+
 <div id="task_info">
     <label><b>Name</b></label>
     <input id="task_name" type='text' value='<%= @task.name %>'></input>
@@ -24,7 +26,7 @@
   $('#save').click(function(){
     var name = $('#task_name').val(),
         stat = $('#task_status').val(),
-      spec = JSON.stringify(json_editor_extract($('#json_editor')));
+        spec = JSON.stringify(json_editor_extract($('#json_editor')));
  
     var AUTH_TOKEN = '<%= "#{form_authenticity_token}" %>';
 
@@ -33,12 +35,22 @@
         url: "/tasks",
         dataType: 'json',
 	data: JSON.stringify({task: {name: name, status: stat,
+        user_id: <%= current_user.id %>,
         specification: spec, task_prototype_id: <%= @task.task_prototype.id %>}, authenticity_token: AUTH_TOKEN}),
         contentType: 'application/json'
     }).done(function(data){
-        console.log(data);
 	window.location = "/tasks?task_prototype_id=" + <%= @task.task_prototype.id %>;
+    }).fail(function(data){
+        var list = $("<ul></ul>")
+        console.log(data);
+        msg = JSON.parse(data.responseText);
+        for ( var key in msg ) {
+          list.append('<li>'+key+': '+msg[key]+'</li>');
+        }
+        $('#fail-message').append('<p><b>Errors prevented this task from being saved.</b></p>').append(list);
+        $('#fail-message').addClass('alert alert-danger');
     });
+
 
   });
 

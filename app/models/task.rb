@@ -11,12 +11,21 @@ class Task < ActiveRecord::Base
 
   validate :matches_prototype
 
+  validate :legal_status
+
+  def legal_status
+    if ! JSON.parse(self.task_prototype.status_options).include? self.status
+      errors.add(:status_choice, "Status must be one of " + self.task_prototype.status_options);
+      return
+    end
+  end
+
   def matches_prototype
 
     begin
       spec = JSON.parse self.specification, symbolize_keys: true
     rescue Exception => e
-      errors.add(:task_json, ": Error parsing JSON in prototype. #{e.to_s}")
+      errors.add(:task_json, "Error parsing JSON in prototype. #{e.to_s}")
       return
     end
 

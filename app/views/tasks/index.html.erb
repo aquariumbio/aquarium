@@ -32,7 +32,13 @@
        </select></div>
 
     </td>
-    <td><%= link_to task.user.login, task.user %></td>
+    <td>
+      <% if task.user %>
+        <%= link_to task.user.login, task.user %>
+      <% else %>
+         nobody
+      <% end %>
+    </td>
     <td><%= time_ago_in_words(task.created_at) %> ago</td>
     <td><%= time_ago_in_words(task.updated_at) %> ago</td>
     <td><%= link_to edit_task_path(task,task_prototype_id: task.task_prototype) do %>
