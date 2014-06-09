@@ -13,7 +13,7 @@ module Plankton
         v = @tok.eat_a_variable
         @tok.eat_a '='
         e = expr
-        push InputInstruction.new v, e, lines
+        push InputInstruction.new @repo, v, e, lines
       end
 
       lines[:endline] = @tok.line

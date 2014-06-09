@@ -53,8 +53,6 @@ module Plankton
       @tok = Lang::Tokenizer.new file[:content]
       @include_stack.push( { tokens: @tok, path: path, returns: rets } )
 
-      puts "Just before beginning included file, current = #{@tok.current}"
-
       push StartIncludeInstruction.new args, path, file[:sha], lines
 
     end # include
