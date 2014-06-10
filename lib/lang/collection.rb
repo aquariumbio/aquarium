@@ -80,6 +80,8 @@ module Lang
 
     def col_transfer sources, dests
 
+      puts "BEGINNING col_transfer !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+
       input = sources.collect { |c|
         c,mat = col_find c;  
         { item: c, matrix: mat }
@@ -102,6 +104,8 @@ module Lang
           (0..length(input[m][:matrix])-1).each do |i|
             (0..length(input[m][:matrix][i])-1).each do |j|
 
+              puts "col_transfer working on #{[m,i,j]}"
+
               while output[n][:matrix][k][l] != -1
 
                 l += 1
@@ -113,8 +117,8 @@ module Lang
                      l = 0
                      k = 0
                      n += 1
-                     if n >= length(output[n])
-                       raise "no more destination slots at #{n},#{k},#{l}"
+                     if n >= length(output)
+                       raise "transfer complete"
                      end
                    end
                 end
@@ -129,7 +133,14 @@ module Lang
         end
 
       rescue Exception => e
-        puts "Exception in col_transfer: " + e.to_s
+
+        if e.to_s != "transfer complete"
+          puts "Exception in col_transfer: " + e.to_s + e.backtrace.join("\n")
+          raise "Exception in col_transfer: " + e.to_s
+        else
+          puts "Transfer complete"
+        end
+
       end # begin #############################################
 
       output.each do |o|

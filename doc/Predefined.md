@@ -25,6 +25,9 @@ Transpose the array of arrays M. Each row needs the to have the same number of c
 ### take(a,i,n)
 Take n consecutive entries from the array a starting at index i.
 
+### range(a,b,delta)
+Returns the array [a, a+delta, ..., b]
+
 Hashes
 ---
 ---------------------------------------------------------------------------------
