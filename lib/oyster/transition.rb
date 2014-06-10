@@ -36,7 +36,7 @@ module Oyster
 
     def run_program scope
       @program.each do |a|
-        scope.set( a[:lhs], eval( scope.substitute a[:rhs] ) )
+        scope.set( a[:lhs], scope.evaluate(a[:rhs]) )
       end
     end
 
