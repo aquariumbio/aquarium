@@ -7,8 +7,17 @@ module Krill
     def initialize jid
 
       @job = Job.find(jid)
+      @path = @job.path
+      @sha = @job.sha
+      @content = Repo::contents @path, @sha
+
+      eval(@content) # adds protocol def to this class
+      
+      puts "Initializing Thread Handler in Thread = #{Thread.current}"
 
       @thread = Thread.new { 
+
+        puts "Protocol thread = #{Thread.current}"
 
         Thread.stop
          
@@ -24,15 +33,6 @@ module Krill
 
     end
 
-    def protocol
-
-      x = 1
-      display( { title: "A step", note: "x = #{x}" } )
-      x = 2
-      display( { title: "A step", note: "x = #{x}" } )
-
-    end
-
     def append_step s
 
       @job.reload
@@ -45,32 +45,35 @@ module Krill
 
     def display page
 
-      append_step page
+      append_step( { operation: "display", content: page } )
 
       @job.reload
       @job.pc += 1
       @job.save
 
+      puts "STOPPING THREAD FOR JOB #{@job.id} with thread = #{Thread.current}"
       Thread.stop
 
     end
 
     def start
 
+      puts "Starting job #{@job.id}"
+
       @job.reload
       @job.pc = 0
       @job.save
 
       @thread.wakeup
-      
 
     end
 
     def continue
 
+      puts "Continuing job #{@job.id}"
+
       if @thread.alive?
         @thread.wakeup
-
       end
 
       @thread.alive?

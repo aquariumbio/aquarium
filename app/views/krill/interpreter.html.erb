@@ -2,7 +2,7 @@
 
 <p>PC:<%= @job.pc %>.</p>
 
-<p>Start: <%= @job.state %></p>
+<div id='state'></div>
 
 <button id='continue' class='btn'>Next</button>
 
@@ -11,5 +11,8 @@
   $('#continue').click(function() {
      window.location = 'continue?job=<%= params[:job] %>';
   });
+ 
+
+  render_json($('#state'),JSON.parse('<%= escape_javascript(@job.state.html_safe) %>'));
 
 </script>

@@ -34,8 +34,19 @@ module Krill
 
             when "continue"
 
-              @jobs[jid].continue
-              client.puts( { response: "ok" }.to_json )
+              if @jobs[jid]
+
+                @jobs[jid].continue
+                client.puts( { response: "ok" }.to_json )
+  
+              else
+
+                j = Job.find(jid)
+                j.pc = Job.COMPLETED
+                j.save
+                client.puts( { response: "error", error: "Krill process not found for job #{jid}" }.to_json )
+
+              end
 
             else
 

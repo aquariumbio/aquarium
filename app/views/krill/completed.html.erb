@@ -1,0 +1,7 @@
+<p>Job <%= @job.id %> is completed.</p> 
+
+<div id='state'></div>
+
+<script>
+  render_json($('#state'),JSON.parse('<%= escape_javascript(@job.state.html_safe) %>'));
+</script>

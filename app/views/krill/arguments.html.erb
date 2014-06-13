@@ -1,13 +1,13 @@
 <% provide(:title, 'Krill' ) %>
 
-<h1>KRILL</h1>
+<h1>Arguments for <%= @path %>, <%= @sha %></h1>
 
 <button id='start' class='btn'>Submit</button>
 
 <script>
 
   $('#start').click(function() {
-     window.location = 'submit';
+     window.location = 'submit?path=<%= @path %>&sha=<%= @sha %>';
   });
 
 </script>

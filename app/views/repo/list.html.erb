@@ -30,7 +30,11 @@
 
         var from = '<%= params[:from] ? "&from=#{params[:from]}" : "" %>';
 
-        tag.append($("<li></li>").append("<a href=/repo/get?path="+path+"/"+children[i]+from+">"+children[i]+"</a>"));
+        if ( children[i].match ( /\.kl$/ ) ) {
+          tag.append($("<li></li>").append("<a href=/krill/arguments?path="+path+"/"+children[i]+from+">"+children[i]+"</a>"));
+        } else {
+          tag.append($("<li></li>").append("<a href=/repo/get?path="+path+"/"+children[i]+from+">"+children[i]+"</a>"));
+        }
 
       } else {
 
