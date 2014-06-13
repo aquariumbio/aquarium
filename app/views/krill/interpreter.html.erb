@@ -1,0 +1,15 @@
+<p>Job: <%= @job.id %>.</p>
+
+<p>PC:<%= @job.pc %>.</p>
+
+<p>Start: <%= @job.state %></p>
+
+<button id='continue' class='btn'>Next</button>
+
+<script>
+
+  $('#continue').click(function() {
+     window.location = 'continue?job=<%= params[:job] %>';
+  });
+
+</script>

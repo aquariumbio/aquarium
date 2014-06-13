@@ -80,8 +80,6 @@ module Lang
 
     def col_transfer sources, dests
 
-      puts "BEGINNING col_transfer !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-
       input = sources.collect { |c|
         c,mat = col_find c;  
         { item: c, matrix: mat }

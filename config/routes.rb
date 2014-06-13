@@ -45,6 +45,12 @@ Bioturk::Application.routes.draw do
   get "interpreter/edit"
   get "interpreter/resubmit"
 
+  get "krill/arguments"
+  get "krill/submit"
+  get "krill/start"
+  get "krill/continue"
+  get "krill/interpreter"
+
   get "stats/jobs"
   get "stats/users"
   get "stats/user_activity"

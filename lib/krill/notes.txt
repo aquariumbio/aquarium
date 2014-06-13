@@ -1,0 +1,12 @@
+IPC
+
+use rails runner to start an ipc daemon
+
+  - it listens on some port p for messages
+  - messages have the form
+    push q msg 
+      # this creates a queue q if it doesn't already exist
+      # then it pushes msg onto it
+    pop q
+      # removes the last message on the queue named q and returns it
+    

@@ -8,6 +8,7 @@ require './lib/plankton/plankton'
 require './lib/oyster/oyster'
 require './lib/repo/repo'
 require './lib/manta/manta'
+require './lib/krill/krill'
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
