@@ -130,8 +130,8 @@ class ObjectType < ActiveRecord::Base
     r = Regexp.new ( params[:prefix] + '\.[0-9]+\.[0-9]+\.[0-9]+' )
 
     (objects.collect { |ot| 
-      ot.items.reject { |i|
-         r.match(i.location) == nil || ( i.sample && i.sample.project != params[:project] )
+      ot.items.select { |i|
+         r.match(i.location) != nil && i.sample && i.sample.project == params[:project]
       } 
     }).flatten.collect{ |i| 
       i.location
@@ -144,6 +144,7 @@ class ObjectType < ActiveRecord::Base
     params = { boxes_per_hotel: 16 }.merge p
 
     locs = items_in_project params
+    puts "locs = #{locs}"
 
     if locs.length == 0 # a totally new project!
 
