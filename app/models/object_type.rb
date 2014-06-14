@@ -116,24 +116,41 @@ class ObjectType < ActiveRecord::Base
     # of the items in the box, with nil entries if there is no item in that slot.
     #
 
+    # boxes will contain the results
     boxes = {}
 
+    # a regexp to match locations of the right format
     r = Regexp.new ( params[:prefix] + '\.[0-9]+\.[0-9]+\.[0-9]+' )
 
-    items = Item.includes(:sample).includes(:object_type).select { |i| 
+    # all items
+    items = Item.includes(:sample).includes(:object_type).all
+
+    # all items with the same project
+    related_items = items.select { |i| 
       r.match(i.location) != nil && i.sample && i.sample.project == params[:project] 
     }
 
-    items.each do |i|
+    # figure out the boxes in the project
+    related_items.each do |i|
       freezer,hotel,box,slot = i.location.split('.')
       slot = slot.to_i
       name = "#{freezer}.#{hotel}.#{box}"
+      if !boxes[name]
+        boxes[name] = Array.new(81) {nil}
+      end
+    end
+
+    # figure out which items in are in which slots
+    items.each do |i|
+
+      freezer,hotel,box,slot = i.location.split('.')
+      slot = slot.to_i
+      name = "#{freezer}.#{hotel}.#{box}"
+
       if boxes[name]
         boxes[name][slot] = i.id
-      else
-        boxes[name] = Array.new(81) {nil}
-        boxes[name][slot] = i.id
       end
+
     end
 
     boxes
