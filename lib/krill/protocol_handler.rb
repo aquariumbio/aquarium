@@ -27,6 +27,8 @@ module Krill
         @job.pc = Job.COMPLETED
         @job.save
 
+        append_step( { operation: "complete" } )
+
         ActiveRecord::Base.connection.close
 
       }

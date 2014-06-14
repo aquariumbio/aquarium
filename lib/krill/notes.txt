@@ -1,12 +1,17 @@
-IPC
+- deal with asynchrony between server and rails
 
-use rails runner to start an ipc daemon
+- arguments
 
-  - it listens on some port p for messages
-  - messages have the form
-    push q msg 
-      # this creates a queue q if it doesn't already exist
-      # then it pushes msg onto it
-    pop q
-      # removes the last message on the queue named q and returns it
-    
+- user input
+
+- hide protocol methods to prevent display, start, continue from being overwritten
+
+  - make protocol class its own class
+
+- including other files
+
+  - write an 'include' like function that reads from the
+    repo and evaluates the results to add methods to the protocol
+    handler object
+
+  - Make sure 

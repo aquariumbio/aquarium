@@ -116,7 +116,7 @@ class StaticPagesController < ApplicationController
           if !flash[:error]
             flash[:error] = ["<b>WARNING!</b>"]
           end
-          flash[:error] << "#{i.location} (for project #{i.sample.project}) contains multiple items: #{b[slot].id} and #{i.id}. "
+          flash[:error] << "#{i.location} contains multiple items: #{b[slot].id} and #{i.id}. "
         end
         @result[freezer][hotel][box][slot] = i
       end
