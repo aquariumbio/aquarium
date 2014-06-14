@@ -107,62 +107,58 @@ class ObjectType < ActiveRecord::Base
 
   end
 
-  def sort_locations locs 
+  def boxes_for_project params
 
-    locs.sort do |a,b|
-      x = a.split('.')
-      y = b.split('.')
-      if x[1].to_i != y[1].to_i
-        x[1].to_i - y[1].to_i
-      elsif x[2].to_i != y[2].to_i
-        x[2].to_i - y[2].to_i
-      else 
-        x[3].to_i - y[3].to_i
-      end
-    end
+    # 
+    # Finds all boxes associated with the project params[:project]
+    #
+    # Returns a hash of the form boxname => array where boxname is like "M20.4.5" and array is an array
+    # of the items in the box, with nil entries if there is no item in that slot.
+    #
 
-  end
-
-  def items_in_project params
-
-    objects = ObjectType.where("prefix = ?", params[:prefix])
+    boxes = {}
 
     r = Regexp.new ( params[:prefix] + '\.[0-9]+\.[0-9]+\.[0-9]+' )
 
-    (objects.collect { |ot| 
-      ot.items.select { |i|
-         r.match(i.location) != nil && i.sample && i.sample.project == params[:project]
-      } 
-    }).flatten.collect{ |i| 
-      i.location
+    items = Item.includes(:sample).includes(:object_type).select { |i| 
+      r.match(i.location) != nil && i.sample && i.sample.project == params[:project] 
     }
-  
-  end
 
-  def next_location p = {}
-
-    params = { boxes_per_hotel: 16 }.merge p
-
-    locs = items_in_project params
-    puts "locs = #{locs}"
-
-    if locs.length == 0 # a totally new project!
-
-      "#{prefix}.#{next_empty_box params}.0"
-
-    else # an existing project
-
-      x = (sort_locations locs).last.split('.')
-
-      if x[3].to_i >= 80 # Note: 9x9 grid gives a max of 80 samples per box
-        "#{prefix}.#{next_empty_box params}.0"
+    items.each do |i|
+      freezer,hotel,box,slot = i.location.split('.')
+      slot = slot.to_i
+      name = "#{freezer}.#{hotel}.#{box}"
+      if boxes[name]
+        boxes[name][slot] = i.id
       else
-        "#{x[0]}.#{x[1]}.#{x[2]}.#{x[3].to_i+1}"
+        boxes[name] = Array.new(81) {nil}
+        boxes[name][slot] = i.id
       end
-
     end
 
-  end 
+    boxes
+
+  end
+
+  def next_freezer_box_slot params
+
+    # make list of all boxes associated with project
+    boxes = boxes_for_project params
+
+    # find first slot in a box with an empty slot
+    boxes.each do |name,slots|
+      for i in 0..80
+        if slots[i] == nil
+          return "#{name}.#{i}"
+        end
+      end
+    end
+
+    # choose a new box if all slots are full in all boxes for project
+    p = { boxes_per_hotel: 16 }.merge params
+    return "#{p[:prefix]}.#{next_empty_box p}.0"
+
+  end
 
   def location_wizard details = {}
 
@@ -171,10 +167,10 @@ class ObjectType < ActiveRecord::Base
     case prefix
     
       when 'M20', 'M80', 'DFS'
-        next_location params
+        next_freezer_box_slot params
 
       when /^SF[0-9]/
-        next_location( { boxes_per_hotel: 24 }.merge params )
+        next_freezer_box_slot ( { boxes_per_hotel: 24 }.merge params )
 
       when /^FIX*/
         prefix.split(":").last

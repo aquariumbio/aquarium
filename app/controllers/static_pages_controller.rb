@@ -88,13 +88,11 @@ class StaticPagesController < ApplicationController
 
   def freezer
 
-    @items = Item.includes(:sample)
-
     @result = {}
 
     flash.delete :error
 
-    (@items.includes(:sample).includes(:object_type).select { |i| /^[0-9a-zA-Z]*\.[0-9]*\.[0-9]*\.[0-9]*$/ =~ i.location }).each do |i|
+    (Item.includes(:sample).includes(:object_type).select { |i| /^[0-9a-zA-Z]*\.[0-9]*\.[0-9]*\.[0-9]*$/ =~ i.location }).each do |i|
 
       freezer,hotel,box,slot = i.location.split('.')
       freezer = freezer.to_sym
