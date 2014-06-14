@@ -1,6 +1,9 @@
 <div class='sample_box'>
 
-              <% box_project = (box.select { |i| i != nil && i.sample != nil }).first.sample.project %>
+              <% 
+                projects = ((box.select { |i| i != nil && i.sample != nil }).collect { |i| i.sample.project }).uniq
+                box_project = projects.join(',')
+              %>
 
 	      <p><%= box_number %> : <%= link_to box_project, project_url(name: box_project) %><p>
 
