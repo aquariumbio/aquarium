@@ -59,8 +59,11 @@ module Plankton
             raise "Sample name must be a string"      
           end
           @sample = Sample.find_by_name(@sample_name)
+          unless @sample
+            raise "Could not find sample with name=#{@sample_name}."
+          end
         rescue Exception => e
-          raise "Could not find sample with name=#{@sample_name} and project=#{@sample_project}."
+          raise "Could not find sample with name=#{@sample_name}."
         end
       end
 
