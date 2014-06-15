@@ -1,18 +1,25 @@
-<p>Job: <%= @job.id %>.</p>
+<div class="row-fluid">
 
-<p>PC:<%= @job.pc %>.</p>
+  <div class="span3" id='state'></div>
+  <div class="span8 well" id='current'></div>
+  <div class="span1"><button id='continue' class='btn'>Next</button></div>
 
-<div id='state'></div>
-
-<button id='continue' class='btn'>Next</button>
+</div>
 
 <script>
 
+  state = JSON.parse('<%= escape_javascript(@job.state.html_safe) %>');
+
+  render_json($('#state'),state);
+
+  krill = new Krill(state,'current');
+  krill.display();
+
   $('#continue').click(function() {
+     // TODO: Make this ajax and use post
      window.location = 'continue?job=<%= params[:job] %>';
   });
  
 
-  render_json($('#state'),JSON.parse('<%= escape_javascript(@job.state.html_safe) %>'));
 
 </script>

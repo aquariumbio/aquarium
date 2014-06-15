@@ -1,12 +1,14 @@
 - deal with asynchrony between server and rails
 
-- arguments
++ arguments
+  + only use json (generic) inputs
+  + assume a single argument called 'input'
 
 - user input
 
 - hide protocol methods to prevent display, start, continue from being overwritten
-
-  - make protocol class its own class
+  - obscurify methods
+  - hide rails stuff somehow
 
 - including other files
 
@@ -14,4 +16,15 @@
     repo and evaluates the results to add methods to the protocol
     handler object
 
-  - Make sure 
+- display format
+
+  [ 
+    { title: "A title" },
+    { note: "A note" },
+    { note: "Another note" },
+    { warning: "Careful!" },
+    { check: "Check" },
+    { select: { choices: [ "A", "B", "C" ], var: "x" } },
+    { input: { type: string, var: "y" } }
+  ]      
+  

@@ -11,6 +11,13 @@ module Krill
       @sha = @job.sha
       @content = Repo::contents @path, @sha
 
+      initial_state = JSON.parse @job.state, symbolize_names: true
+      @args = initial_state[0][:arguments]
+
+      def input
+        @args
+      end
+
       eval(@content) # adds protocol def to this class
       
       puts "Initializing Thread Handler in Thread = #{Thread.current}"
@@ -20,8 +27,12 @@ module Krill
         puts "Protocol thread = #{Thread.current}"
 
         Thread.stop
-         
-        protocol
+        
+        begin 
+          protocol
+        rescue Exception => e
+          error e.to_s
+        end
 
         @job.reload
         @job.pc = Job.COMPLETED
@@ -33,6 +44,13 @@ module Krill
 
       }
 
+    end
+
+    def error message
+      append_step( { operation: "error", message: message } )
+      @job.reload
+      @job.pc = Job.COMPLETED
+      @job.save
     end
 
     def append_step s

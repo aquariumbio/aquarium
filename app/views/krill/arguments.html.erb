@@ -1,13 +1,19 @@
 <% provide(:title, 'Krill' ) %>
 
-<h1>Arguments for <%= @path %>, <%= @sha %></h1>
+<h1>Initialize <%= @path %></h1>
 
-<button id='start' class='btn'>Submit</button>
+<p><b>Version:</b> <%= @sha %></p>
+
+<p>
+  <textarea id='input' style='width: 100%; height: 300px'><%= params[:args] ? params[:args] : '{"message":"temp"}' %></textarea>
+</p>
+
+<p><button id='start' class='btn'>Submit</button></p>
 
 <script>
 
   $('#start').click(function() {
-     window.location = 'submit?path=<%= @path %>&sha=<%= @sha %>';
+     window.location = encodeURI('submit?path=<%= @path %>&sha=<%= @sha %>&args='+$('#input').val());
   });
 
 </script>

@@ -11,13 +11,20 @@ class KrillController < ApplicationController
 
   def submit
 
+    begin
+      @arguments = JSON.parse params[:args], symbolize_names: true
+    rescue Exception => e
+      flash[:error] = "Error parsing arguments: " + e.to_s
+      return redirect_to krill_arguments_path(path: params[:path], sha: params[:sha], args: params[:args])
+    end
+
     @job = Job.new
     @job.path = params[:path]
     @job.sha = params[:sha]
 
     @job.user_id = -1
     @job.pc = Job.NOT_STARTED
-    @job.state = [].to_json
+    @job.state = [{operation: "initialize", arguments: @arguments}].to_json
 
     @job.group_id = 1
     @job.submitted_by = current_user.id
