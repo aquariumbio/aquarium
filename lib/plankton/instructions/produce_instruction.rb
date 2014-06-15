@@ -126,6 +126,9 @@ module Plankton
       if params['location']
         @item.location = params['location']
         @item.save
+      elsif @location != ""
+        @item.location = @location
+        @item.save
       end
 
       # put the resulting item in the desired variable
