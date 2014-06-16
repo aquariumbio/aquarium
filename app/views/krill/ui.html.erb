@@ -1,0 +1,15 @@
+<div class="row-fluid">
+
+  <div class="span3" id='state'></div>
+  <div class="span8 well" id='step'></div>
+  <div class="span1"><button id='next' class='btn'>Next</button></div>
+
+</div>
+
+<script>
+
+  krill = new Krill(<%= @job.id %>);
+  krill.get_state();
+  krill.display();
+
+</script>

@@ -22,7 +22,7 @@ class KrillController < ApplicationController
     @job.path = params[:path]
     @job.sha = params[:sha]
 
-    @job.user_id = -1
+    @job.user_id = current_user.id;
     @job.pc = Job.NOT_STARTED
     @job.state = [{operation: "initialize", arguments: @arguments}].to_json
 
@@ -55,8 +55,8 @@ class KrillController < ApplicationController
       return redirect_to krill_error_path(job: @job.id, message: server_result[:error])
     end
 
-    # redirect to interpreter
-    redirect_to krill_interpreter_path(job: params[:job]) 
+    # redirect to ui
+    redirect_to krill_ui_path(job: params[:job]) 
 
   end
 
@@ -66,8 +66,17 @@ class KrillController < ApplicationController
     @job = Job.find(params[:job])
 
   end
-  
-  def continue
+
+  def state
+
+    @job = Job.find(params[:job])
+    render json: (JSON.parse @job.state)
+
+  end
+
+  def next
+
+   logger.info params
 
     @job = Job.find(params[:job])
 
@@ -75,7 +84,7 @@ class KrillController < ApplicationController
 
       state = JSON.parse @job.state, symbolize_names: true
 
-      state.push( { operation: "next", time: Time.now } )
+      state.push( { operation: "next", time: Time.now, inputs: params[:inputs] } )
       @job.state = state.to_json
       @job.save
 
@@ -90,34 +99,25 @@ class KrillController < ApplicationController
         return redirect_to krill_error_path(job: @job.id, message: server_result[:error])
       end
 
-      # redirect to interpreter
-      redirect_to krill_interpreter_path(job: params[:job]) 
+      @job.reload
 
-    elsif @job.pc == Job.NOT_STARTED
-      redirect_to krill_error_path(job: @job.id, message: "continue: Job not started") 
-    else
-      redirect_to krill_completed_path(job: params[:job]) 
     end
+
+    render json: (JSON.parse @job.state)
 
   end
 
   def completed
-
     @job = Job.find(params[:job])
-
   end
 
-  def interpreter
+  def ui
 
     @job = Job.find(params[:job])
 
-    if @job.pc >= 0
-
-      @job = Job.find(params[:job])
- 
-    elsif @job.pc == Job.NOT_STARTED
+    if @job.pc == Job.NOT_STARTED
       redirect_to krill_error_path(job: @job.id, message: "interpreter: Job not started") 
-    else
+    elsif @job.pc == Job.COMPLETED
       redirect_to krill_completed_path(job: params[:job]) 
     end
 

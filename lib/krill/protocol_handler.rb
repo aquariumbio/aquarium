@@ -74,6 +74,9 @@ module Krill
       puts "STOPPING THREAD FOR JOB #{@job.id} with thread = #{Thread.current}"
       Thread.stop
 
+      @job.reload
+      JSON.parse(@job.state, symbolize_names: true).last[:inputs]
+
     end
 
     def start
