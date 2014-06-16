@@ -32,6 +32,10 @@ module Krill
               @jobs[jid] = ph
               client.puts( { response: "ok" }.to_json )
 
+              delete_old_jobs
+
+              puts "Jobs Maintained by Server: #{@jobs.keys}."
+
             when "continue"
 
               if @jobs[jid]
@@ -63,6 +67,12 @@ module Krill
         client.close 
 
       end
+
+    end
+
+    def delete_old_jobs
+
+      @jobs = @jobs.reject { |k,v| ! v.thread.alive? }
 
     end
 

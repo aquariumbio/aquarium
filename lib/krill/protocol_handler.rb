@@ -2,7 +2,7 @@ module Krill
 
   class ProtocolHandler
 
-    attr_accessor :job
+    attr_accessor :job, :thread
 
     def initialize jid
 
@@ -10,6 +10,8 @@ module Krill
       @path = @job.path
       @sha = @job.sha
       @content = Repo::contents @path, @sha
+      @mutex = Mutex.new
+      @running = false
 
       initial_state = JSON.parse @job.state, symbolize_names: true
       @args = initial_state[0][:arguments]
@@ -20,11 +22,7 @@ module Krill
 
       eval(@content) # adds protocol def to this class
       
-      puts "Initializing Thread Handler in Thread = #{Thread.current}"
-
       @thread = Thread.new { 
-
-        puts "Protocol thread = #{Thread.current}"
 
         Thread.stop
         
@@ -41,6 +39,8 @@ module Krill
         append_step( { operation: "complete" } )
 
         ActiveRecord::Base.connection.close
+
+        @mutex.synchronize { @running = false }
 
       }
 
@@ -71,7 +71,7 @@ module Krill
       @job.pc += 1
       @job.save
 
-      puts "STOPPING THREAD FOR JOB #{@job.id} with thread = #{Thread.current}"
+      @mutex.synchronize { @running = false }
       Thread.stop
 
       @job.reload
@@ -81,22 +81,32 @@ module Krill
 
     def start
 
-      puts "Starting job #{@job.id}"
-
       @job.reload
       @job.pc = 0
       @job.save
 
+      @mutex.synchronize { @running = true }
       @thread.wakeup
+      temp = true
+      @mutex.synchronize { temp = @running }
+      while temp
+        sleep(0.1)
+        @mutex.synchronize { temp = @running }
+      end
 
     end
 
     def continue
 
-      puts "Continuing job #{@job.id}"
-
       if @thread.alive?
+        @mutex.synchronize { @running = true }
         @thread.wakeup
+        temp = true
+        @mutex.synchronize { temp = @running }
+        while temp
+          sleep(0.1)
+          @mutex.synchronize { temp = @running }
+        end
       end
 
       @thread.alive?
