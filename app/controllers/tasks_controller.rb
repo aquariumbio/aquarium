@@ -44,6 +44,8 @@ class TasksController < ApplicationController
     @task = Task.new
     @task.specification = TaskPrototype.find(params[:task_prototype_id].to_i).prototype
     @task.task_prototype_id = params[:task_prototype_id].to_i
+    @task_prototype = TaskPrototype.find(params[:task_prototype_id])
+    @status_options = @task_prototype.status_option_list
 
     respond_to do |format|
       format.html # new.html.erb

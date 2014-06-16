@@ -6,7 +6,11 @@
     <label><b>Name</b></label>
     <input id="task_name" type='text' value='<%= @task.name %>'></input>
     <label><b>Status</b></label>
-    <input id="task_status" type='text' value='<%= @task.status %>'></input>
+    <div class='task-select'><select id='task_status' class='status-select'>
+       <% @status_options.each do |opt| %>
+          <option <%= opt == @task.status ? 'selected' : '' %>><%= opt %></option>
+       <% end %>
+    </select></div>
 </div>
 
 <div id="json_editor"></div>

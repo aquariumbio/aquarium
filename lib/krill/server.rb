@@ -21,7 +21,7 @@ module Krill
         begin
 
           command = JSON.parse client.gets, symbolize_names: true
-          jid = command[:jid]
+          jid = command[:jid].to_i
 
           case command[:operation]
 

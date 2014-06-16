@@ -79,11 +79,7 @@ module Krill
 
     end
 
-    def start
-
-      @job.reload
-      @job.pc = 0
-      @job.save
+    def wake
 
       @mutex.synchronize { @running = true }
       @thread.wakeup
@@ -96,17 +92,19 @@ module Krill
 
     end
 
+    def start
+
+      @job.reload
+      @job.pc = 0
+      @job.save
+      wake
+
+    end
+
     def continue
 
       if @thread.alive?
-        @mutex.synchronize { @running = true }
-        @thread.wakeup
-        temp = true
-        @mutex.synchronize { temp = @running }
-        while temp
-          sleep(0.1)
-          @mutex.synchronize { temp = @running }
-        end
+        wake
       end
 
       @thread.alive?

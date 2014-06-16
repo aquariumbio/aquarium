@@ -9,6 +9,7 @@ function Krill(job) {
     this.job = job;
 
     this.next_button.click(function() {
+
         that.send_next();
         that.display();
     });
@@ -122,7 +123,6 @@ Krill.prototype.get = function() {
         var name = $(e).attr("id");
         if($(e).attr("type")=="number") {
             values[name] = parseFloat($(e).val());
-            console.log(values[name]);
         } else {
             values[name] = $(e).val();
         }
@@ -132,8 +132,6 @@ Krill.prototype.get = function() {
         var name = $(e).attr("id");
         values[name] = $(e).val();
     });    
-
-    console.log(values);
 
     return values;
 
@@ -147,13 +145,15 @@ Krill.prototype.get_state = function() {
 
     var that = this;
 
+    this.step_tag.empty().append("<p>Waiting...</p>");
+
     $.ajax({
         url: 'state?job=' + that.job,
         async: false
     }).done(function(data){
         that.state = data;
     }).fail(function(data){
-        console.log(data);
+        console.log("Error: " + data);
     });
 
 }
@@ -163,6 +163,8 @@ Krill.prototype.send_next = function() {
     var inputs = this.get();
     var that = this;
 
+    this.step_tag.empty().append("<p>Waiting...</p>").show() ;
+
     $.ajax({
         // type: "POST",
         url: 'next?job=' + that.job,
@@ -171,7 +173,7 @@ Krill.prototype.send_next = function() {
     }).done(function(data){
         that.state = data;
     }).fail(function(data){
-        console.log(data);
+        console.log("Error:"+data);
     });
 
 }
