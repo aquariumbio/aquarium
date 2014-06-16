@@ -107,6 +107,26 @@ Krill.prototype.input = function(x) {
 
 }
 
+Krill.prototype.take = function(x) {
+
+    var check = $('<input type="checkbox"></input>').addClass('krill-checkbox');
+    var id = $('<span>' + x.id + ' </span>').addClass('krill-item-id');
+    var name = $('<span>' + x.name + ' </span>').addClass('krill-item-name');
+    var loc = $('<span>' + x.location + ' </span>').addClass('krill-item-location');
+
+    var tag = $('<li></li>').append(check,id,name,loc);
+
+    if ( x.sample ) {
+
+        var sample = $('<span>' + x.sample + ' </span>').addClass('krill-item-sample');
+        var type =  $('<span>' + x.type + ' </span>').addClass('krill-item-type');
+	tag.append(sample,type);
+    }
+
+    return tag;
+
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////
 // PROCESS INPUTS
 //
@@ -145,8 +165,6 @@ Krill.prototype.get_state = function() {
 
     var that = this;
 
-    this.step_tag.empty().append("<p>Waiting...</p>");
-
     $.ajax({
         url: 'state?job=' + that.job,
         async: false
@@ -162,8 +180,6 @@ Krill.prototype.send_next = function() {
 
     var inputs = this.get();
     var that = this;
-
-    this.step_tag.empty().append("<p>Waiting...</p>").show() ;
 
     $.ajax({
         // type: "POST",

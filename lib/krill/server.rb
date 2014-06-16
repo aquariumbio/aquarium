@@ -28,7 +28,7 @@ module Krill
             when "start"
 
               ph = ProtocolHandler.new jid
-              ph.start
+              ph.__krill__start__
               @jobs[jid] = ph
               client.puts( { response: "ok" }.to_json )
 
@@ -40,7 +40,7 @@ module Krill
 
               if @jobs[jid]
 
-                @jobs[jid].continue
+                @jobs[jid].__krill__continue__
                 client.puts( { response: "ok" }.to_json )
   
               else
@@ -72,7 +72,7 @@ module Krill
 
     def delete_old_jobs
 
-      @jobs = @jobs.reject { |k,v| ! v.thread.alive? }
+      @jobs = @jobs.reject { |k,v| ! v.__krill__thread.alive? }
 
     end
 

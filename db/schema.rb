@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140513225335) do
+ActiveRecord::Schema.define(:version => 20140616190537) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -180,6 +180,13 @@ ActiveRecord::Schema.define(:version => 20140513225335) do
     t.string   "description"
     t.string   "field7"
     t.string   "field8"
+  end
+
+  create_table "takes", :force => true do |t|
+    t.integer  "item_id"
+    t.integer  "job_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "task_prototypes", :force => true do |t|

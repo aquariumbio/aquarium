@@ -14,6 +14,7 @@ class Job < ActiveRecord::Base
   has_many :touches
   belongs_to :user
   belongs_to :metacol
+  has_many :takes
 
   def self.params_to_time p
 

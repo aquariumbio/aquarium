@@ -1,13 +1,30 @@
-- deal with asynchrony between server and rails
+- find
+  + use same interface as before, expect return actual objects and not hashes
+  - is there some way to hide rails stuff?
 
-+ arguments
-  + only use json (generic) inputs
-  + assume a single argument called 'input'
+- take
 
-- user input
+  - new table: takes item_id, job_id
+
+  - takes a list of items, displays them to the user with checkboxes,
+    and marks them as taken in the db when the user clicks next
+
+  - in display { take: { id: 0, name: "Plasmid Aliquot", location: "M1.1.2.3', sample: "pASD", type: "Primer" } }
+
+- release
+
+  - releases items 
+
+- produce
+
+- modify
+
+- tables
+
+- collections
 
 - hide protocol methods to prevent display, start, continue from being overwritten
-  - obscurify methods
+  + obscurify methods
   - hide rails stuff somehow
 
 - including other files
@@ -15,16 +32,3 @@
   - write an 'include' like function that reads from the
     repo and evaluates the results to add methods to the protocol
     handler object
-
-- display format
-
-  [ 
-    { title: "A title" },
-    { note: "A note" },
-    { note: "Another note" },
-    { warning: "Careful!" },
-    { check: "Check" },
-    { select: { choices: [ "A", "B", "C" ], var: "x" } },
-    { input: { type: string, var: "y" } }
-  ]      
-  

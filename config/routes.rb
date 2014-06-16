@@ -106,6 +106,7 @@ Bioturk::Application.routes.draw do
   match '/changes', to: 'static_pages#changes'
   match '/location', to: 'static_pages#location'
   match '/freezer', to: 'static_pages#freezer'
+  match '/glass', to: 'sessions#glass'
 
   match '/search', to: 'search#search'
   

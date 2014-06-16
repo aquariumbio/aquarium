@@ -2,112 +2,117 @@ module Krill
 
   class ProtocolHandler
 
-    attr_accessor :job, :thread
+    attr_accessor :__krill__job, :__krill__thread
 
-    def initialize jid
+    def initialize __krill__jid
 
-      @job = Job.find(jid)
-      @path = @job.path
-      @sha = @job.sha
-      @content = Repo::contents @path, @sha
-      @mutex = Mutex.new
-      @running = false
+      @__krill__jid = __krill__jid
+      @__krill__job = Job.find(__krill__jid)
+      @__krill__path = @__krill__job.path
+      @__krill__sha = @__krill__job.sha
+      @__krill__content = Repo::contents @__krill__path, @__krill__sha
+      @__krill__mutex = Mutex.new
+      @__krill__running = false
 
-      initial_state = JSON.parse @job.state, symbolize_names: true
-      @args = initial_state[0][:arguments]
+      initial_state = JSON.parse @__krill__job.state, symbolize_names: true
+      @__krill__args = initial_state[0][:arguments]
 
       def input
-        @args
+        @__krill__args
       end
 
-      eval(@content) # adds protocol def to this class
+      def job
+        @__krill_jid
+      end
+
+      eval(@__krill__content) # adds protocol def to this class
       
-      @thread = Thread.new { 
+      @__krill__thread = Thread.new { 
 
         Thread.stop
         
         begin 
           protocol
         rescue Exception => e
-          error e.to_s
+          __krill__error__ e.to_s
         end
 
-        @job.reload
-        @job.pc = Job.COMPLETED
-        @job.save
+        @__krill__job.reload
+        @__krill__job.pc = Job.COMPLETED
+        @__krill__job.save
 
-        append_step( { operation: "complete" } )
+        __krill__append_step__( { operation: "complete" } )
 
         ActiveRecord::Base.connection.close
 
-        @mutex.synchronize { @running = false }
+        @__krill__mutex.synchronize { @__krill__running = false }
 
       }
 
     end
 
-    def error message
-      append_step( { operation: "error", message: message } )
-      @job.reload
-      @job.pc = Job.COMPLETED
-      @job.save
-    end
-
-    def append_step s
-
-      @job.reload
-      state = JSON.parse @job.state, symbolize_names: true
-      state.push s
-      @job.state = state.to_json
-      @job.save
-
-    end
-
     def display page
 
-      append_step( { operation: "display", content: page } )
+      __krill__append_step__( { operation: "display", content: page } )
 
-      @job.reload
-      @job.pc += 1
-      @job.save
+      @__krill__job.reload
+      @__krill__job.pc += 1
+      @__krill__job.save
 
-      @mutex.synchronize { @running = false }
+      @__krill__mutex.synchronize { @__krill__running = false }
       Thread.stop
 
-      @job.reload
-      JSON.parse(@job.state, symbolize_names: true).last[:inputs]
+      @__krill__job.reload
+      JSON.parse(@__krill__job.state, symbolize_names: true).last[:inputs]
 
     end
 
-    def wake
+    def __krill__error__ message
+      __krill__append_step__( { operation: "error", message: message } )
+      @__krill__job.reload
+      @__krill__job.pc = Job.COMPLETED
+      @__krill__job.save
+    end
 
-      @mutex.synchronize { @running = true }
-      @thread.wakeup
+    def __krill__append_step__ s
+
+      @__krill__job.reload
+      state = JSON.parse @__krill__job.state, symbolize_names: true
+      state.push s
+      @__krill__job.state = state.to_json
+      @__krill__job.save
+
+    end
+
+    def __krill__wake__
+
+      @__krill__mutex.synchronize { @__krill__running = true }
+      @__krill__thread.wakeup
       temp = true
-      @mutex.synchronize { temp = @running }
+      @__krill__mutex.synchronize { temp = @__krill__running }
       while temp
         sleep(0.1)
-        @mutex.synchronize { temp = @running }
+        @__krill__mutex.synchronize { temp = @__krill__running }
       end
 
     end
 
-    def start
+    def __krill__start__
 
-      @job.reload
-      @job.pc = 0
-      @job.save
-      wake
+      @__krill__job.reload
+      @__krill__job.pc = 0
+      @__krill__job.save
+      __krill__wake__
 
     end
 
-    def continue
+    def __krill__continue__
 
-      if @thread.alive?
-        wake
+      if @__krill__thread.alive?
+        __krill__wake__
       end
 
-      @thread.alive?
+      @__krill__thread.alive?
 
     end
 
