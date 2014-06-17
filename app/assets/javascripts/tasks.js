@@ -1,6 +1,6 @@
 function render_json(tag,obj) {
 
-    if ( typeof obj == "number" || typeof obj == "string" ) {
+    if ( typeof obj == "number" || typeof obj == "string" || typeof obj == "boolean" ) {
 
         $(tag).append("<span class='json_const'>" + obj + "</span>");
 

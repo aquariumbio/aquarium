@@ -1,0 +1,38 @@
+.krill-table  {
+
+  border: 1pt solid #aaa;
+  
+  td {
+    border: 1pt solid #aaa;
+    text-align: center;
+    padding: 0 10pt 0 10pt;
+  } 
+
+  .empty {
+    background: #f5f5f5;
+    color: #ddd;
+    font-size: 18pt;
+  }
+
+  .full {
+    background: #fff;
+  }
+
+  .selected {
+    background: yellow;
+  }
+
+}
+
+.krill-td-check {
+  background: lightblue;
+}
+
+.krill-td-check:hover {
+    outline: 2pt solid lightblue;
+}
+
+.krill-td-selected {
+  background: blue;
+  color: white;
+}

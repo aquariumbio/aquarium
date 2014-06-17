@@ -160,6 +160,40 @@ Krill.prototype.take = function(x) {
 
 }
 
+Krill.prototype.table = function(x) {
+
+    var tab = $('<table></table>').addClass('krill-table');
+
+    for( var i=0; i<x.length; i++) {
+        var tr = $('<tr></tr>')
+	for( var j=0; j<x[i].length; j++ ) {
+            console.log(x[i][j] + ": " + typeof x[i][j]);
+            if ( typeof x[i][j] != "object" ) {
+               var td = $('<td>'+x[i][j]+'</td>');
+            } else {
+		var td = $('<td>'+x[i][j].content+'</td>');
+                if ( x[i][j].check ) {
+		    td.addClass('krill-td-check');
+                    (function(td) {
+  		      td.click(function() {
+			if ( td.hasClass('krill-td-selected') ) {
+			    td.removeClass('krill-td-selected');
+			} else {
+			    td.addClass('krill-td-selected');
+			}
+		      });
+                    })(td);
+		}
+	    }
+	    tr.append(td);
+	}
+	tab.append(tr);
+    }
+
+    return tab;
+
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////
 // PROCESS INPUTS
 //
