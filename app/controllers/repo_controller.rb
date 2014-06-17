@@ -48,7 +48,7 @@ class RepoController < ApplicationController
       return
     end
 
-    if /.pl/ =~ params[:path]
+    if /\.pl$/ =~ params[:path]
       if params[:from]
         sequence_new_job @version, params[:path], params[:from].to_i
       else

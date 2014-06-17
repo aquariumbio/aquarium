@@ -1,7 +1,18 @@
 <h1>Job <%= @job.id %> is completed.</h1> 
 
-<div id='state'></div>
+<div class='row-fluid'>
+  <div class='span2'>Inventory Remaining</div>
+  <div class='span6'>History</div>
+  <div class='span4'></div>
+<div>
+
+<div class='row-fluid'>
+  <div class='span2' id='inventory'></div>
+  <div class='span6' id='history'></div>
+  <div class='span4'></div>
+<div>
 
 <script>
-  render_json($('#state'),JSON.parse('<%= escape_javascript(@job.state.html_safe) %>'));
+  render_json($('#history'),JSON.parse('<%= escape_javascript(@history.html_safe) %>'));
+  render_json($('#inventory'),JSON.parse('<%= escape_javascript(@inventory.to_json.html_safe) %>'));
 </script>

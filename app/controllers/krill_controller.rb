@@ -108,7 +108,11 @@ class KrillController < ApplicationController
   end
 
   def completed
+
     @job = Job.find(params[:job])
+    @history = @job.state
+    @inventory = @job.takes.collect { |t| t.id }
+
   end
 
   def ui

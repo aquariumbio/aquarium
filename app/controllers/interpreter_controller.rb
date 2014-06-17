@@ -55,7 +55,7 @@ class InterpreterController < ApplicationController
       begin
         @protocol.parse_arguments_only
       rescue Exception => e
-        @parse_errors = "Error while parsing arguments. " # + e.message # + ": " + e.backtrace.to_s
+        @parse_errors = "Error while parsing arguments. " # + e.message + ": " + e.backtrace.to_s
       end
 
     end
@@ -98,8 +98,6 @@ class InterpreterController < ApplicationController
       redirect_to arguments_new_metacol_path(sha: @sha, path: @path) 
 
     else # its a protocol
-
-      logger.info "PARAMS = #{params}"
 
       if params[:from]
         sequence_new_job @sha, @path, params[:from].to_i

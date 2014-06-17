@@ -1,23 +1,3 @@
-- find
-  + use same interface as before, expect return actual objects and not hashes
-  - is there some way to hide rails stuff?
-
-+ take
-
-  + new table: takes item_id, job_id
-
-  + takes a list of items, displays them to the user with checkboxes,
-    and marks them as taken in the db when the user clicks next
-
-  + in display { take: { id: 0, name: "Plasmid Aliquot", location: "M1.1.2.3', sample: "pASD", type: "Primer" } }
-
-+ release
-
-  + releases items 
-
-- produce
-
-- modify
 
 - tables
 
@@ -34,6 +14,10 @@
     handler object
 
 - UI
+
+  - step layout
+
+  - slider / history
 
   - thumbnails
 
