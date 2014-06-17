@@ -3,7 +3,8 @@ function Krill(job) {
     var that = this;
 
     this.step_tag    = $('#step');
-    this.state_tag   = $('#state');
+    this.history_tag   = $('#history');
+    this.inventory_tag   = $('#inventory');
     this.next_button = $('#next');
 
     this.job = job;
@@ -12,17 +13,49 @@ function Krill(job) {
 
         that.send_next();
         that.display();
+
     });
 
 }
 
 Krill.prototype.display = function() {
 
+    this.step();
+    this.history();
+    this.inventory();
+
+}
+
+Krill.prototype.history = function() {
+
     try {
-      render_json($('#state').empty(),this.state);
+      render_json(this.history_tag.empty(),this.state);
     } catch(e) {
-      $('#state').empty().append('<p>Error:'+e+'</p>');
+      this.history_tag.empty().append('<p>Error:'+e+'</p>');
     }
+
+}
+
+Krill.prototype.inventory = function() {
+
+    var that = this;
+
+    $.ajax({
+        url: 'takes?job=' + that.job,
+    }).done(function(data){
+
+        var items = [];
+        for ( var i in data ) {
+            items.push(data[i].id);
+        }
+        console.log(items);
+	that.inventory_tag.empty();
+        render_json(that.inventory_tag,items);
+    });
+
+}
+
+Krill.prototype.step = function() {
 
     var last = this.state[this.state.length-1];
  

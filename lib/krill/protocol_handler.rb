@@ -4,13 +4,14 @@ module Krill
 
     attr_accessor :__krill__job, :__krill__thread
 
-    def initialize __krill__jid
+    def initialize jid
 
-      @__krill__jid = __krill__jid
-      @__krill__job = Job.find(__krill__jid)
+      @__krill__jid = jid
+      @__krill__job = Job.find(jid)
       @__krill__path = @__krill__job.path
       @__krill__sha = @__krill__job.sha
       @__krill__content = Repo::contents @__krill__path, @__krill__sha
+
       @__krill__mutex = Mutex.new
       @__krill__running = false
 
@@ -22,7 +23,7 @@ module Krill
       end
 
       def job
-        @__krill_jid
+        @__krill__jid
       end
 
       eval(@__krill__content) # adds protocol def to this class

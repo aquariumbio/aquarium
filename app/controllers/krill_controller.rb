@@ -123,4 +123,11 @@ class KrillController < ApplicationController
 
   end
 
+  def takes
+
+    @job = Job.find(params[:job])
+    render json: @job.takes.includes(:item).collect { |t| t.item }
+
+  end
+
 end

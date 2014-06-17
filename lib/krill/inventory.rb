@@ -4,6 +4,8 @@ module Krill
 
     def take items
 
+      puts job
+
       items.each do |i|
         t = Take.new( { job_id: job, item_id: i.id } ).save
       end

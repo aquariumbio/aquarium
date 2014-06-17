@@ -2,18 +2,18 @@
   + use same interface as before, expect return actual objects and not hashes
   - is there some way to hide rails stuff?
 
-- take
++ take
 
-  - new table: takes item_id, job_id
+  + new table: takes item_id, job_id
 
-  - takes a list of items, displays them to the user with checkboxes,
+  + takes a list of items, displays them to the user with checkboxes,
     and marks them as taken in the db when the user clicks next
 
-  - in display { take: { id: 0, name: "Plasmid Aliquot", location: "M1.1.2.3', sample: "pASD", type: "Primer" } }
+  + in display { take: { id: 0, name: "Plasmid Aliquot", location: "M1.1.2.3', sample: "pASD", type: "Primer" } }
 
-- release
++ release
 
-  - releases items 
+  + releases items 
 
 - produce
 
@@ -32,3 +32,11 @@
   - write an 'include' like function that reads from the
     repo and evaluates the results to add methods to the protocol
     handler object
+
+- UI
+
+  - thumbnails
+
+  - inventory
+    - takes
+    - put things back, get new things, ...
