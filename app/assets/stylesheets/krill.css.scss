@@ -1,3 +1,31 @@
+////////////////////////////////////////////////////////////////////////////////////
+// Steps
+//
+
+.krill-step-list {
+  li { 
+    list-style-type: none; 
+  }
+}
+
+.krill-step {
+  border: 1pt solid black;
+  border-radius: 5pt;
+  margin: 10px;
+  padding: 10px;
+}
+
+.krill-step-disabled {
+  color: #999;
+  .krill-step {
+    border: 1pt solid #999;
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+// Tables
+//
+
 .krill-table  {
 
   border: 1pt solid #aaa;
@@ -36,3 +64,4 @@
   background: blue;
   color: white;
 }
+

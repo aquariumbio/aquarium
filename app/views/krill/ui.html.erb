@@ -11,7 +11,7 @@
 
   <div class="span1 well" id='inventory'></div>
   <div class="span2 well" id='history'></div>
-  <div class="span8 well" id='step'></div>
+  <div class="span8 well" id='steps'></div>
   <div class="span1"><button id='next' class='btn'>Next</button></div>
 
 </div>
@@ -19,7 +19,6 @@
 <script>
 
   krill = new Krill(<%= @job.id %>);
-  krill.get_state();
-  krill.display();
+  krill.initialize();
 
 </script>
