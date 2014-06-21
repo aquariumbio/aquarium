@@ -2,8 +2,9 @@
 // KRILL DISPLAY ELEMENTS
 //
 
-Krill.prototype.title = function(x) {
-    return $('<li>'+x+'</li>').addClass('krill-title');
+Krill.prototype.title = function(x,title_tag) {
+    title_tag.html(x);
+    return false;
 }
 
 Krill.prototype.note = function(x) {

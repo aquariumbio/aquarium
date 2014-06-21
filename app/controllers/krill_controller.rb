@@ -24,7 +24,7 @@ class KrillController < ApplicationController
 
     @job.user_id = current_user.id;
     @job.pc = Job.NOT_STARTED
-    @job.state = [{operation: "initialize", arguments: @arguments}].to_json
+    @job.state = [{operation: "initialize", arguments: @arguments, time: Time.now}].to_json
 
     @job.group_id = 1
     @job.submitted_by = current_user.id

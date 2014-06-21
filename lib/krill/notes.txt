@@ -13,7 +13,7 @@
 
   - step layout
 
-  - slider / history
+  + slider / history
 
   - thumbnails
 

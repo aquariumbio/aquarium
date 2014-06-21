@@ -1,8 +1,17 @@
 <div class="row-fluid">
  
-  <div class="span2" id="krill-tools">
-    <div class="krill-inventory" id='inventory'></div>
-    <div class="krill-history" id='history'></div>
+  <div class='span2' id="krill-tools">
+
+    <ul class="nav nav-tabs" id="tools-tab">
+      <li class="active krill-tools-tab"> <a href="#history">   History     </a></li>
+      <li class="krill-tools-tab">        <a href="#inventory"> Inventory   </a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div class="tab-pane active" id='history'>   </div>
+      <div class="tab-pane"        id='inventory'> </div>
+    </div>
+
   </div>
 
   <div class="span10" id="krill-steps-ui">
@@ -17,6 +26,13 @@
 
 <script>
 
+  // Enable Tabs
+  $('#tools-tab a').click(function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+  })
+
+  // Start steps UI
   krill = new Krill(<%= @job.id %>);
   krill.initialize();
   window.onresize = function(){ krill.resize(); }

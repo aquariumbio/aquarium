@@ -1,23 +1,21 @@
 Krill.prototype.carousel_inc = function(num) {
 
-    console.log(this.current_position);
-
-    if ( 1 <= this.current_position + num && this.current_position + num <= this.step_list.length ) {    
-      var item_width = this.step_list[0].outerWidth();  
-      var left_indent = parseInt($('#step_list').css('left')) - num*item_width;  
-      $('#step_list').animate({'left' : left_indent},{queue:false, duration:500});
-      this.current_position += num;
-    }
+    this.carousel_move_to(this.current_position + num,250);
 }
 
-Krill.prototype.carousel_move_to = function(num) {
+Krill.prototype.carousel_move_to = function(num,dur) {
 
-    console.log(this.current_position);
+    var that = this;
+    if ( dur ) {
+	duration = dur;
+    } else {
+	duration = 5;
+    }
 
     if ( 1 <= num && num <= this.step_list.length ) {    
       var item_width = this.step_list[0].outerWidth();  
       var left_indent = -num*item_width;  
-      $('#step_list').animate({'left' : left_indent},{queue:false, duration:5,complete:this.resize});
+      $('#step_list').animate({'left' : left_indent},{queue:false, duration:duration});
       this.current_position = num;
     }
 }
@@ -44,7 +42,6 @@ Krill.prototype.carousel_last = function() {
     this.carousel_move_to(this.step_list.length);
 }
 
-
 //
 // #krill-steps-ui
 //    #steps
@@ -62,14 +59,14 @@ Krill.prototype.resize = function() {
     $('#steps').css('height',h)                // Step description container
     $('#step_list').css('height',h)            // Step list
     $('.krill-step-list-item').css('width',h); // Strep list item
-    $('.krill-step').css('height',h);          // Step description
+    $('.krill-step').css('height',h-22);          // Step description
     $('#krill-tools').css('height',h);
 
     // Adjust widths
     var width = $('#krill-steps-ui').outerWidth(); 
     $('#steps').css('width',width-102);
     $('.krill-step-list-item').css('width',$('#steps').outerWidth());
-    $('.krill-step').css('width',$('#steps').outerWidth()-22);       
+    //$('.krill-step').css('width',$('#steps').outerWidth()-20);       
 
     // Move to first slide
     $('#step-list').css('left',-width+102);

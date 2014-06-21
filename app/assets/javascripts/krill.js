@@ -2,15 +2,13 @@ function Krill(job) {
 
     var that = this;
 
-    this.steps_tag    = $('#steps');                                 // element where step list should be put
-    this.history_tag   = $('#history');
+    this.steps_tag       = $('#steps');                               // element where step list should be put
+    this.history_tag     = $('#history');
     this.inventory_tag   = $('#inventory');
     this.job = job;
    
     this.step_list = [];                                              // list of all step tags for easy access
     this.step_list_tag = $('<ul id="step_list"></ul>').addClass('krill-step-list');  // document ul containing step tags 
-
-
 
 }
 
@@ -78,6 +76,7 @@ Krill.prototype.disable_step = function(step,user_input) {
         $(selects[i]).val(user_input[$(selects[i]).attr('id')]);
     }
 
+    $(".krill-next-btn",step).addClass('krill-next-btn-disabled');
     $(".krill-next-btn",step)[0].disabled = true;
 
 }
@@ -97,6 +96,7 @@ Krill.prototype.add_latest_step = function() {
 
     // Add last step to lists
     var s = $('<li></li>').addClass('krill-step-list-item').append($('<div></div>').addClass('krill-step-container').append(content));
+    s.css('width',$('#krill-steps-ui').outerWidth()-102).css('height', window.innerHeight - 105);
     this.step_list.push(s);
     this.step_list_tag.append(s);
 
@@ -105,27 +105,36 @@ Krill.prototype.add_latest_step = function() {
 Krill.prototype.step = function(description,number) {
 
     var that = this;
-    var num = $('<span>' + number + '</span>').addClass('krill-step-number');
+ 
+    var titlebar = $('<div></div>').addClass('row-fluid').addClass('krill-step-titlebar');
+    var num = $('<div>' + (number) + '</div>').addClass('krill-step-number').addClass('span1');
+    var title = $('<div></div>').addClass('krill-title').addClass('span9');
+    var btn = $('<button id="next">OK</button>').addClass('krill-next-btn');
+    var btnholder = $('<div></div>').addClass('span2').append(btn);
+
+    titlebar.append(num,title,btnholder);
+
     var ul = $('<ul></ul').addClass('krill-step-ul');
-    var btn = $('<button id="next">Next</button>').addClass('btn').addClass('krill-next-btn');
+
     var container = $('<div></div>').addClass('krill-step');
 
     for(var i=0; i<description.length; i++) {
-
         var key = Object.keys(description[i])[0];
-	ul.append(this[key](description[i][key]));
-
+        var new_element = this[key](description[i][key],title);
+	if ( new_element ) {
+            ul.append(new_element);   
+	}
     }
 
     btn.click(function() {
-
         that.send_next();
         that.update();
         that.carousel_inc(1);
-
     });
 
-    container.append(num,btn,ul);
+    container.append(titlebar,ul).css('width',$('#krill-steps-ui').outerWidth());
+    container.css('width',$('#krill-steps-ui').outerWidth()-102);
+    container.css('height', window.innerHeight - 105 );
 
     return container;
 
@@ -158,16 +167,6 @@ Krill.prototype.check_if_done = function() {
 
 }
 
-Krill.prototype.history = function() {
-
-    try {
-      render_json(this.history_tag.empty(),this.state);
-    } catch(e) {
-      this.history_tag.empty().append('<p>Error:'+e+'</p>');
-    }
-
-}
-
 Krill.prototype.inventory = function() {
 
     var that = this;
@@ -183,6 +182,9 @@ Krill.prototype.inventory = function() {
         console.log(items);
 	that.inventory_tag.empty();
         render_json(that.inventory_tag,items);
+	if ( items.length == 0 ) {
+	    that.inventory_tag.append("<p>No items in use</p>").addClass('krill-inventory-none');
+	}
     });
 
 }
