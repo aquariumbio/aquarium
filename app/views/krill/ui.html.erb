@@ -1,24 +1,24 @@
 <div class="row-fluid">
+ 
+  <div class="span2" id="krill-tools">
+    <div class="krill-inventory" id='inventory'></div>
+    <div class="krill-history" id='history'></div>
+  </div>
 
-  <div class="span1">Inventory</div>
-  <div class="span2">History</div>
-  <div class="span8">Current Step</div>
-  <div class="span1"></div>
-
-</div>
-
-<div class="row-fluid">
-
-  <div class="span1 well" id='inventory'></div>
-  <div class="span2 well" id='history'></div>
-  <div class="span8 well" id='steps'></div>
-  <div class="span1"><button id='next' class='btn'>Next</button></div>
+  <div class="span10" id="krill-steps-ui">
+      <div class="outline krill-carousel-btn" id='rev' class='btn'><i class='krill-arrow icon-arrow-left'></i></div>
+      <div class="" id='steps'></div>
+      <div class="outline krill-carousel-btn" id='fwd' class='btn'><i class='krill-arrow icon-arrow-right'></i></div>
+  </div>
 
 </div>
+
+
 
 <script>
 
   krill = new Krill(<%= @job.id %>);
   krill.initialize();
+  window.onresize = function(){ krill.resize(); }
 
 </script>

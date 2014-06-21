@@ -5,18 +5,12 @@ function Krill(job) {
     this.steps_tag    = $('#steps');                                 // element where step list should be put
     this.history_tag   = $('#history');
     this.inventory_tag   = $('#inventory');
-    this.next_button = $('#next');
     this.job = job;
-
+   
     this.step_list = [];                                              // list of all step tags for easy access
-    this.step_list_tag = $('<ul></ul>').addClass('krill-step-list');  // document ul containing step tags 
+    this.step_list_tag = $('<ul id="step_list"></ul>').addClass('krill-step-list');  // document ul containing step tags 
 
-    this.next_button.click(function() {
 
-        that.send_next();
-        that.update();
-
-    });
 
 }
 
@@ -41,10 +35,9 @@ Krill.prototype.initialize = function() {
 
     for ( var i=1; i<this.state.length; i += 2 ) {
 
-        var num = $('<span>' + n + '</span>').addClass('krill-step-number');
-        var content = this.step(this.state[i].content).prepend(num);
+        var content = this.step(this.state[i].content,n);
             
-        var s = $('<div></div>').addClass('krill-step-container').append(content);
+        var s = $('<li id="l'+n+'"></li>').addClass('krill-step-list-item').append($('<div></div>').addClass('krill-step-container').append(content));
         this.step_list.push(s);
         this.step_list_tag.append(s);
 
@@ -60,6 +53,11 @@ Krill.prototype.initialize = function() {
     this.history();
     this.inventory();
 
+    // Set up the carousel
+    this.carousel_setup();
+    this.resize();
+    this.carousel_last();
+
 }
 
 Krill.prototype.disable_step = function(step,user_input) {
@@ -67,16 +65,20 @@ Krill.prototype.disable_step = function(step,user_input) {
     step.addClass('krill-step-disabled');
 
     var inputs = $(".krill-input-box",step);
+
     for ( var i=0; i<inputs.length; i++ ) {
         inputs[i].disabled = true;
         $(inputs[i]).val(user_input[$(inputs[i]).attr('id')]);
     }
 
     var selects = $(".krill-select",step);
+
     for ( var i=0; i<selects.length; i++ ) {
         selects[i].disabled = true;
         $(selects[i]).val(user_input[$(selects[i]).attr('id')]);
     }
+
+    $(".krill-next-btn",step)[0].disabled = true;
 
 }
 
@@ -90,19 +92,23 @@ Krill.prototype.add_latest_step = function() {
     // Build last step
 
     var current = this.state[last].content;
-    var num = $('<span>' + (last+1)/2 + '</span>').addClass('krill-step-number');
-    var content = this.step(current).prepend(num);
+
+    var content = this.step(current,(last+1)/2);
 
     // Add last step to lists
-    var s = $('<div></div>').addClass('krill-step-container').append(content);
+    var s = $('<li></li>').addClass('krill-step-list-item').append($('<div></div>').addClass('krill-step-container').append(content));
     this.step_list.push(s);
     this.step_list_tag.append(s);
 
 }
 
-Krill.prototype.step = function(description) {
+Krill.prototype.step = function(description,number) {
 
-    var ul = $('<ul></ul').addClass('krill-step');
+    var that = this;
+    var num = $('<span>' + number + '</span>').addClass('krill-step-number');
+    var ul = $('<ul></ul').addClass('krill-step-ul');
+    var btn = $('<button id="next">Next</button>').addClass('btn').addClass('krill-next-btn');
+    var container = $('<div></div>').addClass('krill-step');
 
     for(var i=0; i<description.length; i++) {
 
@@ -111,7 +117,17 @@ Krill.prototype.step = function(description) {
 
     }
 
-    return ul;
+    btn.click(function() {
+
+        that.send_next();
+        that.update();
+        that.carousel_inc(1);
+
+    });
+
+    container.append(num,btn,ul);
+
+    return container;
 
 }
 

@@ -1,6 +1,4 @@
 
-+ tables
-
 - including other files
 
   - write an 'include' like function that reads from the
@@ -23,16 +21,3 @@
     - takes
     - put things back, get new things, ...
 
-  - update algorithm
-
-    initially
-      step_tags = [];
-      add all steps to step_tags for current history, with last one being active
-      append all tags to document
-
-    update
-      set last step to inactive and add input data to it
-      make new step tag, append it to list and to document
-        
-        
-    

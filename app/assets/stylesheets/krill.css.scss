@@ -1,25 +1,90 @@
 ////////////////////////////////////////////////////////////////////////////////////
-// Steps
+// UI
 //
 
-.krill-step-list {
-  li { 
-    list-style-type: none; 
-  }
+#krill-tools {
+  // outline: 1pt solid black;
+  overflow: scroll;
 }
 
-.krill-step {
-  border: 1pt solid black;
-  border-radius: 5pt;
-  margin: 10px;
-  padding: 10px;
+#krill-steps-ui {
+ // outline: 1pt solid red;
+
 }
+
+.outline {
+//   outline: 2pt dashed orange;
+}
+
+.krill-carousel-btn {
+  display: inline;
+  float: left;
+  width: 50px;
+  background: #efefef;
+  text-align: center;
+opacity: 0.4;
+}
+
+.krill-arrow {
+  vertical-align: middle;
+}
+
+.krill-carousel-btn:hover {
+    background: #dddddd;
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+// Steps
+//
 
 .krill-step-disabled {
   color: #999;
   .krill-step {
-    border: 1pt solid #999;
+    //border: 1pt solid #999;
   }
+  .krill-input-box {
+    color: #999;
+  }
+  .krill-select {
+    color: #999;
+  }
+}
+
+#steps {
+  float: left;
+  overflow: hidden;
+  //outline: 2pt dashed green;
+}
+
+#step_list {
+    position: relative;
+    width: 99999px !important;
+    margin: 0px;
+    padding: 0px;
+    list-style-type: none;
+    //background: #eee;
+}
+
+.krill-step-list-item { 
+    float: left;
+    list-style-type: none;
+    margin: 0 0 0 0;
+}
+
+.krill-step {
+
+  border: 1pt solid #000;
+  border-radius: 15px;
+  margin: 0;
+  padding: 10px;
+
+  ul {
+  }
+
+  li {
+   // list-style-type: none; 
+  }
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
