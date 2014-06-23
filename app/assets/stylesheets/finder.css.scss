@@ -5,6 +5,8 @@ body .finder {
 }
 
 .finder-body {
+  //height: 400px;
+  //outline: 2pt dashed red;
   overflow:hidden !important;;
 } 
 
@@ -14,7 +16,7 @@ body .finder {
 
 .finder-column {
   float: left;
-  height: 500px;
+  height: 400px;
 
 }
 
@@ -37,4 +39,8 @@ height: 100%;
 
 .finder-li-highlighted {
   background: yellow;
+}
+
+.finder-selected {
+  background: cyan;
 }

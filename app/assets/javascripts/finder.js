@@ -1,15 +1,19 @@
-function Finder(kind) {
+function Finder(kind,callback) {
 
     var that = this;
     this.kind = kind;
+    this.callback = callback;
+    this.selections = [];
 
     if ( kind == 'Samples' ) {
 
-      this.fields = [ "project", "type", "sample" ];
+        this.fields = [ "project", "type", "sample" ];
+        this.select_method = this.select_sample;
 
     } else { // assume kind == 'Items'
 
-      this.fields = [ "project", "type", "sample", "container", "item" ];
+        this.fields = [ "project", "type", "sample", "container", "item" ];
+        this.select_method = this.select_item;
 
     } 
 
@@ -21,6 +25,38 @@ function Finder(kind) {
     $(document.body).append(this.window);
 
     return this.launch_button;
+
+}
+
+Finder.prototype.select_sample = function(x) {
+
+    var i = $.inArray(x.sample_id,this.selections);
+
+    if ( i >= 0 ) {
+        this.selections.splice(i,1);
+        $('#sample-'+x.sample_id).removeClass('finder-selected');
+    } else {
+        this.selections.push(x.sample_id);
+        $('#sample-'+x.sample_id).addClass('finder-selected');
+    }
+
+    console.log("Sample " + JSON.stringify(this.selections));
+
+}
+
+Finder.prototype.select_item = function(x) {
+
+    var i = $.inArray(x.item,this.selections);
+
+    if ( i >= 0 ) {
+        this.selections.splice(i,1);
+        $('#item-'+x.item).removeClass('finder-selected');
+    } else {
+        this.selections.push(x.item);
+        $('#item-'+x.item).addClass('finder-selected');
+    }
+
+    console.log("Item " + JSON.stringify(this.selections));
 
 }
 
@@ -47,14 +83,30 @@ Finder.prototype.get = function(index,spec) {
         $.each(list,function(i) {
 
             var newspec = $.extend({},spec);
-            newspec[field] = list[i];
+            newspec[field] = list[i].name;
+	    if ( field == 'sample' ) {
+		newspec["sample_id"] = list[i].id;
+	    }
+	    var a = $('<a href="#" id='+field+'-'+list[i].id+'>' + list[i].name + '</a>');
 
-	    var a = $('<a href="#">' + list[i] + '</a>');
-
+            // highlight selected items
+	    console.log ( field + ', ' + list[i].id + ', [' + that.selections + ']' );
+            if ( field == 'item' && $.inArray(list[i].id,that.selections) >=0 ) {
+		a.addClass('finder-selected');
+	    } else if ( that.kind == "Samples" && field == 'sample' && $.inArray(list[i].id,that.selections) >=0 ) {
+		a.addClass('finder-selected');
+	    }
+            
 	    a.click(function() {
-                $('#'+field+'s>li>a').removeClass('finder-li-highlighted');
-                $(this).addClass('finder-li-highlighted');
-		that.get(index+1,newspec);
+
+                if ( index < that.fields.length-1 ) {
+                    $('#'+field+'s>li>a').removeClass('finder-li-highlighted');
+                    $(this).addClass('finder-li-highlighted');
+	            that.get(index+1,newspec);
+		} else {
+		    that.select_method(newspec);
+		}
+
 	    });
 
 	    var li = $('<li></li>').append(a);
@@ -68,10 +120,17 @@ Finder.prototype.get = function(index,spec) {
 
 Finder.prototype.launch = function() {
 
+    var that = this;
+
     this.window.empty();
     this.window.html(this.template());
     this.get(0,{});
     this.window.modal('toggle');
+
+    $('#ok',this.window).click(function() {
+        that.window.modal('toggle');
+	that.callback(that.selections);
+    });
 
 }
 
@@ -113,7 +172,7 @@ Finder.prototype.template = function() {
       </div> \
     </div> \
     <div class="modal-footer"> \
-      <a href="#" class="btn btn-primary">Ok</a> \
+      <a href="#" id="ok" class="btn btn-primary">Ok</a> \
     </div> \
   </div>';
 

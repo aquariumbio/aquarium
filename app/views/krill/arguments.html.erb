@@ -12,17 +12,24 @@
 
   arguments = JSON.parse('<%= @args.to_json.html_safe %>');
 
+  function populate(key) {
+    return function(selections) { $('#'+key).val( JSON.stringify(selections)); }
+  };
+
   for ( var key in arguments ) {
-    console.log(""+arguments[key]);
+
     var li = $('<li />');
     var p = $('<span />').html(key).addClass('krill-input-label');
+
     var input = $('<input />')
       .addClass('krill-input-box')
       .attr('type','text')
       .attr('id',key)
       .val(JSON.stringify(arguments[key]));
-    var ifinder = new Finder('Items');
-    var sfinder = new Finder('Samples');
+
+    var ifinder = new Finder('Items', populate(key));
+    var sfinder = new Finder('Samples', populate(key));
+
     $('#arguments').append(li.append(p,input,ifinder,sfinder));
   }
 
