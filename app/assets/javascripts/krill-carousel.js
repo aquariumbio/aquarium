@@ -53,7 +53,7 @@ Krill.prototype.carousel_last = function() {
 Krill.prototype.resize = function() {
 
     // Heights
-    var h = window.innerHeight - 105;
+    var h = window.innerHeight - 90;
     $('#krill-steps-ui').css('height',h);      // UI
     $('.krill-carousel-btn').css('height',h);  // Button regions
     $('#steps').css('height',h)                // Step description container
@@ -72,5 +72,7 @@ Krill.prototype.resize = function() {
     $('#step-list').css('left',-width+102);
 
     this.carousel_last(this.step_list.length);
+
+    console.log('resize');
 
 }

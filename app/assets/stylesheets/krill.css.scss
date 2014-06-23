@@ -1,3 +1,11 @@
+.krill-argument-list {
+  list-style-type: none;
+  margin-bottom: 10px;
+  li {
+    margin-bottom: 20px;
+  }
+}
+
 ////////////////////////////////////////////////////////////////////////////////////
 // UI
 //
@@ -90,6 +98,7 @@
   margin: 0;
   padding: 0px;
   position: relative;
+  overflow: scroll;
   //outline: 4pt solid green;
   ul {
   }
@@ -117,12 +126,12 @@
   font-size: 36pt;
   font-weight: bold;
   line-height: 48pt;
-  text-align: left;
-  #background: white;
-  color: #ee8800; 
+  text-align: center;
+  background: orange;
+  color: white; 
   border-color: lightorange;
   padding: 5px;
-  padding-left: 10px;
+  padding-left: 5px;
   //border-width: 0 1pt 1pt 0;
   //border-style: solid;
 }

@@ -96,7 +96,7 @@ Krill.prototype.add_latest_step = function() {
 
     // Add last step to lists
     var s = $('<li></li>').addClass('krill-step-list-item').append($('<div></div>').addClass('krill-step-container').append(content));
-    s.css('width',$('#krill-steps-ui').outerWidth()-102).css('height', window.innerHeight - 105);
+    s.css('width',$('#krill-steps-ui').outerWidth()-102).css('height', window.innerHeight - 90);
     this.step_list.push(s);
     this.step_list_tag.append(s);
 
@@ -107,8 +107,8 @@ Krill.prototype.step = function(description,number) {
     var that = this;
  
     var titlebar = $('<div></div>').addClass('row-fluid').addClass('krill-step-titlebar');
-    var num = $('<div>' + (number) + '</div>').addClass('krill-step-number').addClass('span1');
-    var title = $('<div></div>').addClass('krill-title').addClass('span9');
+    var num = $('<div>' + (number+26) + '</div>').addClass('krill-step-number').addClass('span2');
+    var title = $('<div></div>').addClass('krill-title').addClass('span8');
     var btn = $('<button id="next">OK</button>').addClass('krill-next-btn');
     var btnholder = $('<div></div>').addClass('span2').append(btn);
 
@@ -134,7 +134,7 @@ Krill.prototype.step = function(description,number) {
 
     container.append(titlebar,ul).css('width',$('#krill-steps-ui').outerWidth());
     container.css('width',$('#krill-steps-ui').outerWidth()-102);
-    container.css('height', window.innerHeight - 105 );
+    container.css('height', window.innerHeight - 90 );
 
     return container;
 

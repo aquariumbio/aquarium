@@ -1,0 +1,40 @@
+body .finder {
+  width: 800px;
+  height: 500px;
+  margin-left: -415px;
+}
+
+.finder-body {
+  overflow:hidden !important;;
+} 
+
+.finder-btn {
+  margin-left: 10px;
+}
+
+.finder-column {
+  float: left;
+  height: 500px;
+
+}
+
+.finder-list-container {
+  overflow: scroll;
+height: 100%;
+}
+
+.finder-list {
+
+  border-left: 1pt solid black;
+  list-style: none;
+  padding-left:0;
+  margin-left: 0;
+  li {
+    padding-left:0;
+    margin-left: 5px;
+  }
+}
+
+.finder-li-highlighted {
+  background: yellow;
+}

@@ -6,6 +6,16 @@ class KrillController < ApplicationController
 
     @path = params[:path]
     @sha = Repo::version @path
+    @content = Repo::contents @path, @sha
+
+    begin 
+      temp = Class.new
+      temp.instance_eval(@content)
+      @args = temp.arguments
+    rescue Exception => e
+      flash[:error] = "Could not evaluate arguments. " + e.to_s + ":" + e.backtrace.to_s[0,200]
+      return redirect_to repo_list_path
+    end
 
   end
 

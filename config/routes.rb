@@ -1,5 +1,11 @@
 Bioturk::Application.routes.draw do
 
+  get "finder/projects"
+  get "finder/types"
+  get "finder/samples"
+  get "finder/containers"
+  get "finder/items"
+
   resources :tasks
 
   resources :task_prototypes

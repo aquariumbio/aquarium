@@ -1,5 +1,13 @@
-<p>Job <%= @job.id %> submitted.</p>
+<h1>Job <%= @job.id %> submitted</h1>
+<h2><%= @job.path %></h2>
 
-<p><b>Arguments:</b><%= @arguments %></p>
+<p><b>Arguments:</b> <div id='args'></div>
 
-<p><%= link_to "Run", krill_start_path(job:@job.id), class: 'btn' %>
+<br />
+
+<p><%= link_to "Run", krill_start_path(job:@job.id), class: 'btn btn-primary' %>
+<%= link_to "Pending Jobs", jobs_path, class: 'btn' %></p>
+
+<script>
+  render_json($('#args'),<%= @arguments.to_json.html_safe %>)
+</script>
