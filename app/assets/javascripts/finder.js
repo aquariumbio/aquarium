@@ -28,35 +28,33 @@ function Finder(kind,callback) {
 
 }
 
-Finder.prototype.select_sample = function(x) {
+Finder.prototype.select = function(field,x) {
 
-    var i = $.inArray(x.sample_id,this.selections);
+    var y;
+
+    if ( field == 'item' ) {
+	y = x.item;
+    } else {
+	y = x.sample_id;
+    }
+
+    var i = $.inArray(y,this.selections);
 
     if ( i >= 0 ) {
         this.selections.splice(i,1);
-        $('#sample-'+x.sample_id).removeClass('finder-selected');
+        $('#'+field+'-'+y).removeClass('finder-selected');
     } else {
-        this.selections.push(x.sample_id);
-        $('#sample-'+x.sample_id).addClass('finder-selected');
+        this.selections.push(y);
+        $('#'+field+'-'+y).addClass('finder-selected');
     }
 
-    console.log("Sample " + JSON.stringify(this.selections));
-
-}
-
-Finder.prototype.select_item = function(x) {
-
-    var i = $.inArray(x.item,this.selections);
-
-    if ( i >= 0 ) {
-        this.selections.splice(i,1);
-        $('#item-'+x.item).removeClass('finder-selected');
-    } else {
-        this.selections.push(x.item);
-        $('#item-'+x.item).addClass('finder-selected');
+    if ( field == 'sample' ) {
+        $.ajax({
+	    url: "/finder/sample_info?spec=" + encodeURI(JSON.stringify(x))
+	}).done(function(info) {
+          render_json($('#sample-info').empty(),info);
+	});
     }
-
-    console.log("Item " + JSON.stringify(this.selections));
 
 }
 
@@ -78,7 +76,6 @@ Finder.prototype.get = function(index,spec) {
 
 
         var ul = $('#'+field+'s',that.window).empty();
-	console.log(list);
 
         $.each(list,function(i) {
 
@@ -90,7 +87,6 @@ Finder.prototype.get = function(index,spec) {
 	    var a = $('<a href="#" id='+field+'-'+list[i].id+'>' + list[i].name + '</a>');
 
             // highlight selected items
-	    console.log ( field + ', ' + list[i].id + ', [' + that.selections + ']' );
             if ( field == 'item' && $.inArray(list[i].id,that.selections) >=0 ) {
 		a.addClass('finder-selected');
 	    } else if ( that.kind == "Samples" && field == 'sample' && $.inArray(list[i].id,that.selections) >=0 ) {
@@ -104,7 +100,7 @@ Finder.prototype.get = function(index,spec) {
                     $(this).addClass('finder-li-highlighted');
 	            that.get(index+1,newspec);
 		} else {
-		    that.select_method(newspec);
+		    that.select(field,newspec);
 		}
 
 	    });
@@ -166,7 +162,9 @@ Finder.prototype.template = function() {
         <div class="finder-column span2"> \
           <b>Items</b> <div class="finder-list-container"><ul class="finder-list" id="items"></ul></div> \
         </div>';
-    } 
+    } else {
+      html += '<div class="finder-column span5"><b>Sample Information</b><div id="sample-info">-</div></div>'
+    }
 
     html += ' \
       </div> \

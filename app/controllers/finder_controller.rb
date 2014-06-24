@@ -28,4 +28,17 @@ class FinderController < ApplicationController
     render json: (Item.joins(:sample,:object_type).where(:samples => { project: spec[:project], name: spec[:sample] }, :object_types => { name: spec[:container] }).collect { |i| { id: i.id, name: i.id } }).sort  { |a,b| a[:name] <=> b[:name] }
   end
 
+  def sample_info 
+    spec = JSON.parse( params[:spec], symbolize_names: true )
+    s = Sample.find(spec[:sample_id])
+    props = { id: s.id, name: s.name, created_at: s.created_at, updated_at: s.updated_at, description: s.description }
+    (1..8).each do |i|
+      prop = s.sample_type["field#{i}name"] 
+      if prop != "" && prop != nil
+        props[s.sample_type["field#{i}name"].to_sym] = s["field#{i}"]
+      end
+    end
+    render json: props
+  end
+
 end

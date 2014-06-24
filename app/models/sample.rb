@@ -10,5 +10,17 @@ class Sample < ActiveRecord::Base
   validates :name, presence: true
   validates :project, presence: true
   validates :user_id, presence: true
+  
+  def get_property key
+    # Look up fields according to sample type field structure
+    st = self.sample_type
+    (1..8).each do |i|
+      n = "field#{i}name"
+      if st[n] == key
+        return self["field#{i}"]
+      end
+    end
+    return nil
+  end
 
 end
