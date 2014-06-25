@@ -35,7 +35,7 @@ module Krill
         begin 
           protocol
         rescue Exception => e
-          __krill__error__ e.to_s
+          __krill__error__ e
         end
 
         @__krill__job.reload
@@ -52,7 +52,7 @@ module Krill
 
     end
 
-    def display page
+    def display *page
 
       __krill__append_step__( { operation: "display", content: page } )
 
@@ -64,12 +64,13 @@ module Krill
       Thread.stop
 
       @__krill__job.reload
+
       JSON.parse(@__krill__job.state, symbolize_names: true).last[:inputs]
 
     end
 
-    def __krill__error__ message
-      __krill__append_step__( { operation: "error", message: message } )
+    def __krill__error__ e
+      __krill__append_step__( { operation: "error", message: e.to_s, backtrace: e.backtrace[0,10] } )
       @__krill__job.reload
       @__krill__job.pc = Job.COMPLETED
       @__krill__job.save

@@ -13,7 +13,7 @@ class Sample < ActiveRecord::Base
   
   def get_property key
     # Look up fields according to sample type field structure
-    st = self.sample_type
+    st = sample_type
     (1..8).each do |i|
       n = "field#{i}name"
       if st[n] == key
@@ -21,6 +21,35 @@ class Sample < ActiveRecord::Base
       end
     end
     return nil
+  end
+
+  def properties
+    st = sample_type
+    result = {}
+    (1..8).each do |i|
+      n = "field#{i}name"
+      t = "field#{i}type"
+      if st[n] != nil
+        case t
+          when "url", "number", "string"
+            result[st[n]] = self["field#{i}"]
+          else
+            result[st[n]] = Sample.find_by_name( self["field#{i}"] )
+          end
+      end
+    end
+    return result
+  end
+
+  def in container
+
+    c = ObjectType.find_by_name container
+    if c
+      Item.where("sample_id = ? AND object_type_id = ?", self.id, c.id )
+    else
+      []
+    end
+
   end
 
 end

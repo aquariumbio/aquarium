@@ -11,7 +11,11 @@ class KrillController < ApplicationController
     begin 
       temp = Class.new
       temp.instance_eval(@content)
-      @args = temp.arguments
+      if temp.respond_to? "arguments"
+        @args = temp.arguments
+      else
+        @args = {}
+      end
     rescue Exception => e
       flash[:error] = "Could not evaluate arguments. " + e.to_s + ":" + e.backtrace.to_s[0,200]
       return redirect_to repo_list_path

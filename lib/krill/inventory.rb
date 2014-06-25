@@ -29,7 +29,7 @@ module Krill
       end
 
       display(
-        [ { title: "Gather the Following Item(s)" } ].concat takes
+        *[ { title: "Gather the Following Item(s)" } ].concat(takes)
       )
 
       take items
@@ -43,7 +43,7 @@ module Krill
       end
 
       display(
-        [ { title: "Return the Following Item(s)" } ].concat rels
+        *[ { title: "Return the Following Item(s)" } ].concat(rels)
       )
 
       release items

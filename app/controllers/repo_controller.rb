@@ -10,7 +10,7 @@ class RepoController < ApplicationController
       full_path = File.join(path, entry)
       if File.directory?(full_path)
         children << directory_hash(full_path, entry)
-      elsif /.pl$|.oy$|.kl$/ =~ entry
+      elsif /.pl$|.oy$|.rb$/ =~ entry
         children << entry
       end
     end

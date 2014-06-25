@@ -119,11 +119,17 @@ Krill.prototype.step = function(description,number) {
     var container = $('<div></div>').addClass('krill-step');
 
     for(var i=0; i<description.length; i++) {
+
         var key = Object.keys(description[i])[0];
-        var new_element = this[key](description[i][key],title);
-	if ( new_element ) {
+        if ( this[key] ) {
+          var new_element = this[key](description[i][key],title);
+          if ( new_element ) {
             ul.append(new_element);   
+	  }
+	} else {
+	    ul.append('<li>ERROR PARSING DISPLAY REQUEST.</li>');
 	}
+
     }
 
     btn.click(function() {
