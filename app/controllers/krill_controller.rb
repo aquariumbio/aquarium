@@ -8,16 +8,10 @@ class KrillController < ApplicationController
     @sha = Repo::version @path
     @content = Repo::contents @path, @sha
 
-    begin 
-      temp = Class.new
-      temp.instance_eval(@content)
-      if temp.respond_to? "arguments"
-        @args = temp.arguments
-      else
-        @args = {}
-      end
+    begin
+      @args = Krill::get_arguments @content
     rescue Exception => e
-      flash[:error] = "Could not evaluate arguments. " + e.to_s + ":" + e.backtrace.to_s[0,200]
+      flash[:error] = "Could not evaluate arguments. " + e.to_s + ":" + e.backtrace.to_s[0,400]
       return redirect_to repo_list_path
     end
 
@@ -60,7 +54,7 @@ class KrillController < ApplicationController
       begin
         server_result = ( Krill::Client.new.start params[:job] )
       rescue Exception => e
-        return redirect_to krill_error_path(job: @job.id, message: e.to_s)
+        return redirect_to krill_error_path(job: @job.id, message: e.to_s + ": " + e.backtrace[0,5].to_s)
       end
 
     end

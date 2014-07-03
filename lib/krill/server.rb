@@ -27,21 +27,26 @@ module Krill
 
             when "start"
 
-              ph = ProtocolHandler.new jid
-              ph.__krill__start__
+              ph = Manager.new jid
+
               @jobs[jid] = ph
               client.puts( { response: "ok" }.to_json )
-
               delete_old_jobs
-
               puts "Jobs Maintained by Server: #{@jobs.keys}."
 
             when "continue"
 
               if @jobs[jid]
 
-                @jobs[jid].__krill__continue__
+                puts "SERVER RECEIVED CONTINUE FOR JOB #{jid}"
+                begin
+                  @jobs[jid].continue
+                rescue Exception => e
+                  puts "TRIED TO CONTINUE JOB #{jid}, BUT GOT #{e.to_s} at #{e.backtrace[0,5]}"
+                end
+                puts "SERVER SENT CONTINUE TO MANAGER FOR JOB #{jid}"
                 client.puts( { response: "ok" }.to_json )
+                puts "SERVER RESPONDED WITH OK TO CLIENT FOR JOB #{jid}"
   
               else
 
@@ -60,7 +65,7 @@ module Krill
 
         rescue Exception => e
 
-          client.puts( { response: "error", error: e.to_s }.to_json )
+          client.puts( { response: "error", error: e.to_s + ": " + e.backtrace[0,10].to_s }.to_json )
 
         end
 
@@ -72,7 +77,7 @@ module Krill
 
     def delete_old_jobs
 
-      @jobs = @jobs.reject { |k,v| ! v.__krill__thread.alive? }
+      @jobs = @jobs.reject { |k,v| ! v.thread.alive? }
 
     end
 

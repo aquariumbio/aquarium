@@ -1,10 +1,26 @@
-def needs path
+module Krill
 
-  p = "#{path}.rb"
-  s = Repo::version p
+  class ProtocolHandler
 
-  content = Repo::contents p, s
+    def needs path
 
-  eval(content)
+      p = "#{path}.rb"
+      s = Repo::version p
+
+      content = Repo::contents p, s
+
+      eval(content)
+
+    end
+
+    def with mod
+
+      class_eval do
+        include mod
+      end
+
+    end
+
+  end
 
 end

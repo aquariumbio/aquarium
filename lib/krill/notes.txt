@@ -1,9 +1,30 @@
 
-- including other files
+- Refactor
 
-  - write an 'include' like function that reads from the
-    repo and evaluates the results to add methods to the protocol
-    handler object
+  - User code
+
+    - User defines a class Protocol in their code. They can define
+      anything else they want too. Protocol must have a 'main' method.
+
+  - KrillBase
+
+    - Defines 'show' (formerly 'display') and other methods that will
+      appear to be built in to the user.
+
+  - Manager does the following to initialize
+  
+    - Creates a namespace class that will contain the user's code
+
+        @namespace = NameSpace.new // this will need to def needs
+        @namespace.class_eval code
+        @protocol = @namespace::Protocol.new
+
+    - Subclasses KrillBase with a new class that defines the method
+      job accordingly to get a class variable @krill.
+
+    - Adds @krill as an ancestor to every class in the user's code
+
+    - Sets up thread stuff
 
 - collections
 
