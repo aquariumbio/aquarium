@@ -5,9 +5,7 @@ module Krill
   class Server
 
     def initialize
-
-      @jobs = {}
-
+      @managers = {}
     end
 
     def run
@@ -27,32 +25,32 @@ module Krill
 
             when "start"
 
-              ph = Manager.new jid
+              @managers[jid] = Manager.new jid
+              @managers[jid].run
 
-              @jobs[jid] = ph
               client.puts( { response: "ok" }.to_json )
+
               delete_old_jobs
-              puts "Jobs Maintained by Server: #{@jobs.keys}."
+              puts "Jobs Maintained by Server: #{@managers.keys}."
 
             when "continue"
 
-              if @jobs[jid]
+              if @managers[jid]
 
-                puts "SERVER RECEIVED CONTINUE FOR JOB #{jid}"
                 begin
-                  @jobs[jid].continue
+                  @managers[jid].continue
                 rescue Exception => e
-                  puts "TRIED TO CONTINUE JOB #{jid}, BUT GOT #{e.to_s} at #{e.backtrace[0,5]}"
+                  puts "TRIED TO CONTINUE JOB #{jid}, BUT GOT #{e.to_s}: #{e.backtrace[0,5]}"
                 end
-                puts "SERVER SENT CONTINUE TO MANAGER FOR JOB #{jid}"
+
                 client.puts( { response: "ok" }.to_json )
-                puts "SERVER RESPONDED WITH OK TO CLIENT FOR JOB #{jid}"
   
               else
 
                 j = Job.find(jid)
                 j.pc = Job.COMPLETED
                 j.save
+
                 client.puts( { response: "error", error: "Krill process not found for job #{jid}" }.to_json )
 
               end
@@ -77,7 +75,7 @@ module Krill
 
     def delete_old_jobs
 
-      @jobs = @jobs.reject { |k,v| ! v.thread.alive? }
+      @managers = @managers.reject { |k,v| ! v.thread.alive? }
 
     end
 

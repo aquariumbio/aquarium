@@ -6,82 +6,68 @@ module Krill
 
   class Manager
 
-    attr_accessor :job, :thread
+    attr_accessor :thread
 
     def initialize jid
 
-      @jid = jid
-      @job = Job.find(jid)
-      @path = @job.path
-      @sha = @job.sha
-      @code = Repo::contents @path, @sha
-
+      # Start new thread
       @mutex = Mutex.new
-      @thread_status = ThreadStatus.new
-      
+      @thread_status = ThreadStatus.new      
       @thread_status.running = false
 
+      # Get job info
+      @jid = jid
+      @job = Job.find(jid)
+      @code = Repo::contents @job.path, @job.sha
       initial_state = JSON.parse @job.state, symbolize_names: true
       @args = initial_state[0][:arguments]
 
       # Create Namespace
-      @namespace = Class.new
-      @namespace.extend(Namespace)
-      @namespace.class_eval @code
+      @namespace = Krill::make_namespace @code
 
-      # Create Base
-      @base = Module.new
-      @base.send(:include,Base)
-      @base.module_eval "def jid; #{@jid}; end"
-      @base.module_eval "def input; #{@args}; end"
+      # Add base_class ancestor to user's code
+      @base_class = make_base
+      insert_base_class @namespace, @base_class
 
-      manager_mutex = @mutex
-      @base.send :define_method, :mutex do
-        manager_mutex
-      end
-
-      manager_thread_status = @thread_status
-      @base.send :define_method, :thread_status do
-        manager_thread_status
-      end
-
-      # Add base ancestor
-      insert_base_class @namespace, @base
+      # Make a base object
+      @base_object = Class.new.extend(@base_class)
 
       # Make protocol
       @protocol = @namespace::Protocol.new
 
+    end
+
+    def run
+
       @thread = Thread.new { 
 
-        @mutex.synchronize { @thread_status.running = true }
+        begin
 
-        @job.reload
-        @job.pc = 0
-        @job.save
+          @mutex.synchronize { @thread_status.running = true }
 
-        puts "#{jid}: STARTING THREAD #{Thread.current}"
-        begin 
-          @protocol.main
-        rescue Exception => e
-          puts "#{jid}: EXCEPTION #{e.to_s} + #{e.backtrace[0,10]}"
+          @job.reload.pc = 0
+          @job.save
+
           begin 
-            error e
-          rescue Exception => d
-            puts "#{jid}: A SERIOUS PROBLEM: #{d.to_s}"
+            @protocol.main
+          rescue Exception => e
+            puts "#{@job.id}: EXCEPTION #{e.to_s} + #{e.backtrace[0,10]}"
+            @base_object.error e
           end
+
+          @job.reload.pc = Job.COMPLETED
+          @job.save
+
+          @base_object.send( :append_step, { operation: "complete" } )
+          ActiveRecord::Base.connection.close
+
+          @mutex.synchronize { @thread_status.running = false }
+
+        rescue Exception => main_error
+
+          puts "#{@job.id}: SERIOUS EXCEPTION #{main_error.to_s}: #{main_error.backtrace[0,10]}"
+
         end
-
-        puts "#{jid}: COMPLETING"
-
-        @job.reload
-        @job.pc = Job.COMPLETED
-        @job.save
-
-        puts "#{jid}: DONE"
-
-        append_step( { operation: "complete" } )
-        ActiveRecord::Base.connection.close
-        @mutex.synchronize { @thread_status.running = false }
 
       }
 
@@ -102,32 +88,32 @@ module Krill
 
     def continue
 
-      puts "#{@jid}: CONTINUE"
-
       if @thread.alive?
-        puts "#{@jid}: ALIVE. ATTEMPTING TO WAKE"
         wake
-        puts "#{@jid}: WAKE SUCCEEDED"
       end
 
       @thread.alive?
 
     end
 
-    def error e
-      append_step( { operation: "error", message: e.to_s, backtrace: e.backtrace[0,10] } )
-      @job.reload
-      @job.pc = Job.COMPLETED
-      @job.save
-    end
+    def make_base
 
-    def append_step s
+      b = Module.new
+      b.send(:include,Base)
+      b.module_eval "def jid; #{@jid}; end"
+      b.module_eval "def input; #{@args}; end"
 
-      @job.reload
-      state = JSON.parse @job.state, symbolize_names: true
-      state.push s
-      @job.state = state.to_json
-      @job.save
+      manager_mutex = @mutex
+      b.send :define_method, :mutex do
+        manager_mutex
+      end
+
+      manager_thread_status = @thread_status
+      b.send :define_method, :thread_status do
+        manager_thread_status
+      end
+
+      b
 
     end
 
@@ -138,31 +124,11 @@ module Krill
         k = obj.const_get(c)
 
         if k.class == Module
-          puts c
           k.eigenclass.send(:include,mod) unless k.eigenclass.include? mod
           insert_base_class k, mod
         elsif k.class == Class
-          puts c
           k.send(:include,mod) unless k.include? mod
           insert_base_class k, mod
-        end
-
-      end
-
-    end
-
-    def show_ancestry obj
-
-      obj.constants.each do |c|
-
-        k = obj.const_get(c)
-
-        if k.class == Module
-          puts c.to_s + " extended by " + (class << k; self end).included_modules.to_s
-          show_ancestry k
-        elsif k.class == Class
-          puts c.to_s + " ancestors are " + k.ancestors.to_s
-          show_ancestry k
         end
 
       end

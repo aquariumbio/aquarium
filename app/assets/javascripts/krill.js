@@ -107,7 +107,7 @@ Krill.prototype.step = function(description,number) {
     var that = this;
  
     var titlebar = $('<div></div>').addClass('row-fluid').addClass('krill-step-titlebar');
-    var num = $('<div>' + (number+26) + '</div>').addClass('krill-step-number').addClass('span2');
+    var num = $('<div>' + (number) + '</div>').addClass('krill-step-number').addClass('span2');
     var title = $('<div></div>').addClass('krill-title').addClass('span8');
     var btn = $('<button id="next">OK</button>').addClass('krill-next-btn');
     var btnholder = $('<div></div>').addClass('span2').append(btn);

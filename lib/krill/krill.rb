@@ -1,7 +1,11 @@
 require_relative 'client'
 require_relative 'server'
-require_relative 'base'
 require_relative 'manager'
-#require_relative 'find'
-#require_relative 'inventory'
+
+require_relative 'namespace'
+require_relative 'base'
+
+require_relative 'find'
+require_relative 'inventory'
+
 #require_relative 'utils'

@@ -1,6 +1,26 @@
 module Krill
 
-  class ProtocolHandler
+  module Base
+
+    def find name, spec
+
+      # Define available tables. Note, no queries should be made at this point
+      tables = {
+        item: Item.includes(sample:[:sample_type]).includes(:object_type).where("location != 'deleted'"),
+        sample: Sample.includes(:sample_type),
+        sample_type: SampleType.includes(),
+        object_type: ObjectType.includes(),
+        task: Task.includes(:task_prototype)
+      }
+
+      # Do the search
+      rows = tables[name].where(pluralize_table_names(spec))
+
+      return rows
+
+    end
+
+    private
 
     def fix val
 
@@ -29,28 +49,6 @@ module Krill
       end          
 
       newspec
-
-    end
-
-    def find name, spec
-
-      # 
-      # Define available tables. Note, no queries should be made at this point
-      #
-      tables = {
-        item: Item.includes(sample:[:sample_type]).includes(:object_type).where("location != 'deleted'"),
-        sample: Sample.includes(:sample_type),
-        sample_type: SampleType.includes(),
-        object_type: ObjectType.includes(),
-        task: Task.includes(:task_prototype)
-      }
-
-      #
-      # Do the search
-      #
-      rows = tables[name].where(pluralize_table_names(spec))
-
-      return rows
 
     end
 
