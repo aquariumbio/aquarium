@@ -1,11 +1,13 @@
 Krill.prototype.step_title = function(s) {
 
-    var title = "";
+    var title = "-";
 
-    for ( var i=0; i<s.content.length; i++ ) {
-	if ( s.content[i].title ) {
-	    title = s.content[i].title;
-	}
+    if ( s ) {
+      for ( var i=0; i<s.content.length; i++ ) {
+  	if ( s.content[i].title ) {
+  	    title = s.content[i].title;
+  	}
+      }
     }
 
     return title;

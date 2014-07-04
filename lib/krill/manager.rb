@@ -39,11 +39,11 @@ module Krill
 
     def run
 
+      @thread_status.running = true
+
       @thread = Thread.new { 
 
         begin
-
-          @mutex.synchronize { @thread_status.running = true }
 
           @job.reload.pc = 0
           @job.save
@@ -71,18 +71,26 @@ module Krill
 
       }
 
+      wait
+
     end
 
-    def wake
+    def wait
 
-      @mutex.synchronize { @thread_status.running = true }
-      @thread.wakeup
       temp = true
       @mutex.synchronize { temp = @thread_status.running }
       while temp
         sleep(0.1) # keeps the processing from being a hog?
         @mutex.synchronize { temp = @thread_status.running }
       end
+
+    end
+
+    def wake
+
+      @mutex.synchronize { @thread_status.running = true }
+      @thread.wakeup
+      wait
 
     end
 
@@ -124,7 +132,10 @@ module Krill
         k = obj.const_get(c)
 
         if k.class == Module
-          k.eigenclass.send(:include,mod) unless k.eigenclass.include? mod
+          eigenclass = class << self
+            self
+          end
+          eigenclass.send(:include,mod) unless eigenclass.include? mod
           insert_base_class k, mod
         elsif k.class == Class
           k.send(:include,mod) unless k.include? mod

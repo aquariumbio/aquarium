@@ -35,7 +35,7 @@ module Krill
       state = JSON.parse job.state, symbolize_names: true
       state.push s
       job.state = state.to_json
-      job.save
+      job.save 
 
     end
 

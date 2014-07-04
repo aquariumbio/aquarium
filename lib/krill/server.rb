@@ -43,6 +43,9 @@ module Krill
                   puts "TRIED TO CONTINUE JOB #{jid}, BUT GOT #{e.to_s}: #{e.backtrace[0,5]}"
                 end
 
+                # Job.find(jid).reload # hopefully forces a commit
+                # sleep(1)
+
                 client.puts( { response: "ok" }.to_json )
   
               else

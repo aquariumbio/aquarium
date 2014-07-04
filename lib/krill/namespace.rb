@@ -7,16 +7,18 @@ module Krill
       p = "#{path}.rb"
       s = Repo::version p
       content = Repo::contents p, s
-      eval(content)
+      class_eval(content)
 
     end
 
   end
 
   def self.make_namespace code
+
     namespace = Class.new.extend(Namespace)
     namespace.class_eval code
     namespace
+
   end
 
   def self.get_arguments code

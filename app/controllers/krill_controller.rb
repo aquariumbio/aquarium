@@ -4,9 +4,14 @@ class KrillController < ApplicationController
 
   def arguments 
 
-    @path = params[:path]
-    @sha = Repo::version @path
-    @content = Repo::contents @path, @sha
+    begin
+      @path = params[:path]
+      @sha = Repo::version @path
+      @content = Repo::contents @path, @sha
+    rescue Exception => e
+      flash[:error] = e.to_s + ". " + e.backtrace[0].to_s
+      return redirect_to repo_list_path
+    end
 
     begin
       @args = Krill::get_arguments @content
@@ -84,8 +89,6 @@ class KrillController < ApplicationController
 
   def next
 
-   logger.info params
-
     @job = Job.find(params[:job])
 
     if @job.pc >= 0
@@ -95,6 +98,7 @@ class KrillController < ApplicationController
       state.push( { operation: "next", time: Time.now, inputs: params[:inputs] } )
       @job.state = state.to_json
       @job.save
+      updated = @job.updated_at
 
       # Tell Krill server to take the next step in the protocol 
       begin
@@ -108,6 +112,10 @@ class KrillController < ApplicationController
       end
 
       @job.reload
+
+      if updated == @job.updated_at
+        flash[:notice] = "Warning: job state not updated in Krill:next"
+      end
 
     end
 
@@ -126,6 +134,10 @@ class KrillController < ApplicationController
   def ui
 
     @job = Job.find(params[:job])
+
+    if (JSON.parse @job.state).length % 2 != 0
+      flash[:error] = "Warning: job state may not have been completely updated yet. Try reloading."
+    end
 
     if @job.pc == Job.NOT_STARTED
       redirect_to krill_error_path(job: @job.id, message: "interpreter: Job not started") 

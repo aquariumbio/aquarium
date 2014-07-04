@@ -35,22 +35,19 @@ module Krill
         answer += line.chop 
       end
 
-      close          
+      close
 
       JSON.parse answer, symbolize_names: true
 
     end
 
     def start jid
-
       send( { operation: "start", jid: jid } )
-
     end
 
     def continue jid
-
       send( { operation: "continue", jid: jid } )
-
+      # (JSON.parse Job.find(jid).state, symbolize_names: true)[:content]
     end
 
   end

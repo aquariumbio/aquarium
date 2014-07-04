@@ -14,6 +14,8 @@ function Krill(job) {
 
 Krill.prototype.update = function() {
 
+    console.log("updating");
+
     if ( !this.check_if_done() ) {
 
       this.add_latest_step();
@@ -30,6 +32,12 @@ Krill.prototype.initialize = function() {
     this.steps_tag.append(this.step_list_tag);
     this.get_state();
     var n=1;
+
+    if ( this.state.length % 2 != 0 ) {
+	alert ( "Server response not ready. "
+              + "Tell your head programmer to do a better job at multi-process control. "
+              + "While you are waiting for him to fix this problem, try reloading the page." );
+    }
 
     for ( var i=1; i<this.state.length; i += 2 ) {
 
@@ -85,14 +93,16 @@ Krill.prototype.add_latest_step = function() {
 
     var last = this.state.length-1;
 
+    console.log("add_latest_step " + last);
+
     // Disable previous step
     this.disable_step(this.step_list[this.step_list.length-1],this.state[last-1].inputs);
 
     // Build last step
-
     var current = this.state[last].content;
-
     var content = this.step(current,(last+1)/2);
+
+    console.log("current = " + current);
 
     // Add last step to lists
     var s = $('<li></li>').addClass('krill-step-list-item').append($('<div></div>').addClass('krill-step-container').append(content));
@@ -155,7 +165,9 @@ Krill.prototype.check_if_done = function() {
     switch ( last.operation ) {
 
       case 'next':
+      case 'initialize':
         this.step_tag.empty().append('<p>Processing not complete. Reload page.</p>');
+	console.log('Processing not complete. Reload page.');
         done = false;
 	break;
       case 'complete':
@@ -166,6 +178,8 @@ Krill.prototype.check_if_done = function() {
         window.location = 'error?job=' + this.job + '&message=' + last.message;
         done = true;
 	break;
+      default:
+        console.log("Default in switch reached: " + last.operation);
 
     }
 

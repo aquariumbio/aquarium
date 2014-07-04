@@ -2,7 +2,7 @@ module Krill
 
   module Base
 
-    def take items, args
+    def take items, args={}
 
       options = { 
         interactive: false
@@ -24,7 +24,7 @@ module Krill
 
     end
 
-    def release items, args
+    def release items, args={}
 
       options = { 
         interactive: false
