@@ -1,4 +1,4 @@
-function Krill(job) {
+function Krill(job,path,pc) {
 
     var that = this;
 
@@ -6,23 +6,20 @@ function Krill(job) {
     this.history_tag     = $('#history');
     this.inventory_tag   = $('#inventory');
     this.job = job;
-   
+    this.path = path;
+    this.pc = pc;
+
     this.step_list = [];                                              // list of all step tags for easy access
-    this.step_list_tag = $('<ul id="step_list"></ul>').addClass('krill-step-list');  // document ul containing step tags 
+    this.step_list_tag = $('<ul id="step_list"></ul>').addClass('krill-step-list');  // document ul containing step tags
 
 }
 
 Krill.prototype.update = function() {
 
-    console.log("updating");
-
-    if ( !this.check_if_done() ) {
-
-      this.add_latest_step();
-      this.history();
-      this.inventory();
-
-    }
+    this.add_latest_step();
+    this.info();
+    this.history();
+    this.inventory();
 
 }
 
@@ -31,31 +28,48 @@ Krill.prototype.initialize = function() {
     // First, initialize the steps list
     this.steps_tag.append(this.step_list_tag);
     this.get_state();
+
+    // keep track of step number
     var n=1;
 
+    // Check that the Krill server has responded
     if ( this.state.length % 2 != 0 ) {
-	alert ( "Server response not ready. "
-              + "Tell your head programmer to do a better job at multi-process control. "
-              + "While you are waiting for him to fix this problem, try reloading the page." );
+	   alert ( "Server response not ready. "
+             + "Tell your lead programmer to do a better job at multi-process control. "
+             + "While you are waiting for him to fix this problem, try reloading the page." );
     }
 
+    // Go through each step and add it to the display
+    // The state looks like [ initialize, display, next, display, next, ..., display, next, complete|error ]
+    //                        0           1        2     3        4          2n+1     2n+2  2n+3
     for ( var i=1; i<this.state.length; i += 2 ) {
 
-        var content = this.step(this.state[i].content,n);
-            
-        var s = $('<li id="l'+n+'"></li>').addClass('krill-step-list-item').append($('<div></div>').addClass('krill-step-container').append(content));
+        // Make an html element to containt the content
+        var content = this.step(this.state[i],n);
+
+        // Put the content in an li
+        var s = $('<li id="l'+n+'"></li>')
+        .addClass('krill-step-list-item')
+        .append($('<div></div>')
+            .addClass('krill-step-container')
+            .append(content));
+
+        // Add the content into the document and a separate list of tags for easy access
         this.step_list.push(s);
         this.step_list_tag.append(s);
 
-	if ( i < this.state.length-2 ) {
-	    this.disable_step(s,this.state[i+1].inputs);
-	}
+        // Disable steps that have already been performed
+        if ( i < this.state.length-2 ) {
+           this.disable_step(s,this.state[i+1].inputs);
+        }
 
+        // Increment step number
         n++;
 
     }
 
     // Then render the history and inventory
+    this.info();
     this.history();
     this.inventory();
 
@@ -93,16 +107,12 @@ Krill.prototype.add_latest_step = function() {
 
     var last = this.state.length-1;
 
-    console.log("add_latest_step " + last);
-
     // Disable previous step
     this.disable_step(this.step_list[this.step_list.length-1],this.state[last-1].inputs);
 
     // Build last step
-    var current = this.state[last].content;
+    var current = this.state[last];
     var content = this.step(current,(last+1)/2);
-
-    console.log("current = " + current);
 
     // Add last step to lists
     var s = $('<li></li>').addClass('krill-step-list-item').append($('<div></div>').addClass('krill-step-container').append(content));
@@ -112,78 +122,128 @@ Krill.prototype.add_latest_step = function() {
 
 }
 
-Krill.prototype.step = function(description,number) {
+Krill.prototype.build_titlebar = function(number,with_button) {  
 
     var that = this;
- 
+
     var titlebar = $('<div></div>').addClass('row-fluid').addClass('krill-step-titlebar');
     var num = $('<div>' + (number) + '</div>').addClass('krill-step-number').addClass('span2');
-    var title = $('<div></div>').addClass('krill-title').addClass('span8');
-    var btn = $('<button id="next">OK</button>').addClass('krill-next-btn');
-    var btnholder = $('<div></div>').addClass('span2').append(btn);
+    var title = $('<div></div>').addClass('krill-title').addClass('span8').attr('id','title');
+    var btnholder = $('<div></div>').addClass('span2');
+
+    if(with_button) {
+
+        btn = $('<button id="next">OK</button>').addClass('krill-next-btn');
+        btnholder.append(btn);
+
+        btn.click(function() {
+          that.send_next();
+          that.update();
+          that.carousel_inc(1);
+        });
+
+    }
 
     titlebar.append(num,title,btnholder);
 
-    var ul = $('<ul></ul').addClass('krill-step-ul');
-
-    var container = $('<div></div>').addClass('krill-step');
-
-    for(var i=0; i<description.length; i++) {
-
-        var key = Object.keys(description[i])[0];
-        if ( this[key] ) {
-          var new_element = this[key](description[i][key],title);
-          if ( new_element ) {
-            ul.append(new_element);   
-	  }
-	} else {
-	    ul.append('<li>ERROR PARSING DISPLAY REQUEST.</li>');
-	}
-
-    }
-
-    btn.click(function() {
-        that.send_next();
-        that.update();
-        that.carousel_inc(1);
-    });
-
-    container.append(titlebar,ul).css('width',$('#krill-steps-ui').outerWidth());
-    container.css('width',$('#krill-steps-ui').outerWidth()-102);
-    container.css('height', window.innerHeight - 90 );
-
-    return container;
+    return titlebar;
 
 }
 
-Krill.prototype.check_if_done = function() {
+Krill.prototype.log_link = function() { 
 
-    var i = this.state.length-1;
-    var last = this.state[i];
-    var done = false;
+    var that = this;
 
-    switch ( last.operation ) {
+    var btn = $('<button>View Log</button>').addClass('btn').click(function(){
+        window.location = 'log?job=' + that.job;
+    });
 
-      case 'next':
-      case 'initialize':
-        this.step_tag.empty().append('<p>Processing not complete. Reload page.</p>');
-	console.log('Processing not complete. Reload page.');
-        done = false;
-	break;
-      case 'complete':
-        window.location = 'completed?job=' + this.job;
-        done = true;
-	break;
-      case 'error':
-        window.location = 'error?job=' + this.job + '&message=' + last.message;
-        done = true;
-	break;
-      default:
-        console.log("Default in switch reached: " + last.operation);
+    return $('<li \>').append(btn).addClass('krill-note');
+
+}
+
+Krill.prototype.pending_link = function() { 
+
+    var that = this;
+
+    var btn = $('<button>View Pending Jobs</button>').addClass('btn').click(function(){
+        window.location = '/jobs';
+    });
+
+    return $('<li \>').append(btn).addClass('krill-note');
+
+}
+
+Krill.prototype.step = function(state,number) {    
+
+    if ( state.operation == 'display' ) {
+
+        var description = state.content;
+        var titlebar = this.build_titlebar(number,true);
+        var ul = $('<ul></ul').addClass('krill-step-ul');
+        var container = $('<div></div>').addClass('krill-step');
+
+        for(var i=0; i<description.length; i++) {
+
+            var key = Object.keys(description[i])[0];
+            if ( this[key] ) {
+              var new_element = this[key](description[i][key],$('#title',titlebar));
+              if ( new_element ) {
+                ul.append(new_element);
+              }
+            } else {
+              ul.append('<li>ERROR PARSING DISPLAY REQUEST.</li>');
+            }
+
+        }
+
+        container.append(titlebar,ul).css('width',$('#krill-steps-ui').outerWidth());
+        container.css('width',$('#krill-steps-ui').outerWidth()-102);
+        container.css('height', window.innerHeight - 90 );
+
+        return container;
+
+    } else if ( state.operation == 'error' ) {
+
+        this.pc = -2;
+
+        var titlebar = this.build_titlebar("!",false);
+        $('#title',titlebar).html('Error');
+
+        var ul = $('<ul></ul>').addClass('krill-step-ul');
+        var p = $('<li><b>'+state.message+'</b></li>').addClass('krill-warning');
+
+        ul.append(p);
+
+        $.each(state.backtrace,function(el) {
+            var line_info = state.backtrace[el].replace('(eval):', 'line: ');
+            ul.append($('<li>'+line_info+'</li>').addClass('krill-note'));
+        });
+
+        ul.append(this.log_link(),this.pending_link());
+
+        container = $('<div></div>').addClass('krill-step').append(titlebar,ul);
+
+        return container;
+
+    } else {
+
+        this.pc = -2;
+
+        var titlebar = this.build_titlebar("&#9734;",false);
+        $('#title',titlebar).html('Completed');
+
+        var ul = $('<ul></ul>').addClass('krill-step-ul');
+        var p = $('<li>This protocol completed normally.</li>').addClass('krill-note');
+
+        ul.append(p);
+        ul.append(this.log_link(),this.pending_link());
+
+        container = $('<div></div>').addClass('krill-step').append(titlebar,ul);
+
+        return container;
 
     }
-
-    return done;
 
 }
 
@@ -199,12 +259,12 @@ Krill.prototype.inventory = function() {
         for ( var i in data ) {
             items.push(data[i].id);
         }
-        console.log(items);
-	that.inventory_tag.empty();
+    	that.inventory_tag.empty();
         render_json(that.inventory_tag,items);
-	if ( items.length == 0 ) {
-	    that.inventory_tag.append("<p>No items in use</p>").addClass('krill-inventory-none');
-	}
+        if ( items.length == 0 ) {
+            that.inventory_tag.append("<p>No items in use</p>").addClass('krill-inventory-none');
+        }
+
     });
 
 }
@@ -229,12 +289,12 @@ Krill.prototype.get = function() {
         } else {
             values[name] = $(e).val();
         }
-    });    
+    });
 
     $.each(selects,function(i,e) {
         var name = $(e).attr("id");
         values[name] = $(e).val();
-    });    
+    });
 
     return values;
 
@@ -242,7 +302,7 @@ Krill.prototype.get = function() {
 
 /////////////////////////////////////////////////////////////////////////////////
 // COMMUNICATION WITH RAILS
-// 
+//
 
 Krill.prototype.get_state = function() {
 

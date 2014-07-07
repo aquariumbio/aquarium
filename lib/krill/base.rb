@@ -2,7 +2,13 @@ module Krill
 
   module Base
 
+    def debug
+      false
+    end
+
     def show *page
+
+      puts "DEBUG MODE ON" if debug
 
       # Append page to job state
       append_step( { operation: "display", content: page } )

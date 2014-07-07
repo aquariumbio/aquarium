@@ -1,21 +1,40 @@
-module M
+module K
 
-    def self.needs content
-        eval(content)
+  module Namespace
+
+      def needs content
+          class_eval(content)
+      end
+
+  end
+
+  class M
+
+    def initialize
+
+      namespace = Class.new.extend(Namespace)
+
+      namespace.class_eval "
+
+        needs 'class Thing; def initialize z; puts z; end; end'
+        needs 'module Thang; def self.f x; -x; end; end'
+
+        class C
+
+          # include Thang
+
+          def initialize
+            t = Thing.new(Thang::f 1)
+          end
+
+        end"
+
+      namespace::C.new
+
     end
 
-    needs "class Thing; def initialize; puts 'ok'; end; end"
+  end
 
 end
 
-code="class C
-
-      def initialize
-        t = Thing.new
-      end
-
-    end"
-
-
-
-M::C.new
+k = K::M.new

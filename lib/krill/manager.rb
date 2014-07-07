@@ -12,7 +12,7 @@ module Krill
 
       # Start new thread
       @mutex = Mutex.new
-      @thread_status = ThreadStatus.new      
+      @thread_status = ThreadStatus.new
       @thread_status.running = false
 
       # Get job info
@@ -41,24 +41,27 @@ module Krill
 
       @thread_status.running = true
 
-      @thread = Thread.new { 
+      @thread = Thread.new {
+
+        error = false
 
         begin
 
           @job.reload.pc = 0
           @job.save
 
-          begin 
+          begin
             @protocol.main
           rescue Exception => e
             puts "#{@job.id}: EXCEPTION #{e.to_s} + #{e.backtrace[0,10]}"
             @base_object.error e
+            error = true
           end
 
           @job.reload.pc = Job.COMPLETED
           @job.save
 
-          @base_object.send( :append_step, { operation: "complete" } )
+          @base_object.send( :append_step, { operation: "complete" } ) unless error
           ActiveRecord::Base.connection.close
 
           @mutex.synchronize { @thread_status.running = false }
@@ -132,12 +135,14 @@ module Krill
         k = obj.const_get(c)
 
         if k.class == Module
+          puts "INSERTING into module #{c}"
           eigenclass = class << self
             self
           end
           eigenclass.send(:include,mod) unless eigenclass.include? mod
           insert_base_class k, mod
         elsif k.class == Class
+          puts "INSERTING into class #{c}"
           k.send(:include,mod) unless k.include? mod
           insert_base_class k, mod
         end
@@ -147,5 +152,5 @@ module Krill
     end
 
   end
- 
+
 end

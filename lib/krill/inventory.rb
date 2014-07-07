@@ -1,20 +1,105 @@
 module Krill
 
+  class Box
+
+    def initialize
+      @slots = Array.new
+      (0..80).each do |i|
+        @slots[i] = { content: i, class: 'td-empty-slot' }
+      end
+    end
+
+    def highlight index, id
+      @slots[index] = { content: id, class: 'td-filled-slot', check: true }
+    end
+
+    def table
+      t = Array.new(9)
+      (0..8).each do |row|
+        t[row] = @slots[9*row,9]
+      end
+      t
+    end
+
+  end
+
   module Base
+
+    # Warning: Adding classes and modules to this module will likely result in
+    # an infinite loop when Base is inserted into the user's code ancestry. Put
+    # them in the top level Krill module instead (as in Box) above.
+
+    def boxes_for items
+
+      boxes = {}
+      extras = []
+
+      r = Regexp.new ( '(M20|M80|SF[0-9]*)\.[0-9]+\.[0-9]+\.[0-9]+' )
+
+      items.each do |i|
+
+        if r.match(i.location)
+
+          freezer,hotel,box,slot = i.location.split('.')
+          slot = slot.to_i
+          name = "#{freezer}.#{hotel}.#{box}"
+
+          boxes[name] = Box.new unless boxes[name]
+          boxes[name].highlight slot, i.id
+
+        else
+
+          extras.push i
+
+        end
+
+      end
+
+      [ boxes, extras ]
+
+    end
+
+
+    def box_interactive items, box_note, extra_title
+
+      boxes, extras = boxes_for items
+
+      boxes.each do |name,box|
+        show(
+          {title:name},
+          {note: box_note},
+          {table: box.table}
+          )
+      end
+
+      if extras.length > 0
+        takes = extras.collect { |i| { take: i.features } }
+        show( *[ { title: extra_title } ].concat(takes) )
+      end
+
+    end
 
     def take items, args={}
 
-      options = { 
-        interactive: false
+      options = {
+        interactive: false,
+        method: "list"
       }.merge args
 
       if options[:interactive]
-     
-        takes = items.collect do |i|
-          { take: i.features }
-        end
 
-        show( *[ { title: "Gather the Following Item(s)" } ].concat(takes) )
+        case options[:method]
+
+        when "boxes"
+
+          box_interactive items, "Collect Item(s)", "Gather the Following Additional Item(s)"
+
+        else
+
+          takes = items.collect { |i| { take: i.features } }
+          show( *[ { title: "Gather the Following Item(s)" } ].concat(takes) )
+
+        end
 
       end
 
@@ -24,19 +109,27 @@ module Krill
 
     end
 
+
     def release items, args={}
 
-      options = { 
+      options = {
         interactive: false
       }.merge args
 
       if options[:interactive]
 
-        rels = items.collect do |i|
-          { take: i.features }
-        end
+        case options[:method]
 
-        show( *[ { title: "Return the Following Item(s)" } ].concat(rels) )
+        when "boxes"
+
+          box_interactive items, "Return Item(s)", "Return the Following Additional Item(s)"
+          
+        else
+
+          rels = items.collect { |i| { take: i.features } }
+          show( *[ { title: "Return the Following Item(s)" } ].concat(rels) )
+
+        end
 
       end
 
@@ -47,6 +140,7 @@ module Krill
       end
 
     end
+
 
     def produce spec
 
@@ -77,6 +171,7 @@ module Krill
       return i
 
     end
+
 
   end
 

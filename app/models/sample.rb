@@ -10,7 +10,7 @@ class Sample < ActiveRecord::Base
   validates :name, presence: true
   validates :project, presence: true
   validates :user_id, presence: true
-  
+
   def get_property key
     # Look up fields according to sample type field structure
     st = sample_type
@@ -45,7 +45,7 @@ class Sample < ActiveRecord::Base
 
     c = ObjectType.find_by_name container
     if c
-      Item.where("sample_id = ? AND object_type_id = ?", self.id, c.id )
+      Item.where("sample_id = ? AND object_type_id = ? AND NOT ( location = 'deleted' )", self.id, c.id )
     else
       []
     end

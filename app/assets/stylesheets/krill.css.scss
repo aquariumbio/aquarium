@@ -78,7 +78,7 @@
     //background: #eee;
 }
 
-.krill-step-list-item { 
+.krill-step-list-item {
     float: left;
     list-style-type: none;
     margin: 0 !important;
@@ -104,14 +104,14 @@
   }
 
   li {
-   // list-style-type: none; 
+   // list-style-type: none;
   }
 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
 // ELEMENTS
-// 
+//
 
 
 .krill-step-titlebar {
@@ -128,7 +128,7 @@
   line-height: 48pt;
   text-align: center;
   background: orange;
-  color: white; 
+  color: white;
   border-color: lightorange;
   padding: 5px;
   padding-left: 5px;
@@ -208,6 +208,8 @@ $noteBottomMargin: 20px;
   margin-bottom: $noteBottomMargin;
   padding: $notePad;
   line-height: $noteLH;
+  color: red;
+  background: yellow;
 }
 
 .krill-select-label {
@@ -260,12 +262,13 @@ $noteBottomMargin: 20px;
 
   border: 1pt solid #aaa;
   font-size: $noteFontSize;
+  margin: 15px;
 
   td {
     border: 1pt solid #aaa;
     text-align: center;
     padding: 10px;
-  } 
+  }
 
   .empty {
     background: #f5f5f5;
@@ -295,6 +298,23 @@ $noteBottomMargin: 20px;
 .krill-td-selected {
   background: blue;
   color: white;
+}
+
+.td-filled-slot {
+  border: 1pt solid #aaa;
+  width: 37px;
+  height: 37px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 10pt;
+}
+
+.td-empty-slot {
+  width: 37px;
+  height: 37px;
+  background: #f5f5f5;
+  color: #ddd;
+  font-size: 18pt;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -332,6 +352,16 @@ $noteBottomMargin: 20px;
 
 .krill-history-step-selected:hover {
   background: rgba(240,240,240,0.5);
+}
+
+.krill-job-info {
+  color: black;
+  margin-bottom: 10px;
+  padding: 3px 6px 9px 6px;
+  font-weight: bold;
+  background: #dfd;
+  border: 1pt solid #eee;
+  border-radius: 5px;
 }
 
 //////////////////////////////////////////////////////////////////////

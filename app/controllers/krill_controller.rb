@@ -16,7 +16,7 @@ class KrillController < ApplicationController
     begin
       @args = Krill::get_arguments @content
     rescue Exception => e
-      flash[:error] = "Could not evaluate arguments. " + e.to_s + ":" + e.backtrace.to_s[0,400]
+      flash[:error] = ("<b>Could not parse '#{@path}'</b><br />" + e.to_s.gsub(/\n/,'<br />').gsub(/\(eval\):/,'line ')).html_safe
       return redirect_to repo_list_path
     end
 
@@ -123,7 +123,7 @@ class KrillController < ApplicationController
 
   end
 
-  def completed
+  def log
 
     @job = Job.find(params[:job])
     @history = @job.state
@@ -141,9 +141,8 @@ class KrillController < ApplicationController
 
     if @job.pc == Job.NOT_STARTED
       redirect_to krill_error_path(job: @job.id, message: "interpreter: Job not started") 
-    elsif @job.pc == Job.COMPLETED
-      redirect_to krill_completed_path(job: params[:job]) 
     end
+
 
   end
 

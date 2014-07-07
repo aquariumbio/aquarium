@@ -64,50 +64,58 @@ Krill.prototype.take = function(x) {
 
 Krill.prototype.table = function(x) {
 
-    var tab = $('<table></table>').addClass('krill-table');
+  var tab = $('<table></table>').addClass('krill-table');
 
-    for( var i=0; i<x.length; i++) {
+  for( var i=0; i<x.length; i++) {
 
-        var tr = $('<tr></tr>')
+    var tr = $('<tr></tr>');
 
-	for( var j=0; j<x[i].length; j++ ) {
+    for( var j=0; j<x[i].length; j++ ) {
 
-            console.log(x[i][j]);
+      console.log(x[i][j]);
 
-            if ( typeof x[i][j] != "object" ) {
+      if ( typeof x[i][j] != "object" ) {
 
-               var td = $('<td>'+x[i][j]+'</td>');
+        var td = $('<td>'+x[i][j]+'</td>');
 
-            } else {
+      } else if ( x[i][j] == null ) {
 
-		var td = $('<td>'+x[i][j].content+'</td>');
+        var td = $('<td></td>');
 
-                if ( x[i][j].style ) { 
-		    for ( var key in x[i][j].style ) {
-			console.log(typeof key+":"+x[i][j].style[key]);
-                        td.css(key,x[i][j].style[key]);
-		    }
-		}
+      } else {
 
-                if ( x[i][j].check ) {
-		    td.addClass('krill-td-check');
-                    (function(td) {
-  		      td.click(function() {
-			if ( td.hasClass('krill-td-selected') ) {
-			    td.removeClass('krill-td-selected');
-			} else {
-			    td.addClass('krill-td-selected');
-			}
-		      });
-                    })(td);
+        var td = $('<td>'+x[i][j].content+'</td>');
 
-		}
-	    }
-	    tr.append(td);
-	}
-	tab.append(tr);
+        if ( x[i][j].style ) {
+          for ( var key in x[i][j].style ) {
+            console.log(typeof key+":"+x[i][j].style[key]);
+            td.css(key,x[i][j].style[key]);
+          }
+        }
+
+        if ( x[i][j].class ) {
+          td.addClass(x[i][j].class);
+        }
+
+        if ( x[i][j].check ) {
+          td.addClass('krill-td-check');
+          (function(td) {
+            td.click(function() {
+              if ( td.hasClass('krill-td-selected') ) {
+                td.removeClass('krill-td-selected');
+              } else {
+                td.addClass('krill-td-selected');
+              }
+            });
+          })(td);
+
+        }
+      }
+      tr.append(td);
     }
+    tab.append(tr);
+  }
 
-    return tab;
+  return tab;
 
 }

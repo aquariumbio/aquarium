@@ -1,5 +1,7 @@
 Krill.prototype.step_title = function(s) {
 
+  if ( s.operation == 'display' ) {
+
     var title = "-";
 
     if ( s ) {
@@ -12,40 +14,62 @@ Krill.prototype.step_title = function(s) {
 
     return title;
 
+  } else if ( s.operation == 'error' ) {
+
+    return "Error"
+
+  } else {
+
+    return "Completed"
+
+  }
+
+}
+
+Krill.prototype.info = function() {
+
+  $('#krill-info').empty();
+
+  var note = "";
+
+  if ( this.pc == -2 ) {
+    note = "<br />(inactive)";
+  }
+  var job_info = $('<div>Job '+this.job+'<br />'+this.path+' '+note+'</div>').addClass('krill-job-info');
+  $('#krill-info').append(job_info);
+
 }
 
 Krill.prototype.history = function() {
 
-    var that = this;
-    var n = 1;
-    that.history_tag.empty();
+  var that = this;
+  var n = 1;
+  that.history_tag.empty();
 
-    for ( var i=0; i<this.state.length; i+=2 ) {
+  for ( var i=0; i<this.state.length; i+=2 ) {
 
-        console.log(this.state[i]);
+    var t = new Date(this.state[i].time).format("h:MM:ss TT");
 
-        var t = new Date(this.state[i].time).format("h:MM:ss TT");
+    var time  = $('<div>'+t+'</div>').addClass('krill-history-time');
+    var title = $('<div>'+this.step_title(this.state[i+1])+'</div>').addClass('krill-history-title');
+    var step = $('<div></div>').addClass('krill-history-step').append(time,title);
 
-        var time  = $('<div>'+t+'</div>').addClass('krill-history-time');
-        var title = $('<div>'+this.step_title(this.state[i+1])+'</div>').addClass('krill-history-title');
-        var step = $('<div></div>').addClass('krill-history-step').append(time,title);
+    (function(num) {
+      step.click(function() {
+       that.carousel_move_to(num,250);
+       $(".krill-history-step").removeClass('krill-history-step-selected');
+       $(this).addClass('krill-history-step-selected');
+     });
+    })(n);
 
-	(function(num) {
-            step.click(function() {
-	        that.carousel_move_to(num,250);
-                $(".krill-history-step").removeClass('krill-history-step-selected');
-                $(this).addClass('krill-history-step-selected');
-  	    });
-        })(n);
+    that.history_tag.append(step);
 
-        that.history_tag.append(step);
+    if ( n == this.step_list.length ) {
+     step.addClass('krill-history-step-selected');
+   }
 
-	if ( n == this.step_list.length ) {
-	    step.addClass('krill-history-step-selected');
-	}
+   n++;
 
-	n++;
-
-    }
+ }
 
 }

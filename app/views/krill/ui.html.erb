@@ -2,6 +2,8 @@
  
   <div class='span2' id="krill-tools">
 
+    <div id="krill-info"></div>
+
     <ul class="nav nav-tabs" id="tools-tab">
       <li class="active krill-tools-tab"> <a href="#history">   History     </a></li>
       <li class="krill-tools-tab">        <a href="#inventory"> Inventory   </a></li>
@@ -22,8 +24,6 @@
 
 </div>
 
-
-
 <script>
 
   // Enable Tabs
@@ -33,7 +33,7 @@
   })
 
   // Start steps UI
-  krill = new Krill(<%= @job.id %>);
+  krill = new Krill(<%= @job.id %>, '<%= @job.path %>', <%= @job.pc %>);
   krill.initialize();
   window.onresize = function(){ krill.resize(); }
 
