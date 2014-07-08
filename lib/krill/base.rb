@@ -8,8 +8,6 @@ module Krill
 
     def show *page
 
-      puts "DEBUG MODE ON" if debug
-
       # Append page to job state
       append_step( { operation: "display", content: page } )
 
@@ -18,12 +16,23 @@ module Krill
       job.pc += 1
       job.save
 
-      # stop and wait for technician to click OK
-      mutex().synchronize { thread_status().running = false }
-      Thread.stop
+      if !debug
 
-      # get technician input and return it
-      JSON.parse(job.reload.state, symbolize_names: true).last[:inputs]
+        # stop and wait for technician to click OK
+        mutex().synchronize { thread_status().running = false }
+        Thread.stop
+
+        # get technician input and return it
+        JSON.parse(job.reload.state, symbolize_names: true).last[:inputs]
+
+      else
+
+        # figure out default technician response
+        i = simulated_input_for page
+        append_step( { operation: "next", time: Time.now, inputs: i })
+        i
+
+      end
 
     end
 
@@ -34,6 +43,47 @@ module Krill
     end
 
     private
+
+    def simulated_input_for page
+
+      i = {}
+
+      page.each do |j|
+
+        if j[:input]
+
+          var = j[:input][:var].to_sym
+          dft = j[:input][:default]
+
+          if !dft
+            if j[:input][:type] == "text"
+              dft = "user input string"
+            else
+              ddt = 0
+            end
+          end
+          i[var] = dft
+
+        elsif j[:select]
+
+          var = j[:select][:var].to_sym
+          dft = j[:select][:default]
+
+          if !dft
+            dft = 0
+          end
+
+          i[var] = j[:select][:choices][dft]
+
+        end
+
+      end
+
+      i[:timestamp] = 1000*Time.now.to_i
+
+      return i
+
+    end
 
     def append_step s
 

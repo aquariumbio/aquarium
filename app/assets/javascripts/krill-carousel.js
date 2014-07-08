@@ -13,7 +13,7 @@ Krill.prototype.carousel_move_to = function(num,dur) {
     }
 
     if ( 1 <= num && num <= this.step_list.length ) {    
-      var item_width = this.step_list[0].outerWidth();  
+      var item_width = this.step_list[0].outerWidth()-1;  
       var left_indent = -num*item_width;  
       $('#step_list').animate({'left' : left_indent},{queue:false, duration:duration});
       this.current_position = num;
