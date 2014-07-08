@@ -50,6 +50,10 @@ module Krill
       # (JSON.parse Job.find(jid).state, symbolize_names: true)[:content]
     end
 
+    def kill_zombies
+      send( { operation: "kill zombies" } )
+    end
+
   end
 
 end

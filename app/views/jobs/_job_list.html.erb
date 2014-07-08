@@ -61,7 +61,7 @@
       <% end %>
       <% if runnable %>
         <td>
-          <% if /\.kl$/ =~ j.path %>
+          <% if /\.rb$/ =~ j.path %>
             <%= link_to krill_start_path(job:j.id) do %>
 		<i class='icon-play'></i>         
 	      <% end %>

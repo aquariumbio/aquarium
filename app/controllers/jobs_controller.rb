@@ -4,6 +4,12 @@ class JobsController < ApplicationController
 
   def index
 
+    server_result = ( Krill::Client.new.kill_zombies )
+
+    if server_result[:killed].length > 0 
+      flash[:notice] = "Killed zombies: #{server_result[:killed]}. This happens when the Krill server is restarted while a job is still active."
+    end
+
     @user_id = params[:user_id] ? params[:user_id].to_i : current_user.id
 
     if @user_id == -1
@@ -33,6 +39,10 @@ class JobsController < ApplicationController
   def show
 
     @job = Job.find(params[:id])
+
+    if /\.rb$/ =~ @job.path
+      return redirect_to krill_log_path(job: @job.id)
+    end
 
     if @job.group_id
       @group = Group.find_by_id(@job.group_id)

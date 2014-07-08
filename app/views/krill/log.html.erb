@@ -1,4 +1,6 @@
-<h1>Job <%= @job.id %> is completed.</h1> 
+<h1>Job <%= @job.id %> is completed</h1>
+
+<center><a href='/krill/ui?job=<%= @job.id %>' class='btn'>View Job Steps</a></center>
 
 <div class='row-fluid'>
   <div class='span2'>Inventory Remaining</div>

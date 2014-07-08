@@ -20,7 +20,11 @@
 </center>
 
   <% @completed_jobs.each do |j| %>
-    <% args = (JSON.parse(j.state))['stack'].first.reject { |k,v| k == 'user_id' } %>
+    <% if /\.rb$/ =~ j.path %>
+      <% args = (JSON.parse(j.state)).first["arguments"] %>
+    <% else %>
+      <% args = (JSON.parse(j.state))['stack'].first.reject { |k,v| k == 'user_id' } %>
+    <% end %>
     <tr>
       <td><%= link_to j.id.to_s, j %></td>
       <td><%= link_to j.path,  jobs_summary_url(path: j.path) %></td>

@@ -1,6 +1,10 @@
 Krill.prototype.step_title = function(s) {
 
-  if ( s.operation == 'display' ) {
+  if ( !s ) { 
+
+    return "??";
+
+  } else if ( s.operation == 'display' ) {
 
     var title = "-";
 
@@ -33,7 +37,7 @@ Krill.prototype.info = function() {
   var note = "";
 
   if ( this.pc == -2 ) {
-    note = "<br />(inactive)";
+    note = "<br />(completed, <a href='log?job="+this.job+"'>view log</a>)";
   }
   var job_info = $('<div>Job '+this.job+'<br />'+this.path+' '+note+'</div>').addClass('krill-job-info');
   $('#krill-info').append(job_info);

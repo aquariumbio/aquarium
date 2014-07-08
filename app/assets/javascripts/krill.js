@@ -34,7 +34,7 @@ Krill.prototype.initialize = function() {
 
     // Check that the Krill server has responded
     if ( this.state.length % 2 != 0 ) {
-	   alert ( "Server response not ready. "
+	   console.log ( "Server response not ready. "
              + "Tell your lead programmer to do a better job at multi-process control. "
              + "While you are waiting for him to fix this problem, try reloading the page." );
     }
@@ -176,7 +176,11 @@ Krill.prototype.pending_link = function() {
 
 Krill.prototype.step = function(state,number) {    
 
-    if ( state.operation == 'display' ) {
+    if ( !state ) {
+
+        return;
+
+    } else if ( state.operation == 'display' ) {
 
         var description = state.content;
         var titlebar = this.build_titlebar(number,true);
