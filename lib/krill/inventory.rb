@@ -60,26 +60,39 @@ module Krill
     end
 
 
-    def box_interactive items, box_note, extra_title
+    def box_interactive items, box_note, extra_title, user_shows
 
       boxes, extras = boxes_for items
 
       boxes.each do |name,box|
-        show(
-          {title:name},
-          {note: box_note},
-          {table: box.table}
-          )
+        show {
+          title name
+          note box_note
+          table box.table
+          raw user_shows
+        }
       end
 
       if extras.length > 0
-        takes = extras.collect { |i| { take: i.features } }
-        show( *[ { title: extra_title } ].concat(takes) )
+        takes = extras.collect { |i| i.features }
+        show {
+          title extra_title
+          takes.each do |t|
+            item t
+          end
+          raw user_shows
+        }
       end
 
     end
 
     def take items, args={}
+
+      if block_given?
+        user_shows = ShowBlock.new.run(&Proc.new) 
+      else
+        user_shows = []
+      end
 
       options = {
         interactive: false,
@@ -92,13 +105,18 @@ module Krill
 
         when "boxes"
 
-          box_interactive items, "Collect Item(s)", "Gather the Following Additional Item(s)"
+          box_interactive items, "Collect Item(s)", "Gather the Following Additional Item(s)", user_shows
 
         else
 
-          takes = items.collect { |i| { take: i.features } }
-          show( *[ { title: "Gather the Following Item(s)" } ].concat(takes) )
-
+          takes = items.collect { |i| i.features }
+          show {
+            title "Gather the Following Item(s)"
+            takes.each do |t|
+              item t
+            end
+            raw user_shows
+          }
         end
 
       end
@@ -112,6 +130,12 @@ module Krill
 
     def release items, args={}
 
+      if block_given?
+        user_shows = ShowBlock.new.run(&Proc.new) 
+      else
+        user_shows = []
+      end
+
       options = {
         interactive: false
       }.merge args
@@ -122,13 +146,18 @@ module Krill
 
         when "boxes"
 
-          box_interactive items, "Return Item(s)", "Return the Following Additional Item(s)"
+          box_interactive items, "Return Item(s)", "Return the Following Additional Item(s)", user_shows
           
         else
 
-          rels = items.collect { |i| { take: i.features } }
-          show( *[ { title: "Return the Following Item(s)" } ].concat(rels) )
-
+          rels = items.collect { |i| i.features }
+          show { 
+            title "Return the Following Item(s)"
+            rels.each do |r|
+              item r
+            end
+            raw user_shows
+          }
         end
 
       end

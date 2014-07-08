@@ -135,14 +135,12 @@ module Krill
         k = obj.const_get(c)
 
         if k.class == Module
-          puts "INSERTING into module #{c}"
           eigenclass = class << self
             self
           end
           eigenclass.send(:include,mod) unless eigenclass.include? mod
           insert_base_class k, mod
         elsif k.class == Class
-          puts "INSERTING into class #{c}"
           k.send(:include,mod) unless k.include? mod
           insert_base_class k, mod
         end

@@ -1,44 +1,13 @@
+- Krill
+  - PCR
+    - collections
+  - hide rails stuff somehow?
 
-- Refactor
+- Inventory
+  - Put unsed items back
 
-  - User code
+- Log
 
-    - User defines a class Protocol in their code. They can define
-      anything else they want too. Protocol must have a 'main' method.
+- Output for metacols
 
-  - KrillBase
-
-    - Defines 'show' (formerly 'display') and other methods that will
-      appear to be built in to the user.
-
-  - Manager does the following to initialize
-  
-    - Creates a namespace class that will contain the user's code
-
-        @namespace = NameSpace.new // this will need to def needs
-        @namespace.class_eval code
-        @protocol = @namespace::Protocol.new
-
-    - Subclasses KrillBase with a new class that defines the method
-      job accordingly to get a class variable @krill.
-
-    - Adds @krill as an ancestor to every class in the user's code
-
-    - Sets up thread stuff
-
-- collections
-
-- hide rails stuff somehow
-
-- UI
-
-  - step layout
-
-  + slider / history
-
-  - thumbnails
-
-  - inventory
-    - takes
-    - put things back, get new things, ...
-
+- Krill from local files (via cleaner ui)

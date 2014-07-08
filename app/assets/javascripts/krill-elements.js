@@ -18,7 +18,7 @@ Krill.prototype.check = function(x) {
 }
 
 Krill.prototype.warning = function(x) {
-    return $('<li>warning</li>').addClass('krill-warning');
+    return $('<li>Warning: ' + x + '</li>').addClass('krill-warning');
 }
 
 Krill.prototype.select = function(x) {
@@ -45,17 +45,17 @@ Krill.prototype.input = function(x) {
 Krill.prototype.take = function(x) {
 
     var check = $('<input type="checkbox"></input>').addClass('krill-checkbox');
-    var id = $('<span>' + x.id + ' </span>').addClass('krill-item-id');
+    var id = $('<span>Item ' + x.id + ' </span>').addClass('krill-item-id');
     var name = $('<span>' + x.name + ' </span>').addClass('krill-item-name');
     var loc = $('<span>' + x.location + ' </span>').addClass('krill-item-location');
-
-    var tag = $('<li></li>').append(check,id,name,loc);
+    var tag = $('<li></li>');
 
     if ( x.sample ) {
-
-        var sample = $('<span>' + x.sample + ' </span>').addClass('krill-item-sample');
-        var type =  $('<span>' + x.type + ' </span>').addClass('krill-item-type');
-	tag.append(sample,type);
+      var sample = $('<span>(' + x.sample + ')</span>').addClass('krill-item-sample');
+      var type =  $('<span>' + x.type + ' </span>').addClass('krill-item-type');
+    	tag.append(check,id,name,sample,loc);
+    } else {
+      tag.append(check,id,name,loc);
     }
 
     return tag;

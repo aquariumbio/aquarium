@@ -6,7 +6,9 @@ module Krill
       false
     end
 
-    def show *page
+    def show
+
+      page = ShowBlock.new.run(&Proc.new)
 
       # Append page to job state
       append_step( { operation: "display", content: page } )
