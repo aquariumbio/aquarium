@@ -1,9 +1,19 @@
 <h1>Task Type: <%= @task_prototype.name %></h1>
 
 <%= link_to "New #{@task_prototype.name}", new_task_path(task_prototype_id: @task_prototype.id), class: 'btn' %>
+<%= link_to "Edit Prototype", edit_task_prototype_path(@task_prototype), class: 'btn' %>
 
-<%= link_to "Edit Prototype",
-    edit_task_prototype_path(@task_prototype), class: 'btn' %>
+:
+
+<% @status_options.each do |o| %>
+
+  <% if o == @option %>
+    <button class='btn btn-small btn-primary' id='<%= o.gsub(/ /,'_') %>'><%= o %></button>
+  <% else %>
+    <button class='btn btn-small' id='<%= o.gsub(/ /,'_') %>'><%= o %></button>
+  <% end %>
+
+<% end %>
 
 <br /><br />
 
@@ -66,6 +76,14 @@ $.each($(".status-select"),function(index,value) {
 });
 
 window.history.replaceState ( null, 'tasks', 'tasks?task_prototype_id=<%= @task_prototype.id %>' );
+
+<% @status_options.each do |o| %>
+
+  $('#<%= o.gsub(/ /,'_') %>').click(function(){
+    window.location = 'tasks?task_prototype_id=<%= @task_prototype.id %>&option=<%= o %>';
+  });
+
+<% end %>
 
 </script>
 

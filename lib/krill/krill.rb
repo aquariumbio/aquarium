@@ -8,3 +8,5 @@ require_relative 'show_block'
 
 require_relative 'find'
 require_relative 'inventory'
+
+require_relative 'collection'

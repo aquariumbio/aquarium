@@ -17,8 +17,15 @@ class TasksController < ApplicationController
     end
 
     @task_prototype = TaskPrototype.find(params[:task_prototype_id])
-    @tasks = @task_prototype.tasks
     @status_options = @task_prototype.status_option_list
+
+    if params[:option]
+      @option = params[:option]
+    else
+      @option = @status_options[0]
+    end
+    
+    @tasks = Task.where('task_prototype_id = ? AND status = ?', @task_prototype.id, @option )
 
     respond_to do |format|
       format.html # index.html.erb

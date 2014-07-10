@@ -23,6 +23,7 @@ module Krill
 
   end
 
+
   module Base
 
     # Warning: Adding classes and modules to this module will likely result in
@@ -85,6 +86,7 @@ module Krill
       end
 
     end
+
 
     def take items, args={}
 
@@ -192,6 +194,12 @@ module Krill
 
       end
 
+      if spec[:data]
+
+        i.data = spec[:data].to_json
+
+      end
+
       i.quantity = 1
       i.save
 
@@ -200,7 +208,6 @@ module Krill
       return i
 
     end
-
 
   end
 

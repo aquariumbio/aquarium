@@ -1,3 +1,4 @@
+
 - Krill
   - PCR
     - collections
@@ -11,3 +12,36 @@
 - Output for metacols
 
 - Krill from local files (via cleaner ui)
+
+- Standard 
+  - Decide where to put it. Should it be included automagically?
+
+- Collection Class
+
+  - Make a collection from an item
+    - Throws an error if the item's object_type's handler is not 'collection'
+    - If no item is passed, then it makes a new collection, maybe taking rows/cols
+
+    Make a new collection
+      c = Collection.new 9, 12
+
+    Promote an item to a collection
+
+      i = Item.find(123)
+      c = Collection.new i
+
+    or better    
+
+      c = Collection.new 123
+
+  - Getters and setters for collection matrix and individual slots
+
+      c.set 3, 4, Sample.find(234)
+      c.set_matrix m
+
+  - Some way of making a bunch of new collections given an array of samples, like
+
+      clist = Collection.spread sample_list, 1, 12
+
+    which would spread the samples in sample_list over some number of 1x12 collections
+
