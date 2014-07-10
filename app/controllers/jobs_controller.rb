@@ -6,12 +6,11 @@ class JobsController < ApplicationController
 
     begin
       server_result = ( Krill::Client.new.kill_zombies )
+      if server_result[:killed].length > 0 
+        flash[:notice] = "Killed zombies: #{server_result[:killed]}. This happens when the Krill server is restarted while a job is still active."
+      end
     rescue Exception => e
       logger.info e.to_s
-    end
-
-    if server_result[:killed].length > 0 
-      flash[:notice] = "Killed zombies: #{server_result[:killed]}. This happens when the Krill server is restarted while a job is still active."
     end
 
     @user_id = params[:user_id] ? params[:user_id].to_i : current_user.id
