@@ -1,6 +1,6 @@
 module Krill
 
-  class Collection < Item
+  class Collection 
 
   end
 
