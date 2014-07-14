@@ -175,31 +175,51 @@ module Krill
 
     def produce spec
 
-      i = Item.new
+      raise "No object type specified in produce" unless spec[:object_type]
 
       olist = find( :object_type, { name: spec[:object_type] } )
       raise "Could not find object type named '#{spec[:object_type]}'." unless olist.length > 0
-      i.object_type_id = olist[0].id
 
-      if spec[:sample]
+      if olist[0].handler == "collection"
 
-        slist = find( :sample, { name: spec[:sample], sample_type: { name: spec[:sample_type] } } )
-        raise "Could not find sample named '#{spec[:sample]}' of type '#{spec[:sample_type]}'." unless slist.length > 0
-        i.sample_id = slist[0].id
-        i.location = olist[0].location_wizard({project: slist[0].project})
+        opt = {
+          rows: 9,
+          cols: 12,
+          sample_matrix:[[-1]]
+        }.merge spec
 
-      else
-
+        i = Collection.new
+        i.apportion opt[:rows], opt[:cols]
         i.location = olist[0].location_wizard
+        i.associate opt[:sample_matrix]
+
+      else 
+
+        i = Item.new
+        i.object_type_id = olist[0].id
+
+        if spec[:sample]
+
+          slist = find( :sample, { name: spec[:sample], sample_type: { name: spec[:sample_type] } } )
+          raise "Could not find sample named '#{spec[:sample]}' of type '#{spec[:sample_type]}'." unless slist.length > 0
+          i.sample_id = slist[0].id
+          i.location = olist[0].location_wizard({project: slist[0].project})
+
+        else
+
+          i.location = olist[0].location_wizard
+
+        end
+
+        if spec[:data]
+
+          i.data = spec[:data].to_json
+
+        end
 
       end
 
-      if spec[:data]
-
-        i.data = spec[:data].to_json
-
-      end
-
+      i.object_type_id = olist[0].id
       i.quantity = 1
       i.save
 
@@ -208,6 +228,7 @@ module Krill
       return i
 
     end
+
 
   end
 

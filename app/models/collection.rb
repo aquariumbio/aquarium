@@ -1,22 +1,20 @@
-class Collection < ActiveRecord::Base
+class Collection < Item
 
-  attr_accessible :columns, :name, :object_type_id, :project, :rows
+  def apportion r, c
+    self.data =  (Array.new(r,Array.new(c,-1))).to_json
+  end
 
-  belongs_to :object_type
-  has_many :parts
+  def associate sample_matrix
 
-  def matrix
+    m = JSON.parse self.data
 
-    m = []
-    rows.times { m.push [] }
-
-    (1..rows).each do |r|
-      (1..columns).each do |c|
-        m[r-1][c-1] = parts.reject { |p| p.row != r || p.column != c }
+    (0..sample_matrix.length-1).each do |r|
+      (0..sample_matrix[r].length-1).each do |c|
+        m[r][c] = sample_matrix[r][c]
       end
     end
 
-    return m
+    self.data = m.to_json
 
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140616190537) do
+ActiveRecord::Schema.define(:version => 20140714220057) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -30,18 +30,6 @@ ActiveRecord::Schema.define(:version => 20140616190537) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "collections", :force => true do |t|
-    t.string   "name"
-    t.string   "project"
-    t.integer  "object_type_id"
-    t.integer  "rows"
-    t.integer  "columns"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-    t.string   "location"
-    t.string   "description"
-  end
-
   create_table "groups", :force => true do |t|
     t.string   "name"
     t.string   "description"
@@ -58,7 +46,6 @@ ActiveRecord::Schema.define(:version => 20140616190537) do
     t.integer  "inuse",                           :default => 0
     t.integer  "sample_id"
     t.text     "data",           :limit => 65536
-    t.integer  "collection_id"
   end
 
   add_index "items", ["object_type_id"], :name => "index_items_on_object_type_id"
@@ -126,19 +113,6 @@ ActiveRecord::Schema.define(:version => 20140616190537) do
     t.integer  "sample_type_id"
     t.string   "image"
     t.string   "prefix"
-  end
-
-  create_table "parts", :force => true do |t|
-    t.integer  "collection_id"
-    t.integer  "row"
-    t.integer  "column"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
-    t.integer  "item_id1"
-    t.integer  "item_id2"
-    t.integer  "item_id3"
-    t.integer  "item_id4"
-    t.string   "data"
   end
 
   create_table "sample_types", :force => true do |t|

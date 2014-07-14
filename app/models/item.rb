@@ -36,3 +36,4 @@ class Item < ActiveRecord::Base
   end
 
 end
+
