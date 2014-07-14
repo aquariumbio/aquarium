@@ -10,5 +10,5 @@ Bioturk::Application.config.image_server_interface = 'http://your.image.server/i
 #
 # URL of vision server. Leave as empty string if you don't have one.
 #
-Bioturk::Application.config.version_server_interface = '' 
+Bioturk::Application.config.vision_server_interface = '' 
 
