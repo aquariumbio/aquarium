@@ -2,14 +2,6 @@
 
 <h1>Start Metacol: <%= params[:path] %></h1>
 
-<% if Rails.env == 'production' %>
-  <center>
-  <p><span class="alert alert-error">Note: You should only start a
-    metacol on the production server if you are physically in the lab
-    at the bench working.</span></p>
-  </center>
-<% end %>
-
 <% if @errors != "" || @parse_errors != "" %>
 
   <h4>Error</h4>
@@ -25,7 +17,8 @@
 
 <br />
 
-<h4>Group</h4>
+<h4>Metacol Owner(s)</h4>
+<p>Note: Choosing a group as an owner will start an instance of the metacol for <b>each</b> member of that group (which you rarely will want to do).</p>
 <div id='group-chooser'></div>
 
 <br />
@@ -69,6 +62,12 @@
   ac.path = '<%= @path %>';
   ac.display_form();
   ac.display_groups(groups,users,'<%= current_user.login %>');
+
+  if ( args.length == 0 ) {
+
+    $('#argument-chooser').append('<p>None</p>');
+
+  }
 
   document.getElementById('launch-button').onclick = splash_launch_alert;
 
