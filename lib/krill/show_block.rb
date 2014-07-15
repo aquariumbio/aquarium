@@ -24,6 +24,10 @@ module Krill
       @parts.push({check: str})
     end
 
+    def bullet str
+      @parts.push({bullet: str})
+    end
+
     def table m
       @parts.push({table: m})
     end

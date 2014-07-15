@@ -101,6 +101,7 @@
   overflow: scroll;
   //outline: 4pt solid green;
   ul {
+
   }
 
   li {
@@ -161,7 +162,8 @@
 
 .krill-step-ul {
   margin-top: 40px;
-    list-style-type: none;
+  list-style-type: none;
+  width: 90%;
   li {
     margin-bottom: 10px;
   }
@@ -276,7 +278,15 @@ font-size: $noteFontSize;
 }
 
 .krill-image {
-  height: 200px;
+  height: 300px;
+}
+
+.krill-bullet {
+  list-style-type: circle;
+  font-size: $noteFontSize;
+  margin: 0 0 $noteBottomMargin 30px;
+  padding: $notePad;
+  line-height: $noteLH;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////

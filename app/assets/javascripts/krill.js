@@ -176,6 +176,8 @@ Krill.prototype.pending_link = function() {
 
 Krill.prototype.step = function(state,number) {    
 
+    var container = $('<div></div>').addClass('krill-step');
+
     if ( !state ) {
 
         return;
@@ -185,7 +187,6 @@ Krill.prototype.step = function(state,number) {
         var description = state.content;
         var titlebar = this.build_titlebar(number,true);
         var ul = $('<ul></ul').addClass('krill-step-ul');
-        var container = $('<div></div>').addClass('krill-step');
 
         for(var i=0; i<description.length; i++) {
 
@@ -205,8 +206,6 @@ Krill.prototype.step = function(state,number) {
         container.css('width',$('#krill-steps-ui').outerWidth()-102);
         container.css('height', window.innerHeight - 90 );
 
-        return container;
-
     } else if ( state.operation == 'error' ) {
 
         this.pc = -2;
@@ -225,10 +224,7 @@ Krill.prototype.step = function(state,number) {
         });
 
         ul.append(this.log_link(),this.pending_link());
-
-        container = $('<div></div>').addClass('krill-step').append(titlebar,ul);
-
-        return container;
+        container.append(titlebar,ul);
 
     } else {
 
@@ -243,11 +239,15 @@ Krill.prototype.step = function(state,number) {
         ul.append(p);
         ul.append(this.log_link(),this.pending_link());
 
-        container = $('<div></div>').addClass('krill-step').append(titlebar,ul);
-
-        return container;
+        container.append(titlebar,ul);
 
     }
+
+    var that = this;
+    container.on("swipeleft", function(){that.carousel_inc(1)});  
+    container.on("swiperight",function(){that.carousel_inc(-1)});  
+
+    return container;
 
 }
 

@@ -21,6 +21,10 @@ Krill.prototype.warning = function(x) {
     return $('<li><span>' + x + '<span></li>').addClass('krill-warning');
 }
 
+Krill.prototype.bullet = function(x) {
+    return $('<li>' + x + '</li>').addClass('krill-bullet');
+}
+
 Krill.prototype.image = function(x) {
   return $("<li><img src=" + x + " class='krill-image'></img></li>");
 }
