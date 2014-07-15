@@ -101,9 +101,10 @@ module Krill
 
       if @thread.alive?
         wake
+        return true
+      else 
+        return false
       end
-
-      @thread.alive?
 
     end
 

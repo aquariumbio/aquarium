@@ -38,15 +38,19 @@ module Krill
               if @managers[jid]
 
                 begin
-                  @managers[jid].continue
+                  alive = @managers[jid].continue
                 rescue Exception => e
                   puts "TRIED TO CONTINUE JOB #{jid}, BUT GOT #{e.to_s}: #{e.backtrace[0,5]}"
                 end
 
-                # Job.find(jid).reload # hopefully forces a commit
-                # sleep(1)
-
-                client.puts( { response: "ok" }.to_json )
+                if alive
+                  client.puts( { response: "ok" }.to_json )
+                else
+                  j = Job.find(jid)
+                  j.pc = Job.COMPLETED
+                  j.save
+                  client.puts( { response: "error", error: "Krill thread job #{jid} died unexpectedly" }.to_json )
+                end
   
               else
 
