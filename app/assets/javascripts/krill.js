@@ -251,22 +251,57 @@ Krill.prototype.step = function(state,number) {
 
 }
 
+Krill.prototype.item_li = function(item) {
+
+  var li = $('<li>')
+    .append("<span class='krill-inventory-item-id'>"+item.id+"</span>")
+    .append("<span class='krill-inventory-object-type-name'>" 
+        + item.object_type.name + "</span>");
+
+  if ( item.sample_id ) { 
+    li.append("<span class='krill-inventory-sample-name'>"
+        + item.sample.name + "</span>");
+  }
+
+  li.click(function() {
+    window.location = '/items/' + item.id;
+  });
+
+  return li;
+
+}
+
 Krill.prototype.inventory = function() {
 
     var that = this;
 
     $.ajax({
-        url: 'takes?job=' + that.job,
+
+        url: 'inventory?job=' + that.job,
+
     }).done(function(data){
 
-        var items = [];
-        for ( var i in data ) {
-            items.push(data[i].id);
+        var ul = $('<ul></ul>').addClass('krill-inventory-list');
+        for ( var i in data.takes ) {
+            ul.append(that.item_li(data.takes[i]));
         }
-    	that.inventory_tag.empty();
-        render_json(that.inventory_tag,items);
-        if ( items.length == 0 ) {
-            that.inventory_tag.append("<p>No items in use</p>").addClass('krill-inventory-none');
+
+    	that.inventory_tag.empty().append($('<h4>In Use</h4>').addClass('krill-inventory-h4')).append(ul);
+
+        if ( data.takes.length == 0 ) {
+            that.inventory_tag.append("<p>None</p>").addClass('krill-inventory-none');
+        }
+
+        var ul = $('<ul></ul>').addClass('krill-inventory-list');
+
+        for ( var i in data.touches ) {
+            ul.append(that.item_li(data.touches[i]));
+        }
+
+        that.inventory_tag.append($('<h4>Used</h4>').addClass('krill-inventory-h4')).append(ul);
+
+        if ( data.touches.length == 0 ) {
+            that.inventory_tag.append("<p>None</p>").addClass('krill-inventory-none');
         }
 
     });

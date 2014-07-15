@@ -136,7 +136,8 @@ module Krill
       end
 
       items.each do |i|
-        t = Take.new( { job_id: jid, item_id: i.id } ).save
+        Take.new( { job_id: jid, item_id: i.id } ).save
+        Touch.new( { job_id: jid, item_id: i.id } ).save
       end
 
       items

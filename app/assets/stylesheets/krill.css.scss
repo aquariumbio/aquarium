@@ -374,7 +374,56 @@ font-size: $noteFontSize;
 // INVENTORY
 //
 
-.krill-inventory-none {
+.krill-inventory-list {
+  list-style-type: none;
+  margin: 0 0 10px 0;
+  li {
+    border-top: 1pt solid #eee;
+    margin: 0;
+    padding: 5px 0 5px 0;
+    font-size: 8pt;
+  }
+  li:hover {
+  background: rgba(240,240,240,0.5);
+  }
+  cursor: pointer;
+}
+
+.krill-inventory-item-id {
+  color: #6c6; 
+  font-size: 10pt;
+  margin: 0pt;
+  padding: 0;
+  font-weight: bold;
+  margin: 0 0 0 0;
+  padding: 5px 0 0 0;
   line-height: 1;
+}
+
+.krill-inventory-item-id::after {
+      content: ': ';
+    }
+
+.krill-inventory-object-type-name {
+  font-size: 10pt;
+  margin: 0 5px 0 0;
   color: black;
+
+  line-height: 1;
+}
+
+.krill-inventory-sample-name {
+  font-size: 10pt;
+  margin: 0 0 0 0;
+  color: #999;
+  display: block;
+  line-height: 1;
+  font-weight: bold;
+}
+
+.krill-inventory-h4 {
+  font-size: 11pt;
+  margin: 0 5px 0 0;
+  color: black;
+
 }

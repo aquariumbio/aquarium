@@ -61,7 +61,7 @@ Bioturk::Application.routes.draw do
   get "krill/state"
   get "krill/next"
   get "krill/error"
-  get "krill/takes"
+  get "krill/inventory"
 
   get "stats/jobs"
   get "stats/users"

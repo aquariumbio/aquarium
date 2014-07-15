@@ -146,11 +146,23 @@ class KrillController < ApplicationController
 
   end
 
-  def takes
+  def inventory
 
-    @job = Job.find(params[:job])
-    render json: @job.takes.includes(:item).collect { |t| t.item }
+    job = Job.find(params[:job])
+
+    takes = job.takes.includes(item: [ :object_type, :sample ] ).collect {
+      |t| t.item.all_attributes 
+    }
+
+    touches = (job.touches.includes(item: [ :object_type, :sample ] ).reject { 
+      |t| (takes.collect { |i| i[:id] }).include?( t.item_id )
+    }).collect { 
+      |t| t.item.all_attributes
+    }
+
+    render json: { takes: takes, touches: touches }
 
   end
 
 end
+

@@ -7,7 +7,11 @@ class Item < ActiveRecord::Base
   has_many :cart_items
   has_many :takes
 
-  attr_accessible :location, :quantity, :inuse, :sample_id, :data, :object_type_id, :created_at, :collection_id
+  attr_accessible :location, :quantity, :inuse, :sample_id, :data, :object_type_id,
+                  :created_at, :collection_id,
+                  :sample_attributes, :object_type_attributes
+
+  accepts_nested_attributes_for :sample, :object_type
 
   validates :location, :presence => true
 
@@ -84,6 +88,20 @@ class Item < ActiveRecord::Base
       f = f.merge({ sample: self.sample.name, type: self.sample.sample_type.name })
     end
     f
+  end
+
+  def all_attributes
+
+    temp = self.attributes.symbolize_keys
+
+    temp[:object_type] = self.object_type.attributes.symbolize_keys
+
+    if self.sample_id
+      temp[:sample] = self. sample.attributes.symbolize_keys
+    end
+
+    return temp
+
   end
 
 end

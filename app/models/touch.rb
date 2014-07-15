@@ -1,4 +1,5 @@
 class Touch < ActiveRecord::Base
+  attr_accessible :item_id, :job_id
   belongs_to :item
   belongs_to :task
   belongs_to :job
