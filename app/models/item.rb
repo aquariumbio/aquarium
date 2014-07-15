@@ -17,6 +17,57 @@ class Item < ActiveRecord::Base
   validates :inuse,    :presence => true
   validate :inuse_less_than_quantity
 
+  def self.new_object name
+
+    i = self.new
+    olist = ObjectType.where("name = ?", name)
+    raise "Could not find object type named '#{spec[:object_type]}'." unless olist.length > 0
+    i.object_type_id = olist[0].id
+    i.location = olist[0].location_wizard
+    i.quantity = 1
+    i.inuse = 0
+    i.save
+    i
+
+  end
+
+  def self.new_sample name, spec
+
+    raise "No Sample Type Specified (with :of)" unless spec[:of]
+    raise "No Container Specified (with :in)" unless spec[:as]
+
+    i = self.new
+
+    olist = ObjectType.where("name = ?", spec[:as])
+    raise "Could not find container named '#{spec[:as]}'." unless olist.length > 0
+
+    sample_type_id = SampleType.find_by_name(spec[:of])
+    raise "Could not find sample type named '#{spec[:of]}'." unless sample_type_id
+
+    slist = Sample.where("name = ? AND sample_type_id = ?", name, sample_type_id)
+    raise "Could not find sample named #{name}" unless slist.length > 0
+
+    i.object_type_id = olist[0].id
+    i.sample_id = slist[0].id
+
+    i.location = olist[0].location_wizard
+    i.quantity = 1
+    i.inuse = 0
+    i.save
+
+    i
+
+  end
+
+  def set_data d
+    self.data = d.to_json
+    self.save
+  end
+
+  def get_data
+    JSON.parse self.data, symbolize_names: true
+  end
+
   def quantity_nonneg
     errors.add(:quantity, "Must be non-negative." ) unless
       self.quantity && self.quantity >= -1 

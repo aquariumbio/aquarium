@@ -30,6 +30,18 @@ module Krill
     # an infinite loop when Base is inserted into the user's code ancestry. Put
     # them in the top level Krill module instead (as in Box) above.
 
+    def new_object name
+      Item.new_object name
+    end
+
+    def new_sample name, spec
+      Item.new_sample name, spec
+    end
+
+    def spread samples, name, rows, cols
+      Collection.spread samples, name, rows, cols
+    end
+
     def boxes_for items
 
       boxes = {}
@@ -127,6 +139,8 @@ module Krill
         t = Take.new( { job_id: jid, item_id: i.id } ).save
       end
 
+      items
+
     end
 
 
@@ -170,10 +184,20 @@ module Krill
         end
       end
 
+      items
+
     end
 
+    def produce items
+      if items.class == Array
+        take items
+      else
+        (take [items])[0]
+      end
 
-    def produce spec
+    end
+
+    def produce_old spec
 
       raise "No object type specified in produce" unless spec[:object_type]
 
