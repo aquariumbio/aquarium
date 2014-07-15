@@ -34,7 +34,7 @@ class Collection < Item
   def self.new_collection name, r, c
 
     o = ObjectType.find_by_name(name)
-    raise "Could not find object type named '#{spec[:object_type]}'." unless o
+    raise "Could not find object type named '#{name}'." unless o
 
     i = Collection.new
     i.object_type_id = o.id
