@@ -22,7 +22,7 @@
     var p = $('<span />').html(key).addClass('krill-input-label');
 
     var input = $('<input />')
-      .addClass('krill-input-box')
+      .addClass('krill-argument-box')
       .attr('type','text')
       .attr('id',key)
       .val(JSON.stringify(arguments[key]));
@@ -36,7 +36,7 @@
   $('#start').click(function() {
 
     var argvals = {}
-    $('.krill-input-box').each(function() {
+    $('.krill-argument-box').each(function() {
       console.log($(this).attr('id') + ":" + $(this).val());
       argvals[$(this).attr('id')] = JSON.parse($(this).val());
     });

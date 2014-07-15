@@ -18,7 +18,11 @@ Krill.prototype.check = function(x) {
 }
 
 Krill.prototype.warning = function(x) {
-    return $('<li>Warning: ' + x + '</li>').addClass('krill-warning');
+    return $('<li><span>' + x + '<span></li>').addClass('krill-warning');
+}
+
+Krill.prototype.image = function(x) {
+  return $("<li><img src=" + x + " class='krill-image'></img></li>");
 }
 
 Krill.prototype.select = function(x) {
@@ -60,6 +64,10 @@ Krill.prototype.take = function(x) {
 
     return tag;
 
+}
+
+Krill.prototype.separator = function(x) {
+  return $('<li \>').addClass('krill-separator');
 }
 
 Krill.prototype.table = function(x) {

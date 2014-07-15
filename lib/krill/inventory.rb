@@ -38,6 +38,10 @@ module Krill
       Item.new_sample name, spec
     end
 
+    def new_collection name, r, c
+      Collection.new_collection name, r, c
+    end
+
     def spread samples, name, rows, cols
       Collection.spread samples, name, rows, cols
     end
@@ -73,13 +77,27 @@ module Krill
     end
 
 
-    def box_interactive items, box_note, extra_title, user_shows
+    def box_interactive items, method, user_shows
 
       boxes, extras = boxes_for items
 
+      if method == :take
+        show_title = "Take from "
+        box_note = "Collect Item(s)"
+        extra_title = "Gather the Following Additional Item(s)"
+      elsif method == :return
+        show_title = "Return to "
+        box_note = "Return Item(s)"
+        extra_title = "Return the Following Additional Item(s)"
+      else
+        show_title = ""
+        box_note = "" 
+        extra_title = ""
+      end
+
       boxes.each do |name,box|
         show {
-          title name
+          title show_title + name
           note box_note
           table box.table
           raw user_shows
@@ -119,7 +137,7 @@ module Krill
 
         when "boxes"
 
-          box_interactive items, "Collect Item(s)", "Gather the Following Additional Item(s)", user_shows
+          box_interactive items, :take, user_shows
 
         else
 
@@ -163,7 +181,7 @@ module Krill
 
         when "boxes"
 
-          box_interactive items, "Return Item(s)", "Return the Following Additional Item(s)", user_shows
+          box_interactive items, :return, user_shows
           
         else
 
@@ -251,6 +269,48 @@ module Krill
       take([i])
 
       return i
+
+    end
+
+    def transfer headings, ingredients, collections
+
+      if block_given?
+        user_shows = ShowBlock.new.run(&Proc.new) 
+      else
+        user_shows = []
+      end
+
+      raise "Empty collection list" unless collections.length > 0
+
+      heading = [ [ "#{collections[0].object_type.name}", "Location" ] + headings ]
+      i = 0
+
+      collections.each do |col|
+
+        tab = []
+        m = col.get_matrix
+
+        (0..m.length-1).each do |r|
+          (0..m[r].length-1).each do |c|
+            if i < ingredients[0].length
+              if m.length == 1
+                loc = "#{c+1}"
+              else
+                loc = "#{r+1},#{c+1}"
+              end
+              tab.push( [ col.id, loc ] + ingredients.collect { |ing| { content: ing[i].id, check: true } } )
+            end
+            i += 1
+          end
+        end
+
+        show {
+          title "Transfer into #{col.object_type.name} #{col.id}"
+          table heading + tab
+          raw user_shows
+        }
+
+      end
 
     end
 

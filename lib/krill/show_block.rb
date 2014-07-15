@@ -36,6 +36,14 @@ module Krill
       @parts.concat p
     end
 
+    def separator
+      @parts.push({separator: true})
+    end
+
+    def image name
+      @parts.push({image: "#{Bioturk::Application.config.image_server_interface}#{name}"})
+    end
+
     def get type, opts={}
     	raise "First argument to get should be either 'number' or 'text'" unless type == 'number' || type == 'text'
     	options = {

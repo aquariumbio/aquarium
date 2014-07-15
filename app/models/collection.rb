@@ -5,7 +5,7 @@ class Collection < Item
   def self.spread samples, name, rows, cols
 
     samples_per_collection = rows * cols
-    num_collections = samples.length / samples_per_collection + 1
+    num_collections = ( samples.length / samples_per_collection.to_f ).ceil
     s = 0
 
     collections = (1..num_collections).collect do |i| 
@@ -79,4 +79,26 @@ class Collection < Item
     d[:matrix]
   end
 
+  def non_empty
+
+    m = self.get_matrix
+    max = [0,0]
+
+    (0..m.length-1).each do |r|
+      (0..m[r].length-1).each do |c|
+        if m[r][c] != -1
+          max = [r,c]
+        end
+      end
+    end
+
+    if m.length > 1 
+      "1,1 - #{max[0]+1}, #{max[1]+1}"
+    else
+      "1 - #{max[1]+1}"
+    end
+
+  end
+
 end
+

@@ -37,4 +37,18 @@
   krill.initialize();
   window.onresize = function(){ krill.resize(); }
 
+  // Highlight items
+  $('.aquarium-item').each(function(){
+    $(this).click(function(el){
+      alert("Information about item " + $(this).attr('id') + " will appear here.");
+    });
+  });
+
+  // Highlight samples
+  $('.aquarium-sample').each(function(){
+    $(this).click(function(el){
+      alert("Information about sample " + $(this).attr('id') + " will appear here.");
+    });
+  });
+
 </script>

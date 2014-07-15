@@ -52,4 +52,8 @@ class Sample < ActiveRecord::Base
 
   end
 
+  def to_s
+    "<span class='aquarium-sample' id='#{self.id}'>#{self.id}</span>"
+  end
+
 end

@@ -208,31 +208,41 @@ $noteBottomMargin: 20px;
   margin-bottom: $noteBottomMargin;
   padding: $notePad;
   line-height: $noteLH;
-  color: red;
-  background: yellow;
-  width: 90%;
+  span {
+    color: red;
+    background: yellow;
+    padding: 0 5px 0 5px;
+  }
 }
 
 .krill-select-label {
   display: block;
+  font-size: 14pt;
+  margin: 0 0 5px 5px;
 }
 
 .krill-select {
-  margin-bottom: 0;
+  margin: 0 0 0 5px;
+  font-size: $noteFontSize !important;
+  width: 400px;
 }
 
 .krill-input {
-  margin-bottom: 10px !important;
+  margin: 0 0 10px 8px !important;
   padding-bottom: 0 !important;
 }
 
 .krill-input-label {
   display: block;
+  font-size: 14pt;
+  margin-bottom: 5px;
 }
 
 .krill-input-box {
   margin-bottom: 0 !important;
   padding-bottom: 0 !important;
+  font-size: $noteFontSize !important;
+  width: 400px;
 }
 
 .krill-item-id {
@@ -258,6 +268,15 @@ font-size: $noteFontSize;
 
 .krill-item-type {
    font-size: $noteFontSize;
+}
+
+.krill-separator {
+  height: 20px;
+  width: 20px;
+}
+
+.krill-image {
+  height: 200px;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -425,5 +444,24 @@ font-size: $noteFontSize;
   font-size: 11pt;
   margin: 0 5px 0 0;
   color: black;
-
 }
+
+.aquarium-item {
+  color: #6c6;
+  &:hover {
+    cursor: pointer; 
+  }
+}
+
+.aquarium-sample {
+  color: #6c6;
+  &:hover {
+    cursor: pointer; 
+  }
+}
+
+
+
+
+
+

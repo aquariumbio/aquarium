@@ -63,6 +63,11 @@ class Item < ActiveRecord::Base
 
   end
 
+  def move loc
+    self.location = loc
+    self.save
+  end
+
   def set_data d
     self.data = d.to_json
     self.save
@@ -102,6 +107,10 @@ class Item < ActiveRecord::Base
 
     return temp
 
+  end
+
+  def to_s
+    "<span class='aquarium-item' id='#{self.id}'>#{self.id}</span>"
   end
 
 end
