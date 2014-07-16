@@ -45,6 +45,7 @@ module Krill
 
                 if alive
                   client.puts( { response: "ok" }.to_json )
+                  puts "processed continue #{jid}"
                 else
                   j = Job.find(jid)
                   j.pc = Job.COMPLETED
