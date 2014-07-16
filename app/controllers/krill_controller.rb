@@ -59,13 +59,15 @@ class KrillController < ApplicationController
       begin
         server_result = ( Krill::Client.new.start params[:job] )
       rescue Exception => e
-        return redirect_to krill_error_path(job: @job.id, message: e.to_s + ": " + e.backtrace[0,5].to_s)
+        return redirect_to krill_error_path(job: @job.id, message: e.to_s, backtrace: e.backtrace[0,5])
       end
 
     end
 
-    if server_result[:error]
-      return redirect_to krill_error_path(job: @job.id, message: server_result[:error])
+    if !server_result
+      return redirect_to krill_error_path(job: @job.id, message: "Server returned nil.", backtrace: [])
+    elsif server_result[:error]
+      return redirect_to krill_error_path(job: @job.id, message: server_result[:error], backtrace: [])
     end
 
     # redirect to ui
@@ -76,6 +78,7 @@ class KrillController < ApplicationController
   def error
 
     @message = params[:message]
+    @backtrace = params[:backtrace] || []
     @job = Job.find(params[:job])
 
   end
@@ -107,7 +110,9 @@ class KrillController < ApplicationController
         flash[:notice] = e.to_s
       end
 
-      if server_result[:error]
+      if !server_result
+        return redirect_to krill_error_path(job: @job.id, message: "Server returned nil.")
+      elsif server_result[:error]
         return redirect_to krill_error_path(job: @job.id, message: server_result[:error])
       end
 

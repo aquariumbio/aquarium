@@ -15,7 +15,7 @@ module Krill
       begin      
         @socket = TCPSocket.open(@hostname, @port)
       rescue
-        raise "Could not connect to Krill server"
+        raise "Could not connect to Krill server. It is probably not running."
       end
     end
 

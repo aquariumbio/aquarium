@@ -1,5 +1,16 @@
 <h1>ERROR</h1>
+<h2>Job <%= @job.id %>: <%= @job.path %></h2>
 
-<p>Message: <%= @message %></p>
+<p>Submitted by <%= User.find(@job.submitted_by) %></p>
+<p>Created: <%= @job.created_at %></p>
 
-<p>Job: <%= @job.inspect %></p>
+
+<div class="alert alert-error">
+<%= @message %>
+</div>
+
+<ul class='list'>
+	<% @backtrace.each do |b| %>
+	  <li><%= b %></li>
+	<% end %>
+</ul>
