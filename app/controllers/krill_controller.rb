@@ -13,11 +13,27 @@ class KrillController < ApplicationController
       return redirect_to repo_list_path
     end
 
-    begin
-      @args = Krill::get_arguments @content
-    rescue Exception => e
-      flash[:error] = ("<b>Could not parse '#{@path}'</b><br />" + e.to_s.gsub(/\n/,'<br />').gsub(/\(eval\):/,'line ')).html_safe
-      return redirect_to repo_list_path
+    if params[:from]
+
+      begin
+        logger.info JSON.parse(Job.find(params[:from].to_i).state,symbolize_names:true).last[:rval]
+        argval = JSON.parse(Job.find(params[:from].to_i).state,symbolize_names:true).last[:rval]
+      rescue Exception => e
+        flash[:error] = "Could not parse arguments from job #{params[:from]}" + e.to_s
+        return redirect_to repo_list_path
+      end
+
+      return redirect_to krill_submit_path(path: @path, sha: @sha, args: argval.to_json)
+
+    else  
+
+      begin
+        @args = Krill::get_arguments @content
+      rescue Exception => e
+        flash[:error] = ("<b>Could not parse '#{@path}'</b><br />" + e.to_s.gsub(/\n/,'<br />').gsub(/\(eval\):/,'line ')).html_safe
+        return redirect_to repo_list_path
+      end
+
     end
 
   end
@@ -132,6 +148,7 @@ class KrillController < ApplicationController
 
     @job = Job.find(params[:job])
     @history = @job.state
+    @rval = JSON.parse(@history, symbolize_names: true).last[:rval] || {}
     @inventory = @job.takes.collect { |t| t.id }
 
   end

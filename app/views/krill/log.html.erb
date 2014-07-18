@@ -1,20 +1,48 @@
 <h1>Job <%= @job.id %> is completed</h1>
 
-<center><a href='/krill/ui?job=<%= @job.id %>' class='btn'>View Job Steps</a></center>
+<a href='/krill/ui?job=<%= @job.id %>' class='btn'>View Job Steps / History</a>
 
-<div class='row-fluid'>
-  <div class='span2'>Inventory Remaining</div>
-  <div class='span6'>History</div>
-  <div class='span4'></div>
-<div>
+<div id='inventory'>
+  <h2>Inventory Remaining</h2>
+  <ul>
+    <% @inventory.each do |i| %>
+      <% item = Item.find(i) %>
+      <li>
+        <%= link_to i, item_path(id: i) %>:
+        <%= item.object_type.name %>
+        <% if item.sample %>
+          (<%= item.sample.name %>)
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>
 
-<div class='row-fluid'>
-  <div class='span2' id='inventory'></div>
-  <div class='span6' id='history'></div>
-  <div class='span4'></div>
+<div id='return-value'>
+  <h2>Return Value</h2>
+  <button id='send' class='btn btn-primary'>Send ...</button><br />
+  <span class='showhide' id='return' class='json_spec'>
+    <div id='return'></div>
+  </span>
+
+</div>
+
+<div id='history'>
+  <h2>Backtrace</h2>
+  <span class='showhide' id='history' class='json_spec'>
+    <div id='history-json'></div>
+  </span>
 <div>
 
 <script>
-  render_json($('#history'),JSON.parse('<%= escape_javascript(@history.html_safe) %>'));
-  render_json($('#inventory'),JSON.parse('<%= escape_javascript(@inventory.to_json.html_safe) %>'));
+
+  render_json($('#return'),JSON.parse('<%= escape_javascript(@rval.to_json.html_safe) %>'));
+  render_json($('#history-json'),JSON.parse('<%= escape_javascript(@history.html_safe) %>'));
+
+  showhide();
+
+  $('#send').click(function() {
+    window.location = '/repo/list?from=' + '<%= @job.id %>';
+  });
+
 </script>

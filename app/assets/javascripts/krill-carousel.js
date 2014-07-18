@@ -42,14 +42,6 @@ Krill.prototype.carousel_last = function() {
     this.carousel_move_to(this.step_list.length);
 }
 
-//
-// #krill-steps-ui
-//    #steps
-//      #step_list (ul)
-//        .krill_step_list_item
-//           .krill_step
-//
-
 Krill.prototype.resize = function() {
 
     // Heights

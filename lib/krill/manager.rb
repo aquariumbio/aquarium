@@ -51,17 +51,18 @@ module Krill
           @job.save
 
           begin
-            @protocol.main
+            rval = @protocol.main
           rescue Exception => e
             puts "#{@job.id}: EXCEPTION #{e.to_s} + #{e.backtrace[0,10]}"
             @base_object.error e
             error = true
+            rval = {}
           end
 
           @job.reload.pc = Job.COMPLETED
           @job.save
 
-          @base_object.send( :append_step, { operation: "complete" } ) unless error
+          @base_object.send( :append_step, { operation: "complete", rval: rval } ) unless error
           ActiveRecord::Base.connection.close
 
           @mutex.synchronize { @thread_status.running = false }
