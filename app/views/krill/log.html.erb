@@ -1,11 +1,13 @@
+<% provide(:title, "Log #{@job.id}: #{@job.path}" ) %>
+
 <h1>Job <%= @job.id %> is completed</h1>
 
 <a href='/krill/ui?job=<%= @job.id %>' class='btn'>View Job Steps / History</a>
 
-<div id='inventory'>
-  <h2>Inventory Remaining</h2>
+<div id='touches'>
+  <h2>Inventory Touched</h2>
   <ul>
-    <% @inventory.each do |i| %>
+    <% @touches.each do |i| %>
       <% item = Item.find(i) %>
       <li>
         <%= link_to i, item_path(id: i) %>:
@@ -18,9 +20,29 @@
   </ul>
 </div>
 
+<div id='inventory'>
+  <h2>Inventory Still Taken</h2>
+  <% if @inventory.length > 0 %>
+	  <ul>
+	    <% @inventory.each do |i| %>
+	      <% item = Item.find(i) %>
+	      <li>
+	        <%= link_to i, item_path(id: i) %>:
+	        <%= item.object_type.name %>
+	        <% if item.sample %>
+	          (<%= item.sample.name %>)
+	        <% end %>
+	      </li>
+	    <% end %>
+	  </ul>
+	<% else %>
+		None.
+	<% end %>
+</div>
+
 <div id='return-value'>
-  <h2>Return Value</h2>
-  <button id='send' class='btn btn-primary'>Send ...</button><br />
+  <h2>Return Value
+    <button id='send' class='btn btn-primary'>Send ...</button></h2>
   <span class='showhide' id='return' class='json_spec'>
     <div id='return'></div>
   </span>

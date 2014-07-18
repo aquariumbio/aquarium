@@ -1,3 +1,9 @@
+<% if params[:from] %>
+  <% provide(:title, "Open from #{params[:from]}" ) %>
+<% else %>
+  <% provide(:title, "Open" ) %>
+<% end %>
+
 <ul id='nav' class="nav nav-pills"></ul>
 
 <% if params[:from] %>

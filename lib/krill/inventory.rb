@@ -42,6 +42,10 @@ module Krill
       Collection.new_collection name, r, c
     end
 
+    def collection_from id
+      Collection.find id
+    end
+
     def spread samples, name, rows, cols
       Collection.spread samples, name, rows, cols
     end

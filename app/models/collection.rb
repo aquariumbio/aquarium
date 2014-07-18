@@ -79,6 +79,28 @@ class Collection < Item
     d[:matrix]
   end
 
+  def dimensions
+    m = self.get_matrix
+    [ m.length, m[0].length ]
+  end
+
+  def num_samples
+
+    m = self.get_matrix
+    s = 0
+
+    (0..m.length-1).each do |r|
+      (0..m[r].length-1).each do |c|
+        if m[r][c] != -1
+          s += 1
+        end
+      end
+    end
+
+    s
+
+  end
+
   def non_empty
 
     m = self.get_matrix

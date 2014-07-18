@@ -149,7 +149,8 @@ class KrillController < ApplicationController
     @job = Job.find(params[:job])
     @history = @job.state
     @rval = JSON.parse(@history, symbolize_names: true).last[:rval] || {}
-    @inventory = @job.takes.collect { |t| t.id }
+    @touches = @job.touches.collect { |t| t.item_id }
+    @inventory = @job.takes.collect { |t| t.item_id }
 
   end
 
