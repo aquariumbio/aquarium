@@ -11,7 +11,7 @@ class Collection < Item
     collections = (1..num_collections).collect do |i| 
 
       c = self.new_collection name, rows, cols
-      m = c.get_matrix
+      m = c.matrix
       (0..rows-1).each do |r|
         (0..cols-1).each do |c|
           if s < samples.length
@@ -20,7 +20,8 @@ class Collection < Item
           s += 1
         end
       end
-      c.set_matrix m # note, also saves c
+      c.matrix = m 
+      c.save
       c
 
     end
@@ -48,7 +49,7 @@ class Collection < Item
   end
 
   def apportion r, c
-    self.data =  { matrix: (Array.new(r,Array.new(c,-1))) }.to_json
+    self.matrix = (Array.new(r,Array.new(c,-1)))
   end
 
   def associate sample_matrix
@@ -65,7 +66,7 @@ class Collection < Item
       end
     end
 
-    self.data = { matrix: m }.to_json
+    self.datum = { matrix: m }
     self.save
 
   end
@@ -75,18 +76,47 @@ class Collection < Item
   end
 
   def get_matrix
-    d = self.get_data
-    d[:matrix]
+    self.datum[:matrix]
   end
 
+  def matrix
+    self.datum[:matrix]
+  end
+
+  def matrix= m
+    d = self.datum
+    self.datum = d.merge( { matrix: m } )
+  end
+
+  def set r, c, x
+    m = self.matrix
+    if x.class == Item
+      if x.sample
+        m[r][c] = x.sample.id
+      else
+        raise "When the third argument to Collection.set is an item, it should be associated with a sample."
+      end
+    elsif x.class == Sample
+      m[r][c] = x.id
+    else
+      raise "The third argument to Collection.set should be an item or a sample."
+    end
+    self.matrix = m
+    self.save
+  end
+
+  #def [](i)
+  #  self.matrix[i]
+  #end
+
   def dimensions
-    m = self.get_matrix
+    m = self.matrix
     [ m.length, m[0].length ]
   end
 
   def num_samples
 
-    m = self.get_matrix
+    m = self.matrix
     s = 0
 
     (0..m.length-1).each do |r|
@@ -101,9 +131,9 @@ class Collection < Item
 
   end
 
-  def non_empty
+  def non_empty_string
 
-    m = self.get_matrix
+    m = self.matrix
     max = [0,0]
 
     (0..m.length-1).each do |r|

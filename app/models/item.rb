@@ -77,6 +77,18 @@ class Item < ActiveRecord::Base
     JSON.parse self.data, symbolize_names: true
   end
 
+  def datum
+    begin
+      JSON.parse self.data, symbolize_names: true
+    rescue
+      {}
+    end
+  end
+
+  def datum= d
+    self.data = d.to_json
+  end
+
   def quantity_nonneg
     errors.add(:quantity, "Must be non-negative." ) unless
       self.quantity && self.quantity >= -1 

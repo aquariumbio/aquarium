@@ -13,7 +13,10 @@ class TasksController < ApplicationController
     if params[:task] && params[:status]
       t = Task.find(params[:task].to_i)
       t.status = params[:status]
-      t.save()
+      unless t.save
+        flash[:error] = "Warning: While updating task status: " + t.errors.to_a.to_s + ". Task specification = "    + t.specification.to_s
+        t.save validate: false
+      end
     end
 
     @task_prototype = TaskPrototype.find(params[:task_prototype_id])
@@ -133,7 +136,7 @@ class TasksController < ApplicationController
       ProductionTask.all.each do |t|
         new_task = Task.new(t.attributes.except("created_at","updated_at"))
         new_task.id = t.id
-        new_task.save
+        new_task.save validate: false
       end
 
 

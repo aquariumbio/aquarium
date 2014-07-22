@@ -58,7 +58,7 @@ class Task < ActiveRecord::Base
         if result
           p.keys.each do |k|
             result = result && s.has_key?(k) && type_check( p[k], s[k] )
-            errors.add(:task_missing_key_value, ": Specification is missing the key #{k}, or the value for that key has the wrong type") unless result 
+            errors.add(:task_missing_key_value, ": Specification is missing the key '#{k}', or the value for that key has the wrong type") unless result 
           end
         end
 
