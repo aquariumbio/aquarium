@@ -48,6 +48,14 @@ module Krill
       @parts.push({image: "#{Bioturk::Application.config.image_server_interface}#{name}"})
     end
 
+    def transfer x, y, routing
+      @parts.push({transfer: { 
+        from: { id: x.id, rows: x.dimensions[0], cols: x.dimensions[1] },
+        to:   { id: y.id, rows: y.dimensions[0], cols: y.dimensions[1] },
+        routing: routing
+      }})
+    end
+
     def get type, opts={}
     	raise "First argument to get should be either 'number' or 'text'" unless type == 'number' || type == 'text'
     	options = {

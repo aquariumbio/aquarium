@@ -1,47 +1,30 @@
 
-- Krill
-  - PCR
-    - collections
-  - hide rails stuff somehow?
++ Krill
+  + PCR
+    + collections
 
 - Inventory
   - Put unsed items back
 
-- Log
-
-- Output for metacols
-
 - Krill from local files (via cleaner ui)
 
-- Standard 
-  - Decide where to put it. Should it be included automagically?
+- Transfer 
 
-- Collection Class
+  - An operation in show{} that takes two collections and a routing matrix. It should
+    display the two collections with a highlighted source/destination pair of locations
+    along with a statement about what is being transferred. When the use clicks on (say)
+    the source, then the transfer is considered made and it is marked. The user should be
+    able to go back to already completed transfered, but the markings don't go away.
 
-  - Make a collection from an item
-    - Throws an error if the item's object_type's handler is not 'collection'
-    - If no item is passed, then it makes a new collection, maybe taking rows/cols
-
-    Make a new collection
-      c = Collection.new 9, 12
-
-    Promote an item to a collection
-
-      i = Item.find(123)
-      c = Collection.new i
-
-    or better    
-
-      c = Collection.new 123
-
-  - Getters and setters for collection matrix and individual slots
-
-      c.set 3, 4, Sample.find(234)
-      c.set_matrix m
-
-  - Some way of making a bunch of new collections given an array of samples, like
-
-      clist = Collection.spread sample_list, 1, 12
-
-    which would spread the samples in sample_list over some number of 1x12 collections
-
+    - show_block gets transfer from, to, routing and makes a transfer item to send to the UI
+    
+    - The UI gets just dimensions and item numbers for of from and to. The routing matrix for the UI has
+      - r,c,r',c',sample_name,amount(optional).
+      - { transfer: { from: { id: 123, rows: 10, cols: 3 }, 
+                      to: { id: 234, rows: 5, cols: 6 },
+                      routing: [ 
+                        { from: [1,1], to: [3,5], name: "pLAB1", volume: 20 },
+                        ...
+                      ] 
+                    } 
+        }

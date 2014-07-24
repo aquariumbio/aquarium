@@ -197,7 +197,7 @@ Krill.prototype.step = function(state,number) {
                 ul.append(new_element);
               }
             } else {
-              ul.append('<li>ERROR PARSING DISPLAY REQUEST.</li>');
+              ul.append('<li>Unknown display request <b>'+key+'</b>: '+JSON.stringify(description[i][key])+'</li>');
             }
 
         }
