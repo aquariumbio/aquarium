@@ -530,3 +530,25 @@ font-size: $noteFontSize;
   }
 
 }
+
+.krill-transfer-todo {
+  background: lightgreen;
+}
+
+.krill-transfer-doing {
+  background: red;
+}
+
+.krill-transfer-done {
+  background: lightgray;
+}
+
+.krill-transfer-info {
+  display:block;
+  clear: both;
+  padding-left: 50px;
+  padding-top: 50px;
+  p {
+    font-size: $noteFontSize;
+  }
+}

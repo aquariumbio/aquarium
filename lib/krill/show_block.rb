@@ -49,11 +49,21 @@ module Krill
     end
 
     def transfer x, y, routing
+
+      routing_details = routing
+
+      routing_details.each do |r|
+        m = x.matrix
+        raise "m is null" unless m
+        r[:sample_name] = Sample.find(m[r[:from][0]][r[:from][1]]).name
+      end
+
       @parts.push({transfer: { 
         from: { id: x.id, type: x.object_type.name, rows: x.dimensions[0], cols: x.dimensions[1] },
         to:   { id: y.id, type: y.object_type.name, rows: y.dimensions[0], cols: y.dimensions[1] },
-        routing: routing
+        routing: routing_details 
       }})
+
     end
 
     def get type, opts={}
