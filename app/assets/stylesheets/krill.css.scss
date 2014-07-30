@@ -471,8 +471,62 @@ font-size: $noteFontSize;
   }
 }
 
+//////////////////////////////////////////////
+// Transfer
 
+.krill-from-container {
+  float: left;
+  display: inline;
 
+  h3 {
+    text-align: left;
+    margin: 0 0 0 50px;
+    padding: 0;
+  }
 
+}
 
+.krill-transfer-arrow {
+  float: left;
+  display: inline;
+  width: 100px;
+  text-align: center;
+  padding-top: 10px;
+}
 
+.krill-to-container {
+  float: left;
+
+  h3 {
+    text-align: right;
+    margin: 0 0 0 0;
+    padding: 0;
+  }
+}
+
+.krill-transfer-table {
+
+  // border: 1pt solid #aaa;
+  font-size: $noteFontSize;
+  margin: 15px;
+  padding: 0;
+  margin: 0;
+
+  td {
+    border: 1pt solid #aaa;
+    text-align: center;
+    width: 50px;
+    height: 50px;
+  }
+
+  .index {
+    color: #aaa;
+    font-size: 10pt;
+    border: none;
+  }
+
+  .selected {
+    background: yellow;
+  }
+
+}

@@ -50,8 +50,8 @@ module Krill
 
     def transfer x, y, routing
       @parts.push({transfer: { 
-        from: { id: x.id, rows: x.dimensions[0], cols: x.dimensions[1] },
-        to:   { id: y.id, rows: y.dimensions[0], cols: y.dimensions[1] },
+        from: { id: x.id, type: x.object_type.name, rows: x.dimensions[0], cols: x.dimensions[1] },
+        to:   { id: y.id, type: y.object_type.name, rows: y.dimensions[0], cols: y.dimensions[1] },
         routing: routing
       }})
     end
