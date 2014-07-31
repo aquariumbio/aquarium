@@ -105,6 +105,27 @@ class Collection < Item
     self.save
   end
 
+  def next r, c, options={}
+
+    opts = { skip_non_empty: false }.merge options
+
+    m = self.matrix
+    nr, nc = self.dimensions
+
+    (r..nr-1).each do |row|
+      (0..nc-1).each do |col|
+        if row > r || col > c 
+          if !opts[:skip_non_empty] || m[row][col] == -1
+            return [ row, col ]
+          end
+        end
+      end
+    end
+
+    return nil
+
+  end 
+
   #def [](i)
   #  self.matrix[i]
   #end

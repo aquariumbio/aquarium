@@ -45,16 +45,25 @@ module Krill
     end # load_samples
 
 
-    def transfer sources, destinations, options
+    def transfer sources, destinations, options={}
 
-      opts = { skip_non_empty: false }.options
+      opts = { skip_non_empty: true }.options
+
+      if block_given?
+        user_shows = ShowBlock.new.run(&Proc.new) 
+      else
+        user_shows = []
+      end
+
+      # go through each well of the sources and transfer it to the next empty well of
+      # destinations. Every time a source or destination is used up, advance to 
+      # another step.
 
       destinations.each do |dest|
 
       end      
 
     end # transfer
-
 
   end
 

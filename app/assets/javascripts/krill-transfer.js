@@ -84,7 +84,9 @@ Krill.prototype.transfer = function(x) {
         var q = "all"
       }
 
-      info.empty().append('<p>Transfer '+q+' of '+route.sample_name+' from '+from_name+' location '+route.from+' to '+to_name+' location '+route.to+'.</p>');
+      info.empty().append('<p>Transfer '+q+' of '+route.sample_name
+        +' from '+from_name+' location '+route.from
+        +' to '  +to_name+  ' location '+route.to    +'.</p>');
 
       to.click(function(){
         from.removeClass();
