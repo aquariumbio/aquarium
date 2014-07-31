@@ -122,7 +122,7 @@ class Collection < Item
       end
     end
 
-    return nil
+    return [nil,nil]
 
   end 
 

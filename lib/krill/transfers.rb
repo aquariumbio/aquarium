@@ -47,7 +47,11 @@ module Krill
 
     def transfer sources, destinations, options={}
 
-      opts = { skip_non_empty: true }.options
+      # go through each well of the sources and transfer it to the next empty well of
+      # destinations. Every time a source or destination is used up, advance to 
+      # another step.    
+
+      opts = { skip_non_empty: true }.merge options
 
       if block_given?
         user_shows = ShowBlock.new.run(&Proc.new) 
@@ -55,16 +59,74 @@ module Krill
         user_shows = []
       end
 
-      # go through each well of the sources and transfer it to the next empty well of
-      # destinations. Every time a source or destination is used up, advance to 
-      # another step.
+      # source and destination indices
+      s=0
+      d=0
 
-      destinations.each do |dest|
+      # matrix indices
+      sr,sc = 0,0
+      dr,dc = 0,0
+      unless destinations[0].matrix[dr][dc] == -1
+        dr,dc = destinations[0].next 0, 0, skip_non_empty:true
+      end
 
-      end      
+      routing = []
+
+      while sr != nil
+
+        # add to routing table
+        routing.push({from:[sr,sc],to:[dr,dc]})
+
+        # increase sr,sc,dr,dc
+        sr,sc =      sources[s].next sr, sc, skip_non_empty: false
+        dr,dc = destinations[d].next dr, dc, skip_non_empty: true
+
+        # if either is nil
+        if !sr || !dr
+
+          # Display 
+          show {
+            title "Transfer from #{sources[s].object_type.name} #{sources[s].id} to #{destinations[d].object_type.name} #{destinations[d].id}"
+            transfer sources[s], destinations[d], routing
+            raw user_shows
+          }
+
+          # Update destination collection
+          routing.each do |r|
+            destinations[d].set r[:to][0], r[:to][1], Sample.find(sources[s].matrix[r[:from][0]][r[:from][1]])
+          end
+
+          destinations[d].save
+
+          # clear routing for next step
+          routing = []
+
+          # update source indices
+          if !sr
+            s += 1
+            return unless s < sources.length
+            sr,sc = 0,0
+          end
+
+          # update destination indices
+          if !dc
+            d += 1
+            return unless d < destinations.length
+            dr,dc = 0,0
+            unless destinations[d].matrix[dr][dc] == -1
+              dr,dc = destinations[d].next 0, 0, skip_non_empty: true
+            end
+          end
+
+        end
+
+      end
+
+      return
 
     end # transfer
 
   end
 
 end
+

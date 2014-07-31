@@ -41,10 +41,10 @@ Krill.prototype.transfer = function(x) {
   var from_table = this.empty_table(x.from.rows,x.from.cols);
   from_table.el.addClass('krill-transfer-from');
 
-  var to_table   = this.empty_table(x.to.rows,x.to.cols);
+  var to_table = this.empty_table(x.to.rows,x.to.cols);
   to_table.el.addClass('krill-transfer-to');
 
-  var arrow      = $("<span><i class='icon-arrow-right' /></span>").addClass('krill-transfer-arrow');
+  var arrow  = $("<span><i class='icon-arrow-right' /></span>").addClass('krill-transfer-arrow');
 
   from.append($('<h3>'+x.from.id+': '+x.from.type+'</h3>'),from_table.el);
   to.append($('<h3>'+x.to.id+': '+x.to.type+'</h3>'),to_table.el);
@@ -60,10 +60,10 @@ Krill.prototype.transfer = function(x) {
     var route = this;
 
     var from = from_table.matrix[this.from[0]][this.from[1]];
-    var from_name = x.from.type + ' ' + x.from.id;
+    var from_name = x.from.type + ' <b>' + x.from.id + '</b>';
 
     var to = to_table.matrix[this.to[0]][this.to[1]];
-    var to_name = x.to.type + ' ' + x.to.id;
+    var to_name = x.to.type + ' ' + ' <b>' + x.to.id + '</b>';
 
     from.addClass('krill-transfer-todo').click(function(){
 
@@ -84,9 +84,9 @@ Krill.prototype.transfer = function(x) {
         var q = "all"
       }
 
-      info.empty().append('<p>Transfer '+q+' of '+route.sample_name
-        +' from '+from_name+' location '+route.from
-        +' to '  +to_name+  ' location '+route.to    +'.</p>');
+      info.empty().append('<p>Transfer '+q+' <b>'+route.sample_name+'</b>'
+        +' from '+from_name+' location ('+[route.from[0]+1,route.from[1]+1] + ')'
+        +' to '  +to_name+  ' location ('+[route.to[0]+1,route.to[1]+1]    +').</p>');
 
       to.click(function(){
         from.removeClass();
