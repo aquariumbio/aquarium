@@ -15,6 +15,7 @@ Getting Started
 ---
 Here is very a simple protocol that displays "Hello World!" to the user.
 
+```ruby
 	class Protocol
 	
 		def main
@@ -24,6 +25,7 @@ Here is very a simple protocol that displays "Hello World!" to the user.
 		end
 		
 	end
+```
 	
 Save this protocol and run it from within Aquarium. It should display a page to the user that says "Hello World!" and a "Next" button. When the user clicks next, the protocol will complete. 
 
@@ -68,6 +70,7 @@ Display the image pointed to by **path** on the page. The **path** argument shou
 
 Display an input box to the user to obtain data of some kind. If no options are supplied, then the data is stored in a hash returned by the **show** function with a key called something like get_12 or get_13 (for get number 12 or get number 13). The name of the variable name can be specified via the **var** option. A label for the input box can also be specified. As an example,
 
+```ruby
 	data = show {
       title "An input example""
       get "text", var: "y", label: "Enter a string", default: "Hello World"
@@ -76,17 +79,20 @@ Display an input box to the user to obtain data of some kind. If no options are 
     
     y = data[:x]
     z = data[:z]
+```
     
 **select choices, opts={}**
 
 Display a selection of choices for the user. The options are the same as for **get**. For example,
 
+```ruby
 	data = show {
       title "A Select Example"
       select [ "A", "B", "C" ], var: "choice", label: "Choose something", default: 1
     }
     
     choice = data[:choice]
+```
 
 **separator**
 
@@ -100,12 +106,15 @@ Display information about the item i -- its id, its location, its object type, a
 
 Display a table represented by the matrix t. For example, 
 
+```ruby
 	show {
 	  table [ [ "A", "B" ], [ 1, 2 ] ] 
 	}
+```
 
 shows a simple 2x2 table. The entries in the table can be strings or  integers, as above, or they can be hashes with more information about what to display. For example, 
 
+```ruby
 	m = [
 	  [ "A", "Very", "Nice", { content: "Table", style: { color: "#f00" } } ],
 	  [ { content: 1, check: true }, 2, 3, 4 ]
@@ -115,6 +124,7 @@ shows a simple 2x2 table. The entries in the table can be strings or  integers, 
       title "A Table"
       table m
     }
+```
     
 shows a table with the 0,3 entry has special styling (any css code can go in the style hash) and the 1,0 entry is checkable, meaning the user can click on it and change its background color. This latter function is useful if you are presenting a number of things for the user to do, and want to have them check them off as they do them.
 
@@ -126,6 +136,7 @@ Input via Arguments
 ===
 To specify arguments (a.k.a. parameters) to a protocol, define the method **arguments** in the **Protocol** class. The arguments are then available from within the protocol via the **input** method. For example,
 
+```ruby
 	class Protocol
 
 	  def arguments
@@ -145,6 +156,7 @@ To specify arguments (a.k.a. parameters) to a protocol, define the method **argu
 	  end
 	  
 	end
+```
 	
 The keys in the hash returned by the **arguments** method define the names of the arguments. The default values for the arguments are values in the hash. They are presented to the user as defaults, but the user can overwrite them. Once the protocol starts running, the values passed in by the user are available via the **input** method. For technical reasons, the **input** method is not available from within a show block, so in the above code the arguments are extracted and assigned to local variables so they can be shown to the user.
 
@@ -155,6 +167,7 @@ Output via Return
 
 For a protocol to return values to, for example, the metacol that called it, simply return a value from the main method. Note that in Ruby, methods return whatever value the last line of the method produces. So if you do not explicitly return something you might be returning nonsense. For example, here is a protocol that asks the user for a value and returns that value plus one.
 
+```ruby
 	class Protocol
 	
 		def main
@@ -168,9 +181,11 @@ For a protocol to return values to, for example, the metacol that called it, sim
     	end
     	
      end
+```
 
 A common pattern in protocols is to merge a hash obtained from the input to the protocol with more infomation. For example,
 
+```ruby
 	class Protocol
 	
 	  def main
@@ -186,6 +201,7 @@ A common pattern in protocols is to merge a hash obtained from the input to the 
 	  end
 	  
 	end
+```
 	
 The output of this protocol can then be fed to another protocol that adds even more information to its input. 
 
@@ -219,19 +235,27 @@ Finding Items and Samples
 ===
 To find items and samples in the database, use the **find** method. This method is most easily explained via examples. 
 
+```ruby
 	find(:item, id: 123)
+```
 	
 This call to **find** returns a list of items whose id is 123. There should be zero or one such item. Just remember that **find** always returns a list.
 
+```ruby
 	find(:item, sample: { name: "pLAB1" })
+```
 	
 This call to **find** returns a list of items that correspond to the sample named "pLAB1". If that sample were a plasmid, then the items returned would be all plasmid stocks and E. coli plasmid stocks, etc. with "pLAB1" in them.
 
+```ruby
 	find(:item, sample: { object_type: { name: "Enzyme Aliquot" }, sample: { name: "ecoRI" } } )
+```
 	
 This call returns a list of all aliquots of ecoRI. 
 
+```ruby
 	find(:sample, name: "pLAB1")
+```
 	
 This call returns all samples named "pLAB1". Since names are unique, this call should return zero or one item. 
 
