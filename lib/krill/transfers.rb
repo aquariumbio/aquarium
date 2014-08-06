@@ -84,14 +84,14 @@ module Krill
         # if either is nil
         if !sr || !dr
 
-          # Display 
+          # display 
           show {
             title "Transfer from #{sources[s].object_type.name} #{sources[s].id} to #{destinations[d].object_type.name} #{destinations[d].id}"
             transfer sources[s], destinations[d], routing
             raw user_shows
           }
 
-          # Update destination collection
+          # update destination collection
           routing.each do |r|
             destinations[d].set r[:to][0], r[:to][1], Sample.find(sources[s].matrix[r[:from][0]][r[:from][1]])
           end
