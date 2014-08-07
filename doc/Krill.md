@@ -207,7 +207,7 @@ The output of this protocol can then be fed to another protocol that adds even m
 
 Items, Objects and Samples
 ===
-The Aquarium inventory is managed via a structured database of Ruby objects with certain relationships, all of shich are available within protocols. The primary inventory objects are
+The Aquarium inventory is managed via a structured database of Ruby objects with certain relationships, all of shich are available within protocols. The primary inventory objects are as follows.
 
 * **ObjectType**: An object type might be named a "1 L Bottle" or a "Primer Aliquot". If the variable **o** is an ObjectType, then the following methods are available:* 
   * o.name - returns the name of the object type, as in "1 L Bottle"
@@ -230,6 +230,8 @@ The Aquarium inventory is managed via a structured database of Ruby objects with
   * i.datum = x - set the value of the datum associated with the item to x. 
   * i.save - if you make changes to an item, you have to call i.save to make sure the changes are saved to the database.
   * i.reload - if the item has changed somehow in the database, this method update **i** so that it has the latest information from the database.
+
+Note that Items, Samples, SampleTypes, and ObjectTypes inherit from **ActiveRecord::Base** which is a fundamental rails class with documentation [here](http://api.rubyonrails.org/classes/ActiveRecord/Base.html). The methods in this parent class are available from within a protocol, although care should be taken when using them. In general, it is preferable to use those methods discussed here. 
 
 Finding Items and Samples
 ===
@@ -291,7 +293,51 @@ As an example of how one might use the **find** method, supose here is a protoco
 ```
   
 Taking Items 
-=== 
+===
+
+If a protocol has a list called, say, **items** returned by **find**, that does not mean the user of the protocol necessarily has taken those items from their locations and brought them to the bench. To tell the user to take the items, one must call take. The effect is to associate the item with the job running the protocol, until it is released (see below). It also "touches" the item by the job, so that one can later determine that the item was used by the job.
+
+There are several forms of take. To illustrate then, suppose we have a list of items obtained from **find** as follows
+
+```ruby
+	items = find(:item, { sample: { name: "pLAB1" }, object_type: { name: "Plasmid Stock" } } )
+```
+
+The most basic form of take is simply to do
+
+```ruby
+	take items
+```
+
+which silently (i.e. without telling the user) takes the items. Once can also tell the user to take them, which shows the user a page that says where the items are, as follows
+
+```ruby
+	take items, interactive: true
+```
+
+If there are more instructions to give the user, you can add an extra **show* block, as in
+
+```ruby
+    take(items, interactive: true) { 
+      warning "Do not leave the freezer open too long!"
+    }
+```
+
+Finally, there is a method of taking a long list of items that goes through freezer boxes in a reasonably intelligent way, so as to reduce the number of freezer door openings and closings. This form of take looks like
+
+```ruby
+	take items, interactive: true,  method: "boxes"
+```
+
+which displays a new page to the user for every freezer box required to take the items. A diagram of the freezer box is shown and the user can check the items as (s)he takes them.
+
+Note that when the protocol is done with the items, it should release them. The simplest form for release is
+
+```ruby
+	release items
+```
+
+More sophisticated patterns for release are shown below.
  
 Producing and Releasing Items
 ===
@@ -315,7 +361,7 @@ which returns a new item in the variable **i** whose object type is "Plasmid Sto
 
 When a protocol is done with a an item, it should release it. This is done with the release function.
 
-**release item_list, opts={} <<block>>** -- release an item. This function has many forms. Suppose **i** and **j** are items currently ''taken'' by the protocol.
+**release item_list, opts={} <<optional block>>** -- release an item. This function has many forms. Suppose **i** and **j** are items currently ''taken'' by the protocol.
 
 ```ruby
 	release([i,j])
@@ -335,7 +381,7 @@ This version calls **show** and tells the user to put the items away, or dispose
 	}
 ```
 
-This version also calls show, like the previous version, but also adds the **show** code block to the **show** that release does, so that you can add various notes, warnings, images, etc. to the page shown to the user.
+This version also calls **show**, like the previous version, but also adds the **show** code block to the **show** that release does, so that you can add various notes, warnings, images, etc. to the page shown to the user.
 
 
 Collections
