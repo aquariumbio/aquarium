@@ -72,7 +72,7 @@ Display an input box to the user to obtain data of some kind. If no options are 
 
 ```ruby
 	data = show {
-      title "An input example""
+      title "An input example"
       get "text", var: "y", label: "Enter a string", default: "Hello World"
       get "number", var: "z", label: "Enter a number", default: 555
     }
@@ -297,7 +297,7 @@ Taking Items
 
 If a protocol has a list called, say, **items** returned by **find**, that does not mean the user of the protocol necessarily has taken those items from their locations and brought them to the bench. To tell the user to take the items, one must call take. The effect is to associate the item with the job running the protocol, until it is released (see below). It also "touches" the item by the job, so that one can later determine that the item was used by the job.
 
-There are several forms of take. To illustrate then, suppose we have a list of items obtained from **find** as follows
+There are several forms of take. To illustrate them, suppose we have a list of items obtained from **find** as follows
 
 ```ruby
 	items = find(:item, { sample: { name: "pLAB1" }, object_type: { name: "Plasmid Stock" } } )
@@ -309,7 +309,7 @@ The most basic form of take is simply to do
 	take items
 ```
 
-which silently (i.e. without telling the user) takes the items. Once can also tell the user to take them, which shows the user a page that says where the items are, as follows
+which silently (i.e. without telling the user) takes the items. One may also tell the user to take them, which shows the user a page that says where the items are.
 
 ```ruby
 	take items, interactive: true
@@ -329,7 +329,7 @@ Finally, there is a method of taking a long list of items that goes through free
 	take items, interactive: true,  method: "boxes"
 ```
 
-which displays a new page to the user for every freezer box required to take the items. A diagram of the freezer box is shown and the user can check the items as (s)he takes them.
+which displays a new page to the user for every freezer box required to take the items. A diagram of the freezer box is shown and the user can check the items as (s)he takes them. Any items not in freezer boxes are displayed in a final page that simply lists the remaining items and their locations.
 
 Note that when the protocol is done with the items, it should release them. The simplest form for release is
 
