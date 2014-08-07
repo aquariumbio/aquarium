@@ -287,13 +287,56 @@ As an example of how one might use the **find** method, supose here is a protoco
 	    
 	  end
 	  
-	end
+	end	
 ```
+  
+Taking Items 
+=== 
  
-Taking, Releasing and Producing Items
+Producing and Releasing Items
 ===
 
-To make new items you use the **produce**
+To make new items you use either **new_object** or **new_sample**, which both return Items. Typically, these functions are used with the **produce** function so that the items returned are (a) put in the databased with new unique ids and (b) associated with the job (i.e. they are "taken").
+
+**new_object name** - This function takes the name of an object type and makes a new item with that object type. An object type with that name must exist in the database. For example, you might do
+
+```ruby
+	i = produce new_object "1 L Bottle"
+```
+which would return a new item in the variable **i**.
+
+**new_sample sample_name, of: sample_type_name, as: object_type_name** - This function takes a sample name and an object type name and makes a new item with that name. For example, you might do
+
+```ruby
+	j = produce new_sample "pLAB1", of: "Plasmid", as: "Plasmid Stock"
+```
+
+which returns a new item in the variable **i** whose object type is "Plasmid Stock", whose corresponding sample is "pLAB1" and whose sample type is "Plasmid". 
+
+When a protocol is done with a an item, it should release it. This is done with the release function.
+
+**release item_list, opts={} <<block>>** -- release an item. This function has many forms. Suppose **i** and **j** are items currently ''taken'' by the protocol.
+
+```ruby
+	release([i,j])
+```
+
+This version of release simply release the items i and j (i.e. it marks them as not taken by the job running the protocol).
+
+```ruby
+	release([i,j],interactive: true)
+```
+
+This version calls **show** and tells the user to put the items away, or dispose of them, etc.  Once the user clicks "Next", the items in the list are marked as not taken.
+
+```ruby
+	release([i,j],interactive: true) {
+		note "Please handle the items carefully."
+	}
+```
+
+This version also calls show, like the previous version, but also adds the **show** code block to the **show** that release does, so that you can add various notes, warnings, images, etc. to the page shown to the user.
+
 
 Collections
 ===
