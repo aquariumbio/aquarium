@@ -16,22 +16,20 @@ Getting Started
 Here is very a simple protocol that displays "Hello World!" to the user.
 
 ```ruby
-	class Protocol
-	
-		def main
-			show {
-				title "Hello World!"
-			}
-		end
-		
-	end
+class Protocol
+  def main
+    show {
+      title "Hello World!"
+    }
+  end
+end
 ```
-	
-Save this protocol and run it from within Aquarium. It should display a page to the user that says "Hello World!" and a "Next" button. When the user clicks next, the protocol will complete. 
+
+Save this protocol and run it from within Aquarium. It should display a page to the user that says "Hello World!" and a "Next" button. When the user clicks next, the protocol will complete.
 
 The above example illustrates several important aspects shared by all protocols.
 
-First, the code is all wrapped in a class called **Protocol**. Aquarium looks for this class when it starts the protocol. You must define it, otherwise you will get an error when you run the protocol. Of course, you can define other classes and modules as well, and call them whatever you want to call them. 
+First, the code is all wrapped in a class called **Protocol**. Aquarium looks for this class when it starts the protocol. You must define it, otherwise you will get an error when you run the protocol. Of course, you can define other classes and modules as well, and call them whatever you want to call them.
 
 Second, the method **main** is defined within the  **Protocol** class. This method is Aquarium's entry point into your protocol. You can of course define other methods as well. However, the names **main**, **arguments**, and **debug** have special meaning (see below).
 
@@ -71,27 +69,27 @@ Display the image pointed to by **path** on the page. The **path** argument shou
 Display an input box to the user to obtain data of some kind. If no options are supplied, then the data is stored in a hash returned by the **show** function with a key called something like get_12 or get_13 (for get number 12 or get number 13). The name of the variable name can be specified via the **var** option. A label for the input box can also be specified. As an example,
 
 ```ruby
-	data = show {
-      title "An input example"
-      get "text", var: "y", label: "Enter a string", default: "Hello World"
-      get "number", var: "z", label: "Enter a number", default: 555
-    }
-    
-    y = data[:x]
-    z = data[:z]
+data = show {
+  title "An input example"
+  get "text", var: "y", label: "Enter a string", default: "Hello World"
+  get "number", var: "z", label: "Enter a number", default: 555
+}
+
+y = data[:x]
+z = data[:z]
 ```
-    
+
 **select choices, opts={}**
 
 Display a selection of choices for the user. The options are the same as for **get**. For example,
 
 ```ruby
-	data = show {
-      title "A Select Example"
-      select [ "A", "B", "C" ], var: "choice", label: "Choose something", default: 1
-    }
-    
-    choice = data[:choice]
+data = show {
+  title "A Select Example"
+  select [ "A", "B", "C" ], var: "choice", label: "Choose something", default: 1
+}
+
+choice = data[:choice]
 ```
 
 **separator**
@@ -104,60 +102,60 @@ Display information about the item i -- its id, its location, its object type, a
 
 **table t**
 
-Display a table represented by the matrix t. For example, 
+Display a table represented by the matrix t. For example,
 
 ```ruby
-	show {
-	  table [ [ "A", "B" ], [ 1, 2 ] ] 
-	}
+show {
+  table [ [ "A", "B" ], [ 1, 2 ] ]
+}
 ```
 
-shows a simple 2x2 table. The entries in the table can be strings or  integers, as above, or they can be hashes with more information about what to display. For example, 
+shows a simple 2x2 table. The entries in the table can be strings or  integers, as above, or they can be hashes with more information about what to display. For example,
 
 ```ruby
-	m = [
-	  [ "A", "Very", "Nice", { content: "Table", style: { color: "#f00" } } ],
-	  [ { content: 1, check: true }, 2, 3, 4 ]
-	]
+m = [
+  [ "A", "Very", "Nice", { content: "Table", style: { color: "#f00" } } ],
+  [ { content: 1, check: true }, 2, 3, 4 ]
+]
 
-    show {
-      title "A Table"
-      table m
-    }
+show {
+  title "A Table"
+  table m
+}
 ```
-    
+
 shows a table with the 0,3 entry has special styling (any css code can go in the style hash) and the 1,0 entry is checkable, meaning the user can click on it and change its background color. This latter function is useful if you are presenting a number of things for the user to do, and want to have them check them off as they do them.
 
 **transfer a, b, routing**
 
-You will need to read about "Collections" below before this function makes sense. The **transfer** function show an interactive transfer display to the user. The arguments **a** and **b** should be collections and **routing** should be an array of routes of the form { from: [a,b], to: [c,d], volume: v }. Here a,b,c, and d are integer indices into the collections a and b respectively. The "volume" key/value pair is in microliters and is optional. If no volume is specified, then it is expected that the user transfer all of the contents of the source well. 
+You will need to read about "Collections" below before this function makes sense. The **transfer** function show an interactive transfer display to the user. The arguments **a** and **b** should be collections and **routing** should be an array of routes of the form { from: [a,b], to: [c,d], volume: v }. Here a,b,c, and d are integer indices into the collections a and b respectively. The "volume" key/value pair is in microliters and is optional. If no volume is specified, then it is expected that the user transfer all of the contents of the source well.
 
 Input via Arguments
 ===
 To specify arguments (a.k.a. parameters) to a protocol, define the method **arguments** in the **Protocol** class. The arguments are then available from within the protocol via the **input** method. For example,
 
 ```ruby
-	class Protocol
+class Protocol
 
-	  def arguments
-	    { x: 1, y: "name" }
-	  end
+  def arguments
+    { x: 1, y: "name" }
+  end
 
-	  def main
-	
-	    x = input[:x]
-	    y = input[:name]
-	    
-	    show {
-	    	title "Arguments"
-	    	note "x = #{x}, y = #{y}"
-	    }
-	    
-	  end
-	  
-	end
+  def main
+
+    x = input[:x]
+    y = input[:name]
+
+    show {
+    	title "Arguments"
+    	note "x = #{x}, y = #{y}"
+    }
+
+  end
+
+end
 ```
-	
+
 The keys in the hash returned by the **arguments** method define the names of the arguments. The default values for the arguments are values in the hash. They are presented to the user as defaults, but the user can overwrite them. Once the protocol starts running, the values passed in by the user are available via the **input** method. For technical reasons, the **input** method is not available from within a show block, so in the above code the arguments are extracted and assigned to local variables so they can be shown to the user.
 
 **Note**: The arguments method merely defines what is displayed to the user when the protocol starts and limits the user to setting only the arguments specified. However, if the protocol is started via a metacol, for example, then the arguments availble via the input method can be ay arbitrary hash or array containing integers, strings, arrays, and other hashes.
@@ -168,58 +166,58 @@ Output via Return
 For a protocol to return values to, for example, the metacol that called it, simply return a value from the main method. Note that in Ruby, methods return whatever value the last line of the method produces. So if you do not explicitly return something you might be returning nonsense. For example, here is a protocol that asks the user for a value and returns that value plus one.
 
 ```ruby
-	class Protocol
-	
-		def main
-		
-			user_input = show {
-              get "number", var: "x", label: "Enter a number", default: 0
-		    }
-    
-    		return { y: user_input[:x] + 1 }
-    		
-    	end
-    	
-     end
+class Protocol
+
+  def main
+
+    user_input = show {
+      get "number", var: "x", label: "Enter a number", default: 0
+    }
+
+    return { y: user_input[:x] + 1 }
+
+  end
+
+end
 ```
 
 A common pattern in protocols is to merge a hash obtained from the input to the protocol with more infomation. For example,
 
 ```ruby
-	class Protocol
-	
-	  def main
-	  
-	    x = input
-	    
-	    # Your code here wherein a variable y is computed based on,
-	    # for example, input obtained from the user as (s)he runs 
-	    # the protocol or sample ids read from the inventory database.
-	    
-	    return x.merge y
-	    
-	  end
-	  
-	end
+class Protocol
+
+  def main
+
+    x = input
+
+    # Your code here wherein a variable y is computed based on,
+    # for example, input obtained from the user as (s)he runs
+    # the protocol or sample ids read from the inventory database.
+
+    return x.merge y
+
+  end
+
+end
 ```
-	
-The output of this protocol can then be fed to another protocol that adds even more information to its input. 
+
+The output of this protocol can then be fed to another protocol that adds even more information to its input.
 
 Items, Objects and Samples
 ===
 The Aquarium inventory is managed via a structured database of Ruby objects with certain relationships, all of shich are available within protocols. The primary inventory objects are as follows.
 
-* **ObjectType**: An object type might be named a "1 L Bottle" or a "Primer Aliquot". If the variable **o** is an ObjectType, then the following methods are available:* 
+* **ObjectType**: An object type might be named a "1 L Bottle" or a "Primer Aliquot". If the variable **o** is an ObjectType, then the following methods are available:*
   * o.name - returns the name of the object type, as in "1 L Bottle"
-  * o.handler - returns the name that classifies the object type, as in "liquid_media". This name is used by the aquarium UI to categorize object types. The special handler "collection" is used to show that items with this given object type are collections (see below)   
-* **SampleType**: A sample type might be something like "Primer" or "Yeast Strain". It defines a class of samples that all have the same basic properties. For example, all Primers have a sequence. If **st** is a sample type, then the following methods are available:* 
+  * o.handler - returns the name that classifies the object type, as in "liquid_media". This name is used by the aquarium UI to categorize object types. The special handler "collection" is used to show that items with this given object type are collections (see below)
+* **SampleType**: A sample type might be something like "Primer" or "Yeast Strain". It defines a class of samples that all have the same basic properties. For example, all Primers have a sequence. If **st** is a sample type, then the following methods are available:*
   * st.name - the name of the sample type, as in "Primer"
   * st.fieldnname - the name of the nth field, for n=1..8. Probably not useful directly. See the Sample object.
   * st.fieldntype - the type of the nth field, either "number", "string", "url", or "sample". Se the Sample object for how to use these fields.
 * **Sample**: A specific (yet still abstract) sample, not to be confused with a sample type or an item. For example, a primer with a certain sequence and name will have sample type "Primer" and possibly many items in the lab for the given sample. If **s** is a sample, then the following methods are available:
   * s.id - The id of the sample.
   * s.name: The name of the sample. For example, a sample whose SampleType is "Plasmid" might be named "pLAB1".
-  * s.sample_type - The sample type of the sample. 
+  * s.sample_type - The sample type of the sample.
   * s.properties - A hash of the form { key1: value1, ..., key8: value8 } where the nth key is named according to the s.sample_type.fieldnname (as a symbol, not a string).
 * **Item**: A physical item in the lab. It has an object type and may correspond to a sample, see the examples below. If **i** is an item, then the following methods are available:
   * i.id - the id of the item. Every item in the lab has such an id that can by used to find information about the item (see Finding Items and Samples).
@@ -227,72 +225,70 @@ The Aquarium inventory is managed via a structured database of Ruby objects with
   * i.object_type - the object type associated with the item.
   * i.sample - the corresponding sample, if any. Some items correspond to samples and some do not. For example, an item whose object type is "1 L Bottle" does not correspond to a sample. An item whose object type is "Plasmid Stock" will have a corresponding sample, whose name might be something like "pLAB1".
   * i.datum - data associated with the item. It can be an arbitrary Ruby value, but is usually a hash.
-  * i.datum = x - set the value of the datum associated with the item to x. 
+  * i.datum = x - set the value of the datum associated with the item to x.
   * i.save - if you make changes to an item, you have to call i.save to make sure the changes are saved to the database.
   * i.reload - if the item has changed somehow in the database, this method update **i** so that it has the latest information from the database.
 
-Note that Items, Samples, SampleTypes, and ObjectTypes inherit from **ActiveRecord::Base** which is a fundamental rails class with documentation [here](http://api.rubyonrails.org/classes/ActiveRecord/Base.html). The methods in this parent class are available from within a protocol, although care should be taken when using them. In general, it is preferable to use those methods discussed here. 
+Note that Items, Samples, SampleTypes, and ObjectTypes inherit from **ActiveRecord::Base** which is a fundamental rails class with documentation [here](http://api.rubyonrails.org/classes/ActiveRecord/Base.html). The methods in this parent class are available from within a protocol, although care should be taken when using them. In general, it is preferable to use those methods discussed here.
 
 Finding Items and Samples
 ===
-To find items and samples in the database, use the **find** method. This method is most easily explained via examples. 
+To find items and samples in the database, use the **find** method. This method is most easily explained via examples.
 
 ```ruby
-	find(:item, id: 123)
+find(:item, id: 123)
 ```
-	
+
 This call to **find** returns a list of items whose id is 123. There should be zero or one such item. Just remember that **find** always returns a list.
 
 ```ruby
-	find(:item, sample: { name: "pLAB1" })
+find(:item, sample: { name: "pLAB1" })
 ```
-	
+
 This call to **find** returns a list of items that correspond to the sample named "pLAB1". If that sample were a plasmid, then the items returned would be all plasmid stocks and E. coli plasmid stocks, etc. with "pLAB1" in them.
 
 ```ruby
-	find(:item, sample: { object_type: { name: "Enzyme Aliquot" }, sample: { name: "ecoRI" } } )
+find(:item, sample: { object_type: { name: "Enzyme Aliquot" }, sample: { name: "ecoRI" } } )
 ```
-	
-This call returns a list of all aliquots of ecoRI. 
+
+This call returns a list of all aliquots of ecoRI.
 
 ```ruby
-	find(:sample, name: "pLAB1")
+find(:sample, name: "pLAB1")
 ```
-	
-This call returns all samples named "pLAB1". Since names are unique, this call should return zero or one item. 
 
-As an example of how one might use the **find** method, supose here is a protocol that tells the user to check that all the 1 kb Ladders are where they are supposed to be. 
+This call returns all samples named "pLAB1". Since names are unique, this call should return zero or one item.
+
+As an example of how one might use the **find** method, supose here is a protocol that tells the user to check that all the 1 kb Ladders are where they are supposed to be.
 
 ```ruby
-	class Protocol
-	
-	  def main
-	  
-	    ladders = find(:item, sample: { name: "1 kb Ladder" } )
-	    
-	    ladders.each do |ladder|
-	    
-	      data = show {
-	        title "Item Number #{ladder.id}"
-	        note "This item should be at location #{ladder.location}"
-	        select ["Yes", "No"], var: "okay", label: "Is the item in the proper location?"
-	      }
-	      
-	      if data[:okay] == "No"
-	        show {
-	          title "Yikes!"
-	          warning "Do something to find item number #{ladder.id}!!!"
-	        }
-	      end
-	    
-	    end
-	    
-	  end
-	  
-	end	
+class Protocol
+
+  def main
+
+    ladders = find(:item, sample: { name: "1 kb Ladder" } )
+
+    ladders.each do |ladder|
+
+      data = show {
+        title "Item Number #{ladder.id}"
+        note "This item should be at location #{ladder.location}"
+        select ["Yes", "No"], var: "okay", label: "Is the item in the proper location?"
+      }
+
+      show {
+        title "Yikes!"
+          warning "Do something to find item number #{ladder.id}!!!"
+      } unless data[:okay] == "Yes"
+
+    end
+
+  end
+
+end
 ```
-  
-Taking Items 
+
+Taking Items
 ===
 
 If a protocol has a list called, say, **items** returned by **find**, that does not mean the user of the protocol necessarily has taken those items from their locations and brought them to the bench. To tell the user to take the items, one must call take. The effect is to associate the item with the job running the protocol, until it is released (see below). It also "touches" the item by the job, so that one can later determine that the item was used by the job.
@@ -300,33 +296,33 @@ If a protocol has a list called, say, **items** returned by **find**, that does 
 There are several forms of take. To illustrate them, suppose we have a list of items obtained from **find** as follows
 
 ```ruby
-	items = find(:item, { sample: { name: "pLAB1" }, object_type: { name: "Plasmid Stock" } } )
+items = find(:item, { sample: { name: "pLAB1" }, object_type: { name: "Plasmid Stock" } } )
 ```
 
 The most basic form of take is simply to do
 
 ```ruby
-	take items
+take items
 ```
 
 which silently (i.e. without telling the user) takes the items. One may also tell the user to take them, which shows the user a page that says where the items are.
 
 ```ruby
-	take items, interactive: true
+take items, interactive: true
 ```
 
 If there are more instructions to give the user, you can add an extra **show* block, as in
 
 ```ruby
-    take(items, interactive: true) { 
-      warning "Do not leave the freezer open too long!"
-    }
+take(items, interactive: true) {
+  warning "Do not leave the freezer open too long!"
+}
 ```
 
 Finally, there is a method of taking a long list of items that goes through freezer boxes in a reasonably intelligent way, so as to reduce the number of freezer door openings and closings. This form of take looks like
 
 ```ruby
-	take items, interactive: true,  method: "boxes"
+take items, interactive: true,  method: "boxes"
 ```
 
 which displays a new page to the user for every freezer box required to take the items. A diagram of the freezer box is shown and the user can check the items as (s)he takes them. Any items not in freezer boxes are displayed in a final page that simply lists the remaining items and their locations.
@@ -334,11 +330,11 @@ which displays a new page to the user for every freezer box required to take the
 Note that when the protocol is done with the items, it should release them. The simplest form for release is
 
 ```ruby
-	release items
+release items
 ```
 
 More sophisticated patterns for release are shown below.
- 
+
 Producing and Releasing Items
 ===
 
@@ -347,38 +343,38 @@ To make new items you use either **new_object** or **new_sample**, which both re
 **new_object name** - This function takes the name of an object type and makes a new item with that object type. An object type with that name must exist in the database. For example, you might do
 
 ```ruby
-	i = produce new_object "1 L Bottle"
+i = produce new_object "1 L Bottle"
 ```
 which would return a new item in the variable **i**.
 
 **new_sample sample_name, of: sample_type_name, as: object_type_name** - This function takes a sample name and an object type name and makes a new item with that name. For example, you might do
 
 ```ruby
-	j = produce new_sample "pLAB1", of: "Plasmid", as: "Plasmid Stock"
+j = produce new_sample "pLAB1", of: "Plasmid", as: "Plasmid Stock"
 ```
 
-which returns a new item in the variable **i** whose object type is "Plasmid Stock", whose corresponding sample is "pLAB1" and whose sample type is "Plasmid". 
+which returns a new item in the variable **i** whose object type is "Plasmid Stock", whose corresponding sample is "pLAB1" and whose sample type is "Plasmid".
 
 When a protocol is done with a an item, it should release it. This is done with the release function.
 
 **release item_list, opts={} <<optional block>>** -- release an item. This function has many forms. Suppose **i** and **j** are items currently ''taken'' by the protocol.
 
 ```ruby
-	release([i,j])
+release([i,j])
 ```
 
 This version of release simply release the items i and j (i.e. it marks them as not taken by the job running the protocol).
 
 ```ruby
-	release([i,j],interactive: true)
+release([i,j],interactive: true)
 ```
 
 This version calls **show** and tells the user to put the items away, or dispose of them, etc.  Once the user clicks "Next", the items in the list are marked as not taken.
 
 ```ruby
-	release([i,j],interactive: true) {
-		note "Please handle the items carefully."
-	}
+release([i,j],interactive: true) {
+  warning "Be careful with these items."
+}
 ```
 
 This version also calls **show**, like the previous version, but also adds the **show** code block to the **show** that release does, so that you can add various notes, warnings, images, etc. to the page shown to the user.
