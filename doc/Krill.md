@@ -357,7 +357,7 @@ which returns a new item in the variable **i** whose object type is "Plasmid Sto
 
 When a protocol is done with a an item, it should release it. This is done with the release function.
 
-**release item_list, opts={} <<optional block>>** -- release an item. This function has many forms. Suppose **i** and **j** are items currently ''taken'' by the protocol.
+**release item_list, opts={} //optional block//** -- release an item. This function has many forms. Suppose **i** and **j** are items currently ''taken'' by the protocol.
 
 ```ruby
 release([i,j])
@@ -379,12 +379,116 @@ release([i,j],interactive: true) {
 
 This version also calls **show**, like the previous version, but also adds the **show** code block to the **show** that release does, so that you can add various notes, warnings, images, etc. to the page shown to the user.
 
-
 Collections
 ===
+
+A **Collection** is a special kind of **Item** that has a matrix of **Sample** ids associated with it. The matrix is stored in the datum field of the item as in the format { matrix: [ [ ... ], ..., [ ... ] ], ... }. For easy manipulation of such items, Aquarium provides the class Collection, which inherits from Item.
+
+Constructing Collections
+---
+
+Collections can be made in a few different ways, either from nothing, from items whose object types have the handler "collection", or by spreading a number of samples accross a new collection.
+
+To make an entirely new collection, use, for example,
+
+```ruby
+i = produce new_collection "Gel", 2, 6
+```
+
+To promote an item **i** to a collection, use
+
+```ruby
+c = collection_from i
+```
+
+which creates and takes a new collection object with an empty 2x6 matrix and an object type of "Gel". Note that the object type associated with a collection **must** have its handler set to "collection".
+
+Finally, suppose **fragments** is a list of fragment sample (obtained from a call to **find** for example). You can construct a new collection whose matrix is populated with those samples as in the following example:
+
+```ruby
+collections = produce spread sample_list, "Stripwell", 1, 12
+```
+
+This call to **spread** returns a list of collections, which is sent to **produce** to take them. In this example, if there were, say, 30 samples in **sample_list**, then the returned list will contain three 1x12 collections with the first two completely, and the last half full. The first sample in the list is associated with the first well of the first collection, and so on.
+
+Collection Methods
+---
+
+Collections inherit all of the methods of Item. In addition, there are a few more methods. Suppose **col** is a collection.
+
+**col.apportion r, c** - Sets the matrix for the collection to an empty rxc matrix and saves the collection to the database. Whatever matrix was associated with the collection is lost.
+
+**col.matrix** - Returns the matrix associated with the collection.
+
+**col.matrix = m** - Sets the matrix associated with the collection to the matrix of Sample ids **m**. Whatever matrix was associated with the collection is lost.
+
+**col.associate m** - Sets the matrix associated with the collection to the matrix m where m can be either a matrix of Samples or a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix was associated with the collection is lost.
+
+**col.set r, c, s** - Set the [r,c] entry of the matrix to id of the Sample **s**.
+
+**col.next r, c, opts={}** - With no options, returns the indices of the next element of the collections, skipping to the next column or row if necessary. With the option skip_non_empty: true, returns the next non empty indices. Returns nil if [r,c] is the last element of the collection.
+
+**col.dimensions** - Returns the dimensions of the matrix associated with the collection.
+
+**col.num_samples** - Returns the number of non empty slots in the matrix.
+
+**col.non_empty_string** - Returns a string describing the indices of the non empty elements in the collection. For example, the method might return the string "1,1 - 5,9" to indicate that collection contains samples in those indices. Note that the string is adjustd for viewing by the user, so starts with 1 instead of 0 for rows and columns.
+
+Collection Helpers
+---
+
+**load_samples headings, ingredients, collections //optional block//**
+
+This helper function displays a table to the user that describes how to load a number of samples into a collection. The argument **headings** is an array of strings that describe how much to transfer of each ingredient. The argument **ingredients** is an array of array of **Items** to be transfered. The argument **collections** is an array of collections. And **block** is an option **show** style block. Note that this function *does not* change the matrix associated with the collection. This is because the sample that is created by combining the ingredients is likely different than the **Samples** associated with the ingredients. For example, the code below shows the user a table that describes how to arrays of templates, forward primers, and reverse primers into a set of stripwell tubes. The stripwells, after a PCR reaction is run, will contain fragment samples, which should be associated with the collections in a separate step.
+
+```ruby
+load_samples(
+  [ "Template, 1 µL", "Forward Primer, 2.5 µL", "Reverse Primer, 2.5 µL" ],
+  [  templates,        forward_primers,          reverse_primers         ],
+  stripwells ) {
+    note "Load templates first, then forward primers, then reverse primers."
+    warning "Use a fresh pipette tip for each transfer."
+  }
+```
+
+**show : transfer x, y, routing **
+
+One of the functions available within a show is **transfer**. The arguments x and y should be collections, and routing is a list of from, to, volume triples. Volume is optional. As an example, you can do
+
+```ruby
+routing = [
+  { from: [0,0], to: [0,0], volume: 10 },
+  { from: [0,1], to: [1,1] }
+]
+
+show do
+  title "Transfer"
+  transfer x, y, routing
+end
+```
+
+**transfer sources, destinations, options={} //optional block//**
+
+This powerful method displays a set of pages using the transfer method from show to the user to that describe how to transfer the individual parts of some quantity of source wells to some quantity of destination wells. The routing arguments are computed automatically. For example, suppose you want the user to transfer all the wells in a set of stripwell tubes into the non-empty lanes of a set of gels. Then you might do something like
+
+```ruby
+transfer( stripwells, gels ) {
+  note "Use a 100 µL pipetter to transfer 10 µL from the PCR results to the gel as indicated."
+}
+```
 
 Tasks
 ===
 
-Including Modules in Other Files
+Under construction.
+
+Including Other Files
 ===
+
+To include another file, saved in a github repo that has been liked to your installation of Aquarium, use "needs". For example,
+
+```ruby
+needs "Krill/lib/standard"
+```
+
+This method is much like Ruby's require, except that it looks in the github repo named "Krill" for a file called "lib/standard". Usually, such included files contain Ruby modules.
