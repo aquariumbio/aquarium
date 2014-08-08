@@ -67,7 +67,7 @@ module Krill
       sr,sc = 0,0
       dr,dc = 0,0
       unless destinations[0].matrix[dr][dc] == -1
-        dr,dc = destinations[0].next 0, 0, skip_non_empty:true
+        dr,dc = destinations[0].next 0, 0, skip_non_empty: true
       end
 
       routing = []
@@ -81,8 +81,8 @@ module Krill
         sr,sc =      sources[s].next sr, sc, skip_non_empty: false
         dr,dc = destinations[d].next dr, dc, skip_non_empty: true
 
-        # if either is nil
-        if !sr || !dr
+        # if either is nil or if the source well is empty
+        if !sr || !dr || sources[s].matrix[sr][sc] == -1
 
           # display 
           show {
@@ -101,10 +101,12 @@ module Krill
           # clear routing for next step
           routing = []
 
+          return if sources[s].matrix[sr][sc] == -1
+
           # update source indices
           if !sr
             s += 1
-            return unless s < sources.length
+            return unless s < sources.length 
             sr,sc = 0,0
           end
 

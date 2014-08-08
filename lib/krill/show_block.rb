@@ -55,7 +55,9 @@ module Krill
       routing_details.each do |r|
         m = x.matrix
         raise "m is null" unless m
-        r[:sample_name] = Sample.find(m[r[:from][0]][r[:from][1]]).name
+        sid = m[r[:from][0]][r[:from][1]]
+        raise "Tried to route from empty element #{[r[:from][0],r[:from][1]]} of collection #{x.id}" unless sid != -1
+        r[:sample_name] = Sample.find(sid).name
       end
 
       @parts.push({transfer: { 
