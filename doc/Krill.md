@@ -128,7 +128,7 @@ shows a table with the 0,3 entry has special styling (any css code can go in the
 
 **transfer a, b, routing**
 
-You will need to read about "Collections" below before this function makes sense. The **transfer** function show an interactive transfer display to the user. The arguments **a** and **b** should be collections and **routing** should be an array of routes of the form { from: [a,b], to: [c,d], volume: v }. Here a,b,c, and d are integer indices into the collections a and b respectively. The "volume" key/value pair is in microliters and is optional. If no volume is specified, then it is expected that the user transfer all of the contents of the source well.
+You will need to read about "Collections" below before this function makes sense. The **transfer** function show an interactive transfer display to the user. The arguments **x** and **y** should be collections and **routing** should be an array of routes of the form { from: [a,b], to: [c,d], volume: v }. Here a,b,c, and d are integer indices into the collections a and b respectively. The "volume" key/value pair is in microliters and is optional. If no volume is specified, then it is expected that the user transfer all of the contents of the source well.
 
 Input via Arguments
 ===
