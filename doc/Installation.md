@@ -60,6 +60,20 @@ Go to aquarium/config and do
 	
 Then edit database.yml to suit your local configuration. You probably don't need to change anything if you are running in "Development"" mode. Otherwise, you need to set up a MySQL server and associate a user name and password. 
 
+You can install all the gems
+
+	bundle install
+
+If rails complains about "An error occurred while installing mysql2 (0.3.13)...", you should install mysql on your local computer or server.
+
+You should migrate the databaes by doing
+
+	rake db:migrate
+
+If rails complains about "SQLite3::SQLException: no such table...", you could do the following and then migrate.
+
+	rake db:schema:load
+
 Start Aquarium
 --
 
