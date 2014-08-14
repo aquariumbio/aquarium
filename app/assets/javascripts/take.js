@@ -50,7 +50,11 @@ TakeUI.prototype.item_html = function(item,i,j) {
   }
 
   if ( item.sample_name ) {
-      description = $('<span class="description">' + item.objecttype + ' : ' + item.sample_name + '</span>' );
+      var name = item.sample_name;
+      if ( name.length > 24 ) {
+        name = name.substring(0,24) + "...";
+      }
+      description = $('<span class="description">' + item.objecttype + ' : ' + name + '</span>' );
   }
 
   el.append(ch).append(id).append(loc).append(description);

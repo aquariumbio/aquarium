@@ -165,12 +165,37 @@
   border: none;
   padding: 0 10px 0 10px !important;
   margin-top: 10px;
-//  margin-left: auto;
- // margin-right: auto;
+  display: block;
+}
+
+.krill-note-btn {
+  font-size: 18pt;
+  line-height: 39pt;
+  background: #999;
+  border-radius: 5px;
+  color: white;
+  border: none;
+  padding: 0 10px 0 10px !important;
+  margin-top: 10px;
+  display: block;
+  width: 50%;
+}
+
+.krill-abort-btn {
+  font-size: 18pt;
+  line-height: 39pt;
+  background: #f33;
+  border-radius: 5px;
+  color: white;
+  border: none;
+  padding: 0 10px 0 10px !important;
+  margin-top: 10px;
+  width: 50%;
 }
 
 .krill-next-btn-disabled {
   cursor: not-allowed;
+  background: #6b6;
 }
 
 .krill-step-ul {

@@ -4,23 +4,28 @@
 
 <div class="row-fluid">
  
-  <div class='span2' id="krill-tools">
+  <div class='span3' id="krill-tools">
 
     <div id="krill-info"></div>
 
     <ul class="nav nav-tabs" id="tools-tab">
       <li class="active krill-tools-tab"> <a href="#history">   History     </a></li>
       <li class="krill-tools-tab">        <a href="#inventory"> Inventory   </a></li>
+      <li class="krill-tools-tab">        <a href="#actions"> Actions   </a></li>
     </ul>
 
     <div class="tab-content">
       <div class="tab-pane active" id='history'>   </div>
       <div class="tab-pane"        id='inventory'> </div>
+      <div class="tab-pane"        id='actions'>
+        <button id="krill-note" class='krill-note-btn'>COMMENT</button>
+        <button id="krill-abort" class='krill-abort-btn'>ABORT</button>
+      </div>
     </div>
 
   </div>
 
-  <div class="span10" id="krill-steps-ui">
+  <div class="span9" id="krill-steps-ui">
       <div class="outline krill-carousel-btn" id='rev' class='btn'><i class='krill-arrow icon-arrow-left'></i></div>
       <div class="" id='steps'></div>
       <div class="outline krill-carousel-btn" id='fwd' class='btn'><i class='krill-arrow icon-arrow-right'></i></div>
