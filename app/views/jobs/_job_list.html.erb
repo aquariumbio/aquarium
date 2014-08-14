@@ -62,9 +62,15 @@
       <% if runnable %>
         <td>
           <% if /\.rb$/ =~ j.path %>
-            <%= link_to krill_start_path(job:j.id) do %>
-		<i class='icon-play'></i>         
-	      <% end %>
+            <% if j.pc == Job.NOT_STARTED %>
+              <%= link_to krill_start_path(job:j.id) do %>
+            		<i class='icon-play'></i>         
+	            <% end %>
+            <% else %>
+              <%= link_to krill_ui_path(job:j.id) do %>
+                <i class='icon-play'></i>         
+              <% end %>
+              <% end %>
           <% else %>
 	    <% if j.pc == Job.NOT_STARTED %>
 	      <%= link_to interpreter_advance_path(job:j.id) do %>

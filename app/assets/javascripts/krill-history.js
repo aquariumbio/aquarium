@@ -52,27 +52,35 @@ Krill.prototype.history = function() {
 
   for ( var i=0; i<this.state.length; i+=2 ) {
 
-    var t = new Date(this.state[i].time).format("h:MM:ss TT");
+    if ( this.state[i+1] ) {
 
-    var time  = $('<div>'+t+'</div>').addClass('krill-history-time');
-    var title = $('<div>'+this.step_title(this.state[i+1])+'</div>').addClass('krill-history-title');
-    var step = $('<div></div>').addClass('krill-history-step').append(time,title);
+      try {
+        var t = new Date(this.state[i].time).format("h:MM:ss TT");
+      } catch(err) {
+        var t = err.message;
+      }
 
-    (function(num) {
-      step.click(function() {
-       that.carousel_move_to(num,250);
-       $(".krill-history-step").removeClass('krill-history-step-selected');
-       $(this).addClass('krill-history-step-selected');
-     });
-    })(n);
+      var time  = $('<div>'+t+'</div>').addClass('krill-history-time');
+      var title = $('<div>'+this.step_title(this.state[i+1])+'</div>').addClass('krill-history-title');
+      var step = $('<div></div>').addClass('krill-history-step').append(time,title);
 
-    that.history_tag.append(step);
+      (function(num) {
+        step.click(function() {
+         that.carousel_move_to(num,250);
+         $(".krill-history-step").removeClass('krill-history-step-selected');
+         $(this).addClass('krill-history-step-selected');
+       });
+      })(n);
 
-    if ( n == this.step_list.length ) {
-     step.addClass('krill-history-step-selected');
+      that.history_tag.append(step);
+
+      if ( n == this.step_list.length ) {
+       step.addClass('krill-history-step-selected');
+     }
+
+     n++;
+
    }
-
-   n++;
 
  }
 

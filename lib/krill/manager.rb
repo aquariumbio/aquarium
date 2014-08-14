@@ -37,13 +37,15 @@ module Krill
 
     end
 
-    def run
+    ##################################################################################
+    # TRICKY THREAD STUFF
+    #
+
+    def start_thread
 
       @thread_status.running = true
 
       @thread = Thread.new {
-
-        error = false
 
         begin
 
@@ -51,21 +53,28 @@ module Krill
           @job.save
 
           begin
+
             rval = @protocol.main
+
           rescue Exception => e
+
             puts "#{@job.id}: EXCEPTION #{e.to_s} + #{e.backtrace[0,10]}"
             @base_object.error e
-            error = true
-            rval = {}
+
+          else
+
+            @base_object.send( :append_step, { operation: "complete", rval: rval } )
+
+          ensure
+
+            @job.reload.pc = Job.COMPLETED
+            @job.save
+            
+            ActiveRecord::Base.connection.close
+
+            @mutex.synchronize { @thread_status.running = false }
+
           end
-
-          @job.reload.pc = Job.COMPLETED
-          @job.save
-
-          @base_object.send( :append_step, { operation: "complete", rval: rval } ) unless error
-          ActiveRecord::Base.connection.close
-
-          @mutex.synchronize { @thread_status.running = false }
 
         rescue Exception => main_error
 
@@ -75,39 +84,70 @@ module Krill
 
       }
 
-      wait
-
     end
 
-    def wait
+    def run
+      start_thread
+      wait 20
+    end
 
-      temp = true
-      @mutex.synchronize { temp = @thread_status.running }
-      while temp
-        sleep(0.1) # keeps the processing from being a hog?
-        @mutex.synchronize { temp = @thread_status.running }
+    def wait secs
+
+      n = 0
+      running = true
+      @mutex.synchronize { running = @thread_status.running }
+
+      while running
+        return "not_ready" unless n < 10*secs # wait two seconds
+        n += 1
+        sleep(0.1) 
+        @mutex.synchronize { running = @thread_status.running }
+      end
+
+      @job.reload
+
+      if @job.pc == -2
+        return "done"
+      else
+        return "ready"
       end
 
     end
 
-    def wake
+    def check_again
 
-      @mutex.synchronize { @thread_status.running = true }
-      @thread.wakeup
-      wait
+      if @thread.alive?
+        wait 2
+      else 
+        "done"
+      end
 
     end
 
     def continue
 
       if @thread.alive?
-        wake
-        return true
+
+        @mutex.synchronize do
+          unless @thread_status.running     # The intention here is that if the step didn't complete in the last
+            @thread_status.running = true   # continue, then it would still be running for the next. However, if
+            @thread.wakeup                  # the user waits long enough before trying again, then the step might
+          end                               # be done, and this will do another step, resulting in two steps in a
+        end                                 # row. Better would be to have the javascript request a different version
+                                            # of continue for the second time "OK" is clicked. 
+        wait 2
+
       else 
-        return false
+
+        "done"
+
       end
 
     end
+
+    #
+    # END TRICKY THREAD STUFF
+    ###########################################################################
 
     def make_base
 

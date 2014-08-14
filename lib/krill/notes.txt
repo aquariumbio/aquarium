@@ -1,30 +1,22 @@
+- Concurrency
+  - Clean up code
+  - Decide how to handle exceptions, errors sent from server to client, etc.
 
-+ Krill
-  + PCR
-    + collections
+  - Browser => Controller
+    - Run
+    - Next
+
+  - Controller
+    - Responds to browser in JSON. Errors must be sent in JSON too.
+    - Uses client to send 'run' or continue' to server
+  - Server
+    - Turns on protocol and either waits for it to stop, or waits N seconds
+    - Responds to client with what happened (should not append state of job as is done now)
+  - Thread
+    - Does its own thing, halting after each show command
 
 - Inventory
   - Put unsed items back
 
 - Krill from local files (via cleaner ui)
 
-- Transfer 
-
-  - An operation in show{} that takes two collections and a routing matrix. It should
-    display the two collections with a highlighted source/destination pair of locations
-    along with a statement about what is being transferred. When the use clicks on (say)
-    the source, then the transfer is considered made and it is marked. The user should be
-    able to go back to already completed transfered, but the markings don't go away.
-
-    - show_block gets transfer from, to, routing and makes a transfer item to send to the UI
-    
-    - The UI gets just dimensions and item numbers for of from and to. The routing matrix for the UI has
-      - r,c,r',c',sample_name,amount(optional).
-      - { transfer: { from: { id: 123, rows: 10, cols: 3 }, 
-                      to: { id: 234, rows: 5, cols: 6 },
-                      routing: [ 
-                        { from: [1,1], to: [3,5], name: "pLAB1", volume: 20 },
-                        ...
-                      ] 
-                    } 
-        }

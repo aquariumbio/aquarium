@@ -1,4 +1,5 @@
 <% provide(:title, "Submitted #{@job.id}: #{@job.path}" ) %>
+<div id="krill-waiting"><%= image_tag 'waiting_animation.gif' %></div>
 
 <h1>Job <%= @job.id %> submitted</h1>
 <h2><%= @job.path %></h2>
@@ -7,9 +8,15 @@
 
 <br />
 
-<p><%= link_to "Run", krill_start_path(job:@job.id), class: 'btn btn-primary' %>
+<p><button class='btn btn-primary' id="run">Run</button>
 <%= link_to "Pending Jobs", jobs_path, class: 'btn' %></p>
 
 <script>
-  render_json($('#args'),<%= @arguments.to_json.html_safe %>)
+  render_json($('#args'),<%= @arguments.to_json.html_safe %>);
+  $("#run").click(function(){
+  	$("#krill-waiting").css('display','block');
+  	$("#krill-waiting").attr("disabled","disabled");
+    $("#krill-waiting").addClass('krill-next-btn-disabled');
+  	window.location='start?job=<%= @job.id %>';
+  });
 </script>

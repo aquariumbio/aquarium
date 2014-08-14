@@ -10,6 +10,19 @@
 // UI
 //
 
+#krill-waiting {
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: none;
+  img {
+    margin: auto;
+    top: 40%;
+    position: absolute;
+  }
+}
+
 #krill-tools {
   // outline: 1pt solid black;
   overflow: scroll;

@@ -12,6 +12,17 @@ function Krill(job,path,pc) {
     this.step_list = [];                                              // list of all step tags for easy access
     this.step_list_tag = $('<ul id="step_list"></ul>').addClass('krill-step-list');  // document ul containing step tags
 
+    this.check_again = false;
+
+}
+
+Krill.prototype.initialize = function() {
+
+    // First, initialize the steps list
+    $('#krill-waiting').css('display','block');
+    this.steps_tag.append(this.step_list_tag);
+    this.get_state(); // Calls render when data arrives
+
 }
 
 Krill.prototype.update = function() {
@@ -23,20 +34,16 @@ Krill.prototype.update = function() {
 
 }
 
-Krill.prototype.initialize = function() {
+Krill.prototype.render = function() {
 
-    // First, initialize the steps list
-    this.steps_tag.append(this.step_list_tag);
-    this.get_state();
+    $('#krill-waiting').css('display','none');
 
     // keep track of step number
     var n=1;
 
     // Check that the Krill server has responded
-    if ( this.state.length % 2 != 0 ) {
-	   console.log ( "Server response not ready. "
-             + "Tell your lead programmer to do a better job at multi-process control. "
-             + "While you are waiting for him to fix this problem, try reloading the page." );
+    if ( this.result.response == "not_ready" || this.state.length % 2 != 0 ) {
+	   alert ( "Warning: This protocol is still preparing its next step(s). Try reloading this page to get the latest step." );
     }
 
     // Go through each step and add it to the display
@@ -136,11 +143,15 @@ Krill.prototype.build_titlebar = function(number,with_button) {
         btn = $('<button id="next">OK</button>').addClass('krill-next-btn');
         btnholder.append(btn);
 
-        btn.click(function() {
-          that.send_next();
-          that.update();
-          that.carousel_inc(1);
-        });
+        btn.click(function() { // USER CLICKS 'OK' ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+            if ( that.check_again ) {
+                that.send("check_again",this);
+            } else {
+                that.send("next",this);
+            }
+
+        }); ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     }
 
@@ -228,13 +239,20 @@ Krill.prototype.step = function(state,number) {
 
     } else {
 
-        this.pc = -2;
-
-        var titlebar = this.build_titlebar("&#9734;",false);
-        $('#title',titlebar).html('Completed');
-
+        this.pc = -2; // COMPLETED
+        
         var ul = $('<ul></ul>').addClass('krill-step-ul');
-        var p = $('<li>This protocol completed normally.</li>').addClass('krill-note');
+
+        if ( this.result.response == "error" ) {
+          var titlebar = this.build_titlebar("!",false);
+          $('#title',titlebar).html('Error');
+          var p = $('<li>'+this.result.error+'</li>').addClass('krill-note');
+        } else {
+          var titlebar = this.build_titlebar("&#10003;",false);
+          $('#title',titlebar).html('Completed');
+          var p = $('<li>This protocol completed normally.</li>').addClass('krill-note');
+        }
+
 
         ul.append(p);
         ul.append(this.log_link(),this.pending_link());
@@ -349,29 +367,56 @@ Krill.prototype.get_state = function() {
 
     $.ajax({
         url: 'state?job=' + that.job,
-        async: false
+        async: true
     }).done(function(data){
-        that.state = data;
+        that.state = data.state;
+        that.result = data.result;
+        that.render();
     }).fail(function(data){
         console.log("Error: " + data);
     });
 
 }
 
-Krill.prototype.send_next = function() {
+Krill.prototype.send = function(command,button) {
+
+    console.log("send");
 
     var inputs = this.get();
     var that = this;
 
+    $(button).attr("disabled","disabled");
+    $(button).addClass('krill-next-btn-disabled');
+    $('#krill-waiting').css('display','block');
+
     $.ajax({
+
         // type: "POST",
-        url: 'next?job=' + that.job,
+        url: "next?command=" + command +'&job=' + that.job,
         data: { inputs: inputs },
-        async: false
+        async: true
+
     }).done(function(data){
-        that.state = data;
+
+        that.state = data.state;
+        that.result = data.result;
+        console.log(that.result);
+
+        if ( that.result.response != "not_ready" ) {
+            that.update();
+            that.carousel_inc(1);
+        } else {
+            alert ( "The protocol is still preparing the next step. Please try clicking 'OK' again or reloading the page.")
+        }
+
+        $(button).removeAttr('disabled');
+        $(button).removeClass('krill-next-btn-disabled');
+        $('#krill-waiting').css('display','none');
+
     }).fail(function(data){
-        console.log("Error:"+data);
+
+        console.log("Error: "+data);
+
     });
 
 }

@@ -78,15 +78,15 @@ class KrillController < ApplicationController
         return redirect_to krill_error_path(job: @job.id, message: e.to_s, backtrace: e.backtrace[0,2])
       end
 
-    end
+      if !server_result
+        return redirect_to krill_error_path(job: @job.id, message: "Krill server returned nil, which is a bad sign.", backtrace: [])
+      elsif server_result[:error]
+        return redirect_to krill_error_path(
+          job: @job.id, 
+          message: server_result[:error][0,512].html_safe,
+          backtrace: [])
+      end
 
-    if !server_result
-      return redirect_to krill_error_path(job: @job.id, message: "Server returned nil.", backtrace: [])
-    elsif server_result[:error]
-      return redirect_to krill_error_path(
-        job: @job.id, 
-        message: server_result[:error][0,512].html_safe,
-        backtrace: [])
     end
 
     # redirect to ui
@@ -105,7 +105,7 @@ class KrillController < ApplicationController
   def state
 
     @job = Job.find(params[:job])
-    render json: (JSON.parse @job.state)
+    render json: { state: (JSON.parse @job.state), result: { response: "n/a" } }
 
   end
 
@@ -117,33 +117,32 @@ class KrillController < ApplicationController
 
       state = JSON.parse @job.state, symbolize_names: true
 
-      state.push( { operation: "next", time: Time.now, inputs: params[:inputs] } )
-      @job.state = state.to_json
-      @job.save
-      updated = @job.updated_at
-
-      # Tell Krill server to take the next step in the protocol 
-      begin
-        server_result = ( Krill::Client.new.continue params[:job] )
-      rescue Exception => e
-        flash[:notice] = e.to_s
+      unless state.last[:operation] == "next" || params[:command] == "check_again"
+        state.push( { operation: params[:command], time: Time.now, inputs: params[:inputs] } )
+        @job.state = state.to_json
+        @job.save
       end
 
-      if !server_result
-        return redirect_to krill_error_path(job: @job.id, message: "Server returned nil.")
-      elsif server_result[:error]
-        return redirect_to krill_error_path(job: @job.id, message: server_result[:error])
+      # Tell Krill server to take continue in the protocol 
+      begin
+        result = ( Krill::Client.new.continue params[:job] )
+      rescue Exception => e
+        result = { response: "error", error: "Call to server raised #{e.to_s}" }
+      end
+
+      if !result
+        result = { response: "error", error: "Server returned nil, a bad sign." }
       end
 
       @job.reload
 
-      if updated == @job.updated_at
-        flash[:notice] = "Warning: job state not updated in Krill:next"
-      end
+    else 
+
+      result = { response: "error", error: "Job is no longer running." }
 
     end
 
-    render json: (JSON.parse @job.state)
+    render json: ( { state: (JSON.parse @job.state), result: result } )
 
   end
 
@@ -161,14 +160,9 @@ class KrillController < ApplicationController
 
     @job = Job.find(params[:job])
 
-    if (JSON.parse @job.state).length % 2 != 0
-      flash[:error] = "Warning: job state may not have been completely updated yet. Try reloading."
-    end
-
     if @job.pc == Job.NOT_STARTED
       redirect_to krill_error_path(job: @job.id, message: "interpreter: Job not started") 
     end
-
 
   end
 
