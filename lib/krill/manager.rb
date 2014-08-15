@@ -63,7 +63,7 @@ module Krill
 
           else
 
-            @base_object.send( :append_step, { operation: "complete", rval: rval } )
+            @job.reload.append_step operation: "complete", rval: rval 
 
           ensure
 
@@ -142,6 +142,29 @@ module Krill
         "done"
 
       end
+
+    end
+
+    def stop
+
+      @thread.kill
+      @thread_status.running = false
+      state = JSON.parse @job.state, symbolize_names: true
+      job = Job.find(jid)
+      steps = []
+
+      if state.length % 2 == 0 # backtrace ends with a 'next'
+        # add incomplete step
+        steps.push operation: "display", content: [ { title: "Interrupted" } ]
+      end
+
+      # add next
+      steps.push operation: "next", time: Time.now, inputs: i 
+
+      # and final step
+      steps.push operation: "aborted", rval: {}
+
+      job.append_steps steps
 
     end
 

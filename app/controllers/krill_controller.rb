@@ -109,6 +109,12 @@ class KrillController < ApplicationController
 
   end
 
+  def jobs
+
+    render json: Krill::Client.new.jobs
+
+  end
+
   def next
 
     @job = Job.find(params[:job])

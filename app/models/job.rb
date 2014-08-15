@@ -45,4 +45,24 @@ class Job < ActiveRecord::Base
     return status
   end
 
+  def backtrace
+    JSON.parse self.state, symbolize_names: true
+  end
+
+  def append_steps steps
+    bt = backtrace
+    bt.concat steps
+    self.state = bt
+    self.save
+  end
+
+  def append_step step
+
+    bt = backtrace
+    bt.push step
+    self.state = bt.to_json
+    self.save 
+
+  end
+
 end

@@ -10,11 +10,10 @@ module Krill
 
       page = ShowBlock.new.run(&Proc.new)
 
-      # Append page to job state
-      append_step( { operation: "display", content: page } )
 
       # increment pc
       job = Job.find(jid)
+      job.append_step operation: "display", content: page
       job.pc += 1
       job.save
 
@@ -31,7 +30,7 @@ module Krill
 
         # figure out default technician response
         i = simulated_input_for page
-        append_step( { operation: "next", time: Time.now, inputs: i })
+        job.reload.append_step operation: "next", time: Time.now, inputs: i 
         i
 
       end
@@ -40,7 +39,7 @@ module Krill
 
     def error e
 
-      append_step( { operation: "error", message: e.to_s, backtrace: e.backtrace[0,10] } )
+      Job.find(jid).reload.append_step operation: "error", message: e.to_s, backtrace: e.backtrace[0,10]
 
     end
 
@@ -84,16 +83,6 @@ module Krill
       i[:timestamp] = 1000*Time.now.to_i
 
       return i
-
-    end
-
-    def append_step s
-
-      job = Job.find(jid)
-      state = JSON.parse job.state, symbolize_names: true
-      state.push s
-      job.state = state.to_json
-      job.save 
 
     end
 

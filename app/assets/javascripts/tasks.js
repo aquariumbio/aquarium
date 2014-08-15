@@ -1,6 +1,8 @@
 function render_json(tag,obj) {
 
-    if ( typeof obj == "number" || typeof obj == "string" || typeof obj == "boolean" ) {
+    if ( obj == null ) {
+
+    } else if ( typeof obj == "number" || typeof obj == "string" || typeof obj == "boolean" ) {
 
         $(tag).append("<span class='json_const'>" + obj + "</span>");
 
@@ -8,17 +10,17 @@ function render_json(tag,obj) {
 
         if ( obj.length > 0 ) {
 
-	    var list = $( "<ul class='json_list'/>" );
+    	    var list = $( "<ul class='json_list'/>" );
 
-	    $.each(obj, function(i,v) {
-		var li = $("<li />");
-		render_json(li,v);
-		list.append(li);      
-	    });
+    	    $.each(obj, function(i,v) {
+    		var li = $("<li />");
+    		render_json(li,v);
+    		list.append(li);      
+    	    });
 
-	    $(tag).append(list);
+    	    $(tag).append(list);
 
-	}
+	   }
 
     } else {
 

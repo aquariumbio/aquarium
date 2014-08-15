@@ -42,16 +42,19 @@ module Krill
     end
 
     def start jid
-      send( { operation: "start", jid: jid } )
+      send operation: "start", jid: jid 
+    end
+
+    def jobs
+      send operation: "jobs"
     end
 
     def continue jid
-      send( { operation: "continue", jid: jid } )
-      # (JSON.parse Job.find(jid).state, symbolize_names: true)[:content]
+      send operation: "continue", jid: jid
     end
 
     def kill_zombies
-      send( { operation: "kill zombies" } )
+      send operation: "kill zombies" 
     end
 
   end

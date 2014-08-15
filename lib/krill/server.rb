@@ -70,6 +70,20 @@ module Krill
 
               end
 
+            when "stop" ########################################################################################################
+
+              if @managers[jid]
+
+                @managers[jid].stop
+                @managers.delete(jid)
+                client.puts( { response: "done" })
+
+              end
+
+            when "jobs" ########################################################################################################
+
+              client.puts( { response: "ok", jobs: @managers.keys }.to_json )
+
             when "kill zombies" ################################################################################################
 
               killed = []
