@@ -109,9 +109,45 @@ class KrillController < ApplicationController
 
   end
 
+  def abort
+
+    
+
+    begin
+      result = Krill::Client.new.abort params[:job]
+    rescue Exception => e
+      result = { response: "error", message: e.to_s }
+    else
+
+      @job = Job.find(params[:job])
+      @job.pc = -2
+
+      state = JSON.parse @job.state, symbolize_names: true
+      if state.length % 2 == 1 # backtrace ends with a 'next'
+        @job.append_step operation: "display", content: [ 
+          { title: "Interrupted" },
+          { note: "This step was being prepared by the protocol when the 'abort' signal was received."} ]
+      end
+
+      # add next and final
+      @job.append_step operation: "next", time: Time.now, inputs: {}
+      @job.append_step operation: "aborted", rval: {}
+
+    end
+
+    render json: result
+
+  end
+
   def jobs
 
-    render json: Krill::Client.new.jobs
+    begin
+      result = Krill::Client.new.jobs
+    rescue Exception => e
+      result = { response: "error", message: e.to_s }
+    end
+
+    render json: result
 
   end
 

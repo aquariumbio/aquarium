@@ -21,7 +21,10 @@ Krill.prototype.initialize = function() {
     // First, initialize the steps list
     $('#krill-waiting').css('display','block');
     this.steps_tag.append(this.step_list_tag);
-    this.get_state(); // Calls render when data arrives
+    this.get_state(); // get_state() calls render when data arrives
+
+    var that = this;
+    $('#krill-abort').click(function(){that.abort();});
 
 }
 
@@ -42,8 +45,12 @@ Krill.prototype.render = function() {
     var n=1;
 
     // Check that the Krill server has responded
-    if ( this.result.response == "not_ready" || this.state.length % 2 != 0 ) {
+    if ( this.result.response == "not_ready" ) {
 	   alert ( "Warning: This protocol is still preparing its next step(s). Try reloading this page to get the latest step." );
+    }
+
+    if ( this.state.length % 2 != 0 ) {
+       alert ( "This protocol has an inconsistent backtrace." );
     }
 
     // Go through each step and add it to the display
@@ -151,7 +158,7 @@ Krill.prototype.build_titlebar = function(number,with_button) {
                 that.send("next",this);
             }
 
-        }); ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        }); //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     }
 
@@ -248,9 +255,17 @@ Krill.prototype.step = function(state,number) {
           $('#title',titlebar).html('Error');
           var p = $('<li>'+this.result.error+'</li>').addClass('krill-note');
         } else {
-          var titlebar = this.build_titlebar("&#10003;",false);
-          $('#title',titlebar).html('Completed');
-          var p = $('<li>This protocol completed normally.</li>').addClass('krill-note');
+          
+
+          if ( state.operation == "complete" ) {
+            var titlebar = this.build_titlebar("&#10003;",false);
+            $('#title',titlebar).html('Completed' );
+            var p = $('<li>This protocol completed normally.</li>').addClass('krill-note');
+          } else if ( state.operation == "aborted" ) {
+            var titlebar = this.build_titlebar("&#10007",false);
+            $('#title',titlebar).html('Aborted' );
+            var p = $('<li>This protocol was aborted.</li>').addClass('krill-note');
+          }
         }
 
 
@@ -420,3 +435,25 @@ Krill.prototype.send = function(command,button) {
     });
 
 }
+
+Krill.prototype.abort = function() {
+
+    var that = this;
+
+    $.ajax({
+        url: 'abort?job=' + that.job,
+        async: true
+    }).done(function(data){
+        console.log(data);
+        if (data.response == "error" ) {
+            alert ( "Could not stop job: " + data.error );
+        } else {
+            location.reload(); // redraws everything
+        }
+    }).fail(function(data){
+        console.log("Error: " + data);
+    });
+
+}
+
+

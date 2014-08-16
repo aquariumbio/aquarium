@@ -147,24 +147,10 @@ module Krill
 
     def stop
 
+      puts "Stopping job #{@job.id}"
+
       @thread.kill
-      @thread_status.running = false
-      state = JSON.parse @job.state, symbolize_names: true
-      job = Job.find(jid)
-      steps = []
-
-      if state.length % 2 == 0 # backtrace ends with a 'next'
-        # add incomplete step
-        steps.push operation: "display", content: [ { title: "Interrupted" } ]
-      end
-
-      # add next
-      steps.push operation: "next", time: Time.now, inputs: i 
-
-      # and final step
-      steps.push operation: "aborted", rval: {}
-
-      job.append_steps steps
+      @mutex.synchronize { @thread_status.running = false }
 
     end
 

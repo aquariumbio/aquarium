@@ -50,19 +50,17 @@ class Job < ActiveRecord::Base
   end
 
   def append_steps steps
-    bt = backtrace
+    bt = self.backtrace
     bt.concat steps
-    self.state = bt
+    self.state = bt.to_json
     self.save
   end
 
   def append_step step
-
-    bt = backtrace
+    bt = self.backtrace
     bt.push step
     self.state = bt.to_json
     self.save 
-
   end
 
 end

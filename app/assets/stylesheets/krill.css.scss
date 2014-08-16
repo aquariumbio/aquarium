@@ -17,6 +17,7 @@
   height: 100%;
   display: none;
   background: #fff;
+  z-index: -10;
   img {
     margin: auto;
     top: 40%;
@@ -48,16 +49,35 @@
   float: left;
   width: 50px;
   background: #efefef;
-  text-align: center;
   opacity: 0.4;
+  position: relative;
+  padding: 0;
+  text-align: center;
+}
+
+.krill-left {
+  cursor: w-resize;
+}
+
+.krill-right {
+  cursor: e-resize;
 }
 
 .krill-arrow {
-  vertical-align: middle;
+  //vertical-align: middle;
+  top: 50%;
+  position: relative;
+  font-size: 24pt;
+  margin: auto;
+  padding: 0;
+  text-align: center;
+  display: inline;
+  color: #fff;
+  //outline: 1pt dashed green;
 }
 
 .krill-carousel-btn:hover {
-    background: #dddddd;
+    background: #eee;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////

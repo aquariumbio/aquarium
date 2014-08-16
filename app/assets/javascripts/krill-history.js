@@ -22,6 +22,10 @@ Krill.prototype.step_title = function(s) {
 
     return "Error"
 
+  } else if ( s.operation == 'aborted' ) {
+
+    return "Aborted"
+
   } else {
 
     return "Completed"
@@ -37,7 +41,7 @@ Krill.prototype.info = function() {
   var note = "";
 
   if ( this.pc == -2 ) {
-    note = "<br />(completed, <a href='log?job="+this.job+"'>view log</a>)";
+    note = "<br /><h3>completed</h3><p><a href='log?job="+this.job+"'>view log</a></p>";
   }
   var job_info = $('<div>Job '+this.job+'<br />'+this.path+' '+note+'</div>').addClass('krill-job-info');
   $('#krill-info').append(job_info);

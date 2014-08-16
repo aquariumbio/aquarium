@@ -70,13 +70,17 @@ module Krill
 
               end
 
-            when "stop" ########################################################################################################
+            when "abort" #######################################################################################################
 
               if @managers[jid]
 
                 @managers[jid].stop
                 @managers.delete(jid)
-                client.puts( { response: "done" })
+                client.puts( { response: "aborted" }.to_json )
+
+              else 
+
+                client.puts( { response: "error", error: "Could not find job #{jid}" }.to_json )
 
               end
 
