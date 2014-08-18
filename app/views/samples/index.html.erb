@@ -2,107 +2,49 @@
 
 <h1><%= pluralize(2,@sample_type.name)[2..-1]%></h1>
 
-<h4><span class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @user ? @user.login : "all users" %><b class="caret"></b></a>
-    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-      <li><a href="#" onclick="update_user(-1)">all users</a></li>
-      <li class="divider"></li>
-      <% choices = (User.all.sort { |x,y| x.login <=> y.login}) %> 
-      <% choices.each do |u| %>
-        <li><a href="#" onclick="update_user(<%= u.id %>)"><%= u.login %></a></li>
-      <% end %>
-    </ul>
-</span></h4>
+<table class='table' id='sample-table' data-source='<%= samples_url(format: 'json', sample_type_id: @sample_type.id ) %>'>
 
-<table class='table'>
-  <tr>
-    <th>Id</th>
-    <th>Name</th>
-    <th>Project</th>
-    <th>Description</th>
-    <% unless @user %>
+  <thead>
+
+    <tr>
+
+      <th>Id</th>
+      <th>Name</th>
+      <th>Project</th>
+      <th>Description</th>
       <th>Owner</th>
-    <% end %>
 
-    <% (1..8).each do |i| 
-       fn = "field#{i}name".to_sym
-       ft = "field#{i}type".to_sym %>
-       <% if @sample_type[ft] != 'not used' && @sample_type[ft] != nil %><th><%= @sample_type[fn] %></th><% end %>
-    <% end %>
-
-    <th></th>
-    <th></th>
-    <th></th>
-
-  </tr>
-
-<% @samples.each do |sample| %>
-  <tr>
-    <td><b><%= sample.id %></b></td>
-    <td><%= link_to sample.name, sample %></td>
-    <td><%= link_to sample.project, project_url(name: sample.project) %></td>
-    <td><%= sample.description %></td>
-
-    <% unless @user %>
-      <td><%= User.find(sample.user_id).login %></td>
-    <% end %>
-
-    <% (1..8).each do |i| 
-       fn = "field#{i}name".to_sym
-       ft = "field#{i}type".to_sym 
-       f = "field#{i}".to_sym %>
-
-      <% if @sample_type[ft] != 'not used' && @sample_type[ft] != nil %>
-        <% if @sample_type[ft] == 'url' %>
-          <% if sample[f] != '' && sample[f] != nil %>
-            <td><a href='<%= sample[f] %>'><%= sample[f][0..20] %> ...</a></td>
-          <% else %>
-            <td>-</td>
-          <% end %>
-        <% elsif @sample_type[ft] == 'number' %>
-          <td><%= sample[f] %></td>
-        <% elsif @sample_type[ft] == 'string' %>
-          <td><%= sample[f] %></td>
-        <% elsif sample[f] == '-none-' %>
-          <td>-</td>
-        <% else %>
-          <td><%= link_to sample[f], Sample.find_by_name(sample[f]) %></td>
-        <% end %>
+      <% (1..8).each do |i| 
+         fn = "field#{i}name".to_sym
+         ft = "field#{i}type".to_sym %>
+         <% if @sample_type[ft] != 'not used' && @sample_type[ft] != nil %><th><%= @sample_type[fn] %></th><% end %>
       <% end %>
 
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
 
-    <% end %>
+  </thead>
 
-    <td><%= link_to 'Show', sample %></td>
-    <td><%= link_to 'Edit', edit_sample_path(sample) %></td>
-    <td><%= link_to 'x', sample, method: :delete, data: { confirm: 'Are
-    you sure you want to delete this sample definition? Note, deleting will fail if there are an items associated with this sample.' } %></td>
-    
-  </tr>
-<% end %>
+  <tbody>
+  </tbody>
+
 </table>
-
-<br />
 
 <%= link_to "New #{@sample_type.name}", new_sample_path(sample_type: @sample_type_id), class: 'btn' %>
 
 <script>
 
-var sample_type_id = <%= @sample_type_id %>;
-var user_id = <%= @user_id %>;
-
-function update_type(i) {
-  sample_type_id = i;
-  reload();
-}
-
-function update_user(i) {
-  user_id = i;
-  reload();
-}
-
-function reload() {
-  window.location = 'samples?user_id=' + user_id + '&' + 'sample_type_id=' + sample_type_id;
-}
+  $('#sample-table').dataTable({
+    "bProcessing": true,
+    "bServerSide": true,
+    "sAjaxSource": $('#sample-table').data('source'),
+    "order": [ 0, 'desc' ],
+    "lengthMenu": [ 15, 25, 50, 75, 100 ],
+    "search": { 
+      "search": '<%= current_user.login %>'
+    }
+  });
 
 </script>

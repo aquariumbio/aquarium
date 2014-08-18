@@ -27,7 +27,7 @@ class SamplesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @samples }
+      format.json { render json: SamplesDatatable.new(view_context) }
     end
 
   end

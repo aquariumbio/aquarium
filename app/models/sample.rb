@@ -41,6 +41,39 @@ class Sample < ActiveRecord::Base
     return result
   end
 
+  def displayable_properties
+
+    sample_type = self.sample_type
+
+    (1..8).collect do |i| 
+
+      fn = "field#{i}name".to_sym
+      ft = "field#{i}type".to_sym 
+      f = "field#{i}".to_sym
+
+      if sample_type[ft] != 'not used' && sample_type[ft] != nil
+        if sample_type[ft] == 'url'
+          if self[f] != '' && self[f] != nil
+            "<a href='#{self[f]}'>#{self[f][0..20]}...</a>"
+          else
+            "-"
+          end
+        elsif sample_type[ft] == 'number'
+          self[f]
+        elsif sample_type[ft] == 'string'
+          self[f]
+        elsif self[f] == '-none-'
+          "-"
+        else
+          l = Sample.find_by_name(self[f])
+          "<a href='samples/#{l.id}'>#{l.name}</a>"
+        end
+      end
+
+    end
+
+  end
+
   def in container
 
     c = ObjectType.find_by_name container
@@ -54,6 +87,15 @@ class Sample < ActiveRecord::Base
 
   def to_s
     "<span class='aquarium-sample' id='#{self.id}'>#{self.id}</span>"
+  end
+
+  def owner
+    u = User.find_by_id(self.user_id)
+    if u
+      u.login
+    else
+      '?'
+    end
   end
 
 end

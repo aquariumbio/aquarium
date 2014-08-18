@@ -5,6 +5,7 @@
     <tr>
       <th>Job</th>
       <th>Protocol</th>
+      <th>Arguments</th>
       <th>Submitted by</th>
       <th>Performed by</th>
       <th>Submitted</th>
@@ -18,7 +19,7 @@
 <div style='height: 40px'></div>
 
 <script>
-  showhide();
+
   $('#log-table').dataTable({
     "bProcessing": true,
     "bServerSide": true,
@@ -29,4 +30,5 @@
       "search": '<%= current_user.login %>'
     }
   });
+
 </script>

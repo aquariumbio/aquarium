@@ -19,9 +19,14 @@ private
 
   def data
     jobs.map do |job|
+      args = job.arguments.to_json
+      if args.length > 50
+        args = args[0,49] + '...'
+      end
       [
         link_to(job.id, job),
         job.path,
+        "<span class='showhide'>#{args}</span>",
         job.submitter,
         job.doer,
         job.created_at.to_formatted_s(:short),
