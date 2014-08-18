@@ -28,6 +28,7 @@ end
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
+gem 'jquery-datatables-rails'
 
 gem 'd3-rails'
 

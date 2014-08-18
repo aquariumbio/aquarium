@@ -1,54 +1,32 @@
-<h3> Log for <span class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @user.login %><b class="caret"></b></a>
-    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-      <% (User.all.sort { |x,y| x.login <=> y.login}).each do |u| %>
-        <li><%= link_to u.login, '/logs?user_id=' + u.id.to_s %></li>
-      <% end %>
-    </ul>
-</span></h3>
+<h1>Completed Jobs</h1>
 
-<table class='table' style='width:50%'>
-  <tr>
-    <th>Job</th>
-    <th>Protocol</th>
-    <th>Arguments</th>
-    <th>Completed</th>
-  </tr>
-
-<center>
-<%= will_paginate @completed_jobs %>
-</center>
-
-  <% @completed_jobs.each do |j| %>
-    <% if /\.rb$/ =~ j.path %>
-      <% args = (JSON.parse(j.state)).first["arguments"] %>
-    <% else %>
-      <% args = (JSON.parse(j.state))['stack'].first.reject { |k,v| k == 'user_id' } %>
-    <% end %>
+<table class='table' id='log-table' data-source='<%= logs_url(format: 'json') %>'>
+  <thead>  
     <tr>
-      <td><%= link_to j.id.to_s, j %></td>
-      <td><%= link_to j.path,  jobs_summary_url(path: j.path) %></td>
-      <td>
-        <% if args.length > 0 %>
-          <span class='showhide'><span>
-            <% args.each do |k,v| %>
-              <%= ("<b>" + k.to_s + "</b>: " + v.to_s).html_safe %><br />
-            <% end %>
-          </span></span>
-        <% else %>
-          -
-        <% end %>
-      </td>
-      <td><%= j.updated_at.to_formatted_s(:short) %></td>
+      <th>Job</th>
+      <th>Protocol</th>
+      <th>Submitted by</th>
+      <th>Performed by</th>
+      <th>Submitted</th>
+      <th>Completed</th>
     </tr>
-  <% end %>
-
+  </thead>
+  <tbody>
+  </tbody>
 </table>
 
-<center>
-<%= will_paginate @completed_jobs %>
-</center>
+<div style='height: 40px'></div>
 
 <script>
   showhide();
+  $('#log-table').dataTable({
+    "bProcessing": true,
+    "bServerSide": true,
+    "sAjaxSource": $('#log-table').data('source'),
+    "order": [ 0, 'desc' ],
+    "lengthMenu": [ 15, 25, 50, 75, 100 ],
+    "search": { 
+      "search": '<%= current_user.login %>'
+    }
+  });
 </script>

@@ -63,4 +63,22 @@ class Job < ActiveRecord::Base
     self.save 
   end
 
+  def submitter
+    u = User.find_by_id(self.submitted_by)
+    if u
+        u.login
+    else
+        "?"
+    end
+  end
+
+  def doer
+    u = User.find_by_id(self.user_id.to_i)
+    if u
+        u.login
+    else
+        "?"
+    end
+  end
+
 end
