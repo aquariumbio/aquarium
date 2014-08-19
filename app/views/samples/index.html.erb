@@ -8,11 +8,11 @@
 
     <tr>
 
-      <th>Id</th>
-      <th>Name</th>
-      <th>Project</th>
+      <th>Id*</th>
+      <th>Name*</th>
+      <th>Project*</th>
       <th>Description</th>
-      <th>Owner</th>
+      <th>Owner*</th>
 
       <% (1..8).each do |i| 
          fn = "field#{i}name".to_sym
@@ -31,6 +31,8 @@
   </tbody>
 
 </table>
+
+<p>*Searchable</p>
 
 <%= link_to "New #{@sample_type.name}", new_sample_path(sample_type: @sample_type_id), class: 'btn' %>
 

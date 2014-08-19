@@ -46,6 +46,8 @@ private
       u = User.find_by_login(key)
       if u
         samples = samples.where("sample_type_id = :stid and user_id like :uid", stid: params[:sample_type_id], uid: u.id)
+      elsif key.to_i != 0
+        samples = samples.where("sample_type_id = :stid and id like :search", stid: params[:sample_type_id], search: key.to_i )
       else 
         samples = samples.where("sample_type_id = :stid and ( name like :search or project like :search )", stid: params[:sample_type_id], search: "%#{key}%")
       end
