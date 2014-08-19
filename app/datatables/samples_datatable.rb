@@ -47,7 +47,7 @@ private
       if u
         samples = samples.where("sample_type_id = :stid and user_id like :uid", stid: params[:sample_type_id], uid: u.id)
       else 
-        samples = samples.where("sample_type_id = :stid and name like :search", stid: params[:sample_type_id], search: "%#{key}%")
+        samples = samples.where("sample_type_id = :stid and ( name like :search or project like :search )", stid: params[:sample_type_id], search: "%#{key}%")
       end
     else
         samples = samples.where("sample_type_id = :stid", stid: params[:sample_type_id] )
