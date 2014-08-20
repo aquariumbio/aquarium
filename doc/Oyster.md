@@ -156,7 +156,11 @@ The keys in the return hash can be wired to specific arguments of protocols in o
 
 Where place1 and place2 are previously declared place identifiers and variable_name1 and variable_name_2 are **strings** describing which key in the source place and which argument in the destination place to use. For example, to wire the key **n** to in place p1 to the argument **x** in place p2 in our example we write:
 
-	wire (p1,"n") => (p2,"x") 
+	wire (p1,"n") => (p2,"x")
+
+If a protocol returns a hash, you can wire all the key/value pairs in that hash to another protocol with the following variant of **wire**
+
+	wire p1 => p2
 
 ## Semantics
 

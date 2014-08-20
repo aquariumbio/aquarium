@@ -48,7 +48,11 @@ class MetacolsController < ApplicationController
         @errors = "ERROR: " + e.to_s
       end
 
-      @metacol.set_state( JSON.parse @mc.state, :symbolize_names => true )
+      begin
+        @metacol.set_state( JSON.parse @mc.state, :symbolize_names => true )
+      rescue
+        puts "Could not set metacol state"
+      end
 
       if @errors==""
         @metacol.id = @mc.id
@@ -141,7 +145,7 @@ class MetacolsController < ApplicationController
           begin
             args[ident] = JSON.parse(val,:symbolize_keys=>true)
           rescue Exception => e
-            flash[:error] = "Could not parse json for argument #{a[:name]}: " + e.to_s
+            flash[:error] = "Could not parse json (#{args[val]}) for argument #{a[:name]}: " + e.to_s
             return redirect_to arguments_new_metacol_path(sha: params[:sha], path: params[:path]) 
           end
         else

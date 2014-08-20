@@ -15,11 +15,24 @@ module Oyster
     def wire
 
       @tok.eat_a 'wire'
-      from = pair
-      @tok.eat_a '=>'
-      to = pair
 
-      @metacol.wire from[:place], from[:arg], to[:place], to[:arg]
+      if @tok.current == '('
+
+        from = pair
+        @tok.eat_a '=>'
+        to = pair
+
+        @metacol.wire from[:place], from[:arg], to[:place], to[:arg]
+
+      else
+
+        from = @metacol.scope.evaluate expr
+        @tok.eat_a '=>'
+        to = @metacol.scope.evaluate expr
+
+        @metacol.wire from, "*", to, "*"
+
+      end
 
     end
 

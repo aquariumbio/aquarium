@@ -17,17 +17,25 @@ ArgumentUI.prototype.display_form = function() {
 
     for ( var i in args ) {
 
-	console.log ( "processing " + args[i].name );
-
         var label = this.label(args[i]);
-        console.log("calling " + args[i].type);
         var form = this[args[i].type](args[i]);
-        console.log("here");
 
         form.attr('id','arg-'+args[i].name);
         var well = $('<div></div>');
         well.addClass('argument');
         well.append(label,form);
+
+        if ( args[i].type == "generic" ) {
+
+          well.append(
+            $('<div />').append(
+              new Finder('Items', function(s){form.val(JSON.stringify(s));}),
+              new Finder('Samples', function(s){form.val(JSON.stringify(s));}),
+              $('<span>&nbsp; Use buttons to populate input box with item or sample lists.</span>')
+            )
+          );
+
+        }
 
         $('#argument-chooser').append(well);
 
@@ -157,10 +165,13 @@ ArgumentUI.prototype.get_array = function(arg) {
 
 ArgumentUI.prototype.label = function(arg) {
 
-    return $('<div />').append($('<label />')
-      .html( '<b>' + arg.name + "</b>: " 
+    var h = '<b>' + arg.name + "</b>: " 
             + arg.description 
-            + ' ( ' + arg.type.replace('_', ' ') + ' ) '));
+            + ' ( ' + arg.type.replace('_', ' ') + ' ) ';
+
+    var lab = $('<label />').html(h);
+
+    return $('<div />').append(lab);
 
 }
 
@@ -170,6 +181,7 @@ ArgumentUI.prototype.generic = function(arg) {
     if ( arg.current ) { 
       x[0].value = arg.current;
     }
+
     return x;
 
 }

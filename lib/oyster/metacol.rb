@@ -128,19 +128,39 @@ module Oyster
         # puts "Considering wire #{w} with dest #{@places[w.dest[:place]]} for place #{p}!"
 
         if @places[w.source[:place]].completed?
+
           r = @places[w.source[:place]].return_value
-          if r
-            value = r[w.source[:name].to_sym]
-            if value.class == String
-              p.arg_expressions[w.dest[:name].to_sym] = '"' + value + '"'
-            else
-              p.arg_expressions[w.dest[:name].to_sym] = "#{value}"
+
+          if w.source[:name] == "*" # wire all outputs
+
+            if r && r.class == Hash
+              r.each do |k,v|
+                if v.class == String
+                  p.arg_expressions[k] = '"' + v + '"'
+                else
+                  p.arg_expressions[k] = "#{v}"
+                end
+              end
             end
+
+          else
+
+            if r
+              value = r[w.source[:name].to_sym]
+              if value.class == String
+                p.arg_expressions[w.dest[:name].to_sym] = '"' + value + '"'
+              else
+                p.arg_expressions[w.dest[:name].to_sym] = "#{value}"
+              end
+            end
+
           end
+
         else
           j = @places[w.source[:place]].jobs.last
           pc = Job.find(j).pc
           raise "Source place for wire #{w.pretty @places} has uncompleted #{j} with pc=#{pc}}."
+
         end
 
       end
