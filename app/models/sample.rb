@@ -66,7 +66,11 @@ class Sample < ActiveRecord::Base
           "-"
         else
           l = Sample.find_by_name(self[f])
-          "<a href='samples/#{l.id}'>#{l.name}</a>"
+          if l
+            "<a href='samples/#{l.id}'>#{l.name}</a>"
+          else
+            "?"
+          end
         end
       end
 

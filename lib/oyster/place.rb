@@ -90,6 +90,8 @@ module Oyster
             desired = Time.now + eval(@desired_start)
           end
 
+          puts "in place.start, who = #{who}"
+
           @jobs.push( Oyster.submit( {
             sha: @sha, 
             path: @protocol, 
@@ -134,13 +136,7 @@ module Oyster
 
     def return_value
       if @jobs.length > 0
-        j = Job.find(@jobs.last)
-        entries = j.logs.reject { |l| l.entry_type != 'return' }
-        if entries.length == 0
-          return nil
-        else
-          JSON.parse(entries.first.data,:symbolize_names => true)
-        end
+        Job.find(@jobs.last).return_value
       else
         return nil
       end

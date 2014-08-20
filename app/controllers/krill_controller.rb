@@ -51,9 +51,8 @@ class KrillController < ApplicationController
     @job.path = params[:path]
     @job.sha = params[:sha]
 
-    @job.user_id = current_user.id;
     @job.pc = Job.NOT_STARTED
-    @job.state = [{operation: "initialize", arguments: @arguments, time: Time.now}].to_json
+    @job.set_arguments @arguments
 
     @job.group_id = 1
     @job.submitted_by = current_user.id
@@ -70,6 +69,9 @@ class KrillController < ApplicationController
 
     # if not running, then start
     if @job.pc == Job.NOT_STARTED
+
+      @job.user_id = current_user.id
+      @job.save
  
       # Tell Krill server to start protocol 
       begin
@@ -110,8 +112,6 @@ class KrillController < ApplicationController
   end
 
   def abort
-
-    
 
     begin
       result = Krill::Client.new.abort params[:job]
@@ -192,7 +192,7 @@ class KrillController < ApplicationController
 
     @job = Job.find(params[:job])
     @history = @job.state
-    @rval = JSON.parse(@history, symbolize_names: true).last[:rval] || {}
+    @rval = @job.return_value
     @touches = @job.touches.collect { |t| t.item_id }
     @inventory = @job.takes.collect { |t| t.item_id }
 

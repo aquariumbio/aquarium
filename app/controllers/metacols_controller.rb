@@ -17,30 +17,11 @@ class MetacolsController < ApplicationController
 
   def index
 
-    @user_id = params[:user_id] ? params[:user_id].to_i : current_user.id
-
-    if @user_id >= 0
-
-      @user = User.find(@user_id)
-      @active_metacols = Metacol.where("status = 'RUNNING' AND user_id = ?", @user_id).order('id DESC')
-      @completed_metacols = Metacol.paginate(page: params[:page], :per_page => 10).where("status != 'RUNNING' AND user_id = ?", @user_id).order('id DESC')
-
-    else
-
-      @active_metacols = Metacol.where("status = 'RUNNING'").order('id DESC')
-      @completed_metacols = Metacol.paginate(page: params[:page], :per_page => 10).where("status != 'RUNNING'").order('id DESC')
-
-    end
-
-    @daemon_status = ""
-    if current_user && current_user.is_admin 
-      IO.popen("ps a | grep [r]unner") { |f| f.each_line { |l| @daemon_status += l } } 
-    end
-
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @metacols }
+      format.json { render json: MetacolsDatatable.new(view_context) }
     end
+
   end
 
   def show
@@ -177,6 +158,8 @@ class MetacolsController < ApplicationController
         flash[:error] = "Could not start metacol due to parse error. #{e.to_s}"
         return redirect_to arguments_new_metacol_path(sha: params[:sha], path: params[:path]) 
       end
+
+      @metacol.who = current_user.id
 
       # Save in db
       mc = Metacol.new

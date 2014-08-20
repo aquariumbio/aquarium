@@ -1,40 +1,49 @@
+<% [ "RUNNING", "NOT_RUNNING" ].each do |stat| %>
 
-<h2>Metacols for <span class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @user? @user.login : 'all users' %><b class="caret"></b></a>
-    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-      <% if current_user && current_user.is_admin %>
-        <li><a href='/metacols?user_id=-1&active=<%= (params[:active] && params[:active]=='true' ? 'true' : 'false') %>'>all users</a></li>
-      <% end %>
-      <% (User.all.sort { |x,y| x.login <=> y.login}).each do |u| %>
-        <li><%= link_to u.login, '/metacols?active=' + (params[:active] && params[:active]=='true' ? 'true' : 'false') + '&user_id=' + u.id.to_s %></li>
-      <% end %>
-    </ul>
-</span></h2>
+  <h3><%= stat == 'RUNNING' ? "Active" : "Completed" %></h3>
 
-<% if params[:active] && params[:active] == 'true' %>
-
-  <h4>Active Metacols</h4>
-  <%= render partial: 'list', locals: { metacols: @active_metacols, status: false } %>
-  <%= link_to "Show Completed", metacols_path(user_id: @user_id), class: 'btn btn-small' %>
-
-<% else %>
-
-  <h4>Completed Metacols</h4>
-  
-  <%= render partial: 'list', locals: { metacols: @completed_metacols, status: true } %>
-
-  <center>
-    <%= will_paginate @completed_metacols %>
-  </center>
-
-  <%= link_to "Show Active", metacols_path(active: true,user_id: @user_id), class: 'btn btn-small' %>
+  <table class='table' id='<%= stat %>' data-source='<%= metacols_url(format: 'json', status: stat) %>'>
+    <thead>  
+      <tr>
+        <th>Id</th>
+        <th>Metacol*</th>
+        <th>Arguments</th>
+        <th>Submitted by</th>
+        <% if stat == 'RUNNING' %>
+          <th></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <div style='height: 40px'></div>
 
 <% end %>
 
-<br />
-<br />
-<br />
+<script>
 
-<% if current_user && current_user.is_admin %>
-<pre><%= @daemon_status %></pre>
-<% end %>
+  $('#RUNNING').dataTable({
+    "bProcessing": true,
+    "bServerSide": true,
+    "sAjaxSource": $('#RUNNING').data('source'),
+    "order": [ 0, 'desc' ],
+    "lengthMenu": [ 10, 20, 50, 75, 100 ],
+    "search": { 
+      "search": '<%= current_user.login %>'
+    }
+  });
+
+  $('#NOT_RUNNING').dataTable({
+    "bProcessing": true,
+    "bServerSide": true,
+    "sAjaxSource": $('#NOT_RUNNING').data('source'),
+    "order": [ 0, 'desc' ],
+    "lengthMenu": [ 10, 20, 50, 75, 100 ],
+    "search": { 
+      "search": '<%= current_user.login %>'
+    }
+  });
+
+
+</script>

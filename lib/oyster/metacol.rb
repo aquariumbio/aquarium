@@ -11,14 +11,14 @@ module Oyster
 
   class Metacol
 
-    attr_accessor :places, :transitions, :wires, :scope, :arguments, :id, :path
+    attr_accessor :places, :transitions, :wires, :scope, :arguments, :id, :path, :who
 
     def initialize
       @arguments = []
       @places = []
       @transitions = []
       @wires = []
-      @who = ''
+      @who = -1
       @scope = Lang::Scope.new
       @id = -1
     end
@@ -33,7 +33,7 @@ module Oyster
     end
 
     def transition t
-      #puts "Added transition with condition #{t.condition}"
+      # puts "Added transition with condition #{t.condition}"
       @transitions.push t
       t
     end
@@ -62,9 +62,10 @@ module Oyster
     def start 
 
       # Start all marked places
-      puts "Starting metacol with scope = #{scope.inspect}"
+      # puts "Starting metacol with scope = #{scope.inspect}"
       @places.each do |p|
         if p.marking > 0
+          # puts "in metacol:start, @who = #{@who}"
           p.start @who, @scope, @id
         end
       end
@@ -102,6 +103,7 @@ module Oyster
           t.children.each do |c|
             c.mark
             set_wires c
+            # puts "in metacol:fire, @who = #{@who}"
             c.start @who, @scope, @id
           end
 
@@ -170,9 +172,12 @@ module Oyster
 
     def state
 
+      # puts "In metacol:state, @who = #{@who}"
+
       { 
         places: @places.collect { |p| { marking: p.marking, started: p.started, jobs: p.jobs, sha: p.sha } },
-        stack: @scope.stack
+        stack: @scope.stack,
+        who: @who
       }
 
     end
@@ -197,6 +202,9 @@ module Oyster
 
       @scope = Lang::Scope.new
       @scope.set_stack s[:stack]
+      @who = s[:who]
+
+      # puts "In metacol:set_state, @who = #{@who}"
 
     end
 

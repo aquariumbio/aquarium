@@ -113,7 +113,9 @@ Krill.prototype.disable_step = function(step,user_input) {
     }
 
     $(".krill-next-btn",step).addClass('krill-next-btn-disabled');
-    $(".krill-next-btn",step)[0].disabled = true;
+    if ($(".krill-next-btn",step).length > 0 ) {
+        $(".krill-next-btn",step)[0].disabled = true;
+    }
 
 }
 

@@ -22,20 +22,26 @@
   <% end %>
 
     <tr>
+
       <td><%= link_to j.id.to_s, j %></td>
+
       <td><%= j.path %></td>
+
+      <% u = User.find_by_id(j.submitted_by); u = ( u ? u.login : 'nobody' ) %>
 
       <% if j.metacol_id %>
         <% m = Metacol.find_by_id(j.metacol_id) %>
         <% if m %>
-          <td>Metacol <%= link_to "#{j.metacol_id}", m %></td>
+          <td><%= u %> (<%= link_to "#{j.metacol_id}", m %>)</td>
         <% else %>
           <td>Unkown metacol</td>
         <% end %>
       <% else %>
-        <td><%= u = User.find_by_id(j.submitted_by); u ? u.login : 'nobody' %></td>
+        <td><%= u %></td>
       <% end %>
+
       <td><%= g = Group.find_by_id(j.group_id); g ? (link_to g.name, g) : 'no group' %></td>
+
       <td>
         <% if args.length > 0 %>
           <span class='showhide'><span>
@@ -47,8 +53,11 @@
           -
         <% end %>
       </td>
+
       <td><%= j.desired_start_time.to_formatted_s(:short) %></td>
+
       <td><%= j.latest_start_time.to_formatted_s(:short) %></td>
+
       <% if last_updated && j.updated_at != j.created_at %>
         <td>
           <%= time_ago_in_words(j.updated_at)%> ago
@@ -59,48 +68,31 @@
       <% else %>
         <td></td>
       <% end %>
+
       <% if runnable %>
-        <td>
-          <% if /\.rb$/ =~ j.path %>
-            <% if j.pc == Job.NOT_STARTED %>
-              <%= link_to krill_start_path(job:j.id) do %>
-            		<i class='icon-play'></i>         
-	            <% end %>
-            <% else %>
-              <%= link_to krill_ui_path(job:j.id) do %>
-                <i class='icon-play'></i>         
-              <% end %>
-              <% end %>
-          <% else %>
-	    <% if j.pc == Job.NOT_STARTED %>
-	      <%= link_to interpreter_advance_path(job:j.id) do %>
-		<i class='icon-play'></i>         
-	      <% end %>
-	    <% elsif j.pc != Job.COMPLETED %>
-	      <%= link_to interpreter_current_path(job:j.id) do %>
-		<i class='icon-play'></i>
-	      <% end %>
-	    <% end %>
-          <% end %>
-       </td>
+
+        <td><%= j.start_link "<i class='icon-play'></i>" %></td>
+
       <% else %>
-         <td><%= link_to interpreter_edit_path(job:j.id) do %>
-           <% if (defined? editable) && editable %><i class='icon-edit'></i><% end %>
-         <% end %> &nbsp;&nbsp;
-          <% if j.pc == Job.NOT_STARTED %>
-            <%= link_to interpreter_advance_path(job:j.id), data: { confirm: 'This job is scheduled for the future. Are you sure you want to start it now?' } do %>
-              <i class='icon-play'></i>         
-            <% end %>
-          <% elsif j.pc != Job.COMPLETED %>
-            <%= link_to interpreter_current_path(job:j.id), data: { confirm: 'This job is scheduled for the future. Are you sure you want to start it now?' } do %>
-              <i class='icon-play'></i>
-            <% end %>
+
+        <td>
+  
+          <%= link_to interpreter_edit_path(job:j.id) do %>
+            <% if (defined? editable) && editable %><i class='icon-edit'></i><% end %>
           <% end %>
-         </td>
-      <% end %>
+
+          &nbsp;&nbsp;
+
+          <%= j.start_link "<i class='icon-play'></i>" %>
+
+       </td>
+
+     <% end %>
+
       <td><% if j.pc >= -1 %><%= link_to '/interpreter/cancel?job=' + j.id.to_s, data: { confirm: 'Are you sure?' } do %>
         <i class='icon-remove'></i>
       <% end %><% end %></td>
+
     </tr>
 
   <% end %>

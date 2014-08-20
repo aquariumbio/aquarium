@@ -93,4 +93,59 @@ class Job < ActiveRecord::Base
     end
   end
 
+  def start_link el
+
+    if /\.rb$/ =~ self.path
+
+      if self.pc == Job.NOT_STARTED 
+        "<a href='/krill/start?job=#{self.id}'>#{el}</a>".html_safe
+      else 
+        "<a href='/krill/ui?job=#{self.id}'>#{el}</a>".html_safe
+      end 
+
+    else 
+
+      if self.pc == Job.NOT_STARTED 
+        "<a href='/interpreter/advance?job=#{self.id}'>#{el}</a>".html_safe 
+      elsif self.pc != Job.COMPLETED 
+        "<a href='/interpreter/current?job=#{self.id}'>#{el}</a>".html_safe 
+      end 
+
+    end 
+
+  end
+
+  def set_arguments a
+
+    if /\.rb$/ =~ self.path
+      self.state = [{operation: "initialize", arguments: a, time: Time.now}].to_json
+    else
+      raise "Could not set arguments of non-krill protocol"
+    end
+
+  end
+
+  def return_value
+
+    if /\.rb$/ =~ self.path
+
+      begin
+        @rval = JSON.parse(self.state, symbolize_names: true).last[:rval] || {}
+      rescue
+        @rval = { error: "Could not find return value." }
+      end      
+
+    else
+
+      entries = self.logs.reject { |l| l.entry_type != 'return' }
+      if entries.length == 0
+        return nil
+      else
+        JSON.parse(entries.first.data,:symbolize_names => true)
+      end
+
+    end
+
+  end
+
 end

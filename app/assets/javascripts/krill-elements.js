@@ -35,16 +35,21 @@ Krill.prototype.select = function(x) {
     var select = $('<select id="'+x.var+'"></select>').addClass('krill-select');
 
     for ( var i=0; i < x.choices.length; i++ ) {
-	select.append('<option>' + x.choices[i] + '</option>');
+	     select.append('<option>' + x.choices[i] + '</option>');
     }
 
     return $('<li></li>').append(label).append(select);
+
 }
 
 Krill.prototype.input = function(x) {
 
     var label = $('<span>' + x.label + '</span>').addClass('krill-input-label');
     var input = $('<input id="'+x.var+'" type='+x.type+'></input>').addClass('krill-input-box');;
+
+    if ( x.default ) {
+      input.attr('value',x.default);
+    }
 
     return $('<li></li>').addClass('krill-input').append(label).append(input);
 

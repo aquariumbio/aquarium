@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   has_many :samples
   has_many :logs
   has_many :jobs
+  has_many :metacols
   has_many :cart_items
   has_many :memberships
   has_many :tasks

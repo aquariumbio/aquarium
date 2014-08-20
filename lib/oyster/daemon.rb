@@ -5,7 +5,9 @@
   # This daemon periodically updates all active metacols. 
   #
 
-  def metacol_daemon
+module MetacolDaemon
+
+  def self.main
 
     puts "#{Time.now}: Starting Aquarium daemon."
 
@@ -90,4 +92,6 @@
     end
 
   end
+
+end
 

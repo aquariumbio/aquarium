@@ -6,24 +6,8 @@ class SamplesController < ApplicationController
   # GET /samples.json
   def index
 
-    # What are the sample types?
-    @all_sample_types = SampleType.all
-
-    # Figure out which user's samples we're looking at
     @sample_type_id = params[:sample_type_id] ? params[:sample_type_id] : @all_sample_types.first.id
-
     @sample_type = SampleType.find(@sample_type_id)
-
-    # Figure out which user's samples we're looking at
-    @user_id = params[:user_id] ? params[:user_id].to_i : -1
-
-    if @user_id >= 0
-      @user = User.find(@user_id)
-      @samples = Sample.where("sample_type_id = :s AND user_id = :u", { s: @sample_type_id, u: @user.id })
-    else
-      @user = nil
-      @samples = Sample.where("sample_type_id = :s", s: @sample_type_id)
-    end
 
     respond_to do |format|
       format.html # index.html.erb
