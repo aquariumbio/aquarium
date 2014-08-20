@@ -480,7 +480,40 @@ transfer( stripwells, gels ) {
 Tasks
 ===
 
-Under construction.
+Tasks are used to store information that can be used as inputs to protocols or metacols. Within a protocol, available tasks can be found with the **find** function. For example, to find all "Daily" tasks that are "ready", do:
+
+```ruby
+tasks = find(:task,{task_prototype: {name: type},status: "ready"})
+```
+
+Tasks have associated specifications (see the Aquarum UI) that can be obtained using the spec field, as in
+
+```ruby
+task.spec
+```
+For example, if "Daily" tasks have am field called "warnings" that is set to an array of strings, one could display those warnings as follows.
+
+```ruby
+data = show {
+  title "Daily Task Warnings"
+  task.spec[:warnings].map { |w| warning w }
+}
+```
+
+Each task has a status field. The possible status fields can be obtained by looking at the task prototype. For example, if **task** is a "Daily" task, its possible status values might be
+
+```ruby
+task.task_prototype.status_options # => [ "ready", "running", "done" ]
+```
+
+To set a task's status, simply do
+
+```ruby
+task.status = "done"
+task.save
+```
+
+Be sure to **save** your changes to the task so that they are reflected in the database.
 
 Including Other Files
 ===

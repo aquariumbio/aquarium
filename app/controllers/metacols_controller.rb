@@ -26,7 +26,7 @@ class MetacolsController < ApplicationController
 
   def show
 
-    @mc = Metacol.find(params[:id])
+    @mc = Metacol.includes(:jobs).find(params[:id])
 
     @sha = @mc.sha
     @path = @mc.path

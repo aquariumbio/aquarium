@@ -99,4 +99,20 @@ class Task < ActiveRecord::Base
 
   end
 
+  def spec
+
+    unless @parsed_spec
+
+      begin
+        @parsed_spec = JSON.parse self.specification, symbolize_names: true
+      rescue Exception => e
+        @parsed_spec = { warnings: [ "Failed to parse task specification", e ]}
+      end
+
+    end
+
+    @parsed_spec
+
+  end
+
 end

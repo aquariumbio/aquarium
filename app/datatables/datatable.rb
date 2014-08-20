@@ -18,11 +18,11 @@ class Datatable
   private
 
   def data
-    [] # redefine this is child classes
+    [] # redefine this is child class
   end
 
   def rows
-    [] # redefine this is child classes
+    [] # redefine this is child class
   end
 
   def page
@@ -30,7 +30,7 @@ class Datatable
   end
 
   def sort_column
-    columns = %w[id created_at updated_at] # possibly redefine in children classes
+    columns = Array.new(20,"id") # redefine in child class
     columns[params[:iSortCol_0].to_i]
   end
 

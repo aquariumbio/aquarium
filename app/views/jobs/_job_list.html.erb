@@ -16,7 +16,7 @@
 <% jobs.each do |j| %>
 
   <% if /\.rb$/ =~ j.path || /\.kl$/ =~ j.path %>
-    <% args = [] %>
+    <% args = j.arguments %>
   <% else %>
     <% args = (JSON.parse(j.state))['stack'].first.reject { |k,v| k == 'user_id' } %>
   <% end %>
