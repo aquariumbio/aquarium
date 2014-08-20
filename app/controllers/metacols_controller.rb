@@ -214,6 +214,7 @@ class MetacolsController < ApplicationController
 
     (@metacol.jobs.select { |j| j.pc == Job.NOT_STARTED }).each do |j|
      j.pc = Job.COMPLETED
+     j.user_id = j.user_id || current_user.id
      j.save
      log j, "CANCEL", {}
     end

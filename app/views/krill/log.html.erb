@@ -2,6 +2,8 @@
 
 <h1>Job <%= @job.id %> is completed</h1>
 
+<h1><%= @job.path %></h1>
+
 <a href='/krill/ui?job=<%= @job.id %>' class='btn'>View Job Steps / History</a>
 
 <div id='touches'>

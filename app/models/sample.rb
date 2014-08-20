@@ -45,7 +45,7 @@ class Sample < ActiveRecord::Base
 
     sample_type = self.sample_type
 
-    (1..8).collect do |i| 
+    result = (1..8).collect do |i| 
 
       fn = "field#{i}name".to_sym
       ft = "field#{i}type".to_sym 
@@ -61,7 +61,12 @@ class Sample < ActiveRecord::Base
         elsif sample_type[ft] == 'number'
           self[f]
         elsif sample_type[ft] == 'string'
-          self[f]
+          s = self[f]
+          if s.length > 20
+            s[0,20] + '...'
+          else
+            s
+          end
         elsif self[f] == '-none-'
           "-"
         else
@@ -75,6 +80,8 @@ class Sample < ActiveRecord::Base
       end
 
     end
+
+    result.reject { |r| r == nil }
 
   end
 

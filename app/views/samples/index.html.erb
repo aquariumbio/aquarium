@@ -2,27 +2,31 @@
 
 <h1><%= pluralize(2,@sample_type.name)[2..-1]%></h1>
 
-<table class='table' id='sample-table' data-source='<%= samples_url(format: 'json', sample_type_id: @sample_type.id ) %>'>
+<table class='table table-condensed compact' id='sample-table' data-source='<%= samples_url(format: 'json', sample_type_id: @sample_type.id ) %>'>
 
   <thead>
 
     <tr>
 
-      <th>Id*</th>
+      <th>Id*</th> 
       <th>Name*</th>
       <th>Project*</th>
       <th>Description</th>
       <th>Owner*</th>
 
-      <% (1..8).each do |i| 
+      <% n = 0
+         (1..8).each do |i| 
          fn = "field#{i}name".to_sym
          ft = "field#{i}type".to_sym %>
-         <% if @sample_type[ft] != 'not used' && @sample_type[ft] != nil %><th><%= @sample_type[fn] %></th><% end %>
+         <% if @sample_type[ft] != 'not used' && @sample_type[ft] != nil %>
+           <th><%= @sample_type[fn] %></th>
+           <% n += 1 %>
+         <% end %>
       <% end %>
 
-      <th></th>
-      <th></th>
-      <th></th>
+      <th>x</th>
+      <th>y</th>
+
     </tr>
 
   </thead>
@@ -46,7 +50,11 @@
     "lengthMenu": [ 15, 25, 50, 75, 100 ],
     "search": { 
       "search": '<%= current_user.login %>'
-    }
+    },
+    "columnDefs":[ {
+      "targets": [<%= 5+n %>, <%= 5+n+1 %>],
+      "orderable": false
+    } ]
   });
 
 </script>

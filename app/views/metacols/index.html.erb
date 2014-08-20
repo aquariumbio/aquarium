@@ -2,7 +2,7 @@
 
   <h3><%= stat == 'RUNNING' ? "Active" : "Completed" %></h3>
 
-  <table class='table' id='<%= stat %>' data-source='<%= metacols_url(format: 'json', status: stat) %>'>
+  <table class='table table-condensed compact' id='<%= stat %>' data-source='<%= metacols_url(format: 'json', status: stat) %>'>
     <thead>  
       <tr>
         <th>Id</th>
@@ -10,13 +10,14 @@
         <th>Arguments</th>
         <th>Submitted by</th>
         <% if stat == 'RUNNING' %>
-          <th></th>
+        <th> </th>
         <% end %>
       </tr>
     </thead>
     <tbody>
     </tbody>
   </table>
+
   <div style='height: 40px'></div>
 
 <% end %>
@@ -31,7 +32,11 @@
     "lengthMenu": [ 10, 20, 50, 75, 100 ],
     "search": { 
       "search": '<%= current_user.login %>'
-    }
+    },
+    "columnDefs":[ {
+      "targets": 4,
+      "orderable": false
+    } ]
   });
 
   $('#NOT_RUNNING').dataTable({

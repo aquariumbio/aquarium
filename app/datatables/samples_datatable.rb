@@ -2,18 +2,41 @@ class SamplesDatatable < Datatable
 
   private  
 
+  def limit s
+    if s && s.length > 20
+      s[0,20] + '...'
+    else
+      s
+    end
+  end
+
   def data
+
     rows.map do |s|
+
       basics = [
         link_to(s.id, s),
         s.name,
         s.project,
-        s.description,
+        limit( s.description ),
         s.owner
       ]
+
       fields = s.displayable_properties
-      links = [1,2,3]
+
+      links = [
+        link_to(Rails.application.routes.url_helpers.edit_sample_path(s)) do 
+          "<i class='icon-pencil'></i>".html_safe
+        end,
+        link_to(s, method: :delete, data: { 
+          confirm: 'Are you sure you want to delete this sample definition? Note, deleting will fail if there are an items associated with this sample.' 
+        }) do
+          "<i class='icon-remove'></i>".html_safe
+        end
+      ]
+
       basics + fields + links
+
     end
   end
 
