@@ -421,6 +421,7 @@ class InterpreterController < ApplicationController
    @job = Job.find(params[:job])
    if @job.pc != Job.COMPLETED
      @job.pc = Job.COMPLETED
+     @job.user_id = current_user.id
      @job.save
      @pc = Job.COMPLETED
      log "ABORT", {}
@@ -432,6 +433,7 @@ class InterpreterController < ApplicationController
    @job = Job.find(params[:job])
    if @job.pc != Job.COMPLETED
      @job.pc = Job.COMPLETED
+     @job.user_id = current_user.id
      @job.save
      @pc = Job.COMPLETED
      log "CANCEL", {}
