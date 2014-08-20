@@ -9,6 +9,8 @@
         <th>Metacol*</th>
         <th>Arguments</th>
         <th>Submitted by</th>
+        <th>Created</th>
+        <th>Updated</th>
         <% if stat == 'RUNNING' %>
         <th> </th>
         <% end %>
@@ -34,7 +36,7 @@
       "search": '<%= current_user.login %>'
     },
     "columnDefs":[ {
-      "targets": 4,
+      "targets": [ 2, 3, 6 ],
       "orderable": false
     } ]
   });
@@ -47,7 +49,11 @@
     "lengthMenu": [ 10, 20, 50, 75, 100 ],
     "search": { 
       "search": '<%= current_user.login %>'
-    }
+    },
+    "columnDefs":[ {
+      "targets": [ 2, 3 ],
+      "orderable": false
+    } ]
   });
 
 

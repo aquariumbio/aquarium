@@ -12,7 +12,9 @@ class MetacolsDatatable < Datatable
         "<a href='metacols/#{m.id}'>#{m.id}</a>" + (m.status == "ERROR" ? " <span style='color:red'>(ERROR)</span>" : ""),
         m.path,
         args,
-        m.user.login
+        m.user.login,
+        m.created_at.to_formatted_s(:short),
+        m.updated_at.to_formatted_s(:short) 
       ]
       if m.status == 'RUNNING'
         cols.push "<a href='metacols/#{m.id}/stop'><i class='icon-stop'></i></a>"
@@ -55,6 +57,11 @@ class MetacolsDatatable < Datatable
 
     metacols
 
+  end
+
+  def sort_column
+    columns = %w[id path cid id created_at updated_at] # possibly redefine in children classes
+    columns[params[:iSortCol_0].to_i]
   end
 
 end

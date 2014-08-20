@@ -10,7 +10,7 @@
       <th>Performed by*</th>
       <th>Submitted</th>
       <th>Completed</th>
-    </tr>
+    </tr> 
   </thead>
   <tbody>
   </tbody>
@@ -31,7 +31,11 @@
     "lengthMenu": [ 15, 25, 50, 75, 100 ],
     "search": { 
       "search": '<%= current_user.login %>'
-    }
+    },
+    "columnDefs":[ {
+      "targets": [2,3,4],
+      "orderable": false
+    } ]
   });
 
 </script>

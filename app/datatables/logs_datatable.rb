@@ -20,7 +20,7 @@ class LogsDatatable < Datatable
 
       [
         link_to(job.id, job),
-        job.path.split('/').last,
+        job.path ? job.path.split('/').last : "?",
         "<span class='showhide'>#{args}</span>",
         job.submitter + mc,
         job.doer,
@@ -57,6 +57,11 @@ class LogsDatatable < Datatable
 
     jobs
 
+  end
+
+  def sort_column
+    columns = %w[id path id id id created_at updated_at] # possibly redefine in children classes
+    columns[params[:iSortCol_0].to_i]
   end
 
 end

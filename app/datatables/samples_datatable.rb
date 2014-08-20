@@ -67,5 +67,10 @@ class SamplesDatatable < Datatable
 
   end
 
+  def sort_column
+    columns = %w[id name project description user_id field1 field2 field3 field4 field5 field6 field7 field8 ] # possibly redefine in children classes
+    columns[params[:iSortCol_0].to_i]
+  end
+
 end
 
