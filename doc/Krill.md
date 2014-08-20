@@ -483,7 +483,7 @@ Tasks
 Tasks are used to store information that can be used as inputs to protocols or metacols. Within a protocol, available tasks can be found with the **find** function. For example, to find all "Daily" tasks that are "ready", do:
 
 ```ruby
-tasks = find(:task,{task_prototype: {name: type},status: "ready"})
+tasks = find(:task,{task_prototype: {name: "Daily"},status: "ready"})
 ```
 
 Tasks have associated specifications (see the Aquarum UI) that can be obtained using the spec field, as in
