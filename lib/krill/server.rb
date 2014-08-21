@@ -8,9 +8,9 @@ module Krill
       @managers = {}
     end
 
-    def run
+    def run port
 
-      server = TCPServer.open(3500)
+      server = TCPServer.open(port)
 
       loop do
 
