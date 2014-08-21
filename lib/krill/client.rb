@@ -7,7 +7,11 @@ module Krill
     def initialize
 
       @hostname = 'localhost'
-      @port = 3500
+      if Rails.env == 'production'
+        @port = 3501
+      else
+        @port = 3500
+      end
 
     end
 
