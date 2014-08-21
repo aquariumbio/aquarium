@@ -51,6 +51,7 @@ module Krill
 
           @job.reload.pc = 0
           @job.save
+          appended_complete = false
 
           begin
 
@@ -64,12 +65,19 @@ module Krill
           else
 
             @job.reload.append_step operation: "complete", rval: rval 
+            appended_complete = true
 
           ensure
 
             @job.reload.pc = Job.COMPLETED
+
+            unless appended_complete
+              @job.append_step operation: "next", time: Time.now, inputs: {}
+              @job.append_step operation: "aborted", rval: {}
+            end
+
             @job.save
-            
+
             ActiveRecord::Base.connection.close
 
             @mutex.synchronize { @thread_status.running = false }

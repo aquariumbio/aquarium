@@ -4,15 +4,6 @@ class JobsController < ApplicationController
 
   def index
 
-    begin
-      server_result = ( Krill::Client.new.kill_zombies )
-      if server_result[:killed].length > 0 
-        flash[:notice] = "Killed zombies: #{server_result[:killed]}. This happens when the Krill server is restarted while a job is still active."
-      end
-    rescue Exception => e
-      logger.info e.to_s
-    end
-
     @user_id = params[:user_id] ? params[:user_id].to_i : current_user.id
 
     if @user_id == -1
@@ -30,10 +21,14 @@ class JobsController < ApplicationController
 
       now = Time.now
 
-      @active_jobs =  (Job.where("pc >= 0").reject { |j| !@user.member? j.group_id } )
-      @urgent_jobs =  (Job.where("pc = -1 AND latest_start_time < ?", now).reject { |j|  !@user.member? j.group_id })
-      @pending_jobs = (Job.where("pc = -1 AND desired_start_time < ? AND ? <= latest_start_time", now, now).reject { |j|  !@user.member? j.group_id })
-      @later_jobs  =  (Job.where("pc = -1 AND ? <= desired_start_time", now).reject { |j|  !@user.member? j.group_id })
+      @active_jobs =  Job.where("pc >= 0")
+      @urgent_jobs =  Job.where("pc = -1 AND latest_start_time < ?", now)
+      @pending_jobs = Job.where("pc = -1 AND desired_start_time < ? AND ? <= latest_start_time", now, now)
+      @later_jobs  =  Job.where("pc = -1 AND ? <= desired_start_time", now)
+
+      [@active_jobs, @urgent_jobs, @pending_jobs, @later_jobs].each do |jl|
+        jl.select! { |j| j.user_id.to_i == @user.id || (@user.member? j.group_id) || j.submitted_by == current_user.id }
+      end
 
     end
 

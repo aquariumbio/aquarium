@@ -88,22 +88,6 @@ module Krill
 
               client.puts( { response: "ok", jobs: @managers.keys }.to_json )
 
-            when "kill zombies" ################################################################################################
-
-              killed = []
-
-              Job.where('pc >= 0').each do |j|
-
-                unless @managers[j.id] 
-                  j.pc = -2
-                  j.save
-                  killed.push(j.id)
-                end
-
-              end
-
-              client.puts( { response: "ok", killed: killed }.to_json )
-
             else # Uknown command ##############################################################################################
 
               client.puts( { response: "error", error: "Unknown command" }.to_json )

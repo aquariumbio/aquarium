@@ -32,3 +32,5 @@
 [#]*[#]
 .\#*
 
+# Gemfile.lock
+Gemfile.lock

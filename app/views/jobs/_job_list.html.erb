@@ -4,6 +4,7 @@
     <th>Job</th>
     <th>Protocol</th>
     <th>Submitted by</th>
+    <% if active %><th>Performed by</th><% end %>
     <th>Group</th>
     <th>Arguments</th>
     <th>Desired Start</th>
@@ -38,6 +39,10 @@
         <% end %>
       <% else %>
         <td><%= u %></td>
+      <% end %>
+
+      <% if active %>
+        <td><%= User.find(j.user_id).login %></td>
       <% end %>
 
       <td><%= g = Group.find_by_id(j.group_id); g ? (link_to g.name, g) : 'no group' %></td>

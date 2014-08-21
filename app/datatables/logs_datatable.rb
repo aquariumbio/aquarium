@@ -53,6 +53,9 @@ class LogsDatatable < Datatable
       else
         jobs = jobs.where("pc = -2 and path like :search", search: "%#{key}%")
       end
+
+    else
+      jobs = jobs.where("pc = -2")
     end
 
     jobs

@@ -1,8 +1,16 @@
 <% provide(:title, "Log #{@job.id}: #{@job.path}" ) %>
 
-<h1>Job <%= @job.id %> is completed</h1>
+<h1>Job <%= @job.id %></h1>
 
-<h1><%= @job.path %></h1>
+<% if @job.pc == Job.COMPLETED %>
+  <h1>Completed
+<% elsif @job.pc == Job.NOT_STARTED %>
+  <h1>Yet to start
+<% else %>
+  <h1>Running
+<% end %>
+
+<%= @job.path %></h1>
 
 <a href='/krill/ui?job=<%= @job.id %>' class='btn'>View Job Steps / History</a>
 
