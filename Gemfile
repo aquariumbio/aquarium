@@ -36,3 +36,4 @@ gem 'jquery-datatables-rails'
 gem 'd3-rails'
 
 gem 'git'
+

@@ -5,7 +5,7 @@ class KrillController < ApplicationController
   def arguments 
 
     begin
-      @path = params[:path]
+      @path = params[:path] 
       @sha = Repo::version @path
       @content = Repo::contents @path, @sha
     rescue Exception => e
@@ -85,7 +85,7 @@ class KrillController < ApplicationController
       elsif server_result[:error]
         return redirect_to krill_error_path(
           job: @job.id, 
-          message: server_result[:error][0,512].html_safe,
+          message: ("server error: " + server_result[:error][0,512]).html_safe,
           backtrace: [])
       end
 

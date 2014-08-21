@@ -3,7 +3,7 @@
 <h1>ERROR</h1>
 <h2>Job <%= @job.id %>: <%= @job.path %></h2>
 
-<p>Submitted by <%= User.find(@job.submitted_by) %></p>
+<p>Submitted by <%= User.find(@job.submitted_by).login %></p>
 <p>Created: <%= @job.created_at %></p>
 
 
