@@ -1,23 +1,36 @@
 <h1>New <%= @task.task_prototype.name %></h1>
 
-<div id='fail-message'></div>
+<div class='row-fluid'>
 
-<div id="task_info">
-    <label><b>Name</b></label>
-    <input id="task_name" type='text' value='<%= @task.name %>'></input>
-    <label><b>Status</b></label>
-    <div class='task-select'><select id='task_status' class='status-select'>
-       <% @status_options.each do |opt| %>
-          <option <%= opt == @task.status ? 'selected' : '' %>><%= opt %></option>
-       <% end %>
-    </select></div>
+  <div class='span2'></div>
+
+  <div class='span8'>
+
+    <div id='fail-message'></div>
+
+    <div id="task_info">
+        <label><b>Name</b></label>
+        <input id="task_name" type='text' value='<%= @task.name %>'></input>
+        <label><b>Status</b></label>
+        <div class='task-select'><select id='task_status' class='status-select'>
+           <% @status_options.each do |opt| %>
+              <option <%= opt == @task.status ? 'selected' : '' %>><%= opt %></option>
+           <% end %>
+        </select></div>
+    </div>
+
+    <div id="json_editor"></div>
+
+    <br />
+
+    <button id='save' class='btn btn-primary' style='margin-left: 50px'>Save</button>
+    <%= link_to 'Cancel', tasks_path(task_prototype_id: @task.task_prototype.id), class: 'btn' %>
+
+    </div>
+
+  <div class='span2'></div>
+
 </div>
-
-<div id="json_editor"></div>
-
-<br />
-
-<button id='save' class='btn btn-primary'>Save</button>
 
 <script>
 
@@ -38,12 +51,12 @@
         type: "POST",
         url: "/tasks",
         dataType: 'json',
-	data: JSON.stringify({task: {name: name, status: stat,
+      	data: JSON.stringify({task: {name: name, status: stat,
         user_id: <%= current_user.id %>,
         specification: spec, task_prototype_id: <%= @task.task_prototype.id %>}, authenticity_token: AUTH_TOKEN}),
         contentType: 'application/json'
     }).done(function(data){
-	window.location = "/tasks?task_prototype_id=" + <%= @task.task_prototype.id %>;
+	       window.location = "/tasks?task_prototype_id=" + <%= @task.task_prototype.id %>;
     }).fail(function(data){
         var list = $("<ul></ul>")
         console.log(data);
@@ -55,9 +68,8 @@
         $('#fail-message').addClass('alert alert-danger');
     });
 
-
   });
 
 </script>
 
-<%= link_to 'Cancel', tasks_path(task_prototype_id: @task.task_prototype.id), class: 'btn' %>
+

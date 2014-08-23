@@ -20,16 +20,36 @@ class Task < ActiveRecord::Base
     end
   end
 
+  def remove_types p
+
+    case p
+      when String, Fixnum, Float
+        p
+      when Hash
+        h = {}
+        p.keys.each do |key|
+          h[key.split(' ')[0].to_sym] = remove_types(p[key])
+        end
+        h
+      when Array
+        p.collect do |a|
+          remove_types a
+        end
+    end
+
+  end
+
   def matches_prototype
 
     begin
-      spec = JSON.parse self.specification, symbolize_keys: true
+      spec = JSON.parse self.specification, symbolize_names: true
     rescue Exception => e
       errors.add(:task_json, "Error parsing JSON in prototype. #{e.to_s}")
       return
     end
 
-    proto = JSON.parse TaskPrototype.find(self.task_prototype_id).prototype, symbolize_keys: true
+    # proto = remove_types(JSON.parse TaskPrototype.find(self.task_prototype_id).prototype)
+    proto = JSON.parse TaskPrototype.find(self.task_prototype_id).prototype, symbolize_names: true
 
     type_check proto, spec
 
@@ -58,7 +78,8 @@ class Task < ActiveRecord::Base
         if result
           p.keys.each do |k|
             result = result && s.has_key?(k) && type_check( p[k], s[k] )
-            errors.add(:task_missing_key_value, ": Specification is missing the key '#{k}', or the value for that key has the wrong type") unless result 
+            errors.add(:task_missing_key_value, ": Specification #{s} is missing the key '#{k}' (a #{k.class})") unless result && s.has_key?(k) 
+            errors.add(:task_missing_key_value, ": Specification #{s[k]} has the wrong type. Should match #{p[k]}") unless result && type_check( p[k], s[k] ) 
           end
         end
 

@@ -6,6 +6,7 @@ Bioturk::Application.routes.draw do
   get "finder/containers"
   get "finder/items"
   get "finder/sample_info"
+  get "finder/type"
 
   resources :tasks
 

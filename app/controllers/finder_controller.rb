@@ -8,7 +8,12 @@ class FinderController < ApplicationController
 
   def types
     spec = JSON.parse( params[:spec], symbolize_names: true )
-    render json: (Sample.includes('sample_type').where("project = ?", spec[:project]).collect{|s| { id: s.sample_type.id, name: s.sample_type.name } }).uniq.sort { |a,b| a[:name] <=> b[:name] }
+    filter = SampleType.find_by_name(params[:filter])
+    if filter
+      render json: (Sample.includes('sample_type').where("project = ? and sample_types.name = ?", spec[:project], filter.name).collect{|s| { id: s.sample_type.id, name: s.sample_type.name } }).uniq.sort { |a,b| a[:name] <=> b[:name] }      
+    else
+      render json: (Sample.includes('sample_type').where("project = ?", spec[:project]).collect{|s| { id: s.sample_type.id, name: s.sample_type.name } }).uniq.sort { |a,b| a[:name] <=> b[:name] }      
+    end
   end
 
   def samples
@@ -19,8 +24,12 @@ class FinderController < ApplicationController
 
   def containers
     spec = JSON.parse( params[:spec], symbolize_names: true )
-    logger.info "SPEC = #{spec}"
-    render json: (ObjectType.joins(:items => :sample).where(:samples => { project: spec[:project], name: spec[:sample] }).collect { |o| { id: o.id, name: o.name } }).uniq.sort { |a,b| a[:name] <=> b[:name] }
+    filter = ObjectType.find_by_name(params[:filter])
+    if filter
+      render json: (ObjectType.joins(:items => :sample).where(:name => filter.name, :samples => { project: spec[:project], name: spec[:sample] }).collect { |o| { id: o.id, name: o.name } }).uniq.sort { |a,b| a[:name] <=> b[:name] }
+    else
+      render json: (ObjectType.joins(:items => :sample).where(:samples => { project: spec[:project], name: spec[:sample] }).collect { |o| { id: o.id, name: o.name } }).uniq.sort { |a,b| a[:name] <=> b[:name] }
+    end      
   end
 
   def items
@@ -39,6 +48,20 @@ class FinderController < ApplicationController
       end
     end
     render json: props
+  end
+
+  def type
+
+    t = params[:type]
+    if SampleType.find_by_name(t)
+      render json: { type: "Samples" }
+    else
+      if ObjectType.find_by_name(t)
+        render json: { type: "Items" }
+      else 
+        render json: { type: "Unknown" }
+      end
+    end
   end
 
 end

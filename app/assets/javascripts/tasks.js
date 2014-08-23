@@ -28,7 +28,7 @@ function render_json(tag,obj) {
 
         $.each(obj, function(k,v) {
             var li = $("<li />");
-            li.append("<span class='json_key_inline'>" + k + ": </span>");
+            li.append("<span class='json_key_inline'>" + k.split(' ')[0] + ": </span>");
             render_json(li,v);
             list.append(li);      
         });
@@ -39,7 +39,7 @@ function render_json(tag,obj) {
 
 }
 
-function render_json_editor(tag,obj,proto) {
+function render_json_editor(tag,obj,proto,type,parent_list) {
 
     if ( typeof obj == "string" ) {
 
@@ -49,39 +49,68 @@ function render_json_editor(tag,obj,proto) {
     } else if ( typeof obj == "number" ) {
 
         var i = $("<input type='number' class='json_edit_number' value=" + obj + "></input>");
+
         $(tag).append(i);
+
+        if ( arguments.length == 5 ) { var parlist = parent_list; }
+
+        if ( arguments.length >= 4 && type != "" ) { // type provided
+            $(tag).append(new Finder(type,function(selections) {
+                /* put result in input tag */ 
+                for ( var n=0; n<selections.length; n++ ) {
+                    if ( n==0 ) { 
+                       i.val(selections[n]);
+                   } else {
+                        console.log("trying to add " + selections[n] + " with " );
+                        if ( parlist ) { // parent is a list
+                            console.log("adding " + selections[n]);
+                            var li = $('<li></li>');
+                            render_json_editor(li,selections[n],proto[proto.length-1],type,list);
+                            parlist.append(li);
+                        }
+                   }
+                }
+            }));
+        }
 
     } else if ( obj.constructor.name == "Array" ) {
 
-         var list = $( "<ul class='json_editor_array'/>" );
+        var list = $( "<ul class='json_editor_array'/>" );
 
-         $.each(obj, function(i,v) {
-	   var li = $("<li />");
-           render_json_editor(li,v,proto[proto.length-1]);
-	   list.append(li);      
-	 });
+        $.each(obj, function(i,v) {
+            var li = $("<li />");
+            console.log(proto);
+            render_json_editor(li,v,proto[proto.length-1],type,list);
+            list.append(li);      
+    	});
 
-	 $(tag).append(list);
+        $(tag).append(list);
 
-         var more = $('<button>+</button>');
-         var less = $('<button>-</button>');
+        var more = $('<button>+</button>');
+        var less = $('<button>-</button>');
 
-         $(tag).append(more,less);
-         more.addClass('btn btn-small add-json-btn');
-         more.click(function(e){
-             var li = $('<li />');
-             if ( proto.length > 0 ) {
-               render_json_editor(li,proto[proto.length-1],proto[proto.length-1]);
-             } else {
-		 render_json_editor(li,"","");
-             }
-             list.append(li);
-         });
+        $(tag).append(more,less);
 
-         less.addClass('btn btn-small add-json-btn');
-         less.click(function(e){
-             list.children().last().remove();
-         });
+        more.addClass('btn btn-small add-json-btn');
+
+        more.click(function(e){
+
+            var li = $('<li />');
+
+            if ( proto.length > 0 ) {
+                render_json_editor(li,proto[proto.length-1],proto[proto.length-1],type,list);
+            } else {
+                render_json_editor(li,"","");
+            }
+
+            list.append(li);
+
+        });
+
+        less.addClass('btn btn-small add-json-btn');
+        less.click(function(e){
+            list.children().last().remove();
+        });
 
     } else {
 
@@ -89,8 +118,8 @@ function render_json_editor(tag,obj,proto) {
 
         $.each(obj, function(k,v) {
             var li = $("<li />");
-            li.append("<span class='json_key'>" + k + "</span>");
-            render_json_editor(li,v,proto[k]);
+            li.append("<span class='json_key' data-key='"+k+"'>" + k.split(' ')[0] + "</span>");
+            render_json_editor(li,v,proto[k],json_editor_type(k));
             list.append(li);
         });
 
@@ -100,6 +129,15 @@ function render_json_editor(tag,obj,proto) {
 
 }
 
+function json_editor_key(str) {
+    return parts = str.split(' ')[0];
+}
+
+function json_editor_type(str) {
+    return parts = str.split(' ').slice(1,3).join(' ');
+}
+
+
 function json_editor_extract(tag) {
 
     return editor_extract_aux(tag.children().first());
@@ -108,7 +146,7 @@ function json_editor_extract(tag) {
 
 function editor_extract_aux(tag) {
 
-    console.log(tag);
+    //console.log(tag);
 
     var x;
 
@@ -133,18 +171,22 @@ function editor_extract_aux(tag) {
             x.push(editor_extract_aux($($(v).children().first())));
         });
 
-    } else {
+    } else { // hash
 
         x = {};
         tag.children().each(function(i,v){
-            var key = $(v).children().first();
+            // var key = $(v).children().first();
+            var key = $(v).children().first().data().key;
+            console.log($(v));
+            console.log("key = " + key);
             var val = $(v).children().eq(1);
-            x[key.html()] = editor_extract_aux($(val));
+            x[key] = editor_extract_aux($(val));
         });
+        console.log(x);
 
     }
 
-    console.log(x);
+    //console.log(x);
 
     return x;
 
