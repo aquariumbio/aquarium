@@ -6,11 +6,15 @@
 
 <ul id='arguments' class='krill-argument-list'></ul>
 
+<!-- div id='args'></div -->
+
 <p><button id='start' class='btn btn-primary'>Submit</button></p>
 
 <script>
 
   arguments = JSON.parse('<%= @args.to_json.html_safe %>');
+
+  // render_json_editor($(args),arguments,arguments);
 
   function populate(key) {
     return function(selections) { $('#'+key).val( JSON.stringify(selections)); }
