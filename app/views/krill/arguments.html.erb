@@ -4,8 +4,6 @@
 
 <p><b>Version:</b> <%= @sha %></p>
 
-<!-- ul id='arguments' class='krill-argument-list'></ul -->
-
 <div id='json_editor'></div>
 
 <p><button id='start' class='btn btn-primary'>Submit</button></p>
@@ -13,43 +11,9 @@
 <script>
 
   arguments = JSON.parse('<%= @args.to_json.html_safe %>');
-
   render_json_editor($('#json_editor'),arguments,arguments);
 
-  /* 
-  function populate(key) {
-    return function(selections) { $('#'+key).val( JSON.stringify(selections)); }
-  };
-
-  for ( var key in arguments ) {
-
-    var li = $('<li />');
-    var p = $('<span />').html(key).addClass('krill-input-label');
-
-    var input = $('<input />')
-      .addClass('krill-argument-box')
-      .attr('type','text')
-      .attr('id',key)
-      .val(JSON.stringify(arguments[key]));
-
-    var ifinder = new Finder('Items', populate(key));
-    var sfinder = new Finder('Samples', populate(key));
-
-    $('#arguments').append(li.append(p,input,ifinder,sfinder));
-  }
-  */
-
   $('#start').click(function() {
-
-    /* 
-    var argvals = {}
-    $('.krill-argument-box').each(function() {
-      console.log($(this).attr('id') + ":" + $(this).val());
-      argvals[$(this).attr('id')] = JSON.parse($(this).val());
-    });
-    var argstr = JSON.stringify(argvals);
-    console.log(argstr);
-    */
 
     spec = JSON.stringify(json_editor_extract($('#json_editor')));
     console.log(spec);
