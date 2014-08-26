@@ -41,7 +41,7 @@
         <td><%= u %></td>
       <% end %>
 
-      <% if j.user_id && j.user_id > 0 %>
+      <% if j.user_id && j.user_id.to_i > 0 %>
         <td><%= User.find(j.user_id).login %></td>
       <% else %>
         <td>-</td>
