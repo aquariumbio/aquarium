@@ -20,25 +20,6 @@ class Task < ActiveRecord::Base
     end
   end
 
-  def remove_types p
-
-    case p
-      when String, Fixnum, Float
-        p
-      when Hash
-        h = {}
-        p.keys.each do |key|
-          h[key.split(' ')[0].to_sym] = remove_types(p[key])
-        end
-        h
-      when Array
-        p.collect do |a|
-          remove_types a
-        end
-    end
-
-  end
-
   def matches_prototype
 
     begin
@@ -48,7 +29,6 @@ class Task < ActiveRecord::Base
       return
     end
 
-    # proto = remove_types(JSON.parse TaskPrototype.find(self.task_prototype_id).prototype)
     proto = JSON.parse TaskPrototype.find(self.task_prototype_id).prototype, symbolize_names: true
 
     type_check proto, spec

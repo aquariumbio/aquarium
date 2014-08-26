@@ -115,10 +115,29 @@ class Job < ActiveRecord::Base
 
   end
 
+  def remove_types p
+
+    case p
+      when String, Fixnum, Float
+        p
+      when Hash
+        h = {}
+        p.keys.each do |key|
+          h[key.to_s.split(' ')[0].to_sym] = remove_types(p[key])
+        end
+        h
+      when Array
+        p.collect do |a|
+          remove_types a
+        end
+    end
+
+  end
+
   def set_arguments a
 
     if /\.rb$/ =~ self.path
-      self.state = [{operation: "initialize", arguments: a, time: Time.now}].to_json
+      self.state = [{operation: "initialize", arguments: (remove_types a), time: Time.now}].to_json
     else
       raise "Could not set arguments of non-krill protocol"
     end

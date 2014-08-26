@@ -34,7 +34,11 @@ class FinderController < ApplicationController
 
   def items
     spec = JSON.parse( params[:spec], symbolize_names: true )
-    render json: (Item.joins(:sample,:object_type).where(:samples => { project: spec[:project], name: spec[:sample] }, :object_types => { name: spec[:container] }).collect { |i| { id: i.id, name: i.id } }).sort  { |a,b| a[:name] <=> b[:name] }
+    render json: ((
+      Item.joins(:sample,:object_type)
+      .where(:samples => { project: spec[:project], name: spec[:sample] }, :object_types => { name: spec[:container] })
+      .reject { |i| i.location == 'deleted' })
+      .collect { |i| { id: i.id, name: i.id } }).sort  { |a,b| a[:name] <=> b[:name] }
   end
 
   def sample_info 
