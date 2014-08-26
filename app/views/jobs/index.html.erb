@@ -15,28 +15,28 @@
 <% if @active_jobs.length > 0 %>
   <div class='well' id='active-jobs'>
     <h3>Active</h3>
-    <%= render partial: 'job_list', locals: { jobs: @active_jobs, runnable: true, last_updated: true, active: true } %>
+    <%= render partial: 'job_list', locals: { jobs: @active_jobs, runnable: true, last_updated: true } %>
   </div>
 <% end %>
 
 <% if @urgent_jobs.length > 0 %>
   <div class='well' id='urgent-jobs'>
     <h3>Overdue</h3>
-    <%= render partial: 'job_list', locals: { jobs: @urgent_jobs, runnable: true, last_updated: false, active: false } %>
+    <%= render partial: 'job_list', locals: { jobs: @urgent_jobs, runnable: true, last_updated: false } %>
   </div>
 <% end %>
 
 <% if @pending_jobs.length > 0 %>
   <div class='well' id='pending-jobs'>
     <h3>Pending</h3>
-    <%= render partial: 'job_list', locals: { jobs: @pending_jobs, runnable: true, last_updated: false, active: false } %>
+    <%= render partial: 'job_list', locals: { jobs: @pending_jobs, runnable: true, last_updated: false } %>
   </div>
 <% end %>
 
 <% if @later_jobs.length > 0 %>
   <div class='well' id='future-jobs'>
     <h3>Upcoming</h3>
-    <%= render partial: 'job_list', locals: { jobs: @later_jobs, runnable: false, last_updated: false, active: false } %>
+    <%= render partial: 'job_list', locals: { jobs: @later_jobs, runnable: false, last_updated: false } %>
   </div>
 <% end %>
 

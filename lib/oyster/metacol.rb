@@ -143,7 +143,7 @@ module Oyster
               end
             end
 
-          else
+          else # wire specific outputs
 
             if r
               value = r[w.source[:name].to_sym]

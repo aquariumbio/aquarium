@@ -46,7 +46,7 @@ function render_json_editor(tag,obj,proto,type,parent_list) {
         var i = $("<textarea class='json_edit_string'>" + obj + "</textarea>");
         $(tag).append(i);
 
-    } else if ( typeof obj == "number" ) {
+    } else if ( !obj || typeof obj == "number" ) {
 
         var i = $("<input type='number' class='json_edit_number' value=" + obj + "></input>");
 

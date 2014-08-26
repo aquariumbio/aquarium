@@ -2,6 +2,8 @@
 
 <h1>Start Metacol: <%= params[:path] %></h1>
 
+<!-- div id='json_editor'></div -->
+
 <% if @errors != "" || @parse_errors != "" %>
 
   <h4>Error</h4>
@@ -39,6 +41,9 @@
 </div>
 
 <script>
+
+  // arguments = JSON.parse('<%= @arguments.to_json.html_safe %>');
+  // render_json_editor($('#json_editor'),arguments,arguments);
 
 
 <% if @errors == "" %>
