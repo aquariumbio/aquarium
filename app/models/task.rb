@@ -102,7 +102,7 @@ class Task < ActiveRecord::Base
 
   def spec
 
-    unless @parsed_spec
+    unless defined?(@parsed_spec)
 
       begin
         @parsed_spec = JSON.parse self.specification, symbolize_names: true

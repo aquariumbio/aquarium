@@ -256,9 +256,7 @@ Krill.prototype.step = function(state,number) {
           var titlebar = this.build_titlebar("!",false);
           $('#title',titlebar).html('Error');
           var p = $('<li>'+this.result.error+'</li>').addClass('krill-note');
-        } else {
-          
-
+        } else {         
           if ( state.operation == "complete" ) {
             var titlebar = this.build_titlebar("&#10003;",false);
             $('#title',titlebar).html('Completed' );
@@ -419,9 +417,11 @@ Krill.prototype.send = function(command,button) {
         that.result = data.result;
         console.log(that.result);
 
-        if ( that.result.response != "not_ready" ) {
+        if ( that.result.response == "display" ) {
             that.update();
             that.carousel_inc(1);
+        } else if ( that.result.response == "done" ) {
+            location.reload();
         } else {
             alert ( "The protocol is still preparing the next step. Please try clicking 'OK' again or reloading the page.")
         }
