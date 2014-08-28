@@ -62,7 +62,9 @@ class Sample < ActiveRecord::Base
           self[f]
         elsif sample_type[ft] == 'string'
           s = self[f]
-          if s.length > 20
+          if !s
+            "-"
+          elsif s.length > 20
             s[0,20] + '...'
           else
             s
