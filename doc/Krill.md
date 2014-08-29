@@ -54,11 +54,11 @@ Put the string s in bold, eye catching font on the page in hopes that the user m
 
 **bullet s**
 
-Put a thie string s on the page, with a bullet in front of it, as in a bullet list.
+Put the string s on the page, with a bullet in front of it, as in a bullet list.
 
 **check s**
 
-Put a thie string s on the page, with a clickable checkbox in front of it.
+Put the string s on the page, with a clickable checkbox in front of it.
 
 **image path**
 
@@ -75,7 +75,7 @@ data = show {
   get "number", var: "z", label: "Enter a number", default: 555
 }
 
-y = data[:x]
+y = data[:y]
 z = data[:z]
 ```
 
