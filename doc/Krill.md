@@ -225,7 +225,7 @@ The Aquarium inventory is managed via a structured database of Ruby objects with
   * i.object_type - the object type associated with the item.
   * i.sample - the corresponding sample, if any. Some items correspond to samples and some do not. For example, an item whose object type is "1 L Bottle" does not correspond to a sample. An item whose object type is "Plasmid Stock" will have a corresponding sample, whose name might be something like "pLAB1".
   * i.datum - data associated with the item. It can be an arbitrary Ruby value, but is usually a hash.
-    i.datum = x - set the value of the datum associated with the item to x.
+  * i.datum = x - set the value of the datum associated with the item to x.
   * i.save - if you make changes to an item, you have to call i.save to make sure the changes are saved to the database.
   * i.reload - if the item has changed somehow in the database, this method update **i** so that it has the latest information from the database.
 
