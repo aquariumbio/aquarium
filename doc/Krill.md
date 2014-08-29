@@ -311,7 +311,7 @@ which silently (i.e. without telling the user) takes the items. One may also tel
 take items, interactive: true
 ```
 
-If there are more instructions to give the user, you can add an extra **show* block, as in
+If there are more instructions to give the user, you can add an extra **show** block, as in
 
 ```ruby
 take(items, interactive: true) {
