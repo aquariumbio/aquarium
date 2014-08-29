@@ -116,4 +116,10 @@ class Task < ActiveRecord::Base
 
   end
 
+  def simple_spec
+
+    Job.new.remove_types spec
+
+  end
+
 end

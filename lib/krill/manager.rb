@@ -125,7 +125,7 @@ module Krill
     def check_again
 
       if @thread.alive?
-        wait 2
+        wait 20
       else 
         "done"
       end
@@ -137,13 +137,13 @@ module Krill
       if @thread.alive?
 
         @mutex.synchronize do
-          unless @thread_status.running     # The intention here is that if the step didn't complete in the last
-            @thread_status.running = true   # continue, then it would still be running for the next. However, if
-            @thread.wakeup                  # the user waits long enough before trying again, then the step might
-          end                               # be done, and this will do another step, resulting in two steps in a
-        end                                 # row. Better would be to have the javascript request a different version
-                                            # of continue for the second time "OK" is clicked. 
-        wait 2
+          unless @thread_status.running     
+            @thread_status.running = true   
+            @thread.wakeup                  
+          end                               
+        end                                 
+                                            
+        wait 20
 
       else 
 
