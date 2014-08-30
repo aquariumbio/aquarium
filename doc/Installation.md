@@ -93,9 +93,7 @@ Go to Admin->New User and make an account. This first account should be given ad
 You can also try create a user with admin previleges in Rails console by doing the following:
 
 	user = User.new(name: "your name", login: "login name", password: "your_password", password_confirmation: "your_password")
-	
 	user.admin = true
-	
 	user.save
 
 
