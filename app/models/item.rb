@@ -54,7 +54,9 @@ class Item < ActiveRecord::Base
     i.object_type_id = olist[0].id
     i.sample_id = slist[0].id
 
-    i.location = olist[0].location_wizard
+    puts "Building new item with attributes = #{i.attributes} and project = #{i.sample.project}"
+
+    i.location = olist[0].location_wizard project: i.sample.project
     i.quantity = 1
     i.inuse = 0
     i.save
@@ -122,7 +124,7 @@ class Item < ActiveRecord::Base
   end
 
   def to_s
-    "<span class='aquarium-item' id='#{self.id}'>#{self.id}</span>"
+    "<a href='/items/#{self.id}' class='aquarium-item' id='#{self.id}'>#{self.id}</a>"
   end
 
 end

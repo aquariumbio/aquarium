@@ -417,7 +417,7 @@ Krill.prototype.send = function(command,button) {
         that.result = data.result;
         console.log(that.result);
 
-        if ( that.result.response == "display" ) {
+        if ( that.result.response == "ready" ) {
             that.update();
             that.carousel_inc(1);
         } else if ( that.result.response == "done" ) {

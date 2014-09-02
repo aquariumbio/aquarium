@@ -229,7 +229,7 @@
 }
 
 $noteFontSize: 20pt;
-$noteLH: 20pt;
+$noteLH: 1.2;
 $notePad: 5px;
 $noteBottomMargin: 20px;
 
@@ -246,15 +246,16 @@ $noteBottomMargin: 20px;
   -webkit-appearance:none;
   -o-appearance:none;
   top:50% !important;
-  margin-top:-4px !important;
+  margin-top:-8px !important;
   margin-right: 10px !important;
   border-radius: 0px;
-  height: 30px !important;
-  width: 30px !important;
+  height: 25px !important;
+  width: 25px !important;
   border: 1pt solid #000;
   &:checked {
     background: green;
   }
+    line-height: $noteLH;
 }
 
 .krill-check {
@@ -309,11 +310,13 @@ $noteBottomMargin: 20px;
 
 .krill-item-id {
 font-size: $noteFontSize;
+  line-height: $noteLH;
 }
 
 .krill-item-name {
   font-size: $noteFontSize;
   font-weight: bold;
+    line-height: $noteLH;
 }
 
 .krill-item-location {
@@ -322,6 +325,7 @@ font-size: $noteFontSize;
   background: #bfb;
   font-weight: bold;
   padding: 2px 10px 0px 10px;
+    line-height: $noteLH;
 }
 
 .krill-item-sample {
@@ -330,6 +334,7 @@ font-size: $noteFontSize;
 
 .krill-item-type {
    font-size: $noteFontSize;
+     line-height: $noteLH;
 }
 
 .krill-separator {
@@ -357,6 +362,7 @@ font-size: $noteFontSize;
 
   border: 1pt solid #aaa;
   font-size: $noteFontSize;
+  line-height: $noteLH;
   margin: 15px;
 
   td {
