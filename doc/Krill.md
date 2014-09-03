@@ -219,6 +219,7 @@ The Aquarium inventory is managed via a structured database of Ruby objects with
   * s.name: The name of the sample. For example, a sample whose SampleType is "Plasmid" might be named "pLAB1".
   * s.sample_type - The sample type of the sample.
   * s.properties - A hash of the form { key1: value1, ..., key8: value8 } where the nth key is named according to the s.sample_type.fieldnname (as a symbol, not a string).
+  * s.make_item object_type_name - Returns an item associated with the sample and in the container described by object_type_name The location of the item is determined by the location wizard.
 * **Item**: A physical item in the lab. It has an object type and may correspond to a sample, see the examples below. If **i** is an item, then the following methods are available:
   * i.id - the id of the item. Every item in the lab has such an id that can by used to find information about the item (see Finding Items and Samples).
   * i.location - a string describing where in the lab the item can be found.
@@ -474,6 +475,17 @@ This powerful method displays a set of pages using the transfer method from show
 ```ruby
 transfer( stripwells, gels ) {
   note "Use a 100 µL pipetter to transfer 10 µL from the PCR results to the gel as indicated."
+}
+```
+
+**distribute collection, object_type_name, options = {} //optional block//**
+
+This method is the opposite of **load_samples**. It returns an array of new items that are made from the samples in the collection. The object type of the items is defined by the **object_type_name** argument. The only option to the method is **:except**, which should be a list of collection indices to skip. For example, suppose you had a gel with ladder in lanes (1,1) and (2,1) and you wanted to make gel fragments from the lanes. You could do
+
+```ruby
+slices = distribute( gel, "Gel Slice", except: [ [0,0], [1,0] ], interactive: true ) {
+  title "Cut gel slices and place them in new 1.5 mL tubes"
+  note "Label the tubes with the id shown"
 }
 ```
 

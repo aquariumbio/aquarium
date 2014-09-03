@@ -128,6 +128,44 @@ module Krill
 
     end # transfer
 
+
+    def distribute col, object_type_name, options = {}
+
+      opts = { except: [] }.merge options
+
+      if block_given?
+        user_shows = ShowBlock.new.run(&Proc.new) 
+        puts "Showing #{user_shows}"
+      else
+        user_shows = []
+      end
+
+      m = col.matrix
+      items = []
+      routes = []
+
+      (0..m.length-1).each do |i|
+        (0..m[i].length-1).each do |j|
+          if m[i][j] > 0 && ! ( opts[:except].include? [i,j] )
+            s = find(:sample,{id: m[i][j]})[0]
+            item = s.make_item object_type_name
+            items.push item
+            routes.push from: [i,j], to: item
+          end
+        end
+      end
+
+      show {
+        table [
+          [ "Row", "Column", "New " + object_type_name + " id" ]
+        ].concat( routes.collect { |r| [ r[:from][0]+1, r[:from][1]+1, r[:to].id ] } )
+        raw user_shows
+      }
+
+      return items
+
+    end # distribute
+
   end
 
 end

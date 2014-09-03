@@ -54,8 +54,6 @@ class Item < ActiveRecord::Base
     i.object_type_id = olist[0].id
     i.sample_id = slist[0].id
 
-    puts "Building new item with attributes = #{i.attributes} and project = #{i.sample.project}"
-
     i.location = olist[0].location_wizard project: i.sample.project
     i.quantity = 1
     i.inuse = 0
