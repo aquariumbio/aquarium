@@ -92,6 +92,8 @@ data = show {
 choice = data[:choice]
 ```
 
+You can tell Aquarium to allow the user to select multiple items with the option **multiple: true**. In that case, the resulting data from the user will contain an array of all selected items.
+
 **separator**
 
 Display a break between other shown elements, such as between two notes.
@@ -229,6 +231,7 @@ The Aquarium inventory is managed via a structured database of Ruby objects with
   * i.datum = x - set the value of the datum associated with the item to x.
   * i.save - if you make changes to an item, you have to call i.save to make sure the changes are saved to the database.
   * i.reload - if the item has changed somehow in the database, this method update **i** so that it has the latest information from the database.
+  * i.mark_as_deleted - to delete an item, don't call delete, call this method instead. It actually just hides the item so old job logs that refer to it can still have something to point to.
 
 Note that Items, Samples, SampleTypes, and ObjectTypes inherit from **ActiveRecord::Base** which is a fundamental rails class with documentation [here](http://api.rubyonrails.org/classes/ActiveRecord/Base.html). The methods in this parent class are available from within a protocol, although care should be taken when using them. In general, it is preferable to use those methods discussed here.
 
@@ -288,6 +291,14 @@ class Protocol
 
 end
 ```
+
+You can also use **find** to get a list of projects names with
+
+```ruby
+find(:project,{})
+```
+
+which returns a sorted list of all project names.
 
 Taking Items
 ===
