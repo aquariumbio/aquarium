@@ -166,6 +166,10 @@ module Krill
 
     end
 
+    def touch item
+      Touch.new( { job_id: jid, item_id: item.id } ).save
+    end
+
 
     def release items, args={}
 

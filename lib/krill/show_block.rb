@@ -99,7 +99,8 @@ module Krill
     	raise "First argument to select should be an array of numbers or strings" unless is_proper_array choices
     	options = {
     		var: "select_#{@select_counter}",
-    		label: "Choose"
+    		label: "Choose",
+        multiple: false
     	}
     	@select_counter += 1
       @parts.push({select: (options.merge opts).merge({choices: choices})})

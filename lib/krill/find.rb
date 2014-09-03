@@ -4,19 +4,27 @@ module Krill
 
     def find name, spec
 
-      # Define available tables. Note, no queries should be made at this point
-      tables = {
-        item: Item.includes(sample:[:sample_type]).includes(:object_type).where("location != 'deleted'"),
-        sample: Sample.includes(:sample_type),
-        sample_type: SampleType.includes(),
-        object_type: ObjectType.includes(),
-        task: Task.includes(:task_prototype)
-      }
+      if name == :project
 
-      # Do the search
-      rows = tables[name].where(pluralize_table_names(spec))
+        return (Sample.all.collect { |s| s.project }).uniq.sort
 
-      return rows
+      else
+
+        # Define available tables. Note, no queries should be made at this point
+        tables = {
+          item: Item.includes(sample:[:sample_type]).includes(:object_type).where("location != 'deleted'"),
+          sample: Sample.includes(:sample_type),
+          sample_type: SampleType.includes(),
+          object_type: ObjectType.includes(),
+          task: Task.includes(:task_prototype)
+        }
+
+        # Do the search
+        rows = tables[name].where(pluralize_table_names(spec))
+
+        return rows
+
+      end
 
     end
 

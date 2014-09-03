@@ -107,6 +107,13 @@ class Item < ActiveRecord::Base
     f
   end
 
+  def mark_as_deleted
+    self.location = 'deleted'
+    self.quantity = -1
+    self.inuse = -1
+    self.save
+  end
+
   def all_attributes
 
     temp = self.attributes.symbolize_keys

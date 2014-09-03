@@ -31,8 +31,10 @@ Krill.prototype.image = function(x) {
 
 Krill.prototype.select = function(x) {
 
+    var mult = x.multiple ? "multiple" : ""
+
     var label = $('<span>' + x.label + '</span>').addClass('krill-select-label');
-    var select = $('<select id="'+x.var+'"></select>').addClass('krill-select');
+    var select = $('<select ' + mult + ' id="'+x.var+'"></select>').addClass('krill-select');
 
     for ( var i=0; i < x.choices.length; i++ ) {
 	     select.append('<option>' + x.choices[i] + '</option>');
