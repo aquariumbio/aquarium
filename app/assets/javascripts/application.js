@@ -17,6 +17,7 @@
 //= require jquery.ui.datepicker
 //= require jquery.ui.menu
 //= require jquery.ui.autocomplete
+//= require jquery.cookie
 //= require dataTables/jquery.dataTables
 //= require d3
 //= require joint.nojquery

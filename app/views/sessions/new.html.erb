@@ -18,3 +18,11 @@
 
   </div>
 </div>
+
+<%
+  cookies.each { |k,v| 
+    if k != :_bioturk_session
+      cookies.delete k 
+    end
+  }
+%>
