@@ -49,7 +49,7 @@
     "order": [ 0, 'desc' ],
     "lengthMenu": [ 15, 25, 50, 75, 100 ],
     "search": { 
-      "search": '<%= current_user.login %>'
+      "search": '<%= cookies[@cookie_name] %>'
     },
     "columnDefs":[ {
       "targets": [<%= 5+n %>, <%= 5+n+1 %>],

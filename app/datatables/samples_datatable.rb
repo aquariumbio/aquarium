@@ -49,6 +49,11 @@ class SamplesDatatable < Datatable
     samples = Sample.order("#{sort_column} #{sort_direction}")
     samples = samples.page(page).per_page(per_page)
 
+    sample_type = SampleType.find(params[:sample_type_id])
+
+    @cookie_name = "sample_search_string_#{sample_type.name}".to_sym
+    @view.cookies[@cookie_name] = params[:sSearch]
+
     if params[:sSearch].present?
       key = params[:sSearch]
       u = User.find_by_login(key)

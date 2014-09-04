@@ -9,6 +9,9 @@ class SamplesController < ApplicationController
     @sample_type_id = params[:sample_type_id] ? params[:sample_type_id] : @all_sample_types.first.id
     @sample_type = SampleType.find(@sample_type_id)
 
+    @cookie_name = "sample_search_string_#{@sample_type.name}".to_sym
+    cookies[@cookie_name] ||= current_user.login
+
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: SamplesDatatable.new(view_context) }

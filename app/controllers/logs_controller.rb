@@ -4,6 +4,8 @@ class LogsController < ApplicationController
 
   def index
 
+    cookies[:logs_search_string] ||= current_user.login
+
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: LogsDatatable.new(view_context) }

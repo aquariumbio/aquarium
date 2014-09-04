@@ -17,6 +17,9 @@ class MetacolsController < ApplicationController
 
   def index
 
+    cookies[:active_metacol_search_string] ||= current_user.login
+    cookies[:stopped_metacol_search_string] ||= current_user.login
+
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: MetacolsDatatable.new(view_context) }

@@ -3,6 +3,7 @@ class MetacolsDatatable < Datatable
   private  
 
   def data
+
     rows.map do |m|
       args = m.arguments.to_json
       if args.length > 50
@@ -34,8 +35,10 @@ class MetacolsDatatable < Datatable
 
     if params[:status] == "RUNNING"
       prefix = "status = 'RUNNING'"
+      @view.cookies[:active_metacol_search_string] = params[:sSearch]
     else
       prefix = "status != 'RUNNING'"
+      @view.cookies[:stopped_metacol_search_string] = params[:sSearch]
     end
 
     if params[:sSearch].present?

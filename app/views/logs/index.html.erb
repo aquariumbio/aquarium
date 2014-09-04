@@ -30,7 +30,7 @@
     "order": [ 0, 'desc' ],
     "lengthMenu": [ 15, 25, 50, 75, 100 ],
     "search": { 
-      "search": '<%= current_user.login %>'
+      "search": '<%= cookies[:logs_search_string] %>'
     },
     "columnDefs":[ {
       "targets": [2,3,4],

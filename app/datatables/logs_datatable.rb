@@ -41,6 +41,8 @@ class LogsDatatable < Datatable
     jobs = Job.order("#{sort_column} #{sort_direction}")
     jobs = jobs.page(page).per_page(per_page)
 
+    @view.cookies[:logs_search_string] = params[:sSearch]
+
     if params[:sSearch].present?
 
       key = params[:sSearch]

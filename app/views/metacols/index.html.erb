@@ -33,7 +33,7 @@
     "order": [ 0, 'desc' ],
     "lengthMenu": [ 10, 20, 50, 75, 100 ],
     "search": { 
-      "search": '<%= current_user.login %>'
+      "search": '<%= cookies[:active_metacol_search_string] %>'
     },
     "columnDefs":[ {
       "targets": [ 2, 3, 6 ],
@@ -48,7 +48,7 @@
     "order": [ 0, 'desc' ],
     "lengthMenu": [ 10, 20, 50, 75, 100 ],
     "search": { 
-      "search": '<%= current_user.login %>'
+      "search": '<%= cookies[:stopped_metacol_search_string] %>'
     },
     "columnDefs":[ {
       "targets": [ 2, 3 ],
