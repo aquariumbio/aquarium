@@ -1,4 +1,8 @@
-<h1>Item <%= @item.id %> at <%= @item.location %></h1>
+<h1>Item <%= @item.id %>
+  <% if @item.location != "deleted" %>
+   at <%= @item.location %>
+  <% end %>
+ </h1>
 
 <%= render @handler.show_item_partial %>
 

@@ -30,9 +30,16 @@ class Sample < ActiveRecord::Base
       n = "field#{i}name"
       t = "field#{i}type"
       if st[n] != nil
-        case t
-          when "url", "number", "string"
+        case st[t]
+          when "url", "string"
             result[st[n]] = self["field#{i}"]
+          when "number"
+            x = self["field#{i}"]
+            if x.to_i == x.to_f
+              result[st[n]] = x.to_i
+            else
+              result[st[n]] = x.to_f
+            end
           else
             result[st[n]] = Sample.find_by_name( self["field#{i}"] )
           end
