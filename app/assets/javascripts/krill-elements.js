@@ -57,6 +57,53 @@ Krill.prototype.input = function(x) {
 
 }
 
+Krill.prototype.upload = function(x) {
+
+  var d = $('<div />');
+  var i = $('<input id="up" type="file" name="files[]" data-url="/jobs" multiple></input>');
+  var p = $('<div id="progress"><div class="bar" style="width: 0%;"></div></div>');
+  d.append(i,p);
+
+  $(function() {
+
+    console.log('setting up file upload');
+
+    $('#up').fileupload({
+
+      dataType: 'json',
+
+      done: function (e, data) {
+         $.each(data.result.files, function (index, file) {
+           console.log("got " + text(file.name));
+         });
+      },
+
+      progressall: function (e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        $('#progress .bar').css(
+          'width',
+          progress + '%'
+          );
+      },
+
+      add: function (e, data) {
+        console.log('adding button');
+        data.context = $('<button/>').text('Upload')
+          .appendTo(d)
+          .click(function () {
+            data.context = $('<p/>').text('Uploading...').replaceAll($(this));
+            data.submit();
+          });
+      }
+
+    });
+
+  });
+
+  return d
+
+}
+
 Krill.prototype.take = function(x) {
 
     var check = $('<input type="checkbox"></input>').addClass('krill-checkbox');

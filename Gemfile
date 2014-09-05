@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.13'
 gem 'bootstrap-sass'
 gem 'yaml_db'
+gem 'paperclip'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'sass-rails',   '~> 3.2.3'
@@ -32,7 +33,9 @@ gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'jquery-datatables-rails'
 gem 'jquery-cookie-rails'
+gem "jquery-fileupload-rails"
 
 gem 'd3-rails'
+
 gem 'git'
 

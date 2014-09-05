@@ -41,6 +41,10 @@ GEM
       will_paginate
     builder (3.0.4)
     callsite (0.0.11)
+    climate_control (0.0.3)
+      activesupport (>= 3.0)
+    cocaine (0.5.4)
+      climate_control (>= 0.0.3, < 1.0)
     coderay (1.1.0)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
@@ -69,6 +73,9 @@ GEM
     jquery-datatables-rails (2.2.2)
       jquery-rails
       sass-rails
+    jquery-fileupload-rails (0.4.1)
+      actionpack (>= 3.1)
+      railties (>= 3.1)
     jquery-rails (3.0.1)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
@@ -85,6 +92,11 @@ GEM
     mime-types (1.23)
     multi_json (1.7.7)
     mysql2 (0.3.13)
+    paperclip (4.2.0)
+      activemodel (>= 3.0.0)
+      activesupport (>= 3.0.0)
+      cocaine (~> 0.5.3)
+      mime-types
     polyglot (0.3.3)
     rack (1.4.5)
     rack-cache (1.2)
@@ -152,10 +164,12 @@ DEPENDENCIES
   highcharts-rails (~> 3.0.0)
   jquery-cookie-rails
   jquery-datatables-rails
+  jquery-fileupload-rails
   jquery-rails
   jquery-ui-rails
   meta_request
   mysql2
+  paperclip
   rails (= 3.2.13)
   sass-rails (~> 3.2.3)
   sqlite3

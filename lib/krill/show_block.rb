@@ -48,6 +48,10 @@ module Krill
       @parts.push({image: "#{Bioturk::Application.config.image_server_interface}#{name}"})
     end
 
+    def upload opts={}
+      @parts.push({upload: opts})
+    end
+
     def transfer x, y, routing
 
       routing_details = routing
