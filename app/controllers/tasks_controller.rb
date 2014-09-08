@@ -10,32 +10,30 @@ class TasksController < ApplicationController
   # GET /tasks.json
   def index
 
-    if params[:task] && params[:status]
-      t = Task.find(params[:task].to_i)
-      t.status = params[:status]
-      unless t.save
-        flash[:error] = "Warning: While updating task status: " + t.errors.to_a.to_s + ". Task specification = "    + t.specification.to_s
-        t.save validate: false
-      end
-    end
-
     @task_prototype = TaskPrototype.find(params[:task_prototype_id])
+
+    @task_search_cookie_name = "#{@task_prototype.name}_search".to_sym
+    @task_status_cookie_name = "#{@task_prototype.name}_status".to_sym
+    cookies[@task_search_cookie_name] ||= current_user.login
+
     @status_options = @task_prototype.status_option_list
 
     if params[:option]
       @option = params[:option]
+    elsif cookies[@task_status_cookie_name]
+      @option = cookies[@task_status_cookie_name]
     else
       @option = @status_options[0]
     end
-    
-    @tasks = Task.where('task_prototype_id = ? AND status = ?', @task_prototype.id, @option )
 
+    cookies[@task_status_cookie_name] = @option
+    
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @tasks }
+      format.json { render json: TasksDatatable.new(view_context,@option,@task_prototype) }
     end
 
-  end
+  end 
 
   # GET /tasks/1
   # GET /tasks/1.json
@@ -147,6 +145,16 @@ class TasksController < ApplicationController
       redirect_to production_interface_path, notice: "This functionality is not available in production mode."
 
     end
+
+  end
+
+  def update_status
+
+    t = Task.find(params[:task])
+    t.status = params[:status]
+    t.save
+
+    render json: { result: 'ok' }
 
   end
 

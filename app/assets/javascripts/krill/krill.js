@@ -356,14 +356,10 @@ Krill.prototype.get = function() {
 
     var upload_containers = $(".krill-upload",this.step_list[this.step_list.length-1]);
 
-    console.log('processing ' + upload_containers.length + ' upload containers');
-
     $.each(upload_containers,function(j,f) {
 
         var varname = $(f).attr("id");
         var uploads = $(".krill-upload-complete",$(f));
-
-        console.log ( "first upload has " + uploads.length + " uploads");
 
         $.each(uploads,function(i,e) {
             var ids   = $('.krill-upload-id',$(e));
@@ -406,8 +402,6 @@ Krill.prototype.get_state = function() {
 
 Krill.prototype.send = function(command,button) {
 
-    console.log("send");
-
     var inputs = this.get();
     var that = this;
 
@@ -428,7 +422,6 @@ Krill.prototype.send = function(command,button) {
 
         that.state = data.state;
         that.result = data.result;
-        console.log(that.result);
 
         if ( that.result.response == "ready" ) {
             that.update();
@@ -459,7 +452,6 @@ Krill.prototype.abort = function() {
         url: 'abort?job=' + that.job,
         async: true
     }).done(function(data){
-        console.log(data);
         if (data.response == "error" ) {
             alert ( "Could not stop job: " + data.error );
         } else {
