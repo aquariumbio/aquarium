@@ -57,23 +57,21 @@ Krill.prototype.input = function(x) {
 
 }
 
-Krill.prototype.uploaded_item = function(upload_name,upload_id,varname) {
+Krill.prototype.uploaded_item = function(upload_name,upload_id) {
 
   var icon = $('<i />').addClass('icon-ok');
   var name = $('<span> '+upload_name+'</span>').addClass('krill-upload-name');
   var id = $('<span> (<span class="krill-upload-id">'+upload_id+'</span>)</span>');
-  return $('<li />').addClass('krill-upload-complete').attr("id",varname).append(icon,name,id);
+  return $('<li />').addClass('krill-upload-complete').append(icon,name,id);
 
 }
 
 Krill.prototype.upload = function(x) {
 
   var that = this;
-  var container = $('<div></div>').addClass('well row-fluid krill-upload');
+  var container = $('<div></div>').addClass('well row-fluid krill-upload').attr('id',x.var);
   var span      = $('<div />').addClass('btn btn-success fileinput-button');
   var input     = $('<input type="file" name="files[]" data-url="/krill/upload?job='+this.job+'" multiple></input>').addClass('krill-uload-input');
-
-  console.log ( "New upload with var = '"+x.var+"'" );
 
   span.append(
     $('<span>Attach files...</span>'),
@@ -92,11 +90,11 @@ Krill.prototype.upload = function(x) {
       dataType: 'json',
 
       done: function (e, data) {
-        data.context.empty().append(that.uploaded_item(data.files[0].name,data.result.upload_id,x.var));
+        data.context.empty().append(that.uploaded_item(data.files[0].name,data.result.upload_id));
       },
 
       add: function (e,data) {
-        var el = $('<li><i class="icon-time"></i> '+data.files[0].name+'</li>').addClass('krill-upload-waiting').attr("id",x.var);
+        var el = $('<li><i class="icon-time"></i> '+data.files[0].name+'</li>').addClass('krill-upload-waiting')  ;
         data.context = el;
         list.append(el);
         data.submit();
