@@ -251,5 +251,11 @@ class KrillController < ApplicationController
 
   end
 
+  def uploads
+
+    render json: { uploads: Job.find(params[:job]).uploads.collect { |u| { id: u.id, name: u.name, url: u.url } } }
+
+  end
+
 end
 

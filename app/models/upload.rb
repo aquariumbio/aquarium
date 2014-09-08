@@ -14,4 +14,8 @@ class Upload < ActiveRecord::Base
     self.upload_file_name
   end
 
+  def url
+    self.upload.url
+  end
+
 end

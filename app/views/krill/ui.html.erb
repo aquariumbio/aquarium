@@ -10,13 +10,18 @@
 
     <ul class="nav nav-tabs" id="tools-tab">
       <li class="active krill-tools-tab"> <a href="#history">   History     </a></li>
-      <li class="krill-tools-tab">        <a href="#inventory"> Inventory   </a></li>
-      <li class="krill-tools-tab">        <a href="#actions"> Actions   </a></li>
+      <li class="krill-tools-tab">        <a href="#associations"> Associations         </a></li>
+      <li class="krill-tools-tab">        <a href="#actions">   Actions     </a></li>
     </ul>
 
     <div class="tab-content">
-      <div class="tab-pane active" id='history'>   </div>
-      <div class="tab-pane"        id='inventory'> </div>
+      <div class="tab-pane active" id='history'> </div>
+      <div class="tab-pane"        id='associations'>  
+        <h4 class='krill-association-heading'>Uploads</h4>
+        <div id="uploads"></div>
+        <h4 class='krill-association-heading'>Inventory</h4>
+        <div id="inventory"></div>
+      </div>
       <div class="tab-pane"        id='actions'>
         <button id="krill-note" class='krill-note-btn'>COMMENT</button>
         <button id="krill-abort" class='krill-abort-btn'>ABORT</button>
