@@ -98,6 +98,7 @@ Krill.prototype.disable_step = function(step,user_input) {
 
     step.addClass('krill-step-disabled');
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     var inputs = $(".krill-input-box",step);
 
     for ( var i=0; i<inputs.length; i++ ) {
@@ -105,6 +106,7 @@ Krill.prototype.disable_step = function(step,user_input) {
         $(inputs[i]).val(user_input[$(inputs[i]).attr('id')]);
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     var selects = $(".krill-select",step);
 
     for ( var i=0; i<selects.length; i++ ) {
@@ -115,6 +117,22 @@ Krill.prototype.disable_step = function(step,user_input) {
     $(".krill-next-btn",step).addClass('krill-next-btn-disabled');
     if ($(".krill-next-btn",step).length > 0 ) {
         $(".krill-next-btn",step)[0].disabled = true;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    var uploads = $(".krill-upload",step);
+
+    for ( var i=0; i<uploads.length; i++ ) {
+        var varname = $(uploads[i]).attr('id');
+        $(uploads[i]).empty();
+        list = $('<li></li>').addClass('list krill-upload-list');
+        if ( user_input[varname] ) {
+            for ( var j=0; j<user_input[varname].length; j++ ) {
+                list.append(this.uploaded_item(user_input[varname][j].name,user_input[varname][j].id))
+            }
+        }
+        $(uploads[i]).append(list);
+
     }
 
 }
@@ -352,6 +370,8 @@ Krill.prototype.get = function() {
 
     var inputs = $(".krill-input-box",this.step_list[this.step_list.length-1]);
     var selects = $(".krill-select",this.step_list[this.step_list.length-1]);
+    var uploads = $(".krill-upload-complete",this.step_list[this.step_list.length-1]);
+
     var values = { timestamp: Date.now()/1000 };
 
     $.each(inputs,function(i,e) {
@@ -367,6 +387,24 @@ Krill.prototype.get = function() {
         var name = $(e).attr("id");
         values[name] = $(e).val();
     });
+
+    var a = [];
+
+    $.each(uploads,function(i,e) {
+        var ids   = $('.krill-upload-id',$(e));
+        var names = $('.krill-upload-name',$(e));
+        var varname = $(e).attr("id");
+        for ( var i=0; i<ids.length; i++ ) {
+            a[a.length] = { 
+                id: parseInt($(ids[i]).html()),
+                name: $(names[i]).html().trim()
+            };
+        }
+        console.log( "getting values["+varname+"] = "+a);
+        values[varname] = a;
+    });
+
+    console.log(JSON.stringify(values));
 
     return values;
 
@@ -408,8 +446,10 @@ Krill.prototype.send = function(command,button) {
 
         // type: "POST",
         url: "next?command=" + command +'&job=' + that.job,
-        data: { inputs: inputs },
-        async: true
+        type:'POST',
+        data: { inputs: JSON.stringify(inputs) },
+        async: true,
+        dataType: "json",
 
     }).done(function(data){
 

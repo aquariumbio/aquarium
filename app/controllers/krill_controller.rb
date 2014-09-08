@@ -160,7 +160,11 @@ class KrillController < ApplicationController
       state = JSON.parse @job.state, symbolize_names: true
 
       unless state.last[:operation] == "next" || params[:command] == "check_again"
-        state.push( { operation: params[:command], time: Time.now, inputs: params[:inputs] } )
+        state.push( { 
+          operation: params[:command], 
+          time: Time.now, inputs: 
+          JSON.parse(params[:inputs], symbolize_names: true)
+        } )
         @job.state = state.to_json
         @job.save
       end
@@ -223,6 +227,27 @@ class KrillController < ApplicationController
     }
 
     render json: { takes: takes, touches: touches }
+
+  end
+
+  def upload
+
+    logger.info "upload = #{params[:files][0]}"
+
+    u = Upload.new
+
+    File.open(params[:files][0].tempfile) do |f|
+      u.upload = f # just assign the logo attribute to a file
+      u.name = params[:files][0].original_filename
+      u.job_id = params[:job]
+      u.save
+    end
+
+    if u.errors
+      logger.info "ERRORS: #{u.errors.full_messages}"
+    end
+
+    render json: { upload_id: u.id, name: u.name }
 
   end
 

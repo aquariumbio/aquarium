@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140714220057) do
+ActiveRecord::Schema.define(:version => 20140907220135) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -193,6 +193,16 @@ ActiveRecord::Schema.define(:version => 20140714220057) do
 
   add_index "touches", ["item_id"], :name => "index_touches_on_item_id"
   add_index "touches", ["job_id"], :name => "index_touches_on_job_id"
+
+  create_table "uploads", :force => true do |t|
+    t.integer  "job_id"
+    t.string   "upload_file_name"
+    t.string   "upload_content_type"
+    t.integer  "upload_file_size"
+    t.datetime "upload_updated_at"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.string   "name"

@@ -626,3 +626,30 @@ font-size: $noteFontSize;
     height: 18px;
     background: green;
 }
+
+.krill-upload-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  li {
+    line-height: 1;
+    margin: 0 0 5px 0;
+  }
+}
+
+.krill-break {
+  display: block;
+  float: left;
+}
+
+.krill-file-upload-container {
+  position: relative;
+}
+
+.krill-upload-complete {
+  color: black;
+}
+
+.krill-upload-waiting {
+  color: red;
+}

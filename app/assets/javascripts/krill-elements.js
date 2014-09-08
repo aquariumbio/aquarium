@@ -57,50 +57,59 @@ Krill.prototype.input = function(x) {
 
 }
 
+Krill.prototype.uploaded_item = function(upload_name,upload_id,varname) {
+
+  var icon = $('<i />').addClass('icon-ok');
+  var name = $('<span> '+upload_name+'</span>').addClass('krill-upload-name');
+  var id = $('<span> (<span class="krill-upload-id">'+upload_id+'</span>)</span>');
+  return $('<li />').addClass('krill-upload-complete').attr("id",varname).append(icon,name,id);
+
+}
+
 Krill.prototype.upload = function(x) {
 
-  var d = $('<div />');
-  var i = $('<input id="up" type="file" name="files[]" data-url="/jobs" multiple></input>');
-  var p = $('<div id="progress"><div class="bar" style="width: 0%;"></div></div>');
-  d.append(i,p);
+  var that = this;
+  var container = $('<div></div>').addClass('well row-fluid krill-upload');
+  var span      = $('<div />').addClass('btn btn-success fileinput-button');
+  var input     = $('<input type="file" name="files[]" data-url="/krill/upload?job='+this.job+'" multiple></input>').addClass('krill-uload-input');
+
+  console.log ( "New upload with var = '"+x.var+"'" );
+
+  span.append(
+    $('<span>Attach files...</span>'),
+    input);
+
+  var list          = $('<ul />').addClass('list krill-upload-list');
+  var button_holder = $('<div />').addClass('span3').append(span);
+  var list_holder   = $('<div />').addClass('span9').append(list);
+
+  container.append(button_holder,list_holder);
 
   $(function() {
 
-    console.log('setting up file upload');
-
-    $('#up').fileupload({
+    input.fileupload({
 
       dataType: 'json',
 
       done: function (e, data) {
-         $.each(data.result.files, function (index, file) {
-           console.log("got " + text(file.name));
-         });
+        data.context.empty().append(that.uploaded_item(data.files[0].name,data.result.upload_id,x.var));
       },
 
-      progressall: function (e, data) {
-        var progress = parseInt(data.loaded / data.total * 100, 10);
-        $('#progress .bar').css(
-          'width',
-          progress + '%'
-          );
+      add: function (e,data) {
+        var el = $('<li><i class="icon-time"></i> '+data.files[0].name+'</li>').addClass('krill-upload-waiting').attr("id",x.var);
+        data.context = el;
+        list.append(el);
+        data.submit();
       },
 
-      add: function (e, data) {
-        console.log('adding button');
-        data.context = $('<button/>').text('Upload')
-          .appendTo(d)
-          .click(function () {
-            data.context = $('<p/>').text('Uploading...').replaceAll($(this));
-            data.submit();
-          });
+      fail: function(e,data) {
+        console.log('failed');
       }
 
     });
-
   });
 
-  return d
+  return container;
 
 }
 

@@ -15,6 +15,7 @@ class Job < ActiveRecord::Base
   belongs_to :user
   belongs_to :metacol
   has_many :takes
+  has_many :uploads
 
   def self.params_to_time p
 

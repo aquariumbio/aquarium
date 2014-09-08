@@ -60,11 +60,12 @@ Bioturk::Application.routes.draw do
   get "krill/log"
   get "krill/ui"
   get "krill/state"
-  get "krill/next"
+  post "krill/next"
   get "krill/error"
   get "krill/inventory"
   get "krill/abort"
   get "krill/jobs"
+  post "krill/upload"
 
   get "stats/jobs"
   get "stats/users"

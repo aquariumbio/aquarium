@@ -11,8 +11,17 @@
 <% end %>
 
 <%= @job.path %></h1>
-
+`
 <a href='/krill/ui?job=<%= @job.id %>' class='btn'>View Job Steps / History</a>
+
+<div id='uploads'>
+  <h2>Uploads</h2>
+  <ul>
+    <% @job.uploads.each do |u| %>
+      <li><a href='<%= u.upload.url %>'><%= u.upload.original_filename  %></a></li>
+    <% end %>
+  </ul>
+</div>
 
 <div id='touches'>
   <h2>Inventory Touched</h2>

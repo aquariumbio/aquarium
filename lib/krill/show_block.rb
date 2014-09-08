@@ -2,10 +2,13 @@ module Krill
 
   class ShowBlock
 
+    @@get_counter = 0  
+    @@select_counter = 0
+    @@upload_counter = 0
+
     def initialize
       @parts = []
-      @get_counter = 0
-      @select_counter = 0
+
     end
 
     def title str
@@ -49,7 +52,11 @@ module Krill
     end
 
     def upload opts={}
-      @parts.push({upload: opts})
+      options = {
+        var: "upload_#{@@upload_counter}"
+      }
+      @@upload_counter += 1
+      @parts.push({upload: options.merge(opts)})
     end
 
     def transfer x, y, routing
@@ -75,10 +82,10 @@ module Krill
     def get type, opts={}
     	raise "First argument to get should be either 'number' or 'text'" unless type == 'number' || type == 'text'
     	options = {
-    		var: "get_#{@get_counter}",
+    		var: "get_#{@@get_counter}",
     		label: "Enter a #{type}"
     	}
-    	@get_counter += 1
+    	@@get_counter += 1
       @parts.push({input: (options.merge opts).merge({type: type})})
     end
 
@@ -102,11 +109,11 @@ module Krill
     def select choices, opts={}
     	raise "First argument to select should be an array of numbers or strings" unless is_proper_array choices
     	options = {
-    		var: "select_#{@select_counter}",
+    		var: "select_#{@@select_counter}",
     		label: "Choose",
         multiple: false
     	}
-    	@select_counter += 1
+    	@@select_counter += 1
       @parts.push({select: (options.merge opts).merge({choices: choices})})
     end
 

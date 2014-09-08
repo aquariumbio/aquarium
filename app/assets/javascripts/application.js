@@ -18,7 +18,7 @@
 //= require jquery.ui.menu
 //= require jquery.ui.autocomplete
 //= require jquery.cookie
-//= require jquery-fileupload
+//= require jquery-fileupload/basic
 //= require dataTables/jquery.dataTables
 //= require d3
 //= require joint.nojquery
