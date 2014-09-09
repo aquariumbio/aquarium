@@ -16,7 +16,8 @@ module Krill
           sample: Sample.includes(:sample_type),
           sample_type: SampleType.includes(),
           object_type: ObjectType.includes(),
-          task: Task.includes(:task_prototype)
+          task: Task.includes(:task_prototype),
+          upload: Upload
         }
 
         # Do the search

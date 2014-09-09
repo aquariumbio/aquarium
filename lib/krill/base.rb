@@ -10,7 +10,6 @@ module Krill
 
       page = ShowBlock.new.run(&Proc.new)
 
-
       # increment pc
       job = Job.find(jid)
       job.append_step operation: "display", content: page

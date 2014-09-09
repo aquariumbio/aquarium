@@ -137,10 +137,10 @@ Krill.prototype.disable_step = function(step,user_input) {
         if ( user_input[varname] ) {
             for ( var j=0; j<user_input[varname].length; j++ ) {
                 list.append(
-                    this.template('uploaded-item')({
+                    $(this.template('uploaded-item')({
                         name: user_input[varname][j].name,
                         id: user_input[varname][j].id
-                }));
+                })));
             }
         }
         $(uploads[i]).append(list);

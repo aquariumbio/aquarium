@@ -33,26 +33,28 @@ Krill.prototype.upload = function(x) {
   var y = this.fix(x);
   y.job = this.job;
 
-  var container = $(this.template('upload')(y)),
-      input = $('.krill-upload-input',container),
-      list = $('.krill-upload-list',container),
-      that = this;
+  var container = $(this.template('upload')(y));
+  var input = $('.krill-upload-input',container);
+  var list = $('.krill-upload-list',container);
+  var that = this;
 
-  $(function() {
+  $(function(e) {
 
     input.fileupload({
 
       dataType: 'json',
 
       done: function (e, data) {
-        data.context.empty().append(that.template('uploaded-item')({
+        console.log('done ' + data.files[0].name);
+        data.context.empty().append($(that.template('uploaded-item')({
           name: data.files[0].name,
           id: data.result.upload_id
-        }));
+        })));
       },
 
       add: function (e,data) {
-        var el = that.template('upload-waiting-template')({name: data.files[0].name});
+        var el = $(that.template('upload-waiting')({name: data.files[0].name}));
+        console.log('sending ' + data.files[0].name);
         data.context = el;
         list.append(el);
         data.submit();
@@ -63,7 +65,10 @@ Krill.prototype.upload = function(x) {
       }
 
     });
+
   });
+
+  console.log('done setting up');
 
   return container;
 

@@ -94,6 +94,34 @@ choice = data[:choice]
 
 You can tell Aquarium to allow the user to select multiple items with the option **multiple: true**. In that case, the resulting data from the user will contain an array of all selected items.
 
+**upload**
+
+To have the user upload files associated with the step, use 
+
+```ruby
+show {
+  title "Please upload some files"
+  upload
+}
+```
+
+which will insert a button that starts a file upload dialog. If a variable name is included, as in
+```ruby
+data = show {
+  upload var: "myvar"
+}
+
+# do something with data[:myvar]
+```
+
+then data[:myvar] will be an array of the uploaded files. Each element in the array will look something like
+
+```ruby
+{ id: 123, name: "important_data_for_your_science_paper.pdf" }
+```
+
+The id refers to the upload id, which you can use to retrieve the upload at some later time. The uploads are also linked to in the log for the protocol.
+
 **separator**
 
 Display a break between other shown elements, such as between two notes.
