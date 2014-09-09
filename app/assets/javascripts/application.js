@@ -20,6 +20,7 @@
 //= require jquery.cookie
 //= require jquery-fileupload/basic
 //= require dataTables/jquery.dataTables
+//= require underscore
 //= require d3
 //= require joint.nojquery
 //= require joint.layout.DirectedGraph

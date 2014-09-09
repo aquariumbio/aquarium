@@ -35,6 +35,8 @@ gem 'jquery-datatables-rails'
 gem 'jquery-cookie-rails'
 gem "jquery-fileupload-rails"
 
+gem 'underscore-rails'
+
 gem 'd3-rails'
 
 gem 'git'

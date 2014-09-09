@@ -145,6 +145,7 @@ GEM
     uglifier (2.1.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
+    underscore-rails (1.7.0)
     will_paginate (3.0.4)
     yaml_db (0.2.3)
 
@@ -174,5 +175,6 @@ DEPENDENCIES
   sass-rails (~> 3.2.3)
   sqlite3
   uglifier (>= 1.0.3)
+  underscore-rails
   will_paginate
   yaml_db

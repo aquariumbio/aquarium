@@ -15,6 +15,11 @@ function Krill(job,path,pc) {
 
     this.check_again = false;
 
+    _.templateSettings = {
+        interpolate: /\{\{\=(.+?)\}\}/g,
+        evaluate: /\{\{(.+?)\}\}/g
+    };
+
 }
 
 Krill.prototype.initialize = function() {
@@ -131,7 +136,11 @@ Krill.prototype.disable_step = function(step,user_input) {
         list = $('<li></li>').addClass('list krill-upload-list');
         if ( user_input[varname] ) {
             for ( var j=0; j<user_input[varname].length; j++ ) {
-                list.append(this.uploaded_item(user_input[varname][j].name,user_input[varname][j].id))
+                list.append(
+                    this.template('uploaded-item')({
+                        name: user_input[varname][j].name,
+                        id: user_input[varname][j].id
+                }));
             }
         }
         $(uploads[i]).append(list);
