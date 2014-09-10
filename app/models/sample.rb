@@ -66,7 +66,7 @@ class Sample < ActiveRecord::Base
             "-"
           end
         elsif sample_type[ft] == 'number'
-          self[f]
+          self[f] ? self[f] : "-"
         elsif sample_type[ft] == 'string'
           s = self[f]
           if !s
@@ -74,7 +74,7 @@ class Sample < ActiveRecord::Base
           elsif s.length > 20
             s[0,20] + '...'
           else
-            s
+            s ? s : "?"
           end
         elsif self[f] == '-none-'
           "-"
@@ -83,7 +83,7 @@ class Sample < ActiveRecord::Base
           if l
             "<a href='samples/#{l.id}'>#{l.name}</a>"
           else
-            "?"
+            "-"
           end
         end
       end
