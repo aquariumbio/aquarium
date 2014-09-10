@@ -50,7 +50,7 @@ module Oyster
     job.latest_start_time = h[:latest]
     job.group_id = group.id
     job.submitted_by = sub ? sub.id : 0
-    job.user_id = 1 # Why is this 1? Maybe it should be set when the job is run.
+    # job.user_id = 1 # Why is this 1? Maybe it should be set when the job is run.
     job.pc = Job.NOT_STARTED
     job.state = { stack: scope.stack }.to_json
     job.metacol_id = h[:metacol_id]

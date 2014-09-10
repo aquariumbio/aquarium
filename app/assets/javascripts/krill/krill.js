@@ -70,10 +70,10 @@ Krill.prototype.render = function() {
 
         // Put the content in an li
         var s = $('<li id="l'+n+'"></li>')
-        .addClass('krill-step-list-item')
-        .append($('<div></div>')
-            .addClass('krill-step-container')
-            .append(content));
+            .addClass('krill-step-list-item')
+            .append($('<div></div>')
+              .addClass('krill-step-container')
+              .append(content));
 
         // Add the content into the document and a separate list of tags for easy access
         this.step_list.push(s);
@@ -170,19 +170,16 @@ Krill.prototype.add_latest_step = function() {
 
 Krill.prototype.build_titlebar = function(number,with_button) {  
 
-    var that = this;
-
-    var titlebar = $('<div></div>').addClass('row-fluid').addClass('krill-step-titlebar');
-    var num = $('<div>' + (number) + '</div>').addClass('krill-step-number').addClass('span2');
-    var title = $('<div></div>').addClass('krill-title').addClass('span8').attr('id','title');
-    var btnholder = $('<div></div>').addClass('span2');
+    var that = this,
+        titlebar = $(this.template('titlebar')({number: number})),
+        btnholder = $('.krill-btn-holder',titlebar);
 
     if(with_button) {
 
         btn = $('<button id="next">OK</button>').addClass('krill-next-btn');
         btnholder.append(btn);
 
-        btn.click(function() { // USER CLICKS 'OK' ///////////////////////////////////////////////////////////////////////////////////////////////////
+        btn.click(function() { // USER CLICKS 'OK' ////////////////////////////////////////////////////////////////////
 
             if ( that.check_again ) {
                 that.send("check_again",this);
@@ -190,11 +187,9 @@ Krill.prototype.build_titlebar = function(number,with_button) {
                 that.send("next",this);
             }
 
-        }); //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        }); ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     }
-
-    titlebar.append(num,title,btnholder);
 
     return titlebar;
 
