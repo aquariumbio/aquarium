@@ -155,4 +155,61 @@ class StatsController < ApplicationController
 
   end
 
+  def to_time x, unit
+    case unit
+    when "hour"
+      x.hours
+    when "day"
+      x.days
+    when "week"
+      x.week
+    else
+      x.hours
+    end
+  end
+
+  def activity_monitor
+
+    if request.path_parameters[:format] == 'json'
+
+      unit = params[:unit]
+      period = params[:period].to_i
+      offset = params[:offset].to_i
+
+      midnight = Time.now.midnight + 1.day
+      start = midnight + to_time(offset*period,unit)
+      stop = midnight + to_time((offset+1)*period, unit)
+
+      created = "created_at >= ? and created_at < ?"
+      updated = "updated_at >= ? and updated_at < ?"
+
+      result = { 
+        unit: unit, 
+        period: period, 
+        offset: offset, 
+        midnight: midnight, 
+        start: start,
+        interval: start.strftime('%a %b %d, %Y'),
+        stop: stop,
+        samples: Sample.where(created, start, stop).count,
+        items: Item.where(created, start, stop).count,
+        objects: ObjectType.where(created, start, stop).count,
+        jobs_started: Job.where(created, start, stop).count,
+        jobs_completed: Job.where(updated + " and pc = -2", start, stop).count,
+        metacols_started: Metacol.where(created, start, stop).count,
+        metacols_completed: Metacol.where(updated + "and status != 'RUNNING'", start, stop).count     
+      }
+
+    end
+
+    respond_to do |format|
+      format.html 
+      format.json { render json: result }
+    end
+
+
+  end
+
 end
+
+

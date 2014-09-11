@@ -1,0 +1,86 @@
+<style>
+.activity-monitor {
+   table-layout: fixed;ß
+/*   font-size: 9pt; */
+   border-top-right-radius:  
+}
+.acbar {
+  background: #8e8;
+  line-height: 1.4;
+  padding-left: 2px;
+}
+</style>
+
+<table id='main' class='table table-condensed activity-monitor'>
+
+  <thead>
+    <tr>
+      <th></th>
+      <th>New Items</th>
+      <th>New Samples</th>
+      <th>New Objects</th>
+      <th>Jobs Started</th>
+      <th>Jobs Completed</th>     
+      <th>Metacols Started</th>
+      <th>Metacols Completed</th>    
+    </tr>
+  </thead>
+
+  <tbody id='body'>
+  </tbody>
+
+</table>
+
+<script type='template' id='row-template'>
+  <th>{{= interval }}</th>
+  <td data-value={{= items }} class='items'></td>
+  <td data-value={{= samples }} class='samples'></td>
+  <td data-value={{= objects }} class='objects'></td>
+  <td data-value={{= jobs_started }} class='jobs_started'></td>    
+  <td data-value={{= jobs_completed }} class='jobs_completed'></td>    
+  <td data-value={{= metacols_started }} class='metacols_started'></td>    
+  <td data-value={{= metacols_completed }} class='metacols_completed'></td>    
+</script>
+
+<script>
+
+  _.templateSettings = {
+      interpolate: /\{\{\=(.+?)\}\}/g,
+      evaluate: /\{\{(.+?)\}\}/g
+  };
+
+  var offsets = _.range(-1,-31,-1);
+  var row = _.template($('#row-template').html());
+
+  $.each(offsets,function() {
+
+    var offset = this;
+    var el = $('<tr />').append(row({interval: 0, items: 0, samples: 0, objects: 0, jobs_started: 0, jobs_completed: 0, metacols_started: 0, metacols_completed: 0 }));
+
+    $.ajax({
+      url: "activity_monitor.json?unit=day&period=1&offset="+offset,
+    }).done(function(data){
+      el.empty().append(row(data));
+      barify();
+    });
+
+    $('#body').append(el);
+
+  });
+
+  function barify() {
+    $("td").each(function(index) {
+      var max = 1;
+      $("."+$(this).attr("class")).each(function() {
+        if ( $(this).data('value') > max ) {
+          max = $(this).data('value');
+        }
+      });
+      var w = $(this).data('value');
+      var bar = $('<div>' + w + '</div>').addClass('acbar');
+      $(this).empty().append(bar);
+      bar.css('width',100*w/max+"%");
+    });
+  }
+
+</script>

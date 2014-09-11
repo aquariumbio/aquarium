@@ -241,6 +241,8 @@ class ObjectTypesController < ApplicationController
 
         num_samples += 1
         new_sample = Sample.new(s.attributes.except("sample_type_id","created_at","updated_at"))
+        new_sample.created_at = s.created_at
+        new_sample.updated_at = s.updated_at        
         new_sample.sample_type_id = s.sample_type_id
         new_sample.id = s.id
         new_sample.save
