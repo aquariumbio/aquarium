@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.13'
+gem 'rails', '3.2.19'
 gem 'bootstrap-sass'
 gem 'yaml_db'
 gem 'paperclip'

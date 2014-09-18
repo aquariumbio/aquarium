@@ -200,7 +200,7 @@ class StatsController < ApplicationController
         metacols_completed: Metacol.where(updated + "and status != 'RUNNING'", start, stop).count     
       }
 
-    end
+    end 
 
     respond_to do |format|
       format.html 
