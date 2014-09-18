@@ -34,7 +34,7 @@ production:
   host: your.mysqlerver.com
   port: 3306
   database: production
-  pool: 5
+  pool: 100
   username: yourusername
   password: "yourpassword"
 
@@ -46,7 +46,7 @@ rehearse:
   host: your.mysqlerver.com
   port: 3306
   database: rehearse
-  pool: 5
+  pool: 100
   username: yourusername
   password: "yourpassword"
 
