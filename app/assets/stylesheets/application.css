@@ -10,7 +10,6 @@
  *
  *= require_self
  *= require_tree .
- *= require bootstrap
  *= require dataTables/jquery.dataTables
  *= require jquery.ui.datepicker
  *= require jquery.ui.menu
