@@ -247,7 +247,7 @@ The Aquarium inventory is managed via a structured database of Ruby objects with
 * **Sample**: A specific (yet still abstract) sample, not to be confused with a sample type or an item. For example, a primer with a certain sequence and name will have sample type "Primer" and possibly many items in the lab for the given sample. If **s** is a sample, then the following methods are available:
   * s.id - The id of the sample.
   * s.name: The name of the sample. For example, a sample whose SampleType is "Plasmid" might be named "pLAB1".
-  * s.sample_type - The sample type of the sample.
+  * s.sample_type_id - The sample type id of the sample.
   * s.properties - A hash of the form { key1: value1, ..., key8: value8 } where the nth key is named according to the s.sample_type.fieldnname (as a symbol, not a string).
   * s.make_item object_type_name - Returns an item associated with the sample and in the container described by object_type_name The location of the item is determined by the location wizard.
 * **Item**: A physical item in the lab. It has an object type and may correspond to a sample, see the examples below. If **i** is an item, then the following methods are available:
