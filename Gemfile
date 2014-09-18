@@ -26,7 +26,7 @@ end
 group :assets do
   gem 'coffee-rails'
   gem 'uglifier', '>= 1.0.3'
-  gem 'bcrypt'
+  gem 'bcrypt-ruby'
 end
 
 gem 'jquery-rails'
