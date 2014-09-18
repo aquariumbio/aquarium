@@ -13,6 +13,9 @@ Krill.prototype.fix = function(x) {
   if ( !("sample" in x)  ) {
     y.sample = null;
   } 
+  if ( !("multiple" in x ) ) {
+    y.multiple = false;
+  }
   return y;
 }
 

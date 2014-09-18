@@ -31,7 +31,7 @@
 <script type='template' id='select-template'>
   <li>
     <span class='krill-select-label'>{{= label }}</span>
-    <select class='krill-select' id='{{= variable }}'>
+    <select class='krill-select' id='{{= variable }}' {{= multiple ? "multiple" : "" }}>
     {{ $.each(choices,function(i) { }}
         <option>{{= choices[i] }}</option>
     {{ }); }}

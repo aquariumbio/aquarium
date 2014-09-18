@@ -30,7 +30,11 @@ function Finder(kind,callback) {
                 that.fields = [ "project", "type", "sample", "container", "item" ];
                 that.select_method = that.select_item;
             }
+            console.log("B");
         });
+
+        console.log("A");
+
 
     }
 
@@ -38,7 +42,7 @@ function Finder(kind,callback) {
       .addClass('btn btn-small finder-btn')
 	  .click(function(){that.launch();});
 
-    this.window = $('<div></div>').addClass('modal hide fade finder');
+    this.window = $('<div></div>').addClass('modal fade finder');
     $(document.body).append(this.window);
 
     return this.launch_button;
@@ -133,6 +137,8 @@ Finder.prototype.get = function(index,spec) {
 
 Finder.prototype.launch = function() {
 
+    console.log("Launch 1");
+
     var that = this;
 
     this.selections = [];
@@ -140,10 +146,14 @@ Finder.prototype.launch = function() {
     this.window.html(this.template());
     this.get(0,{});
     this.window.modal('toggle');
+//    this.window.css('display', 'block !important')
+
+    console.log("Launch 2");
 
     $('#ok',this.window).click(function() {
        that.window.modal('toggle');
 	   that.callback(that.selections);
+       console.log("Launch 3");
     });
 
 }

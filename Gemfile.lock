@@ -32,7 +32,7 @@ GEM
     bcrypt-ruby (3.0.1)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
-    bootstrap-sass (3.2.0.2)
+    bootstrap-sass (2.3.2.0)
       sass (~> 3.2)
     bootstrap-will_paginate (0.0.10)
       will_paginate
@@ -150,7 +150,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt-ruby (~> 3.0.0)
   binding_of_caller
-  bootstrap-sass
+  bootstrap-sass (= 2.3.2.0)
   bootstrap-will_paginate
   coffee-rails
   d3-rails
