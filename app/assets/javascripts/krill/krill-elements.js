@@ -10,6 +10,9 @@ Krill.prototype.fix = function(x) {
   var y = x;
   y.variable = y.var;  // replace default and var with keys that don't
   y.dflt = y.default;  // conflict with javascript keywords
+  if ( !("sample" in x)  ) {
+    y.sample = null;
+  } 
   return y;
 }
 
@@ -25,7 +28,7 @@ Krill.prototype.bullet    = function(x) { return $(this.template('bullet')({cont
 Krill.prototype.image     = function(x) { return $(this.template('image')({content: x})); }
 Krill.prototype.select    = function(x) { return $(this.template('select')(this.fix(x))); }
 Krill.prototype.input     = function(x) { return $(this.template('input')(this.fix(x))); }
-Krill.prototype.take      = function(x) { return $(this.template('take')(x)); }
+Krill.prototype.take      = function(x) { return $(this.template('take')(this.fix(x))); }
 Krill.prototype.separator = function(x) { return $(this.template('separator')()); }
 
 Krill.prototype.upload = function(x) {

@@ -136,12 +136,7 @@
     
   });
 
-  $.each(offsets,function() {
-
-    var offset = this;
-    var r = new Row();
-    rows.push(r);
-    
+  function getrow(r,offset) {
     $.ajax({
       url: "activity_monitor.json?unit=day&period=1&offset="+offset,
     }).done(function(data){
@@ -154,7 +149,20 @@
       jobs.series[2].setData(select('metacols_started'));
       jobs.series[3].setData(select('metacols_completed'));
     });
+    console.log("asked for row " + offset)
+  }
 
-  });
+
+  var delay = 0;
+  for ( var i=0; i<offsets.length; i++ ) {
+
+    var offset = offsets[i];
+    var row = new Row();
+    rows.push(row);
+
+    setTimeout ( function(r,o) { getrow(r,o); }, delay, row, offset );
+    delay += 600;
+
+  }
 
 </script>
