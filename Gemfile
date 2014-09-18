@@ -30,7 +30,7 @@ group :assets do
 end
 
 gem 'jquery-rails'
-gem 'jquery-ui-rails'
+gem 'jquery-ui-rails', '~> 4.2.1'
 gem 'jquery-datatables-rails'
 gem 'jquery-cookie-rails'
 gem "jquery-fileupload-rails"
