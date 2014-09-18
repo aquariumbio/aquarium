@@ -88,6 +88,11 @@ module Krill
 
           puts "#{@job.id}: SERIOUS EXCEPTION #{main_error.to_s}: #{main_error.backtrace[0,10]}"
 
+          if (ActiveRecord::Base.connection && ActiveRecord::Base.connection.active?)
+             ActiveRecord::Base.connection.close
+             puts "#{@job.id}: Closing ActiveRecord connection"
+          end
+
         end
 
       }
