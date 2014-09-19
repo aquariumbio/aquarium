@@ -97,7 +97,11 @@ class InterpreterController < ApplicationController
 
       redirect_to arguments_new_metacol_path(sha: @sha, path: @path) 
 
-    else # its a protocol
+    elsif /\.rb$/.match @path
+
+      redirect_to krill_arguments_path(sha: @sha, path: @path) 
+
+    else # its a plaknton protocol
 
       if params[:from]
         sequence_new_job @sha, @path, params[:from].to_i

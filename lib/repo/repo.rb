@@ -28,10 +28,13 @@ module Repo
 
   def self.contents path, sha
 
-    git = Git.open("repos/" + (repo_name path))
-    object = git.object(sha)
-
-    object.contents
+    begin
+      git = Git.open("repos/" + (repo_name path))
+      object = git.object(sha)
+      object.contents
+    rescue
+      (Blob.get sha, path).xml
+    end
 
   end
 

@@ -6,7 +6,11 @@ class KrillController < ApplicationController
 
     begin
       @path = params[:path] 
-      @sha = Repo::version @path
+      if params[:sha]
+        @sha = params[:sha]
+      else
+        @sha = Repo::version @path
+      end
       @content = Repo::contents @path, @sha
     rescue Exception => e
       flash[:error] = e.to_s + ". " + e.backtrace[0].to_s
