@@ -253,7 +253,7 @@ The Aquarium inventory is managed via a structured database of Ruby objects with
 * **Item**: A physical item in the lab. It has an object type and may correspond to a sample, see the examples below. If **i** is an item, then the following methods are available:
   * i.id - the id of the item. Every item in the lab has such an id that can by used to find information about the item (see Finding Items and Samples).
   * i.location - a string describing where in the lab the item can be found.
-  * i.object_type - the object type associated with the item.
+  * i.object_type_id - the object type id associated with the item.
   * i.sample - the corresponding sample, if any. Some items correspond to samples and some do not. For example, an item whose object type is "1 L Bottle" does not correspond to a sample. An item whose object type is "Plasmid Stock" will have a corresponding sample, whose name might be something like "pLAB1".
   * i.datum - data associated with the item. It can be an arbitrary Ruby value, but is usually a hash.
   * i.datum = x - set the value of the datum associated with the item to x.
