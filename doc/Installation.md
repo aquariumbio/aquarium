@@ -115,7 +115,7 @@ Go to Protocols->Under Version Control and choose myprotocols/hello.pl and run t
 Keep Going
 --
 
-Congratulations, you've installed Aquarium. Now go to Help and read about Plankton and Oyster.
+Congratulations, you've installed Aquarium. Now go to Help and read about Plankton, Krill, and Oyster.
 
 
 
