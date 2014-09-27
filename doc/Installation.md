@@ -85,13 +85,13 @@ to start aquarium. Then go do http://localhost:3000/ and see if it works!
 
 This procedure should start a "Development" mode version with a local sqlite database in the db directory. This could be enough for some labs. However, the Klavins lab runs two versions of Aquarium using MySQL and [Phusion Passenger](https://www.phusionpassenger.com/index2). The first version is the "rehearsal" version, and the second version is the "production" version. This setup allows us to (a) periodically copy the databases from production to rehearsal servers via the ""Admin->Mirror Production" menu and (b) practice protocols without messing up our actual inventory. Details on installing Passenger can be found online.
 
-You will also need to start two servers. First is the Krill server:
+You will also need to start two servers. First the Krill server, which is expected to be running on port 3500 in development mode:
 
-	rails runner "Krill::Server.new.run"
+	rails runner "Krill::Server.new.run(3500)"
 
 Next is metacol server:
 
-  rails runner 'MetacolDaemon.main'
+  	rails runner 'MetacolDaemon.main'
 
 Create an Account
 --
@@ -105,6 +105,7 @@ If above does not work, you can try create a user with admin previleges in Rails
 	user.admin = true
 	user.save
 
+Note that if you add an account through the rails console, you'll have to create another administrator account through the Aquarium interface that you should then use. The user created in the console will be missing neccesary associations that are handled by the Aquarium interface. 
 
 Run Hello World
 --
