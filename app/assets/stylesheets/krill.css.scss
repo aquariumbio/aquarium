@@ -669,3 +669,13 @@ font-size: $noteFontSize;
 .krill-upload-waiting {
   color: red;
 }
+
+.krill-timer {
+  border: 1pt solid #eee;
+  background: yellow;
+  color: black;
+  padding: 30px;
+  margin: 20px;
+  width: 340px; 
+  font-size: 40pt;
+}

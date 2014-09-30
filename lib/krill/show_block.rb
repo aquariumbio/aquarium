@@ -51,6 +51,15 @@ module Krill
       @parts.push({image: "#{Bioturk::Application.config.image_server_interface}#{name}"})
     end
 
+    def timer opts={}
+      options = {
+        initial: { hours: 0, minutes: 1, seconds: 0 },
+        final: { hours: 0, minutes: 0, seconds: 0 },
+        direction: "down"
+      }.merge opts
+      @parts.push({timer: options})
+    end
+
     def upload opts={}
       options = {
         var: "upload_#{@@upload_counter}"

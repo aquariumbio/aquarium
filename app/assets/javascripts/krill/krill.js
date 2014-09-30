@@ -147,6 +147,9 @@ Krill.prototype.disable_step = function(step,user_input) {
 
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    $(".krill-timer",step).each(function() { console.log($(this)); $(this).data("krill_timer").stop(); })
+
 }
 
 Krill.prototype.add_latest_step = function() {

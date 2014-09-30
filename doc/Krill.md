@@ -94,6 +94,15 @@ choice = data[:choice]
 
 You can tell Aquarium to allow the user to select multiple items with the option **multiple: true**. In that case, the resulting data from the user will contain an array of all selected items.
 
+** timer **
+
+Show a timer. By default, the timer starts at one minute and counts down. It starts beeping when it gets to zero, and keeps beeping until the user clicks "OK". You can specify the starting number of hours, minutes, and seconds, with for example
+```ruby
+show {
+  timer initial: { hours: 0, minutes: 20, seconds: 30}
+}
+```
+
 **upload**
 
 To have the user upload files associated with the step, use 
