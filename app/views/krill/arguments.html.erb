@@ -6,18 +6,68 @@
 
 <div id='json_editor'></div>
 
-<p><button id='start' class='btn btn-primary'>Submit</button></p>
+<h4>Scheduling</h4>
+
+  <div id='time-chooser'>
+
+    <div class='row-fluid'>
+
+      <div class='span3'>
+        <div id='group-chooser'></div>
+      </div>
+
+      <div class='span3'>
+        <label>Date</label>
+        <div id="choose-date"></div>
+      </div>
+
+      <div class='span3'>
+        <label>Time</label>
+        <div id="choose-time"></div>
+      </div>
+
+      <div class='span3'>
+        <label>Window</label>
+        <div id="choose-window"></div>
+      </div>
+
+      <div class='span3'></span>
+
+    </div>
+
+  </div>
+
+  <div id='button-area'></div>
+
+  <p><button id='start' class='btn btn-primary'>Submit</button></p>
 
 <script>
+
+  <%= render partial: 'interpreter/build_groups' %>
 
   arguments = JSON.parse('<%= @args.to_json.html_safe %>');
   render_json_editor($('#json_editor'),arguments,arguments);
 
+  // run javascript ui maker thingy
+  ac = new KrillGroupAndTiming();
+  ac.display_groups(groups,users,'<%= current_user.login %>');
+  ac.display_timing();
+
   $('#start').click(function() {
 
     spec = JSON.stringify(json_editor_extract($('#json_editor')));
-    console.log(spec);
-    window.location = encodeURI('submit?path=<%= @path %>&sha=<%= @sha %>&args='+spec);
+
+    var info = {};
+    info.group = $('#group-chooser').find('select').val();
+
+    var date = $('#datepicker').val();
+    var hours = $('#hours').val();
+    var minutes = $('#minutes').val();
+
+    info.date = (new Date(hours + ":" + minutes + ' ' + date )).getTime()/1000;
+    info.window = $('#window').val();
+
+    window.location = encodeURI('submit?path=<%= @path %>&sha=<%= @sha %>&args='+spec) + '&info=' + encodeURIComponent(JSON.stringify(info));;
 
   });
 

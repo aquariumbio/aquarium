@@ -44,6 +44,7 @@ class KrillController < ApplicationController
 
   def submit
 
+    # Parse arguments
     begin
       @arguments = JSON.parse params[:args], symbolize_names: true
     rescue Exception => e
@@ -51,18 +52,27 @@ class KrillController < ApplicationController
       return redirect_to krill_arguments_path(path: params[:path], sha: params[:sha], args: params[:args])
     end
 
+    # Determine group and timing info
+    @info = JSON.parse(params[:info],:symbolize_names => true)
+    @desired = Time.at(@info[:date])
+    @window = @info[:window].to_f
+    @latest = Time.at(@desired + @window.hours)
+    @group = Group.find_by_name(@info[:group])
+
+    # Make a new job
     @job = Job.new
     @job.path = params[:path]
     @job.sha = params[:sha]
 
+    # Set up job parameters
     @job.pc = Job.NOT_STARTED
     @job.set_arguments @arguments
-
-    @job.group_id = 1
+    @job.group_id = @group.id
     @job.submitted_by = current_user.id
-    @job.desired_start_time = Time.now
-    @job.latest_start_time = Time.now + 1.hour
+    @job.desired_start_time = @desired
+    @job.latest_start_time = @latest
 
+    # Save the job
     @job.save
 
   end
