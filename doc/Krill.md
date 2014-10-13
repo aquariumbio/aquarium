@@ -552,7 +552,7 @@ Tasks have associated specifications (see the Aquarum UI) that can be obtained u
 ```ruby
 task.spec
 ```
-For example, if "Daily" tasks have am field called "warnings" that is set to an array of strings, one could display those warnings as follows.
+For example, if "Daily" tasks have a field called "warnings" that is set to an array of strings, one could display those warnings as follows.
 
 ```ruby
 data = show {
