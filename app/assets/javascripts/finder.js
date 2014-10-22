@@ -39,7 +39,7 @@ function Finder(kind,callback) {
       .addClass('btn btn-small finder-btn')
 	  .click(function(){that.launch();});
 
-    this.window = $('<div></div>').addClass('modal fade finder');
+    this.window = $('<div></div>').addClass('modal fade finder').attr('display','none');
     $(document.body).append(this.window);
 
     return this.launch_button;
@@ -133,8 +133,6 @@ Finder.prototype.get = function(index,spec) {
 }
 
 Finder.prototype.launch = function() {
-
-    console.log("Launch 1");
 
     var that = this;
 
