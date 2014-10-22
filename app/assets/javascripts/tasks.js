@@ -39,7 +39,13 @@ function render_json(tag,obj) {
 
 }
 
-function render_json_editor(tag,obj,proto,type,parent_list) {
+function render_json_editor(tag,obj,proto,type,parent_list) { 
+
+    console.log("- " + tag.attr('id') + " -----------------------");
+    console.log(obj);
+    console.log(proto);
+    console.log(type);
+    console.log(parent_list);                
 
     if ( typeof obj == "string" ) {
 

@@ -48,7 +48,7 @@
   arguments = JSON.parse('<%= @args.to_json.html_safe %>');
   render_json_editor($('#json_editor'),arguments,arguments);
 
-  // run javascript ui maker thingy
+  // run javascript ui maker thingy 
   ac = new KrillGroupAndTiming();
   ac.display_groups(groups,users,'<%= current_user.login %>');
   ac.display_timing();

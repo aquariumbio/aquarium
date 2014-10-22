@@ -1,4 +1,4 @@
-function Finder(kind,callback) {
+function Finder(kind,callback) { 
 
     var that = this;
     this.type = "";
@@ -30,11 +30,8 @@ function Finder(kind,callback) {
                 that.fields = [ "project", "type", "sample", "container", "item" ];
                 that.select_method = that.select_item;
             }
-            console.log("B");
+            
         });
-
-        console.log("A");
-
 
     }
 

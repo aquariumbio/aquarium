@@ -20,14 +20,14 @@ class KrillController < ApplicationController
     if params[:from]
 
       begin
-        logger.info JSON.parse(Job.find(params[:from].to_i).state,symbolize_names:true).last[:rval]
+        @args = JSON.parse(Job.find(params[:from].to_i).state,symbolize_names:true).last[:rval]
         argval = JSON.parse(Job.find(params[:from].to_i).state,symbolize_names:true).last[:rval]
       rescue Exception => e
         flash[:error] = "Could not parse arguments from job #{params[:from]}" + e.to_s
         return redirect_to repo_list_path
       end
 
-      return redirect_to krill_submit_path(path: @path, sha: @sha, args: argval.to_json)
+      #return redirect_to krill_submit_path(path: @path, sha: @sha, args: argval.to_json)
 
     else  
 

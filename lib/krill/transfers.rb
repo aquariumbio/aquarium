@@ -101,7 +101,15 @@ module Krill
           # clear routing for next step
           routing = []
 
-          return if sources[s].matrix[sr][sc] == -1
+          # BUGFIX by Yaoyu Yang
+          # return if sources[s].matrix[sr][sc] == -1
+          # 
+          if sr && sources[s].matrix[sr][sc] == -1
+            s += 1
+            return unless s < sources.length
+            sr,sc = 0,0
+          end
+          # END BUGFIX
 
           # update source indices
           if !sr

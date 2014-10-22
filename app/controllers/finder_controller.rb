@@ -1,4 +1,4 @@
-class FinderController < ApplicationController
+class FinderController < ApplicationController 
 
   before_filter :signed_in_user
 
@@ -24,9 +24,15 @@ class FinderController < ApplicationController
 
   def containers
     spec = JSON.parse( params[:spec], symbolize_names: true )
+    logger.info "spec = " + spec.to_json
     filter = ObjectType.find_by_name(params[:filter])
+    logger.info "filter = " + filter.name
     if filter
-      render json: (ObjectType.joins(:items => :sample).where(:name => filter.name, :samples => { project: spec[:project], name: spec[:sample] }).collect { |o| { id: o.id, name: o.name } }).uniq.sort { |a,b| a[:name] <=> b[:name] }
+      render json: (ObjectType
+        .joins(:items => :sample)
+        .where(:name => filter.name, :samples => { project: spec[:project], name: spec[:sample] })
+        .collect { |o| { id: o.id, name: o.name } })
+      .uniq.sort { |a,b| a[:name] <=> b[:name] }
     else
       render json: (ObjectType.joins(:items => :sample).where(:samples => { project: spec[:project], name: spec[:sample] }).collect { |o| { id: o.id, name: o.name } }).uniq.sort { |a,b| a[:name] <=> b[:name] }
     end      
