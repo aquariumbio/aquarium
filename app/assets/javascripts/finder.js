@@ -40,7 +40,7 @@ function Finder(kind,callback) {
       .addClass('btn btn-small finder-btn')
 	  .click(function(){that.launch();});
 
-    this.window = $('<div></div>').addClass('modal fade finder').attr('display','none');
+    this.window = $('<div></div>').addClass('modal fade finder').css('display','none');
     $(document.body).append(this.window);
 
     return this.launch_button;
