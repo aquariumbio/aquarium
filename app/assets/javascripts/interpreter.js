@@ -27,13 +27,15 @@ ArgumentUI.prototype.display_form = function() {
 
         if ( args[i].type == "generic" ) {
 
-          well.append(
-            $('<div />').append(
-              new Finder('Items', function(s){form.val(JSON.stringify(s));}),
-              new Finder('Samples', function(s){form.val(JSON.stringify(s));}),
-              $('<span>&nbsp; Use buttons to populate input box with item or sample lists.</span>')
-            )
-          );
+          (function(form) {
+            well.append(
+              $('<div />').append(
+                new Finder('Items', function(s){form.val(JSON.stringify(s));}),
+                new Finder('Samples', function(s){form.val(JSON.stringify(s));}),
+                $('<span>&nbsp; Use buttons to populate input box with item or sample lists.</span>')
+              )
+            );
+          })(form);
 
         }
 
@@ -76,7 +78,7 @@ ArgumentUI.prototype.submit = function() {
     // Arguments
     var argvals = {};
     for ( var i in this.args ) {
-	argvals[this.args[i].name] = this[get_name = 'get_' + this.args[i].type](this.args[i]);
+	     argvals[this.args[i].name] = this[get_name = 'get_' + this.args[i].type](this.args[i]);
     }
     info.args = argvals;
 
