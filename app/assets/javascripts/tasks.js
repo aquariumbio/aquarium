@@ -67,9 +67,7 @@ function render_json_editor(tag,obj,proto,type,parent_list) {
                     if ( n==0 ) { 
                        i.val(selections[n]);
                    } else {
-                        console.log("trying to add " + selections[n] + " with " );
                         if ( parlist ) { // parent is a list
-                            console.log("adding " + selections[n]);
                             var li = $('<li></li>');
                             render_json_editor(li,selections[n],proto[proto.length-1],type,list);
                             parlist.append(li);

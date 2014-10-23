@@ -2,4 +2,4 @@
 
 <%= render 'form' %>
 
-<%= link_to 'Cancel', samples_path, class: 'btn' %>
+<%= link_to 'Cancel', samples_path(sample_type_id:@sample.sample_type.id), class: 'btn' %>

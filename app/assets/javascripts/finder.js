@@ -5,6 +5,7 @@ function Finder(kind,callback) {
     this.kind = kind;
     this.callback = callback;
     this.selections = [];
+    this.selection_names = [];
 
     if ( kind == 'Samples' ) {
 
@@ -35,7 +36,7 @@ function Finder(kind,callback) {
 
     }
 
-    this.launch_button = $('<button>'+kind+'</button>')
+    this.launch_button = $('<button type="button">'+kind+'</button>')
       .addClass('btn btn-small finder-btn')
 	  .click(function(){that.launch();});
 
@@ -60,9 +61,15 @@ Finder.prototype.select = function(field,x) {
 
     if ( i >= 0 ) {
         this.selections.splice(i,1);
+        if ( this.kind == "Samples" ) {
+            this.selection_names.splice(i,1);
+        }
         $('#'+field+'-'+y).removeClass('finder-selected');
     } else {
         this.selections.push(y);
+        if ( this.kind == "Samples" ) {
+            this.selection_names.push(x.sample_name);
+        }
         $('#'+field+'-'+y).addClass('finder-selected');
     }
 
@@ -100,6 +107,7 @@ Finder.prototype.get = function(index,spec) {
             newspec[field] = list[i].name;
             if ( field == 'sample' ) {
                 newspec["sample_id"] = list[i].id;
+                newspec["sample_name"] = list[i].name;
             }
 
     	    var a = $('<a href="#" id='+field+'-'+list[i].id+'>' + list[i].name + '</a>');
@@ -143,11 +151,9 @@ Finder.prototype.launch = function() {
     this.window.modal('toggle');
 //    this.window.css('display', 'block !important')
 
-    console.log("Launch 2");
-
     $('#ok',this.window).click(function() {
        that.window.modal('toggle');
-	   that.callback(that.selections);
+	   that.callback(that.selections,that.selection_names);
        console.log("Launch 3");
     });
 
