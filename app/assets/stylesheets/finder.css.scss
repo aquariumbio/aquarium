@@ -1,7 +1,7 @@
 body .finder {
-  width: 800px;
+  width: 1000px;
   height: 500px;
-  margin-left: -415px;
+  margin-left: -515px;
 }
 
 .finder-body {
@@ -16,13 +16,12 @@ body .finder {
 
 .finder-column {
   float: left;
-  height: 400px;
-
+  height: 360px;
 }
 
 .finder-list-container {
   overflow: scroll;
-height: 100%;
+  height: 100%;
 }
 
 .finder-list {
@@ -34,7 +33,10 @@ height: 100%;
   li {
     padding-left:0;
     margin-left: 5px;
+    padding-bottom: 5px;
+    line-height: 1.1;
   }
+
 }
 
 .finder-li-highlighted {
