@@ -53,10 +53,12 @@ class FinderController < ApplicationController
 
     if ot.handler == "collection"
 
+      sample = Sample.find_by_name(spec[:sample])
+
       render json: (( Collection.joins(:object_type)
-        .where(:object_types=>{handler:"collection"})
+        .where(:object_types=>{id:ot.id})
         .reject { |i| i.location == 'deleted' })
-        .select{ |c| c.matrix && c.matrix.flatten.index(2058) } )
+        .select{ |c| c.matrix && c.matrix.flatten.index(sample.id) } )
       .collect { |i| { id: i.id, name: i.id } }
 
     else
