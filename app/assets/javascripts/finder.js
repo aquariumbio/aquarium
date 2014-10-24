@@ -64,13 +64,13 @@ Finder.prototype.select = function(field,x) {
         if ( this.kind == "Samples" ) {
             this.selection_names.splice(i,1);
         }
-        $('#'+field+'-'+y).removeClass('finder-selected');
+        $('#'+field+'-'+y).parent().removeClass('finder-selected');
     } else {
         this.selections.push(y);
         if ( this.kind == "Samples" ) {
             this.selection_names.push(x.sample_name);
         }
-        $('#'+field+'-'+y).addClass('finder-selected');
+        $('#'+field+'-'+y).parent().addClass('finder-selected');
     }
 
     if ( field == 'sample' ) {
@@ -103,6 +103,7 @@ Finder.prototype.get = function(index,spec) {
 
         $.each(list,function(i) {
 
+            var li = $('<li></li>');
             var newspec = $.extend({},spec);
             newspec[field] = list[i].name;
             if ( field == 'sample' ) {
@@ -114,15 +115,15 @@ Finder.prototype.get = function(index,spec) {
 
             // highlight selected items
             if ( field == 'item' && $.inArray(list[i].id,that.selections) >=0 ) {
-                a.addClass('finder-selected');
+                li.addClass('finder-selected');
     	    } else if ( that.kind == "Samples" && field == 'sample' && $.inArray(list[i].id,that.selections) >=0 ) {
-                a.addClass('finder-selected');
+                li.addClass('finder-selected');
     	    }
             
-            a.click(function() {
+            li.click(function() {
 
                 if ( index < that.fields.length-1 ) {
-                    $('#'+field+'s>li>a').removeClass('finder-li-highlighted');
+                    $('#'+field+'s>li').removeClass('finder-li-highlighted');
                     $(this).addClass('finder-li-highlighted');
                     that.get(index+1,newspec);
                 } else {
@@ -131,7 +132,7 @@ Finder.prototype.get = function(index,spec) {
 
             });
 
-            var li = $('<li></li>').append(a);
+            li.append(a);
     	    ul.append(li);
 
         });
@@ -164,35 +165,35 @@ Finder.prototype.template = function() {
   var html = ' \
     <div class="modal-header"> \
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> \
-      <h3>Select '+this.kind+' of type '+this.type+'</h3> \
+      <h3>Select '+this.kind+'</h3> \
     </div> \
     <div class="modal-body finder-body"> \
       <div class="row-fluid"> \
         \
         <div class="finder-column span2"> \
-          <b>Projects</b> <div class="finder-list-container"><ul class="finder-list" id="projects"></ul></div> \
+          <h1>Projects</h1> <div class="finder-list-container"><ul class="finder-list" id="projects"></ul></div> \
         </div> \
         \
         <div class="finder-column span2"> \
-          <b>Types</b> <div class="finder-list-container"><ul class="finder-list" id="types"></ul></div> \
+          <h1>Types</h1> <div class="finder-list-container"><ul class="finder-list" id="types"></ul></div> \
         </div> \
         \
         <div class="finder-column span3"> \
-          <b>Samples</b> <div class="finder-list-container"><ul class="finder-list" id="samples"></ul></div> \
+          <h1>Samples</h1> <div class="finder-list-container"><ul class="finder-list" id="samples"></ul></div> \
         </div>';
 
     if ( this.kind == "Items" ) {
   
       html += '  \
         <div class="finder-column span3"> \
-          <b>Containers</b> <div class="finder-list-container"><ul class="finder-list" id="containers"></ul></div> \
+          <h1>Containers</h1> <div class="finder-list-container"><ul class="finder-list" id="containers"></ul></div> \
         </div> \
         \
         <div class="finder-column span2"> \
-          <b>Items</b> <div class="finder-list-container"><ul class="finder-list" id="items"></ul></div> \
+          <h1>Items</h1> <div class="finder-list-container"><ul class="finder-list" id="items"></ul></div> \
         </div>';
     } else {
-      html += '<div class="finder-column span5"><b>Sample Information</b><div id="sample-info">-</div></div>'
+      html += '<div class="finder-column span5"><h1>Sample Information</h1><div id="sample-info"></div></div>'
     }
 
     html += ' \

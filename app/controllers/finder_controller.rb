@@ -26,25 +26,49 @@ class FinderController < ApplicationController
     spec = JSON.parse( params[:spec], symbolize_names: true )
     logger.info "spec = " + spec.to_json
     filter = ObjectType.find_by_name(params[:filter])
-    logger.info "filter = " + filter.name
+
     if filter
-      render json: (ObjectType
+      con = (ObjectType
         .joins(:items => :sample)
         .where(:name => filter.name, :samples => { project: spec[:project], name: spec[:sample] })
         .collect { |o| { id: o.id, name: o.name } })
-      .uniq.sort { |a,b| a[:name] <=> b[:name] }
     else
-      render json: (ObjectType.joins(:items => :sample).where(:samples => { project: spec[:project], name: spec[:sample] }).collect { |o| { id: o.id, name: o.name } }).uniq.sort { |a,b| a[:name] <=> b[:name] }
+      con = (ObjectType
+        .joins(:items => :sample)
+        .where(:samples => { project: spec[:project], name: spec[:sample] })
+        .collect { |o| { id: o.id, name: o.name } })
     end      
+
+    col = ObjectType.where(handler:"collection")
+
+    render json: ( con + col ).uniq.sort { |a,b| a[:name] <=> b[:name] }
+
   end
 
   def items
+
     spec = JSON.parse( params[:spec], symbolize_names: true )
-    render json: ((
-      Item.joins(:sample,:object_type)
-      .where(:samples => { project: spec[:project], name: spec[:sample] }, :object_types => { name: spec[:container] })
-      .reject { |i| i.location == 'deleted' })
-      .collect { |i| { id: i.id, name: i.id } }).sort  { |a,b| a[:name] <=> b[:name] }
+
+    ot = ObjectType.where(name:spec[:container])[0]
+
+    if ot.handler == "collection"
+
+      render json: (( Collection.joins(:object_type)
+        .where(:object_types=>{handler:"collection"})
+        .reject { |i| i.location == 'deleted' })
+        .select{ |c| c.matrix && c.matrix.flatten.index(2058) } )
+      .collect { |i| { id: i.id, name: i.id } }
+
+    else
+
+      render json: ((
+        Item.joins(:sample,:object_type)
+        .where(:samples => { project: spec[:project], name: spec[:sample] }, :object_types => { name: spec[:container] })
+        .reject { |i| i.location == 'deleted' })
+        .collect { |i| { id: i.id, name: i.id } })
+
+    end
+
   end
 
   def sample_info 

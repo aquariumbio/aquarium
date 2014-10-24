@@ -90,7 +90,8 @@
     var i = $('input', d);
     i.append(function() {
        d.append(new Finder(i.data('sample'),function(selections,names) {
-         i.val(names[0]);
+         console.log(names[names.length-1]);
+         i.val(names[names.length-1]);
        }));
     });
   });
