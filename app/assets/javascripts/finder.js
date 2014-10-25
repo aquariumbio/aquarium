@@ -50,6 +50,7 @@ function Finder(kind,callback) {
 Finder.prototype.select = function(field,x) {
 
     var y;
+    var that = this;
 
     if ( field == 'item' ) {
     	y = x.item;
@@ -64,20 +65,21 @@ Finder.prototype.select = function(field,x) {
         if ( this.kind == "Samples" ) {
             this.selection_names.splice(i,1);
         }
-        $('#'+field+'-'+y).parent().removeClass('finder-selected');
+        $('#'+field+'-'+y,this.window).parent().removeClass('finder-selected');
     } else {
         this.selections.push(y);
         if ( this.kind == "Samples" ) {
             this.selection_names.push(x.sample_name);
         }
-        $('#'+field+'-'+y).parent().addClass('finder-selected');
+        $('#'+field+'-'+y,this.window).parent().addClass('finder-selected');
     }
 
     if ( field == 'sample' ) {
         $.ajax({
 	    url: "/finder/sample_info?spec=" + encodeURI(JSON.stringify(x))
 	}).done(function(info) {
-        render_json($('#sample-info').empty(),info);
+        render_json($('#sample-info',that.window).empty(),info);
+        console.log('rendered json');
 	});
     }
 
@@ -146,11 +148,12 @@ Finder.prototype.launch = function() {
     var that = this;
 
     this.selections = [];
+    this.selection_names = [];
+
     this.window.empty();
     this.window.html(this.template());
     this.get(0,{});
     this.window.modal('toggle');
-//    this.window.css('display', 'block !important')
 
     $('#ok',this.window).click(function() {
        that.window.modal('toggle');
