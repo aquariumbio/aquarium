@@ -1,5 +1,9 @@
 Bioturk::Application.routes.draw do
 
+  get "plugin/tester"
+  get "plugin/show"
+  get "plugin/ajax"
+
   get "finder/projects"
   get "finder/types"
   get "finder/samples"

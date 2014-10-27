@@ -1,0 +1,10 @@
+.plugin-container {
+  border: 1pt solid #eee;
+  height: 300px;
+}
+
+.plugin-iframe {
+  border: none;
+  width: 100%;
+  height: 100%;
+}
