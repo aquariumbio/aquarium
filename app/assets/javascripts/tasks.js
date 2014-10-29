@@ -138,7 +138,7 @@ function json_editor_key(str) {
 }
 
 function json_editor_type(str) {
-    return parts = str.split(' ').slice(1,4).join(' ');
+    return parts = str.split(' ').slice(1,40).join(' ');
 }
 
 
