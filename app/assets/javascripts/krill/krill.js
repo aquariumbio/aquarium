@@ -2,10 +2,11 @@ function Krill(job,path,pc) {
 
     var that = this;
 
-    this.steps_tag       = $('#steps');                               // element where step list should be put
-    this.history_tag     = $('#history');
-    this.inventory_tag   = $('#inventory');
+    this.steps_tag     = $('#steps');                               // element where step list should be put
+    this.history_tag   = $('#history');
+    this.inventory_tag = $('#inventory');
     this.uploads_tag   = $('#uploads');
+    this.tasks_tag   = $('#tasks');
     this.job = job;
     this.path = path;
     this.pc = pc;
@@ -41,6 +42,7 @@ Krill.prototype.update = function() {
     this.history();
     this.inventory();
     this.uploads();
+    this.tasks();
 
 }
 
@@ -94,6 +96,7 @@ Krill.prototype.render = function() {
     this.history();
     this.inventory();
     this.uploads();
+    this.tasks();
 
     // Set up the carousel
     this.carousel_setup();

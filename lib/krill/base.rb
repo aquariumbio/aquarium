@@ -42,6 +42,20 @@ module Krill
 
     end
 
+    def set_task_status task, status
+
+      task.status = status
+      task.save
+
+      touch = Touch.new
+      touch.job_id = jid
+      touch.task_id = task.id
+      touch.save
+
+      task
+
+    end
+
     private
 
     def simulated_input_for page

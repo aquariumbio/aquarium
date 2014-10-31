@@ -235,7 +235,7 @@ class KrillController < ApplicationController
     }
 
     touches = (job.touches.includes(item: [ :object_type, :sample ] ).reject { 
-      |t| (takes.collect { |i| i[:id] }).include?( t.item_id )
+      |t| !t.item_id || (takes.collect { |i| i[:id] }).include?( t.item_id )
     }).collect { 
       |t| t.item.all_attributes
     }
@@ -268,6 +268,13 @@ class KrillController < ApplicationController
   def uploads
 
     render json: { uploads: Job.find(params[:job]).uploads.collect { |u| { id: u.id, name: u.name, url: u.url } } }
+
+  end
+
+  def tasks
+
+    job = Job.find(params[:job])
+    render json: { tasks: ((job.touches.includes(task: [ :task_prototype ] ).select { |t| t.task_id }).collect { |t| { id: t.task.id, name: t.task.name, type: t.task.task_prototype.name } }).uniq }
 
   end
 

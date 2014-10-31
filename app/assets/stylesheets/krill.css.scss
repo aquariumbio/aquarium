@@ -679,3 +679,13 @@ font-size: $noteFontSize;
   width: 340px; 
   font-size: 40pt;
 }
+
+.krill-associations-tasks-list {
+    list-style-type: none;
+  margin: 0;
+  padding: 0;
+  li {
+    line-height: 1;
+    margin: 0 0 5px 0;
+  }
+}

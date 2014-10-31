@@ -73,6 +73,7 @@ Bioturk::Application.routes.draw do
   get "krill/jobs"
   post "krill/upload"
   get "krill/uploads"
+  get "krill/tasks"
 
   get "stats/jobs"
   get "stats/users"
