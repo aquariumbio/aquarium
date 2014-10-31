@@ -19,7 +19,7 @@
 </div>
 
 <script>
-  render_json($('#spec'),JSON.parse('<%= j @task.specification.html_safe.force_encoding("UTF-8") %>'));
+  render_json($('#spec'),JSON.parse('<%= j @task.specification.html_safe.force_encoding("UTF-8") %>'),true);
 </script>
 
 <% jobs =  @task.touches.collect { |t| Job.find(t.job_id) } %>

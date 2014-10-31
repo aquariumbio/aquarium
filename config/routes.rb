@@ -12,6 +12,8 @@ Bioturk::Application.routes.draw do
   get "finder/sample_info"
   get "finder/type"
 
+  match "rich_id", to: "tasks#rich_id"
+
   resources :tasks
 
   resources :task_prototypes

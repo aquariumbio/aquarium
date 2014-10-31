@@ -158,5 +158,32 @@ class TasksController < ApplicationController
 
   end
 
+  def rich_id
+
+    id = params[:id].to_i
+    type = params[:type]
+
+    st = SampleType.find_by_name(type)
+    
+    if st
+      s = Sample.find_by_id(id)
+      if s
+        render json: { sample_id: id, sample_name: s.name, type: st.name }
+      else
+        render json: { error: "sample #{id} not found" }
+      end
+    else
+      i = Item.find_by_id(id)
+      if !i
+        render json: { error: "item #{id} not found"}
+      elsif i.sample
+        render json: { item_id: id, object_type: i.object_type.name, location: i.location, sample_name: i.sample.name, sample_id: i.sample.id }
+      else
+        render json: { item_id: id, object_type: i.object_type.name, location: i.location }
+      end
+    end
+
+  end
+
 end
 

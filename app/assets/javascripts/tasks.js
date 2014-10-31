@@ -1,10 +1,17 @@
-function render_json(tag,obj) {
+function render_json(tag,obj,type_info,id_type) {
+
+    var that = this;
+    var show_types = type_info ? true : false;
 
     if ( obj == null ) {
 
     } else if ( typeof obj == "number" || typeof obj == "string" || typeof obj == "boolean" ) {
 
-        $(tag).append("<span class='json_const'>" + obj + "</span>");
+        if ( id_type ) {
+            $(tag).append(json_get_id_info(obj,id_type));
+        } else {
+            $(tag).append("<span class='json_const'>" + obj + "</span>");
+        }
 
     } else if ( obj.constructor.name == "Array" ) {
 
@@ -14,7 +21,7 @@ function render_json(tag,obj) {
 
     	    $.each(obj, function(i,v) {
     		var li = $("<li />");
-    		render_json(li,v);
+    		render_json(li,v,show_types,id_type);
     		list.append(li);      
     	    });
 
@@ -28,8 +35,14 @@ function render_json(tag,obj) {
 
         $.each(obj, function(k,v) {
             var li = $("<li />");
-            li.append("<span class='json_key_inline'>" + k.split(' ')[0] + ": </span>");
-            render_json(li,v);
+            if ( show_types ) {
+                var key = that.json_editor_key(k);
+                var type = that.json_editor_type(k);
+                li.append("<span class='json_key_inline'>" + key + " <span class='json-sample-type'>(" + type + ")</span>: </span>");
+            } else {
+                li.append("<span class='json_key_inline'>" + k + ": </span>");
+            }
+            render_json(li,v,show_types,type);
             list.append(li);      
         });
 
@@ -39,13 +52,47 @@ function render_json(tag,obj) {
 
 }
 
-function render_json_editor(tag,obj,proto,type,parent_list) { 
+function json_get_id_info(id,type) {
 
-    console.log("- " + tag.attr('id') + " -----------------------");
-    console.log(obj);
-    console.log(proto);
-    console.log(type);
-    console.log(parent_list);                
+    var el = $("<span>"+id+"</span>").addClass('json-rich-id');
+
+    $.ajax({
+      url: "/rich_id?id="+id+"&type="+type,
+      dataType: "json",
+    }).done(function(result) {
+        console.log(result.error);
+      if ( ! result.error ) {
+        el.empty().append(json_rich_id_element(result));
+      } else {
+        el.empty().append('<span>'+result.error+"</span>");
+      }
+    });
+
+    return el;
+
+}
+
+function json_rich_id_element(p) {
+
+    var el;
+
+    if ( p.item_id ) {
+        if ( p.sample_id ) {
+          el = $("<span><a href='/items/"+p.item_id+"'>"+p.item_id+"</a>"
+            + " (<a href='/samples/'"+p.sample_id+"'>"+ p.sample_name+"</a>) at "
+            + p.location +"</span>");
+        } else {
+          el = $("<a href='/items/"+p.item_id+"'>"+p.item_id+"</a>");           
+        }
+    } else {
+        el = $("<a href='/samples/"+p.sample_id+"'>"+p.sample_id+": "+ p.sample_name+"</a>");
+    }
+
+    return el;
+
+}
+
+function render_json_editor(tag,obj,proto,type,parent_list) {             
 
     if ( typeof obj == "string" ) {
 
@@ -83,7 +130,6 @@ function render_json_editor(tag,obj,proto,type,parent_list) {
 
         $.each(obj, function(i,v) {
             var li = $("<li />");
-            console.log(proto);
             render_json_editor(li,v,proto[proto.length-1],type,list);
             list.append(li);      
     	});
@@ -150,8 +196,6 @@ function json_editor_extract(tag) {
 
 function editor_extract_aux(tag) {
 
-    //console.log(tag);
-
     var x;
 
     if ( tag.attr('class') == 'json_edit_number' ) {
@@ -181,16 +225,11 @@ function editor_extract_aux(tag) {
         tag.children().each(function(i,v){
             // var key = $(v).children().first();
             var key = $(v).children().first().data().key;
-            console.log($(v));
-            console.log("key = " + key);
             var val = $(v).children().eq(1);
             x[key] = editor_extract_aux($(val));
         });
-        console.log(x);
 
     }
-
-    //console.log(x);
 
     return x;
 
