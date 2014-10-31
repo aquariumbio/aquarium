@@ -59,6 +59,17 @@
 	<% end %>
 </div>
 
+<div id='tasks'>
+  <h2>Associated Tasks</h2>
+  <ul>
+    <% @tasks.each do |t| %>
+      <li>
+        <%= link_to "#{t.id}. #{t.name}", t %> ( <%= t.task_prototype.name %> )
+      </li>
+    <% end %>
+  </ul>
+</div>
+
 <div id='return-value'>
   <h2>Return Value
     <button id='send' class='btn btn-primary'>Send ...</button></h2>

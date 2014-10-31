@@ -570,9 +570,10 @@ task.task_prototype.status_options # => [ "ready", "running", "done" ]
 To set a task's status, simply do
 
 ```ruby
-task.status = "done"
-task.save
+set_task_status(task,"done")
 ```
+
+This function sets the task status, and also "touches" the task, so that the job is associated with the task. Jobs associated with tasks are listed on the task's page in Aquarium. Tasks associated with jobs are listed under "Associations" in the Krill UI.
 
 Be sure to **save** your changes to the task so that they are reflected in the database.
 

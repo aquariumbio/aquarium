@@ -211,7 +211,8 @@ class KrillController < ApplicationController
     @job = Job.find(params[:job])
     @history = @job.state
     @rval = @job.return_value
-    @touches = @job.touches.collect { |t| t.item_id }
+    @touches = (@job.touches.select { |t| t.item_id }).collect { |t| t.item_id }
+    @tasks = ( ( @job.touches.select { |t| t.task_id } ).collect { |t| t.task } ).uniq { |task| task.id }
     @inventory = @job.takes.collect { |t| t.item_id }
 
   end
