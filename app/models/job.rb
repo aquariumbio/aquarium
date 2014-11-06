@@ -90,7 +90,7 @@ class Job < ActiveRecord::Base
         (JSON.parse(self.state))['stack'].first.reject { |k,v| k == 'user_id' }
       end
     rescue Exception => e
-      "unable to parse arguments"
+      { error: "unable to parse arguments" }
     end
   end
 
