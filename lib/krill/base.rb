@@ -30,6 +30,11 @@ module Krill
         # figure out default technician response
         i = simulated_input_for page
         job.reload.append_step operation: "next", time: Time.now, inputs: i 
+
+        if job.pc > 50
+          raise "Job #{jid} executed too many steps (50) in debug mode. Could be an infinite loop."
+        end
+
         i
 
       end
