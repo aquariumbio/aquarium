@@ -8,9 +8,10 @@ class FinderController < ApplicationController
 
   def types
     spec = JSON.parse( params[:spec], symbolize_names: true )
-    filter = SampleType.find_by_name(params[:filter])
-    if filter
-      render json: (Sample.includes('sample_type').where("project = ? and sample_types.name = ?", spec[:project], filter.name).collect{|s| { id: s.sample_type.id, name: s.sample_type.name } }).uniq.sort { |a,b| a[:name] <=> b[:name] }      
+    # filter = SampleType.find_by_name(params[:filter])
+    if params[:filter] != ""
+      types = "("+(params[:filter].split('|').collect { |t| "sample_types.name = '#{t}'" }).join(" OR ")+")"
+      render json: (Sample.includes('sample_type').where("project = ? and #{types}", spec[:project]).collect{|s| { id: s.sample_type.id, name: s.sample_type.name } }).uniq.sort { |a,b| a[:name] <=> b[:name] }      
     else
       render json: (Sample.includes('sample_type').where("project = ?", spec[:project]).collect{|s| { id: s.sample_type.id, name: s.sample_type.name } }).uniq.sort { |a,b| a[:name] <=> b[:name] }      
     end
@@ -88,11 +89,12 @@ class FinderController < ApplicationController
 
   def type
 
-    t = params[:type]
-    if SampleType.find_by_name(t)
+    t = params[:type].split "|"
+
+    if SampleType.find_by_name(t.first)
       render json: { type: "Samples" }
     else
-      if ObjectType.find_by_name(t)
+      if ObjectType.find_by_name(t.first)
         render json: { type: "Items" }
       else 
         render json: { type: "Unknown" }

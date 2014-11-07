@@ -11,4 +11,34 @@ class SampleType < ActiveRecord::Base
   validates :name, presence: true
   validates :description, presence: true
 
+  validate :proper_choices
+
+  def fieldname i
+    n = "field#{i}name".to_sym
+    self[n]
+  end
+
+  def fieldtype i
+    t = "field#{i}type".to_sym
+    self[t].split "|"
+  end
+
+  def proper_choices
+
+    unary =  ['not used','string','number','url']
+
+    (1..8).each do |i|
+      t = self.fieldtype i
+      if t.length > 1
+        unary.each do |u|
+          if t.include? u
+            errors.add(:improper_or,"Multiple types can only consist of links to other samples.")
+            return
+          end
+        end
+      end
+    end
+
+  end
+
 end

@@ -9,7 +9,7 @@ function Finder(kind,callback) {
 
     if ( kind == 'Samples' ) {
 
-        this.fields = [ "project", "type", "sample" ];
+        this.fields = [ "project", "type", "sample" ]; 
         this.select_method = this.select_sample;
 
     } else if ( kind == "Items" ) { 
@@ -20,10 +20,10 @@ function Finder(kind,callback) {
     } else { // kind is either a sample type or item type
 
         $.ajax({
-            url: "/finder/type?type=" + kind
+            url: "/finder/type?type=" + encodeURI(kind)
         }).done(function(result) {
             that.type = that.kind;   // e.g. Plasmid or Primer Aliquot
-            that.kind = result.type; // e.g. Plasmids or Items
+            that.kind = result.type; // e.g. Samples or Items
             if ( result.type == 'Samples' ) {
                 that.fields = [ "project", "type", "sample" ];
                 that.select_method = that.select_sample;
@@ -97,7 +97,7 @@ Finder.prototype.get = function(index,spec) {
   
     $.ajax({
 
-	   url: "/finder/" + field + 's?spec=' + encodeURI(JSON.stringify(spec)) + "&filter=" + this.type
+	   url: "/finder/" + field + 's?spec=' + encodeURI(JSON.stringify(spec)) + "&filter=" + encodeURI(this.type)
 
     }).done(function(list){
 

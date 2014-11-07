@@ -32,8 +32,6 @@
        end
     %>
 
-
-
     <div class='row-fluid'>
       <div class='span1'></div>
       <label class='span3'>Field Names</label>
@@ -46,18 +44,33 @@
         <div class='row-fluid'>
          
         <% fn = "field#{i}name".to_sym
-           ft = "field#{i}type".to_sym %>
-
+           ft = "field#{i}type".to_sym 
+           if @sample_type[ft]
+             chosen = @sample_type[ft].split '|' 
+           else
+             chosen = ['not used']
+           end %>
+           
            <div class='span1'></div>
            <div class='span3'>
              <%= f.text_field fn, placeholder: "Field #{i} Name" %>
            </div>
            <div class='span3'>
-             <%= f.select(ft,types) %>
+             <select class="sample_type_link_select" 
+                     id=<%= "sample_type_field#{i}type" %> 
+                     multiple="multiple" 
+                     name=<%= "sample_type[field#{i}type][]" %>>
+             <% types.each do |opt| %>
+                <option value='<%= opt[1] %>' 
+                        <%= chosen.include?(opt[1]) ? "selected" : "" %> >
+                  <%= opt[0] %>
+                </option>
+             <% end %>
+             </select>
            </div>
           <% if i==1 %>
-           <div class='span4'><b>Note:</b> All samples automatically
-           get a Name, Project, and Description field. </div>
+           <div class='span4'><b>Notes:</b> All samples automatically
+           get a Name, Project, and Description field.</div>
            <div class='span1'></div>
           <% else %>
            <div class='span5'></div>
@@ -73,3 +86,4 @@
   </div>
 
 <% end %>
+

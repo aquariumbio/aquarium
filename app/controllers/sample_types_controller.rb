@@ -39,8 +39,36 @@ class SampleTypesController < ApplicationController
 
   # POST /sample_types
   # POST /sample_types.json
+
+  def build st, p
+
+    logger.info "p = #{p}"
+
+    st.name = p[:name]
+    st.description = p[:description]
+
+    (1..8).each do |i|
+      ft = "field#{i}type".to_sym
+      fn = "field#{i}name".to_sym
+      st[fn] = p[fn]
+      val = p[ft]
+      if !val 
+        st[ft] = "not used"
+      elsif val.length == 1
+        st[ft] = val[0]
+      else        
+        st[ft] = val[0..val.length].join "|"
+      end
+      logger.info "#{fn} => #{p[fn]} and #{ft} => #{st[ft]}"
+    end
+
+    st
+
+  end
+
   def create
-    @sample_type = SampleType.new(params[:sample_type])
+
+    @sample_type = build SampleType.new, params[:sample_type]
 
     respond_to do |format|
       if @sample_type.save
@@ -56,10 +84,11 @@ class SampleTypesController < ApplicationController
   # PUT /sample_types/1
   # PUT /sample_types/1.json
   def update
-    @sample_type = SampleType.find(params[:id])
+
+    @sample_type = build SampleType.find(params[:id]), params[:sample_type]
 
     respond_to do |format|
-      if @sample_type.update_attributes(params[:sample_type])
+      if @sample_type.save
         format.html { redirect_to action: 'index', notice: 'Sample type was successfully updated.' }
         format.json { head :no_content }
       else
