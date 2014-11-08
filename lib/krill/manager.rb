@@ -49,8 +49,8 @@ module Krill
 
         begin
 
-          @job.reload.pc = 0
-          @job.save
+          @job.reload.pc = 0          # what if this fails?
+          @job.save                   # what if this fails?
           appended_complete = false
 
           begin
@@ -69,14 +69,14 @@ module Krill
 
           ensure
 
-            @job.reload.pc = Job.COMPLETED
+            @job.reload.pc = Job.COMPLETED # what if this fails?
 
             unless appended_complete
               @job.append_step operation: "next", time: Time.now, inputs: {}
               @job.append_step operation: "aborted", rval: {}
             end
 
-            @job.save
+            @job.save # what if this fails?
 
             ActiveRecord::Base.connection.close
 

@@ -36,8 +36,6 @@ class PluginController < ApplicationController
   end
 
   def tester
-    logger.info "HERE"
-    @path = "whatever/plugins/hello"
     render layout: "application.html.erb"
   end
 

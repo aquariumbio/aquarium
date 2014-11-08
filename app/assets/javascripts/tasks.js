@@ -79,7 +79,7 @@ function json_rich_id_element(p) {
     if ( p.item_id ) {
         if ( p.sample_id ) {
           el = $("<span><a href='/items/"+p.item_id+"'>"+p.item_id+"</a>"
-            + " (<a href='/samples/'"+p.sample_id+"'>"+ p.sample_name+"</a>) at "
+            + " (<a href='/samples/"+p.sample_id+"'>"+ p.sample_name+"</a>) at "
             + p.location +"</span>");
         } else {
           el = $("<a href='/items/"+p.item_id+"'>"+p.item_id+"</a>");           
