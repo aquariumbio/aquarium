@@ -1,6 +1,7 @@
 .plugin-container {
-  border: 1pt solid #eee;
+  border: none;
   height: 300px;
+  padding-bottom: 10px;
 }
 
 .plugin-iframe {
@@ -9,10 +10,27 @@
   height: 100%;
 }
 
+.plugin {
+  border-top: none;
+  border: 1pt solid #eee;
+  padding: 5px;
+  height: 100vh;  
+  border-radius: 5px;
+}
+
 .plugin h1 {
   font-size: 16pt;
   background: #eee;
   letter-spacing: 0px;
-  margin: 0 0 0 0;
+  margin: 0 0 8px 0;
   line-height: 1.4;
+  border-radius: 5px 5px 0 0;
+}
+
+.plugin h2 {
+  font-size: 16pt;
+  font-weight: bold;
+  letter-spacing: 0px;
+  line-height: 1.2;
+  margin: 4px 2px 4px 8px;
 }

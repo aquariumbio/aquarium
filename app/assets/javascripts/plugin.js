@@ -2,10 +2,6 @@ function Plugin() {
   this.path = aquarium_plugin_path;
 }
 
-Plugin.prototype.path = function() {
-  this.path;
-}
-
 Plugin.prototype.ajax = function(params,callback) {
 
   $.ajax({
@@ -17,3 +13,4 @@ Plugin.prototype.ajax = function(params,callback) {
   });
 
 }
+
