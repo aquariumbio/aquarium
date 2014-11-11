@@ -25,4 +25,8 @@ Aq.prototype.group_link = function(gid,name) {
   return this.link("/groups/" + gid,name);
 }
 
+Aq.prototype.capitalize = function(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 aq = new Aq();
