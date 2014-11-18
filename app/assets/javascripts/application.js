@@ -20,6 +20,9 @@
 //= require jquery.cookie
 //= require jquery-fileupload/basic
 //= require dataTables/jquery.dataTables
+//= require jquery.flot
+//= require jquery.flot.resize
+//= require jquery.flot.time
 //= require underscore
 //= require d3
 //= require joint.nojquery

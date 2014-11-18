@@ -47,7 +47,7 @@ class PluginController < ApplicationController
       plugin = ns::PluginInterface.new view_context
       data = plugin.data(JSON.parse(params[:params],symbolize_names:true))
     rescue Exception => e
-      render json: { error: e.message }
+      render json: { error: e.message + e.backtrace.inspect }
     else
       render json: data
     end

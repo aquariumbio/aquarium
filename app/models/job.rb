@@ -94,22 +94,26 @@ class Job < ActiveRecord::Base
     end
   end
 
-  def start_link el
+  def start_link el, opts={}
+
+    options = { confirm: false }.merge opts
+
+    confirm = options[:confirm] ? "class='confirm'" : ""
 
     if /\.rb$/ =~ self.path
 
       if self.pc == Job.NOT_STARTED 
-        "<a href='/krill/start?job=#{self.id}'>#{el}</a>".html_safe
+        "<a #{confirm} target=_top href='/krill/start?job=#{self.id}'>#{el}</a>".html_safe
       else 
-        "<a href='/krill/ui?job=#{self.id}'>#{el}</a>".html_safe
+        "<a #{confirm} target=_top href='/krill/ui?job=#{self.id}'>#{el}</a>".html_safe
       end 
 
     else 
 
       if self.pc == Job.NOT_STARTED 
-        "<a href='/interpreter/advance?job=#{self.id}'>#{el}</a>".html_safe 
+        "<a #{confirm} target=_top href='/interpreter/advance?job=#{self.id}'>#{el}</a>".html_safe 
       elsif self.pc != Job.COMPLETED 
-        "<a href='/interpreter/current?job=#{self.id}'>#{el}</a>".html_safe 
+        "<a #{confirm} target=_top href='/interpreter/current?job=#{self.id}'>#{el}</a>".html_safe 
       end 
 
     end 

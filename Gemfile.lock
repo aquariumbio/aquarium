@@ -57,6 +57,8 @@ GEM
     debug_inspector (0.0.2)
     erubis (2.7.0)
     execjs (2.2.1)
+    flot-rails (0.0.6)
+      jquery-rails
     git (1.2.8)
     highcharts-rails (3.0.10)
       railties (>= 3.1)
@@ -155,6 +157,7 @@ DEPENDENCIES
   coffee-rails
   d3-rails
   db-charmer
+  flot-rails
   git
   highcharts-rails (~> 3.0.0)
   jquery-cookie-rails

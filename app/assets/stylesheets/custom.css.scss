@@ -362,3 +362,13 @@ img {
   margin:10px;
   font-size: 9pt;
 }
+
+.nice-check {
+  transform: scale(1.25); 
+  padding: 2px;
+  margin: 6px !important;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+  *overflow: hidden;  
+}

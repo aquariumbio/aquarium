@@ -14,3 +14,14 @@ Plugin.prototype.ajax = function(params,callback) {
 
 }
 
+Plugin.prototype.update = function() {
+}
+
+Plugin.prototype.period = function(dt) {
+  var that = this;
+  if ( dt > 0 ) {
+    this.intervalID = setInterval(function(){that.update();}, dt);
+  } else {
+    window.clearInterval(this.intervalID);
+  }
+}

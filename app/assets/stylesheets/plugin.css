@@ -1,7 +1,7 @@
 .plugin-container {
   border: none;
   height: 300px;
-  padding-bottom: 10px;
+  padding-bottom: 25px;
 }
 
 .plugin-iframe {
@@ -14,9 +14,12 @@
 
 .plugin {
   border-top: none;
-  padding: 40px 5px 5px 5px;
+  padding: 5px 5px 5px 5px;
   height: 100vh;  
+}
 
+.with-header {
+  padding: 40px 5px 5px 5px;
 }
 
 .plugin h1 {
@@ -33,7 +36,7 @@
   font-weight: bold;
   letter-spacing: 0px;
   line-height: 1.6;
-  margin: 4px 2px 4px 8px;
+  margin: 4px 8px 4px 8px;
 }
 
 .plugin header {
