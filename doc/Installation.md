@@ -66,20 +66,22 @@ You can install all the gems
 
 If rails complains about "An error occurred while installing mysql2 (0.3.13)...", you should install mysql on your local computer or server.
 
-You should migrate the databaes by doing
+Initialize the database with
 
-	rake db:migrate
+  RAILS_ENV=development rake db:schema:load rake db:schema:load
 
-If rails complains about "SQLite3::SQLException: no such table...", you could do the following and then migrate.
+You can also use production or rehearse in place of development. Anything that is specified in database.yml is okay.
 
-	rake db:schema:load
+If you are working with a production or rehearse server, then you need to precompile the assets with something like
+
+  RAILS_ENV=production bundle exec rake assets:precompile
 
 Start Aquarium
 --
 
 Run
 
-	rails s
+	RAILS_ENV=development rails s
 	
 to start aquarium. Then go do http://localhost:3000/ and see if it works!
 
@@ -100,12 +102,9 @@ Go to Admin->New User and make an account. This first account should be given ad
 
 If above does not work, you can try create a user with admin previleges in Rails console by doing the following:
 
-	rails c
-	user = User.new(name: "your name", login: "login name", password: "your_password", password_confirmation: "your_password")
-	user.admin = true
-	user.save
-
-Note that if you add an account through the rails console, you'll have to create another administrator account through the Aquarium interface that you should then use. The user created in the console will be missing neccesary associations that are handled by the Aquarium interface. 
+	RAILS_ENV=production rails c
+  load 'script/init.rb'
+  make_user "Your Name", "your login", "your password", admin: true
 
 Run Hello World
 --
