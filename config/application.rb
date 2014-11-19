@@ -23,6 +23,11 @@ $CURRENT_JOB_ID = -1
 module Bioturk
   class Application < Rails::Application
 
+    # Paperclip
+    if Rails.env != 'production'
+      config.paperclip_defaults = { :url=>"/system/#{Rails.env}/:class/:attachment/:id_partition/:style/:filename" }
+    end
+
     # config.threadsafe!
 
     # Settings in config/environments/* take precedence over those specified here.
