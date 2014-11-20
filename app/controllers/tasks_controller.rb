@@ -6,6 +6,8 @@ end
 
 class TasksController < ApplicationController
 
+  before_filter :signed_in_user
+
   # GET /tasks
   # GET /tasks.json
   def index

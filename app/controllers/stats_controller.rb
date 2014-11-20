@@ -1,5 +1,7 @@
 class StatsController < ApplicationController
 
+  before_filter :signed_in_user
+
   def jobs
 
     now = Time.now

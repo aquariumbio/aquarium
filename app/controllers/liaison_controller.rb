@@ -1,5 +1,7 @@
 class LiaisonController < ApplicationController
 
+  before_filter :signed_in_user
+
   def info
 
     @x = ObjectType.find_by_name(params[:name])

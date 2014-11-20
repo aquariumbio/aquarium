@@ -1,4 +1,7 @@
 class TaskPrototypesController < ApplicationController
+
+  before_filter :signed_in_user
+  
   # GET /task_prototypes
   # GET /task_prototypes.json
   def index

@@ -1,5 +1,7 @@
 class PluginInterfaceBase
 
+  before_filter :signed_in_user
+
   def initialize(view)
     @view = view
   end
