@@ -45,12 +45,10 @@ module Manta
 
       Thread.new do
 
-        server = "#{Socket.gethostname}:#{request.port.to_s}"
-       
-        url = Bioturk::Application.config.vision_server_interface + "stop?&job=#{job.id}&server=" + server + "&abort=" + aborted
-
         begin
 
+          server = "#{Socket.gethostname}:#{request.port.to_s}"
+          url = Bioturk::Application.config.vision_server_interface + "stop?&job=#{job.id}&server=" + server + "&abort=" + aborted
           uri = URI(url)
           res = Net::HTTP.get(uri)
           puts "Message to MANTA on stop: " + uri.to_s
