@@ -6,8 +6,10 @@
       <% if current_user && current_user.is_admin %>
         <li><a href='/jobs?user_id=-1'>all users</a></li>
       <% end %>
-      <% (User.all.sort { |x,y| x.login <=> y.login}).each do |u| %>
-        <li><%= link_to u.login, '/jobs?user_id=' + u.id.to_s %></li>
+      <% retired = Group.find_by_name('retired')
+         rid = retired ? retired.id : -1
+         ((User.includes(:memberships).select {|u| !u.member? rid }).sort { |x,y| x.login <=> y.login}).each do |u| %>
+         <li><%= link_to u.login, '/jobs?user_id=' + u.id.to_s %></li>
       <% end %>
     </ul>
 </span></h2>

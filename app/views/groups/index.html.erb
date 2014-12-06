@@ -10,7 +10,7 @@
     <th></th>
   </tr>
 
-<% Group.list[:groups].each do |name| %>
+<% (Group.list[:groups] + ['retired']).each do |name| %>
   <% group = Group.find_by_name(name) %>
   <tr>
     <td><%= link_to group.name, group %></td>

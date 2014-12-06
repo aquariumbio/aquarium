@@ -80,7 +80,9 @@ class UsersController < ApplicationController
   end
 
   def index
-    @users = User.paginate(page: params[:page], :per_page => 20).order('login ASC')
+    retired = Group.find_by_name('retired')
+    rid = retired ? retired.id : -1
+    @users = (User.select{|u| !u.member? rid }).paginate(page: params[:page], :per_page => 20)
   end
 
   def destroy
