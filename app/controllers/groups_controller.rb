@@ -17,7 +17,7 @@ class GroupsController < ApplicationController
   # GET /groups/1.json
   def show
 
-    @group = Group.find(params[:id])
+    @group = Group.find_by_id(params[:id])
 
     # Add new users
     if params[:user_id]

@@ -1,26 +1,35 @@
-<% provide(:title, @group.name) %>
+<% if @group %>
 
-<p id="notice"><%= notice %></p>
+  <% provide(:title, @group.name) %>
 
-<p>
-  <b>Name:</b>
-  <%= @group.name %>
-</p>
+  <p id="notice"><%= notice %></p>
 
-<p>
-  <b>Description:</b>
-  <%= @group.description %>
-</p>
+  <p>
+    <b>Name:</b>
+    <%= @group.name %>
+  </p>
 
-<%= render 'memberships' %>
+  <p>
+    <b>Description:</b>
+    <%= @group.description %>
+  </p>
 
-<% if current_user && current_user.is_admin %>
-  <hr />
-  <%= link_to 'Edit details', edit_group_path(@group), class: 'btn' %> 
+  <%= render 'memberships' %>
+
+  <% if current_user && current_user.is_admin %>
+    <hr />
+    <%= link_to 'Edit details', edit_group_path(@group), class: 'btn' %> 
+  <% end %>
+
+  <script>
+   window.history.replaceState ( null, '', '/groups/<%= @group.id %>' );
+  </script>
+
+<% else %>
+
+  <p>Unknown Group</p>
+
 <% end %>
 
 <%= link_to 'All Groups', groups_path, class: 'btn' %>
 
-<script>
-  window.history.replaceState ( null, '', '/groups/<%= @group.id %>' );
-</script>
