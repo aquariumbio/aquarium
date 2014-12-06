@@ -173,4 +173,33 @@ class Job < ActiveRecord::Base
 
   end
 
+  def cancel user
+    if self.pc != Job.COMPLETED
+      self.pc = Job.COMPLETED
+      self.user_id = user.id
+      if /\.rb$/ =~ self.path
+        Krill::Client.new.abort self.id
+        self.abort_krill 
+      end
+      self.save
+    end
+  end
+
+  def abort_krill
+
+    self.pc = Job.COMPLETED
+
+    state = JSON.parse self.state, symbolize_names: true
+    if state.length % 2 == 1 # backtrace ends with a 'next'
+      self.append_step operation: "display", content: [ 
+        { title: "Interrupted" },
+        { note: "This step was being prepared by the protocol when the 'abort' signal was received."} ]
+    end
+
+    # add next and final
+    self.append_step operation: "next", time: Time.now, inputs: {}
+    self.append_step operation: "aborted", rval: {}
+
+  end
+
 end

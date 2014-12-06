@@ -137,7 +137,7 @@ class KrillController < ApplicationController
     else
 
       @job = Job.find(params[:job])
-      @job.pc = -2
+      @job.pc = Job.COMPLETED
 
       state = JSON.parse @job.state, symbolize_names: true
       if state.length % 2 == 1 # backtrace ends with a 'next'

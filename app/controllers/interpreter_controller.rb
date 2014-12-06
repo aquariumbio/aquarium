@@ -422,28 +422,18 @@ class InterpreterController < ApplicationController
   end
 
   def abort
-   @job = Job.find(params[:job])
-   if @job.pc != Job.COMPLETED
-     @job.pc = Job.COMPLETED
-     @job.user_id = current_user.id
-     @job.save
-     @pc = Job.COMPLETED
-     log "ABORT", {}
-   end
-   render 'abort'
+    @job = Job.find(params[:job])
+    @job.cancel current_user
+    log "ABORT", {}
+    render 'abort'
   end
 
   def cancel
-   @job = Job.find(params[:job])
-   if @job.pc != Job.COMPLETED
-     @job.pc = Job.COMPLETED
-     @job.user_id = current_user.id
-     @job.save
-     @pc = Job.COMPLETED
-     log "CANCEL", {}
-   end
-   flash[:success] = "Job #{params[:job]} has been cancelled."
-   redirect_to jobs_url
+    @job = Job.find(params[:job])
+    @job.cancel current_user
+    log "CANCEL", {}
+    flash[:success] = "Job #{params[:job]} has been cancelled."
+    redirect_to jobs_url
   end
 
   def release
