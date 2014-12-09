@@ -41,6 +41,8 @@ class ObjectTypesController < ApplicationController
       @sample_type = SampleType.find(@object_type.sample_type_id)
     end
 
+    @image_url = "#{Bioturk::Application.config.image_server_interface}#{@object_type.image}"
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @object_type }
