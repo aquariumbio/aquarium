@@ -21,7 +21,7 @@
 
 <%
   cookies.each { |k,v| 
-    if k != :_bioturk_session
+    if k != "_bioturk_#{Rails.env}_session".to_sym
       cookies.delete k 
     end
   }
