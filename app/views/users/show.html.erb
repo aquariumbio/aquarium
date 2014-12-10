@@ -51,6 +51,7 @@ function displayProtocols() {
     type: 'GET',
     url: '/stats/user_activity?user_id=<%= @user.id %>',
     dataType: "json",
+
     success: function(data,status) {
 
       var names = [];
@@ -65,49 +66,57 @@ function displayProtocols() {
 
       if(names.length > 0 ) {
 
-	$(function () { 
-	    $('#protocols').highcharts({
-		chart: { type: 'bar' },
-		title: { text: 'Protocols Completed' },
-		xAxis: { categories: names },
-		yAxis: { title: { text: 'Jobs (Past 31 days)'}, allowDecimals: false },
-		credits: { enabled: false },
-		plotOptions: { series: { animation: true } },
-		series: [{
-		    showInLegend: false,
-		    data: nums
-		}]
-	    });
-	});
+      	$(function () { 
+
+            console.log("A");
+
+      	    $('#protocols').highcharts({
+          		chart: { type: 'bar' },
+          		title: { text: 'Protocols Completed' },
+          		xAxis: { categories: names },
+          		yAxis: { title: { text: 'Jobs (Past 31 days)'}, allowDecimals: false },
+          		credits: { enabled: false },
+          		plotOptions: { series: { animation: true } },
+          		series: [{
+          		  showInLegend: false,
+          		  data: nums
+          		}]
+      	    });
+
+            console.log("B");
+
+      	});
 
       } else {
+
         $('#protocols').html("No jobs in past 31 days");
+
       }
 
       $('#activity').css('height',60+20*nums.length);
 
       if(data.completions.length > 0 ) {
 
-	var bins = [data.completions[0].updated], 
-	    dbins = [new Date(data.completions[0].updated).toLocaleDateString()],
-	    results = [{"COMPLETED":0,"ABORTED":0,"CANCELED":0,"ERROR":0}];
-	var day = 24 * 3600 * 1000;
+      	var bins = [data.completions[0].updated], 
+  	    dbins = [new Date(data.completions[0].updated).toLocaleDateString()],
+  	    results = [{"COMPLETED":0,"ABORTED":0,"CANCELED":0,"ERROR":0}];
+  	    var day = 24 * 3600 * 1000;
 
-	for ( var i=0; i<data.completions.length; i++ ) {
+      	for ( var i=0; i<data.completions.length; i++ ) {
 
-	  while ( data.completions[i].updated > bins[bins.length-1] + day ) {
-	    bins.push(bins[bins.length-1] + day);
-	    if (dbins.length % 3 == 0 ) {
-	      dbins.push(new Date(bins[bins.length-1] + day).toLocaleDateString());
-	    } else {
-	      dbins.push("");
-	    }
-	    results.push({"COMPLETED":0,"ABORTED":0,"CANCELED":0,"ERROR":0});
-	  }
+      	  while ( data.completions[i].updated > bins[bins.length-1] + day ) {
+      	    bins.push(bins[bins.length-1] + day);
+	          if (dbins.length % 3 == 0 ) {
+      	      dbins.push(new Date(bins[bins.length-1] + day).toLocaleDateString());
+      	    } else {
+      	      dbins.push("");
+      	    }
+      	    results.push({"COMPLETED":0,"ABORTED":0,"CANCELED":0,"ERROR":0});
+    	  }
 
-	  results[results.length-1][data.completions[i].status]++;
+    	  results[results.length-1][data.completions[i].status]++;
 
-	}
+    	}
 
 	$(function () {
 	  $('#activity').highcharts({

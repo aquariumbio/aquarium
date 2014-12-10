@@ -6,9 +6,11 @@
 function displayProtocols() {
 
   $.ajax({
+
     type: 'GET',
     url: '/stats/protocols',
     dataType: "json",
+
     success: function(data,status) {
 
       names = [];
@@ -21,18 +23,15 @@ function displayProtocols() {
       $('#protocol_stats').css('height',60+20*nums.length);
 
       $(function () { 
-	  $('#protocol_stats').highcharts({
-	      chart: { type: 'bar' },
-              title: { text: 'Protocol Usage' },
-	      xAxis: { categories: names },
-	      yAxis: { title: { text: 'Jobs (past 7 days)'}, allowDecimals: false },
-              credits: { enabled: false },
-              plotOptions: { series: { animation: false } },
-	      series: [{
-                  showInLegend: false,
-		  data: nums
-	      }]
-	  });
+    	  $('#protocol_stats').highcharts({
+    	      chart: { type: 'bar' },
+            title: { text: 'Protocol Usage' },
+    	      xAxis: { categories: names },
+    	      yAxis: { title: { text: 'Jobs (past 7 days)'}, allowDecimals: false },
+            credits: { enabled: false },
+            plotOptions: { series: { animation: false } },
+    	      series: [{ showInLegend: false, data: nums }]
+    	  });
       });
 
 
