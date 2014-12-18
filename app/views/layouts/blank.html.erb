@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Aquarium</title>
+    <%= stylesheet_link_tag    "application", media: "all" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+  </head>
+  <style>
+    body {
+      padding: 0px;
+      margin: 0px;
+    }
+  </style>
+  <body style="background-color:transparent">
+
+      <% flash.each do |key, value| %>
+        <div class="alert alert-<%= key %>"><%= value.class == Array ? value.join('<br />').html_safe : value %></div>
+      <% end %>
+  
+  <%= yield %>
+  </body>
+</html>

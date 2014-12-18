@@ -1,10 +1,17 @@
-<% provide(:title, "Sign in") %>
+<% if params[:msg] %>
+  <div class="container-fluid">
+    <div class='alert'>
+      <%= params[:msg] %>
+    </div>
+  </div>
+<% end %>
 
-<h1>Sign In</h1>
+<h1>Welcome to the Aquarium</h1>
 
 <br />
 
 <div class="row-fluid">
+
   <div class="span4 offset4">
 
     <%= form_for(:session, url: sessions_path) do |f| %>
@@ -12,6 +19,7 @@
       <%= f.text_field :login %>
       <%= f.label :password %>
       <%= f.password_field :password %>
+      <br />
       <br />
       <%= f.submit "Sign in", class: "btn btn-large btn-primary" %>
     <% end %>

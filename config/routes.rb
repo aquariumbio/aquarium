@@ -153,6 +153,8 @@ Bioturk::Application.routes.draw do
   resources :jobs, only: [:index, :destroy, :show]
   resources :logs, only: [:index, :show]
 
+  match '/logout', to: 'sessions#destroy'
+
   match '/item', to: 'items#update'
 
   get "oyster/ping"

@@ -1,6 +1,7 @@
 class SessionsController < ApplicationController
 
   def new
+    render layout: "blank.html.erb"
   end
 
   def create
@@ -8,7 +9,7 @@ class SessionsController < ApplicationController
     if user && user.authenticate(params[:session][:password])
       sign_in user
       flash[:success] = "Welcome to the Aquarium, #{user.login}. Your biological and technological distinctiveness will be added to our own."
-      redirect_back_or user
+      redirect_back_or root_url
     else
       flash.now[:error] = 'Invalid login/password combination'
       render 'new'
@@ -16,9 +17,8 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    flash[:success] = 'Logged out.'
     sign_out
-    redirect_to root_url
+    render 'new', layout: "blank.html.erb"
   end
 
 end
