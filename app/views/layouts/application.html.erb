@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= full_title(yield(:title)) %></title>
@@ -7,19 +8,26 @@
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
   </head>
+
   <body>
+
     <%= render 'layouts/header' %>
+
     <div class="container-fluid">
       <% flash.each do |key, value| %>
         <div class="alert alert-<%= key %>"><%= value.class == Array ? value.join('<br />').html_safe : value %></div>
       <% end %>
       <%= yield %>
     </div>
+
     <%= render 'layouts/footer' %>
+
     <script>
       setTimeout(function() { 
         window.location = "logout?msg=Session timing out due to inactivity.";
       }, 1000 * 60 * 15 /* 15 minutes */ );
     </script>
+
   </body>
+
 </html>

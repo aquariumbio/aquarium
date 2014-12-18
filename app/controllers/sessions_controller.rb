@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
       redirect_back_or root_url
     else
       flash.now[:error] = 'Invalid login/password combination'
-      render 'new'
+      render 'new', layout: "blank.html.erb"
     end
   end
 

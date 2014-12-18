@@ -1,0 +1,21 @@
+<script>
+
+  if ( '<%= Rails.env %>' == 'rehearse' ) {
+
+    document.getElementById('logo').style.color = 'orange';
+    document.getElementById('header-bar').style.background = '#720';
+
+  } else if ( '<%= Rails.env %>' == 'production'  ) {
+
+    document.getElementById('logo').style.color = '#aaa';
+
+  } else {
+
+    document.getElementById('logo').style.color = '#0f0';
+    document.getElementById('header-bar').style.background = '#030';
+
+  }
+
+  <% Manta::blinker.html_safe %>
+
+</script>
