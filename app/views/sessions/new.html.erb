@@ -29,7 +29,7 @@
 
 <%
   cookies.each { |k,v| 
-    if k != "_bioturk_#{Rails.env}_session".to_sym
+    if k != "_bioturk_#{Rails.env}_session".to_sym && k != "location"
       cookies.delete k 
     end
   }

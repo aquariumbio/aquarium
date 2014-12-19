@@ -12,21 +12,23 @@
 
 <% (Group.list[:groups] + ['retired']).each do |name| %>
   <% group = Group.find_by_name(name) %>
-  <tr>
-    <td><%= link_to group.name, group %></td>
-    <td><%= group.description %></td>
-    <td><% if current_user && current_user.is_admin %>
-          <%= link_to edit_group_path(group) do %>
-            <icon class='icon-pencil'></icon>
+  <% if group %>
+    <tr>
+      <td><%= link_to group.name, group %></td>
+      <td><%= group.description %></td>
+      <td><% if current_user && current_user.is_admin %>
+            <%= link_to edit_group_path(group) do %>
+              <icon class='icon-pencil'></icon>
+            <% end %>
           <% end %>
-        <% end %>
-    </td>
-    <td><% if current_user && current_user.is_admin %>
-          <%= link_to group, method: :delete, data: {confirm: 'Are you sure?' } do %>
-            <icon class='icon-remove'></icon>
-          <% end %>
-        <% end %></td>
-  </tr>
+      </td>
+      <td><% if current_user && current_user.is_admin %>
+            <%= link_to group, method: :delete, data: {confirm: 'Are you sure?' } do %>
+              <icon class='icon-remove'></icon>
+            <% end %>
+          <% end %></td>
+    </tr>
+  <% end %>
 <% end %>
 </table>
 
