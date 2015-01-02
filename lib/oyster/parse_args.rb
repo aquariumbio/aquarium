@@ -8,7 +8,7 @@ module Oyster
              @tok.eat_a ':'
       type = @tok.eat_a_argtype
       
-      unless type == 'number' || type == 'string' || type == 'sample' || type == 'object' || type == 'generic'
+      unless type == 'number' || type == 'string' || type == 'sample' || type == 'object' || type == 'generic' || type == 'group'
         raise "Unknown type '#{type}' in argument"
       end
 

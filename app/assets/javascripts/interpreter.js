@@ -110,6 +110,10 @@ ArgumentUI.prototype.get_number = function(arg) {
     return parseFloat($('#arg-'+arg.name).val());
 }
 
+ArgumentUI.prototype.get_group = function(arg) {
+    return $('#arg-'+arg.name).val();
+}
+
 ArgumentUI.prototype.get_generic = function(arg) {
     return $('#arg-'+arg.name).val();
 }
@@ -207,6 +211,26 @@ ArgumentUI.prototype.string = function(arg) {
     if ( arg.current ) { 
       x[0].value = arg.current;
     }
+    return x;
+
+}
+
+ArgumentUI.prototype.group = function(arg) {
+
+    var x = $('<select />');
+
+    $.ajax({
+      url: "/groups/names"
+    }).done(function(response){
+      for ( var i=0; i<response.groups.length; i++ ) {
+        x.append('<option>' + response.groups[i] + '</option>');
+      }
+      x.append('<option disabled>──────────</option>');
+      for ( var i=0; i<response.users.length; i++ ) {
+        x.append('<option>' + response.users[i] + '</option>');
+      }      
+    });
+
     return x;
 
 }

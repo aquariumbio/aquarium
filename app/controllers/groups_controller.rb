@@ -13,6 +13,10 @@ class GroupsController < ApplicationController
     end
   end
 
+  def names
+    render json: Group.list
+  end
+
   # GET /groups/1
   # GET /groups/1.json
   def show

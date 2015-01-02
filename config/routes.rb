@@ -28,6 +28,8 @@ Bioturk::Application.routes.draw do
       get 'stop'
   end 
 
+  get "/groups/names"
+
   resources :groups
 
   resources :collections do
