@@ -453,13 +453,16 @@ c = collection_from i
 
 which creates and takes a new collection object with an empty 2x6 matrix and an object type of "Gel". Note that the object type associated with a collection **must** have its handler set to "collection".
 
-Finally, suppose **fragments** is a list of fragment sample (obtained from a call to **find** for example). You can construct a new collection whose matrix is populated with those samples as in the following example:
+Finally, suppose **fragments**<em>[[should this be **sample_list**? -CT]]</em> is a list of fragment sample (obtained from a call to **find** for example). You can construct a new collection whose matrix is populated with those samples as in the following example:
+
+<em>[[In the above it's not initially clear to what "list of fragment sample" is. Is it a list of samples (not items)  that in this case happen to be fragments"-CT]]</em>
 
 ```ruby
 collections = produce spread sample_list, "Stripwell", 1, 12
 ```
 
 This call to **spread** returns a list of collections, which is sent to **produce** to take them. In this example, if there were, say, 30 samples in **sample_list**, then the returned list will contain three 1x12 collections with the first two completely, and the last half full. The first sample in the list is associated with the first well of the first collection, and so on.
+<i> 
 
 Collection Methods
 ---
