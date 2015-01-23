@@ -37,16 +37,20 @@ class Task < ActiveRecord::Base
 
   def type_check p, s
 
+    puts "CHECKING #{s} against #{p}"
+
     case p
 
       when String
 
         result = (s.class == String)
+        puts "wrong atomic 1" unless result
         errors.add(:task_constant, ": Wrong atomic type encountered") unless result 
 
       when Fixnum, Float
 
         result = (s.class == Fixnum || s.class == Float)
+        puts "wrong atomic 1" unless result
         errors.add(:task_constant, ": Wrong atomic type encountered") unless result 
 
       when Hash
@@ -57,18 +61,18 @@ class Task < ActiveRecord::Base
         # check all requred key/values are present
         if result
           p.keys.each do |k|
-            result = result && s.has_key?(k) && type_check( p[k], s[k] )
-            errors.add(:task_missing_key_value, ": Specification #{s} is missing the key '#{k}' (a #{k.class})") unless result && s.has_key?(k) 
-            errors.add(:task_missing_key_value, ": Specification #{s[k]} has the wrong type. Should match #{p[k]}") unless result && type_check( p[k], s[k] ) 
+            result = result && has_consistent_key?(s,k) && type_check( get_part(p,k), get_part(s,k) )
+            errors.add(:task_missing_key_value, ": Specification #{s} is missing the key '#{k}' (a #{k.class})") unless result   
+            errors.add(:task_missing_key_value, ": Specification #{s[k]} has the wrong type. Should match #{p[k]}") unless result
           end
         end
 
         # check that no other keys are present
         if result
             s.keys.each do |k|
-            result = result && p.has_key?(k)
-            errors.add(:task_extra_key, ": Specification has the key #{k} but prototype does not") unless result 
-          end
+              result = result && has_consistent_key?(p,k)
+              errors.add(:task_extra_key, ": Specification has the key #{k} but prototype does not") unless result 
+            end
         end
 
         when Array
@@ -97,6 +101,45 @@ class Task < ActiveRecord::Base
       end
 
     result
+
+  end
+
+  def get_part spec,key
+
+    name = key.to_s.split(' ')[0]
+
+    spec.each do |k,v|
+      sname = k.to_s.split(' ')[0]
+      if name == sname
+        return v
+      end
+    end
+
+    return nil
+
+  end
+
+  def has_consistent_key?(s,k) 
+
+    puts "checking specification #{s} for existence of #{k}"
+
+    name = k.to_s.split(' ')[0]
+    types = k.to_s.split(' ')[1,100].join(' ').split('|')
+    found = false
+
+    s.each do |key,val| 
+      sname = key.to_s.split(' ')[0]
+      stypes = key.to_s.split(' ')[1,100].join(' ').split('|')
+      puts "  checking if #{name} == #{sname} and #{stypes} is a subset of #{types}" unless found
+      if name == sname && ( stypes.all? { |i| types.include?(i) } || types.all? { |i| stypes.include?(i) } )
+        found = true
+        puts "  #{name} is okay"
+      end
+    end
+
+    puts "  #{name} is not okay" unless found
+
+    found
 
   end
 

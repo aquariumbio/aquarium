@@ -29,8 +29,8 @@
 
 <%
   cookies.each { |k,v| 
-    if k != "_bioturk_#{Rails.env}_session".to_sym && k != "location"
-      cookies.delete k 
+    if k != "_aquarium_#{Rails.env}_session" && k != "location"
+      cookies.delete k
     end
   }
 %>

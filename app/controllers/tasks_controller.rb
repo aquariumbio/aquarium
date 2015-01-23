@@ -156,6 +156,10 @@ class TasksController < ApplicationController
     t.status = params[:status]
     t.save
 
+    if t.errors
+        logger.info t.errors.messages
+    end
+
     render json: { result: 'ok' }
 
   end
@@ -165,11 +169,11 @@ class TasksController < ApplicationController
     id = params[:id].to_i
     type = params[:type]
 
-    st = SampleType.find_by_name(type)
+    st = SampleType.find_by_name(type.split('|')[0])
     
     if st
       s = Sample.find_by_id(id)
-      if s
+      if s 
         render json: { sample_id: id, sample_name: s.name, type: st.name }
       else
         render json: { error: "sample #{id} not found" }

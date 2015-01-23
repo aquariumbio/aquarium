@@ -57,7 +57,7 @@ function json_get_id_info(id,type) {
     var el = $("<span>"+id+"</span>").addClass('json-rich-id');
 
     $.ajax({
-      url: "/rich_id?id="+id+"&type="+type,
+      url: encodeURI("/rich_id?id="+id+"&type="+type),
       dataType: "json",
     }).done(function(result) {
         console.log(result.error);
@@ -108,6 +108,7 @@ function render_json_editor(tag,obj,proto,type,parent_list) {
         if ( arguments.length == 5 ) { var parlist = parent_list; }
 
         if ( arguments.length >= 4 && type != "" ) { // type provided
+
             $(tag).append(new Finder(type,function(selections) {
                 /* put result in input tag */ 
                 for ( var n=0; n<selections.length; n++ ) {
@@ -169,7 +170,7 @@ function render_json_editor(tag,obj,proto,type,parent_list) {
         $.each(obj, function(k,v) {
             var li = $("<li />");
             li.append("<span class='json_key' data-key='"+k+"'>" + k.split(' ')[0] + "</span>");
-            render_json_editor(li,v,proto[k],json_editor_type(k));
+            render_json_editor(li,v,proto[k],json_editor_type_from_proto(k,proto));
             list.append(li);
         });
 
@@ -185,6 +186,21 @@ function json_editor_key(str) {
 
 function json_editor_type(str) {
     return parts = str.split(' ').slice(1,40).join(' ');
+}
+
+function json_editor_type_from_proto(str,proto) {
+
+  var key = str.split(' ')[0];
+  var temp = proto;
+
+  for ( var k in proto ) {
+    var parts = k.split(' ');
+    if ( parts.length > 1 ) { // only include keys with type information
+      temp[parts[0]] = json_editor_type(k);
+    }
+  }
+
+  return temp[key];
 }
 
 
