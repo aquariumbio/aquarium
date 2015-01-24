@@ -87,8 +87,6 @@ Bioturk::Application.routes.draw do
   get "stats/processes"
   get "stats/empty"
   get "stats/timing"
-  get "stats/activity_monitor"
-  match '/activity_monitor',        to: 'stats#activity_monitor'
   get "jobs/index"
   get "jobs/summary"
 
