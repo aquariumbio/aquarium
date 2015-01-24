@@ -109,9 +109,9 @@ class StatsController < ApplicationController
     items = []
 
     while t < now
-      tnew = t + 31.days
-      objects.push( [ 1000*t.to_i, ObjectType.where("created_at < ?", tnew).length ] )
-      items.push( [ 1000*t.to_i, Item.where("created_at < ? AND quantity >= 0", tnew).length  ] )
+      tnew = t + 14.days
+      objects.push( [ 1000*t.to_i, ObjectType.where("created_at < ?", tnew).count ] )
+      items.push( [ 1000*t.to_i, Item.where("created_at < ? AND quantity >= 0", tnew).count  ] )
       t = tnew
     end
 

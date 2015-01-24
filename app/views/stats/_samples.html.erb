@@ -1,5 +1,5 @@
 
-<div id="sample_stats" style='height: 300px'></div>
+<div id="sample_stats" style='height: 350px'><%= image_tag "waiting_animation.gif" %></div>
 
 <script>
 
@@ -11,40 +11,41 @@ function displaySamples() {
     dataType: "json",
     success: function(data,status) {
  
-      names = [];
-      n = [];
-      m = [];
+      var ticks = [], n = [], m = [];
+      var i = 0;
       for ( var st in data ) {
-          names.push(st);
-          n.push(data[st][0]);
-          m.push(data[st][1]);
+        ticks.push([i,st]);
+        n.push([data[st][0],i]);
+        n.push([data[st][1],i]);        
+        i++;
       }
 
-      nms = names;
+      $.plot($("#sample_stats"), [ { data: n, color: 'green' }, { data: m, color: 'orange' } ],
+        {
+            yaxis: { ticks: ticks },
 
-      $('#sample_stats').css('height',150+45*names.length);
+            series: {
+              bars: {
+                show: true
+              }
+            },
+            bars: {
+              align: "center",
+              barWidth: 0.5,
+              horizontal: true
+            },
+            grid: {
+              minBorderMargin: 0,
+              borderWidth: {
+              top: 0, right: 0, bottom: 0, left: 1
+            }
+          }
+        }
+      );
 
-      $(function () { 
-	  $('#sample_stats').highcharts({
-	      chart: { type: 'bar', animation: false },
-              title: { text: 'Sample Inventory' },
-	      xAxis: { categories: names },
-	      yAxis: { title: { text: 'Number'}, allowDecimals: false },
-              credits: { enabled: false },
-              plotOptions: { series: { animation: false } },
-	      series: [{
-                  name: 'Samples',
-		  data: n
-	      }, {
-                  name: 'Items',
-                  data: m
-              }]
-	  });
-      });
     }
-  });
 
-  setTimeout(displaySamples,DISPLAY_SAMPLES_PERIOD);
+  });
 
 }
 

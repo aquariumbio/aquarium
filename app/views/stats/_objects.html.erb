@@ -1,5 +1,5 @@
 
-<div id="object_stats" style='height: 350px'></div>
+<div id="object_stats" style='height: 350px'><%= image_tag "waiting_animation.gif" %></div>
 
 <script>
 
@@ -11,32 +11,30 @@ function displayObjects() {
     dataType: "json",
     success: function(data,status) {
 
-      $(function () { 
-	  $('#object_stats').highcharts({
-	      chart: { },
-              title: { text: 'Inventory' },
-	      xAxis: { type: 'datetime', tickInterval : 28*24 * 3600 * 1000 },
-	      yAxis: [
-                { title: { text: 'Number of Objects'} },
-                { title: { text: 'Number of Items'}, opposite: true } 
-              ],
-              credits: { enabled: false },
-              plotOptions: { series: { animation: false } },
-	      series: [{
-                  yAxis: 0,
-                  name: 'Objects',
-		  data: data.objects
-	      }, {
-                  yAxis: 1,
-                  name: 'Items',
-                  data: data.items
-              }]
-	  });
-      });
+      // data.items
+      // data.objects
+      $.plot($("#object_stats"), [ 
+          { data: data.items, yaxis: 1, label: "Items" },
+          { data: data.objects, yaxis: 2, label: "Objects" }
+        ], {
+          yaxes: [ {position: "left"}, { position: "right"} ],
+          xaxis: {
+            mode: "time",
+            timeformat: "%b %Y"
+          },
+          grid: {
+            minBorderMargin: 0,
+            borderWidth: {
+              top: 0, right: 0, bottom: 1, left: 0
+            }
+          },
+          legend: {
+            position: "se"
+          }
+        }
+      );
     }
   });
-
-  setTimeout(displayObjects,DISPLAY_OBJECTS_PERIOD);
 
 }
 
