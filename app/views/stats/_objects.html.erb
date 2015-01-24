@@ -1,5 +1,7 @@
 
-<div id="object_stats" style='height: 350px'><%= image_tag "waiting_animation.gif" %></div>
+<div id="object_stats" style='height: 350px'>
+  <%= image_tag "waiting_animation.gif" %>
+</div>
 
 <script>
 
@@ -14,8 +16,8 @@ function displayObjects() {
       // data.items
       // data.objects
       $.plot($("#object_stats"), [ 
-          { data: data.items, yaxis: 1, label: "Items" },
-          { data: data.objects, yaxis: 2, label: "Objects" }
+          { data: data.items, yaxis: 1, label: " # Items" },
+          { data: data.objects, yaxis: 2, label: " # Objects" }
         ], {
           yaxes: [ {position: "left" }, { position: "right" } ],
           xaxis: {

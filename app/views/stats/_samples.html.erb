@@ -1,5 +1,7 @@
 
-<div id="sample_stats" style='height: 350px'><%= image_tag "waiting_animation.gif" %></div>
+<div id="sample_stats" style='height: 350px'>
+  <%= image_tag "waiting_animation.gif" %>
+</div>
 
 <script>
 
@@ -11,16 +13,22 @@ function displaySamples() {
     dataType: "json",
     success: function(data,status) {
  
-      var ticks = [], n = [], m = [];
+      var ticks = [], samples = [], items = [];
       var i = 0;
       for ( var st in data ) {
         ticks.push([i,st]);
-        n.push([data[st][0],i]);
-        n.push([data[st][1],i]);        
+        samples.push([data[st][0],i]);
+        items.push([data[st][1],i]);        
         i++;
       }
 
-      $.plot($("#sample_stats"), [ { data: n, color: 'green' }, { data: m, color: 'orange' } ],
+      var c1 = "rgba(0,180,0,1)",
+          c2 = "rgba(0,180,0,0.25)";
+
+      $.plot($("#sample_stats"), [ 
+          { data: samples, color: c1, label: " # Samples", bars: { fillColor: c1 } }, 
+          { data: items, color: c2, label: " # Items", bars: { fillColor: c2 }  } 
+        ],
         {
             yaxis: { ticks: ticks, tickColor: "#fff" },
 

@@ -51,12 +51,21 @@ class StatsController < ApplicationController
 
   def user_activity 
 
-    jobs = Job.includes(:logs).where("user_id = ? AND pc = -2 AND created_at > ?", params[:user_id], Time.now - 31.days)
+    jobs = Job.includes(:logs).where("user_id = ? AND pc = -2 AND created_at > ?", params[:user_id], Time.now - 100.days)
     protocol_usage = summarize_jobs jobs
 
+    completions = []
+
+    (0..99).each { |day| 
+      t1 = (Time.now - day.days).to_i
+      t2 = (Time.now - (day-1).days).to_i
+      num = (jobs.select { |j| t1 < j.updated_at.to_i && j.updated_at.to_i <= t2} ).length
+      completions.push([t1*1000,num])
+    }
+
     render json: {
-      protocol_usage: protocol_usage.sort_by {|_key, value| -value},
-      completions: jobs.collect { |j| { status: j.status, updated: 1000*j.updated_at.to_i } }
+      protocol_usage: protocol_usage.sort_by {|_key, value| value},
+      completions: completions
     }
 
   end
@@ -64,9 +73,7 @@ class StatsController < ApplicationController
   def protocols
 
     now = Time.now
-
     p = summarize_jobs( Job.where("created_at > ?", now - 28.days) )
-
     render json: p.sort_by {|_key, value| value}
 
   end
