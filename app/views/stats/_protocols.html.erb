@@ -1,5 +1,5 @@
 
-<div id="protocol_stats" style='height: 300px'></div>
+<div id="protocol_stats" style='height: 300px'><%= image_tag "waiting_animation.gif" %></div>
 
 <script>
 
@@ -13,32 +13,45 @@ function displayProtocols() {
 
     success: function(data,status) {
 
-      names = [];
+      ticks = [];
       nums = [];
+
       for ( var i=0; i<data.length; i++ ) {
-        names.push(data[i][0]);
-        nums.push(data[i][1]);
+        console.log(data[i])
+        ticks.push([i,data[i][0]])
+        nums.push([data[i][1],i]);
       }
 
-      $('#protocol_stats').css('height',60+20*nums.length);
+      $('#protocol_stats').plot([nums],{
 
-      $(function () { 
-    	  $('#protocol_stats').highcharts({
-    	      chart: { type: 'bar' },
-            title: { text: 'Protocol Usage' },
-    	      xAxis: { categories: names },
-    	      yAxis: { title: { text: 'Jobs (past 7 days)'}, allowDecimals: false },
-            credits: { enabled: false },
-            plotOptions: { series: { animation: false } },
-    	      series: [{ showInLegend: false, data: nums }]
-    	  });
+        yaxis: { ticks: ticks, tickColor: "#fff" },
+
+        xaxis: { tickColor: "#eee", tickDecimals: 0 },
+
+        series: {
+          bars: {
+            show: true
+          }
+        },
+
+        bars: {
+          align: "center",
+          barWidth: 0.5,
+          horizontal: true
+        },
+
+        grid: {
+          minBorderMargin: 0,
+          borderWidth: {
+            top: 0, right: 0, bottom: 0, left: 1
+          }
+        }
+
       });
 
-
     }
-  });
 
-  setTimeout(displayProtocols,DISPLAY_PROTOCOLS_PERIOD);
+  });
 
 }
 

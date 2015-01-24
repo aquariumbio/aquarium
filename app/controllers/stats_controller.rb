@@ -65,9 +65,9 @@ class StatsController < ApplicationController
 
     now = Time.now
 
-    p = summarize_jobs( Job.where("created_at > ?", now - 7.days) )
+    p = summarize_jobs( Job.where("created_at > ?", now - 28.days) )
 
-    render json: p.sort_by {|_key, value| -value}
+    render json: p.sort_by {|_key, value| value}
 
   end
 
