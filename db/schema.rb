@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140907220135) do
+ActiveRecord::Schema.define(:version => 20150124201744) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -216,5 +216,13 @@ ActiveRecord::Schema.define(:version => 20140907220135) do
 
   add_index "users", ["login"], :name => "index_users_on_login", :unique => true
   add_index "users", ["remember_token"], :name => "index_users_on_remember_token"
+
+  create_table "wizards", :force => true do |t|
+    t.string   "name"
+    t.string   "specification"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.string   "description"
+  end
 
 end

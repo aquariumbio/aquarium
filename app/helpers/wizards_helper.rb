@@ -1,0 +1,2 @@
+module WizardsHelper
+end

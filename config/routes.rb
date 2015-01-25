@@ -1,5 +1,8 @@
 Bioturk::Application.routes.draw do
 
+  resources :wizards
+
+
   get "plugin/tester"
   get "plugin/show"
   get "plugin/ajax"

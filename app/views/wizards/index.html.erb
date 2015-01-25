@@ -1,0 +1,34 @@
+<h1>Location Wizards</h1>
+
+<table class='table'>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>   
+    <th>Form</th>
+    <th>Ranges</th>    
+    <th></th>
+    <th></th>
+  </tr>
+
+<% def symb(i) 
+  if i >= 0
+    i
+  else
+    "&#8734;"
+  end
+end %>
+
+<% @wizards.each do |wizard| %>
+  <tr>
+    <td><%= link_to wizard.name, edit_wizard_path(wizard) %></td>
+    <td><%= wizard.description %></td>    
+    <td><%= (wizard.spec[:fields].collect { |f| f[:name] }).join('.') %></td>
+    <td><%= (wizard.spec[:fields].collect { |f| "[#{f[:min]},#{symb(f[:max])}]" }).join('.').html_safe %></td>    
+    <td><%= link_to 'x', wizard, method: :delete, data: { confirm: 'Are you sure you want to delete this wizard?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Wizard', new_wizard_path, class: "btn" %>
