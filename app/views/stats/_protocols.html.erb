@@ -22,6 +22,8 @@ function displayProtocols() {
         nums.push([data[i][1],i]);
       }
 
+      $('#protocol_stats').css('height',20*(1+ticks.length));
+
       $('#protocol_stats').plot([nums],{
 
         yaxis: { ticks: ticks, tickColor: "#fff" },

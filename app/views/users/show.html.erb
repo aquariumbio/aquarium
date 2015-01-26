@@ -55,10 +55,12 @@ function displayProtocols() {
 
       if ( ticks.length > 0 ) {
 
+        $('#protocols').css('height',20*(1+ticks.length));
+
         $('#protocols').plot([ { data: nums, label: " # Associated Jobs" } ],{
 
             yaxis: { ticks: ticks, tickColor: "#fff" },
-
+            xaxis: { tickColor: "#eee", tickDecimals: 0 },
             series: { bars: { show: true } },
 
             bars: {
