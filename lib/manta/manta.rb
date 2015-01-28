@@ -1,6 +1,6 @@
 module Manta
 
-  def self.start job, user, request, cookies
+  def self.start job, user, request, cookies, view = nil
 
     if Bioturk::Application.config.vision_server_interface != ''
 
@@ -24,8 +24,11 @@ module Manta
 
           uri= URI(manta)
           res = Net::HTTP.get(uri)
-          puts "Message to MANTA on start: " + uri.to_s
-          puts "Message from MANTA on start: " + res
+
+          if view
+            view.logger.info "Message to MANTA on start: " + uri.to_s
+            view.logger.info "Message from MANTA on start: " + res
+          end
 
         rescue Exception => e
 
@@ -39,7 +42,7 @@ module Manta
 
   end
 
-  def self.stop job, request, aborted
+  def self.stop job, request, aborted, view = nil
 
     if Bioturk::Application.config.vision_server_interface != ''
 
@@ -51,8 +54,11 @@ module Manta
           url = Bioturk::Application.config.vision_server_interface + "stop?&job=#{job.id}&server=" + server + "&abort=" + aborted
           uri = URI(url)
           res = Net::HTTP.get(uri)
-          puts "Message to MANTA on stop: " + uri.to_s
-          puts "Message from MANTA on stop: " + res
+
+          if view
+            view.logger.info "Message to MANTA on stop: " + uri.to_s
+            view.logger.info "Message from MANTA on stop: " + res
+          end
 
         rescue Exception => e
 

@@ -59,7 +59,7 @@ function displayProtocols() {
 
         $('#protocols').plot([ { data: nums, label: " # Associated Jobs" } ],{
 
-            yaxis: { ticks: ticks, tickColor: "#fff" },
+            yaxis: { ticks: ticks, tickColor: "#fff", tickDecimals: 0 },
             xaxis: { tickColor: "#eee", tickDecimals: 0 },
             series: { bars: { show: true } },
 

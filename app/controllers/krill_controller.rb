@@ -104,7 +104,7 @@ class KrillController < ApplicationController
       end
 
       # tell manta we're starting a protocol
-      Manta::start @job, current_user, request, cookies
+      Manta::start @job, current_user, request, cookies, self
 
     end
 
@@ -151,7 +151,7 @@ class KrillController < ApplicationController
       @job.append_step operation: "aborted", rval: {}
 
       # tell manta we're done
-      Manta::stop @job, request, 'true'
+      Manta::stop @job, request, 'true', self
       logger.info "ABORTING KRILL JOB #{@job.id}"
 
     end
@@ -203,7 +203,7 @@ class KrillController < ApplicationController
 
       if result[:response] == "done"
         # tell manta we're done
-        Manta::stop @job, request, (@exception ? 'true' : 'false')
+        Manta::stop @job, request, (@exception ? 'true' : 'false'), self
       end
 
       @job.reload
