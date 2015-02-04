@@ -551,6 +551,7 @@ tasks = find(:task,{task_prototype: {name: "Daily"},status: "ready"})
 ```
 
 Tasks have associated specifications (see the Aquarum UI) that can be obtained using the spec field, as in
+<em>[[looks like the undocumented .simple_spec does what you'd "expect" here.  ie strip out the container hints from the keys  -CT]]</em> 
 
 ```ruby
 task.spec
