@@ -19,14 +19,12 @@
 
       spec = @wizard.spec
       name = @wizard.spec[:fields][i-1][:name]
-      min = @wizard.spec[:fields][i-1][:min]
-      max = @wizard.spec[:fields][i-1][:max]
+      capacity = @wizard.spec[:fields][i-1][:capacity]
 
     else
 
       name = ['','a','b','c'][i]
-      min = 0
-      max = 0
+      capacity = 0
 
     end %>
 
@@ -35,27 +33,27 @@
         <input id="check<%= i %>" type='checkbox' checked>Use field <%= i %></label>
       </label>
       <label>Field Name</label><input id='name<%= i %>' type='text' value='<%= name %>'></input>
-      <label>Minimum</label><input id='min<%= i %>' type='number' value=<%= min %>></input>
-      <label>Maximum*</label><input id='max<%= i %>' type='number' value=<%= max %>></input>
+      <label id='capacity<%= i %>_label'>Capacity</label><input id='capacity<%= i %>' type='number' value=<%= capacity %>></input>
     </div>
 
   <% end %>
 
 </div>
 
-<p>*Use -1 in the 'Maximum' field to specified that the field is unbounded.</p>
-
 <button id='save' class='btn btn-primary'>Save</button>
 
 <script>
+
+$('#capacity1_label').css('display','none');
+$('#capacity1').css('display','none');
+$('#capacity1').val(-1);
 
 function set(box,val,include_check) {
   box.prop("checked",val);
   var num = box.attr('id').substr(5);
   if ( !include_check ) { $('#check'+num).prop('disabled',!val); }
   $('#name'+num).prop('disabled',!val);  
-  $('#min'+num).prop('disabled',!val);  
-  $('#max'+num).prop('disabled',!val);
+  $('#capacity'+num).prop('disabled',!val);  
   console.log(box);
 }
 
@@ -89,8 +87,7 @@ $('#save').click(function() {
     if ( $('#check'+i).prop('checked') ) { 
       specification.fields.push({
         name: $('#name'+i).val(),
-        min: parseInt($('#min'+i).val()),
-        max: parseInt($('#max'+i).val())     
+        capacity: parseInt($('#capacity'+i).val()),
       });
     }
   }

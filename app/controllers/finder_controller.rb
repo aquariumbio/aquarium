@@ -72,7 +72,7 @@ class FinderController < ApplicationController
 
       render json: (( Collection.joins(:object_type)
         .where(:object_types=>{id:ot.id})
-        .reject { |i| i.location == 'deleted' })
+        .reject { |i| i.deleted? })
         .select{ |c| c.matrix && c.matrix.flatten.index(sample.id) } )
       .collect { |i| { id: i.id, name: i.id } }
 
@@ -81,7 +81,7 @@ class FinderController < ApplicationController
       render json: ((
         Item.joins(:sample,:object_type)
         .where(:samples => { project: spec[:project], name: spec[:sample] }, :object_types => { name: spec[:container] })
-        .reject { |i| i.location == 'deleted' })
+        .reject { |i| i.deleted? })
         .collect { |i| { id: i.id, name: i.id } })
 
     end

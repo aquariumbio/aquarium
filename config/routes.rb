@@ -93,11 +93,6 @@ Bioturk::Application.routes.draw do
   get "jobs/index"
   get "jobs/summary"
 
-  get "liaison/info"
-  get "liaison/take"
-  get "liaison/release"
-  get "liaison/produce"
-
   get "protocol_tree/file"
   get "protocol_tree/recent"
 
@@ -128,7 +123,6 @@ Bioturk::Application.routes.draw do
   match '/analytics',  to: 'static_pages#analytics'
   match '/jobchart', to: 'static_pages#jobchart'
   match '/location', to: 'static_pages#location'
-  match '/freezer', to: 'static_pages#freezer'
   match '/glass', to: 'sessions#glass'
 
   match '/search', to: 'search#search'

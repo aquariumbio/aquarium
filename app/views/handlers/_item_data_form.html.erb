@@ -4,7 +4,7 @@
       <%= f.text_field :return_page, value: "item_show", style: 'display: none'  %>
       <label>Location:</label>
       <%= f.text_field :location, value: @item.location, class:
-      'input-small', onkeydown: "turn_on_submit_button(#{@item.id})"  %>
+      'input', onkeydown: "turn_on_submit_button(#{@item.id})"  %>
       <br />
       <label>Data:</label>
       <%= f.text_field :data, value: @item.data, style: "width: 300px" %>

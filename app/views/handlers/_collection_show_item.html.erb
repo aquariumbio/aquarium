@@ -3,7 +3,7 @@
 
   <div class='span5'>
 
-    <% if @item.location == 'deleted' %>
+    <% if @item.deleted? %>
       <h1>Deleted on <%= @item.updated_at %></h1>
     <% end %>
 

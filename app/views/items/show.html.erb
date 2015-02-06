@@ -1,10 +1,16 @@
 <h1>Item <%= @item.id %>
-  <% if @item.location != "deleted" %>
-   at <%= @item.location %>
+  <% if @item.deleted? %>
+    : Deleted
+  <% else %>
+     at <%= @item.location %>
   <% end %>
  </h1>
 
 <%= render @handler.show_item_partial %>
+
+<p>Locator_id: <%= @item.locator_id ? @item.locator_id : 'nil' %></p>
+<p>Locator.id: <%= @item.locator ? "id = #{@item.locator.id}, item_id = #{@item.locator.item_id}" : 'nil' %></p>
+<p>Primitive Location: <%= @item.primitive_location %></p>
 
 <h4>History</h4>
 

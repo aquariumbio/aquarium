@@ -1,0 +1,47 @@
+<!---
+  locals:
+    name : string
+    box : list of locators
+    selected : nil or locator
+  -->
+
+  <div class='sample_box'>
+    <p><b><%= name %></b></p>
+    <table class='sample_box_table'>
+    <% (0..8).each do |row| %>
+      <tr>
+      <% (0..8).each do |col| %>
+
+        <% el = 9*row + col %>
+
+        <% if !box[el] || !box[el].item %>
+          <td class='empty'><%= el %></td> 
+
+        <% else %>
+
+            <% if selected && box[el] == selected 
+              cla = 'selected'
+            else 
+              cla = 'full'
+            end %>
+
+          <% sample = box[el].item.sample ? box[el].item.sample.name : '?'
+             project = box[el].item.sample ? box[el].item.sample.project : '?'
+             obj = box[el].item.object_type ? box[el].item.object_type.name : '?'
+             tooltip = "Slot #{el}: Item #{box[el].item.id}. Sample #{sample} (#{obj}). (#{project})".html_safe %>
+
+          <td class='<%= cla %>'><%= link_to box[el].item.id, box[el].item, title: tooltip, rel: "tooltip" %></td>
+
+        <% end %>
+
+      <% end %>
+      </tr>        
+    <% end %>
+    </table>
+  </div> 
+
+<script>
+  $(".tooltip").tooltip();
+  $("a[rel=tooltip]").tooltip();
+</script>
+

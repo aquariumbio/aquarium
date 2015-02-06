@@ -10,6 +10,12 @@ end
 class ProductionSample < Sample
 end
 
+class ProductionLocator < Locator
+end
+
+class ProductionWizard < Wizard
+end
+
 class ObjectTypesController < ApplicationController
 
   helper ObjectTypesHelper
@@ -34,7 +40,7 @@ class ObjectTypesController < ApplicationController
   # GET /object_types/1.json
   def show
 
-    @object_type = ObjectType.find(params[:id])
+    @object_type = ObjectType.includes( items: [ { locator: :wizard}, :sample ] ).find(params[:id])
     @handler = view_context.make_handler @object_type
 
     if @object_type.handler == 'sample_container'
@@ -107,6 +113,19 @@ class ObjectTypesController < ApplicationController
   def update
 
     @object_type = ObjectType.find(params[:id])
+
+    if params[:object_type][:prefix] != @object_type.prefix 
+      entries = Item.joins(:locator).where("items.object_type_id = #{@object_type.id} AND locators.item_id = items.id").count
+      if entries != 0
+        flash[:error] = "Cannot change location wizard to #{params[:object_type][:prefix]} because there 
+                      are items associated with this object type using the current wizard whose locations 
+                      might get messed up. To change the wizard, (a) write down all the item numbers; (b)
+                      delete all the items; (c) change the location wizard; (d) undelete all the items by
+                      changing their locations to a location that works with the new location wizard."
+        render action: "edit"
+        return
+      end
+    end
 
     respond_to do |format|
       if @object_type.update_attributes(params[:object_type])
@@ -186,6 +205,14 @@ class ObjectTypesController < ApplicationController
         t.destroy()
       end
 
+      Locator.all.each do |l|
+        i.destroy()
+      end
+
+      Wizard.all.each do |w|
+        w.destroy()
+      end
+
       redirect_to production_interface_path, notice: "Deleted #{num_objects} object types, #{num_items} items, #{num_sample_types} sample type definitions, and #{num_samples} samples from the inventory. All users carts were emptied. Also deleted were #{num_touches} touches."
 
     else
@@ -209,6 +236,8 @@ class ObjectTypesController < ApplicationController
       ProductionItem.switch_connection_to(:production_server)
       ProductionSampleType.switch_connection_to(:production_server)
       ProductionSample.switch_connection_to(:production_server)
+      ProductionLocator.switch_connection_to(:production_server)
+      ProductionWizard.switch_connection_to(:production_server)
 
       ProductionObjectType.all.each do |ot|
 
@@ -221,10 +250,11 @@ class ObjectTypesController < ApplicationController
 
       ProductionItem.all.each do |i|
 
-        new_item = Item.new(i.attributes.except("object_type_id","updated_at"))
+        new_item = Item.new(i.attributes.except("object_type_id","updated_at","locator_id"))
         new_item.id = i.id # Not sure why there was a + 1 here, but it has been commented out now.
         new_item.object_type_id = i.object_type_id
         new_item.sample_id = i.sample_id
+        new_item.locator_id = i.locator_id        
         new_item.save
         num_items += 1
 
@@ -249,6 +279,23 @@ class ObjectTypesController < ApplicationController
         new_sample.id = s.id
         new_sample.save
 
+      end
+
+      ProductionWizard.all.each do |w|
+        new_wiz = Wizard.new(w.attributes)
+        new_wiz.created_at = w.created_at
+        new_wiz.updated_at = w.updated_at  
+        new_wiz.id = w.id
+        new_wiz.save
+      end
+
+      ProductionLocator.all.each do |l|
+        new_loc = Locator.new(l.attributes.except("item_id"))
+        new_loc.created_at = l.created_at
+        new_loc.updated_at = l.updated_at  
+        new_loc.item_id = l.item_id
+        new_loc.id = l.id
+        new_loc.save
       end
 
       redirect_to object_types_path, notice: "Copied #{num_objects} object types, #{num_items} items, #{num_sample_types} sample type definitions, and #{num_samples} samples from the production inventory."

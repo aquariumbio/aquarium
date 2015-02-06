@@ -33,7 +33,7 @@ module ObjectTypesHelper
     end
 
     def new_item params
-      @object_type.items.create(params[:item])
+      Item.make(params[:item],object_type: @object_type)
     end
 
   end

@@ -86,46 +86,4 @@ class StaticPagesController < ApplicationController
 
   end
 
-  def freezer
-
-    @result = {}
-
-    flash.delete :error
-
-    (Item.includes(:sample).includes(:object_type).select { |i| /^[0-9a-zA-Z]*\.[0-9]*\.[0-9]*\.[0-9]*$/ =~ i.location }).each do |i|
-
-      freezer,hotel,box,slot = i.location.split('.')
-      freezer = freezer.to_sym
-      hotel = hotel.to_i
-      box = box.to_i
-      slot = slot.to_i
-
-      if !@result[freezer]
-        @result[freezer] = Array.new(1) { Array.new(16) { Array.new(81) {nil} } }
-      end
-
-      if !@result[freezer][hotel]
-        @result[freezer][hotel] = Array.new(16) { Array.new(81) {nil} }
-      end
-
-      if @result[freezer][hotel][box]
-        b = @result[freezer][hotel][box]
-        if b[slot] != nil
-          if !flash[:error]
-            flash[:error] = ["<b>WARNING!</b>"]
-          end
-          flash[:error] << "#{i.location} contains multiple items: #{b[slot].id} and #{i.id}. "
-        end
-        @result[freezer][hotel][box][slot] = i
-      end
-
-    end
-
-    respond_to do |format|
-      format.html
-      format.json { render json: result }
-    end
-
-  end
-
 end

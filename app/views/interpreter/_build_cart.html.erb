@@ -2,7 +2,7 @@
 
   var cart = [];
 
-  <% (current_user.cart_items.reject { |c| c.item.location == 'deleted' }).each do |c| %>
+  <% (current_user.cart_items.reject { |c| c.item.deleted? }).each do |c| %>
 
     <% if c.item != nil %>
 

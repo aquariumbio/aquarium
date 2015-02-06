@@ -8,6 +8,7 @@
     <th>Ranges</th>    
     <th></th>
     <th></th>
+    <th></th>
   </tr>
 
 <% def symb(i) 
@@ -20,10 +21,15 @@ end %>
 
 <% @wizards.each do |wizard| %>
   <tr>
-    <td><%= link_to wizard.name, edit_wizard_path(wizard) %></td>
-    <td><%= wizard.description %></td>    
-    <td><%= (wizard.spec[:fields].collect { |f| f[:name] }).join('.') %></td>
-    <td><%= (wizard.spec[:fields].collect { |f| "[#{f[:min]},#{symb(f[:max])}]" }).join('.').html_safe %></td>    
+    <td><%= link_to wizard.name, wizard %></td>
+    <td><%= wizard.description %></td>  
+    <% if wizard.spec[:fields] %>  
+      <td><%= (wizard.spec[:fields].collect { |f| f[:name] }).join('.') %></td>
+      <td><%= (wizard.spec[:fields].collect { |f| "[#{0},#{symb(f[:capacity]-1)}]" }).join('.').html_safe %></td>    
+    <% else %>
+      <td>-</td><td>-</td>
+    <% end %>
+    <td><%= link_to 'edit', edit_wizard_path(wizard) %></td>
     <td><%= link_to 'x', wizard, method: :delete, data: { confirm: 'Are you sure you want to delete this wizard?' } %></td>
   </tr>
 <% end %>

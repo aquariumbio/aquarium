@@ -153,9 +153,7 @@ module Plankton
           y.inuse = 0
 
           if y.quantity <= 0
-              y.inuse    = -1
-              y.quantity = -1
-              y.location = 'deleted'
+              y.mark_as_deleted
           end
 
           y.save

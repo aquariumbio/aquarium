@@ -1,4 +1,7 @@
 class WizardsController < ApplicationController
+
+  before_filter :signed_in_user
+
   # GET /wizards
   # GET /wizards.json
   def index
@@ -13,7 +16,16 @@ class WizardsController < ApplicationController
   # GET /wizards/1
   # GET /wizards/1.json
   def show
+
     @wizard = Wizard.find(params[:id])
+    @boxes = @wizard.boxes
+    @object_types = ObjectType.where(prefix: @wizard.name)
+
+    if params[:box]
+      @selected_box = params[:box]
+    else
+      @selected_box = @boxes.first
+    end
 
     respond_to do |format|
       format.html # show.html.erb
@@ -92,4 +104,10 @@ class WizardsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def group # params should have a location like M20.1.2.3. 
+            # this method returns all locations of the form M20.1.2.*
+
+  end
+
 end

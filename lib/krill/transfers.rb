@@ -136,14 +136,15 @@ module Krill
 
     end # transfer
 
-
     def distribute col, object_type_name, options = {}
 
-      opts = { except: [] }.merge options
+      opts = { except: [], interactive: false }.merge options
+
+      object_type = ObjectType.find_by_name(object_type_name)
+      raise "Could not find object type #{object_type_name} in distribute" unless object_type
 
       if block_given?
         user_shows = ShowBlock.new.run(&Proc.new) 
-        puts "Showing #{user_shows}"
       else
         user_shows = []
       end
@@ -156,19 +157,21 @@ module Krill
         (0..m[i].length-1).each do |j|
           if m[i][j] > 0 && ! ( opts[:except].include? [i,j] )
             s = find(:sample,{id: m[i][j]})[0]
-            item = s.make_item object_type_name
+            item = Item.make( { quantity: 1, inuse: 0 }, sample: s, object_type: object_type )
             items.push item
             routes.push from: [i,j], to: item
           end
         end
       end
 
-      show {
-        table [
-          [ "Row", "Column", "New " + object_type_name + " id" ]
-        ].concat( routes.collect { |r| [ r[:from][0]+1, r[:from][1]+1, r[:to].id ] } )
-        raw user_shows
-      }
+      if opts[:interactive]
+        show {
+          table [
+            [ "Row", "Column", "New " + object_type_name + " id" ]
+          ].concat( routes.collect { |r| [ r[:from][0]+1, r[:from][1]+1, r[:to].id ] } )
+          raw user_shows
+        }
+      end
 
       return items
 

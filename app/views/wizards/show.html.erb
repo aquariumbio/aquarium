@@ -1,15 +1,53 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <b>Name:</b>
-  <%= @wizard.name %>
+<h1><%= @wizard.name %>: <%= @wizard.description %><br /></h1>
+    
+<p><b>Spec:</b>
+    <%= (@wizard.spec[:fields].collect { |f| f[:name] }).join('.') %>, 
+    <%= (@wizard.spec[:fields].collect { |f| "[#{0},#{symb(f[:capacity]-1)}]" }).join('.').html_safe %>
 </p>
 
-<p>
-  <b>Specification:</b>
-  <%= @wizard.specification %>
-</p>
+<div class='ot_list'>
+  <% @object_types.each do |ot| %>
+    <div class='ot'><%= link_to ot.name, ot %></div>
+  <% end %>
+</div>
+
+<div class='clear' />
+
+<div class='row-fluid'>
+
+  <div class='span6 boxlist'>
+
+    <% if @wizard.boxes.length > 0 %>
+      <p><b>Boxes manged by <%= @wizard.name %> wizard</b></p>
+
+      <% @wizard.boxes.each do |box| %>
+        <div <% if box == @selected_box %>
+                class='name selected'
+              <% else %> 
+                class='name'
+              <% end %>>
+          <a href='<%= @wizard.id %>?box=<%= box %>'><%= box %></a>
+        </div>
+      <% end %>
+    <% end %>
+
+  </div>
+
+  <div class='span6'>
+    <% if @selected_box %>
+      <%= render partial: 'items/box', locals: { name: @selected_box, box: @wizard.box(@selected_box), selected: nil } %>
+    <% end %>
+  </div>
 
 
-<%= link_to 'Edit', edit_wizard_path(@wizard) %> |
-<%= link_to 'Back', wizards_path %>
+</div>
+
+<div class='clear' />
+<br />
+
+<%= link_to 'Edit', edit_wizard_path(@wizard), class: 'btn' %> 
+<%= link_to 'Back', wizards_path, class: 'btn' %>
+
+<div style='height: 50px' />

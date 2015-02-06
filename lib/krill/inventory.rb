@@ -23,7 +23,6 @@ module Krill
 
   end
 
-
   module Base
 
     # Warning: Adding classes and modules to this module will likely result in
@@ -206,9 +205,7 @@ module Krill
       end
 
       items.each do |i|
-        i.takes.each do |t|
-          t.destroy
-        end
+        takes = Take.where(item_id: i.id).destroy_all
       end
 
       items

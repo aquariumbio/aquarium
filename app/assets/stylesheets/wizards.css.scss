@@ -1,3 +1,35 @@
 // Place all the styles related to the Wizards controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.boxlist {
+
+  .name {
+    background: #eee;
+    margin: 1px;
+    padding: 4px;
+    line-height: 1.2;
+    width: 60px;
+    display: inline;
+    float: left;
+    font-size: 10pt;
+    border-radius: 4px;
+  }
+
+  .selected {
+    background: #0ee;
+  }
+
+}
+
+.ot {
+  background: #fff;
+  margin: 2px;
+  padding: 2px;
+  line-height: 1;
+  width: 200px;
+  display: inline;
+  float: left;
+  font-size: 10pt;
+  border-radius: 4px;
+}

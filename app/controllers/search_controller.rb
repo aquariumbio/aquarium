@@ -10,7 +10,7 @@ class SearchController < ApplicationController
 
     if params[:type] == 'sample'
 
-      @results = ((Sample.includes(items: [:object_type,:sample]).select { |s| Regexp.new(params[:query]) =~ s.name }).collect { |s| s.items }).flatten.select { |i| i.location != 'deleted' }
+      @results = ((Sample.includes(items: [:object_type,:sample]).select { |s| Regexp.new(params[:query]) =~ s.name }).collect { |s| s.items }).flatten.select { |i| !i.deleted? }
 
     elsif params[:type] == 'objecttype'
 

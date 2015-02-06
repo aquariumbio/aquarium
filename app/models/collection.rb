@@ -40,7 +40,7 @@ class Collection < Item
     i = Collection.new
     i.object_type_id = o.id
     i.apportion r,c
-    i.location = o.location_wizard
+    i.location = "Bench"
     i.quantity = 1
     i.inuse = 0
     i.save

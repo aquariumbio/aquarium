@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150124201744) do
+ActiveRecord::Schema.define(:version => 20150129221830) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(:version => 20150124201744) do
     t.integer  "inuse",                           :default => 0
     t.integer  "sample_id"
     t.text     "data",           :limit => 65536
+    t.integer  "locator_id"
   end
 
   add_index "items", ["object_type_id"], :name => "index_items_on_object_type_id"
@@ -64,6 +65,14 @@ ActiveRecord::Schema.define(:version => 20150124201744) do
     t.datetime "desired_start_time"
     t.datetime "latest_start_time"
     t.integer  "metacol_id"
+  end
+
+  create_table "locators", :force => true do |t|
+    t.integer  "wizard_id"
+    t.integer  "item_id"
+    t.integer  "number"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "logs", :force => true do |t|

@@ -23,23 +23,28 @@ class SamplesController < ApplicationController
   # GET /samples/1.json
   def show
 
-    @sample = Sample.find(params[:id])
+    if params[:delete]
+
+      i = Item.find(params[:delete])
+      i.mark_as_deleted
+
+      if i.errors.empty?
+        flash[:notice] = "Deleted item #{i.id}."
+      else
+        flash[:warning] = "Could not delete #{i.id}: #{i.errors.full_messages.join(', ')}"
+      end   
+
+      i.reload
+
+    end
+
+    @sample = Sample.includes(:sample_type,items: [locator: [:wizard]]).find(params[:id])
     @sample_type = @sample.sample_type
 
     if params[:toggle] 
       @item = Item.find(params[:toggle])
       @item.inuse = @item.inuse > 0 ? 0 : 1;
       @item.save
-    end
-
-    if params[:delete] 
-      i = Item.find(params[:delete])
-      puts "DELETING ITEM #{i.id}"
-      flash[:notice] = "Deleted item #{i.id}"
-      i.quantity = -1
-      i.inuse = -1
-      i.location = 'deleted'
-      i.save!
     end
 
     respond_to do |format|

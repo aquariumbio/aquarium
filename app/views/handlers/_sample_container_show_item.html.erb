@@ -3,7 +3,7 @@
 
   <div class='span6'>
 
-    <% if @item.location == 'deleted' %>
+    <% if @item.deleted? %>
       <h1>Deleted on <%= @item.updated_at %></h1>
     <% end %>
 
@@ -13,8 +13,8 @@
 
     <h3><%= @item.sample ? ( @item.sample.description ) : "???" %></h3>
 
-    <p>Added: <%= @item.created_at.to_formatted_s(:short)  %></p>
-    <p>Modified: <%= @item.updated_at.to_formatted_s(:short)  %></p>
+    <p>Added: <%= @item.created_at.to_formatted_s(:rfc822)  %></p>
+    <p>Modified: <%= @item.updated_at.to_formatted_s(:rfc822)  %></p>
 
     <%= render partial: "handlers/item_data" %>
 
@@ -24,8 +24,10 @@
 
   <div class='span6'>
 
-    <% if @box_name %>
-      <%= render partial: 'static_pages/sample_box', locals: { box: @box, box_number: @box_name, selected: @item } %>
+    <% if @box && @wizard %>
+      <%= render partial: 'items/box', locals: { 
+          name: @box, box: @wizard.box(@box), selected: @item.locator 
+      } %>
     <% end %>
 
   </div>

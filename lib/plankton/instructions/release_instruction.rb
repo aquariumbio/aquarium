@@ -54,9 +54,7 @@ module Plankton
 
           when 'dispose'
             if x.sample 
-              x.inuse    = -1
-              x.quantity = -1
-              x.location = 'deleted'
+              x.mark_as_deleted
             else
               x.inuse    -= 1
               x.quantity -= 1

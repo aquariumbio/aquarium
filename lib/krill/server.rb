@@ -10,6 +10,8 @@ module Krill
 
     def run port
 
+      puts "Starting Krill Server on port #{port} at #{Time.now}"
+
       server = TCPServer.open(port)
 
       loop do
