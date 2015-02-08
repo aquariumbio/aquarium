@@ -85,6 +85,15 @@ class Locator < ActiveRecord::Base
 
   end
 
+  def self.port_all
+
+    port Wizard.find_by_name('M20')
+    port Wizard.find_by_name('M80')
+    port Wizard.find_by_name('SF2')        
+    port Wizard.find_by_name('DFP')            
+
+  end
+
   def clear
     r1,r2 = [false,false]
     transaction do

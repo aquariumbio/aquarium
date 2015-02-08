@@ -98,17 +98,19 @@ module Plankton
       # Otherwise make a new item
       else
 
-        loc = params['location'] ? params['location'] : @object_type.location_wizard( { project: @sample ? @sample.project : 'unknown' } )
-
         begin
-          @item = @object_type.items.create(location: loc, quantity: @quantity, data: @data)
+          puts "object_type = #{@object_type.name}"
+          puts "sample = #{@sample.name}"          
+          @item = Item.make( { quantity: @quantity, inuse: 0, data: @data }, sample: @sample, object_type: @object_type )          
+          puts "errors: #{@item.errors.full_messages.join(',')}"
         rescue Exception => e
-          raise "Could not add item of type #{object_type_name}: " + e.message
+          raise "Could not add item of type #{@object_type_name}: " + e.message
         end
 
-        if @sample
-          @item.sample_id = @sample.id
+        if params['location'] && params['location'] != @item.location
+          @item.location = params['location']
           @item.save
+          puts "changed location to #{params['location']}"
         end
 
       end
