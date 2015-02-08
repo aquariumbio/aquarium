@@ -12,3 +12,17 @@
 
 </div>
 
+<br />
+
+<div id='download'>
+  <a id="csv" href="item_list.csv" class='btn' download>Download Spreadsheet</a>
+</div>
+
+<script>
+$(function() {
+  $("#csv").click(function(){
+    $("#csv").attr('disabled',true);
+    $("#download").append('<p>The csv file is being prepared. This may take several minutes.</p>')
+  });
+});
+</script>

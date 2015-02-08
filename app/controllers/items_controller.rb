@@ -121,4 +121,30 @@ class ItemsController < ApplicationController
 
   end
 
+  def item_list
+
+    data = ""
+
+    Item.includes(:object_type, sample: [:sample_type], locator: [:wizard]).all.each do |i|
+      if !i.deleted?
+        if i.object_type
+          oname = i.object_type.name
+        else
+          oname = ""
+        end
+        if i.sample
+          sname = i.sample.name
+          stype = i.sample.sample_type.name
+        else
+          sname = ""
+          stype = ""
+        end
+        data += "#{i.id},#{oname},\"#{sname}\",#{stype},#{i.location},#{i.created_at},#{i.updated_at}\n"
+      end
+    end
+
+    render text: data
+
+  end
+
 end

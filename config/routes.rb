@@ -17,6 +17,8 @@ Bioturk::Application.routes.draw do
 
   match "rich_id", to: "tasks#rich_id"
 
+  match "item_list", to: "items#item_list"
+
   resources :tasks
 
   resources :task_prototypes
