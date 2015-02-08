@@ -135,11 +135,17 @@ class ItemsController < ApplicationController
         if i.sample
           sname = i.sample.name
           stype = i.sample.sample_type.name
+          if i.sample.user
+            user = i.sample.user.login
+          else
+            user = ""
+          end
         else
           sname = ""
           stype = ""
+          user = ""
         end
-        data += "#{i.id},#{oname},\"#{sname}\",#{stype},#{i.location},#{i.created_at},#{i.updated_at}\n"
+        data += "#{i.id},#{oname},\"#{sname}\",#{stype},#{i.location},#{user},#{i.created_at},#{i.updated_at}\n"
       end
     end
 
