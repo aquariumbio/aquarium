@@ -57,7 +57,9 @@ class Item < ActiveRecord::Base
 
   def move_to locstr 
 
-    if object_type && wiz = Wizard.find_by_name(object_type.prefix) # item location managed wizard
+    wiz = Wizard.find_by_name(object_type.prefix)
+
+    if object_type && wiz && wiz.has_correct_form( locstr ) # item and location managed by a wizard
 
       unless wiz.has_correct_form locstr
         errors.add(:wrong_form, "'#{locstr}'' is not in the form of a location for the #{wiz.name} wizard." )
@@ -110,10 +112,21 @@ class Item < ActiveRecord::Base
 
       end
 
-    else
+    else # location is not in the form managed by a wizard
 
+      loc = Locator.find_by_id(locator_id)
+      loc.item_id = nil if loc
+      self.locator_id = nil
       write_attribute(:location,locstr)
-      save
+
+      puts loc
+      puts self
+
+      transaction do
+        self.save
+        loc.save if loc
+      end
+
 
     end
 
