@@ -120,7 +120,7 @@ class Sample < ActiveRecord::Base
 
   def make_item object_type_name
 
-    ot = ObjectType.find_by_name(name)
+    ot = ObjectType.find_by_name(object_type_name)
     raise "Could not find object type #{name}" unless ot
     Item.make( { quantity: 1, inuse: 0 }, sample: self, object_type: ot )
 
