@@ -255,7 +255,7 @@ class ObjectTypesController < ApplicationController
         new_item.object_type_id = i.object_type_id
         new_item.sample_id = i.sample_id
         new_item.locator_id = i.locator_id        
-        new_item.write_attribute(:location,i.location)
+        new_item.set_primitive_location(i.location)
         new_item.save
         num_items += 1
 

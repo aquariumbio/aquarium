@@ -55,6 +55,10 @@ class Item < ActiveRecord::Base
     write_attribute(:location,x) # just for consistency
   end
 
+  def set_primitive_location locstr
+    write_attribute(:location,locstr) 
+  end
+
   def store
     wiz = Wizard.find_by_name(object_type.prefix)
     if wiz
