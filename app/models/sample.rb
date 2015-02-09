@@ -120,19 +120,9 @@ class Sample < ActiveRecord::Base
 
   def make_item object_type_name
 
-    olist = ObjectType.where("name = ?", object_type_name)
-    raise "Could not find container named '#{spec[:as]}'." unless olist.length > 0
-
-    i = Item.new
-    i.sample_id = self.id
-    i.object_type_id = olist[0].id
-
-    i.location = olist[0].location_wizard project: self.project
-    i.quantity = 1
-    i.inuse = 0
-    i.save
-
-    i
+    ot = ObjectType.find_by_name(name)
+    raise "Could not find object type #{name}" unless ot
+    Item.make( { quantity: 1, inuse: 0 }, sample: self, object_type: ot )
 
   end
 
