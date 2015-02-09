@@ -294,8 +294,6 @@ class Item < ActiveRecord::Base
     raise "No Sample Type Specified (with :of)" unless spec[:of]
     raise "No Container Specified (with :in)" unless spec[:as]
 
-    i = self.new
-
     olist = ObjectType.where("name = ?", spec[:as])
     raise "Could not find container named '#{spec[:as]}'." unless olist.length > 0
 
@@ -305,16 +303,8 @@ class Item < ActiveRecord::Base
     slist = Sample.where("name = ? AND sample_type_id = ?", name, sample_type_id)
     raise "Could not find sample named #{name}" unless slist.length > 0
 
-    i.object_type_id = olist[0].id
-    i.sample_id = slist[0].id
-
-    i.location = olist[0].location_wizard project: i.sample.project
-    i.quantity = 1
-    i.inuse = 0
-    i.save
-
-    i
-
+    Item.make( { quantity: 1, inuse: 0 }, sample: slist[0], object_type: olist[0] )
+    
   end
 
 end

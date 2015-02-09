@@ -108,7 +108,7 @@ function render_json_editor(tag,obj,proto,type,parent_list) {
 
         if ( arguments.length == 5 ) { var parlist = parent_list; }
 
-        if ( arguments.length >= 4 && type != "" ) { // type provided
+        if ( arguments.length >= 4 && type != ""  ) { // type provided
 
             $(tag).append(new Finder(type,function(selections) {
                 /* put result in input tag */ 
