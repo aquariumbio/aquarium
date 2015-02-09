@@ -1,0 +1,70 @@
+<% provide(:title, "Log #{@job.id}: #{@job.path.split('/').last}" ) %>
+
+<%= render partial: 'log_templates' %>
+<%= render partial: 'summary_log' %><br />
+
+<div class='row-fluid'>
+
+  <div class='span4'>
+
+    <ul class="nav nav-tabs" id="tabs">
+      <li class='active'><a href="#inventory" data-toggle="tab">Inventory</a></li>    
+      <li><a href="#rval"      data-toggle="tab">Return Value</a></li>
+      <li><a href="#uploads"   data-toggle="tab">Uploads</a></li>
+      <li><a href="#tasks"     data-toggle="tab">Tasks</a></li>
+    </ul>
+
+    <div class='tab-content details'>
+
+      <div class="log-details tab-pane active" id='inventory'>
+        <%= render partial: 'inventory_log' %>
+      </div>
+
+      <div class="log-details tab-pane" id='rval'>
+        <div id='return'></div>
+      </div>
+
+      <div class="log-details tab-pane" id='uploads'><ul>
+        <% @job.uploads.each do |u| %>
+          <li><a href='<%= u.upload.url %>' target='upload'><%= u.upload.original_filename  %></a></li>
+        <% end %>
+      </ul></div>
+
+      <div class="log-details tab-pane" id='tasks'><ul>
+        <% if @tasks.length == 0 %>
+          <p>No associated tasks</p>
+        <% else %>
+          <% @tasks.each do |t| %>
+            <li><%= link_to "#{t.id}. #{t.name}", t %> ( <%= t.task_prototype.name %> )</li>
+          <% end %>
+        <% end %>
+      </ul></div>
+
+    </div>
+
+  </div> <!--- span4 -->
+
+  <div class='span8' id='history'>
+    <div id='history-json'></div>
+  </div>
+
+</div>
+
+<script>
+
+  $(function() {
+
+    render_json($('#return'),JSON.parse('<%= escape_javascript(@rval.to_json.html_safe) %>'));
+
+    kl = new KrillLog(JSON.parse('<%= escape_javascript(@history.html_safe) %>'));
+    kl.render($('#history-json'));
+
+    $('#send').click(function() {
+      window.location = '/repo/list?from=' + '<%= @job.id %>';
+    });    
+
+    $('#tabs a:first').tab('show'); 
+
+  });
+
+</script>
