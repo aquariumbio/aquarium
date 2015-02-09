@@ -9,7 +9,6 @@
 
     <ul class="nav nav-tabs" id="tabs">
       <li class='active'><a href="#inventory" data-toggle="tab">Inventory</a></li>    
-      <li><a href="#rval"      data-toggle="tab">Return Value</a></li>
       <li><a href="#uploads"   data-toggle="tab">Uploads</a></li>
       <li><a href="#tasks"     data-toggle="tab">Tasks</a></li>
     </ul>
@@ -20,13 +19,13 @@
         <%= render partial: 'inventory_log' %>
       </div>
 
-      <div class="log-details tab-pane" id='rval'>
-        <div id='return'></div>
-      </div>
-
       <div class="log-details tab-pane" id='uploads'><ul>
-        <% @job.uploads.each do |u| %>
-          <li><a href='<%= u.upload.url %>' target='upload'><%= u.upload.original_filename  %></a></li>
+        <% if @job.uploads.length == 0 %>
+          <p>No uploads</p>
+        <% else %>      
+          <% @job.uploads.each do |u| %>
+            <li><a href='<%= u.upload.url %>' target='upload'><%= u.upload.original_filename  %></a></li>
+          <% end %>
         <% end %>
       </ul></div>
 
@@ -53,8 +52,6 @@
 <script>
 
   $(function() {
-
-    render_json($('#return'),JSON.parse('<%= escape_javascript(@rval.to_json.html_safe) %>'));
 
     kl = new KrillLog(JSON.parse('<%= escape_javascript(@history.html_safe) %>'));
     kl.render($('#history-json'));

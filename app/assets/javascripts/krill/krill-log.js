@@ -44,13 +44,21 @@ KrillLog.prototype.warning = function(action,val) {
 
 KrillLog.prototype.upload = function(action,val) {
 
-  var v = val.var;
-  var files = action.inputs[v];
+  var v = "uploads";
+  if ( val.var ) {
+    v = val.var;
+  }
+  var files = [];
+  if ( action.inputs ) {
+    files = action.inputs[v];
+  } 
   var li = $('<li />');
   var ul = $('<ul />');
 
-  for ( var i=0; i<files.length; i++ ) {
-    ul.append($(this.template('upload')({name: files[i].name, id: files[i].id})));
+  if ( files ) {
+    for ( var i=0; i<files.length; i++ ) {
+      ul.append($(this.template('upload')({name: files[i].name, id: files[i].id})));
+    }
   }
 
   span = $('<span>Upload(s):</span>');
@@ -118,6 +126,14 @@ KrillLog.prototype.table = function(action,x) {
 
 }
 
+KrillLog.prototype.take = function(action,x) { 
+  var y = x;
+  if ( !y.sample ) {
+    y.sample = null;
+  }
+  return $(this.template('take')(y));
+}
+
 KrillLog.prototype.part = function(action,key,val) {
   
   var li;
@@ -140,7 +156,7 @@ KrillLog.prototype.step = function(action,result) {
   var title = $('<span> - '+this.title(result)+'</span>').addClass('krill-log-title');
   var ul = $('<ul />').addClass('krill-part-list');
 
-  if ( result.operation = 'display' ) {
+  if ( result.content ) {
     for ( var i=0; i < result.content.length; i++ ) {
       var part = result.content[i];
       var key = Object.keys(part)[0];
@@ -157,7 +173,43 @@ KrillLog.prototype.step = function(action,result) {
 
 }
 
-KrillLog.prototype.take      = function(action,x) { return $(this.template('take')(x)); }
+KrillLog.prototype.error = function(action,result) {
+
+  var div = $('<div />').addClass('krill-log-step');
+
+  var time = $('<span>'+aq.nice_time(new Date(action.time))+'</span>').addClass('krill-log-time');
+  var title = $('<span> - '+this.title(result)+': ' + this.message + '</span>').addClass('krill-log-title ');
+  var err = $('<div />').addClass('krill-log-json');
+
+  render_json(err,result.backtrace)
+
+  div.append($('<div></div>').append(time,title).addClass('krill-step-heading  krill-log-error'),err);
+
+  return div;
+
+}
+
+KrillLog.prototype.intro = function(op) {
+
+  var li = $(this.template('result')({time: aq.nice_time(new Date(op.time)), title: "Started protocol", klass: "krill-log-intro"}));
+  render_json($('.krill-log-json',li),op.arguments);
+  return li;
+
+}
+
+
+KrillLog.prototype.result = function(op) {
+
+  if ( op.operation == 'complete' ) {
+    var li = $(this.template('result')({time: "", title: "Completed", klass: "krill-log-complete"}));
+    render_json($('.krill-rval',li),op.rval);
+    return li;
+  } else if ( op.operation == 'aborted' ) {
+    var li = $(this.template('result')({time: "", title: "Aborted", klass: "krill-log-abort"}));
+    return li;
+  }
+
+}
 
 KrillLog.prototype.render = function(tag) {
 
@@ -165,13 +217,28 @@ KrillLog.prototype.render = function(tag) {
 
   var ul = $('<ul />').addClass('krill-log-steps');
   tag.append(ul);
+ 
+  ul.append(this.intro(this.history[0]));
 
   for ( var i=1; i<this.history.length-1; i += 2) {
-    ul.append($('<li />').append(this.step(this.history[i+1],this.history[i])));
+
+    var action = this.history[i+1],
+        result = this.history[i];
+
+    if ( result.operation == 'display' ) {
+      ul.append($('<li />').append(this.step(action,result)));
+    }
+
+    if ( result.operation == 'error' ) {
+      ul.append($('<li />').append(this.error(action,result)));
+    }
+
   }
 
-  var x = $('<p/>');
-  render_json(x,this.history);
-  tag.append(x);
+  ul.append(this.result(this.history[i]));
+
+  // var x = $('<p/>');
+  // render_json(x,this.history);
+  // tag.append(x);
 
 }

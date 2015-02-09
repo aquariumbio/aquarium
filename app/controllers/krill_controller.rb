@@ -220,7 +220,13 @@ class KrillController < ApplicationController
 
   def log
 
-    @job = Job.find(params[:job])
+    begin
+      @job = Job.includes(:user,:group,:touches,:uploads,:takes).find(params[:job])
+    rescue
+      redirect_to logs_path
+      return
+    end
+
     @group = @job.group
     @submitter = User.find(@job.submitted_by)
     @performer = @job.user

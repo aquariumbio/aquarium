@@ -784,3 +784,19 @@ font-size: $noteFontSize;
   border-top-left-radius: 5px;
 }
 
+.krill-log-complete {
+  background: #ddffee;
+}
+
+.krill-log-error {
+  background: yellow;
+}
+
+.krill-log-json {
+  padding: 10px;
+}
+
+.krill-log-abort {
+  background: yellow;
+}
+

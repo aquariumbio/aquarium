@@ -36,7 +36,12 @@ class JobsController < ApplicationController
 
   def show
 
-    @job = Job.find(params[:id])
+    begin
+      @job = Job.find(params[:id])
+    rescue
+      redirect_to logs_path
+      return
+    end
 
     if /\.rb$/ =~ @job.path
       return redirect_to krill_log_path(job: @job.id)
