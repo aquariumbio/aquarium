@@ -17,6 +17,7 @@ module Krill
           sample_type: SampleType.includes(),
           object_type: ObjectType.includes(),
           task: Task.includes(:task_prototype),
+          group: Group.all,
           upload: Upload
         }
 
