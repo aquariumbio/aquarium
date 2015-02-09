@@ -42,6 +42,7 @@ function render_json(tag,obj,type_info,id_type) {
             } else {
                 li.append("<span class='json_key_inline'>" + k + ": </span>");
             }
+
             render_json(li,v,show_types,type);
             list.append(li);      
         });

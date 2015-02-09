@@ -221,6 +221,10 @@ class KrillController < ApplicationController
   def log
 
     @job = Job.find(params[:job])
+    @group = @job.group
+    @submitter = User.find(@job.submitted_by)
+    @performer = @job.user
+
     @history = @job.state
     @rval = @job.return_value
     @touches = (@job.touches.select { |t| t.item_id }).collect { |t| t.item_id }

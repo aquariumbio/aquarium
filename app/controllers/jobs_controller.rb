@@ -108,4 +108,8 @@ class JobsController < ApplicationController
 
   end
 
+  def upload
+    redirect_to Upload.find(params[:id]).url
+  end
+
 end

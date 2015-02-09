@@ -51,7 +51,7 @@ Krill.prototype.upload = function(x) {
       dataType: 'json',
 
       done: function (e, data) {
-        console.log('done ' + data.files[0].name);
+        console.log(data.result.upload_id);
         data.context.empty().append($(that.template('uploaded-item')({
           name: data.files[0].name,
           id: data.result.upload_id
@@ -60,7 +60,6 @@ Krill.prototype.upload = function(x) {
 
       add: function (e,data) {
         var el = $(that.template('upload-waiting')({name: data.files[0].name}));
-        console.log('sending ' + data.files[0].name);
         data.context = el;
         list.append(el);
         data.submit();
@@ -73,8 +72,6 @@ Krill.prototype.upload = function(x) {
     });
 
   });
-
-  console.log('done setting up');
 
   return container;
 

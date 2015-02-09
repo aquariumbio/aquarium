@@ -1,0 +1,39 @@
+ <div>
+    <h3>Inventory Touched</h3>
+    <% if @touches.length == 0 %>
+      None.
+    <% else %>
+      <ul>
+        <% @touches.each do |i| %>
+          <% item = Item.find(i) %>
+          <li>
+            <%= link_to i, item_path(id: i) %>:
+            <%= item.object_type.name %>
+            <% if item.sample %>
+              (<%= item.sample.name %>)
+            <% end %>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+
+  <div id='inventory'>
+    <h3>Inventory Still Taken</h3>
+    <% if @inventory.length > 0 %>
+      <ul>
+        <% @inventory.each do |i| %>
+          <% item = Item.find(i) %>
+          <li>
+            <%= link_to i, item_path(id: i) %>:
+            <%= item.object_type.name %>
+            <% if item.sample %>
+              (<%= item.sample.name %>)
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      None.
+    <% end %>
+  </div>

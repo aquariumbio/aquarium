@@ -55,6 +55,14 @@ class Item < ActiveRecord::Base
     write_attribute(:location,x) # just for consistency
   end
 
+  def store
+    wiz = Wizard.find_by_name(object_type.prefix)
+    if wiz
+      locator = wiz.next
+      move_to( wiz.int_to_location locator.number )
+    end
+  end
+
   def move_to locstr 
 
     wiz = Wizard.find_by_name(object_type.prefix)
@@ -126,7 +134,6 @@ class Item < ActiveRecord::Base
         self.save
         loc.save if loc
       end
-
 
     end
 

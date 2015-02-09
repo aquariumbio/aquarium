@@ -2,7 +2,6 @@ Bioturk::Application.routes.draw do
 
   resources :wizards
 
-
   get "plugin/tester"
   get "plugin/show"
   get "plugin/ajax"
@@ -16,8 +15,8 @@ Bioturk::Application.routes.draw do
   get "finder/type"
 
   match "rich_id", to: "tasks#rich_id"
-
   match "item_list", to: "items#item_list"
+  match "upload", to: "jobs#upload"
 
   resources :tasks
 

@@ -41,7 +41,7 @@ Aq.prototype.filename = function(path) {
   return path.split('/').slice(-1)[0];
 }
 
-Aq.prototype.nice_time = function(date) {
+Aq.prototype.nice_time = function(date,seconds) {
 
   var h = date.getHours();
   var m = date.getMinutes();
@@ -51,7 +51,25 @@ Aq.prototype.nice_time = function(date) {
 
   m = m < 10 ? '0'+m : m;
 
-  return h + ":" + m + " " + ap;
+  var s;
+  if ( seconds ) {
+    s = date.getSeconds();
+    s = s < 10 ? '0'+s : s;
+    s = ':' + s;
+  } else {
+    s = "";
+  }
+  
+  return h + ":" + m + s + " " + ap;
+
+}
+
+Aq.prototype.nice_date = function (date) {
+
+  var time = this.nice_time(date,true);
+  var days = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
+
+  return  days[date.getDay()] + ' ' + date.toLocaleDateString() + ', ' + time;
 
 }
 
