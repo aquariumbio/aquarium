@@ -35,7 +35,7 @@ module Krill
 
     def new_sample name, spec
       s = Sample.find_by_name(name)
-      ot = ObjectType.find_by(spec[:as])
+      ot = ObjectType.find_by_name(spec[:as])
       raise "Unknown sample #{name}" unless s
       raise "Unknown container #{spec[:as]}" unless ot
       Item.make( { quantity: 1, inuse: 0 }, sample: s, object_type: ot )
