@@ -250,11 +250,12 @@ class ObjectTypesController < ApplicationController
 
       ProductionItem.all.each do |i|
 
-        new_item = Item.new(i.attributes.except("object_type_id","updated_at","locator_id"))
+        new_item = Item.new(i.attributes.except("object_type_id","updated_at","locator_id","location"))
         new_item.id = i.id # Not sure why there was a + 1 here, but it has been commented out now.
         new_item.object_type_id = i.object_type_id
         new_item.sample_id = i.sample_id
         new_item.locator_id = i.locator_id        
+        new_item.write_attribute(:location,i.location)
         new_item.save
         num_items += 1
 
