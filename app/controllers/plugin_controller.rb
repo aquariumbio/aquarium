@@ -45,7 +45,8 @@ class PluginController < ApplicationController
       control = get "interface.rb"
       ns = Krill::make_namespace control
       plugin = ns::PluginInterface.new view_context
-      data = plugin.data(JSON.parse(params[:params],symbolize_names:false))
+      arg = JSON.parse(params[:params],symbolize_names:true)
+      data = plugin.data(arg)
     rescue Exception => e
       render json: { error: e.message + e.backtrace.inspect }
     else

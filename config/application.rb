@@ -21,6 +21,7 @@ end
 $CURRENT_JOB_ID = -1
 
 module Bioturk
+
   class Application < Rails::Application
 
     # Paperclip
@@ -77,6 +78,22 @@ module Bioturk
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    # The following code touches all the models, which somehow initializes the constants
+    # representing those models. If you don't do this, you get "wrong constant" errors in
+    # plugins and possibly other places.
+    config.after_initialize do 
+        Job.count
+        Sample.count
+        Item.count
+        User.count
+        Metacol.count
+        Group.count
+        Locator.count
+        Wizard.count
+        SampleType.count
+        ObjectType.count
+    end
 
   end
 
