@@ -70,8 +70,6 @@
       window.location = '/repo/list?from=' + '<%= @job.id %>';
     });    
 
-    $('#tabs a:first').tab('show'); 
-
     $('#upload').fileupload({
 
       dataType: 'json',
@@ -86,7 +84,7 @@
       },
 
       fail: function(e,data) {
-        console.log('failed');
+        $('#upload-button').html('Upload failed...');
       }
 
     });
