@@ -27,6 +27,12 @@
             <li><a href='<%= u.upload.url %>' target='upload'><%= u.upload.original_filename  %></a></li>
           <% end %>
         <% end %>
+        <input type="file" id='upload'
+               name="files[]" data-url="/krill/upload?job=<%= @job.id %>" 
+               multiple style='display: none'>
+        <br />
+        <button id='upload-button' class='btn'>Attach File</button>
+        </input>
       </ul></div>
 
       <div class="log-details tab-pane" id='tasks'><ul>
@@ -41,7 +47,7 @@
 
     </div>
 
-  </div> <!--- span4 -->
+  </div> <!-- span4 -->
 
   <div class='span8' id='history'>
     <div id='history-json'></div>
@@ -65,6 +71,33 @@
     });    
 
     $('#tabs a:first').tab('show'); 
+
+    $('#upload').fileupload({
+
+      dataType: 'json',
+
+      done: function (e, data) {
+        window.location = "/krill/log?job=<%= @job.id %>&upload=1"
+      },
+
+      add: function (e,data) {
+        $('#upload-button').html('Uploading...').prop('disabled',true);
+        data.submit();
+      },
+
+      fail: function(e,data) {
+        console.log('failed');
+      }
+
+    });
+
+    $('#upload-button').click(function() {
+      $('#upload').click();
+    });
+
+    <% if params[:upload] %>
+      $('#tabs li:eq(1) a').tab('show');
+    <% end %>
 
   });
 

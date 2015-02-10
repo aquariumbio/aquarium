@@ -51,7 +51,6 @@ Krill.prototype.upload = function(x) {
       dataType: 'json',
 
       done: function (e, data) {
-        console.log(data.result.upload_id);
         data.context.empty().append($(that.template('uploaded-item')({
           name: data.files[0].name,
           id: data.result.upload_id
