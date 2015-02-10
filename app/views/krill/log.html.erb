@@ -32,6 +32,7 @@
                multiple style='display: none'>
         <br />
         <button id='upload-button' class='btn'>Attach File</button>
+        <div class='alert' style='display: none' id='upload-result'><ul id='upload-result-list'></ul></div>
         </input>
       </ul></div>
 
@@ -75,7 +76,13 @@
       dataType: 'json',
 
       done: function (e, data) {
-        window.location = "/krill/log?job=<%= @job.id %>&upload=1"
+        if ( data.result.error ) {
+          $('#upload-button').html('Attach File').prop('disabled',false);
+          $('#upload-result-list').append('<li>Upload failed: ' + data.result.error + "</li>");
+          $('#upload-result').css('display','block');
+        } else {
+          window.location = "/krill/log?job=<%= @job.id %>&upload=1"
+        }
       },
 
       add: function (e,data) {
@@ -84,7 +91,8 @@
       },
 
       fail: function(e,data) {
-        $('#upload-button').html('Upload failed...');
+        $('#upload-button').html('Attach File').prop('disabled',false);
+        $('#upload-result').html('Upload failed...').css('display','block');
       }
 
     });

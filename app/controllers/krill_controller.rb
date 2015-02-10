@@ -280,8 +280,10 @@ class KrillController < ApplicationController
       u.save
     end
 
-    if u.errors
+    unless u.errors.empty?
       logger.info "ERRORS: #{u.errors.full_messages}"
+      render json: { error: "#{u.errors.full_messages}" }
+      return
     end
 
     render json: { upload_id: u.id, name: u.name }
