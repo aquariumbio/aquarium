@@ -280,12 +280,7 @@ class Item < ActiveRecord::Base
     i = self.new
     olist = ObjectType.where("name = ?", name)
     raise "Could not find object type named '#{spec[:object_type]}'." unless olist.length > 0
-    i.object_type_id = olist[0].id
-    i.location = olist[0].location_wizard
-    i.quantity = 1
-    i.inuse = 0
-    i.save
-    i
+    Item.make( { quantity: 1, inuse: 0 }, object_type: olist[0] )
 
   end
 
@@ -304,7 +299,7 @@ class Item < ActiveRecord::Base
     raise "Could not find sample named #{name}" unless slist.length > 0
 
     Item.make( { quantity: 1, inuse: 0 }, sample: slist[0], object_type: olist[0] )
-    
+
   end
 
 end
