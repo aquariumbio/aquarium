@@ -15,10 +15,15 @@ KrillLog.prototype.title = function(show) {
   var i = 0;
 
   if ( show.content ) {
-    while ( !show.content[i].title && i < show.content.length ) {
+
+    while ( i < show.content.length && !show.content[i].title ) {
       i++;
     }
-    return show.content[i].title;
+    if ( i < show.content.length ) {
+      return show.content[i].title;
+    } else {
+      return "";
+    }
 
   } else {
     return show.operation;
