@@ -207,7 +207,7 @@ KrillLog.prototype.result = function(op) {
 
   if ( op.operation == 'complete' ) {
     var li = $(this.template('result')({time: "", title: "Completed", klass: "krill-log-complete"}));
-    render_json($('.krill-rval',li),op.rval);
+    render_json($('.krill-log-json',li),op.rval);
     return li;
   } else if ( op.operation == 'aborted' ) {
     var li = $(this.template('result')({time: "", title: "Aborted", klass: "krill-log-abort"}));

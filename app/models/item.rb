@@ -167,6 +167,7 @@ class Item < ActiveRecord::Base
       item.object_type_id = o[:object_type].id
       wiz = Wizard.find_by_name(o[:object_type].prefix)
       locator = wiz.next if wiz
+      item.set_primitive_location locator.to_s if wiz
     end
 
     if locator
@@ -181,6 +182,9 @@ class Item < ActiveRecord::Base
     else
       item.save
     end
+
+    item.reload
+    logger.info "Made new item #{item.id} with location #{item.location} and primitive location #{item.primitive_location}"
 
     item
 
