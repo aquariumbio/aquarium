@@ -45,8 +45,10 @@ class Item < ActiveRecord::Base
   def location
     if locator
       locator.to_s
-    else
+    elsif primitive_location
       primitive_location
+    else
+      "Unknown"
     end
   end
 
@@ -69,7 +71,10 @@ class Item < ActiveRecord::Base
 
   def move_to locstr 
 
-    wiz = Wizard.find_by_name(object_type.prefix)
+    if object_type
+      wiz = Wizard.find_by_name(object_type.prefix)
+    end
+
 
     if object_type && wiz && wiz.has_correct_form( locstr ) # item and location managed by a wizard
 
@@ -149,7 +154,7 @@ class Item < ActiveRecord::Base
     move_to locstr
   end
 
-  def self.make params, opts={}
+  def self.make params, opts={} 
 
     # Make a new item with the specified object type and sample information.
     # This method creates a new locator if the object_type is associated with a
@@ -157,7 +162,11 @@ class Item < ActiveRecord::Base
 
     o = { object_type: nil, sample: nil, location: nil }.merge opts
 
-    item = self.new params
+    if o[:object_type]
+      item = self.new params.merge( object_type_id: o[:object_type].id )
+    else 
+      item = self.new params
+    end
 
     if o[:sample]
       item.sample_id = o[:sample].id
