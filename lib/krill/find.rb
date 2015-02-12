@@ -12,7 +12,7 @@ module Krill
 
         # Define available tables. Note, no queries should be made at this point
         tables = {
-          item: Item.includes(sample:[:sample_type]).includes(:object_type).where("location != 'deleted'"),
+          item: Item.includes(sample:[:sample_type]).includes(:object_type),
           sample: Sample.includes(:sample_type),
           sample_type: SampleType.includes(),
           object_type: ObjectType.includes(),
@@ -24,7 +24,12 @@ module Krill
         # Do the search
         rows = tables[name].where(pluralize_table_names(spec))
 
-        return rows
+        puts "name = #{name}"
+        if name == :item
+          return rows.reject { |i| i.deleted? }
+        else
+          return rows
+        end
 
       end
 
