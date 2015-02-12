@@ -41,8 +41,10 @@
     </h3>
     <br />
     <div class='log-status'>
-      <a href='/krill/ui?job=<%= @job.id %>' class='btn btn-small'>View Steps</a>&nbsp;
-      <button id='send' class='btn btn-small btn-primary'>Send To ...</button>
+      <% unless @job.pc == Job.NOT_STARTED %>
+        <a href='/krill/ui?job=<%= @job.id %>' class='btn btn-small'>View Steps</a>&nbsp;
+        <button id='send' class='btn btn-small btn-primary'>Send To ...</button>
+      <% end %>
     </div>
   </div>
 
