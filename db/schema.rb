@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150129221830) do
+ActiveRecord::Schema.define(:version => 20150213173621) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -122,6 +122,25 @@ ActiveRecord::Schema.define(:version => 20150129221830) do
     t.integer  "sample_type_id"
     t.string   "image"
     t.string   "prefix"
+  end
+
+  create_table "post_associations", :force => true do |t|
+    t.integer  "post_id"
+    t.integer  "sample_id"
+    t.integer  "item_id"
+    t.integer  "job_id"
+    t.integer  "task_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.string   "sha"
+  end
+
+  create_table "posts", :force => true do |t|
+    t.text     "content"
+    t.integer  "user_id"
+    t.integer  "parent_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "sample_types", :force => true do |t|

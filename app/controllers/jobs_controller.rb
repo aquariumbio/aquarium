@@ -94,20 +94,44 @@ class JobsController < ApplicationController
 
     elsif params[:path]
 
-      @shas = Job.where('path = ?', params[:path]).uniq.pluck(:sha) #.reject { |s| /local/.match s }
-      @infos = @shas.collect do |s|
-        jobs = Job.where( 'path = ? AND sha = ?', params[:path], s ).sort { |j,k| j.created_at <=> k.created_at }
-        { 
-          sha: s,
-          num: jobs.length,
-          first: jobs.first.created_at,
-          last: jobs.last.created_at
-        }
+      @infos = {}
+
+      Job.where(path: params[:path]).reverse.each do |j|
+        if ! @infos[j.sha]
+          @infos[j.sha] = {
+            num: 1,
+            first: j.created_at,
+            last: j.created_at
+          }
+        else
+          @infos[j.sha] = {
+            num: @infos[j.sha][:num] + 1,
+            last: @infos[j.sha][:last],      
+            first: j.created_at
+          }
+        end
       end
+
+      @infos.each do |k,v|
+        @infos[k][:posts] = PostAssociation.where(sha: k).count
+      end
+
+      # @shas = Job.where('path = ?', params[:path]).uniq.pluck(:sha) #.reject { |s| /local/.match s }
+      # @infos = @shas.collect do |s|
+      #   jobs = Job.where( 'path = ? AND sha = ?', params[:path], s ).sort { 
+      #     |j,k| j.created_at <=> k.created_at 
+      #   }
+      #   { 
+      #     sha: s,
+      #     num: jobs.length,
+      #     first: jobs.first.created_at,
+      #     last: jobs.last.created_at
+      #   }
+      # end
 
     else
 
-      @paths = (Job.uniq.pluck(:path).reject { |p| !p }).sort
+      @paths = (Job.uniq.pluck(:path).reject { |p| !p || /\.pdl$/ =~ p || /\.pl$/ =~ p }).sort
 
     end
 

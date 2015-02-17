@@ -3,6 +3,7 @@ class Task < ActiveRecord::Base
   attr_accessible :name, :specification, :status, :task_prototype_id, :user_id
   belongs_to :task_prototype
   has_many :touches
+  has_many :post_associations
   belongs_to :user
 
   validates :name, :presence => true
@@ -163,6 +164,10 @@ class Task < ActiveRecord::Base
 
     Job.new.remove_types spec
 
+  end
+
+  def num_posts
+    self.post_associations.count
   end
 
 end

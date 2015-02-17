@@ -4,6 +4,7 @@ class Sample < ActiveRecord::Base
   belongs_to :sample_type
   belongs_to :user
   has_many :items
+  has_many :post_associations
 
   validates_uniqueness_of :name, scope: :project, message: ": Samples within the same project must have unique names."
 
@@ -124,6 +125,10 @@ class Sample < ActiveRecord::Base
     raise "Could not find object type #{name}" unless ot
     Item.make( { quantity: 1, inuse: 0 }, sample: self, object_type: ot )
 
+  end
+
+  def num_posts
+    self.post_associations.count
   end
 
 end

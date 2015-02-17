@@ -42,6 +42,14 @@
 
 </div>
 
+<%= 
+  render partial: '/posts/discussion', locals: { 
+  topic: @job,
+  button_class: 'btn-small',
+  hidden: true,
+  reload: false } 
+%>
+
 <script>
 
   // Enable Tabs

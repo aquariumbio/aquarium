@@ -17,6 +17,7 @@ class Job < ActiveRecord::Base
   has_many :takes
   has_many :uploads
   belongs_to :group
+  has_many :post_associations
 
   def self.params_to_time p
 
@@ -200,6 +201,10 @@ class Job < ActiveRecord::Base
     self.append_step operation: "next", time: Time.now, inputs: {}
     self.append_step operation: "aborted", rval: {}
 
+  end
+
+  def num_posts
+    self.post_associations.count
   end
 
 end

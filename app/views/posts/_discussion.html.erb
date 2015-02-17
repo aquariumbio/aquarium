@@ -1,0 +1,102 @@
+<%
+
+  if topic.class == ProtocolSummary
+    base = "#{topic.sha}"
+    topic_name = "Protocol Discussion: #{topic.protocol.split('/').last}"
+  else
+    base = "#{topic.class}_#{topic.id}"
+    topic_name = "#{topic.class} #{topic.id} Discussion"
+  end
+
+  button_name = "#{base}_discussion_button"
+  modal_name  = "#{base}_discussion_modal"
+
+ %>
+
+  <%
+    button_class = (local_assigns.has_key? :button_class) ? button_class : "btn-mini"
+  %>
+
+<a href="#<%= modal_name %>" id="<%= button_name %>" role="button" 
+   class="btn btn-info <%= button_class %>" data-toggle="modal">
+</a>
+
+  <div id="<%= modal_name %>" class="modal hide fade discussion-modal" tabindex="-1" 
+     role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 style='text-align: left'><%= topic_name %></h3>
+  </div>
+
+  <div class="modal-body" style='text-align: left'>
+
+  <% if topic.class == ProtocolSummary %>
+    <div class='protocol-version'>
+      Protocol Version: <%= topic.sha %><br />
+      <a href="/jobs/summary?path=<%= topic.protocol %>">All versions</a>
+    </div>
+  <% end %>
+
+    <div class="new-post">
+      <textarea id="new-post-text"></textarea><br />
+      <button id="new-post-button" class='btn btn-mini'>Post</button>
+    </div>
+
+    <div id="posts" class="posts-container"></div>
+
+  </div>
+
+</div>
+
+<script type='template' id='post-template'>
+  <li class="post">
+      <span class='post-username'>{{= username }}</span>
+      <span class='post-login'>(<a href="/users/{{= user_id }}">{{= login }}</a>)</span>
+      <span class='post-date'>{{= nice_date }}</span>
+      <div class='post-content'>{{= content }}</div>
+      <button id='start-reply-button' class='btn btn-link start-reply-button'>Reply</button>
+      <div id='reply-area' class='reply-area' style='display:none'>
+         <span class='post-username'>{{= username }}</span> 
+         <span class='post-login'>(<a href="/users/{{= user_id }}">{{= login }}</a>)</span><br />
+         <textarea class='post-content' id="reply-text"></textarea><br />
+         <button id="send-reply-button" class='btn btn-mini'>Reply</button>
+         <button id='cancel-reply-button' class='btn btn-mini post-reply'>Cancel</button>
+      </div>
+  </li>
+</script>
+
+<script>
+
+  <%
+    if local_assigns.has_key? :link
+      linkname = link
+    else
+      n = topic.num_posts
+      if n > 0 
+        linkname = pluralize(n,"Post")
+      else
+        linkname = "Discuss"
+      end
+    end
+  %>
+
+  d = new Discussion({
+    topic: JSON.parse('<%= topic.to_json(:except => [:state,:specification]).html_safe %>'),
+    klass:  '<%= topic.class %>',
+    button: $('#<%= button_name %>'),
+    modal:  $('#<%= modal_name %>'),
+    link:   '<%= linkname %>'
+  });
+
+  <% if !(local_assigns.has_key? :reload) || reload %>
+    $('.modal').on('hidden', function () {
+      location.reload();
+    });
+  <% end %>
+
+  <% if (local_assigns.has_key? :hidden) && hidden %>
+    $('#<%= button_name %>').css('display','none');
+  <% end %>
+
+</script>

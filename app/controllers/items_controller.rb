@@ -38,7 +38,7 @@ class ItemsController < ApplicationController
 
     @handler = view_context.make_handler @object_type
 
-    @item = @handler.new_item params ############################################
+    @item = @handler.new_item params 
     @item.save
 
     if (@item.errors.size > 0 )

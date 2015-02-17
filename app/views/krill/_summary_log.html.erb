@@ -1,11 +1,16 @@
 
+<%
+  protocol = ProtocolSummary.new({ protocol: @job.path, sha: @job.sha })
+%>
+
 <div class='row-fluid' id='log-title-box'>
 
   <div class='span7'>
     <h1 class='log-h'><span style='color: #888'>Job <%= @job.id %> :</span> <%= @job.path.split('/').last %></h1>
     <p>
       Full Path: <a href='/jobs/summary?path=<%= @job.path %>'><%= @job.path %></a> ( ...
-                        <a href='/jobs/summary?path=<%= @job.path %>&sha=<%= @job.sha %>'><%= @job.sha[-10,10] %></a> )<br />
+                        <a href='/jobs/summary?path=<%= @job.path %>&sha=<%= @job.sha %>'><%= @job.sha[-10,10] %></a> )
+                        <%= render partial: '/posts/discussion', locals: { topic: protocol, link: "Discuss Protocol" } %>
       Submitted by <a href='/users/<%= @submitter.id %>'><%= @submitter.login %></a>
       for group <a href='/groups/<%= @group.id %>'><%= @group.name %></a>
       <% if @performer %>
@@ -41,6 +46,7 @@
     </h3>
     <br />
     <div class='log-status'>
+      <%= render partial: '/posts/discussion', locals: { topic: @job, button_class: "btn-small" } %>&nbsp;
       <% unless @job.pc == Job.NOT_STARTED %>
         <a href='/krill/ui?job=<%= @job.id %>' class='btn btn-small'>View Steps</a>&nbsp;
         <button id='send' class='btn btn-small btn-primary'>Send To ...</button>
@@ -49,3 +55,5 @@
   </div>
 
 </div>
+
+

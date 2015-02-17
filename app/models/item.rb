@@ -9,6 +9,7 @@ class Item < ActiveRecord::Base
   has_many :cart_items
   has_many :takes
   has_one :locator, autosave: false
+  has_many :post_associations
 
   # accessors ###########################################################
 
@@ -313,6 +314,10 @@ class Item < ActiveRecord::Base
 
     Item.make( { quantity: 1, inuse: 0 }, sample: slist[0], object_type: olist[0] )
 
+  end
+
+  def num_posts
+    self.post_associations.count
   end
 
 end

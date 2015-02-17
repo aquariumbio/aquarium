@@ -29,8 +29,14 @@ Krill.prototype.initialize = function() {
     $('#krill-waiting').css('display','block');
     this.steps_tag.append(this.step_list_tag);
     this.get_state(); // get_state() calls render when data arrives
-
+    
     var that = this;
+    $('#krill-note').click(function(){
+        console.log('asd');
+        var b = $("#Job_"+that.job+"_discussion_button");
+        console.log(b);
+        b.click();
+    });
     $('#krill-abort').click(function(){that.abort();});
 
 }

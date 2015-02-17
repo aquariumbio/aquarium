@@ -1,5 +1,6 @@
 Bioturk::Application.routes.draw do
 
+  resources :posts, only: [ :index, :create ]
   resources :wizards
 
   get "plugin/tester"

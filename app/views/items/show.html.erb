@@ -6,6 +6,11 @@
   <% end %>
  </h1>
 
+  <%= 
+    render partial: '/posts/discussion', locals: { 
+    topic: @item,
+    button_class: 'btn-small' } %>
+
 <%= render @handler.show_item_partial %>
 
 <p>Locator_id: <%= @item.locator_id ? @item.locator_id : 'nil' %></p>

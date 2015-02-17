@@ -6,6 +6,12 @@
 
   <div class='span6'>
 
+    <%= 
+      render partial: '/posts/discussion', locals: { 
+      topic: @sample,
+      button_class: 'btn-small' } 
+    %>
+
     <p>
       <b>Description:</b>
       <%= @sample.description %>

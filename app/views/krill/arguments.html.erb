@@ -1,9 +1,19 @@
 <% provide(:title, 'Start ' + @path ) %>
 
+<%
+  protocol = ProtocolSummary.new({ protocol: params[:path], sha: @sha })
+%>
+
 <h1>Initialize <%= @path %></h1>
 
-<p><b>Version:</b> <%= @sha %></p>
+<p>
+  <b>Version:</b> <%= @sha %><br />
+  <%= render partial: '/posts/discussion', locals: { 
+      topic: protocol, link: "Discuss", button_class: "small"
+  } %>
+</p>
 
+<h4>Arguments</h4>
 <div id='json_editor'></div>
 
 <h4>Scheduling</h4>

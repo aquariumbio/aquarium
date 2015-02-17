@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  post_id: 1
+  sample_id: 1
+  item_id: 1
+  job_id: 1
+  task_id: 1
+
+two:
+  post_id: 1
+  sample_id: 1
+  item_id: 1
+  job_id: 1
+  task_id: 1

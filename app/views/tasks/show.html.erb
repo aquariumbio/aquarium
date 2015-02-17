@@ -1,6 +1,5 @@
 <p id="notice"><%= notice %></p>
 
-
 <h1><%= @task.task_prototype.name %>: <%= @task.name %></h1>
 
 <h1>
@@ -13,7 +12,10 @@
 <div class='task_buttons'>
   <%= link_to "Edit", edit_task_path(task_prototype_id:
     @task.task_prototype), class: 'btn btn-primary btn-small' %>
-
+  <%= 
+    render partial: '/posts/discussion', locals: { 
+    topic: @task,
+    button_class: 'btn-small' } %>
   <%= link_to "Show All #{pluralize(2,@task.task_prototype.name)[2..-1]}", tasks_path(task_prototype_id:
     @task.task_prototype), class: 'btn btn-small' %>
 </div>

@@ -1,7 +1,12 @@
 <% if params[:sha] %>
 
-  <h1>Jobs Associated with <%= params[:path] %></h1>
+  <%
+    protocol = ProtocolSummary.new({ protocol: params[:path], sha: params[:sha] })
+  %>
+
+  <h1>Jobs Associated with <a href="/jobs/summary?path=<%= params[:path] %>"><%= params[:path] %></a></h1>
   <h3 style='text-align: center'>Version: <%= params[:sha] %></h3>
+  <%= render partial: '/posts/discussion', locals: { topic: protocol } %>
 
   <p><b>Jobs:</b> &nbsp;
     <% @jobs.each do |j| %>
@@ -11,28 +16,42 @@
 
   <h4>Code:</h4>
   <pre>
-<%= @content %>
+    <%= @content %>
   </pre>
 
 <% elsif params[:path] %>
 
   <h1>Versions of <%= params[:path] %></h1>
 
-  <% if @infos.length > 0 %>
+  <% if @infos.keys.length > 0 %>
 
     <table class='table'>
       <tr>
         <th>Version</th>
-        <th>Number of Jobs</th>
+        <th>Discussion</th>
+        <th>Used</th>
         <th>First run</th>
         <th>Last run</th>
       </tr>
-      <% @infos.each do |i| %>
+      <% @infos.each do |k,v| %>
+
+        <%
+          protocol = ProtocolSummary.new({ protocol: params[:path], sha: k })
+        %>
+
         <tr>
-          <td><%= link_to i[:sha], jobs_summary_url(path: params[:path], sha: i[:sha]) %></td>
-          <td><%= i[:num] %></td>
-          <td><%= time_ago_in_words(i[:first]) %> ago</td>
-          <td><%= time_ago_in_words(i[:last]) %> ago</td>
+          <td><%= link_to k, jobs_summary_url(path: params[:path], sha: k) %></td>
+          <td>
+            <% if v[:posts] > 0 %>
+              <%= render partial: '/posts/discussion', locals: { 
+                topic: protocol, 
+                link: pluralize(v[:posts],"post") 
+              } %>
+            <% end %>
+          </td>
+          <td><%= pluralize(v[:num],"time") %></td>
+          <td><%= time_ago_in_words(v[:first]) %> ago</td>
+          <td><%= time_ago_in_words(v[:last]) %> ago</td>
         </tr>
       <% end %>
     </table>
