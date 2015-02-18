@@ -80,9 +80,11 @@
       end
     end
   %>
-
+console.log("A");
+  topic_object = JSON.parse('<%= topic.to_json(:except => [:state,:specification,:data]).html_safe %>');
+console.log("B");
   d = new Discussion({
-    topic: JSON.parse('<%= topic.to_json(:except => [:state,:specification]).html_safe %>'),
+    topic: topic_object,
     klass:  '<%= topic.class %>',
     button: $('#<%= button_name %>'),
     modal:  $('#<%= modal_name %>'),
