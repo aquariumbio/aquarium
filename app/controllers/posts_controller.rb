@@ -23,11 +23,13 @@ class PostsController < ApplicationController
 
       # Called with no object in particular
 
-      posts = Post.where(parent_id: nil).reverse
-      logger.info("HERE")
       respond_to do |format|
-        format.html # index.html.erb
+        format.html {
+          render layout: "plugin.html.erb"
+        }
         format.json {
+          # Post.where(:published => true).paginate(:page => params[:page]).order('id DESC')
+          posts = Post.where(parent_id: nil).paginate(page: params[:page].to_i+1).order('posts.updated_at DESC')
           render json: posts.as_json 
         }
       end
@@ -65,21 +67,19 @@ class PostsController < ApplicationController
       p = Post.new content: params[:data][:content], user_id: current_user.id
       p.save
 
-      pa = PostAssociation.new post_id: p.id
-
       if params[:data][:klass]
+        pa = PostAssociation.new post_id: p.id
         if params[:data][:klass] == "Protocol"
           pa[:sha] = params[:data][:key]
         else
           pa[(params[:data][:klass].downcase + "_id").to_sym] = params[:data][:key]
         end
+        pa.save
       end
-
-      pa.save
 
     rescue Exception => e
 
-      logger.info e.to_s
+      logger.info e.to_s + ": " + e.backtrace.join(',')
       render json: { error: "Could not create post: " + e.to_s }
       return
 

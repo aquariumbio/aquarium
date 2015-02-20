@@ -14,6 +14,8 @@ class Post < ActiveRecord::Base
 
   after_create :update_root
 
+  self.per_page = 10
+
   class Protocol
 
     attr_reader :protocol, :sha
@@ -45,13 +47,13 @@ class Post < ActiveRecord::Base
    j = {
      :id => self.id,
      :parent_id => self.parent_id,
-     :content => "(#{self.id}) " + self.content,
+     :content => self.content,
      :created_at => self.created_at,
      :nice_date => time_ago_in_words(self.created_at) + " ago",
      :username => self.user ? self.user.name : "?",
      :login => self.user ? self.user.login : "?",
      :user_id => self.user ? self.user.id : "-1",
-     :responses => (self.responses.collect { |p| p.as_json }).reverse
+     :responses => (self.responses.sort.collect { |p| p.as_json }).reverse
    }
 
    if self.topic_info?
@@ -66,11 +68,13 @@ class Post < ActiveRecord::Base
 
   def update_root
 
-    p = self.parent
-    while p.parent_id != nil
-      p = p.parent
+    if self.parent
+      p = self.parent
+      while p.parent_id != nil
+        p = p.parent
+      end
+      p.touch
     end
-    p.touch
 
   end
 

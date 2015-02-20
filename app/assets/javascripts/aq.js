@@ -22,7 +22,11 @@ Aq.prototype.metacol_link = function(mid) {
 }
 
 Aq.prototype.user_link = function(uid,login) {
-  return this.link("/users/" + uid,login);
+  if ( login ) {
+    return this.link("/users/" + uid,login);
+  } else {
+    return "-";
+  }
 }
 
 Aq.prototype.start_link = function(jid,body) {

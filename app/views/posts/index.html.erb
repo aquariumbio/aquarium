@@ -1,5 +1,3 @@
-<h1>Discussions</h1>
-
 <div id='general-posts' class='discussion'>
 
   <div class="new-post">
@@ -7,15 +5,30 @@
     <button id="new-post-button" class='btn btn-mini'>Post</button>
   </div>
 
-  <div id="posts" class="posts-container"></div>
+  <div id="posts-area">
+    <div id="posts" class="posts-container"></div>
+  </div>
+
+  <button id="more-posts" class='btn btn-mini btn-primary'>More</button>
 
 </div>
 
 <script>
-  d = new Discussion();
+
+  var d = new Discussion();
+  var num_parts = 0;
+
   d.index({
     tag: $('#general-posts')
   });
+
+  $("#more-posts").click(function() {
+    num_parts++;
+    var p = $('<div class="posts-container"></div>');
+    $("#posts-area").append(p);
+    d.render_index_part(p,num_parts);
+  });
+
 </script>
 
 <%= render partial: '/posts/post_template' %>

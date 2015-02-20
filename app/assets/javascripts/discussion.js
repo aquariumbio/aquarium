@@ -29,14 +29,25 @@ Discussion.prototype.index = function(spec) {
 Discussion.prototype.render_index = function(spec) {
 
   var that = this;
+  $("#new-post-text").css('color','#000').val("");
+
+  $(".posts-container",this.tag).each(function(i) {
+    that.render_index_part($(this),i);
+  });
+  
+}
+
+Discussion.prototype.render_index_part = function(tag,num) {
+
+  var that = this;
 
   $.ajax({
-    url: "/posts.json"
+    url: "/posts.json?page="+num
   }).done(function(posts) {
     var rp = that.render_aux(posts);
-    $("#posts",that.tag).empty().append(rp);
+    tag.empty().append(rp);
   });  
-  
+
 }
 
 Discussion.prototype.setup_topic = function(spec) {
@@ -139,6 +150,7 @@ Discussion.prototype.render_post = function(post) {
 
   $("#send-reply-button",li).click(function(){
     $("#send-reply-button",li).prop('disabled',true);
+    $("#reply-text",li).css('color',"#aaa");
     that.reply($("#reply-text",li).val(),post.id);
   }).prop("disabled",true);
 
@@ -161,16 +173,16 @@ Discussion.prototype.post = function(content) {
     data = { content: content };
   }
 
+  $("#new-post-text").css('color','#aaa'); 
+
   $.ajax({
     type: "post",
     url: "/posts.json",
     data: {data: data}
   }).done(function(data) {
     if ( that.general ) {
-      $("#new-post-text").val("");
       that.render_index();
     } else {
-      $("#new-post-text").val("");
       that.render();
     }
   });
