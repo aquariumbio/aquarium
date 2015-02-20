@@ -27,7 +27,8 @@ class Locator < ActiveRecord::Base
       if locs.length > 0
         locs.first
       else 
-        loc = Locator.new(wizard_id: wizard.id, number: 0)
+        m = Locator.largest wizard
+        loc = Locator.new(wizard_id: wizard.id, number: m.number+1)
         loc.save
         loc
       end

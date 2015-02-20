@@ -21,7 +21,7 @@
    class="btn btn-info <%= button_class %>" data-toggle="modal">
 </a>
 
-  <div id="<%= modal_name %>" class="modal hide fade discussion-modal" tabindex="-1" 
+  <div id="<%= modal_name %>" class="modal hide fade discussion discussion-modal" tabindex="-1" 
      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
   <div class="modal-header">
@@ -49,22 +49,7 @@
 
 </div>
 
-<script type='template' id='post-template'>
-  <li class="post">
-      <span class='post-username'>{{= username }}</span>
-      <span class='post-login'>(<a href="/users/{{= user_id }}">{{= login }}</a>)</span>
-      <span class='post-date'>{{= nice_date }}</span>
-      <div class='post-content'>{{= content }}</div>
-      <button id='start-reply-button' class='btn btn-link start-reply-button'>Reply</button>
-      <div id='reply-area' class='reply-area' style='display:none'>
-         <span class='post-username'>{{= username }}</span> 
-         <span class='post-login'>(<a href="/users/{{= user_id }}">{{= login }}</a>)</span><br />
-         <textarea class='post-content' id="reply-text"></textarea><br />
-         <button id="send-reply-button" class='btn btn-mini'>Reply</button>
-         <button id='cancel-reply-button' class='btn btn-mini post-reply'>Cancel</button>
-      </div>
-  </li>
-</script>
+<%= render partial: '/posts/post_template' %>
 
 <script>
 
@@ -80,10 +65,12 @@
       end
     end
   %>
-console.log("A");
+
   topic_object = JSON.parse('<%= topic.to_json(:except => [:state,:specification,:data]).html_safe %>');
-console.log("B");
-  d = new Discussion({
+
+  d = new Discussion();
+
+  d.setup_topic({
     topic: topic_object,
     klass:  '<%= topic.class %>',
     button: $('#<%= button_name %>'),

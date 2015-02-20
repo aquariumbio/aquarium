@@ -1,4 +1,4 @@
-function Discussion(spec) {
+function Discussion() {
 
   // Adjust underscore template delimiter
 
@@ -6,6 +6,40 @@ function Discussion(spec) {
         interpolate: /\{\{\=(.+?)\}\}/g,
         evaluate: /\{\{(.+?)\}\}/g
     };
+
+}
+
+Discussion.prototype.index = function(spec) {
+
+  var that = this;
+  this.tag = spec.tag;
+  this.general = true; // list all posts, not just those for a specific topic
+  this.render_index();
+
+  $("#new-post-button").click(function() {
+    that.post($("#new-post-text").val());
+  }).prop("disabled",true);
+
+  $("#new-post-text").bind('input propertychange',function() {
+    $("#new-post-button").prop('disabled',$(this).val() == "");
+  }); 
+
+}
+
+Discussion.prototype.render_index = function(spec) {
+
+  var that = this;
+
+  $.ajax({
+    url: "/posts.json"
+  }).done(function(posts) {
+    var rp = that.render_aux(posts);
+    $("#posts",that.tag).empty().append(rp);
+  });  
+  
+}
+
+Discussion.prototype.setup_topic = function(spec) {
 
   // set up instance variables
   
@@ -70,7 +104,7 @@ Discussion.prototype.render_aux = function(posts) {
 
   for ( var i=0; i<posts.length; i++ ) {
 
-    ul.append(this.reply_box(posts[i]));
+    ul.append(this.render_post(posts[i]));
 
     if ( posts[i].responses.length > 0 ) {
       ul.append($("<li />").append(that.render_aux(posts[i].responses)));
@@ -82,9 +116,13 @@ Discussion.prototype.render_aux = function(posts) {
 
 }
 
-Discussion.prototype.reply_box = function(post) {
+Discussion.prototype.render_post = function(post) {
 
   var that = this;
+
+  if ( !this.general ) {
+    delete post.topic_info
+  }
 
   var li = $(this.template('post')(post));
 
@@ -115,15 +153,26 @@ Discussion.prototype.reply_box = function(post) {
 Discussion.prototype.post = function(content) {
 
   var that = this;
+  var data;
+
+  if ( that.klass ) {
+    data = { klass: that.klass, key: that.topic[that.key], content: content };
+  } else {
+    data = { content: content };
+  }
 
   $.ajax({
     type: "post",
     url: "/posts.json",
-    data: {data: { klass: that.klass, key: that.topic[that.key], content: content }}
+    data: {data: data}
   }).done(function(data) {
-    $("#new-post-text",that.modal).val("");
-    console.log(data);
-    that.render();
+    if ( that.general ) {
+      $("#new-post-text").val("");
+      that.render_index();
+    } else {
+      $("#new-post-text").val("");
+      that.render();
+    }
   });
 
 }
@@ -137,8 +186,11 @@ Discussion.prototype.reply = function(content,parent_id) {
     url: "/posts.json",
     data: {data: { parent_id: parent_id, content: content }}
   }).done(function(data) {
-    console.log(data);
-    that.render();
+    if ( that.general ) {
+      that.render_index();
+    } else {
+      that.render();
+    }
   });
 
 }

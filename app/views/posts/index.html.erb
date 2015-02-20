@@ -1,27 +1,21 @@
-<h1>Listing posts</h1>
+<h1>Discussions</h1>
 
-<table>
-  <tr>
-    <th>Content</th>
-    <th>User</th>
-    <th>Parent</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<div id='general-posts' class='discussion'>
 
-<% @posts.each do |post| %>
-  <tr>
-    <td><%= post.content %></td>
-    <td><%= post.user_id %></td>
-    <td><%= post.parent_id %></td>
-    <td><%= link_to 'Show', post %></td>
-    <td><%= link_to 'Edit', edit_post_path(post) %></td>
-    <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
-</table>
+  <div class="new-post">
+    <textarea id="new-post-text"></textarea><br />
+    <button id="new-post-button" class='btn btn-mini'>Post</button>
+  </div>
 
-<br />
+  <div id="posts" class="posts-container"></div>
 
-<%= link_to 'New Post', new_post_path %>
+</div>
+
+<script>
+  d = new Discussion();
+  d.index({
+    tag: $('#general-posts')
+  });
+</script>
+
+<%= render partial: '/posts/post_template' %>
