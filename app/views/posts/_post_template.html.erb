@@ -1,7 +1,7 @@
 <script type='template' id='post-template'>
   <li class="post">
       <span class='post-username'>{{= username }}</span>
-      <span class='post-login'>(<a href="/users/{{= user_id }}">{{= login }}</a>)</span>
+      <span class='post-login'>(<a href="/users/{{= user_id }}" target=_parent>{{= login }}</a>)</span>
       <span class='post-date'>{{= nice_date }}</span>
       {{ if ( typeof(topic_info) != "undefined") { }}
         {{ for ( var i=0; i<topic_info.length; i++ ) { }}
