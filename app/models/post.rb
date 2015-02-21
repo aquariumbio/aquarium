@@ -53,7 +53,7 @@ class Post < ActiveRecord::Base
      :username => self.user ? self.user.name : "?",
      :login => self.user ? self.user.login : "?",
      :user_id => self.user ? self.user.id : "-1",
-     :responses => (self.responses.sort.collect { |p| p.as_json }).reverse
+     :responses => (self.responses.sort.collect { |p| p.as_json }).reverse   
    }
 
    if self.topic_info?
