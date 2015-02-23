@@ -27,11 +27,11 @@ class PostAssociation < ActiveRecord::Base
     if self.job
       { type: "Job", id: self.job.id, path: "/jobs/#{self.job.id}" }
     elsif self.item
-      { type: "Item", id: self.item.id, path: "/Items/#{self.item.id}" }
+      { type: "Item", id: self.item.id, path: "/items/#{self.item.id}" }
     elsif self.task
-      { type: "Task", id: self.task.id, path: "/Tasks/#{self.task.id}" }
+      { type: "Task", id: self.task.id, path: "/tasks/#{self.task.id}" }
     elsif self.sample
-      { type: "Sample", id: self.sample.id, path: "/Samples/#{self.sample.id}" }
+      { type: "Sample", id: self.sample.id, path: "/samples/#{self.sample.id}" }
     elsif self.sha
       path = Job.limit(1).find_by_sha(self.sha).path
       id = path.split('/').last
