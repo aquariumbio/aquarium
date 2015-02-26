@@ -30,6 +30,7 @@
         <th>Version</th>
         <th>Discussion</th>
         <th>Used</th>
+        <th>Success Rate</th>
         <th>First run</th>
         <th>Last run</th>
       </tr>
@@ -50,6 +51,7 @@
             <% end %>
           </td>
           <td><%= pluralize(v[:num],"time") %></td>
+          <td><%= (v[:successes].to_f / v[:num].to_f).round(2) %></td>
           <td><%= time_ago_in_words(v[:first]) %> ago</td>
           <td><%= time_ago_in_words(v[:last]) %> ago</td>
         </tr>

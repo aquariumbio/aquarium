@@ -100,12 +100,14 @@ class JobsController < ApplicationController
         if ! @infos[j.sha]
           @infos[j.sha] = {
             num: 1,
+            successes: j.error? ? 0 : 1,
             first: j.created_at,
             last: j.created_at
           }
         else
           @infos[j.sha] = {
             num: @infos[j.sha][:num] + 1,
+            successes: @infos[j.sha][:successes] + ((j.error?) ? 0 : 1),
             last: @infos[j.sha][:last],      
             first: j.created_at
           }
@@ -115,19 +117,6 @@ class JobsController < ApplicationController
       @infos.each do |k,v|
         @infos[k][:posts] = PostAssociation.where(sha: k).count
       end
-
-      # @shas = Job.where('path = ?', params[:path]).uniq.pluck(:sha) #.reject { |s| /local/.match s }
-      # @infos = @shas.collect do |s|
-      #   jobs = Job.where( 'path = ? AND sha = ?', params[:path], s ).sort { 
-      #     |j,k| j.created_at <=> k.created_at 
-      #   }
-      #   { 
-      #     sha: s,
-      #     num: jobs.length,
-      #     first: jobs.first.created_at,
-      #     last: jobs.last.created_at
-      #   }
-      # end
 
     else
 
