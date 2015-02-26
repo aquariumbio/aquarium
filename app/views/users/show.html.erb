@@ -2,7 +2,7 @@
 
 <div class="row-fluid">
 
-  <div class="span3">
+  <div class="span3 user-info">
 
     <ul>
       <li>Name: <b><%= @user.name %></b></li>
@@ -12,12 +12,14 @@
 
   </div>
 
-  <div class="span9">
+  <div class="span9 user-info">
 
     <ul>
       <% if @user.id == current_user.id %>
         <li>
-          API Key: <b><%= @user.key ? @user.key : "none" %></b><br />
+          API Key: <b><%= @user.key ? @user.key : "none" %></b>
+        </li>
+        <li>
           <%= link_to "Generate New Key", 
               { action: "show", id: @user.id, keygen: true }, 
               class: "btn btn-mini btn-info" %>
