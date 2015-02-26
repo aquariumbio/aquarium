@@ -59,7 +59,7 @@
   })
 
   // Start steps UI
-  krill = new Krill(<%= @job.id %>, '<%= @job.path %>', <%= @job.pc %>);
+  krill = new Krill(<%= @job.id %>, '<%= @job.path %>', <%= @job.pc %>, <%= @job.metacol_id ? @job.metacol_id : "null" %>);
   krill.initialize();
   window.onresize = function(){ krill.resize(); }
 

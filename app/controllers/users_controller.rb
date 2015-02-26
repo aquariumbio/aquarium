@@ -26,6 +26,14 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+
+    if params[:keygen] && @user.id == current_user.id
+      @user.generate_api_key
+      @user.reload
+      redirect_to @user
+      return
+    end
+
   end
 
   def create

@@ -31,6 +31,13 @@ KrillLog.prototype.title = function(show) {
 
 }
 
+KrillLog.prototype.log = function(action,val) {
+  var log = $('<span/>').addClass('showhide');
+  var li = $('<li>Data: </li>').append(log);
+  render_json(log,val);
+  return li;
+}
+
 KrillLog.prototype.note = function(action,val) {
   return $('<li />').append($('<span>'+val+'</span>'));
 }
@@ -197,6 +204,10 @@ KrillLog.prototype.error = function(action,result) {
 KrillLog.prototype.intro = function(op) {
 
   var li = $(this.template('result')({time: aq.nice_time(new Date(op.time)), title: "Started protocol", klass: "krill-log-intro"}));
+
+  if ( ! $.isEmptyObject(op.arguments) ) {
+    $('.krill-log-json',li).addClass('showhide');
+  }
   render_json($('.krill-log-json',li),op.arguments);
   return li;
 
@@ -207,6 +218,9 @@ KrillLog.prototype.result = function(op) {
 
   if ( op.operation == 'complete' ) {
     var li = $(this.template('result')({time: "", title: "Completed", klass: "krill-log-complete"}));
+    if ( ! $.isEmptyObject(op.rval) ) {
+      $('.krill-log-json',li).addClass('showhide');
+    }
     render_json($('.krill-log-json',li),op.rval);
     return li;
   } else if ( op.operation == 'aborted' ) {

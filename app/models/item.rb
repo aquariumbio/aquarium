@@ -76,7 +76,6 @@ class Item < ActiveRecord::Base
       wiz = Wizard.find_by_name(object_type.prefix)
     end
 
-
     if object_type && wiz && wiz.has_correct_form( locstr ) # item and location managed by a wizard
 
       unless wiz.has_correct_form locstr
@@ -148,6 +147,18 @@ class Item < ActiveRecord::Base
     end
 
     self
+
+  end
+
+  def non_wizard_location?
+
+    wiz = Wizard.find_by_name(self.object_type.prefix)
+
+    if wiz && self.locator == nil
+      return false
+    else
+      return true
+    end
 
   end
 

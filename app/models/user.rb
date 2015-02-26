@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
 
-  attr_accessible :login, :name, :password, :password_confirmation, :password_digest
+  attr_accessible :login, :name, :password, :password_confirmation, :password_digest, :key
   has_secure_password
   has_many :samples
   has_many :logs
@@ -11,13 +11,14 @@ class User < ActiveRecord::Base
   has_many :tasks
   
   # Q: Why not = user.login.downcase?
-  before_save { |user| user.login = login.downcase } 
-  before_save :create_remember_token
+  before_create { |user| user.login = login.downcase }
+  before_create :create_remember_token
 
   validates :name,  presence: true, length: { maximum: 50 }
   validates :login, presence: true, uniqueness: { case_sensitive: false }
-  validates :password, presence: true, length: { minimum: 6 }
-  validates :password_confirmation, presence: true
+
+  validates :password, presence: true, length: { minimum: 6 }, :on => :create
+  validates :password_confirmation, presence: true, :on => :create
 
   def is_admin
     g = Group.find_by_name('admin')
@@ -37,6 +38,12 @@ class User < ActiveRecord::Base
     self.password_confirmation = "asdasd"
     self.password_digest = u.password_digest
     save!
+  end
+
+  def generate_api_key
+    self.key = SecureRandom.urlsafe_base64 32
+    self.save
+    self.key
   end
 
   private

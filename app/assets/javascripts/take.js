@@ -7,8 +7,6 @@ function TakeUI(entries, tag, job, env) {
   this.env = env;
   this.release = [];
 
-  console.log(this.env);
-
 }
 
 TakeUI.prototype.check = function(i,j) {

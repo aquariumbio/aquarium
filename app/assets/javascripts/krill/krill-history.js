@@ -39,11 +39,15 @@ Krill.prototype.info = function() {
   $('#krill-info').empty();
 
   var note = "";
+  var metacol = "";
 
   if ( this.pc == -2 ) {
     note = "<br /><h3>completed</h3><p><a href='log?job="+this.job+"'>view log</a></p>";
   }
-  var job_info = $('<div>Job '+this.job+'<br />'+this.path+' '+note+'</div>').addClass('krill-job-info');
+  if ( this.metacol ) {
+    metacol = " / Metacol <a href='/metacols/"  + this.metacol + "'>" + this.metacol + "</a>";
+  }
+  var job_info = $('<div>Job '+this.job+metacol+'<br />'+this.path+' '+note+'</div>').addClass('krill-job-info');
   $('#krill-info').append(job_info);
 
 }

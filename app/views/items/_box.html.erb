@@ -3,6 +3,7 @@
     name : string
     box : list of locators
     selected : nil or locator
+    limit : how many samples per box
   -->
 
   <div class='sample_box'>
@@ -14,7 +15,9 @@
 
         <% el = 9*row + col %>
 
-        <% if !box[el] || !box[el].item %>
+        <% if el > limit %>
+          <td class='non-existant'>-</td>
+        <% elsif !box[el] || !box[el].item %>
           <td class='empty'><%= el %></td> 
 
         <% else %>

@@ -125,10 +125,9 @@ module Oyster
     end
 
     def error?
-      if @jobs.length > 0
+      if @jobs.length > 0 
         j = Job.find(@jobs.last)
-        entries = j.logs.reject { |l| l.entry_type != 'CANCEL' && l.entry_type != 'ERROR' && l.entry_type != 'ABORT' }
-        return entries.length > 0
+        return j.error?
       else
         return false
       end

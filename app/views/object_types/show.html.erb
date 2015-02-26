@@ -2,6 +2,7 @@
 
 <h1><%= @object_type.name %></h1>
 
+
 <div class="row-fluid">
 
   <div class="span3 object-image">
@@ -9,6 +10,10 @@
   </div>
 
   <div class="span9 object-description">
+    <% wiz = Wizard.find_by_name(@object_type.prefix) %>
+    <% if wiz %>
+      <h3>Locations managed by the <%= link_to wiz.name, wiz %> wizard</h3>
+    <% end %>  
     <%= render 'description' %>
   </div>
 

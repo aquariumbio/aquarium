@@ -1,8 +1,16 @@
   <div class='well'>
+
+    <% unless @item.non_wizard_location? %>
+      <div class='alert'>WARNING: This item is normally managed by the 
+        <%= @item.object_type.prefix %> wizard, but the current location does
+        not have the form of a location for this wizard.</div>
+    <% end %>
+
     <%= form_for(@item) do |f| %>
       <%= f.number_field :id, style: 'display: none'  %>
       <%= f.text_field :return_page, value: "item_show", style: 'display: none'  %>
-      <label>Location:</label>
+      <label>Location: 
+      </label>
       <%= f.text_field :location, value: @item.location, class:
       'input', onkeydown: "turn_on_submit_button(#{@item.id})"  %>
       <br />

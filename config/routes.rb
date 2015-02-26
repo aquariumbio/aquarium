@@ -3,6 +3,8 @@ Bioturk::Application.routes.draw do
   resources :posts, only: [ :index, :create ]
   resources :wizards
 
+  match "api", to: "api#main"
+
   get "plugin/tester"
   get "plugin/show"
   get "plugin/ajax"

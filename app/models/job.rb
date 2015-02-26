@@ -30,6 +30,10 @@ class Job < ActiveRecord::Base
 
   end
 
+  def done?
+    return (self.pc == -2)
+  end
+
   def status
     if self.pc >= 0
       status = 'ACTIVE'
@@ -184,6 +188,35 @@ class Job < ActiveRecord::Base
       end
       self.save
     end
+  end
+
+  def krill?
+    if /\.rb$/ =~ self.path
+      return true
+    else
+      return false
+    end
+  end
+
+  def plankton?
+    if /\.pl$/ =~ self.path
+      return true
+    else
+      return false
+    end
+  end  
+
+  def error?
+
+    if krill? 
+       return self.done? && self.backtrace.last[:operation] != "complete"
+    elsif plankton?
+      entries = self.logs.reject { |l| l.entry_type != 'CANCEL' && l.entry_type != 'ERROR' && l.entry_type != 'ABORT' }
+      return entries.length > 0
+    else
+      false
+    end
+
   end
 
   def abort_krill

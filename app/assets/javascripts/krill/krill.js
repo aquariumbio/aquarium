@@ -1,4 +1,4 @@
-function Krill(job,path,pc) {
+function Krill(job,path,pc,metacol) {
 
     var that = this;
 
@@ -7,6 +7,7 @@ function Krill(job,path,pc) {
     this.inventory_tag = $('#inventory');
     this.uploads_tag   = $('#uploads');
     this.tasks_tag   = $('#tasks');
+    this.metacol = metacol;
     this.job = job;
     this.path = path;
     this.pc = pc;

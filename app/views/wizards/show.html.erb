@@ -37,7 +37,7 @@
 
   <div class='span6'>
     <% if @selected_box %>
-      <%= render partial: 'items/box', locals: { name: @selected_box, box: @wizard.box(@selected_box), selected: nil } %>
+      <%= render partial: 'items/box', locals: { name: @selected_box, box: @wizard.box(@selected_box), selected: nil, limit: @wizard.limit } %>
     <% end %>
   </div>
 

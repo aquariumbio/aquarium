@@ -168,52 +168,16 @@ class ObjectTypesController < ApplicationController
 
     if Rails.env != 'production'
 
-      num_objects = 0
-      num_items = 0
-      num_sample_types = 0
-      num_samples = 0     
-      num_touches = 0
+      CartItem.delete_all
+      ObjectType.delete_all
+      Item.delete_all
+      SampleType.delete_all
+      Sample.delete_all
+      Touch.delete_all
+      Locator.delete_all
+      Wizard.delete_all
 
-      CartItem.all.each do |c|
-        c.destroy
-      end
-
-      ObjectType.includes(:items).each do |ob|
-        num_objects += 1
-        num_items += ob.items.length
-        ob.destroy
-      end
-
-      Item.all.each do |i| # this should destroy any orphans
-        num_items += 1
-        i.destroy
-      end
-
-      SampleType.includes(:samples).each do |st|
-        num_sample_types += 1
-        num_samples += st.samples.length
-        st.destroy
-      end
-
-      Sample.all.each do |s| # this should destroy any orphans
-        num_samples += 1
-        s.destroy
-      end
-
-      Touch.all.each do |t|
-        num_touches += 1
-        t.destroy()
-      end
-
-      Locator.all.each do |l|
-        i.destroy()
-      end
-
-      Wizard.all.each do |w|
-        w.destroy()
-      end
-
-      redirect_to production_interface_path, notice: "Deleted #{num_objects} object types, #{num_items} items, #{num_sample_types} sample type definitions, and #{num_samples} samples from the inventory. All users carts were emptied. Also deleted were #{num_touches} touches."
+      redirect_to production_interface_path, notice: "Deleted inventory. Pretty fast, huh?"
 
     else
 
@@ -223,14 +187,42 @@ class ObjectTypesController < ApplicationController
 
   end
 
+  def copy_table from, to
+
+    all_inserts = from.all.collect { |pw| 
+      "(" + (pw.attributes.values.collect { |v| 
+        if v.class == String 
+          "'#{v.gsub(/'/) {|s| "''"}}'"
+        elsif v.class == ActiveSupport::TimeWithZone          
+          "'#{v}'"
+        elsif v == nil
+          "NULL"
+        else          
+            v
+        end
+      }).join(',') + ")"
+    }
+
+    columns = from.column_names
+
+    max = 500
+
+    for i in 0..(all_inserts.length/max)
+
+      inserts = all_inserts[max*i,max]
+      if inserts.length > 0
+        puts "inserting #{max*i} to #{max*i+max}"
+        sql = "INSERT INTO #{to} (#{columns.join(',')}) VALUES #{inserts.join(',')}"
+        ActiveRecord::Base.connection.execute sql
+      end
+
+    end
+
+  end
+
   def copy_inventory_from_production
 
     if Rails.env != 'production'
-
-      num_objects = 0
-      num_items = 0
-      num_sample_types = 0
-      num_samples = 0
 
       ProductionObjectType.switch_connection_to(:production_server)
       ProductionItem.switch_connection_to(:production_server)
@@ -239,67 +231,14 @@ class ObjectTypesController < ApplicationController
       ProductionLocator.switch_connection_to(:production_server)
       ProductionWizard.switch_connection_to(:production_server)
 
-      ProductionObjectType.all.each do |ot|
+      copy_table ProductionWizard, "wizards"
+      copy_table ProductionLocator, "locators"
+      copy_table ProductionObjectType, "object_types"
+      copy_table ProductionItem, "items"
+      copy_table ProductionSampleType, "sample_types"
+      copy_table ProductionSample, "samples"
 
-        num_objects += 1
-        new_ot = ObjectType.new(ot.attributes.except("image_file_name","image_content_type","image_file_size","image_updated_at","updated_at"))
-        new_ot.id = ot.id
-        new_ot.save
-
-      end
-
-      ProductionItem.all.each do |i|
-
-        new_item = Item.new(i.attributes.except("object_type_id","updated_at","locator_id","location"))
-        new_item.id = i.id # Not sure why there was a + 1 here, but it has been commented out now.
-        new_item.object_type_id = i.object_type_id
-        new_item.sample_id = i.sample_id
-        new_item.locator_id = i.locator_id        
-        new_item.set_primitive_location(i.location)
-        new_item.save
-        num_items += 1
-
-      end
-
-      ProductionSampleType.all.each do |st|
-
-        num_sample_types += 1
-        new_st = SampleType.new(st.attributes.except("created_at","updated_at"))
-        new_st.id = st.id
-        new_st.save
-
-     end
-
-     ProductionSample.all.each do |s|
-
-        num_samples += 1
-        new_sample = Sample.new(s.attributes.except("sample_type_id","created_at","updated_at"))
-        new_sample.created_at = s.created_at
-        new_sample.updated_at = s.updated_at        
-        new_sample.sample_type_id = s.sample_type_id
-        new_sample.id = s.id
-        new_sample.save
-
-      end
-
-      ProductionWizard.all.each do |w|
-        new_wiz = Wizard.new(w.attributes)
-        new_wiz.created_at = w.created_at
-        new_wiz.updated_at = w.updated_at  
-        new_wiz.id = w.id
-        new_wiz.save
-      end
-
-      ProductionLocator.all.each do |l|
-        new_loc = Locator.new(l.attributes.except("item_id"))
-        new_loc.created_at = l.created_at
-        new_loc.updated_at = l.updated_at  
-        new_loc.item_id = l.item_id
-        new_loc.id = l.id
-        new_loc.save
-      end
-
-      redirect_to object_types_path, notice: "Copied #{num_objects} object types, #{num_items} items, #{num_sample_types} sample type definitions, and #{num_samples} samples from the production inventory."
+      redirect_to object_types_path, notice: "Copied #{ObjectType.count} object types, #{Item.count} items, #{SampleType.count} sample types, #{Sample.count} samples, #{Wizard.count} wizards, and #{Locator.count} locators. Whew."
 
     else
 

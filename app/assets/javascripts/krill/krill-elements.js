@@ -33,6 +33,7 @@ Krill.prototype.select    = function(x) { return $(this.template('select')(this.
 Krill.prototype.input     = function(x) { return $(this.template('input')(this.fix(x))); }
 Krill.prototype.take      = function(x) { return $(this.template('take')(this.fix(x))); }
 Krill.prototype.separator = function(x) { return $(this.template('separator')()); }
+Krill.prototype.log       = function(x) { return $("<div class='krill-log-in-show'></div>"); }
 
 Krill.prototype.upload = function(x) {
 

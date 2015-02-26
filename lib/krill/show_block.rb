@@ -19,6 +19,10 @@ module Krill
       @parts.push({note: str})
     end
 
+    def log data
+      @parts.push({log: data})
+    end
+
     def warning str
       @parts.push({warning: str})
     end

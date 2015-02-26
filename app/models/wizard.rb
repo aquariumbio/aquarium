@@ -31,6 +31,10 @@ class Wizard < ActiveRecord::Base
 
   end
 
+  def limit # returns the number of elements in the main component of the location
+    self.spec[:fields].last[:capacity]
+  end
+
   def object_types
     ObjectType.where(prefix: self.name)
   end

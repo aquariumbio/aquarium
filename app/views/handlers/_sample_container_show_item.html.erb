@@ -13,6 +13,11 @@
 
     <h3><%= @item.sample ? ( @item.sample.description ) : "???" %></h3>
 
+    <% wiz = Wizard.find_by_name(@item.object_type.prefix) %>
+    <% if wiz %>
+      <p>Location managed by the <%= link_to wiz.name, wiz %> wizard.    </p>
+    <% end %>
+
     <p>Added: <%= @item.created_at.to_formatted_s(:rfc822)  %></p>
     <p>Modified: <%= @item.updated_at.to_formatted_s(:rfc822)  %></p>
 
@@ -26,7 +31,7 @@
 
     <% if @box && @wizard %>
       <%= render partial: 'items/box', locals: { 
-          name: @box, box: @wizard.box(@box), selected: @item.locator 
+          name: @box, box: @wizard.box(@box), selected: @item.locator, limit: @wizard.limit
       } %>
     <% end %>
 

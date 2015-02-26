@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150213173621) do
+ActiveRecord::Schema.define(:version => 20150222153442) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -240,6 +240,7 @@ ActiveRecord::Schema.define(:version => 20150213173621) do
     t.string   "password_digest"
     t.string   "remember_token"
     t.boolean  "admin",           :default => false
+    t.string   "key"
   end
 
   add_index "users", ["login"], :name => "index_users_on_login", :unique => true
