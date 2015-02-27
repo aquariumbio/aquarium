@@ -51,7 +51,12 @@
             <% end %>
           </td>
           <td><%= pluralize(v[:num],"time") %></td>
-          <td><%= (v[:successes].to_f / v[:num].to_f).round(2) %></td>
+          <td>
+            <% p = (v[:successes].to_f / v[:num].to_f) %>
+            <% color = p < 0.5 ? "red" : "black" %>
+            <% background = p < 0.5 ? "#faa" : "#afa" %>
+            <div style='color: <%= color %>; background: <%= background %>; width: <%= 100*p %>%;'>&nbsp;<%= (100*p).to_i %>%</div>
+          </td>
           <td><%= time_ago_in_words(v[:first]) %> ago</td>
           <td><%= time_ago_in_words(v[:last]) %> ago</td>
         </tr>
