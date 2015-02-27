@@ -8,9 +8,14 @@
   <h3 style='text-align: center'>Version: <%= params[:sha] %></h3>
   <%= render partial: '/posts/discussion', locals: { topic: protocol } %>
 
+  <style>
+    .job-error { color: red; font-weight: bold }
+  </style>
+
   <p><b>Jobs:</b> &nbsp;
     <% @jobs.each do |j| %>
-      <%= link_to j.id, j %> &nbsp;
+      <%= link_to j.id, j, class: (j.error? ? "job-error" : "") %>
+      &nbsp;
     <% end %>
   </p>
 
