@@ -29,10 +29,19 @@ module Test
   end
 
   def self.verify name, query, opts={}
+
     print "#{name}"
-    result = send query
+    answer = send query
     puts " --> #{result} " if opts[:loud]
-    puts report yield result
+
+    begin
+      result = yield answer
+    rescue
+      result = false
+    end
+
+    puts report result
+    
   end
 
 end

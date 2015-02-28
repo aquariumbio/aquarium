@@ -1,0 +1,85 @@
+class Api
+
+  attr_reader :params
+
+  include ApiLogin
+  include ApiFind
+
+  def initialize params
+    @params = symbolize params
+    @errors = []
+    @warnings = []
+    @rows = []
+  end
+
+  def symbolize hash
+    hash.inject({}) { |result, (key, value)|
+      new_key = case key
+        when String then key.to_sym
+        else key
+      end
+      new_value = case value
+        when Hash then symbolize value
+        else value
+      end
+      result[new_key] = new_value
+      result
+    }
+  end
+
+  def error?
+    @errors.length > 0
+  end
+
+  def warning?
+    @warnings.length > 0
+  end
+
+  def error e
+    @errors.push e
+  end
+
+  def warn w
+    @warnings.push w
+  end
+
+  def add r
+    @rows += r
+  end
+
+  def run
+
+    if login
+
+      if params[:run] && params[:run][:method]
+        begin
+          direct params[:run][:method], params[:run][:args]
+        rescue Exception => e
+          error "Could not execute request"
+        end
+      else
+        warn "No run section found"
+      end
+
+    end
+
+    if error?
+      return { result: "error", errors: @errors }
+    else
+      return { result: "ok", warnings: @warnings, rows: @rows }
+    end
+
+  end
+
+  def direct method, args
+
+    case method
+      when "find"
+        find args
+      else
+        warn "No methods found"
+    end
+
+  end
+
+end
