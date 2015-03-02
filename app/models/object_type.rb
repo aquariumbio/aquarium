@@ -77,6 +77,10 @@ class ObjectType < ActiveRecord::Base
 
   end
 
+  def export
+    attributes
+  end 
+
 end
 
 

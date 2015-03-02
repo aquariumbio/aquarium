@@ -1,15 +1,18 @@
 class Api
 
-  attr_reader :params
+  attr_reader :params, :user
 
   include ApiLogin
   include ApiFind
+  include ApiCreate
+  include ApiSubmit  
 
   def initialize params
     @params = symbolize params
     @errors = []
     @warnings = []
     @rows = []
+    @user = nil
   end
 
   def symbolize hash
@@ -55,7 +58,7 @@ class Api
         begin
           direct params[:run][:method], params[:run][:args]
         rescue Exception => e
-          error "Could not execute request"
+          error "Could not execute request: #{e.to_s}"
         end
       else
         warn "No run section found"
@@ -73,11 +76,14 @@ class Api
 
   def direct method, args
 
-    case method
-      when "find"
-        find args
-      else
-        warn "No methods found"
+    routes = { "find"   => method(:find), 
+               "create" => method(:create), 
+               "submit" => method(:submit) }
+
+    if routes[method]
+      routes[method].call(args)
+    else
+      warn "No valid methods found"
     end
 
   end

@@ -46,6 +46,14 @@ class User < ActiveRecord::Base
     self.key
   end
 
+  def export
+    a = attributes
+    a.delete "password_digest"
+    a.delete "remember_token"
+    a.delete "key"
+    a
+  end
+
   private
 
     def create_remember_token

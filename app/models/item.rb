@@ -331,5 +331,18 @@ class Item < ActiveRecord::Base
     self.post_associations.count
   end
 
+  def export
+    a = attributes
+    a.delete "inuse"
+    a.delete "locator_id"
+    begin
+      a["data"] = self.get_data
+    rescue
+    end
+    a[:sample] = sample.export if association(:sample).loaded?
+    a[:object_type] = object_type.export if association(:object_type).loaded?
+    a
+  end  
+
 end
 

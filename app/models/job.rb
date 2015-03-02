@@ -244,4 +244,11 @@ class Job < ActiveRecord::Base
     self.post_associations.count
   end
 
+  def export
+    a = attributes
+    a["backtrace"] = JSON.parse a["state"], symbolize_names: true
+    a.delete "state"
+    a
+  end
+
 end

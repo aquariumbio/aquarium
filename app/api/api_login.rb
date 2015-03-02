@@ -2,9 +2,9 @@ module ApiLogin
 
   def login
 
-    user = User.find_by_login(params[:login])
+    @user = User.find_by_login(params[:login])
 
-    if user && user.key == params[:key]
+    if @user && @user.key == params[:key]
       return true
     else
       error "Invalid user / key combination"

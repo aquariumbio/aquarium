@@ -1,26 +1,3 @@
-class Jobb < Job
-
-  def attributes
-    a = super
-    a["backtrace"] = a["state"]
-    a.delete "state"
-    a
-  end
-
-end
-
-class Userr < User
-
-  def attributes
-    a = super
-    a.delete "password_digest"
-    a.delete "remember_token"
-    a.delete "key"
-    a
-  end
-
-end
-
 module ApiFind
 
   def pluralize_table_names spec
@@ -40,15 +17,14 @@ module ApiFind
     end          
 
     puts "#{spec} ==> #{newspec}"
-
     newspec
 
   end
 
   def find args
 
-    models = { "item" => Item, "job" => Jobb, "sample" => Sample, "user" => Userr, 
-               "task" => Task, "sampletype" => SampleType, "objecttype" => ObjectType }
+    models = { "item" => Item, "job" => Job, "sample" => Sample, "user" => User, 
+               "task" => Task, "sample_type" => SampleType, "object_type" => ObjectType }
 
     query = models[args[:model]]  
     query = query.includes(args[:includes]) if args[:includes]
@@ -60,7 +36,7 @@ module ApiFind
       query = query.all
     end
 
-    add query
+    add query.collect { |r| r.export }
 
   end
 

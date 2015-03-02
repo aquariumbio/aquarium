@@ -170,4 +170,9 @@ class Task < ActiveRecord::Base
     self.post_associations.count
   end
 
+  def export
+    attributes
+  end
+
+
 end

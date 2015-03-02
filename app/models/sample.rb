@@ -24,6 +24,15 @@ class Sample < ActiveRecord::Base
     return nil
   end
 
+  def set_property name, val
+    i = self.sample_type.field_index name
+    if i
+      self["field#{i}".to_sym] = val
+    else
+      raise "Could not find field named #{name} in #{self.sample_type.name}"
+    end
+  end
+
   def properties
     st = sample_type
     result = {}
@@ -129,6 +138,50 @@ class Sample < ActiveRecord::Base
 
   def num_posts
     self.post_associations.count
+  end
+
+  def lite_properties
+
+    st = SampleType.find(sample_type_id) # Note: Not using sample_type here because I don't want to
+                                         # load the association in the case when it hasn't been included
+                                         # by the user's request
+
+    result = {}
+    (1..8).each do |i|
+      n = "field#{i}name"
+      t = "field#{i}type"
+      if st[n] != nil
+        case st[t]
+          when "url", "string"
+            result[st[n]] = self["field#{i}"]
+          when "number"
+            x = self["field#{i}"]
+            if x.to_i == x.to_f
+              result[st[n]] = x.to_i
+            else
+              result[st[n]] = x.to_f
+            end
+          else
+            s = Sample.find_by_name( self["field#{i}"] )
+            if s
+              result[st[n]] = s.id
+            else
+              result[st[n]] = nil
+            end
+          end
+      end
+    end
+    return result
+  end     
+
+  def export
+    a = attributes
+    a[:fields] = self.lite_properties
+    (1..8).each do |i|
+      a.delete "field#{i}"
+    end
+    a[:sample_type] = sample_type.export if association(:sample_type).loaded?    
+    a
   end
 
 end

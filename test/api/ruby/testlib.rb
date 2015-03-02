@@ -32,7 +32,9 @@ module Test
 
     print "#{name}"
     answer = send query
-    puts " --> #{result} " if opts[:loud]
+    puts " --> #{answer} " if opts[:loud]
+
+    puts " error: #{answer[:errors].join(', ')}" if answer[:result] == "error"
 
     begin
       result = yield answer

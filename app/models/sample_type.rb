@@ -23,6 +23,21 @@ class SampleType < ActiveRecord::Base
     self[t].split "|"
   end
 
+  def field_index name
+
+    i = 1
+    while i<=8 && self["field#{i}name".to_sym] != name
+      i += 1
+    end
+
+    if i<= 8
+      i
+    else
+      nil
+    end
+
+  end
+
   def proper_choices
 
     unary =  ['not used','string','number','url']
@@ -39,6 +54,10 @@ class SampleType < ActiveRecord::Base
       end
     end
 
+  end
+
+  def export
+    attributes
   end
 
 end
