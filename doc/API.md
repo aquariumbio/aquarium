@@ -34,13 +34,13 @@ Essentially, this form requests that the API run the method indicated in the "me
 
 The Aquarium API will respond to requests with a JSON object the following fields.
 
-<tt>result</tt>: The value of this field is either "ok" or "error".
+**<tt>result</tt>**: The value of this field is either "ok" or "error".
 
-<tt>errors</tt>: The value of this field is an array of error messages that is present only if there are errors.
+**<tt>errors</tt>**: The value of this field is an array of error messages that is present only if there are errors.
 
-<tt>warnings</tt>: The value of this field is an array of warnings, only present if something odd is detected.
+**<tt>warnings</tt>**: The value of this field is an array of warnings, only present if something odd is detected.
 
-<tt>rows</tt>: An array of Aquarium objects resulting from the method run (see below).
+**<tt>rows</tt>**: An array of Aquarium objects resulting from the method run (see below).
 
 ## Inventory Queries
 
@@ -48,7 +48,7 @@ If "method" is "find", then the following arguments can be given.
 
 **<tt>model</tt>**: Required. One of "user", "job", "task", "item", "sample", "sample_type" or "object_type". 
 
-<tt>where</tt>: Optional. Specifies which rows to include. For example,
+**<tt>where</tt>**: Optional. Specifies which rows to include. For example,
 
 
 	"run" : {
@@ -61,7 +61,7 @@ If "method" is "find", then the following arguments can be given.
 	
 requests all items whose id is 123, which should result in no more than one item. If no "where" field is specified, the request returns all models (unless a limit is specified, as below).
 
-<tt>includes</tt>: Which associations to include. For example,
+**<tt>includes</tt>**: Which associations to include. For example,
 
     run: {
     	"method": "find",
@@ -74,7 +74,7 @@ requests all items whose id is 123, which should result in no more than one item
 	
 retrieves all items whose associated sample is named "CFP_r". Without the "includes" field, the request would fail because the sample associated with the item would not be included in the database query.
 
-<tt>limit</tt>: How many rows to return. For example,
+**<tt>limit</tt>**: How many rows to return. For example,
 
 	run: {
     	method: "find",
