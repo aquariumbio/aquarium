@@ -133,16 +133,16 @@ class Item < ActiveRecord::Base
 
       loc = Locator.find_by_id(locator_id)
       loc.item_id = nil if loc
-      self.locator_id = nil
+      
       write_attribute(:location,locstr)
-
-      puts loc
-      puts self
+      self.locator_id = nil
 
       transaction do
         self.save
         loc.save if loc
       end
+
+      self.reload
 
     end
 
