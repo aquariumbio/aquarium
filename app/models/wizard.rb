@@ -127,16 +127,26 @@ class Wizard < ActiveRecord::Base
                     # locstr, and return the last one
 
     m = Locator.largest self
-    num = self.location_to_int locstr
-    loc = nil
 
-    # insert block of new locators
-    (m.number+1..num).each do |n|
-       loc = Locator.new(
-         number: n, 
-         wizard_id: self.id, 
-       )
-       loc.save
+    if m
+
+      num = self.location_to_int locstr
+      loc = nil
+
+      # insert block of new locators
+      (m.number+1..num).each do |n|
+         loc = Locator.new(
+           number: n, 
+           wizard_id: self.id, 
+         )
+         loc.save
+      end
+
+    else 
+
+      loc = Locator.new number: 0, wizard_id: self.id
+      loc.save
+
     end
 
     loc

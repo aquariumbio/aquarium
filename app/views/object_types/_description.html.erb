@@ -1,7 +1,7 @@
 <% if  @object_type.handler == 'sample_container' %>
   <div class='alert alert-info'>
     <p>Objects of this type contain samples of type
-       <b><%= @sample_type.name %></b>. <br />
+       <b><%= link_to @sample_type.name, @sample_type %></b>. <br />
        Description: <%= @sample_type.description %>
     </p>
   </div>

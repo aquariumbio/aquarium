@@ -15,7 +15,7 @@
 
         <% el = 9*row + col %>
 
-        <% if el > limit %>
+        <% if el >= limit %>
           <td class='non-existant'>-</td>
         <% elsif !box[el] || !box[el].item %>
           <td class='empty'><%= el %></td> 

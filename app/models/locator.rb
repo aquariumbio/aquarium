@@ -6,6 +6,12 @@ class Locator < ActiveRecord::Base
   has_one :item, autosave: false
 
   # validate :no_collisions
+  validate :has_wizard
+
+  def has_wizard
+    errors.add(:no_wizard, "no wizard" ) unless
+      self.wizard_id && self.wizard_id >= 0 
+  end
 
   def no_collisions
     puts "Checking for collisions for #{self.id}"
@@ -18,7 +24,7 @@ class Locator < ActiveRecord::Base
   end
 
   def to_s
-    wizard.int_to_location number
+    self.wizard.int_to_location number
   end
 
   def self.first_empty wizard

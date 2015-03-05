@@ -44,8 +44,8 @@ class Item < ActiveRecord::Base
   end
 
   def location
-    if locator
-      locator.to_s
+    if self.locator
+      self.locator.to_s
     elsif primitive_location
       primitive_location
     else
@@ -90,7 +90,6 @@ class Item < ActiveRecord::Base
           newloc = wiz.addnew locstr
         when 1
           newloc = locs.first 
-          puts "using exsting location #{newloc.id}"
         else         
           errors.add(:too_many_locators, "There are multiple items at #{locstr}." )
           return
@@ -119,6 +118,7 @@ class Item < ActiveRecord::Base
 
         reload
         oldloc.reload if oldloc
+        puts "newloc = #{newloc.inspect}"
         newloc.reload
 
         errors.add(:locator_save_error, "Error: '#{errors.full_messages.join(',')}'") unless errors.empty? 

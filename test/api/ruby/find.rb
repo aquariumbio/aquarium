@@ -15,7 +15,7 @@ require_relative 'testlib'
           where: { id: id }
         }
       }
-    }) do |response| 
+    },loud:true) do |response| 
       response[:result] == "ok"           \
       && response[:rows]                  \
       && response[:rows].length == 1      \
