@@ -2,6 +2,15 @@ class ItemsController < ApplicationController
 
   before_filter :signed_in_user
 
+  def index
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: ItemsDatatable.new(view_context) }
+    end
+
+  end
+
   def show
 
     @item = Item.find_by_id(params[:id])

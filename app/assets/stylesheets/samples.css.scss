@@ -4,6 +4,32 @@
 
 @import "bootstrap";
 
+
+.sample-title-box {
+  background: #eee;
+  padding: 10px;
+  width: 98%;
+  h1 {
+    text-align: left;
+  }
+  .sample-id {
+    color: #aaa;
+  }
+}
+
+.sample-item-num {
+  color: black;
+}
+
+.sample-item-tab {
+  color: black;
+  padding: 10px;
+}
+
+.odd, .even { background: transparent!important; }
+
+/////////////////////////////////////////////////////////////
+
 .sample-object {
   br {
     clear: both;

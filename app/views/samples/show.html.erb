@@ -1,104 +1,86 @@
 <% provide(:title, @sample_type.name + '|' + @sample.name ) %>
 
-<h1><%= @sample_type.name %> <%= @sample.id %><br /><%= @sample.name %></h1>
+<div class='sample-title-box'>
+  <h1><span class='sample-id'><%= @sample_type.name %> <%= @sample.id %>:</span>
+      <% if @sample.name.length > 30 %>
+        <br />
+      <% end %>
+      <span class='sample-title'><%= @sample.name %></span>
+  </h1>
 
-<div class='row-fluid'>
+  <div class='row-fluid' style='position: relative'>
 
-  <div class='span6'>
-
-    <%= 
-      render partial: '/posts/discussion', locals: { 
-      topic: @sample,
-      button_class: 'btn-small' } 
-    %>
-
-    <p>
-      <b>Description:</b>
-      <%= @sample.description %>
-    </p>
-
-    <p>
-      <b>Owner:</b>
-      <%= @sample.user ? @sample.user.login : 'unknown' %>
-    </p>
-
-    <p> 
-      <b>Project:</b>
-      <%= link_to @sample.project, project_url(name: @sample.project) %>
-    </p>
-
-      <ul class='list'>
-        <% (1..8).each do |i| 
-           fn = "field#{i}name".to_sym
-           ft = "field#{i}type".to_sym 
-            f = "field#{i}".to_sym %>
-           <% if @sample_type[ft] != 'not used' && @sample_type[ft] !=nil %>
-
-            <li><%= @sample_type[fn] %>: 
-             
-            <% if @sample[f] != nil %>
-
-	      <% if @sample_type[ft] == 'url' %>
-                <a href='<%= @sample[f] %>'><%= @sample[f][0..100] %></a>
-	      <% elsif @sample_type[ft] == 'number' %>
-		<%= @sample[f] %>
-	      <% elsif @sample_type[ft] == 'string' %>
-		<%= @sample[f] %>
-	      <% elsif @sample[f] == '-none-' %>
-                 -
-	      <% else %>
-		<%= link_to @sample[f], Sample.find_by_name(@sample[f]) %>
-	      <% end %>
-
-            <% else %>
-              - 
-            <% end %>
-
-            </li>
-
-          <% end %>
-
+    <div class='span3'>
+      <ul>
+        <% if @sample.description && @sample.description != "" %>
+          <li><b>Description</b><%= @sample.description %></li>
+        <% end %>      
+        <li>
+          <b>Owner:</b>
+          <%= @sample.user ? link_to( @sample.user.login, @sample.user ) : 'unknown' %>
+        </li>
+        <li> 
+          <b>Project:</b>
+          <%= link_to @sample.project, project_url(name: @sample.project) %>
+        </li>
+        <li> 
+          <b>Created:</b>
+          <%= @sample.created_at.to_formatted_s(:long) %> 
+        </li>
+        <% if @sample.created_at != @sample.created_at %>
+          <li> 
+            <b>Updated:</b>
+            <%= @sample.updated_at.to_formatted_s(:long) %> 
+          </li>
         <% end %>
       </ul>
+    </div>
 
-  </div><div class='span3'></div><div class='span3 well'>
-      <i class='icon-chevron-down'></i> Show details</br>
-      <i class='icon-shopping-cart'></i> Add to cart</br>
-      <i class='icon-refresh'></i> Toggle availability</br>
-      <i class='icon-remove'></i> Delete the item</br>
-    </p>
+    <div class='span6'>
+      <%= render partial: 'sample_info', locals: {
+        sample: @sample,
+        sample_type: @sample_type
+      }
+      %>
+    </div>
+
+    <div class='span3'>
+      <div style='position: absolute; bottom: 0; right: 0'>
+
+        <%= 
+          render partial: '/posts/discussion', locals: { 
+          topic: @sample,
+          button_class: 'btn-small' } 
+        %>
+
+        <%= link_to "Edit", edit_sample_path(@sample), class: 'btn btn-small btn-primary' %> 
+        <%= link_to 'All', samples_path(sample_type_id: @sample.sample_type_id), class: 'btn btn-small' %>  
+
+        <label class="checkbox" style='margin-top: 5px'>
+          <input type='checkbox' 
+                  id='show-deleted' 
+                  <% if params[:show_deleted] %>
+                    checked
+                  <% end %>
+          /> Show Deleted
+        </label>
+
+      </div>
+    </div>
+
   </div>
 
 </div>
 
-<hr />
+<br />
 
-<% @sample_type.object_types.each do |ot| %>
-  <div class='sample-object'>
-    <h4>
-      <%= link_to pluralize(2,ot.name)[2..-1], ot %>
-      <% wiz = Wizard.find_by_name(ot.prefix) %>
-      <% if wiz %>
-        ( <%= link_to wiz.name, wiz %> )
-      <% end %>
-    </h4>
-    <!-- WARNING: I THINK THIS REJECT IS SLOW COMPARED TO SOME KIND OF --
-      -- DB QUERY                                                      -->
-    <% (ot.items.reject { |i| i.sample_id != @sample.id || i.quantity < 0 } ).each do |i| %>
-      <%= render partial: '/samples/item', locals: { item: i } %>
-    <% end %>
-    <br />
-    <%= render partial: '/samples/new_item', locals: { object_type: ot, sample: @sample } %>
-  </div>
-  <hr />
-<% end %>
-
-<%= link_to "Edit #{@sample_type.name} Information", edit_sample_path(@sample), class: 'btn' %> 
-<%= link_to 'Back to List', samples_path(sample_type_id: @sample.sample_type_id), class: 'btn' %>
+<div class='sample-items'>
+  <%= render partial: 'containers', locals: { sample_type: @sample_type, sample: @sample } %>
+</div>
 
 <script>
 
- window.history.replaceState ( null, '', '/samples/<%= @sample.id %>' );
+ // window.history.replaceState ( null, '', '/samples/<%= @sample.id %>' );
 
  function toggle_change_details_form(i) {
 
@@ -122,11 +104,21 @@
   }
 
   function turn_on_submit_button(i) {
-     document.getElementById('submit-'+i).disabled = false;
+    document.getElementById('submit-'+i).disabled = false;
   }
 
   <% if params[:active_item] %>
     toggle_change_details_form(<%= params[:active_item] %>);
   <% end %>
+
+  $(function() {
+    $('#show-deleted').click(function() {
+      if ( $("#show-deleted").is(':checked') ) {
+        window.location = "/samples/<%= @sample.id %>?show_deleted=true";
+      } else {
+        window.location = "/samples/<%= @sample.id %>";     
+      }
+    });
+  });
 
 </script>

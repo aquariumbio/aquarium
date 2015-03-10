@@ -3,7 +3,7 @@
   <%= form_for([object_type, object_type.items.build], html: { class: 'input-append'}) do |f| %>
     <%= f.number_field :quantity, value: 1, style: 'display: none' %>
     <%= f.number_field :sample_id, value: sample.id, style: 'display: none' %>
-    <%= f.submit class: "btn", value: "new" %>
+    <%= f.submit class: "btn btn-primary", value: "new" %>
   <% end %>
 
 </div>

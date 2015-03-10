@@ -1,0 +1,50 @@
+<% name = pluralize(2,object_type.name)[2..-1] 
+   link = name.gsub(/\//,'per').gsub(/ /,'_')
+     id = link + "_table" %>
+
+<div id='<%= id %>-container'>
+
+  <table class='table table-condensed compact' 
+            id='<%= id %>' 
+   data-source='<%= items_url( format: 'json', sample_id: sample.id, object_type_id: object_type.id, show_deleted: params[:show_deleted] ) %>'>
+
+    <thead>
+      <tr>
+        <th>Id</th> 
+        <th>Location</th>
+        <th>Data</th>
+        <th>Created</th>
+        <th>Updated</th>
+      </tr>
+    </thead>
+
+    <tbody></tbody>
+
+  </table>
+
+</div>
+
+<div id='<%= id %>-empty' style='display: none'>
+  <span>No items.</span>
+</div>
+
+<script>
+
+  $('#<%= id %>').dataTable({
+    "bProcessing": true,
+    "bServerSide": true,
+    "sAjaxSource": $('#<%= id %>').data('source'),
+    "order": [ 0, 'desc' ],
+    "bFilter": false,
+    "bLengthChange": false,
+    "fnInitComplete": function(oSettings, json) {
+      if ( json.iTotalRecords == 0 ) {
+        $('#<%= id %>-container').css('display','none');
+        $('#<%= id %>-empty').css('display','block');
+      } else {
+        $('#<%= link %>-num').html(' (' + json.iTotalRecords + ')');
+      }
+    }
+  });
+
+</script>

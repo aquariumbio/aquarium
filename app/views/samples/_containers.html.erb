@@ -1,0 +1,53 @@
+<ul class="nav nav-tabs" id="tabs">
+
+  <% first = true %>
+
+  <% sample_type.object_types.each do |ot| %>
+
+    <% name = pluralize(2,ot.name)[2..-1] 
+       link = name.gsub(/\//,"per").gsub(/ /, '_') %>
+
+    <li <%= first ? "class='active'".html_safe : "".html_safe %>>
+      <a href="#<%= link %>" data-toggle="tab"><%= name %><span class='sample-item-num' id="<%= link %>-num"></span></a>
+    </li>
+
+    <% first = false %>
+
+  <% end %>
+
+</ul>
+
+<div class='tab-content details'>
+
+  <% first = true %>
+
+  <% sample_type.object_types.each do |ot| %>
+
+    <% name = pluralize(2,ot.name)[2..-1] 
+       link = name.gsub(/\//,"per").gsub(/ /, '_') %>
+
+    <div <%= first ? 'class="sample-item-tab tab-pane active"'.html_safe : 
+                     'class="sample-item-tab tab-pane"'.html_safe %> id='<%= link %>'>
+
+      <%= render partial: 'item_list', locals: { object_type: ot, sample: @sample }  %>
+
+      <br />
+
+      <p>
+        <% wiz = Wizard.find_by_name(ot.prefix) %>
+        <% if wiz %>
+          Managed by the <%= link_to wiz.name, wiz %> wizard.
+        <% end %>
+      </p>
+
+      <%= render partial: '/samples/new_item', locals: { object_type: ot, sample: @sample } %>
+
+    </div>
+
+    <% first = false %>
+
+  <% end %>
+
+</div>
+
+
