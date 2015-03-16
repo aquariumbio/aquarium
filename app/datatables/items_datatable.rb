@@ -7,15 +7,14 @@ class ItemsDatatable < Datatable
     rows.map do |i|
       [ link_to(i.id,i), 
         i.location, 
-        i.data, 
-        i.created_at.to_formatted_s(:short) , 
+        "<span class='json'>#{i.data}</span>", 
+        i.created_at.to_formatted_s(:short), 
         i.updated_at.to_formatted_s(:short),
         link_to(@view.item_path(i,sample_id: params[:sample_id]), method: :delete, data: { 
           confirm: 'Are you sure you want to delete this item?'
         }) do
           "<i class='icon-remove'></i>".html_safe
         end
-
       ]
     end
 

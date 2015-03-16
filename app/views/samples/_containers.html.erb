@@ -91,22 +91,22 @@
 </div>
 
 <script>
-$(function() {
+  $(function() {
 
-  $(".nav-list").bind('click',function(e) {
-    var href = $(e.target).attr('href');
-    var name = href.substr(1);
-    $.cookie("sample-<%= @sample.id %>-active-section",name);
-    console.log(name);
+    $(".nav-list").bind('click',function(e) {
+      var href = $(e.target).attr('href');
+      var name = href.substr(1);
+      $.cookie("sample-<%= @sample.id %>-active-section",name);
+    });
+
+    var tab = $.cookie("sample-<%= @sample.id %>-active-section");
+
+    if ( tab ) {
+      $('#'+tab+"-li a").tab('show');
+    } else {
+      $('#tabs a:first').tab('show');
+    }
+
   });
 
-  var tab = $.cookie("sample-<%= @sample.id %>-active-section");
-
-  if ( tab ) {
-    $('#'+tab+"-li a").tab('show');
-  } else {
-    $('#tabs a:first').tab('show');
-  }
-
-});
 </script>

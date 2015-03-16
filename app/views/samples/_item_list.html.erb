@@ -41,12 +41,26 @@
       { "bSortable": false, "aTargets": "_all" }
     ],
     "fnInitComplete": function(oSettings, json) {
+
       if ( json.iTotalRecords == 0 ) {
         $('#<%= id %>-container').css('display','none');
         $('#<%= id %>-empty').css('display','block');
       } else {
         $('#<%= link %>-num').html(' (' + json.iTotalRecords + ')');
       }
+
+      $(function() {
+        $("#<%= id %>-container .json").each(function() {
+          try {
+            var json = JSON.parse($(this).html());
+            $(this).empty();
+            render_json($(this),json);
+          } catch(e) {
+
+          }
+        });
+      });
+
     }
   });
 
