@@ -3,7 +3,7 @@
   protocol = ProtocolSummary.new({ protocol: @job.path, sha: @job.sha })
 %>
 
-<div class='row-fluid' id='log-title-box'>
+<div class='row-fluid' id='log-title-box' style='position: relative'>
 
   <div class='span7'>
     <h1 class='log-h'><span style='color: #888'>Job <%= @job.id %> :</span> <%= @job.path.split('/').last %></h1>
@@ -45,7 +45,7 @@
       <% end %>
     </h3>
     <br />
-    <div class='log-status'>
+    <div class='log-status' style='position: absolute; bottom: 10px; right: 10px'>
       <%= render partial: '/posts/discussion', locals: { topic: @job, button_class: "btn-small" } %>&nbsp;
       <% unless @job.pc == Job.NOT_STARTED %>
         <a href='/krill/ui?job=<%= @job.id %>' class='btn btn-small'>View Steps</a>&nbsp;

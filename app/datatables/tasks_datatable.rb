@@ -12,9 +12,7 @@ class TasksDatatable < Datatable
 
     html = "<select class='status-selector' data-task-id=#{task.id}>"
 
-    @tp.status_option_list.each do |opt|
-
-      puts opt
+    task.task_prototype.status_option_list.each do |opt|
 
       if opt == @status
         html += "<option selected>#{opt}</option>"        
@@ -36,14 +34,11 @@ class TasksDatatable < Datatable
 
       [
         link_to(task.id, task),
-        task.name,
+        @tp ? task.name : "<b>#{task.task_prototype.name}:</b> #{task.name}",
         status_selector(task),
-        task.user.login,
+        link_to(task.user.login, task.user),
         task.created_at.to_formatted_s(:short),
-        task.updated_at.to_formatted_s(:short),
-        link_to( task, method: :delete, data: { confirm: 'Are you sure?' }) do
-          "<i class='icon-remove'></i>".html_safe
-        end
+        task.updated_at.to_formatted_s(:short)
       ]
 
     end
@@ -59,7 +54,9 @@ class TasksDatatable < Datatable
     tasks = Task.order("#{sort_column} #{sort_direction}")
     tasks = tasks.page(page).per_page(per_page)
 
-    @view.cookies["#{@tp.name}_search"] = params[:sSearch]
+    if @tp
+      @view.cookies["#{@tp.name}_search"] = params[:sSearch]
+    end
 
     if params[:sSearch].present?
 
@@ -80,9 +77,20 @@ class TasksDatatable < Datatable
       end
 
     else
-      tasks = tasks.where("task_prototype_id = :tpid and status = :status",
-        status: @status,
-        tpid: @tp.id)
+
+      if @tp
+        tasks = tasks.where("task_prototype_id = :tpid and status = :status",
+          status: @status,
+          tpid: @tp.id)
+      elsif params[:sample_id]
+        sample = Sample.find_by_id(params[:sample_id])
+        jobs = (sample.items.collect { |i| i.touches }).flatten.collect { |t| t.job }
+        touches = (jobs.collect { |j| j.touches }).flatten
+        tasks = (touches.collect { |t| t.task }).flatten.reject { |t| !t }
+        tasks = (tasks.select { |t| t.mentions? sample }).uniq
+      else
+        tasks = []
+      end
     end
 
     tasks

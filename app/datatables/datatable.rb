@@ -10,7 +10,7 @@ class Datatable
     {
       sEcho: params[:sEcho].to_i,
       iTotalRecords: rows.count,
-      iTotalDisplayRecords: rows.total_entries,
+      iTotalDisplayRecords: rows.class == ActiveRecord::Relation ? rows.total_entries : rows.length,
       aaData: data
     }
   end

@@ -25,7 +25,7 @@
 </div>
 
 <div id='<%= id %>-empty' style='display: none'>
-  <span>No items.</span>
+  <span>There are no <%= pluralize(2,object_type.name)[2..-1] %> in stock.</span>
 </div>
 
 <script>

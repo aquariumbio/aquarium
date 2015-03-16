@@ -4,9 +4,20 @@ class ItemsController < ApplicationController
 
   def index
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: ItemsDatatable.new(view_context) }
+    if params[:type] == 'collection' 
+
+      respond_to do |format|
+        format.html # index.html.erb
+        format.json { render json: CollectionsDatatable.new(view_context) }
+      end
+
+    else
+
+      respond_to do |format|
+        format.html # index.html.erb
+        format.json { render json: ItemsDatatable.new(view_context) }
+      end
+
     end
 
   end
@@ -70,9 +81,14 @@ class ItemsController < ApplicationController
   end
 
   def destroy
-    x = Item.find(params[:id]).mark_as_deleted
+    i = Item.find(params[:id])
+    i.mark_as_deleted
     flash[:success] = "Item #{params[:id]} has been deleted."
-    redirect_to object_type_url :id => params[:object_type_id]
+    if params[:sample_id]
+      redirect_to sample_url :id => params[:sample_id]
+    else
+      redirect_to object_type_url :id => i.object_type_id
+    end
   end
 
   def update

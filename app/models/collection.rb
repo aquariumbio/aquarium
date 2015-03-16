@@ -2,6 +2,16 @@ class Collection < Item
 
   # CLASS METHODS ###################################################################
 
+  def self.every 
+    Item.joins(:object_type).where(object_types: { handler: "collection" })
+  end
+
+  def self.containing s
+    i = s.id.to_s
+    r = Regexp.new '\[' + i + ',|,' + i + ',|,' + i + '\]|\[' + i + '\]'
+    Collection.every.select { |i| r =~ i.data  }
+  end
+
   def self.spread samples, name, rows, cols
 
     samples_per_collection = rows * cols
@@ -9,7 +19,6 @@ class Collection < Item
     s = 0
 
     collections = (1..num_collections).collect do |i| 
-
       c = self.new_collection name, rows, cols
       m = c.matrix
       (0..rows-1).each do |r|
@@ -40,10 +49,11 @@ class Collection < Item
     i = Collection.new
     i.object_type_id = o.id
     i.apportion r,c
-    i.location = "Bench"
     i.quantity = 1
     i.inuse = 0
     i.save
+    i.location = "Bench"   
+    puts "aleph"
     i
 
   end

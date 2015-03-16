@@ -60,6 +60,7 @@
     text-align: center;
     font-weight: bold;
     font-size: 8pt;
+    vertical-align: inherit;
   } 
 
   .empty {
@@ -80,6 +81,13 @@
     display: none;
   }  
 
+}
+
+.sample_box_table_small {
+  td {
+    width: 28px;
+    height: 28px;   
+  }
 }
 
 .sample_box {

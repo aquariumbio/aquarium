@@ -1,53 +1,91 @@
-<ul class="nav nav-tabs" id="tabs">
+<div class='row-fluid'>
 
-  <% first = true %>
+  <div class='span2'>
 
-  <% sample_type.object_types.each do |ot| %>
+    <ul class="nav nav-list" id="tabs">
 
-    <% name = pluralize(2,ot.name)[2..-1] 
-       link = name.gsub(/\//,"per").gsub(/ /, '_') %>
+      <li class="nav-header">Containers</li>
 
-    <li <%= first ? "class='active'".html_safe : "".html_safe %>>
-      <a href="#<%= link %>" data-toggle="tab"><%= name %><span class='sample-item-num' id="<%= link %>-num"></span></a>
-    </li>
+      <% first = true %>
 
-    <% first = false %>
+      <% sample_type.object_types.each do |ot| %>
 
-  <% end %>
+        <% name = pluralize(2,ot.name)[2..-1] 
+           link = name.gsub(/\//,"per").gsub(/ /, '_') %>
 
-</ul>
+        <li <%= first ? "class='active'".html_safe : "".html_safe %>>
+          <a href="#<%= link %>" data-toggle="tab"><%= name %><span class='sample-item-num' id="<%= link %>-num"></span></a>
+        </li>
 
-<div class='tab-content details'>
+        <% first = false %>
 
-  <% first = true %>
+      <% end %>
 
-  <% sample_type.object_types.each do |ot| %>
+      <li class="nav-header">Associations</li>
 
-    <% name = pluralize(2,ot.name)[2..-1] 
-       link = name.gsub(/\//,"per").gsub(/ /, '_') %>
+      <li>
+        <a href="#collections" data-toggle="tab">Collections<span class='sample-item-num' id='collections-num'></span></a>
+      </li>
 
-    <div <%= first ? 'class="sample-item-tab tab-pane active"'.html_safe : 
-                     'class="sample-item-tab tab-pane"'.html_safe %> id='<%= link %>'>
+      <li>
+        <a href="#tasks" data-toggle="tab">Tasks<span class='sample-item-num' id='tasks-num'></span></a>
+      </li>
 
-      <%= render partial: 'item_list', locals: { object_type: ot, sample: @sample }  %>
+    </ul>
 
-      <br />
+  </div>
 
-      <p>
-        <% wiz = Wizard.find_by_name(ot.prefix) %>
-        <% if wiz %>
-          Managed by the <%= link_to wiz.name, wiz %> wizard.
-        <% end %>
-      </p>
+  <div class='span10'>
 
-      <%= render partial: '/samples/new_item', locals: { object_type: ot, sample: @sample } %>
+    <div class='tab-content details'>
+
+      <% first = true %>
+
+      <% sample_type.object_types.each do |ot| %>
+
+        <% name = pluralize(2,ot.name)[2..-1] 
+           link = name.gsub(/\//,"per").gsub(/ /, '_') %>
+
+        <div <%= first ? 'class="sample-item-tab tab-pane active"'.html_safe : 
+                         'class="sample-item-tab tab-pane"'.html_safe %> id='<%= link %>'>
+
+          <%= render partial: 'item_list', locals: { object_type: ot, sample: @sample }  %>
+          
+            <% wiz = Wizard.find_by_name(ot.prefix) %>
+
+            <% if wiz %>
+              <p><%= name %> are managed by the <%= link_to wiz.name, wiz %> wizard.</p>
+            <% end %>
+
+          <%= render partial: '/samples/new_item', locals: { object_type: ot, sample: @sample, wizard: wiz } %>
+
+        </div>
+
+        <% first = false %>
+
+      <% end %>
+
+      <div class="sample-item-tab tab-pane" id="collections">
+        <div id='collections-container'>
+          <%= render partial: 'collections', locals: { sample: sample } %>
+        </div>
+        <div id='collections-empty' style='display: none'>
+          <p>No known collections are associated with this sample.</p>
+        </div>
+      </div>
+
+      <div class="sample-item-tab tab-pane" id="tasks">
+        <div id='tasks-container'>
+          <%= render partial: 'tasks', locals: { sample: sample } %>
+        </div>
+        <div id='tasks-empty' style='display: none'>
+          <p>No processed tasks are associated with this sample.</p>
+          <p><b>Note:</b> Tasks that have yet to be processed by a job or metacol are not shown here.</p>
+        </div>
+      </div>      
 
     </div>
 
-    <% first = false %>
-
-  <% end %>
+  </div>
 
 </div>
-
-

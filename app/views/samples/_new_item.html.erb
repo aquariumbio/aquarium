@@ -2,8 +2,11 @@
 
   <%= form_for([object_type, object_type.items.build], html: { class: 'input-append'}) do |f| %>
     <%= f.number_field :quantity, value: 1, style: 'display: none' %>
+    <% unless wizard %>
+      <%= f.text_field :location, value: "Bench", style: 'display: none' %>
+    <% end %>
     <%= f.number_field :sample_id, value: sample.id, style: 'display: none' %>
-    <%= f.submit class: "btn btn-primary", value: "new" %>
+    <%= f.submit class: "btn btn-small btn-primary fix-btn-border", value: "New" %>
   <% end %>
 
 </div>

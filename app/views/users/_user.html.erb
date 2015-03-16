@@ -2,8 +2,12 @@
    <td><%= user.login %></td>
    <td><%= link_to user.name, user %></td>
    <td><%= user.created_at.strftime("%m/%d/%Y") %></td>
-   <td><% if current_user.is_admin && !current_user?(user) %>
-    <%= link_to "delete", user, method: :delete,
-                                  data: { confirm: "You sure?" } %></td>
-  <% end %>
+   <% if current_user.is_admin && !current_user?(user) %>
+     <td>
+       <%= link_to "retire", user, method: :delete, data: { confirm: "Are you sure you want to retire this user?" } %>
+     </td>
+   <% else %> 
+     <td></td>
+   <% end %>
+
 </tr>

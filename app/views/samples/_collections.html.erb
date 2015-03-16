@@ -1,0 +1,45 @@
+<!-- tasks -->
+
+<table class='table table-condensed compact' 
+       id="collection-table" 
+       data-source='<%= items_url(format: 'json', type: 'collection', sample_id: sample.id, show_deleted: params[:show_deleted]) %>'>
+
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Location</th>
+      <th>Type</th>
+      <th>Matrix</th>
+      <th>Created</th>
+      <th>Updated</th>
+      <th></th>
+    </tr> 
+  </thead>
+
+  <tbody>
+  </tbody>
+</table>
+
+<script>
+
+  var table = $('#collection-table').dataTable({
+
+    "bProcessing": true,
+    "bServerSide": true,
+    "sAjaxSource": $('#collection-table').data('source'),
+    "order": [ 0, 'desc' ],
+    "bFilter": false,
+    "bLengthChange": false,
+
+    "fnInitComplete": function(oSettings, json) {
+      if ( json.iTotalRecords == 0 ) {
+        $('#collections-container').css('display','none');
+        $('#collections-empty').css('display','block');
+      } else {
+        $('#collections-num').html(' (' + json.iTotalRecords + ')');
+      }
+    }
+
+  });
+
+  </script>

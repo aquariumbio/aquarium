@@ -142,6 +142,8 @@ class Item < ActiveRecord::Base
         loc.save if loc
       end
 
+      raise self.errors.full_messages.join(',') unless self.errors.empty?
+
       self.reload
 
     end
@@ -175,7 +177,11 @@ class Item < ActiveRecord::Base
     o = { object_type: nil, sample: nil, location: nil }.merge opts
 
     if o[:object_type]
+      loc = params["location"]
+      params.delete "location"
       item = self.new params.merge( object_type_id: o[:object_type].id )
+      item.save
+      item.location = loc if loc
     else 
       item = self.new params
     end

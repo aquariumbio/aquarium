@@ -90,13 +90,28 @@ class UsersController < ApplicationController
   def index
     retired = Group.find_by_name('retired')
     rid = retired ? retired.id : -1
-    @users = (User.select{|u| !u.member? rid }).paginate(page: params[:page], :per_page => 20)
+    @users = ((User.select{|u| !u.member? rid }).sort { |a,b| a[:login] <=> b[:login] }).paginate(page: params[:page], :per_page => 40)
   end
 
   def destroy
-    User.find(params[:id]).destroy
-    flash[:success] = "The user has been disconnected. Why did he resist? We only wish to raise quality of life for all species."
+
+    logger.info "retire"
+
+    u = User.find(params[:id])
+    ret = Group.find_by_name('retired')
+
+    if ret
+      m = Membership.new
+      m.user_id = u.id
+      m.group_id = ret.id
+      m.save    
+      flash[:success] = "The user has been disconnected. Why did they resist? We only wish to raise quality of life for all species."
+    else 
+      flash[:error] = "Could not retire user because the 'retired' group does not exist. Go make it and try again."
+    end
+
     redirect_to users_url
+
   end
 
   def copy_users_from_production

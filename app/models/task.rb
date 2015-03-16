@@ -38,20 +38,20 @@ class Task < ActiveRecord::Base
 
   def type_check p, s
 
-    puts "CHECKING #{s} against #{p}"
+    # puts "CHECKING #{s} against #{p}"
 
     case p
 
       when String
 
         result = (s.class == String)
-        puts "wrong atomic 1" unless result
+        # puts "wrong atomic 1" unless result
         errors.add(:task_constant, ": Wrong atomic type encountered") unless result 
 
       when Fixnum, Float
 
         result = (s.class == Fixnum || s.class == Float)
-        puts "wrong atomic 1" unless result
+        # puts "wrong atomic 1" unless result
         errors.add(:task_constant, ": Wrong atomic type encountered") unless result 
 
       when Hash
@@ -122,7 +122,7 @@ class Task < ActiveRecord::Base
 
   def has_consistent_key?(s,k) 
 
-    puts "checking specification #{s} for existence of #{k}"
+    # puts "checking specification #{s} for existence of #{k}"
 
     name = k.to_s.split(' ')[0]
     types = k.to_s.split(' ')[1,100].join(' ').split('|')
@@ -131,14 +131,14 @@ class Task < ActiveRecord::Base
     s.each do |key,val| 
       sname = key.to_s.split(' ')[0]
       stypes = key.to_s.split(' ')[1,100].join(' ').split('|')
-      puts "  checking if #{name} == #{sname} and #{stypes} is a subset of #{types}" unless found
+      # puts "  checking if #{name} == #{sname} and #{stypes} is a subset of #{types}" unless found
       if name == sname && ( stypes.all? { |i| types.include?(i) } || types.all? { |i| stypes.include?(i) } )
         found = true
-        puts "  #{name} is okay"
+        # puts "  #{name} is okay"
       end
     end
 
-    puts "  #{name} is not okay" unless found
+    # puts "  #{name} is not okay" unless found
 
     found
 
@@ -174,5 +174,44 @@ class Task < ActiveRecord::Base
     attributes
   end
 
+  def mentions? sample # returns true if any field of the task specification refers to 
+                      # this particular sample
+
+    return mentions_aux spec, sample.id, sample.sample_type.name
+
+  end
+
+  def mentions_aux sp, sample_id, sample_type_name
+
+    if sp.class == Hash
+
+      sp.each do |k,v|
+
+        name,type = k.to_s.split(' ')
+
+        if type
+          types = type.split('|')
+          if types.member? sample_type_name
+            if v.class == Array
+              return v.member? sample_id
+            else
+              return sample_id == v
+            end
+          else 
+            return false
+          end
+        else
+          return mentions_aux v, sample_id, sample_type_name
+        end
+
+      end
+
+    else
+
+      return false
+
+    end
+
+  end
 
 end

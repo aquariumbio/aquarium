@@ -4,7 +4,11 @@ class ItemsDatatable < Datatable
 
   def data
     rows.map do |i|
-      [ link_to(i.id,i), i.location, i.data, i.created_at, i.updated_at ]
+      [ link_to(i.id,i), 
+        i.location, 
+        i.data, 
+        i.created_at.to_formatted_s(:short) , 
+        i.updated_at.to_formatted_s(:short)  ]
     end
   end
 
@@ -15,6 +19,7 @@ class ItemsDatatable < Datatable
   def fetch_rows
     items = Item.page(page).per_page(per_page)
     @view.logger.info "sd = #{params[:deleted]}"
+
     if params[:show_deleted]
       items = items.where("sample_id = ? and object_type_id = ?", params[:sample_id], params[:object_type_id])
     else

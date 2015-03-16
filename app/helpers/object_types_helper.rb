@@ -60,12 +60,14 @@ module ObjectTypesHelper
 
       r = params[:item][:rows].to_i
       c = params[:item][:cols].to_i
-      params[:item].delete(:rows)
-      params[:item].delete(:cols)
-      item = @object_type.items.create(params[:item])
+
+      item = Item.make({
+          quantity: 1,
+          inuse: 0,
+          data: { matrix: Array.new(r,Array.new(c,-1)) }.to_json
+        },object_type: @object_type)
     
-      item.quantity = 1
-      item.data = { matrix: Array.new(r,Array.new(c,-1)) }.to_json
+      item.location = params[:item][:location]
       item
 
     end

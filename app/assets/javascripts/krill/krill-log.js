@@ -190,7 +190,7 @@ KrillLog.prototype.error = function(action,result) {
   var div = $('<div />').addClass('krill-log-step');
 
   var time = $('<span>'+aq.nice_time(new Date(action.time))+'</span>').addClass('krill-log-time');
-  var title = $('<span> - '+this.title(result)+': ' + this.message + '</span>').addClass('krill-log-title ');
+  var title = $('<span> - '+this.title(result)+': ' + result.message + '</span>').addClass('krill-log-title ');
   var err = $('<div />').addClass('krill-log-json');
 
   render_json(err,result.backtrace)

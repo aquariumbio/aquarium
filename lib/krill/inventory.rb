@@ -173,7 +173,6 @@ module Krill
       Touch.new( { job_id: jid, item_id: item.id } ).save
     end
 
-
     def release items, args={}
 
       if block_given?
@@ -224,7 +223,6 @@ module Krill
       end
 
     end
-
 
   end
 

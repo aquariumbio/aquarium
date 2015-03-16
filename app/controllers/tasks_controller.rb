@@ -12,13 +12,21 @@ class TasksController < ApplicationController
   # GET /tasks.json
   def index
 
-    @task_prototype = TaskPrototype.find(params[:task_prototype_id])
+    if params[:task_prototype_id]
 
-    @task_search_cookie_name = "#{@task_prototype.name}_search".to_sym
-    @task_status_cookie_name = "#{@task_prototype.name}_status".to_sym
-    cookies[@task_search_cookie_name] ||= current_user.login
+      @task_prototype = TaskPrototype.find(params[:task_prototype_id])
 
-    @status_options = @task_prototype.status_option_list
+      @task_search_cookie_name = "#{@task_prototype.name}_search".to_sym
+      @task_status_cookie_name = "#{@task_prototype.name}_status".to_sym
+      cookies[@task_search_cookie_name] ||= current_user.login
+
+      @status_options = @task_prototype.status_option_list
+
+    else 
+
+      @status_options = []
+
+    end
 
     if params[:option]
       @option = params[:option]
