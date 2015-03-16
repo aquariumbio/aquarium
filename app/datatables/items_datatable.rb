@@ -3,13 +3,22 @@ class ItemsDatatable < Datatable
   private  
 
   def data
+
     rows.map do |i|
       [ link_to(i.id,i), 
         i.location, 
         i.data, 
         i.created_at.to_formatted_s(:short) , 
-        i.updated_at.to_formatted_s(:short)  ]
+        i.updated_at.to_formatted_s(:short),
+        link_to(@view.item_path(i,sample_id: params[:sample_id]), method: :delete, data: { 
+          confirm: 'Are you sure you want to delete this item?'
+        }) do
+          "<i class='icon-remove'></i>".html_safe
+        end
+
+      ]
     end
+
   end
 
   def rows
@@ -17,6 +26,7 @@ class ItemsDatatable < Datatable
   end
 
   def fetch_rows
+
     items = Item.page(page).per_page(per_page)
     @view.logger.info "sd = #{params[:deleted]}"
 
@@ -25,7 +35,9 @@ class ItemsDatatable < Datatable
     else
       items = items.where("sample_id = ? and object_type_id = ? and location != 'deleted'", params[:sample_id], params[:object_type_id])
     end
+
     items    
+
   end
 
   def sort_column

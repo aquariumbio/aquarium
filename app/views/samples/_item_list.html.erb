@@ -15,6 +15,7 @@
         <th>Data</th>
         <th>Created</th>
         <th>Updated</th>
+        <th />
       </tr>
     </thead>
 
@@ -34,9 +35,11 @@
     "bProcessing": true,
     "bServerSide": true,
     "sAjaxSource": $('#<%= id %>').data('source'),
-    "order": [ 0, 'desc' ],
     "bFilter": false,
     "bLengthChange": false,
+    "aoColumnDefs": [
+      { "bSortable": false, "aTargets": "_all" }
+    ],
     "fnInitComplete": function(oSettings, json) {
       if ( json.iTotalRecords == 0 ) {
         $('#<%= id %>-container').css('display','none');

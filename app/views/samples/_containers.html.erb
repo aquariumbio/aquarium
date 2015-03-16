@@ -2,7 +2,7 @@
 
   <div class='span2'>
 
-    <ul class="nav nav-list" id="tabs">
+    <ul class="nav nav-list sample-nav" id="tabs">
 
       <li class="nav-header">Containers</li>
 
@@ -13,7 +13,7 @@
         <% name = pluralize(2,ot.name)[2..-1] 
            link = name.gsub(/\//,"per").gsub(/ /, '_') %>
 
-        <li <%= first ? "class='active'".html_safe : "".html_safe %>>
+        <li <%= first ? "class='active'".html_safe : "".html_safe %> id="<%= link %>-li">
           <a href="#<%= link %>" data-toggle="tab"><%= name %><span class='sample-item-num' id="<%= link %>-num"></span></a>
         </li>
 
@@ -23,11 +23,11 @@
 
       <li class="nav-header">Associations</li>
 
-      <li>
+      <li id='collections-li'>
         <a href="#collections" data-toggle="tab">Collections<span class='sample-item-num' id='collections-num'></span></a>
       </li>
 
-      <li>
+      <li id='tasks-li'>
         <a href="#tasks" data-toggle="tab">Tasks<span class='sample-item-num' id='tasks-num'></span></a>
       </li>
 
@@ -89,3 +89,24 @@
   </div>
 
 </div>
+
+<script>
+$(function() {
+
+  $(".nav-list").bind('click',function(e) {
+    var href = $(e.target).attr('href');
+    var name = href.substr(1);
+    $.cookie("sample-<%= @sample.id %>-active-section",name);
+    console.log(name);
+  });
+
+  var tab = $.cookie("sample-<%= @sample.id %>-active-section");
+
+  if ( tab ) {
+    $('#'+tab+"-li a").tab('show');
+  } else {
+    $('#tabs a:first').tab('show');
+  }
+
+});
+</script>

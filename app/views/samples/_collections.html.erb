@@ -30,7 +30,9 @@
     "order": [ 0, 'desc' ],
     "bFilter": false,
     "bLengthChange": false,
-
+    "aoColumnDefs": [
+      { "bSortable": false, "aTargets": "_all" }
+    ],
     "fnInitComplete": function(oSettings, json) {
       if ( json.iTotalRecords == 0 ) {
         $('#collections-container').css('display','none');

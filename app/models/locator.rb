@@ -24,7 +24,11 @@ class Locator < ActiveRecord::Base
   end
 
   def to_s
-    self.wizard.int_to_location number
+    if self.wizard
+      self.wizard.int_to_location number
+    else
+      "ERROR"
+    end
   end
 
   def self.first_empty wizard

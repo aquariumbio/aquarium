@@ -1,0 +1,30 @@
+
+<div class='row-fluid'>
+
+  <div class='span5'>
+
+    <% if @item.deleted? %>
+      <h1>Deleted on <%= @item.updated_at %></h1>
+    <% end %>
+
+    <h2><%= link_to @item.object_type.name, @item.object_type %></h2>
+
+    <%= render partial: "handlers/item_data_form" %>
+
+  </div>
+
+  <div class='span7'>
+
+    <h2>Contents</h2>
+
+    <%= render partial: '/handlers/collection_matrix', locals: { m: @handler.matrix(@item) } %>
+
+  </div>
+
+</div>
+
+<script>
+  $(".tooltip").tooltip();
+  $("a[rel=tooltip]").tooltip();
+
+</script>
