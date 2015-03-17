@@ -52,11 +52,12 @@
       $(function() {
         $("#<%= id %>-container .json").each(function() {
           try {
-            var json = JSON.parse($(this).html());
+            var html = $(this).html().replace(/\b0*/g, '')
+            var json = JSON.parse(html);
             $(this).empty();
             render_json($(this),json);
           } catch(e) {
-
+            console.log("Error rendering json: " + e);
           }
         });
       });
@@ -65,3 +66,4 @@
   });
 
 </script>
+

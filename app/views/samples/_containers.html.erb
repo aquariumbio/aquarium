@@ -95,8 +95,10 @@
 
     $(".nav-list").bind('click',function(e) {
       var href = $(e.target).attr('href');
-      var name = href.substr(1);
-      $.cookie("sample-<%= @sample.id %>-active-section",name);
+      if ( href && href.length > 0 ) {
+        var name = href.substr(1);
+        $.cookie("sample-<%= @sample.id %>-active-section",name);
+      }
     });
 
     var tab = $.cookie("sample-<%= @sample.id %>-active-section");

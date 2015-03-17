@@ -164,9 +164,11 @@ class TasksController < ApplicationController
     t.status = params[:status]
     t.save
 
-    if t.errors
-        logger.info t.errors.messages
+    unless t.errors.empty?
+        logger.info "Errors: " + t.errors.full_messages.join(',')
     end
+
+    logger.info t.reload.inspect
 
     render json: { result: 'ok' }
 

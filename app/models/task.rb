@@ -15,8 +15,13 @@ class Task < ActiveRecord::Base
   validate :legal_status
 
   def legal_status
-    if ! JSON.parse(self.task_prototype.status_options).include? self.status
-      errors.add(:status_choice, "Status must be one of " + self.task_prototype.status_options);
+    begin
+      if ! JSON.parse(self.task_prototype.status_options).include? self.status
+        errors.add(:status_choice, "Status must be one of " + self.task_prototype.status_options);
+        return
+      end
+    rescue Exception => e 
+      errors.add(:status_udpate, "Could not update status: #{e.to_s}")
       return
     end
   end
@@ -32,7 +37,9 @@ class Task < ActiveRecord::Base
 
     proto = JSON.parse TaskPrototype.find(self.task_prototype_id).prototype, symbolize_names: true
 
-    type_check proto, spec
+    unless type_check proto, spec
+      errors.add(:task_prototype, "Task specification does not match prototype")
+    end
 
   end
 

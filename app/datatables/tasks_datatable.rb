@@ -14,7 +14,7 @@ class TasksDatatable < Datatable
 
     task.task_prototype.status_option_list.each do |opt|
 
-      if opt == @status
+      if opt == task.status
         html += "<option selected>#{opt}</option>"        
       else
         html += "<option>#{opt}</option>"
