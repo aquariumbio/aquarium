@@ -1,0 +1,73 @@
+<h4>
+  Notifications
+  <% if params[:include_unread] %>
+    <button id="hide_read" class='btn btn-mini btn-primary'>Hide Read</button>  
+  <% else %>
+    <button id="show_read" class='btn btn-mini btn-primary'>Show Read</button>
+  <% end %>
+  <button id='mark_all' class='btn btn-mini btn-info'>Mark all as read</button>
+</h4>
+
+<table class='table table-condensed compact' 
+       id="notification-table" 
+       data-source="<%= notifications_url(format: 'json', task_id: task.id, include_unread: params[:include_unread] ? true : false) %>">
+
+  <thead>
+    <tr>
+      <th>Content</th>
+      <th>Job</th>
+      <th>Metacol</th>
+      <th>Date/Time</th>
+      <th>Read</th>
+    </tr> 
+  </thead>
+
+  <tbody>
+  </tbody>
+
+</table>
+
+<script>
+
+  var table = $('#notification-table').dataTable({
+
+    "bProcessing": true,
+    "bServerSide": true,
+    "sAjaxSource": $('#notification-table').data('source'),
+    "bFilter": false,
+    "bLengthChange": false,
+
+    "createdRow": function ( row, data, index ) {
+
+      $('.read',$(row)).change(function() {
+        var url = '/read?note_id=' + $(this).data('note-id');
+        if ( !$(this).prop('checked') ) {
+          url += '&unread=true';
+        }
+        $.ajax({
+          url: url,
+          async: true
+        }).done(function(data) {
+          table.fnDraw();
+        })
+      });
+    },
+    "language": {
+      "emptyTable": "No notifications."
+    }
+
+  });
+
+  $("#show_read").click(function() {
+    window.location = "/tasks/<%= task.id %>?include_unread=true";
+  });
+
+  $("#hide_read").click(function() {
+    window.location = "/tasks/<%= task.id %>";
+  });
+
+  $("#mark_all").click(function() {
+    window.location = "/tasks/<%= task.id %>?mark_all=true";
+  });
+
+</script>

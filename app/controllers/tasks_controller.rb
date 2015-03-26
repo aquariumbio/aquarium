@@ -48,12 +48,21 @@ class TasksController < ApplicationController
   # GET /tasks/1
   # GET /tasks/1.json
   def show
+
     @task = Task.find(params[:id])
+
+    if params[:mark_all] == "true" 
+      @task.notifications.each { |n|
+        n.read = true
+        n.save
+      }
+    end
 
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @task }
     end
+
   end
 
   # GET /tasks/new
@@ -199,6 +208,22 @@ class TasksController < ApplicationController
       end
     end
 
+  end
+
+  def notifications
+    render json: TaskNotificationDatatable.new(view_context)
+  end
+
+  def read 
+    tn = TaskNotification.find(params[:note_id])
+    if params[:unread] == "true"
+      tn.read = false
+    else
+      tn.read = true
+    end
+    tn.save
+    logger.info tn.attributes.to_json
+    render json: { result: "ok" }
   end
 
 end

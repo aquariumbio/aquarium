@@ -22,11 +22,13 @@ Bioturk::Application.routes.draw do
   match "upload", to: "jobs#upload"
 
   resources :tasks
-
   resources :task_prototypes
 
+  match "notifications", to: "tasks#notifications"
+  match "read", to: "tasks#read"
+
   get "metacols/draw"
-   match 'viewer',        to: 'metacols#viewer'
+  match 'viewer',        to: 'metacols#viewer'
 
   resources :metacols do
       get 'arguments', on: :new

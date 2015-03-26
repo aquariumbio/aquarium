@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  content: MyText
+  task_id: 1
+  job_id: 1
+  read: false
+
+two:
+  content: MyText
+  task_id: 1
+  job_id: 1
+  read: false

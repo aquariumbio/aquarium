@@ -4,6 +4,7 @@ class Task < ActiveRecord::Base
   belongs_to :task_prototype
   has_many :touches
   has_many :post_associations
+  has_many :task_notifications
   belongs_to :user
 
   validates :name, :presence => true
@@ -219,6 +220,22 @@ class Task < ActiveRecord::Base
 
     end
 
+  end
+
+  def notify msg, opts={}
+
+    tn = TaskNotification.new( { 
+      task_id: self.id, 
+      content: msg, 
+      job_id: nil, 
+      read: false }.merge opts )
+
+    tn.save
+
+  end
+
+  def notifications
+    task_notifications
   end
 
 end
