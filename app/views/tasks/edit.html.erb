@@ -1,5 +1,7 @@
 <h1>Edit <%= @task.task_prototype.name %></h1>
 
+<p><%= @task.task_prototype.description %></p>
+
 <div id="task_info">
     <label><b>Name</b></label>
     <input id="task_name" type='text' value='<%= @task.name %>'></input>
@@ -12,6 +14,7 @@
       <% end %>
     </select>
 </div>
+
 
 <div id="json_editor"></div>
 

@@ -49,8 +49,11 @@ module Krill
 
     def set_task_status task, status
 
+      old_status = task.status
       task.status = status
       task.save
+
+      task.notify "Status changed from '#{old_status}' to '#{status}'.", job_id: jid
 
       touch = Touch.new
       touch.job_id = jid

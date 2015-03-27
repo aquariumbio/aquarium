@@ -25,6 +25,7 @@ Bioturk::Application.routes.draw do
   resources :task_prototypes
 
   match "notifications", to: "tasks#notifications"
+  match "notification_list", to: "tasks#notification_list"
   match "read", to: "tasks#read"
 
   get "metacols/draw"

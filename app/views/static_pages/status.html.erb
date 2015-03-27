@@ -1,25 +1,22 @@
-<%= javascript_tag "var AUTH_TOKEN = '#{form_authenticity_token}';" if protect_against_forgery? %>
 
-<div id="activity" class="job_chart"></div>
-<a id="back" class='control' href="#"><i class='icon-arrow-left'></i></a>
-<a id="zoom_in" class='control' href="#"><i class='icon-zoom-in'></i></a>
-<a id="zoom_out" class='control' href="#"><i class='icon-zoom-out'></i></a>
-<a id="forward" class='control' href="#"><i class='icon-arrow-right'></i></a>
 
-<script>
+    <div class='row-fluid'>
+      <div class='span7 plugin-container'>   
+          <iframe class='plugin-iframe' allowtransparency="true" src='/plugin/show?path=aqualib/plugins/metacols'></iframe>   
+      </div>
+      <div class='span5 plugin-container'>   
+          <iframe class='plugin-iframe' allowtransparency="true" src='/plugin/show?path=aqualib/plugins/daemons'></iframe>   
+      </div>
+    </div>
 
-  jc = new JobChart('activity');
+    <div class='row-fluid'>
+      <div class='span6 plugin-container'>
+        <iframe class='plugin-iframe' allowtransparency="true" src='/plugin/show?path=aqualib/plugins/user_activity'></iframe>
+      </div>
+      <div class='span6 plugin-container'>   
+          <iframe class='plugin-iframe' allowtransparency="true" src='/plugin/show?path=aqualib/plugins/activity_monitor'></iframe>   
+      </div>
+    </div>
 
-  jc.render();
-
-  window.setInterval ( function() {
-    jc.update();
-  }, 60000 );
-
-  window.onresize = function() {
-    jc.render();
-  }
-
-</script>
-
+  </div>
 

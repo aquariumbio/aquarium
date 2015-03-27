@@ -226,5 +226,19 @@ class TasksController < ApplicationController
     render json: { result: "ok" }
   end
 
+  def notification_list
+
+    if params[:mark_all] == "true" 
+      tns = (current_user.tasks.collect { |t| t.notifications }).flatten
+      tns.each { |n|
+        n.read = true
+        n.save
+      }
+    end
+
+    render layout: "plugin.html.erb"
+
+  end
+
 end
 

@@ -11,10 +11,23 @@ class TaskNotificationDatatable < Datatable
 
     rows.map do |note|
 
+      if note.job && note.job.metacol
+        mid = link_to note.job.metacol.id, note.job.metacol
+      else
+        mid = '-'
+      end
+
+      if @view.params[:user_id]
+        task = "#{link_to note.task.id, note.task, target: "_parent"}: #{note.task.name} ( #{note.task.task_prototype.name} )"
+      else
+        task = note.task.id
+      end
+
       [
+        task,
         note.content,
-        note.job_id,
-        "-",
+        note.job ? link_to(note.job.id, note.job) : '-',
+        mid,
         note.created_at.to_formatted_s(:short),
         "<input type='checkbox' class='read' data-note-id=#{note.id} #{note.read ? 'checked' : ''}></input>"
       ]
@@ -29,14 +42,27 @@ class TaskNotificationDatatable < Datatable
 
   def fetch_rows
 
-    task = Task.find(@view.params[:task_id])
-   
-    if @view.params[:include_unread] == "true"
-      @view.logger.info "including unread: #{@view.params.to_json}"
-      task.notifications
+    if @view.params[:task_id] 
+
+      tns = TaskNotification.where(task_id: @view.params[:task_id]).page(page).per_page(per_page).order("id DESC")
+     
+      if @view.params[:include_unread] == "true"
+        tns
+      else
+        tns.where(read:false)
+      end
+
     else
-      @view.logger.info "not including unread: #{@view.params.to_json}"      
-      task.notifications.reject { |n| n.read }
+
+      tns = TaskNotification.page(page).per_page(per_page).joins(:task).order("id DESC").where(tasks: { user_id: params[:user_id] } )
+
+      if @view.params[:include_unread] == "true"
+        tns
+      else
+        tns.where(read:false)
+      end
+
+
     end
 
   end
