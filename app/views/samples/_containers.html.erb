@@ -54,7 +54,7 @@
             <% wiz = Wizard.find_by_name(ot.prefix) %>
 
             <% if wiz %>
-              <p><%= name %> are managed by the <%= link_to wiz.name, wiz %> wizard.</p>
+              <p><%= link_to name, ot %> are managed by the <%= link_to wiz.name, wiz %> wizard.</p>
             <% end %>
 
           <%= render partial: '/samples/new_item', locals: { object_type: ot, sample: @sample, wizard: wiz } %>
