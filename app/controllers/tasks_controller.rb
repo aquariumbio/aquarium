@@ -170,11 +170,14 @@ class TasksController < ApplicationController
   def update_status
 
     t = Task.find(params[:task])
+    old_status = t.status
     t.status = params[:status]
     t.save
 
+    t.notify "#{current_user.login} changed the status from '#{old_status}' to '#{t.status}'."
+
     unless t.errors.empty?
-        logger.info "Errors: " + t.errors.full_messages.join(',')
+      logger.info "Errors: " + t.errors.full_messages.join(',')
     end
 
     logger.info t.reload.inspect

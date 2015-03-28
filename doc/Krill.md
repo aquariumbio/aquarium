@@ -590,7 +590,13 @@ To set a task's status, simply do
 set_task_status(task,"done")
 ```
 
-This function sets the task status, and also "touches" the task, so that the job is associated with the task. Jobs associated with tasks are listed on the task's page in Aquarium. Tasks associated with jobs are listed under "Associations" in the Krill UI.
+This function sets the task status and "touches" the task, so that the job is associated with the task. In addition, a notification that the task's status was changed is sent to the owner of the task. Jobs associated with tasks are listed on the task's page in Aquarium. Tasks associated with jobs are listed under "Associations" in the Krill UI.
+
+Setting a task's status notifies the task's owner. To send other information to a task's owner without changing the task's status, do
+
+```ruby
+task.notify "Some information about the task", job_id: jid
+```
 
 Be sure to **save** your changes to the task so that they are reflected in the database.
 
