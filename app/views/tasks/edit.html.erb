@@ -10,7 +10,7 @@
     <label><b>Task Owner</b></label>
     <select id="task_owner">
       <% User.all.each do |user| %>
-        <option <%= user == current_user ? 'selected' : '' %> value=<%= user.id %>><%= user.login %></option>
+        <option <%= user.id == @task.user_id ? 'selected' : '' %> value=<%= user.id %>><%= user.login %></option>
       <% end %>
     </select>
 </div>
@@ -35,8 +35,6 @@
         stat = $('#task_status').val(),
         owner = $('#task_owner').val(),
         spec = JSON.stringify(json_editor_extract($('#json_editor'))); //.replace("[", "[ ").replace("]", " ]").replace("{", "{ ").replace("}", " }");
- 
-    console.log("owner="+owner);
  
     var AUTH_TOKEN = '<%= "#{form_authenticity_token}" %>';
 
