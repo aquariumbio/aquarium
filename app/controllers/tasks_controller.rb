@@ -172,7 +172,7 @@ class TasksController < ApplicationController
     t = Task.find(params[:task])
     old_status = t.status
     t.status = params[:status]
-    t.save
+    t.save validate: false
 
     t.notify "#{current_user.login} changed the status from '#{old_status}' to '#{t.status}'."
 

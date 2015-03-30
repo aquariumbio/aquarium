@@ -236,6 +236,6 @@ class Task < ActiveRecord::Base
 
   def notifications
     task_notifications
-  end
+  end 
 
 end
