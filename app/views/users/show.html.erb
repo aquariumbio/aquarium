@@ -33,24 +33,25 @@
 
 <div class='row-fluid'>
 
-  <div class='span6'>
+  <div class='span4'>
     <center><p><b>Protocol Usage (Last 100 Days)</p></b></center>
     <div id="protocols" style='height: 300px'>
-      <%= image_tag 'waiting_animation.gif' %>
+      <center><%= image_tag 'waiting_animation.gif' %></center>
     </div>
   </div>
 
-  <div class='span6'>
+  <div class='span4'>
     <center><p><b>Activity (Last 100 Days)</p></b></center>  
     <div id="activity" style='height: 300px'>
-      <%= image_tag 'waiting_animation.gif' %>
+      <center><%= image_tag 'waiting_animation.gif' %></center>
+    </div>
   </div>
 
   <div class='span4'>
+    <%= render partial: "items_owned" %>
   </div>
 
 </div>
-
 
 <script>
 

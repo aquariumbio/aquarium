@@ -138,7 +138,7 @@ class StatsController < ApplicationController
         if m.path
           name = m.path.split('.').first
         else
-          name = "unkown"
+          name = "unknown"
         end
         names.push( "#{m.id}:#{name}<br />(#{login})" )
         active.push( (m.jobs.select { |j| j.pc >= 0 }).length )
@@ -147,6 +147,27 @@ class StatsController < ApplicationController
     end
 
     render json: { names: names, active: active, pending: pending, completed: completed }
+
+  end
+
+  def user_items
+
+    items = Item.joins(:sample).where(
+        object_type_id: params[:object_type_id].to_i,
+        samples: { user_id: params[:user_id].to_i }
+      )
+
+    data = []
+
+    if items.length > 0
+      data.push [ 1000*(items.first.created_at - 1.day).to_i, 0 ]
+    end
+
+    items.each do |i|
+      data.push [ 1000*i.created_at.to_i, data.last[1] + 1 ]
+    end
+
+    render json: data
 
   end
 

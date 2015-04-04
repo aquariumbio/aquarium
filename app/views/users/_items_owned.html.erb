@@ -1,0 +1,60 @@
+<center>
+  <p><b>Items: </b>
+    <select id='object_type'>
+    <% ObjectType.where(handler: 'sample_container').each do |c| %>
+      <option value='<%= c.id %>'><%= pluralize(2,c.name)[2..-1] %></option>
+    <% end %>
+    </select>
+  </p>
+</center>  
+
+<div id="items_owned" style='height: 300px'>
+  <center><%= image_tag 'waiting_animation.gif' %></center>
+</div>
+
+<script>
+
+function UserItems(object_type_id) {
+
+  $.ajax({
+
+    type: 'GET',
+    url: '/stats/user_items?user_id=<%= @user.id %>&object_type_id='+object_type_id,
+    dataType: "json",
+
+    success: function(data,status) {
+
+      $('#items_owned').plot([
+        {data: data, label: "Items", color: "rgb(0,200,0)"}
+      ],{
+        xaxis: {
+          tickColor: "#fff",
+          mode: "time",
+          timeformat: "%b %d"
+        },        grid: {
+          minBorderMargin: 0,
+          borderWidth: {
+            top: 0, right: 0, bottom: 1, left: 0
+          }
+        },
+        lines: {
+          steps: true,
+          fill: true,
+          fillColor: "rgba(0,200,0,0.5)"
+        }
+      }
+      );
+
+    }
+
+  })
+
+}
+
+UserItems($('#object_type').val());
+
+$('#object_type').change(function() {
+  UserItems($('#object_type').val());
+});
+
+</script>
