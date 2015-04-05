@@ -62,7 +62,9 @@
         console.log(data);
         msg = JSON.parse(data.responseText);
         for ( var key in msg ) {
-          list.append('<li>'+key+': '+msg[key]+'</li>');
+          for ( var i=0; i<msg[key].length; i++ ) {
+            list.append('<li>'+key+': '+msg[key][i]+'</li>');
+          }
         }
         $('#fail-message').append('<p><b>Errors prevented this task from being saved.</b></p>').append(list);
         $('#fail-message').addClass('alert alert-danger');

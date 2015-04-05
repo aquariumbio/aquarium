@@ -1,6 +1,6 @@
 class TaskPrototype < ActiveRecord::Base
 
-  attr_accessible :description, :name, :prototype, :status_options
+  attr_accessible :description, :name, :prototype, :status_options, :validator
   has_many :tasks
 
   validates :name, :presence => true

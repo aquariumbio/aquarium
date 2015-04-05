@@ -10,10 +10,9 @@ class Task < ActiveRecord::Base
   validates :name, :presence => true
   validates :status, :presence => true
   validates_uniqueness_of :name, scope: :task_prototype_id
-
-  validate :matches_prototype
-
   validate :legal_status
+
+  validate :valid_task
 
   def legal_status
     begin
@@ -27,8 +26,9 @@ class Task < ActiveRecord::Base
     end
   end
 
-  def matches_prototype
+  def valid_task
 
+    # Check for legal json
     begin
       spec = JSON.parse self.specification, symbolize_names: true
     rescue Exception => e
@@ -36,10 +36,26 @@ class Task < ActiveRecord::Base
       return
     end
 
+    # check that it matches the task prototype
     proto = JSON.parse TaskPrototype.find(self.task_prototype_id).prototype, symbolize_names: true
 
     unless type_check proto, spec
       errors.add(:task_prototype, "Task specification does not match prototype")
+    end
+
+    # run the user specified validation, if there is one
+    tv = Krill::TaskValidator.new self
+    result = tv.check
+    unless result == true
+      if result.class == Array
+        result.each do |e|
+          logger.info e
+          errors.add(tv.name, e)
+        end
+      else
+        logger.info "Validator returned non-true, non-array value"
+        errors.add(tv.name, "Returned non-true, non-array value.")
+      end
     end
 
   end
@@ -183,10 +199,8 @@ class Task < ActiveRecord::Base
   end
 
   def mentions? sample # returns true if any field of the task specification refers to 
-                      # this particular sample
-
+                       # this particular sample
     return mentions_aux spec, sample.id, sample.sample_type.name
-
   end
 
   def mentions_aux sp, sample_id, sample_type_name

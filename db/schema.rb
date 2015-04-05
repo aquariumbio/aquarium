@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150326202149) do
+ActiveRecord::Schema.define(:version => 20150405154727) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -207,6 +207,7 @@ ActiveRecord::Schema.define(:version => 20150326202149) do
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
     t.string   "status_options"
+    t.string   "validator"
   end
 
   create_table "tasks", :force => true do |t|

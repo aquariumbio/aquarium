@@ -129,7 +129,6 @@ class TasksController < ApplicationController
     end
   end
 
-
   def copy_tasks_from_production
     
     if Rails.env != 'production'
@@ -156,7 +155,6 @@ class TasksController < ApplicationController
         new_task.save validate: false
       end
 
-
       redirect_to production_interface_path, notice: "#{TaskPrototype.all.length} task prototypes and #{Task.all.length} tasks copied."
 
     else
@@ -179,8 +177,6 @@ class TasksController < ApplicationController
     unless t.errors.empty?
       logger.info "Errors: " + t.errors.full_messages.join(',')
     end
-
-    logger.info t.reload.inspect
 
     render json: { result: 'ok' }
 
@@ -225,7 +221,6 @@ class TasksController < ApplicationController
       tn.read = true
     end
     tn.save
-    logger.info tn.attributes.to_json
     render json: { result: "ok" }
   end
 
