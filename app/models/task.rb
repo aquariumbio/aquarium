@@ -44,8 +44,15 @@ class Task < ActiveRecord::Base
     end
 
     # run the user specified validation, if there is one
-    tv = Krill::TaskValidator.new self
-    result = tv.check
+
+    begin
+      tv = Krill::TaskValidator.new self
+      result = tv.check
+    rescue Exception => e
+      errors.add(:validator_exec_error,e.to_s)
+      return 
+    end
+
     unless result == true
       if result.class == Array
         result.each do |e|
