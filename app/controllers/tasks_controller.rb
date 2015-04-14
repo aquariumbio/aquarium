@@ -113,7 +113,6 @@ class TasksController < ApplicationController
         format.json { render json: @task.errors, status: :unprocessable_entity }
       end
     end
-
   end
 
   # DELETE /tasks/1

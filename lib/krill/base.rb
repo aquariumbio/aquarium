@@ -51,9 +51,13 @@ module Krill
 
       old_status = task.status
       task.status = status
-      task.save
+      task.save validate: false
 
-      task.notify "Status changed from '#{old_status}' to '#{status}'.", job_id: jid
+      if task.errors.empty?
+        task.notify "Status changed from '#{old_status}' to '#{status}'.", job_id: jid
+      else
+        task.notify "Attempt to change status from '#{old_status}' to '#{status}' failed: #{task.full_messages.join(',')}", job_id: jid
+      end
 
       touch = Touch.new
       touch.job_id = jid

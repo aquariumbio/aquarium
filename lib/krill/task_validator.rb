@@ -9,7 +9,6 @@ module Krill
       @task = task
       @errors = []
       
-
       path = @task.task_prototype.validator
 
       if path
