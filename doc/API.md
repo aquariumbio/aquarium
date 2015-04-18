@@ -55,7 +55,7 @@ If "method" is "find", then the following arguments can be given.
 		"method": "find",
 		"args": { 
 			"model": "item",
-			"where": '{ "id": 123 }'
+			"where": { "id": 123 }
 		}
 	}
 	
@@ -77,18 +77,63 @@ retrieves all items whose associated sample is named "CFP_r". Without the "inclu
 **<tt>limit</tt>**: How many rows to return. For example,
 
 	run: {
-    	method: "find",
-	    args: {
-    		model: :item,
-    		limit: 32
+    	"method": "find",
+	    "args": {
+    		"model": "item",
+    		"limit": 32
         }
     }
     
 Returns the first 32 items in the database.
 
-## Inserting Inventory
+## Inserting Samples
 
-## Submitting Tasks
+To insert a new sample into the inventory, use the method "create" as in the following example:
+
+	run: {
+        "method": "create",
+        "args": {
+            "model": "sample",
+            "type": "Primer",
+            "name": "MyPrimer",
+            "project": "Test",
+            "description": "This is a test of the create api method",
+            "fields": {
+                "Overhang Sequence": "atccaggactaggacta",
+                "Anneal Sequence": "atctcggctatatcgac",
+                "T Anneal": 67.8
+            }
+        }
+    }
+
+Setting the "model" field to "sample "tells the "create" method to create a new sample. Future versions of the create method will allow you to create object_types and sample_types as well. The "type" field must correspond to the name of an existing sample type. The "name" field must be unique. The description is any string. The fields are those fields that are declared in the sample type definition (e.g. via the sample type page).
+
+Note that when you create a sample, the "user" field of the sample will correspond to the user that was authenticaed in the request (see above).
+
+There is a limit to the number of samples you can submit in a 24 hour period (configurable by your Aquarium administrator). If you attempt to submit more samples, you will get an error.
+
+## Deleting inventory
+
+### Deleting Samples
+
+Samples can only be deleted by the user who owns them and only if there are no corresponding items. It is expected that deleting samples would be used mainly if and when samples were created erroneously via some algrothmic connection to Aquarium.
+
+Samples can be dropped by name and/or by id. For example:
+
+	run: {
+        "method": "drop",
+        "args": {
+            "model": "sample",
+			"names": [ "sample_one, "sample_two" ],
+			"ids": [ 123, 234, 345 ]
+        }
+    }
+
+### Deleting items
+
+TODO: Items can be deleted only by the user who owns the associated sample.
+
+## Submitting Tasks and changing their statuses
 
 ## Submitting Jobs
 
@@ -119,7 +164,7 @@ Returns the first 32 items in the database.
 
 ## user
 
-# Appendix 2: Connecting to the API Various Languages
+# Appendix 2: Connecting to the API via various languages
 
 ## Ruby
 

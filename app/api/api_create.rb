@@ -9,6 +9,10 @@ module ApiCreate
       st = SampleType.find_by_name(args[:type])
       return error "Could not find sample type #{args[:type]}" unless st
 
+      num_samples = Sample.where("created_at > ?", 1.day.ago).count
+      max = Bioturk::Application.config.sample_creation_limit
+      return error "Limit of #{max} new samples in 24 hours reached." if num_samples > max
+
       s = Sample.new({
         name: args[:name], 
         sample_type_id: st.id, 
@@ -29,9 +33,9 @@ module ApiCreate
         error s.errors.full_messages.join(', ')        
       end
 
-    when "item"
+    else
 
-      warn "Creating items not implemented"
+      warn "Creating at #{args[:model]} not implemented"
 
     end
 

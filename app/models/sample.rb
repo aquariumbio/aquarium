@@ -6,7 +6,7 @@ class Sample < ActiveRecord::Base
   has_many :items
   has_many :post_associations
 
-  validates_uniqueness_of :name, scope: :project, message: ": Samples within the same project must have unique names."
+  validates_uniqueness_of :name, message: "Samples: must have unique names."
 
   validates :name, presence: true
   validates :project, presence: true
