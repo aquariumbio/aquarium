@@ -24,7 +24,8 @@ module ApiFind
   def find args
 
     models = { "item" => Item, "job" => Job, "sample" => Sample, "user" => User, 
-               "task" => Task, "sample_type" => SampleType, "object_type" => ObjectType }
+               "task" => Task, "sample_type" => SampleType, "object_type" => ObjectType,
+               "task_prototype" => TaskPrototype }
 
     query = models[args[:model]]  
     query = query.includes(args[:includes]) if args[:includes]

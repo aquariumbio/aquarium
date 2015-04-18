@@ -42,7 +42,7 @@ The Aquarium API will respond to requests with a JSON object the following field
 
 **<tt>rows</tt>**: An array of Aquarium objects resulting from the method run (see below).
 
-## Inventory Queries
+## Find
 
 If "method" is "find", then the following arguments can be given.
 
@@ -86,9 +86,11 @@ retrieves all items whose associated sample is named "CFP_r". Without the "inclu
     
 Returns the first 32 items in the database.
 
-## Inserting Samples
+## Create
 
-To insert a new sample into the inventory, use the method "create" as in the following example:
+### Samples
+
+To create a new sample, use the method "create" as in the following example:
 
 	run: {
         "method": "create",
@@ -112,7 +114,12 @@ Note that when you create a sample, the "user" field of the sample will correspo
 
 There is a limit to the number of samples you can submit in a 24 hour period (configurable by your Aquarium administrator). If you attempt to submit more samples, you will get an error.
 
-## Deleting inventory
+### Tasks
+
+### Jobs
+
+
+## Drop
 
 ### Deleting Samples
 
@@ -133,9 +140,7 @@ Samples can be dropped by name and/or by id. For example:
 
 TODO: Items can be deleted only by the user who owns the associated sample.
 
-## Submitting Tasks and changing their statuses
-
-## Submitting Jobs
+## Modify
 
 # Appendix 1: Aquarium Datatypes
 

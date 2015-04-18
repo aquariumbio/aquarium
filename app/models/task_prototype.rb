@@ -51,4 +51,8 @@ class TaskPrototype < ActiveRecord::Base
 
   end
 
+  def export
+    attributes
+  end
+
 end
