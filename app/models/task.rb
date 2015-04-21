@@ -45,25 +45,25 @@ class Task < ActiveRecord::Base
 
     # run the user specified validation, if there is one
 
-    begin
-      tv = Krill::TaskValidator.new self
-      result = tv.check
-    rescue Exception => e
-      errors.add(:validator_exec_error,e.to_s)
-      return 
-    end
+    # begin
+    #   tv = Krill::TaskValidator.new self
+    #   result = tv.check
+    # rescue Exception => e
+    #   errors.add(:validator_exec_error,e.to_s)
+    #   return 
+    # end
 
-    unless result == true
-      if result.class == Array
-        result.each do |e|
-          logger.info e
-          errors.add(tv.name, e)
-        end
-      else
-        logger.info "Validator returned non-true, non-array value"
-        errors.add(tv.name, "Returned non-true, non-array value.")
-      end
-    end
+    # unless result == true
+    #   if result.class == Array
+    #     result.each do |e|
+    #       logger.info e
+    #       errors.add(tv.name, e)
+    #     end
+    #   else
+    #     logger.info "Validator returned non-true, non-array value"
+    #     errors.add(tv.name, "Returned non-true, non-array value.")
+    #   end
+    # end
 
   end
 
@@ -258,5 +258,17 @@ class Task < ActiveRecord::Base
   def notifications
     task_notifications
   end 
+
+  def self.okay_to_drop? task, user
+
+    warn "Could not find task"                                                      and return false unless task
+    warn "Not allowed to delete task #{task.id}"                                    and return false unless task.user_id == user.id
+    warn "Could not delete task #{task.id} because it has associated jobs"          and return false unless task.touches.length == 0
+    warn "Could not delete task #{task.id} because it has associated posts"         and return false unless task.posts.length == 0
+    warn "Could not delete task #{task.id} because it has associated notifications" and return false unless task.notifications.length == 0        
+
+    true
+
+  end    
 
 end

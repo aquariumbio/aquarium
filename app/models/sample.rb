@@ -184,4 +184,14 @@ class Sample < ActiveRecord::Base
     a
   end
 
+  def self.okay_to_drop? sample, user
+
+    warn "Could not find sample"                                                and return false unless sample
+    warn "Not allowed to delete sample #{sample.id}"                            and return false unless sample.user_id == user.id
+    warn "Could not delete sample #{sample.id} because it has associated items" and return false unless sample.items.length == 0
+
+    true
+
+  end  
+
 end

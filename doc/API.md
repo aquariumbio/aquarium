@@ -88,7 +88,7 @@ Returns the first 32 items in the database.
 
 ## Create
 
-### Samples
+### Creating Samples
 
 To create a new sample, use the method "create" as in the following example:
 
@@ -114,14 +114,33 @@ Note that when you create a sample, the "user" field of the sample will correspo
 
 There is a limit to the number of samples you can submit in a 24 hour period (configurable by your Aquarium administrator). If you attempt to submit more samples, you will get an error.
 
-### Tasks
+### Creating Tasks
 
-### Jobs
+Tasks can be created similarly, as in the following example.
 
+	run: {
+        "method": "create",
+        "args": {
+            "model": "task",
+            "name": "MyTask",
+            "status": "waiting",
+            "task_prototype_id": 5,       
+            "specification": {
+                "plasmid": 2,
+                "fragments": [ 5636, 5637, 5638 ]
+            }
+        }
+    }
+
+Here, the "task_prototype_id" corresponds to a Gibson Assembly on our local installation. This number could have been found by running a "find" for the task_prototype with that name and getting the id from the first row returned. The "specification" field must match the json specification in the corresponding task prototype.
+
+There is a limit to the number of tasls you can submit in a 24 hour period (configurable by your Aquarium administrator). If you attempt to submit more tasks, you will get an error.
+
+### Creating Jobs
 
 ## Drop
 
-### Deleting Samples
+### Dropping Samples
 
 Samples can only be deleted by the user who owns them and only if there are no corresponding items. It is expected that deleting samples would be used mainly if and when samples were created erroneously via some algrothmic connection to Aquarium.
 
@@ -135,12 +154,20 @@ Samples can be dropped by name and/or by id. For example:
 			"ids": [ 123, 234, 345 ]
         }
     }
+ 
+### Dropping Tasks
 
-### Deleting items
+TODO: Can only drop a task if it has no associated jobs and it is owned by the current user.
 
-TODO: Items can be deleted only by the user who owns the associated sample.
+### Deleting Items
+
+TODO: Items can be deleted only by the user who owns the associated sample. It marks them as deleted, but does not truely delete them (i.e. the id will still be in use).
 
 ## Modify
+
+### Changing a Task's Status
+
+### Canceling a Job
 
 # Appendix 1: Aquarium Datatypes
 
@@ -164,6 +191,8 @@ TODO: Items can be deleted only by the user who owns the associated sample.
 	"object_type": associated object_type (option)
 
 ## job
+
+## task_prototype
 
 ## task
 

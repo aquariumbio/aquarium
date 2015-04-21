@@ -5,19 +5,15 @@ module ApiCreate
     case args[:model]
 
     when "sample"
-      
       create_sample args
 
     when "task"
-
       create_task args
 
     when "job"
-
       create_job args
 
     else
-
       warn "Creating at #{args[:model]} not implemented"
 
     end
@@ -25,21 +21,28 @@ module ApiCreate
   end
 
   def create_task args
+  
+    num_tasks = Task.where("created_at > ?", 1.day.ago).count
+    max = Bioturk::Application.config.task_creation_limit
+    return error "Limit of #{max} new tasks in 24 hours reached." if num_tasks > max
 
     t = Task.new({
       name: args[:name], 
       status: args[:status], 
       task_prototype_id: args[:task_prototype_id],
-      specification: args[:specification].to_json})
+      specification: args[:specification].to_json},
+      user_id: user.id)
 
-    t.save
-
-    if t.errors.empty?
+    if t.save
       add [ t ]
     else
-      error "Could not create sample: #{t.errors.full_messages.join(', ')}"
+      error "Could not create task: " + t.errors.full_messages.join(', ')
     end
 
+  end
+
+  def create_job args
+    return error "Create job not yet implemented"
   end
 
   def create_sample args
@@ -68,9 +71,10 @@ module ApiCreate
     if s.save
       add [ s ]
     else
-      error s.errors.full_messages.join(', ')        
+      error "Could not create Sample: " + s.errors.full_messages.join(', ')        
     end
 
   end
 
 end
+
