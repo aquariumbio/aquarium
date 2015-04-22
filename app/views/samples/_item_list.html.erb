@@ -1,5 +1,5 @@
 <% name = pluralize(2,object_type.name)[2..-1] 
-   link = name.gsub(/\//,'per').gsub(/ /,'_')
+   link = name.gsub(/\//,"per").gsub(/ /, '_').gsub(/\(/, '-').gsub(/\)/, '-') 
      id = link + "_table" %>
 
 <div id='<%= id %>-container'>

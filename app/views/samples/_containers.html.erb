@@ -8,10 +8,14 @@
 
       <% first = true %>
 
+      <% def fix s
+           s.gsub(/\//,"per").gsub(/ /, '_').gsub(/\(/, '-').gsub(/\)/, '-') 
+         end %>
+
       <% sample_type.object_types.each do |ot| %>
 
         <% name = pluralize(2,ot.name)[2..-1] 
-           link = name.gsub(/\//,"per").gsub(/ /, '_') %>
+           link = fix name %>
 
         <li <%= first ? "class='active'".html_safe : "".html_safe %> id="<%= link %>-li">
           <a href="#<%= link %>" data-toggle="tab"><%= name %><span class='sample-item-num' id="<%= link %>-num"></span></a>
@@ -44,7 +48,7 @@
       <% sample_type.object_types.each do |ot| %>
 
         <% name = pluralize(2,ot.name)[2..-1] 
-           link = name.gsub(/\//,"per").gsub(/ /, '_') %>
+           link = fix name %>
 
         <div <%= first ? 'class="sample-item-tab tab-pane active"'.html_safe : 
                          'class="sample-item-tab tab-pane"'.html_safe %> id='<%= link %>'>
