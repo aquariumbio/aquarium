@@ -6,9 +6,9 @@ Test.verify( "Get an error if sample type does not exist --> ", {
     login: Test.login,
     key: Test.key,
     run: {
-      method: "create",
+      method: "find",
       args: {
-        model: "sample",
+        model: "task_prototype",
         type: "Primera"
       }
     }

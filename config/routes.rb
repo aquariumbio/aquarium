@@ -99,6 +99,7 @@ Bioturk::Application.routes.draw do
   get "stats/empty"
   get "stats/timing"
   get "stats/user_items" 
+  get "stats/protocol_version_info"
   get "jobs/index"
   get "jobs/summary"
 

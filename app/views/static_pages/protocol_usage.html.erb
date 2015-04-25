@@ -1,6 +1,26 @@
-<h1>Protocol Usage (Last 28 Days)</h1>
+<h1>Protocol Usage (Last <%= @since %> Days)</h1>
 
-  <%= render partial: 'stats/protocols' %>
 
-</div>
+<table class='table'>
+  <tr>
+    <th><br />Path</th>
+    <th><br />No. Times run</th>
+    <th><br />Last Used</th>
+    <th>Discussions<br />(Latest Version)</th>
+  </tr>
 
+  <% (@protocol_summaries.values.sort_by { |s| -s[:count] } ).each do |v| %>
+
+    <% protocol = ProtocolSummary.new({ protocol: v[:path], sha: v[:latest_sha] }) %>
+    <% link_name = v[:posts] > 0 ? pluralize(v[:posts],"Post") : "Discuss" %>
+
+    <tr>
+      <td><a title='Show all versions of <%= v[:path] %>' href='/jobs/summary?path=<%= v[:path] %>'><%= v[:path] %></a></td>
+      <td><div style="color: black; background: #afa; width: <%= 100*v[:percent] %>%">&nbsp;<%= v[:count] %></div></td>
+      <td><%= time_ago_in_words(v[:date]) %> ago</td>
+      <td><%= render partial: '/posts/discussion', locals: { topic: protocol, link: link_name } %></td>          
+    </tr>
+
+  <% end %>
+
+</table>

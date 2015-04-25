@@ -17,6 +17,40 @@ class StaticPagesController < ApplicationController
   def about
   end
 
+  def protocol_usage
+
+    @since = params[:since] ? params[:since] : 30
+    jobs = Job.where("updated_at > ?", @since.days.ago )
+
+    @protocol_summaries = {}
+
+    jobs.each do |j| 
+      @protocol_summaries[j.path] = {
+        path: j.path,
+        count: 1,
+        latest_sha: j.sha,
+        posts: PostAssociation.where(sha: j.sha).count,
+        date: j.created_at
+      } unless @protocol_summaries[j.path]
+      @protocol_summaries[j.path][:count] += 1
+      @protocol_summaries[j.path][:latest_sha] = j.sha
+      @protocol_summaries[j.path][:posts] = PostAssociation.where(sha: j.sha).count    
+      @protocol_summaries[j.path][:date] = j.created_at
+    end
+
+    max = 1
+    @protocol_summaries.each do |k,v|
+      if max < v[:count]
+        max = v[:count]
+      end
+    end
+
+    @protocol_summaries.each do |k,v|
+      v[:percent] = v[:count].to_f / max.to_f
+    end
+
+  end
+
   def jobchart
 
     jobs = Job.where("( :newmin < created_at AND created_at < :oldmin) OR created_at > :max", 
