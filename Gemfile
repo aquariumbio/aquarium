@@ -43,3 +43,5 @@ gem 'd3-rails'
 
 gem 'git'
 
+gem 'rails-patch-json-encode'
+gem 'oj'

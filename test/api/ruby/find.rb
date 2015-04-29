@@ -101,3 +101,21 @@ Test.verify( "Get 32 items", {
   }) do |response| 
     response[:rows].length == 32
 end
+
+puts
+
+Test.verify( "Get three particular items", { 
+    login: Test.login,
+    key: Test.key,
+    run: {
+      method: "find",
+      args: {
+        model: :item,
+        where: { id: [ 200, 300, 400 ]}
+      }
+    }
+  },loud: true) do |response| 
+    puts
+    puts "Got #{response[:rows].length} rows"
+    response[:rows].length == 3
+end

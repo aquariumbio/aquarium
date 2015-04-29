@@ -1,7 +1,7 @@
 class ApiController < ApplicationController 
 
   def main
-    render json: (Api.new params).run
+    render json: Oj.dump((Api.new params).run, mode: :compat)
   end
 
 end

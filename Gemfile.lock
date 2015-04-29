@@ -89,6 +89,7 @@ GEM
     mime-types (1.25.1)
     multi_json (1.10.1)
     mysql2 (0.3.16)
+    oj (2.12.5)
     paperclip (4.2.0)
       activemodel (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -112,6 +113,8 @@ GEM
       activesupport (= 3.2.19)
       bundler (~> 1.0)
       railties (= 3.2.19)
+    rails-patch-json-encode (0.1.1)
+      multi_json (~> 1.0, >= 1.9.3)
     railties (3.2.19)
       actionpack (= 3.2.19)
       activesupport (= 3.2.19)
@@ -167,8 +170,10 @@ DEPENDENCIES
   jquery-ui-rails (~> 4.2.1)
   meta_request
   mysql2
+  oj
   paperclip
   rails (= 3.2.19)
+  rails-patch-json-encode
   sass-rails (~> 3.2.3)
   sqlite3
   uglifier (>= 1.0.3)

@@ -172,11 +172,38 @@ class Sample < ActiveRecord::Base
       end
     end
     return result
-  end     
+  end
+
+  def really_lite_properties
+
+    st = self.sample_type
+
+    result = {}
+    (1..8).each do |i|
+      n = "field#{i}name"
+      t = "field#{i}type"
+      if st[n] != nil
+        case st[t]
+          when "url", "string"
+            result[st[n]] = self["field#{i}"]
+          when "number"
+            x = self["field#{i}"]
+            if x.to_i == x.to_f
+              result[st[n]] = x.to_i
+            else
+              result[st[n]] = x.to_f
+            end
+          else
+            result[st[n]] = self["field#{i}"]
+          end
+      end
+    end
+    return result
+  end
 
   def export
     a = attributes
-    a[:fields] = self.lite_properties
+    a[:fields] = self.really_lite_properties
     (1..8).each do |i|
       a.delete "field#{i}"
     end

@@ -291,7 +291,7 @@ class Item < ActiveRecord::Base
     temp[:object_type] = self.object_type.attributes.symbolize_keys
 
     if self.sample_id
-      temp[:sample] = self. sample.attributes.symbolize_keys
+      temp[:sample] = self.sample.attributes.symbolize_keys
     end
 
     return temp
