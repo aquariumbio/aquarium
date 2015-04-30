@@ -2,21 +2,6 @@ require_relative "testlib"
 require 'securerandom'
 
 ########################################################################################
-Test.verify( "Get an error if sample type does not exist --> ", { 
-    login: Test.login,
-    key: Test.key,
-    run: {
-      method: "find",
-      args: {
-        model: "task_prototype",
-        type: "Primera"
-      }
-    }
-  }) do |response| 
-    response[:result] == "error"
-end
-
-########################################################################################
 name = "Test" + SecureRandom.hex(4)
 
 Test.verify( "Get an error if property does not exist", { 

@@ -3,16 +3,35 @@ require 'json'
 
 module Test
 
+  @@report = false
+
   def self.login 
     "klavins"
   end
 
   def self.key 
-   "fVcQ53G4v1vAZZYsh3UmLRbASBvGa72wkOofFdxqERE"
+    if ARGV[0] == "r"
+      "mT6wiyfYoAtY-8rJMmRqh8QgRTTcNrrTbKiHSOzPocI"      
+    else
+      "fVcQ53G4v1vAZZYsh3UmLRbASBvGa72wkOofFdxqERE"
+    end
+  end
+
+  def self.url
+
+    if ARGV[0] == "r"
+      u = 'http://bioturk.ee.washington.edu:3011/api'      
+    else    
+      u = 'http://localhost:3000/api'
+    end
+    puts
+    puts "Connecting to #{u}" unless @@report
+    @@report = true
+    u
   end
 
   def self.send data
-    uri = URI('http://localhost:3000/api')  
+    uri = URI(url)  
     http = Net::HTTP.new(uri.host,uri.port)
     req = Net::HTTP::Post.new(uri.path, initheader = {'Content-Type' =>'application/json'})
     req.body = data.to_json

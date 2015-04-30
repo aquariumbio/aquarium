@@ -174,9 +174,18 @@ class Sample < ActiveRecord::Base
     return result
   end
 
+  @@sample_types = false
+
   def really_lite_properties
 
-    st = self.sample_type
+    unless @@sample_types
+      @@sample_types = []
+      sts = SampleType.all.each do |st|
+        @@sample_types[st.id] = st
+      end
+    end
+
+    st = @@sample_types[self.sample_type_id]
 
     result = {}
     (1..8).each do |i|

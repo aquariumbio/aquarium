@@ -31,8 +31,7 @@ Test.verify( "Get all samples", {
     run: {
       method: "find",
       args: {
-        model: :sample,
-        includes: :sample_type
+        model: :sample
       }
     }
   }) do |response| 
