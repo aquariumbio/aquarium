@@ -330,6 +330,8 @@ class InterpreterController < ApplicationController
     # tell manta we're done
     Manta::stop @job, request, (@exception ? 'true' : 'false')
 
+    MetacolDaemon::update
+
   end
 
   def clear_params

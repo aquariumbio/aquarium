@@ -22,7 +22,7 @@ module ApiCreate
 
   def create_task args
   
-    num_tasks = Task.where("created_at > ?", 1.day.ago).count
+    num_tasks = Task.where("created_at > ? AND user_id = ?", 1.day.ago, @user.id).count
     max = Bioturk::Application.config.task_creation_limit
     return error "Limit of #{max} new tasks in 24 hours reached." if num_tasks > max
 
@@ -50,7 +50,7 @@ module ApiCreate
     st = SampleType.find_by_name(args[:type])
     return error "Could not find sample type #{args[:type]}" unless st
 
-    num_samples = Sample.where("created_at > ?", 1.day.ago).count
+    num_samples = Sample.where("created_at > ? AND user_id = ?", 1.day.ago, @user.id).count
     max = Bioturk::Application.config.sample_creation_limit
     return error "Limit of #{max} new samples in 24 hours reached." if num_samples > max
 

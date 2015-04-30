@@ -13,75 +13,84 @@ module MetacolDaemon
 
     while true
 
-      sleep 3
+      update
+      sleep 5*60 # minutes      
 
-      # Build the list of active metacols. The db query (Metacol.where) is in a begin...rescue on the off chance
-      # that the db server does not respond to the query, which actually seems to happen once every few days.
+    end
 
-      is_valid_query = true
+  end
 
-      begin 
-        procs = Metacol.where("status = 'RUNNING'")
-        l = procs.length # This line forces active record to query the db here, instead of at procs.each below
-      rescue Exception => e
-        puts "#{Time.now}: Daemon could not get current processes from database server: " + e.message.split('[')[0]
-        is_valid_query = false
-      end
+  def self.update
+    begin
+      update_aux
+    rescue
+    end
+  end
 
-      if is_valid_query
+  def self.update_aux
 
-        procs.each do |process|
+    is_valid_query = true
 
-          unless process.num_pending_jobs > 10 # to keep poorly written metacols from spiraling out of control
-                                               # we limit the number of pending jobs they can have to 11
+    begin 
+      procs = Metacol.where("status = 'RUNNING'")
+      l = procs.length # This line forces active record to query the db here, instead of at procs.each below
+    rescue Exception => e
+      puts "#{Time.now}: Daemon could not get current processes from database server: " + e.message.split('[')[0]
+      is_valid_query = false
+    end
 
-            # Get the metacol and parse it, checking for parse errors along the way
+    if is_valid_query
 
-            if /local_file/ =~ process.sha
-              blob = Blob.get process.sha, process.path
-              content = blob.xml.force_encoding('UTF-8')
-            else
-              content = Repo::contents process.path, process.sha
-            end
+      procs.each do |process|
 
-            error = false
-            args = (JSON.parse process.state, :symbolize_names => true)[:stack].first
+        unless process.num_pending_jobs > 10 # to keep poorly written metacols from spiraling out of control
+                                             # we limit the number of pending jobs they can have to 11
+
+          # Get the metacol and parse it, checking for parse errors along the way
+
+          if /local_file/ =~ process.sha
+            blob = Blob.get process.sha, process.path
+            content = blob.xml.force_encoding('UTF-8')
+          else
+            content = Repo::contents process.path, process.sha
+          end
+
+          error = false
+          args = (JSON.parse process.state, :symbolize_names => true)[:stack].first
+
+          begin
+            m = Oyster::Parser.new(process.path,content).parse args
+          rescue Exception => e
+            error = true
+            process.message = "#{Time.now}: Error in Daemon while parsing #{process.path}: " + e.message.split('[')[0]
+            puts process.message
+            process.status = "ERROR"
+            process.save
+          end
+
+          if !error 
+
+            # Parsing was successful, so update the process.
+
+            m.set_state( JSON.parse process.state, :symbolize_names => true )
+            m.id = process.id
 
             begin
-              m = Oyster::Parser.new(process.path,content).parse args
+              m.update
             rescue Exception => e
-              error = true
-              process.message = "#{Time.now}: Error in Daemon while parsing #{process.path}: " + e.message.split('[')[0]
+              process.message = "#{Time.now}: Error in Daemon on update: " + e.message.split('[')[0]
               puts process.message
               process.status = "ERROR"
               process.save
             end
 
-            if !error 
+            process.state = m.state.to_json
 
-              # Parsing was successful, so update the process.
-
-              m.set_state( JSON.parse process.state, :symbolize_names => true )
-              m.id = process.id
-
-              begin
-                m.update
-              rescue Exception => e
-                process.message = "#{Time.now}: Error in Daemon on update: " + e.message.split('[')[0]
-                puts process.message
-                process.status = "ERROR"
-                process.save
-              end
-
-              process.state = m.state.to_json
-
-              if m.done?
-                process.status = "DONE"
-              end
-
-              process.save
-
+            if m.done?
+              process.status = "DONE"
             end
+
+            process.save
 
           end
 

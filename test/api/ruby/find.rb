@@ -1,6 +1,24 @@
 require_relative 'testlib'
 
 ###################################################################################
+Test.verify( "Find all samples owned by a particular user", { 
+    login: Test.login,
+    key: Test.key,
+    run: {
+      method: "find",
+      args: {
+        model: :sample,
+        where: { user_id: 64 }
+      }
+    }
+  },loud:true) do |response| 
+    puts "Found #{response[:rows].length}"
+    response[:rows].length >= 0
+  end
+
+puts 
+
+###################################################################################
 [ [:item,9891], [:job,5000], [:sample,123], 
   [:sample_type,12], [:object_type,100], [:user,20], 
   [:task,14] ].each do |thing,id|
