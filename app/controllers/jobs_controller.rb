@@ -4,8 +4,6 @@ class JobsController < ApplicationController
 
   def index
 
-    MetacolDaemon::update   
-
     @user_id = params[:user_id] ? params[:user_id].to_i : current_user.id
 
     if @user_id == -1
