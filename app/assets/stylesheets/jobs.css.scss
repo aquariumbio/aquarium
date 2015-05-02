@@ -2,6 +2,30 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.jobs-nav {
+  border: 1pt solid #efefef;
+  border-radius: 2px;
+  li {
+    margin-left: 20px;
+  }
+}
+
+.jobs-indent {
+  margin-left: 20px;
+}
+
+.jobs-metacol-id {
+  font-weight: bold;
+}
+
+.jobs-select {
+  font-size: 9pt;
+}
+
+.jobs-table-size {
+  color: #888;
+}
+
 .timing-block {
   float: left; 
   display:'block';
@@ -51,22 +75,22 @@
   font-weight: bold;
 }
 
-.error {
+.jobs-error {
   color: red;
 }
 
-.canceled {
+.jobs-canceled {
   color: orange;
 }
 
-.aborted {
+.jobs-aborted {
   color: orange;
 }
 
-.pending {
+.jobs-pending {
   color: blue;
 }
 
-.active {
+.jobs-active {
   color: #0d0;
 }

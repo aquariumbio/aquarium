@@ -1,52 +1,20 @@
 <% provide(:title, 'Jobs') %>
 
-<h2>Jobs for user <span class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @user? @user.login : 'all users' %><b class="caret"></b></a>
-    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-      <% if current_user && current_user.is_admin %>
-        <li><a href='/jobs?user_id=-1'>all users</a></li>
-      <% end %>
-      <% retired = Group.find_by_name('retired')
-         rid = retired ? retired.id : -1
-         ((User.includes(:memberships).select {|u| !u.member? rid }).sort { |x,y| x.login <=> y.login}).each do |u| %>
-         <li><%= link_to u.login, '/jobs?user_id=' + u.id.to_s %></li>
-      <% end %>
-    </ul>
-</span></h2>
+<div class="row-fluid">
 
-<% if @active_jobs.length > 0 %>
-  <div class='well' id='active-jobs'>
-    <h3>Active</h3>
-    <%= render partial: 'job_list', locals: { jobs: @active_jobs, runnable: true, last_updated: true } %>
+  <div class="span3">
+    <%= render partial: "sidebar" %>
   </div>
-<% end %>
 
-<% if @urgent_jobs.length > 0 %>
-  <div class='well' id='urgent-jobs'>
-    <h3>Overdue</h3>
-    <%= render partial: 'job_list', locals: { jobs: @urgent_jobs, runnable: true, last_updated: false } %>
+  <div class="span9">
+    <%= render partial: "jobs" %>
   </div>
-<% end %>
 
-<% if @pending_jobs.length > 0 %>
-  <div class='well' id='pending-jobs'>
-    <h3>Pending</h3>
-    <%= render partial: 'job_list', locals: { jobs: @pending_jobs, runnable: true, last_updated: false } %>
-  </div>
-<% end %>
-
-<% if @later_jobs.length > 0 %>
-  <div class='well' id='future-jobs'>
-    <h3>Upcoming</h3>
-    <%= render partial: 'job_list', locals: { jobs: @later_jobs, runnable: false, last_updated: false } %>
-  </div>
-<% end %>
-
-<% if @pending_jobs.length + @urgent_jobs.length + @active_jobs.length + @later_jobs.length == 0 %>
- <h4>No jobs found</h4>
-<% end %>
-
+</div>
 
 <script>
-  showhide();
+  $('#tabs a:first').tab('show');
+ 
+  jl = new JobLister();
+
 </script>

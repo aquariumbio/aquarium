@@ -26,7 +26,12 @@ class User < ActiveRecord::Base
   end
 
   def member? group_id
-    g = Group.find_by_id (group_id)
+    g = Group.find_by_id(group_id)
+    g && g.member?(id)
+  end
+
+  def retired?
+    g = Group.find_by_name('retired')
     g && g.member?(id)
   end
 

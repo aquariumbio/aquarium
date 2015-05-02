@@ -102,6 +102,7 @@ Bioturk::Application.routes.draw do
   get "stats/protocol_version_info"
   get "jobs/index"
   get "jobs/summary"
+  match "joblist", to: "jobs#joblist"
 
   get "protocol_tree/file"
   get "protocol_tree/recent"

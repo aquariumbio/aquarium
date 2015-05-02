@@ -4,34 +4,15 @@ class JobsController < ApplicationController
 
   def index
 
-    @user_id = params[:user_id] ? params[:user_id].to_i : current_user.id
+    @users = (User.all.reject { |u| u.retired? }).sort_by { |u| u.login }
+    @groups = Group.all.select { |g| g.memberships.count != 1 }
+    @metacols = Metacol.where(status: "RUNNING")
 
-    if @user_id == -1
+  end
 
-      now = Time.now
-
-      @active_jobs =  Job.where("pc >= 0")
-      @urgent_jobs =  Job.where("pc = -1 AND latest_start_time < ?", now)
-      @pending_jobs = Job.where("pc = -1 AND desired_start_time < ? AND ? <= latest_start_time", now, now)
-      @later_jobs  =  Job.where("pc = -1 AND ? <= desired_start_time", now)
-
-    else
-
-      @user = User.find(@user_id)
-
-      now = Time.now
-
-      @active_jobs =  Job.where("pc >= 0")
-      @urgent_jobs =  Job.where("pc = -1 AND latest_start_time < ?", now)
-      @pending_jobs = Job.where("pc = -1 AND desired_start_time < ? AND ? <= latest_start_time", now, now)
-      @later_jobs  =  Job.where("pc = -1 AND ? <= desired_start_time", now)
-
-      [@active_jobs, @urgent_jobs, @pending_jobs, @later_jobs].each do |jl|
-        jl.select! { |j| j.user_id.to_i == @user.id || (@user.member? j.group_id) || j.submitted_by == current_user.id }
-      end
-
-    end
-
+  def joblist
+    logger.info params
+    render json: JobsDatatable.new(view_context)
   end
 
   def show

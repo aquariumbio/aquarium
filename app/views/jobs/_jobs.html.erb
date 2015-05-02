@@ -1,0 +1,31 @@
+<div class='tab-content'>
+
+  <div class="jobs-item-tab tab-pane active" id="pending">
+    <h2>Pending Jobs</h2>
+    <%= render partial: "job_table", locals: { type: "pending" } %>
+  </div>
+
+  <div class="jobs-item-tab tab-pane" id="future">
+    <h2>Future Jobs</h2>
+    <%= render partial: "job_table", locals: { type: "future" } %>    
+  </div>
+
+  <div class="jobs-item-tab tab-pane" id="active">
+    <h2>Active Jobs</h2>
+    <%= render partial: "job_table", locals: { type: "active" } %>       
+  </div>    
+
+  <% @metacols.each do |m| %>
+
+    <div class="jobs-item-tab tab-pane" id="metacol-<%= m.id %>">
+      <h2>Metacol <%= link_to m.id, m %> : <%= m.path %></h2>
+      <p>
+        Submitted by <%= link_to m.user.login, m.user %> <%=  time_ago_in_words(m.created_at) %> ago.
+        Last updated <%= time_ago_in_words(m.updated_at) %> ago.
+      </p>
+      <%= render partial: "job_table", locals: { type: "metacol-#{m.id}" } %>        
+    </div>
+
+  <% end %>
+
+</div>
