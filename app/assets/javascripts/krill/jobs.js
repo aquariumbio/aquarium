@@ -107,11 +107,6 @@ JobLister.prototype.init = function () {
 JobLister.prototype.summarize = function () {
   $(".job-table").each(function() {
     var n = $(this).find(".jobs-jid").length;
-    console.log($(this).attr('id') + " has " + n + " jobs");
-    if ( n > 0 ) {
-      $('#'+$(this).attr('id')+'-size').html(" ("+n+")");
-    } else {
-      $('#'+$(this).attr('id')+'-size').html("");     
-    }
+    $('#'+$(this).attr('id')+'-size').html(" ("+n+")");
   });
 }
