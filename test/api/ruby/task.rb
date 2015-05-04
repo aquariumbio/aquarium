@@ -73,8 +73,8 @@ Test.verify( "Make a task--> ", {
         status: "waiting",
         task_prototype_id: tpid,       
         specification: {
-          plasmid: 2,
-          fragments: [ 5636, 5637, 5638 ]
+          "plasmid Plasmid" => 2,
+          "fragments Fragment" => [ 5636, 5637, 5638 ]
         }
       }
     }

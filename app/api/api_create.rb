@@ -26,12 +26,16 @@ module ApiCreate
     max = Bioturk::Application.config.task_creation_limit
     return error "Limit of #{max} new tasks in 24 hours reached." if num_tasks > max
 
+    puts "@user_id = #{@user.id}"
+
     t = Task.new({
       name: args[:name], 
       status: args[:status], 
       task_prototype_id: args[:task_prototype_id],
-      specification: args[:specification].to_json},
-      user_id: user.id)
+      specification: args[:specification].to_json,
+      user_id: @user.id})
+
+    puts "t.user_id = #{t.user_id}"
 
     if t.save
       add [ t ]
@@ -58,7 +62,7 @@ module ApiCreate
       name: args[:name], 
       sample_type_id: st.id, 
       description: args[:description],
-      user_id: user.id,
+      user_id: @user.id,
       project: args[:project]
     })
 
