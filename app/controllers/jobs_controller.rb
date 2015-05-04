@@ -4,8 +4,8 @@ class JobsController < ApplicationController
 
   def index
 
-    @users = (User.all.reject { |u| u.retired? }).sort_by { |u| u.login }
-    @groups = Group.all.select { |g| g.memberships.count != 1 }
+    @users = User.all - User.includes(memberships: :group).where(memberships: { group_id: Group.find_by_name('retired') })
+    @groups = Group.includes(:memberships).all.reject { |g| g.memberships.length == 1 }
     @metacols = Metacol.where(status: "RUNNING")
 
   end

@@ -223,15 +223,19 @@ class MetacolsController < ApplicationController
     @metacol.status = "DONE"
     @metacol.save
 
+    n = 0
     (@metacol.jobs.select { |j| j.pc == Job.NOT_STARTED }).each do |j|
-     j.pc = Job.COMPLETED
-     j.user_id = j.user_id || current_user.id
-     j.save
-     log j, "CANCEL", {}
+      j.pc = Job.COMPLETED
+      j.user_id = j.user_id || current_user.id
+      j.save
+      log j, "CANCEL", {}
+      n += 1
     end
 
+    flash[:success] = "Metacol #{@metacol.id} and #{n} associated job(s) was (were) canceled."
+
     respond_to do |format|
-      format.html { redirect_to metacols_path( active: true ) }
+      format.html { redirect_to jobs_path }
       format.json { head :no_content }
     end
     
