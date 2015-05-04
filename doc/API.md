@@ -108,7 +108,7 @@ To create a new sample, use the method "create" as in the following example:
         }
     }
 
-Setting the "model" field to "sample "tells the "create" method to create a new sample. Future versions of the create method will allow you to create object_types and sample_types as well. The "type" field must correspond to the name of an existing sample type. The "name" field must be unique. The description is any string. The fields are those fields that are declared in the sample type definition (e.g. via the sample type page).
+Setting the "model" field to "sample "tells the "create" method to create a new sample. Future versions of the create method will allow you to create object_types and sample_types as well. The "type" field must correspond to the name of an existing sample type. The "name" field must be unique. The description is any string. The fields are those fields that are declared in the sample type definition (e.g. via the sample type page). These fields can be strings, numbers, urls, or either the sample id or sample name of another sample.
 
 Note that when you create a sample, the "user" field of the sample will correspond to the user that was authenticaed in the request (see above).
 

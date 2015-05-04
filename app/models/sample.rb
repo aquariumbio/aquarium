@@ -25,9 +25,30 @@ class Sample < ActiveRecord::Base
   end
 
   def set_property name, val
-    i = self.sample_type.field_index name
+    st = self.sample_type
+    i = st.field_index name
     if i
-      self["field#{i}".to_sym] = val
+      n = "field#{i}type"
+      case st[n]
+        when "url", "string"
+          raise "Field '#{name}' should be a string" unless val.class == String
+          self["field#{i}".to_sym] = val
+        when "number"
+          raise "Field '#{name}' should be a number" unless val.class == Fixnum || val.class == Float
+          self["field#{i}".to_sym] = val          
+        else
+          if val.class == String
+            s = Sample.find_by_name val
+            raise "Could not find sample named #{val}" unless s
+            self["field#{i}".to_sym] = val
+          elsif val.class == Fixnum
+            s = Sample.find_by_id val
+            raise "Could not find sample with id #{val}" unless s
+            self["field#{i}".to_sym] = s.name
+          else
+            raise "Field '#{name}' should be a sample id or a sample name" 
+          end
+      end
     else
       raise "Could not find field named #{name} in #{self.sample_type.name}"
     end

@@ -47,7 +47,7 @@ Test.verify( "Create a sample named #{name}", {
     }
   }) do |response| 
     puts " --> New sample has id #{response[:rows][0][:id]}"
-    response[:rows][0][:name] = name
+    response[:rows][0][:name] == name
 end
 
 Test.verify( "Get an error if the sample name is already in use", { 
