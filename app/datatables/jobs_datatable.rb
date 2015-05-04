@@ -28,7 +28,8 @@ class JobsDatatable < Datatable
       doer = User.find_by_id(j.user_id)
       group = Group.find(j.group_id)
       name = j.path.split('/').last.split('.').first 
-
+      meta = (j.metacol_id && !(/metacol/ =~ params[:type])) ? (" (" + link_to(j.metacol_id, j.metacol) + ")") : ""
+ 
       stop = link_to(
           '/interpreter/cancel?job=' + j.id.to_s, 
           data: { confirm: "Are you sure you want to cancel job #{j.id}, protocol '#{name}'?" },
@@ -39,7 +40,7 @@ class JobsDatatable < Datatable
       [ 
         link_to(j.id,j,class: "jobs-jid"), 
         "<b>" + name + "</b>",
-        link_to(sub.login, sub),
+        link_to(sub.login, sub) + meta.html_safe,
         doer ? link_to(doer.login,doer) : "-",
         link_to(group.name,group),
         window(j.desired_start_time,j.latest_start_time,j.pc),
