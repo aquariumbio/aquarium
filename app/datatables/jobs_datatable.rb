@@ -83,7 +83,7 @@ class JobsDatatable < Datatable
       end
     # end
 
-    jobs = jobs.page(page).per_page(per_page)
+    jobs = jobs.page(page).per_page(10000)
     jobs
 
   end
