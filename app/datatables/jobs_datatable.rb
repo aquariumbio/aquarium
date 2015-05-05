@@ -11,9 +11,9 @@ class JobsDatatable < Datatable
     if pc >= 0 # running
       msg = sp + "style='color: green'>running</span>"
     elsif now < t1 # future
-      msg = sp + "Start between " + @view.time_ago_in_words(t1) + " and " + @view.time_ago_in_words(t2) + " from now</span>"
+      msg = sp + ">Start between " + @view.time_ago_in_words(t1) + " and " + @view.time_ago_in_words(t2) + " from now</span>"
     elsif t1 <= now && now < t2 # current
-      msg = sp + "Start within " + @view.time_ago_in_words(t2) + "</span>"
+      msg = sp + ">Start within " + @view.time_ago_in_words(t2) + "</span>"
     else # past due!
       msg = sp + "style='color: red'>" + @view.distance_of_time_in_words(now-t2) + " past due</span>"
     end
