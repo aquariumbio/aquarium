@@ -17,8 +17,6 @@ class MetacolsController < ApplicationController
 
   def index
 
-    MetacolDaemon::update
-
     cookies[:active_metacol_search_string] ||= current_user.login
     cookies[:stopped_metacol_search_string] ||= current_user.login
 
@@ -30,8 +28,6 @@ class MetacolsController < ApplicationController
   end
 
   def show
-
-    MetacolDaemon::update   
 
     @mc = Metacol.includes(:jobs).find(params[:id])
 

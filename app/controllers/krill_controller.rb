@@ -204,8 +204,6 @@ class KrillController < ApplicationController
       if result[:response] == "done"
         # tell manta we're done
         Manta::stop @job, request, (@exception ? 'true' : 'false'), self
-        # update metacols
-        MetacolDaemon::update
       end
 
       @job.reload

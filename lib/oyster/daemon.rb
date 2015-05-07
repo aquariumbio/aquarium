@@ -14,7 +14,7 @@ module MetacolDaemon
     while true
 
       update
-      sleep 30      
+      sleep 15      
 
     end
 
