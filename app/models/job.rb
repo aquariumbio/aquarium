@@ -246,7 +246,11 @@ class Job < ActiveRecord::Base
 
   def export
     a = attributes
-    a["backtrace"] = JSON.parse a["state"], symbolize_names: true
+    begin
+      a["backtrace"] = JSON.parse a["state"], symbolize_names: true
+    rescue
+      a["backtrace"] = { error: "Could not parse backtrace." }
+    end
     a.delete "state"
     a
   end
