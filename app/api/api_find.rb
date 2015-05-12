@@ -37,9 +37,9 @@ module ApiFind
       query = query.all
     end
 
-    if args[:model] == "job"
-      query = query.select { |j| j.krill? }
-    end
+    #if args[:model] == "job"
+    #  query = query.select { |j| j.krill? }
+    #end
 
     add query.collect { |r| r.export }
 
