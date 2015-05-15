@@ -45,3 +45,5 @@ gem 'git'
 
 gem 'rails-patch-json-encode'
 gem 'oj'
+
+gem 'angularjs-rails'

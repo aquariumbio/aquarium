@@ -1,5 +1,8 @@
 Bioturk::Application.routes.draw do
 
+  resources :operations
+  resources :workflows
+
   resources :posts, only: [ :index, :create ]
   resources :wizards
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150405154727) do
+ActiveRecord::Schema.define(:version => 20150515160619) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -122,6 +122,14 @@ ActiveRecord::Schema.define(:version => 20150405154727) do
     t.integer  "sample_type_id"
     t.string   "image"
     t.string   "prefix"
+  end
+
+  create_table "operations", :force => true do |t|
+    t.string   "name"
+    t.string   "protocol_path"
+    t.text     "specification"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "post_associations", :force => true do |t|
@@ -262,6 +270,13 @@ ActiveRecord::Schema.define(:version => 20150405154727) do
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
     t.string   "description"
+  end
+
+  create_table "workflows", :force => true do |t|
+    t.string   "name"
+    t.text     "specification"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
 end

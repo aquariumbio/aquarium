@@ -1,0 +1,69 @@
+
+(function() {
+
+  var w = angular.module('workflow', []);
+
+  w.controller('workflowFormsCtrl', function ($scope,$http) {
+
+    var that = this;
+
+    $scope.show = function(selection,callback) {
+
+      that.nodes = [];
+      that.callback = callback;
+
+      selection.each(function(node) {
+
+        if (!(node instanceof go.Node)) return;
+        $scope.node = node;
+
+        if ( ! $scope.node.data.workflow ) {
+          $scope.node.data.workflow = default_workflow_data(node);
+        } 
+
+        that.nodes.push(node);
+
+      });     
+
+      angular.element('#details').scope().$apply();
+
+    }
+
+    function default_workflow_data(node) {
+
+      switch ( node.data.category ) {
+
+        case "operation":
+          return { name: node.data.name, path: "", timing: "" };
+
+        case "inventory":
+          return { name: node.data.name, sample: 0, sample_type: 0 };
+
+        default:
+          return {};
+
+      }  
+
+    }
+
+    $scope.save = function(node) {
+      that.callback(node);
+    }
+
+  });
+
+  w.directive('operation', function() {
+    return {
+      restrict: 'E',
+      templateUrl: "/templates/operation.html"
+    };
+  });
+
+  w.directive('inventory', function() {
+    return {
+      restrict: 'E',
+      templateUrl: "/templates/inventory.html"
+    };
+  });
+
+})();

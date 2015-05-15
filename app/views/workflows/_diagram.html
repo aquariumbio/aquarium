@@ -1,0 +1,42 @@
+<textarea id="workflow-data" style="display: hidden">
+{ "class": "go.GraphLinksModel",
+  "linkFromPortIdProperty": "fromPort",
+  "linkToPortIdProperty": "toPort",
+  "nodeDataArray": [ 
+{"key":"operation", "name":"PCR", "category":"operation", "color":"lightBlue", "leftArray":[  ], "rightArray":[  ], "topArray":[ {"portId":"top0", "portColor":"#295"},{"portId":"top1", "portColor":"#295"},{"portId":"top2", "portColor":"#295"} ], "bottomArray":[ {"portId":"bottom0", "portColor":"#295"} ], "loc":"100 76.6006795295578", "workflow":{"name":"PCR", "path":"", "timing":""}},
+{"key":"inventory1", "name":"fwd", "category":"inventory", "color":"lightBlue", "type":"input", "workflow":{"name":"fwd", "sample":0, "sample_type":0}},
+{"key":"inventory2", "name":"rev", "category":"inventory", "color":"lightBlue", "type":"input", "workflow":{"name":"rev", "sample":0, "sample_type":0}},
+{"key":"inventory3", "name":"template", "category":"inventory", "color":"lightBlue", "type":"input", "workflow":{"name":"template", "sample":0, "sample_type":0}},
+{"key":"inventory4", "name":"pcr_product", "category":"inventory", "color":"lightBlue", "type":"output", "workflow":{"name":"pcr_product", "sample":0, "sample_type":0}},
+{"key":"operation2", "name":"Run Gel", "category":"operation", "color":"lightBlue", "leftArray":[  ], "rightArray":[  ], "topArray":[ {"portId":"top0", "portColor":"#295"},{"portId":"top1", "portColor":"#295"} ], "bottomArray":[ {"portId":"bottom0", "portColor":"#295"} ], "loc":"200.0000000000002 230.80203858867378", "workflow":{"name":"Run Gel", "path":"", "timing":""}},
+{"key":"inventory5", "name":"dna", "category":"inventory", "color":"lightBlue", "type":"input", "workflow":{"name":"dna", "sample":0, "sample_type":0}},
+{"key":"inventory6", "name":"gel", "category":"inventory", "color":"lightBlue", "type":"input", "workflow":{"name":"gel", "sample":0, "sample_type":0}},
+{"key":"inventory7", "name":"gel_lane", "category":"inventory", "color":"lightBlue", "type":"output", "workflow":{"name":"gel_lane", "sample":0, "sample_type":0}},
+{"key":"operation3", "name":"Pour Gel", "category":"operation", "color":"lightBlue", "leftArray":[  ], "rightArray":[  ], "topArray":[  ], "bottomArray":[ {"portId":"bottom0", "portColor":"#295"} ], "loc":"225 76.60067952955791", "workflow":{"name":"Pour Gel", "path":"", "timing":""}},
+{"key":"inventory8", "name":"gel", "category":"inventory", "color":"lightBlue", "type":"output", "workflow":{"name":"gel", "sample":0, "sample_type":0}},
+{"key":"operation5", "name":"Cut Gel", "category":"operation", "color":"lightBlue", "leftArray":[  ], "rightArray":[  ], "topArray":[ {"portId":"top0", "portColor":"#295"} ], "bottomArray":[ {"portId":"bottom0", "portColor":"#295"} ], "loc":"199.99999999999997 385.0033976477898", "workflow":{"name":"Cut Gel", "path":"", "timing":""}},
+{"key":"inventory11", "name":"gel_lane", "category":"inventory", "color":"lightBlue", "type":"input", "workflow":{"name":"gel_lane", "sample":0, "sample_type":0}},
+{"key":"inventory12", "name":"gel_slice", "category":"inventory", "color":"lightBlue", "type":"output", "workflow":{"name":"gel_slice", "sample":0, "sample_type":0}},
+{"key":"operation6", "name":"Purify Gel", "category":"operation", "color":"lightBlue", "leftArray":[  ], "rightArray":[  ], "topArray":[ {"portId":"top0", "portColor":"#295"} ], "bottomArray":[ {"portId":"bottom0", "portColor":"#295"} ], "loc":"200 539.2047567069056", "workflow":{"name":"Purify Gel", "path":"", "timing":""}},
+{"key":"inventory13", "name":"gel_slice", "category":"inventory", "color":"lightBlue", "type":"input", "workflow":{"name":"gel_slice", "sample":0, "sample_type":0}},
+{"key":"inventory14", "name":"fragment_stock", "category":"inventory", "color":"lightBlue", "type":"output", "workflow":{"name":"fragment_stock", "sample":0, "sample_type":0}}
+ ],
+  "linkDataArray": [ 
+{"to":"operation", "from":"inventory1", "toPort":"top0", "category":"io"},
+{"to":"operation", "from":"inventory2", "toPort":"top1", "category":"io"},
+{"to":"operation", "from":"inventory3", "toPort":"top2", "category":"io"},
+{"from":"operation", "to":"inventory4", "fromPort":"bottom0", "category":"io"},
+{"to":"operation2", "from":"inventory5", "toPort":"top0", "category":"io"},
+{"to":"operation2", "from":"inventory6", "toPort":"top1", "category":"io"},
+{"from":"operation2", "to":"inventory7", "fromPort":"bottom0", "category":"io"},
+{"to":"inventory5", "from":"inventory4", "category":"identification"},
+{"from":"operation3", "to":"inventory8", "fromPort":"bottom0", "category":"io"},
+{"to":"inventory6", "from":"inventory8", "category":"identification"},
+{"to":"operation5", "from":"inventory11", "toPort":"top0", "category":"io"},
+{"from":"operation5", "to":"inventory12", "fromPort":"bottom0", "category":"io"},
+{"to":"inventory11", "from":"inventory7", "category":"identification"},
+{"to":"operation6", "from":"inventory13", "toPort":"top0", "category":"io"},
+{"from":"operation6", "to":"inventory14", "fromPort":"bottom0", "category":"io"},
+{"to":"inventory13", "from":"inventory12", "category":"identification"}
+ ]}
+ </textarea>

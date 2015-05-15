@@ -1,0 +1,18 @@
+<form>
+
+  <h4>Operation: {{node.data.workflow.name}}</h4>
+
+  <label>Name:</label>
+  <input type="text" ng-model="node.data.workflow.name" />
+
+  <label>Protocol Path:</label>
+  <input type="text" ng-model="node.data.workflow.path" />
+
+  <label>Timing:</label>
+  <input type="text" ng-model="node.data.workflow.timing" />
+
+  <br />
+
+  <input type="submit" ng-click="save(node)" value="Update" class="btn btn-primary">
+
+</form>
