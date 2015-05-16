@@ -4,14 +4,14 @@ WorkflowEditor.prototype.define_nodes = function() {
   this.define_inventory_node(); 
 }
 
-WorkflowEditor.prototype.operation_port = function(side,r,c,spot,direction) {
-  return o(go.Panel, direction, new go.Binding("itemArray", side+"Array"),
-      { row: r, column: c,
+WorkflowEditor.prototype.operation_port = function(name) {
+
+  return o(go.Panel, this.geom[name].dir, new go.Binding("itemArray", name+"Ports"),
+      { row: this.geom[name].x, column: this.geom[name].y,
        itemTemplate:
          o(go.Panel,
-           { _side: side,  
-             fromSpot: spot, toSpot: spot,
-             fromLinkable: false, toLinkable: true, cursor: "pointer" },
+           { _side: this.geom[name].side,  
+             fromSpot: this.geom[name].spot, toSpot: this.geom[name].spot },
          new go.Binding("portId", "portId"),
          o(go.Shape, "Circle",
            { stroke: null,
@@ -28,12 +28,18 @@ WorkflowEditor.prototype.define_operation_node = function() {
 
   var that = this;
 
+  this.geom = {
+    input:  { side: "top",    spot: go.Spot.Top,    x: 0, y: 1, dir: "Horizontal" },
+    output: { side: "bottom", spot: go.Spot.Bottom, x: 2, y: 1, dir: "Horizontal" },
+    param:  { side: "left",   spot: go.Spot.Left,   x: 1, y: 0, dir: "Vertical" }        
+  }
+
   var nodeMenu =  // context menu for each Node
     o(go.Adornment, "Vertical",
       o("ContextMenuButton", o(go.TextBlock, "Add input"),      { click: function(e,obj) { that.addInput(); } } ),
       o("ContextMenuButton", o(go.TextBlock, "Add output"),     { click: function(e,obj) { that.addOutput(); } } ),
       o("ContextMenuButton", o(go.TextBlock, "Associate data"), { click: function(e,obj) { that.associateData(); } } ),
-      o("ContextMenuButton", o(go.TextBlock, "Delete"), { click: function(e,obj) { that.drop_operation(); } } )      
+      o("ContextMenuButton", o(go.TextBlock, "Delete"),         { click: function(e,obj) { that.drop_operation(); } } )      
     );
 
   this.diagram.nodeTemplateMap.add("operation",
@@ -54,10 +60,9 @@ WorkflowEditor.prototype.define_operation_node = function() {
         o(go.TextBlock, { margin: 3, textAlign: "center" }, new go.Binding("text", "name"))
       ),
 
-      this.operation_port  ( "left", 1, 0, go.Spot.Left, "Vertical" ),
-      this.operation_port  ( "right", 1, 2, go.Spot.Right, "Vertical" ),
-      this.operation_port  ( "top", 0, 1, go.Spot.Top, "Horizontal" ),
-      this.operation_port  ( "bottom", 2, 1, go.Spot.Bottom, "Horizontal" )        
+      this.operation_port  ( "input" ),
+      this.operation_port  ( "output" ),
+      this.operation_port  ( "param" )    
 
     )
     

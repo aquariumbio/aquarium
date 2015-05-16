@@ -2,8 +2,6 @@ function WorkflowEditor(wid,view_tag,data_tag) {
 
   var that = this;
 
-  this.workflow_id = wid;
-
   this.diagram = o(go.Diagram, view_tag, {
     initialContentAlignment: go.Spot.Center, 
     "undoManager.isEnabled": true 
@@ -25,7 +23,14 @@ function WorkflowEditor(wid,view_tag,data_tag) {
 
   this.diagram.initialContentAlignment = go.Spot.Center;
   this.diagram.undoManager.isEnabled = true;
-  this.diagram.layout = o(go.LayeredDigraphLayout,{direction: 90,layerSpacing: 1});
+  this.diagram.layout = o(go.LayeredDigraphLayout,{
+    direction: 90,
+    layerSpacing: 1,
+    layeringOption: go.LayeredDigraphLayout.LayerOptimalLinkLength,
+    packOption: go.LayeredDigraphLayout.PackStraighten,
+    setsPortSpots: false
+  });
+  //this.diagram.layout = o(go.TreeLayout,{angle: 90, treeStyle: go.TreeLayout.StyleLastParents});
 
   this.diagram.contextMenu = 
    o(go.Adornment, "Vertical",
@@ -49,8 +54,12 @@ function WorkflowEditor(wid,view_tag,data_tag) {
   this.diagram.model.copyNodeDataFunction = function(data) { that.copyNodeData(data) };
   
   // model
-  this.workflow = this.retrieve_workflow();
-  //this.diagram.model = go.Model.fromJson(document.getElementById(data_tag).value);  
+  this.workflow = new Workflow(wid);
+
+  this.workflow.get().then(function(){
+    console.log(that.workflow);
+    that.diagram.model = that.workflow.graph();
+  });
 
 }
 

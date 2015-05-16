@@ -9,7 +9,8 @@ class Workflow < ActiveRecord::Base
   def expand
     s = parse_spec
     s[:operations] = s[:operations].collect { |o|
-      Operation.find(o).parse_spec.merge id: o
+      op = Operation.find(o)
+      op.parse_spec.merge id: o, name: op.name, protocol: op.protocol_path
     }
     { id: id, name: name, specification: s }
   end
