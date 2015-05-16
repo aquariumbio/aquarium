@@ -1,6 +1,8 @@
-function WorkflowEditor(view_tag,data_tag) {
+function WorkflowEditor(wid,view_tag,data_tag) {
 
   var that = this;
+
+  this.workflow_id = wid;
 
   this.diagram = o(go.Diagram, view_tag, {
     initialContentAlignment: go.Spot.Center, 
@@ -42,12 +44,14 @@ function WorkflowEditor(view_tag,data_tag) {
          }).ofObject())
    );
 
-  // model
-  this.diagram.model = go.Model.fromJson(document.getElementById(data_tag).value);  
   this.diagram.model.linkToPortIdProperty = "toPort";
   this.diagram.model.linkFromPortIdProperty = "fromPort";
   this.diagram.model.copyNodeDataFunction = function(data) { that.copyNodeData(data) };
   
+  // model
+  this.workflow = this.retrieve_workflow();
+  //this.diagram.model = go.Model.fromJson(document.getElementById(data_tag).value);  
+
 }
 
 WorkflowEditor.prototype.json = function() {

@@ -1,0 +1,19 @@
+workflow
+
+translating operation specifications to go.js networks
+
+  * who is responsibility is it to translate between the two formats?
+
+    js asks ruby for workflow
+      workflow controller gets specification and loads all operations into a big workflow json
+
+    js turns them into go network
+      workflow_to_network
+
+    user edits go network
+    
+    js extracts data and sends back to ruby
+      network_to_workflow
+
+
+

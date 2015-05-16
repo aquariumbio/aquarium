@@ -13,11 +13,9 @@ class WorkflowsController < ApplicationController
   # GET /workflows/1
   # GET /workflows/1.json
   def show
-    @workflow = Workflow.find(params[:id])
-
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @workflow }
+      format.json { render json: Workflow.find(params[:id]).expand }
     end
   end
 

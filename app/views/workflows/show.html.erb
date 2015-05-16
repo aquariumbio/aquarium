@@ -46,13 +46,13 @@
 
 </div>
 
-<%= render partial: 'diagram' %>
+<span id="workflow-data"></span>
 
 <script>
 
   $(function() {
     o = go.GraphObject.make;
-    we = new WorkflowEditor("workflow","workflow-data");
+    we = new WorkflowEditor(<%= params[:id] %>,"workflow","workflow-data");
   });
 
   function save() {
