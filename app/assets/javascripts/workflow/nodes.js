@@ -31,13 +31,15 @@ WorkflowEditor.prototype.define_operation_node = function() {
   this.geom = {
     input:  { side: "top",    spot: go.Spot.Top,    x: 0, y: 1, dir: "Horizontal" },
     output: { side: "bottom", spot: go.Spot.Bottom, x: 2, y: 1, dir: "Horizontal" },
-    param:  { side: "left",   spot: go.Spot.Left,   x: 1, y: 0, dir: "Vertical" }        
+    data:  { side: "left",    spot: go.Spot.Left,   x: 1, y: 0, dir: "Vertical" },
+    exception:  { side: "right",    spot: go.Spot.Right,   x: 1, y: 2, dir: "Vertical" }        
   }
 
   var nodeMenu =  // context menu for each Node
     o(go.Adornment, "Vertical",
       o("ContextMenuButton", o(go.TextBlock, "Add input"),      { click: function(e,obj) { that.addInput(); } } ),
       o("ContextMenuButton", o(go.TextBlock, "Add output"),     { click: function(e,obj) { that.addOutput(); } } ),
+      o("ContextMenuButton", o(go.TextBlock, "Add Parameter"),  { click: function(e,obj) { that.addParameter(); } } ),      
       o("ContextMenuButton", o(go.TextBlock, "Associate data"), { click: function(e,obj) { that.associateData(); } } ),
       o("ContextMenuButton", o(go.TextBlock, "Delete"),         { click: function(e,obj) { that.drop_operation(); } } )      
     );
@@ -62,8 +64,8 @@ WorkflowEditor.prototype.define_operation_node = function() {
 
       this.operation_port  ( "input" ),
       this.operation_port  ( "output" ),
-      this.operation_port  ( "param" )    
-
+      this.operation_port  ( "data" ),
+      this.operation_port  ( "exception" )
     )
     
   );

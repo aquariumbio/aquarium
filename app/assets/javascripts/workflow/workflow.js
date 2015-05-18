@@ -36,7 +36,7 @@ Workflow.prototype.get = function() {
 
 Workflow.prototype.graph = function() {
 
-  var that = this;
+  var graph = this;
 
   var g = { 
     class: "go.GraphLinksModel",
@@ -58,70 +58,16 @@ Workflow.prototype.graph = function() {
       inputPorts: [],
       outputPorts: [],
       paramPorts: [],
-      dataPorts: []
+      dataPorts: [],
+      exceptionPorts: []
     };
 
-    $.each(this.inputs,function() { // Inputs ////////////////////////////////////////////
-      op.inputPorts.push({
-        portId: this.name,
-        portColor: "orange"
-      });
-      g.nodeDataArray.push({
-        key: that.id + "_" + this.name,
-        name: this.name,
-        category: "inventory",
-        color: "lightBlue",
-        data: this
-      });
-      g.linkDataArray.push({
-        to: that.id,
-        from: that.id + "_" + this.name,
-        toPort: this.name,
-        category: "io",
-        fromSpot: go.Spot.Bottom
-      });
-    });
+    graph.link(op,g,this.inputs,    "input", "green","inventory","io",  "from");
+    graph.link(op,g,this.outputs,   "output","pink","inventory","io",  "to");
+    graph.link(op,g,this.parameters,"data", "blue", "inventory","data","from");
+    graph.link(op,g,this.data,      "data", "cyan", "inventory","data","to");
 
-    $.each(this.outputs,function() { // Outputs //////////////////////////////////////////
-      op.outputPorts.push({
-        portId: this.name,
-        portColor: "blue"
-      });
-      g.nodeDataArray.push({
-        key: that.id + "_" + this.name,
-        name: this.name,
-        category: "inventory",
-        color: "lightBlue",
-        data: this
-      });
-      g.linkDataArray.push({
-        from: that.id,
-        to: that.id + "_" + this.name,
-        fromPort: this.name,
-        category: "io"
-      });      
-    });
-
-    $.each(this.parameters,function() { // Parameters ////////////////////////////////////
-      op.paramPorts.push({
-        portId: this.name,
-        portColor: "green"
-      });
-      g.nodeDataArray.push({
-        key: that.id + "_" + this.name,
-        name: this.name,
-        category: "inventory",
-        color: "lightGreen",
-        data: this
-      });
-      g.linkDataArray.push({
-        to: that.id,
-        from: that.id + "_" + this.name,
-        toPort: this.name,
-        category: "data",
-        fromSpot: go.Spot.Right
-      });      
-    });    
+    graph.link(op,g,this.exceptions,"exception", "coral", "inventory","data","to");
 
     g.nodeDataArray.push(op);
 
@@ -133,11 +79,54 @@ Workflow.prototype.graph = function() {
       to: this.to[0] + "_" + this.to[1],
       category: "identification"
     });
-  });
 
-  console.log(g);
+  });
 
   return go.Model.fromJson(g);  
 
 }
 
+Workflow.prototype.link = function(op,g,parts,name,color,nodeType,linkType,dir) {
+
+  var lc = "light" + color.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+    return letter.toUpperCase();
+  });
+
+  $.each(parts,function() { 
+
+    op[name+"Ports"].push({
+      portId: this.name,
+      portColor: color
+    });
+
+    g.nodeDataArray.push({
+      key: op.key + "_" + this.name,
+      name: this.name,
+      category: nodeType,
+      color: lc,
+      data: this
+    });
+
+    if ( dir == "from" ) {
+
+      g.linkDataArray.push({
+        to: op.key,
+        from: op.key + "_" + this.name,
+        toPort: this.name,
+        category: linkType
+      });      
+
+    } else {
+
+      g.linkDataArray.push({
+        from: op.key,
+        to: op.key + "_" + this.name,
+        fromPort: this.name,
+        category: linkType
+      });   
+
+    }
+
+  }); 
+
+}
