@@ -1,0 +1,37 @@
+<h4>Operation {{operation.id}}: {{operation.name}}</h4>
+
+<ul id="operation-editor-tabs" class="nav nav-pills">
+  <li><a href="#operation" data-toggle="tab">Operation</a></li>
+  <li><a href="#inputs" data-toggle="tab">Inputs</a></li>
+  <li><a href="#ouputs" data-toggle="tab">Ouputs</a></li>
+  <li><a href="#parameters" data-toggle="tab">Parameters</a></li>
+  <li><a href="#data" data-toggle="tab">Data</a></li>
+  <li><a href="#exceptions" data-toggle="tab">Exceptions</a></li>    
+</ul>
+
+<div class="tab-content">
+  <div class="tab-pane active" id="operation">
+    {{operation.name}}<br /><b>{{operation.protocol}}</b>
+  </div>
+  <div class="tab-pane" id="inputs">     <div     inputs="operation.inputs">     </div> </div>
+  <div class="tab-pane" id="ouputs">     <div    outputs="operation.outputs">    </div> </div>
+  <div class="tab-pane" id="parameters"> <div parameters="operation.parameters"> </div> </div>
+  <div class="tab-pane" id="data">       <div       data="operation.data">       </div> </div>
+  <div class="tab-pane" id="exceptions"> <div exceptions="operation.exceptions"> </div> </div>
+</div>
+
+<br />
+
+  <input type="submit" ng-click="save(node)" value="Sync" class="btn btn-primary">
+
+<br /><br />
+
+<pre>
+{{operation}}
+</pre>
+
+<script>
+  $(function () {
+    $('#operation-editor-tabs a:first').tab('show');
+  })
+</script>

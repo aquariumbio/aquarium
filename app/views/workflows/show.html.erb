@@ -1,14 +1,11 @@
 <% height = '100vh' %>
 
-<div ng-app="workflow">
+<div ng-app="workflow_editor">
 
   <style>
     canvas {
       outline: none;
       -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
-    }
-    .details-list {
-      list-style-type: none;
     }
   </style>
 
@@ -21,25 +18,13 @@
       </div>
     </div>
 
-    <div class="span8">
+    <div class="span7">
       <div id="workflow" style="height:<%= height %>;">
       </div>
     </div>
 
-    <div class="span3" style="border: 1pt solid #eee; height: <%= height %>">
-      <div id="details" style="margin: 10px" ng-controller="workflowFormsCtrl as workflow">
-        <ul>
-          <li ng-repeat="node in workflow.nodes" class="details-list">
-            <div ng-if="node.category == 'operation'">
-              <operation node="node"></operation>
-            </div>
-            <div ng-if="node.category == 'inventory'">
-              <inventory node="node"></inventory>
-            </div>
-            <hr />        
-          </li>
-          </ul>
-      </div>
+    <div class="span4" style="border: 1pt solid #eee; height: <%= height %>">
+      <%= render partial: 'workflow_form' %>
     </div>
 
   </div>

@@ -2,11 +2,9 @@ WorkflowEditor.prototype.show_details = function(e) {
 
   var that = this;
 
-  angular.element('#details').scope()
+  console.log(this.diagram.selection);
 
-    .show(this.diagram.selection,function(node) {
-
-      console.log(node);
+  angular.element('#details').scope().show(this.diagram.selection,function(node) {
 
       var old_name = node.data.name;
       node.data.name = node.data.workflow.name;

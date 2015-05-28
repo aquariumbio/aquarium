@@ -1,0 +1,24 @@
+<div id="details" style="margin: 10px" ng-controller="workflowFormsCtrl as form">
+
+  <h4>Workflow: {{form.workflow.name}}</h4>
+
+  <hr />
+
+  <div ng-if="form.nodes.length > 0">
+
+    <ul class="workflow-details-list">
+      <li ng-repeat="node in form.nodes">
+        <div ng-if="node.category == 'operation'">
+          <div operation="node.data"></div>
+        </div>
+        <hr />        
+      </li>
+    </ul>
+
+  </div>
+
+  <div ng-if="!form.nodes || form.nodes.length == 0">
+    <p>{{form.workflow.description()}}</p>
+  </div>
+
+</div>

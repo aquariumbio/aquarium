@@ -2,3 +2,11 @@
   font-family: "Courier";
   font-size: "9pt";
 }
+
+.workflow-details-list {
+  margin: 0;
+  padding: 0;
+  li { 
+    list-style-type: none;
+  }
+}

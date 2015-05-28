@@ -1,8 +1,10 @@
+//
+// I am not sure if any of this is needed. 
+//
+
 WorkflowEditor.prototype.copyNodeData = function(data) {
 
   var copy = {};
-
-
 
   copy.key = data.key;  
   copy.loc = data.loc;

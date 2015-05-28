@@ -77,13 +77,25 @@ WorkflowEditor.prototype.drop_operation = function() {
 
   });
 
-  this.diagram.startTransaction("dropOp");
-
   for ( var i=0; i<nodes.length; i++ ) {
-    this.diagram.remove(nodes[i]);
-  }
 
-  this.diagram.commitTransaction("dropOp");    
+    if ( nodes[i].data.category == "operation" ) {
+
+      (function(n) {
+        $.ajax('/workflows/'+that.workflow.id+'/drop_operation/'+n.data.id).done(function() {
+          that.diagram.startTransaction("dropOp"+i);
+          that.diagram.remove(n);
+          that.diagram.commitTransaction("dropOp"+i);    
+        });
+      })(nodes[i]);
+
+    } else {
+      that.diagram.startTransaction("dropOp"+i);
+      that.diagram.remove(nodes[i]);
+      that.diagram.commitTransaction("dropOp"+i);         
+    }
+
+  }
 
 }
 

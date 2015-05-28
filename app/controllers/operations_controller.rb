@@ -1,4 +1,23 @@
 class OperationsController < ApplicationController
+
+  def new_part
+    op = Operation.find(params[:id])
+    name = op.new_part params[:type].to_sym
+    render json: { name: name, operation: op.export }
+  end
+
+  def new_exception
+    op = Operation.find(params[:id])
+    op.new_exception
+    render json: op.export
+  end
+
+  def new_exception_part
+    op = Operation.find(params[:id])
+    op.new_exception_part(params[:type].to_sym, params[:name])
+    render json: op.export
+  end
+
   # GET /operations
   # GET /operations.json
   def index

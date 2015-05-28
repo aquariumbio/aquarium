@@ -1,115 +1,153 @@
-WorkflowEditor.prototype.addInventorySpec = function (type,color) {
+WorkflowEditor.prototype.addInventorySpec = function (type) {
 
   var that = this;
-
-  var real_type = type == "param" ? "data" : type;
-
-  var lc = "light" + color.toLowerCase().replace(/\b[a-z]/g, function(letter) {
-    return letter.toUpperCase();
-  });
-
-  this.diagram.startTransaction("addInv"); 
+  var real_type = type == "parameters" ? "data" : type;
 
   this.diagram.selection.each(function(node) {
 
     if (!(node instanceof go.Node)) return;
 
-    var i = 0;
-    while (node.findPort(real_type + i.toString()) !== node) i++;
+    var portname = ({ inputs: "inputPorts", outputs: "outputPorts", 
+                      data: "dataPorts", parameters: "dataPorts"})[type];
 
-    var name = type + i.toString();
-    var arr = node.data[real_type+"Ports"];
+    var arr = node.data[portname];
 
     if (arr) {
 
-      var newportdata = {
-        portId: name,
-        portColor: color
-      };
+      $.ajax("/operations/" + node.data.id + "/new_part.json?type=" + type).done(function(result) {
 
-      that.diagram.model.insertArrayItem(arr, -1, newportdata);
+        console.log(data);
 
-      var inventoryNodeData = {
-        key: type + that.currentID++,
-        name: type,
-        category: "inventory", 
-        color: lc,
-        type: type
-      };
+        var name = result.name;
 
-      that.diagram.model.addNodeData(inventoryNodeData);
+        $.extend(node.data,result.operation);
 
-      var link_type = type == "input" || type == "output" ? "io" : "data";
+        that.diagram.startTransaction("addInv");
 
-      if ( type == "input" || type == "param" ) {
+        var newportdata = {
+          portId: name,
+          portColor: "#af2"
+        };
 
-        that.diagram.model.addLinkData({
-          to: node.data.key, from: inventoryNodeData.key, toPort: name, category: link_type
-        });
+        that.diagram.model.insertArrayItem(arr, -1, newportdata);
 
-      } else {
+        var inventoryNodeData = {
+          key: type + that.currentID++,
+          name: name,
+          category: "inventory", 
+          color: "#eee",
+          type: type
+        };
 
-        that.diagram.model.addLinkData({
-          from: node.data.key, to: inventoryNodeData.key, fromPort: name, category: link_type
-        });
+        that.diagram.model.addNodeData(inventoryNodeData);
 
-      }
+        var link_type = type == "inputs" || type == "outputs" ? "io" : "data";
+
+        if ( type == "inputs" || type == "parameters" ) {
+
+          that.diagram.model.addLinkData({
+            to: node.data.key, from: inventoryNodeData.key, toPort: name, category: link_type
+          });
+
+        } else {
+
+          that.diagram.model.addLinkData({
+            from: node.data.key, to: inventoryNodeData.key, fromPort: name, category: link_type
+          });
+
+        }
+
+        that.diagram.commitTransaction("addInv"); 
+
+      });
 
     }
-  });
 
-  this.diagram.commitTransaction("addInv"); 
+  });
 
 }
 
-
 WorkflowEditor.prototype.addInput = function (e,obj) {
-  this.addInventorySpec("input","green");
+  this.addInventorySpec("inputs");
 }
 
 WorkflowEditor.prototype.addOutput = function(e,obj) {
-  this.addInventorySpec("output","pink");
+  this.addInventorySpec("outputs");
 }
 
 WorkflowEditor.prototype.addParameter = function(e,obj) {
-  this.addInventorySpec("param","blue");
+  this.addInventorySpec("parameters");
 }
 
 WorkflowEditor.prototype.associateData = function(e,obj) {
-  this.addInventorySpec("data","cyan");
+  this.addInventorySpec("data");
 }
 
 WorkflowEditor.prototype.addOperation = function() {
 
-  this.diagram.model.addNodeData({
-    key: "operation",
-    name: "op",
-    category: "operation", 
-    color: "lightBlue","input":[  ], "output":[  ], "data":[  ], "parameters":[  ], "exceptions": []
+  var that = this;
+
+  $.ajax("/workflows/"+this.workflow.id+"/new_operation.json").done(function(data) {
+
+    that.diagram.startTransaction("addOp");     
+
+    var r = $.extend({},data,{
+      key: data.id,
+      category: "operation", 
+      inputPorts: [], 
+      outputPorts: [], 
+      dataPorts: [], 
+      parameterPorts: [], 
+      exceptionPorts: []
+    });
+
+    that.diagram.model.addNodeData(r);
+    that.diagram.commitTransaction("addOp"); 
+
   });
 
 }
 
 WorkflowEditor.prototype.identifyIO = function() {
 
-  this.diagram.startTransaction("identifyIO"); 
-
+  var that = this;
   var input, output;
   var x = 0;
+
   this.diagram.selection.each(function(node) {
+
     x++;
     if (node.data.type == "input" ) {
       input = node;
     } else if ( node.data.type == "output" ) {
       output = node;
     }
+
   });
 
   if ( x == 2 && input && output ) {
 
-    this.diagram.model.addLinkData({
-      to: input.data.key, from: output.data.key, category: "identification"
-    });
+    var source = output.data.key.split("_")[0],
+        dest = input.data.key.split("_")[0];
+
+    $.ajax("/workflows/"+this.workflow.id+"/identify.json?source="
+           +source+"&dest="+dest+"&output="+output.data.name+"&input="+input.data.name).done(
+
+      function(result) {
+
+        that.diagram.startTransaction("identifyIO"); 
+
+        that.diagram.model.addLinkData({
+          to: input.data.key, from: output.data.key, category: "identification"
+        });
+
+        console.log({
+          to: input.data.key, from: output.data.key, category: "identification"
+        });
+
+        that.diagram.commitTransaction("identifyIO");   
+
+      });
 
   } else {
 
@@ -117,6 +155,5 @@ WorkflowEditor.prototype.identifyIO = function() {
 
   }
 
-  this.diagram.commitTransaction("identifyIO");   
 
 }

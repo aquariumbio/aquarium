@@ -15,14 +15,38 @@ class WorkflowsController < ApplicationController
   def show
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: Workflow.find(params[:id]).expand }
+      format.json { render json: Workflow.find(params[:id]).export }
     end
+  end
+
+  def new_operation
+    workflow = Workflow.find(params[:id])
+    op = workflow.new_operation # creates new op, adds it to workflow, returns the op
+    render json: op
+  end
+
+  def drop_operation
+    workflow = Workflow.find(params[:id])
+    op = Operation.find(params[:oid])
+    workflow.drop_operation op
+    render json: workflow.export
+  end  
+
+  def identify
+    workflow = Workflow.find(params[:id])
+    workflow.identify params[:source].to_i, params[:dest].to_i, params[:output], params[:input]
+    render json: workflow.export   
   end
 
   # GET /workflows/new
   # GET /workflows/new.json
   def new
     @workflow = Workflow.new
+    @workflow.specification = ({
+        operations: [],
+        io: [],
+        description: ""
+      }).to_json
 
     respond_to do |format|
       format.html # new.html.erb

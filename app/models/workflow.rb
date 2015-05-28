@@ -6,13 +6,41 @@ class Workflow < ActiveRecord::Base
     JSON.parse specification, symbolize_names: true
   end
 
-  def expand
+  def export
     s = parse_spec
     s[:operations] = s[:operations].collect { |o|
-      op = Operation.find(o)
-      op.parse_spec.merge id: o, name: op.name, protocol: op.protocol_path
+      Operation.find(o).export
     }
     { id: id, name: name, specification: s }
+  end
+
+  def add_operation op
+    s = parse_spec
+    s[:operations].push(op.id)
+    self.specification = s.to_json
+    self.save
+  end
+
+  def new_operation
+    op = Operation.new
+    op.save
+    add_operation op
+    op.export
+  end
+
+  def drop_operation op
+    s = parse_spec
+    s[:operations] -= [op.id]
+    self.specification = s.to_json
+    self.save
+    op.destroy if op.okay_to_drop?
+  end
+
+  def identify source, dest, output, input
+    s = parse_spec
+    s[:io].push({from:[source,output],to:[dest,input]})
+    self.specification = s.to_json
+    self.save
   end
 
 end

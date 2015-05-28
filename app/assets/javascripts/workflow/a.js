@@ -9,6 +9,7 @@ function WorkflowEditor(wid,view_tag,data_tag) {
 
   this.currentID = 0;
 
+  this.set_style();
   this.define_nodes();
   this.define_links();
 
@@ -23,14 +24,14 @@ function WorkflowEditor(wid,view_tag,data_tag) {
 
   this.diagram.initialContentAlignment = go.Spot.Center;
   this.diagram.undoManager.isEnabled = true;
+
   this.diagram.layout = o(go.LayeredDigraphLayout,{
-    direction: 90,
-    layerSpacing: 1,
+    direction: this.style.diagram.direction,
+    layerSpacing: this.style.diagram.layerSpacing,
     layeringOption: go.LayeredDigraphLayout.LayerOptimalLinkLength,
     packOption: go.LayeredDigraphLayout.PackStraighten,
     setsPortSpots: false
   });
-  //this.diagram.layout = o(go.TreeLayout,{angle: 90, treeStyle: go.TreeLayout.StyleLastParents});
 
   this.diagram.contextMenu = 
    o(go.Adornment, "Vertical",
@@ -51,13 +52,13 @@ function WorkflowEditor(wid,view_tag,data_tag) {
 
   this.diagram.model.linkToPortIdProperty = "toPort";
   this.diagram.model.linkFromPortIdProperty = "fromPort";
-  this.diagram.model.copyNodeDataFunction = function(data) { that.copyNodeData(data) };
+  //this.diagram.model.copyNodeDataFunction = function(data) { that.copyNodeData(data) };
   
   // model
   this.workflow = new Workflow(wid);
 
   this.workflow.get().then(function(){
-    console.log(that.workflow);
+    angular.element('#details').scope().init(that.workflow);
     that.diagram.model = that.workflow.graph();
   });
 

@@ -1,7 +1,14 @@
 Bioturk::Application.routes.draw do
+  
+  resources :workflows
+  get '/workflows/:id/new_operation',       to: 'workflows#new_operation'
+  get '/workflows/:id/drop_operation/:oid', to: 'workflows#drop_operation'
+  get '/workflows/:id/identify',            to: 'workflows#identify'
 
   resources :operations
-  resources :workflows
+  get '/operations/:id/new_part',           to: 'operations#new_part'
+  get '/operations/:id/new_exception',      to: 'operations#new_exception'
+  get '/operations/:id/new_exception_part', to: 'operations#new_exception_part'
 
   resources :posts, only: [ :index, :create ]
   resources :wizards
@@ -35,10 +42,10 @@ Bioturk::Application.routes.draw do
   match 'viewer',        to: 'metacols#viewer'
 
   resources :metacols do
-      get 'arguments', on: :new
-      get 'narguments', on: :new
-      get 'launch', on: :new
-      get 'stop'
+    get 'arguments', on: :new
+    get 'narguments', on: :new
+    get 'launch', on: :new
+    get 'stop'
   end 
 
   get "/groups/names"
@@ -164,7 +171,6 @@ Bioturk::Application.routes.draw do
   resources :logs, only: [:index, :show]
 
   match '/logout', to: 'sessions#destroy'
-
   match '/item', to: 'items#update'
 
   get "oyster/ping"
