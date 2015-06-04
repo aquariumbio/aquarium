@@ -113,14 +113,8 @@ Workflow.prototype.graph = function() {
   });
 
   $.each(this.io(),function() {
-    console.log(this);
-    g.linkDataArray.push({
-      from: this.from[0] + "_" + this.from[1],
-      to: this.to[0] + "_" + this.to[1],
-      category: "identification"
-    });
 
-    console.log({
+    g.linkDataArray.push({
       from: this.from[0] + "_" + this.from[1],
       to: this.to[0] + "_" + this.to[1],
       category: "identification"

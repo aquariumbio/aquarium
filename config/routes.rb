@@ -9,6 +9,9 @@ Bioturk::Application.routes.draw do
   get '/operations/:id/new_part',           to: 'operations#new_part'
   get '/operations/:id/new_exception',      to: 'operations#new_exception'
   get '/operations/:id/new_exception_part', to: 'operations#new_exception_part'
+  get '/operations/:id/drop_part',          to: 'operations#drop_part'
+  get '/operations/:id/rename',             to: 'operations#rename'
+  get '/operations/:id/rename_part',        to: 'operations#rename_part'  
 
   resources :posts, only: [ :index, :create ]
   resources :wizards

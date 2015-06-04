@@ -32,8 +32,11 @@
     }
 
     $scope.save = function(node) {
-      // that.callback(node);
-      console.log("Save not yet implemented.")
+      that.callback("rename_op",$scope.node);
+    }
+
+    $scope.save_part = function(node) {
+      that.callback("rename_part",$scope.node);
     }
 
   });

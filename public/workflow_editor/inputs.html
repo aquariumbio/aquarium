@@ -1,1 +1,8 @@
-{{inputs}}
+
+<div ng-repeat="input in inputs">
+  <pre>{{input}}</pre>
+  <form class='form-inline'>
+    <input type="text" ng-model="input.new_name">
+    <input type="submit" ng-click="$parent.$parent.$parent.save_part()" value="Sync" class="btn">
+  </form>
+</div>

@@ -16,8 +16,6 @@ WorkflowEditor.prototype.addInventorySpec = function (type) {
 
       $.ajax("/operations/" + node.data.id + "/new_part.json?type=" + type).done(function(result) {
 
-        console.log(data);
-
         var name = result.name;
 
         $.extend(node.data,result.operation);
@@ -36,7 +34,7 @@ WorkflowEditor.prototype.addInventorySpec = function (type) {
           name: name,
           category: "inventory", 
           color: "#eee",
-          type: type
+          type: type.split("s")[0]
         };
 
         that.diagram.model.addNodeData(inventoryNodeData);
@@ -117,6 +115,9 @@ WorkflowEditor.prototype.identifyIO = function() {
   this.diagram.selection.each(function(node) {
 
     x++;
+
+    console.log(node.data.type);
+
     if (node.data.type == "input" ) {
       input = node;
     } else if ( node.data.type == "output" ) {
@@ -151,7 +152,7 @@ WorkflowEditor.prototype.identifyIO = function() {
 
   } else {
 
-    console.log("Cannot combine selected inventory specifications.");
+    console.log(["Cannot combine selected inventory specifications.",input,output]);
 
   }
 

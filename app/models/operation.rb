@@ -76,4 +76,30 @@ class Operation < ActiveRecord::Base
     self.save
   end
 
+  def drop_part type, name
+    raise "Illegal type: :#{type}." unless [:inputs,:outputs,:data,:parameters].member? type
+    s = self.parse_spec
+    s[type] = s[type].reject { |p| p[:name] == name }
+    self.specification = s.to_json
+    self.save
+  end
+
+  def rename name
+    self.name = name
+    self.save
+  end
+
+  def rename_part type, old_name, new_name
+    raise "Illegal type: :#{type}." unless [:inputs,:outputs,:data,:parameters].member? type
+    s = self.parse_spec
+    matching_parts = s[type].select { |p| p[:name] == old_name }
+    raise "#{new_name} not found." unless matching_parts.length == 1
+    part = matching_parts[0]
+    other_parts = s[type].reject { |p| p[:name] == old_name }
+    part[:name] = new_name
+    s[type] = [part] + other_parts
+    self.specification = s.to_json
+    self.save    
+  end
+
 end

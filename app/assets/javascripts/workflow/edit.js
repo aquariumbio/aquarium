@@ -2,20 +2,25 @@ WorkflowEditor.prototype.show_details = function(e) {
 
   var that = this;
 
-  console.log(this.diagram.selection);
+  angular.element('#details').scope().show(this.diagram.selection,function(ev,node) {
 
-  angular.element('#details').scope().show(this.diagram.selection,function(node) {
 
-      var old_name = node.data.name;
-      node.data.name = node.data.workflow.name;
-      that.diagram.startTransaction("changeName"); 
-      that.diagram.model.raiseDataChanged(node.data, "name", old_name, node.data.name);
-      that.diagram.commitTransaction("changeName");  
+    if ( ev == "rename_op" ) {
 
-      that.diagram.isModified = true; // not working?
+      $.ajax("/operations/" + node.data.id + "/rename.json?name="+node.data.name).done(function() {
+        that.diagram.startTransaction("changeName"); 
+        that.diagram.model.raiseDataChanged(node.data,"name");
+        that.diagram.commitTransaction("changeName");  
+        that.diagram.isModified = true; // not working?
+      });
 
-      document.getElementById("workflow-data").value = that.json();
+    } else if ( ev == "rename_part" ) {
 
-    });
+      console.log(node.data.inputs);
+
+    }
+
+  });
 
 }
+

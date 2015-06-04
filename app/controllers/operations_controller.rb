@@ -1,10 +1,28 @@
 class OperationsController < ApplicationController
 
+  def rename
+    op = Operation.find(params[:id])
+    op.rename params[:name]
+    render json: op.export
+  end
+
+  def rename_part
+    op = Operation.find(params[:id])
+    op.rename_part params[:type].to_sym, params[:old_name], params[:new_name]
+    render json: op.export
+  end
+
   def new_part
     op = Operation.find(params[:id])
     name = op.new_part params[:type].to_sym
     render json: { name: name, operation: op.export }
   end
+
+  def drop_part
+    op = Operation.find(params[:id])
+    op.drop_part params[:type].to_sym, params[:name]
+    render json: op.export
+  end    
 
   def new_exception
     op = Operation.find(params[:id])

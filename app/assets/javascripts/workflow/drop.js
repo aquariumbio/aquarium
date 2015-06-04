@@ -9,6 +9,7 @@ WorkflowEditor.prototype.drop_inventory = function() {
     if (!(node instanceof go.Node)) return;
 
     if ( node.data.category == "inventory" ) {
+
       nodes.push(node);
 
       node.findLinksConnected().each(function(link) {
@@ -17,7 +18,7 @@ WorkflowEditor.prototype.drop_inventory = function() {
           ports.push(link.fromPort);
         }
 
-        if ( link.toNode.data.category == "operation" ) {
+        if ( link.toNode && link.toNode.data.category == "operation" ) {
           ports.push(link.toPort);
         }
 
@@ -27,18 +28,17 @@ WorkflowEditor.prototype.drop_inventory = function() {
 
   });
 
-  this.diagram.startTransaction("dropInv");
 
-  for ( var i=0; i<nodes.length; i++ ) {
-    this.diagram.remove(nodes[i]);
-  }
+  var opid = nodes[0].data.key.split('_')[0],
+      type = nodes[0].data.type != 'data' ? nodes[0].data.type + "s" : nodes[0].data.type;
 
-  for ( var i=0; i<ports.length; i++ ) {
-    this.removePort(ports[i]);
-  }  
-
-  this.diagram.commitTransaction("dropInv");   
-
+  $.ajax ( "/operations/" + opid + "/drop_part?type=" + type + "&name=" + nodes[0].data.name )
+    .done(function() {
+      that.diagram.startTransaction("dropInv");  
+      that.diagram.remove(nodes[0]);
+      that.removePort(ports[0]);
+      that.diagram.commitTransaction("dropInv");   
+    });
 
 }
 
