@@ -216,9 +216,10 @@ TODO: Items can be deleted only by the user who owns the associated sample. It m
     req.add_header("Content-Type","application/json")
 
     resp = urllib2.urlopen(req)
-    rdata = resp.read()
+    #read server's responce into a python dict
+    rdata = json.loads(resp.read()) 
 
-    print rdata #this is the data we got back from the aq server
+    print rdata 
 
 ## Javascript
 
