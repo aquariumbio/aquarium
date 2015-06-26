@@ -199,10 +199,26 @@ TODO: Items can be deleted only by the user who owns the associated sample. It m
 ## user
 
 # Appendix 2: Connecting to the API via various languages
+## cURL
+    curl http://54.68.9.194:82/api -H "Content-Type: application/json" --data "{'login':'user-name','key':'key-here'}" -X POST -w "\n"
 
 ## Ruby
 
-## Python
+## Python 2.7
+    import urllib2
+    import json
+
+    url = 'http://54.68.9.194:82/api' #port 81 for production
+    data = {'login':'my-user-same',
+            'key':'my-secret-key'}
+
+    req = urllib2.Request(url,json.dumps(data))
+    req.add_header("Content-Type","application/json")
+
+    resp = urllib2.urlopen(req)
+    rdata = resp.read()
+
+    print rdata #this is the data we got back from the aq server
 
 ## Javascript
 
