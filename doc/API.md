@@ -224,3 +224,14 @@ TODO: Items can be deleted only by the user who owns the associated sample. It m
 ## Javascript
 
 ## MATLAB
+
+
+## Mathematica (v9 + )
+
+    URLFetch["54.68.9.194:82/api",
+      "Method" -> "POST",
+      "Body" -> "{
+      \"login\":\"my-user-name\",
+      \"key\":\"my-secret-key\"
+      }", "Headers" -> {"Content-Type" -> "application/json"}
+    ]
