@@ -77,4 +77,8 @@ Aq.prototype.nice_date = function (date) {
 
 }
 
+Aq.prototype.delete_from_array = function (arr, el) {
+  arr.splice( $.inArray(el, arr), 1 );
+}
+
 aq = new Aq();

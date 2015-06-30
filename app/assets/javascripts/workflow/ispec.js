@@ -6,21 +6,7 @@
     w = angular.module('workflow_editor'); 
   } catch (e) {
     w = angular.module('workflow_editor', []); 
-  }
-
-  var containers;
-  $.ajax({
-    url: '/containers.json'
-  }).done(function(data) {
-    containers = data;
-  });
-
-  var sample_types;
-  $.ajax({
-    url: '/sample_types.json'
-  }).done(function(data) {
-    sample_types = data;
-  });  
+  } 
 
   w.controller('ispecFormsCtrl', function ($scope,$http) {
 
@@ -30,18 +16,44 @@
     $scope.init = function(ispec) {
       $.extend(that.ispec,ispec);
       angular.element().scope().$apply();      
-      console.log(that.ispec);
     } 
 
-  });
+  }); 
 
-  w.directive("ispec", function() {
+  w.directive("alternative", function() {
+
     return {
 
       restrict: 'A',
+      scope: { alternative: "=" },
+      templateUrl: "/workflow_editor/alternative.html",
 
+      link: function($scope,element,attrs) {
+
+      }
+
+    }
+
+  });
+
+  w.directive("alternatives", function() {
+
+    return {
+
+      restrict: 'A',
+      scope: { alternatives: "=" },
+      templateUrl: "/workflow_editor/alternatives.html"
+
+    }
+
+  });  
+
+  w.directive("ispec", function() {
+
+    return {
+
+      restrict: 'A',
       scope: { ispec: "=" },
-
       link: function($scope,element,attrs) {
 
         // Dimensions //////////////////////////////////////////////////////////////////////
@@ -71,49 +83,19 @@
           $scope.ispec.matrix = true;
         }
 
-        // Parts ///////////////////////////////////////////////////////////////////////////
+        $scope.new_alternative = function() {
+          $scope.ispec.alternatives.push({});
+        }        
 
-        $scope.item = function() {
-          element.find("#container_type").attr('disabled', false);
-          $scope.ispec.is_part = false;          
-        };
-
-        $scope.part = function() {
-          element.find("#container_type").attr('disabled', true);          
-          element.find("#container_type").val('collection');
-          $scope.ispec.is_part = true;
-        }
-
-        // Containers //////////////////////////////////////////////////////////////////////
-
-        element.find("#container").autocomplete({
-          source: containers
-        });
-
-        element.find("#sample_type").autocomplete({
-          source: sample_types
-        });
-
-        $scope.sample_type = "";
-        $scope.container = "";
-        $scope.sample = "";
-
-        $scope.sample_type_change = function() {
-          console.log("sample type = " + element.find("#sample_type").val());
-        }
-
-        $scope.container_change = function() {
-          console.log("container = " + element.find("#container").val());
-        }
-
-        $scope.sample_change = function() {
-          console.log("sample = " + element.find("#sample").val());
-        }                
+        $scope.delete_alternative = function(alternative) {
+          aq.delete_from_array($scope.ispec.alternatives,alternative);
+        }           
 
       },
 
-      templateUrl: "/workflow_editor/ispec.html" // this file is in ./public/
-    };                                           // since putting it views confuses rails
+      templateUrl: "/workflow_editor/ispec.html" 
+
+    };                                           
 
   });  
 
