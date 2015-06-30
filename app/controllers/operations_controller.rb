@@ -117,4 +117,13 @@ class OperationsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def container_types
+    render json: ObjectType.uniq.pluck(:handler)
+  end
+
+  def sample_types
+    render json: SampleType.select([:id,:name]).collect { |h| "#{h.id}: #{h.name}" }
+  end  
+
 end

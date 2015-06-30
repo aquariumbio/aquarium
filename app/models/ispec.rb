@@ -52,11 +52,11 @@ class Ispec
       num_rows = self.dimension[0]
       num_cols = self.dimension[1]
 
-      return false unless i.class == Array && i.length == num_rows
+      return false unless i.class == Array && i.length <= num_rows
 
-      (0..num_rows-1).each do |x|
-        return false unless i[x].class == Array && i[x].length == num_cols
-        (0..num_cols-1).each do |y|
+      (0..i.length-1).each do |x|
+        return false unless i[x].class == Array && i[x].length <= num_cols
+        (0..i[x].length-1).each do |y|
           element = Ispec.new(get_attrs.except :dimension)
           sat &&= element.satisfied_by?(i[x][y])
         end

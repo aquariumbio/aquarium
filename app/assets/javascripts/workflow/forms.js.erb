@@ -1,7 +1,12 @@
 
 (function() {
 
-  var w = angular.module('workflow_editor', []);
+  var w;
+  try {
+    w = angular.module('workflow_editor'); 
+  } catch (e) {
+    w = angular.module('workflow_editor', []); 
+  }
 
   w.controller('workflowFormsCtrl', function ($scope,$http) {
 

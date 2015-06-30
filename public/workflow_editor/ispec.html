@@ -1,0 +1,71 @@
+<form style='padding-left: 5px'>
+
+  <fieldset>
+
+    <label>Name</label>
+    <input type="text" ng-model='ispec.name'>
+
+    <div class='row-fluid'>
+
+      <div class='span3'>
+        <label class="radio">
+          <input type="radio" name="itemOrPart" id="item" value="item" checked>
+          Item
+        </label>
+        <label class="radio">
+          <input type="radio" name="itemOrPart" id="part" value="part">
+          Part
+        </label>
+      </div>
+
+      <div class='span3'>
+        <label class="radio">
+          <input type="radio" name="scalarOrMatrix" id="scalar" value="scalar" checked ng-click="scalar()">
+          Single
+        </label>
+        <label class="radio">
+          <input type="radio" name="scalarOrMatrix" id="matrix" value="matrix" ng-click="matrix()">
+          Matrix
+        </label>
+      </div>      
+
+      <div class='span6' id='dimensions'>
+        <input class='input-mini' type="number" ng-model='ispec.rows'> x 
+        <input class='input-mini' type="number" ng-model='ispec.columns'>
+      </div>
+
+    </div>
+
+    <div class='controls controls-row'>
+      <label class='span6'>Container Type</label>
+      <label class='span6'>Container</label>
+    </div>
+
+    <div class='controls controls-row'>
+      <input id="container_type" type=text class='span6'>
+      <input id="container" type=text  class='span6'>
+    </div>
+
+    <div class='controls controls-row'>
+      <label class='span6'>Sample Type</label>
+      <label class='span6'>Sample</label>
+    </div>
+
+    <div class='controls controls-row'>
+      <input id="sample_type" type=text class='span6'>
+      <input id="sample" type=text  class='span6'>
+    </div>
+
+    <div class='span4'>
+      <button class='btn btn-primary'>Sync</button>
+    </div>
+
+  </fieldset>
+
+</form>
+
+<hr />
+
+<pre>
+{{ispec}}
+</pre>

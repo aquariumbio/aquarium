@@ -13,6 +13,9 @@ Bioturk::Application.routes.draw do
   get '/operations/:id/rename',             to: 'operations#rename'
   get '/operations/:id/rename_part',        to: 'operations#rename_part'  
 
+  get 'container_types',        to: 'operations#container_types'  
+  get 'sample_types',           to: 'operations#sample_types'    
+
   resources :posts, only: [ :index, :create ]
   resources :wizards
 
