@@ -9,11 +9,11 @@
 
       <div class='span3'>
         <label class="radio">
-          <input type="radio" name="itemOrPart" id="item" value="item" checked>
+          <input type="radio" name="itemOrPart" id="item" value="item" checked ng-click="item()">
           Item
         </label>
         <label class="radio">
-          <input type="radio" name="itemOrPart" id="part" value="part">
+          <input type="radio" name="itemOrPart" id="part" value="part" ng-click="part()">
           Part
         </label>
       </div>
@@ -36,29 +36,25 @@
 
     </div>
 
-    <div class='controls controls-row'>
-      <label class='span6'>Container Type</label>
+    <div class='row-fluid'>
+      <label class='span6'>Sample Type</label>
       <label class='span6'>Container</label>
     </div>
 
-    <div class='controls controls-row'>
-      <input id="container_type" type=text class='span6'>
-      <input id="container" type=text  class='span6'>
+    <div class='row-fluid'>
+      <input id="sample_type" type=text class='span6' ng-model="sample_type" ng-blur="sample_type_change()">
+      <input id="container"   type=text class='span6' ng-model="container" ng-blur="container_change()">      
+    </div>
+
+    <div class='row-fluid'>
+      <label class='span12'>Sample</label>
     </div>
 
     <div class='controls controls-row'>
-      <label class='span6'>Sample Type</label>
-      <label class='span6'>Sample</label>
+      <input id="sample" type=text  class='span12' ng-model="sample" ng-blur="sample_change()">
     </div>
 
-    <div class='controls controls-row'>
-      <input id="sample_type" type=text class='span6'>
-      <input id="sample" type=text  class='span6'>
-    </div>
-
-    <div class='span4'>
-      <button class='btn btn-primary'>Sync</button>
-    </div>
+    <button class='btn btn-primary'>Sync</button>
 
   </fieldset>
 

@@ -1,15 +1,6 @@
-# Name
-# Sample Type [e.g. Plasmid]
-# Sample Name [e.g. pABC]
-# Container Name [e.g. Stripwell]
-# Item number(s)
-# Part of Collection? [Yes|No]
-# Dimension [Scalar, n, nxm]
-# Shared? [Yes|No]
+class Alternative
 
-class Ispec
-
-  attr_accessor :name, :sample_type, :sample, :container, :item, :is_part, :dimension, :is_shared, :row, :col
+  attr_accessor :sample_type, :container, :sample, :item, :row, :column
 
   def initialize attrs={}
     assign_attrs attrs
@@ -18,7 +9,61 @@ class Ispec
   def assign_attrs attrs
     attrs.keys.each do |key|
       m = "#{key}="
-      self.send( m, attrs[key].class == Fixnum ? [attrs[key]] : attrs[key] ) if self.respond_to?( m )
+      self.send( m, attrs[key] ) if self.respond_to?( m )
+    end
+  end
+
+  def satisfied_by_item? i
+
+    sat = true
+
+    sat &&= ( self.item == i.id )                           if self.item
+    sat &&= ( self.container == i.object_type.id )          if self.container
+    sat &&= ( self.sample == i.sample.id )                  if self.sample
+    sat &&= ( self.sample_type == i.sample.sample_type.id ) if self.sample_type    
+
+    sat
+
+  end
+
+  def satisfied_by_part? p
+
+    sat = true
+
+    return false unless p.class == Part 
+
+    sat &&= ( self.container == p.collection.object_type.id ) if self.container
+    sat &&= ( self.item == p.collection.id )                  if self.item
+    sat &&= ( self.sample_type == p.sample.sample_type.id )   if self.sample_type
+    sat &&= ( self.sample == p.sample.id )                    if self.sample
+    sat &&= ( self.row == p.x )                               if self.row
+    sat &&= ( self.column == p.y )                            if self.column    
+
+    sat
+
+  end
+
+end
+
+class Ispec
+
+  attr_accessor :name, :alternatives, :item, :rows, :columns
+  attr_accessor :is_part, :is_shared, :is_matrix
+
+  def initialize attrs={}
+    assign_attrs attrs
+  end
+
+  def assign_attrs attrs
+    attrs.keys.each do |key|
+      if key == :alternatives
+        self.alternatives = attrs[key].collect { |a|
+          a.class == Alternative ? a : (Alternative.new a)
+        }
+      else
+        m = "#{key}="
+        self.send( m, attrs[key] ) if self.respond_to?( m )
+      end
     end
   end
 
@@ -47,37 +92,24 @@ class Ispec
 
     sat = true
  
-    if self.dimension
+    if self.is_matrix
 
-      num_rows = self.dimension[0]
-      num_cols = self.dimension[1]
+      raise "rows and/or columns not defined" unless self.rows && self.columns
 
-      return false unless i.class == Array && i.length <= num_rows
+      return false unless i.class == Array && i.length <= self.rows
 
       (0..i.length-1).each do |x|
-        return false unless i[x].class == Array && i[x].length <= num_cols
+        return false unless i[x].class == Array && i[x].length <= self.columns
         (0..i[x].length-1).each do |y|
-          element = Ispec.new(get_attrs.except :dimension)
+          element = Ispec.new(get_attrs.except :is_matrix, :rows, :columns)
           sat &&= element.satisfied_by?(i[x][y])
         end
       end
 
     elsif is_part
-
-      return false unless i.class == Part # Part = { collection, x, y }
-
-      sat &&= ( self.container[0] == i.collection.object_type.id ) if self.container
-      sat &&= ( self.item[0] == i.collection.id ) if self.item
-      sat &&= ( self.sample_type[0] == i.sample.sample_type.id ) if self.sample_type
-      sat &&= ( self.sample[0] == i.sample.id ) if self.sample
-
+      sat &&= self.alternatives.inject(false) { |sum,a| sum || ( a.satisfied_by_part? i ) }
     else
-
-      sat &&= ( self.item.member? i.id ) if self.item
-      sat &&= ( self.container.member? i.object_type.id ) if self.container
-      sat &&= ( self.sample.member? i.sample.id ) if self.sample
-      sat &&= ( self.sample_type.member? i.sample.sample_type.id ) if self.sample_type    
-
+      sat &&= self.alternatives.inject(false) { |sum,a| sum || ( a.satisfied_by_item? i ) }
     end
 
     sat

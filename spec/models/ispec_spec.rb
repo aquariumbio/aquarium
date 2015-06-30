@@ -22,32 +22,32 @@ RSpec.describe Ispec, :type => :model do
     i = s.items.last
 
     it "is satisfied by an item when it specifies a single item" do
-      is = Ispec.new item: i.id
+      is = Ispec.new alternatives: [ { item: i.id } ]
       expect(is.satisfied_by? i).to eq(true)
     end
 
     it "is satisfied by an item when it specifies a list of items" do
-      is = Ispec.new item: [i.id,2]
+      is = Ispec.new alternatives: [ { item: i.id } , { item: 2 } ]
       expect(is.satisfied_by? i).to eq(true)
     end    
 
-    it "is not satisfied by an item when it specifies a disjoint list of items" do
-      is = Ispec.new item: [1,2]
+    it "is not satisfied by an item when it specifies list of non-matching items" do
+      is = Ispec.new alternatives: [ { item: 1 } , { item: 2 } ]
       expect(is.satisfied_by? i).to eq(false)
     end
 
     it "is satisfied by an item when it specifies a container type" do
-      is = Ispec.new container: i.object_type.id
+      is = Ispec.new alternatives: [ { container: i.object_type.id } ]
       expect(is.satisfied_by? i).to eq(true)
     end
 
     it "is satisfied by an item when it specifies a sample" do
-      is = Ispec.new sample: s.id
+      is = Ispec.new alternatives: [ { sample: s.id } ]
       expect(is.satisfied_by? i).to eq(true)
     end
 
     it "is satisfied by an item when it specifies a sample type" do
-      is = Ispec.new sample_type: st.id
+      is = Ispec.new alternatives: [ { sample_type: st.id } ]
       expect(is.satisfied_by? i).to eq(true)
     end    
 
@@ -60,7 +60,7 @@ RSpec.describe Ispec, :type => :model do
     i = s.items.last
 
     it "is satisfied by a matrix of items" do
-      is = Ispec.new dimension: [1,1], sample: s.id
+      is = Ispec.new is_matrix: true, rows: 1, columns: 1, alternatives: [ { sample: s.id } ]
       expect(is.satisfied_by? [[i]]).to eq(true)
     end    
 
@@ -73,33 +73,33 @@ RSpec.describe Ispec, :type => :model do
     s = part.sample
 
     it "is satisfied by a part" do
-      is = Ispec.new is_part: true
+      is = Ispec.new is_part: true, alternatives: [ {} ]
       expect(is.satisfied_by? part).to eq(true)
     end
 
     it "is satisfied by a part when an object type is specified" do
-      is = Ispec.new is_part: true, container: col.object_type.id
+      is = Ispec.new is_part: true, alternatives: [ { container: col.object_type.id } ]
       expect(is.satisfied_by? part).to eq(true)
     end
 
     it "is satisfied by a part when an object type and a sample are specified" do
-      is = Ispec.new is_part: true, container: col.object_type.id, sample: s.id
+      is = Ispec.new is_part: true, alternatives: [ { container: col.object_type.id, sample: s.id } ]
       expect(is.satisfied_by? part).to eq(true)
     end     
 
     it "is satisfied by a part when a specific collection is specified" do
-      is = Ispec.new is_part: true, item: col.id
+      is = Ispec.new is_part: true, alternatives: [ { item: col.id } ]
       expect(is.satisfied_by? part).to eq(true)
     end        
 
     it "is satisfied by a part when a specific collection and row and column are specified" do
-      is = Ispec.new is_part: true, item: col.id, row: 0, col: 0
+      is = Ispec.new is_part: true, alternatives: [ { item: col.id, row: 0, column: 0 } ]
       expect(is.satisfied_by? part).to eq(true)
     end  
 
-    it "is not satisfied by a part when a specific collection and row and column are incorrectly specified" do
-      is = Ispec.new is_part: true, item: col.id, row: 0, col: 1
-      expect(is.satisfied_by? part).to eq(true)
+    it "is not satisfied by a part when a specific collection, row and column are incorrectly specified" do
+      is = Ispec.new is_part: true, alternatives: [ { item: col.id, row: 0, column: 1 } ]
+      expect(is.satisfied_by? part).to eq(false)
     end            
 
   end

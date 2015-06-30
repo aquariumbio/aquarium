@@ -118,9 +118,13 @@ class OperationsController < ApplicationController
     end
   end
 
-  def container_types
-    render json: ObjectType.uniq.pluck(:handler)
+  def containers
+    render json: ObjectType.select([:id,:name]).collect { |h| "#{h.id}: #{h.name}" }
   end
+
+  def collection_containers
+    render json: ObjectType.select([:id,:name]).collect { |h| "#{h.id}: #{h.name}" }
+  end  
 
   def sample_types
     render json: SampleType.select([:id,:name]).collect { |h| "#{h.id}: #{h.name}" }
