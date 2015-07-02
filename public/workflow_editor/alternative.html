@@ -1,30 +1,28 @@
-<div class='row-fluid'>
 
-  <div class='span11'>
 
-    <form>
+    <div class='row-fluid'>
+
+      <fieldset class='span6'>
+        <label>Sample Type</label>
+        <input class='input-block-level' id="sample_type" type=text ng-model="alternative.sample_type" ng-blur="sample_type_change()">
+      </fieldset>
+
+      <fieldset class='span6'>
+        <label>Container</label> 
+        <input id="container" class='input-block-level' type=text  ng-model="alternative.container" ng-blur="container_change()">
+      </fieldset>
+
+
+  </div>
+
+
+    </div>
 
       <fieldset>
 
-        <label>Sample Type</label>
-        <input id="sample_type" type=text ng-model="alternative.sample_type" ng-blur="sample_type_change()">
-
-        <label>Container</label> 
-        <input id="container"   type=text  ng-model="alternative.container" ng-blur="container_change()">
-
         <label>Sample</label>
-        <input id="sample" type=text  ng-model="alternative.sample" ng-blur="sample_change()">
+        <input id="sample"  class='input-block-level' type=text  ng-model="alternative.sample" ng-blur="sample_change()">
 
       </fieldset>
 
-    </form>
 
-  </div>
-
-  <div class='span1'>
-
-    <button class='btn btn-mini' ng-click="$parent.$parent.$parent.delete_alternative(alternative)">-</button>
-
-  </div>
-
-</div>

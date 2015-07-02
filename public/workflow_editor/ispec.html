@@ -1,12 +1,7 @@
 <style>
-
-.bracketed {
-  border-left: 1pt solid green;
-  border-radius: 5px;
-  padding-left: 10px;
-  margin-bottom: 5px;
+.hoverable {
+  cursor: pointer;
 }
-
 </style>
 
 <form style='padding-left: 5px'>
@@ -14,33 +9,38 @@
   <fieldset>
 
     <label>Name</label>
-    <input type="text" ng-model='ispec.name'>
+    <input type="text" class='input-block-level' ng-model='ispec.name'>
+
+    <label>Description</label>
+    <textarea type="text" class='input-block-level' ng-model='ispec.description' />    
 
     <div class='row-fluid'>
 
       <div class='span3'>
         <label class="radio">
-          <input type="radio" name="itemOrPart" id="item" value="item" checked ng-click="item()">
+          <input type="radio" name="itemOrPart" ng-value="false" ng-model="ispec.is_part">
           Item
         </label>
         <label class="radio">
-          <input type="radio" name="itemOrPart" id="part" value="part" ng-click="part()">
+          <input type="radio" name="itemOrPart" ng-value="true" ng-model="ispec.is_part">
           Part
         </label>
       </div>
 
       <div class='span3'>
         <label class="radio">
-          <input type="radio" name="scalarOrMatrix" id="scalar" value="scalar" checked ng-click="scalar()">
+          <input type="radio" name="scalarOrMatrix"
+                 ng-value="false" ng-model="ispec.is_matrix">
           Single
         </label>
         <label class="radio">
-          <input type="radio" name="scalarOrMatrix" id="matrix" value="matrix" ng-click="matrix()">
+          <input type="radio" name="scalarOrMatrix"
+                 ng-value="true" ng-model="ispec.is_matrix" ng-click="dimensions()">
           Matrix
         </label>
       </div>      
 
-      <div class='span6' id='dimensions'>
+      <div class='span6' ng-show="ispec.is_matrix">
         <input class='input-mini' type="number" ng-model='ispec.rows'> x 
         <input class='input-mini' type="number" ng-model='ispec.columns'>
       </div>
@@ -49,16 +49,15 @@
 
   </fieldset>    
 
-  <div id="alternatives_container">
-    <div alternatives="ispec.alternatives"></div>
-  </div>
 
-  <button class='btn btn-mini' ng-click="new_alternative()">+</button>
+  <div alternatives="ispec.alternatives"></div>
+
+  <icon class='icon-plus hoverable' ng-click="new_alternative()" />
 
 </form>
 
-<hr />
 
-<pre>
-{{ispec}}
-</pre>
+
+<!-- pre>
+{{ispec|json}}
+</pre -->

@@ -1,0 +1,26 @@
+<style>
+.upper-right {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+.hoverable {
+  cursor: pointer;
+}
+</style>
+
+<div class='row-fluid' ng-repeat="kv in keyvals" style="position:relative">
+  <fieldset class='span6'>
+    <label>Name</label>
+    <input class='input-block-level' type=text ng-model='kv.name'>
+  </fieldset>
+  <fieldset class='span6'>
+    <label>Type</label>
+    <input class='input-block-level' type=text ng-model='kv.type'>  
+  </fieldset>
+  <icon class='icon-remove hoverable upper-right' ng-click="$parent.delete_keyval(kv)" />  
+</div>
+
+<icon class='icon-plus hoverable' ng-click="new_keyval()" />
+
+<pre>{{keyvals|json}}</pre>

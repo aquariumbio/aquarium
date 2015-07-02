@@ -23,15 +23,9 @@
   w.directive("alternative", function() {
 
     return {
-
       restrict: 'A',
       scope: { alternative: "=" },
-      templateUrl: "/workflow_editor/alternative.html",
-
-      link: function($scope,element,attrs) {
-
-      }
-
+      templateUrl: "/workflow_editor/alternative.html"
     }
 
   });
@@ -39,11 +33,9 @@
   w.directive("alternatives", function() {
 
     return {
-
       restrict: 'A',
       scope: { alternatives: "=" },
       templateUrl: "/workflow_editor/alternatives.html"
-
     }
 
   });  
@@ -58,30 +50,20 @@
 
         // Dimensions //////////////////////////////////////////////////////////////////////
 
-        if ( !$scope.ispec.rows ) {
-          $scope.ispec.rows = 1;
+        if( !$scope.ispec.is_matrix ) {
+          $scope.ispec.is_matrix = false;
         }
 
-        if ( !$scope.ispec.columns ) {
-          $scope.ispec.columns = 1;
-        }        
-
-        element.find("#scalar").attr('checked',!$scope.ispec.matrix);        
-        element.find("#matrix").attr('checked', $scope.ispec.matrix);
-
-        if ( angular.element("#scalar").attr('checked') ) {
-          element.find("#dimensions").css('display', 'none');
+        $scope.dimensions = function() {
+          if ( !$scope.ispec.rows ) {
+            $scope.ispec.rows = 1;
+          }
+          if ( !$scope.ispec.columns ) {
+            $scope.ispec.columns = 1;
+          }           
         }
 
-        $scope.scalar = function() {
-          element.find("#dimensions").css('display', 'none');
-          $scope.ispec.matrix = false;          
-        };
-
-        $scope.matrix = function() {
-          element.find("#dimensions").css('display', 'block');
-          $scope.ispec.matrix = true;
-        }
+        // Alternatives ////////////////////////////////////////////////////////////////////
 
         $scope.new_alternative = function() {
           $scope.ispec.alternatives.push({});
@@ -89,7 +71,13 @@
 
         $scope.delete_alternative = function(alternative) {
           aq.delete_from_array($scope.ispec.alternatives,alternative);
-        }           
+        }        
+
+        // Parts ///////////////////////////////////////////////////////////////////////////
+
+        if( !$scope.ispec.is_part ) {
+          $scope.ispec.is_part = false;
+        }
 
       },
 
