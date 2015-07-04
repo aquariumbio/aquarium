@@ -16,7 +16,6 @@ WorkflowEditor.prototype.copyNodeData = function(data) {
     copy.topArray    = this.copyPortArray(data.topArray); 
     copy.bottomArray = this.copyPortArray(data.bottomArray); 
   }
-  console.log([data,copy]);
   return copy;
 
 }

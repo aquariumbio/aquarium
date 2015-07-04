@@ -1,51 +1,34 @@
-<% height = '100vh' %>
+<div ng-app="workflow">
 
-<div ng-app="workflow_editor">
+  <div id="workflow-control" class='row-fluid' ng-controller='workflowCtrl as workflow' 
+       workflow=<%= params[:id] %> style='outline: 1pt dashed orange'>
 
-  <style>
-    canvas {
-      outline: none;
-      -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
-    }
-  </style>
-
-  <div class="row-fluid">
-
-    <div id="controls" class="span1" style="border: 1pt solid #eee; height: <%= height %>">
-      <div style="margin: 10px">
-        <button class="btn btn-block" id="AddButton" onclick="add()">Add</button>
-        <button class="btn btn-block" id="SaveButton" onclick="save()">JSON</button>
-      </div>
+    <div class='span8'>
+      <svg id="diagram" style='outline: 1pt dashed orange' width="100%">
+        <!-- operations  -->
+        <g ng-repeat="op in workflow.specification.operations"
+           ng-attr-transform="translate({{200*$index+20}}, 20)">
+           <g operation="op"></g>
+        </g>
+        <!-- connections -->
+      </svg>
     </div>
 
-    <div class="span7">
-      <div id="workflow" style="height:<%= height %>;">
-      </div>
-    </div>
-
-    <div class="span4" style="border: 1pt solid #eee; height: <%= height %>">
-      <%= render partial: 'workflow_form' %>
+    <div class='span4'>
+      <textarea json-text ng-model="workflow.specification"></textarea>
+      <pre>{{workflow.specification|json}}</pre>
     </div>
 
   </div>
 
 </div>
 
-<span id="workflow-data"></span>
-
 <script>
-
-  $(function() {
-    o = go.GraphObject.make;
-    we = new WorkflowEditor(<%= params[:id] %>,"workflow","workflow-data");
-  });
-
-  function save() {
-    document.getElementById("workflow-data").value = we.json();
-  }
-
-  function add() {
-    we.addOperation();
+  function resize() {
+    var y = $( window ).height() - 90;
+    $("#workflow-control").css('height',y + 'px');
+    $("#diagram").css('height', y + 'px');
   }  
-
+  resize();
+  $(window).resize(resize);
 </script>

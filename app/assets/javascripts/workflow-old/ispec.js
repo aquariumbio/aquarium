@@ -20,16 +20,6 @@
 
   }); 
 
-  w.directive("alternative", function() {
-
-    return {
-      restrict: 'A',
-      scope: { alternative: "=" },
-      templateUrl: "/workflow_editor/alternative.html"
-    }
-
-  });
-
   w.directive("alternatives", function() {
 
     return {

@@ -1,0 +1,101 @@
+<!-- Constants -->
+
+{{ nameHeight = 20 }}
+{{ width = 160 }}
+{{ portSpace  = 14 }}
+{{ textOffset = 8 }}
+{{ numInputs  = operation.inputs.length }}
+{{ numOutputs = operation.outputs.length }}
+{{ numParams  = operation.parameters.length }}
+{{ numDatas   = operation.data.length }}
+{{ numEx      = operation.exceptions.length }}
+
+{{ bodyHeight = portSpace+portSpace * ( 
+                numInputs+numParams > numOuputs+numDatas ? 
+                  (numInputs+numParams) : 
+                  (numOuputs+numDatas)
+                ) + portSpace * ( numEx > 0 ? 1 : 0 ) }}
+
+<!-- Title -->
+
+  <rect class='operation-title-box' 
+        ng-width="{{width}}"
+        ng-height="{{nameHeight}}"
+        />
+
+  <text class='operation-title' 
+        ng-x={{width/2}}
+        ng-y={{nameHeight/2+2}}
+        text-anchor="middle"
+        alignment-baseline="middle">
+    {{operation.name}}
+  </text>
+
+  <rect ng-width="{{width}}"
+    ng-height="{{bodyHeight}}"
+    y=20
+    stroke="black"
+    fill="white" />
+
+<!-- Inputs / Parameters -->
+
+  <g ng-transform="translate(0,{{nameHeight+portSpace}})">
+
+    <circle ng-repeat="input in operation.inputs" r=5 stroke="black" fill="orange" 
+            ng-cy="{{portSpace*$index}}">
+    </circle>
+
+    <text part-name="input.name"
+          ng-repeat="input in operation.inputs"
+          ng-x="{{textOffset}}" ng-y="{{portSpace*$index}}" 
+          alignment-baseline="middle">
+    </text>
+
+    <circle ng-repeat="param in operation.parameters" r=5 stroke="black" fill="lightgreen" 
+            ng-cy="{{portSpace*$index+portSpace*numInputs}}">
+    </circle>
+
+    <text part-name="param.name"
+          ng-repeat="param in operation.parameters" 
+          ng-x="{{textOffset}}" ng-y="{{portSpace*$index+portSpace*numInputs}}"
+          alignment-baseline="middle">
+    </text>    
+
+  </g>
+
+<!-- Outputs / Data -->
+
+  <g ng-transform="translate(0,{{nameHeight+portSpace}})">
+
+    <circle ng-repeat="output in operation.outputs" r=5 stroke="black" fill="orange" 
+            ng-cx="{{width}}" ng-cy="{{portSpace*$index}}">
+    </circle>
+
+    <text part-name="output.name"
+          ng-repeat="output in operation.outputs"
+          ng-x="{{width-textOffset}}" ng-y="{{portSpace*$index}}" 
+          alignment-baseline="middle" text-anchor="end">
+    </text>    
+
+    <circle ng-repeat="data in operation.data" r=5 stroke="black" fill="lightgreen" 
+            ng-cx="{{width}}" ng-cy="{{portSpace*$index+portSpace*numOutputs}}">
+    </circle>
+
+    <text part-name="data.name"
+          ng-repeat="data in operation.data" 
+          ng-x="{{width-textOffset}}" ng-y="{{portSpace*$index+portSpace*numInputs}}"
+          alignment-baseline="middle" text-anchor="end">
+    </text>        
+
+  </g>
+
+<!-- Exceptions -->
+
+  <g ng-transform="translate({{-(numEx-1)*portSpace/2+width/2}},{{nameHeight+bodyHeight}})">
+
+    <circle ng-repeat="ex in operation.exceptions" r=5 stroke="black" fill="orange" 
+            ng-cx="{{portSpace*$index}}">
+    </circle>
+
+  </g>
+

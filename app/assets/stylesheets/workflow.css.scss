@@ -1,3 +1,15 @@
+/* Diagram */
+.operation-title-box {
+  stroke: black; 
+  fill: #efefef;
+}
+
+.operation-title {
+  font-weight: bold;
+}
+
+/* Editor */
+
 .code-text-area {
   font-family: "Courier";
   font-size: "9pt";
@@ -9,4 +21,21 @@
   li { 
     list-style-type: none;
   }
+}
+
+.upper-right {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+.hoverable {
+  cursor: pointer;
+}
+
+.bracketed {
+  position: relative;
+  border-left: 1pt solid green;
+  border-radius: 5px;
+  padding-left: 10px;
+  margin-bottom: 4px;
 }
