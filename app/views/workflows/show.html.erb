@@ -28,7 +28,8 @@
           <div class="controls controls-row">
             <input class="span2" type="number" ng-model="h.x">
             <input class="span2" type="number" ng-model="h.y">
-          </div>                
+          </div>    
+          <button class='btn btn-warning' ng-click='delete_operation(h)'>Delete</button>               
         </div>
 
         <div ng-repeat="input in h.operation.inputs">

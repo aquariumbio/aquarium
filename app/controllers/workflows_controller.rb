@@ -91,37 +91,65 @@ class WorkflowsController < ApplicationController
     end
   end
 
+  def nils_to_empty_arrays obj
+
+    # fixes an issue where rails turns [] into nil in json data passed to params
+
+    case obj
+      when nil
+        return []
+      when Array
+        return obj.collect { |x| nils_to_empty_arrays x }
+      when Hash
+        newobj = {}
+        obj.each do |k,v|
+          newobj[k.to_sym] = nils_to_empty_arrays v
+        end
+        return newobj
+      else
+        return obj
+    end
+
+  end
+
   def save
 
-    logger.info params[:id]
-    logger.info params[:name]
-    logger.info params[:specification][:operations].collect { |o| { 
-        id: o[:id].to_i, x: o[:x], y: o[:y]
-      }
-    }
-    logger.info params[:specification][:io]
-    logger.info params[:specification][:description]    
+    # Save operations
 
-    w = Workflow.find(params[:id])
+    fixed_params = (nils_to_empty_arrays params)
 
-    w.name = params[:name]
+    logger.info "new params = #{fixed_params}"
+
+    fixed_params[:specification][:operations].each do |h|
+
+      logger.info "h = #{h.inspect}"
+
+      o = Operation.find(h[:id])
+      o.name = h[:operation][:name]
+      o.protocol_path = h[:operation][:protocol]
+      o.specification = h[:operation].to_json
+      o.save
+
+    end
+
+    # Save workflow
+
+    w = Workflow.find(fixed_params[:id])
+
+    w.name = fixed_params[:name]
 
     w.specification = ({ 
-      operations: params[:specification][:operations].collect { |o| { 
+      operations: fixed_params[:specification][:operations].collect { |o| { 
           id: o[:id].to_i, x: o[:x], y: o[:y]
         }
       },
-      io: params[:specification][:io],
-      description: params[:specification][:description]
+      io: fixed_params[:specification][:io],
+      description: fixed_params[:specification][:description]
     }).to_json
 
     w.save
 
-    if w.errors 
-      render json: { result: "error" }
-    else
-      render json: { result: "okay" }
-    end
+    render json: { result: "okay" }
 
   end
 

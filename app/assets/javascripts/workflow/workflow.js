@@ -25,6 +25,11 @@
       $scope.$root.selection = null;
     }
 
+    $scope.delete_operation = function(h) {
+      aq.delete_from_array($scope.workflow.specification.operations,h);
+      $scope.$root.selection = null;
+    }    
+
   });
 
   angular.forEach(['x', 'y', 'width', 'height', 'cx', 'cy', 'transform', 'd'], function(name) {
@@ -65,7 +70,7 @@
 
       link: function($scope,$element) {
 
-         $scope.new_connection = function() {
+        $scope.new_connection = function() {
           $scope.wf.specification.io.push({from: [0,"output"], to: [1,"input"]});
         }        
 
@@ -77,14 +82,17 @@
           $.ajax({
             url: "/operations/make.json"
           }).done(function(data) {
-            $scope.wf.specification.operations.push({
+            var op = {
               x: 100, y: 100, id: data.id, operation: $.extend(data,{workflow: $scope.wf.id})
-            });
+            };
+            console.log(op);
+            $scope.wf.specification.operations.push(op);
             $scope.$apply();
           });
         }
 
         $scope.save = function() {
+          console.log(angular.toJson($scope.wf));
           $.ajax({
             method: "post",
             url: "/workflows/" + $scope.wf.id + "/save",
