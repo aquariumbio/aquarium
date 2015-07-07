@@ -2,12 +2,31 @@
 .operation-title-box {
   stroke: black; 
   fill: #efefef;
+  cursor: -webkit-grab; cursor: -moz-grab;
 }
 
 .operation-title {
   font-weight: bold;
+  cursor: pointer;
 }
 
+.operation-part {
+  cursor: pointer;
+}
+
+.operation-port {
+  cursor: pointer; 
+}
+
+.workflow-connection {
+  stroke: #888;
+  stroke-width: 2;
+  fill: none
+}
+
+.hoverable {
+  cursor: pointer;
+}
 /* Editor */
 
 .code-text-area {
@@ -39,3 +58,5 @@
   padding-left: 10px;
   margin-bottom: 4px;
 }
+
+

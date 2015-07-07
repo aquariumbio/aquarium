@@ -9,7 +9,7 @@ class Workflow < ActiveRecord::Base
   def export
     s = parse_spec
     s[:operations] = s[:operations].collect { |o|
-      Operation.find(o).export
+      o.merge operation: Operation.find(o[:id]).export 
     }
     { id: id, name: name, specification: s }
   end

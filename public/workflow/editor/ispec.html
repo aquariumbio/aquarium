@@ -1,11 +1,8 @@
-<style>
-.hoverable {
-  cursor: pointer;
-}
-</style>
+<div style='padding-left: 5px' <div ng-show="ispec == $parent.$root.selection">
 
-<form style='padding-left: 5px'>
-
+  <h3>Operation: {{opName}}</h3>
+  <h4>{{opType}}: {{ispec.name}}</h4>
+  <form>
   <fieldset>
 
     <label>Name</label>
@@ -49,15 +46,16 @@
 
   </fieldset>    
 
-
   <div alternatives="ispec.alternatives"></div>
 
-  <icon class='icon-plus hoverable' ng-click="new_alternative()" />
+  <span class="hoverable" ng-click="new_alternative()">
+    <icon class='icon-plus' /> Add item specification
+  </span>
 
-</form>
-
-
+  </form>
 
 <!-- pre>
 {{ispec|json}}
 </pre -->
+</div>
+

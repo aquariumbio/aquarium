@@ -1,0 +1,12 @@
+<div ng-show="keyval == $parent.$root.selection">
+
+  <h3>Operation: {{opName}}</h3>
+  <h4>{{opType}}: {{keyval.name}}</h4>
+  <fieldset>
+    <label>Name</label>
+    <input ng-model="keyval.name" type="text" />
+    <label>Type</label>
+    <input ng-model="keyval.type" type="text" />    
+  </fieldset>  
+
+</div>

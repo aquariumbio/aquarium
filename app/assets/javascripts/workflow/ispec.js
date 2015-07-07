@@ -1,31 +1,18 @@
-
 (function() {
 
   var w;
   try {
-    w = angular.module('workflow_editor'); 
+    w = angular.module('workflow'); 
   } catch (e) {
-    w = angular.module('workflow_editor', []); 
-  } 
-
-  w.controller('ispecFormsCtrl', function ($scope,$http) {
-
-    var that = this;
-    this.ispec = { rows: 0, columns: 0 };
-
-    $scope.init = function(ispec) {
-      $.extend(that.ispec,ispec);
-      angular.element().scope().$apply();      
-    } 
-
-  }); 
+    w = angular.module('workflow', []); 
+  }  
 
   w.directive("alternatives", function() {
 
     return {
       restrict: 'A',
       scope: { alternatives: "=" },
-      templateUrl: "/workflow_editor/alternatives.html"
+      templateUrl: "/workflow/editor/alternatives.html"
     }
 
   });  
@@ -35,14 +22,10 @@
     return {
 
       restrict: 'A',
-      scope: { ispec: "=" },
-      link: function($scope,element,attrs) {
+      scope: { ispec: "=", opName: "=", opType: "=" },
+      link: function($scope,$element,$attr) {
 
         // Dimensions //////////////////////////////////////////////////////////////////////
-
-        if( !$scope.ispec.is_matrix ) {
-          $scope.ispec.is_matrix = false;
-        }
 
         $scope.dimensions = function() {
           if ( !$scope.ispec.rows ) {
@@ -63,19 +46,12 @@
           aq.delete_from_array($scope.ispec.alternatives,alternative);
         }        
 
-        // Parts ///////////////////////////////////////////////////////////////////////////
-
-        if( !$scope.ispec.is_part ) {
-          $scope.ispec.is_part = false;
-        }
-
       },
 
-      templateUrl: "/workflow_editor/ispec.html" 
+      templateUrl: "/workflow/editor/ispec.html" 
 
     };                                           
 
-  });  
+  });    
 
 })();
-

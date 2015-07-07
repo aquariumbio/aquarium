@@ -81,4 +81,12 @@ Aq.prototype.delete_from_array = function (arr, el) {
   arr.splice( $.inArray(el, arr), 1 );
 }
 
+Aq.prototype.rand_string = function(n) {
+  return Array.apply(0, Array(n)).map(function() {
+    return (function(charset){
+        return charset.charAt(Math.floor(Math.random() * charset.length))
+    }('abcdefghijklmnopqrstuvwxyz'));
+  }).join('');
+}
+
 aq = new Aq();

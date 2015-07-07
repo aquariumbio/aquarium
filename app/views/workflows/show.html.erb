@@ -1,22 +1,54 @@
 <div ng-app="workflow">
 
   <div id="workflow-control" class='row-fluid' ng-controller='workflowCtrl as workflow' 
-       workflow=<%= params[:id] %> style='outline: 1pt dashed orange'>
+       workflow=<%= params[:id] %> >
 
     <div class='span8'>
-      <svg id="diagram" style='outline: 1pt dashed orange' width="100%">
+      <svg id="diagram" width="100%" ng-click="clearSelection()">
         <!-- operations  -->
-        <g ng-repeat="op in workflow.specification.operations"
-           ng-attr-transform="translate({{200*$index+20}}, 20)">
-           <g operation="op"></g>
+        <g ng-repeat="h in workflow.specification.operations"
+           ng-attr-transform="translate({{h.x}}, {{h.y}})">
+           <g operation="h.operation"></g>
         </g>
         <!-- connections -->
+        <g connections workflow="workflow"></g>
       </svg>
     </div>
 
     <div class='span4'>
-      <textarea json-text ng-model="workflow.specification"></textarea>
-      <pre>{{workflow.specification|json}}</pre>
+
+      <div wf="workflow" ng-show="null == $parent.$root.selection">
+      </div>
+
+      <div ng-repeat="h in workflow.specification.operations">
+
+        <div ng-show="h.operation == $parent.$root.selection" >
+          <div op="h.operation"></div>
+          <label>Coordinates</label> 
+          <div class="controls controls-row">
+            <input class="span2" type="number" ng-model="h.x">
+            <input class="span2" type="number" ng-model="h.y">
+          </div>                
+        </div>
+
+        <div ng-repeat="input in h.operation.inputs">
+          <div ispec="input" op-name="h.operation.name" op-type="'Input'"></div>
+        </div>
+
+        <div ng-repeat="output in h.operation.outputs">
+          <div ispec="output" op-name="h.operation.name" op-type="'Output'"></div>
+        </div>
+
+        <div ng-repeat="p in h.operation.parameters">
+          <div keyval="p" op-name="h.operation.name" op-type="'Parameter'"></div>
+        </div>
+
+        <div ng-repeat="d in h.operation.data">
+          <div keyval="d" op-name="h.operation.name" op-type="'Data'"></div>
+        </div>
+
+      </div>
+
     </div>
 
   </div>

@@ -1,0 +1,28 @@
+<h3>Operation: {{op.name}}</h3>
+
+<form>
+  <label>Name</label>
+  <input ng-model="op.name" type="text"/>
+  <label>Path</label>
+  <input ng-model="op.protocol" type="text"/>
+</form>
+
+<div class='row-fluid'>  
+  <div class="span1">
+    Add:
+  </div>
+  <div class="span2">
+    <button ng-click="addInput()" class="btn btn-small">Input</button>
+  </div>
+  <div class="span2">
+    <button ng-click="addOutput()" class="btn btn-small">Output</button>
+  </div>
+  <div class="span3">
+    <button ng-click="addParam()" class="btn btn-small">Parameter</button>
+  </div>
+  <div class="span2">
+    <button ng-click="addData()" class="btn btn-small">Data</button>
+  </div>
+</div>
+
+<br />

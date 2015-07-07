@@ -1,0 +1,31 @@
+<div class="bracketed" ng-repeat="alternative in alternatives">
+
+  <div class='row-fluid'>
+
+    <fieldset class='span6'>
+      <label>Sample Type</label>
+      <input class='input-block-level' id="sample_type" type=text 
+             ng-model="alternative.sample_type" ng-blur="sample_type_change()">
+    </fieldset>
+
+    <fieldset class='span6'>
+      <label>Container</label> 
+      <input id="container" class='input-block-level' type=text  
+             ng-model="alternative.container" ng-blur="container_change()">
+    </fieldset>
+
+  </div>
+
+  <fieldset>
+
+    <label>Sample</label>
+    <input id="sample"  class='input-block-level' type=text 
+           ng-model="alternative.sample" ng-blur="sample_change()">
+
+  </fieldset>
+  
+  <icon class='icon-remove hoverable upper-right' 
+        ng-click="$parent.$parent.delete_alternative(alternative)" />
+
+</div>
+
