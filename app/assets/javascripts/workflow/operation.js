@@ -44,7 +44,11 @@
       restrict: 'A',
       scope: { op: "=" },
       templateUrl: "/workflow/editor/operation.html",
-      link: function($scope) {
+      link: function($scope,$element) {
+        if ( $scope.op.workflow != $scope.$parent.workflow.id ) {        
+          $element.find('input').attr('disabled',true);
+          $element.find('button').attr('disabled',true);
+        }
         $scope.addInput = function() {
           $scope.op.inputs.push(new_ispec());
           $scope.$root.selection = $scope.op.inputs.slice(-1)[0];

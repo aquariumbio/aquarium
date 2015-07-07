@@ -10,7 +10,7 @@
   w.directive("keyval", function() {
     return {
       restrict: 'A',
-      scope: { keyval: "=", opName: "=", opType: "=" },
+      scope: { keyval: "=", opName: "=", partType: "=" },
       templateUrl: "/workflow/editor/keyval.html"
     }
   });     

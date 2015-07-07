@@ -19,9 +19,11 @@
         console.log("Could not retrieve workflow");
       });
 
-      $scope.clearSelection = function() {
-        $scope.$root.selection = null;
-      }
+    this.get_id = function() { return $scope.workflow.id };
+
+    $scope.clearSelection = function() {
+      $scope.$root.selection = null;
+    }
 
   });
 
@@ -54,18 +56,47 @@
   });  
 
   w.directive("wf", function() {
+
     return {
+
       restrict: 'A',
       scope: { wf: "=" },
       templateUrl: "/workflow/diagram/workflow.html",
-      link: function($scope) {
-        $scope.new_connection = function() {
+
+      link: function($scope,$element) {
+
+         $scope.new_connection = function() {
           $scope.wf.specification.io.push({from: [0,"output"], to: [1,"input"]});
         }        
 
         $scope.delete_connection = function(connection) {
           aq.delete_from_array($scope.wf.specification.io,connection);
-        }    
+        }
+
+        $scope.new_operation = function(connection) {
+          $.ajax({
+            url: "/operations/make.json"
+          }).done(function(data) {
+            $scope.wf.specification.operations.push({
+              x: 100, y: 100, id: data.id, operation: $.extend(data,{workflow: $scope.wf.id})
+            });
+            $scope.$apply();
+          });
+        }
+
+        $scope.save = function() {
+          $.ajax({
+            method: "post",
+            url: "/workflows/" + $scope.wf.id + "/save",
+            contentType: 'application/json',
+            dataType: 'json',
+            data: angular.toJson($scope.wf)
+          }).success(function(data) {
+            console.log("saved");
+            console.log(data);
+          });
+        }
+
       }
     }
   });        

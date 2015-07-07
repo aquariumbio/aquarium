@@ -1,4 +1,4 @@
-<div class="bracketed" ng-repeat="alternative in alternatives">
+<div alternative class="bracketed" ng-repeat="alternative in alternatives">
 
   <div class='row-fluid'>
 
@@ -25,7 +25,8 @@
   </fieldset>
   
   <icon class='icon-remove hoverable upper-right' 
-        ng-click="$parent.$parent.delete_alternative(alternative)" />
+        ng-click="$parent.$parent.delete_alternative(alternative)" 
+        ng-if="!$parent.$parent.disabled()" />
 
 </div>
 

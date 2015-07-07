@@ -17,13 +17,37 @@
 
   });  
 
+  w.directive("alternative", function() {
+
+    return {
+      restrict: 'A',
+      link: function($scope,$element) {
+        if ( $scope.$parent.$parent.disabled() ) {
+          $element.find('input').attr('disabled',true);
+        }
+      }
+    }
+
+  });    
+
   w.directive("ispec", function() {
 
     return {
 
       restrict: 'A',
-      scope: { ispec: "=", opName: "=", opType: "=" },
-      link: function($scope,$element,$attr) {
+      scope: { ispec: "=", opName: "=", partType: "=" },
+      require: "^ngController",
+      link: function($scope,$element,$attr,wfCtrl) {
+
+        $scope.disabled = function() {
+          return $scope.$parent.$parent.h.operation.workflow != wfCtrl.get_id();
+        }
+
+        // Disable if non-native
+        if ( $scope.disabled() ) {
+          $element.find('input').attr('disabled',true);
+          $element.find('textarea').attr('disabled',true);          
+        }
 
         // Dimensions //////////////////////////////////////////////////////////////////////
 

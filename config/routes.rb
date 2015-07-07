@@ -1,9 +1,12 @@
 Bioturk::Application.routes.draw do
   
   resources :workflows
+  post '/workflows/:id/save',                to: 'workflows#save'
   get '/workflows/:id/new_operation',       to: 'workflows#new_operation'
   get '/workflows/:id/drop_operation/:oid', to: 'workflows#drop_operation'
   get '/workflows/:id/identify',            to: 'workflows#identify'
+
+  get '/operations/make',                   to: 'operations#make' 
 
   resources :operations
   get '/operations/:id/new_part',           to: 'operations#new_part'
@@ -12,7 +15,7 @@ Bioturk::Application.routes.draw do
   get '/operations/:id/drop_part',          to: 'operations#drop_part'
   get '/operations/:id/rename',             to: 'operations#rename'
   get '/operations/:id/rename_part',        to: 'operations#rename_part'  
-
+  
   get 'containers',             to: 'operations#containers'  
   get 'collection_containers',  to: 'operations#collection_containers'    
   get 'sample_types',           to: 'operations#sample_types'

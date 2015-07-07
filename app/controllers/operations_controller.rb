@@ -90,6 +90,15 @@ class OperationsController < ApplicationController
     end
   end
 
+  def make
+
+    @operation = Operation.new
+    @operation.save
+
+    render json: @operation.export
+
+  end
+
   # PUT /operations/1
   # PUT /operations/1.json
   def update

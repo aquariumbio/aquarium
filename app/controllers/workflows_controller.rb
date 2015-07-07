@@ -91,6 +91,40 @@ class WorkflowsController < ApplicationController
     end
   end
 
+  def save
+
+    logger.info params[:id]
+    logger.info params[:name]
+    logger.info params[:specification][:operations].collect { |o| { 
+        id: o[:id].to_i, x: o[:x], y: o[:y]
+      }
+    }
+    logger.info params[:specification][:io]
+    logger.info params[:specification][:description]    
+
+    w = Workflow.find(params[:id])
+
+    w.name = params[:name]
+
+    w.specification = ({ 
+      operations: params[:specification][:operations].collect { |o| { 
+          id: o[:id].to_i, x: o[:x], y: o[:y]
+        }
+      },
+      io: params[:specification][:io],
+      description: params[:specification][:description]
+    }).to_json
+
+    w.save
+
+    if w.errors 
+      render json: { result: "error" }
+    else
+      render json: { result: "okay" }
+    end
+
+  end
+
   # DELETE /workflows/1
   # DELETE /workflows/1.json
   def destroy

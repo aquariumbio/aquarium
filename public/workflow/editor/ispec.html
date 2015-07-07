@@ -1,7 +1,7 @@
 <div style='padding-left: 5px' <div ng-show="ispec == $parent.$root.selection">
 
   <h3>Operation: {{opName}}</h3>
-  <h4>{{opType}}: {{ispec.name}}</h4>
+  <h4>{{partType}}: {{ispec.name}}</h4>
   <form>
   <fieldset>
 
@@ -48,7 +48,7 @@
 
   <div alternatives="ispec.alternatives"></div>
 
-  <span class="hoverable" ng-click="new_alternative()">
+  <span class="hoverable" ng-click="new_alternative()" ng-if="!disabled()">
     <icon class='icon-plus' /> Add item specification
   </span>
 
