@@ -10,6 +10,10 @@
   cursor: pointer;
 }
 
+.operation-body {
+  cursor: -webkit-grab; cursor: -moz-grab;
+}
+
 .operation-title-selected {
   font-weight: bold;
   cursor: pointer;
@@ -30,6 +34,14 @@
 
 .operation-port {
   cursor: pointer; 
+  r: 5; 
+  stroke: "black";
+  fill: "orange";
+}
+
+.operation-port-selected {
+  cursor: pointer; 
+  r: 6;  
 }
 
 .workflow-connection {

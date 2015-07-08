@@ -4,14 +4,15 @@
        workflow=<%= params[:id] %> >
 
     <div class='span8'>
-      <svg id="diagram" width="100%" ng-click="clearSelection()">
+      <svg id="diagram" width="100%" ng-click="clearSelection()"
+           ng-mouseup="$root.mouseUpForDrag()"
+           ng-mousemove="$root.mouseMoveForDrag($event); $event.stopPropagation();" >
         <!-- operations  -->
         <g ng-repeat="h in workflow.specification.operations"
            ng-attr-transform="translate({{h.x}}, {{h.y}})">
            <g operation="h.operation"
               ng-mousedown="$root.mouseDownForDrag($event,h); $event.stopPropagation();"            
-              ng-mousemove="$root.mouseMoveForDrag($event,h); $event.stopPropagation();" 
-              ng-mouseup="$root.mouseUpForDrag($event,h); $event.stopPropagation();" >
+               >
            </g>
         </g>
         <!-- connections -->

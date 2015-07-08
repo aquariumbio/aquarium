@@ -29,7 +29,8 @@
     {{operation.id}}: {{operation.name}}
   </text>
 
-  <rect ng-width="{{width}}"
+  <rect class='operation-body'
+    ng-width="{{width}}"
     ng-height="{{bodyHeight}}"
     y=20
     stroke="black"
@@ -40,7 +41,7 @@
   <g ng-transform="translate(0,{{nameHeight+portSpace}})">
 
     <circle ng-repeat="input in operation.inputs" r=5 stroke="black" fill="orange" 
-            ng-click="portClick(input); $event.stopPropagation();" class='operation-port'
+            ng-click="$root.inputClick(operation,input); $event.stopPropagation();" class='operation-port'
             ng-cy="{{portSpace*$index}}">
     </circle>
 
@@ -73,9 +74,11 @@
 
   <g ng-transform="translate(0,{{nameHeight+portSpace}})">
 
-    <circle ng-repeat="output in operation.outputs" r=5 stroke="black" fill="orange" 
-            ng-click="portClick(output); $event.stopPropagation();" class='operation-port'
-            ng-cx="{{width}}" ng-cy="{{portSpace*$index}}">
+    <circle ng-repeat="output in operation.outputs" stroke="black" fill="orange" 
+            ng-click="$root.outputClick(operation,output); $event.stopPropagation();" 
+            ng-cx="{{width}}" ng-cy="{{portSpace*$index}}"
+            ng-class="{{$parent.$parent.selected(output) ? 'operation-port-selected' : 'operation-port'}}"
+            >
     </circle>
 
     <text part-name="output.name"

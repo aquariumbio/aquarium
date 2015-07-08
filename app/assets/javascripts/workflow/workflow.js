@@ -23,6 +23,8 @@
 
     $scope.clearSelection = function() {
       $scope.$root.selection = null;
+      $scope.$root.output_selected = null;
+      $scope.$root.current_op = null;
     }
 
     $scope.delete_operation = function(h) {
@@ -35,25 +37,37 @@
     }
 
     $scope.$root.mouseDownForDrag = function($event,h) {
-      console.log("drag started");
       $scope.dragging = h;
       $scope.mouseDownX = $event.offsetX - h.x;
       $scope.mouseDownY = $event.offsetY - h.y;
-      console.log($event);
     }
 
-    $scope.$root.mouseMoveForDrag = function($event,h) {
-      if ( $scope.dragging == h ) {
-        console.log("moving");
-        h.x = $event.offsetX - $scope.mouseDownX;
-        h.y = $event.offsetY - $scope.mouseDownY;
+    $scope.$root.mouseMoveForDrag = function($event) {
+      if ( $scope.dragging ) {
+        $scope.dragging.x = $event.offsetX - $scope.mouseDownX;
+        $scope.dragging.y = $event.offsetY - $scope.mouseDownY;
       }
     }    
 
-    $scope.$root.mouseUpForDrag = function($event,h) {
-      console.log("drag stopped");
+    $scope.$root.mouseUpForDrag = function() {
       $scope.dragging = null;
     }    
+
+    $scope.$root.outputClick = function(op,part) {
+      $scope.$root.selection = part;
+      $scope.$root.output_selected = true;
+      $scope.$root.current_op = op;
+    }        
+
+    $scope.$root.inputClick = function(op,part) {
+      if ( $scope.$root.output_selected ) {
+        $scope.workflow.specification.io.push ( { 
+          to: [ op.id, part.name ],
+          from: [ $scope.$root.current_op.id, $scope.$root.selection.name ]
+        });
+        $scope.clearSelection();
+      }
+    }
 
   });
 
