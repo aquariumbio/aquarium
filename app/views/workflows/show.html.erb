@@ -8,7 +8,11 @@
         <!-- operations  -->
         <g ng-repeat="h in workflow.specification.operations"
            ng-attr-transform="translate({{h.x}}, {{h.y}})">
-           <g operation="h.operation"></g>
+           <g operation="h.operation"
+              ng-mousedown="$root.mouseDownForDrag($event,h); $event.stopPropagation();"            
+              ng-mousemove="$root.mouseMoveForDrag($event,h); $event.stopPropagation();" 
+              ng-mouseup="$root.mouseUpForDrag($event,h); $event.stopPropagation();" >
+           </g>
         </g>
         <!-- connections -->
         <g connections workflow="workflow"></g>
@@ -16,6 +20,8 @@
     </div>
 
     <div class='span4'>
+
+      <h2>{{workflow.id}}: {{workflow.name}}</h2>
 
       <div wf="workflow" ng-show="null == $parent.$root.selection">
       </div>

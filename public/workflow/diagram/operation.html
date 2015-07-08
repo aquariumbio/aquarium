@@ -16,15 +16,16 @@
 
   <rect class='operation-title-box' 
         ng-width="{{width}}"
-        ng-height="{{nameHeight}}"
+        ng-height="{{nameHeight}}"       
         />
 
-  <text class='operation-title' 
-        ng-click="mouseDown(operation); $event.stopPropagation();" 
+  <text ng-click="mouseDown(operation); $event.stopPropagation();" 
         ng-x={{width/2}}
         ng-y={{nameHeight/2+2}}
         text-anchor="middle"
-        alignment-baseline="middle">
+        alignment-baseline="middle"
+        ng-class="{{$parent.selected(operation) ? 'operation-title-selected' : 'operation-title'}}"
+        >
     {{operation.id}}: {{operation.name}}
   </text>
 
@@ -43,12 +44,13 @@
             ng-cy="{{portSpace*$index}}">
     </circle>
 
-    <text class='operation-part'
-          part-name="input.name"
+    <text part-name="input.name"
           ng-repeat="input in operation.inputs"
           ng-click="mouseDown(input); $event.stopPropagation();"
           ng-x="{{textOffset}}" ng-y="{{portSpace*$index}}" 
-          alignment-baseline="middle">
+          alignment-baseline="middle"
+          ng-class="{{$parent.$parent.selected(input) ? 'part-selected' : 'operation-part'}}"
+          >
     </text>
 
     <circle ng-repeat="param in operation.parameters" r=5 stroke="black" fill="lightgreen" 
@@ -57,11 +59,12 @@
     </circle>
 
     <text part-name="param.name"
-          class='operation-part'
           ng-repeat="param in operation.parameters" 
           ng-click="mouseDown(param); $event.stopPropagation();"
           ng-x="{{textOffset}}" ng-y="{{portSpace*$index+portSpace*numInputs}}"
-          alignment-baseline="middle">
+          alignment-baseline="middle"
+          ng-class="{{$parent.$parent.selected(param) ? 'part-selected' : 'operation-part'}}"
+          >
     </text>    
 
   </g>
@@ -76,11 +79,12 @@
     </circle>
 
     <text part-name="output.name"
-          class='operation-part'
           ng-click="mouseDown(output); $event.stopPropagation();"
           ng-repeat="output in operation.outputs"
           ng-x="{{width-textOffset}}" ng-y="{{portSpace*$index}}" 
-          alignment-baseline="middle" text-anchor="end">
+          alignment-baseline="middle" text-anchor="end"
+          ng-class="{{$parent.$parent.selected(output) ? 'part-selected' : 'operation-part'}}"
+          >
     </text>    
 
     <circle ng-repeat="data in operation.data" r=5 stroke="black" fill="lightgreen" 
@@ -92,9 +96,10 @@
     <text part-name="data.name"
           ng-repeat="data in operation.data" 
           ng-click="mouseDown(data); $event.stopPropagation();"
-          class='operation-part'
           ng-x="{{width-textOffset}}" ng-y="{{portSpace*$index+portSpace*numOutputs}}"
-          alignment-baseline="middle" text-anchor="end">
+          alignment-baseline="middle" text-anchor="end"
+          ng-class="{{$parent.$parent.selected(data) ? 'part-selected' : 'operation-part'}}"
+          >
     </text>        
 
   </g>

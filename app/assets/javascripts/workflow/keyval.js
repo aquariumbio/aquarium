@@ -11,7 +11,14 @@
     return {
       restrict: 'A',
       scope: { keyval: "=", opName: "=", partType: "=" },
-      templateUrl: "/workflow/editor/keyval.html"
+      templateUrl: "/workflow/editor/keyval.html",
+      require: "^ngController",
+      link: function($scope,$element,$attr,wfCtrl) {
+        if ( $scope.$parent.$parent.h.operation.workflow != wfCtrl.get_id() ) {        
+          $element.find('input').attr('disabled',true);
+          $element.find('button').attr('disabled',true);
+        }
+      }
     }
   });     
 

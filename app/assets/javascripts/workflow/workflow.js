@@ -30,9 +30,34 @@
       $scope.$root.selection = null;
     }    
 
+    $scope.selected = function(obj) {
+      return $scope.$root.selection == obj;
+    }
+
+    $scope.$root.mouseDownForDrag = function($event,h) {
+      console.log("drag started");
+      $scope.dragging = h;
+      $scope.mouseDownX = $event.offsetX - h.x;
+      $scope.mouseDownY = $event.offsetY - h.y;
+      console.log($event);
+    }
+
+    $scope.$root.mouseMoveForDrag = function($event,h) {
+      if ( $scope.dragging == h ) {
+        console.log("moving");
+        h.x = $event.offsetX - $scope.mouseDownX;
+        h.y = $event.offsetY - $scope.mouseDownY;
+      }
+    }    
+
+    $scope.$root.mouseUpForDrag = function($event,h) {
+      console.log("drag stopped");
+      $scope.dragging = null;
+    }    
+
   });
 
-  angular.forEach(['x', 'y', 'width', 'height', 'cx', 'cy', 'transform', 'd'], function(name) {
+  angular.forEach(['x', 'y', 'width', 'height', 'cx', 'cy', 'transform', 'd', 'fill', 'class'], function(name) {
     var ngName = 'ng' + name[0].toUpperCase() + name.slice(1);
     w.directive(ngName, function() {
       return function(scope, element, attrs) {
@@ -104,7 +129,6 @@
             console.log(data);
           });
         }
-
       }
     }
   });        

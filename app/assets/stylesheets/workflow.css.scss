@@ -10,8 +10,22 @@
   cursor: pointer;
 }
 
+.operation-title-selected {
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 12pt;
+  fill: #bb0000;  
+}
+
 .operation-part {
   cursor: pointer;
+}
+
+.part-selected {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12pt;
+  fill: #bb0000;
 }
 
 .operation-port {
@@ -27,6 +41,7 @@
 .hoverable {
   cursor: pointer;
 }
+
 /* Editor */
 
 .code-text-area {
