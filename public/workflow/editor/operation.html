@@ -7,23 +7,23 @@
   <input ng-model="op.protocol" type="text"/>
 </form>
 
-<div class='row-fluid'>  
-  <div class="span1">
-    Add:
-  </div>
-  <div class="span2">
-    <button ng-click="addInput()" class="btn btn-small">Input</button>
-  </div>
-  <div class="span2">
-    <button ng-click="addOutput()" class="btn btn-small">Output</button>
-  </div>
-  <div class="span3">
-    <button ng-click="addParam()" class="btn btn-small">Parameter</button>
-  </div>
-  <div class="span2">
-    <button ng-click="addData()" class="btn btn-small">Data</button>
-  </div>
-</div>
+  <span class="hoverable" ng-click="addInput()">
+    <icon class='icon-plus' /> New input
+  </span>
+  <br />
+  <span class="hoverable" ng-click="addOutput()">
+    <icon class='icon-plus' /> New output
+  </span> 
+  <br />
+  <span class="hoverable" ng-click="addParam()">
+    <icon class='icon-plus' /> New parameter
+  </span>   
+  <br />
+  <span class="hoverable" ng-click="addData()">
+    <icon class='icon-plus' /> New data
+  </span> 
+
+  <br />    
 
 <br />
 

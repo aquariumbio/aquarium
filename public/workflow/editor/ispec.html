@@ -1,6 +1,6 @@
 <div style='padding-left: 5px' <div ng-show="ispec == $parent.$root.selection">
 
-  <h3>Operation: {{opName}}</h3>
+  <h3>Operation: {{oper.name}}</h3>
   <h4>{{partType}}: {{ispec.name}}</h4>
   <form>
   <fieldset>
@@ -51,6 +51,12 @@
   <span class="hoverable" ng-click="new_alternative()" ng-if="!disabled()">
     <icon class='icon-plus' /> Add item specification
   </span>
+
+  <br /><br />
+
+  <button class='btn btn-warning btn-mini' ng-click='$root.deletePart(oper,partType,ispec)'>
+    Delete This {{partType}}
+  </button>               
 
   </form>
 

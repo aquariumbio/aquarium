@@ -17,6 +17,16 @@
         $scope.mouseDown = function(obj) {        
           $scope.$root.selection = obj;
         }
+        $scope.exceptionTotalPorts = function(ex) {
+          var i = 0, sum = 0;
+          while($scope.operation.exceptions[i] != ex) {
+            sum += $scope.operation.exceptions[i].outputs.length 
+                 + $scope.operation.exceptions[i].data.length;
+            i += 1;
+          }
+          //sum += $scope.operation.exceptions[i].data.length;
+          return sum;
+        }
       }
     }
   });

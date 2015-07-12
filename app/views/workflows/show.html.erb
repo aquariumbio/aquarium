@@ -36,23 +36,26 @@
             <input class="span2" type="number" ng-model="h.x">
             <input class="span2" type="number" ng-model="h.y">
           </div>    
-          <button class='btn btn-warning' ng-click='delete_operation(h)'>Delete</button>               
+          <br />
+          <button class='btn btn-warning btn-mini' ng-click='delete_operation(h)'>
+            Delete This Operation
+          </button>               
         </div>
 
         <div ng-repeat="input in h.operation.inputs">
-          <div ispec="input" op-name="h.operation.name" part-type="'Input'"></div>
+          <div ispec="input" oper="h.operation" part-type="'Input'"></div>
         </div>
 
         <div ng-repeat="output in h.operation.outputs">
-          <div ispec="output" op-name="h.operation.name" part-type="'Output'"></div>
+          <div ispec="output" oper="h.operation" part-type="'Output'"></div>
         </div>
 
         <div ng-repeat="p in h.operation.parameters">
-          <div keyval="p" op-name="h.operation.name" part-type="'Parameter'"></div>
+          <div keyval="p" oper="h.operation" part-type="'Parameter'"></div>
         </div>
 
         <div ng-repeat="d in h.operation.data">
-          <div keyval="d" op-name="h.operation.name" part-type="'Data'"></div>
+          <div keyval="d" oper="h.operation" part-type="'Data'"></div>
         </div>
 
       </div>

@@ -107,15 +107,60 @@
 
   </g>
 
-<!-- Exceptions -->
+  <!-- Exceptions -->
 
-  <g ng-transform="translate({{-(numEx-1)*portSpace/2+width/2}},{{nameHeight+bodyHeight}})">
+    <g ng-repeat="ex in operation.exceptions">
 
-    <circle ng-repeat="ex in operation.exceptions" r=5 stroke="black" fill="orange" 
-            ng-cx="{{portSpace*$index}}">
-    </circle>
+      {{ numPorts = exceptionTotalPorts(ex) }}
+      {{ n = ex.outputs.length + ex.data.length }}
+      {{ exBodyHeight = portSpace+portSpace * ( n == 0 ? 1 : n ) }}   
+      {{ exX = width + portSpace/2 }}    
+      {{ exY = bodyHeight + ($index+2)*portSpace + (numPorts+2*$index)*portSpace }}
+      {{ outX = (numEx-1)*portSpace/2 + width/2 - portSpace*$index }}
+      {{ outY = nameHeight+bodyHeight }}
 
-  </g>
+      <circle r=5 stroke="black" fill="red" 
+              ng-cx="{{outX}}"
+              ng-cy="{{outY}}">
+      </circle>
+
+      <rect class='exception-title-box' 
+        ng-width="{{width}}"
+        ng-height="{{nameHeight}}" 
+        ng-x="{{exX}}"
+        ng-y="{{exY}}"
+        />
+
+      <rect class='operation-body'  
+        ng-width="{{width}}"
+        ng-height="{{exBodyHeight}}"
+        ng-x="{{exX}}"
+        ng-y="{{exY+nameHeight}}"
+        stroke="black"
+        fill="white" />   
+
+      <text class="operation-title"
+            ng-x="{{exX + width/2}}"
+            ng-y="{{exY+nameHeight/2+2}}"
+            text-anchor="middle"
+            alignment-baseline="middle">
+        {{ex.name}} : {{numPorts}}, {{$index}}
+      </text>
+
+      <!-- Exception input port -->
+
+      <g ng-transform="translate({{exX}},{{exY+nameHeight+portSpace}})">
+        <circle r=5 stroke="black" fill="orange"></circle>
+      </g>
+
+      <path class='exception-connection' 
+            ng-d="M {{outX}} {{outY}} 
+               L {{outX}} {{exY+nameHeight+portSpace-10}}
+               S {{outX}} {{exY+nameHeight+portSpace}} {{outX+10}} {{exY+nameHeight+portSpace}}
+               L {{exX}} {{exY+nameHeight+portSpace}}"
+      </path>      
+
+    </g>   
 
   <!-- Lock -->
  

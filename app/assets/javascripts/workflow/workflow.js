@@ -69,6 +69,19 @@
       }
     }
 
+    $scope.$root.deletePart = function(op,type,part) {
+      if ( type == "Input" ) {
+        aq.delete_from_array(op.inputs,part);
+      } else if ( type == "Output" ) {
+        aq.delete_from_array(op.outputs,part);
+      } else if ( type == "Data" ) {
+        aq.delete_from_array(op.data,part);
+      } else {
+        aq.delete_from_array(op.parameters,part);
+      }
+      $scope.$root.selection = null;
+    }
+
   });
 
   angular.forEach(['x', 'y', 'width', 'height', 'cx', 'cy', 'transform', 'd', 'fill', 'class'], function(name) {

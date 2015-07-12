@@ -50,8 +50,21 @@
   fill: none
 }
 
+.exception-connection {
+  stroke: #888;
+  stroke-width: 2;
+  fill: none;
+  stroke-dasharray: 4,2;
+}
+
 .hoverable {
   cursor: pointer;
+}
+
+.exception-title-box {
+  stroke: black; 
+  fill: #efafaf;
+  cursor: -webkit-grab; cursor: -moz-grab;
 }
 
 /* Editor */

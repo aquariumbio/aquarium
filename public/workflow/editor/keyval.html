@@ -1,6 +1,6 @@
 <div ng-show="keyval == $parent.$root.selection">
 
-  <h3>Operation: {{opName}}</h3>
+  <h3>Operation: {{oper.name}}</h3>
   <h4>{{partType}}: {{keyval.name}}</h4>
   <fieldset>
     <label>Name</label>
@@ -8,5 +8,9 @@
     <label>Type</label>
     <input ng-model="keyval.type" type="text" />    
   </fieldset>  
+
+  <button class='btn btn-warning btn-mini' ng-click='$root.deletePart(oper,partType,keyval)'>
+    Delete This {{partType}}
+  </button>    
 
 </div>
