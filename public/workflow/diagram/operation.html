@@ -143,22 +143,62 @@
             ng-x="{{exX + width/2}}"
             ng-y="{{exY+nameHeight/2+2}}"
             text-anchor="middle"
-            alignment-baseline="middle">
-        {{ex.name}} : {{numPorts}}, {{$index}}
+            alignment-baseline="middle"
+            ng-click="mouseDown(ex); $event.stopPropagation();" 
+            ng-class="{{$parent.$parent.selected(ex) ? 'operation-title-selected' : 'operation-title'}}">
+        {{ex.name}} 
       </text>
 
       <!-- Exception input port -->
 
-      <g ng-transform="translate({{exX}},{{exY+nameHeight+portSpace}})">
-        <circle r=5 stroke="black" fill="orange"></circle>
-      </g>
+      <circle ng-transform="translate({{exX}},{{exY+nameHeight+portSpace}})" r=5 stroke="black" fill="orange"></circle>
+
+      <!-- Exception connection -->
 
       <path class='exception-connection' 
             ng-d="M {{outX}} {{outY}} 
                L {{outX}} {{exY+nameHeight+portSpace-10}}
                S {{outX}} {{exY+nameHeight+portSpace}} {{outX+10}} {{exY+nameHeight+portSpace}}
-               L {{exX}} {{exY+nameHeight+portSpace}}"
+               L {{exX}} {{exY+nameHeight+portSpace}}">
       </path>      
+
+      <!-- Exception output / data ports -->
+
+      <g ng-transform="translate({{exX+width}},{{exY+nameHeight+portSpace}})">
+
+        <circle ng-repeat="output in ex.outputs" r=5 stroke="black" fill="orange" 
+                class='operation-port'
+                ng-cy="{{portSpace*$index}}">
+        </circle>
+
+        <text part-name="output.name"
+              ng-repeat="output in ex.outputs"
+              ng-x="{{-textOffset}}" ng-y="{{portSpace*$index}}" 
+              alignment-baseline="middle"
+              text-anchor="end"
+              ng-click="mouseDown(output); $event.stopPropagation();" 
+              ng-class="{{$parent.$parent.selected(output) ? 'part-selected' : 'operation-part'}}"
+              >
+        </text>
+
+        {{ numExOutputs = ex.outputs.length }}
+
+        <circle ng-repeat="data in ex.data" r=5 stroke="black" fill="lightgreen" 
+                ng-cx="0"
+                ng-cy="{{portSpace*$index+portSpace*numExOutputs}}">
+        </circle>
+
+        <text part-name="data.name"
+              ng-repeat="data in ex.data" 
+              ng-x="{{-textOffset}}" ng-y="{{portSpace*$index+portSpace*numExOutputs}}"
+              alignment-baseline="middle"
+              text-anchor="end"
+              ng-click="mouseDown(data); $event.stopPropagation();" 
+              ng-class="{{$parent.$parent.selected(data) ? 'part-selected' : 'operation-part'}}"
+              >
+        </text>    
+
+      </g>
 
     </g>   
 

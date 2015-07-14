@@ -58,6 +58,21 @@
           <div keyval="d" oper="h.operation" part-type="'Data'"></div>
         </div>
 
+        <div ng-repeat="e in h.operation.exceptions">
+          <div exception="e" oper="h.operation"></div>
+          <div ng-repeat="output in e.outputs">
+            <div ispec="output" oper="h.operation" ex="e" part-type="'Output'"></div>
+          </div>          
+          <div ng-repeat="data in e.data">
+            <div keyval="data" oper="h.operation" ex="e" part-type="'Data'"></div>
+          </div>          
+          <button ng-show="e == $parent.$root.selection"
+                  ng-if="h.operation.workflow == $root.workflow_id"
+                  class='btn btn-warning btn-mini' ng-click='$root.deleteException(h.operation,e)'>
+            Delete This Exception
+          </button>   
+        </div>        
+
       </div>
 
     </div>

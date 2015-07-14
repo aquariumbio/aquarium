@@ -35,7 +35,7 @@
     return {
 
       restrict: 'A',
-      scope: { ispec: "=", oper: "=", partType: "=" },
+      scope: { ispec: "=", ex: "=", oper: "=", partType: "=" },
       require: "^ngController",
       link: function($scope,$element,$attr,wfCtrl) {
 

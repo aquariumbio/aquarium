@@ -7,24 +7,32 @@
   <input ng-model="op.protocol" type="text"/>
 </form>
 
-  <span class="hoverable" ng-click="addInput()">
-    <icon class='icon-plus' /> New input
-  </span>
-  <br />
-  <span class="hoverable" ng-click="addOutput()">
-    <icon class='icon-plus' /> New output
-  </span> 
-  <br />
-  <span class="hoverable" ng-click="addParam()">
-    <icon class='icon-plus' /> New parameter
-  </span>   
-  <br />
-  <span class="hoverable" ng-click="addData()">
-    <icon class='icon-plus' /> New data
-  </span> 
+  <div ng-if="op.workflow == $root.workflow_id">
 
-  <br />    
+    <span class="hoverable" ng-click="addInput()">
+      <icon class='icon-plus' /> New input
+    </span>
+    <br />
+    <span class="hoverable" ng-click="addOutput()">
+      <icon class='icon-plus' /> New output
+    </span> 
+    <br />
+    <span class="hoverable" ng-click="addParam()">
+      <icon class='icon-plus' /> New parameter
+    </span>   
+    <br />
+    <span class="hoverable" ng-click="addData()">
+      <icon class='icon-plus' /> New data
+    </span> 
+    <br />
+    <span class="hoverable" ng-click="addException()">
+      <icon class='icon-plus' /> New exception
+    </span>  
 
-<br />
+   <br />    
+   <br />
+
+  </div>
+
 
 <!-- pre>{{op|json}}</pre -->

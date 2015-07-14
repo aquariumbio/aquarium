@@ -7,10 +7,12 @@
 <textarea ng-model="wf.specification.description" style="width: 90%; height: 100px"></textarea>
 
 <label>{{wf.specification.operations.length}} Operations</label>
+
   <span class="hoverable" ng-click="new_operation()">
     <icon class='icon-plus' /> New operation
   </span>
   <br />
+
   <span class="hoverable" ng-click="add_existing_operation()">
     <icon class='icon-plus' /> Add operation from another workflow
   </span>  

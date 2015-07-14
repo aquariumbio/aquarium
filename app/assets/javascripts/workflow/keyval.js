@@ -10,7 +10,7 @@
   w.directive("keyval", function() {
     return {
       restrict: 'A',
-      scope: { keyval: "=", oper: "=", partType: "=" },
+      scope: { keyval: "=", oper: "=", ex: "=", partType: "=" },
       templateUrl: "/workflow/editor/keyval.html",
       require: "^ngController",
       link: function($scope,$element,$attr,wfCtrl) {

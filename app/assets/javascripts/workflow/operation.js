@@ -20,11 +20,11 @@
         $scope.exceptionTotalPorts = function(ex) {
           var i = 0, sum = 0;
           while($scope.operation.exceptions[i] != ex) {
-            sum += $scope.operation.exceptions[i].outputs.length 
-                 + $scope.operation.exceptions[i].data.length;
+            var n = $scope.operation.exceptions[i].outputs.length 
+                  + $scope.operation.exceptions[i].data.length;
+            sum += (n == 0 ? 1 : n);
             i += 1;
           }
-          //sum += $scope.operation.exceptions[i].data.length;
           return sum;
         }
       }
@@ -45,6 +45,14 @@
     return {
       name: aq.rand_string(5), 
       type: ""
+    };
+  }  
+
+  function new_exception() {
+    return {
+      name: aq.rand_string(5), 
+      outputs: [],
+      data: []
     };
   }  
 
@@ -74,7 +82,11 @@
         $scope.addData = function() {
           $scope.op.data.push(new_keyval());
           $scope.$root.selection = $scope.op.data.slice(-1)[0];
-        }                       
+        }         
+        $scope.addException = function() {
+          $scope.op.exceptions.push(new_exception());
+          $scope.$root.selection = $scope.op.data.slice(-1)[0];
+        }                          
       }
     }
 
@@ -102,6 +114,25 @@
       }
     }
 
+  });  
+
+  w.directive("exception", function() {
+    return {
+      restrict: 'A',
+      scope: { exception: "=", oper: "="},
+      templateUrl: "/workflow/editor/exception.html",
+      link: function($scope,$element) {
+        // TODO: Disable functions if parent operation is locked
+        $scope.addOutput = function() {
+          $scope.exception.outputs.push(new_ispec());
+          $scope.$root.selection = $scope.exception.outputs.slice(-1)[0];
+        }    
+        $scope.addData = function() {
+          $scope.exception.data.push(new_ispec());
+          $scope.$root.selection = $scope.exception.data.slice(-1)[0];
+        }         
+      }
+    }
   });  
 
 })();

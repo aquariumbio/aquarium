@@ -1,0 +1,27 @@
+<div ng-show="exception == $parent.$root.selection">
+
+  <h3>Exception: {{exception.name}}</h3>
+
+  <form>
+    <label>Name</label>
+    <input ng-model="exception.name" type="text"/>
+  </form>
+
+  <div ng-if="oper.workflow == $root.workflow_id">
+
+    <span class="hoverable" ng-click="addOutput()">
+      <icon class='icon-plus' /> New output
+    </span> 
+    <br />
+    <span class="hoverable" ng-click="addData()">
+      <icon class='icon-plus' /> New data
+    </span> 
+
+    <br />    
+    <br />
+
+ </div>
+
+  <!-- pre>{{op|json}}</pre -->
+
+</div>

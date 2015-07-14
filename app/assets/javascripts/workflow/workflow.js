@@ -14,6 +14,7 @@
     $http.get('/workflows/' + $attrs.workflow + ".json")
       .success(function(data) {
         $scope.workflow = data;
+        $scope.$root.workflow_id = data.id;
       })
       .error(function() {
         console.log("Could not retrieve workflow");
@@ -69,6 +70,13 @@
       }
     }
 
+    $scope.$root.exOutputClick = function(operation,ex,part) {
+      console.log("asd")
+      $scope.$root.selection = part;
+      $scope.$root.output_selected = true;
+      $scope.$root.current_op = op;
+    }
+
     $scope.$root.deletePart = function(op,type,part) {
       if ( type == "Input" ) {
         aq.delete_from_array(op.inputs,part);
@@ -80,6 +88,11 @@
         aq.delete_from_array(op.parameters,part);
       }
       $scope.$root.selection = null;
+    }
+
+    $scope.$root.deleteException = function(op,ex) {
+      aq.delete_from_array(op.exceptions,ex);
+      $scope.$root.selection = op;
     }
 
   });
@@ -137,7 +150,6 @@
             var op = {
               x: 100, y: 100, id: data.id, operation: $.extend(data,{workflow: $scope.wf.id})
             };
-            console.log(op);
             $scope.wf.specification.operations.push(op);
             $scope.$apply();
           });
