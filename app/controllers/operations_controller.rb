@@ -139,4 +139,8 @@ class OperationsController < ApplicationController
     render json: SampleType.select([:id,:name]).collect { |h| "#{h.id}: #{h.name}" }
   end  
 
+  def samples
+    render json: Sample.where(sample_type_id: params[:id]).select([:id,:name]).collect { |h| "#{h.id}: #{h.name}" }
+  end
+
 end

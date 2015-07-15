@@ -4,13 +4,13 @@
 
     <fieldset class='span6'>
       <label>Sample Type</label>
-      <input class='input-block-level' id="sample_type" type=text 
+      <input class='input-block-level sample_type' type=text 
              ng-model="alternative.sample_type" ng-blur="sample_type_change()">
     </fieldset>
 
     <fieldset class='span6'>
       <label>Container</label> 
-      <input id="container" class='input-block-level' type=text  
+      <input class='input-block-level container' type=text  
              ng-model="alternative.container" ng-blur="container_change()">
     </fieldset>
 
@@ -19,7 +19,7 @@
   <fieldset>
 
     <label>Sample</label>
-    <input id="sample"  class='input-block-level' type=text 
+    <input class='input-block-level sample' type=text 
            ng-model="alternative.sample" ng-blur="sample_change()">
 
   </fieldset>
