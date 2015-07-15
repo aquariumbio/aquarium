@@ -45,18 +45,20 @@
         }
 
         function sample_autocomplete() {
-          var st_id = $scope.alternative.sample_type.split(':')[0];
-          $.ajax({
-            url: '/sample_list/' + st_id + ".json"
-          }).done(function(samples) {
-            $element.find(".sample").autocomplete({
-              source: samples,
-              select: function(ev,ui) {
-                $scope.alternative.sample = ui.item.value;
-                $scope.$apply();
-              }
+          if ( $scope.alternative.sample_type ) {
+            var st_id = $scope.alternative.sample_type.split(':')[0];
+            $.ajax({
+              url: '/sample_list/' + st_id + ".json"
+            }).done(function(samples) {
+              $element.find(".sample").autocomplete({
+                source: samples,
+                select: function(ev,ui) {
+                  $scope.alternative.sample = ui.item.value;
+                  $scope.$apply();
+                }
+              });
             });
-          });
+          }
         }
 
         // Autocompletes

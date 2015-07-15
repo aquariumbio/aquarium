@@ -29,8 +29,10 @@
     }
 
     $scope.delete_operation = function(h) {
-      aq.delete_from_array($scope.workflow.specification.operations,h);
-      $scope.$root.selection = null;
+      if ( confirm('Are you sure you want to the operation ' + h.operation.name + '? Doing so will only delete it from this workflow, but not from the database.' ) ) {
+        aq.delete_from_array($scope.workflow.specification.operations,h);
+        $scope.$root.selection = null;
+      }
     }    
 
     $scope.selected = function(obj) {
@@ -78,21 +80,25 @@
     }
 
     $scope.$root.deletePart = function(op,type,part) {
-      if ( type == "Input" ) {
-        aq.delete_from_array(op.inputs,part);
-      } else if ( type == "Output" ) {
-        aq.delete_from_array(op.outputs,part);
-      } else if ( type == "Data" ) {
-        aq.delete_from_array(op.data,part);
-      } else {
-        aq.delete_from_array(op.parameters,part);
+      if ( confirm('Are you sure you want to delete ' + part.name + '?') ) {
+        if ( type == "Input" ) {
+          aq.delete_from_array(op.inputs,part);
+        } else if ( type == "Output" ) {
+          aq.delete_from_array(op.outputs,part);
+        } else if ( type == "Data" ) {
+          aq.delete_from_array(op.data,part);
+        } else {
+          aq.delete_from_array(op.parameters,part);
+        }
+        $scope.$root.selection = null;
       }
-      $scope.$root.selection = null;
     }
 
     $scope.$root.deleteException = function(op,ex) {
-      aq.delete_from_array(op.exceptions,ex);
-      $scope.$root.selection = op;
+      if ( confirm('Are you sure you want to delete the exception ' + ex.name + '?') ) {      
+        aq.delete_from_array(op.exceptions,ex);
+        $scope.$root.selection = op;
+      }
     }
 
   });
