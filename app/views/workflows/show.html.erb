@@ -4,6 +4,9 @@
        workflow=<%= params[:id] %> >
 
     <div class='span8'>
+
+      <div width="100%"><h1 style="text-align: left">{{workflow.id}}: {{workflow.name}}</h1></div>
+
       <svg id="diagram" width="100%" ng-click="clearSelection()"
            ng-mouseup="$root.mouseUpForDrag()"
            ng-mousemove="$root.mouseMoveForDrag($event); $event.stopPropagation();" >
@@ -20,9 +23,7 @@
       </svg>
     </div>
 
-    <div class='span4'>
-
-      <h2>{{workflow.id}}: {{workflow.name}}</h2>
+    <div class='span4' style="background: #eee; border: 1pt solid #ddd; padding: 10pt; overflow: auto;">
 
       <div wf="workflow" ng-show="null == $parent.$root.selection">
       </div>
