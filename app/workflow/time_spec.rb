@@ -42,7 +42,7 @@ class TimeSpec
   def parse 
     @i = 0
     case current
-    when "now"
+    when "now", "immediately"
       eat 
       Time.now
     when "day"

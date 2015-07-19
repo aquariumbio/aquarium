@@ -140,7 +140,7 @@ class WorkflowsController < ApplicationController
 
     w.specification = ({ 
       operations: fixed_params[:specification][:operations].collect { |o| { 
-          id: o[:id].to_i, x: o[:x], y: o[:y]
+          id: o[:id].to_i, x: o[:x], y: o[:y], timing: o[:timing]
         }
       },
       io: fixed_params[:specification][:io],

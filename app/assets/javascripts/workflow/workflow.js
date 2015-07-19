@@ -154,7 +154,7 @@
             url: "/operations/make.json"
           }).done(function(data) {
             var op = {
-              x: 100, y: 100, id: data.id, operation: $.extend(data,{workflow: $scope.wf.id})
+              x: 100, y: 100, id: data.id, timing: "immediately", operation: $.extend(data,{workflow: $scope.wf.id})
             };
             $scope.wf.specification.operations.push(op);
             $scope.$apply();
