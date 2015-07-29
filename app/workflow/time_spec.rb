@@ -52,6 +52,7 @@ class TimeSpec
       Time.now.beginning_of_day + (day-1).day + eat_time
     when "today"
       eat
+      eat "at"
       Time.now.beginning_of_day + eat_time
     else
       duration = eat_time

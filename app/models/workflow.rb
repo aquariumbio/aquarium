@@ -1,5 +1,7 @@
 class Workflow < ActiveRecord::Base
 
+  include WorkflowAux
+
   attr_accessible :name, :specification
 
   def parse_spec

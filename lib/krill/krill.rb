@@ -12,3 +12,5 @@ require_relative 'inventory'
 require_relative 'transfers'
 
 require_relative 'task_validator'
+
+require_relative 'workflow'

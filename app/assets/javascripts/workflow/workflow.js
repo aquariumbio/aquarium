@@ -7,7 +7,7 @@
     w = angular.module('workflow', []); 
   } 
 
-  w.controller('workflowCtrl', function ($scope,$http,$attrs) {
+  w.controller('workflowCtrl', [ '$scope', '$http', '$attrs', function ($scope,$http,$attrs) {
 
     $scope.selection = null;
 
@@ -101,7 +101,7 @@
       }
     }
 
-  });
+  }]);
 
   angular.forEach(['x', 'y', 'width', 'height', 'cx', 'cy', 'transform', 'd', 'fill', 'class'], function(name) {
     var ngName = 'ng' + name[0].toUpperCase() + name.slice(1);

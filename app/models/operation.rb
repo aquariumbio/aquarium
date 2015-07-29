@@ -25,81 +25,27 @@ class Operation < ActiveRecord::Base
     true
   end
 
-  # Methods for adding new parts to an operation
+  def enqueue op, timing
 
-  def new_part_name 
-    s = self.parse_spec
-    names = (s[:inputs]+s[:outputs]+s[:exceptions]+s[:data]+s[:parameters]).collect { |p| p[:name] }
-    name = "O"+SecureRandom.hex(2)
-    while names.member? name
-      name = "O"+SecureRandom.hex(2)
-    end
-    name
-  end
+    job = Job.new
+    
+    job.path = "aqualib/auto/test.rb" # replace with #{self.id}.rb
+    job.sha = Repo.version(job.path)
+    job.set_arguments op
 
-  def new_part type     # e.g. op.new_part :parameters
-    raise "Illegal type: :#{type}." unless [:inputs,:outputs,:data,:parameters].member? type
-    s = self.parse_spec
-    name = self.new_part_name
-    s[type].push({name: name})
-    self.specification = s.to_json
-    self.save
-    name
-  end
+    ts = TimeSpec.new timing
+    start = ts.parse
 
-  def new_exception
-    s = self.parse_spec
-    s[:exceptions].push({name: self.new_part_name, outputs: [], data: []})
-    self.specification = s.to_json
-    self.save
-  end
+    job.desired_start_time = start
+    job.latest_start_time = start + 1.hour
 
-  def new_exception_part_name e
-    names = (e[:outputs]+e[:data]).collect { |p| p[:name] }
-    name = "E"+SecureRandom.hex(2)
-    while names.member? name
-      name = "E"+SecureRandom.hex(2)
-    end
-    name
-  end
+    job.group_id = 1
+    job.submitted_by = 1
+    job.pc = Job.NOT_STARTED
+    job.save
 
-  def new_exception_part type, ename
-    raise "Illegal type: :#{type}." unless [:outputs,:data].member? type    
-    s = self.parse_spec
-    es = s[:exceptions].select { |e| e[:name] == ename }
-    others = s[:exceptions].reject { |e| e[:name] == ename }
-    raise "Exception named '#{ename}' not found, or inconsistent exception." unless es.length == 1
-    e = es[0]
-    e[type].push({name: self.new_exception_part_name(e)})
-    s[:exceptions] = [e] + others
-    self.specification = s.to_json
-    self.save
-  end
+    job.id    
 
-  def drop_part type, name
-    raise "Illegal type: :#{type}." unless [:inputs,:outputs,:data,:parameters].member? type
-    s = self.parse_spec
-    s[type] = s[type].reject { |p| p[:name] == name }
-    self.specification = s.to_json
-    self.save
-  end
-
-  def rename name
-    self.name = name
-    self.save
-  end
-
-  def rename_part type, old_name, new_name
-    raise "Illegal type: :#{type}." unless [:inputs,:outputs,:data,:parameters].member? type
-    s = self.parse_spec
-    matching_parts = s[type].select { |p| p[:name] == old_name }
-    raise "#{new_name} not found." unless matching_parts.length == 1
-    part = matching_parts[0]
-    other_parts = s[type].reject { |p| p[:name] == old_name }
-    part[:name] = new_name
-    s[type] = [part] + other_parts
-    self.specification = s.to_json
-    self.save    
   end
 
 end
