@@ -124,7 +124,6 @@ module Krill
 
     end
 
-
     def take items, args={}
 
       if block_given?

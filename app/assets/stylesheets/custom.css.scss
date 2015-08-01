@@ -372,3 +372,15 @@ img {
   top: -1px;
   *overflow: hidden;  
 }
+
+.bugico
+{ 
+   background:url(/assets/glyphicons-361-bug.png) left top; 
+   width: 16px;
+   height: 16px;
+   background-size: 16px 16px;
+   display: block;
+   float: left;
+   padding-top: 2px;
+   filter: invert(50%);
+}

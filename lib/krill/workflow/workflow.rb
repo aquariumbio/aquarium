@@ -2,8 +2,9 @@ module Krill
 
   class Op
 
-    def initialize spec
+    def initialize spec, protocol
 
+      @protocol = protocol
       @spec = spec
       @parts = []
 
@@ -68,6 +69,17 @@ module Krill
       { type: @type, parts: @parts, query: @queryQ, silent: @silentQ, method: @use_method, index: @index }
     end  
 
+    def get_ispec_io
+      unless @type == :inputs || @type == :outputs
+        raise "No i/o specified. Call .input or .output first." 
+      end
+      get
+    end    
+
+    def result
+      @spec
+    end
+
     # CHAINERS ############################################################
 
     def input;     @parts = []; @type = :inputs;     self; end
@@ -86,32 +98,6 @@ module Krill
     def method m;  @use_method = m;     self; end
 
     # DOERS ###############################################################
-
-    def assert_io
-      unless @type == :inputs || @type == :outputs
-        raise "No i/o specified. Call .input or .output first." 
-      end
-    end
-
-    def take
-      assert_io
-      ispecs = get
-      puts "take #{ispecs} with options = #{options}"
-      self
-    end
-
-    def release
-      assert_io
-      ispecs = get
-      puts "release #{ispecs} with options = #{options}"
-      self
-    end
-
-    def produce
-      assert_io
-      ispecs = get
-      puts "produce #{ispecs} with options = #{options}"      
-    end
 
     def []=i,val
       @type = :data
@@ -146,7 +132,7 @@ module Krill
   module Base
 
     def op spec
-      Op.new spec
+      Op.new spec, self
     end
 
   end

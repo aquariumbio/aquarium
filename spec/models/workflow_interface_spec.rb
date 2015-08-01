@@ -34,7 +34,7 @@ RSpec.describe Krill do
       o = Krill::Op.new rand_op_spec
       puts "#{o.name}"
       o.input.fwd.take
-      o.input.fwd.rev.take
+      o.input.rev.template.take
       o.input.all.release
       o.output.fragment.produce
       o.data.tc[0] = 1

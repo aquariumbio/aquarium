@@ -24,10 +24,10 @@ RSpec.describe Workflow, :type => :model do
     frag = frags[rand(frags.length)]
 
     [
-      {name: "fwd",      sample: fwd.id}, 
-      {name: "rev",      sample: rev.id}, 
-      {name: "template", sample: template.id},
-      {name: "fragment", sample: frag.id},
+      {name: "fwd",      sample: fwd.id, container: ObjectType.find_by_name("Primer Aliquot").id }, 
+      {name: "rev",      sample: rev.id, container: ObjectType.find_by_name("Primer Aliquot").id }, 
+      {name: "template", sample: template.id, container: ObjectType.find_by_name("Plasmid Stock").id },
+      {name: "fragment", sample: frag.id, container: ObjectType.find_by_name("Fragment Stock").id },
       {name: "annealing_temperature", value: 71.3}
     ]
 
