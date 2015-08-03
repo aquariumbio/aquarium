@@ -142,7 +142,11 @@ class Collection < Item
 
   def dimensions
     m = self.matrix
-    [ m.length, m[0].length ]
+    if m && m[0]
+      [ m.length, m[0].length ]
+    else
+      [ 0, 0 ]
+    end
   end
 
   def num_samples

@@ -68,7 +68,9 @@ RSpec.describe Ispec, :type => :model do
 
   context "satisfied by a part of a collection" do
 
-    col = (Collection.every.reject { |c| c.deleted? }).last.becomes Collection
+    col = Collection.new quantity: 1, inuse: 0, object_type_id: ObjectType.find_by_name("Stripwell").id
+    col.matrix = [ [ SampleType.find_by_name("Primer").samples.first.id ] ]
+    col.save
     part = Part.new col, 0, 0
     s = part.sample
 

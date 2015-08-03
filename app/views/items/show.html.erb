@@ -4,7 +4,7 @@
   <% else %>
      at <%= @item.location %>
   <% end %>
- </h1>
+</h1>
 
   <%= 
     render partial: '/posts/discussion', locals: { 
@@ -32,7 +32,7 @@
     <td><%= j.created_at.to_formatted_s(:short) %></td>
     <td><%= link_to j.id, j %></td>
     <td><%= j.path %></td>
-    <td><%= j.user.login %></td>
+    <td><%= j.user ? j.user.login : '?' %></td>
   </tr>
 <% end %>
 </table>

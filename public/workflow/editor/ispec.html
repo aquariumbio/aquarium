@@ -31,6 +31,10 @@
           <input type="radio" name="itemOrPart" ng-value="true" ng-model="ispec.is_part">
           Part
         </label>
+        <label class="checkbox">
+          <input type="checkbox" name="isShared" ng-model="ispec.shared">
+          Shared
+        </label>        
       </div>
 
       <div class='span3'>
@@ -46,9 +50,20 @@
         </label>
       </div>      
 
-      <div class='span6' ng-show="ispec.is_matrix">
-        <input class='input-mini' type="number" ng-model='ispec.rows'> x 
-        <input class='input-mini' type="number" ng-model='ispec.columns'>
+      <div class='span6'>
+
+        <div ng-show="ispec.is_matrix">
+          <input class='input-mini' type="number" ng-model='ispec.rows'> x 
+          <input class='input-mini' type="number" ng-model='ispec.columns'>
+        </div>
+
+        <div ng-show="ispec.shared">
+          <label class='input'>
+            Limit: 
+            <input class='input-mini' type="number" ng-model='ispec.limit'> 
+          </label>
+        </div>
+
       </div>
 
     </div>

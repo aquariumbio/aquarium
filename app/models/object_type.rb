@@ -81,6 +81,21 @@ class ObjectType < ActiveRecord::Base
     attributes
   end 
 
+  def default_dimensions # for collections
+
+    if self.handler == "collection"
+      h = JSON.parse(self.data,symbolize_names: true)
+      if h[:rows] && h[:columns]
+        [h[:rows],h[:columns]]
+      else
+        [1,1]
+      end
+    else
+      raise "Tried to get dimensions of a container that is not a collection"
+    end
+
+  end  
+
 end
 
 

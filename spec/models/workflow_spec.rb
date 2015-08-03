@@ -27,7 +27,8 @@ RSpec.describe Workflow, :type => :model do
       {name: "fwd",      sample: fwd.id, container: ObjectType.find_by_name("Primer Aliquot").id }, 
       {name: "rev",      sample: rev.id, container: ObjectType.find_by_name("Primer Aliquot").id }, 
       {name: "template", sample: template.id, container: ObjectType.find_by_name("Plasmid Stock").id },
-      {name: "fragment", sample: frag.id, container: ObjectType.find_by_name("Fragment Stock").id },
+      # {name: "fragment", sample: frag.id, container: ObjectType.find_by_name("Stripwell").id },
+      {name: "fragment", sample: frag.id, container: ObjectType.find_by_name("Fragment Stock").id },     
       {name: "annealing_temperature", value: 71.3}
     ]
 
@@ -68,7 +69,9 @@ RSpec.describe Workflow, :type => :model do
       p = make_process
       
       p.all_parts.each do |part|
-        expect(part[:instantiation].length).to eq(3)
+        if !part[:shared]
+          expect(part[:instantiation].length).to eq(3.0)
+        end
       end
 
     end
@@ -94,9 +97,13 @@ RSpec.describe Workflow, :type => :model do
       puts "#{jobs[0].backtrace.select { |o| o[:operation] == "error" }}\n\n"
       puts "#{jobs[1].backtrace.select { |o| o[:operation] == "error" }}"
 
+      p.reload
+
       RSpec.configure do |config|
         config.use_transactional_fixtures = true
       end
+
+
 
     end
 

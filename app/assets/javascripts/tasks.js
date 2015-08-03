@@ -5,10 +5,14 @@ function render_json(tag,obj,type_info,id_type) {
 
     if ( obj == null ) {
 
+        $(tag).append("<span class='json_const'>null</span>");
+
     } else if ( typeof obj == "number" || typeof obj == "string" || typeof obj == "boolean" ) {
 
         if ( id_type ) {
             $(tag).append(json_get_id_info(obj,id_type));
+        } else if ( typeof obj == "boolean" ) {
+            $(tag).append("<span class='json_const'>" + (obj ? 'true' : 'false') + "</span>");
         } else {
             $(tag).append("<span class='json_const'>" + obj + "</span>");
         }
@@ -27,13 +31,17 @@ function render_json(tag,obj,type_info,id_type) {
 
     	    $(tag).append(list);
 
-	   }
+	   } else {
+          $(tag).append("<span>[]</span>");
+       }
 
     } else {
 
       	var list = $( "<ul class='json_hash'/>" );
+        var empty = true;
 
         $.each(obj, function(k,v) {
+            empty = false;
             var li = $("<li />");
             if ( show_types ) {
                 var key = that.json_editor_key(k);
@@ -46,6 +54,10 @@ function render_json(tag,obj,type_info,id_type) {
             render_json(li,v,show_types,type);
             list.append(li);      
         });
+
+        if (empty) {
+            list.append("<li>&nbsp;</li>");
+        }
 
         $(tag).append(list);
 

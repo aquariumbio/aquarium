@@ -129,7 +129,7 @@ class Job < ActiveRecord::Base
   def remove_types p
 
     case p
-      when String, Fixnum, Float
+      when String, Fixnum, Float, TrueClass, FalseClass
         p
       when Hash
         h = {}

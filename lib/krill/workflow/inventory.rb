@@ -138,8 +138,17 @@ module Krill
             o = container instance
             i = @protocol.produce( @protocol.new_sample s.name, of: s.sample_type.name, as: o.name )
             instance[:item] = i.id
+          elsif instance[:container]
+            o = container instance
+            if o.handler == "collection"
+              d = o.default_dimensions
+              i = @protocol.produce( @protocol.new_collection o.name, d[0], d[1] )
+            else
+              i = @protocol.produce( @protocol.new_object o.name )
+            end
+            instance[:item] = i.id
           else
-            error instance, "Unimplemented: produce item from ispec without sample and container."
+            error instance, "Unimplemented: produce item from ispec without sample and/or container."
           end
 
         end

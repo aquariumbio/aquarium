@@ -13,6 +13,7 @@ class WorkflowProcess < ActiveRecord::Base
   def setup workflow, threads
 
     @cached_state = workflow.export
+    @num_threads = threads.length
 
     threads.each do |t|
     
@@ -24,16 +25,32 @@ class WorkflowProcess < ActiveRecord::Base
 
     end
 
-    self.state = @state_hash.to_json
+    # self.state = @state_hash.to_json
 
-    # instantiate remaining i/o to {}
+    # instantiate remaining i/o to default
     operation_containers.each do |oc|
       (parts oc).each do |p|
-        p[:instantiation] ||= (1..(threads.length)).collect { |i| {} }
+        if p[:shared]
+          n = ((@num_threads.to_f) / p[:limit]).ceil
+        else
+          n = @num_threads
+        end
+        p[:instantiation] ||= (1..n).collect { |i| default_ispec p  }
       end
     end
 
+    self.state = self.state_hash.to_json
     self.save
+
+  end
+
+  def default_ispec p
+
+    if p[:alternatives] && p[:alternatives].length > 0
+      p[:alternatives][0]
+    else 
+      {}
+    end
 
   end
 
@@ -41,8 +58,11 @@ class WorkflowProcess < ActiveRecord::Base
     self.operation_containers.each do |oc|
       (parts oc).each do |part|
         if part[:name] == a[:name]
+          if part[:shared] && part[:instantiation] && part[:instantiation].length >= ((@num_threads.to_f) / p[:limit]).ceil
+            return
+          end
           part[:instantiation] ||= []
-          part[:instantiation].push (a.except :name)
+          part[:instantiation] << (a.except :name)
         end
       end
     end
