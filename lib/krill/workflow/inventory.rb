@@ -52,12 +52,17 @@ module Krill
       ispecs = get_ispec_io
 
       items = []
+      collections = []
 
       ispecs.each do |ispec|
 
         ispec[:instantiation].each do |instance|
 
-          if instance[:item]
+          if instance[:is_part]
+
+            error instance, "Unimplemented: take the collection containing a particular ispec"
+
+          elsif instance[:item]
 
             items << Item.find(instance[:item])
 
@@ -93,7 +98,7 @@ module Krill
 
       end
 
-      @protocol.take items, interactive: true,  method: "boxes", &block
+      @protocol.take (items+collections), interactive: true,  method: "boxes", &block
 
       self
 

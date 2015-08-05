@@ -7,6 +7,7 @@ module Krill
       @protocol = protocol
       @spec = spec
       @parts = []
+      @collection_list = []
 
       # define method chainers for i/o
       (input_names+output_names+data_names).each do |name|
@@ -33,6 +34,9 @@ module Krill
           keyval[0][:instantiation].collect { |v| v[:value] }
         end
       end
+
+      # set up collections
+      initialize_collections
 
       # set up defaults
       query true
@@ -125,6 +129,7 @@ module Krill
     def export
       # returns the filled out operation spec
       puts "Exporting"
+      @spec
     end
 
   end

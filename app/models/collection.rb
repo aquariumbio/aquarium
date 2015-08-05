@@ -52,8 +52,7 @@ class Collection < Item
     i.quantity = 1
     i.inuse = 0
     i.save
-    i.location = "Bench"   
-    puts "aleph"
+    i.location = "Bench"
     i
 
   end
