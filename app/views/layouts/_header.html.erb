@@ -15,7 +15,7 @@
               <li><%= link_to "Status", status_path %></li>
               <li><%= link_to "Protocol Usage", protocol_usage_path %></li>
               <li><%= link_to "Protocol Versions", jobs_summary_path %></li>
-              <li><%= link_to "Inventory Statistics", inventory_stats_path %></li>              
+              <li><%= link_to "Inventory Statistics", inventory_stats_path %></li>
               <!-- <li><%= link_to "Critical Inventory", inventory_critical_path %></li> -->
             </ul>
           </li>
@@ -41,7 +41,7 @@
           <li id="fat-menu" class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tasks<b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <% TaskPrototype.all.each do |tp| %>
+              <% TaskPrototype.order(:name).each do |tp| %>
                 <% name = pluralize(2,tp.name)[2..-1] %>
                 <li><%= link_to name, tasks_path(task_prototype_id: tp.id) %></li>
               <% end %>
@@ -62,7 +62,7 @@
           </li>
 
           <% if signed_in? %>
-            
+
             <li id="fat-menu" class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account<b class="caret"></b>
               </a>
@@ -107,18 +107,18 @@
           <li id="fat-menu" class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Help<b class="caret"></b></a>
             <ul class="dropdown-menu">
-                <li><a href='https://github.com/klavinslab/bioturk/blob/master/doc/Predefined.md'
+                <li><a href='https://github.com/klavinslab/aquarium/blob/master/doc/Krill.md'
                     target="Aquarium Help">
-                    Predefined Functions</a></li>
-                <li><a href='https://github.com/klavinslab/bioturk/blob/master/doc/Plankton.md'
-                    target="Aquarium Help">
-                    Plankton</a></li>
+                    Krill</a></li>
                 <li><a href='https://github.com/klavinslab/bioturk/blob/master/doc/Oyster.md'
                     target="Aquarium Help">
                     Oyster</a></li>
                 <li><a href='https://github.com/klavinslab/bioturk/blob/master/doc/Locations.md'
                     target="Aquarium Help">
                     Locations</a></li>
+                <li><a href='https://github.com/klavinslab/aqualib/blob/master/doc/cloning_the_Aquarium_way.md'
+                    target="Aquarium Help">
+                    Tasks</a></li>
             </ul>
           </li>
 
@@ -139,6 +139,3 @@
 </header>
 
 <%= render 'layouts/color_guard' %>
-
-
-
