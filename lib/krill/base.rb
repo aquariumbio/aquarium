@@ -53,9 +53,7 @@ module Krill
       task.status = status
       task.save validate: false
 
-      if task.errors.empty?
-        task.notify "Status changed from '#{old_status}' to '#{status}'.", job_id: jid
-      else
+      unless task.errors.empty?
         task.notify "Attempt to change status from '#{old_status}' to '#{status}' failed: #{task.full_messages.join(',')}", job_id: jid
       end
 
