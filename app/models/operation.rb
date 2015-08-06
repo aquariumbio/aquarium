@@ -29,7 +29,7 @@ class Operation < ActiveRecord::Base
 
     job = Job.new
     
-    job.path = "aqualib/auto/test.rb" # replace with #{self.id}.rb
+    job.path = "aqualib/auto/#{self.id}.rb"
     job.sha = Repo.version(job.path)
     job.set_arguments op
 

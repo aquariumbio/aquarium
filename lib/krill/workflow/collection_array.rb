@@ -24,6 +24,10 @@ module Krill
       self.sample < 0
     end
 
+    def nonempty?
+      self.sample >= 0
+    end
+
   end
 
   class CollectionArray < Array
@@ -98,24 +102,73 @@ module Krill
       # make rows
       rows = []
       slots c do |index,slot|
-        row = []
-        specs.each do |k,v|
-          case k
-          when :id
-            row << slot.collection.id
-          when :row
-            row << slot.row
-          when :col
-            row << slot.col
-          else
-            row << slot.ingredients[k][:id]
-            row << { content: slot.ingredients[k][:vol], check: true }
+        puts "slot.sample = #{slot.sample}"
+        if slot.nonempty?
+          row = []
+          specs.each do |k,v|
+            case k
+            when :id
+              row << slot.collection.id
+            when :row
+              row << slot.row
+            when :col
+              row << slot.col
+            else
+              if slot.ingredients[k]
+                row << slot.ingredients[k][:id]
+                row << { content: slot.ingredients[k][:volume], check: true }
+              else
+                row << '?' << '?'
+              end
+            end
           end
+          rows << row          
         end
-        rows << row
       end
 
-      [ [ legend ] ] + rows
+      [ legend ] + rows
+
+    end
+
+  end
+
+  class Op
+
+    def new_collections
+
+      ispecs = get_ispec_io
+
+      raise "No alternatives in ispec" unless ispecs.first[:alternatives].length > 0
+      raise "No container in first ispec alternative" unless ispecs.first[:alternatives].first[:container]
+
+      id = ispecs.first[:alternatives].first[:container].split(":").first.to_i
+      ot = ObjectType.find(id)
+
+      raise "Container #{ot.name} is not a collection" unless ot.handler == "collection"
+
+      d = ot.default_dimensions
+      capacity = d[0]*d[1]
+
+      collections = CollectionArray.new
+      (ispecs.length / capacity.to_f).ceil.times do 
+        collections << Collection.new_collection(ot.name, d[0], d[1])
+      end
+
+      collections
+
+    end
+
+    def associate index, slot    
+
+      ispecs = get_ispec_io
+
+      raise "Indeterminant ispec." unless ispecs.length == 1
+      raise "Index out of range." unless index < ispecs[0][:instantiation].length
+      raise "No sample instantiated in ispec" unless ispecs[0][:instantiation][index][:sample]
+      ispecs[0][:instantiation][index][:collection] = slot.collection.id
+      ispecs[0][:instantiation][index][:row] = slot.row
+      ispecs[0][:instantiation][index][:col] = slot.col
+      slot.sample = ispecs[0][:instantiation][index][:sample]
 
     end
 

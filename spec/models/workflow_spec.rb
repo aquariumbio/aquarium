@@ -18,9 +18,18 @@ RSpec.describe Workflow, :type => :model do
     plasmids = SampleType.find_by_name("Plasmid").samples
     frags = SampleType.find_by_name("Fragment").samples
 
-    fwd = primers[rand(primers.length)]
-    rev = primers[rand(primers.length)]
-    template = plasmids[rand(plasmids.length)]
+    begin 
+      fwd = primers[rand(primers.length)]
+    end while fwd.items.length == 0
+
+    begin
+      rev = primers[rand(primers.length)]
+    end while rev.items.length == 0
+
+    begin
+      template = plasmids[rand(plasmids.length)]
+    end while template.items.length == 0
+
     frag = frags[rand(frags.length)]
 
     [

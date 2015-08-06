@@ -7,7 +7,6 @@ module Krill
       @protocol = protocol
       @spec = spec
       @parts = []
-      @collection_list = []
 
       # define method chainers for i/o
       (input_names+output_names+data_names).each do |name|
@@ -34,9 +33,6 @@ module Krill
           keyval[0][:instantiation].collect { |v| v[:value] }
         end
       end
-
-      # set up collections
-      initialize_collections
 
       # set up defaults
       query true
@@ -83,6 +79,28 @@ module Krill
     def result
       @spec
     end
+
+    def samples
+      ispecs = get
+      s = []
+      ispecs.each do |ispec|
+        ispec[:instantiation].each do |instance|
+          s << instance[:sample]
+        end
+      end
+      s
+    end
+
+    def items
+      ispecs = get
+      s = []
+      ispecs.each do |ispec|
+        ispec[:instantiation].each do |instance|
+          s << instance[:item]
+        end
+      end
+      s
+    end    
 
     # CHAINERS ############################################################
 

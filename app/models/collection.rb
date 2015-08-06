@@ -99,7 +99,9 @@ class Collection < Item
 
   def set r, c, x
     m = self.matrix
-    if x.class == Item
+    if x.class == Fixnum
+      m[r][c] = x
+    elsif x.class == Item
       if x.sample
         m[r][c] = x.sample.id
       else
@@ -108,7 +110,7 @@ class Collection < Item
     elsif x.class == Sample
       m[r][c] = x.id
     else
-      raise "The third argument to Collection.set should be an item or a sample."
+      raise "The third argument to Collection.set should be an item, a sample, or a sample id, but it was '#{x}' which is a #{x.class}"
     end
     self.matrix = m
     self.save
