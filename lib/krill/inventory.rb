@@ -83,7 +83,6 @@ module Krill
 
     end
 
-
     def box_interactive items, method, user_shows
 
       boxes, extras = boxes_for items
@@ -100,6 +99,14 @@ module Krill
         show_title = ""
         box_note = "" 
         extra_title = ""
+      end
+
+      if boxes.length > 0
+        show {
+          title "Boxes Required"
+          note "You will need the following boxes from the freezer(s)"
+          table (boxes.keys.collect { |b| { content: b, check: true }}).each_slice(6).to_a
+        }
       end
 
       boxes.each do |name,box|

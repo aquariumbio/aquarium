@@ -36,18 +36,17 @@ RSpec.describe Workflow, :type => :model do
       {name: "fwd",      sample: fwd.id, container: ObjectType.find_by_name("Primer Aliquot").id }, 
       {name: "rev",      sample: rev.id, container: ObjectType.find_by_name("Primer Aliquot").id }, 
       {name: "template", sample: template.id, container: ObjectType.find_by_name("Plasmid Stock").id },
-      # {name: "fragment", sample: frag.id, container: ObjectType.find_by_name("Stripwell").id },
-      {name: "fragment", sample: frag.id, container: ObjectType.find_by_name("Fragment Stock").id },     
+      {name: "fragment", sample: frag.id },     
       {name: "annealing_temperature", value: 71.3}
     ]
 
   end
 
-  def make_process
+  def make_process n
 
     w = Workflow.find(11)
 
-    threads = (1..3).collect { |i|
+    threads = (1..n).collect { |i|
       (w.new_thread make_random_thread_spec).reload
     }
 
@@ -75,7 +74,7 @@ RSpec.describe Workflow, :type => :model do
 
     it "initializes" do
 
-      p = make_process
+      p = make_process 3
       
       p.all_parts.each do |part|
         if !part[:shared]
@@ -91,13 +90,20 @@ RSpec.describe Workflow, :type => :model do
         config.use_transactional_fixtures = false
       end
 
-      p = make_process
+      t1 = Time.now
+      puts "#{((Time.now-t1).seconds*1000).to_i}: Making processes"
+
+      p = make_process 22
       p.launch
       
+      puts "#{((Time.now-t1).seconds*1000).to_i}: Running"
+
       jobs = Job.last(2)
 
       s1 = Krill::Client.new.start jobs[0].id
       s2 = Krill::Client.new.start jobs[1].id
+
+      puts "#{((Time.now-t1).seconds*1000).to_i}: Done"
 
       jobs[0].reload
       jobs[1].reload
@@ -111,8 +117,6 @@ RSpec.describe Workflow, :type => :model do
       RSpec.configure do |config|
         config.use_transactional_fixtures = true
       end
-
-
 
     end
 

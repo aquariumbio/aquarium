@@ -59,14 +59,14 @@ class Job < ActiveRecord::Base
   def append_steps steps
     bt = self.backtrace
     bt.concat steps
-    self.state = bt.to_json
+    self.state = Oj.dump(bt,mode: :compat)
     self.save
   end
 
   def append_step step
     bt = self.backtrace
     bt.push step
-    self.state = bt.to_json
+    self.state = Oj.dump(bt,mode: :compat)
     self.save 
   end
 

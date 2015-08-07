@@ -102,7 +102,6 @@ module Krill
       # make rows
       rows = []
       slots c do |index,slot|
-        puts "slot.sample = #{slot.sample}"
         if slot.nonempty?
           row = []
           specs.each do |k,v|
@@ -150,7 +149,8 @@ module Krill
       capacity = d[0]*d[1]
 
       collections = CollectionArray.new
-      (ispecs.length / capacity.to_f).ceil.times do 
+      n = (ispecs.collect { |i| i[:instantiation].length }).inject{|sum,x| sum + x }
+      (n / capacity.to_f).ceil.times do 
         collections << Collection.new_collection(ot.name, d[0], d[1])
       end
 
