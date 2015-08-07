@@ -113,10 +113,23 @@ module Krill
 
       ispecs.each do |ispec|
 
-        ispec[:instantiation].each do |instance|
+        if ispec[:is_part]
 
-          if instance[:item]
-            items << Item.find(instance[:item])
+          ispec[:instantiation].each do |instance|
+
+            c = Item.find(instance[:collection]) 
+            items << c unless items.member? c
+
+          end
+
+        else
+
+          ispec[:instantiation].each do |instance|
+
+            if instance[:item]
+              items << Item.find(instance[:item])
+            end
+
           end
 
         end
@@ -180,8 +193,6 @@ module Krill
       self
 
     end # produce
-
-
 
   end
 
