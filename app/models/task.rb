@@ -283,10 +283,7 @@ class Task < ActiveRecord::Base
     eval "module TempAfterSaveModule; #{code}; end; self.extend(TempAfterSaveModule)"
 
     if self.respond_to?:after_save
-      logger.info "TASK: Responds to after_save"
       self.after_save
-    else
-      logger.info "TASK: Does not respond. methods = #{self.methods.sort}"
     end
 
   end 
