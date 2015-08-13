@@ -269,6 +269,26 @@ class Task < ActiveRecord::Base
 
     true
 
-  end    
+  end   
+
+  def after_save_setup
+
+    begin
+      sha = Repo.version(self.task_prototype.after_save)
+    rescue Exception => e
+      return
+    end
+
+    code = Repo.contents self.task_prototype.after_save, sha
+    eval "module TempAfterSaveModule; #{code}; end; self.extend(TempAfterSaveModule)"
+
+    if self.respond_to?:after_save
+      logger.info "TASK: Responds to after_save"
+      self.after_save
+    else
+      logger.info "TASK: Does not respond. methods = #{self.methods.sort}"
+    end
+
+  end 
 
 end

@@ -68,6 +68,7 @@ class TasksController < ApplicationController
   # GET /tasks/new
   # GET /tasks/new.json
   def new
+
     @task = Task.new
     @task.specification = TaskPrototype.find(params[:task_prototype_id].to_i).prototype
     @task.task_prototype_id = params[:task_prototype_id].to_i
@@ -91,6 +92,7 @@ class TasksController < ApplicationController
     @task = Task.new(params[:task])
     respond_to do |format|
       if @task.save
+        @task.after_save_setup
         format.html { redirect_to  tasks_url(task_prototype_id: @task.task_prototype.id), notice: "Task #{@task.name} was successfully created." }
         format.json { render json: @task, status: :created, location: @task }
       else
@@ -106,6 +108,7 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
     respond_to do |format|
       if @task.update_attributes(params[:task])
+        @task.after_save_setup      
         format.html { redirect_to tasks_url(task_prototype_id: @task.task_prototype.id), notice: 'Task was successfully updated.' }
         format.json { head :no_content }
       else

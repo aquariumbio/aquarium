@@ -55,4 +55,8 @@ class TaskPrototype < ActiveRecord::Base
     attributes
   end
 
+  def after_save
+    self.validator
+  end
+
 end
