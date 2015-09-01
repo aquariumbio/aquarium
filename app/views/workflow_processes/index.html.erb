@@ -1,0 +1,5 @@
+<ul>
+  <% @workflow_processes.reverse.each do |wp| %>
+    <li><%= link_to wp.id, wp %>, <%= wp.state_hash[:name] %></li>
+  <% end %>
+</ul>

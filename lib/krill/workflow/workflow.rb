@@ -65,6 +65,10 @@ module Krill
       end
     end
 
+    def instances
+      (get.collect { |part| part[:instantiation] }).flatten
+    end
+
     def options
       { type: @type, parts: @parts, query: @queryQ, silent: @silentQ, method: @use_method, index: @index }
     end  

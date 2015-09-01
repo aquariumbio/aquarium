@@ -28,7 +28,7 @@ module Krill
         nil
       end
 
-    end    
+    end
 
     def first_item ispec
 
@@ -84,6 +84,12 @@ module Krill
 
             end
 
+          elsif instance[:collection] && instance[:row] && instance[:col]
+            
+            unless (collections.collect { |c| c.id }).member? instance[:collection]
+              collections << Collection.find(instance[:collection])
+            end
+
           elsif instance[:sample] && ! instance[:container]
             error instance, "Could not take an item associated with #{instance[:sample]} because no container was specified."
           elsif instance[:sample_type] 
@@ -117,8 +123,10 @@ module Krill
 
           ispec[:instantiation].each do |instance|
 
-            c = Item.find(instance[:collection]) 
-            items << c unless items.member? c
+            if instance[:collection]
+              c = Item.find(instance[:collection]) 
+              items << c unless items.member? c
+            end
 
           end
 

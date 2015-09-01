@@ -133,6 +133,21 @@ module Krill
 
   class Op
 
+    def collections
+
+      ispecs = get_ispec_io
+
+      cs = CollectionArray.new
+
+      ispecs.first[:instantiation].each{ |ispec|
+        puts "adding collection for #{ispec}"
+        cs << Collection.find(ispec[:item])
+      }
+
+      cs
+
+    end
+
     def new_collections
 
       ispecs = get_ispec_io

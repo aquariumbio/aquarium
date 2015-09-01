@@ -2,10 +2,14 @@ class WorkflowProcess < ActiveRecord::Base
 
   attr_accessible :state, :workflow_id
 
+  has_many :jobs
+  belongs_to :workflow
+
   # Process Creation and setup
 
   def self.create workflow, threads
     wp = WorkflowProcess.new
+    wp.workflow_id = workflow.id
     wp.setup workflow, threads
     wp
   end
@@ -39,8 +43,7 @@ class WorkflowProcess < ActiveRecord::Base
       end
     end
 
-    self.state = self.state_hash.to_json
-    self.save
+    self.save_state
 
   end
 
@@ -90,27 +93,121 @@ class WorkflowProcess < ActiveRecord::Base
     # launch jobs
     initial_ocs.each do |oc|
       op = Operation.find(oc[:id])
-      jid = op.enqueue oc[:operation], oc[:timing]
+      jid = op.enqueue oc[:operation], oc[:timing], self.id
       oc[:jid] = jid 
     end
 
-    self.save
+    self.save_state
 
   end
 
-  def update
+  def save_state
+    self.state = self.state_hash.to_json
+    save!
+    unless self.errors.empty?
+      raise "Could not save state."
+    end
+  end
+
+  def completed?
+    operation_containers.conjoin { |oc| oc[:jid] && Job.find(oc[:jid]).done? }
+  end
+
+  def record_result_of job
+
+    rv = job.return_value
+    oc = operation_container_for job
+
+    unless rv[:inputs] && rv[:outputs] && rv[:data]
+      raise "Job #{job.id} (#{job.path}) did not return a value whose type is useable in a workflow."
+    end
+
+    rv[:inputs].each do |job_input|
+      oc_input = (inputs oc).find { |o| job_input[:name] == o[:name] }
+      oc_input[:instantiation] = job_input[:instantiation]
+    end
+
+    rv[:outputs].each do |job_output|
+      oc_output = (outputs oc).find { |o| job_output[:name] == o[:name] }
+      oc_output[:instantiation] = job_output[:instantiation]
+    end
+
+    rv[:data].each do |job_data|
+      oc_data = (data oc).find { |o| job_data[:name] == o[:name] }
+      oc_data[:instantiation] = job_data[:instantiation]
+    end
+
+    self.save_state   
+
+  end
+
+  def step
+
+    operation_containers.each do |oc|
+
+      unless operation_completed? oc
+
+        links = incoming oc
+
+        if links.length > 0 && links.conjoin { |link| operation_completed?(operation_container link[:from][0]) }
+
+          puts "#{oc[:id]} is ready"
+
+          (inputs oc).each do |input|
+
+            # update instantiations
+            links.each do |link|
+              if input[:name] == link[:to][1]
+                source = operation_container link[:from][0]
+                input[:instantiation] = output(link[:from][1], source)[:instantiation]
+                # TODO: This should be a unificiation, not an assignment.
+              end
+            end       
+
+          end
+
+          # launch job
+          op = Operation.find(oc[:id])
+          jid = op.enqueue oc[:operation], oc[:timing], self.id
+          oc[:jid] = jid              
+
+        end
+
+      end
+
+    end
+
+    save_state
+
+    true
 
   end
 
   # Getters, setters
+
+  def output name, oc
+
+    oc[:operation][:outputs].find { |i| i[:name] == name } 
+
+  end
+
+  def incoming oc
+    io.select { |link| 
+      link[:to][0] == oc[:id]
+    }
+  end  
 
   def io
     self.state_hash[:specification][:io]
   end
 
   def state_hash    
-    @cached_state ||= JSON.parse self.state, symbolize_keys: true
+    @cached_state ||= JSON.parse self.state, symbolize_names: true
     @cached_state
+  end
+
+  def clear_cache
+    @cached_state = nil
   end
 
   def operation_containers
@@ -121,6 +218,16 @@ class WorkflowProcess < ActiveRecord::Base
     oc = (self.state_hash[:specification][:operations].select { |o| o[:id] == id }).first
     raise "could not find operation container #{id}" unless oc
     oc
+  end
+
+  def operation_container_for job
+    oc = self.state_hash[:specification][:operations].find { |o| o[:jid] == job.id }
+    raise "could not find operation container for #{job.id}" unless oc
+    oc
+  end
+
+  def operation_completed? oc
+    oc[:jid] != nil && Job.find(oc[:jid]).status == "COMPLETED"
   end
 
   def inputs oc

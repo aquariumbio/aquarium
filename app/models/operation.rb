@@ -25,10 +25,11 @@ class Operation < ActiveRecord::Base
     true
   end
 
-  def enqueue op, timing
+  def enqueue op, timing, process_id
 
     job = Job.new
     
+    job.workflow_process_id = process_id
     job.path = "aqualib/auto/#{self.id}.rb"
     job.sha = Repo.version(job.path)
     job.set_arguments op

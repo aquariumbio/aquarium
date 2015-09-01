@@ -18,6 +18,7 @@ class Job < ActiveRecord::Base
   has_many :uploads
   belongs_to :group
   has_many :post_associations
+  belongs_to :workflow_process
 
   def self.params_to_time p
 
@@ -31,7 +32,11 @@ class Job < ActiveRecord::Base
   end
 
   def done?
-    return (self.pc == -2)
+    self.pc == Job.COMPLETED
+  end
+
+  def not_started?
+    self.pc == Job.NOT_STARTED
   end
 
   def status
@@ -214,7 +219,7 @@ class Job < ActiveRecord::Base
       rescue
         return true
       end
-  elsif plankton?
+    elsif plankton?
       entries = self.logs.reject { |l| l.entry_type != 'CANCEL' && l.entry_type != 'ERROR' && l.entry_type != 'ABORT' }
       return entries.length > 0
     else
@@ -222,6 +227,14 @@ class Job < ActiveRecord::Base
     end
 
   end
+
+  def error_message
+    self.backtrace[-3][:message]
+  end
+
+  def error_backtrace
+    self.backtrace[-3][:backtrace]
+  end  
 
   def abort_krill
 
