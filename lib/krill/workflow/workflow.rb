@@ -65,8 +65,25 @@ module Krill
       end
     end
 
-    def instances
-      (get.collect { |part| part[:instantiation] }).flatten
+    def objects type, field
+      temp = (get.collect { |part|
+        part[:instantiation].collect { |i| i[field] }
+      }).flatten
+      ids = temp.collect { |t| 
+        extract_id t
+      }
+      rows = type.where(id: ids)
+      ids.collect { |i|
+        if i
+          rows.find { |r| r.id == i }
+        else
+          nil
+        end
+      }
+    end
+
+    def samples 
+      self.objects Sample, :sample
     end
 
     def options
@@ -78,29 +95,45 @@ module Krill
         raise "No i/o specified. Call .input or .output first." 
       end
       get
-    end    
+    end
 
     def result
       @spec
     end
 
-    def samples
+    def extract_id descriptor
+      if descriptor.class == String
+        descriptor.split(':')[0].to_i
+      else
+        descriptor
+      end
+    end
+
+    def specs
+      (get.collect { |ispec| ispec[:instantiation] }).flatten
+    end
+
+    def length
+      specs.length
+    end
+
+    def sample_ids
       ispecs = get
       s = []
       ispecs.each do |ispec|
         ispec[:instantiation].each do |instance|
-          s << instance[:sample]
+          s << extract_id(instance[:sample])
         end
       end
       s
     end
 
-    def items
+    def item_ids
       ispecs = get
       s = []
       ispecs.each do |ispec|
         ispec[:instantiation].each do |instance|
-          s << instance[:item]
+          s << extract_id(instance[:item])
         end
       end
       s

@@ -143,6 +143,7 @@ RSpec.describe Workflow, :type => :model do
         (p.jobs.select { |job| job.not_started? }).each do |job|
           puts "starting job #{job.id}"
           result = Krill::Client.new.start job.id
+          puts result
           if result[:response] == "error"
             raise "Krill could not start #{job.id}: #{result[:error]}"
           end

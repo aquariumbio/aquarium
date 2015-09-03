@@ -50,7 +50,6 @@ module Krill
         d[0].times do |r|
           d[1].times do |c|
             @slot_list[index] ||= Slot.new(collection, r, c)
-            yield index, @slot_list[index]
             index += 1
           end
         end
@@ -64,13 +63,14 @@ module Krill
           d[0].times do |r|
             d[1].times do |c|
               @slot_list[index] ||= Slot.new(collection, r, c)
-              yield index, @slot_list[index]
               index += 1
             end
           end
         end
 
       end
+
+      @slot_list
 
     end
 
