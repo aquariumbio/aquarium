@@ -1,7 +1,14 @@
 module Krill
 
+  # An operation, packing together all the input, output, parameters,
+  # data, and exceptions in an operation specification and providing
+  # a variety of convience routines. 
+  #
+  # @example To get an operation object named 'o', start main with the following.
+  #   o = op input
   class Op
 
+    # @private
     def initialize spec, protocol
 
       @protocol = protocol
@@ -41,8 +48,10 @@ module Krill
 
     end
 
-    # GETTERS #############################################################
+    # @!group Getters
 
+    # The name of the operation
+    # @return [String]
     def name
       @spec[:name]
     end
@@ -139,7 +148,9 @@ module Krill
       s
     end    
 
-    # CHAINERS ############################################################
+    # @!endgroup
+
+    # @!group Chainers
 
     def input;     @parts = []; @type = :inputs;     self; end
     def output;    @parts = []; @type = :outputs;    self; end
@@ -156,7 +167,7 @@ module Krill
     def silent b;  @silentQ = b;        self; end
     def method m;  @use_method = m;     self; end
 
-    # DOERS ###############################################################
+    # @!endgroup
 
     def []=i,val
       @type = :data
@@ -179,8 +190,6 @@ module Krill
       puts "#{keyval[0]}"      
     end     
 
-    # RETURN VALUE ########################################################
-
     def export
       # returns the filled out operation spec
       puts "Exporting"
@@ -191,6 +200,12 @@ module Krill
 
   module Base
 
+    # Returns an Op object based on the specification, usually the
+    # input to the protocol.
+    # @param [Hash] A hash describing the entire operation.
+    # @return [Op] 
+    # @example Put this at the beginning of your main method.
+    #   o = op input
     def op spec
       Op.new spec, self
     end

@@ -8,8 +8,12 @@ class Operation < ActiveRecord::Base
      unless persisted?
       self.name ||= "Operation"
       self.specification ||= ({ inputs: [], outputs: [], parameters: [], data: [], exceptions: [] }).to_json
-      self.protocol_path ||= ""
+      self.protocol_path ||= "/aqualib/auto/#{self.id}.rb"
     end
+  end
+
+  def make_generic_protocol
+    Repo.copy "aqualib/auto/0.rb", "aqualib/auto/#{self.id}.rb"
   end
 
   def parse_spec

@@ -1,36 +1,43 @@
-<h3>Operation: {{op.name}}</h3>
+<h3>{{op.id}}: {{op.name}}</h3>
 
 <form>
   <label>Operation Name</label>
   <input ng-model="op.name" type="text"/>
 </form>
 
-  <div ng-if="op.workflow == $root.workflow_id">
+<a href="https://github.com/klavinslab/aqualib/edit/master/auto/{{op.id}}.rb" target="{{op.id}}">
+  <i class='icon-pencil'></i> 
+  Edit protocol code
+</a>
 
-    <span class="hoverable" ng-click="addInput()">
-      <icon class='icon-plus' /> New input
-    </span>
-    <br />
-    <span class="hoverable" ng-click="addOutput()">
-      <icon class='icon-plus' /> New output
-    </span> 
-    <br />
-    <span class="hoverable" ng-click="addParam()">
-      <icon class='icon-plus' /> New parameter
-    </span>   
-    <br />
-    <span class="hoverable" ng-click="addData()">
-      <icon class='icon-plus' /> New data
-    </span> 
-    <br />
-    <span class="hoverable" ng-click="addException()">
-      <icon class='icon-plus' /> New exception
-    </span>  
+<br /><br />
 
-   <br />    
-   <br />
+<div ng-if="op.workflow == $root.workflow_id">
 
-  </div>
+  <span class="hoverable" ng-click="addInput()">
+    <icon class='icon-plus' /> New input
+  </span>
+  <br />
+  <span class="hoverable" ng-click="addOutput()">
+    <icon class='icon-plus' /> New output
+  </span> 
+  <br />
+  <span class="hoverable" ng-click="addParam()">
+    <icon class='icon-plus' /> New parameter
+  </span>   
+  <br />
+  <span class="hoverable" ng-click="addData()">
+    <icon class='icon-plus' /> New data
+  </span> 
+  <br />
+  <span class="hoverable" ng-click="addException()">
+    <icon class='icon-plus' /> New exception
+  </span>  
+
+  <br />    
+  <br />
+
+</div>
 
 
 <!-- pre>{{op|json}}</pre -->

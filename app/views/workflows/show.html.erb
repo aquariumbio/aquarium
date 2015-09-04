@@ -31,12 +31,7 @@
       <div ng-repeat="h in workflow.specification.operations">
 
         <div ng-show="h.operation == $parent.$root.selection" >
-          <div op="h.operation"></div>
-          <label>Coordinates</label> 
-          <div class="controls controls-row">
-            <input class="span2" type="number" ng-model="h.x">
-            <input class="span2" type="number" ng-model="h.y">
-          </div>    
+          <div op="h.operation"></div>  
           <label>Timing</label>
           <input type='text' ng-model="h.timing">
           <br />

@@ -104,8 +104,24 @@ module Krill
 
   end
 
+  # An extension of the Ruby {Array} class with methods that make
+  # iterating over threads easier.
   class ThreadArray < Array
 
+    # Spread the array of threads over a {CollectionArray}. 
+    # @param [CollectionArray] collections 
+    # @param [Hash] opts Currently only skip_occupied: Boolean
+    # 
+    # @example Suppose o is an {Op} and gels is a {CollectionArray}
+    #   o.threads.spread(gels) do |thread,slot|
+    #     thread.output.fragment.associate slot
+    #   end
+    #
+    # @example Skip slots in the {CollectionArray} that are filled.
+    #   o.threads.spread(gels,skip_occupied:true) do |thread,slot|
+    #     thread.output.fragment.associate slot
+    #   end
+    #
     def spread collections, opts={}
 
       options =  { skip_occupied: false }.merge opts
@@ -133,6 +149,8 @@ module Krill
 
   class Op
 
+    # The number of threads in the operation.
+    # @return [Fixnum]
     def num_threads
 
       parts = (@spec[:inputs] + @spec[:outputs] + @spec[:parameters] + @spec[:data]).reject do |ispec|
@@ -147,6 +165,8 @@ module Krill
 
     end
 
+    # An array of the (non-shared) threads in the operation.
+    # @return [ThreadArray]
     def threads
 
       unless @thread_array 

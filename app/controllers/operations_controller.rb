@@ -77,10 +77,12 @@ class OperationsController < ApplicationController
   # POST /operations
   # POST /operations.json
   def create
-    @operation = Operation.new(params[:operation])
 
+    @operation = Operation.new(params[:operation])
+    result = @operation.save
+    
     respond_to do |format|
-      if @operation.save
+      if result
         format.html { redirect_to @operation, notice: 'Operation was successfully created.' }
         format.json { render json: @operation, status: :created, location: @operation }
       else
@@ -94,6 +96,7 @@ class OperationsController < ApplicationController
 
     @operation = Operation.new
     @operation.save
+    @operation.make_generic_protocol
 
     render json: @operation.export
 

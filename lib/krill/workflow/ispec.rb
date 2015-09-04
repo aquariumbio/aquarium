@@ -22,6 +22,10 @@ module Krill
       self[:row]
     end
 
+    def col
+      self[:col]
+    end
+
     def column
       self[:col]
     end

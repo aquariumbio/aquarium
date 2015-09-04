@@ -8,8 +8,9 @@
 
 <label>{{wf.specification.operations.length}} Operations</label>
 
-  <span class="hoverable" ng-click="new_operation()">
-    <icon class='icon-plus' /> New operation
+  <span id="new_operation_container" class="hoverable" ng-click="new_operation()">
+    <icon class='icon-plus'/> 
+    <span id="new_operation_link">New operation</span>
   </span>
   <br />
 
@@ -17,31 +18,6 @@
     <icon class='icon-plus' /> Add operation from another workflow
   </span>  
 
-<br />
-
-<form>
-  <label>Connections</label>
-  <fieldset>
-  <div ng-repeat="c in wf.specification.io">
-
-    <div class="controls controls-row">
-      <input class="span2" type="number" ng-model="c.from[0]">
-      <input class="span2" type="text" ng-model="c.from[1]">
-      <input class="span2" type="number" ng-model="c.to[0]">
-      <input class="span2" type="text" ng-model="c.to[1]"> 
-      <span class='span2'></span> 
-      <span class="hoverable span2" ng-click="$parent.delete_connection(c)">
-        <icon class='icon-remove' />
-      </span>    
-    </div>
-
-  </div>
-
-    <span class="hoverable" ng-click="new_connection()">
-      <icon class='icon-plus' /> Add connection
-    </span>
-
-  </fieldset>
-</form>
+<br /><br />
 
 <button ng-click="save()" class="btn btn-primary">Save</button>

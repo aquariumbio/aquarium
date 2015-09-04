@@ -33,9 +33,9 @@ RSpec.describe Workflow, :type => :model do
     frag = frags[rand(frags.length)]
 
     [
-      {name: "fwd",      sample: fwd.id, container: ObjectType.find_by_name("Primer Aliquot").id }, 
-      {name: "rev",      sample: rev.id, container: ObjectType.find_by_name("Primer Aliquot").id }, 
-      {name: "template", sample: template.id, container: ObjectType.find_by_name("Plasmid Stock").id },
+      {name: "fwd",      sample: fwd.id }, 
+      {name: "rev",      sample: rev.id }, 
+      {name: "template", sample: template.id },
       {name: "fragment", sample: frag.id },     
       {name: "annealing_temperature", value: 71.3}
     ]
@@ -131,7 +131,7 @@ RSpec.describe Workflow, :type => :model do
       puts "make process #{p.id}"
 
       # launch the workflow, putting the initial jobs on the queue
-      # and the job id in the associate operation container (oc)
+      # and the job id in the associated operation container (oc)
       p.launch
 
       i = 0 # avoid infinite loops during development

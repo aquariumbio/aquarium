@@ -46,7 +46,8 @@ module Krill
       ispec[:errors] << msg
     end
 
-    #######################################################################################
+    # Take all selected items.
+    # @return [Op] Returns itself. Can be chained.
     def take &block
 
       ispecs = get_ispec_io
@@ -66,6 +67,12 @@ module Krill
 
             items << Item.find(instance[:item])
 
+          elsif instance[:collection] && instance[:row] && instance[:col]
+            
+            unless (collections.collect { |c| c.id }).member? instance[:collection]
+              collections << Collection.find(instance[:collection])
+            end            
+
           elsif instance[:sample] && instance[:container]
 
             if @query
@@ -82,12 +89,6 @@ module Krill
                 error instance, "Could not find an item associated with #{instance[:sample]}."
               end
 
-            end
-
-          elsif instance[:collection] && instance[:row] && instance[:col]
-            
-            unless (collections.collect { |c| c.id }).member? instance[:collection]
-              collections << Collection.find(instance[:collection])
             end
 
           elsif instance[:sample] && ! instance[:container]
@@ -110,7 +111,8 @@ module Krill
 
     end
 
-    #######################################################################################
+    # Release all selected inventory.
+    # @return [Op] Returns itself. Can be chained.
     def release &block
 
       ispecs = get_ispec_io
@@ -150,7 +152,8 @@ module Krill
 
     end
 
-    #######################################################################################
+    # Produce all selected inventory.
+    # @return [Op] Can be chained.
     def produce &block
 
       ispecs = get_ispec_io

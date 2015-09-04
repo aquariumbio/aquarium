@@ -150,19 +150,27 @@
         }
 
         $scope.new_operation = function(connection) {
-          $.ajax({
-            url: "/operations/make.json"
-          }).done(function(data) {
-            var op = {
-              x: 100, y: 100, id: data.id, timing: "immediately", operation: $.extend(data,{workflow: $scope.wf.id})
-            };
-            $scope.wf.specification.operations.push(op);
-            $scope.$apply();
-          });
+
+          if (!$scope.new_op_locked) {
+            $('#new_operation_link').html("Creating new operation ...");  
+            $('#new_operation_container').removeClass('hoverable');
+            $scope.new_op_locked = true;
+            $.ajax({
+              url: "/operations/make.json"
+            }).done(function(data) {
+              var op = {
+                x: 100, y: 100, id: data.id, timing: "immediately", operation: $.extend(data,{workflow: $scope.wf.id})
+              };
+              $scope.wf.specification.operations.push(op);
+              $scope.$apply();
+              $('#new_operation_link').html("New operation");  
+              $('#new_operation_container').addClass('hoverable');               
+              $scope.new_op_locked = false;                   
+            });
+          }
         }
 
         $scope.save = function() {
-          console.log(angular.toJson($scope.wf));
           $.ajax({
             method: "post",
             url: "/workflows/" + $scope.wf.id + "/save",
@@ -171,7 +179,6 @@
             data: angular.toJson($scope.wf)
           }).success(function(data) {
             console.log("saved");
-            console.log(data);
           });
         }
       }

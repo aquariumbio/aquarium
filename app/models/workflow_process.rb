@@ -65,7 +65,12 @@ class WorkflowProcess < ActiveRecord::Base
             return
           end
           part[:instantiation] ||= []
-          part[:instantiation] << (a.except :name)
+          if part[:alternatives] && part[:alternatives].length > 0
+            base = part[:alternatives].first
+          else
+            base = {}
+          end
+          part[:instantiation] << base.merge(a.except :name)
         end
       end
     end
