@@ -10,6 +10,7 @@ class WorkflowProcess < ActiveRecord::Base
   def self.create workflow, threads
     wp = WorkflowProcess.new
     wp.workflow_id = workflow.id
+    wp.save
     wp.setup workflow, threads
     wp
   end
@@ -21,6 +22,12 @@ class WorkflowProcess < ActiveRecord::Base
 
     threads.each do |t|
     
+      logger.info "Setting thread process_id to #{self.id}"
+      t.process_id = self.id
+      t.save
+      t.reload
+      logger.info " ==> thread process_id = #{t.process_id}"
+
       spec = t.spec # parses the json
 
       spec.each do |assignment|
@@ -58,10 +65,11 @@ class WorkflowProcess < ActiveRecord::Base
   end
 
   def instantiate a 
+
     self.operation_containers.each do |oc|
       (parts oc).each do |part|
         if part[:name] == a[:name]
-          if part[:shared] && part[:instantiation] && part[:instantiation].length >= ((@num_threads.to_f) / p[:limit]).ceil
+          if part[:shared] && part[:instantiation] && part[:instantiation].length >= ((@num_threads.to_f) / part[:limit]).ceil
             return
           end
           part[:instantiation] ||= []

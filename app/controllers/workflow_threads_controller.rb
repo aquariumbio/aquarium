@@ -3,7 +3,7 @@ class WorkflowThreadsController < ApplicationController
   def index
 
     if params[:workflow_id]
-     render json: WorkflowThread.where(workflow_id: params[:workflow_id].to_i)
+     render json: WorkflowThread.where(workflow_id: params[:workflow_id].to_i,process_id: nil)
     else
       render json: WorkflowThread.all
     end
@@ -21,5 +21,14 @@ class WorkflowThreadsController < ApplicationController
     )
 
   end
+
+  def destroy
+
+    @thread = WorkflowThread.find(params[:id])
+    @thread.destroy
+
+    render json: { results: "ok" }
+
+  end  
 
 end

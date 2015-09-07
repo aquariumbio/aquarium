@@ -5,11 +5,9 @@
        ng-controller='launcherCtrl as launcher' 
        workflow=<%= params[:wid] %> >
 
-    <div class="alert alert-info">
-      <h4>New <i>{{workflow.name}}</i><span id='status'>(Initializing)</span></h4>
-    </div>
+    <h4>New <i>{{workflow.name}}</i><span id='status'>(Initializing)</span></h4>
 
-    <p>{{workflow.description}}</p>
+    <p>{{workflow.specification.description}}</p>
 
     <div id="thread_builder">
 
@@ -40,35 +38,36 @@
 
     </div>
 
-    <div id="unassigned-threads" style='margin-top: 40px'>
+    <div id="unassigned-threads" style='margin-top: 20px'>
 
       <div class='pull-left'><h4>Choose Threads</h4></div>
       <div class="btn-group pull-right">
-        <a class="btn btn-small" href="#" ng-click="clear()">Clear</a>
-        <a class="btn btn-small" href="#" ng-click="select_all()">Select All</a>
+        <a class="btn btn-small" href="#" ng-click="clear()">Clear Selection</a>
+        <a class="btn btn-small" href="#" ng-click="all()">Select All</a>
         <a class="btn btn-small btn-success" href="#" ng-click="launch()">Launch</a>
       </div>
 
-      <table class='table'>
+      <table class='launcher-table launcher-threads'>
         <tr>
-          <th></th>
           <th>Id</th>
           <th ng-repeat="i in workflow.form.inputs">{{i.description}}</th>
           <th ng-repeat="i in workflow.form.parameters">{{i.description}}</th>          
           <th ng-repeat="i in workflow.form.outputs">{{i.description}}</th> 
           <th>Created at</th>   
-          <th></th>       
         </tr>
         <tr ng-repeat="thread in threads">
-          <td><input type=checkbox></td>
-          <td>{{thread.id}}</td>
+          <td>
+            <input type=checkbox checked data-thread-id={{thread.id}} class='selector'> 
+            {{thread.id}}
+            <a href='#' ng-click="destroy(thread.id)" class='pull-right'><i class='icon-remove'></i></a>
+          </td>
           <td ng-repeat="i in workflow.form.inputs">{{thread[i.name]}}</td>
           <td ng-repeat="i in workflow.form.parameters">{{thread[i.name]}}</td>          
           <td ng-repeat="i in workflow.form.outputs">{{thread[i.name]}}</td> 
-          <td>{{thread.created_at}}</td>
-          <td><a href='#' ng-click="destroy(thread.id)"><i class='icon-remove'></i></td>
+          <td>{{thread.created_at | date:'MMM dd, yyyy'}}</td>
         </tr>
-      </table>      
+      </table>    
+
     </div>
 
   </div>
@@ -100,12 +99,16 @@
     function expand(thread) {
       var s = JSON.parse(thread.specification);
       angular.forEach(s,function(ispec) {
-        thread[ispec.name] = ispec.sample;
+        if ( ispec.sample ) {
+          thread[ispec.name] = ispec.sample;
+        } else {
+          thread[ispec.name] = ispec.value;
+        }
       });
       return thread;
     }
 
-    $http.get('/workflow_threads.json?wid='+$attrs.workflow)
+    $http.get('/workflow_threads.json?workflow_id='+$attrs.workflow)
       .success(function(data) {
         $scope.threads = data;
         angular.forEach($scope.threads,function(thread) {
@@ -203,20 +206,44 @@
       });
     }
 
-    $scope.select_all = function() {
-      console.log("select_all");
+    $scope.all = function() {
+      $(".selector").prop('checked',true);
     }
 
     $scope.clear = function() {
-      console.log("clear");
+      $(".selector").prop('checked',false);
     }
 
     $scope.launch = function() {
-      console.log("launch");
+      var thread_ids = [];
+      $('.selector').each(function(s) {
+        if ($(this).prop('checked') ) {
+          thread_ids.push($(this).data('thread-id'));
+        }
+      });
+      $http.post('/workflow_processes',{workflow_id: $scope.workflow.id, thread_ids: thread_ids})
+        .success(function(data) {
+          window.location = '/workflow_processes/' + data.id;
+        })
+        .error(function() {
+          console.log("Could not start process")
+        });
     }
 
     $scope.destroy = function(tid) {
-      console.log("destroy " + tid);
+      $http.delete('/workflow_threads/'+tid+'.json')
+        .success(function(data) {
+          var temp = [];
+          angular.forEach($scope.threads,function(thread) {
+            if ( thread.id != tid ) {
+              temp.push(thread);
+            }
+          });
+          $scope.threads = temp;
+        })
+        .error(function() {
+          console.log("Could not delete thread " + tid);
+        });    
     }    
 
   }]);

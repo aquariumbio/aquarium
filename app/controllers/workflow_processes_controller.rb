@@ -20,4 +20,13 @@ class WorkflowProcessesController < ApplicationController
     @workflow = Workflow.find(params[:wid])
   end
 
+  def create
+
+    workflow = Workflow.find(params[:workflow_id])
+    threads = params[:thread_ids].collect { |tid| WorkflowThread.find(tid) }
+    @wp = WorkflowProcess.create workflow, threads
+    render json: @wp
+
+  end
+
 end

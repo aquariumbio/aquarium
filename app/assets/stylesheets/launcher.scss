@@ -9,6 +9,7 @@
 }
 
 .input-plain:focus {
+  background-color: #ffe;
 }
 
   .input-plain:disabled {
@@ -18,6 +19,7 @@
 .launcher-table {
 
   width: 100%;
+  table-layout: fixed;
 
   th { 
     border: 1pt solid #aaa;
@@ -33,6 +35,9 @@
     height: 20px;
     padding: 0px;
     margin: 0px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;    
   }
 
   tr {
@@ -40,6 +45,12 @@
     margin: 0px;
   }
 
+}
+
+.launcher-threads {
+  td {
+    padding: 5px;
+  }
 }
 
 .right {

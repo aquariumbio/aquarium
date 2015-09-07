@@ -74,6 +74,11 @@ module WorkflowAux
       s << { name: i[:name], sample: h[i[:name]] }
     end
 
+    f[:parameters].each do |p|
+      logger.info({p:p,h:h})
+      s << { name: p[:name], value: h[p[:name]] }
+    end
+
     s
 
   end  
