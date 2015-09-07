@@ -1,8 +1,15 @@
 module WorkflowAux
 
-  def wired? oid, name
+  def wired_input? oid, name
     @fullspec[:specification][:io].each do |io|
-      return true if io[:from] == [ oid, name ] || io[:to] == [ oid, name ]
+      return true if io[:to] == [ oid, name ]
+    end
+    false
+  end
+
+  def wired_output? oid, name
+    @fullspec[:specification][:io].each do |io|
+      return true if io[:from] == [ oid, name ]
     end
     false
   end
@@ -13,11 +20,9 @@ module WorkflowAux
     outputs = []
     parameters = []
 
-    @fullspec = export
-
-    @fullspec[:specification][:operations].each do |h|
-      inputs += (h[:operation][:inputs].reject { |i| wired? h[:id], i[:name] }).collect { |i| i.merge oid: h[:id] }
-      outputs += (h[:operation][:outputs].reject { |o| wired? h[:id], o[:name] }).collect { |o| o.merge oid: h[:id] }
+    complete_spec[:specification][:operations].each do |h|
+      inputs += (h[:operation][:inputs].reject { |i| wired_input? h[:id], i[:name] }).collect { |i| i.merge oid: h[:id] }
+      outputs += (h[:operation][:outputs].reject { |o| wired_output? h[:id], o[:name] }).collect { |o| o.merge oid: h[:id] }
       parameters += h[:operation][:parameters].collect { |p| p.merge oid: h[:id] }
     end
 
@@ -58,5 +63,19 @@ module WorkflowAux
     t
 
   end
+
+  def make_spec_from_hash h
+
+    s = []
+
+    f = form
+
+    (f[:inputs]+f[:outputs]).each do |i|
+      s << { name: i[:name], sample: h[i[:name]] }
+    end
+
+    s
+
+  end  
 
 end

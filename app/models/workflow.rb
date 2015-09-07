@@ -2,6 +2,8 @@ class Workflow < ActiveRecord::Base
 
   include WorkflowAux
 
+  has_many :workflow_associations
+
   attr_accessible :name, :specification
 
   def parse_spec
@@ -9,11 +11,18 @@ class Workflow < ActiveRecord::Base
   end
 
   def export
-    s = parse_spec
-    s[:operations] = s[:operations].collect { |o|
-      o.merge operation: Operation.find(o[:id]).export 
-    }
-    { id: id, name: name, specification: s }
+    complete_spec.merge({form: form})
+  end
+
+  def complete_spec
+    unless @fullspec
+      s = parse_spec
+      s[:operations] = s[:operations].collect { |o|
+        o.merge operation: Operation.find(o[:id]).export 
+      }
+      @fullspec = { id: id, name: name, specification: s }
+    end
+    @fullspec
   end
 
   def add_operation op

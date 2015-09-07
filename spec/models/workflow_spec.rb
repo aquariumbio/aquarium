@@ -8,7 +8,7 @@ RSpec.describe Workflow, :type => :model do
 
   context "forms" do
     it "makes forms" do
-      Workflow.find(11).form
+      Workflow.find(11).form 
     end
   end
 

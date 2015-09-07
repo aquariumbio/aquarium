@@ -16,4 +16,8 @@ class WorkflowProcessesController < ApplicationController
     end      
   end
 
+  def new
+    @workflow = Workflow.find(params[:wid])
+  end
+
 end

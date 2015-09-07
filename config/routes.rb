@@ -21,7 +21,9 @@ Bioturk::Application.routes.draw do
   get 'sample_types_list',           to: 'operations#sample_types'
   get 'sample_list/:id',             to: 'operations#samples'
 
-  resources :workflow_processes, only: [ :index, :show ]
+  resources :workflow_processes, only: [ :index, :show, :new ]
+
+  resources :workflow_threads, only: [ :create, :index ]
 
   resources :posts, only: [ :index, :create ]
   resources :wizards

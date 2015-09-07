@@ -1,0 +1,226 @@
+<div ng-app="launcher">
+
+  <div id="launcher-control" 
+       class='row-fluid' 
+       ng-controller='launcherCtrl as launcher' 
+       workflow=<%= params[:wid] %> >
+
+    <div class="alert alert-info">
+      <h4>New <i>{{workflow.name}}</i><span id='status'>(Initializing)</span></h4>
+    </div>
+
+    <p>{{workflow.description}}</p>
+
+    <div id="thread_builder">
+
+      <div class='pull-left'><h4>Build a Thread</h4></div>
+      <div class="btn-group pull-right">
+        <a class="btn btn-small" href="#" ng-click="randomize()">Randomize</a> 
+        <a class="btn btn-small btn-success" href="#" ng-click="submit()">Add</a>               
+      </div>      
+
+      <table class='launcher-table'>
+        <tr>
+          <th ng-repeat="i in workflow.form.inputs">{{i.description}}</th>
+          <th ng-repeat="i in workflow.form.parameters">{{i.description}}</th>          
+          <th ng-repeat="i in workflow.form.outputs">{{i.description}}</th>            
+        </tr>
+        <tr>
+          <td ng-repeat="i in workflow.form.inputs">
+            <input type='text' id='{{i.name}}' class='input-plain' ng-model="new_thread[i.name]" />
+          </td>
+          <td ng-repeat="i in workflow.form.parameters">
+            <input type='text' id='{{i.name}}' class='input-plain' ng-model="new_thread[i.name]" />
+          </td>
+          <td ng-repeat="i in workflow.form.outputs">
+            <input type='text' id='{{i.name}}' class='input-plain' ng-model="new_thread[i.name]" />
+          </td>            
+        </tr>
+      </table>
+
+    </div>
+
+    <div id="unassigned-threads" style='margin-top: 40px'>
+
+      <div class='pull-left'><h4>Choose Threads</h4></div>
+      <div class="btn-group pull-right">
+        <a class="btn btn-small" href="#" ng-click="clear()">Clear</a>
+        <a class="btn btn-small" href="#" ng-click="select_all()">Select All</a>
+        <a class="btn btn-small btn-success" href="#" ng-click="launch()">Launch</a>
+      </div>
+
+      <table class='table'>
+        <tr>
+          <th></th>
+          <th>Id</th>
+          <th ng-repeat="i in workflow.form.inputs">{{i.description}}</th>
+          <th ng-repeat="i in workflow.form.parameters">{{i.description}}</th>          
+          <th ng-repeat="i in workflow.form.outputs">{{i.description}}</th> 
+          <th>Created at</th>   
+          <th></th>       
+        </tr>
+        <tr ng-repeat="thread in threads">
+          <td><input type=checkbox></td>
+          <td>{{thread.id}}</td>
+          <td ng-repeat="i in workflow.form.inputs">{{thread[i.name]}}</td>
+          <td ng-repeat="i in workflow.form.parameters">{{thread[i.name]}}</td>          
+          <td ng-repeat="i in workflow.form.outputs">{{thread[i.name]}}</td> 
+          <td>{{thread.created_at}}</td>
+          <td><a href='#' ng-click="destroy(thread.id)"><i class='icon-remove'></i></td>
+        </tr>
+      </table>      
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+(function() {
+
+  w = angular.module('launcher',[]);
+
+  w.controller('launcherCtrl', [ '$scope', '$http', '$attrs', function ($scope,$http,$attrs) {
+
+    $scope.new_thread = {};
+    $scope.threads = [];
+    $scope.workflow = {};
+    $scope.sample_names = {};
+
+    $http.get('/workflows/' + $attrs.workflow + ".json")
+      .success(function(data) {
+        $scope.workflow = data;
+        $scope.get_samples();
+      })
+      .error(function() {
+        console.log("Could not retrieve workflow");
+      });
+
+    function expand(thread) {
+      var s = JSON.parse(thread.specification);
+      angular.forEach(s,function(ispec) {
+        thread[ispec.name] = ispec.sample;
+      });
+      return thread;
+    }
+
+    $http.get('/workflow_threads.json?wid='+$attrs.workflow)
+      .success(function(data) {
+        $scope.threads = data;
+        angular.forEach($scope.threads,function(thread) {
+          expand(thread);
+        });
+      })
+      .error(function() {
+        console.log("Could not retrieve workflow threads");
+      });      
+
+    function parts() {
+      return $scope.workflow.form.inputs.concat($scope.workflow.form.outputs);
+    }
+
+    $scope.get_samples = function() {
+
+      angular.forEach(parts(),function(i) {
+        angular.forEach(i.alternatives, function(alt) {
+          if ( alt.sample_type ) {
+            var stid = alt.sample_type.split(":")[0];
+            if ( ! $scope.sample_names[stid] ) {
+              $scope.sample_names[stid] = [];
+            }
+          }
+        });
+      });
+
+      angular.forEach($scope.sample_names,function(vals,stid) {
+        $.ajax({
+          url: '/sample_list/' + stid + ".json"
+        }).done(function(samples) {
+          $scope.sample_names[stid] = samples;
+          $scope.autocomplete();
+        });      
+      });
+
+    }
+
+    $scope.autocomplete = function() {
+      angular.forEach(parts(),function(i) {
+
+        var samples = [];
+
+        angular.forEach(i.alternatives, function(alt) {
+          var stid = alt.sample_type.split(":")[0];          
+          samples = samples.concat($scope.sample_names[stid])
+         });
+
+        $("#"+i.name).autocomplete({
+            source: samples,
+            select: function(ev,ui) {
+              $scope.new_thread[i.name] = ui.item.value;
+              $scope.$apply();
+            }
+          });
+
+        if ( i.alternatives[0] && i.alternatives[0].sample ) {
+          $scope.new_thread[i.name] = i.alternatives[0].sample;
+        }
+        $scope.$apply();
+
+        $("#status").css('display','none');
+
+      });
+    }
+
+    $scope.submit = function() { 
+
+      $http.post('/workflow_threads/',{ thread: $scope.new_thread, workflow_id: $scope.workflow.id } )
+        .success(function(data) {
+          $scope.threads.push(expand(data));
+          $scope.new_thread = {};
+          angular.forEach(parts(),function(i) {
+            $scope.new_thread[i.name] = i.alternatives[0].sample;
+          });
+        })
+        .error(function() {
+          console.log("Could not submit thread");
+        });      
+
+    }
+
+    $scope.randomize = function() {
+      angular.forEach(parts(),function(io) {
+        if ( !$scope.new_thread[io.name] ) {
+          var stid = io.alternatives[0].sample_type.split(":")[0];            
+          n = $scope.sample_names[stid].length;
+          $scope.new_thread[io.name] = $scope.sample_names[stid][Math.floor(Math.random()*n)];
+        }
+      });
+      angular.forEach($scope.workflow.form.parameters,function(p) {
+        if ( !$scope.new_thread[p.name] ) {
+          $scope.new_thread[p.name] = Math.round(Math.random()*1000)/10;
+        }
+      });
+    }
+
+    $scope.select_all = function() {
+      console.log("select_all");
+    }
+
+    $scope.clear = function() {
+      console.log("clear");
+    }
+
+    $scope.launch = function() {
+      console.log("launch");
+    }
+
+    $scope.destroy = function(tid) {
+      console.log("destroy " + tid);
+    }    
+
+  }]);
+
+})();
+
+</script>

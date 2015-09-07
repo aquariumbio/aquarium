@@ -9,7 +9,9 @@
     <label>Name</label>
     <input ng-model="keyval.name" type="text" />
     <label>Type</label>
-    <input ng-model="keyval.type" type="text" />    
+    <input ng-model="keyval.type" type="text" />   
+    <label>Description</label>
+    <input ng-model="keyval.description" type="text" />     
   </fieldset>  
 
   <button ng-if="!ex && oper.workflow == $root.workflow_id" class='btn btn-warning btn-mini' ng-click='$root.deletePart(oper,partType,keyval)'>
