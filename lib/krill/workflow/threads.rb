@@ -128,18 +128,11 @@ module Krill
 
       i = 0
       collections.slots.each do |slot|
-        puts "slot #{slot.row}, #{slot.col}"
         if !options[:skip_occupied] || slot.empty?
-          puts "  is not occupied" if options[:skip_occupied]
           if i < self.length
-            puts "  yielding to thread #{i}"
             yield self[i], slot
             i += 1
-          else
-            puts "  out of range"
           end
-        else
-          puts "  occupied"
         end
       end
 

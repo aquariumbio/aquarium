@@ -12,8 +12,8 @@
     <div id="thread_builder">
 
       <div class='pull-left'><h4>Build a Thread</h4></div>
-      <div class="btn-group pull-right">
-        <a class="btn btn-small" href="#" ng-click="randomize()">Randomize</a> 
+      <div class="pull-right">
+        <a class="btn btn-small btn-info" href="#" ng-click="randomize()">Randomize</a> 
         <a class="btn btn-small btn-success" href="#" ng-click="submit()">Add</a>               
       </div>      
 
@@ -38,18 +38,21 @@
 
     </div>
 
-    <div id="unassigned-threads" style='margin-top: 20px'>
+    <div id="unassigned-threads" style='margin-top: 20px' ng-show="threads.length > 0">
 
       <div class='pull-left'><h4>Choose Threads</h4></div>
-      <div class="btn-group pull-right">
+      <div class="pull-right">
         <a class="btn btn-small" href="#" ng-click="clear()">Clear Selection</a>
         <a class="btn btn-small" href="#" ng-click="all()">Select All</a>
-        <a class="btn btn-small btn-success" href="#" ng-click="launch()">Launch</a>
+        <% if Rails.env != 'production' %>
+          <a class="btn btn-small btn-warning" href="#" ng-click="launch(true)" ng-disabled="!launchable">Debug</a>        
+        <% end %>        
+        <a class="btn btn-small btn-success" href="#" ng-click="launch(false)" ng-disabled="!launchable">Launch</a>
       </div>
 
       <table class='launcher-table launcher-threads'>
         <tr>
-          <th>Id</th>
+          <th>Thread Id</th>
           <th ng-repeat="i in workflow.form.inputs">{{i.description}}</th>
           <th ng-repeat="i in workflow.form.parameters">{{i.description}}</th>          
           <th ng-repeat="i in workflow.form.outputs">{{i.description}}</th> 
@@ -57,7 +60,7 @@
         </tr>
         <tr ng-repeat="thread in threads">
           <td>
-            <input type=checkbox checked data-thread-id={{thread.id}} class='selector'> 
+            <input type=checkbox checked data-thread-id={{thread.id}} ng-model="thread.checked" ng-change='launch_check()' class='selector'> 
             {{thread.id}}
             <a href='#' ng-click="destroy(thread.id)" class='pull-right'><i class='icon-remove'></i></a>
           </td>
@@ -86,6 +89,7 @@
     $scope.threads = [];
     $scope.workflow = {};
     $scope.sample_names = {};
+    $scope.launchable = false;
 
     $http.get('/workflows/' + $attrs.workflow + ".json")
       .success(function(data) {
@@ -105,6 +109,7 @@
           thread[ispec.name] = ispec.value;
         }
       });
+      thread.checked = true;
       return thread;
     }
 
@@ -114,6 +119,7 @@
         angular.forEach($scope.threads,function(thread) {
           expand(thread);
         });
+        $scope.launchable = ($scope.threads.length > 0);
       })
       .error(function() {
         console.log("Could not retrieve workflow threads");
@@ -184,6 +190,7 @@
           angular.forEach(parts(),function(i) {
             $scope.new_thread[i.name] = i.alternatives[0].sample;
           });
+          $scope.launchable = true;
         })
         .error(function() {
           console.log("Could not submit thread");
@@ -206,28 +213,47 @@
       });
     }
 
+    function set_thread_checked(val) {
+      angular.forEach($scope.threads,function(t) {
+        t.checked = val;
+      });
+    }
+
     $scope.all = function() {
       $(".selector").prop('checked',true);
+      set_thread_checked(true);
+      $scope.launchable = true;      
     }
 
     $scope.clear = function() {
       $(".selector").prop('checked',false);
+      set_thread_checked(false);   
+      $scope.launchable = false;      
     }
 
-    $scope.launch = function() {
+    $scope.launch_check = function() {
+      $scope.launchable = ( $(".selector:checked").length > 0 );
+      return $scope.launchable;
+    }
+
+    $scope.launch = function(debug) {
       var thread_ids = [];
       $('.selector').each(function(s) {
         if ($(this).prop('checked') ) {
           thread_ids.push($(this).data('thread-id'));
         }
       });
-      $http.post('/workflow_processes',{workflow_id: $scope.workflow.id, thread_ids: thread_ids})
-        .success(function(data) {
-          window.location = '/workflow_processes/' + data.id;
-        })
-        .error(function() {
-          console.log("Could not start process")
-        });
+      if ( thread_ids.length > 0 ) {
+        $http.post('/workflow_processes',{workflow_id: $scope.workflow.id, thread_ids: thread_ids, debug: debug})
+          .success(function(data) {
+            window.location = '/workflow_processes/' + data.id;
+          })
+          .error(function() {
+            console.log("Could not start process")
+          });
+        } else {
+          console.log("No threads selected.")
+        }
     }
 
     $scope.destroy = function(tid) {

@@ -109,6 +109,8 @@ class Collection < Item
       end
     elsif x.class == Sample
       m[r][c] = x.id
+    elsif x.class == String
+      m[r][c] = x.split(':')[0].to_i
     else
       raise "The third argument to Collection.set should be an item, a sample, or a sample id, but it was '#{x}' which is a #{x.class}"
     end

@@ -56,15 +56,30 @@ module Krill
       @spec[:name]
     end
 
+    # An array of all the input names in the operation.
+    # @return [Array]
     def input_names;     @spec[:inputs].collect { |i| i[:name] };     end
+
+    # An array of all the output names in the operation.
+    # @return [Array]
     def output_names;    @spec[:outputs].collect { |i| i[:name] };    end
+
+    # An array of all the parameter names in the operation.
+    # @return [Array]   
     def parameter_names; @spec[:parameters].collect { |i| i[:name] }; end
+
+    # An array of all the data names in the operation.
+    # @return [Array]   
     def data_names;      @spec[:data].collect { |i| i[:name] };       end
 
+    # An array of all the input, output, parameter, and data names in the operation.
+    # @return [Array]
     def part_names
       input_names + output_names + parameter_names + data_names
     end
 
+    # Returns the an array of {ISpec}s for the current selection.
+    # @return [Array]
     def get
       raise "no type specified." unless @type
       type = @spec[@type]
@@ -74,6 +89,7 @@ module Krill
       end
     end
 
+    # @private
     def objects type, field
       temp = (get.collect { |part|
         part[:instantiation].collect { |i| i[field] }
@@ -91,14 +107,18 @@ module Krill
       }
     end
 
+    # Returns an array of sample ids for the current selection.
+    # @return [Array]
     def samples 
       self.objects Sample, :sample
     end
 
+    # @private
     def options
       { type: @type, parts: @parts, query: @queryQ, silent: @silentQ, method: @use_method, index: @index }
     end  
 
+    # @private
     def get_ispec_io
       unless @type == :inputs || @type == :outputs
         raise "No i/o specified. Call .input or .output first." 
@@ -106,10 +126,15 @@ module Krill
       get
     end
 
+    # Returns the operation specification, for use as the return value of a protocol.
+    # @example Use this code at the end of a protocol.
+    #   return o.result
+    # @return [Hash]
     def result
       @spec
     end
 
+    # @private
     def extract_id descriptor
       if descriptor.class == String
         descriptor.split(':')[0].to_i
@@ -118,14 +143,20 @@ module Krill
       end
     end
 
+    # Returns an array {ISpec}s corresponding to the current selection.
+    # @return [Array]
     def specs
       (get.collect { |ispec| ispec[:instantiation] }).flatten
     end
 
+    # Returns the number of {ISpecs}s in current selection.
+    # @return [Fixnum]
     def length
       specs.length
     end
 
+    # Returns an array sample ids corresponding to the current selection.
+    # @return [Array]
     def sample_ids
       ispecs = get
       s = []
@@ -137,6 +168,8 @@ module Krill
       s
     end
 
+    # Returns an array item ids corresponding to the current selection.
+    # @return [Array]
     def item_ids
       ispecs = get
       s = []
@@ -152,19 +185,46 @@ module Krill
 
     # @!group Chainers
 
+    # Sets the current selection to the operation's input. Can be chained.
+    # @return [Op]
     def input;     @parts = []; @type = :inputs;     self; end
+
+    # Sets the current selection to the operation's output. Can be chained.
+    # @return [Op]    
     def output;    @parts = []; @type = :outputs;    self; end
+
+    # Sets the current selection to the operation's parameters. Can be chained.
+    # @return [Op]    
     def parameter; @parts = []; @type = :parameters; self; end
+
+    # Sets the current selection to the operation's data. Can be chained.
+    # @return [Op]    
     def data;      @parts = []; @type = :data;       self; end
 
+    # Selects input, output, parameter, and data. Can be chained.
+    # @return [Op]
     def all
       raise "no i/o specified" unless @type == :inputs or @type == :outputs
       @parts = @spec[@type].collect { |i| i[:name] }
       self
     end
 
+    # Sets whether to query the user in subsequent calls to take, release, and produce.
+    # @param [Boolean] b
+    # @return [Op]
     def query b;   @queryQ = b;         self; end
+
+    # Sets whether to interact with the user in subsequent calls to take, release, and produce.
+    # @param [Boolean] b
+    # @return [Op]
+
     def silent b;  @silentQ = b;        self; end
+
+    # Sets the name of the method (currently "list" or "boxes" )
+    # to use in subsequent calls to take, release, and produce.
+    # 
+    # @param [String] m
+    # @return [Op]    
     def method m;  @use_method = m;     self; end
 
     # @!endgroup
@@ -176,7 +236,6 @@ module Krill
         raise "exactly one (and not zero) data element(s) field can be set at a time. #{options}" 
       end
       keyval[0][:instantiation][i] = { value: val }
-      puts "#{keyval[0]}"      
     end
 
     def set(name,val)
@@ -187,12 +246,10 @@ module Krill
         raise "#{val} is not an array, or incompatible array sizes when setting data #{name}." 
       end
       keyval[0][:instantiation] = val.collect { |x| { value: x } }
-      puts "#{keyval[0]}"      
     end     
 
     def export
       # returns the filled out operation spec
-      puts "Exporting"
       @spec
     end
 

@@ -8,51 +8,66 @@
          color = "#eff"
        elsif job.status == "COMPLETED"
          color = "#efe"
-       else
-        color = "#eee"
-      end %>
+       else 
+         color = "#fff"
+       end %>
   <% end %>
 
   <div class='well' style='background: <%= color %>'>
 
-  <h2><%= oc[:operation][:id] %>: <%= oc[:operation][:name] %>: 
+  <h4><%= oc[:operation][:id] %>: <%= oc[:operation][:name] %>: 
     <% if job %>
       Implemented by Job <%= link_to oc[:jid], job %> (<%= job.status %>)
     <% end %>
-  </h2>
+  </h4>
 
-    <div class='row-fluid'>
-
-      <div class='span3'>
-        <h3>Inputs</h3>
-        <% oc[:operation][:inputs].each do |input| %>
-          <h4><%= input[:name] %></h4>
-          <div class="json"><%= input[:instantiation].to_json %></div>
-        <% end %>
+    <% if job && job.error? %>
+      <div class='alert alert-error'>
+        <b>Error: <%= job.error_message %></b><br />
+        <ul>
+          <% job.error_backtrace.each do |entry| %>
+            <li><%= entry %></li>
+          <% end %>
+        </ul>
       </div>
+    <% end %>  
 
-      <div class='span3'>
-        <h3>Parameters</h3>
-        <% oc[:operation][:parameters].each do |p| %>
-          <h4><%= p[:name] %></h4>
-          <div class="json"><%= p[:instantiation].to_json %></div>
-        <% end %>
-      </div>     
+    <div class='showhide'>
 
-      <div class='span3'>
-        <h3>Outputs</h3>
-        <% oc[:operation][:outputs].each do |output| %>
-          <h4><%= output[:name] %></h4>
-          <div class="json"><%= output[:instantiation].to_json %></div>
-        <% end %>
-      </div>
+      <div class='row-fluid'>
 
-      <div class='span3'>
-        <h3>Data</h3>
-        <% oc[:operation][:data].each do |d| %>
-          <h4><%= d[:name] %></h4>
-          <div class="json"><%= d[:instantiation].to_json %></div>
-        <% end %>
+        <div class='span3'>
+          <h5>Inputs</h5>
+          <% oc[:operation][:inputs].each do |input| %>
+            <h4><%= input[:name] %></h4>
+            <div class="json"><%= input[:instantiation].to_json %></div>
+          <% end %>
+        </div>
+
+        <div class='span3'>
+          <h4>Parameters</h4>
+          <% oc[:operation][:parameters].each do |p| %>
+            <h5><%= p[:name] %></h5>
+            <div class="json"><%= p[:instantiation].to_json %></div>
+          <% end %>
+        </div>     
+
+        <div class='span3'>
+          <h4>Outputs</h4>
+          <% oc[:operation][:outputs].each do |output| %>
+            <h5><%= output[:name] %></h5>
+            <div class="json"><%= output[:instantiation].to_json %></div>
+          <% end %>
+        </div>
+
+        <div class='span3'>
+          <h4>Data</h4>
+          <% oc[:operation][:data].each do |d| %>
+            <h5><%= d[:name] %></h5>
+            <div class="json"><%= d[:instantiation].to_json %></div>
+          <% end %>
+        </div>
+
       </div>
 
     </div>
@@ -66,6 +81,7 @@
 </pre -->
 
 <script>
+  showhide();
   $(".json").each(function() {
     var j = $(this).html();
     $(this).empty();
