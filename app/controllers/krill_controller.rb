@@ -151,7 +151,8 @@ class KrillController < ApplicationController
       @job.append_step operation: "aborted", rval: {}
 
       # tell manta we're done
-      Manta::stop @job, request, 'true', self
+      # Manta::stop @job, request, 'true', self
+
       logger.info "ABORTING KRILL JOB #{@job.id}"
 
     end
@@ -202,11 +203,18 @@ class KrillController < ApplicationController
       end
 
       if result[:response] == "done"
-        # tell manta we're done
-        Manta::stop @job, request, (@exception ? 'true' : 'false'), self
-      end
 
-      @job.reload
+        # tell manta we're done
+        # Manta::stop @job, request, (@exception ? 'true' : 'false'), self
+
+        # step the job's workflow
+        @job.reload.step_workflow
+
+      else
+
+        @job.reload
+
+      end
 
     else 
 

@@ -2,9 +2,13 @@ class Workflow < ActiveRecord::Base
 
   include WorkflowAux
 
-  has_many :workflow_associations
+  has_many :workflow_processes
 
   attr_accessible :name, :specification
+
+  def processes
+    self.workflow_processes
+  end
 
   def parse_spec
     JSON.parse specification, symbolize_names: true

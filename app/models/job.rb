@@ -268,4 +268,14 @@ class Job < ActiveRecord::Base
     a
   end
 
+  def step_workflow
+
+    if self.workflow_process
+      wp = WorkflowProcess.find(self.workflow_process.id)
+      wp.record_result_of self
+      wp.step
+    end
+
+  end
+
 end

@@ -1,10 +1,25 @@
 module Krill
 
+  # Instances of Slot represent elements of a [Collection]. The most likley way
+  # you will encounter a slot is when iterating over a collection or [CollectionArray].
+  #
+  # Each slot has a row, column, and sample id, and you can test whether it is empty or nonempty.
+  #
+  # @example Show the contents of a collection, slot by slot
+  #  show do 
+  #    collection_array.slots do |slot|
+  #      if slow.nonempty?
+  #        note "#{slot.collection.id}(#{slot.row},#{slot.col}) = #{slot.sample_id}"
+  #       end
+  #     end
+  #   end
+  #
   class Slot
 
     attr_reader :row, :col, :collection
     attr_accessor :ingredients
 
+    # @private
     def initialize col, r, c
       @collection = col
       @row = r
@@ -12,18 +27,31 @@ module Krill
       @ingredients = {}
     end
 
+    # Returns the sample associated with the slot.
+    # @warning Use sample_id instead. This method will return the actual {Sample} object in the future.
+    # @return [Fixnum]
     def sample
       @collection.matrix[@row][@col]
     end
 
+    # Returns the sample id associated with the slot.
+    # @return [Fixnum]    
+    def sample_id
+      @collection.matrix[@row][@col]
+    end
+
+    # Associate the sample id s with the slot
+    # @param [Fixnum]
     def sample= s
       @collection.set @row, @col, s
     end
 
+    # Returns true if and only if the slot is empty.
     def empty?
       self.sample < 0
     end
 
+    # Returns true if and only if the slot is not empty.
     def nonempty?
       self.sample >= 0
     end
@@ -140,7 +168,6 @@ module Krill
       cs = CollectionArray.new
 
       ispecs.first[:instantiation].each{ |ispec|
-        puts "adding collection for #{ispec}"
         cs << Collection.find(ispec[:item])
       }
 

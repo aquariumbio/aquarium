@@ -7,26 +7,24 @@ class WorkflowProcess < ActiveRecord::Base
 
   # Process Creation and setup
 
-  def self.create workflow, threads
+  def self.create workflow, threads, debug=false
     wp = WorkflowProcess.new
     wp.workflow_id = workflow.id
     wp.save
-    wp.setup workflow, threads
+    wp.setup workflow, threads, debug
     wp
   end
 
-  def setup workflow, threads
+  def setup workflow, threads, debug
 
     @cached_state = workflow.export
     @num_threads = threads.length
 
     threads.each do |t|
     
-      logger.info "Setting thread process_id to #{self.id}"
       t.process_id = self.id
       t.save
       t.reload
-      logger.info " ==> thread process_id = #{t.process_id}"
 
       spec = t.spec # parses the json
 
@@ -50,8 +48,14 @@ class WorkflowProcess < ActiveRecord::Base
       end
     end
 
+    state_hash[:debug] = debug
+    puts "WP: set state_hash[:debug] to #{debug} to get #{state_hash[:debug]}"
     self.save_state
 
+  end
+
+  def debug?
+    self.state_hash[:debug]
   end
 
   def default_ispec p
@@ -105,12 +109,23 @@ class WorkflowProcess < ActiveRecord::Base
 
     # launch jobs
     initial_ocs.each do |oc|
+
       op = Operation.find(oc[:id])
       jid = op.enqueue oc[:operation], oc[:timing], self.id
       oc[:jid] = jid 
-    end
+      self.save_state
+      puts "WP: Submitted job #{jid} and saved the jid in the oc"
 
-    self.save_state
+      if state_hash[:debug]
+        puts "WP: starting job #{jid}"
+        result = Krill::Client.new.start jid, true
+        j = Job.find(jid)
+        puts "WP: job #{j.id} is #{j.status}"
+        record_result_of j
+        step
+      end      
+
+    end   
 
   end
 
@@ -132,7 +147,7 @@ class WorkflowProcess < ActiveRecord::Base
     oc = operation_container_for job
 
     unless rv[:inputs] && rv[:outputs] && rv[:data]
-      raise "Job #{job.id} (#{job.path}) did not return a value whose type is useable in a workflow."
+      raise "Job #{job.id} (#{job.path}) did not return a value whose type is useable in a workflow: #{rv}"
     end
 
     rv[:inputs].each do |job_input|
@@ -164,8 +179,6 @@ class WorkflowProcess < ActiveRecord::Base
 
         if links.length > 0 && links.conjoin { |link| operation_completed?(operation_container link[:from][0]) }
 
-          puts "#{oc[:id]} is ready"
-
           (inputs oc).each do |input|
 
             # update instantiations
@@ -182,15 +195,23 @@ class WorkflowProcess < ActiveRecord::Base
           # launch job
           op = Operation.find(oc[:id])
           jid = op.enqueue oc[:operation], oc[:timing], self.id
-          oc[:jid] = jid              
+          oc[:jid] = jid       
+          save_state
+
+          if state_hash[:debug]
+            puts "WP: starting job #{jid}"
+            result = Krill::Client.new.start jid, true
+            j = Job.find(jid)
+            puts "WP: job #{j.id} is #{j.status}"
+            record_result_of j
+            step
+          end                   
 
         end
 
       end
 
-    end
-
-    save_state
+    end    
 
     true
 

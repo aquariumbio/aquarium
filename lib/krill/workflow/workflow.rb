@@ -149,7 +149,7 @@ module Krill
       (get.collect { |ispec| ispec[:instantiation] }).flatten
     end
 
-    # Returns the number of {ISpecs}s in current selection.
+    # Returns the number of {ISpec}s in current selection.
     # @return [Fixnum]
     def length
       specs.length

@@ -24,15 +24,9 @@ class WorkflowProcessesController < ApplicationController
 
     @workflow = Workflow.find(params[:workflow_id])
     @threads = params[:thread_ids].collect { |tid| WorkflowThread.find(tid) }
-    @wp = WorkflowProcess.create @workflow, @threads
+    @wp = WorkflowProcess.create @workflow, @threads, params[:debug]
 
-    if params[:debug]
-      logger.info "DEBUG MODE"
-      Thread.new do
-        debug
-      end
-    else
-      logger.info "NORMAL SCHEDULING MODE"
+    Thread.new do
       @wp.launch
     end
 

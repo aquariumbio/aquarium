@@ -141,6 +141,9 @@
 
       link: function($scope,$element) {
 
+        var new_x = 100,
+            new_y = 100;
+
         $scope.new_connection = function() {
           $scope.wf.specification.io.push({from: [0,"output"], to: [1,"input"]});
         }        
@@ -159,13 +162,20 @@
               url: "/operations/make.json"
             }).done(function(data) {
               var op = {
-                x: 100, y: 100, id: data.id, timing: "immediately", operation: $.extend(data,{workflow: $scope.wf.id})
+                x: new_x, y: new_y, id: data.id, timing: "immediately", operation: $.extend(data,{workflow: $scope.wf.id})
               };
+              new_x += 30;
+              new_y += 30;
               $scope.wf.specification.operations.push(op);
               $scope.$apply();
               $('#new_operation_link').html("New operation");  
               $('#new_operation_container').addClass('hoverable');               
               $scope.new_op_locked = false;                   
+            }).error(function(data) {
+              console.log("Error: " + data.responseText);
+              $('#new_operation_link').html("New operation"); 
+              $('#new_operation_container').addClass('hoverable'); 
+              $scope.new_op_locked = false;   
             });
           }
         }

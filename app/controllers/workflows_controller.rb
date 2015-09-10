@@ -42,16 +42,15 @@ class WorkflowsController < ApplicationController
   # GET /workflows/new.json
   def new
     @workflow = Workflow.new
+    @workflow.name = "New workflow"
     @workflow.specification = ({
         operations: [],
         io: [],
-        description: ""
+        description: "A new workflow that has not yet been carefully described."
       }).to_json
+    @workflow.save
+    redirect_to @workflow
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @workflow }
-    end
   end
 
   # GET /workflows/1/edit

@@ -1,5 +1,20 @@
 module Krill
 
+  # A class that collects all the inputs, outputs, parameters, and data for a particular
+  # thread. The most likely situation for encountering a WorkflowThread object is when
+  # iterating over all threads in the operation, as in the example below.
+  #
+  # The main way to use a thread is to use the input, output, data, and parameter selectors,
+  # which are method chainers, followed by a name selector. That is, if your operation has an input
+  # named x, then you access it via thread.input.x. If you have a parameter named y, then you 
+  # access it via thread.parameter.y, and so on.
+  #
+  # @example Iterate over all threads and show the user the sample id for a particular input named x, assuming o is an instance of {Op}.
+  #   show do 
+  #     o.threads.each do |thread|
+  #       note "#{thread.index}: #{thread.input.x.sample_id}"
+  #     end
+  #   end
   class WorkflowThread
 
     # @!visibility private
