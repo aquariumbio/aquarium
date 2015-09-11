@@ -1,4 +1,29 @@
 Bioturk::Application.routes.draw do
+  
+  resources :workflows
+  post '/workflows/:id/save',                to: 'workflows#save'
+  get '/workflows/:id/new_operation',       to: 'workflows#new_operation'
+  get '/workflows/:id/drop_operation/:oid', to: 'workflows#drop_operation'
+  get '/workflows/:id/identify',            to: 'workflows#identify'
+
+  get '/operations/make',                   to: 'operations#make' 
+
+  resources :operations
+  get '/operations/:id/new_part',           to: 'operations#new_part'
+  get '/operations/:id/new_exception',      to: 'operations#new_exception'
+  get '/operations/:id/new_exception_part', to: 'operations#new_exception_part'
+  get '/operations/:id/drop_part',          to: 'operations#drop_part'
+  get '/operations/:id/rename',             to: 'operations#rename'
+  get '/operations/:id/rename_part',        to: 'operations#rename_part'  
+  
+  get 'containers_list',             to: 'operations#containers'  
+  get 'collection_containers_list',  to: 'operations#collection_containers'    
+  get 'sample_types_list',           to: 'operations#sample_types'
+  get 'sample_list/:id',             to: 'operations#samples'
+
+  resources :workflow_processes, only: [ :index, :show, :new, :create ]
+
+  resources :workflow_threads, only: [ :create, :index, :destroy ]
 
   resources :posts, only: [ :index, :create ]
   resources :wizards
@@ -32,10 +57,10 @@ Bioturk::Application.routes.draw do
   match 'viewer',        to: 'metacols#viewer'
 
   resources :metacols do
-      get 'arguments', on: :new
-      get 'narguments', on: :new
-      get 'launch', on: :new
-      get 'stop'
+    get 'arguments', on: :new
+    get 'narguments', on: :new
+    get 'launch', on: :new
+    get 'stop'
   end 
 
   get "/groups/names"
@@ -161,7 +186,6 @@ Bioturk::Application.routes.draw do
   resources :logs, only: [:index, :show]
 
   match '/logout', to: 'sessions#destroy'
-
   match '/item', to: 'items#update'
 
   get "oyster/ping"

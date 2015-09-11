@@ -12,3 +12,10 @@ require_relative 'inventory'
 require_relative 'transfers'
 
 require_relative 'task_validator'
+
+require_relative 'workflow/workflow'
+require_relative 'workflow/inventory'
+require_relative 'workflow/collection_array'
+require_relative 'workflow/threads'
+require_relative 'workflow/ispec'
+require_relative 'workflow/table'

@@ -15,6 +15,7 @@ group :development do
 #  gem 'better_errors'
   gem 'binding_of_caller'
   gem 'meta_request'
+  gem 'rspec-rails'
 end
 
 group :production, :rehearse do 
@@ -45,3 +46,5 @@ gem 'git'
 
 gem 'rails-patch-json-encode'
 gem 'oj'
+
+gem 'angularjs-rails'

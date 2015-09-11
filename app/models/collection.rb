@@ -52,8 +52,7 @@ class Collection < Item
     i.quantity = 1
     i.inuse = 0
     i.save
-    i.location = "Bench"   
-    puts "aleph"
+    i.location = "Bench"
     i
 
   end
@@ -100,7 +99,9 @@ class Collection < Item
 
   def set r, c, x
     m = self.matrix
-    if x.class == Item
+    if x.class == Fixnum
+      m[r][c] = x
+    elsif x.class == Item
       if x.sample
         m[r][c] = x.sample.id
       else
@@ -108,8 +109,10 @@ class Collection < Item
       end
     elsif x.class == Sample
       m[r][c] = x.id
+    elsif x.class == String
+      m[r][c] = x.split(':')[0].to_i
     else
-      raise "The third argument to Collection.set should be an item or a sample."
+      raise "The third argument to Collection.set should be an item, a sample, or a sample id, but it was '#{x}' which is a #{x.class}"
     end
     self.matrix = m
     self.save
@@ -142,7 +145,11 @@ class Collection < Item
 
   def dimensions
     m = self.matrix
-    [ m.length, m[0].length ]
+    if m && m[0]
+      [ m.length, m[0].length ]
+    else
+      [ 0, 0 ]
+    end
   end
 
   def num_samples

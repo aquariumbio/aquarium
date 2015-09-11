@@ -11,10 +11,10 @@ module Krill
       page = ShowBlock.new.run(&Proc.new)
 
       # increment pc
-      job = Job.find(jid)
-      job.append_step operation: "display", content: page
-      job.pc += 1
-      job.save
+      @job ||= Job.find(jid)
+      @job.append_step operation: "display", content: page
+      # @job.pc += 1
+      # @job.save
 
       if !debug
 
@@ -23,15 +23,15 @@ module Krill
         Thread.stop
 
         # get technician input and return it
-        JSON.parse(job.reload.state, symbolize_names: true).last[:inputs]
+        JSON.parse(@job.reload.state, symbolize_names: true).last[:inputs]
 
       else
 
         # figure out default technician response
         i = simulated_input_for page
-        job.reload.append_step operation: "next", time: Time.now, inputs: i 
+        @job.append_step operation: "next", time: Time.now, inputs: i 
 
-        if job.pc > 50
+        if @job.pc > 500
           raise "Job #{jid} executed too many steps (50) in debug mode. Could be an infinite loop."
         end
 

@@ -1,0 +1,95 @@
+<div style='padding-left: 5px' <div ng-show="ispec == $parent.$root.selection">
+
+  <div ng-if="!ex">
+    <h3>Operation: {{oper.name}}</h3>
+  </div>
+
+  <div ng-if="ex">
+    <h3 ng-if="ex">Exception: {{ex.name}}</h3>
+  </div>
+
+  <h4>{{partType}}: {{ispec.name}}</h4>    
+  
+  <form>
+
+  <fieldset>
+
+    <label>Name</label>
+    <input type="text" class='input-block-level' ng-model='ispec.name'>
+
+    <label>Description</label>
+    <textarea type="text" class='input-block-level' ng-model='ispec.description' />    
+
+    <div class='row-fluid'>
+
+      <div class='span3'>
+        <label class="radio">
+          <input type="radio" name="itemOrPart" ng-value="false" ng-model="ispec.is_part">
+          Item
+        </label>
+        <label class="radio">
+          <input type="radio" name="itemOrPart" ng-value="true" ng-model="ispec.is_part">
+          Part
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" name="isShared" ng-model="ispec.shared">
+          Shared
+        </label>        
+      </div>
+
+      <div class='span3'>
+        <label class="radio">
+          <input type="radio" name="scalarOrMatrix"
+                 ng-value="false" ng-model="ispec.is_matrix">
+          Single
+        </label>
+        <label class="radio">
+          <input type="radio" name="scalarOrMatrix"
+                 ng-value="true" ng-model="ispec.is_matrix" ng-click="dimensions()">
+          Matrix
+        </label>
+      </div>      
+
+      <div class='span6'>
+
+        <div ng-show="ispec.is_matrix">
+          <input class='input-mini' type="number" ng-model='ispec.rows'> x 
+          <input class='input-mini' type="number" ng-model='ispec.columns'>
+        </div>
+
+        <div ng-show="ispec.shared">
+          <label class='input'>
+            Limit: 
+            <input class='input-mini' type="number" ng-model='ispec.limit'> 
+          </label>
+        </div>
+
+      </div>
+
+    </div>
+
+  </fieldset>    
+
+  <div alternatives="ispec.alternatives"></div>
+
+  <span class="hoverable" ng-click="new_alternative()" ng-if="!disabled()">
+    <icon class='icon-plus' /> Add item specification
+  </span>
+
+  <br /><br />
+
+  <button ng-if="!ex && oper.workflow == $root.workflow_id" class='btn btn-warning btn-mini' ng-click='$root.deletePart(oper,partType,ispec)'>
+    Delete This {{partType}}
+  </button>               
+
+  <button ng-if="ex && oper.workflow == $root.workflow_id" class='btn btn-warning btn-mini' ng-click='$root.deletePart(ex,partType,ispec)'>
+    Delete This {{partType}}
+  </button>               
+
+  </form>
+
+<!-- pre>
+{{ispec|json}}
+</pre -->
+</div>
+

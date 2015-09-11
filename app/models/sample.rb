@@ -5,6 +5,7 @@ class Sample < ActiveRecord::Base
   belongs_to :user
   has_many :items
   has_many :post_associations
+  has_many :workflow_associations
 
   validates_uniqueness_of :name, message: "Samples: must have unique names."
 
@@ -249,6 +250,10 @@ class Sample < ActiveRecord::Base
 
     true
 
-  end  
+  end
+
+  def threads
+    self.workflow_associations.collect { |wa| puts wa.inspect; wa.workflow_thread }
+  end
 
 end

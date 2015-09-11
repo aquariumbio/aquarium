@@ -1,0 +1,105 @@
+/* Diagram */
+.operation-title-box {
+  stroke: black; 
+  fill: #efefef;
+  cursor: -webkit-grab; cursor: -moz-grab;
+}
+
+.operation-title {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.operation-body {
+  cursor: -webkit-grab; cursor: -moz-grab;
+}
+
+.operation-title-selected {
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 12pt;
+  fill: #bb0000;  
+}
+
+.operation-part {
+  cursor: pointer;
+}
+
+.part-selected {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12pt;
+  fill: #bb0000;
+}
+
+.operation-port {
+  cursor: pointer; 
+  r: 5; 
+  stroke: "black";
+  fill: "orange";
+}
+
+.operation-port-selected {
+  cursor: pointer; 
+  r: 6;  
+}
+
+.workflow-connection {
+  stroke: #888;
+  stroke-width: 2;
+  fill: none
+}
+
+.exception-connection {
+  stroke: #888;
+  stroke-width: 2;
+  fill: none;
+  stroke-dasharray: 4,2;
+}
+
+.hoverable {
+  cursor: pointer;
+}
+
+.exception-title-box {
+  stroke: black; 
+  fill: #efafaf;
+  cursor: -webkit-grab; cursor: -moz-grab;
+}
+
+/* Editor */
+
+.code-text-area {
+  font-family: "Courier";
+  font-size: "9pt";
+}
+
+.workflow-details-list {
+  margin: 0;
+  padding: 0;
+  li { 
+    list-style-type: none;
+  }
+}
+
+.upper-right {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+.hoverable {
+  cursor: pointer;
+}
+
+.bracketed {
+  position: relative;
+  border-left: 1pt solid green;
+  border-radius: 5px;
+  padding-left: 10px;
+  margin-bottom: 4px;
+}
+
+.left-margin {
+  margin-left: 5px;
+}
+

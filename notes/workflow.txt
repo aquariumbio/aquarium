@@ -1,0 +1,27 @@
+workflow
+
+translating operation specifications to go.js networks
+
+  * who is responsibility is it to translate between the two formats?
+
+    js asks ruby for workflow
+      workflow controller gets specification and loads all operations into a big workflow json
+
+    js turns them into go network
+      workflow_to_network
+
+    user edits go network
+      this puts data in a subfield of the go network
+
+    syncing with backend
+      new operations get immediately created via ajax coordination with the backend
+        - add operation to db and to workflow
+      user edits of an operation are sent to server, changing operation from synced, to unsynced
+      adding new identifications immediately are sent to server
+      when syncing, ui becomes unavailable
+
+    backend methods, accessible via the workflow controller
+      - add operation
+      - update operation with i/o etc
+      - add identification
+

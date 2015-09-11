@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150405154727) do
+ActiveRecord::Schema.define(:version => 20150828232337) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -55,9 +55,9 @@ ActiveRecord::Schema.define(:version => 20150405154727) do
     t.string   "user_id"
     t.string   "sha"
     t.text     "arguments"
-    t.text     "state",              :limit => 4294967295
-    t.datetime "created_at",                               :null => false
-    t.datetime "updated_at",                               :null => false
+    t.text     "state",               :limit => 4294967295
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.string   "path"
     t.integer  "pc"
     t.integer  "group_id"
@@ -65,6 +65,7 @@ ActiveRecord::Schema.define(:version => 20150405154727) do
     t.datetime "desired_start_time"
     t.datetime "latest_start_time"
     t.integer  "metacol_id"
+    t.integer  "workflow_process_id"
   end
 
   create_table "locators", :force => true do |t|
@@ -122,6 +123,14 @@ ActiveRecord::Schema.define(:version => 20150405154727) do
     t.integer  "sample_type_id"
     t.string   "image"
     t.string   "prefix"
+  end
+
+  create_table "operations", :force => true do |t|
+    t.string   "name"
+    t.string   "protocol_path"
+    t.text     "specification"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "post_associations", :force => true do |t|
@@ -262,6 +271,37 @@ ActiveRecord::Schema.define(:version => 20150405154727) do
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
     t.string   "description"
+  end
+
+  create_table "workflow_associations", :force => true do |t|
+    t.integer  "thread_id"
+    t.integer  "process_id"
+    t.integer  "sample_id"
+    t.integer  "item_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "workflow_processes", :force => true do |t|
+    t.integer  "workflow_id"
+    t.text     "state"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "workflow_threads", :force => true do |t|
+    t.integer  "process_id"
+    t.text     "specification"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.integer  "workflow_id"
+  end
+
+  create_table "workflows", :force => true do |t|
+    t.string   "name"
+    t.text     "specification"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
 end

@@ -1,0 +1,59 @@
+.input-plain {
+  border: 0pt solid #aaa !important;
+  border-radius: 0px !important;
+  width: 100%;
+  margin: 0px !important;
+  padding: 0px;
+  height: 20px;  
+  line-height: 0;
+}
+
+.input-plain:focus {
+  background-color: #ffe;
+}
+
+  .input-plain:disabled {
+    background-color: white;
+  }
+
+.launcher-table {
+
+  width: 100%;
+  table-layout: fixed;
+
+  th { 
+    border: 1pt solid #aaa;
+    height: 20px;
+    padding: 5px;
+    margin: 0px;
+    text-align: left;
+    background: #eee;
+  }
+
+  td {
+    border: 1pt solid #aaa;
+    height: 20px;
+    padding: 0px;
+    margin: 0px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;    
+  }
+
+  tr {
+    padding: 0px;
+    margin: 0px;
+  }
+
+}
+
+.launcher-threads {
+  td {
+    padding: 5px;
+  }
+}
+
+.right {
+  float: right;
+}
+

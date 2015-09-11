@@ -46,8 +46,8 @@ module Krill
 
     end
 
-    def start jid
-      send operation: "start", jid: jid 
+    def start jid, debug=false
+      send operation: "start", jid: jid, debug: debug
     end
 
     def jobs

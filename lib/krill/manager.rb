@@ -8,12 +8,13 @@ module Krill
 
     attr_accessor :thread
 
-    def initialize jid
+    def initialize jid, debug
 
       # Start new thread
       @mutex = Mutex.new
       @thread_status = ThreadStatus.new
       @thread_status.running = false
+      @debug = debug
 
       # Get job info
       @jid = jid
@@ -99,9 +100,64 @@ module Krill
 
     end
 
+    def debug
+
+      begin
+
+        @job.reload.pc = 0          # what if this fails?
+        @job.save                   # what if this fails?
+        appended_complete = false
+
+        begin
+
+          rval = @protocol.main
+
+        rescue Exception => e
+
+          puts "#{@job.id}: EXCEPTION #{e.to_s} + #{e.backtrace[0,10]}"
+          @base_object.error e
+
+        else
+
+          @job.reload.append_step operation: "complete", rval: rval 
+          appended_complete = true
+
+        ensure
+
+          @job.reload.pc = Job.COMPLETED # what if this fails?
+
+          unless appended_complete
+            @job.append_step operation: "next", time: Time.now, inputs: {}
+            @job.append_step operation: "aborted", rval: {}
+          end
+
+          @job.save # what if this fails?
+
+        end
+
+      rescue Exception => main_error
+
+        puts "#{@job.id}: SERIOUS EXCEPTION #{main_error.to_s}: #{main_error.backtrace[0,10]}"
+
+        if (ActiveRecord::Base.connection && ActiveRecord::Base.connection.active?)
+           ActiveRecord::Base.connection.close
+           puts "#{@job.id}: Closing ActiveRecord connection"
+        end
+
+      end
+
+    end    
+
     def run
-      start_thread
-      wait 20
+
+      if @protocol.debug
+        debug
+      else
+        start_thread
+        wait 20 # This so that you wait until either the step is done or 20 seconds is up. 
+                # It doesn't have to wait the whole 20 seconds if the step finishes quickly.
+      end
+
     end
 
     def wait secs
@@ -177,6 +233,10 @@ module Krill
       b.send(:include,Base)
       b.module_eval "def jid; #{@jid}; end"
       b.module_eval "def input; #{@args}; end"
+
+      if @debug
+        b.module_eval "def debug; true; end"
+      end
 
       manager_mutex = @mutex
       b.send :define_method, :mutex do

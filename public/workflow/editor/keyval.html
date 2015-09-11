@@ -1,0 +1,25 @@
+<div ng-show="keyval == $parent.$root.selection">
+
+  <h3 ng-if="!ex">Operation: {{oper.name}}</h3>
+  <h3 ng-if="ex">Exception: {{oper.name}}</h3>
+
+  <h4>{{partType}}: {{keyval.name}}</h4>
+
+  <fieldset>
+    <label>Name</label>
+    <input ng-model="keyval.name" type="text" />
+    <label>Type</label>
+    <input ng-model="keyval.type" type="text" />   
+    <label>Description</label>
+    <input ng-model="keyval.description" type="text" />     
+  </fieldset>  
+
+  <button ng-if="!ex && oper.workflow == $root.workflow_id" class='btn btn-warning btn-mini' ng-click='$root.deletePart(oper,partType,keyval)'>
+    Delete This {{partType}}
+  </button>    
+
+  <button ng-if="ex && oper.workflow == $root.workflow_id" class='btn btn-warning btn-mini' ng-click='$root.deletePart(ex,partType,keyval)'>
+    Delete This {{partType}}
+  </button>  
+
+</div>

@@ -8,7 +8,11 @@
  
   <div class='span3' id="krill-tools">
 
-    <div id="krill-info"></div>
+    <% if @job.workflow_process %>
+      <%= link_to "Process #{@job.workflow_process.id}", @job.workflow_process %><br />
+    <% end %>
+    <div id="krill-info">
+    </div>
 
     <ul class="nav nav-tabs" id="tools-tab">
       <li class="active krill-tools-tab"> <a href="#history">   History     </a></li>

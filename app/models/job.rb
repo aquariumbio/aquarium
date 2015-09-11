@@ -18,6 +18,7 @@ class Job < ActiveRecord::Base
   has_many :uploads
   belongs_to :group
   has_many :post_associations
+  belongs_to :workflow_process
 
   def self.params_to_time p
 
@@ -31,7 +32,11 @@ class Job < ActiveRecord::Base
   end
 
   def done?
-    return (self.pc == -2)
+    self.pc == Job.COMPLETED
+  end
+
+  def not_started?
+    self.pc == Job.NOT_STARTED
   end
 
   def status
@@ -59,14 +64,14 @@ class Job < ActiveRecord::Base
   def append_steps steps
     bt = self.backtrace
     bt.concat steps
-    self.state = bt.to_json
+    self.state = Oj.dump(bt,mode: :compat)
     self.save
   end
 
   def append_step step
     bt = self.backtrace
     bt.push step
-    self.state = bt.to_json
+    self.state = Oj.dump(bt,mode: :compat)
     self.save 
   end
 
@@ -129,7 +134,7 @@ class Job < ActiveRecord::Base
   def remove_types p
 
     case p
-      when String, Fixnum, Float
+      when String, Fixnum, Float, TrueClass, FalseClass
         p
       when Hash
         h = {}
@@ -214,7 +219,7 @@ class Job < ActiveRecord::Base
       rescue
         return true
       end
-  elsif plankton?
+    elsif plankton?
       entries = self.logs.reject { |l| l.entry_type != 'CANCEL' && l.entry_type != 'ERROR' && l.entry_type != 'ABORT' }
       return entries.length > 0
     else
@@ -222,6 +227,14 @@ class Job < ActiveRecord::Base
     end
 
   end
+
+  def error_message
+    self.backtrace[-3][:message]
+  end
+
+  def error_backtrace
+    self.backtrace[-3][:backtrace]
+  end  
 
   def abort_krill
 
@@ -253,6 +266,16 @@ class Job < ActiveRecord::Base
     end
     a.delete "state"
     a
+  end
+
+  def step_workflow
+
+    if self.workflow_process
+      wp = WorkflowProcess.find(self.workflow_process.id)
+      wp.record_result_of self
+      wp.step
+    end
+
   end
 
 end

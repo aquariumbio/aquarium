@@ -1,0 +1,90 @@
+<div ng-app="workflow">
+
+  <div id="workflow-control" class='row-fluid' ng-controller='workflowCtrl as workflow' 
+       workflow=<%= params[:id] %> >
+
+    <div class='span8'>
+
+      <div width="100%"><h1 style="text-align: left">{{workflow.id}}: {{workflow.name}}</h1></div>
+
+      <svg id="diagram" width="100%" ng-click="clearSelection()"
+           ng-mouseup="$root.mouseUpForDrag()"
+           ng-mousemove="$root.mouseMoveForDrag($event); $event.stopPropagation();" >
+        <!-- operations  -->
+        <g ng-repeat="h in workflow.specification.operations"
+           ng-attr-transform="translate({{h.x}}, {{h.y}})">
+           <g operation="h.operation"
+              ng-mousedown="$root.mouseDownForDrag($event,h); $event.stopPropagation();"            
+               >
+           </g>
+        </g>
+        <!-- connections -->
+        <g connections workflow="workflow"></g>
+      </svg>
+    </div>
+
+    <div class='span4' style="background: #eee; border: 1pt solid #ddd; padding: 10pt; overflow: auto;">
+
+      <div wf="workflow" ng-show="null == $parent.$root.selection">
+      </div>
+
+      <div ng-repeat="h in workflow.specification.operations">
+
+        <div ng-show="h.operation == $parent.$root.selection" >
+          <div op="h.operation"></div>  
+          <label>Timing</label>
+          <input type='text' ng-model="h.timing">
+          <br />
+          <button class='btn btn-warning btn-mini' ng-click='delete_operation(h)'>
+            Delete This Operation
+          </button>               
+        </div>
+
+        <div ng-repeat="input in h.operation.inputs">
+          <div ispec="input" oper="h.operation" part-type="'Input'"></div>
+        </div>
+
+        <div ng-repeat="output in h.operation.outputs">
+          <div ispec="output" oper="h.operation" part-type="'Output'"></div>
+        </div>
+
+        <div ng-repeat="p in h.operation.parameters">
+          <div keyval="p" oper="h.operation" part-type="'Parameter'"></div>
+        </div>
+
+        <div ng-repeat="d in h.operation.data">
+          <div keyval="d" oper="h.operation" part-type="'Data'"></div>
+        </div>
+
+        <div ng-repeat="e in h.operation.exceptions">
+          <div exception="e" oper="h.operation"></div>
+          <div ng-repeat="output in e.outputs">
+            <div ispec="output" oper="h.operation" ex="e" part-type="'Output'"></div>
+          </div>          
+          <div ng-repeat="data in e.data">
+            <div keyval="data" oper="h.operation" ex="e" part-type="'Data'"></div>
+          </div>          
+          <button ng-show="e == $parent.$root.selection"
+                  ng-if="h.operation.workflow == $root.workflow_id"
+                  class='btn btn-warning btn-mini' ng-click='$root.deleteException(h.operation,e)'>
+            Delete This Exception
+          </button>   
+        </div>        
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  function resize() {
+    var y = $( window ).height() - 90;
+    $("#workflow-control").css('height',y + 'px');
+    $("#diagram").css('height', y + 'px');
+  }  
+  resize();
+  $(window).resize(resize);
+</script>

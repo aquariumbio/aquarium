@@ -7,6 +7,18 @@
       <nav>
         <ul class="nav pull-right">
 
+          <% unless Rails.env == 'production' %>
+            <li id="fat-menu" class="dropdown">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown">Workflow<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><%= link_to "Index", workflows_path %></li>
+                <li><%= link_to "Processes", workflow_processes_path %></li>
+                <li><%= link_to "Operations", operations_path %></li>
+              </ul>
+            </li>
+          <% end %>
+
           <li id="fat-menu" class="dropdown">
             <a href="#" class="dropdown-toggle"
             data-toggle="dropdown">Analytics<b class="caret"></b></a>
@@ -107,6 +119,7 @@
           <li id="fat-menu" class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Help<b class="caret"></b></a>
             <ul class="dropdown-menu">
+<<<<<<< HEAD
                 <li><a href='https://github.com/klavinslab/aquarium/blob/master/doc/Krill.md'
                     target="Aquarium Help">
                     Krill</a></li>
@@ -119,12 +132,17 @@
                 <li><a href='https://github.com/klavinslab/aqualib/blob/master/doc/cloning_the_Aquarium_way.md'
                     target="Aquarium Help">
                     Tasks</a></li>
+=======
+                <li><a href='/doc/krill/frames.html'
+                    target="Krill Workflows">
+                    Krill Workflow API</a></li>
+>>>>>>> workflow
             </ul>
           </li>
 
-           <li class='dropdown'><%= link_to cart_items_path do %>
-               <i class='icon-shopping-cart icon-white'></i>
-             <% end %>
+           <li class='dropdown'><a href="https://github.com/aquarium-bio/issues/issues" target='w'>
+               <i class='bugico'></i>
+             </a>
            </li>
 
            <li class='dropdown'><%= link_to search_path do %>

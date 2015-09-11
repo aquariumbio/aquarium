@@ -47,4 +47,21 @@ module Repo
     }
   end
 
+  def self.copy from, to
+
+    Thread.new do  
+      system "cp repos/#{from} repos/#{to}"
+      raise "Could not create new protocol file: #{$?}" unless $? == 0
+
+      git = Git.open("repos/" + (repo_name from))
+      git.add(basic_path to)
+      git.commit("Created generic protocol for operation #{to.split('/').last.split('.').first}")
+
+      
+      git.pull(git.remote('origin'))
+      git.push(git.remote('origin'))
+    end
+
+  end
+
 end

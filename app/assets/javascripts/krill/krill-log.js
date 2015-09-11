@@ -96,40 +96,44 @@ KrillLog.prototype.table = function(action,x) {
 
   for( var i=0; i<x.length; i++) {
     var tr = $('<tr></tr>');
-    for( var j=0; j<x[i].length; j++ ) {
-      if ( typeof x[i][j] != "object" ) {
-        var td = $('<td>'+x[i][j]+'</td>');
-      } else if ( x[i][j] == null ) {
-        var td = $('<td></td>');
-      } else {
+    if ( x[i] ) {    
+      for( var j=0; j<x[i].length; j++ ) {
+        if ( typeof x[i][j] != "object" ) {
+          var td = $('<td>'+x[i][j]+'</td>');
+        } else if ( x[i][j] == null ) {
+          var td = $('<td></td>');
+        } else {
 
-        var td = $('<td>'+x[i][j].content+'</td>');
+          var td = $('<td>'+x[i][j].content+'</td>');
 
-        if ( x[i][j].style ) {
-          for ( var key in x[i][j].style ) {
-            td.css(key,x[i][j].style[key]);
+          if ( x[i][j].style ) {
+            for ( var key in x[i][j].style ) {
+              td.css(key,x[i][j].style[key]);
+            }
+          }
+
+          if ( x[i][j].class ) {
+            td.addClass(x[i][j].class);
+          }
+
+          if ( x[i][j].check ) {
+            td.addClass('krill-td-check');
+            (function(td) {
+              td.click(function() {
+                if ( td.hasClass('krill-td-selected') ) {
+                  td.removeClass('krill-td-selected');
+                } else {
+                  td.addClass('krill-td-selected');
+                }
+              });
+            })(td);
+
           }
         }
-
-        if ( x[i][j].class ) {
-          td.addClass(x[i][j].class);
-        }
-
-        if ( x[i][j].check ) {
-          td.addClass('krill-td-check');
-          (function(td) {
-            td.click(function() {
-              if ( td.hasClass('krill-td-selected') ) {
-                td.removeClass('krill-td-selected');
-              } else {
-                td.addClass('krill-td-selected');
-              }
-            });
-          })(td);
-
-        }
+        tr.append(td);
       }
-      tr.append(td);
+    } else {
+      tr.append('<td>Formmating error in table.</td>');
     }
     tab.append(tr);
   }

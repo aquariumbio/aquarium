@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  protocol_path: MyString
+  specification: MyText
+
+two:
+  name: MyString
+  protocol_path: MyString
+  specification: MyText

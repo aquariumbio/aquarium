@@ -27,5 +27,8 @@
 //= require d3
 //= require joint.nojquery
 //= require joint.layout.DirectedGraph
+//= require angular
+//= require angular-resource
+//= require go
 //= require_tree .
 
