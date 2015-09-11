@@ -1,5 +1,5 @@
 <h1><%= @workflow_process.id %> : 
-    <%= @workflow_process.workflow.name %>
+    <%= link_to @workflow_process.workflow.name, @workflow_process.workflow %>
     <%= @workflow_process.state_hash[:debug] ? "[DEBUG]" : "" %></h1>
 
 <% @workflow_process.operation_containers.each do |oc| %>
@@ -28,7 +28,7 @@
 
     <% if job && job.error? %>
       <div class='alert alert-error'>
-        <b>Error: <%= job.error_message %></b><br />
+        <b>Error: <%= job.error_message.html_safe %></b><br />
         <ul>
           <% job.error_backtrace.each do |entry| %>
             <li><%= entry %></li>

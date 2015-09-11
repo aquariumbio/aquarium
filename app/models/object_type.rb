@@ -87,7 +87,9 @@ class ObjectType < ActiveRecord::Base
       begin
         h = JSON.parse(self.data,symbolize_names: true)
       rescue Exception => e
-        raise "Could not parse data field '#{self.data}' of object type #{self.id}"
+        raise "Could not parse data field '#{self.data}' of object type #{self.id}. Please go to " + 
+              "<a href='/object_types/#{self.id}/edit'>Object Type #{self.id}</a> and edit the data " +
+              "field so that it reads something like { \"rows\": 10, \"columns\": 10 }"
       end
       if h[:rows] && h[:columns]
         [h[:rows],h[:columns]]

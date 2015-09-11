@@ -106,7 +106,9 @@ module Krill
       elsif @selection == @datas
         str = name.to_s
         if str =~ /=$/
-          @selection[str[0,str.length-1].to_sym][:value] = args[0]
+          name = str[0,str.length-1].to_sym
+          raise "Could not find data field named '#{name}' in this operation. Check your spelling, or edit the operation definition in the workflow editor to add this data." unless @selection[name]
+          @selection[name][:value] = args[0]
         else
           super
         end
