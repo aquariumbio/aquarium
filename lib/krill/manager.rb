@@ -154,8 +154,8 @@ module Krill
         debug
       else
         start_thread
-        wait 20 # what is this doing here? I think it is so that if you are in debug mode it doesn't return
-                # until either you are done or 20 seconds is up. It doesn't have to wait the whole 20 seconds.
+        wait 20 # This so that you wait until either the step is done or 20 seconds is up. 
+                # It doesn't have to wait the whole 20 seconds if the step finishes quickly.
       end
 
     end
