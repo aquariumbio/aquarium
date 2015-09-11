@@ -1,5 +1,7 @@
 class OperationsController < ApplicationController
 
+  before_filter :signed_in_user
+
   def rename
     op = Operation.find(params[:id])
     op.rename params[:name]

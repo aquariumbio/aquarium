@@ -1,4 +1,7 @@
 class WorkflowsController < ApplicationController
+
+  before_filter :signed_in_user
+
   # GET /workflows
   # GET /workflows.json
   def index

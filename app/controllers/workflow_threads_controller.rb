@@ -1,5 +1,7 @@
 class WorkflowThreadsController < ApplicationController
 
+  before_filter :signed_in_user
+
   def index
 
     if params[:workflow_id]

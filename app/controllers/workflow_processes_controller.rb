@@ -1,5 +1,7 @@
 class WorkflowProcessesController < ApplicationController
 
+  before_filter :signed_in_user
+
   def index
     @workflow_processes = WorkflowProcess.all
     respond_to do |format|
