@@ -183,14 +183,18 @@
 
     $scope.submit = function() { 
 
-      $http.post('/workflow_threads/',{ thread: $scope.new_thread, workflow_id: $scope.workflow.id } )
-        .success(function(data) {
+      $.ajax({
+          url: '/workflow_threads/',
+          data: { thread: $scope.new_thread, workflow_id: $scope.workflow.id },
+          method: "POST"
+        }).success(function(data) {
           $scope.threads.push(expand(data));
           $scope.new_thread = {};
           angular.forEach(parts(),function(i) {
             $scope.new_thread[i.name] = i.alternatives[0].sample;
           });
           $scope.launchable = true;
+          $scope.$apply();
         })
         .error(function() {
           console.log("Could not submit thread");
@@ -244,21 +248,27 @@
         }
       });
       if ( thread_ids.length > 0 ) {
-        $http.post('/workflow_processes',{workflow_id: $scope.workflow.id, thread_ids: thread_ids, debug: debug})
-          .success(function(data) {
+
+        $.ajax({
+          url: '/workflow_processes',
+          data: {workflow_id: $scope.workflow.id, thread_ids: thread_ids, debug: debug},
+          method: "POST"
+        }).success(function(data) {
             window.location = '/workflow_processes/' + data.id;
-          })
-          .error(function() {
+        }).error(function() {
             console.log("Could not start process")
-          });
-        } else {
-          console.log("No threads selected.")
-        }
+        });
+
+      } else {
+        console.log("No threads selected.")
+      }
     }
 
     $scope.destroy = function(tid) {
-      $http.delete('/workflow_threads/'+tid+'.json')
-        .success(function(data) {
+      $.ajax({
+        method: "DELETE",
+        url: '/workflow_threads/'+tid+'.json'
+      }).success(function(data) {
           var temp = [];
           angular.forEach($scope.threads,function(thread) {
             if ( thread.id != tid ) {
@@ -266,6 +276,7 @@
             }
           });
           $scope.threads = temp;
+          $scope.$apply();
         })
         .error(function() {
           console.log("Could not delete thread " + tid);

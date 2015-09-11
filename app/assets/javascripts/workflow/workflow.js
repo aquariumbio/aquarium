@@ -188,7 +188,7 @@
             dataType: 'json',
             data: angular.toJson($scope.wf)
           }).success(function(data) {
-            console.log("saved");
+            console.log("saved and got " + data);
           });
         }
       }

@@ -84,7 +84,11 @@ class ObjectType < ActiveRecord::Base
   def default_dimensions # for collections
 
     if self.handler == "collection"
-      h = JSON.parse(self.data,symbolize_names: true)
+      begin
+        h = JSON.parse(self.data,symbolize_names: true)
+      rescue Exception => e
+        raise "Could not parse data field '#{self.data}' of object type #{self.id}"
+      end
       if h[:rows] && h[:columns]
         [h[:rows],h[:columns]]
       else
