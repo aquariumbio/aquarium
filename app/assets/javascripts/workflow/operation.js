@@ -60,7 +60,7 @@
 
     return {
       restrict: 'A',
-      scope: { op: "=" },
+      scope: { op: "=", github: "="  },
       templateUrl: "/workflow/editor/operation.html",
       link: function($scope,$element) {
         if ( $scope.op.workflow != $scope.$parent.workflow.id ) {        

@@ -5,10 +5,10 @@
   <input ng-model="op.name" type="text"/>
 </form>
 
-<a href="https://github.com/klavinslab/aqualib/edit/master/auto/{{op.id}}.rb" target="{{op.id}}">
+<a href="{{github}}/{{op.id}}.rb" target="{{op.id}}">
   <i class='icon-pencil'></i> 
-  Edit protocol code
-</a>
+  Edit protocol code on github
+</a> (if linked)
 
 <br /><br />
 
@@ -40,4 +40,4 @@
 </div>
 
 
-<!-- pre>{{op|json}}</pre -->
+<pre>{{github}}</pre>

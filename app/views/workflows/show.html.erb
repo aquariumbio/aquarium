@@ -25,13 +25,12 @@
 
     <div class='span4' style="background: #eee; border: 1pt solid #ddd; padding: 10pt; overflow: auto;">
 
-      <div wf="workflow" ng-show="null == $parent.$root.selection">
-      </div>
+      <div wf="workflow" ng-show="null == $parent.$root.selection"></div>
 
       <div ng-repeat="h in workflow.specification.operations">
 
         <div ng-show="h.operation == $parent.$root.selection" >
-          <div op="h.operation"></div>  
+          <div op="h.operation" github="workflow.github_edit_path"></div>  
           <label>Timing</label>
           <input type='text' ng-model="h.timing">
           <br />

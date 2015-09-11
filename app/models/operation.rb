@@ -4,16 +4,28 @@ class Operation < ActiveRecord::Base
 
   after_initialize :defaults
 
+  def base_path
+    "#{Bioturk::Application.config.workflow[:repo]}/auto/#{Rails.env}"
+  end
+
+  def path
+    "#{base_path}/#{self.id}.rb"
+  end
+
+  def default_path
+    "#{Bioturk::Application.config.workflow[:repo]}/auto/default.rb"
+  end
+
   def defaults
      unless persisted?
       self.name ||= "Operation"
       self.specification ||= ({ inputs: [], outputs: [], parameters: [], data: [], exceptions: [] }).to_json
-      self.protocol_path ||= "/aqualib/auto/#{self.id}.rb"
+      self.protocol_path ||= base_path
     end
   end
 
   def make_generic_protocol
-    Repo.copy "aqualib/auto/0.rb", "aqualib/auto/#{self.id}.rb"
+    Repo.copy default_path, path
   end
 
   def parse_spec
@@ -34,7 +46,7 @@ class Operation < ActiveRecord::Base
     job = Job.new
     
     job.workflow_process_id = process_id
-    job.path = "aqualib/auto/#{self.id}.rb"
+    job.path = self.path
     job.sha = Repo.version(job.path)
     job.set_arguments op
 

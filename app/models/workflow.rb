@@ -15,12 +15,16 @@ class Workflow < ActiveRecord::Base
   end
 
   def export
-    complete_spec.merge({form: form})
+    complete_spec.merge({form: form,github_edit_path: github})
+  end
+
+  def github
+    "#{Bioturk::Application.config.workflow[:github]}#{Bioturk::Application.config.workflow[:repo]}/edit/master/auto/#{Rails.env}"
   end
 
   def complete_spec
     unless @fullspec
-      s = parse_spec
+      s = parse_spec     
       s[:operations] = s[:operations].collect { |o|
         o.merge operation: Operation.find(o[:id]).export 
       }
