@@ -52,7 +52,7 @@ Go to aquarium/config/initializers and do
 
 	cp aquarium_template.notrb aquarium.rb
 	
-Then edit aquarium.rb. You probably won't want to change anything initially.
+Then edit aquarium.rb. In particular, you should change the workflow github information.
 
 Go to aquarium/config and do
 

@@ -1,11 +1,19 @@
 module Repo
 
   def self.repo_name path
-    path.split('/')[0]
+    if path[0] == "/"
+      path.split('/')[1]      
+    else
+      path.split('/')[0]
+    end
   end
 
   def self.basic_path path
-    path.split('/')[1..-1].join('/')
+    if path[0] == "/"
+      path.split('/')[2..-1].join('/')      
+    else
+      path.split('/')[1..-1].join('/')
+    end
   end
 
   def self.version path
@@ -50,16 +58,53 @@ module Repo
   def self.copy from, to
 
     Thread.new do  
-      system "cp repos/#{from} repos/#{to}"
-      raise "Could not create new protocol file: #{$?}" unless $? == 0
 
-      git = Git.open("repos/" + (repo_name from))
-      git.add(basic_path to)
-      git.commit("Created generic protocol for operation #{to.split('/').last.split('.').first}")
+      begin
 
-      
-      git.pull(git.remote('origin'))
-      git.push(git.remote('origin'))
+        Rails.logger.info "DEFAULT PROTOCOL: Copying #{from} to #{to}."
+
+        system "cp repos/#{from} repos/#{to}"
+        raise "DEFAULT PROTOCOL: Could not create new protocol file: #{$?}" unless $? == 0
+
+        Rails.logger.info "DEFAULT PROTOCOL: Copied default protocol."
+
+        begin
+          git = Git.open("repos/" + (repo_name from))
+        rescue Exception => e
+          Rails.logger.info "DEFAULT PROTOCOL: failed to open repo (#{repo_name from}): #{e.to_s}"
+        end
+
+        Rails.logger.info "DEFAULT PROTOCOL: opened #{repo_name from}"
+
+        begin
+          Rails.logger.info "DEFAULT PROTOCOL: adding ... "
+          git.add
+          Rails.logger.info "DEFAULT PROTOCOL: ... added."
+        rescue Exception => e
+          Rails.logger.info "DEFAULT PROTOCOL: Error in default copy routine (could not open/add #{basic_path to}): #{e.to_s}"
+        end
+
+        Rails.logger.info "DEFAULT PROTOCOL: added #{basic_path to}."
+
+        git.commit("Created generic protocol for operation #{to.split('/').last.split('.').first}")
+
+        Rails.logger.info "DEFAULT PROTOCOL: committed changes to #{repo_name from}"
+
+        begin
+          git.pull(git.remote('origin'))
+          git.push(git.remote('origin'))
+        rescue Exception => e 
+          Rails.logger.info "DEFAULT PROTOCOL: Error in default copy routine. Not master repo found. #{e.to_s}"
+        end
+
+        Rails.logger.info "DEFAULT PROTOCOL: Completed protocol default copy routine."      
+
+      rescue Exception => e
+
+        Rails.logger.info "DEFAULT PROTOCOL ERROR: #{e.to_s}, #{e.backtrace.join('\n')}"
+
+      end
+
     end
 
   end
