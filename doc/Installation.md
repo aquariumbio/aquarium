@@ -45,6 +45,13 @@ Finally, make the repo.
 	
 These protocol libraries will be accessible via the "Protocols -> Under Version Control" menu.
 
+Tou need to set up the origins with something like
+
+  git remote rm origin
+  git remote add origin https://username:password@github.com/your_organization/your_repo.git 
+
+Then you will need to set all the permissions on all repos to 755, including everything under .git. Note that running git from the command line may change the permissions on things in .git. 
+
 Configure Aquarium
 --
 
