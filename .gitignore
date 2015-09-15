@@ -37,6 +37,4 @@ Gemfile.lock
 
 awc.sh
 
-public/doc/krill/
 lib/krill/workflow/doc/
-lib/krill/workflow/.yardoc/
