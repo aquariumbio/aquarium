@@ -31,11 +31,15 @@ You may also want to start your own repository of protocols. For example, do (fr
 	mkdir my_protocols
 	cd my_protocols
 
-Then create a new file called hello.pl with the following code in it:
+Then create a new file called hello.rb with the following code in it:
 
-	step
-		description: "Hello World"
-	end
+	class Protocol
+    def main
+      show do
+        title "Hello world!"
+      end
+    end
+  end
 	
 Finally, make the repo.
 
