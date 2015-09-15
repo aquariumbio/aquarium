@@ -114,13 +114,14 @@ class WorkflowProcess < ActiveRecord::Base
       jid = op.enqueue oc[:operation], oc[:timing], self.id
       oc[:jid] = jid 
       self.save_state
-      puts "WP: Submitted job #{jid} and saved the jid in the oc"
+      Rails.logger.info "WORKFLOW PROCESS(launch): Submitted job #{jid} and saved the jid in the oc"
 
       if state_hash[:debug]
-        puts "WP: starting job #{jid}"
+        Rails.logger.info "WORKFLOW PROCESS(launch): starting job #{jid}"
         result = Krill::Client.new.start jid, true
+        Rails.logger.info "WORKFLOW PROCESS(launch): result of #{jid}: #{result}"
         j = Job.find(jid)
-        puts "WP: job #{j.id} is #{j.status}"
+        Rails.logger.info "WORKFLOW PROCESS(launch): job #{j.id} is #{j.status}"
         record_result_of j
         step
       end      
