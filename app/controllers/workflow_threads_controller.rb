@@ -17,10 +17,14 @@ class WorkflowThreadsController < ApplicationController
     wf = Workflow.find(params[:workflow_id])
     spec = wf.make_spec_from_hash(params[:thread])
 
-    render json: WorkflowThread.create(
+    thread = WorkflowThread.create(
       spec,
       params[:workflow_id]
     )
+
+    Rails.logger.info "CREATE THREAD: created #{thread.id} with spec #{thread.spec}, made from #{params[:thread]}"
+
+    render json: thread
 
   end
 

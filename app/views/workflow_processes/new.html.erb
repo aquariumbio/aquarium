@@ -73,9 +73,14 @@
 
     </div>
 
+    <br>
+    <pre>{{workflow.form}}</pre>
+
   </div>
 
 </div>
+
+
 
 <script>
 
@@ -182,6 +187,8 @@
     }
 
     $scope.submit = function() { 
+
+      console.log("Submitting new thread: " + JSON.stringify($scope.new_thread));
 
       $.ajax({
           url: '/workflow_threads/',

@@ -26,11 +26,15 @@ module WorkflowAux
       parameters += h[:operation][:parameters].collect { |p| p.merge oid: h[:id] }
     end
 
-    {
+    f = { 
       inputs: inputs,
       outputs: outputs,
       parameters: parameters
     }
+
+    Rails.logger.info "WORKFLOW FORM: made form #{f}."
+
+    return f
 
   end
 
@@ -71,7 +75,10 @@ module WorkflowAux
     f = form
 
     (f[:inputs]+f[:outputs]).each do |i|
-      s << { name: i[:name], sample: h[i[:name]] }
+      ispec = { name: i[:name], sample: h[i[:name]] }
+      unless s.member? ispec
+        s << { name: i[:name], sample: h[i[:name]] }
+      end
     end
 
     f[:parameters].each do |p|

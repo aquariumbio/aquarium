@@ -28,7 +28,10 @@ class WorkflowProcess < ActiveRecord::Base
 
       spec = t.spec # parses the json
 
+      Rails.logger.info "WORKFLOW PROCESS SETUP: Thread #{t.id} with spec #{t.spec}"
+
       spec.each do |assignment|
+        Rails.logger.info "WORKFLOW PROCESS SETUP:   Setting up #{assignment}"
         self.instantiate assignment
       end   
 
