@@ -14,6 +14,10 @@ module WorkflowAux
     false
   end
 
+  def sample_based? ispec
+    ispec[:alternatives].disjoin { |a| a[:sample] }
+  end
+
   def form
 
     inputs = []
@@ -21,8 +25,8 @@ module WorkflowAux
     parameters = []
 
     complete_spec[:specification][:operations].each do |h|
-      inputs += (h[:operation][:inputs].reject { |i| wired_input? h[:id], i[:name] }).collect { |i| i.merge oid: h[:id] }
-      outputs += (h[:operation][:outputs].reject { |o| wired_output? h[:id], o[:name] }).collect { |o| o.merge oid: h[:id] }
+      inputs += (h[:operation][:inputs].reject { |i| wired_input?(h[:id], i[:name]) || !sample_based?(i) }).collect { |i| i.merge oid: h[:id] }
+      outputs += (h[:operation][:outputs].reject { |o| wired_output?(h[:id], o[:name]) || !sample_based?(o) }).collect { |o| o.merge oid: h[:id] }
       parameters += h[:operation][:parameters].collect { |p| p.merge oid: h[:id] }
     end
 

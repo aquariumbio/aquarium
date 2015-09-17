@@ -5,7 +5,7 @@
        ng-controller='launcherCtrl as launcher' 
        workflow=<%= params[:wid] %> >
 
-    <h4>New <i>{{workflow.name}}</i><span id='status'>(Initializing)</span></h4>
+    <h4>New <i><a href="/workflows/{{workflow.id}}">{{workflow.name}}</a></i> Process</h4>
 
     <p>{{workflow.specification.description}}</p>
 
@@ -18,6 +18,9 @@
       </div>      
 
       <table class='launcher-table'>
+        <tr ng-if="workflow.form.inputs.length == 0 && workflow.form.outputs.length == 0 && workflow.form.parameters == 0">
+          <th>No Thread Definition Required</th>
+        </tr>
         <tr>
           <th ng-repeat="i in workflow.form.inputs">{{i.description}}</th>
           <th ng-repeat="i in workflow.form.parameters">{{i.description}}</th>          
