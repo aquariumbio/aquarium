@@ -15,7 +15,10 @@ module WorkflowAux
   end
 
   def sample_based? ispec
-    ispec[:alternatives].disjoin { |a| a[:sample] }
+
+    a = ispec[:alternatives].disjoin { |a| a[:sample_type] }
+    Rails.logger.info "SAMPLE_BASED: #{ispec} => #{a}"
+    a
   end
 
   def form
