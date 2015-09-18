@@ -17,6 +17,8 @@ class WorkflowProcess < ActiveRecord::Base
 
   def setup workflow, threads, debug
 
+    Rails.logger.info "WORKFLOW PROCESS SETUP: debug.class = #{debug.class}"
+
     @cached_state = workflow.export
     @num_threads = threads.length
 
@@ -52,7 +54,7 @@ class WorkflowProcess < ActiveRecord::Base
     end
 
     state_hash[:debug] = debug
-    puts "WP: set state_hash[:debug] to #{debug} to get #{state_hash[:debug]}"
+    puts "WP: set state_hash[:debug] to #{debug} to get #{state_hash[:debug]} with class #{state_hash[:debug].class}"
     self.save_state
 
   end
