@@ -28,6 +28,8 @@ Bioturk::Application.routes.draw do
   resources :posts, only: [ :index, :create ]
   resources :wizards
 
+  resources :folders, only: [ :index ]
+
   match "api", to: "api#main"
 
   get "plugin/tester"
