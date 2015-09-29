@@ -2,13 +2,45 @@
 
   <%= render partial: 'folder_template' %>
 
+  <%= render partial: 'sample_template' %>
+
   <div ng-controller='foldersCtrl as fc'>
+
+    <div class='row-fluid folder-controls'>
+
+      <span ng-repeat="f in path(current_folder) track by $index">
+        <input type=text value="{{f}}" ng-disabled="true" class='folder-path-input' />
+      </span>
+
+      <input id='folder-name'
+             type=text 
+             class='folder-path-input folder-current-name' 
+             ng-model="current_folder.name"
+             ng-disabled="current_folder.id < 0"
+             ng-blur="renameFolder(current_folder)">
+
+      <a href='#' id="delete-folder"
+         ng-if="current_folder.id>=0"
+         class='btn pull-right folder-btn'
+         ng-click="deleteFolder(current_folder)">Delete Folder</a>
+
+      <a href='#'  
+         class='btn folder-btn pull-right' 
+         ng-click="newFolder()"
+         ng-disabled="current_folder.locked">New Folder</a>
+
+      <a href='#' class='btn pull-right folder-btn' ng-show="current_folder.id>=0">New Sample</a>
+
+      <div class='input-append pull-right folder-btn' ng-show="current_folder.id>=0">
+        <input id="add-sample" type="text">
+        <a href='#' class="btn" type="button" ng-click="addSample()">Add</a>
+      </div>      
+
+    </div>
 
     <div class='row-fluid folder-row'>
 
-      <div id="folder-list" class='span2'>
-
-        <a href='#' class='btn btn-mini folder-new-btn' ng-click="newFolder()">New Folder</a>
+      <div id="folder-list" class='span3'>
 
         <ul class='folder-ul folder-ul-top'>
           <li ng-repeat="folder in folders"
@@ -18,188 +50,23 @@
 
       </div>
 
-      <div id="current-folder" class='span10'>
+      <div id="current-folder" class='span9'>
 
-        <span ng-repeat="f in path(current_folder) track by $index">
-          <input type=text value="{{f}}" ng-disabled="true" />
-          :
-        </span>
+        <ul ng-if="current_folder.samples && current_folder.samples.length > 0"
+            class='folder-sample-list'>
+          <li ng-repeat="sample in current_folder.samples" 
+              ng-include="'sample'">
+          </li>
+        </ul>
 
-        <input id='folder-name'
-               type=text 
-               ng-model="current_folder.name"
-               ng-disabled="current_folder.id < 0"
-               ng-blur="renameFolder(current_folder)">
+        <div ng-if="!current_folder.samples || current_folder.samples.length == 0">
+          <p>Empty.</p>
+        </div>
 
-        <a href='#' id="delete-folder"
-           ng-if="current_folder.id>=0"
-           class="btn btn-small pull-right"
-           ng-click="deleteFolder(current_folder)">Delete</a>
-
-        <br>
-
-        {{current_folder}}
-
-      </div>
+        </div>
 
     </div>
 
   </div>
 
 </div>
-
-<script>
-
-(function() {
-
-  w = angular.module('folders',[]);
-
-  w.controller('foldersCtrl', [ '$scope','railsfolder','focus', function ($scope,railsfolder,focus) {
-
-    railsfolder.index(function(data) {
-      $scope.folders = data.folders;
-      $scope.folders[0].open = true;
-      $scope.current_folder = $scope.folders[0];
-    });
-
-    $scope.setCurrentFolder = function(f) {
-      $scope.current_folder = f;
-    }
-
-    $scope.openFolder = function(f) {
-      // $scope.current_folder = f;      
-      f.open = true;
-    }
-
-    $scope.closeFolder = function(f) {
-      // $scope.current_folder = f;            
-      f.open = false;
-    }
-
-    $scope.newFolder = function() {
-      railsfolder.newFolder($scope.current_folder,function(data) {
-        if ( !$scope.current_folder.children ) {
-          $scope.current_folder.children = [];
-        }
-        $scope.current_folder.children.push(data.folder);
-        $scope.current_folder.open = true;
-        $scope.current_folder = data.folder;
-        focus('folder-name');
-      });
-    }
-
-    $scope.renameFolder = function(f) {
-      railsfolder.renameFolder(f);
-    }
-
-    function remove(p,f) {
-      if ( ! p.children || p.children == null ) {
-        return null;
-      }
-      for ( var n in p.children ) {
-        if ( f == p.children[n] ) {
-          p.children.splice(n, 1);
-          return p;
-        } else {
-          var r = remove (p.children[n],f);
-          if ( r ) {
-            return r;
-          } 
-        }
-      }
-      return null;
-    }
-
-    $scope.deleteFolder = function(f) {
-      confirm("Are you sure you want to delete the folder and all of its sub-folders? Other contents will not be deleted, but may be harder to find.");
-      railsfolder.deleteFolder($scope.current_folder,function(data) {
-        $scope.current_folder = remove($scope.folders[0],$scope.current_folder);      
-      });
-    }
-
-    function find(f,target) {
-
-      if ( f == target ) {
-        return []
-      } else if ( f.children ) {
-        for ( n in f.children ) {
-          var p = find(f.children[n],target);
-          if ( p ) {
-            return [f.name].concat(p);
-          }
-        }
-      }
-
-      return null;
-
-    }
-
-    $scope.path = function(f) {
-      for ( n in $scope.folders ) {
-        var p = find($scope.folders[n],f);
-        if ( p ) {
-          return p;
-        } 
-      }
-    }
-
-  }]);
-
-  w.service('railsfolder', [ '$http', function($http) {
-
-    this.get = function(url,f) {
-      $http.get(url).
-        then(f, function(response) {
-          console.log("error: " + response);
-        });
-    }
-
-    this.index = function(then) {
-      this.get('/folders.json',function(response) {
-        then(response.data);
-      });
-    };
-
-    this.newFolder = function(parent,then) {
-      this.get('/folders.json?method=new&parent_id='+parent.id,function(response) {
-        then(response.data);
-      });
-    }
-
-    this.deleteFolder = function(f,then) {
-      this.get('/folders.json?method=delete&folder_id='+f.id,function(response) {
-        then(response.data);
-      });
-    }    
-
-    this.renameFolder = function(f) {
-      this.get('/folders.json?method=rename&folder_id='+f.id+"&name="+f.name,function(response) {
-      });     
-    }
-
-  }]);
-
-  w.factory('focus', function($timeout, $window) {
-    return function(id) {
-      $timeout(function() {
-        var element = $window.document.getElementById(id);
-        if(element)
-          element.focus();
-      });
-    };
-  });
-
-  w.directive('eventFocus', function(focus) {
-    return function(scope, elem, attr) {
-      elem.on(attr.eventFocus, function() {
-        focus(attr.eventFocusId);        
-      });
-      scope.$on('$destroy', function() {
-        elem.off(attr.eventFocus);
-      });
-    };
-  });
-
-})();
-
-</script>

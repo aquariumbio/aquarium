@@ -1,0 +1,25 @@
+<!--
+
+  Need to show
+    id
+    whether changes have been made and if they have been saved (a status)
+    name (editable)
+      if taken, save should fail with an error (in status)
+    what role (if any) the sample plays in a thread
+    field values for non-link fields
+    created and updated dates
+    notes
+
+-->
+
+<script type="text/ng-template" id="sample">
+
+  <div class='folder-sample'>
+    <span class='folder-expander-container'>
+      <span class="folder-expander">&#9658</span>
+    </span>
+    <span class='folder-sample-id'>{{sample.id}}: </span>
+    <input type=text class='folder-sample-input' value='{{sample.name}}'</input>
+  </div>
+
+</script>

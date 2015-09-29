@@ -60,4 +60,20 @@ class SampleType < ActiveRecord::Base
     attributes
   end
 
+  def self.folders 
+
+    { id: -1, 
+      name: "All Samples", 
+      children: SampleType.all.collect { |st| {
+         id: -1, 
+         name: st.name.pluralize, 
+         sample_type_id: st.id,
+         locked: true
+        } 
+      },
+      locked: true
+    }
+
+  end
+
 end

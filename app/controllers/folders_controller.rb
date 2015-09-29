@@ -30,7 +30,7 @@ class FoldersController < ApplicationController
 
           f.save
 
-          { folder: f }
+          { folder: { id: f.id, name: f.name } }
 
         when 'delete'
 
@@ -46,11 +46,17 @@ class FoldersController < ApplicationController
 
           { result: "ok" }
 
+        when 'contents'
+
+          samples = Sample.includes(:folder_contents).where("folder_contents.folder_id = ?",params[:folder_id])
+
+          { samples: samples }
+
       end
 
     else 
 
-      { folders: Folder.tree(current_user) }
+      { folders: [ Folder.tree(current_user), SampleType.folders ] }
 
     end
 

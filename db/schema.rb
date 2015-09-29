@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150924044044) do
+ActiveRecord::Schema.define(:version => 20150926162327) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -31,11 +31,10 @@ ActiveRecord::Schema.define(:version => 20150924044044) do
   end
 
   create_table "folder_contents", :force => true do |t|
-    t.integer  "parent_id"
-    t.integer  "child_id"
     t.integer  "sample_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "folder_id"
   end
 
   create_table "folders", :force => true do |t|

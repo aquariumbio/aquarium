@@ -17,7 +17,7 @@
   <span class='folder'
         ng-class="folder == current_folder ? 'folder-selected' : ''"
         ng-click="setCurrentFolder(folder)">
-    {{ folder.name }}
+    <i class='icon-folder-close' style="color: #eee"></i> {{ folder.name }}
   </span>
 
   <ul ng-if="folder.children && folder.open" class='folder-ul'>

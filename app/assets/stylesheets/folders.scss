@@ -14,7 +14,7 @@
 
 .folder-ul {
   list-style:none;
-  margin-left: 16px;
+  margin-left: 22px;
   li {
     overflow: visible;
     margin-left: 0px;
@@ -28,17 +28,17 @@
 
 .folder-expander-container {
   display: inline-block;
-  width: 12px;
+  width: 10px;
   /* outline: 1pt solid orange; */
 }  
 
 .folder-expander {
   cursor: pointer;
-  color: #aaa;
+  color: #444;
   font-size: 8pt;
 }
 
-.folder-new-btn {
+.folder-btn {
   margin: 0 0 12px 12px !important;
 }
 
@@ -50,4 +50,37 @@
       padding-bottom: 100%;
     margin-bottom: -100%;
   border-right: 1pt solid #eee;
+}
+
+.folder-path-input {
+  outline: none;
+  border: 1pt solid white !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+  width: auto;
+}
+
+.folder-current-name:hover {
+  border: 1pt solid #bbf !important
+}
+
+.folder-current-name {
+  font-weight: bold;
+}
+
+/*
+ * Samples
+*/
+
+.folder-sample-list {
+  list-style: none;
+}
+
+.folder-sample-id {
+
+}
+
+.folder-sample-input {
+
 }

@@ -20,6 +20,7 @@ Bioturk::Application.routes.draw do
   get 'collection_containers_list',  to: 'operations#collection_containers'    
   get 'sample_types_list',           to: 'operations#sample_types'
   get 'sample_list/:id',             to: 'operations#samples'
+  get 'sample_list',                 to: 'operations#samples'
 
   resources :workflow_processes, only: [ :index, :show, :new, :create ]
 

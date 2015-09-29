@@ -6,6 +6,7 @@ class Sample < ActiveRecord::Base
   has_many :items
   has_many :post_associations
   has_many :workflow_associations
+  has_many :folder_contents
 
   validates_uniqueness_of :name, message: "Samples: must have unique names."
 
