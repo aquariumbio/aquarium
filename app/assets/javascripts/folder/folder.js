@@ -1,6 +1,11 @@
 (function() {
 
-  w = angular.module('folders',[]);
+  var w;
+  try {
+    w = angular.module('folders'); 
+  } catch (e) {
+    w = angular.module('folders', []); 
+  } 
 
   w.controller('foldersCtrl', [ '$scope','railsfolder','focus', function ($scope,railsfolder,focus) {
 
@@ -18,9 +23,40 @@
       });
     });
 
+    $scope.width = {
+      id: 20,
+      name: 120,
+      role: 120,
+      fields: 120,
+      created: 30,
+      updated: 30,
+      status: 20,
+      blank: 100
+    };
+
+    $scope.get_current_thread_parts = function(sample) {
+      if ( !sample.current_thread.parts ) {
+        railsfolder.thread_parts(sample.id,sample.current_thread.id,function(data) {
+          sample.current_thread.parts = data.parts;
+        });
+      } 
+    }
+
+    $scope.expandSample = function(sample) {
+      sample.expanded = true;
+      $scope.get_current_thread_parts(sample);
+    }
+
+    $scope.unexpandSample = function(sample) {
+      sample.expanded = false;
+    }
+
     $scope.addSample = function(f) {
-      console.log("adding sample " + $('#add-sample').val() );
-      $('#add-sample').val('');
+      var sid = $('#add-sample').val().split(":")[0];
+      railsfolder.add_sample(sid,$scope.current_folder.id,function(data) {
+        $scope.current_folder.samples.unshift(data.sample); 
+        $('#add-sample').val(''); 
+      });
     }
 
     $scope.setCurrentFolder = function(f) {
@@ -76,8 +112,9 @@
         $scope.current_folder = remove($scope.folders[0],$scope.current_folder);      
       });
     }
-
+ 
     $scope.samples = function(f) {
+      // Return a list of samples (and their associated threads) contained in the folder f
       if ( ! f.samples ) {
         railsfolder.samples(f,function(data) {
           console.log(data)
@@ -112,68 +149,11 @@
       }
     }
 
-  }]);
-
-  w.service('railsfolder', [ '$http', function($http) {
-
-    this.get = function(url,f) {
-      $http.get(url).
-        then(f, function(response) {
-          console.log("error: " + response);
-        });
-    }
-
-    this.index = function(then) {
-      this.get('/folders.json',function(response) {
-        then(response.data);
-      });
-    };
-
-    this.newFolder = function(parent,then) {
-      this.get('/folders.json?method=new&parent_id='+parent.id,function(response) {
-        then(response.data);
-      });
-    }
-
-    this.deleteFolder = function(f,then) {
-      this.get('/folders.json?method=delete&folder_id='+f.id,function(response) {
-        then(response.data);
-      });
-    }    
-
-    this.renameFolder = function(f) {
-      this.get('/folders.json?method=rename&folder_id='+f.id+"&name="+f.name,function(response) {
-      });     
-    }
-
-    this.samples = function(f,then) {
-      this.get('/folders.json?method=contents&folder_id='+f.id,function(response) {
-        then(response.data);
-      });
-    }
+    $scope.range = function(n) {
+      return new Array(n);
+    };    
 
   }]);
-
-  w.factory('focus', function($timeout, $window) {
-    return function(id) {
-      $timeout(function() {
-        var element = $window.document.getElementById(id);
-        if(element)
-          element.focus();
-      });
-    };
-  });
-
-  w.directive('eventFocus', function(focus) {
-    return function(scope, elem, attr) {
-      elem.on(attr.eventFocus, function() {
-        focus(attr.eventFocusId);        
-      });
-      scope.$on('$destroy', function() {
-        elem.off(attr.eventFocus);
-      });
-    };
-  });
 
 })();
 

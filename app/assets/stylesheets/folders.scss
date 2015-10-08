@@ -39,17 +39,14 @@
 }
 
 .folder-btn {
-  margin: 0 0 12px 12px !important;
-}
-
-.folder-row {
-  height: 100%;
+  margin: 0 20px 12px 0px !important;
 }
 
 #folder-list {
-      padding-bottom: 100%;
-    margin-bottom: -100%;
-  border-right: 1pt solid #eee;
+  padding-bottom: 100%;
+  margin-bottom: -100%;
+  padding-left: 10px;
+  padding-top: 10px;
 }
 
 .folder-path-input {
@@ -69,18 +66,76 @@
   font-weight: bold;
 }
 
+.folder-controls {
+  border-bottom: 1pt solid #000;
+  padding-left: 10px;
+  padding-right: 50px;
+}
+
 /*
- * Samples
-*/
+ * Folder Contents
+ */
 
-.folder-sample-list {
-  list-style: none;
+#folder-content-container {
 }
 
-.folder-sample-id {
-
+#folder-current {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
 }
 
-.folder-sample-input {
-
+.folder-contents-heading {
+  /* outline: 1pt dashed red; */
+  margin-bottom: -1px;  
+  padding: 0px;
+  width: 100%;
+  font-weight: bold;
+  border-bottom: 1pt solid #ddd;   
+  background: #eee;
 }
+
+.folder-contents {
+   /*outline: 1pt dashed green; */
+  margin: 0px;  
+  padding: 0px;  
+  width: 100%;  
+  height: 100%;
+  overflow: scroll;
+  div:hover {
+    background: #efe;
+  }
+}
+
+.folder-contents-row {
+  /*outline: 1pt dashed orange;*/
+  border-right: 1pt solid #ddd; 
+  margin: 0px;  
+  padding: 0px;
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.folder-contents-cell {
+  border-top: 1pt solid #ddd;
+  border-left: 1pt solid #ddd;
+  margin: 0px;  
+  padding: 5px;
+  display: table-cell;
+  overflow: scroll;  
+  white-space: nowrap;
+}
+
+.folder-role-select {
+  -webkit-appearance:none;
+  box-shadow: none !important;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 85%;
+  overflow: hidden;
+}
+
+

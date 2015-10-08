@@ -11,6 +11,26 @@ class FoldersController < ApplicationController
 
   end
 
+  def full sample
+
+    s = sample.as_json
+
+    s[:threads] = sample.workflow_associations.collect { |wa|
+      { 
+        id: wa.thread.id,
+        workflow: {
+          id: wa.thread.workflow.id,
+          name: wa.thread.workflow.name
+        },
+        role: wa.role,
+        process_id: wa.thread.workflow_process ? wa.thread.workflow_process.id : nil
+      } 
+    }
+
+    s
+
+  end
+
   def route
 
     if params[:method]
@@ -48,9 +68,26 @@ class FoldersController < ApplicationController
 
         when 'contents'
 
-          samples = Sample.includes(:folder_contents).where("folder_contents.folder_id = ?",params[:folder_id])
+          # samples = Sample.includes(:folder_contents).where("folder_contents.folder_id = ?",params[:folder_id])
+
+          samples = FolderContent
+            .includes(sample: {workflow_associations: { workflow_thread: :workflow } })
+            .where(folder_id: params[:folder_id])
+            .reverse
+            .collect { |fc| full fc.sample }
 
           { samples: samples }
+
+        when 'add_sample'
+
+          s = Sample.includes(workflow_associations: { workflow_thread: :workflow }).find(params[:sample_id])
+          FolderContent.new(folder_id: params[:folder_id], sample_id: s.id).save
+
+          { sample: full(s) }
+
+        when 'thread_parts'
+
+          { parts: WorkflowThread.find(params[:thread_id]).parts(params[:sample_id]) }
 
       end
 

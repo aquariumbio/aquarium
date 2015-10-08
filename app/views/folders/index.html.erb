@@ -1,3 +1,13 @@
+<style>
+body {
+  overflow: hidden;
+}
+
+.container-fluid {
+  padding: 0;
+}
+</style>
+
 <div ng-app="folders">
 
   <%= render partial: 'folder_template' %>
@@ -38,9 +48,9 @@
 
     </div>
 
-    <div class='row-fluid folder-row'>
+    <div class='row-fluid' id='folder-content-container'>
 
-      <div id="folder-list" class='span3'>
+      <div id="folder-list" class='span2'>
 
         <ul class='folder-ul folder-ul-top'>
           <li ng-repeat="folder in folders"
@@ -50,20 +60,32 @@
 
       </div>
 
-      <div id="current-folder" class='span9'>
+      <div id="folder-current" class='span10'>
 
-        <ul ng-if="current_folder.samples && current_folder.samples.length > 0"
-            class='folder-sample-list'>
-          <li ng-repeat="sample in current_folder.samples" 
-              ng-include="'sample'">
-          </li>
-        </ul>
+        <div class="folder-contents-heading" ng-show="current_folder.samples.length > 0">
 
-        <div ng-if="!current_folder.samples || current_folder.samples.length == 0">
-          <p>Empty.</p>
+          <div class="folder-contents-row">
+              <div class="folder-contents-cell" ng-style="{ width: width.id }">Id</div>
+              <div class="folder-contents-cell" ng-style="{ width: width.name }">Name</div>
+              <div class="folder-contents-cell" ng-style="{ width: width.role }">Workflow</div>
+              <div class="folder-contents-cell" ng-style="{ width: width.fields }">Fields</div>
+              <div class="folder-contents-cell" ng-style="{ width: width.created }">Created at</div>
+              <div class="folder-contents-cell" ng-style="{ width: width.updated }">Updated at</div>
+              <div class="folder-contents-cell" ng-style="{ width: width.status }">Status</div>
+          </div>
+
         </div>
 
+        <div class="folder-contents" ng-style='style()' resize>
+
+          <div ng-repeat="sample in current_folder.samples"
+               ng-include="'sample'"
+               ng-init="indent=0">
+          </div>
+
         </div>
+
+      </div>
 
     </div>
 

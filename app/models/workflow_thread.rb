@@ -3,6 +3,8 @@ class WorkflowThread < ActiveRecord::Base
   attr_accessible :workflow_id, :process_id, :specification
 
   has_many :workflow_associations, foreign_key: :thread_id
+  belongs_to :workflow
+  belongs_to :workflow_process, foreign_key: :process_id
 
   def associations
     workflow_associations
@@ -24,7 +26,7 @@ class WorkflowThread < ActiveRecord::Base
     spec.each do |ispec| 
       if ispec[:sample]
         if ispec[:sample].class == String
-          sid = ispec[:sample].split(":")[0]
+          sid = ispec[:sample].as_sample_id
         else
           sid = ispec[:sample]
         end
@@ -38,6 +40,22 @@ class WorkflowThread < ActiveRecord::Base
 
     t
 
+  end
+
+  def parts except
+    (spec.reject { |p| p[:sample] && p[:sample].as_sample_id == except}).collect do |ispec|
+      if ispec[:sample]
+        {
+          name: ispec[:name],
+          sample: Sample.find(ispec[:sample].as_sample_id)
+        }
+      else
+        {
+          name: ispec[:name],
+          value: ispec[:value]
+        }
+      end
+    end
   end
 
 end

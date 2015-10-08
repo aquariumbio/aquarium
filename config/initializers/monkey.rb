@@ -11,3 +11,11 @@
   end  
 
 end
+
+class String
+
+  def as_sample_id
+    self.split(":")[0]
+  end
+
+end

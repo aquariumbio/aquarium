@@ -1,25 +1,67 @@
-<!--
-
-  Need to show
-    id
-    whether changes have been made and if they have been saved (a status)
-    name (editable)
-      if taken, save should fail with an error (in status)
-    what role (if any) the sample plays in a thread
-    field values for non-link fields
-    created and updated dates
-    notes
-
--->
 
 <script type="text/ng-template" id="sample">
 
-  <div class='folder-sample'>
-    <span class='folder-expander-container'>
-      <span class="folder-expander">&#9658</span>
-    </span>
-    <span class='folder-sample-id'>{{sample.id}}: </span>
-    <input type=text class='folder-sample-input' value='{{sample.name}}'</input>
+  <div class="folder-contents-row" ng-if="sample">
+
+    <div class="folder-contents-cell" ng-style="{ width: width.id }">
+      <span ng-repeat="i in range(indent)">&nbsp;&nbsp;</span>    
+      {{sample.id}}
+    </div>
+
+    <div class="folder-contents-cell" ng-style="{ width: width.name }">  
+      <span ng-repeat="i in range(indent)">&nbsp;&nbsp;</span>           
+      {{sample.name}}
+      <span ng-if="role">(<b>{{role}}</b>)</span>
+    </div>
+
+    <div class="folder-contents-cell" ng-style="{ width: width.role }">
+
+      <span class='folder-expander-container'>
+        <span class="folder-expander" 
+              ng-if="sample.current_thread && !sample.expanded"
+              ng-click="expandSample(sample)">
+          &#9658;
+        </span>
+        <span class="folder-expander"
+              ng-if="sample.current_thread && sample.expanded"
+              ng-click="unexpandSample(sample)">
+          &#9660;
+        </span> 
+      </span>
+
+      <select class='folder-role-select'
+              ng-model='sample.current_thread'
+              ng-options='thread.role + " in " + thread.workflow.name + " " + (thread.process_id ? thread.process_id : "") for thread in sample.threads'
+              ng-init="sample.current_thread = sample.threads[0]"
+              ng-change="get_current_thread_parts(sample)"
+              >
+      </select>
+
+      <i class='icon-plus'></i>
+
+    </div>
+
+    <div class="folder-contents-cell" ng-style="{ width: width.fields }">
+      {{sample.field1}}
+    </div>
+
+    <div class="folder-contents-cell" ng-style="{ width: width.created }">
+      {{sample.created_at|date:'shortDate'}}
+    </div>
+
+    <div class="folder-contents-cell" ng-style="{ width: width.updated }">
+      {{sample.updated_at|date:'shortDate'}}
+    </div>
+
+    <div class="folder-contents-cell" ng-style="{ width: width.status }">
+    </div>
+
+  </div>
+
+  <div ng-if="sample.expanded"
+       ng-repeat="part in sample.current_thread.parts"
+       ng-include="'sample'"
+       ng-init="role=part.name; sample=part.sample; indent=indent+1">
   </div>
 
 </script>
