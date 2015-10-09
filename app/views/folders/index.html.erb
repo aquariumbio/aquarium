@@ -41,6 +41,10 @@ body {
 
       <a href='#' class='btn pull-right folder-btn' ng-show="current_folder.id>=0">New Sample</a>
 
+      <a href='#' class='btn pull-right folder-btn'
+                  ng-show="current_folder.id>=0" 
+                  ng-disabled="!save_enabled()">Save</a>
+
       <div class='input-append pull-right folder-btn' ng-show="current_folder.id>=0">
         <input id="add-sample" type="text">
         <a href='#' class="btn" type="button" ng-click="addSample()">Add</a>
@@ -65,16 +69,19 @@ body {
         <div class="folder-contents-heading" ng-show="current_folder.samples.length > 0">
 
           <div class="folder-contents-row">
-              <div class="folder-contents-cell" ng-style="{ width: width.id }">Id</div>
-              <div class="folder-contents-cell" ng-style="{ width: width.name }">Name</div>
-              <div class="folder-contents-cell" ng-style="{ width: width.role }">Workflow</div>
-              <div class="folder-contents-cell" ng-style="{ width: width.fields }">Fields</div>
-              <div class="folder-contents-cell" ng-style="{ width: width.created }">Created at</div>
-              <div class="folder-contents-cell" ng-style="{ width: width.updated }">Updated at</div>
-              <div class="folder-contents-cell" ng-style="{ width: width.status }">Status</div>
+            <div class="folder-contents-cell" ng-style="{ width: width.chooser }"></div>
+            <div class="folder-contents-cell" ng-style="{ width: width.id }">Id</div>
+            <div class="folder-contents-cell" ng-style="{ width: width.name }">Name</div>
+            <div class="folder-contents-cell" ng-style="{ width: width.role }">Workflow Thread</div>
+            <div class="folder-contents-cell" ng-style="{ width: width.fields }">Properties</div>
+            <div class="folder-contents-cell" ng-style="{ width: width.created }">Created at</div>
+            <div class="folder-contents-cell" ng-style="{ width: width.updated }">Updated at</div>
+            <div class="folder-contents-cell" ng-style="{ width: width.status }">Status</div>
           </div>
 
         </div>
+
+        <div ng-if="!current_folder.samples">Loading...</div>
 
         <div class="folder-contents" ng-style='style()' resize>
 

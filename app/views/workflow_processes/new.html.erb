@@ -29,9 +29,37 @@
         <tr>
           <td ng-repeat="i in workflow.form.inputs">
             <input type='text' id='{{i.name}}' class='input-plain' ng-model="new_thread[i.name]" />
-          </td>
+          </td>          
           <td ng-repeat="i in workflow.form.parameters">
-            <input type='text' id='{{i.name}}' class='input-plain' ng-model="new_thread[i.name]" />
+
+            <div ng-if="!i.type.type">Error: type descriptor is not valid</div>
+
+            <input ng-if="i.type.type == 'number' && !i.type.choices" 
+                  type='number' 
+                  id='{{i.name}}'                  
+                  ng-model="new_thread[i.name]"
+                  ng-init="new_thread[i.name] = i.type.default ? i.type.default : 0"
+                  class='input-plain'/>
+
+            <input ng-if="i.type.type == 'string' && !i.type.choices" 
+                   type='text'
+                   id='{{i.name}}'                     
+                   ng-model="new_thread[i.name]"
+                   ng-init="new_thread[i.name] = i.type.default ? i.type.default : ''"
+                   class='input-plain'/>
+
+            <select ng-if="i.type.type == 'number' && i.type.choices" 
+                    ng-options="toNumber(choice) as choice for choice in i.type.choices" 
+                    ng-init="new_thread[i.name] = i.type.choices[0]" 
+                    ng-model="new_thread[i.name]"
+                    class='launcher-select'></select>
+
+            <select ng-if="i.type.type == 'string' && i.type.choices" 
+                    ng-options="choice for choice in i.type.choices" 
+                    ng-init="new_thread[i.name] = i.type.choices[0]" 
+                    ng-model="new_thread[i.name]"
+                    class='launcher-select'></select>
+
           </td>
           <td ng-repeat="i in workflow.form.outputs">
             <input type='text' id='{{i.name}}' class='input-plain' ng-model="new_thread[i.name]" />
@@ -96,6 +124,16 @@
     $scope.workflow = {};
     $scope.sample_names = {};
     $scope.launchable = false;
+
+    $scope.toNumber = function(str) {
+      var i = parseInt(str);
+      var f = parseInt(str);
+      if ( i == f ) {
+        return i;
+      } else {
+        return f;
+      }
+    }
 
     $http.get('/workflows/' + $attrs.workflow + ".json")
       .success(function(data) {
@@ -193,7 +231,9 @@
 
       $.ajax({
           url: '/workflow_threads/',
-          data: { thread: $scope.new_thread, workflow_id: $scope.workflow.id },
+          dataType: 'json',
+          contentType: 'application/json',
+          data: JSON.stringify({ thread: $scope.new_thread, workflow_id: $scope.workflow.id }),
           method: "POST"
         }).success(function(data) {
           $scope.threads.push(expand(data));

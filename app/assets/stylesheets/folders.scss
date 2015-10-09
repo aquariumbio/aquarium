@@ -133,9 +133,40 @@
   border: 0;
   margin: 0;
   padding: 0;
-  height: 100%;
   width: 85%;
   overflow: hidden;
 }
 
+.folder-editable {
+  outline: none;
+  padding: 1px;
+  margin: 1px;
+  border: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+  background: transparent;
+  :focus {
+    outline: none;
+    border: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;     
+  };
+}
+
+.folder-contents-field-cell {
+  border-top: 1pt solid #ddd;
+  border-left: 1pt solid #ddd;
+  margin: 0px;  
+  padding: 0 0 0 5px;
+  display: table-cell;
+  overflow: scroll;  
+  white-space: nowrap;
+}
+
+.folder-sample-field {
+  display: block;
+
+}
 

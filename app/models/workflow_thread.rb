@@ -44,10 +44,11 @@ class WorkflowThread < ActiveRecord::Base
 
   def parts except
     (spec.reject { |p| p[:sample] && p[:sample].as_sample_id == except}).collect do |ispec|
+
       if ispec[:sample]
         {
           name: ispec[:name],
-          sample: Sample.find(ispec[:sample].as_sample_id)
+          sample: Sample.find(ispec[:sample].as_sample_id).for_folder
         }
       else
         {

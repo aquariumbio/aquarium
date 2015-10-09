@@ -9,16 +9,20 @@
     <label>Name</label>
     <input ng-model="keyval.name" type="text" />
     <label>Type</label>
-    <input ng-model="keyval.type" type="text" />   
+    <textarea class='workflow-type-edit' json-text ng-model="keyval.type" />
     <label>Description</label>
     <input ng-model="keyval.description" type="text" />     
   </fieldset>  
 
-  <button ng-if="!ex && oper.workflow == $root.workflow_id" class='btn btn-warning btn-mini' ng-click='$root.deletePart(oper,partType,keyval)'>
+  <button ng-if="!ex && oper.workflow == $root.workflow_id"
+          class='btn btn-warning btn-mini' 
+          ng-click='$root.deletePart(oper,partType,keyval)'>
     Delete This {{partType}}
   </button>    
 
-  <button ng-if="ex && oper.workflow == $root.workflow_id" class='btn btn-warning btn-mini' ng-click='$root.deletePart(ex,partType,keyval)'>
+  <button ng-if="ex && oper.workflow == $root.workflow_id"
+          class='btn btn-warning btn-mini'
+          ng-click='$root.deletePart(ex,partType,keyval)'>
     Delete This {{partType}}
   </button>  
 

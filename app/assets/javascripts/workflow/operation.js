@@ -44,7 +44,7 @@
   function new_keyval() {
     return {
       name: aq.rand_string(5), 
-      type: ""
+      type: { "type": "number" }
     };
   }  
 

@@ -18,4 +18,8 @@ class String
     self.split(":")[0]
   end
 
+  def as_container_id
+    as_sample_id
+  end
+
 end

@@ -257,4 +257,16 @@ class Sample < ActiveRecord::Base
     self.workflow_associations.collect { |wa| puts wa.inspect; wa.workflow_thread }
   end
 
+  def for_folder
+    s = as_json
+    s[:sample_type] = { name: sample_type.name }  
+    s[:fields] = ((1..8).select { |i| [ "number", "string", "url" ].member? sample_type["field#{i}type".to_sym] }).collect { |i|
+      {
+        name: sample_type["field#{i}name".to_sym],
+        value: self["field#{i}".to_sym]
+      }
+    }
+    s
+  end
+
 end

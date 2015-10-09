@@ -95,8 +95,17 @@ module Krill
             error instance, "Could not take an item associated with #{instance[:sample]} because no container was specified."
           elsif instance[:sample_type] 
             error instance, "Unimplemented: take item from sample_type and container ispec."
+
           elsif instance[:container]
-            error instance, "Unimplemented: take item container ispec."
+
+            container_items = ObjectType.find(instance[:container].as_container_id).items
+
+            if container_items.length > 0
+              items << container_items[0]
+            else 
+              error instance, "Could not find any items whose container type is #{instances[:container]}"
+            end
+
           elsif # any item meets the specification
             error instance, "Unimplemented: take item from empty ispec."
           end

@@ -13,7 +13,7 @@ class FoldersController < ApplicationController
 
   def full sample
 
-    s = sample.as_json
+    s = sample.for_folder
 
     s[:threads] = sample.workflow_associations.collect { |wa|
       { 
@@ -80,7 +80,7 @@ class FoldersController < ApplicationController
 
         when 'add_sample'
 
-          s = Sample.includes(workflow_associations: { workflow_thread: :workflow }).find(params[:sample_id])
+          s = Sample.includes(:sample_type,workflow_associations: { workflow_thread: :workflow }).find(params[:sample_id])
           FolderContent.new(folder_id: params[:folder_id], sample_id: s.id).save
 
           { sample: full(s) }

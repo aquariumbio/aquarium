@@ -13,6 +13,7 @@
       $scope.folders = data.folders;
       $scope.folders[0].open = true;
       $scope.current_folder = $scope.folders[0];
+      $scope.current_folder.samples = [];
     });
 
     $.ajax({
@@ -24,7 +25,8 @@
     });
 
     $scope.width = {
-      id: 20,
+      chooser: 6,
+      id: 60,
       name: 120,
       role: 120,
       fields: 120,
@@ -33,6 +35,25 @@
       status: 20,
       blank: 100
     };
+
+    $scope.unsave = function(sample) {
+      sample.unsaved = true;
+      sample.selected = true;
+    }
+
+    $scope.save_enabled = function() {
+      if ( $scope.current_folder ) {
+        var saveQ = false;
+        angular.forEach($scope.current_folder.samples, function(s) {
+          if ( s.selected && s.unsaved ) {
+            saveQ = true;
+          }
+        });
+        return saveQ;
+      } else {
+        return false;
+      }
+    }
 
     $scope.get_current_thread_parts = function(sample) {
       if ( !sample.current_thread.parts ) {
@@ -49,6 +70,14 @@
 
     $scope.unexpandSample = function(sample) {
       sample.expanded = false;
+    }
+
+    $scope.expandSampleFields = function(sample) {
+      sample.fields_expanded = true;
+    }
+
+    $scope.unexpandSampleFields = function(sample) {
+      sample.fields_expanded = false;
     }
 
     $scope.addSample = function(f) {

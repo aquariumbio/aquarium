@@ -21,9 +21,7 @@ class WorkflowThreadsController < ApplicationController
       spec,
       params[:workflow_id]
     )
-
-    Rails.logger.info "CREATE THREAD: created #{thread.id} with spec #{thread.spec}, made from #{params[:thread]}"
-
+    
     render json: thread
 
   end
