@@ -19,12 +19,19 @@ function setDiagramParameters($scope) {
   } 
 
   w.directive("connections", function() {
+
     return {
       restrict: 'A',
       scope: { workflow: "=" },
-      templateUrl: "/workflow/diagram/connections.html"
+      templateUrl: "/workflow/diagram/connections.html",
+      link: function($scope,$element) {
+        $scope.select_connection = function(c) {
+          $scope.$root.selection = c; 
+        }
+      }
     }
-  });   
+
+  });
 
   function pluck_operation ( operations, id ) {
     for ( var i=0; i<operations.length; i++ ) {
@@ -60,11 +67,19 @@ function setDiagramParameters($scope) {
   }
 
   w.directive("connection", function() {
-    return {
-      restrict: 'A',
-      scope: { connection: "=", operations: "=", io: "=" },
 
-      link: function($scope, $element, $attr) {     
+    return {
+
+      restrict: 'A',
+
+      scope: { 
+        connection: "=", 
+        operations: "=", 
+        io: "=", 
+        eventHandler: '&ngClick'
+      },
+
+      link: function($scope, $element, $attr) {   
 
         $scope.draw = function() {
 
@@ -75,10 +90,13 @@ function setDiagramParameters($scope) {
             from_part = $scope.connection.from[1],
               to_part = $scope.connection.to[1];
 
-          if ( from_op && to_op ) {
-            var ip = inputPosition($scope,to_op.operation,to_part),
-                op = outputPosition($scope,from_op.operation,from_part);
+          if ( to_op ) {
+            var ip = inputPosition($scope,to_op.operation,to_part);
           }
+
+          if ( from_op ) {
+            var op = outputPosition($scope,from_op.operation,from_part);
+          }          
 
           if ( from_op && to_op && ip > 0 && op > 0 ) {
 
@@ -93,9 +111,27 @@ function setDiagramParameters($scope) {
                    + (x2-$scope.cPoint) + " " + y2 + " "
                    + x2 + " " + y2 );
 
+          } else if ( from_op && op > 0 ) {
+
+            var x1 = from_op.x + $scope.width,
+                y1 = from_op.y + op;
+
+            $attr.$set("d", 
+              "M " + x1 + " " + y1 + " " +
+              "L " + (x1+20) + " " + (y1) );            
+
+          } else if ( to_op && ip > 0 ) {
+
+            var x2 = to_op.x,
+                y2 = to_op.y + ip;
+
+            $attr.$set("d", 
+              "M " + x2 + " " + y2 + " " +
+              "L " + (x2-20) + " " + y2 );
+
           } else {
 
-              $attr.$set("d", "");
+            $attr.$set("d", "");
 
           }
 

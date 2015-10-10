@@ -25,7 +25,7 @@
 
     <div class='span4' style="background: #eee; border: 1pt solid #ddd; padding: 10pt; overflow: auto;">
 
-      <div wf="workflow" ng-show="null == $parent.$root.selection"></div>
+      <div wf="workflow" ng-show="null == $parent.$root.selection || $parent.$root.selection.to"></div>
 
       <div ng-repeat="h in workflow.specification.operations">
 
@@ -75,6 +75,8 @@
     </div>
 
   </div>
+
+
 
 </div>
 

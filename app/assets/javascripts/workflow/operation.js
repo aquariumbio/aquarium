@@ -15,7 +15,7 @@
       link: function($scope,$element,$attr) {
         setDiagramParameters($scope);
         $scope.mouseDown = function(obj) {        
-          $scope.$root.selection = obj;
+          $scope.$root.selection = obj;     
         }
         $scope.exceptionTotalPorts = function(ex) {
           var i = 0, sum = 0;

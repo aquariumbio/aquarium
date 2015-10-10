@@ -1,5 +1,10 @@
+
 <g ng-repeat="c in workflow.specification.io">
   <path class='workflow-connection'
-        connection="c" operations="workflow.specification.operations" io="workflow.specification.io">
+        ng-class="$parent.$parent.selected(c) ? 'workflow-connection-selected' : 'workflow-connection'"
+        connection="c" 
+        operations="workflow.specification.operations"
+        io="workflow.specification.io"
+        data-ng-click="select_connection(c); $event.stopPropagation();">
   </path>
 </g>

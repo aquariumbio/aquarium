@@ -47,7 +47,15 @@
 .workflow-connection {
   stroke: #888;
   stroke-width: 2;
-  fill: none
+  fill: none;
+  cursor: pointer;
+}
+
+.workflow-connection-selected {
+  stroke: #bb0000;
+  stroke-width: 4;
+  fill: none;
+  cursor: pointer;
 }
 
 .exception-connection {

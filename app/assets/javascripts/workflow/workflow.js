@@ -25,7 +25,7 @@
     $scope.clearSelection = function() {
       $scope.$root.selection = null;
       $scope.$root.output_selected = null;
-      $scope.$root.current_op = null;
+      $scope.$root.current_op = null;  
     }
 
     $scope.delete_operation = function(h) {
@@ -99,7 +99,7 @@
         aq.delete_from_array(op.exceptions,ex);
         $scope.$root.selection = op;
       }
-    }
+    }  
 
   }]);
 
