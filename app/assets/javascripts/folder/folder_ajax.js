@@ -63,7 +63,7 @@
 
   ///////////////////////////////////////////////////////////////////////////////////////
 
-  w.factory('focus', function($timeout, $window) {
+  w.factory('focus', [ '$timeout', '$window', function($timeout, $window) {
     return function(id) {
       $timeout(function() {
         var element = $window.document.getElementById(id);
@@ -71,7 +71,7 @@
           element.focus();
       });
     };
-  });
+  }]);
 
   w.directive('eventFocus', function(focus) {
     return function(scope, elem, attr) {
@@ -83,31 +83,6 @@
       });
     };
   });
-
-  w.directive('resize', function ($window) {
-    return function (scope, element) {
-        var w = angular.element($window);
-        scope.getWindowDimensions = function () {
-            return {
-                'h': w.height()
-            };
-        };
-        scope.$watch(scope.getWindowDimensions, function (newValue, oldValue) {
-            scope.windowHeight = newValue.h;
-            scope.windowWidth = newValue.w;
-
-            scope.style = function () {
-                return {
-                    'height': (newValue.h - 160) + 'px'
-                };
-            };
-
-        }, true);
-
-        w.bind('resize', function () {
-            scope.$apply();
-        });
-    }});
 
 })();
 

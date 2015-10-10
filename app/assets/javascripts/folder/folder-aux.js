@@ -7,7 +7,7 @@
     w = angular.module('folders', []); 
   } 
 
-  w.factory('focus', function($timeout, $window) {
+  w.factory('focus', [ '$timeout', '$window', function($timeout, $window) {
     return function(id) {
       $timeout(function() {
         var element = $window.document.getElementById(id);
@@ -15,7 +15,7 @@
           element.focus();
       });
     };
-  });
+  }]);
 
   w.directive('eventFocus', function(focus) {
     return function(scope, elem, attr) {
@@ -28,7 +28,7 @@
     };
   });
 
-  w.directive('resize', function ($window) {
+  w.directive('resize', [ '$window', function ($window) {
     return function (scope, element) {
         var w = angular.element($window);
         scope.getWindowDimensions = function () {
@@ -49,9 +49,9 @@
         }, true);
 
         w.bind('resize', function () {
-            scope.$apply();
+          scope.$apply();
         });
-    }});
+    }}]);
 
 })();
 
