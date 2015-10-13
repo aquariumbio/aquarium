@@ -34,6 +34,8 @@
 
             <div ng-if="!i.type.type">Error: type descriptor is not valid</div>
 
+            <!-- No Choices -->
+
             <input ng-if="i.type.type == 'number' && !i.type.choices" 
                   type='number' 
                   id='{{i.name}}'                  
@@ -46,19 +48,40 @@
                    id='{{i.name}}'                     
                    ng-model="new_thread[i.name]"
                    ng-init="new_thread[i.name] = i.type.default ? i.type.default : ''"
-                   class='input-plain'/>
+                   class='input-plain'/>            
 
-            <select ng-if="i.type.type == 'number' && i.type.choices" 
+            <!-- Single Choice -->
+
+            <select ng-if="i.type.type == 'number' && i.type.choices && !i.type.multiple" 
                     ng-options="toNumber(choice) as choice for choice in i.type.choices" 
                     ng-init="new_thread[i.name] = i.type.choices[0]" 
                     ng-model="new_thread[i.name]"
                     class='launcher-select'></select>
 
-            <select ng-if="i.type.type == 'string' && i.type.choices" 
+            <select ng-if="i.type.type == 'string' && i.type.choices && !i.type.multiple" 
                     ng-options="choice for choice in i.type.choices" 
                     ng-init="new_thread[i.name] = i.type.choices[0]" 
                     ng-model="new_thread[i.name]"
                     class='launcher-select'></select>
+
+            <!-- Multiple Choice -->
+
+            <select ng-if="i.type.type == 'number' && i.type.choices && i.type.multiple" 
+                    ng-options="toNumber(choice) as choice for choice in i.type.choices" 
+                    ng-init="new_thread[i.name] = i.type.choices[0]" 
+                    ng-model="new_thread[i.name]"
+                    multiple
+                    ng-attr-size="{{ i.type.choices.length }}"
+                    class='launcher-select'></select>
+
+            <select ng-if="i.type.type == 'string' && i.type.choices && i.type.multiple" 
+                    ng-options="choice for choice in i.type.choices" 
+                    ng-init="new_thread[i.name] = i.type.choices[0]" 
+                    ng-model="new_thread[i.name]"
+                    multiple
+                    ng-attr-size="{{ i.type.choices.length }}"
+                    class='launcher-select'></select>
+
 
           </td>
           <td ng-repeat="i in workflow.form.outputs">

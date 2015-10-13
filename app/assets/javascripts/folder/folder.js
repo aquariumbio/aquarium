@@ -32,7 +32,7 @@
       fields: 120,
       created: 30,
       updated: 30,
-      status: 20,
+      status: 30,
       blank: 100
     };
 

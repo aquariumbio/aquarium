@@ -71,6 +71,9 @@ module Krill
     # a method chainer).
     #
     # @return [WorkflowThread] The thread it was called on, with parameters selected.
+    #
+    # @example Collect the values of a parameter named my_param
+    #   my_param_vals = o.threads.collect { |t| t.parameter.my_param.value }
     def parameter
       @selection = @parameters
       self
@@ -91,7 +94,7 @@ module Krill
     # 
     # @return [ISpec] The inventory specification for the given part.
     # @example Get the sample id of the input named 'fragment' for the first thread in the [Operation] o.
-    #   sid = o.threads.input.fragment.sample_id
+    #   sid = o.threads[0].input.fragment.sample_id
     def partname
       raise "Do not use this method directly."
     end
@@ -113,7 +116,7 @@ module Krill
           super
         end
       elsif @selection == @parameters
-        @selection[name]
+        @selection[name][:value]
       else
         super        
       end
