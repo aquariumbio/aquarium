@@ -7,7 +7,7 @@ A **workflow** is a set of interconnected **operations**, each with a set of inp
 
 To create a new workflow, first navigate to the workflow index.
 
-![new_workflow_index](images/workflow_tutorial/new_workflow_index.png)
+![new_workflow_index](images/workflow_tutorial/index.png)
 
 Now click "New"
 
