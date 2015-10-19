@@ -41,7 +41,9 @@ name them carefully because these exact names are used in protocol code
 
 ## Launching the Workflow
 
-Now that the "Streak Plate" workflow has been carefully described, make sure you've saved, and click "Launch." You will be taken to a launch screen where you can build one or more [**threads**][threads]. Here, you'll see the inputs for both of our operations listed; these are essentially the inputs for the workflow. Each thread, in this case, corresponds to a single strain of yeast. Typically, someone performing an operation from this workflow in the lab will operate on many strains simultaneously. Let's say we have two different types of strain we want to clone, so we build two threads to launch in this workflow, one for each strain type. Start typing "434: pMOD-8-pRPR1-gRNAc3" into both cells of the table, and select them in the drop-down when they appear. Then click "Add." Now do the same with "434: pMOD-8-pRPR1-gRNAc3."
+Now that the "Streak Plate" workflow has been carefully described, make sure you've saved, and click "Launch." You will be taken to a launch screen where you can build one or more [**threads**][threads]. Here, you'll see the inputs for both of our operations listed; these are essentially the inputs for the workflow. Each thread, in this case, corresponds to a single strain of yeast. Typically, someone performing an operation from this workflow in the lab will operate on many strains simultaneously. Let's say we have two different types of strain we want to clone, so we build two threads to launch in this workflow, one for each strain type.
+
+Start typing "434: pMOD-8-pRPR1-gRNAc3" into both cells of the table, and select them in the drop-down when they appear. Then click "Add." Now do the same with "434: pMOD-8-pRPR1-gRNAc3."
 
 ![build_threads](images/workflow_tutorial/build_threads.png)
 
