@@ -57,9 +57,9 @@ Note: The "Yeast Glycerol Stock" and "Streaked Yeast Plate" inputs must be of th
 link to WorkflowProtocolAPI.md
 
 ## Questions
-Who is the intended audience? The "expert" should only have to link up operations, while the "programmer" will need to add inputs/outputs and write protocol code.
-How's my definition of "thread"?
-Is that a bug that we have to define the sample for both inputs?
+ - Who is the intended audience? The "expert" should only have to link up operations, while the "programmer" will need to add inputs/outputs and write protocol code.
+ - How's my definition of "thread"?
+ - Is that a bug that we have to define the sample for both inputs?
 
 [protocols]: https://github.com/klavinslab/aquarium/blob/master/doc/Krill.md#authoring-protocols-for-aquarium "Authoring Protocols for Aquarium"
 [threads]: https://github.com/klavinslab/aquarium/blob/master/doc/WorkflowProtocolAPI.md#threads "Threads"
