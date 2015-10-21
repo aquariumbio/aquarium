@@ -45,7 +45,7 @@ Or
     
 ## Options
 
-Options set particular flags for latter inactions with an *Op*. Presently, the following options for the *take*, *produyce*, and *release* methods, discussed below, are available.
+Options set particular flags for latter inactions with an *Op*. Presently, the following options for the *take*, *produce*, and *release* methods, discussed below, are available.
 
 	o.query(bool)		# => whether to query the user about which item to take
 	o.silent(bool)      # => whether to take, produce or release silently (without user interaction)
