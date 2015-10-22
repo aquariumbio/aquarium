@@ -66,10 +66,20 @@ class WorkflowProcess < ActiveRecord::Base
   def default_ispec p
 
     if p[:alternatives] && p[:alternatives].length > 0
-      p[:alternatives][0]
+      instance = p[:alternatives][0]
     else 
-      {}
+      instance = {}
     end
+
+    if instance[:sample] && instance[:sample].class == String
+      instance[:sample_id] = instance[:sample].as_sample_id
+    end
+
+    if instance[:sample] && instance[:sample].class == Array
+      instance[:sample_ids] = instance[:sample].collect { |s| s.as_sample_id }
+    end    
+
+    instance
 
   end
 
@@ -296,6 +306,10 @@ class WorkflowProcess < ActiveRecord::Base
       p += parts oc
     end
     p
+  end
+
+  def threads
+    WorkflowThread.where(process_id: self.id)
   end
 
 end

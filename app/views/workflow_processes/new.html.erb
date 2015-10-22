@@ -12,24 +12,48 @@
     <div id="thread_builder">
 
       <div class='pull-left'><h4>Build a Thread</h4></div>
+
       <div class="pull-right">
         <a class="btn btn-small btn-info" href="#" ng-click="randomize()">Randomize</a> 
         <a class="btn btn-small btn-success" href="#" ng-click="submit()">Add</a>               
       </div>      
 
       <table class='launcher-table'>
+
         <tr ng-if="workflow.form.inputs.length == 0 && workflow.form.outputs.length == 0 && workflow.form.parameters == 0">
           <th>No Thread Definition Required</th>
         </tr>
+
         <tr>
-          <th ng-repeat="i in workflow.form.inputs">{{i.description}}</th>
-          <th ng-repeat="i in workflow.form.parameters">{{i.description}}</th>          
-          <th ng-repeat="i in workflow.form.outputs">{{i.description}}</th>            
+          <th ng-repeat="i in workflow.form.inputs" class='input-header'>{{i.description}}</th>
+          <th ng-repeat="i in workflow.form.parameters" class='param-header'>{{i.description}}</th>          
+          <th ng-repeat="i in workflow.form.outputs" class='output-header'>{{i.description}}</th>            
         </tr>
+
         <tr>
           <td ng-repeat="i in workflow.form.inputs">
-            <input type='text' id='{{i.name}}' class='input-plain' ng-model="new_thread[i.name]" />
-          </td>          
+            <input ng-if="!i.is_vector" type='text' class='input-plain {{i.name}}-sample' ng-model="new_thread[i.name]" />
+            <div ng-if="i.is_vector">
+               <table class='launcher-vector-table'>
+                 <tr ng-repeat="s in new_thread[i.name] track by $index">
+                   <td>
+                     <input type='text' 
+                            class='input-plain {{i.name}}-sample'
+                            ng-model="new_thread[i.name][$index]"
+                            ng-data-index="{{$index}}" /> 
+                   </td>
+                   <td class='launcher-vector-remove'>
+                     <a href="#" ng-click="removeFromVector(i,$index)"><i class='icon-remove'></i></a>
+                   </td>
+                 </tr>
+                 <tr>
+                   <td><a href="#" ng-click="addToVector(i)"><i class='icon-plus'></i></a></td>
+                   <td></td>
+                 </tr>
+               </table>
+            </div>
+          </td>   
+
           <td ng-repeat="i in workflow.form.parameters">
 
             <div ng-if="!i.type.type">Error: type descriptor is not valid</div>
@@ -68,7 +92,7 @@
 
             <select ng-if="i.type.type == 'number' && i.type.choices && i.type.multiple" 
                     ng-options="toNumber(choice) as choice for choice in i.type.choices" 
-                    ng-init="new_thread[i.name] = i.type.choices[0]" 
+                    ng-init="new_thread[i.name] = []" 
                     ng-model="new_thread[i.name]"
                     multiple
                     ng-attr-size="{{ i.type.choices.length }}"
@@ -76,7 +100,7 @@
 
             <select ng-if="i.type.type == 'string' && i.type.choices && i.type.multiple" 
                     ng-options="choice for choice in i.type.choices" 
-                    ng-init="new_thread[i.name] = i.type.choices[0]" 
+                    ng-init="new_thread[i.name] = []" 
                     ng-model="new_thread[i.name]"
                     multiple
                     ng-attr-size="{{ i.type.choices.length }}"
@@ -127,8 +151,19 @@
 
     </div>
 
-    <!-- br>
-    <pre>{{workflow.form}}</pre -->
+    <br />
+
+    <div class='row-fluid'>
+      <div class='span4'>
+        <pre style="font-size: 6pt; line-height: 1.2">{{workflow.form.inputs|json}}</pre>
+      </div>
+      <div class='span4'>
+        <pre style="font-size: 6pt; line-height: 1.2">{{workflow.form.parameters|json}}</pre>
+      </div>      
+      <div class='span4'>
+        <pre style="font-size: 6pt; line-height: 1.2">{{new_thread|json}}</pre>
+      </div>
+    </div>
 
   </div>
 
@@ -220,37 +255,82 @@
 
     }
 
+    $scope.associate_autocomplete_data = function (ispec) {
+
+      var samples = [];
+
+      angular.forEach(ispec.alternatives, function(alt) {
+        var stid = alt.sample_type.split(":")[0];          
+        samples = samples.concat($scope.sample_names[stid])
+       });
+
+      $("."+ispec.name+"-sample").autocomplete({
+          source: samples,
+          select: function(ev,ui) {
+
+            if ( typeof $scope.new_thread[ispec.name] == "string" ) {
+              $scope.new_thread[ispec.name] = ui.item.value;
+            } else {
+              var index = $(ev.target).attr('ng-data-index');
+              $scope.new_thread[ispec.name][index] = ui.item.value;
+            }
+            $scope.$apply();
+          }
+        });
+
+    }
+
     $scope.autocomplete = function() {
+
       angular.forEach(parts(),function(i) {
 
-        var samples = [];
-
-        angular.forEach(i.alternatives, function(alt) {
-          var stid = alt.sample_type.split(":")[0];          
-          samples = samples.concat($scope.sample_names[stid])
-         });
-
-        $("#"+i.name).autocomplete({
-            source: samples,
-            select: function(ev,ui) {
-              $scope.new_thread[i.name] = ui.item.value;
-              $scope.$apply();
-            }
-          });
+        $scope.associate_autocomplete_data(i);
 
         if ( i.alternatives[0] && i.alternatives[0].sample ) {
           $scope.new_thread[i.name] = i.alternatives[0].sample;
         }
+
+        if ( i.is_vector ) {
+          $scope.new_thread[i.name] = [ "" ];
+        }
+
         $scope.$apply();
 
         $("#status").css('display','none');
 
       });
+
+    }
+
+    $scope.removeFromVector = function(ispec,index) {
+
+      console.log([ispec,index]);
+      $scope.new_thread[ispec.name].splice(index, 1);
+
+    }
+
+    $scope.addToVector = function(ispec) {
+
+      $scope.new_thread[ispec.name].push("");
+
+      setTimeout(function(){ 
+        // Note: This is lame, but I can't figure out how to set up autocomplete on the new element
+        // that will be created when the model is updated unless I wait for angular to add the 
+        // the element.
+        $scope.associate_autocomplete_data(ispec);
+      }, 100);
+
+    }
+
+    $scope.reset_param = function(p) {
+      if ( p.type.default ) {
+        $scope.new_thread[p.name] = p.type.default;
+      } else if ( p.type.choices ) {
+        $scope.new_thread[p.name] = p.type.choices[0];
+      }
     }
 
     $scope.submit = function() { 
-
-      console.log("Submitting new thread: " + JSON.stringify($scope.new_thread));
 
       $.ajax({
           url: '/workflow_threads/',
@@ -262,8 +342,14 @@
           $scope.threads.push(expand(data));
           $scope.new_thread = {};
           angular.forEach(parts(),function(i) {
-            $scope.new_thread[i.name] = i.alternatives[0].sample;
+            if ( i.alternatives[0] && i.alternatives[0].sample ) {
+              $scope.new_thread[i.name] = i.alternatives[0].sample;
+            }
+            if ( i.is_vector ) {
+               $scope.new_thread[i.name] = [ "" ];
+             }
           });
+          angular.forEach($scope.workflow.form.parameters,$scope.reset_param);
           $scope.launchable = true;
           $scope.$apply();
         })
@@ -274,18 +360,46 @@
     }
 
     $scope.randomize = function() {
+
       angular.forEach(parts(),function(io) {
-        if ( !$scope.new_thread[io.name] ) {
+
+        if ( !io.is_vector ) {
           var stid = io.alternatives[0].sample_type.split(":")[0];            
           n = $scope.sample_names[stid].length;
-          $scope.new_thread[io.name] = $scope.sample_names[stid][Math.floor(Math.random()*n)];
+          $scope.new_thread[io.name] = $scope.sample_names[stid][Math.floor(Math.random()*n)];      
+        } else {
+          var stid = io.alternatives[0].sample_type.split(":")[0];            
+          n = $scope.sample_names[stid].length;
+          $scope.new_thread[io.name] = [];
+          for ( var i=0; i<2; i++ ) {
+            $scope.new_thread[io.name].push($scope.sample_names[stid][Math.floor(Math.random()*n)]);
+          }
         }
+
       });
+
       angular.forEach($scope.workflow.form.parameters,function(p) {
-        if ( !$scope.new_thread[p.name] ) {
-          $scope.new_thread[p.name] = Math.round(Math.random()*1000)/10;
+
+        if ( !p.type.choices ) {
+          if ( p.type.default ) {
+            $scope.new_thread[p.name] = p.type.default;            
+          } else if ( p.type.type == "number" ) {
+            $scope.new_thread[p.name] = Math.round(Math.random()*1000)/10;
+          } else if ( p.type.type == "string" ) {
+            var strings = [ "biology", "computer science", "mathematics", "chemistry", "philosophy",
+                            "economics", "literature", "medicine", "engineering", "sports and leisure",
+                            "political sciences", "education", "psychology" ];
+            $scope.new_thread[p.name] = strings[Math.floor(Math.random()*strings.length)];
+          }
+        } else {
+          if ( p.type.multiple ) {
+            $scope.new_thread[p.name] = [ p.type.choices[Math.floor(Math.random()*p.type.choices.length)] ];
+          } else {
+            $scope.new_thread[p.name] = p.type.choices[Math.floor(Math.random()*p.type.choices.length)];
+          }
         }
       });
+
     }
 
     function set_thread_checked(val) {

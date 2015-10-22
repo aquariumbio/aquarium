@@ -139,7 +139,7 @@ class Sample < ActiveRecord::Base
   end
 
   def to_s
-    "<span class='aquarium-sample' id='#{self.id}'>#{self.id}</span>"
+    "<a href='/samples/#{self.id}' class='aquarium-item' id='#{self.id}'>#{self.id}</a>"
   end
 
   def owner

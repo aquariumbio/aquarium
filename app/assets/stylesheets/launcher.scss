@@ -2,8 +2,8 @@
   border: 0pt solid #aaa !important;
   border-radius: 0px !important;
   width: 100%;
-  margin: 0px !important;
-  padding: 0px;
+  margin: 0 0 0 3px !important;
+  padding: 0px !important;
   height: 100% !important;
 
 }
@@ -12,14 +12,15 @@
   background-color: #ffe;
 }
 
-  .input-plain:disabled {
-    background-color: white;
-  }
+.input-plain:disabled {
+  background-color: white;
+}
 
 .launcher-table {
 
   width: 100%;
   table-layout: fixed;
+  height: 100%;
 
   th { 
     border: 1pt solid #aaa;
@@ -27,7 +28,6 @@
     padding: 5px;
     margin: 0px;
     text-align: left;
-    background: #eee;
   }
 
   td {
@@ -45,6 +45,51 @@
     margin: 0px;
   }
 
+  .input-header {
+    color: black;
+    background: #eff;
+  }
+
+  .param-header {
+    color: black;    
+    background: #efe;
+  }
+
+  .output-header {
+    color: black;    
+    background: #ffe;
+  }  
+
+
+}
+
+.param-header {
+  color: red;
+  background: #fee;
+}
+
+.output-header {
+  background: #efe;
+}
+
+.launcher-vector-table {
+  width: 100%;
+  table-layout: fixed;
+  tr {
+    border: 0;
+    padding: 0px;
+    margin: 0px;
+    border-bottom: 1pt solid #eee;
+  }
+  td {
+    border: 0;
+    padding: 0px;
+    margin: 0px;
+    height: 20px;    
+  }
+}
+.launcher-vector-remove {
+  width: 16px;
 }
 
 .launcher-threads {

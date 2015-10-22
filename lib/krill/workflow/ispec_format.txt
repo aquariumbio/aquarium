@@ -1,0 +1,71 @@
+# An ispec is a jsonable with the following form
+
+  {
+
+    name: varname,
+
+    is_part: true|false,
+
+    is_shared: true|false,
+    limit: number,
+
+    is_vector: true|false,
+
+    alternatives: [
+      {
+        sample_type: id,
+        container: id,
+        sample: id,
+        item: id,
+        row: number,
+        column: number
+      },
+      ...
+    ],
+
+    # If the ispec has been instantiated in a workflow_process, then 
+    # an array of instantiations is present here as well, one for each 
+    # thread
+
+    instantiation: [
+
+      instance_ispec,
+      instance_ispec,
+      ...
+
+    ]
+
+  }
+
+# instance_ispec (a.k.a. ISpec Object Data)
+#
+# These instane_ispecs are promoted to lib/krill/workflow/ISpec objects when 
+# made available in operation code.
+#
+# Many of these fields are made on an as-needed basis. For example, the sample is not
+# loaded using Sample.find(sample_id) until the sample method is accessed.
+{
+
+  # for samples
+  sample_id: id,
+  sample: Sample,
+  sample_ids: [ id1, id2, ... ]      # if is_vector is true in parent ispec
+  samples: [ Sample1, Sample2, ... ] # if is_vector is true in parent ispec
+
+  # for items
+  item_id: id,
+  item: Item,
+  item_ids: [ id1, id2, ... ]        # if is_vector is true in parent ispec
+  items: [ Item1, Item2, ... ]       # if is_vector is true in parent ispec
+
+  container_id: id,
+  contianer: ObjectType,
+
+  # for parts of a collection
+  row: number,
+  column: number,
+  collection_id: id,
+  collection: Collection
+
+}
+

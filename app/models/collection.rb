@@ -6,10 +6,27 @@ class Collection < Item
     Item.joins(:object_type).where(object_types: { handler: "collection" })
   end
 
-  def self.containing s
+  def self.containing s, ot=nil
     i = s.id.to_s
     r = Regexp.new '\[' + i + ',|,' + i + ',|,' + i + '\]|\[' + i + '\]'
-    Collection.every.select { |i| r =~ i.data  }
+    if ot
+      Collection.where(object_type_id: ot.id).select { |i| r =~ i.data  }
+    else
+      Collection.every.select { |i| r =~ i.data  }
+    end
+  end
+
+  def position s
+    rows,cols = self.dimensions
+    m = self.matrix
+    (0..rows-1).each do |r|
+      (0..cols-1).each do |c|
+        if m[r][c] == s.id
+          return { row: r, column: c }
+        end
+      end
+    end
+    return nil
   end
 
   def self.spread samples, name, rows, cols

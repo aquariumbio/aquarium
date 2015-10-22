@@ -19,7 +19,7 @@
         ng-height="{{nameHeight}}"       
         />
 
-  <text ng-click="mouseDown(operation); $event.stopPropagation();" 
+  <text ng-click="$root.selectOperation(operation); $event.stopPropagation();" 
         ng-x={{width/2}}
         ng-y={{nameHeight/2+2}}
         text-anchor="middle"
@@ -77,7 +77,7 @@
     <circle ng-repeat="output in operation.outputs" stroke="black" fill="orange" 
             ng-click="$root.outputClick(operation,output); $event.stopPropagation();" 
             ng-cx="{{width}}" ng-cy="{{portSpace*$index}}"
-            ng-class="{{$parent.$parent.selected(output) ? 'operation-port-selected' : 'operation-port'}}"
+            ng-class="{{$parent.$parent.selected(output) ? ($parent.$parent.$root.output_selected ? 'operation-port-live' : 'operation-port-selected') : 'operation-port'}}"
             >
     </circle>
 

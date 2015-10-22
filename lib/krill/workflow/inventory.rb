@@ -2,217 +2,69 @@ module Krill
 
   class Op
 
-    def sample ispec
-
-      if ispec[:sample]
-        if ispec[:sample].class == String
-          Sample.find(ispec[:sample].split(':')[0])
-        else
-          Sample.find(ispec[:sample])
-        end
-      else
-        nil
-      end
-
-    end
-
-    def container ispec
-
-      if ispec[:container]
-        if ispec[:container].class == String
-          ObjectType.find(ispec[:container].split(':')[0])
-        else
-          ObjectType.find(ispec[:container])
-        end
-      else
-        nil
-      end
-
-    end
-
-    def first_item ispec
-
-      i = (sample ispec).items.select { |i| i.object_type_id == (container ispec).id }
-      if i.length > 0 
-        i.first
-      else
-        nil
-      end
-
-    end
-
     def error ispec, msg
       ispec[:errors] ||= []
       ispec[:errors] << msg
     end
 
-    # Take all selected items.
-    # @return [Op] Returns itself. Can be chained.
-    def take &block
+    private
 
-      ispecs = get_ispec_io
-
-      items = []
-      collections = []
-
-      ispecs.each do |ispec|
-
-        ispec[:instantiation].each do |instance|
-
-          if instance[:is_part]
-
-            error instance, "Unimplemented: take the collection containing a particular ispec"
-
-          elsif instance[:item]
-
-            items << Item.find(instance[:item])
-
-          elsif instance[:collection] && instance[:row] && instance[:col]
-            
-            unless (collections.collect { |c| c.id }).member? instance[:collection]
-              collections << Collection.find(instance[:collection])
-            end            
-
-          elsif instance[:sample] && instance[:container]
-
-            if @query
-
-              error instance, "Unimplemented: take item from sample ispec with method query."
-
-            else
-
-              i = first_item instance
-              if i
-                instance[:item] = i.id
-                items << i
-              else
-                error instance, "Could not find an item associated with #{instance[:sample]}."
-              end
-
-            end
-
-          elsif instance[:sample] && ! instance[:container]
-            error instance, "Could not take an item associated with #{instance[:sample]} because no container was specified."
-          elsif instance[:sample_type] 
-            error instance, "Unimplemented: take item from sample_type and container ispec."
-
-          elsif instance[:container]
-
-            container_items = ObjectType.find(instance[:container].as_container_id).items
-
-            if container_items.length > 0
-              items << container_items[0]
-            else 
-              error instance, "Could not find any items whose container type is #{instances[:container]}"
-            end
-
-          elsif # any item meets the specification
-            error instance, "Unimplemented: take item from empty ispec."
-          end
-            
-        end
-
+    # The Sample object associated with the ispec
+    def sample ispec
+      if ispec[:sample] && ispec[:sample].class == String
+        Sample.find(ispec[:sample].as_sample_id)
+      else
+        raise "Could not find Sample object for #{ispec} because 'sample' was not a string"
       end
-
-      @protocol.take (items+collections), interactive: true,  method: "boxes", &block
-
-      self
-
     end
 
-    # Release all selected inventory.
-    # @return [Op] Returns itself. Can be chained.
-    def release &block
-
-      ispecs = get_ispec_io
-
-      items = []
-
-      ispecs.each do |ispec|
-
-        if ispec[:is_part]
-
-          ispec[:instantiation].each do |instance|
-
-            if instance[:collection]
-              c = Item.find(instance[:collection]) 
-              items << c unless items.member? c
-            end
-
-          end
-
-        else
-
-          ispec[:instantiation].each do |instance|
-
-            if instance[:item]
-              items << Item.find(instance[:item])
-            end
-
-          end
-
-        end
-
+    # The list of Sample objects associated with the ispec
+    def samples ispec
+      if ispec[:sample] && ispec[:sample].class == Array && ispec[:sample].conjoin { |s| s.class == String }
+        Sample.find(ispec[:sample].collect { |s| s.as_sample_id })
+      else
+        raise "Could not find Sample objects for #{ispec} because 'sample' was not an array of strings"        
       end
-
-      @protocol.release items, interactive: true,  method: "boxes", &block      
-
-      self
-
     end
 
-    # Produce all selected inventory.
-    # @return [Op] Can be chained.
-    def produce &block
+    # The container object associated with the ispec
+    def container ispec
+      if ispec[:container] && ispec[:container].class == String
+        ObjectType.find(ispec[:container].as_container_id)
+      else
+        raise "Could not find ObjectType (aka Container) object for #{ispec} because 'container' was not a string"
+      end
+    end
 
-      ispecs = get_ispec_io
+    # The first Item in the database consistent with the ispec
+    def first_item ispec
 
-      ispecs.each do |ispec|
+      i = (sample ispec).items.select { |i| i.object_type_id == (container ispec).id }
 
-        if ispec[:is_part]
+      if i.length > 0 
+        i.first
+      else
+        error ispec, "Could not find any items associated with this sample 'ispec[:sample]'."
+        nil
+      end
 
-          collections = []
+    end  
 
-          ispec[:instantiation].each do |instance| 
-            if instance[:collection]
-              c = Item.find(instance[:collection]) 
-              collections << c unless collections.member? c
-            end
-          end
+    # An array of the first Item in the database consistent with the list array of samples
+    # and the container specified in the ispec
+    def first_item_array ispec 
 
-          @protocol.produce collections
-
+      (samples ispec).collect do |s|
+        i = s.items.select { |i| i.object_type_id == (container ispec).id }
+        if i.length > 0 
+          i.first
         else
+          error ispec, "Could not find any items associated with sample 'ispec[:sample]'."
+          nil
+        end
+      end
 
-          ispec[:instantiation].each do |instance| 
-
-            if instance[:sample] && instance[:container]
-              s = sample instance
-              o = container instance
-              i = @protocol.produce( @protocol.new_sample s.name, of: s.sample_type.name, as: o.name )
-              instance[:item] = i.id
-            elsif instance[:container]
-              o = container instance
-              if o.handler == "collection"
-                d = o.default_dimensions
-                i = @protocol.produce( @protocol.new_collection o.name, d[0], d[1] )
-              else
-                i = @protocol.produce( @protocol.new_object o.name )
-              end
-              instance[:item] = i.id
-            else
-              error instance, "Unimplemented: produce item from ispec without sample and/or container."
-            end
-
-          end # instance.each
-
-        end # if/else
-
-      end # ispec.each
-
-      self
-
-    end # produce
+    end    
 
   end
 

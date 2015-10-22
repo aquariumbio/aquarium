@@ -39,23 +39,18 @@
 
       <div class='span3'>
         <label class="radio">
-          <input type="radio" name="scalarOrMatrix"
-                 ng-value="false" ng-model="ispec.is_matrix">
-          Single
+          <input type="radio" name="scalarOrVector"
+                 ng-value="false" ng-model="ispec.is_vector">
+          Scalar
         </label>
         <label class="radio">
-          <input type="radio" name="scalarOrMatrix"
-                 ng-value="true" ng-model="ispec.is_matrix" ng-click="dimensions()">
-          Matrix
+          <input type="radio" name="scalarOrVector"
+                 ng-value="true" ng-model="ispec.is_vector">
+          Vector
         </label>
       </div>      
 
       <div class='span6'>
-
-        <div ng-show="ispec.is_matrix">
-          <input class='input-mini' type="number" ng-model='ispec.rows'> x 
-          <input class='input-mini' type="number" ng-model='ispec.columns'>
-        </div>
 
         <div ng-show="ispec.shared">
           <label class='input'>
@@ -84,7 +79,11 @@
 
   <button ng-if="ex && oper.workflow == $root.workflow_id" class='btn btn-warning btn-mini' ng-click='$root.deletePart(ex,partType,ispec)'>
     Delete This {{partType}}
-  </button>               
+  </button> 
+
+  <button class='btn btn-mini' ng-click='$root.wireToOutput(oper,ispec)'>
+    Wire to Output
+  </button>
 
   </form>
 

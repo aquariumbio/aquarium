@@ -17,7 +17,7 @@
 .operation-title-selected {
   font-weight: bold;
   cursor: pointer;
-  font-size: 12pt;
+  font-size: 11pt;
   fill: #bb0000;  
 }
 
@@ -28,7 +28,7 @@
 .part-selected {
   cursor: pointer;
   font-weight: bold;
-  font-size: 12pt;
+  font-size: 11pt;
   fill: #bb0000;
 }
 
@@ -42,6 +42,11 @@
 .operation-port-selected {
   cursor: pointer; 
   r: 6;  
+}
+
+.operation-port-live {
+  fill: red;
+  r:6 ;
 }
 
 .workflow-connection {

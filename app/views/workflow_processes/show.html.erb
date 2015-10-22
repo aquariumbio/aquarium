@@ -2,6 +2,17 @@
     <%= link_to @workflow_process.workflow.name, @workflow_process.workflow %>
     <%= @workflow_process.state_hash[:debug] ? "[DEBUG]" : "" %></h1>
 
+<a class='btn btn-mini' href="rerun?id=<%= @workflow_process.id%>">
+  Rerun
+</a>
+
+<a class='btn btn-mini btn-warning' href="rerun?id=<%= @workflow_process.id%>&debug=true">
+  Rerun in debug mode
+</a>
+
+<br />
+<br />
+
 <% @workflow_process.operation_containers.each do |oc| %>
 
   <% if oc[:jid] %>

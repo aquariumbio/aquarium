@@ -43,6 +43,33 @@ class WorkflowProcessesController < ApplicationController
 
   end
 
+  def rerun
+
+    Rails.logger.info "Rerunning process #{params[:id]}"
+
+    @wp = WorkflowProcess.find(params[:id])
+    @workflow = @wp.workflow
+
+    @threads = @wp.threads.collect { |t|
+      WorkflowThread.create t.spec, t.workflow_id
+    }
+
+    if params[:debug].class == String
+      debug = ( params[:debug] == "true" ? true : false )
+    else
+      debug = params[:debug]
+    end
+
+    @workflow_process = WorkflowProcess.create @workflow, @threads, debug
+
+    Thread.new do
+      @workflow_process.launch
+    end
+
+    redirect_to workflow_process_url(@workflow_process)
+
+  end
+
   def debug
 
     @wp.launch

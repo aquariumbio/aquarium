@@ -52,6 +52,24 @@
       }
     }    
 
+    $scope.$root.selectOperation = function(op) {
+      
+      if ( $scope.$root.output_selected ) {
+
+        op.inputs.push(jQuery.extend(true, {}, $scope.$root.selection));
+
+        $scope.workflow.specification.io.push ( { 
+          to: [ op.id, $scope.$root.selection.name ],
+          from: [ $scope.$root.current_op.id, $scope.$root.selection.name ]
+        });
+        $scope.clearSelection();
+
+      }
+
+      $scope.$root.selection = op;
+
+    }
+
     $scope.$root.mouseUpForDrag = function() {
       $scope.dragging = null;
     }    
@@ -92,6 +110,11 @@
         }
         $scope.$root.selection = null;
       }
+    }
+
+    $scope.$root.wireToOutput = function(oper,ispec) {
+      oper.outputs.push(jQuery.extend(true, {}, ispec));
+      $scope.$root.selection = oper.outputs[oper.outputs.length-1];
     }
 
     $scope.$root.deleteException = function(op,ex) {
