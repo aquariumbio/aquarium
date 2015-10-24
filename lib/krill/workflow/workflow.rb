@@ -9,8 +9,9 @@ module Krill
   class Op
 
     # @private
-    def initialize spec, protocol
+    def initialize spec, protocol, jid
 
+      @jid = jid
       @protocol = protocol
       @spec = spec
       @parts = []
@@ -264,7 +265,7 @@ module Krill
     # @example Put this at the beginning of your main method.
     #   o = op input
     def op spec
-      Op.new spec, self
+      Op.new spec, self, jid
     end
 
   end

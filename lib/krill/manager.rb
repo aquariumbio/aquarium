@@ -100,7 +100,7 @@ module Krill
 
     end
 
-    def debug
+    def debugger
 
       begin
 
@@ -148,10 +148,10 @@ module Krill
 
     end    
 
-    def run
+    def run    
 
       if @protocol.debug
-        debug
+        debugger
       else
         start_thread
         wait 20 # This so that you wait until either the step is done or 20 seconds is up. 

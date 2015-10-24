@@ -12,28 +12,27 @@ module Krill
 
       ispecs.each do |ispec|
 
-        if ispec[:is_part]
+        ispec[:instantiation].each do |instance|
 
-          ispec[:instantiation].each do |instance|
+          if ispec[:is_part] && !ispec[:is_vector]
 
-            if instance[:collection]
-              c = Item.find(instance[:collection]) 
-              items << c unless items.member? c
-            end
+            items << Collection.find(instance[:collection_id]) 
 
-          end
+          elsif ispec[:is_part] && ispec[:is_vector]
 
-        else
+            items += Collection.find(instance[:collection_ids]) 
 
-          ispec[:instantiation].each do |instance|
+          elsif !ispec[:is_vector]
 
-            if instance[:item]
-              if instance[:item].class == Array
-                items = items + Item.find(instance[:item])
-              else
-                items << Item.find(instance[:item])
-              end
-            end
+            items << Item.find(instance[:item_id])
+
+          elsif ispec[:is_vector]
+
+            items += Item.find(instance[:item_ids])
+
+          else
+
+            raise "Cannot release #{instance}"
 
           end
 
@@ -41,7 +40,7 @@ module Krill
 
       end
 
-      @protocol.release items, interactive: true,  method: "boxes", &block      
+      @protocol.release items.uniq, interactive: true,  method: "boxes", &block      
 
       self
 

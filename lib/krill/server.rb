@@ -36,6 +36,7 @@ module Krill
 
               rescue Exception => e
 
+                puts "Exception sent to client: #{e.to_s}: #{e.backtrace[0,5]}"
                 client.puts( { response: "error", error: "Krill Server: #{command[:operation]} resulted in: #{e.to_s}: #{e.backtrace[0,5]}" }.to_json )
                 @managers.delete(jid)
 

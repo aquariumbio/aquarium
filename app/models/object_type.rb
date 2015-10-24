@@ -102,6 +102,10 @@ class ObjectType < ActiveRecord::Base
 
   end  
 
+  def to_s
+    "<a href='/object_types/#{self.id}' class='aquarium-item' id='#{self.id}'>#{self.id}</a>"
+  end
+
 end
 
 

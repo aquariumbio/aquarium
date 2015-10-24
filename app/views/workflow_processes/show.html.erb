@@ -97,10 +97,28 @@
 </pre -->
 
 <script>
+
   showhide();
+
   $(".json").each(function() {
     var j = $(this).html();
     $(this).empty();
     render_json($(this),JSON.parse(j));
   });
+
+  (function() {
+    if( window.localStorage )
+    {
+      if( !localStorage.getItem('firstLoad') )
+      {
+        setTimeout(function(){         
+          localStorage['firstLoad'] = true;
+          window.location.reload();
+        },1000);
+      }  
+      else
+        localStorage.removeItem('firstLoad');
+    }
+  })();
+
 </script>

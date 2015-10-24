@@ -15,10 +15,15 @@ module Krill
 
         ispec[:instantiation].each do |instance|
 
-          if ispec[:is_part]
+          if ispec[:is_part] && !ispec[:is_vector]
 
             c = take_collection_containing instance
             collections << c if c
+
+          elsif ispec[:is_part] && ispec[:is_vector]
+
+            c = take_collections_containing instance
+            collections = collections + c
 
           elsif instance[:item]
 
@@ -43,24 +48,26 @@ module Krill
             end
 
           elsif instance[:sample] && ! instance[:container]
+
             error instance, "Could not take an item associated with #{instance[:sample]} because no container was specified."
 
           elsif instance[:sample_type] && instance[:container]
+
             error instance, "Unimplemented: take item from sample_type and container ispec."
 
-          elsif instance[:container]
+          elsif instance[:container] && !ispec[:is_vector]
 
-            container_items = ObjectType.find(instance[:container].as_container_id).items
+            i = take_item_by_container instance
+            items << i if i
 
-            if container_items.length > 0
-              instance[:item] = container_items[0].id
-              items << container_items[0]
-            else 
-              error instance, "Could not find any items whose container type is #{instances[:container]}"
-            end
+          elsif instance[:container] && ispec[:is_vector]
+
+            error instance, "Cannot take a vector of items when only a container is specified: #{instance}"
 
           elsif # any item meets the specification
-            error instance, "Unimplemented: take item from empty ispec."
+
+            error instance, "Unimplemented: take item from empty ispec #{instance}"
+
           end
             
         end
@@ -72,7 +79,7 @@ module Krill
       raise "Ack! nil item requested: #{items}" if items.member? nil
       raise "Ack! nil collection requested: #{collections}" if collections.member? nil      
 
-      @protocol.take (items+collections), interactive: true,  method: "boxes", &block
+      @protocol.take (items+collections).uniq, interactive: true,  method: "boxes", &block
 
       self
 
@@ -80,49 +87,80 @@ module Krill
 
     private
 
-    def take_collection_containing instance
+    def take_item_by_container instance
 
-      ot = ObjectType.find(instance[:container].as_container_id)
+      container_items = ObjectType.find(instance[:container].as_container_id).items
 
-      unless ot.handler == "collection"
-        raise "in #{instance}, is_part = true but container #{instance[:container]} is not a collection" 
-      end
-
-      unless instance[:sample]
-        raise "no sample specified in #{instance}"
-      end
-
-      s = Sample.find(instance[:sample].as_sample_id)
-
-      unless s
-        raise "sample '#{s}' not found"
-      end
-
-      collections = Collection.containing s, ot
-
-      puts "found collections = #{collections} with length = '#{collections.length}'"
-
-      if collections.length > 0
-        c = collections.first
-        instance[:collection_id] = c.id
-        p = c.position s
-        if p
-          instance[:row] = p[:row] 
-          instance[:column] = p[:column]
-        else
-          error instance, "Could not determine row and column for #{instance[:sample]} in collection #{c.id}"
-        end
-        puts "found #{s.id} in collection #{c.id}"
-        c
-      else
-        error instance, "Could not find collection of type #{ot.name} containing sample '#{instance[:sample]}'"
+      if container_items.length > 0
+        instance[:item_id] = container_items[0].id
+        container_items[0]
+      else 
+        error instance, "Could not find any items whose container type is #{instances[:container]}"
         nil
       end
 
     end
 
+    def collection_helper container, sample
+
+      ot = ObjectType.find(container.as_container_id)
+      raise "container '#{container}' is not a collection" unless ot.handler == "collection"
+
+      s = Sample.find(sample.as_sample_id)
+      raise "sample '#{sample}' not found" unless s
+
+      collections = Collection.containing s, ot
+
+      if collections.length > 0
+        c = collections.first
+        [ c, c.position(s) ]
+      else
+        [ nil, nil ]
+      end
+
+    end
+
+    def take_collection_containing instance
+
+      c, p = collection_helper(instance[:container],instance[:sample])
+
+      instance[:collection_id] = c.id if c
+      instance.merge! p if p
+
+      error instance, "Could not find collection containing sample '#{instance[:sample]}'" unless c
+      error instance, "Could not determine row and column for #{instance[:sample]} in collection" unless !c || p
+
+      c
+
+    end
+
+    def take_collections_containing instance    
+
+      collections = []
+      instance[:collection_ids] = []
+      instance[:rows] = []
+      instance[:columns] = []
+
+      instance[:sample].each do |s|
+        c, p = collection_helper(instance[:container],s)
+        if c 
+          collections << c
+          instance[:collection_ids] << c.id
+        end
+        if p
+          instance[:rows] << p[:row] 
+          instance[:columns] << p[:column] 
+        end
+        error instance, "Could not find collection containing sample '#{instance[:sample]}'" unless c
+        error instance, "Could not determine row and column for #{instance[:sample]} in collection" unless !c || p
+      end
+
+      collections
+
+    end
+
     def take_collection_for instance
-      collections << Collection.find(instance[:collection])
+      Collection.find(instance[:collection])
     end
 
     def take_item_in instance

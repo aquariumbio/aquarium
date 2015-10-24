@@ -68,8 +68,8 @@ class Collection < Item
     i.apportion r,c
     i.quantity = 1
     i.inuse = 0
-    i.save
     i.location = "Bench"
+    i.save    
     i
 
   end

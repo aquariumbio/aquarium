@@ -3,6 +3,11 @@ module Krill
   # This module is used to extend hashes that represent inventory specifications in operations. 
   module ISpec
 
+    # A list of error messages, if any
+    def errors
+      self[:errors]
+    end
+
     # Returns true if the ispec refers to a vector of samples, items, parts, or containers
     def is_vector
       self[:is_vector]
@@ -12,6 +17,9 @@ module Krill
     # Returns nil if no sample id is associated with the {ISpec}.
     # @return [Fixnum] The sample id.
     def sample_id
+      if !self[:sample_id] && self[:sample]
+        self[:sample_id] = self[:sample].as_sample_id
+      end
       self[:sample_id]
     end
 
@@ -62,7 +70,8 @@ module Krill
 
     def items
       begin
-        @items ||= Item.find(self.item_ids)
+        a = self[:item_ids]
+        @items ||= Item.find(a).index_by(&:id).slice(*a).values
       rescue
         @items = []
       end
@@ -78,10 +87,11 @@ module Krill
 
     def samples
       if !self[:sample_ids]
-        self[:sample_ids] = self[:samples].collect { |s| s.as_sample_id }
+        self[:sample_ids] = self[:sample].collect { |s| s.as_sample_id }
       end      
       begin
-        @samples ||= Sample.find(self[:sample_ids])
+        a = self[:sample_ids]
+        @samples ||= Sample.find(a).index_by(&:id).slice(*a).values
       rescue
         @samples = []
       end
@@ -89,19 +99,62 @@ module Krill
     end    
 
     def container
-      @container ||= ObjectType.find(self.container_id)
+      if !self[:container_id]
+        self[:container_id] = self[:container].as_container_id
+      end
+      @container ||= ObjectType.find(self[:container_id])
     end
 
     def collection
       @collection ||= Collection.find_by_id(self.collection_id)
     end    
 
+    def collections
+      begin
+        @collections = []
+        self[:collection_ids].each do |cid|
+          @collections << Collection.find(cid)
+        end
+      rescue
+        @collections = []
+      end
+      @collections
+    end    
+
+    def rows
+      self[:rows]
+    end
+
+    def columns
+      self[:columns]
+    end
+
     def associate slot    
 
-      self[:collection] = slot.collection.id
-      self[:row] = slot.row
-      self[:col] = slot.col
-      slot.sample = self[:sample]
+      if self[:sample].class == String
+
+        self[:collection_id] = slot.collection.id
+        self[:row] = slot.row
+        self[:column] = slot.column
+        slot.sample = self[:sample].as_sample_id
+
+      elsif self[:sample].class == Array
+
+        self[:collection_ids] = []
+        self[:rows] = []
+        self[:columns] = []        
+
+        s = slot
+
+        self[:sample].each do |samp|
+          self[:collection_ids] << s.collection.id
+          self[:rows] << s.row
+          self[:columns] << s.column
+          s.sample = samp.as_sample_id
+          s = s.next
+        end
+
+      end
 
     end    
 

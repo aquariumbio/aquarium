@@ -15,7 +15,7 @@ end
 class String
 
   def as_sample_id
-    self.split(":")[0]
+    self.split(":")[0].to_i
   end
 
   def as_container_id
