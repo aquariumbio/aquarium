@@ -2,8 +2,7 @@
 
 ## Prerequisites
  - Be familiar with selecting and launching workflows with the workflow GUI.
- - Have a text editor and at least cursory Ruby knowledge.
- - Be able to read English.
+ - Have a [text editor][text editor] and at least cursory Ruby knowledge.
  - Be always using Chrome.
 
 ## Starting a New Workflow
@@ -51,4 +50,5 @@ link to WorkflowProtocolAPI.md
  - How's my definition of "thread"?
  - Is that a bug that we have to define the sample for both inputs?
 
+[text editor]: http://www.sublimetext.com/
 [protocols]: https://github.com/klavinslab/aquarium/blob/master/doc/Krill.md#authoring-protocols-for-aquarium "Authoring Protocols for Aquarium"
