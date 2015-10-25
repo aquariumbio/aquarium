@@ -1,7 +1,7 @@
 Let’s begin by looking at the JSON that that describes the workflow below:
 ![Fragment Construction Workflow](images/JSON/workflow_fragment_construction.jpeg)
 ##Workflow JSON 
-The JSON below describes a workflow by listing its constituent operations and their locations in the workflow editor along with the timing information associated with each of them. These workflows are stored in the **workflow** table.
+The JSON below describes this workflow by listing its constituent operations, their locations in the workflow editor and  the timing information associated with each operation. These workflows are stored in the **workflow table**.
 ```json
 {
 
@@ -28,16 +28,19 @@ The JSON below describes a workflow by listing its constituent operations and th
 }
 
 ```
-The ‘id’ key-value pair in the JSON above refers to an individual operation. A workflow is comprised of several operation strung together in a logical manner. The ‘id’ field is a pointer to the operations table which contains more information about the operation in question. For e.g. the PCR operation above has the id 1.
+The ‘id’ key-value pair in the JSON above refers to an individual operation. 
+A workflow is comprised of several operations strung together in a logical manner. 
+The ‘id’ field is a pointer to the **operations table**. 
+
+For e.g. the PCR operation above has the id 1.
 
 ![Fragment Construction Workflow](images/JSON/operation_pcr.png)
 
-The specification for this operation is also made via the same workflow editor in the following manner
+The specification for this operation is also made via the same workflow editor:
 
 ![Fragment Construction Workflow](images/JSON/operation_pcr_input_fwd.png)
 ##Operation JSON
-The JSON corresponding this id number in the operations table is as given below
-The skeletal structure of the JSON is as follows
+The skeletal structure of the JSON corresponding for the operation shown above (id=1) is as given below
 ```json
 {
 	"inputs": […..],
@@ -53,7 +56,8 @@ The skeletal structure of the JSON is as follows
 ```
 Let’s go through these parts one by one
 
-The inputs array lists properties associated with each input such as default sample_type and container. An entry of the input array associated with this specific operation is given below:
+---
+The inputs array lists properties associated with each input such as default **sample_type** and **container**. An entry of the input array associated with this specific operation is given below:
 ```json
 {
 		"name": "fwd",
@@ -65,7 +69,13 @@ The inputs array lists properties associated with each input such as default sam
 			"container": "207: Primer Aliquot"}]
 }
 ```
-The strings “1: Primer" and "207: Primer Aliquot" are references to other entities within the Aquarium system. The string “1: Primer" is a reference to the sample_types table, specifically the sample_type with the id 1. The "207: Primer Aliquot" string is a reference to the object_types table.
+The strings **“1: Primer" and "207: Primer Aliquot"** are references to other entities within the Aquarium system. 
+
+The string **“1: Primer"** is a reference to the **sample_types table**, specifically the sample_type with the id 1. 
+
+The **"207: Primer Aliquot"** string is a reference to the **object_types** table.
+
+---
 The outputs array is similar in nature and reflects detailed properties related to the outputs associated with the operation. An entry from the output array associated with this operation is given below:
 ```json
 {
