@@ -28,6 +28,11 @@ The JSON below describes a workflow by listing its constituent operations and th
 }
 
 ```
+![Fragment Construction Workflow](images/JSON/operation_pcr.png)
+
+The specification for this operation is also made via the same workflow editor in the following manner
+
+![Fragment Construction Workflow](images/JSON/operation_pcr_input_fwd.png)
 ##Operation JSON
 The JSON corresponding this id number in the operations table is as given below
 The skeletal structure of the JSON is as follows
