@@ -28,6 +28,8 @@ The JSON below describes a workflow by listing its constituent operations and th
 }
 
 ```
+The ‘id’ key-value pair in the JSON above refers to an individual operation. A workflow is comprised of several operation strung together in a logical manner. The ‘id’ field is a pointer to the operations table which contains more information about the operation in question. For e.g. the PCR operation above has the id 1.
+
 ![Fragment Construction Workflow](images/JSON/operation_pcr.png)
 
 The specification for this operation is also made via the same workflow editor in the following manner
