@@ -11,7 +11,7 @@ The Diagram above shows the relationship between all the models in the Aquarium 
 <h2>Terms</h2>
 
 - **Item**
-  - The physical item that exists in the lab. For an Item **i**: 
+  - The physical, individual instance item that exists in the lab. For an Item **i**: 
     - **i**.id: Identification number for that particular item. Every item in the lab has an associated ID number that can be used to find
     information about that particular item.
     - **i**.location: String representation of where the item is located within the lab.
@@ -25,12 +25,12 @@ The Diagram above shows the relationship between all the models in the Aquarium 
   	- **i**.mark_as_deleted: Use this method to delete the item. This way, old logs that have used this item can still have a reference to it.
 
 - **Container / ObjectType**
-  - This is the object type of the item. For an ObjectType **o**:
+  - This is the object type of the item. This specifies what the item is, or in what container/form it is in. For example, an object type can be "1 L Bottle" or "Primer Aliquot". For an ObjectType **o**:
     - **o**.name: Returns name of the object type.
     - **o**.handler: returns the classifier for the item's object type. Aquarium uses this to categorize object types with the same classifier as "Collections".
 
 - **Sample**
-  - A specific sample. For a Sample **s**:
+  - A specific sample (See SampleType for the relationship between sample, sample type, and item). For a Sample **s**:
     - **s**.id: Identification number for the given sample.
     - **s**.name: Name of sample.
     - **s**.sample_type_id: Sample type ID of the given sample.
@@ -39,7 +39,7 @@ The Diagram above shows the relationship between all the models in the Aquarium 
     - **s**.make_item_object_type_name: Returns an item associated with the sample and in the object type described by object_type_name. The location is handled by the location wizard.
 
 - **SampleType**
-  - Defines a class of samples that all have the same basic properties. For a SampleType **st**:
+  - Defines a class of samples that all have the same basic properties. For example, "Primer" or "Yeast Strain" can both be sample types, and there can be many different kinds of Primers with different sequences, where each of these are individual samples. There can also be multiple items of this same sample (having same sequence, name, etc.) either in with the same object type, or in different object types. For a SampleType **st**:
     - **st**.name: Name of the sample type.
     - **st**.fieldnname: Name of the nth field (n=1,2....8).
     - **st**.fieldntype: Type of the nth field ("number", "string", "url", or "sample"). See Sample object to see how to use these fields.
@@ -76,3 +76,4 @@ Here is an example of the page you encounter after clicking on "Fragments" on th
 (images/references/SampleSpec.png)
 
 At the top, the SampleType, Sample ID and Sample Name are shown. On the left side, there is a list of all the ObjectTypes (or Containers) that can be associated with this Sample. The number next to the ObjectType represents the number of Items of the given Sample that exist in that specific ObjectType. The three columns in the middle show the Item ID, Item Location, and Item Data. 
+
