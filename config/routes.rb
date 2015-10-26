@@ -23,6 +23,7 @@ Bioturk::Application.routes.draw do
   get 'sample_list',                 to: 'operations#samples'
 
   get 'workflow_processes/rerun',    to: 'workflow_processes#rerun'
+  get 'workflow_processes/step',    to: 'workflow_processes#step'
   resources :workflow_processes, only: [ :index, :show, :new, :create ]
 
   resources :workflow_threads, only: [ :create, :index, :destroy ]

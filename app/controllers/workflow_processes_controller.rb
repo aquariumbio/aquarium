@@ -101,4 +101,11 @@ class WorkflowProcessesController < ApplicationController
 
   end
 
+  def step
+
+    WorkflowProcess.find(params[:id]).step
+    redirect_to workflow_process_url(@wp)
+
+  end
+
 end
