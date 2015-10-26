@@ -1,4 +1,4 @@
-<h1>References</h1>
+<h1>Reference</h1>
 
 
 <h2>Relationship Diagram</h2>
