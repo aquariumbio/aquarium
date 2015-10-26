@@ -16,7 +16,7 @@ module Krill
 
           if ispec[:is_part] && !ispec[:is_vector]
 
-            items << Collection.find(instance[:collection_id]) 
+            items << Collection.find(instance[:collection_id]) if instance[:collection_id]
 
           elsif ispec[:is_part] && ispec[:is_vector]
 
@@ -24,7 +24,7 @@ module Krill
 
           elsif !ispec[:is_vector]
 
-            items << Item.find(instance[:item_id])
+            items << Item.find(instance[:item_id]) if instance[:item_id]
 
           elsif ispec[:is_vector]
 
