@@ -1,10 +1,9 @@
-<h1>References</h1>
-
-
 <h2>Relationship Diagram</h2>
 
 ![Image of RelationshipDiagram]
 (images/references/relationshipdiagram.png)
+
+The Diagram above shows the relationship between all the models in the Aquarium system. 
 
 <h2>Terms</h2>
 
@@ -62,10 +61,16 @@
 ![Image of ItemSearching]
 (images/references/SearchingItems.png)
 
+Once you click the inventory tab at the top, you can either click "Basic" to view various ObjectTypes within ObjectType categories, or choose from the following list of SampleTypes.
+
 ![Image of SampleSearching]
 (images/references/SearchSample.png)
 
+Here is an example of the page you encounter after clicking on "Fragments" on the drop down menu. The far left column shows you the Sample ID and the column next to that gives you the Sample name. You can click on the ID to see the Sample in detail.
+
 ![Image of ItemExample]
 (images/references/SampleSpec.png)
+
+At the top, the SampleType, Sample ID and Sample Name are shown. On the left side, there is a list of all the ObjectTypes (or Containers) that can be associated with this Sample. The number next to the ObjectType represents the number of Items of the given Sample that exist in that specific ObjectType. The three columns in the middle show the Item ID, Item Location, and Item Data. 
 
 <h2>Analogy for the model system in Aquarium</h2>
