@@ -1,12 +1,12 @@
-<h2>References</h2>
+<h1>References</h1>
 
 
-<h1>Relationship Diagram</h1>
+<h2>Relationship Diagram</h2>
 
 ![Image of RelationshipDiagram]
-(aquarium/doc/images/references/relationshipdiagram.png)
+(images/references/relationshipdiagram.png)
 
-<h1>Terms</h1>
+<h2>Terms</h2>
 
 - **Item**
   - The physical item that exists in the lab. For an Item **i**: 
@@ -57,16 +57,15 @@
     - c.num_samples: Returns the number of the non empty slots of the matrix.
     - c.non_empty_string: Returns a string representing the indices of the non empty elements in the collection. Example: can return "1,1 - 5,9", which means that the collection contains samples in those indices. The string representation starts at 1, not 0. 
 
-<h1>Terms Within Aquarium Web UI</h1>
+<h2>Terms Within Aquarium Web UI</h2>
 
 ![Image of ItemSearching]
-(aquarium/doc/images/references/SearchingItems.png)
+(images/references/SearchingItems.png)
 
 ![Image of SampleSearching]
-(aquarium/doc/images/references/SearchSample.png)
+(images/references/SearchSample.png)
 
 ![Image of ItemExample]
-(aquarium/doc/images/references/SampleSpec.png)
+(images/references/SampleSpec.png)
 
-<h1>Analogy for the model system in Aquarium</h1>
-
+<h2>Analogy for the model system in Aquarium</h2>
