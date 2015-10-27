@@ -1,7 +1,17 @@
 body {
   padding-top: 20px;
+  font-family:helvetica;
 }
 
 .doc-list li {
   margin-bottom: 10px;
+}
+
+pre code {
+  background: #fbfbff;
+  width: 100%;
+  display: block;
+  padding: 10px;
+  margin-left: 10px;
+  border-left: 2pt solid #aaaadd;
 }

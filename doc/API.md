@@ -205,33 +205,37 @@ TODO: Items can be deleted only by the user who owns the associated sample. It m
 ## Ruby
 
 ## Python 2.7
-    import urllib2
-    import json
 
-    url = 'http://54.68.9.194:82/api' #port 81 for production
-    data = {'login':'my-user-same',
-            'key':'my-secret-key'}
+```python
+import urllib2
+import json
 
-    req = urllib2.Request(url,json.dumps(data))
-    req.add_header("Content-Type","application/json")
+url = 'http://54.68.9.194:82/api' #port 81 for production
+data = {'login':'my-user-same',
+        'key':'my-secret-key'}
 
-    resp = urllib2.urlopen(req)
-    #read server's response into a python dict
-    rdata = json.loads(resp.read()) 
+req = urllib2.Request(url,json.dumps(data))
+req.add_header("Content-Type","application/json")
 
-    print rdata 
+resp = urllib2.urlopen(req)
+#read server's response into a python dict
+rdata = json.loads(resp.read()) 
+
+print rdata 
+```
 
 ## Javascript
 
 ## MATLAB
 
-
 ## Mathematica (v9 + )
 
-    URLFetch["54.68.9.194:82/api",
-      "Method" -> "POST",
-      "Body" -> "{
-      \"login\":\"my-user-name\",
-      \"key\":\"my-secret-key\"
-      }", "Headers" -> {"Content-Type" -> "application/json"}
-    ]
+```mathematica
+URLFetch["54.68.9.194:82/api",
+  "Method" -> "POST",
+  "Body" -> "{
+  \"login\":\"my-user-name\",
+  \"key\":\"my-secret-key\"
+  }", "Headers" -> {"Content-Type" -> "application/json"}
+]
+```
