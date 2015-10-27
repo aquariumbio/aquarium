@@ -1,0 +1,46 @@
+<html>
+
+  <style>
+      .markdown-body {
+          min-width: 200px;
+          max-width: 790px;
+          margin: 0 auto;
+          padding: 30px;
+      }
+  </style>
+
+  <head>
+    <meta charset="utf-8"></meta>
+    <link href="/assets/application.css" media="all" rel="stylesheet" type="text/css" />
+    <script src="/assets/application.js" type="text/javascript"></script> 
+    <script type='text/javascript' src='js/markdown-it.min.js'></script>
+    <script type='text/javascript' src='js/docs.js'></script>    
+    <link href="css/docs.css" media="all" rel="stylesheet" type="text/css" />  
+  </head>
+
+  <body>
+    <div class='container'>
+      <center><a href="index.html">Documentation Index</a></center>
+      <article class="markdown-body" id='main'>Loading...</article>
+    </div>
+  </body>
+
+  <script>
+
+    $(function() {
+
+      $.ajax(
+        {
+          url: "md/" + getUrlVars().doc + '.md',
+          async: false,
+          success: function (data) {
+            var md = window.markdownit();
+            document.getElementById('main').innerHTML = md.render(data);
+          }
+        });
+
+    });
+
+  </script>
+
+</html>

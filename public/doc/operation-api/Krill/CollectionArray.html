@@ -145,6 +145,28 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#num_slots-instance_method" title="#num_slots (instance method)">- (Object) <strong>num_slots</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#slot-instance_method" title="#slot (instance method)">- (Object) <strong>slot</strong>(c, row, col) </a>
     
 
@@ -168,6 +190,28 @@
   <span class="summary_signature">
     
       <a href="#slots-instance_method" title="#slots (instance method)">- (Object) <strong>slots</strong>(col = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#sucessor-instance_method" title="#sucessor (instance method)">- (Object) <strong>sucessor</strong>(slot) </a>
     
 
     
@@ -241,13 +285,13 @@
       <pre class="lines">
 
 
-63
-64
-65
-66</pre>
+68
+69
+70
+71</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'collection_array.rb', line 63</span>
+      <pre class="code"><span class="info file"># File 'collection_array.rb', line 68</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span>
   <span class='ivar'>@slot_list</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
@@ -266,7 +310,47 @@
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="slot-instance_method">
+  <h3 class="signature first" id="num_slots-instance_method">
+  
+    - (<tt>Object</tt>) <strong>num_slots</strong> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+73
+74
+75
+76
+77
+78
+79
+80</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'collection_array.rb', line 73</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_num_slots'>num_slots</span>
+  <span class='kw'>if</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>&gt;</span> <span class='int'>0</span>
+    <span class='id identifier rubyid_d'>d</span> <span class='op'>=</span> <span class='kw'>self</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_dimensions'>dimensions</span>
+    <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>*</span> <span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='op'>*</span> <span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
+  <span class='kw'>else</span>
+    <span class='int'>0</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="slot-instance_method">
   
     - (<tt>Object</tt>) <strong>slot</strong>(c, row, col) 
   
@@ -280,20 +364,20 @@
       <pre class="lines">
 
 
-105
-106
-107
-108
-109
-110
-111
-112
-113
-114
-115</pre>
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'collection_array.rb', line 105</span>
+      <pre class="code"><span class="info file"># File 'collection_array.rb', line 141</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_slot'>slot</span> <span class='id identifier rubyid_c'>c</span><span class='comma'>,</span> <span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='id identifier rubyid_col'>col</span>
   
@@ -302,7 +386,7 @@
   <span class='kw'>return</span> <span class='kw'>nil</span> <span class='kw'>if</span> <span class='id identifier rubyid_row'>row</span><span class='op'>&gt;</span><span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='id identifier rubyid_col'>col</span><span class='op'>&gt;</span><span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
   <span class='id identifier rubyid_n'>n</span> <span class='op'>=</span> <span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='op'>*</span><span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
   <span class='id identifier rubyid_index'>index</span> <span class='op'>=</span> <span class='id identifier rubyid_c'>c</span><span class='op'>*</span><span class='id identifier rubyid_n'>n</span> <span class='op'>+</span> <span class='id identifier rubyid_row'>row</span><span class='op'>*</span><span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span> <span class='op'>+</span> <span class='id identifier rubyid_col'>col</span>
-  <span class='ivar'>@slot_list</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='const'>Slot</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='kw'>self</span><span class='lbracket'>[</span><span class='id identifier rubyid_c'>c</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='id identifier rubyid_col'>col</span><span class='rparen'>)</span>
+  <span class='ivar'>@slot_list</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='const'>Slot</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='kw'>self</span><span class='comma'>,</span><span class='kw'>self</span><span class='lbracket'>[</span><span class='id identifier rubyid_c'>c</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='id identifier rubyid_col'>col</span><span class='rparen'>)</span>
   <span class='ivar'>@slot_list</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span>
 
 <span class='kw'>end</span></pre>
@@ -326,102 +410,19 @@
       <pre class="lines">
 
 
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-88
-89
-90
-91
-92
-93
-94
-95
-96
-97
-98
-99
-100
-101
-102
-103</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'collection_array.rb', line 68</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_slots'>slots</span> <span class='id identifier rubyid_col'>col</span><span class='op'>=</span><span class='kw'>nil</span>
-
-  <span class='kw'>if</span> <span class='id identifier rubyid_col'>col</span>
-
-    <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_col'>col</span> <span class='op'>&gt;=</span> <span class='int'>0</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_col'>col</span> <span class='op'>&lt;</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
-
-    <span class='id identifier rubyid_collection'>collection</span> <span class='op'>=</span> <span class='kw'>self</span><span class='lbracket'>[</span><span class='id identifier rubyid_col'>col</span><span class='rbracket'>]</span>
-    <span class='id identifier rubyid_d'>d</span> <span class='op'>=</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_dimensions'>dimensions</span>
-    <span class='id identifier rubyid_index'>index</span> <span class='op'>=</span> <span class='id identifier rubyid_col'>col</span> <span class='op'>*</span> <span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='op'>*</span> <span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
-
-    <span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_times'>times</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_r'>r</span><span class='op'>|</span>
-      <span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_times'>times</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span>
-        <span class='ivar'>@slot_list</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='const'>Slot</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='comma'>,</span> <span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_c'>c</span><span class='rparen'>)</span>
-        <span class='id identifier rubyid_index'>index</span> <span class='op'>+=</span> <span class='int'>1</span>
-      <span class='kw'>end</span>
-    <span class='kw'>end</span>
-
-  <span class='kw'>else</span> <span class='comment'># loop through all collections
-</span>
-    <span class='id identifier rubyid_index'>index</span> <span class='op'>=</span> <span class='int'>0</span>
-
-    <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_collection'>collection</span><span class='op'>|</span>
-      <span class='id identifier rubyid_d'>d</span> <span class='op'>=</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_dimensions'>dimensions</span>
-      <span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_times'>times</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_r'>r</span><span class='op'>|</span>
-        <span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_times'>times</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span>
-          <span class='ivar'>@slot_list</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='const'>Slot</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_collection'>collection</span><span class='comma'>,</span> <span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_c'>c</span><span class='rparen'>)</span>
-          <span class='id identifier rubyid_index'>index</span> <span class='op'>+=</span> <span class='int'>1</span>
-        <span class='kw'>end</span>
-      <span class='kw'>end</span>
-    <span class='kw'>end</span>
-
-  <span class='kw'>end</span>
-
-  <span class='ivar'>@slot_list</span>
-
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="table-instance_method">
-  
-    - (<tt>Object</tt>) <strong>table</strong>(c, specs) 
-  
-
-  
-
-  
-</h3><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
 117
 118
 119
@@ -444,29 +445,178 @@
 136
 137
 138
-139
-140
-141
-142
-143
-144
-145
-146
-147
-148
-149
-150
-151
-152
+139</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'collection_array.rb', line 104</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_slots'>slots</span> <span class='id identifier rubyid_col'>col</span><span class='op'>=</span><span class='kw'>nil</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_col'>col</span>
+
+    <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_col'>col</span> <span class='op'>&gt;=</span> <span class='int'>0</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_col'>col</span> <span class='op'>&lt;</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
+
+    <span class='id identifier rubyid_collection'>collection</span> <span class='op'>=</span> <span class='kw'>self</span><span class='lbracket'>[</span><span class='id identifier rubyid_col'>col</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_d'>d</span> <span class='op'>=</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_dimensions'>dimensions</span>
+    <span class='id identifier rubyid_index'>index</span> <span class='op'>=</span> <span class='id identifier rubyid_col'>col</span> <span class='op'>*</span> <span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='op'>*</span> <span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
+
+    <span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_times'>times</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_r'>r</span><span class='op'>|</span>
+      <span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_times'>times</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span>
+        <span class='ivar'>@slot_list</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='const'>Slot</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='kw'>self</span><span class='comma'>,</span><span class='id identifier rubyid_collection'>collection</span><span class='comma'>,</span> <span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_c'>c</span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_index'>index</span> <span class='op'>+=</span> <span class='int'>1</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+
+  <span class='kw'>else</span> <span class='comment'># loop through all collections
+</span>
+    <span class='id identifier rubyid_index'>index</span> <span class='op'>=</span> <span class='int'>0</span>
+
+    <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_collection'>collection</span><span class='op'>|</span>
+      <span class='id identifier rubyid_d'>d</span> <span class='op'>=</span> <span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_dimensions'>dimensions</span>
+      <span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_times'>times</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_r'>r</span><span class='op'>|</span>
+        <span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_times'>times</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span>
+          <span class='ivar'>@slot_list</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='const'>Slot</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='kw'>self</span><span class='comma'>,</span><span class='id identifier rubyid_collection'>collection</span><span class='comma'>,</span> <span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_c'>c</span><span class='rparen'>)</span>
+          <span class='id identifier rubyid_index'>index</span> <span class='op'>+=</span> <span class='int'>1</span>
+        <span class='kw'>end</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+
+  <span class='kw'>end</span>
+
+  <span class='ivar'>@slot_list</span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="sucessor-instance_method">
+  
+    - (<tt>Object</tt>) <strong>sucessor</strong>(slot) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'collection_array.rb', line 82</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_sucessor'>sucessor</span> <span class='id identifier rubyid_slot'>slot</span>
+
+  <span class='id identifier rubyid_i'>i</span> <span class='op'>=</span> <span class='ivar'>@slot_list</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span> <span class='id identifier rubyid_slot'>slot</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_i'>i</span> <span class='op'>&amp;&amp;</span> <span class='ivar'>@slot_list</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='op'>+</span><span class='int'>1</span><span class='rbracket'>]</span>
+    <span class='ivar'>@slot_list</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='op'>+</span><span class='int'>1</span><span class='rbracket'>]</span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_i'>i</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_slot_list'>slot_list</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='op'>+</span><span class='int'>1</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_d'>d</span> <span class='op'>=</span> <span class='id identifier rubyid_slot'>slot</span><span class='period'>.</span><span class='id identifier rubyid_collection'>collection</span><span class='period'>.</span><span class='id identifier rubyid_dimensions'>dimensions</span>
+    <span class='id identifier rubyid_c'>c</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='id identifier rubyid_slot'>slot</span><span class='period'>.</span><span class='id identifier rubyid_collection'>collection</span><span class='rparen'>)</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_slot'>slot</span><span class='lbracket'>[</span><span class='symbol'>:column</span><span class='rbracket'>]</span><span class='op'>+</span><span class='int'>1</span> <span class='op'>&lt;</span> <span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
+      <span class='ivar'>@slot_list</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='op'>+</span><span class='int'>1</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='const'>Slot</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='kw'>self</span><span class='comma'>,</span><span class='id identifier rubyid_slot'>slot</span><span class='period'>.</span><span class='id identifier rubyid_collection'>collection</span><span class='comma'>,</span><span class='id identifier rubyid_slot'>slot</span><span class='period'>.</span><span class='id identifier rubyid_row'>row</span><span class='comma'>,</span><span class='id identifier rubyid_slot'>slot</span><span class='period'>.</span><span class='id identifier rubyid_column'>column</span><span class='op'>+</span><span class='int'>1</span><span class='rparen'>)</span>
+    <span class='kw'>elsif</span> <span class='id identifier rubyid_slot'>slot</span><span class='lbracket'>[</span><span class='symbol'>:row</span><span class='rbracket'>]</span><span class='op'>+</span><span class='int'>1</span> <span class='op'>&lt;</span> <span class='id identifier rubyid_d'>d</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span>
+      <span class='ivar'>@slot_list</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='op'>+</span><span class='int'>1</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='const'>Slot</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='kw'>self</span><span class='comma'>,</span><span class='id identifier rubyid_slot'>slot</span><span class='period'>.</span><span class='id identifier rubyid_collection'>collection</span><span class='comma'>,</span><span class='id identifier rubyid_slot'>slot</span><span class='lbracket'>[</span><span class='symbol'>:row</span><span class='rbracket'>]</span><span class='op'>+</span><span class='int'>1</span><span class='comma'>,</span><span class='int'>0</span><span class='rparen'>)</span>         
+    <span class='kw'>elsif</span> <span class='id identifier rubyid_c'>c</span><span class='op'>+</span><span class='int'>1</span> <span class='op'>&lt;</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
+      <span class='ivar'>@slot_list</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='op'>+</span><span class='int'>1</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='const'>Slot</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='kw'>self</span><span class='comma'>,</span><span class='kw'>self</span><span class='lbracket'>[</span><span class='id identifier rubyid_c'>c</span><span class='op'>+</span><span class='int'>1</span><span class='rbracket'>]</span><span class='comma'>,</span><span class='int'>0</span><span class='comma'>,</span><span class='int'>0</span><span class='rparen'>)</span>         
+    <span class='kw'>else</span>
+      <span class='kw'>nil</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="table-instance_method">
+  
+    - (<tt>Object</tt>) <strong>table</strong>(c, specs) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
 153
 154
 155
 156
 157
-158</pre>
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'collection_array.rb', line 117</span>
+      <pre class="code"><span class="info file"># File 'collection_array.rb', line 153</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_table'>table</span> <span class='id identifier rubyid_c'>c</span><span class='comma'>,</span> <span class='id identifier rubyid_specs'>specs</span>
 
@@ -520,7 +670,7 @@
 </div>
 
     <div id="footer">
-  Generated on Tue Sep 15 14:19:54 2015 by
+  Generated on Mon Oct 26 21:29:20 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-2.0.0).
 </div>

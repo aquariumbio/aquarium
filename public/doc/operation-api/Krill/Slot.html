@@ -143,35 +143,6 @@ empty or nonempty.</p>
       <li class="public ">
   <span class="summary_signature">
     
-      <a href="#col-instance_method" title="#col (instance method)">- (Object) <strong>col</strong> </a>
-    
-
-    
-  </span>
-  
-  
-  
-    
-      <span class="note title readonly">readonly</span>
-    
-    
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>Returns the value of attribute col.</p>
-</div></span>
-  
-</li>
-
-    
-      <li class="public ">
-  <span class="summary_signature">
-    
       <a href="#collection-instance_method" title="#collection (instance method)">- (Object) <strong>collection</strong> </a>
     
 
@@ -193,6 +164,35 @@ empty or nonempty.</p>
   
     <span class="summary_desc"><div class='inline'>
 <p>Returns the value of attribute collection.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#column-instance_method" title="#column (instance method)">- (Object) <strong>column</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute column.</p>
 </div></span>
   
 </li>
@@ -287,6 +287,28 @@ empty or nonempty.</p>
     <span class="summary_desc"><div class='inline'>
 <p>Returns true if and only if the slot is empty.</p>
 </div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#next-instance_method" title="#next (instance method)">- (Object) <strong>next</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
   
 </li>
 
@@ -397,50 +419,7 @@ empty or nonempty.</p>
       
       <span id=""></span>
       <div class="method_details first">
-  <h3 class="signature first" id="col-instance_method">
-  
-    - (<tt>Object</tt>) <strong>col</strong>  <span class="extras">(readonly)</span>
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Returns the value of attribute col</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-19
-20
-21</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'collection_array.rb', line 19</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_col'>col</span>
-  <span class='ivar'>@col</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      
-      <span id=""></span>
-      <div class="method_details ">
-  <h3 class="signature " id="collection-instance_method">
+  <h3 class="signature first" id="collection-instance_method">
   
     - (<tt>Object</tt>) <strong>collection</strong>  <span class="extras">(readonly)</span>
   
@@ -474,6 +453,49 @@ empty or nonempty.</p>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_collection'>collection</span>
   <span class='ivar'>@collection</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="column-instance_method">
+  
+    - (<tt>Object</tt>) <strong>column</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute column</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+19
+20
+21</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'collection_array.rb', line 19</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_column'>column</span>
+  <span class='ivar'>@column</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -612,15 +634,45 @@ empty or nonempty.</p>
       <pre class="lines">
 
 
-50
-51
-52</pre>
+55
+56
+57</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'collection_array.rb', line 50</span>
+      <pre class="code"><span class="info file"># File 'collection_array.rb', line 55</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_empty?'>empty?</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_sample'>sample</span> <span class='op'>&lt;</span> <span class='int'>0</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="next-instance_method">
+  
+    - (<tt>Object</tt>) <strong>next</strong> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+31
+32
+33</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'collection_array.rb', line 31</span>
+
+<span class='kw'>def</span> <span class='kw'>next</span>
+  <span class='ivar'>@parent</span><span class='period'>.</span><span class='id identifier rubyid_sucessor'>sucessor</span> <span class='kw'>self</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -666,12 +718,12 @@ empty or nonempty.</p>
       <pre class="lines">
 
 
-55
-56
-57</pre>
+60
+61
+62</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'collection_array.rb', line 55</span>
+      <pre class="code"><span class="info file"># File 'collection_array.rb', line 60</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_nonempty?'>nonempty?</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_sample'>sample</span> <span class='op'>&gt;=</span> <span class='int'>0</span>
@@ -720,15 +772,15 @@ empty or nonempty.</p>
       <pre class="lines">
 
 
-33
-34
-35</pre>
+38
+39
+40</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'collection_array.rb', line 33</span>
+      <pre class="code"><span class="info file"># File 'collection_array.rb', line 38</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sample'>sample</span>
-  <span class='ivar'>@collection</span><span class='period'>.</span><span class='id identifier rubyid_matrix'>matrix</span><span class='lbracket'>[</span><span class='ivar'>@row</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='ivar'>@col</span><span class='rbracket'>]</span>
+  <span class='ivar'>@collection</span><span class='period'>.</span><span class='id identifier rubyid_matrix'>matrix</span><span class='lbracket'>[</span><span class='ivar'>@row</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='ivar'>@column</span><span class='rbracket'>]</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -776,15 +828,15 @@ empty or nonempty.</p>
       <pre class="lines">
 
 
-45
-46
-47</pre>
+50
+51
+52</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'collection_array.rb', line 45</span>
+      <pre class="code"><span class="info file"># File 'collection_array.rb', line 50</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sample='>sample=</span> <span class='id identifier rubyid_s'>s</span>
-  <span class='ivar'>@collection</span><span class='period'>.</span><span class='id identifier rubyid_set'>set</span> <span class='ivar'>@row</span><span class='comma'>,</span> <span class='ivar'>@col</span><span class='comma'>,</span> <span class='id identifier rubyid_s'>s</span>
+  <span class='ivar'>@collection</span><span class='period'>.</span><span class='id identifier rubyid_set'>set</span> <span class='ivar'>@row</span><span class='comma'>,</span> <span class='ivar'>@column</span><span class='comma'>,</span> <span class='id identifier rubyid_s'>s</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -830,15 +882,15 @@ empty or nonempty.</p>
       <pre class="lines">
 
 
-39
-40
-41</pre>
+44
+45
+46</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'collection_array.rb', line 39</span>
+      <pre class="code"><span class="info file"># File 'collection_array.rb', line 44</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sample_id'>sample_id</span>
-  <span class='ivar'>@collection</span><span class='period'>.</span><span class='id identifier rubyid_matrix'>matrix</span><span class='lbracket'>[</span><span class='ivar'>@row</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='ivar'>@col</span><span class='rbracket'>]</span>
+  <span class='ivar'>@collection</span><span class='period'>.</span><span class='id identifier rubyid_matrix'>matrix</span><span class='lbracket'>[</span><span class='ivar'>@row</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='ivar'>@column</span><span class='rbracket'>]</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -850,7 +902,7 @@ empty or nonempty.</p>
 </div>
 
     <div id="footer">
-  Generated on Tue Sep 15 14:19:54 2015 by
+  Generated on Mon Oct 26 21:29:20 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-2.0.0).
 </div>

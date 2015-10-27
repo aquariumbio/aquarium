@@ -167,6 +167,7 @@ GEM
     underscore-rails (1.7.0)
     will_paginate (3.0.7)
     yaml_db (0.2.3)
+    yard (0.8.7.6)
 
 PLATFORMS
   ruby
@@ -201,3 +202,4 @@ DEPENDENCIES
   underscore-rails
   will_paginate
   yaml_db
+  yard
