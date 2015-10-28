@@ -26,12 +26,14 @@ class WorkflowThread < ActiveRecord::Base
     spec.each do |ispec| 
       if ispec[:sample]
         if ispec[:sample].class == String
-          sid = ispec[:sample].as_sample_id
-        else
-          sid = ispec[:sample]
+          wa = WorkflowAssociation.new thread_id: t.id, sample_id: ispec[:sample].as_sample_id
+          wa.save
+        elsif ispec[:sample].class == Array
+          ispec[:sample].each do |s|
+            wa = WorkflowAssociation.new thread_id: t.id, sample_id: s.as_sample_id
+            wa.save
+          end
         end
-        wa = WorkflowAssociation.new thread_id: t.id, sample_id: sid
-        wa.save
       elsif ispec[:item]
         wa = WorkflowAssociation.new thread_id: t.id, item_id: ispec[:item]
         wa.save
@@ -43,20 +45,45 @@ class WorkflowThread < ActiveRecord::Base
   end
 
   def parts except
-    (spec.reject { |p| p[:sample] && p[:sample].as_sample_id == except}).collect do |ispec|
 
-      if ispec[:sample]
-        {
-          name: ispec[:name],
-          sample: Sample.find(ispec[:sample].as_sample_id).for_folder
-        }
+    samples = []
+
+    (spec.select { |p| p[:sample] }).collect do |ispec|
+      if ispec[:sample].class == Array
+        (0...ispec[:sample].length-1).collect do |i|
+          if ispec[:sample][i].as_sample_id != except.to_i
+            samples << {
+              name: "#{ispec[:name]}[#{i}]",
+              sample: Sample.find(ispec[:sample][i].as_sample_id).for_folder
+            }
+          end
+        end
       else
-        {
-          name: ispec[:name],
-          value: ispec[:value]
-        }
+        if ispec[:sample].as_sample_id != except.to_i
+          samples << {
+            name: ispec[:name],
+            sample: Sample.find(ispec[:sample].as_sample_id).for_folder
+          }
+        end
       end
     end
+
+    params = (spec.select { |p| !p[:type] && p[:value] }).collect do |ispec|
+      {
+        name: ispec[:name],
+        value: ispec[:value]
+      }
+    end 
+
+    data = (spec.select { |p| p[:type] }).collect do |ispec|
+      {
+        name: ispec[:name],
+        value: ispec[:value]
+      }
+    end 
+
+    { samples: samples, params: params, data: data }
+
   end
 
 end

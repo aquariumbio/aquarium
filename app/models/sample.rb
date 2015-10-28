@@ -1,5 +1,7 @@
 class Sample < ActiveRecord::Base
 
+  include ActionView::Helpers::DateHelper
+
   attr_accessible :field1, :field2, :field3, :field4, :field5, :field7, :field6, :field8, :name, :user_id, :project, :sample_type_id, :user_id, :description
   belongs_to :sample_type
   belongs_to :user
@@ -257,7 +259,7 @@ class Sample < ActiveRecord::Base
     self.workflow_associations.collect { |wa| puts wa.inspect; wa.workflow_thread }
   end
 
-  def for_folder
+  def for_folder_aux
     s = as_json
     s[:sample_type] = { name: sample_type.name }  
     s[:fields] = ((1..8).select { |i| [ "number", "string", "url" ].member? sample_type["field#{i}type".to_sym] }).collect { |i|
@@ -268,5 +270,28 @@ class Sample < ActiveRecord::Base
     }
     s
   end
+
+  def for_folder 
+
+    s = self.for_folder_aux
+
+    s[:threads] = self.workflow_associations
+      .select { |wa| wa.thread }
+      .collect { |wa|
+        { 
+          id: wa.thread.id,
+          workflow: {
+            id: wa.thread.workflow.id,
+            name: wa.thread.workflow.name
+          },
+          role: wa.role,
+          process_id: wa.thread.workflow_process ? wa.thread.workflow_process.id : nil,
+          updated_at: wa.thread.workflow_process ? time_ago_in_words(wa.thread.workflow_process.updated_at) : nil
+        } 
+      }
+
+    s
+
+  end  
 
 end

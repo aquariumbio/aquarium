@@ -4,7 +4,7 @@
   try {
     w = angular.module('folders'); 
   } catch (e) {
-    w = angular.module('folders', []); 
+    w = angular.module('folders', ['puElasticInput']); 
   } 
 
   w.controller('foldersCtrl', [ '$scope','railsfolder','focus', function ($scope,railsfolder,focus) {
@@ -13,7 +13,7 @@
       $scope.folders = data.folders;
       $scope.folders[0].open = true;
       $scope.current_folder = $scope.folders[0];
-      $scope.current_folder.samples = [];
+      $scope.contents($scope.current_folder);
     });
 
     $.ajax({
@@ -23,18 +23,6 @@
         source: samples
       });
     });
-
-    $scope.width = {
-      chooser: 6,
-      id: 60,
-      name: 120,
-      role: 120,
-      fields: 120,
-      created: 30,
-      updated: 30,
-      status: 30,
-      blank: 100
-    };
 
     $scope.unsave = function(sample) {
       sample.unsaved = true;
@@ -53,14 +41,6 @@
       } else {
         return false;
       }
-    }
-
-    $scope.get_current_thread_parts = function(sample) {
-      if ( !sample.current_thread.parts ) {
-        railsfolder.thread_parts(sample.id,sample.current_thread.id,function(data) {
-          sample.current_thread.parts = data.parts;
-        });
-      } 
     }
 
     $scope.expandSample = function(sample) {
@@ -90,11 +70,50 @@
 
     $scope.setCurrentFolder = function(f) {
       $scope.current_folder = f;
-      $scope.samples(f);
+      $scope.contents(f);
     }
+
+    $scope.openSample = function(s) {
+      s.open = true;
+    }
+
+    $scope.closeSample = function(s) {
+      s.open = false;
+    }    
+
+    $scope.includeThread = function(s,t) {
+
+      // Return false if t is a thread that s a part of. Could add thread_id to 
+      // samples being returned (in addition to role). Then I would just check
+      // if sample.in_thread_id = t.id
+
+      return s.open;
+
+    }
+
+    $scope.get_thread_parts = function(sample,thread) {
+      if ( !thread.parts ) {
+        railsfolder.thread_parts(sample.id,thread.id,function(data) {
+          thread.parts = data.parts;
+        });
+      }
+    }
+
+    $scope.openThread = function(s,t) {
+      t.open = true;
+      $scope.get_thread_parts(s,t);
+    }
+
+    $scope.closeThread = function(t) {
+      t.open = false;
+    }      
 
     $scope.openFolder = function(f) {
       f.open = true;
+    }
+
+    $scope.openWorkflow = function(workflow) {
+      window.location = '/workflows/' + workflow.id;
     }
 
     $scope.closeFolder = function(f) {
@@ -142,12 +161,11 @@
       });
     }
  
-    $scope.samples = function(f) {
-      // Return a list of samples (and their associated threads) contained in the folder f
-      if ( ! f.samples ) {
+    $scope.contents = function(f) {
+      if ( ! f.samples || ! f.workflows ) {
         railsfolder.samples(f,function(data) {
-          console.log(data)
           f.samples = data.samples;
+          f.workflows = data.workflows;          
         });
       }
     }

@@ -11,9 +11,8 @@ body {
 <div ng-app="folders">
 
   <%= render partial: 'folder_template' %>
+
   <%= render partial: 'sample_template' %>
-  <%= render partial: 'thread_template' %>
-  <%= render partial: 'part_template' %>  
 
   <div ng-controller='foldersCtrl as fc'>
 
@@ -31,7 +30,7 @@ body {
              ng-blur="renameFolder(current_folder)">
 
       <a href='#' id="delete-folder"
-         ng-if="current_folder != folders[0]"
+         ng-if="current_folder.id>=0"
          class='btn pull-right folder-btn'
          ng-click="deleteFolder(current_folder)">Delete Folder</a>
 
@@ -65,28 +64,31 @@ body {
 
       </div>
 
-      <br>
-
       <div id="folder-current" class='span10'>
+
+        <div class="folder-contents-heading" ng-show="current_folder.samples.length > 0">
+
+          <div class="folder-contents-row">
+            <div class="folder-contents-cell" ng-style="{ width: width.chooser }"></div>
+            <div class="folder-contents-cell" ng-style="{ width: width.id }">Id</div>
+            <div class="folder-contents-cell" ng-style="{ width: width.name }">Name</div>
+            <div class="folder-contents-cell" ng-style="{ width: width.role }">Workflow Thread</div>
+            <div class="folder-contents-cell" ng-style="{ width: width.fields }">Properties</div>
+            <div class="folder-contents-cell" ng-style="{ width: width.created }">Created at</div>
+            <div class="folder-contents-cell" ng-style="{ width: width.updated }">Updated at</div>
+            <div class="folder-contents-cell" ng-style="{ width: width.status }">Status</div>
+          </div>
+
+        </div>
+
+        <div ng-if="!current_folder.samples">Loading...</div>
 
         <div class="folder-contents" ng-style='style()' resize>
 
-          <div ng-repeat="sample in current_folder.samples" 
-               ng-include="'sampleView'"
+          <div ng-repeat="sample in current_folder.samples"
+               ng-include="'sample'"
                ng-init="indent=0">
           </div>
-
-          <div ng-repeat="workflow in current_folder.workflows">
-            <div class='folder-workflow' ng-click='openWorkflow(workflow)'>
-              <i class='icon-tasks'></i> {{workflow.name}}
-            </div>
-          </div>
-
-         <div ng-repeat="child in current_folder.children">
-            <div class='folder-folder' ng-click="setCurrentFolder(child)">
-              <i class='icon-folder-close'></i> {{child.name}}
-            </div>
-          </div>          
 
         </div>
 

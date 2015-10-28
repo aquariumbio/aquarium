@@ -1,0 +1,37 @@
+<script type="text/ng-template" id="threadView">
+
+  <div class='folder-thread'>
+
+    <!-- EXPANDER --------------------------------------------------------------------- -->
+    <div class='expander-container'>
+      <span ng-repeat="i in range(indent) track by $index">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>     
+      <span class="folder-expander" 
+            ng-if="!thread.open"
+            ng-click="openThread(sample,thread)">
+        &#9658;
+      </span>
+      <span class="folder-expander"
+            ng-if="thread.open"
+            ng-click="closeThread(thread)">
+        &#9660;
+      </span> 
+    </div>
+
+    <!-- DESCRIPTION ------------------------------------------------------------------- -->
+    <div class='thread-description'>
+      As <b>{{thread.role}}</b> in {{thread.workflow.name}}
+      <span ng-if="thread.process_id">
+        (Process {{thread.process_id}}, updated {{thread.updated_at}} ago)
+      </span>
+    </div>
+
+  </div>
+
+  <!-- SAMPLES ------------------------------------------------------------------------- -->
+  <div ng-if="thread.open"
+       ng-repeat="s in thread.parts.samples"
+       ng-include="'sampleView'"
+       ng-init="role = s.name; sample = s.sample; indent=indent+1">
+  </div>  
+
+</script>

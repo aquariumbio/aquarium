@@ -1,3 +1,4 @@
+
 class Folder < ActiveRecord::Base
 
   attr_accessible :name, :user_id, :parent_id
@@ -23,14 +24,18 @@ class Folder < ActiveRecord::Base
   end
 
   def self.tree user
+
     folders = Folder.where(user_id: user.id, parent_id: nil)
-    { 
-      id: -1,
-      name: "My Folders",
-      children: folders.collect do |f|
-        f.tree_aux
-      end
-    }
+
+    if folders.length == 0 
+      top = Folder.new({name: user.name, user_id: user.id, parent_id: nil})
+      top.save
+    else
+      top = folders[0]
+    end
+
+    top.tree_aux
+
   end
 
   def children
@@ -45,3 +50,4 @@ class Folder < ActiveRecord::Base
   end
 
 end
+

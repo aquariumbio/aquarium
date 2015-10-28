@@ -11,15 +11,25 @@ class WorkflowAssociation < ActiveRecord::Base
 
   def role 
 
+    name = "unknown"
+
     begin
 
-      (self.workflow_thread.spec.find { |part|
-        part[:sample].split(':')[0].to_i == sample_id
-      })[:name]
+      self.workflow_thread.spec.each do |part|
+        if part[:sample].class == String
+          name = part[:name] if part[:sample].as_sample_id == sample_id
+        elsif part[:sample].class == Array
+          (0..part[:sample].length-1).each do |i|
+            name = "#{part[:name]}[#{i}]" if part[:sample][i].as_sample_id == sample_id
+          end
+        end
+      end
 
     rescue Exception => e
-      "unknown #{e}"
+      name = "error" #{e}"
     end
+
+    name
 
   end
 

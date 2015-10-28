@@ -11,23 +11,10 @@ class FoldersController < ApplicationController
 
   end
 
-  def full sample
 
-    s = sample.for_folder
+  def workflow_info wf
 
-    s[:threads] = sample.workflow_associations.collect { |wa|
-      { 
-        id: wa.thread.id,
-        workflow: {
-          id: wa.thread.workflow.id,
-          name: wa.thread.workflow.name
-        },
-        role: wa.role,
-        process_id: wa.thread.workflow_process ? wa.thread.workflow_process.id : nil
-      } 
-    }
-
-    s
+    wf
 
   end
 
@@ -68,22 +55,26 @@ class FoldersController < ApplicationController
 
         when 'contents'
 
-          # samples = Sample.includes(:folder_contents).where("folder_contents.folder_id = ?",params[:folder_id])
-
           samples = FolderContent
             .includes(sample: {workflow_associations: { workflow_thread: :workflow } })
-            .where(folder_id: params[:folder_id])
+            .where("folder_id = ? AND sample_id is not null", params[:folder_id] )
             .reverse
-            .collect { |fc| full fc.sample }
+            .collect { |fc| fc.sample.for_folder }
 
-          { samples: samples }
+          workflows = FolderContent
+            .includes(:workflow)
+            .where("folder_id = ? AND workflow_id is not null", params[:folder_id] )
+            .reverse
+            .collect { |fc| workflow_info fc.workflow }
+
+          { samples: samples, workflows: workflows }
 
         when 'add_sample'
 
           s = Sample.includes(:sample_type,workflow_associations: { workflow_thread: :workflow }).find(params[:sample_id])
           FolderContent.new(folder_id: params[:folder_id], sample_id: s.id).save
 
-          { sample: full(s) }
+          { sample: s.for_folder }
 
         when 'thread_parts'
 

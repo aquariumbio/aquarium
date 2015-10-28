@@ -4,7 +4,7 @@
   try {
     w = angular.module('folders'); 
   } catch (e) {
-    w = angular.module('folders', []); 
+    w = angular.module('folders', ['puElasticInput']); 
   } 
 
   w.factory('focus', [ '$timeout', '$window', function($timeout, $window) {
