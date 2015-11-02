@@ -7,18 +7,16 @@
       <nav>
         <ul class="nav pull-right">
 
-          <% unless Rails.env == 'production' %>
-            <li id="fat-menu" class="dropdown">
-              <a href="#" class="dropdown-toggle"
-              data-toggle="dropdown">Workflow<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><%= link_to "Index", workflows_path %></li>
-                <li><%= link_to "Processes", workflow_processes_path %></li>
-                <li><%= link_to "Operations", operations_path %></li>
-                <li><%= link_to "Folders", folders_path %></li>
-              </ul>
-            </li>
-          <% end %>
+          <li id="fat-menu" class="dropdown">
+            <a href="#" class="dropdown-toggle"
+            data-toggle="dropdown">Workflow<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><%= link_to "Index", workflows_path %></li>
+              <li><%= link_to "Processes", workflow_processes_path %></li>
+              <li><%= link_to "Operations", operations_path %></li>
+              <li><%= link_to "Folders", folders_path %></li>
+            </ul>
+          </li>
 
           <li id="fat-menu" class="dropdown">
             <a href="#" class="dropdown-toggle"
