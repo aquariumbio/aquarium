@@ -3,7 +3,7 @@ class SampleType < ActiveRecord::Base
   attr_accessible :description, :field1name, :field1type, :field2name, :field2type, :field3name, 
                                 :field3type, :field4name, :field4type, :field5name, :field5type, 
                                 :field6name, :field6type, :field7name, :field7type, :field8name, :field8type,  
-                                :name
+                                :name, :datatype
 
   has_many :samples
   has_many :object_types
@@ -12,6 +12,10 @@ class SampleType < ActiveRecord::Base
   validates :description, presence: true
 
   validate :proper_choices
+
+  def datatype_hash
+    JSON.parse(self.datatype,symbolize_names: true)
+  end
 
   def fieldname i
     n = "field#{i}name".to_sym

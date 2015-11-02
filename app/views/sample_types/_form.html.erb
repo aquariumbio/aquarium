@@ -24,6 +24,14 @@
    </div>
   </div>
 
+  <div class='row-fluid'>
+    <div class='span1'></div>
+    <div class='span11'>
+      <label>Datatype (Note: This UI will be replaced something nicer soon)</label>
+      <%= f.text_area :datatype, rows: "5", :style => "width:90%;" %>
+    </div>
+  </div>
+
   <hr />
 
     <% types = [['not used','not used'],['string','string'],['number','number'],['url','url']] 
@@ -69,8 +77,8 @@
              </select>
            </div>
           <% if i==1 %>
-           <div class='span4'><b>Notes:</b> All samples automatically
-           get a Name, Project, and Description field.</div>
+           <div class='span4'><b>Notes:</b> Static fields are deprecated for operation
+           based workflows. Use the datatype json field instead. </div>
            <div class='span1'></div>
           <% else %>
            <div class='span5'></div>

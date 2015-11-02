@@ -1,24 +1,31 @@
 <script type="text/ng-template" id="sampleView">
 
-  <div class='folder-sample'>
+  <div class='row'>
 
     <!-- EXPANDER --------------------------------------------------------------------- -->
     <div class='expander-container'>
-      <span ng-repeat="i in range(indent) track by $index">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>     
-      <span class="folder-expander" 
+      <div ng-repeat="i in range(indent) track by $index" class='spacer'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+      <!-- span space="n" / -->
+      <div class="expander" 
             ng-if="!sample.open"
             ng-click="openSample(sample)">
         &#9658;
-      </span>
-      <span class="folder-expander"
+      </div>
+      <div class="expander"
             ng-if="sample.open"
             ng-click="closeSample(sample)">
         &#9660;
-      </span> 
+      </div> 
     </div>
 
     <!-- ID --------------------------------------------------------------------------- -->
-    <div class='id'>{{sample.id}}<span ng-if="role"> {{role}}</span>:</div>
+    <div ng-class="sample == selection ? 'id selected' : 'id'" 
+      ng-if="sample.id" ng-click="select(sample)">
+      {{sample.id}}<span ng-if="role"> {{role}}</span>:</div>
+
+    <div class='id' ng-if="!sample.id" ng-click="select(sample)">
+      ???:
+    </div>    
 
     <!-- NAME ------------------------------------------------------------------------- -->
     <div class='name'>
@@ -28,21 +35,62 @@
              ng-keypress="unsave(sample)"
              pu-elastic-input
              pu-elastic-input-maxwidth="none"/>
-      <span class='sample-type'>({{sample.sample_type.name}})</span>
+      <div class='sample-type'>({{sample.sample_type.name}})</div>
     </div>
 
     <!-- BUTTONS ---------------------------------------------------------------------- -->
-    <div class='info pull-right'>
-      <button class='btn btn-mini btn-warning' ng-if='sample.unsaved'>Save</button>
+    <div class='info pull-right'>   
+
+      <a href='#'
+         class='btn btn-mini btn-warning row-button' 
+         ng-if='sample.unsaved && sample.id'
+         ng-click="save(sample)">
+        {{ sample.saving ? "Saving..." : "Save" }}
+      </a>
+
+      <a href='#'
+         class='btn btn-mini btn-success row-button' 
+         ng-if='sample.unsaved && sample.id'
+         ng-click="revert(sample)">
+        Cancel
+      </a>     
+
+      <a href='#'
+         class='btn btn-mini btn-warning row-button' 
+         ng-if='sample.unsaved && !sample.id'
+         ng-click="save_new(sample)">
+        Save
+      </a>     
+
     </div>
 
   </div>
 
-  <!-- DATA --------------------------------------------------------------------------- -->
-  <div ng-if="sample.open" class='sample-data'>
-    <span ng-repeat="i in range(indent+1) track by $index">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 
-    <span>SAMPLE DATA HERE</span>
+  <!-- ERRORS ------------------------------------------------------------------------- -->
+  <div class='error row' ng-if="sample.error">
+    <span ng-repeat="i in range(indent+1) track by $index" class='spacer'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <span class='error-message'>{{sample.error}}</span>
   </div>
+
+
+  <!-- DATA --------------------------------------------------------------------------- -->
+  <div ng-repeat="(key,value) in sample.data" ng-if="sample.open" class='data row'>
+    <span ng-repeat="i in range(indent+1) track by $index" class='spacer'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>   
+    <span class='name'>{{key}}:</span> 
+    <input type='text' 
+           class='editable' 
+           ng-model='sample.data[key]'
+           ng-keypress="unsave(sample)"
+           pu-elastic-input
+           pu-elastic-input-minwidth="50px"
+           pu-elastic-input-maxwidth="none"/>
+  </div>
+
+  <!-- NEW THREADS -------------------------------------------------------------------- -->
+  <div ng-repeat='thread in sample.new_threads'
+       ng-include="'newThreadView'"
+       ng-init="indent=indent+1">
+  </div>  
 
   <!-- THREADS ------------------------------------------------------------------------ -->
   <div ng-repeat='thread in sample.threads'

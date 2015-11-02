@@ -1,4 +1,4 @@
-<script type="text/ng-template" id="threadView">
+<script type="text/ng-template" id="newThreadView">
 
   <div class='row'>
 
@@ -19,19 +19,13 @@
 
     <!-- DESCRIPTION ------------------------------------------------------------------- -->
     <div class='thread-description'>
-      As <b>{{thread.role}}</b> in {{thread.workflow.name}}
-      <span ng-if="thread.process_id">
-        (Process {{thread.process_id}}, updated {{thread.updated_at}} ago)
-      </span>
-    </div>
+      {{thread}}
 
   </div>
 
   <!-- SAMPLES ------------------------------------------------------------------------- -->
   <div ng-if="thread.open"
-       ng-repeat="s in thread.parts.samples"
-       ng-include="'sampleView'"
-       ng-init="role = s.name; sample = s.sample; indent=indent+1">
+    PARTS HERE
   </div>  
 
 </script>

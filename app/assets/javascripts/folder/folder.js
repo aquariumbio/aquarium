@@ -16,6 +16,14 @@
       $scope.contents($scope.current_folder);
     });
 
+    railsfolder.sample_types(function(data) {
+      $scope.sample_types = data;
+    });
+
+    railsfolder.workflows(function(data) {
+      $scope.workflows = data;
+    });    
+
     $.ajax({
       url: '/sample_list'
     }).done(function(samples) {
@@ -24,9 +32,47 @@
       });
     });
 
+    $scope.select = function(thing) {
+      $scope.selection = thing;
+    }
+
+    $scope.save = function(sample) {
+      sample.saving = true;
+      railsfolder.save_sample(sample,function(data) {
+        if ( data.error ) {
+          sample.error = data.error;
+        } else {
+          sample.unsaved = false;
+        }
+        sample.saving = false;
+      });
+    }
+
+    $scope.save_new = function(sample) {
+      sample.saving = true;
+      railsfolder.new_sample($scope.current_folder,sample,function(data) {
+        if ( data.error ) {
+          sample.error = data.error;
+        } else {
+          sample.unsaved = false;
+          sample.id = data.sample.id
+        }
+        sample.saving = false;
+      });
+    }    
+
     $scope.unsave = function(sample) {
       sample.unsaved = true;
       sample.selected = true;
+    }
+
+    $scope.revert = function(sample) {
+      railsfolder.get_sample(sample.id,function(data) {
+        sample.name = data.sample.name;
+        sample.data = data.sample.data;
+        sample.description = data.sample.description;
+        sample.unsaved = false;
+      });
     }
 
     $scope.save_enabled = function() {
@@ -68,6 +114,21 @@
       });
     }
 
+    $scope.newSample = function(sample_type) {
+      sample = { 
+        name: "New sample", 
+        data: {}, 
+        sample_type_id: sample_type.id, 
+        sample_type: { name: sample_type.name },
+        open: true,
+        unsaved: true
+      };
+      angular.forEach(sample_type.datatype,function(v,k) {
+        sample.data[k] = null;
+      });
+      $scope.current_folder.samples.unshift(sample);
+    }
+
     $scope.setCurrentFolder = function(f) {
       $scope.current_folder = f;
       $scope.contents(f);
@@ -75,20 +136,16 @@
 
     $scope.openSample = function(s) {
       s.open = true;
+      $scope.selection = s;      
     }
 
     $scope.closeSample = function(s) {
       s.open = false;
+      $scope.selection = s;      
     }    
 
     $scope.includeThread = function(s,t) {
-
-      // Return false if t is a thread that s a part of. Could add thread_id to 
-      // samples being returned (in addition to role). Then I would just check
-      // if sample.in_thread_id = t.id
-
-      return s.open;
-
+      return s.containing_thread_id != t.id && s.open;
     }
 
     $scope.get_thread_parts = function(sample,thread) {

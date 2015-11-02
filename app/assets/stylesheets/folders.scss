@@ -1,53 +1,152 @@
-$row-height: 24px;
+$row-height: 20px;
+$editable-height: 20px;
+$row-margin: 3px;
 
-.expander-container {
-  display: inline-block;
-}
+$thick: 0pt;
+$oo: $thick dashed orange;
+$go: $thick dashed green;
+$bo: $thick dashed blue;
+$ro: $thick solid red;
+$po: $thick dashed pink;
 
-.folder-sample {
+.folder-contents {
 
-  height: $row-height;
+  position: relative;
 
-  .id {
-    font-weight: bold;
-    display: inline-block;
-    cursor: pointer;
+  .sample-repeater {
+    outline: $oo;
+    display: block;
   }
 
-  .name {
-    display: inline-block;
+  .row {
+
+    border-bottom: 1pt solid #eee;
+
+    outline: $go;
+
+    height: $row-height;
+
+    padding: 0;
+    margin: 0 0 $row-margin 0;
+
+    .row-button {
+      vertical-align: middle;
+      position: relative;
+      height: 18px;
+      margin-top: -2px;
+    }
+
+    .info {
+      outline: $bo;
+    }
+
+    .id {
+      height: $row-height; 
+      line-height: $row-height;      
+      font-weight: bold;
+      display: inline-block;
+      cursor: pointer;
+      outline: $bo;
+    }
+
+    .selected {
+      color: red;
+    }
+
+    .name {
+      height: $row-height;
+      line-height: $row-height;             
+      display: inline-block;
+      outline: $bo;  
+    }
+
+    .info {
+      height: $row-height; 
+      line-height: $row-height;            
+      display: inline-block;
+      padding-right: 20px;
+      outline: $bo;      
+    }
+
+    .sample-type {
+      height: $row-height; 
+      line-height: $row-height;            
+      color: #aaa;
+      display: inline-block;
+      outline: $bo;      
+    }
+
   }
 
-  .info {
-    display: inline-block;
-    padding-right: 20px;
+  .data {
   }
 
   .editable {
+    vertical-align: top;
+    height: $row-height;         
     display: inline-block;    
-    padding: 1px;
-    margin: 1px;
+    padding: 0;
+    margin: 0;
     border: none !important;
+    -webkit-appearance:none;
     -webkit-box-shadow: none !important;
     -moz-box-shadow: none !important;
     box-shadow: none !important;
     background: transparent;
+    outline: $ro;
   }
 
- .editable:focus {
+  .editable:focus {
+    height: $row-height;      
     color: #0000aa;
     outline: none;
+    display: inline-block;       
     border: none !important;
+    -webkit-appearance:none;
     -webkit-box-shadow: none !important;
     -moz-box-shadow: none !important;
     box-shadow: none !important;     
   }
 
-  .sample-type {
-    color: #aaa;
+  .expander-container {
+
+    height: $row-height;  
+    padding: 0 !important;
+    margin: 0 !important;  
+    display: inline-block;
+    outline: $po;
+
+    .expander {
+      height: $row-height;   
+      line-height: $row-height !important;     
+      cursor: pointer;
+      color: #444;
+      font-size: 8pt;
+      padding: 0 !important;
+      margin: 0 !important;  
+      display: inline-block;
+    } 
+
+    .spacer {
+      height: $row-height;   
+      line-height: $row-height !important;
+      display: inline-block; 
+    }
+
+  }  
+
+  .thread-description {
+    height: $row-height;      
+    display: inline-block;
+    width: 75%;
+  }
+
+  .error-message {
+    color: red;
   }
 
 }
+
 
 .folder-workflow {
   height: $row-height;
@@ -56,18 +155,8 @@ $row-height: 24px;
 .folder-folder {
   height: $row-height;
   cursor: pointer;
+  border-bottom: 1pt solid #eee;
 }
-
-.folder-thread {
-
-  .thread-description {
-    display: inline-block;
-    width: 75%;
-  }
-
-  height: $row-height;
-}
-
 .folder {
   width: 100%;
   cursor: pointer;   
@@ -75,7 +164,20 @@ $row-height: 24px;
 
 .folder-workflow {
   width: 100%;
-  cursor: pointer;   
+  cursor: pointer; 
+  border-bottom: 1pt solid #eee;  
+}
+
+.folder-sample-data {
+  width: 100%;
+  cursor: pointer; 
+  padding: 0;  
+  margin: 0;
+}
+
+.folder-sample-key {
+  margin: 0;
+  padding: 0;
 }
 
 .folder-noedit {
@@ -99,19 +201,7 @@ $row-height: 24px;
 
 .folder-ul-top {
   margin-left: 0px;
-}
-
-.folder-expander-container {
-  display: inline-block;
-  width: 10px;
-  /* outline: 1pt solid orange; */
-}  
-
-.folder-expander {
-  cursor: pointer;
-  color: #444;
-  font-size: 8pt;
-}
+} 
 
 .folder-expander-disabled {
   color: #ccc;

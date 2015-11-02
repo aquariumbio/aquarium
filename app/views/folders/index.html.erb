@@ -12,6 +12,7 @@ body {
 
   <%= render partial: 'folder_template' %>
   <%= render partial: 'sample_template' %>
+  <%= render partial: 'new_thread_template' %>  
   <%= render partial: 'thread_template' %>
   <%= render partial: 'part_template' %>  
 
@@ -40,11 +41,40 @@ body {
          ng-click="newFolder()"
          ng-disabled="current_folder.locked">New Folder</a>
 
-      <a href='#' class='btn pull-right folder-btn' ng-show="current_folder.id>=0">New Sample</a>
+      <div class="btn-group pull-right folder-btn" ng-show="current_folder.id>=0">
+        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+          New Sample
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li ng-repeat="st in sample_types" ng-click="newSample(st)">
+            <a href="#">{{st.name}}</a>
+          </li>
+        </ul>
+      </div>
 
-      <a href='#' class='btn pull-right folder-btn'
-                  ng-show="current_folder.id>=0" 
-                  ng-disabled="!save_enabled()">Save</a>
+      <div class="btn-group pull-right folder-btn" ng-show="selection">
+
+        <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+          New Task
+          <span class="caret"></span>
+        </a>
+
+        <ul class="dropdown-menu pull-right">
+          <li ng-repeat="w in workflows" 
+              class="dropdown-submenu" 
+              ng-if="w.form.outputs.length > 0 || w.form.inputs.length > 0">
+            <a tabindex="-1" href="#">{{w.name}}</a>
+            <ul class="dropdown-menu pull-left">
+              <li ng-repeat="o in w.form.inputs.concat(w.form.outputs)" 
+                  ng-click="newThread(s,w,o)">
+                <a tabindex="-1" href="#">{{o.description}} ({{o.name}})</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+      </div>      
 
       <div class='input-append pull-right folder-btn' ng-show="current_folder.id>=0">
         <input id="add-sample" type="text">
@@ -73,7 +103,8 @@ body {
 
           <div ng-repeat="sample in current_folder.samples" 
                ng-include="'sampleView'"
-               ng-init="indent=0">
+               ng-init="indent=0"
+               class='sample-repeater'>
           </div>
 
           <div ng-repeat="workflow in current_folder.workflows">

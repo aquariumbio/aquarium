@@ -5,12 +5,18 @@ class WorkflowsController < ApplicationController
   # GET /workflows
   # GET /workflows.json
   def index
+
     @workflows = Workflow.all
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @workflows }
+      format.json { render json: @workflows.collect { |wf| 
+          wf[:form] = wf.form
+          wf
+        }
+      }
     end
+
   end
 
   # GET /workflows/1

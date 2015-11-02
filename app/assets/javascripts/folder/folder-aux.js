@@ -28,6 +28,14 @@
     };
   });
 
+  w.directive('space', [ '$window', function($window) {
+    return {
+      restrict: 'A',
+      scope: { space: "=" },
+      template: '<span style="width: {{10*space}}" class="spacer"></span>'
+    }
+  }]);
+
   w.directive('resize', [ '$window', function ($window) {
     return function (scope, element) {
         var w = angular.element($window);

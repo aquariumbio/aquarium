@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151027164741) do
+ActiveRecord::Schema.define(:version => 20151029034310) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -189,6 +189,7 @@ ActiveRecord::Schema.define(:version => 20151027164741) do
     t.string   "field7type"
     t.string   "field8name"
     t.string   "field8type"
+    t.text     "datatype"
   end
 
   create_table "samples", :force => true do |t|
@@ -207,6 +208,7 @@ ActiveRecord::Schema.define(:version => 20151027164741) do
     t.string   "description"
     t.string   "field7"
     t.string   "field8"
+    t.text     "data"
   end
 
   create_table "takes", :force => true do |t|

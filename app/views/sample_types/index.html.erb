@@ -17,7 +17,7 @@
   <tr>
     <th>Name</th>
     <th>Description</th>
-    <th>Fields</th>
+    <th>Datatype/Fields</th>
     <th>Quantity</th>
     <th></th>
   </tr>
@@ -27,6 +27,8 @@
     <td><b><%= link_to sample_type.name, sample_type %></b></td>
     <td><%= sample_type.description %></td>
     <td>
+      <span><%= sample_type.datatype %></span>
+      <br>
       <% (1..8).each do |i| %>
         <% fn = "field#{i}name".to_sym
            ft = "field#{i}type".to_sym %>

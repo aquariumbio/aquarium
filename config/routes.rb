@@ -31,6 +31,7 @@ Bioturk::Application.routes.draw do
   resources :posts, only: [ :index, :create ]
   resources :wizards
 
+  post 'folders', to: 'folders#index'
   resources :folders, only: [ :index ]
 
   match "api", to: "api#main"

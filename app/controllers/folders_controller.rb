@@ -76,6 +76,49 @@ class FoldersController < ApplicationController
 
           { sample: s.for_folder }
 
+        when 'get_sample'
+
+          { sample: Sample.find(params[:sample_id]).for_folder }
+
+        when 'new_sample'
+
+          Rails.logger.info "params = #{params}"
+
+          sample = Sample.new({
+            sample_type_id: params[:sample][:sample_type_id],
+            project: Folder.find(params[:folder_id]).name,
+            user_id: current_user.id,
+            name: params[:sample][:name],
+            description: params[:sample][:description]
+            });
+
+          sample.data = params[:sample][:data].to_json
+          sample.save
+
+          if sample.errors.empty?
+            fc = FolderContent.new(folder_id: params[:folder_id], sample_id: sample.id)
+            fc.save
+            { sample: sample.for_folder }
+          else
+            { error: "Could not create sample: " + sample.errors.full_messages.join(', ') }
+          end
+
+        when 'save_sample'
+
+          Rails.logger.info "params = #{params}"          
+
+          sample = Sample.find(params[:id])
+          sample.name = params[:name]
+          sample.description = params[:description]
+          sample.data = params[:data].to_json
+          sample.save
+
+          if sample.errors.empty?
+            { sample: sample.for_folder }
+          else
+            { error: "Could not save sample: " + sample.errors.full_messages.join(', ') }
+          end
+
         when 'thread_parts'
 
           { parts: WorkflowThread.find(params[:thread_id]).parts(params[:sample_id]) }

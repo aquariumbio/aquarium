@@ -48,5 +48,6 @@ gem 'rails-patch-json-encode'
 gem 'oj'
 
 gem 'angularjs-rails'
+gem 'angular_rails_csrf'
 
 gem 'yard'

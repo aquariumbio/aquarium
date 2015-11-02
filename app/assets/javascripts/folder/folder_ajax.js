@@ -16,6 +16,13 @@
         });
     }
 
+    this.post = function(url,data,f) {
+      $http.post(url,data).
+        then(f, function(response) {
+          console.log("error: " + response);
+        });
+    }    
+
     this.index = function(then) {
       this.get('/folders.json',function(response) {
         then(response.data);
@@ -51,10 +58,38 @@
       });
     }
 
+    this.get_sample = function(sample_id,then) {
+      this.get('/folders.json?method=get_sample&sample_id='+sample_id,function(response) {
+        then(response.data);
+      });
+    }
+
     this.add_sample = function(sample_id,folder_id,then) {
-      console.log("here " + sample_id + ", " + folder_id);
       this.get('/folders.json?method=add_sample&sample_id='+sample_id+'&folder_id='+folder_id,function(response) {
-        console.log("here response = " + response);
+        then(response.data);
+      });
+    }   
+
+    this.new_sample = function(folder,sample,then)  {
+      this.post('/folders.json?method=new_sample',{ folder_id: folder.id, sample: sample },function(response) {
+        then(response.data);
+      });
+    }
+
+    this.save_sample = function(sample,then)  {
+      this.post('/folders.json?method=save_sample',sample,function(response) {
+        then(response.data);
+      });
+    }    
+
+    this.sample_types = function(then) {
+      this.get('/sample_types.json', function(response) {
+        then(response.data);
+      });
+    }
+
+    this.workflows = function(then) {
+      this.get('/workflows.json', function(response) {
         then(response.data);
       });
     }    

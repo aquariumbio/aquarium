@@ -54,7 +54,7 @@ class WorkflowThread < ActiveRecord::Base
           if ispec[:sample][i].as_sample_id != except.to_i
             samples << {
               name: "#{ispec[:name]}[#{i}]",
-              sample: Sample.find(ispec[:sample][i].as_sample_id).for_folder
+              sample: Sample.find(ispec[:sample][i].as_sample_id).for_folder(self.id)
             }
           end
         end
@@ -62,7 +62,7 @@ class WorkflowThread < ActiveRecord::Base
         if ispec[:sample].as_sample_id != except.to_i
           samples << {
             name: ispec[:name],
-            sample: Sample.find(ispec[:sample].as_sample_id).for_folder
+            sample: Sample.find(ispec[:sample].as_sample_id).for_folder(self.id)
           }
         end
       end

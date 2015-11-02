@@ -9,7 +9,7 @@ class SampleTypesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @sample_types }
+      format.json { render json: @sample_types.collect { |st| st[:datatype] = st.datatype_hash; st } }
     end
   end
 
@@ -42,10 +42,9 @@ class SampleTypesController < ApplicationController
 
   def build st, p
 
-    logger.info "p = #{p}"
-
     st.name = p[:name]
     st.description = p[:description]
+    st.datatype = p[:datatype]
 
     (1..8).each do |i|
       ft = "field#{i}type".to_sym

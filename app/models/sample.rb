@@ -259,21 +259,44 @@ class Sample < ActiveRecord::Base
     self.workflow_associations.collect { |wa| puts wa.inspect; wa.workflow_thread }
   end
 
+  def data_hash
+    JSON.parse(self.data,symbolize_names:true)
+  end
+
   def for_folder_aux
+
     s = as_json
+
     s[:sample_type] = { name: sample_type.name }  
+
     s[:fields] = ((1..8).select { |i| [ "number", "string", "url" ].member? sample_type["field#{i}type".to_sym] }).collect { |i|
       {
         name: sample_type["field#{i}name".to_sym],
         value: self["field#{i}".to_sym]
       }
     }
+
+    if self.data
+      s["data"] = self.data_hash
+    else # Migrate old sample fields to new sample json
+      o = {}
+      s[:fields].each do |f|
+        o[f[:name]] = f[:value]
+      end
+      s["data"] = o
+      self.data = o.to_json
+      self.save
+    end
+
     s
+
   end
 
-  def for_folder 
+  def for_folder containing_thread_id=nil
 
     s = self.for_folder_aux
+
+    s[:containing_thread_id] = containing_thread_id if containing_thread_id
 
     s[:threads] = self.workflow_associations
       .select { |wa| wa.thread }

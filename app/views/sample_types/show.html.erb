@@ -9,7 +9,11 @@
   Show all <%= link_to s, samples_path( sample_type_id: @sample_type.id )%>
 </h2>
 
-<h3>Fields</h3>
+<h3>Datatype (Used in Operation Based Workflows)</h3>
+
+<pre><%= @sample_type.datatype %></pre>
+
+<h3>Fields (Deprecated for Operation Based Workflows)</h3>
 
 <ul class='list'>
   <li><b>Description</b>: <%= @sample_type.description %></li>
