@@ -92,7 +92,7 @@
 
   });
 
-  w.directive("partName", function($compile) {
+  w.directive("partName", ['$compile', function($compile) {
 
     update_part_name = function($scope, $element) {
       var displayName = $scope.partName;
@@ -114,7 +114,7 @@
       }
     }
 
-  });  
+  }]);  
 
   w.directive("exception", function() {
     return {
