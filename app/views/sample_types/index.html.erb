@@ -20,6 +20,7 @@
     <th>Datatype/Fields</th>
     <th>Quantity</th>
     <th></th>
+    <th></th>
   </tr>
 
 <% @sample_types.each do |sample_type| %>
@@ -41,6 +42,9 @@
        s = pluralize n, sample_type.name %>
     <td><%= link_to s, samples_path( sample_type_id: sample_type.id )%></td>
     <td><%= link_to 'Edit', edit_sample_type_path(sample_type) %></td>
+    <td><%= link_to(sample_type, method: :delete, data: { confirm: "Are you sure you want to delete #{sample_type.name}?"}) do %>
+                 <i class='icon-remove'></i>
+               <% end %></td>    
   </tr>
 <% end %>
 
