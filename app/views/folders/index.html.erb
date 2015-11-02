@@ -66,9 +66,10 @@ body {
               ng-if="w.form.outputs.length > 0 || w.form.inputs.length > 0">
             <a tabindex="-1" href="#">{{w.name}}</a>
             <ul class="dropdown-menu pull-left">
-              <li ng-repeat="o in w.form.inputs.concat(w.form.outputs)" 
-                  ng-click="newThread(s,w,o)">
-                <a tabindex="-1" href="#">{{o.description}} ({{o.name}})</a>
+              <li ng-repeat="p in w.form.inputs.concat(w.form.outputs)">
+                <a tabindex="-1" href="#" ng-click="newThread(w,p)">
+                  {{p.description}} ({{p.name}})
+                </a>
               </li>
             </ul>
           </li>

@@ -156,6 +156,10 @@
       }
     }
 
+    $scope.newThread = function(workflow,part) {
+      console.log([$scope.selection,workflow,part]);
+    }
+
     $scope.openThread = function(s,t) {
       t.open = true;
       $scope.get_thread_parts(s,t);
