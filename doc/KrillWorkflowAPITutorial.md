@@ -43,10 +43,9 @@ name them carefully because these exact names are used in protocol code
 ### Creating Another Operation
 
 ## Editing Protocol Code
-link to WorkflowProtocolAPI.md
+### Protocol API
 
-## Questions
- - Who is the intended audience? The "expert" should only have to link up operations, while the "programmer" will need to add inputs/outputs and write protocol code.
+## Improvements to this article
  - How's my definition of "thread"?
  - Is that a bug that we have to define the sample for both inputs?
 
