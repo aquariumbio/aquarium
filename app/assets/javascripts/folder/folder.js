@@ -38,6 +38,7 @@
 
     $scope.save = function(sample) {
       sample.saving = true;
+      sample.error = null;
       railsfolder.save_sample(sample,function(data) {
         if ( data.error ) {
           sample.error = data.error;
@@ -48,9 +49,9 @@
       });
     }
 
-    $scope.save_new = function(sample) {
+    $scope.save_new = function(sample,role) {
       sample.saving = true;
-      railsfolder.new_sample($scope.current_folder,sample,function(data) {
+      railsfolder.new_sample($scope.current_folder,sample,role,function(data) {
         if ( data.error ) {
           sample.error = data.error;
         } else {
@@ -64,6 +65,7 @@
     $scope.unsave = function(sample) {
       sample.unsaved = true;
       sample.selected = true;
+      $scope.selection = sample;
     }
 
     $scope.revert = function(sample) {
@@ -114,8 +116,8 @@
       });
     }
 
-    $scope.newSample = function(sample_type) {
-      sample = { 
+    $scope.newSampleTemplate = function(sample_type) {
+      var sample = { 
         name: "New sample", 
         data: {}, 
         sample_type_id: sample_type.id, 
@@ -126,7 +128,11 @@
       angular.forEach(sample_type.datatype,function(v,k) {
         sample.data[k] = null;
       });
-      $scope.current_folder.samples.unshift(sample);
+      return sample;
+    }
+
+    $scope.newSample = function(sample_type) {
+      $scope.current_folder.samples.unshift($scope.newSampleTemplate(sample_type));
     }
 
     $scope.setCurrentFolder = function(f) {
@@ -156,8 +162,44 @@
       }
     }
 
-    $scope.newThread = function(workflow,part) {
-      console.log([$scope.selection,workflow,part]);
+    $scope.newThreadBuilder = function(workflow,part) {
+
+      if ( !$scope.selection.thread_builders ) {
+        $scope.selection.thread_builders = [];
+      }      
+
+      $scope.selection.thread_builders.push({
+        workflow: workflow, 
+        part: part, 
+        open: true
+      });
+
+      $scope.selection.open = true;
+
+    }
+
+    $scope.newSampleForThreadBuilder = function(part) {
+
+      if ( part.alternatives.length > 0 && part.alternatives[0].sample_type ) {
+
+        $.ajax({
+          url: '/sample_types/' + part.alternatives[0].sample_type.split(':')[0] + ".json"
+        }).done(function(sample_type) {
+          var s = $scope.newSampleTemplate(sample_type);
+          s.name = $scope.selection.name + "_"  + part.name;
+          part.new_sample = s;
+          $scope.$apply();
+        });
+
+      } else {
+        console.log("No alternatives to use to create new sample")
+      }
+
+    }
+
+    $scope.threadBuilderCancel = function(sample,builder) {
+      var i = sample.thread_builders.indexOf(builder);
+      sample.thread_builders.splice(i,1);
     }
 
     $scope.openThread = function(s,t) {

@@ -1,0 +1,62 @@
+<script type="text/ng-template" id="newThreadBuilderView">
+
+  <div class='row'>
+
+    <!-- EXPANDER ---------------------------------------------------------------------- -->
+    <div class='expander-container'>
+      <span ng-repeat="i in range(indent) track by $index">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>     
+      <span class="expander" 
+            ng-if="!builder.open"
+            ng-click="openThreadBuilder(sample,builder)">
+        &#9658;
+      </span>
+      <span class="expander"
+            ng-if="builder.open"
+            ng-click="closeThreadBuilder(thread)">
+        &#9660;
+      </span> 
+    </div>
+
+    <!-- DESCRIPTION ------------------------------------------------------------------- -->
+    <div class='thread-description'>
+      As <b>{{builder.part.name}}</b> in {{builder.workflow.name}} (unsaved)
+    </div>
+
+    <!-- BUTTONS ----------------------------------------------------------------------- -->
+    <div class='info pull-right'>
+      <a href="#" class='btn btn-mini btn-warning row-button'>Save</a>
+      <a href="#" class='btn btn-mini row-button' ng-click="threadBuilderCancel(sample,builder)">Cancel</a>
+    </div>
+
+  </div>
+
+  <!-- PARTS ------------------------------------------------------------------------- -->
+  <div ng-if="builder.open"
+       ng-repeat="part in builder.workflow.form.inputs"
+       >
+
+    <div ng-if="!part.new_sample && builder.part.name != part.name" class='row'>
+
+      <span ng-repeat="i in range(indent+1) track by $index">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+
+      <span><b>{{part.name}}:</b> </span>
+
+      <input class='editable' ng-model="part.sample_id" autocomplete part="part"></input>
+
+      <div class='info pull-right' ng-if="part.sample_id == null || part.sample_id == ''">
+        <a href="#" class='btn btn-mini btn-warning row-button' ng-click="newSampleForThreadBuilder(part)">New</a>
+      </div>
+
+    </div>
+
+    <div ng-if="part.new_sample"
+         ng-include="'sampleView'"
+         ng-init="role = part.name; sample = part.new_sample; indent=indent+1">
+
+    </div>  
+
+    </div>
+
+  </div>  
+
+</script>

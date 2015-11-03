@@ -32,7 +32,7 @@
       <input type='text' 
              class='editable' 
              ng-model='sample.name'
-             ng-keypress="unsave(sample)"
+             ng-keydown="unsave(sample)"
              pu-elastic-input
              pu-elastic-input-maxwidth="none"/>
       <div class='sample-type'>({{sample.sample_type.name}})</div>
@@ -58,7 +58,7 @@
       <a href='#'
          class='btn btn-mini btn-warning row-button' 
          ng-if='sample.unsaved && !sample.id'
-         ng-click="save_new(sample)">
+         ng-click="save_new(sample,role)">
         Save
       </a>     
 
@@ -87,8 +87,8 @@
   </div>
 
   <!-- NEW THREADS -------------------------------------------------------------------- -->
-  <div ng-repeat='thread in sample.new_threads'
-       ng-include="'newThreadView'"
+  <div ng-repeat='builder in sample.thread_builders'
+       ng-include="'newThreadBuilderView'"
        ng-init="indent=indent+1">
   </div>  
 

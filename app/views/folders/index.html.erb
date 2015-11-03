@@ -12,7 +12,7 @@ body {
 
   <%= render partial: 'folder_template' %>
   <%= render partial: 'sample_template' %>
-  <%= render partial: 'new_thread_template' %>  
+  <%= render partial: 'new_thread_builder_template' %>  
   <%= render partial: 'thread_template' %>
   <%= render partial: 'part_template' %>  
 
@@ -67,7 +67,7 @@ body {
             <a tabindex="-1" href="#">{{w.name}}</a>
             <ul class="dropdown-menu pull-left">
               <li ng-repeat="p in w.form.inputs.concat(w.form.outputs)">
-                <a tabindex="-1" href="#" ng-click="newThread(w,p)">
+                <a tabindex="-1" href="#" ng-click="newThreadBuilder(w,p)">
                   {{p.description}} ({{p.name}})
                 </a>
               </li>

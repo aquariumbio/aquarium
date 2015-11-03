@@ -96,8 +96,10 @@ class FoldersController < ApplicationController
           sample.save
 
           if sample.errors.empty?
-            fc = FolderContent.new(folder_id: params[:folder_id], sample_id: sample.id)
-            fc.save
+            unless params[:role]
+              fc = FolderContent.new(folder_id: params[:folder_id], sample_id: sample.id)
+              fc.save
+            end
             { sample: sample.for_folder }
           else
             { error: "Could not create sample: " + sample.errors.full_messages.join(', ') }

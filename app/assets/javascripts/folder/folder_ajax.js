@@ -70,8 +70,8 @@
       });
     }   
 
-    this.new_sample = function(folder,sample,then)  {
-      this.post('/folders.json?method=new_sample',{ folder_id: folder.id, sample: sample },function(response) {
+    this.new_sample = function(folder,sample,role,then)  {
+      this.post('/folders.json?method=new_sample',{ folder_id: folder.id, sample: sample, role: role },function(response) {
         then(response.data);
       });
     }

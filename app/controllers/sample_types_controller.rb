@@ -15,9 +15,10 @@ class SampleTypesController < ApplicationController
 
   def show
     @sample_type = SampleType.find(params[:id])
+    @sample_type[:datatype] = @sample_type.datatype_hash
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @sample }
+      format.json { render json: @sample_type }
     end
   end
 
