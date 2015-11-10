@@ -117,7 +117,7 @@ column
 
 ## Threads
 
-The input, output, data, and paramter vectors of non-shared components of a workflow are all indexed the same way, from 0 to one minus the number of threads in the operation. Another way to group the components is, thus, by thread. For example, suppose that an operation has an input named u, a paramter named p, and an output named y. Then you can use something like to the following code to iterate over all the threads.
+The input, output, data, and parameter vectors of non-shared components of a workflow are all indexed the same way, from 0 to one minus the number of threads in the operation. Another way to group the components is, thus, by thread. For example, suppose that an operation has an input named u, a paramter named p, and an output named y. Then you can use something like to the following code to iterate over all the threads.
 
 ```ruby
 show do 
