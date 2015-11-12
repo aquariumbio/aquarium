@@ -13,6 +13,9 @@ module ApiCreate
     when "job"
       create_job args
 
+    when "thread"
+        create_thread args
+
     else
       warn "Creating at #{args[:model]} not implemented"
 
@@ -78,6 +81,51 @@ module ApiCreate
       error "Could not create Sample: " + s.errors.full_messages.join(', ')        
     end
 
+  end
+
+  def create_thread args
+    #First check if the workflow specified is correct
+    wf = Workflow.find(args[:workflow_id])
+    return error "Workflow ID not found" unless wf
+
+    threads=args[:thread]
+    # Then for each thread,check two things
+    wf_form=wf.form
+    # First check if all the inputs are specified
+    expected_inputs=wf_form[:inputs].collect { |input_hash| input_hash[:name] }
+    threads.each { |thread|
+      submitted_inputs=thread.keys
+      expected_inputs.each { |expected_input|
+        raise "An input:\"#{expected_input}\" is missing the threads array" unless submitted_inputs.include?(expected_input)
+      }
+    }
+
+    # Then check if each input specified is correct: if the sample is a valid sample and if the sample_id of the sample is valid in this case
+    wf_form[:inputs].each { |wf_form_input|
+      if wf_form_input[:alternatives]
+        if wf_form_input[:alternatives][0][:sample_type]
+          wf_form_sample_type_id=wf_form_input[:alternatives][0][:sample_type].split(':')[0]
+          threads.each {|ip_thread|
+            ip_thread_sample_id=thread[ip_thread[:name]].split(':')[0]
+
+            # Checking if the specified sample is valid
+            ip_sample=Sample.find(ip_thread_sample_id)
+            raise "The specified sample:#{ip_thread[:name]} is incorrect" unless ip_sample
+
+            # Checking if the sample_type_id is correct(matches the required sample_type_id)
+            input_sample_type_id=ip_sample.sample_type_id
+            raise "The sample type of the sample:/'#{input[:name]}/' does not match the required sample type for this input" unless input_sample_type_id==wf_form_sample_type_id
+          }
+        end
+      end
+    }
+
+    thread_ids=threads.collect {|thread|
+      spec = wf.make_spec_from_hash(thread)
+      thread = WorkflowThread.create(spec,args[:workflow_id])
+      thread.id
+    }
+    add [{'thread_ids'=>thread_ids}]
   end
 
 end
