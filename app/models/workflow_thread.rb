@@ -86,4 +86,13 @@ class WorkflowThread < ActiveRecord::Base
 
   end
 
+  def self.okay_to_drop? workflow_thread,user
+
+    warn "Could not find a thread with the specified ID" and return false unless workflow_thread
+    workflow_associations=workflow_thread.associations
+    wokflow_association=workflow_associations.detect { |wokflow_association| !wokflow_association.process_id}
+    warn "The thread requested for deletion is already associated with a process" and return false unless wokflow_association
+    true
+  end
+
 end
