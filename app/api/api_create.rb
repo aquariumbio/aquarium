@@ -13,8 +13,8 @@ module ApiCreate
     when "job"
       create_job args
 
-    when "thread"
-        create_thread args
+    when "workflow_thread"
+      create_workflow_thread args
 
     else
       warn "Creating at #{args[:model]} not implemented"
@@ -83,7 +83,7 @@ module ApiCreate
 
   end
 
-  def create_thread args
+  def create_workflow_thread args
     #First check if the workflow specified is correct
     wf = Workflow.find(args[:workflow_id])
     return error "Workflow ID not found" unless wf
