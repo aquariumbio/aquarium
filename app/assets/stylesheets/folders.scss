@@ -145,8 +145,12 @@ $po: $thick dashed pink;
     color: red;
   }
 
-}
+  .icon-holder {
+    width: 18px;
+    outline: 0pt solid #aee;
+  }
 
+}
 
 .folder-workflow {
   height: $row-height;

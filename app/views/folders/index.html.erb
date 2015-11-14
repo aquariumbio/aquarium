@@ -14,7 +14,7 @@ body {
   <%= render partial: 'sample_template' %>
   <%= render partial: 'new_thread_builder_template' %>  
   <%= render partial: 'thread_template' %>
-  <%= render partial: 'part_template' %>  
+  <%= render partial: 'component_template' %>  
 
   <div ng-controller='foldersCtrl as fc'>
 
@@ -33,16 +33,21 @@ body {
 
       <a href='#' id="delete-folder"
          ng-if="current_folder != folders[0]"
-         class='btn pull-right folder-btn'
+         class='btn btn-small pull-right folder-btn'
          ng-click="deleteFolder(current_folder)">Delete Folder</a>
 
       <a href='#'  
-         class='btn folder-btn pull-right' 
+         class='btn btn-small folder-btn pull-right' 
          ng-click="newFolder()"
          ng-disabled="current_folder.locked">New Folder</a>
 
+      <a href='#'  
+         class='btn btn-small folder-btn pull-right' 
+         ng-click="removeSample()"
+         ng-show="selection != null">Remove Sample</a>
+
       <div class="btn-group pull-right folder-btn" ng-show="current_folder.id>=0">
-        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+        <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
           New Sample
           <span class="caret"></span>
         </a>
@@ -55,7 +60,7 @@ body {
 
       <div class="btn-group pull-right folder-btn" ng-show="selection">
 
-        <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+        <a class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
           New Task
           <span class="caret"></span>
         </a>
@@ -67,7 +72,7 @@ body {
             <a tabindex="-1" href="#">{{w.name}}</a>
             <ul class="dropdown-menu pull-left">
               <li ng-repeat="p in w.form.inputs.concat(w.form.outputs)">
-                <a tabindex="-1" href="#" ng-click="newThreadBuilder(w,p)">
+                <a tabindex="-1" href="#" ng-click="threadBuilder.make(w,p)">
                   {{p.description}} ({{p.name}})
                 </a>
               </li>
@@ -77,9 +82,10 @@ body {
 
       </div>      
 
-      <div class='input-append pull-right folder-btn' ng-show="current_folder.id>=0">
-        <input id="add-sample" type="text">
-        <a href='#' class="btn" type="button" ng-click="addSample()">Add</a>
+      <div class='input-append pull-right folder-btn' 
+           ng-show="current_folder.id>=0">
+        <input id="add-sample" type="text" style="height: 26px !important;">
+        <a href='#' class="btn btn-small" type="button" ng-click="addSample()">Add</a>
       </div>      
 
     </div>

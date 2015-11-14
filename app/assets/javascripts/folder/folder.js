@@ -7,20 +7,23 @@
     w = angular.module('folders', ['puElasticInput']); 
   } 
 
-  w.controller('foldersCtrl', [ '$scope','railsfolder','focus', function ($scope,railsfolder,focus) {
+  w.controller('foldersCtrl', [ '$scope','folderAjax','threadBuilder','focus', 
+                       function ($scope,  folderAjax,  threadBuilder,  focus) {
 
-    railsfolder.index(function(data) {
+    folderAjax.index(function(data) {
       $scope.folders = data.folders;
       $scope.folders[0].open = true;
       $scope.current_folder = $scope.folders[0];
       $scope.contents($scope.current_folder);
+      $scope.threadBuilder = threadBuilder;
+      $scope.threadBuilder.init($scope);
     });
 
-    railsfolder.sample_types(function(data) {
+    folderAjax.sample_types(function(data) {
       $scope.sample_types = data;
     });
 
-    railsfolder.workflows(function(data) {
+    folderAjax.workflows(function(data) {
       $scope.workflows = data;
     });    
 
@@ -39,7 +42,7 @@
     $scope.save = function(sample) {
       sample.saving = true;
       sample.error = null;
-      railsfolder.save_sample(sample,function(data) {
+      folderAjax.save_sample(sample,function(data) {
         if ( data.error ) {
           sample.error = data.error;
         } else {
@@ -51,7 +54,8 @@
 
     $scope.save_new = function(sample,role) {
       sample.saving = true;
-      railsfolder.new_sample($scope.current_folder,sample,role,function(data) {
+      sample.error = null;
+      folderAjax.new_sample($scope.current_folder,sample,role,function(data) {
         if ( data.error ) {
           sample.error = data.error;
         } else {
@@ -69,7 +73,7 @@
     }
 
     $scope.revert = function(sample) {
-      railsfolder.get_sample(sample.id,function(data) {
+      folderAjax.get_sample(sample.id,function(data) {
         sample.name = data.sample.name;
         sample.data = data.sample.data;
         sample.description = data.sample.description;
@@ -110,9 +114,10 @@
 
     $scope.addSample = function(f) {
       var sid = $('#add-sample').val().split(":")[0];
-      railsfolder.add_sample(sid,$scope.current_folder.id,function(data) {
+      folderAjax.add_sample(sid,$scope.current_folder.id,function(data) {
         $scope.current_folder.samples.unshift(data.sample); 
-        $('#add-sample').val(''); 
+        $('#add-sample').val('');
+        $scope.selection = data.sample; 
       });
     }
 
@@ -138,6 +143,7 @@
     $scope.setCurrentFolder = function(f) {
       $scope.current_folder = f;
       $scope.contents(f);
+      $scope.selection = null;
     }
 
     $scope.openSample = function(s) {
@@ -156,50 +162,10 @@
 
     $scope.get_thread_parts = function(sample,thread) {
       if ( !thread.parts ) {
-        railsfolder.thread_parts(sample.id,thread.id,function(data) {
+        folderAjax.thread_parts(sample.id,thread.id,function(data) {
           thread.parts = data.parts;
         });
       }
-    }
-
-    $scope.newThreadBuilder = function(workflow,part) {
-
-      if ( !$scope.selection.thread_builders ) {
-        $scope.selection.thread_builders = [];
-      }      
-
-      $scope.selection.thread_builders.push({
-        workflow: workflow, 
-        part: part, 
-        open: true
-      });
-
-      $scope.selection.open = true;
-
-    }
-
-    $scope.newSampleForThreadBuilder = function(part) {
-
-      if ( part.alternatives.length > 0 && part.alternatives[0].sample_type ) {
-
-        $.ajax({
-          url: '/sample_types/' + part.alternatives[0].sample_type.split(':')[0] + ".json"
-        }).done(function(sample_type) {
-          var s = $scope.newSampleTemplate(sample_type);
-          s.name = $scope.selection.name + "_"  + part.name;
-          part.new_sample = s;
-          $scope.$apply();
-        });
-
-      } else {
-        console.log("No alternatives to use to create new sample")
-      }
-
-    }
-
-    $scope.threadBuilderCancel = function(sample,builder) {
-      var i = sample.thread_builders.indexOf(builder);
-      sample.thread_builders.splice(i,1);
     }
 
     $scope.openThread = function(s,t) {
@@ -224,7 +190,7 @@
     }
 
     $scope.newFolder = function() {
-      railsfolder.newFolder($scope.current_folder,function(data) {
+      folderAjax.newFolder($scope.current_folder,function(data) {
         if ( !$scope.current_folder.children ) {
           $scope.current_folder.children = [];
         }
@@ -236,7 +202,7 @@
     }
 
     $scope.renameFolder = function(f) {
-      railsfolder.renameFolder(f);
+      folderAjax.rename_folder(f);
     }
 
     function remove(p,f) {
@@ -257,16 +223,26 @@
       return null;
     }
 
+    $scope.removeSample = function() {
+      folderAjax.remove_sample($scope.current_folder,$scope.selection, function(data) {
+        var i = $scope.current_folder.samples.indexOf($scope.selection);
+        if ( $scope.current_folder.samples[i+1] ) {
+          $scope.selection = $scope.current_folder.samples[i+1];
+        }
+        $scope.current_folder.samples.splice(i,1);
+      });
+    }
+
     $scope.deleteFolder = function(f) {
       confirm("Are you sure you want to delete the folder and all of its sub-folders? Other contents will not be deleted, but may be harder to find.");
-      railsfolder.deleteFolder($scope.current_folder,function(data) {
+      folderAjax.delete_folder($scope.current_folder,function(data) {
         $scope.current_folder = remove($scope.folders[0],$scope.current_folder);      
       });
     }
  
     $scope.contents = function(f) {
       if ( ! f.samples || ! f.workflows ) {
-        railsfolder.samples(f,function(data) {
+        folderAjax.samples(f,function(data) {
           f.samples = data.samples;
           f.workflows = data.workflows;          
         });
@@ -304,6 +280,41 @@
     };    
 
   }]);
+
+  w.directive('tooltip', function(){
+
+    return {
+
+      restrict: 'A',
+
+      link: function(scope, element, attrs) {
+
+        var d1 = 1500, t1, 
+            d2 = 500,  t2;
+
+        $(element).mouseover(function(){
+
+          t1 = setTimeout(function(){
+            $(element).tooltip('show');
+          },d1);
+
+        }).mouseout(function(){
+
+          clearTimeout(t1);
+          t2 = setTimeout(function(){
+            var isHover = $(element).is(":hover");
+            if(isHover !== true){
+              $(element).tooltip('hide').unbind('mouseenter mouseleave');
+            }
+          },d2);
+
+        });
+
+      }
+
+    };
+
+  });
 
 })();
 

@@ -105,6 +105,13 @@ class FoldersController < ApplicationController
             { error: "Could not create sample: " + sample.errors.full_messages.join(', ') }
           end
 
+        when 'remove_sample'
+
+          fc = FolderContent.where(folder_id: params[:folder_id], sample_id: params[:sample_id])
+          if fc.length > 0 
+            fc[0].destroy
+          end
+
         when 'save_sample'
 
           Rails.logger.info "params = #{params}"          

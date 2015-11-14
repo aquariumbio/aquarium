@@ -4,7 +4,7 @@
 
     <!-- EXPANDER --------------------------------------------------------------------- -->
     <div class='expander-container'>
-      <div ng-repeat="i in range(indent) track by $index" class='spacer'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+      <div ng-repeat="i in range(indent) track by $index" class='spacer'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
       <!-- span space="n" / -->
       <div class="expander" 
             ng-if="!sample.open"
@@ -21,10 +21,14 @@
     <!-- ID --------------------------------------------------------------------------- -->
     <div ng-class="sample == selection ? 'id selected' : 'id'" 
       ng-if="sample.id" ng-click="select(sample)">
-      {{sample.id}}<span ng-if="role"> {{role}}</span>:</div>
+      {{sample.id}}
+      <span ng-if="role && !is_vector"> {{role}}:</span>
+      <span ng-if="role && is_vector">  {{role}}[{{index}}]:</span>
+    </div>
 
     <div class='id' ng-if="!sample.id" ng-click="select(sample)">
-      ???:
+      <span ng-if="role && !is_vector"> {{role}}:</span>
+      <span ng-if="role && is_vector">  {{role}}[{{index}}]:</span>
     </div>    
 
     <!-- NAME ------------------------------------------------------------------------- -->
@@ -39,28 +43,48 @@
     </div>
 
     <!-- BUTTONS ---------------------------------------------------------------------- -->
+
     <div class='info pull-right'>   
 
-      <a href='#'
-         class='btn btn-mini btn-warning row-button' 
-         ng-if='sample.unsaved && sample.id'
-         ng-click="save(sample)">
-        {{ sample.saving ? "Saving..." : "Save" }}
-      </a>
+      <div class='icon-holder'>
+        <a href="#" ng-if="container && index == container.value.length - 1" ng-click="threadBuilder.add_to_vector(container)"
+           data-toggle='tooltip' data-placement="left" data-title="Add a component to this vector." tooltip>
+          <i class='icon-plus'></i>
+        </a>  
+      </div>
 
-      <a href='#'
-         class='btn btn-mini btn-success row-button' 
-         ng-if='sample.unsaved && sample.id'
-         ng-click="revert(sample)">
-        Cancel
-      </a>     
+      <div class='icon-holder'>
+          <a href="#" class='' ng-if="component" ng-click="threadBuilder.no_new_sample(component)"
+             data-toggle='tooltip' data-placement="left" data-title="Search for an existing sample instead of making a new one." tooltip>
+            <i class='icon-resize-horizontal'></i>
+          </a>
+      </div>    
 
-      <a href='#'
-         class='btn btn-mini btn-warning row-button' 
-         ng-if='sample.unsaved && !sample.id'
-         ng-click="save_new(sample,role)">
-        Save
-      </a>     
+      <div class='icon-holder'>
+        <a href='#'
+           ng-if='sample.unsaved && sample.id'
+           ng-click="save(sample)"
+           data-toggle='tooltip' data-placement="left" data-title="Save this sample." tooltip>
+           <i class='icon-hdd'></i>
+        </a>
+        <a href='#'
+           ng-if='sample.unsaved && !sample.id'
+           ng-click="save_new(sample,role)"
+           data-toggle='tooltip' data-placement="left" data-title="Save this sample." tooltip>
+          <i class='icon-hdd'>i</i>
+        </a>    
+      </div>        
+
+      <div class='icon-holder'>
+        <a href='#'
+           ng-if='sample.unsaved && sample.id'
+           ng-click="revert(sample)"
+           data-toggle='tooltip' data-placement="left" data-title="Discard changes to this sample." tooltip>
+          <i class='icon-arrow-left'></i>
+        </a>     
+      </div>
+
+      <div class='icon-holder'></div>
 
     </div>
 
@@ -68,15 +92,16 @@
 
   <!-- ERRORS ------------------------------------------------------------------------- -->
   <div class='error row' ng-if="sample.error">
-    <span ng-repeat="i in range(indent+1) track by $index" class='spacer'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <span ng-repeat="i in range(indent+1) track by $index" class='spacer'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <span class="error-message">&#9763;</span>
     <span class='error-message'>{{sample.error}}</span>
   </div>
 
 
-  <!-- DATA --------------------------------------------------------------------------- -->
+  <!-- PROPERTIES --------------------------------------------------------------------- -->
   <div ng-repeat="(key,value) in sample.data" ng-if="sample.open" class='data row'>
-    <span ng-repeat="i in range(indent+1) track by $index" class='spacer'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>   
-    <span class='name'>{{key}}:</span> 
+    <span ng-repeat="i in range(indent+1) track by $index" class='spacer'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 
+    <span class='name'>&#9632; {{key}}:</span> 
     <input type='text' 
            class='editable' 
            ng-model='sample.data[key]'
@@ -89,7 +114,8 @@
   <!-- NEW THREADS -------------------------------------------------------------------- -->
   <div ng-repeat='builder in sample.thread_builders'
        ng-include="'newThreadBuilderView'"
-       ng-init="indent=indent+1">
+       ng-init="indent=indent+1" 
+       ng-if="sample.open">
   </div>  
 
   <!-- THREADS ------------------------------------------------------------------------ -->
