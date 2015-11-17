@@ -25,6 +25,12 @@
       });
       angular.forEach(form.parameters, function(p) {
         thread[p.name] = angular.copy(p);
+        if ( thread[p.name].type.choices ) {
+          thread[p.name].value = thread[p.name].type.choices[0];
+        }
+        if ( thread[p.name].type.choices && thread[p.name].type.multiple ) {
+          thread[p.name].value = {};
+        }        
       }); 
       return thread;
     }
@@ -104,9 +110,23 @@
       component.value.splice(index,1);
     }    
 
+    this.parameter_height = function(component) {
+      var h = "20px";
+      if ( component.type.multiple ) {
+        h = ""+20*component.type.choices.length+"px";
+      }
+      return h;
+    }
+
+    this.toggle_select = function(component,c) {
+      component.value[c] = !component.value[c];
+    }
+
     return this;
 
   });
+
+
 
   w.directive('autocomplete', function(focus) {
 

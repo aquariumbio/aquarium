@@ -4,8 +4,8 @@
 
     <div class='expander-container'>
       <span ng-repeat="i in range(indent) track by $index">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 
-      <span class="expander" style="color: #eee">
-        &#9658;
+      <span class="expander">
+        &#9655;
       </span>
     </div>
 
@@ -45,5 +45,44 @@
     </div>
 
   </div>
+
+  <div ng-if="component.type" class='row' ng-style="{ 'height': threadBuilder.parameter_height(component) }">
+
+    <div class='expander-container parameter-name'>
+      <span ng-repeat="i in range(indent) track by $index">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 
+      <span class="name">
+        &#9632;
+      </span>
+    </div>
+
+    <div class='name parameter-name' ng-style="{ 'height': threadBuilder.parameter_height(component) }">
+      {{component.description}} (<b>{{component.name}}</b>):
+    </div>
+    
+    <input ng-if="component.type.type == 'json'"
+           ng-init="component.value = component.type.default ? component.type.default : ''"
+           type=text class='editable' ng-model='component.value'></input>
+
+    <input ng-if="component.type.type == 'number' && !component.type.choices"
+           ng-init="component.value = component.type.default ? component.type.default : 0"
+           type=number class='editable' ng-model='component.value'></input>
+
+    <input ng-if="component.type.type == 'string' && !component.type.choices"
+           ng-init="component.value = component.type.default ? component.type.default : ''"    
+           type=text class='editable' ng-model='component.value'></input>    
+
+    <select ng-if="(component.type.type == 'number' || component.type.type == 'string') && component.type.choices && !component.type.multiple" 
+            ng-options="choice as choice for choice in component.type.choices" 
+            ng-model="component.value"
+            class='thread-builder-select'></select>    
+
+    <div ng-if="(component.type.type == 'number' || component.type.type == 'string') && component.type.choices && component.type.multiple"
+         class="multiselect">
+      <div ng-repeat="c in component.type.choices" 
+           ng-click="threadBuilder.toggle_select(component,c)"           
+           ng-class="component.value[c] ? 'multiselector multiselected' : 'multiselector'">
+           {{c}}
+      </div>
+    </div>
 
 </script>

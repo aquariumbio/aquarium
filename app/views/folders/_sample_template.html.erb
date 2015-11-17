@@ -21,7 +21,7 @@
     <!-- ID --------------------------------------------------------------------------- -->
     <div ng-class="sample == selection ? 'id selected' : 'id'" 
       ng-if="sample.id" ng-click="select(sample)">
-      {{sample.id}}
+      {{sample.id}}<span ng-if="!role">:</span>            
       <span ng-if="role && !is_vector"> {{role}}:</span>
       <span ng-if="role && is_vector">  {{role}}[{{index}}]:</span>
     </div>

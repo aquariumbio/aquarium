@@ -82,6 +82,7 @@ $po: $thick dashed pink;
   }
 
   .editable {
+    color: #0000cc;
     vertical-align: top;
     height: $row-height;         
     display: inline-block;    
@@ -98,7 +99,6 @@ $po: $thick dashed pink;
 
   .editable:focus {
     height: $row-height;      
-    color: #0000aa;
     outline: none;
     display: inline-block;       
     border: none !important;
@@ -148,6 +148,39 @@ $po: $thick dashed pink;
   .icon-holder {
     width: 18px;
     outline: 0pt solid #aee;
+  }
+
+  .thread-builder-select {
+    color: #0000cc;
+    display: inline-block;
+    height: $row-height;
+    width: auto;
+    box-shadow: none !important;
+    border: 0;
+    margin: 0 0 1px 0;
+    padding: 0;
+    overflow: hidden;
+    margin: 0; 
+    background: transparent;
+    border-radius: 0px;
+  }  
+
+  .multiselect {
+    color: #0000cc;
+    display: inline-block;
+  } 
+
+  .multiselector {
+    cursor: pointer;
+    padding-right: 50px;
+  } 
+
+  .multiselected {
+    background: #ddffdd;
+  } 
+
+  .parameter-name {
+    vertical-align: top;
   }
 
 }
