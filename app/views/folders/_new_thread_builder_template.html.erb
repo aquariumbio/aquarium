@@ -18,15 +18,19 @@
     </div>
 
     <!-- DESCRIPTION ------------------------------------------------------------------- -->
-    <div class='thread-description'>
+    <div class='thread-description' ng-if="builder.parent_sample_role">
       As <b>{{builder.parent_sample_role}}</b> in {{builder.workflow_name}} (unsaved)
+    </div>
+
+    <div class='thread-description' ng-if="!builder.parent_sample_role">
+      Unsaved thread
     </div>
 
     <!-- BUTTONS ----------------------------------------------------------------------- -->
     <div class='info pull-right'>
 
       <div class='icon-holder'>
-        <a href="#" ng-click="threadBuilder.save(sample,builder)"
+        <a href="#" ng-click="threadBuilder.save(sample ? sample : workflow,builder)"
           data-toggle='tooltip' data-placement="left" data-title="Save this thread." tooltip>
          <i class='icon-hdd'></i>
         </a>
@@ -35,7 +39,7 @@
       <div class='icon-holder'></div>      
 
       <div class='icon-holder'>      
-        <a href="#" class='' ng-click="threadBuilder.cancel(sample,builder)"
+        <a href="#" class='' ng-click="threadBuilder.cancel(sample ? sample : workflow,builder)"
            data-toggle='tooltip' data-placement="left" data-title="Discard this thread." tooltip>
           <i class='icon-remove'></i>
         </a>
@@ -45,11 +49,19 @@
 
   </div>
 
+  <!-- ERRORS ------------------------------------------------------------------------ -->
+  <div class='error row' ng-if="builder.error && builder.open">
+    <span ng-repeat="i in range(indent+1) track by $index" class='spacer'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <span class="error-message">&#9763;</span>
+    <span class='error-message'>{{builder.error}}</span>
+  </div>
+
   <!-- PARTS ------------------------------------------------------------------------- -->
   <div ng-if="builder.open" ng-repeat="(name,component) in builder.thread">
 
     <div ng-if="builder.parent_sample_role != name">
 
+      <!-- SCALARS ------------------------------------------------------------------- -->
       <div ng-if="!component.is_vector">
 
         <div ng-if="!component.new_sample" 
@@ -64,6 +76,7 @@
 
       </div>
 
+      <!-- VECTORS ------------------------------------------------------------------- -->
       <div ng-if="component.is_vector">
 
         <div ng-repeat="comp in component.value track by $index">

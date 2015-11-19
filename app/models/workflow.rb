@@ -62,4 +62,12 @@ class Workflow < ActiveRecord::Base
     self.save
   end
 
+  def for_folder
+
+    wf = self.as_json
+    wf[:form] = self.form
+    wf
+
+  end
+
 end

@@ -45,7 +45,7 @@
 
       this.scope.selection.thread_builders.push({
         thread: that.new_thread(workflow.form),
-        parent_sample_role: part.name,
+        parent_sample_role: part ? part.name : null,
         workflow_id: workflow.id,
         workflow_name: workflow.name,
         open: true
@@ -64,8 +64,88 @@
       builder.open = false;
     }
 
-    this.save = function(sample,builder) {
-      console.log(builder);
+    this.save = function(container,builder) {
+
+      var new_thread = {};
+      var that = this;
+
+      angular.forEach(builder.thread,function(component,name) {
+
+        if ( name == builder.parent_sample_role ) {
+
+          // the role this sample is playing in the thread
+          new_thread[name] = "" + container.id + ": " + container.name;
+
+        } else if ( component.type && component.type.multiple ) {
+
+          // a multi select parameter
+          var vec = [];
+          angular.forEach(component.value,function(val,key) {
+            if(val) {
+              vec.push(key);
+            }
+          });
+          new_thread[name] = vec;
+
+        } else if ( typeof component.value == "object" ) { 
+
+          // a vector of samples
+          var vec = [];
+          angular.forEach(component.value,function(val,key) {
+            if ( val.new_sample ) {              
+              vec.push(""+val.new_sample.id+": "+val.new_sample.name);
+            } else {
+              vec.push(val.value);
+            }
+          });
+          new_thread[name] = vec;
+
+        } else {
+
+          // a simple sample or parameter
+          new_thread[name] = component.value;
+
+        }
+
+      });    
+
+      $.ajax({
+          url: '/workflow_threads/',
+          dataType: 'json',
+          contentType: 'application/json',
+          data: JSON.stringify({ thread: new_thread, workflow_id: builder.workflow_id }),
+          method: "POST"
+        }).success(function(thread) {
+
+          if ( thread.error ) {
+
+            builder.error = thread.error;
+            that.scope.$apply();
+
+          } else {
+
+            thread.role = builder.parent_sample_role;
+            
+            if ( container.sample_type ) {
+              container.threads.unshift(thread);
+              thread.open = true;
+            } else {
+              container.threads.push(thread);
+            }
+
+            that.scope.get_thread_parts(container,thread);
+
+            var i = container.thread_builders.indexOf(builder);
+            container.thread_builders.splice(i,1);
+            that.scope.$apply();
+
+          }
+
+        })
+        .error(function(data) {
+          console.log("Could not submit thread");
+        });
+
     }
 
     this.new_sample = function(name,component,alternatives) {
@@ -96,9 +176,9 @@
       component.new_sample = null;
     }
 
-    this.cancel = function(sample,builder) {
-      var i = sample.thread_builders.indexOf(builder);
-      sample.thread_builders.splice(i,1);
+    this.cancel = function(container,builder) {
+      var i = container.thread_builders.indexOf(builder);
+      container.thread_builders.splice(i,1);
       this.scope.selection = null;
     }    
 
@@ -126,15 +206,13 @@
 
   });
 
-
-
   w.directive('autocomplete', function(focus) {
 
     return {
 
       restrict: 'A',
 
-      scope: { alternatives: "=" },
+      scope: { alternatives: "=", ngModel: '=' },
 
       link: function($scope,$element) {
 
@@ -146,7 +224,11 @@
             url: '/sample_list?id=' + stid
           }).done(function(samples) {
             $element.autocomplete({
-              source: samples
+              source: samples,
+              select: function(ev,ui) {
+                $scope.ngModel = ui.item.value;
+                $scope.$apply();
+              }
             });
           });
 

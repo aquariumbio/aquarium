@@ -11,13 +11,6 @@ class FoldersController < ApplicationController
 
   end
 
-
-  def workflow_info wf
-
-    wf
-
-  end
-
   def route
 
     if params[:method]
@@ -65,7 +58,7 @@ class FoldersController < ApplicationController
             .includes(:workflow)
             .where("folder_id = ? AND workflow_id is not null", params[:folder_id] )
             .reverse
-            .collect { |fc| workflow_info fc.workflow }
+            .collect { |fc| fc.workflow.for_folder }
 
           { samples: samples, workflows: workflows }
 
@@ -114,8 +107,6 @@ class FoldersController < ApplicationController
 
         when 'save_sample'
 
-          Rails.logger.info "params = #{params}"          
-
           sample = Sample.find(params[:id])
           sample.name = params[:name]
           sample.description = params[:description]
@@ -131,6 +122,14 @@ class FoldersController < ApplicationController
         when 'thread_parts'
 
           { parts: WorkflowThread.find(params[:thread_id]).parts(params[:sample_id]) }
+
+        when 'threads'
+
+          { threads: WorkflowThread
+                       .includes(:user)
+                       .where(workflow_id: params[:workflow_id], process_id: nil)
+                       .as_json(include: :user) 
+          }
 
       end
 

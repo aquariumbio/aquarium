@@ -1,10 +1,11 @@
 class WorkflowThread < ActiveRecord::Base
 
-  attr_accessible :workflow_id, :process_id, :specification
+  attr_accessible :workflow_id, :process_id, :specification, :user_id
 
   has_many :workflow_associations, foreign_key: :thread_id
   belongs_to :workflow
   belongs_to :workflow_process, foreign_key: :process_id
+  belongs_to :user
 
   def associations
     workflow_associations
@@ -18,9 +19,41 @@ class WorkflowThread < ActiveRecord::Base
     JSON.parse specification, symbolize_names: true
   end
 
-  def self.create spec, wid
+  def valid_sample_name str
+    str.class == String && str.split(':').length == 2
+  end
 
-    t = WorkflowThread.new workflow_id: wid.to_i, specification: spec.to_json
+  def validate
+
+    s = spec
+    form = Workflow.find(workflow_id).form
+
+    (form[:inputs]+form[:outputs]).each do |input|
+      component = s.find { |c| c[:name] == input[:name] }
+      if input[:is_vector]
+        raise "The vector #{input[:name]} is not specified." unless component && component[:sample].class == Array
+        (0..component[:sample].length-1).each do |i|
+          raise "'#{input[:name]}[#{i}]' is not specified." unless valid_sample_name(component[:sample][i])
+        end
+      else
+        raise "The '#{input[:name]}' is not specified." unless component && valid_sample_name(component[:sample])
+      end
+    end
+
+    form[:parameters].each do |input|
+      component = s.find { |c| c[:name] == input[:name] }
+      # TODO: Typecheck component
+      raise "The parameter '#{input[:name]}' is not defined." unless component 
+    end
+
+    return true
+
+  end
+
+  def self.create spec, wid, user
+
+    t = WorkflowThread.new workflow_id: wid.to_i, specification: spec.to_json , user_id: user.id   
+    t.validate
     t.save 
 
     spec.each do |ispec| 
@@ -50,7 +83,7 @@ class WorkflowThread < ActiveRecord::Base
 
     (spec.select { |p| p[:sample] }).collect do |ispec|
       if ispec[:sample].class == Array
-        (0...ispec[:sample].length-1).collect do |i|
+        (0..ispec[:sample].length-1).collect do |i|
           if ispec[:sample][i].as_sample_id != except.to_i
             samples << {
               name: "#{ispec[:name]}[#{i}]",

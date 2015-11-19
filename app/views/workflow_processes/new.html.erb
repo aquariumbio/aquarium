@@ -332,30 +332,43 @@
 
     $scope.submit = function() { 
 
+      var data = JSON.stringify({ thread: $scope.new_thread, workflow_id: $scope.workflow.id });
+
       $.ajax({
           url: '/workflow_threads/',
           dataType: 'json',
           contentType: 'application/json',
-          data: JSON.stringify({ thread: $scope.new_thread, workflow_id: $scope.workflow.id }),
+          data: data,
           method: "POST"
         }).success(function(data) {
-          $scope.threads.push(expand(data));
-          $scope.new_thread = {};
-          angular.forEach(parts(),function(i) {
-            if ( i.alternatives[0] && i.alternatives[0].sample ) {
-              $scope.new_thread[i.name] = i.alternatives[0].sample;
-            }
-            if ( i.is_vector ) {
-               $scope.new_thread[i.name] = [ "" ];
-             }
-          });
-          angular.forEach($scope.workflow.form.parameters,$scope.reset_param);
-          $scope.launchable = true;
-          $scope.$apply();
+
+          if ( data.error ) {
+
+            console.log(data.error);
+
+          } else {
+
+            console.log(data);
+            $scope.threads.push(expand(data));
+            $scope.new_thread = {};
+            angular.forEach(parts(),function(i) {
+              if ( i.alternatives[0] && i.alternatives[0].sample ) {
+                $scope.new_thread[i.name] = i.alternatives[0].sample;
+              }
+              if ( i.is_vector ) {
+                 $scope.new_thread[i.name] = [ "" ];
+               }
+            });
+            angular.forEach($scope.workflow.form.parameters,$scope.reset_param);
+            $scope.launchable = true;
+            $scope.$apply();
+
+          }
+
         })
         .error(function() {
           console.log("Could not submit thread");
-        });      
+        });
 
     }
 
@@ -426,12 +439,15 @@
     }
 
     $scope.launch = function(debug) {
+
       var thread_ids = [];
+
       $('.selector').each(function(s) {
         if ($(this).prop('checked') ) {
           thread_ids.push($(this).data('thread-id'));
         }
       });
+
       if ( thread_ids.length > 0 ) {
 
         $.ajax({

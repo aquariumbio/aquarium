@@ -127,6 +127,16 @@ $po: $thick dashed pink;
       display: inline-block;
     } 
 
+    .expander-large {
+      height: $row-height;   
+      line-height: $row-height !important;     
+      cursor: pointer;
+      color: #444;
+      padding: 0 !important;
+      margin: 0 !important;  
+      display: inline-block;
+    } 
+
     .spacer {
       height: $row-height;   
       line-height: $row-height !important;
@@ -181,6 +191,27 @@ $po: $thick dashed pink;
 
   .parameter-name {
     vertical-align: top;
+  }
+
+  .value {
+    color: #0000cc;
+    display: inline-block;
+  }
+
+  .thread-selector-all {
+    margin: 0 3px 0 0;
+    color: black;
+    font-weight: bold;
+    font-size: 14pt;
+    cursor: pointer;    
+  }
+
+  .thread-selector {
+    cursor: pointer;
+  }
+
+  .workflow-message {
+    color: #00cc00;
   }
 
 }

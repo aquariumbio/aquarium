@@ -15,6 +15,8 @@ body {
   <%= render partial: 'new_thread_builder_template' %>  
   <%= render partial: 'thread_template' %>
   <%= render partial: 'component_template' %>  
+  <%= render partial: 'parameter_template' %>   
+  <%= render partial: 'workflow_template' %>  
 
   <div ng-controller='foldersCtrl as fc'>
 
@@ -58,7 +60,7 @@ body {
         </ul>
       </div>
 
-      <div class="btn-group pull-right folder-btn" ng-show="selection">
+      <div class="btn-group pull-right folder-btn" ng-show="selection && selection.sample_type ">
 
         <a class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
           New Task
@@ -114,10 +116,9 @@ body {
                class='sample-repeater'>
           </div>
 
-          <div ng-repeat="workflow in current_folder.workflows">
-            <div class='folder-workflow' ng-click='openWorkflow(workflow)'>
-              <i class='icon-tasks'></i> {{workflow.name}}
-            </div>
+          <div ng-repeat="workflow in current_folder.workflows"
+               ng-include="'workflowView'"
+               ng-init="indent=0">
           </div>
 
          <div ng-repeat="child in current_folder.children">

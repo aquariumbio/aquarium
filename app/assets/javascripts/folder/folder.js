@@ -7,16 +7,21 @@
     w = angular.module('folders', ['puElasticInput']); 
   } 
 
-  w.controller('foldersCtrl', [ '$scope','folderAjax','threadBuilder','focus', 
-                       function ($scope,  folderAjax,  threadBuilder,  focus) {
+  w.controller('foldersCtrl', [ '$scope','folderAjax','threadBuilder','workflowManager','focus', 
+                       function ($scope,  folderAjax,  threadBuilder,  workflowManager,  focus) {
 
     folderAjax.index(function(data) {
+
       $scope.folders = data.folders;
       $scope.folders[0].open = true;
       $scope.current_folder = $scope.folders[0];
       $scope.contents($scope.current_folder);
+
       $scope.threadBuilder = threadBuilder;
       $scope.threadBuilder.init($scope);
+
+      $scope.workflowManager = workflowManager;
+      $scope.workflowManager.init($scope);      
     });
 
     folderAjax.sample_types(function(data) {
@@ -162,7 +167,7 @@
 
     $scope.get_thread_parts = function(sample,thread) {
       if ( !thread.parts ) {
-        folderAjax.thread_parts(sample.id,thread.id,function(data) {
+        folderAjax.thread_parts(sample ? sample.id : null,thread.id,function(data) {
           thread.parts = data.parts;
         });
       }
@@ -179,10 +184,6 @@
 
     $scope.openFolder = function(f) {
       f.open = true;
-    }
-
-    $scope.openWorkflow = function(workflow) {
-      window.location = '/workflows/' + workflow.id;
     }
 
     $scope.closeFolder = function(f) {

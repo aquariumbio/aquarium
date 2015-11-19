@@ -303,6 +303,7 @@ class Sample < ActiveRecord::Base
       .collect { |wa|
         { 
           id: wa.thread.id,
+          user: User.find_by_id(wa.thread.user_id),
           workflow: {
             id: wa.thread.workflow.id,
             name: wa.thread.workflow.name
