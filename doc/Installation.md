@@ -18,44 +18,6 @@ If you want to use the bleeding edge code, you can clone the code to your local 
 
 	git clone https://github.com/klavinslab/aquarium
 
-Install Protocols
---
-	
-Install at least one repository of protocols, such as aqualib, as follows:
-
-	cd aquarium/repos
-	git clone https://github.com/klavinslab/aqualib
-	
-You may also want to start your own repository of protocols. For example, do (from within my_protocols):
-
-	mkdir my_protocols
-	cd my_protocols
-
-Then create a new file called hello.rb with the following code in it:
-
-	class Protocol
-    def main
-      show do
-        title "Hello world!"
-      end
-    end
-  end
-	
-Finally, make the repo.
-
-	git init
-	git add .
-	git commit -m "Initial commit"
-	
-These protocol libraries will be accessible via the "Protocols -> Under Version Control" menu.
-
-Tou need to set up the origins with something like
-
-  git remote rm origin
-  git remote add origin https://username:password@github.com/your_organization/your_repo.git 
-
-Then you will need to set all the permissions on all repos to 755, including everything under .git. Note that running git from the command line may change the permissions on things in .git. 
-
 Configure Aquarium
 --
 
@@ -116,6 +78,44 @@ If above does not work, you can try create a user with admin previleges in Rails
 	RAILS_ENV=production rails c
     load 'script/init.rb'
     make_user "Your Name", "your login", "your password", admin: true
+ 
+Install Protocols
+--
+	
+Install at least one repository of protocols, such as aqualib, as follows:
+
+	cd aquarium/repos
+	git clone https://github.com/klavinslab/aqualib
+	
+You may also want to start your own repository of protocols. For example, do (from within my_protocols):
+
+	mkdir my_protocols
+	cd my_protocols
+
+Then create a new file called hello.rb with the following code in it:
+
+	class Protocol
+    def main
+      show do
+        title "Hello world!"
+      end
+    end
+  end
+	
+Finally, make the repo.
+
+	git init
+	git add .
+	git commit -m "Initial commit"
+	
+These protocol libraries will be accessible via the "Protocols -> Under Version Control" menu.
+
+Tou need to set up the origins with something like
+
+  git remote rm origin
+  git remote add origin https://username:password@github.com/your_organization/your_repo.git 
+
+Then you will need to set all the permissions on all repos to 755, including everything under .git. Note that running git from the command line may change the permissions on things in .git. 
 
 Run Hello World
 --
