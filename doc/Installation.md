@@ -114,8 +114,8 @@ Go to Admin->New User and make an account. This first account should be given ad
 If above does not work, you can try create a user with admin previleges in Rails console by doing the following:
 
 	RAILS_ENV=production rails c
-  load 'script/init.rb'
-  make_user "Your Name", "your login", "your password", admin: true
+        load 'script/init.rb'
+        make_user "Your Name", "your login", "your password", admin: true
 
 Run Hello World
 --
