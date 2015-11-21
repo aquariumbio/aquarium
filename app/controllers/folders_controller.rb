@@ -52,6 +52,7 @@ class FoldersController < ApplicationController
             .includes(sample: {workflow_associations: { workflow_thread: :workflow } })
             .where("folder_id = ? AND sample_id is not null", params[:folder_id] )
             .reverse
+            .select { |fc| fc.sample }
             .collect { |fc| fc.sample.for_folder }
 
           workflows = FolderContent
