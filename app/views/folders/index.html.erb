@@ -83,7 +83,7 @@ body {
       </div>      
 
       <div class='input-append pull-right folder-btn' 
-           ng-show="current_folder.id>=0" ng-if="!current_folder.locked">
+           ng-show="current_folder.id>=0 && !current_folder.locked">
         <input id="add-sample" type="text" style="height: 26px !important;">
         <a href='#' class="btn btn-small" type="button" ng-click="addSample()">Add</a>
       </div>      
