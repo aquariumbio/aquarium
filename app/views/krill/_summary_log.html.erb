@@ -20,7 +20,7 @@
       <% if @job.metacol %>
         Part of Metacol <%= link_to @job.metacol.id, @job.metacol %> ( <%= @job.metacol.path %> )<br />
       <% end %>
-      <% if @job.workflow_process %>
+      <% if @job.workflow_process && @job.workflow_process.workflow %>
         Part of Workflow Process <%= link_to "#{@job.workflow_process.id}: #{@job.workflow_process.workflow.name}", @job.workflow_process %><br />
       <% end %>
       <%= link_to( '/jobs/' + (@job.id-1).to_s ) do %>
