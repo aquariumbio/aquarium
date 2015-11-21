@@ -299,7 +299,7 @@ class Sample < ActiveRecord::Base
     s[:containing_thread_id] = containing_thread_id if containing_thread_id
 
     s[:threads] = self.workflow_associations
-      .select { |wa| wa.thread }
+      .select { |wa| wa.thread && wa.thread.workflow }
       .collect { |wa|
         { 
           id: wa.thread.id,
