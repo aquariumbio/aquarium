@@ -165,6 +165,7 @@ class WorkflowsController < ApplicationController
   # DELETE /workflows/1.json
   def destroy
     @workflow = Workflow.find(params[:id])
+    FolderContent.where(workflow_id: @workflow.id).destroy_all
     @workflow.destroy
 
     respond_to do |format|
