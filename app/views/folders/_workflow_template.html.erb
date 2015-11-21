@@ -15,7 +15,7 @@
             ng-click="workflowManager.close(workflow)">
         &#9783;
       </span>
-    </div>
+    </div> 
 
     <!-- NAME ------------------------------------------------------------------------- -->
     <div class='name'>
@@ -24,7 +24,7 @@
         {{workflow.id}}:
       </b>
       <span ng-click="workflowManager.select(workflow)" style="cursor: pointer;">{{workflow.name}}</span>
-      <span ng-if="workflow.open">(Unprocessed Threads)</span>
+      <span ng-if="selection == workflow">({{workflow.threads.length}} unprocessed threads)</span>
     </div>
 
     <!-- BUTTONS ---------------------------------------------------------------------- -->

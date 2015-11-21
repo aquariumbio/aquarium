@@ -4,7 +4,7 @@
   try {
     w = angular.module('folders'); 
   } catch (e) {
-    w = angular.module('folders', ['puElasticInput']); 
+    w = angular.module('folders', ['puElasticInput', 'cfp.hotkeys']); 
   } 
 
   w.service('folderAjax', [ '$http', function($http) {
@@ -70,11 +70,23 @@
       });
     }   
 
+    this.add_workflow = function(workflow_id,folder_id,then) {
+      this.get('/folders.json?method=add_workflow&workflow_id='+workflow_id+'&folder_id='+folder_id,function(response) {
+        then(response.data);
+      });
+    }
+
     this.remove_sample = function(folder,sample,then) {
       this.get('/folders.json?method=remove_sample&sample_id='+sample.id+'&folder_id='+folder.id,function(response) {
         then(response.data);
       });
     }
+
+    this.remove_workflow = function(folder,workflow,then) {
+      this.get('/folders.json?method=remove_workflow&workflow_id='+workflow.id+'&folder_id='+folder.id,function(response) {
+        then(response.data);
+      });
+    }    
 
     this.new_sample = function(folder,sample,role,then)  {
       this.post('/folders.json?method=new_sample',{ folder_id: folder.id, sample: sample, role: role },function(response) {

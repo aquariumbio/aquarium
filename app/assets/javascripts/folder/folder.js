@@ -4,11 +4,11 @@
   try {
     w = angular.module('folders'); 
   } catch (e) {
-    w = angular.module('folders', ['puElasticInput']); 
+    w = angular.module('folders', ['puElasticInput', 'cfp.hotkeys']); 
   } 
 
-  w.controller('foldersCtrl', [ '$scope','folderAjax','threadBuilder','workflowManager','focus', 
-                       function ($scope,  folderAjax,  threadBuilder,  workflowManager,  focus) {
+  w.controller('foldersCtrl', [ '$scope','folderAjax','threadBuilder','workflowManager','focus', 'hotkeys', 
+                       function ($scope,  folderAjax,  threadBuilder,  workflowManager,  focus,   hotkeys) {
 
     folderAjax.index(function(data) {
 
@@ -21,7 +21,10 @@
       $scope.threadBuilder.init($scope);
 
       $scope.workflowManager = workflowManager;
-      $scope.workflowManager.init($scope);      
+      $scope.workflowManager.init($scope);   
+
+      $scope.clipboard = null;
+
     });
 
     folderAjax.sample_types(function(data) {
@@ -119,11 +122,22 @@
 
     $scope.addSample = function(f) {
       var sid = $('#add-sample').val().split(":")[0];
+      $scope.addSampleAux(f,sid);
+    }
+
+    $scope.addSampleAux = function(f,sid) {
       folderAjax.add_sample(sid,$scope.current_folder.id,function(data) {
         $scope.current_folder.samples.unshift(data.sample); 
         $('#add-sample').val('');
         $scope.selection = data.sample; 
       });
+    }
+
+    $scope.addWorkflow = function(f,wid) {
+      folderAjax.add_workflow(wid,$scope.current_folder.id,function(data) {
+        $scope.current_folder.workflows.unshift(data.workflow); 
+        $scope.selection = data.workflow; 
+      });      
     }
 
     $scope.newSampleTemplate = function(sample_type) {
@@ -224,8 +238,8 @@
       return null;
     }
 
-    $scope.removeSample = function() {
-      folderAjax.remove_sample($scope.current_folder,$scope.selection, function(data) {
+    $scope.removeSampleAux = function(sample) {
+      folderAjax.remove_sample($scope.current_folder,sample, function(data) {
         var i = $scope.current_folder.samples.indexOf($scope.selection);
         if ( $scope.current_folder.samples[i+1] ) {
           $scope.selection = $scope.current_folder.samples[i+1];
@@ -234,15 +248,49 @@
       });
     }
 
+    $scope.removeSample = function() {
+      $scope.removeSampleAux($scope.selection);
+    }
+
+    $scope.removeWorkflow = function(workflow) {
+      folderAjax.remove_workflow($scope.current_folder,workflow, function(data) {
+        var i = $scope.current_folder.workflows.indexOf(workflow);
+        if ( $scope.current_folder.workflows[i+1] ) {
+          $scope.selection = $scope.current_folder.worfklows[i+1];
+        }
+        $scope.current_folder.workflows.splice(i,1);
+      });
+    }    
+
     $scope.deleteFolder = function(f) {
       confirm("Are you sure you want to delete the folder and all of its sub-folders? Other contents will not be deleted, but may be harder to find.");
       folderAjax.delete_folder($scope.current_folder,function(data) {
         $scope.current_folder = remove($scope.folders[0],$scope.current_folder);      
       });
     }
+
+    $scope.remove = function() {
+
+      var object = $scope.selection;
+
+      if ( object && object.sample_type ) {
+        $scope.removeSampleAux(object);
+      } else if ( object && object.form ) {
+        $scope.removeWorkflow(object);
+      } else if ( object && object.children ) {
+        
+      } else {
+        console.log("Pasting unknown object.")        
+      }      
+
+    }
  
     $scope.contents = function(f) {
-      if ( ! f.samples || ! f.workflows ) {
+      if ( f.special == "workflows" ) {
+        folderAjax.workflows(function(data) {
+          f.workflows = data;          
+        });
+      } else if ( ! f.samples || ! f.workflows ) {
         folderAjax.samples(f,function(data) {
           f.samples = data.samples;
           f.workflows = data.workflows;          
@@ -278,7 +326,56 @@
 
     $scope.range = function(n) {
       return new Array(n);
-    };    
+    };
+
+    $scope.paste = function() {
+
+      var object = $scope.clipboard;
+
+      // I am embarrased by hjow I am figuring out what kind of object is
+      // being pasted.
+      if ( object && object.sample_type ) {
+        $scope.addSampleAux($scope.current_folder,object.id);
+      } else if ( object && object.form ) {
+        $scope.addWorkflow($scope.current_folder,object.id);        
+      } else if ( object && object.children ) {
+        console.log("TODO: paste folder " + object.id);
+      } else {
+        console.log("Pasting unknown object.")
+      }
+
+    }
+
+    // KEYBOARD SHORTCUTS
+    hotkeys.add({
+      combo: 'ctrl+c',
+      description: 'Copy',
+      callback: function() {
+        if ( $scope.selection ) {
+          $scope.clipboard = $scope.selection;
+        } else {
+          $scope.clipboard = $scope.current_folder;
+        }
+      }
+    });
+
+    hotkeys.add({
+      combo: 'ctrl+v',
+      description: 'Paste',
+      callback: $scope.paste
+    });
+
+    hotkeys.add({
+      combo: 'ctrl+d',
+      description: 'Delete',
+      callback: $scope.remove
+    });    
+
+    hotkeys.add({
+      combo: 'ctrl+n',
+      description: 'New Folder',
+      callback: $scope.newFolder
+    });
 
   }]);
 

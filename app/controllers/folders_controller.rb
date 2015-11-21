@@ -69,6 +69,13 @@ class FoldersController < ApplicationController
 
           { sample: s.for_folder }
 
+        when 'add_workflow'
+
+          wf = Workflow.find(params[:workflow_id])
+          FolderContent.new(folder_id: params[:folder_id], workflow_id: wf.id).save
+
+          { workflow: wf.for_folder }
+
         when 'get_sample'
 
           { sample: Sample.find(params[:sample_id]).for_folder }
@@ -105,6 +112,13 @@ class FoldersController < ApplicationController
             fc[0].destroy
           end
 
+        when 'remove_workflow'
+
+          fc = FolderContent.where(folder_id: params[:folder_id], workflow_id: params[:workflow_id])
+          if fc.length > 0 
+            fc[0].destroy
+          end
+
         when 'save_sample'
 
           sample = Sample.find(params[:id])
@@ -135,7 +149,7 @@ class FoldersController < ApplicationController
 
     else 
 
-      { folders: [ Folder.tree(current_user), SampleType.folders ] }
+      { folders: [ Folder.tree(current_user), Workflow.folders, User.folders(current_user) ] }
 
     end
 

@@ -7,7 +7,13 @@ namespace :docs do
     "WorkflowProtocolAPI",
     "API",
     "Installation",
-    "Location Wizard"
+    "Location Wizard",
+    "Folders",
+    "Reference",
+    "WorkflowGUITutorial",
+    "KrillWorkflowAPITutorial",
+    "JSONDocumentation",
+    "Workflow"
   ]
 
   task :md do 
@@ -15,6 +21,7 @@ namespace :docs do
     md.each do |name|
       sh "cp 'doc/#{name}.md' public/doc/md"
     end
+    sh "cp -r doc/images public/doc"
   end
 
   task :auto do

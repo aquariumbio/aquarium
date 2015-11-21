@@ -1,5 +1,63 @@
-<ul>
-  <% @workflow_processes.reverse.each do |wp| %>
-    <li><%= link_to wp.id, wp %></li>
-  <% end %>
-</ul>
+<% provide(:title, 'Processes') %>
+
+<div ng-app="process_viewer">
+
+  <%= render partial: 'process_template' %>
+
+  <div id="process-viewer-control" class='row-fluid process-viewer' ng-controller='pvCtrl as pv'>
+
+    <div class='span2'>
+
+      <div data-spy="affix" data-offset-top="200">
+
+        <div ng-click="activeOn()" ng-class="category == 'active' ? 'active-choice' : 'inactive-choice'">Active</div>
+
+        <div ng-click="recentOn()" ng-class="category == 'recent' ? 'active-choice' : 'inactive-choice'">Recent</div>
+
+        <div ng-show="category == 'recent'" class='ago-container'>
+          <div ng-click="decrementDaysAgo()" 
+                class='arrow-btn'
+                ng-class="days_ago > 1 ? 'arrow-btn' : 'arrow-btn-inactive'">&#9664;</div>  
+          <div class="last">  
+            <span ng-show="days_ago == 1">Last day</span>
+            <span ng-show="days_ago > 1">{{days_ago-1}}-{{days_ago}} days ago</span>          
+          </div>
+          <div ng-click="incrementDaysAgo()" class='arrow-btn'>&#9654;</div>
+        </div>
+
+        <div ng-show="active_loading" class="loading">Loading Active Processes...</div>
+
+        <div ng-show="recent_loading" class="loading">Loading Recent Processes...</div>        
+
+      </div>
+
+    </div>
+
+    <div class="span10 processes">
+
+      <div ng-repeat="process in active"
+         ng-include="'processTemplate'"
+         ng-show="category == 'active'"
+         ng-init="cat = 'active'">
+      </div>
+
+      <div ng-repeat="process in recent"
+         ng-include="'processTemplate'"
+         ng-show="category == 'recent'"
+         ng-init="cat = 'recent'">
+      </div>
+
+      <div ng-if="( category == 'active' && active.length==0 && !active_loading ) || ( category == 'recent' && recent.length==0 && !recent_loading )">
+        No processes found.
+      </div>
+
+    </div>
+
+  </div>  
+
+  <br />
+  <br />
+
+</div>
+
+ 

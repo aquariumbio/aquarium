@@ -1,3 +1,5 @@
+<% provide(:title, 'Folders') %>
+
 <style>
 body {
   overflow: hidden;
@@ -30,25 +32,21 @@ body {
              type=text 
              class='folder-path-input folder-current-name' 
              ng-model="current_folder.name"
-             ng-disabled="current_folder.id < 0"
+             ng-disabled="current_folder.id < 0 || current_folder.locked"
              ng-blur="renameFolder(current_folder)">
 
       <a href='#' id="delete-folder"
-         ng-if="current_folder != folders[0]"
+         ng-if="current_folder != folders[0] && !current_folder.locked"
          class='btn btn-small pull-right folder-btn'
          ng-click="deleteFolder(current_folder)">Delete Folder</a>
 
       <a href='#'  
          class='btn btn-small folder-btn pull-right' 
          ng-click="newFolder()"
+         ng-if="!current_folder.locked"
          ng-disabled="current_folder.locked">New Folder</a>
 
-      <a href='#'  
-         class='btn btn-small folder-btn pull-right' 
-         ng-click="removeSample()"
-         ng-show="selection != null">Remove Sample</a>
-
-      <div class="btn-group pull-right folder-btn" ng-show="current_folder.id>=0">
+      <div class="btn-group pull-right folder-btn" ng-show="current_folder.id>=0" ng-if="!current_folder.locked">
         <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
           New Sample
           <span class="caret"></span>
@@ -85,10 +83,12 @@ body {
       </div>      
 
       <div class='input-append pull-right folder-btn' 
-           ng-show="current_folder.id>=0">
+           ng-show="current_folder.id>=0" ng-if="!current_folder.locked">
         <input id="add-sample" type="text" style="height: 26px !important;">
         <a href='#' class="btn btn-small" type="button" ng-click="addSample()">Add</a>
       </div>      
+
+      <span ng-if="current_folder.locked" class="pull-right read-only">Read Only</span>      
 
     </div>
 
@@ -131,7 +131,7 @@ body {
 
       </div>
 
-    </div>
+    </div>  
 
   </div>
 

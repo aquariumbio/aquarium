@@ -157,6 +157,10 @@ class WorkflowProcess < ActiveRecord::Base
     operation_containers.conjoin { |oc| oc[:jid] && Job.find(oc[:jid]).done? }
   end
 
+  def active?
+    self.jobs.disjoin { |j| j.active? || j.pending? }
+  end
+
   def record_result_of job
 
     rv = job.return_value

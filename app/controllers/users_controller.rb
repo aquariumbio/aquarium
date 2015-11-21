@@ -88,9 +88,16 @@ class UsersController < ApplicationController
   end
 
   def index
-    retired = Group.find_by_name('retired')
-    rid = retired ? retired.id : -1
-    @users = ((User.select{|u| !u.member? rid }).sort { |a,b| a[:login] <=> b[:login] }).paginate(page: params[:page], :per_page => 40)
+
+    respond_to do |format|
+      format.html {
+        retired = Group.find_by_name('retired')
+        rid = retired ? retired.id : -1
+        @users = ((User.select{|u| !u.member? rid }).sort { |a,b| a[:login] <=> b[:login] }).paginate(page: params[:page], :per_page => 40)        
+      }
+      format.json { render json: User.all }
+    end
+
   end
 
   def destroy
