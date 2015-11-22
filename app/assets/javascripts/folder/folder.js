@@ -127,9 +127,13 @@
 
     $scope.addSampleAux = function(f,sid) {
       folderAjax.add_sample(sid,$scope.current_folder.id,function(data) {
-        $scope.current_folder.samples.unshift(data.sample); 
+        if ( !data.error ) {
+          $scope.current_folder.samples.unshift(data.sample); 
+          $scope.selection = data.sample; 
+        } else {
+          alert("Could not find an existing sample with name and/or id '" + $('#add-sample').val() + "'.")
+        }
         $('#add-sample').val('');
-        $scope.selection = data.sample; 
       });
     }
 

@@ -66,10 +66,14 @@ class FoldersController < ApplicationController
 
         when 'add_sample'
 
-          s = Sample.includes(:sample_type,workflow_associations: { workflow_thread: :workflow }).find(params[:sample_id])
-          FolderContent.new(folder_id: params[:folder_id], sample_id: s.id).save
+          s = Sample.includes(:sample_type,workflow_associations: { workflow_thread: :workflow }).find_by_id(params[:sample_id])
 
-          { sample: s.for_folder }
+          if s
+            FolderContent.new(folder_id: params[:folder_id], sample_id: s.id).save
+            { sample: s.for_folder }
+          else
+            { error: "Could not add sample '#{params[:sample_id]}'" }
+          end
 
         when 'add_workflow'
 
