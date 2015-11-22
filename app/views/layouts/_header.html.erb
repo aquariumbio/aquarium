@@ -2,7 +2,11 @@
   <div class="navbar-inner">
     <div class="container-fluid" id="header-bar">
       <%= link_to "AQUARIUM", root_path, id: "logo" %>
-      <div id='environment'><%= Bioturk::Application.config.instance_name %>: <%= Rails.env %></div>
+      <div id='environment'>
+        <%= Bioturk::Application.config.instance_name %>: 
+        <%= Rails.env %>
+        <span class="aquarium-version">v<%= Bioturk::Application.config.aquarium_version %></span>
+      </div>
       <div class='info' id="info-area"></div>
       <nav>
         <ul class="nav pull-right">
