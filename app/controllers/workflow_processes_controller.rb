@@ -78,7 +78,11 @@ class WorkflowProcessesController < ApplicationController
     @wp = WorkflowProcess.create @workflow, @threads, debug
 
     Thread.new do
-      @wp.launch
+      begin
+        @wp.launch
+      rescue Exception => e
+        Rails.logger "Failed to launch workflow process: #{e.to_s}"
+      end
     end
 
     render json: @wp
@@ -87,13 +91,17 @@ class WorkflowProcessesController < ApplicationController
 
   def rerun
 
-    Rails.logger.info "Rerunning process #{params[:id]}"
-
     @wp = WorkflowProcess.find(params[:id])
     @workflow = @wp.workflow
 
+    if !@workflow 
+      flash[:error] = "Workflow not found. Process cannot be rerun"
+      redirect_to workflow_processes_url
+      return
+    end
+
     @threads = @wp.threads.collect { |t|
-      WorkflowThread.create t.spec, t.workflow_id
+      WorkflowThread.create t.spec, t.workflow_id, current_user
     }
 
     if params[:debug].class == String
