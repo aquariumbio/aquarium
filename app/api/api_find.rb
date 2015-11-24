@@ -4,7 +4,7 @@ module ApiFind
 
     newspec = spec.clone
 
-    reps =  { object_type: :object_types, 
+    reps =  { object_type: :object_types,
               sample: :samples,
               sample_type: :sample_types,
               task_prototype: :task_prototypes }
@@ -14,7 +14,7 @@ module ApiFind
         newspec.delete(k)
         newspec[reps[k]] = v
       end
-    end          
+    end
 
     puts "#{spec} ==> #{newspec}"
     newspec
@@ -23,11 +23,11 @@ module ApiFind
 
   def find args
 
-    models = { "item" => Item, "job" => Job, "sample" => Sample, "user" => User, 
+    models = { "item" => Item, "job" => Job, "sample" => Sample, "user" => User,
                "task" => Task, "sample_type" => SampleType, "object_type" => ObjectType,
-               "task_prototype" => TaskPrototype }
+               "task_prototype" => TaskPrototype, "touch" => Touch }
 
-    query = models[args[:model]]  
+    query = models[args[:model]]
     query = query.includes(args[:includes]) if args[:includes]
     query = query.limit(args[:limit]) if args[:limit]
 
