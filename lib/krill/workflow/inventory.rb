@@ -11,8 +11,6 @@ module Krill
       Job.find(@jid).takes
     end
 
-    private
-
     # The Sample object associated with the ispec
     def sample ispec
       if ispec[:sample] && ispec[:sample].class == String
