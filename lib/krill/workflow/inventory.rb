@@ -11,17 +11,21 @@ module Krill
       Job.find(@jid).takes
     end
 
+    private
+
     # The Sample object associated with the ispec
-    def sample ispec
+    def sample_aux ispec
       if ispec[:sample] && ispec[:sample].class == String
-        Sample.find(ispec[:sample].as_sample_id)
+        s = Sample.find_by_id(ispec[:sample].as_sample_id)
+        raise "No sample specified in #{ispec}." unless s
       else
         raise "Could not find Sample object for #{ispec} because 'sample' was not a string"
       end
+      return s
     end
 
     # The list of Sample objects associated with the ispec
-    def samples ispec
+    def samples_aux ispec
       if ispec[:sample] && ispec[:sample].class == Array && ispec[:sample].conjoin { |s| s.class == String }
         a = ispec[:sample].collect { |s| s.as_sample_id }
         Sample.find(a).index_by(&:id).slice(*a).values
@@ -31,7 +35,7 @@ module Krill
     end
 
     # The container object associated with the ispec
-    def container ispec
+    def container_aux ispec
       if ispec[:container] && ispec[:container].class == String
         ObjectType.find(ispec[:container].as_container_id)
       else
@@ -42,7 +46,12 @@ module Krill
     # The first Item in the database consistent with the ispec
     def first_item ispec
 
-      i = (sample ispec).items.select { |i| i.object_type_id == (container ispec).id }
+      s = sample_aux ispec
+      if s
+        i = (sample_aux ispec).items.select { |i| i.object_type_id == (container_aux ispec).id }
+      else
+        i = []
+      end
 
       if i.length > 0 
         i.first
@@ -57,8 +66,8 @@ module Krill
     # and the container specified in the ispec
     def first_item_array ispec 
 
-      (samples ispec).collect do |s|
-        i = s.items.select { |i| i.object_type_id == (container ispec).id }
+      (samples_aux ispec).collect do |s|
+        i = s.items.select { |i| i.object_type_id == (container_aux ispec).id }
         if i.length > 0 
           i.first
         else

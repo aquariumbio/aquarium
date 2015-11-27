@@ -110,7 +110,7 @@ class WorkflowProcess < ActiveRecord::Base
       return true if connection[:to] == [ oid, name ]
     end
     false
-  end
+  end 
 
   def initializer? oc # returns true if the operation container's op should be run
                       # initially, when the process starts

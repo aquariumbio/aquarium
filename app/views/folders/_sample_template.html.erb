@@ -39,7 +39,7 @@
              ng-keydown="unsave(sample)"
              pu-elastic-input
              pu-elastic-input-maxwidth="none"/>
-      <div class='sample-type'>({{sample.sample_type.name}})</div>
+      <div class='sample-type' ng-if="sample.sample_type">({{sample.sample_type.name}})</div>
     </div>
 
     <!-- BUTTONS ---------------------------------------------------------------------- -->

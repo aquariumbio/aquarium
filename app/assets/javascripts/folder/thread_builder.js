@@ -17,9 +17,13 @@
       var thread = {};
       angular.forEach(form.inputs.concat(form.outputs), function(part) {
         if ( part.is_vector ) {
-          thread[part.name] = { value: [ {} ], is_vector: true };
+          thread[part.name] = { value: [ {} ], is_vector: true, hidden: part.hidden };
         } else {
-          thread[part.name] = { value: "" };
+          if ( part.alternatives.length > 0 && part.alternatives[0].sample ) {
+            thread[part.name] = { value: part.alternatives[0].sample, hidden: part.hidden };
+          } else {
+            thread[part.name] = { value: "", hidden: part.hidden };
+          }
         }
         thread[part.name].alternatives = part.alternatives;
       });

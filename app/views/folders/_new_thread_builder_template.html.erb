@@ -59,7 +59,7 @@
   <!-- PARTS ------------------------------------------------------------------------- -->
   <div ng-if="builder.open" ng-repeat="(name,component) in builder.thread">
 
-    <div ng-if="builder.parent_sample_role != name">
+    <div ng-if="builder.parent_sample_role != name && !component.hidden">
 
       <!-- SCALARS ------------------------------------------------------------------- -->
       <div ng-if="!component.is_vector">
