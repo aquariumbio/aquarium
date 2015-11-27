@@ -28,7 +28,7 @@ module ApiFind
 
     models = { "item" => Item, "job" => Job, "sample" => Sample, "user" => User,
                "task" => Task, "sample_type" => SampleType, "object_type" => ObjectType,
-               "task_prototype" => TaskPrototype,
+               "task_prototype" => TaskPrototype, "touch" => Touch,
                "workflow_thread"=>WorkflowThread,
                "upload"=>Upload,
                "task_prototype" => TaskPrototype, 
