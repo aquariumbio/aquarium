@@ -318,4 +318,8 @@ class Sample < ActiveRecord::Base
 
   end  
 
+  def to_workflow_identifier
+    "#{self.id}: #{self.name}"
+  end
+
 end

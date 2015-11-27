@@ -18,4 +18,12 @@ class Upload < ActiveRecord::Base
     self.upload.url
   end
 
+  def path
+    self.upload.path
+  end
+
+  def export
+    attributes
+  end
+
 end

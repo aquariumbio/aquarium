@@ -17,8 +17,12 @@ module WorkflowAux
   def sample_based? ispec
 
     a = ispec[:alternatives].disjoin { |a| a[:sample_type] }
-    Rails.logger.info "SAMPLE_BASED: #{ispec} => #{a}"
     a
+
+  end
+
+  def is_input? inputs, name
+    inputs.find { |i| i[:name] == name }
   end
 
   def form
@@ -28,9 +32,16 @@ module WorkflowAux
     parameters = []
 
     complete_spec[:specification][:operations].each do |h|
-      inputs += (h[:operation][:inputs].reject { |i| wired_input?(h[:id], i[:name]) || !sample_based?(i) }).collect { |i| i.merge oid: h[:id] }
-      outputs += (h[:operation][:outputs].reject { |o| wired_output?(h[:id], o[:name]) || !sample_based?(o) }).collect { |o| o.merge oid: h[:id] }
+
+      inputs += (h[:operation][:inputs].reject { |i| wired_input?(h[:id], i[:name]) || !sample_based?(i) })
+                .collect { |i| i.merge oid: h[:id] }
+
+      outputs += (h[:operation][:outputs].reject { |o| wired_output?(h[:id], o[:name]) || !sample_based?(o) })
+                .reject { |o| is_input? inputs, o[:name] }
+                .collect { |o| o.merge oid: h[:id] }
+
       parameters += h[:operation][:parameters].collect { |p| p.merge oid: h[:id] }
+
     end
 
     f = { 
@@ -38,8 +49,6 @@ module WorkflowAux
       outputs: outputs,
       parameters: parameters
     }
-
-    Rails.logger.info "WORKFLOW FORM: made form #{f}."
 
     return f
 

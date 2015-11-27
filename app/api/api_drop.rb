@@ -10,6 +10,9 @@ module ApiDrop
     when "task"
       drop_aux Task, args
 
+    when "workflow_thread"
+      drop_aux WorkflowThread, args
+
     end
 
   end
@@ -33,5 +36,6 @@ module ApiDrop
       end
     end      
   end
+
 
 end

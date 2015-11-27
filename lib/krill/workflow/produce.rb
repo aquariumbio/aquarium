@@ -57,16 +57,20 @@ module Krill
     private
 
     def produce_sample_from instance
-      s = sample instance
-      o = container instance
-      i = @protocol.produce( @protocol.new_sample s.name, of: s.sample_type.name, as: o.name )
-      instance[:sample_id] = s.id                
-      instance[:item_id] = i.id
+      begin
+        s = sample_aux instance
+        o = container_aux instance
+        i = @protocol.produce( @protocol.new_sample s.name, of: s.sample_type.name, as: o.name )
+        instance[:sample_id] = s.id                
+        instance[:item_id] = i.id
+      rescue Exception => e
+        error instance, "Could not produce sample: #{e.to_s}"
+      end
     end
 
     def produce_samples_from instance
-      sample_array = samples instance 
-      o = container instance
+      sample_array = samples_aux instance 
+      o = container_aux instance
       instance[:item_ids] = []
       instance[:sample_ids] = []
       instance[:sample_ids] = sample_array.collect { |s| s.id }
@@ -76,7 +80,7 @@ module Krill
     end
 
     def produce_basic_item_from instance
-      o = container instance
+      o = container_aux instance
       if o.handler == "sample_container"
         raise "Cannot produce item only from container #{o} because a sample is required: #{ispec}" 
       end

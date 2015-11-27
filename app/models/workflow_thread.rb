@@ -28,15 +28,15 @@ class WorkflowThread < ActiveRecord::Base
     s = spec
     form = Workflow.find(workflow_id).form
 
-    (form[:inputs]+form[:outputs]).each do |input|
+    (form[:inputs]+form[:outputs]).reject { |p| p[:hidden] }.each do |input|
       component = s.find { |c| c[:name] == input[:name] }
       if input[:is_vector]
-        raise "The vector #{input[:name]} is not specified." unless component && component[:sample].class == Array
+        raise "#{input[:description]} (#{input[:name]}) is not specified." unless component && component[:sample].class == Array
         (0..component[:sample].length-1).each do |i|
-          raise "'#{input[:name]}[#{i}]' is not specified." unless valid_sample_name(component[:sample][i])
+          raise "#{input[:description]} (#{input[:name]}[#{i}]) is not specified." unless valid_sample_name(component[:sample][i])
         end
       else
-        raise "The '#{input[:name]}' is not specified." unless component && valid_sample_name(component[:sample])
+        raise "#{input[:description]} (#{input[:name]}) is not specified." unless component && valid_sample_name(component[:sample])
       end
     end
 
@@ -93,9 +93,10 @@ class WorkflowThread < ActiveRecord::Base
         end
       else
         if ispec[:sample].as_sample_id != except.to_i
+          s = Sample.find_by_id(ispec[:sample].as_sample_id)
           samples << {
             name: ispec[:name],
-            sample: Sample.find(ispec[:sample].as_sample_id).for_folder(self.id)
+            sample: s ? s.for_folder(self.id) : {}
           }
         end
       end
@@ -117,6 +118,15 @@ class WorkflowThread < ActiveRecord::Base
 
     { samples: samples, params: params, data: data }
 
+  end
+
+  def self.okay_to_drop? workflow_thread,user
+
+    warn "Could not find a thread with the specified ID" and return false unless workflow_thread
+    workflow_associations=workflow_thread.associations
+    wokflow_association=workflow_associations.detect { |wokflow_association| !wokflow_association.process_id}
+    warn "The thread requested for deletion is already associated with a process" and return false unless wokflow_association
+    true
   end
 
 end

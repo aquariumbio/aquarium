@@ -204,7 +204,9 @@ module Krill
       cs = CollectionArray.new
 
       ispecs.first[:instantiation].each { |ispec|
-        cs << Collection.find(ispec[:collection_id])
+        if ispec[:collection_id]
+          cs << Collection.find(ispec[:collection_id])
+        end
       }
 
       cs
