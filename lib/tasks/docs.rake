@@ -17,7 +17,8 @@ namespace :docs do
   ]
 
   task :md do 
-    puts "copying doc/*.md files to public/doc"
+    puts "copying doc/*.md files to public/doc/md"
+    sh "mkdir public/doc/md"
     md.each do |name|
       sh "cp 'doc/#{name}.md' public/doc/md"
     end
