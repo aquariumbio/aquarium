@@ -12,7 +12,7 @@ namespace :docs do
     "Reference",
     "WorkflowGUITutorial",
     "KrillWorkflowAPITutorial",
-    "JSONDocumentation",
+    "JSONdocumentation",
     "Workflow"
   ]
 
@@ -27,6 +27,7 @@ namespace :docs do
 
   task :auto do
     puts "autogenerating operation api docs"
+    sh "mkdir public/doc/operation-api"
     sh "rm -rf public/doc/operation-api"
     sh "cd lib/krill/workflow; yard doc"
     sh "mv lib/krill/workflow/doc public/doc/operation-api"

@@ -43,5 +43,6 @@ awc.sh
 # documentation temp files
 /lib/krill/workflow/doc/
 /public/doc/md/
-/public/doc/images
+/public/doc/images/
+/public/doc/operation-api/
 
