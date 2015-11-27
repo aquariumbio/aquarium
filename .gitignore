@@ -32,6 +32,9 @@
 [#]*[#]
 .\#*
 
+# temporary vim files
+*.swp
+
 # Gemfile.lock
 Gemfile.lock
 
