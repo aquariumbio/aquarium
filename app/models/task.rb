@@ -316,7 +316,7 @@ class Task < ActiveRecord::Base
         (0..n-1).collect { |i| spec[:"num_colonies"][i]*spec[:"primer_ids Primer"][i].length }.inject{ |sum,x| sum+x }         
 
       when "Sequencing"
-        n = spec[:"plasmid_stock_id Plasmid Stock"].length
+        n = spec[:"plasmid_stock_id Plasmid Stock|Fragment Stock"].length
         (0..n-1).collect { |i| spec[:"primer_ids Primer"][i].length }.inject{ |sum,x| sum+x }        
 
       when "Yeast Strain QC"
@@ -330,10 +330,10 @@ class Task < ActiveRecord::Base
         spec[:"primer_ids Primer"].length        
 
       when "Glycerol Stock"
-        spec[:"item_ids Yeast Plate"].length  
+        spec[:"item_ids Yeast Plate|Yeast Overnight Suspension|TB Overnight of Plasmid|Overnight suspension"].length  
 
       when "Discard Item"
-        spec[:"item_ids Yeast Plate"].length          
+        spec[:"item_ids Item"].length          
 
       when "Streak Plate"
         spec[:"item_ids Yeast Glycerol Stock"].length    
