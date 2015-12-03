@@ -288,4 +288,67 @@ class Task < ActiveRecord::Base
 
   end 
 
+  def size
+    begin
+      n = size_aux
+    rescue Exception => e
+      Rails.logger.info "Error: e.full_messages.join(', ')"
+      n = 0.123
+    end
+    n
+  end
+
+  def size_aux
+
+    case task_prototype.name
+
+      when "Fragment Construction"
+        spec[:"fragments Fragment"].length
+
+      when "Gibson"
+        1
+
+      when "Gibson Assembly"
+        1
+
+      when "Plasmid Verification"
+        n = spec[:"plate_ids E coli Plate of Plasmid"].length
+        (0..n-1).collect { |i| spec[:"num_colonies"][i]*spec[:"primer_ids Primer"][i].length }.inject{ |sum,x| sum+x }         
+
+      when "Sequencing"
+        n = spec[:"plasmid_stock_id Plasmid Stock"].length
+        (0..n-1).collect { |i| spec[:"primer_ids Primer"][i].length }.inject{ |sum,x| sum+x }        
+
+      when "Yeast Strain QC"
+        n = spec[:"yeast_plate_ids Yeast Plate"].length
+        (0..n-1).collect { |i| spec[:"num_colonies"][i] }.inject{ |sum,x| sum+x }
+
+      when "Yeast Transformation"
+        spec[:"yeast_transformed_strain_ids Yeast Strain"].length
+
+      when "Primer Order"
+        spec[:"primer_ids Primer"].length        
+
+      when "Glycerol Stock"
+        spec[:"item_ids Yeast Plate"].length  
+
+      when "Discard Item"
+        spec[:"item_ids Yeast Plate"].length          
+
+      when "Streak Plate"
+        spec[:"item_ids Yeast Glycerol Stock"].length    
+
+      when "Sequencing Verification"
+        spec[:"plasmid_stock_ids Plasmid Stock"].length + spec[:"overnight_ids TB Overnight of Plasmid"].length
+
+      when "Yeast Competent Cell"
+        spec[:"yeast_strain_ids Yeast Strain"].length
+
+      else
+        1
+
+    end
+
+  end
+
 end

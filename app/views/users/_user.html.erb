@@ -2,6 +2,7 @@
    <td><%= user.login %></td>
    <td><%= link_to user.name, user %></td>
    <td><%= user.created_at.strftime("%m/%d/%Y") %></td>
+   <td><%= user.tasks.select { |t| t.created_at >= Date.today.at_beginning_of_month - 3.month }.length %>
    <% if current_user.is_admin && !current_user?(user) %>
      <td>
        <%= link_to "retire", user, method: :delete, data: { confirm: "Are you sure you want to retire this user?" } %>
@@ -9,5 +10,6 @@
    <% else %> 
      <td></td>
    <% end %>
+   <td><a href="/users/billing/<%= user.id %>">billing</a></td>
 
 </tr>

@@ -36,6 +36,50 @@ class UsersController < ApplicationController
 
   end
 
+  def billing
+
+    @task_prototypes = TaskPrototype.all
+
+    @user = User.find(params[:id])
+
+    @report = (0..11).collect do |i| 
+
+      date = Date.today.at_beginning_of_month - i.month
+
+      task_summaries = TaskPrototype.all.collect do |tp|
+
+        tasks = Task.includes(:task_prototype)
+                    .where( "task_prototype_id = ? AND user_id = ? AND ? <= created_at AND created_at < ? ", 
+                            tp.id, @user.id, date, date + 1.month )
+
+        if tasks.length > 0
+          number = tasks.collect { |t| t.size }.inject{|sum,x| sum + x }
+        else
+          number = 0
+        end
+
+        cost_per = tp.prototype_hash[:cost_per] ? tp.prototype_hash[:cost_per] : 1
+
+        {
+          name: tp.name,
+          number: number,
+          cost_per: cost_per,
+          total: cost_per * number
+        }
+
+      end
+
+      { date: date, task_summaries: task_summaries }
+
+    end
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @report }
+    end    
+
+  end
+
   def create
 
     if !params[:change_password]
@@ -93,7 +137,7 @@ class UsersController < ApplicationController
       format.html {
         retired = Group.find_by_name('retired')
         rid = retired ? retired.id : -1
-        @users = ((User.select{|u| !u.member? rid }).sort { |a,b| a[:login] <=> b[:login] }).paginate(page: params[:page], :per_page => 40)        
+        @users = ((User.includes(:tasks).select{|u| !u.member? rid }).sort { |a,b| a[:login] <=> b[:login] }).paginate(page: params[:page], :per_page => 15)        
       }
       format.json { render json: User.all }
     end

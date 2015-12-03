@@ -25,6 +25,15 @@ class TaskPrototype < ActiveRecord::Base
 
   end
 
+  def prototype_hash
+    begin
+      result = JSON.parse self.prototype, symbolize_names: true
+    rescue Exception => e
+      result = {}
+    end
+    result
+  end
+
   def legal_options
 
     okay = true
