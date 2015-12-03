@@ -292,8 +292,8 @@ class Task < ActiveRecord::Base
     begin
       n = size_aux
     rescue Exception => e
-      Rails.logger.info "Warning: Could not compute size of #{self.simple_spec}: #{e}. #{e.backtrace[0]}"
-      n = 0.0123
+      Rails.logger.info "Warning: Using default task size of 1. Could not compute size of #{self.simple_spec}: #{e}. #{e.backtrace[0]}"
+      n = 1
     end
     n
   end
