@@ -176,6 +176,7 @@ Bioturk::Application.routes.draw do
   match '/inventory_stats', to: 'static_pages#inventory_stats'
   match '/inventory_critical', to: 'static_pages#inventory_critical'
   match '/protocol_usage', to: 'static_pages#protocol_usage'
+  match '/cost_report', to: 'static_pages#cost_report'  
 
   get '/production_interface', to: 'object_types#production_interface'
   get '/delete_inventory', to: 'object_types#delete_inventory'

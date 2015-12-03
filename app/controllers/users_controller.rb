@@ -38,38 +38,8 @@ class UsersController < ApplicationController
 
   def billing
 
-    @task_prototypes = TaskPrototype.all
-
     @user = User.find(params[:id])
-
-    @report = (0..11).collect do |i| 
-
-      date = Date.today.at_beginning_of_month - i.month
-
-      task_summaries = TaskPrototype.all.collect do |tp|
-
-        tasks = Task.includes(:task_prototype)
-                    .where( "task_prototype_id = ? AND user_id = ? AND ? <= created_at AND created_at < ? ", 
-                            tp.id, @user.id, date, date + 1.month )
-
-        if tasks.length > 0
-          number = tasks.collect { |t| t.size }.inject{|sum,x| sum + x }
-        else
-          number = 0
-        end
-
-        {
-          name: tp.name,
-          number: number,
-          cost_per: tp.cost,
-          total: tp.cost * number
-        }
-
-      end
-
-      { date: date, task_summaries: task_summaries }
-
-    end
+    @report = TaskPrototype.cost_report @user.id
 
     respond_to do |format|
       format.html

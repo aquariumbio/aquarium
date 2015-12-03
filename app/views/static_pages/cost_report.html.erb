@@ -1,0 +1,47 @@
+<h2>Cost Report</h2>
+
+<p>See the <%= link_to "individual users index", users_url %> for costs per user.</p>
+
+<ul>
+
+  <% @report.each do |r| %>
+
+    <li>
+      <b><%= r[:date].strftime('%b %d, %Y') %> to <%= (r[:date] + 1.month - 1.day).strftime('%b %d, %Y') %></b>
+
+      <table class='table'>
+
+        <tr>
+          <th width=25%>Task Type</th>
+          <th width=25%>Cost per</th>          
+          <th width=25%>Number</th>
+          <th width=25%>Total Cost</th>
+        </tr>
+
+        <% r[:task_summaries].each do |ts| %>
+
+          <% if ts[:number] > 0 %>
+            <tr>          
+              <td><%= ts[:name] %></td>        
+              <td><%= number_to_currency ( ts[:cost_per] ) %></td>
+              <td><%= ts[:number] %></td>              
+              <td><%= number_to_currency ( ts[:number] * ts[:cost_per] ) %></td>                    
+            </tr>            
+          <% end %>
+        <% end %>
+
+      <tr style="border-top: 2pt solid black">
+        <td></td>
+        <td></td>
+        <td>Total</td>        
+        <td><%= number_to_currency ( r[:task_summaries].collect { |ts| ts[:total] }.inject { |sum,x| sum + x } ) %></td>
+      </tr>
+
+
+      </table>
+
+    </li>
+
+  <% end %>
+
+</ul>
