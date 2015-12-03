@@ -1,19 +1,21 @@
 <h2>Activity: <%= @user.name%></h2>
 
-<ul>
-
   <% @report.each do |r| %>
 
-    <li>
-      <b><%= r[:date].strftime('%b %d, %Y') %> to <%= (r[:date] + 1.month - 1.day).strftime('%b %d, %Y') %></b>
+      <hr />
+
+      <h3><%= r[:date].strftime('%B, %Y') %></h3>
 
       <table class='table'>
 
         <tr>
-          <th width=25%>Task Type</th>
-          <th width=25%>Cost per</th>          
-          <th width=25%>Number</th>
-          <th width=25%>Total Cost</th>
+          <th width=28%>Task Type</th>
+          <th width=12%>Cost per</th>          
+          <th width=12%>Number</th>
+          <th width=12%>Direct Cost</th>
+          <th width=12%>Indirect Cost</th>
+          <th width=12%>Aquarium Overhead</th>                    
+          <th width=12%>Total Cost</th>                              
         </tr>
 
         <% r[:task_summaries].each do |ts| %>
@@ -24,22 +26,24 @@
               <td><%= number_to_currency ( ts[:cost_per] ) %></td>
               <td><%= ts[:number] %></td>              
               <td><%= number_to_currency ( ts[:number] * ts[:cost_per] ) %></td>                    
+              <td><%= number_to_currency ( 0.54*ts[:number] * ts[:cost_per] ) %></td>                    
+              <td><%= number_to_currency ( 0.1*ts[:number] * ts[:cost_per] ) %></td>                    
+              <td><%= number_to_currency ( 1.64*ts[:number] * ts[:cost_per] ) %></td>        
             </tr>            
           <% end %>
         <% end %>
 
-      <tr style="border-top: 2pt solid black">
-        <td></td>
-        <td></td>
-        <td>Total</td>        
-        <td><%= number_to_currency ( r[:task_summaries].collect { |ts| ts[:total] }.inject { |sum,x| sum + x } ) %></td>
-      </tr>
-
+        <tr style="border-top: 2pt solid black">
+          <% cost = r[:task_summaries].collect { |ts| ts[:total] }.inject { |sum,x| sum + x } %>
+          <td></td>
+          <td></td> 
+          <td>Total</td>        
+          <td><%= number_to_currency ( cost ) %></td>
+          <td><%= number_to_currency ( 0.54 * cost ) %></td>
+          <td><%= number_to_currency ( 0.1* cost ) %></td>
+          <td><%= number_to_currency ( 1.64 * cost ) %></td>
+        </tr>
 
       </table>
 
-    </li>
-
   <% end %>
-
-</ul>

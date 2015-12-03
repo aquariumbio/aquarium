@@ -1,47 +1,119 @@
+<div ng-app="costs">
+
+<div id="cost-control" ng-controller='costsCtrl as cc'>
+
 <h2>Cost Report</h2>
 
 <p>See the <%= link_to "individual users index", users_url %> for costs per user.</p>
 
-<ul>
+<label>UW Indirect Cost Rate</label>
+<input type="number" ng-model="idc_rate" />
+
+<label>Aquarium Overhead Rate</label>
+<input type="number" ng-model="aq_rate" />
 
   <% @report.each do |r| %>
 
-    <li>
-      <b><%= r[:date].strftime('%b %d, %Y') %> to <%= (r[:date] + 1.month - 1.day).strftime('%b %d, %Y') %></b>
+      <hr />
 
-      <table class='table'>
+      <h3><%= r[:date].strftime('%B, %Y') %></h3>
 
-        <tr>
-          <th width=25%>Task Type</th>
-          <th width=25%>Cost per</th>          
-          <th width=25%>Number</th>
-          <th width=25%>Total Cost</th>
-        </tr>
+      <div class='row-fluid'>
 
-        <% r[:task_summaries].each do |ts| %>
+        <div class='span8'>
 
-          <% if ts[:number] > 0 %>
-            <tr>          
-              <td><%= ts[:name] %></td>        
-              <td><%= number_to_currency ( ts[:cost_per] ) %></td>
-              <td><%= ts[:number] %></td>              
-              <td><%= number_to_currency ( ts[:number] * ts[:cost_per] ) %></td>                    
-            </tr>            
-          <% end %>
-        <% end %>
+          <table class='table'>
 
-      <tr style="border-top: 2pt solid black">
-        <td></td>
-        <td></td>
-        <td>Total</td>        
-        <td><%= number_to_currency ( r[:task_summaries].collect { |ts| ts[:total] }.inject { |sum,x| sum + x } ) %></td>
-      </tr>
+            <caption style="text-align:left">Cost Summary</caption>
 
+            <tr>
+              <th width=28%>Task Type</th>
+              <th width=12%>Cost per</th>          
+              <th width=12%>Number</th>
+              <th width=12%>Direct Cost</th>
+              <th width=12%>Indirect Cost</th>
+              <th width=12%>Aquarium Overhead</th>                            
+              <th width=12%>Total Cost</th>                                          
+            </tr>
 
-      </table>
+            <% r[:task_summaries].each do |ts| %>
 
-    </li>
+              <% if ts[:number] > 0 %>
+                <tr>          
+                  <td><%= ts[:name] %></td>        
+                  <td><%= number_to_currency ( ts[:cost_per] ) %></td>
+                  <td><%= ts[:number] %></td>              
+                  <td><%= number_to_currency ( ts[:number] * ts[:cost_per] ) %></td> 
+                  <td>{{idc_rate*<%= ts[:number] * ts[:cost_per] %>|currency}}</td> 
+                  <td>{{aq_rate*<%= ts[:number] * ts[:cost_per] %>|currency}}</td>
+                  <td>{{(1+idc_rate+aq_rate)*<%= ts[:number] * ts[:cost_per] %>|currency}}</td>
+                </tr>            
+              <% end %>
+            <% end %>
+
+            <tr style="border-top: 2pt solid black">
+              <% cost = r[:task_summaries].collect { |ts| ts[:total] }.inject { |sum,x| sum + x } %>
+              <td></td>
+              <td></td>
+              <td>Total</td>        
+              <td>{{ <%= cost %> | currency }}</td>
+              <td>{{ idc_rate * <%= cost %> | currency }}</td>
+              <td>{{ aq_rate * <%= cost %> | currency }}</td>  
+              <td>{{ (1+idc_rate+aq_rate) * <%= cost %> | currency }}</td>                                  
+            </tr>
+
+          </table>
+
+        </div>
+
+        <div class='span4'>
+
+          <table class='table'>
+            <caption style="text-align:left">Customer Breakdown</caption>
+            <tr>
+              <th width=40%>Customer</th>
+              <th width=15%>Direct Cost</th>
+              <th width=15%>Indirect Cost</th>
+              <th width=15%>Aquarium Overhead</th>                            
+              <th width=15%>Total Cost</th>                  
+            </tr>
+
+            <% r[:breakdown].each do |login,summary| %>
+              <% if summary[:cost] > 100 %>
+                <tr>
+                  <% cost = summary[:cost] %>
+                  <td><%= summary[:name] %></td>
+                  <td>{{ <%= cost %> | currency }}</td>
+                  <td>{{ idc_rate * <%= cost %> | currency }}</td>
+                  <td>{{ aq_rate * <%= cost %> | currency }}</td>
+                  <td>{{ ( 1 + aq_rate + idc_rate ) * <%= cost %> | currency }}</td>                                    
+                </tr>
+              <% end %>
+            <% end %>
+
+          </table>
+
+        </div>
+
+      </div>
 
   <% end %>
 
-</ul>
+</div>
+
+</div>
+
+<script>
+(function() {
+
+  w = angular.module('costs',[]);
+
+  w.controller('costsCtrl', [ '$scope', '$http', '$attrs', function ($scope,$http,$attrs) {
+
+    $scope.idc_rate = 0.54;
+    $scope.aq_rate = 0.10;
+
+  }]);
+
+})();
+</script>

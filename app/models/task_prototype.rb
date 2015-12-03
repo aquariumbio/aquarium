@@ -71,10 +71,13 @@ class TaskPrototype < ActiveRecord::Base
   def self.cost_report user_id=nil
 
     task_prototypes = TaskPrototype.all
+    users = User.all
 
     report = (0..11).collect do |i| 
 
       date = Date.today.at_beginning_of_month - i.month
+      breakdown = {}
+      users.each { |u| breakdown[u.login] = { name: u.name, id: u.id, cost: 0.0 } }
 
       task_summaries = TaskPrototype.all.collect do |tp|
 
@@ -85,27 +88,39 @@ class TaskPrototype < ActiveRecord::Base
         else
           tasks = Task.includes(:task_prototype)
                       .where( "task_prototype_id = ? AND ? <= created_at AND created_at < ? ", 
-                              tp.id, date, date + 1.month )          
-        end
+                              tp.id, date, date + 1.month )  
+        end # if
 
         if tasks.length > 0
           number = tasks.collect { |t| t.size }.inject{|sum,x| sum + x }
         else
           number = 0
-        end
+        end # if
 
-        {
+        r = {
           name: tp.name,
           number: number,
           cost_per: tp.cost,
           total: tp.cost * number
         }
 
-      end
+        if !user_id
+          users.each do |u|
+            utasks = tasks.select { |t| t.user_id == u.id }
+            if utasks.length > 0
+              number = tasks.select { |t| t.user_id == u.id }.collect { |t| t.size }.inject{|sum,x| sum + x }
+              breakdown[u.login][:cost] += tp.cost * number
+            end
+          end
+        end #if
 
-      { date: date, task_summaries: task_summaries }
+        r
 
-    end  
+      end # collect task summaries
+
+      { date: date, task_summaries: task_summaries, breakdown: breakdown }      
+
+    end # collect dates
 
   end
 
