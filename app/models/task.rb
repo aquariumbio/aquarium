@@ -292,8 +292,8 @@ class Task < ActiveRecord::Base
     begin
       n = size_aux
     rescue Exception => e
-      Rails.logger.info "Error: e.full_messages.join(', ')"
-      n = 0.123
+      Rails.logger.info "Warning: Could not compute size of #{self.simple_spec}: #{e}. #{e.backtrace[0]}"
+      n = 0.0123
     end
     n
   end
@@ -303,7 +303,7 @@ class Task < ActiveRecord::Base
     case task_prototype.name
 
       when "Fragment Construction"
-        spec[:"fragments Fragment"].length
+        simple_spec[:"fragments"].length
 
       when "Gibson"
         1
@@ -312,37 +312,70 @@ class Task < ActiveRecord::Base
         1
 
       when "Plasmid Verification"
-        n = spec[:"plate_ids E coli Plate of Plasmid"].length
-        (0..n-1).collect { |i| spec[:"num_colonies"][i]*spec[:"primer_ids Primer"][i].length }.inject{ |sum,x| sum+x }         
+
+        n = simple_spec[:"plate_ids"].length
+
+        (0..n-1).collect { |i| 
+
+          if i < simple_spec[:"num_colonies"].length 
+            nc = simple_spec[:"num_colonies"][i]
+          else
+            nc = simple_spec[:"num_colonies"][0]
+          end
+
+          if simple_spec[:"primer_ids"].class == Array
+            if simple_spec[:"primer_ids"][i].class == Array
+              nc*simple_spec[:"primer_ids"][i].length
+            else
+              nc             
+            end
+          else
+            nc
+          end
+        }.inject{ |sum,x| sum+x }
 
       when "Sequencing"
-        n = spec[:"plasmid_stock_id Plasmid Stock|Fragment Stock"].length
-        (0..n-1).collect { |i| spec[:"primer_ids Primer"][i].length }.inject{ |sum,x| sum+x }        
+        if simple_spec[:"plasmid_stock_id"] && simple_spec[:"plasmid_stock_id"].class == Array
+          n = simple_spec[:"plasmid_stock_id"].length
+        else 
+          n = 1
+        end;
+        (0..n-1).collect { |i| 
+          if simple_spec[:"primer_ids"] && simple_spec[:"primer_ids"].class == Array
+            if simple_spec[:"primer_ids"][i].class == Array
+              simple_spec[:"primer_ids"][i].length 
+            else
+              1
+            end
+          else
+            1
+          end
+        }.inject{ |sum,x| sum+x }        
 
       when "Yeast Strain QC"
-        n = spec[:"yeast_plate_ids Yeast Plate"].length
-        (0..n-1).collect { |i| spec[:"num_colonies"][i] }.inject{ |sum,x| sum+x }
+        n = simple_spec[:"yeast_plate_ids"].length
+        (0..n-1).collect { |i| simple_spec[:"num_colonies"][i] }.inject{ |sum,x| sum+x }
 
       when "Yeast Transformation"
-        spec[:"yeast_transformed_strain_ids Yeast Strain"].length
+        simple_spec[:"yeast_transformed_strain_ids"].length
 
       when "Primer Order"
-        spec[:"primer_ids Primer"].length        
+        simple_spec[:"primer_ids"].length        
 
       when "Glycerol Stock"
-        spec[:"item_ids Yeast Plate|Yeast Overnight Suspension|TB Overnight of Plasmid|Overnight suspension"].length  
+        simple_spec[:"item_ids"].length  
 
       when "Discard Item"
-        spec[:"item_ids Item"].length          
+        simple_spec[:"item_ids"].length          
 
       when "Streak Plate"
-        spec[:"item_ids Yeast Glycerol Stock|Yeast Plate"].length    
+        simple_spec[:"item_ids"].length    
 
       when "Sequencing Verification"
-        spec[:"plasmid_stock_ids Plasmid Stock"].length + spec[:"overnight_ids TB Overnight of Plasmid"].length
+        simple_spec[:"plasmid_stock_ids"].length + simple_spec[:"overnight_ids"].length
 
       when "Yeast Competent Cell"
-        spec[:"yeast_strain_ids Yeast Strain"].length
+        simple_spec[:"yeast_strain_ids"].length
 
       else
         1
