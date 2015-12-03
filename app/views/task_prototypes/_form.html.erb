@@ -26,6 +26,11 @@
   </div>
 
   <div class="field">
+    <%= f.label :cost %>
+    <%= f.number_field :cost, :step => 0.01 %>
+  </div>  
+
+  <div class="field">
     <%= f.label :status_options %>
     <%= f.text_field :status_options, style: 'width: 100%;' %>
   </div>

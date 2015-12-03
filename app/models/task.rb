@@ -336,7 +336,7 @@ class Task < ActiveRecord::Base
         spec[:"item_ids Item"].length          
 
       when "Streak Plate"
-        spec[:"item_ids Yeast Glycerol Stock"].length    
+        spec[:"item_ids Yeast Glycerol Stock|Yeast Plate"].length    
 
       when "Sequencing Verification"
         spec[:"plasmid_stock_ids Plasmid Stock"].length + spec[:"overnight_ids TB Overnight of Plasmid"].length

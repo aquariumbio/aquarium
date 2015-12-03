@@ -1,5 +1,9 @@
 <h1>New <%= @task.task_prototype.name %></h1>
 
+<h2>Base Cost: <%= number_to_currency (  @task_prototype.cost ) %> </h2>
+
+<p>Total cost will be the base cost times the number of samples processed for this task.</p>
+
 <div class='row-fluid'>
 
   <div class='span2'></div>

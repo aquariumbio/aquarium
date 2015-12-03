@@ -63,7 +63,7 @@ class UsersController < ApplicationController
         {
           name: tp.name,
           number: number,
-          cost_per: cost_per,
+          cost_per: tp.cost,
           total: cost_per * number
         }
 
