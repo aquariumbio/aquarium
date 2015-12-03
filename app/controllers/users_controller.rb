@@ -58,13 +58,11 @@ class UsersController < ApplicationController
           number = 0
         end
 
-        cost_per = tp.prototype_hash[:cost_per] ? tp.prototype_hash[:cost_per] : 1
-
         {
           name: tp.name,
           number: number,
           cost_per: tp.cost,
-          total: cost_per * number
+          total: tp.cost * number
         }
 
       end
