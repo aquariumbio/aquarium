@@ -20,7 +20,7 @@
 
       <div class='row-fluid'>
 
-        <div class='span8'>
+        <div class='span7'>
 
           <table class='table'>
 
@@ -66,23 +66,23 @@
 
         </div>
 
-        <div class='span4'>
+        <div class='span5'>
 
           <table class='table'>
             <caption style="text-align:left">Customer Breakdown</caption>
             <tr>
-              <th width=40%>Customer</th>
-              <th width=15%>Direct Cost</th>
-              <th width=15%>Indirect Cost</th>
-              <th width=15%>Aquarium Overhead</th>                            
-              <th width=15%>Total Cost</th>                  
+              <th width=32%>Customer</th>
+              <th width=17%>Direct Cost</th>
+              <th width=17%>Indirect Cost</th>
+              <th width=17%>Aquarium Overhead</th>                            
+              <th width=17%>Total Cost</th>                  
             </tr>
 
             <% r[:breakdown].each do |login,summary| %>
               <% if summary[:cost] > 100 %>
                 <tr>
                   <% cost = summary[:cost] %>
-                  <td><%= summary[:name] %></td>
+                  <td><a href="/users/billing/<%= summary[:id] %>"><%= summary[:name] %></a></td>
                   <td>{{ <%= cost %> | currency }}</td>
                   <td>{{ idc_rate * <%= cost %> | currency }}</td>
                   <td>{{ aq_rate * <%= cost %> | currency }}</td>
