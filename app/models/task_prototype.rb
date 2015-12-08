@@ -79,7 +79,7 @@ class TaskPrototype < ActiveRecord::Base
       breakdown = {}
       users.each { |u| breakdown[u.login] = { name: u.name, id: u.id, cost: 0.0 } }
 
-      task_summaries = TaskPrototype.all.collect do |tp|
+      task_summaries = task_prototypes.collect do |tp|
 
         if user_id
           tasks = Task.includes(:task_prototype)
