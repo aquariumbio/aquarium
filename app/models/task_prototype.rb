@@ -83,11 +83,11 @@ class TaskPrototype < ActiveRecord::Base
 
         if user_id
           tasks = Task.includes(:task_prototype)
-                      .where( "task_prototype_id = ? AND user_id = ? AND ? <= created_at AND created_at < ? ", 
+                      .where( "status != 'canceled' AND task_prototype_id = ? AND user_id = ? AND ? <= created_at AND created_at < ? ", 
                               tp.id, user_id, date, date + 1.month )
         else
           tasks = Task.includes(:task_prototype)
-                      .where( "task_prototype_id = ? AND ? <= created_at AND created_at < ? ", 
+                      .where( "status != 'canceled' AND task_prototype_id = ? AND ? <= created_at AND created_at < ? ", 
                               tp.id, date, date + 1.month )  
         end # if
 
