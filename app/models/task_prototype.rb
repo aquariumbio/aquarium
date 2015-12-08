@@ -98,6 +98,7 @@ class TaskPrototype < ActiveRecord::Base
         end # if
 
         r = {
+          id: tp.id,
           name: tp.name,
           number: number,
           cost_per: tp.cost,

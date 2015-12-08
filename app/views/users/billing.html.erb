@@ -21,8 +21,8 @@
         <% r[:task_summaries].each do |ts| %>
 
           <% if ts[:number] > 0 %>
-            <tr>          
-              <td><%= ts[:name] %></td>        
+            <tr>                      
+              <td><a href="/task_prototypes/<%= ts[:id] %>"><%= ts[:name] %><a></td>        
               <td><%= number_to_currency ( ts[:cost_per] ) %></td>
               <td><%= ts[:number] %></td>              
               <td><%= number_to_currency ( ts[:number] * ts[:cost_per] ) %></td>                    

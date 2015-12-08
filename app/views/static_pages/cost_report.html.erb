@@ -40,7 +40,7 @@
 
               <% if ts[:number] > 0 %>
                 <tr>          
-                  <td><%= ts[:name] %></td>        
+                  <td><a href="/task_prototypes/<%= ts[:id] %>"><%= ts[:name] %><a></td>        
                   <td><%= number_to_currency ( ts[:cost_per] ) %></td>
                   <td><%= ts[:number] %></td>              
                   <td><%= number_to_currency ( ts[:number] * ts[:cost_per] ) %></td> 
@@ -49,6 +49,7 @@
                   <td>{{(1+idc_rate+aq_rate)*<%= ts[:number] * ts[:cost_per] %>|currency}}</td>
                 </tr>            
               <% end %>
+
             <% end %>
 
             <tr style="border-top: 2pt solid black">
