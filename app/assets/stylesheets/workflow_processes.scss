@@ -1,0 +1,183 @@
+.process-viewer {
+
+  .active-choice {
+    color: black;
+    cursor: pointer;
+    background: white;
+    width: 100%;
+    border: 1pt solid #ddd;
+    margin: 5px 0 5px 0;
+    padding: 5px 0 5px 0;
+    text-align: center;        
+  }
+
+  .inactive-choice {
+    color: #999;
+    cursor: pointer;
+    background: #eee;
+    width: 100%;
+    border: 1pt solid #ddd;    
+    margin: 5px 0 5px 0;
+    padding: 5px 0 5px 0;
+    text-align: center;    
+  }
+
+  .loading {
+    color: #999;
+    cursor: pointer;
+    width: 100%;
+    margin: 5px 0 5px 0;    
+    padding: 5px 0 5px 0;
+    text-align: center;    
+  }  
+
+  .ago-container {
+    width: 100%;
+    margin: 5px 0 5px 0;   
+    padding: 5px 0 5px 0;
+    position: relative;
+    font-size:0;
+  }
+
+  .arrow-btn {
+    cursor: pointer;
+    width: 20%;
+    text-align: center;
+    display: inline-block;
+    padding: 5px 0 5px 0;
+    font-size:11pt;    
+  }
+
+  .arrow-btn-inactive {
+    cursor: pointer;
+    disabled: true;
+    color: #bbb;
+    width: 20%;
+    text-align: center;    
+    display: inline-block;  
+    padding: 5px 0 5px 0;    
+    font-size:11pt;     
+  }
+
+  .last {
+    width: 60%;
+    text-align: center;  
+    display: inline-block;    
+    outline: 1pt solid #eee;   
+    padding: 5px 0 5px 0;  
+    font-size:11pt;         
+  }
+
+  .processes {
+  }
+
+  .process-info {
+    position: relative;
+    margin-left: 2px;
+    padding: 0 0 0 10px;
+    cursor: pointer; 
+  }
+
+  .process-info-selected  {
+    position: relative;    
+    border-left: 2pt solid rgb(0, 136, 204);
+    border-radius: 5px;
+    margin-left: 0px;
+    padding: 0 0 0 10px;
+    cursor: pointer;
+  }  
+
+  .process-info-header {
+    border-bottom: 1pt solid #eee;
+    font-size: 14pt;
+    padding-bottom: 3px;
+  }
+
+  .process-info-body {
+    margin-bottom: 15px;
+    padding: 0 0 0 40px;
+  }  
+
+  .process-name {
+    font-weight: bold;
+  }
+
+  .process-time {
+    color: #ccc;
+  }
+
+  .operation-table {
+
+    width: 100%;
+
+    th {
+      /*border-bottom: 1pt solid #eee;*/
+      text-align: left;
+      padding: 0 3px 0 3px;
+      color: #888;
+      font-size: 8pt;
+    }
+    td {
+      /*border-left: 1pt solid #eee;*/
+      padding: 0 3px 0 3px;      
+    }
+
+    .operation {
+      width: 15%;
+    }
+    .job-id {
+      width: 15%;
+    }
+    .sub{
+      width: 15%;
+    }
+    .run {
+      width: 15%;
+    }
+    .timing {
+      width: 15%;
+    }
+    .updated {
+      width: 15%;
+    }
+    .controls {
+      width: 10%;
+    }
+
+    .no-job {
+      color: #ccc;
+    }    
+    .subtle {
+      color: #ccc;
+    }
+    .error {
+      font-weight: bold;
+      color: red;
+    }
+    .pending {
+      color: #000;
+      font-weight: bold;
+    }
+    .active {
+      color: #500;
+      font-weight: bold;
+    }
+    .blinking {
+      animation: blinker 3s ease infinite;
+    }
+    @keyframes blinker {  
+      50% { opacity: 0.2; }
+    }    
+  }
+
+  .thread-info {
+    margin-left: 40px;
+  }
+
+  .op-info {
+    font-size: 8pt;
+    line-height: 1;
+    overflow-x: scroll !important;
+  }
+
+}

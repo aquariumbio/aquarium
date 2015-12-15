@@ -11,7 +11,7 @@
 
     <div id="thread_builder">
 
-      <div class='pull-left'><h4>Build a Thread</h4></div>
+      <div class='pull-left'><h4>Build a Thread <span class="alert alert-error" ng-if="error != ''">{{error}}</span></h4></div>
 
       <div class="pull-right">
         <a class="btn btn-small btn-info" href="#" ng-click="randomize()">Randomize</a> 
@@ -25,13 +25,13 @@
         </tr>
 
         <tr>
-          <th ng-repeat="i in workflow.form.inputs" class='input-header'>{{i.description}}</th>
+          <th ng-repeat="i in visible_inputs()" class='input-header'>{{i.description}}</th>
           <th ng-repeat="i in workflow.form.parameters" class='param-header'>{{i.description}}</th>          
-          <th ng-repeat="i in workflow.form.outputs" class='output-header'>{{i.description}}</th>            
+          <th ng-repeat="i in visible_outputs()" class='output-header'>{{i.description}}</th>            
         </tr>
 
         <tr>
-          <td ng-repeat="i in workflow.form.inputs">
+          <td ng-repeat="i in visible_inputs()">
             <input ng-if="!i.is_vector" type='text' class='input-plain {{i.name}}-sample' ng-model="new_thread[i.name]" />
             <div ng-if="i.is_vector">
                <table class='launcher-vector-table'>
@@ -108,7 +108,7 @@
 
 
           </td>
-          <td ng-repeat="i in workflow.form.outputs">
+          <td ng-repeat="i in visible_outputs()">
             <input type='text' id='{{i.name}}' class='input-plain' ng-model="new_thread[i.name]" />
           </td>            
         </tr>
@@ -153,17 +153,20 @@
 
     <br />
 
-    <div class='row-fluid'>
-      <div class='span4'>
+    <!-- div class='row-fluid'>
+      <div class='span3'>
         <pre style="font-size: 6pt; line-height: 1.2">{{workflow.form.inputs|json}}</pre>
       </div>
-      <div class='span4'>
-        <pre style="font-size: 6pt; line-height: 1.2">{{workflow.form.parameters|json}}</pre>
+      <div class='span3'>
+        <pre style="font-size: 6pt; line-height: 1.2">{{workflow.form.outputs|json}}</pre>
       </div>      
-      <div class='span4'>
+      <div class='span3'>
+        <pre style="font-size: 6pt; line-height: 1.2">{{workflow.form.parameters|json}}</pre>
+      </div -->      
+      <div class='sdpan3'>
         <pre style="font-size: 6pt; line-height: 1.2">{{new_thread|json}}</pre>
       </div>
-    </div>
+    </div
 
   </div>
 
@@ -182,6 +185,7 @@
     $scope.workflow = {};
     $scope.sample_names = {};
     $scope.launchable = false;
+    $scope.error = "";
 
     $scope.toNumber = function(str) {
       var i = parseInt(str);
@@ -193,12 +197,40 @@
       }
     }
 
+    $scope.visible = function(parts) {
+      var list = [];
+      angular.forEach(parts,function(i) {
+        if ( !i.hidden ) {
+          list.push(i);
+        }
+      });
+      return list;
+    }
+
+    $scope.visible_inputs = function() {
+      if ( $scope.workflow.form ) {
+        return $scope.visible($scope.workflow.form.inputs);
+      } else {
+        return [];
+      }
+    }
+
+    $scope.visible_outputs = function() {
+      if ( $scope.workflow.form ) {
+        return $scope.visible($scope.workflow.form.outputs);
+      } else {
+        return [];
+      }
+    }
+
     $http.get('/workflows/' + $attrs.workflow + ".json")
       .success(function(data) {
         $scope.workflow = data;
         $scope.get_samples();
+        $scope.init_new_thread();
       })
       .error(function() {
+        $scope.error = "Could not retrieve workflow";
         console.log("Could not retrieve workflow");
       });
 
@@ -267,7 +299,6 @@
       $("."+ispec.name+"-sample").autocomplete({
           source: samples,
           select: function(ev,ui) {
-
             if ( typeof $scope.new_thread[ispec.name] == "string" ) {
               $scope.new_thread[ispec.name] = ui.item.value;
             } else {
@@ -304,7 +335,6 @@
 
     $scope.removeFromVector = function(ispec,index) {
 
-      console.log([ispec,index]);
       $scope.new_thread[ispec.name].splice(index, 1);
 
     }
@@ -330,32 +360,55 @@
       }
     }
 
+    $scope.init_new_thread = function() {
+      $scope.new_thread = {};
+      angular.forEach(parts(),function(i) {
+        if ( i.alternatives[0] && i.alternatives[0].sample ) {
+          $scope.new_thread[i.name] = i.alternatives[0].sample;
+        }
+        if ( i.alternatives[0] && !i.alternatives[0].sample ) {
+          $scope.new_thread[i.name] = "";
+        }              
+        if ( i.is_vector ) {
+           $scope.new_thread[i.name] = [ "" ];
+        }
+      });
+      angular.forEach($scope.workflow.form.parameters,$scope.reset_param);
+    }
+
     $scope.submit = function() { 
+
+      var data = JSON.stringify({ thread: $scope.new_thread, workflow_id: $scope.workflow.id });
 
       $.ajax({
           url: '/workflow_threads/',
           dataType: 'json',
           contentType: 'application/json',
-          data: JSON.stringify({ thread: $scope.new_thread, workflow_id: $scope.workflow.id }),
+          data: data,
           method: "POST"
         }).success(function(data) {
-          $scope.threads.push(expand(data));
-          $scope.new_thread = {};
-          angular.forEach(parts(),function(i) {
-            if ( i.alternatives[0] && i.alternatives[0].sample ) {
-              $scope.new_thread[i.name] = i.alternatives[0].sample;
-            }
-            if ( i.is_vector ) {
-               $scope.new_thread[i.name] = [ "" ];
-             }
-          });
-          angular.forEach($scope.workflow.form.parameters,$scope.reset_param);
-          $scope.launchable = true;
+
+          if ( data.error ) {
+
+            $scope.error = data.error;
+            console.log(data.error);
+
+          } else {
+
+            $scope.error = "";
+            $scope.threads.push(expand(data));
+            $scope.init_new_thread();
+            $scope.launchable = true;
+            
+          }
+
           $scope.$apply();
+
         })
         .error(function() {
+          $scope.error = "Unknown error";
           console.log("Could not submit thread");
-        });      
+        });
 
     }
 
@@ -426,12 +479,15 @@
     }
 
     $scope.launch = function(debug) {
+
       var thread_ids = [];
+
       $('.selector').each(function(s) {
         if ($(this).prop('checked') ) {
           thread_ids.push($(this).data('thread-id'));
         }
       });
+
       if ( thread_ids.length > 0 ) {
 
         $.ajax({

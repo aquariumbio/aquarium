@@ -59,6 +59,16 @@ class User < ActiveRecord::Base
     a
   end
 
+  def self.folders current_user
+    { id: -1, 
+      name: "Users", 
+      children: (User.all.reject { |u| u.retired? }).collect { |u|
+        Folder.tree(u,locked:u.id != current_user.id)
+      },
+      locked: true
+    }
+  end    
+
   private
 
     def create_remember_token

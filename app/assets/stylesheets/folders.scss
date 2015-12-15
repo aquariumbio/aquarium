@@ -82,6 +82,7 @@ $po: $thick dashed pink;
   }
 
   .editable {
+    color: #0000cc;
     vertical-align: top;
     height: $row-height;         
     display: inline-block;    
@@ -98,7 +99,6 @@ $po: $thick dashed pink;
 
   .editable:focus {
     height: $row-height;      
-    color: #0000aa;
     outline: none;
     display: inline-block;       
     border: none !important;
@@ -127,6 +127,16 @@ $po: $thick dashed pink;
       display: inline-block;
     } 
 
+    .expander-large {
+      height: $row-height;   
+      line-height: $row-height !important;     
+      cursor: pointer;
+      color: #444;
+      padding: 0 !important;
+      margin: 0 !important;  
+      display: inline-block;
+    } 
+
     .spacer {
       height: $row-height;   
       line-height: $row-height !important;
@@ -145,8 +155,66 @@ $po: $thick dashed pink;
     color: red;
   }
 
-}
+  .icon-holder {
+    width: 18px;
+    outline: 0pt solid #aee;
+  }
 
+  .thread-builder-select {
+    color: #0000cc;
+    display: inline-block;
+    height: $row-height;
+    width: auto;
+    box-shadow: none !important;
+    border: 0;
+    margin: 0 0 1px 0;
+    padding: 0;
+    overflow: hidden;
+    margin: 0; 
+    background: transparent;
+    border-radius: 0px;
+  }  
+
+  .multiselect {
+    color: #0000cc;
+    display: inline-block;
+  } 
+
+  .multiselector {
+    cursor: pointer;
+    padding-right: 50px;
+  } 
+
+  .multiselected {
+    background: #ddffdd;
+  } 
+
+  .parameter-name {
+    vertical-align: top;
+  }
+
+  .value {
+    color: #0000cc;
+    display: inline-block;
+  }
+
+  .thread-selector-all {
+    margin: 0 3px 0 0;
+    color: black;
+    font-weight: bold;
+    font-size: 14pt;
+    cursor: pointer;    
+  }
+
+  .thread-selector {
+    cursor: pointer;
+  }
+
+  .workflow-message {
+    color: #00cc00;
+  }
+
+}
 
 .folder-workflow {
   height: $row-height;
@@ -157,6 +225,7 @@ $po: $thick dashed pink;
   cursor: pointer;
   border-bottom: 1pt solid #eee;
 }
+
 .folder {
   width: 100%;
   cursor: pointer;   
@@ -193,14 +262,17 @@ $po: $thick dashed pink;
   list-style:none;
   margin-left: 22px;
   li {
-    overflow: visible;
+    overflow: scroll;
     margin-left: 0px;
     position: relative;
+      overflow: scroll;
   }
+    overflow: scroll;
 }
 
 .folder-ul-top {
   margin-left: 0px;
+    overflow: scroll;
 } 
 
 .folder-expander-disabled {
@@ -216,7 +288,8 @@ $po: $thick dashed pink;
   margin-bottom: -100%;
   padding-left: 10px;
   padding-top: 10px;
-  border-right: 1pt solid #eee
+  border-right: 1pt solid #eee;
+  overflow: scroll;
 }
 
 .folder-path-input {
@@ -242,11 +315,16 @@ $po: $thick dashed pink;
   padding-right: 50px;
 }
 
+.position-fixed {
+  position: fixed;
+}
+
 /*
  * Folder Contents
  */
 
 #folder-content-container {
+    overflow: scroll;
 }
 
 #folder-current {
@@ -317,6 +395,11 @@ $po: $thick dashed pink;
 
 .folder-sample-field {
   display: block;
+}
 
+.read-only {
+  margin: 5px 30px 0 0;
+  font-size: 14pt;
+  color: #aaa;
 }
 

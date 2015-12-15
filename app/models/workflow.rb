@@ -62,4 +62,19 @@ class Workflow < ActiveRecord::Base
     self.save
   end
 
+  def for_folder
+    wf = self.as_json
+    wf[:form] = self.form
+    wf
+  end
+
+  def self.folders
+    { id: -1, 
+      name: "Workflows", 
+      children: [],
+      locked: true,
+      special: "workflows"
+    }
+  end
+
 end

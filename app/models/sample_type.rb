@@ -14,7 +14,11 @@ class SampleType < ActiveRecord::Base
   validate :proper_choices
 
   def datatype_hash
-    JSON.parse(self.datatype,symbolize_names: true)
+    begin
+      JSON.parse(self.datatype,symbolize_names: true)
+    rescue Exception => e
+      { type: "number", error: "Parse error in JSON. Default data type used." }
+    end
   end
 
   def fieldname i

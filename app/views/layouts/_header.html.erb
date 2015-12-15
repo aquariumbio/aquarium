@@ -2,8 +2,12 @@
   <div class="navbar-inner">
     <div class="container-fluid" id="header-bar">
       <%= link_to "AQUARIUM", root_path, id: "logo" %>
-      <div id='environment'><%= Bioturk::Application.config.instance_name %>: <%= Rails.env %></div>
-      <div class='info' id="info-area"></div>
+      <div id='environment'>
+        <%= Bioturk::Application.config.instance_name %>: 
+        <%= Rails.env %>
+        <span class="aquarium-version">v<%= Bioturk::Application.config.aquarium_version %></span>
+      </div>
+      <div id="info-area"></div>
       <nav>
         <ul class="nav pull-right">
 
@@ -23,6 +27,7 @@
             data-toggle="dropdown">Analytics<b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><%= link_to "Job Logs", logs_path %></li>
+              <li><%= link_to "Cost Report", cost_report_path %></li>
               <li><%= link_to "Status", status_path %></li>
               <li><%= link_to "Protocol Usage", protocol_usage_path %></li>
               <li><%= link_to "Protocol Versions", jobs_summary_path %></li>
@@ -116,7 +121,7 @@
           </li>
 
           <li id="fat-menu" class="dropdown">
-            <a href="doc/index.html" class="dropdown-toggle" target='documentation'>Help</a>
+            <a href="/doc/index.html" class="dropdown-toggle" target='documentation'>Help</a>
           </li>
 
            <li class='dropdown'><a href="https://github.com/aquarium-bio/issues/issues" target='w'>

@@ -1,0 +1,19 @@
+<script type="text/ng-template" id="parameterView">
+
+  <div class='row'>
+
+    <!-- EXPANDER ---------------------------------------------------------------------- -->
+    <div class='expander-container'>
+      <span ng-repeat="i in range(indent) track by $index">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>     
+      <span class="expander">
+        &#9632;
+      </span> 
+    </div>
+
+    <div class="name"><b>{{param.name}}:</b></div>
+
+    <div class="value">{{param.value}}</div>
+
+  </div>
+
+</script>

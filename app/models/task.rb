@@ -288,4 +288,100 @@ class Task < ActiveRecord::Base
 
   end 
 
+  def size
+    begin
+      n = size_aux
+    rescue Exception => e
+      Rails.logger.info "Warning: Using default task size of 1. Could not compute size of #{self.simple_spec}: #{e}. #{e.backtrace[0]}"
+      n = 1
+    end
+    n
+  end
+
+  def size_aux
+
+    case task_prototype.name
+
+      when "Fragment Construction"
+        simple_spec[:"fragments"].length
+
+      when "Gibson"
+        1
+
+      when "Gibson Assembly"
+        1
+
+      when "Plasmid Verification"
+
+        n = simple_spec[:"plate_ids"].length
+
+        (0..n-1).collect { |i| 
+
+          if i < simple_spec[:"num_colonies"].length 
+            nc = simple_spec[:"num_colonies"][i]
+          else
+            nc = simple_spec[:"num_colonies"][0]
+          end
+
+          if simple_spec[:"primer_ids"].class == Array
+            if simple_spec[:"primer_ids"][i].class == Array
+              nc*simple_spec[:"primer_ids"][i].length
+            else
+              nc             
+            end
+          else
+            nc
+          end
+        }.inject{ |sum,x| sum+x }
+
+      when "Sequencing"
+        if simple_spec[:"plasmid_stock_id"] && simple_spec[:"plasmid_stock_id"].class == Array
+          n = simple_spec[:"plasmid_stock_id"].length
+        else 
+          n = 1
+        end;
+        (0..n-1).collect { |i| 
+          if simple_spec[:"primer_ids"] && simple_spec[:"primer_ids"].class == Array
+            if simple_spec[:"primer_ids"][i].class == Array
+              simple_spec[:"primer_ids"][i].length 
+            else
+              1
+            end
+          else
+            1
+          end
+        }.inject{ |sum,x| sum+x }        
+
+      when "Yeast Strain QC"
+        n = simple_spec[:"yeast_plate_ids"].length
+        (0..n-1).collect { |i| simple_spec[:"num_colonies"][i] }.inject{ |sum,x| sum+x }
+
+      when "Yeast Transformation"
+        simple_spec[:"yeast_transformed_strain_ids"].length
+
+      when "Primer Order"
+        simple_spec[:"primer_ids"].length        
+
+      when "Glycerol Stock"
+        simple_spec[:"item_ids"].length  
+
+      when "Discard Item"
+        simple_spec[:"item_ids"].length          
+
+      when "Streak Plate"
+        simple_spec[:"item_ids"].length    
+
+      when "Sequencing Verification"
+        simple_spec[:"plasmid_stock_ids"].length + simple_spec[:"overnight_ids"].length
+
+      when "Yeast Competent Cell"
+        simple_spec[:"yeast_strain_ids"].length
+
+      else
+        1
+
+    end
+
+  end
+
 end

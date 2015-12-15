@@ -11,13 +11,6 @@ class FoldersController < ApplicationController
 
   end
 
-
-  def workflow_info wf
-
-    wf
-
-  end
-
   def route
 
     if params[:method]
@@ -59,22 +52,35 @@ class FoldersController < ApplicationController
             .includes(sample: {workflow_associations: { workflow_thread: :workflow } })
             .where("folder_id = ? AND sample_id is not null", params[:folder_id] )
             .reverse
+            .select { |fc| fc.sample }
             .collect { |fc| fc.sample.for_folder }
 
           workflows = FolderContent
             .includes(:workflow)
             .where("folder_id = ? AND workflow_id is not null", params[:folder_id] )
             .reverse
-            .collect { |fc| workflow_info fc.workflow }
+            .select { |fc| fc.workflow }
+            .collect { |fc| fc.workflow.for_folder }
 
           { samples: samples, workflows: workflows }
 
         when 'add_sample'
 
-          s = Sample.includes(:sample_type,workflow_associations: { workflow_thread: :workflow }).find(params[:sample_id])
-          FolderContent.new(folder_id: params[:folder_id], sample_id: s.id).save
+          s = Sample.includes(:sample_type,workflow_associations: { workflow_thread: :workflow }).find_by_id(params[:sample_id])
 
-          { sample: s.for_folder }
+          if s
+            FolderContent.new(folder_id: params[:folder_id], sample_id: s.id).save
+            { sample: s.for_folder }
+          else
+            { error: "Could not add sample '#{params[:sample_id]}'" }
+          end
+
+        when 'add_workflow'
+
+          wf = Workflow.find(params[:workflow_id])
+          FolderContent.new(folder_id: params[:folder_id], workflow_id: wf.id).save
+
+          { workflow: wf.for_folder }
 
         when 'get_sample'
 
@@ -105,9 +111,21 @@ class FoldersController < ApplicationController
             { error: "Could not create sample: " + sample.errors.full_messages.join(', ') }
           end
 
-        when 'save_sample'
+        when 'remove_sample'
 
-          Rails.logger.info "params = #{params}"          
+          fc = FolderContent.where(folder_id: params[:folder_id], sample_id: params[:sample_id])
+          if fc.length > 0 
+            fc[0].destroy
+          end
+
+        when 'remove_workflow'
+
+          fc = FolderContent.where(folder_id: params[:folder_id], workflow_id: params[:workflow_id])
+          if fc.length > 0 
+            fc[0].destroy
+          end
+
+        when 'save_sample'
 
           sample = Sample.find(params[:id])
           sample.name = params[:name]
@@ -125,11 +143,19 @@ class FoldersController < ApplicationController
 
           { parts: WorkflowThread.find(params[:thread_id]).parts(params[:sample_id]) }
 
+        when 'threads'
+
+          { threads: WorkflowThread
+                       .includes(:user)
+                       .where(workflow_id: params[:workflow_id], process_id: nil)
+                       .as_json(include: :user) 
+          }
+
       end
 
     else 
 
-      { folders: [ Folder.tree(current_user), SampleType.folders ] }
+      { folders: [ Folder.tree(current_user), Workflow.folders, User.folders(current_user) ] }
 
     end
 

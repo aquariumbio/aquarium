@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151029034310) do
+ActiveRecord::Schema.define(:version => 20151203054202) do
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -231,10 +231,11 @@ ActiveRecord::Schema.define(:version => 20151029034310) do
     t.string   "name"
     t.string   "description"
     t.text     "prototype"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
     t.string   "status_options"
     t.string   "validator"
+    t.float    "cost",           :default => 1.0
   end
 
   create_table "tasks", :force => true do |t|
@@ -313,6 +314,7 @@ ActiveRecord::Schema.define(:version => 20151029034310) do
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
     t.integer  "workflow_id"
+    t.integer  "user_id"
   end
 
   create_table "workflows", :force => true do |t|

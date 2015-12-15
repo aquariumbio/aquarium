@@ -110,9 +110,9 @@ module Krill
 
     # Returns an array of sample ids for the current selection.
     # @return [Array]
-    def samples 
-      self.objects Sample, :sample
-    end
+    #def samples 
+    #  self.objects Sample, :sample
+    #end
 
     # @private
     def options
@@ -137,6 +137,7 @@ module Krill
 
     # @private
     def extract_id descriptor
+      puts "Extracting id from #{descriptor}"
       if descriptor.class == String
         descriptor.split(':')[0].to_i
       else
@@ -163,24 +164,46 @@ module Krill
       s = []
       ispecs.each do |ispec|
         ispec[:instantiation].each do |instance|
-          s << extract_id(instance[:sample])
+          if instance[:sample].class == String
+            s << instance[:sample].as_sample_id
+          elsif instance[:sample].class == Array
+            s += instance[:sample].collect { |s| s.as_sample_id }
+          end
         end
       end
       s
     end
 
+    # Returns an array of samples corresponding to the current selection.
+    # @return [Array]
+    def samples
+      Sample.find(sample_ids)
+    end    
+
     # Returns an array item ids corresponding to the current selection.
     # @return [Array]
     def item_ids
       ispecs = get
-      s = []
+      iids = []
+      puts "obtaining items ids from #{ispecs}"
       ispecs.each do |ispec|
         ispec[:instantiation].each do |instance|
-          s << extract_id(instance[:item])
+          if instance[:item_id]
+            iids << instance[:item_id]
+          elsif instance[:item_ids]
+            iids += instance[:item_ids]
+          end
         end
       end
-      s
-    end    
+      iids
+    end
+
+    # Returns an array of items corresponding to the current selection.
+    # @return [Array]
+    def items
+      puts "finding items via #{item_ids}"
+      Item.find(item_ids)
+    end       
 
     # @!endgroup
 
@@ -218,7 +241,6 @@ module Krill
     # Sets whether to interact with the user in subsequent calls to take, release, and produce.
     # @param [Boolean] b
     # @return [Op]
-
     def silent b;  @silentQ = b;        self; end
 
     # Sets the name of the method (currently "list" or "boxes" )
@@ -227,6 +249,25 @@ module Krill
     # @param [String] m
     # @return [Op]    
     def method m;  @use_method = m;     self; end
+
+    # Associate a sample with the selected inventory specification(s).
+    # @param [Sample] sample
+    # @return [Op]
+    def associate_sample sample
+      if sample
+        ispecs = get
+        ispecs.each do |ispec|
+          ispec[:instantiation].each do |i|
+            if ispec[:is_vector]
+              i[:sample] = [ sample.to_workflow_identifier ]
+            else
+              i[:sample] = sample.to_workflow_identifier
+            end
+          end
+        end
+      end
+      return self
+    end
 
     # @!endgroup
 

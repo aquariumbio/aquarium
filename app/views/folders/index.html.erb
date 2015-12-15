@@ -1,12 +1,4 @@
-<style>
-body {
-  overflow: hidden;
-}
-
-.container-fluid {
-  padding: 0;
-}
-</style>
+<% provide(:title, 'Folders') %>
 
 <div ng-app="folders">
 
@@ -14,7 +6,9 @@ body {
   <%= render partial: 'sample_template' %>
   <%= render partial: 'new_thread_builder_template' %>  
   <%= render partial: 'thread_template' %>
-  <%= render partial: 'part_template' %>  
+  <%= render partial: 'component_template' %>  
+  <%= render partial: 'parameter_template' %>   
+  <%= render partial: 'workflow_template' %>  
 
   <div ng-controller='foldersCtrl as fc'>
 
@@ -28,21 +22,22 @@ body {
              type=text 
              class='folder-path-input folder-current-name' 
              ng-model="current_folder.name"
-             ng-disabled="current_folder.id < 0"
+             ng-disabled="current_folder.id < 0 || current_folder.locked"
              ng-blur="renameFolder(current_folder)">
 
       <a href='#' id="delete-folder"
-         ng-if="current_folder != folders[0]"
-         class='btn pull-right folder-btn'
+         ng-if="current_folder != folders[0] && !current_folder.locked"
+         class='btn btn-small pull-right folder-btn'
          ng-click="deleteFolder(current_folder)">Delete Folder</a>
 
       <a href='#'  
-         class='btn folder-btn pull-right' 
+         class='btn btn-small folder-btn pull-right' 
          ng-click="newFolder()"
+         ng-if="!current_folder.locked"
          ng-disabled="current_folder.locked">New Folder</a>
 
-      <div class="btn-group pull-right folder-btn" ng-show="current_folder.id>=0">
-        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+      <div class="btn-group pull-right folder-btn" ng-show="current_folder.id>=0" ng-if="!current_folder.locked">
+        <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
           New Sample
           <span class="caret"></span>
         </a>
@@ -53,9 +48,9 @@ body {
         </ul>
       </div>
 
-      <div class="btn-group pull-right folder-btn" ng-show="selection">
+      <div class="btn-group pull-right folder-btn" ng-show="selection && selection.sample_type ">
 
-        <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+        <a class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
           New Task
           <span class="caret"></span>
         </a>
@@ -67,7 +62,7 @@ body {
             <a tabindex="-1" href="#">{{w.name}}</a>
             <ul class="dropdown-menu pull-left">
               <li ng-repeat="p in w.form.inputs.concat(w.form.outputs)">
-                <a tabindex="-1" href="#" ng-click="newThreadBuilder(w,p)">
+                <a tabindex="-1" href="#" ng-click="threadBuilder.make(w,p)">
                   {{p.description}} ({{p.name}})
                 </a>
               </li>
@@ -77,10 +72,13 @@ body {
 
       </div>      
 
-      <div class='input-append pull-right folder-btn' ng-show="current_folder.id>=0">
-        <input id="add-sample" type="text">
-        <a href='#' class="btn" type="button" ng-click="addSample()">Add</a>
+      <div class='input-append pull-right folder-btn' 
+           ng-show="current_folder.id>=0 && !current_folder.locked">
+        <input id="add-sample" type="text" style="height: 26px !important;">
+        <a href='#' class="btn btn-small" type="button" ng-click="addSample()">Add</a>
       </div>      
+
+      <span ng-if="current_folder.locked" class="pull-right read-only">Read Only</span>      
 
     </div>
 
@@ -108,10 +106,9 @@ body {
                class='sample-repeater'>
           </div>
 
-          <div ng-repeat="workflow in current_folder.workflows">
-            <div class='folder-workflow' ng-click='openWorkflow(workflow)'>
-              <i class='icon-tasks'></i> {{workflow.name}}
-            </div>
+          <div ng-repeat="workflow in current_folder.workflows"
+               ng-include="'workflowView'"
+               ng-init="indent=0">
           </div>
 
          <div ng-repeat="child in current_folder.children">
@@ -124,7 +121,7 @@ body {
 
       </div>
 
-    </div>
+    </div>  
 
   </div>
 

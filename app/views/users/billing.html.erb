@@ -1,0 +1,49 @@
+<h2>Activity: <%= @user.name%></h2>
+
+  <% @report.each do |r| %>
+
+      <hr />
+
+      <h3><%= r[:date].strftime('%B, %Y') %></h3>
+
+      <table class='table'>
+
+        <tr>
+          <th width=28%>Task Type</th>
+          <th width=12%>Cost per</th>          
+          <th width=12%>Number</th>
+          <th width=12%>Direct Cost</th>
+          <th width=12%>Indirect Cost</th>
+          <th width=12%>Aquarium Overhead</th>                    
+          <th width=12%>Total Cost</th>                              
+        </tr>
+
+        <% r[:task_summaries].each do |ts| %>
+
+          <% if ts[:number] > 0 %>
+            <tr>                      
+              <td><a href="/task_prototypes/<%= ts[:id] %>"><%= ts[:name] %><a></td>        
+              <td><%= number_to_currency ( ts[:cost_per] ) %></td>
+              <td><%= ts[:number] %></td>              
+              <td><%= number_to_currency ( ts[:number] * ts[:cost_per] ) %></td>                    
+              <td><%= number_to_currency ( 0.54*ts[:number] * ts[:cost_per] ) %></td>                    
+              <td><%= number_to_currency ( 0.1*ts[:number] * ts[:cost_per] ) %></td>                    
+              <td><%= number_to_currency ( 1.64*ts[:number] * ts[:cost_per] ) %></td>        
+            </tr>            
+          <% end %>
+        <% end %>
+
+        <tr style="border-top: 2pt solid black">
+          <% cost = r[:task_summaries].collect { |ts| ts[:total] }.inject { |sum,x| sum + x } %>
+          <td></td>
+          <td></td> 
+          <td>Total</td>        
+          <td><%= number_to_currency ( cost ) %></td>
+          <td><%= number_to_currency ( 0.54 * cost ) %></td>
+          <td><%= number_to_currency ( 0.1* cost ) %></td>
+          <td><%= number_to_currency ( 1.64 * cost ) %></td>
+        </tr>
+
+      </table>
+
+  <% end %>

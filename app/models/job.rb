@@ -39,6 +39,14 @@ class Job < ActiveRecord::Base
     self.pc == Job.NOT_STARTED
   end
 
+  def pending? 
+    self.not_started?
+  end
+
+  def active? 
+    self.pc >= 0
+  end
+
   def status
     if self.pc >= 0
       status = 'ACTIVE'
@@ -271,9 +279,13 @@ class Job < ActiveRecord::Base
   def step_workflow
 
     if self.workflow_process
-      wp = WorkflowProcess.find(self.workflow_process.id)
-      wp.record_result_of self
-      wp.step
+      begin
+        wp = WorkflowProcess.find(self.workflow_process.id)
+        wp.record_result_of self
+        wp.step
+      rescue Exception => e
+        Rails.logger.info "Error trying to step workflow process " + e.to_s
+      end
     end
 
   end

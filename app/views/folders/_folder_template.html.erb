@@ -1,25 +1,32 @@
 
 <script type="text/ng-template" id="folderTree">
 
-  <span class='folder-expander-container'>
+  <!-- span class='folder-expander-container'>
     <span class="folder-expander" 
-          ng-if="folder.children.length > 0 && !folder.open"
+          ng-if="!folder.open"
           ng-click="openFolder(folder)">
       &#9658;
     </span>
     <span class="folder-expander"
-          ng-if="folder.children.length > 0  && folder.open"
+          ng-if="folder.open"
           ng-click="closeFolder(folder)">
       &#9660;
     </span> 
-  </span>
+  </span -->
 
   <span class='folder'
-        ng-class="folder == current_folder ? 'folder-selected' : ''"
-        ng-click="setCurrentFolder(folder)">
-    <i ng-if="folder.open" class='icon-folder-open' style="color: #eee"></i> 
-    <i ng-if="!folder.open" class='icon-folder-close' style="color: #eee"></i> 
-    {{ folder.name }}
+        ng-class="folder == current_folder ? 'folder-selected' : ''">
+
+    <i ng-if="folder.open" 
+        ng-click="closeFolder(folder)" 
+        class='icon-folder-open' style="color: #eee"></i> 
+
+    <i ng-if="!folder.open" 
+        ng-click="openFolder(folder)" 
+        class='icon-folder-close' style="color: #eee"></i> 
+
+    <span ng-click="setCurrentFolder(folder)">{{ folder.name }}</span>
+
   </span>
 
   <ul ng-if="folder.children && folder.open" class='folder-ul'>

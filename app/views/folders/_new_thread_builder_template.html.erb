@@ -4,56 +4,96 @@
 
     <!-- EXPANDER ---------------------------------------------------------------------- -->
     <div class='expander-container'>
-      <span ng-repeat="i in range(indent) track by $index">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>     
+      <span ng-repeat="i in range(indent) track by $index">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>     
       <span class="expander" 
             ng-if="!builder.open"
-            ng-click="openThreadBuilder(sample,builder)">
+            ng-click="threadBuilder.open(sample,builder)">
         &#9658;
       </span>
       <span class="expander"
             ng-if="builder.open"
-            ng-click="closeThreadBuilder(thread)">
+            ng-click="threadBuilder.close(builder)">
         &#9660;
       </span> 
     </div>
 
     <!-- DESCRIPTION ------------------------------------------------------------------- -->
-    <div class='thread-description'>
-      As <b>{{builder.part.name}}</b> in {{builder.workflow.name}} (unsaved)
+    <div class='thread-description' ng-if="builder.parent_sample_role">
+      As <b>{{builder.parent_sample_role}}</b> in {{builder.workflow_name}} (unsaved)
+    </div>
+
+    <div class='thread-description' ng-if="!builder.parent_sample_role">
+      Unsaved thread
     </div>
 
     <!-- BUTTONS ----------------------------------------------------------------------- -->
     <div class='info pull-right'>
-      <a href="#" class='btn btn-mini btn-warning row-button'>Save</a>
-      <a href="#" class='btn btn-mini row-button' ng-click="threadBuilderCancel(sample,builder)">Cancel</a>
-    </div>
 
-  </div>
+      <div class='icon-holder'>
+        <a href="#" ng-click="threadBuilder.save(sample ? sample : workflow,builder)"
+          data-toggle='tooltip' data-placement="left" data-title="Save this thread." tooltip>
+         <i class='icon-hdd'></i>
+        </a>
+      </div>
 
-  <!-- PARTS ------------------------------------------------------------------------- -->
-  <div ng-if="builder.open"
-       ng-repeat="part in builder.workflow.form.inputs"
-       >
+      <div class='icon-holder'></div>      
 
-    <div ng-if="!part.new_sample && builder.part.name != part.name" class='row'>
-
-      <span ng-repeat="i in range(indent+1) track by $index">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-
-      <span><b>{{part.name}}:</b> </span>
-
-      <input class='editable' ng-model="part.sample_id" autocomplete part="part"></input>
-
-      <div class='info pull-right' ng-if="part.sample_id == null || part.sample_id == ''">
-        <a href="#" class='btn btn-mini btn-warning row-button' ng-click="newSampleForThreadBuilder(part)">New</a>
+      <div class='icon-holder'>      
+        <a href="#" class='' ng-click="threadBuilder.cancel(sample ? sample : workflow,builder)"
+           data-toggle='tooltip' data-placement="left" data-title="Discard this thread." tooltip>
+          <i class='icon-remove'></i>
+        </a>
       </div>
 
     </div>
 
-    <div ng-if="part.new_sample"
-         ng-include="'sampleView'"
-         ng-init="role = part.name; sample = part.new_sample; indent=indent+1">
+  </div>
 
-    </div>  
+  <!-- ERRORS ------------------------------------------------------------------------ -->
+  <div class='error row' ng-if="builder.error && builder.open">
+    <span ng-repeat="i in range(indent+1) track by $index" class='spacer'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <span class="error-message">&#9763;</span>
+    <span class='error-message'>{{builder.error}}</span>
+  </div>
+
+  <!-- PARTS ------------------------------------------------------------------------- -->
+  <div ng-if="builder.open" ng-repeat="(name,component) in builder.thread">
+
+    <div ng-if="builder.parent_sample_role != name && !component.hidden">
+
+      <!-- SCALARS ------------------------------------------------------------------- -->
+      <div ng-if="!component.is_vector">
+
+        <div ng-if="!component.new_sample" 
+             ng-include="'componentView'"
+             ng-init="indent=indent+1; is_vector=false">
+        </div>
+
+        <div ng-if="component.new_sample"
+             ng-include="'sampleView'"
+             ng-init="role = name; is_vector=false; sample = component.new_sample; component = component; indent=indent+1">
+        </div>          
+
+      </div>
+
+      <!-- VECTORS ------------------------------------------------------------------- -->
+      <div ng-if="component.is_vector">
+
+        <div ng-repeat="comp in component.value track by $index">
+
+          <div ng-if="!comp.new_sample"
+               ng-include="'componentView'"
+               ng-init="role=name; is_vector = true; container = component; component = comp; index = $index; indent=indent+1">
+          </div>
+
+          <div ng-if="comp.new_sample"
+               ng-include="'sampleView'"
+               ng-init="role = name; is_vector = true; index = $index; sample = comp.new_sample; container = component; component = comp; indent=indent+1">
+          </div>
+
+        </div>
+
+      </div>
 
     </div>
 

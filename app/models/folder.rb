@@ -13,17 +13,20 @@ class Folder < ActiveRecord::Base
     end
   end
 
-  def tree_aux
+  def tree_aux opts
     {
       id: self.id,
       name: self.name,
+      locked: opts[:locked],
       children: self.children.collect { |c|
-        c.tree_aux
+        c.tree_aux(opts)
       }
     }
   end
 
-  def self.tree user
+  def self.tree user, opts={}
+
+    options = { locked: false }.merge opts
 
     folders = Folder.where(user_id: user.id, parent_id: nil)
 
@@ -34,7 +37,7 @@ class Folder < ActiveRecord::Base
       top = folders[0]
     end
 
-    top.tree_aux
+    top.tree_aux(opts)
 
   end
 

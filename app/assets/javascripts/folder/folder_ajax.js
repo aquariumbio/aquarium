@@ -4,10 +4,10 @@
   try {
     w = angular.module('folders'); 
   } catch (e) {
-    w = angular.module('folders', ['puElasticInput']); 
+    w = angular.module('folders', ['puElasticInput', 'cfp.hotkeys']); 
   } 
 
-  w.service('railsfolder', [ '$http', function($http) {
+  w.service('folderAjax', [ '$http', function($http) {
 
     this.get = function(url,f) {
       $http.get(url).
@@ -35,13 +35,13 @@
       });
     }
 
-    this.deleteFolder = function(f,then) {
+    this.delete_folder = function(f,then) {
       this.get('/folders.json?method=delete&folder_id='+f.id,function(response) {
         then(response.data);
       });
     }    
 
-    this.renameFolder = function(f) {
+    this.rename_folder = function(f) {
       this.get('/folders.json?method=rename&folder_id='+f.id+"&name="+f.name,function(response) {
       });     
     }
@@ -69,6 +69,24 @@
         then(response.data);
       });
     }   
+
+    this.add_workflow = function(workflow_id,folder_id,then) {
+      this.get('/folders.json?method=add_workflow&workflow_id='+workflow_id+'&folder_id='+folder_id,function(response) {
+        then(response.data);
+      });
+    }
+
+    this.remove_sample = function(folder,sample,then) {
+      this.get('/folders.json?method=remove_sample&sample_id='+sample.id+'&folder_id='+folder.id,function(response) {
+        then(response.data);
+      });
+    }
+
+    this.remove_workflow = function(folder,workflow,then) {
+      this.get('/folders.json?method=remove_workflow&workflow_id='+workflow.id+'&folder_id='+folder.id,function(response) {
+        then(response.data);
+      });
+    }    
 
     this.new_sample = function(folder,sample,role,then)  {
       this.post('/folders.json?method=new_sample',{ folder_id: folder.id, sample: sample, role: role },function(response) {

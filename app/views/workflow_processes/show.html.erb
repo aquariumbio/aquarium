@@ -1,5 +1,7 @@
 <h1><%= @workflow_process.id %> : 
-    <%= link_to @workflow_process.workflow.name, @workflow_process.workflow %>
+    <% if @workflow_process.workflow %>
+      <%= link_to @workflow_process.workflow.name, @workflow_process.workflow %>
+    <% end %>
     <%= @workflow_process.state_hash[:debug] ? "[DEBUG]" : "" %></h1>
 
 <a class='btn btn-mini' href="rerun?id=<%= @workflow_process.id%>">

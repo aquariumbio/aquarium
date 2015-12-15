@@ -36,6 +36,18 @@ class UsersController < ApplicationController
 
   end
 
+  def billing
+
+    @user = User.find(params[:id])
+    @report = TaskPrototype.cost_report @user.id
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @report }
+    end    
+
+  end
+
   def create
 
     if !params[:change_password]
@@ -88,9 +100,16 @@ class UsersController < ApplicationController
   end
 
   def index
-    retired = Group.find_by_name('retired')
-    rid = retired ? retired.id : -1
-    @users = ((User.select{|u| !u.member? rid }).sort { |a,b| a[:login] <=> b[:login] }).paginate(page: params[:page], :per_page => 40)
+
+    respond_to do |format|
+      format.html {
+        retired = Group.find_by_name('retired')
+        rid = retired ? retired.id : -1
+        @users = ((User.includes(:tasks).select{|u| !u.member? rid }).sort { |a,b| a[:login] <=> b[:login] }).paginate(page: params[:page], :per_page => 15)        
+      }
+      format.json { render json: User.all }
+    end
+
   end
 
   def destroy

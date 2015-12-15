@@ -22,8 +22,12 @@ Bioturk::Application.routes.draw do
   get 'sample_list/:id',             to: 'operations#samples'
   get 'sample_list',                 to: 'operations#samples'
 
-  get 'workflow_processes/rerun',    to: 'workflow_processes#rerun'
-  get 'workflow_processes/step',    to: 'workflow_processes#step'
+  get 'workflow_processes/kill/:id',    to: 'workflow_processes#kill'
+  get 'workflow_processes/active',      to: 'workflow_processes#active'
+  get 'workflow_processes/recent',      to: 'workflow_processes#recent'  
+  get 'workflow_processes/rerun',       to: 'workflow_processes#rerun'
+  get 'workflow_processes/step',        to: 'workflow_processes#step'
+
   resources :workflow_processes, only: [ :index, :show, :new, :create ]
 
   resources :workflow_threads, only: [ :create, :index, :destroy ]
@@ -172,6 +176,7 @@ Bioturk::Application.routes.draw do
   match '/inventory_stats', to: 'static_pages#inventory_stats'
   match '/inventory_critical', to: 'static_pages#inventory_critical'
   match '/protocol_usage', to: 'static_pages#protocol_usage'
+  match '/cost_report', to: 'static_pages#cost_report'  
 
   get '/production_interface', to: 'object_types#production_interface'
   get '/delete_inventory', to: 'object_types#delete_inventory'
@@ -183,6 +188,7 @@ Bioturk::Application.routes.draw do
   match '/signup', to: 'users#new'
   match '/password', to: 'users#password'
 
+  get 'users/billing/:id',    to: 'users#billing' 
   resources :users do 
     get 'change_password'
   end

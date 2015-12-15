@@ -32,9 +32,17 @@
 [#]*[#]
 .\#*
 
+# temporary vim files
+*.swp
+
 # Gemfile.lock
 Gemfile.lock
 
 awc.sh
 
-lib/krill/workflow/doc/
+# documentation temp files
+/lib/krill/workflow/doc/
+/public/doc/md/
+/public/doc/images/
+/public/doc/operation-api/
+

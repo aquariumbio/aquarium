@@ -28,12 +28,16 @@ module ApiFind
 
     models = { "item" => Item, "job" => Job, "sample" => Sample, "user" => User,
                "task" => Task, "sample_type" => SampleType, "object_type" => ObjectType,
+               "task_prototype" => TaskPrototype, "touch" => Touch,
                "task_prototype" => TaskPrototype,
                "workflow"=>Workflow,
                "workflow_thread"=>WorkflowThread,
-               "upload"=>Upload }
+               "upload"=>Upload,
+               "task_prototype" => TaskPrototype, 
+               "touch" => Touch }
 
     query = models[args[:model]]
+    
     if(query)
       query = query.includes(args[:includes]) if args[:includes]
       query = query.limit(args[:limit]) if args[:limit]

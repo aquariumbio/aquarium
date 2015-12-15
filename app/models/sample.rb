@@ -266,25 +266,44 @@ class Sample < ActiveRecord::Base
   def for_folder_aux
 
     s = as_json
-
     s[:sample_type] = { name: sample_type.name }  
 
-    s[:fields] = ((1..8).select { |i| [ "number", "string", "url" ].member? sample_type["field#{i}type".to_sym] }).collect { |i|
-      {
-        name: sample_type["field#{i}name".to_sym],
-        value: self["field#{i}".to_sym]
-      }
-    }
-
     if self.data
+
       s["data"] = self.data_hash
-    else # Migrate old sample fields to new sample json
+
+    else 
+
+      s[:fields] = ((1..8).select { |i| [ "number", "string", "url" ].member? sample_type["field#{i}type".to_sym] }).collect { |i|
+        {
+          name: sample_type["field#{i}name".to_sym],
+          value: self["field#{i}".to_sym]
+        }
+      }
+
       o = {}
       s[:fields].each do |f|
         o[f[:name]] = f[:value]
       end
       s["data"] = o
       self.data = o.to_json
+      self.save
+
+    end
+
+    # Add any new fields defined by the sample_type, if necessary
+    flag = false
+    puts "sample_type.datatype_hash = #{sample_type.inspect}"
+    sample_type.datatype_hash.each do |k,v|
+      puts "#{k}, #{s['data']}"
+      unless s["data"][k.to_s]
+        flag = true
+        s["data"][k.to_s] = v == "number" ? 0 : ""
+      end
+    end
+
+    if flag
+      self.data = s["data"].to_json
       self.save
     end
 
@@ -299,10 +318,11 @@ class Sample < ActiveRecord::Base
     s[:containing_thread_id] = containing_thread_id if containing_thread_id
 
     s[:threads] = self.workflow_associations
-      .select { |wa| wa.thread }
+      .select { |wa| wa.thread && wa.thread.workflow }
       .collect { |wa|
         { 
           id: wa.thread.id,
+          user: User.find_by_id(wa.thread.user_id),
           workflow: {
             id: wa.thread.workflow.id,
             name: wa.thread.workflow.name
@@ -316,5 +336,9 @@ class Sample < ActiveRecord::Base
     s
 
   end  
+
+  def to_workflow_identifier
+    "#{self.id}: #{self.name}"
+  end
 
 end

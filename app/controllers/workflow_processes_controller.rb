@@ -3,12 +3,54 @@ class WorkflowProcessesController < ApplicationController
   before_filter :signed_in_user
 
   def index
-    @workflow_processes = WorkflowProcess.all
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @workflow_processes }
-    end    
+      format.json { render json: WorkflowProcess.all }        
+    end
   end
+
+  def active
+    render json: Job.includes(workflow_process: :jobs)
+      .where("pc >= -1 AND workflow_process_id is not null")
+      .collect { |j| 
+        wp = j.workflow_process
+        wpj = wp.as_json(include: :jobs)
+        wpj[:state] = wp.state_hash
+        wpj
+      }
+      .uniq
+  end
+
+  def recent
+
+    a = Time.now - params[:days_ago].to_i.days
+    b = Time.now - params[:days_ago].to_i.days + 1.days
+
+    recently_updated = WorkflowProcess
+      .includes(:jobs)
+      .where("? < updated_at AND updated_at <= ?", a, b )
+      .reject { |wp| wp.active? }
+      .collect { |wp| 
+        wpj = wp.as_json(include: :jobs)
+        wpj[:state] = wp.state_hash
+        wpj
+      }
+
+    recently_updated_via_jobs = Job.includes(workflow_process: :jobs)
+      .where("? < updated_at AND updated_at <= ? AND workflow_process_id is not null", a, b)
+      .collect { |j| 
+        j.workflow_process
+      }
+      .reject { |wp| wp.active? }
+      .collect { |wp| 
+        wpj = wp.as_json(include: :jobs)
+        wpj[:state] = wp.state_hash
+        wpj
+      }
+
+      render json: (recently_updated+recently_updated_via_jobs).uniq
+
+  end  
 
   def show
     @workflow_process = WorkflowProcess.find(params[:id])
@@ -36,7 +78,11 @@ class WorkflowProcessesController < ApplicationController
     @wp = WorkflowProcess.create @workflow, @threads, debug
 
     Thread.new do
-      @wp.launch
+      begin
+        @wp.launch
+      rescue Exception => e
+        Rails.logger "Failed to launch workflow process: #{e.to_s}"
+      end
     end
 
     render json: @wp
@@ -45,13 +91,17 @@ class WorkflowProcessesController < ApplicationController
 
   def rerun
 
-    Rails.logger.info "Rerunning process #{params[:id]}"
-
     @wp = WorkflowProcess.find(params[:id])
     @workflow = @wp.workflow
 
+    if !@workflow 
+      flash[:error] = "Workflow not found. Process cannot be rerun"
+      redirect_to workflow_processes_url
+      return
+    end
+
     @threads = @wp.threads.collect { |t|
-      WorkflowThread.create t.spec, t.workflow_id
+      WorkflowThread.create t.spec, t.workflow_id, current_user
     }
 
     if params[:debug].class == String
@@ -107,6 +157,18 @@ class WorkflowProcessesController < ApplicationController
     @wp.step
     redirect_to workflow_process_url(@wp)
 
+  end
+
+  def kill 
+    wp = WorkflowProcess.includes(:jobs).find(params[:id])
+    wp.jobs.each do |j|
+      j.cancel current_user
+    end
+    wp.reload
+    wpj = wp.as_json(include: :jobs)
+    wpj[:state] = wp.state_hash
+    wpj
+    render json: { status: "killed process #{params[:id]}", process: wpj }
   end
 
 end

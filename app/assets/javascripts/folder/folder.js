@@ -4,23 +4,34 @@
   try {
     w = angular.module('folders'); 
   } catch (e) {
-    w = angular.module('folders', ['puElasticInput']); 
+    w = angular.module('folders', ['puElasticInput', 'cfp.hotkeys']); 
   } 
 
-  w.controller('foldersCtrl', [ '$scope','railsfolder','focus', function ($scope,railsfolder,focus) {
+  w.controller('foldersCtrl', [ '$scope','folderAjax','threadBuilder','workflowManager','focus', 'hotkeys', 
+                       function ($scope,  folderAjax,  threadBuilder,  workflowManager,  focus,   hotkeys) {
 
-    railsfolder.index(function(data) {
+    folderAjax.index(function(data) {
+
       $scope.folders = data.folders;
       $scope.folders[0].open = true;
       $scope.current_folder = $scope.folders[0];
       $scope.contents($scope.current_folder);
+
+      $scope.threadBuilder = threadBuilder;
+      $scope.threadBuilder.init($scope);
+
+      $scope.workflowManager = workflowManager;
+      $scope.workflowManager.init($scope);   
+
+      $scope.clipboard = null;
+
     });
 
-    railsfolder.sample_types(function(data) {
+    folderAjax.sample_types(function(data) {
       $scope.sample_types = data;
     });
 
-    railsfolder.workflows(function(data) {
+    folderAjax.workflows(function(data) {
       $scope.workflows = data;
     });    
 
@@ -39,7 +50,7 @@
     $scope.save = function(sample) {
       sample.saving = true;
       sample.error = null;
-      railsfolder.save_sample(sample,function(data) {
+      folderAjax.save_sample(sample,function(data) {
         if ( data.error ) {
           sample.error = data.error;
         } else {
@@ -51,7 +62,8 @@
 
     $scope.save_new = function(sample,role) {
       sample.saving = true;
-      railsfolder.new_sample($scope.current_folder,sample,role,function(data) {
+      sample.error = null;
+      folderAjax.new_sample($scope.current_folder,sample,role,function(data) {
         if ( data.error ) {
           sample.error = data.error;
         } else {
@@ -69,7 +81,7 @@
     }
 
     $scope.revert = function(sample) {
-      railsfolder.get_sample(sample.id,function(data) {
+      folderAjax.get_sample(sample.id,function(data) {
         sample.name = data.sample.name;
         sample.data = data.sample.data;
         sample.description = data.sample.description;
@@ -110,10 +122,26 @@
 
     $scope.addSample = function(f) {
       var sid = $('#add-sample').val().split(":")[0];
-      railsfolder.add_sample(sid,$scope.current_folder.id,function(data) {
-        $scope.current_folder.samples.unshift(data.sample); 
-        $('#add-sample').val(''); 
+      $scope.addSampleAux(f,sid);
+    }
+
+    $scope.addSampleAux = function(f,sid) {
+      folderAjax.add_sample(sid,$scope.current_folder.id,function(data) {
+        if ( !data.error ) {
+          $scope.current_folder.samples.unshift(data.sample); 
+          $scope.selection = data.sample; 
+        } else {
+          alert("Could not find an existing sample with name and/or id '" + $('#add-sample').val() + "'.")
+        }
+        $('#add-sample').val('');
       });
+    }
+
+    $scope.addWorkflow = function(f,wid) {
+      folderAjax.add_workflow(wid,$scope.current_folder.id,function(data) {
+        $scope.current_folder.workflows.unshift(data.workflow); 
+        $scope.selection = data.workflow; 
+      });      
     }
 
     $scope.newSampleTemplate = function(sample_type) {
@@ -138,6 +166,7 @@
     $scope.setCurrentFolder = function(f) {
       $scope.current_folder = f;
       $scope.contents(f);
+      $scope.selection = null;
     }
 
     $scope.openSample = function(s) {
@@ -156,50 +185,10 @@
 
     $scope.get_thread_parts = function(sample,thread) {
       if ( !thread.parts ) {
-        railsfolder.thread_parts(sample.id,thread.id,function(data) {
+        folderAjax.thread_parts(sample ? sample.id : null,thread.id,function(data) {
           thread.parts = data.parts;
         });
       }
-    }
-
-    $scope.newThreadBuilder = function(workflow,part) {
-
-      if ( !$scope.selection.thread_builders ) {
-        $scope.selection.thread_builders = [];
-      }      
-
-      $scope.selection.thread_builders.push({
-        workflow: workflow, 
-        part: part, 
-        open: true
-      });
-
-      $scope.selection.open = true;
-
-    }
-
-    $scope.newSampleForThreadBuilder = function(part) {
-
-      if ( part.alternatives.length > 0 && part.alternatives[0].sample_type ) {
-
-        $.ajax({
-          url: '/sample_types/' + part.alternatives[0].sample_type.split(':')[0] + ".json"
-        }).done(function(sample_type) {
-          var s = $scope.newSampleTemplate(sample_type);
-          s.name = $scope.selection.name + "_"  + part.name;
-          part.new_sample = s;
-          $scope.$apply();
-        });
-
-      } else {
-        console.log("No alternatives to use to create new sample")
-      }
-
-    }
-
-    $scope.threadBuilderCancel = function(sample,builder) {
-      var i = sample.thread_builders.indexOf(builder);
-      sample.thread_builders.splice(i,1);
     }
 
     $scope.openThread = function(s,t) {
@@ -215,16 +204,12 @@
       f.open = true;
     }
 
-    $scope.openWorkflow = function(workflow) {
-      window.location = '/workflows/' + workflow.id;
-    }
-
     $scope.closeFolder = function(f) {
       f.open = false;
     }
 
     $scope.newFolder = function() {
-      railsfolder.newFolder($scope.current_folder,function(data) {
+      folderAjax.newFolder($scope.current_folder,function(data) {
         if ( !$scope.current_folder.children ) {
           $scope.current_folder.children = [];
         }
@@ -236,7 +221,7 @@
     }
 
     $scope.renameFolder = function(f) {
-      railsfolder.renameFolder(f);
+      folderAjax.rename_folder(f);
     }
 
     function remove(p,f) {
@@ -257,16 +242,60 @@
       return null;
     }
 
+    $scope.removeSampleAux = function(sample) {
+      folderAjax.remove_sample($scope.current_folder,sample, function(data) {
+        var i = $scope.current_folder.samples.indexOf($scope.selection);
+        if ( $scope.current_folder.samples[i+1] ) {
+          $scope.selection = $scope.current_folder.samples[i+1];
+        }
+        $scope.current_folder.samples.splice(i,1);
+      });
+    }
+
+    $scope.removeSample = function() {
+      $scope.removeSampleAux($scope.selection);
+    }
+
+    $scope.removeWorkflow = function(workflow) {
+      folderAjax.remove_workflow($scope.current_folder,workflow, function(data) {
+        var i = $scope.current_folder.workflows.indexOf(workflow);
+        if ( $scope.current_folder.workflows[i+1] ) {
+          $scope.selection = $scope.current_folder.worfklows[i+1];
+        }
+        $scope.current_folder.workflows.splice(i,1);
+      });
+    }    
+
     $scope.deleteFolder = function(f) {
       confirm("Are you sure you want to delete the folder and all of its sub-folders? Other contents will not be deleted, but may be harder to find.");
-      railsfolder.deleteFolder($scope.current_folder,function(data) {
+      folderAjax.delete_folder($scope.current_folder,function(data) {
         $scope.current_folder = remove($scope.folders[0],$scope.current_folder);      
       });
     }
+
+    $scope.remove = function() {
+
+      var object = $scope.selection;
+
+      if ( object && object.sample_type ) {
+        $scope.removeSampleAux(object);
+      } else if ( object && object.form ) {
+        $scope.removeWorkflow(object);
+      } else if ( object && object.children ) {
+        
+      } else {
+        console.log("Pasting unknown object.")        
+      }      
+
+    }
  
     $scope.contents = function(f) {
-      if ( ! f.samples || ! f.workflows ) {
-        railsfolder.samples(f,function(data) {
+      if ( f.special == "workflows" ) {
+        folderAjax.workflows(function(data) {
+          f.workflows = data;          
+        });
+      } else if ( ! f.samples || ! f.workflows ) {
+        folderAjax.samples(f,function(data) {
           f.samples = data.samples;
           f.workflows = data.workflows;          
         });
@@ -301,9 +330,93 @@
 
     $scope.range = function(n) {
       return new Array(n);
-    };    
+    };
+
+    $scope.paste = function() {
+
+      var object = $scope.clipboard;
+
+      // I am embarrased by hjow I am figuring out what kind of object is
+      // being pasted.
+      if ( object && object.sample_type ) {
+        $scope.addSampleAux($scope.current_folder,object.id);
+      } else if ( object && object.form ) {
+        $scope.addWorkflow($scope.current_folder,object.id);        
+      } else if ( object && object.children ) {
+        console.log("TODO: paste folder " + object.id);
+      } else {
+        console.log("Pasting unknown object.")
+      }
+
+    }
+
+    // KEYBOARD SHORTCUTS
+    hotkeys.add({
+      combo: 'ctrl+c',
+      description: 'Copy',
+      callback: function() {
+        if ( $scope.selection ) {
+          $scope.clipboard = $scope.selection;
+        } else {
+          $scope.clipboard = $scope.current_folder;
+        }
+      }
+    });
+
+    hotkeys.add({
+      combo: 'ctrl+v',
+      description: 'Paste',
+      callback: $scope.paste
+    });
+
+    hotkeys.add({
+      combo: 'ctrl+d',
+      description: 'Delete',
+      callback: $scope.remove
+    });    
+
+    hotkeys.add({
+      combo: 'ctrl+n',
+      description: 'New Folder',
+      callback: $scope.newFolder
+    });
 
   }]);
+
+  w.directive('tooltip', function(){
+
+    return {
+
+      restrict: 'A',
+
+      link: function(scope, element, attrs) {
+
+        var d1 = 1500, t1, 
+            d2 = 500,  t2;
+
+        $(element).mouseover(function(){
+
+          t1 = setTimeout(function(){
+            $(element).tooltip('show');
+          },d1);
+
+        }).mouseout(function(){
+
+          clearTimeout(t1);
+          t2 = setTimeout(function(){
+            var isHover = $(element).is(":hover");
+            if(isHover !== true){
+              $(element).tooltip('hide').unbind('mouseenter mouseleave');
+            }
+          },d2);
+
+        });
+
+      }
+
+    };
+
+  });
 
 })();
 

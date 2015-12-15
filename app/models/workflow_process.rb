@@ -110,7 +110,7 @@ class WorkflowProcess < ActiveRecord::Base
       return true if connection[:to] == [ oid, name ]
     end
     false
-  end
+  end 
 
   def initializer? oc # returns true if the operation container's op should be run
                       # initially, when the process starts
@@ -155,6 +155,10 @@ class WorkflowProcess < ActiveRecord::Base
 
   def completed?
     operation_containers.conjoin { |oc| oc[:jid] && Job.find(oc[:jid]).done? }
+  end
+
+  def active?
+    self.jobs.disjoin { |j| j.active? || j.pending? }
   end
 
   def record_result_of job

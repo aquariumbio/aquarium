@@ -135,27 +135,35 @@ class TasksController < ApplicationController
     
     if Rails.env != 'production'
 
-      TaskPrototype.all.each do |tp|
-        tp.destroy
-      end
-
-      Task.all.each do |t|
-        t.destroy
-      end
+      TaskPrototype.delete_all
+      Task.delete_all
 
       ProductionTaskPrototype.switch_connection_to(:production_server)
+      tps = []
       ProductionTaskPrototype.all.each do |tp|
         new_tp = TaskPrototype.new(tp.attributes.except("created_at","updated_at"))
+        new_tp.created_at = tp.created_at
+        new_tp.updated_at = tp.updated_at        
         new_tp.id = tp.id
-        new_tp.save
+        tps << new_tp.as_json
       end
+      TaskPrototype.import!(tps)
+
 
       ProductionTask.switch_connection_to(:production_server)
-      ProductionTask.all.each do |t|
+
+      all_prod_tasks = ProductionTask.all
+      Rails.logger.info "Attempting to copy #{all_prod_tasks.length} tasks"
+
+      ts = []
+      all_prod_tasks.each do |t|
         new_task = Task.new(t.attributes.except("created_at","updated_at"))
+        new_task.created_at = t.created_at
+        new_task.updated_at = t.updated_at                
         new_task.id = t.id
-        new_task.save validate: false
+        ts << new_task.as_json # .save validate: false
       end
+      Task.import!(ts)
 
       redirect_to production_interface_path, notice: "#{TaskPrototype.all.length} task prototypes and #{Task.all.length} tasks copied."
 
