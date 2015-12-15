@@ -82,7 +82,7 @@ module Bioturk
     # The following code touches all the models, which somehow initializes the constants
     # representing those models. If you don't do this, you get "wrong constant" errors in
     # plugins and possibly other places.
-    config.after_initialize do 
+    config.after_initialize do
         Job.count
         Sample.count
         Item.count
@@ -93,6 +93,14 @@ module Bioturk
         Wizard.count
         SampleType.count
         ObjectType.count
+    end
+
+    #Added to enable CORS
+    config.middleware.insert_before 0, "Rack::Cors" do
+      allow do
+        origins '*'
+        resource '*', :headers => :any, :methods => [:get, :post, :options]
+      end
     end
 
   end
