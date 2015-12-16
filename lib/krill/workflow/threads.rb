@@ -99,8 +99,6 @@ module Krill
       raise "Do not use this method directly."
     end
 
-  private
-
     # @!visibility private
     # This method is used to route part requests and should not be used directly.
     def method_missing name, *args, &block

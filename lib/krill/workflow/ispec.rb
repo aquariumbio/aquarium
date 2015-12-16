@@ -13,6 +13,26 @@ module Krill
       self[:is_vector]
     end
 
+    # Associate a sample with an ISpec
+    # @return [ISpec] The inventory specification
+    def associate_sample sample
+      raise "Cannot associate a single sample with a vector based inventory specification." if is_vector
+      self[:sample_id] = sample_id
+      self[:sample] = "#{sample.id}: #{sample.name}"
+      @sample = sample
+      self
+    end
+
+    # Associate a vector of samples with a vector based ISpec
+    # @return [ISpec] The inventory specification    
+    def associate_samples samples
+      raise "Cannot associate a vector of samples with a scalar based inventory specification." unless is_vector
+      self[:sample_ids] = samples.collect { |s| s.id }
+      self[:sample] = samples.collect { |s| "#{s.id}: #{s.name}" }
+      @samples = samples
+      self
+    end
+
     # Returns the sample id associated with the the {ISpec}. 
     # Returns nil if no sample id is associated with the {ISpec}.
     # @return [Fixnum] The sample id.
