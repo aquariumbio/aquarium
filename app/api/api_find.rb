@@ -30,12 +30,10 @@ module ApiFind
                "task" => Task, "sample_type" => SampleType, "object_type" => ObjectType,
                "task_prototype" => TaskPrototype, "touch" => Touch,
                "workflow_thread"=>WorkflowThread,
-               "upload"=>Upload,
-               "task_prototype" => TaskPrototype, 
-               "touch" => Touch }
+               "upload"=>Upload }
 
     query = models[args[:model]]
-    
+
     if(query)
       query = query.includes(args[:includes]) if args[:includes]
       query = query.limit(args[:limit]) if args[:limit]
@@ -74,6 +72,11 @@ module ApiFind
             add [{file_name =>file_contents}]
           end
         end
+      end
+    elsif args[:model]=='url_for_upload'
+      upload = Upload.find(args[:where][:id])
+      if upload
+        add [upload.url]
       end
     end
     #if args[:model] == "job"
