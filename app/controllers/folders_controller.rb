@@ -130,6 +130,7 @@ class FoldersController < ApplicationController
           sample = Sample.find(params[:id])
           sample.name = params[:name]
           sample.description = params[:description]
+          # TODO Move to strong params
           sample.data = params[:data].to_json
           sample.save
 

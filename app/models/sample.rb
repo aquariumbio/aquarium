@@ -39,7 +39,7 @@ class Sample < ActiveRecord::Base
           self["field#{i}".to_sym] = val
         when "number"
           raise "Field '#{name}' should be a number" unless val.class == Fixnum || val.class == Float
-          self["field#{i}".to_sym] = val          
+          self["field#{i}".to_sym] = val
         else
           if val.class == String
             s = Sample.find_by_name val
@@ -50,7 +50,7 @@ class Sample < ActiveRecord::Base
             raise "Could not find sample with id #{val}" unless s
             self["field#{i}".to_sym] = s.name
           else
-            raise "Field '#{name}' should be a sample id or a sample name" 
+            raise "Field '#{name}' should be a sample id or a sample name"
           end
       end
     else
@@ -87,10 +87,10 @@ class Sample < ActiveRecord::Base
 
     sample_type = self.sample_type
 
-    result = (1..8).collect do |i| 
+    result = (1..8).collect do |i|
 
       fn = "field#{i}name".to_sym
-      ft = "field#{i}type".to_sym 
+      ft = "field#{i}type".to_sym
       f = "field#{i}".to_sym
 
       if sample_type[ft] != 'not used' && sample_type[ft] != nil
@@ -241,7 +241,7 @@ class Sample < ActiveRecord::Base
     (1..8).each do |i|
       a.delete "field#{i}"
     end
-    a[:sample_type] = sample_type.export if association(:sample_type).loaded?    
+    a[:sample_type] = sample_type.export if association(:sample_type).loaded?
     a
   end
 
@@ -266,13 +266,13 @@ class Sample < ActiveRecord::Base
   def for_folder_aux
 
     s = as_json
-    s[:sample_type] = { name: sample_type.name }  
+    s[:sample_type] = { name: sample_type.name }
 
     if self.data
 
       s["data"] = self.data_hash
 
-    else 
+    else
 
       s[:fields] = ((1..8).select { |i| [ "number", "string", "url" ].member? sample_type["field#{i}type".to_sym] }).collect { |i|
         {
@@ -287,6 +287,7 @@ class Sample < ActiveRecord::Base
       end
       s["data"] = o
       self.data = o.to_json
+      puts "saving\n\n\n"
       self.save
 
     end
@@ -295,8 +296,7 @@ class Sample < ActiveRecord::Base
     flag = false
     puts "sample_type.datatype_hash = #{sample_type.inspect}"
     sample_type.datatype_hash.each do |k,v|
-      puts "#{k}, #{s['data']}"
-      unless s["data"][k.to_s]
+      unless s["data"][k]
         flag = true
         s["data"][k.to_s] = v == "number" ? 0 : ""
       end
@@ -320,7 +320,7 @@ class Sample < ActiveRecord::Base
     s[:threads] = self.workflow_associations
       .select { |wa| wa.thread && wa.thread.workflow }
       .collect { |wa|
-        { 
+        {
           id: wa.thread.id,
           user: User.find_by_id(wa.thread.user_id),
           workflow: {
@@ -330,12 +330,12 @@ class Sample < ActiveRecord::Base
           role: wa.role,
           process_id: wa.thread.workflow_process ? wa.thread.workflow_process.id : nil,
           updated_at: wa.thread.workflow_process ? time_ago_in_words(wa.thread.workflow_process.updated_at) : nil
-        } 
+        }
       }
 
     s
 
-  end  
+  end
 
   def to_workflow_identifier
     "#{self.id}: #{self.name}"
