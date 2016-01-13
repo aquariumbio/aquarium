@@ -9,7 +9,8 @@ module ApiFind
               sample_type: :sample_types,
               task_prototype: :task_prototypes,
               job: :jobs,
-              upload: :uploads
+              upload: :uploads,
+              user: :users
     }
 
     spec.each do |k,v|
@@ -28,21 +29,30 @@ module ApiFind
 
     models = { "item" => Item, "job" => Job, "sample" => Sample, "user" => User,
                "task" => Task, "sample_type" => SampleType, "object_type" => ObjectType,
-               "task_prototype" => TaskPrototype, "touch" => Touch,
                "task_prototype" => TaskPrototype,
+               "touch" => Touch,
                "workflow"=>Workflow,
                "workflow_thread"=>WorkflowThread,
                "upload"=>Upload,
-               "task_prototype" => TaskPrototype, 
-               "touch" => Touch }
+                }
 
     query = models[args[:model]]
-    
+
     if(query)
       query = query.includes(args[:includes]) if args[:includes]
       query = query.limit(args[:limit]) if args[:limit]
-      if args[:where]
+      if (args[:where] or args[:time_range])
+        if args[:where]
         query = query.where(pluralize_table_names(args[:where]))
+        end
+        if args[:time_range]
+          for used_model in args[:time_range].keys
+            for time_column in args[:time_range][used_model].keys
+              time_range=DateTime.parse(args[:time_range][used_model][time_column][0])..DateTime.parse(args[:time_range][used_model][time_column][1]);
+              query= query.where(pluralize_table_names(Hash[used_model,Hash[time_column,time_range]]));
+            end
+          end
+        end
       else
         query = query.all
       end
@@ -76,6 +86,11 @@ module ApiFind
             add [{file_name =>file_contents}]
           end
         end
+      end
+    elsif args[:model]=='url_for_upload'
+      upload = Upload.find(args[:where][:id])
+      if upload
+        add [upload.url]
       end
     end
     #if args[:model] == "job"
