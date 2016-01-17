@@ -61,6 +61,17 @@ If "method" is "find", then the following arguments can be given.
 	
 requests all items whose id is 123, which should result in no more than one item. If no "where" field is specified, the request returns all models (unless a limit is specified, as below).
 
+To retrieve multiple rows which satisfy a given set of conditions, use an array in your "where" hash.
+
+	"run" : {
+			"method": "find",
+			"args": { 
+				"model": "item",
+				"where": { "id": [123,124] }
+			}
+		}
+This will return two items: one with the ID 123 and the other with the ID 124, provided they exist.		
+
 **<tt>includes</tt>**: Which associations to include. For example,
 
     run: {
