@@ -1,0 +1,30 @@
+<style>
+  html, body {
+    height: 100%;
+  }
+</style>
+
+<div ng-app="tree">
+
+  <%= render partial: "sample_tree" %> 
+  <%= render partial: "property" %>
+  <%= render partial: "item" %>  
+  <%= render partial: "job" %>  
+  <%= render partial: "task" %>   
+  <%= render partial: "nav" %>    
+
+  <div class="container-fluid">
+
+    <div class="row-fluid app" 
+         ng-controller='treeCtrl as tree' 
+         ng-init="init(<%= params[:id] %>)">
+
+      <div class="span3 navbar chooser-container" ng-include="'nav'"></div>
+
+      <div class="span9 st" ng-include="'sampleTree'" ng-init="role=''; indent=0"></div>
+
+    </div>
+
+  </div>
+
+</div>

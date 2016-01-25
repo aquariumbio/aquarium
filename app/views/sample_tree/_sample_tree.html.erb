@@ -1,0 +1,56 @@
+<script type="text/ng-template" id="sampleTree"> 
+
+  <div class="row">
+    
+    <div class="cell one">
+
+      <span ng-repeat="n in range(indent) track by $index" class="spacer"></span>
+
+      <span ng-if="sample_tree.open" 
+       ng-click="close(sample_tree)"
+       class="expander">&#9660;</span> 
+
+      <span ng-if="!sample_tree.open" 
+       ng-click="open(sample_tree)"
+       class="expander">&#9654;</span> 
+
+      <span ng-if="role">{{role}}:</span>
+
+      <b>{{sample_tree.sample.name}}</b>
+      ({{sample_tree.sample.project}})
+
+    </div>
+
+    <div class="cell two">
+    </div> 
+
+    <div class="cell three">
+      <a href="/users/{{sample_tree.sample.user_id}}">{{sample_tree.sample.user_login}}</a>
+    </div>
+
+    <div class="cell four">{{sample_tree.sample.updated_at|date}}</div>  
+
+  </div>
+
+  <div class="row" 
+       ng-if="sample_tree.open && displayable(v)" 
+       ng-repeat="(k,v) in sample_tree.sample.properties" 
+       ng-include="'property'"
+       ng-init="indent = indent + 1">
+  </div>  
+
+  <div 
+       ng-if="sample_tree.open && item.location != 'deleted'"
+       ng-repeat="item in sample_tree.sample.items"
+       ng-include="'item'"
+       ng-init="indent = indent + 1">
+  </div>
+
+  <div  
+       ng-if="sample_tree.open" 
+       ng-repeat="parent in sample_tree.parents"
+       ng-include="'sampleTree'" 
+       ng-init="role=parent[0]; sample_tree = parent[1]; indent = indent + 1">
+  </div>
+
+</script>

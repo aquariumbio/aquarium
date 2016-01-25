@@ -1,5 +1,10 @@
 Bioturk::Application.routes.draw do
-  
+
+  get '/sample_tree/samples',              to: 'sample_tree#samples'  
+  get '/sample_tree/jobs/:id',             to: 'sample_tree#jobs'  
+  get '/sample_tree/annotate/:id/:note',   to: 'sample_tree#annotate'
+  get '/sample_tree/:id',                  to: 'sample_tree#show'
+
   resources :workflows
   post '/workflows/:id/save',                to: 'workflows#save'
   get '/workflows/:id/new_operation',       to: 'workflows#new_operation'

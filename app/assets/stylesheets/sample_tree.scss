@@ -1,0 +1,111 @@
+$sampleTypeCellHeight: 14px;
+
+.st {
+
+  ul {
+    li {
+      list-style: none;
+    }
+  }
+
+  .expander {
+    font-size: 10pt;
+    cursor: pointer;
+    width: 15px;
+    display: inline-block;
+  }
+
+  .expander-prop {
+    color: #eee;
+    cursor: default;
+  }
+
+  .expander-item {
+    cursor: default;
+  }
+
+  .row {
+
+    /*outline: 1pt solid #eee;*/
+    padding: 5px;
+    width: 100%;
+    border-bottom: 1pt solid #eee;
+    .cell {
+      /*outline: 1pt solid #ccf;*/
+      display: inline-block;
+      margin: 0;
+      padding: 0;
+      height: $sampleTypeCellHeight;
+      white-space: nowrap;
+    }
+    .one {
+      width: 64%;
+    }
+    .two {
+      width: 11%;
+      text-align: left;
+    }
+    .three {
+      width: 11%;
+      text-align: left;
+    }
+    .four {
+      width: 11%;
+      text-align: left;
+    }    
+
+  }
+
+  .spacer {
+    width: 40px;
+    display: inline-block;
+  }
+
+  input {
+    outline: none;
+    border: 1pt solid #eee !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+    width: 70%;
+    height: $sampleTypeCellHeight;
+    padding: 0 0 0 4px;
+    margin: 0;
+  }
+
+  .selected {
+    background: yellow;
+  }
+
+  .app {
+    min-height: 100%;
+    height:auto !important; /* cross-browser */
+    height: 100%; /* cross-browser */    
+  }
+
+  .navbar {
+    white-space: nowrap;
+    overflow: scroll;
+    height: 100%; 
+  }
+
+  .container-fluid {
+    height: 100%;
+    overflow-y: hidden;
+  }
+
+}
+
+.chooser-container {
+}
+
+.chooser {
+  overflow: hidden;
+  text-align: left !important;
+  display: table-cell;
+  width: 200px;
+}
+
+
+
+

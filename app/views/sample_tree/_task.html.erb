@@ -1,0 +1,20 @@
+<script type="text/ng-template" id="task"> 
+
+  <div class="cell one">
+    <span ng-repeat="n in range(indent+2) track by $index" class="spacer"></span>    
+    <span class="expander">&#10144;</span>
+    Task <a href="/tasks/{{task.id}}">{{task.id}}</a>
+    ({{task.status}})
+  </div>
+
+  <div class="cell two">&nbsp;</div>      
+
+  <div class="cell three">    
+    <a href="/users/{{task.user_id}}">{{task.user_login}}</a>
+  </div>
+
+  <div class="cell four"> 
+    {{task.created_at|date}}
+  </div>
+
+</script>

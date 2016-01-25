@@ -55,6 +55,7 @@
 
         <%= link_to "Edit", edit_sample_path(@sample), class: 'btn btn-small btn-primary' %> 
         <%= link_to 'All', samples_path(sample_type_id: @sample.sample_type_id), class: 'btn btn-small' %>  
+        <a href="/sample_tree/<%= @sample.id %>" class='btn btn-small btn-success'>Ancestry</a>        
 
         <label class="checkbox" style='margin-top: 5px'>
           <input type='checkbox' 

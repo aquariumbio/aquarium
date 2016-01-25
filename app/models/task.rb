@@ -205,12 +205,18 @@ class Task < ActiveRecord::Base
     attributes
   end
 
-  def mentions? sample # returns true if any field of the task specification refers to 
+  def mentions? thing # returns true if any field of the task specification refers to 
                        # this particular sample
-    return mentions_aux spec, sample.id, sample.sample_type.name
+    if thing.class == Sample
+      return mentions_aux spec, thing.id, thing.sample_type.name
+    elsif thing.class == Item
+      return mentions_aux spec, thing.id, thing.object_type.name
+    else
+      return false
+    end
   end
 
-  def mentions_aux sp, sample_id, sample_type_name
+  def mentions_aux sp, id, name
 
     if sp.class == Hash
 
@@ -220,17 +226,17 @@ class Task < ActiveRecord::Base
 
         if type
           types = type.split('|')
-          if types.member? sample_type_name
+          if types.member? name
             if v.class == Array
-              return v.member? sample_id
+              return v.member? id
             else
-              return sample_id == v
+              return id == v
             end
           else 
             return false
           end
         else
-          return mentions_aux v, sample_id, sample_type_name
+          return mentions_aux v, id, name
         end
 
       end
@@ -242,6 +248,68 @@ class Task < ActiveRecord::Base
     end
 
   end
+
+  def references? thing
+    s,i = self.references
+    if thing.class == Item
+      return i.member?(thing.id) || ( thing.sample && s.member?(thing.sample.id) )
+    elsif thing.class == Sample
+      return s.member?(thing.id)
+    end
+  end
+
+  def references
+    # returns all sample and item ids mentioned by this task
+    @object_type_names ||= ObjectType.all.collect { |ot| ot.name }
+    @sample_type_names ||= SampleType.all.collect { |st| st.name }
+    references_aux spec, [], []
+  end
+
+  def references_aux sp, samples, items
+
+    new_samples = samples
+    new_items = items
+
+    if sp.class == Hash
+
+      sp.each do |k,v|
+
+        name,type = k.to_s.split(' ',2)
+
+        if type
+          types = type.split('|')
+          if (types & @sample_type_names) != []
+            puts "sample: #{types & @sample_type_names}"
+            if v.class == Array
+              new_samples += v
+            else
+              new_samples << v
+            end
+          elsif (types & @object_type_names) != []
+            puts "item: #{types}"            
+            item_list = []
+            if v.class == Array
+              item_list += v
+            else
+              item_list << v
+            end            
+            new_items += item_list
+            temp = Item.includes(:sample).find(item_list)
+            new_samples += temp.collect { |i| i.sample.id }
+          end
+        else
+          new_samples, new_items = references_aux v, new_samples, new_items
+        end
+
+      end
+
+    end
+
+    [ new_samples, new_items ]
+
+  end
+
+
 
   def notify msg, opts={}
 

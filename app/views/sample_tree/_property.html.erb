@@ -1,0 +1,18 @@
+<script type="text/ng-template" id="property"> 
+
+  <div class="cell one">
+
+    <span ng-repeat="n in range(indent) track by $index" class="spacer"></span>
+
+    <span class="expander expander-prop">&#9724;</span>
+
+    {{k}}: <b ng-if="!is_url(v)">{{v}}</b>
+           <a ng-if="is_url(v)" href="{{v}}">{{v}}</a>
+
+  </div>
+
+  <div class="cell two">&nbsp;</div>
+  <div class="cell three">&nbsp;</div>
+  <div class="cell four">&nbsp;</div>
+
+</script> 

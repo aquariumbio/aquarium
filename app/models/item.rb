@@ -276,6 +276,10 @@ class Item < ActiveRecord::Base
     self.data = d.to_json
   end
 
+  def annotate hash
+    self.set_data(self.datum.merge hash)
+  end
+
   def features
     f = { id: self.id, location: self.location, name: self.object_type.name }
     if self.sample_id

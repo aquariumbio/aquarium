@@ -1,0 +1,18 @@
+<script type="text/ng-template" id="job"> 
+
+  <div class="cell one"> 
+    <span ng-repeat="n in range(indent+1) track by $index" class="spacer"></span>    
+    <span class="expander">&#9724;</span>
+    Job <a href="/jobs/{{job.id}}">{{job.id}}</a> 
+    ({{job.path}}) 
+  </div>
+
+  <div class="cell two">&nbsp;</div> 
+
+  <div class="cell three">
+    <a href="/users/{{job.user_id}}">{{job.user_login}}</a>
+  </div>
+
+  <div class="cell four">{{job.updated_at|date}}</div>
+
+</script>
