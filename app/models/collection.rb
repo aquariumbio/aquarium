@@ -2,7 +2,7 @@ class Collection < Item
 
   # CLASS METHODS ###################################################################
 
-  def self.every 
+  def self.every
     Item.joins(:object_type).where(object_types: { handler: "collection" })
   end
 
@@ -10,9 +10,9 @@ class Collection < Item
     i = s.id.to_s
     r = Regexp.new '\[' + i + ',|,' + i + ',|,' + i + '\]|\[' + i + '\]'
     if ot
-      Collection.where(object_type_id: ot.id).select { |i| r =~ i.data  }
+      Collection.where(object_type_id: ot.id).select { |i| r =~ i.datum[:matrix].to_json  }
     else
-      Collection.every.select { |i| r =~ i.data  }
+      Collection.every.select { |i| r =~ i.datum[:matrix].to_json }
     end
   end
 
@@ -35,7 +35,7 @@ class Collection < Item
     num_collections = ( samples.length / samples_per_collection.to_f ).ceil
     s = 0
 
-    collections = (1..num_collections).collect do |i| 
+    collections = (1..num_collections).collect do |i|
       c = self.new_collection name, rows, cols
       m = c.matrix
       (0..rows-1).each do |r|
@@ -46,7 +46,7 @@ class Collection < Item
           s += 1
         end
       end
-      c.matrix = m 
+      c.matrix = m
       c.save
       c
 
@@ -69,7 +69,7 @@ class Collection < Item
     i.quantity = 1
     i.inuse = 0
     i.location = "Bench"
-    i.save    
+    i.save
     i
 
   end
@@ -144,7 +144,7 @@ class Collection < Item
 
     (r..nr-1).each do |row|
       (0..nc-1).each do |col|
-        if row > r || col > c 
+        if row > r || col > c
           if !opts[:skip_non_empty] || m[row][col] == -1
             return [ row, col ]
           end
@@ -154,7 +154,7 @@ class Collection < Item
 
     return [nil,nil]
 
-  end 
+  end
 
   #def [](i)
   #  self.matrix[i]
@@ -199,7 +199,7 @@ class Collection < Item
       end
     end
 
-    if m.length > 1 
+    if m.length > 1
       "1,1 - #{max[0]+1}, #{max[1]+1}"
     else
       "1 - #{max[1]+1}"
@@ -208,4 +208,3 @@ class Collection < Item
   end
 
 end
-
