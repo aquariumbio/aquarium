@@ -40,7 +40,7 @@
   </div>  
 
   <div 
-       ng-if="sample_tree.open && item.location != 'deleted'"
+       ng-if="sample_tree.open"
        ng-repeat="item in sample_tree.sample.items"
        ng-include="'item'"
        ng-init="indent = indent + 1">

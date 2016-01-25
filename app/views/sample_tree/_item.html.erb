@@ -7,7 +7,9 @@
       <span ng-repeat="n in range(indent) track by $index" class="spacer"></span>
       <span ng-if="item.open" class="expander expander-item" ng-click="close_item(item)">&#9661;</span>
       <span ng-if="!item.open" class="expander expander-item" ng-click="open_item(item)">&#9655;</span>        
-      {{item.object_type.name }} <a href="/items/{{item.id}}"> {{item.id}} </a> at {{item.location}}</a>
+      {{item.object_type.name }} <a href="/items/{{item.id}}"> {{item.id}} </a> 
+      <span ng-if="item.location != 'deleted'">at {{item.location}}</span>
+      <span ng-if="item.location == 'deleted'">(deleted)</span>
 
     </div>
 
