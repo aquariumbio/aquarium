@@ -89,13 +89,13 @@ Aq.prototype.rand_string = function(n) {
   }).join('');
 }
 
-Aq.prototype.change_url = function(title, url) {
-  if (typeof (history.pushState) != "undefined") {
-      var obj = { Title: title, Url: url };
-      history.pushState(obj, obj.Title, obj.Url);
-  } else {
-      alert("Browser does not support HTML5.");
-  }
-}
+// Aq.prototype.change_url = function(title, url) {
+//   if (typeof (history.pushState) != "undefined") {
+//       var obj = { Title: title, Url: url };
+//       history.pushState(obj, obj.Title, obj.Url);
+//   } else {
+//       alert("Browser does not support HTML5.");
+//   }
+// }
 
 aq = new Aq();

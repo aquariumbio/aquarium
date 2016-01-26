@@ -7,7 +7,7 @@
   //   $locationProvider.html5Mode(true);
   // }]);
 
-  w.controller('treeCtrl', [ '$scope', '$http', '$attrs', '$location', function ($scope,$http,$attrs,$location) {
+  w.controller('treeCtrl', [ '$scope', '$http', '$attrs', function ($scope,$http,$attrs) {
 
     function fetch(sid,then) {
       $http({
@@ -132,7 +132,6 @@
       $scope.current_sample = s;
       $scope.sid = s.id;
       $scope.init(s.id);
-      //aq.change_url("Aquarium: " + s.name, "/sample_tree/"+s.id);
 
 //      $location.url("/sample_tree/"+s.id);
 //      $location.replace();
