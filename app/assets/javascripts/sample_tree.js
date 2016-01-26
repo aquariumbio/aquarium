@@ -3,10 +3,6 @@
 
   w = angular.module('tree',[]);
 
-  // w.config(['$locationProvider', function($locationProvider) {
-  //   $locationProvider.html5Mode(true);
-  // }]);
-
   w.controller('treeCtrl', [ '$scope', '$http', '$attrs', function ($scope,$http,$attrs) {
 
     function fetch(sid,then) {
@@ -132,10 +128,6 @@
       $scope.current_sample = s;
       $scope.sid = s.id;
       $scope.init(s.id);
-
-//      $location.url("/sample_tree/"+s.id);
-//      $location.replace();
-//      history.pushState(null, 'any', $location.absUrl());
 
     }    
 
