@@ -3,9 +3,9 @@
 
   w = angular.module('tree',[]);
 
-  w.config(['$locationProvider', function($locationProvider) {
-    $locationProvider.html5Mode(true);
-  }]);
+  // w.config(['$locationProvider', function($locationProvider) {
+  //   $locationProvider.html5Mode(true);
+  // }]);
 
   w.controller('treeCtrl', [ '$scope', '$http', '$attrs', '$location', function ($scope,$http,$attrs,$location) {
 
@@ -136,7 +136,7 @@
 
       $location.url("/sample_tree/"+s.id);
       $location.replace();
-      history.pushState(null, 'any', $location.absUrl());
+//      history.pushState(null, 'any', $location.absUrl());
 
     }    
 
