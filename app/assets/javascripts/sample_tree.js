@@ -3,9 +3,9 @@
 
   w = angular.module('tree',[]);
 
-  w.config(function($locationProvider) {
+  w.config(['$locationProvider', function($locationProvider) {
     $locationProvider.html5Mode(true);
-  });
+  }]);
 
   w.controller('treeCtrl', [ '$scope', '$http', '$attrs', '$location', function ($scope,$http,$attrs,$location) {
 
