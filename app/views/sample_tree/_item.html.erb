@@ -26,17 +26,27 @@
 
   </div>
 
-  <div class="row" ng-if="item.open">
+  <div class="row" 
+       ng-repeat="(k,v) in item.data"
+       ng-if="item.open && k != 'note' && k != 'from'">
     
     <div class="cell one">
       <span ng-repeat="n in range(indent+1) track by $index" class="spacer"></span>
-      {{item.data}}
+      {{k}}: {{v}}
     </div>
+
     <div class="cell two">&nbsp;</div>
     <div class="cell three">&nbsp;</div>
     <div class="cell three">&nbsp;</div>
+
   </div>
-    
+
+  <div ng-if="item.open && item.data.from"
+       ng-repeat="i in item.data.from"
+       ng-include="'item'"
+       ng-init="indent = indent+1; item = i">
+  </div>
+
   <div ng-repeat="job in item.jobs">
     <div class="row" ng-if='item.open' ng-include="'job'"></div>
     <div class="row" ng-repeat="task in job.tasks" ng-if='item.open' ng-include="'task'"></div>

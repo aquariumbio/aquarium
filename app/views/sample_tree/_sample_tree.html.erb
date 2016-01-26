@@ -16,8 +16,12 @@
 
       <span ng-if="role">{{role}}:</span>
 
-      <b>{{sample_tree.sample.name}}</b>
-      ({{sample_tree.sample.project}})
+      <b>
+        <a href="/samples/{{sample_tree.sample.id}}">{{sample_tree.sample.id}}</a>:
+        {{ sample_tree.sample.name | limitTo: 60-11*indent }}
+        {{sample_tree.sample.name.length > 60-11*indent ? '...' : ''}}
+      </b>
+      <span ng-if="current_project != sample_tree.sample.project">({{sample_tree.sample.project}})</span>
 
     </div>
 
@@ -41,7 +45,7 @@
 
   <div 
        ng-if="sample_tree.open"
-       ng-repeat="item in sample_tree.sample.items"
+       ng-repeat="item in sample_tree.sample.items | orderBy:'-id'"
        ng-include="'item'"
        ng-init="indent = indent + 1">
   </div>

@@ -28,9 +28,17 @@ class SampleTree
     samp[:user_login] = @sample.user.login
 
     samp[:items].each do |i|
-      Rails.logger.info "#{i}: #{i.class}, #{i.keys}, _#{i['data']}_, _#{i[:data]}_"
       begin
         i['data'] = JSON.parse i['data']
+        if i['data']['from']
+          if i['data']['from'].class == String
+            i['data']['from'] = [ Item.find_by_id(i['data']['from']).as_json(:include => :object_type) ]
+          else
+            i['data']['from'] = i['data']['from'].collect { |id|
+              Item.find_by_id(id).as_json(:include => :object_type)
+            }
+          end
+        end
       rescue
         i['data'] = {}
       end

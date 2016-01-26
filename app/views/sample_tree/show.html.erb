@@ -11,16 +11,19 @@
   <%= render partial: "item" %>  
   <%= render partial: "job" %>  
   <%= render partial: "task" %>   
-  <%= render partial: "nav" %>    
+  <%= render partial: "nav" %>
 
-  <div class="container-fluid">
 
-    <div class="row-fluid app" 
-         ng-controller='treeCtrl as tree' 
-         ng-init="init(<%= params[:id] %>)">
+
+  <div class="container-fluid" ng-controller='treeCtrl as tree'>
+
+    <h2>
+      {{sample_tree.sample.id}}: {{sample_tree.sample.name}}
+    </h2>      
+
+    <div class="row-fluid app" ng-init="init(<%= params[:id] %>)">
 
       <div class="span3 navbar chooser-container" ng-include="'nav'"></div>
-
       <div class="span9 st" ng-include="'sampleTree'" ng-init="role=''; indent=0"></div>
 
     </div>

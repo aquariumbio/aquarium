@@ -3,7 +3,11 @@
 
   w = angular.module('tree',[]);
 
-  w.controller('treeCtrl', [ '$scope', '$http', '$attrs', function ($scope,$http,$attrs) {
+  w.config(function($locationProvider) {
+    $locationProvider.html5Mode(true);
+  });
+
+  w.controller('treeCtrl', [ '$scope', '$http', '$attrs', '$location', function ($scope,$http,$attrs,$location) {
 
     function fetch(sid,then) {
       $http({
@@ -123,10 +127,17 @@
     }
 
     $scope.set_sample = function(s) {
+
       $scope.sample_tree = {};
       $scope.current_sample = s;
       $scope.sid = s.id;
       $scope.init(s.id);
+      //aq.change_url("Aquarium: " + s.name, "/sample_tree/"+s.id);
+
+      $location.url("/sample_tree/"+s.id);
+      $location.replace();
+      history.pushState(null, 'any', $location.absUrl());
+
     }    
 
   }]);
