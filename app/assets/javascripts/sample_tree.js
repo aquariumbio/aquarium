@@ -134,8 +134,8 @@
       $scope.init(s.id);
       //aq.change_url("Aquarium: " + s.name, "/sample_tree/"+s.id);
 
-      $location.url("/sample_tree/"+s.id);
-      $location.replace();
+//      $location.url("/sample_tree/"+s.id);
+//      $location.replace();
 //      history.pushState(null, 'any', $location.absUrl());
 
     }    
