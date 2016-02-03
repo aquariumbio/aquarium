@@ -354,5 +354,9 @@ class Item < ActiveRecord::Base
     a
   end  
 
+def week
+  self.created_at.strftime('%W')
+end  
+
 end
 

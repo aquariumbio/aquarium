@@ -1,0 +1,54 @@
+<% if @current_rows.length > 0 %>
+
+  <table class='table'>
+
+    <tr>
+      <th>Date</th>
+      <th>Description</th>
+      <th>Budget</th>    
+      <th>Credits</th>            
+      <th>Debits</th>                
+    </tr>
+    
+    <% @current_rows.each do |row| %>
+
+      <tr>
+
+        <td><%= row.updated_at.strftime("%b %d, %Y") %></td>
+
+        <td>
+          <% if row.task %>
+            <%= row.task.task_prototype.name %>
+            <%= link_to row.task_id, row.task %>,
+          <% end %>
+          <i><%= row.description %> <%= row.category ? "(#{row.category})" : "" %></i>
+        </td>
+
+        <td>
+          <%= row.budget.name %> <%= row.budget.description ? "(#{row.budget.description})" : "" %>
+        </td>
+
+        <td>
+          <% if row.transaction_type == "credit" %>
+            <%= number_to_currency(row.amount) %>
+          <% end %>
+        </td>  
+
+        <td>
+          <% if row.transaction_type == "debit" %>
+            <%= number_to_currency(row.amount) %>
+          <% end %>
+        </td>  
+
+      </tr>
+
+    <% end %> 
+
+  </table>
+
+<% else %>
+
+  <p>No transactions to show in <%= @start_date.strftime("%b, %Y") %>.</p>
+
+<% end %>  
+

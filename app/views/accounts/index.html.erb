@@ -1,0 +1,26 @@
+<% provide(:title, "Account: User #{@user.id}" ) %>
+
+<% if @unauthorized %>
+
+  <div class='well alert-error'>
+  You do not have administrative access to Aquarium, so you may only view 
+  <a href="/accounts/<%= current_user.id %>">your own balance sheet</a>.
+  </div>
+
+<% else %>
+
+
+    <%= render partial: 'title' %>
+    <div class='row-fluid'>
+      <div class='span7'>
+        <%= render partial: 'balances' %>
+      </div>
+      <div class='span1'></div>
+      <div class='span4'>
+        <%= render partial: 'deposit' %>
+      </div>
+    </div>
+    <%= render partial: 'rows' %>
+
+
+<% end %>

@@ -1,5 +1,12 @@
 Bioturk::Application.routes.draw do
 
+  resources :budgets
+
+  get '/accounts',                          to: 'accounts#index'  
+  get '/accounts/deposit',                  to: 'accounts#deposit'    
+  get '/accounts/:uid',                     to: 'accounts#index'  
+  get '/accounts/:uid/:month/:year',        to: 'accounts#index'      
+
   get '/sample_tree/samples',              to: 'sample_tree#samples'  
   get '/sample_tree/jobs/:id',             to: 'sample_tree#jobs'  
   get '/sample_tree/annotate/:id/:note',   to: 'sample_tree#annotate'
@@ -166,6 +173,7 @@ Bioturk::Application.routes.draw do
   root to: 'static_pages#home'
 
   match '/',        to: 'static_pages#home'
+
   match '/help',    to: 'static_pages#help'
   match '/about',   to: 'static_pages#about'
   match '/signin',  to: 'sessions#new'
@@ -174,6 +182,9 @@ Bioturk::Application.routes.draw do
   match '/analytics',  to: 'static_pages#analytics'
   match '/jobchart', to: 'static_pages#jobchart'
   match '/location', to: 'static_pages#location'
+
+  match '/yeast_qc', to: 'static_pages#yeast_qc'
+
   match '/glass', to: 'sessions#glass'
 
   match '/search', to: 'search#search'

@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
 
+  include Budgeting
+
   attr_accessible :login, :name, :password, :password_confirmation, :password_digest, :key
   has_secure_password
   has_many :samples
@@ -9,6 +11,7 @@ class User < ActiveRecord::Base
   has_many :cart_items
   has_many :memberships
   has_many :tasks
+  has_many :account
   
   # Q: Why not = user.login.downcase?
   before_create { |user| user.login = login.downcase }

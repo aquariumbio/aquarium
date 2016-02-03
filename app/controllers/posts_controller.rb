@@ -29,8 +29,14 @@ class PostsController < ApplicationController
         }
         format.json {
           # Post.where(:published => true).paginate(:page => params[:page]).order('id DESC')
-          posts = Post.where(parent_id: nil).paginate(page: params[:page].to_i+1).order('posts.updated_at DESC')
-          render json: posts.as_json 
+          begin
+            posts = Post.where(parent_id: nil).paginate(page: params[:page].to_i+1).order('posts.updated_at DESC')
+            render json: posts.as_json 
+          rescue Exception => e
+            posts = Post.where(parent_id: nil).order('posts.updated_at DESC')
+            render json: posts.as_json 
+          end
+          
         }
       end
 

@@ -42,9 +42,7 @@ module Krill
     end
 
     def error e
-
       Job.find(jid).reload.append_step operation: "error", message: e.to_s, backtrace: e.backtrace[0,10]
-
     end
 
     def set_task_status task, status
@@ -61,6 +59,12 @@ module Krill
       touch.job_id = jid
       touch.task_id = task.id
       touch.save
+
+      begin
+        task.charge(Job.find(jid),status)
+      rescue Exception => e
+        puts "Could not charge for task #{task.id}, job #{jid}, '#{status}': #{e.to_s}"
+      end
 
       task
 

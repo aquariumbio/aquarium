@@ -131,4 +131,20 @@ class StaticPagesController < ApplicationController
 
   end
 
+  def yeast_qc
+
+    # u = User.find_by_login("dyounger")
+  
+    @items = Item.includes(:sample => [ :sample_type, :user ] )
+              .where("samples.sample_type_id = ?", SampleType.find_by_name("Yeast Strain").id )
+              .select { |i| i.datum[:QC_result]  }
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @qc }
+    end              
+
+  end
+
+
 end

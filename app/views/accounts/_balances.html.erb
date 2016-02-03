@@ -1,0 +1,49 @@
+
+<% @balances.each do |b| %>
+
+  <div class='well'>
+
+    <table class='table'>
+
+      <thead>
+        <b><%= b[:budget].name %>: 
+        <%= b[:budget].description %>, 
+        <%= b[:budget].contact %></b>
+      </thead>
+
+      <tr>
+        <td><%= @prev_month.strftime("%B, %Y") %> Balance</td>
+        <td style="width: 10px">$</td>
+        <td><%= render partial: 'amount', locals: { amount: b[:prev] } %></td>
+      </tr>
+
+      <tr>
+        <td>Total Credits This Month</td>
+        <td></td>
+        <td><%= render partial: 'amount', locals: { amount: b[:credits] } %></td>        
+      </tr>
+
+      <tr>
+        <td>Total Debits This Month</td>
+        <td></td>        
+        <td><%= render partial: 'amount', locals: { amount: b[:debits] } %></td>                
+      </tr>
+
+      <tr style="font-weight: bold">
+        <td>
+          <% if @start_date.month == Date.today.month %>
+            Current
+          <% else %>
+            <%= @start_date.strftime("%B, %Y") %>
+          <% end %>
+          Balance</td>
+        <td>$</td>        
+        <td><%= render partial: 'amount', locals: { amount: b[:current] } %></td>                
+      </tr>
+
+    </table>
+
+  </div>
+
+<% end %>
+

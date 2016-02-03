@@ -1,0 +1,35 @@
+
+  <div class='row-fluid' style="margin-bottom: 20px">
+
+     <div class='span6'>
+       <h2>
+         <%= @start_date.strftime("%B, %Y") %>:
+         <%= link_to @user.name, @user %>
+       </h2>
+      <h4>
+        User id: <%= @user.id %><br />
+        Login: <%= @user.login %>
+      </h4>       
+    </div>
+
+    <div class='span6' style="padding-top: 20px">
+
+      <a href='/accounts/<%= @user.id %>/<%= @prev_month.month %>/<%= @prev_month.year %>' 
+         class="pull-right"> 
+         <%= @prev_month.strftime("%b, %Y") %>         
+      </a><br />  
+
+      <a href='/accounts/<%= @user.id %>/<%= Date.today.month %>/<%= Date.today.year %>' 
+         class="pull-right"> 
+         This month         
+      </a><br />
+
+      <a href='/accounts/<%= @user.id %>/<%= @next_month.month %>/<%= @next_month.year %>'
+         class="pull-right"> 
+         <%= @next_month.strftime("%b, %Y") %>
+      </a>  
+
+    </div>
+
+  </div>
+

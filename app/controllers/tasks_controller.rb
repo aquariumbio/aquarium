@@ -75,10 +75,15 @@ class TasksController < ApplicationController
     @task_prototype = TaskPrototype.find(params[:task_prototype_id])
     @status_options = @task_prototype.status_option_list
 
+    @budget_info = current_user.budget_info 
+
+    @has_sufficient_funds = @budget_info.collect { |bi| bi[:balance] }.inject { |sum,x| sum+x }
+
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @task }
     end
+
   end
 
   # GET /tasks/1/edit

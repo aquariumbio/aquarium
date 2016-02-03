@@ -1,0 +1,7 @@
+<% if !amount %>
+  error
+<% elsif amount >= 0 %>
+  <%= number_to_currency(amount, unit: '') %>
+<% else %>
+  (<%= number_to_currency(amount, unit: '') %>)
+<% end %>

@@ -1,12 +1,17 @@
 class Task < ActiveRecord::Base
 
-  attr_accessible :name, :specification, :status, :task_prototype_id, :user_id
+  include CostService
+  include CostModel
+
+  attr_accessible :name, :specification, :status, :task_prototype_id, :user_id, :budget_id
   belongs_to :task_prototype
   has_many :touches
   has_many :post_associations
   has_many :task_notifications
   belongs_to :user
+  belongs_to :budget
 
+  validates :budget_id, :presence => true
   validates :name, :presence => true
   validates :status, :presence => true
   validates_uniqueness_of :name, scope: :task_prototype_id

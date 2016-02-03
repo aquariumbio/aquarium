@@ -1,0 +1,36 @@
+<p id="notice"><%= notice %></p>
+
+<h2>
+  <%= @budget.name %>: <%= @budget.description %>
+</h2>
+
+<h4>
+  Contact: <%= @budget.contact %>
+</h4>
+
+<% if @balances.length > 0 %>
+
+  <table class='table' style='width: 50%'>
+
+    <tr>
+      <th>User</th>
+      <th>Balance</th>
+    </tr>
+
+    <% @balances.each do |b| %>
+      <tr>
+        <td><%= link_to b[:user].name, b[:user] %></td>
+        <td><%= render partial: '/accounts/amount', locals: { amount: b[:balance] } %></td>
+      </tr>
+    <% end %>
+
+  </table>
+
+<% else %>
+
+  <p>No users are associated with this budget.</p>
+
+<% end %>
+
+<%= link_to 'Edit', edit_budget_path(@budget), class: "btn" %> 
+<%= link_to 'Back', budgets_path, class: "btn"  %>

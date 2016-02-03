@@ -36,6 +36,7 @@ class TasksDatatable < Datatable
         link_to(task.id, task),
         @tp ? task.name : "<b>#{task.task_prototype.name}:</b> #{task.name}",
         status_selector(task),
+        task.budget ? task.budget.name : "no budget specified",
         task.user ? link_to(task.user.login, task.user) : "?",
         task.created_at.to_formatted_s(:short),
         task.updated_at.to_formatted_s(:short)

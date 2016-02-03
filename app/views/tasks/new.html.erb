@@ -1,36 +1,56 @@
 <h1>New <%= @task.task_prototype.name %></h1>
 
-<h2>Base Cost: <%= number_to_currency (  @task_prototype.cost ) %> </h2>
 
-<p>Total cost will be the base cost times the number of samples processed for this task.</p>
 
 <div class='row-fluid'>
 
   <div class='span2'></div>
 
-  <div class='span8'>
+  <% if @has_sufficient_funds %>
 
-    <div id='fail-message'></div>
+    <div class='span8'>
 
-    <div id="task_info">
-        <label><b>Name</b></label>
-        <input id="task_name" type='text' value='<%= @task.name %>'></input>
-        <label><b>Status</b></label>
-        <div class='task-select'><select id='task_status' class='status-select'>
-           <% @status_options.each do |opt| %>
-              <option <%= opt == @task.status ? 'selected' : '' %>><%= opt %></option>
-           <% end %>
-        </select></div>
+      <center>
+      <p><%= @task.task_prototype.description %></p>
+      </center>
+
+      <div id='fail-message'></div>
+
+      <div id="task_info">
+
+          <label><b>Task Name</b></label>
+          <input id="task_name" type='text' value='<%= @task.name %>'></input>
+      
+          <label><b>Initial Status</b></label>
+          <div class='task-select'>
+            <select id='task_status' class='status-select'>
+             <% @status_options.each do |opt| %>
+                <option <%= opt == @task.status ? 'selected' : '' %>><%= opt %></option>
+             <% end %>
+            </select>
+          </div>
+
+          <%= render partial: 'budget_list' %>
+
+      </div>
+
+      <div id="json_editor"></div>
+
+      <br />
+
+      <button id='save' class='btn btn-primary' style='margin-left: 50px'>Save</button>
+      <%= link_to 'Cancel', tasks_path(task_prototype_id: @task.task_prototype.id), class: 'btn' %>
+
     </div>
 
-    <div id="json_editor"></div>
+  <% else %>
 
-    <br />
-
-    <button id='save' class='btn btn-primary' style='margin-left: 50px'>Save</button>
-    <%= link_to 'Cancel', tasks_path(task_prototype_id: @task.task_prototype.id), class: 'btn' %>
-
+    <div class='span8'>
+      <p>You have no funds allocated to submit tasks.</p>
+      <p>Please talk to the Aquarium lab manager about allocating funds to your account.</p>
     </div>
+
+  <% end %>
 
   <div class='span2'></div>
 
@@ -51,16 +71,21 @@
  
     var AUTH_TOKEN = '<%= "#{form_authenticity_token}" %>';
 
+    var budget_id = $("input:radio[name=budget]:checked").val();
+
     $.ajax({
         type: "POST",
         url: "/tasks",
         dataType: 'json',
-      	data: JSON.stringify({task: {name: name, status: stat,
-        user_id: <%= current_user.id %>,
-        specification: spec, task_prototype_id: <%= @task.task_prototype.id %>}, authenticity_token: AUTH_TOKEN}),
-        contentType: 'application/json'
+      	data: JSON.stringify({task: {
+          name: name, 
+          status: stat,
+          budget_id: budget_id,
+          user_id: <%= current_user.id %>,
+          specification: spec, task_prototype_id: <%= @task.task_prototype.id %>}, authenticity_token: AUTH_TOKEN}),
+          contentType: 'application/json'
     }).done(function(data){
-	       window.location = "/tasks?task_prototype_id=" + <%= @task.task_prototype.id %>;
+         window.location = "/tasks?task_prototype_id=" + <%= @task.task_prototype.id %>;
     }).fail(function(data){
         var list = $("<ul></ul>")
         console.log(data);

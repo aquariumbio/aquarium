@@ -290,4 +290,8 @@ class Job < ActiveRecord::Base
 
   end
 
+  def name
+    self.path.split("/").last.split(".").first
+  end
+
 end

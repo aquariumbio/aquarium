@@ -11,7 +11,25 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151203054202) do
+ActiveRecord::Schema.define(:version => 20160129165100) do
+
+  create_table "accounts", :force => true do |t|
+    t.string   "transaction_type"
+    t.float    "amount"
+    t.integer  "user_id"
+    t.integer  "budget_id"
+    t.string   "category"
+    t.integer  "task_id"
+    t.integer  "job_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.text     "description"
+  end
+
+  add_index "accounts", ["budget_id"], :name => "index_accounts_on_budget_id"
+  add_index "accounts", ["job_id"], :name => "index_accounts_on_job_id"
+  add_index "accounts", ["task_id"], :name => "index_accounts_on_task_id"
+  add_index "accounts", ["user_id"], :name => "index_accounts_on_user_id"
 
   create_table "blobs", :force => true do |t|
     t.string   "sha"
@@ -21,6 +39,15 @@ ActiveRecord::Schema.define(:version => 20151203054202) do
     t.datetime "updated_at", :null => false
     t.text     "dir"
     t.integer  "job_id"
+  end
+
+  create_table "budgets", :force => true do |t|
+    t.string   "name"
+    t.float    "overhead"
+    t.string   "contact"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.text     "description"
   end
 
   create_table "cart_items", :force => true do |t|
@@ -57,11 +84,11 @@ ActiveRecord::Schema.define(:version => 20151203054202) do
     t.string   "location"
     t.integer  "quantity"
     t.integer  "object_type_id"
-    t.datetime "created_at",                                     :null => false
-    t.datetime "updated_at",                                     :null => false
-    t.integer  "inuse",                           :default => 0
+    t.datetime "created_at",                                        :null => false
+    t.datetime "updated_at",                                        :null => false
+    t.integer  "inuse",                              :default => 0
     t.integer  "sample_id"
-    t.text     "data",           :limit => 65536
+    t.text     "data",           :limit => 16777215
     t.integer  "locator_id"
   end
 
@@ -71,7 +98,7 @@ ActiveRecord::Schema.define(:version => 20151203054202) do
     t.string   "user_id"
     t.string   "sha"
     t.text     "arguments"
-    t.text     "state",               :limit => 4294967295
+    t.text     "state",               :limit => 2147483647
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
     t.string   "path"
@@ -132,7 +159,6 @@ ActiveRecord::Schema.define(:version => 20151203054202) do
     t.datetime "created_at",          :null => false
     t.datetime "updated_at",          :null => false
     t.string   "unit"
-    t.datetime "image_updated_at"
     t.float    "cost"
     t.string   "release_method"
     t.text     "release_description"
@@ -246,6 +272,7 @@ ActiveRecord::Schema.define(:version => 20151203054202) do
     t.datetime "updated_at",                       :null => false
     t.integer  "task_prototype_id"
     t.integer  "user_id",           :default => 0
+    t.integer  "budget_id"
   end
 
   create_table "touches", :force => true do |t|
