@@ -165,7 +165,7 @@ module CostModel
 
   def one mat, lab, warn=false
     if warn
-      puts "WARNING: Cost Model Error: Could not find key #{key} in specification #{spec}. Assuming single sample."
+      puts "WARNING: Cost Model Error: Could not find key key in specification #{spec}. Assuming single sample."
     end
     { materials: mat, labor: lab * labor_rate }
   end
