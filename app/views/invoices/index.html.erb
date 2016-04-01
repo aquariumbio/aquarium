@@ -1,0 +1,19 @@
+<h1>Invoices</h1>
+
+<% @data.each do |datum| %>
+
+  <h4><%= datum[:date].strftime("%b %d, %Y") %></h4>
+
+  <table class='table table-condensed' style="table-layout: fixed">
+    <% datum[:entries].each do |e| %>
+      <tr>
+        <td><%= link_to e[:user].login, e[:user] %></td>
+        <td><%= link_to e[:budget].name, e[:budget] %></td>
+        <td><%= e[:budget].contact %></td>
+        <td><%= e[:invoice].in_progress ? "in progress" : e[:invoice].status %></td>
+        <td><%= link_to "show", e[:invoice] %></td>        
+      </tr>
+    <% end %>
+  </table>
+
+<% end %>

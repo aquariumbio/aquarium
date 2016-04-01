@@ -27,4 +27,26 @@ class Account < ActiveRecord::Base
 
   end
 
+  def self.users_and_budgets year, month
+
+    start_date = DateTime.new(year,month)
+    end_date = start_date.next_month    
+
+    a = Account.where("? <= created_at && created_at < ?", start_date, end_date)
+           .collect { |a| { 
+                user_id: a.user_id,
+                budget_id: a.budget_id
+              } 
+            }
+           .uniq
+
+    a.collect { |x| {
+        user: User.find(x[:user_id]),
+        budget: Budget.find(x[:budget_id]),
+        invoice: Invoice.for(x.merge(year:year, month:month, status:"ready", notes: ""))
+      }
+    }
+
+  end
+
 end

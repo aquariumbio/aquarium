@@ -7,7 +7,8 @@
         <th>Budget</th>
         <th>Description</th>
         <th>Contact</th>
-        <th>Balance</th>
+        <th>Quota</th>
+        <th>Spent this month</th>
       </tr>
 
     <% @budget_info.each do |bi| %>
@@ -18,7 +19,7 @@
           <input type="radio" 
                 name="budget" 
                 value="<%= bi[:budget].id %>" 
-                 <%= bi[:balance] < 50 ? "disabled" : "" %> > 
+                 <%= bi[:spent_this_month] >= bi[:quota] ? "disabled" : "" %> > 
         </td>
 
         <td>
@@ -34,11 +35,11 @@
         </td>
 
         <td>
-          <% if bi[:balance] > 0 %>
-            <span><%= number_to_currency(bi[:balance]) %></span>
-          <% else %>
-            <span style='color: red'>(<%= number_to_currency(-bi[:balance]) %>)</span>
-          <% end %>
+          <span><%= number_to_currency(bi[:quota]) %></span>
+        </td>
+
+        <td>
+          <span><%= number_to_currency(bi[:spent_this_month]) %></span>
         </td>
 
       </tr>

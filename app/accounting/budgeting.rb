@@ -23,10 +23,12 @@ module Budgeting
 
   def budget_info
 
-    budget_ids.collect { |bid| 
+    user_budget_associations.collect { |uba| 
+      b = Budget.find(uba.budget_id)
       {
-        budget: Budget.find(bid),
-        balance: balance(bid)
+        budget: b,
+        quota: uba.quota,
+        spent_this_month: b.spent_this_month(uba.user_id)
       }
     }
 

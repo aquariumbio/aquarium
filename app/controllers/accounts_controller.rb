@@ -46,7 +46,7 @@ class AccountsController < ApplicationController
             .inject(0) { |sum,x| sum+x },
           debits: @current_rows
             .select { |r| r.budget_id == bid && r.transaction_type == 'debit'}
-            .collect { |r| -@startr.amount }
+            .collect { |r| -r.amount }
             .inject(0) { |sum,x| sum+x },
           credits: @current_rows
             .select { |r| r.budget_id == bid && r.transaction_type == 'credit'}
@@ -72,7 +72,7 @@ class AccountsController < ApplicationController
 
         user = User.find(params[:uid])
         budget = Budget.find(params[:bid])
-        description = "#{current_user.name} deposited $#{params[:amount]} for user '#{user.login}' from budget #{budget.name}."
+        description = "#{current_user.name} deposited $#{params[:amount]} associated budget #{budget.name}."
 
         row = Account.new(
           user_id: user.id, 
@@ -105,3 +105,5 @@ class AccountsController < ApplicationController
   end
 
 end
+
+

@@ -6,7 +6,7 @@
 
   <div class='span2'></div>
 
-  <% if @has_sufficient_funds %>
+  <% if current_user.budget_info.length > 0 %>
 
     <div class='span8'>
 

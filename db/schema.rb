@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160129165100) do
+ActiveRecord::Schema.define(:version => 20160330190634) do
 
   create_table "accounts", :force => true do |t|
     t.string   "transaction_type"
@@ -48,6 +48,8 @@ ActiveRecord::Schema.define(:version => 20160129165100) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
     t.text     "description"
+    t.string   "email"
+    t.string   "phone"
   end
 
   create_table "cart_items", :force => true do |t|
@@ -78,6 +80,17 @@ ActiveRecord::Schema.define(:version => 20160129165100) do
     t.string   "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "invoices", :force => true do |t|
+    t.integer  "year"
+    t.integer  "month"
+    t.integer  "budget_id"
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.string   "status"
+    t.text     "notes"
   end
 
   create_table "items", :force => true do |t|
@@ -295,6 +308,15 @@ ActiveRecord::Schema.define(:version => 20160129165100) do
     t.datetime "upload_updated_at"
     t.datetime "created_at",          :null => false
     t.datetime "updated_at",          :null => false
+  end
+
+  create_table "user_budget_associations", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "budget_id"
+    t.float    "quota"
+    t.boolean  "disabled"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "users", :force => true do |t|

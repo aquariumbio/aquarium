@@ -78,7 +78,7 @@
                 </li>
                 <li class="divider"></li>
                 <li><%= link_to "Profile", current_user %></li>
-                <li><%= link_to "Accounting", accounts_path %></li>
+                <li><%= link_to "Invoices", invoices_path %></li> 
                 <li><%= link_to "Settings", edit_user_path(current_user) %></li>
                 <li class="divider"></li>
                 <li><%= link_to "Users", users_path %></li>                
@@ -102,7 +102,7 @@
                     <li><%= link_to "New User", signup_path %></li>
                     <li><%= link_to "Change a Password", password_path %></li>
                     <li><%= link_to "Budgets", budgets_path %></li>
-                    <li><%= link_to "Accounts", accounts_path %></li>                    
+                    <li><%= link_to "Invoices", invoices_path %></li>                    
                     <li><%= link_to "Set Location", location_path %></li>
                     <% if Rails.env != 'production' %>
                       <li class="divider"></li>

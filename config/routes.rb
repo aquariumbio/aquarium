@@ -1,11 +1,16 @@
 Bioturk::Application.routes.draw do
 
+  get '/budgets/add/:bid/:uid/:quota',          to: 'budgets#add_user'
+  get '/budgets/remove/:bid/:uid',          to: 'budgets#remove_user'  
   resources :budgets
 
-  get '/accounts',                          to: 'accounts#index'  
-  get '/accounts/deposit',                  to: 'accounts#deposit'    
-  get '/accounts/:uid',                     to: 'accounts#index'  
-  get '/accounts/:uid/:month/:year',        to: 'accounts#index'      
+  get '/invoices/year/:year',              to: 'invoices#index'    
+  resources :invoices
+
+  get '/accounts',                         to: 'accounts#index'  
+  get '/accounts/deposit',                 to: 'accounts#deposit'
+  get '/accounts/:uid',                    to: 'accounts#index'  
+  get '/accounts/:uid/:month/:year',       to: 'accounts#index'      
 
   get '/sample_tree/samples',              to: 'sample_tree#samples'  
   get '/sample_tree/jobs/:id',             to: 'sample_tree#jobs'  
@@ -13,7 +18,7 @@ Bioturk::Application.routes.draw do
   get '/sample_tree/:id',                  to: 'sample_tree#show'
 
   resources :workflows
-  post '/workflows/:id/save',                to: 'workflows#save'
+  post '/workflows/:id/save',               to: 'workflows#save'
   get '/workflows/:id/new_operation',       to: 'workflows#new_operation'
   get '/workflows/:id/drop_operation/:oid', to: 'workflows#drop_operation'
   get '/workflows/:id/identify',            to: 'workflows#identify'

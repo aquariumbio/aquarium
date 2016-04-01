@@ -24,13 +24,7 @@ class BudgetsController < ApplicationController
   def show
 
     @budget = Budget.find(params[:id])
-    @uids = Account.where(budget_id: @budget.id).pluck(:user_id).uniq
-    @balances = @uids.collect { |uid|
-      {
-        user: User.find(uid),
-        balance: Account.balance(uid, @budget.id)
-      }
-    }
+    @users = User.all.reject { |u| u.retired? }
 
     respond_to do |format|
       format.html # show.html.erb
@@ -98,4 +92,31 @@ class BudgetsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def add_user
+    if current_user.is_admin
+      uba = UserBudgetAssociation.new
+      uba.budget_id = params[:bid].to_i
+      uba.user_id = params[:uid].to_i
+      uba.quota = params[:quota].to_i
+      uba.disabled = false;
+      uba.save
+    else
+      flash[:warning] = "Only admins can add users to budgets"
+    end
+    redirect_to Budget.find(params[:bid])
+  end
+
+  def remove_user
+    if current_user.is_admin
+      ubas = UserBudgetAssociation.where(budget_id: params[:bid].to_i, user_id: params[:uid])
+      if ubas.length > 0
+        ubas[0].destroy
+      end
+    else
+      flash["warning"] = "Only admins can remove users from budgets"
+    end
+    redirect_to Budget.find(params[:bid])
+  end  
+
 end
