@@ -163,8 +163,10 @@ module CostModel
     lambda { |spec| { materials: 0, labor: 0 } }
   end
 
-  def one mat, lab
-    puts "WARNING: Cost Model Error: Could not find key #{key} in specification #{spec}. Assuming single sample."
+  def one mat, lab, warn=false
+    if warn
+      puts "WARNING: Cost Model Error: Could not find key #{key} in specification #{spec}. Assuming single sample."
+    end
     { materials: mat, labor: lab * labor_rate }
   end
 
@@ -181,7 +183,7 @@ module CostModel
           labor: lab * num * labor_rate
         }      
       else
-        one mat, lab
+        one mat, lab, true
       end
     }
   end
@@ -195,7 +197,7 @@ module CostModel
         basic key, mat, lab
       end
     else
-      one mat, lab
+      one mat, lab, true
     end
   end
 
