@@ -10,17 +10,20 @@ class InvoicesController < ApplicationController
       year = params[:year].to_i
     end
 
-    if params[:all] && is_admin
+    if params[:all] && current_user.is_admin
+      user = nil
     else
-      @data = (1..12).collect { |m| 
-        { 
-          month: m,
-          year: year,
-          date: DateTime.new(year,m),
-          entries: Account.users_and_budgets(year, m)
-        }
-      }.reverse.reject { |d| d[:entries].length == 0 }
+      user = current_user
     end
+
+    @data = (1..12).collect { |m| 
+      { 
+        month: m,
+        year: year,
+        date: DateTime.new(year,m),
+        entries: Account.users_and_budgets(year, m,user)
+      }
+    }.reverse.reject { |d| d[:entries].length == 0 }
 
   end
 

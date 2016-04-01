@@ -15,30 +15,44 @@ class Account < ActiveRecord::Base
   validates_inclusion_of :transaction_type, :in => [ "credit", "debit" ]
   validates_inclusion_of :category, :in => [ nil, "materials", "labor", "overhead" ]
 
-  def self.balance uid, bid
-
-    rows = Account.where user_id: uid, budget_id: bid
-
+  def self.total rows
     amounts = rows.collect { |row| 
-      row.transaction_type == "credit" ? row.amount : -row.amount
+      row.transaction_type == "credit" ? -row.amount : row.amount
     }
-
     amounts.inject(0) { |sum,x| sum+x }
-
   end
 
-  def self.users_and_budgets year, month
+  def self.balance uid, bid
+    rows = Account.where user_id: uid, budget_id: bid
+    -(self.total rows)
+  end
 
-    start_date = DateTime.new(year,month)
-    end_date = start_date.next_month    
+  def self.users_and_budgets year, month, user=nil
 
-    a = Account.where("? <= created_at && created_at < ?", start_date, end_date)
-           .collect { |a| { 
-                user_id: a.user_id,
-                budget_id: a.budget_id
-              } 
-            }
-           .uniq
+    start_date = DateTime.new(year,month).change(:offset => "-7:00")
+    end_date = start_date.next_month
+
+    if user
+
+      a = Account.where("? <= created_at AND created_at < ? AND user_id = ?", start_date, end_date, user.id)
+             .collect { |a| { 
+                  user_id: a.user_id,
+                  budget_id: a.budget_id
+                } 
+              }
+             .uniq
+
+    else  
+
+      a = Account.where("? <= created_at && created_at < ?", start_date, end_date)
+             .collect { |a| { 
+                  user_id: a.user_id,
+                  budget_id: a.budget_id
+                } 
+              }
+             .uniq
+
+    end
 
     a.collect { |x| {
         user: User.find(x[:user_id]),

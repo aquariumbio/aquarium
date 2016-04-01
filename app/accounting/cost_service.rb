@@ -1,17 +1,7 @@
 module CostService
 
   def cost job, status
-
-    nothing = { materials: 0, labor: 0 }
-
-    protocol = cost_model[job.name]
-    return nothing unless protocol
-
-    model = protocol[status]
-    return nothing unless model
-
-    model.call(self.simple_spec)
-
+    cost_model job.name, status
   end
 
   def description job, status

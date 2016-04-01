@@ -102,7 +102,7 @@
                     <li><%= link_to "New User", signup_path %></li>
                     <li><%= link_to "Change a Password", password_path %></li>
                     <li><%= link_to "Budgets", budgets_path %></li>
-                    <li><%= link_to "Invoices", invoices_path %></li>                    
+                    <li><%= link_to "Invoices", invoices_path(:all=>true) %></li>                    
                     <li><%= link_to "Set Location", location_path %></li>
                     <% if Rails.env != 'production' %>
                       <li class="divider"></li>

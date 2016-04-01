@@ -19,10 +19,10 @@ class Invoice < ActiveRecord::Base
   end
 
   def rows
-    start_date = DateTime.new(year,month)
-    end_date = start_date.next_month        
-    Account.where("user_id = ? AND budget_id = ? AND ? <= created_at AND created_at < ?",
-      user_id, budget_id, start_date, end_date)  
+    start_date = DateTime.new(year,month).change(:offset => "-7:00")
+    end_date = start_date.next_month
+    # puts "#{[year,month]}: start = #{start_date}, end = #{end_date}"
+    Account.where(user_id: user_id, budget_id: budget_id).where(created_at: start_date..end_date)
   end
 
   def in_progress

@@ -1,5 +1,7 @@
 <h1>Invoice for <%= @date.strftime("%b %Y") %></h1>
 
+<h2>Total: <%= number_to_currency(Account.total(@rows)) %></h2>
+
 <p><b>User</b>: <%= @invoice.user.name %> (<%= @invoice.user.login %>)<br />
    <b>Budget</b>: <%= @invoice.budget.name %>, <%= @invoice.budget.contact %><br />
 
@@ -14,9 +16,11 @@
   </select><br />
 <% end %>
 
+<% if false %>
 <b>Notes</b>:<br />
   <textarea id="notes" style="width:600px; height: 100px"><%= @invoice.notes %></textarea>
 </p>
+<% end %>
 
 <button class='btn btn-warning' id="save">Save Changes</button>
 
@@ -36,7 +40,7 @@
 
       <tr>
 
-        <td><%= row.updated_at.strftime("%b %d, %Y") %></td>
+        <td>(<%= row.id %>) <%= row.created_at.strftime("%b %d, %Y") %></td>
 
         <td>
           <% if row.task %>
