@@ -12,7 +12,7 @@ module CostService
 
     (cost job, status).each do |category,amount|
 
-      if amount > 0
+      if amount > 0 && self.budget_id
 
         row = Account.new(
           user_id: self.user.id, 

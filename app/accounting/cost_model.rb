@@ -4,7 +4,7 @@ module CostModel
 
     case [protocol,status]
 
-    # PRIMER_ORDER ######################################################################################
+      # PRIMER_ORDER ######################################################################################
 
       when ["order_primer","ordered"]
         primers = simple_spec[:primer_ids].collect { |pid| Sample.find(pid) }
@@ -28,18 +28,18 @@ module CostModel
       # FRAGMENT CONSTRUCTION ##############################################################################
 
       when ["PCR","pcr"]          then basic(:fragments,1.26,4.6)
-      when ["pour_gel","gel run"] then basic(:fragments,0.31,2.0)
-      when ["cut_gel","get cut"]  then basic(:fragments,0.10,2.0)
+      when ["run_gel","gel run"]  then basic(:fragments,0.31,2.0)
+      when ["cut_gel","gel cut"]  then basic(:fragments,0.10,2.0)
       when ["cut_gel","failed"]   then nothing
-      when ["gel_purify","done"]  then basic(:fragments,1.98,7.1)
+      when ["purify_gel","done"]  then basic(:fragments,1.98,7.1)
 
       # GIBSON ASSEMBLY ####################################################################################
 
-      when ["gibson","gibson"]                           then basic(:plasmids,1.85,5.2)
-      when ["ecoli_transformation","transformed"]        then basic(:plasmids,1.80,3.0)
-      when ["ecoli_transformation","plated"]             then basic(:plasmids,0.77,1.9)
-      when ["image_plate","imaged and stored in fridge"] then basic(:plasmids,0.03,0.7)
-      when ["image_plate","no colonies"]                 then basic(:plasmids,0.0,0.7)
+      when ["gibson","gibson"]                           then basic(:default,1.85,5.2)
+      when ["ecoli_transformation","transformed"]        then basic(:default,1.80,3.0)
+      when ["plate_ecoli_transformation","plated"]       then basic(:default,0.77,1.9)
+      when ["image_plate","imaged and stored in fridge"] then basic(:default,0.03,0.7)
+      when ["image_plate","no colonies"]                 then basic(:default,0.0,0.7)
 
       # PLASMID VERIFICATION ################################################################################
 
@@ -73,7 +73,7 @@ module CostModel
       # YEAST TRANSFORMATION #################################################################################
 
       when ["digest_plasmid_yeast_transformation","plasmid_digested"] then basic(:yeast_transformed_strain_ids,0.91,3.5)
-      when ["make_antibiotic_plate","???"]                            then nothing
+      when ["make_antibiotic_plate","plate_made"]                     then basic(:yeast_transformed_strain_ids,3.02,1.4)
       when ["yeast_transformation","transformed"]                     then basic(:yeast_transformed_strain_ids,1.48,11)
       when ["plate_yeast_transformation","plated"]                    then basic(:yeast_transformed_strain_ids,0,2)
 

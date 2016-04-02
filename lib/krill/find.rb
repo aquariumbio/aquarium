@@ -24,7 +24,6 @@ module Krill
         # Do the search
         rows = tables[name].where(pluralize_table_names(spec))
 
-        puts "name = #{name}"
         if name == :item
           return rows.reject { |i| i.deleted? }
         else
