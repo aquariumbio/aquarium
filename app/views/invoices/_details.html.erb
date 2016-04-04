@@ -1,0 +1,25 @@
+<% @tps.each do |tp| %>
+
+  <% tprows = @rows.select { |r| r.task.task_prototype_id == tp.id } %>
+
+  <% if tprows.length > 0 %>
+
+    <h3><%= tp.name %>: <%= number_to_currency(Account.total tprows) %></h3>
+
+    <% task_groups = tprows.group_by { |r| r.task_id } %>
+
+    <% task_groups.each do |task_id, rows| %>
+
+      <div style='margin: 0 50px 0 50px'>
+
+        <h4>Task <a href="/tasks/<%= task_id %>"><%= task_id %></a>: <%= Task.find(task_id).name %></h4>
+
+        <%= render partial: 'rows', locals: { rows: rows } %>
+
+      </div>
+
+    <% end %>
+
+  <% end %>
+
+<% end %>

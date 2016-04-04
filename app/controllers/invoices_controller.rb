@@ -31,6 +31,9 @@ class InvoicesController < ApplicationController
     @invoice = Invoice.find(params[:id])
     @date = DateTime.new(@invoice.year,@invoice.month)
     @rows = @invoice.rows
+    @tps = TaskPrototype.all
+    @base = Account.total(@rows)
+    @markup = @base * 0.33 
   end
 
-end
+end 

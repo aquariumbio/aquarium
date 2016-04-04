@@ -1,82 +1,52 @@
-<h1>Invoice for <%= @date.strftime("%b %Y") %></h1>
+<h1>
+  Invoice for <%= @date.strftime("%b %Y") %>  
+</h1>
 
-<h2>Total: <%= number_to_currency(Account.total(@rows)) %></h2>
+<div class='container row-fluid well' style='width: 90%'>
 
-<p><b>User</b>: <%= @invoice.user.name %> (<%= @invoice.user.login %>)<br />
-   <b>Budget</b>: <%= @invoice.budget.name %>, <%= @invoice.budget.contact %><br />
+  <div class='span6'>
 
-<b>Status</b>:
-<% if @invoice.in_progress %>
-  "In progress"<br />
-<% else %>
-  <br /> <select id="status">
-    <%= ["ready", "approval_requested", "reconciled"].each do |s| %>
-      <option <%= @invoice.status == s ? "selected" : "" %> ><%= s %></option>
+    <p><b>User</b>: <%= @invoice.user.name %> (<%= @invoice.user.login %>)<br />
+       <b>Budget</b>: <%= @invoice.budget.name %>, <%= @invoice.budget.contact %><br />
+
+    <b>Status</b>:
+    <% if @invoice.in_progress %>
+      <span class='text-error'>In progress<br />
+    <% else %>
+      <br /> <select id="status">
+        <%= ["ready", "approval_requested", "reconciled"].each do |s| %>
+          <option <%= @invoice.status == s ? "selected" : "" %> ><%= s %></option>
+        <% end %>
+      </select><br />
     <% end %>
-  </select><br />
-<% end %>
 
-<% if false %>
-<b>Notes</b>:<br />
-  <textarea id="notes" style="width:600px; height: 100px"><%= @invoice.notes %></textarea>
-</p>
-<% end %>
+    <% if false %>
+    <b>Notes</b>:<br />
+      <textarea id="notes" style="width:600px; height: 100px"><%= @invoice.notes %></textarea>
+    </p>
+    <% end %>
 
-<button class='btn btn-warning' id="save">Save Changes</button>
+    <button class='btn btn-warning' id="save">Save Changes</button>
 
-<% if @rows.length > 0 %>
+  </div>
 
-  <table class='table'>
+  <div class='span6'>
 
-    <tr>
-      <th>Date</th>
-      <th>Description</th>
-      <th>Budget</th>    
-      <th>Credits</th>            
-      <th>Debits</th>                
-    </tr>
-    
-    <% @rows.each do |row| %>
+    <p>
 
-      <tr>
+    <b>Base Cost</b>: <%= number_to_currency(@base) %><br />
 
-        <td>(<%= row.id %>) <%= row.created_at.strftime("%b %d, %Y") %></td>
+    <b>Operating Costs</b>: <%= number_to_currency(@markup) %><br />
 
-        <td>
-          <% if row.task %>
-            <%= row.task.task_prototype.name %>
-            <%= link_to row.task_id, row.task %>,
-          <% end %>
-          <i><%= row.description %> <%= row.category ? "(#{row.category})" : "" %></i>
-        </td>
+    <b>Total</b>: <%= number_to_currency(@base + @markup) %>
 
-        <td>
-          <%= row.budget.name %> <%= row.budget.description ? "(#{row.budget.description})" : "" %>
-        </td>
+    </p>
 
-        <td>
-          <% if row.transaction_type == "credit" %>
-            <%= number_to_currency(row.amount) %>
-          <% end %>
-        </td>  
+  </div>
 
-        <td>
-          <% if row.transaction_type == "debit" %>
-            <%= number_to_currency(row.amount) %>
-          <% end %>
-        </td>  
+</div>
 
-      </tr>
-
-    <% end %> 
-
-  </table>
-
-<% else %>
-
-  <p>No transactions to show in <%= @start_date.strftime("%b, %Y") %>.</p>
-
-<% end %>  
+<%= render partial: 'details' %>
 
 <script>
 

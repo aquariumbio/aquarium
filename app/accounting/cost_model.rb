@@ -44,8 +44,8 @@ module CostModel
       # PLASMID VERIFICATION ################################################################################
 
       when ["start_overnight_plate","overnight"]        then basic(:plate_ids,0.93,1.7)
-      when ["miniprep","plasmid_extracted"]             then basic(:plate_ids,1.35,6.4)
-      when ["sequencing","sent to sequencing"]          then basic(:plate_ids,6.12,2.6)
+      when ["miniprep","plasmid extracted"]             then basic(:plate_ids,1.35,6.4)
+      when ["sequencing","send to sequencing"]          then basic(:plate_ids,6.12,2.6)
       when ["upload_sequencing_results","results back"] then nothing
       when ["glycerol_stock","done"]                    then basic(:plate_ids,2.69,1.7)
       when ["discard_item","discarded"]                 then nothing
@@ -67,13 +67,13 @@ module CostModel
       # YEAST COMPETENT CELLS ################################################################################
 
       when ["overnight_suspension_collection","overnight"]         then basic(:yeast_strain_ids,1.18,4.7)
-      when ["inoculate_large_volume_growth","large_volume_growth"] then basic(:yeast_strain_ids,1.00,4.2)
+      when ["inoculate_large_volume_growth","large volume growth"] then basic(:yeast_strain_ids,1.00,4.2)
       when ["make_yeast_competent_cells","done"]                   then basic(:yeast_strain_ids,1.55,16)
 
       # YEAST TRANSFORMATION #################################################################################
 
-      when ["digest_plasmid_yeast_transformation","plasmid_digested"] then basic(:yeast_transformed_strain_ids,0.91,3.5)
-      when ["make_antibiotic_plate","plate_made"]                     then basic(:yeast_transformed_strain_ids,3.02,1.4)
+      when ["digest_plasmid_yeast_transformation","plasmid digested"] then basic(:yeast_transformed_strain_ids,0.91,3.5)
+      when ["make_antibiotic_plate","plate made"]                     then basic(:yeast_transformed_strain_ids,3.02,1.4)
       when ["yeast_transformation","transformed"]                     then basic(:yeast_transformed_strain_ids,1.48,11)
       when ["plate_yeast_transformation","plated"]                    then basic(:yeast_transformed_strain_ids,0,2)
 
@@ -81,7 +81,7 @@ module CostModel
 
       when ["make_yeast_lysate","lysate"]      then basic(:yeast_plate_ids,0.10,3.3)
       when ["yeast_colony_PCR","pcr"]          then basic(:yeast_plate_ids,0.43,2.2)
-      when ["fragment_analyzing","gel_imaged"] then basic(:yeast_plate_ids,0.35,1.0)
+      when ["fragment_analyzing","gel imaged"] then basic(:yeast_plate_ids,0.35,1.0)
 
       else nothing
 

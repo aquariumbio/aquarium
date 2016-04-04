@@ -1,0 +1,43 @@
+<table class='table table-condensed' style='table-layout: fixed;'>
+
+ <% rows.each do |row| %>
+
+    <tr>
+
+      <td style='width: 10%'><%= row.created_at.strftime("%b %d, %Y") %></td>
+
+      <td>
+        <i><%= row.description.split(':')[1] %> <%= row.category ? "(#{row.category})" : "" %></i>
+      </td>
+
+      <td>
+        <%= row.budget.name %> <%= row.budget.description ? "(#{row.budget.description})" : "" %>
+      </td>
+
+      <td style='width: 10%'>
+        <% if row.transaction_type == "credit" %>
+          <%= number_to_currency(row.amount) %>
+        <% end %>
+      </td>  
+
+      <td style='width: 10%'>
+        <% if row.transaction_type == "debit" %>
+          <%= number_to_currency(row.amount) %>
+        <% end %>
+      </td>  
+
+    </tr>
+
+  <% end %> 
+
+  <tr>
+
+    <td></td>
+    <td></td>
+    <td></td>    
+    <td><b>Subtotal</b></td>
+    <td><b><%= number_to_currency(Account.total rows) %></b></td>
+
+  </tr>
+
+</table>
