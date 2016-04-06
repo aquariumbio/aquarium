@@ -24,7 +24,7 @@ class BudgetsController < ApplicationController
   def show
 
     @budget = Budget.find(params[:id])
-    @users = User.all.reject { |u| u.retired? }
+    @users = (User.all.reject { |u| u.retired? }).sort { |a,b| a[:login] <=> b[:login] }
 
     respond_to do |format|
       format.html # show.html.erb

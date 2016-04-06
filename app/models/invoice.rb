@@ -21,7 +21,6 @@ class Invoice < ActiveRecord::Base
   def rows
     start_date = DateTime.new(year,month).change(:offset => "-7:00")
     end_date = start_date.next_month
-    # puts "#{[year,month]}: start = #{start_date}, end = #{end_date}"
     Account.where(user_id: user_id, budget_id: budget_id).where(created_at: start_date..end_date)
   end
 

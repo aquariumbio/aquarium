@@ -5,6 +5,7 @@
     <th>Name</th>
     <th>Description</th>
     <th>Contact</th>  
+    <th>Users</th>      
     <th></th>
     <th></th>
   </tr>
@@ -14,6 +15,12 @@
     <td><%= link_to budget.name, budget %></td>
     <td><%= budget.description %></td>
     <td><%= budget.contact %></td>        
+    <td>
+      <%= budget.user_budget_associations.collect { |uba|
+          uba.user.name
+        }.join(', ')
+      %>
+    </td>            
     <td><%= link_to 'Edit', edit_budget_path(budget) %></td>
     <td><%= link_to 'Destroy', budget, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>

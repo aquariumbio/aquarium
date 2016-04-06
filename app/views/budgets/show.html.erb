@@ -10,11 +10,13 @@
   Email:  <%= @budget.email %>  
 </p>
 
-<table class='table' style='width: 50%'>
+<table class='table' style='width: 70%'>
 
   <tr>
     <th>User</th>
     <th>Quota</th>
+    <th>Spent this month</th>    
+    <th>Spent total</th>
     <th></th>
     <th></th>
   </tr>
@@ -22,7 +24,9 @@
   <% @budget.user_budget_associations.each do |uba| %>
     <tr>
       <td><%= link_to uba.user.name, uba.user %></td>
-      <td><%= uba.quota %></td>
+      <td><%= number_to_currency(uba.quota) %></td>
+      <td><%= 12 %></td>
+      <td><%= 13 %></td>      
       <td><%= uba.disabled ? 'disabled' : '' %></td>
       <td><a href='#' class='remove-user' data-uid=<%= uba.user_id %>><icon class='icon-remove'></icon></a></td>
     </tr>

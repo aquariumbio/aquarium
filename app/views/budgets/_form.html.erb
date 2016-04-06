@@ -1,4 +1,5 @@
 <%= form_for(@budget) do |f| %>
+
   <% if @budget.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@budget.errors.count, "error") %> prohibited this budget from being saved:</h2>
@@ -11,34 +12,54 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label "Budget Number" %><br />
-    <%= f.text_field :name %>
+  <div class='row-fluid'>
+
+    <div class='span2'></div>
+
+    <div class='span4'>
+
+      <div class="field">
+        <%= f.label "Budget Number / short name" %>
+        <%= f.text_field :name %>
+      </div>
+
+      <div class="field">
+        <%= f.label :description %>
+        <%= f.text_field :description %>
+      </div>
+
+      <div class="field">
+        <%= f.label "Contact name / principal investigator" %>
+        <%= f.text_field :contact %>
+      </div>      
+
+    </div>
+
+    <div class='span4'>
+
+      <div class="field">
+        <%= f.label "Contact's email" %>
+        <%= f.text_field :email %>
+      </div>
+
+      <div class="field">
+        <%= f.label "Contact's phone" %>
+        <%= f.text_field :phone %>
+      </div>
+
+      <div class="actions">
+        <br />
+        <%= f.submit 'Save', class: 'btn btn-primary' %>
+        <%= link_to 'Cancel', budgets_path, class: "btn" %> 
+      </div>
+           
+
+    </div>
+
+    <div class='span2'></div>
+
   </div>
 
-  <div class="field">
-    <%= f.label :description %><br />
-    <%= f.text_field :description %>
-  </div>
 
-  <div class="field">
-    <%= f.label :contact %><br />
-    <%= f.text_field :contact %>
-  </div>
-
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.text_field :email %>
-  </div>
-
-  <div class="field">
-    <%= f.label :phone %><br />
-    <%= f.text_field :phone %>
-  </div>
-
-
-  <div class="actions">
-    <%= f.submit 'save', class: 'btn btn-primary' %>
-  </div>
 
 <% end %>

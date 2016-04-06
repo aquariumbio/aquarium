@@ -7,7 +7,7 @@
   <table class='table table-condensed' style="table-layout: fixed">
     <% datum[:entries].each do |e| %>
       <tr>
-        <td><%= link_to e[:user].login, e[:user] %></td>
+        <td><%= e[:user].name %> (<%= link_to "#{e[:user].login}", e[:user] %>)</td>
         <td><%= link_to e[:budget].name, e[:budget] %></td>
         <td><%= e[:budget].contact %></td>
         <td><%= e[:invoice].in_progress ? "in progress" : e[:invoice].status %></td>
