@@ -33,32 +33,29 @@ class Account < ActiveRecord::Base
     end_date = start_date.next_month
 
     if user
-
-      a = Account.where("? <= created_at AND created_at < ? AND user_id = ?", start_date, end_date, user.id)
-             .collect { |a| { 
-                  user_id: a.user_id,
-                  budget_id: a.budget_id
-                } 
-              }
-             .uniq
-
+      rows = Account.where("? <= created_at AND created_at < ? AND user_id = ?", start_date, end_date, user.id)
     else  
-
-      a = Account.where("? <= created_at && created_at < ?", start_date, end_date)
-             .collect { |a| { 
-                  user_id: a.user_id,
-                  budget_id: a.budget_id
-                } 
-              }
-             .uniq
-
+      rows = Account.where("? <= created_at && created_at < ?", start_date, end_date)
     end
 
-    a.collect { |x| {
+    a = rows.collect { |a| { 
+            user_id: a.user_id,
+            budget_id: a.budget_id
+          } 
+        }
+       .uniq
+
+    a.collect { |x| 
+
+      invoice = Invoice.for(x.merge(year:year, month:month, status:"ready", notes: "")) 
+
+      {
         user: User.find(x[:user_id]),
         budget: Budget.find(x[:budget_id]),
-        invoice: Invoice.for(x.merge(year:year, month:month, status:"ready", notes: ""))
+        invoice: invoice,
+        spent: Account.total(invoice.rows) * (1 + Parameter.get_float('markup rate'))
       }
+
     }
 
   end

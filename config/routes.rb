@@ -1,5 +1,7 @@
 Bioturk::Application.routes.draw do
 
+  resources :parameters
+
   get '/budgets/add/:bid/:uid/:quota',          to: 'budgets#add_user'
   get '/budgets/remove/:bid/:uid',          to: 'budgets#remove_user'  
   resources :budgets

@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Key:</b>
+  <%= @parameter.key %>
+</p>
+
+<p>
+  <b>Value:</b>
+  <%= @parameter.value %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @parameter.description %>
+</p>
+
+
+<%= link_to 'Edit', edit_parameter_path(@parameter), class: 'btn' %> 
+<%= link_to 'All', parameters_path, class: 'btn' %>

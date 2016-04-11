@@ -33,7 +33,7 @@ class InvoicesController < ApplicationController
     @rows = @invoice.rows
     @tps = TaskPrototype.all
     @base = Account.total(@rows)
-    @markup = @base * 0.33 
+    @markup = @base * Parameter.get_float('markup rate')
   end
 
 end 

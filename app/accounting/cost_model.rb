@@ -11,16 +11,16 @@ module CostModel
         primer_costs = primers.collect { |p| 
           length = p.properties["Overhang Sequence"].length + p.properties["Anneal Sequence"].length
           if length <= 60
-            length * 0.15
+            length * Parameter.get_float('short primer cost')
           elsif length <= 90
-            length * 0.34
+            length * Parameter.get_float('medium primer cost')
           else
-            length * 0.55
+            length * Parameter.get_float('long primer cost')
           end
         }
         { 
           materials: primer_costs.inject{|sum,x| sum+x },
-          labor: 0.0 * primers.length * labor_rate
+          labor: 0.0
         }
 
       when ["get_primer","received and stocked"] then basic(:primer_ids,0.05,3.6)
@@ -101,7 +101,7 @@ module CostModel
   end
 
   def labor_rate
-    20.97 / 60
+    Parameter.get_float('labor rate')
   end
 
   def basic key, mat, lab

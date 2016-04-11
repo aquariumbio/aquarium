@@ -19,7 +19,7 @@ class Budget < ActiveRecord::Base
     amounts = rows.collect { |row| 
       row.transaction_type == "credit" ? -row.amount : row.amount
     }
-    amounts.inject(0) { |sum,x| sum+x }    
+    (1 + Parameter.get_float('markup rate')) * amounts.inject(0) { |sum,x| sum+x }    
   end
 
 end

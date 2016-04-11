@@ -1,17 +1,34 @@
+<style>
+.medium {
+  width: 20%;
+}
+.large {
+  width: 33%;
+}
+</style>
+
 <h1>Invoices</h1>
 
 <% @data.each do |datum| %>
 
-  <h4><%= datum[:date].strftime("%b %d, %Y") %></h4>
+  <h4>
+    <%= datum[:date].strftime("%B %Y") %>
+    <% if params[:all] %>
+      <span class='pull-right'>
+        <%= number_to_currency(datum[:entries].collect { |e| e[:spent] }.inject{|s,x| s + x}) %>
+      </span>
+    <% end %>
+  </h4>
 
   <table class='table table-condensed' style="table-layout: fixed">
     <% datum[:entries].each do |e| %>
       <tr>
-        <td><%= e[:user].name %> (<%= link_to "#{e[:user].login}", e[:user] %>)</td>
-        <td><%= link_to e[:budget].name, e[:budget] %></td>
+        <td class='medium'><%= e[:user].name %> (<%= link_to "#{e[:user].login}", e[:user] %>)</td>
+        <td class='large'><%= link_to e[:budget].name, e[:budget] %>: <%= e[:budget].description %></td>
         <td><%= e[:budget].contact %></td>
         <td><%= e[:invoice].in_progress ? "in progress" : e[:invoice].status %></td>
-        <td><%= link_to "show", e[:invoice] %></td>        
+        <td><%= number_to_currency(e[:spent]) %></td>        
+        <td><span class='pull-right'><%= link_to "show", e[:invoice] %></span></td>        
       </tr>
     <% end %>
   </table>

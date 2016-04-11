@@ -7,7 +7,6 @@
     <th>Contact</th>  
     <th>Users</th>      
     <th></th>
-    <th></th>
   </tr>
 
 <% @budgets.each do |budget| %>
@@ -22,7 +21,6 @@
       %>
     </td>            
     <td><%= link_to 'Edit', edit_budget_path(budget) %></td>
-    <td><%= link_to 'Destroy', budget, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
 <% end %>
 </table>

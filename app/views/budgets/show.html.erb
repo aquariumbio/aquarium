@@ -15,24 +15,30 @@
   <tr>
     <th>User</th>
     <th>Quota</th>
-    <th>Spent this month</th>    
+    <th>Spent this month (so far)</th>    
     <th>Spent total</th>
     <th></th>
     <th></th>
   </tr>
 
   <% @budget.user_budget_associations.each do |uba| %>
+    <% invoice = Invoice.for(user_id: uba.user_id, budget_id: uba.budget_id, month: Date.today.month, year: Date.today.year) %>
+    <% all = Account.where(user_id: uba.user_id, budget_id: uba.budget_id) %>
+
     <tr>
       <td><%= link_to uba.user.name, uba.user %></td>
       <td><%= number_to_currency(uba.quota) %></td>
-      <td><%= 12 %></td>
-      <td><%= 13 %></td>      
+      <td><%= number_to_currency(Account.total(invoice.rows)*1.33) %></td>
+      <td><%= number_to_currency(Account.total(all)*1.33) %></td>      
       <td><%= uba.disabled ? 'disabled' : '' %></td>
-      <td><a href='#' class='remove-user' data-uid=<%= uba.user_id %>><icon class='icon-remove'></icon></a></td>
+      <td><a href='#' class='remove-user' data-uid=<%= uba.user_id %> 
+             onclick="return confirm('Are you sure you want to delete this association?')"><icon class='icon-remove'></icon></a></td>
     </tr>
   <% end %>
 
 </table>
+
+<p><b>Note:</b> The above table lists only current user/budget associations. There may be other expenditures for users that were associated with this budget in the past, but for which the association has been deleted.</p>
 
 <% if current_user.is_admin %>
 
@@ -67,6 +73,5 @@
     var uid = $(this).data('uid');
     window.location = '/budgets/remove/' + <%= @budget.id %> + '/' + uid;
   });
-
 
 </script>
