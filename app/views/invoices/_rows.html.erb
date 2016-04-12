@@ -1,30 +1,52 @@
 <table class='table table-condensed' style='table-layout: fixed;'>
 
+  <tr>
+    <th>Date</th>
+    <th>Task Status</th>    
+    <th style='width: 35%'>Description</th>
+    <th>Amount</th>
+    <th>Operating Cost</th>        
+    <th>Subtotal</th>        
+  </tr>
+
+
  <% rows.each do |row| %>
 
     <tr>
 
-      <td style='width: 10%'><%= row.created_at.strftime("%b %d, %Y") %></td>
+      <td><%= row.created_at.strftime("%b %d, %Y") %></td>
 
       <td>
-        <i><%= row.description.split(':')[1] %> <%= row.category ? "(#{row.category})" : "" %></i>
+          <%= row.description.split(':')[1] %>
       </td>
 
       <td>
-        <%= row.budget.name %> <%= row.budget.description ? "(#{row.budget.description})" : "" %>
-      </td>
+          <% if row.category == "labor" %>
+            <%= row.category %>: <%= (row.amount / row.labor_rate).round(3) %> min @ $<%= row.labor_rate %>/min
+          <% else %>
+            <%= row.category %>
+          <% end %>
+      </td>      
 
-      <td style='width: 10%'>
-        <% if row.transaction_type == "credit" %>
-          <%= number_to_currency(row.amount) %>
-        <% end %>
-      </td>  
-
-      <td style='width: 10%'>
+      <td>
         <% if row.transaction_type == "debit" %>
-          <%= number_to_currency(row.amount) %>
+          <%= number_to_currency(row.amount) %> 
+        <% else %>
+          <b>+<%= number_to_currency(row.amount) %></b>
         <% end %>
       </td>  
+
+      <td>
+        <% if row.transaction_type == "debit" %>
+          <%= number_to_currency(row.amount*row.markup_rate) %>
+        <% end %>
+      </td>  
+
+      <td>
+        <% if row.transaction_type == "debit" %>
+          <%= number_to_currency(row.amount*(1.0+row.markup_rate)) %>
+        <% end %>
+      </td>        
 
     </tr>
 
@@ -34,9 +56,9 @@
 
     <td></td>
     <td></td>
-    <td></td>    
-    <td><b>Subtotal</b></td>
-    <td><b><%= number_to_currency(Account.total rows) %></b></td>
+    <td></td>        
+    <td><b>Task Total</b></td>
+    <td><b><%= number_to_currency(Account.total rows,true) %></b></td>
 
   </tr>
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160411131711) do
+ActiveRecord::Schema.define(:version => 20160412010529) do
 
   create_table "accounts", :force => true do |t|
     t.string   "transaction_type"
@@ -24,6 +24,8 @@ ActiveRecord::Schema.define(:version => 20160411131711) do
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
     t.text     "description"
+    t.float    "labor_rate"
+    t.float    "markup_rate"
   end
 
   add_index "accounts", ["budget_id"], :name => "index_accounts_on_budget_id"

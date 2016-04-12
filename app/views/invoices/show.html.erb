@@ -1,13 +1,33 @@
 <h1>
-  Invoice for <%= @date.strftime("%b %Y") %>  
+  Invoice for <%= @date.strftime("%B %Y") %>  
 </h1>
 
 <div class='container row-fluid well' style='width: 90%'>
 
-  <div class='span6'>
+  <div class='span4'>
 
-    <p><b>User</b>: <%= @invoice.user.name %> (<%= @invoice.user.login %>)<br />
-       <b>Budget</b>: <%= @invoice.budget.name %>, <%= @invoice.budget.contact %><br />
+    <p><b>User</b>: <%= @invoice.user.name %> (<%= link_to @invoice.user.login, @invoice.user %>)<br />
+       <b>Budget</b>: <%= link_to @invoice.budget.name, @invoice.budget %><br />
+       <b>Contact</b>: <%= @invoice.budget.contact %> (<%= @invoice.budget.email %>)<br />
+       <b>Contact phone</b>: <%= @invoice.budget.phone %> <br />       
+
+
+
+  </div>
+
+  <div class='span3'>
+
+    <p>
+
+    <b>Base Cost</b>: <%= number_to_currency(@base) %><br />
+    <b>Operating Costs</b>: <%= number_to_currency(@markup) %><br />
+    <b>Total</b>: <%= number_to_currency(@total) %>
+
+    </p>
+
+  </div>
+
+  <div class='span5'>
 
     <b>Status</b>:
     <% if @invoice.in_progress %>
@@ -27,21 +47,6 @@
     <% end %>
 
     <button class='btn btn-warning' id="save">Save Changes</button>
-
-  </div>
-
-  <div class='span6'>
-
-    <p>
-
-    <b>Base Cost</b>: <%= number_to_currency(@base) %><br />
-
-    <b>Operating Costs</b>: <%= number_to_currency(@markup) %><br />
-
-    <b>Total</b>: <%= number_to_currency(@base + @markup) %>
-
-    </p>
-
   </div>
 
 </div>

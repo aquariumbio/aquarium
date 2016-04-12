@@ -32,8 +32,9 @@ class InvoicesController < ApplicationController
     @date = DateTime.new(@invoice.year,@invoice.month)
     @rows = @invoice.rows
     @tps = TaskPrototype.all
-    @base = Account.total(@rows)
-    @markup = @base * Parameter.get_float('markup rate')
+    @base = Account.total(@rows,false)
+    @total = Account.total(@rows,true)
+    @markup = @total - @base
   end
 
 end 

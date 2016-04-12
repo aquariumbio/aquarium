@@ -15,9 +15,15 @@ class Account < ActiveRecord::Base
   validates_inclusion_of :transaction_type, :in => [ "credit", "debit" ]
   validates_inclusion_of :category, :in => [ nil, "materials", "labor", "overhead" ]
 
-  def self.total rows
+  after_create do |row|
+    row.labor_rate = Parameter.get_float("labor rate")
+    row.markup_rate = Parameter.get_float("markup rate")
+  end
+
+  def self.total rows, markup=true
     amounts = rows.collect { |row| 
-      row.transaction_type == "credit" ? -row.amount : row.amount
+      m = markup ? (row.markup_rate+1.0) : 1.0
+      row.transaction_type == "credit" ? -row.amount*m : row.amount*m
     }
     amounts.inject(0) { |sum,x| sum+x }
   end
@@ -53,7 +59,7 @@ class Account < ActiveRecord::Base
         user: User.find(x[:user_id]),
         budget: Budget.find(x[:budget_id]),
         invoice: invoice,
-        spent: Account.total(invoice.rows) * (1 + Parameter.get_float('markup rate'))
+        spent: Account.total(invoice.rows)
       }
 
     }

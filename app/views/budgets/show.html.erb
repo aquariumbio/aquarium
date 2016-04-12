@@ -28,8 +28,8 @@
     <tr>
       <td><%= link_to uba.user.name, uba.user %></td>
       <td><%= number_to_currency(uba.quota) %></td>
-      <td><%= number_to_currency(Account.total(invoice.rows)*1.33) %></td>
-      <td><%= number_to_currency(Account.total(all)*1.33) %></td>      
+      <td><%= number_to_currency(Account.total(invoice.rows)) %></td>
+      <td><%= number_to_currency(Account.total(all)) %></td>      
       <td><%= uba.disabled ? 'disabled' : '' %></td>
       <td><a href='#' class='remove-user' data-uid=<%= uba.user_id %> 
              onclick="return confirm('Are you sure you want to delete this association?')"><icon class='icon-remove'></icon></a></td>

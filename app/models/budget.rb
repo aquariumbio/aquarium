@@ -16,10 +16,7 @@ class Budget < ActiveRecord::Base
   def spent_this_month user_id
     start = Date.today.beginning_of_month
     rows = Account.where("created_at >= ? AND budget_id = ? AND user_id = ?", start, id, user_id)
-    amounts = rows.collect { |row| 
-      row.transaction_type == "credit" ? -row.amount : row.amount
-    }
-    (1 + Parameter.get_float('markup rate')) * amounts.inject(0) { |sum,x| sum+x }    
+    Account.total rows   
   end
 
 end
