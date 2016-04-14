@@ -5,32 +5,50 @@
 .large {
   width: 33%;
 }
+.indent {
+  margin-left: 35px;
+}
+.users {
+  width: 95%;
+  margin-left: 30px;
+}
+.budget-name {
+  font-size: 14pt;
+  margin-bottom: 0;
+}
 </style>
 
 <h1>Invoices</h1>
 
 <% @data.each do |datum| %>
 
-  <h4>
+  <h3>
     <%= datum[:date].strftime("%B %Y") %>
     <% if params[:all] %>
-      <span class='pull-right'>
-        <%= number_to_currency(datum[:entries].collect { |e| e[:spent] }.inject{|s,x| s + x}) %>
-      </span>
+      : <%= number_to_currency(datum[:entries].collect { |e| e[:spent] }.inject{|s,x| s + x}) %>
     <% end %>
-  </h4>
+  </h3>
 
-  <table class='table table-condensed' style="table-layout: fixed">
-    <% datum[:entries].each do |e| %>
+  <% datum[:entries].collect { |e| e[:budget] }.uniq.each do |b| %>
+
+    <p class='indent budget-name'><b><%= link_to b.name, b %></b> (<%= b.contact %>): <%= b.description %> </p>
+
+    <table class='table table-condensed users' style="table-layout: fixed">
+      <% datum[:entries].select { |e| e[:budget].id == b.id }.each do |e| %>
+        <tr>
+          <td><%= e[:user].name %> (<%= link_to "#{e[:user].login}", e[:user] %>)</td>
+          <td><i><%= e[:invoice].in_progress ? "in progress" : e[:invoice].status %></i></td>
+          <td><%= link_to number_to_currency(e[:spent]), e[:invoice] %></td>        
+        </tr>
+      <% end %>
+      <% total = datum[:entries].select { |e| e[:budget].id == b.id }.collect { |e| e[:spent] }.inject{|sum,x| sum+x} %>
       <tr>
-        <td class='medium'><%= e[:user].name %> (<%= link_to "#{e[:user].login}", e[:user] %>)</td>
-        <td class='large'><%= link_to e[:budget].name, e[:budget] %>: <%= e[:budget].description %></td>
-        <td><%= e[:budget].contact %></td>
-        <td><%= e[:invoice].in_progress ? "in progress" : e[:invoice].status %></td>
-        <td><%= number_to_currency(e[:spent]) %></td>        
-        <td><span class='pull-right'><%= link_to "show", e[:invoice] %></span></td>        
+      <td></td>
+      <td></td>
+      <td><b><%= number_to_currency(total) %></b></td>
       </tr>
-    <% end %>
-  </table>
+    </table>
+
+  <% end %>
 
 <% end %>
