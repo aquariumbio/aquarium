@@ -76,7 +76,11 @@ class Sample < ActiveRecord::Base
               result[st[n]] = x.to_f
             end
           else
-            result[st[n]] = Sample.find_by_name( self["field#{i}"] )
+            if self["field#{i}"] != self.name # avoid infinite loop for self-referencing samples
+              result[st[n]] = Sample.find_by_name( self["field#{i}"] )
+            else 
+              result[st[n]] = self.attributes
+            end
           end
       end
     end

@@ -21,7 +21,7 @@
    class="btn btn-info <%= button_class %>" data-toggle="modal">
 </a>
 
-  <div id="<%= modal_name %>" class="modal hide fade discussion discussion-modal" tabindex="-1" 
+<div id="<%= modal_name %>" class="modal hide fade discussion discussion-modal" tabindex="-1" 
      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
   <div class="modal-header">
@@ -31,12 +31,12 @@
 
   <div class="modal-body" style='text-align: left'>
 
-  <% if topic.class == ProtocolSummary %>
-    <div class='protocol-version'>
-      Protocol Version: <%= topic.sha %><br />
-      <a href="/jobs/summary?path=<%= topic.protocol %>">All versions</a>
-    </div>
-  <% end %>
+    <% if topic.class == ProtocolSummary %>
+      <div class='protocol-version'>
+        Protocol Version: <%= topic.sha %><br />
+        <a href="/jobs/summary?path=<%= topic.protocol %>">All versions</a>
+      </div>
+    <% end %>
 
     <div class="new-post">
       <textarea id="new-post-text"></textarea><br />
