@@ -18,6 +18,7 @@ class Account < ActiveRecord::Base
   after_create do |row|
     row.labor_rate = Parameter.get_float("labor rate")
     row.markup_rate = Parameter.get_float("markup rate")
+    row.save
   end
 
   def self.total rows, markup=true
