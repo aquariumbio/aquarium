@@ -5,7 +5,7 @@ module CostService
   end
 
   def description job, status
-    "#{self.name}: #{status}"
+    status
   end
 
   def charge job, status
@@ -28,7 +28,7 @@ module CostService
         row.save
 
         if row.errors.any?
-          raise "Could not charge account for #{self.description job, status}: #{row.errors.full_messages.join(',')}" 
+          raise "Could not charge account for #{self.name} #{status}: #{row.errors.full_messages.join(',')}" 
         end
 
       end
