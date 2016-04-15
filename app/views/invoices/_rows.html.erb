@@ -17,7 +17,7 @@
       <td><%= row.created_at.strftime("%b %d, %Y") %></td>
 
       <td>
-          <%= row.description.split(':')[1] %>
+          <%= row.description.split(':').last %>
       </td>
 
       <td>
