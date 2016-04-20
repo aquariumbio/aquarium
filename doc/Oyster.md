@@ -1,8 +1,5 @@
 # The Oyster Metacol Language
 
-### by Eric Klavins
-### November, 2013
-
 ## Comments
 
 A comment starts with the **#** symbol and ends with a newline, as in [Plankton](https://github.com/klavinslab/specifications/blob/master/Languages/Plankton.md).

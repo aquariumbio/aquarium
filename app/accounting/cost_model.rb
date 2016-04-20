@@ -68,7 +68,7 @@ module CostModel
 
       when ["overnight_suspension_collection","overnight"]         then basic(:yeast_strain_ids,1.18,4.7)
       when ["inoculate_large_volume_growth","large volume growth"] then basic(:yeast_strain_ids,1.00,4.2)
-      when ["make_yeast_competent_cells","done"]                   then basic(:yeast_strain_ids,1.55,16)
+      when ["make_yeast_competent_cell","done"]                    then basic(:yeast_strain_ids,1.55,16)
 
       # YEAST TRANSFORMATION #################################################################################
 

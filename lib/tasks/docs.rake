@@ -13,7 +13,8 @@ namespace :docs do
     "WorkflowGUITutorial",
     "KrillWorkflowAPITutorial",
     "JSONdocumentation",
-    "Workflow"
+    "Workflow",
+    "Oyster"
   ]
 
   task :md do 
