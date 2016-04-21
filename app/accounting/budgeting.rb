@@ -24,13 +24,17 @@ module Budgeting
   def budget_info
 
     user_budget_associations.collect { |uba| 
-      b = Budget.find(uba.budget_id)
-      {
-        budget: b,
-        quota: uba.quota,
-        spent_this_month: b.spent_this_month(uba.user_id)
-      }
-    }
+      b = Budget.find_by_id(uba.budget_id)
+      if b
+        {
+          budget: b,
+          quota: uba.quota,
+          spent_this_month: b.spent_this_month(uba.user_id)
+        }
+      else 
+        nil
+      end
+    }.select { |bi| bi }
 
   end
 

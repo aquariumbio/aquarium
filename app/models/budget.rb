@@ -1,7 +1,7 @@
 class Budget < ActiveRecord::Base
 
   has_many :tasks
-  has_many :user_budget_associations
+  has_many :user_budget_associations, dependent: :destroy
 
   attr_accessible :contact, :name, :overhead, :description, :email, :phone
 
@@ -12,6 +12,8 @@ class Budget < ActiveRecord::Base
   validates :description,  presence: true  
 
   # validates_numericality_of :overhead, :greater_than_or_equal_to => 0.0, :less_than => 1.0 
+
+
 
   def spent_this_month user_id
     start = Date.today.beginning_of_month
