@@ -12,13 +12,13 @@
       <span class="project-expander" 
             ng-if="project.name != current_selection.project"
             ng-click="select_project(project)">
-        &#9658;
+        <i class='icon-folder-close' style="color: #eee"></i>
       </span>
 
       <span class="project-expander"
             ng-if="project.name == current_selection.project"
             ng-click="unselect_project(project)">
-        &#9660;
+        <i class='icon-folder-open' style="color: #eee"></i>
       </span>
 
       <span class="project-expander" ng-click="select_project(project)">{{project.name}}</span>
@@ -27,17 +27,17 @@
 
         <li ng-repeat="st in sample_types" class="project-expander" >
 
-          <span ng-if="st.id == current_selection.sample_type"
-                ng-click="unselect_st(st)">
-            <i class='icon-folder-open' style="color: #eee"></i> 
-            {{st.name}}
-          </span>
-
           <span ng-if="st.id != current_selection.sample_type" 
                 ng-click="select_st(st)">
               <i class='icon-folder-close' style="color: #eee"></i> 
             {{st.name}}
           </span>      
+
+          <span ng-if="st.id == current_selection.sample_type"
+                ng-click="unselect_st(st)">
+            <i class='icon-folder-open' style="color: #eee"></i> 
+            {{st.name}}
+          </span>          
 
         </li>
 

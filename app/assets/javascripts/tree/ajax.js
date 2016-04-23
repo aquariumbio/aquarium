@@ -34,6 +34,15 @@
       });
     }
 
+    this.user_info = function(then) {
+      var that = this;
+      this.get('/users.json',function(users_response) {
+        that.get('/users/current',function(current_response) {
+          then(users_response.data,current_response.data);
+        });
+      });
+    }
+
   }]);
 
 })();

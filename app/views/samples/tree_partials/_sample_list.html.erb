@@ -4,28 +4,30 @@
 
 <div ng-if="samples[current_selection.project] && samples[current_selection.project][current_selection.sample_type]">
 
-  <p>
+  <div class='sample-list-header'>
     <span class="sample-list-name">
       {{current_selection.project}}
       &#9658;
-      {{sample_type_from_id(current_selection.sample_type).name}}
+      <a href="/sample_types/{{sample_type_from_id(current_selection.sample_type).id}}">
+        {{sample_type_from_id(current_selection.sample_type).name}}
+      </a>
     </span>
     <span class="sample-list-description">
       ( {{sample_type_from_id(current_selection.sample_type).description}} )
     </span>
-  </p>
+  </div>
 
 </div>
 
 <div>
 
-<div class='sample-tree-list'>
-  <ul>
-    <li ng-repeat="sample in samples[current_selection.project][current_selection.sample_type]"
-        ng-include="'sample'">
-    </li>
-  </ul>
-</div>
+  <div class='sample-tree-list'>
+    <ul>
+      <li ng-repeat="sample in samples[current_selection.project][current_selection.sample_type]"
+          ng-include="'sample_router'">
+      </li>
+    </ul>
+  </div>
 
 </div>
 

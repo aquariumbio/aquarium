@@ -1,14 +1,28 @@
 .sample-tree {
 
+  .tree-nav {
+    border-right: 1pt solid #eee;
+    height: 100%;
+  }
+
+  .viewer {
+  }
+
   .editable {
     border: 1pt solid #efefef;
     margin: 2px;
     padding: 2px;
     height: 14pt;
+    width: 500px;
+  }
+
+  .owner-login {
+    color: #ccc;
+    font-weight: normal;
   }
 
   .long {
-    width: 300px;
+    width: 700px;
   }
 
   .sample-type-name {
@@ -19,11 +33,28 @@
     
   }    
 
+  .sample-id {
+    font-weight: bold;
+  }  
+
+  .sample-name {
+    font-weight: normal !important;
+  }    
+
   .field-name {
     display: inline-block;
     width: 200px;
     font-weight: bold;
     color: #009;
+  }
+
+  .field-value {
+    font-weight: normal;
+    font-family: monospace;
+  }
+
+  .mono {
+    font-family: monospace;
   }
 
   .static-field-name {
@@ -33,6 +64,15 @@
     color: #090;
   }
 
+  .little {
+    font-size: 8pt;
+    line-height: 9pt;
+    display: inline-block;
+    font-weight: bold;
+    font-family: monospace;
+    color: #888;
+  }
+
   .sub-field-name {
     display: inline-block;
     width: 200px;
@@ -40,8 +80,19 @@
     color: #900;
   }  
 
+  .url-field-name {
+    display: inline-block;
+    width: 200px;
+    font-weight: bold;
+    color: #DAA520;
+  }    
+
   .bigger {
     margin: 4px;
+  }
+
+  .sample-list-header {
+    margin-bottom: 10px;
   }
 
   .sample-list-name {
@@ -72,13 +123,13 @@
       top:0;
       bottom:0;
       left:0;
-      border-left:1px solid;
+      border-left: 1px solid #bbb;
     }
 
     li {
       margin:0;
       padding:0 1.5em; /* indentation + .5em */
-      line-height:2em; /* default list item's `line-height` */
+      line-height:1.75em; /* default list item's `line-height` */
       font-weight:bold;
       position:relative;
     }
@@ -88,7 +139,7 @@
       display:block;
       width:10px; /* same with indentation */
       height:0;
-      border-top:1px solid;
+      border-top:1px solid #bbb;
       margin-top:-1px; /* border top width */
       position:absolute;
       top:1em; /* (line-height/2) */
@@ -103,7 +154,7 @@
     }
 
     li:last-child {
-      margin-bottom: 10px;
+      margin-bottom: 5px;
     }
 
   }

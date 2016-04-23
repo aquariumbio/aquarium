@@ -112,6 +112,12 @@ class UsersController < ApplicationController
 
   end
 
+  def current
+    u = current_user
+    u[:memberships] = current_user.groups
+    render json: u
+  end
+
   def destroy
 
     logger.info "retire"

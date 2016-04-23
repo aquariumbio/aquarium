@@ -63,6 +63,16 @@ class User < ActiveRecord::Base
     a
   end
 
+  def groups
+    self.memberships.collect { |m| m.group }
+  end
+
+  def as_json opts={}
+    j = super opts
+    j[:groups] = self.groups.as_json
+    j
+  end
+
   def self.folders current_user
     { id: -1, 
       name: "Users", 

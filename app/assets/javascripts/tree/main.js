@@ -21,6 +21,9 @@
     $scope.projects = {};    
     $scope.project_choice = "user";
     $scope.mode = "view";
+    $scope.users = [];
+    $scope.current = {};
+    $scope.logins = [];
 
     $scope.samples_loaded = false;
     $scope.types_loaded = false;
@@ -34,7 +37,15 @@
         st.fields = $scope.fields(st);
       });
       $scope.samples_loaded = true;
-    })
+    });
+
+    treeAjax.user_info(function(users,current) {
+      $scope.users = users;
+      $scope.current_user = current;
+      aq.each($scope.users,function(user) {
+        $scope.logins[user.id] = user.login;
+      })
+    });
 
     $.ajax({
       url: '/samples/all'
@@ -142,14 +153,31 @@
       }
     }
 
+    $scope.edit_sample = function(sample) {
+      sample.edit = true;
+      sample.sample_type = $scope.sample_type_from_id(sample.sample_type_id);
+    }
+
+    $scope.view_sample = function(sample) {
+      sample.edit = false;
+    }    
+
+    $scope.save_new_samples = function() {
+      console.log("SAVE " + $scope.new_samples.length + " SAMPLE(S) FROM FORM.");
+    }
+
+    $scope.save_sample = function(sample) {
+      console.log("SAVE SAMPLE: " + sample);
+    }
+
     // Helper methods
 
     $scope.empty_sample = function(st,name) {
       return {
         sample_type: st,
-        name: name ? name : "new-sample",
-        description: "Description here",
-        project: "Project"
+        name: name ? name : "new-" + st.name.toLowerCase(),
+        description: "Description of new " + st.name.toLowerCase() + " here",
+        project: $scope.current_selection.project ? $scope.current_selection.project : $scope.projects[0].name
       };
     }
 
@@ -183,7 +211,18 @@
       })[0];
     }
 
-  }]);  
+    $scope.login = function(id) {
+      var users = aq.where($scope.users,function(user) {
+        return user.id == id;
+      });
+      if ( users.length == 1 ) {
+        return users[0].login;
+      } else {
+        return "unknown";
+      }
+    }
+
+  }]);
 
   w.directive("autocomplete", function() {
 
@@ -197,15 +236,37 @@
 
     return {
       restrict: 'A',
-      scope: { autocomplete: '=' },
+      scope: { autocomplete: '=', ngModel: '='  },
       link: function($scope,$element,$attributes) {
         var types = $scope.autocomplete;
         $element.autocomplete({
-          source: samples_for(types)
+          source: samples_for(types),
+          select: function(ev,ui) {
+            $scope.ngModel = ui.item.value;
+            $scope.$apply();
+          }
         })
       }
     }
 
   });
+
+  w.directive("projectcomplete", function() {
+
+    return {
+      restrict: 'A',
+      scope: { ngModel: '=' },
+      link: function($scope,$element,$attributes) {
+        $element.autocomplete({
+          source: aq.collect($scope.$parent.projects,function(p) { return p.name; }),
+          select: function(ev,ui) {
+            $scope.ngModel = ui.item.value;
+            $scope.$apply();
+          }
+        });
+      }
+    }
+
+  });  
 
 })();

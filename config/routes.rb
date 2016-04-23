@@ -217,6 +217,7 @@ Bioturk::Application.routes.draw do
   match '/signup', to: 'users#new'
   match '/password', to: 'users#password'
 
+  get 'users/current',        to: 'users#current'
   get 'users/billing/:id',    to: 'users#billing' 
   resources :users do 
     get 'change_password'
