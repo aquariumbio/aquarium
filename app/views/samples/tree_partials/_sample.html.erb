@@ -1,0 +1,60 @@
+<script type="text/ng-template" id="sample">
+
+   <div class='sample-header'>
+
+     <span class='sample-type-id'>{{sample.id}}:</span>
+
+     <span class='sample-type-name'>{{sample.name}}</span>
+
+     <span class="project-expander" 
+           ng-if="!sample.open"
+           ng-click="toggle_sample(sample)">
+       &#9658;
+     </span>
+
+     <span class="project-expander"
+           ng-if="sample.open"
+           ng-click="toggle_sample(sample)">
+       &#9660;
+     </span>
+
+   </div>
+
+     <div ng-if="sample.open">
+
+       <ul>
+
+         <li>
+           <span class='static-field-name'>Created:</span> 
+           {{sample.created_at}}
+         </li>
+
+         <li ng-repeat="field in sample_type_from_id(sample.sample_type_id).fields">
+
+           <span ng-if="field.type == 'string' || field.type == 'number'">
+             <span class='field-name'>{{field.name}}:</span> 
+             {{sample["field"+field.index]}}
+           </span>
+
+           <span ng-if="field.type == 'url'">
+             <span class='field-name'>{{field.name}}:</span>           
+             <a href='{{sample["field"+field.index]}}'>{{sample["field"+field.index]}}</a>
+           </span>
+
+           <div ng-if="field.type != 'string' && field.type != 'number' && field.type != 'url' && sample.subsamples[field.name]">
+             <span class='sub-field-name'>{{field.name}}:</span> 
+             <ul class='sample-tree-list'>
+               <li 
+                   ng-include="'sample'"
+                   ng-init="sample = sample.subsamples[field.name]"></li>
+             </ul>           
+           </div>
+
+         </li>
+       </ul>
+
+     </div>
+
+   </div>
+
+</script>

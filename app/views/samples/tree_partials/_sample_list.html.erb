@@ -1,0 +1,34 @@
+<div ng-if="current_selection.sample_type && !current_selection.loaded">
+  <p>Loading samples...</p>
+</div>
+
+<div ng-if="samples[current_selection.project] && samples[current_selection.project][current_selection.sample_type]">
+
+  <p>
+    <span class="sample-list-name">
+      {{current_selection.project}}
+      &#9658;
+      {{sample_type_from_id(current_selection.sample_type).name}}
+    </span>
+    <span class="sample-list-description">
+      ( {{sample_type_from_id(current_selection.sample_type).description}} )
+    </span>
+  </p>
+
+</div>
+
+<div>
+
+<div class='sample-tree-list'>
+  <ul>
+    <li ng-repeat="sample in samples[current_selection.project][current_selection.sample_type]"
+        ng-include="'sample'">
+    </li>
+  </ul>
+</div>
+
+</div>
+
+<div ng-if="samples[current_selection.project] && samples[current_selection.project][current_selection.sample_type].length == 0">
+  <p>No samples</p>
+</div>

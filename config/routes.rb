@@ -1,8 +1,14 @@
 Bioturk::Application.routes.draw do
 
+  get '/samples/tree',                      to: 'samples#tree'
+  get '/samples/all',                       to: 'samples#all'  
+  get '/samples/projects',                  to: 'samples#projects'    
+  get '/samples/samples_for_tree',          to: 'samples#samples_for_tree'  
+  get '/samples/sub/:id',                   to: 'samples#subsamples'
+
   resources :parameters
 
-  get '/budgets/add/:bid/:uid/:quota',          to: 'budgets#add_user'
+  get '/budgets/add/:bid/:uid/:quota',      to: 'budgets#add_user'
   get '/budgets/remove/:bid/:uid',          to: 'budgets#remove_user'  
   resources :budgets
 

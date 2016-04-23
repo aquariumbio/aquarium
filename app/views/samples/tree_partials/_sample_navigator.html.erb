@@ -1,0 +1,50 @@
+<div class='project-list'>
+
+  <div class='project-heading project-expander' ng-click="project_toggle()">
+    <span ng-if="project_choice == 'user'">My Projects</span>
+    <span ng-if="project_choice == 'all'">All Projects</span>      
+  </div>
+
+  <ul>
+
+    <li ng-repeat="project in project_info[project_choice]">
+
+      <span class="project-expander" 
+            ng-if="project.name != current_selection.project"
+            ng-click="select_project(project)">
+        &#9658;
+      </span>
+
+      <span class="project-expander"
+            ng-if="project.name == current_selection.project"
+            ng-click="unselect_project(project)">
+        &#9660;
+      </span>
+
+      <span class="project-expander" ng-click="select_project(project)">{{project.name}}</span>
+
+      <ul ng-show='project.name == current_selection.project'>
+
+        <li ng-repeat="st in sample_types" class="project-expander" >
+
+          <span ng-if="st.id == current_selection.sample_type"
+                ng-click="unselect_st(st)">
+            <i class='icon-folder-open' style="color: #eee"></i> 
+            {{st.name}}
+          </span>
+
+          <span ng-if="st.id != current_selection.sample_type" 
+                ng-click="select_st(st)">
+              <i class='icon-folder-close' style="color: #eee"></i> 
+            {{st.name}}
+          </span>      
+
+        </li>
+
+      </ul>
+
+    </li>
+
+  </ul>
+
+</div>

@@ -27,10 +27,10 @@
           </li>
 
           <li id="fat-menu" class="dropdown">
-            <a href="#" class="dropdown-toggle"
-            data-toggle="dropdown">Inventory<b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Inventory<b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><%= link_to "Basic", object_types_path %></li>
+              <li><a href="/samples/tree">Samples</a></li>
+              <li><%= link_to "Containers", object_types_path %></li>
               <li class="divider"></li>
               <% SampleType.all.each do |st| %>
                 <% name = pluralize(2,st.name)[2..-1] %>
@@ -39,8 +39,6 @@
               <li class="divider"></li>             
               <li><%= link_to "Import Samples from Spreadsheet", spreadsheet_path %></li>
               <li><%= link_to "Samples by Project", project_url %></li>
-              <li><%= link_to "Sample Type Definitions", sample_types_path %></li>
-              <li><%= link_to "Location Wizards", wizards_path %></li>
             </ul>
           </li>
 
@@ -81,9 +79,6 @@
                 <li><%= link_to "Invoices", invoices_path %></li> 
                 <li><%= link_to "Settings", edit_user_path(current_user) %></li>
                 <li class="divider"></li>
-                <li><%= link_to "Users", users_path %></li>                
-                <li><%= link_to "Groups", groups_path %></li>
-                <li class="divider"></li>
                 <li>
                   <%= link_to "Sign out", signout_path, method: "delete" %>
                 </li>
@@ -101,14 +96,17 @@
               <ul class="dropdown-menu">
                     <li><%= link_to "New User", signup_path %></li>
                     <li><%= link_to "Change a Password", password_path %></li>
+                    <li><%= link_to "Users", users_path %></li>                
+                    <li><%= link_to "Groups", groups_path %></li>
+                    <li class="divider"></li>
                     <li><%= link_to "Budgets", budgets_path %></li>
                     <li><%= link_to "Invoices", invoices_path(:all=>true) %></li>
                     <li><%= link_to "Parameters", parameters_path %></li>                    
+                    <li class="divider"></li>
+                    <li><%= link_to "Sample Type Definitions", sample_types_path %></li>
+                    <li><%= link_to "Location Wizards", wizards_path %></li>                    
+                    <li class="divider"></li>
                     <li><%= link_to "Set Location", location_path %></li>
-                    <% if Rails.env != 'production' %>
-                      <li class="divider"></li>
-                      <li><%= link_to "Mirror Production", production_interface_path %></li>
-                    <% end %>
               </ul>
             </li>
 

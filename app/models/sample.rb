@@ -345,10 +345,10 @@ class Sample < ActiveRecord::Base
     "#{self.id}: #{self.name}"
   end
 
-  def as_json opts={}
-    j = super opts
-    j[:properties] = properties.as_json
-    j
-  end
+  # def as_json opts={}
+  #   j = super opts
+  #   j[:properties] = properties.as_json
+  #   j
+  # end
 
 end

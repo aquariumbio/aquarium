@@ -1,0 +1,58 @@
+<div ng-app="tree" class='sample-tree'>
+
+  <div id="tree-control" ng-controller='treeCtrl as tree'>
+
+    <%= render partial: "samples/tree_partials/sample" %>
+    <%= render partial: "samples/tree_partials/new_sample" %>
+
+    <div class='row-fluid'>
+
+      <div class='span3'>
+
+        <%= render partial: "samples/tree_partials/sample_navigator" %> 
+
+        <hr />
+
+        <div class='project-heading project-expander' ng-click="set_mode('new')">
+          <span>New Sample Input</span>        
+        </div>
+
+        <select ng-model="sample_type_choice" ng-init="sample_type_choice=1">
+          <option ng-repeat="st in sample_types" value="{{st.id}}">
+            {{st.name}}
+          </option>
+        </select><br />
+
+        <button class='btn btn-primary' ng-click="new_sample()">New</button>      
+
+      </div>
+
+      <div class='span9'>
+
+        <div ng-if="mode == 'new' && new_samples.length > 0">
+
+          <span>
+            <b>New sample(s) </b>
+            <button class='btn btn-mini btn-primary bigger'>Save</button>
+          </span>
+
+          <div class='sample-tree-list'>
+            <ul>
+              <li ng-repeat="sample in new_samples" ng-include="'new_sample'">
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div ng-if="mode == 'view' || new_samples.length == 0">
+          <%= render partial: "samples/tree_partials/sample_list" %>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

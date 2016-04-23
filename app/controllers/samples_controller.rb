@@ -220,6 +220,40 @@ class SamplesController < ApplicationController
 
   end
 
+  def tree
+  end
+
+  def all
+
+    sts = SampleType.includes(:samples).all
+
+    result = {}
+
+    sts.each { |st|
+      result[st.name] = st.samples.collect { |s|
+        "#{s.id}: #{s.name}"
+      }
+    }
+
+    render json: result
+
+  end
+
+  def projects
+    render json: {
+      user: Sample.where(user_id: current_user.id).uniq.pluck(:project).sort.collect { |p| { name: p, selected: false } },
+      all: Sample.uniq.pluck(:project).sort.collect { |p| { name: p, selected: false } }
+    }
+  end
+
+  def samples_for_tree
+    render json: Sample.includes(:sample_type).where(project: params[:project], sample_type_id: params[:sample_type_id].to_i).reverse
+  end
+
+  def subsamples
+    render json: Sample.find(params[:id]).properties
+  end
+
   def process_spreadsheet
 
     if !params[:spreadsheet]

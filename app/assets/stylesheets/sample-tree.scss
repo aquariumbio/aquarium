@@ -1,0 +1,134 @@
+.sample-tree {
+
+  .editable {
+    border: 1pt solid #efefef;
+    margin: 2px;
+    padding: 2px;
+    height: 14pt;
+  }
+
+  .long {
+    width: 300px;
+  }
+
+  .sample-type-name {
+    font-weight: bold;
+  }  
+
+  .sample-type-id {
+    
+  }    
+
+  .field-name {
+    display: inline-block;
+    width: 200px;
+    font-weight: bold;
+    color: #009;
+  }
+
+  .static-field-name {
+    display: inline-block;
+    width: 200px;
+    font-weight: bold;
+    color: #090;
+  }
+
+  .sub-field-name {
+    display: inline-block;
+    width: 200px;
+    font-weight: bold;
+    color: #900;
+  }  
+
+  .bigger {
+    margin: 4px;
+  }
+
+  .sample-list-name {
+    font-size: 14pt;
+    font-weight: bold;
+  }
+
+  .sample-list-description {
+    font-size: 14pt;
+  }
+
+  /*  http://cssdeck.com/labs/pure-css-tree-menu-framework */
+
+  .sample-tree-list {
+
+    ul {
+      margin:0 0 0 1em; /* indentation */
+      padding:0;
+      list-style:none;
+      position:relative;
+    }
+
+    ul:before {
+      content:"";
+      display:block;
+      width:0;
+      position:absolute;
+      top:0;
+      bottom:0;
+      left:0;
+      border-left:1px solid;
+    }
+
+    li {
+      margin:0;
+      padding:0 1.5em; /* indentation + .5em */
+      line-height:2em; /* default list item's `line-height` */
+      font-weight:bold;
+      position:relative;
+    }
+
+    li:before {
+      content:"";
+      display:block;
+      width:10px; /* same with indentation */
+      height:0;
+      border-top:1px solid;
+      margin-top:-1px; /* border top width */
+      position:absolute;
+      top:1em; /* (line-height/2) */
+      left:0;
+    }
+
+    li:last-child:before {
+      background:white; /* same with body background */
+      height:auto;
+      top:1em; /* (line-height/2) */
+      bottom:0;
+    }
+
+    li:last-child {
+      margin-bottom: 10px;
+    }
+
+  }
+
+  .project-list {
+    ul {
+      list-style:none;
+      margin-left: 22px;
+      li {
+        overflow: scroll;
+        margin-left: 0px;
+        position: relative;
+        overflow: scroll;        
+      }
+        overflow: scroll;
+    }    
+  }
+
+  .project-expander {
+    cursor: pointer;
+  }
+
+  .project-heading {
+    padding-bottom: 5px;
+    font-weight: bold;
+  }
+
+}

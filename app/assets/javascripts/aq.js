@@ -89,4 +89,79 @@ Aq.prototype.rand_string = function(n) {
   }).join('');
 }
 
+Aq.prototype.each = function(array,f) {
+
+  if ( array ) {
+    for ( var i=0; i<array.length; i++ ) {
+      f(array[i],i);
+    }
+  }
+  return this;
+}
+
+Aq.prototype.collect = function(array,f) {
+  var result = [];
+  if ( array ) {
+    for ( var i=0; i<array.length; i++ ) {
+      result.push(f(array[i],i));
+    }
+  }
+  return result;
+}
+
+Aq.prototype.where = function(array,f) {
+  var result = [];
+  if (array) {
+    for ( var i=0; i<array.length; i++ ) {
+      if ( f(array[i]) ) {
+        result.push(array[i]);
+      }
+    }
+  }
+  return result;
+}
+
+Aq.prototype.range = function(n) {
+  var result = [];
+  for ( var i=0; i<n; i++ ) {
+    result.push(i);
+  }
+  return result;
+}
+
+Aq.prototype.random_int = function(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+Aq.prototype.random_list = function(min_length,max_length,min_val,max_val) {
+  var len = this.random_int(min_length,max_length);
+  var that = this;
+  return this.collect ( this.range(len), function(i) {
+    return that.random_int(min_val,max_val);
+  });
+}
+
+Aq.prototype.matrix = function(n,m,el) {
+  var rows = [];
+  if ( !el ) {
+    el = null;
+  }
+  for ( var i=0; i<n; i++ ) {
+    var col = [];
+    for ( var j=0; j<m; j++ ) {
+      col.push(el);
+    }
+    rows.push(col);
+  }
+  return rows;
+}
+
+Aq.prototype.pluck = function(obj,fields) {
+  var result = {};
+  o.each(fields,function(f) {
+    result[f] = obj[f];
+  });
+  return result;
+}
+
 aq = new Aq();

@@ -9,7 +9,10 @@ class SampleTypesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @sample_types.collect { |st| st[:datatype] = st.datatype_hash; st } }
+      format.json { render json: @sample_types
+                                  .collect { |st| st[:datatype] = st.datatype_hash; st }
+                                  .sort { |a,b| a.name <=> b.name }
+                  }
     end
   end
 
