@@ -8,8 +8,6 @@
     w = angular.module('tree', []); 
   } 
 
-  var all_samples = {};
-
   w.controller('treeCtrl', [ '$scope', '$http', '$attrs', 'treeAjax', function ($scope,$http,$attrs,treeAjax) {
 
     // Initialization
@@ -24,12 +22,13 @@
     $scope.users = [];
     $scope.current = {};
     $scope.logins = [];
+    $scope.sample_names = {};
 
     $scope.samples_loaded = false;
     $scope.types_loaded = false;
     $scope.projects_loaded = false;
 
-    $scope.current_selection = { project: null, sample_type: null, loaded: false };
+    $scope.current_selection = { project: 'LABW16', sample_type: null, loaded: false };
 
     treeAjax.sample_types(function(data) {
       $scope.sample_types = data;
@@ -44,13 +43,13 @@
       $scope.current_user = current;
       aq.each($scope.users,function(user) {
         $scope.logins[user.id] = user.login;
-      })
+      });
     });
 
     $.ajax({
       url: '/samples/all'
-    }).done(function(samples) {
-      all_samples = samples;
+    }).done(function(sample_names) {
+      $scope.sample_names = sample_names;
       $scope.types_loaded = true;
     });    
 
@@ -70,29 +69,21 @@
       $scope.mode = 'new';
     }
 
-    $scope.new_sub_sample = function(sample,field,st_name) {
-      var st = aq.where($scope.sample_types,function(s) { return s.name == st_name })[0];   
-      field.sample = $scope.empty_sample(st);
-      field.sample.name = sample.name + "-" + field.name.toLowerCase() ;
-      field.sample.description = "The " + field.name.toLowerCase() + " for " + sample.name;
-    }
-
-    $scope.toggle_new_existing = function ( field ) {
-      if ( field.choice == 'existing' ) {
-        field.choice = 'new';
-        field.sample = null;
-      } else {
-        field.choice = 'existing';
-        field.sample = "";
-      }
+    $scope.new_sub_sample = function(sample,index,st_name) {
+      var st = $scope.sample_type_from_name(st_name);
+      var f = 'field'+index;
+      sample.copy[f].new = new Sample().empty(st,$scope.default_project());
+      sample.copy[f].new.edit = true;
+      sample.copy[f].new.copy.name = sample.name + "-" + sample.field_name(index).toLowerCase() ;
+      sample.copy[f].new.copy.description = "The " + sample.field_name(index).toLowerCase() + " for " + sample.name;
     }
 
     $scope.remove_subsample = function(field) {
-      field.sample = null;
+      field.new = null;
     }
 
-    $scope.new_subsample_button_class = function(field,st_name) {
-      if ( field.sample && field.sample.sample_type.name == st_name ) {
+    $scope.new_subsample_button_class = function(sample,st_name) {
+      if ( sample && sample.sample_type.name == st_name ) {
         return "btn btn-primary btn-mini bigger";
       } else {
         return "btn btn-mini bigger";        
@@ -124,10 +115,16 @@
       $scope.current_selection.loaded = false;
       $scope.current_selection.sample_type = st.id;
       treeAjax.samples($scope.current_selection.project,$scope.current_selection.sample_type,function(samples) {
+
+        var upgraded_samples = aq.collect(samples,function(raw_sample) {
+          return new Sample().from(raw_sample);
+        });
+
         $scope.samples[$scope.current_selection.project] = {};
-        $scope.samples[$scope.current_selection.project][$scope.current_selection.sample_type] = samples;
+        $scope.samples[$scope.current_selection.project][$scope.current_selection.sample_type] = upgraded_samples;
         $scope.current_selection.loaded = true;
       });
+
     }
 
     $scope.unselect_st = function(st) {
@@ -154,11 +151,14 @@
     }
 
     $scope.edit_sample = function(sample) {
-      sample.edit = true;
+
       sample.sample_type = $scope.sample_type_from_id(sample.sample_type_id);
+      sample.edit = true;
+      sample.prepare_copy();
+
     }
 
-    $scope.view_sample = function(sample) {
+    $scope.view_sample = function(sample) {      
       sample.edit = false;
     }    
 
@@ -172,13 +172,12 @@
 
     // Helper methods
 
-    $scope.empty_sample = function(st,name) {
-      return {
-        sample_type: st,
-        name: name ? name : "new-" + st.name.toLowerCase(),
-        description: "Description of new " + st.name.toLowerCase() + " here",
-        project: $scope.current_selection.project ? $scope.current_selection.project : $scope.projects[0].name
-      };
+    $scope.default_project = function() {
+      return $scope.current_selection.project ? $scope.current_selection.project : $scope.projects[0].name;
+    }
+
+    $scope.empty_sample = function(st) {
+      return new Sample().empty(st,$scope.default_project());
     }
 
     $scope.fields = function(sample_type) {
@@ -211,6 +210,12 @@
       })[0];
     }
 
+    $scope.sample_type_from_name = function(name) {
+      return aq.where($scope.sample_types,function(st) {
+        return name == st.name;
+      })[0];
+    }    
+
     $scope.login = function(id) {
       var users = aq.where($scope.users,function(user) {
         return user.id == id;
@@ -226,10 +231,10 @@
 
   w.directive("autocomplete", function() {
 
-    samples_for = function(types) {
+    samples_for = function(names,types) {
       var samples = [];
       aq.each(types,function(type) {
-        samples = samples.concat(all_samples[type])
+        samples = samples.concat(names[type])
       });
       return samples;
     }
@@ -240,7 +245,7 @@
       link: function($scope,$element,$attributes) {
         var types = $scope.autocomplete;
         $element.autocomplete({
-          source: samples_for(types),
+          source: samples_for($scope.$parent.sample_names,types),
           select: function(ev,ui) {
             $scope.ngModel = ui.item.value;
             $scope.$apply();

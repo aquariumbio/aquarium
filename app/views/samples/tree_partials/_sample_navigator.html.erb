@@ -13,15 +13,15 @@
             ng-if="project.name != current_selection.project"
             ng-click="select_project(project)">
         <i class='icon-folder-close' style="color: #eee"></i>
+        {{project.name}}
       </span>
 
       <span class="project-expander"
             ng-if="project.name == current_selection.project"
             ng-click="unselect_project(project)">
         <i class='icon-folder-open' style="color: #eee"></i>
+        {{project.name}}
       </span>
-
-      <span class="project-expander" ng-click="select_project(project)">{{project.name}}</span>
 
       <ul ng-show='project.name == current_selection.project'>
 

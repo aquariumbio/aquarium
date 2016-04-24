@@ -2,41 +2,20 @@
 
   <div id="tree-control" ng-controller='treeCtrl as tree'>
 
+    <!-- TEMPLATES -->
     <%= render partial: "samples/tree_partials/sample_router" %>
     <%= render partial: "samples/tree_partials/sample" %>
     <%= render partial: "samples/tree_partials/form" %>
 
     <div class='row-fluid'>
-
       <div class='span3 tree-nav'>
         <%= render partial: "samples/tree_partials/sample_navigator" %> 
         <%= render partial: "samples/tree_partials/new_sample_navigator" %>   
       </div>
-
       <div class='span9 viewer'>
-
-        <div ng-if="mode == 'new' && new_samples.length > 0">
-
-          <span>
-            <b>New sample(s) </b>
-            <a href="#" class='btn btn-mini btn-primary bigger' ng-click="save_new_samples()">Save New Sample(s)</a>
-          </span>
-
-          <div class='sample-tree-list'>
-            <ul>
-              <li ng-repeat="sample in new_samples" ng-include="'sample_form'">
-              </li>
-            </ul>
-          </div>
-
-        </div>
-
-        <div ng-if="mode == 'view' || new_samples.length == 0">
-          <%= render partial: "samples/tree_partials/sample_list" %>
-        </div>
-
+        <%= render partial: "samples/tree_partials/new_samples" %>
+        <%= render partial: "samples/tree_partials/samples" %>
       </div>
-
     </div>
 
   </div>
