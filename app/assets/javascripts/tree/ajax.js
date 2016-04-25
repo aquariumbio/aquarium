@@ -49,6 +49,12 @@
       });
     }
 
+    this.save_sample = function(sample,then) {
+      this.post('/tree/save',{ sample: sample },function(response) {
+        then(response.data);
+      });
+    }    
+
     this.user_info = function(then) {
       var that = this;
       this.get('/users.json',function(users_response) {

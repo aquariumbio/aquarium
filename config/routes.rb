@@ -6,7 +6,8 @@ Bioturk::Application.routes.draw do
   get '/tree/samples_for_tree',          to: 'tree#samples_for_tree'  
   get '/tree/sub/:id',                   to: 'tree#subsamples'
   post '/tree/save_new',                 to: 'tree#save_new'
-
+  post '/tree/save',                     to: 'tree#save'
+  
   resources :parameters
 
   get '/budgets/add/:bid/:uid/:quota',      to: 'budgets#add_user'

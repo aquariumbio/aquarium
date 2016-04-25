@@ -53,17 +53,23 @@ class TreeController < ApplicationController
     end
   end
 
-  def make_sample samp
+  def make_sample samp, is_new
 
     s = samp[:copy]
 
-    sample = Sample.new({
-      name: s[:name],
-      project: s[:project],
-      description: s[:description],
-      user_id: current_user.id,
-      sample_type_id: samp[:sample_type][:id]
-    })
+    if is_new
+      sample = Sample.new({
+        name: s[:name],
+        project: s[:project],
+        description: s[:description],
+        user_id: current_user.id,
+        sample_type_id: samp[:sample_type][:id]
+      })
+    else 
+      sample = Sample.find(samp[:id])
+      sample.project = s[:project]
+      sample.description = s[:description]
+    end
 
     (1..8).each do |i|
 
@@ -72,11 +78,15 @@ class TreeController < ApplicationController
       if s[f].respond_to? :has_key?
 
         if s[f][:choice] == 'existing'
-          if s[f][:existing]
+          if s[f][:existing] && s[f][:existing] != ""
             subsample_name = sample_name_from_identifier(s[f][:existing])
+            unless Sample.find_by_name(subsample_name)
+              @errors << "Could not find sample reference '#{subsample_name}' in #{s[:name]}."
+              raise ActiveRecord::Rollback
+            end
             sample[f] = subsample_name
           else
-            sampe[f] = ""
+            sample[f] = ""
           end
         else # new
           sample[f] = s[f][:new][:name]
@@ -92,17 +102,17 @@ class TreeController < ApplicationController
 
   end
 
-  def save_new_aux samp
+  def save_aux samp, is_new=false
 
     (1..8).each do |i|
       f = samp[:copy]["field#{i}"]
       if f.respond_to?(:has_key?) && f[:new]
-        s = save_new_aux f[:new]
+        s = save_aux f[:new], true
         f[:new][:name] = s.name
       end
     end
 
-    sample = make_sample samp
+    sample = make_sample samp, is_new
     sample.save
 
     unless sample.errors.empty? && @errors.length == 0
@@ -125,7 +135,7 @@ class TreeController < ApplicationController
     begin
       Sample.transaction do
         params[:new_samples].each do |samp|
-          save_new_aux samp
+          save_aux samp, true
         end
       end
     rescue Exception => e
@@ -135,6 +145,28 @@ class TreeController < ApplicationController
         render json: { errors: @errors }
       else
         render json: { samples: @samples }
+      end
+    end
+
+  end
+
+  def save
+
+    @errors = []
+    @samples = []
+    sample = nil
+
+    begin
+      Sample.transaction do
+        sample = save_aux params[:sample], false
+      end
+    rescue Exception => e
+      render json: { errors: [ e.to_s, e.backtrace[0..5].join(", ") ] }
+    else
+      if @errors.length > 0 
+        render json: { errors: @errors }
+      else
+        render json: { sample: sample }
       end
     end
 

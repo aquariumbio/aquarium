@@ -186,19 +186,30 @@
           $scope.new_samples = [];
           $scope.messages = aq.collect(response.samples,function(s) { return "Created sample " + s.id + ": " + s.name; });
           upgraded_samples = aq.collect(response.samples,function(raw_sample) {
-            console.log(raw_sample)
             return new Sample().from(raw_sample);
           });
-          console.log([$scope.recent_samples,upgraded_samples]);
           $scope.recent_samples = $scope.recent_samples.concat(upgraded_samples);
-          console.log([$scope.recent_samples,upgraded_samples]);          
           $scope.set_mode('recent');
         }
       });
     }
 
     $scope.save_sample = function(sample) {
-      console.log("SAVE SAMPLE: " + sample);
+      treeAjax.save_sample(sample,function(response) {
+        if ( response.errors ) {
+          $scope.errors = response.errors;
+        } else {
+          $scope.messages = [ "Saved changes to sample " + sample.id + ": " + sample.name ]
+          var new_sample = new Sample().from(response.sample);
+          sample.edit = false;
+          $scope.editing = false;
+          sample.project = new_sample.project;
+          sample.description = new_sample.description;
+          for ( var i=1; i<=8; i++ ) {
+            sample['field'+i] = new_sample['field'+i]
+          }
+        }
+      });
     }
 
     $scope.dismiss_errors = function() {
