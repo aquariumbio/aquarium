@@ -35,6 +35,9 @@
 
   .sample-id {
     font-weight: bold;
+    a {
+      color: black;
+    }
   }  
 
   .sample-name {
@@ -51,6 +54,10 @@
   .field-value {
     font-weight: normal;
     font-family: monospace;
+  }
+
+  .static-field-value {
+    font-weight: normal;   
   }
 
   .mono {

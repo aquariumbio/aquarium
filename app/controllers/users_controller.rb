@@ -107,7 +107,7 @@ class UsersController < ApplicationController
         rid = retired ? retired.id : -1
         @users = ((User.includes(:tasks).select{|u| !u.member? rid }).sort { |a,b| a[:login] <=> b[:login] }).paginate(page: params[:page], :per_page => 15)        
       }
-      format.json { render json: User.all }
+      format.json { render json: User.includes(memberships: :group).all }
     end
 
   end

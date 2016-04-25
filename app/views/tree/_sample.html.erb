@@ -2,7 +2,7 @@
 
    <span class='sample-header'>
 
-     <span class='sample-id'>{{sample.id}}:</span>
+     <span class="sample-id"><a href="/samples/{{sample.id}}">{{sample.id}}</a>:</span>
 
      <span class='sample-name'>{{sample.name}}</span>
 
@@ -34,8 +34,13 @@
        <ul>
 
          <li>
+           <span class='static-field-name'>Description:</span> 
+           <span class='static-field-value'>{{sample.description}}</span>
+         </li>
+
+         <li>
            <span class='static-field-name'>Created:</span> 
-           {{sample.created_at|date}}
+           <span class='static-field-value'>{{sample.created_at|date}}</span>
          </li>
 
          <!-- STRING AND NUMBER FIELDS -->

@@ -3,9 +3,9 @@
   var w;
 
   try {
-    w = angular.module('tree'); 
+    w = angular.module('treeview'); 
   } catch (e) {
-    w = angular.module('tree', []); 
+    w = angular.module('treeview', []); 
   } 
 
   w.controller('treeCtrl', [ '$scope', '$http', '$attrs', 'treeAjax', function ($scope,$http,$attrs,treeAjax) {
@@ -39,7 +39,7 @@
       aq.each($scope.sample_types,function(st) {
         st.fields = $scope.fields(st);
       });
-      $scope.samples_loaded = true;
+      $scope.types_loaded = true;
     });
 
     treeAjax.user_info(function(users,current) {
@@ -54,7 +54,7 @@
       url: '/tree/all'
     }).done(function(sample_names) {
       $scope.sample_names = sample_names;
-      $scope.types_loaded = true;
+      $scope.samples_loaded = true;
     });    
 
     $.ajax({
