@@ -22,7 +22,8 @@
 
      <a href="#" class="btn btn-mini"
            ng-if="sample.open && !no_edit"
-           ng-click="edit_sample(sample)">
+           ng-disabled="editing"
+           ng-click="editing || edit_sample(sample)">
        Edit
      </a>     
 
@@ -65,11 +66,18 @@
 
            <span class='sub-field-name'>{{field.name}}: </span> 
 
-           <span ng-if="sample.subsamples[field.name]"
+           <span ng-if="sample.subsamples[field.name] && !sample.subsamples[field.name].id">-</span>
+
+           <span ng-if="sample.subsamples[field.name] && sample.subsamples[field.name].id && !sample.subsamples[field.name].edit"
                  ng-include="'sample'"
-                 ng-init="sample = sample.subsamples[field.name]; no_edit=true"></span>
+                 ng-init="sample = sample.subsamples[field.name]"></span>
+
+           <span ng-if="sample.subsamples[field.name] && sample.subsamples[field.name].edit"
+                 ng-include="'sample_form'"
+                 ng-init="sample = sample.subsamples[field.name]"></span>                 
 
          </li>
+
        </ul>
 
      </div>

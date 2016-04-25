@@ -1,0 +1,19 @@
+<div class='alert alert-error' ng-if="errors.length > 0">
+  <button type="button" class="close" ng-click="dismiss_errors()">&times;</button>
+  <h4>Errors</h4>
+  <ul>
+    <li ng-repeat="error in errors">
+      {{error}}
+    </li>
+  </ul>
+</div>
+
+<div class='alert alert-info' ng-if="messages.length > 0">
+  <button type="button" class="close" ng-click="dismiss_messages()">&times;</button>
+  <h4>Messages</h4>
+  <ul>
+    <li ng-repeat="message in messages">
+      {{message}}
+    </li>
+  </ul>
+</div>

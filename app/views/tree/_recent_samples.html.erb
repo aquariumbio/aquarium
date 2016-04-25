@@ -1,0 +1,17 @@
+<div ng-if="mode == 'recent'">
+
+  <div class='sample-list-header'>
+    <span class="sample-list-name">
+      Recently Created Samples
+    </span>
+  </div>
+
+  <div class='sample-tree-list'>
+    <ul>
+      <li ng-repeat="sample in recent_samples"
+          ng-include="'sample_router'">
+      </li>
+    </ul>
+  </div>
+
+</div>

@@ -1,0 +1,25 @@
+<div ng-app="tree" class='sample-tree'>
+
+  <div id="tree-control" ng-controller='treeCtrl as tree'>
+
+    <!-- TEMPLATES -->
+    <%= render partial: "sample_router" %>
+    <%= render partial: "sample" %>
+    <%= render partial: "form" %>
+
+    <div class='row-fluid'>
+      <div class='span3 tree-nav'>
+        <%= render partial: "sample_navigator" %> 
+        <%= render partial: "new_sample_navigator" %>   
+      </div>
+      <div class='span9 viewer'>
+        <%= render partial: "messages" %>
+        <%= render partial: "new_samples" %>
+        <%= render partial: "samples" %>
+        <%= render partial: "recent_samples" %>        
+      </div>
+    </div>
+
+  </div>
+
+</div>

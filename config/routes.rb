@@ -1,10 +1,11 @@
 Bioturk::Application.routes.draw do
 
-  get '/samples/tree',                      to: 'samples#tree'
-  get '/samples/all',                       to: 'samples#all'  
-  get '/samples/projects',                  to: 'samples#projects'    
-  get '/samples/samples_for_tree',          to: 'samples#samples_for_tree'  
-  get '/samples/sub/:id',                   to: 'samples#subsamples'
+  get '/tree',                           to: 'tree#tree'
+  get '/tree/all',                       to: 'tree#all'  
+  get '/tree/projects',                  to: 'tree#projects'    
+  get '/tree/samples_for_tree',          to: 'tree#samples_for_tree'  
+  get '/tree/sub/:id',                   to: 'tree#subsamples'
+  post '/tree/save_new',                 to: 'tree#save_new'
 
   resources :parameters
 

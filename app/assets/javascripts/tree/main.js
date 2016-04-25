@@ -19,16 +19,20 @@
     $scope.projects = {};    
     $scope.project_choice = "user";
     $scope.mode = "view";
+    $scope.editing = false;
     $scope.users = [];
     $scope.current = {};
     $scope.logins = [];
     $scope.sample_names = {};
+    $scope.errors = [];
+    $scope.messages = [];
+    $scope.recent_samples = [];
 
     $scope.samples_loaded = false;
     $scope.types_loaded = false;
     $scope.projects_loaded = false;
 
-    $scope.current_selection = { project: 'LABW16', sample_type: null, loaded: false };
+    $scope.current_selection = { project: null, sample_type: null, loaded: false };
 
     treeAjax.sample_types(function(data) {
       $scope.sample_types = data;
@@ -47,19 +51,19 @@
     });
 
     $.ajax({
-      url: '/samples/all'
+      url: '/tree/all'
     }).done(function(sample_names) {
       $scope.sample_names = sample_names;
       $scope.types_loaded = true;
     });    
 
     $.ajax({
-      url: '/samples/projects'
+      url: '/tree/projects'
     }).done(function(plist) {
       $scope.project_info = plist;
       $scope.projects = $scope.project_info.user;
       $scope.projects_loaded = true;
-    });        
+    });
 
     // Button methods
 
@@ -73,9 +77,9 @@
       var st = $scope.sample_type_from_name(st_name);
       var f = 'field'+index;
       sample.copy[f].new = new Sample().empty(st,$scope.default_project());
-      sample.copy[f].new.edit = true;
-      sample.copy[f].new.copy.name = sample.name + "-" + sample.field_name(index).toLowerCase() ;
-      sample.copy[f].new.copy.description = "The " + sample.field_name(index).toLowerCase() + " for " + sample.name;
+      //sample.copy[f].new.edit = true;
+      sample.copy[f].new.copy.name = sample.copy.name + "-" + sample.field_name(index).toLowerCase() ;
+      sample.copy[f].new.copy.description = "The " + sample.field_name(index).toLowerCase() + " for " + sample.copy.name;
     }
 
     $scope.remove_subsample = function(field) {
@@ -114,13 +118,13 @@
       $scope.mode = 'view';
       $scope.current_selection.loaded = false;
       $scope.current_selection.sample_type = st.id;
+      $scope.samples[$scope.current_selection.project] = {};
       treeAjax.samples($scope.current_selection.project,$scope.current_selection.sample_type,function(samples) {
 
         var upgraded_samples = aq.collect(samples,function(raw_sample) {
           return new Sample().from(raw_sample);
         });
 
-        $scope.samples[$scope.current_selection.project] = {};
         $scope.samples[$scope.current_selection.project][$scope.current_selection.sample_type] = upgraded_samples;
         $scope.current_selection.loaded = true;
       });
@@ -140,35 +144,70 @@
     }
 
     $scope.toggle_sample = function(sample) {
+
       if ( sample.open ) {
         sample.open = false;
       } else {
         treeAjax.subsamples(sample,function(data) {
-          sample.subsamples = data;
-          sample.open = true;     
+          var key;
+          sample.subsamples = {};
+          for ( key in data ) {
+            if ( typeof data[key] == "object" ) {
+              sample.subsamples[key] = new Sample().from(data[key]);              
+            } else {
+              sample.subsamples[key] = data[key];
+            }
+          }
+          sample.open = true;
         })
       }
+
     }
 
     $scope.edit_sample = function(sample) {
-
       sample.sample_type = $scope.sample_type_from_id(sample.sample_type_id);
       sample.edit = true;
+      $scope.editing = true;
       sample.prepare_copy();
-
     }
 
     $scope.view_sample = function(sample) {      
       sample.edit = false;
+      $scope.editing = false;
     }    
 
     $scope.save_new_samples = function() {
       console.log("SAVE " + $scope.new_samples.length + " SAMPLE(S) FROM FORM.");
+      $scope.errors = [];
+      treeAjax.save_new_samples($scope.new_samples,function(response) {
+        if ( response.errors ) {
+          $scope.errors = response.errors;
+        } else {
+          $scope.new_samples = [];
+          $scope.messages = aq.collect(response.samples,function(s) { return "Created sample " + s.id + ": " + s.name; });
+          upgraded_samples = aq.collect(response.samples,function(raw_sample) {
+            console.log(raw_sample)
+            return new Sample().from(raw_sample);
+          });
+          console.log([$scope.recent_samples,upgraded_samples]);
+          $scope.recent_samples = $scope.recent_samples.concat(upgraded_samples);
+          console.log([$scope.recent_samples,upgraded_samples]);          
+          $scope.set_mode('recent');
+        }
+      });
     }
 
     $scope.save_sample = function(sample) {
       console.log("SAVE SAMPLE: " + sample);
     }
+
+    $scope.dismiss_errors = function() {
+      $scope.errors = [];
+    }
+
+    $scope.dismiss_messages = function() {
+      $scope.messages = [];
+    }    
 
     // Helper methods
 

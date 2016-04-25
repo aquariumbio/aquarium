@@ -7,14 +7,24 @@
      <span  class='sample-type-name' ng-if="sample.edit">
        {{sample.sample_type.name}}
        {{sample.id}}:
-       </span> 
-     <input class='editable' ng-model="sample.copy.name" ></input>
-     <a href="#" ng-if="!sample.edit" ng-click='remove_sample(sample)'><i class='icon-remove' ng-if="!no_remove"></i></a>
-     <a href="#" ng-if="sample.edit && !no_cancel" ng-click='view_sample(sample)'class='btn btn-mini'>Cancel</a>
-     <a href="#" ng-if="sample.edit && !no_cancel" ng-click='save_sample(sample)'class='btn btn-mini btn-primary'>Save</a>     
-   </div>
+     </span> 
+ 
+     <span class='sample-name' ng-if="sample.edit">{{sample.name}}</span>
+     <input class='editable' ng-model="sample.copy.name" ng-if="!sample.edit"></input>     
+ 
+     <a href="#" ng-if="!sample.edit" ng-click='remove_sample(sample)'>
+       <i class='icon-remove' ng-if="!no_remove"></i>
+     </a>
 
-   <!-- pre class='little'>{{sample.subsamples|json}}</pre -->
+     <a href="#" ng-if="sample.edit && !no_cancel" ng-click='view_sample(sample)'class='btn btn-mini'>
+       Cancel
+     </a>
+
+     <a href="#" ng-if="sample.edit && !no_cancel" ng-click='save_sample(sample)'class='btn btn-mini btn-primary'>
+       Save
+     </a>
+
+   </div>
 
    <!-- FIELDS -->
 

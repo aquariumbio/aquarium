@@ -48,7 +48,7 @@ Sample.prototype.prepare_copy = function() {
 
 Sample.prototype.subsample_identifier = function(i) {
   var ss = this.subsamples[this.field_name(i)];
-  if ( ss ) {
+  if ( ss && ss.id ) {
     return ss.id + ": " + ss.name;
   } else {
     return "";
