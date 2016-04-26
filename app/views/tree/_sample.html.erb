@@ -21,7 +21,7 @@
      </span>
 
      <a href="#" class="btn btn-mini"
-           ng-if="sample.open && !no_edit"
+           ng-if="sample.open && !no_edit && allowed(sample)"
            ng-disabled="editing"
            ng-click="editing || edit_sample(sample)">
        Edit

@@ -27,6 +27,7 @@
     $scope.errors = [];
     $scope.messages = [];
     $scope.recent_samples = [];
+    $scope.sample_type_choice = {};
 
     $scope.samples_loaded = false;
     $scope.types_loaded = false;
@@ -40,6 +41,7 @@
         st.fields = $scope.fields(st);
       });
       $scope.types_loaded = true;
+      $scope.sample_type_choice = $scope.sample_types[0];
     });
 
     treeAjax.user_info(function(users,current) {
@@ -68,8 +70,7 @@
     // Button methods
 
     $scope.new_sample = function() {
-      var st = aq.where($scope.sample_types,function(s) { return s.id == $scope.sample_type_choice })[0];
-      $scope.new_samples.push($scope.empty_sample(st));
+      $scope.new_samples.push($scope.empty_sample($scope.sample_type_choice));
       $scope.mode = 'new';
     }
 
@@ -275,6 +276,14 @@
       } else {
         return "unknown";
       }
+    }
+
+    $scope.allowed = function(sample) {
+      var admin = aq.where($scope.current_user.groups,function(g) {
+        return g.name == 'admin';
+      });
+      console.log([admin,$scope.current_user.id, sample.user_id]);
+      return admin.length > 0 || $scope.current_user.id == sample.user_id;
     }
 
   }]);

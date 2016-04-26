@@ -2,10 +2,11 @@
   <span>New Sample(s)</span>        
 </div>
 
-<select ng-model="sample_type_choice" ng-init="sample_type_choice=1">
-  <option ng-repeat="st in sample_types" value="{{st.id}}">
-    {{st.name}}
-  </option>
-</select><br />
+<select ng-model="sample_type_choice" 
+        ng-options="st.name for st in sample_types track by st.id" 
+        class="form-control">
+</select>
+
+<br />
 
 <button class='btn btn-primary' ng-click="new_sample()">New</button>  
