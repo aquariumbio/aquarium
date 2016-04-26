@@ -1,5 +1,7 @@
 class TreeController < ApplicationController
 
+  before_filter :signed_in_user
+
   def tree
   end
 
