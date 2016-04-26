@@ -1,4 +1,4 @@
-<footer class="footer" style='padding: 0px; right:0; margin: 0; border: 0''>
+<footer class="footer no-print" style='padding: 0px; right:0; margin: 0; border: 0'>
   <p style='padding: 0px; margin: 0 10px 0 0; float: right'>
     <% if cookies[:location] %>
       <span class='location'><%= cookies[:location] %></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
@@ -19,6 +19,6 @@
 }
 </style>
 
-<footer class="footer" style='  z-index: -2 !important;'>
+<footer class="footer no-print" style='  z-index: -2 !important;'>
   <div id='login'><%= current_user ? current_user.login : '' %></div>
 </footer>

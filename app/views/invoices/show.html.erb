@@ -1,5 +1,5 @@
 <h1>
-  Invoice for <%= @date.strftime("%B %Y") %>  
+  UW BIOFAB: Invoice for <%= @date.strftime("%B %Y") %>  
 </h1>
 
 <div class='container row-fluid well' style='width: 90%'>
@@ -9,9 +9,7 @@
     <p><b>User</b>: <%= @invoice.user.name %> (<%= link_to @invoice.user.login, @invoice.user %>)<br />
        <b>Budget</b>: <%= link_to @invoice.budget.name, @invoice.budget %><br />
        <b>Contact</b>: <%= @invoice.budget.contact %> (<%= @invoice.budget.email %>)<br />
-       <b>Contact phone</b>: <%= @invoice.budget.phone %> <br />       
-
-
+       <b>Contact phone</b>: <%= @invoice.budget.phone %> <br />    
 
   </div>
 
@@ -50,6 +48,8 @@
   </div>
 
 </div>
+
+  <p>Please contact <b>Amanda McKraken</b> (mccracken1029@gmail.com) regarding payment and questions about this invoice.</p> 
 
 <%= render partial: 'details' %>
 
