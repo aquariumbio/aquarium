@@ -145,7 +145,7 @@
 
     li {
       margin:0;
-      padding:0 1.5em; /* indentation + .5em */
+      padding: 0 0 0 1.5em; /* indentation + .5em */
       line-height:1.75em; /* default list item's `line-height` */
       font-weight:bold;
       position:relative;
@@ -171,7 +171,7 @@
     }
 
     li:last-child {
-      margin-bottom: 5px;
+      margin-bottom: 2px;
     }
 
   }
