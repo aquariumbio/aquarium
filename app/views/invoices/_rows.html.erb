@@ -1,12 +1,16 @@
 <table class='table table-condensed' style='table-layout: fixed;'>
 
   <tr>
+    <th style="width: 5%">Id</th>
     <th>Date</th>
     <th>Task Status</th>    
-    <th style='width: 35%'>Description</th>
+    <th style='width: 35%'>Description / Notes</th>
     <th>Amount</th>
     <th>Operating Cost</th>        
-    <th>Subtotal</th>        
+    <th>Subtotal</th>    
+    <% if current_user && current_user.is_admin %>
+      <th style="width: 5%"></th>    
+    <% end %>
   </tr>
 
 
@@ -14,7 +18,11 @@
 
     <tr>
 
-      <td><%= row.created_at.strftime("%b %d, %Y") %></td>
+      <td><b><%= row.id %></b></td>
+
+      <td>
+        <%= row.created_at.strftime("%b %d, %Y") %>
+      </td>
 
       <td>
           <%= row.description.split(':').last %>
@@ -23,16 +31,30 @@
       <td>
           <% if row.category == "labor" %>
             <%= row.category %>: <%= (row.amount / row.labor_rate).round(3) %> min @ $<%= row.labor_rate %>/min
-          <% else %>
+          <% elsif row.category != "credit" %>
             <%= row.category %>
           <% end %>
+
+        <ul>
+          <% row.first_row_logs.each do |al| %>
+            <% if al.row2 %>
+              <li><%= link_to al.user.login, al.user %>: <%= al.note %>
+                  See transaction <%= al.second_row.id %> in your <%= al.second_row.created_at.strftime("%B, %Y") %> statement.
+              </li>            
+            <% else %>
+              <li><%= link_to al.user.login, al.user %>: <%= al.note %> (<%= al.created_at.strftime("%b %d, %Y") %>)</li>
+            <% end %>
+          <% end %>
+          <% row.second_row_logs.each do |al| %>
+            <li><%= link_to al.user.login, al.user %>: <%= al.note %> (<%= al.created_at.strftime("%b %d, %Y") %>)</li>
+          <% end %>          
+        </ul>
+
       </td>      
 
       <td>
         <% if row.transaction_type == "debit" %>
           <%= number_to_currency(row.amount) %> 
-        <% else %>
-          <b>+<%= number_to_currency(row.amount) %></b>
         <% end %>
       </td>  
 
@@ -45,8 +67,20 @@
       <td>
         <% if row.transaction_type == "debit" %>
           <%= number_to_currency(row.amount*(1.0+row.markup_rate)) %>
+        <% else %>
+          <b><%= number_to_currency(row.amount) %> CREDIT</b>
         <% end %>
-      </td>        
+      </td>    
+
+      <% if current_user && current_user.is_admin %>
+        <td>
+          <input type='checkbox' 
+                 class='chooser pull-right' 
+                 data-row-id='<%= row.id %>' 
+                 data-task-id='<%= row.task_id %>'
+                 data-row-amount='<%= row.amount*(1.0+row.markup_rate) %>'>    
+        </td>
+      <% end %>
 
     </tr>
 
@@ -60,6 +94,9 @@
     <td></td>            
     <td><b>Task Total</b></td>
     <td><b><%= number_to_currency(Account.total rows,true) %></b></td>
+    <% if current_user && current_user.is_admin %>    
+      <td></td>
+    <% end %>
 
   </tr>
 

@@ -4,7 +4,9 @@
 
   <% if tprows.length > 0 %>
 
-    <h3><%= tp.name %>: <%= number_to_currency(Account.total tprows) %></h3>
+    <h3>
+      <%= tp.name %>: <%= number_to_currency(Account.total tprows) %>
+    </h3>
 
     <% task_groups = tprows.group_by { |r| r.task_id } %>
 
@@ -12,7 +14,17 @@
 
       <div style='margin: 0 50px 0 50px'>
 
-        <h4>Task <a href="/tasks/<%= task_id %>"><%= task_id %></a>: <%= Task.find(task_id).name %></h4>
+        <h4>
+
+          Task <a href="/tasks/<%= task_id %>"><%= task_id %></a>: <%= Task.find(task_id).name %>
+
+          <% if current_user && current_user.is_admin %>
+            <button class='btn btn-mini pull-right action no-print' onclick="choose_all(<%= task_id %>)">All</button>
+            <button class='btn btn-mini btn-primary pull-right action no-print' onclick="note(<%= task_id %>)">Note</button>
+            <button class='btn btn-mini btn-success pull-right action no-print' onclick="credit(<%= task_id %>)">Credit</button>
+          <% end %>      
+
+        </h4>
 
         <%= render partial: 'rows', locals: { rows: rows } %>
 

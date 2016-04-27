@@ -109,6 +109,16 @@ Aq.prototype.collect = function(array,f) {
   return result;
 }
 
+Aq.prototype.sum = function(array,f) {
+  var result = 0;
+  if ( array ) {
+    for ( var i=0; i<array.length; i++ ) {
+      result += f(array[i],i);
+    }
+  }
+  return result;
+}
+
 Aq.prototype.where = function(array,f) {
   var result = [];
   if (array) {
@@ -162,6 +172,10 @@ Aq.prototype.pluck = function(obj,fields) {
     result[f] = obj[f];
   });
   return result;
+}
+
+Aq.prototype.currency = function(num) {
+  return '$' + parseFloat(num, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
 }
 
 aq = new Aq();

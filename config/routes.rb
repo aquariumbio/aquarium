@@ -14,6 +14,8 @@ Bioturk::Application.routes.draw do
   get '/budgets/remove/:bid/:uid',          to: 'budgets#remove_user'  
   resources :budgets
 
+  post '/invoices/note',                   to: "invoices#note"
+  post '/invoices/credit',                 to: "invoices#credit"  
   get '/invoices/year/:year',              to: 'invoices#index'    
   resources :invoices
 

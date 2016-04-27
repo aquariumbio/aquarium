@@ -11,7 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160412010529) do
+ActiveRecord::Schema.define(:version => 20160427043546) do
+
+  create_table "account_logs", :force => true do |t|
+    t.integer  "row1"
+    t.integer  "row2"
+    t.integer  "task_id"
+    t.integer  "user_id"
+    t.text     "note"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "account_logs", ["task_id"], :name => "index_account_log_associations_on_task_id"
+  add_index "account_logs", ["user_id"], :name => "index_account_log_associations_on_user_id"
 
   create_table "accounts", :force => true do |t|
     t.string   "transaction_type"

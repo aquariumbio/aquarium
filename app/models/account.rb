@@ -4,8 +4,10 @@ class Account < ActiveRecord::Base
   belongs_to :budget
   belongs_to :task
   belongs_to :job
+  has_many :first_row_logs,  class_name: "AccountLog", foreign_key: :row1
+  has_many :second_row_logs, class_name: "AccountLog", foreign_key: :row2
 
-  attr_accessible :user_id, :budget_id, :amount, :category, :transaction_type, :description, :job_id, :task_id
+  attr_accessible :user_id, :budget_id, :amount, :category, :transaction_type, :description, :job_id, :task_id, :labor_rate, :markup_rate
 
   validates :user,  presence: true
   validates :budget,  presence: true 
@@ -13,7 +15,7 @@ class Account < ActiveRecord::Base
 
   validates_numericality_of :amount, :greater_than_or_equal_to => 0.0
   validates_inclusion_of :transaction_type, :in => [ "credit", "debit" ]
-  validates_inclusion_of :category, :in => [ nil, "materials", "labor", "overhead" ]
+  validates_inclusion_of :category, :in => [ nil, "materials", "labor", "overhead", "credit" ]
 
   after_create do |row|
     row.labor_rate = Parameter.get_float("labor rate")
@@ -24,7 +26,11 @@ class Account < ActiveRecord::Base
   def self.total rows, markup=true
     amounts = rows.collect { |row| 
       m = markup ? (row.markup_rate+1.0) : 1.0
-      row.transaction_type == "credit" ? -row.amount*m : row.amount*m
+      if row.transaction_type == "credit" 
+        -row.amount
+      else
+        row.amount*m
+      end
     }
     amounts.inject(0) { |sum,x| sum+x }
   end
