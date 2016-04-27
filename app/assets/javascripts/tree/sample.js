@@ -2,6 +2,7 @@ function Sample(sample_type) {
   this.copy = {};
   this.edit = false;
   this.sample_type = sample_type;
+  this.data = {};
   return this;
 }
 
@@ -9,6 +10,11 @@ Sample.prototype.from = function(sample) {
 
   for (var key in sample) { 
     this[key] = sample[key];
+  }
+  if ( typeof this.data == "string") {
+    this.data = JSON.parse(this.data);
+  } else if ( this.data == null ) {
+    this.data = {};
   }
   return this;
 

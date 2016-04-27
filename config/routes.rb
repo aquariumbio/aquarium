@@ -5,6 +5,7 @@ Bioturk::Application.routes.draw do
   get '/tree/projects',                  to: 'tree#projects'    
   get '/tree/samples_for_tree',          to: 'tree#samples_for_tree'  
   get '/tree/sub/:id',                   to: 'tree#subsamples'
+  get '/tree/annotate/:id/:note',        to: 'tree#annotate'  
   post '/tree/save_new',                 to: 'tree#save_new'
   post '/tree/save',                     to: 'tree#save'
   

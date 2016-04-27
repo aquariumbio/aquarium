@@ -221,6 +221,31 @@
       $scope.messages = [];
     }    
 
+    $scope.noteBlur = function(sample) {
+      var note;
+
+      if ( sample.data.note == "" ) {
+        note = "_EMPTY_"
+      } else {
+        note = sample.data.note;
+      }
+
+      $http({
+        url: '/tree/annotate/' + sample.id + '/' + note + '.json',
+        method: "GET",
+        responseType: "json"
+      });
+
+    }    
+
+    $scope.noteColor = function(note) {
+      if ( note ) {
+        return { background: "#" + string_to_color(note,40) }
+      } else {
+        return {}
+      }
+    }  
+
     // Helper methods
 
     $scope.default_project = function() {

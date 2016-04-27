@@ -44,6 +44,16 @@
     font-weight: normal !important;
   }    
 
+  .tag {
+    outline: 1pt solid #efefef;
+    color: #abc;
+    width: 50px;
+    height: 12pt;
+    padding: 0 0 0 2px;
+    margin: 0;
+    color: black;
+  }
+
   .field-name {
     display: inline-block;
     width: 200px;

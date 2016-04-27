@@ -174,4 +174,17 @@ class TreeController < ApplicationController
 
   end
 
+  def annotate
+    s = Sample.find(params[:id])
+    begin
+      data = JSON.parse(s.data)
+    rescue Exception => e
+      data = {}
+    end
+    data[:note] = (params[:note] == "_EMPTY_" ? "" : params[:note])
+    s.data = data.to_json
+    s.save
+    render json: s
+  end
+
 end

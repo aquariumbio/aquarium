@@ -23,9 +23,15 @@
      <a href="#" class="btn btn-mini"
            ng-if="sample.open && !no_edit && allowed(sample)"
            ng-disabled="editing"
-           ng-click="editing || edit_sample(sample)">
+           ng-click="editing || edit_sample(sample)"
+           ng-model="sample.data.note">
        Edit
      </a>     
+
+     <input class="tag pull-right"
+           ng-model="sample.data.note"
+            ng-blur="noteBlur(sample)"
+            ng-style="noteColor(sample.data.note)"></input>
 
    </span>
 
