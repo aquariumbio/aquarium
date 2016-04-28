@@ -23,36 +23,36 @@ module CostModel
           labor: 0.0
         }
 
-      when ["get_primer","received and stocked"] then basic(:primer_ids,0.05,3.6)
+      when ["get_primer","received and stocked"] then basic(:primer_ids,0.09,3.5)
 
       # FRAGMENT CONSTRUCTION ##############################################################################
 
-      when ["PCR","pcr"]          then basic(:fragments,1.26,4.6)
-      when ["run_gel","gel run"]  then basic(:fragments,0.31,2.0)
-      when ["cut_gel","gel cut"]  then basic(:fragments,0.10,2.0)
+      when ["PCR","pcr"]          then basic(:fragments,0.94,5.0)
+      when ["run_gel","gel run"]  then basic(:fragments,0.31,2.7)
+      when ["cut_gel","gel cut"]  then basic(:fragments,0.10,2.1)
       when ["cut_gel","failed"]   then nothing
-      when ["purify_gel","done"]  then basic(:fragments,1.98,7.1)
+      when ["purify_gel","done"]  then basic(:fragments,1.99,7.5)
 
       # GIBSON ASSEMBLY ####################################################################################
 
-      when ["gibson","gibson"]                           then basic(:default,1.85,5.2)
-      when ["ecoli_transformation","transformed"]        then basic(:default,1.80,3.0)
-      when ["plate_ecoli_transformation","plated"]       then basic(:default,0.77,1.9)
+      when ["gibson","gibson"]                           then basic(:default,2.85,5.3)
+      when ["ecoli_transformation","transformed"]        then basic(:default,1.72,3.3)
+      when ["plate_ecoli_transformation","plated"]       then basic(:default,0.71,2.0)
       when ["image_plate","imaged and stored in fridge"] then basic(:default,0.03,0.7)
       when ["image_plate","no colonies"]                 then basic(:default,0.0,0.7)
 
       # PLASMID VERIFICATION ################################################################################
 
-      when ["start_overnight_plate","overnight"]        then basic(:plate_ids,0.93,1.7)
-      when ["miniprep","plasmid extracted"]             then basic(:plate_ids,1.35,6.4)
-      when ["sequencing","send to sequencing"]          then basic(:plate_ids,6.12,2.6)
+      when ["start_overnight_plate","overnight"]        then basic(:plate_ids,0.11,3.1)
+      when ["miniprep","plasmid extracted"]             then basic(:plate_ids,1.35,9.9)
+      when ["sequencing","send to sequencing"]          then basic(:plate_ids,4.8,5.3)
       when ["upload_sequencing_results","results back"] then nothing
-      when ["glycerol_stock","done"]                    then basic(:plate_ids,2.69,1.7)
+      when ["glycerol_stock","done"]                    then basic(:plate_ids,0.53,1.9)
       when ["discard_item","discarded"]                 then nothing
 
       # STREAK PLATE ########################################################################################
 
-      when ["streak_yeast_plate","streaked"] then basic(:item_ids,1.12,5.8)
+      when ["streak_yeast_plate","streaked"] then basic(:item_ids,0.13,5.0)
 
       # USED IN ECOLI/YEAST TRANSFORMATION, GIBSON ASSEMBLY, and YEAST MATING ###############################
 
@@ -66,22 +66,22 @@ module CostModel
 
       # YEAST COMPETENT CELLS ################################################################################
 
-      when ["overnight_suspension_collection","overnight"]         then basic(:yeast_strain_ids,1.18,4.7)
-      when ["inoculate_large_volume_growth","large volume growth"] then basic(:yeast_strain_ids,1.00,4.2)
-      when ["make_yeast_competent_cell","done"]                    then basic(:yeast_strain_ids,1.55,16)
+      when ["overnight_suspension_collection","overnight"]         then basic(:yeast_strain_ids,0.06,5.4)
+      when ["inoculate_large_volume_growth","large volume growth"] then basic(:yeast_strain_ids,0.28,3.8)
+      when ["make_yeast_competent_cell","done"]                    then basic(:yeast_strain_ids,0.33,16.4)
 
       # YEAST TRANSFORMATION #################################################################################
 
-      when ["digest_plasmid_yeast_transformation","plasmid digested"] then basic(:yeast_transformed_strain_ids,0.91,3.5)
-      when ["make_antibiotic_plate","plate made"]                     then basic(:yeast_transformed_strain_ids,3.02,1.4)
-      when ["yeast_transformation","transformed"]                     then basic(:yeast_transformed_strain_ids,1.48,11)
+      when ["digest_plasmid_yeast_transformation","plasmid digested"] then basic(:yeast_transformed_strain_ids,1.25,4.4)
+      when ["make_antibiotic_plate","plate made"]                     then basic(:yeast_transformed_strain_ids,2.09,1.4)
+      when ["yeast_transformation","transformed"]                     then basic(:yeast_transformed_strain_ids,0.91,11.3)
       when ["plate_yeast_transformation","plated"]                    then basic(:yeast_transformed_strain_ids,0,2)
 
       # YEAST STRAIN QC #######################################################################################
 
-      when ["make_yeast_lysate","lysate"]      then basic(:yeast_plate_ids,0.10,3.3)
-      when ["yeast_colony_PCR","pcr"]          then basic(:yeast_plate_ids,0.43,2.2)
-      when ["fragment_analyzing","gel imaged"] then basic(:yeast_plate_ids,0.35,1.0)
+      when ["make_yeast_lysate","lysate"]      then basic(:yeast_plate_ids,0.10,4.0)
+      when ["yeast_colony_PCR","pcr"]          then basic(:yeast_plate_ids,0.43,3.1)
+      when ["fragment_analyzing","gel imaged"] then basic(:yeast_plate_ids,0.35,3.1)
 
       else nothing
 
