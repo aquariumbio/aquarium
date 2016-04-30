@@ -2,13 +2,16 @@ class Sample < ActiveRecord::Base
 
   include ActionView::Helpers::DateHelper
 
-  attr_accessible :field1, :field2, :field3, :field4, :field5, :field7, :field6, :field8, :name, :user_id, :project, :sample_type_id, :user_id, :description
+  attr_accessible :name, :user_id, :project, :sample_type_id, :user_id, :description
+  attr_accessible :field1, :field2, :field3, :field4, :field5, :field7, :field6, :field8 # deprecated
+
   belongs_to :sample_type
   belongs_to :user
   has_many :items
   has_many :post_associations
-  has_many :workflow_associations
-  has_many :folder_contents
+
+  # Field values
+  has_many :field_values
 
   validates_uniqueness_of :name, message: "Samples: must have unique names."
 
@@ -16,7 +19,7 @@ class Sample < ActiveRecord::Base
   validates :project, presence: true
   validates :user_id, presence: true
 
-  def get_property key
+  def get_property key # deprecated
     # Look up fields according to sample type field structure
     st = sample_type
     (1..8).each do |i|
@@ -28,7 +31,7 @@ class Sample < ActiveRecord::Base
     return nil
   end
 
-  def set_property name, val
+  def set_property name, val # deprecated
     st = self.sample_type
     i = st.field_index name
     if i
@@ -58,7 +61,7 @@ class Sample < ActiveRecord::Base
     end
   end
 
-  def properties
+  def properties # deprecated
     st = sample_type
     result = {}
     (1..8).each do |i|
@@ -87,7 +90,7 @@ class Sample < ActiveRecord::Base
     return result
   end
 
-  def displayable_properties
+  def displayable_properties # deprecated
 
     sample_type = self.sample_type
 
@@ -169,7 +172,7 @@ class Sample < ActiveRecord::Base
     self.post_associations.count
   end
 
-  def lite_properties
+  def lite_properties # deprecated
 
     st = SampleType.find(sample_type_id) # Note: Not using sample_type here because I don't want to
                                          # load the association in the case when it hasn't been included
@@ -258,6 +261,15 @@ class Sample < ActiveRecord::Base
     true
 
   end
+
+
+
+
+  ####################################################################################################
+  # UNUSED WORKFLOW STUFF FROM HERE TO EOF: OKAY TO EVENTUALLY DELETE 
+
+  has_many :workflow_associations
+  has_many :folder_contents
 
   def threads
     self.workflow_associations.collect { |wa| puts wa.inspect; wa.workflow_thread }

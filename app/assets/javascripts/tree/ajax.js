@@ -3,9 +3,9 @@
   var w;
 
   try {
-    w = angular.module('treeview'); 
+    w = angular.module('aquarium'); 
   } catch (e) {
-    w = angular.module('treeview', []); 
+    w = angular.module('aquarium', []); 
   }
 
   w.service('treeAjax', [ '$http', function($http) {

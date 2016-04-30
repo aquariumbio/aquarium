@@ -7,7 +7,7 @@
   <strong>Note:</strong> Each entry on this list describes a type of
   sample. The name is used to distinguish different kinds of samples
   in item, object type, and interpreter views. The field names and
-  types are used when index, viewing, and editing samples of a given
+  types are used when indexing, viewing, and editing samples of a given
   type. When in doubt, do not create a new sample type. Instead, see
   if your sample type is close enough to an existing sample type and
   use that.
@@ -28,15 +28,7 @@
     <td><b><%= link_to sample_type.name, sample_type %></b></td>
     <td><%= sample_type.description %></td>
     <td>
-      <span><%= sample_type.datatype %></span>
-      <br>
-      <% (1..8).each do |i| %>
-        <% fn = "field#{i}name".to_sym
-           ft = "field#{i}type".to_sym %>
-        <% if sample_type[ft] != 'not used' && sample_type[ft] != nil %>
-           <b><%= sample_type[fn] %></b>: <%= sample_type[ft] %></br>
-        <% end %>
-      <% end %>
+      <%= render partial: 'fields', locals: { sample_type: sample_type } %>
     </td>
     <% n = sample_type.samples.all.length
        s = pluralize n, sample_type.name %>

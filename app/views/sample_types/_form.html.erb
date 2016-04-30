@@ -1,97 +1,110 @@
-<%= form_for(@sample_type) do |f| %>
-  <% if @sample_type.errors.any? %>
+<div class='sample-type-edit' 
+     ng-app='aquarium' 
+     ng-controller='sampleTypeEditCtrl as stec' 
+     ng-init="stid = <%= @sample_type.id ? @sample_type.id : 0 %>">
 
-    <div id="error_explanation">
-      <h2><%= pluralize(@sample_type.errors.count, "error") %> prohibited this sample_type from being saved:</h2>
-      <ul>
-      <% @sample_type.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-
-    </div>
-  <% end %>
-
-  <div class='row-fluid'>
-   <div class='span1'></div>
-   <div class='span3'>
-     <label>Name</label>
-     <%= f.text_field :name, placeholder: 'Name' %>
-   </div>
-   <div class='span8'>
-     <label>Description</label>
-     <%= f.text_field :description, placeholder: 'Short description', class: 'input-xxlarge' %>
-   </div>
+  <div class='alert alert-success' ng-if="messages.length > 0">
+    <button type="button" class="close" ng-click="clear_messages()">&times;</button>
+    <h4 ng-if="messages.length == 1">1 Message</h4>
+    <h4 ng-if="messages.length > 1">{{messages.length}} Messages</h4>    
+    <ul>
+      <li ng-repeat="m in messages track by $index">{{m}}</li>
+    </ul>
   </div>
 
-  <div class='row-fluid'>
-    <div class='span1'></div>
-    <div class='span11'>
-      <label>Datatype (Note: This UI will be replaced something nicer soon)</label>
-      <%= f.text_area :datatype, rows: "5", :style => "width:90%;" %>
-    </div>
-  </div>
+  <h4>Name</h4>
+  <input ng-model="sample_type.name" class="long bordered">
 
-  <hr />
+  <h4>Description</h4>  
+  <input ng-model="sample_type.description" class="long bordered">
 
-    <% types = [['not used','not used'],['string','string'],['number','number'],['url','url']] 
-       SampleType.all.each do |st|
-         types.push [ 'link to ' + st.name.downcase, st.name ]
-       end
-    %>
+  <h4>Fields <button class='btn btn-mini' ng-click="add_field()">Add</button></h4>
 
-    <div class='row-fluid'>
-      <div class='span1'></div>
-      <label class='span3'>Field Names</label>
-      <label class='span3'>Field Types</label>
-      <div class='span5'></div>
-    </div>
+  <table>
 
-      <% (1..8).each do |i| %>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Required?</th>
+      <th>Array?</th>
+      <th>Sample Options (If type='sample')</th>      
+      <th>Choices (Comma separated. Leave blank for unrestricted value).</th>
+      <th></th>
+    </tr>
 
-        <div class='row-fluid'>
-         
-        <% fn = "field#{i}name".to_sym
-           ft = "field#{i}type".to_sym 
-           if @sample_type[ft]
-             chosen = @sample_type[ft].split '|' 
-           else
-             chosen = ['not used']
-           end %>
-           
-           <div class='span1'></div>
-           <div class='span3'>
-             <%= f.text_field fn, placeholder: "Field #{i} Name" %>
-           </div>
-           <div class='span3'>
-             <select class="sample_type_link_select" 
-                     id=<%= "sample_type_field#{i}type" %> 
-                     multiple="multiple" 
-                     name=<%= "sample_type[field#{i}type][]" %>>
-             <% types.each do |opt| %>
-                <option value='<%= opt[1] %>' 
-                        <%= chosen.include?(opt[1]) ? "selected" : "" %> >
-                  <%= opt[0] %>
-                </option>
-             <% end %>
-             </select>
-           </div>
-          <% if i==1 %>
-           <div class='span4'><b>Notes:</b> Static fields are deprecated for operation
-           based workflows. Use the datatype json field instead. </div>
-           <div class='span1'></div>
-          <% else %>
-           <div class='span5'></div>
-          <% end %>
+    <tr ng-repeat="ft in sample_type.field_types" ng-if="!ft.deleted">
+
+      <td>
+        <input ng-model="ft.name" class='input-bold'>
+        <!-- pre>{{ft.allowable_field_types|json}}</pre -->
+      </td>
+
+      <td>
+        <select ng-model="ft.ftype">
+          <option ng-selected="ft.ftype == 'string'">string</option>
+          <option ng-selected="ft.ftype == 'number'">number</option>
+          <option ng-selected="ft.ftype == 'url'">url</option>
+          <option ng-selected="ft.ftype == 'sample'">sample</option>                        
+        </select>
+      </td>
+
+      <td><input type=checkbox 
+                 ng-model='ft.required' 
+                 ng-checked='ft.required'
+                 ng-init="ft.required = ft.required ? true : false"> {{ft.required}}</td>
+
+      <td><input type=checkbox 
+                 ng-model='ft.array' 
+                 ng-checked='ft.array' 
+                 ng-init="ft.array = ft.array ? true : false"> {{ft.array}}</td>
+
+      <td>
+        <div ng-if="ft.ftype != 'sample'">N/A</div>
+        <div ng-if="ft.ftype == 'sample'">
+          <ul class='select-list'>
+            <li ng-repeat="aft in ft.allowable_field_types" ng-if="!aft.deleted">
+              <table class="plain-table">
+                <tr>
+                  <td>
+                    <select ng-model='aft.sample_type_id' 
+                            ng-options="st.id as st.name for st in sample_types"
+                            class='margin'>
+                    </select>
+                  </td>
+                  <td>
+                    <a href="#" ng-click="remove_aft(aft)"><i class='icon-remove'></i></a>
+                  </td>
+                </tr>
+                </table>
+            </li>
+            <li>
+              <a href="" class='btn btn-mini' ng-click='add_option(ft)'>Add Option</a>
+            </li>
+          </ul>
         </div>
+      </td>
 
-      <% end %>
+      <td>
+        <div ng-if="ft.ftype != 'number' && ft.ftype != 'string'">N/A</div>
+        <div ng-if="ft.ftype == 'number' || ft.ftype == 'string'">
+          <textarea ng-model="ft.choices" >        
+          </textarea>
+        </div>
+      </td>         
 
-  <hr />
+      <td><a href="#" ng-click="remove_field(ft)"><i class='icon-remove'></i></a></td>
 
-  <div class="actions">
-    <%= f.submit "Save Sample Type", class: 'btn' %>
-  </div>
+    </tr>
 
-<% end %>
+  </table>
+
+  <br />
+
+  <a href="#" class="btn btn-primary" ng-click="save()">Save</a>
+  <%= link_to 'All', sample_types_path, class: 'btn' %>
+
+</div>
+
+<br />
+
 

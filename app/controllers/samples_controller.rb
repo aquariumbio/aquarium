@@ -49,7 +49,11 @@ class SamplesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @sample }
+      format.json { render json: Sample
+        .includes(sample_type: { field_types: { allowable_field_types: :sample_type } })
+        .find(params[:id])
+        .to_json(include: {sample_type: { include: { field_types: { include: { allowable_field_types: { include: :sample_type } } } } } } )
+      }
     end
 
   end
@@ -57,23 +61,13 @@ class SamplesController < ApplicationController
   # GET /samples/new
   # GET /samples/new.json
   def new
-
     @sample = Sample.new
-    @user = User.find(current_user)
-    @sample.sample_type_id = params[:sample_type]
-    @sample_type = @sample.sample_type
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @sample }
-    end
-
+    @sample_type = SampleType.find(params[:sample_type])
   end
 
   # GET /samples/1/edit
   def edit
     @sample = Sample.find(params[:id])
-    @user = User.find(current_user)
     @sample_type = @sample.sample_type
   end
 

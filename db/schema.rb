@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160427043546) do
+ActiveRecord::Schema.define(:version => 20160430152749) do
 
   create_table "account_logs", :force => true do |t|
     t.integer  "row1"
@@ -46,6 +46,18 @@ ActiveRecord::Schema.define(:version => 20160427043546) do
   add_index "accounts", ["task_id"], :name => "index_accounts_on_task_id"
   add_index "accounts", ["user_id"], :name => "index_accounts_on_user_id"
 
+  create_table "allowable_field_types", :force => true do |t|
+    t.integer  "field_type_id"
+    t.integer  "sample_type_id"
+    t.integer  "object_type_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "allowable_field_types", ["field_type_id"], :name => "index_allowable_field_types_on_field_type_id"
+  add_index "allowable_field_types", ["object_type_id"], :name => "index_allowable_field_types_on_object_type_id"
+  add_index "allowable_field_types", ["sample_type_id"], :name => "index_allowable_field_types_on_sample_type_id"
+
   create_table "blobs", :force => true do |t|
     t.string   "sha"
     t.string   "path"
@@ -73,6 +85,31 @@ ActiveRecord::Schema.define(:version => 20160427043546) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "field_types", :force => true do |t|
+    t.integer  "sample_type_id"
+    t.string   "name"
+    t.string   "ftype"
+    t.string   "choices"
+    t.boolean  "array"
+    t.boolean  "required"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "field_types", ["sample_type_id"], :name => "index_field_types_on_sample_type_id"
+
+  create_table "field_values", :force => true do |t|
+    t.integer  "sample_id"
+    t.string   "value"
+    t.integer  "child_sample_id"
+    t.integer  "child_item_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.string   "name"
+  end
+
+  add_index "field_values", ["sample_id"], :name => "index_field_values_on_sample_id"
 
   create_table "folder_contents", :force => true do |t|
     t.integer  "sample_id"

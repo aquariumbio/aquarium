@@ -7,3 +7,98 @@
     color: red;
   }
 }
+
+.sample-type-edit {
+
+  .light {
+    color: #ddd;
+  }
+
+  input, input[type="number"], input[type="text"] {
+    width: 100%;
+    height: 100%;
+    padding: 2px;
+    margin: 0 !important;
+    border: none;
+    display:inline-block;
+    background: none; 
+    outline: none;
+    box-shadow: none;    
+  }
+
+  .input-bold {
+    font-weight: bold;
+  }
+
+  .long {
+    width: 80%;
+  }
+
+  .short {
+    width: 33%;
+  }
+
+  table {
+    width: 100%;
+    td {
+      vertical-align: top;
+      border: 1pt solid #eee;
+      margin: 0;
+      padding: 0 5px 0 5px;
+    }
+    th {
+      text-align: left;
+    }
+  }
+
+  .no-padding {
+    padding: 0;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  select {
+    padding: 0;
+    width: 100%;
+    text-align: left;
+    margin: 0;
+  }
+
+  .margin {
+    margin: 2px;
+  }
+
+  textarea {
+    height: 100%;
+    width: 100%;
+    border: 0;
+    margin: 0;
+  }
+
+  .select-list {
+    margin-left: 0;    
+    li {
+      margin-left: 0;
+    }
+  }
+
+  .plain-table {
+    margin: 0;
+    tr {
+      margin: 0
+    }
+    td {
+      margin: 0;
+      border: none;
+      vertical-align: middle;
+      padding: 0 5px 0 0;
+    }
+  }
+
+  .bordered {
+    border: 1pt solid #eee;
+  }
+
+}

@@ -1,98 +1,88 @@
-<%= form_for(@sample) do |f| %>
-  <% if @sample.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@sample.errors.count, "error") %> prohibited this sample from being saved:</h2>
-      <ul>
-      <% @sample.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+<div ng-app="aquarium" 
+     ng-controller="sampleEditCtrl" 
+     ng-init="info = { stid: <%= @sample_type.id %>, sid: <%= @sample.id ? @sample.id : 0 %> }"
+     class='sample-type-edit'>
 
-   <div class='row-fluid'>
+  <h4>Name</h4>
+  <input ng-model='sample.name' class="short bordered">
 
-    <div class='span3'>    
+  <h4>Project</h4>
+  <input ng-model='sample.project' class="short bordered">
 
-     <label>Name</label>
-     <%= f.text_field :name %>
+  <h4>Description</h4>
+  <input ng-model='sample.description' class="long bordered">
 
-   </div><div class='span3'>    
 
-    <label>Project </label>
-    <%= f.text_field :project %>
+  <br/>  <br/>
 
-   </div><div class='span3'>    
+  <table>
 
-     <label>Owner</label>
-     <%= f.select( :user_id, (User.all.collect { |u| [ u.login, u.id ]}).sort, selected: current_user.id ) %>
+    <tr>
+      <th>Property Name</th>
+      <th>Type</th>      
+      <th>Value</th>      
+    </tr>
 
-   </div><div class='span3'>    
+    <tr ng-repeat="ft in sample.sample_type.field_types">
 
-     <div style='display: none'>
-       <label>Type</label>
-       <%= f.select( :sample_type_id, SampleType.all.collect { |st| [ st.name, st.id ] } ) %>
-     </div> 
+      <!-- NAME /////////////////////////////////////////////////////////////// -->
+      <td>
+        <b>{{ft.name}}</b>
+        <span ng-if="ft.required" class="light">(required)</span>
+      </td>
 
-   </div>
+      <!-- TYPE /////////////////////////////////////////////////////////////// -->
 
-  </div>
+      <td ng-if="ft.ftype != 'sample' && ft.ftype != 'item'">
+        {{ft.ftype}}
+      </td>
 
-   <div class='row-fluid'>
-     <div class='span9'>    
-       <label>Description</label>
-       <%= f.text_area :description, style: 'width: 100%;' ,rows: 1 %>
-    </div>
-  </div>
+      <td ng-if="ft.ftype == 'sample'">
+        <span ng-repeat="aft in ft.allowable_field_types track by $index">
+          <a href="/sample_types/{{aft.sample_type.id}}">{{aft.sample_type.name}}</a> 
+          <span ng-if="!$last">|</span>
+        </span>
+      </td>
 
-  <hr />
+      <!-- VALUE ////////////////////////////////////////////////////////////// -->
 
-    <% (1..8).each do |i| 
-       fn = "field#{i}name".to_sym
-       ft = "field#{i}type".to_sym 
-       ff = "field#{i}".to_sym %>
-      <% if @sample_type[ft] != 'not used' && @sample_type[ft] != nil %>
-        <label><%= @sample_type[fn] %> (<%= @sample_type[ft] %>)</label>
-        <% if @sample_type[ft] == 'url' %>
-          <%= f.url_field ff %>
-        <% elsif @sample_type[ft] == 'number' %>
-          <%= f.text_field ff %>
-        <% elsif @sample_type[ft] == 'string' %>
-          <%= f.text_field ff %>
-        <% else %>
+      <td ng-if="ft.ftype == 'string'">
+        <div ng-if="!ft.array">
+          <input ng-model="sample.fields[ft.name]" type='text' class='no-padding'>
+        </div>
+        <div ng-if="ft.array">
+          Array here
+        </div>        
+      </td>
 
-          <div class='sample-link'>
-            <input id='sample_field<%= i %>' 
-                 name='sample[field<%= i %>]' 
-                 size=30
-                 type='text'
-                 data-sample='<%= @sample_type[ft] %>'
-                 readonly
-                 value='<%= @sample[ff] && @sample[ff] != "" ? @sample[ff] : "-none-" %>'>
-            </input>
-          </div>
+      <td ng-if="ft.ftype == 'number'">
+        <div ng-if="!ft.array">
+          <input ng-model="sample.fields[ft.name]" type="number" step="0.01" class='no-padding'>
+        </div>
+        <div ng-if="ft.array">
+          Array here (Not implemented)
+        </div> 
+      </td>     
 
-        <% end %>
-      <% end %>
-    <% end %>
+      <td ng-if="ft.ftype == 'url'">
+        <input ng-model="sample.fields[ft.name]" type="text">
+      </td>       
 
-  <hr />
+      <td ng-if="ft.ftype == 'sample'">
+        <div ng-if="!ft.array">
+          <input ng-model="sample.fields[ft.name]" type="text" step="0.01" class='no-padding' autocomplete="types(ft)">
+        </div>
+        <div ng-if="ft.array">
+          Array here (Not implemented)
+        </div>       
+      </td>
 
-  <div class="actions">
-    <%= f.submit "Save Sample Information", class: 'btn' %>
-  </div>
+    </tr>
 
-<% end %>
+  </table>
 
-<script>
-  $('.sample-link').each ( function() {
-    var d = $(this);
-    var i = $('input', d);
-    i.append(function() {
-       d.append(new Finder(i.data('sample'),function(selections,names) {
-         console.log(names[names.length-1]);
-         i.val(names[names.length-1]);
-       }));
-    });
-  });
-</script>
+  <!-- pre>{{sample|json}}</pre -->
+
+</div>
+
+<br />
