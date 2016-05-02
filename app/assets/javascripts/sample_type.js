@@ -22,9 +22,7 @@
             $scope.sample_type = response.data;
           });
       } else {
-        console.log("Starting new sample type creator")
         $scope.mode = 'new';
-        console.log("mode = " + $scope.mode)
         $scope.sample_type = {
           name: "New sample type",
           description: "New sample type description",
@@ -68,8 +66,6 @@
 
       if ( $scope.mode == 'new' ) {
 
-        console.log("new")
-
         $http.post('/sample_types.json', { sample_type: $scope.sample_type } ).
           then(function(response) {
             var st = response.data.sample_type;
@@ -82,7 +78,7 @@
 
         $http.put('/sample_types/' + $scope.stid + '.json', { sample_type: $scope.sample_type } )
           .then(function(response) {
-            $scope.messages.push("Saved sample " + $scope.stid + ".")
+            $scope.messages.push("Saved sample type " + $scope.stid + ".")
           });
 
       }

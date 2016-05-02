@@ -1,0 +1,63 @@
+<script type="text/ng-template" id="sample_input">
+  <input ng-if="!ft.choices" 
+         ng-model="fv.child_sample_name"
+         type='text'
+         autocomplete="ft.types"
+         class='bordered tall'>
+</script>
+
+<script type="text/ng-template" id="number_input">
+  <input ng-if="!ft.choices" 
+         ng-model="fv.value"
+         type='number' step=0.01
+         class='bordered tall'>
+  <select ng-if="ft.choices"
+          ng-model="fv.value"   
+          ng-options="choice for choice in ft.choices_array">
+  </select>
+</script>
+
+<script type="text/ng-template" id="string_input">
+  <input ng-if="!ft.choices" 
+         ng-model="fv.value"
+         type='text' 
+         class='bordered tall'>
+
+  <select ng-if="ft.choices"
+          ng-model="fv.value"   
+          ng-options="choice for choice in ft.choices_array">
+  </select>
+</script>
+
+<script type="text/ng-template" id="url_input">
+  <input ng-repeat="fv in sample.field_values track by $index"
+         ng-if="fv.name == ft.name"
+         ng-model="fv.value" type="text"
+         class="bordered tall">
+</script>
+
+<script type="text/ng-template" id="field_input">
+
+  <div ng-repeat="fv in sample.field_values track by $index"
+       ng-if="fv.name == ft.name && !fv.deleted">
+
+    <table class='plain-table'>
+      <tr>
+        <td ng-include="ft.ftype+'_input'">
+        </td>
+        <td style='width: 5%'>
+          <a href="#" ng-click="remove_from_array(fv)" ng-if="ft.array">
+            <i class='icon-remove'></i>
+          </a>
+        </td>
+      </tr>
+    </table>
+
+  </div>
+
+  <a href="#" 
+     class='btn btn-mini adder' 
+     ng-if="ft.array"
+     ng-click="add_to_array(ft)">+</a>
+
+</script>

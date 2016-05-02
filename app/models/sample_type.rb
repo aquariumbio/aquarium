@@ -15,6 +15,10 @@ class SampleType < ActiveRecord::Base
 
   validate :proper_choices # deprecated
 
+  def type name
+    self.field_types.find { |ft| ft.name == name }
+  end
+
   def save_field_types raw_field_types
 
     if raw_field_types
@@ -23,7 +27,8 @@ class SampleType < ActiveRecord::Base
 
         if raw_ft[:id]
           if raw_ft[:deleted]
-            FieldType.find(raw_ft[:id]).destroy
+            temp = FieldType.find_by_id(raw_ft[:id])
+            temp.destroy if temp
           else
             ft = FieldType.find(raw_ft[:id])
             ft.update_attributes(raw_ft.slice(:name,:ftype,:required,:array,:choices))
@@ -34,7 +39,7 @@ class SampleType < ActiveRecord::Base
           ft.save
         end
 
-        if raw_ft[:allowable_field_types]
+        if !raw_ft[:deleted] && raw_ft[:allowable_field_types]
 
           raw_ft[:allowable_field_types].each do |raw_aft|
             if raw_aft[:id]

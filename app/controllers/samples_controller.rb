@@ -50,9 +50,12 @@ class SamplesController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: Sample
-        .includes(sample_type: { field_types: { allowable_field_types: :sample_type } })
+        .includes(field_values: :child_sample, sample_type: { field_types: { allowable_field_types: :sample_type } })
         .find(params[:id])
-        .to_json(include: {sample_type: { include: { field_types: { include: { allowable_field_types: { include: :sample_type } } } } } } )
+        .to_json(include: { 
+          sample_type: { include: { field_types: { include: { allowable_field_types: { include: :sample_type } } } } },
+          field_values: { include: :child_sample }
+        })
       }
     end
 
@@ -75,19 +78,14 @@ class SamplesController < ApplicationController
   # POST /samples.json
   def create
 
-    @sample = Sample.new(params[:sample])
-    @user = User.find(current_user)
-    @sample_type = @sample.sample_type
+    @sample = Sample.creator(params[:sample], current_user)
 
-    respond_to do |format|
-      if @sample.save
-        format.html { redirect_to @sample, notice: 'Sample was successfully created.' }
-        format.json { render json: @sample, status: :created, location: @sample }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @sample.errors, status: :unprocessable_entity }
-      end
+    if @sample.errors.empty?
+      render json: { sample: @sample }
+    else
+      render json: { errors: @sample.errors.full_messages }
     end
+
   end
 
   # PUT /samples/1

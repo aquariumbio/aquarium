@@ -77,7 +77,7 @@
     $scope.new_sub_sample = function(sample,index,st_name) {
       var st = $scope.sample_type_from_name(st_name);
       var f = 'field'+index;
-      sample.copy[f].new = new Sample().empty(st,$scope.default_project());
+      sample.copy[f].new = new tSample().empty(st,$scope.default_project());
       //sample.copy[f].new.edit = true;
       sample.copy[f].new.copy.name = sample.copy.name + "-" + sample.field_name(index).toLowerCase() ;
       sample.copy[f].new.copy.description = "The " + sample.field_name(index).toLowerCase() + " for " + sample.copy.name;
@@ -123,7 +123,7 @@
       treeAjax.samples($scope.current_selection.project,$scope.current_selection.sample_type,function(samples) {
 
         var upgraded_samples = aq.collect(samples,function(raw_sample) {
-          return new Sample().from(raw_sample);
+          return new tSample().from(raw_sample);
         });
 
         $scope.samples[$scope.current_selection.project][$scope.current_selection.sample_type] = upgraded_samples;
@@ -154,7 +154,7 @@
           sample.subsamples = {};
           for ( key in data ) {
             if ( typeof data[key] == "object" ) {
-              sample.subsamples[key] = new Sample().from(data[key]);              
+              sample.subsamples[key] = new tSample().from(data[key]);              
             } else {
               sample.subsamples[key] = data[key];
             }
@@ -187,7 +187,7 @@
           $scope.new_samples = [];
           $scope.messages = aq.collect(response.samples,function(s) { return "Created sample " + s.id + ": " + s.name; });
           upgraded_samples = aq.collect(response.samples,function(raw_sample) {
-            return new Sample().from(raw_sample);
+            return new tSample().from(raw_sample);
           });
           $scope.recent_samples = $scope.recent_samples.concat(upgraded_samples);
           $scope.set_mode('recent');
@@ -201,7 +201,7 @@
           $scope.errors = response.errors;
         } else {
           $scope.messages = [ "Saved changes to sample " + sample.id + ": " + sample.name ]
-          var new_sample = new Sample().from(response.sample);
+          var new_sample = new tSample().from(response.sample);
           sample.edit = false;
           $scope.editing = false;
           sample.project = new_sample.project;
@@ -253,7 +253,7 @@
     }
 
     $scope.empty_sample = function(st) {
-      return new Sample().empty(st,$scope.default_project());
+      return new tSample().empty(st,$scope.default_project());
     }
 
     $scope.fields = function(sample_type) {
@@ -262,7 +262,9 @@
 
         var type = sample_type["field"+(i+1)+"type"];
 
-        if ( type != 'number' && type != 'string' && type != 'url' ) {
+        if ( type == null ) {
+          type = [];
+        } else if ( type != 'number' && type != 'string' && type != 'url' ) {
           type = type.split('|');
         }
 
@@ -334,7 +336,7 @@
             $scope.ngModel = ui.item.value;
             $scope.$apply();
           }
-        })
+        });
       }
     }
 

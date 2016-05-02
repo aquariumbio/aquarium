@@ -1,4 +1,4 @@
-function Sample(sample_type) {
+function tSample(sample_type) {
   this.copy = {};
   this.edit = false;
   this.sample_type = sample_type;
@@ -6,7 +6,7 @@ function Sample(sample_type) {
   return this;
 }
 
-Sample.prototype.from = function(sample) {
+tSample.prototype.from = function(sample) {
 
   for (var key in sample) { 
     this[key] = sample[key];
@@ -20,19 +20,19 @@ Sample.prototype.from = function(sample) {
 
 }
 
-Sample.prototype.field_type = function(i) {
+tSample.prototype.field_type = function(i) {
   return this.sample_type["field"+i+"type"];
 }
 
-Sample.prototype.field_name = function(i) {
+tSample.prototype.field_name = function(i) {
   return this.sample_type["field"+i+"name"];
 }
 
-Sample.prototype.key= function(i) {
+tSample.prototype.key= function(i) {
   return "field"+i;
 }
 
-Sample.prototype.prepare_copy = function() {
+tSample.prototype.prepare_copy = function() {
 
   this.copy = {
     name: this.name,
@@ -52,7 +52,7 @@ Sample.prototype.prepare_copy = function() {
 
 }
 
-Sample.prototype.subsample_identifier = function(i) {
+tSample.prototype.subsample_identifier = function(i) {
   var ss = this.subsamples[this.field_name(i)];
   if ( ss && ss.id ) {
     return ss.id + ": " + ss.name;
@@ -61,7 +61,7 @@ Sample.prototype.subsample_identifier = function(i) {
   }
 }
 
-Sample.prototype.field_copy = function(i) {
+tSample.prototype.field_copy = function(i) {
   if ( this.field_type(i) == 'url' || this.field_type(i) == 'string') {
     return this[this.key(i)];
   } else if ( this.field_type(i) == 'number' ) {
@@ -71,7 +71,7 @@ Sample.prototype.field_copy = function(i) {
   }
 }
 
-Sample.prototype.default_field = function(i) {
+tSample.prototype.default_field = function(i) {
   if ( this.field_type(i) == 'url' ) {
     return "http://";
   } else if ( this.field_type(i) == 'number' ) {
@@ -83,7 +83,7 @@ Sample.prototype.default_field = function(i) {
   }
 }
 
-Sample.prototype.toggle_new_existing = function(i) {
+tSample.prototype.toggle_new_existing = function(i) {
   if ( this.copy[this.key(i)].choice == 'existing' ) {
     this.copy[this.key(i)].choice = 'new';
   } else {
@@ -92,7 +92,7 @@ Sample.prototype.toggle_new_existing = function(i) {
   return this;
 }
 
-Sample.prototype.empty = function(sample_type,project) {
+tSample.prototype.empty = function(sample_type,project) {
 
   this.sample_type = sample_type;
 
@@ -110,7 +110,7 @@ Sample.prototype.empty = function(sample_type,project) {
 
 }
 
-Sample.prototype.fields = function() {
+tSample.prototype.fields = function() {
   for ( var i=1; i<=8; i++ ) {
     
   }

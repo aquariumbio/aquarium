@@ -19,6 +19,67 @@ class Sample < ActiveRecord::Base
   validates :project, presence: true
   validates :user_id, presence: true
 
+  def self.sample_from_identifier str
+    parts = str.split(': ')
+    if parts.length > 1
+      Sample.find_by_name(parts[1..-1].join(": "))
+    else
+      nil
+    end
+  end
+
+  def self.creator raw, user
+
+    sample = Sample.new(raw.slice :name, :description, :project, :sample_type_id)
+    sample.user_id = user.id    
+
+    Sample.transaction do 
+
+      sample.save
+
+      if sample.errors.empty?
+
+        sample_type = SampleType.find(raw[:sample_type_id])
+
+        raw[:field_values].each do |raw_fv|
+
+          ft = sample_type.type(raw_fv[:name])
+          fv = sample.field_values.create(name: raw_fv[:name])
+
+          if ft.ftype == 'sample'
+            child = self.sample_from_identifier raw_fv[:child_sample_name]
+            fv.child_sample_id = child.id if child
+            Rails.logger.info "Found child: #{child.inspect} when looking for #{raw_fv[:child_sample_name]}"
+          elsif ft.ftype == 'number'
+            fv.value = raw_fv[:value].to_f
+          else # string, url        
+            fv.value = raw_fv[:value]
+          end
+
+          fv.save
+
+          unless fv.errors.empty? 
+            sample.errors.add "Could not save field #{raw_fv[:name]}"
+            raise ActiveRecord::Rollback
+          end
+
+        end
+
+      else
+
+        raise ActiveRecord::Rollback
+
+      end
+
+    end
+
+    return sample
+
+  end
+
+  #################################################################
+  # Old methods for dealing with string valued fields
+
   def get_property key # deprecated
     # Look up fields according to sample type field structure
     st = sample_type
