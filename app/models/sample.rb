@@ -30,36 +30,71 @@ class Sample < ActiveRecord::Base
 
   def self.creator raw, user
 
-    sample = Sample.new(raw.slice :name, :description, :project, :sample_type_id)
+    sample = Sample.new
     sample.user_id = user.id    
+    sample.sample_type_id = raw[:sample_type_id]
+    sample.updater raw
+
+    return sample
+
+  end
+
+  def updater raw
+
+    self.name = raw[:name]
+    self.description = raw[:description]
+    self.project = raw[:project]
 
     Sample.transaction do 
 
-      sample.save
+      save
 
-      if sample.errors.empty?
+      if errors.empty?
 
         sample_type = SampleType.find(raw[:sample_type_id])
 
         raw[:field_values].each do |raw_fv|
 
           ft = sample_type.type(raw_fv[:name])
-          fv = sample.field_values.create(name: raw_fv[:name])
 
-          if ft.ftype == 'sample'
-            child = self.sample_from_identifier raw_fv[:child_sample_name]
-            fv.child_sample_id = child.id if child
-            Rails.logger.info "Found child: #{child.inspect} when looking for #{raw_fv[:child_sample_name]}"
-          elsif ft.ftype == 'number'
-            fv.value = raw_fv[:value].to_f
-          else # string, url        
-            fv.value = raw_fv[:value]
+          if raw_fv[:id] && raw_fv[:deleted] 
+
+            fv = FieldValue.find_by_id(raw_fv[:id])
+            fv.destroy if fv
+
+          else
+
+            if raw_fv[:id]
+              begin
+                fv = FieldValue.find(raw_fv[:id])            
+              rescue Exception => e
+                errors.add :missing_field_value, "Field value #{raw_fv[:id]} not found in db."
+                errors.add :missing_field_value, e.to_s
+                raise ActiveRecord::Rollback
+              end
+            else
+              fv = field_values.create(name: raw_fv[:name])
+            end
+
+            if ft.ftype == 'sample'
+              child = Sample.sample_from_identifier raw_fv[:child_sample_name]
+              fv.child_sample_id = child.id if child
+              if !child && ft.required
+                errors.add :required, "Sample required for field '#{ft.name}' not present."
+                raise ActiveRecord::Rollback
+              end
+            elsif ft.ftype == 'number'
+              fv.value = raw_fv[:value].to_f
+            else # string, url 
+              fv.value = raw_fv[:value]
+            end
+
           end
 
           fv.save
 
           unless fv.errors.empty? 
-            sample.errors.add "Could not save field #{raw_fv[:name]}"
+            errors.add :field_value, "Could not save field #{raw_fv[:name]}: #{fv.errors.full_messages.join(', ')}"
             raise ActiveRecord::Rollback
           end
 
@@ -72,8 +107,6 @@ class Sample < ActiveRecord::Base
       end
 
     end
-
-    return sample
 
   end
 

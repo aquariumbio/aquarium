@@ -5,28 +5,30 @@
 
   <%= render partial: '/samples/templates/field_input' %>
 
-  <h1>
-    {{mode == 'edit' ? 'Edit' : 'New'}}
-    {{sample.sample_type.name}}
-    {{sample.id}} :
-    <i>{{sample.name}}</i>
-  </h1>
+  <h3>
+    <span class='light'>
+      {{mode == 'edit' ? 'Edit' : 'New'}}
+      {{sample.sample_type.name}}
+      {{sample.id}} :
+    </span>
+    {{sample.name}}
+  </h3>
 
-  <center>
   <p>{{sample.sample_type.description}}</p>
-  </center>
 
   <div class='alert alert-error' ng-if="errors.length > 0">
     <button type="button" class="close" ng-click="clear_errors()">&times;</button>
+    <h4>Error(s)</h4>
     <ul>
-    <li ng-repeat="e in errors">{{e}}</li>
+      <li ng-repeat="e in errors">{{e}}</li>
     </ul>
   </div>
 
   <div class='alert alert-success' ng-if="messages.length > 0">
     <button type="button" class="close" ng-click="clear_messages()">&times;</button>
+    <h4>Message(s)</h4>
     <ul>
-    <li ng-repeat="m in messages">{{m}}</li>
+      <li ng-repeat="m in messages">{{m}}</li>
     </ul>
   </div>  
 
@@ -41,13 +43,13 @@
       <div class='span3'>
 
         <h4>Name</h4>
-        <input ng-model='sample.name' class="full bordered tall">
+        <input ng-model='sample.name' type=text class="full bordered tall">
 
         <h4>Project</h4>
-        <input ng-model='sample.project' class="full bordered tall">
+        <input ng-model='sample.project' type=text class="full bordered tall">
 
         <h4>Description</h4>
-        <textarea ng-model='sample.description' class="bordered"></textarea>
+        <textarea ng-model='sample.description' type=text class="bordered"></textarea>
 
       </div>
 
@@ -95,12 +97,14 @@
 
     </div>
 
+    <br />
+
     <a href="#" class='btn btn-primary' ng-click="save()">Save</a> 
     <%= link_to 'Cancel', samples_path(sample_type_id:@sample_type.id), class: 'btn' %> 
 
   </div>
 
-    <!-- <pre>{{sample.field_values|json}}</pre> -->
+   <!-- <pre>{{sample|json}}</pre> -->
 
 </div>
 

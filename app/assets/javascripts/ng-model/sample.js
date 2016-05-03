@@ -93,10 +93,13 @@ Sample.prototype.type = function(name) {
 
 }
 
-Sample.prototype.update = function(name) {
-  console.log("update")
+Sample.prototype.update = function(promise) {
+  this.http.put('/samples/' + this.id + '.json', { sample: this } )
+    .then(function(response) {
+       promise(response.data);
+    });
+  return this;
 }
-
 
 Sample.prototype.create = function(promise) {
   this.http.post('/samples.json', { sample: this } )

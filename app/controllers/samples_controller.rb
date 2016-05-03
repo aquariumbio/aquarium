@@ -91,17 +91,16 @@ class SamplesController < ApplicationController
   # PUT /samples/1
   # PUT /samples/1.json
   def update
-    @sample = Sample.find(params[:id])
 
-    respond_to do |format|
-      if @sample.update_attributes(params[:sample])
-        format.html { redirect_to @sample, notice: 'Sample was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @sample.errors, status: :unprocessable_entity }
-      end
+    @sample = Sample.find(params[:sample][:id])
+    @sample.updater(params[:sample])
+
+    if @sample.errors.empty?
+      render json: { sample: @sample }
+    else
+      render json: { errors: @sample.errors.full_messages }
     end
+
   end
 
   # DELETE /samples/1

@@ -8,7 +8,8 @@
     w = angular.module('aquarium', []); 
   } 
 
-  w.controller('sampleEditCtrl', [ '$scope', '$http', '$attrs', function ($scope,$http,$attrs,treeAjax) {
+  w.controller('sampleEditCtrl', [ '$scope', '$http', '$attrs', '$location', '$window', 
+                        function (  $scope,   $http,   $attrs,   $location,   $window ) {
 
     $scope.info = {};
     $scope.sample = new Sample($http);
@@ -16,6 +17,10 @@
     $scope.ready = false;
     $scope.errors = [];
     $scope.messages = [];
+
+    if ( $window.location.search ) {
+      $scope.messages.push(decodeURI($window.location.search.split('=')[1]));
+    }
 
     $scope.helper.autocomplete(function(sample_names) {
       $scope.sample_names = sample_names;
@@ -53,21 +58,29 @@
     }           
 
     $scope.save = function() {
+
       if ( $scope.mode == 'edit' ) {
-        $scope.messages = [ "Saving edited samples not yet implemented." ];
+
+        $scope.sample.update(function(result) {
+          if ( result.errors ) {
+            $scope.errors = result.errors;
+          } else {
+            window.location = '/samples/' + result.sample.id + '/edit?message=Sample ' + result.sample.id + " saved.";
+          }
+        });
+
       } else {
+
         $scope.sample.create(function(result) {
           if ( result.errors ) {
             $scope.errors = result.errors;
           } else {
-            $scope.sample = new Sample($http).find(result.sample.id,function() {
-              $scope.clear_errors();
-              $scope.messages = [ "Created new sample. Id: " + result.sample.id ];
-              $scope.mode = 'edit';
-            });
+            window.location = '/samples/' + result.sample.id + '/edit?message=Sample ' + result.sample.id + " created.";
           }
         });
+
       }
+
     }
 
   }]);
