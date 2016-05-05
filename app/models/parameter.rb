@@ -23,7 +23,7 @@ class Parameter < ActiveRecord::Base
     if p
       p.value
     else
-      p.make key, ""
+      p = Parameter.make key, ""
       p.value
     end
   end
