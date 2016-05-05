@@ -50,44 +50,35 @@
          </li>
 
          <!-- STRING AND NUMBER FIELDS -->
-         <li ng-repeat="field in sample_type_from_id(sample.sample_type_id).fields"
-             ng-if="field.type == 'string' || field.type == 'number'">
-
-           <span>
-             <span class='field-name'>{{field.name}}:</span> 
-             <span class='field-value'>{{sample["field"+field.index]}}</span>
+         <li ng-repeat="ft in sample.sample_type.field_types" ng-if="ft.ftype == 'string' || ft.ftype == 'number'">
+           <span class='field-name'>{{ft.name}}:</span>
+           <span class='field-value' ng-repeat="fv in sample.field_values" ng-if="fv.name == ft.name">
+             {{fv.value}}
            </span>
-
          </li>
 
          <!-- URL FIELDS -->
-         <li ng-repeat="field in sample_type_from_id(sample.sample_type_id).fields"
-             ng-if="field.type == 'url'">
-
-           <span>
-             <span class='url-field-name'>{{field.name}}:</span>           
-             <a href='{{sample["field"+field.index]}}' target="outside-link">{{sample["field"+field.index]}}</a>
+         <li ng-repeat="ft in sample.sample_type.field_types" ng-if="ft.ftype == 'url'">
+           <span class='url-field-name'>{{ft.name}}:</span>
+           <span class='field-value' ng-repeat="fv in sample.field_values" ng-if="fv.name == ft.name">
+             {{fv.value}}
            </span>
-
          </li>
 
          <!-- SUBSAMPLE FIELDS -->
-         <li ng-repeat="field in sample_type_from_id(sample.sample_type_id).fields"
-             ng-if="field.type != 'string' && field.type != 'number' && field.type != 'url'">
-
-           <span class='sub-field-name'>{{field.name}}: </span> 
-
-           <span ng-if="sample.subsamples[field.name] && !sample.subsamples[field.name].id">-</span>
-
-           <span ng-if="sample.subsamples[field.name] && sample.subsamples[field.name].id && !sample.subsamples[field.name].edit"
-                 ng-include="'sample'"
-                 ng-init="sample = sample.subsamples[field.name]"></span>
-
-           <span ng-if="sample.subsamples[field.name] && sample.subsamples[field.name].edit"
-                 ng-include="'sample_form'"
-                 ng-init="sample = sample.subsamples[field.name]"></span>                 
-
+         <li ng-repeat="ft in sample.sample_type.field_types" ng-if="ft.ftype == 'sample'">
+           <span class='sub-field-name'>{{ft.name}}:</span>
+           <span ng-repeat="fv in sample.field_values" ng-if="fv.name == ft.name">
+             <span ng-if="!fv.child_sample">-</span>
+             <span ng-if="fv.child_sample && !fv.edit"
+                   ng-include="'sample'"
+                   ng-init="sample = fv.child_sample"></span>
+             <span ng-if="fv.child_sample && fv.edit"
+                   ng-include="'sample_form'"
+                   ng-init="sample = fv.child_sample"></span>   
+           </span>
          </li>
+
 
        </ul>
 

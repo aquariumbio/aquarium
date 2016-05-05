@@ -119,6 +119,7 @@
 
   .sample-list-description {
     font-size: 14pt;
+    margin-top: 5px;
   }
 
   /*  http://cssdeck.com/labs/pure-css-tree-menu-framework */
@@ -174,6 +175,10 @@
       margin-bottom: 2px;
     }
 
+  }
+
+  .clickable {
+    cursor: pointer;
   }
 
   .project-list {

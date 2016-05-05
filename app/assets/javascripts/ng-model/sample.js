@@ -13,17 +13,36 @@ Sample.prototype.find = function(id,promise) {
       sample[key] = response.data[key];
     }
 
-    if ( typeof this.data == "string") {
-      sample.data = JSON.parse(sample.data);
-    } else if ( this.data == null ) {
-      sample.data = {};
-    }
-
+    sample.promote_data();
     sample.sample_type = new SampleType(sample.http).from(sample.sample_type);
     sample.complete_fields();
     promise(sample);
 
   });
+
+  return this;
+
+}
+
+Sample.prototype.promote_data = function() {
+  if ( typeof this.data == "string") {
+    try {
+      this.data = JSON.parse(this.data);
+    } catch(e) {
+      this.data = {};
+    }
+  } else if ( this.data == null ) {
+    this.data = {};
+  }  
+}
+
+Sample.prototype.from = function(raw) {
+
+  for (var key in raw) { 
+    this[key] = raw[key];
+  }
+
+  this.promote_data();
 
   return this;
 
@@ -38,13 +57,36 @@ Sample.prototype.complete_fields = function() {
     if ( t == 'number' ) {
       fv.value = parseFloat(fv.value);
     } else if ( t == 'sample' && fv.child_sample ) {
+      fv.child_sample = new Sample(sample.http).from(fv.child_sample);
       fv.child_sample_name = "" + fv.child_sample.id + ": " + fv.child_sample.name;
+      fv.allowable_child_types = sample.allowable(fv.name);
+    } else if ( !t ) {
+      fv.orphan = true;
     }
   });
 
+  sample.set_defaults();
+
+  return this;
+
+}
+
+Sample.prototype.allowable = function(field_name) {
+  var ft = this.field_type(field_name);
+  return aq.collect(ft.allowable_field_types,function(aft) {
+    return aft.sample_type.name;
+  });
+}
+
+Sample.prototype.set_defaults = function() {
+
+  var sample = this;
+
   aq.each(this.sample_type.field_types,function(ft) {
     if ( !ft.array && sample.fields(ft.name).length == 0 ) {
-      sample.field_values.push(sample.sample_type.default_field(ft));
+      var fv = sample.sample_type.default_field(ft);
+      fv.allowable_child_types = sample.allowable(fv.name);
+      sample.field_values.push(fv);
     }
   });
 
@@ -60,9 +102,12 @@ Sample.prototype.new = function(stid,promise) {
 
     sample.name = "new_" + sample_type.name.toLowerCase();
     sample.description = "New sample type description";
-    sample.field_values = sample_type.default_field_values();
+    sample.field_values = [];
     sample.sample_type = sample_type;
     sample.sample_type_id = stid;
+    sample.set_defaults();   
+
+    console.log(sample);
 
     promise(sample);
 
@@ -79,14 +124,25 @@ Sample.prototype.fields = function(name) {
   return fvs;
 }
 
-Sample.prototype.type = function(name) {
+Sample.prototype.type = function(x) {
+  var ft = this.field_type(x);
+  if (ft) {
+    return ft.ftype;
+  } else {
+    return null;
+  }
+}
+
+Sample.prototype.field_type = function(x) {
+
+  var name = typeof x == 'string' ? x : x.name;
 
   var fts = aq.where(this.sample_type.field_types,function(ft) {
     return ft.name == name;
   });
 
   if ( fts.length == 1 ) {
-    return fts[0].ftype;
+    return fts[0]
   } else {
     return null;
   }

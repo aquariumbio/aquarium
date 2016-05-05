@@ -1,0 +1,14 @@
+<script type="text/ng-template" id="orphan_field">
+
+  <td><b>{{fv.name}}</b></td>              
+  <td ng-if="fv.child_sample_name">{{fv.value}}</td>              
+  <td ng-if="fv.value">{{fv.value}}</td>
+  <td></td>
+  <td>Orphan field (not editable)</td>
+  <td style='width: 5%; padding-left: 5px; vertical-align: top'>
+    <a href="#" ng-click="remove_from_array(fv)">
+      <i class='icon-remove'></i>
+    </a>
+  </td>    
+
+</script>

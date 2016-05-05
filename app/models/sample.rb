@@ -62,7 +62,7 @@ class Sample < ActiveRecord::Base
             fv = FieldValue.find_by_id(raw_fv[:id])
             fv.destroy if fv
 
-          else
+          elsif !raw_fv[:deleted] # fv might have been made and marked deleted without ever saving
 
             if raw_fv[:id]
               begin
@@ -89,13 +89,13 @@ class Sample < ActiveRecord::Base
               fv.value = raw_fv[:value]
             end
 
-          end
+            fv.save
 
-          fv.save
+            unless fv.errors.empty? 
+              errors.add :field_value, "Could not save field #{raw_fv[:name]}: #{fv.errors.full_messages.join(', ')}"
+              raise ActiveRecord::Rollback
+            end
 
-          unless fv.errors.empty? 
-            errors.add :field_value, "Could not save field #{raw_fv[:name]}: #{fv.errors.full_messages.join(', ')}"
-            raise ActiveRecord::Rollback
           end
 
         end
@@ -155,78 +155,46 @@ class Sample < ActiveRecord::Base
     end
   end
 
-  def properties # deprecated
-    st = sample_type
-    result = {}
-    (1..8).each do |i|
-      n = "field#{i}name"
-      t = "field#{i}type"
-      if st[n] != nil
-        case st[t]
-          when "url", "string"
-            result[st[n]] = self["field#{i}"]
-          when "number"
-            x = self["field#{i}"]
-            if x.to_i == x.to_f
-              result[st[n]] = x.to_i
-            else
-              result[st[n]] = x.to_f
-            end
-          else
-            if self["field#{i}"] != self.name # avoid infinite loop for self-referencing samples
-              result[st[n]] = Sample.find_by_name( self["field#{i}"] )
-            else 
-              result[st[n]] = self.attributes
-            end
-          end
+  def properties
+    p = {}
+    field_values.each do |fv|
+      if fv.value
+        p[fv.name] = fv.value
+      elsif fv.child_sample_id
+        p[fv.name] = fv.child_sample
+      elsif fv.child_item_id
+        p[fv.name] = fv.child_item
       end
     end
-    return result
+    p
   end
 
-  def displayable_properties # deprecated
+  def value field_type
 
-    sample_type = self.sample_type
+    result = field_values.select { |fv| fv.name == field_type.name }
 
-    result = (1..8).collect do |i|
-
-      fn = "field#{i}name".to_sym
-      ft = "field#{i}type".to_sym
-      f = "field#{i}".to_sym
-
-      if sample_type[ft] != 'not used' && sample_type[ft] != nil
-        if sample_type[ft] == 'url'
-          if self[f] != '' && self[f] != nil
-            "<a href='#{self[f]}'>#{self[f][0..20]}...</a>"
-          else
-            "-"
-          end
-        elsif sample_type[ft] == 'number'
-          self[f] ? self[f] : "-"
-        elsif sample_type[ft] == 'string'
-          s = self[f]
-          if !s
-            "-"
-          elsif s.length > 20
-            s[0,20] + '...'
-          else
-            s ? s : "?"
-          end
-        elsif self[f] == '-none-'
-          "-"
-        else
-          l = Sample.find_by_name(self[f])
-          if l
-            "<a href='samples/#{l.id}'>#{l.name}</a>"
-          else
-            "-"
-          end
-        end
+    if field_type.array
+      result
+    else
+      if result.length >= 1
+        result[0]
+      else
+        nil
       end
-
     end
 
-    result.reject { |r| r == nil }
+  end
+
+  def displayable_properties
+
+    sample_type.field_types.collect do |ft|
+      v = value ft
+      if v.class == Array
+        v.collect { |u| u.to_s }.join(", ")
+      else
+        v.to_s
+      end
+    end
 
   end
 
@@ -355,9 +323,6 @@ class Sample < ActiveRecord::Base
     true
 
   end
-
-
-
 
   ####################################################################################################
   # UNUSED WORKFLOW STUFF FROM HERE TO EOF: OKAY TO EVENTUALLY DELETE 

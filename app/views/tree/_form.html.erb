@@ -3,113 +3,101 @@
   <!-- HEADING -->
 
    <div class='sample-header'>
-     <span  class='sample-type-name' ng-if="!sample.edit">{{sample.sample_type.name}}:</span>
+
+     <span  class='sample-type-name' ng-if="!sample.edit">
+       {{sample.sample_type.name}}:
+       <input class='editable' ng-model="sample.copy.name"></input>
+       <a href="#" ng-click='remove_sample(sample)'>
+         <i class='icon-remove' ng-if="!no_remove"></i>
+       </a>       
+     </span>
+   
      <span  class='sample-type-name' ng-if="sample.edit">
        {{sample.sample_type.name}}
-       {{sample.id}}:
+       {{sample.id}}: 
+       <span class='sample-name' >{{sample.name}}</span>
+       <a href="#" ng-if="!no_cancel" ng-click='view_sample(sample)'class='btn btn-mini'>
+         Cancel
+       </a>       
+       <a href="#" ng-if="!no_cancel" ng-click='save_sample(sample)'class='btn btn-mini btn-primary'>
+         Save
+       </a>
      </span> 
- 
-     <span class='sample-name' ng-if="sample.edit">{{sample.name}}</span>
-     <input class='editable' ng-model="sample.copy.name" ng-if="!sample.edit"></input>     
- 
-     <a href="#" ng-if="!sample.edit" ng-click='remove_sample(sample)'>
-       <i class='icon-remove' ng-if="!no_remove"></i>
-     </a>
-
-     <a href="#" ng-if="sample.edit && !no_cancel" ng-click='view_sample(sample)'class='btn btn-mini'>
-       Cancel
-     </a>
-
-     <a href="#" ng-if="sample.edit && !no_cancel" ng-click='save_sample(sample)'class='btn btn-mini btn-primary'>
-       Save
-     </a>
-
+     
    </div>
 
-   <!-- FIELDS -->
+
 
    <ul class='sample-tree-list'>
+
+     <!-- STATIC FIELDS -->
 
      <li>
        <span class="static-field-name">Description:</span>
        <i class='icon-refresh icon-white'></i> 
-       <input class='editable' ng-model="sample.copy.description"></input>
+       <input class='editable' ng-model="sample.description"></input>
      </li>
 
      <li>
        <span class="static-field-name">Project:</span>
        <i class='icon-refresh icon-white'></i>  
        <input class='editable' 
-              ng-model="sample.copy.project" 
+              ng-model="sample.project" 
               type="text"
               projectcomplete></input>
      </li>
 
-     <li ng-repeat='f in sample.sample_type.fields track by $index'
-         ng-if="f.type == 'number' || f.type == 'string'">
-
-       <!-- SIMPLE FIELDS -->     
-
-       <div>
-         <span class="field-name">{{f.name}}:</span>
+     <!-- STRING AND NUMBER FIELDS -->     
+     <li ng-repeat="ft in sample.sample_type.field_types" ng-if="ft.ftype == 'string' || ft.ftype == 'number'">
+       <span class='field-name'>{{ft.name}}:</span>
          <i class='icon-refresh icon-white'></i> 
-         <input class='editable mono' 
-                ng-model="sample.copy['field'+f.index]" 
-                type="{{f.type}}" 
-                step="any"></input>
-       </div>
-
+         <input ng-repeat="fv in sample.field_values" ng-if="fv.name == ft.name" class='editable mono' 
+                ng-model="fv.value" 
+                type="{{ft.ftype}}" 
+                step="any"></input>      
      </li>
 
-     <li ng-repeat='f in sample.sample_type.fields track by $index'
-         ng-if="f.type == 'url'">
-
-       <div>
-         <span class="field-name">{{f.name}}:</span>
+     <!-- URL FIELDS -->     
+     <li ng-repeat="ft in sample.sample_type.field_types" ng-if="ft.ftype == 'url'">
+       <span class='url-field-name'>{{ft.name}}:</span>
          <i class='icon-refresh icon-white'></i> 
-         <input class='editable' 
-                ng-model="sample.copy['field'+f.index]" 
-                type="text" 
-                step="any"></input>
-       </div>
-
+         <input ng-repeat="fv in sample.field_values" ng-if="fv.name == ft.name" class='editable mono' 
+                ng-model="fv.value" 
+                type="text"></input>      
      </li>
 
-     <li ng-repeat='f in sample.sample_type.fields track by $index'
-         ng-if="f.type != 'url' && f.type != 'string' && f.type != 'number'">     
+     <!-- LINKS TO OTHER SAMPLES -->
+     <li ng-repeat="ft in sample.sample_type.field_types" ng-if="ft.ftype == 'sample'">
 
-       <!-- LINKS TO OTHER SAMPLES -->
+       <span class="sub-field-name">{{ft.name}}:</span>
 
-       <span class="sub-field-name">{{f.name}}:</span>
-
-       <span>
-
-         <i class='icon-refresh bullet-container'
-            ng-click='sample.toggle_new_existing(f.index)'></i>
+       <span ng-repeat="fv in sample.field_values" ng-if="fv.name == ft.name">
+         <i class='icon-refresh clickable'
+            ng-click='toggle_new_existing(sample,fv)'></i>
 
          <!-- CHOOSE AN EXISTING SAMPLE -->
-         <span ng-if="sample.copy['field'+f.index].choice == 'existing'">
+         <span ng-if="!fv.choice || fv.choice == 'existing'">
            <input class='editable' 
-                  ng-model="sample.copy['field'+f.index].existing"
-                  autocomplete="f.type"></input>
+                  ng-model="fv.child_sample_name"
+                  autocomplete="fv.allowable_child_types"></input>
          </span>
 
          <!-- BUILD A NEW SAMPLE -->
-         <span ng-if="sample.copy['field'+f.index].choice == 'new'">
+         <span ng-if="fv.choice == 'new'">
 
-           <button ng-class="new_subsample_button_class(sample.copy['field'+f.index].new,st_name)" 
-                   ng-repeat="st_name in f.type"
-                   ng-click="new_sub_sample(sample,f.index,st_name)"
-                   ng-disabled="sample.copy['field'+f.index].new != null">{{st_name}}</button>
+           <button ng-repeat="st_name in fv.allowable_child_types"
+                   ng-class="new_subsample_button_class(fv.new_child_sample,st_name)"
+                   ng-click="new_sub_sample(sample,fv,st_name)"
+                   ng-disabled="fv.new_child_sample != null">{{st_name}}</button>
 
-           <i class='icon-remove' 
-              ng-if="sample.copy['field'+f.index].new" 
-              ng-click="remove_subsample(sample.copy['field'+f.index])"></i>
+           <i class='icon-remove clickable' 
+              ng-if="fv.new_child_sample" 
+              ng-click="remove_subsample(fv)"></i>
 
            <ul class='sample-tree-list'>
-             <li ng-if="sample.copy['field'+f.index].new" 
+             <li ng-if="fv.new_child_sample" 
                  ng-include="'sample_form'" 
-                 ng-init="sample = sample.copy['field'+f.index].new; no_remove=true; no_cancel=true"></li>
+                 ng-init="sample = fv.new_child_sample; no_remove=true; no_cancel=true"></li>
            </ul>
 
          </span>

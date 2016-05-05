@@ -17,6 +17,8 @@
     $scope.ready = false;
     $scope.errors = [];
     $scope.messages = [];
+    $scope.mode = 'initilizing';
+    $scope.changes = -2;
 
     if ( $window.location.search ) {
       $scope.messages.push(decodeURI($window.location.search.split('=')[1]));
@@ -31,7 +33,7 @@
 
       if ( $scope.info.sid > 0 ) {
         $scope.sample.find($scope.info.sid, function(sample) {
-          $scope.mode = 'edit';
+          $scope.mode = 'edit';           
         });
       } else {
         $scope.sample.new($scope.info.stid,function() {
@@ -40,6 +42,10 @@
       }
 
     });
+
+    $scope.$watch('sample', function() { 
+      $scope.changes++;
+    },true);    
 
     $scope.add_to_array = function(ft) {
       $scope.sample.field_values.push($scope.sample.sample_type.default_field(ft));
@@ -65,7 +71,9 @@
           if ( result.errors ) {
             $scope.errors = result.errors;
           } else {
-            window.location = '/samples/' + result.sample.id + '/edit?message=Sample ' + result.sample.id + " saved.";
+            $scope.errors = [];
+            $scope.messages = [ 'Sample ' + result.sample.id + " saved." ];
+            $scope.changes = 0;
           }
         });
 
@@ -82,6 +90,13 @@
       }
 
     }
+
+    $scope.legacy = function() {
+      return $scope.sample.field1 || $scope.sample.field2 || $scope.sample.field3 || $scope.sample.field4
+          || $scope.sample.field5 || $scope.sample.field6 || $scope.sample.field7 || $scope.sample.field8; 
+    }
+
+    $scope.eight = [ 1,2,3,4,5,6,7,8 ];
 
   }]);
 

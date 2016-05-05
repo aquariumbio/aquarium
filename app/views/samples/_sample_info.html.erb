@@ -1,37 +1,10 @@
 <ul class='list'>
 
-  <% (1..8).each do |i| 
-
-   fn = "field#{i}name".to_sym
-   ft = "field#{i}type".to_sym 
-   f = "field#{i}".to_sym %>
-
-    <% if sample_type[ft] != 'not used' && sample_type[ft] != nil && sample[f] && sample[f] != "" %>
-
-      <li><b><%= sample_type[fn] %></b>: 
-
-        <% if sample[f] != nil %>
-
-          <% if sample_type[ft] == 'url' %>
-            <a href='<%= sample[f] %>'><%= sample[f][0..100] %></a>
-          <% elsif sample_type[ft] == 'number' %>
-            <%= sample[f] %>
-          <% elsif sample_type[ft] == 'string' %>
-            <%= sample[f] %>
-          <% elsif sample[f] == '-none-' %>
-            -
-          <% else %>
-            <%= link_to sample[f], Sample.find_by_name(sample[f]) %>
-          <% end %>
-
-        <% else %>
-          - 
-        <% end %>
-
-      </li>
-
-    <% end %>
-
+  <% sample.sample_type.field_types.each do |ft| %>
+    <li>
+      <b><%= ft.name %></b>
+      <%= (sample.value ft).to_s.html_safe %>
+    </li>
   <% end %>
 
 </ul>

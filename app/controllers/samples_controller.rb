@@ -96,9 +96,15 @@ class SamplesController < ApplicationController
     @sample.updater(params[:sample])
 
     if @sample.errors.empty?
-      render json: { sample: @sample }
+      render json: Sample
+        .includes(field_values: :child_sample, sample_type: { field_types: { allowable_field_types: :sample_type } })
+        .find(params[:id])
+        .to_json(include: { 
+          sample_type: { include: { field_types: { include: { allowable_field_types: { include: :sample_type } } } } },
+          field_values: { include: :child_sample }
+        })
     else
-      render json: { errors: @sample.errors.full_messages }
+      render json: { save_error: @sample.errors.full_messages }
     end
 
   end

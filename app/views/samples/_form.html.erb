@@ -4,6 +4,7 @@
      class='sample-type-edit'>
 
   <%= render partial: '/samples/templates/field_input' %>
+  <%= render partial: '/samples/templates/orphan_field' %>  
 
   <h3>
     <span class='light'>
@@ -49,7 +50,7 @@
         <input ng-model='sample.project' type=text class="full bordered tall">
 
         <h4>Description</h4>
-        <textarea ng-model='sample.description' type=text class="bordered"></textarea>
+        <textarea ng-model='sample.description' type=text rows=4 class="bordered"></textarea>
 
       </div>
 
@@ -83,12 +84,19 @@
 
             <!-- VALUE ////////////////////////////////////////////////////////////// -->
 
+            <td style='width: 3%'>
+              <a href="#" 
+                 ng-if="ft.array"
+                 ng-click="add_to_array(ft)"><i class='icon-plus'></i></a>
+            </td>            
+
             <td ng-include="'field_input'" style="width: 60%"></td>     
 
           </tr>
 
-          <tr>
-            <td colspan="3">TODO: Legacy field values here (if any).</td>
+          <tr ng-repeat="fv in sample.field_values"
+              ng-if="fv.orphan && !fv.deleted"
+              ng-include="'orphan_field'">
           </tr>
 
         </table>
@@ -99,10 +107,23 @@
 
     <br />
 
-    <a href="#" class='btn btn-primary' ng-click="save()">Save</a> 
+    <button class='btn btn-primary' ng-click="save()" ng-disabled="changes <= 0">Save</button> 
     <%= link_to 'Cancel', samples_path(sample_type_id:@sample_type.id), class: 'btn' %> 
 
+    <br /><br />
+
+    <div ng-if="legacy()">
+      <hr />
+      <h4>Legacy Fields</h4>
+      <div ng-repeat="i in eight">
+        <b>{{i}}. {{sample.sample_type['field'+i+'name']}}: </b>
+           {{sample['field'+i]}}
+      </div>
+    </div>
+
   </div>
+
+
 
    <!-- <pre>{{sample|json}}</pre> -->
 

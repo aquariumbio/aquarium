@@ -14,14 +14,10 @@
       <th>Description</th>
       <th>Owner*</th>
 
-      <% n = 0
-         (1..8).each do |i| 
-         fn = "field#{i}name".to_sym
-         ft = "field#{i}type".to_sym %>
-         <% if @sample_type[ft] != 'not used' && @sample_type[ft] != nil %>
-           <th><%= @sample_type[fn] %></th>
+      <% n = 0 %>
+      <% @sample_type.field_types.each do |ft| %>
+           <th><%= ft.name %></th>
            <% n += 1 %>
-         <% end %>
       <% end %>
 
       <th></th>
