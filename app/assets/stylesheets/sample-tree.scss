@@ -1,11 +1,11 @@
 .sample-tree {
 
   .tree-nav {
-    border-right: 1pt solid #eee;
-    height: 100%;
+    border-right: 1pt solid #eee;   
   }
 
   .viewer {
+    padding-top: 10px;
   }
 
   .editable {
@@ -203,5 +203,50 @@
     padding-bottom: 5px;
     font-weight: bold;
   }
+
+/* bootstrap overrides */
+
+html, body {
+    height: 100%;
+}
+
+.main, .row-fluid {
+    height: 100%;
+}
+
+.main:before, .main:after,
+.column:before, .column:after {
+    content: "";
+    display: table;
+}
+
+  .main:after,
+  .column:after {
+      clear: both;
+  }
+
+  .column {
+      height: 100%;
+      overflow: auto;
+      *zoom:1;
+  }
+
+  .column .padding {
+      padding: 20px;
+  }
+
+  .box {
+      bottom: 0;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top:40px;
+      padding: 10px;
+  }
+
+  .span9.full {
+      width: 100%;
+  }
+
 
 }

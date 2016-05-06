@@ -7,17 +7,19 @@
     <%= render partial: "sample" %>
     <%= render partial: "form" %>
 
+    <div class='box'>
     <div class='row-fluid'>
-      <div class='span3 tree-nav'>
+      <div class='span3 tree-nav column'>
         <%= render partial: "sample_navigator" %> 
         <%= render partial: "new_sample_navigator" %>   
       </div>
-      <div class='span9 viewer'>
+      <div class='span9 viewer column'>
         <%= render partial: "messages" %>
         <%= render partial: "new_samples" %>
         <%= render partial: "samples" %>
         <%= render partial: "recent_samples" %>        
       </div>
+    </div>
     </div>
 
   </div>
