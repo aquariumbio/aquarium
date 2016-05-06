@@ -73,7 +73,7 @@
 
     $scope.new_sub_sample = function(sample,fv,st_name) {
       var st = $scope.sample_type_from_name(st_name);
-      fv.new_child_sample = new Sample($http).new(st.id,function(sample) {
+      fv.new_child_sample = new Sample($http).new(st.id,function(child) {
         fv.new_child_sample.name = sample.name + "-" + fv.name.toLowerCase() ;
         fv.new_child_sample.description = "The " + fv.name.toLowerCase() + " for " + sample.name;
       });
@@ -168,9 +168,9 @@
           $scope.new_samples = [];
           $scope.messages = aq.collect(response.samples,function(s) { return "Created sample " + s.id + ": " + s.name; });
           upgraded_samples = aq.collect(response.samples,function(raw_sample) {
-            return new Sample().from(raw_sample);
+            return new Sample($http).from(raw_sample);
           });
-          $scope.recent_samples = $scope.recent_samples.concat(upgraded_samples);
+          $scope.recent_samples = upgraded_samples.concat($scope.recent_samples);
           $scope.set_mode('recent');
         }
       });
@@ -184,8 +184,8 @@
           $scope.messages = [ "Saved changes to sample " + sample.id + ": " + sample.name ]
           sample.from(response);
           sample.edit = false;
+          $scope.editing = false;
           console.log(sample);
-          $scope.editing = false;          
         }
       });
     }

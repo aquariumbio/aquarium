@@ -16,6 +16,7 @@ Sample.prototype.find = function(id,promise) {
     sample.promote_data();
     sample.sample_type = new SampleType(sample.http).from(sample.sample_type);
     sample.complete_fields();
+
     promise(sample);
 
   });
@@ -39,10 +40,14 @@ Sample.prototype.promote_data = function() {
 Sample.prototype.from = function(raw) {
 
   for (var key in raw) { 
+    console.log(key);
     this[key] = raw[key];
   }
 
+  console.log("promoting")
   this.promote_data();
+  this.sample_type = new SampleType(this.http).from(this.sample_type);
+  this.complete_fields();
 
   return this;
 
@@ -106,8 +111,6 @@ Sample.prototype.new = function(stid,promise) {
     sample.sample_type = sample_type;
     sample.sample_type_id = stid;
     sample.set_defaults();   
-
-    console.log(sample);
 
     promise(sample);
 

@@ -13,7 +13,7 @@ class Sample < ActiveRecord::Base
   # Field values
   has_many :field_values
 
-  validates_uniqueness_of :name, message: "Samples: must have unique names."
+  validates_uniqueness_of :name, message: "The sample name '%{value}' is not used by another sample."
 
   validates :name, presence: true
   validates :project, presence: true
@@ -39,7 +39,7 @@ class Sample < ActiveRecord::Base
 
   end
 
-  def updater raw
+  def updater raw, user=nil
 
     self.name = raw[:name]
     self.description = raw[:description]
@@ -53,54 +53,62 @@ class Sample < ActiveRecord::Base
 
         sample_type = SampleType.find(raw[:sample_type_id])
 
-        raw[:field_values].each do |raw_fv|
+        if raw[:field_values]
 
-          ft = sample_type.type(raw_fv[:name])
+          raw[:field_values].each do |raw_fv|
 
-          if raw_fv[:id] && raw_fv[:deleted] 
+            ft = sample_type.type(raw_fv[:name])
 
-            fv = FieldValue.find_by_id(raw_fv[:id])
-            fv.destroy if fv
+            if raw_fv[:id] && raw_fv[:deleted] 
 
-          elsif !raw_fv[:deleted] # fv might have been made and marked deleted without ever saving
+              fv = FieldValue.find_by_id(raw_fv[:id])
+              fv.destroy if fv
 
-            if raw_fv[:id]
-              begin
-                fv = FieldValue.find(raw_fv[:id])            
-              rescue Exception => e
-                errors.add :missing_field_value, "Field value #{raw_fv[:id]} not found in db."
-                errors.add :missing_field_value, e.to_s
+            elsif !raw_fv[:deleted] # fv might have been made and marked deleted without ever having been saved
+
+              if raw_fv[:id]
+                begin
+                  fv = FieldValue.find(raw_fv[:id])            
+                rescue Exception => e
+                  errors.add :missing_field_value, "Field value #{raw_fv[:id]} not found in db."
+                  errors.add :missing_field_value, e.to_s
+                  raise ActiveRecord::Rollback
+                end
+              else
+                fv = field_values.create(name: raw_fv[:name])
+              end
+
+              if ft.ftype == 'sample'
+                if raw_fv[:new_child_sample]
+                  child = Sample.creator(raw_fv[:new_child_sample], user ? user : User.find(self.user_id))
+                else
+                  child = Sample.sample_from_identifier raw_fv[:child_sample_name]
+                end
+                fv.child_sample_id = child.id if child
+                if !child && ft.required
+                  errors.add :required, "Sample required for field '#{ft.name}' not present."
+                  raise ActiveRecord::Rollback
+                end
+              elsif ft.ftype == 'number'
+                fv.value = raw_fv[:value].to_f
+              else # string, url 
+                fv.value = raw_fv[:value]
+              end
+
+              fv.save
+
+              unless fv.errors.empty? 
+                errors.add :field_value, "Could not save field #{raw_fv[:name]}: #{fv.errors.full_messages.join(', ')}"
                 raise ActiveRecord::Rollback
               end
-            else
-              fv = field_values.create(name: raw_fv[:name])
-            end
 
-            if ft.ftype == 'sample'
-              child = Sample.sample_from_identifier raw_fv[:child_sample_name]
-              fv.child_sample_id = child.id if child
-              if !child && ft.required
-                errors.add :required, "Sample required for field '#{ft.name}' not present."
-                raise ActiveRecord::Rollback
-              end
-            elsif ft.ftype == 'number'
-              fv.value = raw_fv[:value].to_f
-            else # string, url 
-              fv.value = raw_fv[:value]
-            end
+            end # if
 
-            fv.save
+          end # each
 
-            unless fv.errors.empty? 
-              errors.add :field_value, "Could not save field #{raw_fv[:name]}: #{fv.errors.full_messages.join(', ')}"
-              raise ActiveRecord::Rollback
-            end
+        end # if
 
-          end
-
-        end
-
-      else
+      else 
 
         raise ActiveRecord::Rollback
 

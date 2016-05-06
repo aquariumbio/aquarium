@@ -30,10 +30,7 @@ SampleHelper.prototype.samples = function(project,sample_type_id,promise) {
 
 SampleHelper.prototype.create_samples = function(samples,promise) {
   this.http.post('/tree/create_samples', { samples: samples }).then(function(response) {
-    console.log(response.data);
     promise(response.data);
   });
-
   return this;
-
 }
