@@ -29,7 +29,7 @@
 
       <ul ng-show='project.name == current_selection.project'>
 
-        <li ng-repeat="st in sample_types" class="project-expander" >
+        <li ng-repeat="st in sample_types" class="project-expander" ng-if="show_sample_type(project,st)">
 
           <span ng-if="st.id != current_selection.sample_type" 
                 ng-click="select_st(st)">

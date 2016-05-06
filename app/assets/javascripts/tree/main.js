@@ -59,6 +59,7 @@
       url: '/tree/projects'
     }).done(function(plist) {
       $scope.project_info = plist;
+      console.log($scope.project_info)
       $scope.projects = $scope.project_info.user;
       $scope.projects_loaded = true;
     });
@@ -261,6 +262,10 @@
         return g.name == 'admin';
       });
       return admin.length > 0 || $scope.current_user.id == sample.user_id;
+    }
+
+    $scope.show_sample_type = function(project,st) {
+      return project.sample_type_ids.indexOf(st.id) >= 0;
     }
 
   }]);

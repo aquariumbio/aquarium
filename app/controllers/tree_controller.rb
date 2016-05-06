@@ -27,10 +27,10 @@ class TreeController < ApplicationController
                   .uniq
                   .pluck(:project)
                   .sort
-                  .collect { |p| { name: p, selected: false } },
-      all:  Sample.uniq.pluck(:project)
-                  .sort
-                  .collect { |p| { name: p, selected: false } }
+                  .collect { |p| { name: p, selected: false, sample_type_ids: Sample.where( project: p).pluck(:sample_type_id).uniq  } },
+      all: Sample.uniq.pluck(:project)
+                 .sort
+                 .collect { |p| { name: p, selected: false, sample_type_ids: Sample.where( project: p).pluck(:sample_type_id).uniq } }
     }
   end
 
