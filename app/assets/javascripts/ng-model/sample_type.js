@@ -50,7 +50,7 @@ SampleType.prototype.default_field = function(field_type) {
   var defs = {
     string: "",
     number: 0,
-    url: "http://you.suck.if.you.dont.link.your.sequences.com",
+    url: "http://please.link.your.sequences.com",
     sample: ""
   };
 

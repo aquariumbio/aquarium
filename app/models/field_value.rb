@@ -135,4 +135,25 @@ class FieldValue < ActiveRecord::Base
 
   end
 
+  def to_s
+    if child_sample_id
+      c = Sample.find_by_id(child_sample_id)
+      if c
+        "<a href='/samples/#{c.id}'>#{c.name}</a>"
+      else
+        "? #{child_sample_id} not found ?"
+      end
+    elsif child_item_id
+      c = Item.includes(:object_type).find_by_id(child_sample_id)
+      if c
+        "<a href='/items/#{c.id}'>#{c.object_type.name} #{c.id}</a>"
+      else
+        "? #{child_item_id} not found ?"
+      end
+    else
+      value
+    end
+
+  end
+
 end 

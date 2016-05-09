@@ -1,19 +1,116 @@
+$row-height: 18px;
+
 .sample-tree {
 
+  .subtle {
+    color: #ddd;
+  }
+
+  .input-no-style {
+    color: #0000cc;
+    display: inline-block;    
+    padding: 0;
+    margin: 0;
+    border: none !important;
+    height: $row-height !important;
+    line-height: $row-height;
+    -webkit-appearance:none;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+    background: transparent;
+  }
+
+  .input-no-style:hover {
+    /*outline: 1pt solid #eee;*/
+  }  
+
+  .select-no-style {
+    color: #0000cc;
+    display: inline-block;    
+    padding: 0;
+    margin: 0;
+    border: none !important;
+    height: $row-height !important;
+    line-height: $row-height;
+    -webkit-appearance:none;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+    background: transparent;
+  }  
+
+  .full {
+    width: 99% !important;
+  }
+
+  .td-input {
+    /*border-bottom: 1pt solid #eee;*/
+  }
+
+  .sample-choice {
+    margin-right: 5px;
+  }
+
+  .controls {
+
+  }
+
+  .field-table {
+    width: 100%;
+    /*outline: 1pt solid #bfb;*/
+    margin: 0;
+    tr {
+      /*height: $row-height;*/
+    }
+    td {
+      padding: 0 0 0 5px; 
+      height: $row-height;
+      /*outline: 1pt solid #def; */
+    }
+    .name {
+      width: 160px;
+      font-weight: bold;      
+    }
+    .name-string, .name-number {
+      color: #358235;
+    }
+    .name-url {
+      color: #966306;
+    }
+    .name-sample {
+      color: #353582;
+    }
+    .url {
+      color: #966306;
+    }
+    .value {
+      font-weight: normal;
+      font-family: monospace;      
+    }
+    .description {
+      font-weight: normal;
+    }    
+    .modifer {
+      width: 16px;
+      /*border: 1pt solid green;*/
+    }
+  }
+
   .tree-nav {
-    border-right: 1pt solid #eee;
-    height: 100%;
+    border-right: 1pt solid #eee;   
   }
 
   .viewer {
+    padding-top: 10px;
   }
 
   .editable {
     border: 1pt solid #eee;
-    margin: 2px;
+    margin: 0px;
     padding: 2px;
     height: 14pt;
-    width: 300px;
+    width: 99%;
   }
 
   .owner-login {
@@ -54,31 +151,12 @@
     color: black;
   }
 
-  .field-name {
-    display: inline-block;
-    width: 200px;
-    font-weight: bold;
-    color: #009;
-  }
-
-  .field-value {
-    font-weight: normal;
-    font-family: monospace;
-  }
-
   .static-field-value {
     font-weight: normal;   
   }
 
   .mono {
     font-family: monospace;
-  }
-
-  .static-field-name {
-    display: inline-block;
-    width: 200px;
-    font-weight: bold;
-    color: #090;
   }
 
   .little {
@@ -88,21 +166,7 @@
     font-weight: bold;
     font-family: monospace;
     color: #888;
-  }
-
-  .sub-field-name {
-    display: inline-block;
-    width: 200px;
-    font-weight: bold;
-    color: #900;
-  }  
-
-  .url-field-name {
-    display: inline-block;
-    width: 200px;
-    font-weight: bold;
-    color: #DAA520;
-  }    
+  }   
 
   .bigger {
     margin: 4px;
@@ -119,6 +183,7 @@
 
   .sample-list-description {
     font-size: 14pt;
+    margin-top: 5px;
   }
 
   /*  http://cssdeck.com/labs/pure-css-tree-menu-framework */
@@ -171,12 +236,17 @@
     }
 
     li:last-child {
-      margin-bottom: 2px;
+      margin-bottom: 0;
     }
 
   }
 
+  .clickable {
+    cursor: pointer;
+  }
+
   .project-list {
+    padding-top: 10px;
     ul {
       list-style:none;
       margin-left: 22px;
@@ -195,8 +265,53 @@
   }
 
   .project-heading {
-    padding-bottom: 5px;
+    padding-bottom: 0;
     font-weight: bold;
   }
+
+/* bootstrap overrides */
+
+html, body {
+    height: 100%;
+}
+
+.main, .row-fluid {
+    height: 100%;
+}
+
+.main:before, .main:after,
+.column:before, .column:after {
+    content: "";
+    display: table;
+}
+
+  .main:after,
+  .column:after {
+      clear: both;
+  }
+
+  .column {
+      height: 100%;
+      overflow: auto;
+      *zoom:1;
+  }
+
+  .column .padding {
+      padding: 20px;
+  }
+
+  .box {
+      bottom: 0;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top:40px;
+      padding: 10px;
+  }
+
+  .span9.full {
+      width: 100%;
+  }
+
 
 }

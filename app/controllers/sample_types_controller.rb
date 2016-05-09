@@ -5,13 +5,13 @@ class SampleTypesController < ApplicationController
   # GET /sample_types
   # GET /sample_types.json
   def index
-    @sample_types = SampleType.all
+    @sample_types = SampleType.includes(field_types: :allowable_field_types).all
 
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @sample_types
-                                 .collect { |st| st[:datatype] = st.datatype_hash; st }
                                  .sort { |a,b| a.name <=> b.name }
+                                 .to_json(include: { field_types: { include: :allowable_field_types } })
                   }
     end
   end

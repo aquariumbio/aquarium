@@ -74,33 +74,37 @@ class SamplesController < ApplicationController
     @sample_type = @sample.sample_type
   end
 
+  def render_full_sample sid
+    render json: Sample
+      .includes(field_values: :child_sample, sample_type: { field_types: { allowable_field_types: :sample_type } })
+      .find(sid)
+      .to_json(include: { 
+        sample_type: { include: { field_types: { include: { allowable_field_types: { include: :sample_type } } } } },
+        field_values: { include: :child_sample }
+      })
+  end
+
   # POST /samples
   # POST /samples.json
   def create
-
     @sample = Sample.creator(params[:sample], current_user)
-
     if @sample.errors.empty?
-      render json: { sample: @sample }
+      render_full_sample @sample.id
     else
-      render json: { errors: @sample.errors.full_messages }
+      render json: { save_error: @sample.errors.full_messages }
     end
-
   end
 
   # PUT /samples/1
   # PUT /samples/1.json
   def update
-
     @sample = Sample.find(params[:sample][:id])
-    @sample.updater(params[:sample])
-
+    @sample.updater(params[:sample],current_user)
     if @sample.errors.empty?
-      render json: { sample: @sample }
+      render_full_sample @sample.id
     else
-      render json: { errors: @sample.errors.full_messages }
+      render json: { save_error: @sample.errors.full_messages }
     end
-
   end
 
   # DELETE /samples/1

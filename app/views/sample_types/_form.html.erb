@@ -13,10 +13,10 @@
   </div>
 
   <h4>Name</h4>
-  <input ng-model="sample_type.name" class="long bordered">
+  <input ng-model="sample_type.name" type=text class="long bordered full tall">
 
   <h4>Description</h4>  
-  <input ng-model="sample_type.description" class="long bordered">
+  <input ng-model="sample_type.description" type=text class="long bordered full tall">
 
   <h4>Fields <button class='btn btn-mini' ng-click="add_field()">Add</button></h4>
 
@@ -87,7 +87,7 @@
       <td>
         <div ng-if="ft.ftype != 'number' && ft.ftype != 'string'">N/A</div>
         <div ng-if="ft.ftype == 'number' || ft.ftype == 'string'">
-          <textarea ng-model="ft.choices" >        
+          <textarea ng-model="ft.choices" type=text class='bordered'>        
           </textarea>
         </div>
       </td>         

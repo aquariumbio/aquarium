@@ -3,23 +3,23 @@
   <div ng-if="samples[current_selection.project] && samples[current_selection.project][current_selection.sample_type]">
 
     <div class='sample-list-header'>
-      <span class="sample-list-name">
+      <div class="sample-list-name">
         {{current_selection.project}}
         &#9658;
         <a href="/sample_types/{{sample_type_from_id(current_selection.sample_type).id}}">
           {{sample_type_from_id(current_selection.sample_type).name}}
         </a>
-      </span>
-      <span class="sample-list-description">
-        ( {{sample_type_from_id(current_selection.sample_type).description}} )
-      </span>
+      </div>
+      <div class="sample-list-description">
+        {{sample_type_from_id(current_selection.sample_type).description}}
+      </div>
     </div>
     
   </div>
 
   <div class='sample-tree-list'>
     <ul>
-      <li ng-repeat="sample in samples[current_selection.project][current_selection.sample_type]"
+      <li ng-repeat="sample in samples[current_selection.project][current_selection.sample_type] track by $index"
           ng-include="'sample_router'">
       </li>
     </ul>

@@ -40,23 +40,4 @@ module SampleTypesHelper
     FieldType.destroy_all
   end
 
-  def self.upgrade_sample s
-
-    (1..8).each do |i|
-      n = s.sample_type.fieldname i       
-      t = s.sample_type.fieldtype i 
-      if t == [ 'string' ] || t == [ 'url' ] || t == [ 'number' ]
-        fv = s.field_values.new name: n, value: s["field#{i}"].to_s
-      elsif t != [ 'not used' ]
-        c = Sample.find_by_name(s["field#{i}"])
-        raise "Could not find #{s["field#{i}"]} of type #{t}" unless c
-        fv = s.field_values.new name: n, child_sample_id: c.id
-      end
-      fv.save if fv
-    end
-
-    return s
-
-  end
-
 end

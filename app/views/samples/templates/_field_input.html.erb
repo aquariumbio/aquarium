@@ -45,7 +45,7 @@
       <tr>
         <td ng-include="ft.ftype+'_input'">
         </td>
-        <td style='width: 5%'>
+        <td style='width: 5%; padding-left: 5px; vertical-align: top'>
           <a href="#" ng-click="remove_from_array(fv)" ng-if="ft.array">
             <i class='icon-remove'></i>
           </a>
@@ -54,10 +54,5 @@
     </table>
 
   </div>
-
-  <a href="#" 
-     class='btn btn-mini adder' 
-     ng-if="ft.array"
-     ng-click="add_to_array(ft)">+</a>
 
 </script>
