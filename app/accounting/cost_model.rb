@@ -60,7 +60,7 @@ module CostModel
           shared({
             "Ecoli Transformation" => :plasmid_item_ids,
             "Gibson Assembly" => :default,
-            "Yeast Mating" => :yeast_mating_strain_ids,
+            "Yeast Mating" => :single_sample,
             "Yeast Transformation" => :yeast_transformed_strain_ids
           },0.03,0.7)
 
@@ -78,6 +78,20 @@ module CostModel
       when ["plate_yeast_transformation","plated"]                    then basic(:yeast_transformed_strain_ids,0,2)
 
       # YEAST STRAIN QC #######################################################################################
+      when ["make_yeast_lysate","lysate"]      then basic(:yeast_plate_ids,0.10,4.0)
+      when ["yeast_colony_PCR","pcr"]          then basic(:yeast_plate_ids,0.43,3.1)
+      when ["fragment_analyzing","gel imaged"] then basic(:yeast_plate_ids,0.35,3.1)
+      
+      # YEAST MATING #######################################################################################
+      # All the yeast mating task are single sample.
+      # Even the yeast_mating_strain_ids is an array of size two, they are counted as single sample.
+      when ["yeast_mating","mating"]      then basic(:single_sample,0.90,3.3)
+      when ["streak_yeast_plate","plate"] then basic(:single_sample,0,5)
+      
+      # YEAST CYTOMETRY #######################################################################################
+      when ["overnight_suspension_divided_plate_to_deepwell","overnight"]      then basic(:yeast_strain_ids,1.53,2.7)
+      when ["dilute_yeast_culture_deepwell_plate","diluted"] then basic(:yeast_strain_ids,1.53,2.4)
+      when ["cytometer_reading","cytometer read"] then basic(:yeast_strain_ids,0.02,2.9)
 
       when ["make_yeast_lysate","lysate"]      then basic(:yeast_plate_ids,0.10,4.0)
       when ["yeast_colony_PCR","pcr"]          then basic(:yeast_plate_ids,0.43,3.1)
