@@ -1,0 +1,52 @@
+<script type="text/ng-template" id="sample_heading">
+
+ <span class='sample-header'>
+
+   <span class="sample-id"><a href="/samples/{{sample.id}}">{{sample.id}}</a>:</span>
+
+   <span class='sample-name'>{{sample.name}}</span>
+
+   <span ng-if='sample.user_id != current_user.id' class='owner-login'> ( {{logins[sample.user_id]}} ) </span>
+
+   <span class="project-expander" 
+         ng-if="!sample.open && !sample.edit"
+         ng-click="toggle_sample(sample)">
+     &#9658;
+   </span>
+
+   <span class="project-expander"
+         ng-if="sample.open && !sample.edit"
+         ng-click="toggle_sample(sample)">
+     &#9660;
+   </span>
+
+   <span class="project-expander"
+         ng-if="sample.open && sample.edit">
+     &#9660;
+   </span>   
+
+   <button class="btn btn-mini"
+         ng-if="sample.open && !no_edit && allowed(sample)"
+         ng-disabled="editing"
+         ng-click="editing || edit_sample(sample)"
+         ng-model="sample.data.note">
+     Edit
+   </button>     
+
+   <span  class='sample-type-name' ng-if="sample.edit">
+     <a href="#" ng-if="!no_cancel" ng-click='view_sample(sample)'class='btn btn-mini'>
+       Cancel
+     </a>       
+     <a href="#" ng-if="!no_cancel" ng-click='save_sample(sample)'class='btn btn-mini btn-primary'>
+       Save
+     </a>
+   </span>    
+
+   <input class="tag pull-right"
+          ng-model="sample.data.note"
+          ng-blur="noteBlur(sample)"
+          ng-style="noteColor(sample.data.note)"></input>
+
+ </span>
+
+</script>

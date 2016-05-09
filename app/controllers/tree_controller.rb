@@ -38,7 +38,7 @@ class TreeController < ApplicationController
     render json: Sample
         .where(project: params[:project], sample_type_id: params[:sample_type_id].to_i)
         .reverse
-        .to_json(only: [:name,:id,:user_id])
+        .to_json(only: [:name,:id,:user_id,:data])
   end
 
   def gory_details_of_samples_for_tree

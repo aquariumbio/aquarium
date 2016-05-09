@@ -72,7 +72,7 @@
             $scope.errors = result.errors;
           } else {
             $scope.errors = [];
-            $scope.messages = [ 'Sample ' + result.sample.id + " saved." ];
+            $scope.messages = [ 'Sample ' + result.id + " saved." ];
             $scope.changes = 0;
           }
         });
@@ -83,7 +83,7 @@
           if ( result.errors ) {
             $scope.errors = result.errors;
           } else {
-            window.location = '/samples/' + result.sample.id + '/edit?message=Sample ' + result.sample.id + " created.";
+            window.location = '/samples/' + result.id + '/edit?message=Sample ' + result.id + " created.";
           }
         });
 

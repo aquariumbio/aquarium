@@ -40,11 +40,9 @@ Sample.prototype.promote_data = function() {
 Sample.prototype.from = function(raw) {
 
   for (var key in raw) { 
-    console.log(key);
     this[key] = raw[key];
   }
 
-  console.log("promoting")
   this.promote_data();
   this.sample_type = new SampleType(this.http).from(this.sample_type);
   this.complete_fields();

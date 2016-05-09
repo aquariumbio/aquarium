@@ -257,22 +257,54 @@ The output of this protocol can then be fed to another protocol that adds even m
 
 Items, Objects and Samples
 ===
-The Aquarium inventory is managed via a structured database of Ruby objects with certain relationships, all of shich are available within protocols. The primary inventory objects are as follows.
 
-* **ObjectType**: An object type might be named a "1 L Bottle" or a "Primer Aliquot". If the variable **o** is an ObjectType, then the following methods are available:*
+The Aquarium inventory is managed via a structured database of Ruby objects with certain relationships, all of shich are available within protocols. The primary inventory objects are as follows. Note that Items, Samples, SampleTypes, and ObjectTypes inherit from **ActiveRecord::Base** which is a fundamental rails class with documentation [here](http://api.rubyonrails.org/classes/ActiveRecord/Base.html). The methods in this parent class are available from within a protocol, although care should be taken when using them. In general, it is preferable to use those methods discussed here.
+
+The relationship between these various objects is as follows:
+
+* A SampleType 
+    * Has many Samples of that type
+* A Sample 
+    * Belongs to a SampleType that defines what information should be associated with it
+    * Has many Items in inventory
+* An Item 
+    * Belongs to an ObjectType that defines what kind of container it is in 
+    * May belong to and a Sample that says what kind of item it is
+
+For example, suppose we have a primer "fwd" with several aliquots and a stock in the inventory. Using various ActiveRecord nicities, we could write
+
+```ruby
+fwd = Sample.find_by_name("fwd")
+fwd.sample_type.name => "Primer"
+aliquot_type = ObjectType.find_by_name("Primer Aliquot")
+fwd.items.select { |i| i.object_type_id == aliquot_type.id } => List of primer aliquots containing "fwd"
+```
+
+### ObjectType (a.k.a. Container)
+
+An object type might be named a "1 L Bottle" or a "Primer Aliquot". If the variable **o** is an ObjectType, then the following methods are available:*
   * o.name - returns the name of the object type, as in "1 L Bottle"
   * o.handler - returns the name that classifies the object type, as in "liquid_media". This name is used by the aquarium UI to categorize object types. The special handler "collection" is used to show that items with this given object type are collections (see below)
-* **SampleType**: A sample type might be something like "Primer" or "Yeast Strain". It defines a class of samples that all have the same basic properties. For example, all Primers have a sequence. If **st** is a sample type, then the following methods are available:*
+
+### SampleType
+
+ A sample type might be something like "Primer" or "Yeast Strain". It defines a class of samples that all have the same basic properties. For example, all Primers have a sequence. If **st** is a sample type, then the following methods are available:*
   * st.name - the name of the sample type, as in "Primer"
   * st.fieldnname - the name of the nth field, for n=1..8. Probably not useful directly. See the Sample object.
   * st.fieldntype - the type of the nth field, either "number", "string", "url", or "sample". Se the Sample object for how to use these fields.
-* **Sample**: A specific (yet still abstract) sample, not to be confused with a sample type or an item. For example, a primer with a certain sequence and name will have sample type "Primer" and possibly many items in the lab for the given sample. If **s** is a sample, then the following methods are available:
+
+### Sample
+
+A specific (yet still abstract) sample, not to be confused with a sample type or an item. For example, a primer with a certain sequence and name will have sample type "Primer" and possibly many items in the lab for the given sample. If **s** is a sample, then the following methods are available:
   * s.id - The id of the sample.
   * s.name: The name of the sample. For example, a sample whose SampleType is "Plasmid" might be named "pLAB1".
   * s.sample_type_id - The sample type id of the sample.
   * s.properties - A hash of the form { key1: value1, ..., key8: value8 } where the nth key is named according to the s.sample_type.fieldnname (as a symbol, not a string).
   * s.make_item object_type_name - Returns an item associated with the sample and in the container described by object_type_name The location of the item is determined by the location wizard.
-* **Item**: A physical item in the lab. It has an object type and may correspond to a sample, see the examples below. If **i** is an item, then the following methods are available:
+
+### Item
+
+A physical item in the lab. It has an object type and may correspond to a sample, see the examples below. If **i** is an item, then the following methods are available:
   * i.id - the id of the item. Every item in the lab has such an id that can by used to find information about the item (see Finding Items and Samples).
   * i.location - a string describing where in the lab the item can be found.
   * i.object_type_id - the object type id associated with the item.
@@ -283,73 +315,6 @@ The Aquarium inventory is managed via a structured database of Ruby objects with
   * i.save - if you make changes to an item, you have to call i.save to make sure the changes are saved to the database.
   * i.reload - if the item has changed somehow in the database, this method update **i** so that it has the latest information from the database.
   * i.mark_as_deleted - to delete an item, don't call delete, call this method instead. It actually just hides the item so old job logs that refer to it can still have something to point to.
-
-Note that Items, Samples, SampleTypes, and ObjectTypes inherit from **ActiveRecord::Base** which is a fundamental rails class with documentation [here](http://api.rubyonrails.org/classes/ActiveRecord/Base.html). The methods in this parent class are available from within a protocol, although care should be taken when using them. In general, it is preferable to use those methods discussed here.
-
-Finding Items and Samples
-===
-To find items and samples in the database, use the **find** method. This method is most easily explained via examples.
-
-```ruby
-find(:item, id: 123)
-```
-
-This call to **find** returns a list of items whose id is 123. There should be zero or one such item. Just remember that **find** always returns a list.
-
-```ruby
-find(:item, sample: { name: "pLAB1" })
-```
-
-This call to **find** returns a list of items that correspond to the sample named "pLAB1". If that sample were a plasmid, then the items returned would be all plasmid stocks and E. coli plasmid stocks, etc. with "pLAB1" in them.
-
-```ruby
-find(:item, sample: { object_type: { name: "Enzyme Aliquot" }, sample: { name: "ecoRI" } } )
-```
-
-This call returns a list of all aliquots of ecoRI.
-
-```ruby
-find(:sample, name: "pLAB1")
-```
-
-This call returns all samples named "pLAB1". Since names are unique, this call should return zero or one item.
-
-As an example of how one might use the **find** method, supose here is a protocol that tells the user to check that all the 1 kb Ladders are where they are supposed to be.
-
-```ruby
-class Protocol
-
-  def main
-
-    ladders = find(:item, sample: { name: "1 kb Ladder" } )
-
-    ladders.each do |ladder|
-
-      data = show {
-        title "Item Number #{ladder.id}"
-        note "This item should be at location #{ladder.location}"
-        select ["Yes", "No"], var: "okay", label: "Is the item in the proper location?"
-      }
-
-      show {
-        title "Yikes!"
-          warning "Do something to find item number #{ladder.id}!!!"
-      } unless data[:okay] == "Yes"
-
-    end
-
-  end
-
-end
-```
-
-You can also use **find** to get a list of projects names with
-
-```ruby
-find(:project,{})
-```
-
-which returns a sorted list of all project names.
 
 Taking Items
 ===

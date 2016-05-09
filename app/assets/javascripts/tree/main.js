@@ -59,7 +59,6 @@
       url: '/tree/projects'
     }).done(function(plist) {
       $scope.project_info = plist;
-      console.log($scope.project_info)
       $scope.projects = $scope.project_info.user;
       $scope.projects_loaded = true;
     });
@@ -77,6 +76,7 @@
       fv.new_child_sample = new Sample($http).new(st.id,function(child) {
         fv.new_child_sample.name = sample.name + "-" + fv.name.toLowerCase() ;
         fv.new_child_sample.description = "The " + fv.name.toLowerCase() + " for " + sample.name;
+        fv.new_child_sample.project = sample.project;
       });
     }
 
@@ -86,9 +86,9 @@
 
     $scope.new_subsample_button_class = function(sample,st_name) {
       if ( sample && sample.sample_type && sample.sample_type.name == st_name ) {
-        return "btn btn-primary btn-mini bigger";
+        return "btn btn-primary btn-mini sample-choice";
       } else {
-        return "btn btn-mini bigger";        
+        return "btn btn-mini sample-choice";        
       }
     }
 
@@ -155,9 +155,11 @@
       $scope.editing = true;
     }
 
-    $scope.view_sample = function(sample) {      
-      sample.edit = false;
-      $scope.editing = false;
+    $scope.view_sample = function(sample) {  
+      sample.find(sample.id, function(sample) {
+        sample.edit = false;
+        $scope.editing = false;
+      });
     }    
 
     $scope.save_new_samples = function() {
@@ -186,7 +188,6 @@
           sample.from(response);
           sample.edit = false;
           $scope.editing = false;
-          console.log(sample);
         }
       });
     }
@@ -266,6 +267,34 @@
 
     $scope.show_sample_type = function(project,st) {
       return project.sample_type_ids.indexOf(st.id) >= 0;
+    }
+
+    $scope.non_sample = function(ft) {
+      return ft.ftype != 'sample';
+    }
+
+    $scope.is_empty_array = function(sample,ft) {
+      var fvs = aq.where(sample.fields(ft.name),function(fv) {
+        return !fv.deleted;
+      });
+      console.log([fvs,fvs.length]);
+      return fvs.length == 0;
+    }
+
+    $scope.add_to_array = function(sample,ft) {
+      var fv = sample.sample_type.default_field(ft);
+      fv.allowable_child_types = sample.allowable(fv.name);
+      sample.field_values.push(fv);
+    }
+
+    $scope.remove_from_array = function(fv) {    
+      fv.deleted = true;
+    }
+
+    $scope.fv_name_filter = function(field_type_name) {
+      return function(fv) {
+        return fv.name == field_type_name && !fv.deleted;
+      }
     }
 
   }]);

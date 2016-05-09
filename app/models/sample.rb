@@ -13,7 +13,7 @@ class Sample < ActiveRecord::Base
   # Field values
   has_many :field_values
 
-  validates_uniqueness_of :name, message: "The sample name '%{value}' is not used by another sample."
+  validates_uniqueness_of :name, message: "The sample name '%{value}' is the name of an existing sample"
 
   validates :name, presence: true
   validates :project, presence: true
@@ -37,6 +37,10 @@ class Sample < ActiveRecord::Base
 
     return sample
 
+  end
+
+  def stringify_errors elist
+    elist.full_messages.join(",")
   end
 
   def updater raw, user=nil
@@ -89,6 +93,10 @@ class Sample < ActiveRecord::Base
                   errors.add :required, "Sample required for field '#{ft.name}' not present."
                   raise ActiveRecord::Rollback
                 end
+                unless child.errors.empty?
+                  errors.add :child_error, "#{ft.name}: " + stringify_errors(child.errors)
+                  raise ActiveRecord::Rollback  
+                end
               elsif ft.ftype == 'number'
                 fv.value = raw_fv[:value].to_f
               else # string, url 
@@ -98,7 +106,7 @@ class Sample < ActiveRecord::Base
               fv.save
 
               unless fv.errors.empty? 
-                errors.add :field_value, "Could not save field #{raw_fv[:name]}: #{fv.errors.full_messages.join(', ')}"
+                errors.add :field_value, "Could not save field #{raw_fv[:name]}: #{stringify_errors(fv.errors)}"
                 raise ActiveRecord::Rollback
               end
 
