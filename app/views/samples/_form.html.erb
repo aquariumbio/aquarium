@@ -115,7 +115,7 @@
     <div ng-if="legacy()">
       <hr />
       <h4>Legacy Fields</h4>
-      <div ng-repeat="i in eight">
+      <div ng-repeat="i in eight" ng-if="sample['field'+i]">
         <b>{{i}}. {{sample.sample_type['field'+i+'name']}}: </b>
            {{sample['field'+i]}}
       </div>

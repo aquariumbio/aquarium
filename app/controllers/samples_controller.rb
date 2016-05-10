@@ -232,6 +232,7 @@ class SamplesController < ApplicationController
       if @samples.length > 0
         @samples.each do |s|
           s.save
+          SamplesHelper.upgrade(s, s.sample_type)
         end
       end
 
