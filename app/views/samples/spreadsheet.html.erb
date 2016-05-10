@@ -30,14 +30,30 @@
 
 <p>
 The first line of the .csv file should include only the name of the sample type (e.g. Primer) in the first column and be blank in the remaining columns. All other lines are of the form
-<pre>
-  name, project, field1, field2, ...
-</pre>
+</p>
+
+<ul>
+<pre style="background: rgba(250,250,250, 0.35)">
+  name, project, field1, field2, ...</pre>
+</ul>
+
+<p>
 where name is a unique, unused, sample name. Project is string,
 preferable indicating an existing project name.
 The remaining columns are the fields specified by the sample type.
-If only three fields are specified in the sample type, then only three columns should be used after the login column.
+If only three fields are specified in the sample type, then only three columns should be used after the project column.
+For example, to uplaod two new primers and associate them with the Auxin project, you would do use a file of the form
 </p>
+
+<ul>
+  <pre style="background: rgba(250,250,250, 0.35)">
+  Primer
+  my_primer_1, Auxin, actcatcgacgact, cacggactacg, 65.0
+  my_primer_2, Auxin, ttttcattactataaacact, cacacattctacacactac, 60.0</pre>
+</ul>
+</p>
+
+
 
 <p>
 Use this functionality with care. <span style='color: red'>Try importing on the rehearsal
