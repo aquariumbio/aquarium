@@ -42,12 +42,41 @@ module CostModel
       when ["image_plate","no colonies"]                 then basic(:default,0.0,0.7)
 
       # PLASMID VERIFICATION ################################################################################
+      when ["start_overnight_plate","overnight"] 
+        n = simple_spec[:num_colonies].inject { |sum,x| sum+x }
+        {
+          materials: 0.11 * n,
+          labor: 3.1 * n * labor_rate
+        }
 
-      when ["start_overnight_plate","overnight"]        then basic(:plate_ids,0.11,3.1)
-      when ["miniprep","plasmid extracted"]             then basic(:plate_ids,1.35,9.9)
-      when ["sequencing","send to sequencing"]          then basic(:plate_ids,4.8,5.3)
+      when ["miniprep","plasmid extracted"]  
+        n = simple_spec[:num_colonies].inject { |sum,x| sum+x }
+        {
+          materials: 1.35 * n,
+          labor: 9.9 * n * labor_rate
+        }
+
+      when ["sequencing","send to sequencing"]
+        n = 0
+        simple_spec[:num_colonies].each do |num_col|
+          simple_spec[:primer_ids].each do |primer_list|
+            n += num_col * primer_list.length
+          end
+        end
+        {
+          materials: 4.8 * n,
+          labor: 5.3 * n * labor_rate
+        }
+
       when ["upload_sequencing_results","results back"] then nothing
-      when ["glycerol_stock","done"]                    then basic(:plate_ids,0.53,1.9)
+
+      when ["glycerol_stock","done"] 
+        n = simple_spec[:num_colonies].inject { |sum,x| sum+x }
+        {
+          materials: 0.53 * n,
+          labor: 1.9 * n * labor_rate
+        }
+
       when ["discard_item","discarded"]                 then nothing
 
       # STREAK PLATE ########################################################################################
@@ -77,18 +106,39 @@ module CostModel
       when ["yeast_transformation","transformed"]                     then basic(:yeast_transformed_strain_ids,0.91,11.3)
       when ["plate_yeast_transformation","plated"]                    then basic(:yeast_transformed_strain_ids,0,2)
 
+
       # YEAST STRAIN QC #######################################################################################
-      when ["make_yeast_lysate","lysate"]      then basic(:yeast_plate_ids,0.10,4.0)
-      when ["yeast_colony_PCR","pcr"]          then basic(:yeast_plate_ids,0.43,3.1)
-      when ["fragment_analyzing","gel imaged"] then basic(:yeast_plate_ids,0.35,3.1)
+
+      when ["make_yeast_lysate","lysate"]
+        n = simple_spec[:num_colonies].inject { |sum,x| sum+x }
+        {
+          materials: 0.10 * n,
+          labor: 4.0 * n * labor_rate
+        }
+
+      when ["yeast_colony_PCR","pcr"]
+        n = simple_spec[:num_colonies].inject { |sum,x| sum+x }
+        {
+          materials: 0.43 * n,
+          labor: 3.1 * n * labor_rate
+        }
+
+      when ["fragment_analyzing","gel imaged"]
+        n = simple_spec[:num_colonies].inject { |sum,x| sum+x }
+        {
+          materials: 0.43 * n,
+          labor: 3.1 * n * labor_rate
+        }
       
       # YEAST MATING #######################################################################################
       # All the yeast mating task are single sample.
       # Even the yeast_mating_strain_ids is an array of size two, they are counted as single sample.
+
       when ["yeast_mating","mating"]      then basic(:single_sample,0.90,3.3)
       when ["streak_yeast_plate","plate"] then basic(:single_sample,0,5)
       
       # YEAST CYTOMETRY #######################################################################################
+
       when ["overnight_suspension_divided_plate_to_deepwell","overnight"]      then basic(:yeast_strain_ids,1.53,2.7)
       when ["dilute_yeast_culture_deepwell_plate","diluted"] then basic(:yeast_strain_ids,1.53,2.4)
       when ["cytometer_reading","cytometer read"] then basic(:yeast_strain_ids,0.02,2.9)
