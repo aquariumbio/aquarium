@@ -48,4 +48,10 @@ module SamplesHelper
 
   end
 
+  def self.upgrade_all
+    SampleType.all.each do |st|
+      self.upgrade_by_st st
+    end
+  end
+
 end

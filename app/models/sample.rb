@@ -141,41 +141,53 @@ class Sample < ActiveRecord::Base
     return nil
   end
 
-  def set_property name, val # deprecated
-    st = self.sample_type
-    i = st.field_index name
-    if i
-      n = "field#{i}type"
-      case st[n]
-        when "url", "string"
-          raise "Field '#{name}' should be a string" unless val.class == String
-          self["field#{i}".to_sym] = val
-        when "number"
-          raise "Field '#{name}' should be a number" unless val.class == Fixnum || val.class == Float
-          self["field#{i}".to_sym] = val
-        else
-          if val.class == String
-            s = Sample.find_by_name val
-            raise "Could not find sample named #{val}" unless s
-            self["field#{i}".to_sym] = val
-          elsif val.class == Fixnum
-            s = Sample.find_by_id val
-            raise "Could not find sample with id #{val}" unless s
-            self["field#{i}".to_sym] = s.name
-          else
-            raise "Field '#{name}' should be a sample id or a sample name"
-          end
+  def set_property name, val 
+
+    ft = field_type name
+    fvs = field_values.select { |fv| fv.name == name }
+
+    if ft && fvs.length == 1
+
+      fv = fvs[0]
+
+      case field_type(name).ftype 
+     
+      when 'string', 'url'
+        raise "#{val} is not a string" unless val.class == String
+        fv.value = val
+
+      when 'number'
+        raise "#{val} is not a number" unless val.respond_to? :to_f
+        fv.value = val.to_s
+    
+      when 'sample'
+        raise "#{val} is not a sample" unless val.class == Sample
+        fv.child_sample_id = val.id
+
+      when 'item'
+        raise "#{val} is not a item" unless val.class == Item
+        fv.child_item_id = val.id
+
       end
-    else
-      raise "Could not find field named #{name} in #{self.sample_type.name}"
-    end
+
+      fv.save
+
+    end 
+
+    # TODO: allow user to set array fields too
+
   end
 
   def properties
     p = {}
     field_values.each do |fv|
       if fv.value
-        p[fv.name] = fv.value
+        ft = field_type fv.name 
+        if ft.ftype == 'number'
+          p[fv.name] = fv.value.to_f
+        else
+          p[fv.name] = fv.value
+        end
       elsif fv.child_sample_id
         p[fv.name] = fv.child_sample
       elsif fv.child_item_id
@@ -199,6 +211,15 @@ class Sample < ActiveRecord::Base
       end
     end
 
+  end
+
+  def field_type name
+    fts = sample_type.field_types.select { |ft| ft.name == name }
+    if fts.length > 0
+      fts[0]
+    else
+      nil
+    end
   end
 
   def displayable_properties
