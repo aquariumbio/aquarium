@@ -93,7 +93,7 @@ class Sample < ActiveRecord::Base
                   errors.add :required, "Sample required for field '#{ft.name}' not present."
                   raise ActiveRecord::Rollback
                 end
-                unless child.errors.empty?
+                unless !child || child.errors.empty?
                   errors.add :child_error, "#{ft.name}: " + stringify_errors(child.errors)
                   raise ActiveRecord::Rollback  
                 end
