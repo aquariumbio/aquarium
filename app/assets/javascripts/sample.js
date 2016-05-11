@@ -20,10 +20,6 @@
     $scope.mode = 'initilizing';
     $scope.changes = -2;
 
-    if ( $window.location.search ) {
-      $scope.messages.push(decodeURI($window.location.search.split('=')[1]));
-    }
-
     $scope.helper.autocomplete(function(sample_names) {
       $scope.sample_names = sample_names;
       $scope.ready = true;
