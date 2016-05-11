@@ -33,4 +33,8 @@ class FieldType < ActiveRecord::Base
     end
   end
 
+  def type
+    ftype
+  end
+
 end 
