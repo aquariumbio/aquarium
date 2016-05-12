@@ -3,7 +3,7 @@
   <% sample.sample_type.field_types.each do |ft| %>
     <li>
       <b><%= ft.name %></b>
-      <%= (sample.value ft).to_s.html_safe %>
+      <%= (sample.value ft).to_s.try(:html_safe) %>
     </li>
   <% end %>
 
