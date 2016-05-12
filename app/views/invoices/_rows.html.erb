@@ -13,7 +13,6 @@
     <% end %>
   </tr>
 
-
  <% rows.each do |row| %>
 
     <tr>
@@ -29,26 +28,31 @@
       </td>
 
       <td>
-          <% if row.category == "labor" %>
-            <%= row.category %>: <%= (row.amount / row.labor_rate).round(3) %> min @ $<%= row.labor_rate %>/min
-          <% elsif row.category != "credit" %>
-            <%= row.category %>
-          <% end %>
 
-        <ul>
-          <% row.first_row_logs.each do |al| %>
-            <% if al.row2 %>
-              <li><%= link_to al.user.login, al.user %>: <%= al.note %>
-                  See transaction <%= al.second_row.id %> in your <%= al.second_row.created_at.strftime("%B, %Y") %> statement.
-              </li>            
-            <% else %>
-              <li><%= link_to al.user.login, al.user %>: <%= al.note %> (<%= al.created_at.strftime("%b %d, %Y") %>)</li>
+        <% if row.category == "labor" %>
+          <%= row.category %>: <%= (row.amount / row.labor_rate).round(3) %> min @ $<%= row.labor_rate %>/min
+        <% elsif row.category != "credit" %>
+          <%= row.category %>
+        <% end %>
+
+        <% if row.first_row_logs.length > 0 || row.second_row_logs.length > 0 %>
+          <ul>
+            <% row.first_row_logs.each do |al| %>
+              <% if al.row2 %>
+                <li><%= link_to al.user.login, al.user %>: <%= al.note %>
+                    See transaction <%= al.second_row.id %> in your <%= al.second_row.created_at.strftime("%B, %Y") %> statement.
+                </li>            
+              <% else %>
+                <li><%= link_to al.user.login, al.user %>: <%= al.note %> (<%= al.created_at.strftime("%b %d, %Y") %>)</li>
+              <% end %>
             <% end %>
-          <% end %>
-          <% row.second_row_logs.each do |al| %>
-            <li><%= link_to al.user.login, al.user %>: <%= al.note %> (<%= al.created_at.strftime("%b %d, %Y") %>)</li>
-          <% end %>          
-        </ul>
+            <% row.second_row_logs.each do |al| %>
+              <li><%= link_to al.user.login, al.user %>: <%= al.note %> (<%= al.created_at.strftime("%b %d, %Y") %>)</li>
+            <% end %>          
+          </ul>
+        <% end %>
+
+        <span id="row-<%= row.id %>-budget" class='change'></span>
 
       </td>      
 

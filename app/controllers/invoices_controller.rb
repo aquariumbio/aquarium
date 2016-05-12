@@ -63,6 +63,47 @@ class InvoicesController < ApplicationController
 
   end
 
+  def change_budget
+
+    task = Task.find(params[:task_id])
+    budget = Budget.find(params[:budget_id])
+    rows = []
+
+    if params[:rows]
+      params[:rows].each do |index,val|
+        logger.info val[:id]
+        row = Account.find(val[:id])
+        row.budget_id = budget.id
+        row.save
+        rows << row
+      end
+    end
+
+    task.budget_id = params[:budget_id]
+    task.save
+
+    if task.errors.empty?
+      render json: { task: task, budget: budget, rows: rows }
+    else
+      render json: { error: task.errors.full_messages.join(', ') }
+    end
+
+  end 
+
+  def change_status
+
+    invoice = Invoice.find(params[:id])
+    invoice.status = params[:status]
+    invoice.save
+
+    if invoice.errors.empty? 
+      render json: { invoice: invoice }      
+    else     
+      render json: { error: invoice.errors.full_messages.join(', ') }
+    end
+
+  end
+
   def credit
 
     if current_user.is_admin

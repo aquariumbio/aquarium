@@ -14,17 +14,28 @@
 
       <div style='margin: 0 50px 0 50px'>
 
-        <h4>
+        <table style="width: 100%; table-layout: fixed;">
 
-          Task <a href="/tasks/<%= task_id %>"><%= task_id %></a>: <%= Task.find(task_id).name %>
+          <tr style="vertical-align: top">
 
-          <% if current_user && current_user.is_admin %>
-            <button class='btn btn-mini pull-right action no-print' onclick="choose_all(<%= task_id %>)">All</button>
-            <button class='btn btn-mini btn-primary pull-right action no-print' onclick="note(<%= task_id %>)">Note</button>
-            <button class='btn btn-mini btn-success pull-right action no-print' onclick="credit(<%= task_id %>)">Credit</button>
-          <% end %>      
+            <td>
+              <b>Task <a href="/tasks/<%= task_id %>"><%= task_id %></a>: <%= Task.find(task_id).name %>
+                 <span id="task-<%= task_id %>-budget" class='change'></span>
+              </b>
+            </td>
 
-        </h4>
+            <td width="25%">
+              <% if current_user && current_user.is_admin %>
+                <button class='btn btn-mini pull-right action no-print' onclick="choose_all(<%= task_id %>)">All</button>
+                <button class='btn btn-mini btn-primary pull-right action no-print' onclick="note(<%= task_id %>)">Note</button>
+                <button class='btn btn-mini btn-success pull-right action no-print' onclick="credit(<%= task_id %>)">Credit</button>
+                <button class='btn btn-mini btn-info pull-right action no-print' onclick="change_budget(<%= task_id %>)">Change Budget</button>
+              <% end %>      
+            </td>
+
+          </tr>
+
+        </table>
 
         <%= render partial: 'rows', locals: { rows: rows } %>
 

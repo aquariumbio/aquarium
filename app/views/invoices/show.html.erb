@@ -50,7 +50,8 @@
       </p>
       <% end %>
 
-      <button class='btn btn-warning' id="save">Save Changes</button>
+      <button class='btn btn-warning' id="save" onclick="save_status()">Save Changes</button>
+
     </div>
 
   </div>
@@ -60,15 +61,21 @@
   <%= render partial: 'details' %>
   <%= render partial: "note_dialog" %>
   <%= render partial: "credit_dialog" %>
+  <%= render partial: "change_budget_dialog" %>  
 
 </div>
 
 <script>
 
+  var current_task_id = -1;
+
   $('#save').css('display', 'none');
   function show_save() {
     $('#save').css('display', 'block');
   }
+  function hide_save() {
+    $('#save').css('display', 'none');
+  }  
   $('#status').change(show_save);
   $('#notes').keydown(show_save);
 
@@ -108,6 +115,26 @@
       $('#transaction-total').html(aq.currency(total));
       $("#creditDialog").modal('show');
     }
+  }
+
+  function change_budget(task_id) {    
+    rows = $('.chooser:checked').filter(function() {
+      return $(this).data('task-id') == task_id && $(this).prop('checked');
+    });     
+    $('#change-budget-task-id').html(task_id);
+    $("#changeBudgetDialog").modal('show');
+    current_task_id = task_id;
+  }  
+
+  function save_status() {
+    $.ajax({
+      type: "GET",
+      url: "/invoices/change_status/" + <%= @invoice.id %> + "/" + $('#status').val(),
+      success: function(data) {
+        console.log(data);
+        hide_save();
+      }
+    });
   }
 
   function save_note() {
@@ -156,6 +183,33 @@
       });      
     }
   }
+
+  function save_change_budget () {
+
+    var bid = $('#change-budget-select').val();
+
+    var change_data = {
+      rows: aq.collect(rows,function(row) { return { id: $(row).data('row-id'), task_id: $(row).data('task-id') } } ),
+      budget_id: $('#change-budget-select').val(),
+      task_id: current_task_id
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "/invoices/change_budget/",
+        data: change_data,
+        success: function(data) {
+          console.log(["success", data]);
+          $('#task-'+current_task_id+"-budget").html("&#xffeb; " + data.budget.name);
+          aq.each(data.rows,function(row) {
+            $('#row-'+row.id+"-budget").html("&#xffeb; " + data.budget.name);
+          });
+          $("#changeBudgetDialog").modal('hide');
+        },
+        dataType: 'json'
+      });          
+
+  }  
 
 </script>
 

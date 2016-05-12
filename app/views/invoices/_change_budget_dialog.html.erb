@@ -1,0 +1,25 @@
+<div id="changeBudgetDialog" class="modal hide fade">
+
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Change Budget for Task <span id="change-budget-task-id">-1</span></h3>
+  </div>
+
+  <div class="modal-body">
+
+  <p><b>User</b>: <%= @invoice.user.name %> (<%= link_to @invoice.user.login, @invoice.user %>).</p>
+
+    <select id="change-budget-select">
+      <% Budget.all.each do |budget| %>
+        <option value=<%= budget.id %>><%= budget.name %></option>
+      <% end %>
+    </select>
+
+  </div>
+
+  <div class="modal-footer">
+    <a href="#" class="btn" onclick="$('#changeBudgetDialog').modal('hide')">Cancel</a>
+    <a href="#" class="btn btn-primary" onclick="save_change_budget()">Change</a>
+  </div>
+
+</div>
