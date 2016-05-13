@@ -1,13 +1,13 @@
 Bioturk::Application.routes.draw do
 
-  get '/tree',                           to: 'tree#tree'
-  get '/tree/all',                       to: 'tree#all'  
-  get '/tree/projects',                  to: 'tree#projects'    
-  get '/tree/samples_for_tree',          to: 'tree#samples_for_tree'  
-  get '/tree/sub/:id',                   to: 'tree#subsamples'
-  get '/tree/annotate/:id/:note',        to: 'tree#annotate'  
-  post '/tree/create_samples',           to: 'tree#create_samples'
-  post '/tree/save',                     to: 'tree#save'
+  get '/browser',                           to: 'browser#browser'
+  get '/browser/all',                       to: 'browser#all'  
+  get '/browser/projects',                  to: 'browser#projects'    
+  get '/browser/samples_for_tree',          to: 'browser#samples_for_tree'  
+  get '/browser/sub/:id',                   to: 'browser#subsamples'
+  get '/browser/annotate/:id/:note',        to: 'browser#annotate'  
+  post '/browser/create_samples',           to: 'browser#create_samples'
+  post '/browser/save',                     to: 'browser#save'
   
   resources :parameters
 

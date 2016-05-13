@@ -1,8 +1,8 @@
-class TreeController < ApplicationController
+class BrowserController < ApplicationController
 
   before_filter :signed_in_user
 
-  def tree
+  def browser
   end
 
   def all

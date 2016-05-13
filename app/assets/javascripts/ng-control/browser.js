@@ -8,7 +8,7 @@
     w = angular.module('aquarium', []); 
   } 
 
-  w.controller('treeCtrl', [ '$scope', '$http', '$attrs', 'treeAjax', '$window', function ($scope,$http,$attrs,treeAjax,$window) {
+  w.controller('browserCtrl', [ '$scope', '$http', '$attrs', function ($scope,$http,$attrs) {
 
     // Initialization
 
@@ -36,13 +36,35 @@
 
     $scope.current_selection = { project: null, sample_type: null, loaded: false };
 
-    treeAjax.sample_types(function(data) {
+    function get(url,f) {
+      $http.get(url).
+        then(f, function(response) {
+          console.log("error: " + response);
+        });
+    }     
+
+    function user_info(then) {
+      var that = this;
+      get('/users.json',function(users_response) {
+        get('/users/current',function(current_response) {
+          then(users_response.data,current_response.data);
+        });
+      });
+    }
+
+    function sample_types(then) {
+      get('/sample_types.json', function(response) {
+        then(response.data);
+      });
+    }    
+
+    sample_types(function(data) {
       $scope.sample_types = data;
       $scope.types_loaded = true;
-      $scope.sample_type_choice = $scope.sample_types[0];
-    });
+      $scope.sample_type_choice = $scope.sample_types[0];      
+    })
 
-    treeAjax.user_info(function(users,current) {
+    user_info(function(users,current) {
       $scope.users = users;
       $scope.current_user = current;
       aq.each($scope.users,function(user) {
@@ -56,7 +78,7 @@
     });
 
     $.ajax({
-      url: '/tree/projects'
+      url: '/browser/projects'
     }).done(function(plist) {
       $scope.project_info = plist;
       $scope.projects = $scope.project_info.user;
@@ -210,7 +232,7 @@
       }
 
       $http({
-        url: '/tree/annotate/' + sample.id + '/' + note + '.json',
+        url: '/browser/annotate/' + sample.id + '/' + note + '.json',
         method: "GET",
         responseType: "json"
       });
@@ -298,50 +320,5 @@
     }
 
   }]);
-
-  w.directive("autocomplete", function() {
-
-    samples_for = function(names,types) {
-      var samples = [];
-      aq.each(types,function(type) {
-        samples = samples.concat(names[type])
-      });
-      return samples;
-    }
-
-    return {
-      restrict: 'A',
-      scope: { autocomplete: '=', ngModel: '='  },
-      link: function($scope,$element,$attributes) {
-        var types = $scope.autocomplete;
-        $element.autocomplete({
-          source: samples_for($scope.$parent.sample_names,types),
-          select: function(ev,ui) {
-            $scope.ngModel = ui.item.value;
-            $scope.$apply();
-          }
-        });
-      }
-    }
-
-  });
-
-  w.directive("projectcomplete", function() {
-
-    return {
-      restrict: 'A',
-      scope: { ngModel: '=' },
-      link: function($scope,$element,$attributes) {
-        $element.autocomplete({
-          source: aq.collect($scope.$parent.projects,function(p) { return p.name; }),
-          select: function(ev,ui) {
-            $scope.ngModel = ui.item.value;
-            $scope.$apply();
-          }
-        });
-      }
-    }
-
-  });  
 
 })();

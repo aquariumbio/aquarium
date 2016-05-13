@@ -103,7 +103,7 @@
                <input class='input-no-style full' 
                       ng-if="!fv.choice || fv.choice == 'existing'"
                       ng-model="fv.child_sample_name"
-                      autocomplete="fv.allowable_child_types"
+                      samplecomplete="fv.allowable_child_types"
                       type="text"></input>
                <button ng-if="fv.choice == 'new'"
                        ng-repeat="st_name in fv.allowable_child_types"

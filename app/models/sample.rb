@@ -95,7 +95,7 @@ class Sample < ActiveRecord::Base
                 end
                 fv.child_sample_id = child.id if child
                 if !child && ft.required
-                  errors.add :required, "Sample required for field '#{ft.name}' not present."
+                  errors.add :required, "Sample required for field '#{ft.name}' not found or not specified."
                   raise ActiveRecord::Rollback
                 end
                 unless !child || child.errors.empty?
