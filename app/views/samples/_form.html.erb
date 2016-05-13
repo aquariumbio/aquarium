@@ -21,7 +21,7 @@
     <button type="button" class="close" ng-click="clear_errors()">&times;</button>
     <h4>Error(s)</h4>
     <ul>
-      <li ng-repeat="e in errors">{{e}}</li>
+      <li ng-repeat="e in errors track by $index">{{e}}</li>
     </ul>
   </div>
 

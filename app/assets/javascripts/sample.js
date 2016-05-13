@@ -64,8 +64,8 @@
       if ( $scope.mode == 'edit' ) {
 
         $scope.sample.update(function(result) {
-          if ( result.errors ) {
-            $scope.errors = result.errors;
+          if ( result.save_error ) {
+            $scope.errors = result.save_error;
           } else {
             $scope.errors = [];
             $scope.messages = [ 'Sample ' + result.id + " saved." ];
@@ -76,8 +76,8 @@
       } else {
 
         $scope.sample.create(function(result) {
-          if ( result.errors ) {
-            $scope.errors = result.errors;
+          if ( result.save_error ) {
+            $scope.errors = result.save_error;
           } else {
             window.location = '/samples/' + result.id + '/edit?message=Sample ' + result.id + " created.";
           }
