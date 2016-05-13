@@ -1,6 +1,7 @@
 class Sample < ActiveRecord::Base
 
   include ActionView::Helpers::DateHelper
+  include SampleValidator
 
   attr_accessible :name, :user_id, :project, :sample_type_id, :user_id, :description
   attr_accessible :field1, :field2, :field3, :field4, :field5, :field7, :field6, :field8 # deprecated
@@ -20,9 +21,13 @@ class Sample < ActiveRecord::Base
   validates :user_id, presence: true
 
   def self.sample_from_identifier str
-    parts = str.split(': ')
-    if parts.length > 1
-      Sample.find_by_name(parts[1..-1].join(": "))
+    if str
+      parts = str.split(': ')
+      if parts.length > 1
+        Sample.find_by_name(parts[1..-1].join(": "))
+      else
+        nil
+      end
     else
       nil
     end
