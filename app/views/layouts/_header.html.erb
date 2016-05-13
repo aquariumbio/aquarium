@@ -44,7 +44,7 @@
 
           <li id="fat-menu" class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tasks<b class="caret"></b></a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu scrollable-menu">
               <% TaskPrototype.order(:name).each do |tp| %>
                 <% name = pluralize(2,tp.name)[2..-1] %>
                 <li><%= link_to name, tasks_path(task_prototype_id: tp.id) %></li>

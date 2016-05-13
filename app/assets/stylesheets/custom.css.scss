@@ -388,3 +388,9 @@ img {
 .aquarium-version {
   color: #666;
 }
+
+.scrollable-menu {
+    height: auto;
+    max-height: 550px;
+    overflow-x: hidden;
+}
