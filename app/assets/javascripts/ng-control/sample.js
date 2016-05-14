@@ -102,6 +102,18 @@
         return g.name == 'admin';
       });
       return admin.length > 0 || $scope.user.current.id == sample.user_id;
+    }    
+
+    $scope.toggle_inventory = function(sample) {
+      console.log("1")
+      if ( sample.inventory ) {
+        sample.inventory = false;
+      } else {
+        sample.get_inventory(function() {
+          sample.inventory = true;
+          console.log([sample.containers,sample.items])
+        });
+      }
     }      
 
   }]);

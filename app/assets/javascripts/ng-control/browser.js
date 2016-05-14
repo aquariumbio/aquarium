@@ -10,8 +10,6 @@
 
   w.controller('browserCtrl', [ '$scope', '$http', '$attrs', function ($scope,$http,$attrs) {
 
-    // Initialization
-
     $scope.new_samples = [];
     $scope.sample_types = [];
     $scope.projects_info = {};

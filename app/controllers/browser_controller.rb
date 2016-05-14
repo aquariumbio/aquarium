@@ -109,4 +109,11 @@ class BrowserController < ApplicationController
     render json: s
   end
 
+  def items
+    sample = Sample.find(params[:id])
+    item_list = Item.includes(:locator).where(sample_id: params[:id]).select { |i| !i.deleted? }
+    containers = ObjectType.where(sample_type_id: sample.sample_type_id)
+    render json: { items: item_list.as_json(include: [:locator]), containers: containers.as_json(only:[:name,:id]) }
+  end
+
 end

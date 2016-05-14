@@ -4,11 +4,9 @@
 
     <div ng-include="'sample_heading'"></div>
 
-    <div ng-if="!sample.edit" ng-include="'sample'">
-    </div>
-
-    <div ng-if="sample.edit"  ng-include="'sample_form'">
-    </div>
+    <div ng-if="!sample.edit" ng-include="'sample'"></div>
+    
+    <div ng-if="sample.edit"  ng-include="'sample_form'"></div>
 
   </div>
 

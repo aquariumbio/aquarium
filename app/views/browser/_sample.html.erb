@@ -1,79 +1,79 @@
 <script type="text/ng-template" id="sample">
 
-     <div ng-if="sample.open">
+   <div ng-if="sample.open && !sample.inventory">
 
-       <ul>
+     <ul>
 
-         <li>
-           <table class='field-table'>         
-             <td class='name'>Description:</td> 
+       <li>
+         <table class='field-table'>         
+           <td class='name'>Description:</td> 
+           <td class='modifer'></td>
+           <td class='description'>{{sample.description}}</td>
+         </table>
+       </li>
+
+       <li>
+         <table class='field-table'>         
+           <td class='name'>Created:</td> 
+           <td class='modifer'></td>             
+           <td class='description'>{{sample.created_at|date}}</td>
+         </table>
+       </li>
+
+       <!-- SIMPLE FIELDS -->
+       <li ng-repeat="ft in sample.sample_type.field_types | filter: non_sample" ng-init="field_type_name = ft.name">
+         <table class='field-table'>
+
+           <tr ng-repeat="fv in sample.field_values | filter: { name: field_type_name }:true">
+             <td class='name name-{{ft.ftype}}'><span ng-if="$first">{{ft.name}}:</span></td>
+             <td class='modifer'></td>               
+             <td class='value' ng-if="ft.ftype != 'url'">{{fv.value}}</td> 
+             <td class='value' ng-if="ft.ftype == 'url'"><a href='{{fv.value}}' class='url'>{{fv.value}}</a></td>                
+           </tr>
+
+           <tr ng-if="is_empty_array(sample,ft)">
+             <td class='name name-{{ft.ftype}}'>{{ft.name}}:</td>
              <td class='modifer'></td>
-             <td class='description'>{{sample.description}}</td>
-           </table>
-         </li>
+             <td class='value subtle'>(empty)</td>                        
+           </tr>
 
-         <li>
-           <table class='field-table'>         
-             <td class='name'>Created:</td> 
-             <td class='modifer'></td>             
-             <td class='description'>{{sample.created_at|date}}</td>
-           </table>
-         </li>
+         </table>
+       </li>
 
-         <!-- SIMPLE FIELDS -->
-         <li ng-repeat="ft in sample.sample_type.field_types | filter: non_sample" ng-init="field_type_name = ft.name">
-           <table class='field-table'>
+       <!-- SUBSAMPLE FIELDS -->
+       <li ng-repeat="ft in sample.sample_type.field_types | filter: { ftype: 'sample' }:true" ng-init="field_type_name = ft.name">
+         <table class='field-table'>   
 
-             <tr ng-repeat="fv in sample.field_values | filter: { name: field_type_name }:true">
-               <td class='name name-{{ft.ftype}}'><span ng-if="$first">{{ft.name}}:</span></td>
-               <td class='modifer'></td>               
-               <td class='value' ng-if="ft.ftype != 'url'">{{fv.value}}</td> 
-               <td class='value' ng-if="ft.ftype == 'url'"><a href='{{fv.value}}' class='url'>{{fv.value}}</a></td>                
-             </tr>
+           <tr ng-repeat-start="fv in sample.field_values | filter: { name: field_type_name }:true track by $index">
+             <td class='name name-sample'>{{ft.name}}<span ng-if="ft.array">({{$index}}):</span><span ng-if="!ft.array">:</span></td>
+             <td class='modifer'></td>               
+             <td ng-include="'sample_heading'" ng-if="fv.child_sample" ng-init="sample = fv.child_sample"></td>
+           </tr>
 
-             <tr ng-if="is_empty_array(sample,ft)">
-               <td class='name name-{{ft.ftype}}'>{{ft.name}}:</td>
-               <td class='modifer'></td>
-               <td class='value subtle'>(empty)</td>                        
-             </tr>
+           <tr ng-repeat-end>
+             <td ng-if="fv.child_sample.open && fv.child_sample && !fv.child_sample.edit"
+                 ng-include="'sample'"
+                 ng-init="sample = fv.child_sample"
+                 colspan=3></td>
+             <td ng-if="fv.child_sample.edit"
+                 ng-include="'sample_form'"
+                 ng-init="sample = fv.child_sample"
+                 colspan=3></td> 
+           </tr>
 
-           </table>
-         </li>
+           <tr ng-if="is_empty_array(sample,ft)">
+             <td class='name name-{{ft.ftype}}'>{{ft.name}}:</td>
+             <td class='modifer'></td>                 
+             <td class='value subtle'>(empty)</td> 
+           </tr> 
+                        
+         </table>
+       </li>          
 
-         <!-- SUBSAMPLE FIELDS -->
-         <li ng-repeat="ft in sample.sample_type.field_types | filter: { ftype: 'sample' }:true" ng-init="field_type_name = ft.name">
-           <table class='field-table'>   
-
-             <tr ng-repeat-start="fv in sample.field_values | filter: { name: field_type_name }:true track by $index">
-               <td class='name name-sample'>{{ft.name}}<span ng-if="ft.array">({{$index}}):</span><span ng-if="!ft.array">:</span></td>
-               <td class='modifer'></td>               
-               <td ng-include="'sample_heading'" ng-if="fv.child_sample" ng-init="sample = fv.child_sample"></td>
-             </tr>
-
-             <tr ng-repeat-end>
-               <td ng-if="fv.child_sample.open && fv.child_sample && !fv.child_sample.edit"
-                   ng-include="'sample'"
-                   ng-init="sample = fv.child_sample"
-                   colspan=3></td>
-               <td ng-if="fv.child_sample.edit"
-                   ng-include="'sample_form'"
-                   ng-init="sample = fv.child_sample"
-                   colspan=3></td> 
-             </tr>
-
-             <tr ng-if="is_empty_array(sample,ft)">
-               <td class='name name-{{ft.ftype}}'>{{ft.name}}:</td>
-               <td class='modifer'></td>                 
-               <td class='value subtle'>(empty)</td> 
-             </tr> 
-                          
-           </table>
-         </li>          
-
-       </ul>
-
-     </div>
+     </ul>
 
    </div>
+
+   <div ng-if="sample.open && sample.inventory" ng-include="'inventory'"></div>     
 
 </script>

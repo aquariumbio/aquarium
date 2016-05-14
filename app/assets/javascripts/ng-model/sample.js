@@ -25,6 +25,25 @@ Sample.prototype.find = function(id,promise) {
 
 }
 
+Sample.prototype.get_inventory = function(promise) {
+
+  var sample = this;
+
+  this.http.get('/browser/items/' + this.id + '.json').then(function(response) {
+    sample.containers = response.data.containers;    
+    sample.items = response.data.items;
+    aq.each(sample.items,function(i) {
+      try {
+        i.data = JSON.parse(i.data);
+      } catch(e) {
+        i.data = {};
+      }
+    });
+    promise(sample.containers,sample.items);
+  });  
+
+}
+
 Sample.prototype.promote_data = function() {
   if ( typeof this.data == "string") {
     try {

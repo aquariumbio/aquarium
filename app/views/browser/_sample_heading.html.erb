@@ -28,10 +28,17 @@
    <a href='#' class="btn btn-mini"
          ng-if="sample.open && !no_edit && allowed(sample)"
          ng-disabled="sample.edit"
-         ng-click="editing || edit(sample)"
-         ng-model="sample.data.note">
+         ng-click="editing || edit(sample)">
      Edit
    </a>     
+
+   <a href='#' class="btn btn-mini"
+         ng-if="sample.open && !no_edit"
+         ng-disabled="sample.edit"
+         ng-click="toggle_inventory(sample)">
+     <span ng-if="!sample.inventory">Inventory</span>
+     <span ng-if="sample.inventory">Description</span>     
+   </a>       
 
    <span  class='sample-type-name' ng-if="sample.edit">
      <a href="#" ng-if="!no_cancel" ng-click='view(sample)'class='btn btn-mini'>

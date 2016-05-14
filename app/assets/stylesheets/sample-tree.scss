@@ -317,4 +317,16 @@ $row-height: 18px;
     margin-bottom: 5px;
   }
 
+  .inventory-table {
+    table-layout: fixed;
+    width: 100%;
+    td {
+      vertical-align: top;
+      font-weight: normal;
+    }
+    .data-field {
+      width: 30%;
+    }
+  }
+
 }

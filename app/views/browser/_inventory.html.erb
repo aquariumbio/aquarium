@@ -1,0 +1,33 @@
+<script type="text/ng-template" id="jsonDisplay">
+  <div ng-repeat="(key,val) in json" ng-if="json">
+    <b>{{key}}: </b>{{val}}
+  </div>
+  <span ng-if="!json">-</span>
+</script>
+
+<script type="text/ng-template" id="inventory">
+
+  <ul ng-controller='inventoryCtrl'>
+
+    <li ng-repeat="container in sample.containers"
+        ng-if="num_items(sample,container)>0">
+      <b>{{container.name}}</b>
+      <ul>
+        <li ng-repeat="item in sample.items | filter: { object_type_id: container.id }:true">
+          <table class='inventory-table'>
+            <tr>
+              <td><b><a href="/items/{{item.id}}">{{item.id}}</a></b></td>
+              <td>{{item.location}}</td>
+              <td class='data-field' ng-include="'jsonDisplay'" ng-init='json = item.data'>
+              </td>
+              <td>{{item.created_at|date}}</td>
+              <td>{{item.updated_at|date}}</td>              
+            </tr>
+          </td>              
+        </li>
+      </ul>
+    </li>
+
+  </ul>
+
+</script>

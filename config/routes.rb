@@ -6,6 +6,7 @@ Bioturk::Application.routes.draw do
   get '/browser/samples_for_tree',          to: 'browser#samples_for_tree'  
   get '/browser/sub/:id',                   to: 'browser#subsamples'
   get '/browser/annotate/:id/:note',        to: 'browser#annotate'  
+  get '/browser/items/:id',                 to: 'browser#items'
   post '/browser/create_samples',           to: 'browser#create_samples'
   post '/browser/save',                     to: 'browser#save'
   
