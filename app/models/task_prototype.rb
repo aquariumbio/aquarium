@@ -1,6 +1,6 @@
 class TaskPrototype < ActiveRecord::Base
 
-  attr_accessible :description, :name, :prototype, :status_options, :validator, :cost
+  attr_accessible :description, :name, :prototype, :status_options, :validator, :cost, :metacol
   has_many :tasks
 
   validates :name, :presence => true
@@ -66,6 +66,15 @@ class TaskPrototype < ActiveRecord::Base
 
   def after_save
     self.validator
+  end
+
+  def metacol_submit
+    begin
+      sha = Repo.version(self.metacol)
+      return URI.encode("/metacols/new/arguments?path=" + self.metacol + "&sha=" + sha)
+    rescue Exception => e
+      return
+    end
   end
 
   def self.cost_report user_id=nil

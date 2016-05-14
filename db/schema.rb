@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160430152749) do
+ActiveRecord::Schema.define(:version => 20160514044605) do
 
   create_table "account_logs", :force => true do |t|
     t.integer  "row1"
@@ -335,6 +335,7 @@ ActiveRecord::Schema.define(:version => 20160430152749) do
     t.string   "status_options"
     t.string   "validator"
     t.float    "cost",           :default => 1.0
+    t.string   "metacol"
   end
 
   create_table "tasks", :force => true do |t|
