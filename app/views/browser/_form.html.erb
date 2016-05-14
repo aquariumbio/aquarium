@@ -3,9 +3,10 @@
    <span  class='sample-type-name' ng-if="!sample.edit">
       <span class='name' ng-if="!no_remove">{{sample.sample_type.name}}:</span>
       <span><a href="#" ng-click='remove_sample(sample)'><i class='icon-remove' ng-if="!no_remove"></i></a></span>
+      <span>{{controller_name}}</span>
    </span>
 
-   <ul class='sample-tree-list'>
+   <ul class='sample-tree-list' ng-controller='sampleCtrl'>
 
      <!-- STATIC FIELDS -->
 

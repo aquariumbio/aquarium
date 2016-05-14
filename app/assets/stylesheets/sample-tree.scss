@@ -271,19 +271,19 @@ $row-height: 18px;
 
 /* bootstrap overrides */
 
-html, body {
-    height: 100%;
-}
+  html, body {
+      height: 100%;
+  }
 
-.main, .row-fluid {
-    height: 100%;
-}
+  .main, .row-fluid {
+      height: 100%;
+  }
 
-.main:before, .main:after,
-.column:before, .column:after {
-    content: "";
-    display: table;
-}
+  .main:before, .main:after,
+  .column:before, .column:after {
+      content: "";
+      display: table;
+  }
 
   .main:after,
   .column:after {
@@ -313,5 +313,8 @@ html, body {
       width: 100%;
   }
 
+  .bottom-margin {
+    margin-bottom: 5px;
+  }
 
 }
