@@ -5,10 +5,10 @@
   try {
     w = angular.module('aquarium'); 
   } catch (e) {
-    w = angular.module('aquarium', []); 
+    w = angular.module('aquarium', ['ngCookies']); 
   } 
 
-  w.controller('browserCtrl', [ '$scope', '$http', '$attrs', function ($scope,$http,$attrs) {
+  w.controller('browserCtrl', [ '$scope', '$http', '$attrs', '$cookies', function ($scope,$http,$attrs,$cookies) {
 
     $scope.views = {
       sample_type: {}, // not used, yet
