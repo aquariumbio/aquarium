@@ -9,13 +9,17 @@ gem 'bootstrap-will_paginate'
 gem 'sass-rails',   '~> 3.2.3'
 gem 'db-charmer', :require => 'db_charmer'
 gem "highcharts-rails", "~> 3.0.0"
-gem 'mysql2', "~> 0.3.17"
 
 group :development do
+  gem 'sqlite3'
 #  gem 'better_errors'
   gem 'binding_of_caller'
   gem 'meta_request'
   gem 'rspec-rails'
+end
+
+group :production, :rehearse do 
+  gem 'mysql2', "~> 0.3.10"
 end
 
 # Gems used only for assets and not required
