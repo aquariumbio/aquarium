@@ -17,6 +17,10 @@
       return items.length;
     }
 
+    $scope.empty = function(data) {
+      return !data || $.isEmptyObject(data);
+    }
+
   }])
 
 })();

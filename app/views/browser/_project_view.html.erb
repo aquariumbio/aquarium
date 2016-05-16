@@ -1,0 +1,34 @@
+<div ng-show="views.project.selected" ng-if="views.project.selection.sample_type">
+
+  <div ng-if="views.project.samples">
+
+    <div class='sample-list-header'>
+      <div class="sample-list-name">
+        {{current_selection.project}}
+        &#9658;
+        {{sample_type_from_id(views.project.selection.sample_type).name}}
+      </div>
+      <div class="sample-list-description">
+        {{sample_type_from_id(views.project.selection.sample_type).description}}
+      </div>
+    </div>
+    
+  </div>
+
+  <div class='sample-tree-list'>
+    <ul>
+      <li ng-repeat="sample in views.project.samples | filter: by_user track by $index"
+          ng-include="'sample_router'">
+      </li>
+    </ul>
+  </div>
+
+  <div ng-if="!views.project.selection.loaded">
+    <p>Loading samples...</p>
+  </div>
+
+  <div ng-if="views.project.samples && views.project.samples.length == 0">
+    <p>No samples</p>
+  </div>
+
+</div>

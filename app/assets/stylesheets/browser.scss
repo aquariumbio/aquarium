@@ -1,6 +1,38 @@
 $row-height: 18px;
 
-.sample-tree {
+.browser {
+
+  .browser-control {
+    padding: 10px;
+    border-bottom: 1pt solid #eee;
+    border-right: 1pt solid #eee;
+    border-left: 10px solid #eee;    
+    cursor: pointer;   
+  }
+
+  .browser-control-on {
+    border-left: 10px solid #ccc;
+  }  
+
+  .browser-control-plain {
+
+  }    
+
+  .inline-control {
+    display: inline-block;
+  }
+
+  .input-append {
+    margin: 0;
+  }
+
+  .folder-name {
+    font-weight: normal;
+  }
+
+  .user-filter {
+    margin-left: 10px;
+  }
 
   .subtle {
     color: #ddd;
@@ -98,7 +130,7 @@ $row-height: 18px;
   }
 
   .tree-nav {
-    border-right: 1pt solid #eee;   
+    border-right: 0pt solid #eee;   
   }
 
   .viewer {
@@ -325,7 +357,7 @@ $row-height: 18px;
       font-weight: normal;
     }
     .data-field {
-      width: 30%;
+
     }
   }
 

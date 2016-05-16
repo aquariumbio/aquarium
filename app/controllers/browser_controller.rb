@@ -21,17 +21,43 @@ class BrowserController < ApplicationController
 
   end
 
+  def recent_samples
+    if params[:id]
+      user = User.find_by_id(params[:id])
+    end    
+    if !user
+      render json: Sample
+          .last(25)      
+          .reverse
+          .to_json(only: [:name,:id,:user_id,:data])
+    else
+      render json: Sample
+          .where(user_id: user.id)
+          .last(25)
+          .reverse
+          .to_json(only: [:name,:id,:user_id,:data])
+    end
+  end
+
   def projects 
-    render json: {
-      user: Sample.where(user_id: current_user.id)
-                  .uniq
-                  .pluck(:project)
-                  .sort
-                  .collect { |p| { name: p, selected: false, sample_type_ids: Sample.where( project: p).pluck(:sample_type_id).uniq  } },
-      all: Sample.uniq.pluck(:project)
+    if params[:uid]
+      user = User.find_by_id(params[:uid])
+    end
+    if !user
+      render json: {
+        projects: Sample.uniq.pluck(:project)
                  .sort
                  .collect { |p| { name: p, selected: false, sample_type_ids: Sample.where( project: p).pluck(:sample_type_id).uniq } }
-    }
+      }
+    else
+      render json: {
+        projects: Sample.where(user_id: user.id)
+                    .uniq
+                    .pluck(:project)
+                    .sort
+                    .collect { |p| { name: p, selected: false, sample_type_ids: Sample.where( project: p).pluck(:sample_type_id).uniq  } }
+      }
+    end
   end
 
   def samples_for_tree
@@ -114,6 +140,21 @@ class BrowserController < ApplicationController
     item_list = Item.includes(:locator).where(sample_id: params[:id]).select { |i| !i.deleted? }
     containers = ObjectType.where(sample_type_id: sample.sample_type_id)
     render json: { items: item_list.as_json(include: [:locator]), containers: containers.as_json(only:[:name,:id]) }
+  end
+
+  def search
+
+    samples = Sample.where("name like ? or id = ?", "%#{params[:query]}%", params[:query].to_i)
+
+    if params[:user_id]
+      samples = Sample.where("name like ? or id = ?", "%#{params[:query]}%", params[:query].to_i)
+                      .where(user_id: params[:user_id])
+    else
+      samples = Sample.where("name like ? or id = ?", "%#{params[:query]}%", params[:query].to_i)
+    end
+
+    render json: samples.last(50).reverse.to_json(only: [:name,:id,:user_id,:data])
+
   end
 
 end

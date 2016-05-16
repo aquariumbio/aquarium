@@ -1,0 +1,25 @@
+<div ng-class="browser_control_class('create')" 
+     ng-click="select_view('create')"
+     ng-if="sample_types">
+
+  <span class='project-heading project-expander'>
+    New Samples &nbsp;
+  </span>
+
+  <span>
+
+    <div class="btn-group">
+
+      <a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#">
+        Create <span class="caret"></span>
+      </a>
+
+      <ul class="dropdown-menu">
+        <li ng-repeat="st in sample_types"><a href="#" ng-click="new_sample(st)">{{st.name}}</a></li>
+      </ul>
+
+    </div>  
+
+  </span> 
+
+</div>

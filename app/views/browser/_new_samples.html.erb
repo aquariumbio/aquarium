@@ -1,4 +1,5 @@
-<div ng-if="mode == 'new' && new_samples.length > 0">
+<div ng-show="views.create.selected"
+     ng-if="views.create.samples.length > 0">
 
   <span>
     <a href="#" 
@@ -10,7 +11,7 @@
 
   <div class='sample-tree-list'>
     <ul>
-      <li ng-repeat="sample in new_samples" ng-include="'sample_form'">
+      <li ng-repeat="sample in views.create.samples" ng-include="'sample_form'">
       </li>
     </ul>
   </div>

@@ -9,6 +9,8 @@ Bioturk::Application.routes.draw do
   get '/browser/items/:id',                 to: 'browser#items'
   post '/browser/create_samples',           to: 'browser#create_samples'
   post '/browser/save',                     to: 'browser#save'
+  get '/browser/recent_samples/:id',        to: 'browser#recent_samples'  
+  get '/browser/search/:query(/:user_id)',  to: 'browser#search'    
   
   resources :parameters
 

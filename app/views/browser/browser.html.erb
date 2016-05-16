@@ -1,4 +1,4 @@
-<div ng-app="aquarium" class='sample-tree'>
+<div ng-app="aquarium" class='browser'>
 
   <div id="browser-control" ng-controller='browserCtrl as browser'>
 
@@ -10,18 +10,27 @@
     <%= render partial: "form" %>
 
     <div class='box'>
-    <div class='row-fluid'>
-      <div class='span3 tree-nav column'>
-        <%= render partial: "sample_navigator" %> 
-        <%= render partial: "new_sample_navigator" %>   
+
+      <div class='row-fluid'>
+
+        <div class='span3 tree-nav column'>
+          <%= render partial: "user_control" %> 
+          <%= render partial: "search_control" %>
+          <%= render partial: "create_control" %>                  
+          <%= render partial: "recent_navigator" %>          
+          <%= render partial: "project_navigator" %>         
+        </div>
+
+        <div class='span9 viewer column'>
+          <%= render partial: "messages" %>
+          <%= render partial: "new_samples" %>
+          <%= render partial: "project_view" %>
+          <%= render partial: "recent_samples" %>     
+          <%= render partial: "search_results" %>              
+        </div>
+
       </div>
-      <div class='span9 viewer column'>
-        <%= render partial: "messages" %>
-        <%= render partial: "new_samples" %>
-        <%= render partial: "samples" %>
-        <%= render partial: "recent_samples" %>        
-      </div>
-    </div>
+
     </div>
 
   </div>

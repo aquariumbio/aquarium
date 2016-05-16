@@ -1,0 +1,12 @@
+<div ng-class="browser_control_class('search')" 
+     ng-click="select_view('search')"
+     ng-if="sample_names && sample_type_names">
+
+  <div class="input-append">
+
+    <input type="text" ng-model="views.search.query" style="width: 70%">
+    <a class="btn" type="button" ng-click="search()">Search</a>
+
+  </div>
+
+</div>

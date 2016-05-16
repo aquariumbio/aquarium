@@ -1,17 +1,21 @@
-<div ng-if="views.recent.selected">
+<div ng-if="views.search.selected">
 
   <div class='sample-list-header'>
     <span class="sample-list-name">
-      Recently Created Samples
+      Search Results
     </span>
   </div>
 
   <div class='sample-tree-list'>
     <ul>
-      <li ng-repeat="sample in views.recent.samples"
+      <li ng-repeat="sample in views.search.samples"
           ng-include="'sample_router'">
       </li>
     </ul>
+  </div>
+
+  <div ng-if="views.search.samples.length == 0">
+    No results.
   </div>
 
 </div>
