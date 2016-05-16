@@ -10,17 +10,64 @@
 
   w.controller('browserCtrl', [ '$scope', '$http', '$attrs', '$cookies', function ($scope,$http,$attrs,$cookies) {
 
-    $scope.views = {
-      sample_type: {}, // not used, yet
-      project: {},
-      recent: {},
-      create: {
-        selected: true,
-        samples: []
-      },
-      search: {},
-      user: { current: { login: "All", id: 0 } }
-    };
+    function cookie() {
+
+      var data = {
+
+        project: {
+          loaded: false,
+          selected: $scope.views.project.selected,
+          selection: $scope.views.project.selection,
+          samples: []
+        },
+        recent: {
+          selected: $scope.views.recent.selected
+        },
+        create: {
+          selected: $scope.views.create.selected,
+          samples: [],
+        },
+        search: {
+          selected: $scope.views.search.selected,
+          query: $scope.views.search.query
+        },
+        user: { current: { login: "All", id: 0 } }
+
+      };
+
+      console.log(['saving cookie', data]);
+      $cookies.putObject("browserViews", data);
+
+    }
+
+    $scope.views = $cookies.getObject("browserViews");
+
+    if ( ! $scope.views ) {
+
+      console.log("saving new cookie")
+
+      $scope.views = {
+        sample_type: {}, // not used, yet
+        project: {
+          loaded: false,
+          selection: {}
+        },
+        recent: {},
+        create: {
+          selected: true,
+          samples: []
+        },
+        search: {},
+        user: { current: { login: "All", id: 0 } }
+      };
+
+      cookie();
+
+    } else {
+
+      console.log(["loaded cookie",$scope.views]);
+
+    }
 
     $scope.helper = new SampleHelper($http);
 
@@ -39,12 +86,12 @@
       $.ajax({
         url: '/browser/projects?uid=' + $scope.views.user.current.id
       }).done(function(response) {
-        $scope.views.project = {
-          projects: response.projects,
-          loaded: true,
-          selection: {}
-        };
+        $scope.views.project.projects = response.projects;
+        $scope.views.project.loaded = true;
         $scope.projects = response.projects;
+        if ( $scope.views.project.selection.sample_type ) {
+          $scope.select_st({ id: $scope.views.project.selection.sample_type },true);
+        }
         if ( promise ) { promise(response.projects); }
       });
     }
@@ -72,13 +119,18 @@
     }
 
     $scope.select_view = function(view) {
+
       for ( key in $scope.views ) {
         $scope.views[key].selected = false;
       }
+
       $scope.views[view].selected = true;
+      cookie();      
+
       if ( view == 'recent' ) {
         $scope.fetch_recent();
       }
+
     }
 
     $scope.choose_user = function(user) {
@@ -105,6 +157,8 @@
       }
     }
 
+    $scope.fetch_recent();
+
     // Project browsing
 
     $scope.select_project = function(project) {
@@ -121,15 +175,16 @@
       return project.sample_type_ids.indexOf(st.id) >= 0;
     }
 
-    $scope.select_st = function(st) { 
-      if ( $scope.views.project.selection.sample_type != st.id) {
+    $scope.select_st = function(st, force) { 
+      if ( $scope.views.project.selection.sample_type != st.id || force) {
         $scope.views.project.selection.loaded = false;
         $scope.views.project.selection.sample_type = st.id;
-        $scope.views.project.samples = {};
+        $scope.views.project.samples = [];
         $scope.helper.samples($scope.views.project.selection.project,$scope.views.project.selection.sample_type,function(samples) {
           $scope.views.project.samples = samples;
           $scope.views.project.selection.loaded = true;
         });
+        cookie();
       }
     }
 
@@ -199,6 +254,10 @@
             return new Sample($http).from(s);
           })
         });      
+    }
+
+    if ( $scope.views.search.query ) {
+      $scope.search();
     }
 
     // Messages 
