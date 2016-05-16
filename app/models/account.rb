@@ -60,7 +60,7 @@ class Account < ActiveRecord::Base
 
     a.collect { |x| 
 
-      invoice = Invoice.for(x.merge(year:year, month:month, status:"ready", notes: "")) 
+      invoice = Invoice.for(x.merge({year:year, month:month}), { status:"ready", notes: "" }) 
 
       {
         user: User.find(x[:user_id]),

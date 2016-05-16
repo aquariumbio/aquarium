@@ -7,15 +7,15 @@ class Invoice < ActiveRecord::Base
   belongs_to :user
   belongs_to :budget
 
-  def self.for x
+  def self.for x, y
     invoices = Invoice.where(x)
     if invoices.length == 0
-      i = Invoice.new(x)
+      i = Invoice.new(x.merge y)
       i.save
       i
     else 
       invoices[0]
-    end
+    end 
   end
 
   def rows
