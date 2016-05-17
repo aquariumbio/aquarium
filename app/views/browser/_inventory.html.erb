@@ -7,7 +7,7 @@
 
 <script type="text/ng-template" id="inventory">
 
-  <ul ng-controller='inventoryCtrl'>
+  <ul ng-controller='inventoryCtrl' ng-if="sample.items.length > 0">
 
     <li ng-repeat="container in sample.containers"
         ng-if="num_items(sample,container)>0">
@@ -27,5 +27,10 @@
     </li>
 
   </ul>
+
+  <ul ng-controller='inventoryCtrl' ng-if="sample.items.length == 0">
+    <li>No items inventory</li>
+  </ul>
+
 
 </script>

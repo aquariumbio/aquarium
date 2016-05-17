@@ -1,6 +1,24 @@
 $row-height: 18px;
+$selected-sample-color: #f3ffff;
 
 .browser {
+
+  .sample-heading-table {
+    table-layout: fixed;
+  }
+
+  .sample-heading-name {
+    white-space:nowrap; overflow: 
+    hidden;overflow-x: scroll;
+  }
+
+  .button-heading-open {
+    width: 200px;
+  }
+
+  .button-heading-closed {
+    width: 0;
+  }
 
   .browser-control {
     padding: 10px;
@@ -218,6 +236,9 @@ $row-height: 18px;
     margin-top: 5px;
   }
 
+
+
+  /*********************************************************************************************************/
   /*  http://cssdeck.com/labs/pure-css-tree-menu-framework */
 
   .sample-tree-list {
@@ -242,7 +263,7 @@ $row-height: 18px;
 
     li {
       margin:0;
-      padding: 0 0 0 1.5em; /* indentation + .5em */
+      padding: 0 0 0 0.9em; /* indentation + .5em */
       line-height:1.75em; /* default list item's `line-height` */
       font-weight:bold;
       position:relative;
@@ -261,7 +282,7 @@ $row-height: 18px;
     }
 
     li:last-child:before {
-      background:white; /* same with body background */
+      background: white; /* same with body background */
       height:auto;
       top:1em; /* (line-height/2) */
       bottom:0;
@@ -272,6 +293,12 @@ $row-height: 18px;
     }
 
   }
+
+  .sample-container:hover {
+    background: $selected-sample-color;
+  }
+ 
+  /********************************************************************************************/
 
   .clickable {
     cursor: pointer;

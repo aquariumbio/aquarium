@@ -1,5 +1,7 @@
 <script type="text/ng-template" id="sample_form">
 
+<div class='sample-container'>
+
    <span  class='sample-type-name' ng-if="!sample.edit">
       <span class='name' ng-if="!no_remove">{{sample.sample_type.name}}:</span>
       <span><a href="#" ng-click='remove_sample(sample)'><i class='icon-remove' ng-if="!no_remove"></i></a></span>
@@ -89,7 +91,9 @@
      </li> 
 
      <!-- SUBSAMPLE FIELDS -->
-     <li ng-repeat="ft in sample.sample_type.field_types | filter: { ftype: 'sample' }:true" ng-init="field_type_name = ft.name">
+     <li ng-repeat="ft in sample.sample_type.field_types | filter: { ftype: 'sample' }:true" 
+         ng-init="field_type_name = ft.name">
+
        <table class='field-table'>  
 
          <tr ng-repeat-start="fv in sample.field_values | filter: fv_name_filter(field_type_name)">
@@ -136,8 +140,11 @@
          </tr>  
 
        </table>
+
      </li>
 
    </ul>
+
+ </div>
 
 </script>

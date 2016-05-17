@@ -276,7 +276,17 @@
       } else {
         return {}
       }
-    }      
+    }    
+
+    $scope.button_heading_class = function(sample) {
+
+      if ( sample.open ) {
+        return "button-heading-open";
+      } else {
+        return "button-heading-closed";
+      }
+
+    }  
 
   }]);
 

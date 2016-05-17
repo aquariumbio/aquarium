@@ -1,59 +1,62 @@
 <script type="text/ng-template" id="sample_heading">
 
- <span class='sample-header'>
+<table class='field-table sample-heading-table'>
 
-   <span class="sample-id"><a href="/samples/{{sample.id}}">{{sample.id}}</a>:</span>
+  <tr>
 
-   <span class='sample-name'>{{sample.name}}</span>
+    <td class="sample-heading-name">
+       <span class="sample-id"><a href="/samples/{{sample.id}}">{{sample.id}}</a>:</span>
+       <span class='sample-name'>{{sample.name}}</span>
+       <span ng-if='sample.user_id != user.current.id' class='owner-login'> ( {{user.logins[sample.user_id]}} ) </span>
+    </td>
 
-   <span ng-if='sample.user_id != user.current.id' class='owner-login'> ( {{user.logins[sample.user_id]}} ) </span>
+    <td ng-class="button_heading_class(sample)">
 
-   <span class="project-expander" 
-         ng-if="!sample.open && !sample.edit"
-         ng-click="toggle(sample)">
-     &#9658;
-   </span>
+      <span class='pull-right'>
 
-   <span class="project-expander"
-         ng-if="sample.open && !sample.edit"
-         ng-click="toggle(sample)">
-     &#9660;
-   </span>
+       <a href='#' class="btn btn-mini"
+             ng-if="sample.open && !no_edit && allowed(sample)"
+             ng-disabled="sample.edit"
+             ng-click="editing || edit(sample)">
+         Edit
+       </a>
 
-   <span class="project-expander"
-         ng-if="sample.open && sample.edit">
-     &#9660;
-   </span>   
+       <a href='#' class="btn btn-mini"
+             ng-if="sample.open && !no_edit"
+             ng-disabled="sample.edit"
+             ng-click="toggle_inventory(sample)">
+         <span ng-if="!sample.inventory">Inventory</span>
+         <span ng-if="sample.inventory">Description</span>     
+       </a>       
 
-   <a href='#' class="btn btn-mini"
-         ng-if="sample.open && !no_edit && allowed(sample)"
-         ng-disabled="sample.edit"
-         ng-click="editing || edit(sample)">
-     Edit
-   </a>     
+       <span  class='sample-type-name' ng-if="sample.edit">
+         <a href="#" ng-if="!no_cancel" ng-click='view(sample)'class='btn btn-mini'>
+           Cancel
+         </a>       
+         <a href="#" ng-if="!no_cancel" ng-click='save(sample)'class='btn btn-mini btn-primary'>
+           Save
+         </a>
+       </span>   
 
-   <a href='#' class="btn btn-mini"
-         ng-if="sample.open && !no_edit"
-         ng-disabled="sample.edit"
-         ng-click="toggle_inventory(sample)">
-     <span ng-if="!sample.inventory">Inventory</span>
-     <span ng-if="sample.inventory">Description</span>     
-   </a>       
+       </span>
 
-   <span  class='sample-type-name' ng-if="sample.edit">
-     <a href="#" ng-if="!no_cancel" ng-click='view(sample)'class='btn btn-mini'>
-       Cancel
-     </a>       
-     <a href="#" ng-if="!no_cancel" ng-click='save(sample)'class='btn btn-mini btn-primary'>
-       Save
-     </a>
-   </span>    
+    </td>
 
-   <input class="tag pull-right"
-          ng-model="sample.data.note"
-          ng-blur="noteBlur(sample)"
-          ng-style="noteColor(sample.data.note)"></input>
+    <td style='width: 50px'> 
+       <input class="tag pull-right"
+              ng-model="sample.data.note"
+              ng-blur="noteBlur(sample)"
+              ng-style="noteColor(sample.data.note)"></input>
+    </td>
 
- </span>
+    <td style='width: 20px'>
+       <span class="project-expander" ng-if="!sample.open && !sample.edit" ng-click="toggle(sample)">&#9658;</span>
+       <span class="project-expander" ng-if="sample.open && !sample.edit"  ng-click="toggle(sample)">&#9660;</span>
+       <span class="project-expander" ng-if="sample.open && sample.edit">&#9660;</span>    
+    </td>       
+
+  </tr>
+
+</table>
 
 </script>

@@ -1,11 +1,9 @@
 <script type="text/ng-template" id="sample_router">
 
-  <div ng-controller='sampleCtrl'>
+  <div ng-controller='sampleCtrl' class='sample-container'>
 
     <div ng-include="'sample_heading'"></div>
-
     <div ng-if="!sample.edit" ng-include="'sample'"></div>
-    
     <div ng-if="sample.edit"  ng-include="'sample_form'"></div>
 
   </div>

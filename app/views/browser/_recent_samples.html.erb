@@ -8,7 +8,7 @@
 
   <div class='sample-tree-list'>
     <ul>
-      <li ng-repeat="sample in views.recent.samples"
+      <li ng-repeat="sample in views.recent.samples | filter: by_user "
           ng-include="'sample_router'">
       </li>
     </ul>

@@ -11,8 +11,11 @@
 
   <div class='sample-tree-list'>
     <ul>
-      <li ng-repeat="sample in views.create.samples" ng-include="'sample_form'">
+      <li ng-repeat="sample in views.create.samples" 
+          ng-include="'sample_form'"
+          class='no-sample-hover'>
       </li>
     </ul>
   </div>
+
 </div>
