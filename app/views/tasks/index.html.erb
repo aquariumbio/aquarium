@@ -2,9 +2,16 @@
 <br />
 
 <%= link_to "New #{@task_prototype.name}", new_task_path(task_prototype_id: @task_prototype.id), class: 'btn btn-small btn-info' %>
+
 <% if current_user.member? Group.find_by_name('admin').id %>
+
   <%= link_to "Edit Prototype", edit_task_prototype_path(@task_prototype), class: 'btn btn-small' %>
-  <%= link_to "Start Metacol", @task_prototype.metacol_submit, class: 'btn btn-small btn-warning' %>
+
+  <% if @metacol_url %>
+    <%= link_to "Start Metacol", @metacol_url, class: 'btn btn-small btn-warning' %>
+  <% end %>
+
+
 <% end %>
 
 :

@@ -37,7 +37,15 @@ class TasksController < ApplicationController
     end
 
     cookies[@task_status_cookie_name] = @option
-    
+
+    begin
+      sha = Repo.version(@task_prototype.metacol)
+      @metacol_url = URI.encode("/metacols/new/arguments?path=" + @task_prototype.metacol + "&sha=" + sha)
+    rescue Exception => e
+      @metacol_url = nil
+    end
+
+   
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: TasksDatatable.new(view_context,@option,@task_prototype) }

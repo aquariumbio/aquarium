@@ -68,15 +68,6 @@ class TaskPrototype < ActiveRecord::Base
     self.validator
   end
 
-  def metacol_submit
-    begin
-      sha = Repo.version(self.metacol)
-      return URI.encode("/metacols/new/arguments?path=" + self.metacol + "&sha=" + sha)
-    rescue Exception => e
-      return
-    end
-  end
-
   def self.cost_report user_id=nil
 
     task_prototypes = TaskPrototype.all
