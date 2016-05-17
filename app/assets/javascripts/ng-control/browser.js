@@ -31,7 +31,7 @@
           selected: $scope.views.search.selected,
           query: $scope.views.search.query
         },
-        user: { current: { login: "All", id: 0 } }
+        user: $scope.views.user
 
       };
 
@@ -72,7 +72,7 @@
     $scope.helper = new SampleHelper($http);
 
     $scope.user = new User($http,function(user_info) {
-      $scope.views.user.current = user_info.current;
+      // $scope.views.user.current = user_info.current;
       $scope.get_projects(function(){
         $scope.$apply();
       });      
@@ -137,6 +137,7 @@
       if ( $scope.views.user.current.id != user.id ) {
         $scope.views.project.loaded = false;
         $scope.views.user.current = user;
+        cookie();
         $scope.views.recent.samples = [];
         if ( $scope.views.recent.selected ) {
           $scope.fetch_recent();
