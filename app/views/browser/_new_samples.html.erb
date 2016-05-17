@@ -1,14 +1,6 @@
 <div ng-show="views.create.selected"
      ng-if="views.create.samples.length > 0">
 
-  <span>
-    <a href="#" 
-       class='btn btn-mini btn-primary controls bottom-margin'
-       ng-click="save_new_samples()">
-      Save New Sample(s)
-    </a>
-  </span>
-
   <div class='sample-tree-list'>
     <ul>
       <li ng-repeat="sample in views.create.samples" 

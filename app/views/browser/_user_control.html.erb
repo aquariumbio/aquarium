@@ -1,22 +1,23 @@
 
 <div class="browser-control browser-control-plain" 
      ng-if="user.current">
-    {{views.user.current.name}}
-</div>
-
-<div class="browser-control browser-control-plain" 
-     ng-if="user.current">
 
   <div class="btn-group">
 
-    <a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#">
-       {{views.user.current.login}} <span class="caret"></span>
-    </a>
+    <button class="btn btn-small">
+      {{views.user.current.name}}
+    </button>
+
+    <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+      <span class="caret"></span>
+    </button>
 
     <ul class="dropdown-menu">
       <li><a href="#" ng-click="choose_user(everyone)">All</a></li>
       <li class='divider'></li>
-      <li ng-repeat="user in user.all"><a href="#" ng-click="choose_user(user)">{{user.name}} ({{user.login}})</a></li>
+      <li ng-repeat="user in user.all track by $index">
+        <a href="#" ng-click="choose_user(user)">{{user.name}} ({{user.login}})</a>
+      </li>                 
     </ul>
 
   </div>

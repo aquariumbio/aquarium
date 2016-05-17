@@ -35,7 +35,6 @@
 
       };
 
-      console.log(['saving cookie', data]);
       $cookies.putObject("browserViews", data);
 
     }
@@ -43,8 +42,6 @@
     $scope.views = $cookies.getObject("browserViews");
 
     if ( ! $scope.views ) {
-
-      console.log("saving new cookie")
 
       $scope.views = {
         sample_type: {}, // not used, yet
@@ -63,19 +60,19 @@
 
       cookie();
 
-    } else {
-
-      console.log(["loaded cookie",$scope.views]);
-
     }
 
     $scope.helper = new SampleHelper($http);
 
     $scope.user = new User($http,function(user_info) {
-      // $scope.views.user.current = user_info.current;
-      $scope.get_projects(function(){
-        $scope.$apply();
-      });      
+      if ( !$scope.views.user.initialized ) {
+        $scope.views.user.initialized = true;
+        $scope.choose_user(user_info.current);
+      } else {
+        $scope.get_projects(function(){
+          $scope.$apply();
+        });      
+      }
     });
 
     $scope.everyone = { login: 'everyone', id: 0, name: "All Projects" };
@@ -134,18 +131,20 @@
     }
 
     $scope.choose_user = function(user) {
-      if ( $scope.views.user.current.id != user.id ) {
-        $scope.views.project.loaded = false;
-        $scope.views.user.current = user;
-        cookie();
-        $scope.views.recent.samples = [];
-        if ( $scope.views.recent.selected ) {
-          $scope.fetch_recent();
-        }                
-        $scope.get_projects(function(plist) {
-          $scope.$apply();
-        });
-      }
+
+      $scope.views.user.current = user;
+      cookie();
+
+      $scope.views.recent.samples = [];
+      if ( $scope.views.recent.selected ) {
+        $scope.fetch_recent();
+      }                
+
+      $scope.views.project.loaded = false;        
+      $scope.get_projects(function(plist) {
+        $scope.$apply();
+      });
+
     }
 
     // Recent samples

@@ -3,13 +3,18 @@ $selected-sample-color: #f3ffff;
 
 .browser {
 
+  .view-description-well {
+    margin-bottom: 10px;
+  }
+
   .sample-heading-table {
     table-layout: fixed;
   }
 
   .sample-heading-name {
-    white-space:nowrap; overflow: 
-    hidden;overflow-x: scroll;
+    white-space:nowrap; 
+    overflow: hidden;
+    overflow-x: auto;
   }
 
   .button-heading-open {
@@ -223,7 +228,7 @@ $selected-sample-color: #f3ffff;
   }
 
   .sample-list-header {
-    margin-bottom: 10px;
+    margin-bottom: 0px;
   }
 
   .sample-list-name {

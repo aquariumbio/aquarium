@@ -1,0 +1,34 @@
+<div class='well view-description-well'>
+
+  <div ng-show="views.search.selected" class='sample-list-header'>
+    <span class="sample-list-name">
+      Search Results
+    </span>
+  </div>
+
+  <div ng-show="views.create.selected" class='sample-list-header'>
+    <span class="sample-list-name">
+      New Samples
+    </span>
+  </div>
+
+  <div ng-show="views.recent.selected" class='sample-list-header'>
+    <span class="sample-list-name">
+      Recent Samples
+    </span>
+  </div>
+
+  <div ng-show="views.project.selected" class='sample-list-header'>
+    <div class='sample-list-header'>
+      <div class="sample-list-name">
+        {{current_selection.project}}
+        &#9658;
+        {{sample_type_from_id(views.project.selection.sample_type).name}}
+      </div>
+      <div class="sample-list-description">
+        {{sample_type_from_id(views.project.selection.sample_type).description}}
+      </div>
+    </div>
+  </div>
+
+</div>
