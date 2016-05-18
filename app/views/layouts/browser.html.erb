@@ -14,15 +14,12 @@
 
     <%= render 'layouts/header' %>
 
-    <div class="container-fluid">
-      <% flash.each do |key, value| %>
-        <div class="alert alert-<%= key %>"><%= value.class == Array ? value.join('<br />').html_safe : value %></div>
-      <% end %>
-      <%= yield %>
+    <% flash.each do |key, value| %>
+      <div class="alert alert-<%= key %>"><%= value.class == Array ? value.join('<br />').html_safe : value %></div>
+    <% end %>
+    <%= yield %>
 
-    </div>
-
-    <%= render 'layouts/footer' %>    
+    <%= render 'layouts/footer' %>         
 
   </body>
 

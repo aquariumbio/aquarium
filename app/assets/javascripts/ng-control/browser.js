@@ -80,6 +80,7 @@
     // Fetch data
 
     $scope.get_projects = function(promise) {
+      $scope.views.project.loaded = false;      
       $.ajax({
         url: '/browser/projects?uid=' + $scope.views.user.current.id
       }).done(function(response) {
@@ -176,16 +177,21 @@
     }
 
     $scope.select_st = function(st, force) { 
+
       if ( $scope.views.project.selection.sample_type != st.id || force) {
+
         $scope.views.project.selection.loaded = false;
         $scope.views.project.selection.sample_type = st.id;
         $scope.views.project.samples = [];
+        cookie();
+
         $scope.helper.samples($scope.views.project.selection.project,$scope.views.project.selection.sample_type,function(samples) {
           $scope.views.project.samples = samples;
           $scope.views.project.selection.loaded = true;
         });
-        cookie();
+
       }
+
     }
 
     $scope.unselect_st = function(st) {

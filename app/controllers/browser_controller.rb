@@ -3,6 +3,9 @@ class BrowserController < ApplicationController
   before_filter :signed_in_user
 
   def browser
+    respond_to do |format|
+      format.html { render layout: 'browser' }
+    end
   end
 
   def all
