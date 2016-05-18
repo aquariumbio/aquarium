@@ -49,12 +49,16 @@
           loaded: false,
           selection: {}
         },
-        recent: {},
+        recent: {
+          selected: true
+        },
         create: {
-          selected: true,
+          selected: false,
           samples: []
         },
-        search: {},
+        search: {
+          selected: false
+        },
         user: { current: { login: "All", id: 0 } }
       };
 
@@ -283,6 +287,24 @@
         return {}
       }
     }    
+
+    $scope.noteBlur = function(sample) {
+
+      var note;
+
+      if ( !sample.data.note || sample.data.note == "" ) {
+        note = "_EMPTY_"
+      } else {
+        note = sample.data.note;
+      }
+
+      $http({
+        url: '/browser/annotate/' + sample.id + '/' + note + '.json',
+        method: "GET",
+        responseType: "json"
+      });
+
+    }     
 
     $scope.button_heading_class = function(sample) {
 

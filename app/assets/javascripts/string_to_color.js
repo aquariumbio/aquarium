@@ -35,7 +35,7 @@ function string_to_color(str, prc) {
             .slice(1);
     };
 
-    // Convert init to an RGBA
+    // Convert int to an RGBA
     var int_to_rgba = function(i) {
         var color = ((i >> 24) & 0xFF).toString(16) +
             ((i >> 16) & 0xFF).toString(16) +
