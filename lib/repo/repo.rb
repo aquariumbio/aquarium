@@ -21,7 +21,7 @@ module Repo
     begin
       git = Git.open("repos/" + (repo_name path))
     rescue Exception => e
-      raise "Repo Module could not find a repository named '#{repo_name path}'"
+      raise "Repo Module could not find or open the repository named '#{repo_name path}'"
     end
 
     begin
@@ -53,6 +53,29 @@ module Repo
       message: git.log.first.message,
       who:     git.log.first.committer.name
     }
+  end
+
+  def self.save path, content
+
+    file = File.open('repos/' + path, "w");
+    file.puts content
+    file.close
+
+    git = Git.open("repos/" + (repo_name path))
+    git.add
+    git.commit "Updated #{path}"
+    object = git.object( ":" + (basic_path path))
+
+    Thread.new do
+      begin
+        git.push(git.remote('origin'))
+      rescue Exception => e 
+        Rails.logger.info "Repo module could not pull/push"
+      end
+    end
+
+    object.sha
+
   end
 
   def self.copy from, to

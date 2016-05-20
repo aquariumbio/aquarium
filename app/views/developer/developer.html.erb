@@ -1,0 +1,53 @@
+<div class='developer'
+     ng-app="aquarium"
+     ng-controller="developerCtrl">
+
+  <div class='main'>
+
+    <div class='controls'>
+
+      <div ng-class="control_class('edit')" ng-click="set_mode('edit')">
+        <label>Protocol Path</label>
+        <input type='text' ng-model="path">
+        <br />
+        <button class='btn' ng-click="get()" ng-disabled="busy">Get</button>
+        <button class='btn btn-info' ng-click="save()" ng-disabled="busy || code == ''">Commit</button>
+      </div>
+
+      <div ng-class="control_class('backtrace')" ng-click="set_mode('backtrace')">
+        <label>Arguments to Protocol</label>      
+        <textarea json-text ng-model="arguments" class='arguments'></textarea>
+        <button class='btn' ng-click="test()" ng-disabled="busy">Test</button>
+      </div>
+
+      <div ng-class='message_class()' ng-show="messages.length > 0">
+        <b>Messages</b> <button class='btn btn-mini pull-right' ng-click="clear_messages()">Clear</button>
+        <br />
+        <ul>
+          <li ng-repeat="m in messages track by $index">
+            <b>{{m.type}}:</b> {{m.message}}
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class='view' ng-show="mode=='edit'">
+      <textarea ng-model="code"></textarea>
+    </div>
+
+    <div class='view' ng-show="mode=='backtrace'">
+      <div class='backtrace'>
+        <ul style="list-style-type: none">
+          <li class="backtrace-title" ng-show="jobs[0].id">Job <a href="/jobs/{{jobs[0].id}}">{{jobs[0].id}}</a></li>
+          <li ng-show="!jobs[0].id && !busy">No backtrace.</li>          
+          <li ng-repeat="step in backtrace">
+            <pre>{{step|json}}</pre>
+          </li>
+        </ul>
+      </div>      
+    </div>
+
+  </div>
+
+</div>

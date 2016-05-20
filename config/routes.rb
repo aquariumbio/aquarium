@@ -1,5 +1,11 @@
 Bioturk::Application.routes.draw do
 
+  get '/developer',                         to: 'developer#developer'
+  get '/developer/get/:path',               to: 'developer#get'  
+  get '/developer/save/:path',              to: 'developer#save'
+  post '/developer/save',                   to: 'developer#save'    
+  post '/developer/test',                   to: 'developer#test'      
+
   get '/browser',                           to: 'browser#browser'
   get '/browser/all',                       to: 'browser#all'  
   get '/browser/projects',                  to: 'browser#projects'    
