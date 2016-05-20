@@ -106,6 +106,15 @@ class ObjectType < ActiveRecord::Base
     "<a href='/object_types/#{self.id}' class='aquarium-item' id='#{self.id}'>#{self.id}</a>"
   end
 
+  def data_object
+    begin
+      result = JSON.parse(data,symbolize_names: true)
+    rescue Exception => e
+      result = {}
+    end
+    return result
+  end
+
 end
 
 
