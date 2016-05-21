@@ -27,6 +27,8 @@
 //= require d3
 //= require joint.nojquery
 //= require joint.layout.DirectedGraph
+//= require ace-rails-ap
+//= require ace/mode-ruby
 //= require angular
 //= require angular-resource
 //= require angular-cookies

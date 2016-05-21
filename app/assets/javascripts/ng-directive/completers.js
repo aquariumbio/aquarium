@@ -5,7 +5,7 @@
   try {
     w = angular.module('aquarium'); 
   } catch (e) {
-    w = angular.module('aquarium', ['ngCookies']); 
+    w = angular.module('aquarium', ['ngCookies','ui.ace']); 
   } 
 
   w.directive("samplecomplete", function() {

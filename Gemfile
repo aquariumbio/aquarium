@@ -45,6 +45,7 @@ gem 'oj'
 
 gem 'angularjs-rails'
 gem 'angular_rails_csrf'
+gem 'ace-rails-ap'
 
 gem 'yard'
 gem 'rack-cors', :require => 'rack/cors'

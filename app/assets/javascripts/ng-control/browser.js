@@ -5,7 +5,7 @@
   try {
     w = angular.module('aquarium'); 
   } catch (e) {
-    w = angular.module('aquarium', ['ngCookies']); 
+    w = angular.module('aquarium', ['ngCookies','ui.ace']); 
   } 
 
   w.controller('browserCtrl', [ '$scope', '$http', '$attrs', '$cookies', function ($scope,$http,$attrs,$cookies) {
