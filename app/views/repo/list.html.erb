@@ -25,10 +25,8 @@
 </div>
 
 <script>
-
   from = '<%= params[:from] ? "&from=#{params[:from]}" : "" %>';
   highlight = '<%= @highlight %>';
   repos = JSON.parse('<%= escape_javascript(@repos.to_json.html_safe) %>');
   rpl = new RepoListing(repos,highlight,from);
-  
 </script>

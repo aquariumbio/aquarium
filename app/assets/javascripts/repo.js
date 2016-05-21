@@ -9,6 +9,8 @@ function RepoListing ( repos, highlight, from ) {
     var repo_name = repos.children[i].data;
     var repo_info = repos.children[i].info;
 
+    console.log(repos.children[i]);
+
     if ( ! $.cookie('open-repo-directories') ) {
       $.cookie('open-repo-directories',JSON.stringify("[]"),{ path: '/' });
     }

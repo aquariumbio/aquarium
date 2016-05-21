@@ -15,8 +15,11 @@
     $scope.busy = false;
     $scope.jobs = [];
     $scope.mode = 'edit';
-    $scope.arguments = {};
     $scope.editor = null;
+
+    $scope.path = "";
+    $scope.arguments = {};
+    $scope.branch = "development";    
 
     $scope.aceLoaded = function(_editor) {
       _editor.setShowPrintMargin(false);
@@ -44,7 +47,7 @@
       }
 
       $scope.busy = true;
-      $http.get("/developer/get/" + encodeURIComponent(path))
+      $http.post("/developer/get/", { path: $scope.path, branch: $scope.branch })
         .success(function(response) {
           if ( response.errors && response.errors.length > 0 ) {
             add_errors(response.errors);
@@ -70,7 +73,7 @@
         }
 
         $scope.busy = true;
-        $http.post("/developer/save",{ path: $scope.path, content: $scope.code })
+        $http.post("/developer/save",{ path: $scope.path, content: $scope.code, branch: $scope.branch })
           .success(function(response) {
             if ( response.errors && response.errors.length > 0 ) {
               add_errors(response.errors);
@@ -101,7 +104,8 @@
 
       $scope.busy = true;   
       $scope.backtrace = [];
-      $http.post("/developer/test",{ path: $scope.path, arguments: $scope.arguments })
+
+      $http.post("/developer/test",{ path: $scope.path, arguments: $scope.arguments, branch: $scope.branch })
         .success(function(response) {
           if ( response.errors && response.errors.length > 0 ) {
             add_errors(response.errors);
@@ -142,9 +146,11 @@
       $scope.path = $scope.cookie.path;
       $scope.get();
     } else {
-      $scope.cookie = { path: "" };
-      $cookies.putObject("browserViews", $scope.cookie);
+      $scope.cookie = { path: "", arguments: {}, branch: "development" };
+      $cookies.putObject("developer", $scope.cookie);
       $scope.path = "";
+      $scope.arguments = {};
+      $scope.branch = "development";
     }    
 
     $scope.message_class = function() {

@@ -2,6 +2,10 @@ class RepoController < ApplicationController
 
   before_filter :signed_in_user
 
+  def base_path
+    "repos/master/"
+  end
+
   def directory_hash(path, name=nil)
     data = {:data => (name || path)}
     data[:children] = children = []
@@ -19,7 +23,9 @@ class RepoController < ApplicationController
 
   def list
 
-    @repos = directory_hash('repos')
+    @repos = directory_hash base_path
+
+    Rails.logger.info @repos
 
     @repos[:children].each do |r|
       r[:info] = Repo::info( r[:data] )
@@ -63,7 +69,7 @@ class RepoController < ApplicationController
   def pull
 
     begin
-      flash[:notice] = Git.open("repos/"+params[:name]).pull().gsub(/\r|\n/,"<br />").html_safe
+      flash[:notice] = Git.open(base_path+params[:name]).pull().gsub(/\r|\n/,"<br />").html_safe
     rescue Exception => e
       flash[:notice] = "Could not pull: " + e.to_s
     end

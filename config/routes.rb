@@ -1,8 +1,7 @@
 Bioturk::Application.routes.draw do
 
   get '/developer',                         to: 'developer#developer'
-  get '/developer/get/:path',               to: 'developer#get'  
-  get '/developer/save/:path',              to: 'developer#save'
+  post '/developer/get/',                   to: 'developer#get'  
   post '/developer/save',                   to: 'developer#save'    
   post '/developer/test',                   to: 'developer#test'      
 

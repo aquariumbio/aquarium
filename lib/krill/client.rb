@@ -46,8 +46,8 @@ module Krill
 
     end
 
-    def start jid, debug=false
-      send operation: "start", jid: jid, debug: debug
+    def start jid, debug=false, directory='master', branch='master'
+      send operation: "start", jid: jid, debug: debug, directory: directory, branch: branch
     end
 
     def jobs

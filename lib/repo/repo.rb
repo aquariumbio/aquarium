@@ -1,5 +1,9 @@
 module Repo
 
+  def self.base directory
+    "repos/#{directory}/"
+  end
+
   def self.repo_name path
     if path[0] == "/"
       path.split('/')[1]      
@@ -16,12 +20,15 @@ module Repo
     end
   end
 
-  def self.version path
+  def self.version path, directory='master', branch='master'
    
+    puts "Version #{base(directory) + (repo_name path)} : #{branch}"
+
     begin
-      git = Git.open("repos/" + (repo_name path))
+      git = Git.open(base(directory) + (repo_name path))
+      git.branch(branch).checkout
     rescue Exception => e
-      raise "Repo Module could not find or open the repository named '#{repo_name path}'"
+      raise "Repo Module could not find or open the repository named '#{repo_name path}': #{e.to_s}"
     end
 
     begin
@@ -34,101 +41,60 @@ module Repo
 
   end
 
-  def self.contents path, sha
+  def self.contents path, sha, directory='master', branch='master'
+
+    puts "Contents #{base(directory) + (repo_name path)} : #{branch}"    
 
     begin
-      git = Git.open("repos/" + (repo_name path))
+      git = Git.open(base(directory) + (repo_name path))
+      git.branch(branch).checkout      
       object = git.object(sha)
       object.contents
-    rescue
-      (Blob.get sha, path).xml
+    rescue Exception => e
+      puts e.to_s
+      raise e
     end
 
   end
 
-  def self.info name
-    git = Git.open("repos/" + (name))
+  def self.info name, directory='master', branch='master'
+
+    puts "Info #{base(directory)}, #{name}, #{branch}"
+
+    git = Git.open(base(directory) + (name))
+    git.branch(branch).checkout    
+
     {
       date:    git.log.first.date,
       message: git.log.first.message,
-      who:     git.log.first.committer.name
+      who:     git.log.first.committer.name,
+      branch:  branch
     }
+
   end
 
-  def self.save path, content
+  def self.save path, content, directory='master', branch='master'
 
-    file = File.open('repos/' + path, "w");
+    puts "Save #{base(directory) + (repo_name path)} : #{branch}"    
+
+    git = Git.open(base(directory) + (repo_name path))
+    git.branch(branch).checkout  
+
+    file = File.open(base(directory) + path, "w");
     file.puts content
     file.close
 
-    git = Git.open("repos/" + (repo_name path))
     git.add
     git.commit "Updated #{path}"
     object = git.object( ":" + (basic_path path))
 
-    # Thread.new do
-      begin
-        git.push(git.remote('origin'))
-      rescue Exception => e 
-        Rails.logger.info "Repo module could not pull/push"
-      end
-    # end
+    begin
+      result = git.push(git.remote('origin'),branch)
+    rescue Exception => e 
+      Rails.logger.info "Repo module could not pull/push"
+    end
 
     object.sha
-
-  end
-
-  def self.copy from, to
-
-    Thread.new do  
-
-      begin
-
-        Rails.logger.info "DEFAULT PROTOCOL: Copying #{from} to #{to}."
-
-        system "cp repos/#{from} repos/#{to}"
-        raise "DEFAULT PROTOCOL: Could not create new protocol file: #{$?}" unless $? == 0
-
-        Rails.logger.info "DEFAULT PROTOCOL: Copied default protocol."
-
-        begin
-          git = Git.open("repos/" + (repo_name from))
-        rescue Exception => e
-          Rails.logger.info "DEFAULT PROTOCOL: failed to open repo (#{repo_name from}): #{e.to_s}"
-        end
-
-        Rails.logger.info "DEFAULT PROTOCOL: opened #{repo_name from}"
-
-        begin
-          Rails.logger.info "DEFAULT PROTOCOL: adding ... "
-          git.add
-          Rails.logger.info "DEFAULT PROTOCOL: ... added."
-        rescue Exception => e
-          Rails.logger.info "DEFAULT PROTOCOL: Error in default copy routine (could not open/add #{basic_path to}): #{e.to_s}"
-        end
-
-        Rails.logger.info "DEFAULT PROTOCOL: added #{basic_path to}."
-
-        git.commit("Created generic protocol for operation #{to.split('/').last.split('.').first}")
-
-        Rails.logger.info "DEFAULT PROTOCOL: committed changes to #{repo_name from}"
-
-        begin
-          git.pull(git.remote('origin'))
-          git.push(git.remote('origin'))
-        rescue Exception => e 
-          Rails.logger.info "DEFAULT PROTOCOL: Error in default copy routine. Not master repo found. #{e.to_s}"
-        end
-
-        Rails.logger.info "DEFAULT PROTOCOL: Completed protocol default copy routine."      
-
-      rescue Exception => e
-
-        Rails.logger.info "DEFAULT PROTOCOL ERROR: #{e.to_s}, #{e.backtrace.join('\n')}"
-
-      end
-
-    end
 
   end
 

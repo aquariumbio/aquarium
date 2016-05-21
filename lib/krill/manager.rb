@@ -8,7 +8,7 @@ module Krill
 
     attr_accessor :thread
 
-    def initialize jid, debug
+    def initialize jid, debug, directory='master', branch='master'
 
       # Start new thread
       @mutex = Mutex.new
@@ -19,7 +19,7 @@ module Krill
       # Get job info
       @jid = jid
       @job = Job.find(jid)
-      @code = Repo::contents @job.path, @job.sha
+      @code = Repo::contents @job.path, @job.sha, directory, branch
       initial_state = JSON.parse @job.state, symbolize_names: true
       @args = initial_state[0][:arguments]
 

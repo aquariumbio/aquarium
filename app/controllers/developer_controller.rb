@@ -10,11 +10,12 @@ class DeveloperController < ApplicationController
 
   def get
 
-    path = params[:path] + ".rb"    
+    path = params[:path] + ".rb"
+    branch = params[:branch]
 
     begin
-      sha = Repo::version path
-      content = Repo::contents path, sha
+      sha = Repo::version path, 'development', branch
+      content = Repo::contents path, sha, 'development', branch
       render json: { path: path, sha: sha, content: content, errors: [] }
     rescue Exception => e
       render json: { errors: [ e.to_s ] }
@@ -25,9 +26,10 @@ class DeveloperController < ApplicationController
   def save
 
     path = params[:path] + ".rb"
+    branch = params[:branch]    
 
     begin
-      sha = Repo::save path, params[:content]
+      sha = Repo::save path, params[:content], 'development', branch
       render json: { errors: [], sha: sha }
     rescue Exception => e
       render json: { errors: [ e.to_s ] }
@@ -38,9 +40,10 @@ class DeveloperController < ApplicationController
   def test
 
     path = params[:path] + ".rb"
+    branch = params[:branch]    
 
     begin
-      sha = Repo::version path
+      sha = Repo::version path, 'development', branch
     rescue Exception => e
       render json: { errors: [ e.to_s ] }
       return
@@ -62,7 +65,7 @@ class DeveloperController < ApplicationController
     # Save the job
     job.save
 
-    result = Krill::Client.new.start job.id, true # debug
+    result = Krill::Client.new.start job.id, true, 'development', branch
 
     if result[:response] == "error"
       render json: { errors: [ "Krill could not start #{job.id}" ] + result[:error].split(",")[0,5] }
