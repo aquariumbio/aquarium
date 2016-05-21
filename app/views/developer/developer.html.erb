@@ -2,12 +2,15 @@
      ng-app="aquarium"
      ng-controller="developerCtrl">
 
+  <%= render partial: 'backtrace' %>
+  <%= render partial: 'show' %>  
+
   <div class='main'>
 
     <div class='controls'>
 
       <div ng-class="control_class('edit')" ng-click="set_mode('edit')">
-        <label>Protocol Path</label>
+        <label><b>Protocol</b></label>
         <input type='text' ng-model="path">
         <br />
         <button class='btn' ng-click="get()" ng-disabled="busy">Get</button>
@@ -15,7 +18,7 @@
       </div>
 
       <div ng-class="control_class('backtrace')" ng-click="set_mode('backtrace')">
-        <label>Arguments to Protocol</label>      
+        <label><b>Arguments</b></label>      
         <textarea json-text ng-model="arguments" class='arguments'></textarea>
         <button class='btn' ng-click="test()" ng-disabled="busy">Test</button>
       </div>
@@ -33,17 +36,20 @@
     </div>
 
     <div class='view' ng-show="mode=='edit'">
-      <textarea ng-model="code"></textarea>
+      <div ui-ace="{
+                     useWrapMode : true,
+                     mode: 'ruby',
+                     onLoad: aceLoaded,
+                     onChange: aceChanged
+                   }" ng-model="code"></div>
     </div>
 
     <div class='view' ng-show="mode=='backtrace'">
       <div class='backtrace'>
         <ul style="list-style-type: none">
-          <li class="backtrace-title" ng-show="jobs[0].id">Job <a href="/jobs/{{jobs[0].id}}">{{jobs[0].id}}</a></li>
+          <li class="title" ng-show="jobs[0].id">Job <a href="/jobs/{{jobs[0].id}}">{{jobs[0].id}}</a></li>
           <li ng-show="!jobs[0].id && !busy">No backtrace.</li>          
-          <li ng-repeat="step in backtrace">
-            <pre>{{step|json}}</pre>
-          </li>
+          <li ng-repeat="step in backtrace" ng-include="step.operation"></li>
         </ul>
       </div>      
     </div>

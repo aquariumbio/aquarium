@@ -5,7 +5,7 @@
   try {
     w = angular.module('aquarium'); 
   } catch (e) {
-    w = angular.module('aquarium', ['ngCookies']); 
+    w = angular.module('aquarium', ['ngCookies','ui.ace']); 
   } 
 
   w.controller('developerCtrl', [ '$scope', '$http', '$attrs', '$cookies', function ($scope,$http,$attrs,$cookies) {
@@ -16,6 +16,12 @@
     $scope.jobs = [];
     $scope.mode = 'edit';
     $scope.arguments = {};
+    $scope.editor = null;
+
+    $scope.aceLoaded = function(_editor) {
+      _editor.setShowPrintMargin(false);
+      $scope.editor = _editor;
+    };
 
     function add_notice(m) {
       $scope.messages.push({ type: "notice", message: m});
@@ -79,6 +85,18 @@
 
     }
 
+    function highlight_syntax_error(errors) {
+      var ses = aq.where(errors,function(e) {
+        return e.match("syntax error");
+      });
+      if ( ses.length > 0 ) {
+        var n = parseInt(ses[0].split(':')[1]);
+        $scope.editor.gotoLine(n);
+        $scope.editor.setHighlightGutterLine(true);
+        $scope.mode = 'edit';
+      }
+    }
+
     $scope.test = function() {
 
       $scope.busy = true;   
@@ -87,6 +105,7 @@
         .success(function(response) {
           if ( response.errors && response.errors.length > 0 ) {
             add_errors(response.errors);
+            highlight_syntax_error(response.errors);
           } else {
             add_notice("Job id: " + response.job.id);
           }
@@ -135,6 +154,19 @@
         return "dev-control";
       }
     }
+
+    $scope.has_inputs = function(step) {
+      return Object.keys(step.inputs).length > 1;
+    }
+
+    $scope.content_type = function(line) {
+      return Object.keys(line)[0];
+    }
+
+    $scope.content_value = function(line) {
+      var k = Object.keys(line)[0];
+      return line[k];
+    }    
 
   }]);
 

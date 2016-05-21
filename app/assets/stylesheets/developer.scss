@@ -17,9 +17,9 @@
 
   .controls {
     flex: 1;
-    padding-right: 0px;
-    /*outline: 1pt dashed orange;*/
-    position: relative;
+    padding-right: 5px;
+    position: relative;  
+    overflow-y: scroll;  
   }
 
   .view {
@@ -28,40 +28,79 @@
     position: relative;
   }  
 
-  .view > textarea {
-
+  .ace_editor {
     position: absolute;
     top: 0;
-    bottom: 0;
+    bottom: 10px;
     right: 0;
     left: 10px;
     width: 98%;
     resize: none;
-    font-family: "Courier New", Courier, monospace;
     font-weight: bold;
     background: transparent;
     border: 1pt solid #ccc;
-    border-radius: 5px;
     overflow: auto;
-    outline: none;
-
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;    
-
   }
 
   .backtrace {
-    margin-right: 10px;        
-    margin-left: -25px;        
-  }
 
-  .backtrace-title {
-    padding: 15px;
-    border: 1pt solid #ccc;
-    border-radius: 5px;
-    margin-right: 10px;   
-    margin-bottom: 10px; 
+    margin-right: 10px;        
+    margin-left: -25px;  
+
+    .title {
+      padding: 5px 5px 5px 10px;
+      border: 1pt solid #ccc;
+      /*border-radius: 5px;*/
+      margin-right: 10px;   
+      margin-bottom: 5px; 
+      background: #fafffa;      
+    }
+
+    .step {
+      padding: 5px 5px 5px 10px;
+      border: 1pt solid #ccc;
+      /*border-radius: 5px;*/
+      margin-right: 10px;   
+      margin-bottom: 5px;     
+    }
+
+    .step-next {
+      background: #fafffa;
+    }    
+
+    .step-display {
+      background: white;
+      border:none;
+      margin-left: 15px;
+
+    }   
+
+    .step-initialize, .step-complete {
+      background: #fafffa;         
+    }     
+
+    .step-error {
+      background: #ffff11;
+    }
+
+    .content {
+    }
+
+    .content-title {
+      font-weight: bold;
+    }
+
+    .content-note {
+      margin-left: 10px;
+    }
+
+    .content-select {
+      margin-left: 10px;
+    }
+
   }
 
   .dev-control {
@@ -69,7 +108,7 @@
     display: block;
     padding: 15px;
     border: 1pt solid #ccc;
-    border-radius: 5px;
+    /*border-radius: 5px;*/
     width: 90%;
     height: 100%;
     margin: 0 5px 5px 0;
@@ -79,7 +118,7 @@
 
   .dev-control-on {  
     /*border: 1pt solid orange;*/
-    background: #FeFeeF;
+    background: #f0f0f0;
   }
 
   .dev-control-error {  

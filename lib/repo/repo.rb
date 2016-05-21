@@ -66,13 +66,13 @@ module Repo
     git.commit "Updated #{path}"
     object = git.object( ":" + (basic_path path))
 
-    Thread.new do
+    # Thread.new do
       begin
         git.push(git.remote('origin'))
       rescue Exception => e 
         Rails.logger.info "Repo module could not pull/push"
       end
-    end
+    # end
 
     object.sha
 
