@@ -69,7 +69,9 @@ class JobsController < ApplicationController
         begin
           @content = Repo::contents params[:path], params[:sha] 
         rescue Exception => e
-          @content = "Could not find '#{params[:path]}' with sha '#{params[:sha]}'.<br />The repository information is probably not part of the path because the path was stored to the<br />database in the octokit era.".html_safe
+          @content = "Could not find '#{params[:path]}' with sha '#{params[:sha]}' in master branch.<br />"
+          @content += "    This protocol may have been run from a development branch that has not yet been merged with master."
+          @content = @content.html_safe
         end
       end
 
