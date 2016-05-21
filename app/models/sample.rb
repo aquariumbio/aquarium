@@ -151,6 +151,10 @@ class Sample < ActiveRecord::Base
     ft = field_type name
     fvs = field_values.select { |fv| fv.name == name }
 
+    if fvs.length == 0
+      fvs = [ field_values.create(name: name) ]
+    end
+
     if ft && fvs.length == 1
 
       fv = fvs[0]
@@ -177,7 +181,12 @@ class Sample < ActiveRecord::Base
 
       fv.save
 
-    end 
+    else 
+
+      self.errors.add(:set_property,"Could not set sample #{id} property #{name} to #{val}")
+      nil
+
+    end
 
     # TODO: allow user to set array fields too
 
