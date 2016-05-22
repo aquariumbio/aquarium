@@ -1,4 +1,4 @@
-<div class='developer'
+<div class='twocol developer' 
      ng-app="aquarium"
      ng-controller="developerCtrl">
 
@@ -14,7 +14,7 @@
         <input type='text' ng-model="path">
         <br />
         <label><b>Branch</b></label>
-        <input type='text' ng-model="branch">        
+        <input type='text' ng-model="branch"> <br />       
         <button class='btn' ng-click="get()" ng-disabled="busy">Get</button>
         <button class='btn btn-info' ng-click="save()" ng-disabled="busy || code == ''">Commit</button>
       </div>
@@ -37,24 +37,25 @@
 
     </div>
 
-    <div class='view' ng-show="mode=='edit'">
-      <div ui-ace="{
+    <div class='view' >
+      <div ng-if="mode=='edit'"
+           ng-model="code"
+           ui-ace="{
                      useWrapMode : true,
                      mode: 'ruby',
                      onLoad: aceLoaded,
                      onChange: aceChanged,
                      theme:'tomorrow'
-                   }" ng-model="code"></div>
-    </div>
+                   }"></div>
 
-    <div class='view' ng-show="mode=='backtrace'">
-      <div class='backtrace'>
+      <div class='backtrace' ng-if="mode=='backtrace'">
         <ul style="list-style-type: none">
           <li class="title" ng-show="jobs[0].id">Job <a href="/jobs/{{jobs[0].id}}">{{jobs[0].id}}</a></li>
           <li ng-show="!jobs[0].id && !busy">No backtrace.</li>          
           <li ng-repeat="step in backtrace" ng-include="step.operation"></li>
         </ul>
       </div>      
+
     </div>
 
   </div>

@@ -75,24 +75,36 @@ module Repo
 
   def self.save path, content, directory='master', branch='master'
 
-    puts "Save #{base(directory) + (repo_name path)} : #{branch}"    
+    Rails.logger.info "Repo::save: Opening repo #{base(directory) + (repo_name path)} : #{branch}"    
 
     git = Git.open(base(directory) + (repo_name path))
     git.branch(branch).checkout  
+
+    Rails.logger.info "Repo::save: Branches:\n#{git.branches}"
+    Rails.logger.info "Repo::save: Opening file #{base(directory) + path}"       
 
     file = File.open(base(directory) + path, "w");
     file.puts content
     file.close
 
-    git.add
-    git.commit "Updated #{path}"
+    Rails.logger.info "Repo::save: Adding file #{base(directory) + path}"   
+
+    git.add 
+
+    Rails.logger.info "Repo::save: Committing"     
+
+    git.commit "Repo::save: Updated #{path} via the Aquarium developer tool."
     object = git.object( ":" + (basic_path path))
+
+    Rails.logger.info "Repo::save: Pushing"     
 
     begin
       result = git.push(git.remote('origin'),branch)
     rescue Exception => e 
-      Rails.logger.info "Repo module could not pull/push"
+      Rails.logger.info "Repo::save: Repo module could not pull/push"
     end
+
+    Rails.logger.info "Repo::save: Done"
 
     object.sha
 

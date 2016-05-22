@@ -1,40 +1,16 @@
-.developer {
-
-  height: 92vh;
-  display: flex;
-  flex-direction: column;  
-  overflow: hidden;
-
-  .main {
-    display: flex;
-    flex: 1; 
-    overflow: hidden;    
-  }
-
-  .controls, .view {
-    padding-left: 10px;
-  }
-
-  .controls {
-    flex: 1;
-    padding-right: 5px;
-    position: relative;  
-    overflow-y: scroll;  
-  }
-
-  .view {
-    flex: 4;
-    overflow: scroll;  
-    position: relative;
-  }  
+.developer { 
 
   .ace_editor {
     position: absolute;
-    top: 0;
-    bottom: 10px;
+
     right: 0;
-    left: 10px;
-    width: 98%;
+    left: 0;
+    bottom: 0px;
+    top: 0px;
+
+    /*height: 90%;*/
+
+    width: calc(100%-5px);
     resize: none;
     font-weight: bold;
     background: transparent;
@@ -42,7 +18,7 @@
     overflow: auto;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
-    box-shadow: none;    
+    box-shadow: none;   
   }
 
   .backtrace {
@@ -103,32 +79,9 @@
 
   }
 
-  .dev-control {
-    position: relative;
-    display: block;
-    padding: 15px;
-    border: 1pt solid #ccc;
-    /*border-radius: 5px;*/
-    width: 90%;
-    height: 100%;
-    margin: 0 5px 5px 0;
-    word-wrap: break-word;   
-    cursor: pointer;
-  }
-
-  .dev-control-on {  
-    /*border: 1pt solid orange;*/
-    background: #f0f0f0;
-  }
-
-  .dev-control-error {  
-    /*border: 1pt solid orange;*/
-    background: #ffff00;
-  }  
-
   .arguments {
     width: 100%;
-    height: 200px;
+    height: 80px;
   }
 
 }

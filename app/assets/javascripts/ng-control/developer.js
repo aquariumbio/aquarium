@@ -47,6 +47,9 @@
       }
 
       $scope.busy = true;
+
+      console.log("Getting " + $scope.path + " from " + $scope.branch);
+
       $http.post("/developer/get/", { path: $scope.path, branch: $scope.branch })
         .success(function(response) {
           if ( response.errors && response.errors.length > 0 ) {
@@ -56,6 +59,9 @@
             $scope.sha = response.sha;
             $scope.code = response.content;
             add_notice("Version " + $scope.sha.substr($scope.sha.length - 7));
+            console.log($scope.code);
+            $scope.editor.setValue($scope.code);
+            $scope.editor.gotoLine(1);
           }
           $scope.busy = false;          
         });
@@ -64,7 +70,11 @@
 
     $scope.save = function() {
 
-      if ( confirm("Are you sure you want to save this protocol?" ) ) {
+      if ( $scope.branch == 'master' ) {
+
+        add_errors(["You cannot commit to the master branch from this page. You should commit to a branch, then do a pull request via github."]);
+
+      } else if ( confirm("Are you sure you want to save this protocol?" ) ) {
 
         var path = $scope.path;
 
@@ -73,7 +83,8 @@
         }
 
         $scope.busy = true;
-        $http.post("/developer/save",{ path: $scope.path, content: $scope.code, branch: $scope.branch })
+        
+        $http.post("/developer/save",{ path: $scope.path, content: $scope.editor.getValue(), branch: $scope.branch })
           .success(function(response) {
             if ( response.errors && response.errors.length > 0 ) {
               add_errors(response.errors);
@@ -124,9 +135,9 @@
 
     $scope.control_class = function(m) {
       if ( m == $scope.mode ) {
-        return "dev-control dev-control-on";
+        return "control control-on";
       } else {
-        return "dev-control";
+        return "control";
       }
     }
 
@@ -138,26 +149,11 @@
       $scope.messages = [];
     }
 
-    // Initialize 
-
-    $scope.cookie = $cookies.getObject("developer");
-
-    if ( $scope.cookie && $scope.cookie.path ) {
-      $scope.path = $scope.cookie.path;
-      $scope.get();
-    } else {
-      $scope.cookie = { path: "", arguments: {}, branch: "development" };
-      $cookies.putObject("developer", $scope.cookie);
-      $scope.path = "";
-      $scope.arguments = {};
-      $scope.branch = "development";
-    }    
-
     $scope.message_class = function() {
       if ( $scope.messages.length > 0 && $scope.messages[$scope.messages.length-1].type == "error" ) {
-        return "dev-control dev-control-error";
+        return "control control-no-click control-error";
       } else {
-        return "dev-control";
+        return "control control-no-click ";
       }
     }
 
@@ -172,7 +168,24 @@
     $scope.content_value = function(line) {
       var k = Object.keys(line)[0];
       return line[k];
-    }    
+    }      
+
+    // Initialize 
+
+    $scope.cookie = $cookies.getObject("developer");
+
+    if ( $scope.cookie && $scope.cookie.path ) {
+      $scope.path = $scope.cookie.path;
+      $scope.branch = $scope.cookie.branch;
+      $scope.arguments = $scope.cookie.arguments;
+      $scope.get();
+    } else {
+      $scope.cookie = { path: "", arguments: {}, branch: "development" };
+      $cookies.putObject("developer", $scope.cookie);
+      $scope.path = "";
+      $scope.arguments = {};
+      $scope.branch = "development";
+    }     
 
   }]);
 
