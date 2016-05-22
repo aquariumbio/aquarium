@@ -13,12 +13,14 @@
     $scope.user = new User($http);
 
     $scope.toggle = function(sample) {
-      if ( sample.open ) {
-        sample.open = false;
-      } else {
-        sample.find(sample.id,function(sample) {
-          sample.open = true;
-        });
+      if ( !sample.edit ) {
+        if ( sample.open ) {
+          sample.open = false;
+        } else {
+          sample.find(sample.id,function(sample) {
+            sample.open = true;
+          });
+        }
       }
     }
 
