@@ -29,7 +29,7 @@
         <b>Messages</b> <button class='btn btn-mini pull-right' ng-click="clear_messages()">Clear</button>
         <br />
         <ul>
-          <li ng-repeat="m in messages track by $index">
+          <li ng-repeat="m in messages | orderBy:'-' track by $index">
             <b>{{m.type}}:</b> {{m.message}}
           </li>
         </ul>

@@ -19,7 +19,7 @@
 
     $scope.path = "";
     $scope.arguments = {};
-    $scope.branch = "development";    
+    $scope.branch = "master";    
 
     $scope.aceLoaded = function(_editor) {
       _editor.setShowPrintMargin(false);
@@ -39,7 +39,11 @@
     $scope.get = function() {
 
       var path = $scope.path;
+
       $scope.cookie.path = $scope.path;
+      $scope.cookie.arguments = $scope.arguments;
+      $scope.cookie.branch = $scope.branch;  
+
       $cookies.putObject("developer", $scope.cookie);
 
       if ( path == "" ) {
@@ -50,21 +54,31 @@
 
       console.log("Getting " + $scope.path + " from " + $scope.branch);
 
-      $http.post("/developer/get/", { path: $scope.path, branch: $scope.branch })
-        .success(function(response) {
-          if ( response.errors && response.errors.length > 0 ) {
-            add_errors(response.errors);
+      $http.post("/developer/get/", { path: $scope.path, branch: $scope.branch }).then(
+
+        function(response) {
+          if ( response.data.errors && response.data.errors.length > 0 ) {
+            add_errors(response.data.errors);
             $scope.code = "";
           } else {
-            $scope.sha = response.sha;
-            $scope.code = response.content;
+            console.log(response.data);
+            $scope.sha = response.data.sha;
+            $scope.code = response.data.content;
             add_notice("Version " + $scope.sha.substr($scope.sha.length - 7));
             console.log($scope.code);
             $scope.editor.setValue($scope.code);
             $scope.editor.gotoLine(1);
           }
           $scope.busy = false;          
-        });
+        },
+
+        function(response) {
+          add_errors(["Communication with server failed.", "" + response.status + ": " + response.statusText]);
+          $scope.code = "";
+          $scope.busy = false;
+        }
+
+      );
 
     }
 
@@ -84,16 +98,25 @@
 
         $scope.busy = true;
         
-        $http.post("/developer/save",{ path: $scope.path, content: $scope.editor.getValue(), branch: $scope.branch })
-          .success(function(response) {
-            if ( response.errors && response.errors.length > 0 ) {
-              add_errors(response.errors);
+        $http.post("/developer/save",{ path: $scope.path, content: $scope.editor.getValue(), branch: $scope.branch }).then(
+
+          function(response) {
+            if ( response.data.errors && response.data.errors.length > 0 ) {
+              add_errors(response.data.errors);
             } else {
-              $scope.sha = response.sha;
+              $scope.sha = response.data.sha;
               add_notice("Saved. New version: " + $scope.sha.substr($scope.sha.length - 7));
             }
             $scope.busy = false;
-          });
+          },
+
+          function(response) {
+            add_errors(["Communication with server failed.", "" + response.status + ": " + response.statusText]);
+            $scope.code = "";
+            $scope.busy = false;
+          }
+
+        );
 
       }
 
@@ -115,21 +138,31 @@
 
       $scope.busy = true;   
       $scope.backtrace = [];
+      $scope.code = $scope.editor.getValue();
 
-      $http.post("/developer/test",{ path: $scope.path, arguments: $scope.arguments, branch: $scope.branch })
-        .success(function(response) {
-          if ( response.errors && response.errors.length > 0 ) {
-            add_errors(response.errors);
-            highlight_syntax_error(response.errors);
+      $http.post("/developer/test",{ path: $scope.path, arguments: $scope.arguments, branch: $scope.branch }).then(
+
+        function(response) {
+          if ( response.data.errors && response.data.errors.length > 0 ) {
+            add_errors(response.data.errors.reverse());
+            highlight_syntax_error(response.data.errors);
           } else {
-            add_notice("Job id: " + response.job.id);
+            add_notice("Job id: " + response.data.job.id);
           }
-          if ( response.job ) {
-            $scope.jobs.unshift(response.job);
+          if ( response.data.job ) {
+            $scope.jobs.unshift(response.data.job);
             $scope.backtrace = JSON.parse($scope.jobs[0].state);
           }          
           $scope.busy = false;
-        });
+        },
+
+        function(response) {
+          add_errors(["Communication with server failed.", "" + response.status + ": " + response.statusText]);
+          $scope.code = "";
+          $scope.busy = false;
+        }
+
+      );
 
     }
 
@@ -180,11 +213,11 @@
       $scope.arguments = $scope.cookie.arguments;
       $scope.get();
     } else {
-      $scope.cookie = { path: "", arguments: {}, branch: "development" };
+      $scope.cookie = { path: "", arguments: {}, branch: "master" };
       $cookies.putObject("developer", $scope.cookie);
       $scope.path = "";
       $scope.arguments = {};
-      $scope.branch = "development";
+      $scope.branch = "master";
     }     
 
   }]);

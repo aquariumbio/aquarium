@@ -93,6 +93,8 @@ module Bioturk
         Wizard.count
         SampleType.count
         ObjectType.count
+        TaskPrototype.count
+        Task.count
     end
 
     #Added to enable CORS

@@ -52,19 +52,18 @@ $selected-sample-color: #f3ffff;
   }
 
   .browser-control {
-    padding: 10px;
-    border-bottom: 1pt solid #eee;
-    border-right: 1pt solid #eee;
-    border-left: 10px solid #eee;    
-    cursor: pointer;   
+    padding: 15px;
+    border: 1pt solid #ccc;
+    margin: 10px 10px 10px 10px;
+    cursor: pointer;
   }
 
   .browser-control-on {
-    border-left: 10px solid #ccc;
+    box-shadow: 0 0 10px #9ecaed;
   }  
 
   .browser-control-plain {
-
+    cursor: default;
   }    
 
   .inline-control {
@@ -267,8 +266,8 @@ $selected-sample-color: #f3ffff;
   .sample-tree-list {
 
     ul {
-      margin:0 0 0 1em; /* indentation */
-      padding:0;
+      margin:0 0 20px 1em; /* indentation */
+      padding: 0;
       list-style:none;
       position:relative;
     }

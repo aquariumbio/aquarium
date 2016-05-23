@@ -7,7 +7,7 @@ class Invoice < ActiveRecord::Base
   belongs_to :user
   belongs_to :budget
 
-  def self.for x, y
+  def self.for x, y={}
     invoices = Invoice.where(x)
     if invoices.length == 0
       i = Invoice.new(x.merge y)

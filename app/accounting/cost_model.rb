@@ -137,7 +137,7 @@ module CostModel
       when ["yeast_mating","mating"]      then basic(:single_sample,0.90,3.3)
       when ["streak_yeast_plate","plate"] then basic(:single_sample,0,5)
       
-      # YEAST CYTOMETRY #######################################################################################
+      # YEAST CYTOMETRY ####################################################################################
 
       when ["overnight_suspension_divided_plate_to_deepwell","overnight"]      then basic(:yeast_strain_ids,1.53,2.7)
       when ["dilute_yeast_culture_deepwell_plate","diluted"] then basic(:yeast_strain_ids,1.53,2.4)
@@ -146,6 +146,14 @@ module CostModel
       when ["make_yeast_lysate","lysate"]      then basic(:yeast_plate_ids,0.10,4.0)
       when ["yeast_colony_PCR","pcr"]          then basic(:yeast_plate_ids,0.43,3.1)
       when ["fragment_analyzing","gel imaged"] then basic(:yeast_plate_ids,0.35,3.1)
+
+      # DIRECT PURCHASES ##################################################################################
+
+      when ["direct_purchase", "purchased"]
+        {
+          materials: simple_spec[:materials],
+          labor: simple_spec[:labor] * labor_rate
+        }
 
       else nothing
 
