@@ -43,7 +43,6 @@
       $scope.cookie.path = $scope.path;
       $scope.cookie.arguments = $scope.arguments;
       $scope.cookie.branch = $scope.branch;  
-
       $cookies.putObject("developer", $scope.cookie);
 
       if ( path == "" ) {
@@ -61,11 +60,9 @@
             add_errors(response.data.errors);
             $scope.code = "";
           } else {
-            console.log(response.data);
             $scope.sha = response.data.sha;
             $scope.code = response.data.content;
             add_notice("Version " + $scope.sha.substr($scope.sha.length - 7));
-            console.log($scope.code);
             $scope.editor.setValue($scope.code);
             $scope.editor.gotoLine(1);
           }
@@ -96,6 +93,8 @@
           path = "_NOT_SPECIFIED_";
         }
 
+        $scope.cookie.branch = $scope.branch;  
+        $cookies.putObject("developer", $scope.cookie);        
         $scope.busy = true;
         
         $http.post("/developer/save",{ path: $scope.path, content: $scope.editor.getValue(), branch: $scope.branch }).then(
@@ -164,7 +163,7 @@
 
       );
 
-    }
+    }    
 
     $scope.control_class = function(m) {
       if ( m == $scope.mode ) {

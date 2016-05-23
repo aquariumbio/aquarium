@@ -4,6 +4,7 @@ Bioturk::Application.routes.draw do
   post '/developer/get/',                   to: 'developer#get'  
   post '/developer/save',                   to: 'developer#save'    
   post '/developer/test',                   to: 'developer#test'      
+  post '/developer/pull',                   to: 'developer#pull'        
 
   get '/browser',                           to: 'browser#browser'
   get '/browser/all',                       to: 'browser#all'  

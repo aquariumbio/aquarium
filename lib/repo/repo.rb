@@ -83,7 +83,12 @@ module Repo
     Rails.logger.info "Repo::save: Branches:\n#{git.branches}"
     Rails.logger.info "Repo::save: Opening file #{base(directory) + path}"       
 
-    file = File.open(base(directory) + path, "w");
+    full_path = base(directory) + path
+    dir = full_path.split('/')[0..-2].join('/')
+    unless File.directory?(dir)
+      FileUtils.mkdir_p(dir)
+    end
+    file = File.open(full_path, "w");
     file.puts content
     file.close
 
@@ -100,8 +105,10 @@ module Repo
 
     begin
       result = git.push(git.remote('origin'),branch)
+      Rails.logger.info "Repo:: #{result}"
     rescue Exception => e 
-      Rails.logger.info "Repo::save: Repo module could not pull/push"
+      Rails.logger.info "Repo::save: Repo module could not pull/push: #{e}"
+      raise e
     end
 
     Rails.logger.info "Repo::save: Done"
