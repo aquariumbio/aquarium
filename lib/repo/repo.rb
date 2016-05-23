@@ -47,7 +47,7 @@ module Repo
 
     begin
       git = Git.open(base(directory) + (repo_name path))
-      git.branch(branch).checkout      
+      git.branch(branch).checkout unless directory == 'master'
       object = git.object(sha)
       object.contents
     rescue Exception => e
@@ -62,7 +62,7 @@ module Repo
     puts "Info #{base(directory)}, #{name}, #{branch}"
 
     git = Git.open(base(directory) + (name))
-    git.branch(branch).checkout    
+    git.branch(branch).checkout unless directory == 'master'    
 
     {
       date:    git.log.first.date,
@@ -78,7 +78,7 @@ module Repo
     Rails.logger.info "Repo::save: Opening repo #{base(directory) + (repo_name path)} : #{branch}"    
 
     git = Git.open(base(directory) + (repo_name path))
-    git.branch(branch).checkout  
+    git.branch(branch).checkout unless directory == 'master' 
 
     Rails.logger.info "Repo::save: Branches:\n#{git.branches}"
     Rails.logger.info "Repo::save: Opening file #{base(directory) + path}"       
