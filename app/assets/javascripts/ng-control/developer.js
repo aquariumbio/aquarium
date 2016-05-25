@@ -194,7 +194,9 @@
     }
 
     $scope.content_type = function(line) {
-      return Object.keys(line)[0];
+      var type = Object.keys(line)[0];
+      if ( type == "item") { console.log(type); }
+      return type;
     }
 
     $scope.content_value = function(line) {

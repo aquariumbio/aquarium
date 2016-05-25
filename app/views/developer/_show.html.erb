@@ -59,9 +59,15 @@
   </div>
 </script>
 
+<script type="text/ng-template" id="take">
+  <div class='content content-note'>
+    Item {{content_value(line).id}} at {{content_value(line).location}}
+  </div>
+</script>
+
 <script type="text/ng-template" id="item">
   <div class='content content-note'>
-    {{content_value(line)}}
+    Item {{content_value(line).id}} at {{content_value(line).location}}
   </div>
 </script>
 
