@@ -4,16 +4,11 @@ namespace :docs do
 
   md = [
     "Krill",
-    "WorkflowProtocolAPI",
     "API",
     "Installation",
     "Location Wizard",
     "Folders",
     "Reference",
-    "WorkflowGUITutorial",
-    "KrillWorkflowAPITutorial",
-    "JSONdocumentation",
-    "Workflow",
     "Oyster"
   ]
 
@@ -27,12 +22,12 @@ namespace :docs do
     sh "cp -r doc/images public/doc"
   end
 
-  task :auto do
-    puts "autogenerating operation api docs"
-    sh "rm -rf public/doc/operation-api"
-    sh "mkdir public/doc/operation-api"    
-    sh "cd lib/krill/workflow; yard doc"
-    sh "mv lib/krill/workflow/doc public/doc/operation-api"
-  end
+  # task :auto do
+  #   puts "autogenerating operation api docs"
+  #   sh "rm -rf public/doc/operation-api"
+  #   sh "mkdir public/doc/operation-api"    
+  #   sh "cd lib/krill/workflow; yard doc"
+  #   sh "mv lib/krill/workflow/doc public/doc/operation-api"
+  # end
 
 end

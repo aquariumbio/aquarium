@@ -40,44 +40,9 @@ Bioturk::Application.routes.draw do
   get '/sample_tree/jobs/:id',             to: 'sample_tree#jobs'  
   get '/sample_tree/annotate/:id/:note',   to: 'sample_tree#annotate'
   get '/sample_tree/:id',                  to: 'sample_tree#show'
-
-  resources :workflows
-  post '/workflows/:id/save',               to: 'workflows#save'
-  get '/workflows/:id/new_operation',       to: 'workflows#new_operation'
-  get '/workflows/:id/drop_operation/:oid', to: 'workflows#drop_operation'
-  get '/workflows/:id/identify',            to: 'workflows#identify'
-
-  get '/operations/make',                   to: 'operations#make' 
-
-  resources :operations
-  get '/operations/:id/new_part',           to: 'operations#new_part'
-  get '/operations/:id/new_exception',      to: 'operations#new_exception'
-  get '/operations/:id/new_exception_part', to: 'operations#new_exception_part'
-  get '/operations/:id/drop_part',          to: 'operations#drop_part'
-  get '/operations/:id/rename',             to: 'operations#rename'
-  get '/operations/:id/rename_part',        to: 'operations#rename_part'  
   
-  get 'containers_list',             to: 'operations#containers'  
-  get 'collection_containers_list',  to: 'operations#collection_containers'    
-  get 'sample_types_list',           to: 'operations#sample_types'
-  get 'sample_list/:id',             to: 'operations#samples'
-  get 'sample_list',                 to: 'operations#samples'
-
-  get 'workflow_processes/kill/:id',    to: 'workflow_processes#kill'
-  get 'workflow_processes/active',      to: 'workflow_processes#active'
-  get 'workflow_processes/recent',      to: 'workflow_processes#recent'  
-  get 'workflow_processes/rerun',       to: 'workflow_processes#rerun'
-  get 'workflow_processes/step',        to: 'workflow_processes#step'
-
-  resources :workflow_processes, only: [ :index, :show, :new, :create ]
-
-  resources :workflow_threads, only: [ :create, :index, :destroy ]
-
   resources :posts, only: [ :index, :create ]
   resources :wizards
-
-  post 'folders', to: 'folders#index'
-  resources :folders, only: [ :index ]
 
   match "api", to: "api#main"
 
