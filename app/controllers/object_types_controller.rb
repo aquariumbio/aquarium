@@ -220,6 +220,26 @@ class ObjectTypesController < ApplicationController
 
   end
 
+  def containers
+    render json: ObjectType.select([:id,:name]).collect { |h| "#{h.id}: #{h.name}" }
+  end
+
+  def collection_containers
+    render json: ObjectType.select([:id,:name]).collect { |h| "#{h.id}: #{h.name}" }
+  end    
+
+  def sample_types
+    render json: SampleType.select([:id,:name]).collect { |h| "#{h.id}: #{h.name}" }
+  end  
+
+  def samples
+    if params[:id]
+      render json: Sample.where(sample_type_id: params[:id]).select([:id,:name]).collect { |h| "#{h.id}: #{h.name}" }
+    else
+      render json: Sample.select([:id,:name]).collect { |h| "#{h.id}: #{h.name}" }      
+    end
+  end  
+
   def copy_inventory_from_production
 
     if Rails.env != 'production'
