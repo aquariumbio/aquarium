@@ -41,6 +41,12 @@ Bioturk::Application.routes.draw do
   get '/sample_tree/annotate/:id/:note',   to: 'sample_tree#annotate'
   get '/sample_tree/:id',                  to: 'sample_tree#show'
   
+  get 'containers_list',             to: 'object_types#containers'  
+  get 'collection_containers_list',  to: 'object_types#collection_containers'    
+  get 'sample_types_list',           to: 'object_types#sample_types'
+  get 'sample_list/:id',             to: 'object_types#samples'
+  get 'sample_list',                 to: 'object_types#samples'
+
   resources :posts, only: [ :index, :create ]
   resources :wizards
 
