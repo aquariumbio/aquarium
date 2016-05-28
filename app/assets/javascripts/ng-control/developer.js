@@ -173,7 +173,7 @@
       }
     }
 
-    $scope.set_mode= function(val) {
+    $scope.set_mode = function(val) {
       $scope.mode = val;
     }
 

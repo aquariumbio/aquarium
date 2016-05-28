@@ -73,7 +73,11 @@
 
 <script type="text/ng-template" id="table">
   <div class='content content-note'>
-    {{content_value(line)}}
+    <table >
+      <tr ng-repeat="row in content_value(line)">
+        <td style="border: 1pt solid #aaa" ng-repeat="cell in row">{{cell}}</row>
+      </tr>
+    </table>
   </div>
 </script>
 
