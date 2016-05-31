@@ -455,7 +455,7 @@ Collections inherit all of the methods of Item. In addition, there are a few mor
 
 **col.associate m** - Sets the matrix associated with the collection to the matrix m where m can be either a matrix of Samples or a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix was associated with the collection is lost.
 
-**col.set r, c, s** - Set the [r,c] entry of the matrix to id of the Sample **s**.
+**col.set r, c, s** - Set the [r,c] entry of the matrix to id of the Sample **s**. If **s**=nil, then the [r,c] entry is cleared.
 
 **col.next r, c, opts={}** - With no options, returns the indices of the next element of the collections, skipping to the next column or row if necessary. With the option skip_non_empty: true, returns the next non empty indices. Returns nil if [r,c] is the last element of the collection.
 

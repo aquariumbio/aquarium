@@ -128,6 +128,8 @@ class Collection < Item
       m[r][c] = x.id
     elsif x.class == String
       m[r][c] = x.split(':')[0].to_i
+    elsif !x
+      m[r][c] = -1
     else
       raise "The third argument to Collection.set should be an item, a sample, or a sample id, but it was '#{x}' which is a #{x.class}"
     end

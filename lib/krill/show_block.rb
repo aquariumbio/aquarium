@@ -104,16 +104,16 @@ module Krill
 
     def is_proper_array c
       if c.class == Array 
-  		if c.length > 0
-  			t = c[0].class
-  			return false unless t == Fixnum || t == Float || t == String
-  			c.each do |x|
-  				return false if t != x.class
-  			end
-  			return true
-  		else
-  			false
-  		end
+    		if c.length > 0
+    			t = c[0].class
+    			return false unless t == Fixnum || t == Float || t == String
+    			c.each do |x|
+    				return false if t != x.class
+    			end
+    			return true
+    		else
+    			true
+    		end
       else
       	false
       end

@@ -8,6 +8,7 @@ class Task < ActiveRecord::Base
   has_many :touches
   has_many :post_associations
   has_many :task_notifications
+  has_many :accounts
   belongs_to :user
   belongs_to :budget
 

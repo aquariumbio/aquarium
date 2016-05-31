@@ -17,6 +17,12 @@
   </div>
 </script>
 
+<script type="text/ng-template" id="input">
+  <div class='content content-note'>
+    <b>{{content_value(line).var}}</b> = {{content_value(line).label}} ({{content_value(line).type}})
+  </div>
+</script>
+
 <script type="text/ng-template" id="bullet">
   <div class='content content-note'>
     {{content_value(line)}}
