@@ -31,7 +31,7 @@
             <ul class="dropdown-menu">
               <li><a href="/browser">Samples</a></li>
               <li><%= link_to "Containers", object_types_path %></li>
-              <li><%= link_to "Direct Purchase", "http://localhost:3000/krill/arguments?path=aqualib/purchasing/direct_purchase.rb" %></li>
+              <li><%= link_to "Direct Purchase", "/krill/arguments?path=aqualib/purchasing/direct_purchase.rb" %></li>
               <li class="divider"></li>
               <% SampleType.all.each do |st| %>
                 <% name = pluralize(2,st.name)[2..-1] %>
