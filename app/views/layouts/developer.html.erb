@@ -1,14 +1,4 @@
 <!DOCTYPE html>
-
-<style>
-body, html {
-  overflow: hidden;
-}
-body {
-  padding: 0;
-}
-</style>
-
 <html>
 
   <head>
@@ -22,8 +12,13 @@ body {
 
   <body>
 
-    <%= render 'layouts/header' %>   
+    <%= render 'layouts/header' %>
+
+    <% flash.each do |key, value| %>
+      <div class="alert alert-<%= key %>"><%= value.class == Array ? value.join('<br />').html_safe : value %></div>
+    <% end %>
     <%= yield %>
+
     <%= render 'layouts/footer' %>         
 
   </body>

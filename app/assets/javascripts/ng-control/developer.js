@@ -167,9 +167,9 @@
 
     $scope.control_class = function(m) {
       if ( m == $scope.mode ) {
-        return "control control-on";
+        return "two-column-control two-column-control-on";
       } else {
-        return "control";
+        return "two-column-control";
       }
     }
 
@@ -183,9 +183,9 @@
 
     $scope.message_class = function() {
       if ( $scope.messages.length > 0 && $scope.messages[$scope.messages.length-1].type == "error" ) {
-        return "control control-no-click control-error";
+        return "two-column-control two-column-control-no-click two-column-control-error";
       } else {
-        return "control control-no-click ";
+        return "two-column-control two-column-control-no-click ";
       }
     }
 

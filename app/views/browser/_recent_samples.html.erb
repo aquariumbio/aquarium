@@ -1,7 +1,7 @@
 <div ng-show="views.recent.selected">
 
   <div class='sample-tree-list' ng-repeat="st_id in views.recent.sample_types">
-    <h4>{{sample_type_from_id(st_id).name}}</h4>
+    <h5>{{sample_type_from_id(st_id).name}}</h5>
     <ul>
       <li ng-repeat="sample in views.recent.samples"
           ng-include="'sample_router'"

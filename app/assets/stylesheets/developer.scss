@@ -2,15 +2,10 @@
 
   .ace_editor {
     position: absolute;
-
-    right: 0;
+    right: 10px;
     left: 0;
     bottom: 0px;
-    top: 0px;
-
-    /*height: 90%;*/
-
-    width: calc(100%-5px);
+    top: 10px;
     resize: none;
     font-weight: bold;
     background: transparent;

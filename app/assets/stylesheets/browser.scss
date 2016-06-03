@@ -2,32 +2,6 @@ $row-height: 18px;
 $selected-sample-color: #f3ffff;
 
 .browser {
-
-  display: flex;
-  flex-direction: column;  
-  height: 100vh !important;
-
-  .browser-main {
-    height: 100vh !important;
-    display: flex;
-    flex: 1;
-    overflow:hidden;
-    position: relative;
-    margin-top: -11px;    
-  }
-
-  .tree-nav {
-    flex: 1;
-    overflow: scroll;
-  }
-
-  .viewer {
-    padding-top: 10px;
-    padding-left: 15px;
-    flex: 4;
-    overflow: scroll;  
-  }  
-
   .view-description-well {
     margin-bottom: 10px;
   }

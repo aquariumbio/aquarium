@@ -1,72 +1,56 @@
-.twocol { 
+.two-column {
 
-  height: 90vh;
-  display: flex;
-  flex-direction: column;  
-  overflow: hidden;
-
-  .main {
-    display: flex;
-    flex: 9; 
-    overflow: hidden; 
-  }
-
-  .controls, .view {
-    margin: 0 5px 0 5px;
-  }
-
-  .controls {
-    flex: 2;
-    position: relative;  
-    overflow-y: scroll; 
-    overflow-x: hidden;
-    /*outline: 1pt dashed orange;  */
-    padding-right: 5px; 
-  }
-
-  .controls::-webkit-scrollbar { 
-    display: none; 
-  }    
-
-  .view {
-    flex: 7;
-    overflow: scroll;  
+  .two-column-left {
+    float: left ;
+    width: 300px;
     position: relative;
-    /*outline: 1pt dashed green;   */
+    overflow-y: scroll;    
   }
 
-  .view::-webkit-scrollbar { 
-    display: none; 
-  }  
-
-  .control {
-    width: 90%;
-    height: 100%;
+  .two-column-right {
+    float: left;
+    width: calc(100% - 310px);
     position: relative;
-    /*outline: 1pt dashed blue;   */
-    padding: 15px;
+    overflow-y: scroll;
+    padding: 10px 10px 0 0;
+  }
+
+  .two-column-control {
+    width: 250px;
+    padding: 10px 15px 15px 15px;
+    margin: 10px 10px 0 10px;
     border: 1pt solid #ccc;
-    margin: 0 0 10px 0;
     word-wrap: break-word;   
     cursor: pointer;
+    display: block;
+    overflow: auto;
   }
 
-  .control-on {  
-    /*border: 1pt solid orange;*/
+  .two-column-control-on {  
     box-shadow: 0 0 10px #9ecaed;
   }
 
-  .control-error {  
-    /*border: 1pt solid orange;*/
+  .two-column-control-error {  
     background: #ffff00;
   }  
 
-  .control-no-click {  
+  .two-column-control-no-click {  
     cursor: default;
   } 
 
-  .control-no-click:active {  
+  .two-column-control-no-click:active {  
     background: white;
   }   
 
 }
+
+
+
+
+
+
+
+
+
+
+

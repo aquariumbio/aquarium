@@ -1,13 +1,19 @@
-<div class='twocol developer' 
+<style>
+body {
+  padding-top: 49px;
+}
+</style>
+
+<div class='developer' 
      ng-app="aquarium"
      ng-controller="developerCtrl">
 
   <%= render partial: 'backtrace' %>
   <%= render partial: 'show' %>  
 
-  <div class='main'>
+  <div class='two-column'>
 
-    <div class='controls'>
+    <div class='two-column-left'>
 
       <div ng-class="control_class('edit')" ng-click="set_mode('edit')">
         <label><b>Protocol</b></label>
@@ -37,7 +43,7 @@
 
     </div>
 
-    <div class='view' >
+    <div class='two-column-right' >
       <div ng-show="mode=='edit'"
            ng-model="code"
            ui-ace="{
