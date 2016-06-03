@@ -32,13 +32,13 @@ class BrowserController < ApplicationController
       render json: Sample
           .last(25)      
           .reverse
-          .to_json(only: [:name,:id,:user_id,:data])
+          .to_json(only: [:name,:id,:user_id,:data,:sample_type_id])
     else
       render json: Sample
           .where(user_id: user.id)
           .last(25)
           .reverse
-          .to_json(only: [:name,:id,:user_id,:data])
+          .to_json(only: [:name,:id,:user_id,:data,:sample_type_id])
     end
   end
 
@@ -147,8 +147,6 @@ class BrowserController < ApplicationController
 
   def search
 
-    samples = Sample.where("name like ? or id = ?", "%#{params[:query]}%", params[:query].to_i)
-
     if params[:user_id]
       samples = Sample.where("name like ? or id = ?", "%#{params[:query]}%", params[:query].to_i)
                       .where(user_id: params[:user_id])
@@ -156,7 +154,7 @@ class BrowserController < ApplicationController
       samples = Sample.where("name like ? or id = ?", "%#{params[:query]}%", params[:query].to_i)
     end
 
-    render json: samples.last(50).reverse.to_json(only: [:name,:id,:user_id,:data])
+    render json: samples.last(50).reverse.to_json(only: [:name,:id,:user_id,:data,:sample_type_id])
 
   end
 

@@ -99,6 +99,22 @@ Aq.prototype.each = function(array,f) {
   return this;
 }
 
+Aq.prototype.uniq = function(array) {
+
+  var result = [];
+
+  if ( array ) {
+    for ( var i=0; i<array.length; i++ ) {
+      if ( result.indexOf(array[i]) < 0 ) {
+        result.push(array[i]);
+      }
+    }
+  }
+
+  return result;
+
+}
+
 Aq.prototype.collect = function(array,f) {
   var result = [];
   if ( array ) {

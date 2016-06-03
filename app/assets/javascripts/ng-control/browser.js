@@ -14,7 +14,7 @@
 
       var data = {
 
-        project: {
+        project: { 
           loaded: false,
           selected: $scope.views.project.selected,
           selection: $scope.views.project.selection,
@@ -158,6 +158,10 @@
       if ( !$scope.views.recent.samples || $scope.views.recent.samples.length == 0 ) {
         $scope.helper.recent_samples($scope.views.user.current.id,function(samples) {
           $scope.views.recent.samples = samples;
+          $scope.views.recent.sample_types = aq.uniq(aq.collect(samples, function(s) {
+            return s.sample_type_id;
+          })); 
+          console.log($scope.views.recent.sample_types);
         });
       }
     }
@@ -233,6 +237,12 @@
       })[0];
     }
 
+    $scope.sample_type_from_id = function(id) {
+      return aq.where($scope.sample_types,function(st) {
+        return id == st.id;
+      })[0];
+    }    
+
     $scope.save_new_samples = function() {
       $scope.errors = [];
       $scope.helper.create_samples($scope.views.create.samples,function(response) {
@@ -262,8 +272,12 @@
         then(function(response) {
           $scope.views.search.samples = aq.collect(response.data,function(s) {
             return new Sample($http).from(s);
-          })
+          });
+          $scope.views.search.sample_types = aq.uniq(aq.collect($scope.views.search.samples, function(s) {
+            return s.sample_type_id;
+          }));
         });      
+
     }
 
     if ( $scope.views.search.query ) {
