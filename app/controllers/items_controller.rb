@@ -80,7 +80,23 @@ class ItemsController < ApplicationController
 
   end
 
+  def make # used by the browser to create new items
+
+    object_type = ObjectType.find(params[:oid])
+    handler = view_context.make_handler object_type
+    item = handler.new_item item: { quantity: 1, sample_id: params[:sid] }, object_type_id: object_type.id
+    item.save
+
+    if !item.errors.empty?
+      render json: { errors: item.errors.full_messages }
+    else 
+      render json: { item: item.as_json(include: [:locator]) }
+    end
+
+  end
+
   def destroy
+
     i = Item.find(params[:id])
     i.mark_as_deleted
     flash[:success] = "Item #{params[:id]} has been deleted."
@@ -89,6 +105,7 @@ class ItemsController < ApplicationController
     else
       redirect_to object_type_url :id => i.object_type_id
     end
+
   end
 
   def update

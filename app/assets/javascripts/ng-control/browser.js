@@ -70,7 +70,8 @@
           selected: false
         },
         sample_type: {
-          selected: false
+          selected: false,
+          selection: {}
         },
         user: { current: { login: "All", id: 0 } }
       };
@@ -321,6 +322,12 @@
         }
       });
     }   
+
+    $scope.copy = function(sample) {
+      var ns = angular.copy(sample).wipe();
+      $scope.views.create.samples.push(ns);
+      $scope.select_view('create');
+    }
 
     // Search
 

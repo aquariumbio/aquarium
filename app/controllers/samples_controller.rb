@@ -23,40 +23,48 @@ class SamplesController < ApplicationController
   # GET /samples/1.json
   def show
 
-    if params[:delete]
-
-      i = Item.find(params[:delete])
-      i.mark_as_deleted
-
-      if i.errors.empty?
-        flash[:notice] = "Deleted item #{i.id}."
-      else
-        flash[:warning] = "Could not delete #{i.id}: #{i.errors.full_messages.join(', ')}"
-      end   
-
-      i.reload
-
-    end
-
-    @sample = Sample.includes(:sample_type,items: [locator: [:wizard]]).find(params[:id])
-    @sample_type = @sample.sample_type
-
-    if params[:toggle] 
-      @item = Item.find(params[:toggle])
-      @item.inuse = @item.inuse > 0 ? 0 : 1;
-      @item.save
-    end
-
     respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: Sample
-        .includes(field_values: :child_sample, sample_type: { field_types: { allowable_field_types: :sample_type } })
-        .find(params[:id])
-        .to_json(include: { 
-          sample_type: { include: { field_types: { include: { allowable_field_types: { include: :sample_type } } } } },
-          field_values: { include: :child_sample }
-        })
+
+      format.html {
+
+        if params[:delete]
+
+          i = Item.find(params[:delete])
+          i.mark_as_deleted
+
+          if i.errors.empty?
+            flash[:notice] = "Deleted item #{i.id}."
+          else
+            flash[:warning] = "Could not delete #{i.id}: #{i.errors.full_messages.join(', ')}"
+          end   
+
+          i.reload
+
+        end
+
+        @sample = Sample.includes(:sample_type,items: [locator: [:wizard]]).find(params[:id])
+        @sample_type = @sample.sample_type
+
+        if params[:toggle] 
+          @item = Item.find(params[:toggle])
+          @item.inuse = @item.inuse > 0 ? 0 : 1;
+          @item.save
+        end
+
       }
+
+      format.json { 
+
+        render json: Sample
+          .includes(field_values: :child_sample, sample_type: { field_types: { allowable_field_types: :sample_type } })
+          .find(params[:id])
+          .to_json(include: { 
+            sample_type: { include: [ :object_types, { field_types: { include: { allowable_field_types: { include: :sample_type } } } } ] },
+            field_values: { include: :child_sample }
+          })
+
+      }
+
     end
 
   end

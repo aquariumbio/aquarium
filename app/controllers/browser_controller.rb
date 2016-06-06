@@ -180,4 +180,18 @@ class BrowserController < ApplicationController
 
   end
 
+  def delete_item
+    item = Item.find(params[:item_id])
+    item.mark_as_deleted
+    item.reload
+    render json: { location: item.location }
+  end
+
+  def restore_item
+    item = Item.find(params[:item_id])
+    item.store
+    item.reload
+    render json: { location: item.location }
+  end  
+
 end

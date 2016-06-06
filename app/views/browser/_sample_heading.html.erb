@@ -34,32 +34,48 @@
             Actions <span class="caret"></span>
           </a>           
 
-          <ul class='dropdown-menu dropdown-in-stl'>
+          <ul class='dropdown-menu dropdown-in-stl pull-left'>
 
-           <li ng-show="sample.open && !sample.edit && !no_edit && allowed(sample)">
+           <li ng-show="sample.open && !no_edit && !sample.edit">
+             <a href='#' ng-click="toggle_inventory(sample)">
+               <span ng-show="!sample.inventory">Inventory</span>
+               <span ng-show="sample.inventory">Description</span>     
+             </a>       
+           </li>
+
+           <li ng-show="!sample.edit && !no_edit && allowed(sample)">
              <a href='#'ng-click="editing || edit(sample)">
                Edit
              </a>
            </li>
 
-           <li ng-show="sample.open && !no_edit && !sample.edit">
-             <a href='#' ng-click="toggle_inventory(sample)">
-               <span ng-show="!sample.inventory">Show Inventory</span>
-               <span ng-show="sample.inventory">Show Description</span>     
-             </a>       
+           <li ng-show="!sample.edit && !no_edit && !sample.inventory">
+             <a href='#'ng-click="copy(sample)">
+               Copy
+             </a>
            </li>
+
+           <li ng-show="sample.inventory" class='dropdown-submenu pull-left'>
+             <a tabindex="-1" href="#">New Item</a>
+             <ul class='dropdown-menu dropdown-in-stl'>
+               <li ng-repeat="container in sample.sample_type.object_types"
+                   ng-click="new_item(sample,container)">
+                   <a href="#">{{container.name}}</a>
+               </li>
+             </ul>
+           </li>           
 
            <li ng-show="sample.edit && !no_cancel">
              <a href="#" ng-click='view(sample)'>
                Cancel
-             </a>       
-           </li>   
+             </a>
+           </li>
 
            <li ng-if="sample.edit && !no_cancel">
              <a href="#" ng-click='save(sample)'>
                Save
              </a>
-           </li>          
+           </li>
 
           </ul>
 

@@ -4,7 +4,11 @@
 
    <span  class='sample-type-name' ng-if="!sample.edit">
       <span class='name' ng-if="!no_remove">{{sample.sample_type.name}}:</span>
-      <span class='pull-right'><a href="#" ng-click='remove_sample(sample)'><i class='icon-remove' ng-if="!no_remove"></i></a></span>
+      <span class='pull-right'>
+        <a href="#" ng-click='remove_sample(sample)' class="item-delete">
+          <span ng-if="!no_remove">&times;</span>
+        </a>
+      </span>
    </span>
 
    <ul class='sample-tree-list' ng-controller='sampleCtrl'>
@@ -97,7 +101,7 @@
 
          <tr ng-repeat-start="fv in sample.field_values | filter: fv_name_filter(field_type_name)">
            <td class='name name-sample'>
-              <i class='icon-refresh clickable' ng-click='toggle_new_existing(sample,fv)' ng-if="!fv.new_child_sample"></i>           
+              <span ng-click='toggle_new_existing(sample,fv)' ng-if="!fv.new_child_sample" class='toggle-se'>&#x021C6;</span>           
               {{ft.name}}<span ng-if="ft.array">({{$index}}):</span><span ng-if="!ft.array">:</span>                 
            </td>
            <td class='modifer'>

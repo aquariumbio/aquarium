@@ -150,6 +150,21 @@ Sample.prototype.new = function(stid,promise) {
 
 }
 
+Sample.prototype.wipe = function()  {
+
+  this.name = this.name + " (copy)";
+  this.description = this.description + " (copy of sample no. " + this.id + ")";
+  this.id = null;
+
+  aq.each(this.field_values,function(fv) {
+    fv.id = null;
+  });
+
+  return this;
+
+}
+
+
 Sample.prototype.fields = function(name) {
   var fvs = aq.where(this.field_values,function(fv) {
     return fv.name == name;

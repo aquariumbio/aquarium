@@ -121,6 +121,19 @@
       }
     } 
 
+    $scope.new_item = function(sample,container) {
+      $http.get("/items/make/" + sample.id + "/" + container.id ).then(function(response) {
+        var i = response.data.item;
+        try {
+          i.data = JSON.parse(i.data);
+        } catch(e) {
+          i.data = {};
+        }   
+        sample.items.push(i);
+     
+      });
+    }
+
   }]);
 
 })();

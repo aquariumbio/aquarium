@@ -1,10 +1,10 @@
 Bioturk::Application.routes.draw do
 
-  get '/developer',                         to: 'developer#developer'
-  post '/developer/get/',                   to: 'developer#get'  
-  post '/developer/save',                   to: 'developer#save'    
-  post '/developer/test',                   to: 'developer#test'      
-  post '/developer/pull',                   to: 'developer#pull'        
+  get '/developer',                              to: 'developer#developer'
+  post '/developer/get/',                        to: 'developer#get'  
+  post '/developer/save',                        to: 'developer#save'    
+  post '/developer/test',                        to: 'developer#test'      
+  post '/developer/pull',                        to: 'developer#pull'        
 
   get '/browser',                                to: 'browser#browser'
   get '/browser/all',                            to: 'browser#all'  
@@ -19,35 +19,37 @@ Bioturk::Application.routes.draw do
   get '/browser/recent_samples/:id',             to: 'browser#recent_samples'  
   get '/browser/search/:query(/:user_id)',       to: 'browser#search' 
   get '/browser/collections/:sample_id',         to: 'browser#collections'
-  
+  get '/browser/delete_item/:item_id',           to: 'browser#delete_item'  
+  get '/browser/restore_item/:item_id',          to: 'browser#restore_item'  
+
   resources :parameters
 
-  get '/budgets/add/:bid/:uid/:quota',      to: 'budgets#add_user'
-  get '/budgets/remove/:bid/:uid',          to: 'budgets#remove_user'  
+  get '/budgets/add/:bid/:uid/:quota',           to: 'budgets#add_user'
+  get '/budgets/remove/:bid/:uid',               to: 'budgets#remove_user'  
   resources :budgets
 
-  post '/invoices/note',                       to: "invoices#note"
-  post '/invoices/credit',                     to: "invoices#credit"  
-  get '/invoices/year/:year',                  to: 'invoices#index'  
-  post '/invoices/change_budget',              to: 'invoices#change_budget'  
-  get '/invoices/change_status/:id/:status',   to: 'invoices#change_status'
+  post '/invoices/note',                         to: "invoices#note"
+  post '/invoices/credit',                       to: "invoices#credit"  
+  get '/invoices/year/:year',                    to: 'invoices#index'  
+  post '/invoices/change_budget',                to: 'invoices#change_budget'  
+  get '/invoices/change_status/:id/:status',     to: 'invoices#change_status'
   resources :invoices
 
-  get '/accounts',                         to: 'accounts#index'  
-  get '/accounts/deposit',                 to: 'accounts#deposit'
-  get '/accounts/:uid',                    to: 'accounts#index'  
-  get '/accounts/:uid/:month/:year',       to: 'accounts#index'      
+  get '/accounts',                               to: 'accounts#index'  
+  get '/accounts/deposit',                       to: 'accounts#deposit'
+  get '/accounts/:uid',                          to: 'accounts#index'  
+  get '/accounts/:uid/:month/:year',             to: 'accounts#index'      
 
-  get '/sample_tree/samples',              to: 'sample_tree#samples'  
-  get '/sample_tree/jobs/:id',             to: 'sample_tree#jobs'  
-  get '/sample_tree/annotate/:id/:note',   to: 'sample_tree#annotate'
-  get '/sample_tree/:id',                  to: 'sample_tree#show'
+  get '/sample_tree/samples',                    to: 'sample_tree#samples'  
+  get '/sample_tree/jobs/:id',                   to: 'sample_tree#jobs'  
+  get '/sample_tree/annotate/:id/:note',         to: 'sample_tree#annotate'
+  get '/sample_tree/:id',                        to: 'sample_tree#show'
   
-  get 'containers_list',             to: 'object_types#containers'  
-  get 'collection_containers_list',  to: 'object_types#collection_containers'    
-  get 'sample_types_list',           to: 'object_types#sample_types'
-  get 'sample_list/:id',             to: 'object_types#samples'
-  get 'sample_list',                 to: 'object_types#samples'
+  get 'containers_list',                         to: 'object_types#containers'  
+  get 'collection_containers_list',              to: 'object_types#collection_containers'    
+  get 'sample_types_list',                       to: 'object_types#sample_types'
+  get 'sample_list/:id',                         to: 'object_types#samples'
+  get 'sample_list',                             to: 'object_types#samples'
 
   resources :posts, only: [ :index, :create ]
   resources :wizards
@@ -160,6 +162,7 @@ Bioturk::Application.routes.draw do
   get "repo/get"
   get "repo/pull"
 
+  get "/items/make/:sid/:oid", to: "items#make"
   resources :items
 
   match "project", to: 'samples#project'

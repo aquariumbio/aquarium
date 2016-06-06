@@ -49,6 +49,22 @@
       }
     }    
 
-  }])
+    $scope.delete = function(item) {
+      if ( confirm("Are you sure you want to mark this item as deleted?") ) {
+        $http.get("/browser/delete_item/" + item.id).then(function(response) {
+          item.location = response.data.location;
+          console.log(response.data.location);
+        });
+      }
+    }
+
+    $scope.restore = function(item) {
+      $http.get("/browser/restore_item/" + item.id).then(function(response) {
+        item.location = response.data.location;
+        console.log(response.data.location);
+      });
+    }    
+
+  }]);
 
 })();
