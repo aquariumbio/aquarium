@@ -30,8 +30,6 @@ module ApiFind
                "task" => Task, "sample_type" => SampleType, "object_type" => ObjectType,
                "task_prototype" => TaskPrototype, "touch" => Touch,
                "task_prototype" => TaskPrototype,
-               "workflow"=>Workflow,
-               "workflow_thread"=>WorkflowThread,
                "upload"=>Upload }
 
     query = models[args[:model]]
@@ -45,12 +43,6 @@ module ApiFind
         query = query.all
       end
       add query.collect { |r| r.export }
-      #For requests that don't map to a model
-    elsif args[:model]=='workflow_form'
-      workflow=Workflow.find(args[:where][:id])
-      if workflow
-        add [Workflow.find(args[:where][:id]).form]
-      end
     elsif args[:model]=='file'
       if args[:where][:id]
         upload=Upload.find(args[:where][:id])
