@@ -33,4 +33,39 @@
     </div>
   </div>
 
+  <div ng-show="views.sample_type.selected && views.sample_type.selection" 
+       class='sample-list-header'>
+
+    <span class="sample-list-name">
+
+      {{views.sample_type.selection.name}} 
+
+      <span class="st-offset" 
+            ng-click="offset(-1)"
+            ng-if="views.sample_type.selection.offset!=0">
+        &#10094;
+      </span>
+
+      <span class="st-offset-disabled"
+            ng-if="views.sample_type.selection.offset==0">
+        &#10094;
+      </span>
+
+      <!-- {{views.sample_type.selection.offset+1}} - {{views.sample_type.selection.offset+30}}  -->
+      {{views.sample_type.selection.samples[0].id}} -
+      {{views.sample_type.selection.samples[views.sample_type.selection.samples.length - 1].id}}
+
+      <span class="st-offset"
+            ng-click="offset(1)">
+        &#10095;
+      </span>
+
+      <span class='pull-right date'>
+        {{views.sample_type.selection.samples[0].created_at|date:'MMM yyyy'}}
+      </span>
+
+    </span>
+
+  </div>  
+
 </div>

@@ -7,7 +7,14 @@ $(function() {
   }
 
   window.onresize = two_column_resize;
-
   two_column_resize();
+
+  var dm = $(".two-column .dropdown-toggle");
+  dm.on('focus', function() {
+      $(".two-column-left").css("overflow", "visible");
+  });
+  dm.on('blur', function() {
+      $(".two-column-left").css("overflow", "auto");
+  });  
 
 });

@@ -86,3 +86,5 @@ SampleType.prototype.field_type = function(name) {
     return null;
   }
 }
+
+

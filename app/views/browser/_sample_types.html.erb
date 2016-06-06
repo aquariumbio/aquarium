@@ -1,0 +1,9 @@
+<div ng-show="views.sample_type.selected">
+
+  <ul class='plain-list'>
+    <li ng-repeat="sample in views.sample_type.selection.samples"
+        ng-include="'sample_router'">
+    </li>
+  </ul>
+
+</div>

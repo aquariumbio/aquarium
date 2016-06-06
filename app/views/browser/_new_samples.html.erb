@@ -1,8 +1,8 @@
 <div ng-show="views.create.selected"
      ng-if="views.create.samples.length > 0">
 
-  <div class='sample-tree-list'>
-    <ul>
+  <div>
+    <ul class='sample-tree-list'>
       <li ng-repeat="sample in views.create.samples" 
           ng-include="'sample_form'"
           class='no-sample-hover'>

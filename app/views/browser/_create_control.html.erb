@@ -1,6 +1,6 @@
 <div ng-class="browser_control_class('create')" 
      ng-click="select_view('create')"
-     ng-if="sample_types">
+     ng-show="sample_types">
 
   <span class='project-heading project-expander'>
     New Samples &nbsp;
@@ -10,7 +10,7 @@
 
     <div class="btn-group">
 
-      <a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#">
+      <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
         Create <span class="caret"></span>
       </a>
 
@@ -27,6 +27,5 @@
     </a>
 
   </span> 
-
 
 </div>

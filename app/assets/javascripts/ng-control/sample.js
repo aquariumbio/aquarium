@@ -24,8 +24,14 @@
       }
     }
 
+    $scope.toggle_show_deleted = function(sample) {
+      sample.show_deleted = !sample.show_deleted;
+      console.log("switched to " + sample.show_deleted)
+    }
+
     $scope.edit = function(sample) {
       sample.edit = true;
+      sample.inventory = false;
     }
 
     $scope.view = function(sample) {  
@@ -107,13 +113,11 @@
     }    
 
     $scope.toggle_inventory = function(sample) {
-      console.log("1")
-      if ( sample.inventory ) {
+      if ( !sample.edit && sample.inventory ) {
         sample.inventory = false;
-      } else {
+      } else if ( !sample.edit ) {
         sample.get_inventory(function() {
           sample.inventory = true;
-          console.log([sample.containers,sample.items])
         });
       }
     }     

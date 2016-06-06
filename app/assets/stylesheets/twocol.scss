@@ -1,18 +1,23 @@
 .two-column {
 
+  position: relative;
+  overflow: hidden;
+
   .two-column-left {
-    float: left ;
+    float: left;
     width: 300px;
+    overflow-y: scroll;
+    overflow-x: visible;
     position: relative;
-    overflow-y: scroll;    
   }
 
   .two-column-right {
     float: left;
     width: calc(100% - 310px);
-    position: relative;
     overflow-y: scroll;
+    overflow-x: visible;
     padding: 10px 10px 0 0;
+    position: relative;  
   }
 
   .two-column-control {
@@ -23,7 +28,6 @@
     word-wrap: break-word;   
     cursor: pointer;
     display: block;
-    overflow: auto;
   }
 
   .two-column-control-on {  

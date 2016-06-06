@@ -10,7 +10,8 @@ class Collection < Item
     i = s.id.to_s
     r = Regexp.new '\[' + i + ',|,' + i + ',|,' + i + '\]|\[' + i + '\]'
     if ot
-      Collection.where(object_type_id: ot.id).select { |i| r =~ i.datum[:matrix].to_json  }
+      Collection.includes(:object_type).where(object_type_id: ot.id)
+                .select { |i| r =~ i.datum[:matrix].to_json  }
     else
       Collection.every.select { |i| r =~ i.datum[:matrix].to_json }
     end

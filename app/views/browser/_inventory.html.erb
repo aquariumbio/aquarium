@@ -5,32 +5,65 @@
   <span ng-if="empty(data)">-</span>
 </script>
 
+<script type="text/ng-template" id="collectionDisplay">
+  <table class='collection-table'>
+    <tr ng-repeat="row in matrix track by $index">
+      <td ng-repeat="id in row track by $index">
+        <span ng-if="id == -1">&nbsp;</span>       
+        <span ng-if="id != -1 && id != sample.id">{{id}}</span> 
+        <span ng-if="id == sample.id" class='collection-highlight'>{{id}}</span> 
+      </td>
+    </tr>
+  </table>
+</script>
+
 <script type="text/ng-template" id="inventory">
 
-  <ul ng-controller='inventoryCtrl' ng-if="sample.items.length > 0">
+  <ul ng-controller='inventoryCtrl' ng-if="sample.items.length > 0" class='sample-tree-list'>
 
-    <li ng-repeat="container in sample.containers"
-        ng-if="num_items(sample,container)>0">
+    <li ng-repeat="container in sample.containers" ng-if="num_items(sample,container)>0">
 
       <table ng-repeat="item in sample.items | filter: { object_type_id: container.id }:true"
+             ng-if="item.location != 'deleted' || sample.show_deleted"
              class='inventory-table'>
         <tr>
           <td style="width: 20%"><b ng-if="$first">{{container.name}}</b></td>
           <td><b><a href="/items/{{item.id}}">{{item.id}}</a></b></td>
-          <td>{{item.location}}</td>
-          <td  style="width: 30%" ng-include="'dataDisplay'" ng-init='data = item.data'></td>
+          <td>
+            <span ng-if="item.location == 'deleted'" class='deleted-item'>{{item.location}}</span>
+            <span ng-if="item.location != 'deleted'">{{item.location}}</span>          
+          </td>
+          <td  style="width: 45%" ng-include="'dataDisplay'" ng-init='data = item.data'></td>
           <td>{{item.created_at|date}}</td>
-          <td>{{item.updated_at|date}}</td>              
+          <td>{{item.updated_at|date}}</td>
         </tr>
-      </table>   
+      </table>
 
     </li>
 
+    <li ng-repeat="col in sample.collections"
+        ng-if="col.location != 'deleted' || sample.show_deleted">
+
+      <table class='inventory-table'>
+        <tr>
+          <td style="width: 20%"><b>{{col.object_type.name}}</b></td>
+          <td><b><a href="/items/{{col.id}}">{{col.id}}</a></b></td>
+          <td>
+            <span ng-if="col.location == 'deleted'" class='deleted-item'>{{col.location}}</span>
+            <span ng-if="col.location != 'deleted'">{{col.location}}</span>          
+          </td>
+          <td  style="width: 45%" ng-include="'collectionDisplay'" ng-init='matrix = col.data.matrix'></td>
+          <td>{{col.created_at|date}}</td>
+          <td>{{col.updated_at|date}}</td>              
+        </tr>
+      </table> 
+
+    </li>      
+
   </ul>
 
-  <ul ng-controller='inventoryCtrl' ng-if="sample.items.length == 0">
+  <ul ng-controller='inventoryCtrl' ng-if="sample.items.length == 0" class='sample-tree-list'>
     <li>No items in inventory</li>
   </ul>
-
 
 </script>

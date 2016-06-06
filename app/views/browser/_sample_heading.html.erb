@@ -4,41 +4,68 @@
 
   <tr>
 
+    <td style='width: 16px'>
+       <span class="project-expander" ng-if="!sample.open && !sample.edit" ng-click="toggle(sample)">&#9658;</span>
+       <span class="project-expander" ng-if="sample.open && !sample.edit"  ng-click="toggle(sample)">&#9660;</span>
+       <span class="project-expander" ng-if="sample.open && sample.edit">&#9660;</span>    
+    </td>      
+
     <td class="sample-heading-name" ng-click="toggle(sample)">
-       <span class="sample-id"><a href="/samples/{{sample.id}}">{{sample.id}}</a>:</span>
+       <span class="sample-id">{{sample.id}}:</span>
        <span class='sample-name'>{{sample.name}}</span>
        <span ng-if='sample.user_id != user.current.id' class='owner-login'> ( {{user.logins[sample.user_id]}} ) </span>
     </td>
 
     <td ng-class="button_heading_class(sample)">
 
-      <span class='pull-right'>
+      <div ng-if="sample.open" class='pull-right'>
 
-       <a href='#' class="btn btn-mini"
-             ng-if="sample.open && !no_edit && allowed(sample)"
-             ng-disabled="sample.edit"
-             ng-click="editing || edit(sample)">
-         Edit
-       </a>
+        <a href="#" ng-if="sample.open && sample.inventory" 
+           class="btn btn-mini dropdown-toggle" 
+           ng-click="toggle_show_deleted(sample)">
+          <span ng-show="sample.show_deleted">Hide</span>
+          <span ng-show="!sample.show_deleted">Show</span>          
+          Deleted
+        </a>      
 
-       <a href='#' class="btn btn-mini"
-             ng-if="sample.open && !no_edit"
-             ng-disabled="sample.edit"
-             ng-click="toggle_inventory(sample)">
-         <span ng-if="!sample.inventory">Inventory</span>
-         <span ng-if="sample.inventory">Description</span>     
-       </a>       
+        <div class='btn-group' style="margin-right: 5px;">
 
-       <span  class='sample-type-name' ng-if="sample.edit">
-         <a href="#" ng-if="!no_cancel" ng-click='view(sample)'class='btn btn-mini'>
-           Cancel
-         </a>       
-         <a href="#" ng-if="!no_cancel" ng-click='save(sample)'class='btn btn-mini btn-primary'>
-           Save
-         </a>
-       </span>   
+          <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
+            Actions <span class="caret"></span>
+          </a>           
 
-       </span>
+          <ul class='dropdown-menu dropdown-in-stl'>
+
+           <li ng-show="sample.open && !sample.edit && !no_edit && allowed(sample)">
+             <a href='#'ng-click="editing || edit(sample)">
+               Edit
+             </a>
+           </li>
+
+           <li ng-show="sample.open && !no_edit && !sample.edit">
+             <a href='#' ng-click="toggle_inventory(sample)">
+               <span ng-show="!sample.inventory">Show Inventory</span>
+               <span ng-show="sample.inventory">Show Description</span>     
+             </a>       
+           </li>
+
+           <li ng-show="sample.edit && !no_cancel">
+             <a href="#" ng-click='view(sample)'>
+               Cancel
+             </a>       
+           </li>   
+
+           <li ng-if="sample.edit && !no_cancel">
+             <a href="#" ng-click='save(sample)'>
+               Save
+             </a>
+           </li>          
+
+          </ul>
+
+        </div>    
+
+      </div>
 
     </td>
 
@@ -47,13 +74,7 @@
               ng-model="sample.data.note"
               ng-blur="noteBlur(sample)"
               ng-style="noteColor(sample.data.note)"></input>
-    </td>
-
-    <td style='width: 20px'>
-       <span class="project-expander" ng-if="!sample.open && !sample.edit" ng-click="toggle(sample)">&#9658;</span>
-       <span class="project-expander" ng-if="sample.open && !sample.edit"  ng-click="toggle(sample)">&#9660;</span>
-       <span class="project-expander" ng-if="sample.open && sample.edit">&#9660;</span>    
-    </td>       
+    </td> 
 
   </tr>
 

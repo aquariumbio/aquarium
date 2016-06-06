@@ -1,7 +1,19 @@
 <style>
 body {
   padding-top: 49px;
+  overflow: hidden;
 }
+.ui-autocomplete { 
+  position: absolute; 
+  cursor: default;
+  z-index:30 !important;
+  max-height: 350px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 20px;  
+} 
+.dropdown-menu {   
+} 
 </style>
 
 <div ng-app="aquarium" class='browser'>
@@ -23,15 +35,17 @@ body {
         <%= render partial: "create_control" %>                  
         <%= render partial: "recent_navigator" %>          
         <%= render partial: "project_navigator" %>         
+        <%= render partial: "sample_type_navigator" %>               
       </div>
 
-      <div class='two-column-right'>
+      <div class='two-column-right sample-view'>
         <%= render partial: "view_heading" %>        
         <%= render partial: "messages" %>
         <%= render partial: "new_samples" %>
         <%= render partial: "project_view" %>
         <%= render partial: "recent_samples" %>     
         <%= render partial: "search_results" %>              
+        <%= render partial: "sample_types" %>          
       </div>
 
     </div> 

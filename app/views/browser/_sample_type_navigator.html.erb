@@ -1,6 +1,33 @@
 <div ng-class="browser_control_class('sample_type')" 
      ng-click="select_view('sample_type')">
+
   <div class='project-heading project-expander'>
     Sample Types
   </div>  
+
+  <div>
+
+    <ul class='sample-tree-list'>
+    
+      <li ng-repeat="st in sample_types">
+
+        <span class="project-expander" 
+              ng-if="st.id != views.sample_type.selection.id"
+              ng-click="select_sample_type(st)">
+          <i class='icon-folder-close' style="color: #eee"></i>
+          <span class='folder-name'>{{st.name}}</span>
+        </span>
+
+        <span class="project-expander"
+              ng-if="st.id == views.sample_type.selection.id"
+              ng-click="unselect_sample_type(st)">
+          <i class='icon-folder-open' style="color: #eee"></i>
+          <span class='folder-name'>{{st.name}}</span>
+        </span>
+
+      </li>
+    </ul>
+
+  </div>
+
 </div>

@@ -31,6 +31,15 @@
           selected: $scope.views.search.selected,
           query: $scope.views.search.query
         },
+        sample_type: {
+          selected: $scope.views.sample_type.selected,   
+          selection: {
+            name: $scope.views.sample_type.selection.name,
+            id: $scope.views.sample_type.selection.id,
+            offset: $scope.views.sample_type.selection.offset,
+            samples: []
+          }
+        },
         user: $scope.views.user
 
       };
@@ -41,7 +50,7 @@
 
     $scope.views = $cookies.getObject("browserViews");
 
-    if ( ! $scope.views ) {
+    if ( !$scope.views ) {
 
       $scope.views = {
         sample_type: {}, // not used, yet
@@ -59,11 +68,18 @@
         search: {
           selected: false
         },
+        sample_type: {
+          selected: false
+        },
         user: { current: { login: "All", id: 0 } }
       };
 
       cookie();
 
+    } else {
+      if ( !$scope.views.sample_type ) {
+        $scope.views.sample_type = { selected: false };
+      }
     }
 
     $scope.helper = new SampleHelper($http);
@@ -104,6 +120,10 @@
         $scope.sample_type_names = aq.collect(response.data,function(st) {
           return st.name;
         });
+        if ( $scope.views.sample_type.selected && $scope.views.sample_type.selection ) {
+          get_samples($scope.views.sample_type.selection);
+          console.log("asd");
+        }        
       });
 
     $scope.helper.autocomplete(function(sample_names) {
@@ -161,7 +181,6 @@
           $scope.views.recent.sample_types = aq.uniq(aq.collect(samples, function(s) {
             return s.sample_type_id;
           })); 
-          console.log($scope.views.recent.sample_types);
         });
       }
     }
@@ -184,7 +203,7 @@
       return project.sample_type_ids.indexOf(st.id) >= 0;
     }
 
-    $scope.select_st = function(st, force) { 
+    $scope.select_st = function(st, force) { // within projec navigator
 
       if ( $scope.views.project.selection.sample_type != st.id || force) {
 
@@ -204,8 +223,48 @@
 
     $scope.unselect_st = function(st) {
       if ( $scope.views.project.selection.sample_type == st.id ) {
-        $scope.views.project.selection.sample_type = null;
+        $scope.views.project.selection.sample_type = null;       
       } 
+    }  
+
+    // Sample Type Chooser    
+
+    function get_samples ( st ) {
+      var user_str = "";
+      if ( $scope.views.user.filter ) {
+        user_str = "/" + $scope.views.user.current.id;
+      }
+      $http.get('/browser/samples/' + st.id + '/' + st.offset + user_str + '.json').
+        then(function(response) {
+          st.samples = [];
+          new Sample($http)
+          aq.each(response.data,function(s) {
+            st.samples.push ( new Sample($http).from(s) );
+          });
+        });
+    }
+
+    $scope.offset = function(sign) {
+      $scope.views.sample_type.selection.offset += sign * 30;
+      $scope.views.sample_type.selection.samples = [];
+      get_samples($scope.views.sample_type.selection);
+      cookie();      
+    }        
+
+    $scope.select_sample_type = function(st) {
+      $scope.views.sample_type.selection = st
+      if ( !st.offset ) {
+        st.offset = 0;        
+      }
+      get_samples(st);
+      cookie();       
+    }    
+
+    $scope.unselect_sample_type = function(st) {
+      if ( $scope.views.sample_type.selection == st ) {
+        $scope.views.sample_type.selection = null;
+      } 
+      cookie();      
     }    
 
     $scope.sample_type_from_id = function(stid) {

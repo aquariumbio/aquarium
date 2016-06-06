@@ -2,12 +2,21 @@ $row-height: 18px;
 $selected-sample-color: #f3ffff;
 
 .browser {
+
   .view-description-well {
     margin-bottom: 10px;
   }
 
   .sample-heading-table {
     table-layout: fixed;
+    td {
+      height: 24px;
+      overflow-x: scroll;
+      white-space:nowrap;
+      margin-left: 0;   
+      margin-right: 0;
+      padding-left: 0 !important;
+    }
   }
 
   .sample-heading-name {
@@ -15,14 +24,20 @@ $selected-sample-color: #f3ffff;
     overflow: hidden;
     overflow-x: auto;
     cursor: pointer;
+    margin-left: 0;
+    padding-left: 0;
   }
 
   .button-heading-open {
     width: 200px;
+    overflow: visible !important;    
+    white-space:nowrap;    
   }
 
   .button-heading-closed {
     width: 0;
+    overflow: visible !important;    
+    white-space:nowrap;    
   }
 
   .browser-control {
@@ -58,6 +73,31 @@ $selected-sample-color: #f3ffff;
 
   .subtle {
     color: #ddd;
+  }
+
+  .date {
+    color: orange;
+  }
+
+  .collection-table {
+
+    overflow: scroll;
+    white-space: nowrap;
+
+    td {
+      border: 1pt solid #ccc;
+      width: 30px;
+      margin: 0 0 1px 1px;
+      font-size: 8pt;
+      text-align: center;
+      overflow: hidden;
+      display: inline-block;
+    }
+
+    .collection-highlight {
+      background: yellow;
+    }
+
   }
 
   .input-no-style {
@@ -123,7 +163,7 @@ $selected-sample-color: #f3ffff;
       /*outline: 1pt solid #def; */
     }
     .name {
-      width: 160px;
+      width: 210px;
       font-weight: bold;      
     }
     .name-string, .name-number {
@@ -232,30 +272,33 @@ $selected-sample-color: #f3ffff;
     margin-top: 5px;
   }
 
-
-
-  /*********************************************************************************************************/
-  /*  http://cssdeck.com/labs/pure-css-tree-menu-framework */
+  .plain-list {
+    list-style:none;
+    margin: 10px;
+    li {
+      margin: 0;
+    }
+  }
 
   .sample-tree-list {
+    margin:0 0 10px 1em; /* indentation */
+    padding: 0;
+    list-style:none;
+    position:relative;
+  }
 
-    ul {
-      margin:0 0 10px 1em; /* indentation */
-      padding: 0;
-      list-style:none;
-      position:relative;
-    }
+  .sample-tree-list:before {
+    content:"";
+    display:block;
+    width:0;
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    border-left: 1px solid #bbb;
+  }
 
-    ul:before {
-      content:"";
-      display:block;
-      width:0;
-      position:absolute;
-      top:0;
-      bottom:0;
-      left:0;
-      border-left: 1px solid #bbb;
-    }
+  .sample-tree-list {
 
     li {
       margin:0;
@@ -286,6 +329,16 @@ $selected-sample-color: #f3ffff;
 
     li:last-child {
       margin-bottom: 0;
+    }
+
+    .dropdown-in-stl {
+      li {
+        padding: 0;
+      }
+      li:before {
+        width: 0;
+        border: none;
+      };
     }
 
   }
@@ -335,10 +388,24 @@ $selected-sample-color: #f3ffff;
     td {
       vertical-align: top;
       font-weight: normal;
+      overflow: scroll;
     }
     .data-field {
 
     }
+    .deleted-item {
+      color: #a00;
+    }
   }
+
+  .st-offset {
+    cursor: pointer;
+  }
+
+  .st-offset-disabled {
+    cursor: pointer;    
+    disabled: true;
+    color: #ccc;
+  }  
 
 }

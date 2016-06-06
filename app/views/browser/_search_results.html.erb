@@ -1,8 +1,8 @@
 <div ng-show="views.search.selected">
 
-  <div class='sample-tree-list' ng-repeat="st_id in views.search.sample_types">
+  <div ng-repeat="st_id in views.search.sample_types">
     <h5>{{sample_type_from_id(st_id).name}}</h5>
-    <ul>
+    <ul class='plain-list'>
       <li ng-repeat="sample in views.search.samples"
           ng-include="'sample_router'"
           ng-if="sample.sample_type_id == sample_type_from_id(st_id).id">

@@ -1,6 +1,5 @@
-
 <div class="browser-control browser-control-plain" 
-     ng-if="user.current">
+     ng-show="user.current">
 
   <div class="btn-group">
 
@@ -12,7 +11,7 @@
       <span class="caret"></span>
     </button>
 
-    <ul class="dropdown-menu">
+    <ul class="dropdown-menu scrollable-menu">
       <li><a href="#" ng-click="choose_user(everyone)">All</a></li>
       <li class='divider'></li>
       <li ng-repeat="user in user.all track by $index">

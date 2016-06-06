@@ -40,6 +40,19 @@ Sample.prototype.get_inventory = function(promise) {
       }
     });
     promise(sample.containers,sample.items);
+  });
+
+  this.http.get('/browser/collections/' + this.id + '.json').then(function(response) {
+    sample.collections = response.data;
+    aq.each(sample.collections,function(i) {
+      try {
+        i.data = JSON.parse(i.data);
+      } catch(e) {
+        i.data = {};
+      }
+    });
+    promise(sample.collections);
+    console.log(response.data)
   });  
 
 }
