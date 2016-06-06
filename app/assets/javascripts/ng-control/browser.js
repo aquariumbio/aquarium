@@ -8,7 +8,8 @@
     w = angular.module('aquarium', ['ngCookies','ui.ace']); 
   } 
 
-  w.controller('browserCtrl', [ '$scope', '$http', '$attrs', '$cookies', function ($scope,$http,$attrs,$cookies) {
+  w.controller('browserCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
+                     function (  $scope,   $http,   $attrs,   $cookies ) {
 
     function cookie() {
 
@@ -212,7 +213,9 @@
         $scope.views.project.samples = [];
         cookie();
 
-        $scope.helper.samples($scope.views.project.selection.project,$scope.views.project.selection.sample_type,function(samples) {
+        $scope.helper.samples($scope.views.project.selection.project,
+                              $scope.views.project.selection.sample_type,
+                              function(samples) {
           $scope.views.project.samples = samples;
           $scope.views.project.selection.loaded = true;
         });
@@ -312,7 +315,9 @@
           $scope.views.recent.samples = [];
           $scope.choose_user($scope.user.current);
           $scope.select_view('recent');
-          $scope.messages = aq.collect(response.samples,function(s) { return "Created sample " + s.id + ": " + s.name; });          
+          $scope.messages = aq.collect(response.samples,function(s) { 
+            return "Created sample " + s.id + ": " + s.name; 
+          });          
         }
       });
     }   
@@ -332,7 +337,8 @@
           $scope.views.search.samples = aq.collect(response.data,function(s) {
             return new Sample($http).from(s);
           });
-          $scope.views.search.sample_types = aq.uniq(aq.collect($scope.views.search.samples, function(s) {
+          $scope.views.search.sample_types = aq
+                .uniq(aq.collect($scope.views.search.samples, function(s) {
             return s.sample_type_id;
           }));
         });      

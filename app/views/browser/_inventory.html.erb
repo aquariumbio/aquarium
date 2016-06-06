@@ -19,51 +19,61 @@
 
 <script type="text/ng-template" id="inventory">
 
-  <ul ng-controller='inventoryCtrl' ng-if="sample.items.length > 0" class='sample-tree-list'>
+  <div ng-controller='inventoryCtrl'> 
 
-    <li ng-repeat="container in sample.containers" ng-if="num_items(sample,container)>0">
+    <ul ng-if="visible_inventory(sample) > 0" 
+        class='sample-tree-list'>
 
-      <table ng-repeat="item in sample.items | filter: { object_type_id: container.id }:true"
-             ng-if="item.location != 'deleted' || sample.show_deleted"
-             class='inventory-table'>
-        <tr>
-          <td style="width: 20%"><b ng-if="$first">{{container.name}}</b></td>
-          <td><b><a href="/items/{{item.id}}">{{item.id}}</a></b></td>
-          <td>
-            <span ng-if="item.location == 'deleted'" class='deleted-item'>{{item.location}}</span>
-            <span ng-if="item.location != 'deleted'">{{item.location}}</span>          
-          </td>
-          <td  style="width: 45%" ng-include="'dataDisplay'" ng-init='data = item.data'></td>
-          <td>{{item.created_at|date}}</td>
-          <td>{{item.updated_at|date}}</td>
-        </tr>
-      </table>
+      <li ng-repeat="container in sample.containers" 
+          ng-if="num_items(sample,container)>0">
 
-    </li>
+        <table ng-repeat="item in sample.items | filter: item_filter(sample,container)"
+               class='inventory-table'>
+          <tr>
+            <td style="width: 20%"><b ng-if="$first">{{container.name}}</b></td>
+            <td><b><a href="/items/{{item.id}}">{{item.id}}</a></b></td>
+            <td>
+              <span ng-if="item.location == 'deleted'" class='deleted-item'>{{item.location}}</span>
+              <span ng-if="item.location != 'deleted'">{{item.location}}</span>          
+            </td>
+            <td  style="width: 45%" ng-include="'dataDisplay'" ng-init='data = item.data'></td>
+            <td>{{item.created_at|date}}</td>
+            <td>{{item.updated_at|date}}</td>
+          </tr>
+        </table>
 
-    <li ng-repeat="col in sample.collections"
-        ng-if="col.location != 'deleted' || sample.show_deleted">
+      </li>
 
-      <table class='inventory-table'>
-        <tr>
-          <td style="width: 20%"><b>{{col.object_type.name}}</b></td>
-          <td><b><a href="/items/{{col.id}}">{{col.id}}</a></b></td>
-          <td>
-            <span ng-if="col.location == 'deleted'" class='deleted-item'>{{col.location}}</span>
-            <span ng-if="col.location != 'deleted'">{{col.location}}</span>          
-          </td>
-          <td  style="width: 45%" ng-include="'collectionDisplay'" ng-init='matrix = col.data.matrix'></td>
-          <td>{{col.created_at|date}}</td>
-          <td>{{col.updated_at|date}}</td>              
-        </tr>
-      </table> 
+      <li ng-repeat="container in sample.collection_containers"
+          ng-if="num_collections(sample,container)>0"
+          ng-class="li_selected_class()">
 
-    </li>      
+        <table ng-repeat="col in sample.collections | filter: item_filter(sample,container)"
+               class='inventory-table'>
+          <tr>
+            <td style="width: 20%"><b ng-if="$first">{{container.name}}</b></td>
+            <td><b><a href="/items/{{col.id}}">{{col.id}}</a></b></td>
+            <td>
+              <span ng-if="col.location == 'deleted'" class='deleted-item'>{{col.location}}</span>
+              <span ng-if="col.location != 'deleted'">{{col.location}}</span>          
+            </td>
+            <td style="width: 45%"
+                ng-include="'collectionDisplay'" 
+                ng-init='matrix = col.data.matrix'></td>
+            <td>{{col.created_at|date}}</td>
+            <td>{{col.updated_at|date}}</td>              
+          </tr>
+        </table> 
 
-  </ul>
+      </li>      
 
-  <ul ng-controller='inventoryCtrl' ng-if="sample.items.length == 0" class='sample-tree-list'>
-    <li>No items in inventory</li>
-  </ul>
+    </ul>
+
+    <ul ng-if="visible_inventory(sample) == 0" 
+        class='sample-tree-list'>
+      <li>No items in inventory</li>
+    </ul>
+
+  </div>
 
 </script>

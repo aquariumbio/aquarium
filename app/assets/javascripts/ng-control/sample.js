@@ -26,7 +26,6 @@
 
     $scope.toggle_show_deleted = function(sample) {
       sample.show_deleted = !sample.show_deleted;
-      console.log("switched to " + sample.show_deleted)
     }
 
     $scope.edit = function(sample) {
@@ -120,7 +119,7 @@
           sample.inventory = true;
         });
       }
-    }     
+    } 
 
   }]);
 

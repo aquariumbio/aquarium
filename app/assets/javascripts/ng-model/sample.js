@@ -43,7 +43,8 @@ Sample.prototype.get_inventory = function(promise) {
   });
 
   this.http.get('/browser/collections/' + this.id + '.json').then(function(response) {
-    sample.collections = response.data;
+    sample.collections = response.data.collections;
+    sample.collection_containers = response.data.containers;
     aq.each(sample.collections,function(i) {
       try {
         i.data = JSON.parse(i.data);
@@ -51,8 +52,7 @@ Sample.prototype.get_inventory = function(promise) {
         i.data = {};
       }
     });
-    promise(sample.collections);
-    console.log(response.data)
+    promise(sample.collection_containers,sample.collections);
   });  
 
 }

@@ -142,8 +142,17 @@ class BrowserController < ApplicationController
     sample = Sample.find(params[:id])
     item_list = Item.includes(:locator).where(sample_id: params[:id]) # .select { |i| !i.deleted? }
     containers = ObjectType.where(sample_type_id: sample.sample_type_id)
-    render json: { items: item_list.as_json(include: [:locator]), containers: containers.as_json(only:[:name,:id]) }
+    render json: { items: item_list.as_json(include: [:locator]), 
+                   containers: containers.as_json(only:[:name,:id]) }
   end
+
+  def collections
+    s = Sample.find(params[:sample_id])
+    collections = Collection.containing(s)
+    containers = collections.collect { |c| c.object_type }.uniq
+    render json: { collections: collections.as_json(include: :object_type), 
+                   containers: containers.as_json(only: [:name,:id]) }
+  end  
 
   def search
 
@@ -169,11 +178,6 @@ class BrowserController < ApplicationController
     render json: samples.offset(params[:offset]).last(30).reverse
         .to_json(only: [:name,:id,:user_id,:data,:created_at])
 
-  end
-
-  def collections
-    s = Sample.find(params[:sample_id])
-    render json: Collection.containing(s).to_json(include: :object_type)
   end
 
 end

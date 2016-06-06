@@ -21,7 +21,8 @@
        </li>
 
        <!-- SIMPLE FIELDS -->
-       <li ng-repeat="ft in sample.sample_type.field_types | filter: non_sample" ng-init="field_type_name = ft.name">
+       <li ng-repeat="ft in sample.sample_type.field_types | filter: non_sample" 
+           ng-init="field_type_name = ft.name">
        
          <table class='field-table'>
 
