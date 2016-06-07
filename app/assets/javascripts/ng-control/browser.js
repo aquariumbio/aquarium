@@ -14,7 +14,7 @@
     function cookie() {
 
       var data = {
-
+        version: $scope.views.version,
         project: { 
           loaded: false,
           selected: $scope.views.project.selected,
@@ -42,7 +42,6 @@
           }
         },
         user: $scope.views.user
-
       };
 
       $cookies.putObject("browserViews", data);
