@@ -155,6 +155,10 @@
         $scope.fetch_recent();
       }
 
+      if ( view == 'sample_type' && $scope.views.sample_type.selection ) {
+        $scope.select_sample_type($scope.views.sample_type.selection);
+      }
+
     }
 
     $scope.choose_user = function(user) {
@@ -198,6 +202,7 @@
     $scope.unselect_project = function(project) {
       if ( $scope.views.project.selection.project == project.name  ) {
         $scope.views.project.selection.project = null;
+        $scope.views.project.selection.sample_type = null;
       }
     }    
 
@@ -205,7 +210,7 @@
       return project.sample_type_ids.indexOf(st.id) >= 0;
     }
 
-    $scope.select_st = function(st, force) { // within projec navigator
+    $scope.select_st = function(st, force) { // within project navigator
 
       if ( $scope.views.project.selection.sample_type != st.id || force) {
 
@@ -256,7 +261,7 @@
     }        
 
     $scope.select_sample_type = function(st) {
-      $scope.views.sample_type.selection = st
+      $scope.views.sample_type.selection = st;
       if ( !st.offset ) {
         st.offset = 0;        
       }
