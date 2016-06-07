@@ -125,7 +125,6 @@ class SamplesController < ApplicationController
     if @sample.items.length > 0 
       flash[:notice] = "Could not delete sample #{@sample.name} because there are items associated with it."
     else
-      FolderContent.where(sample_id: @sample.id).destroy_all
       @sample.destroy
     end
 
