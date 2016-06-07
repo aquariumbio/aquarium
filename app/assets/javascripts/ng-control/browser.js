@@ -51,10 +51,10 @@
 
     $scope.views = $cookies.getObject("browserViews");
 
-    if ( !$scope.views ) {
+    if ( !$scope.views || $scope.views.version != 1 ) {
 
       $scope.views = {
-        sample_type: {}, // not used, yet
+        version: 1,
         project: {
           loaded: false,
           selection: {}
