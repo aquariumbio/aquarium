@@ -123,7 +123,6 @@
         });
         if ( $scope.views.sample_type.selected && $scope.views.sample_type.selection ) {
           get_samples($scope.views.sample_type.selection);
-          console.log("asd");
         }        
       });
 
