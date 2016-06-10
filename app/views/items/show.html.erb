@@ -11,7 +11,16 @@
     topic: @item,
     button_class: 'btn-small' } %>
 
-<%= render @handler.show_item_partial %>
+  <%= render @handler.show_item_partial %>
+
+ <div class='well'>
+  <h4>Data Associations</h4>
+  <ul>
+    <% @item.associations.each do |k,v| %>
+      <li><%= k %>: <%= v %></li>
+    <% end %>
+  </ul>
+</div>
 
 <p>Locator_id: <%= @item.locator_id ? @item.locator_id : 'nil' %></p>
 <p>Locator.id: <%= @item.locator ? "id = #{@item.locator.id}, item_id = #{@item.locator.item_id}" : 'nil' %></p>

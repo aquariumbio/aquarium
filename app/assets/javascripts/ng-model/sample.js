@@ -30,30 +30,27 @@ Sample.prototype.get_inventory = function(promise) {
   var sample = this;
 
   this.http.get('/browser/items/' + this.id + '.json').then(function(response) {
-    sample.containers = response.data.containers;    
-    sample.items = response.data.items;
-    aq.each(sample.items,function(i) {
-      try {
-        i.data = JSON.parse(i.data);
-      } catch(e) {
-        i.data = {};
-      }
-    });
-    promise(sample.containers,sample.items);
-  });
 
-  this.http.get('/browser/collections/' + this.id + '.json').then(function(response) {
-    sample.collections = response.data.collections;
-    sample.collection_containers = response.data.containers;
-    aq.each(sample.collections,function(i) {
-      try {
-        i.data = JSON.parse(i.data);
-      } catch(e) {
-        i.data = {};
-      }
+    sample.containers = response.data.containers;    
+
+    sample.items = aq.collect(response.data.items, function(raw) { 
+      return new Item(sample.http).from(raw); 
     });
-    promise(sample.collection_containers,sample.collections);
-  });  
+
+    sample.http.get('/browser/collections/' + sample.id + '.json').then(function(response) {
+      sample.collections = response.data.collections;
+      sample.collection_containers = response.data.containers;
+      aq.each(sample.collections,function(i) {
+        try {
+          i.data = JSON.parse(i.data);
+        } catch(e) {
+          i.data = {};
+        }
+      });
+      promise();
+    });  
+
+  });
 
 }
 

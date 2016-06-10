@@ -53,7 +53,6 @@
       if ( confirm("Are you sure you want to mark this item as deleted?") ) {
         $http.get("/browser/delete_item/" + item.id).then(function(response) {
           item.location = response.data.location;
-          console.log(response.data.location);
         });
       }
     }
@@ -61,9 +60,27 @@
     $scope.restore = function(item) {
       $http.get("/browser/restore_item/" + item.id).then(function(response) {
         item.location = response.data.location;
-        console.log(response.data.location);
+        if ( response.data.errors ) {
+          aq.each(response.data.errors,function(e) {
+            console.log(e);
+          })
+        }
       });
-    }    
+    }
+
+    $scope.notes = function(item) {
+      var das = aq.where(item.data_associations,function(da) { return da.key == "notes"; });      
+      if ( das.length > 0 ) {
+        return new DataAssociation($http).from(das[0]).value();
+      } else {
+        return null;
+      }
+    }
+
+    $scope.edit_note = function(item) {
+      item.note = $scope.notes(item);
+      item.edit_modal = true;
+    }
 
   }]);
 

@@ -5,6 +5,7 @@ class Upload < ActiveRecord::Base
   do_not_validate_attachment_file_type :upload
 
   belongs_to :job
+  has_many :data_associations
 
   def name= n
     self.upload_file_name = n

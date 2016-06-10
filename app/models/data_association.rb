@@ -1,0 +1,26 @@
+class DataAssociation < ActiveRecord::Base
+
+  belongs_to :upload
+  attr_accessible :parent_class, :key, :object, :parent_id, :upload_id
+
+  def full_object
+    begin
+      HashWithIndifferentAccess.new(JSON.parse object, symbolize_names: true)    
+    rescue Exception => e
+      HashWithIndifferentAccess.new
+    end
+  end
+
+  def value
+    h = full_object
+    h[h.keys.first]
+  end
+
+  def as_json(options={})
+    result = super(include: :upload)
+    result = result.merge url: upload.url if upload
+    result
+  end
+
+end
+ 

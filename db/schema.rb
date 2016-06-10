@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160526204339) do
+ActiveRecord::Schema.define(:version => 20160607162741) do
 
   create_table "account_logs", :force => true do |t|
     t.integer  "row1"
@@ -85,6 +85,18 @@ ActiveRecord::Schema.define(:version => 20160526204339) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "data_associations", :force => true do |t|
+    t.integer  "parent_id"
+    t.string   "parent_class"
+    t.string   "key"
+    t.integer  "upload_id"
+    t.text     "object"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "data_associations", ["upload_id"], :name => "index_data_associations_on_upload_id"
 
   create_table "field_types", :force => true do |t|
     t.integer  "sample_type_id"

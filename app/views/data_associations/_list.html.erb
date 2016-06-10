@@ -1,0 +1,37 @@
+<script type="text/ng-template" id="dataList">
+
+  <div ng-controller="daCtrl">
+
+    <ul ng-if="parent.data_associations.length > 0"  class='data-list'>
+
+      <li ng-repeat="da in parent.data_associations | filter: { key: '!notes' }">
+
+        <span class='data-key'>{{da.key}}:</span> 
+        <span class='data-value' ng-if="!da.url">{{da.value()}}</span>
+
+        <span class='data-upload' ng-if="da.url">
+
+          <a href="#" ng-click="toggle_modal(da)">{{da.upload.upload_content_type}}</a>
+          ({{da.upload.upload_file_size|bytes}})
+
+          <div modal='da.modal' title='title(da)' width='750px' height='80%'>
+            <div class="ng-modal-data">{{da.value()}}</div>          
+            <div ng-if="is_image(da)">
+              <img ng-src="{{da.url}}" ng-if="da.modal"></img>
+            </div>
+            <div ng-if="!is_image(da)">
+              <b>Download:</b> <a href="{{da.url}}" download>{{da.upload.upload_file_name}}</a>
+            </div>          
+          </div>
+
+        </span>          
+
+      </li>
+
+    </ul>
+
+  </div>
+
+</script>
+
+

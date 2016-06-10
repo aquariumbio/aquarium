@@ -1,8 +1,3 @@
-<script type="text/ng-template" id="dataDisplay">
-  <div ng-repeat="(key,val) in data" ng-if="!empty(data)">
-    <b>{{key}}: </b>{{val}}
-  </div>
-</script>
 
 <script type="text/ng-template" id="collectionDisplay">
   <table class='collection-table'>
@@ -16,81 +11,90 @@
   </table>
 </script>
 
+<script type="text/ng-template" id="inventory-item">
+
+  <table ng-repeat="item in items | filter: item_filter(sample,container)" class='inventory-table'>
+
+    <tr>
+
+      <td style="width: 20%">
+
+        <b ng-if="$first">{{container.name}}</b>
+
+        <span ng-if="notes(item)">
+          <br />
+          {{notes(item)}}
+         </span>
+
+         <a href="#" ng-click="edit_note(item)" class='edit-note'>&#9997;</a>
+
+        <div modal='item.edit_modal' title='Notes' width='40%' height='40%'>
+          <textarea ng-model="item.note" class='note-editor'></textarea>
+          <div class='pull-right'>
+            <button class='btn btn-small'>Cancel</button>
+            <button class='btn btn-small btn-primary'>Save</button>            
+          </div>            
+        </div>
+
+      </td>
+
+      <td style="width: 55px"><b><a href="/items/{{item.id}}">{{item.id}}</a></b></td>
+
+      <td style="width: 80px">
+        <span ng-if="item.location == 'deleted'" class='deleted-item'>{{item.location}}</span>
+        <span ng-if="item.location != 'deleted'">{{item.location}}</span>
+      </td>
+
+      <td ng-if="item_list" style="width: 40%" ng-include="'dataList'"          ng-init='parent = item'></td>
+      <td ng-if="col_list"  style="width: 40%" ng-include="'collectionDisplay'" ng-init='matrix = col.data.matrix'></td>
+
+      <td style="width: 85px">{{item.created_at|date}}</td>
+
+      <td style="width: 20px">
+        <span ng-if="item.location != 'deleted' && allowed(sample)"
+              class='pull-right'>
+          <a href="#" ng-click="delete(item)" class='item-delete'>&times;</a>
+        </span>
+        <span ng-if="item.location == 'deleted' && allowed(sample)"
+              class='pull-right'>
+          <a href="#" ng-click="restore(item)" class='item-delete'>&#8617;</a>
+        </span>              
+      </td>
+
+    </tr>
+
+  </table>
+
+</script>
+
 <script type="text/ng-template" id="inventory">
 
   <div ng-controller='inventoryCtrl'> 
 
-    <ul ng-if="visible_inventory(sample) > 0" 
-        class='sample-tree-list'>
+    <ul ng-if="!sample.loading_inventory && visible_inventory(sample) > 0" class='sample-tree-list'>
 
       <li ng-repeat="container in sample.containers" 
-          ng-if="num_items(sample,container)>0">
-
-        <table ng-repeat="item in sample.items | filter: item_filter(sample,container)"
-               class='inventory-table'>
-          <tr>
-            <td style="width: 20%"><b ng-if="$first">{{container.name}}</b></td>
-            <td style="width: 55px"><b><a href="/items/{{item.id}}">{{item.id}}</a></b></td>
-            <td style="width: 80px">
-              <span ng-if="item.location == 'deleted'" class='deleted-item'>
-                {{item.location}}
-              </span>
-              <span ng-if="item.location != 'deleted'">
-                {{item.location}}
-              </span>
-            </td>
-            <td  style="width: 40%" ng-include="'dataDisplay'" ng-init='data = item.data'></td>
-            <td style="width: 85px">{{item.created_at|date}}</td>
-            <td style="width: 20px">
-              <span ng-if="item.location != 'deleted' && allowed(sample)"
-                    class='pull-right'>
-                <a href="#" ng-click="delete(item)" class='item-delete'>&times;</a>
-              </span>
-              <span ng-if="item.location == 'deleted' && allowed(sample)"
-                    class='pull-right'>
-                <a href="#" ng-click="restore(item)" class='item-delete'>&#8617;</a>
-              </span>              
-            </td>
-          </tr>
-        </table>
-
+          ng-if="num_items(sample,container)>0"
+          ng-include="'inventory-item'"
+          ng-init="item_list = true; items = sample.items">
       </li>
 
       <li ng-repeat="container in sample.collection_containers"
           ng-if="num_collections(sample,container)>0"
-          ng-class="li_selected_class()">
-
-        <table ng-repeat="col in sample.collections | filter: item_filter(sample,container)"
-               class='inventory-table'>
-          <tr>
-            <td style="width: 20%"><b ng-if="$first">{{container.name}}</b></td>
-            <td style="width: 55px"><b><a href="/items/{{col.id}}">{{col.id}}</a></b></td>
-            <td style="width: 80px">
-              <span ng-if="col.location == 'deleted'" class='deleted-item'>{{col.location}}</span>
-              <span ng-if="col.location != 'deleted'">{{col.location}}</span>          
-            </td>
-            <td style="width: 40%"
-                ng-include="'collectionDisplay'" 
-                ng-init='matrix = col.data.matrix'></td>
-            <td style="width: 85px">{{col.created_at|date}}</td>
-            <td style="width: 20px">
-              <span ng-if="col.location != 'deleted' && allowed(sample)"
-                    class='pull-right'>
-                <a href="#" ng-click="delete(col)" class='item-delete'>&times;</a>
-              </span>
-            </td>          
-          </tr>
-
-        </table> 
-
+          ng-include="'inventory-item'"
+          ng-init="col_list = true; items = sample.collections">
       </li>      
 
     </ul>
 
-    <ul ng-if="visible_inventory(sample) == 0" 
+    <ul ng-if="sample.loading_inventory" class='sample-tree-list'>
+      <li>Loading inventory information ...</li>
+    </ul>
+
+    <ul ng-if="!sample.loading_inventory && visible_inventory(sample) == 0" 
         class='sample-tree-list'>
       <li>No items in inventory</li>
-    </ul>
+    </ul>    
 
   </div>
 

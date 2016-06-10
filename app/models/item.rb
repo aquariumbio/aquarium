@@ -1,5 +1,7 @@
 class Item < ActiveRecord::Base
 
+  include DataAssociator
+
   # associations #######################################################
 
   belongs_to :object_type
@@ -67,6 +69,8 @@ class Item < ActiveRecord::Base
     if wiz
       locator = wiz.next
       move_to( wiz.int_to_location locator.number )
+    else
+      move_to "Bench"
     end
   end
 

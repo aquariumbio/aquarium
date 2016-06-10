@@ -65,6 +65,27 @@ $selected-sample-outline-color: #e0ffff;
         };
       }
 
+      .data-list {
+        list-style: none;  
+        margin-left: 0;      
+        li {
+          padding: 0;
+        }
+        li:before {
+          width: 0;
+          border: none;
+        };        
+        .data-key {
+          font-weight: bold;
+        }
+        .data-value {
+          font-weight: normal;
+        }
+        .data-upload {
+          font-weight: normal;
+        }        
+      }
+
     }
 
   }
@@ -407,6 +428,13 @@ $selected-sample-outline-color: #e0ffff;
     }
     .deleted-item {
       color: #a00;
+    }
+    .edit-note {
+      font-size: 14pt;
+    }
+    .note-editor {
+      width: 100%;
+      margin-top: 10px;
     }
   }
 

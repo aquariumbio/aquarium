@@ -11,7 +11,6 @@ class BrowserController < ApplicationController
   def all
 
     sts = SampleType.includes(:samples).all
-
     result = {}
 
     sts.each { |st|
@@ -140,9 +139,9 @@ class BrowserController < ApplicationController
 
   def items
     sample = Sample.find(params[:id])
-    item_list = Item.includes(:locator).where(sample_id: params[:id]) # .select { |i| !i.deleted? }
+    item_list = Item.includes(:locator).where(sample_id: params[:id])
     containers = ObjectType.where(sample_type_id: sample.sample_type_id)
-    render json: { items: item_list.as_json(include: [:locator]), 
+    render json: { items: item_list.as_json(include: [:locator], methods: :data_associations), 
                    containers: containers.as_json(only:[:name,:id]) }
   end
 
@@ -190,8 +189,11 @@ class BrowserController < ApplicationController
   def restore_item
     item = Item.find(params[:item_id])
     item.store
-    item.reload
-    render json: { location: item.location }
+    if item.errors.empty?
+      render json: { location: item.location }
+    else
+      render json: { location: item.location, errors: item.errors.full_messages }
+    end
   end  
 
 end

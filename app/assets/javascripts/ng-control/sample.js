@@ -19,6 +19,7 @@
         } else {
           sample.find(sample.id,function(sample) {
             sample.open = true;
+            $scope.toggle_inventory(sample,true)            
           });
         }
       }
@@ -111,14 +112,20 @@
       return admin.length > 0 || $scope.user.current.id == sample.user_id;
     }    
 
-    $scope.toggle_inventory = function(sample) {
-      if ( !sample.edit && sample.inventory ) {
+    $scope.toggle_inventory = function(sample,val) {
+
+      if ( val ) sample.inventory = val;
+      sample.loading_inventory = true;
+
+      if ( !val && !sample.edit && sample.inventory ) {
         sample.inventory = false;
-      } else if ( !sample.edit ) {
+      } else if ( val || !sample.edit ) {
         sample.get_inventory(function() {
+          sample.loading_inventory = false;            
           sample.inventory = true;
         });
       }
+
     } 
 
     $scope.new_item = function(sample,container) {
