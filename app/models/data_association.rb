@@ -22,5 +22,9 @@ class DataAssociation < ActiveRecord::Base
     result
   end
 
+  def self.find_parent parent_class, parent_id
+    Object.const_get(parent_class).find(parent_id)
+  end
+
 end
  

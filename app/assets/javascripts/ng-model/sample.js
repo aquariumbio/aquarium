@@ -38,15 +38,10 @@ Sample.prototype.get_inventory = function(promise) {
     });
 
     sample.http.get('/browser/collections/' + sample.id + '.json').then(function(response) {
-      sample.collections = response.data.collections;
-      sample.collection_containers = response.data.containers;
-      aq.each(sample.collections,function(i) {
-        try {
-          i.data = JSON.parse(i.data);
-        } catch(e) {
-          i.data = {};
-        }
+      sample.collections = aq.collect(response.data.collections, function(raw) {
+        return new Collection(sample.http).from(raw);
       });
+      sample.collection_containers = response.data.containers;
       promise();
     });  
 

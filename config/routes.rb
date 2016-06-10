@@ -16,6 +16,7 @@ Bioturk::Application.routes.draw do
   get '/browser/items/:id',                      to: 'browser#items'
   post '/browser/create_samples',                to: 'browser#create_samples'
   post '/browser/save',                          to: 'browser#save'
+  post '/browser/save_data_association',         to: 'browser#save_data_association'    
   get '/browser/recent_samples/:id',             to: 'browser#recent_samples'  
   get '/browser/search/:query(/:user_id)',       to: 'browser#search' 
   get '/browser/collections/:sample_id',         to: 'browser#collections'

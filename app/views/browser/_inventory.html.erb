@@ -1,5 +1,8 @@
 
 <script type="text/ng-template" id="collectionDisplay">
+
+  <div ng-include="'dataList'"></div>
+
   <table class='collection-table'>
     <tr ng-repeat="row in matrix track by $index">
       <td ng-repeat="id in row track by $index">
@@ -9,6 +12,8 @@
       </td>
     </tr>
   </table>
+
+
 </script>
 
 <script type="text/ng-template" id="inventory-item">
@@ -16,26 +21,9 @@
   <table ng-repeat="item in items | filter: item_filter(sample,container)" class='inventory-table'>
 
     <tr>
-
+      
       <td style="width: 20%">
-
         <b ng-if="$first">{{container.name}}</b>
-
-        <span ng-if="notes(item)">
-          <br />
-          {{notes(item)}}
-         </span>
-
-         <a href="#" ng-click="edit_note(item)" class='edit-note'>&#9997;</a>
-
-        <div modal='item.edit_modal' title='Notes' width='40%' height='40%'>
-          <textarea ng-model="item.note" class='note-editor'></textarea>
-          <div class='pull-right'>
-            <button class='btn btn-small'>Cancel</button>
-            <button class='btn btn-small btn-primary'>Save</button>            
-          </div>            
-        </div>
-
       </td>
 
       <td style="width: 55px"><b><a href="/items/{{item.id}}">{{item.id}}</a></b></td>
@@ -45,8 +33,17 @@
         <span ng-if="item.location != 'deleted'">{{item.location}}</span>
       </td>
 
-      <td ng-if="item_list" style="width: 40%" ng-include="'dataList'"          ng-init='parent = item'></td>
-      <td ng-if="col_list"  style="width: 40%" ng-include="'collectionDisplay'" ng-init='matrix = col.data.matrix'></td>
+      <td ng-if="item_list" 
+          style="width: 40%"
+          ng-include="'dataList'" 
+          ng-init='parent = item'>
+      </td>
+
+      <td ng-if="col_list"
+          style="width: 40%"
+          ng-include="'collectionDisplay'"
+          ng-init='parent = item; matrix = item.data.matrix'>
+      </td>
 
       <td style="width: 85px">{{item.created_at|date}}</td>
 

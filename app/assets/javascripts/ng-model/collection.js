@@ -1,10 +1,10 @@
-function Item(http) {
+function Collection(http) {
   this.http = http;
   return this;
 }
 
-Item.prototype.from = function(raw) {
-  
+Collection.prototype.from = function(raw) {
+
   for (var key in raw) { 
     this[key] = raw[key];
   }

@@ -51,6 +51,8 @@ module DataAssociator
 
   def associate key, value, upload=nil
 
+    Rails.logger.info "key = #{key} and value = #{value} in associate"
+
     if data_associations(key).empty? 
       da = DataAssociation.new({
         parent_id: id,
@@ -64,11 +66,23 @@ module DataAssociator
         self.errors.add :data_association_error, "Could not save data association named '#{key}': #{da.errors.full_messages.join(', ')}"        
       end
     else
-      self.errors.add :data_association_error, "Data association named '#{key}' already exists. Use modify."
+      modify key, value, upload
     end
 
     self
 
+  end
+
+  def modify key, value, upload=nil
+    da = get_association key
+    if da
+      da.object = { key => value }.to_json
+      da.upload = upload if upload
+      da.save
+    else      
+      self.errors.add :data_association_error, "Data association named '#{key}' not found."
+    end
+    self
   end
 
   def notes= text

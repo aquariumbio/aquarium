@@ -68,6 +68,7 @@ $selected-sample-outline-color: #e0ffff;
       .data-list {
         list-style: none;  
         margin-left: 0;      
+        margin-right: 0;
         li {
           padding: 0;
         }
@@ -434,7 +435,11 @@ $selected-sample-outline-color: #e0ffff;
     }
     .note-editor {
       width: 100%;
-      margin-top: 10px;
+      margin-top: 10px;      
+    }
+    .da-notes {
+      font-weight: normal;
+      font-style: italic;
     }
   }
 

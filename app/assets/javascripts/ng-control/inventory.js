@@ -68,20 +68,6 @@
       });
     }
 
-    $scope.notes = function(item) {
-      var das = aq.where(item.data_associations,function(da) { return da.key == "notes"; });      
-      if ( das.length > 0 ) {
-        return new DataAssociation($http).from(das[0]).value();
-      } else {
-        return null;
-      }
-    }
-
-    $scope.edit_note = function(item) {
-      item.note = $scope.notes(item);
-      item.edit_modal = true;
-    }
-
   }]);
 
 })();

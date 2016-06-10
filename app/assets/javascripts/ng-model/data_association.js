@@ -21,7 +21,12 @@ DataAssociation.prototype.from = function(raw) {
     this[key] = raw[key];
   }
 
-  this.full_object = JSON.parse(this.object);
+  try {
+    this.full_object = JSON.parse(this.object);
+  } catch(e) {
+    this.full_object = {};
+    this.full_object[this.key] = null;
+  }
 
   return this;
 
@@ -31,4 +36,9 @@ DataAssociation.prototype.value = function() {
 
   return this.full_object[this.key];
 
+}
+
+DataAssociation.prototype.set = function(val) {
+  this.full_object = {};
+  this.full_object[this.key] = val;
 }

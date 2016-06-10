@@ -149,7 +149,7 @@ class BrowserController < ApplicationController
     s = Sample.find(params[:sample_id])
     collections = Collection.containing(s)
     containers = collections.collect { |c| c.object_type }.uniq
-    render json: { collections: collections.as_json(include: :object_type), 
+    render json: { collections: collections.as_json(include: :object_type, methods: :data_associations), 
                    containers: containers.as_json(only: [:name,:id]) }
   end  
 
@@ -195,5 +195,14 @@ class BrowserController < ApplicationController
       render json: { location: item.location, errors: item.errors.full_messages }
     end
   end  
+
+  def save_data_association
+    parent = DataAssociation.find_parent(params[:parent_class],params[:id])
+    parent.associate(params[:key],params[:value])
+    da = parent.get_association params[:key]
+    Rails.logger.info "parent = #{parent.inspect}"
+    Rails.logger.info "da = #{da.inspect}"   
+    render json: { data_association: da, parent: parent, errors: parent.errors.full_messages }
+  end
 
 end
