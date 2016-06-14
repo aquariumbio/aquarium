@@ -310,11 +310,19 @@ A physical item in the lab. It has an object type and may correspond to a sample
   * i.object_type_id - the object type id associated with the item.
   * i.object_type - the object type associated with the item.
   * i.sample - the corresponding sample, if any. Some items correspond to samples and some do not. For example, an item whose object type is "1 L Bottle" does not correspond to a sample. An item whose object type is "Plasmid Stock" will have a corresponding sample, whose name might be something like "pLAB1".
-  * i.datum - data associated with the item. It can be an arbitrary Ruby value, but is usually a hash.
-  * i.datum = x - set the value of the datum associated with the item to x.
   * i.save - if you make changes to an item, you have to call i.save to make sure the changes are saved to the database.
   * i.reload - if the item has changed somehow in the database, this method update **i** so that it has the latest information from the database.
   * i.mark_as_deleted - to delete an item, don't call delete, call this method instead. It actually just hides the item so old job logs that refer to it can still have something to point to.
+
+You can associate data, such as a measurement or uploaded data file, with an item using the DataAssociation model, described [here](/doc/md-viewer?doc=DataAssociation).
+
+Note that the **item.data** and **item.datum** interface has been deprecated. Most items in your database should have been upgraded. If they have not, you can use 
+
+```ruby
+item.upgrade
+```
+
+to upgrade them.
 
 Taking Items
 ===

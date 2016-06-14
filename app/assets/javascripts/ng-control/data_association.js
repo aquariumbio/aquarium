@@ -48,12 +48,10 @@
           object: JSON.stringify(obj),
           id: parent.id
         });
-        console.log(da);
         if ( ! parent.data_associations ) {
           parent.data_associations = [];
         }
         parent.data_associations.push(da);
-        console.log(parent.data_associations);
       }
     }
 
@@ -68,7 +66,6 @@
           id: parent.id
         }
       ).then(function(result) {
-        console.log(result.data);
         parent.edit_modal = false;
         set_da(parent,"notes",parent.note);
       })

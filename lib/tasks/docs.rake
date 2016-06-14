@@ -9,7 +9,8 @@ namespace :docs do
     "Location Wizard",
     "Folders",
     "Reference",
-    "Oyster"
+    "Oyster",
+    "DataAssociation"
   ]
 
   task :md do 

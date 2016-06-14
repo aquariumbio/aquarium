@@ -453,11 +453,16 @@ $selected-sample-outline-color: #e0ffff;
     color: #ccc;
   } 
 
-  .item-delete {
+  .item-small-icon {
     padding-right: 5px;
     font-weight: bold;
     text-decoration: none;    
   } 
+
+  .small-note {
+    font-size: 9pt !important;
+    font-weight: normal;
+  }
 
   .toggle-se {
     cursor: pointer;

@@ -32,7 +32,7 @@
 
         <span class="da-notes">{{notes(parent)}}</span>
 
-        <a href="#" ng-click="edit_note(item)" class='edit-note'>&#9997;</a>
+        <a href="#" ng-click="edit_note(item)" class='edit-note item-small-icon small-note'>[note]</a>
 
         <div modal='item.edit_modal' title="'Notes for item ' + item.id" width='40%' height='40%'>
           <textarea ng-model="item.note" class='note-editor'></textarea>

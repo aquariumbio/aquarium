@@ -1,8 +1,6 @@
 
 <script type="text/ng-template" id="collectionDisplay">
 
-  <div ng-include="'dataList'"></div>
-
   <table class='collection-table'>
     <tr ng-repeat="row in matrix track by $index">
       <td ng-repeat="id in row track by $index">
@@ -13,6 +11,7 @@
     </tr>
   </table>
 
+  <div ng-include="'dataList'"></div>  
 
 </script>
 
@@ -50,11 +49,11 @@
       <td style="width: 20px">
         <span ng-if="item.location != 'deleted' && allowed(sample)"
               class='pull-right'>
-          <a href="#" ng-click="delete(item)" class='item-delete'>&times;</a>
+          <a href="#" ng-click="delete(item)" class='item-small-icon'>&times;</a>
         </span>
         <span ng-if="item.location == 'deleted' && allowed(sample)"
               class='pull-right'>
-          <a href="#" ng-click="restore(item)" class='item-delete'>&#8617;</a>
+          <a href="#" ng-click="restore(item)" class='item-small-icon'>&#8617;</a>
         </span>              
       </td>
 

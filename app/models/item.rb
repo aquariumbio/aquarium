@@ -310,6 +310,32 @@ class Item < ActiveRecord::Base
     "<a href='/items/#{self.id}' class='aquarium-item' id='#{self.id}'>#{self.id}</a>"
   end
 
+  def upgrade # upgrades data field to data association (if no data associations exist)
+
+    if associations.empty? 
+    
+      begin
+
+        obj = JSON.parse self.data
+
+        obj.each do |k,v|
+          item.associate k, v
+        end
+
+      rescue Exception => e
+
+        item.notes = item.data if item.data
+
+      end
+
+    else
+
+      append_notes "\n#{Date.today}: Attempt to upgrade failed. Item already had associations."
+
+    end
+
+  end
+
   ###########################################################################
   # OLD 
   ###########################################################################
