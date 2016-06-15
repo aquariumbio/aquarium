@@ -310,9 +310,9 @@ class Item < ActiveRecord::Base
     "<a href='/items/#{self.id}' class='aquarium-item' id='#{self.id}'>#{self.id}</a>"
   end
 
-  def upgrade # upgrades data field to data association (if no data associations exist)
+  def upgrade force=false # upgrades data field to data association (if no data associations exist)
 
-    if associations.empty? 
+    if force || associations.empty? 
     
       begin
 
@@ -324,7 +324,7 @@ class Item < ActiveRecord::Base
 
       rescue Exception => e
 
-        item.notes = item.data if item.data
+        self.notes = self.data if self.data
 
       end
 
