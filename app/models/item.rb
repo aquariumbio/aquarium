@@ -319,7 +319,7 @@ class Item < ActiveRecord::Base
         obj = JSON.parse self.data
 
         obj.each do |k,v|
-          item.associate k, v
+          self.associate k, v
         end
 
       rescue Exception => e
