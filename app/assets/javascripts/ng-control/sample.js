@@ -41,9 +41,11 @@
     }    
 
     $scope.save = function(sample) {
+      sample.error = null;
       sample.update(function(response) {
         if ( response.save_error ) {
-          $scope.errors = response.save_error;
+          sample.error = response.save_error;
+          console.log(["Error in sample.js", response.save_error])
         } else {
           $scope.messages = [ "Saved changes to sample " + sample.id + ": " + sample.name ]
           sample.from(response);

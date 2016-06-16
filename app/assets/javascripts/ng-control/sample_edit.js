@@ -65,7 +65,8 @@
 
         $scope.sample.update(function(result) {
           if ( result.save_error ) {
-            $scope.errors = result.save_error;
+            $scope.$parent.errors = result.save_error;
+            console.log(["Error in sample_edit.js", result.save_error])
           } else {
             $scope.errors = [];
             $scope.messages = [ 'Sample ' + result.id + " saved." ];

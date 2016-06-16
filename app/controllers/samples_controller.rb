@@ -56,12 +56,11 @@ class SamplesController < ApplicationController
       format.json { 
 
         render json: Sample
-          .includes(field_values: :child_sample, sample_type: { field_types: { allowable_field_types: :sample_type } })
           .find(params[:id])
-          .to_json(include: { 
-            sample_type: { include: [ :object_types, { field_types: { include: { allowable_field_types: { include: :sample_type } } } } ] },
-            field_values: { include: :child_sample }
-          })
+          .to_json(
+            include: { sample_type: { include: :object_types, methods: :field_types } },
+            methods: :field_values
+          )
 
       }
 
@@ -84,12 +83,9 @@ class SamplesController < ApplicationController
 
   def render_full_sample sid
     render json: Sample
-      .includes(field_values: :child_sample, sample_type: { field_types: { allowable_field_types: :sample_type } })
       .find(sid)
-      .to_json(include: { 
-        sample_type: { include: { field_types: { include: { allowable_field_types: { include: :sample_type } } } } },
-        field_values: { include: :child_sample }
-      })
+      .to_json(include: { sample_type: { methods: :field_types } }, 
+               methods: :field_values)
   end
 
   # POST /samples

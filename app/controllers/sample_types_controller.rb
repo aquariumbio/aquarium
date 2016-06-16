@@ -5,25 +5,25 @@ class SampleTypesController < ApplicationController
   # GET /sample_types
   # GET /sample_types.json
   def index
-    @sample_types = SampleType.includes(field_types: :allowable_field_types).all
+    @sample_types = SampleType.all
 
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @sample_types
                                  .sort { |a,b| a.name <=> b.name }
-                                 .to_json(include: { field_types: { include: :allowable_field_types } })
+                                 .to_json(methods: :field_types)
                   }
     end
   end
 
   def show
 
-    @sample_type = SampleType.includes(field_types: { allowable_field_types: :sample_type }).find(params[:id])
+    @sample_type = SampleType.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @sample_type
-                       .to_json(include: { field_types: { include: { allowable_field_types: { include: :sample_type } } } } ) }
+                       .to_json(methods: :field_types) }
     end
 
   end

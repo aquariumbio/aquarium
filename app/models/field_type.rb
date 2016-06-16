@@ -1,12 +1,3 @@
-#
-# FieldType
-#
-# name
-# ftype     // 'string', 'number', 'url', 'sample', 'item'
-# choices  // comma separated strings (works for numbers too). nil => anything
-# array    // true or false
-# required // true or false
-#
 
 class FieldType < ActiveRecord::Base
 
@@ -35,6 +26,10 @@ class FieldType < ActiveRecord::Base
 
   def type
     ftype
+  end
+
+  def as_json(options={})
+    super include: [ allowable_field_types: { include: :sample_type } ]
   end
 
 end 

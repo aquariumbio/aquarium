@@ -51,8 +51,6 @@ module DataAssociator
 
   def associate key, value, upload=nil
 
-    Rails.logger.info "key = #{key} and value = #{value} in associate"
-
     if data_associations(key).empty? 
       da = DataAssociation.new({
         parent_id: id,

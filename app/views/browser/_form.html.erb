@@ -13,6 +13,12 @@
 
    <ul class='sample-tree-list' ng-controller='sampleCtrl'>
 
+     <!-- ERRORS -->
+
+     <li ng-if="sample.error" ng-repeat="error in sample.error">
+       <span class='alert alert-error'>{{error}}</span>
+     </li>
+
      <!-- STATIC FIELDS -->
 
      <li>
@@ -102,7 +108,7 @@
          <tr ng-repeat-start="fv in sample.field_values | filter: fv_name_filter(field_type_name)">
            <td class='name name-sample'>
               <span ng-click='toggle_new_existing(sample,fv)' ng-if="!fv.new_child_sample" class='toggle-se'>&#x021C6;</span>           
-              {{ft.name}}<span ng-if="ft.array">({{$index}}):</span><span ng-if="!ft.array">:</span>                 
+              {{ft.name}}<span ng-if="ft.array">({{$index}}):</span><span ng-if="!ft.array">:</span>              
            </td>
            <td class='modifer'>
              <i ng-if="ft.array && $first" class='icon-plus clickable' ng-click="add_to_array(sample,ft)"></i>             

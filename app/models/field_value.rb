@@ -156,4 +156,8 @@ class FieldValue < ActiveRecord::Base
 
   end
 
+  def as_json
+    super include: :child_sample
+  end
+
 end 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160607162741) do
+ActiveRecord::Schema.define(:version => 20160615161649) do
 
   create_table "account_logs", :force => true do |t|
     t.integer  "row1"
@@ -99,29 +99,31 @@ ActiveRecord::Schema.define(:version => 20160607162741) do
   add_index "data_associations", ["upload_id"], :name => "index_data_associations_on_upload_id"
 
   create_table "field_types", :force => true do |t|
-    t.integer  "sample_type_id"
+    t.integer  "parent_id"
     t.string   "name"
     t.string   "ftype"
     t.string   "choices"
     t.boolean  "array"
     t.boolean  "required"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.string   "parent_class"
   end
 
-  add_index "field_types", ["sample_type_id"], :name => "index_field_types_on_sample_type_id"
+  add_index "field_types", ["parent_id"], :name => "index_field_types_on_sample_type_id"
 
   create_table "field_values", :force => true do |t|
-    t.integer  "sample_id"
+    t.integer  "parent_id"
     t.string   "value"
     t.integer  "child_sample_id"
     t.integer  "child_item_id"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
     t.string   "name"
+    t.string   "parent_class"
   end
 
-  add_index "field_values", ["sample_id"], :name => "index_field_values_on_sample_id"
+  add_index "field_values", ["parent_id"], :name => "index_field_values_on_sample_id"
 
   create_table "groups", :force => true do |t|
     t.string   "name"

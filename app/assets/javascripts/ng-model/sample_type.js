@@ -30,7 +30,7 @@ SampleType.prototype.setup_types_arrays = function() {
 
   aq.each(this.field_types,function(ft) {
     ft.types = [];
-    aq.collect(ft.allowable_field_types,function(aft) {
+    aq.each(ft.allowable_field_types,function(aft) {
       ft.types.push(aft.sample_type.name);
     });
     if ( ft.choices ) {
