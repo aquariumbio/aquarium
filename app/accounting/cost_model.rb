@@ -64,7 +64,7 @@ module CostModel
           end
         end
         {
-          materials: 4.8 * n,
+          materials: 6.0 * n,
           labor: 5.3 * n * labor_rate
         }
 
