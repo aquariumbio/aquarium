@@ -43,14 +43,22 @@ module CostModel
 
       # PLASMID VERIFICATION ################################################################################
       when ["start_overnight_plate","overnight"] 
-        n = simple_spec[:num_colonies].inject { |sum,x| sum+x }
+        if simple_spec[:num_colonies]
+          n = simple_spec[:num_colonies].inject { |sum,x| sum+x }
+        else
+          n = 1
+        end
         {
           materials: 0.11 * n,
           labor: 3.1 * n * labor_rate
         }
 
       when ["miniprep","plasmid extracted"]  
-        n = simple_spec[:num_colonies].inject { |sum,x| sum+x }
+        if simple_spec[:num_colonies]
+          n = simple_spec[:num_colonies].inject { |sum,x| sum+x }
+        else
+          n = 1
+        end
         {
           materials: 1.35 * n,
           labor: 9.9 * n * labor_rate
@@ -58,20 +66,29 @@ module CostModel
 
       when ["sequencing","send to sequencing"]
         n = 0
-        simple_spec[:num_colonies].each do |num_col|
-          simple_spec[:primer_ids].each do |primer_list|
-            n += num_col * primer_list.length
+        if simple_spec[:num_colonies]
+          m = simple_spec[:num_colonies].length
+          (0..m-1).each do |i|
+            n += simple_spec[:num_colonies][i] * simple_spec[:primer_ids][i]
           end
+        else
+          simple_spec[:primer_ids].each do |primer_list|
+            n += primer_list.length
+          end          
         end
         {
-          materials: 4.8 * n,
+          materials: 6.0 * n,
           labor: 5.3 * n * labor_rate
         }
 
       when ["upload_sequencing_results","results back"] then nothing
 
       when ["glycerol_stock","done"] 
-        n = simple_spec[:num_colonies].inject { |sum,x| sum+x }
+        if simple_spec[:num_colonies]
+          n = simple_spec[:num_colonies].inject { |sum,x| sum+x }
+        else
+          n = 1
+        end
         {
           materials: 0.53 * n,
           labor: 1.9 * n * labor_rate
