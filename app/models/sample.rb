@@ -72,12 +72,12 @@ class Sample < ActiveRecord::Base
 
             ft = sample_type.type(raw_fv[:name])
 
-            if raw_fv[:id] && raw_fv[:deleted] 
+            if ft && raw_fv[:id] && raw_fv[:deleted] 
 
               fv = FieldValue.find_by_id(raw_fv[:id])
               fv.destroy if fv
 
-            elsif !raw_fv[:deleted] # fv might have been made and marked deleted without ever having been saved
+            elsif ft && !raw_fv[:deleted] # fv might have been made and marked deleted without ever having been saved
 
               if raw_fv[:id]
                 begin
@@ -88,7 +88,6 @@ class Sample < ActiveRecord::Base
                   raise ActiveRecord::Rollback
                 end
               else
-                Rails.logger.info "Creating new field value"
                 fv = field_values.create(name: raw_fv[:name])
               end
 
