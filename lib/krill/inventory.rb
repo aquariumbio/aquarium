@@ -86,20 +86,9 @@ module Krill
 
       r = Regexp.new ( '(M20|M80|SF[0-9]*)\.[0-9]+\.[0-9]+\.[0-9]+' )
 
-      show {
-        note "items"
-        items.each { |i| note i.id; note i.location }
-      }
-
       loc_matched_items = items.select { |i| r.match(i.location) }
       extras = items - loc_matched_items
 
-      show {
-        note "extras"
-        extras.each { |i| note i.id; note i.location }
-        note "location-matched items"
-        loc_matched_items.each { |i| note i.id; note i.location }
-      }
       (sort_by_location loc_matched_items).each do |i|
 
           freezer,hotel,box,slot = i.location.split('.')
