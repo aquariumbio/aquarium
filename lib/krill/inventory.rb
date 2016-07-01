@@ -97,10 +97,10 @@ module Krill
       show {
         note "extras"
         extras.each { |i| note i.id; note i.location }
-        note "items"
-        items.each { |i| note i.id; note i.location }
+        note "location-matched items"
+        loc_matched_items.each { |i| note i.id; note i.location }
       }
-      (sort_by_location items).each do |i|
+      (sort_by_location loc_matched_items).each do |i|
 
           freezer,hotel,box,slot = i.location.split('.')
           slot = slot.to_i
