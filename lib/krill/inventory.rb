@@ -68,14 +68,14 @@ module Krill
     # end
 
     def sort_by_location items
-      location_prefix = items[0].location.split(".")[0]
-      location_arrays = items.map { |item| item.location.split(".")[1..-1] }
-      sorted_locations = location_arrays.sort { |row1, row2| 
-                                                comp = row1[0].to_i <=> row2[0].to_i
-                                                comp = comp.zero? ? row1[1].to_i <=> row2[1].to_i : comp
-                                                comp.zero? ? row1[2].to_i <=> row2[2].to_i : comp }
-      location_strings = sorted_locations.map { |row| "#{location_prefix}.#{row[0]}.#{row[1]}.#{row[2]}" }
-      items.sort_by! { |item| location_strings.index(item.location) }
+      loc_pref = items[0].location.split(".")[0]
+      locations = items.map { |item| item.location.split(".")[1..-1] }
+      sorted_locations = locations.sort { |loc1, loc2| 
+                                                comp = loc1[0].to_i <=> loc2[0].to_i
+                                                comp = comp.zero? ? loc1[1].to_i <=> loc2[1].to_i : comp
+                                                comp.zero? ? loc1[2].to_i <=> loc2[2].to_i : comp }
+      loc_strings = sorted_locations.map { |loc| "#{loc_pref}.#{loc[0]}.#{loc[1]}.#{loc[2]}" }
+      items.sort_by! { |item| loc_strings.index(item.location) }
     end # sort_by_location
 
     def boxes_for items
@@ -86,13 +86,17 @@ module Krill
       r = Regexp.new ( '(M20|M80|SF[0-9]*)\.[0-9]+\.[0-9]+\.[0-9]+' )
 
       show {
-        note items
+        note "items"
+        items.each { |i| note i.id; note i.location }
       }
 
       extras = items - items.select! { |i| r.match(i.location) }
 
       show {
-        note items
+        note "extras"
+        extras.each { |i| note i.id; note i.location }
+        note "items"
+        items.each { |i| note i.id; note i.location }
       }
       (sort_by_location items).each do |i|
 
