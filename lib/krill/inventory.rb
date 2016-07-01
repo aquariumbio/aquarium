@@ -52,6 +52,20 @@ module Krill
     def spread samples, name, rows, cols
       Collection.spread samples, name, rows, cols
     end
+    
+    def sort_by_location boxes
+      show {
+        title "sort_by_location"
+        note boxes
+      }
+      loc_pref = boxes.values[0].name.split(".")[0]
+      locations = boxes.map { |box| box.name.split(".")[1..2] }
+      sorted_locations = locations.sort { |loc1, loc2| 
+                                                comp = loc1[0].to_i <=> loc2[0].to_i
+                                                comp = comp.zero? ? loc1[1].to_i <=> loc2[1].to_i : comp }
+      loc_strings = sorted_locations.map { |loc| "#{loc_pref}.#{loc[0]}.#{loc[1]}" }
+      boxes.sort_by! { |box| loc_strings.index(box.name) }
+    end
 
     def boxes_for items
 
