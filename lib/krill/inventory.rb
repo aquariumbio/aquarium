@@ -53,30 +53,48 @@ module Krill
       Collection.spread samples, name, rows, cols
     end
     
-    def sort_by_location boxes
-      show {
-        title "sort_by_location"
-        note boxes
-      }
-      loc_pref = boxes.values[0].name.split(".")[0]
-      locations = boxes.map { |box| box.name.split(".")[1..2] }
-      sorted_locations = locations.sort { |loc1, loc2| 
-                                                comp = loc1[0].to_i <=> loc2[0].to_i
-                                                comp = comp.zero? ? loc1[1].to_i <=> loc2[1].to_i : comp }
-      loc_strings = sorted_locations.map { |loc| "#{loc_pref}.#{loc[0]}.#{loc[1]}" }
-      boxes.sort_by! { |box| loc_strings.index(box.name) }
-    end
+    # def sort_by_location boxes
+    #   show {
+    #     title "sort_by_location"
+    #     note boxes
+    #   }
+    #   loc_pref = boxes.values[0].name.split(".")[0]
+    #   locations = boxes.map { |box| box.name.split(".")[1..2] }
+    #   sorted_locations = locations.sort { |loc1, loc2| 
+    #                                             comp = loc1[0].to_i <=> loc2[0].to_i
+    #                                             comp = comp.zero? ? loc1[1].to_i <=> loc2[1].to_i : comp }
+    #   loc_strings = sorted_locations.map { |loc| "#{loc_pref}.#{loc[0]}.#{loc[1]}" }
+    #   boxes.sort_by! { |box| loc_strings.index(box.name) }
+    # end
 
-    def boxe_for items
+    def sort_by_location items
+      location_prefix = items[0].location.split(".")[0]
+      location_arrays = items.map { |item| item.location.split(".")[1..-1] }
+      sorted_locations = location_arrays.sort { |row1, row2| 
+                                                comp = row1[0].to_i <=> row2[0].to_i
+                                                comp = comp.zero? ? row1[1].to_i <=> row2[1].to_i : comp
+                                                comp.zero? ? row1[2].to_i <=> row2[2].to_i : comp }
+      location_strings = sorted_locations.map { |row| "#{location_prefix}.#{row[0]}.#{row[1]}.#{row[2]}" }
+      items.sort_by! { |item| location_strings.index(item.location) }
+    end # sort_by_location
+
+    def boxes_for items
 
       boxes = {}
       extras = []
 
       r = Regexp.new ( '(M20|M80|SF[0-9]*)\.[0-9]+\.[0-9]+\.[0-9]+' )
 
-      items.each do |i|
+      show {
+        note items
+      }
 
-        if r.match(i.location)
+      extras = items - items.select! { |i| r.match(i.location) }
+
+      show {
+        note items
+      }
+      (sort_by_location items).each do |i|
 
           freezer,hotel,box,slot = i.location.split('.')
           slot = slot.to_i
@@ -84,12 +102,6 @@ module Krill
 
           boxes[name] = Box.new unless boxes[name]
           boxes[name].highlight slot, i.id
-
-        else
-
-          extras.push i
-
-        end
 
       end
 
