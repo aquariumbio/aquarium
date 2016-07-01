@@ -67,7 +67,7 @@ module Krill
       boxes.sort_by! { |box| loc_strings.index(box.name) }
     end
 
-    def boxes_for items
+    def boxe_for items
 
       boxes = {}
       extras = []
