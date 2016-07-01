@@ -54,6 +54,7 @@ module Krill
     end
 
     def sort_by_location items
+      return [] if items.empty?
       loc_pref = items[0].location.split(".")[0]
       locations = items.map { |item| item.location.split(".")[1..-1] }
       sorted_locations = locations.sort { |loc1, loc2| 
