@@ -81,6 +81,7 @@ module Krill
     def boxes_for items
 
       boxes = {}
+      loc_matched_items = []
       extras = []
 
       r = Regexp.new ( '(M20|M80|SF[0-9]*)\.[0-9]+\.[0-9]+\.[0-9]+' )
@@ -90,7 +91,8 @@ module Krill
         items.each { |i| note i.id; note i.location }
       }
 
-      extras = items - items.select! { |i| r.match(i.location) }
+      loc_matched_items = items.select { |i| r.match(i.location) }
+      extras = items - loc_matched_items
 
       show {
         note "extras"
