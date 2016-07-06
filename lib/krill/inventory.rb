@@ -55,13 +55,16 @@ module Krill
 
     def sort_by_location items
       return [] if items.empty?
-      loc_pref = items[0].location.split(".")[0]
-      locations = items.map { |item| item.location.split(".")[1..-1] }
+      locations = items.map { |item| item.location.split(".") }
       sorted_locations = locations.sort { |loc1, loc2| 
                                                 comp = loc1[0].to_i <=> loc2[0].to_i
                                                 comp = comp.zero? ? loc1[1].to_i <=> loc2[1].to_i : comp
-                                                comp.zero? ? loc1[2].to_i <=> loc2[2].to_i : comp }
-      loc_strings = sorted_locations.map { |loc| "#{loc_pref}.#{loc[0]}.#{loc[1]}.#{loc[2]}" }
+                                                comp = comp.zero? ? loc1[2].to_i <=> loc2[2].to_i : comp
+                                                comp.zero? ? loc1[3].to_i <=> loc2[3].to_i : comp }
+      loc_strings = sorted_locations.map { |loc| "#{loc[0]}.#{loc[0]}.#{loc[1]}.#{loc[2]}" }
+      show {
+        note loc_strings
+      }
       items.sort_by! { |item| loc_strings.index(item.location) }
     end # sort_by_location
 
