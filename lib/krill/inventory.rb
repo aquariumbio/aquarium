@@ -53,6 +53,7 @@ module Krill
       Collection.spread samples, name, rows, cols
     end
 
+    # sorts items alphanumerically by freezer, hotel, box, then slot
     def sort_by_location items
       return [] if items.empty?
       locations = items.map { |item| item.location.split(".") }
@@ -76,6 +77,7 @@ module Krill
       loc_matched_items = items.select { |i| r.match(i.location) }
       extras = items - loc_matched_items
 
+      # make boxes for the items with valid box locations, sorted by location
       (sort_by_location loc_matched_items).each do |i|
 
           freezer,hotel,box,slot = i.location.split('.')
