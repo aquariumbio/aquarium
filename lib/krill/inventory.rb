@@ -61,10 +61,7 @@ module Krill
                                                 comp = comp.zero? ? loc1[1].to_i <=> loc2[1].to_i : comp
                                                 comp = comp.zero? ? loc1[2].to_i <=> loc2[2].to_i : comp
                                                 comp.zero? ? loc1[3].to_i <=> loc2[3].to_i : comp }
-      loc_strings = sorted_locations.map { |loc| "#{loc[0]}.#{loc[0]}.#{loc[1]}.#{loc[2]}" }
-      show {
-        note loc_strings
-      }
+      loc_strings = sorted_locations.map { |loc| "#{loc[0]}.#{loc[1]}.#{loc[2]}.#{loc[3]}" }
       items.sort_by! { |item| loc_strings.index(item.location) }
     end # sort_by_location
 
