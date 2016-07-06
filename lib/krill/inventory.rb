@@ -57,7 +57,7 @@ module Krill
       return [] if items.empty?
       locations = items.map { |item| item.location.split(".") }
       sorted_locations = locations.sort { |loc1, loc2| 
-                                                comp = loc1[0].to_i <=> loc2[0].to_i
+                                                comp = loc1[0] <=> loc2[0]
                                                 comp = comp.zero? ? loc1[1].to_i <=> loc2[1].to_i : comp
                                                 comp = comp.zero? ? loc1[2].to_i <=> loc2[2].to_i : comp
                                                 comp.zero? ? loc1[3].to_i <=> loc2[3].to_i : comp }
