@@ -53,16 +53,32 @@ module Krill
       Collection.spread samples, name, rows, cols
     end
 
+    # sorts items alphanumerically by freezer, hotel, box, then slot
+    def sort_by_location items
+      return [] if items.empty?
+      locations = items.map { |item| item.location.split(".") }
+      sorted_locations = locations.sort { |loc1, loc2| 
+                                                comp = loc1[0] <=> loc2[0]
+                                                comp = comp.zero? ? loc1[1].to_i <=> loc2[1].to_i : comp
+                                                comp = comp.zero? ? loc1[2].to_i <=> loc2[2].to_i : comp
+                                                comp.zero? ? loc1[3].to_i <=> loc2[3].to_i : comp }
+      loc_strings = sorted_locations.map { |loc| "#{loc[0]}.#{loc[1]}.#{loc[2]}.#{loc[3]}" }
+      items.sort_by! { |item| loc_strings.index(item.location) }
+    end # sort_by_location
+
     def boxes_for items
 
       boxes = {}
+      loc_matched_items = []
       extras = []
 
       r = Regexp.new ( '(M20|M80|SF[0-9]*)\.[0-9]+\.[0-9]+\.[0-9]+' )
 
-      items.each do |i|
+      loc_matched_items = items.select { |i| r.match(i.location) }
+      extras = items - loc_matched_items
 
-        if r.match(i.location)
+      # make boxes for the items with valid box locations, sorted by location
+      (sort_by_location loc_matched_items).each do |i|
 
           freezer,hotel,box,slot = i.location.split('.')
           slot = slot.to_i
@@ -70,12 +86,6 @@ module Krill
 
           boxes[name] = Box.new unless boxes[name]
           boxes[name].highlight slot, i.id
-
-        else
-
-          extras.push i
-
-        end
 
       end
 
