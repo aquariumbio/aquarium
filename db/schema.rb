@@ -122,8 +122,10 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
     t.datetime "updated_at",      :null => false
     t.string   "name"
     t.string   "parent_class"
+    t.integer  "field_type_id"
   end
 
+  add_index "field_values", ["field_type_id"], :name => "index_field_values_on_field_type_id"
   add_index "field_values", ["parent_id"], :name => "index_field_values_on_sample_id"
 
   create_table "groups", :force => true do |t|
