@@ -48,7 +48,7 @@ module FieldValuer
     if ft.array && val.class == Array
 
       new_fvs = val.collect { |v|
-        set_property_aux(ft,field_values.create(name: name),v)
+        set_property_aux(ft,field_values.create(name: name,field_type_id:ft.id),v)
       }
 
       if self.errors.empty? 
@@ -71,7 +71,7 @@ module FieldValuer
     elsif !ft.array && val.class != Array      
 
       if fvs.length == 0
-        fvs = [ field_values.create(name: name) ]
+        fvs = [ field_values.create(name: name,field_type_id:ft.id) ]
       end
 
       if ft && fvs.length == 1

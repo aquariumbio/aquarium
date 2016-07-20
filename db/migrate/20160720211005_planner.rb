@@ -17,6 +17,10 @@ class Planner < ActiveRecord::Migration
 
     add_column :field_types, :role, :string
 
+    add_column :field_values, :field_type_id, :integer
+
+    add_index :field_values, :field_type_id
+
   end
 
 end
