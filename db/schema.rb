@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160615161649) do
+ActiveRecord::Schema.define(:version => 20160720211005) do
 
   create_table "account_logs", :force => true do |t|
     t.integer  "row1"
@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(:version => 20160615161649) do
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
     t.string   "parent_class"
+    t.string   "role"
   end
 
   add_index "field_types", ["parent_id"], :name => "index_field_types_on_sample_type_id"
@@ -229,6 +230,21 @@ ActiveRecord::Schema.define(:version => 20160615161649) do
     t.string   "image"
     t.string   "prefix"
   end
+
+  create_table "operation_types", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "operations", :force => true do |t|
+    t.integer  "operation_type_id"
+    t.string   "status"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  add_index "operations", ["operation_type_id"], :name => "index_operations_on_operation_type_id"
 
   create_table "parameters", :force => true do |t|
     t.string   "key"

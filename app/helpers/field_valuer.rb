@@ -56,7 +56,7 @@ module FieldValuer
         fvs.each { |fv| fv.destroy }
       end
 
-      return new_fvs
+      return self
 
     elsif ft.array && val.class != Array      
 
@@ -82,12 +82,11 @@ module FieldValuer
       end
 
       fv.save if self.errors.empty?
-      return fv
+      return self
 
     end
 
   end  
-
 
   def basic_value ft, fv
 

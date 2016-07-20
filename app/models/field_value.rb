@@ -4,7 +4,7 @@ class FieldValue < ActiveRecord::Base
   belongs_to :child_sample, class_name: "Sample", foreign_key: :child_sample_id
   belongs_to :child_item, class_name: "Item", foreign_key: :child_item_id  
 
-  attr_accessible :name, :child_item_id, :child_sample_id, :value
+  attr_accessible :name, :child_item_id, :child_sample_id, :value, :role
 
   def val
 
