@@ -2,6 +2,7 @@ class Planner
 
   def initialize operation_types
     @operation_types = operation_types
+    @plan_space_size = 0
   end
 
   def plan op
@@ -12,11 +13,14 @@ class Planner
 
         @operation_types.each do |pre_op_type|
           pre_op_type.outputs.each do |output|
-            if output.can_produce input.value
+            if output.can_produce input
               pre_op = pre_op_type.instantiate output, input
               input.predecessors |= []
               input.predecessors << { operation: pre_op, output_name: output.name }
-              plan pre_op
+              @plan_space_size += 1
+              if @plan_space_size < 12
+                plan pre_op
+              end
             end
           end
         end

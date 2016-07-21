@@ -1,6 +1,7 @@
 class OperationType < ActiveRecord::Base
 
   include FieldTyper
+  include OperationTypePlanner
 
   has_many :operations
   attr_accessible :name

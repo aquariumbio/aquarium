@@ -1,5 +1,6 @@
-
 class FieldType < ActiveRecord::Base
+
+  include FieldTypePlanner
 
   belongs_to :sample_type
   has_many :allowable_field_types, dependent: :destroy

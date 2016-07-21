@@ -122,6 +122,7 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
     t.datetime "updated_at",      :null => false
     t.string   "name"
     t.string   "parent_class"
+    t.string   "role"
     t.integer  "field_type_id"
   end
 

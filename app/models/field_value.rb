@@ -1,32 +1,38 @@
 class FieldValue < ActiveRecord::Base
 
+  include FieldValuePlanner
+
   belongs_to :sample
   belongs_to :child_sample, class_name: "Sample", foreign_key: :child_sample_id
   belongs_to :child_item, class_name: "Item", foreign_key: :child_item_id  
+  belongs_to :field_type
 
-  attr_accessible :name, :child_item_id, :child_sample_id, :value, :role
+  attr_accessible :name, :child_item_id, :child_sample_id, :value, :role, :field_type_id
 
   def val
 
-    fts = self.sample.sample_type.field_types.select { |ft| ft.name == self.name }
-
-    if fts.length == 1
-
-      case fts[0].ftype
-      when 'string', 'url'
-        return self.value
-      when 'number'
-        return self.value.to_f
-      when 'sample'
-        return self.child_sample
-      when 'item'
-        return self.child_item
+    if field_type
+      ft = field_type
+    elsif self.sample && self.sample_type
+      fts = self.sample.sample_type.field_types.select { |ft| ft.name == self.name }
+      if fts.length == 1
+        ft = fts[0]
+      else
+        nil
       end
-
     else
+      nil
+    end
 
-      return nil
-
+    case ft.ftype
+    when 'string', 'url'
+      return self.value
+    when 'number'
+      return self.value.to_f
+    when 'sample'
+      return self.child_sample
+    when 'item'
+      return self.child_item
     end
 
   end

@@ -10,9 +10,27 @@ class Operation < ActiveRecord::Base
 
   attr_accessible :status
 
+  def set_input name, val
+    set_property name, val, "input"
+  end
+
+  def set_output name, val
+    set_property name, val, "output"
+  end
+
+  def inputs
+    field_values.select { |ft| ft.role == 'input' }
+  end
+
+  def outputs
+    field_values.select { |ft| ft.role == 'output' }
+  end
+
   def to_s
-    fvs = (field_values.collect { |fv| fv.inspect }).join(", ")
-    "#{operation_type.name} #{id} (" + fvs + ")"
+    ins = (inputs.collect { |fv| "#{fv.name}: #{fv.child_sample.name}" }).join(", ")
+    outs = (outputs.collect { |fv| "#{fv.name}: #{fv.child_sample.name}" }).join(", ")    
+    "#{operation_type.name} #{id} ( " + ins + " ) ==> ( " + outs + " )"
   end
 
 end
+

@@ -34,9 +34,9 @@ module FieldValuer
 
   end
 
-  def set_property name, val 
+  def set_property name, val, role=nil
 
-    ft = field_type name
+    ft = field_type name, role
 
     unless ft
       self.errors.add(:no_such_property,"#{self.class} #{id} does not have a property named #{name}.")
@@ -48,7 +48,7 @@ module FieldValuer
     if ft.array && val.class == Array
 
       new_fvs = val.collect { |v|
-        set_property_aux(ft,field_values.create(name: name,field_type_id:ft.id),v)
+        set_property_aux(ft,field_values.create(name: name,field_type_id:ft.id,role:role),v)
       }
 
       if self.errors.empty? 
@@ -71,7 +71,7 @@ module FieldValuer
     elsif !ft.array && val.class != Array      
 
       if fvs.length == 0
-        fvs = [ field_values.create(name: name,field_type_id:ft.id) ]
+        fvs = [ field_values.create(name: name,field_type_id:ft.id,role:role) ]
       end
 
       if ft && fvs.length == 1
@@ -150,8 +150,8 @@ module FieldValuer
 
   end
 
-  def field_type name
-    fts = parent_type.field_types.select { |ft| ft.name == name }
+  def field_type name, role=nil
+    fts = parent_type.field_types.select { |ft| ft.name == name && ft.role == role }
     if fts.length > 0
       fts[0]
     else

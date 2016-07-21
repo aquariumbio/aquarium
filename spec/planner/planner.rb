@@ -1,7 +1,9 @@
 require "rails_helper"
 
 RSpec.describe "Planner" do
+
   context "gibson" do
+
     it "works" do
 
       puts "- Creating Required Object Types"
@@ -51,10 +53,17 @@ RSpec.describe "Planner" do
 
       puts "- Instantiating Output Operation (Gibson Assembly)"
 
-      gop = gibson.operations.create status: "ready"
-      gop.set_property("Assembled Plasmid", SampleType.find_by_name("Plasmid").samples.last)
-         .set_property("Fragments", SampleType.find_by_name("Fragment").samples.sample(3))
+      gop = gibson.operations.create status: "planning"
+      gop.set_output("Assembled Plasmid", SampleType.find_by_name("Plasmid").samples.last)
+         .set_input("Fragments", SampleType.find_by_name("Fragment").samples.sample(5))
+
+      puts "gop.inputes = #{gop.inputs}"
+
+      planner = Planner.new OperationType.all
+      planner.plan gop
 
     end
+
   end
+
 end
