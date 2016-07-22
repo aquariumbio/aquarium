@@ -7,9 +7,10 @@ module FieldTypePlanner
     when "sample"
       if fv.child_sample
         allowable_field_types.each do |aft|
-          if aft.sample_type
-            puts "  Operations of type '#{OperationType.find(parent_id).name}' can make input #{fv.name} for Operation #{fv.parent_id}"
-            return true if fv.child_sample.sample_type == aft.sample_type
+          if aft.sample_type && fv.sample_type == aft.sample_type && fv.object_type == aft.object_type
+            print "'#{OperationType.find(parent_id).name}' "
+            puts  "can make sample #{fv.child_sample.id}: #{fv.child_sample.name} for Operation #{fv.parent_id}"
+            return true
           end
         end
         return false

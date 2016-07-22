@@ -15,11 +15,12 @@ class Planner
           pre_op_type.outputs.each do |output|
             if output.can_produce input
               pre_op = pre_op_type.instantiate output, input
-              input.predecessors |= []
               input.predecessors << { operation: pre_op, output_name: output.name }
               @plan_space_size += 1
-              if @plan_space_size < 12
+              if @plan_space_size < 20
                 plan pre_op
+              else
+                puts "MAX DEPTH REACHED, PLANNER STOPPED"
               end
             end
           end

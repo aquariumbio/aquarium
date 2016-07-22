@@ -10,6 +10,8 @@ module FieldValuer
 
   def set_property_aux ft, fv, val
 
+    # puts "SETTING #{fv.name}(#{fv.role}) to #{val.inspect}"
+
     case ft.ftype 
 
     when 'string', 'url'
@@ -43,7 +45,7 @@ module FieldValuer
       return nil
     end
 
-    fvs = field_values.select { |fv| fv.name == name }
+    fvs = field_values.select { |fv| fv.name == name && fv.role == role }
 
     if ft.array && val.class == Array
 

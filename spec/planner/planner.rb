@@ -22,9 +22,9 @@ RSpec.describe "Planner" do
             .add_input(  "Comp cell", "E coli strain", "Electrocompetent aliquot", array: true )      
             .add_output(  "Assembled Plasmid", "Plasmid",  "Transformed E coli 1.5 mL tube" )
 
-      fe = OperationType.new name: "Fragment Extraction"
+      fe = OperationType.new name: "Extract Fragment"
       fe.save
-      fe.add_input(  "Fragment", "Fragment",   "Stripwell", array: true )
+      fe.add_input(  "Fragment", "Fragment",   "Stripwell" )
         .add_output(  "Fragment", "Fragment",  "Fragment Stock" )
 
       pcr = OperationType.new name: "PCR"
@@ -34,18 +34,18 @@ RSpec.describe "Planner" do
          .add_input(  "Template",       [ "Plasmid", "Fragment" ],  [ "Plasmid Stock", "Fragment Stock" ] )
          .add_output( "Fragment",       "Fragment", "Stripwell" )
 
-      pa = OperationType.new name: "PrimerAliquot"
+      pa = OperationType.new name: "Make Primer Aliquot"
       pa.save
       pa.add_input(  "Primer", "Primer",   "Primer Stock")
         .add_output( "Primer", "Primer",   "Primer Aliquot")
 
-      rp = OperationType.new name: "ReceivePrimer"
+      rp = OperationType.new name: "Receive Primer"
       rp.save
       rp.add_input(  "Primer", "Primer", "Lyophilized Primer" )
         .add_output( "Primer", "Primer", "Primer Stock" )
         .add_output( "Primer", "Primer", "Primer Aliquot" )
 
-      op = OperationType.new name: "OrderPrimer"
+      op = OperationType.new name: "Order Primer"
       op.save
       op.add_output( "Primer", "Primer", "Lyophilized Primer" )  
 
@@ -55,9 +55,9 @@ RSpec.describe "Planner" do
 
       gop = gibson.operations.create status: "planning"
       gop.set_output("Assembled Plasmid", SampleType.find_by_name("Plasmid").samples.last)
-         .set_input("Fragments", SampleType.find_by_name("Fragment").samples.sample(5))
+         .set_input("Fragments", SampleType.find_by_name("Fragment").samples.sample(2))
 
-      puts "gop.inputes = #{gop.inputs}"
+      puts "\e[95mPlanning #{gop}\e[39m"
 
       planner = Planner.new OperationType.all
       planner.plan gop
