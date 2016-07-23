@@ -1,0 +1,27 @@
+How to represent the plan
+
+  IDEA 1: Add a new join model that relates FieldValue outputs to FieldValue inputs. Since FieldValues have operation parents, you would know which operations were involved as well. It would like like
+
+    input.wire_from output ==> FieldAssociation.new from_id: output, to_id: input
+
+    input.wires[0].operation ==> knows that input is a FieldValue with role "input", so looks
+                                 for a FieldAssociation that has it as the to_id
+
+  This approach allows you to represent plans, and to execute them, since the association would be used to determine whether an operation was ready to execute by looking at all the inputs coming into it and the statuses of their operations.
+
+    class FieldValue < ActiveRecord::Base
+      has_many :wires
+      has_many :predecessors,  class_name: "FieldValue", through: :wires, foreign_key: :to_id
+      has_many :successors,    class_name: "FieldValue", through: :wires, foreign_key: :from_id
+    end
+     
+    class Wire < ActiveRecord::Base
+      belongs_to :assembly
+      belongs_to :part
+    end
+
+  Note: When one input has many predecessors, that means there are options and the user still needs to choose which plan to use.
+
+  IDEA 2: Don't make a formal object. Put it all in a json hash. We've seen how well that works.
+
+  IDEA 3: Make some kind of separate plan object. 

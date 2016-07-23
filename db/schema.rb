@@ -403,6 +403,11 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
   add_index "users", ["login"], :name => "index_users_on_login", :unique => true
   add_index "users", ["remember_token"], :name => "index_users_on_remember_token"
 
+  create_table "wires", :force => true do |t|
+    t.integer "from_id"
+    t.integer "to_id"
+  end
+
   create_table "wizards", :force => true do |t|
     t.string   "name"
     t.string   "specification"

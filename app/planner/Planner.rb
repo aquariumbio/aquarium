@@ -36,4 +36,17 @@ class Planner
 
   end
 
+  def show op, space=""
+
+    puts "#{space}#{op.id}: #{op.operation_type.name}"
+
+    op.inputs.each do |i|
+      puts "  #{space}#{i.sample_type.name} #{i.child_sample.name}(#{i.object_type.name})"
+      i.predecessors.each do |p|
+        show(p[:operation], space+"    ")
+      end
+    end
+
+  end
+
 end

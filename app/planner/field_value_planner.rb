@@ -1,11 +1,26 @@
 module FieldValuePlanner
 
-  attr_accessor :predecessors, :unsat
+  extend ActiveSupport::Concern
 
-  def predecessors
-    @predecessors ||= []
-    @predecessors
+  included do
+
+    has_many :wires
+
+    has_many :wires_as_source, class_name: "Wire", foreign_key: :from_id
+    has_many :wires_as_dest, class_name: "Wire", foreign_key: :to_id 
+
+    has_many :successors, through: :wires_as_source, source: :to
+    has_many :predecessors, through: :wires_as_dest, source: :from    
+
   end
+
+  def add_successor fv
+    wires_as_source.create to_id: fv.id
+  end
+
+  def add_predecessor fv
+    wires_as_dest.create from_id: fv.id
+  end  
 
   def unsat
     if @unsat != true && @unsat != false
