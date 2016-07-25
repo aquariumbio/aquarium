@@ -15,15 +15,17 @@ RSpec.describe "Planner" do
 
       gop = gibson.operations.create status: "planning"
       gop.set_output("Assembled Plasmid", SampleType.find_by_name("Plasmid").samples.last)
-         .set_input("Fragments", SampleType.find_by_name("Fragment").samples.sample(2))
+         .set_input("Fragments", SampleType.find_by_name("Fragment").samples.sample(4))
 
       puts "\e[95mPlanning #{gop}\e[39m"
 
       planner = Planner.new OperationType.all
       planner.plan gop
+      planner.mark_shortest gop
 
       puts
       puts "Plan"
+      gop.reload
       planner.show gop
 
     end

@@ -19,15 +19,9 @@ module FieldValuePlanner
   end
 
   def add_predecessor fv
+    puts "adding predecessor #{fv} to #{self}"
     wires_as_dest.create from_id: fv.id
   end  
-
-  def unsat
-    if @unsat != true && @unsat != false
-      @unsat = false
-    end
-    @unsat
-  end
 
   def sample_type
     child_sample.sample_type    
@@ -43,18 +37,22 @@ module FieldValuePlanner
     return nil
   end
 
+  def operation
+    Operation.find(parent_id)
+  end
+
   def satisfied_by_environment
 
     case val
     when Sample
       if object_type
-        print "Checking whether input #{name} #{val.name} (#{object_type.name}) needs to be made ... "      
+        # print "Checking whether input #{name} #{val.name} (#{object_type.name}) needs to be made ... "      
         items = val.items.select { |i| !i.deleted? && i.object_type_id == object_type.id }
         if items.length > 0
-          puts "found #{items[0].object_type.name} #{items[0].id}"
+          # puts "found #{items[0].object_type.name} #{items[0].id}"
           true
         else
-          puts "not found"
+          # puts "not found"
           false
         end
       else

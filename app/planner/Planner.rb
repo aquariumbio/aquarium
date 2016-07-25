@@ -15,7 +15,7 @@ class Planner
           pre_op_type.outputs.each do |output|
             if output.can_produce input
               pre_op = pre_op_type.instantiate output, input
-              input.predecessors << { operation: pre_op, output_name: output.name }
+              input.add_predecessor pre_op.get_output(output.name)
               @plan_space_size += 1
               if @plan_space_size < 20
                 plan pre_op
@@ -26,10 +26,6 @@ class Planner
           end
         end
 
-        if input.predecessors.empty?
-          input.unsat = true
-        end 
-
       end
 
     end
@@ -38,14 +34,72 @@ class Planner
 
   def show op, space=""
 
-    puts "#{space}#{op.id}: #{op.operation_type.name}"
+    if op.status == "planning"
+      puts "#{space}\e[95m#{op.operation_type.name} #{op.id}, status: #{op.status}\e[39m"
+    else
+      puts "#{space}\e[90m#{op.operation_type.name} #{op.id}, status: #{op.status}\e[39m"      
+    end
 
     op.inputs.each do |i|
-      puts "  #{space}#{i.sample_type.name} #{i.child_sample.name}(#{i.object_type.name})"
-      i.predecessors.each do |p|
-        show(p[:operation], space+"    ")
+
+      print "  #{space}+ #{i.sample_type.name}"
+      print " #{i.child_sample.name}"
+      print " (#{i.object_type ? i.object_type.name : 'NO OBJECT TYPE'})"
+
+      if i.predecessors.length > 0
+        puts " ... #{i.predecessors.length} option(s)"
+      elsif i.satisfied_by_environment
+        puts " ... available"
+      else
+        puts " ... no inventory and no way to make this sample"
       end
+
+      i.predecessors.each do |p|
+        show p.operation, space+"    "
+      end
+
     end
+
+  end
+
+  def mark_shortest op
+
+    d = if op.inputs.empty?
+
+      1
+
+    else
+
+      input_depths = op.inputs.collect { |i|
+
+        if i.predecessors.empty? 
+          1
+        else
+          pred_lengths = (i.predecessors.collect { |p| mark_shortest p.operation })
+
+          if i.predecessors.length > 1
+            puts "Determining best choice for input #{i.name} of operation #{op.id}"
+            index = pred_lengths.each_with_index.min[1]
+            puts "  It's option #{index}"
+            i.predecessors.each_with_index do |p,j| 
+              unless j == index
+                puts "  Unplanning operation #{p.operation.id}"
+                p.operation.set_status_recursively "unplanned"
+              end
+            end
+          end
+          pred_lengths.min + 1
+        end
+
+      }
+
+      input_depths.max
+
+    end
+
+    puts "#{op.id} #{op.operation_type.name} has depth #{d}"
+
+    d
 
   end
 
