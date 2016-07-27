@@ -34,6 +34,23 @@ class Operation < ActiveRecord::Base
     outputs.find { |o| o.name == name }
   end
 
+  def recurse &block
+    block.call(self)
+    inputs.each do |input|
+      input.predecessors.each do |pred|
+        pred.operation.recurse &block
+      end
+    end
+  end    
+
+  def set_status_recursively str
+    recurse do |op|
+      puts "    Setting operation #{id} status to #{str}"
+      op.status = str
+      op.save
+    end
+  end
+
   def to_s
     ins = (inputs.collect { |fv| "#{fv.name}: #{fv.child_sample.name}" }).join(", ")
     outs = (outputs.collect { |fv| "#{fv.name}: #{fv.child_sample.name}" }).join(", ")    

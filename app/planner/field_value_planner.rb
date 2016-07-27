@@ -19,7 +19,7 @@ module FieldValuePlanner
   end
 
   def add_predecessor fv
-    puts "adding predecessor #{fv} to #{self}"
+    # puts "adding predecessor #{fv} to #{self}"
     wires_as_dest.create from_id: fv.id
   end  
 

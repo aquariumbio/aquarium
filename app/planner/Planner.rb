@@ -35,27 +35,44 @@ class Planner
   def show op, space=""
 
     if op.status == "planning"
-      puts "#{space}\e[95m#{op.operation_type.name} #{op.id}, status: #{op.status}\e[39m"
+      print "#{space}\e[95m#{op.operation_type.name} #{op.id}, status: #{op.status}\e[39m"
     else
-      puts "#{space}\e[90m#{op.operation_type.name} #{op.id}, status: #{op.status}\e[39m"      
+      print "#{space}\e[90m#{op.operation_type.name} #{op.id}, status: #{op.status}\e[39m"      
     end
 
-    op.inputs.each do |i|
+    if op.ready?
+      puts ", ready"
+    else
+      puts ", not ready"
+    end
 
-      print "  #{space}+ #{i.sample_type.name}"
-      print " #{i.child_sample.name}"
-      print " (#{i.object_type ? i.object_type.name : 'NO OBJECT TYPE'})"
+    op.operation_type.inputs.each do |j|
 
-      if i.predecessors.length > 0
-        puts " ... #{i.predecessors.length} option(s)"
-      elsif i.satisfied_by_environment
-        puts " ... available"
-      else
-        puts " ... no inventory and no way to make this sample"
+      input_list = op.inputs.each.select { |i| i.name == j.name }
+
+      input_list.each do |i| # note: array inputs may have multiple fvs with the same name
+
+        print "  #{space}+ #{i.sample_type.name}"
+        print " #{i.child_sample.name}"
+        print " (#{i.object_type ? i.object_type.name : 'NO OBJECT TYPE'})"
+
+        if i.predecessors.length > 0
+          puts " ... #{i.predecessors.length} option(s)"
+        elsif i.satisfied_by_environment
+          puts " ... available"
+        else
+          puts " ... no inventory and no way to make this sample"
+        end
+
+        i.predecessors.each do |p|
+          show p.operation, space+"    "
+        end
+
       end
 
-      i.predecessors.each do |p|
-        show p.operation, space+"    "
+      if input_list.empty?
+        afts = j.allowable_field_types.collect { |aft| aft.sample_type.name }.join(',')
+        puts "  #{space}+ #{j.name} (#{afts}): NOT DETERMINED (by Operation.instantiate)"
       end
 
     end

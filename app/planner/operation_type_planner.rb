@@ -34,7 +34,7 @@ module OperationTypePlanner
 
     end    
 
-    puts "\e[95m#{op}\e[39m"
+    puts "  #{op}"
     op
 
   end
