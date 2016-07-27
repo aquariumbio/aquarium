@@ -8,7 +8,10 @@ class Operation < ActiveRecord::Base
   end  
 
   belongs_to :operation_type
-  attr_accessible :status
+  belongs_to :user
+  belongs_to :job
+
+  attr_accessible :status, :user_id, :job_id
 
   def set_input name, val
     set_property name, val, "input"

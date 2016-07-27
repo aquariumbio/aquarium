@@ -236,6 +236,7 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
 
   create_table "operation_types", :force => true do |t|
     t.string   "name"
+    t.string   "protocol"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
@@ -243,11 +244,15 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
   create_table "operations", :force => true do |t|
     t.integer  "operation_type_id"
     t.string   "status"
+    t.integer  "user_id"
+    t.integer  "job_id"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
   end
 
+  add_index "operations", ["job_id"], :name => "index_operations_on_job_id"
   add_index "operations", ["operation_type_id"], :name => "index_operations_on_operation_type_id"
+  add_index "operations", ["user_id"], :name => "index_operations_on_user_id"
 
   create_table "parameters", :force => true do |t|
     t.string   "key"

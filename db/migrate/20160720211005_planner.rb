@@ -4,16 +4,21 @@ class Planner < ActiveRecord::Migration
 
     create_table :operation_types do |t|
       t.string :name
-      t.timestamps
+      t.string :protocol
+      t.timestamps      
     end
 
     create_table :operations do |t|
       t.references :operation_type
       t.string :status
+      t.references :user
+      t.references :job
       t.timestamps
     end
 
     add_index :operations, :operation_type_id
+    add_index :operations, :user_id
+    add_index :operations, :job_id
 
     add_column :field_types, :role, :string
     add_column :field_values, :role, :string    
