@@ -43,8 +43,6 @@ module Repo
 
   def self.contents path, sha, directory='master', branch='master'
 
-    puts "Contents #{base(directory) + (repo_name path)} : #{branch}"    
-
     begin
       git = Git.open(base(directory) + (repo_name path))
       git.branch(branch).checkout unless directory == 'master'

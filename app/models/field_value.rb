@@ -1,13 +1,14 @@
 class FieldValue < ActiveRecord::Base
 
   include FieldValuePlanner
+  include FieldValueKrill
 
   belongs_to :sample
   belongs_to :child_sample, class_name: "Sample", foreign_key: :child_sample_id
   belongs_to :child_item, class_name: "Item", foreign_key: :child_item_id  
   belongs_to :field_type
 
-  attr_accessible :name, :child_item_id, :child_sample_id, :value, :role, :field_type_id
+  attr_accessible :name, :child_item_id, :child_sample_id, :value, :role, :field_type_id, :item
 
   def val
 

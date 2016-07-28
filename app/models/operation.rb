@@ -13,6 +13,10 @@ class Operation < ActiveRecord::Base
 
   attr_accessible :status, :user_id, :job_id
 
+  def name
+    operation_type.name
+  end
+
   def set_input name, val
     set_property name, val, "input"
   end
@@ -58,6 +62,20 @@ class Operation < ActiveRecord::Base
     ins = (inputs.collect { |fv| "#{fv.name}: #{fv.child_sample.name}" }).join(", ")
     outs = (outputs.collect { |fv| "#{fv.name}: #{fv.child_sample.name}" }).join(", ")    
     "#{operation_type.name} #{id} ( " + ins + " ) ==> ( " + outs + " )"
+  end
+
+  def successors
+
+    ops = []
+
+    outputs.each do |output|
+      output.successors.each do |suc|    
+        ops << suc.operation
+      end
+    end
+
+    ops
+
   end
 
 end

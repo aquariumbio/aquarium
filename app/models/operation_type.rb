@@ -28,8 +28,12 @@ class OperationType < ActiveRecord::Base
   end
 
   def pending
-    operations.select { |op| op.status == "pending" }
+    operations.where status: "pending"
   end
+
+  def done
+    operations.where status: "done"
+  end  
 
   def schedule ops, user, group
 
