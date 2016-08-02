@@ -1,5 +1,9 @@
 Bioturk::Application.routes.draw do
 
+  resources :operation_types
+  get '/operations/manager',                     to: 'planner#manager'
+  get '/operations/planner',                     to: 'planner#planner'
+
   get '/developer',                              to: 'developer#developer'
   post '/developer/get/',                        to: 'developer#get'  
   post '/developer/save',                        to: 'developer#save'    

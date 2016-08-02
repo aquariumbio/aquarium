@@ -21,15 +21,34 @@ class Planner < ActiveRecord::Migration
     add_index :operations, :job_id
 
     add_column :field_types, :role, :string
-    add_column :field_values, :role, :string    
+    add_column :field_types, :part, :boolean
 
+    add_column :field_values, :role, :string    
     add_column :field_values, :field_type_id, :integer
+    add_column :field_values, :row, :integer
+    add_column :field_values, :column, :integer
+
     add_index :field_values, :field_type_id
 
     create_table :wires do |t|
       t.integer :from_id
       t.integer :to_id
+      t.boolean :active
     end
+
+    create_table :plans do |t|
+      t.references :user
+    end
+
+    add_index :plans, :user_id
+
+    create_table :plan_associations do |t|
+      t.references :plan
+      t.references :operation
+    end
+
+    add_index :plan_associations, :plan_id
+    add_index :plan_associations, :operation_id
 
   end
 

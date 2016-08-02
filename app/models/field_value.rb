@@ -8,7 +8,7 @@ class FieldValue < ActiveRecord::Base
   belongs_to :child_item, class_name: "Item", foreign_key: :child_item_id  
   belongs_to :field_type
 
-  attr_accessible :name, :child_item_id, :child_sample_id, :value, :role, :field_type_id, :item
+  attr_accessible :name, :child_item_id, :child_sample_id, :value, :role, :field_type_id, :item, :row, :column
 
   def val
 

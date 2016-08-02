@@ -109,6 +109,7 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
     t.datetime "updated_at",   :null => false
     t.string   "parent_class"
     t.string   "role"
+    t.boolean  "part"
   end
 
   add_index "field_types", ["parent_id"], :name => "index_field_types_on_sample_type_id"
@@ -124,6 +125,8 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
     t.string   "parent_class"
     t.string   "role"
     t.integer  "field_type_id"
+    t.integer  "row"
+    t.integer  "column"
   end
 
   add_index "field_values", ["field_type_id"], :name => "index_field_values_on_field_type_id"
@@ -165,9 +168,9 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
     t.string   "user_id"
     t.string   "sha"
     t.text     "arguments"
-    t.text     "state",               :limit => 2147483647
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.text     "state",              :limit => 2147483647
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
     t.string   "path"
     t.integer  "pc"
     t.integer  "group_id"
@@ -175,7 +178,6 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
     t.datetime "desired_start_time"
     t.datetime "latest_start_time"
     t.integer  "metacol_id"
-    t.integer  "workflow_process_id"
   end
 
   create_table "locators", :force => true do |t|
@@ -261,6 +263,20 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
     t.datetime "updated_at",  :null => false
     t.text     "description"
   end
+
+  create_table "plan_associations", :force => true do |t|
+    t.integer "plan_id"
+    t.integer "operation_id"
+  end
+
+  add_index "plan_associations", ["operation_id"], :name => "index_plan_associations_on_operation_id"
+  add_index "plan_associations", ["plan_id"], :name => "index_plan_associations_on_plan_id"
+
+  create_table "plans", :force => true do |t|
+    t.integer "user_id"
+  end
+
+  add_index "plans", ["user_id"], :name => "index_plans_on_user_id"
 
   create_table "post_associations", :force => true do |t|
     t.integer  "post_id"
@@ -411,6 +427,7 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
   create_table "wires", :force => true do |t|
     t.integer "from_id"
     t.integer "to_id"
+    t.boolean "active"
   end
 
   create_table "wizards", :force => true do |t|

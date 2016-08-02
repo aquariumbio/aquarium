@@ -24,6 +24,9 @@ RSpec.describe "Planner" do
 
       gop.show_plan
 
+      plan = gop.plans.first
+      puts "plan = #{plan.inspect}, ops = #{plan.operations.collect { |o| o.id }}"
+
     end
 
   end

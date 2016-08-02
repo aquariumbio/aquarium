@@ -5,7 +5,7 @@ class FieldType < ActiveRecord::Base
   belongs_to :sample_type
   has_many :allowable_field_types, dependent: :destroy
 
-  attr_accessible :parent_id, :array, :choices, :name, :required, :ftype, :role
+  attr_accessible :parent_id, :array, :choices, :name, :required, :ftype, :role, :part
 
   validates :name, presence: true
   validates :ftype, presence: true  
@@ -22,6 +22,22 @@ class FieldType < ActiveRecord::Base
       return allowable_field_types.collect { |aft| aft.sample_type.id }.member? val.sample_type_id
     when "item"
       return allowable_field_types.collect { |aft| aft.object_type.id }.member? val.object_type_id      
+    end
+  end
+
+  def allowable_sample_types
+    if ftype == "sample"
+      allowable_field_types.collect { |aft| aft.sample_type }
+    else
+      []
+    end
+  end
+
+  def allowable_object_types
+    if ftype == "item"
+      allowable_field_types.collect { |aft| aft.object_type }
+    else
+      []
     end
   end
 

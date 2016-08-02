@@ -1,5 +1,14 @@
 module OperationPlanner
 
+  def associate_plan plan
+    pa = plan_associations.create plan_id: plan.id
+    pa.save
+    if !plan.user_id
+      plan.user_id = user_id
+      plan.save
+    end
+  end
+
   def ready?
 
     operation_type.inputs.each do |i|

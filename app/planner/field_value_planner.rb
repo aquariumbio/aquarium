@@ -15,12 +15,12 @@ module FieldValuePlanner
   end
 
   def add_successor fv
-    wires_as_source.create to_id: fv.id
+    wires_as_source.create to_id: fv.id, active: true
   end
 
   def add_predecessor fv
     # puts "adding predecessor #{fv} to #{self}"
-    wires_as_dest.create from_id: fv.id
+    wires_as_dest.create from_id: fv.id, active: true
   end  
 
   def sample_type
@@ -62,6 +62,17 @@ module FieldValuePlanner
       false
     end
 
+  end
+
+  def satisfies fv
+    # puts "\e[93mComparing #{self.child_sample.name} (#{self.object_type.name}) with #{fv.child_sample.name} (#{fv.object_type.name})\e[39m"
+    if 
+      child_sample_id == fv.child_sample_id && object_type == fv.object_type
+      puts "   \e[93mFound operation that already outputs #{fv.child_sample.name} (#{fv.object_type.name}).\e[39m"
+      return true
+    else
+      return false
+    end
   end
 
 end

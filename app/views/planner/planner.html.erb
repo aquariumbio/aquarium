@@ -1,0 +1,27 @@
+<div ng-app="aquarium" ng-controller="plannerCtrl as planner" class='planner'>
+
+  <div class='two-column'>
+
+    <div class='two-column-left'>
+      <div class="two-column-control">
+        <h4>Operation Types</h4>      
+        <ul>
+          <li ng-repeat="ot in operation_types">
+            <span ng-if="ot != selection" class="item-plain"    ng-click="open(ot)"> {{ot.name}}</span>
+            <span ng-if="ot == selection" class="item-selected" ng-click="close(ot)">{{ot.name}}</span>            
+          </li>
+        </ul>    
+      </div>
+    </div>
+
+    <div class='two-column-right'>
+      <div ng-if="selection">
+        <h2>{{selection.name}}</h2>
+        <pre>{{selection|json}}</pre>
+      </div>
+    </div>
+
+  </div> 
+
+
+</div>

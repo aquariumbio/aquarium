@@ -11,10 +11,22 @@ class Operation < ActiveRecord::Base
   belongs_to :user
   belongs_to :job
 
+  has_many :plan_associations
+  has_many :plans, through: :plan_associations
+
   attr_accessible :status, :user_id, :job_id
 
   def name
     operation_type.name
+  end
+
+  def plan
+    pset = plans
+    if pset.length > 0
+      pset[0]
+    else
+      nil
+    end
   end
 
   def set_input name, val
@@ -52,7 +64,7 @@ class Operation < ActiveRecord::Base
 
   def set_status_recursively str
     recurse do |op|
-      puts "    Setting operation #{id} status to #{str}"
+      puts "Setting operation #{op.id} status to #{str}"
       op.status = str
       op.save
     end
