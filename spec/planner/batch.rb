@@ -11,6 +11,7 @@ RSpec.describe "Planner" do
       build_workflow      
 
       gibson = OperationType.find_by_name "Gibson Assembly"
+      pcr = OperationType.find_by_name "PCR"
 
       common_fragment = SampleType.find_by_name("Fragment").samples.sample
 

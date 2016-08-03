@@ -3,18 +3,30 @@ module FieldValueKrill
   def retrieve
 
     if child_item_id
+
       @item = Item.find_by_id(child_item_id)
+
     else
-      if object_type
+
+      if object_type && !field_type.part
         items = Item.where(sample_id: child_sample_id, object_type_id: object_type.id).reject { |i| i.deleted? }
+      elsif object_type && field_type.part
+        items = Collection.containing(val, object_type).reject { |c| c.deleted? }
       else
         items = Item.where(sample_id: child_sample_id).reject { |i| i.deleted? }
       end
+
       unless items.empty?
         @item = items[0]
         self.child_item_id = @item.id
+        if @item.class == Collection
+          p = @item.position self.child_sample
+          self.row = p[:row]
+          self.column = p[:column]
+        end
         self.save
       end
+
     end
 
     @item
@@ -31,6 +43,20 @@ module FieldValueKrill
     end
 
     @item
+
+  end
+
+  def make_collection rows, columns
+    Collection.new_collection(object_type.name, rows, columns)
+  end
+
+  def make_part collection, r, c
+
+    collection.set r, c, child_sample
+    self.child_item_id = collection.id
+    self.row = r
+    self.column = c
+    self.save
 
   end
 
@@ -57,8 +83,12 @@ module FieldValueKrill
       end
     end
 
-    "#{name}: { sample: #{si}, item: #{ii}, array: #{field_type.array ? 'true' : 'false' } }"
+    "#{name}: { sample: #{si}, item: #{ii}, array: #{field_type.array ? 'true' : 'false' }, part: #{field_type.part ? [row,column] : '-' } }"
 
+  end
+
+  def part?
+    field_type.part
   end
 
 end

@@ -44,20 +44,43 @@ module FieldValuePlanner
   def satisfied_by_environment
 
     case val
+
     when Sample
+
       if object_type
-        # print "Checking whether input #{name} #{val.name} (#{object_type.name}) needs to be made ... "      
-        items = val.items.select { |i| !i.deleted? && i.object_type_id == object_type.id }
-        if items.length > 0
-          # puts "found #{items[0].object_type.name} #{items[0].id}"
-          true
+
+        if object_type.handler == 'collection' && field_type.part
+         
+          collections = Collection.containing(val, object_type).reject { |c| c.deleted? }
+
+          # print "  While Looking for '#{val.id}: #{val.name}' as part of a collection of type #{object_type.name}"            
+
+          if collections.empty?
+            # puts "  ... found nothing"            
+            return false
+          else
+            # puts "  ... found collection #{collections[0].id} at #{collections[0].location} with matrix #{collections[0].matrix}"
+            return true
+          end
+
         else
-          # puts "not found"
-          false
+
+          # print "Checking whether input #{name} #{val.name} (#{object_type.name}) needs to be made ... "      
+          items = val.items.select { |i| !i.deleted? && i.object_type_id == object_type.id }
+          if items.length > 0
+            # puts "found #{items[0].object_type.name} #{items[0].id}"
+            true
+          else
+            # puts "not found"
+            false
+          end
+
         end
+
       else
         false
       end
+
     else
       false
     end
@@ -65,14 +88,16 @@ module FieldValuePlanner
   end
 
   def satisfies fv
+
     # puts "\e[93mComparing #{self.child_sample.name} (#{self.object_type.name}) with #{fv.child_sample.name} (#{fv.object_type.name})\e[39m"
-    if 
-      child_sample_id == fv.child_sample_id && object_type == fv.object_type
+
+    if child_sample_id == fv.child_sample_id && object_type == fv.object_type && field_type.part == fv.field_type.part
       puts "   \e[93mFound operation that already outputs #{fv.child_sample.name} (#{fv.object_type.name}).\e[39m"
       return true
     else
       return false
     end
+
   end
 
 end

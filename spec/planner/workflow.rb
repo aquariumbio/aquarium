@@ -6,6 +6,12 @@ def build_workflow
 
   raise "Could not make object type: #{lp.errors.full_messages.join(', ')}" unless lp.errors.empty?
 
+  cp = ObjectType.new(name: "Checked E coli Plate of Plasmid", handler: "sample_container", unit: "plate", min: 1, max: 10000,
+                      release_method: "return", description: "A plate that actually has some colonies on it", cost: 5.00)
+  cp.save
+
+  raise "Could not make object type: #{lp.errors.full_messages.join(', ')}" unless lp.errors.empty?  
+
   op = OperationType.new name: "Order Primer", protocol: "protocols/planner/order_primer.rb"
   op.save
   op.add_output( "Primer", "Primer", "Lyophilized Primer" )  
@@ -18,7 +24,7 @@ def build_workflow
 
   mpa = OperationType.new name: "Make Primer Aliquot", protocol: "protocols/planner/make_primer_aliquot.rb"
   mpa.save
-  mpa.add_input(  "Primer", "Primer",   "Primer Stock")
+  mpa.add_input( "Primer", "Primer",   "Primer Stock")
     .add_output( "Primer", "Primer",   "Primer Aliquot")
   
   pcr = OperationType.new name: "PCR", protocol: "protocols/planner/pcr.rb"
@@ -28,9 +34,9 @@ def build_workflow
      .add_input(  "Template",       [ "Plasmid", "Fragment" ],  [ "Plasmid Stock", "Fragment Stock" ] )
      .add_output( "Fragment",       "Fragment", "Stripwell", part: true ) 
 
-  run_gel = OperationType.new name: "Run Gel", protocol: "protocols/planner/run_gel.rb" # aka purify gel
+  run_gel = OperationType.new name: "Run Gel", protocol: "protocols/planner/run_gel.rb" 
   run_gel.save
-  run_gel.add_input(  "Fragment", "Fragment",   "Stripwell", part: true )
+  run_gel.add_input(  "Fragment", "Fragment",  "Stripwell", part: true )
          .add_output( "Fragment", "Fragment",  "50 mL 0.8 Percent Agarose Gel in Gel Box", part: true )
 
   extract_fragment = OperationType.new name: "Extract Fragment", protocol: "protocols/planner/extract_fragment.rb"
@@ -62,11 +68,11 @@ def build_workflow
   check_plate = OperationType.new name: "Check E coli Plate", protocol: "protocols/planner/check_e_coli_plate.rb" 
   check_plate.save
   check_plate.add_input(  "Plasmid", "Plasmid",  "Transformed E coli 1.5 mL tube" ) 
-             .add_output( "Plasmid", "Plasmid",  "E coli Plate of Plasmid" )
+             .add_output( "Plasmid", "Plasmid",  "Checked E coli Plate of Plasmid" )
 
   overnight = OperationType.new name: "E coli Overnight", protocol: "protocols/planner/e_coli_overnight.rb" 
   overnight.save
-  overnight.add_input(  "Plasmid", "Plasmid",  "E coli Plate of Plasmid" )
+  overnight.add_input(  "Plasmid", "Plasmid",  "Checked E coli Plate of Plasmid" )
            .add_output( "Plasmid", "Plasmid",  "TB Overnight of Plasmid" )  
 
   mp = OperationType.new name: "Miniprep", protocol: "protocols/planner/miniprep.rb"

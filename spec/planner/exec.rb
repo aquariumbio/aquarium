@@ -11,12 +11,17 @@ RSpec.describe "Planner" do
       build_workflow
 
       # do some planning
-      (1..4).each do 
+      (1..6).each do |i|
 
-        gop = plan_gibson 2
+        gop = plan_gibson 2 
+
         puts
         print "\e[93mPlan: "
         issues = gop.issues
+
+        puts
+        puts "\e[92mPlan #{gop.plan.id} issues: [ " + issues.join(', ') + "]\e[39m"      
+        # gop.show_plan
 
         if issues.empty?
 
@@ -45,7 +50,9 @@ RSpec.describe "Planner" do
 
         OperationType.all.each do |ot|
 
-          puts "\e[4m#{ot.name}: #{ot.pending.count} pending, #{ot.waiting.count} waiting, and #{ot.done.count} done\e[0m"
+          if ot.pending.count + ot.waiting.count > 0
+            puts "\e[4m#{ot.name}: #{ot.pending.count} pending, #{ot.waiting.count} waiting, and #{ot.done.count} done\e[0m"
+          end
 
           if ot.pending.count > 0
 
@@ -88,7 +95,7 @@ RSpec.describe "Planner" do
 
         end
 
-        puts "At end of round there are #{Operation.where(status: 'pending').count} pending and #{Operation.where(status: 'done').count} done operations"
+        puts "At end of round there are #{Operation.where(status: 'pending').count} pending, #{Operation.where(status: 'waiting').count} waiting, and #{Operation.where(status: 'done').count} done operations"
 
       end 
 

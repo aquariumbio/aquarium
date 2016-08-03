@@ -8,7 +8,12 @@ A FieldType ft specifies a type, ft.type, that should be one of the following: "
 As an example, the allowable sample types for the Template field of a Fragment can be obtained as follows.
 
 ```ruby
-SampleType.find_by_name("Fragment").type("Template").allowable_sample_types
+SampleType
+  .find_by_name("Fragment")
+  .type("Template")
+  .allowable_sample_types
 ```
 
 which returns "Plasmid", "E coli strain", "Fragment", and "Yeast Strain". 
+
+If a FieldType ft specifies a number or string, then it may have a choices array

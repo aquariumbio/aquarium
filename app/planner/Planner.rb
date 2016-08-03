@@ -18,7 +18,7 @@ class Planner
 
     ops.each do |op|
       mark_unused op
-    end    
+    end   
 
     @plan
 
@@ -97,6 +97,23 @@ class Planner
   end
 
   def mark_unused op
+    op.recurse do |o|
+      if o != op && unused(o)
+        # remove wires to o
+        o.inputs.each do |input|
+          input.wires_as_dest.each do |w|
+            w.active = false
+            w.save
+          end
+        end
+        puts "Setting operation #{o.id} to unplanned"
+        o.status = "unplanned"
+        o.save
+      end
+    end
+  end
+
+  def old_mark_unused op
     op.recurse do |o|
       if o != op && unused(o)
         o.set_status_recursively "unplanned"
