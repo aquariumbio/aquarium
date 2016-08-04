@@ -15,7 +15,7 @@ module OperationPlanner
 
       input_list = inputs.select { |j| j.name == i.name }
 
-      if input_list.empty? && !i.array
+      if input_list.empty? # && !i.array # arrays need to have at least one element (for now)
         return false
       else
         input_list.each do |j|
@@ -44,7 +44,7 @@ module OperationPlanner
 
     operation_type.inputs.each do |i|
       input_list = inputs.select { |j| j.name == i.name }
-      if input_list.empty? && ! i.array
+      if input_list.empty? # && ! i.array # arrays need to have at least one element (for now)
         return true
       end
     end

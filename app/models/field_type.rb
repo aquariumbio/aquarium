@@ -4,6 +4,7 @@ class FieldType < ActiveRecord::Base
 
   belongs_to :sample_type
   has_many :allowable_field_types, dependent: :destroy
+  has_many :field_values
 
   attr_accessible :parent_id, :array, :choices, :name, :required, :ftype, :role, :part
 

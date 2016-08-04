@@ -41,6 +41,26 @@ module OperationTypePlanner
 
   end
 
+  def random n=1
+
+    (1..n).collect do |i|
+
+      op = operations.create status: "pending", user_id: User.all.sample.id
+
+      inputs.each do |input|
+        op.set_input(input.name,input.random)
+      end
+
+      outputs.each do |output|
+        op.set_output(output.name,output.random)
+      end      
+
+      op
+
+    end
+
+  end
+
 end
 
 

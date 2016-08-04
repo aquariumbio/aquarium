@@ -24,4 +24,12 @@ module FieldTypePlanner
 
   end
 
+  def random
+    if array
+      allowable_sample_types.sample.samples.sample(3) # Ahhh! So awesome.      
+    else
+      allowable_sample_types.sample.samples.sample    # Ahhh! So awesome.
+    end
+  end
+
 end

@@ -62,6 +62,16 @@ class Operation < ActiveRecord::Base
     end
   end    
 
+  def find name
+    ops = []
+    recurse do |op|
+      if op.operation_type.name == name
+        ops << op
+      end
+    end
+    return ops
+  end
+
   def set_status_recursively str
     recurse do |op|
       puts "Setting operation #{op.id} status to #{str}"
