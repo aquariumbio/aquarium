@@ -3,13 +3,32 @@ require_relative "workflow"
 
 RSpec.describe "Planner" do
 
-  context "plans" do
+    op_names = [
+      "Order Primer",
+      "Receive Primer",
+      "Make Primer Aliquot",
+      "PCR",
+      "Run Gel",
+      "Extract Fragment",
+      "Purify Gel",
+      "Gibson Assembly",
+      "Transform E coli",
+      "Plate E coli",
+      "Check E coli Plate",
+      "E coli Overnight",
+      "Miniprep",
+      "Sequencing" ]
 
-    it "runs operations" do
+  op_names.each do |name|     
 
-      build_workflow
+    it name do
 
-      ot = OperationType.all.sample
+      puts
+      puts "\e[35mTesting Operation '#{name}'\e[39m"
+
+      build_workflow    
+      ot = OperationType.find_by_name name  
+
       ops = ot.random(5)
       puts "Made five random operations of type #{ot.name}"
       ops.each do |op|
