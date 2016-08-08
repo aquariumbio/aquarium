@@ -4,6 +4,7 @@ class OperationType < ActiveRecord::Base
   include OperationTypePlanner
 
   has_many :operations
+  has_many :fts, foreign_key: "parent_id", class_name: "FieldType"
 
   attr_accessible :name, :protocol
 

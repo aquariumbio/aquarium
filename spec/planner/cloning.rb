@@ -1,5 +1,4 @@
 require "rails_helper"
-require_relative "workflow"
 require_relative "gibson"
 require_relative "runner"
 
@@ -9,7 +8,7 @@ RSpec.describe "Planner" do
 
     it "edits plans" do
 
-      build_workflow
+      # build_workflow
 
       seq = OperationType.find_by_name "Sequencing"
 

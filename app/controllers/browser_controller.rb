@@ -16,7 +16,7 @@ class BrowserController < ApplicationController
     sts.each { |st|
       result[st.name] = st.samples.collect { |s|
         "#{s.id}: #{s.name}"
-      }
+      }.reverse
     }
 
     render json: result

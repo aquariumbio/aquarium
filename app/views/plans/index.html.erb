@@ -1,0 +1,45 @@
+<div ng-app="aquarium" ng-controller="plannerCtrl as planner" class='planner'>
+
+  <%= render partial: "/fields/field_type" %>  
+  <%= render partial: "/fields/field_value" %>  
+
+  <div class='two-column' ng-if="ready">
+
+    <div class='two-column-left'>
+
+      <div class="two-column-control">
+
+        <h5>Under Construction</h5>
+
+        <ul class="plan-list">
+          <li ng-repeat="plan in plans">{{plan.id}}.
+            <span ng-repeat="goal in plan.goals" ng-class='plan_choice_class(plan)' ng-click="select_plan(plan)">
+              {{goal.operation_type.name}} ({{goal.created_at|date}})
+            </span>
+          </li>
+        </ul>
+
+        <br />
+
+        <button class='btn btn-mini btn-primary' ng-click="set_mode('choose')">View / Edit Goals</button>        
+
+      </div>
+
+    </div>
+ 
+    <div class='two-column-right'>    
+      <div  style="margin-left: 15px">
+        <%= render partial: "main" %>
+        <%= render partial: "choose_goal" %>
+        <%= render partial: "build_plan" %>
+        <%= render partial: "view_edit_plan" %>
+      </div>
+    </div>
+
+  </div>
+
+  <div ng-if="!ready">
+    Loading...
+  </div>
+
+</div>

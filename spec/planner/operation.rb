@@ -1,49 +1,40 @@
 require "rails_helper"
-require_relative "workflow"
 
 RSpec.describe "Planner" do
 
-    op_names = [
-      "Order Primer",
-      "Receive Primer",
-      "Make Primer Aliquot",
-      "PCR",
-      "Run Gel",
-      "Extract Fragment",
-      "Purify Gel",
-      "Gibson Assembly",
-      "Transform E coli",
-      "Plate E coli",
-      "Check E coli Plate",
-      "E coli Overnight",
-      "Miniprep",
-      "Sequencing" ]
-
-  op_names.each do |name|     
+  OperationType.all.collect { |ot| ot.name }.each do |name|     
 
     it name do
 
       puts
-      puts "\e[35mTesting Operation '#{name}'\e[39m"
+      puts "\e[93mTesting operation '#{name}'\e[39m"
 
-      build_workflow    
+      # build_workflow    
       ot = OperationType.find_by_name name  
 
       ops = ot.random(5)
-      puts "Made five random operations of type #{ot.name}"
+      puts "\e[93mMade five random operations\e[39m"
       ops.each do |op|
         puts "  #{op}"  
       end
 
       job = ot.schedule(ops, User.find_by_login('klavins'), Group.find_by_name('technicians'))
-      puts "Scheduled job #{job.id}"
+      puts "\e[93mScheduled job #{job.id}\e[39m"
 
       job.user_id = User.find_by_login('klavins').id
       job.save
 
-      puts "  Starting job #{job.id}"
+      puts "\e[93mStarting job #{job.id}\e[39m"
+      puts
+
       manager = Krill::Manager.new job.id, true, "master", "master"
       manager.run
+
+      puts "\e[93mBacktrace\e[39m"
+      job.reload
+      job.backtrace.each do |step|
+        puts step
+      end
 
     end
 

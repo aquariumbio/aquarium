@@ -1,5 +1,4 @@
 require "rails_helper"
-require_relative "workflow"
 require_relative "gibson"
 
 RSpec.describe "Planner" do
@@ -8,7 +7,7 @@ RSpec.describe "Planner" do
 
     it "makes plans" do
 
-      build_workflow      
+      # build_workflow      
 
       gibson = OperationType.find_by_name "Gibson Assembly"
       pcr = OperationType.find_by_name "PCR"

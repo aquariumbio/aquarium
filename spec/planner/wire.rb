@@ -1,5 +1,4 @@
 require "rails_helper"
-require_relative "workflow"
 
 RSpec.describe "Planner" do
 
@@ -7,7 +6,7 @@ RSpec.describe "Planner" do
 
     it "works" do
 
-      build_workflow
+      # build_workflow
 
       primer = SampleType.find_by_name("Primer").samples.sample
 

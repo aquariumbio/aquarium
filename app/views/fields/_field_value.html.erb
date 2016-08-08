@@ -1,0 +1,25 @@
+<script type="text/ng-template" id="field_value">
+  FIELD VALUE: {{ft}}, {{fv}}, {{parent}}
+</script>
+
+<script type="text/ng-template" id="field_value_form">
+
+  <div class='field_value_form'>
+
+    <div ng-if="ft.ftype != 'sample'">{{ft.ftype}} NOT IMPLEMENTED</div>
+
+    <span ng-if="ft.ftype == 'sample' && !ft.array">
+      <input type='string' ftsamplecomplete="ft" ng-model='operation.fvs[ft.name]'></input>
+    </span>
+
+    <span ng-if="ft.ftype == 'sample' && ft.array">
+      <div ng-repeat="sid in operation.fvs[ft.name] track by $index">
+        <input type='string' ftsamplecomplete="ft" ng-model='operation.fvs[ft.name][$index]' class="array-input"></input> 
+        <a href="#" ng-click="delete_from_fvs(operation.fvs[ft.name],$index)">&times;</a>
+      </div>
+      <button class='btn btn-mini' ng-click="add_to_array(operation.fvs,ft.name)">+</button>
+    </span>
+
+  </div>
+
+</script>

@@ -163,8 +163,8 @@ class FieldValue < ActiveRecord::Base
 
   end
 
-  def as_json
-    super include: :child_sample
+  def as_json(options={})
+    super(include: :child_sample, methods: [ :wires_as_source, :wires_as_dest ] )
   end
 
 end 

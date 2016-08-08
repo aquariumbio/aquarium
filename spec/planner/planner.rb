@@ -1,5 +1,4 @@
 require "rails_helper"
-require_relative "workflow"
 require_relative "gibson"
 
 RSpec.describe "Planner" do
@@ -8,7 +7,7 @@ RSpec.describe "Planner" do
 
     it "makes plans" do
 
-      build_workflow
+      # build_workflow
 
       gop = plan_gibson 4
 
@@ -23,6 +22,8 @@ RSpec.describe "Planner" do
       end
 
       gop.show_plan
+
+      puts gop.serialize
 
       plan = gop.plans.first
       puts "plan = #{plan.inspect}, ops = #{plan.operations.collect { |o| o.id }}"

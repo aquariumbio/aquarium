@@ -1,0 +1,63 @@
+<div ng-if="mode == 'build'" ng-controller="buildPlanCtrl as builder">
+
+  <div class='row-fluid'>
+    <div class='span6'>
+      <span class='op-type-name'>Goal: {{goal.name}}</span>
+    </div>
+    <div class='span6'>
+      <button ng-click='plan(goal)' class='btn btn-primary pull-right'>Plan</button> 
+    </div>
+  </div>    
+     
+  <table class='table op-table'>
+
+    <thead>
+
+      <tr>
+        <th class='small-col'></th>
+        <th ng-repeat="ft in goal.fts | filter: { role: 'input' }" ng-include="'field_type'"></th>
+        <th class='small-col arrow'>&#8658;</th>
+        <th ng-repeat="ft in goal.fts | filter: { role: 'output' }" ng-include="'field_type'"></th> 
+        <th class='small-col'></th>     
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      <tr ng-repeat="operation in goal.operations track by $index">
+
+        <td>{{$index+1}}.</td>
+
+        <td ng-repeat="ft in goal.fts | filter: { role: 'input' }" 
+            ng-include="'field_value_form'"></td>
+
+        <td></td>
+
+        <td ng-repeat="ft in goal.fts | filter: { role: 'output' }" 
+            ng-include="'field_value_form'"></td>
+
+        <td><a href='#' ng-click="drop(goal,operation)">&times;</a></td>              
+
+      </tr>
+
+      <tr>
+
+        <td ng-repeat="ft in goal.fts | filter: { role: 'input' }"></td>
+        <td></td>
+        <td ng-repeat="ft in goal.fts | filter: { role: 'output' }"></td>
+
+        <td>
+          <a href='#' class='btn btn-mini pull-right' ng-click="more(goal)">Add</a>
+        </td>
+
+        <td></td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>
+

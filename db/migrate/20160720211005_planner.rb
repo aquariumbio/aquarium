@@ -34,10 +34,12 @@ class Planner < ActiveRecord::Migration
       t.integer :from_id
       t.integer :to_id
       t.boolean :active
+      t.timestamps      
     end
 
     create_table :plans do |t|
       t.references :user
+      t.timestamps      
     end
 
     add_index :plans, :user_id
@@ -45,6 +47,7 @@ class Planner < ActiveRecord::Migration
     create_table :plan_associations do |t|
       t.references :plan
       t.references :operation
+      t.timestamps      
     end
 
     add_index :plan_associations, :plan_id

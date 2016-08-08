@@ -265,15 +265,19 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
   end
 
   create_table "plan_associations", :force => true do |t|
-    t.integer "plan_id"
-    t.integer "operation_id"
+    t.integer  "plan_id"
+    t.integer  "operation_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   add_index "plan_associations", ["operation_id"], :name => "index_plan_associations_on_operation_id"
   add_index "plan_associations", ["plan_id"], :name => "index_plan_associations_on_plan_id"
 
   create_table "plans", :force => true do |t|
-    t.integer "user_id"
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   add_index "plans", ["user_id"], :name => "index_plans_on_user_id"
@@ -425,9 +429,11 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
   add_index "users", ["remember_token"], :name => "index_users_on_remember_token"
 
   create_table "wires", :force => true do |t|
-    t.integer "from_id"
-    t.integer "to_id"
-    t.boolean "active"
+    t.integer  "from_id"
+    t.integer  "to_id"
+    t.boolean  "active"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "wizards", :force => true do |t|

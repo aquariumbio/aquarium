@@ -13,6 +13,7 @@ class Operation < ActiveRecord::Base
 
   has_many :plan_associations
   has_many :plans, through: :plan_associations
+  # has_many :fvs, foreign_key: "parent_id", class_name: "FieldValue" # THIS DOESN'T WORK BECAUSE IT DOESN'T KNOW ABOUT parent_class
 
   attr_accessible :status, :user_id, :job_id
 

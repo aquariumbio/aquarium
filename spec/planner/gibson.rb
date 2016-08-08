@@ -7,7 +7,7 @@ def plan_gibson n
   frags = SampleType.find_by_name("Fragment").samples
 
   gop.set_output("Assembled Plasmid", SampleType.find_by_name("Plasmid").samples.last)
-     .set_input("Fragments", frags.sample(n))
+     .set_input("Fragment", frags.sample(n))
      .set_input("Comp cell", Sample.find_by_name("DH5alpha"))
 
   puts

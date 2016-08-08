@@ -53,15 +53,26 @@ module OperationPlanner
 
   end
 
+  def has_no_stock_or_method
+    inputs.each do |i|
+      if !i.satisfied_by_environment && i.predecessors.length == 0
+        return true
+      end
+    end
+    return false
+  end
+
   def issues
 
     issues = []
 
     recurse do |op|
       if op.status == "planning" && op.leaf? && !op.ready?
-        issues << "leaf operation #{op.id} is not ready"
+        issues << { id: op.id, leaf: true, msg: "not ready" }
       elsif op.status == "planning" && op.undetermined_inputs?
-        issues << "operation #{op.id} has undetermined inputs"
+        issues << { id: op.id, leaf: op.ready?, msg: "unspecified inputs" }
+      elsif op.has_no_stock_or_method
+        issues << { id: op.id, leaf: op.ready?, msg: "no way to make at least one input"}
       end
     end
 
@@ -118,4 +129,66 @@ module OperationPlanner
 
   end  
 
+  def serialize override_status=nil
+
+    problem = false
+
+    {
+
+      id: id,
+      operation_type_id: operation_type_id,
+      status: override_status ? override_status : status,
+      ready: ready?,
+
+      inputs: inputs.collect { |i| 
+
+        sat = i.satisfied_by_environment
+        preds = i.predecessors
+        os = override_status if (override_status)
+        os = status if (!override_status && status == "unplanned")
+        problem = !sat && preds.length == 0
+
+        {
+          name: i.name,
+          satisfied: sat,
+          issue: !sat && preds.length == 0,
+          predecessors: preds.collect { |p|
+            {
+              id: p.id,
+              name: p.name,
+              operation: p.operation.serialize(os)
+            }
+          }
+        }
+
+      },
+
+      problem: problem
+
+    }
+
+  end
+
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

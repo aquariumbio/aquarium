@@ -1,0 +1,24 @@
+$row-height: 22px;
+
+.field_value_form {
+
+  .name {
+    width: 250px;
+    font-weight: bold;
+    display: inline-block;
+  }
+
+  input,input:focus,input:active,input:hover {
+    color: #0000cc;
+    display: inline-block;    
+    padding: 2px;
+    margin: 0px;
+    width: 100%;
+  }
+
+  .array-input, .array-input:focus, .array-input:active, .array-input:hover {
+    width: 90%;
+    margin-bottom: 4px;
+  }
+
+}

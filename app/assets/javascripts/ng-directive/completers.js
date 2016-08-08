@@ -35,6 +35,39 @@
 
   });
 
+  w.directive("ftsamplecomplete", function() {
+
+    samples_for = function(names,types) {
+      var samples = [];
+      if ( names ) {
+        aq.each(types,function(type) {
+          samples = samples.concat(names[type])
+        });
+      }
+      return samples;
+    }
+
+    return {
+      restrict: 'A',
+      scope: { ftsamplecomplete: '=', ngModel: '='  },
+      link: function($scope,$element,$attributes) {
+
+        var types = aq.collect($scope.ftsamplecomplete.allowable_field_types,function(aft) {
+          return aft.sample_type.name;
+        });
+
+        $element.autocomplete({
+          source: samples_for($scope.$root.sample_names,types),
+          select: function(ev,ui) {
+            $scope.ngModel = ui.item.value;
+            $scope.$apply();
+          }
+        });
+      }
+    }
+
+  });
+
   w.directive("projectcomplete", function() {
 
     return {

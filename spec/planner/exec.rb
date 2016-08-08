@@ -1,5 +1,4 @@
 require "rails_helper"
-require_relative "workflow"
 require_relative "gibson"
 require_relative "runner"
 
@@ -9,7 +8,7 @@ RSpec.describe "Planner" do
 
     it "executes plans" do
 
-      build_workflow
+      # build_workflow
 
       # do some planning
       (1..6).each do |i|
