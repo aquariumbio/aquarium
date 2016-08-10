@@ -37,7 +37,16 @@
         return ot.id == operation.operation_type_id;
       });
       return m[0];
-    }    
+    }  
+
+    $scope.plan = function(ot) {
+      $http.post("/plans/plan",{ ot_id: ot.id, operations: ot.operations }).then(function(response) {
+        $scope.mode = 'view';
+        $scope.plans.unshift(response.data);
+        $scope.current_plan = response.data;
+        $scope.current_plan.current_node = response.data.trees[0];
+      });
+    }      
 
     $scope.select_plan = function(plan) {
 
@@ -48,13 +57,21 @@
         $http.get('/plans/'+plan.id+'.json').then(function(response) {
           var index = $scope.plans.indexOf(plan);
           $scope.plans[index] = response.data;
+          $scope.plans[index].current_node = response.data.trees[0];
           if ( $scope.current_plan.id == response.data.id ) {
             $scope.current_plan = response.data;
           }
-          // console.log(response.data);
         });
       }
 
+    }
+
+    $scope.delete_plan = function(plan) {
+      $http.delete('/plans/'+plan.id).then(function(response) {
+        var index = $scope.plans.indexOf(plan);
+        $scope.plans.splice(index,1);
+        $scope.mode = 'main';
+      });     
     }
 
     $scope.plan_choice_class = function(p) {

@@ -13,8 +13,8 @@
 
         <ul class="plan-list">
           <li ng-repeat="plan in plans">{{plan.id}}.
-            <span ng-repeat="goal in plan.goals" ng-class='plan_choice_class(plan)' ng-click="select_plan(plan)">
-              {{goal.operation_type.name}} ({{goal.created_at|date}})
+            <span ng-class='plan_choice_class(plan)' ng-click="select_plan(plan)">
+              {{plan.goals[0].operation_type.name}} ({{plan.created_at|date}})
             </span>
           </li>
         </ul>

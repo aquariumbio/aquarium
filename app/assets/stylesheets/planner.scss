@@ -58,6 +58,49 @@
     }
   }
 
+  .operation-details {
+    border: 1pt solid #ccc;
+    padding: 10px;
+  }
+
+  .node {
+    font-weight: bold;
+    border: 1pt solid #aaa;
+    border-radius: 3px;
+    padding: 1px 5px 1px 2px;
+    margin: 1px;
+    background: white;
+    cursor: pointer;
+    background: #ffa;
+  }
+
+  .node-selected {
+    border: 1pt solid #444;      
+    box-shadow:0 0 4px #55f;
+  }
+
+  .node-ready {
+    background: #afa;     
+  }
+
+  .node-unplanned {
+    background: #eee;
+    color: #aaa;
+  }
+
+  .node-problem {
+    background: #faa;
+  }
+
+  .available {
+    color: green;
+  }
+
+  .no-plan {
+    font-weight: bold;
+    background: red;
+  }
+
   .plan {
 
     /*border: 1pt solid red;*/
@@ -112,44 +155,6 @@
         margin-bottom: 0;
       }
 
-    }
-
-    .node {
-      font-weight: bold;
-      border: 1pt solid #aaa;
-      border-radius: 3px;
-      padding: 1px 5px 1px 2px;
-      margin: 1px;
-      background: white;
-      cursor: pointer;
-      background: #ffa;
-    }
-
-    .node-selected {
-      border: 1pt solid #444;      
-      box-shadow:0 0 4px #55f;
-    }
-
-    .node-ready {
-      background: #afa;     
-    }
-
-    .node-unplanned {
-      background: #eee;
-      color: #aaa;
-    }
-
-    .node-problem {
-      background: #faa;
-    }
-
-    .available {
-      color: green;
-    }
-
-    .no-plan {
-      font-weight: bold;
-      background: red;
     }
 
   }

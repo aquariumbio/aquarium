@@ -10,8 +10,7 @@
 
   w.controller('buildPlanCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
                        function (  $scope,   $http,   $attrs,   $cookies ) {
-   
-
+    
     $scope.more = function(ot) {
       ot.operations.push({ fvs: {} })
     }
@@ -21,10 +20,6 @@
       if (index > -1) {
         ot.operations.splice(index, 1);
       }      
-    }
-
-    $scope.select_node = function(ot,node) {
-      ot.current = node;
     }
 
     $scope.add_to_array = function(fvs,name) {

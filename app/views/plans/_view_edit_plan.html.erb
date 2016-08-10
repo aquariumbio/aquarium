@@ -1,9 +1,9 @@
 
 <script type="text/ng-template" id="plan">
 
-    <span ng-class='node_class(selection,node)'
+    <span ng-class='node_class(current_plan,node)'
 
-      <a href="#" ng-click='select_node(selection,node)'>
+      <a href="#" ng-click='select_node(current_plan,node)'>
         {{operation_type(node).name}}
       </a>
 
@@ -20,30 +20,55 @@
           <li ng-repeat="p in input.predecessors" ng-include="'plan'" ng-init="node=p.operation"></li>
         </ul>
         <span ng-if="input.issue" class="no-plan">&nbsp;NO PLAN&nbsp;</span>
+        <span ng-if="input.missing" class="no-plan">&nbsp;MISSING INPUT&nbsp;</span>        
       </li>
     </ul>
 
 </script>
+
+
 
 <script type="text/ng-template" id="operation">
 
-  <h4>{{operation_type(op).name}}</h4>
+  <h4 ng-class='node_class(current_plan,current_plan.current_node)'>{{operation_type(op).name}}</h4>
+
+  <br />
+
+  <span ng-if="current_plan.current_node.ready && (current_plan.current_node.status != 'unplanned')">
+    This operation is ready to be run.
+  </span>
+
+  <span ng-if="current_plan.current_node.status == 'unplanned'">
+    This operation was found by the planner, but has not been chosen as part of the final plan.
+  </span>
+
+  <span ng-if="current_plan.current_node.problem">
+    This operation needs to be edited and replanned because one or more inputs could not be determined.
+  </span>
+
+  <span ng-if="!current_plan.current_node.ready && current_plan.current_node.status != 'unplanned' && !current_plan.current_node.problem">
+    This operation is waiting for its predecessors to complete.
+  </span>
 
   <h5>Inputs</h5>
-    <ul>
-      <li ng-repeat="fv in op.field_values | filter: { role: 'input' }">
-        {{fv.name}}: {{fv.child_sample.name}}
-      </li>
-    </ul>
+
+  <ul>
+    <li ng-repeat="fv in op.field_values | filter: { role: 'input' }">
+      {{fv.name}}: {{fv.child_sample.name}}
+    </li>
+  </ul>
 
   <h5>Outputs</h5>
-    <ul>
-      <li ng-repeat="fv in op.field_values | filter: { role: 'output' }">
-        {{fv.name}}: {{fv.child_sample.name}}
-      </li>
-    </ul>  
+
+  <ul>
+    <li ng-repeat="fv in op.field_values | filter: { role: 'output' }">
+      {{fv.name}}: {{fv.child_sample.name}}
+    </li>
+  </ul>  
 
 </script>
+
+
 
 <div ng-if="mode=='view'" ng-controller="viewEditPlanCtrl">
 
@@ -55,33 +80,42 @@
         </span>
       </h4>
       <p>
-        Created on {{current_plan.created_at|date}}<br />
-        Status: TODO: PUT STATUS HERE
+        Created on {{current_plan.created_at|date}}
       </p>
     </div>
     <div class='span6'>
-      <button ng-click='cancel(selection)' class='btn pull-right space'>Cancel</button> 
-      <button ng-click='replan(selection)' class='btn pull-right space'>Replan</button>        
-      <button ng-click='launch(selection)' class='btn btn-primary pull-right space'>Launch</button>        
+      <button ng-click='delete_plan(current_plan)' 
+              class='btn pull-right space'>
+        Delete
+      </button> 
+      <button ng-click='launch(current_plan)' 
+              ng-if="current_plan.issues.length == 0"
+              class='btn btn-primary pull-right space'>
+        Launch
+      </button>        
     </div>
   </div> 
  
   <div class='row-fluid'>
 
-    <div class='span5 plan'>
-      <h4>Plan</h4>
+    <div class='span5' ng-if="current_plan.trees">
       <ul>
         <li ng-repeat="issue in current_plan.issues">Operation {{issue.id}}: {{issue.msg}}</li>
       </ul>
-      <ul>
-        <li ng-repeat="node in current_plan.trees" ng-include="'plan'"></li>
-      </ul>
+      <div class='plan'>
+        <ul>
+          <li ng-repeat="node in current_plan.trees" ng-include="'plan'"></li>
+        </ul>
+      </div>
     </div>
 
+    <div class='span5 plan' ng-if="!current_plan.trees">
+      <p>Loading plan ...</p>
+    </div>    
+
     <div class='span7'>
-      <div ng-repeat="op in current_plan.operations" ng-show="current_plan.current.id == op.id">
-        <div ng-include="'operation'"></div>
-        <!-- <pre>{{op|json}}</pre> -->
+      <div ng-repeat="op in current_plan.operations" ng-show="current_plan.current_node.id == op.id">
+        <div ng-include="'operation'" class="operation-details"></div>
       </div>
     </div>
 

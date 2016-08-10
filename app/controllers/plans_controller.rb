@@ -9,11 +9,15 @@ class PlansController < ApplicationController
   def manager
     respond_to do |format|
       format.html { render layout: 'browser' }
-    end    [[]]
+    end    
   end
 
   def sid str
-    str.split(':')[0]
+    if str
+      str.split(':')[0]
+    else
+      0
+    end
   end
 
   def value data
@@ -21,7 +25,7 @@ class PlansController < ApplicationController
     if data.class == Array
       data.collect { |str| Sample.find(sid(str)) }
     else
-      Sample.find(sid(data))
+      Sample.find_by_id(sid(data))
     end
 
   end
@@ -47,23 +51,24 @@ class PlansController < ApplicationController
 
     planner = Planner.new OperationType.all
     planner.plan_trees operations   
-
-    render json: Planer.plan.serialize
-
-    # render json: {
-    #   trees: operations.collect { |op| op.serialize },
-    #   plan: Plan.find(planner.plan.id).as_json(include: { operations: { methods: :field_values } } ),
-    #   issues: operations.collect { |op| op.issues }.flatten
-    # }
+    planner.plan.reload
+    render json: planner.plan.serialize
 
   end
 
   def index
 
     respond_to do |format|
-      format.json { render json: Plan.where(user_id: current_user.id).as_json(methods: :goals) }
+      format.json { render json: Plan.where(user_id: current_user.id).reverse.as_json(methods: :goals) }
       format.html { render layout: 'browser' }
     end  
+
+  end
+
+  def destroy
+
+    Plan.find(params[:id]).remove
+    render json: {}
 
   end
 

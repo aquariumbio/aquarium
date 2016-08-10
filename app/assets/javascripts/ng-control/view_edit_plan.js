@@ -12,20 +12,9 @@
                        function (  $scope,   $http,   $attrs,   $cookies ) {
 
 
-    $scope.plan = function(ot) {
-      // ot.mode = 'waiting';
-      $http.post("/operations/plan",{ ot_id: ot.id, operations: ot.operations }).then(function(response) {
-        ot.plan = response.data.plan;
-        ot.trees = response.data.trees;
-        ot.current = response.data.trees[0];
-        ot.issues = response.data.issues;
-        ot.mode = 'plan';
-      });
-    }
-
-    $scope.node_class = function(ot,node) {
+    $scope.node_class = function(plan,node) {
       var c = "node";
-      if ( ot.current == node ) {
+      if ( plan.current_node == node ) {
         c += " node-selected";
       } 
       if ( node.ready ) {
@@ -39,6 +28,10 @@
       }
       return c;
     }
+
+    $scope.select_node = function(plan,node) {
+      plan.current_node = node;
+    }    
 
   }]);
 

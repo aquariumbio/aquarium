@@ -5,7 +5,8 @@ module FieldValuer
   end
 
   def field_values
-    FieldValue.includes(:child_sample).where(parent_class: self.class.to_s, parent_id: self.id)
+    FieldValue.includes(:child_sample, wires_as_dest: :to, wires_as_source: :from)
+              .where(parent_class: self.class.to_s, parent_id: self.id)
   end
 
   def set_property_aux ft, fv, val

@@ -128,10 +128,50 @@ module OperationPlanner
     end
 
   end  
-
+  
   def serialize override_status=nil
 
     problem = false
+    input_list = []
+
+    operation_type.inputs.each do |ot_input|
+
+      op_inputs = inputs.select { |i| i.name == ot_input.name }
+
+      if op_inputs.length > 0 
+
+        op_inputs.each do |i| 
+
+          sat = i.satisfied_by_environment
+          preds = i.predecessors
+          os = override_status if (override_status)
+          os = status if (!override_status && status == "unplanned")
+          problem = problem || ( !sat && preds.length == 0 )
+
+          input_list << {
+            name: i.name,
+            satisfied: sat,
+            issue: !sat && preds.length == 0,
+            predecessors: preds.reject { |p| p.operation.status == "unplanned" }.collect { |p|
+              {
+                id: p.id,
+                name: p.name,
+                operation: p.operation.serialize(os)
+              }
+            }
+          }
+
+        end
+
+      else
+        problem = true
+        input_list << { 
+          name: ot_input.name,
+          missing: true
+        }
+      end
+
+    end
 
     {
 
@@ -139,35 +179,12 @@ module OperationPlanner
       operation_type_id: operation_type_id,
       status: override_status ? override_status : status,
       ready: ready?,
-
-      inputs: inputs.collect { |i| 
-
-        sat = i.satisfied_by_environment
-        preds = i.predecessors
-        os = override_status if (override_status)
-        os = status if (!override_status && status == "unplanned")
-        problem = !sat && preds.length == 0
-
-        {
-          name: i.name,
-          satisfied: sat,
-          issue: !sat && preds.length == 0,
-          predecessors: preds.collect { |p|
-            {
-              id: p.id,
-              name: p.name,
-              operation: p.operation.serialize(os)
-            }
-          }
-        }
-
-      },
-
+      inputs: input_list,
       problem: problem
 
     }
 
-  end
+  end  
 
 end
 
