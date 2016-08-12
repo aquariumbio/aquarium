@@ -5,8 +5,24 @@ class Plan < ActiveRecord::Base
   has_many :plan_associations
   has_many :operations, through: :plan_associations
 
+  def start
+    gs = goals_plain
+    issues = gs.collect { |g| g.issues }.flatten
+    if issues.empty?
+      gs.each do |goal|
+        goal.recurse do |op|
+          op.user_id = user_id
+          if op.status == "planning"
+            op.status = op.leaf? ? "pending" : "waiting"
+          end
+          op.save            
+        end
+      end
+    end
+  end
+
   def goals_plain
-    # TODO: Make this faster. Note, fvs doesn't work, so will probably need to be some kind of SQL query.
+    # TODO: Make this faster. 
     operations.select { |op| op.successors.length == 0 }
   end
 

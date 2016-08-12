@@ -16,6 +16,17 @@ User.prototype.init_aux = function(users,current) {
   this.logins  = User.prototype.logins;
 }
 
+User.prototype.find = function(id) {
+  var matches = aq.where(this.all,function(u) {
+    return u.id == id;
+  });
+  if ( matches.length > 0 ) {
+    return matches[0];
+  } else {
+    return null;
+  }
+}
+
 User.prototype.init = function(promise) {
 
   var user = this;

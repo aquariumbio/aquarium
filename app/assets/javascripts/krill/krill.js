@@ -232,6 +232,18 @@ Krill.prototype.pending_link = function() {
 
 }
 
+Krill.prototype.operations_link = function() { 
+
+    var that = this;
+
+    var btn = $('<button>Operations</button>').addClass('btn').click(function(){
+        window.location = '/operations';
+    });
+
+    return $('<li \>').append(btn).addClass('krill-note');
+
+}
+
 Krill.prototype.step = function(state,number) {    
 
     var container = $('<div></div>').addClass('krill-step');
@@ -281,7 +293,7 @@ Krill.prototype.step = function(state,number) {
             ul.append($('<li>'+line_info+'</li>').addClass('krill-note'));
         });
 
-        ul.append(this.log_link(),this.pending_link());
+        ul.append(this.log_link(),this.pending_link(),operations_link());
         container.append(titlebar,ul);
 
     } else {
@@ -308,7 +320,7 @@ Krill.prototype.step = function(state,number) {
 
 
         ul.append(p);
-        ul.append(this.log_link(),this.pending_link());
+        ul.append(this.log_link(),this.pending_link(),this.operations_link());
 
         container.append(titlebar,ul);
 

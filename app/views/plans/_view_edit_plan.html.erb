@@ -8,7 +8,6 @@
       </a>
 
       <span ng-if="node.ready">(ready)</span>
-
       <span ng-if="node.problem">(problem)</span>      
 
     </span>
@@ -16,7 +15,7 @@
     <ul>
       <li ng-repeat="input in node.inputs">
         {{input.name}}<span ng-if="input.satisfied" class='available'>: available</span>
-        <ul ng-if="!input.satisfied && input.predecessors.length > 0">
+        <ul ng-if="input.predecessors.length > 0">
           <li ng-repeat="p in input.predecessors" ng-include="'plan'" ng-init="node=p.operation"></li>
         </ul>
         <span ng-if="input.issue" class="no-plan">&nbsp;NO PLAN&nbsp;</span>
@@ -27,10 +26,9 @@
 </script>
 
 
-
 <script type="text/ng-template" id="operation">
 
-  <h4 ng-class='node_class(current_plan,current_plan.current_node)'>{{operation_type(op).name}}</h4>
+  <h4 ng-class='node_class(current_plan,current_plan.current_node)'>{{operation_type(op).name}} : {{op.status}}</h4>
 
   <br />
 
@@ -69,7 +67,6 @@
 </script>
 
 
-
 <div ng-if="mode=='view'" ng-controller="viewEditPlanCtrl">
 
   <div class='row-fluid'>
@@ -89,10 +86,16 @@
         Delete
       </button> 
       <button ng-click='launch(current_plan)' 
-              ng-if="current_plan.issues.length == 0"
-              class='btn btn-primary pull-right space'>
-        Launch
-      </button>        
+              ng-if="current_plan.issues.length == 0 && current_plan.launch_mode != 'Stop'"
+              class='btn btn-primary pull-right space'
+              ng-disabled="current_plan.launch_mode == 'Launching'">
+        {{current_plan.launch_mode}}
+      </button>       
+      <button ng-click='stop(current_plan)' 
+              ng-if="current_plan.issues.length == 0 && current_plan.launch_mode == 'Stop'"
+              class='btn btn-warning pull-right space'>
+        {{current_plan.launch_mode}}
+      </button>          
     </div>
   </div> 
  
@@ -120,6 +123,11 @@
     </div>
 
   </div>
+
+  <!--
+    <pre>{{current_plan.trees|json}}</pre>
+    <pre>{{current_plan.operations|json}}</pre>
+  -->
 
 </div>
 

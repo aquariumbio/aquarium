@@ -103,9 +103,6 @@ class KrillController < ApplicationController
           backtrace: [])
       end
 
-      # tell manta we're starting a protocol
-      Manta::start @job, current_user, request, cookies, self
-
     end
 
     # redirect to ui
@@ -137,7 +134,7 @@ class KrillController < ApplicationController
     else
 
       @job = Job.find(params[:job])
-      @job.pc = Job.COMPLETED
+      @job.stop "error"
 
       state = JSON.parse @job.state, symbolize_names: true
       if state.length % 2 == 1 # backtrace ends with a 'next'
@@ -149,9 +146,6 @@ class KrillController < ApplicationController
       # add next and final
       @job.append_step operation: "next", time: Time.now, inputs: {}
       @job.append_step operation: "aborted", rval: {}
-
-      # tell manta we're done
-      # Manta::stop @job, request, 'true', self
 
       logger.info "ABORTING KRILL JOB #{@job.id}"
 
@@ -203,9 +197,6 @@ class KrillController < ApplicationController
       end
 
       if result[:response] == "done"
-
-        # tell manta we're done
-        # Manta::stop @job, request, (@exception ? 'true' : 'false'), self
 
         # step the job's workflow
         @job.reload.step_workflow

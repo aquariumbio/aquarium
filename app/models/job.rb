@@ -1,5 +1,7 @@
 class Job < ActiveRecord::Base
 
+  include JobOperations
+
   attr_accessible :arguments, :sha, :state, :user_id, :pc, :submitted_by, :group_id, :desired_start_time, :latest_start_time, :metacol_id
 
   def self.NOT_STARTED
@@ -19,6 +21,7 @@ class Job < ActiveRecord::Base
   belongs_to :group
   has_many :post_associations
   belongs_to :workflow_process
+  has_many :operations
 
   def self.params_to_time p
 

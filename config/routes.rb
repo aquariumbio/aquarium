@@ -2,8 +2,13 @@ Bioturk::Application.routes.draw do
 
   resources :operation_types
 
-  post '/plans/plan',                           to: 'plans#plan'  
+  get '/plans/start/:id',                        to: 'plans#start'
+  post '/plans/plan',                            to: 'plans#plan'  
   resources :plans
+
+  post '/operations/batch',                      to: 'operations#batch'
+  get '/operations/jobs',                        to: 'operations#jobs'
+  resources :operations
 
   get '/developer',                              to: 'developer#developer'
   post '/developer/get/',                        to: 'developer#get'  

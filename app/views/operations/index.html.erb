@@ -1,0 +1,132 @@
+
+<script type="text/ng-template" id="operation_list">
+
+
+</script>
+
+
+<div ng-app="aquarium" ng-controller="operationsCtrl as planner" class='operations'>
+
+  <div class='two-column' ng-if="operation_types.length > 0">
+
+    <div class='two-column-left'>
+
+      <div class="two-column-control">
+
+        <table class='table table-condensed'>
+          <tr>
+            <th></th>
+            <th>P</th>
+            <th>S</th>
+            <th>R</th>
+          </tr>
+          <tr ng-repeat="ot in operation_types" ng-click="choose(ot)">
+            <td ng-class="op_type_class(ot)">{{ot.name}}</td>
+            <td ng-class="number_class(ot,'pending')">   {{number(ot,"pending")}}   </td>
+            <td ng-class="number_class(ot,'scheduled')"> {{number(ot,"scheduled")}} </td>
+            <td ng-class="number_class(ot,'running')">   {{number(ot,"running")}}   </td>
+          </tr>
+        </table>
+
+      </div>
+
+    </div>
+ 
+    <div class='two-column-right'> 
+
+      <div class='info'>
+
+        <h2>Operation: {{current_ot.name}}</h2>
+
+        <div ng-show='number(ot,"pending") > 0'>
+
+          <h4>Pending Operations</h4>
+
+          <div class='pull-right launch-buttons'>
+            <a href="#" class='btn btn-mini btn-primary' ng-click="batch(current_ot)">Batch</a>
+            <a href="#" class='btn btn-mini' ng-click="select(current_ot,true)">All</a>
+            <a href="#" class='btn btn-mini' ng-click="select(current_ot,false)">None</a>
+          </div>
+
+          <table class='table table-fixed'>
+            <tr ng-repeat="op in operations | filter: { operation_type_id: current_ot.id, status: 'pending'}">
+              <td><input type='checkbox' ng-model='op.selected'></input></td>
+              <td>{{user.find(op.user_id).name}}</td>
+              <td>
+                <ul class='input-list'>
+                  <li ng-repeat="fv in op.field_values | filter: { role: 'output' }">
+                    {{fv.name}}: {{fv.child_sample.name}}
+                  </li>
+                </ul>              
+              </td>         
+              <td>{{op.created_at|date}}</td>
+            </tr>
+          </table>
+
+        </div>
+
+
+        <div ng-show='number(ot,"scheduled") > 0'>
+
+          <h4>Scheduled Jobs</h4>
+
+          <table class='table table-fixed'>
+
+            <tr ng-repeat="job in jobs.pending | filter: jobs_for_current_ot">
+              <td><a href="/jobs/{{job.id}}">{{job.id}}</td>
+              <td>{{user.find(job.submitted_by).name}}</td>
+              <td>
+                <ul class='op-list'>
+                  <li ng-repeat="op in operations | filter: { operation_type_id: current_ot.id, job_id: job.id, status: 'scheduled' }">
+                    <span ng-repeat="fv in op.field_values | filter: { role: 'output' }">
+                      <a href="/samples/{{fv.child_sample.id}}"/>{{fv.child_sample.name}}</a>
+                    </span> for {{user.find(op.user_id).name}}
+                  </li>
+                </ul>
+              </td>
+              <td>{{job.created_at|date}}</td>    
+              <td><a href="/krill/start?job={{job.id}}"><i class="icon-play"></i></a></td>
+            <tr>
+
+          </table>
+
+        </div>
+
+
+        <div ng-show='number(ot,"running") > 0'>
+
+          <h4>Running Jobs</h4>
+
+          <table class='table table-fixed'>
+
+            <tr ng-repeat="job in jobs.running | filter: jobs_for_current_ot">
+              <td><a href="/jobs/{{job.id}}">{{job.id}}</td>
+              <td>{{user.find(job.submitted_by).name}}</td>
+              <td>{{user.find(job.user_id).name}}</td>
+              <td>
+                <ul class='op-list'>
+                  <li ng-repeat="op in operations | filter: { operation_type_id: current_ot.id, job_id: job.id, status: 'running' }">
+                    <span ng-repeat="fv in op.field_values | filter: { role: 'output' }">
+                      <a href="/samples/{{fv.child_sample.id}}"/>{{fv.child_sample.name}}</a>
+                    </span> for {{user.find(op.user_id).name}}
+                  </li>
+                </ul>
+              </td>
+              <td>{{job.created_at|date}}</td>    
+            <tr>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div ng-if="operation_types.length == 0">
+    Loading...
+  </div>
+
+</div>

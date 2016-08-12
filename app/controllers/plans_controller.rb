@@ -20,18 +20,23 @@ class PlansController < ApplicationController
     end
   end
 
+  def show
+    render json: Plan.find(params[:id]).serialize
+  end
+
+  def start
+    p = Plan.find(params[:id])
+    p.start
+    p.reload
+    render json: p.serialize
+  end
+
   def value data
- 
-    if data.class == Array
+     if data.class == Array
       data.collect { |str| Sample.find(sid(str)) }
     else
       Sample.find_by_id(sid(data))
     end
-
-  end
-
-  def show
-    render json: Plan.find(params[:id]).serialize
   end
 
   def plan

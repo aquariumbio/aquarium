@@ -1,3 +1,39 @@
-// Place all the styles related to the Operation controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.operations {
+
+  .op-type {
+
+  }
+  .op-type-selected {
+    font-weight: bold;
+  }
+  .op-type-none {
+    color: #ccc;
+  }  
+
+  .input-list {
+    list-style: none;
+  }
+
+  .ot-list {
+    list-style: none;
+  }
+
+  .launch-buttons {
+    margin-bottom: 5px;
+  }
+
+  .info {
+    padding-left: 20px;
+  }
+
+  .number-none {
+    color: #eee;
+  }
+
+  .number-some {
+    color: black;
+    font-weight: bold;
+  }
+
+}

@@ -39,12 +39,36 @@
       return m[0];
     }  
 
+    function determine_launch_mode(plan) {
+      var op = plan.operations[0];
+      if ( op.status == 'planning' ) {
+        plan.launch_mode = 'Launch';
+      } else {
+        plan.launch_mode = "Stop";
+      }      
+    }
+
+    $scope.launch = function(plan) {
+      plan.launch_mode = "Launching";
+      $http.get("/plans/start/" + plan.id).then(function(response) {
+        var index = $scope.plans.indexOf(plan);
+        $scope.plans[index] = response.data;
+        $scope.plans[index].current_node = response.data.trees[0];
+        if ( $scope.current_plan.id == response.data.id ) {
+          $scope.current_plan = response.data;
+        }
+        determine_launch_mode($scope.current_plan);
+      });
+    }
+
     $scope.plan = function(ot) {
       $http.post("/plans/plan",{ ot_id: ot.id, operations: ot.operations }).then(function(response) {
         $scope.mode = 'view';
         $scope.plans.unshift(response.data);
         $scope.current_plan = response.data;
         $scope.current_plan.current_node = response.data.trees[0];
+        var op = response.data.operations[0];
+        determine_launch_mode($scope.current_plan);
       });
     }      
 
@@ -61,6 +85,7 @@
           if ( $scope.current_plan.id == response.data.id ) {
             $scope.current_plan = response.data;
           }
+          determine_launch_mode($scope.current_plan);
         });
       }
 

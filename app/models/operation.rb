@@ -101,5 +101,17 @@ class Operation < ActiveRecord::Base
 
   end
 
+  def self.step 
+
+    Operation.where(status: "waiting").each do |op|
+      if op.ready?
+        Rails.logger.info "  Changing operation #{op.id}'s status to pending!"
+        op.status = "pending"
+        op.save
+      end
+    end
+
+  end 
+
 end
 

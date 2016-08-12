@@ -50,8 +50,7 @@ module Krill
 
         begin
 
-          @job.reload.pc = 0          # what if this fails?
-          @job.save                   # what if this fails?
+          @job.start          # what if this fails?
           appended_complete = false
 
           begin
@@ -70,9 +69,10 @@ module Krill
 
           ensure
 
-            @job.reload.pc = Job.COMPLETED # what if this fails?
-
-            unless appended_complete
+            if appended_complete
+              @job.stop
+            else 
+              @job.stop "error"
               @job.append_step operation: "next", time: Time.now, inputs: {}
               @job.append_step operation: "aborted", rval: {}
             end
@@ -104,8 +104,7 @@ module Krill
 
       begin
 
-        @job.reload.pc = 0          # what if this fails?
-        @job.save                   # what if this fails?
+        @job.start          # what if this fails?
         appended_complete = false
 
         begin
@@ -124,9 +123,10 @@ module Krill
 
         ensure
 
-          @job.reload.pc = Job.COMPLETED # what if this fails?
-
-          unless appended_complete
+          if appended_complete
+            @job.stop # what if this fails?
+          else
+            @job.stop "error"
             @job.append_step operation: "next", time: Time.now, inputs: {}
             @job.append_step operation: "aborted", rval: {}
           end
