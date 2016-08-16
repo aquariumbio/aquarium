@@ -4,7 +4,6 @@ class Planner < ActiveRecord::Migration
 
     create_table :operation_types do |t|
       t.string :name
-      t.string :protocol
       t.timestamps      
     end
 
@@ -52,6 +51,15 @@ class Planner < ActiveRecord::Migration
 
     add_index :plan_associations, :plan_id
     add_index :plan_associations, :operation_id
+
+    create_table :codes do |t|
+      t.string :name
+      t.text :content
+      t.integer :parent_id
+      t.string :parent_class
+      t.integer :child_id
+      t.timestamps
+    end
 
   end
 

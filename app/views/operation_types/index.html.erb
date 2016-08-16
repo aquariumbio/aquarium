@@ -12,7 +12,10 @@
         <ul class='op-type-list'>
           <li ng-repeat="ot in operation_types" ng-click="choose(ot)" ng-class="ot_class(ot)">{{ot.name}}</li>
           <li><br /></li>
-          <li><button class='btn btn-mini btn-primary' ng-click="new_operation_type()">New</button></li>
+          <li>
+            <button class='btn btn-mini btn-primary' ng-click="new_operation_type()">New</button>
+            <button class='btn btn-mini' ng-click="copy_operation_type()">Copy</button>
+          </li>
         </ul>
 
       </div>
@@ -27,16 +30,22 @@
         <li ng-class="tab('cost')"><a href="#" ng-click="set_mode('cost')">Cost</a></li>
         <li ng-class="tab('documentation')"><a href="#" ng-click="set_mode('documentation')">Documentation</a></li>
         <li ng-class="tab('test')"><a href="#" ng-click="set_mode('test')">Test</a></li>
-      </ul>      
+      </ul> 
 
-      <%= render partial: 'definition' %>
-      <%= render partial: 'protocol' %>
-      <%= render partial: 'cost' %>
-      <%= render partial: 'documentation' %>      
-      <%= render partial: 'test' %>
+      <div class="ot-part-container">
+        <%= render partial: 'definition' %>
+        <%= render partial: 'protocol' %>
+        <%= render partial: 'cost' %>
+        <%= render partial: 'documentation' %>      
+        <%= render partial: 'test' %>
+      </div>
 
     </div>
 
   </div>
 
 </div>
+
+<script>
+  
+</script>

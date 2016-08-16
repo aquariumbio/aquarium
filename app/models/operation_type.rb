@@ -2,6 +2,7 @@ class OperationType < ActiveRecord::Base
 
   include FieldTyper
   include OperationTypePlanner
+  include CodeHelper
 
   has_many :operations
   # has_many :fts, foreign_key: "parent_id", class_name: "FieldType"
@@ -61,6 +62,18 @@ class OperationType < ActiveRecord::Base
 
     job
 
+  end
+
+  def protocol
+    self.code "protocol"
+  end
+
+  def cost_model
+    self.code "cost_model"
+  end
+
+  def documentation
+    self.code "documentation"
   end
 
 end

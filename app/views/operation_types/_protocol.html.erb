@@ -1,3 +1,19 @@
-<div ng-show="mode == 'protocol'">
-  _protocol.html.erb
+<div ng-if="current_ot.protocol && mode == 'protocol'" ng-controller="codeCtrl as code">
+
+  <div ng-model="current_ot.protocol.content"
+       ui-ace="{
+                 useWrapMode : true,
+                 mode: 'ruby',
+                 onLoad: aceLoaded,
+                 onChange: aceChanged,
+                 theme:'tomorrow'
+               }">
+  </div>
+
+  <div class='code-controls'>
+    <a href='#' class='btn' ng-click="save(current_ot,'protocol')">Save</a>
+    <a href='#' class='btn'>Test</a>    
+    <a href='#' class='btn'>Revert</a>        
+  </div>
+
 </div>

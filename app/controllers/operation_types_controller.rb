@@ -3,7 +3,7 @@ class OperationTypesController < ApplicationController
   def index
 
     respond_to do |format|
-      format.json { render json: OperationType.all.as_json(methods: :field_types) }
+      format.json { render json: OperationType.all.as_json(methods: [:field_types, :protocol, :cost_model, :documentation]) }
       format.html { render layout: 'browser' }
     end    
     
@@ -30,8 +30,32 @@ class OperationTypesController < ApplicationController
 
     ot = OperationType.new name: params[:name]
     ot.save
-    add_field_types ot, params[:field_types]
-    render json: ot.as_json(methods: :field_types)
+    add_field_types ot, params[:field_types]     
+
+    ["protocol", "cost_model", "documentation"].each do |name|
+      ot.new_code(name, params[name]["content"])
+    end
+
+    render json: ot.as_json(methods: [:field_types, :protocol, :cost_model, :documentation])
+
+  end
+
+  def code
+
+    ot = OperationType.find(params[:id])
+
+    c = ot.code(params[:name])
+    
+    if c
+      logger.info "Found code: #{c.inspect}"
+      c = c.commit(params[:content])
+    else
+      logger.info "Making new code"      
+      c = ot.new_code(params[:name], params[:content])
+      logger.info "  ==> New code: #{c.inspect}"      
+    end
+
+    render json: c
 
   end
 
@@ -47,7 +71,7 @@ class OperationTypesController < ApplicationController
 
     add_field_types ot, params[:field_types]
 
-    render json: ot.as_json(methods: :field_types)
+    render json: ot.as_json(methods: [:field_types, :protocol, :cost_model, :documentation])
 
   end
 

@@ -60,4 +60,34 @@
     width: 100%;
   }
 
+  .ot-part-container {
+    /*position: relative;*/
+  }
+
+  .ace_editor {
+    position: absolute;
+    right: 10px;
+    left: 0;
+    bottom: 45px;
+    top: 48px;
+    resize: none;
+    font-weight: bold;
+    background: transparent;
+    overflow: auto;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;   
+  }
+
+  .code-controls {
+    height: 30px;
+    margin: 0;
+    border: 1pt solide #bbb;
+    position: absolute;
+    right: 10px;
+    left: 0;
+    bottom: 10px;
+    text-align: right;
+  }
+
 }

@@ -53,58 +53,35 @@
       return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    // Save
-
     $scope.save_ot = function(ot) {
       if ( confirm ( "Are you sure you want to save this operation type definition?" ) ) {
         if ( ot.id ) {
           $http.put("/operation_types/" + ot.id,ot).then(function(response) {
             var i = $scope.operation_types.indexOf(ot);
             $scope.operation_types[i] = response.data;
+            $scope.current_ot = response.data;
           });          
         } else {
           $http.post("/operation_types",ot).then(function(response) {
             var i = $scope.operation_types.indexOf(ot);
             $scope.operation_types[i] = response.data;            
+            $scope.current_ot = response.data;            
           });
         }
       }
     }
 
-    // Edit operation types
-
     $scope.new_operation_type = function() {
       var new_ot = {
         name: "New Operation Type",
-        field_types:[]
+        field_types:[],
+        protocol: { name: 'protocol', content: 'class Protocol\n  def main\n    {}\n  end\nend'},
+        cost_model: { name: 'cost_model', content: 'def cost(op)\n  { labor: 0, materials: 0 }\nend' },
+        documentation: { name: 'documentation', content: "New Operation Type\n===\n\nDocumentation here"}
       };
       $scope.operation_types.push(new_ot);
       $scope.current_ot = new_ot;
     }
-
-    $scope.add_io = function(role) {
-      $scope.current_ot.field_types.push({
-        role: role,
-        name: "New " + role,
-        allowable_field_types: []
-      })
-    }
-
-    $scope.add_aft = function(io) {
-      io.allowable_field_types.push({
-        sample_type: { name: "" },
-        object_type: { name: "" }
-      });
-    }
-
-    $scope.remove_io = function(io) {
-      aq.remove($scope.current_ot.field_types,io);
-    }
-
-    $scope.remove_aft = function(io,aft) {
-      aq.remove(io.allowable_field_types,aft);
-    }
-
 
   }]);
 

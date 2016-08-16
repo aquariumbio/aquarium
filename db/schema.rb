@@ -86,6 +86,16 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "codes", :force => true do |t|
+    t.string   "name"
+    t.text     "content"
+    t.integer  "parent_id"
+    t.string   "parent_class"
+    t.integer  "child_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
   create_table "data_associations", :force => true do |t|
     t.integer  "parent_id"
     t.string   "parent_class"
@@ -238,7 +248,6 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
 
   create_table "operation_types", :force => true do |t|
     t.string   "name"
-    t.string   "protocol"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
