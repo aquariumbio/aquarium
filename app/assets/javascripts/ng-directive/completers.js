@@ -86,4 +86,40 @@
 
   });  
 
+  w.directive("sampletypecomplete", function() {
+
+    return {
+      restrict: 'A',
+      scope: { ngModel: '=' },
+      link: function($scope,$element,$attributes) {
+        $element.autocomplete({
+          source: aq.collect($scope.$parent.sample_types,function(p) { return p.name; }),
+          select: function(ev,ui) {
+            $scope.ngModel = ui.item.value;
+            $scope.$apply();
+          }
+        });
+      }
+    }
+
+  });   
+
+  w.directive("objecttypecomplete", function() {
+
+    return {
+      restrict: 'A',
+      scope: { ngModel: '=' },
+      link: function($scope,$element,$attributes) {
+        $element.autocomplete({
+          source: aq.collect($scope.$parent.object_types,function(p) { return p.name; }),
+          select: function(ev,ui) {
+            $scope.ngModel = ui.item.value;
+            $scope.$apply();
+          }
+        });
+      }
+    }
+
+  });   
+
 })();

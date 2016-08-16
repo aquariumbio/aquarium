@@ -1,10 +1,4 @@
 
-<script type="text/ng-template" id="operation_list">
-
-
-</script>
-
-
 <div ng-app="aquarium" ng-controller="operationsCtrl as planner" class='operations'>
 
   <div class='two-column' ng-if="operation_types.length > 0">
@@ -38,7 +32,7 @@
 
         <h2>Operation: {{current_ot.name}}</h2>
 
-        <div ng-show='number(ot,"pending") > 0'>
+        <div ng-show='number(current_ot,"pending") > 0'>
 
           <h4>Pending Operations</h4>
 
@@ -66,7 +60,7 @@
         </div>
 
 
-        <div ng-show='number(ot,"scheduled") > 0'>
+        <div ng-show='number(current_ot,"scheduled") > 0'>
 
           <h4>Scheduled Jobs</h4>
 
@@ -93,7 +87,7 @@
         </div>
 
 
-        <div ng-show='number(ot,"running") > 0'>
+        <div ng-show='number(current_ot,"running") > 0'>
 
           <h4>Running Jobs</h4>
 

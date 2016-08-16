@@ -66,7 +66,7 @@
 
     $scope.select = function(ot,val) {
       aq.each($scope.operations, function(op) {
-        if ( op.operation_type_id == ot.id ) {
+        if ( op.operation_type_id == ot.id && op.status == "pending" ) {
           op.selected = val;
         }
       });
@@ -78,7 +78,10 @@
         return op.operation_type_id == ot.id && op.selected;
       });
 
-      var op_ids = aq.collect(ops,function(op) { return op.id; } );
+      var op_ids = aq.collect(ops,function(op) { 
+        op.selected = false;
+        return op.id; 
+      });
 
       $http.post("/operations/batch", { operation_ids: op_ids }).then(function(response) {
         $scope.jobs = response.data.jobs;

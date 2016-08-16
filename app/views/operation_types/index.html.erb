@@ -1,0 +1,42 @@
+
+<div ng-app="aquarium" ng-controller="operationTypesCtrl as planner" class='operation_types'>
+
+  <div class='two-column' ng-if="operation_types.length > 0">
+
+    <%= render partial: 'io_form' %>
+
+    <div class='two-column-left'>
+
+      <div class="two-column-control">
+
+        <ul class='op-type-list'>
+          <li ng-repeat="ot in operation_types" ng-click="choose(ot)" ng-class="ot_class(ot)">{{ot.name}}</li>
+          <li><br /></li>
+          <li><button class='btn btn-mini btn-primary' ng-click="new_operation_type()">New</button></li>
+        </ul>
+
+      </div>
+
+    </div>
+ 
+    <div class='two-column-right'> 
+
+      <ul class="nav nav-tabs">
+        <li ng-class="tab('definition')"><a href="#" ng-click="set_mode('definition')">Definition</a></li>
+        <li ng-class="tab('protocol')"><a href="#" ng-click="set_mode('protocol')">Protocol</a></li>
+        <li ng-class="tab('cost')"><a href="#" ng-click="set_mode('cost')">Cost</a></li>
+        <li ng-class="tab('documentation')"><a href="#" ng-click="set_mode('documentation')">Documentation</a></li>
+        <li ng-class="tab('test')"><a href="#" ng-click="set_mode('test')">Test</a></li>
+      </ul>      
+
+      <%= render partial: 'definition' %>
+      <%= render partial: 'protocol' %>
+      <%= render partial: 'cost' %>
+      <%= render partial: 'documentation' %>      
+      <%= render partial: 'test' %>
+
+    </div>
+
+  </div>
+
+</div>

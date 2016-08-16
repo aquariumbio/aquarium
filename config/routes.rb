@@ -10,6 +10,8 @@ Bioturk::Application.routes.draw do
   get '/operations/jobs',                        to: 'operations#jobs'
   resources :operations
 
+  resources :operation_types
+
   get '/developer',                              to: 'developer#developer'
   post '/developer/get/',                        to: 'developer#get'  
   post '/developer/save',                        to: 'developer#save'    

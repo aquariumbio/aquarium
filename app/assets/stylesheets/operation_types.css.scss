@@ -1,0 +1,63 @@
+.operation_types {
+
+  .op-type-list {
+    list-style: none;
+    margin-left: 0;    
+    li {
+      margin-left: 0;
+    }
+  }
+
+  .label-bold {
+    font-weight: bold;
+  }
+
+  .op-type-current {
+    font-weight: bold;
+    background: yellow;
+  }
+
+  .field-type-table {
+    width: 100%;
+    table-layout: fixed;
+    th {
+      text-align: left;
+    }
+    td {
+      vertical-align: top;
+    }
+    .aft-td {
+      width: 50%;
+    }
+  }
+
+  .aft-td {
+    width: 50%;
+  }
+
+  .io-list {
+    margin: 10px 0 0 0;
+    list-style: none;
+    border: 1pt solid #bbb;
+    padding: 8px;
+    border-radius: 1px;
+  }
+
+  .aft-list {
+    list-style: none;
+    margin-left: 0;    
+  }
+
+  .aft-remove {
+    font-weight: bold;
+    color: black;
+    &:hover {
+      text-decoration: none;
+    };
+  }
+
+  .input-fit {
+    width: 100%;
+  }
+
+}

@@ -15,9 +15,9 @@
 
       <tr>
         <th class='small-col'></th>
-        <th ng-repeat="ft in goal.fts | filter: { role: 'input' }" ng-include="'field_type'"></th>
+        <th ng-repeat="ft in goal.field_types | filter: { role: 'input' }" ng-include="'field_type'"></th>
         <th class='small-col arrow'>&#8658;</th>
-        <th ng-repeat="ft in goal.fts | filter: { role: 'output' }" ng-include="'field_type'"></th> 
+        <th ng-repeat="ft in goal.field_types | filter: { role: 'output' }" ng-include="'field_type'"></th> 
         <th class='small-col'></th>     
       </tr>
 
@@ -29,12 +29,12 @@
 
         <td>{{$index+1}}.</td>
 
-        <td ng-repeat="ft in goal.fts | filter: { role: 'input' }" 
+        <td ng-repeat="ft in goal.field_types | filter: { role: 'input' }" 
             ng-include="'field_value_form'"></td>
 
         <td></td>
 
-        <td ng-repeat="ft in goal.fts | filter: { role: 'output' }" 
+        <td ng-repeat="ft in goal.field_types | filter: { role: 'output' }" 
             ng-include="'field_value_form'"></td>
 
         <td><a href='#' ng-click="drop(goal,operation)">&times;</a></td>              
@@ -43,9 +43,9 @@
 
       <tr>
 
-        <td ng-repeat="ft in goal.fts | filter: { role: 'input' }"></td>
+        <td ng-repeat="ft in goal.field_types | filter: { role: 'input' }"></td>
         <td></td>
-        <td ng-repeat="ft in goal.fts | filter: { role: 'output' }"></td>
+        <td ng-repeat="ft in goal.field_types | filter: { role: 'output' }"></td>
 
         <td>
           <a href='#' class='btn btn-mini pull-right' ng-click="more(goal)">Add</a>

@@ -1,0 +1,54 @@
+<script type="text/ng-template" id="io_form">
+
+    <ul ng-repeat="io in current_ot.field_types" ng-if="io.role == role" class="io-list">
+
+      <div class='row-fluid'>
+
+        <div class="span8">
+          <label>Name</label>
+          <input type="text" ng-model="io.name" class="input-fit">
+        </div>
+
+        <div class="span1"></div>
+
+        <div class="span2">
+          <label>
+            <input type='checkbox' ng-model="io.array"> Array? 
+          </label>
+          <label>
+            <input type='checkbox' ng-model="io.part"> Part?
+          </label>      
+        </div>
+
+        <div class="span1">
+          <a href="#" class="aft-remove pull-right" ng-click="remove_io(io)">&times;</a>
+        </div>
+
+      </div>
+
+      <ul class='aft-list'>
+
+        <label>
+          Sample types / containers
+          <a href="#" class="btn btn-mini pull-right" ng-click="add_aft(io)">Add</a>
+        </label>
+
+        <li ng-repeat="aft in io.allowable_field_types">
+          <div class="row-fluid">
+            <div class="span5">
+              <input type="text" ng-model="aft.sample_type.name" class="input-fit" sampletypecomplete>
+            </div>
+            <div class="span5">            
+              <input type="text" ng-model="aft.object_type.name" class="input-fit" objecttypecomplete>
+            </div>
+            <div class="span2">            
+              <a href="#" class="aft-remove pull-right" ng-click="remove_aft(io,aft)">&times;</a>    
+            </div>
+          </div>
+        </li>
+
+      <ul>     
+
+    </ul>
+
+</script>

@@ -147,6 +147,14 @@ Aq.prototype.where = function(array,f) {
   return result;
 }
 
+Aq.prototype.remove = function(array,element) {
+  var i = array.indexOf(element);
+  if ( i > -1 ) {
+    array.splice(i,1);
+  }
+  return array;
+}
+
 Aq.prototype.range = function(n) {
   var result = [];
   for ( var i=0; i<n; i++ ) {

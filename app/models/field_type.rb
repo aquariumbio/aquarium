@@ -47,7 +47,7 @@ class FieldType < ActiveRecord::Base
   end
 
   def as_json(options={})
-    super include: [ allowable_field_types: { include: :sample_type } ]
+    super include: [ allowable_field_types: { include: [ :sample_type, :object_type ] } ]
   end
 
 end 

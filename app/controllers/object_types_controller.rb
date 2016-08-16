@@ -26,14 +26,15 @@ class ObjectTypesController < ApplicationController
   # GET /object_types.json
   def index
 
-    @handler = params[:handler] ? params[:handler] : 'glassware'
-    @all_handlers = ObjectType.pluck(:handler).uniq
-    @object_types = ObjectType.where("handler = ?", @handler)
-
     respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @object_types }
+      format.html { # index.html.erb
+        @handler = params[:handler] ? params[:handler] : 'glassware'
+        @all_handlers = ObjectType.pluck(:handler).uniq
+        @object_types = ObjectType.where("handler = ?", @handler)
+      }
+      format.json { render json: ObjectType.pluck(:name).collect { |m| { name: m } } }
     end
+
   end
 
   # GET /object_types/1

@@ -4,9 +4,13 @@ class OperationType < ActiveRecord::Base
   include OperationTypePlanner
 
   has_many :operations
-  has_many :fts, foreign_key: "parent_id", class_name: "FieldType"
+  # has_many :fts, foreign_key: "parent_id", class_name: "FieldType"
 
   attr_accessible :name, :protocol
+
+  def add_io name, sample_name, container_name, role, opts
+    add_field name, sample_name, container_name, role, opts
+  end
 
   def add_input name, sample_name, container_name, opts={}
     add_field name, sample_name, container_name, "input", opts
