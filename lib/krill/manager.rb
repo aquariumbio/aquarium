@@ -19,7 +19,15 @@ module Krill
       # Get job info
       @jid = jid
       @job = Job.find(jid)
-      @code = Repo::contents @job.path, @job.sha, directory, branch
+
+      if @job.sha
+        @code = Repo::contents @job.path, @job.sha, directory, branch
+      elsif !@job.operations.empty?
+        @code = @job.operations.first.operation_type.code("protocol").content
+      else
+        raise "No path specified for job #{job.id}. Cannot start."
+      end
+
       initial_state = JSON.parse @job.state, symbolize_names: true
       @args = initial_state[0][:arguments]
 

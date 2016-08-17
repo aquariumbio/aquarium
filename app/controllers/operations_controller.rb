@@ -27,7 +27,6 @@ class OperationsController < ApplicationController
     ops = params[:operation_ids].collect { |oid| Operation.find(oid) }
 
     unless ops.empty? 
-      Rails.logger.info ops.collect { |o| o.inspect }
       ot = ops.first.operation_type
       job = ot.schedule(ops, current_user, Group.find_by_name('technicians'))
     end

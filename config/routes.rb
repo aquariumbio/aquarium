@@ -1,7 +1,5 @@
 Bioturk::Application.routes.draw do
 
-  resources :operation_types
-
   get '/plans/start/:id',                        to: 'plans#start'
   post '/plans/plan',                            to: 'plans#plan'  
   resources :plans
@@ -10,8 +8,13 @@ Bioturk::Application.routes.draw do
   get '/operations/jobs',                        to: 'operations#jobs'
   resources :operations
 
-  post '/operation_types/code',                  to: 'operation_types#code'
-  resources :operation_types
+  get '/operation_types/:id/random/:num',        to: 'operation_types#random'
+  resources :operation_types do
+    collection do 
+      get 'default'
+      post 'code'
+    end
+  end
 
   get '/developer',                              to: 'developer#developer'
   post '/developer/get/',                        to: 'developer#get'  

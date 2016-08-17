@@ -75,5 +75,20 @@ class OperationTypesController < ApplicationController
 
   end
 
+  def default
+    render json: { content: File.open("lib/tasks/default.rb", "r").read }
+  end
+
+  def random
+    ops_json = []
+    ActiveRecord::Base.transaction do
+      ops = OperationType.find(params[:id]).random(params[:num].to_i)
+      ops_json = ops.as_json(methods: :field_values)
+      render json: ops_json
+      raise ActiveRecord::Rollback
+    end
+    
+  end
+
 end
 

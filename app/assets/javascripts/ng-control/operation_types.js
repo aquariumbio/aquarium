@@ -15,6 +15,7 @@
     $scope.current_ot = { name: "Loading" }
     $scope.user = new User($http);  
     $scope.mode = 'definition';
+    $scope.default_protocol = "";
 
     $http.get('/operation_types.json').then(function(response) {
       $scope.operation_types = response.data;
@@ -27,6 +28,10 @@
 
     $http.get('/sample_types.json').then(function(response) {
       $scope.sample_types = response.data;
+    });
+
+    $http.get('/operation_types/default.json').then(function(response) {
+      $scope.default_protocol = response.data.content;
     });
 
     $scope.tab = function(mode) {
@@ -75,7 +80,7 @@
       var new_ot = {
         name: "New Operation Type",
         field_types:[],
-        protocol: { name: 'protocol', content: 'class Protocol\n  def main\n    {}\n  end\nend'},
+        protocol: { name: 'protocol', content: $scope.default_protocol },
         cost_model: { name: 'cost_model', content: 'def cost(op)\n  { labor: 0, materials: 0 }\nend' },
         documentation: { name: 'documentation', content: "New Operation Type\n===\n\nDocumentation here"}
       };

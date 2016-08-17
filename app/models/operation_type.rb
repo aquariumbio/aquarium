@@ -44,8 +44,11 @@ class OperationType < ActiveRecord::Base
   def schedule ops, user, group
 
     job = Job.new
-    job.path = protocol
-    job.sha = Repo::version protocol
+    
+    job.path = "operation.rb"
+    job.sha = nil # lame, but this is how I signal to the krill manager
+                  # that this is job is associated with an operation type
+
     job.pc = Job.NOT_STARTED
     job.set_arguments({ operation_type_id: id})
     job.group_id = group.id

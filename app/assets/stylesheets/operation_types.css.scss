@@ -76,13 +76,13 @@
     overflow: auto;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
-    box-shadow: none;   
+    box-shadow: none;  
+    border-bottom: 1pt solid #eee; 
   }
 
   .code-controls {
     height: 30px;
     margin: 0;
-    border: 1pt solide #bbb;
     position: absolute;
     right: 10px;
     left: 0;

@@ -105,7 +105,7 @@ namespace :workflow do
     protocol = File.open("lib/tasks/default.rb", "r").read
     OperationType.all.each do |ot|
       ot.new_code("protocol", "# #{ot.name} Protocol\n\n" + protocol)
-      ot.new_code "cost_model", "# #{ot.name} Cost Model\n\ndef cost(ot);\n  { labor: 0, materials: 0 };\nend"
+      ot.new_code "cost_model", "# #{ot.name} Cost Model\n\ndef cost(ot)\n  { labor: 0, materials: 0 }\nend"
       ot.new_code "documentation", "#{ot.name}\n===\n\nDocumentation here"
     end
 

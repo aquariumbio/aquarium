@@ -9,7 +9,7 @@
     <h1 class='log-h'><span style='color: #888'>Job <%= @job.id %> :</span> <%= @job.path.split('/').last %></h1>
     <p>
       Full Path: <a href='/jobs/summary?path=<%= @job.path %>'><%= @job.path %></a> ( ...
-                        <a href='/jobs/summary?path=<%= @job.path %>&sha=<%= @job.sha %>'><%= @job.sha[-10,10] %></a> )
+                        <a href='/jobs/summary?path=<%= @job.path %>&sha=<%= @job.sha %>'><%= @job.sha ? @job.sha[-10,10] : "--" %></a> )
                         <%= render partial: '/posts/discussion', locals: { topic: protocol, link: "Discuss Protocol" } %>
       Submitted by <a href='/users/<%= @submitter.id %>'><%= @submitter.login %></a>
       for group <a href='/groups/<%= @group.id %>'><%= @group.name %></a>
