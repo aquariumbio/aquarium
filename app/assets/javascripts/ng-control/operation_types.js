@@ -8,8 +8,8 @@
     w = angular.module('aquarium', ['ngCookies','ui.ace']); 
   } 
 
-  w.controller('operationTypesCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
-                        function (  $scope,   $http,   $attrs,   $cookies ) {
+  w.controller('operationTypesCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', 
+                        function (  $scope,   $http,   $attrs,   $cookies, $sce ) {
 
     $scope.operation_types = [];
     $scope.current_ot = { name: "Loading" }
@@ -87,6 +87,16 @@
       $scope.operation_types.push(new_ot);
       $scope.current_ot = new_ot;
     }
+
+    $scope.render_docs = function(ot) {
+      var md = window.markdownit();
+      ot.rendered_docs = $sce.trustAsHtml(md.render(ot.documentation.content));
+      $scope.mode = 'documentation_view'; 
+    }
+
+    $scope.edit_docs = function(ot) {
+      $scope.mode = 'documentation';
+    }    
 
   }]);
 

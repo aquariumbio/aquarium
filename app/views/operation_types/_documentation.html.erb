@@ -12,7 +12,18 @@
 
   <div class='code-controls'>
     <a href='#' class='btn' ng-click="save(current_ot,'documentation')">Save</a>
-    <a href='#' class='btn'>Render</a>
+    <a href='#' class='btn' ng-click="render_docs(current_ot)">Render</a>
   </div>
+
+</div>
+
+<div ng-if="current_ot.documentation && mode == 'documentation_view'" ng-controller="codeCtrl as code">
+
+  <div ng-bind-html="current_ot.rendered_docs"></div>
+
+  <div class='code-controls'>
+    <a href='#' class='btn' ng-click="save(current_ot,'documentation')">Save</a>
+    <a href='#' class='btn' ng-click="edit_docs(current_ot)">Edit</a>
+  </div>  
 
 </div>

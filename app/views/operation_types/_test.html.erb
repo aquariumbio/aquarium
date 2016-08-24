@@ -18,6 +18,8 @@
 
   </form>
 
+  <h4>Input Operations</h4>
+
   <div ng-show="!current_ot.test_operations">No test operations definied.</div>
 
   <table class='table table-fixed table-condensed' ng-show="current_ot.test_operations">
@@ -51,23 +53,29 @@
 
   </table>
 
-  <div ng-show="!current_ot.test_results">No test results.</div>
+  <hr />
+  <h4>Backtrace</h4>  
+
+  <div ng-show="!current_ot.test_results">No backtrace has been generated.</div>
 
   <div ng-show="current_ot.test_results">
-
-    <h5>Test Backtrace</h5>
     <ul class="backtrace" >
       <li ng-repeat="step in current_ot.test_results.job.backtrace" ng-include="step.operation"></li>
     </ul>
+  </div>
 
-    <h5>Test Operations</h5>
+  <hr />
+  <h4>Operation Information</h4>    
+
+  <div ng-show="!current_ot.test_results">No operations have been affected.</div>
+
+  <div ng-show="current_ot.test_results">
     <ul>
       <li ng-repeat="op in current_ot.test_results.operations">
         Operation {{op.id}}: {{op.status}}.
         <span ng-repeat="(k,v) in op.associations">{{k}}: {{v}}</span>
       </li>
     </ul>
-
   </div>
 
   <!-- pre>{{current_ot.test_results.operations|json}}</pre -->
