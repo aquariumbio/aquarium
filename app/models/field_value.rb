@@ -19,10 +19,10 @@ class FieldValue < ActiveRecord::Base
       if fts.length == 1
         ft = fts[0]
       else
-        nil
+        return nil
       end
     else
-      nil
+      return nil
     end
 
     case ft.ftype

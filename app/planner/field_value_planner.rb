@@ -24,7 +24,9 @@ module FieldValuePlanner
   end  
 
   def sample_type
-    child_sample.sample_type    
+    if child_sample
+      child_sample.sample_type    
+    end
   end
 
   def object_type

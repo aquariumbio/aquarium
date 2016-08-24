@@ -1,9 +1,13 @@
 module JobOperations
 
-  def set_op_status str
+  def set_op_status str, force=false
     operations.each do |op|
-      op.status = str
-      op.save
+      if op.status != "error" || force 
+        Rails.logger.info "#{op.id}: SETTING STATUS FROM #{op.status} to #{str}"
+        op.set_status str
+      else
+        Rails.logger.info "#{op.id}: DID NOT SET STATUS BECUASE IT WAS ALREADY 'error'"
+      end
     end
   end
 

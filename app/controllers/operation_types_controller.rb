@@ -59,20 +59,23 @@ class OperationTypesController < ApplicationController
 
   end
 
-  def update
+  def update_from_ui data
 
-    ot = OperationType.find(params[:id])
-    ot.name = params[:name]
+    ot = OperationType.find(data[:id])
+    ot.name = data[:name]
     ot.save
 
     ot.field_types.each do |ft| 
       ft.destroy
     end
 
-    add_field_types ot, params[:field_types]
+    add_field_types ot, data[:field_types]
 
+  end
+
+  def update
+    update_from_ui params
     render json: ot.as_json(methods: [:field_types, :protocol, :cost_model, :documentation])
-
   end
 
   def default
@@ -83,11 +86,54 @@ class OperationTypesController < ApplicationController
     ops_json = []
     ActiveRecord::Base.transaction do
       ops = OperationType.find(params[:id]).random(params[:num].to_i)
-      ops_json = ops.as_json(methods: :field_values)
-      render json: ops_json
+      render json: ops.as_json(methods: :field_values)
       raise ActiveRecord::Rollback
     end
     
+  end
+
+  def test
+
+    # save the operaton
+    update_from_ui params
+
+    # start a transaction
+    ActiveRecord::Base.transaction do
+
+      # (re)build the operations
+      ot = OperationType.find(params[:id])
+      ops = []
+      params[:test_operations].each do |test_op|
+        op = ot.operations.create status: "ready", user_id: test_op[:user_id]
+        test_op[:field_values].each do |fv|
+          op.set_property(fv[:name], Sample.find(fv[:child_sample_id]),fv[:role])
+        end
+        ops << op
+      end
+
+      # run the protocol
+      job = ot.schedule(ops, current_user, Group.find_by_name('technicians'))
+      manager = Krill::Manager.new job.id, true, "master", "master"
+
+      ops.each do |op|
+        op.set_status "running"
+      end      
+
+      manager.run
+
+      ops.each { |op| op.reload }
+
+      # render the resulting data including the job and the operations
+      render json: {
+        operations: ops.as_json(methods: [:field_values,:associations]),
+        job: job.reload
+      }
+
+      # rollback the transaction
+      raise ActiveRecord::Rollback
+
+    end   
+
   end
 
 end

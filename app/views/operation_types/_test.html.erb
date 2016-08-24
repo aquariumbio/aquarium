@@ -1,23 +1,35 @@
 <div ng-show="mode == 'test'" ng-controller="operationTypeTestCtrl as tester">
 
   <form class='form-inline'>
+
     <label>Batch Size: </label>
+
     <input type='number' 
            ng-model="current_ot.batch_size" 
            placeholder="Batch Size"
            class="input-small">
     </input>
+
     <a href="#" class="btn" ng-click="randomize(current_ot)">Generate Operations</a>
-    <a href="#" class="btn btn-warning">Run Test</a>
+
+    <button class="btn btn-warning"
+                ng-click="test(current_ot)"
+                ng-disabled="!current_ot.test_operations || current_ot.test_operations.length == 0">Run Test</button>
+
   </form>
 
-  <table class='table table-fixed table-condensed'>
+  <div ng-show="!current_ot.test_operations">No test operations definied.</div>
+
+  <table class='table table-fixed table-condensed' ng-show="current_ot.test_operations">
+
     <tr>
       <th>User</th>
       <th>Inputs</th>
       <th>Ouputs</th> 
     </tr>
+
     <tr ng-repeat="op in current_ot.test_operations | filter: { operation_type_id: current_ot.id, status: 'pending'}">
+
       <td>{{user.find(op.user_id).name}}</td>
       <td>
         <ul class='input-list'>
@@ -25,19 +37,39 @@
             {{fv.name}}: {{fv.child_sample.name}}
           </li>
         </ul>              
-      </td>       
+      </td>  
+
       <td>
         <ul class='input-list'>
           <li ng-repeat="fv in op.field_values | filter: { role: 'output' }">
             {{fv.name}}: {{fv.child_sample.name}}
           </li>
         </ul>              
-      </td>         
+      </td>   
+
     </tr>
+
   </table>
 
-  <div class="test-backtrace">
-    Test results here.
+  <div ng-show="!current_ot.test_results">No test results.</div>
+
+  <div ng-show="current_ot.test_results">
+
+    <h5>Test Backtrace</h5>
+    <ul class="backtrace" >
+      <li ng-repeat="step in current_ot.test_results.job.backtrace" ng-include="step.operation"></li>
+    </ul>
+
+    <h5>Test Operations</h5>
+    <ul>
+      <li ng-repeat="op in current_ot.test_results.operations">
+        Operation {{op.id}}: {{op.status}}.
+        <span ng-repeat="(k,v) in op.associations">{{k}}: {{v}}</span>
+      </li>
+    </ul>
+
   </div>
 
+  <!-- pre>{{current_ot.test_results.operations|json}}</pre -->
+ 
 </div>

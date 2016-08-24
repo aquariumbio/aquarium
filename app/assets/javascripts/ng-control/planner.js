@@ -67,7 +67,7 @@
         $scope.plans.unshift(response.data);
         $scope.current_plan = response.data;
         $scope.current_plan.current_node = response.data.trees[0];
-        var op = response.data.operations[0];
+        ot.operations = null;
         determine_launch_mode($scope.current_plan);
       });
     }      

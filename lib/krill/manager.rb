@@ -134,6 +134,7 @@ module Krill
           if appended_complete
             @job.stop # what if this fails?
           else
+            @job.reload
             @job.stop "error"
             @job.append_step operation: "next", time: Time.now, inputs: {}
             @job.append_step operation: "aborted", rval: {}

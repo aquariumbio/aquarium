@@ -1,8 +1,9 @@
 class Operation < ActiveRecord::Base
 
+  include DataAssociator
   include FieldValuer
   include OperationPlanner
-
+  
   def parent_type # interface with FieldValuer
     operation_type
   end  
@@ -19,6 +20,12 @@ class Operation < ActiveRecord::Base
 
   def name
     operation_type.name
+  end
+
+  def set_status str
+    self.status = str
+    self.save
+    raise "Could not set status" unless self.errors.empty?
   end
 
   def plan

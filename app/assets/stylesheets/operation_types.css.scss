@@ -90,4 +90,70 @@
     text-align: right;
   }
 
+  .backtrace {
+
+    list-style-type: none;
+
+    margin-right: 10px;        
+    margin-left: 0px;  
+
+    .title {
+      padding: 5px 5px 5px 10px;
+      border: 1pt solid #ccc;
+      /*border-radius: 5px;*/
+      margin-right: 10px;   
+      margin-bottom: 5px; 
+      background: #fafffa;      
+    }
+
+    .step {
+      padding: 5px 5px 5px 10px;
+      border: 1pt solid #ccc;
+      /*border-radius: 5px;*/
+      margin-right: 10px;   
+      margin-bottom: 5px;     
+    }
+
+    .step-next {
+      background: #fafffa;
+    }    
+
+    .step-display {
+      background: white;
+      border:none;
+      margin-left: 15px;
+
+    }   
+
+    .step-initialize, .step-complete {
+      background: #fafffa;         
+    }     
+
+    .step-error {
+      background: #ffff11;
+    }
+
+    .content {
+    }
+
+    .content-title {
+      font-weight: bold;
+    }
+
+    .content-note {
+      margin-left: 10px;
+    }
+
+    .content-select {
+      margin-left: 10px;
+    }
+
+  }
+
+  .arguments {
+    width: 100%;
+    height: 80px;
+  }
+
+
 }

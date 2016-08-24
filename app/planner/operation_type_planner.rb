@@ -52,7 +52,12 @@ module OperationTypePlanner
       end
 
       outputs.each do |output|
-        op.set_output(output.name,output.random)
+        matching_inputs = op.inputs.select { |i| i.name == output.name }
+        if matching_inputs.empty?
+          op.set_output(output.name,output.random)
+        else
+          op.set_output(output.name,matching_inputs[0].val)
+        end
       end      
 
       op

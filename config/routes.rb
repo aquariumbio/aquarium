@@ -13,6 +13,7 @@ Bioturk::Application.routes.draw do
     collection do 
       get 'default'
       post 'code'
+      post 'test'
     end
   end
 

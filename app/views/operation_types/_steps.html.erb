@@ -1,0 +1,46 @@
+<script type="text/ng-template" id="initialize">
+  <div class='step step-initialize'>
+    <b>{{step.time | date:'medium'}}</b><br />
+    Arguments: {{step.arguments}}
+  </div>
+</script>
+
+<script type="text/ng-template" id="display">
+  <div class='step step-display'>
+    <div ng-repeat="line in step.content" ng-include="content_type(line)"></div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="next">
+  <div class='step step-next'>
+     <b>{{step.time | date: "h:mm:ss a"}}</b>
+     <ul ng-show="has_inputs(step)">
+       <li ng-repeat="(k,v) in step.inputs" ng-show="k != 'timestamp'">
+         <b>{{k}}:</b> {{v}}
+       </li>
+     </ul>
+  </div>
+</script>
+
+<script type="text/ng-template" id="complete">
+  <div class='step step-complete'>
+    <b>Completed</b>
+     <ul>
+       <li ng-repeat="(k,v) in step.rval" ng-show="k != 'timestamp'">
+         <b>{{k}}:</b> {{v}}
+       </li>
+     </ul>    
+  </div>
+</script>
+
+<script type="text/ng-template" id="error">
+  <div class='step step-error'>
+    <b>Error: {{step.message}}</b>
+     <ul>
+       <li ng-repeat="b in step.backtrace track by $index">
+         {{b}}
+       </li>
+     </ul>    
+  </div>
+</script>
+
