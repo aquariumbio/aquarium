@@ -171,6 +171,11 @@ module CostModel
           materials: simple_spec[:materials],
           labor: simple_spec[:labor] * labor_rate
         }
+      when ["tasks_inputs", "purchased"]
+        {
+          materials: simple_spec[:materials],
+          labor: 0
+        }
 
       else nothing
 
