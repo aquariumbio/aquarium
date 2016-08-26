@@ -62,6 +62,8 @@ module FieldValuePlanner
             return false
           else
             # puts "  ... found collection #{collections[0].id} at #{collections[0].location} with matrix #{collections[0].matrix}"
+            self.child_item_id = collections[0].id
+            self.save
             return true
           end
 
@@ -71,6 +73,8 @@ module FieldValuePlanner
           items = val.items.select { |i| !i.deleted? && i.object_type_id == object_type.id }
           if items.length > 0
             # puts "found #{items[0].object_type.name} #{items[0].id}"
+            self.child_item_id = items[0].id
+            self.save        
             true
           else
             # puts "not found"

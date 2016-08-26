@@ -29,15 +29,25 @@
 
     $http.get('/plans.json').then(function(response) {
       $scope.plans = response.data;
-      $scope.ready = true;      
+      $scope.ready = true;  
+      if ( $scope.plans.length > 0 ) {
+        $scope.select_plan($scope.plans[0]);
+      }
     })
 
-    $scope.operation_type = function(operation) {
+    $scope.operation_type = function(node) {
       var m = aq.where($scope.operation_types,function(ot) {
-        return ot.id == operation.operation_type_id;
+        return ot.id == node.operation_type_id;
       });
       return m[0];
     }  
+
+    $scope.operation = function(node) {
+      var m = aq.where($scope.current_plan.operations,function(o) {
+        return o.id == node.id;
+      });
+      return m[0];      
+    }
 
     function determine_launch_mode(plan) {
       var op = plan.operations[0];
@@ -52,12 +62,12 @@
       plan.launch_mode = "Launching";
       $http.get("/plans/start/" + plan.id).then(function(response) {
         var index = $scope.plans.indexOf(plan);
-        $scope.plans[index] = response.data;
-        $scope.plans[index].current_node = response.data.trees[0];
-        if ( $scope.current_plan.id == response.data.id ) {
-          $scope.current_plan = response.data;
+        $scope.plans[index] = response.data.plan;
+        if ( $scope.current_plan.id == response.data.plan.id ) {
+          $scope.current_plan = response.data.plan;
+          $scope.current_plan.issues = response.data.issues;
         }
-        determine_launch_mode($scope.current_plan);
+        // determine_launch_mode($scope.current_plan);
       });
     }
 
@@ -66,9 +76,9 @@
         $scope.mode = 'view';
         $scope.plans.unshift(response.data);
         $scope.current_plan = response.data;
-        $scope.current_plan.current_node = response.data.trees[0];
+        $scope.current_plan.current_node = response.data;
         ot.operations = null;
-        determine_launch_mode($scope.current_plan);
+        // determine_launch_mode($scope.current_plan);
       });
     }      
 
@@ -81,11 +91,10 @@
         $http.get('/plans/'+plan.id+'.json').then(function(response) {
           var index = $scope.plans.indexOf(plan);
           $scope.plans[index] = response.data;
-          $scope.plans[index].current_node = response.data.trees[0];
           if ( $scope.current_plan.id == response.data.id ) {
             $scope.current_plan = response.data;
           }
-          determine_launch_mode($scope.current_plan);
+          // determine_launch_mode($scope.current_plan);
         });
       }
 
@@ -121,7 +130,18 @@
 
     $scope.close_goal = function(ot) {
       $scope.goal = null;
-    }
+    }    
+
+    $scope.select_predecessor = function(plan,op,ops) {
+      plan.issues = [ { msg: "Note: Editing plans is not yet implemented." } ];
+      $http.get("/plans/" + plan.id + "/select/" + op.id ).then(function(response) {
+        aq.each(ops,function(o) {
+          if ( o != op ) {
+            o.selected = false;
+          }
+        })
+      });
+    }    
 
   }]);
 

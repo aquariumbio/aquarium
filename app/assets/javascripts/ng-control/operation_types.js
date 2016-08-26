@@ -44,6 +44,7 @@
 
     $scope.choose = function(ot) {
       $scope.current_ot = ot;
+      $scope.mode = 'definition';
     }
 
     $scope.ot_class = function(ot) {

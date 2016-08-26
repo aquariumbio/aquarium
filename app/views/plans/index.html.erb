@@ -12,9 +12,19 @@
         <h5>Under Construction</h5>
 
         <ul class="plan-list">
-          <li ng-repeat="plan in plans">{{plan.id}}.
+          <li ng-repeat="plan in plans | filter: { status: 'Under Construction' }">{{plan.id}}.
             <span ng-class='plan_choice_class(plan)' ng-click="select_plan(plan)">
-              {{plan.goals[0].operation_type.name}} ({{plan.created_at|date}})
+              {{plan.goals[0].operation_type.name}}
+            </span>
+          </li>
+        </ul>
+
+        <h5>Running</h5>
+
+        <ul class="plan-list">
+          <li ng-repeat="plan in plans | filter: { status: 'Running' }">{{plan.id}}.
+            <span ng-class='plan_choice_class(plan)' ng-click="select_plan(plan)">
+              {{plan.goals[0].operation_type.name}}
             </span>
           </li>
         </ul>

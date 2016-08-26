@@ -17,6 +17,10 @@
     font-weight: bold;
   }
 
+  .clickable {
+    cursor: pointer;
+  }
+
   .op-table {
     width: 100%;
     th {
@@ -103,6 +107,14 @@
 
   .plan {
 
+    .available {
+      color: green;
+    }
+
+    .problem {
+      color: red;
+    }
+
     /*border: 1pt solid red;*/
     font-size: 10pt; 
 
@@ -128,7 +140,7 @@
         margin:0;
         padding: 0 0 0 10px; /* indentation + .5em */
         line-height: 22px; /* default list item's `line-height` */
-        font-weight: bold;
+        /*font-weight: bold;*/
         position:relative;
       }
 
@@ -153,6 +165,15 @@
 
       li:last-child {
         margin-bottom: 0;
+      }
+
+      .operation-details {
+        &:before {
+          border: none;
+        }
+        li:before {
+          border: none;
+        }
       }
 
     }

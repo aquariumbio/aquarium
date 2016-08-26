@@ -26,9 +26,9 @@ class PlansController < ApplicationController
 
   def start
     p = Plan.find(params[:id])
-    p.start
+    issues = p.start
     p.reload
-    render json: p.serialize
+    render json: { plan: p.serialize, issues: issues }
   end
 
   def value data
@@ -62,18 +62,25 @@ class PlansController < ApplicationController
   end
 
   def index
-
     respond_to do |format|
-      format.json { render json: Plan.where(user_id: current_user.id).reverse.as_json(methods: :goals) }
+      format.json { render json: Plan.where(user_id: current_user.id).reverse.as_json(methods: [:goals, :status]) }
       format.html { render layout: 'browser' }
     end  
-
   end
 
   def destroy
-
     Plan.find(params[:id]).remove
     render json: {}
+  end
+
+  def select
+
+    plan = Plan.find(params[:pid])
+    operation = Operation.find(params[:oid])
+
+    plan.select_subtree(operation)
+
+    render json: plan.serialize
 
   end
 

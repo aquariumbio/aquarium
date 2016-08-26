@@ -75,8 +75,6 @@ RSpec.describe "Planner" do
       puts "\e[93mNew Plan\e[39m"  
       goal.reload
       goal.show_plan         
-
-
       issues = goal.issues
 
       puts

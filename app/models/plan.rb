@@ -1,5 +1,7 @@
 class Plan < ActiveRecord::Base
 
+  include PlanSerializer
+
   attr_accessible :user_id
 
   has_many :plan_associations
@@ -15,35 +17,13 @@ class Plan < ActiveRecord::Base
           if op.status == "planning"
             op.status = op.leaf? ? "pending" : "waiting"
           end
-          op.save            
+          op.save
         end
       end
+      []
+    else
+      issues
     end
-  end
-
-  def goals_plain
-    # TODO: Make this faster. 
-    operations.select { |op| op.successors.length == 0 }
-  end
-
-  def goals
-    # TODO: Make this faster. Note, fvs doesn't work, so will probably need to be some kind of SQL query.
-    goals_plain.as_json(include: :operation_type, methods: :field_values)
-  end
-
-  def serialize
-
-    {
-      id: id,
-      user_id: user_id,
-      created_at: created_at,
-      updated_at: updated_at,
-      goals: goals,
-      trees: goals_plain.collect { |op| op.serialize },
-      issues: goals_plain.collect { |op| op.issues }.flatten,
-      operations: operations.reject { |op| op.status == 'unplanned' }.as_json(methods: :field_values)
-    }
-  
   end
 
   def remove
@@ -71,6 +51,30 @@ class Plan < ActiveRecord::Base
     puts "destroying plan #{id}"
     self.delete
 
+  end
+
+  def goals_plain
+    # TODO: Make this faster. 
+    operations.select { |op| op.successors.length == 0 }
+  end  
+
+  def goals
+    # TODO: Make this faster. Note, fvs doesn't work, so will probably need to be some kind of SQL query.
+    goals_plain.as_json(include: :operation_type, methods: :field_values)
+  end
+
+  def status
+    s = "Under Construction"
+    goals_plain.each do |g|
+      if g.status != "planning"
+        s = "Running"
+      end
+    end
+    s
+  end
+
+  def select_subtree operation
+    Rails.logger.info "TODO: Select the subtree"
   end
 
 end

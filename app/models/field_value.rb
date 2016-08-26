@@ -167,4 +167,11 @@ class FieldValue < ActiveRecord::Base
     super(include: :child_sample, methods: [ :wires_as_source, :wires_as_dest ] )
   end
 
+  def export
+    attributes.merge({
+      child_sample: child_sample.as_json,
+      child_item: child_item.as_json,      
+    })
+  end
+
 end 

@@ -68,11 +68,11 @@ module OperationPlanner
 
     recurse do |op|
       if op.status == "planning" && op.leaf? && !op.ready?
-        issues << { id: op.id, leaf: true, msg: "not ready" }
+        issues << { id: op.id, leaf: true, msg: "Operation #{op.operation_type.name} not ready." }
       elsif op.status == "planning" && op.undetermined_inputs?
-        issues << { id: op.id, leaf: op.ready?, msg: "unspecified inputs" }
+        issues << { id: op.id, leaf: op.ready?, msg: "Operation #{op.operation_type.name} has unspecified inputs." }
       elsif op.has_no_stock_or_method
-        issues << { id: op.id, leaf: op.ready?, msg: "no way to make at least one input"}
+        issues << { id: op.id, leaf: op.ready?, msg: "No way to make at least one input of operation #{op.operation_type.name}."}
       end
     end
 

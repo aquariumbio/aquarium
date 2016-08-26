@@ -12,6 +12,8 @@
                        function (  $scope,   $http,   $attrs,   $cookies ) {
 
 
+    $scope.user = new User($http); 
+
     $scope.node_class = function(plan,node) {
       var c = "node";
       if ( plan.current_node == node ) {
@@ -31,7 +33,33 @@
 
     $scope.select_node = function(plan,node) {
       plan.current_node = node;
-    }    
+    }
+
+    function io_info(io,ot,role) {
+      var fts = aq.where(ot.field_types,function(ft) {
+        return ft.role == role && ft.name == io.name;
+      });
+      var aft = aq.where(fts[0].allowable_field_types,function(aft) {
+        return io.child_sample.sample_type_id == aft.sample_type_id
+      })[0];
+      return aft;
+    }
+
+    $scope.input_info = function(io,ot) {    
+      return io_info(io,ot,'input');
+    }
+
+    $scope.output_info = function(io,ot) {    
+      return io_info(io,ot,'output');
+    }
+
+    $scope.expand = function(op) {
+      op.open = true;
+    }
+
+    $scope.unexpand = function(op) {
+      op.open = false;
+    }
 
   }]);
 
