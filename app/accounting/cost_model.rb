@@ -64,7 +64,7 @@ module CostModel
           labor: 9.9 * n * labor_rate
         }
 
-      when ["sequencing","sent to sequencing"]
+      when ["sequencing","send to sequencing"]
         n = 0
         if simple_spec[:num_colonies]
           m = simple_spec[:num_colonies].length
