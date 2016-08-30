@@ -2,6 +2,8 @@
 
   <%= render partial: "/fields/field_type" %>  
   <%= render partial: "/fields/field_value" %>  
+  <%= render partial: "operation" %> 
+  <%= render partial: "/data_associations/list" %>  
 
   <script type="text/ng-template" id="plan_list">
     <div ng-class='plan_choice_class(plan)' ng-click="select_plan(plan)">

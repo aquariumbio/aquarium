@@ -1,10 +1,13 @@
 
 function PromoteDataAssociations(parent) {
 
+  console.log(["promoting", parent])
+
   var temp = parent.data_associations;
   parent.data_associations = [];
 
   aq.each(temp,function(da) {
+    console.log(["adding", da])
     parent.data_associations.push(new DataAssociation(parent.http).from(da));
   });
 

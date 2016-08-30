@@ -65,7 +65,7 @@
 
       var c = 0.0;
 
-      if ( status == "Under Construction" ) {
+      if ( status == "Under Construction" && op.nominal_cost ) {
         c += op.nominal_cost.materials + op.nominal_cost.labor;        
       } else if ( op.materials && op.labor ) {
         c += op.materials + op.labor;        

@@ -41,11 +41,15 @@ module PlanSerializer
     @done = true
 
     ops = operations.includes(:job).as_json(include: :job, methods: :nominal_cost)
+    op_ids = ops.collect { |o| o["id"] }
+
+    associations = DataAssociation.includes(:upload).where(parent_class: "Operation", parent_id: op_ids).as_json(include: :upload)
 
     ops.each do |op|
       op["selected"] = (op["status"] != "unplanned")
       @running = true if [ "pending", "waiting", "ready", "scheduled", "running" ].member? op["status"]
       @done = false unless [ "done", "error" ].member? op["status"]
+      op["data_associations"] = associations.select { |a| a["parent_id"] == op["id"] }
     end
 
     operation_types = OperationType.where(id: ops.collect { |o| o["operation_type_id"] }).as_json
@@ -61,7 +65,7 @@ module PlanSerializer
 
     field_values = FieldValue
                    .includes(:child_sample,:child_item)
-                   .where(parent_class: "Operation", parent_id: ops.collect { |o| o["id"] })
+                   .where(parent_class: "Operation", parent_id: op_ids)
                    .collect { |fv| fv.export }
 
     fids = field_values.collect { |fv| fv["id"] }

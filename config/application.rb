@@ -96,6 +96,8 @@ module Bioturk
         TaskPrototype.count
         Task.count
         Parameter.count
+        DataAssociation.count
+        Upload.count
     end
 
     #Added to enable CORS

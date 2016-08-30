@@ -1,11 +1,3 @@
-<script type="text/ng-template" id="operation">
-  <ul class='operation-details'>
-    <li>Job: <a href="/krill/log?job={{operation.job.id}}">{{operation.job.id}}</a>, last updated {{operation.job.updated_at|date}}</li>
-    <li>Submitted by: {{user.find(operation.job.submitted_by).login}}</li>
-    <li>Run by: {{user.find(operation.job.user_id).login}}</li>
-  </ul>
-</script>
-
 <script type="text/ng-template" id="plan">
 
   <label class="checkbox" ng-if="p.operations.length > 1">

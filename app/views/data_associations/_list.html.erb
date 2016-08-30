@@ -32,12 +32,12 @@
 
         <span class="da-notes">{{notes(parent)}}</span>
 
-        <a href="#" ng-click="edit_note(item)" class='edit-note item-small-icon small-note'>[note]</a>
+        <a href="#" ng-click="edit_note(parent)" class='edit-note item-small-icon small-note'>[note]</a>
 
-        <div modal='item.edit_modal' title="'Notes for item ' + item.id" width='40%' height='40%'>
-          <textarea ng-model="item.note" class='note-editor'></textarea>
+        <div modal='parent.edit_modal' title="'Notes for item ' + item.id" width='40%' height='40%'>
+          <textarea ng-model="parent.note" class='note-editor'></textarea>
           <div class='pull-right'>
-            <button class='btn btn-small btn-primary' ng-click="save_note(item,'Item')">
+            <button class='btn btn-small btn-primary' ng-click="save_note(parent,type)">
               Save
             </button>            
           </div>            

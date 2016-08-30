@@ -82,6 +82,21 @@
       });
     }      
 
+    function promote_data_op(op) {
+      PromoteDataAssociations(op);
+      aq.each(op.predecessors,function(p) {
+        aq.each(p.operations, function(op) {
+          promote_data_op(op);
+        })
+      })
+    }
+
+    function promote_data(plan) {
+      aq.each(plan.goals,function(goal) {
+        promote_data_op(goal);
+      })
+    }
+
     $scope.select_plan = function(plan) {
 
       $scope.current_plan = plan;
@@ -91,8 +106,10 @@
         $http.get('/plans/'+plan.id+'.json').then(function(response) {
           var index = $scope.plans.indexOf(plan);
           $scope.plans[index] = response.data;
-          if ( $scope.current_plan.id == response.data.id ) {
-            $scope.current_plan = response.data;
+          $scope.plans[index].http = $http;
+          promote_data($scope.plans[index]);
+          if ( $scope.current_plan.id == $scope.plans[index].id ) {
+            $scope.current_plan = $scope.plans[index];
           }
           // determine_launch_mode($scope.current_plan);
         });
