@@ -9,6 +9,7 @@ namespace :workflow do
     OperationType.destroy_all
     Operation.destroy_all
     Code.destroy_all
+    Plan.destroy_all
 
   end
 
@@ -18,13 +19,13 @@ namespace :workflow do
                         release_method: "return", description: "Some barely visible white powder", cost: 5.00)
     lp.save
 
-    # raise "Could not make object type: #{lp.errors.full_messages.join(', ')}" unless lp.errors.empty?
+    raise "Could not make object type: #{lp.errors.full_messages.join(', ')}" unless lp.errors.empty?
 
     cp = ObjectType.new(name: "Checked E coli Plate of Plasmid", handler: "sample_container", unit: "plate", min: 1, max: 10000,
                         release_method: "return", description: "A plate that actually has some colonies on it", cost: 5.00)
     cp.save
 
-    # raise "Could not make object type: #{lp.errors.full_messages.join(', ')}" unless lp.errors.empty?  
+    raise "Could not make object type: #{cp.errors.full_messages.join(', ')}" unless cp.errors.empty?  
 
     op = OperationType.new name: "Order Primer"
     op.save
@@ -105,7 +106,7 @@ namespace :workflow do
     protocol = File.open("lib/tasks/default.rb", "r").read
     OperationType.all.each do |ot|
       ot.new_code("protocol", "# #{ot.name} Protocol\n\n" + protocol)
-      ot.new_code "cost_model", "# #{ot.name} Cost Model\n\ndef cost(ot)\n  { labor: 0, materials: 0 }\nend"
+      ot.new_code "cost_model", "# #{ot.name} Cost Model\n\ndef cost(op)\n  if op.status == 'error'\n    { labor: 0, materials: 0 }\n  else\n    { labor: 1, materials: 1 }\n  end\nend"
       ot.new_code "documentation", "#{ot.name}\n===\n\nDocumentation here"
     end
 

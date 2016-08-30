@@ -61,6 +61,40 @@
       op.open = false;
     }
 
+    op_cost = function(op,status) {
+
+      var c = 0.0;
+
+      if ( status == "Under Construction" ) {
+        c += op.nominal_cost.materials + op.nominal_cost.labor;        
+      } else if ( op.materials && op.labor ) {
+        c += op.materials + op.labor;        
+      }
+
+      aq.each(op.predecessors,function(p) {
+        aq.each(p.operations,function(op) {
+          if ( op.selected ) {            
+            c += op_cost(op,status);
+          }
+        });
+      })
+
+      return c;
+
+    }
+
+    $scope.cost = function(plan) {
+
+      var cost = 0.0;
+
+      aq.each(plan.goals,function(goal) {
+        cost += op_cost(goal,plan.status);
+      });
+
+      return cost;
+
+    }
+
   }]);
 
 })();

@@ -11,6 +11,20 @@ module JobOperations
     end
   end
 
+  def charge
+    operations.each do |op|
+      cost_model_code = op.operation_type.code("cost_model").content
+      eval("#{cost_model_code}")
+      c = cost(op)
+      op.materials = c[:materials]
+      op.labor = c[:labor]
+      op.save
+      unless errors.empty?
+        raise "Could not save cost information to operation #{id}"
+      end
+    end
+  end
+
   def start
     if self.pc == Job.NOT_STARTED
       self.pc = 0
@@ -24,6 +38,7 @@ module JobOperations
       self.pc = Job.COMPLETED
       save
       set_op_status status
+      charge
       Operation.step
     end
   end

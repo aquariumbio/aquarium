@@ -43,10 +43,23 @@
 
   .plan-list {
     list-style: none;
+    font-size: 11pt;
     margin: 0;    
     .plan-choice-selected {
       font-weight: bold;
+      background: yellow;          
     }  
+    li {
+      overflow: hidden;
+      white-space: nowrap;
+      &:hover {
+        color: blue;
+      };
+    }
+    .op-name {
+    }
+    .op-goal {
+    }
   }
 
   .goal-list {
@@ -80,7 +93,7 @@
 
   .node-selected {
     border: 1pt solid #444;      
-    box-shadow:0 0 4px #55f;
+    box-shadow:0 0 4px #55f;   
   }
 
   .node-ready {

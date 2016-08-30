@@ -70,12 +70,22 @@
   <div ng-show="!current_ot.test_results">No operations have been affected.</div>
 
   <div ng-show="current_ot.test_results">
-    <ul>
-      <li ng-repeat="op in current_ot.test_results.operations">
-        Operation {{op.id}}: {{op.status}}.
-        <span ng-repeat="(k,v) in op.associations">{{k}}: {{v}}</span>
-      </li>
-    </ul>
+    <table class='table'>
+      <tr>
+        <th>Id</th>
+        <th>Status</th>
+        <th>Data</th>
+        <th>Materials</th>
+        <th>Labor</th>
+      </tr>
+      <tr ng-repeat="op in current_ot.test_results.operations">
+        <td>{{op.id}}</td>
+        <td>{{op.status}}</td>
+        <td><span ng-repeat="(k,v) in op.associations">{{k}}: {{v}}</span></td>
+        <td>{{op.materials|currency}}</td>
+        <td>{{op.labor|currency}}</td>
+      </tr>
+    </table>
   </div>
 
   <!-- pre>{{current_ot.test_results.operations|json}}</pre -->

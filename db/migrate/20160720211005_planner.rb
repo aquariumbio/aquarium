@@ -12,6 +12,8 @@ class Planner < ActiveRecord::Migration
       t.string :status
       t.references :user
       t.references :job
+      t.float :labor
+      t.float :materials
       t.timestamps
     end
 

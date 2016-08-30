@@ -120,5 +120,14 @@ class Operation < ActiveRecord::Base
 
   end 
 
+  def nominal_cost
+    eval(operation_type.code("cost_model").content)
+    temp = self.status
+    self.status = "done"
+    c = cost(self)
+    self.status = temp
+    c
+  end
+
 end
 

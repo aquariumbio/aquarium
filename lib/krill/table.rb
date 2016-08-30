@@ -41,6 +41,14 @@ module Krill
       self
     end
 
+    def has_columns?
+      !@columns.keys.empty?
+    end
+
+    def has_column? key
+      @columns[key] != nil
+    end    
+
     # Set a value in the current row
     #
     # @param [symbol] name The name of the column

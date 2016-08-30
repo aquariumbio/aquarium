@@ -77,4 +77,33 @@ class Plan < ActiveRecord::Base
     Rails.logger.info "TODO: Select the subtree"
   end
 
+  def self.list user
+
+    plans = Plan.includes(operations: :operation_type).where(user_id: user.id).as_json(include: { operations: { include: :operation_type } }).as_json
+    op_ids = plans.collect { |p| p["operations"].collect { |o| o["id"] } }.flatten
+    fvs = FieldValue.includes(:child_sample).where(parent_class: "Operation", parent_id: op_ids)
+
+    plans.each do |plan|
+      running = false
+      done = true
+      plan["operations"].each do |op|
+        running = true if [ "pending", "waiting", "ready", "scheduled", "running" ].member? op["status"]
+        done = false unless [ "done", "error" ].member? op["status"]
+        op["inputs"] = []
+        op["outputs"] = []        
+        fvs.each do |fv|
+          op["inputs"] << fv if fv["parent_id"] == op["id"] && fv["role"] == "input"
+          op["outputs"] << fv if fv["parent_id"] == op["id"] && fv["role"] == "output"
+        end
+      end
+      plan["goals"] = [ plan["operations"][0] ]
+      plan["status"] = "Under Construction" if !running && !done
+      plan["status"] = "Running" if running
+      plan["status"] = "Completed" if done            
+    end
+
+    plans
+
+  end
+
 end

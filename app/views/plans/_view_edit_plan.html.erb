@@ -23,7 +23,15 @@
       &#9660;
     </span>
 
-    <b>{{node.operation_type.name}}</b> <span>{{node.status}}</span>
+    <b>{{node.operation_type.name}}</b> <span>{{node.status}}, </span>
+
+     <span ng-if="node.status != 'done' && node.status != 'error'">
+       {{node.nominal_cost.labor + node.nominal_cost.materials|currency}} (estimate)
+     </span>
+
+     <span ng-if="node.status == 'done' || node.status == 'error'">
+       {{node.labor + node.materials|currency}}
+     </span>     
 
   </span>
 
@@ -33,21 +41,21 @@
 
     <li ng-repeat="p in node.predecessors">
 
-      {{p.name}}. 
+      {{p.name}}: 
 
       <span ng-repeat="i in node.inputs | filter: { id: p.id }">
 
-        {{i.child_sample.name}} : 
+        {{i.child_sample.name}} / 
         {{input_info(i,operation_type(node)).object_type.name}}
 
-        <span ng-if="i.child_item_id && current_plan.status != 'Running'" class="available">
+        <span ng-if="i.child_item_id && current_plan.status == 'Under Construction'" class="available">
           ... available
         </span>
-        <span ng-if="!i.child_item_id && p.operations.length == 0  && current_plan.status != 'Running'" class="problem">
+        <span ng-if="!i.child_item_id && p.operations.length == 0 && current_plan.status == 'Under Construction'" class="problem">
           ... no plan!
         </span>        
 
-        <span ng-if="current_plan.status == 'Running' && ( node.status != 'done' && node.status != 'error'"
+        <span ng-if="current_plan.status == 'Running' && ( node.status != 'done' && node.status != 'error' )"
               ng-repeat="op in p.operations | filter: { status: 'done' }">
           <span ng-repeat="output in op.outputs | filter: { name: input.name }">
             <a href="/items/{{output.child_item_id}}">{{output.child_item_id}}</a>
@@ -78,7 +86,11 @@
 
     <div class='span6'>
       <h4>Status: {{current_plan.status}}</h4>
+      <b ng-if="current_plan.status == 'Under Construction'">Total Cost Estimate: {{cost(current_plan)|currency}}</b>
+      <b ng-if="current_plan.status != 'Under Construction'">Total Cost to Date: {{cost(current_plan)|currency}}</b>      
     </div>
+
+    <br /><br />
 
     <div ng-if="current_plan.status == 'Under Construction'" class='span6'> 
       <button class="btn btn-small pull-right space" ng-click="delete_plan(current_plan)">Delete</button>
@@ -101,7 +113,7 @@
 
     <div ng-repeat="output in node.outputs">
 
-        {{output.name}}. {{output.child_sample.name}} : 
+        {{output.name}}: {{output.child_sample.name}} / 
         {{output_info(output,operation_type(node)).object_type.name}}
         <span ng-if="node.status == 'done'">
           <a href="/items/{{output.child_item.id}}">{{output.child_item.id}}</a>

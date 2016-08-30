@@ -257,6 +257,8 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
     t.string   "status"
     t.integer  "user_id"
     t.integer  "job_id"
+    t.float    "labor"
+    t.float    "materials"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
   end

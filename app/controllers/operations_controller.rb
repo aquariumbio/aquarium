@@ -1,5 +1,7 @@
 class OperationsController < ApplicationController
 
+  before_filter :signed_in_user
+
   def active_and_pending_jobs
     job_ids = Operation.pluck(:job_id).uniq.select { |jid| jid }
     { 

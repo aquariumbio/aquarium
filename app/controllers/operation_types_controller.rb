@@ -1,5 +1,13 @@
 class OperationTypesController < ApplicationController
 
+  before_filter :signed_in_user
+
+  before_filter {
+    unless current_user && current_user.is_admin
+      redirect_to root_path, notice: "Administrative privileges required to access budgets."
+    end
+  }
+
   def index
 
     respond_to do |format|
@@ -14,8 +22,14 @@ class OperationTypesController < ApplicationController
     if fts
       fts.each do |ft|
         if ft[:allowable_field_types]
-          sample_type_names = ft[:allowable_field_types].collect { |aft| aft[:sample_type][:name] }
-          container_names =  ft[:allowable_field_types].collect { |aft| aft[:object_type][:name] }          
+          sample_type_names = ft[:allowable_field_types].collect { |aft| 
+            raise "Sample type not definied by browser for #{ft[:name]}: #{ft}" unless SampleType.find_by_id(aft[:sample_type_id])
+            SampleType.find(aft[:sample_type_id]).name
+          }
+          container_names =  ft[:allowable_field_types].collect { |aft| 
+            raise "Object type not definied by browser for #{ft[:name]}: #{ft}!" unless ObjectType.find_by_id(aft[:object_type_id])
+            ObjectType.find(aft[:object_type_id]).name
+          }          
         else
           sample_type_names = []
           container_names = []
@@ -71,10 +85,12 @@ class OperationTypesController < ApplicationController
 
     add_field_types ot, data[:field_types]
 
+    ot
+
   end
 
   def update
-    update_from_ui params
+    ot = update_from_ui params
     render json: ot.as_json(methods: [:field_types, :protocol, :cost_model, :documentation])
   end
 

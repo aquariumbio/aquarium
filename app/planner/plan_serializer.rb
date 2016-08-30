@@ -18,7 +18,7 @@ module PlanSerializer
       {
         name: input["name"],
         id: input["id"],
-        operations: ops.select { |other_op| ( @status != "Running" || other_op["status"] != "unplanned" ) && precedes(other_op, input) }
+        operations: ops.select { |other_op| ( @running || other_op["status"] != "unplanned" ) && precedes(other_op, input) }
                        .collect { |other_op| 
                                     other_op["visited"] = true
                                     other_op.merge(predecessors: predecessors(other_op,ops)) 
@@ -37,13 +37,15 @@ module PlanSerializer
 
   def serialize
 
-    @status = "Under Construction"
+    @running = false
+    @done = true
 
-    ops = operations.includes(:job).as_json(include: :job)
+    ops = operations.includes(:job).as_json(include: :job, methods: :nominal_cost)
 
     ops.each do |op|
       op["selected"] = (op["status"] != "unplanned")
-      @status = "Running" if [ "pending", "waiting", "ready", "scheduled", "running", "done", "error" ].member? op["status"] 
+      @running = true if [ "pending", "waiting", "ready", "scheduled", "running" ].member? op["status"]
+      @done = false unless [ "done", "error" ].member? op["status"]
     end
 
     operation_types = OperationType.where(id: ops.collect { |o| o["operation_type_id"] }).as_json
@@ -73,7 +75,7 @@ module PlanSerializer
     ops.each do |op|
       op["operation_type"] = operation_types.select { |ot| ot["id"] == op["operation_type_id"] }[0]
       op["inputs"]  = field_values.select { |fv| fv["parent_id"] == op["id"] && fv["role"] == "input" }
-      op["outputs"] = field_values.select { |fv| fv["parent_id"] == op["id"] && fv["role"] == "output" }      
+      op["outputs"] = field_values.select { |fv| fv["parent_id"] == op["id"] && fv["role"] == "output" }
     end
 
     goals = ops.select { |op| goal? op }
@@ -81,6 +83,10 @@ module PlanSerializer
     goals.each do |g| 
       g["visited"] = true
     end
+
+    @status = "Under Construction" if !@running && !@done
+    @status = "Running" if @running 
+    @status = "Completed" if @done
 
     {
       id: id,

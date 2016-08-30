@@ -79,9 +79,9 @@
 
 <script type="text/ng-template" id="table">
   <div class='content content-note'>
-    <table >
+    <table class='table table-condensed'>
       <tr ng-repeat="row in content_value(line)">
-        <td style="border: 1pt solid #aaa" ng-repeat="cell in row">{{cell}}</row>
+        <td style="border: 1pt solid #aaa" ng-repeat="cell in row track by $index">{{cell}}</row>
       </tr>
     </table>
   </div>

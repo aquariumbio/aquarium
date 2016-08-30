@@ -1,5 +1,7 @@
 class PlansController < ApplicationController
 
+  before_filter :signed_in_user
+
   def show
     respond_to do |format|
       format.html { render layout: 'browser' }
@@ -63,7 +65,7 @@ class PlansController < ApplicationController
 
   def index
     respond_to do |format|
-      format.json { render json: Plan.where(user_id: current_user.id).reverse.as_json(methods: [:goals, :status]) }
+      format.json { render json: Plan.list(current_user).reverse }
       format.html { render layout: 'browser' }
     end  
   end

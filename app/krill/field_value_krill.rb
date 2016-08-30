@@ -47,7 +47,12 @@ module FieldValueKrill
   end
 
   def make_collection rows, columns
-    Collection.new_collection(object_type.name, rows, columns)
+    ot = object_type
+    if ot
+      Collection.new_collection(object_type.name, rows, columns)
+    else
+      raise "Could not find object type: #{object_type}"
+    end
   end
 
   def make_part collection, r, c

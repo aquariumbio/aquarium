@@ -22,12 +22,17 @@
 
   .two-column-control {
     width: 250px;
-    padding: 10px 15px 15px 15px;
+    padding: 5px 15px 15px 15px;
     margin: 10px 10px 0 10px;
     border: 1pt solid #ccc;
     word-wrap: break-word;   
     cursor: pointer;
     display: block;
+    h5 {
+      text-align: center;
+      margin: 5px;
+      padding: 0;
+    }    
   }
 
   .two-column-control-on {  
