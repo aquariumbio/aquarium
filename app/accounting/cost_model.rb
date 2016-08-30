@@ -66,12 +66,12 @@ module CostModel
 
       when ["sequencing","send to sequencing"]
         n = 0
-        if simple_spec[:num_colonies]
+        if simple_spec[:num_colonies] # its a "Plasmid Verification" task
           m = simple_spec[:num_colonies].length
           (0..m-1).each do |i|
-            n += simple_spec[:num_colonies][i] * simple_spec[:primer_ids][i]
+            n += simple_spec[:num_colonies][i] * simple_spec[:primer_ids][i].length
           end
-        else
+        else # its a "Sequencing" task
           simple_spec[:primer_ids].each do |primer_list|
             n += primer_list.length
           end          
