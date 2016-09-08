@@ -1,13 +1,6 @@
 <div ng-if="mode == 'build'" ng-controller="buildPlanCtrl as builder">
 
-  <div class='row-fluid'>
-    <div class='span6'>
-      <span class='op-type-name'>Goal: {{goal.name}}</span>
-    </div>
-    <div class='span6'>
-      <button ng-click='plan(goal)' class='btn btn-primary pull-right'>Plan</button> 
-    </div>
-  </div>    
+  <div class='op-doc' ng-bind-html="goal.rendered_docs"></div>
 
   <table class='table op-table'>
 
@@ -48,7 +41,8 @@
         <td ng-repeat="ft in goal.field_types | filter: { role: 'output' }"></td>
 
         <td>
-          <a href='#' class='btn btn-mini pull-right' ng-click="more(goal)">Add</a>
+          <a href="#" class='btn btn-mini btn-primary pull-right space' ng-click='plan(goal)'>Plan</button> 
+          <a href='#' class='btn btn-mini pull-right space' ng-click="more(goal)">Add</a>
         </td>
 
         <td></td>

@@ -8,8 +8,8 @@
     w = angular.module('aquarium', ['ngCookies','ui.ace']); 
   } 
 
-  w.controller('plannerCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
-                     function (  $scope,   $http,   $attrs,   $cookies ) {
+  w.controller('plannerCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', 
+                     function (  $scope,   $http,   $attrs,   $cookies,   $sce ) {
 
     $scope.plans = [];
     $scope.mode = 'main';
@@ -143,6 +143,8 @@
       }
       $scope.mode = 'build';
       $scope.goal = ot;
+      var md = window.markdownit();
+      ot.rendered_docs = $sce.trustAsHtml(md.render(ot.documentation.content));
     }
 
     $scope.close_goal = function(ot) {
