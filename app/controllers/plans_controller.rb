@@ -86,4 +86,15 @@ class PlansController < ApplicationController
 
   end
 
+  def replan
+
+    logger.info({
+      id: params[:id],
+      keys: params.keys,
+      fvs: params[:fvs]
+    })
+    render json: { whatever: true }
+
+  end
+
 end

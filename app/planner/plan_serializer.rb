@@ -1,5 +1,9 @@
 module PlanSerializer
 
+  # Because the operations in a plan form a tree, serializing them with build in rails stuff is super slow, because it 
+  # requires recursion. This code loads everything involved with a plan in a few db queries, and then stiches it all 
+  # together into a nice recursive object. Since the stiching is done in memory, its fast.
+
   def precedes aop, input
     # returns true of there is an output fv in aop that is wired to the specified input fv of bop
     return false if aop["visited"]
@@ -13,18 +17,29 @@ module PlanSerializer
     return false
   end
 
-  def predecessors op, ops
-    op["inputs"].collect { |input|
+  def predecessors op, ops, field_types
+
+    determined_predecessors = op["inputs"].collect { |input|
       {
         name: input["name"],
         id: input["id"],
         operations: ops.select { |other_op| ( @running || other_op["status"] != "unplanned" ) && precedes(other_op, input) }
                        .collect { |other_op| 
                                     other_op["visited"] = true
-                                    other_op.merge(predecessors: predecessors(other_op,ops)) 
-                                }
-      }
+                                    other_op.merge(predecessors: predecessors(other_op,ops,field_types)) 
+                                },
+        undetermined: false
+      }      
     }
+
+    undetermined_predecessors = op["operation_type"]["inputs"].reject { |ot_input|
+      op["inputs"].collect { |input| input["name"] }.member? ot_input["name"]
+    }.collect { |ot_input|
+      field_types.select { |ft| ft["id"] == ot_input["id"] }.first.merge undetermined: true
+    }
+
+    determined_predecessors + undetermined_predecessors
+
   end
 
   def goal? op
@@ -50,6 +65,7 @@ module PlanSerializer
       @running = true if [ "pending", "waiting", "ready", "scheduled", "running" ].member? op["status"]
       @done = false unless [ "done", "error" ].member? op["status"]
       op["data_associations"] = associations.select { |a| a["parent_id"] == op["id"] }
+      op["fvs"] = {}
     end
 
     operation_types = OperationType.where(id: ops.collect { |o| o["operation_type_id"] }).as_json
@@ -98,7 +114,7 @@ module PlanSerializer
       created_at: created_at,
       updated_at: updated_at,
       status: @status,
-      goals: goals.collect { |g| g.merge(predecessors: predecessors(g,ops)) }
+      goals: goals.collect { |g| g.merge(predecessors: predecessors(g,ops,field_types)) }
     }
 
   end

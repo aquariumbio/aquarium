@@ -2,6 +2,7 @@ Bioturk::Application.routes.draw do
 
   get '/plans/:pid/select/:oid',                 to: 'plans#select'
   get '/plans/start/:id',                        to: 'plans#start'
+  post '/plans/replan',                          to: 'plans#replan'
   post '/plans/plan',                            to: 'plans#plan'  
   resources :plans
 

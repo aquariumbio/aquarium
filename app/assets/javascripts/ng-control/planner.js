@@ -9,7 +9,7 @@
   } 
 
   w.controller('plannerCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', 
-                     function (  $scope,   $http,   $attrs,   $cookies,   $sce ) {
+                     function (  $scope,   $http,   $attrs,   $cookies,   $sce ) {                  
 
     $scope.plans = [];
     $scope.mode = 'main';
@@ -81,6 +81,13 @@
         // determine_launch_mode($scope.current_plan);
       });
     }      
+
+    $scope.replan = function(op) {
+      $http.post("/plans/replan", op).then(function(response) {
+        console.log("Hello from the replanner");
+        console.log(response);
+      });
+    }
 
     function promote_data_op(op) {
       PromoteDataAssociations(op);

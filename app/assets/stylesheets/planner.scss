@@ -193,4 +193,23 @@
 
   }
 
+  .field_value_form {
+    width: auto;
+    input {
+      margin: 3px;
+      height: 11pt;
+      width: 250px;
+    }
+   }
+
+   .replan {
+      td {
+      vertical-align: top;
+      }
+      tr td:first-child{
+          width:1%;
+          white-space:nowrap;
+      }    
+   }
+
 }

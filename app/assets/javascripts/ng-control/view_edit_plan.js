@@ -95,6 +95,12 @@
 
     }
 
+    $scope.needs_more_planning = function(node) {
+      return aq.where(node.predecessors, function(p) {
+        return p.undetermined;
+      }).length > 0;
+    }    
+
   }]);
 
 })();

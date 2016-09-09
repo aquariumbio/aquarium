@@ -1,52 +1,78 @@
 <script type="text/ng-template" id="plan">
 
+  <!-- PLAN TEMPLATE: Shows an operation in a plan, showing predecessors recurseively. -->
+
+  <!-- If there are several options, list name and status of the operation and show a checkbox -->
   <label class="checkbox" ng-if="p.operations.length > 1">
-    <input type=checkbox ng-model="node.selected" ng-change="select_predecessor(current_plan,node,p.operations)"></input>
+    <input type=checkbox
+           ng-model="node.selected" 
+           ng-change="select_predecessor(current_plan,node,p.operations)"></input>
     <b>{{node.operation_type.name}}</b> <span>{{node.status}}</span>
   </label>
 
+  <!-- If there is only one option, just list it with various information and potentially with open
+      and close triangles -->
   <span ng-if="!(p.operations.length > 1)">
 
-    <span ng-if="!node.open && ( node.status == 'done' || node.status == 'error' )" ng-click="expand(node)" class='clickable'>
-      &#9654;
+    <span ng-if="!node.open && ( node.status == 'done' || node.status == 'error' )"
+          ng-click="expand(node)"
+          class='clickable'>
+      &#9654; <!-- right triangle -->
     </span>
 
-    <span ng-if="node.open" ng-click="unexpand(node)" class='clickable'>
-      &#9660;
+    <span ng-if="node.open"
+          ng-click="unexpand(node)" 
+          class='clickable'>
+      &#9660; <!-- down triangle -->
     </span>
 
     <b>{{node.operation_type.name}}</b> <span>{{node.status}}, </span>
 
-     <span ng-if="node.status != 'done' && node.status != 'error'">
-       {{node.nominal_cost.labor + node.nominal_cost.materials|currency}} (estimate)
-     </span>
+    <span ng-if="node.status != 'done' && node.status != 'error'">
+      {{node.nominal_cost.labor + node.nominal_cost.materials|currency}} (estimate)
+    </span>
 
-     <span ng-if="node.status == 'done' || node.status == 'error'">
-       {{node.labor + node.materials|currency}}
-     </span>     
+    <span class='problem' ng-if="needs_more_planning(node)">
+      This operation has undetermined inputs.
+     </span>    
+
+    <span ng-if="node.status == 'done' || node.status == 'error'">
+      {{node.labor + node.materials|currency}}
+    </span>     
 
   </span>
 
+  <!-- Show operation details if it is expanded (calls sub-template) -->
   <div ng-if="node.open" ng-include="'operation'" ng-init="operation = node"></div>
 
+  <!-- Show each predecessor -->
   <ul ng-if="node.predecessors.length > 0">
 
-    <li ng-repeat="p in node.predecessors">
+    <!-- Determined Inputs -->
+    <li ng-repeat="p in node.predecessors | filter: { undetermined: false }">
+
+      <!-- Show predecessor information: name, sample name, object type name, item number, and location.
+           If the predecessor is in planning phase, show whether its inputs are available or unplannable. -->
 
       {{p.name}}: 
 
       <span ng-repeat="i in node.inputs | filter: { id: p.id }">
 
-        {{i.child_sample.name}} / 
-        {{input_info(i,operation_type(node)).object_type.name}}
+        {{i.child_sample.name}} / {{input_info(i,operation_type(node)).object_type.name}}
 
-        <span ng-if="i.child_item_id && current_plan.status == 'Under Construction'" class="available">
+        <!-- Planning Phase: Availale Input -->
+        <span ng-if="i.child_item_id && current_plan.status == 'Under Construction'"
+              class="available">
           ... available
         </span>
-        <span ng-if="!i.child_item_id && p.operations.length == 0 && current_plan.status == 'Under Construction'" class="problem">
-          ... no plan!
-        </span>        
 
+        <!-- Planning Phase: No operation type and no available input -->
+        <span ng-if="!i.child_item_id && p.operations.length == 0 && current_plan.status == 'Under Construction'"
+              class="problem">
+          ERROR: No operation type found that can produce this input, and no inventory is available.
+        </span>
+
+        <!-- Execution Phase: Running operations showing its predecessor's output items / locations -->
         <span ng-if="current_plan.status == 'Running' && ( node.status != 'done' && node.status != 'error' )"
               ng-repeat="op in p.operations | filter: { status: 'done' }">
           <span ng-repeat="output in op.outputs | filter: { name: input.name }">
@@ -55,6 +81,7 @@
           </span>
         </span>
 
+        <!-- Completed Phase: Completed predecessor -->
         <span ng-if="node.status == 'done'">
           <a href="/items/{{i.child_item.id}}">{{i.child_item.id}}</a>
           at {{i.child_item.location}}          
@@ -62,15 +89,39 @@
 
       </span>
 
+      <!-- List predecessor operations, calling this template recurseively -->
       <ul ng-if="p.operations.length > 0">
         <li ng-repeat="node in p.operations" ng-include="'plan'"></li>
       </ul>
 
     </li>
 
+    <!-- Undetermined Inputs. User needs to enter them and replan. -->
+    <li ng-repeat="p in node.predecessors | filter: { undetermined: true }" ng-controller="buildPlanCtrl as builder">
+      <table class="replan">
+        <tr>
+          <td class='problem' style='width: 20%'>{{p.name}}:</td>
+          <td ng-include="'field_value_form'" ng-init="ft = p; operation = node"></td>
+        </tr>
+      </table>
+    </li>
+
+    <li ng-if="needs_more_planning(node)">
+     <a href="#"
+         class='btn btn-mini btn-primary'
+         ng-click="replan(node)">
+         Plan
+      </a>    
+    </li>
+
   </ul>
 
+
 </script>
+
+
+
+
 
 <div ng-if="mode=='view'" ng-controller="viewEditPlanCtrl" class='plan'>
 
