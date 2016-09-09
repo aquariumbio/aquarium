@@ -23,7 +23,7 @@ module PlanSerializer
       {
         name: input["name"],
         id: input["id"],
-        operations: ops.select { |other_op| ( @running || other_op["status"] != "unplanned" ) && precedes(other_op, input) }
+        operations: ops.select { |other_op| ( !@running || other_op["status"] != "unplanned" ) && precedes(other_op, input) }
                        .collect { |other_op| 
                                     other_op["visited"] = true
                                     other_op.merge(predecessors: predecessors(other_op,ops,field_types)) 
@@ -57,6 +57,7 @@ module PlanSerializer
 
     ops = operations.includes(:job).as_json(include: :job, methods: :nominal_cost)
     op_ids = ops.collect { |o| o["id"] }
+    Rails.logger.info "====================== OP_IDS = #{op_ids} =============================="
 
     associations = DataAssociation.includes(:upload).where(parent_class: "Operation", parent_id: op_ids).as_json(include: :upload)
 

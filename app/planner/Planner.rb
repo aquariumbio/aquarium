@@ -2,10 +2,10 @@ class Planner
 
   attr_reader :plan
 
-  def initialize operation_types
+  def initialize operation_types, plan=nil
     @operation_types = operation_types
     @plan_space_size = 0
-    @plan = Plan.new
+    @plan = plan || Plan.new
     @plan.save    
   end
 
@@ -43,7 +43,7 @@ class Planner
 
   def plan_tree op
 
-    op.associate_plan @plan
+    op.associate_plan @plan unless op.plan
 
     op.inputs.each do |input|
 

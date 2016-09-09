@@ -48,6 +48,7 @@ class PlansController < ApplicationController
     operations = params[:operations].collect do |o|
       op = ot.operations.create status: "planning", user_id: current_user.id
       ot.inputs.each do |input|
+        puts "========== setting #{input.name} to #{o[:fvs][input.name]}"
         op.set_input input.name, value(o[:fvs][input.name])
       end
       ot.outputs.each do |output|
@@ -88,12 +89,23 @@ class PlansController < ApplicationController
 
   def replan
 
-    logger.info({
-      id: params[:id],
-      keys: params.keys,
-      fvs: params[:fvs]
-    })
-    render json: { whatever: true }
+    # Find the plan
+    operation = Operation.find(params[:id])
+    puts "============= REPLANNING Operation #{operation.id}: #{operation.operation_type.name}"
+    puts "============= FVS: #{params[:fvs]} ============="
+    params[:fvs].each do |key,str|
+      puts "========== SETTING #{key} to #{str} =============="
+      operation.set_input(key,value(str))
+     end
+
+    # Replan the operation
+    planner = Planner.new OperationType.all, operation.plan
+    planner.plan_tree operation
+    planner.mark_shortest operation
+    planner.mark_unused operation
+
+    # render the plan
+    redirect_to plan_path(id: operation.plan.id)
 
   end
 

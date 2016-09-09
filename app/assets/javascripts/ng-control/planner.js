@@ -84,8 +84,12 @@
 
     $scope.replan = function(op) {
       $http.post("/plans/replan", op).then(function(response) {
-        console.log("Hello from the replanner");
-        console.log(response);
+        var i = $scope.plans.indexOf(op);
+        $scope.mode = 'view';
+        $scope.plans[i] = response.data;
+        $scope.current_plan = response.data;
+        $scope.current_plan.current_node = response.data;
+        ot.operations = null;
       });
     }
 

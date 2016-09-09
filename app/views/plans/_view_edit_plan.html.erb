@@ -7,7 +7,7 @@
     <input type=checkbox
            ng-model="node.selected" 
            ng-change="select_predecessor(current_plan,node,p.operations)"></input>
-    <b>{{node.operation_type.name}}</b> <span>{{node.status}}</span>
+    <b>{{node.id}}: {{node.operation_type.name}}</b> <span>{{node.status}}</span>
   </label>
 
   <!-- If there is only one option, just list it with various information and potentially with open
@@ -26,7 +26,7 @@
       &#9660; <!-- down triangle -->
     </span>
 
-    <b>{{node.operation_type.name}}</b> <span>{{node.status}}, </span>
+    <b>{{node.id}}: {{node.operation_type.name}}</b> <span>{{node.status}}, </span>
 
     <span ng-if="node.status != 'done' && node.status != 'error'">
       {{node.nominal_cost.labor + node.nominal_cost.materials|currency}} (estimate)
@@ -54,7 +54,7 @@
       <!-- Show predecessor information: name, sample name, object type name, item number, and location.
            If the predecessor is in planning phase, show whether its inputs are available or unplannable. -->
 
-      {{p.name}}: 
+      {{p.id}}: {{p.name}}: 
 
       <span ng-repeat="i in node.inputs | filter: { id: p.id }">
 
