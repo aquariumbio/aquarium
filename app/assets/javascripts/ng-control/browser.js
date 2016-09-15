@@ -5,11 +5,11 @@
   try {
     w = angular.module('aquarium'); 
   } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace'], function($rootScopeProvider) { 
+    w = angular.module('aquarium', ['ngCookies','ui.ace'], [ '$rootScopeProvider', function($rootScopeProvider) { 
       // This is an apparently well known hack that prevents digest errors when recursively
       // rendering templates that nest more than 10 levels.
       $rootScopeProvider.digestTtl(25); 
-    });
+    }]);
   } 
 
   w.controller('browserCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
