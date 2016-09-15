@@ -4,6 +4,8 @@ class Planner < ActiveRecord::Migration
 
     create_table :operation_types do |t|
       t.string :name
+      t.string :category
+      t.boolean :deployed
       t.timestamps      
     end
 

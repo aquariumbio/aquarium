@@ -7,15 +7,14 @@
 
   } else if ( '<%= Rails.env %>' == 'production'  ) {
 
-    document.getElementById('logo').style.color = '#aaa';
+    document.getElementById('logo').style.color = '#0f2';
+    document.getElementById('header-bar').style.background = '#02a';    
 
   } else {
 
-    document.getElementById('logo').style.color = '#0f0';
-    document.getElementById('header-bar').style.background = '#030';
+    document.getElementById('logo').style.color = '#0f2';
+    document.getElementById('header-bar').style.background = '#02a';
 
   }
-
-  <% Manta::blinker.html_safe %>
 
 </script>

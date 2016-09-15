@@ -43,7 +43,7 @@ class OperationTypesController < ApplicationController
 
   def create
 
-    ot = OperationType.new name: params[:name]
+    ot = OperationType.new name: params[:name], category: params[:category], deployed: params[:deployed]
     ot.save
     add_field_types ot, params[:field_types]     
 
@@ -78,6 +78,8 @@ class OperationTypesController < ApplicationController
 
     ot = OperationType.find(data[:id])
     ot.name = data[:name]
+    ot.category = data[:category]
+    ot.deployed = data[:deployed]
     ot.save
 
     ot.field_types.each do |ft| 

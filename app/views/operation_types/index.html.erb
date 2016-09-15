@@ -11,13 +11,27 @@
 
       <div class="two-column-control">
 
-        <ul class='op-type-list'>
-          <li ng-repeat="ot in operation_types" ng-click="choose(ot)" ng-class="ot_class(ot)">{{ot.name}}</li>
+        <ul class='op-type-list'>          
+
+          <li ng-repeat="category in categories track by $index">
+
+            <h4>{{category}}</h4>
+
+            <ul>
+              <li ng-repeat="ot in operation_types | filter: { category: category } : true track by $index" 
+                  ng-click="choose(ot)"
+                  ng-class="ot_class(ot)">{{ot.name}}</li>
+            </ul>
+
+          </li>
+
           <li><br /></li>
+
           <li>
             <button class='btn btn-mini btn-primary' ng-click="new_operation_type()">New</button>
             <button class='btn btn-mini' ng-click="copy_operation_type()">Copy</button>
           </li>
+
         </ul>
 
       </div>

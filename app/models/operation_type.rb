@@ -7,7 +7,7 @@ class OperationType < ActiveRecord::Base
   has_many :operations
   # has_many :fts, foreign_key: "parent_id", class_name: "FieldType"
 
-  attr_accessible :name, :protocol
+  attr_accessible :name, :category, :deployed
 
   def add_io name, sample_name, container_name, role, opts
     add_field name, sample_name, container_name, role, opts

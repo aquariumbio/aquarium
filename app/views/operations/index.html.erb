@@ -14,7 +14,7 @@
             <th>S</th>
             <th>R</th>
           </tr>
-          <tr ng-repeat="ot in operation_types" ng-click="choose(ot)">
+          <tr ng-repeat="ot in operation_types | filter: { deployed: true }" ng-click="choose(ot)">
             <td ng-class="op_type_class(ot)">{{ot.name}}</td>
             <td ng-class="number_class(ot,'pending')">   {{number(ot,"pending")}}   </td>
             <td ng-class="number_class(ot,'scheduled')"> {{number(ot,"scheduled")}} </td>

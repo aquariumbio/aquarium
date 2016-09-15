@@ -3,17 +3,28 @@
   <form>
 
     <div class="row-fluid">
-      <div class="span6">
+      <div class="span4">
         <label class="label-bold">Operation Name</label>
         <input type='text' ng-model="current_ot.name" class="input-xlarge">
       </div>
-      <div class="span6">
+      <div class="span4">
+        <label class="label-bold">Category</label>
+        <input type='text' ng-model="current_ot.category" class="input-xlarge">
+      </div>   
+      <div class="span1">
+        <label class="label-bold">Deployed?</label>
+        <input type='checkbox' ng-model="current_ot.deployed">
+      </div>
+      <div class="span3">
+        <label class="label-bold">&nbsp;</label>
         <button class="btn btn-primary pull-right" ng-click="save_ot(current_ot)">
-          <span ng-if="current_ot.id">Update Definition</span>
-          <span ng-if="!current_ot.id">Save new Operation Type</span>
+          <span ng-if="current_ot.id">Update</span>
+          <span ng-if="!current_ot.id">Save</span>
         </button>
       </div>
     </div>
+
+    <hr />
 
     <div class='row-fluid'>
       <div class='span6'>

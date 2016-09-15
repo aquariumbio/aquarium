@@ -248,6 +248,8 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
 
   create_table "operation_types", :force => true do |t|
     t.string   "name"
+    t.string   "category"
+    t.boolean  "deployed"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

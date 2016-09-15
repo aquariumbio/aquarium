@@ -64,7 +64,7 @@ class PlansController < ApplicationController
     end
 
     if errors.empty?
-      planner = Planner.new OperationType.all
+      planner = Planner.new OperationType.where(deployed: true)
       planner.plan_trees operations   
       planner.plan.reload
       render json: planner.plan.serialize
@@ -109,7 +109,7 @@ class PlansController < ApplicationController
      end
 
     # Replan the operation
-    planner = Planner.new OperationType.all, operation.plan
+    planner = Planner.new OperationType..where(deployed: true), operation.plan
     planner.plan_tree operation
     planner.mark_shortest operation
     planner.mark_unused operation

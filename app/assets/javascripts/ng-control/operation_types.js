@@ -16,10 +16,18 @@
     $scope.user = new User($http);  
     $scope.mode = 'definition';
     $scope.default_protocol = "";
+    $scope.categories = [];
+
+    function make_categories() {
+      $scope.categories = aq.uniq(aq.collect($scope.operation_types,function(ot) {
+        return ot.category;
+      }));
+    }
 
     $http.get('/operation_types.json').then(function(response) {
       $scope.operation_types = response.data;
-      $scope.current_ot = $scope.operation_types[0];      
+      $scope.current_ot = $scope.operation_types[0];
+      make_categories();
     });
 
     $http.get('/object_types.json').then(function(response) {
@@ -66,12 +74,14 @@
             var i = $scope.operation_types.indexOf(ot);
             $scope.operation_types[i] = response.data;
             $scope.current_ot = response.data;
+            make_categories();
           });          
         } else {
           $http.post("/operation_types",ot).then(function(response) {
             var i = $scope.operation_types.indexOf(ot);
             $scope.operation_types[i] = response.data;            
-            $scope.current_ot = response.data;            
+            $scope.current_ot = response.data;  
+            make_categories();
           });
         }
       }
@@ -80,6 +90,8 @@
     $scope.new_operation_type = function() {
       var new_ot = {
         name: "New Operation Type",
+        category: "Unsorted",
+        deployed: false,
         field_types:[],
         protocol: { name: 'protocol', content: $scope.default_protocol },
         cost_model: { name: 'cost_model', content: 'def cost(op)\n  { labor: 0, materials: 0 }\nend' },

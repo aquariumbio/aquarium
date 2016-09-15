@@ -13,6 +13,24 @@ namespace :workflow do
 
   end
 
+  task :export => :environment do
+
+    OperationType.all.each do |ot|
+
+      puts "- OPERATION TYPE -----------------------"
+      puts ot.name
+      puts "- PROTOCOL -----------------------------"
+      puts ot.code('protocol').content if ot.code('protocol')
+      puts "- COST ---------------------------------"
+      puts ot.code('cost_model').content if ot.code('cost_model')
+      puts "- DOCUMENTATION ------------------------"
+      puts ot.code('documentation').content if ot.code('documentation')
+      puts "\n\n\n\n"
+
+    end
+
+  end
+
   task :seed => :environment do 
 
     lp = ObjectType.new(name: "Lyophilized Primer", handler: "sample_container", unit: "tube", min: 1, max: 10000,
@@ -27,75 +45,75 @@ namespace :workflow do
 
     raise "Could not make object type: #{cp.errors.full_messages.join(', ')}" unless cp.errors.empty?  
 
-    op = OperationType.new name: "Order Primer"
+    op = OperationType.new name: "Order Primer", category: "Cloning", deployed: true
     op.save
     op.add_output( "Primer", "Primer", "Lyophilized Primer" )  
 
-    rp = OperationType.new name: "Receive Primer"
+    rp = OperationType.new name: "Receive Primer", category: "Cloning", deployed: true
     rp.save
     rp.add_input(  "Primer", "Primer", "Lyophilized Primer" )
       .add_output( "Primer", "Primer", "Primer Stock" )
       .add_output( "Primer", "Primer", "Primer Aliquot" )
 
-    mpa = OperationType.new name: "Make Primer Aliquot"
+    mpa = OperationType.new name: "Make Primer Aliquot", category: "Cloning", deployed: true
     mpa.save
     mpa.add_input( "Primer", "Primer",   "Primer Stock")
       .add_output( "Primer", "Primer",   "Primer Aliquot")
     
-    pcr = OperationType.new name: "PCR"
+    pcr = OperationType.new name: "PCR", category: "Cloning", deployed: true
     pcr.save
     pcr.add_input(  "Forward Primer", "Primer",   "Primer Aliquot" )
        .add_input(  "Reverse Primer", "Primer",   "Primer Aliquot" )
        .add_input(  "Template",       [ "Plasmid", "Fragment" ],  [ "Plasmid Stock", "Fragment Stock" ] )
        .add_output( "Fragment",       "Fragment", "Stripwell", part: true ) 
 
-    run_gel = OperationType.new name: "Run Gel"
+    run_gel = OperationType.new name: "Run Gel", category: "Cloning", deployed: true
     run_gel.save
     run_gel.add_input(  "Fragment", "Fragment",  "Stripwell", part: true )
            .add_output( "Fragment", "Fragment",  "50 mL 0.8 Percent Agarose Gel in Gel Box", part: true )
 
-    extract_fragment = OperationType.new name: "Extract Fragment"
+    extract_fragment = OperationType.new name: "Extract Fragment", category: "Cloning", deployed: true
     extract_fragment.save
     extract_fragment.add_input(  "Fragment", "Fragment",  "50 mL 0.8 Percent Agarose Gel in Gel Box", part: true )
                     .add_output( "Fragment", "Fragment",  "Gel Slice" )
 
-    purify_gel = OperationType.new name: "Purify Gel"
+    purify_gel = OperationType.new name: "Purify Gel", category: "Cloning", deployed: true
     purify_gel.save
     purify_gel.add_input(  "Fragment", "Fragment",   "Gel Slice" )
               .add_output( "Fragment", "Fragment",  "Fragment Stock" )
 
-    gibson = OperationType.new name: "Gibson Assembly"
+    gibson = OperationType.new name: "Gibson Assembly", category: "Cloning", deployed: true
     gibson.save
     gibson.add_input(  "Fragment", "Fragment", "Fragment Stock", array: true )
           .add_output( "Assembled Plasmid", "Plasmid",  "Gibson Reaction Result" )
 
-    transform = OperationType.new name: "Transform E coli"
+    transform = OperationType.new name: "Transform E coli", category: "Cloning", deployed: true
     transform.save
     transform.add_input(  "Plasmid", "Plasmid",  "Gibson Reaction Result" )
              .add_input(  "Comp cell", "E coli strain", "Electrocompetent aliquot" )      
              .add_output( "Plasmid", "Plasmid", "Transformed E coli 1.5 mL tube" ) 
 
-    plate = OperationType.new name: "Plate E coli"
+    plate = OperationType.new name: "Plate E coli", category: "Cloning", deployed: true
     plate.save
     plate.add_input(  "Plasmid", "Plasmid",  "Transformed E coli 1.5 mL tube" ) # can I add a few other possible object types here (see pcr)?
          .add_output( "Plasmid", "Plasmid",  "E coli Plate of Plasmid" )
 
-    check_plate = OperationType.new name: "Check E coli Plate"
+    check_plate = OperationType.new name: "Check E coli Plate", category: "Cloning", deployed: true
     check_plate.save
     check_plate.add_input(  "Plasmid", "Plasmid",  "Transformed E coli 1.5 mL tube" ) 
                .add_output( "Plasmid", "Plasmid",  "Checked E coli Plate of Plasmid" )
 
-    overnight = OperationType.new name: "E coli Overnight"
+    overnight = OperationType.new name: "E coli Overnight", category: "Cloning", deployed: true
     overnight.save
     overnight.add_input(  "Plasmid", "Plasmid",  "Checked E coli Plate of Plasmid" )
              .add_output( "Plasmid", "Plasmid",  "TB Overnight of Plasmid" )  
 
-    mp = OperationType.new name: "Miniprep"
+    mp = OperationType.new name: "Miniprep", category: "Cloning", deployed: true
     mp.save
     mp.add_input( "Plasmid", "Plasmid", "TB Overnight of Plasmid")
       .add_output( "Plasmid", "Plasmid", "Plasmid Stock")
 
-    seq = OperationType.new name: "Sequencing"
+    seq = OperationType.new name: "Sequencing", category: "Cloning", deployed: true
     seq.save
     seq.add_input( "Plasmid", "Plasmid", "Plasmid Stock")
 
