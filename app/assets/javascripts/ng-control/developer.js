@@ -8,7 +8,8 @@
     w = angular.module('aquarium', ['ngCookies','ui.ace']); 
   } 
 
-  w.controller('developerCtrl', [ '$scope', '$http', '$attrs', '$cookies', function ($scope,$http,$attrs,$cookies) {
+  w.controller('developerCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
+                        function ( $scope,   $http,   $attrs,   $cookies ) {
 
     $scope.errors = [];
     $scope.messages = [];

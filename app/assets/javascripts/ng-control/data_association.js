@@ -8,7 +8,8 @@
     w = angular.module('aquarium', ['ngCookies','ui.ace']); 
   } 
 
-  w.controller('daCtrl', [ '$scope', '$http', '$attrs', function ($scope,$http,$attrs) {
+  w.controller( 'daCtrl', [ '$scope', '$http', '$attrs', 
+                  function ( $scope,   $http,   $attrs ) {
 
     $scope.toggle_modal = function(da) {
       da.modal = !da.modal;

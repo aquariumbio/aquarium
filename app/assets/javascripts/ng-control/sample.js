@@ -8,7 +8,8 @@
     w = angular.module('aquarium', ['ngCookies','ui.ace']); 
   } 
 
-  w.controller('sampleCtrl', [ '$scope', '$http', '$attrs', function ($scope,$http,$attrs) {
+  w.controller('sampleCtrl', [ '$scope', '$http', '$attrs', 
+                    function (  $scope,   $http,   $attrs ) {
 
     $scope.user = new User($http);
 

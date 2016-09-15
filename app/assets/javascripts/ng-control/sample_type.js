@@ -8,7 +8,8 @@
     w = angular.module('aquarium', ['ngCookies','ui.ace']); 
   } 
 
-  w.controller('sampleTypeEditCtrl', [ '$scope', '$http', '$attrs', function ($scope,$http,$attrs,treeAjax) {
+  w.controller('sampleTypeEditCtrl', [ '$scope', '$http', '$attrs', 
+                            function (  $scope,   $http,   $attrs, treeAjax ) {
 
     $scope.sample_type = {};
     $scope.sample_types = {};

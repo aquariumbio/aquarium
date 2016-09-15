@@ -9,7 +9,7 @@
   } 
 
   w.controller('operationTypesCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', 
-                        function (  $scope,   $http,   $attrs,   $cookies, $sce ) {
+                            function (  $scope,   $http,   $attrs,   $cookies,   $sce ) {
 
     $scope.operation_types = [];
     $scope.current_ot = { name: "Loading" }

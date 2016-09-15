@@ -9,7 +9,7 @@
   } 
 
   w.controller('operationTypeDefinitionCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
-                        function (  $scope,   $http,   $attrs,   $cookies ) {
+                                     function (  $scope,   $http,   $attrs,   $cookies ) {
 
 
     $scope.add_io = function(role) {

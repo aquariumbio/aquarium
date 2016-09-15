@@ -3,7 +3,8 @@
 
   w = angular.module('tree',[]);
 
-  w.controller('treeCtrl', [ '$scope', '$http', '$attrs', function ($scope,$http,$attrs) {
+  w.controller('treeCtrl', [ '$scope', '$http', '$attrs', 
+                  function (  $scope,   $http,   $attrs ) {
 
     function fetch(sid,then) {
       $http({

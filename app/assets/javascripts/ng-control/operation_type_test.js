@@ -9,7 +9,7 @@
   } 
 
   w.controller('operationTypeTestCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
-                              function (  $scope,   $http,   $attrs,   $cookies ) {
+                               function (  $scope,   $http,   $attrs,   $cookies ) {
 
     $scope.randomize = function(ot) {
 

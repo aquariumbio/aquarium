@@ -23,12 +23,13 @@ class OperationTypesController < ApplicationController
       fts.each do |ft|
         if ft[:allowable_field_types]
           sample_type_names = ft[:allowable_field_types].collect { |aft| 
-            raise "Sample type not definied by browser for #{ft[:name]}: #{ft}" unless SampleType.find_by_id(aft[:sample_type_id])
-            SampleType.find(aft[:sample_type_id]).name
+            puts "====== #{aft} ======"
+            raise "Sample type not definied by browser for #{ft[:name]}: #{ft}" unless SampleType.find_by_name(aft[:sample_type][:name])
+            aft[:sample_type][:name]
           }
           container_names =  ft[:allowable_field_types].collect { |aft| 
-            raise "Object type not definied by browser for #{ft[:name]}: #{ft}!" unless ObjectType.find_by_id(aft[:object_type_id])
-            ObjectType.find(aft[:object_type_id]).name
+            raise "Object type not definied by browser for #{ft[:name]}: #{ft}!" unless ObjectType.find_by_name(aft[:object_type][:name])
+            aft[:object_type][:name]
           }          
         else
           sample_type_names = []

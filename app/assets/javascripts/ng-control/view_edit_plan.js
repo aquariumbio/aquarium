@@ -9,7 +9,7 @@
   } 
 
   w.controller('viewEditPlanCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
-                       function (  $scope,   $http,   $attrs,   $cookies ) {
+                          function (  $scope,   $http,   $attrs,   $cookies ) {
 
 
     $scope.user = new User($http); 
