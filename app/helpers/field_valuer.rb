@@ -37,13 +37,13 @@ module FieldValuer
 
   end
 
-  def set_property name, val, role=nil
+  def set_property name, val, role=nil, override_array=false
 
     ft = field_type name, role
 
     unless ft
       self.errors.add(:no_such_property,"#{self.class} #{id} does not have a property named #{name}.")
-      return nil
+      return self
     end
 
     fvs = field_values.select { |fv| fv.name == name && fv.role == role }
@@ -61,17 +61,17 @@ module FieldValuer
 
       return self
 
-    elsif ft.array && val.class != Array      
+    elsif ft.array && val.class != Array && !override_array
 
       self.errors.add(:set_property,"Tried to set property #{ft.name}, an array, to something that is not an array.")
-      return nil
+      return self
 
     elsif !ft.array && val.class == Array
 
       self.errors.add(:set_property,"Tried to set property #{ft.name}, which is not an array, to something is an array.")
-      return nil
+      return self
 
-    elsif !ft.array && val.class != Array      
+    elsif !ft.array || override_array
 
       if fvs.length == 0
         fvs = [ field_values.create(name: name,field_type_id:ft.id,role:role) ]
@@ -81,10 +81,15 @@ module FieldValuer
         fv = set_property_aux(ft,fvs[0],val)
       else 
         self.errors.add(:set_property,"Could not set #{self.class} #{id} property #{name} to #{val}")
-        return nil
+        return self
       end
 
       fv.save if self.errors.empty?
+      return self
+
+    else
+
+      self.errors.add(:set_property,"Could not set #{self.class} #{id} property #{name} to #{val}. No case matches conditions.")
       return self
 
     end

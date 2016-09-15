@@ -21,13 +21,15 @@ class OperationTypesController < ApplicationController
 
     if fts
       fts.each do |ft|
+        logger.info "ft = #{ft.inspect}"            
         if ft[:allowable_field_types]
           sample_type_names = ft[:allowable_field_types].collect { |aft| 
-            puts "====== #{aft} ======"
+            logger.info "  aft = #{aft.inspect}"            
             raise "Sample type not definied by browser for #{ft[:name]}: #{ft}" unless SampleType.find_by_name(aft[:sample_type][:name])
             aft[:sample_type][:name]
           }
           container_names =  ft[:allowable_field_types].collect { |aft| 
+            logger.info "  aft = #{aft.inspect}"            
             raise "Object type not definied by browser for #{ft[:name]}: #{ft}!" unless ObjectType.find_by_name(aft[:object_type][:name])
             aft[:object_type][:name]
           }          
@@ -74,7 +76,7 @@ class OperationTypesController < ApplicationController
 
   end
 
-  def update_from_ui data
+  def update_from_ui data, update_fields=true
 
     ot = OperationType.find(data[:id])
     ot.name = data[:name]
@@ -82,11 +84,15 @@ class OperationTypesController < ApplicationController
     ot.deployed = data[:deployed]
     ot.save
 
-    ot.field_types.each do |ft| 
-      ft.destroy
-    end
+    if update_fields
 
-    add_field_types ot, data[:field_types]
+      ot.field_types.each do |ft| 
+        ft.destroy
+      end
+
+      add_field_types ot, data[:field_types]
+
+    end
 
     ot
 
@@ -114,7 +120,7 @@ class OperationTypesController < ApplicationController
   def test
 
     # save the operaton
-    update_from_ui params
+    update_from_ui params, false
 
     # start a transaction
     ActiveRecord::Base.transaction do
@@ -125,7 +131,11 @@ class OperationTypesController < ApplicationController
       params[:test_operations].each do |test_op|
         op = ot.operations.create status: "ready", user_id: test_op[:user_id]
         test_op[:field_values].each do |fv|
-          op.set_property(fv[:name], Sample.find(fv[:child_sample_id]),fv[:role])
+          actual_fv = op.set_property(fv[:name], Sample.find(fv[:child_sample_id]),fv[:role],true)
+          raise "Nil value Error: Could not set #{fv}" unless actual_fv
+          if !actual_fv.errors.empty? 
+            raise "Active Record Error: Could not set #{fv}: #{actual_fv.errors.full_messages.join(', ')}"
+          end
         end
         ops << op
       end
