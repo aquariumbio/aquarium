@@ -130,21 +130,38 @@ class OperationTypesController < ApplicationController
 
       # run the protocol
       job = ot.schedule(ops, current_user, Group.find_by_name('technicians'))
-      manager = Krill::Manager.new job.id, true, "master", "master"
+      error = nil
 
-      ops.each do |op|
-        op.set_status "running"
-      end      
+      begin
+        manager = Krill::Manager.new job.id, true, "master", "master"
+      rescue Exception => e
+        error = e
+      end
 
-      manager.run
+      if error
 
-      ops.each { |op| op.reload }
+        render json: {
+          error: error.message,
+          backtrace: error.backtrace
+        }
 
-      # render the resulting data including the job and the operations
-      render json: {
-        operations: ops.as_json(methods: [:field_values,:associations]),
-        job: job.reload
-      }
+      else
+
+        ops.each do |op|
+          op.set_status "running"
+        end      
+
+        manager.run
+
+        ops.each { |op| op.reload }
+
+        # render the resulting data including the job and the operations
+        render json: {
+          operations: ops.as_json(methods: [:field_values,:associations]),
+          job: job.reload
+        }
+
+      end
 
       # rollback the transaction
       raise ActiveRecord::Rollback

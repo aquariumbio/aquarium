@@ -28,9 +28,14 @@
 
     $scope.test = function(ot) {
       ot.test_results = null;
+      ot.test_error = null;
       $http.post("/operation_types/test", ot).then(function(response) {
-        ot.test_results = response.data;
-        ot.test_results.job.backtrace = JSON.parse(ot.test_results.job.state)
+        if ( response.data.error ) {
+          ot.test_error = response.data.error.replace("(eval):", "Line ");
+        } else {
+          ot.test_results = response.data;
+          ot.test_results.job.backtrace = JSON.parse(ot.test_results.job.state);
+        }
       });
     }
 

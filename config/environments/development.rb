@@ -30,8 +30,8 @@ Bioturk::Application.configure do
   config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   # Assets
-  config.assets.compress = true
-  config.serve_static_assets = false
+  config.assets.compress = false
+#  config.serve_static_assets = false
   config.assets.debug = false
 
   # config.time_zone = "Pacific Time (US & Canada)"
