@@ -16,6 +16,7 @@
     $scope.ready = false;
     $scope.current_plan = null;
     $scope.goal = null;
+    $scope.build_errors = [];
 
     $scope.helper = new SampleHelper($http);
 
@@ -49,15 +50,6 @@
       return m[0];      
     }
 
-    function determine_launch_mode(plan) {
-      var op = plan.operations[0];
-      if ( op.status == 'planning' ) {
-        plan.launch_mode = 'Launch';
-      } else {
-        plan.launch_mode = "Stop";
-      }      
-    }
-
     $scope.launch = function(plan) {
       plan.launch_mode = "Launching";
       $http.get("/plans/start/" + plan.id).then(function(response) {
@@ -67,18 +59,22 @@
           $scope.current_plan = response.data.plan;
           $scope.current_plan.issues = response.data.issues;
         }
-        // determine_launch_mode($scope.current_plan);
       });
     }
 
     $scope.plan = function(ot) {
       $http.post("/plans/plan",{ ot_id: ot.id, operations: ot.operations }).then(function(response) {
-        $scope.mode = 'view';
-        $scope.plans.unshift(response.data);
-        $scope.current_plan = response.data;
-        $scope.current_plan.current_node = response.data;
-        ot.operations = null;
-        // determine_launch_mode($scope.current_plan);
+        if ( response.data.errors ) {
+          $scope.build_errors = response.data.errors;
+          console.log(response.data.errors);
+        } else {
+          $scope.build_errors = [];
+          $scope.mode = 'view';
+          $scope.plans.unshift(response.data);
+          $scope.current_plan = response.data;
+          $scope.current_plan.current_node = response.data;
+          ot.operations = null;
+        }
       });
     }      
 

@@ -1,5 +1,11 @@
 <div ng-if="mode == 'build'" ng-controller="buildPlanCtrl as builder">
 
+  <div ng-if="build_errors.length > 0" class="alert">
+    <ul>
+      <li ng-repeat="error in build_errors">{{error}}</li>
+    </ul>
+  </div>
+
   <div class='op-doc' ng-bind-html="goal.rendered_docs"></div>
 
   <table class='table op-table'>

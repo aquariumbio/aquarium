@@ -22,12 +22,13 @@ module OperationTypePlanner
 
       else
 
-        # puts "instantiating op#{op.id}(#{i.name},#{desired_value.child_sample.name}) from properties #{desired_value.child_sample.properties}"
+        puts "instantiating op#{op.id}(#{i.name},#{desired_value.child_sample.name})"
+        puts "from properties #{desired_value.child_sample.properties}"
 
         # For any other input, find a fv in the desired_value's properties with the
         # same name, and set that inputs value to that property.
         desired_value.child_sample.field_values.each do |fv|
-          if i.name == fv.name
+          if i.name == fv.name && fv.child_sample
             op.set_input(i.name,fv.child_sample)
           end
         end

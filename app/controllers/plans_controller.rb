@@ -45,22 +45,32 @@ class PlansController < ApplicationController
 
     ot = OperationType.find(params[:ot_id])
 
+    errors = []
+
     operations = params[:operations].collect do |o|
       op = ot.operations.create status: "planning", user_id: current_user.id
       ot.inputs.each do |input|
-        puts "========== setting #{input.name} to #{o[:fvs][input.name]}"
-        op.set_input input.name, value(o[:fvs][input.name])
+        v = value(o[:fvs][input.name])
+        puts "========== Setting #{input.name} to #{o[:fvs][input.name]}" if v
+        op.set_input input.name, v if v
+        errors << "#{input.name} not specified. IO specifications should be in the form id: name." unless v
       end
       ot.outputs.each do |output|
-        op.set_output output.name, value(o[:fvs][output.name])
+        v = value(o[:fvs][output.name])
+        op.set_output output.name, v if v
+        errors << "#{output.name} not specified. IO specifications should be in the form id: name." unless v
       end      
       op
     end
 
-    planner = Planner.new OperationType.all
-    planner.plan_trees operations   
-    planner.plan.reload
-    render json: planner.plan.serialize
+    if errors.empty?
+      planner = Planner.new OperationType.all
+      planner.plan_trees operations   
+      planner.plan.reload
+      render json: planner.plan.serialize
+    else
+      render json: { errors: errors }
+    end
 
   end
 
