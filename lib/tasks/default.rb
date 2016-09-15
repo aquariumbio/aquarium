@@ -74,7 +74,8 @@ class Protocol
       error_ops.each do |op|
           note "#{op.id}: #{op.get('input error')}"
       end
-    end unless errors.empty?
+      note "None" if error_ops.empty?
+    end
 
     return {}  
 
