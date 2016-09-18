@@ -2,10 +2,18 @@ module Krill
 
   module Base
 
-    def operations
-      @operations ||= Operation.includes(:operation_type).where(job_id: jid)
+    def operations opts={force:false}
+      
+      if opts[:force]
+        @operations = Operation.includes(:operation_type).where(job_id: jid)
+      else
+        @operations ||= Operation.includes(:operation_type).where(job_id: jid)
+      end
+
       @operations.extend(OperationList)
+      @operations.protocol = self
       @operations
+
     end
 
     def operation_type

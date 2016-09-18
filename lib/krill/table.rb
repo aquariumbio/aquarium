@@ -121,6 +121,15 @@ module Krill
 
     end
 
+    def add_column name, values
+      column(name.to_sym, name)
+      values.each_with_index do |v,i|
+        @rows[i] ||= {}
+        @rows[i][name.to_sym] = v
+      end
+      self
+    end
+
     private
 
     # @private

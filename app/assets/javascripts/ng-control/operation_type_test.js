@@ -48,7 +48,18 @@
     $scope.content_value = function(line) {
       var k = Object.keys(line)[0];
       return line[k];
-    }     
+    }  
+
+    $scope.table_class = function(cell) {
+      var c = "";
+      if ( cell.class ) {
+        c += cell.class;
+      }
+      if ( cell.check ) {
+        c += " krill-td-check"
+      }
+      return c;
+    }
 
   }]);
 

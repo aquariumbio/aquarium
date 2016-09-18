@@ -2,30 +2,45 @@ module Krill
 
   module OperationList
 
+    def protocol= p
+      @protocol = p
+    end
+
+    def running &block
+      select { |op| op.status != "error" }.collect(&block)
+    end    
+
+    def errored &block
+      select { |op| op.status == "error" }.collect(&block)
+    end
+
     #
     # Get all items. 
     # Error out any operations for which items could not be retrieved.
     # Show item retrieval instructions (unless verbose is false)
     #
-    def retrieve opts={verbose:true}
+    def retrieve opts={interactive:true, method: "boxes"}, &block
 
       items = []
 
-      each_with_index do |op,i|
-          
+      each_with_index do |op,i|         
+        op_items = []
         op.inputs.each do |input|
-            
           input.retrieve
-          
           if input.child_item_id
-            items << input.child_item
+              op_items << input.child_item
           else
               op.set_status "error"
               op.associate "input error", "Could not find input #{input.child_sample.name}"
-          end
-                         
+          end                         
         end
-        
+        items = items + op_items unless op.status == "error"        
+      end
+
+      if block_given?
+        @protocol.take items, opts, &Proc.new
+      else
+        @protocol.take items, opts        
       end
 
       self
@@ -42,26 +57,38 @@ module Krill
       @output_collections = {}
 
       select { |op| opts[:errored] || op.status != "error" }.each_with_index do |op,i|
-
         op.outputs.each do |output|
-
           if output.part?
             output_collections[output.name] ||= output.make_collection(count, 1)
             output.make_part(output_collections[output.name],i,0)
           else
             output.make
-          end
-          
+          end         
         end
-              
       end
 
       self
 
     end
 
-    def store opts={verbose:true,errored:false}
+    def store opts={interactive:true,method: "boxes",errored:false,io:"input"}
+
+      items = []
+
+      select { |op| opts[:errored] || op.status != "error" }.each_with_index do |op,i|         
+        op.field_values.select { |fv| fv.role == opts[:io] }.each do |input|
+          items << input.child_item
+        end
+      end
+
+      if block_given?
+        @protocol.release items, opts, &Proc.new
+      else
+        @protocol.release items, opts        
+      end
+
       self
+
     end
 
     def item_column fv

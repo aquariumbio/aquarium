@@ -79,9 +79,13 @@
 
 <script type="text/ng-template" id="table">
   <div class='content content-note'>
-    <table class='table table-condensed'>
+    <table class='krill-log-table'>
       <tr ng-repeat="row in content_value(line)">
-        <td style="border: 1pt solid #aaa" ng-repeat="cell in row track by $index">{{cell}}</row>
+        <td ng-repeat="cell in row track by $index"
+            ng-class="table_class(cell)">
+          <span ng-if="cell.content == undefined">{{cell}}</span>
+          <span ng-if="cell.content != undefined">{{cell.content}}</span>
+        </row>
       </tr>
     </table>
   </div>

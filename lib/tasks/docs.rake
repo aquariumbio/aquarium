@@ -10,7 +10,9 @@ namespace :docs do
     "Folders",
     "Reference",
     "Oyster",
-    "DataAssociation"
+    "DataAssociation",
+    "Operations",
+    "Tables"
   ]
 
   task :md do 
@@ -22,13 +24,5 @@ namespace :docs do
     end
     sh "cp -r doc/images public/doc"
   end
-
-  # task :auto do
-  #   puts "autogenerating operation api docs"
-  #   sh "rm -rf public/doc/operation-api"
-  #   sh "mkdir public/doc/operation-api"    
-  #   sh "cd lib/krill/workflow; yard doc"
-  #   sh "mv lib/krill/workflow/doc public/doc/operation-api"
-  # end
 
 end
