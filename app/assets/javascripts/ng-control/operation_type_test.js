@@ -66,12 +66,6 @@
     $scope.backtrace = function(step) {
 
       var relevant_messages = step.backtrace;
-
-      // var relevant_messages = aq.where(step.backtrace, function(msg) {
-      //   console.log(msg);
-      //   return msg.match(/\(eval\):/);
-      // });
-
       return aq.collect(relevant_messages, (msg) => msg.replace(/\(eval\):/, "Line: "));
 
     }
