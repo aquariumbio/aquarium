@@ -50,6 +50,7 @@ module OperationTypePlanner
 
       inputs.each do |input|
         op.set_input(input.name,input.random)
+        puts "==== set input #{input.name}"
       end
 
       outputs.each do |output|
@@ -59,6 +60,7 @@ module OperationTypePlanner
         else
           op.set_output(output.name,matching_inputs[0].val)
         end
+        puts "==== set output #{output.name}"        
       end      
 
       op
@@ -68,5 +70,3 @@ module OperationTypePlanner
   end
 
 end
-
-

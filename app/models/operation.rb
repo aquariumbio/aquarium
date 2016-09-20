@@ -53,6 +53,7 @@ class Operation < ActiveRecord::Base
   end
 
   def get_input name
+    puts "================= FINDING #{name}"
     inputs.find { |i| i.name == name }
   end
 
@@ -131,6 +132,34 @@ class Operation < ActiveRecord::Base
     self.status = temp
     c
   end
+
+  def child_data child_name, child_role, data_name
+    fv = get_input(child_name) if child_role == 'input'
+    fv = get_output(child_name) if child_role == 'output'
+    fv ? fv.child_data(data_name) : nil
+  end
+
+  def input_data input_name, data_name
+    child_data input_name, 'input', data_name
+  end
+
+  def output_data input_name, data_name
+    child_data input_name, 'output', data_name
+  end
+
+  def set_child_data child_name, child_role, data_name, value
+    fv = get_input(child_name) if child_role == 'input'
+    fv = get_output(child_name) if child_role == 'output'
+    fv ? fv.set_child_data(data_name,value) : nil
+  end
+
+  def set_input_data input_name, data_name, value
+    set_child_data input_name, 'input', data_name, value
+  end
+
+  def set_output_data input_name, data_name, value
+    set_child_data input_name, 'output', data_name, value
+  end  
 
 end
 

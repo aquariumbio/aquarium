@@ -99,6 +99,7 @@
       };
       $scope.operation_types.push(new_ot);
       $scope.current_ot = new_ot;
+      make_categories();
     }
 
     $scope.render_docs = function(ot) {

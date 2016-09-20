@@ -174,4 +174,21 @@ class FieldValue < ActiveRecord::Base
     })
   end
 
+  def child_data name
+    if child_item_id
+      child_item.get(name)
+    else
+      nil
+    end
+  end
+
+  def set_child_data name, value
+    if child_item_id
+      child_item.associate name, value
+    else
+      nil
+    end
+  end
+
+
 end 

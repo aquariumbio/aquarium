@@ -52,13 +52,28 @@
 
     $scope.table_class = function(cell) {
       var c = "";
-      if ( cell.class ) {
+      if ( cell == null ) {
+        c += " krill-td-null-cell";
+      } else if ( cell.class ) {
         c += cell.class;
       }
-      if ( cell.check ) {
+      if ( cell && cell.check ) {
         c += " krill-td-check"
       }
       return c;
+    }
+
+    $scope.backtrace = function(step) {
+
+      var relevant_messages = step.backtrace;
+
+      // var relevant_messages = aq.where(step.backtrace, function(msg) {
+      //   console.log(msg);
+      //   return msg.match(/\(eval\):/);
+      // });
+
+      return aq.collect(relevant_messages, (msg) => msg.replace(/\(eval\):/, "Line: "));
+
     }
 
   }]);

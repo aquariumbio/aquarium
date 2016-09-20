@@ -37,7 +37,7 @@
   <div class='step step-error'>
     <b>Error: {{step.message}}</b>
      <ul>
-       <li ng-repeat="b in step.backtrace track by $index">
+       <li ng-repeat="b in backtrace(step) track by $index">
          {{b}}
        </li>
      </ul>    

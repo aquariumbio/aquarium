@@ -42,7 +42,7 @@ module FieldValuer
     ft = field_type name, role
 
     unless ft
-      self.errors.add(:no_such_property,"#{self.class} #{id} does not have a property named #{name}.")
+      self.errors.add(:no_such_property,"#{self.class} #{id} does not have a property named #{name} with role #{role}.")
       return self
     end
 

@@ -2,13 +2,13 @@ module Krill
 
   module OperationList
 
-    def table
-      @table
-    end
-
-    def build_table opts={errored:false}
+    def start_table opts={errored:false}
       @table = Table.new
       self
+    end
+
+    def end_table
+      @table
     end
 
     def property op, method_name, name
@@ -17,35 +17,35 @@ module Krill
     end
 
     def item name, role
-      @table.add_column("#{name} Item ID", running { |op|
+      @table.add_column("#{name} Item ID", running.collect { |op|
             property op, :child_item_id, name
           })
       self
     end
 
     def collection name, role
-      @table.add_column("#{name} Collecton ID", running { |op|
+      @table.add_column("#{name} Collecton ID", running.collect { |op|
         property op, :child_item_id, name
       })
       self
     end
 
     def row name, role
-      @table.add_column("#{name} Row", running { |op|
+      @table.add_column("#{name} Row", running.collect { |op|
         property op, :row, name
       })
       self      
     end
 
     def column name, role
-      @table.add_column("#{name} Column", running { |op|
+      @table.add_column("#{name} Column", running.collect { |op|
         property op, :column, name
       })
       self      
     end    
 
     def custom_column name, &block
-      @table.add_column name, running(&block)
+      @table.add_column name, running.collect(&block)
       self      
     end
 

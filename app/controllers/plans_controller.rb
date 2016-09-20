@@ -109,7 +109,7 @@ class PlansController < ApplicationController
      end
 
     # Replan the operation
-    planner = Planner.new OperationType..where(deployed: true), operation.plan
+    planner = Planner.new(OperationType.where(deployed: true), operation.plan)
     planner.plan_tree operation
     planner.mark_shortest operation
     planner.mark_unused operation

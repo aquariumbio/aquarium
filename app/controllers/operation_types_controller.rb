@@ -133,7 +133,7 @@ class OperationTypesController < ApplicationController
         test_op[:field_values].each do |fv|
           actual_fv = op.set_property(fv[:name], Sample.find(fv[:child_sample_id]),fv[:role],true)
           raise "Nil value Error: Could not set #{fv}" unless actual_fv
-          if !actual_fv.errors.empty? 
+          unless actual_fv.errors.empty? 
             raise "Active Record Error: Could not set #{fv}: #{actual_fv.errors.full_messages.join(', ')}"
           end
         end

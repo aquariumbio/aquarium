@@ -417,6 +417,10 @@ font-size: $noteFontSize;
   color: white;
 }
 
+.krill-td-null-cell {
+  background: yellow;
+}
+
 .td-filled-slot {
   border: 1pt solid #aaa;
   width: 37px;

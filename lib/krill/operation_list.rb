@@ -6,12 +6,33 @@ module Krill
       @protocol = p
     end
 
-    def running &block
-      select { |op| op.status != "error" }.collect(&block)
+    def collect &block
+      ops = super(&block)
+      ops.extend(OperationList)
+      ops.protocol = @protocol
+      ops
+    end
+
+    def select &block
+      ops = super(&block)
+      ops.extend(OperationList)
+      ops.protocol = @protocol
+      ops
+    end
+
+    def reject &block
+      ops = super(&block)
+      ops.extend(OperationList)
+      ops.protocol = @protocol
+      ops
+    end
+
+    def running
+      select { |op| op.status != "error" }
     end    
 
-    def errored &block
-      select { |op| op.status == "error" }.collect(&block)
+    def errored
+      select { |op| op.status == "error" }
     end
 
     #
