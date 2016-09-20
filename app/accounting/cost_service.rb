@@ -31,6 +31,8 @@ module CostService
           raise "Could not charge account for #{self.description job, status}: #{row.errors.full_messages.join(',')}" 
         end
 
+        row
+
       end
 
     end
