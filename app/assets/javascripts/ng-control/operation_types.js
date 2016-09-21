@@ -87,6 +87,23 @@
       }
     }
 
+    $scope.delete_ot = function(ot) {
+      if ( confirm ( "Are you sure you want delete this operation type definition?" ) ) {
+        $http.delete("/operation_types/" + ot.id,ot).then(function(response) {
+          if ( response.data.error ) {
+            alert ( "Could not delete operation type: " + response.data.error );
+          } else {
+            var i = $scope.operation_types.indexOf(ot);
+            $scope.operation_types.splice(i,1);
+            make_categories();
+            if ( $scope.operation_types.length > 0 ) {
+              $scope.current_ot = $scope.operation_types[0];
+            }
+          }
+        });             
+      }
+    }
+
     $scope.new_operation_type = function() {
       var new_ot = {
         name: "New Operation Type",

@@ -17,10 +17,13 @@
       </div>
       <div class="span3">
         <label class="label-bold">&nbsp;</label>
-        <button class="btn btn-primary pull-right" ng-click="save_ot(current_ot)">
+        <button class="btn btn-primary pull-right" ng-click="save_ot(current_ot)" style="margin-left: 5px">
           <span ng-if="current_ot.id">Update</span>
           <span ng-if="!current_ot.id">Save</span>
         </button>
+        <button ng-if="current_ot.id && !current_ot.deployed" 
+                class="btn pull-right" 
+                ng-click="delete_ot(current_ot)">Delete</button>
       </div>
     </div>
 

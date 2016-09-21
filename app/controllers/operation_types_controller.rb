@@ -57,6 +57,21 @@ class OperationTypesController < ApplicationController
 
   end
 
+  def destroy
+
+    ot = OperationType.find(params[:id])
+
+    if ot.operations.count != 0
+      render json: { error: "Operation Type #{ot.name} has associated operations." }
+    elsif ot.deployed
+      render json: { error: "Operation Type #{ot.name} has been deployed." }
+    else
+      ot.destroy
+      render json: { ok: true }
+    end
+
+  end
+
   def code
 
     ot = OperationType.find(params[:id])
@@ -130,11 +145,13 @@ class OperationTypesController < ApplicationController
       ops = []
       params[:test_operations].each do |test_op|
         op = ot.operations.create status: "ready", user_id: test_op[:user_id]
-        test_op[:field_values].each do |fv|
-          actual_fv = op.set_property(fv[:name], Sample.find(fv[:child_sample_id]),fv[:role],true)
-          raise "Nil value Error: Could not set #{fv}" unless actual_fv
-          unless actual_fv.errors.empty? 
-            raise "Active Record Error: Could not set #{fv}: #{actual_fv.errors.full_messages.join(', ')}"
+        if test_op[:field_values]
+          test_op[:field_values].each do |fv|
+            actual_fv = op.set_property(fv[:name], Sample.find(fv[:child_sample_id]),fv[:role],true)
+            raise "Nil value Error: Could not set #{fv}" unless actual_fv
+            unless actual_fv.errors.empty? 
+              raise "Active Record Error: Could not set #{fv}: #{actual_fv.errors.full_messages.join(', ')}"
+            end
           end
         end
         ops << op
