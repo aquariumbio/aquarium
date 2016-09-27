@@ -53,6 +53,7 @@ module FieldValueKrill
       c.store if c.location == "Unknown"
       self.child_item_id = c.id
       self.save
+      c
     else
       raise "Could not find object type: #{object_type}"
     end

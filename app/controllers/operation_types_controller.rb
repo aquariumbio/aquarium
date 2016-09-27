@@ -162,7 +162,7 @@ class OperationTypesController < ApplicationController
       end
 
       # run the protocol
-      job,ops = ot.schedule(ops, current_user, Group.find_by_name('technicians'))
+      job,newops = ot.schedule(ops, current_user, Group.find_by_name('technicians'))
       error = nil
 
       begin
@@ -180,9 +180,13 @@ class OperationTypesController < ApplicationController
 
       else
 
+        ops.extend(Krill::OperationList)
+        puts "======== Making mock inputs"
+        ops.make(role: 'input')
+
         ops.each do |op|
           op.set_status "running"
-        end      
+        end
 
         manager.run
 

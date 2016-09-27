@@ -75,19 +75,23 @@ module Krill
       @output_collections
     end
 
-    def make opts={errored:false}
+    def make opts={errored:false,role:'output'}
+
+      puts "====== make: ROLE: #{opts[:role]}"
 
       @output_collections = {}
 
       select { |op| opts[:errored] || op.status != "error" }.each_with_index do |op,i|
-        op.outputs.each do |output|
-          if output.part?
-            output_collections[output.name] ||= output.make_collection(count, 1)
-            output.make_part(output_collections[output.name],i,0)
-          elsif output.object_type && output.object_type.handler == "collection"
-            output.make_collection 1, 10
+        puts "====== make: operation #{op.id}"
+        op.field_values.select { |fv| fv.role == opts[:role] }.each do |fv|
+          puts "======= making #{fv.name}"
+          if fv.part?
+            @output_collections[fv.name] = fv.make_collection(12, 1) unless @output_collections[fv.name]
+            fv.make_part(@output_collections[fv.name],i,0)
+          elsif fv.object_type && fv.object_type.handler == "collection"
+            fv.make_collection 1, 10
           else
-            output.make
+            fv.make
           end         
         end
       end
