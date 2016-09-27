@@ -32,7 +32,7 @@ class ObjectTypesController < ApplicationController
         @all_handlers = ObjectType.pluck(:handler).uniq
         @object_types = ObjectType.where("handler = ?", @handler)
       }
-      format.json { render json: ObjectType.pluck(:name).collect { |m| { name: m } } }
+      format.json { render json: ObjectType.all.collect { |ot| { name: ot.name, handler: ot.handler } } }
     end
 
   end

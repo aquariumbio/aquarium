@@ -98,7 +98,7 @@ module FieldValuePlanner
     # puts "\e[93mComparing #{self.child_sample.name} (#{self.object_type.name}) with #{fv.child_sample.name} (#{fv.object_type.name})\e[39m"
 
     if child_sample_id == fv.child_sample_id && object_type == fv.object_type && field_type.part == fv.field_type.part
-      puts "   \e[93mFound operation that already outputs #{fv.child_sample.name} (#{fv.object_type.name}).\e[39m"
+      puts "   \e[93mFound operation that already outputs #{fv.inspect}.\e[39m"
       return true
     else
       return false

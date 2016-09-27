@@ -27,7 +27,7 @@
     <tr>
       <th>User</th>
       <th>Inputs</th>
-      <th>Ouputs</th> 
+      <th>Outputs</th> 
     </tr>
 
     <tr ng-repeat="op in current_ot.test_operations | filter: { operation_type_id: current_ot.id, status: 'pending'}">
@@ -36,7 +36,7 @@
       <td>
         <ul class='input-list'>
           <li ng-repeat="fv in op.field_values | filter: { role: 'input' }">
-            {{fv.name}}: {{fv.child_sample.name}}
+            {{fv.name}}<span ng-if="fv.child_sample">: {{fv.child_sample.name}}</span>
           </li>
         </ul>              
       </td>  
@@ -44,7 +44,7 @@
       <td>
         <ul class='input-list'>
           <li ng-repeat="fv in op.field_values | filter: { role: 'output' }">
-            {{fv.name}}: {{fv.child_sample.name}}
+            {{fv.name}} <span ng-if="fv.child_sample">: {{fv.child_sample.name}}</span>
           </li>
         </ul>              
       </td>   

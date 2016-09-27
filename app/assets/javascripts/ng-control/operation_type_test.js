@@ -31,6 +31,8 @@
       ot.test_error = null;
       $http.post("/operation_types/test", ot).then(function(response) {
         if ( response.data.error ) {
+          console.log(response.data.error)
+          console.log(response.data.backtrace)
           ot.test_error = response.data.error.replace(/\(eval\):/g, "Line ");
         } else {
           ot.test_results = response.data;

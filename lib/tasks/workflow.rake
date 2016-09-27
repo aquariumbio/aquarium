@@ -4,12 +4,14 @@ namespace :workflow do
 
   task :unseed => :environment do
 
-    ObjectType.find_by_name("Lyophilized Primer").destroy
-    ObjectType.find_by_name("Checked E coli Plate of Plasmid").destroy    
+    ObjectType.find_by_name("Lyophilized Primer").destroy if ObjectType.find_by_name("Lyophilized Primer")
+    ObjectType.find_by_name("Checked E coli Plate of Plasmid").destroy  if ObjectType.find_by_name("Checked E coli Plate of Plasmid") 
     OperationType.destroy_all
     Operation.destroy_all
     Code.destroy_all
     Plan.destroy_all
+
+    FieldValue.where(parent_class:"Operation").each { |fv| fv.destroy }
 
   end
 
@@ -67,9 +69,14 @@ namespace :workflow do
        .add_input(  "Template",       [ "Plasmid", "Fragment" ],  [ "Plasmid Stock", "Fragment Stock" ] )
        .add_output( "Fragment",       "Fragment", "Stripwell", part: true ) 
 
+    pour_gel = OperationType.new name: "Pour Gel", category: "Cloning", deployed: true, on_the_fly: true
+    pour_gel.save
+    pour_gel.add_output( "Gel", "", "50 mL 0.8 Percent Agarose Gel in Gel Box" )
+
     run_gel = OperationType.new name: "Run Gel", category: "Cloning", deployed: true
     run_gel.save
     run_gel.add_input(  "Fragment", "Fragment",  "Stripwell", part: true )
+           .add_input(  "Lane", "", "50 mL 0.8 Percent Agarose Gel in Gel Box", part: true )
            .add_output( "Fragment", "Fragment",  "50 mL 0.8 Percent Agarose Gel in Gel Box", part: true )
 
     extract_fragment = OperationType.new name: "Extract Fragment", category: "Cloning", deployed: true

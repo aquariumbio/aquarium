@@ -32,11 +32,13 @@
 
         <h2>Operation: {{current_ot.name}}</h2>
 
+        <b ng-if="current_ot.on_the_fly">This operation cannot be scheduled directly</b>
+
         <div ng-show='number(current_ot,"pending") > 0'>
 
           <h4>Pending Operations</h4>
 
-          <div class='pull-right launch-buttons'>
+          <div ng-if="!current_ot.on_the_fly" class='pull-right launch-buttons'>
             <a href="#" class='btn btn-mini btn-primary' ng-click="batch(current_ot)">Batch</a>
             <a href="#" class='btn btn-mini' ng-click="select(current_ot,true)">All</a>
             <a href="#" class='btn btn-mini' ng-click="select(current_ot,false)">None</a>
@@ -44,21 +46,22 @@
 
           <table class='table table-fixed'>
             <tr ng-repeat="op in operations | filter: { operation_type_id: current_ot.id, status: 'pending'}">
-              <td><input type='checkbox' ng-model='op.selected'></input></td>
+              <td ng-if="!current_ot.on_the_fly"><input type='checkbox' ng-model='op.selected'></input></td>
               <td>{{user.find(op.user_id).name}}</td>
               <td>
                 <ul class='input-list'>
                   <li ng-repeat="fv in op.field_values | filter: { role: 'output' }">
-                    {{fv.name}}: {{fv.child_sample.name}}
+                    {{fv.name}}<span ng-if="fv.child_sample">: {{fv.child_sample.name}}</span>
                   </li>
                 </ul>              
-              </td>         
+              </td>
+              <td ng-if="!current_ot.on_the_fly">
+                <a ng-repeat="plan in op.plans" href="/plans/{{plan.id}}">Plan {{plan.id}}</a></td>
               <td>{{op.created_at|date}}</td>
             </tr>
           </table>
 
         </div>
-
 
         <div ng-show='number(current_ot,"scheduled") > 0'>
 
@@ -72,14 +75,18 @@
               <td>
                 <ul class='op-list'>
                   <li ng-repeat="op in operations | filter: { operation_type_id: current_ot.id, job_id: job.id, status: 'scheduled' }">
+                    Operation {{op.id}}: 
                     <span ng-repeat="fv in op.field_values | filter: { role: 'output' }">
                       <a href="/samples/{{fv.child_sample.id}}"/>{{fv.child_sample.name}}</a>
-                    </span> for {{user.find(op.user_id).name}}
+                    </span> ({{user.find(op.user_id).login}})
                   </li>
                 </ul>
               </td>
               <td>{{job.created_at|date}}</td>    
-              <td><a href="/krill/start?job={{job.id}}"><i class="icon-play"></i></a></td>
+              <td ng-if="job.active_predecessors.length == 0"><a href="/krill/start?job={{job.id}}"><i class="icon-play"></i></a></td>
+              <td ng-if="job.active_predecessors.length > 0">
+                Waiting for job <span ng-repeat="job in job.active_predecessors">{{job.id}}</span>
+              </td>
             <tr>
 
           </table>

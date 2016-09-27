@@ -202,4 +202,23 @@ Aq.prototype.currency = function(num) {
   return '$' + parseFloat(num, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
 }
 
+Aq.prototype.query = function() {
+
+  var query_string = window.location.search.split('?')[1];
+  var o = {};
+
+  if ( query_string ) {
+    
+    aq.each(query_string.split('&'), function(p) { 
+      var key = p.split("=")[0],
+          val = p.split("=")[1];
+      o[key] = val;
+    });
+    
+  } 
+
+  return o;
+
+}
+
 aq = new Aq();

@@ -6,7 +6,7 @@ class OperationsController < ApplicationController
     job_ids = Operation.pluck(:job_id).uniq.select { |jid| jid }
     { 
       ids: job_ids,
-      pending: Job.where(pc: -1, id: job_ids),
+      pending: Job.includes(:predecessors).where(pc: -1, id: job_ids).as_json(methods: :active_predecessors),
       running: Job.where(pc: 0..10000, id: job_ids)
     }    
   end
@@ -18,7 +18,8 @@ class OperationsController < ApplicationController
   def index
 
     respond_to do |format|
-      format.json { render json: Operation.where(status: [ 'pending', 'scheduled', 'running' ]).as_json(methods: :field_values) }
+      format.json { render json: Operation.where(status: [ 'pending', 'scheduled', 'running', 'primed' ])
+                                          .as_json(methods: [:field_values, :plans]) }
       format.html { render layout: 'browser' }
     end
     
@@ -28,12 +29,12 @@ class OperationsController < ApplicationController
 
     ops = params[:operation_ids].collect { |oid| Operation.find(oid) }
 
-    unless ops.empty? 
+    unless ops.empty?
       ot = ops.first.operation_type
-      job = ot.schedule(ops, current_user, Group.find_by_name('technicians'))
+      job,operations = ot.schedule(ops, current_user, Group.find_by_name('technicians'))
     end
 
-    render json: { operations: ops, jobs: active_and_pending_jobs }
+    render json: { operations: operations, jobs: active_and_pending_jobs }
 
   end
 

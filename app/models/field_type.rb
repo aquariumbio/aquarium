@@ -46,6 +46,10 @@ class FieldType < ActiveRecord::Base
     ftype
   end
 
+  def empty?
+    allowable_sample_types.select { |ast| ast }.length == 0
+  end
+
   def as_json(options={})
     super include: [ allowable_field_types: { include: [ :sample_type, :object_type ] } ]
   end

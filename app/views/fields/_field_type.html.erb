@@ -3,7 +3,7 @@
   <b>{{ft.name}} <span ng-if="ft.array">(array)</span></b>
   <br/>
   <span ng-repeat="aft in ft.allowable_field_types">
-    {{aft.object_type.name}} {{ $last ? '' : ', '}}
+  {{aft.object_type.name}} {{ $last ? '' : ', '}}
   </span>
 </script>
 

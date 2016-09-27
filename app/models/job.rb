@@ -2,7 +2,8 @@ class Job < ActiveRecord::Base
 
   include JobOperations
 
-  attr_accessible :arguments, :sha, :state, :user_id, :pc, :submitted_by, :group_id, :desired_start_time, :latest_start_time, :metacol_id
+  attr_accessible :arguments, :sha, :state, :user_id, :pc, :submitted_by, :group_id, 
+                  :desired_start_time, :latest_start_time, :metacol_id, :successor
 
   def self.NOT_STARTED
     -1
@@ -22,6 +23,9 @@ class Job < ActiveRecord::Base
   has_many :post_associations
   belongs_to :workflow_process
   has_many :operations
+
+  belongs_to :successor, class_name: "Job"
+  has_many :predecessors, class_name: "Job", foreign_key: :successor_id
 
   def self.params_to_time p
 
@@ -295,6 +299,10 @@ class Job < ActiveRecord::Base
 
   def name
     self.path.split("/").last.split(".").first
+  end
+
+  def active_predecessors
+    predecessors.reject { |p| p.done? }
   end
 
 end

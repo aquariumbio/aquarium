@@ -188,6 +188,7 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
     t.datetime "desired_start_time"
     t.datetime "latest_start_time"
     t.integer  "metacol_id"
+    t.integer  "successor_id"
   end
 
   create_table "locators", :force => true do |t|
@@ -250,6 +251,7 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
     t.string   "name"
     t.string   "category"
     t.boolean  "deployed"
+    t.boolean  "on_the_fly"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

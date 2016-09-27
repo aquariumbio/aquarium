@@ -7,6 +7,7 @@ class Collection < Item
   end
 
   def self.containing s, ot=nil
+    return [] unless s
     i = s.id.to_s
     r = Regexp.new '\[' + i + ',|,' + i + ',|,' + i + '\]|\[' + i + '\]'
     if ot

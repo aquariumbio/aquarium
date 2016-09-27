@@ -22,16 +22,28 @@ module OperationTypePlanner
 
       else
 
-        puts "instantiating op#{op.id}(#{i.name},#{desired_value.child_sample.name})"
-        puts "from properties #{desired_value.child_sample.properties}"
+        props = desired_value.child_sample.properties
 
-        # For any other input, find a fv in the desired_value's properties with the
-        # same name, and set that inputs value to that property.
-        desired_value.child_sample.field_values.each do |fv|
-          if i.name == fv.name && fv.child_sample
-            op.set_input(i.name,fv.child_sample)
+        puts "instantiating op #{op.id}'s input #{i.name}, which should lead to #{desired_value.child_sample.name}"
+        puts "from #{desired_value.child_sample.name}'s properties #{props}"
+
+        # For other inputs, find a fv in the desired_value's properties with the
+        # same name, and set that input's value to that property.
+        found_match = false
+        desired_value.child_sample.sample_type.field_types.each do |ft|
+          if i.name == ft.name 
+            found_match = true            
+            if props[ft.name]  # note: if no child sample, don't set the input, which signals
+                               # to the planner that desired_value's properties are incomplete
+              op.set_input(i.name,props[ft.name])
+              puts "  ==> SETTING #{i.name} to #{props[ft.name]}"
+            end
           end
         end
+
+        # set any remaining inputs to nil
+        puts "  ==> SETTING #{i.name} to nil" unless found_match
+        op.set_input(i.name,nil) unless found_match
 
       end
 
@@ -45,6 +57,8 @@ module OperationTypePlanner
   def random n=1
 
     (1..n).collect do |i|
+
+      puts "==== making operation of type #{name}"
 
       op = operations.create status: "pending", user_id: User.all.sample.id
 

@@ -85,11 +85,13 @@
 
       $http.post("/operations/batch", { operation_ids: op_ids }).then(function(response) {
         $scope.jobs = response.data.jobs;
-        aq.each(ops,function(op) {
+        console.log(response.data.operations);
+        aq.each($scope.operations,function(op) {
           aq.each(response.data.operations,function(updated_op) {
             if ( op.id == updated_op.id ) {
+              console.log("updating operation " + op.id);
               op.job_id = updated_op.job_id;
-              op.status = "scheduled";
+              op.status = updated_op.status;
             }
           });
         });

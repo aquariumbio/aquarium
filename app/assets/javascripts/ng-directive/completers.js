@@ -52,8 +52,9 @@
       scope: { ftsamplecomplete: '=', ngModel: '='  },
       link: function($scope,$element,$attributes) {
 
-        var types = aq.collect($scope.ftsamplecomplete.allowable_field_types,function(aft) {
-          return aft.sample_type.name;
+        var types = aq.collect(
+          aq.where($scope.ftsamplecomplete.allowable_field_types,function(aft) { return aft.sample_type; }),
+          function(aft) { return aft.sample_type.name;
         });
 
         $element.autocomplete({
@@ -108,10 +109,14 @@
 
     return {
       restrict: 'A',
-      scope: { ngModel: '=' },
+      scope: { objecttypecomplete: '=', ngModel: '=' },
       link: function($scope,$element,$attributes) {
+        console.log($scope.objecttypecomplete);
         $element.autocomplete({
-          source: aq.collect($scope.$parent.object_types,function(p) { return p.name; }),
+          source: aq.collect(aq.where($scope.$parent.object_types,function(ot) { 
+                    console.log(ot.handler)
+                    return ot.handler == "sample_container" || ot.handler == "collection"
+                  }),function(p) { return p.name; }),
           select: function(ev,ui) {
             $scope.ngModel = ui.item.value;
             $scope.$apply();

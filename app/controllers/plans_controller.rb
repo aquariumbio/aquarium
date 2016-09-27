@@ -23,7 +23,12 @@ class PlansController < ApplicationController
   end
 
   def show
-    render json: Plan.find(params[:id]).serialize
+    respond_to do |format|      
+      format.html { 
+        redirect_to plans_url(params)
+      }
+      format.json { render json: Plan.find(params[:id]).serialize }
+    end           
   end
 
   def start
@@ -48,19 +53,31 @@ class PlansController < ApplicationController
     errors = []
 
     operations = params[:operations].collect do |o|
+
       op = ot.operations.create status: "planning", user_id: current_user.id
-      ot.inputs.each do |input|
-        v = value(o[:fvs][input.name])
-        puts "========== Setting #{input.name} to #{o[:fvs][input.name]}" if v
-        op.set_input input.name, v if v
-        errors << "#{input.name} not specified. IO specifications should be in the form id: name." unless v
+
+      ot.inputs.each do |input|       
+        if input.empty?
+          op.set_input input.name, nil
+        else
+          v = value(o[:fvs][input.name])
+          op.set_input input.name, v if v
+          errors << "Input '#{input.name}' not specified. IO specifications should be in the form id: name." unless v
+        end
       end
+
       ot.outputs.each do |output|
-        v = value(o[:fvs][output.name])
-        op.set_output output.name, v if v
-        errors << "#{output.name} not specified. IO specifications should be in the form id: name." unless v
-      end      
+        if output.empty?
+          op.set_output output.name, nil
+        else
+          v = value(o[:fvs][output.name])
+          op.set_output output.name, v if v
+          errors << "Output '#{output.name}' not specified. IO specifications should be in the form id: name." unless v
+        end
+      end   
+
       op
+
     end
 
     if errors.empty?

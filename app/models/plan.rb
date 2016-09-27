@@ -8,22 +8,31 @@ class Plan < ActiveRecord::Base
   has_many :operations, through: :plan_associations
 
   def start
+
     gs = goals_plain
     issues = gs.collect { |g| g.issues }.flatten
+
     if issues.empty?
+
       gs.each do |goal|
+
+        goal.start_on_the_fly
+        
+        goal.start
+
         goal.recurse do |op|
           op.user_id = user_id
-          if op.status == "planning"
-            op.status = op.leaf? ? "pending" : "waiting"
-          end
           op.save
-        end
+        end       
+
       end
+
       []
+
     else
       issues
     end
+
   end
 
   def remove

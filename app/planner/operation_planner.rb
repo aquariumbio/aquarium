@@ -17,6 +17,8 @@ module OperationPlanner
 
       if input_list.empty? # && !i.array # arrays need to have at least one element (for now)
         return false
+      elsif on_the_fly
+        return false
       else
         input_list.each do |j|
           if ! j.satisfied_by_environment
@@ -29,15 +31,6 @@ module OperationPlanner
 
     return true
 
-  end
-
-  def leaf?
-    inputs.each do |i|
-      if i.predecessors.count > 0
-        return false
-      end
-    end
-    return true
   end
 
   def undetermined_inputs?
@@ -187,25 +180,4 @@ module OperationPlanner
   end  
 
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

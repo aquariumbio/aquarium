@@ -49,7 +49,10 @@ module FieldValueKrill
   def make_collection rows, columns
     ot = object_type
     if ot
-      Collection.new_collection(object_type.name, rows, columns)
+      c = Collection.new_collection(object_type.name, rows, columns)
+      c.store if c.location == "Unknown"
+      self.child_item_id = c.id
+      self.save
     else
       raise "Could not find object type: #{object_type}"
     end

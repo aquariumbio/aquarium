@@ -58,7 +58,9 @@
 
       <span ng-repeat="i in node.inputs | filter: { id: p.id }">
 
-        {{i.child_sample.name}} / {{input_info(i,operation_type(node)).object_type.name}}
+        <span ng-if="i.child_sample">{{i.child_sample.name}} / </span>
+        {{input_info(i,operation_type(node)).object_type.name}}
+        <span ng=if=part(i,operation_type(node))>(part)</span>
 
         <!-- Planning Phase: Availale Input -->
         <span ng-if="i.child_item_id && current_plan.status == 'Under Construction'"
@@ -68,8 +70,8 @@
 
         <!-- Planning Phase: No operation type and no available input -->
         <span ng-if="!i.child_item_id && p.operations.length == 0 && current_plan.status == 'Under Construction'"
-              class="problem">
-          ERROR: No operation type found that can produce this input, and no inventory is available.
+              class="problem"><br />
+          No operation type produces this input. No inventory is available.
         </span>
 
         <!-- Execution Phase: Running operations showing its predecessor's output items / locations -->

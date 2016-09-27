@@ -21,6 +21,10 @@ class Operation < ActiveRecord::Base
     operation_type.name
   end
 
+  def on_the_fly
+    operation_type.on_the_fly
+  end
+
   def set_status str
     self.status = str
     self.save
@@ -61,6 +65,14 @@ class Operation < ActiveRecord::Base
     outputs.find { |o| o.name == name }
   end
 
+  def input name
+    get_input name
+  end
+
+  def output name
+    get_output name
+  end
+
   def get_field_value name
     field_values.find { |fv| fv.name == name }
   end
@@ -72,7 +84,7 @@ class Operation < ActiveRecord::Base
         pred.operation.recurse &block
       end
     end
-  end    
+  end
 
   def find name
     ops = []
@@ -93,8 +105,8 @@ class Operation < ActiveRecord::Base
   end
 
   def to_s
-    ins = (inputs.collect { |fv| "#{fv.name}: #{fv.child_sample.name}" }).join(", ")
-    outs = (outputs.collect { |fv| "#{fv.name}: #{fv.child_sample.name}" }).join(", ")    
+    ins = (inputs.collect { |fv| "#{fv.name}: #{fv.child_sample ? fv.child_sample.name : 'NO SAMPLE'}" }).join(", ")
+    outs = (outputs.collect { |fv| "#{fv.name}: #{fv.child_sample ? fv.child_sample.name : 'NO SAMPLE'}" }).join(", ")    
     "#{operation_type.name} #{id} ( " + ins + " ) ==> ( " + outs + " )"
   end
 
@@ -159,6 +171,74 @@ class Operation < ActiveRecord::Base
 
   def set_output_data input_name, data_name, value
     set_child_data input_name, 'output', data_name, value
+  end  
+
+  ###################################################################################################
+  # STARTING PLANS
+
+  def start_on_the_fly
+
+    puts "======== CONSIDERING #{id} (#{status})"
+
+    if on_the_fly && leaf?
+
+      puts "=============== Setting op #{id} to 'primed'"
+      set_status "primed"
+      return true
+
+    else
+
+      start = on_the_fly
+
+      inputs.each do |input|
+        input.predecessors.each do |pred|          
+          if pred.operation.status == "planning"
+            start = pred.operation.start_on_the_fly && start
+          end
+        end
+      end
+
+      if start
+        puts "=============== Setting op #{id} to 'primed'"
+        set_status "primed"
+        return true
+      else 
+        puts "=============== No start on the fly for op #{id}"
+        return false
+      end
+
+    end
+
+  end
+
+
+  def start
+    recurse do |op|
+      if op.status == "planning" && !op.on_the_fly
+        op.set_status(op.leaf? ? "pending" : "waiting")
+        puts "=================== set op #{op.id} to #{op.status}"
+      else
+        puts "=================== skipped #{op.id} because its 'on the fly'"
+      end
+    end
+  end
+
+  def leaf?
+
+    inputs.each do |i|
+
+      if i.predecessors.count > 0
+        i.predecessors.each do |pred|
+          if pred.operation.status != "primed"
+            return false
+          end
+        end
+      end
+
+    end
+
+    return true
+
   end  
 
 end

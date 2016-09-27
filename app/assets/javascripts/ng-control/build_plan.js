@@ -33,6 +33,20 @@
       fv.splice(i, 1);
     }
 
+    $scope.incomplete_field_types = function(goal, role) {
+      // Only return field_types that have afts with sample types
+      return aq.where(goal.field_types, function(ft) { 
+        if ( ft.role != role ) {
+          return false;
+        } else {
+          var afts = aq.where(ft.allowable_field_types,function(aft) {
+            return aft.sample_type; 
+          });
+          return afts.length != 0;
+        }
+      });
+    }
+
   }]);
 
 })();

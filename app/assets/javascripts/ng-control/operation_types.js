@@ -127,7 +127,11 @@
 
     $scope.edit_docs = function(ot) {
       $scope.mode = 'documentation';
-    }    
+    }   
+
+    $scope.containers_for = function(sample_name)  {
+      return [ sample_name, "Whatever", "Works" ]
+    }
 
   }]);
 

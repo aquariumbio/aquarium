@@ -12,10 +12,14 @@
         <input type='text' ng-model="current_ot.category" class="input-xlarge">
       </div>   
       <div class="span1">
+        <label class="label-bold">On the fly?</label>
+        <input type='checkbox' ng-model="current_ot.on_the_fly">
+      </div>      
+      <div class="span1">
         <label class="label-bold">Deployed?</label>
         <input type='checkbox' ng-model="current_ot.deployed">
       </div>
-      <div class="span3">
+      <div class="span2">
         <label class="label-bold">&nbsp;</label>
         <button class="btn btn-primary pull-right" ng-click="save_ot(current_ot)" style="margin-left: 5px">
           <span ng-if="current_ot.id">Update</span>

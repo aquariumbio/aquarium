@@ -28,7 +28,7 @@ class Planner
 
     @plan.reload
 
-    @plan.operations.each do |op|
+    @plan.operations.reject { |op| op.on_the_fly}.each do |op|
       op.outputs.each do |output|
         if output.satisfies input
           puts "\e[92mALREADY FOUND OPERATION TO MAKE #{input}. ADDING TO PLAN\e[39m"
@@ -47,7 +47,11 @@ class Planner
 
     op.inputs.each do |input|
 
+      puts "\e[94mOperation #{op.id}: Backchaining #{input.name}\e[39m"
+
       if !input.satisfied_by_environment
+
+        puts "\e[94m  #{input.name} is not satisfied by the environment!\e[39m"
 
         output = satisfied_by_plan input
 
@@ -73,6 +77,10 @@ class Planner
           end
 
         end
+
+      else
+
+        puts "\e[94m  #{input.name} is satisfied by the environment!\e[39m"
 
       end
 

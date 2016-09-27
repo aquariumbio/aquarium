@@ -24,8 +24,12 @@ module FieldValuer
       fv.value = val.to_s
   
     when 'sample'
-      self.errors.add(:set_property,"#{val} is not a sample") unless val.class == Sample
-      fv.child_sample_id = val.id
+      if val
+        self.errors.add(:set_property,"#{val} is not a sample") unless val.class == Sample
+        fv.child_sample_id = val.id
+      else
+        fv.child_sample_id = nil # this is used for empty samples in the planner
+      end
 
     when 'item'
       self.errors.add(:set_property,"#{val} is not a item") unless val.class == Item

@@ -6,6 +6,7 @@ class Planner < ActiveRecord::Migration
       t.string :name
       t.string :category
       t.boolean :deployed
+      t.boolean :on_the_fly
       t.timestamps      
     end
 
@@ -64,6 +65,8 @@ class Planner < ActiveRecord::Migration
       t.integer :child_id
       t.timestamps
     end
+
+    add_column :jobs, :successor_id, :integer
 
   end
 

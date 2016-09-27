@@ -190,5 +190,13 @@ class FieldValue < ActiveRecord::Base
     end
   end
 
+  def set opts={}
+    self.child_item_id = opts[:item].id if opts[:item]   
+    self.child_item_id = opts[:collection].id if opts[:collection]
+    self.row = opts[:row] if opts[:row]
+    self.column = opts[:column] if opts[:column]
+    self.save
+  end
+
 
 end 

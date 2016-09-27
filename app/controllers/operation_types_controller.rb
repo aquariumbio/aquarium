@@ -25,7 +25,7 @@ class OperationTypesController < ApplicationController
         if ft[:allowable_field_types]
           sample_type_names = ft[:allowable_field_types].collect { |aft| 
             logger.info "  aft = #{aft.inspect}"            
-            raise "Sample type not definied by browser for #{ft[:name]}: #{ft}" unless SampleType.find_by_name(aft[:sample_type][:name])
+            # raise "Sample type not definied by browser for #{ft[:name]}: #{ft}" unless SampleType.find_by_name(aft[:sample_type][:name])
             aft[:sample_type][:name]
           }
           container_names =  ft[:allowable_field_types].collect { |aft| 
@@ -45,7 +45,10 @@ class OperationTypesController < ApplicationController
 
   def create
 
-    ot = OperationType.new name: params[:name], category: params[:category], deployed: params[:deployed]
+    ot = OperationType.new(
+      name: params[:name], category: params[:category], 
+      deployed: params[:deployed], on_the_fly: params[:on_the_fly])
+
     ot.save
     add_field_types ot, params[:field_types]     
 
@@ -97,6 +100,7 @@ class OperationTypesController < ApplicationController
     ot.name = data[:name]
     ot.category = data[:category]
     ot.deployed = data[:deployed]
+    ot.on_the_fly = data[:on_the_fly]
     ot.save
 
     if update_fields
@@ -147,7 +151,7 @@ class OperationTypesController < ApplicationController
         op = ot.operations.create status: "ready", user_id: test_op[:user_id]
         if test_op[:field_values]
           test_op[:field_values].each do |fv|
-            actual_fv = op.set_property(fv[:name], Sample.find(fv[:child_sample_id]),fv[:role],true)
+            actual_fv = op.set_property(fv[:name], Sample.find_by_id(fv[:child_sample_id]), fv[:role],true)
             raise "Nil value Error: Could not set #{fv}" unless actual_fv
             unless actual_fv.errors.empty? 
               raise "Active Record Error: Could not set #{fv}: #{actual_fv.errors.full_messages.join(', ')}"
@@ -158,7 +162,7 @@ class OperationTypesController < ApplicationController
       end
 
       # run the protocol
-      job = ot.schedule(ops, current_user, Group.find_by_name('technicians'))
+      job,ops = ot.schedule(ops, current_user, Group.find_by_name('technicians'))
       error = nil
 
       begin

@@ -52,10 +52,12 @@ module Krill
               op_items << input.child_item
           else
               op.set_status "error"
-              op.associate "input error", "Could not find input #{input.child_sample.name}"
+              sname = input.child_sample ? input.child_sample.name : '-'
+              oname = input.child_item ? input.child_item.object_type.name : '-'
+              op.associate "input error", "Could not find input #{input.name}: #{sname} / #{oname}"
           end                         
         end
-        items = items + op_items unless op.status == "error"        
+        items = items + op_items unless op.status == "error"
       end
 
       if block_given?
@@ -82,6 +84,8 @@ module Krill
           if output.part?
             output_collections[output.name] ||= output.make_collection(count, 1)
             output.make_part(output_collections[output.name],i,0)
+          elsif output.object_type && output.object_type.handler == "collection"
+            output.make_collection 1, 10
           else
             output.make
           end         
@@ -144,8 +148,8 @@ module Krill
              .column(row_column(fv),        row_column(fv)) 
              .column(column_column(fv),     column_column(fv)) unless t.has_column? fv.name
 
-            t.set(fv.name,               fv.child_sample.name)          
-             .set(collection_column(fv), fv.child_item_id ? fv.child_item_id : "NOT FOUND")
+            t.set(fv.name,               fv.child_sample ? fv.child_sample.name : "NO SAMPLE")          
+             .set(collection_column(fv), fv.child_item_id ? fv.child_item_id : "NO COLLECTION")
              .set(row_column(fv),        fv.row)
              .set(column_column(fv),     fv.column)                          
 
@@ -154,8 +158,8 @@ module Krill
             t.column(fv.name,         fv.name)
              .column(item_column(fv), item_column(fv)) unless t.has_column? fv.name
 
-            t.set(fv.name,         fv.child_sample.name)          
-             .set(item_column(fv), fv.child_item_id ? fv.child_item_id : "NOT FOUND")
+            t.set(fv.name,         fv.child_sample ? fv.child_sample.name : "NO SAMPLE")          
+             .set(item_column(fv), fv.child_item_id ? fv.child_item_id : "NO ITEM")
 
           end
                      

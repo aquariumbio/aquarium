@@ -36,13 +36,24 @@
     }
 
     function io_info(io,ot,role) {
+      if (ot) {
+        var fts = aq.where(ot.field_types,function(ft) {
+          return ft.role == role && ft.name == io.name;
+        });
+        var aft = aq.where(fts[0].allowable_field_types,function(aft) {
+          return !io.child_sample || ( io.child_sample && io.child_sample.sample_type_id == aft.sample_type_id );
+        })[0];
+        return aft;
+      } else {
+        return null;
+      }
+    }
+
+    function part(io,ot,role) {
       var fts = aq.where(ot.field_types,function(ft) {
         return ft.role == role && ft.name == io.name;
       });
-      var aft = aq.where(fts[0].allowable_field_types,function(aft) {
-        return io.child_sample.sample_type_id == aft.sample_type_id
-      })[0];
-      return aft;
+      return fts[0].part;
     }
 
     $scope.input_info = function(io,ot) {    

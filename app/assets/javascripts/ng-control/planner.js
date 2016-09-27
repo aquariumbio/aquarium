@@ -31,7 +31,14 @@
     $http.get('/plans.json').then(function(response) {
       $scope.plans = response.data;
       $scope.ready = true;  
-      if ( $scope.plans.length > 0 ) {
+      if ( aq.query().id ) {
+         var id = parseInt(aq.query().id);
+         console.log("HERE : " + id);
+         var plans = aq.where($scope.plans, function(p) { return p.id == id; });
+         if ( plans.length == 1 ) {
+           $scope.select_plan(plans[0]);
+         }
+      } else if ( $scope.plans.length > 0 ) {
         $scope.select_plan($scope.plans[0]);
       }
     })
@@ -85,7 +92,6 @@
         $scope.plans[i] = response.data;
         $scope.current_plan = response.data;
         $scope.current_plan.current_node = response.data;
-        ot.operations = null;
       });
     }
 
