@@ -198,5 +198,11 @@ class FieldValue < ActiveRecord::Base
     self.save
   end
 
+  def copy_inventory fv
+    self.child_item_id = fv.child_item_id 
+    self.row = fv.row
+    self.column = fv.column
+    self.save    
+  end
 
 end 
