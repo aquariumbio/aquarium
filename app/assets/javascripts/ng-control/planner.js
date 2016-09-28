@@ -79,7 +79,6 @@
           $scope.mode = 'view';
           $scope.plans.unshift(response.data);
           $scope.current_plan = response.data;
-          $scope.current_plan.current_node = response.data;
           ot.operations = null;
         }
       });
@@ -91,7 +90,7 @@
         $scope.mode = 'view';
         $scope.plans[i] = response.data;
         $scope.current_plan = response.data;
-        $scope.current_plan.current_node = response.data;
+        console.log(["Set plan to", $scope.current_plan])
       });
     }
 

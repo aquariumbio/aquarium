@@ -20,11 +20,21 @@ module OperationPlanner
       elsif on_the_fly
         return false
       else
+
         input_list.each do |j|
           if ! j.satisfied_by_environment
-            return false
+            if j.predecessors.empty?
+              return false
+            else
+              j.predecessors.each do |pred|
+                if pred.operation.status != 'primed'
+                  return false
+                end
+              end
+            end
           end
         end
+
       end
 
     end

@@ -34,6 +34,11 @@ class FieldType < ActiveRecord::Base
     end
   end
 
+  def has_sample_type
+    asts = allowable_sample_types.select { |st| st }
+    !asts.empty?
+  end
+
   def allowable_object_types
     if ftype == "item"
       allowable_field_types.collect { |aft| aft.object_type }

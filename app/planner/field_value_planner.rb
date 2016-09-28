@@ -55,13 +55,13 @@ module FieldValuePlanner
          
           collections = Collection.containing(val, object_type).reject { |c| c.deleted? }
 
-          # print "  While Looking for '#{val.id}: #{val.name}' as part of a collection of type #{object_type.name}"            
+          print "  While Looking for '#{val.id}: #{val.name}' as part of a collection of type #{object_type.name}"            
 
           if collections.empty?
-            # puts "  ... found nothing"            
+            puts "  ... found nothing"            
             return false
           else
-            # puts "  ... found collection #{collections[0].id} at #{collections[0].location} with matrix #{collections[0].matrix}"
+            puts "  ... found collection #{collections[0].id} at #{collections[0].location} with matrix #{collections[0].matrix}"
             self.child_item_id = collections[0].id
             self.save
             return true
@@ -69,15 +69,15 @@ module FieldValuePlanner
 
         else
 
-          # print "Checking whether input #{name} #{val.name} (#{object_type.name}) needs to be made ... "      
+          print "Checking whether input #{name} #{val.name} (#{object_type.name}) needs to be made ... "      
           items = val.items.select { |i| !i.deleted? && i.object_type_id == object_type.id }
           if items.length > 0
-            # puts "found #{items[0].object_type.name} #{items[0].id}"
+            puts "found #{items[0].object_type.name} #{items[0].id}"
             self.child_item_id = items[0].id
             self.save        
             true
           else
-            # puts "not found"
+            puts "not found"
             false
           end
 

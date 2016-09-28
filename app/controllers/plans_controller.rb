@@ -132,7 +132,7 @@ class PlansController < ApplicationController
     planner.mark_unused operation
 
     # render the plan
-    redirect_to plan_path(id: operation.plan.id)
+    redirect_to plan_path(id: operation.plan.id, format: :json)
 
   end
 

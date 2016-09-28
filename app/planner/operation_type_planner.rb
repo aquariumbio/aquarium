@@ -18,7 +18,7 @@ module OperationTypePlanner
         op.set_input(i.name, desired_value.child_sample)
         unless op.errors.empty?
           raise "Could not set input of operation: #{op.errors.full_messages.join(', ')}"
-        end        
+        end
 
       else
 
@@ -43,7 +43,7 @@ module OperationTypePlanner
 
         # set any remaining inputs to nil
         puts "  ==> SETTING #{i.name} to nil" unless found_match
-        op.set_input(i.name,nil) unless found_match
+        op.set_input(i.name,nil) if !i.has_sample_type && !found_match
 
       end
 

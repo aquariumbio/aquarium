@@ -5,7 +5,7 @@
   <!-- If there are several options, list name and status of the operation and show a checkbox -->
   <label class="checkbox" ng-if="p.operations.length > 1">
     <input type=checkbox
-           ng-model="node.selected" 
+           ng-model="node.selected"
            ng-change="select_predecessor(current_plan,node,p.operations)"></input>
     <b>{{node.id}}: {{node.operation_type.name}}</b> <span>{{node.status}}</span>
   </label>
@@ -54,13 +54,13 @@
       <!-- Show predecessor information: name, sample name, object type name, item number, and location.
            If the predecessor is in planning phase, show whether its inputs are available or unplannable. -->
 
-      {{p.id}}: {{p.name}}: 
+      {{p.name}}: 
 
       <span ng-repeat="i in node.inputs | filter: { id: p.id }">
 
         <span ng-if="i.child_sample">{{i.child_sample.name}} / </span>
         {{input_info(i,operation_type(node)).object_type.name}}
-        <span ng=if=part(i,operation_type(node))>(part)</span>
+        <span ng-if="part(i,operation_type(node),'input')">(part)</span>
 
         <!-- Planning Phase: Availale Input -->
         <span ng-if="i.child_item_id && current_plan.status == 'Under Construction'"

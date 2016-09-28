@@ -49,11 +49,11 @@
       }
     }
 
-    function part(io,ot,role) {
+    $scope.part = function (io,ot,role) {
       var fts = aq.where(ot.field_types,function(ft) {
         return ft.role == role && ft.name == io.name;
       });
-      return fts[0].part;
+      return fts.length > 0 && fts[0].part;
     }
 
     $scope.input_info = function(io,ot) {    
