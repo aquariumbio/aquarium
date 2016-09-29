@@ -37,12 +37,14 @@ Sample.prototype.get_inventory = function(promise) {
       return new Item(sample.http).from(raw); 
     });
 
+    promise();
+
     sample.http.get('/browser/collections/' + sample.id + '.json').then(function(response) {
       sample.collections = aq.collect(response.data.collections, function(raw) {
         return new Collection(sample.http).from(raw);
       });
       sample.collection_containers = response.data.containers;
-      promise();
+      
     });  
 
   });

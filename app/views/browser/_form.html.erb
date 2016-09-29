@@ -72,7 +72,7 @@
 
          <tr ng-repeat="fv in sample.field_values | filter: fv_name_filter(field_type_name)">
            <td class='name name-{{ft.ftype}}'><span ng-if="$first">{{ft.name}}:</span></td>
-           <td class='modifer'><i ng-if="ft.array && $first" class='icon-plus clickable' ng-click="add_to_array(sample,ft)"></i></td>           
+           <td class='modifer'><span ng-if="ft.array && $first" class='clickable' ng-click="add_to_array(sample,ft)">+</span></td>           
            <td class='td-input'>
              <input ng-if="!ft.choices"
                     class='input-no-style full mono' 
@@ -85,13 +85,13 @@
                       ng-options="choice for choice in ft.choices_array">
            </td> 
            <td class='modifer'>
-             <i ng-if="ft.array" class='icon-remove clickable' ng-click="remove_from_array(fv)"></i>
+             <span ng-if="ft.array" class='clickable' ng-click="remove_from_array(fv)">&times;</span>
            </td>           
          </tr>
 
          <tr ng-if="is_empty_array(sample,ft)">
            <td class='name name-{{ft.ftype}}'>{{ft.name}}:</td>
-           <td class='modifer'><i ng-if="ft.array" class='icon-plus clickable' ng-click="add_to_array(sample,ft)"></i></td>
+           <td class='modifer'><span ng-if="ft.array" class='clickable' ng-click="add_to_array(sample,ft)">+</span></td>
            <td class='value subtle'>(empty)</td> 
            <td class='modifer'></td>                       
          </tr>  
@@ -111,7 +111,7 @@
               {{ft.name}}<span ng-if="ft.array">({{$index}}):</span><span ng-if="!ft.array">:</span>              
            </td>
            <td class='modifer'>
-             <i ng-if="ft.array && $first" class='icon-plus clickable' ng-click="add_to_array(sample,ft)"></i>             
+             <span ng-if="ft.array && $first" class='clickable' ng-click="add_to_array(sample,ft)">+</span>             
            </td>
            <td class='td-input'>
                <input class='input-no-style full' 
@@ -124,12 +124,12 @@
                        ng-class="new_subsample_button_class(fv.new_child_sample,st_name)"
                        ng-click="new_sub_sample(sample,fv,st_name)"
                        ng-disabled="fv.new_child_sample != null">{{st_name}}</button> 
-               <i class='icon-remove clickable' 
+               <span class='clickable' 
                   ng-if="fv.new_child_sample" 
-                  ng-click="remove_subsample(fv)"></i>   
+                  ng-click="remove_subsample(fv)">&times;</span>   
            </td>
            <td class='modifer'>
-             <i ng-if="ft.array" class='icon-remove clickable' ng-click="remove_from_array(fv)"></i>
+             <span ng-if="ft.array" class='clickable' ng-click="remove_from_array(fv)">&times;</span>
            </td>             
          </tr>
 
