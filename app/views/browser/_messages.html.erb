@@ -15,7 +15,7 @@
   <button type="button" class="close" ng-click="dismiss_messages()">&times;</button>
   <h4>Messages</h4>
   <ul>
-    <li ng-repeat="message in messages">
+    <li ng-repeat="message in messages track by $index">
       {{message}}
     </li>
   </ul>

@@ -143,7 +143,9 @@
 
          <tr ng-if="is_empty_array(sample,ft)">
            <td class='name name-{{ft.ftype}}'>{{ft.name}}:</td>
-           <td class='modifer'><i ng-if="ft.array" class='icon-plus clickable' ng-click="add_to_array(sample,ft)"></i></td>
+           <td class='modifer'><i ng-if="ft.array" 
+                                  class='icon-plus clickable' 
+                                  ng-click="add_to_array(sample,ft)"></i></td>
            <td class='value subtle'>(empty)</td> 
            <td class='modifer'></td>                       
          </tr>  

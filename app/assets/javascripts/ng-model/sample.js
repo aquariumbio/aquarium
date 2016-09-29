@@ -132,9 +132,11 @@ Sample.prototype.new = function(stid,promise) {
     sample.field_values = [];
     sample.sample_type = sample_type;
     sample.sample_type_id = stid;
-    sample.set_defaults();   
+    sample.set_defaults();
 
-    promise(sample);
+    if ( promise ) {
+      promise(sample);
+    }
 
   });
 
@@ -203,4 +205,87 @@ Sample.prototype.create = function(promise) {
        promise(response.data);
     });
   return this;
+}
+
+Sample.prototype.field_value = function(name) {
+
+  var fvs = aq.where(this.field_values,function(fv) {
+    return fv.name == name;
+  });
+
+  if ( fvs.length == 1 ) {
+    return fvs[0]
+  } else {
+    return null;
+  }
+}
+
+Sample.prototype.lookup = function(name,sample_names,types,warnings) {
+
+  for ( var st_name in sample_names ) {
+    for ( var i=0; i<sample_names[st_name].length; i++ ) {
+      var identifier = sample_names[st_name][i];
+      if ( types.indexOf(st_name) >= 0 && ( identifier.split(": ")[0] == name || identifier.split(": ")[1] == name ) ) {
+        return identifier;
+      }
+    }
+  }
+
+  warnings.push ( "Sample " + name + " was not found in among samples allowed for the given sample type and field." );
+  return "UNKNOWN SUBSAMPLE " + name;
+
+}
+
+Sample.prototype.assign_fv_aux = function( t, fv, value, sample_names, warnings ) {
+
+  var choices = null;
+
+  if ( t.choices ) {
+    choices = t.choices.split(',');    
+  }
+
+  if ( t.ftype == "number" ) {   
+    var nchoices = aq.collect(choices,function(s) { return parseFloat(s); });
+    if ( ! choices || nchoices.indexOf(parseInt(value)) >= 0 ) {
+      fv.value = parseFloat(value);
+    } else {
+      warnings.push("Value for field " + t.name + " should be one of " + t.choices + ".")
+    }
+  } else if ( t.ftype == "sample" ) {
+    if ( ! choices || choices.indexOf(value) >= 0 ) {    
+      fv.child_sample_name = this.lookup(value, sample_names,fv.allowable_child_types,warnings);
+    } else {
+      warnings.push("Value for field " + t.name + " should be one of " + t.choices + ".")     
+    }
+  } else {
+    fv.value = value;
+  }
+
+}
+
+Sample.prototype.assign_field_value = function(name,value,sample_names,warnings) {
+
+  var t = this.field_type(name),
+      fv = this.field_value(name);
+
+  if ( fv && !t.array ) {
+
+    this.assign_fv_aux(t,fv,value,sample_names,warnings);
+
+  } else if ( t && t.array && value != "" ) {
+
+    var fv = this.sample_type.default_field(t);
+    this.field_values.push(fv);
+    this.assign_fv_aux(t,fv,value,sample_names,warnings);
+
+  } else if ( t && t.array && value == ""  ) {
+
+    // Do nothing, its an empty array field
+
+  } else {
+
+    warnings.push("Could not find field named '" + name + "'" + ".");
+
+  }
+
 }

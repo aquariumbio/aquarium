@@ -30,7 +30,12 @@
         },
         search: {
           selected: $scope.views.search.selected,
-          query: $scope.views.search.query
+          query: $scope.views.search.query,
+          sample_type: $scope.views.search.sample_type,
+          project: $scope.views.search.project,
+          project_filter: $scope.views.search.project_filter,          
+          user: $scope.views.search.user,
+          user_filter: $scope.views.search.user_filter,
         },
         sample_type: {
           selected: $scope.views.sample_type.selected,   
@@ -50,23 +55,25 @@
 
     $scope.views = $cookies.getObject("browserViews");
 
-    if ( !$scope.views || $scope.views.version != 1 ) {
+    if ( !$scope.views || $scope.views.version != 2 ) {
 
       $scope.views = {
-        version: 1,
+        version: 2,
         project: {
           loaded: false,
           selection: {}
         },
         recent: {
-          selected: true
+          selected: false
         },
         create: {
           selected: false,
           samples: []
         },
         search: {
-          selected: false
+          selected: true,
+          user: -1,
+          user_filter: true
         },
         sample_type: {
           selected: false,
@@ -77,6 +84,14 @@
 
       cookie();
 
+      $scope.messages = [ "Welcome to the updated Aquarium browser. The search feature "
+                        + "has been expanded and is now the way to find samples by name, "
+                        + "sample type, project, and user. In addition, sample the sample "
+                        + "creation tool now allows you to upload samples from a "
+                        + "spreadsheet. Note that the format of the spreadsheet has "
+                        + "changed, which you can read about on the 'New Samples' "
+                        + "page." ]
+
     } else {
       if ( !$scope.views.sample_type ) {
         $scope.views.sample_type = { selected: false };
@@ -86,6 +101,10 @@
     $scope.helper = new SampleHelper($http);
 
     $scope.user = new User($http,function(user_info) {
+      if ( $scope.views.search.user == -1 ) {
+        $scope.views.search.user = user_info.current.login;
+        $scope.search(0);
+      }
       if ( !$scope.views.user.initialized ) {
         $scope.views.user.initialized = true;
         $scope.choose_user(user_info.current);
@@ -316,9 +335,12 @@
           $scope.errors = response.errors;
         } else {
           $scope.views.create.samples = [];
-          $scope.views.recent.samples = [];
           $scope.choose_user($scope.user.current);
-          $scope.select_view('recent');
+          $scope.views.search.query = "";
+          $scope.views.search.sample_type = "";
+          $scope.views.search.user = $scope.user.current.login;
+          $scope.select_view('search');
+          $scope.search(0);
           $scope.messages = aq.collect(response.samples,function(s) { 
             return "Created sample " + s.id + ": " + s.name; 
           });          
@@ -334,29 +356,36 @@
 
     // Search
 
-    $scope.search = function() {
+    $scope.search = function(p) {
 
-      var url = '/browser/search/'+$scope.views.search.query;
+      $scope.views.search.samples = [];
+      $scope.views.search.status = "searching";
+      $scope.views.search.page = p;
 
-      if ( $scope.views.user.filter ) {
-        url += "/" + $scope.views.user.current.id;
-      }
-
-      $http.get(url).
-        then(function(response) {
-          $scope.views.search.samples = aq.collect(response.data,function(s) {
+      $http.post("/browser/search",$scope.views.search).
+        then(function(response) { 
+          $scope.views.search.status = "preparing";         
+          $scope.views.search.samples = aq.collect(response.data.samples,function(s) {
             return new Sample($http).from(s);
           });
-          $scope.views.search.sample_types = aq
-                .uniq(aq.collect($scope.views.search.samples, function(s) {
-            return s.sample_type_id;
-          }));
-        });      
-
+          $scope.views.search.count = response.data.count;
+          $scope.views.search.pages = aq.range(response.data.count / 30);
+          $scope.views.search.status = "done";
+        });
+          
     }
 
-    if ( $scope.views.search.query ) {
-      $scope.search();
+    $scope.page_class = function(page) {
+      var c = "page";
+      if ( page == $scope.views.search.page ) {
+        c += " page-selected";
+      }
+      return c;
+    }
+
+
+    if ( $scope.views.search.user != -1 ) {
+      $scope.search(0);
     }
 
     // Messages 
@@ -404,6 +433,46 @@
       }
 
     }  
+
+    $scope.upload_change = function(files) {
+      $scope.spreadsheet_name = files[0].name;
+      $scope.upload();      
+    }
+
+    $scope.upload = function() {
+
+      $scope.spreadsheet_name = undefined;
+
+      var f = document.getElementById('spreadsheet').files[0],
+          r = new FileReader();
+
+      r.onloadend = function(e) {
+
+        try {
+
+          data = $scope.helper.spreadsheet(
+            $http,
+            $scope.sample_types,
+            $scope.sample_names,
+            e.target.result
+          );
+
+          $scope.views.create.samples = data.samples;
+          $scope.messages = data.warnings;
+          $scope.messages.push("Spreadsheet '" + f.name + "' processed. Review the new samples below and click 'Save' to save this data to Aquarium.");
+
+        } catch (e) {
+
+          $scope.messages = [ "Error processing spreadsheet: " + e ];
+          $scope.$apply();
+
+        }
+
+      }
+
+      r.readAsBinaryString(f);
+
+    }     
 
   }]);
 

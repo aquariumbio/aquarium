@@ -2,9 +2,11 @@
      ng-click="select_view('create')"
      ng-show="sample_types">
 
-  <span class='project-heading project-expander'>
-    New Samples &nbsp;
-  </span>
+  <div class='project-heading project-expander'>
+    New Samples
+  </div>
+
+  <br />
 
   <span>
 
@@ -25,6 +27,22 @@
        ng-if="views.create.samples.length > 0">
       Save
     </a>
+
+    <div style="margin-top: 10px">
+
+      <label class="btn btn-default btn-file btn-small">
+        Upload Spreadsheet <input type=file
+                        id="spreadsheet"
+                        file="spreadsheet"
+                        style="display: none;"
+                        custom-on-change="upload_change">
+      </label>
+
+      <div ng-if="spreadsheet_name" style="margin-top: 10px">
+        <a href='#' class='btn btn-small btn-primary' ng-click="upload()">Upload</a>
+      </div>
+
+    </div>      
 
   </span> 
 

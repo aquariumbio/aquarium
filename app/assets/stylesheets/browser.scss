@@ -4,6 +4,24 @@ $selected-sample-outline-color: #e0ffff;
 
 .browser {
 
+  .search-part {
+    margin-top: 3px;
+  }
+
+  .page {
+    border: 1pt solid #bbb;
+    border-radius: 2px;
+    width: 24px;
+    margin: 2px;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .page-selected {
+    background: #ff0;
+  }  
+
   @mixin sample-tree-list($color) {
 
     .sample-tree-list {
@@ -245,10 +263,12 @@ $selected-sample-outline-color: #e0ffff;
     margin: 0;
     tr {
       /*height: $row-height;*/
+      
     }
     td {
       padding: 0 0 0 5px; 
       height: $row-height;
+      overflow: hidden;
       /*outline: 1pt solid #def; */
     }
     .name {
@@ -422,7 +442,7 @@ $selected-sample-outline-color: #e0ffff;
     td {
       vertical-align: top;
       font-weight: normal;
-      overflow: scroll;
+      overflow: hidden;
     }
     .data-field {
 

@@ -3,11 +3,29 @@
 
   <div>
     <ul class='sample-tree-list'>
-      <li ng-repeat="sample in views.create.samples" 
+      <li ng-repeat="sample in views.create.samples track by $index" 
           ng-include="'sample_form'"
           class='no-sample-hover'>
       </li>
     </ul>
   </div>
+
+</div>
+
+<div ng-show="views.create.selected"
+     ng-if="views.create.samples.length == 0"
+     class='well'>
+
+  <p><b>To create new samples</b>: Choose a samle type from the "Create" menu on the left. Edit 
+  your samples. Click "Save".</p>
+
+  <p><b>To upload a spreadsheet</b>: Click "Spreadsheet" on the left. This will add all of your
+  new samples to this page, but will not save them. Review the sample definitions and any warnings,
+  and then click "Save". Spreadsheets should be in .csv format. The first entry of the first row should
+  specify the sample type name. Remaining entries in the first row should be names of fields, the
+  word 'Project', or the word 'Description'. Fields that correspond to arrays may show up multiple times, 
+  and can be empty (in which case the entry is ignored). The remaining rows specify the samples. In the 
+  first column should be the name of the sample. All other columns correspond to their headings.
+  Subsamples can be referred to by name or id. </p>
 
 </div>

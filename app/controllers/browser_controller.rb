@@ -16,7 +16,7 @@ class BrowserController < ApplicationController
     sts.each { |st|
       result[st.name] = st.samples.collect { |s|
         "#{s.id}: #{s.name}"
-      }
+      }.reverse
     }
 
     render json: result
@@ -155,14 +155,25 @@ class BrowserController < ApplicationController
 
   def search
 
-    if params[:user_id]
-      samples = Sample.where("name like ? or id = ?", "%#{params[:query]}%", params[:query].to_i)
-                      .where(user_id: params[:user_id])
-    else
-      samples = Sample.where("name like ? or id = ?", "%#{params[:query]}%", params[:query].to_i)
+    samples = Sample.where("name like ? or id = ?", "%#{params[:query]}%", params[:query].to_i)
+
+    if params[:user_filter]
+      user = User.find_by_login(params[:user])
+      samples = samples.where(user_id: user.id) if user
     end
 
-    render json: samples.last(50).reverse.to_json(only: [:name,:id,:user_id,:data,:sample_type_id])
+    project = params[:project]
+    samples = samples.where(project: params[:project]) if params[:project_filter]
+
+    sample_type = SampleType.find_by_name(params[:sample_type])
+    samples = samples.where(sample_type_id: sample_type.id) if sample_type
+
+    sample_list =  samples.offset(params[:page]*30)
+                          .last(30)
+                          .reverse
+                          .as_json(only: [:name,:id,:user_id,:data,:sample_type_id])
+
+    render json: { samples: sample_list, count: samples.count }
 
   end
 
