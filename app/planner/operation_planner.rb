@@ -27,7 +27,7 @@ module OperationPlanner
               return false
             else
               j.predecessors.each do |pred|
-                if pred.operation.status != 'primed'
+                if ! ( pred.operation.status == 'primed' || pred.operation.status == 'done' )
                   return false
                 end
               end

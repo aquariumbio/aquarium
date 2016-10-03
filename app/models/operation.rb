@@ -211,7 +211,6 @@ class Operation < ActiveRecord::Base
 
   end
 
-
   def start
     recurse do |op|
       if op.status == "planning" && !op.on_the_fly

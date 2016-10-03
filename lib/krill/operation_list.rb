@@ -61,9 +61,9 @@ module Krill
       end
 
       if block_given?
-        @protocol.take items, opts, &Proc.new
+        @protocol.take items.uniq, opts, &Proc.new
       else
-        @protocol.take items, opts        
+        @protocol.take items.uniq, opts        
       end
 
       self
