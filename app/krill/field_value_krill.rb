@@ -6,6 +6,12 @@ module FieldValueKrill
 
       @item = Item.find_by_id(child_item_id)
 
+    elsif predecessors.length > 0
+
+      # TODO: THIS SHOULD USE THE ACTIVE PREDECESSOR, IN CASE THERE IS MORE THAN ONE
+      #       FILTER BY STATUS (e.g. "done")?
+      copy_inventory(predecessors[0])
+
     else
 
       if object_type && !field_type.part
