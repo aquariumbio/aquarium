@@ -1,5 +1,5 @@
 <div ng-if="current_ot.documentation && mode == 'documentation'" ng-controller="codeCtrl as code">
-
+ 
   <div ng-model="current_ot.documentation.content"
        ui-ace="{
                  useWrapMode : true,
@@ -7,12 +7,15 @@
                  onLoad: aceLoaded,
                  onChange: aceChanged,
                  theme:'tomorrow'
-               }">
+               }"
+       ng-change="change(current_ot.documentation)">
   </div>
 
   <div class='code-controls'>
-    <a href='#' class='btn' ng-click="save(current_ot,'documentation')">Save</a>
-    <a href='#' class='btn' ng-click="render_docs(current_ot)">Render</a>
+    <a href='#' class='btn' 
+                ng-click="save(current_ot,'documentation')"
+                ng-disabled="!current_ot.documentation.changed">Save</a>
+    <a href='#' class='btn' ng-click="render_docs(current_ot)">Preview</a>
   </div>
 
 </div>
@@ -22,7 +25,9 @@
   <div ng-bind-html="current_ot.rendered_docs"></div>
 
   <div class='code-controls'>
-    <a href='#' class='btn' ng-click="save(current_ot,'documentation')">Save</a>
+    <a href='#' class='btn' 
+                ng-click="save(current_ot,'documentation')" 
+                ng-disabled="!current_ot.documentation.changed">Save</a>
     <a href='#' class='btn' ng-click="edit_docs(current_ot)">Edit</a>
   </div>  
 

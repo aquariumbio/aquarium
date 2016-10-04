@@ -5,30 +5,39 @@
     <div class="row-fluid">
       <div class="span4">
         <label class="label-bold">Operation Name</label>
-        <input type='text' ng-model="current_ot.name" class="input-xlarge">
+        <input type='text' ng-model="current_ot.name" ng-change="change(current_ot)" class="input-xlarge">
       </div>
       <div class="span4">
         <label class="label-bold">Category</label>
-        <input type='text' ng-model="current_ot.category" class="input-xlarge">
+        <input type='text' ng-model="current_ot.category" ng-change="change(current_ot)" class="input-xlarge">
       </div>   
       <div class="span1">
         <label class="label-bold">On the fly?</label>
-        <input type='checkbox' ng-model="current_ot.on_the_fly">
+        <input type='checkbox' ng-change="change(current_ot)" ng-model="current_ot.on_the_fly">
       </div>      
       <div class="span1">
         <label class="label-bold">Deployed?</label>
-        <input type='checkbox' ng-model="current_ot.deployed">
+        <input type='checkbox' ng-change="change(current_ot)" ng-model="current_ot.deployed">
       </div>
+
       <div class="span2">
+
         <label class="label-bold">&nbsp;</label>
-        <button class="btn btn-primary pull-right" ng-click="save_ot(current_ot)" style="margin-left: 5px">
+
+        <button class="btn btn-primary pull-right" 
+                ng-click="save_ot(current_ot)" 
+                ng-disabled="!current_ot.changed"
+                style="margin-left: 5px">
           <span ng-if="current_ot.id">Update</span>
           <span ng-if="!current_ot.id">Save</span>
         </button>
+
         <button ng-if="current_ot.id && !current_ot.deployed" 
                 class="btn pull-right" 
                 ng-click="delete_ot(current_ot)">Delete</button>
+
       </div>
+
     </div>
 
     <hr />
@@ -37,7 +46,7 @@
       <div class='span6'>
         <label class="label-bold">
           Inputs
-          <a href="#" class="btn btn-mini pull-right" ng-click="add_io('input')">Add</a>
+          <a href="#" class="btn btn-mini pull-right" ng-click="change(current_ot); add_io('input')">Add</a>
         </label>
         <div ng-include="'io_form'" onLoad="role = 'input'" ng-if="true"></div>
       </div>
@@ -45,7 +54,7 @@
       <div class='span6'>
         <label class="label-bold">
           Outputs
-          <a href="#" class="btn btn-mini pull-right" ng-click="add_io('output')">Add</a>
+          <a href="#" class="btn btn-mini pull-right" ng-click="change(current_ot); add_io('output')">Add</a>
         </label>
         <div ng-include="'io_form'" onLoad="role = 'output'" ng-if="true"></div>
         </div>

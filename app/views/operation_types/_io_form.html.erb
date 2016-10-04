@@ -6,22 +6,22 @@
 
         <div class="span8">
           <label>Name</label>
-          <input type="text" ng-model="io.name" class="input-fit">
+          <input type="text" ng-model="io.name" class="input-fit" ng-change="change(current_ot)">
         </div>
 
         <div class="span1"></div>
 
         <div class="span2">
           <label>
-            <input type='checkbox' ng-model="io.array"> Array? 
+            <input type='checkbox' ng-model="io.array" ng-change="change(current_ot)"> Array? 
           </label>
           <label>
-            <input type='checkbox' ng-model="io.part"> Part?
+            <input type='checkbox' ng-model="io.part" ng-change="change(current_ot)"> Part?
           </label>      
         </div>
 
         <div class="span1">
-          <a href="#" class="aft-remove pull-right" ng-click="remove_io(io)">&times;</a>
+          <a href="#" class="aft-remove pull-right" ng-click="change(current_ot); remove_io(io)">&times;</a>
         </div>
 
       </div>
@@ -30,19 +30,21 @@
 
         <label>
           Sample types / containers
-          <a href="#" class="btn btn-mini pull-right" ng-click="add_aft(io)">Add</a>
+          <a href="#" class="btn btn-mini pull-right" ng-click="change(current_ot); add_aft(io)">Add</a>
         </label>
 
         <li ng-repeat="aft in io.allowable_field_types">
           <div class="row-fluid">
             <div class="span5">
-              <input type="text" ng-model="aft.sample_type.name" class="input-fit" sampletypecomplete>
+              <input type="text" ng-model="aft.sample_type.name" class="input-fit"  
+                    ng-change="change(current_ot)"sampletypecomplete>
             </div>
             <div class="span5">            
-              <input type="text" ng-model="aft.object_type.name" class="input-fit" objecttypecomplete="aft.sample_type.name">
+              <input type="text" ng-model="aft.object_type.name" class="input-fit" 
+                     ng-change="change(current_ot)" objecttypecomplete="aft.sample_type.name">
             </div>
             <div class="span2">            
-              <a href="#" class="aft-remove pull-right" ng-click="remove_aft(io,aft)">&times;</a>    
+              <a href="#" class="aft-remove pull-right" ng-click="change(current_ot); remove_aft(io,aft)">&times;</a>    
             </div>
           </div>
         </li>

@@ -7,11 +7,12 @@
                  onLoad: aceLoaded,
                  onChange: aceChanged,
                  theme:'tomorrow'
-               }">
+               }"
+       ng-change="change(current_ot.cost_model)">
   </div>
 
   <div class='code-controls'>
-    <a href='#' class='btn' ng-click="save(current_ot,'cost_model')">Save</a>
+    <a href='#' class='btn' ng-click="save(current_ot,'cost_model')" ng-disabled="!current_ot.cost_model.changed">Save</a>
   </div>
 
 </div>

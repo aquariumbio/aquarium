@@ -133,6 +133,15 @@
       return [ sample_name, "Whatever", "Works" ]
     }
 
+    $scope.change = function(thing) {
+      thing.changed = true;
+    }
+
+    $scope.unchange = function(thing) {
+      thing.changed = false;
+    }
+
+
   }]);
 
 })();
