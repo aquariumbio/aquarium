@@ -89,18 +89,31 @@
 
     $scope.delete_ot = function(ot) {
       if ( confirm ( "Are you sure you want delete this operation type definition?" ) ) {
-        $http.delete("/operation_types/" + ot.id,ot).then(function(response) {
-          if ( response.data.error ) {
-            alert ( "Could not delete operation type: " + response.data.error );
-          } else {
-            var i = $scope.operation_types.indexOf(ot);
-            $scope.operation_types.splice(i,1);
-            make_categories();
-            if ( $scope.operation_types.length > 0 ) {
-              $scope.current_ot = $scope.operation_types[0];
+
+        if ( ot.id ) {
+
+          $http.delete("/operation_types/" + ot.id,ot).then(function(response) {
+            if ( response.data.error ) {
+              alert ( "Could not delete operation type: " + response.data.error );
+            } else {
+              var i = $scope.operation_types.indexOf(ot);
+              $scope.operation_types.splice(i,1);
+              make_categories();
+              if ( $scope.operation_types.length > 0 ) {
+                $scope.current_ot = $scope.operation_types[0];
+              }
             }
-          }
-        });             
+          });             
+
+        } else { // ot hasn't been saved yet
+
+          var i = $scope.operation_types.indexOf(ot);
+          $scope.operation_types.splice(i,1);
+          $scope.current_ot = $scope.operation_types[0];
+          make_categories();
+
+        }
+
       }
     }
 
@@ -154,6 +167,7 @@
         name: "New Operation Type",
         category: "Unsorted",
         deployed: false,
+        changed: true,
         field_types:[],
         protocol: { name: 'protocol', content: $scope.default_protocol },
         cost_model: { name: 'cost_model', content: 'def cost(op)\n  { labor: 0, materials: 0 }\nend' },

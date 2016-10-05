@@ -30,7 +30,7 @@
           <span ng-if="!current_ot.id">Save</span>
         </button>
 
-        <button ng-if="current_ot.id && !current_ot.deployed" 
+        <button ng-if="!current_ot.deployed" 
                 class="btn btn-mini pull-right"  style="margin-left: 5px"
                 ng-click="delete_ot(current_ot)"><span>Delete</span></button>
 
