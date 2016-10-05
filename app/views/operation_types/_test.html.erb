@@ -1,5 +1,7 @@
 <div ng-show="mode == 'test'" ng-controller="operationTypeTestCtrl as tester">
 
+  <h4 ng-if="!current_ot.id">Save this operation type's definition before testing.</h4>
+
   <form class='form-inline'>
 
     <label>Batch Size: </label>
@@ -10,11 +12,21 @@
            class="input-small">
     </input>
 
-    <a href="#" class="btn" ng-click="randomize(current_ot)">Generate Operations</a>
+    <a href="#" class="btn" ng-click="randomize(current_ot)" ng-disabled="!current_ot.id">Generate Operations</a>
 
     <button class="btn btn-warning"
-                ng-click="test(current_ot)"
-                ng-disabled="!current_ot.test_operations || current_ot.test_operations.length == 0">Run Test</button>
+            ng-click="test(current_ot)"
+            ng-if="!current_ot.changed && !current_ot.protocol.changed"            
+            ng-disabled="!current_ot.id || !current_ot.test_operations || current_ot.test_operations.length == 0">
+      Test
+    </button>
+
+    <button class="btn btn-warning"
+            ng-click="save_and_test(current_ot)"
+            ng-if="current_ot.changed || current_ot.protocol.changed"
+            ng-disabled="!current_ot.id || !current_ot.test_operations || current_ot.test_operations.length == 0">
+      Save and Test
+    </button>                
 
   </form>
 

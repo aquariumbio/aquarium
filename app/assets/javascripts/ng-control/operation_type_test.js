@@ -21,7 +21,19 @@
 
       $http.get("/operation_types/" + ot.id + "/random/" + ot.batch_size).then(function(response) {
         ot.test_operations = response.data;
-        console.log(response.data)
+      });
+
+    }
+
+    $scope.save_and_test = function(ot) {
+
+      $http.post("/operation_types/code", {
+        id: ot.id,
+        name: "protocol",
+        content: ot.protocol.content
+      }).then(function(response) {
+        ot.protocol.changed = false;
+        $scope.test(ot);
       });
 
     }
@@ -31,8 +43,6 @@
       ot.test_error = null;
       $http.post("/operation_types/test", ot).then(function(response) {
         if ( response.data.error ) {
-          console.log(response.data.error)
-          console.log(response.data.backtrace)
           ot.test_error = response.data.error.replace(/\(eval\):/g, "Line ");
         } else {
           ot.test_results = response.data;

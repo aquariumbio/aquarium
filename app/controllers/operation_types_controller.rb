@@ -78,16 +78,12 @@ class OperationTypesController < ApplicationController
   def code
 
     ot = OperationType.find(params[:id])
-
     c = ot.code(params[:name])
     
     if c
-      logger.info "Found code: #{c.inspect}"
       c = c.commit(params[:content])
     else
-      logger.info "Making new code"      
       c = ot.new_code(params[:name], params[:content])
-      logger.info "  ==> New code: #{c.inspect}"      
     end
 
     render json: c
