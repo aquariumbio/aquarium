@@ -8,7 +8,7 @@ module Krill
 
     def show
 
-      page = ShowBlock.new.run(&Proc.new)
+      page = ShowBlock.new(self).run(&Proc.new)
 
       # increment pc
       @job ||= Job.find(jid)
