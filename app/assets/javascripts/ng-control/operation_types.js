@@ -106,7 +106,6 @@
 
     $scope.export_ot = function(ot) {
       $http.get("/operation_types/" + ot.id + "/export").then(function(response) {
-        console.log(response.data);
 
         var blob = new Blob([JSON.stringify(response.data)], { type:"application/json;charset=utf-8;" });     
         var downloadLink = angular.element('<a></a>');
@@ -127,7 +126,14 @@
 
       r.onloadend = function(e) {
 
-        $http.post("/operation_types/import", { operation_type: JSON.parse(e.target.result) }).then(function(response) {
+        try {
+          var json = JSON.parse(e.target.result);
+        } catch(e) {
+          alert("Could not parse file: " + e);
+          return;
+        }
+
+        $http.post("/operation_types/import", { operation_type: json }).then(function(response) {
           if ( !response.data.error ) {
             $scope.current_ot = response.data.operation_type
             $scope.operation_types.push($scope.current_ot);

@@ -111,10 +111,8 @@
       restrict: 'A',
       scope: { objecttypecomplete: '=', ngModel: '=' },
       link: function($scope,$element,$attributes) {
-        console.log($scope.objecttypecomplete);
         $element.autocomplete({
           source: aq.collect(aq.where($scope.$parent.object_types,function(ot) { 
-                    console.log(ot.handler)
                     return ot.handler == "sample_container" || ot.handler == "collection"
                   }),function(p) { return p.name; }),
           select: function(ev,ui) {

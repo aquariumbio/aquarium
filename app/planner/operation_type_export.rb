@@ -46,6 +46,8 @@ module OperationTypeExport
 
       ot = OperationType.new name: obj[:name], category: obj[:category], deployed: obj[:deployed]
       ot.save
+    
+      raise "Could not save operation type: " + ot.errors.full_messages.join(', ') unless ot.errors.empty?   
 
       if obj[:field_types]
         obj[:field_types].each do |ft|

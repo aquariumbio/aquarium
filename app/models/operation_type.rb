@@ -10,6 +10,9 @@ class OperationType < ActiveRecord::Base
 
   attr_accessible :name, :category, :deployed, :on_the_fly
 
+  validates :name, presence: true
+  validates :category, presence: true
+
   def add_io name, sample_name, container_name, role, opts
     add_field name, sample_name, container_name, role, opts
   end
