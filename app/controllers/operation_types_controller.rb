@@ -207,5 +207,24 @@ class OperationTypesController < ApplicationController
 
   end
 
+  def export
+    render json: OperationType.find(params[:id]).export
+  end
+
+  def import
+
+    begin 
+      ot = OperationType.import(params[:operation_type])
+      ot.category = "Recent Imports"
+      ot.deployed = false
+      ot.save
+      render json: { operation_type: ot.as_json(methods: [:field_types, :protocol, :cost_model, :documentation]) }
+    rescue Exception => e
+      render json: { error: "Could not import operation type: " + e.to_s }
+    end
+
+
+  end
+
 end
 

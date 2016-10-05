@@ -15,24 +15,6 @@ namespace :workflow do
 
   end
 
-  task :export => :environment do
-
-    OperationType.all.each do |ot|
-
-      puts "- OPERATION TYPE -----------------------"
-      puts ot.name
-      puts "- PROTOCOL -----------------------------"
-      puts ot.code('protocol').content if ot.code('protocol')
-      puts "- COST ---------------------------------"
-      puts ot.code('cost_model').content if ot.code('cost_model')
-      puts "- DOCUMENTATION ------------------------"
-      puts ot.code('documentation').content if ot.code('documentation')
-      puts "\n\n\n\n"
-
-    end
-
-  end
-
   task :seed => :environment do 
 
     lp = ObjectType.new(name: "Lyophilized Primer", handler: "sample_container", unit: "tube", min: 1, max: 10000,

@@ -22,9 +22,7 @@
 
       <div class="span2">
 
-        <label class="label-bold">&nbsp;</label>
-
-        <button class="btn btn-primary pull-right" 
+        <button class="btn btn-primary pull-right btn-mini" 
                 ng-click="save_ot(current_ot)" 
                 ng-disabled="!current_ot.changed"
                 style="margin-left: 5px">
@@ -33,8 +31,11 @@
         </button>
 
         <button ng-if="current_ot.id && !current_ot.deployed" 
-                class="btn pull-right" 
-                ng-click="delete_ot(current_ot)">Delete</button>
+                class="btn btn-mini pull-right"  style="margin-left: 5px"
+                ng-click="delete_ot(current_ot)"><span>Delete</span></button>
+
+        <button class="btn btn-mini pull-right" 
+                ng-click="export_ot(current_ot)"><span>Export</span></button>
 
       </div>
 

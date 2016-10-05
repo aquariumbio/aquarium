@@ -31,6 +31,16 @@
           <li>
             <button class='btn btn-mini btn-primary' ng-click="new_operation_type()">New</button>
             <button class='btn btn-mini' ng-click="copy_operation_type()">Copy</button>
+
+            <label class="btn btn-default btn-file btn-mini">
+              Import <input type=file
+                              id="import"
+                              file="import"
+                              style="display: none;"
+                              custom-on-change="import_ot">
+            </label>
+
+
           </li>
 
         </ul>
