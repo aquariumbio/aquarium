@@ -13,6 +13,13 @@ module Krill
       ops
     end
 
+    def map &block
+      ops = super(&block)
+      ops.extend(OperationList)
+      ops.protocol = @protocol
+      ops
+    end
+
     def select &block
       ops = super(&block)
       ops.extend(OperationList)
