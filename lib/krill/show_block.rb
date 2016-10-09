@@ -36,7 +36,11 @@ module Krill
     end
 
     def table m
-      @parts.push({table: m})
+      if m.class == Table
+        @parts.push({table: m.all.render})
+      else
+        @parts.push({table: m})        
+      end
     end
 
     def item t

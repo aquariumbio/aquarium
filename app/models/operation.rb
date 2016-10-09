@@ -240,5 +240,10 @@ class Operation < ActiveRecord::Base
 
   end  
 
+  def temporary
+    @temporary ||= {}
+    @temporary
+  end
+
 end
 

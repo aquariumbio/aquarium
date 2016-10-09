@@ -364,6 +364,7 @@ Krill.prototype.get = function() {
 
     var inputs = $(".krill-input-box",this.step_list[this.step_list.length-1]);
     var selects = $(".krill-select",this.step_list[this.step_list.length-1]);
+    var table_inputs = $(".krill-table-input",this.step_list[this.step_list.length-1]);
  
     var values = { timestamp: Date.now()/1000 };
 
@@ -379,6 +380,16 @@ Krill.prototype.get = function() {
     $.each(selects,function(i,e) {
         var name = $(e).attr("id");
         values[name] = $(e).val();
+    });
+
+    values.table_inputs = [];
+    $.each(table_inputs,function(i,e) {
+        values.table_inputs.push({ 
+            value: $(e).val(), 
+            opid: $(e).data('opid'), 
+            key: $(e).data('key'),
+            type: $(e).data('type')
+        });
     });
 
     var a = [];

@@ -72,6 +72,9 @@
       if ( cell && cell.check ) {
         c += " krill-td-check"
       }
+      if ( cell && cell.type ) {
+        c += " krill-td-input"
+      }      
       return c;
     }
 

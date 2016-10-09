@@ -100,18 +100,67 @@ The **operations** list makes it easy to construct tables, with a number of meth
 operations.retrieve
           .make
 
-t = operations.start_table
-      .input_item("Forward Primer")
-      .input_item("Reverse Primer")
-      .custom_column("Master Mix (uL)") { |op| 50 }
-      .output_collection("Fragment")
-      .output_row("Fragment")
-      .output_column("Fragment")
-      .end_table
-
 show do
-  title "Ingredients Table"      
-  table t.all.render
+title "Ingredients Table"      
+table operations.start_table
+  .input_item("Forward Primer")
+  .input_item("Reverse Primer")
+  .custom_column("Master Mix (uL)") { |op| 50 }
+  .output_collection("Fragment", heading: "Frag")
+  .output_row("Fragment")
+  .output_column("Fragment")
+  .end_table
+end
+```
+
+The methods available for making tables this way are
+
+```ruby
+input_item        
+output_item       
+input_sample      
+output_sample     
+input_collection  
+output_collection 
+input_row         
+output_row        
+input_column      
+output_column  
+```
+
+All of these methods take the input or output name as an argument, and take the options
+
+```ruby
+heading: "A string to use instead of the default"
+checkable: "Whether the table entry should be checkable by the technician"
+```
+
+In addition, you can make custom columns via
+
+```ruby
+custom_column(name) { |op|
+  # code that uses op to compute a number of string here
+}
+```
+
+To show a column of data entry cells for the technician to fill out, use the following
+
+```ruby
+show do 
+    table operations.start_table
+      .get(:x, type: 'number', heading: 'Enter a value in this column', default: 1)
+      .end_table
+end
+```
+
+After this show is complete, this data can be retrieved from an operation op via op.temporary[:x].
+You can of course use any symbol, not just :x. To show a table of operation data, do
+
+```ruby
+show do
+  table operations.start_table
+    .result(:x, heading: "You entered this data")
+    .end_table
 end
 ```
 

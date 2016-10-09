@@ -102,6 +102,11 @@ KrillLog.prototype.table = function(action,x) {
           var td = $('<td>'+x[i][j]+'</td>');
         } else if ( x[i][j] == null ) {
           var td = $('<td></td>');
+
+        } else if ( x[i][j].type ) {
+
+          var td = $('<td>&#9656; '+action.inputs.table_inputs[i-1].value+'</td>');
+
         } else {
 
           var td = $('<td>'+x[i][j].content+'</td>');
