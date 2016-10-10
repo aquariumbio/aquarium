@@ -43,8 +43,7 @@ Krill.prototype.uploads = function() {
 
         url: 'uploads?job=' + that.job,
 
-    }).done(function(data){
-
+    }).done(function(data) {
 
         var ul = $('<ul></ul>').addClass('krill-associations-upload-list');
 
