@@ -58,9 +58,11 @@ module Krill
       self      
     end    
 
-    def custom_column heading, &block
-      @table.add_column heading, running.collect(&block)
-      self      
+    def custom_column opts={heading: "Custom Column", checkable: false }, &block
+      @table.add_column opts[:heading], running.collect(&block).collect { |x| 
+        opts[:checkable] ? ({ content: x, check: true }) : x
+      }
+      self
     end
 
     def input_item        name, opts={}; item name,       "input", opts;  end

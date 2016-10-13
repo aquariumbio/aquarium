@@ -138,10 +138,12 @@ checkable: "Whether the table entry should be checkable by the technician"
 In addition, you can make custom columns via
 
 ```ruby
-custom_column(name) { |op|
+custom_column { |op|
   # code that uses op to compute a number of string here
 }
 ```
+
+You can pass a heading: and/or a checkable: option to custom_column.
 
 To show a column of data entry cells for the technician to fill out, use the following
 
@@ -200,7 +202,7 @@ class Protocol
     
     t = operations.start_table
                   .input_item("Plasmid")
-                  .custom_column("Concentration") { |op| op.input_data "Plasmid", :concentration }
+                  .custom_column(heading: "Concentration") { |op| op.input_data "Plasmid", :concentration }
                   .end_table
     
     show { table t.all.render }
