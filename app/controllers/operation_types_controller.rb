@@ -93,21 +93,39 @@ class OperationTypesController < ApplicationController
   def update_from_ui data, update_fields=true
 
     ot = OperationType.find(data[:id])
-    ot.name = data[:name]
-    ot.category = data[:category]
-    ot.deployed = data[:deployed]
-    ot.on_the_fly = data[:on_the_fly]
-    ot.save
+    update_errors = []
 
-    if update_fields
+    ActiveRecord::Base.transaction do
 
-      ot.field_types.each do |ft| 
-        ft.destroy
+      ot.name = data[:name]
+      ot.category = data[:category]
+      ot.deployed = data[:deployed]
+      ot.on_the_fly = data[:on_the_fly] 
+      ot.save
+
+      if !ot.errors.empty?
+        update_errors << ot.errors.full_messages.join(", ")
+        raise ActiveRecord::Rollback
       end
 
-      add_field_types ot, data[:field_types]
+      if update_fields
+
+        ot.field_types.each do |ft| 
+          ft.destroy
+        end
+
+        begin
+          add_field_types ot, data[:field_types]
+        rescue Exception => e
+          update_errors << e.to_s
+          raise ActiveRecord::Rollback
+        end
+
+      end
 
     end
+
+    ot[:update_errors] = update_errors
 
     ot
 
@@ -115,7 +133,11 @@ class OperationTypesController < ApplicationController
 
   def update
     ot = update_from_ui params
-    render json: ot.as_json(methods: [:field_types, :protocol, :cost_model, :documentation])
+    if ot[:update_errors].empty?
+      render json: ot.as_json(methods: [:field_types, :protocol, :cost_model, :documentation])
+    else
+      render json: { errors: ot.update_errors }     
+    end
   end
 
   def default
@@ -135,7 +157,12 @@ class OperationTypesController < ApplicationController
   def test
 
     # save the operaton
-    update_from_ui params, false
+    ot = update_from_ui params, false
+
+    if !ot[:update_errors].empty? 
+      render json: { errors: ot.update_errors }
+      return
+    end
 
     # start a transaction
     ActiveRecord::Base.transaction do
