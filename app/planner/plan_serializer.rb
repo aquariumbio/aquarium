@@ -54,6 +54,7 @@ module PlanSerializer
 
     @running = false
     @done = true
+    @error = false
 
     ops = operations.includes(:job).as_json(include: :job, methods: :nominal_cost)
     op_ids = ops.collect { |o| o["id"] }
@@ -65,6 +66,7 @@ module PlanSerializer
       op["selected"] = (op["status"] != "unplanned")
       @running = true if [ "pending", "waiting", "ready", "scheduled", "running" ].member? op["status"]
       @done = false unless [ "done", "error" ].member? op["status"]
+      @error = true if op["status"] == "error"
       op["data_associations"] = associations.select { |a| a["parent_id"] == op["id"] }
       op["fvs"] = {}
     end
@@ -108,6 +110,7 @@ module PlanSerializer
     @status = "Under Construction" if !@running && !@done
     @status = "Running" if @running 
     @status = "Completed" if @done
+    @status = "Error" if @error
 
     {
       id: id,
@@ -115,7 +118,8 @@ module PlanSerializer
       created_at: created_at,
       updated_at: updated_at,
       status: @status,
-      goals: goals.collect { |g| g.merge(predecessors: predecessors(g,ops,field_types)) }
+      goals: goals.collect { |g| g.merge(predecessors: predecessors(g,ops,field_types)) },
+      loaded: true
     }
 
   end

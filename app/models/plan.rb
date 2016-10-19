@@ -95,9 +95,11 @@ class Plan < ActiveRecord::Base
     plans.each do |plan|
       running = false
       done = true
+      error = false
       plan["operations"].each do |op|
         running = true if [ "pending", "waiting", "ready", "scheduled", "running" ].member? op["status"]
         done = false unless [ "done", "error" ].member? op["status"]
+        error = true if op["status"] == "error"
         op["inputs"] = []
         op["outputs"] = []        
         fvs.each do |fv|
@@ -108,7 +110,8 @@ class Plan < ActiveRecord::Base
       plan["goals"] = [ plan["operations"][0] ]
       plan["status"] = "Under Construction" if !running && !done
       plan["status"] = "Running" if running
-      plan["status"] = "Completed" if done            
+      plan["status"] = "Completed" if done   
+      plan["status"] = "Error" if error      
     end
 
     plans

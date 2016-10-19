@@ -21,6 +21,27 @@
     cursor: pointer;
   }
 
+  .highlight {
+    border-radius: 2px;
+    padding: 0 2px 0 2px;
+  }
+
+  .highlight-error {
+    background: #f99;
+  }
+
+  .highlight-done {
+    background: cyan;
+  }
+
+  .highlight-pending, .highlight-waiting {
+    background: #ff9;
+  }
+
+  .highlight-running {
+    background: #9f9;
+  }
+
   .op-table {
     width: 100%;
     th {

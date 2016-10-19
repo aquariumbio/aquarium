@@ -26,7 +26,10 @@
       &#9660; <!-- down triangle -->
     </span>
 
-    <b>{{node.id}}: {{node.operation_type.name}}</b> <span>{{node.status}}, </span>
+    <b>{{node.id}}: {{node.operation_type.name}}</b> 
+
+      <span ng-class='highlight(node.status)'>{{node.status}}</span>
+      ,
 
     <span ng-if="node.status != 'done' && node.status != 'error'">
       {{node.nominal_cost.labor + node.nominal_cost.materials|currency}} (estimate)
@@ -123,11 +126,13 @@
 
 
 
-
-
 <div ng-if="mode=='view'" ng-controller="viewEditPlanCtrl" class='plan'>
 
-  <div class='row-fluid'>
+  <div ng-show="!current_plan.loaded">
+    <p>Loading...</p>
+  </div>
+
+  <div class='row-fluid' ng-show="current_plan.loaded">
 
     <div class='span6'>
       <h4>Status: {{current_plan.status}}</h4>
@@ -154,7 +159,7 @@
     </div>
   </div>  
 
-  <div ng-repeat="node in current_plan.goals">
+  <div ng-repeat="node in current_plan.goals"  ng-show="current_plan.loaded">
 
     <div ng-repeat="output in node.outputs">
 

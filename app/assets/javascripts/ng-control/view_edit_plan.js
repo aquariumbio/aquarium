@@ -40,9 +40,12 @@
         var fts = aq.where(ot.field_types,function(ft) {
           return ft.role == role && ft.name == io.name;
         });
-        var aft = aq.where(fts[0].allowable_field_types,function(aft) {
-          return !io.child_sample || ( io.child_sample && io.child_sample.sample_type_id == aft.sample_type_id );
-        })[0];
+        var aft = null;
+        if ( fts[0] ) {
+          aft = aq.where(fts[0].allowable_field_types,function(aft) {
+            return !io.child_sample || ( io.child_sample && io.child_sample.sample_type_id == aft.sample_type_id );
+          })[0];
+        }
         return aft;
       } else {
         return null;
@@ -111,6 +114,10 @@
         return p.undetermined;
       }).length > 0;
     }    
+
+    $scope.highlight = function(status) {
+      return "highlight highlight-" + status;
+    }
 
   }]);
 

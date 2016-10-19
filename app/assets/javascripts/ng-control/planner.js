@@ -33,7 +33,6 @@
       $scope.ready = true;  
       if ( aq.query().id ) {
          var id = parseInt(aq.query().id);
-         console.log("HERE : " + id);
          var plans = aq.where($scope.plans, function(p) { return p.id == id; });
          if ( plans.length == 1 ) {
            $scope.select_plan(plans[0]);
@@ -90,7 +89,6 @@
         $scope.mode = 'view';
         $scope.plans[i] = response.data;
         $scope.current_plan = response.data;
-        console.log(["Set plan to", $scope.current_plan])
       });
     }
 

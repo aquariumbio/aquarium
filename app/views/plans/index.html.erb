@@ -44,12 +44,21 @@
 
       <div class="two-column-control">
 
+        <h5>Error</h5>
+
+        <ul class="plan-list">
+          <li ng-repeat="plan in plans | filter: { status: 'Error' }" ng-include="'plan_list'"></li>
+        </ul>        
+
+      </div>      
+
+      <div class="two-column-control">
+
         <h5>Completed</h5>
 
         <ul class="plan-list">
           <li ng-repeat="plan in plans | filter: { status: 'Completed' }" ng-include="'plan_list'"></li>
         </ul>        
-
 
       </div>
 
