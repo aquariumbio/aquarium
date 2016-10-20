@@ -148,9 +148,11 @@
     }
 
     $scope.open_goal = function(ot) {
+
       if ( !ot.operations ) {
-        ot.operations = [ { fvs: {} } ];
+        ot.operations = [ empty_goal(ot) ];
       }
+
       $scope.mode = 'build';
       $scope.goal = ot;
       var md = window.markdownit();

@@ -129,16 +129,18 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
     t.string   "value"
     t.integer  "child_sample_id"
     t.integer  "child_item_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
     t.string   "name"
     t.string   "parent_class"
     t.string   "role"
     t.integer  "field_type_id"
     t.integer  "row"
     t.integer  "column"
+    t.integer  "allowable_field_type_id"
   end
 
+  add_index "field_values", ["allowable_field_type_id"], :name => "index_field_values_on_allowable_field_type_id"
   add_index "field_values", ["field_type_id"], :name => "index_field_values_on_field_type_id"
   add_index "field_values", ["parent_id"], :name => "index_field_values_on_sample_id"
 

@@ -12,7 +12,7 @@
                        function (  $scope,   $http,   $attrs,   $cookies ) {
     
     $scope.more = function(ot) {
-      ot.operations.push({ fvs: {} })
+      ot.operations.push(empty_goal(ot));
     }
 
     $scope.drop = function(ot,op) {
@@ -23,10 +23,10 @@
     }
 
     $scope.add_to_array = function(fvs,name) {
-      if ( ! fvs[name] ) {
-        fvs[name] = [];
+      if ( fvs[name].sample == "" ) {
+        fvs[name].sample = [];
       }
-      fvs[name].push("");
+      fvs[name].sample.push("");
     }
 
     $scope.delete_from_fvs = function(fv,i) {

@@ -2,7 +2,7 @@
 
 <div ng-app="aquarium" ng-controller="operationTypesCtrl as planner" class='operation_types'>
 
-  <div class='two-column' ng-if="operation_types.length > 0">
+  <div class='two-column' ng-if="operation_types">
 
     <%= render partial: 'io_form' %>
     <%= render partial: 'show_block' %>
@@ -49,7 +49,7 @@
 
     </div>
  
-    <div class='two-column-right'> 
+    <div class='two-column-right' ng-show="operation_types && current_ot"> 
 
       <ul class="nav nav-tabs">
         <li ng-class="tab('definition')"><a href="#" ng-click="set_mode('definition')">Definition</a></li>

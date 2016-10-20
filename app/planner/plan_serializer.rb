@@ -62,6 +62,12 @@ module PlanSerializer
 
     associations = DataAssociation.includes(:upload).where(parent_class: "Operation", parent_id: op_ids).as_json(include: :upload)
 
+    operation_types = OperationType.where(id: ops.collect { |o| o["operation_type_id"] }).as_json
+
+    field_types = FieldType.includes(allowable_field_types: [ :sample_type, :object_type ])
+                        .where(parent_class: "OperationType", parent_id: operation_types.collect { |ot| ot["id"] })
+                        .collect { |ft| ft.as_json }
+
     ops.each do |op|
       op["selected"] = (op["status"] != "unplanned")
       @running = true if [ "pending", "waiting", "ready", "scheduled", "running" ].member? op["status"]
@@ -69,13 +75,17 @@ module PlanSerializer
       @error = true if op["status"] == "error"
       op["data_associations"] = associations.select { |a| a["parent_id"] == op["id"] }
       op["fvs"] = {}
+      field_types.select { |ft| ft["parent_id"] == op["operation_type_id"] }.each { |ft| 
+        op["fvs"][ft["name"]] = {
+          sample: ft[:array] ? [] : "",
+          aft: {},
+          role: ft["role"]
+        }
+        if ft[:allowable_field_types].length > 0
+          op["fvs"][ft["name"]]["aft"] = ft[:allowable_field_types][0]
+        end
+      }
     end
-
-    operation_types = OperationType.where(id: ops.collect { |o| o["operation_type_id"] }).as_json
-
-    field_types = FieldType.includes(allowable_field_types: [ :sample_type, :object_type ])
-                        .where(parent_class: "OperationType", parent_id: operation_types.collect { |ot| ot["id"] })
-                        .collect { |ft| ft.as_json }
 
     operation_types.each do |ot|
       ot["inputs"] = field_types.select { |ft| ft["parent_id"] == ot["id"] && ft["role"] == "input" }

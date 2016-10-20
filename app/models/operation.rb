@@ -40,12 +40,12 @@ class Operation < ActiveRecord::Base
     end
   end
 
-  def set_input name, val
-    set_property name, val, "input"
+  def set_input name, val, aft=nil
+    set_property name, val, "input", false, aft
   end
 
-  def set_output name, val
-    set_property name, val, "output"
+  def set_output name, val, aft=nil
+    set_property name, val, "output", false, aft
   end
 
   def inputs

@@ -58,10 +58,12 @@ class PlansController < ApplicationController
 
       ot.inputs.each do |input|       
         if input.empty?
-          op.set_input input.name, nil
+          op.set_input input.name, nil 
         else
-          v = value(o[:fvs][input.name])
-          op.set_input input.name, v if v
+          v = value(o[:fvs][input.name][:sample])
+          puts "---------------- #{o[:fvs][input.name]}"
+          aft = AllowableFieldType.find_by_id(o[:fvs][input.name][:aft][:id])
+          op.set_input input.name, v, aft if v
           errors << "Input '#{input.name}' not specified. IO specifications should be in the form id: name." unless v
         end
       end
@@ -70,8 +72,9 @@ class PlansController < ApplicationController
         if output.empty?
           op.set_output output.name, nil
         else
-          v = value(o[:fvs][output.name])
-          op.set_output output.name, v if v
+          v = value(o[:fvs][output.name][:sample])
+          aft = AllowableFieldType.find_by_id(o[:fvs][output.name][:aft][:id])
+          op.set_output output.name, v, aft if v
           errors << "Output '#{output.name}' not specified. IO specifications should be in the form id: name." unless v
         end
       end   
@@ -120,9 +123,10 @@ class PlansController < ApplicationController
     operation = Operation.find(params[:id])
     puts "============= REPLANNING Operation #{operation.id}: #{operation.operation_type.name}"
     puts "============= FVS: #{params[:fvs]} ============="
-    params[:fvs].each do |key,str|
-      puts "========== SETTING #{key} to #{str} =============="
-      operation.set_input(key,value(str))
+    params[:fvs].each do |key,val|
+      puts "========== SETTING #{key} to #{val} =============="
+      aft = AllowableFieldType.find_by_id(val[:aft][:id])
+      operation.set_input(key,value(val[:sample]),aft)
      end
 
     # Replan the operation

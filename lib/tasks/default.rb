@@ -21,8 +21,7 @@ class Protocol
       table tout.all.render
     end
     
-    operations.store(io: "input")
-              .store(io: "output") 
+    operations.store
     
     return {}
     

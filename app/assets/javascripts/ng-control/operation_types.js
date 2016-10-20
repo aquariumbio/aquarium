@@ -12,7 +12,7 @@
                             function (  $scope,   $http,   $attrs,   $cookies,   $sce ) {
 
     $scope.operation_types = [];
-    $scope.current_ot = { name: "Loading" }
+    $scope.current_ot = null;
     $scope.user = new User($http);  
     $scope.mode = 'definition';
     $scope.default_protocol = "";

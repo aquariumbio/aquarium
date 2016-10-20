@@ -26,7 +26,7 @@ class OperationTypesController < ApplicationController
           sample_type_names = ft[:allowable_field_types].collect { |aft| 
             logger.info "  aft = #{aft.inspect}"            
             # raise "Sample type not definied by browser for #{ft[:name]}: #{ft}" unless SampleType.find_by_name(aft[:sample_type][:name])
-            aft[:sample_type][:name]
+            aft[:sample_type] ? aft[:sample_type][:name] : nil
           }
           container_names =  ft[:allowable_field_types].collect { |aft| 
             logger.info "  aft = #{aft.inspect}"            
@@ -104,7 +104,7 @@ class OperationTypesController < ApplicationController
       ot.save
 
       if !ot.errors.empty?
-        update_errors << ot.errors.full_messages.join(", ")
+        update_errors << ot.errors.full_messages.join(", ") 
         raise ActiveRecord::Rollback
       end
 
@@ -117,7 +117,7 @@ class OperationTypesController < ApplicationController
         begin
           add_field_types ot, data[:field_types]
         rescue Exception => e
-          update_errors << e.to_s
+          update_errors << e.to_s << e.backtrace.to_s
           raise ActiveRecord::Rollback
         end
 

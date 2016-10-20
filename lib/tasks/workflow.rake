@@ -12,6 +12,7 @@ namespace :workflow do
     Plan.destroy_all
 
     FieldValue.where(parent_class:"Operation").each { |fv| fv.destroy }
+    FieldType.where(parent_class:"OperationType").each { |ft| ft.destroy }
 
   end
 
@@ -111,7 +112,7 @@ namespace :workflow do
     puts OperationType.all.collect { |ot| "  " + ot.name }
 
     protocol = File.open("lib/tasks/default.rb", "r").read
-    OperationType.all.each do |ot|
+    OperationType.all.select { |ot| !ot.protocol }.each do |ot|
       ot.new_code("protocol", "# #{ot.name} Protocol\n\n" + protocol)
       ot.new_code "cost_model", "# #{ot.name} Cost Model\n\ndef cost(op)\n  if op.status == 'error'\n    { labor: 0, materials: 0 }\n  else\n    { labor: 1, materials: 1 }\n  end\nend"
       ot.new_code "documentation", "#{ot.name}\n===\n\nDocumentation here"

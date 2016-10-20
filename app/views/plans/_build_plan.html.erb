@@ -14,9 +14,9 @@
 
       <tr>
         <th class='small-col'></th>
-        <th ng-repeat="ft in incomplete_field_types(goal,'input')" ng-include="'field_type'"></th>
+        <th ng-repeat="ft in incomplete_field_types(goal,'input')">{{ft.name}}</th>
         <th class='small-col arrow'>&#8658;</th>
-        <th ng-repeat="ft in incomplete_field_types(goal,'output')" ng-include="'field_type'"></th> 
+        <th ng-repeat="ft in incomplete_field_types(goal,'output')">{{ft.name}}</th> 
         <th class='small-col'></th>     
       </tr>
 
@@ -24,7 +24,7 @@
 
     <tbody>
 
-      <tr ng-repeat="operation in goal.operations track by $index">
+      <tr ng-repeat="operation in goal.operations track by $index"> <!-- operation rows -->
 
         <td>{{$index+1}}.</td>
 
@@ -40,7 +40,7 @@
 
       </tr>
 
-      <tr>
+      <tr> <!-- controls row -->
 
         <td ng-repeat="ft in incomplete_field_types(goal,'input')"></td>
         <td></td>
@@ -58,6 +58,8 @@
     </tbody>
 
   </table>
+
+  <!-- pre>{{goal.operations|json}}</pre -->
 
 </div>
 

@@ -41,7 +41,7 @@ module FieldValuer
 
   end
 
-  def set_property name, val, role=nil, override_array=false
+  def set_property name, val, role=nil, override_array=false, aft=nil
 
     ft = field_type name, role
 
@@ -55,7 +55,9 @@ module FieldValuer
     if ft.array && val.class == Array
 
       new_fvs = val.collect { |v|
-        set_property_aux(ft,field_values.create(name: name,field_type_id:ft.id,role:role),v)
+        fv = set_property_aux(ft,field_values.create(name: name,field_type_id:ft.id,role:role),v)
+        fv.allowable_field_type_id = aft.id if aft
+        fv
       }
 
       if self.errors.empty? 
@@ -83,6 +85,7 @@ module FieldValuer
 
       if ft && fvs.length == 1
         fv = set_property_aux(ft,fvs[0],val)
+        fv.allowable_field_type_id = aft.id if aft
       else 
         self.errors.add(:set_property,"Could not set #{self.class} #{id} property #{name} to #{val}")
         return self

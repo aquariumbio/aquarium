@@ -45,7 +45,7 @@
   .op-table {
     width: 100%;
     th {
-      font-weight: normal;
+      font-weight: bold;
     }
     table-layout: fixed;
     .small-col {
@@ -54,8 +54,8 @@
     .arrow {
       font-size: 24pt;
     }
-    tr {
-      border: none;
+    th {
+      border-bottom: 1pt solid #bbb
     }
     td {
       border: none;

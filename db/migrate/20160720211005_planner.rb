@@ -31,8 +31,10 @@ class Planner < ActiveRecord::Migration
     add_column :field_values, :field_type_id, :integer
     add_column :field_values, :row, :integer
     add_column :field_values, :column, :integer
+    add_column :field_values, :allowable_field_type_id, :integer
 
     add_index :field_values, :field_type_id
+    add_index :field_values, :allowable_field_type_id
 
     create_table :wires do |t|
       t.integer :from_id

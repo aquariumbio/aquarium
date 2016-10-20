@@ -2,6 +2,8 @@ $row-height: 22px;
 
 .field_value_form {
 
+  width: 100% !important;
+
   display: inline-block;
 
   .name {
@@ -15,11 +17,17 @@ $row-height: 22px;
     display: inline-block;    
     padding: 2px;
     margin: 0px;
-    width: 100%;
+    width: 90% !important;
   }
 
-  .array-input, .array-input:focus, .array-input:active, .array-input:hover {
-    margin-bottom: 4px;
+  .radio, .radio:hover, .radio:active, .radio:checked{
+    display: inline;
+    width: 10% !important;
+  }
+
+  .radio-label {
+    display: inline;
+    width: 80% !important;
   }
 
 }

@@ -49,13 +49,20 @@
 
     return {
       restrict: 'A',
-      scope: { ftsamplecomplete: '=', ngModel: '='  },
+      scope: { ftsamplecomplete: '=', ngModel: '=', aft: '=' },
       link: function($scope,$element,$attributes) {
 
-        var types = aq.collect(
-          aq.where($scope.ftsamplecomplete.allowable_field_types,function(aft) { return aft.sample_type; }),
-          function(aft) { return aft.sample_type.name;
-        });
+        var types = [];
+
+        if ( $scope.aft ) {
+          types = [ $scope.aft.sample_type.name ];
+        } else {
+          types  = aq.collect(
+                      aq.where(
+                        $scope.ftsamplecomplete.allowable_field_types,
+                        function(aft) { return aft.sample_type; }),
+                      function(aft) { return aft.sample_type.name; });          
+        }
 
         $element.autocomplete({
           source: samples_for($scope.$root.sample_names,types),
@@ -64,6 +71,21 @@
             $scope.$apply();
           }
         });
+        
+        $scope.$watch('aft', function (v) {
+          if ( $scope.aft ) {
+            types = [ $scope.aft.sample_type.name ];
+            $element.autocomplete({
+              source: samples_for($scope.$root.sample_names,types),
+              select: function(ev,ui) {
+                $scope.ngModel = ui.item.value;
+                $scope.$apply();
+              }
+            });
+            $element.val("");
+          }
+        });
+
       }
     }
 

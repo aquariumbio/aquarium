@@ -28,8 +28,7 @@
 
     <b>{{node.id}}: {{node.operation_type.name}}</b> 
 
-      <span ng-class='highlight(node.status)'>{{node.status}}</span>
-      ,
+      <span ng-class='highlight(node.status)'>{{node.status}}</span>,
 
     <span ng-if="node.status != 'done' && node.status != 'error'">
       {{node.nominal_cost.labor + node.nominal_cost.materials|currency}} (estimate)
