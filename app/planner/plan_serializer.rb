@@ -58,7 +58,6 @@ module PlanSerializer
 
     ops = operations.includes(:job).as_json(include: :job, methods: :nominal_cost)
     op_ids = ops.collect { |o| o["id"] }
-    Rails.logger.info "====================== OP_IDS = #{op_ids} =============================="
 
     associations = DataAssociation.includes(:upload).where(parent_class: "Operation", parent_id: op_ids).as_json(include: :upload)
 
@@ -74,15 +73,19 @@ module PlanSerializer
       @done = false unless [ "done", "error" ].member? op["status"]
       @error = true if op["status"] == "error"
       op["data_associations"] = associations.select { |a| a["parent_id"] == op["id"] }
-      op["fvs"] = {}
+      op["form_inputs"] = {}
+      op["form_outputs"] = {}
       field_types.select { |ft| ft["parent_id"] == op["operation_type_id"] }.each { |ft| 
-        op["fvs"][ft["name"]] = {
+        sort = "form_" + ft["role"] + "s"
+        op[sort][ft["name"]] = {
           sample: ft[:array] ? [] : "",
           aft: {},
+          aft_id: 0,
           role: ft["role"]
         }
         if ft[:allowable_field_types].length > 0
-          op["fvs"][ft["name"]]["aft"] = ft[:allowable_field_types][0]
+          op[sort][ft["name"]]["aft"] = ft[:allowable_field_types][0]
+          op[sort][ft["name"]]["aft_id"] = ft[:allowable_field_types][0]["id"]
         end
       }
     end

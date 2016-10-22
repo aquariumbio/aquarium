@@ -23,7 +23,7 @@
     }
 
     $scope.add_to_array = function(fvs,name) {
-      if ( fvs[name].sample == "" ) {
+      if ( typeof fvs[name].sample == "string" ) {
         fvs[name].sample = [];
       }
       fvs[name].sample.push("");

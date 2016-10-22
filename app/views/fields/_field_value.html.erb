@@ -11,19 +11,19 @@
     <span ng-if="ft.ftype == 'sample' && !ft.array">
       <input type='string' 
              ftsamplecomplete="ft"
-             aft="operation.fvs[ft.name].aft"
-             ng-model='operation.fvs[ft.name].sample'>
+             aft="operation['form_'+ft.role+'s'][ft.name].aft"
+             ng-model="operation['form_'+ft.role+'s'][ft.name].sample">
     </span>
 
     <span ng-if="ft.ftype == 'sample' && ft.array">
-      <div ng-repeat="sid in operation.fvs[ft.name].sample track by $index">
+      <div ng-repeat="sid in operation['form_'+ft.role+'s'][ft.name].sample track by $index">
         <input type='string' 
                ftsamplecomplete="ft" 
-               aft="operation.fvs[ft.name].aft"
-               ng-model='operation.fvs[ft.name].sample[$index]'>
-        <a href="#" ng-click="delete_from_fvs(operation.fvs[ft.name].sample,$index)">&times;</a>
+               aft="operation['form_'+ft.role+'s'][ft.name].aft"
+               ng-model="operation['form_'+ft.role+'s'][ft.name].sample[$index]">
+        <a href="#" ng-click="delete_from_fvs(operation['form_' + ft.role+'s'][ft.name].sample,$index)">&times;</a>
       </div>
-      <button class='btn btn-mini' ng-click="add_to_array(operation.fvs,ft.name)">+</button>
+      <button class='btn btn-mini' ng-click="add_to_array(operation['form_'+ft.role+'s'],ft.name)">+</button>
     </span>
 
     <div>
@@ -32,17 +32,18 @@
           <label class="radio-label">
           <input type="radio"
                  class="radio"
-                 name="ft.name"
-                 ng-value="aft"
+                 name="ft.name + '_' + ft.role"
+                 ng-value="aft.id"
                  ng-disabled="ft.allowable_field_types.length == 1"
-                 ng-model="operation.fvs[ft.name].aft">
+                 ng-model="operation['form_' + ft.role+'s'][ft.name].aft_id"
+                 ng-change="operation['form_' + ft.role+'s'][ft.name].aft = aft">
                  {{aft.object_type.name}}
           </label>
         </div>        
       </form>
     </div>    
 
-    <pre>{{operation.fvs|json}}</pre>
+    <!-- pre>{{operation['form_' + ft.role+'s'][ft.name]|json}}</pre -->
 
   </div>
 
