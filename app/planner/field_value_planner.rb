@@ -26,17 +26,23 @@ module FieldValuePlanner
   def sample_type
     if child_sample
       child_sample.sample_type    
+    elsif allowable_field_type 
+      allowable_field_type.sample_type
+    else
+      nil
     end
   end
 
   def object_type
-    st = sample_type
-    field_type.allowable_field_types.each do |aft|
-      if aft.sample_type == st
-        return aft.object_type
-      end
+
+    if child_item
+      child_item.object_type
+    elsif allowable_field_type
+      allowable_field_type.object_type
+    else
+      nil
     end
-    return nil
+
   end
 
   def operation
@@ -69,8 +75,10 @@ module FieldValuePlanner
 
         else
 
-          print "Checking whether input #{name} #{val.name} (#{object_type.name}) needs to be made ... "      
+          print "Checking whether input #{name} #{val.name} (#{object_type.name}) needs to be made ... "  
+
           items = val.items.select { |i| !i.deleted? && i.object_type_id == object_type.id }
+
           if items.length > 0
             puts "found #{items[0].object_type.name} #{items[0].id}"
             self.child_item_id = items[0].id
@@ -83,12 +91,16 @@ module FieldValuePlanner
 
         end
 
-      else
-        false
-      end
+      else # No object type specified
 
-    else
+        false
+
+      end 
+
+    else # Not a sample
+
       false
+
     end
 
   end
@@ -97,11 +109,19 @@ module FieldValuePlanner
 
     # puts "\e[93mComparing #{self.child_sample.name} (#{self.object_type.name}) with #{fv.child_sample.name} (#{fv.object_type.name})\e[39m"
 
-    if child_sample_id == fv.child_sample_id && object_type == fv.object_type && field_type.part == fv.field_type.part
-      puts "   \e[93mFound operation that already outputs #{fv.inspect}.\e[39m"
-      return true
+    if object_type && fv.object_type && object_type.id == fv.object_type.id
+
+      if child_sample_id == fv.child_sample_id && field_type.part == fv.field_type.part
+        puts "   \e[93mFound operation that already outputs #{fv.inspect}.\e[39m"
+        return true
+      else
+        return false
+      end
+
     else
+
       return false
+
     end
 
   end

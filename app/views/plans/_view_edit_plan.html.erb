@@ -28,7 +28,10 @@
 
     <b>{{node.id}}: {{node.operation_type.name}}</b> 
 
-      <span ng-class='highlight(node.status)'>{{node.status}}</span>,
+      <blink ng-if="node.status == 'running'" class='highlight-running'>{{node.status}}</blink>
+
+      <span ng-if="node.status != 'running'"
+            ng-class='highlight(node.status)'>{{node.status}}</span>,
 
     <span ng-if="node.status != 'done' && node.status != 'error'">
       {{node.nominal_cost.labor + node.nominal_cost.materials|currency}} (estimate)
@@ -61,10 +64,10 @@
       <span ng-repeat="i in node.inputs | filter: { id: p.id }">
 
         <span ng-if="i.child_sample">{{i.child_sample.name}} / </span>
-        {{input_info(i,operation_type(node)).object_type.name}}
+        {{input_info(i,operation_type(node))}}
         <span ng-if="part(i,operation_type(node),'input')">(part)</span>
 
-        <!-- Planning Phase: Availale Input -->
+        <!-- Planning Phase: Available Input -->
         <span ng-if="i.child_item_id && current_plan.status == 'Under Construction'"
               class="available">
           ... available
@@ -160,7 +163,7 @@
     <div ng-repeat="output in node.outputs">
 
         {{output.name}}: {{output.child_sample.name}} / 
-        {{output_info(output,operation_type(node)).object_type.name}}
+        {{output_info(output,operation_type(node))}}
         <span ng-if="node.status == 'done'">
           <a href="/items/{{output.child_item.id}}">{{output.child_item.id}}</a>
           at {{output.child_item.location}}

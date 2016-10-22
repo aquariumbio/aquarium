@@ -35,7 +35,10 @@ module Krill
     end
 
     def running
-      select { |op| op.status != "error" }
+      result = select { |op| 
+        op.status != "error"
+      }
+      result
     end    
 
     def errored

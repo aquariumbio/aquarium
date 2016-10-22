@@ -23,7 +23,7 @@ module PlanSerializer
       {
         name: input["name"],
         id: input["id"],
-        operations: ops.select { |other_op| ( !@running || other_op["status"] != "unplanned" ) && precedes(other_op, input) }
+        operations: ops.select { |other_op| ( @status == "Under Construction" || other_op["status"] != "unplanned" ) && precedes(other_op, input) }
                        .collect { |other_op| 
                                     other_op["visited"] = true
                                     other_op.merge(predecessors: predecessors(other_op,ops,field_types)) 
@@ -70,7 +70,7 @@ module PlanSerializer
     ops.each do |op|
       op["selected"] = (op["status"] != "unplanned")
       @running = true if [ "pending", "waiting", "ready", "scheduled", "running" ].member? op["status"]
-      @done = false unless [ "done", "error" ].member? op["status"]
+      @done = false unless !op["selected"] || [ "done", "error" ].member?(op["status"])
       @error = true if op["status"] == "error"
       op["data_associations"] = associations.select { |a| a["parent_id"] == op["id"] }
       op["form_inputs"] = {}

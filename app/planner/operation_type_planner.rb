@@ -5,7 +5,17 @@ module OperationTypePlanner
     op = operations.create status: "planning"
 
     # Set the output fv to the desired value.
-    op.set_output(output.name, desired_value.child_sample)
+    aft = nil
+    output.allowable_field_types.each do |output_aft|
+      desired_value.field_type.allowable_field_types.each do |input_aft|
+        if output_aft.equals input_aft
+          aft = output_aft
+        end
+      end
+    end
+
+    op.set_output(output.name, desired_value.child_sample,aft)
+
     unless op.errors.empty?
       raise "Could not set output of operation: #{op.errors.full_messages.join(', ')}"
     end
@@ -58,23 +68,26 @@ module OperationTypePlanner
 
     (1..n).collect do |i|
 
-      puts "==== making operation of type #{name}"
-
       op = operations.create status: "pending", user_id: User.all.sample.id
 
       inputs.each do |input|
-        op.set_input(input.name,input.random)
-        puts "==== set input #{input.name}"
+        random_sample, random_aft = input.random
+        op.set_input(input.name,random_sample,random_aft) 
       end
 
       outputs.each do |output|
         matching_inputs = op.inputs.select { |i| i.name == output.name }
         if matching_inputs.empty?
-          op.set_output(output.name,output.random)
+          random_sample, random_aft = output.random
+          op.set_output(output.name,random_sample,random_aft)
         else
-          op.set_output(output.name,matching_inputs[0].val)
+          if output.allowable_field_types.length > 0
+            aft = output.allowable_field_types.sample
+          else
+            aft = nil
+          end
+          op.set_output(output.name,matching_inputs[0].val,aft)
         end
-        puts "==== set output #{output.name}"        
       end      
 
       op

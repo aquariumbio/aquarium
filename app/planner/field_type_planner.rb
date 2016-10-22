@@ -8,14 +8,36 @@ module FieldTypePlanner
 
       if fv.child_sample
 
-        puts "\e[93m   #{fv.name}'s type is sample, and it specifies sample #{fv.child_sample.name}\e[39m"
+        puts "\e[93mCan '#{OperationType.find(parent_id).name}' produce #{fv.name} (#{fv.object_type ? fv.object_type.name : '?'}) for Operation #{fv.parent_id}"
 
-        allowable_field_types.each do |aft|
-          if aft.sample_type && fv.sample_type == aft.sample_type && fv.object_type == aft.object_type
-            return true
+        if fv.object_type
+
+          allowable_field_types.each do |aft|
+            puts "  #{aft.object_type ? aft.object_type.name : '?'} =? #{fv.object_type ? fv.object_type.name : '?'}"
+            if aft.sample_type && fv.sample_type == aft.sample_type && fv.object_type == aft.object_type            
+              puts "... yes.\e[39m"
+              return true
+            end
           end
+
+        else
+
+          puts "  checking afts: #{allowable_field_types.length} x #{fv.field_type.allowable_field_types.length}"
+
+          allowable_field_types.each do |aft_from|
+            fv.field_type.allowable_field_types.each do |aft_to|
+              puts "  #{aft_from.object_type ? aft_from.object_type.name : '?'} =? #{aft_to.object_type ? aft_to.object_type.name : '?'}"
+              if aft_from.equals aft_to
+                puts " ... yes.\e[39m"
+                return true
+              end
+            end
+
+          end
+
         end
 
+        puts " ... no.\e[39m"
         return false
 
       else # fv says its a sample, but doesn't specify a sample
@@ -52,12 +74,18 @@ module FieldTypePlanner
   end
 
   def random
-    return nil unless allowable_sample_types.sample
-    if array
-      allowable_sample_types.sample.samples.sample(3) # Ahhh! So awesome.      
+
+    if allowable_field_types.length == 0 
+      return [nil, nil]
     else
-      allowable_sample_types.sample.samples.sample    # Ahhh! So awesome.
+      aft = allowable_field_types.sample
+      if array
+        return [ aft.sample_type.samples.sample(3), aft ]
+      else
+        return [ aft.sample_type.samples.sample, aft ]
+      end
     end
+
   end
 
 end

@@ -24,7 +24,7 @@ class OperationTypesController < ApplicationController
         logger.info "ft = #{ft.inspect}"            
         if ft[:allowable_field_types]
           sample_type_names = ft[:allowable_field_types].collect { |aft| 
-            logger.info "  aft = #{aft.inspect}"            
+            logger.info "  aft = #{aft.inspect}"
             # raise "Sample type not definied by browser for #{ft[:name]}: #{ft}" unless SampleType.find_by_name(aft[:sample_type][:name])
             aft[:sample_type] ? aft[:sample_type][:name] : nil
           }
@@ -174,7 +174,8 @@ class OperationTypesController < ApplicationController
         op = ot.operations.create status: "ready", user_id: test_op[:user_id]
         if test_op[:field_values]
           test_op[:field_values].each do |fv|
-            actual_fv = op.set_property(fv[:name], Sample.find_by_id(fv[:child_sample_id]), fv[:role],true)
+            aft = AllowableFieldType.find_by_id(fv[:allowable_field_type_id])
+            actual_fv = op.set_property(fv[:name], Sample.find_by_id(fv[:child_sample_id]), fv[:role],true,aft)
             raise "Nil value Error: Could not set #{fv}" unless actual_fv
             unless actual_fv.errors.empty? 
               raise "Active Record Error: Could not set #{fv}: #{actual_fv.errors.full_messages.join(', ')}"

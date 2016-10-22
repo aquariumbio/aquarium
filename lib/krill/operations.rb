@@ -3,7 +3,7 @@ module Krill
   module Base
 
     def operations opts={force:false}
-      
+
       if opts[:force]
         @operations = Operation.includes(:operation_type).where(job_id: jid)
       else
@@ -12,6 +12,8 @@ module Krill
 
       @operations.extend(OperationList)
       @operations.protocol = self
+      @operations.length # force db query
+
       @operations
 
     end

@@ -166,6 +166,25 @@ show do
 end
 ```
 
+Inputs and Outputs
+===
+
+Given an operation **op**, you can access its inputs and outputs by name using the **input** and **output** methods, which return what are called FieldValue objects. The FieldValue objects then have a number of methods that allow you to determine what inventory items, samples, and object_types are associated with the field the input or output. For example, suppose op has an input named "Primer". You can then access the following methods:
+
+```ruby
+op.input("Primer").item
+op.input("Primer").sample
+op.input("Primer").sample_type
+op.input("Primer").object_type
+```
+
+These methods will return nil if the requested object is not found. Otherwise, you'll get an ActiveRecord for an Item, Sample, SampleType, or ObjectType, respectively.
+
+Operation Status
+===
+
+TODO
+
 Data Associations
 ===
 

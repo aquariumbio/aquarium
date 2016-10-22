@@ -97,8 +97,9 @@ class Plan < ActiveRecord::Base
       done = true
       error = false
       plan["operations"].each do |op|
+        selected = op["status"] != "unplanned"
         running = true if [ "pending", "waiting", "ready", "scheduled", "running" ].member? op["status"]
-        done = false unless [ "done", "error" ].member? op["status"]
+        done = false unless !selected || [ "done", "error" ].member?(op["status"])
         error = true if op["status"] == "error"
         op["inputs"] = []
         op["outputs"] = []        

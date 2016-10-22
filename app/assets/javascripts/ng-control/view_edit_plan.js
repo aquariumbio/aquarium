@@ -42,11 +42,11 @@
         });
         var aft = null;
         if ( fts[0] ) {
-          aft = aq.where(fts[0].allowable_field_types,function(aft) {
+          afts = aq.where(fts[0].allowable_field_types,function(aft) {
             return !io.child_sample || ( io.child_sample && io.child_sample.sample_type_id == aft.sample_type_id );
-          })[0];
+          });
         }
-        return aft;
+        return aq.collect(afts,function(aft) { return aft.object_type.name; }).join(" or ");
       } else {
         return null;
       }
