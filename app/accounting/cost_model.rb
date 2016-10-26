@@ -99,6 +99,14 @@ module CostModel
       # STREAK PLATE ########################################################################################
 
       when ["streak_yeast_plate","streaked"] then basic(:item_ids,0.13,5.0)
+        
+      # VERIFICATION DIGEST #################################################################################
+      
+      when ["restriction_digest","digested"] then basic(:default,0.95,5.7)
+      when ["fragment_analyzing","correct"], 
+           ["fragment_analyzing","partial"], 
+           ["fragment_analyzing","incorrect"]
+        then basic(:default,0.43,3.1)
 
       # USED IN ECOLI/YEAST TRANSFORMATION, GIBSON ASSEMBLY, and YEAST MATING ###############################
 
