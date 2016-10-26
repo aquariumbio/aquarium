@@ -124,6 +124,54 @@ class Operation < ActiveRecord::Base
 
   end
 
+  def predecessors
+
+    ops = []
+
+    inputs.each do |input|
+      input.predecessors.each do |pred|
+        ops << pred.operation
+      end
+    end
+
+    ops
+
+  end
+
+  def siblings
+
+    ops = outputs.collect do |output|
+      output.wires_as_source.collect do |wire|
+        wire.to.predecessors.collect { |pred| pred.operation }
+      end
+    end
+
+    ops.flatten
+
+  end
+
+  def activate
+    puts "Activating operation #{id}"
+    set_status "planning"
+    outputs.each do |output|
+      output.wires_as_source.each do |wire|
+        wire.active = true
+        wire.save
+      end
+    end
+  end
+
+  def deactivate
+    puts "Deactivating operation #{id}"    
+    set_status "unplanned"
+    outputs.each do |output|
+      output.wires_as_source.each do |wire|
+        wire.active = false
+        wire.save
+      end
+    end
+  end
+
   def self.step 
 
     Operation.where(status: "waiting").each do |op|

@@ -109,9 +109,7 @@ class PlansController < ApplicationController
 
     plan = Plan.find(params[:pid])
     operation = Operation.find(params[:oid])
-
     plan.select_subtree(operation)
-
     render json: plan.serialize
 
   end

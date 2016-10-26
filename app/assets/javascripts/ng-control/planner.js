@@ -121,7 +121,6 @@
           if ( $scope.current_plan.id == $scope.plans[index].id ) {
             $scope.current_plan = $scope.plans[index];
           }
-          // determine_launch_mode($scope.current_plan);
         });
       }
 
@@ -164,13 +163,15 @@
     }    
 
     $scope.select_predecessor = function(plan,op,ops) {
-      plan.issues = [ { msg: "Note: Editing plans is not yet implemented." } ];
+      // plan.issues = [ { msg: "Note: Editing plans is not yet implemented." } ];
       $http.get("/plans/" + plan.id + "/select/" + op.id ).then(function(response) {
-        aq.each(ops,function(o) {
-          if ( o != op ) {
-            o.selected = false;
-          }
-        })
+        var index = $scope.plans.indexOf(plan);
+        $scope.plans[index] = response.data;
+        $scope.plans[index].http = $http;
+        promote_data($scope.plans[index]);
+        if ( $scope.current_plan.id == $scope.plans[index].id ) {
+          $scope.current_plan = $scope.plans[index];
+        }
       });
     }    
 

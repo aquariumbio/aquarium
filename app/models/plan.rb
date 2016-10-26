@@ -83,7 +83,19 @@ class Plan < ActiveRecord::Base
   end
 
   def select_subtree operation
-    Rails.logger.info "TODO: Select the subtree"
+
+    operation.siblings.each do |op|
+      if op == operation
+        op.activate
+      else
+        op.deactivate
+      end
+    end
+
+    unless operation.errors.empty? 
+      puts "################ #{operation.errors.full_messages.join(', ')}"
+    end
+
   end
 
   def self.list user
