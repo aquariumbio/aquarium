@@ -57,7 +57,7 @@ module Krill
       each_with_index do |op,i|         
         op_items = []
         op.inputs.each do |input|
-          input.retrieve
+          input.retrieve unless input.child_item
           if input.child_item_id
               op_items << input.child_item
           else
