@@ -121,10 +121,14 @@ Sample.prototype.complete_fields = function() {
     var t = sample.type(fv.name);
     if ( t == 'number' ) {
       fv.value = parseFloat(fv.value);
-    } else if ( t == 'sample' && fv.child_sample ) {
-      fv.child_sample = new Sample(sample.http).from(fv.child_sample);
-      fv.child_sample_name = "" + fv.child_sample.id + ": " + fv.child_sample.name;
-      fv.allowable_child_types = sample.allowable(fv.name);
+    } else if ( t == 'sample' ) {
+      if ( fv.child_sample ) {
+        fv.child_sample = new Sample(sample.http).from(fv.child_sample);
+        fv.child_sample_name = "" + fv.child_sample.id + ": " + fv.child_sample.name;
+      }
+      if ( !fv.allowable_child_types ) {
+        fv.allowable_child_types = sample.allowable(fv.name);
+      }
     } else if ( !t ) {
       fv.orphan = true;
     }

@@ -98,7 +98,8 @@ class Sample < ActiveRecord::Base
                   child = Sample.sample_from_identifier raw_fv[:child_sample_name]
                 end
                 fv.child_sample_id = child.id if child
-                if !child && ft.required
+                fv.child_sample_id = nil if !child && raw_fv[:child_sample_name] == ""
+                if !child && ft.required && raw_fv[:child_sample_name] != ""
                   errors.add :required, "Sample required for field '#{ft.name}' not found or not specified."
                   raise ActiveRecord::Rollback
                 end
