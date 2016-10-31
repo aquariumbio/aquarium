@@ -51,6 +51,42 @@ Sample.prototype.get_inventory = function(promise) {
 
 }
 
+Sample.prototype.num_items = function(container) {
+
+  var sample = this;
+
+  var items = aq.where(sample.items,function(i) {
+    return ( sample.show_deleted || i.location != 'deleted' ) && i.object_type_id == container.id;
+  });
+
+  return items.length;
+
+}
+
+Sample.prototype.num_collections = function(container) {
+
+  var sample = this;
+
+  var collections = aq.where(sample.collections,function(c) {
+    return ( sample.show_deleted || c.location != 'deleted' ) && c.object_type_id == container.id;
+  });
+
+  return collections.length;
+
+}
+
+Sample.prototype.visible_inventory = function() {
+
+  var sample = this;
+
+  var s = aq.sum(this.containers,function(con) {
+    return sample.num_items(con) + sample.num_collections(con);
+  });
+
+  return s;
+
+}
+
 Sample.prototype.promote_data = function() {
   if ( typeof this.data == "string") {
     try {

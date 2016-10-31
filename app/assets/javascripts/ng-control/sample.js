@@ -19,7 +19,7 @@
         } else {
           sample.find(sample.id,function(sample) {
             sample.open = true;
-            $scope.toggle_inventory(sample,true)            
+            $scope.toggle_inventory(sample,true);            
           });
         }
       }
