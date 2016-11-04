@@ -234,7 +234,7 @@ class OperationTypesController < ApplicationController
   def export
     render json: OperationType.find(params[:id]).export
   end
-
+ 
   def import
 
     begin 
@@ -246,7 +246,6 @@ class OperationTypesController < ApplicationController
     rescue Exception => e
       render json: { error: "Could not import operation type: " + e.to_s }
     end
-
 
   end
 

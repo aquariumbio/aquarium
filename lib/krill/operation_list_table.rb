@@ -11,9 +11,9 @@ module Krill
       @table
     end
 
-    def property op, method_name, name, checkable
+    def property op, method_name, name, role, checkable
 
-      fv = op.get_field_value name
+      fv = op.get_field_value name, role
 
       if checkable
         fv ? { content: fv.send(method_name), check: true } : "?"        
@@ -24,36 +24,36 @@ module Krill
     end
 
     def item name, role, opts={}
-      @table.add_column( opts[:heading] || "#{name} Item ID", running.collect { |op|
-            property op, :child_item_id, name, opts[:checkable]
+      @table.add_column( opts[:heading] || "#{name} Item ID (#{role})", running.collect { |op|
+            property op, :child_item_id, name, role, opts[:checkable]
           })
       self
     end
 
     def sample name, role, opts={}
-      @table.add_column( opts[:heading] || "#{name} Sample ID", running.collect { |op|
-            property op, :child_sample_id, name, opts[:checkable]
+      @table.add_column( opts[:heading] || "#{name} Sample ID (#{role})", running.collect { |op|
+            property op, :child_sample_id, name, role, opts[:checkable]
           })
       self
     end    
 
     def collection name, role, opts={}
-      @table.add_column( opts[:heading] || "#{name} Collecton ID", running.collect { |op|
-        property op, :child_item_id, name, opts[:checkable]
+      @table.add_column( opts[:heading] || "#{name} Collecton ID (#{role})", running.collect { |op|
+        property op, :child_item_id, name, role, opts[:checkable]
       })
       self
     end
 
     def row name, role, opts={}
-      @table.add_column( opts[:heading] || "#{name} Row", running.collect { |op|
-        property op, :row, name, opts[:checkable]
+      @table.add_column( opts[:heading] || "#{name} Row (#{role})", running.collect { |op|
+        property op, :row, name, role, opts[:checkable]
       })
       self      
     end
 
     def column name, role, opts={}
-      @table.add_column( opts[:heading] || "#{name} Column", running.collect { |op|
-        property op, :column, name, opts[:checkable]
+      @table.add_column( opts[:heading] || "#{name} Column (#{role})", running.collect { |op|
+        property op, :column, name, role, opts[:checkable]
       })
       self      
     end    

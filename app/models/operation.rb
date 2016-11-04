@@ -73,8 +73,8 @@ class Operation < ActiveRecord::Base
     get_output name
   end
 
-  def get_field_value name
-    field_values.find { |fv| fv.name == name }
+  def get_field_value name, role="input"
+    field_values.find { |fv| fv.name == name && fv.role == role }
   end
 
   def recurse &block
