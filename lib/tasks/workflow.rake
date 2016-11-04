@@ -2,6 +2,32 @@ namespace :workflow do
 
   desc 'Setup Workflow'
 
+  task :up => :environment do
+
+    lp = ObjectType.new(name: "Lyophilized Primer", handler: "sample_container", unit: "tube", min: 1, max: 10000,
+                        release_method: "return", description: "Some barely visible white powder", cost: 5.00)
+    lp.save
+
+    OperationType.import_from_file "ots.json"
+
+  end
+
+  task :down => :environment do
+
+    OperationType.export_all "ots.json"
+
+    ObjectType.find_by_name("Lyophilized Primer").destroy if ObjectType.find_by_name("Lyophilized Primer")
+    ObjectType.find_by_name("Checked E coli Plate of Plasmid").destroy  if ObjectType.find_by_name("Checked E coli Plate of Plasmid") 
+    OperationType.destroy_all
+    Operation.destroy_all
+    Code.destroy_all
+    Plan.destroy_all
+
+    FieldValue.where(parent_class:"Operation").each { |fv| fv.destroy }
+    FieldType.where(parent_class:"OperationType").each { |ft| ft.destroy }
+
+  end
+
   task :unseed => :environment do
 
     ObjectType.find_by_name("Lyophilized Primer").destroy if ObjectType.find_by_name("Lyophilized Primer")

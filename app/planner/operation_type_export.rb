@@ -63,6 +63,32 @@ module OperationTypeExport
 
     end
 
+    def import_list op_type_list
+
+      op_type_list.each do |ot|
+        import ot
+      end
+
+    end
+
+    def export_all filename=nil
+
+      ots = OperationType.all.collect { |ot| ot.export }
+
+      if filename
+        File.write(filename, ots.to_json)
+      end
+
+      ots
+
+    end  
+
+    def import_from_file filename
+
+      import_list(JSON.parse(File.open(filename, "rb").read, symbolize_names: true))
+      
+    end
+
   end
 
 end
