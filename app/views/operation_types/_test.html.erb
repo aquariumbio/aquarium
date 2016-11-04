@@ -12,21 +12,43 @@
            class="input-small">
     </input>
 
-    <a href="#" class="btn" ng-click="randomize(current_ot)" ng-disabled="!current_ot.id">Generate Operations</a>
+    <a href="#" 
+       ng-if="!current_ot.randomizing"
+       class="btn" 
+       ng-click="randomize(current_ot)" 
+       ng-disabled="!current_ot.id">
+      Generate Operations
+    </a>
 
-    <button class="btn btn-warning"
+    <a href="#" 
+       ng-if="current_ot.randomizing"
+       class="btn" 
+       ng-click="randomize(current_ot)" 
+       ng-disabled="true">
+      Generate Operations ...
+    </a>
+
+    <a href="#"
+            class="btn btn-warning"
             ng-click="test(current_ot)"
-            ng-if="!current_ot.changed && !current_ot.protocol.changed"            
+            ng-if="!current_ot.running_test && !current_ot.changed && !current_ot.protocol.changed"            
             ng-disabled="!current_ot.id || !current_ot.test_operations || current_ot.test_operations.length == 0">
       Test
-    </button>
+    </a>
 
     <button class="btn btn-warning"
             ng-click="save_and_test(current_ot)"
-            ng-if="current_ot.changed || current_ot.protocol.changed"
+            ng-if="!current_ot.running_test && ( current_ot.changed || current_ot.protocol.changed )"
             ng-disabled="!current_ot.id || !current_ot.test_operations || current_ot.test_operations.length == 0">
       Save and Test
-    </button>                
+    </button>   
+
+    <a href="#"
+            class="btn btn-warning"
+            ng-if="current_ot.running_test"
+            ng-disabled="true">
+      Testing...
+    </a>      
 
   </form>
 

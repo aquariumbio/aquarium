@@ -18,8 +18,10 @@
       }
 
       ot.test_operations = null;
+      ot.randomizing = true;
 
       $http.get("/operation_types/" + ot.id + "/random/" + ot.batch_size).then(function(response) {
+        ot.randomizing = false;
         ot.test_operations = response.data;
       });
 
@@ -41,7 +43,10 @@
     $scope.test = function(ot) {
       ot.test_results = null;
       ot.test_error = null;
+      ot.running_test = true;
+      console.log(ot.running_test);
       $http.post("/operation_types/test", ot).then(function(response) {
+        ot.running_test = false;
         if ( response.data.error ) {
           ot.test_error = response.data.error.replace(/\(eval\):/g, "Line ");
         } else {
