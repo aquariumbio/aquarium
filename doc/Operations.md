@@ -23,6 +23,26 @@ my_ops = operations.running.select do |op|
 end
 ```
 
+Checking and Changing Operation Status
+===
+
+Each operation **op** has a status, **op.status**. When a protocol first starts, the status should be "running". When the protocol completes, Aquarium automatically sets the status to "done". If for some reason an operation has a problem, your protocol can set the status to "error" as in
+```ruby
+op.set_status "error"
+```
+which sets the status and saves the operation. Subsequent calls to **operations** can be filtered by doing **operations.running** or **operations.errored**. Note that table operations **operations.start_table...** described below default to running operations.
+
+It is common to provide the owner of the operation some information about why you are setting their operation's status to "error". You can do this with something like
+```ruby
+  op.set_status "error"
+  op.associate :no_growth, "The overnight has no growth." 
+```
+or with the shorthand
+```ruby
+  op.error :no_growth, "The overnight has no growth." 
+```
+
+
 Retrieving, Making, and Storing Inventory
 ===
 
@@ -179,11 +199,6 @@ op.input("Primer").object_type
 ```
 
 These methods will return nil if the requested object is not found. Otherwise, you'll get an ActiveRecord for an Item, Sample, SampleType, or ObjectType, respectively.
-
-Operation Status
-===
-
-TODO
 
 Data Associations
 ===

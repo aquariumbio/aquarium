@@ -31,6 +31,11 @@ class Operation < ActiveRecord::Base
     raise "Could not set status" unless self.errors.empty?
   end
 
+  def error error_type, msg
+    set_status "error"
+    associate error_type, msg
+  end
+
   def plan
     pset = plans
     if pset.length > 0
