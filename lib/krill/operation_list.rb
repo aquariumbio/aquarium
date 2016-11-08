@@ -103,7 +103,7 @@ module Krill
             size = rows * columns
 
             unless @output_collections[fv.name]
-              @output_collections[fv.name] = (1..ops.length/+1).collect do |c|
+              @output_collections[fv.name] = (1..ops.length/size+1).collect do |c|
                 fv.make_collection 
               end
             end
