@@ -28,9 +28,9 @@ module OperationTypeExport
 
       },
 
-      protocol: protocol.content,
-      cost_model: cost_model.content,
-      documentation: documentation.content
+      protocol: protocol ? protocol.content : "",
+      cost_model: cost_model ? cost_model.content : "",
+      documentation: documentation ? documentation.content : ""
 
     }
 
