@@ -60,14 +60,14 @@ class Collection < Item
 
   # METHODS #########################################################################
 
-  def self.new_collection name, r, c
+  def self.new_collection name
 
     o = ObjectType.find_by_name(name)
     raise "Could not find object type named '#{name}'." unless o
 
     i = Collection.new
     i.object_type_id = o.id
-    i.apportion r,c
+    i.apportion(o.rows, o.columns)
     i.quantity = 1
     i.inuse = 0
     i.location = "Bench"

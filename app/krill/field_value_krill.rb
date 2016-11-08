@@ -52,10 +52,10 @@ module FieldValueKrill
 
   end
 
-  def make_collection rows, columns
+  def make_collection
     ot = object_type
     if ot
-      c = Collection.new_collection(object_type.name, rows, columns)
+      c = Collection.new_collection(object_type.name)
       c.store if c.location == "Unknown"
       self.child_item_id = c.id
       self.save

@@ -107,6 +107,12 @@ operations.each do |operation|
 end
 ```
 
+If an output of an operation is a part, then **make** will create new collections to put the outputs in. For example, say 26 operations are being processed and they have an output part that should be put into a 3x4 collection. Then three collections will be made, and the outputs of the operations will fill up the first two collections, and two wells of the third collection. After running **make**, you can retrieve a hash of the collections created with 
+```ruby
+operations.output_collections
+```
+which is index by the name of the output. For example, operations.output_collections["Fragment"] would give a list of collections into which the "Fragment" outputs were placed.
+
 **store**
 
 This method produces instructions for the technician to follow to return inputs and or outputs of a protocol to their proper place in the lab (e.g. a freezer). You can specify **interactive: true** and  method: "boxes" as with *retreive**. You can also specify whether to store the input inventory with **io: "input"** (the default) or the output inventory with **io: "output".

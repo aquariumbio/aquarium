@@ -90,14 +90,26 @@ module Krill
       puts "====== make: ROLE: #{opts[:role]}"
 
       @output_collections = {}
+      ops = select { |op| opts[:errored] || op.status != "error" }
 
-      select { |op| opts[:errored] || op.status != "error" }.each_with_index do |op,i|
+      ops.each_with_index do |op,i|
         puts "====== make: operation #{op.id}"
-        op.field_values.select { |fv| fv.role == opts[:role] }.each do |fv|
+        op.field_values.select { |fv| fv.role == opts[:role] }.each do |fv| 
           puts "======= making #{fv.name}"
           if fv.part?
-            @output_collections[fv.name] = fv.make_collection(12, 1) unless @output_collections[fv.name]
-            fv.make_part(@output_collections[fv.name],i,0)
+
+            rows = fv.object_type.rows
+            columns = fv.object_type.columns
+            size = rows * columns
+
+            unless @output_collections[fv.name]
+              @output_collections[fv.name] = (1..ops.length/+1).collect do |c|
+                fv.make_collection 
+              end
+            end
+
+            fv.make_part(@output_collections[fv.name][i/size],(i%size)/columns,(i%size)%columns)
+
           elsif fv.object_type && fv.object_type.handler == "collection"
             fv.make_collection 1, 10
           else
