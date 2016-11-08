@@ -8,6 +8,9 @@
   <tr>
     <th>Name</th>
     <th>Description</th>
+    <% if @handler == 'collection' %>
+      <th>Collection Dimensions</th>
+    <% end %>
     <th>Quantity</th>
     <th>Range</th>
     <th><span class="dropdown">
@@ -26,6 +29,9 @@
   <tr>
     <td><%= link_to object_type.name, object_type %></td>
     <td><%= object_type.description %></td>
+    <% if @handler == 'collection' %>
+      <td><%= object_type.rows %>&times;<%= object_type.columns %></th>
+    <% end %>
     <td>
       <% if object_type.quantity < object_type.min %>
         <span class="text-error">

@@ -13,7 +13,12 @@
 <li><b>Unit: </b>       <%= @object_type.unit %>(<%= number_to_currency(@object_type.cost)%> each)</li>
 
 <% unless  @object_type.handler == 'sample_container' %>
-  <li><b>Handler: </b><%= @object_type.handler %></li>
+  <li><b>Handler: </b>
+    <% if @object_type.handler == 'collection' %>
+      <%= @object_type.rows %>&times;<%= @object_type.columns %>
+    <% end %>
+    <%= @object_type.handler %>
+  </li>
 <% end %>
 
 <li><b>Release(<%= @object_type.release_method.capitalize %>): </b><%= @object_type.release_description %></li>

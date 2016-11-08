@@ -96,7 +96,12 @@ class ObjectTypesController < ApplicationController
   # POST /object_types
   # POST /object_types.json
   def create
-    @object_type = ObjectType.new(params[:object_type])
+    @object_type = ObjectType.new(params[:object_type].except(:rows, :columns))
+
+    if params[:handler] == 'collection'
+      @object_type.rows = params[:object_type][:rows]
+      @object_type.columns = params[:object_type][:columns]
+    end
 
     respond_to do |format|
       if @object_type.save
@@ -128,8 +133,16 @@ class ObjectTypesController < ApplicationController
       end
     end
 
+    ok = @object_type.update_attributes(params[:object_type].except(:rows, :columns))
+
+    if params[:object_type][:handler] == 'collection'
+      @object_type.rows = params[:object_type][:rows]
+      @object_type.columns = params[:object_type][:columns]
+      @object_type.save
+    end
+
     respond_to do |format|
-      if @object_type.update_attributes(params[:object_type])
+      if ok
         if @object_type.handler == 'sample_container'
           format.html { redirect_to @object_type.sample_type, notice: 'Object type was successfully updated.' }
           format.json { head :no_content }

@@ -247,6 +247,8 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
     t.integer  "sample_type_id"
     t.string   "image"
     t.string   "prefix"
+    t.integer  "rows"
+    t.integer  "columns"
   end
 
   create_table "operation_types", :force => true do |t|

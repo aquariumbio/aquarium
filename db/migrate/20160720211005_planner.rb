@@ -70,6 +70,9 @@ class Planner < ActiveRecord::Migration
 
     add_column :jobs, :successor_id, :integer
 
+    add_column :object_types, :rows, :integer
+    add_column :object_types, :columns, :integer
+
   end
 
 end
