@@ -72,26 +72,31 @@ SampleHelper.prototype.spreadsheet = function(http,sample_types, sample_names, c
 
     var fields = row.split(',');
 
-    (new Sample(http)).new(sample_type.id, function(sample) {
+    if ( fields.length > 1 ) {
 
-      aq.each(headers,function(header,j) {
+      console.log(fields);
 
-        if ( header == sample_type_name ) {
-          sample.name = fields[j];
-        } else if ( header == "Description" ) {
-          sample.description = fields[j];
-        } else if ( header == "Project" ) {
-          sample.project = fields[j];
-        } else {
-          sample.assign_field_value(header,fields[j],sample_names,warnings);
-        }
+      (new Sample(http)).new(sample_type.id, function(sample) {
+
+        aq.each(headers,function(header,j) {
+
+          if ( header == sample_type_name ) {
+            sample.name = fields[j];
+          } else if ( header == "Description" ) {
+            sample.description = fields[j];
+          } else if ( header == "Project" ) {
+            sample.project = fields[j];
+          } else {
+            sample.assign_field_value(header,fields[j],sample_names,warnings);
+          }
+
+        });
+
+        samples.push(sample);
 
       });
 
-      samples[i] = sample;
-
-    });
-
+    }
 
   });
 

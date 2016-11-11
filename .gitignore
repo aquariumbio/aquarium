@@ -46,3 +46,4 @@ awc.sh
 /public/doc/images/
 /public/doc/operation-api/
 
+.DS_Store
