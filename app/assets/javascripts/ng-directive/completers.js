@@ -28,6 +28,9 @@
       restrict: 'A',
       scope: { samplecomplete: '=', ngModel: '='  },
       link: function($scope,$element,$attributes) {
+
+        var sample_names = $scope.$parent.sample_names;
+
         var types = $scope.samplecomplete;
         $element.autocomplete({
           source: samples_for($scope.$parent.sample_names,types),
@@ -36,6 +39,24 @@
             $scope.$apply();
           }
         });
+
+        function changed() {
+          return sample_names != $scope.$parent.sample_names;
+        }
+
+        $scope.$watch(changed, function (v) {
+          console.log("Updating samplecomplete")
+          types = $scope.samplecomplete;
+          sample_names = $scope.$parent.sample_names;
+          $element.autocomplete({
+            source: samples_for($scope.$parent.sample_names,types),
+            select: function(ev,ui) {
+              $scope.ngModel = ui.item.value;
+              $scope.$apply();
+            }
+          });
+        });
+
       }
     }
 

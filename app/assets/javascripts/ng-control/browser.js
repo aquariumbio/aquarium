@@ -145,9 +145,15 @@
         }        
       });
 
-    $scope.helper.autocomplete(function(sample_names) {
-      $scope.sample_names = sample_names;
-    });
+    function load_sample_names() {
+
+      $scope.helper.autocomplete(function(sample_names) {
+        $scope.sample_names = sample_names;
+      });
+
+    }
+
+    load_sample_names();
 
     // View Selection
 
@@ -343,7 +349,8 @@
           $scope.search(0);
           $scope.messages = aq.collect(response.samples,function(s) { 
             return "Created sample " + s.id + ": " + s.name; 
-          });          
+          });    
+          load_sample_names();
         }
       });
     }   
