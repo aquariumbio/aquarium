@@ -74,8 +74,6 @@ SampleHelper.prototype.spreadsheet = function(http,sample_types, sample_names, c
 
     if ( fields.length > 1 ) {
 
-      console.log(fields);
-
       (new Sample(http)).new(sample_type.id, function(sample) {
 
         aq.each(headers,function(header,j) {
