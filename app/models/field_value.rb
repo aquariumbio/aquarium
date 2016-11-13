@@ -214,4 +214,9 @@ class FieldValue < ActiveRecord::Base
     self.save    
   end
 
+  def routing
+    ft = field_type
+    ft ? ft.routing : nil
+  end
+
 end 

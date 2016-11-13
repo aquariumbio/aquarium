@@ -6,7 +6,7 @@ class FieldType < ActiveRecord::Base
   has_many :allowable_field_types, dependent: :destroy
   has_many :field_values
 
-  attr_accessible :parent_id, :array, :choices, :name, :required, :ftype, :role, :part
+  attr_accessible :parent_id, :array, :choices, :name, :required, :ftype, :role, :part, :routing
 
   validates :name, presence: true
   validates :ftype, presence: true  

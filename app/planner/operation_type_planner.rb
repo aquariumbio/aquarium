@@ -22,7 +22,7 @@ module OperationTypePlanner
 
     inputs.each do |i|
 
-      if i.name == output.name
+      if i.routing == output.routing
 
         # For any input whose name equals the name of the output, set that fv to the desired value.        
         op.set_input(i.name, desired_value.child_sample)

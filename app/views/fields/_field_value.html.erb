@@ -12,7 +12,7 @@
       <input type='string' 
              ftsamplecomplete="ft"
              aft="operation['form_'+ft.role+'s'][ft.name].aft"
-             ng-model="operation['form_'+ft.role+'s'][ft.name].sample">
+             ng-model="operation.routing[ft.routing]">
     </span>
 
     <span ng-if="ft.ftype == 'sample' && ft.array">
@@ -20,7 +20,7 @@
         <input type='string' 
                ftsamplecomplete="ft" 
                aft="operation['form_'+ft.role+'s'][ft.name].aft"
-               ng-model="operation['form_'+ft.role+'s'][ft.name].sample[$index]">
+               ng-model="operation.routing[ft.routing][$index]">
         <a href="#" ng-click="delete_from_fvs(operation['form_' + ft.role+'s'][ft.name].sample,$index)">&times;</a>
       </div>
       <button class='btn btn-mini' ng-click="add_to_array(operation['form_'+ft.role+'s'],ft.name)">+</button>
@@ -43,7 +43,7 @@
       </form>
     </div>    
 
-    <!-- pre>{{operation['form_' + ft.role+'s'][ft.name]|json}}</pre -->
+    <pre>{{operation.routing|json}}</pre>
 
   </div>
 

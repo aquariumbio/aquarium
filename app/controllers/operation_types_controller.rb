@@ -21,18 +21,13 @@ class OperationTypesController < ApplicationController
 
     if fts
       fts.each do |ft|
-        logger.info "ft = #{ft.inspect}"            
         if ft[:allowable_field_types]
           sample_type_names = ft[:allowable_field_types].collect { |aft| 
-            logger.info "  aft = #{aft.inspect}"
-            # raise "Sample type not definied by browser for #{ft[:name]}: #{ft}" unless SampleType.find_by_name(aft[:sample_type][:name])
             aft[:sample_type] ? aft[:sample_type][:name] : nil
           }
-          # .select { |aft| ObjectType.find_by_name(aft[:object_type]) }
           container_names =  ft[:allowable_field_types]
             .select { |aft| aft[:object_type] && aft[:object_type][:name] && aft[:object_type][:name] != "" }
-            .collect { |aft| 
-              logger.info "  aft = #{aft.inspect}"            
+            .collect { |aft|            
               raise "Object type '#{aft[:object_type][:name]}' not definied by browser for #{ft[:name]}." unless ObjectType.find_by_name(aft[:object_type][:name])
               aft[:object_type][:name]
           }          
@@ -40,7 +35,7 @@ class OperationTypesController < ApplicationController
           sample_type_names = []
           container_names = []
         end
-        ot.add_io ft[:name], sample_type_names, container_names, ft[:role], array: ft[:array], part: ft[:part]
+        ot.add_io ft[:name], sample_type_names, container_names, ft[:role], array: ft[:array], part: ft[:part], routing: ft[:routing]
       end
     end
 

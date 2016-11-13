@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160720211005) do
+ActiveRecord::Schema.define(:version => 20161113203042) do
 
   create_table "account_logs", :force => true do |t|
     t.integer  "row1"
@@ -120,6 +120,7 @@ ActiveRecord::Schema.define(:version => 20160720211005) do
     t.string   "parent_class"
     t.string   "role"
     t.boolean  "part"
+    t.string   "routing"
   end
 
   add_index "field_types", ["parent_id"], :name => "index_field_types_on_sample_type_id"

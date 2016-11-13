@@ -46,7 +46,9 @@
             return !io.child_sample || ( io.child_sample && io.child_sample.sample_type_id == aft.sample_type_id );
           });
         }
-        return aq.collect(afts,function(aft) { return aft.object_type.name; }).join(" or ");
+        return aq.collect(afts,function(aft) { 
+          return aft.object_type ? aft.object_type.name : "Unspecified Container";
+        }).join(" or ");
       } else {
         return null;
       }

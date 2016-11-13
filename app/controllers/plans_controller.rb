@@ -46,6 +46,20 @@ class PlansController < ApplicationController
     end
   end
 
+  def routing_value route
+
+    if route.class == String
+      Sample.find_by_id(sid(route))
+    else
+      route.keys.collect { |k| Sample.find_by_id(sid(route[k]))}      
+    end
+
+  end
+
+  def route_name r
+    r ? r : "null"
+  end
+
   def plan
 
     ot = OperationType.find(params[:ot_id])
@@ -60,7 +74,7 @@ class PlansController < ApplicationController
         if input.empty?
           op.set_input input.name, nil 
         else
-          v = value(o[:form_inputs][input.name][:sample])
+          v = routing_value o[:routing][route_name(input.routing)]
           aft = AllowableFieldType.find_by_id(o[:form_inputs][input.name][:aft][:id])
           op.set_input input.name, v, aft if v
           errors << "Input '#{input.name}' not specified. IO specifications should be in the form id: name." unless v
@@ -71,7 +85,7 @@ class PlansController < ApplicationController
         if output.empty?
           op.set_output output.name, nil
         else
-          v = value(o[:form_outputs][output.name][:sample])
+          v = routing_value o[:routing][route_name(output.routing)]
           aft = AllowableFieldType.find_by_id(o[:form_outputs][output.name][:aft][:id])
           op.set_output output.name, v, aft if v
           errors << "Output '#{output.name}' not specified. IO specifications should be in the form id: name." unless v
@@ -118,10 +132,18 @@ class PlansController < ApplicationController
 
     # Find the plan
     operation = Operation.find(params[:id])
+
+    routes = {}
+    params[:operation_type][:inputs].each { |i| routes[i[:name]] = i[:routing] }
+    puts "#{routes}"
+    puts "+++++++++"
+
     params[:form_inputs].each do |key,val|
+      puts "#{key}, #{val}"
       aft = AllowableFieldType.find_by_id(val[:aft][:id])
-      operation.set_input(key,value(val[:sample]),aft)
-     end
+      v = routing_value params[:routing][route_name(routes[key])]
+      operation.set_input(key,v,aft)
+    end
 
     # Replan the operation
     planner = Planner.new(OperationType.where(deployed: true), operation.plan)
