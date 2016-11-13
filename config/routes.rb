@@ -13,7 +13,8 @@ Bioturk::Application.routes.draw do
   post '/operation_types/import',                to: 'operation_types#import'    
   get '/operation_types/:id/random/:num',        to: 'operation_types#random'
   get '/operation_types/:id/export',             to: 'operation_types#export'  
-  
+  get '/operation_types/:id/copy',               to: 'operation_types#copy'  
+
   resources :operation_types do
     collection do 
       get 'default'

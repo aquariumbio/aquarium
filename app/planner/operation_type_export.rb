@@ -10,7 +10,7 @@ module OperationTypeExport
 
       name: name,
       category: category,
-      deployed: deployed ? true : false,
+      deployed: false,
       on_the_fly: on_the_fly ? true : false,
 
       field_types: field_types.select { |ft| ft.role }.collect { |ft|
@@ -39,6 +39,15 @@ module OperationTypeExport
   def self.included(base)
     base.extend(ClassMethods)
   end  
+
+  def copy
+    ot = OperationType.import(export)
+    ot.name += " (copy)"
+    ot.category = category
+    ot.deployed = false
+    ot.save
+    ot
+  end
 
   module ClassMethods
 

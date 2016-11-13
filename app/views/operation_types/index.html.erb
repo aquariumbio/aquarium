@@ -30,7 +30,7 @@
 
           <li>
             <button class='btn btn-mini btn-primary' ng-click="new_operation_type()">New</button>
-            <button class='btn btn-mini' ng-click="copy_operation_type()">Copy</button>
+            <button class='btn btn-mini' ng-if="current_ot.id" ng-click="copy(current_ot)">Copy</button>
 
             <label class="btn btn-default btn-file btn-mini">
               Import <input type=file

@@ -72,7 +72,8 @@
         if ( ot.id ) {
           $http.put("/operation_types/" + ot.id,ot).then(function(response) {
             if ( response.data.errors ) {
-              alert ( "Could not update operation type definition: " + response.data.errors.join(", ") )
+              alert ( "Could not update operation type definition: " + response.data.errors[0] )
+              console.log(response.data.errors);
             } else {
               var i = $scope.operation_types.indexOf(ot);
               $scope.operation_types[i] = response.data;
@@ -84,7 +85,8 @@
           $http.post("/operation_types",ot).then(function(response) {
             var i = $scope.operation_types.indexOf(ot);
             if ( response.data.errors ) {
-              alert ( "Could not update operation type definition: " + response.data.errors.join(", ") )
+              alert ( "Could not update operation type definition: " + response.data.errors[0] );
+              console.log(response.data);
             } else {            
               $scope.operation_types[i] = response.data;            
               $scope.current_ot = response.data;  
@@ -184,6 +186,21 @@
       $scope.operation_types.push(new_ot);
       $scope.current_ot = new_ot;
       make_categories();
+    }
+
+    $scope.copy = function(ot) {
+
+      $http.get("/operation_types/" + ot.id + "/copy/").then(function(response) {
+        if ( !response.data.error ) { 
+          console.log(response.data);
+          $scope.current_ot = response.data.operation_type;
+          $scope.operation_types.push($scope.current_ot);
+          make_categories();
+        } else {
+          alert ( response.data.error );
+        }
+      });
+
     }
 
     $scope.render_docs = function(ot) {

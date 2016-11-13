@@ -28,10 +28,13 @@ class OperationTypesController < ApplicationController
             # raise "Sample type not definied by browser for #{ft[:name]}: #{ft}" unless SampleType.find_by_name(aft[:sample_type][:name])
             aft[:sample_type] ? aft[:sample_type][:name] : nil
           }
-          container_names =  ft[:allowable_field_types].collect { |aft| 
-            logger.info "  aft = #{aft.inspect}"            
-            raise "Object type not definied by browser for #{ft[:name]}: #{ft}!" unless ObjectType.find_by_name(aft[:object_type][:name])
-            aft[:object_type][:name]
+          # .select { |aft| ObjectType.find_by_name(aft[:object_type]) }
+          container_names =  ft[:allowable_field_types]
+            .select { |aft| aft[:object_type] && aft[:object_type][:name] && aft[:object_type][:name] != "" }
+            .collect { |aft| 
+              logger.info "  aft = #{aft.inspect}"            
+              raise "Object type '#{aft[:object_type][:name]}' not definied by browser for #{ft[:name]}." unless ObjectType.find_by_name(aft[:object_type][:name])
+              aft[:object_type][:name]
           }          
         else
           sample_type_names = []
@@ -104,7 +107,7 @@ class OperationTypesController < ApplicationController
       ot.save
 
       if !ot.errors.empty?
-        update_errors << ot.errors.full_messages.join(", ") 
+        update_errors += ot.errors.full_messages
         raise ActiveRecord::Rollback
       end
 
@@ -245,6 +248,17 @@ class OperationTypesController < ApplicationController
       render json: { operation_type: ot.as_json(methods: [:field_types, :protocol, :cost_model, :documentation]) }
     rescue Exception => e
       render json: { error: "Could not import operation type: " + e.to_s }
+    end
+
+  end
+
+  def copy
+
+    begin
+      ot = OperationType.find(params[:id]).copy
+      render json: { operation_type: ot.as_json(methods: [:field_types, :protocol, :cost_model, :documentation]) }
+    rescue Exception => e
+      render json: { error: "Could not copy operation type: " + e.to_s }
     end
 
   end
