@@ -135,11 +135,8 @@ class PlansController < ApplicationController
 
     routes = {}
     params[:operation_type][:inputs].each { |i| routes[i[:name]] = i[:routing] }
-    puts "#{routes}"
-    puts "+++++++++"
 
     params[:form_inputs].each do |key,val|
-      puts "#{key}, #{val}"
       aft = AllowableFieldType.find_by_id(val[:aft][:id])
       v = routing_value params[:routing][route_name(routes[key])]
       operation.set_input(key,v,aft)
