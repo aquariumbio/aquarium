@@ -53,16 +53,22 @@ module FieldValueKrill
   end
 
   def make_collection
-    ot = object_type
-    if ot
+
+    ot = object_type    
+
+    if ot && ot.handler == 'collection'
       c = Collection.new_collection(object_type.name)
       c.store if c.location == "Unknown"
       self.child_item_id = c.id
       self.save
       c
+    elsif ot && ot.handler != 'collection'
+      raise "Could not make a new collection from the object type name '#{ot.name}', " +
+            "because its handler is '#{ot.handler}', not 'collection'"
     else
       raise "Could not find object type: #{object_type}"
     end
+
   end
 
   def make_part collection, r, c
