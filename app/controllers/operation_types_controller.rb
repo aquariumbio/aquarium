@@ -202,27 +202,38 @@ class OperationTypesController < ApplicationController
 
       else
 
-        ops.extend(Krill::OperationList)
-        puts "======== Making mock inputs"
-        ops.make(role: 'input')
+        begin
 
-        ops.each do |op|
-          op.set_status "running"
+          ops.extend(Krill::OperationList)
+          ops.make(role: 'input')
+
+          ops.each do |op|
+            op.set_status "running"
+          end
+
+          manager.run
+
+          ops.each { |op| op.reload }
+
+          # render the resulting data including the job and the operations
+          render json: {
+            operations: ops.as_json(methods: [:field_values,:associations]),
+            job: job.reload
+          }
+
+        rescue Exception => e
+
+          render json: {
+            error: "Bug encountered while testing: " + e.message + " at " + e.backtrace.first + ". " +
+                   "Please notify the Aquarium development team.",
+            backtrace: e.backtrace
+          }          
+
         end
-
-        manager.run
-
-        ops.each { |op| op.reload }
-
-        # render the resulting data including the job and the operations
-        render json: {
-          operations: ops.as_json(methods: [:field_values,:associations]),
-          job: job.reload
-        }
 
       end
 
-      # rollback the transaction
+      # rollback the transaction so test data is not added to the inventory
       raise ActiveRecord::Rollback
 
     end   
