@@ -152,6 +152,40 @@ class OperationTypesController < ApplicationController
     
   end
 
+  def make_test_ops ot, tops
+
+    tops.collect do |test_op|
+
+      op = ot.operations.create status: "ready", user_id: test_op[:user_id]
+
+      (ot.inputs + ot.outputs).each do |io|
+
+        if io.array
+          fvs = test_op[:field_values].select { |fv| fv[:name] == io.name && fv[:role] == io.role }
+          aft = AllowableFieldType.find_by_id(fvs[0][:allowable_field_type_id])
+          samples = fvs.collect { |fv|
+            Sample.find_by_id(fv[:child_sample_id])
+          }
+          actual_fvs = op.set_property(io.name, samples, io.role,true,aft)
+          raise "Nil value Error: Could not set #{fvs}" unless actual_fvs
+        else
+          fv = test_op[:field_values].select { |fv| fv[:name] == io.name && fv[:role] == io.role }[0]
+          aft = AllowableFieldType.find_by_id(fv[:allowable_field_type_id])
+          actual_fv = op.set_property(fv[:name], Sample.find_by_id(fv[:child_sample_id]), fv[:role],true,aft)
+          raise "Nil value Error: Could not set #{fv}" unless actual_fv
+          unless actual_fv.errors.empty? 
+            raise "Active Record Error: Could not set #{fv}: #{actual_fv.errors.full_messages.join(', ')}"
+          end          
+        end
+
+      end
+
+      op
+
+    end
+
+  end
+
   def test
 
     # save the operaton
@@ -166,22 +200,7 @@ class OperationTypesController < ApplicationController
     ActiveRecord::Base.transaction do
 
       # (re)build the operations
-      ot = OperationType.find(params[:id])
-      ops = []
-      params[:test_operations].each do |test_op|
-        op = ot.operations.create status: "ready", user_id: test_op[:user_id]
-        if test_op[:field_values]
-          test_op[:field_values].each do |fv|
-            aft = AllowableFieldType.find_by_id(fv[:allowable_field_type_id])
-            actual_fv = op.set_property(fv[:name], Sample.find_by_id(fv[:child_sample_id]), fv[:role],true,aft)
-            raise "Nil value Error: Could not set #{fv}" unless actual_fv
-            unless actual_fv.errors.empty? 
-              raise "Active Record Error: Could not set #{fv}: #{actual_fv.errors.full_messages.join(', ')}"
-            end
-          end
-        end
-        ops << op
-      end
+      ops = make_test_ops OperationType.find(params[:id]), params[:test_operations]
 
       # run the protocol
       job,newops = ot.schedule(ops, current_user, Group.find_by_name('technicians'))

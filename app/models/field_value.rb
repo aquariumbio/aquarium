@@ -19,6 +19,10 @@ class FieldValue < ActiveRecord::Base
     child_item
   end
 
+  def collection
+    child_item
+  end
+
   def val
 
     if field_type

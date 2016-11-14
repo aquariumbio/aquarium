@@ -200,11 +200,31 @@ Given an operation **op**, you can access its inputs and outputs by name using t
 ```ruby
 op.input("Primer").item
 op.input("Primer").sample
+op.input("Primer").collection
 op.input("Primer").sample_type
 op.input("Primer").object_type
 ```
 
 These methods will return nil if the requested object is not found. Otherwise, you'll get an ActiveRecord for an Item, Sample, SampleType, or ObjectType, respectively.
+
+If an input (or output) is an array, you can get an array of values using
+
+```ruby
+op.input_array("Primer")
+```
+which returns an Array-like object with the following methods for access items, samples, etc:
+```ruby
+op.input_array("Primer").items
+op.input_array("Primer").item_id
+op.input_array("Primer").samples
+op.input_array("Primer").sample_ids
+op.input_array("Primer").collections
+op.input_array("Primer").collection_ids
+op.input_array("Primer").rows       # An array of the rows in which the Primer is found (if the input is a part)
+op.input_array("Primer").columns    # An array of the columns in which the Primer is found (if the input is a part)
+op.input_array("Primer").rcs        # An array of the [row,column] where the Primer is found  (if the input is a part)
+
+```
 
 Data Associations
 ===

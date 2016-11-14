@@ -78,6 +78,14 @@ class Operation < ActiveRecord::Base
     get_output name
   end
 
+  def input_array name
+    inputs.select { |i| i.name == name }.extend(IOList)
+  end
+
+  def output_array name
+    outputs.select { |o| o.name == name } .extend(IOList)   
+  end
+
   def get_field_value name, role="input"
     field_values.find { |fv| fv.name == name && fv.role == role }
   end
