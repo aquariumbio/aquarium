@@ -90,6 +90,20 @@
 
     }
 
+    $scope.is_part = function(ot,fv) {
+
+      var fts = aq.where(ot.field_types, function(ft) {
+        return ft.role == fv.role && ft.name == fv.name;
+      });
+
+      if ( fts.length > 0 ) {
+        return fts[0].part;
+      } else {  
+        return false;
+      }
+
+    }
+
   }]);
 
 })();

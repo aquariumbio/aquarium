@@ -64,36 +64,4 @@ module OperationTypePlanner
 
   end
 
-  def random n=1
-
-    (1..n).collect do |i|
-
-      op = operations.create status: "pending", user_id: User.all.sample.id
-
-      inputs.each do |input|
-        random_sample, random_aft = input.random
-        op.set_input(input.name,random_sample,random_aft) 
-      end
-
-      outputs.each do |output|
-        matching_inputs = op.inputs.select { |i| i.name == output.name }
-        if matching_inputs.empty?
-          random_sample, random_aft = output.random
-          op.set_output(output.name,random_sample,random_aft)
-        else
-          if output.allowable_field_types.length > 0
-            aft = output.allowable_field_types.sample
-          else
-            aft = nil
-          end
-          op.set_output(output.name,matching_inputs[0].val,aft)
-        end
-      end      
-
-      op
-
-    end
-
-  end
-
 end

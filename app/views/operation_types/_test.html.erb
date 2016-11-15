@@ -72,7 +72,7 @@
           <li ng-repeat="fv in op.field_values | filter: { role: 'input' }">
             <b>{{fv.name}}</b><span ng-if="fv.child_sample">: {{fv.child_sample.name}}</span>
             <span ng-if="fv.allowable_field_type.object_type && fv.allowable_field_type.object_type.name">
-              ({{fv.allowable_field_type.object_type.name}})
+              (<span ng-if="is_part(current_ot,fv)">Part of a </span>{{fv.allowable_field_type.object_type.name}})
             </span>
           </li>
         </ul>              
@@ -83,7 +83,7 @@
           <li ng-repeat="fv in op.field_values | filter: { role: 'output' }">
             <b>{{fv.name}}</b><span ng-if="fv.child_sample">: {{fv.child_sample.name}}</span>
             <span ng-if="fv.allowable_field_type.object_type && fv.allowable_field_type.object_type.name">
-              ({{fv.allowable_field_type.object_type.name}})
+              (<span ng-if="is_part(current_ot,fv)">Part of a </span>{{fv.allowable_field_type.object_type.name}})
             </span>
           </li>
         </ul>              

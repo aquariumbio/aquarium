@@ -5,6 +5,7 @@ class OperationType < ActiveRecord::Base
   include CodeHelper
   include OperationTypeExport
   include OperationTypeWorkflow
+  include OperationTypeRandom
 
   has_many :operations
   # has_many :fts, foreign_key: "parent_id", class_name: "FieldType"

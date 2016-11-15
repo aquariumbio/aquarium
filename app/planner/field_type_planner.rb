@@ -88,4 +88,18 @@ module FieldTypePlanner
 
   end
 
+  def choose_aft_for sample
+
+    afts = allowable_field_types.select { |aft|
+      aft.sample_type_id == sample.sample_type.id
+    }
+
+    if afts.length > 0 
+      afts.sample
+    else
+      nil
+    end
+
+  end
+
 end
