@@ -205,7 +205,8 @@ op.input("Primer").sample_type
 op.input("Primer").object_type
 ```
 
-These methods will return nil if the requested object is not found. Otherwise, you'll get an ActiveRecord for an Item, Sample, SampleType, or ObjectType, respectively.
+The same foes for *op.output*. These methods will return nil if the requested object is not found. 
+Otherwise, you'll get an ActiveRecord for an Item, Sample, SampleType, or ObjectType, respectively.
 
 If an input (or output) is an array, you can get an array of values using
 
@@ -225,6 +226,7 @@ op.input_array("Primer").columns    # An array of the columns in which the Prime
 op.input_array("Primer").rcs        # An array of the [row,column] where the Primer is found  (if the input is a part)
 
 ```
+The same goes for *op.output_array*.
 
 Data Associations
 ===
