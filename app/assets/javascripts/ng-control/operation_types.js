@@ -22,6 +22,9 @@
       $scope.categories = aq.uniq(aq.collect($scope.operation_types,function(ot) {
         return ot.category;
       }));
+      if ( $scope.categories.length > 0 ) {
+        $scope.current_category = $scope.categories[0];
+      }
     }
 
     $http.get('/operation_types.json').then(function(response) {
@@ -55,12 +58,27 @@
       $scope.mode = 'definition';
     }
 
-    $scope.ot_class = function(ot) {
-      if ( $scope.current_ot == ot ) {
-        return "op-type op-type-current";
-      }  else {
-        return "op-type";
+    $scope.choose_category = function(c) {
+      if ( $scope.current_category == c ) {
+        delete $scope.current_category;
+      } else {
+        $scope.current_category = c;
       }
+    }
+
+    $scope.category_size = function(c) {
+      return aq.where($scope.operation_types,function(ot) { return ot.category == c; }).length;
+    }    
+
+    $scope.ot_class = function(ot) {
+      var c = "op-type";
+      if ( $scope.current_ot == ot ) {
+        c += " op-type-current";
+      } 
+      if ( ot.deployed ) {
+        c += " op-type-deployed"
+      }
+      return c;
     }
 
     $scope.capitalize = function(string) {

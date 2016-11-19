@@ -8,6 +8,14 @@
     }
   }
 
+  .op-type-sublist {
+    list-style: none;
+    margin-left: 15px;    
+    li {
+      margin-left: 0;
+    }
+  }  
+
   .label-bold {
     font-weight: bold;
   }
@@ -15,6 +23,14 @@
   .op-type-current {
     font-weight: bold;
     background: yellow;
+  }
+
+  .op-type:before {       
+    content: "\25CB \020";
+  }
+
+  .op-type-deployed:before {
+    content: "\25CF \020";
   }
 
   .field-type-table {
