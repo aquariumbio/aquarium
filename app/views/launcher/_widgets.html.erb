@@ -1,0 +1,90 @@
+<script type="text/ng-template" id="operation_type_chooser">
+
+  <div class='btn-group' style="margin-right: 5px;">
+
+    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+      Choose Goal Operation Type <span class="caret"></span>
+    </a>    
+
+    <ul class='dropdown-menu'>
+      <li ng-repeat="operation_type in operation_types">
+        <a href='#' ng-click="select(operation_type)">
+          {{operation_type.name}} 
+        </a>
+      </li>
+    </ul>
+
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="operation_editor">
+
+  <div class='operation'>
+
+    <div class='outputs' ng-if="operation.operation_type.num_outputs() > 0">
+      <div ng-repeat="ft in operation.operation_type.field_types | filter: { role: 'output' }"
+           ng-include="'operation_io'"></div>
+    </div>
+
+    <div class='name'>
+      <div class='arrow'>&ldsh;</div>
+      <span>{{operation.operation_type.name}}</span>
+      <div class='cancel'>
+        <a href="#" ng-click="operation.clear()">&times;</a>
+      </div> 
+    </div>  
+
+    <div class='inputs' ng-if="operation.operation_type.num_inputs() > 0">
+      <div class='arrow'>&ldsh;</div>
+      <div ng-repeat="ft in operation.operation_type.field_types | filter: { role: 'input' }"
+           ng-include="'operation_io'"></div>
+    </div>      
+
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="operation_io">
+
+  <div class='field_value_form' 
+       ng-init="ft.aft_choice = ft.allowable_field_types[0].id">
+
+    <span class='io-name'>
+      <b>{{ft.name}}</b>: <form class='radio-buttons pull-right'>
+        <span ng-repeat="aft in ft.allowable_field_types track by $index">
+          <label class="radio-label">
+            <input type="radio"
+                   class="radio"
+                   name="{{ft.name + '_' + ft.role}}"
+                   ng-value="aft.id"
+                   ng-disabled="ft.allowable_field_types.length == 1"
+                   ng-model="ft.aft_choice">
+                     {{aft.object_type.name}}
+          </label>
+        </span>
+      </form>
+    </span>
+
+    <span ng-if="ft.ftype == 'sample' && !ft.array">
+      <input type='string' 
+             ftautocomplete="ft"
+             ng-model="operation.routing[ft.routing]">
+    </span>
+
+    <span ng-if="ft.ftype == 'sample' && ft.array">
+      <div ng-repeat="fv in operation.field_values | filter: { name: ft.name } track by $index">
+        <input class='array_input'
+               type=string
+               ftautocomplete="ft" 
+               ng-model="fv.sample_identifier">
+        <a href="#" ng-click="operation.delete_array_field_value(ft,$index)">&times;</a>
+      </div>
+      <a href='#' class='btn btn-mini' 
+              ng-click="operation.add_array_field_value(ft)">+</a>
+    </span>
+
+  </div>
+
+</script>
+

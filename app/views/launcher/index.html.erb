@@ -1,0 +1,18 @@
+<% provide(:title, 'Launcher') %>
+
+<div ng-app="aquarium" ng-controller="launcherCtrl as launcher" class='launcher'>
+
+  <%= render partial: 'widgets' %>
+
+  <div class='container'>
+
+    <div ng-if="status != 'ready'">{{status}}</div>
+
+    <div ng-if="status == 'ready'">
+      <div ng-if="!operation.operation_type_id" ng-include="'operation_type_chooser'"></div> 
+      <div ng-if="operation.operation_type_id" ng-include="'operation_editor'"></div> 
+    </div>
+
+  </div>
+
+</div>

@@ -1,5 +1,10 @@
 Bioturk::Application.routes.draw do
 
+  post '/json/current',      to: 'json#current'
+  post '/json',              to: 'json#index'
+
+  get '/launcher',                               to: 'launcher#index'
+
   get '/plans/:pid/select/:oid',                 to: 'plans#select'
   get '/plans/start/:id',                        to: 'plans#start'
   post '/plans/replan',                          to: 'plans#replan'

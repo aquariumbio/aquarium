@@ -1,114 +1,93 @@
-.input-plain {
-  border: 0pt solid #aaa !important;
-  border-radius: 0px !important;
-  width: 100%;
-  margin: 0 0 0 3px !important;
-  padding: 0px !important;
-  height: 100% !important;
+.launcher {
 
-}
+  .operation {
 
-.input-plain:focus {
-  background-color: #ffe;
-}
+    position: relative;
+    width: 100%;
+    margin: 5px;
+    padding: 0 0 1px 0;
+    
 
-.input-plain:disabled {
-  background-color: white;
-}
+    .name {
+      position: relative;
+      font-weight: bold;
+      margin: 5px 5px 5px 40px;
+      padding: 5px;
+      outline: 1pt solid #ddd;  
+      background: #eee; 
+    }
 
-.launcher-table {
+    .io-name {
+      line-height: 24px !important;
+      padding: 2px;
+    }
 
-  width: 100%;
-  table-layout: fixed;
-  height: 100%;
+    .cancel {
+      font-weight: bold;
+      position: absolute;
+      top: 4px;
+      right: 12px;
+    }
 
-  th { 
-    border: 1pt solid #aaa;
-    height: 20px;
-    padding: 5px;
-    margin: 0px;
-    text-align: left;
+    .arrow {
+      font-weight: bold;
+      font-size: 12pt;
+      position: absolute;
+      top: 0px;
+      left: -20px; 
+      -webkit-transform: rotate(90deg);    
+    }
+
+    .inputs {
+      margin: 5px 5px 5px 80px;
+      padding: 5px;      
+      outline: 1pt solid #eee;  
+      position: relative;
+    }
+
+    .input {
+      margin: 5px;
+      padding: 5px;
+      outline: 1pt solid #eee;  
+    }
+
+    .outputs {
+      margin: 5px 5px 5px 5px;
+      padding: 5px;      
+      outline: 1pt solid #eee; 
+      position: relative; 
+    }
+
+    .output {
+      margin: 5px;
+      padding: 5px;
+      outline: 1pt solid #eee;  
+    }
+
+    .array_input {
+      width: 90% !important;
+      margin: 2px;
+    }
+
+    .radio-buttons {
+
+      margin: 0;
+      display: inline-block;
+
+      .radio, .radio:hover, .radio:active, .radio:checked {
+        display: inline;
+        margin: -1px;
+        padding: 0;
+        width: 20px !important;
+      }
+
+      .radio-label {
+        padding: 0;
+        margin: 0 10px 0 0;
+        display: inline; 
+      }      
+    }
+
   }
 
-  td {
-    border: 1pt solid #aaa;
-    height: 20px;
-    padding: 0px;
-    margin: 0px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;    
-  }
-
-  tr {
-    padding: 0px;
-    margin: 0px;
-  }
-
-  .input-header {
-    color: black;
-    background: #eff;
-  }
-
-  .param-header {
-    color: black;    
-    background: #efe;
-  }
-
-  .output-header {
-    color: black;    
-    background: #ffe;
-  }  
-
-
-}
-
-.param-header {
-  color: red;
-  background: #fee;
-}
-
-.output-header {
-  background: #efe;
-}
-
-.launcher-vector-table {
-  width: 100%;
-  table-layout: fixed;
-  tr {
-    border: 0;
-    padding: 0px;
-    margin: 0px;
-    border-bottom: 1pt solid #eee;
-  }
-  td {
-    border: 0;
-    padding: 0px;
-    margin: 0px;
-    height: 20px;    
-  }
-}
-.launcher-vector-remove {
-  width: 16px;
-}
-
-.launcher-threads {
-  td {
-    padding: 5px;
-  }
-}
-
-.right {
-  float: right;
-}
-
-.launcher-select {
-  height: 100%;
-  box-shadow: none !important;
-  border: 0;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  overflow: hidden;  
-  margin: 0; 
 }

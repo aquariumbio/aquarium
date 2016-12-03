@@ -17,15 +17,18 @@ $row-height: 22px;
     display: inline-block;    
     padding: 2px;
     margin: 0px;
-    width: 90% !important;
+    width: 100% !important;
   }
 
-  .radio, .radio:hover, .radio:active, .radio:checked{
+  .radio, .radio:hover, .radio:active, .radio:checked {
     display: inline;
     width: 10% !important;
+    margin: 0;
+    padding: 0;
   }
 
   .radio-label {
+    padding-top: 2px !important;
     display: inline;
     width: 80% !important;
   }
