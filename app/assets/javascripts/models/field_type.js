@@ -23,3 +23,4 @@ AQ.FieldType.record_methods.chosen_sample_type_name = function() {
   return null;
 
 }
+

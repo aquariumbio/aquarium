@@ -23,15 +23,24 @@
           $scope.status = "ready";
           $scope.operation_types = operation_types;
           $scope.current_user = user;
+          // $scope.select($scope.operation_types[3])
         });
       });
     });
 
     $scope.select = function(operation_type) {
       $scope.operation = new AQ.Record(AQ.Operation,{
-        field_values: []
+        input: {},
+        output: {},
+        routing: {}
       });
       $scope.operation.set_type(operation_type);
+    }
+
+    $scope.set_aft = function(op,ft,aft) {
+      op[ft.role][ft.name].aft = aft;
+      op.routing[ft.routing] = '';
+      op[ft.role][ft.name] = { aft: aft, aft_id: aft.id, items: [] };
     }
 
   }]);

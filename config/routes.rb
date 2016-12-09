@@ -1,7 +1,8 @@
 Bioturk::Application.routes.draw do
-
-  post '/json/current',      to: 'json#current'
-  post '/json',              to: 'json#index'
+ 
+  get '/json/current',             to: 'json#current'
+  get '/json/items/:sid/:oid',     to: 'json#items'
+  post '/json',                    to: 'json#index'
 
   get '/launcher',                               to: 'launcher#index'
 

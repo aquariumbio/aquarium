@@ -1,5 +1,16 @@
 .launcher {
 
+  .dropdown {
+    width: 190px;
+    margin: 0px;
+    padding: 2px 5px 2px 5px;
+    height: 20px !important;
+    border: 1pt solid rgb(187,187,187);
+    border-radius: 0px !important;
+    background: white;
+    text-align: left;
+  }   
+
   .operation {
 
     position: relative;
@@ -7,14 +18,14 @@
     margin: 5px;
     padding: 0 0 1px 0;
     
-
     .name {
       position: relative;
       font-weight: bold;
-      margin: 5px 5px 5px 40px;
+      margin: 5px 10px 5px 40px;
       padding: 5px;
-      outline: 1pt solid #ddd;  
-      background: #eee; 
+      border: 1pt solid #aaa;  
+      border-radius: 10px !important;
+      background: #efe;
     }
 
     .io-name {
@@ -41,7 +52,7 @@
     .inputs {
       margin: 5px 5px 5px 80px;
       padding: 5px;      
-      outline: 1pt solid #eee;  
+      /*outline: 1pt solid #eee;  */
       position: relative;
     }
 
@@ -54,7 +65,7 @@
     .outputs {
       margin: 5px 5px 5px 5px;
       padding: 5px;      
-      outline: 1pt solid #eee; 
+      /*outline: 1pt solid #eee; */
       position: relative; 
     }
 
@@ -64,9 +75,29 @@
       outline: 1pt solid #eee;  
     }
 
-    .array_input {
-      width: 90% !important;
+    .array-item-input {
+      width: 180px !important;
       margin: 2px;
+    }
+
+    .sample-with-item {
+      width: calc(100% - 210px) !important;
+      display: inline-block;      
+    }
+ 
+    .sample-only {
+      width: 100% !important;
+      display: inline-block;      
+    }    
+
+    .no-items {
+      color: #bbb;
+      width: 204px !important;
+      display: inline-block !important;
+      border: 1px solid rgb(187,187,187) !important;
+      margin: 0 !important;
+      padding: 2px !important;
+      height: 26px !important;
     }
 
     .radio-buttons {

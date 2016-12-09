@@ -1,3 +1,3 @@
 AQ.User.current = function() {
-  return AQ.post('/json/current',{});
+  return AQ.get('/json/current');
 }
