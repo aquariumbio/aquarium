@@ -23,24 +23,27 @@
           $scope.status = "ready";
           $scope.operation_types = operation_types;
           $scope.current_user = user;
-          // $scope.select($scope.operation_types[3])
+          $scope.select($scope.operation_types[3])
         });
       });
     });
 
     $scope.select = function(operation_type) {
       $scope.operation = new AQ.Record(AQ.Operation,{
-        input: {},
-        output: {},
-        routing: {}
+        routing: {},
+        form: { input: {}, output: {} }
       });
       $scope.operation.set_type(operation_type);
     }
 
     $scope.set_aft = function(op,ft,aft) {
-      op[ft.role][ft.name].aft = aft;
-      op.routing[ft.routing] = '';
-      op[ft.role][ft.name] = { aft: aft, aft_id: aft.id, items: [] };
+      op.form[ft.role][ft.name] = { aft_id: aft.id, aft: aft };
+      aq.each(op.field_values,function(fv) {
+        if ( fv.name == fv.name && fv.role == ft.role ) {
+          op.routing[ft.routing] = '';
+          fv = { aft: aft, aft_id: aft.id, items: [] };
+        }
+      });
     }
 
   }]);

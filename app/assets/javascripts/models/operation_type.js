@@ -34,7 +34,13 @@ AQ.OperationType.all_with_content = function() {
 // RECORD METHODS ==================================================
 
 AQ.OperationType.record_methods.upgrade_field_types = function() {
-  this.field_types = aq.collect(this.field_types,(ft) => { return new AQ.Record(AQ.FieldType,ft) });
+  this.field_types = aq.collect(this.field_types,(ft) => { 
+    var upgraded_ft = new AQ.Record(AQ.FieldType,ft);
+    if ( ft.allowable_field_types.length > 0 ) {
+      upgraded_ft.current_aft_id = ft.allowable_field_types[0].id;
+    }
+    return upgraded_ft;
+  });
 }
 
 AQ.OperationType.record_methods.num_inputs = function() {

@@ -24,3 +24,8 @@ AQ.FieldType.record_methods.chosen_sample_type_name = function() {
 
 }
 
+AQ.FieldType.record_methods.matches = function(field_value) {
+  return field_value.role == this.role && field_value.name == this.name;
+}
+
+

@@ -1,0 +1,137 @@
+
+<script type="text/ng-template" id="operation_editor">
+
+  <!-- Displays an operation editor, allowing the user to enter the samples and items
+       needed to add the operation to a plan and launch it 
+
+       operation: AQ.Operation
+    -->
+
+  <div class='operation'>
+
+    <div class='outputs' ng-if="operation.operation_type.num_outputs() > 0">
+      <div ng-repeat="ft in operation.operation_type.field_types | filter: { role: 'output', ftype: 'sample' }"
+           ng-include="'operation_io'"></div>
+    </div>
+
+    <div class='name'>
+      <div class='arrow'>&ldsh;</div>
+      <span>{{operation.operation_type.name}}</span>
+      <div class='cancel'>
+        <a href="#" ng-click="operation.clear()">&times;</a>
+      </div> 
+    </div>  
+
+    <div class='inputs' ng-if="operation.operation_type.num_inputs() > 0">
+      <div class='arrow'>&ldsh;</div>
+      <div ng-repeat="ft in operation.operation_type.field_types | filter: { role: 'input', ftype: 'sample' }"
+           ng-include="'operation_io'"></div>
+    </div>
+
+  </div>
+
+  <!-- <pre>{{operation.form|json}}</pre> -->
+
+</script>
+
+
+<script type="text/ng-template" id="operation_io">
+
+  <!-- Displays field value editors associated with a given field type for the given operation.
+
+       operation: AQ.Operation
+       ft: AQ.FieldType
+    -->
+
+  <div class='field_value_form'>
+
+    <span class='io-name' ng-if="ft.allowable_field_types[0].object_type">
+      <b>{{ft.name}}</b>
+      <form class='radio-buttons pull-right'> 
+        <span ng-repeat="aft in ft.allowable_field_types track by $index"
+                ng-init="set_aft(operation,ft,ft.allowable_field_types[0])">
+          <label class="radio-label">
+            <input type="radio" class="radio"
+                   name="{{ft.name + '_' + ft.role}}"
+                   ng-value="aft.id"
+                   ng-disabled="ft.allowable_field_types.length == 1"
+                   ng-model=  "operation.form[ft.role][ft.name].aft_id"
+                   ng-change= "set_aft(operation,ft,aft)">
+            {{aft.object_type.name}} 
+            <span ng-if="ft.part">(part)</span>
+          </label>
+        </span>
+      </form>
+    </span>
+
+    <div itemselect
+         ng-repeat="fv in operation.field_values | filter: { name: ft.name, role: ft.role }" 
+         ft="ft" operation="operation" fv="fv">
+    </div> 
+
+    <div ng-if="ft.array">      
+      <a href='#' 
+         class='btn btn-mini' 
+         ng-click="operation.array_add(ft)">+</a>
+    </div>
+
+  </div>
+
+</script>
+
+
+
+<script type="text/ng-template" id="item_select">
+
+  <!-- Displays sample input and item selector for a given field value
+
+       operation: AQ.Operation
+       ft: AQ.FieldType
+       fv: AQ.FieldValue
+    -->
+
+
+  <input type='string' 
+         placeholder="Sample Identifier"
+         id="sample-io"
+         ng-class="show_item_select(ft) ? 'sample-with-item' : 'sample-only'"
+         ng-model="operation.routing[ft.routing]"
+         ng-if="!ft.array">
+
+  <input type='string' 
+         placeholder="Sample Identifier"
+         id="sample-io"
+         ng-class="show_item_select(ft) ? 'sample-with-item' : 'sample-only'"
+         ng-model="fv.sample_identifier"
+         ng-if="ft.array">
+
+  <div class='btn-group' ng-if="show_item_select(ft)">
+
+    <a ng-class="item_select_class(ft)"
+       data-toggle="dropdown" 
+       href="#">
+      <span ng-if="fv.items.length == 0">No Items</span>    
+      <span ng-if="fv.items.length > 0 && !fv.item">Item</span>
+      <span ng-if="fv.item">
+        <b>{{fv.item.id}}</b>: 
+           {{fv.item.location}}
+      </span>
+      <span class="caret pull-right"></span>
+    </a>
+
+    <ul class='dropdown-menu' ng-if="fv.items.length > 0">
+      <li ng-repeat="item in fv.items">
+        <a href='#' ng-click="select(item)">
+          <b>{{item.id}}</b>: 
+          {{item.location}}
+          ({{item.created_at|date}})
+        </a>
+      </li>
+    </ul>
+
+  </div>
+
+  <a ng-if="ft.array" href="#" ng-click="operation.array_remove(fv)" class='array-remove'>&times;</a>
+
+</script>
+
