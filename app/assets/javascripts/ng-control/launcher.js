@@ -23,7 +23,7 @@
           $scope.status = "ready";
           $scope.operation_types = operation_types;
           $scope.current_user = user;
-          $scope.select($scope.operation_types[5])
+          // $scope.select($scope.operation_types[5])
         });
       });
     });

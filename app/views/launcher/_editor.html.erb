@@ -36,7 +36,7 @@
 
   <div class='field_value_form'>
 
-    <span class='io-name' ng-if="ft.allowable_field_types[0].object_type">
+    <span class='io-name'> 
       <b>{{ft.name}}</b>
       <form class='radio-buttons pull-right'> 
         <span ng-repeat="aft in ft.allowable_field_types track by $index"
@@ -90,10 +90,10 @@
          ng-if="ft.array && operation.form[ft.role][ft.name].aft.sample_type_id">
 
   <input type='string' 
-         placeholder="This input does not require a sample name"
+         placeholder="This i/o does not require a sample name"
          disabled=true
          class="sample-with-item"
-         ng-if="!operation.form[ft.role][ft.name].aft.sample_type_id">         
+         ng-if="!operation.form[ft.role][ft.name].aft.sample_type_id"> 
 
   <div class='btn-group' ng-if="show_item_select(ft)">
 
