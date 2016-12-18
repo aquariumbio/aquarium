@@ -9,7 +9,7 @@ class JsonController < ApplicationController
       if [ "all", "where", "find", "find_by_name", "new" ].member? m
         return true
       else
-        raise "Illeagal method #{m} requested from front end."
+        raise "Illegal method #{m} requested from front end."
       end
     else
       false
@@ -50,7 +50,7 @@ class JsonController < ApplicationController
       if sample && ot
 
         if ot.handler == 'collection'
-          render json: []
+          render json: Collection.parts(sample,ot)
         else
           render json: sample.items.reject { |i| i.deleted? || i.object_type_id != ot.id }
         end

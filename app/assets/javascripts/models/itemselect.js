@@ -25,7 +25,7 @@
         var autocomp = function(ev,ui) {
 
           // Called when a sample input is updated. It checks for items
-          // that match the given sample for every non-arrau input fv whose
+          // that match the given sample for every non-array input fv whose
           // routing matches matches the updated fv.
 
           var sid = AQ.id_from(ui.item.value);
@@ -85,12 +85,13 @@
           return ft.role == 'input' && 
             aq.where(
               ft.allowable_field_types,
-              (aft) => { return aft.object_type_id != null }).length > 0;
+              (aft) => { return aft.object_type_id != null }
+            ).length > 0;
 
         }
 
         $scope.$watch('operation.form[ft.role][ft.name].aft', function(new_aft,old_aft) {
-          if ( new_aft ) {
+          if ( new_aft && new_aft.sample_type ) {
             var name = new_aft.sample_type.name;
             $($element).find("#sample-io").autocomplete({
               source: AQ.sample_names_for(name),

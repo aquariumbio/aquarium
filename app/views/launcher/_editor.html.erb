@@ -2,10 +2,7 @@
 <script type="text/ng-template" id="operation_editor">
 
   <!-- Displays an operation editor, allowing the user to enter the samples and items
-       needed to add the operation to a plan and launch it 
-
-       operation: AQ.Operation
-    -->
+       needed to add the operation to a plan and launch it -->
 
   <div class='operation'>
 
@@ -30,18 +27,12 @@
 
   </div>
 
-  <!-- <pre>{{operation.form|json}}</pre> -->
-
 </script>
 
 
 <script type="text/ng-template" id="operation_io">
 
-  <!-- Displays field value editors associated with a given field type for the given operation.
-
-       operation: AQ.Operation
-       ft: AQ.FieldType
-    -->
+  <!-- Displays field value editors associated with a given field type for the given operation. -->
 
   <div class='field_value_form'>
 
@@ -80,30 +71,29 @@
 </script>
 
 
-
 <script type="text/ng-template" id="item_select">
 
-  <!-- Displays sample input and item selector for a given field value
-
-       operation: AQ.Operation
-       ft: AQ.FieldType
-       fv: AQ.FieldValue
-    -->
-
+  <!-- Displays sample input and item selector for a given field value -->
 
   <input type='string' 
          placeholder="Sample Identifier"
          id="sample-io"
          ng-class="show_item_select(ft) ? 'sample-with-item' : 'sample-only'"
          ng-model="operation.routing[ft.routing]"
-         ng-if="!ft.array">
+         ng-if="!ft.array && operation.form[ft.role][ft.name].aft.sample_type_id">
 
   <input type='string' 
          placeholder="Sample Identifier"
          id="sample-io"
          ng-class="show_item_select(ft) ? 'sample-with-item' : 'sample-only'"
          ng-model="fv.sample_identifier"
-         ng-if="ft.array">
+         ng-if="ft.array && operation.form[ft.role][ft.name].aft.sample_type_id">
+
+  <input type='string' 
+         placeholder="This input does not require a sample name"
+         disabled=true
+         class="sample-with-item"
+         ng-if="!operation.form[ft.role][ft.name].aft.sample_type_id">         
 
   <div class='btn-group' ng-if="show_item_select(ft)">
 
@@ -112,20 +102,30 @@
        href="#">
       <span ng-if="fv.items.length == 0">No Items</span>    
       <span ng-if="fv.items.length > 0 && !fv.item">Item</span>
-      <span ng-if="fv.item">
+      <span ng-if="!ft.part && fv.item">
         <b>{{fv.item.id}}</b>: 
            {{fv.item.location}}
+      </span>
+      <span ng-if="ft.part && fv.item">
+        <b>{{fv.item.collection.id}}</b>[{{fv.item.row}},{{fv.item.column}}]:
+           {{fv.item.collection.location}}
       </span>
       <span class="caret pull-right"></span>
     </a>
 
     <ul class='dropdown-menu' ng-if="fv.items.length > 0">
       <li ng-repeat="item in fv.items">
-        <a href='#' ng-click="select(item)">
+        <a ng-if="!ft.part" href='#' ng-click="select(item)">
           <b>{{item.id}}</b>: 
           {{item.location}}
           ({{item.created_at|date}})
         </a>
+        <a ng-if="ft.part" href='#' ng-click="select(item)">
+          <b>{{item.collection.id}}</b>[{{item.row}},{{item.column}}]:  
+          {{item.collection.location}}
+          ({{item.collection.created_at|date}})
+        </a>
+
       </li>
     </ul>
 

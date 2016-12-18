@@ -31,6 +31,14 @@ class Collection < Item
     return nil
   end
 
+  def self.parts s, ot=nil
+    plist = []
+    Collection.containing(s,ot).reject { |c| c.deleted? }.each do |c|
+      plist << Collection.find(c.id).position(s).merge(collection: c)
+    end
+    return plist
+  end
+
   def self.spread samples, name, rows, cols
 
     samples_per_collection = rows * cols
