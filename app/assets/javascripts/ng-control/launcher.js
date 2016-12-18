@@ -18,7 +18,7 @@
     AQ.get_sample_names().then(() =>  {
       $scope.status = "Loading operation types ...";
       AQ.OperationType.all_with_content().then((operation_types) => {
-        $scope.status = "Determining current user ...";
+        $scope.status = "Getting user information ...";
         AQ.User.current().then((user) => {
           $scope.status = "ready";
           $scope.operation_types = operation_types;

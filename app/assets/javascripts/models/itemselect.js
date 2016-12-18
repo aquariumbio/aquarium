@@ -20,47 +20,40 @@
 
         var ft = $scope.ft,
             fv = $scope.fv,
+            op = $scope.operation,
+            op_type = $scope.operation.operation_type,
             route = $scope.operation.routing;
 
         var autocomp = function(ev,ui) {
 
-          // Called when a sample input is updated. It checks for items
-          // that match the given sample for every non-array input fv whose
-          // routing matches matches the updated fv.
-
+          // Called when a sample input is updated. 
+          
           var sid = AQ.id_from(ui.item.value);
           route[ft.routing] = ui.item.value;
-          
-          aq.each($scope.operation.operation_type.field_types,function(field_type) {
 
-            aq.each($scope.operation.field_values, function(fv) {
+          op.each_input((field_type,field_value) => {
 
-              if ( ( (field_type.array && fv == $scope.fv ) || 
-                    (!field_type.array && field_type.routing == ft.routing ) ) &&
-                   field_type.matches(fv) && 
-                   field_type.role == 'input' && 
-                   $scope.operation.form.input[field_type.name] ) {
+            if ( ( ( field_type.array && field_value == $scope.fv ) || 
+                   (!field_type.array && field_type.routing == ft.routing ) ) &&
+                 op.form.input[ft.name] ) {
 
-                var aft = $scope.operation.form.input[ft.name].aft;
+              var aft = op.form.input[field_type.name].aft;
 
-                if ( aft.object_type_id ) {
+              if ( aft.object_type_id ) {
 
-                  fv.items = [];
-                  fv.item = null;
+                field_value.clear();
 
-                  AQ.items_for(sid,aft.object_type_id).then((items) => {            
-                    if ( items.length > 0 ) {
-                      fv.items = items;
-                      fv.item = items[0];
-                      $scope.$apply();
-                    }
-                  });
-
-                }
+                AQ.items_for(sid,aft.object_type_id).then((items) => {            
+                  if ( items.length > 0 ) {
+                    field_value.items = items;
+                    field_value.item = items[0];
+                    $scope.$apply();
+                  }
+                });
 
               }
 
-            });
+            }
 
           });
 
@@ -97,7 +90,7 @@
               source: AQ.sample_names_for(name),
               select: autocomp
             });
-            fv.items = [];
+            fv.clear();
           }
         });
 
