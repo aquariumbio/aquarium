@@ -1,31 +1,33 @@
-AQ.FieldType.record_methods.sample_type_names = function() {
-  var ft = this;
-  return aq.collect(
-           aq.where(ft.allowable_field_types, function(aft) { return aft.sample_type; }),
-           function(aft) { return aft.sample_type.name; }
-         );
-}
+AQ.FieldType.record_methods = {
 
-AQ.FieldType.record_methods.chosen_sample_type_name = function() {
+  sample_type_names: function() {
+    var ft = this;
+    return aq.collect(
+             aq.where(ft.allowable_field_types, function(aft) { return aft.sample_type; }),
+             function(aft) { return aft.sample_type.name; }
+           );
+  },
 
-  var ft = this;
+  chosen_sample_type_name: function() {
 
-  for ( var i=0; i< ft.allowable_field_types.length; i++ ) {
-    if ( ft.allowable_field_types[i].id == ft.aft_choice ) {
-      if ( ft.allowable_field_types[i].sample_type ) {
-        return ft.allowable_field_types[i].sample_type.name;
-      } else {
-        return null;
+    var ft = this;
+
+    for ( var i=0; i< ft.allowable_field_types.length; i++ ) {
+      if ( ft.allowable_field_types[i].id == ft.aft_choice ) {
+        if ( ft.allowable_field_types[i].sample_type ) {
+          return ft.allowable_field_types[i].sample_type.name;
+        } else {
+          return null;
+        }
       }
     }
+
+    return null;
+
+  },
+
+  matches: function(field_value) {
+    return field_value.role == this.role && field_value.name == this.name;
   }
 
-  return null;
-
-}
-
-AQ.FieldType.record_methods.matches = function(field_value) {
-  return field_value.role == this.role && field_value.name == this.name;
-}
-
-
+};

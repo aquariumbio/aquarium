@@ -17,6 +17,15 @@
     width: 100%;
     margin: 5px;
     padding: 0 0 1px 0;
+
+    .cost {
+      font-weight: normal;
+    }
+
+    .no-cost {
+      font-weight: normal;
+      color: #888;
+    }
     
     .name {
       position: relative;
@@ -125,5 +134,7 @@
     }
 
   }
+
+
 
 }

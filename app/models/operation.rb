@@ -198,12 +198,26 @@ class Operation < ActiveRecord::Base
   end 
 
   def nominal_cost
-    eval(operation_type.code("cost_model").content)
+
+    begin
+      eval(operation_type.code("cost_model").content)
+    rescue Exception => e
+      raise "Could not evaluate cost function definition: " + e.to_s
+    end
+
     temp = self.status
     self.status = "done"
-    c = cost(self)
+
+    begin
+      c = cost(self)
+    rescue Exception => e
+      self.status = temp
+      raise "Could not evaluate cost function on the given operation: " + e.to_s
+    end
+
     self.status = temp
     c
+
   end
 
   def child_data child_name, child_role, data_name

@@ -27,7 +27,9 @@
         var autocomp = function(ev,ui) {
 
           // Called when a sample input is updated. 
-          
+
+          op.update_cost();
+
           var sid = AQ.id_from(ui.item.value);
           route[ft.routing] = ui.item.value;
 
