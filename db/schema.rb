@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20161113203042) do
+ActiveRecord::Schema.define(:version => 20161219172123) do
 
   create_table "account_logs", :force => true do |t|
     t.integer  "row1"
@@ -324,24 +324,8 @@ ActiveRecord::Schema.define(:version => 20161113203042) do
   create_table "sample_types", :force => true do |t|
     t.string   "name"
     t.string   "description"
-    t.string   "field1name"
-    t.string   "field1type"
-    t.string   "field2name"
-    t.string   "field2type"
-    t.string   "field3name"
-    t.string   "field3type"
-    t.string   "field4name"
-    t.string   "field4type"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
-    t.string   "field5name"
-    t.string   "field5type"
-    t.string   "field6name"
-    t.string   "field6type"
-    t.string   "field7name"
-    t.string   "field7type"
-    t.string   "field8name"
-    t.string   "field8type"
     t.text     "datatype"
   end
 
@@ -349,18 +333,10 @@ ActiveRecord::Schema.define(:version => 20161113203042) do
     t.string   "name"
     t.integer  "sample_type_id"
     t.string   "project"
-    t.string   "field1"
-    t.string   "field2"
-    t.string   "field3"
-    t.string   "field4"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
-    t.string   "field5"
-    t.string   "field6"
     t.integer  "user_id"
     t.string   "description"
-    t.string   "field7"
-    t.string   "field8"
     t.text     "data"
   end
 

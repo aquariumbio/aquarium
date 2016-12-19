@@ -11,7 +11,6 @@ class Sample < ActiveRecord::Base
   after_destroy :destroy_fields
 
   attr_accessible :name, :user_id, :project, :sample_type_id, :user_id, :description
-  attr_accessible :field1, :field2, :field3, :field4, :field5, :field7, :field6, :field8 # deprecated
 
   belongs_to :sample_type
   belongs_to :user
@@ -135,21 +134,6 @@ class Sample < ActiveRecord::Base
 
   end
 
-  #################################################################
-  # Old methods for dealing with string valued fields
-
-  def get_property key # deprecated
-    # Look up fields according to sample type field structure
-    st = sample_type
-    (1..8).each do |i|
-      n = "field#{i}name"
-      if st[n] == key
-        return self["field#{i}"]
-      end
-    end
-    return nil
-  end
-
   def in container
 
     c = ObjectType.find_by_name container
@@ -184,86 +168,6 @@ class Sample < ActiveRecord::Base
 
   def num_posts
     self.post_associations.count
-  end
-
-  def lite_properties # deprecated
-
-    st = SampleType.find(sample_type_id) # Note: Not using sample_type here because I don't want to
-                                         # load the association in the case when it hasn't been included
-                                         # by the user's request
-
-    result = {}
-    (1..8).each do |i|
-      n = "field#{i}name"
-      t = "field#{i}type"
-      if st[n] != nil
-        case st[t]
-          when "url", "string"
-            result[st[n]] = self["field#{i}"]
-          when "number"
-            x = self["field#{i}"]
-            if x.to_i == x.to_f
-              result[st[n]] = x.to_i
-            else
-              result[st[n]] = x.to_f
-            end
-          else
-            s = Sample.find_by_name( self["field#{i}"] )
-            if s
-              result[st[n]] = s.id
-            else
-              result[st[n]] = nil
-            end
-          end
-      end
-    end
-    return result
-  end
-
-  @@sample_types = false
-
-  def really_lite_properties
-
-    unless @@sample_types
-      @@sample_types = []
-      sts = SampleType.all.each do |st|
-        @@sample_types[st.id] = st
-      end
-    end
-
-    st = @@sample_types[self.sample_type_id]
-
-    result = {}
-    (1..8).each do |i|
-      n = "field#{i}name"
-      t = "field#{i}type"
-      if st[n] != nil
-        case st[t]
-          when "url", "string"
-            result[st[n]] = self["field#{i}"]
-          when "number"
-            x = self["field#{i}"]
-            if x.to_i == x.to_f
-              result[st[n]] = x.to_i
-            else
-              result[st[n]] = x.to_f
-            end
-          else
-            result[st[n]] = self["field#{i}"]
-          end
-      end
-    end
-    return result
-  end
-
-  def export
-    a = attributes
-    a[:fields] = self.really_lite_properties
-    (1..8).each do |i|
-      a.delete "field#{i}"
-    end
-    a[:sample_type] = sample_type.export if association(:sample_type).loaded?
-    a
   end
 
   def self.okay_to_drop? sample, user

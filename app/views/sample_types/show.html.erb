@@ -15,19 +15,6 @@
 
 <%= render partial: 'fields', locals: { sample_type: @sample_type } %>
 
-<h3>Old Fields</h3>
-
-<ul class='list'>
-  <li></li>
-  <% (1..8).each do |i| %>
-    <% fn = "field#{i}name".to_sym
-       ft = "field#{i}type".to_sym %>
-    <% if @sample_type[ft] != 'not used' && @sample_type[ft] != nil %>
-      <li><b><%= @sample_type[fn] %></b>: <%= @sample_type[ft] %></li>
-    <% end %>
-  <% end %>
-</ul>
-
 <h3>Containers</h3>
 
 <ul class='list'>
