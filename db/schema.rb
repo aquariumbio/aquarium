@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20161219172123) do
+ActiveRecord::Schema.define(:version => 20161219172133) do
 
   create_table "account_logs", :force => true do |t|
     t.integer  "row1"
@@ -326,7 +326,6 @@ ActiveRecord::Schema.define(:version => 20161219172123) do
     t.string   "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
-    t.text     "datatype"
   end
 
   create_table "samples", :force => true do |t|

@@ -5,5 +5,6 @@ class DropStaticFields < ActiveRecord::Migration
       remove_column :sample_types, "field#{i}type".to_sym
       remove_column :samples, "field#{i}".to_sym    
     end
+    remove_column :sample_types, :datatype
   end
 end
