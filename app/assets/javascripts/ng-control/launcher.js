@@ -14,26 +14,38 @@
     AQ.init($http);
 
     $scope.status = "Loading sample names ...";
+    $scope.plan = null;
 
     AQ.get_sample_names().then(() =>  {
       $scope.status = "Loading operation types ...";
       AQ.OperationType.all_with_content().then((operation_types) => {
         $scope.status = "Getting user information ...";
         AQ.User.current().then((user) => {
-          $scope.status = "ready";
+          $scope.status = "Ready";
           $scope.operation_types = operation_types;
           $scope.current_user = user;
-          // $scope.select($scope.operation_types[5])
+          $scope.mode = 'new-plan';
         });
       });
     });
 
     $scope.select = function(operation_type) {
-      $scope.operation = new AQ.Record(AQ.Operation,{
+
+      var op = AQ.Operation.record({
         routing: {},
         form: { input: {}, output: {} }
       });
-      $scope.operation.set_type(operation_type);
+
+      op.set_type(operation_type);
+
+      $scope.plan = AQ.Plan.record({
+        operations: [ op ]
+      });
+
+    }
+
+    $scope.clear_plan = function() {
+      $scope.plan = null;
     }
 
     $scope.set_aft = function(op,ft,aft) {
@@ -44,6 +56,14 @@
           fv = { aft: aft, aft_id: aft.id, items: [] };
         }
       });
+    }
+
+    $scope.highlight = function(m) {
+      var c = "";
+      if ( m == $scope.mode ) {
+        c += "highlight";
+      }
+      return c;
     }
 
   }]);

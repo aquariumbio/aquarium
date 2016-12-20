@@ -1,13 +1,19 @@
 <script type="text/ng-template" id="operation_type_chooser">
 
-  <h4>Choose Goal Operation Type</h4>
+  {{categories}}
 
-  <ul>
-    <li ng-repeat="operation_type in operation_types">
-      <a href='#' ng-click="select(operation_type)">
-        {{operation_type.name}} 
-      </a>
-    </li>
-  </ul>
+  <div ng-repeat="category in operation_types.categories" class='category'>
+
+    <h4>{{category}}</h4>
+
+    <ul>
+      <li ng-repeat="operation_type in operation_types | filter : { category: category }">
+        <a href='#' ng-click="select(operation_type)">
+          {{operation_type.name}} 
+        </a>
+      </li>
+    </ul>
+
+  </div>
 
 </script>

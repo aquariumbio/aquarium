@@ -8,6 +8,10 @@ AQ.Base.prototype.super = function(name) {
   return base.__proto__[name].apply(base,arguments);
 }
 
+AQ.Base.prototype.record = function(extras) {
+  return new AQ.Record(this,extras);
+}
+
 AQ.Base.prototype.find = function(id) {
   var base = this;
   return new Promise(function(resolve,reject) {

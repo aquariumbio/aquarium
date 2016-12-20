@@ -3,28 +3,36 @@
 <div ng-app="aquarium" ng-controller="launcherCtrl as launcher" class='launcher'>
 
   <%= render partial: 'chooser' %>
-  <%= render partial: 'editor' %>
+  <%= render partial: 'plan_editor' %>  
+  <%= render partial: 'operation_editor' %>
+  <%= render partial: 'io_editor' %>
 
   <div class='two-column'>
 
     <div class='two-column-left'>
       <div class='two-column-control'>
-        <h4>Control</h4>
-        <a href="#" class='btn btn-primary'>Launch</a>
-      </div>
-      <div class='two-column-control'>
         <h4>Plans</h4>
+        <ul>
+          <li><a href="#" ng-click="mode = 'new-plan'"        ng-class="highlight('new-plan')">New</a></li>
+          <li><a href="#" ng-click="mode = 'running-plans'"   ng-class="highlight('running-plans')">Running</a></li>
+          <li><a href="#" ng-click="mode = 'completed-plans'" ng-class="highlight('completed-plans')">Completed</a></li>      
+          <li><a href="#" ng-click="mode = 'errored-plans'"   ng-class="highlight('errored-plans')">Errors</a></li>       
+        </ul>
+
       </div>      
+      <div class='two-column-control' ng-if="status != 'Ready'"><b>{{status}}</b></div>
     </div>
 
     <div class='two-column-right'>
 
-      <div ng-if="status != 'ready'">{{status}}</div>
-
-      <div ng-if="status == 'ready'">
-        <div ng-if="!operation.operation_type_id" ng-include="'operation_type_chooser'"></div> 
-        <div ng-if="operation.operation_type_id" ng-include="'operation_editor'"></div> 
+      <div ng-if="status == 'Ready' && mode == 'new-plan'">
+        <div ng-if="plan == null" ng-include="'operation_type_chooser'"></div> 
+        <div ng-if="plan != null" ng-include="'plan_editor'"></div> 
       </div>
+
+      <div ng-if="status == 'Ready' && mode != 'new-plan'">
+        {{mode}}
+      </div>      
 
     </div>
 

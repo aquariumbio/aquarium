@@ -1,0 +1,31 @@
+<script type="text/ng-template" id="operation_editor">
+
+  <!-- Displays an operation editor, allowing the user to enter the samples and items
+       needed to add the operation to a plan and launch it -->
+
+  <div class='operation'>
+
+    <div class='outputs' ng-if="operation.operation_type.num_outputs() > 0">
+      <div ng-repeat="ft in operation.operation_type.field_types | filter: { role: 'output', ftype: 'sample' }"
+           ng-include="'io_editor'"></div>
+    </div>
+
+    <div class='name'>
+      <div class='arrow'>&ldsh;</div>
+      <span>{{operation.operation_type.name}}:</span>
+      <span class='no-cost' ng-if='!operation.cost'>Cost undetermined</span>      
+      <span class='cost' ng-if='operation.cost'>{{operation.cost|currency}}</span>
+      <div class='cancel'>
+        <a href="#" ng-click="operation.clear()">&times;</a>
+      </div> 
+    </div>  
+
+    <div class='inputs' ng-if="operation.operation_type.num_inputs() > 0">
+      <div class='arrow'>&ldsh;</div>
+      <div ng-repeat="ft in operation.operation_type.field_types | filter: { role: 'input', ftype: 'sample' }"
+           ng-include="'io_editor'"></div>
+    </div>
+
+  </div>
+
+</script>

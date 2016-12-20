@@ -140,6 +140,3 @@ class ObjectType < ActiveRecord::Base
   end
 
 end
-
-
- 

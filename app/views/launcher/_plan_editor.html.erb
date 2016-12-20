@@ -1,0 +1,12 @@
+<script type="text/ng-template" id="plan_editor">
+
+  <div>
+    <a href="#" class='btn btn-small btn-primary pull-right'>Launch</a>
+    <a href="#" class='btn btn-small pull-right' ng-click="clear_plan()">Cancel</a>
+  </div>
+
+  <br /><hr />
+
+  <div ng-repeat="operation in plan.operations" ng-include="'operation_editor'"></div>
+
+</script>
