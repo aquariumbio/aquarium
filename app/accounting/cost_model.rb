@@ -19,7 +19,7 @@ module CostModel
           end
         }
         { 
-          materials: primer_costs.inject{|sum,x| sum+x },
+          materials: primer_costs.inject{|sum,x| sum+x } * 1.096,
           labor: 0.79
         }
 
@@ -182,7 +182,7 @@ module CostModel
       # All the yeast mating task are single sample.
       # Even the yeast_mating_strain_ids is an array of size two, they are counted as single sample.
 
-      when ["yeast_mating","mating"]         then basic(:single_sample,2.16,7.37)
+      when ["yeast_mating","mating"]         then basic(:single_sample,2.94,10.27)
       when ["streak_yeast_plate","streaked"] then basic(:single_sample,0.39,7.4)
       
       # YEAST CYTOMETRY ####################################################################################
