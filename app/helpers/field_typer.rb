@@ -8,8 +8,8 @@ module FieldTyper
     FieldType.includes(allowable_field_types: :sample_type).where(parent_class: self.class.to_s, parent_id: self.id)
   end
 
-  def type name
-    self.field_types.find { |ft| ft.name == name }
+  def type name, role=nil
+    self.field_types.find { |ft| ft.name == name && ( !role || ft.role == role ) }
   end
 
   def save_field_types raw_field_types

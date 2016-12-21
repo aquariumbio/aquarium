@@ -14,12 +14,15 @@ AQ.Operation.record_methods.set_type = function(operation_type) {
     op.field_values.push(fv);
   });
 
+  return this;
+
 }
 
 AQ.Operation.record_methods.clear = function() {
   delete this.operation_type_id;
   delete this.operation_type;
   delete this.allowable_field_types;
+  return this;
 }
 
 AQ.Operation.record_methods.array_remove = function(fv) {
@@ -32,6 +35,7 @@ AQ.Operation.record_methods.array_remove = function(fv) {
 
   this.field_values.splice(j,1);
   this.update_cost();
+  return this;
 
 }
 
@@ -50,8 +54,8 @@ AQ.Operation.record_methods.array_add = function(field_type) {
   }
 
   this.field_values.push(fv);
-
   this.update_cost();
+  return this;
 
 }
 
@@ -67,6 +71,8 @@ AQ.Operation.record_methods.each_field = function(callback) {
     });
   });
 
+  return this;
+
 }
 
 AQ.Operation.record_methods.each_input = function(callback) {
@@ -75,6 +81,8 @@ AQ.Operation.record_methods.each_input = function(callback) {
       callback(ft,fv);
     }
   })
+  return this;
+
 }
 
 AQ.Operation.record_methods.each_output = function(callback) {
@@ -83,6 +91,8 @@ AQ.Operation.record_methods.each_output = function(callback) {
       callback(ft,fv);
     }
   })
+  return this;
+
 }
 
 AQ.Operation.record_methods.update_cost = function() {
@@ -92,8 +102,9 @@ AQ.Operation.record_methods.update_cost = function() {
   AQ.post('/launcher/cost',op).then((result) => {
     op.cost = result.data.cost;
   }).catch( (problem) => {
-    console.log(problem.data);
   });
+
+  return this;
 
 }
 

@@ -16,7 +16,7 @@
     vertical-align: top; 
     margin: 0 8px 5px 5px; 
     border: 1pt solid #bbb; 
-    padding: 10px;
+    padding: 10px 20px 10px 10px;
   }
 
   .highlight {
@@ -150,5 +150,9 @@
   .btn-small {
     margin: 5px;
   }
+
+  .capitalize {
+     text-transform: capitalize;
+  }  
 
 }

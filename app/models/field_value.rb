@@ -11,6 +11,30 @@ class FieldValue < ActiveRecord::Base
 
   attr_accessible :name, :child_item_id, :child_sample_id, :value, :role, :field_type_id, :item, :row, :column
 
+  validate :valid
+
+  def valid
+
+    unless field_type_id
+      errors.add(:field_type, "No field type specified for #{role} '#{name}'")
+      return false
+    end
+
+    if field_type.ftype == 'sample'
+
+      Rails.logger.info "--------------------- #{child_item_id}"
+
+      unless child_sample_id
+        errors.add(:child_sample, "No sample specified for #{role} '#{name}'")
+        return false
+      end
+
+    end
+
+    return true
+
+  end
+
   def sample
     child_sample
   end

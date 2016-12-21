@@ -21,31 +21,46 @@
       AQ.OperationType.all_with_content().then((operation_types) => {
         $scope.status = "Getting user information ...";
         AQ.User.current().then((user) => {
-          $scope.status = "Ready";
-          $scope.operation_types = operation_types;
-          $scope.current_user = user;
-          $scope.mode = 'new-plan';
+          $scope.status = "Retrieving plans ...";
+          AQ.Plan.where({user_id: user.id},{methods: ['status']}).then((plans) => {
+            $scope.status = "Ready";
+            $scope.operation_types = operation_types;
+            $scope.current_user = user;
+            $scope.plans = plans.reverse();            
+            $scope.mode = 'new';
+            $scope.$apply();
+          });
         });
       });
     });
 
     $scope.select = function(operation_type) {
 
-      var op = AQ.Operation.record({
-        routing: {},
-        form: { input: {}, output: {} }
-      });
-
-      op.set_type(operation_type);
-
       $scope.plan = AQ.Plan.record({
-        operations: [ op ]
+        operations: [ 
+          AQ.Operation.record({
+            routing: {},
+            form: { input: {}, output: {} }
+          }).set_type(operation_type)
+        ]
       });
 
     }
 
     $scope.clear_plan = function() {
       $scope.plan = null;
+    }
+
+    $scope.submit_plan = function() {
+      $scope.plan.submit().then((plan) => {
+        $scope.clear_plan();
+        $scope.mode = 'running';
+        $scope.plans.unshift(plan);
+        $scope.$apply();
+        console.log("Plan submitted!");
+      }).catch((error) => {
+        console.log("Error");
+      });
     }
 
     $scope.set_aft = function(op,ft,aft) {

@@ -6,10 +6,12 @@ class Plan < ActiveRecord::Base
 
   has_many :plan_associations
   has_many :operations, through: :plan_associations
+  belongs_to :user
 
   def start
 
     gs = goals_plain
+
     issues = gs.collect { |g| g.issues }.flatten
 
     if issues.empty?
@@ -30,7 +32,8 @@ class Plan < ActiveRecord::Base
       []
 
     else
-      issues
+      Rails.logger.info "Plan has issues: #{issues}"
+      errors.add :start_plan, issues.to_s
     end
 
   end
@@ -90,10 +93,6 @@ class Plan < ActiveRecord::Base
       else
         op.deactivate
       end
-    end
-
-    unless operation.errors.empty? 
-      puts "################ #{operation.errors.full_messages.join(', ')}"
     end
 
   end

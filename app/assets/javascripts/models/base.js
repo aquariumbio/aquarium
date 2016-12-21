@@ -17,7 +17,7 @@ AQ.Base.prototype.find = function(id) {
   return new Promise(function(resolve,reject) {
     AQ.post('/json',{model: base.model, id: id}).then(
       (response) => {
-        resolve(new AQ.Record(base,response.data));
+        resolve(base.record(response.data));
       },(response) => {
         reject(response.data.errors);
       }
@@ -30,7 +30,7 @@ AQ.Base.prototype.find_by_name = function(name) {
   return new Promise(function(resolve,reject) {  
     AQ.post('/json',{model: base.model, method: 'find_by_name', arguments: [ name ] }).then(
       (response) => {
-        resolve(new AQ.Record(base,response.data));
+        resolve(base.record(response.data));
       },(response) => {
         reject(response.data.errors);
       }
@@ -42,14 +42,13 @@ AQ.Base.prototype.array_query = function(method,arguments,rest) {
 
   var base = this;
   var query = { model: base.model, method: method, arguments: arguments };
-  var more = rest ? rest : {};
 
   return new Promise(function(resolve,reject) {
     AQ.post('/json',$.extend(query,rest)).then(
       (response) => {
         var records = [];
         for (var i=0; i<response.data.length; i++ ) {
-          records.push(new AQ.Record(base,response.data[i]));
+          records.push(base.record(response.data[i]));
         }
         resolve(records);
       },(response) => {
@@ -64,8 +63,8 @@ AQ.Base.prototype.all = function() {
   return this.array_query('all',[]);
 }
 
-AQ.Base.prototype.where = function(criteria) {
-  return this.array_query('where',criteria);
+AQ.Base.prototype.where = function(criteria,methods={}) {
+  return this.array_query('where',criteria,methods);
 }
 
 AQ.Base.prototype.exec = function(method, arguments) {
@@ -83,7 +82,7 @@ AQ.Base.prototype.new = function() {
   return new Promise(function(resolve,reject) {    
     AQ.post('/json',{model: base.model, method: 'new'}).then(
       (response) => {
-        resolve(new AQ.Record(base,response.data));
+        resolve(base.record(response.data));
       }, (response) => {
         reject(response.data.errors);
       }

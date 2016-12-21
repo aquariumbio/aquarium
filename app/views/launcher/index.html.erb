@@ -6,6 +6,7 @@
   <%= render partial: 'plan_editor' %>  
   <%= render partial: 'operation_editor' %>
   <%= render partial: 'io_editor' %>
+  <%= render partial: 'plan_list' %>  
 
   <div class='two-column'>
 
@@ -13,10 +14,10 @@
       <div class='two-column-control'>
         <h4>Plans</h4>
         <ul>
-          <li><a href="#" ng-click="mode = 'new-plan'"        ng-class="highlight('new-plan')">New</a></li>
-          <li><a href="#" ng-click="mode = 'running-plans'"   ng-class="highlight('running-plans')">Running</a></li>
-          <li><a href="#" ng-click="mode = 'completed-plans'" ng-class="highlight('completed-plans')">Completed</a></li>      
-          <li><a href="#" ng-click="mode = 'errored-plans'"   ng-class="highlight('errored-plans')">Errors</a></li>       
+          <li><a href="#" ng-click="mode = 'new'"       ng-class="highlight('new')">New</a></li>
+          <li><a href="#" ng-click="mode = 'running'"   ng-class="highlight('running')">Running</a></li>
+          <li><a href="#" ng-click="mode = 'completed'" ng-class="highlight('completed')">Completed</a></li>      
+          <li><a href="#" ng-click="mode = 'errored'"   ng-class="highlight('errored')">Errors</a></li>       
         </ul>
 
       </div>      
@@ -25,13 +26,13 @@
 
     <div class='two-column-right'>
 
-      <div ng-if="status == 'Ready' && mode == 'new-plan'">
+      <div ng-if="status == 'Ready' && mode == 'new'">
         <div ng-if="plan == null" ng-include="'operation_type_chooser'"></div> 
         <div ng-if="plan != null" ng-include="'plan_editor'"></div> 
       </div>
 
-      <div ng-if="status == 'Ready' && mode != 'new-plan'">
-        {{mode}}
+      <div ng-if="status == 'Ready' && mode != 'new'"
+           ng-include="'plan_list'">
       </div>      
 
     </div>

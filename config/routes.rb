@@ -5,6 +5,7 @@ Bioturk::Application.routes.draw do
   post '/json',                    to: 'json#index'
 
   post '/launcher/cost',                         to: 'launcher#cost'
+  post '/launcher/submit',                       to: 'launcher#submit'  
   get '/launcher',                               to: 'launcher#index'
 
   get '/plans/:pid/select/:oid',                 to: 'plans#select'
