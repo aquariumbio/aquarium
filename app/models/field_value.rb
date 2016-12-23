@@ -201,7 +201,18 @@ class FieldValue < ActiveRecord::Base
   end
 
   def as_json(options={})
-    super(include: [ :child_sample, allowable_field_type: { include: [ :object_type, :sample_type ]} ], methods: [ :wires_as_source, :wires_as_dest ] )
+    # , methods: [ :wires_as_source, :wires_as_dest ] 
+    super( include: [ 
+      :child_sample, 
+      :wires_as_source, 
+      :wires_as_dest, 
+      allowable_field_type: { 
+        include: [ 
+          :object_type, 
+          :sample_type 
+        ]
+      } 
+    ] )
   end
 
   def export

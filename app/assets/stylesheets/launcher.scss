@@ -155,4 +155,38 @@
      text-transform: capitalize;
   }  
 
+  .plan-list {
+
+    width: 100%;
+    border-top: 1pt solid #eee;
+    padding: 5px;
+
+    .id {
+      width: 100px;
+      display: inline-block;      
+    }
+
+    .name, .sample, .status, .date { 
+      display: inline-block;
+    }
+
+    .name, .status, .date { 
+      width: calc(20% - 30px);  
+    }  
+
+    .sample {
+      width: calc(40% - 30px);  
+    }
+
+    .heading {
+      font-weight: bold;
+    }
+
+
+  }
+
+  .no-line {
+    border-top: none;
+  }  
+
 }

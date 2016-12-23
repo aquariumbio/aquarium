@@ -93,13 +93,33 @@ class LauncherController < ApplicationController
       plan.start
 
       if plan.errors.empty?
-        render json: plan.as_json(methods: [ 'status' ] )
+        render json: plan.as_json(include: { operations: { include: :operation_type, methods: [ 'field_values' ] } } )
       else
         render json: { errors: "Could not start plan. " + plan.errors.full_messages.join(", ") }, status: 422        
         raise ActiveRecord::Rollback
       end
 
     end
+
+  end
+
+  def plans
+
+    plans = Plan
+      .includes(operations: :operation_type)
+      .where(user_id: current_user.id)
+      .order('created_at DESC')
+      .limit(15)
+
+    oids = plans.collect { |p| p.operations.collect { |o| o.id } }.flatten
+    field_values = FieldValue
+      .includes(:child_sample, :wires_as_dest, :wires_as_source, field_type: { allowable_field_types: [ :sample_type, :object_type ] })
+      .where(parent_class: "Operation", parent_id: oids)
+
+    render json: { 
+      plans: plans.reverse.as_json(include: { operations: { include: :operation_type } } ),
+      field_values: field_values
+    }
 
   end
 

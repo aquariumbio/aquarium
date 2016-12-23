@@ -1,11 +1,47 @@
 <script type="text/ng-template" id="plan_list">
 
-  <h4 class="capitalize">{{mode}} Plans</h4>
+  <div class="plan-list no-line">
 
-  <ul>
-    <li ng-repeat="plan in plans">
-      {{plan.id}}: {{plan}}
-    </li>
-  </ul>
+    <span class='id heading'>ID</span>
+    <span class='name heading'>Goal</span>     
+    <span class='sample heading'>Output Sample(s)</span>
+    <span class='status heading'>Status</span>
+    <span class='date heading'>Date Launched</span>
+
+  </div>
+
+  <div ng-repeat="plan in plans" class="plan-list">
+
+    <span class='id'>{{plan.id}}</span>
+    <span class='name'>{{plan.operations[0].operation_type.name}}</span>     
+    <span class='sample'>{{plan.operations[0].field_values[0].child_sample.name}}</span>
+    <span class='status'>
+      <span ng-repeat="op in plan.operations">
+        {{op.status}} <span ng-if="!$last">,</span>
+      </span>
+    </span>
+    <span  class='date'>{{plan.created_at|date}}</span>
+
+    <ul ng-if="plan.open">
+      <li ng-repeat="operation in plan.operations track by $index">
+        {{operation.id}}: {{operation.operation_type.name}}: {{operation.status}}
+        <ul>
+          <li>Output
+            <ul>
+              <li ng-repeat="fv in operation.field_values | filter : { role: 'output' }">{{fv.name}} ({{fv.role}}): {{fv.child_sample.name}}</li>
+            </ul>
+          </li>
+          <li>Input
+            <ul>
+              <li ng-repeat="fv in operation.field_values | filter : { role: 'output' }">{{fv.name}} ({{fv.role}}): {{fv.child_sample.name}}</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <!-- <pre>{{plan|json}}</pre> -->
+  </div>
+
 
 </script>

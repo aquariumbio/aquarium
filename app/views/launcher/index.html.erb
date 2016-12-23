@@ -12,16 +12,20 @@
 
     <div class='two-column-left'>
       <div class='two-column-control'>
-        <h4>Plans</h4>
+        <h4>Launcher</h4>
         <ul>
-          <li><a href="#" ng-click="mode = 'new'"       ng-class="highlight('new')">New</a></li>
-          <li><a href="#" ng-click="mode = 'running'"   ng-class="highlight('running')">Running</a></li>
-          <li><a href="#" ng-click="mode = 'completed'" ng-class="highlight('completed')">Completed</a></li>      
-          <li><a href="#" ng-click="mode = 'errored'"   ng-class="highlight('errored')">Errors</a></li>       
+          <li><a href="#" ng-click="mode = 'running'"   ng-class="highlight('running')">Workflow List</a></li>
+          <li><a href="#" ng-click="mode = 'new'"       ng-class="highlight('new')">New Workflow</a></li>
         </ul>
-
       </div>      
+
       <div class='two-column-control' ng-if="status != 'Ready'"><b>{{status}}</b></div>
+
+      <div class='two-column-control alert alert-error' ng-if="error != null">
+        <h4>Error</h4>
+        {{error}}
+      </div>
+
     </div>
 
     <div class='two-column-right'>

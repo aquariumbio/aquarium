@@ -15,6 +15,7 @@
 
     $scope.status = "Loading sample names ...";
     $scope.plan = null;
+    $scope.error = null;
 
     AQ.get_sample_names().then(() =>  {
       $scope.status = "Loading operation types ...";
@@ -22,12 +23,12 @@
         $scope.status = "Getting user information ...";
         AQ.User.current().then((user) => {
           $scope.status = "Retrieving plans ...";
-          AQ.Plan.where({user_id: user.id},{methods: ['status']}).then((plans) => {
+          AQ.Plan.list().then((plans) => {
             $scope.status = "Ready";
             $scope.operation_types = operation_types;
             $scope.current_user = user;
             $scope.plans = plans.reverse();            
-            $scope.mode = 'new';
+            $scope.mode = 'running';
             $scope.$apply();
           });
         });
@@ -52,14 +53,15 @@
     }
 
     $scope.submit_plan = function() {
+      $scope.error = null;
       $scope.plan.submit().then((plan) => {
         $scope.clear_plan();
         $scope.mode = 'running';
         $scope.plans.unshift(plan);
         $scope.$apply();
-        console.log("Plan submitted!");
       }).catch((error) => {
-        console.log("Error");
+        $scope.error = error;
+        $scope.$apply();
       });
     }
 
