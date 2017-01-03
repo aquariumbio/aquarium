@@ -13,7 +13,7 @@ First, open up the banner HTML file (https://github.com/klavinslab/aquarium/tree
 </div>
 ```
 
-You can format the announcement using any standard HTML tags, attributs, etc. However, a single <h3> and <p> is the current standard.
+You can format the announcement using any standard HTML tags, attributs, etc. However, a single `<h3>` and `<p>` is the current standard.
 
 Once you've written the announcement and committed the change to GitHub, kindly ask Eric to restart the production server.
 
