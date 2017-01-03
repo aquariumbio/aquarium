@@ -6,10 +6,12 @@ Creating a new announcement
 
 First, open up the banner HTML file (https://github.com/klavinslab/aquarium/tree/master/app/views/layouts/_banner.html.erb). The content of the banner takes the following form:
 
-	<div class='banner'>
-	  <h3>[Announcement Title]</h3>
-	  <p>[Announcement Description]</p>
-	</div>
+```html
+<div class='banner'>
+  <h3>[Announcement Title]</h3>
+  <p>[Announcement Description]</p>
+</div>
+```
 
 You can format the announcement using any standard HTML tags, attributs, etc. However, a single <h3> and <p> is the current standard.
 
@@ -20,12 +22,14 @@ Removing an announcement
 
 To remove an announcement, simply comment it out, using `<!-- -->` as in
 
-	<!-- mm/dd/yy
-	<div class='banner'>
-	  <h3>[Announcement Title]</h3>
-	  <p>[Announcement Description]</p>
-	</div>
-	-->
+```html
+<!-- mm/dd/yy
+<div class='banner'>
+  <h3>[Announcement Title]</h3>
+  <p>[Announcement Description]</p>
+</div>
+-->
+```
 
 Commenting out old announcements and stamping them with the date of removal will serve to log old announcements.
 
