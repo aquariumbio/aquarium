@@ -159,30 +159,66 @@
 
     width: 100%;
     border-top: 1pt solid #eee;
-    padding: 5px;
+    margin: 5px 0 5px 0;
+    padding: 5px 0 0 0;
 
-    .id {
-      width: 100px;
-      display: inline-block;      
-    }
-
-    .name, .sample, .status, .date { 
+    .opener, .name, .sample, .status, .date { 
       display: inline-block;
+      vertical-align: top;     
+      /*outline: 1pt dashed orange;*/
+      margin: 0px;
+      border: none;
     }
 
-    .name, .status, .date { 
-      width: calc(20% - 30px);  
+    .opener {
+      width: 20px;
+      cursor: pointer;
+    }    
+
+    .name { 
+      width: calc(18% - 36px);  
     }  
 
+    .status, .date { 
+      width: 10%;
+    }      
+
     .sample {
-      width: calc(40% - 30px);  
+      width: 62%;
     }
 
-    .heading {
-      font-weight: bold;
+    .header {
+      text-align: left;
     }
 
+  }
 
+  .op-list {
+
+    width: 100%;
+    border-top: 1pt solid #eee;
+    margin: 5px 0 5px 0;
+    padding: 5px 0 0 0;
+
+    .opener, .name, .controls, .status {
+      display: inline-block;
+      vertical-align: top;   
+      /*outline: 1pt dashed green;*/
+    }    
+    .opener {
+      width: 20px;
+      margin-left: 20px;
+      cursor: pointer;      
+    }
+    .name {
+      width: calc(18% - 56px);        
+    }
+    .controls {
+      width: 62%;      
+    }    
+    .status {
+      width: 20%; 
+    }
   }
 
   .no-line {

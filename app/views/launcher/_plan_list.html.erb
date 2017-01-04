@@ -2,45 +2,29 @@
 
   <div class="plan-list no-line">
 
-    <span class='id heading'>ID</span>
-    <span class='name heading'>Goal</span>     
-    <span class='sample heading'>Output Sample(s)</span>
+    <span class="opener"></span>
+    <span class='name heading'>Plan: Goal</span>     
+    <span class='sample heading'>Output Sample</span>
     <span class='status heading'>Status</span>
-    <span class='date heading'>Date Launched</span>
+    <span class='date heading'>Date</span>
 
   </div>
 
   <div ng-repeat="plan in plans" class="plan-list">
 
-    <span class='id'>{{plan.id}}</span>
-    <span class='name'>{{plan.operations[0].operation_type.name}}</span>     
-    <span class='sample'>{{plan.operations[0].field_values[0].child_sample.name}}</span>
-    <span class='status'>
-      <span ng-repeat="op in plan.operations">
-        {{op.status}} <span ng-if="!$last">,</span>
-      </span>
+    <span opener="plan.open" class="opener"></span>
+    <span class='name'>{{plan.id}}: {{plan.operations[0].operation_type.name}}</span>     
+    <span class='sample'>
+      <div ng-repeat="fv in plan.operations[0].field_values | filter : { role: 'output' }">
+        {{fv.name}}: {{fv.child_sample.name}}
+      </div>
     </span>
-    <span  class='date'>{{plan.created_at|date}}</span>
+    <span class='status'>{{plan.operations[0].status}}</span>
+    <span class='date'>{{plan.created_at|date}}</span><br/>
 
-    <ul ng-if="plan.open">
-      <li ng-repeat="operation in plan.operations track by $index">
-        {{operation.id}}: {{operation.operation_type.name}}: {{operation.status}}
-        <ul>
-          <li>Output
-            <ul>
-              <li ng-repeat="fv in operation.field_values | filter : { role: 'output' }">{{fv.name}} ({{fv.role}}): {{fv.child_sample.name}}</li>
-            </ul>
-          </li>
-          <li>Input
-            <ul>
-              <li ng-repeat="fv in operation.field_values | filter : { role: 'output' }">{{fv.name}} ({{fv.role}}): {{fv.child_sample.name}}</li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ul>
+    <div ng-if="plan.open" ng-include="'plan_viewer'">
+    </div>
 
-    <!-- <pre>{{plan|json}}</pre> -->
   </div>
 
 

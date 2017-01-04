@@ -27,7 +27,8 @@
             $scope.status = "Ready";
             $scope.operation_types = operation_types;
             $scope.current_user = user;
-            $scope.plans = plans.reverse();            
+            $scope.plans = plans.reverse();
+            aq.each($scope.plans, (plan)=> { plan.link_operation_types($scope.operation_types) });
             $scope.mode = 'running';
             $scope.$apply();
           });
@@ -79,6 +80,14 @@
       var c = "";
       if ( m == $scope.mode ) {
         c += "highlight";
+      }
+      return c;
+    }
+
+    $scope.op_mode = function(op,m) {
+      var c = "btn btn-mini";
+      if ( op.mode == m ) {
+        c += " btn-primary";
       }
       return c;
     }

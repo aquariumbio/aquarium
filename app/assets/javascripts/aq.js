@@ -148,6 +148,15 @@ Aq.prototype.where = function(array,f) {
   return result;
 }
 
+Aq.prototype.find = function(array,f) {
+  var results = this.where(array,f);
+  if ( results.length > 0 ) {
+    return results[0];
+  } else {
+    return undefined;
+  }
+}
+
 Aq.prototype.remove = function(array,element) {
   var i = array.indexOf(element);
   if ( i > -1 ) {

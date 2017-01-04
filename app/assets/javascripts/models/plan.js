@@ -14,6 +14,16 @@ AQ.Plan.record_methods.submit = function() {
 
 }
 
+AQ.Plan.record_methods.link_operation_types = function(operation_types) {
+
+  aq.each(this.operations,(operation) => {
+    operation.operation_type = aq.find(operation_types,(ot) => { 
+      return ot.id == operation.operation_type.id 
+    } );
+  });
+
+}
+
 AQ.Plan.list = function(user) {
 
   return new Promise(function(resolve,reject) {

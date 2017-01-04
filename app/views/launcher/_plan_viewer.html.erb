@@ -1,0 +1,32 @@
+<script type="text/ng-template" id="op_io">
+  <ul class='well'>
+  <li ng-repeat="field_type in operation.operation_type.field_types | filter: { role: 'input' }">
+    {{field_type.name}}
+  </li>
+  <li ng-repeat="field_type in operation.operation_type.field_types | filter: { role: 'output' }">
+    {{field_type.name}}
+  </li>  
+  </ul>
+</script>
+
+<script type="text/ng-template" id="op_data">
+  <div class='well'>DATA</div>
+</script>
+
+<script type="text/ng-template" id="plan_viewer">
+
+  <div ng-repeat="operation in plan.operations" class='op-list' ng-init="operation.mode = 'io'">
+    <div class='header'>
+      <span opener="operation.open" class="opener"></span>
+      <span class='name'>{{operation.id}}: {{operation.operation_type.name}}</span>
+      <span class='controls'>
+        <a ng-if="operation.open" ng-class="op_mode(operation,'io')" ng-click="operation.mode = 'io'">I/O</a>
+        <a ng-if="operation.open" ng-class="op_mode(operation,'data')" ng-click="operation.mode = 'data'">Data</a>        
+      </span>
+      <span class='status'>{{operation.status}}</span>
+    </div>
+    <div class='body' ng-if="operation.open && operation.mode == 'io'" ng-include="'op_io'"></div>
+    <div class='body' ng-if="operation.open && operation.mode == 'data'" ng-include="'op_data'"></div>    
+  </div>
+
+</script>
