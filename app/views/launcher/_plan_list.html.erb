@@ -1,28 +1,21 @@
 <script type="text/ng-template" id="plan_list">
 
-  <div class="plan-list no-line">
+  <div ng-repeat="plan in plans" class="rel">
 
-    <span class="opener"></span>
-    <span class='name heading'>Plan: Goal</span>     
-    <span class='sample heading'>Output Sample</span>
-    <span class='status heading'>Status</span>
-    <span class='date heading'>Date</span>
+    <div class='spanner-row border-top'>
 
-  </div>
+      <span class='spanner-cell' opener="plan.open" class="opener"></span>
+      <spanner w=18>{{plan.id}}: {{plan.operations[0].operation_type.name}}</spanner>     
+      <spanner w=62>
+        <div ng-repeat="fv in plan.operations[0].field_values | filter : { role: 'output' }">
+          {{fv.name}}: {{fv.child_sample.name}}
+        </div>
+      </spanner>
+      <spanner w=10>{{plan.operations[0].status}}</spanner>
+      <spanner w=10 p=36>{{plan.created_at|date}}</spanner>
 
-  <div ng-repeat="plan in plans" class="plan-list">
+      <div ng-if="plan.open" ng-include="'plan_viewer'"></div>
 
-    <span opener="plan.open" class="opener"></span>
-    <span class='name'>{{plan.id}}: {{plan.operations[0].operation_type.name}}</span>     
-    <span class='sample'>
-      <div ng-repeat="fv in plan.operations[0].field_values | filter : { role: 'output' }">
-        {{fv.name}}: {{fv.child_sample.name}}
-      </div>
-    </span>
-    <span class='status'>{{plan.operations[0].status}}</span>
-    <span class='date'>{{plan.created_at|date}}</span><br/>
-
-    <div ng-if="plan.open" ng-include="'plan_viewer'">
     </div>
 
   </div>

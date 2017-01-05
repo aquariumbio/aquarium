@@ -170,11 +170,6 @@
       border: none;
     }
 
-    .opener {
-      width: 20px;
-      cursor: pointer;
-    }    
-
     .name { 
       width: calc(18% - 36px);  
     }  
@@ -196,7 +191,7 @@
   .op-list {
 
     width: 100%;
-    border-top: 1pt solid #eee;
+    /*border-top: 1pt solid #eee;*/
     margin: 5px 0 5px 0;
     padding: 5px 0 0 0;
 
@@ -219,6 +214,7 @@
     .status {
       width: 20%; 
     }
+
   }
 
   .no-line {

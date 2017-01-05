@@ -1,32 +1,51 @@
 <script type="text/ng-template" id="op_io">
-  <ul class='well'>
-  <li ng-repeat="field_type in operation.operation_type.field_types | filter: { role: 'input' }">
-    {{field_type.name}}
-  </li>
-  <li ng-repeat="field_type in operation.operation_type.field_types | filter: { role: 'output' }">
-    {{field_type.name}}
-  </li>  
-  </ul>
+
+  <div class='spanner-row indent-40'>
+    <span class='spanner-cell small-heading' style='width: 14px'></span>    
+    <spanner w=18 p=42 c="small-heading">Name</spanner>
+    <spanner w=12 c="small-heading">Item</spanner>       
+    <spanner w=15 c="small-heading">Container</spanner>     
+    <spanner w=55 c="small-heading">Sample</spanner>
+  </div>
+
+  <div class='spanner-row indent-40' ng-repeat="fv in operation.field_values">
+    <span class='spanner-cell' opener="fv.open" class="opener"></span>  
+    <spanner w=18 p=42>{{fv.name}} ({{fv.role}})</spanner>
+    <spanner w=12>
+      <span ng-if="fv.child_item_id">{{fv.child_item_id}}</span>        
+      <span ng-if="!fv.child_item_id">undetermined</span>
+    </spanner>              
+    <spanner w=15>Todo</spanner>          
+    <spanner w=55>{{fv.child_sample.name}}</spanner>
+  </div>
+
 </script>
 
 <script type="text/ng-template" id="op_data">
-  <div class='well'>DATA</div>
+  <div class='spanner-row indent-40'>
+    <div class='spanner-cell'>
+      Todo: Show data associations
+    </div>
+  </div>
 </script>
 
 <script type="text/ng-template" id="plan_viewer">
 
-  <div ng-repeat="operation in plan.operations" class='op-list' ng-init="operation.mode = 'io'">
-    <div class='header'>
-      <span opener="operation.open" class="opener"></span>
-      <span class='name'>{{operation.id}}: {{operation.operation_type.name}}</span>
-      <span class='controls'>
-        <a ng-if="operation.open" ng-class="op_mode(operation,'io')" ng-click="operation.mode = 'io'">I/O</a>
-        <a ng-if="operation.open" ng-class="op_mode(operation,'data')" ng-click="operation.mode = 'data'">Data</a>        
-      </span>
-      <span class='status'>{{operation.status}}</span>
+  <div ng-repeat="operation in plan.operations" class="rel">
+
+    <div class='spanner-row indent-20'>
+      <span class='spanner-cell' opener="operation.open" class="opener"></span>
+      <spanner w=18 p=20>{{operation.id}}: {{operation.operation_type.name}}</spanner>
+      <spanner w=62> 
+        <a ng-if="operation.open" ng-class="op_mode(operation,'io')"   ng-click="operation.mode = 'io'">I/O</a>
+        <a ng-if="operation.open" ng-class="op_mode(operation,'data')" ng-click="operation.mode = 'data'">Data</a>  
+      </spanner>
+      <spanner w=20 p=34>{{operation.status}}</spanner>
     </div>
-    <div class='body' ng-if="operation.open && operation.mode == 'io'" ng-include="'op_io'"></div>
-    <div class='body' ng-if="operation.open && operation.mode == 'data'" ng-include="'op_data'"></div>    
+
+    <div ng-if="operation.open && operation.mode == 'io'"   ng-include="'op_io'" class='rel'></div>
+    <div ng-if="operation.open && operation.mode == 'data'" ng-include="'op_data'"></div>
+
   </div>
 
 </script>

@@ -1,0 +1,65 @@
+.spanner-row {
+
+  display: block;
+  vertical-align: top;
+  width: calc(100% - 0px);
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-right: 0px;
+  position: relative;
+  /*outline: 2pt dashed #f99;*/
+  padding: 0;
+
+  .spanner-cell {
+    display: inline-block;
+    vertical-align: top;
+    /*outline: 1pt solid #9f9;*/
+    border: none;
+    padding: 2px;
+    margin: 0;
+    height: 20px;
+    z-index: 100;
+  }
+
+  .small-heading {
+    font-weight: bold;
+    font-size: 9pt;
+    height: 14px;
+  }
+
+  .indent-20 {
+    margin-left: 20px !important;
+  }
+
+  .indent-40 {
+    margin-left: 40px !important;
+  }
+
+  .indent-60 {
+    margin-left: 60px !important;
+  }
+
+  .indent-80 {
+    margin-left: 80px !important;
+  }
+
+  .opener {
+    width: 20px;
+    cursor: pointer;
+  }    
+
+}
+
+.rel {
+    position: relative;
+    /*outline: 2px dashed blue;*/
+    clear: both;
+    content: "";
+    display: block;
+    overflow: hidden; 
+    width: 100%;
+}
+
+.border-top {
+  border-top: 1pt solid #eee;
+}

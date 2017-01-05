@@ -24,8 +24,8 @@
 
       },
 
-      template: "<span class='clickable' ng-if='opener' ng-click='toggle()'>&#9660;</span>" + 
-                "<span class='clickable' ng-if='!opener' ng-click='toggle()'>&#9658;</span>"
+      template: "<span class='clickable' ng-if='opener' ng-click='toggle()' style='cursor: pointer'>&#9660;</span>" + 
+                "<span class='clickable' ng-if='!opener' ng-click='toggle()' style='cursor: pointer'>&#9658;</span>"
 
     }
 

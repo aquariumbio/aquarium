@@ -33,6 +33,7 @@ AQ.Plan.list = function(user) {
           var plan = AQ.Plan.record(p);
           plan.operations = aq.collect(plan.operations,(op) => {
             var operation = AQ.Operation.record(op);
+            operation.mode = 'io'; // This is for the launcher UI, should probably be moved somewhere
             operation.field_values = aq.collect(
               aq.where(response.data.field_values, (fv) => {
                 return fv.parent_id == operation.id;
