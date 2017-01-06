@@ -95,8 +95,7 @@ AQ.Base.prototype.new = function() {
 AQ.Base.prototype.getter = function(child_model, child_name,id=null) {
 
   var hidden_name = "_" + child_name,
-      id_name = id ? id : child_name + "_id",
-      fetch = "_fetching_" + child_name;
+      id_name = id ? id : child_name + "_id";
 
   this.record_getters[child_name] = function() {
 
@@ -104,10 +103,9 @@ AQ.Base.prototype.getter = function(child_model, child_name,id=null) {
 
     if ( base[hidden_name] ) {
       return base[hidden_name];
-    } else if ( base[id_name] && !base[fetch] ) {
-      base[fetch] = true;    
+    } else if ( base[id_name] ) {
+      base[hidden_name] = {};    
       child_model.find(base[id_name]).then((x) => { 
-        base[fetch]= false;
         base[hidden_name] = x;
         AQ.update();
       });    
