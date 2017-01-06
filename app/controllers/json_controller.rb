@@ -23,13 +23,15 @@ class JsonController < ApplicationController
 
       result = Object.const_get(params[:model])
       result = result.find(params[:id]) if params[:id] 
-      result = result.send(params[:method],*params[:arguments]) if method_ok(params[:method])
+      result = result.send(params[:method],*params[:arguments]) if method_ok(params[:method]) && params[:method] != "where"
+      result = result.where(params[:arguments]) if params[:method] == "where"
       result = result.as_json(methods: params[:methods]) if ( params[:methods] )
 
       render json: result
 
     rescue Exception => e 
 
+      logger.info e.inspect
       render json: { errors: e.to_s }, status: 422
 
     end

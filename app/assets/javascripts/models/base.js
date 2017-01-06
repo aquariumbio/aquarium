@@ -1,6 +1,8 @@
 AQ.Base = function(model) {
   this.model = model;
   this.record_methods = {};
+  this.record_getters = {};
+  this.update = function() {};
 }
 
 AQ.Base.prototype.super = function(name) {
@@ -90,10 +92,38 @@ AQ.Base.prototype.new = function() {
   });
 }
 
+AQ.Base.prototype.getter = function(child_model, child_name,id=null) {
+
+  var hidden_name = "_" + child_name,
+      id_name = id ? id : child_name + "_id",
+      fetch = "_fetching_" + child_name;
+
+  this.record_getters[child_name] = function() {
+
+    var base = this;
+
+    if ( base[hidden_name] ) {
+      return base[hidden_name];
+    } else if ( base[id_name] && !base[fetch] ) {
+      base[fetch] = true;    
+      child_model.find(base[id_name]).then((x) => { 
+        base[fetch]= false;
+        base[hidden_name] = x;
+        AQ.update();
+      });    
+      return null;  
+    } else {
+      return null;
+    }
+
+  }
+
+}
+
 AQ.model_names = [ 
   "User", "Group", "SampleType", "Sample", "ObjectType", "Item",
   "OperationType", "Operation", "FieldType", "FieldValue", "AllowableFieldType", 
-  "Plan", "PlanAssociation" ];
+  "Plan", "PlanAssociation", "DataAssociation" ];
 
 for ( var i=0; i<AQ.model_names.length; i++ ) {
   AQ[AQ.model_names[i]] = new AQ.Base(AQ.model_names[i]);

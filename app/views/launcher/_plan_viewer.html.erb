@@ -9,14 +9,19 @@
   </div>
 
   <div class='spanner-row indent-40' ng-repeat="fv in operation.field_values">
-    <span class='spanner-cell' opener="fv.open" class="opener"></span>  
+
+    <span class='spanner-cell' opener="fv.open" class="opener" ng-if="fv.child_item_id"></span>  
+    <span class='spanner-cell' style='width: 14px' ng-if="!fv.child_item_id"></span>      
     <spanner w=18 p=42>{{fv.name}} ({{fv.role}})</spanner>
     <spanner w=12>
       <span ng-if="fv.child_item_id">{{fv.child_item_id}}</span>        
-      <span ng-if="!fv.child_item_id">undetermined</span>
-    </spanner>              
-    <spanner w=15>Todo</spanner>          
+      <span ng-if="!fv.child_item_id">n/a</span>
+    </spanner> 
+    <spanner w=15>{{fv.item.object_type.name}}</spanner>          
     <spanner w=55>{{fv.child_sample.name}}</spanner>
+
+    <div ng-if="fv.open" class='rel' ng-include="'fv_info'"></div>
+
   </div>
 
 </script>
@@ -26,6 +31,18 @@
     <div class='spanner-cell'>
       Todo: Show data associations
     </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="fv_info">
+  <div class='spanner-row indent-20' 
+       ng-if="fv.item.data_associations.length == 0">
+    No data
+  </div>
+  <div class='spanner-row indent-20' 
+       ng-if="fv.item.data_associations.length > 0"
+       ng-repeat="da in fv.item.data_associations">
+    <spanner w=10>{{da.key}} : {{da.value}}</spanner>
   </div>
 </script>
 

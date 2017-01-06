@@ -12,6 +12,7 @@
                       function (  $scope,   $http,   $attrs,   $cookies,   $sce ) {
 
     AQ.init($http);
+    AQ.update = () => { $scope.$apply(); }
 
     $scope.status = "Loading sample names ...";
     $scope.plan = null;
