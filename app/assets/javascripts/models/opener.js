@@ -12,23 +12,33 @@
 
     return {
 
-      restrict: 'A',
+      restrict: 'AE',
 
-      scope: { opener: '=' },
+      scope: { model: '=', invisible: '=', disabled: '=' },
 
       link: function($scope,$element,$attributes) {
 
         $scope.toggle = function() {
-          $scope.opener = !$scope.opener;
+          $scope.model = !$scope.model;
         }
 
       },
 
-      template: "<span class='clickable' ng-if='opener' ng-click='toggle()' style='cursor: pointer'>&#9660;</span>" + 
-                "<span class='clickable' ng-if='!opener' ng-click='toggle()' style='cursor: pointer'>&#9658;</span>"
+      replace: true,
+
+      template: "<span ng-click='toggle()' class='spanner-cell'>" + 
+                   "<span class='opener' ng-if='!invisible && !disabled'>" +
+                     "{{model ? '&#9660' : '&#9658;'}}" +
+                   "</span>" +
+                   "<span class='opener-invisible' ng-if='invisible'>&nbsp;</span>" +
+                   "<span class='opener-disabled' ng-if='!invisible && disabled'>&#9658;</span>" +
+                 "</span>"
 
     }
 
   });
   
 })();
+
+
+//    <!-- <opener class='spanner-cell' style='width: 14px' ng-if="!fv.child_item_id"></span>       -->

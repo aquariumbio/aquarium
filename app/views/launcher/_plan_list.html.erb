@@ -1,18 +1,18 @@
 <script type="text/ng-template" id="plan_list">
 
-  <div ng-repeat="plan in plans" class="rel">
+  <div ng-repeat="plan in plans" class="rel rel-hoverable">
 
     <div class='spanner-row border-top'>
 
-      <span class='spanner-cell' opener="plan.open" class="opener"></span>
+      <opener model="plan.open"></opener>
       <spanner w=18>{{plan.id}}: {{plan.operations[0].operation_type.name}}</spanner>     
-      <spanner w=62>
+      <spanner w=52>
         <div ng-repeat="fv in plan.operations[0].field_values | filter : { role: 'output' }">
           {{fv.name}}: {{fv.child_sample.name}}
         </div>
       </spanner>
-      <spanner w=10>{{plan.operations[0].status}}</spanner>
-      <spanner w=10 p=36>{{plan.created_at|date}}</spanner>
+      <spanner w=15>{{plan.operations[0].status}}</spanner>
+      <spanner w=15 p=36>{{plan.created_at|date}}</spanner>
 
       <div ng-if="plan.open" ng-include="'plan_viewer'"></div>
 
