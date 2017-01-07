@@ -3,9 +3,7 @@
   display: block;
   vertical-align: top;
   width: calc(100% - 0px);
-  margin-top: 0px;
-  margin-bottom: 0px;
-  margin-right: 0px;
+  margin: 0px;
   position: relative;
   /*outline: 2pt dashed #f99;*/
   padding: 0;
@@ -13,11 +11,9 @@
   .spanner-cell {
     display: inline-block;
     vertical-align: top;
-    /*outline: 1pt solid #9f9;*/
     border: none;
     padding: 2px;
     margin: 0;
-    /*height: 20px;*/
     z-index: 100;
   }
 
@@ -67,17 +63,18 @@
 
 .rel {
   position: relative;
-  /*outline: 2px dashed blue;*/
   clear: both;
   content: "";
   display: block;
   overflow: hidden; 
   width: 100%;
+  /*outline: 1pt solid green;*/
 }
 
 .rel-hoverable:hover {
-  background: #eef;
-  outline: 1pt solid #eee;
+  background: #ffffef;
+  border-left: 1pt solid #eee;  
+  border-right: 1pt solid #eee; 
 }
 
 .border-top {
