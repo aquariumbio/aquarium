@@ -5,3 +5,7 @@ AQ.User.current = function() {
     });
   });
 }
+
+AQ.User.record_getters.url = function() {
+  return "<a href='/users/" + this.id + "'>" + this.login + "</a>";
+}

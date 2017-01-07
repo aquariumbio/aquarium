@@ -48,7 +48,7 @@
                 AQ.items_for(sid,aft.object_type_id).then((items) => {            
                   if ( items.length > 0 ) {
                     field_value.items = items;
-                    field_value.item = items[0];
+                    field_value.selected_item = items[0];
                     $scope.$apply();
                   }
                 });
@@ -64,7 +64,7 @@
         };
 
         $scope.select = function(item) {
-          fv.item = item;
+          fv.selected_item = item;
         }
 
         $scope.item_select_class = function(ft) {

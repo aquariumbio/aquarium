@@ -108,3 +108,5 @@ AQ.Operation.record_methods.update_cost = function() {
 
 }
 
+AQ.Operation.getter(AQ.Job,"job");
+

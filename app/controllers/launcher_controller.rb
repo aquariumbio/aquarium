@@ -32,7 +32,8 @@ class LauncherController < ApplicationController
         role: fv[:role], 
         field_type_id: ft.id,
         child_sample_id: sid,
-        child_item_id: fv[:item] ? fv[:item][:id] : nil
+        child_item_id: fv[:selected_item] ? fv[:selected_item][:id] : nil,
+        allowable_field_type_id: fv[:aft_id]
       )
 
       unless field_value.errors.empty?

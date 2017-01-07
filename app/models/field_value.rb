@@ -9,7 +9,8 @@ class FieldValue < ActiveRecord::Base
   belongs_to :field_type
   belongs_to :allowable_field_type
 
-  attr_accessible :name, :child_item_id, :child_sample_id, :value, :role, :field_type_id, :item, :row, :column
+  attr_accessible :name, :child_item_id, :child_sample_id, :value, :role
+  attr_accessible :field_type_id, :item, :row, :column, :allowable_field_type_id
 
   validate :valid
 
@@ -21,8 +22,6 @@ class FieldValue < ActiveRecord::Base
     end
 
     if field_type.ftype == 'sample'
-
-      Rails.logger.info "--------------------- #{child_item_id}"
 
       unless child_sample_id
         errors.add(:child_sample, "No sample specified for #{role} '#{name}'")

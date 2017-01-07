@@ -67,14 +67,14 @@
        data-toggle="dropdown" 
        href="#">
       <span ng-if="fv.items.length == 0">No Items</span>    
-      <span ng-if="fv.items.length > 0 && !fv.item">Item</span>
-      <span ng-if="!ft.part && fv.item">
-        <b>{{fv.item.id}}</b>: 
-           {{fv.item.location}}
+      <span ng-if="fv.items.length > 0 && !fv.selected_item">Item</span>
+      <span ng-if="!ft.part && fv.selected_item">
+        <b>{{fv.selected_item.id}}</b>: 
+           {{fv.selected_item.location}}
       </span>
-      <span ng-if="ft.part && fv.item">
-        <b>{{fv.item.collection.id}}</b>[{{fv.item.row}},{{fv.item.column}}]:
-           {{fv.item.collection.location}}
+      <span ng-if="ft.part && fv.selected_item">
+        <b>{{fv.selected_item.collection.id}}</b>[{{fv.selected_item.row}},{{fv.selected_item.column}}]:
+           {{fv.selected_item.collection.location}}
       </span>
       <span class="caret pull-right"></span>
     </a>

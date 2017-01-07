@@ -17,8 +17,20 @@
     </div>
 
     <div class='spanner-row indent-20'>
-      <div ng-if="operation.open && operation.mode == 'io'"   ng-include="'op_io'" class='rel'></div>
-      <div ng-if="operation.open && operation.mode == 'data'" ng-include="'data_association'" ng-init="object = operation" class='rel'></div>
+
+      <div ng-if="operation.open && operation.mode == 'io'"   
+           ng-include="'op_io'" 
+          class='rel'></div>
+
+      <div ng-if="operation.open && operation.mode == 'data'" 
+           ng-include="'job_info'" 
+           class='rel'></div>
+
+      <div ng-if="operation.open && operation.mode == 'data'" 
+           ng-include="'data_association'" 
+           ng-init="object = operation" 
+           class='rel'></div>
+
     </div>
 
   </div>
@@ -33,22 +45,21 @@
 
   <div class='spanner-row indent-20'>
     <opener class='small-heading' invisible=true></opener>    
-    <spanner w=18 p=42 c="small-heading">Name</spanner>
-    <spanner w=12 c="small-heading">Item</spanner>       
-    <spanner w=15 c="small-heading">Container</spanner>     
-    <spanner w=55 c="small-heading">Sample</spanner>
+    <spanner w=20 p=42 c="small-heading">Name</spanner>
+    <spanner w=8 c="small-heading">Item</spanner>   
+    <spanner w=12 c="small-heading">Location</spanner>          
+    <spanner w=12 c="small-heading">Container</spanner>     
+    <spanner w=47 c="small-heading">Sample</spanner>
   </div>
 
   <div class='spanner-row indent-20' ng-repeat="fv in operation.field_values">
 
     <opener model="fv.open" disabled="!fv.child_item_id"></opener>  
-    <spanner w=18 p=42>{{fv.name}} ({{fv.role}})</spanner>
-    <spanner w=12>
-      <span ng-if="fv.child_item_id">{{fv.child_item_id}}</span>        
-      <span ng-if="!fv.child_item_id">n/a</span>
-    </spanner> 
-    <spanner w=15>{{fv.item.object_type.name}}</spanner>          
-    <spanner w=55>{{fv.child_sample.name}}</spanner>
+    <spanner w=20 p=42>{{fv.name}} <span class='small'>({{fv.role}})</span></spanner>
+    <spanner w=8>{{fv.item.id}}</spanner> 
+    <spanner w=12>{{fv.item.location}}</spanner>
+    <spanner w=12>{{fv.item.object_type.name}}</spanner>          
+    <spanner w=47>{{fv.child_sample.name}}</spanner>
 
     <div ng-if="fv.open" class='rel' ng-include="'data_association'" ng-init="object = fv.item"></div>
 
@@ -56,11 +67,24 @@
 
 </script>
 
-<script type="text/ng-template" id="data_association">
+<script type="text/ng-template" id="job_info">
 
   <!--
-    FIELD VALUE DATA TEMPLATE
+    JOB TEMPLATE
     -->
+
+  <div class='spanner-row indent-20' ng-if="operation.job_id">
+    <span class="spanner-row">
+      <spanner w=18 p=20 ng-bind-html="'Job ' + operation.job.url | trust"></spanner>
+      <spanner w=52 ng-bind-html="'Performed by ' + operation.job.user.url | trust"></spanner>
+      <spanner w=15>{{operation.job.created_at|date}}</spanner>
+      <spanner w=15 p=5>{{operation.job.updated_at|date}}</spanner>
+    </span>
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="data_association">
 
   <div class='spanner-row indent-20' 
        ng-if="object.data_associations.length == 0">
