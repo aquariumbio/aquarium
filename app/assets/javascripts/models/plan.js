@@ -24,11 +24,12 @@ AQ.Plan.record_methods.link_operation_types = function(operation_types) {
 
 }
 
-AQ.Plan.list = function(user) {
+AQ.Plan.list = function(offset) {
 
   return new Promise(function(resolve,reject) {
-    AQ.get('/launcher/plans').then(
+    AQ.get('/launcher/plans?offset='+offset).then(
       (response) => {
+        AQ.Plan.num_plans = response.data.num_plans;
         resolve(aq.collect(response.data.plans,(p) => { 
           var plan = AQ.Plan.record(p);
           plan.operations = aq.collect(plan.operations,(op) => {

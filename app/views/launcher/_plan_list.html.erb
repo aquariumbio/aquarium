@@ -1,5 +1,12 @@
 <script type="text/ng-template" id="plan_list">
 
+  <span ng-if="getting_plans" class="text-info">Retrieving plans...</span>
+
+  <div class='plan-offset-ctrl pull-right'>
+    <a href='#' class="btn btn-primary btn-mini" ng-click="inc_plan_offset(-1)" ng-disabled="!more_plans(-1)">&Lang;</a>&nbsp;
+    <a href='#' class="btn btn-primary btn-mini" ng-click="inc_plan_offset(1)"  ng-disabled="!more_plans(1)">&Rang;</a>    
+  </div>
+
   <div ng-repeat="plan in plans" class="rel rel-hoverable">
 
     <div class='spanner-row border-top'>
@@ -20,5 +27,9 @@
 
   </div>
 
+  <div class='plan-offset-ctrl pull-right'>
+    <a href='#' class="btn btn-primary btn-mini" ng-click="inc_plan_offset(-1)" ng-disabled="!more_plans(-1)">&Lang;</a>&nbsp;
+    <a href='#' class="btn btn-primary btn-mini" ng-click="inc_plan_offset(1)"  ng-disabled="!more_plans(1)">&Rang;</a>    
+  </div>
 
 </script>

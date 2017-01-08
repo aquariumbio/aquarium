@@ -110,7 +110,8 @@ class LauncherController < ApplicationController
       .includes(operations: :operation_type)
       .where(user_id: current_user.id)
       .order('created_at DESC')
-      .limit(10)
+      .limit(15)
+      .offset(params[:offset] || 0)
 
     oids = plans.collect { |p| p.operations.collect { |o| o.id } }.flatten
     field_values = FieldValue
@@ -119,7 +120,8 @@ class LauncherController < ApplicationController
 
     render json: { 
       plans: plans.reverse.as_json(include: { operations: { include: :operation_type } } ),
-      field_values: field_values
+      field_values: field_values,
+      num_plans: Plan.where(user_id: current_user.id).count
     }
 
   end

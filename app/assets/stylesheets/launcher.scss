@@ -28,6 +28,15 @@
     color: #666;
   }
 
+  .plan-offset-ctrl {
+    margin: 5px;
+    position: relative;
+    clear: both;
+    content: "";
+    display: block;
+    overflow: hidden;     
+  }
+
   .operation {
 
     position: relative;
@@ -163,5 +172,12 @@
   .no-line {
     border-top: none;
   }  
+
+  .btn.disabled {
+    pointer-events: none;
+  }
+  .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
+    cursor: not-allowed;
+  }
 
 }
