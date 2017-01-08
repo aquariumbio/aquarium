@@ -1,3 +1,18 @@
+AQ.Plan.record_methods.upgrade = function() {
+  var plan = this;
+  plan.operations = aq.collect(plan.operations, (op) => {
+    var operation = AQ.Operation.record(op);
+    operation.mode = 'io' // This is for the launcher
+    operation.field_values = aq.collect(operation.field_values,(fv) => {
+      return AQ.FieldValue.record(fv);  
+    })
+    return operation;
+  });
+  plan.open = true;
+  plan.operations[0].open = true;
+  return plan;
+}
+
 AQ.Plan.record_methods.submit = function() {
 
   var plan = this;
@@ -5,7 +20,7 @@ AQ.Plan.record_methods.submit = function() {
   return new Promise(function(resolve,reject) {
     AQ.post('/launcher/submit',plan).then(
       (response) => {
-        resolve(AQ.Plan.record(response.data));
+        resolve(AQ.Plan.record(response.data).upgrade());
       }, (response) => {
         reject(response.data.errors);
       }

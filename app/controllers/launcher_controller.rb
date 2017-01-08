@@ -20,12 +20,16 @@ class LauncherController < ApplicationController
     form[:field_values].each do |fv|    
 
       if fv[:sample_identifier]
+        logger.info "determining sid from sample_identifier: #{fv[:sample_identifier]}"
         sid = sid(fv[:sample_identifier])
       else
+        logger.info "determining sid from routing: #{fv[:routing]} => #{form[:routing][fv[:routing]]}"        
         sid = sid(form[:routing][fv[:routing]])
       end
 
       ft = ot.type(fv[:name],fv[:role])
+
+      logger.info "WARNING: sid = #{sid}"
 
       field_value = op.field_values.create(
         name: fv[:name], 

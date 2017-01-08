@@ -31,7 +31,12 @@
           op.update_cost();
 
           var sid = AQ.id_from(ui.item.value);
-          route[ft.routing] = ui.item.value;
+
+          if ( ft.array ) {
+            fv.sample_identifier = ui.item.value;
+          } else {
+            route[ft.routing] = ui.item.value;
+          }
 
           op.each_input((field_type,field_value) => {
 

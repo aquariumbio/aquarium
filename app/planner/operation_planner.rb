@@ -23,7 +23,7 @@ module OperationPlanner
 
         input_list.each do |j|
           if ! j.satisfied_by_environment
-            Rails.logger.info "#{j.name}, #{j.child_sample.name} is not satisfied_by_environment"
+            Rails.logger.info "#{j.name}, sample #{j.child_sample_id} is not satisfied_by_environment"
             if j.predecessors.empty?
               return false
             else

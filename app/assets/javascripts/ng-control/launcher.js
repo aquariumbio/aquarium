@@ -63,6 +63,7 @@
       $scope.plan.submit().then((plan) => {
         $scope.clear_plan();
         $scope.mode = 'running';
+        plan.link_operation_types($scope.operation_types);
         $scope.plans.unshift(plan);
         $scope.$apply();
       }).catch((error) => {

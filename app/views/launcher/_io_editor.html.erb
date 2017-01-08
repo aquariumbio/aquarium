@@ -5,6 +5,7 @@
 
   <div class='field_value_form'>
 
+    <!-- Name and object type chooser -->
     <span class='io-name'> 
       <b>{{ft.name}}</b>
       <form class='radio-buttons pull-right'> 
@@ -24,6 +25,7 @@
       </form>
     </span>
 
+    <!-- Sample and Item chooser -->
     <div itemselect
          ng-repeat="fv in operation.field_values | filter: { name: ft.name, role: ft.role }" 
          ft="ft" operation="operation" fv="fv">
@@ -98,6 +100,8 @@
   </div>
 
   <a ng-if="ft.array" href="#" ng-click="operation.array_remove(fv)" class='array-remove'>&times;</a>
+
+  <!-- <pre>sid = {{fv.sample_identifier|json}}, {{ft.routing}} = {{operation.routing[ft.routing]}}</pre> -->
 
 </script>
 
