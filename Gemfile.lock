@@ -44,6 +44,7 @@ GEM
     callsite (0.0.11)
     climate_control (0.0.3)
       activesupport (>= 3.0)
+    closure-compiler (1.1.12)
     cocaine (0.5.8)
       climate_control (>= 0.0.3, < 1.0)
     coffee-rails (3.2.2)
@@ -171,8 +172,6 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.49)
-    uglifier (3.0.0)
-      execjs (>= 0.3.0, < 3)
     underscore-rails (1.8.3)
     will_paginate (3.1.0)
     yaml_db (0.3.0)
@@ -191,6 +190,7 @@ DEPENDENCIES
   binding_of_caller
   bootstrap-sass (= 2.3.2.0)
   bootstrap-will_paginate
+  closure-compiler
   coffee-rails
   d3-rails
   db-charmer
@@ -211,7 +211,6 @@ DEPENDENCIES
   rails-patch-json-encode
   rspec-rails
   sass-rails (~> 3.2.3)
-  uglifier (>= 1.0.3)
   underscore-rails
   will_paginate
   yaml_db

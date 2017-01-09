@@ -21,7 +21,8 @@ end
 # in production environments by default.
 group :assets do
   gem 'coffee-rails'
-  gem 'uglifier', '>= 1.0.3'
+  # gem 'uglifier', '>= 1.0.3'
+  gem 'closure-compiler'
   gem 'bcrypt-ruby', "~> 3.0.0"
 end
 
