@@ -69,10 +69,10 @@ AQ.Base.prototype.where = function(criteria,methods={}) {
   return this.array_query('where',criteria,methods);
 }
 
-AQ.Base.prototype.exec = function(method, arguments) {
+AQ.Base.prototype.exec = function(method, args) {
   var base = this;
   return new Promise(function(resolve,reject) {  
-    AQ.post('/json',{model: base.model, method: method, arguments: arguments}).then(
+    AQ.post('/json',{model: base.model, method: method, arguments: args}).then(
       (response) => { resolve(response.data) },
       (response) => { reject(response.data.errors) }
     );
