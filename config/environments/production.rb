@@ -14,7 +14,11 @@ Bioturk::Application.configure do
   # Compress JavaScripts and CSS
   config.assets.compress = true
   require 'closure-compiler'
-  config.assets.js_compressor = Closure::Compiler.new(compilation_level: 'SIMPLE_OPTIMIZATIONS', language_in: 'ECMASCRIPT6')  
+  config.assets.js_compressor = Closure::Compiler.new(
+    compilation_level: 'SIMPLE_OPTIMIZATIONS', 
+    language_in: 'ECMASCRIPT6',
+    language_out: 'ES5'
+  )  
 
   # Don't fallback to assets pipeline if a precompiled asset is missed
   config.assets.compile = false
