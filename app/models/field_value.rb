@@ -16,16 +16,20 @@ class FieldValue < ActiveRecord::Base
 
   def valid
 
-    unless field_type_id
-      errors.add(:field_type, "No field type specified for #{role} '#{name}'")
-      return false
-    end
+    if parent_class == "Operation"
 
-    if field_type.ftype == 'sample'
-
-      unless child_sample_id
-        errors.add(:child_sample, "No sample specified for #{role} '#{name}'")
+      unless field_type_id
+        errors.add(:field_type, "No field type specified for #{role} '#{name}'")
         return false
+      end
+
+      if field_type.ftype == 'sample'
+
+        unless child_sample_id
+          errors.add(:child_sample, "No sample specified for #{role} '#{name}'")
+          return false
+        end
+
       end
 
     end
