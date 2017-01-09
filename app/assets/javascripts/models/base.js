@@ -40,10 +40,10 @@ AQ.Base.prototype.find_by_name = function(name) {
   });
 }
 
-AQ.Base.prototype.array_query = function(method,arguments,rest) {
+AQ.Base.prototype.array_query = function(method,args,rest) {
 
   var base = this;
-  var query = { model: base.model, method: method, arguments: arguments };
+  var query = { model: base.model, method: method, arguments: args };
 
   return new Promise(function(resolve,reject) {
     AQ.post('/json',$.extend(query,rest)).then(
