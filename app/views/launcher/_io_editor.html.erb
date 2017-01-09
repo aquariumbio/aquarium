@@ -9,7 +9,7 @@
     <span class='io-name'> 
       <b>{{ft.name}}</b>
       <form class='radio-buttons pull-right'> 
-        <span ng-repeat="aft in ft.allowable_field_types track by $index"
+        <span ng-repeat="aft in ft.allowable_field_types"
                 ng-init="set_aft(operation,ft,ft.allowable_field_types[0])">
           <label class="radio-label">
             <input type="radio" class="radio"
@@ -18,7 +18,7 @@
                    ng-disabled="ft.allowable_field_types.length == 1"
                    ng-model=  "operation.form[ft.role][ft.name].aft_id"
                    ng-change= "set_aft(operation,ft,aft)">
-            {{aft.object_type.name}} 
+            {{aft.object_type_id ? aft.object_type.name : 'No container'}} 
             <span ng-if="ft.part">(part)</span>
           </label>
         </span>
