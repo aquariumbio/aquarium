@@ -200,7 +200,7 @@ module CostModel
       when ["direct_purchase", "purchased"]
         {
           materials: simple_spec[:materials],
-          labor: simple_spec[:labor] / labor_rate
+          labor: simple_spec[:labor] * labor_rate
         }
       when ["tasks_inputs", "purchased"]
         {
