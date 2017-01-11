@@ -45,6 +45,8 @@ module FieldValuer
 
     ft = field_type name, role
 
+    puts "Setting property #{name}"
+
     unless ft
       self.errors.add(:no_such_property,"#{self.class} #{id} does not have a property named #{name} with role #{role}.")
       return self
@@ -85,17 +87,23 @@ module FieldValuer
 
       if ft && fvs.length == 1
         fv = set_property_aux(ft,fvs[0],val)
-        fv.allowable_field_type_id = aft.id if aft
+        fv.allowable_field_type_id = aft.id if aft        
       else 
         self.errors.add(:set_property,"Could not set #{self.class} #{id} property #{name} to #{val}")
         return self
       end
 
-      fv.save if self.errors.empty?
+      if self.errors.empty?
+        fv.save
+        Rails.logger.info "Could not save field value #{fv.inspect}: #{fv.errors.full_messages.join(', ')}" unless fv.errors.empty?
+      else
+        Rails.logger.info "Errors setting property of #{self.class} #{self.id}: #{self.errors.full_messages.join(', ')}"
+      end
       return self
 
     else
 
+      Rails.logger.info "Could not set #{self.class} #{id} property #{name} to #{val}. No case matches conditions."
       self.errors.add(:set_property,"Could not set #{self.class} #{id} property #{name} to #{val}. No case matches conditions.")
       return self
 

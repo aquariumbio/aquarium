@@ -20,9 +20,10 @@ module OperationTypeRandom
         if samples[ft.routing]
           aft = ft.choose_aft_for(samples[ft.routing])
           op.set_property ft.name, samples[ft.routing], ft.role, false, aft
-        else
+        else 
           random_sample, random_aft = ft.random
-          op.set_property ft.name, random_sample, ft.role, false, random_aft         
+          op.set_property ft.name, random_sample, ft.role, false, random_aft
+          Rails.logger.info "Error adding property: #{op.errors.full_messages.join(', ')}" unless op.errors.empty?
           samples[ft.routing] = random_sample
         end
 

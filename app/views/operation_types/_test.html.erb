@@ -67,6 +67,7 @@
     <tr ng-repeat="op in current_ot.test_operations | filter: { operation_type_id: current_ot.id, status: 'pending'}">
 
       <td>{{user.find(op.user_id).name}}</td>
+
       <td>
         <ul class='input-list'>
           <li ng-repeat="fv in op.field_values | filter: { role: 'input' }">

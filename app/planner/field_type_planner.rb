@@ -79,7 +79,9 @@ module FieldTypePlanner
       return [nil, nil]
     else
       aft = allowable_field_types.sample
-      if array
+      if !aft.sample_type
+        return [ nil, aft ]
+      elsif array
         return [ aft.sample_type.samples.sample(3), aft ]
       else
         return [ aft.sample_type.samples.sample, aft ]
