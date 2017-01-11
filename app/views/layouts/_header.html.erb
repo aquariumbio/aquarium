@@ -98,7 +98,8 @@
                     <li class="divider"></li>
                     <li><%= link_to "Budgets", budgets_path %></li>
                     <li><%= link_to "Invoices", invoices_path(:all=>true) %></li>
-                    <li><%= link_to "Parameters", parameters_path %></li>                    
+                    <li><%= link_to "Parameters", parameters_path %></li>
+                    <li><%= link_to "Announcements", announcements_path %></li>                    
                     <li class="divider"></li>
                     <% if Rails.env != 'production' %>
                       <li><%= link_to "Developer", developer_path %></li>

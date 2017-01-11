@@ -1,4 +1,15 @@
-<%= render 'layouts/banner' %>
+
+<% if @announcement %>
+	<div class='well alert'>
+		<h4>Announcement: <%= @announcement.title %></h4>
+		<p><%= @announcement.created_at %></p>
+		<p><%= @announcement.message %></p>
+		<a href='/dismiss'
+		   class='btn btn-small'>
+		   Dismiss
+		</a>
+	</div>
+<% end %>
 
 <div class='row-fluid'>
 
