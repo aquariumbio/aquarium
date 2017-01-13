@@ -63,7 +63,9 @@
     <spanner w=12>{{fv.item.object_type.name}}</spanner>          
     <spanner w=47>{{fv.child_sample.name}}</spanner>
 
-    <div ng-if="fv.open" class='rel' ng-include="'data_association'" ng-init="object = fv.item"></div>
+    <div class='indent-20'>
+      <da ng-if="fv.open" record="fv.item"></da>
+    </div>
 
   </div>
 
@@ -86,17 +88,4 @@
 
 </script>
 
-<script type="text/ng-template" id="data_association">
-
-  <div class='spanner-row indent-20' 
-       ng-if="object.data_associations.length == 0">
-    No data
-  </div>
-  <div class='spanner-row indent-20' 
-       ng-if="object.data_associations.length > 0"
-       ng-repeat="da in object.data_associations">
-    <spanner w=90>{{da.key}} : {{da.value}}</spanner>
-  </div>
-  
-</script>
 

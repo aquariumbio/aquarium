@@ -45,5 +45,33 @@ AQ.Record.prototype.init = function(data) {
   return this;
 }
 
+AQ.Record.prototype.save = function() {
+
+  var record = this;
+
+  return new Promise(function(resolve,reject) {  
+    AQ.post('/json/save',record).then(
+      (response) => { 
+        record.updated_at = response.data.updated_at
+        resolve(record)
+      },
+      (response) => { reject(response.data.errors) }
+    );
+  });
+
+}
+
+AQ.Record.prototype.delete_data_association = function(da) {
+
+  console.log([this,da])
+
+}
+
+AQ.Record.prototype.new_data_association = function() {
+
+  console.log(this)
+
+}
+
 
 

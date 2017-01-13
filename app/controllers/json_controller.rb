@@ -32,8 +32,28 @@ class JsonController < ApplicationController
     rescue Exception => e 
 
       logger.info e.inspect
+      logger.info e.backtrace
       render json: { errors: e.to_s }, status: 422
 
+    end
+
+  end
+
+  def save
+
+    record = Object.const_get(params[:model][:model]).find(params[:id])
+
+    record.attributes.each do |name,val|
+      record[name] = params[name]
+    end
+
+    record.save
+
+    if record.errors.empty?
+      render json: record
+    else
+      logger.into record.errors.full_messages.join(', ')
+      render json: { errors: record.errors }, status: 422    
     end
 
   end

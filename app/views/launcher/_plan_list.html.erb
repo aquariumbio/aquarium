@@ -1,6 +1,7 @@
 <script type="text/ng-template" id="plan_list">
 
-  <span ng-if="getting_plans" class="text-info">Retrieving plans...</span>
+  
+  <span><b>Plans</b></span> <span ng-if="getting_plans" class="text-info">... Retrieving</span>
 
   <div class='plan-offset-ctrl pull-right'>
     <a href='#' class="btn btn-primary btn-mini" ng-click="inc_plan_offset(-1)" ng-disabled="!more_plans(-1)">&Lang;</a>&nbsp;

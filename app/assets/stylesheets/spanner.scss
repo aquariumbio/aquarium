@@ -9,12 +9,34 @@
   padding: 0;
 
   .spanner-cell {
+
     display: inline-block;
     vertical-align: top;
     border: none;
     padding: 2px;
     margin: 0;
     z-index: 100;
+    /*outline: 1pt solid red;*/
+
+    input[type=text] {
+      appearance: none;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      border-radius: 0;
+      -moz-border-radius: 0;
+      -webkit-border-radius: 0;
+      height: 16px;
+      line-height: 16px;
+      margin: 0;
+      width: 100%;
+      padding: 1px 5px 1px 5px;
+    }
+
+    .btn-spanner {
+      height: 16px;
+      padding-top: 0px !important;
+    }
+
   }
 
   .small-heading {
@@ -80,3 +102,5 @@
 .border-top {
   border-top: 1pt solid #eee;
 }
+
+

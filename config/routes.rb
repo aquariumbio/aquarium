@@ -2,6 +2,7 @@ Bioturk::Application.routes.draw do
  
   get '/json/current',             to: 'json#current'
   get '/json/items/:sid/:oid',     to: 'json#items'
+  post '/json/save',               to: 'json#save'  
   post '/json',                    to: 'json#index'
 
   post '/launcher/cost',                         to: 'launcher#cost'
