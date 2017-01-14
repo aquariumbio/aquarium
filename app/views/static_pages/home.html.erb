@@ -1,6 +1,6 @@
 
 <% if @announcement %>
-	<div class='well alert'>
+	<div class='announcement'>
 		<h4>Announcement: <%= @announcement.title %></h4>
 		<p><%= @announcement.created_at %></p>
 		<p><%= @announcement.message %></p>
@@ -10,7 +10,7 @@
 		</a>
 	</div>
 <% end %>
-
+	
 <div class='row-fluid'>
 
   <div class='span8'>
