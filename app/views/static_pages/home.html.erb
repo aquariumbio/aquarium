@@ -1,4 +1,17 @@
 
+<% if @announcement %>
+	<div class='announcement'>
+		<h4 style='text-align: center'>
+			Announcement: <%= @announcement.title %>
+			<p><%= @announcement.created_at.strftime '%A %B %e, %Y' %></p>
+		</h4>
+		<p><%= simple_format(@announcement.message).html_safe %></p>
+		<span class='close-x btn-small'>
+			<a href='/dismiss'>✕</a>
+		</span>
+	</div>
+<% end %>
+	
 <div class='row-fluid'>
 
   <div class='span8'>

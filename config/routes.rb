@@ -1,5 +1,7 @@
 Bioturk::Application.routes.draw do
 
+  resources :announcements
+
   get '/developer',                              to: 'developer#developer'
   post '/developer/get/',                        to: 'developer#get'  
   post '/developer/save',                        to: 'developer#save'    
@@ -178,16 +180,17 @@ Bioturk::Application.routes.draw do
 
   root to: 'static_pages#home'
 
-  match '/',        to: 'static_pages#home'
+  match '/',           to: 'static_pages#home'
 
-  match '/help',    to: 'static_pages#help'
-  match '/about',   to: 'static_pages#about'
-  match '/signin',  to: 'sessions#new'
-  match '/signout', to: 'sessions#destroy', via: :delete
-  match '/status',  to: 'static_pages#status'
+  match '/help',       to: 'static_pages#help'
+  match '/about',      to: 'static_pages#about'
+  match '/signin',     to: 'sessions#new'
+  match '/signout',    to: 'sessions#destroy', via: :delete
+  match '/status',     to: 'static_pages#status'
   match '/analytics',  to: 'static_pages#analytics'
-  match '/jobchart', to: 'static_pages#jobchart'
-  match '/location', to: 'static_pages#location'
+  match '/jobchart',   to: 'static_pages#jobchart'
+  match '/location',   to: 'static_pages#location'
+  get "/dismiss",      to: 'static_pages#dismiss'
 
   match '/yeast_qc', to: 'static_pages#yeast_qc'
 
