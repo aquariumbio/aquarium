@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20170106212607) do
+ActiveRecord::Schema.define(:version => 20170106204721) do
 
   create_table "account_logs", :force => true do |t|
     t.integer  "row1"
@@ -59,11 +59,11 @@ ActiveRecord::Schema.define(:version => 20170106212607) do
   add_index "allowable_field_types", ["sample_type_id"], :name => "index_allowable_field_types_on_sample_type_id"
 
   create_table "announcements", :force => true do |t|
+    t.string   "title"
     t.text     "message"
     t.boolean  "active"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.string   "title"
   end
 
   create_table "blobs", :force => true do |t|
@@ -169,9 +169,9 @@ ActiveRecord::Schema.define(:version => 20170106212607) do
     t.string   "user_id"
     t.string   "sha"
     t.text     "arguments"
-    t.text     "state",              :limit => 2147483647
-    t.datetime "created_at",                               :null => false
-    t.datetime "updated_at",                               :null => false
+    t.text     "state",               :limit => 2147483647
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.string   "path"
     t.integer  "pc"
     t.integer  "group_id"
@@ -179,6 +179,7 @@ ActiveRecord::Schema.define(:version => 20170106212607) do
     t.datetime "desired_start_time"
     t.datetime "latest_start_time"
     t.integer  "metacol_id"
+    t.integer  "workflow_process_id"
   end
 
   create_table "locators", :force => true do |t|

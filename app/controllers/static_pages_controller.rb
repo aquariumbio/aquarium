@@ -4,7 +4,7 @@ class StaticPagesController < ApplicationController
 
   def home
     temp = Announcement.last
-    @announcement = temp if temp.active && cookies[:latest_announcement].to_i != temp.id
+    @announcement = temp if temp && temp.active && cookies[:latest_announcement].to_i != temp.id
   end
 
   def dismiss
