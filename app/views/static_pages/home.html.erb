@@ -1,13 +1,15 @@
 
 <% if @announcement %>
 	<div class='announcement'>
-		<h4>Announcement: <%= @announcement.title %></h4>
-		<p><%= @announcement.created_at %></p>
-		<p><%= @announcement.message %></p>
-		<a href='/dismiss'
-		   class='btn btn-small'>
-		   Dismiss
-		</a>
+		<h4 style='text-align: center'>
+			Announcement: <%= @announcement.title %>
+			<p><%= @announcement.created_at.strftime '%A %B %e, %Y' %></p>
+		</h4>
+		<p><%= simple_format(@announcement.message).html_safe %></p>
+		<span class='close-x btn-small'>
+			<a href='/dismiss'>✕
+			</a>
+		</span>
 	</div>
 <% end %>
 	
