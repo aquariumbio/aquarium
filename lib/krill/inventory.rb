@@ -41,8 +41,8 @@ module Krill
       Item.make( { quantity: 1, inuse: 0 }, sample: s, object_type: ot )
     end
 
-    def new_collection name, r, c
-      Collection.new_collection name, r, c
+    def new_collection name
+      Collection.new_collection name
     end
 
     def collection_from id
