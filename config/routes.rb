@@ -75,6 +75,9 @@ Bioturk::Application.routes.draw do
   match "item_list", to: "items#item_list"
   match "upload", to: "jobs#upload"
 
+  match "tasks/upload", to: "tasks#upload"
+  match "tasks/list/:offset", to: "tasks#list"
+
   resources :tasks
   resources :task_prototypes
 
