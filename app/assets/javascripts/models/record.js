@@ -52,7 +52,7 @@ AQ.Record.prototype.save = function() {
   return new Promise(function(resolve,reject) {  
     AQ.post('/json/save',record).then(
       (response) => { 
-        if ( !record.id ) { record.id = response.id; };
+        if ( !record.id ) { record.id = response.data.id; };
         record.updated_at = response.data.updated_at;
         record.unsaved = null;
         resolve(record)
