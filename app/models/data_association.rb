@@ -26,5 +26,10 @@ class DataAssociation < ActiveRecord::Base
     Object.const_get(parent_class).find(parent_id)
   end
 
+  def may_delete user
+    parent = DataAssociation.find_parent(parent_class,parent_id)
+    parent_class == "Item" && parent.sample && parent.sample.user_id = user.id
+  end
+
 end
  

@@ -66,6 +66,19 @@ class JsonController < ApplicationController
 
   end
 
+  def delete
+
+    record = Object.const_get(params[:model][:model]).find(params[:id])    
+
+    if record.respond_to?(:may_delete) && record.may_delete(current_user)
+      record.delete
+      render json: record      
+    else 
+      render json: { errors: [ "Insufficient permission to delete" ] }, status: 422 
+    end 
+
+  end
+
   def sid str
     str ? str.split(':')[0] : 0
   end

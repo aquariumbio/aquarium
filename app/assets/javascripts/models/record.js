@@ -63,9 +63,25 @@ AQ.Record.prototype.save = function() {
 
 }
 
+AQ.Record.prototype.delete = function() {
+
+  var record = this;
+
+  return new Promise(function(resolve,reject) {  
+    AQ.post('/json/delete',record).then(
+      (response) => { resolve(record) },
+      (response) => { reject(response.data.errors) }
+    );
+  });  
+
+}
+
 AQ.Record.prototype.delete_data_association = function(da) {
 
-  console.log([this,da])
+  da.delete().then(() => {
+    aq.remove(this._data_associations,da);
+    AQ.update();
+  });
 
 }
 
