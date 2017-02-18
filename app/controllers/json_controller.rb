@@ -41,7 +41,15 @@ class JsonController < ApplicationController
 
   def save
 
-    record = Object.const_get(params[:model][:model]).find(params[:id])
+    if ( params[:id] ) 
+
+      record = Object.const_get(params[:model][:model]).find(params[:id])
+
+    else
+
+      record = Object.const_get(params[:model][:model]).new
+
+    end
 
     record.attributes.each do |name,val|
       record[name] = params[name]

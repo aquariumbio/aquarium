@@ -6,12 +6,17 @@
          ng-if="record.data_associations.length > 0"
          ng-repeat="da in record.data_associations">
 
-      <spanner w=16 p=1>{{da.key}}</spanner>
+      <spanner w=16 p=1 ng-if="!da.unsaved">{{da.key}}</spanner>
+
+      <spanner w=16 p=1 ng-if="da.unsaved">
+        <input type='text' ng-model=da.key>
+      </spanner>
+
       <spanner w=50 p=36><input type='text' ng-model=da.new_value ng-init="da.new_value=da.value"></spanner>
       <spanner w=14>&nbsp;</spanner>
       <spanner w=15>
         <a href="#" ng-click="save(da)" 
-                    ng-if="da.new_value != da.value"
+                    ng-if="da.new_value != da.value || da.unsaved"
                     class='btn btn-mini btn-primary btn-spanner'>Save</a>
         <a href="#" ng-click="da.new_value=da.value"
                     ng-if="da.new_value != da.value"

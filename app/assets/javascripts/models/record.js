@@ -52,7 +52,9 @@ AQ.Record.prototype.save = function() {
   return new Promise(function(resolve,reject) {  
     AQ.post('/json/save',record).then(
       (response) => { 
-        record.updated_at = response.data.updated_at
+        if ( !record.id ) { record.id = response.id; };
+        record.updated_at = response.data.updated_at;
+        record.unsaved = null;
         resolve(record)
       },
       (response) => { reject(response.data.errors) }
@@ -69,7 +71,14 @@ AQ.Record.prototype.delete_data_association = function(da) {
 
 AQ.Record.prototype.new_data_association = function() {
 
-  console.log(this)
+  this._data_associations.push(AQ.DataAssociation.record({
+    unsaved: true,
+    key: "key",
+    value: undefined,
+    new_value: "",
+    parent_class: this.model.model,
+    parent_id: this.id
+  }));
 
 }
 

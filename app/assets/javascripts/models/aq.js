@@ -14,7 +14,7 @@ AQ.get_sample_names = function() {
     AQ.get('/browser/all').then(
       (response) => {
         AQ.sample_names = response.data;
-        resolve();
+        resolve(AQ.sample_names);
       }, (response) => {
         reject(response.data.errors);
       }
