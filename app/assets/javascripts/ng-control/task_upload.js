@@ -14,23 +14,37 @@
     $scope.messages = [];
     $scope.errors = [];
     $scope.tasks = [];
+    $scope.task_prototypes = [];    
     $scope.mode = 'upload';
     $scope.offset = 0;
+    $scope.current_tp = 0;
 
     $http.get("/tasks/list/0").then(function(response) {
       $scope.tasks = response.data;
+      aq.each($scope.tasks,function(t) {
+        t.task_prototype.status_options = JSON.parse(t.task_prototype.status_options)
+      });
     })
 
+    $http.get("/task_prototypes.json").then(function(response) {
+      $scope.task_prototypes = response.data;
+    })    
+
     $scope.advance = function(n) {
-      var temp = $scope.offset;      
-      $scope.offset += n;
-      $http.get("/tasks/list/" + $scope.offset).then(function(response) {
-        if ( response.data.length > 0 ) {
-          $scope.tasks = response.data;
-        } else {
-          $scope.offset = temp;
-        }
-      })
+      if ( $scope.offset + n >= 0 ) {
+        var temp = $scope.offset;      
+        $scope.offset += n;
+        $http.get("/tasks/list/" + $scope.offset).then(function(response) {
+          if ( response.data.length > 0 ) {
+            $scope.tasks = response.data;
+            aq.each($scope.tasks,function(t) {
+              t.task_prototype.status_options = JSON.parse(t.task_prototype.status_options)
+            });            
+          } else {
+            $scope.offset = temp;
+          }
+        });
+      }
     }
 
     function upload_tasks(task_data) {
@@ -79,6 +93,14 @@
       r.readAsBinaryString(f);
 
     }  
+
+    $scope.change_status = function(task)  {
+      $http.get('/update_task_status?task='+task.id+'&status='+task.status).then(function(response) {
+        if ( task.status == response.data.task.status ) {
+          task.message = "changed status";
+        }
+      });
+    }
 
   }]);
 

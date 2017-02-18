@@ -57,7 +57,7 @@ class TasksController < ApplicationController
                      .where(user_id: current_user.id)
                      .limit(15)
                      .offset(params[:offset])
-                     .reverse
+                     .order("id DESC")
                      .as_json(include: :task_prototype)
   end
 
@@ -168,7 +168,6 @@ class TasksController < ApplicationController
       end
       TaskPrototype.import!(tps)
 
-
       ProductionTask.switch_connection_to(:production_server)
 
       all_prod_tasks = ProductionTask.all
@@ -207,7 +206,7 @@ class TasksController < ApplicationController
       logger.info "Errors: " + t.errors.full_messages.join(',')
     end
 
-    render json: { result: 'ok' }
+    render json: { result: 'ok', task: t }
 
   end
 
@@ -272,7 +271,6 @@ class TasksController < ApplicationController
     respond_to do |format|
 
       format.html do
-        @task_prototypes = TaskPrototype.all
       end
 
       format.json do 
