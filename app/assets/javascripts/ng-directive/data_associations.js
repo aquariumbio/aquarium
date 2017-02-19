@@ -33,7 +33,7 @@
             .then(() => { da.value = da.new_value, AQ.update() })
             .catch(() => { da.object = old_object; })
 
-        }        
+        }
 
       },
 

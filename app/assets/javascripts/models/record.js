@@ -76,6 +76,12 @@ AQ.Record.prototype.delete = function() {
 
 }
 
+AQ.Record.prototype.drop = function(da) {
+
+  aq.remove(this._data_associations,da);
+
+}
+
 AQ.Record.prototype.delete_data_association = function(da) {
 
   da.delete().then(() => {
@@ -97,6 +103,3 @@ AQ.Record.prototype.new_data_association = function() {
   }));
 
 }
-
-
-

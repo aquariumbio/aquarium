@@ -121,7 +121,7 @@ AQ.Base.prototype.getter = function(child_model, child_name,id=null) {
 AQ.model_names = [ 
   "User", "Group", "SampleType", "Sample", "ObjectType", "Item",
   "OperationType", "Operation", "FieldType", "FieldValue", "AllowableFieldType", 
-  "Plan", "PlanAssociation", "DataAssociation", "Job" ];
+  "Plan", "PlanAssociation", "DataAssociation", "Job", "Upload" ];
 
 for ( var i=0; i<AQ.model_names.length; i++ ) {
   AQ[AQ.model_names[i]] = new AQ.Base(AQ.model_names[i]);

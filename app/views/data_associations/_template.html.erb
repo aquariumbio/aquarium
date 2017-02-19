@@ -12,18 +12,28 @@
         <input type='text' ng-model=da.key>
       </spanner>
 
-      <spanner w=50 p=36><input type='text' ng-model=da.new_value ng-init="da.new_value=da.value"></spanner>
+      <spanner w=50 p=36 ng-if="!da.upload_id">
+        <input type='text' ng-model=da.new_value ng-init="da.new_value=da.value">
+      </spanner>
+
+      <spanner w=50 p=36 ng-if="da.upload_id">
+        <a href="{{da.upload.url}}">{{da.upload.upload_file_name}}</a>
+      </spanner>
+
       <spanner w=14>&nbsp;</spanner>
       <spanner w=15>
         <a href="#" ng-click="save(da)" 
                     ng-if="da.new_value != da.value || da.unsaved"
                     class='btn btn-mini btn-primary btn-spanner'>Save</a>
         <a href="#" ng-click="da.new_value=da.value"
-                    ng-if="da.new_value != da.value"
+                    ng-if="da.new_value != da.value && !da.unsaved"
                     class='btn btn-mini btn-spanner'>Cancel</a>
+        <a href="#" ng-click="record.drop(da)"
+                    ng-if="da.unsaved"
+                    class='btn btn-mini btn-spanner'>Cancel</a>                    
       </spanner>
       <spanner w=5>
-        <a href="#" ng-click="record.delete_data_association(da)">&times;</a>
+        <a href="#" ng-click="record.delete_data_association(da)" ng-if="!da.unsaved">&times;</a>
       </spanner>      
 
     </div>
