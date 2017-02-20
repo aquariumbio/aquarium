@@ -17,10 +17,33 @@
       </spanner>
 
       <spanner w=50 p=36 ng-if="da.upload_id">
-        <a href="{{da.upload.url}}">{{da.upload.upload_file_name}}</a>
+
+        <a href="#" ng-click="da.modal=true" ng-init="da.modal=false">
+          {{da.upload.upload_file_name}}
+        </a>
+
+        ({{da.upload.upload_file_size|bytes}})
+
+        <div modal='da.modal' title="da.key + ': ' + da.upload.upload_file_name" 
+             width='50%' height='70%' ng-if="da.modal">
+          <div class='da-upload'>
+            <img ng-src="{{da.url}}" class='image'>
+            <h4>Notes: </h4>
+            <textarea ng-model=da.new_value ng-init="da.new_value=da.value" class='value'></textarea>
+            <a href="#" class='btn btn-primary' 
+                        ng-click="save(da)" 
+                        class='save' 
+                        ng-disabled="da.new_value == da.value">Save Notes</a>
+            <div class='download'>
+              <b>Download:</b> <a href="{{da.url}}" download>{{da.upload.upload_file_name}}</a>
+            </div>         
+          </div>    
+        </div>  
+
       </spanner>
 
       <spanner w=14>&nbsp;</spanner>
+
       <spanner w=15>
         <a href="#" ng-click="save(da)" 
                     ng-if="da.new_value != da.value || da.unsaved"
@@ -32,6 +55,7 @@
                     ng-if="da.unsaved"
                     class='btn btn-mini btn-spanner'>Cancel</a>                    
       </spanner>
+
       <spanner w=5>
         <a href="#" ng-click="record.delete_data_association(da)" ng-if="!da.unsaved">&times;</a>
       </spanner>      

@@ -13,7 +13,14 @@ AQ.Record = function(model,data) {
   }
 
   for ( var method_name in model.record_getters ) {
-    Object.defineProperty(record, method_name, { get: model.record_getters[method_name] } );
+    Object.defineProperty(
+      record, 
+      method_name, 
+      { 
+        get: model.record_getters[method_name], 
+        configurable: true 
+      } 
+    );
   }
 
   if ( data ) {

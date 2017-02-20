@@ -9,3 +9,19 @@
   border-radius: 5px;
   border-left: 1pt solid black;
 }
+
+.da-upload {
+  .image {
+    height: 200px;
+  }
+  .value {
+    margin: 2px 0 10px 0;
+    width: 100% !important;
+  }
+  .save {
+
+  }
+  .download {
+    margin-top: 10px;
+  }
+}
