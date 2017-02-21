@@ -23,9 +23,7 @@
           {{da.upload.upload_file_name}}
         </a>
 
-        ({{da.upload.upload_file_size|bytes}})
-
-        {{da.value}}
+        <span ng-if="da.busy">uploading file...</span>
 
         <div modal='da.modal' title="da.key + ': ' + da.upload.upload_file_name" 
              width='50%' height='70%' ng-if="da.modal">

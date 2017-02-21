@@ -34,25 +34,35 @@
       replace: true,
 
       template: "<div id='da123'>"
-              + "<label class='btn btn-default btn-file btn-mini btn-spanner'>"
-              + "Upload File <input type=file"
-              + "                     id='upload'"
-              + "                   file='upload'"
-              + "               data-url='/json/upload.json'"
-              + "               multiple"
-              + "                  style='display: none;'>"
+              + "<label class='btn btn-default btn-file btn-mini btn-spanner' ng-disabled='record.uploading'>"
+              + "<span ng-if='record.uploading'>Uploading</span>"
+              + "<span ng-if='!record.uploading'>Upload File</span>"              
+              + "  <input type=file"
+              + "    id='upload'"
+              + "    file='upload'"
+              + "    data-url='/json/upload.json'"
+              + "    multiple"
+              + "    style='display: none;'>"
               + "</label>",
 
       link: function(scope,element,attrs) {
 
         $(element).find('#upload').fileupload({
           dataType: "json",
+          add: function(e,data) {
+            console.log("Starting");            
+            data.submit();
+            scope.record.uploading = true;
+            AQ.update();
+          },
           done: function(e,data) {
+            console.log("Done");            
             var da = scope.record.new_data_association();
             delete da.upload;
             da.upload = data.result;
             da.upload_id = data.result.id;
             da.url = data.result.url;
+            scope.record.uploading = false;
             AQ.update();
           }
         });
