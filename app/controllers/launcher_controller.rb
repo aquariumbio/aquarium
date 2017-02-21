@@ -52,15 +52,14 @@ class LauncherController < ApplicationController
 
   def cost
 
-    ActiveRecord::Base.transaction do
-
-      op = operation_from(params)
+    ActiveRecord::Base.transaction do     
 
       begin
+        op = operation_from(params)
         c = op.nominal_cost
         render json: { cost: c[:materials] + c[:labor] * Parameter.get_float("labor rate") }
       rescue Exception => e
-        render json: { errors: e.to_s }, status: 422
+        render json: { errors: e.to_s }
       end
 
       raise ActiveRecord::Rollback
