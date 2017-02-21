@@ -57,9 +57,12 @@ AQ.Record.prototype.save = function() {
   var record = this;
 
   return new Promise(function(resolve,reject) {  
-    AQ.post('/json/save',record).then(
+    AQ.post('/json/save',record,{withCredentials: true,processData: false}).then(
       (response) => { 
-        if ( !record.id ) { record.id = response.data.id; };
+        if ( !record.id ) { 
+          record.id = response.data.id; 
+          record.created_at = response.data.created_at
+        };
         record.updated_at = response.data.updated_at;
         record.unsaved = null;
         resolve(record)
@@ -91,22 +94,30 @@ AQ.Record.prototype.drop = function(da) {
 
 AQ.Record.prototype.delete_data_association = function(da) {
 
-  da.delete().then(() => {
-    aq.remove(this._data_associations,da);
-    AQ.update();
-  });
+  if ( AQ.confirm("Are you sure you want to delete this datum?") ) {
+
+    da.delete().then(() => {
+      aq.remove(this._data_associations,da);
+      AQ.update();
+    });
+
+  }
 
 }
 
 AQ.Record.prototype.new_data_association = function() {
 
-  this._data_associations.push(AQ.DataAssociation.record({
+  var da = AQ.DataAssociation.record({
     unsaved: true,
     key: "key",
     value: undefined,
     new_value: "",
     parent_class: this.model.model,
     parent_id: this.id
-  }));
+  });
+
+  this._data_associations.push(da);
+
+  return da;
 
 }

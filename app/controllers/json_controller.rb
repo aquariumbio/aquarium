@@ -39,16 +39,32 @@ class JsonController < ApplicationController
 
   end
 
+  def upload 
+
+    u = Upload.new
+
+    File.open(params[:files][0].tempfile) do |f|
+      u.upload = f # just assign the logo attribute to a file
+      u.name = params[:files][0].original_filename
+      u.save
+    end
+
+    unless u.errors.empty?
+      logger.info "ERRORS: #{u.errors.full_messages}"
+      render json: { error: "#{u.errors.full_messages}" }
+      return
+    end
+
+    render json: u.as_json(methods: :url)
+
+  end    
+
   def save
 
     if ( params[:id] ) 
-
       record = Object.const_get(params[:model][:model]).find(params[:id])
-
     else
-
       record = Object.const_get(params[:model][:model]).new
-
     end
 
     record.attributes.each do |name,val|

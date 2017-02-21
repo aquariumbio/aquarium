@@ -3,6 +3,7 @@ AQ.Base = function(model) {
   this.record_methods = {};
   this.record_getters = {};
   this.update = function() {};
+  this.confirm = function() { return true; };
 }
 
 AQ.Base.prototype.super = function(name) {

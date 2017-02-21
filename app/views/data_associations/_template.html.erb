@@ -4,7 +4,8 @@
 
     <div class='spanner-row' 
          ng-if="record.data_associations.length > 0"
-         ng-repeat="da in record.data_associations">
+         ng-repeat="da in record.data_associations"
+         ng-init="da.new_value=da.value">
 
       <spanner w=16 p=1 ng-if="!da.unsaved">{{da.key}}</spanner>
 
@@ -13,7 +14,7 @@
       </spanner>
 
       <spanner w=50 p=36 ng-if="!da.upload_id">
-        <input type='text' ng-model=da.new_value ng-init="da.new_value=da.value">
+        <input type='text' ng-model=da.new_value>
       </spanner>
 
       <spanner w=50 p=36 ng-if="da.upload_id">
@@ -23,6 +24,8 @@
         </a>
 
         ({{da.upload.upload_file_size|bytes}})
+
+        {{da.value}}
 
         <div modal='da.modal' title="da.key + ': ' + da.upload.upload_file_name" 
              width='50%' height='70%' ng-if="da.modal">
@@ -63,7 +66,14 @@
     </div>
 
     <div class='spanner-row'>
-      <spanner w=20><a href="#" ng-click="record.new_data_association()">+ Add new data field</spanner>
+      <spanner w=20>
+        <a href="#" 
+           ng-click="record.new_data_association()" 
+           class='btn btn-mini btn-spanner'>
+           Add data
+        </a>
+        <upload record='record'></upload>
+      </spanner>
     </div>
 
   </div>

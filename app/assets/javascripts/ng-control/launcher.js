@@ -13,6 +13,7 @@
 
     AQ.init($http);
     AQ.update = () => { $scope.$apply(); }
+    AQ.confirm = (msg) => { return confirm(msg); }
 
     $scope.status = "Loading sample names ...";
     $scope.plan = null;

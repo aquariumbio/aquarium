@@ -24,4 +24,42 @@
     }
   });
 
+  w.directive('upload', function() {
+
+    return {
+
+      restrict: 'EA',
+      transclude: true,
+      scope: { record: '=' },
+      replace: true,
+
+      template: "<div id='da123'>"
+              + "<label class='btn btn-default btn-file btn-mini btn-spanner'>"
+              + "Upload File <input type=file"
+              + "                     id='upload'"
+              + "                   file='upload'"
+              + "               data-url='/json/upload.json'"
+              + "               multiple"
+              + "                  style='display: none;'>"
+              + "</label>",
+
+      link: function(scope,element,attrs) {
+
+        $(element).find('#upload').fileupload({
+          dataType: "json",
+          done: function(e,data) {
+            var da = scope.record.new_data_association();
+            delete da.upload;
+            da.upload = data.result;
+            da.upload_id = data.result.id;
+            da.url = data.result.url;
+            AQ.update();
+          }
+        });
+
+      }
+    }
+
+  });
+
 })();

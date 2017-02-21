@@ -15,6 +15,10 @@ class Upload < ActiveRecord::Base
     self.upload_file_name
   end
 
+  def size
+    self.upload_file_size
+  end  
+
   def url
     self.upload.url
   end
