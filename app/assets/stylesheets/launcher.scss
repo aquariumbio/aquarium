@@ -130,6 +130,11 @@
       display: inline-block;      
     }    
 
+    .sample-array-element {
+      width: calc(100% - 20px) !important;
+      display: inline-block;      
+    }      
+
     .no-items {
       color: #bbb;
       width: 204px !important;
@@ -178,6 +183,39 @@
   }
   .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
     cursor: not-allowed;
+  }
+
+  .adjusted-radio {
+    margin: 0 !important;
+    padding-bottom: 3px !important;
+  }
+
+  .tiny-collection {
+    border: none;
+    width: 100%;
+    tr { 
+      margin: 0;
+      padding: 0;
+      border: none;
+    }
+    td {
+      margin: 0;
+      padding: 0;
+      border: 1pt solid #eee;
+      width: 10px;
+      height: 10px;      
+    }
+    .filled {
+      background: #aaf; 
+      cursor: pointer;
+    }
+    .blank {
+    }  
+    .selected {
+      background: #00f; 
+      cursor: pointer;      
+    }               
+
   }
 
 }

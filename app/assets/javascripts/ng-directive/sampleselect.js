@@ -8,13 +8,13 @@
     w = angular.module('aquarium', ['ngCookies','ui.ace']); 
   } 
 
-  w.directive("itemselect", function() {
+  w.directive("sampleselect", function() {
 
     return {
 
       restrict: 'A',
 
-      scope: { ft: '=', operation: '=', fv: '=' },
+      scope: { ft: '=', operation: '=', fv: '=', cb: '=' },
 
       link: function($scope,$element,$attributes) {
 
@@ -30,7 +30,7 @@
 
           op.update_cost();
 
-          var sid = AQ.id_from(ui.item.value);
+          var sid = AQ.id_from(ui.item.value); // ui.item.value looks like "123: Sample Name"
 
           if ( ft.array ) {
             fv.sample_identifier = ui.item.value;
@@ -54,6 +54,7 @@
                   if ( items.length > 0 ) {
                     field_value.items = items;
                     field_value.selected_item = items[0];
+                    field_value.sid = sid;
                     $scope.$apply();
                   }
                 });
@@ -101,9 +102,13 @@
           }
         });
 
+        $scope.focus = function(op,fv) {
+          $scope.cb(op,fv);
+        }
+
       },
 
-      template: $('#item_select').html()
+      template: $('#sample_select').html()
 
     }
 

@@ -109,7 +109,8 @@ class JsonController < ApplicationController
       if sample && ot
 
         if ot.handler == 'collection'
-          render json: Collection.parts(sample,ot)
+          logger.info Collection.parts(sample,ot) 
+          render json: Collection.parts(sample,ot) 
         else
           render json: sample.items.reject { |i| i.deleted? || i.object_type_id != ot.id }
         end

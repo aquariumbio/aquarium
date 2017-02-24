@@ -21,6 +21,11 @@
     $scope.plan_offset = 0;
     $scope.getting_plans = false;
 
+    $scope.io_focus = function(op,fv) {
+      $scope.current_operation = op;
+      $scope.current_fv = fv;
+    }
+
     AQ.get_sample_names().then(() =>  {
       $scope.status = "Loading operation types ...";
       AQ.OperationType.all_with_content().then((operation_types) => {
@@ -115,6 +120,20 @@
     $scope.more_plans = function(dir) {
       var o = $scope.plan_offset + 15 * dir; 
       return o >= 0 && o < AQ.Plan.num_plans;
+    }
+
+    $scope.choose_default_part = function(fv,item) {
+      if ( item.collection ) {
+      // used in _field_value_editor.html.erb to initialized collection choice
+        for ( var r=0; r<item.collection.matrix.length; r++ ) {
+          for ( var c=0; c<item.collection.matrix[r].length; c++ ) {
+            if ( item.collection.matrix[r][c] == fv.sid ) {
+              item.selected_row = r;
+              item.selected_column = c;
+            }
+          }
+        }
+      }
     }
 
   }]);

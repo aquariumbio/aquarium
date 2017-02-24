@@ -5,9 +5,3 @@ AQ.FieldValue.record_methods.clear = function() {
 }
 
 AQ.FieldValue.getter(AQ.Item,"item","child_item_id");
-
-
-
-
-
-

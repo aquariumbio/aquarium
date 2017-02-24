@@ -45,7 +45,15 @@ AQ.items_for = function(sample_id,object_type_id) {
 
     AQ.get('/json/items/'+sample_id+'/'+object_type_id).then(
       (response) => {
-        resolve(aq.collect(response.data, (item) => { return new AQ.Record(AQ.Item,item); }));
+        resolve(aq.collect(response.data, (item) => { 
+          if ( item.collection ) {
+            var i = item;
+            i.collection.matrix = JSON.parse(i.collection.data).matrix;
+            return new AQ.Record(AQ.Item,item); 
+          } else {
+            return new AQ.Record(AQ.Item,item); 
+          }
+        }));
       }, (response) => {
         reject(response.data.errors);
       }
