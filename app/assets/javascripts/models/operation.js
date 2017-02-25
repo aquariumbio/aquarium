@@ -6,7 +6,13 @@ AQ.Operation.record_methods.set_type = function(operation_type) {
   op.field_values = [];
 
   aq.each(operation_type.field_types,function(ft) {
-    var fv = AQ.FieldValue.record({ name: ft.name, role: ft.role, items: [], routing: ft.routing, });
+    var fv = AQ.FieldValue.record({ 
+      name: ft.name, 
+      role: ft.role, 
+      items: [], 
+      routing: ft.routing,
+      field_type: ft 
+    });
     if ( ft.allowable_field_types.length > 0 ) {
       fv.aft = ft.allowable_field_types[0];
       fv.aft_id = ft.allowable_field_types[0].id;

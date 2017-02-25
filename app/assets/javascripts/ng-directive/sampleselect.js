@@ -102,8 +102,8 @@
           }
         });
 
-        $scope.focus = function(op,fv) {
-          $scope.cb(op,fv);
+        $scope.focus = function(op,ft,fv) {
+          $scope.cb(op,ft,fv);
         }
 
       },

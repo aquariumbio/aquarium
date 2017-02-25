@@ -21,9 +21,10 @@
     $scope.plan_offset = 0;
     $scope.getting_plans = false;
 
-    $scope.io_focus = function(op,fv) {
+    $scope.io_focus = function(op,ft,fv) {
       $scope.current_operation = op;
       $scope.current_fv = fv;
+      $scope.current_ft = ft;
     }
 
     AQ.get_sample_names().then(() =>  {
@@ -36,11 +37,17 @@
           AQ.Plan.list($scope.plan_offset).then((plans) => {
             $scope.status = "Ready";
             $scope.getting_plans = false;
+            AQ.operation_types = operation_types;
             $scope.operation_types = operation_types;
+
+            // FOR DEVELOPING LAUNCHER, DELETE LATER
+            $scope.select(operation_types[2]);
+            $scope.mode = 'new';
+
             $scope.current_user = user;
             $scope.plans = plans.reverse();
             aq.each($scope.plans, (plan)=> { plan.link_operation_types($scope.operation_types) });
-            $scope.mode = 'running';
+            // $scope.mode = 'running';
             $scope.$apply();
           });
         });
@@ -81,9 +88,13 @@
     $scope.set_aft = function(op,ft,aft) {
       op.form[ft.role][ft.name] = { aft_id: aft.id, aft: aft };
       aq.each(op.field_values,function(fv) {
-        if ( fv.name == fv.name && fv.role == ft.role ) {
+        if ( fv.name == ft.name && fv.role == ft.role ) {
           op.routing[ft.routing] = '';
-          fv = { aft: aft, aft_id: aft.id, items: [] };
+          fv.aft = aft;
+          fv.aft_id = aft.id;
+          fv.items = [];
+          fv.field_type = ft;
+          fv.recompute_getter('predecessors');
         }
       });
     }

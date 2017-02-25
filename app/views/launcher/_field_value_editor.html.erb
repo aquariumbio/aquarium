@@ -53,4 +53,12 @@
 
   <b ng-if="current_fv.items.length == 0">No Inventory</b><br/>
 
+  <div ng-if="current_fv.role == 'input'">
+    <hr/>
+    <b>Predecessors</b><br/>
+    <ul>
+      <li ng-repeat="pred in current_fv.predecessors">{{pred.operation_type.name}}</li>
+    </ul>
+  </div>
+
 </script>

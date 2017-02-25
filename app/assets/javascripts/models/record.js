@@ -45,6 +45,10 @@ AQ.Record = function(model,data) {
 
 }
 
+AQ.Record.prototype.recompute_getter = function(gname) {
+  Object.defineProperty(this,gname,{get: this.model.record_getters[gname], configurable: true});
+}
+
 AQ.Record.prototype.init = function(data) {
   for ( var key in data ) {
     this[key] = data[key];
