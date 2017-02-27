@@ -56,11 +56,12 @@
     .name {
       position: relative;
       font-weight: bold;
-      margin: 5px 10px 5px 40px;
+      margin: 5px 0px 5px 40px;
       padding: 5px;
       border: 1pt solid #aaa;  
       border-radius: 10px !important;
       background: #efe;
+      width: calc(100% - 60px);
     }
 
     .io-name {
@@ -85,8 +86,8 @@
     }
 
     .inputs {
-      margin: 5px 5px 5px 80px;
-      padding: 5px;      
+      margin: 0px 5px 5px 80px;
+      padding: 0px 5px 5px 5px;      
       /*outline: 1pt solid #eee;  */
       position: relative;
     }
@@ -132,7 +133,8 @@
 
     .sample-array-element {
       width: calc(100% - 20px) !important;
-      display: inline-block;      
+      display: inline-block;   
+      margin-bottom: 5px;   
     }      
 
     .no-items {
@@ -188,6 +190,10 @@
   .adjusted-radio {
     margin: 0 !important;
     padding-bottom: 3px !important;
+  }
+
+  .nomargin {
+    margin: 0;
   }
 
   .tiny-collection {

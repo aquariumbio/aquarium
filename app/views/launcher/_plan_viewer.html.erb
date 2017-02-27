@@ -4,34 +4,41 @@
     PLAN TEMPLATE
     -->
 
-  <div ng-repeat="operation in plan.operations" class="rel">
+  <div ng-repeat="operation in plan.operations" class="rel" ng-include="'operation_viewer'">
+  </div>
 
-    <div class='spanner-row indent-20'>
-      <opener model="operation.open"></opener>
-      <spanner w=18 p=20>{{operation.id}}: {{operation.operation_type.name}}</spanner>
-      <spanner w=52> 
-        <a ng-if="operation.open" ng-class="op_mode(operation,'io')"   ng-click="operation.mode = 'io'">I/O</a>
-        <a ng-if="operation.open" ng-class="op_mode(operation,'data')" ng-click="operation.mode = 'data'">Data</a>  
-      </spanner>
-      <spanner w=30 p=34>{{operation.status}}</spanner>
-    </div>
+</script>
 
-    <div class='spanner-row indent-20'>
+<script type="text/ng-template" id="operation_viewer">
 
-      <div ng-if="operation.open && operation.mode == 'io'"   
-           ng-include="'op_io'" 
-          class='rel'></div>
+  <!--
+    OPERATION TEMPLATE
+    -->
 
-      <div ng-if="operation.open && operation.mode == 'data'" 
-           ng-include="'job_info'" 
-           class='rel'></div>
+  <div class='spanner-row indent-20'>
+    <opener model="operation.open"></opener>
+    <spanner w=18 p=20>{{operation.id}}: {{operation.operation_type.name}}</spanner>
+    <spanner w=52> 
+      <a ng-if="operation.open" ng-class="op_mode(operation,'io')"   ng-click="operation.mode = 'io'">I/O</a>
+      <a ng-if="operation.open" ng-class="op_mode(operation,'data')" ng-click="operation.mode = 'data'">Data</a>  
+    </spanner>
+    <spanner w=30 p=34>{{operation.status}}</spanner>
+  </div>
 
-      <div ng-if="operation.open && operation.mode == 'data'" 
-           ng-include="'data_association'" 
-           ng-init="object = operation" 
-           class='rel'></div>
+  <div class='spanner-row indent-20'>
 
-    </div>
+    <div ng-if="operation.open && operation.mode == 'io'"   
+         ng-include="'op_io'" 
+        class='rel'></div>
+
+    <div ng-if="operation.open && operation.mode == 'data'" 
+         ng-include="'job_info'" 
+         class='rel'></div>
+
+    <div ng-if="operation.open && operation.mode == 'data'" 
+         ng-include="'data_association'" 
+         ng-init="object = operation" 
+         class='rel'></div>
 
   </div>
 

@@ -14,19 +14,22 @@
 
       restrict: 'A',
 
-      scope: { ft: '=', operation: '=', fv: '=', cb: '=' },
+      scope: { ft: '=', plan: "=", operation: '=', fv: '=', focus: '=' },
 
       link: function($scope,$element,$attributes) {
 
         var ft = $scope.ft,
             fv = $scope.fv,
             op = $scope.operation,
+            plan = $scope.plan,
             op_type = $scope.operation.operation_type,
             route = $scope.operation.routing;
 
         var autocomp = function(ev,ui) {
 
           // Called when a sample input is updated. 
+
+          plan.propagate(op,fv,ui.item.value); // send new sid to i/o of other operations
 
           op.update_cost();
 
@@ -100,11 +103,7 @@
             });
             fv.clear();
           }
-        });
-
-        $scope.focus = function(op,ft,fv) {
-          $scope.cb(op,ft,fv);
-        }
+        });    
 
       },
 

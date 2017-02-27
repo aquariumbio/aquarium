@@ -65,3 +65,80 @@ AQ.Plan.list = function(offset) {
   });
 
 }
+
+AQ.Plan.record_methods.wire = function(from_op, from, to_op, to) {
+
+  var plan = this;
+  if ( !plan.wires ) {
+    plan.wires = [];
+  }
+
+  plan.wires.push(
+    AQ.Wire.record({
+      from_op: from_op,
+      from: from,
+      to_op: to_op,
+      to: to
+    })
+  );
+
+  return plan;
+
+}
+
+AQ.Plan.record_methods.unwire = function(op) {
+
+  var plan = this;
+
+  aq.each(plan.wires, (wire) => {
+    if ( wire.from_op == op || wire.to_op == op ) {
+      aq.remove(plan.wires,wire);
+    }
+  });
+
+}
+
+AQ.Plan.record_methods.propagate_down = function(fv,sid) {
+
+  var plan = this;
+
+  aq.each(plan.wires, (wire) => {
+    if ( wire.to == fv ) {
+      wire.from_op.routing[wire.from.routing] = sid;
+      aq.each(wire.from_op.field_values,(fv) => {
+        plan.propagate_down(fv,sid);
+      })
+    }
+  });
+
+  return plan;
+
+}
+
+AQ.Plan.record_methods.propagate_up = function(op,fv,sid) {
+
+  var plan = this,
+      routing = fv.routing;
+
+  aq.each(op.field_values,(fv) => {
+    if ( fv.routing == routing ) {
+      aq.each(plan.wires, (wire) => {
+        if ( wire.from == fv ) {
+          wire.to_op.routing[wire.to.routing] = sid;
+          aq.each(wire.to_op.field_values,(to_fv) => {
+            plan.propagate_up(wire.to_op,to_fv,sid)
+          })
+        }
+      })
+    }
+  })
+
+  return plan;
+
+}
+
+
+AQ.Plan.record_methods.propagate = function(op,fv,sid) {
+  return this.propagate_down(fv,sid)
+             .propagate_up(op,fv,sid);
+}

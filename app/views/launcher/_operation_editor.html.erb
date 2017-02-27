@@ -5,7 +5,7 @@
 
   <div class='operation'>
 
-    <div class='outputs' ng-if="operation.operation_type.num_outputs() > 0">
+    <div class='outputs' ng-if="!is_predecessor && operation.operation_type.num_outputs() > 0">
       <div ng-repeat="ft in operation.operation_type.field_types | filter: { role: 'output', ftype: 'sample' }"
            ng-include="'io_editor'"></div>
     </div>
@@ -16,7 +16,7 @@
       <span class='no-cost' ng-if='!operation.cost'>Cost undetermined</span>      
       <span class='cost' ng-if='operation.cost'>{{operation.cost|currency}}</span>
       <div class='cancel'>
-        <a href="#">&times;</a>
+        <a href="#" ng-click="plan.unwire(operation)">&times;</a>
       </div> 
     </div>  
 

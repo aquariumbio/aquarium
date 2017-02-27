@@ -2,63 +2,75 @@
 
   <h4>{{current_operation.operation_type.name}}: {{current_fv.name}}</h4>
 
-  <form ng-if="current_fv.items.length > 0">
+  <form>
 
-    <b>Inventory</b>
+    <div ng-if="current_fv.items.length > 0"
+          class="nomargin">
 
-    <table class='table table-condensed'>
+      <b>Inventory</b>
 
-      <tr ng-repeat="item in current_fv.items" ng-if="!item.collection">
-        <td>
-          <label>
-            <input type="radio" 
-                   class="adjusted-radio"
-                   name="item"
-                   ng-model="item.selected">
-              {{item.id}}
-          </label>
-        </td>
-        <td>{{item.location}}</td>
-      </tr>
+      <table class='table table-condensed nomargin'>
 
-      <tr ng-repeat="item in current_fv.items"
-          ng-if="item.collection"
-          ng-init="choose_default_part(current_fv,item)">
-        <td>
-          <label>
-            <input type="radio" 
-                   class="adjusted-radio"
-                   name="item"
-                   ng-model="item.selected">
-              {{item.collection.id}}:<br />
-              {{item.collection.location}}<br/>
-              ({{item.selected_row}},{{item.selected_column}})
-          </label>
-        </td>
-        <td>
-          <table class='tiny-collection'>
-            <tr ng-repeat="row in item.collection.matrix track by $index">
-              <td ng-repeat="el in row track by $index" 
-                  ng-class="current_fv.sid == el ? (item.selected_row == $parent.$index && item.selected_column == $index ? 'selected' : 'filled' ) : 'black'"
-                  ng-click="item.selected_row = $parent.$index; item.selected_column = $index">
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
+        <tr ng-repeat="item in current_fv.items" ng-if="!item.collection">
+          <td>
+            <label>
+              <input type="radio" 
+                     class="adjusted-radio"
+                     name="predecessor"
+                     ng-model="item.selected">
+                {{item.id}}
+            </label>
+          </td>
+          <td>{{item.location}}</td>
+        </tr>
 
-    </table>
+        <tr ng-repeat="item in current_fv.items"
+            ng-if="item.collection"
+            ng-init="choose_default_part(current_fv,item)">
+          <td>
+            <label>
+              <input type="radio" 
+                     class="adjusted-radio"
+                     name="predecessor"
+                     ng-model="item.selected">
+                {{item.collection.id}}:<br />
+                {{item.collection.location}}<br/>
+                ({{item.selected_row}},{{item.selected_column}})
+            </label>
+          </td>
+          <td>
+            <table class='tiny-collection'>
+              <tr ng-repeat="row in item.collection.matrix track by $index">
+                <td ng-repeat="el in row track by $index" 
+                    ng-class="current_fv.sid == el ? (item.selected_row == $parent.$index && 
+                              item.selected_column == $index ? 'selected' : 'filled' ) : 'black'"
+                    ng-click="item.selected_row = $parent.$index; item.selected_column = $index">
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+      </table>
+
+    </div>
 
   </form>
 
-  <b ng-if="current_fv.items.length == 0">No Inventory</b><br/>
+  <b ng-if="current_fv.items.length == 0">No Inventory<br/></b>
 
-  <div ng-if="current_fv.role == 'input'">
-    <hr/>
-    <b>Predecessors</b><br/>
-    <ul>
-      <li ng-repeat="pred in current_fv.predecessors">{{pred.operation_type.name}}</li>
-    </ul>
+  <div ng-if="current_fv.role == 'input' && current_fv.predecessors.length > 0">
+    <b>Operation Types</b><br/>
+    <table class='table table-condensed nomargin'>
+      <tr ng-repeat="pred in current_fv.predecessors">
+        <td><a href="#"
+               ng-click="add_wire(current_fv,current_operation,pred)" 
+               class="btn btn-mini">Add</a></td>
+        <td>{{pred.operation_type.name}}</td>
+      </tr>
+    </table>
   </div>
+
+  <b ng-if="current_fv.predecessors.length == 0">No Operation Types<br/></b>
 
 </script>

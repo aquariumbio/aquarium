@@ -1,7 +1,4 @@
-
 <script type="text/ng-template" id="io_editor">
-
-  <!-- Displays field value editors associated with a given field type for the given operation. -->
 
   <div class='field_value_form'>
 
@@ -9,15 +6,14 @@
     <span class='io-name'> 
       <b>{{ft.name}}</b>
       <form class='radio-buttons pull-right'> 
-        <span ng-repeat="aft in ft.allowable_field_types"
-                ng-init="set_aft(operation,ft,ft.allowable_field_types[0])">
+        <span ng-repeat="aft in ft.allowable_field_types">
           <label class="radio-label">
             <input type="radio" class="radio"
                    name="{{ft.name + '_' + ft.role}}"
                    ng-value="aft.id"
                    ng-disabled="ft.allowable_field_types.length == 1"
                    ng-model=  "operation.form[ft.role][ft.name].aft_id"
-                   ng-change= "set_aft(operation,ft,aft)">
+                   ng-change= "operation.set_aft(ft,aft)">
             {{aft.object_type_id ? aft.object_type.name : 'No container'}} 
             <span ng-if="ft.part">(part)</span>
           </label>
@@ -28,10 +24,11 @@
     <!-- Sample Chooser -->
     <div sampleselect
          ng-repeat="fv in operation.field_values | filter: { name: ft.name, role: ft.role }" 
-         ft="ft" operation="operation" fv="fv" cb="io_focus">
+         ft="ft" operation="operation" fv="fv" focus="io_focus" plan="plan">
     </div> 
 
-    <div ng-if="ft.array">      
+    <!-- Add array element button -->
+    <div ng-if="ft.array">
       <a href='#' class='btn btn-mini' ng-click="operation.array_add(ft)">+</a>
     </div>
 
@@ -41,8 +38,6 @@
 
 <script type="text/ng-template" id="sample_select">
 
-  <!-- Displays sample input and item selector for a given field value -->
-
   <!-- basic sample -->
   <input type='string' 
          placeholder="Sample Identifier"
@@ -50,6 +45,7 @@
          class="sample-only"
          ng-model="operation.routing[ft.routing]"
          ng-focus="focus(operation,ft,fv)"
+         ng-blur="blur()"
          ng-if="!ft.array && operation.form[ft.role][ft.name].aft.sample_type_id">
 
   <!-- element of sample array -->
@@ -58,7 +54,8 @@
          id="sample-io"
          class="sample-array-element"
          ng-model="fv.sample_identifier"
-         ng-focus="io_focus(operation,ft,fv)"
+         ng-focus="focus(operation,ft,fv)"
+         ng-blur="blur()"         
          ng-if="ft.array && operation.form[ft.role][ft.name].aft.sample_type_id">
 
   <!-- not a sample -->
@@ -66,48 +63,17 @@
          placeholder="This i/o does not require a sample name"
          disabled=true
          class="sample-only"
-         ng-focus="io_focus(operation,ft,fv)"
+         ng-focus="focus(operation,ft,fv)"
+         ng-blur="blur()"         
          ng-if="!operation.form[ft.role][ft.name].aft.sample_type_id">
 
-<!--   <div class='btn-group' ng-if="show_item_select(ft)">
-
-    <a ng-class="item_select_class(ft)"
-       data-toggle="dropdown" 
-       href="#">
-      <span ng-if="fv.items.length == 0">No Items</span>    
-      <span ng-if="fv.items.length > 0 && !fv.selected_item">Item</span>
-      <span ng-if="!ft.part && fv.selected_item">
-        <b>{{fv.selected_item.id}}</b>: 
-           {{fv.selected_item.location}}
-      </span>
-      <span ng-if="ft.part && fv.selected_item">
-        <b>{{fv.selected_item.collection.id}}</b>[{{fv.selected_item.row}},{{fv.selected_item.column}}]:
-           {{fv.selected_item.collection.location}}
-      </span>
-      <span class="caret pull-right"></span>
-    </a>
-
-    <ul class='dropdown-menu' ng-if="fv.items.length > 0">
-      <li ng-repeat="item in fv.items">
-        <a ng-if="!ft.part" href='#' ng-click="select(item)">
-          <b>{{item.id}}</b>: 
-          {{item.location}}
-          ({{item.created_at|date}})
-        </a>
-        <a ng-if="ft.part" href='#' ng-click="select(item)">
-          <b>{{item.collection.id}}</b>[{{item.row}},{{item.column}}]:  
-          {{item.collection.location}}
-          ({{item.collection.created_at|date}})
-        </a>
-
-      </li>
-    </ul>
-
-  </div>
- -->
   <a ng-if="ft.array" href="#" ng-click="operation.array_remove(fv)" class='array-remove'>&times;</a>
 
-  <!-- <pre>sid = {{fv.sample_identifier|json}}, {{ft.routing}} = {{operation.routing[ft.routing]}}</pre> -->
+  <br />
+
+  <div ng-repeat="wire in plan.wires | filter: fv.is_wired_to"
+       ng-include="'operation_editor'" 
+       ng-init="operation = wire.from_op; is_predecessor=true; io_focus=focus">
+  </div>
 
 </script>
-

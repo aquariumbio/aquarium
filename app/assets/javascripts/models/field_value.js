@@ -1,4 +1,3 @@
-
 AQ.FieldValue.record_methods.clear = function() {
   this.items = [];
   this.item = null;
@@ -14,9 +13,12 @@ AQ.FieldValue.record_getters.predecessors = function() {
 
   aq.each(AQ.operation_types,function(ot) {
     aq.each(ot.field_types,function(ft) {
+      console.log("checking " + ot.name + " / " + ft.name );
       if ( ft.role == 'output' && ft.can_produce(fv) ) {
-        console.log("found predecessor: " + ot.name);
         preds.push({operation_type: ot, output: ft});
+        console.log("ok!")
+      } else {
+        console.log("nope")
       }
     });
   });
@@ -25,4 +27,9 @@ AQ.FieldValue.record_getters.predecessors = function() {
   fv.predecessors = preds;
   return preds;
 
+}
+
+AQ.FieldValue.record_getters.is_wired_to = function() {
+  var fv = this;
+  return function(wire) { return wire.to == fv; }
 }

@@ -27,6 +27,12 @@
       $scope.current_ft = ft;
     }
 
+    $scope.io_blur = function() {
+      $scope.current_operation = null;
+      $scope.current_fv = null;
+      $scope.current_ft = null;      
+    }
+
     AQ.get_sample_names().then(() =>  {
       $scope.status = "Loading operation types ...";
       AQ.OperationType.all_with_content().then((operation_types) => {
@@ -85,20 +91,6 @@
       });
     }
 
-    $scope.set_aft = function(op,ft,aft) {
-      op.form[ft.role][ft.name] = { aft_id: aft.id, aft: aft };
-      aq.each(op.field_values,function(fv) {
-        if ( fv.name == ft.name && fv.role == ft.role ) {
-          op.routing[ft.routing] = '';
-          fv.aft = aft;
-          fv.aft_id = aft.id;
-          fv.items = [];
-          fv.field_type = ft;
-          fv.recompute_getter('predecessors');
-        }
-      });
-    }
-
     $scope.highlight = function(m) {
       var c = "";
       if ( m == $scope.mode ) {
@@ -145,6 +137,23 @@
           }
         }
       }
+    }
+
+    $scope.add_wire = function(fv, op, pred) {
+
+      console.log("Adding wire");
+
+      var preop = operation = AQ.Operation.record({
+        routing: {},
+        form: { input: {}, output: {} }
+      }).set_type(pred.operation_type);
+
+      var preop_output = preop.output(pred.output.name);
+
+      $scope.plan.wire(preop,preop_output,op,fv);
+
+      console.log($scope.plan.wires)
+
     }
 
   }]);

@@ -18,10 +18,28 @@ AQ.Operation.record_methods.set_type = function(operation_type) {
       fv.aft_id = ft.allowable_field_types[0].id;
     }
     op.field_values.push(fv);
+
+    op.set_aft(ft,ft.allowable_field_types[0])
+
   });
 
   return this;
 
+}
+
+AQ.Operation.record_methods.set_aft = function(ft,aft) {
+  var op = this;
+  op.form[ft.role][ft.name] = { aft_id: aft.id, aft: aft };
+  aq.each(op.field_values,function(fv) {
+    if ( fv.name == ft.name && fv.role == ft.role ) {
+      op.routing[ft.routing] = '';
+      fv.aft = aft;
+      fv.aft_id = aft.id;
+      fv.items = [];
+      fv.field_type = ft;
+      fv.recompute_getter('predecessors');
+    }
+  });
 }
 
 AQ.Operation.record_methods.clear = function() {
@@ -51,7 +69,8 @@ AQ.Operation.record_methods.array_add = function(field_type) {
     name: field_type.name, 
     role: field_type.role,
     routing: field_type.routing,
-    items: []
+    items: [],
+    field_type: field_type
   });
 
   if ( this.form && this.form[field_type.role] && this.form[field_type.role][field_type.name] ) {
@@ -111,6 +130,20 @@ AQ.Operation.record_methods.update_cost = function() {
   });
 
   return this;
+
+}
+
+AQ.Operation.record_methods.output = function(name) {
+
+  var fvs = aq.where(this.field_values,(fv) => { 
+    return fv.name == name && fv.role == 'output' 
+  });
+
+  if ( fvs.length > 0 ) {
+    return fvs[0];
+  } else {
+    throw "Attempted to access nonexistent output named '" + name + "'";
+  }
 
 }
 
