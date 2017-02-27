@@ -105,6 +105,7 @@ AQ.Plan.record_methods.propagate_down = function(fv,sid) {
   aq.each(plan.wires, (wire) => {
     if ( wire.to == fv ) {
       wire.from_op.routing[wire.from.routing] = sid;
+      wire.from_op.update_cost();
       aq.each(wire.from_op.field_values,(fv) => {
         plan.propagate_down(fv,sid);
       })
@@ -120,11 +121,15 @@ AQ.Plan.record_methods.propagate_up = function(op,fv,sid) {
   var plan = this,
       routing = fv.routing;
 
+      console.log("propagate_up: " + op.operation_type.name + ", " + fv.name + ", " + routing + ", "  + sid)
+
   aq.each(op.field_values,(fv) => {
     if ( fv.routing == routing ) {
       aq.each(plan.wires, (wire) => {
         if ( wire.from == fv ) {
           wire.to_op.routing[wire.to.routing] = sid;
+          wire.to.sample_identifier = sid;
+          wire.to_op.update_cost();
           aq.each(wire.to_op.field_values,(to_fv) => {
             plan.propagate_up(wire.to_op,to_fv,sid)
           })
@@ -136,7 +141,6 @@ AQ.Plan.record_methods.propagate_up = function(op,fv,sid) {
   return plan;
 
 }
-
 
 AQ.Plan.record_methods.propagate = function(op,fv,sid) {
   return this.propagate_down(fv,sid)

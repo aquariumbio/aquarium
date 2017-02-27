@@ -36,11 +36,9 @@ AQ.FieldType.record_methods.can_produce = function(fv) {
   if ( ft.ftype == "sample" && fv.field_type.ftype == "sample" ) {
 
     aq.each(ft.allowable_field_types, (aft) => {
-      console.log([aft.sample_type_id,fv.aft.sample_type_id,aft.object_type.id,fv.aft.object_type.id,fv.field_type.part, ft.part]);
       if ( fv.aft.sample_type_id == aft.sample_type_id &&
            fv.aft.object_type_id == aft.object_type_id && 
            Number(fv.field_type.part) == Number(ft.part) ) { // Note, Number is used to compare null and false
-        console.log("Found match!")
         rval = true;
       }
     });

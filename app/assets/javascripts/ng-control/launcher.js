@@ -47,7 +47,7 @@
             $scope.operation_types = operation_types;
 
             // FOR DEVELOPING LAUNCHER, DELETE LATER
-            $scope.select(operation_types[2]);
+            $scope.select(operation_types[7]);
             $scope.mode = 'new';
 
             $scope.current_user = user;
@@ -141,8 +141,6 @@
 
     $scope.add_wire = function(fv, op, pred) {
 
-      console.log("Adding wire");
-
       var preop = operation = AQ.Operation.record({
         routing: {},
         form: { input: {}, output: {} }
@@ -151,8 +149,6 @@
       var preop_output = preop.output(pred.output.name);
 
       $scope.plan.wire(preop,preop_output,op,fv);
-
-      console.log($scope.plan.wires)
 
     }
 

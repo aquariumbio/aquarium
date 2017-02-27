@@ -13,13 +13,9 @@ AQ.FieldValue.record_getters.predecessors = function() {
 
   aq.each(AQ.operation_types,function(ot) {
     aq.each(ot.field_types,function(ft) {
-      console.log("checking " + ot.name + " / " + ft.name );
       if ( ft.role == 'output' && ft.can_produce(fv) ) {
         preds.push({operation_type: ot, output: ft});
-        console.log("ok!")
-      } else {
-        console.log("nope")
-      }
+      } 
     });
   });
 
