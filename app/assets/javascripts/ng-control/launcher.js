@@ -47,8 +47,8 @@
             $scope.operation_types = operation_types;
 
             // FOR DEVELOPING LAUNCHER, DELETE LATER
-            $scope.select(operation_types[2]);
-            $scope.mode = 'new';
+            // $scope.select(operation_types[2]);
+            // $scope.mode = 'new';
 
             $scope.current_user = user;
             $scope.plans = plans.reverse();
