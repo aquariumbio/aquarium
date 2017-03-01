@@ -8,7 +8,9 @@
     <%= render partial: 'show_block' %>
     <%= render partial: 'steps' %>      
 
-    <div class='two-column-left'>
+    <div ng-if="!initialized">Loading ...</div>
+
+    <div class='two-column-left' ng-if="initialized">
 
       <div class="two-column-control">
 

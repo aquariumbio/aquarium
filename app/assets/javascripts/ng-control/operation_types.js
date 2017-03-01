@@ -17,6 +17,7 @@
     $scope.mode = 'definition';
     $scope.default_protocol = "";
     $scope.categories = [];
+    $scope.initialized = false;
 
     function make_categories() {
       $scope.categories = aq.uniq(aq.collect($scope.operation_types,function(ot) {
@@ -31,6 +32,7 @@
       $scope.operation_types = response.data;
       $scope.current_ot = $scope.operation_types[0];
       make_categories();
+      $scope.initialized = true;
     });
 
     $http.get('/object_types.json').then(function(response) {
@@ -159,7 +161,6 @@
 
     $scope.import_ot = function() {
 
-
       $scope.spreadsheet_name = undefined;
 
       var f = document.getElementById('import').files[0],
@@ -242,7 +243,6 @@
     $scope.unchange = function(thing) {
       thing.changed = false;
     }
-
 
   }]);
 
