@@ -97,13 +97,15 @@ class LauncherController < ApplicationController
         end
       end
 
-      params[:wires].each do |form_wire|
-        wire = Wire.new({
-          from_id: @id_map[form_wire[:from][:rid]],
-          to_id: @id_map[form_wire[:to][:rid]],
-          active: true
-        })
-        wire.save
+      if params[:wires]
+        params[:wires].each do |form_wire|
+          wire = Wire.new({
+            from_id: @id_map[form_wire[:from][:rid]],
+            to_id: @id_map[form_wire[:to][:rid]],
+            active: true
+          })
+          wire.save
+        end
       end
 
       plan.start
