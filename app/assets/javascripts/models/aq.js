@@ -5,6 +5,7 @@ AQ.init = function(http) {
   AQ.http = http;
   AQ.get = http.get;
   AQ.post = http.post;
+  AQ.next_record_id = 0;
 
 }
 

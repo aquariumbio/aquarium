@@ -13,16 +13,33 @@ AQ.Plan.record_methods.upgrade = function() {
   return plan;
 }
 
-AQ.Plan.record_methods.submit = function() {
+AQ.Plan.record_methods.export = function() {
 
   var plan = this;
+
+  console.log("Exporting plan");
+
+  return AQ.Plan.record({
+    operations: plan.operations_from_wires(),
+    wires: plan.wires
+  })
+
+}
+
+AQ.Plan.record_methods.submit = function() {
+
+  var plan = this.export();
+
+  console.log(plan)
 
   return new Promise(function(resolve,reject) {
     AQ.post('/launcher/submit',plan).then(
       (response) => {
+        console.log("Plan submitted :-)");
         resolve(AQ.Plan.record(response.data).upgrade());
       }, (response) => {
         reject(response.data.errors);
+        console.log("Plan rejected :-(")
       }
     );
   });
@@ -49,7 +66,7 @@ AQ.Plan.list = function(offset) {
           var plan = AQ.Plan.record(p);
           plan.operations = aq.collect(plan.operations,(op) => {
             var operation = AQ.Operation.record(op);
-            operation.mode = 'io'; // This is for the launcher UI, should probably be moved somewhere
+            operation.mode = 'io'; // This is for the launcher UI.
             operation.field_values = aq.collect(
               aq.where(response.data.field_values, (fv) => {
                 return fv.parent_id == operation.id;
@@ -69,6 +86,7 @@ AQ.Plan.list = function(offset) {
 AQ.Plan.record_methods.wire = function(from_op, from, to_op, to) {
 
   var plan = this;
+
   if ( !plan.wires ) {
     plan.wires = [];
   }
@@ -82,6 +100,8 @@ AQ.Plan.record_methods.wire = function(from_op, from, to_op, to) {
     })
   );
 
+  to.wired = true;
+
   return plan;
 
 }
@@ -92,9 +112,24 @@ AQ.Plan.record_methods.unwire = function(op) {
 
   aq.each(plan.wires, (wire) => {
     if ( wire.from_op == op || wire.to_op == op ) {
+      delete wire.to_op.wired;
       aq.remove(plan.wires,wire);
     }
   });
+
+}
+
+AQ.Plan.record_methods.remove_wires_to = function(op) {
+
+  var plan = this;
+
+  aq.each(plan.wires, (wire) => {  
+    if ( wire.to_op == op ) {
+      aq.remove(plan.wires,wire);
+    }
+  });
+
+  return plan;
 
 }
 
@@ -121,8 +156,6 @@ AQ.Plan.record_methods.propagate_up = function(op,fv,sid) {
   var plan = this,
       routing = fv.routing;
 
-      console.log("propagate_up: " + op.operation_type.name + ", " + fv.name + ", " + routing + ", "  + sid)
-
   aq.each(op.field_values,(fv) => {
     if ( fv.routing == routing ) {
       aq.each(plan.wires, (wire) => {
@@ -145,4 +178,40 @@ AQ.Plan.record_methods.propagate_up = function(op,fv,sid) {
 AQ.Plan.record_methods.propagate = function(op,fv,sid) {
   return this.propagate_down(fv,sid)
              .propagate_up(op,fv,sid);
+}
+
+AQ.Plan.record_methods.operations_from_wires = function() {
+
+  var plan = this, 
+      ops = [];
+
+  aq.each(plan.operations,(op) => {
+    ops.push(op);
+  });
+
+  aq.each(plan.wires, (wire) => {
+    if ( ops.indexOf(wire.from_op) < 0 ) { 
+      ops.push(wire.from_op);
+    }
+    if ( ops.indexOf(wire.to_op) < 0 ) { 
+      ops.push(wire.to_op);
+    }
+  })
+
+  return ops;
+
+}
+
+AQ.Plan.record_methods.cost = function() {
+
+  var plan = this,
+      sum = 0;
+
+  aq.each(plan.operations_from_wires(),(op) => {
+    if ( op.cost ) {
+      sum += op.cost;
+    }
+  })    
+
+  return sum;
 }

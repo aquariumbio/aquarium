@@ -38,14 +38,15 @@
 
 <script type="text/ng-template" id="sample_select">
 
+{{fv.wired_to}}
+
   <!-- basic sample -->
   <input type='string' 
          placeholder="Sample Identifier"
          id="sample-io"
-         class="sample-only"
+         ng-class="input_class()"
          ng-model="operation.routing[ft.routing]"
          ng-focus="focus(operation,ft,fv)"
-         ng-blur="blur()"
          ng-if="!ft.array && operation.form[ft.role][ft.name].aft.sample_type_id">
 
   <!-- element of sample array -->
@@ -55,7 +56,6 @@
          class="sample-array-element"
          ng-model="fv.sample_identifier"
          ng-focus="focus(operation,ft,fv)"
-         ng-blur="blur()"         
          ng-if="ft.array && operation.form[ft.role][ft.name].aft.sample_type_id">
 
   <!-- not a sample -->
@@ -64,10 +64,12 @@
          disabled=true
          class="sample-only"
          ng-focus="focus(operation,ft,fv)"
-         ng-blur="blur()"         
          ng-if="!operation.form[ft.role][ft.name].aft.sample_type_id">
 
-  <a ng-if="ft.array" href="#" ng-click="operation.array_remove(fv)" class='array-remove'>&times;</a>
+  <a ng-if="ft.array" 
+     href="#" 
+     ng-click="operation.array_remove(fv)" 
+     class='array-remove'>&times;</a>
 
   <br />
 

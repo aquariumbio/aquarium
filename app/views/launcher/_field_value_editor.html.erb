@@ -4,7 +4,7 @@
 
   <form>
 
-    <div ng-if="current_fv.items.length > 0"
+    <div ng-if="current_fv.items.length > 0 && !current_fv.wired"
           class="nomargin">
 
       <b>Inventory</b>
@@ -57,7 +57,7 @@
 
   </form>
 
-  <b ng-if="current_fv.items.length == 0">No Inventory<br/></b>
+  <b ng-if="current_fv.items.length == 0 && !current_fv.wired">No Inventory<br/></b>
 
   <div ng-if="current_fv.role == 'input' && current_fv.predecessors.length > 0">
     <b>Operation Types</b><br/>

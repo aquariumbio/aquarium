@@ -47,14 +47,17 @@
             $scope.operation_types = operation_types;
 
             // FOR DEVELOPING LAUNCHER, DELETE LATER
-            $scope.select(operation_types[7]);
+            $scope.select(operation_types[2]);
             $scope.mode = 'new';
 
             $scope.current_user = user;
             $scope.plans = plans.reverse();
-            aq.each($scope.plans, (plan)=> { plan.link_operation_types($scope.operation_types) });
+            aq.each($scope.plans, (plan)=> { 
+              plan.link_operation_types($scope.operation_types) 
+            });
             // $scope.mode = 'running';
             $scope.$apply();
+
           });
         });
       });
@@ -148,6 +151,7 @@
 
       var preop_output = preop.output(pred.output.name);
 
+      $scope.plan.remove_wires_to(op);
       $scope.plan.wire(preop,preop_output,op,fv);
 
     }

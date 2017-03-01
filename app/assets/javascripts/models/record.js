@@ -43,6 +43,8 @@ AQ.Record = function(model,data) {
     } 
   }});
 
+  record.rid = AQ.next_record_id++;
+
 }
 
 AQ.Record.prototype.recompute_getter = function(gname) {

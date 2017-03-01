@@ -1,18 +1,16 @@
 <script type="text/ng-template" id="plan_editor">
 
-  <div>
+  <div class='plan-controls'>
 
-    <a ng-click="submit_plan()" 
-       class='btn btn-small btn-primary pull-right' 
-       href="#" >Launch</a>
+      <span class='plan-cost'>Cost Estimate: {{plan.cost()|currency}}</span>
 
-    <a ng-click="clear_plan()" 
-       class='btn btn-small pull-right'
-       href="#" >Cancel</a>
+      <span class='plan-controls pull-right'>
+        <a ng-click="submit_plan()" 
+           class='btn btn-small btn-primary' 
+           href="#">Launch</a>
+      </span>
 
   </div>
-
-  <br><hr>
 
   <div ng-repeat="operation in plan.operations" 
        ng-include="'operation_editor'"></div>

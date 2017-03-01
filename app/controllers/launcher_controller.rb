@@ -12,6 +12,11 @@ class LauncherController < ApplicationController
     str ? str.split(':')[0] : nil
   end
 
+  def map_id rid, id
+    @id_map ||= []
+    @id_map[rid] = id
+  end
+
   def operation_from form
 
     ot = OperationType.find(form[:operation_type][:id])
@@ -20,16 +25,12 @@ class LauncherController < ApplicationController
     form[:field_values].each do |fv|    
 
       if fv[:sample_identifier]
-        logger.info "determining sid from sample_identifier: #{fv[:sample_identifier]}"
         sid = sid(fv[:sample_identifier])
       else
-        logger.info "determining sid from routing: #{fv[:routing]} => #{form[:routing][fv[:routing]]}"        
         sid = sid(form[:routing][fv[:routing]])
       end
 
       ft = ot.type(fv[:name],fv[:role])
-
-      logger.info "WARNING: sid = #{sid}"
 
       field_value = op.field_values.create(
         name: fv[:name], 
@@ -39,6 +40,8 @@ class LauncherController < ApplicationController
         child_item_id: fv[:selected_item] ? fv[:selected_item][:id] : nil,
         allowable_field_type_id: fv[:aft_id]
       )
+
+      map_id fv[:rid], field_value.id
 
       unless field_value.errors.empty?
         raise field_value.errors.full_messages.join(", ")    
@@ -92,6 +95,15 @@ class LauncherController < ApplicationController
           render json: { errors: e.to_s }, status: 422        
           raise ActiveRecord::Rollback       
         end
+      end
+
+      params[:wires].each do |form_wire|
+        wire = Wire.new({
+          from_id: @id_map[form_wire[:from][:rid]],
+          to_id: @id_map[form_wire[:to][:rid]],
+          active: true
+        })
+        wire.save
       end
 
       plan.start

@@ -25,15 +25,14 @@
             op_type = $scope.operation.operation_type,
             route = $scope.operation.routing;
 
+        // Called when a sample input is updated. 
         var autocomp = function(ev,ui) {
 
-          // Called when a sample input is updated. 
+          var sid = AQ.id_from(ui.item.value); 
 
-          plan.propagate(op,fv,ui.item.value); // send new sid to i/o of other operations
-
+          // send new sid to i/o of other operations
+          plan.propagate(op,fv,ui.item.value); 
           op.update_cost();
-
-          var sid = AQ.id_from(ui.item.value); // ui.item.value looks like "123: Sample Name"
 
           if ( ft.array ) {
             fv.sample_identifier = ui.item.value;
@@ -72,6 +71,14 @@
 
         };
 
+        $scope.input_class = function() {
+          var c = "sample-only";
+          if ( fv.items.length > 0 ) {
+            c += " input-satisfied";
+          }
+          return c
+        }
+
         $scope.select = function(item) {
           fv.selected_item = item;
         }
@@ -94,7 +101,8 @@
 
         }
 
-        $scope.$watch('operation.form[ft.role][ft.name].aft', function(new_aft,old_aft) {
+        $scope.$watch('operation.form[ft.role][ft.name].aft', 
+                      function(new_aft,old_aft) {
           if ( new_aft && new_aft.sample_type ) {
             var name = new_aft.sample_type.name;
             $($element).find("#sample-io").autocomplete({
