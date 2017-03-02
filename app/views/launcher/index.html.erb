@@ -9,7 +9,7 @@
   <%= render partial: 'io_editor' %>
   <%= render partial: 'plan_list' %>  
   <%= render partial: 'plan_viewer' %>  
-  <%= render partial: '/data_associations/template' %>    
+  <%= render partial: '/data_associations/template' %> 
 
   <div class='two-column'>
 
@@ -18,8 +18,8 @@
       <div class='two-column-control' ng-if="status == 'Ready'">
         <h4>Launcher</h4>
         <ul>
-          <li><a href="#" ng-click="mode = 'running'"   ng-class="highlight('running')">Workflow List</a></li>
-          <li><a href="#" ng-click="mode = 'new'"       ng-class="highlight('new')">New Workflow</a></li>
+          <li><a href="#" ng-click="$parent.mode = 'running'" ng-class="highlight('running')">Workflow List</a></li>
+          <li><a href="#" ng-click="$parent.mode = 'new'"     ng-class="highlight('new')">New Workflow</a></li>
         </ul>
       </div>
 
