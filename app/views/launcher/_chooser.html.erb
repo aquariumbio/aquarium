@@ -2,17 +2,32 @@
 
   {{categories}}
 
-  <div ng-repeat="category in operation_types.categories" class='category'>
+  <div ng-repeat="category in operation_types.categories">
 
     <h4>{{category}}</h4>
 
-    <ul>
-      <li ng-repeat="operation_type in operation_types | filter : { category: category }">
-        <a href='#' ng-click="select(operation_type)">
-          {{operation_type.name}} 
-        </a>
-      </li>
-    </ul>
+    <table class="table table-condensed table-fixed">
+      <tr>
+        <th>Operation Type</th>
+        <th>Inputs</th>
+        <th>Outputs</th>
+      </tr>
+      <tr ng-repeat="operation_type in operation_types | filter : { category: category }">
+        <td style="width:33%">
+          <a href='#' ng-click="select(operation_type)">{{operation_type.name}}</a>
+        </td>
+        <td style="width:33%">
+          <ul>
+            <li ng-repeat="ft in operation_type.field_types | filter : { role: 'input' }">{{ft.name}}</li>
+          </ul>
+        </td>
+        <td style="width:33%">
+          <ul>
+            <li ng-repeat="ft in operation_type.field_types | filter : { role: 'output' }">{{ft.name}}</li>
+          </ul>
+        </td>        
+      </tr>
+    </table>
 
   </div>
 
