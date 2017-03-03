@@ -3,7 +3,7 @@
   <!--
     PLAN TEMPLATE
     -->
-
+  <da class='rel indent-20' record="plan"></da>
   <div ng-repeat="operation in plan.operations" class="rel" ng-include="'operation_viewer'">
   </div>
 
@@ -29,16 +29,15 @@
 
     <div ng-if="operation.open && operation.mode == 'io'"   
          ng-include="'op_io'" 
-        class='rel'></div>
+         class='rel'></div>
 
     <div ng-if="operation.open && operation.mode == 'data'" 
          ng-include="'job_info'" 
          class='rel'></div>
 
-    <div ng-if="operation.open && operation.mode == 'data'" 
-         ng-include="'data_association'" 
-         ng-init="object = operation" 
-         class='rel'></div>
+    <da ng-if="operation.open && operation.mode == 'data'" 
+         record="operation" 
+         class='rel indent-20'></da>
 
   </div>
 

@@ -1,6 +1,7 @@
 class Plan < ActiveRecord::Base
 
   include PlanSerializer
+  include DataAssociator
 
   attr_accessible :user_id
 
