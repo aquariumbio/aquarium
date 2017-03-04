@@ -228,6 +228,12 @@ op.input_array("Primer").rcs        # An array of the [row,column] where the Pri
 ```
 The same goes for *op.output_array*.
 
+If an input is a parameter, for example called "X", you can get the value of the parameter for that operation:
+```ruby
+op.input("X").val
+```
+The 'val' method will return a value of the defined type for the parameter. 
+
 Data Associations
 ===
 

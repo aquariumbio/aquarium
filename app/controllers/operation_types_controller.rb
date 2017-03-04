@@ -154,13 +154,28 @@ class OperationTypesController < ApplicationController
 
   def make_test_ops ot, tops
 
+    logger.info "MAKE_TEST_OPS"
+
     tops.collect do |test_op|
 
       op = ot.operations.create status: "ready", user_id: test_op[:user_id]
 
       (ot.inputs + ot.outputs).each do |io|
 
-        if io.array
+          logger.info "SETTING PARAMETER #{io}"        
+
+        if io.ftype != 'sample'
+
+          if io.choices != "" && io.ftype != nil
+            op.set_property io.name, io.choices.split(',').sample, io.role, true, nil
+          elsif io.type == "number"
+            op.set_property io.name, rand(100), io.role, true, nil
+          else
+            op.set_property(io.name, ["Lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit" ].sample, io.role, true, nil)
+          end
+
+        elsif io.array
+
           fvs = test_op[:field_values].select { |fv| fv[:name] == io.name && fv[:role] == io.role }
           aft = AllowableFieldType.find_by_id(fvs[0][:allowable_field_type_id])
           samples = fvs.collect { |fv|
@@ -168,14 +183,17 @@ class OperationTypesController < ApplicationController
           }
           actual_fvs = op.set_property(io.name, samples, io.role,true,aft)
           raise "Nil value Error: Could not set #{fvs}" unless actual_fvs
+
         else
+
           fv = test_op[:field_values].select { |fv| fv[:name] == io.name && fv[:role] == io.role }[0]
           aft = AllowableFieldType.find_by_id(fv[:allowable_field_type_id])
           actual_fv = op.set_property(fv[:name], Sample.find_by_id(fv[:child_sample_id]), fv[:role],true,aft)
           raise "Nil value Error: Could not set #{fv}" unless actual_fv
           unless actual_fv.errors.empty? 
             raise "Active Record Error: Could not set #{fv}: #{actual_fv.errors.full_messages.join(', ')}"
-          end          
+          end 
+
         end
 
       end
