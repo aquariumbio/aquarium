@@ -35,7 +35,7 @@ class OperationTypesController < ApplicationController
           sample_type_names = []
           container_names = []
         end
-        ot.add_io ft[:name], sample_type_names, container_names, ft[:role], array: ft[:array], part: ft[:part], routing: ft[:routing]
+        ot.add_io ft[:name], sample_type_names, container_names, ft[:role], array: ft[:array], part: ft[:part], routing: ft[:routing], ftype: ft[:ftype], choices: ft[:choices]
       end
     end
 

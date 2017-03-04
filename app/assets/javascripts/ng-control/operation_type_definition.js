@@ -11,10 +11,19 @@
   w.controller('operationTypeDefinitionCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
                                      function (  $scope,   $http,   $attrs,   $cookies ) {
 
-
     $scope.add_io = function(role) {
       $scope.current_ot.field_types.push({
         role: role,
+        ftype: 'sample',
+        name: "New " + role,
+        allowable_field_types: []
+      })
+    }
+
+    $scope.add_parameter = function(role) {
+      $scope.current_ot.field_types.push({
+        role: role,
+        ftype: 'number',
         name: "New " + role,
         allowable_field_types: []
       })
@@ -34,7 +43,6 @@
     $scope.remove_aft = function(io,aft) {
       aq.remove(io.allowable_field_types,aft);
     }
-
 
   }]);
 

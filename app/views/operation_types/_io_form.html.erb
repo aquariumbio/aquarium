@@ -2,7 +2,31 @@
 
     <ul ng-repeat="io in current_ot.field_types" ng-if="io.role == role" class="io-list">
 
-      <div class='row-fluid'>
+      <div ng-if="io.ftype != 'sample'" class='row-fluid'>
+        <div class="span4">
+          <label>&nbsp;<br />Parameter Name</label>
+          <input type="text" ng-model="io.name" class="input-fit" ng-change="change(current_ot)">
+        </div>
+        <div class="span5">
+          <label>Choices (Comma separated. Leave blank if unrestricted)</label>
+          <input type="text" ng-model="io.choices" class="input-fit" ng-change="change(current_ot)">
+        </div>      
+        <div class="span2">
+          <form>
+          <label>
+            <input type='radio' name="number" value="number" ng-model="io.ftype" ng-change="change(current_ot)"> Number
+          </label>
+          <label>
+            <input type='radio' name="number" value="string" ng-model="io.ftype" ng-change="change(current_ot)"> String
+          </label>
+          </form>
+        </div>       
+        <div class="span1">
+          <a href="#" class="aft-remove pull-right" ng-click="change(current_ot); remove_io(io)">&times;</a>
+        </div>           
+      </div>
+
+      <div ng-if="io.ftype == 'sample'" class='row-fluid'>
 
         <div class="span5">
           <label>Name</label>
@@ -31,7 +55,7 @@
 
       </div>
 
-      <ul class='aft-list'>
+      <ul ng-if="io.ftype == 'sample'" class='aft-list'>
 
         <label>
           Sample types / containers
