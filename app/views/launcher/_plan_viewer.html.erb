@@ -61,10 +61,14 @@
   <div class='spanner-row indent-20' ng-repeat="fv in operation.field_values">
 
     <opener model="fv.open" disabled="!fv.child_item_id"></opener>  
-    <spanner w=20 p=42>{{fv.name}} <span class='small'>({{fv.role}})</span></spanner>
-    <spanner w=8>
+    <spanner w=20 p=42>{{fv.name}} <span class='small'>({{fv.value ? 'param' : fv.role}})</span></spanner>
+
+    <spanner w=8 ng-if="!fv.value">
       <span ng-bind-html="fv.item.url | trust"></span><span ng-if="fv.row != null">[{{fv.row}},{{fv.column}}]</span>
     </spanner> 
+
+    <spanner w=8 ng-if="fv.value">{{fv.value}}</spanner>
+
     <spanner w=12>{{fv.item.location}}</spanner>
     <spanner w=12>{{fv.item.object_type.name}}</spanner>          
     <spanner w=47>{{fv.child_sample.name}}</spanner>

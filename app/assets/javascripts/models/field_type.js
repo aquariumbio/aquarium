@@ -52,3 +52,16 @@ AQ.FieldType.record_methods.can_produce = function(fv) {
   return rval;
 
 }
+
+AQ.FieldType.record_getters.choices_array = function() {
+
+  var ft = this;
+  delete ft.choices_array;
+  if ( ft.choices ) {
+    ft.choices_array = ft.choices.split(',');
+  } else {
+    ft.choices_array = [];
+  }
+  return ft.choices_array;
+
+}

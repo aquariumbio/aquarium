@@ -6,6 +6,7 @@ AQ.Operation.record_methods.set_type = function(operation_type) {
   op.field_values = [];
 
   aq.each(operation_type.field_types,function(ft) {
+
     var fv = AQ.FieldValue.record({ 
       name: ft.name, 
       role: ft.role, 
@@ -13,13 +14,21 @@ AQ.Operation.record_methods.set_type = function(operation_type) {
       routing: ft.routing,
       field_type: ft 
     });
+
     if ( ft.allowable_field_types.length > 0 ) {
       fv.aft = ft.allowable_field_types[0];
       fv.aft_id = ft.allowable_field_types[0].id;
     }
+
+    if ( ft.choices_array.length > 0 ) {
+      fv.value = ft.choices_array[0];
+    }    
+
     op.field_values.push(fv);
 
-    op.set_aft(ft,ft.allowable_field_types[0])
+    if ( ft.allowable_field_types.length > 0 ) {
+      op.set_aft(ft,ft.allowable_field_types[0])
+    }
 
   });
 

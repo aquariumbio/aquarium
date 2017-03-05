@@ -19,7 +19,9 @@
       link: function($scope,$element,$attributes) {
 
         $scope.toggle = function() {
-          $scope.model = !$scope.model;
+          if ( !$scope.disabled ) {
+            $scope.model = !$scope.model;
+          }
         }
 
       },

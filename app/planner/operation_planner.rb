@@ -19,6 +19,8 @@ module OperationPlanner
         return false
       elsif on_the_fly
         return false
+      elsif input_list[0].field_type.ftype != 'sample'
+        return true
       else
 
         input_list.each do |j|
@@ -58,7 +60,7 @@ module OperationPlanner
   end
 
   def has_no_stock_or_method
-    inputs.each do |i|
+    inputs.select { |i| i.field_type.ftype == 'sample' }.each do |i|
       if !i.satisfied_by_environment && i.predecessors.length == 0
         return true
       end

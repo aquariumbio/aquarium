@@ -35,6 +35,10 @@
                       filter: { role: 'input', ftype: 'sample' }"
            ng-include="'io_editor'">
        </div>
+      <div ng-repeat="ft in operation.operation_type.field_types |
+                      filter: { role: 'input', ftype: '!sample' }"
+           ng-include="'parameter_editor'">
+       </div>       
     </div>
 
   </div>

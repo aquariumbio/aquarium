@@ -38,7 +38,8 @@ class LauncherController < ApplicationController
         field_type_id: ft.id,
         child_sample_id: sid,
         child_item_id: fv[:selected_item] ? fv[:selected_item][:id] : nil,
-        allowable_field_type_id: fv[:aft_id]
+        allowable_field_type_id: fv[:aft_id],
+        value: fv[:value]
       )
 
       map_id fv[:rid], field_value.id

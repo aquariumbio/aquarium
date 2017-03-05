@@ -36,9 +36,28 @@
 
 </script>
 
-<script type="text/ng-template" id="sample_select">
+<script type="text/ng-template" id="parameter_editor">
 
-{{fv.wired_to}}
+  <div class='field_value_form' ng-repeat="fv in operation.field_values | filter: { role: ft.role }" ng-if="fv.name == ft.name">
+
+    <span class='io-name'> <b>{{fv.name}}</b></span>
+
+    <input ng-if="ft.choices_array.length == 0"
+           type="string" 
+           ng-model="fv.value"
+           class="sample-only"
+           placeholder="{{ft.ftype}}">
+    
+    <div ng-if="ft.choices_array.length > 0" class='select-container'>
+      <select ng-model="fv.value"
+              ng-options="choice for choice in ft.choices_array"></select>
+    </div>
+
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="sample_select">
 
   <!-- basic sample -->
   <input type='string' 
