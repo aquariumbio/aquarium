@@ -200,6 +200,7 @@
         field_types:[],
         protocol: { name: 'protocol', content: $scope.default_protocol },
         cost_model: { name: 'cost_model', content: 'def cost(op)\n  { labor: 0, materials: 0 }\nend' },
+        precondition: { name: 'precondition', content: 'def precondition(op)\n  true\nend'},
         documentation: { name: 'documentation', content: "New Operation Type\n===\n\nDocumentation here"}
       };
       $scope.operation_types.push(new_ot);

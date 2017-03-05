@@ -31,7 +31,7 @@ module OperationTypeRandom
 
         else
 
-          if ft.choices != "" && ft.ftype != nil
+          if ft.choices != "" && ft.choices != nil
             op.set_property ft.name, ft.choices.split(',').sample, ft.role, true, nil
           elsif ft.type == "number"
             op.set_property ft.name, rand(100), ft.role, true, nil

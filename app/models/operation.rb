@@ -248,6 +248,21 @@ class Operation < ActiveRecord::Base
     set_child_data input_name, 'output', data_name, value
   end  
 
+  def precondition_value
+
+    rval = true
+
+    begin
+      eval(operation_type.code("precondition").content)
+      rval = precondition(self)
+    rescue Exception => e
+      rval = false # default if there is no precondition or it crashes
+    end
+
+    rval
+
+  end
+
   ###################################################################################################
   # STARTING PLANS
 

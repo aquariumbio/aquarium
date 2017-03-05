@@ -11,7 +11,7 @@ class OperationTypesController < ApplicationController
   def index
 
     respond_to do |format|
-      format.json { render json: OperationType.all.as_json(methods: [:field_types, :protocol, :cost_model, :documentation]) }
+      format.json { render json: OperationType.all.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation]) }
       format.html { render layout: 'browser' }
     end    
     
@@ -50,11 +50,11 @@ class OperationTypesController < ApplicationController
     ot.save
     add_field_types ot, params[:field_types]     
 
-    ["protocol", "cost_model", "documentation"].each do |name|
+    ["protocol", "precondition", "cost_model", "documentation"].each do |name|
       ot.new_code(name, params[name]["content"])
     end
 
-    render json: ot.as_json(methods: [:field_types, :protocol, :cost_model, :documentation])
+    render json: ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation])
 
   end
 
@@ -132,7 +132,7 @@ class OperationTypesController < ApplicationController
   def update
     ot = update_from_ui params
     if ot[:update_errors].empty?
-      render json: ot.as_json(methods: [:field_types, :protocol, :cost_model, :documentation])
+      render json: ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation])
     else
       render json: { errors: ot.update_errors }     
     end
@@ -146,7 +146,7 @@ class OperationTypesController < ApplicationController
     ops_json = []
     ActiveRecord::Base.transaction do
       ops = OperationType.find(params[:id]).random(params[:num].to_i)
-      render json: ops.as_json(methods: :field_values)
+      render json: ops.as_json(methods: [ :field_values, :precondition_value ])
       raise ActiveRecord::Rollback
     end
     
@@ -154,19 +154,15 @@ class OperationTypesController < ApplicationController
 
   def make_test_ops ot, tops
 
-    logger.info "MAKE_TEST_OPS"
-
     tops.collect do |test_op|
 
       op = ot.operations.create status: "ready", user_id: test_op[:user_id]
 
       (ot.inputs + ot.outputs).each do |io|
 
-          logger.info "SETTING PARAMETER #{io}"        
-
         if io.ftype != 'sample'
 
-          if io.choices != "" && io.ftype != nil
+          if io.choices != "" && io.choices != nil
             op.set_property io.name, io.choices.split(',').sample, io.role, true, nil
           elsif io.type == "number"
             op.set_property io.name, rand(100), io.role, true, nil
@@ -218,7 +214,12 @@ class OperationTypesController < ApplicationController
     ActiveRecord::Base.transaction do
 
       # (re)build the operations
-      ops = make_test_ops OperationType.find(params[:id]), params[:test_operations]
+      ops = make_test_ops(OperationType.find(params[:id]), params[:test_operations])
+
+      if params[:use_precondition]
+        logger.info "Using Precondition to filter operation types"
+        ops = ops.select { |op| op.precondition_value }
+      end      
 
       # run the protocol
       job,newops = ot.schedule(ops, current_user, Group.find_by_name('technicians'))
@@ -293,7 +294,7 @@ class OperationTypesController < ApplicationController
       ot.category = "Recent Imports"
       ot.deployed = false
       ot.save
-      render json: { operation_type: ot.as_json(methods: [:field_types, :protocol, :cost_model, :documentation]) }
+      render json: { operation_type: ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation]) }
     rescue Exception => e
       render json: { error: "Could not import operation type: " + e.to_s }
     end
@@ -304,7 +305,7 @@ class OperationTypesController < ApplicationController
 
     begin
       ot = OperationType.find(params[:id]).copy
-      render json: { operation_type: ot.as_json(methods: [:field_types, :protocol, :cost_model, :documentation]) }
+      render json: { operation_type: ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation]) }
     rescue Exception => e
       render json: { error: "Could not copy operation type: " + e.to_s }
     end

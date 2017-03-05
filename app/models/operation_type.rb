@@ -55,6 +55,10 @@ class OperationType < ActiveRecord::Base
     self.code "cost_model"
   end
 
+  def precondition
+    self.code "precondition"
+  end  
+
   def documentation
     self.code "documentation"
   end

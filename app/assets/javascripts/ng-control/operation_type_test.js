@@ -34,8 +34,16 @@
         name: "protocol",
         content: ot.protocol.content
       }).then(function(response) {
-        ot.protocol.changed = false;
-        $scope.test(ot);
+        
+        $http.post("/operation_types/code", {
+          id: ot.id,
+          name: "precondition",
+          content: ot.precondition.content
+        }).then(function(response) {
+          ot.precondition.changed = false;
+          $scope.test(ot);
+        });
+
       });
 
     }
@@ -44,7 +52,6 @@
       ot.test_results = null;
       ot.test_error = null;
       ot.running_test = true;
-      console.log(ot.running_test);
       $http.post("/operation_types/test", ot).then(function(response) {
         ot.running_test = false;
         if ( response.data.error ) {

@@ -50,6 +50,11 @@
       Testing...
     </a>      
 
+    <label class='pull-right'>
+      <input type="checkbox" ng-model='current_ot.use_precondition'>
+      Use Precondition
+    </label>
+
   </form>
 
   <h4>Input Operations</h4>
@@ -60,6 +65,7 @@
 
     <tr>
       <th>User</th>
+      <th>Precondition</th>
       <th>Inputs</th>
       <th>Outputs</th> 
     </tr>
@@ -67,6 +73,8 @@
     <tr ng-repeat="op in current_ot.test_operations | filter: { operation_type_id: current_ot.id, status: 'pending'}">
 
       <td>{{user.find(op.user_id).name}}</td>
+
+      <td>{{op.precondition_value}}</td>
 
       <td>
         <ul class='input-list'>
@@ -106,6 +114,12 @@
   </div>
 
   <h4>Backtrace</h4>  
+
+  <div ng-if="current_ot.test_results && current_ot.use_precondition">
+    <span class='alert'>Number of operations passing preconditions: {{current_ot.test_results.operations.length}}.</span>
+    <br />
+    <br />
+  </div>
 
   <div ng-show="!current_ot.test_results">No backtrace has been generated.</div>
 

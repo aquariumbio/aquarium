@@ -67,11 +67,11 @@
       <span ng-bind-html="fv.item.url | trust"></span><span ng-if="fv.row != null">[{{fv.row}},{{fv.column}}]</span>
     </spanner> 
 
-    <spanner w=8 ng-if="fv.value">{{fv.value}}</spanner>
+    <spanner w=12 ng-if="!fv.value">{{fv.item.location}}</spanner>
+    <spanner w=12 ng-if="!fv.value">{{fv.item.object_type.name}}</spanner>          
+    <spanner w=47 ng-if="!fv.value">{{fv.child_sample.name}}</spanner>
 
-    <spanner w=12>{{fv.item.location}}</spanner>
-    <spanner w=12>{{fv.item.object_type.name}}</spanner>          
-    <spanner w=47>{{fv.child_sample.name}}</spanner>
+    <spanner w=79 ng-if="fv.value">{{fv.value}}</spanner>
 
     <div class='indent-20'>
       <da ng-if="fv.open" record="fv.item"></da>

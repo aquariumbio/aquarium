@@ -1,0 +1,18 @@
+<div ng-if="current_ot.cost_model && mode == 'precondition'" ng-controller="codeCtrl as code">
+
+  <div ng-model="current_ot.precondition.content"
+       ui-ace="{
+                 useWrapMode : true,
+                 mode: 'ruby',
+                 onLoad: aceLoaded,
+                 onChange: aceChanged,
+                 theme:'tomorrow'
+               }"
+       ng-change="change(current_ot.precondition)">
+  </div>
+
+  <div class='code-controls'>
+    <a href='#' class='btn' ng-click="save(current_ot,'precondition')" ng-disabled="!current_ot.precondition.changed">Save</a>
+  </div>
+
+</div>
