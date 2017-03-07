@@ -312,5 +312,22 @@ class OperationTypesController < ApplicationController
 
   end
 
+  def numbers
+
+    pending = Operation.where(operation_type_id: params[:id], status: 'pending')
+    pending_true = pending.select { |op| op.precondition_value }
+    pending_false = pending.reject { |op| op.precondition_value }
+
+    render json: {
+      pending_true: pending_true.length,
+      pending_false: pending_false.length,
+      scheduled: Operation.where(operation_type_id: params[:id], status: 'scheduled').count,
+      running: Operation.where(operation_type_id: params[:id], status: 'running').count,
+      done: Operation.where(operation_type_id: params[:id], status: 'done').count,
+      error: Operation.where(operation_type_id: params[:id], status: 'error').count
+    }
+
+  end
+
 end
 

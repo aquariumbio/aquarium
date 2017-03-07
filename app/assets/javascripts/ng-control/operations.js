@@ -12,61 +12,90 @@
   w.controller('operationsCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
                         function (  $scope,   $http,   $attrs,   $cookies ) {
 
+    AQ.init($http);
+    AQ.update = () => { $scope.$apply(); }
+    AQ.confirm = (msg) => { return confirm(msg); }
+
     $scope.operation_types = [];
-    $scope.operations = [];
-    $scope.current_ot = { name: "Loading" }
 
-    $scope.user = new User($http);  
+    $scope.current = {
+      ot: null,
+      status: null
+    }
 
-    $http.get('/operation_types.json').then(function(response) {
-      $scope.operation_types = response.data;
-      $scope.current_ot = $scope.operation_types[0];
-    }); 
-
-    $http.get('/operations.json').then(function(response) {
-      $scope.operations = response.data;
-      $http.get('/operations/jobs.json').then(function(response) {
-        $scope.jobs = response.data;
-      });      
+    $scope.status = 'Loading Operation Types ...';
+    AQ.OperationType.all_with_content().then(operation_types => {
+      $scope.status = "Fetching user information ...";
+      AQ.User.current().then( user => {
+          $scope.status = "Ready";
+          AQ.operation_types = operation_types;
+          $scope.operation_types = operation_types;
+          $scope.current_user = user;
+          $scope.$apply();
+      });
     });
 
-    $scope.operation_type = function(operation) {
-      var m = aq.where($scope.operation_types,function(ot) {
-        return ot.id == operation.operation_type_id;
-      });
-      return m[0];
-    }  
-
-    $scope.choose = function(ot) {
-      $scope.current_ot = ot;
+    $scope.show_operation_type = function() {
+      return function(ot) {
+        var s = 0;
+        for ( key in ot.numbers ) {
+          s += ot.numbers[key];
+        }
+        return s != 0;
+      }
     }
 
-    $scope.number = function(ot,status) {
-      var ops = aq.where($scope.operations, function(o) { return o.status == status && o.operation_type_id == ot.id });
-      return ops.length;
-    }
-
-    $scope.number_class = function(ot,status) {
+    $scope.status_selector = function(ot,status) {
       var c = "";
-      if ( $scope.number(ot,status) == 0 ) {
-        c += "number-none";
+      if ( ot.numbers[status] == 0 ) {
+        c += " number-none";
       } else {
-        c += "number-some";
+        c += " number-some";
+      }
+      if ( $scope.current.ot == ot && $scope.current.status == status ) {
+        c += " number-selected"
+      } else {
+        c += " number";
       }
       return c;
     }
 
-    $scope.op_type_class = function(ot) {
-      var c = "op-type";
-      if ( ot == $scope.current_ot ) {
-        c += " op-type-selected";
-      }
-      return c;
+    $scope.select = function(ot,status,selected_ops) {
+
+      $scope.current.ot = ot; 
+      $scope.current.status = status;
+
+      var actual_status = ( status == 'pending_true' || status == 'pending_false' ? 'pending' : status );
+
+      AQ.Operation.where({
+        operation_type_id: ot.id, 
+        status: actual_status
+      },{
+        methods: ['user','field_values', 'precondition_value', 'plans']
+      }).then(operations => {
+        if ( status == 'pending_false' ) {
+          ot.operations = aq.where(operations, op => !op.precondition_value);
+        } else if ( status == 'pending_true' ) {
+          ot.operations = aq.where(operations, op => op.precondition_value);
+        } else {
+          ot.operations = operations;
+        }
+        aq.each(ot.operations, op => { 
+          aq.each(selected_ops, sop => {
+            if ( op.id == sop.id ) {
+              op.selected = true;
+            }
+          })
+        })
+        $scope.jobs = aq.uniq(aq.collect(ot.operations,op => op.job_id));
+        $scope.$apply();
+      })
+
     }
 
-    $scope.select = function(ot,val) {
-      aq.each($scope.operations, function(op) {
-        if ( op.operation_type_id == ot.id && op.status == "pending" ) {
+    $scope.choose = function(ot,status,val,job_id) {
+      aq.each(ot.operations, op => {
+        if ( op.operation_type_id == ot.id && op.status == status && ( !job_id || op.job_id == job_id )) {
           op.selected = val;
         }
       });
@@ -74,42 +103,33 @@
 
     $scope.batch = function(ot) {
 
-      var ops = aq.where($scope.operations, function(op) {
-        return op.operation_type_id == ot.id && op.selected;
-      });
+      var ops = aq.where(ot.operations, op => op.selected);
 
-      var op_ids = aq.collect(ops,function(op) { 
-        op.selected = false;
-        return op.id; 
-      });
-
-      $http.post("/operations/batch", { operation_ids: op_ids }).then(function(response) {
-        $scope.jobs = response.data.jobs;
-        console.log(response.data.operations);
-        aq.each($scope.operations,function(op) {
-          aq.each(response.data.operations,function(updated_op) {
-            if ( op.id == updated_op.id ) {
-              console.log("updating operation " + op.id);
-              op.job_id = updated_op.job_id;
-              op.status = updated_op.status;
-            }
-          });
+      if ( ops.length > 0 ) {
+        ot.schedule(ops).then( () => {
+          ot.numbers.pending_true -= ops.length;
+          ot.numbers.scheduled += ops.length;        
+          $scope.select(ot,'scheduled',ops);
+          $scope.$apply();
         });
-      });
+      }
 
     }
 
-    $scope.jobs_for_current_ot = function(job) {
+    $scope.unschedule = function(ot,jid) {
 
-      var ops = aq.where($scope.operations,function(op) {
-        return op.job_id == job.id;
-      });
+      var ops = aq.where(ot.operations,op => op.selected && op.job_id == jid);
 
-      if ( ops.length > 0 ) {
-        return ops[0].operation_type_id == $scope.current_ot.id;
+      if ( ops.length > 0 ) {     
+        ot.unschedule(ops).then( () => {
+          ot.numbers.pending_true += ops.length;
+          ot.numbers.scheduled -= ops.length;    
+          $scope.select(ot,'pending_true',ops);    
+          $scope.$apply();
+        });
       } else {
-        return false;
-      }  
+        console.log("No operations selected")
+      }
 
     }
 

@@ -144,9 +144,10 @@ AQ.Operation.record_methods.update_cost = function() {
 
 AQ.Operation.record_methods.output = function(name) {
 
-  var fvs = aq.where(this.field_values,(fv) => { 
-    return fv.name == name && fv.role == 'output' 
-  });
+  var fvs = aq.where(
+    this.field_values,
+    fv => fv.name == name && fv.role == 'output'
+  );
 
   if ( fvs.length > 0 ) {
     return fvs[0];

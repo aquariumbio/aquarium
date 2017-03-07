@@ -6,7 +6,6 @@ AQ.DataAssociation.record_getters.upload = function() {
 
   AQ.Upload.where({id: da.upload_id},{methods: 'url'}).then((uploads) => {
     if ( uploads.length > 0 ) {
-      console.log(uploads[0])
       da.upload = uploads[0];
       AQ.update();
     }

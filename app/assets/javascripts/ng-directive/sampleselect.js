@@ -12,7 +12,7 @@
 
     return {
 
-      restrict: 'A',
+      restrict: 'AE',
 
       scope: { ft: '=', plan: "=", operation: '=', fv: '=', focus: '=' },
 

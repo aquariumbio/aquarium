@@ -13,6 +13,8 @@
 
   .input-list {
     list-style: none;
+    margin-left: 0;
+    padding-left: 0;
   }
 
   .ot-list {
@@ -27,6 +29,10 @@
     padding-left: 20px;
   }
 
+  .number:hover {
+    background: #eee;
+  }
+
   .number-none {
     color: #eee;
   }
@@ -34,6 +40,53 @@
   .number-some {
     color: black;
     font-weight: bold;
+  }
+
+  .number-selected {
+    background: yellow;
+    outline: 1pt solid black;
+  }
+
+  .capitalize {
+     text-transform: capitalize;
+  }  
+
+  .status-table {
+
+    tr:hover {
+      background: white;
+    };
+
+    td:not(:first-child) {
+      text-align: center;
+    }
+
+    th.rotate {
+      /* Something you can count on */
+      height: 80px;
+      white-space: nowrap;
+      /*outline: 1pt solid red;*/
+      padding: 0;
+      margin: 0;
+
+    }
+
+    th.rotate > div {
+      transform: 
+        translate(0px, 55px)
+        rotate(270deg);
+      width: 20px;
+      /*outline: 1pt solid blue;*/
+      padding: 0;
+      margin: 0;
+    }
+    th.rotate > div > span {
+      padding: 0;
+      margin: 0;
+      /*outline: 1pt solid green;*/
+
+    }
+
   }
 
 }

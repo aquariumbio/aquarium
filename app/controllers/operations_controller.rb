@@ -19,7 +19,7 @@ class OperationsController < ApplicationController
 
     respond_to do |format|
       format.json { render json: Operation.where(status: [ 'pending', 'scheduled', 'running', 'primed' ])
-                                          .as_json(methods: [:field_values, :plans]) }
+                                          .as_json(methods: [:field_values, :plans, :precondition_value]) }
       format.html { render layout: 'browser' }
     end
     
@@ -37,5 +37,23 @@ class OperationsController < ApplicationController
     render json: { operations: operations, jobs: active_and_pending_jobs }
 
   end
+
+  def unbatch
+
+    ops = params[:operation_ids].collect { |oid| Operation.find(oid) }
+
+    ops.each do |op|
+      job = op.job
+      op.job_id = nil
+      op.status = 'pending';
+      op.save
+      if job.reload.operations.length == 0
+        job.cancel current_user
+      end
+    end
+
+    render json: { operations: ops }
+
+  end  
 
 end

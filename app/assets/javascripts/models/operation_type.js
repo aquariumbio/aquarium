@@ -57,3 +57,57 @@ AQ.OperationType.record_methods.new_operation = function() {
     resolve("New Operation");
   });
 }
+
+AQ.OperationType.record_getters.numbers = function() {
+
+  var ot = this;
+
+  delete ot.numbers;
+  ot.numbers = {};
+  
+  AQ.post("/operation_types/numbers",ot).then((response) => {
+    ot.numbers = response.data;
+  }).catch((response) => {
+    console.log(["error", response.data]);
+  })
+
+  return {};
+
+}
+
+AQ.OperationType.record_methods.schedule = function(operations) {
+
+  var op_ids = aq.collect(operations,(op) => {
+    return op.id;
+  });
+
+  return new Promise(function(resolve,reject) {
+
+    AQ.post("/operations/batch", { operation_ids: op_ids }).then(
+      response => resolve(response.data.operations),
+      response => reject(response.data.operations)
+    );
+
+  });
+
+}
+
+AQ.OperationType.record_methods.unschedule = function(operations) {
+
+  var op_ids = aq.collect(operations,(op) => {
+    return op.id;
+  });
+
+  return new Promise(function(resolve,reject) {
+
+    console.log("asd")
+
+    AQ.post("/operations/unbatch", { operation_ids: op_ids }).then(
+      response => resolve(response.data.operations),
+      response => reject(response.data.operations)
+    );
+
+  });
+
+}
+

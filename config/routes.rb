@@ -19,10 +19,12 @@ Bioturk::Application.routes.draw do
   resources :plans
 
   post '/operations/batch',                      to: 'operations#batch'
+  post '/operations/unbatch',                    to: 'operations#unbatch'  
   get '/operations/jobs',                        to: 'operations#jobs'
   resources :operations
 
   post '/operation_types/import',                to: 'operation_types#import'    
+  post '/operation_types/numbers',               to: 'operation_types#numbers'    
   get '/operation_types/:id/random/:num',        to: 'operation_types#random'
   get '/operation_types/:id/export',             to: 'operation_types#export'  
   get '/operation_types/:id/copy',               to: 'operation_types#copy'  

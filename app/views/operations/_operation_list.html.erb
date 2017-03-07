@@ -1,0 +1,62 @@
+<script type="text/ng-template" id="operation-list">
+
+  <div class='oplist'>
+
+    <table class='table table-condensed'
+           ng-show="operations.length > 0">
+
+      <tr>
+        <th class='selector'></th>
+        <th>Submitted by</th>
+        <th>Job</th>
+        <th class='output'>Output</th>
+        <th>Plan</th>
+        <th>Last Update</th>
+      </tr>
+
+      <tr ng-repeat="op in operations"
+          ng-if="!jobid || op.job_id == jobid">
+
+        <td>
+          <input type='checkbox' 
+                 ng-model='op.selected' 
+                 ng-if="!ot.on_the_fly && ( status == 'pending_true' || status == 'scheduled')">
+        </td>
+
+        <td>{{op.user.name}}</td>
+
+        <td>
+          <a ng-if="op.job_id" href="/jobs/{{op.job_id}}" ng-if>{{op.job_id}}</a>
+          <span ng-if="!op.job_id">-</span>
+        </td>
+
+        <td>
+          <ul class='input-list'>
+            <li ng-repeat="fv in op.field_values | filter: { role: 'output' }">
+              {{fv.name}}<span ng-if="fv.child_sample">: {{fv.child_sample.name}}</span>
+            </li>
+          </ul>              
+        </td>
+
+        <td>
+          <a ng-repeat="plan in op.plans" href="/launcher?plan_id={{plan.id}}">{{plan.id}}{{$last ? '' : ', '}}</a>
+        </td>
+
+        <td>{{op.updated_at|date}}</td>
+
+      </tr>
+
+    </table>
+
+    <table ng-if="operations.length == 0"
+           class='table table-fixed table-condensed'>
+      <tr>
+        <td>No operations</td>
+      </tr>
+    </table>
+
+    <span ng-if="!operations">Loading...</span>
+
+  </div>
+
+</script>

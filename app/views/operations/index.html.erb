@@ -2,24 +2,33 @@
 
 <div ng-app="aquarium" ng-controller="operationsCtrl as planner" class='operations'>
 
-  <div class='two-column' ng-if="operation_types.length > 0">
+  <%= render partial: 'operation_list' %> <!-- used by <oplist> -->
 
-    <div class='two-column-left'>
+  <div class='two-column'>
 
-      <div class="two-column-control">
+    <div class='two-column-left-wide'>
 
-        <table class='table table-condensed'>
+      <div class="two-column-control-wide" ng-if="status!='Ready'">
+        {{status}}
+      </div>
+
+      <div class="two-column-control-wide" ng-if="status=='Ready'">
+
+        <table class='table table-condensed status-table'>
           <tr>
             <th></th>
-            <th>P</th>
-            <th>S</th>
-            <th>R</th>
+            <th ng-repeat="status in [ 'Waiting', 'Pending', 'Scheduled', 'Running', 'Done', 'Error' ]"
+                class='rotate'>
+              <div><span>{{status}}</span></div>
+            </th>
           </tr>
-          <tr ng-repeat="ot in operation_types | filter: { deployed: true }" ng-click="choose(ot)">
+          <tr ng-repeat="ot in operation_types | filter: show_operation_type()" ng-click="choose(ot)">
             <td ng-class="op_type_class(ot)">{{ot.name}}</td>
-            <td ng-class="number_class(ot,'pending')">   {{number(ot,"pending")}}   </td>
-            <td ng-class="number_class(ot,'scheduled')"> {{number(ot,"scheduled")}} </td>
-            <td ng-class="number_class(ot,'running')">   {{number(ot,"running")}}   </td>
+            <td ng-repeat="status in [ 'pending_false', 'pending_true', 'scheduled', 'running', 'done', 'error' ]"
+                ng-class="$parent.status_selector(ot,status)"
+                ng-click="$parent.select(ot,status)">
+                {{ot.numbers[status]}}
+            </td>
           </tr>
         </table>
 
@@ -27,97 +36,51 @@
 
     </div>
  
-    <div class='two-column-right'> 
+    <div class='two-column-right-narrow'>
 
-      <div class='info'>
+      <h4 ng-if="current.ot">
 
-        <h2>Operation: {{current_ot.name}}</h2>
+        {{current.ot.name}}: 
 
-        <b ng-if="current_ot.on_the_fly">This operation cannot be scheduled directly</b>
+        <span class='capitalize'>
+          {{
+            current.status == 'pending_false' ? 'Waiting' : 
+            current.status == 'pending_true' ? 'Pending' : current.status
+          }}
+        </span>
 
-        <div ng-show='number(current_ot,"pending") > 0'>
+        <div ng-if="!current.ot.on_the_fly && current.status == 'pending_true'" class='pull-right launch-buttons'>
+          <a href="#" class='btn btn-mini btn-primary' ng-click="batch(current.ot)">Schedule</a>
+          <a href="#" class='btn btn-mini' ng-click="choose(current.ot,'pending',true)">All</a>
+          <a href="#" class='btn btn-mini' ng-click="choose(current.ot,'pending',false)">None</a>
+        </div>       
+            
+      </h4>
+   
+      <oplist ot="current.ot" 
+              operations="current.ot.operations" 
+              status="current.status"
+              ng-if="current.ot && current.status != 'scheduled'">
+      </oplist>
 
-          <h4>Pending Operations</h4>
+      <div ng-if="current.status == 'scheduled'">
 
-          <div ng-if="!current_ot.on_the_fly" class='pull-right launch-buttons'>
-            <a href="#" class='btn btn-mini btn-primary' ng-click="batch(current_ot)">Batch</a>
-            <a href="#" class='btn btn-mini' ng-click="select(current_ot,true)">All</a>
-            <a href="#" class='btn btn-mini' ng-click="select(current_ot,false)">None</a>
-          </div>
+        <div ng-repeat="job_id in jobs">
 
-          <table class='table table-fixed'>
-            <tr ng-repeat="op in operations | filter: { operation_type_id: current_ot.id, status: 'pending'}">
-              <td ng-if="!current_ot.on_the_fly"><input type='checkbox' ng-model='op.selected'></input></td>
-              <td>{{user.find(op.user_id).name}}</td>
-              <td>
-                <ul class='input-list'>
-                  <li ng-repeat="fv in op.field_values | filter: { role: 'output' }">
-                    {{fv.name}}<span ng-if="fv.child_sample">: {{fv.child_sample.name}}</span>
-                  </li>
-                </ul>              
-              </td>
-              <td ng-if="!current_ot.on_the_fly">
-                <a ng-repeat="plan in op.plans" href="/plans/{{plan.id}}">Plan {{plan.id}}</a></td>
-              <td>{{op.created_at|date}}</td>
-            </tr>
-          </table>
+          <h5>
+            Job <a href="/jobs/{{job_id}}">{{job_id}}</a>
+            <div class='pull-right launch-buttons'>
+              <a href="#" class='btn btn-mini btn-primary' ng-click="unschedule(current.ot,job_id)">Unschedule</a>
+              <a href="#" class='btn btn-mini' ng-click="$parent.choose(current.ot,'scheduled',true,job_id)">All</a>
+              <a href="#" class='btn btn-mini' ng-click="$parent.choose(current.ot,'scheduled',false,job_id)">None</a>
+            </div>    
+          </h5>
 
-        </div>
-
-        <div ng-show='number(current_ot,"scheduled") > 0'>
-
-          <h4>Scheduled Jobs</h4>
-
-          <table class='table table-fixed'>
-
-            <tr ng-repeat="job in jobs.pending | filter: jobs_for_current_ot">
-              <td><a href="/jobs/{{job.id}}">{{job.id}}</td>
-              <td>{{user.find(job.submitted_by).name}}</td>
-              <td>
-                <ul class='op-list'>
-                  <li ng-repeat="op in operations | filter: { operation_type_id: current_ot.id, job_id: job.id, status: 'scheduled' }">
-                    Operation {{op.id}}: 
-                    <span ng-repeat="fv in op.field_values | filter: { role: 'output' }">
-                      <a href="/samples/{{fv.child_sample.id}}"/>{{fv.child_sample.name}}</a>
-                    </span> ({{user.find(op.user_id).login}})
-                  </li>
-                </ul>
-              </td>
-              <td>{{job.created_at|date}}</td>    
-              <td ng-if="job.active_predecessors.length == 0"><a href="/krill/start?job={{job.id}}"><i class="icon-play"></i></a></td>
-              <td ng-if="job.active_predecessors.length > 0">
-                Waiting for job <span ng-repeat="job in job.active_predecessors">{{job.id}}</span>
-              </td>
-            <tr>
-
-          </table>
-
-        </div>
-
-
-        <div ng-show='number(current_ot,"running") > 0'>
-
-          <h4>Running Jobs</h4>
-
-          <table class='table table-fixed'>
-
-            <tr ng-repeat="job in jobs.running | filter: jobs_for_current_ot">
-              <td><a href="/jobs/{{job.id}}">{{job.id}}</td>
-              <td>{{user.find(job.submitted_by).name}}</td>
-              <td>{{user.find(job.user_id).name}}</td>
-              <td>
-                <ul class='op-list'>
-                  <li ng-repeat="op in operations | filter: { operation_type_id: current_ot.id, job_id: job.id, status: 'running' }">
-                    <span ng-repeat="fv in op.field_values | filter: { role: 'output' }">
-                      <a href="/samples/{{fv.child_sample.id}}"/>{{fv.child_sample.name}}</a>
-                    </span> for {{user.find(op.user_id).name}}
-                  </li>
-                </ul>
-              </td>
-              <td>{{job.created_at|date}}</td>    
-            <tr>
-
-          </table>
+          <oplist ot="current.ot" 
+                  operations="current.ot.operations"
+                  status="current.status" 
+                  jobid="job_id">
+          </oplist>
 
         </div>
 
@@ -125,10 +88,6 @@
 
     </div>
 
-  </div>
-
-  <div ng-if="operation_types.length == 0">
-    Loading...
   </div>
 
 </div>
