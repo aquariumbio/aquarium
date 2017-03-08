@@ -20,16 +20,20 @@
       <span>{{operation.operation_type.name}}:</span>
       <span class='no-cost' ng-if='!operation.cost'>Cost undetermined</span>      
       <span class='cost' ng-if='operation.cost'>{{operation.cost|currency}}</span>
+      <div class='collapse-open' ng-if="!operation.closed">
+        <a href="#" ng-click="operation.closed = true">&#9660;</a>
+      </div>
+      <div class='collapse-closed' ng-if="operation.closed">
+        <a href="#" ng-click="operation.closed = false">&#9658;</a>
+      </div>
       <div class='cancel'>
-        <a href="#" ng-click="operation == plan.operations[0] ? 
-                              clear_plan() : 
-                              plan.unwire(operation)">
+        <a href="#" ng-click="remove_operation(operation); plan.unwire(operation)">
           &times;
         </a>
       </div> 
     </div>  
 
-    <div class='inputs' ng-if="operation.operation_type.num_inputs() > 0">
+    <div class='inputs' ng-if="operation.operation_type.num_inputs() > 0 && !operation.closed">
       <div class='arrow'>&ldsh;</div>
       <div ng-repeat="ft in operation.operation_type.field_types |
                       filter: { role: 'input', ftype: 'sample' }"

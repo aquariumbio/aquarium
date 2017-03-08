@@ -30,16 +30,14 @@ AQ.Plan.record_methods.submit = function() {
 
   var plan = this.export();
 
-  console.log(plan)
-
   return new Promise(function(resolve,reject) {
     AQ.post('/launcher/submit',plan).then(
       (response) => {
         console.log("Plan submitted :-)");
         resolve(AQ.Plan.record(response.data).upgrade());
       }, (response) => {
-        reject(response.data.errors);
         console.log("Plan rejected :-(")
+        reject(response.data.errors);
       }
     );
   });

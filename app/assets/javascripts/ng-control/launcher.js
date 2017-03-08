@@ -77,14 +77,29 @@
 
     }
 
-    $scope.clear_plan = function() {
-      $scope.plan = null;
+    $scope.remove_operation = function(op) {
+      aq.remove($scope.plan.operations,op);
+      if ( $scope.plan.operations.length == 0 ) {
+        $scope.plan = null;
+      }
+      $scope.current_operation = null;
+    }
+
+    $scope.add_goal = function() {
+      aq.each($scope.plan.operations,op => op.closed = true)
+      $scope.plan.operations.unshift(
+        AQ.Operation.record({
+            routing: {},
+            form: { input: {}, output: {} }
+          }).set_type($scope.plan.operations[0].operation_type)
+      )
     }
 
     $scope.submit_plan = function() {
       $scope.error = null;
       $scope.plan.submit().then((plan) => {
-        $scope.clear_plan();
+        $scope.plan=null;
+        $scope.current_operation = null;
         $scope.mode = 'running';
         plan.link_operation_types($scope.operation_types);
         $scope.plans.unshift(plan);

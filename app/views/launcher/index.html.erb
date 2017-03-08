@@ -20,6 +20,7 @@
         <ul>
           <li><a href="#" ng-click="$parent.mode = 'running'" ng-class="highlight('running')">Workflow List</a></li>
           <li><a href="#" ng-click="$parent.mode = 'new'"     ng-class="highlight('new')">New Workflow</a></li>
+          <li ng-if="plan != null"><a href="#" ng-click="$parent.add_goal()" ng-class="highlight('new')">Add Goal</a></li>
         </ul>
       </div>
 

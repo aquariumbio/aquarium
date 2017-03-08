@@ -119,8 +119,9 @@
     }
 
     .io-name {
-      line-height: 24px !important;
-      padding: 2px;
+      /*line-height: 24px !important;*/
+      padding: 0px;
+      font-size: 9pt;
     }
 
     .cancel {
@@ -128,6 +129,20 @@
       position: absolute;
       top: 2px;
       right: 8px;
+    }
+
+    .collapse-open {
+      font-weight: bold;
+      position: absolute;
+      top: 3px;
+      right: 24px;      
+    }
+
+    .collapse-closed {
+      font-weight: bold;
+      position: absolute;
+      top: 3px;
+      right: 24px;      
     }
 
     .arrow {
@@ -221,6 +236,7 @@
         padding: 0;
         margin: 0 10px 0 0;
         display: inline; 
+        font-size: 9pt;
       }      
     }
 

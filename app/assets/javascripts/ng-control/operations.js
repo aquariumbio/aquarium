@@ -27,11 +27,11 @@
     AQ.OperationType.all_with_content().then(operation_types => {
       $scope.status = "Fetching user information ...";
       AQ.User.current().then( user => {
-          $scope.status = "Ready";
-          AQ.operation_types = operation_types;
-          $scope.operation_types = operation_types;
-          $scope.current_user = user;
-          $scope.$apply();
+        $scope.status = "Ready";
+        AQ.operation_types = operation_types;
+        $scope.operation_types = operation_types;
+        $scope.current_user = user;
+        $scope.$apply();
       });
     });
 
@@ -127,9 +127,7 @@
           $scope.select(ot,'pending_true',ops);    
           $scope.$apply();
         });
-      } else {
-        console.log("No operations selected")
-      }
+      } 
 
     }
 

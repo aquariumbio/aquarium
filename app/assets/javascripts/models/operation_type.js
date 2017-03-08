@@ -100,8 +100,6 @@ AQ.OperationType.record_methods.unschedule = function(operations) {
 
   return new Promise(function(resolve,reject) {
 
-    console.log("asd")
-
     AQ.post("/operations/unbatch", { operation_ids: op_ids }).then(
       response => resolve(response.data.operations),
       response => reject(response.data.operations)
