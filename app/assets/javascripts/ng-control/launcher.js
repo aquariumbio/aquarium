@@ -93,6 +93,7 @@
             form: { input: {}, output: {} }
           }).set_type($scope.plan.operations[0].operation_type)
       )
+      $scope.io_blur();
     }
 
     $scope.submit_plan = function() {

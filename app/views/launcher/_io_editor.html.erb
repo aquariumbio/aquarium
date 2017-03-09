@@ -46,10 +46,12 @@
            type="string" 
            ng-model="fv.value"
            class="sample-only"
-           placeholder="{{ft.ftype}}">
+           placeholder="{{ft.ftype}}"
+           ng-focus='io_blur()'>
     
     <div ng-if="ft.choices_array.length > 0" class='select-container'>
       <select ng-model="fv.value"
+              ng-focus='io_blur()'
               ng-options="choice for choice in ft.choices_array"></select>
     </div>
 

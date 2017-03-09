@@ -70,7 +70,8 @@
           <h5>
             Job <a href="/jobs/{{job_id}}">{{job_id}}</a>
             <div class='pull-right launch-buttons'>
-              <a href="#" class='btn btn-mini btn-primary' ng-click="unschedule(current.ot,job_id)">Unschedule</a>
+              <a href="/krill/start?job={{job_id}}" class='btn btn-mini btn-primary' ng-click="unschedule(current.ot,job_id)">Run</a>
+              <a href="#" class='btn btn-mini btn-warning' ng-click="unschedule(current.ot,job_id)">Unschedule</a>
               <a href="#" class='btn btn-mini' ng-click="$parent.choose(current.ot,'scheduled',true,job_id)">All</a>
               <a href="#" class='btn btn-mini' ng-click="$parent.choose(current.ot,'scheduled',false,job_id)">None</a>
             </div>    
