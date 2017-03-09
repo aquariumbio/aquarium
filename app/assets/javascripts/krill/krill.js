@@ -293,7 +293,7 @@ Krill.prototype.step = function(state,number) {
             ul.append($('<li>'+line_info+'</li>').addClass('krill-note'));
         });
 
-        ul.append(this.log_link(),this.pending_link(),operations_link());
+        ul.append(this.log_link(),this.pending_link(),this.operations_link());
         container.append(titlebar,ul);
 
     } else {

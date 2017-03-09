@@ -46,6 +46,8 @@ module FieldValueKrill
       @item.store if @item.location == "Unknown"
       self.child_item_id = @item.id
       self.save
+    else
+      puts "COULD NOT MAKE ITEM FOR FV #{id} BECAUSE object_type = null, although aft = #{AllowableFieldType.find(allowable_field_type_id).inspect}"
     end
 
     @item
@@ -109,7 +111,7 @@ module FieldValueKrill
   end
 
   def part?
-    field_type.part
+    field_type && field_type.part
   end
 
 end

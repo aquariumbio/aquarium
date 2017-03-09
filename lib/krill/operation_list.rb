@@ -115,7 +115,9 @@ module Krill
 
           else
 
+            puts "MAKING ITEM FOR FV #{fv.inspect}"
             fv.make
+            puts "GOT #{fv.inspect}"
 
           end         
 
