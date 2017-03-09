@@ -25,7 +25,7 @@ module Krill
       elsif !@job.operations.empty?
         @code = @job.operations.first.operation_type.code("protocol").content
       else
-        raise "No path specified for job #{job.id}. Cannot start."
+        raise "No path specified for job #{@job.id}. Cannot start."
       end
 
       initial_state = JSON.parse @job.state, symbolize_names: true
