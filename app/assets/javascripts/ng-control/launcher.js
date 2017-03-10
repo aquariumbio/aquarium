@@ -44,13 +44,9 @@
           AQ.Plan.list($scope.plan_offset).then((plans) => {
             $scope.status = "Ready";
             $scope.getting_plans = false;
-            AQ.operation_types = operation_types;
-            $scope.operation_types = operation_types;
-
-            // FOR DEVELOPING LAUNCHER, DELETE LATER
-            // $scope.select(operation_types[2]);
-            // $scope.mode = 'new';
-
+            $scope.operation_types = aq.where(operation_types,ot => ot.deployed);
+            AQ.OperationType.compute_categories($scope.operation_types);
+            AQ.operation_types = $scope.operation_types;
             $scope.current_user = user;
             $scope.plans = plans.reverse();
             aq.each($scope.plans, (plan)=> { 
