@@ -17,30 +17,6 @@ class OperationTypesController < ApplicationController
     
   end
 
-  def add_field_types ot, fts
-
-    if fts
-      fts.each do |ft|
-        if ft[:allowable_field_types]
-          sample_type_names = ft[:allowable_field_types].collect { |aft| 
-            aft[:sample_type] ? aft[:sample_type][:name] : nil
-          }
-          container_names =  ft[:allowable_field_types]
-            .select { |aft| aft[:object_type] && aft[:object_type][:name] && aft[:object_type][:name] != "" }
-            .collect { |aft|            
-              raise "Object type '#{aft[:object_type][:name]}' not definied by browser for #{ft[:name]}." unless ObjectType.find_by_name(aft[:object_type][:name])
-              aft[:object_type][:name]
-          }          
-        else
-          sample_type_names = []
-          container_names = []
-        end
-        ot.add_io ft[:name], sample_type_names, container_names, ft[:role], array: ft[:array], part: ft[:part], routing: ft[:routing], ftype: ft[:ftype], choices: ft[:choices]
-      end
-    end
-
-  end
-
   def create
 
     ot = OperationType.new(
@@ -48,7 +24,12 @@ class OperationTypesController < ApplicationController
       deployed: params[:deployed], on_the_fly: params[:on_the_fly])
 
     ot.save
-    add_field_types ot, params[:field_types]     
+
+    params[:field_types].each do |ft|
+      fts.each do |ft|
+        ot.add_new_field_type ft
+      end
+    end
 
     ["protocol", "precondition", "cost_model", "documentation"].each do |name|
       ot.new_code(name, params[name]["content"])
@@ -108,12 +89,8 @@ class OperationTypesController < ApplicationController
 
       if update_fields
 
-        ot.field_types.each do |ft| 
-          ft.destroy
-        end
-
         begin
-          add_field_types ot, data[:field_types]
+          ot.update_field_types data[:field_types]
         rescue Exception => e
           update_errors << e.to_s << e.backtrace.to_s
           raise ActiveRecord::Rollback

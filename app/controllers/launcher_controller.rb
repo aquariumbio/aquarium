@@ -93,7 +93,7 @@ class LauncherController < ApplicationController
             raise ActiveRecord::Rollback                   
           end
         rescue Exception => e
-          render json: { errors: e.to_s }, status: 422        
+          render json: { errors: e.to_s + e.backtrace[0].to_s }, status: 422        
           raise ActiveRecord::Rollback       
         end
       end

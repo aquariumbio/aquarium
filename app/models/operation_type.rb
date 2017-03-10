@@ -125,4 +125,191 @@ class OperationType < ActiveRecord::Base
 
   end
 
+  #
+  # Update Methods for Field Types from Front End Start Here
+  #
+
+  def add_new_allowable_field_type ft, newaft
+
+    if newaft[:sample_type]
+      st = SampleType.find_by_name(newaft[:sample_type][:name])
+    else
+      st = nil
+    end
+
+    if newaft[:object_type] && newaft[:object_type][:name] != ""
+      ot = ObjectType.find_by_name(newaft[:object_type][:name])
+    else
+      ot = nil
+    end   
+
+    ft.allowable_field_types.create(
+      sample_type_id: st ? st.id : nil,
+      object_type_id: ot ? ot.id : nil
+    )
+
+  end 
+
+  def update_allowable_field_type oldaft, newaft
+
+    if newaft[:sample_type]
+      st = SampleType.find_by_name(newaft[:sample_type][:name])
+      oldaft.sample_type_id = st.id if st
+    else
+      oldaft.sample_type_id = nil
+    end
+
+    if newaft[:object_type] && newaft[:object_type][:name] != ""
+      ot = ObjectType.find_by_name(newaft[:object_type][:name])
+      oldaft.object_type_id = ot.id if ot
+    else
+      oldaft.sample_type_id = nil
+    end   
+
+    oldaft.save
+
+  end
+
+  def add_new_field_type newft
+
+    puts "ADDING NEW FIELD TYPE #{newft[:name]}/#{newft[:role]}"
+
+    if newft[:allowable_field_types]
+
+      sample_type_names = newft[:allowable_field_types].collect { |aft| 
+        aft[:sample_type] ? aft[:sample_type][:name] : nil
+      }
+
+      container_names =  newft[:allowable_field_types]
+        .select { |aft| aft[:object_type] && aft[:object_type][:name] && aft[:object_type][:name] != "" }
+        .collect { |aft|            
+          raise "Object type '#{aft[:object_type][:name]}' not definied by browser for #{ft[:name]}." unless ObjectType.find_by_name(aft[:object_type][:name])
+          aft[:object_type][:name]
+      }          
+
+    else
+
+      sample_type_names = []
+      container_names = []
+
+    end
+
+    add_io(
+      newft[:name], 
+      sample_type_names, 
+      container_names, 
+      newft[:role], 
+      array: newft[:array], 
+      part: newft[:part], 
+      routing: newft[:routing], 
+      ftype: newft[:ftype], 
+      choices: newft[:choices]
+    )
+
+    return field_types.where(name: newft[:name], role: newft[:role])[0]
+
+  end
+
+  def update_field_type oldft, newft
+
+    if oldft.ftype == 'sample'
+
+      oldft.name = newft[:name]
+      oldft.routing = newft[:routing]
+      oldft.array = newft[:array]
+      oldft.part = newft[:part]
+
+      keepers = []
+
+      if newft[:allowable_field_types]
+
+        newft[:allowable_field_types].each do |newaft|
+
+          matching_afts = oldft.allowable_field_types.select { |aft| aft.id == newaft[:id] }
+
+          if matching_afts.length == 1
+            oldaft = matching_afts[0]
+            keepers << oldaft
+            update_allowable_field_type oldaft, newaft
+          elsif matching_afts.length == 0
+            keepers << add_new_allowable_field_type(oldft, newaft)
+          else
+            raise "More than one allowable field type matched."
+          end
+
+        end
+
+      end
+
+    else
+
+      oldft.name = newft[:name]
+      oldft.ftype = newft[:ftype]
+      oldft.choices = newft[:choices]
+
+    end
+
+    oldft.save
+
+    oldft.allowable_field_types.reject { |aft| keepers.include? aft }.each do |aft|
+      aft.destroy
+    end
+
+  end
+
+  def update_field_types fts
+
+    keepers = []
+
+    if fts
+      fts.each do |newft|
+        matching_fts = field_types.select { |oldft| oldft.id == newft[:id] && oldft.role == newft[:role] }
+        if matching_fts.length == 1
+          oldft = matching_fts[0]
+          keepers << oldft
+          update_field_type oldft, newft
+        elsif matching_fts.length == 0
+          keepers << add_new_field_type(newft)
+        else
+          raise "Multiple inputs (or outputs) named #{newft[:name]}"
+        end
+      end
+    end
+
+    field_types.reject { |ft| keepers.include? ft }.each do |ft|
+      puts "DELETING FT #{ft.name}/#{ft.role}"
+      ft.destroy
+    end
+
+    error_out_obsolete_operations
+
+  end
+
+  def error_out_obsolete_operations
+
+    Operation.where(operation_type_id: id, status: ["pending", "scheduled"]).each do |op|
+
+      op.field_values.each do |fv|
+
+        if !fv.field_type || !fv.allowable_field_type
+          puts "ERRORING OUT OP #{op.id}" 
+          op.error :obsolete, "The operation type definition for this operation has changed too much since it was created."
+        end
+
+      end
+
+    end
+
+  end
+
 end
+
+
+
+
+
+
+
+
+
+
