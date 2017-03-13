@@ -37,10 +37,15 @@ class LauncherController < ApplicationController
         role: fv[:role], 
         field_type_id: ft.id,
         child_sample_id: sid,
-        child_item_id: fv[:selected_item] ? fv[:selected_item][:id] : nil,
+        child_item_id: ( fv[:role] == 'input' && fv[:selected_item] ) ? fv[:selected_item][:id] : nil,
         allowable_field_type_id: fv[:aft_id],
         value: fv[:value]
       )
+
+      logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!\n" +
+                  " SET ITEM FOR FV #{field_value.id} to #{field_value.child_item_id}\n" +
+                  field_value.inspect + "\n" +
+                  "!!!!!!!!!!!!!!!!!!!!!!!!!\n")
 
       map_id fv[:rid], field_value.id
 
@@ -68,7 +73,7 @@ class LauncherController < ApplicationController
 
       raise ActiveRecord::Rollback
 
-    end   
+    end
 
   end
 
@@ -98,6 +103,12 @@ class LauncherController < ApplicationController
         end
       end
 
+      plan.operations.each do |op|
+        op.field_values.each do |fv|
+          puts "A: #{fv.id}: #{fv.child_item_id}"
+        end
+      end      
+
       if params[:wires]
         params[:wires].each do |form_wire|
           wire = Wire.new({
@@ -106,10 +117,26 @@ class LauncherController < ApplicationController
             active: true
           })
           wire.save
+          wire.to.field_values.each do |fv| # remove inputs from non-leaves
+            fv.child_item_id = nil
+            fv.save
+          end
         end
       end
 
+      plan.operations.each do |op|
+        op.field_values.each do |fv|
+          puts "B: #{fv.id}: #{fv.child_item_id}"
+        end
+      end      
+
       plan.start
+
+      plan.operations.each do |op|
+        op.field_values.each do |fv|
+          puts "C: #{fv.id}: #{fv.child_item_id}"
+        end
+      end
 
       if plan.errors.empty?
         render json: plan.as_json(include: { operations: { include: :operation_type, methods: [ 'field_values' ] } } )
@@ -133,7 +160,12 @@ class LauncherController < ApplicationController
 
     oids = plans.collect { |p| p.operations.collect { |o| o.id } }.flatten
     field_values = FieldValue
-      .includes(:child_sample, :wires_as_dest, :wires_as_source, field_type: { allowable_field_types: [ :sample_type, :object_type ] })
+      .includes(
+        :child_sample, 
+        :wires_as_dest, 
+        :wires_as_source, 
+        field_type: { allowable_field_types: [ :sample_type, :object_type ] }
+        )
       .where(parent_class: "Operation", parent_id: oids)
 
     render json: { 

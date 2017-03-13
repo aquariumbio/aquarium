@@ -79,11 +79,15 @@ module FieldValuePlanner
 
           items = val.items.select { |i| !i.deleted? && i.object_type_id == object_type.id }
 
-          if items.length > 0
-            puts "found #{items[0].object_type.name} #{items[0].id}"
-            self.child_item_id = items[0].id
-            self.save        
-            true
+          if items.length > 0 
+            if !self.child_item_id
+              puts "found #{items[0].object_type.name} #{items[0].id}"
+              self.child_item_id = items[0].id
+              self.save        
+            else
+              puts "already has an item specified"
+            end
+              true
           else
             puts "not found"
             false

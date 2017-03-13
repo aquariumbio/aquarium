@@ -12,46 +12,53 @@
 
       <table class='table table-condensed nomargin'>
 
-        <tr ng-repeat="item in current_fv.items" ng-if="!item.collection">
-          <td>
-            <label>
-              <input type="radio" 
-                     class="adjusted-radio"
-                     name="predecessor"
-                     ng-model="item.selected"
-                     ng-disabled=current_fv.wired>
-                {{item.id}}
-            </label>
-          </td>
-          <td>{{item.location}}</td>
-        </tr>
+        <form name="itemList">
 
-        <tr ng-repeat="item in current_fv.items"
-            ng-if="item.collection"
-            ng-init="choose_default_part(current_fv,item)">
-          <td>
-            <label>
-              <input type="radio" 
-                     class="adjusted-radio"
-                     name="predecessor"
-                     ng-model="item.selected">
-                {{item.collection.id}}:<br />
-                {{item.collection.location}}<br/>
-                ({{item.selected_row}},{{item.selected_column}})
-            </label>
-          </td>
-          <td>
-            <table class='tiny-collection'>
-              <tr ng-repeat="row in item.collection.matrix track by $index">
-                <td ng-repeat="el in row track by $index" 
-                    ng-class="current_fv.sid == el ? (item.selected_row == $parent.$index && 
-                              item.selected_column == $index ? 'selected' : 'filled' ) : 'black'"
-                    ng-click="item.selected_row = $parent.$index; item.selected_column = $index">
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
+          <tr ng-repeat="item in current_fv.items" ng-if="!item.collection">
+            <td>
+              <label>
+                <input type="radio" 
+                       class="adjusted-radio"
+                       name="selected_item"
+                       ng-model="current_fv.selected_item"
+                       ng-value="item"
+                       ng-disabled=current_fv.wired>
+                  {{item.id}}
+              </label>
+            </td>
+            <td>{{item.location}}</td>
+          </tr>
+
+          <tr ng-repeat="item in current_fv.items"
+              ng-if="item.collection"
+              ng-init="choose_default_part(current_fv,item)">
+            <td>
+              <label>
+                <input type="radio" 
+                       class="adjusted-radio"
+                       name="selected_item"
+                       ng-model="current_fv.selected_item"
+                       ng-value="item"
+                       ng-disabled="current_fv.wired">
+                  {{item.collection.id}}:<br />
+                  {{item.collection.location}}<br/>
+                  ({{item.selected_row}},{{item.selected_column}})
+              </label>
+            </td>
+            <td>
+              <table class='tiny-collection'>
+                <tr ng-repeat="row in item.collection.matrix track by $index">
+                  <td ng-repeat="el in row track by $index" 
+                      ng-class="current_fv.sid == el ? (item.selected_row == $parent.$index && 
+                                item.selected_column == $index ? 'selected' : 'filled' ) : 'black'"
+                      ng-click="item.selected_row = $parent.$index; item.selected_column = $index">
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+        </form>
 
       </table>
 

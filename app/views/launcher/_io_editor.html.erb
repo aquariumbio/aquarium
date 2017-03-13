@@ -38,7 +38,9 @@
 
 <script type="text/ng-template" id="parameter_editor">
 
-  <div class='field_value_form' ng-repeat="fv in operation.field_values | filter: { role: ft.role }" ng-if="fv.name == ft.name">
+  <div class='field_value_form' 
+       ng-repeat="fv in operation.field_values | filter: { role: ft.role }" 
+       ng-if="fv.name == ft.name">
 
     <span class='io-name'> <b>{{fv.name}}</b></span>
 

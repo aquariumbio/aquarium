@@ -95,7 +95,7 @@
     $scope.submit_plan = function() {
       $scope.error = null;
       $scope.plan.submit().then((plan) => {
-        $scope.plan=null;
+        $scope.plan = null;
         $scope.current_operation = null;
         $scope.mode = 'running';
         plan.link_operation_types($scope.operation_types);
