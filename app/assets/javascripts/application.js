@@ -32,6 +32,5 @@
 //= require angular
 //= require angular-resource
 //= require angular-cookies
-//= require go
 //= require_tree .
 
