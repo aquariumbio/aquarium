@@ -35,37 +35,33 @@
           op.update_cost();
 
           if ( ft.array ) {
+
             fv.sample_identifier = ui.item.value;
+
           } else {
-            route[ft.routing] = ui.item.value;
-          }
 
-          op.each_input((field_type,field_value) => {
+            route[ft.routing] = ui.item.value; // Updates other sample ids with same routing
 
-            if ( ( ( field_type.array && field_value == $scope.fv ) || 
-                   (!field_type.array && field_type.routing == ft.routing ) ) &&
-                 op.form.input[ft.name] ) {
+            op.each_field((field_type,field_value) => {
 
-              var aft = op.form.input[field_type.name].aft;
-
-              if ( aft.object_type_id ) {
-
-                field_value.clear();
-
-                AQ.items_for(sid,aft.object_type_id).then((items) => {            
-                  if ( items.length > 0 ) {
-                    field_value.items = items;
-                    field_value.selected_item = items[0];
-                    field_value.sid = sid;
-                    $scope.$apply();
-                  }
-                });
-
+              if ( field_type.routing == fv.routing && !field_type.array ) {
+                var aft = op.form[field_value.role][field_value.name].aft;
+                if ( aft.object_type_id ) {
+                  field_value.clear();
+                  AQ.items_for(sid,aft.object_type_id).then((items) => { 
+                    if ( items.length > 0 ) {                      
+                      field_value.items = items;
+                      field_value.selected_item = items[0];
+                      field_value.sid = sid;
+                      $scope.$apply();
+                    }
+                  });
+                }               
               }
 
-            }
+            });
 
-          });
+          }
 
           $scope.$apply();
 

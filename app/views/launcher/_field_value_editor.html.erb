@@ -4,8 +4,9 @@
 
   <form>
 
-    <div ng-if="current_fv.items.length > 0 && !current_fv.wired"
-          class="nomargin">
+    <!--  && !current_fv.wired --> <!--  && !current_fv.wired --> 
+
+    <div ng-if="current_fv.items.length > 0" class="nomargin">
 
       <b>Inventory</b>
 
@@ -17,7 +18,8 @@
               <input type="radio" 
                      class="adjusted-radio"
                      name="predecessor"
-                     ng-model="item.selected">
+                     ng-model="item.selected"
+                     ng-disabled=current_fv.wired>
                 {{item.id}}
             </label>
           </td>
