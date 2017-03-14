@@ -1,0 +1,24 @@
+{
+  "name": "Aquarium",
+  "homepage": "https://github.com/klavinslab/aquarium",
+  "authors": [
+    "Eric Klavins <klavins@uw.edu>"
+  ],
+  "description": "A Lab in the Cloud",
+  "main": "",
+  "license": "UW",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor/assets/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-material": "~1.1.3",
+    "angular-cookies": "latest",
+    "angular-resource": "latest"
+  }
+}

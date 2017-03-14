@@ -108,6 +108,9 @@ module Bioturk
       end
     end
 
+    # For bower installed components
+    config.assets.paths << Rails.root.join('vendor', 'assets', 'components')
+
   end
 
 end

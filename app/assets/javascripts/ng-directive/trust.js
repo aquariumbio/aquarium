@@ -7,7 +7,7 @@
   try {
     w = angular.module('aquarium'); 
   } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace']); 
+    w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
   } 
 
   w.filter("trust", ['$sce', function($sce) {

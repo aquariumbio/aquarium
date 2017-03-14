@@ -14,8 +14,8 @@
  *= require jquery.ui.datepicker
  *= require jquery.ui.menu
  *= require jquery.fileupload-ui
+ *= require angular-material/angular-material.css 
  */
-
 
 @media print
 {    
@@ -23,4 +23,9 @@
     {
         display: none !important;
     }
+}
+
+body {
+  padding-top: 60px !important;
+  padding-bottom: 0px;
 }
