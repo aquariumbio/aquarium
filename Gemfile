@@ -8,7 +8,6 @@ gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'sass-rails',   '~> 3.2.3'
 gem 'db-charmer', :require => 'db_charmer'
-gem "highcharts-rails", "~> 3.0.0"
 gem 'mysql2', "~> 0.3.17"
 
 group :development do
@@ -36,14 +35,11 @@ gem "flot-rails"
 
 gem 'underscore-rails'
 
-gem 'd3-rails'
-
 gem 'git'
 
 gem 'rails-patch-json-encode'
 gem 'oj'
 
-gem 'angularjs-rails'
 gem 'angular_rails_csrf'
 gem 'ace-rails-ap'
 
