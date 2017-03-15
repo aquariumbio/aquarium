@@ -110,7 +110,7 @@ AQ.Plan.record_methods.unwire = function(op) {
 
   aq.each(plan.wires, (wire) => {
     if ( wire.from_op == op || wire.to_op == op ) {
-      delete wire.to_op.wired;
+      delete wire.to.wired;
       aq.remove(plan.wires,wire);
     }
   });

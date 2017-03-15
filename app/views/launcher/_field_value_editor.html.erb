@@ -1,85 +1,105 @@
 <script type="text/ng-template" id="field_value_editor">
 
-  <h4>{{current_operation.operation_type.name}}: {{current_fv.name}}</h4>
+  <md-content class="field-value-editor">
 
-  <form>
+    <div class="md-title title">{{current_fv.name}}</div>
 
-    <!--  && !current_fv.wired --> <!--  && !current_fv.wired --> 
+    <form>
 
-    <div ng-if="current_fv.items.length > 0" class="nomargin">
+      <!--  && !current_fv.wired --> <!--  && !current_fv.wired --> 
 
-      <b>Inventory</b>
+      <div ng-if="current_fv.items.length > 0" class="nomargin">
 
-      <table class='table table-condensed nomargin'>
+        <md-subheader class="md-no-sticky">
+          Inventory
+        </md-subheader>
 
-        <form name="itemList">
+        <md-list class='md-compact-list' ng-if="!current_fv.items[0].collection">
 
-          <tr ng-repeat="item in current_fv.items" ng-if="!item.collection">
-            <td>
-              <label>
-                <input type="radio" 
-                       class="adjusted-radio"
-                       name="selected_item"
-                       ng-model="current_fv.selected_item"
-                       ng-value="item"
-                       ng-disabled=current_fv.wired>
-                  {{item.id}}
-              </label>
-            </td>
-            <td>{{item.location}}</td>
-          </tr>
+          <md-list-item class="md-compact" 
+            ng-repeat="item in current_fv.items" 
+            ng-if="!item.collection">
 
-          <tr ng-repeat="item in current_fv.items"
+            <md-checkbox
+              ng-click="select_item(current_fv,item)"
+              ng-checked="item.selected"
+              ng-disabled="current_fv.wired || current_fv.role == 'output'">
+            </md-checkbox>
+
+            <p>{{item.id}}</p>
+            <span flex></span>
+            <p>{{item.location}}</p>
+
+          </md-list-item>
+
+        </md-list>
+
+        <md-list ng-if="current_fv.items[0].collection">
+
+          <md-list-item ng-repeat="item in current_fv.items"
+              class="md-3-line"
               ng-if="item.collection"
               ng-init="choose_default_part(current_fv,item)">
-            <td>
-              <label>
-                <input type="radio" 
-                       class="adjusted-radio"
-                       name="selected_item"
-                       ng-model="current_fv.selected_item"
-                       ng-value="item"
-                       ng-disabled="current_fv.wired">
-                  {{item.collection.id}}:<br />
-                  {{item.collection.location}}<br/>
-                  ({{item.selected_row}},{{item.selected_column}})
-              </label>
-            </td>
-            <td>
-              <table class='tiny-collection'>
-                <tr ng-repeat="row in item.collection.matrix track by $index">
-                  <td ng-repeat="el in row track by $index" 
-                      ng-class="current_fv.sid == el ? (item.selected_row == $parent.$index && 
-                                item.selected_column == $index ? 'selected' : 'filled' ) : 'black'"
-                      ng-click="item.selected_row = $parent.$index; item.selected_column = $index">
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
 
-        </form>
+            <span class='collection-checkbox-holder'>
 
-      </table>
+              <md-checkbox
+                ng-click="select_item(current_fv,item)"
+                ng-checked="item.selected"
+                ng-disabled="current_fv.wired || current_fv.role == 'output'">
+              </md-checkbox>
+
+            </span>
+
+              <p><b>{{item.collection.id}} ({{item.selected_row}},{{item.selected_column}})</b><br/>
+                 {{item.collection.location}}</p>
+
+
+            <span flex></span>
+
+            <table class='tiny-collection'>
+              <tr ng-repeat="row in item.collection.matrix track by $index">
+                <td ng-repeat="el in row track by $index" 
+                    ng-class="current_fv.sid == el ? (item.selected_row == $parent.$index && 
+                              item.selected_column == $index ? 'selected' : 'filled' ) : 'blank'"
+                    ng-click="select_row_column(current_fv,el,item,$parent.$index,$index)">
+                </td>
+              </tr>
+            </table>
+
+          </md-list-item>
+
+        </md-list>
+
+      </div>
+
+    </form>
+
+    <md-subheader ng-if="current_fv.items.length == 0 && !current_fv.wired" class="md-no-sticky">
+      No Inventory
+    </md-subheader>
+
+    <div ng-if="current_fv.role == 'input' && current_fv.predecessors.length > 0">
+
+      <md-subheader class="md-no-sticky">
+        Operation Types
+      </md-subheader>
+
+      <md-list class="md-compact-list">
+        <md-list-item ng-repeat="pred in current_fv.predecessors">
+          <p><b>{{pred.operation_type.name}}</b></p>
+          <md-button class="md-raised md-primary md-secondary" ng-click="add_wire(current_fv,current_operation,pred)">
+              Add
+          </md-button>
+        </md-list-item>
+      </md-list>
 
     </div>
 
-  </form>
+    <md-subheader class="md-no-sticky" ng-if="current_fv.predecessors.length == 0">
+      No Operation Types
+    </md-subheader>
 
-  <b ng-if="current_fv.items.length == 0 && !current_fv.wired">No Inventory<br/></b>
-
-  <div ng-if="current_fv.role == 'input' && current_fv.predecessors.length > 0">
-    <b>Operation Types</b><br/>
-    <table class='table table-condensed nomargin'>
-      <tr ng-repeat="pred in current_fv.predecessors">
-        <td><a href="#"
-               ng-click="add_wire(current_fv,current_operation,pred)" 
-               class="btn btn-mini">Add</a></td>
-        <td>{{pred.operation_type.name}}</td>
-      </tr>
-    </table>
-  </div>
-
-  <b ng-if="current_fv.predecessors.length == 0">No Operation Types<br/></b>
+  </md-content>
 
 </script>

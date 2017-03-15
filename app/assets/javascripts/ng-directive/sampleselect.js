@@ -51,6 +51,7 @@
                   AQ.items_for(sid,aft.object_type_id).then((items) => { 
                     if ( items.length > 0 ) {                      
                       field_value.items = items;
+                      field_value.items[0].selected = true;
                       field_value.selected_item = items[0];
                       field_value.sid = sid;
                       $scope.$apply();

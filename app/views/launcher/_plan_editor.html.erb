@@ -1,18 +1,23 @@
 <script type="text/ng-template" id="plan_editor">
 
-  <div class='plan-controls'>
+  <section layout="row">
 
-      <span class='plan-cost'>Cost Estimate: {{plan.cost()|currency}}</span>
+    <span class='md-headline'>
+       {{plan.operations[0].operation_type.name}}:
+       {{plan.cost()|currency}}
+    </span>
 
-      <span class='plan-controls pull-right'>
-      
-        <a ng-click="submit_plan()" 
-           class='btn btn-small btn-primary' 
-           href="#">Launch</a>
+    <span flex></span>
 
-      </span>
+    <md-button class="md-raised md-primary" ng-click="submit_plan()" aria-label="Launch">
+      Launch
+    </md-button>
 
-  </div>
+    <md-button class="md-raised" ng-if="plan != null" ng-click="$parent.add_goal()" aria-label="Add Goal">
+      Add Goal
+    </md-button>        
+
+  </section>
 
   <div ng-repeat="operation in plan.operations" 
        ng-include="'operation_editor'"></div>

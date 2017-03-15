@@ -11,34 +11,55 @@
   <%= render partial: 'plan_viewer' %>  
   <%= render partial: '/data_associations/template' %> 
 
-  <div class='two-column'>
+  <md-content flex layout-padding ng-if="status != 'Ready'">
+    <div layout="column">
+      <h2 class="md-title">{{status}}</h2>
+      <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+    </div>
+  </md-content>
 
-    <div class='two-column-left'>
+  <section ng-if="status == 'Ready'" layout="row" flex>
 
-      <div class='two-column-control' ng-if="status == 'Ready'">
-        <h4>Launcher</h4>
-        <ul>
-          <li><a href="#" ng-click="$parent.mode = 'running'" ng-class="highlight('running')">Workflow List</a></li>
-          <li><a href="#" ng-click="$parent.mode = 'new'"     ng-class="highlight('new')">New Workflow</a></li>
-          <li ng-if="plan != null"><a href="#" ng-click="$parent.add_goal()" ng-class="highlight('new')">Add Goal</a></li>
-        </ul>
-      </div>
+    <md-sidenav
+      class="md-sidenav-left"
+      md-component-id="left"
+      md-is-locked-open="true"
+      md-whiteframe="1">
 
-      <div class='two-column-control' ng-if="status != 'Ready'"><b>{{status}}</b></div>
+      <md-toolbar>
 
-      <div class='two-column-control alert alert-error' ng-if="error != null">
+        <div class="md-toolbar-tools">
+
+          <h2 class="md-toolbar-tools">Planner</h2>
+
+          <span flex></span>
+
+          <md-button
+            ng-click="$parent.mode = 'running'" 
+            ng-class="$parent.mode === 'running' ? 'md-small md-highlight' : 'md-small'">
+              List</md-button>
+
+          <md-button
+            ng-click="$parent.mode = 'new'" 
+            ng-class="$parent.mode === 'new' ? 'md-small md-highlight' : 'md-small'">
+              New</md-button>
+
+        </div>
+
+      </md-toolbar>
+
+      <div ng-if="error != null">
         <h4>Error</h4>
         {{error}}
       </div>
 
-      <div class='two-column-control' 
-           ng-if="current_operation" 
+      <div ng-if="current_operation" 
            ng-include="'field_value_editor'">
       </div>
 
-    </div>
+    </md-sidenav>
 
-    <div class='two-column-right'>    
+    <md-content flex layout-padding>    
 
       <div ng-if="status == 'Ready' && mode == 'new'">
         <div ng-if="plan == null" ng-include="'operation_type_chooser'"></div> 
@@ -49,8 +70,8 @@
            ng-include="'plan_list'">
       </div>      
 
-    </div>
+    </md-content>
 
-  </div>
+  </section>
 
 </div>

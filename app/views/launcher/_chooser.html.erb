@@ -1,34 +1,24 @@
 <script type="text/ng-template" id="operation_type_chooser">
 
-  {{categories}}
+  <section ng-repeat="category in operation_types.categories" layout-padding>
 
-  <div ng-repeat="category in operation_types.categories">
+    <div class="md-title category-title">{{category}}</div>
 
-    <h4>{{category}}</h4>
+    <md-grid-list 
+        md-cols-gt-md="6" md-cols="2" md-cols-md="4"
+        md-row-height-gt-md="3:1" md-row-height="3:1"
+        md-gutter-gt-md="16px" md-gutter-md="8px" md-gutter="4px">    
 
-    <table class="table table-condensed table-fixed">
-      <tr>
-        <th>Operation Type</th>
-        <th>Inputs</th>
-        <th>Outputs</th>
-      </tr>
-      <tr ng-repeat="operation_type in operation_types | filter : { category: category }">
-        <td style="width:33%">
-          <a href='#' ng-click="select(operation_type)">{{operation_type.name}}</a>
-        </td>
-        <td style="width:33%">
-          <ul>
-            <li ng-repeat="ft in operation_type.field_types | filter : { role: 'input' }">{{ft.name}}</li>
-          </ul>
-        </td>
-        <td style="width:33%">
-          <ul>
-            <li ng-repeat="ft in operation_type.field_types | filter : { role: 'output' }">{{ft.name}}</li>
-          </ul>
-        </td>        
-      </tr>
-    </table>
+      <md-grid-tile 
+        class="operation-type-choice" 
+        md-ink-ripple
+        ng-repeat="operation_type in operation_types | filter : { category: category }"
+        ng-click="select(operation_type)">
+          {{operation_type.name}}
+      </md-grid-tile>
 
-  </div>
+    </md-grid-list>
+
+  </section>
 
 </script>

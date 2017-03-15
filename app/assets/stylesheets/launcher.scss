@@ -1,4 +1,55 @@
+
 .launcher {
+
+  /* STYLES INTERACTING WITH ANGULAR MATERIAL ********************************************************* */
+
+  .operation-type-choice {
+    border: 1pt solid #bbb;
+    color: black;
+    background: #eee;
+    &:hover {
+      cursor: pointer;
+    }    
+  }
+
+  .operation-type-choice-selected {
+    border: 1pt solid #bbb;
+    margin: 16px 0 16px 0;
+  }  
+
+  .highlight {
+    background: #acf;
+  }
+
+  .animate-show-hide.ng-hide {
+    opacity: 0;
+  }
+
+  .animate-show-hide.ng-hide-add,
+  .animate-show-hide.ng-hide-remove {
+    transition: all linear 0.5s;
+  }  
+
+  .compact {
+    padding: 0px !important;
+  }
+
+  .field-value-editor {
+    .title {
+      text-align: center;
+      margin: 10px 0 10px 0 !important;
+    }
+  }
+
+  .collection-checkbox-holder {
+    padding-top: 8px;
+  }
+
+  .category-title {
+    border-bottom: 1pt solid #bbb;
+  }
+
+  /* OTHER STYLES *************************************************************************************** */
 
   .select-container {
 
@@ -63,10 +114,6 @@
     padding: 10px 20px 10px 10px;
   }
 
-  .highlight {
-    font-weight: bold;
-  }
-
   .small {
     font-size: 9pt;
     color: #666;
@@ -90,6 +137,8 @@
     border-bottom: 1pt solid #eee;
     padding-bottom: 10px;
   }
+
+
 
   .operation {
 
@@ -271,8 +320,9 @@
   }
 
   .tiny-collection {
-    border: none;
-    width: 100%;
+    border: 1pt solid #eee;
+    padding: 1pt;
+    margin: 5px;
     tr { 
       margin: 0;
       padding: 0;

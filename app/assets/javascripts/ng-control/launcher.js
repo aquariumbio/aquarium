@@ -107,14 +107,6 @@
       });
     }
 
-    $scope.highlight = function(m) {
-      var c = "";
-      if ( m == $scope.mode ) {
-        c += "highlight";
-      }
-      return c;
-    }
-
     $scope.op_mode = function(op,m) {
       var c = "btn btn-mini";
       if ( op.mode == m ) {
@@ -167,6 +159,25 @@
       $scope.plan.remove_wires_to(op);
       $scope.plan.wire(preop,preop_output,op,fv);
 
+    }
+
+    $scope.select_item = function(fv, item) {
+      aq.each(fv.items, i => {
+        if ( i.collection ) {
+          i.selected = (i.collection.id == item.collection.id);
+        } else {
+          i.selected = (i.id == item.id);        
+        }
+        console.log((i.id || i.collection.id) + ": " + i.selected);
+      });
+      fv.selected_item = item;
+    }
+
+    $scope.select_row_column = function(fv,element,item,r,c) {
+      if ( fv.sid == element ) {
+        item.selected_row = r;
+        item.selected_column = c;
+      }
     }
 
   }]);
