@@ -27,12 +27,12 @@
 //= require joint.layout.DirectedGraph
 //= require ace-rails-ap
 //= require ace/mode-ruby
-//= require angular/angular.js
-//= require angular-resource/angular-resource.js
-//= require angular-cookies/angular-cookies.js
-//= require angular-animate/angular-animate.js
-//= require angular-aria/angular-aria.js
-//= require angular-messages/angular-messages.js
-//= require angular-material/angular-material.js
+//= require angular/angular.min.js
+//= require angular-resource/angular-resource.min.js
+//= require angular-cookies/angular-cookies.min.js
+//= require angular-animate/angular-animate.min.js
+//= require angular-aria/angular-aria.min.js
+//= require angular-messages/angular-messages.min.js
+//= require angular-material/angular-material.min.js
 //= require_tree .
 
