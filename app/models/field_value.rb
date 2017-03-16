@@ -28,7 +28,7 @@ class FieldValue < ActiveRecord::Base
       if field_type.ftype == 'sample' && (!allowable_field_type || allowable_field_type.object_type.handler == 'sample_container')
 
         unless child_sample_id
-          errors.add(:child_sample, "No sample specified for #{role} '#{name}'")
+          errors.add(:child_sample, "not specified for #{role} '#{name}'.")
           Rails.logger.info "Validation error for field value #{name} with aft = #{allowable_field_type.inspect}"
           return false
         end

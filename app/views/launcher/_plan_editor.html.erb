@@ -1,6 +1,6 @@
 <script type="text/ng-template" id="plan_editor">
 
-  <section layout="row">
+  <section layout="row" layout-align="center center">
 
     <span class='md-headline'>
        {{plan.operations[0].operation_type.name}}:
@@ -10,10 +10,16 @@
     <span flex></span>
 
     <md-button class="md-raised md-primary" ng-click="submit_plan()" aria-label="Launch">
+      <md-tooltip md-direction="bottom">
+        Launch this plan
+      </md-tooltip>        
       Launch
     </md-button>
 
     <md-button class="md-raised" ng-if="plan != null" ng-click="$parent.add_goal()" aria-label="Add Goal">
+      <md-tooltip md-direction="bottom">
+        Add another '{{plan.operations[0].operation_type.name}} operation to this plan
+      </md-tooltip>      
       Add Goal
     </md-button>        
 

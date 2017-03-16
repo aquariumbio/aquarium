@@ -22,6 +22,10 @@
     $scope.getting_plans = false;
     $scope.mode = 'running';
 
+    $scope.clear_error = function() {
+      delete $scope.error;
+    }
+
     $scope.io_focus = function(op,ft,fv) {
       $scope.current_operation = op;
       $scope.current_fv = fv;

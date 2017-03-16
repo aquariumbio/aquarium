@@ -2,25 +2,6 @@
 
   <div class='field_value_form'>
 
-    <!-- Name and object type chooser -->
-    <span class='io-name'> 
-      <b>{{ft.name}}</b>
-      <form class='radio-buttons pull-right'> 
-        <span ng-repeat="aft in ft.allowable_field_types">
-          <label class="radio-label">
-            <input type="radio" class="radio"
-                   name="{{ft.name + '_' + ft.role}}"
-                   ng-value="aft.id"
-                   ng-disabled="ft.allowable_field_types.length == 1"
-                   ng-model=  "operation.form[ft.role][ft.name].aft_id"
-                   ng-change= "operation.set_aft(ft,aft)">
-            {{aft.object_type_id ? aft.object_type.name : 'No container'}} 
-            <span ng-if="ft.part">(part)</span>
-          </label>
-        </span>
-      </form>
-    </span>
-
     <!-- Sample Chooser -->
     <div sampleselect
          ng-repeat="fv in operation.field_values | filter: { name: ft.name, role: ft.role }" 
@@ -62,6 +43,10 @@
 </script>
 
 <script type="text/ng-template" id="sample_select">
+
+  <span class='io-name'> 
+    <span ng-class="$parent.current_fv == fv ? 'bold' : ''">{{fv.name}}</span>
+  </span>
 
   <!-- basic sample -->
   <input type='string' 

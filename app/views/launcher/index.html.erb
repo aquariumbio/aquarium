@@ -1,6 +1,6 @@
 <% provide(:title, 'Launcher') %>
 
-<div ng-app="aquarium" ng-controller="launcherCtrl as launcher" class='launcher'>
+<div ng-app="aquarium" ng-controller="launcherCtrl as launcher" class='launcher' layout="vertical" layout-fill>
 
   <%= render partial: 'chooser' %>
   <%= render partial: 'plan_editor' %>  
@@ -37,20 +37,27 @@
           <md-button
             ng-click="$parent.mode = 'running'" 
             ng-class="$parent.mode === 'running' ? 'md-small md-highlight' : 'md-small'">
-              List</md-button>
+              <md-tooltip md-direction="bottom">List all of your plans</md-tooltip>
+              List
+          </md-button>
 
           <md-button
             ng-click="$parent.mode = 'new'" 
             ng-class="$parent.mode === 'new' ? 'md-small md-highlight' : 'md-small'">
-              New</md-button>
+              <md-tooltip md-direction="bottom">Design a new plan</md-tooltip>
+              New
+          </md-button>
 
         </div>
 
       </md-toolbar>
 
-      <div ng-if="error != null">
-        <h4>Error</h4>
-        {{error}}
+      <div ng-if="error">
+        <md-content class='launch-error'>
+          <div class="md-title title">Error</div>
+          <p layout-padding>{{error}}</p>
+          <span class="md-title dismiss" ng-click="clear_error()">&times;</span>
+        </md-content>
       </div>
 
       <div ng-if="current_operation" 
@@ -59,7 +66,7 @@
 
     </md-sidenav>
 
-    <md-content flex layout-padding>    
+    <md-content flex layout-padding class="main-content">    
 
       <div ng-if="status == 'Ready' && mode == 'new'">
         <div ng-if="plan == null" ng-include="'operation_type_chooser'"></div> 

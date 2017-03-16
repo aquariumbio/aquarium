@@ -9,7 +9,8 @@
     background: #eee;
     &:hover {
       cursor: pointer;
-    }    
+      background: #bcf;
+    }
   }
 
   .operation-type-choice-selected {
@@ -20,15 +21,6 @@
   .highlight {
     background: #acf;
   }
-
-  .animate-show-hide.ng-hide {
-    opacity: 0;
-  }
-
-  .animate-show-hide.ng-hide-add,
-  .animate-show-hide.ng-hide-remove {
-    transition: all linear 0.5s;
-  }  
 
   .compact {
     padding: 0px !important;
@@ -49,7 +41,42 @@
     border-bottom: 1pt solid #bbb;
   }
 
+  .title {
+    text-align: center;
+    margin: 10px 0 10px 0 !important;
+  }  
+
+  .main-content {
+    background: white;
+  }
+
+  .launch-error {    
+    .title {
+      color: #a25900;
+      margin-bottom: 0px !important;
+    }
+    p { 
+      color: #a25900;
+      line-height: 18px;
+    }
+    border-bottom: 1pt solid #bbb;
+    position: relative;
+    .dismiss {
+      position: absolute;
+      top: 7px;
+      right: 14px;
+      color: #aaa;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
   /* OTHER STYLES *************************************************************************************** */
+
+  .bold {
+    font-weight: bold;
+  }
 
   .select-container {
 

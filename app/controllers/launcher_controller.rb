@@ -42,11 +42,6 @@ class LauncherController < ApplicationController
         value: fv[:value]
       )
 
-      logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!\n" +
-                  " SET ITEM FOR FV #{field_value.id} to #{field_value.child_item_id}\n" +
-                  field_value.inspect + "\n" +
-                  "!!!!!!!!!!!!!!!!!!!!!!!!!\n")
-
       map_id fv[:rid], field_value.id
 
       unless field_value.errors.empty?
@@ -98,7 +93,7 @@ class LauncherController < ApplicationController
             raise ActiveRecord::Rollback                   
           end
         rescue Exception => e
-          render json: { errors: e.to_s + e.backtrace[0].to_s }, status: 422        
+          render json: { errors: e.to_s + " " + e.backtrace[0].to_s }, status: 422        
           raise ActiveRecord::Rollback       
         end
       end

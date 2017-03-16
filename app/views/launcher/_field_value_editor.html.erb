@@ -1,12 +1,29 @@
 <script type="text/ng-template" id="field_value_editor">
 
-  <md-content class="field-value-editor">
+  <md-content class="field-value-editor" 
+    ng-if="mode=='new'">
 
     <div class="md-title title">{{current_fv.name}}</div>
 
-    <form>
+      <md-subheader class="md-no-sticky">
+        Container Type
+      </md-subheader>
 
-      <!--  && !current_fv.wired --> <!--  && !current_fv.wired --> 
+      <md-list class='md-compact-list'>
+
+        <md-list-item ng-repeat="aft in current_fv.field_type.allowable_field_types">
+
+          <md-checkbox
+            ng-click="current_operation.set_aft(current_fv.field_type,aft)"
+            ng-checked="current_operation.form[current_fv.role][current_fv.name].aft_id == aft.id"
+            ng-disabled="current_fv.field_type.allowable_field_types.length === 1">
+          </md-checkbox>
+
+          <p>{{aft.object_type_id ? aft.object_type.name : 'No container'}}</p>
+
+        </md-list-item>
+
+      </md-list>
 
       <div ng-if="current_fv.items.length > 0" class="nomargin">
 
@@ -73,8 +90,6 @@
 
       </div>
 
-    </form>
-
     <md-subheader ng-if="current_fv.items.length == 0 && !current_fv.wired" class="md-no-sticky">
       No Inventory
     </md-subheader>
@@ -89,6 +104,9 @@
         <md-list-item ng-repeat="pred in current_fv.predecessors">
           <p><b>{{pred.operation_type.name}}</b></p>
           <md-button class="md-raised md-primary md-secondary" ng-click="add_wire(current_fv,current_operation,pred)">
+              <md-tooltip md-direction="bottom">
+                Use {{pred.operation_type.name}} to produce {{current_fv.name}}
+              </md-tooltip>
               Add
           </md-button>
         </md-list-item>
