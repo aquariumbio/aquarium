@@ -112,7 +112,7 @@ class LauncherController < ApplicationController
             active: true
           })
           wire.save
-          wire.to.field_values.each do |fv| # remove inputs from non-leaves
+          wire.to_op.field_values.each do |fv| # remove inputs from non-leaves
             fv.child_item_id = nil
             fv.save
           end
