@@ -30,12 +30,16 @@
       $scope.current_operation = op;
       $scope.current_fv = fv;
       $scope.current_ft = ft;
+      aq.each($scope.plan.operations, op =>
+        aq.each(op.field_values, fv => fv.selected = false)
+      );
+      fv.selected = true;
     }
 
     $scope.io_blur = function() {
       $scope.current_operation = null;
       $scope.current_fv = null;
-      $scope.current_ft = null;      
+      $scope.current_ft = null;  
     }
 
     AQ.get_sample_names().then(() =>  {
@@ -98,6 +102,7 @@
 
     $scope.submit_plan = function() {
       $scope.error = null;
+      $scope.plan.status = 'planning';
       $scope.plan.submit().then((plan) => {
         $scope.plan = null;
         $scope.current_operation = null;
@@ -106,6 +111,7 @@
         $scope.plans.unshift(plan);
         $scope.$apply();
       }).catch((error) => {
+        delete $scope.plan.status;
         $scope.error = error;
         $scope.$apply();
       });
@@ -153,6 +159,8 @@
 
     $scope.add_wire = function(fv, op, pred) {
 
+      console.log("Adding wire to " + op.operation_type.name + " / " + fv.name )
+
       var preop = operation = AQ.Operation.record({
         routing: {},
         form: { input: {}, output: {} }
@@ -160,7 +168,7 @@
 
       var preop_output = preop.output(pred.output.name);
 
-      $scope.plan.remove_wires_to(op);
+      $scope.plan.remove_wires_to(op,fv);
       $scope.plan.wire(preop,preop_output,op,fv);
 
     }

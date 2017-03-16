@@ -117,12 +117,12 @@ AQ.Plan.record_methods.unwire = function(op) {
 
 }
 
-AQ.Plan.record_methods.remove_wires_to = function(op) {
+AQ.Plan.record_methods.remove_wires_to = function(op,fv) {
 
   var plan = this;
 
   aq.each(plan.wires, (wire) => {  
-    if ( wire.to_op == op ) {
+    if ( wire.to_op == op && wire.to == fv ) {
       aq.remove(plan.wires,wire);
     }
   });
