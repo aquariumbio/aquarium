@@ -45,7 +45,7 @@
 <script type="text/ng-template" id="sample_select">
 
   <span class='io-name'> 
-    <span ng-class="$parent.current_fv == fv ? 'bold' : ''">{{fv.name}}</span>
+    <span ng-class="fv.selected ? 'bold' : ''">{{fv.name}}</span>
   </span>
 
   <!-- basic sample -->

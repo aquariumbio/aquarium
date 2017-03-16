@@ -9,11 +9,16 @@
 
     <span flex></span>
 
-    <md-button class="md-raised md-primary" ng-click="submit_plan()" aria-label="Launch">
+    <md-button 
+      class="md-raised md-primary" 
+      ng-click="submit_plan()" 
+      aria-label="Launch"
+      ng-disabled="plan.status == 'planning'">
       <md-tooltip md-direction="bottom">
         Launch this plan
       </md-tooltip>        
-      Launch
+      <span ng-if="plan.status != 'planning'">Launch</span>
+      <span ng-if="plan.status == 'planning'">Planning...</span>
     </md-button>
 
     <md-button class="md-raised" ng-if="plan != null" ng-click="$parent.add_goal()" aria-label="Add Goal">
@@ -27,5 +32,9 @@
 
   <div ng-repeat="operation in plan.operations" 
        ng-include="'operation_editor'"></div>
+
+    <div ng-repeat="w in plan.wires">
+    {{w.from_op.operation_type.name}} / {{w.from.name}} =&gt; {{w.to_op.operation_type.name}} / {{w.to.name}} 
+    </div>       
 
 </script>

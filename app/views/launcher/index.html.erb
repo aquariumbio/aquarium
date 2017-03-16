@@ -18,13 +18,14 @@
     </div>
   </md-content>
 
-  <section ng-if="status == 'Ready'" layout="row" flex>
+  <md-content ng-if="status == 'Ready'" layout="row" flex>
 
     <md-sidenav
       class="md-sidenav-left"
       md-component-id="left"
       md-is-locked-open="true"
-      md-whiteframe="1">
+      md-whiteframe="1"
+      md-disable-backdrop="">
 
       <md-toolbar>
 
@@ -54,7 +55,7 @@
 
       <div ng-if="error">
         <md-content class='launch-error'>
-          <div class="md-title title">Error</div>
+          <div class="md-title title">Your Plan has Issues</div>
           <p layout-padding>{{error}}</p>
           <span class="md-title dismiss" ng-click="clear_error()">&times;</span>
         </md-content>
@@ -79,6 +80,6 @@
 
     </md-content>
 
-  </section>
+  </md-content
 
 </div>
