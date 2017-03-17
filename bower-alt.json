@@ -1,0 +1,10 @@
+    "jquery": "latest",
+    "jquery-ujs": "latest",
+    "jquery-ui-daterangepicker": "latest",
+    "jquery-menu": "latest",
+    "jquery-autocomplete": "latest",
+    "jquery-cookie": "latest",
+    "jquery-file-upload": "latest",
+    "jquery-flot": "latest",
+
+        "ace-editor": "latest",
