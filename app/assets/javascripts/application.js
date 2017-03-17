@@ -22,7 +22,6 @@
 //= require jquery.flot
 //= require jquery.flot.resize
 //= require jquery.flot.time
-//= require ace-rails-ap
-//= require ace/mode-ruby
+//= require underscore
 //= require_tree .
 

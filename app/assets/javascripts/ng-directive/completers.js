@@ -115,7 +115,7 @@
       restrict: 'A',
       scope: { ngModel: '=' },
       link: function($scope,$element,$attributes) {
-        $element.autocomplete({
+        $($element).autocomplete({
           source: aq.collect($scope.$parent.sample_types,function(p) { return p.name; }),
           select: function(ev,ui) {
             $scope.ngModel = ui.item.value;
@@ -133,7 +133,7 @@
       restrict: 'A',
       scope: { objecttypecomplete: '=', ngModel: '=' },
       link: function($scope,$element,$attributes) {
-        $element.autocomplete({
+        $($element).autocomplete({
           source: aq.collect(aq.where($scope.$parent.object_types,function(ot) { 
                     return ot.handler == "sample_container" || ot.handler == "collection"
                   }),function(p) { return p.name; }),

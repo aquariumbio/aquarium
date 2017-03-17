@@ -1,7 +1,6 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    ace-rails-ap (4.1.2)
     actionmailer (3.2.19)
       actionpack (= 3.2.19)
       mail (~> 2.5.4)
@@ -37,7 +36,7 @@ GEM
       debug_inspector (>= 0.0.1)
     bootstrap-sass (2.3.2.0)
       sass (~> 3.2)
-    bootstrap-will_paginate (0.0.10)
+    bootstrap-will_paginate (0.0.11)
       will_paginate
     builder (3.0.4)
     callsite (0.0.11)
@@ -94,7 +93,7 @@ GEM
     mimemagic (0.3.0)
     multi_json (1.12.1)
     mysql2 (0.3.21)
-    oj (2.18.2)
+    oj (2.18.3)
     paperclip (4.3.7)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -177,7 +176,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  ace-rails-ap
   angular_rails_csrf
   bcrypt-ruby (~> 3.0.0)
   binding_of_caller
