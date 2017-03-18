@@ -49,5 +49,5 @@ awc.sh
 ots.json
 
 # ignore bower installed components
-/vendor/assets/components
+public/components
 
