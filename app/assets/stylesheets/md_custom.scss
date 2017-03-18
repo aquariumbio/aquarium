@@ -48,3 +48,10 @@ $buttonHighlight: rgb(73, 91, 281);
     margin: 0;
   }
 }
+
+/* NG_CLICK *****************************************************************/
+
+.no-highlight:focus {
+  outline: none;
+  border: 0;
+ }

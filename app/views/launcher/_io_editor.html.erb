@@ -3,9 +3,11 @@
   <div class='field_value_form'>
 
     <!-- Sample Chooser -->
-    <div sampleselect
+    <div sampleselect 
          ng-repeat="fv in operation.field_values | filter: { name: ft.name, role: ft.role }" 
-         ft="ft" operation="operation" fv="fv" focus="io_focus" plan="plan">
+         ft="ft" operation="operation" fv="fv" focus="io_focus" plan="plan" 
+         ng-click="io_focus(operation,ft,fv)"
+         class="no-highlight">
     </div> 
 
     <!-- Add array element button -->
@@ -68,7 +70,7 @@
 
   <!-- not a sample -->
   <input type='string'
-         placeholder="This i/o does not require a sample name"
+         placeholder="This {{fv.role}} does not require a sample name"
          disabled=true
          class="sample-only"
          ng-focus="focus(operation,ft,fv)"
