@@ -76,6 +76,8 @@
          ng-focus="focus(operation,ft,fv)"
          ng-if="!operation.form[ft.role][ft.name].aft.sample_type_id">
 
+         {{fv.row}}, {{fv.column}}
+
   <a ng-if="ft.array" 
      href="#" 
      ng-click="operation.array_remove(fv)" 

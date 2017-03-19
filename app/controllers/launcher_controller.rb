@@ -32,13 +32,17 @@ class LauncherController < ApplicationController
 
       ft = ot.type(fv[:name],fv[:role])
 
+      item = ( fv[:role] == 'input' && fv[:selected_item] ) ? fv[:selected_item] : nil
+
       field_value = op.field_values.create(
         name: fv[:name], 
         role: fv[:role], 
         field_type_id: ft.id,
         child_sample_id: sid,
-        child_item_id: ( fv[:role] == 'input' && fv[:selected_item] ) ? fv[:selected_item][:id] : nil,
+        child_item_id: item ? item[:id] : nil,
         allowable_field_type_id: fv[:aft_id],
+        row: item ? item[:selected_row] : nil,
+        column: item ? item[:selected_column] : nil,
         value: fv[:value]
       )
 
