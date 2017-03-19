@@ -39,7 +39,10 @@ module JobOperations
       save
       set_op_status status
       charge
-      Operation.step
+      Thread.new do # this goes in the background because it can take a while, and the
+                    # technician interface should not have to wait
+        Operation.step
+      end
     end
   end
 
