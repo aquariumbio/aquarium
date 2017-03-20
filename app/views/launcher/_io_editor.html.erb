@@ -6,7 +6,6 @@
     <div sampleselect 
          ng-repeat="fv in operation.field_values | filter: { name: ft.name, role: ft.role }" 
          ft="ft" operation="operation" fv="fv" focus="io_focus" plan="plan" 
-         ng-click="io_focus(operation,ft,fv)"
          class="no-highlight">
     </div> 
 
@@ -47,7 +46,11 @@
 <script type="text/ng-template" id="sample_select">
 
   <span class='io-name'> 
-    <span ng-class="fv.selected ? 'bold' : ''">{{fv.name}}</span>
+    <span 
+      ng-click="focus(operation,ft,fv)" 
+      ng-class="fv.selected ? 'bold clickable no-highlight' : 'clickable no-highlight'">
+        {{fv.name}}
+    </span>
   </span>
 
   <!-- basic sample -->

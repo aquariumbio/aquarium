@@ -24,17 +24,14 @@ module OperationPlanner
       else
 
         input_list.each do |j|
-          if ! j.satisfied_by_environment
-            Rails.logger.info "#{j.name}, sample #{j.child_sample_id} is not satisfied_by_environment"
-            if j.predecessors.empty?
-              return false
-            else
-              j.predecessors.each do |pred|
-                if ! ( pred.operation.status == 'primed' || pred.operation.status == 'done' || pred.operation.status == 'unplanned' )
-                  return false
-                end
+          if ! j.predecessors.empty?
+            j.predecessors.each do |pred|
+              if ! ( pred.operation.status == 'primed' || pred.operation.status == 'done' || pred.operation.status == 'unplanned' )
+                return false
               end
             end
+          elsif ! j.satisfied_by_environment
+            return false
           end
         end
 

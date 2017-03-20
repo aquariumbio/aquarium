@@ -100,13 +100,7 @@ class LauncherController < ApplicationController
           render json: { errors: e.to_s + " " + e.backtrace[0].to_s }, status: 422        
           raise ActiveRecord::Rollback       
         end
-      end
-
-      plan.operations.each do |op|
-        op.field_values.each do |fv|
-          puts "A: #{fv.id}: #{fv.child_item_id}"
-        end
-      end      
+      end  
 
       if params[:wires]
         params[:wires].each do |form_wire|
@@ -123,18 +117,10 @@ class LauncherController < ApplicationController
         end
       end
 
-      plan.operations.each do |op|
-        op.field_values.each do |fv|
-          puts "B: #{fv.id}: #{fv.child_item_id}"
-        end
-      end      
-
       plan.start
 
       plan.operations.each do |op|
-        op.field_values.each do |fv|
-          puts "C: #{fv.id}: #{fv.child_item_id}"
-        end
+        op.reload
       end
 
       if plan.errors.empty?

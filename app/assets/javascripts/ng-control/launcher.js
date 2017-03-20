@@ -30,9 +30,14 @@
       $scope.current_operation = op;
       $scope.current_fv = fv;
       $scope.current_ft = ft;
-      aq.each($scope.plan.operations, op =>
-        aq.each(op.field_values, fv => fv.selected = false)
-      );
+      aq.each($scope.plan.wires, w => {
+        aq.each(w.to_op.field_values, field_value => { 
+          field_value.selected = false;
+        })
+        aq.each(w.from_op.field_values, field_value => { 
+          field_value.selected = false;
+        })
+      })
       fv.selected = true;
     }
 
