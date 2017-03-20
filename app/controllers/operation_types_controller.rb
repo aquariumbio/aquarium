@@ -274,6 +274,8 @@ class OperationTypesController < ApplicationController
  
   def import
 
+    ots = []
+
     begin 
       
       ots = params[:operation_types].collect { |x|
@@ -288,7 +290,8 @@ class OperationTypesController < ApplicationController
 
     rescue Exception => e
 
-      render json: { error: "Could not import operation types: " + e.to_s + ": " + e.backtrace.to_s }
+      ots.each { |ot| ot.destroy }
+      render json: { error: "Rails could not import operation types: " + e.to_s + ": " + e.backtrace.to_s }
 
     end
 
