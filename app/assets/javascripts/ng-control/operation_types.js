@@ -159,9 +159,19 @@
       });
     }
 
-    $scope.import_ot = function() {
+    $scope.export_category = function(category) {
+      $http.get("/operation_types/export_category/" + category).then(function(response) {
 
-      $scope.spreadsheet_name = undefined;
+        var blob = new Blob([JSON.stringify(response.data)], { type:"application/json;charset=utf-8;" });     
+        var downloadLink = angular.element('<a></a>');
+                          downloadLink.attr('href',window.URL.createObjectURL(blob));
+                          downloadLink.attr('download', category + '.json');
+        downloadLink[0].click();
+
+      });
+    }
+
+    $scope.import = function() {
 
       var f = document.getElementById('import').files[0],
           r = new FileReader();
@@ -175,11 +185,17 @@
           return;
         }
 
-        $http.post("/operation_types/import", { operation_type: json }).then(function(response) {
+        $http.post("/operation_types/import", { operation_types: json }).then(function(response) {
           if ( !response.data.error ) {
-            $scope.current_ot = response.data.operation_type
-            $scope.operation_types.push($scope.current_ot);
-            make_categories();
+            if ( response.data.operation_types.length > 0 ) {
+              $scope.operation_types = $scope.operation_types.concat(response.data.operation_types);
+              aq.each(response.data.operation_types,o => console.log(o.category))
+              make_categories();
+              $scope.current_ot = response.data.operation_types[0];     
+              $scope.current_category = $scope.current_ot.category;         
+            } else {
+              alert ( "No operation types found in file." );
+            }
           } else {
             alert ( response.data.error );
           }

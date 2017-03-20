@@ -68,17 +68,19 @@ module FieldTyper
     ft = field_types.create({parent_id: self.id, name: name, ftype: "sample", role: role}.merge opts)
     ft.save
 
-    (0..snames.length-1).each do |i|
-      sample = SampleType.find_by_name(snames[i])    
-      container = ObjectType.find_by_name(cnames[i])
-      # raise "Could not find sample #{snames[i]}" unless sample
-      # raise "Could not find container #{cnames[i]}" unless container
-      ft.allowable_field_types.create(
-        sample_type_id: sample ? sample.id : nil, 
-        object_type_id: container ? container.id : nil
-      )
+    if snames
+      (0..snames.length-1).each do |i|
+        sample = SampleType.find_by_name(snames[i])    
+        container = ObjectType.find_by_name(cnames[i])
+        # raise "Could not find sample #{snames[i]}" unless sample
+        # raise "Could not find container #{cnames[i]}" unless container
+        ft.allowable_field_types.create(
+          sample_type_id: sample ? sample.id : nil, 
+          object_type_id: container ? container.id : nil
+        )
+      end
     end
-
+    
     self
 
   end  

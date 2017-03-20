@@ -14,24 +14,7 @@
 
       <div class="two-column-control">
 
-        <ul class='op-type-list'>          
-
-          <li ng-repeat="category in categories track by $index">
-
-            <b ng-click="choose_category(category)">
-              <span ng-if="current_category != category">&#9658;</span>
-              <span ng-if="current_category == category">&#9660;</span>             
-              {{category}}
-              ({{category_size(category)}})
-            </b>
-
-            <ul ng-if="current_category == category" class='op-type-sublist'>
-              <li ng-repeat="ot in operation_types | filter: { category: category } : true track by $index" 
-                  ng-click="choose(ot)"
-                  ng-class="ot_class(ot)">{{ot.name}}</li>
-            </ul>
-
-          </li>
+        <ul class='op-type-list'>    
 
           <li><br /></li>
 
@@ -44,9 +27,31 @@
                               id="import"
                               file="import"
                               style="display: none;"
-                              custom-on-change="import_ot">
+                              custom-on-change="import">
             </label>
 
+            <button class='btn btn-mini' ng-if="current_category" ng-click="export_category(current_category)">
+              Export {{current_category}}
+            </button>
+
+          </li>
+
+          <li><hr /></li>
+
+          <li ng-repeat="category in categories track by $index">
+
+            <b ng-click="choose_category(category)" class="no-highlight">
+              <span ng-if="current_category != category">&#9658;</span>
+              <span ng-if="current_category == category">&#9660;</span>             
+              {{category}}
+              ({{category_size(category)}})
+            </b>
+
+            <ul ng-if="current_category == category" class='op-type-sublist'>
+              <li ng-repeat="ot in operation_types | filter: { category: category } : true track by $index" 
+                  ng-click="choose(ot)"
+                  ng-class="ot_class(ot)">{{ot.name}}</li>
+            </ul>
 
           </li>
 

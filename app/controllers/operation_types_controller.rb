@@ -26,9 +26,7 @@ class OperationTypesController < ApplicationController
     ot.save
 
     params[:field_types].each do |ft|
-      fts.each do |ft|
-        ot.add_new_field_type ft
-      end
+      ot.add_new_field_type ft
     end
 
     ["protocol", "precondition", "cost_model", "documentation"].each do |name|
@@ -261,19 +259,37 @@ class OperationTypesController < ApplicationController
   end
 
   def export
-    render json: OperationType.find(params[:id]).export
+    render json: [ OperationType.find(params[:id]).export ]
+  end
+
+  def export_category
+
+    ots = OperationType.where(category: params[:category]).collect { |ot|
+      ot.export
+    }
+
+    render json: ots
+
   end
  
   def import
 
     begin 
-      ot = OperationType.import(params[:operation_type])
-      ot.category = "Recent Imports"
-      ot.deployed = false
-      ot.save
-      render json: { operation_type: ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation]) }
+      
+      ots = params[:operation_types].collect { |x|
+        OperationType.import(x.merge(category: "Recent Imports", deployed: false))
+      }
+
+      render json: { 
+        operation_types: ots.collect { |ot| 
+          ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation]) 
+        } 
+      }
+
     rescue Exception => e
-      render json: { error: "Could not import operation type: " + e.to_s }
+
+      render json: { error: "Could not import operation types: " + e.to_s + ": " + e.backtrace.to_s }
+
     end
 
   end

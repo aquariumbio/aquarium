@@ -29,6 +29,7 @@ module OperationTypeExport
       },
 
       protocol: protocol ? protocol.content : "",
+      precondition: precondition ? precondition.content : "",
       cost_model: cost_model ? cost_model.content : "",
       documentation: documentation ? documentation.content : ""
 
@@ -53,7 +54,7 @@ module OperationTypeExport
 
     def import obj
 
-      ot = OperationType.new name: obj[:name], category: obj[:category], deployed: obj[:deployed]
+      ot = OperationType.new name: obj[:name], category: obj[:category], deployed: obj[:deployed], on_the_fly: obj[:on_the_fly]
       ot.save
     
       raise "Could not save operation type: " + ot.errors.full_messages.join(', ') unless ot.errors.empty?   
@@ -65,6 +66,7 @@ module OperationTypeExport
       end
 
       ot.new_code 'protocol', obj[:protocol]
+      ot.new_code 'precondition', obj[:precondition]
       ot.new_code 'cost_model', obj[:cost_model]
       ot.new_code 'documentation', obj[:documentation]
 
