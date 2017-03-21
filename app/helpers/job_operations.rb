@@ -11,6 +11,13 @@ module JobOperations
     end
   end
 
+  def cancel_plans 
+    plans = operations.collect { |op| op.plan }.uniq
+    plans.each do |plan|
+      plan.error "All operations in this plan were canceled because job number #{id} crashed."
+    end
+  end
+
   def charge
     operations.each do |op|
       cost_model_code = op.operation_type.code("cost_model").content
@@ -38,7 +45,11 @@ module JobOperations
       self.pc = Job.COMPLETED
       save
       set_op_status status
-      charge
+      if status == 'done'
+        charge
+      elsif status == 'error'
+        cancel_plans
+      end
     end
   end
 

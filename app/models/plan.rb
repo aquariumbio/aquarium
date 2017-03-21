@@ -39,6 +39,18 @@ class Plan < ActiveRecord::Base
 
   end
 
+  def error msg
+
+    operations.each do |op|
+      if op.status == 'pending' || op.status == 'waiting' || op.status == 'scheduled'
+        op.error :job_crash, msg
+      end
+    end
+
+    associate :job_crash, msg
+
+  end
+
   def remove
 
     operations.each do |op|

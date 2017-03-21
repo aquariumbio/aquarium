@@ -81,6 +81,7 @@ module Krill
               @job.stop
             else 
               @job.stop "error"
+              @job.reload
               @job.append_step operation: "next", time: Time.now, inputs: {}
               @job.append_step operation: "aborted", rval: {}
             end
