@@ -24,7 +24,7 @@
     }
 
     $scope.status = 'Loading Operation Types ...';
-    AQ.OperationType.all_with_content().then(operation_types => {
+    AQ.OperationType.all().then(operation_types => {
       $scope.status = "Fetching user information ...";
       AQ.User.current().then( user => {
         $scope.status = "Ready";

@@ -17,14 +17,14 @@
         <table class='table table-condensed status-table'>
           <tr>
             <th></th>
-            <th ng-repeat="status in [ 'Waiting', 'Pending', 'Scheduled', 'Running', 'Done', 'Error' ]"
+            <th ng-repeat="status in [ 'Waiting', 'Pending', 'Scheduled', 'Running' ]"
                 class='rotate'>
               <div><span>{{status}}</span></div>
             </th>
           </tr>
           <tr ng-repeat="ot in operation_types | filter: show_operation_type()" ng-click="choose(ot)">
             <td ng-class="op_type_class(ot)">{{ot.name}}</td>
-            <td ng-repeat="status in [ 'pending_false', 'pending_true', 'scheduled', 'running', 'done', 'error' ]"
+            <td ng-repeat="status in [ 'pending_false', 'pending_true', 'scheduled', 'running' ]"
                 ng-class="$parent.status_selector(ot,status)"
                 ng-click="$parent.select(ot,status)">
                 {{ot.numbers[status]}}
