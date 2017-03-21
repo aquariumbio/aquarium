@@ -310,17 +310,26 @@ class OperationTypesController < ApplicationController
 
   def numbers
 
-    pending = Operation.where(operation_type_id: params[:id], status: 'pending')
+    ops = Operation.where(operation_type_id: params[:id])
+
+    pending = ops.select { |op| op.status == 'pending' }
     pending_true = pending.select { |op| op.precondition_value }
     pending_false = pending.reject { |op| op.precondition_value }
+    
+    s = ops.select { |op| op.status == 'scheduled' }.length
+    r = ops.select { |op| op.status == 'running' }.length
+    d = ops.select { |op| op.status == 'done' }.length
+    e = ops.select { |op| op.status == 'error' }.length
+    w = ops.select { |op| op.status == 'waiting' }.length
 
     render json: {
       pending_true: pending_true.length,
-      pending_false: pending_false.length,
-      scheduled: Operation.where(operation_type_id: params[:id], status: 'scheduled').count,
-      running: Operation.where(operation_type_id: params[:id], status: 'running').count,
-      done: Operation.where(operation_type_id: params[:id], status: 'done').count,
-      error: Operation.where(operation_type_id: params[:id], status: 'error').count
+      pending_false: pending_false.length + w,
+      scheduled: s,
+      running: r,
+      done: d,
+      error: e,
+      waiting: w
     }
 
   end

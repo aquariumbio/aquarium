@@ -188,9 +188,7 @@ class Operation < ActiveRecord::Base
   def self.step 
 
     Operation.where(status: "waiting").each do |op|
-      Rails.logger.info "STEP Considering #{op.operation_type.name} #{self.id} is ready"
       if op.ready?
-        Rails.logger.info "  Changing operation #{op.id}'s status to pending!"
         op.status = "pending"
         op.save
       end

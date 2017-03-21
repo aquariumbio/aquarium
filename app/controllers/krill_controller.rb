@@ -198,8 +198,14 @@ class KrillController < ApplicationController
 
       if result[:response] == "done"
 
-        # step the job's workflow
+        # step the job's workflow (remove once workflows are removed)
         @job.reload.step_workflow
+
+        Thread.new do # this goes in the background because it can take a 
+                      # while, and the technician interface should not have
+                      # to wait
+          Operation.step
+        end        
 
       else
 

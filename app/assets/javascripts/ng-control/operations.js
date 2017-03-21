@@ -65,7 +65,15 @@
       $scope.current.ot = ot; 
       $scope.current.status = status;
 
-      var actual_status = ( status == 'pending_true' || status == 'pending_false' ? 'pending' : status );
+      var actual_status;
+
+      if ( status == 'pending_true' ) {
+        actual_status = 'pending';
+      } else if ( status == 'pending_false' ) {
+        actual_status = ['pending','waiting'];
+      } else {
+        actual_status = status;
+      }
 
       AQ.Operation.where({
         operation_type_id: ot.id, 
@@ -74,7 +82,7 @@
         methods: ['user','field_values', 'precondition_value', 'plans']
       }).then(operations => {
         if ( status == 'pending_false' ) {
-          ot.operations = aq.where(operations, op => !op.precondition_value);
+          ot.operations = aq.where(operations, op => { return !op.precondition_value || op.status == 'waiting' });
         } else if ( status == 'pending_true' ) {
           ot.operations = aq.where(operations, op => op.precondition_value);
         } else {
