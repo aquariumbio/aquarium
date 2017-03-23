@@ -144,8 +144,8 @@
           $scope.getting_plans = false;
           $scope.plans = $scope.plans.concat(plans.reverse());
           aq.each(plans, (plan)=> { plan.link_operation_types($scope.operation_types) });
-          $scope.$apply();
         }
+        $scope.$apply();        
       });      
     }
 
