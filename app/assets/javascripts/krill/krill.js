@@ -33,13 +33,45 @@ Krill.prototype.initialize = function() {
     
     var that = this;
     $('#krill-note').click(function(){
-        console.log('asd');
         var b = $("#Job_"+that.job+"_discussion_button");
-        console.log(b);
         b.click();
     });
     $('#krill-abort').click(function(){that.abort();});
 
+    $(window).keyup(function(e) {
+
+      if ( e.keyCode == 39 /* arrow right */ ) {
+
+        if ( that.current_position == that.step_list.length && that.ok_to_advance() ) {            
+
+          that.carousel_move_to(that.step_list.length,250);
+
+          if ( that.check_again ) {
+            that.send("check_again",this);
+          } else {
+            that.send("next",this);
+          }
+
+        } else {
+
+          e.preventDefault();            
+          that.carousel_inc(1);  
+
+        }
+
+      } else if ( e.keyCode == 37 /* arrow left */ ) {
+
+        that.carousel_inc(-1);  
+
+      }
+
+    });
+
+}
+
+Krill.prototype.ok_to_advance = function() {
+  var last = this.state[this.state.length -1];
+  return last.operation != 'complete' && last.operation != 'error';
 }
 
 Krill.prototype.update = function() {
