@@ -97,7 +97,10 @@ AQ.Record.prototype.delete = function() {
 
 AQ.Record.prototype.drop = function(da) {
 
-  aq.remove(this._data_associations,da);
+  if ( typeof this.data_associations == "object" ) {
+    aq.remove(this.data_associations,da);
+    AQ.update();
+  }
 
 }
 
