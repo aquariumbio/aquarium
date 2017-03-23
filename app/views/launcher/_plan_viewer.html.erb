@@ -1,11 +1,31 @@
+
 <script type="text/ng-template" id="plan_viewer">
 
   <!--
     PLAN TEMPLATE
     -->
-  <da class='rel indent-20' record="plan"></da>
-  <div ng-repeat="operation in plan.operations" class="rel" ng-include="'operation_viewer'">
+
+  <div layout="row" layout-align="space-between center">
+
+    <div>
+      <span class='md-subhead' ng-if="plan.data_associations.length > 0">Plan Data</span>
+      <span class='md-subhead' ng-if="plan.data_associations.length == 0">No Plan Data</span>
+    </div>
+
+    <div layout="row">
+      <md-button class='md-small md-raised'
+         ng-click="plan.new_data_association()">
+         New
+      </md-button>
+      <upload record='plan' class="left-pad"></upload>
+    </div>
+
   </div>
+
+  <da record="plan"></da>
+  <div class='md-subhead'>Plan Operations</div>
+  <div layout="row" layout-wrap ng-repeat="operation in plan.operations" 
+       ng-include="'operation_viewer'"></div>
 
 </script>
 
@@ -15,29 +35,49 @@
     OPERATION TEMPLATE
     -->
 
-  <div class='spanner-row indent-20'>
-    <opener model="operation.open"></opener>
-    <spanner w=18 p=20>{{operation.id}}: {{operation.operation_type.name}}</spanner>
-    <spanner w=52> 
-      <a ng-if="operation.open" ng-class="op_mode(operation,'io')"   ng-click="operation.mode = 'io'">I/O</a>
-      <a ng-if="operation.open" ng-class="op_mode(operation,'data')" ng-click="operation.mode = 'data'">Data</a>  
-    </spanner>
-    <spanner w=30 p=34>{{operation.status}}</spanner>
+  <div layout="row" layout-wrap
+       ng-class="operation.open ? 'plan-header plan-row plan-row-open' : 'plan-header plan-row'">
+    <div flex="25">
+      <opener model="operation.open" class='no-highlight clickable no-margin'></opener>&nbsp;
+      <span class='md-body-2'>{{operation.id}}: {{operation.operation_type.name}}</span>
+    </div>
+    <div flex="55">
+      <span ng-include="'job_info'" ng-include="'job_info'"></span>
+    </div> 
+    <div flex="20">
+      <span ng-class="'md-body-2 status-'+operations.status">{{operation.status}}</span>
+    </div>
   </div>
 
-  <div class='spanner-row indent-20'>
+  <!-- DETAILS -->
 
-    <div ng-if="operation.open && operation.mode == 'io'"   
-         ng-include="'op_io'" 
-         class='rel'></div>
+  <div layout="column" layout-align="start stretch" ng-if="operation.open" class="plan-row plan-details">
 
-    <div ng-if="operation.open && operation.mode == 'data'" 
-         ng-include="'job_info'" 
-         class='rel'></div>
+    <div layout="row" layout-wrap layout-align="space-between center">
 
-    <da ng-if="operation.open && operation.mode == 'data'" 
-         record="operation" 
-         class='rel indent-20'></da>
+      <div>
+        <span class='md-subhead' ng-if="operation.data_associations.length > 0">Operation Data</span>
+        <span class='md-subhead' ng-if="operation.data_associations.length == 0">No Operation Data</span>
+      </div>
+
+      <div layout="row">
+        <md-button class='md-small md-raised'
+           ng-click="operation.new_data_association()">
+           New
+        </md-button>
+        <upload record='operation' class="left-pad"></upload>
+      </div>
+
+    </div>    
+
+    <da record="operation"
+        ng-if="operation.data_associations.length > 0"></da>
+
+    <div layout="row" layout-align="space-between center">
+      <div class='md-subhead'>Inputs, Outputs, and Parameters</div>
+    </div>
+
+    <div ng-include="'op_io'"></div> 
 
   </div>
 
@@ -87,14 +127,11 @@
     JOB TEMPLATE
     -->
 
-  <div class='spanner-row indent-20' ng-if="operation.job_id">
-    <span class="spanner-row">
-      <spanner w=16 ng-bind-html="'Job ' + operation.job.url | trust"></spanner>
-      <spanner w=52 ng-bind-html="'Performed by ' + operation.job.user.url | trust"></spanner>
-      <spanner w=15>{{operation.job.created_at|date}}</spanner>
-      <spanner w=15 p=5>{{operation.job.updated_at|date}}</spanner>
-    </span>
-  </div>
+  <span ng-if="operation.job_id">
+    <span ng-bind-html="'Job ' + operation.job.url | trust"></span>
+    <span ng-bind-html="'performed by ' + operation.job.user.url | trust"></span> on 
+    <span>{{operation.job.updated_at|date}}</span>
+  </span>
 
 </script>
 

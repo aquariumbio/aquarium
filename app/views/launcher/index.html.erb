@@ -67,15 +67,16 @@
 
     </md-sidenav>
 
-    <md-content flex layout-padding class="main-content">    
+    <md-content flex class="main-content">    
 
-      <div ng-if="status == 'Ready' && mode == 'new'">
+      <div ng-if="status == 'Ready' && mode == 'new'" layout-padding>
         <div ng-if="plan == null" ng-include="'operation_type_chooser'"></div> 
         <div ng-if="plan != null" ng-include="'plan_editor'"></div> 
       </div>
 
       <div ng-if="status == 'Ready' && mode != 'new'"
-           ng-include="'plan_list'">
+           ng-include="'plan_list'"
+           class='plan-list'>
       </div>      
 
     </md-content>

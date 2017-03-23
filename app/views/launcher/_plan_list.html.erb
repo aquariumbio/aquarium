@@ -1,36 +1,39 @@
 <script type="text/ng-template" id="plan_list">
 
-  
-  <span><b>Plans</b></span> <span ng-if="getting_plans" class="text-info">... Retrieving</span>
+  <md-content class='plan-list'>
 
-  <div class='plan-offset-ctrl pull-right'>
-    <a href='#' class="btn btn-primary btn-mini" ng-click="inc_plan_offset(-1)" ng-disabled="!more_plans(-1)">&Lang;</a>&nbsp;
-    <a href='#' class="btn btn-primary btn-mini" ng-click="inc_plan_offset(1)"  ng-disabled="!more_plans(1)">&Rang;</a>    
-  </div>
+    <div class='md-headline top-pad bottom-pad' layout="row" layout-align="center center">Plans</div>  
 
-  <div ng-repeat="plan in plans" class="rel rel-hoverable">
+    <div layout="row" layout-wrap ng-repeat-start="plan in plans"
+         ng-class="plan.open ? 'plan-header plan-row plan-row-open' : 'plan-header plan-row'">
 
-    <div class='spanner-row border-top'>
+      <div flex="25" class='no-wrap'>
+        <opener model="plan.open" class='no-highlight clickable no-margin'></opener>&nbsp;
+        <span class="md-body-2">{{plan.id}}: {{plan.operations[0].operation_type.name}}</span>
+      </div>
 
-      <opener model="plan.open"></opener>
-      <spanner w=18>{{plan.id}}: {{plan.operations[0].operation_type.name}}</spanner>     
-      <spanner w=52>
-        <div ng-repeat="fv in plan.operations[0].field_values | filter : { role: 'output' }">
+      <div flex="55" class='no-wrap left-pad'>
+        <span ng-repeat="fv in plan.operations[0].field_values | filter : { role: 'output' }" class='md-body-1'>
           {{fv.name}}: {{fv.child_sample.name}}
-        </div>
-      </spanner>
-      <spanner w=15>{{plan.operations[0].status}}</spanner>
-      <spanner w=15 p=36>{{plan.created_at|date}}</spanner>
+        </span>
+      </div>
 
-      <div ng-if="plan.open" ng-include="'plan_viewer'"></div>
+      <div flex="10" class='no-wrap left-pad'>
+        <span ng-class="'md-body-2 status-'+plan.operations[0].status">
+          {{plan.operations[0].status}}
+        </span>
+      </div>
+
+      <div flex="10" class='no-wrap' class='md-body-1'>
+        {{plan.created_at|date}}
+      </div>
 
     </div>
 
-  </div>
-
-  <div class='plan-offset-ctrl pull-right'>
-    <a href='#' class="btn btn-primary btn-mini" ng-click="inc_plan_offset(-1)" ng-disabled="!more_plans(-1)">&Lang;</a>&nbsp;
-    <a href='#' class="btn btn-primary btn-mini" ng-click="inc_plan_offset(1)"  ng-disabled="!more_plans(1)">&Rang;</a>    
-  </div>
+    <div layout="row" layout-wrap ng-if="plan.open" ng-repeat-end="" class="plan-row plan-details"> 
+      <div flex="100" ng-include="'plan_viewer'"></div>
+    </div>
+   
+  </md-content>
 
 </script>

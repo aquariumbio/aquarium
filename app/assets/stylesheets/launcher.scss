@@ -82,6 +82,105 @@
     font-weight: bold;
   }
 
+  .no-wrap {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .no-margin {
+    margin: 0 !important;
+  }
+
+  .left-pad {
+    padding-left: 10px;
+  }
+
+  .top-pad {
+    padding-top: 10px;
+  }
+
+  .status-error {
+    color: red;
+  }
+
+  .bottom-pad {
+    padding-bottom: 10px;
+  }  
+
+  .status-running {
+    color: green;
+  }  
+
+  .status-scheduled {
+    color: orange;
+  }  
+
+  .status-pending {
+    color: blue;
+  }  
+
+  .status-done {
+    color: black;
+  }
+
+  .status-waiting {
+    color: purple;
+  }  
+
+  /* PLANS ***************************************/
+
+  $plan-border-color: #aaa;
+  $plan-header-color: #80d8ff;
+  $plan-details-color: white;
+
+  .plan-list {
+    margin: 0 5px 0 0;
+    padding: 0px;
+  }
+
+  .plan-row {
+    width: 99%;
+    padding: 5px;
+    margin: 0 25px 0 10px;
+  }
+
+  .plan-header {
+    &:hover {
+      background: $plan-header-color;
+    }   
+  }
+
+  .plan-row-open {
+    border-top: 1pt solid $plan-border-color;
+    border-right: 1pt solid $plan-border-color;
+    border-left: 1pt solid $plan-border-color;
+    background: $plan-header-color;
+  }
+
+  .plan-details {
+    border-left: 1pt solid $plan-border-color;
+    border-right: 1pt solid $plan-border-color;
+    border-bottom: 1pt solid $plan-border-color;    
+    background: $plan-details-color;    
+    margin: 0 25px 10px 10px;    
+  }
+
+  .no-side-margins {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .outlined {
+    outline: 1pt dashed orange;
+  }
+
+  /***************************************************/
+
+
+  .spanner-cell {
+    padding: 0 !important;
+  }
+
   .select-container {
 
     border: 1px solid #ccc;

@@ -2,6 +2,7 @@ AQ.Record = function(model,data) {
 
   var record = this;
   this.model = model;
+  this._data_associations = []
 
   for ( var method_name in model.record_methods ) {
     record[method_name] = (function(mname) { 

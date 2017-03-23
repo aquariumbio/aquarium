@@ -34,9 +34,9 @@
       replace: true,
 
       template: "<div id='da123'>"
-              + "<label class='btn btn-default btn-file btn-mini btn-spanner' ng-disabled='record.uploading'>"
-              + "<span ng-if='record.uploading'>Uploading...</span>"
-              + "<span ng-if='!record.uploading'>Upload File</span>"              
+              + "<label class='md-button md-small md-raised' ng-disabled='record.uploading'>"
+              + "<span ng-if='record.uploading'>Busy...</span>"
+              + "<span ng-if='!record.uploading'>Upload</span>"              
               + "  <input type=file"
               + "    id='upload'"
               + "    file='upload'"
