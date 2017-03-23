@@ -135,13 +135,13 @@
 
   .plan-list {
     margin: 0 5px 0 0;
-    padding: 0px;
+    padding: 0 0 0 5px;
   }
 
   .plan-row {
     width: 99%;
     padding: 5px;
-    margin: 0 25px 0 10px;
+    margin: 0 25px 0 5px;
   }
 
   .plan-header {
@@ -162,7 +162,7 @@
     border-right: 1pt solid $plan-border-color;
     border-bottom: 1pt solid $plan-border-color;    
     background: $plan-details-color;    
-    margin: 0 25px 10px 10px;    
+    margin: 0 25px 10px 5px;    
   }
 
   .no-side-margins {

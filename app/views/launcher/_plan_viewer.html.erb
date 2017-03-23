@@ -24,7 +24,7 @@
 
   <da record="plan"></da>
   <div class='md-subhead'>Plan Operations</div>
-  <div layout="row" layout-wrap ng-repeat="operation in plan.operations" 
+  <div ng-repeat="operation in plan.operations" 
        ng-include="'operation_viewer'"></div>
 
 </script>
@@ -45,7 +45,7 @@
       <span ng-include="'job_info'" ng-include="'job_info'"></span>
     </div> 
     <div flex="20">
-      <span ng-class="'md-body-2 status-'+operations.status">{{operation.status}}</span>
+      <span ng-class="'md-body-2 status-'+operation.status">{{operation.status}}</span>
     </div>
   </div>
 
@@ -77,7 +77,7 @@
       <div class='md-subhead'>Inputs, Outputs, and Parameters</div>
     </div>
 
-    <div ng-include="'op_io'"></div> 
+    <div layout="column" ng-include="'op_io'"></div> 
 
   </div>
 
@@ -89,33 +89,48 @@
     FIELD VALUE TEMPLATE
     -->
 
-  <div class='spanner-row indent-20'>
-    <opener class='small-heading' invisible=true></opener>    
-    <spanner w=20 p=42 c="small-heading">Name</spanner>
-    <spanner w=8 c="small-heading">Item</spanner>   
-    <spanner w=12 c="small-heading">Location</spanner>          
-    <spanner w=12 c="small-heading">Container</spanner>     
-    <spanner w=47 c="small-heading">Sample</spanner>
+  <div layout="row" ng-repeat-start="fv in operation.field_values"
+       ng-class="fv.open ? 'plan-header plan-row plan-row-open' : 'plan-header plan-row'">
+
+    <div flex="20">
+      <opener model="fv.open" 
+              disabled="!fv.child_item_id"
+              class='no-highlight clickable no-margin'></opener>&nbsp;
+      {{fv.name}} <span class='small'>({{ fv.child_sample || fv.item  || !fv.value ? fv.role : 'param'}})</span>
+    </div>
+
+    <div flex="10">
+      <span ng-bind-html="fv.item.url | trust"></span><span ng-if="fv.row != null">[{{fv.row}},{{fv.column}}]</span>
+    </div> 
+
+    <div flex="10" ng-if="!fv.value">{{fv.item.location}}</div> 
+    <div flex="15" ng-if="!fv.value">{{fv.item.object_type.name}}</div>         
+    <div flex="45" ng-if="!fv.value">{{fv.child_sample.name}}</div> 
+
+    <div flex="80" ng-if="fv.value">{{fv.value}}</div>
+
   </div>
 
-  <div class='spanner-row indent-20' ng-repeat="fv in operation.field_values">
+  <div layout="column" ng-repeat-end layout-align="start stretch" ng-if="fv.open" class="plan-row plan-details">  
 
-    <opener model="fv.open" disabled="!fv.child_item_id"></opener>  
-    <spanner w=20 p=42>{{fv.name}} <span class='small'>({{fv.child_sample || fv.item ? fv.role : 'param'}})</span></spanner>
+    <div layout="row" layout-wrap layout-align="space-between center" ng-if="fv.open && fv.item">
 
-    <spanner w=8 ng-if="!fv.value">
-      <span ng-bind-html="fv.item.url | trust"></span><span ng-if="fv.row != null">[{{fv.row}},{{fv.column}}]</span>
-    </spanner> 
+      <div>
+        <span class='md-subhead' ng-if="fv.item.data_associations.length > 0">Item Data</span>
+        <span class='md-subhead' ng-if="fv.item.data_associations.length == 0">No item Data</span>
+      </div>
 
-    <spanner w=12 ng-if="fv.item">{{fv.item.location}}</spanner>
-    <spanner w=12 ng-if="fv.item">{{fv.item.object_type.name}}</spanner>          
-    <spanner w=47 ng-if="fv.child_sample">{{fv.child_sample.name}}</spanner>
+      <div layout="row">
+        <md-button class='md-small md-raised'
+           ng-click="fv.item.new_data_association()">
+           New
+        </md-button>
+        <upload record='fv.item' class="left-pad"></upload>
+      </div>
 
-    <spanner w=79 ng-if="fv.value">{{fv.value}}</spanner>
+    </div>     
 
-    <div class='indent-20'>
-      <da ng-if="fv.open" record="fv.item"></da>
-    </div>
+    <da ng-if="fv.open" record="fv.item"></da>  
 
   </div>
 

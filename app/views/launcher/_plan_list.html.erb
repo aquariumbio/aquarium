@@ -12,10 +12,21 @@
         <span class="md-body-2">{{plan.id}}: {{plan.operations[0].operation_type.name}}</span>
       </div>
 
-      <div flex="55" class='no-wrap left-pad'>
+      <div flex="55" class='no-wrap left-pad' ng-if="!plan.open">
         <span ng-repeat="fv in plan.operations[0].field_values | filter : { role: 'output' }" class='md-body-1'>
           {{fv.name}}: {{fv.child_sample.name}}
         </span>
+      </div>      
+
+      <div flex="40" class='no-wrap left-pad' ng-if="plan.open">
+        <span ng-repeat="fv in plan.operations[0].field_values | filter : { role: 'output' }" class='md-body-1'>
+          {{fv.name}}: {{fv.child_sample.name}}
+        </span>
+      </div>
+
+      <div flex="15" class='no-wrap left-pad' ng-if="plan.open">
+        <md-button class="md-small md-raised" ng-click="plan.reload()">Reload</md-button>
+        <md-button class="md-small md-raised" ng-click="plan.cancel('Canceled via user interface')">Cancel</md-button>        
       </div>
 
       <div flex="10" class='no-wrap left-pad'>
@@ -33,6 +44,13 @@
     <div layout="row" layout-wrap ng-if="plan.open" ng-repeat-end="" class="plan-row plan-details"> 
       <div flex="100" ng-include="'plan_viewer'"></div>
     </div>
+
+    <br />
+
+    <md-button ng-if="!no_more_plans"
+      class='md-raised md-primary md-small' 
+      ng-disabled="getting_plans"
+      ng-click="more_plans()">More</md-button>
    
   </md-content>
 

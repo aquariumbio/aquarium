@@ -157,5 +157,27 @@ AQ.Operation.record_methods.output = function(name) {
 
 }
 
+AQ.Operation.record_methods.reload = function() {
+
+  var operation = this;
+
+  return new Promise(function(resolve,reject) {  
+
+    AQ. Operation.find(operation.id).then(
+      op => {
+        operation.status = op.status;
+        operation.job_id = op.job_id;
+        operation.recompute_getter('data_associations');
+        operation.recompute_getter('job');
+        aq.each(operation.field_values, fv => {
+          fv.reload();
+        });
+      }
+    );
+
+  });
+
+}
+
 AQ.Operation.getter(AQ.Job,"job");
 

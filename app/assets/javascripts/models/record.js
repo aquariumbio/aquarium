@@ -2,7 +2,6 @@ AQ.Record = function(model,data) {
 
   var record = this;
   this.model = model;
-  this._data_associations = []
 
   for ( var method_name in model.record_methods ) {
     record[method_name] = (function(mname) { 
@@ -11,6 +10,24 @@ AQ.Record = function(model,data) {
         return model.record_methods[mname].apply(record,args);
       }
     })(method_name);
+  }
+
+  model.record_getters.data_associations = function() { // all records should have this getter, 
+                                                        // so its defined here
+
+    var record = this;
+    delete record.data_associations;
+
+    AQ.DataAssociation.where({parent_id: record.id, parent_class: record.model.model}).then((das) => {          
+      record.data_associations = das;
+      aq.each(record.data_associations,(da) => {
+        da.value = JSON.parse(da.object)[da.key];
+      });
+      AQ.update();   
+    });
+
+    return null;
+
   }
 
   for ( var method_name in model.record_getters ) {
@@ -28,27 +45,12 @@ AQ.Record = function(model,data) {
     record.init(data);
   }
 
-  Object.defineProperty(record, "data_associations", { get: function() {
-    if ( record._data_associations ) {
-      return record._data_associations;
-    } else  {
-      record._data_associations = [];
-      AQ.DataAssociation.where({parent_id: record.id, parent_class: model.model}).then((das) => {          
-        record._data_associations = das;
-        aq.each(record._data_associations,(da) => {
-          da.value = JSON.parse(da.object)[da.key];
-        });
-        AQ.update();   
-      });
-      return null;
-    } 
-  }});
-
   record.rid = AQ.next_record_id++;
 
 }
 
 AQ.Record.prototype.recompute_getter = function(gname) {
+  delete this["_"+gname];
   Object.defineProperty(this,gname,{get: this.model.record_getters[gname], configurable: true});
 }
 
@@ -104,8 +106,10 @@ AQ.Record.prototype.delete_data_association = function(da) {
   if ( AQ.confirm("Are you sure you want to delete this datum?") ) {
 
     da.delete().then(() => {
-      aq.remove(this._data_associations,da);
-      AQ.update();
+      if ( typeof this.data_associations == "object" ) {
+        aq.remove(this.data_associations,da);
+        AQ.update();
+      }
     });
 
   }
@@ -123,7 +127,9 @@ AQ.Record.prototype.new_data_association = function() {
     parent_id: this.id
   });
 
-  this._data_associations.push(da);
+  if ( typeof this.data_associations === "object" ) {
+    this.data_associations.push(da);
+  }
 
   return da;
 

@@ -28,12 +28,12 @@
 
       replace: true,
 
-      template: "<span ng-click='toggle()' class='spanner-cell'>" + 
+      template: "<span ng-click='toggle()'>" + 
                    "<span class='opener' ng-if='!invisible && !disabled'>" +
                      "{{model ? '&#9660' : '&#9658;'}}" +
                    "</span>" +
                    "<span class='opener-invisible' ng-if='invisible'>&nbsp;</span>" +
-                   "<span class='opener-disabled' ng-if='!invisible && disabled'>&#9658;</span>" +
+                   "<span class='opener' style='color: #bbb; cursor: not-allowed;' ng-if='!invisible && disabled'>&#9658;</span>" +
                  "</span>"
 
     }

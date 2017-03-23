@@ -26,6 +26,7 @@ class JsonController < ApplicationController
       result = result.send(params[:method],*params[:arguments]) if method_ok(params[:method]) && params[:method] != "where"
       result = result.where(params[:arguments]) if params[:method] == "where"
       result = result.as_json(methods: params[:methods]) if ( params[:methods] )
+      result = result.as_json(include: params[:include]) if ( params[:include] )
 
       render json: result
 

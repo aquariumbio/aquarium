@@ -29,3 +29,10 @@ AQ.FieldValue.record_getters.is_wired_to = function() {
   var fv = this;
   return function(wire) { return wire.to == fv; }
 }
+
+AQ.FieldValue.record_methods.reload = function() {
+
+  var fv = this;
+  fv.recompute_getter("item");
+
+}

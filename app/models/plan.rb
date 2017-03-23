@@ -39,15 +39,15 @@ class Plan < ActiveRecord::Base
 
   end
 
-  def error msg
+  def error msg, key=:job_crash
 
     operations.each do |op|
       if op.status == 'pending' || op.status == 'waiting' || op.status == 'scheduled'
-        op.error :job_crash, msg
+        op.error key, msg
       end
     end
 
-    associate :job_crash, msg
+    associate key, msg
 
   end
 

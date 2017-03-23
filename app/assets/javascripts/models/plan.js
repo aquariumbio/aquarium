@@ -13,11 +13,22 @@ AQ.Plan.record_methods.upgrade = function() {
   return plan;
 }
 
+AQ.Plan.record_methods.reload = function() {
+
+  var plan = this;
+  plan.recompute_getter('data_associations');
+
+  aq.each(plan.operations, op => {
+    op.reload().then(op => {
+      AQ.update();
+    });
+  })
+
+}
+
 AQ.Plan.record_methods.export = function() {
 
   var plan = this;
-
-  console.log("Exporting plan");
 
   return AQ.Plan.record({
     operations: plan.operations_from_wires(),
@@ -33,14 +44,30 @@ AQ.Plan.record_methods.submit = function() {
   return new Promise(function(resolve,reject) {
     AQ.post('/launcher/submit',plan).then(
       (response) => {
-        console.log("Plan submitted :-)");
         resolve(AQ.Plan.record(response.data).upgrade());
       }, (response) => {
-        console.log("Plan rejected :-(")
         reject(response.data.errors);
       }
     );
   });
+
+}
+
+AQ.Plan.record_methods.cancel = function(msg) {
+
+  var plan = this;
+
+  return new Promise(function(resolve,reject) {  
+    AQ.get('/plans/cancel/' + plan.id + "/" + msg).then(
+      (response) => { 
+        console.log("A")
+        plan.reload();
+        console.log("B")
+        resolve(response.data)
+      },
+      (response) => { reject(response.data.errors) }
+    );
+  });  
 
 }
 

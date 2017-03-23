@@ -153,4 +153,12 @@ class PlansController < ApplicationController
 
   end
 
+  def cancel
+
+    Plan.find(params[:id]).error(params[:msg] + " (user: #{current_user.login})",:canceled)
+
+    render json: { result: "ok" }
+
+  end
+
 end

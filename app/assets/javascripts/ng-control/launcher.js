@@ -114,8 +114,12 @@
         $scope.mode = 'running';
         plan.link_operation_types($scope.operation_types);
         $scope.plans.unshift(plan);
+        aq.each($scope.plans,plan => plan.open = false);
+        plan.open = true;
+        aq.each(plan.operations,op => op.open = false);
         $scope.$apply();
       }).catch((error) => {
+        console.log(error)
         delete $scope.plan.status;
         $scope.error = error;
         $scope.$apply();
@@ -130,23 +134,25 @@
       return c;
     }
 
-    $scope.inc_plan_offset = function(dir) {
-      if ( $scope.more_plans(dir) ) {
-        $scope.plan_offset += 15 * dir;
-        $scope.getting_plans = true;
-        AQ.Plan.list($scope.plan_offset).then((plans) => {
+    $scope.more_plans = function() {
+      $scope.plan_offset += 15;
+      $scope.getting_plans = true;
+      AQ.Plan.list($scope.plan_offset).then((plans) => {
+        if ( plans.length == 0 ) {
+          $scope.no_more_plans = true;
+        } else {
           $scope.getting_plans = false;
-          $scope.plans = plans.reverse();
-          aq.each($scope.plans, (plan)=> { plan.link_operation_types($scope.operation_types) });
+          $scope.plans = $scope.plans.concat(plans.reverse());
+          aq.each(plans, (plan)=> { plan.link_operation_types($scope.operation_types) });
           $scope.$apply();
-        });      
-      } 
+        }
+      });      
     }
 
-    $scope.more_plans = function(dir) {
-      var o = $scope.plan_offset + 15 * dir; 
-      return o >= 0 && o < AQ.Plan.num_plans;
-    }
+    // $scope.more_plans = function(dir) {
+    //   var o = $scope.plan_offset + 15 * dir; 
+    //   return o >= 0 && o < AQ.Plan.num_plans;
+    // }
 
     $scope.choose_default_part = function(fv,item) {
       if ( item.collection ) {
