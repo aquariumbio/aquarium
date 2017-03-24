@@ -98,6 +98,7 @@ module Bioturk
         Parameter.count
         DataAssociation.count
         Upload.count
+        VirtualOperation.count
     end
 
     #Added to enable CORS

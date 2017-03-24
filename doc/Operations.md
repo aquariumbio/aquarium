@@ -113,6 +113,24 @@ operations.output_collections
 ```
 which is index by the name of the output. For example, operations.output_collections["Fragment"] would give a list of collections into which the "Fragment" outputs were placed.
 
+Sometimes you need to make more parts of a collection than you have operations. For example, if you need to reserve some lanes of a gel for ladder. In that case, you can insert a VirtualOperation to your operations list, and then make. For example, Lets say you have n 2x6 gels and want to not associate any operation with lanes 0,0 and 1,0. Then you could do 
+```ruby
+(0...n/6).each do |m|
+  insert_operation 6*m, VirtualOperation.new
+end
+operations.make
+```
+In this case, make will skip parts of the output collections associated with the new virutal operations. If you use this feature, make sure to insert the virtual operations just before you call make, as other methods that action on the operations may be affect. If you need to use the operations list after inserting, you can use op.virtual? to check whether an operation is virtual.
+
+Note that you an also make individual operations, instead of the whole list. For example, given an operation op, you can call
+```ruby
+op.make
+```
+or if op is to be the (2,3) part of a collection c, you can call
+```ruby
+op.mark_part(c,2,3)
+```
+
 **store**
 
 This method produces instructions for the technician to follow to return inputs and or outputs of a protocol to their proper place in the lab (e.g. a freezer). You can specify **interactive: true** and  method: "boxes" as with *retreive**. You can also specify whether to store the input inventory with **io: "input"** (the default) or the output inventory with **io: "output".

@@ -50,7 +50,7 @@ class FieldValue < ActiveRecord::Base
   end
 
   def collection
-    child_item
+    Collection.find(child_item.id)
   end
 
   def val

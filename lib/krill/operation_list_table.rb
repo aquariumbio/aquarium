@@ -65,6 +65,13 @@ module Krill
       self
     end
 
+    def operation_id opts={heading: "Operation ID", checkable: false }
+      @table.add_column opts[:heading], running.collect { |op| 
+        op.id
+      }
+      self
+    end    
+
     def input_item        name, opts={}; item name,       "input", opts;  end
     def output_item       name, opts={}; item name,       "output", opts; end
     def input_sample      name, opts={}; sample name,     "input", opts;  end

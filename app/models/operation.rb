@@ -17,6 +17,10 @@ class Operation < ActiveRecord::Base
 
   attr_accessible :status, :user_id, :job_id
 
+  def virtual?
+    false
+  end
+
   def name
     operation_type.name
   end

@@ -30,6 +30,13 @@ module Krill
 
     end
 
+    def insert_operation index, element
+      before = @operations[0,index]
+      after = @operations[index,@operations.length-index]
+      @operations = before + [element] + after
+      @operations
+    end
+
   end
 
 end

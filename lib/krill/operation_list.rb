@@ -89,10 +89,14 @@ module Krill
 
     def make opts={errored:false,role:'output'}
 
+      puts "MAKE #{opts[:role]}"
+
       @output_collections = {}
       ops = select { |op| opts[:errored] || op.status != "error" }
 
       ops.each_with_index do |op,i|
+
+        puts "  Make for op #{op.virtual? ? 'virtual' : op.id}"
 
         op.field_values.select { |fv| fv.role == opts[:role] }.each do |fv| 
 
@@ -100,6 +104,8 @@ module Krill
 
             rows = fv.object_type.rows || 1
             columns = fv.object_type.columns || 12
+
+            puts "    Making part for collection dim = #{rows}x#{columns}"
 
             size = rows * columns
 
@@ -121,11 +127,11 @@ module Krill
             fv.make
             puts "GOT #{fv.inspect}"
 
-          end         
+          end # if  
 
-        end
+        end # select/each
 
-      end
+      end # each
 
       self
 
@@ -142,9 +148,9 @@ module Krill
       end
 
       if block_given?
-        @protocol.release items, opts, &Proc.new
+        @protocol.release items.uniq, opts, &Proc.new
       else
-        @protocol.release items, opts        
+        @protocol.release items.uniq, opts        
       end
 
       self
