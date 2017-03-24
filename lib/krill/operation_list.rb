@@ -57,10 +57,12 @@ module Krill
       each_with_index do |op,i|         
         op_items = []
         op.inputs.each do |input|
-          input.retrieve unless input.child_item
+          puts input.inspect
+          input.retrieve unless input.child_item || input.value
           if input.child_item_id
               op_items << input.child_item
-          else
+              puts "Adding #{input.child_item.inspect} to op_items"
+          elsif !input.value
               op.set_status "error"
               sname = input.child_sample ? input.child_sample.name : '-'
               oname = input.child_item ? input.child_item.object_type.name : '-'
@@ -184,7 +186,12 @@ module Krill
             t.set(fv.name,               fv.child_sample ? fv.child_sample.name : "NO SAMPLE")          
              .set(collection_column(fv), fv.child_item_id ? fv.child_item_id : "NO COLLECTION")
              .set(row_column(fv),        fv.row)
-             .set(column_column(fv),     fv.column)                          
+             .set(column_column(fv),     fv.column) 
+
+          elsif fv.value
+
+            t.column(fv.name,fv.name)
+            t.set(fv.name,fv.value)
 
           else
 

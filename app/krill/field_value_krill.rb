@@ -47,7 +47,7 @@ module FieldValueKrill
       self.child_item_id = @item.id
       self.save
     else
-      puts "COULD NOT MAKE ITEM FOR FV #{id} BECAUSE object_type = null, although aft = #{AllowableFieldType.find(allowable_field_type_id).inspect}"
+      puts "COULD NOT MAKE ITEM FOR FV #{id} BECAUSE object_type = null"
     end
 
     @item

@@ -236,14 +236,14 @@ class OperationTypesController < ApplicationController
 
         rescue Exception => e
 
-          logger.error "Bug encountered while testing: " + e.message 
+          logger.error "Bug encountered while testing: " + e.message + " -- " + e.backtrace.to_s
 
           e.backtrace.each do |b|
             logger.error b
           end
 
           render json: {
-            error: "Bug encountered while testing: " + e.message + " at " + e.backtrace.first + ". ",
+            error: "Bug encountered while testing: " + e.message + " at " + e.backtrace.join("\n") + ". ",
             backtrace: e.backtrace
           }          
 
