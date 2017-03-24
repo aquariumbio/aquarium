@@ -12,9 +12,14 @@
   <%= render partial: '/data_associations/template' %> 
 
   <md-content flex layout-padding ng-if="status != 'Ready'">
-    <div layout="column">
-      <h2 class="md-title">{{status}}</h2>
-      <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+    <div layout="row">
+      <div flex="25"></div>
+      <div flex="50">
+        <br /><br />
+        <h2 class="md-title">{{status}}</h2>
+        <br />
+        <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+      </div>
     </div>
   </md-content>
 
