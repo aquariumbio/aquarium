@@ -136,7 +136,7 @@ module Krill
       items = []
 
       select { |op| opts[:errored] || op.status != "error" }.each_with_index do |op,i|         
-        op.field_values.select { |fv| opts[:io] == "all" || fv.role == opts[:io] }.each do |input|
+        op.field_values.select { |fv| fv.field_type.ftype == 'sample' && ( opts[:io] == "all" || fv.role == opts[:io] ) }.each do |input|
           items << input.child_item
         end
       end
