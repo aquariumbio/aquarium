@@ -33,6 +33,12 @@ AQ.FieldValue.record_getters.is_wired_to = function() {
 AQ.FieldValue.record_methods.reload = function() {
 
   var fv = this;
-  fv.recompute_getter("item");
+  AQ.FieldValue.find(fv.id).then(updated_fv => {
+    fv.child_item_id = updated_fv.child_item_id;
+    fv.row = updated_fv.row;
+    fv.column = updated_fv.column;
+    fv.recompute_getter("item");
+  });
+
 
 }
