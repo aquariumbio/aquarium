@@ -33,7 +33,7 @@ module CodeHelper
       )
 
       f.save
-      raise f.errors.full_messages.to_s unless f.errors.empty
+      raise f.errors.full_messages.to_s unless f.errors.empty?
       f
 
     end
