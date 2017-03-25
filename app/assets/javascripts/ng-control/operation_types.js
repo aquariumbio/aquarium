@@ -11,10 +11,20 @@
   w.controller('operationTypesCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', 
                             function (  $scope,   $http,   $attrs,   $cookies,   $sce ) {
 
+    AQ.init($http);
+    AQ.update = () => { $scope.$apply(); }
+    AQ.confirm = (msg) => { return confirm(msg); }
+
     $scope.operation_types = [];
     $scope.current_ot = null;
     $scope.user = new User($http);  
-    $scope.mode = 'definition';
+
+    if ( $cookies.getObject("DeveloperMode") ) {
+      $scope.mode = $cookies.getObject("DeveloperMode");
+    } else {
+      $scope.mode = 'definition';
+    }
+
     $scope.default_protocol = "";
     $scope.categories = [];
     $scope.initialized = false;
@@ -22,18 +32,45 @@
     function make_categories() {
       $scope.categories = aq.uniq(aq.collect($scope.operation_types,function(ot) {
         return ot.category;
-      }));
-      if ( $scope.categories.length > 0 ) {
-        $scope.current_category = $scope.categories[0];
+      })).sort();
+      if ( $cookies.getObject("DeveloperCurrentCategory") ) {
+        $scope.choose_category($cookies.getObject("DeveloperCurrentCategory"));
+      } else if ( $scope.categories.length > 0 && !$scope.current_category ) {
+        $scope.choose_category($scope.categories[0]);
       }
     }
 
-    $http.get('/operation_types.json').then(function(response) {
-      $scope.operation_types = response.data;
-      $scope.current_ot = $scope.operation_types[0];
+    AQ.OperationType.all().then(operation_types => {
+      $scope.operation_types = operation_types;
+      if ( $cookies.getObject("DeveloperCurrentOperationTypeId") ) {
+        var ots = aq.where($scope.operation_types,ot => ot.id == $cookies.getObject("DeveloperCurrentOperationTypeId") );
+        if  ( ots.length == 1 ) {
+          $scope.current_ot = ots[0];
+        } else {
+          $scope.current_ot = $scope.operation_types[0];         
+        }
+      } else {
+        $scope.current_ot = $scope.operation_types[0];
+      }
       make_categories();
-      $scope.initialized = true;
+      $scope.initialized = true;      
     });
+
+    // $http.get('/operation_types.json').then(function(response) {
+    //   $scope.operation_types = response.data;
+    //   if ( $cookies.getObject("DeveloperCurrentOperationTypeId") ) {
+    //     var ots = aq.where($scope.operation_types,ot => ot.id == $cookies.getObject("DeveloperCurrentOperationTypeId") );
+    //     if  ( ots.length == 1 ) {
+    //       $scope.current_ot = ots[0];
+    //     } else {
+    //       $scope.current_ot = $scope.operation_types[0];         
+    //     }
+    //   } else {
+    //     $scope.current_ot = $scope.operation_types[0];
+    //   }
+    //   make_categories();
+    //   $scope.initialized = true;
+    // });
 
     $http.get('/object_types.json').then(function(response) {
       $scope.object_types = response.data;
@@ -52,12 +89,14 @@
     }
 
     $scope.set_mode = function(mode) {
+      $cookies.putObject("DeveloperMode",mode) 
       $scope.mode = mode;
     }
 
     $scope.choose = function(ot) {
       $scope.current_ot = ot;
       $scope.mode = 'definition';
+      $cookies.putObject("DeveloperCurrentOperationTypeId", ot.id); 
     }
 
     $scope.choose_category = function(c) {
@@ -65,6 +104,7 @@
         delete $scope.current_category;
       } else {
         $scope.current_category = c;
+        $cookies.putObject("DeveloperCurrentCategory", c);        
       }
     }
 
@@ -99,6 +139,8 @@
               $scope.operation_types[i] = response.data;
               $scope.current_ot = response.data;
               make_categories();
+              $scope.current_category = $scope.current_ot.category;
+              $cookies.putObject("DeveloperCurrentCategory", $scope.current_ot.category);        
             }
           });          
         } else {
@@ -111,6 +153,9 @@
               $scope.operation_types[i] = response.data;            
               $scope.current_ot = response.data;  
               make_categories();
+              $scope.current_category = $scope.current_ot.category;
+              $cookies.putObject("DeveloperCurrentOperationTypeId", $scope.current_ot.id);
+              $cookies.putObject("DeveloperCurrentCategory", $scope.current_ot.category);                
             }
           });
         }
@@ -131,6 +176,8 @@
               make_categories();
               if ( $scope.operation_types.length > 0 ) {
                 $scope.current_ot = $scope.operation_types[0];
+                $scope.current_category = $scope.current_ot.category;
+                $cookies.putObject("DeveloperCurrentCategory", $scope.current_ot.category);                 
               }
             }
           });             
@@ -141,6 +188,8 @@
           $scope.operation_types.splice(i,1);
           $scope.current_ot = $scope.operation_types[0];
           make_categories();
+          $scope.current_category = $scope.current_ot.category;
+          $cookies.putObject("DeveloperCurrentCategory", $scope.current_ot.category);           
 
         }
 
@@ -222,6 +271,8 @@
       $scope.operation_types.push(new_ot);
       $scope.current_ot = new_ot;
       make_categories();
+      $scope.current_category = "Unsorted";
+      $scope.mode = "definition";
     }
 
     $scope.copy = function(ot) {

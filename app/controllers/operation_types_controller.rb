@@ -25,8 +25,10 @@ class OperationTypesController < ApplicationController
 
     ot.save
 
-    params[:field_types].each do |ft|
-      ot.add_new_field_type ft
+    if params[:field_types]
+      params[:field_types].each do |ft|
+        ot.add_new_field_type ft
+      end
     end
 
     ["protocol", "precondition", "cost_model", "documentation"].each do |name|
@@ -148,12 +150,14 @@ class OperationTypesController < ApplicationController
         elsif io.array
 
           fvs = test_op[:field_values].select { |fv| fv[:name] == io.name && fv[:role] == io.role }
-          aft = AllowableFieldType.find_by_id(fvs[0][:allowable_field_type_id])
-          samples = fvs.collect { |fv|
-            Sample.find_by_id(fv[:child_sample_id])
-          }
-          actual_fvs = op.set_property(io.name, samples, io.role,true,aft)
-          raise "Nil value Error: Could not set #{fvs}" unless actual_fvs
+          unless fvs.empty?
+            aft = AllowableFieldType.find_by_id(fvs[0][:allowable_field_type_id])
+            samples = fvs.collect { |fv|
+              Sample.find_by_id(fv[:child_sample_id])
+            }
+            actual_fvs = op.set_property(io.name, samples, io.role,true,aft)
+            raise "Nil value Error: Could not set #{fvs}" unless actual_fvs
+          end
 
         else
 

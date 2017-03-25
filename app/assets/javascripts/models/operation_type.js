@@ -109,3 +109,58 @@ AQ.OperationType.record_methods.unschedule = function(operations) {
 
 }
 
+AQ.OperationType.record_methods.code = function(name) {
+
+  var ot = this;
+
+  delete ot[name];
+  ot[name]= { content: "Loading " + name, name: "name" };
+
+  AQ.Code.where({parent_class: "OperationType", parent_id: ot.id, name: name}).then(codes => {
+    if ( codes.length > 0 ) {
+      latest = aq.where(codes,code => { return code.child_id == null });
+      if ( latest.length == 1 ) {
+        ot[name] = latest[0];
+      } else {
+        console.log("no latest")
+      }
+    } else { 
+      ot[name]= { content: "# Add code here.", name: "name" };
+    }
+    AQ.update();
+  });
+
+  return ot[name];
+
+}
+
+AQ.OperationType.record_getters.protocol = function() {
+  return this.code("protocol");
+}
+
+AQ.OperationType.record_getters.documentation = function() {
+  return this.code("documentation");
+}
+
+AQ.OperationType.record_getters.cost_model = function() {
+  return this.code("cost_model");
+}
+
+AQ.OperationType.record_getters.precondition = function() {
+  return this.code("precondition");
+}
+
+AQ.OperationType.record_getters.field_types = function() {
+  
+  var ot = this;
+  delete ot.field_types;
+  ot.field_types = [];
+  ot.loading_field_types = true;
+
+  AQ.FieldType.where({parent_class: "OperationType", parent_id: ot.id}).then(fts => {
+    ot.field_types = fts;
+    ot.loading_field_types = false;
+    AQ.update();
+  });
+
+}
