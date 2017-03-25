@@ -162,6 +162,22 @@
       }
     }
 
+    function after_delete(c) {
+      make_categories();
+      if ( $scope.category_size(c) > 0 ) {
+        var ots = aq.where($scope.operation_types, ot => ot.category == c );
+        $scope.current_ot = ots[0];
+        $cookies.putObject("DeveloperCurrentOperationTypeId", $scope.current_ot.id); 
+        $scope.current_category = c;
+        $cookies.putObject("DeveloperCurrentCategory", c);          
+      } else if ( $scope.operation_types.length > 0 ) {
+        $scope.current_ot = $scope.operation_types[0];
+        $cookies.putObject("DeveloperCurrentOperationTypeId", $scope.current_ot.id); 
+        $scope.current_category = $scope.current_ot.category;
+        $cookies.putObject("DeveloperCurrentCategory", $scope.current_ot.category);                 
+      }      
+    }
+
     $scope.delete_ot = function(ot) {
       if ( confirm ( "Are you sure you want delete this operation type definition?" ) ) {
 
@@ -171,26 +187,19 @@
             if ( response.data.error ) {
               alert ( "Could not delete operation type: " + response.data.error );
             } else {
-              var i = $scope.operation_types.indexOf(ot);
+              var i = $scope.operation_types.indexOf(ot),
+                  c = ot.category;
               $scope.operation_types.splice(i,1);
-              make_categories();
-              if ( $scope.operation_types.length > 0 ) {
-                $scope.current_ot = $scope.operation_types[0];
-                $scope.current_category = $scope.current_ot.category;
-                $cookies.putObject("DeveloperCurrentCategory", $scope.current_ot.category);                 
-              }
+              after_delete(c);
             }
           });             
 
         } else { // ot hasn't been saved yet
 
-          var i = $scope.operation_types.indexOf(ot);
+          var i = $scope.operation_types.indexOf(ot),
+              c = ot.category;
           $scope.operation_types.splice(i,1);
-          $scope.current_ot = $scope.operation_types[0];
-          make_categories();
-          $scope.current_category = $scope.current_ot.category;
-          $cookies.putObject("DeveloperCurrentCategory", $scope.current_ot.category);           
-
+          after_delete(c);          
         }
 
       }
