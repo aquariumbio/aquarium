@@ -56,22 +56,6 @@
       $scope.initialized = true;      
     });
 
-    // $http.get('/operation_types.json').then(function(response) {
-    //   $scope.operation_types = response.data;
-    //   if ( $cookies.getObject("DeveloperCurrentOperationTypeId") ) {
-    //     var ots = aq.where($scope.operation_types,ot => ot.id == $cookies.getObject("DeveloperCurrentOperationTypeId") );
-    //     if  ( ots.length == 1 ) {
-    //       $scope.current_ot = ots[0];
-    //     } else {
-    //       $scope.current_ot = $scope.operation_types[0];         
-    //     }
-    //   } else {
-    //     $scope.current_ot = $scope.operation_types[0];
-    //   }
-    //   make_categories();
-    //   $scope.initialized = true;
-    // });
-
     $http.get('/object_types.json').then(function(response) {
       $scope.object_types = response.data;
     });
@@ -268,7 +252,7 @@
     $scope.new_operation_type = function() {
       var new_ot = {
         name: "New Operation Type",
-        category: "Unsorted",
+        category: $scope.current_category ? $scope.current_category : "Unsorted",
         deployed: false,
         changed: true,
         field_types:[],
@@ -280,7 +264,7 @@
       $scope.operation_types.push(new_ot);
       $scope.current_ot = new_ot;
       make_categories();
-      $scope.current_category = "Unsorted";
+      $scope.current_category = new_ot.category;
       $scope.mode = "definition";
     }
 
