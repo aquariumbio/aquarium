@@ -96,6 +96,23 @@
     border-bottom: 1pt solid #eee; 
   }
 
+  .versions {
+    position: absolute;
+    right: 10px;
+    left: 0;
+    bottom: 45px;
+    top: 48px;
+    resize: none;
+    background: transparent;
+    overflow: auto;
+    border-bottom: 1pt solid #eee;  
+    pre {
+      margin: 10px;
+      font-size: 9pt;
+      line-height: 11pt;
+    }   
+  }
+
   .code-controls {
     height: 30px;
     margin: 0;

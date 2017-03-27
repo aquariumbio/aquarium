@@ -164,3 +164,21 @@ AQ.OperationType.record_getters.field_types = function() {
   });
 
 }
+
+AQ.OperationType.record_getters.protocol_versions = function() {
+
+  console.log("protocol_versions")
+
+  var ot = this;
+  delete ot.protocol_versions;
+  ot.protocol_versions = [];
+
+  AQ.Code.where({parent_class: "OperationType", parent_id: ot.id, name: 'protocol'}).then(codes => {
+    console.log(codes)
+    ot.protocol_versions = codes.reverse();
+    AQ.update();
+  });
+
+  return ot.protocol_versions;
+
+}

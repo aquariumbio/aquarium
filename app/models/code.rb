@@ -18,7 +18,7 @@ class Code < ActiveRecord::Base
 
   end
 
-  def versions  
+  def versions
     Code.where(parent_id: self.parent_id, parent_class: self.parent_class, name: self.name)
   end
 

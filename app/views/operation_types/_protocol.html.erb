@@ -1,6 +1,7 @@
 <div ng-if="current_ot.protocol && mode == 'protocol'" ng-controller="codeCtrl as code">
 
   <div ng-model="current_ot.protocol.content"
+       ng-if="current_ot.mode != 'versions'"
        ui-ace="{
                  useWrapMode : true,
                  mode: 'ruby',
@@ -8,11 +9,43 @@
                  onChange: aceChanged,
                  theme:'tomorrow'
                }"
-        ng-change="change(current_ot.protocol)">
+       ng-change="change(current_ot.protocol)">
   </div>
 
-  <div class='code-controls'>
-    <a href='#' class='btn' ng-click="save(current_ot,'protocol')" ng-disabled="!current_ot.protocol.changed">Save</a>
+  <div ng-if="current_ot.mode == 'versions'" class="versions">
+    <h4>Past Versions</h4>
+    <ul>
+      <li ng-repeat="version in current_ot.protocol_versions">
+        <a href="#" ng-click="version.open = !version.open">{{version.id}}</a>
+        {{version.updated_at|date:'medium'}} : 
+        {{version.content.length/1000}} kb
+        <div ng-if='version.open'>
+          <pre>{{version.content}}</pre>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class='code-controls' ng-if="current_ot.mode != 'versions'">
+    <a href='#' 
+       class='btn' 
+       ng-click="save(current_ot,'protocol')" 
+       ng-disabled="!current_ot.protocol.changed">
+       Save
+    </a>
+    <a href='#' 
+       class='btn' 
+       ng-click="current_ot.mode = 'versions'">
+       Versions
+    </a>
+  </div>
+
+  <div class='code-controls' ng-if="current_ot.mode == 'versions'">
+    <a href='#' 
+       class='btn' 
+       ng-click="current_ot.mode = null">
+       Current Version
+    </a>
   </div>
 
 </div>
