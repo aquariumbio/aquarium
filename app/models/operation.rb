@@ -192,9 +192,13 @@ class Operation < ActiveRecord::Base
   def self.step 
 
     Operation.where(status: "waiting").each do |op|
-      if op.ready?
-        op.status = "pending"
-        op.save
+      begin
+        if op.ready?
+          op.status = "pending"
+          op.save
+        end
+      rescue Exception => e
+        Rails.logger.ingo "COULD NOT STEP OPERATION #{op.id}"
       end
     end
 
