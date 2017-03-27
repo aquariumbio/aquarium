@@ -38,6 +38,20 @@
 
             fv.sample_identifier = ui.item.value;
 
+            var aft = op.form[fv.role][fv.name].aft;
+            if ( aft.object_type_id ) {
+              fv.clear();
+              AQ.items_for(sid,aft.object_type_id).then((items) => { 
+                if ( items.length > 0 ) {                      
+                  fv.items = items;
+                  fv.items[0].selected = true;
+                  fv.selected_item = items[0];
+                  fv.sid = sid;
+                  $scope.$apply();
+                }
+              });
+            }               
+
           } else {
 
             route[ft.routing] = ui.item.value; // Updates other sample ids with same routing
