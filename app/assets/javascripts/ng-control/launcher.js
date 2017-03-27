@@ -22,31 +22,6 @@
     $scope.getting_plans = false;
     $scope.mode = 'running';
 
-    $scope.clear_error = function() {
-      delete $scope.error;
-    }
-
-    $scope.io_focus = function(op,ft,fv) {
-      $scope.current_operation = op;
-      $scope.current_fv = fv;
-      $scope.current_ft = ft;
-      aq.each($scope.plan.wires, w => {
-        aq.each(w.to_op.field_values, field_value => { 
-          field_value.selected = false;
-        })
-        aq.each(w.from_op.field_values, field_value => { 
-          field_value.selected = false;
-        })
-      })
-      fv.selected = true;
-    }
-
-    $scope.io_blur = function() {
-      $scope.current_operation = null;
-      $scope.current_fv = null;
-      $scope.current_ft = null;  
-    }
-
     AQ.get_sample_names().then(() =>  {
       $scope.status = "Loading operation types ...";
       AQ.OperationType.all_with_content().then((operation_types) => {
@@ -71,7 +46,32 @@
           });
         });
       });
-    });
+    });    
+
+    $scope.clear_error = function() {
+      delete $scope.error;
+    }
+
+    $scope.io_focus = function(op,ft,fv) {
+      $scope.current_operation = op;
+      $scope.current_fv = fv;
+      $scope.current_ft = ft;
+      aq.each($scope.plan.wires, w => {
+        aq.each(w.to_op.field_values, field_value => { 
+          field_value.selected = false;
+        })
+        aq.each(w.from_op.field_values, field_value => { 
+          field_value.selected = false;
+        })
+      })
+      fv.selected = true;
+    }
+
+    $scope.io_blur = function() {
+      $scope.current_operation = null;
+      $scope.current_fv = null;
+      $scope.current_ft = null;  
+    }
 
     $scope.select = function(operation_type) {
 
