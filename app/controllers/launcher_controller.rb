@@ -111,10 +111,17 @@ class LauncherController < ApplicationController
           })
           wire.save
           wire.to_op.field_values.each do |fv| # remove inputs from non-leaves
-            fv.child_item_id = nil
-            fv.save
+            if fv.child_item_id
+              puts "REMOVING ITEM #{fv.child_item_id} FROM #{fv.name}"
+              fv.child_item_id = nil
+              fv.save
+            end
           end
         end
+      end
+
+      plan.operations.each do |op|
+        puts "Controller: Starting op #{op.id}: #{op.field_values.collect { |fv| [fv.name,fv.child_item_id]}.join(', ')}"
       end
 
       plan.start

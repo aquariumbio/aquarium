@@ -58,7 +58,7 @@ module OperationPlanner
 
   def has_no_stock_or_method
     inputs.select { |i| i.field_type.ftype == 'sample' }.each do |i|
-      if !i.satisfied_by_environment && i.predecessors.length == 0
+      if i.predecessors.length == 0 && !i.satisfied_by_environment 
         return true
       end
     end

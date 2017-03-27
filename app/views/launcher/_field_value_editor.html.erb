@@ -29,6 +29,7 @@
 
         <md-subheader class="md-no-sticky">
           Inventory
+          <span ng-if="current_fv.wired">(Not Used in Plan)</span>
         </md-subheader>
 
         <md-list class='md-compact-list' ng-if="!current_fv.items[0].collection">
@@ -39,7 +40,7 @@
 
             <md-checkbox
               ng-click="select_item(current_fv,item)"
-              ng-checked="item.selected"
+              ng-checked="item.selected && !current_fv.wired"
               ng-disabled="current_fv.wired || current_fv.role == 'output'">
             </md-checkbox>
 
