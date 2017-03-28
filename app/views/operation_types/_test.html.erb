@@ -153,6 +153,13 @@
     </table>
   </div>
 
+  <hr />
+  <h4>Plan Information</h4>
+
+  <div ng-repeat="plan in current_ot.test_results.plans">
+    <pre>{{plan|json}}</pre>
+  </div>
+
   <!-- pre>{{current_ot.test_results.operations|json}}</pre -->
  
 </div>

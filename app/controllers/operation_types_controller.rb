@@ -195,6 +195,15 @@ class OperationTypesController < ApplicationController
       # (re)build the operations
       ops = make_test_ops(OperationType.find(params[:id]), params[:test_operations])
 
+      plans = []
+      ops.each do |op|
+        plan = Plan.new user_id: current_user.id
+        plan.save        
+        plans << plan
+        pa = PlanAssociation.new operation_id: op.id, plan_id: plan.id
+        pa.save
+      end
+
       if params[:use_precondition]
         logger.info "Using Precondition to filter operation types"
         ops = ops.select { |op| op.precondition_value }
@@ -235,6 +244,7 @@ class OperationTypesController < ApplicationController
           # render the resulting data including the job and the operations
           render json: {
             operations: ops.as_json(methods: [:field_values,:associations]),
+            plans: plans.collect { |p| p.as_json(include: :operations, methods: [:associations]) },
             job: job.reload
           }
 

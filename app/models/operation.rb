@@ -198,7 +198,7 @@ class Operation < ActiveRecord::Base
           op.save
         end
       rescue Exception => e
-        Rails.logger.ingo "COULD NOT STEP OPERATION #{op.id}"
+        Rails.logger.info "COULD NOT STEP OPERATION #{op.id}"
       end
     end
 
@@ -267,6 +267,37 @@ class Operation < ActiveRecord::Base
     end
 
     rval
+
+  end
+
+  def add_successor opts
+
+    ot = OperationType.find_by_name(opts[:type])
+
+    op = ot.operations.create(
+        status: "waiting",
+        user_id: user_id
+    )
+
+    plan.plan_associations.create operation_id: op.id
+
+    opts[:routing].each do |r|
+      ot.field_types.select { |ft| ft.routing == r[:symbol] }.each do |ft|
+        aft = ft.allowable_field_types[0]
+        op.set_property ft.name, r[:sample], ft.role, false, aft
+      end
+    end
+
+    raise "Could not find output #{opts[:from]} of #{operation_type.name}" unless output(opts[:from])
+    raise "Could not find input #{opts[:to]} of #{opts[:type]} (inputs = #{op.field_values.inspect})" unless op.input(opts[:to])   
+    
+    wire = Wire.new(
+      from_id: output(opts[:from]).id, 
+      to_id: op.input(opts[:to]).id, 
+      active: true
+    )
+
+    wire.save
 
   end
 
