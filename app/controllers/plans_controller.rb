@@ -167,7 +167,7 @@ class PlansController < ApplicationController
     errors = []
 
     # find all pending operations
-    pending = plan.operations.select { |o| o.status == 'pending' }
+    pending = plan.operations.select { |o| o.status == 'pending' && o.precondition_value }
 
     # group them by operation type
     type_ids = pending.collect { |op| op.operation_type_id }.uniq
@@ -197,7 +197,6 @@ class PlansController < ApplicationController
         begin
 
           ops.extend(Krill::OperationList)
-          ops.make(role: 'input')
 
           ops.each do |op|
             op.set_status "running"

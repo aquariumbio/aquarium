@@ -18,11 +18,23 @@ AQ.Plan.record_methods.reload = function() {
   var plan = this;
   plan.recompute_getter('data_associations');
 
-  aq.each(plan.operations, op => {
-    op.reload().then(op => {
-      AQ.update();
+  AQ.PlanAssociation.where({plan_id: plan.id}).then(pas => {
+    AQ.Operation.where(
+      {id: aq.collect(pas,pa => pa.operation_id)},
+      {methods: [ "field_values", "operation_type" ] }
+    ).then(ops => {
+      plan.operations = ops;
+      aq.each(plan.operations, op => {
+        op.field_values = aq.collect(op.field_values,(fv) => {
+          return AQ.FieldValue.record(fv);  
+        })
+        op.reload().then(op => {
+          op.open = false;
+          AQ.update();
+        });
+      });
     });
-  })
+  });
 
 }
 
@@ -60,9 +72,7 @@ AQ.Plan.record_methods.cancel = function(msg) {
   return new Promise(function(resolve,reject) {  
     AQ.get('/plans/cancel/' + plan.id + "/" + msg).then(
       (response) => { 
-        console.log("A")
         plan.reload();
-        console.log("B")
         resolve(response.data)
       },
       (response) => { reject(response.data.errors) }
