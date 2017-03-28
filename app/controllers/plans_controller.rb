@@ -161,4 +161,64 @@ class PlansController < ApplicationController
 
   end
 
+  def debug
+
+    plan = Plan.find(params[:id])
+    errors = []
+
+    # find all pending operations
+    pending = plan.operations.select { |o| o.status == 'pending' }
+
+    # group them by operation type
+    type_ids = pending.collect { |op| op.operation_type_id }.uniq
+
+    # batch each group and run a job
+    type_ids.each do |ot_id|
+
+      ops = pending.select { |op| op.operation_type_id == ot_id }
+
+      job,newops = OperationType.find(ot_id)
+        .schedule(ops, current_user, Group.find_by_name('technicians'))
+
+      error = nil
+
+      begin
+        manager = Krill::Manager.new job.id, true, "master", "master"
+      rescue Exception => e
+        error = e
+      end
+
+      if error
+
+        errors << error
+
+      else
+
+        begin
+
+          ops.extend(Krill::OperationList)
+          ops.make(role: 'input')
+
+          ops.each do |op|
+            op.set_status "running"
+          end
+
+          manager.run
+
+        rescue Exception => e
+
+          errors << "Bug encountered while testing: " + e.message + " at " + e.backtrace.join("\n") + ". "
+
+        end # begin
+
+      end # if
+
+    end # type_ids.each
+
+    Operation.step
+
+    render json: { errors: errors }
+
+  end # def debug
+
 end

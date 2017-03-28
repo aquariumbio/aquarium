@@ -18,15 +18,20 @@
         </span>
       </div>      
 
-      <div flex="40" class='no-wrap left-pad' ng-if="plan.open">
+      <div flex="35" class='no-wrap left-pad' ng-if="plan.open">
         <span ng-repeat="fv in plan.operations[0].field_values | filter : { role: 'output' }" class='md-body-1'>
           {{fv.name}}: {{fv.child_sample.name}}
         </span>
       </div>
 
-      <div flex="15" class='no-wrap left-pad' ng-if="plan.open">
+      <div flex="20" class='no-wrap left-pad' ng-if="plan.open">
         <md-button class="md-small md-raised" ng-click="plan.reload()">Reload</md-button>
-        <md-button class="md-small md-raised" ng-click="plan.cancel('Canceled via user interface')">Cancel</md-button>        
+        <md-button class="md-small md-raised" ng-click="plan.cancel('Canceled via user interface')">Cancel</md-button> 
+      <md-button 
+        class='md-small md-raised' 
+        ng-disabled="plan.debugging"
+        ng-click="plan.debug()">Debug</md-button>
+
       </div>
 
       <div flex="10" class='no-wrap left-pad'>

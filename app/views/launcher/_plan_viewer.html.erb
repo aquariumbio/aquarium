@@ -1,9 +1,7 @@
 
 <script type="text/ng-template" id="plan_viewer">
 
-  <!--
-    PLAN TEMPLATE
-    -->
+  <!-- PLAN TEMPLATE -->
 
   <div layout="row" layout-align="space-between center">
 
@@ -31,9 +29,7 @@
 
 <script type="text/ng-template" id="operation_viewer">
 
-  <!--
-    OPERATION TEMPLATE
-    -->
+  <!-- OPERATION TEMPLATE -->
 
   <div layout="row" layout-wrap
        ng-class="operation.open ? 'plan-header plan-row plan-row-open' : 'plan-header plan-row'">
@@ -85,9 +81,7 @@
 
 <script type="text/ng-template" id="op_io">
 
-  <!--
-    FIELD VALUE TEMPLATE
-    -->
+  <!-- FIELD VALUE TEMPLATE -->
 
   <div layout="row" ng-repeat-start="fv in operation.field_values"
        ng-class="fv.open ? 'plan-header plan-row plan-row-open' : 'plan-header plan-row'">
@@ -138,9 +132,7 @@
 
 <script type="text/ng-template" id="job_info">
 
-  <!--
-    JOB TEMPLATE
-    -->
+  <!-- JOB TEMPLATE -->
 
   <span ng-if="operation.job_id">
     <span ng-bind-html="'Job ' + operation.job.url | trust"></span>

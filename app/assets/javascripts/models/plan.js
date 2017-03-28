@@ -240,3 +240,21 @@ AQ.Plan.record_methods.cost = function() {
 
   return sum;
 }
+
+AQ.Plan.record_methods.debug = function() {
+
+  var plan = this;
+  plan.debugging = true;
+
+  return new Promise(function(resolve,reject) {  
+
+    AQ.get("/plans/" + plan.id + "/debug").then(
+      response => {
+        plan.reload();
+        plan.debugging = false;
+      }
+    );
+
+  });
+  
+}

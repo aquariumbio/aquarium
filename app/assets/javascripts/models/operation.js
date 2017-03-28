@@ -163,7 +163,7 @@ AQ.Operation.record_methods.reload = function() {
 
   return new Promise(function(resolve,reject) {  
 
-    AQ. Operation.find(operation.id).then(
+    AQ.Operation.find(operation.id).then(
       op => {
         operation.status = op.status;
         operation.job_id = op.job_id;
