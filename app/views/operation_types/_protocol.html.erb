@@ -9,7 +9,8 @@
                  onChange: aceChanged,
                  theme:'tomorrow'
                }"
-       ng-change="change(current_ot.protocol)">
+       ng-change="change(current_ot.protocol)"
+       ng-readonly="current_ot.protocol.no_edit">
   </div>
 
   <div ng-if="current_ot.mode == 'versions'" class="versions">

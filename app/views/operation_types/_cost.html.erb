@@ -8,7 +8,8 @@
                  onChange: aceChanged,
                  theme:'tomorrow'
                }"
-       ng-change="change(current_ot.cost_model)">
+       ng-change="change(current_ot.cost_model)"
+       ng-readonly="current_ot.cost_model.no_edit">
   </div>
 
   <div class='code-controls'>

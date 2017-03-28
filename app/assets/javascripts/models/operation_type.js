@@ -114,7 +114,7 @@ AQ.OperationType.record_methods.code = function(name) {
   var ot = this;
 
   delete ot[name];
-  ot[name]= { content: "Loading " + name, name: "name" };
+  ot[name]= { content: "Loading " + name, name: "name", no_edit: true };
 
   AQ.Code.where({parent_class: "OperationType", parent_id: ot.id, name: name}).then(codes => {
     if ( codes.length > 0 ) {

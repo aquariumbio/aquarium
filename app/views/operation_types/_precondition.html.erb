@@ -8,7 +8,8 @@
                  onChange: aceChanged,
                  theme:'tomorrow'
                }"
-       ng-change="change(current_ot.precondition)">
+       ng-change="change(current_ot.precondition)"
+       ng-readonly="current_ot.precondition.no_edit">
   </div>
 
   <div class='code-controls'>
