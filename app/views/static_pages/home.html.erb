@@ -1,18 +1,51 @@
 
 <div class='row-fluid'>
 
-  <div class='span8'>
-
-    <div class='span12 plugin-container'>
-      <iframe class='plugin-iframe' allowtransparency="true" src='/plugin/show?path=aqualib/plugins/jobs'></iframe>
-      <iframe class='notification-iframe' allowtransparency="true" src='/notification_list'></iframe>
-    </div>
-
-
+  <div class='span4 discussion-index discussion-home'>
+    <h2 class="md-title">Discussions</h2>
+    <iframe class='discussion-iframe' allowtransparency="true" src='/posts/'></iframe>
   </div>
 
-  <div class='span4 discussion-index'>
-      <iframe class='discussion-iframe' allowtransparency="true" src='/posts/'></iframe>
+  <div class='span8 main-navigation' ng-app="aquarium" ng-controller="homeCtrl">
+
+    <br />
+    <br />
+    <h1 class='md-display-1'>Welcome to the <%= Bioturk::Application.config.instance_name %></h1>
+    <h1 class='md-title'>Powered by Aquarium</h1>
+    <br />
+    <br />
+
+    <md-grid-list 
+        md-cols="2" md-cols-md="2"
+        md-row-height="4:1"
+        md-gutter="32px">   
+
+        <md-grid-tile class="big-link" md-rowspan="1" md-colspan="1">
+          <a href="/browser">
+            <h1 class="md-title">Manage Samples</h1>
+          </a>
+        </md-grid-tile>
+
+        <md-grid-tile class="big-link" md-rowspan="1" md-colspan="1">
+          <a href="/launcher">
+            <h1 class="md-title">Create and Manage Plans</h1>
+          </a>      
+        </md-grid-tile>
+
+        <md-grid-tile class="big-link" md-rowspan="1" md-colspan="1">
+          <a href="/operations">
+             <h1 class="md-title">Manage Jobs</h1>
+          </a>      
+        </md-grid-tile>
+
+        <md-grid-tile class="big-link" md-rowspan="1" md-colspan="1">
+          <a href="/browser">
+            <h1 class="md-title">Develop Workflows</h1>
+          </a> 
+        </md-grid-tile>
+
+      </md-grid-list>
+
   </div>
 
 </div>
