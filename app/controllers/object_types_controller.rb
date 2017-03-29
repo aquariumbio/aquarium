@@ -162,7 +162,12 @@ class ObjectTypesController < ApplicationController
   # DELETE /object_types/1.json
   def destroy
     @object_type = ObjectType.find(params[:id])
-    @object_type.destroy
+
+    if @object_type.items.length > 0
+      flash[:notice] = "Could not delete object type definition #{@object_type.name} because it has items associated with it."
+    else
+      @object_type.destroy
+    end
 
     respond_to do |format|
       format.html { redirect_to object_types_url }
