@@ -119,10 +119,11 @@ AQ.OperationType.record_methods.code = function(name) {
   AQ.Code.where({parent_class: "OperationType", parent_id: ot.id, name: name}).then(codes => {
     if ( codes.length > 0 ) {
       latest = aq.where(codes,code => { return code.child_id == null });
-      if ( latest.length == 1 ) {
+      if ( latest.length >= 1 ) {
         ot[name] = latest[0];
       } else {
-        console.log("no latest")
+        console.log("no latest");
+        ot[name]= { content: "# Add code here.", name: "name" };
       }
     } else { 
       ot[name]= { content: "# Add code here.", name: "name" };
