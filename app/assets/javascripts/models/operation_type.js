@@ -184,3 +184,13 @@ AQ.OperationType.record_getters.protocol_versions = function() {
   return ot.protocol_versions;
 
 }
+
+AQ.OperationType.record_methods.remove_predecessors = function() {
+  // This method can be used to remove references to predecessors in field types
+  // so that the resulting object is guaranteed not to be circular
+  var ot = this;
+  aq.each(ot.field_types,ft => {
+    delete ft.predecessors;
+  });
+  return ot;
+}

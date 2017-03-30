@@ -116,7 +116,7 @@
     $scope.save_ot = function(ot) {
       if ( confirm ( "Are you sure you want to save this operation type definition?" ) ) {
         if ( ot.id ) {
-          $http.put("/operation_types/" + ot.id,ot).then(function(response) {
+          $http.put("/operation_types/" + ot.id,ot.remove_predecessors()).then(function(response) {
             if ( response.data.errors ) {
               alert ( "Could not update operation type definition: " + response.data.errors[0] )
               console.log(response.data.errors);
