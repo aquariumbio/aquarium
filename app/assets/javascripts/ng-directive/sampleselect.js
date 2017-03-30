@@ -32,7 +32,11 @@
 
           // send new sid to i/o of other operations
           plan.propagate(op,fv,ui.item.value); 
-          op.update_cost();
+
+          // use sample information to fill in inputs, if possible
+          if ( fv.role == 'output' ) {
+            op.instantiate(plan,fv,sid);
+          }
 
           if ( ft.array ) {
 

@@ -172,12 +172,16 @@ AQ.Plan.record_methods.propagate_down = function(fv,sid) {
 
   var plan = this;
 
-  aq.each(plan.wires, (wire) => {
+  aq.each(plan.wires, wire => {
     if ( wire.to == fv ) {
-      wire.from_op.routing[wire.from.routing] = sid;
-      wire.from_op.update_cost();
-      aq.each(wire.from_op.field_values,(fv) => {
-        plan.propagate_down(fv,sid);
+      wire.from_op.routing[wire.from.routing] = sid; 
+      if ( wire.from.role == 'output' ) {
+        wire.from_op.instantiate(plan,wire.from,sid)
+      }
+      aq.each(wire.from_op.field_values, subfv => {
+        if ( wire.from.route_compatible(subfv) ) {
+          plan.propagate_down(subfv,sid);
+        }
       })
     }
   });
@@ -188,18 +192,18 @@ AQ.Plan.record_methods.propagate_down = function(fv,sid) {
 
 AQ.Plan.record_methods.propagate_up = function(op,fv,sid) {
 
-  var plan = this,
-      routing = fv.routing;
+  var plan = this;
 
-  aq.each(op.field_values,(fv) => {
-    if ( fv.routing == routing ) {
-      aq.each(plan.wires, (wire) => {
-        if ( wire.from == fv ) {
+  aq.each(op.field_values, other_fv => {
+    if ( fv.route_compatible(other_fv) ) {
+      aq.each(plan.wires, wire => {
+        if ( wire.from == other_fv ) {
           wire.to_op.routing[wire.to.routing] = sid;
           wire.to.sample_identifier = sid;
-          wire.to_op.update_cost();
-          aq.each(wire.to_op.field_values,(to_fv) => {
-            plan.propagate_up(wire.to_op,to_fv,sid)
+          aq.each(wire.to_op.field_values, to_fv => {
+            if ( to_fv.route_compatible(wire.to) ) {
+              plan.propagate_up(wire.to_op,to_fv,sid)
+            }
           })
         }
       })
@@ -211,8 +215,17 @@ AQ.Plan.record_methods.propagate_up = function(op,fv,sid) {
 }
 
 AQ.Plan.record_methods.propagate = function(op,fv,sid) {
-  return this.propagate_down(fv,sid)
-             .propagate_up(op,fv,sid);
+
+  aq.each(op.field_values,io => {
+    if ( fv.route_compatible(io) ) {
+      this.propagate_down(io,sid)
+    }  
+  })
+
+  this.propagate_up(op,fv,sid);
+
+  return this;
+
 }
 
 AQ.Plan.record_methods.operations_from_wires = function() {

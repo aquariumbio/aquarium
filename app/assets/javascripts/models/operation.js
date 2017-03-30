@@ -181,3 +181,28 @@ AQ.Operation.record_methods.reload = function() {
 
 AQ.Operation.getter(AQ.Job,"job");
 
+AQ.Operation.record_methods.instantiate = function(plan,field_value,sid) {
+
+  var operation = this,
+      sample_id = AQ.id_from(sid); 
+
+  AQ.Sample.where({id: sample_id}, {methods: ["field_values"]}).then(samples => {
+
+    if ( samples.length == 1 ) {
+      var sample = samples[0];
+      aq.each(sample.field_values, sfv => {
+        aq.each(operation.field_values, ofv => {
+          if ( ofv != field_value && sfv.name == ofv.name && sfv.child_sample_id ) {
+            AQ.Sample.find(sfv.child_sample_id).then(linked_sample => {
+              operation.routing[ofv.routing] = linked_sample.identifier;
+              plan.propagate_down(ofv,linked_sample.identifier);
+              AQ.update();
+            })
+          }
+        })
+      });
+    }
+  });
+
+}
+

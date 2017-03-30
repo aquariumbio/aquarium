@@ -40,5 +40,10 @@ AQ.FieldValue.record_methods.reload = function() {
     fv.recompute_getter("item");
   });
 
+}
 
+AQ.FieldValue.record_methods.route_compatible = function(other_fv) {
+  var fv = this;
+  return ( !other_fv.array && !fv.array && other_fv.routing == fv.routing ) ||
+         (  other_fv.array &&  fv.array && other_fv.sample_identifier == fv.sample_identifier );
 }

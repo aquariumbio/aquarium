@@ -149,11 +149,6 @@
       });      
     }
 
-    // $scope.more_plans = function(dir) {
-    //   var o = $scope.plan_offset + 15 * dir; 
-    //   return o >= 0 && o < AQ.Plan.num_plans;
-    // }
-
     $scope.choose_default_part = function(fv,item) {
       if ( item.collection ) {
       // used in _field_value_editor.html.erb to initialized collection choice
@@ -170,8 +165,6 @@
 
     $scope.add_wire = function(fv, op, pred) {
 
-      console.log("Adding wire to " + op.operation_type.name + " / " + fv.name )
-
       var preop = operation = AQ.Operation.record({
         routing: {},
         form: { input: {}, output: {} }
@@ -181,6 +174,12 @@
 
       $scope.plan.remove_wires_to(op,fv);
       $scope.plan.wire(preop,preop_output,op,fv);
+
+      if ( fv.field_type.array ) {
+        $scope.plan.propagate(op,fv,fv.sample_identifier);
+      } else {
+        $scope.plan.propagate(op,fv,op.routing[fv.routing])
+      }
 
     }
 

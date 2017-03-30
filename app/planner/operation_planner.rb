@@ -11,13 +11,17 @@ module OperationPlanner
 
   def ready?
 
+    @@ready_errors ||= []
+
     operation_type.inputs.each do |i|
 
       input_list = inputs.select { |j| j.name == i.name }
 
       if input_list.empty? # && !i.array # arrays need to have at least one element (for now)
+        @@ready_errors << "#{operation_type.name}>#{i.name}: Arrays should have at least one element."
         return false
       elsif on_the_fly
+        @@ready_errors << "#{operation_type.name}>#{i.name}: Input is on the fly."
         return false
       elsif input_list[0].field_type.ftype != 'sample'
         return true
@@ -26,11 +30,18 @@ module OperationPlanner
         input_list.each do |j|
           if ! j.predecessors.empty?
             j.predecessors.each do |pred|
-              if ! ( pred.operation.status == 'primed' || pred.operation.status == 'done' || pred.operation.status == 'unplanned' )
+              if ! ( pred.operation.status == 'primed' || 
+                     pred.operation.status == 'done' || 
+                     pred.operation.status == 'unplanned' ||
+                     pred.operation.status == 'planning' )
+                @@ready_errors << "#{operation_type.name}>#{i.name}: " + 
+                                 "Predecessor '#{pred.operation.operation_type.name}' " + 
+                                 "has status #{pred.operation.status}."
                 return false
               end
             end
           elsif ! j.satisfied_by_environment
+            @@ready_errors << "#{operation_type.name}>#{i.name}: no available items."
             return false
           end
         end
@@ -67,15 +78,17 @@ module OperationPlanner
 
   def issues
 
+    @@ready_errors ||= []
     issues = []
 
     recurse do |op|
-      if op.status == "planning" && op.leaf? && !op.ready?
-        issues << { id: op.id, leaf: true, msg: "Operation #{op.operation_type.name} not ready." }
+      ready = op.ready?
+      if op.status == "planning" && op.leaf? && !ready
+        issues << "Operation '#{op.operation_type.name}' is not ready (#{ready}). #{@@ready_errors.join(' ')}"
       elsif op.status == "planning" && op.undetermined_inputs?
-        issues << { id: op.id, leaf: op.ready?, msg: "Operation #{op.operation_type.name} has unspecified inputs." }
+        issues << "Operation '#{op.operation_type.name}' has unspecified inputs."
       elsif op.has_no_stock_or_method
-        issues << { id: op.id, leaf: op.ready?, msg: "No way to make at least one input of operation #{op.operation_type.name}."}
+        issues << "No way to make at least one input of operation '#{op.operation_type.name}'."
       end
     end
 
