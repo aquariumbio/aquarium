@@ -31,6 +31,7 @@ AQ.Record = function(model,data) {
   }
 
   for ( var method_name in model.record_getters ) {
+
     Object.defineProperty(
       record, 
       method_name, 
@@ -39,11 +40,12 @@ AQ.Record = function(model,data) {
         configurable: true 
       } 
     );
+
   }
 
   if ( data ) {
     record.init(data);
-  }
+  } 
 
   record.rid = AQ.next_record_id++;
 
@@ -52,10 +54,12 @@ AQ.Record = function(model,data) {
 AQ.Record.prototype.recompute_getter = function(gname) {
   delete this["_"+gname];
   Object.defineProperty(this,gname,{get: this.model.record_getters[gname], configurable: true});
+  return this[gname];
 }
 
 AQ.Record.prototype.init = function(data) {
   for ( var key in data ) {
+    delete this[key]
     this[key] = data[key];
   }
   return this;
