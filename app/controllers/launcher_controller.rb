@@ -49,7 +49,7 @@ class LauncherController < ApplicationController
       map_id fv[:rid], field_value.id
 
       unless field_value.errors.empty?
-        raise field_value.errors.full_messages.join(", ")    
+        raise ot.name + ": " + field_value.errors.full_messages.join(", ") + "field value: #{field_value.inspect}"
       end
 
     end

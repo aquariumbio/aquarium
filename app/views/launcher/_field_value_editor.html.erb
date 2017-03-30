@@ -3,7 +3,10 @@
   <md-content class="field-value-editor" 
     ng-if="mode=='new'">
 
-    <div class="md-title title">{{current_fv.name}}</div>
+    <div class="title">
+      <h1 class="md-title">{{current_operation.operation_type.name}}</h1>
+      <h1 class="md-subhead">{{current_fv.name}} ({{current_fv.role}})</h1>
+    </div>
 
       <md-subheader class="md-no-sticky">
         Container Type
@@ -101,11 +104,11 @@
       </md-subheader>
 
       <md-list class="md-compact-list">
-        <md-list-item ng-repeat="pred in current_fv.predecessors">
+        <md-list-item ng-repeat="pred in current_fv.predecessors" ng-if="pred.operation_type.id != current_operation.operation_type.id">
           <p><b>{{pred.operation_type.name}}</b></p>
           <md-button class="md-raised md-primary md-secondary" ng-click="add_wire(current_fv,current_operation,pred)">
               <md-tooltip md-direction="bottom">
-                Use {{pred.operation_type.name}} to produce {{current_fv.name}}
+                Use {{pred.operation_type.name}} from {{pred.operation_type.category}} to produce {{current_fv.name}}
               </md-tooltip>
               Add
           </md-button>

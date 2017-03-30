@@ -12,12 +12,14 @@
                                      function (  $scope,   $http,   $attrs,   $cookies ) {
 
     $scope.add_io = function(role) {
-      $scope.current_ot.field_types.push({
-        role: role,
-        ftype: 'sample',
-        name: "New " + role,
-        allowable_field_types: []
-      })
+      $scope.current_ot.field_types.push(
+        AQ.FieldType.record({
+          role: role,
+          ftype: 'sample',
+          name: "New " + role,
+          allowable_field_types: []
+        })
+      )
     }
 
     $scope.add_parameter = function(role) {

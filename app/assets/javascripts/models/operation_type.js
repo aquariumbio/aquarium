@@ -9,9 +9,9 @@ AQ.OperationType.compute_categories = function(ots) {
 
 }
 
-AQ.OperationType.all = function() {
+AQ.OperationType.all = function(rest) {
 
-  return this.super('all').then(
+  return this.super('all',rest).then(
     (ots) => {
       this.compute_categories(ots);
       return ots;
@@ -151,6 +151,8 @@ AQ.OperationType.record_getters.precondition = function() {
 }
 
 AQ.OperationType.record_getters.field_types = function() {
+
+  console.log("Field types")
   
   var ot = this;
   delete ot.field_types;
@@ -163,18 +165,17 @@ AQ.OperationType.record_getters.field_types = function() {
     AQ.update();
   });
 
+  return ot.field_types;
+
 }
 
 AQ.OperationType.record_getters.protocol_versions = function() {
-
-  console.log("protocol_versions")
 
   var ot = this;
   delete ot.protocol_versions;
   ot.protocol_versions = [];
 
   AQ.Code.where({parent_class: "OperationType", parent_id: ot.id, name: 'protocol'}).then(codes => {
-    console.log(codes)
     ot.protocol_versions = codes.reverse();
     AQ.update();
   });

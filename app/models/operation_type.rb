@@ -218,6 +218,8 @@ class OperationType < ActiveRecord::Base
       oldft.routing = newft[:routing]
       oldft.array = newft[:array]
       oldft.part = newft[:part]
+      oldft.preferred_operation_type_id = newft[:preferred_operation_type_id]   
+      oldft.preferred_field_type_id = newft[:preferred_field_type_id]          
 
       keepers = []
 

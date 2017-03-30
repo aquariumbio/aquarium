@@ -5,8 +5,11 @@ class FieldType < ActiveRecord::Base
   belongs_to :sample_type
   has_many :allowable_field_types, dependent: :destroy
   has_many :field_values
+  has_one :preferred_operation_type
+  has_one :preferred_field_type
 
   attr_accessible :parent_id, :array, :choices, :name, :required, :ftype, :role, :part, :routing
+  attr_accessible :preferred_operation_type_id, :preferred_field_type_id
 
   validates :name, presence: true
   validates :ftype, presence: true  

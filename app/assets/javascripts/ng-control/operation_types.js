@@ -40,8 +40,10 @@
       }
     }
 
-    AQ.OperationType.all().then(operation_types => {
+    AQ.OperationType.all({methods: ["field_types"]}).then(operation_types => {
       $scope.operation_types = operation_types;
+      aq.each($scope.operation_types,ot => ot.upgrade_field_types());
+      AQ.operation_types = $scope.operation_types
       if ( $cookies.getObject("DeveloperCurrentOperationTypeId") ) {
         var ots = aq.where($scope.operation_types,ot => ot.id == $cookies.getObject("DeveloperCurrentOperationTypeId") );
         if  ( ots.length == 1 ) {
@@ -120,8 +122,9 @@
               console.log(response.data.errors);
             } else {
               var i = $scope.operation_types.indexOf(ot);
-              $scope.operation_types[i] = response.data;
-              $scope.current_ot = response.data;
+              $scope.operation_types[i] = AQ.OperationType.record(response.data);
+              $scope.current_ot = $scope.operation_types[i];
+              $scope.current_ot.upgrade_field_types()
               make_categories();
               $scope.current_category = $scope.current_ot.category;
               $cookies.putObject("DeveloperCurrentCategory", $scope.current_ot.category);        
@@ -134,8 +137,9 @@
               alert ( "Could not update operation type definition: " + response.data.errors[0] );
               console.log(response.data);
             } else {            
-              $scope.operation_types[i] = response.data;            
-              $scope.current_ot = response.data;  
+              $scope.operation_types[i] = AQ.OperationType.record(response.data);          
+              $scope.current_ot = $scope.operation_types[i]
+              $scope.current_ot.upgrade_field_types() 
               make_categories();
               $scope.current_category = $scope.current_ot.category;
               $cookies.putObject("DeveloperCurrentOperationTypeId", $scope.current_ot.id);

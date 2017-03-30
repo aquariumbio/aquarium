@@ -98,6 +98,7 @@ module Bioturk
         Parameter.count
         DataAssociation.count
         Upload.count
+        Operation.count
         VirtualOperation.count
     end
 

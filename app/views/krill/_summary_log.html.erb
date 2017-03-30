@@ -6,11 +6,19 @@
 <div class='row-fluid' id='log-title-box' style='position: relative'>
 
   <div class='span7'>
-    <h1 class='log-h'><span style='color: #888'>Job <%= @job.id %> :</span> <%= @job.path.split('/').last %></h1>
+    <h1 class='log-h'><span style='color: #888'>Job <%= @job.id %> :</span>
+       <% if @job.operations.length > 0 %>
+         <%= @job.operations[0].operation_type.name %>
+       <% else %>
+         <%= @job.path.split('/').last %>
+       <% end %>
+    </h1>
     <p>
-      Full Path: <a href='/jobs/summary?path=<%= @job.path %>'><%= @job.path %></a> ( ...
+      <% if @job.operations.length == 0 %>
+        Full Path: <a href='/jobs/summary?path=<%= @job.path %>'><%= @job.path %></a> ( ...
                         <a href='/jobs/summary?path=<%= @job.path %>&sha=<%= @job.sha %>'><%= @job.sha ? @job.sha[-10,10] : "--" %></a> )
                         <%= render partial: '/posts/discussion', locals: { topic: protocol, link: "Discuss Protocol" } %>
+      <% end %>
       Submitted by <a href='/users/<%= @submitter.id %>'><%= @submitter.login %></a>
       for group <a href='/groups/<%= @group.id %>'><%= @group.name %></a>
       <% if @performer %>

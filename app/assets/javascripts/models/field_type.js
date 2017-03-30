@@ -65,3 +65,32 @@ AQ.FieldType.record_getters.choices_array = function() {
   return ft.choices_array;
 
 }
+
+AQ.FieldType.record_getters.predecessors = function() {
+
+  var ft = this;
+  var preds = [];
+
+  delete ft.predecessors;
+
+  aq.each(AQ.operation_types, ot => {
+    aq.each(ot.field_types, other_ft => {
+      if ( other_ft.role == 'output' ) {
+        aq.each(ft.allowable_field_types, aft => {
+          aq.each(other_ft.allowable_field_types, other_aft => {
+            if ( aft.sample_type_id == other_aft.sample_type_id &&
+                 aft.object_type_id == other_aft.object_type_id && 
+                 Number(ft.part) == Number(other_ft.part) ) { // Note, Number is used to compare null and false
+              preds.push({operation_type: ot, field_type: other_ft});
+            }          
+          });
+        });
+      }
+    });
+  });
+
+  ft.predecessors = preds;
+
+  return preds;
+
+}
