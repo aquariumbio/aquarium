@@ -7,8 +7,9 @@ AQ.Base = function(model) {
 }
 
 AQ.Base.prototype.super = function(name) {
-  var base = this;
-  return base.__proto__[name].apply(base,arguments);
+  var base = this, args = [];
+  for (var i=0;i<arguments.length-1;i++) args[i]=arguments[i+1];
+  return base.__proto__[name].apply(base,args);
 }
 
 AQ.Base.prototype.record = function(extras) {
@@ -62,8 +63,8 @@ AQ.Base.prototype.array_query = function(method,args,rest) {
 
 }
 
-AQ.Base.prototype.all = function() {
-  return this.array_query('all',[]);
+AQ.Base.prototype.all = function(rest={}) {
+  return this.array_query('all',[],rest);
 }
 
 AQ.Base.prototype.where = function(criteria,methods={}) {
