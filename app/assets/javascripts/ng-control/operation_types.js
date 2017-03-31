@@ -43,7 +43,7 @@
     AQ.OperationType.all({methods: ["field_types"]}).then(operation_types => {
       $scope.operation_types = operation_types;
       aq.each($scope.operation_types,ot => ot.upgrade_field_types());
-      AQ.operation_types = $scope.operation_types
+      AQ.operation_types = $scope.operation_types;
       if ( $cookies.getObject("DeveloperCurrentOperationTypeId") ) {
         var ots = aq.where($scope.operation_types,ot => ot.id == $cookies.getObject("DeveloperCurrentOperationTypeId") );
         if  ( ots.length == 1 ) {
@@ -56,6 +56,7 @@
       }
       make_categories();
       $scope.initialized = true;      
+      $scope.$apply();
     });
 
     $http.get('/object_types.json').then(function(response) {
