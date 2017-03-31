@@ -196,6 +196,7 @@ AQ.Operation.record_methods.instantiate = function(plan,field_value,sid) {
             AQ.Sample.find(sfv.child_sample_id).then(linked_sample => {
               operation.routing[ofv.routing] = linked_sample.identifier;
               plan.propagate_down(ofv,linked_sample.identifier);
+              ofv.find_items(linked_sample.identifier);
               AQ.update();
             })
           }

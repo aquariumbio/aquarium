@@ -47,3 +47,19 @@ AQ.FieldValue.record_methods.route_compatible = function(other_fv) {
   return ( !other_fv.array && !fv.array && other_fv.routing == fv.routing ) ||
          (  other_fv.array &&  fv.array && other_fv.sample_identifier == fv.sample_identifier );
 }
+
+AQ.FieldValue.record_methods.find_items = function(sid) {
+
+  var fv = this;
+
+  AQ.items_for(sid,fv.aft.object_type_id).then( items => { 
+    if ( items.length > 0 ) {                      
+      fv.items = items;
+      fv.items[0].selected = true;
+      fv.selected_item = items[0];
+      fv.sid = sid;
+      AQ.update();
+    }
+  });
+
+}

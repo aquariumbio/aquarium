@@ -45,15 +45,7 @@
             var aft = op.form[fv.role][fv.name].aft;
             if ( aft.object_type_id ) {
               fv.clear();
-              AQ.items_for(sid,aft.object_type_id).then((items) => { 
-                if ( items.length > 0 ) {                      
-                  fv.items = items;
-                  fv.items[0].selected = true;
-                  fv.selected_item = items[0];
-                  fv.sid = sid;
-                  $scope.$apply();
-                }
-              });
+              fv.find_items(sid);
             }               
 
           } else {
@@ -61,23 +53,13 @@
             route[ft.routing] = ui.item.value; // Updates other sample ids with same routing
 
             op.each_field((field_type,field_value) => {
-
               if ( field_type.routing == fv.routing && !field_type.array ) {
                 var aft = op.form[field_value.role][field_value.name].aft;
                 if ( aft.object_type_id ) {
                   field_value.clear();
-                  AQ.items_for(sid,aft.object_type_id).then((items) => { 
-                    if ( items.length > 0 ) {                      
-                      field_value.items = items;
-                      field_value.items[0].selected = true;
-                      field_value.selected_item = items[0];
-                      field_value.sid = sid;
-                      $scope.$apply();
-                    }
-                  });
+                  field_value.find_items(sid);
                 }               
               }
-
             });
 
           }
