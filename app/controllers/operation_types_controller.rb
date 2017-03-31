@@ -301,7 +301,7 @@ class OperationTypesController < ApplicationController
     begin 
       
       ots = params[:operation_types].collect { |x|
-        OperationType.import(x.merge(category: "Recent Imports", deployed: false))
+        OperationType.import(x.merge(deployed: false))
       }
 
       render json: { 
