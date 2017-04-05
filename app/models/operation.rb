@@ -189,9 +189,13 @@ class Operation < ActiveRecord::Base
     end
   end
 
-  def self.step 
+  def self.step ops=nil
 
-    Operation.where(status: "waiting").each do |op|
+    if !ops
+      ops = Operation.where(status: "waiting")
+    end
+
+    ops.each do |op|
       begin
         if op.ready?
           op.status = "pending"
@@ -202,7 +206,7 @@ class Operation < ActiveRecord::Base
       end
     end
 
-  end 
+  end
 
   def nominal_cost
 

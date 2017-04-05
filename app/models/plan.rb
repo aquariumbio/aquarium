@@ -143,4 +143,74 @@ class Plan < ActiveRecord::Base
 
   end
 
+  def wires
+
+    fvs = []
+
+    op_ids = operations.collect { |op| op.id }
+    FieldValue.where(parent_class: "Operation", parent_id: op_ids).each do |fv|
+      fvs << fv.id
+    end
+
+    Wire.where(from_id: fvs).where(to_id: fvs).uniq
+
+  end
+
+  def relaunch
+
+    fv_maps = []
+
+    # Make new plan
+    newplan = Plan.new user_id: user_id
+    newplan.save
+
+    # Make new operations from old ones
+    operations.each do |op|
+      newop = op.operation_type.operations.create status: 'planning', user_id: op.user_id
+      op.field_values.each do |fv|
+        newfv = FieldValue.new({
+          name: fv.name,
+          child_sample_id: fv.child_sample_id,
+          value: fv.value,
+          role: fv.role,
+          field_type_id: fv.field_type_id,
+          allowable_field_type_id: fv.allowable_field_type_id,
+          parent_class: "Operation",
+          parent_id: newop.id
+        })
+        newfv.save
+        fv_maps[fv.id] = newfv.id
+      end
+      newplan.plan_associations.create operation_id: newop.id
+    end
+
+    wires.each do |wire|
+      newwire = Wire.new from_id: fv_maps[wire.from_id] , to_id: fv_maps[wire.to_id]
+      newwire.save
+    end
+
+    newplan
+
+  end
+
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

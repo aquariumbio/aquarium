@@ -11,6 +11,7 @@ class FieldValue < ActiveRecord::Base
 
   attr_accessible :name, :child_item_id, :child_sample_id, :value, :role
   attr_accessible :field_type_id, :item, :row, :column, :allowable_field_type_id
+  attr_accessible :parent_class, :parent_id
 
   validate :valid
 

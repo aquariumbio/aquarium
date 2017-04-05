@@ -214,7 +214,7 @@ class PlansController < ApplicationController
 
     end # type_ids.each
 
-    Operation.step
+    Operation.step(plan.operations.select { |op| op.status == "waiting" })
 
     render json: { errors: errors }
 

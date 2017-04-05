@@ -11,6 +11,7 @@ Bioturk::Application.routes.draw do
   post '/launcher/submit',                       to: 'launcher#submit'  
   get '/launcher/plans',                         to: 'launcher#plans'  
   get '/launcher',                               to: 'launcher#index'
+  get '/launcher/:id/relaunch',                  to: 'launcher#relaunch'  
 
   get '/plans/:pid/select/:oid',                 to: 'plans#select'
   get '/plans/start/:id',                        to: 'plans#start'

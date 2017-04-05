@@ -9,7 +9,6 @@ AQ.Plan.record_methods.upgrade = function() {
     return operation;
   });
   plan.open = true;
-  plan.operations[0].open = true;
   return plan;
 }
 
@@ -280,4 +279,20 @@ AQ.Plan.record_methods.debug = function() {
 
   });
   
+}
+
+AQ.Plan.record_methods.relaunch = function() {
+
+  var plan = this;
+
+  return new Promise(function(resolve,reject) {
+    AQ.get("/launcher/" + plan.id + "/relaunch").then(
+      response => {
+        var p = AQ.Plan.record(response.data.plan).upgrade();
+        resolve(p,response.data.issues)
+      },
+      response => reject(null,response.data.issues)
+    )
+  });
+
 }

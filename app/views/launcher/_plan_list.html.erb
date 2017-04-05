@@ -27,11 +27,14 @@
       <div flex="20" class='no-wrap left-pad' ng-if="plan.open">
         <md-button class="md-small md-raised" ng-click="plan.reload()">Reload</md-button>
         <md-button class="md-small md-raised" ng-click="plan.cancel('Canceled via user interface')">Cancel</md-button> 
-      <md-button 
-        class='md-small md-raised' 
-        ng-disabled="plan.debugging"
-        ng-click="plan.debug()">Debug</md-button>
-
+        <md-button 
+          class='md-small md-raised' 
+          ng-disabled="plan.debugging"
+          ng-click="plan.debug()">Debug</md-button>
+        <md-button 
+          class='md-small md-raised' 
+          ng-disabled="plan.relaunching"
+          ng-click="relaunch(plan)">{{plan.relaunching ? 'Copying' : 'Copy'}}</md-button>
       </div>
 
       <div flex="10" class='no-wrap left-pad'>

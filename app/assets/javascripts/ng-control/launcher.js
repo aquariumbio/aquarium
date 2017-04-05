@@ -126,6 +126,21 @@
       });
     }
 
+    $scope.relaunch = function(plan) {
+
+      plan.relaunching = true;
+
+      plan.relaunch().then( (newplan,issues) => {
+        newplan.link_operation_types($scope.operation_types);
+        $scope.plans.unshift(newplan);
+        newplan.open = true;
+        plan.open = false;
+        delete plan.relaunching;
+        $scope.$apply();
+      }).catch( ()=> {console.log("oops")});
+
+    }
+
     $scope.op_mode = function(op,m) {
       var c = "btn btn-mini";
       if ( op.mode == m ) {
