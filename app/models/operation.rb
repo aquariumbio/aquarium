@@ -192,7 +192,7 @@ class Operation < ActiveRecord::Base
   def self.step ops=nil
 
     if !ops
-      ops = Operation.where(status: "waiting")
+      ops = Operation.includes(:operation_type).where(status: "waiting")
     end
 
     ops.each do |op|

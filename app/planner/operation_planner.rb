@@ -9,48 +9,73 @@ module OperationPlanner
     end
   end
 
+  def predecessors_aux i, wires, pred_outputs, predecessors
+
+    preds = []
+
+    wires.select { |w| w.to_id == i.id }.each do |wire|
+      pred_outputs.select { |o| o.id == wire.from_id }.each do |output|
+        predecessors.select { |p| p.id == output.parent_id }.each do |pred|
+          preds << pred
+        end
+      end
+    end
+
+    preds
+
+  end
+
   def ready?
 
     @@ready_errors ||= []
 
-    operation_type.inputs.each do |i|
+    if on_the_fly
 
-      input_list = inputs.select { |j| j.name == i.name }
+      return false
 
-      if input_list.empty? # && !i.array # arrays need to have at least one element (for now)
-        @@ready_errors << "#{operation_type.name}>#{i.name}: Arrays should have at least one element."
-        return false
-      elsif on_the_fly
-        @@ready_errors << "#{operation_type.name}>#{i.name}: Input is on the fly."
-        return false
-      elsif input_list[0].field_type.ftype != 'sample'
-        return true
-      else
+    else
 
-        input_list.each do |j|
-          if ! j.predecessors.empty?
-            j.predecessors.each do |pred|
-              if ! ( pred.operation.status == 'primed' || 
-                     pred.operation.status == 'done' || 
-                     pred.operation.status == 'unplanned' ||
-                     pred.operation.status == 'planning' )
-                @@ready_errors << "#{operation_type.name}>#{i.name}: " + 
-                                 "Predecessor '#{pred.operation.operation_type.name}' " + 
-                                 "has status #{pred.operation.status}."
+      inputs = FieldValue.includes(:field_type).where(parent_class: "Operation", parent_id: id, role: "input")
+      wires = Wire.where(to_id: inputs.collect { |fv| fv.id })
+      pred_outputs = FieldValue.where(id: wires.collect { |w| w.from_id })
+      predecessors = Operation.where(id: pred_outputs.collect { |o| o.parent_id })
+
+      inputs.each do |i|
+
+        if i.field_type.ftype == 'sample'
+
+          preds = predecessors_aux i, wires, pred_outputs, predecessors
+
+          if preds.length > 0
+
+            preds.each do |pred|
+
+              if ! ( pred.status == 'primed' || 
+                     pred.status == 'done' || 
+                     pred.status == 'unplanned' ||
+                     pred.status == 'planning' )
+                @@ready_errors << "Operation #{id} is waiting for operation #{pred.id} which has status #{pred.status}"
+                Rails.logger.info "Ready: #{@@ready_errors}"
                 return false
-              end
+              end            
+
             end
-          elsif ! j.satisfied_by_environment
-            @@ready_errors << "#{operation_type.name}>#{i.name}: no available items."
+
+          elsif !i.satisfied_by_environment
+
+            @@ready_errors << "No items in stock available for input '#{i.name}' of operation #{id}"
+            Rails.logger.info "Ready: #{@@ready_errors}"            
             return false
-          end
-        end
 
-      end
+          end #if
 
-    end
+        end #if 
 
-    return true
+      end # each
+
+      return true
+
+    end # if
 
   end
 

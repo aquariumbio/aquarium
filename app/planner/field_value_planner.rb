@@ -75,7 +75,7 @@ module FieldValuePlanner
 
         else
 
-          print "Checking whether input #{name} #{val.name} (#{object_type.name}) needs to be made ... "  
+          puts "Checking whether input #{name} #{val.name} (#{object_type.name}) needs to be made ... "  
 
           items = val.items.select { |i| !i.deleted? && i.object_type_id == object_type.id }
 
