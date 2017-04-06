@@ -52,8 +52,9 @@
       ot.test_results = null;
       ot.test_error = null;
       ot.running_test = true;
-      $http.post("/operation_types/test", ot).then(function(response) {
+      $http.post("/operation_types/test", ot.remove_predecessors()).then(function(response) {
         ot.running_test = false;
+        aq.each(ot.field_types, ft => ft.recompute_getter('predecessors'));        
         if ( response.data.error ) {
           ot.test_error = response.data.error.replace(/\(eval\):/g, "Line ");
         } else {
