@@ -182,6 +182,9 @@ class PlansController < ApplicationController
 
       error = nil
 
+      job.user_id = current_user.id
+      job.save
+
       begin
         manager = Krill::Manager.new job.id, true, "master", "master"
       rescue Exception => e
