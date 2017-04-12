@@ -252,6 +252,14 @@ op.input("X").val
 ```
 The 'val' method will return a value of the defined type for the parameter. 
 
+Paramters can be numbers, strings, or json. If the paramter is of type json then
+
+  op.input(“x”).val
+
+will return a Ruby object with the same structure as the json, and with symbols (not strings) for keys. Note that if the json does not parse, you will get an object of the form.
+
+  { error: “JSON parse error description”, original_value: “whatever you put as the input” }.
+
 Data Associations
 ===
 
