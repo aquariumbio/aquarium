@@ -172,8 +172,6 @@ class OperationType < ActiveRecord::Base
 
   def add_new_field_type newft
 
-    puts "ADDING NEW FIELD TYPE #{newft[:name]}/#{newft[:role]}"
-
     if newft[:allowable_field_types]
 
       sample_type_names = newft[:allowable_field_types].collect { |aft| 

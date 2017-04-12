@@ -35,6 +35,8 @@ module OperationTypeRandom
             op.set_property ft.name, ft.choices.split(',').sample, ft.role, true, nil
           elsif ft.type == "number"
             op.set_property ft.name, rand(100), ft.role, true, nil
+          elsif ft.ftype == "json"
+            op.set_property ft.name, "{ \"message\": \"random json parameters are hard to generate\" }", ft.role, true, nil            
           else
             op.set_property(ft.name, ["Lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit" ].sample, ft.role, true, nil)
           end          

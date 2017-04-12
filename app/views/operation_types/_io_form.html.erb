@@ -9,7 +9,11 @@
         </div>
         <div class="span5">
           <label>Choices (Comma separated. Leave blank if unrestricted)</label>
-          <input type="text" ng-model="io.choices" class="input-fit" ng-change="change(current_ot)">
+          <input type="text" 
+                 ng-model="io.choices" 
+                 class="input-fit" 
+                 ng-disabled="io.ftype == 'json'"
+                 ng-change="change(current_ot)">
         </div>      
         <div class="span2">
           <form>
@@ -19,6 +23,9 @@
           <label>
             <input type='radio' value="string" ng-model="io.ftype" ng-change="change(current_ot)"> String
           </label>
+         <label>
+            <input type='radio' value="json" ng-model="io.ftype" ng-change="change(current_ot)"> JSON
+          </label>          
           </form>
         </div>       
         <div class="span1">

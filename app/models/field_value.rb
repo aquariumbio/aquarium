@@ -72,6 +72,12 @@ class FieldValue < ActiveRecord::Base
     case ft.ftype
     when 'string', 'url'
       return self.value
+    when 'json'
+      begin
+        return JSON.parse self.value, :symbolize_names => true
+      rescue Exception => e
+        return { error: e, original_value: self.value }
+      end
     when 'number'
       return self.value.to_f
     when 'sample'

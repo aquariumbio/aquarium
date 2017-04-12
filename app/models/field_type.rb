@@ -14,7 +14,7 @@ class FieldType < ActiveRecord::Base
   validates :name, presence: true
   validates :ftype, presence: true  
 
-  validates_inclusion_of :ftype, :in => [ "string", "number", "url", "sample", "item" ]
+  validates_inclusion_of :ftype, :in => [ "string", "number", "url", "sample", "item", "json" ]
 
   def allowed? val
     case ftype

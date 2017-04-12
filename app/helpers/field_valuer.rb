@@ -15,7 +15,7 @@ module FieldValuer
 
     case ft.ftype 
 
-    when 'string', 'url'
+    when 'string', 'url', 'json'
       self.errors.add(:set_property,"#{val} is not a string") unless val.class == String
       fv.value = val
 
@@ -44,8 +44,6 @@ module FieldValuer
   def set_property name, val, role=nil, override_array=false, aft=nil
 
     ft = field_type name, role
-
-    puts "Setting property #{name}"
 
     unless ft
       self.errors.add(:no_such_property,"#{self.class} #{id} does not have a property named #{name} with role #{role}.")

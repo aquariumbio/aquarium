@@ -26,14 +26,22 @@
 
     <span class='io-name'> <b>{{fv.name}}</b></span>
 
-    <input ng-if="ft.choices_array.length == 0"
+    <input ng-if="ft.choices_array.length == 0 && ft.ftype != 'json'"
            type="string" 
            ng-model="fv.value"
            class="sample-only"
            placeholder="{{ft.ftype}}"
            ng-focus='io_blur()'>
+
+    <div ng-if="ft.ftype == 'json'">
+    <textarea 
+           ng-model="fv.value"
+           class='parameter-json'
+           placeholder="JSON"
+           ng-focus="io_blur()"></textarea>
+    </div> 
     
-    <div ng-if="ft.choices_array.length > 0" class='select-container'>
+    <div ng-if="ft.choices_array.length > 0  && ft.ftype != 'json'" class='select-container'>
       <select ng-model="fv.value"
               ng-focus='io_blur()'
               ng-options="choice for choice in ft.choices_array"></select>

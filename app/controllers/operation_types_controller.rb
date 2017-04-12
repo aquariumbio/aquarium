@@ -128,16 +128,43 @@ class OperationTypesController < ApplicationController
   end
 
   def random
+
     ops_json = []
-    ActiveRecord::Base.transaction do
-      ops = OperationType.find(params[:id]).random(params[:num].to_i)
-      render json: ops.as_json(methods: [ :field_values, :precondition_value ])
-      raise ActiveRecord::Rollback
+
+    begin
+
+      ActiveRecord::Base.transaction do
+
+        ops = OperationType.find(params[:id]).random(params[:num].to_i)
+
+        error = false
+
+        precondition_errors = ops.select do |op|
+          begin
+            op.precondition_value
+          rescue Exception => e
+            error = true
+          end
+        end
+
+        if !error
+          render json: ops.as_json(methods: [ :field_values, :precondition_value ])
+        else
+          render json: { error: "One or more preconditions could not be evaluated." }
+        end
+        raise ActiveRecord::Rollback
+
+      end
+
+    rescue Exception => e
+      render json: { error: e.to_s, backtrace: e.backtrace }
     end
     
   end
 
   def make_test_ops ot, tops
+
+    puts "MAKE TEST OPS"
 
     tops.collect do |test_op|
 
@@ -149,8 +176,10 @@ class OperationTypesController < ApplicationController
 
           if io.choices != "" && io.choices != nil
             op.set_property io.name, io.choices.split(',').sample, io.role, true, nil
-          elsif io.type == "number"
+          elsif io.ftype == "number"
             op.set_property io.name, rand(100), io.role, true, nil
+          elsif io.ftype == "json"
+            op.set_property io.name, "{ \"message\": \"random json parameters are hard to generate\" }", io.role, true, nil
           else
             op.set_property(io.name, ["Lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit" ].sample, io.role, true, nil)
           end
@@ -201,7 +230,11 @@ class OperationTypesController < ApplicationController
     ActiveRecord::Base.transaction do
 
       # (re)build the operations
-      ops = make_test_ops(OperationType.find(params[:id]), params[:test_operations])
+      if params[:test_operations]
+        ops = make_test_ops(OperationType.find(params[:id]), params[:test_operations])
+      else
+        ops = []
+      end
 
       plans = []
       ops.each do |op|

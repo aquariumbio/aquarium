@@ -21,8 +21,15 @@
       ot.randomizing = true;
 
       $http.get("/operation_types/" + ot.id + "/random/" + ot.batch_size).then(function(response) {
-        ot.randomizing = false;
-        ot.test_operations = response.data;
+        ot.randomizing = false;        
+        if ( response.data.error ) {
+          ot.test_error = response.data.error
+          if ( response.data.backtrace ) {
+            ot.test_error += response.data.backtrace[0]
+          }
+        } else {
+          ot.test_operations = response.data;
+        }
       });
 
     }
@@ -57,6 +64,7 @@
         aq.each(ot.field_types, ft => ft.recompute_getter('predecessors'));        
         if ( response.data.error ) {
           ot.test_error = response.data.error.replace(/\(eval\):/g, "Line ");
+          console.log(test_error);
         } else {
           ot.test_results = response.data;
           ot.test_results.job.backtrace = JSON.parse(ot.test_results.job.state);
