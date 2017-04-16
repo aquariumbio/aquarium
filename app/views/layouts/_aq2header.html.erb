@@ -1,0 +1,124 @@
+<div class="header not-scrollable">
+
+  <md-toolbar class="main-toolbar md-hue-25">
+
+    <div class="md-toolbar-tools">
+
+      <md-menu layout="row">
+
+        <div class='detail-menu clickable'
+             ng-click="openMenu($mdMenu, $event)">
+          <ng-md-icon icon="menu" size="30" aria-label="Menu"></ng-md-icon>
+        </div>
+
+        <md-menu-content width="4" class="scrollable" flex>
+
+          <md-menu-item>
+            <md-button href="/logs">Logs</md-button>
+          </md-menu-item>
+          <md-menu-item>
+            <md-button>Statistics</md-button>
+          </md-menu-item>          
+
+          <md-menu-divider></md-menu-divider>
+
+          <md-menu-item>
+            <md-button href="/signup">New User</md-button>
+          </md-menu-item>
+          <md-menu-item>
+            <md-button href="/password">Change a Password</md-button>
+          </md-menu-item>
+          <md-menu-item>
+            <md-button href="/users">Users</md-button>
+          </md-menu-item>
+          <md-menu-item>
+            <md-button href="/groups">Groups</md-button>
+          </md-menu-item>          
+
+          <md-menu-divider></md-menu-divider>
+
+          <md-menu-item>
+            <md-button href="/budgets">Budgets</md-button>
+          </md-menu-item>
+          <md-menu-item>
+            <md-button href="/invoices?all=true">Invoices</md-button>
+          </md-menu-item>
+          <md-menu-item>
+            <md-button href="/parameters">Parameters</md-button>
+          </md-menu-item>
+
+          <md-menu-divider></md-menu-divider>
+
+          <md-menu-item>
+            <md-button href="/sample_types">Sample Type Definitions</md-button>
+          </md-menu-item>
+          <md-menu-item>
+            <md-button href="/wizards">Location Wizards</md-button>
+          </md-menu-item>
+
+        </md-menu-content>
+
+      </md-menu> 
+
+      <div class="aq2-logo" layout="column" flex md-truncate>
+        <div class='top'>
+          <span class="aquarium">AQUARIUM</span>
+          <span class="version">v<%= Bioturk::Application.config.aquarium_version %></span>
+        </div>
+        <div class='bottom'>
+          <span class="instance"><%= Bioturk::Application.config.instance_name %>:</span>
+          <span class="mode"><%= Rails.env %></span>
+        </div>
+      </div>
+
+      <md-button aria-label="Planner">
+        <%= link_to "Planner", launcher_path %>
+      </md-button>
+
+      <md-button aria-label="Inventory">
+        <a href="/browser">Inventory</a>
+      </md-button>
+
+      <% if current_user && current_user.is_admin %>
+
+        <md-button aria-label="Manager">
+          <%= link_to "Manager", operations_path %>
+        </md-button>
+
+        <md-button aria-label="Manager">
+          <%= link_to "Developer", operation_types_path %>
+        </md-button>
+
+      <% end %>      
+
+      <md-menu> 
+
+        <md-button class="login"
+                   ng-click="openMenu($mdMenu, $event)" 
+                   aria-label="<%= current_user.login %>">
+          &#x25CF; <%= current_user.login %>          
+        </md-button>
+
+        <md-menu-content width="3" class="scrollable">
+          <md-menu-item>
+            <md-button href='/users/<%= current_user.id %>'>Profile</md-button>
+          </md-menu-item>
+          <md-menu-item>
+            <md-button href="/invoices">Invoices</md-button>
+          </md-menu-item>
+          <md-menu-item>
+            <md-button href="/users/<%= current_user.id %>/edit">Account Settings</md-button>
+          </md-menu-item>
+          <md-menu-divider></md-menu-divider>          
+          <md-menu-item>
+            <md-button href="/signout" data-method="delete">Signout</md-button>
+          </md-menu-item>         
+        </md-menu-content>
+
+      </md-menu> 
+
+    </div>
+
+  </md-toolbar>
+
+</div>

@@ -1,0 +1,140 @@
+.aq2 {
+
+  /*  ::-webkit-scrollbar {
+      width: 0px; 
+  }*/
+
+  min-width:100vw;
+  max-width: 100vw;
+
+  background: white;
+
+  .aq2-navigation {
+    position: relative;
+    min-height: calc(100vh - 44px);
+    max-height: calc(100vh - 44px);   
+  }
+
+  .site-sidenav {
+    background: #106CC8 !important;
+    color: white;
+    border-right: 1pt solid #aaa;
+  }
+
+  .site-sidenav md-content {
+    /*background: transparent;*/
+  }
+
+  .main-toolbar {
+
+    background-color: #106CC8;
+    background: -webkit-linear-gradient(#185694, #106cc8);
+    background: linear-gradient(#185694, #106cc8);
+
+    max-height: 44px !important;
+    min-height: 44px !important;
+
+    .aq2-logo {
+
+      .aquarium {
+        color: rgb(0,255,34);
+        font-size: 22pt;
+        font-weight: bold;
+        padding: 0;
+        margin: 0;
+        line-height: 20pt;
+        height: 20pt;
+      }
+
+      .version {
+        color: #308CE8;
+        margin: 0;
+        padding: 0;
+        font-size: 12pt;  
+        line-height: 10pt;
+        height: 10pt;
+      }
+
+      .instance {
+        color: #eee;
+        margin: 0;
+        font-size: 11pt;  
+        padding: 0;
+        margin: 0;
+        line-height: 10pt;
+        height: 10pt;
+      }
+
+      .mode {
+        color: #eee;
+        margin: 0;
+        font-size: 11pt; 
+        padding: 0;
+        margin: 0;
+        line-height: 10pt;
+        height: 10pt;
+      }
+
+      .top {
+
+      }
+
+      .bottom {
+        margin-top: -5px;
+      }
+
+    }
+
+    .login {
+      color: rgb(0,255,34);
+    }    
+
+    .detail-menu {
+      margin-right: 16px;
+      fill: #50ACFF;
+    }
+
+    .md-button {
+      a {
+        &:hover {
+          color: #eee;
+          text-decoration: none;
+        };
+      }
+    }
+
+  }
+
+  .page-specific-nav {
+    padding: 5px 5px 5px 8px;
+  }
+
+  .menu {
+    overflow-y: scroll;
+  }
+
+  .main {
+    padding: 10px; 
+    background: white;       
+  }
+
+  .specific-toolbar {
+    border-bottom: 1px solid #eee;
+    background: white;
+    color: #888;
+    max-width: 100%;
+    min-width: 100%;
+  }
+
+  .content-container {   
+  }
+
+  .left-margin {
+    margin-left: 10px !important;
+  }
+
+  .clickable {
+    cursor: pointer;
+  }
+
+}

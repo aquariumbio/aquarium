@@ -1,0 +1,114 @@
+<div layout='row' put-ng-controller-here>
+
+  <md-sidenav class="site-sidenav md-sidenav-left"
+              md-component-id="left" hide-print 
+              md-is-locked-open="true">
+
+    <div class="logo nav-header not-scrollable">
+
+      <div layout="row" layout-align="space-between center">
+      
+        <md-menu>
+
+          <span class='clickable'
+                ng-click="openMenu($mdMenu, $event)">
+            <ng-md-icon icon="menu" style="color:#555;" size="30" aria-label="Menu"></ng-md-icon>
+          </span>
+
+          <md-menu-content width="4" class="scrollable">
+            <md-menu-item>
+              <md-button ng-click="ctrl.redial($event)">
+                Redial
+              </md-button>
+            </md-menu-item>
+            <md-menu-item>
+              <md-button disabled="disabled" ng-click="ctrl.checkVoicemail()">
+                Check voicemail
+              </md-button>
+            </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+              <md-button ng-click="ctrl.toggleNotifications()">
+                Enable notifications
+              </md-button>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu> 
+
+        <div class="aquarium-logo md-heading">
+          <a ng-href="/">AQUARIUM</a>
+        </div>
+
+        <span class="aquarium-version">v
+          <%= Bioturk::Application.config.aquarium_version %>
+        </span>
+
+      </div>
+
+      <div class="lab-name md-title">
+        <%= Bioturk::Application.config.instance_name %>: 
+        <%= Rails.env %>
+      </div>
+      <div class="login md-body-2" layout='row'>
+        &#9679; <%= current_user.login %>
+      </div>
+    </div>
+
+    <md-content flex role="navigation" class='page-specific-nav scrollable'>
+
+      <p>Page navigation goes here. For example, in the planner, this is
+         where the field editor goes. In the inventory browser, this is
+         where the search box, filters, and project browser would be. </p>
+
+      <md-divider></md-divider>
+
+      <md-list class="menu">
+        <md-list-item ng-repeat="x in range(100)">
+          <div class="md-list-item-text">x is equal to {{x}}</div>
+        </md-list-item>
+      </md-list>
+
+    </md-content>
+
+  </md-sidenav>
+
+  <div layout="column" tabIndex="-1" flex>
+
+    <md-toolbar class="toolbar not-scrollable">
+
+      <div class="md-toolbar-tools">
+
+        <h2 flex md-truncate>
+          Page Name
+        </h2>
+
+        <md-button aria-label="Click">
+          One
+        </md-button>
+
+        <md-button aria-label="Click">
+          Two
+        </md-button>
+
+      </div>
+
+    </md-toolbar>
+
+    <md-content class='main scrollable'>
+
+       <h1 class='md-title'>Content Title Here</h1>
+
+       <%= render partial: 'lorum_ipsum' %>
+       <%= render partial: 'lorum_ipsum' %>
+
+    </md-content>
+
+  </div>
+
+</div>
+
+<!-- 
+<%= render layout: 'test' do |x| %>
+  <p>ERT <%= puts "SDFSDF #{x}"; x %></p>
+<% end %>
+ -->

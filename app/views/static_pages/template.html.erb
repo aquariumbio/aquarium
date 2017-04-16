@@ -1,0 +1,42 @@
+<!-- Various non-visible stuff like templates here. -->
+<script type="template"></script>
+
+
+<%= content_for :sidebar do %>
+
+  <h4>Tool specific tools go here.</h4>
+
+  <p>For example, in the planner, this is
+     where the field editor goes. In the inventory browser, this is
+     where the search box, filters, and project browser would be. </p>
+
+  <md-divider></md-divider>
+
+  <md-list class="menu">
+    <md-list-item ng-repeat="x in range(100)">
+      <div class="md-list-item-text">x is equal to {{x}}</div>
+    </md-list-item>
+  </md-list>
+
+<% end %>
+
+<%= content_for :specific_title do %>
+  Tool Details
+<% end %>
+
+<%= content_for :action1 do %>
+  <md-button aria-label="Click">
+    Action One
+  </md-button>
+<% end %>
+
+<%= content_for :action2 do %>
+  <md-button aria-label="Click">
+    Action Two
+  </md-button>
+<% end %>
+
+<%= content_for :main do %>
+asd
+<% end %>
+

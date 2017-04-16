@@ -17,6 +17,12 @@ class StaticPagesController < ApplicationController
   def about
   end
 
+  def template
+    respond_to do |format|
+      format.html { render layout: 'aq2' }
+    end    
+  end  
+
   def cost_report
     
     @report = TaskPrototype.cost_report

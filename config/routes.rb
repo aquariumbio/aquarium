@@ -220,6 +220,7 @@ Bioturk::Application.routes.draw do
   root to: 'static_pages#home'
 
   match '/',        to: 'static_pages#home'
+  match '/template',    to: 'static_pages#template'
 
   match '/help',    to: 'static_pages#help'
   match '/about',   to: 'static_pages#about'
