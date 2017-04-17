@@ -64,6 +64,7 @@
 
       $scope.current.ot = ot; 
       $scope.current.status = status;
+      delete ot.operations;
 
       var actual_status;
 

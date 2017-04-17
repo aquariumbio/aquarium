@@ -58,9 +58,11 @@
     <%= render partial: '/layouts/aq2header' %>
 
       <% if content_for? :controller %>
-        <div class="aq2-navigation" layout='row' ng-controller="<%= yield :controller %>">
+        <div class="aq2-navigation <%= yield :class %>" 
+             layout='row' 
+             ng-controller="<%= yield :controller %>">
       <% else %>
-        <div layout='row'>
+        <div layout='row' class="<%= yield :class %>">
       <% end %>
 
       <%= yield %>
@@ -99,7 +101,11 @@
 
             <% if content_for? :action3 %>
               <%= yield :action3 %>
-            <% end %>              
+            <% end %>    
+
+            <% if content_for? :action4 %>
+              <%= yield :action4 %>
+            <% end %>                        
 
           </div>
 

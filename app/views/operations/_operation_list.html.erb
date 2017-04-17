@@ -2,7 +2,7 @@
 
   <div class='oplist'>
 
-    <table class='table table-condensed'
+    <table class='table table-condensed oplist'
            ng-show="operations.length > 0">
 
       <tr>
@@ -48,14 +48,9 @@
 
     </table>
 
-    <table ng-if="operations.length == 0"
-           class='table table-fixed table-condensed'>
-      <tr>
-        <td>No operations</td>
-      </tr>
-    </table>
+    <h1 ng-if="operations.length == 0" class='md-title'>No operations</h1>
 
-    <span ng-if="!operations">Loading...</span>
+    <h1 ng-if="!operations" class='md-title'>Checking for operations...</h1>
 
   </div>
 

@@ -35,23 +35,46 @@
 
   .number-none {
     color: #eee;
+    cursor: pointer;
   }
 
   .number-some {
     color: black;
     font-weight: bold;
+    cursor: pointer;
   }
 
   .number-selected {
     background: yellow;
     outline: 1pt solid black;
+    cursor: pointer;
   }
 
   .capitalize {
      text-transform: capitalize;
   }  
 
+  .job {
+    border: 1pt solid #bbb;
+    .job-toolbar {
+      background: #80d8ff;
+      color: black;
+      min-height: 34px;
+      max-height: 34px;         
+    }
+    margin-bottom: 10px;
+  }
+
+  .oplist {
+    padding: 10px 10px 0 10px;
+    margin: 0;
+  }
+
   .status-table {
+
+    .operation-name {
+      width: 66%;
+    }
 
     tr:hover {
       background: white;
