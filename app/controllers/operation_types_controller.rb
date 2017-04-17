@@ -65,12 +65,14 @@ class OperationTypesController < ApplicationController
       ot = OperationType.find(params[:id])
       c = ot.code(params[:name])
       
-      if c
-        c = c.commit(params[:content])
-      else
-        c = ot.new_code(params[:name], params[:content])
+      unless params[:content][:no_edit]
+        if c
+          c = c.commit(params[:content])
+        else
+          c = ot.new_code(params[:name], params[:content])
+        end
       end
-
+      
       render json: c
 
     end
@@ -163,8 +165,6 @@ class OperationTypesController < ApplicationController
   end
 
   def make_test_ops ot, tops
-
-    puts "MAKE TEST OPS"
 
     tops.collect do |test_op|
 

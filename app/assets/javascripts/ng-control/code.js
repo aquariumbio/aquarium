@@ -22,14 +22,16 @@
     };
 
     $scope.save = function(ot,name) {
-      $http.post("/operation_types/code",{
-        id: ot.id,
-        name: name,
-        content: ot[name].content
-      }).then(function(response) {
-        ot[name] = response.data;
-        ot.recompute_getter('versions')
-      });
+      if ( !ot[name].no_edit ) {
+        $http.post("/operation_types/code",{
+          id: ot.id,
+          name: name,
+          content: ot[name].content
+        }).then(function(response) {
+          ot[name] = response.data;
+          ot.recompute_getter('versions')
+        });
+      }
     }
 
   }]);

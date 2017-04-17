@@ -36,22 +36,28 @@
 
     $scope.save_and_test = function(ot) {
 
-      $http.post("/operation_types/code", {
-        id: ot.id,
-        name: "protocol",
-        content: ot.protocol.content
-      }).then(function(response) {
-        
+      if ( !ot.protocol.no_edit ) {
+
         $http.post("/operation_types/code", {
           id: ot.id,
-          name: "precondition",
-          content: ot.precondition.content
+          name: "protocol",
+          content: ot.protocol.content
         }).then(function(response) {
-          ot.precondition.changed = false;
-          $scope.test(ot);
+          
+          if ( !ot.precondition.no_edit ) {
+            $http.post("/operation_types/code", {
+              id: ot.id,
+              name: "precondition",
+              content: ot.precondition.content
+            }).then(function(response) {
+              ot.precondition.changed = false;
+              $scope.test(ot);
+            });
+          }
+
         });
 
-      });
+      }
 
     }
 

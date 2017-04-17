@@ -31,14 +31,14 @@
     <a href="#"
             class="btn btn-warning"
             ng-click="test(current_ot)"
-            ng-if="!current_ot.running_test && !current_ot.changed && !current_ot.protocol.changed"            
+            ng-if="!current_ot.running_test && !current_ot.changed && !current_ot.protocol.changed && !current_ot.precondition.changed"            
             ng-disabled="!current_ot.id || !current_ot.test_operations || current_ot.test_operations.length == 0">
       Test
     </a>
 
     <button class="btn btn-warning"
             ng-click="save_and_test(current_ot)"
-            ng-if="!current_ot.running_test && ( current_ot.changed || current_ot.protocol.changed )"
+            ng-if="!current_ot.running_test && ( current_ot.changed || current_ot.protocol.changed || current_ot.precondition.changed )"
             ng-disabled="!current_ot.id || !current_ot.test_operations || current_ot.test_operations.length == 0">
       Save and Test
     </button>   

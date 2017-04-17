@@ -152,8 +152,6 @@ AQ.OperationType.record_getters.precondition = function() {
 }
 
 AQ.OperationType.record_getters.field_types = function() {
-
-  console.log("Field types")
   
   var ot = this;
   delete ot.field_types;
