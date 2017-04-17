@@ -20,7 +20,7 @@ class OperationsController < ApplicationController
     respond_to do |format|
       format.json { render json: Operation.where(status: [ 'pending', 'scheduled', 'running', 'primed' ])
                                           .as_json(methods: [:field_values, :plans, :precondition_value]) }
-      format.html { render layout: 'browser' }
+      format.html { render layout: 'aq2' }
     end
     
   end

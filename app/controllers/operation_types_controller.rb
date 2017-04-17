@@ -198,7 +198,11 @@ class OperationTypesController < ApplicationController
 
         else
 
-          fv = test_op[:field_values].select { |fv| fv[:name] == io.name && fv[:role] == io.role }[0]
+          puts "Considering #{io.name}, #{io.role}"
+          puts "test_op[:field_values] = #{test_op[:field_values].collect { |fv| fv[:name] }}"
+          fvlist = test_op[:field_values].select { |fv| fv[:name] == io.name && fv[:role] == io.role }
+          fv = fvlist[0]
+          puts "FV = #{fv}"
           aft = AllowableFieldType.find_by_id(fv[:allowable_field_type_id])
           actual_fv = op.set_property(fv[:name], Sample.find_by_id(fv[:child_sample_id]), fv[:role],true,aft)
           raise "Nil value Error: Could not set #{fv}" unless actual_fv
@@ -370,8 +374,16 @@ class OperationTypesController < ApplicationController
     puts "ops.length = #{ops.length}"
 
     pending = ops.select { |op| op.status == 'pending' }
-    pending_true = pending.select { |op| op.precondition_value }
-    pending_false = pending.reject { |op| op.precondition_value }
+
+    pending_true = []
+    pending_false = []
+    pending.each do |op|
+      if op.precondition_value
+        pending_true << op
+      else
+        pending_false << op
+      end
+    end
     
     s = ops.select { |op| op.status == 'scheduled' }.length
     r = ops.select { |op| op.status == 'running' }.length

@@ -1,101 +1,112 @@
 <% provide(:title, 'Manager') %>
 
-<div ng-app="aquarium" ng-controller="operationsCtrl as planner" class='operations'>
+<%= render partial: 'operation_list' %> 
 
-  <%= render partial: 'operation_list' %> <!-- used by <oplist> -->
+<%= content_for :class do %>operations<% end %>
 
-  <div class='two-column'>
+<%= content_for :controller do %>operationsCtrl as planner<% end %>
 
-    <div class='two-column-left-wide'>
+<%= content_for :sidebar do %>
 
-      <div class="two-column-control-wide" ng-if="status!='Ready'">
-        {{status}}
-      </div>
+  <h1 class='md-title'>Active Operations</h1>
 
-      <div class="two-column-control-wide" ng-if="status=='Ready'">
+  <table class='table table-condensed status-table'>
+    <tr>
+      <th class='operation-name'></th>
+      <th ng-repeat="status in [ 'Waiting', 'Pending', 'Scheduled', 'Running' ]"
+          class='rotate'>
+        <div><span>{{status}}</span></div>
+      </th>
+    </tr>
+    <tr ng-repeat="ot in operation_types | filter: show_operation_type()" ng-click="choose(ot)">
+      <td class="operation-name">{{ot.name}}</td>
+      <td ng-repeat="status in [ 'pending_false', 'pending_true', 'scheduled', 'running' ]"
+          ng-class="$parent.status_selector(ot,status)"
+          ng-click="$parent.select(ot,status)">
+          {{ot.numbers[status]}}
+      </td>
+    </tr>
+  </table>
 
-        <table class='table table-condensed status-table'>
-          <tr>
-            <th></th>
-            <th ng-repeat="status in [ 'Waiting', 'Pending', 'Scheduled', 'Running' ]"
-                class='rotate'>
-              <div><span>{{status}}</span></div>
-            </th>
-          </tr>
-          <tr ng-repeat="ot in operation_types | filter: show_operation_type()" ng-click="choose(ot)">
-            <td ng-class="op_type_class(ot)">{{ot.name}}</td>
-            <td ng-repeat="status in [ 'pending_false', 'pending_true', 'scheduled', 'running' ]"
-                ng-class="$parent.status_selector(ot,status)"
-                ng-click="$parent.select(ot,status)">
-                {{ot.numbers[status]}}
-            </td>
-          </tr>
-        </table>
+<% end %>
 
-      </div>
+<%= content_for :specific_title do %>
+  <div ng-if="current.ot">
+    {{current.ot.name}}: 
+    <span class='capitalize'>
+      {{
+        current.status == 'pending_false' ? 'Waiting' : 
+        current.status == 'pending_true' ? 'Pending' : current.status
+      }}
+    </span>
+  </div>
+<% end %>
 
-    </div>
- 
-    <div class='two-column-right-narrow'>
+<%= content_for :action1 do %>
+  <md-button aria-label="Schedule" 
+    ng-if="!current.ot.on_the_fly && current.status == 'pending_true'"
+    ng-click="batch(current.ot)">
+    Schedule
+  </md-button>
+<% end %>
 
-      <h4 ng-if="current.ot">
+<%= content_for :action2 do %>
+  <md-button aria-label="Click" 
+    ng-if="!current.ot.on_the_fly && current.status == 'pending_true'"
+    ng-click="choose(current.ot,'pending',true)">
+    All
+  </md-button>
+<% end %>
 
-        {{current.ot.name}}: 
+<%= content_for :action3 do %>
+  <md-button aria-label="Click" 
+    ng-if="!current.ot.on_the_fly && current.status == 'pending_true'"  
+    ng-click="choose(current.ot,'pending',false)">
+    None
+  </md-button>
+<% end %>
 
-        <span class='capitalize'>
-          {{
-            current.status == 'pending_false' ? 'Waiting' : 
-            current.status == 'pending_true' ? 'Pending' : current.status
-          }}
-        </span>
+<%= content_for :main do %>
 
-        <div ng-if="!current.ot.on_the_fly && current.status == 'pending_true'" class='pull-right launch-buttons'>
-          <a href="#" class='btn btn-mini btn-primary' ng-click="batch(current.ot)">Schedule</a>
-          <a href="#" class='btn btn-mini' ng-click="choose(current.ot,'pending',true)">All</a>
-          <a href="#" class='btn btn-mini' ng-click="choose(current.ot,'pending',false)">None</a>
-        </div>       
-            
-      </h4>
-   
-      <oplist ot="current.ot" 
-              operations="current.ot.operations" 
-              status="current.status"
-              ng-if="current.ot && current.status != 'scheduled'">
-      </oplist>
+  <oplist ot="current.ot" 
+          operations="current.ot.operations" 
+          status="current.status"
+          ng-if="current.ot && current.status != 'scheduled'">
+  </oplist>
 
-      <div ng-if="current.status == 'scheduled'">
+  <div ng-if="current.ot && current.status == 'scheduled'">
 
-        <div ng-repeat="job_id in jobs">
+    <div ng-repeat="job_id in jobs" class='job'>
 
-          <h5>
+      <md-toolbar class="job-toolbar">
+
+        <div class='md-toolbar-tools'>
+
+          <h2 flex md-truncate>
             Job <a href="/jobs/{{job_id}}">{{job_id}}</a>
-            <div class='pull-right launch-buttons'>
-              <a href="/krill/start?job={{job_id}}" 
-                 class='btn btn-mini btn-primary'>Run</a>
-              <a href="#" 
-                 class='btn btn-mini btn-warning' 
-                 ng-click="unschedule(current.ot,job_id)">Unschedule</a>
-              <a href="#" 
-                 class='btn btn-mini'
-                 ng-click="$parent.choose(current.ot,'scheduled',true,job_id)">All</a>
-              <a href="#" 
-                 class='btn btn-mini'
-                 ng-click="$parent.choose(current.ot,'scheduled',false,job_id)">None</a>
-            </div>    
-          </h5>
-
-          <oplist ot="current.ot" 
-                  operations="current.ot.operations"
-                  status="current.status" 
-                  jobid="job_id">
-          </oplist>
+          </h2>
+        
+          <md-button class='md-small' ng-href="/krill/start?job={{job_id}}" aria-lable="Run">Run</md-button>
+          <md-button class='md-small' ng-click="unschedule(current.ot,job_id)" aria-lable="Unschedule">Remove</md-button>
+          <md-button class='md-small' ng-click="$parent.choose(current.ot,'scheduled',true,job_id)" aria-label="All">All</md-button>
+          <md-button class='md-small' ng-click="$parent.choose(current.ot,'scheduled',false,job_id)" aria-lable="None">None</md-button>
 
         </div>
 
-      </div>
+      </md-toolbar>
+
+      <oplist ot="current.ot" 
+              operations="current.ot.operations"
+              status="current.status" 
+              jobid="job_id">
+      </oplist>
 
     </div>
 
   </div>
 
-</div>
+  <h1 class='md-title' ng-if="!current.ot">No operations selected</h1>
+
+<% end %>
+
+ 
