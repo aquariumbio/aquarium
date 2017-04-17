@@ -28,6 +28,7 @@
         content: ot[name].content
       }).then(function(response) {
         ot[name] = response.data;
+        ot.recompute_getter('versions')
       });
     }
 

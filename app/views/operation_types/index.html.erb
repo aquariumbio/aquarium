@@ -6,7 +6,8 @@
 
     <%= render partial: 'io_form' %>
     <%= render partial: 'show_block' %>
-    <%= render partial: 'steps' %>      
+    <%= render partial: 'steps' %>     
+    <%= render partial: 'code' %>   
 
     <div ng-if="!initialized">Loading ...</div>
 
@@ -73,12 +74,29 @@
       </ul> 
 
       <div class="ot-part-container">
+
         <%= render partial: 'definition' %>
-        <%= render partial: 'protocol' %>
-        <%= render partial: 'precondition' %>
-        <%= render partial: 'cost' %>
-        <%= render partial: 'documentation' %>      
+
+        <div ng-include="'code'" ng-init="name='protocol'"      ng-if="current_ot.protocol && mode == 'protocol'" ></div>
+        <div ng-include="'code'" ng-init="name='precondition'"  ng-if="current_ot.precondition && mode == 'precondition'"></div>
+        <div ng-include="'code'" ng-init="name='cost_model'"    ng-if="current_ot.cost_model && mode == 'cost'"></div>        
+
+        <div ng-include="'code'" ng-init="name='documentation'" ng-if="current_ot.documentation && mode == 'documentation'"></div>
+        <div ng-if="current_ot.documentation && mode == 'documentation_view'" ng-controller="codeCtrl as code">
+          <div ng-bind-html="current_ot.rendered_docs"></div>
+
+          <div class='code-controls'>
+            <a href='#' class='btn' 
+                        ng-click="save(current_ot,'documentation')" 
+                        ng-disabled="!current_ot.documentation.changed">Save</a>
+            <a href='#' class='btn' ng-click="edit_docs(current_ot)">Edit</a>
+          </div>  
+
+        </div>  
+
+
         <%= render partial: 'test' %>
+
       </div>
 
     </div>

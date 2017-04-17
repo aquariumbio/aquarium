@@ -1,0 +1,58 @@
+<script type="text/ng-template" id="code">
+
+  <div ng-controller="codeCtrl as code">
+
+    <div ng-model="current_ot[name].content"
+         ng-if="current_ot.mode != 'versions'"
+         ui-ace="{
+                   useWrapMode : true,
+                   mode: 'ruby',
+                   onLoad: aceLoaded,
+                   onChange: aceChanged,
+                   theme:'tomorrow'
+                 }"
+         ng-change="change(current_ot[name])"
+         ng-readonly="current_ot[name].no_edit">
+    </div>
+
+    <div ng-if="current_ot.mode == 'versions'" class="versions">
+      <h4>Past Versions</h4>
+      <ul>
+        <li ng-repeat="version in current_ot.versions[name]">
+          <a href="#" ng-click="version.open = !version.open">{{version.id}}</a>
+          {{version.updated_at|date:'medium'}} : 
+          {{version.content.length/1000}} kb
+          <div ng-if='version.open'>
+            <pre>{{version.content}}</pre>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class='code-controls' ng-if="current_ot.mode != 'versions'">
+      <a href='#' 
+         class='btn' 
+         ng-click="save(current_ot,name)" 
+         ng-disabled="!current_ot[name].changed">
+         Save
+      </a>
+      <a href='#' 
+         class='btn' 
+         ng-click="current_ot.mode = 'versions'">
+         Versions
+      </a>
+      <a href='#' class='btn' ng-if="name == 'documentation'" ng-click="render_docs(current_ot)">Preview</a>
+
+    </div>
+
+    <div class='code-controls' ng-if="current_ot.mode == 'versions'">
+      <a href='#' 
+         class='btn' 
+         ng-click="current_ot.mode = null">
+         Current Version
+      </a>
+    </div>
+
+  </div>
+
+</script>

@@ -170,18 +170,34 @@ AQ.OperationType.record_getters.field_types = function() {
 
 }
 
-AQ.OperationType.record_getters.protocol_versions = function() {
+AQ.OperationType.record_getters.versions = function() {
 
   var ot = this;
-  delete ot.protocol_versions;
-  ot.protocol_versions = [];
+  delete ot.versions;
+  ot.versions = {
+    protocol: [],
+    cost_model: [],
+    precondition: [],
+    documentation: []
+  };
 
-  AQ.Code.where({parent_class: "OperationType", parent_id: ot.id, name: 'protocol'}).then(codes => {
-    ot.protocol_versions = codes.reverse();
-    AQ.update();
+  AQ.Code.where({parent_class: "OperationType", parent_id: ot.id, name: 'protocol'}).then(protocols => {
+    AQ.Code.where({parent_class: "OperationType", parent_id: ot.id, name: 'precondition'}).then(pres => {
+      AQ.Code.where({parent_class: "OperationType", parent_id: ot.id, name: 'cost_model'}).then(costs => {
+        AQ.Code.where({parent_class: "OperationType", parent_id: ot.id, name: 'documentation'}).then(docs => {
+          ot.versions = {
+            protocol: protocols.reverse(),
+            cost_model: costs.reverse(),
+            precondition: pres.reverse(),
+            documentation: docs.reverse()
+          };          
+          AQ.update();
+        });
+      });
+    });
   });
 
-  return ot.protocol_versions;
+  return ot.versions;
 
 }
 
