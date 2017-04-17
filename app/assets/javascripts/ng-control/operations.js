@@ -65,6 +65,7 @@
       $scope.current.ot = ot; 
       $scope.current.status = status;
       delete ot.operations;
+      delete $scope.jobs;
 
       var actual_status;
 

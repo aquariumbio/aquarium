@@ -76,7 +76,7 @@
 
   <div ng-if="current.ot && current.status == 'scheduled'">
 
-    <div ng-repeat="job_id in jobs" class='job'>
+    <div ng-if="jobs.length > 0" ng-repeat="job_id in jobs" class='job'>
 
       <md-toolbar class="job-toolbar">
 
@@ -102,6 +102,10 @@
       </oplist>
 
     </div>
+
+    <h1 class="md-title" ng-if="jobs.length == 0">No operations</h1>
+
+    <h1 class="md-title" ng-if="!jobs">Loading operations ...</h1>    
 
   </div>
 
