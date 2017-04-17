@@ -65,14 +65,14 @@ class OperationTypesController < ApplicationController
       ot = OperationType.find(params[:id])
       c = ot.code(params[:name])
       
-      unless params[:content][:no_edit]
+      unless params[:no_edit]
         if c
           c = c.commit(params[:content])
         else
           c = ot.new_code(params[:name], params[:content])
         end
       end
-      
+
       render json: c
 
     end
