@@ -53,28 +53,29 @@
 
           <% if false %>
 
-          <li id="fat-menu" class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tasks<b class="caret"></b></a>
-            <ul class="dropdown-menu scrollable-menu">
-              <% TaskPrototype.order(:name).each do |tp| %>
-                <% name = pluralize(2,tp.name)[2..-1] %>
-                <li><%= link_to name, tasks_path(task_prototype_id: tp.id) %></li>
-              <% end %>
-              <li class="divider"></li>
-              <li><%= link_to "New Prototype", new_task_prototype_path %></li>
-            </ul>
-          </li>
+            <li id="fat-menu" class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tasks<b class="caret"></b></a>
+              <ul class="dropdown-menu scrollable-menu">
+                <% TaskPrototype.order(:name).each do |tp| %>
+                  <% name = pluralize(2,tp.name)[2..-1] %>
+                  <li><%= link_to name, tasks_path(task_prototype_id: tp.id) %></li>
+                <% end %>
+                <li class="divider"></li>
+                <li><%= link_to "Batch Upload", tasks_upload_path %></li>
+                <li><%= link_to "New Prototype", new_task_prototype_path %></li>
+              </ul>
+            </li>
 
-          <li id="fat-menu" class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Protocols<b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li><%= link_to "Under Version Control", repo_list_path %></li>
-              <li><%= link_to "On Local Computer", protocol_tree_file_path %></li>
-              <li class="divider"></li>
-              <li><%= link_to "Pending Jobs", jobs_path %></li>
-              <li><%= link_to "Metacols", metacols_path(:active => true) %></li>
-            </ul>
-          </li>
+            <li id="fat-menu" class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Protocols<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><%= link_to "Under Version Control", repo_list_path %></li>
+                <li><%= link_to "On Local Computer", protocol_tree_file_path %></li>
+                <li class="divider"></li>
+                <li><%= link_to "Pending Jobs", jobs_path %></li>
+                <li><%= link_to "Metacols", metacols_path(:active => true) %></li>
+              </ul>
+            </li>
 
           <% end %>
 
@@ -114,7 +115,8 @@
                     <li class="divider"></li>
                     <li><%= link_to "Budgets", budgets_path %></li>
                     <li><%= link_to "Invoices", invoices_path(:all=>true) %></li>
-                    <li><%= link_to "Parameters", parameters_path %></li>                    
+                    <li><%= link_to "Parameters", parameters_path %></li>
+                    <li><%= link_to "Announcements", announcements_path %></li>                    
                     <li class="divider"></li>
                     <% if Rails.env != 'production' %>
                       <li><%= link_to "Developer", developer_path %></li>

@@ -44,7 +44,6 @@ class TasksController < ApplicationController
     rescue Exception => e
       @metacol_url = nil
     end
-
    
     respond_to do |format|
       format.html # index.html.erb
@@ -52,6 +51,15 @@ class TasksController < ApplicationController
     end
 
   end 
+
+  def list
+    render json: Task.includes(:task_prototype)
+                     .where(user_id: current_user.id)
+                     .limit(15)
+                     .offset(params[:offset])
+                     .order("id DESC")
+                     .as_json(include: :task_prototype)
+  end
 
   # GET /tasks/1
   # GET /tasks/1.json
@@ -160,7 +168,6 @@ class TasksController < ApplicationController
       end
       TaskPrototype.import!(tps)
 
-
       ProductionTask.switch_connection_to(:production_server)
 
       all_prod_tasks = ProductionTask.all
@@ -199,7 +206,7 @@ class TasksController < ApplicationController
       logger.info "Errors: " + t.errors.full_messages.join(',')
     end
 
-    render json: { result: 'ok' }
+    render json: { result: 'ok', task: t }
 
   end
 
@@ -256,6 +263,59 @@ class TasksController < ApplicationController
     end
 
     render layout: "plugin.html.erb"
+
+  end
+
+  def upload
+
+    respond_to do |format|
+
+      format.html do
+      end
+
+      format.json do 
+
+        tasks = []
+        errors = []
+
+        ActiveRecord::Base.transaction do     
+
+          params[:tasks].each do |t|
+
+            tp = TaskPrototype.find_by_name(t[:type])
+
+            if tp 
+              task = tp.tasks.create(
+                name: t[:name], 
+                specification: t[:specification].to_json, 
+                user_id: current_user.id,
+                budget_id: 1
+              )
+              task.status = t[:status] || tp.status_option_list.first
+              task.save
+              if task.errors.empty?
+                tasks << task
+              else
+                errors += task.errors.full_messages.collect { |m| "'#{t[:name]}': #{m}" }
+                raise ActiveRecord::Rollback 
+              end
+
+            else 
+
+              errors << "Could not find task prototype named '#{t[:type]}'"
+
+            end
+
+          end
+
+        end
+
+        errors << "No tasks created." unless errors.empty?
+        render json: { errors: errors, tasks: tasks.reverse.as_json(include: :task_prototype) }
+
+      end
+
+    end
 
   end
 

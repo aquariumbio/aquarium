@@ -51,3 +51,4 @@ ots.json
 # ignore bower installed components
 public/components
 
+.DS_Store

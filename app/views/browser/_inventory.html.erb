@@ -67,16 +67,16 @@
 
   <div ng-controller='inventoryCtrl'> 
 
-    <ul ng-if="!sample.loading_inventory && visible_inventory(sample) > 0" class='sample-tree-list'>
+    <ul ng-if="!sample.loading_inventory && sample.visible_inventory() > 0" class='sample-tree-list'>
 
       <li ng-repeat="container in sample.containers" 
-          ng-if="num_items(sample,container)>0"
+          ng-if="sample.num_items(container)>0"
           ng-include="'inventory-item'"
           ng-init="item_list = true; items = sample.items">
       </li>
 
       <li ng-repeat="container in sample.collection_containers"
-          ng-if="num_collections(sample,container)>0"
+          ng-if="sample.num_collections(container)>0"
           ng-include="'inventory-item'"
           ng-init="col_list = true; items = sample.collections">
       </li>      
@@ -87,9 +87,9 @@
       <li>Loading inventory information ...</li>
     </ul>
 
-    <ul ng-if="!sample.loading_inventory && visible_inventory(sample) == 0" 
+    <ul ng-if="!sample.loading_inventory && sample.visible_inventory() == 0" 
         class='sample-tree-list'>
-      <li>No items in inventory</li>
+      <li>No items in inventory (<a href='#' ng-click='toggle_inventory(sample)'>Show Description</a>)</li>
     </ul>    
 
   </div>

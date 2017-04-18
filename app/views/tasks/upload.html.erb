@@ -1,0 +1,155 @@
+<div ng-app="aquarium" class='task_upload'>
+
+  <div ng-controller='taskUploadCtrl as upload'>
+
+    <div class='two-column'>
+
+      <div class='two-column-left'>   
+
+        <div class='two-column-control' ng-click="mode='upload'">
+
+          <h4>Upload Task JSON</h4>
+
+          <label class="btn btn-default btn-file btn-small">
+            Choose File <input type=file
+                               id="tasks_upload"
+                               file="tasks_upload"
+                               style="display: none;"
+                               custom-on-change="upload_change">
+          </label>
+
+          <div ng-if="tasks_upload_name" style="margin-top: 10px">
+            <a href='#' class='btn btn-small btn-primary' ng-click="upload()">Upload</a>
+          </div>        
+
+        </div>
+
+        <div class='two-column-control' ng-click="mode='tps'">
+          <h4>Task Prototype Help</h4>
+        </div>        
+
+        <div class='two-column-control' ng-click="mode='example'">
+          <h4>Example JSON File</h4>
+        </div>          
+
+      </div>
+
+      <div class='two-column-right sample-view'>
+
+        <div ng-if="mode=='upload'">
+
+          <div class='alert alert-success' ng-if="messages.length > 0">
+            <div ng-repeat="m in messages track by $index">{{m}}</div>
+          </div>
+          <div class='alert alert-error' ng-if="errors.length > 0">
+            <div ng-repeat="e in errors track by $index">{{e}}</div> 
+          </div>
+
+          <h4>Tasks for <%= current_user.name %>
+            <span class='pull-right'>
+              <a href='#' class='btn btn-mini' ng-click='advance(-15)'>Prev</a>
+              <a href='#' class='btn btn-mini' ng-click='advance(15)'>Next</a>      
+             </span>
+          </h4>
+
+          <table class='table table-fixed table-condensed'>
+
+            <tr>
+              <th>Id</th>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Created At</th>
+              <th>Status (Change Carefully)</th>
+              <th></th>
+            </tr>
+
+            <tr ng-repeat="task in tasks" ng-class="task.new ? 'green' : ''">
+              <td><a href="/tasks/{{task.id}}">{{task.id}}</a></td>
+              <td>{{task.name}}</td>
+              <td>{{task.task_prototype.name}}</td>              
+              <td>{{task.created_at|date}}</td>
+              <td><select ng-model="task.status"
+                          ng-change="change_status(task)"
+                          class='smaller-select'>
+                    <option ng-repeat="c in task.task_prototype.status_options track by $index"
+                            ng-selected="c == task.status">{{c}}</option>
+                </select>
+              </td>             
+              <td>{{task.message}}</td>
+            </tr>
+
+          </table>   
+
+        </div>
+
+        <div ng-if="mode=='tps'">
+           <p>Click on a task prototype to see the format you should use when defining tasks. Note that a zero can be replaced by any integer, usually a sample or item id. A [0] can be replaced by an array of integers. Similarly, "" means a string, and [""] means an array of strings. Finally, only the identifer defined in a given key should be used in your JSON keys. For example, <tt>"fragments Fragment": [0]</tt> would be instantiated by something like the <tt>"fragments": [1234, 2345]</tt>. In this example, the denotation "Fragment" together with [0] means that what follows should be an array of Fragment sample ids.</p>
+           <ul>
+             <li ng-repeat="tp in task_prototypes track by $index">
+               <a href='#' ng-click='tp.open = tp.open ? false : true'>{{tp.name}}</a>
+               <pre ng-if="tp.open">{{tp.prototype}}</pre>
+             </li>
+           </ul>
+        </div>
+
+        <div ng-if="mode=='example'">
+       
+          <pre>
+{
+
+  "metadata": {
+    "Name": "Example Task JSON File",
+    "Comment": "You can put whatever you want in the metadata field"
+  },
+
+  "tasks": [
+
+    {
+      "name": "Test1",
+      "type": "Gibson Assembly",
+      "status": "waiting",
+      "specification": {
+        "plasmid": 13860,
+        "fragments": [5746,13870,13871,13873,12117]
+      }
+    },
+
+    {
+      "name": "Test2",
+      "type": "Yeast Transformation",
+      "status": "waiting",
+      "specification": {
+        "yeast_transformed_strain_ids": [13734] 
+      }
+    },
+
+    {
+      "name": "Test3",
+      "type": "Plasmid Verification",
+      "specification": {
+        "plate_ids": [64775,67160,69390],
+        "num_colonies": [2,2,2],
+        "primer_ids": [ 
+           [11227,11899],
+           [4555],
+           [12034,12042]
+        ],
+       "initials": "EK"
+      }
+    }
+
+  ]
+
+}       
+
+          </pre>
+
+        </div>
+
+      </div>
+
+    </div> 
+
+  </div>
+
+</div>

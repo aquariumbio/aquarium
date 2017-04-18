@@ -1,21 +1,21 @@
 <% provide(:title, 'Browser') %>
 
 <style>
-body {
-  padding-top: 49px;
-  overflow: hidden;
-}
-.ui-autocomplete { 
-  position: absolute; 
-  cursor: default;
-  z-index:30 !important;
-  max-height: 350px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding-right: 20px;  
-} 
-.dropdown-menu {   
-} 
+  body {
+    padding-top: 49px;
+    overflow: hidden;
+  }
+  .ui-autocomplete { 
+    position: absolute; 
+    cursor: default;
+    z-index:30 !important;
+    max-height: 350px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 20px;  
+  } 
+  .dropdown-menu {   
+  } 
 </style>
 
 <div ng-app="aquarium" class='browser'>
@@ -32,23 +32,28 @@ body {
 
     <div class='two-column'>
 
-      <div class='two-column-left'>
-        <%= render partial: "user_control" %> 
+      <div class='two-column-left'>        
         <%= render partial: "search_control" %>
-        <%= render partial: "create_control" %>                  
-        <%= render partial: "recent_navigator" %>          
-        <%= render partial: "project_navigator" %>         
-        <%= render partial: "sample_type_navigator" %>               
+            
+        <%= render partial: "create_control" %>                         
+        <% if false %>
+          <%= render partial: "recent_navigator" %>  
+          <%= render partial: "user_control" %>              
+          <%= render partial: "project_navigator" %>         
+          <%= render partial: "sample_type_navigator" %>               
+        <% end %>
       </div>
 
       <div class='two-column-right sample-view'>
         <%= render partial: "view_heading" %>        
         <%= render partial: "messages" %>
         <%= render partial: "new_samples" %>
-        <%= render partial: "project_view" %>
-        <%= render partial: "recent_samples" %>     
-        <%= render partial: "search_results" %>              
-        <%= render partial: "sample_types" %>          
+        <%= render partial: "search_results" %>           
+        <% if false %>    
+          <%= render partial: "project_view" %>                   
+          <%= render partial: "sample_types" %>  
+          <%= render partial: "recent_samples" %>        
+        <% end %>
       </div>
 
     </div> 

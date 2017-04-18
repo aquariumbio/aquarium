@@ -1,0 +1,28 @@
+
+.announcement {
+
+  padding: 10px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  color: #7F5E21;
+  background-color: #EDCD93;
+  border-radius: 3px;
+  border: 2px solid #E8AB3C;
+  position: relative;
+
+  .field {
+    width: 100%;
+  }
+
+  .close-x {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
+
+  .h4 {
+    text-align: center;
+    color: #ffffff;
+  }
+
+}

@@ -1,17 +1,32 @@
 <div ng-show="views.search.selected">
 
-  <div ng-repeat="st_id in views.search.sample_types">
-    <h5>{{sample_type_from_id(st_id).name}}</h5>
-    <ul class='plain-list'>
-      <li ng-repeat="sample in views.search.samples"
-          ng-include="'sample_router'"
-          ng-if="sample.sample_type_id == sample_type_from_id(st_id).id">
-      </li>
-    </ul>
-  </div> 
+  <b ng-if="views.search.count == 1">1 Sample</b>
+  <b ng-if="views.search.count > 1">{{views.search.count}} Samples</b>
 
-  <div ng-if="views.search.samples.length == 0">
+  <div class='search-pager' ng-if="views.search.pages.length > 1">
+    <span ng-repeat="page in views.search.pages" 
+          ng-click="search(page)"
+          ng-class="page_class(page)">
+      {{page+1}}
+    </span> 
+  </div>
+
+  <ul class='plain-list'>
+    <li ng-repeat="sample in views.search.samples"
+        ng-include="'sample_router'">
+    </li>
+  </ul>
+
+  <div ng-if="views.search.samples.length == 0 && views.search.status == 'done'">
     No results.
   </div>
+
+  <div ng-if="views.search.status == 'searching'">
+    Retrieving data ...
+  </div>  
+
+  <div ng-if="views.search.status == 'preparing'">
+    Preparing data ...
+  </div>   
 
 </div>

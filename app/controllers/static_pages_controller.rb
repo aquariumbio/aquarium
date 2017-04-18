@@ -3,6 +3,13 @@ class StaticPagesController < ApplicationController
   before_filter :signed_in_user
 
   def home
+    temp = Announcement.last
+    @announcement = temp if temp && temp.active && cookies[:latest_announcement].to_i != temp.id
+  end
+
+  def dismiss
+    cookies[:latest_announcement] = Announcement.last.id
+    redirect_to root_path
   end
 
   def inventory_stats

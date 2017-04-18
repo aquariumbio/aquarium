@@ -50,3 +50,54 @@ SampleHelper.prototype.create_samples = function(samples,promise) {
   });
   return this;
 }
+
+SampleHelper.prototype.spreadsheet = function(http,sample_types, sample_names, csv) {
+
+  var lines = csv.split(/\r|\n/),
+      headers = lines[0].split(','),
+      rows = lines.splice(1,lines.length),
+      sample_type_name = headers[0],
+      matches = aq.where(sample_types,function(st) { return st.name == sample_type_name; } ),
+      sample_type,
+      samples = [],
+      warnings = [];
+
+  if ( matches.length > 0 ) {
+    sample_type = matches[0];
+  } else {
+    throw("Could not find sample type " + sample_type_name);
+  }
+
+  aq.each(rows,function(row,i) {
+
+    var fields = row.split(',');
+
+    if ( fields.length > 1 ) {
+
+      (new Sample(http)).new(sample_type.id, function(sample) {
+
+        aq.each(headers,function(header,j) {
+
+          if ( header == sample_type_name ) {
+            sample.name = fields[j];
+          } else if ( header == "Description" ) {
+            sample.description = fields[j];
+          } else if ( header == "Project" ) {
+            sample.project = fields[j];
+          } else {
+            sample.assign_field_value(header,fields[j],sample_names,warnings);
+          }
+
+        });
+
+        samples.push(sample);
+
+      });
+
+    }
+
+  });
+
+  return { samples: samples, warnings: warnings };
+
+}

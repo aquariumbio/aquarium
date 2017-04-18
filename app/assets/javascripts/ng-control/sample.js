@@ -20,7 +20,7 @@
         } else {
           sample.find(sample.id,function(sample) {
             sample.open = true;
-            $scope.toggle_inventory(sample,true)            
+            $scope.toggle_inventory(sample,true);            
           });
         }
       }
@@ -46,7 +46,6 @@
       sample.update(function(response) {
         if ( response.save_error ) {
           sample.error = response.save_error;
-          console.log(["Error in sample.js", response.save_error])
         } else {
           $scope.messages = [ "Saved changes to sample " + sample.id + ": " + sample.name ]
           sample.from(response);

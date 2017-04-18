@@ -55,7 +55,10 @@ SampleType.prototype.default_field = function(field_type) {
   };
 
   if ( field_type.ftype == 'sample' ) {
-    return { name: field_type.name, child_sample_name: defs[field_type.ftype]};
+    return { name: field_type.name, 
+             child_sample_name: defs[field_type.ftype], 
+             allowable_child_types: aq.collect(field_type.allowable_field_types,function(aft) { return aft.sample_type.name }) 
+           }
   } else if ( field_type.ftype == 'string' && field_type.choices ) {
     return { name: field_type.name, value: field_type.choices_array[0] };
   } else if ( field_type.ftype == 'number' && field_type.choices ) {

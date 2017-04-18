@@ -12,24 +12,51 @@
 
     samples_for = function(names,types) {
       var samples = [];
-      aq.each(types,function(type) {
-        samples = samples.concat(names[type])
-      });
-      return samples;
+      if ( types == "all" ) {
+        for ( var type in names ) {
+          samples = samples.concat(names[type]);
+        }
+      } else {
+        aq.each(types,function(type) {
+          samples = samples.concat(names[type])
+        });
+      }
+      return samples;    
     }
 
     return {
       restrict: 'A',
       scope: { samplecomplete: '=', ngModel: '='  },
       link: function($scope,$element,$attributes) {
+
+        var sample_names = $scope.$parent.sample_names;
+
         var types = $scope.samplecomplete;
-        $element.autocomplete({
+        $($element).autocomplete({
           source: samples_for($scope.$parent.sample_names,types),
           select: function(ev,ui) {
             $scope.ngModel = ui.item.value;
             $scope.$apply();
           }
         });
+
+        function changed() {
+          return sample_names != $scope.$parent.sample_names;
+        }
+
+        $scope.$watch(changed, function (v) {
+          console.log("Updating samplecomplete")
+          types = $scope.samplecomplete;
+          sample_names = $scope.$parent.sample_names;
+          $($element).autocomplete({
+            source: samples_for($scope.$parent.sample_names,types),
+            select: function(ev,ui) {
+              $scope.ngModel = ui.item.value;
+              $scope.$apply();
+            }
+          });
+        });
+
       }
     }
 
@@ -75,7 +102,7 @@
         $scope.$watch('aft', function (v) {
           if ( $scope.aft ) {
             types = [ $scope.aft.sample_type.name ];
-            $element.autocomplete({
+            $($element).autocomplete({
               source: samples_for($scope.$root.sample_names,types),
               select: function(ev,ui) {
                 $scope.ngModel = ui.item.value;
@@ -97,7 +124,7 @@
       restrict: 'A',
       scope: { ngModel: '=' },
       link: function($scope,$element,$attributes) {
-        $element.autocomplete({
+        $($element).autocomplete({
           source: aq.collect($scope.$parent.projects,function(p) { return p.name; }),
           select: function(ev,ui) {
             $scope.ngModel = ui.item.value;

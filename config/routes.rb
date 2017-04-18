@@ -41,6 +41,8 @@ Bioturk::Application.routes.draw do
     end
   end
 
+  resources :announcements
+
   get '/developer',                              to: 'developer#developer'
   post '/developer/get/',                        to: 'developer#get'  
   post '/developer/save',                        to: 'developer#save'    
@@ -59,7 +61,7 @@ Bioturk::Application.routes.draw do
   post '/browser/save',                          to: 'browser#save'
   post '/browser/save_data_association',         to: 'browser#save_data_association'    
   get '/browser/recent_samples/:id',             to: 'browser#recent_samples'  
-  get '/browser/search/:query(/:user_id)',       to: 'browser#search' 
+  post '/browser/search',                        to: 'browser#search' 
   get '/browser/collections/:sample_id',         to: 'browser#collections'
   get '/browser/delete_item/:item_id',           to: 'browser#delete_item'  
   get '/browser/restore_item/:item_id',          to: 'browser#restore_item'  
@@ -113,6 +115,9 @@ Bioturk::Application.routes.draw do
   match "rich_id", to: "tasks#rich_id"
   match "item_list", to: "items#item_list"
   match "upload", to: "jobs#upload"
+
+  match "tasks/upload", to: "tasks#upload"
+  match "tasks/list/:offset", to: "tasks#list"
 
   resources :tasks
   resources :task_prototypes
@@ -219,17 +224,18 @@ Bioturk::Application.routes.draw do
 
   root to: 'static_pages#home'
 
-  match '/',        to: 'static_pages#home'
+  match '/',            to: 'static_pages#home'
   match '/template',    to: 'static_pages#template'
 
-  match '/help',    to: 'static_pages#help'
-  match '/about',   to: 'static_pages#about'
-  match '/signin',  to: 'sessions#new'
-  match '/signout', to: 'sessions#destroy', via: :delete
-  match '/status',  to: 'static_pages#status'
+  match '/help',       to: 'static_pages#help'
+  match '/about',      to: 'static_pages#about'
+  match '/signin',     to: 'sessions#new'
+  match '/signout',    to: 'sessions#destroy', via: :delete
+  match '/status',     to: 'static_pages#status'
   match '/analytics',  to: 'static_pages#analytics'
-  match '/jobchart', to: 'static_pages#jobchart'
-  match '/location', to: 'static_pages#location'
+  match '/jobchart',   to: 'static_pages#jobchart'
+  match '/location',   to: 'static_pages#location'
+  get "/dismiss",      to: 'static_pages#dismiss'
 
   match '/yeast_qc', to: 'static_pages#yeast_qc'
 
