@@ -48,6 +48,10 @@
       });
     });    
 
+    $scope.set_mode = function(m) {
+      $scope.mode = m;
+    }
+
     $scope.clear_error = function() {
       delete $scope.error;
     }

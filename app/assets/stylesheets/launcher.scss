@@ -46,10 +46,6 @@
     margin: 10px 0 10px 0 !important;
   }  
 
-  .main-content {
-    background: white;
-  }
-
   .launch-error {    
     .title {
       color: #a25900;
@@ -133,15 +129,11 @@
   $plan-header-color: #80d8ff;
   $plan-details-color: white;
 
-  .plan-list {
-    margin: 0 5px 0 0;
-    padding: 0 0 0 5px;
-  }
-
   .plan-row {
-    width: 99%;
     padding: 5px;
-    margin: 0 25px 0 5px;
+    margin: 0 25px 0 0px;
+    min-width: 100%;
+    max-width: 100%;
   }
 
   .plan-header {
@@ -162,7 +154,7 @@
     border-right: 1pt solid $plan-border-color;
     border-bottom: 1pt solid $plan-border-color;    
     background: $plan-details-color;    
-    margin: 0 25px 10px 5px;    
+    margin: 0 25px 10px 0px;    
   }
 
   .no-side-margins {
@@ -421,7 +413,8 @@
         margin: 0 10px 0 0;
         display: inline; 
         font-size: 9pt;
-      }      
+      }
+         
     }
 
   }

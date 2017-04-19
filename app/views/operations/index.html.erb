@@ -31,15 +31,15 @@
 <% end %>
 
 <%= content_for :specific_title do %>
-  <div ng-if="current.ot">
-    {{current.ot.name}}: 
+  <span ng-if="current.ot">
+    &rang; {{current.ot.name}} &rang;
     <span class='capitalize'>
       {{
         current.status == 'pending_false' ? 'Waiting' : 
         current.status == 'pending_true' ? 'Pending' : current.status
       }}
     </span>
-  </div>
+  </span>
 <% end %>
 
 <%= content_for :action1 do %>

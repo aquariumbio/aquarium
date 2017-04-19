@@ -1,67 +1,61 @@
 <script type="text/ng-template" id="plan_list">
 
-  <md-content class='plan-list'>
+  <div layout="row" layout-wrap ng-repeat-start="plan in plans" 
+       ng-class="plan.open ? 'plan-header plan-row plan-row-open' : 'plan-header plan-row'">
 
-    <div class='md-headline top-pad bottom-pad' layout="row" layout-align="center center">Plans</div>  
-
-    <div layout="row" layout-wrap ng-repeat-start="plan in plans"
-         ng-class="plan.open ? 'plan-header plan-row plan-row-open' : 'plan-header plan-row'">
-
-      <div flex="25" class='no-wrap'>
-        <opener model="plan.open" class='no-highlight clickable no-margin'></opener>&nbsp;
-        <span class="md-body-2">{{plan.id}}: {{plan.operations[0].operation_type.name}}</span>
-      </div>
-
-      <div flex="55" class='no-wrap left-pad' ng-if="!plan.open">
-        <span ng-repeat="fv in plan.operations[0].field_values | filter : { role: 'output' }" class='md-body-1'>
-          {{fv.name}}: {{fv.child_sample.name}}
-        </span>
-      </div>      
-
-      <div flex="35" class='no-wrap left-pad' ng-if="plan.open">
-        <span ng-repeat="fv in plan.operations[0].field_values | filter : { role: 'output' }" class='md-body-1'>
-          {{fv.name}}: {{fv.child_sample.name}}
-        </span>
-      </div>
-
-      <div flex="20" class='no-wrap left-pad' ng-if="plan.open">
-        <md-button class="md-small md-raised" ng-click="plan.reload()">Reload</md-button>
-        <md-button class="md-small md-raised" ng-click="plan.cancel('Canceled via user interface')">Cancel</md-button> 
-        <md-button 
-          class='md-small md-raised' 
-          ng-disabled="plan.debugging"
-          ng-click="plan.debug()">Debug</md-button>
-        <md-button 
-          class='md-small md-raised' 
-          ng-disabled="plan.relaunching"
-          ng-click="relaunch(plan)">{{plan.relaunching ? 'Copying' : 'Copy'}}</md-button>
-      </div>
-
-      <div flex="10" class='no-wrap left-pad'>
-        <span ng-class="'md-body-2 status-'+plan.operations[0].status">
-          {{plan.operations[0].status}}
-        </span>
-      </div>
-
-      <div flex="10" class='no-wrap' class='md-body-1'>
-        {{plan.created_at|date}}
-      </div>
-
+    <div flex="25" class='no-wrap'>
+      <opener model="plan.open" class='no-highlight clickable no-margin'></opener>&nbsp;
+      <span class="md-body-2">{{plan.id}}: {{plan.operations[0].operation_type.name}}</span>
     </div>
 
-    <div layout="row" layout-wrap ng-if="plan.open" ng-repeat-end="" class="plan-row plan-details"> 
-      <div flex="100" ng-include="'plan_viewer'"></div>
+    <div flex="55" class='no-wrap left-pad' ng-if="!plan.open">
+      <span ng-repeat="fv in plan.operations[0].field_values | filter : { role: 'output' }" class='md-body-1'>
+        {{fv.name}}: {{fv.child_sample.name}}
+      </span>
+    </div>      
+
+    <div flex="35" class='no-wrap left-pad' ng-if="plan.open">
+      <span ng-repeat="fv in plan.operations[0].field_values | filter : { role: 'output' }" class='md-body-1'>
+        {{fv.name}}: {{fv.child_sample.name}}
+      </span>
     </div>
 
-    <br />
+    <div flex="20" class='no-wrap left-pad' ng-if="plan.open">
+      <md-button class="md-small md-raised" ng-click="plan.reload()">Reload</md-button>
+      <md-button class="md-small md-raised" ng-click="plan.cancel('Canceled via user interface')">Cancel</md-button> 
+      <md-button 
+        class='md-small md-raised' 
+        ng-disabled="plan.debugging"
+        ng-click="plan.debug()">Debug</md-button>
+      <md-button 
+        class='md-small md-raised' 
+        ng-disabled="plan.relaunching"
+        ng-click="relaunch(plan)">{{plan.relaunching ? 'Copying' : 'Copy'}}</md-button>
+    </div>
 
-    <md-button ng-if="!no_more_plans"
-      class='md-raised md-primary md-small' 
-      ng-disabled="getting_plans"
-      ng-click="more_plans()">More</md-button>
+    <div flex="10" class='no-wrap left-pad'>
+      <span ng-class="'md-body-2 status-'+plan.operations[0].status">
+        {{plan.operations[0].status}}
+      </span>
+    </div>
 
-    <br /><br />
-   
-  </md-content>
+    <div flex="10" class='no-wrap' class='md-body-1'>
+      {{plan.created_at|date}}
+    </div>
 
+  </div>
+
+  <div layout="row" layout-wrap ng-if="plan.open" ng-repeat-end="" class="plan-row plan-details"> 
+    <div flex="100" ng-include="'plan_viewer'"></div>
+  </div>
+
+  <br />
+
+  <md-button ng-if="!no_more_plans"
+    class='md-raised md-primary md-small' 
+    ng-disabled="getting_plans"
+    ng-click="more_plans()">More</md-button>
+
+  <br /><br />
+ 
 </script>

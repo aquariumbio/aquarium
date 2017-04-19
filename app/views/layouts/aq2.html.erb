@@ -84,10 +84,9 @@
           <div class="md-toolbar-tools">
 
             <h2 flex md-truncate>
+              <%= yield :title %>
               <% if content_for? :specific_title %>
                 <%= yield :specific_title %>
-              <% else %>
-                Main
               <% end %>
             </h2>
 
@@ -111,7 +110,7 @@
 
         </md-toolbar>
 
-        <md-content class='main scrollable' flex='100'>
+        <md-content class='main scrollable'>
            <%= yield :main %>
         </md-content>
 

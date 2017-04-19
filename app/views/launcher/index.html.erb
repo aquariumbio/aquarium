@@ -1,17 +1,67 @@
-<% provide(:title, 'Launcher') %>
+<% provide(:title, 'Planner') %>
 
-<div ng-app="aquarium" ng-controller="launcherCtrl as launcher" class='launcher' layout="vertical" layout-fill>
+<%= render partial: 'chooser' %>
+<%= render partial: 'plan_editor' %>  
+<%= render partial: 'operation_editor' %>
+<%= render partial: 'field_value_editor' %>   
+<%= render partial: 'io_editor' %>
+<%= render partial: 'plan_list' %>  
+<%= render partial: 'plan_viewer' %>  
+<%= render partial: '/data_associations/template' %> 
 
-  <%= render partial: 'chooser' %>
-  <%= render partial: 'plan_editor' %>  
-  <%= render partial: 'operation_editor' %>
-  <%= render partial: 'field_value_editor' %>   
-  <%= render partial: 'io_editor' %>
-  <%= render partial: 'plan_list' %>  
-  <%= render partial: 'plan_viewer' %>  
-  <%= render partial: '/data_associations/template' %> 
+<%= content_for :class do %>launcher<% end %>
+<%= content_for :controller do %>launcherCtrl as launcher<% end %>
 
-  <md-content flex layout-padding ng-if="status != 'Ready'">
+<%= content_for :sidebar do %>
+
+  <div ng-if="error">
+    <md-content class='launch-error'>
+      <div class="md-title title">Your Plan has Issues</div>
+      <p layout-padding>{{error}}</p>
+      <span class="md-title dismiss" ng-click="clear_error()">&times;</span>
+    </md-content>
+  </div>
+
+  <div ng-if="current_operation" 
+       ng-include="'field_value_editor'">
+  </div>  
+
+  <div ng-if="( mode == 'running' || ( mode == 'new' && plan == null ) ) && status == 'Ready'">
+    <h1 class="md-title">Budget Information</h1>
+    <md-list ng-repeat="uba in current_user.user_budget_associations" flex>
+      <md-list-item>
+        <div class="md-list-item-text" layout="column">
+          <div class="md-body-2">{{uba.budget.name}} : {{uba.quota|currency}} / month</div>
+          <div class="md-body-1">{{uba.budget.description}}</div>
+        </div>      
+      </md-list-item>
+    </md-list>
+  </div>
+
+<% end %>
+
+<%= content_for :specific_title do %>
+  <span ng-if="status == 'Ready'">
+  &rang; <span ng-if="mode == 'new' && plan == null">Choose Goal</span>
+         <span ng-if="mode == 'new' && plan != null">Build Plan</span>
+         <span ng-if="mode == 'running'">Plans</span>    
+  </span>
+<% end %>
+
+<%= content_for :action1 do %>
+  <md-button ng-click="set_mode('running')" ng-if="mode == 'new' && status == 'Ready'">
+      <md-tooltip md-direction="bottom">List all of your plans</md-tooltip>
+      List
+  </md-button>
+  <md-button ng-click="set_mode('new')" ng-if="mode == 'running' && status == 'Ready'">
+      <md-tooltip md-direction="bottom">Design a new plan</md-tooltip>
+      New
+  </md-button>    
+<% end %>
+
+<%= content_for :main do %>
+
+  <div flex layout-padding ng-if="status != 'Ready'">
     <div layout="row">
       <div flex="25"></div>
       <div flex="50">
@@ -21,71 +71,15 @@
         <md-progress-linear md-mode="indeterminate"></md-progress-linear>
       </div>
     </div>
-  </md-content>
+  </div>
 
-  <md-content ng-if="status == 'Ready'" layout="row" flex>
+  <div ng-if="status == 'Ready' && mode == 'new'">
+    <div ng-if="plan == null" ng-include="'operation_type_chooser'"></div> 
+    <div ng-if="plan != null" ng-include="'plan_editor'"></div> 
+  </div>
 
-    <md-sidenav
-      class="md-sidenav-left"
-      md-component-id="left"
-      md-is-locked-open="true"
-      md-whiteframe="1"
-      md-disable-backdrop="">
+  <div ng-if="status == 'Ready' && mode != 'new'"
+       ng-include="'plan_list'" layout-padding flex>
+  </div>  
 
-      <md-toolbar>
-
-        <div class="md-toolbar-tools">
-
-          <h2 class="md-toolbar-tools">Planner</h2>
-
-          <span flex></span>
-
-          <md-button
-            ng-click="$parent.mode = 'running'" 
-            ng-class="$parent.mode === 'running' ? 'md-small md-highlight' : 'md-small'">
-              <md-tooltip md-direction="bottom">List all of your plans</md-tooltip>
-              List
-          </md-button>
-
-          <md-button
-            ng-click="$parent.mode = 'new'" 
-            ng-class="$parent.mode === 'new' ? 'md-small md-highlight' : 'md-small'">
-              <md-tooltip md-direction="bottom">Design a new plan</md-tooltip>
-              New
-          </md-button>
-
-        </div>
-
-      </md-toolbar>
-
-      <div ng-if="error">
-        <md-content class='launch-error'>
-          <div class="md-title title">Your Plan has Issues</div>
-          <p layout-padding>{{error}}</p>
-          <span class="md-title dismiss" ng-click="clear_error()">&times;</span>
-        </md-content>
-      </div>
-
-      <div ng-if="current_operation" 
-           ng-include="'field_value_editor'">
-      </div>
-
-    </md-sidenav>
-
-    <md-content flex class="main-content">    
-
-      <div ng-if="status == 'Ready' && mode == 'new'" layout-padding>
-        <div ng-if="plan == null" ng-include="'operation_type_chooser'"></div> 
-        <div ng-if="plan != null" ng-include="'plan_editor'"></div> 
-      </div>
-
-      <div ng-if="status == 'Ready' && mode != 'new'"
-           ng-include="'plan_list'"
-           class='plan-list'>
-      </div>      
-
-    </md-content>
-
-  </md-content
-
-</div>
+<% end %> 
