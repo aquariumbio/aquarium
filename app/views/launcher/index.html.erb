@@ -27,12 +27,13 @@
   </div>  
 
   <div ng-if="( mode == 'running' || ( mode == 'new' && plan == null ) ) && status == 'Ready'">
-    <h1 class="md-title">Budget Information</h1>
+    <h1 class="md-title">Budgets</h1>
     <md-list ng-repeat="uba in current_user.user_budget_associations" flex>
       <md-list-item>
         <div class="md-list-item-text" layout="column">
-          <div class="md-body-2">{{uba.budget.name}} : {{uba.quota|currency}} / month</div>
-          <div class="md-body-1">{{uba.budget.description}}</div>
+          <div class="md-body-2">{{uba.budget.name}}</div>
+          <div class="md-body-1">{{uba.budget.description}}.</div>
+          <div class="md-body-1">{{uba.budget.spent.this_month|currency}} / {{uba.quota|currency}} spent</div>
         </div>      
       </md-list-item>
     </md-list>
