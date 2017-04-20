@@ -30,14 +30,21 @@
               ( mode == 'new' && plan == null ) ) && 
               status.user_info == 'Ready'">
 
-    <h1 class="md-title">Budgets</h1>
+    <h1 class="md-title" 
+        ng-if="current_user && 
+               current_user.user_budget_associations && 
+               current_user.user_budget_associations.length > 0 &&
+               current_user.user_budget_associations[0].budget &&
+               current_user.user_budget_associations[0].budget.spent.this_month !== null">Budgets</h1>
 
     <md-list ng-repeat="uba in current_user.user_budget_associations" flex>
-      <md-list-item ng-if="uba.budget && uba.budget.spent">
+      <md-list-item ng-if="uba.budget && uba.budget.spent.this_month != null">
         <div class="md-list-item-text" layout="column">
           <div class="md-body-2">{{uba.budget.name}}</div>
           <div class="md-body-1">{{uba.budget.description}}.</div>
-          <div class="md-body-1">{{uba.budget.spent.this_month|currency}} / {{uba.quota|currency}} spent</div>
+          <div class="md-body-1">
+              {{uba.budget.spent.this_month|currency}}
+            / {{uba.quota|currency}} spent</div>
         </div>      
       </md-list-item>
     </md-list>
@@ -47,7 +54,7 @@
 <% end %>
 
 <%= content_for :specific_title do %>
-  <span ng-if="status.operation_types == 'Ready' && status.sample_names == 'Ready'">
+  <span>
   &rang; <span ng-if="mode == 'new' && plan == null">Choose Goal</span>
          <span ng-if="mode == 'new' && plan != null">Build Plan</span>
          <span ng-if="mode == 'running'">Plans</span>    
