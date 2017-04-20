@@ -26,10 +26,14 @@
        ng-include="'field_value_editor'">
   </div>  
 
-  <div ng-if="( mode == 'running' || ( mode == 'new' && plan == null ) ) && status == 'Ready'">
+  <div ng-if="( mode == 'running' || 
+              ( mode == 'new' && plan == null ) ) && 
+              status.user_info == 'Ready'">
+
     <h1 class="md-title">Budgets</h1>
+
     <md-list ng-repeat="uba in current_user.user_budget_associations" flex>
-      <md-list-item>
+      <md-list-item ng-if="uba.budget && uba.budget.spent">
         <div class="md-list-item-text" layout="column">
           <div class="md-body-2">{{uba.budget.name}}</div>
           <div class="md-body-1">{{uba.budget.description}}.</div>
@@ -37,12 +41,13 @@
         </div>      
       </md-list-item>
     </md-list>
+
   </div>
 
 <% end %>
 
 <%= content_for :specific_title do %>
-  <span ng-if="status == 'Ready'">
+  <span ng-if="status.operation_types == 'Ready' && status.sample_names == 'Ready'">
   &rang; <span ng-if="mode == 'new' && plan == null">Choose Goal</span>
          <span ng-if="mode == 'new' && plan != null">Build Plan</span>
          <span ng-if="mode == 'running'">Plans</span>    
@@ -50,11 +55,11 @@
 <% end %>
 
 <%= content_for :action1 do %>
-  <md-button ng-click="set_mode('running')" ng-if="mode == 'new' && status == 'Ready'">
+  <md-button ng-click="set_mode('running')" ng-if="mode == 'new' && status.plans == 'Ready'">
       <md-tooltip md-direction="bottom">List all of your plans</md-tooltip>
       List
   </md-button>
-  <md-button ng-click="set_mode('new')" ng-if="mode == 'running' && status == 'Ready'">
+  <md-button ng-click="set_mode('new')" ng-if="mode == 'running' && status.operation_types == 'Ready' && status.plans == 'Ready'">
       <md-tooltip md-direction="bottom">Design a new plan</md-tooltip>
       New
   </md-button>    
@@ -62,24 +67,24 @@
 
 <%= content_for :main do %>
 
-  <div flex layout-padding ng-if="status != 'Ready'">
+  <div flex layout-padding ng-if="status.plans != 'Ready'">
     <div layout="row">
       <div flex="25"></div>
       <div flex="50">
         <br /><br />
-        <h2 class="md-title">{{status}}</h2>
+        <h2 class="md-title">Loading Plans...</h2>
         <br />
         <md-progress-linear md-mode="indeterminate"></md-progress-linear>
       </div>
     </div>
   </div>
 
-  <div ng-if="status == 'Ready' && mode == 'new'">
+  <div ng-if="status.operation_types == 'Ready' && status.sample_names == 'Ready' && mode == 'new'">
     <div ng-if="plan == null" ng-include="'operation_type_chooser'"></div> 
     <div ng-if="plan != null" ng-include="'plan_editor'"></div> 
   </div>
 
-  <div ng-if="status == 'Ready' && mode != 'new'"
+  <div ng-if="status.plans == 'Ready' && mode != 'new'"
        ng-include="'plan_list'" layout-padding flex>
   </div>  
 

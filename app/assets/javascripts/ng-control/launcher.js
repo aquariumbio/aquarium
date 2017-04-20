@@ -15,38 +15,53 @@
     AQ.update = () => { $scope.$apply(); }
     AQ.confirm = (msg) => { return confirm(msg); }
 
-    $scope.status = "Loading sample names ...";
     $scope.plan = null;
     $scope.error = null;
     $scope.plan_offset = 0;
     $scope.getting_plans = false;
     $scope.mode = 'running';
 
-    AQ.get_sample_names().then(() =>  {
-      $scope.status = "Loading operation types ...";
-      AQ.OperationType.all_with_content().then((operation_types) => {
-        $scope.status = "Getting user information ...";
-        AQ.User.current().then((user) => {
-          $scope.status = "Retrieving plans ...";
-          $scope.getting_plans = true;
-          AQ.Plan.list($scope.plan_offset).then((plans) => {
-            $scope.status = "Ready";
-            $scope.getting_plans = false;
-            $scope.operation_types = aq.where(operation_types,ot => ot.deployed);
-            AQ.OperationType.compute_categories($scope.operation_types);
-            AQ.operation_types = $scope.operation_types;
-            $scope.current_user = user;
-            $scope.plans = plans.reverse();
-            aq.each($scope.plans, (plan)=> { 
-              plan.link_operation_types($scope.operation_types) 
-            });
+    $scope.status = {
+      sample_names: "Loading",
+      operation_types: "Loading",
+      user_info: "Loading",
+      plans: "Loading"
+    }
 
-            $scope.$apply();
+    AQ.User.current().then((user) => {
 
+      $scope.current_user = user;
+      $scope.status.user_info = "Ready";      
+      $scope.getting_plans = true;      
+
+      AQ.Plan.list($scope.plan_offset).then((plans) => {
+
+        $scope.plans = plans.reverse();        
+        $scope.status.plans = "Ready";        
+        $scope.getting_plans = false;
+
+        AQ.OperationType.all_with_content().then((operation_types) => {
+
+          $scope.operation_types = aq.where(operation_types,ot => ot.deployed);
+          AQ.OperationType.compute_categories($scope.operation_types);
+          AQ.operation_types = $scope.operation_types;
+          aq.each($scope.plans, (plan)=> { 
+            plan.link_operation_types($scope.operation_types) 
+          });       
+
+          $scope.status.operation_types = "Ready";
+
+          AQ.get_sample_names().then(() =>  {
+            $scope.status.sample_names = "Ready";
           });
+
+          $scope.$apply();
+
         });
       });
-    });    
+    });
+
+    // $scope.$apply();
 
     $scope.set_mode = function(m) {
       $scope.mode = m;
