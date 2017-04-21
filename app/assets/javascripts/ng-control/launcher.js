@@ -108,10 +108,11 @@
       aq.each(user.user_budget_associations, uba => {
         if ( uba.id == s.id ) {
           uba.selected = true;
+          $scope.plan.uba = uba;
         } else {
           uba.selected = false;
         }
-      })
+      });
     }
 
     $scope.remove_operation = function(op) {

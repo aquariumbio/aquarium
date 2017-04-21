@@ -80,7 +80,7 @@ class LauncherController < ApplicationController
         c = {}
 
         begin
-          c = op.nominal_cost.merge(labor_rate: labor_rate, markup_rate: markup)
+          c = op.nominal_cost.merge(labor_rate: labor_rate, markup_rate: markup, rid: @id_map[op.id])
         rescue Exception => e
           c = { error: e.to_s }
         end
@@ -104,6 +104,7 @@ class LauncherController < ApplicationController
   def plan_from params
 
     plan = current_user.plans.create
+    @id_map = {}
 
     unless plan.errors.empty?
       raise plan.errors.full_messages.join(", ")
@@ -114,6 +115,7 @@ class LauncherController < ApplicationController
         op = operation_from(form_op)
         op.associate_plan plan
         op.save
+        @id_map[op.id] = form_op[:rid]
         unless op.errors.empty?
           raise op.errors.full_messages.join(", ")
         end
@@ -147,12 +149,34 @@ class LauncherController < ApplicationController
 
     ActiveRecord::Base.transaction do    
 
+      puts "LOOKING FOR BUDGET"
+
+      if params[:user_budget_association]
+        uba = UserBudgetAssociation.find params[:user_budget_association][:id]
+      else
+        render json: { errors: "No budget specified" }
+        raise ActiveRecord::Rollback                
+      end
+
+      puts "FOUND BUDGET"
+
+      if current_user.id != uba.id || uba.budget.spent_this_month(current_user.id) >= uba.quota
+        puts "User #{current_user.login} not authorized or overspent for budget #{uba.budget.name}"
+        render json: { errors: "User #{current_user.login} not authorized or overspent for budget #{uba.budget.name}"}, status: 422
+        raise ActiveRecord::Rollback        
+      end
+
       begin
         plan = plan_from params
       rescue Exception => e
         render json: { errors: e }
         raise ActiveRecord::Rollback
       end
+
+      plan.budget_id = uba.budget.id
+      plan.save
+
+      puts "Plan budget is #{plan.budget.name}"
 
       plan.operations.each do |op|
         puts "Controller: Starting op #{op.id}: #{op.field_values.collect { |fv| [fv.name,fv.child_item_id]}.join(', ')}"

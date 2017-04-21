@@ -43,7 +43,8 @@ AQ.Plan.record_methods.export = function() {
 
   return AQ.Plan.record({
     operations: plan.operations_from_wires(),
-    wires: plan.wires
+    wires: plan.wires,
+    user_budget_association: plan.uba
   })
 
 }
@@ -72,6 +73,7 @@ AQ.Plan.record_methods.estimate_cost = function() {
   if ( !plan.estimating ) {
   
     plan.estimating = true;
+
     AQ.post('/launcher/estimate',plan.export()).then( response => {
 
       if ( response.data.errors ) {
@@ -89,8 +91,9 @@ AQ.Plan.record_methods.estimate_cost = function() {
               error = true;
               return 0;
             } else {
-              var base = c.materials + c.labor * c.labor_rate;
-              return base * ( 1.0 + c.markup_rate );
+              c.base = c.materials + c.labor * c.labor_rate;
+              c.total = c.base * ( 1.0 + c.markup_rate );
+              return c.total;
             }
           })
         };
@@ -98,6 +101,22 @@ AQ.Plan.record_methods.estimate_cost = function() {
         plan.cost.error = error;
 
       }
+
+      aq.each(response.data, cost => {
+        console.log(cost);
+      });      
+
+      aq.each(plan.operations_from_wires(), op => {
+        aq.each(response.data, cost => {
+          if ( op.rid == cost.rid ) {
+            if ( !cost.error ) {
+              op.cost = cost.total;  
+            } else {
+              op.cost = cost.error;
+            }
+          }
+        });
+      });
 
       plan.estimating = false;
 
@@ -325,3 +344,5 @@ AQ.Plan.record_methods.relaunch = function() {
   });
 
 }
+
+AQ.Plan.getter(AQ.Budget,"budget");
