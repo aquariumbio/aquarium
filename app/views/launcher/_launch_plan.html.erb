@@ -15,7 +15,8 @@
 
       <div ng-if="!plan.estimating" layout="row" layout-align="center center">
         <span class="md-body-2" ng-if="plan.cost.error">
-          Undetermined: {{plan.cost.error}}
+          Cost Undetermined: 
+          <span class="md-body-1">{{plan.cost.error}}</span>
         </span>
         <span class="md-body-2" ng-if="!plan.cost.error">
           {{plan.cost.total|currency}}
@@ -49,8 +50,12 @@
     <hr>
 
     <div layout="row" layout-align="center center">
-      <md-button ng-click="submit_plan()" class="md-raised md-primary">Submit</md-button>
-      <md-button ng-click="plan.status = 'preparing'"class="md-raised">Cancel</md-button>
+      <md-button 
+        ng-click="submit_plan()"
+        ng-disabled="plan.estimating || plan.cost.error"
+        class="md-raised md-primary">
+        Submit
+      </md-button>
     </div>    
 
   </md-content>
