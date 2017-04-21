@@ -22,7 +22,7 @@ class LauncherController < ApplicationController
     ot = OperationType.find(form[:operation_type][:id])
     op = ot.operations.create status: "planning", user_id: current_user.id
 
-    form[:field_values].each do |fv|    
+    form[:field_values].each do |fv|
 
       if fv[:sample_identifier]
         sid = sid(fv[:sample_identifier])
@@ -49,7 +49,7 @@ class LauncherController < ApplicationController
       map_id fv[:rid], field_value.id
 
       unless field_value.errors.empty?
-        raise ot.name + ": " + field_value.errors.full_messages.join(", ") + "field value: #{field_value.inspect}"
+        raise ot.name + " operation: " + field_value.errors.full_messages.join(", ")
       end
 
     end
@@ -58,21 +58,88 @@ class LauncherController < ApplicationController
 
   end
 
-  def cost
+  def estimate
 
-    ActiveRecord::Base.transaction do     
+    costs = []
+    labor_rate = Parameter.get_float("labor rate") 
+    markup = Parameter.get_float("markup rate")
+    error = nil
+    
+    ActiveRecord::Base.transaction do 
 
       begin
-        op = operation_from(params)
-        c = op.nominal_cost
-        render json: { cost: c[:materials] + c[:labor] * Parameter.get_float("labor rate") }
+        plan = plan_from params
       rescue Exception => e
-        render json: { errors: e.to_s }
+        error = e.to_s
+        puts "ERROR building plan: #{e}"
+        raise ActiveRecord::Rollback
+      end
+
+      costs = plan.operations.collect do |op|
+
+        c = {}
+
+        begin
+          c = op.nominal_cost.merge(labor_rate: labor_rate, markup_rate: markup)
+        rescue Exception => e
+          c = { error: e.to_s }
+        end
+
+        c
+
       end
 
       raise ActiveRecord::Rollback
 
     end
+
+    if error
+      render json: { errors: error }
+    else
+      render json: costs
+    end
+
+  end
+
+  def plan_from params
+
+    plan = current_user.plans.create
+
+    unless plan.errors.empty?
+      raise plan.errors.full_messages.join(", ")
+    end
+
+    params[:operations].each do |form_op|
+      begin
+        op = operation_from(form_op)
+        op.associate_plan plan
+        op.save
+        unless op.errors.empty?
+          raise op.errors.full_messages.join(", ")
+        end
+      rescue Exception => e
+        raise e.to_s
+      end
+    end
+
+    if params[:wires]
+      params[:wires].each do |form_wire|
+        wire = Wire.new({
+          from_id: @id_map[form_wire[:from][:rid]],
+          to_id: @id_map[form_wire[:to][:rid]],
+          active: true
+        })
+        wire.save
+        wire.to_op.field_values.each do |fv| # remove inputs from non-leaves
+          if fv.child_item_id
+            fv.child_item_id = nil
+            fv.save
+          end
+        end
+      end
+    end
+
+    return plan
 
   end
 
@@ -80,44 +147,11 @@ class LauncherController < ApplicationController
 
     ActiveRecord::Base.transaction do    
 
-      plan = current_user.plans.create
-
-      unless plan.errors.empty?
-        render json: { errors: plan.errors.full_messages.join(", ") }, status: 422        
-        raise ActiveRecord::Rollback       
-      end
-
-      params[:operations].each do |form_op|
-        begin
-          op = operation_from(form_op)
-          op.associate_plan plan
-          op.save
-          unless op.errors.empty?
-            render json: { errors: op.errors.full_messages.join(", ") }, status: 422        
-            raise ActiveRecord::Rollback                   
-          end
-        rescue Exception => e
-          render json: { errors: e.to_s + " " + e.backtrace[0].to_s }, status: 422        
-          raise ActiveRecord::Rollback       
-        end
-      end  
-
-      if params[:wires]
-        params[:wires].each do |form_wire|
-          wire = Wire.new({
-            from_id: @id_map[form_wire[:from][:rid]],
-            to_id: @id_map[form_wire[:to][:rid]],
-            active: true
-          })
-          wire.save
-          wire.to_op.field_values.each do |fv| # remove inputs from non-leaves
-            if fv.child_item_id
-              puts "REMOVING ITEM #{fv.child_item_id} FROM #{fv.name}"
-              fv.child_item_id = nil
-              fv.save
-            end
-          end
-        end
+      begin
+        plan = plan_from params
+      rescue Exception => e
+        render json: { errors: e }
+        raise ActiveRecord::Rollback
       end
 
       plan.operations.each do |op|

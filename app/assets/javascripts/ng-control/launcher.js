@@ -61,8 +61,6 @@
       });
     });
 
-    // $scope.$apply();
-
     $scope.set_mode = function(m) {
       $scope.mode = m;
     }
@@ -75,6 +73,7 @@
       $scope.current_operation = op;
       $scope.current_fv = fv;
       $scope.current_ft = ft;
+      delete $scope.plan.status;
       aq.each($scope.plan.wires, w => {
         aq.each(w.to_op.field_values, field_value => { 
           field_value.selected = false;
@@ -103,6 +102,16 @@
         ]
       });
 
+    }
+
+    $scope.select_uba= function(user,s) {      
+      aq.each(user.user_budget_associations, uba => {
+        if ( uba.id == s.id ) {
+          uba.selected = true;
+        } else {
+          uba.selected = false;
+        }
+      })
     }
 
     $scope.remove_operation = function(op) {

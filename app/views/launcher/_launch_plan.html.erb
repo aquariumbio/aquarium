@@ -1,0 +1,58 @@
+<script type="text/ng-template" id="launch_plan">
+
+  <md-content ng-if="mode=='new'">
+
+    <div class="title">
+
+      <span class="md-title">{{current_operation.operation_type.name}}</span>
+
+      <div ng-if="plan.estimating" layout="row" layout-align="center center">
+        <md-progress-circular class="md-hue-2" md-diameter="20px">
+        </md-progress-circular> 
+        &nbsp;
+        <span class="md-body-2">Estimating Cost</span>
+      </div>     
+
+      <div ng-if="!plan.estimating" layout="row" layout-align="center center">
+        <span class="md-body-2" ng-if="plan.cost.error">
+          Undetermined: {{plan.cost.error}}
+        </span>
+        <span class="md-body-2" ng-if="!plan.cost.error">
+          {{plan.cost.total|currency}}
+        </span>
+      </div>
+
+    </div>
+
+    <md-list ng-repeat="uba in current_user.user_budget_associations" flex>
+      <md-list-item ng-if="uba.budget && uba.budget.spent.this_month != null">
+        <div class="md-list-item-text" layout="column">
+          <div class="md-body-2">
+            <md-checkbox
+              aria-label="Budget Choice"
+              class='budget-checkbox'
+              ng-click="select_uba(current_user,uba)"
+              ng-checked="uba.selected"
+              ng-disabled="uba.budget.spent.this_month > uba.quota">
+            </md-checkbox>
+            {{uba.budget.name}}
+          </div>
+
+          <div class="md-body-1">{{uba.budget.description}}.</div>
+          <div class="md-body-1">
+              {{uba.budget.spent.this_month|currency}}
+            / {{uba.quota|currency}} spent</div>
+        </div>
+      </md-list-item>
+    </md-list>
+
+    <hr>
+
+    <div layout="row" layout-align="center center">
+      <md-button ng-click="submit_plan()" class="md-raised md-primary">Submit</md-button>
+      <md-button ng-click="plan.status = 'preparing'"class="md-raised">Cancel</md-button>
+    </div>    
+
+  </md-content>
+
+</script>

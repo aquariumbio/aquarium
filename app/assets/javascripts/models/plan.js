@@ -64,6 +64,49 @@ AQ.Plan.record_methods.submit = function() {
 
 }
 
+AQ.Plan.record_methods.estimate_cost = function() {
+
+  var plan = this;
+  plan.estimating;
+
+  if ( !plan.estimating ) {
+  
+    plan.estimating = true;
+    AQ.post('/launcher/estimate',plan.export()).then( response => {
+
+      if ( response.data.errors ) {
+
+        plan.cost = { error: response.data.errors };
+
+      } else {
+
+        var error = false;
+
+        plan.cost = {
+          costs: response.data,
+          total: aq.sum(response.data, c => {
+            if ( c.error ) {
+              error = true;
+              return 0;
+            } else {
+              var base = c.materials + c.labor * c.labor_rate;
+              return base * ( 1.0 + c.markup_rate );
+            }
+          })
+        };
+
+        plan.cost.error = error;
+
+      }
+
+      plan.estimating = false;
+
+    });
+
+  }
+
+}
+
 AQ.Plan.record_methods.cancel = function(msg) {
 
   var plan = this;
@@ -247,20 +290,6 @@ AQ.Plan.record_methods.operations_from_wires = function() {
 
   return ops;
 
-}
-
-AQ.Plan.record_methods.cost = function() {
-
-  var plan = this,
-      sum = 0;
-
-  aq.each(plan.operations_from_wires(),(op) => {
-    if ( op.cost ) {
-      sum += op.cost;
-    }
-  })    
-
-  return sum;
 }
 
 AQ.Plan.record_methods.debug = function() {
