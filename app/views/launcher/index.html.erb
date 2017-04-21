@@ -23,11 +23,11 @@
     </md-content>
   </div>
 
-  <div ng-if="current_operation && plan.status != 'launch'" 
+  <div ng-if="current_operation && plan.status != 'launch' && plan.status != 'planning'"
        ng-include="'field_value_editor'">
   </div>  
 
-  <div ng-if="plan && plan.status == 'launch'" 
+  <div ng-if="plan && ( plan.status == 'launch' || plan.status == 'planning' )" 
        ng-include="'launch_plan'">
   </div>  
 

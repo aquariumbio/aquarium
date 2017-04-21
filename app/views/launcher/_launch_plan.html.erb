@@ -52,9 +52,10 @@
     <div layout="row" layout-align="center center">
       <md-button 
         ng-click="submit_plan()"
-        ng-disabled="plan.estimating || plan.cost.error"
+        ng-disabled="plan.estimating || plan.cost.error || plan.status == 'planning'"
         class="md-raised md-primary">
-        Submit
+        <span ng-if="plan.status != 'planning'">Submit</span>
+        <span ng-if="plan.status == 'planning'">Planning...</span>        
       </md-button>
     </div>    
 
