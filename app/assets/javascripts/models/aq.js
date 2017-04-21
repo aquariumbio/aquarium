@@ -44,7 +44,7 @@ AQ.items_for = function(sample_id,object_type_id) {
 
   return new Promise(function(resolve,reject) {
 
-    AQ.get('/json/items/'+sample_id+'/'+object_type_id).then(
+    AQ.post('/json/items/',{ sid: sample_id, oid: object_type_id }) .then(
       (response) => {
         resolve(aq.collect(response.data, (item) => { 
           if ( item.collection ) {

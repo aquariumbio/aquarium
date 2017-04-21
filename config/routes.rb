@@ -1,13 +1,13 @@
 Bioturk::Application.routes.draw do
  
   get '/json/current',             to: 'json#current'
-  get '/json/items/:sid/:oid',     to: 'json#items'
+  post '/json/items',              to: 'json#items'
   post '/json/save',               to: 'json#save'  
   post '/json/delete',             to: 'json#delete'    
   post '/json/upload',             to: 'json#upload'    
   post '/json',                    to: 'json#index'
 
-  post '/launcher/cost',                         to: 'launcher#cost'
+  post '/launcher/estimate',                     to: 'launcher#estimate'
   post '/launcher/submit',                       to: 'launcher#submit'  
   get '/launcher/plans',                         to: 'launcher#plans'  
   get '/launcher',                               to: 'launcher#index'
