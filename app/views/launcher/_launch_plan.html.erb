@@ -14,7 +14,7 @@
       </div>     
 
       <div ng-if="!plan.estimating" layout="row" layout-align="center center">
-        <span class="md-body-2" ng-if="plan.cost.error">
+        <span class="md-body-2 cost-error" ng-if="plan.cost.error ">
           Cost Undetermined: 
           <span class="md-body-1">{{plan.cost.error}}</span>
         </span>

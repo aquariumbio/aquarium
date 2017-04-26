@@ -82,13 +82,13 @@ AQ.Plan.record_methods.estimate_cost = function() {
 
       } else {
 
-        var error = false;
+        var errors = [];
 
         plan.cost = {
           costs: response.data,
           total: aq.sum(response.data, c => {
             if ( c.error ) {
-              error = true;
+              errors.push(c.error.replace(/\(eval\)/g, 'cost'));
               return 0;
             } else {
               c.base = c.materials + c.labor * c.labor_rate;
@@ -98,7 +98,9 @@ AQ.Plan.record_methods.estimate_cost = function() {
           })
         };
 
-        plan.cost.error = error;
+        if ( errors.length > 0 ) {
+          plan.cost.error = errors.join(", ");
+        }
 
       }
 

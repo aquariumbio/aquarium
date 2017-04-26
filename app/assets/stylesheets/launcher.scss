@@ -46,9 +46,20 @@
     margin: 10px 0 10px 0 !important;
   }  
 
+  .cost-error {
+    color: darkred;
+    line-height: 18px;
+    border-top: 1pt solid #bbb;
+    border-bottom: 1pt solid #bbb;    
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+
   .launch-error {    
     .title {
-      color: #a25900;
+      color: darkred;
       margin-bottom: 0px !important;
     }
     p { 
