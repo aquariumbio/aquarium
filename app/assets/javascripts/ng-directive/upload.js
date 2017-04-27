@@ -33,28 +33,29 @@
       scope: { record: '=' },
       replace: true,
 
-      template: "<div id='da123'>"
-              + "<label class='md-button md-small md-raised' ng-disabled='record.uploading'>"
-              + "<span ng-if='record.uploading'>Busy...</span>"
-              + "<span ng-if='!record.uploading'>Upload</span>"              
-              + "  <input type=file"
-              + "    id='upload'"
-              + "    file='upload'"
-              + "    data-url='/json/upload.json'"
-              + "    multiple"
-              + "    style='display: none;'>"
-              + "</label>",
+      template: "<label>"
+              + "  <span ng-if='record.uploading'>Busy...</span>"
+              + "  <span ng-if='!record.uploading'>Upload</span>"              
+              + "    <input type=file"
+              + "      id='upload'"
+              + "      file='upload'"
+              + "      data-url='/json/upload.json'"
+              + "      multiple"
+              + "      style='display: none;'>"
+              + "</label>",       
 
       link: function(scope,element,attrs) {
 
         $(element).find('#upload').fileupload({
           dataType: "json",
           add: function(e,data) {
+            console.log("ASD");
             data.submit();
             scope.record.uploading = true;
             AQ.update();
           },        
           done: function(e,data) {
+            console.log("BSD");
             var da = scope.record.new_data_association();
             delete da.upload;
             da.upload = data.result;

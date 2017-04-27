@@ -4,28 +4,11 @@
   <!-- PLAN TEMPLATE -->
 
   <div class="md-subhead" ng-show="plan.cost_total">
-    Budget: {{plan.budget.name}}, Cost:  {{plan.cost_so_far|currency}} / {{plan.cost_total|currency}}
-  </div>
-
-  <div layout="row" layout-align="space-between center">
-
-    <div>
-      <span class='md-subhead' ng-if="plan.data_associations.length > 0">Plan Data</span>
-      <span class='md-subhead' ng-if="plan.data_associations.length == 0">No Plan Data</span>
-    </div>
-
-    <div layout="row">
-      <md-button class='md-small md-raised'
-         ng-click="plan.new_data_association()">
-         New
-      </md-button>
-      <upload record='plan' class="left-pad"></upload>
-    </div>
-
+    {{plan.budget.name}}, Cost:  {{plan.cost_so_far|currency}} / {{plan.cost_total|currency}}
   </div>
 
   <da record="plan"></da>
-  <div class='md-subhead'>Plan Operations</div>
+  <div class='md-subhead'>Operations</div>
   <div ng-repeat="operation in plan.operations"
        ng-include="'operation_viewer'"></div>
 
@@ -47,31 +30,36 @@
     <div flex="10">
       <span ng-class="'md-body-2 status-'+operation.status">{{operation.status}}</span>
     </div>
-    <div flex="10">
-      <span class="md-body-2" ng-if="operation.status == 'done'">{{operation.cost.total|currency}}</span>
-    </div>    
+    <div flex="10" layout="row" layout-align="end center" ng-if="operation.status == 'done' && !operation.open">
+      <span class="md-body-2">{{operation.cost.total|currency}}</span>
+    </div>
+    <div flex="10" layout="row" layout-align="end center" ng-if="operation.open">
+      <md-menu layout="row">
+
+        <div class='detail-menu clickable'
+             ng-click="openMenu($mdMenu, $event)">
+          <ng-md-icon icon="menu" size="20" aria-label="Menu"></ng-md-icon>
+        </div>
+
+        <md-menu-content width="4" class="scrollable" flex>
+
+          <md-menu-item>
+            <md-button ng-click="operation.new_data_association()">Add Data</md-button>
+          </md-menu-item>
+
+          <md-menu-item>
+            <md-button><upload record='oepration'></upload></md-button>
+          </md-menu-item>
+
+        </md-menu-content>
+
+      </md-menu>
+    </div>   
   </div>
 
   <!-- DETAILS -->
 
-  <div layout="column" layout-align="start stretch" ng-if="operation.open" class="plan-row plan-details">
-
-    <div layout="row" layout-wrap layout-align="space-between center">
-
-      <div>
-        <span class='md-subhead' ng-if="operation.data_associations.length > 0">Operation Data</span>
-        <span class='md-subhead' ng-if="operation.data_associations.length == 0">No Operation Data</span>
-      </div>
-
-      <div layout="row">
-        <md-button class='md-small md-raised'
-           ng-click="operation.new_data_association()">
-           New
-        </md-button>
-        <upload record='operation' class="left-pad"></upload>
-      </div>
-
-    </div>    
+  <div layout="column" layout-align="start stretch" ng-if="operation.open" class="plan-row plan-details"> 
 
     <da record="operation"
         ng-if="operation.data_associations.length > 0"></da>
@@ -106,29 +94,39 @@
 
     <div flex="10" ng-if="!fv.value">{{fv.item.location}}</div> 
     <div flex="15" ng-if="!fv.value">{{fv.item.object_type.name}}</div>         
-    <div flex="45" ng-if="!fv.value">{{fv.child_sample.name}}</div> 
+    <div flex="35" ng-if="!fv.value">{{fv.child_sample.name}}</div> 
+    <div flex="70" ng-if="fv.value">{{fv.value}}</div>
 
-    <div flex="80" ng-if="fv.value">{{fv.value}}</div>
+    <div flex="10" layout="row" layout-align="end center" ng-if="fv.open">
+      <md-menu layout="row">
+
+        <div class='detail-menu clickable'
+             ng-click="openMenu($mdMenu, $event)">
+          <ng-md-icon icon="menu" size="20" aria-label="Menu"></ng-md-icon>
+        </div>
+
+        <md-menu-content width="4" class="scrollable" flex>
+
+          <md-menu-item>
+            <md-button ng-click="fv.item.new_data_association()">Add Data</md-button>
+          </md-menu-item>
+
+          <md-menu-item>
+            <md-button><upload record='fv.item'></upload></md-button>
+          </md-menu-item>
+
+        </md-menu-content>
+
+      </md-menu>
+    </div>   
+
 
   </div>
 
   <div layout="column" ng-repeat-end layout-align="start stretch" ng-if="fv.open" class="plan-row plan-details">  
 
     <div layout="row" layout-wrap layout-align="space-between center" ng-if="fv.open && fv.item">
-
-      <div>
-        <span class='md-subhead' ng-if="fv.item.data_associations.length > 0">Item Data</span>
         <span class='md-subhead' ng-if="fv.item.data_associations.length == 0">No item Data</span>
-      </div>
-
-      <div layout="row">
-        <md-button class='md-small md-raised'
-           ng-click="fv.item.new_data_association()">
-           New
-        </md-button>
-        <upload record='fv.item' class="left-pad"></upload>
-      </div>
-
     </div>     
 
     <da ng-if="fv.open" record="fv.item"></da>  
