@@ -3,8 +3,8 @@
 
   <!-- PLAN TEMPLATE -->
 
-  <div class="md-subhead" ng-show="plan.cost_total">
-    {{plan.budget.name}}, Cost:  {{plan.cost_so_far|currency}} / {{plan.cost_total|currency}}
+  <div class="md-subhead" ng-show="plan.cost_total != null">
+    {{plan.budget.name}}:  {{plan.cost_so_far|currency}} / {{plan.cost_total|currency}}
   </div>
 
   <da record="plan"></da>

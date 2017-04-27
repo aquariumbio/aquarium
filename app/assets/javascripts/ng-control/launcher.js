@@ -115,10 +115,20 @@
       });
     }
 
+    $scope.unselect_ubas = function(user) {
+      aq.each(user.user_budget_associations, uba => {
+        if ( $scope.plan ) {
+          $scope.plan.uba = null;
+        }
+        uba.selected = false;
+      });
+    }
+
     $scope.remove_operation = function(op) {
       aq.remove($scope.plan.operations,op);
       if ( $scope.plan.operations.length == 0 ) {
         $scope.plan = null;
+        $scope.unselect_ubas($scope.current_user);
       }
       $scope.current_operation = null;
     }
@@ -139,6 +149,7 @@
       $scope.plan.status = 'planning';
       $scope.plan.submit().then((plan) => {
         $scope.plan = null;
+        $scope.unselect_ubas($scope.current_user);
         $scope.current_operation = null;
         $scope.mode = 'running';
         plan.link_operation_types($scope.operation_types);

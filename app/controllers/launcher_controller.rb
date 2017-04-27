@@ -71,7 +71,6 @@ class LauncherController < ApplicationController
         plan = plan_from params
       rescue Exception => e
         error = e.to_s
-        puts "ERROR building plan: #{e}"
         raise ActiveRecord::Rollback
       end
 
@@ -149,8 +148,6 @@ class LauncherController < ApplicationController
 
     ActiveRecord::Base.transaction do    
 
-      puts "LOOKING FOR BUDGET"
-
       if params[:user_budget_association]
         uba = UserBudgetAssociation.find params[:user_budget_association][:id]
       else
@@ -158,9 +155,7 @@ class LauncherController < ApplicationController
         raise ActiveRecord::Rollback                
       end
 
-      puts "FOUND BUDGET"
-
-      if current_user.id != uba.id || uba.budget.spent_this_month(current_user.id) >= uba.quota
+      if current_user.id != uba.user_id || uba.budget.spent_this_month(current_user.id) >= uba.quota
         puts "User #{current_user.login} not authorized or overspent for budget #{uba.budget.name}"
         render json: { errors: "User #{current_user.login} not authorized or overspent for budget #{uba.budget.name}"}, status: 422
         raise ActiveRecord::Rollback        
@@ -175,8 +170,6 @@ class LauncherController < ApplicationController
 
       plan.budget_id = uba.budget.id
       plan.save
-
-      puts "Plan budget is #{plan.budget.name}"
 
       plan.operations.each do |op|
         puts "Controller: Starting op #{op.id}: #{op.field_values.collect { |fv| [fv.name,fv.child_item_id]}.join(', ')}"
