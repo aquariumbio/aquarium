@@ -1,35 +1,36 @@
-<% @tps.each do |tp| %>
+<% @operation_types.each do |ot| %>
 
-  <% tprows = @rows.select { |r| r.task.task_prototype_id == tp.id } %>
+  <% otrows = @rows.select { |r| r.operation && r.operation.operation_type_id == ot.id } %>
 
-  <% if tprows.length > 0 %>
+  <% if otrows.length > 0 %>
 
     <h3>
-      <%= tp.name %>: <%= number_to_currency(Account.total tprows) %>
+      <%= ot.name %>: <%= number_to_currency(Account.total otrows) %>
     </h3>
 
-    <% task_groups = tprows.group_by { |r| r.task_id } %>
+    <% ot_groups = otrows.group_by { |r| r.operation_id } %>
 
-    <% task_groups.each do |task_id, rows| %>
+    <% ot_groups.each do |operation_id, rows| %>
 
-      <div style='margin: 0 50px 0 50px'>
+      <div>
 
-        <table style="width: 100%; table-layout: fixed;">
+        <table style="table-layout: fixed; margin-left: 3px; width: 100%">
 
           <tr style="vertical-align: top">
 
             <td>
-              <b>Task <a href="/tasks/<%= task_id %>"><%= task_id %></a>: <%= Task.find(task_id).name %>
-                 <span id="task-<%= task_id %>-budget" class='change'></span>
-              </b>
+              <b>Operation <%= operation_id %></b>
+                 <span id="operation-<%= operation_id %>-budget" class='change'></span>
             </td>
 
             <td width="25%">
               <% if current_user && current_user.is_admin %>
-                <button class='btn btn-mini pull-right action no-print' onclick="choose_all(<%= task_id %>)">All</button>
-                <button class='btn btn-mini btn-primary pull-right action no-print' onclick="note(<%= task_id %>)">Note</button>
-                <button class='btn btn-mini btn-success pull-right action no-print' onclick="credit(<%= task_id %>)">Credit</button>
-                <button class='btn btn-mini btn-info pull-right action no-print' onclick="change_budget(<%= task_id %>)">Change Budget</button>
+                <div class='pull-right'>
+                <md-button class='md-small md-raised no-print' onclick="change_budget(<%= operation_id %>)">Change</md-button>  
+                <md-button class='md-small md-raised no-print' onclick="note(<%= operation_id %>)">Note</md-button>
+                <md-button class='md-small md-raised no-print' onclick="credit(<%= operation_id %>)">Credit</md-button>                
+                <md-button class='md-small md-raised no-print' onclick="choose_all(<%= operation_id %>)">All</md-button> 
+                </div>
               <% end %>      
             </td>
 

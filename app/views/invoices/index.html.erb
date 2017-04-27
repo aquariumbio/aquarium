@@ -6,11 +6,11 @@
   width: 33%;
 }
 .indent {
-  margin-left: 35px;
+  margin-left: 5px;
 }
 .users {
-  width: 95%;
-  margin-left: 30px;
+  width: 100%;
+  margin: 0;
 }
 .budget-name {
   font-size: 14pt;
@@ -18,37 +18,48 @@
 }
 </style>
 
-<h1>Invoices</h1>
+<%= content_for :specific_title do %>
+  Invoices
+<% end %>
 
-<% @data.each do |datum| %>
+<% content_for :sidebar do %>
+  Under construction: Choose a specific user. 
+<% end %>
 
-  <h3>
-    <%= datum[:date].strftime("%B %Y") %>
-    <% if params[:all] %>
-      : <%= number_to_currency(datum[:entries].collect { |e| e[:spent] }.inject{|s,x| s + x}) %>
-    <% end %>
-  </h3>
+<%= content_for :main do %>
 
-  <% datum[:entries].collect { |e| e[:budget] }.uniq.each do |b| %>
+  <% @data.each do |datum| %>
 
-    <p class='indent budget-name'><b><%= link_to b.name, b %></b> (<%= b.contact %>): <%= b.description %> </p>
-
-    <table class='table table-condensed users' style="table-layout: fixed">
-      <% datum[:entries].select { |e| e[:budget].id == b.id }.each do |e| %>
-        <tr>
-          <td><%= e[:user].name %> (<%= link_to "#{e[:user].login}", e[:user] %>)</td>
-          <td><i><%= e[:invoice].in_progress ? "in progress" : e[:invoice].status %></i></td>
-          <td><%= link_to number_to_currency(e[:spent]), e[:invoice] %></td>        
-        </tr>
+    <h3>
+      <%= datum[:date].strftime("%B %Y") %>
+      <% if params[:all] %>
+        : <%= number_to_currency(datum[:entries].collect { |e| e[:spent] }.inject{|s,x| s + x}) %>
       <% end %>
-      <% total = datum[:entries].select { |e| e[:budget].id == b.id }.collect { |e| e[:spent] }.inject{|sum,x| sum+x} %>
-      <tr>
-      <td></td>
-      <td></td>
-      <td><b><%= number_to_currency(total) %></b></td>
-      </tr>
-    </table>
+    </h3>
+
+    <% datum[:entries].collect { |e| e[:budget] }.uniq.each do |b| %>
+
+      <p class='indent budget-name'><b><%= link_to b.name, b %></b> (<%= b.contact %>): <%= b.description %> </p>
+
+      <table class='table table-condensed users' style="table-layout: fixed">
+        <% datum[:entries].select { |e| e[:budget].id == b.id }.each do |e| %>
+          <tr>
+            <td><%= e[:user].name %> (<%= link_to "#{e[:user].login}", e[:user] %>)</td>
+            <td><i><%= e[:invoice].in_progress ? "in progress" : e[:invoice].status %></i></td>
+            <td><%= link_to number_to_currency(e[:spent]), e[:invoice] %></td>        
+          </tr>
+        <% end %>
+        <% total = datum[:entries].select { |e| e[:budget].id == b.id }.collect { |e| e[:spent] }.inject{|sum,x| sum+x} %>
+        <tr>
+        <td></td>
+        <td></td>
+        <td><b><%= number_to_currency(total) %></b></td>
+        </tr>
+      </table>
+
+    <% end %>
 
   <% end %>
 
 <% end %>
+

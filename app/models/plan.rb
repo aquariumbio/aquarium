@@ -162,7 +162,7 @@ class Plan < ActiveRecord::Base
     fv_maps = []
 
     # Make new plan
-    newplan = Plan.new user_id: user_id
+    newplan = Plan.new user_id: user_id, budget_id: budget_id
     newplan.save
 
     # Make new operations from old ones

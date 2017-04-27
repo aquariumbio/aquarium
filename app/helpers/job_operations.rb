@@ -1,4 +1,4 @@
-module JobOperations
+module JobOperations # included in Job model
 
   def set_op_status str, force=false
     operations.each do |op|
@@ -19,17 +19,64 @@ module JobOperations
   end
 
   def charge
+
+    puts "CHARGING: #{operations.collect { |op| op.id }}"
+
+    labor_rate = Parameter.get_float("labor rate") 
+    markup_rate = Parameter.get_float("markup rate")        
+
     operations.each do |op|
-      cost_model_code = op.operation_type.code("cost_model").content
-      eval("#{cost_model_code}")
-      c = cost(op)
-      op.materials = c[:materials]
-      op.labor = c[:labor]
-      op.save
-      unless errors.empty?
-        raise "Could not save cost information to operation #{id}"
+
+      c = {};
+
+      begin
+
+        c = op.nominal_cost.merge(labor_rate: labor_rate, markup_rate: markup_rate)
+
+      rescue Exception => e
+
+        op.associate :cost_error, e.to_s
+
+      else
+
+        materials = Account.new(
+          user_id: op.user_id, 
+          category: "materials", 
+          amount: c[:materials],
+          budget_id: op.plan.budget_id,
+          description: "Materials",
+          labor_rate: labor_rate,
+          markup_rate: markup_rate,
+          operation_id: op.id,
+          job_id: id,
+          transaction_type: "debit"
+        )
+
+        materials.save
+
+        op.associate :cost_error, materials.errors.full_messages.join(', ') unless materials.errors.empty?
+
+        labor = Account.new(
+          user_id: op.user_id, 
+          category: "labor", 
+          amount: c[:labor] * labor_rate,
+          budget_id: op.plan.budget_id,
+          description: "Labor: #{c[:labor]} minutes @ $#{labor_rate}/min",
+          labor_rate: labor_rate,
+          markup_rate: markup_rate,
+          operation_id: op.id,
+          job_id: id,
+          transaction_type: "debit"
+        )
+
+        labor.save
+
+        op.associate :cost_error, labor.errors.full_messages.join(', ') unless labor.errors.empty? 
+
       end
+
     end
+
   end
 
   def start
@@ -41,6 +88,7 @@ module JobOperations
   end
 
   def stop status="done"
+    puts "STOPPING"
     if self.pc >= 0
       self.pc = Job.COMPLETED
       save
