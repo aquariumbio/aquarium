@@ -23,6 +23,7 @@ AQ.Plan.record_methods.reload = function() {
       {methods: [ "field_values", "operation_type" ] }
     ).then(ops => {
       plan.operations = ops;
+      plan.recompute_getter('costs');
       aq.each(plan.operations, op => {
         op.field_values = aq.collect(op.field_values,(fv) => {
           return AQ.FieldValue.record(fv);  
