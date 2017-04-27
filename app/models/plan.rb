@@ -194,6 +194,28 @@ class Plan < ActiveRecord::Base
 
   end
 
+  def costs
+
+    labor_rate = Parameter.get_float("labor rate") 
+    markup_rate = Parameter.get_float("markup rate")
+
+    op_ids = PlanAssociation.where(plan_id: id).collect { |pa| pa.operation_id }
+    ops = Operation.includes(:operation_type).find(op_ids)
+
+    ops.collect do |op|
+
+      begin
+        c = op.nominal_cost.merge(labor_rate: labor_rate, markup_rate: markup_rate, id: op.id)
+      rescue Exception => e
+        c = {}
+      end 
+
+      c 
+
+    end
+
+  end
+
 end
 
 

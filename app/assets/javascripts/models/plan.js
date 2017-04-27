@@ -65,6 +65,12 @@ AQ.Plan.record_methods.submit = function() {
 
 }
 
+AQ.Plan.record_methods.cost_to_amount = function(c) {
+  c.base = c.materials + c.labor * c.labor_rate;
+  c.total = c.base * ( 1.0 + c.markup_rate );
+  return c.total;
+}
+
 AQ.Plan.record_methods.estimate_cost = function() {
 
   var plan = this;
@@ -91,9 +97,7 @@ AQ.Plan.record_methods.estimate_cost = function() {
               errors.push(c.error.replace(/\(eval\)/g, 'cost'));
               return 0;
             } else {
-              c.base = c.materials + c.labor * c.labor_rate;
-              c.total = c.base * ( 1.0 + c.markup_rate );
-              return c.total;
+              return plan.cost_to_amount(c);
             }
           })
         };
@@ -102,11 +106,7 @@ AQ.Plan.record_methods.estimate_cost = function() {
           plan.cost.error = errors.join(", ");
         }
 
-      }
-
-      aq.each(response.data, cost => {
-        console.log(cost);
-      });      
+      } 
 
       aq.each(plan.operations_from_wires(), op => {
         aq.each(response.data, cost => {
@@ -125,6 +125,41 @@ AQ.Plan.record_methods.estimate_cost = function() {
     });
 
   }
+
+}
+
+AQ.Plan.record_getters.cost_total = function() {
+  delete this.cost_total;
+  this.costs;
+}
+
+AQ.Plan.record_getters.costs = function() {
+
+  var plan = this;
+  delete plan.costs;
+  plan.costs = [];
+
+  AQ.get('/plans/costs/'+plan.id).then(response => {
+
+    plan.costs = response.data;
+    plan.cost_total = 0;
+    plan.cost_so_far = 0;
+
+    aq.each(plan.costs, cost => {
+      aq.each(plan.operations, op => {
+        if ( cost.id == op.id ) {
+          op.cost = cost;
+          plan.cost_total += plan.cost_to_amount(cost);
+          if ( op.status == "done" ) {
+            plan.cost_so_far += plan.cost_to_amount(cost);
+          }
+        }
+      })
+    })
+
+  });
+
+  return plan.costs;
 
 }
 

@@ -161,6 +161,12 @@ class PlansController < ApplicationController
 
   end
 
+  def costs
+
+    render json: Plan.find(params[:id]).costs
+
+  end
+
   def debug
 
     plan = Plan.find(params[:id])

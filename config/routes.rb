@@ -15,6 +15,7 @@ Bioturk::Application.routes.draw do
 
   get '/plans/:pid/select/:oid',                 to: 'plans#select'
   get '/plans/start/:id',                        to: 'plans#start'
+  get '/plans/costs/:id',                         to: 'plans#costs'
   get '/plans/cancel/:id/:msg',                  to: 'plans#cancel' 
   get '/plans/:id/debug',                        to: 'plans#debug'
   post '/plans/replan',                          to: 'plans#replan'

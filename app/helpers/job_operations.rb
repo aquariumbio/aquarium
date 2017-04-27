@@ -20,14 +20,12 @@ module JobOperations # included in Job model
 
   def charge
 
-    puts "CHARGING: #{operations.collect { |op| op.id }}"
-
     labor_rate = Parameter.get_float("labor rate") 
     markup_rate = Parameter.get_float("markup rate")        
 
     operations.each do |op|
 
-      c = {};
+      c = {}
 
       begin
 

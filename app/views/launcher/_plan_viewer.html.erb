@@ -3,8 +3,8 @@
 
   <!-- PLAN TEMPLATE -->
 
-  <div class="md-subhead">
-    Budget: {{plan.budget.name}}
+  <div class="md-subhead" ng-show="plan.cost_total">
+    Budget: {{plan.budget.name}}, Cost:  {{plan.cost_so_far|currency}} / {{plan.cost_total|currency}}
   </div>
 
   <div layout="row" layout-align="space-between center">
@@ -26,7 +26,7 @@
 
   <da record="plan"></da>
   <div class='md-subhead'>Plan Operations</div>
-  <div ng-repeat="operation in plan.operations" 
+  <div ng-repeat="operation in plan.operations"
        ng-include="'operation_viewer'"></div>
 
 </script>
@@ -44,9 +44,12 @@
     <div flex="55">
       <span ng-include="'job_info'" ng-include="'job_info'"></span>
     </div> 
-    <div flex="20">
+    <div flex="10">
       <span ng-class="'md-body-2 status-'+operation.status">{{operation.status}}</span>
     </div>
+    <div flex="10">
+      <span class="md-body-2" ng-if="operation.status == 'done'">{{operation.cost.total|currency}}</span>
+    </div>    
   </div>
 
   <!-- DETAILS -->
