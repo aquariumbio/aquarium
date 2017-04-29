@@ -267,6 +267,21 @@ AQ.Plan.record_methods.remove_wires_to = function(op,fv) {
 
 }
 
+AQ.Plan.record_methods.is_wired = function(op,fv) {
+
+  var plan = this,
+      found = false;
+
+  aq.each(plan.wires, (wire) => {  
+    if ( wire.to_op == op && wire.to == fv ) {
+      found = true;
+    }
+  });
+
+  return found;
+
+}
+
 AQ.Plan.record_methods.propagate_down = function(fv,sid) {
 
   var plan = this;
@@ -346,6 +361,30 @@ AQ.Plan.record_methods.operations_from_wires = function() {
   })
 
   return ops;
+
+}
+
+AQ.Plan.record_methods.add_wire = function(fv,op,pred) {
+
+  var plan = this;
+
+  var preop = operation = AQ.Operation.record({
+    routing: {},
+    form: { input: {}, output: {} }
+  }).set_type(pred.operation_type);
+
+  var preop_output = preop.output(pred.output.name);
+
+  plan.remove_wires_to(op,fv);
+  plan.wire(preop,preop_output,op,fv);
+
+  if ( fv.field_type.array ) {
+    plan.propagate(op,fv,fv.sample_identifier);
+  } else {
+    plan.propagate(op,fv,op.routing[fv.routing])  
+  }
+
+  return preop;
 
 }
 

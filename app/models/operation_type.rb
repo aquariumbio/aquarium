@@ -219,6 +219,8 @@ class OperationType < ActiveRecord::Base
       oldft.preferred_operation_type_id = newft[:preferred_operation_type_id]   
       oldft.preferred_field_type_id = newft[:preferred_field_type_id]          
 
+      puts "PREF(#{oldft.name}): #{newft[:preferred_field_type_id]}"
+
       keepers = []
 
       if newft[:allowable_field_types]

@@ -96,7 +96,7 @@
             <input type='checkbox' 
                    ng-checked='io.preferred_operation_type_id == pred.operation_type.id && 
                                io.preferred_field_type_id == pred.field_type.id'
-                   ng-click='io.preferred_operation_type_id = pred.operation_type.id;
+                   ng-click='io.preferred_operation_type_id = io.preferred_operation_type_id ? null : pred.operation_type.id;
                              io.preferred_field_type_id = pred.field_type.id;
                              change(current_ot)'>
             {{pred.operation_type.category}} : {{pred.operation_type.name}} : {{pred.field_type.name}}            

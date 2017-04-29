@@ -218,26 +218,6 @@
       }
     }
 
-    $scope.add_wire = function(fv, op, pred) {
-
-      var preop = operation = AQ.Operation.record({
-        routing: {},
-        form: { input: {}, output: {} }
-      }).set_type(pred.operation_type);
-
-      var preop_output = preop.output(pred.output.name);
-
-      $scope.plan.remove_wires_to(op,fv);
-      $scope.plan.wire(preop,preop_output,op,fv);
-
-      if ( fv.field_type.array ) {
-        $scope.plan.propagate(op,fv,fv.sample_identifier);
-      } else {
-        $scope.plan.propagate(op,fv,op.routing[fv.routing])
-      }
-
-    }
-
     $scope.select_item = function(fv, item) {
       aq.each(fv.items, i => {
         if ( i.collection ) {

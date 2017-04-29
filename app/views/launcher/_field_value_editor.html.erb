@@ -110,13 +110,21 @@
             ng-class="current_fv.field_type.preferred_operation_type_id == pred.operation_type.id ? 
                      'md-raised md-primary md-secondary' :
                      'md-raised md-secondary'"
-            ng-click="add_wire(current_fv,current_operation,pred)">
+            ng-click="plan.add_wire(current_fv,current_operation,pred)">
               <md-tooltip md-direction="bottom">
                 Use {{pred.operation_type.name}} from {{pred.operation_type.category}} to produce {{current_fv.name}}
               </md-tooltip>
               Add
           </md-button>
         </md-list-item>
+
+        <md-divider style="margin: 2px"></md-divider>
+
+        <md-list-item>
+          <p></p>
+          <md-button class="md-raised md-small md-warn" ng-click="current_fv.backchain(plan,current_operation)">Auto</md-button>
+        </md-list-item>
+
       </md-list>
 
     </div>
