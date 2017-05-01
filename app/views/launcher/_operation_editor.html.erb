@@ -16,7 +16,7 @@
 
       <li>
 
-        <node>
+        <node ng-click="set_current_op(operation)">
           <span class="collapse-open" ng-if="!operation.closed && operation.inputs.length != 0">
             <a href="#" ng-click="operation.closed = true">&#9660;</a>
           </span>

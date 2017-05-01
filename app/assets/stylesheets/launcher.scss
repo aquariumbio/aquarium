@@ -233,6 +233,13 @@
       box-sizing: border-box;   
   }  
 
+  .documentation {
+    padding: 0 16px 0 16px;
+    p {
+      line-height: 20px;
+    }
+  }
+
   .dropdown {
     width: 190px;
     margin: 0px;

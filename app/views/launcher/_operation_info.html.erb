@@ -1,0 +1,14 @@
+<script type="text/ng-template" id="operation_info">
+
+  <md-content class="field-value-editor" ng-if="mode=='new'">
+
+    <div class="title">
+      <h1 class="md-title">{{current_operation.operation_type.name}}</h1>
+    </div>
+
+  <div class='documentation md-body-1' ng-bind-html="current_operation.operation_type.rendered_docs"></div>
+
+  </md-content>
+
+
+</script>

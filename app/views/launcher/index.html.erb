@@ -4,6 +4,7 @@
 <%= render partial: 'plan_editor' %>  
 <%= render partial: 'operation_editor' %>
 <%= render partial: 'field_value_editor' %>
+<%= render partial: 'operation_info' %>
 <%= render partial: 'launch_plan' %>      
 <%= render partial: 'io_editor' %>
 <%= render partial: 'plan_list' %>  
@@ -23,8 +24,12 @@
     </md-content>
   </div>
 
-  <div ng-if="current_operation && plan.status != 'launch' && plan.status != 'planning'"
+  <div ng-if="current_operation && plan.status != 'launch' && plan.status != 'planning' && current_fv"
        ng-include="'field_value_editor'">
+  </div>  
+
+  <div ng-if="current_operation && plan.status != 'launch' && plan.status != 'planning' && !current_fv"
+       ng-include="'operation_info'">
   </div>  
 
   <div ng-if="plan && ( plan.status == 'launch' || plan.status == 'planning' )" 

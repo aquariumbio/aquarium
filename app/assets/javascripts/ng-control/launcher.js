@@ -14,6 +14,7 @@
     AQ.init($http);
     AQ.update = () => { $scope.$apply(); }
     AQ.confirm = (msg) => { return confirm(msg); }
+    AQ.sce = $sce;
 
     $scope.plan = null;
     $scope.error = null;
@@ -235,6 +236,11 @@
         item.selected_row = r;
         item.selected_column = c;
       }
+    }
+
+    $scope.set_current_op = function(op) {
+      $scope.current_operation = op;
+      $scope.current_fv = null;
     }
 
   }]);

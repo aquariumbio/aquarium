@@ -122,7 +122,6 @@ AQ.OperationType.record_methods.code = function(name) {
       if ( latest.length >= 1 ) {
         ot[name] = latest[0];
       } else {
-        console.log("no latest");
         ot[name]= { content: "# Add code here.", name: "name" };
       }
     } else { 
@@ -208,3 +207,36 @@ AQ.OperationType.record_methods.remove_predecessors = function() {
   });
   return ot;
 }
+
+AQ.OperationType.record_getters.rendered_docs = function() {
+
+  var ot = this;
+  var md = window.markdownit();
+  var docs = "Rendering..."
+
+  delete ot.rendered_docs;
+  ot.rendered_docs = AQ.sce.trustAsHtml(docs);
+
+  AQ.Code.where({parent_class: "OperationType", parent_id: ot.id, name: 'documentation'}).then(codes => {
+
+    if ( codes.length > 0 ) {
+      latest = aq.where(codes,code => { return code.child_id == null });
+      if ( latest.length >= 1 ) {
+        docs = latest[0].content;
+      } else {
+        docs = "This operation type has not yet been documented";
+      }
+    } else { 
+      docs = "This operation type has not yet been documented";
+    }
+
+    ot.rendered_docs = AQ.sce.trustAsHtml(md.render(docs));
+
+    AQ.update();
+
+  });
+
+  return docs;
+
+}
+
