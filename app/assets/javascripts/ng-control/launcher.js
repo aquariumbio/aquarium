@@ -103,6 +103,8 @@
         ]
       });
 
+      $scope.set_current_op($scope.plan.operations[0])
+
     }
 
     $scope.select_uba= function(user,s) {      
@@ -135,14 +137,17 @@
     }
 
     $scope.add_goal = function() {
-      aq.each($scope.plan.operations,op => op.closed = true)
-      $scope.plan.operations.unshift(
-        AQ.Operation.record({
-            routing: {},
-            form: { input: {}, output: {} }
-          }).set_type($scope.plan.operations[0].operation_type)
-      )
-      $scope.io_blur();
+
+      // aq.each($scope.plan.operations,op => op.closed = true)
+
+      var op = AQ.Operation.record({
+          routing: {},
+          form: { input: {}, output: {} }
+        }).set_type($scope.plan.operations[0].operation_type);
+
+      $scope.plan.operations.unshift(op)
+      $scope.set_current_op(op);
+
     }
 
     $scope.submit_plan = function() {
