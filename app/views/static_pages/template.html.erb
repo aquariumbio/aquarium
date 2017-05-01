@@ -37,6 +37,36 @@
 <% end %>
 
 <%= content_for :main do %>
-asd
+
+  <div class="aq-list">
+    <ul>
+      <li>
+        <input placeholder="Plasmid">
+        <ul>
+          <li>
+            <node><opener></opener>Assemble Plasmid <span class='pull-right'>&times;</span></node>
+            <ul>
+              <li>
+                <input placeholder="Fragment">
+                <ul>
+                  <li>
+                    <node><opener></opener>Make Fragment <span class='pull-right'>&times;</span></node>
+                    <ul>
+                      <li><input placeholder="Forward Primer"></li>
+                      <li><input placeholder="Reverse Primer"></li>
+                      <li><input placeholder="Template"></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li><input placeholder="Fragment"></li>
+              <li>&nbsp;&plus;</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
 <% end %>
 

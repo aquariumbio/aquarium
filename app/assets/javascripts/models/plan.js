@@ -287,7 +287,7 @@ AQ.Plan.record_methods.propagate_down = function(fv,sid) {
   var plan = this;
 
   aq.each(plan.wires, wire => {
-    if ( wire.to == fv ) {
+    if ( wire.to.rid === fv.rid ) {
       wire.from_op.routing[wire.from.routing] = sid; 
       if ( wire.from.role == 'output' ) {
         wire.from_op.instantiate(plan,wire.from,sid)
@@ -330,13 +330,24 @@ AQ.Plan.record_methods.propagate_up = function(op,fv,sid) {
 
 AQ.Plan.record_methods.propagate = function(op,fv,sid) {
 
-  aq.each(op.field_values,io => {
-    if ( fv.route_compatible(io) ) {
-      this.propagate_down(io,sid)
-    }  
-  })
+  var plan = this;
 
-  this.propagate_up(op,fv,sid);
+  if ( ! fv.field_type.array ) {
+
+    aq.each(op.field_values,io => {
+      if ( fv.route_compatible(io) ) {
+        plan.propagate_down(io,sid)
+      }  
+    })
+
+  } else {
+
+    plan.propagate_down(fv,sid)
+
+  }
+
+
+  plan.propagate_up(op,fv,sid);
 
   return this;
 

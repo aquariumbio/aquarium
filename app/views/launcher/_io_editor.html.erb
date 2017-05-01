@@ -1,50 +1,45 @@
 <script type="text/ng-template" id="io_editor">
 
-  <div class='field_value_form'>
+  <!-- Sample Chooser -->
+  <div sampleselect 
+       ng-repeat="fv in operation.field_values | filter: { name: ft.name, role: ft.role }" 
+       ft="ft" operation="operation" fv="fv" focus="io_focus" plan="plan" 
+       class="no-highlight">
+  </div> 
 
-    <!-- Sample Chooser -->
-    <div sampleselect 
-         ng-repeat="fv in operation.field_values | filter: { name: ft.name, role: ft.role }" 
-         ft="ft" operation="operation" fv="fv" focus="io_focus" plan="plan" 
-         class="no-highlight">
-    </div> 
-
-    <!-- Add array element button -->
-    <div ng-if="ft.array">
-      <a href='#' class='btn btn-mini' ng-click="operation.array_add(ft)">+</a>
-    </div>
-
+  <!-- Add array element button -->
+  <div ng-if="ft.array">
+    <a href='#' class='btn btn-mini' ng-click="operation.array_add(ft)">+</a>
   </div>
 
 </script>
 
 <script type="text/ng-template" id="parameter_editor">
 
-  <div class='field_value_form' 
+  <div 
        ng-repeat="fv in operation.field_values | filter: { role: ft.role }" 
        ng-if="fv.name == ft.name">
-
-    <span class='io-name'> <b>{{fv.name}}</b></span>
 
     <input ng-if="ft.choices_array.length == 0 && ft.ftype != 'json'"
            type="string" 
            ng-model="fv.value"
-           class="sample-only"
-           placeholder="{{ft.ftype}}"
+           placeholder="{{ft.name}} ({{ft.ftype}})"
            ng-focus='io_blur()'>
 
     <div ng-if="ft.ftype == 'json'">
-    <textarea 
+
+    <textarea
            ng-model="fv.value"
-           class='parameter-json'
-           placeholder="JSON"
+           placeholder="{{ft.name}} (JSON)"
            ng-focus="io_blur()"></textarea>
-    </div> 
+    </div>
     
     <div ng-if="ft.choices_array.length > 0  && ft.ftype != 'json'" class='select-container'>
       <select ng-model="fv.value"
               ng-focus='io_blur()'
-              ng-options="choice for choice in ft.choices_array"></select>
+              ng-options="choice for choice in ft.choices_array">
+        <option value="" disabled selected>{{fv.name}}</option>
+      </select>
     </div>
 
   </div>
@@ -53,17 +48,9 @@
 
 <script type="text/ng-template" id="sample_select">
 
-  <span class='io-name'> 
-    <span 
-      ng-click="focus(operation,ft,fv)" 
-      ng-class="fv.selected ? 'bold clickable no-highlight' : 'clickable no-highlight'">
-        {{fv.name}}
-    </span>
-  </span>
-
   <!-- basic sample -->
   <input type='string' 
-         placeholder="Sample Identifier"
+         placeholder="{{fv.name}}"
          id="sample-io"
          ng-class="input_class()"
          ng-model="operation.routing[ft.routing]"
@@ -73,20 +60,19 @@
 
   <!-- element of sample array -->
   <input type='string' 
-         placeholder="Sample Identifier"
+         placeholder="{{fv.name}}"
          id="sample-io"
-         ng-class="'sample-array-element ' + input_class()"
+         ng-class="input_class()"
          ng-model="fv.sample_identifier"
          ng-focus="focus(operation,ft,fv)"
          ng-if="ft.array && operation.form[ft.role][ft.name].aft.sample_type_id">
 
   <!-- not a sample -->
-  <input type='string'
-         placeholder="This {{fv.role}} does not require a sample name"
-         disabled=true
-         class="sample-only"
-         ng-focus="focus(operation,ft,fv)"
-         ng-if="!operation.form[ft.role][ft.name].aft.sample_type_id">
+  <span ng-click="focus(operation,ft,fv)"
+        ng-if="!operation.form[ft.role][ft.name].aft.sample_type_id"
+        class="non-sample">
+    {{fv.name}}
+  </span>
 
   <a ng-if="ft.array" 
      href="#" 

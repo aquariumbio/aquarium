@@ -31,6 +31,7 @@
           var sid = AQ.id_from(ui.item.value); 
 
           // send new sid to i/o of other operations
+          console.log("In sampleselect, about to propagate fv " + fv.rid)
           plan.propagate(op,fv,ui.item.value); 
 
           // use sample information to fill in inputs, if possible

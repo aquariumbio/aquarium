@@ -10,7 +10,7 @@ AQ.Operation.record_methods.set_type = function(operation_type) {
     var fv = AQ.FieldValue.record({ 
       name: ft.name, 
       role: ft.role, 
-      items: [], 
+      items: [],
       routing: ft.routing,
       field_type: ft 
     });
@@ -20,9 +20,9 @@ AQ.Operation.record_methods.set_type = function(operation_type) {
       fv.aft_id = ft.allowable_field_types[0].id;
     }
 
-    if ( ft.choices_array.length > 0 ) {
-      fv.value = ft.choices_array[0];
-    }    
+    // if ( ft.choices_array.length > 0 ) {
+    //   fv.value = ft.choices_array[0];
+    // }    
 
     op.field_values.push(fv);
 
@@ -67,6 +67,7 @@ AQ.Operation.record_methods.array_remove = function(fv) {
   }
 
   this.field_values.splice(j,1);
+  this.recompute_getter('types_and_values');
   return this;
 
 }
@@ -87,6 +88,7 @@ AQ.Operation.record_methods.array_add = function(field_type) {
   }
 
   this.field_values.push(fv);
+  this.recompute_getter('types_and_values');
   return this;
 
 }
@@ -203,7 +205,6 @@ AQ.Operation.record_methods.instantiate_aux = function(plan,pairs,resolve) {
 
 }
 
-
 AQ.Operation.record_methods.instantiate = function(plan,field_value,sid) {
 
   var operation = this,
@@ -233,5 +234,42 @@ AQ.Operation.record_methods.instantiate = function(plan,field_value,sid) {
     });
 
   });
+
+}
+
+AQ.Operation.record_getters.inputs = function() {
+
+  var op = this;
+  delete op.inputs;
+
+  op.inputs = aq.where(op.field_values, fv => fv.role == 'input');
+
+  return op.inputs;
+
+}
+
+AQ.Operation.record_getters.types_and_values = function() {
+
+  var op = this,
+      tvs = [];
+
+  delete op.types_and_values;
+
+  aq.each(op.operation_type.field_types, ft => {
+    if ( ft.role == 'input' && ft.ftype == 'sample' ) {
+      aq.each(op.field_values, fv => {
+        if ( fv.role == 'input' && ft.name == fv.name ) {
+          tvs.push({type: ft, value: fv})
+        }
+      });
+      if ( ft.array ) {
+        tvs.push({type: ft, array_add_button: true});
+      }
+    }
+  });
+
+  op.types_and_values = tvs;
+
+  return tvs;
 
 }
