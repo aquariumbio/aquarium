@@ -277,10 +277,10 @@
 
       $http.get("/operation_types/" + ot.id + "/copy/").then(function(response) {
         if ( !response.data.error ) { 
-          console.log(response.data);
           $scope.current_ot = response.data.operation_type;
           $scope.operation_types.push($scope.current_ot);
           make_categories();
+          $scope.current_category = $scope.current_ot.category;
         } else {
           alert ( response.data.error );
         }

@@ -17,13 +17,17 @@ module OperationTypeExport
 
         {
 
+          ftype: ft.ftype,
           role: ft.role, 
           name: ft.name,
           sample_types: ft.allowable_field_types.collect { |aft| aft.sample_type ? aft.sample_type.name : "" },
           object_types: ft.allowable_field_types.collect { |aft| aft.object_type ? aft.object_type.name : "" },
           part: ft.part ? true : false,
           array: ft.array ? true : false,
-          routing: ft.routing
+          routing: ft.routing,
+          preferred_operation_type_id: ft.preferred_operation_type_id,
+          preferred_field_type_id: ft.preferred_field_type_id,
+          choices: ft.choices
 
         }
 
@@ -62,7 +66,15 @@ module OperationTypeExport
 
       if obj[:field_types]
         obj[:field_types].each do |ft|
-          ot.add_io ft[:name], ft[:sample_types], ft[:object_types], ft[:role], part: ft[:part], array: ft[:array], routing: ft[:routing]
+          ot.add_io(
+            ft[:name], ft[:sample_types], ft[:object_types], ft[:role], 
+            part: ft[:part], 
+            array: ft[:array], 
+            routing: ft[:routing], 
+            ftype: ft[:ftype],
+            preferred_operation_type_id: ft[:preferred_operation_type_id],
+            preferred_field_type_id: ft[:preferred_field_type_id]
+          )
         end
       end
 
