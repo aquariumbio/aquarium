@@ -207,33 +207,37 @@ AQ.Operation.record_methods.instantiate_aux = function(plan,pairs,resolve) {
 
 AQ.Operation.record_methods.instantiate = function(plan,field_value,sid) {
 
-  var operation = this,
-      sample_id = AQ.id_from(sid); 
+  if ( sid ) {
 
-  return new Promise(function(resolve,reject) {    
+    var operation = this,
+        sample_id = AQ.id_from(sid); 
 
-    AQ.Sample.where({id: sample_id}, {methods: ["field_values"]}).then(samples => {
+    return new Promise(function(resolve,reject) {    
 
-      if ( samples.length == 1 ) {
+      AQ.Sample.where({id: sample_id}, {methods: ["field_values"]}).then(samples => {
 
-        var sample = samples[0],
-            pairs = [];
+        if ( samples.length == 1 ) {
 
-        aq.each(sample.field_values, sfv => {
-          aq.each(operation.field_values, ofv => {
-            if ( ofv != field_value && sfv.name == ofv.name && sfv.child_sample_id ) {
-              pairs.push({sfv:sfv,ofv: ofv})
-            } 
-          })
-        });
+          var sample = samples[0],
+              pairs = [];
 
-        operation.instantiate_aux(plan,pairs,resolve);
+          aq.each(sample.field_values, sfv => {
+            aq.each(operation.field_values, ofv => {
+              if ( ofv != field_value && sfv.name == ofv.name && sfv.child_sample_id ) {
+                pairs.push({sfv:sfv,ofv: ofv})
+              } 
+            })
+          });
 
-      } 
+          operation.instantiate_aux(plan,pairs,resolve);
+
+        } 
+
+      });
 
     });
 
-  });
+  }
 
 }
 
