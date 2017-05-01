@@ -28,10 +28,11 @@
 
     <div ng-if="ft.ftype == 'json'">
 
-    <textarea
-           ng-model="fv.value"
-           placeholder="{{ft.name}} (JSON)"
-           ng-focus="io_blur()"></textarea>
+      <textarea
+             ng-model="fv.value"
+             placeholder="{{ft.name}} (JSON)"
+             ng-focus="io_blur()"></textarea>
+           
     </div>
     
     <div ng-if="ft.choices_array.length > 0  && ft.ftype != 'json'" class='select-container'>
@@ -49,10 +50,11 @@
 <script type="text/ng-template" id="sample_select">
 
   <!-- basic sample -->
+
   <input type='string' 
          placeholder="{{fv.name}}"
          id="sample-io"
-         ng-class="input_class()"
+         ng-class="input_class($parent.$parent.current_fv)"
          ng-model="operation.routing[ft.routing]"
          ng-focus="focus(operation,ft,fv)"
          autofocus="true"
@@ -62,7 +64,7 @@
   <input type='string' 
          placeholder="{{fv.name}}"
          id="sample-io"
-         ng-class="input_class()"
+         ng-class="input_class($parent.$parent.current_fv)"
          ng-model="fv.sample_identifier"
          ng-focus="focus(operation,ft,fv)"
          ng-if="ft.array && operation.form[ft.role][ft.name].aft.sample_type_id">

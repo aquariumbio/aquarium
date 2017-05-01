@@ -75,6 +75,12 @@
       <md-tooltip md-direction="bottom">Design a new plan</md-tooltip>
       New
   </md-button>    
+  <md-button 
+    ng-click="set_mode('new')" 
+    disabled=true
+    ng-if="mode == 'running' && status.operation_types != 'Ready' && status.plans == 'Ready'">
+    Loading Operation Types ...
+  </md-button>
 <% end %>
 
 <%= content_for :main do %>

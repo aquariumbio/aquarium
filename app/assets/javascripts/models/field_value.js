@@ -100,31 +100,42 @@ AQ.FieldValue.record_methods.backchain = function(plan,operation) {
   var fv = this;
   var pred = fv.preferred_predecessor();
 
-  if ( plan.is_wired(operation,fv) ) {
-    console.log("The input " + fv.name + " is already wired. delete existing subplan to replan.")
-  } else if ( operation.form[fv.role][fv.name].aft.sample_type_id && ! fv.samp_id(operation) ) {
-    console.log("The input " + fv.name + " does not have a sample assigned. fv.sid = " + fv.sample_identifier);
-  } else if ( aq.where(fv.items, i => i.selected ).length > 0 ) {
-    console.log("The input " + fv.name + " already has an item. Manually backchain to ignore it.");
-  } else if ( !pred ) {
-    console.log("The input " + fv.name + " has no preferred predecessor. Manually backchain to proceed.");    
-  } else {
-    var preop = plan.add_wire(fv,operation,pred);
-    var output = aq.where(preop.field_values, fv => fv.role == 'output')[0];
-    preop.instantiate(plan,output,output.samp_id(preop)).then( () => {    
-      aq.each(preop.field_values, fv => {
-        if ( fv.role == 'input' ) {
-          var has_sample = preop.form[fv.role][fv.name].aft.sample_type_id;
-          if ( has_sample && fv.samp_id(preop) ) {
-            fv.find_items(fv.samp_id(preop)).then( items => {
-              fv.backchain(plan,preop);
-            });
-          } else if ( !has_sample ) {
-            fv.backchain(plan,preop);           
-          } 
-        }
+  return new Promise(function(resolve,reject) {
+
+    if ( plan.is_wired(operation,fv) ) {
+      fv.backchain_msg = "The input '" + fv.name + "'' is already wired. delete existing subplan to replan.";
+    } else if ( operation.form[fv.role][fv.name].aft.sample_type_id && ! fv.samp_id(operation) ) {
+      fv.backchain_msg = "The input '" + fv.name + "'' does not have a sample assigned.";
+    } else if ( aq.where(fv.items, i => i.selected ).length > 0 ) {
+      fv.backchain_msg = "The input '" + fv.name + "'' already has an item. Backchaining complete. Manually backchain to ignore it.";
+    } else if ( !pred ) {
+      fv.backchain_msg = "The input '" + fv.name + "'' has no preferred predecessor. Manually backchain to proceed."
+    } else {
+      fv.backchaining = true;
+      var preop = plan.add_wire(fv,operation,pred);
+      var output = aq.where(preop.field_values, fv => fv.role == 'output')[0];
+      preop.instantiate(plan,output,output.samp_id(preop)).then( () => {    
+        aq.each(preop.field_values, pfv => {
+          if ( pfv.role == 'input' ) {
+            var has_sample = preop.form[pfv.role][pfv.name].aft.sample_type_id;
+            if ( has_sample && pfv.samp_id(preop) ) {
+              pfv.find_items(pfv.samp_id(preop)).then( items => {
+                pfv.backchain(plan,preop).then(() => {
+                  fv.backchaining = false;
+                });
+              });
+            } else if ( !has_sample ) {
+              fv.backchain(plan,preop).then(() => {
+                fv.backchaining = false;
+              });
+            } 
+          } else {
+            fv.backchaining = false;
+          }
+        });
       });
-    });
-  }
+    }
+
+  });
 
 }

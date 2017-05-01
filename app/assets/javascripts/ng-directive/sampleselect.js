@@ -69,10 +69,13 @@
 
         };
 
-        $scope.input_class = function() {
+        $scope.input_class = function(current_fv) {
           var c = "sample-only";
           if ( fv.items.length > 0 ) {
             c += " input-satisfied";
+          }
+          if ( current_fv && current_fv.rid == fv.rid ) {
+            c += " selected-input";
           }
           return c
         }

@@ -122,10 +122,23 @@
 
         <md-list-item>
           <p></p>
-          <md-button class="md-raised md-small md-warn" ng-click="current_fv.backchain(plan,current_operation)">Auto</md-button>
+          <md-button 
+            class="md-raised md-small md-warn" 
+            ng-disabled="current_fv.backchaining"
+            ng-click="current_fv.backchain(plan,current_operation)">
+              Auto
+          </md-button>
         </md-list-item>
 
       </md-list>
+
+      <div class="backchain-msg" ng-if="current_fv.backchain_msg">
+        {{current_fv.backchain_msg}}
+        <div class="dismiss"
+          ng-click="current_fv.backchain_msg = false">
+          &times;
+        </div>
+      </div>
 
     </div>
 

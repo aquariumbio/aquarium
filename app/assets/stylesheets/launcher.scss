@@ -252,6 +252,12 @@
     padding: 10px 20px 10px 10px;
   }
 
+  .selected-input {
+    border-color: rgba(0, 51, 255, 0.8) !important;
+    box-shadow: 0 1px 1px rgba(0, 51, 255, 0.075) inset, 0 0 8px rgba(0, 51, 255, 0.6) !important;
+    outline: 0 none !important; 
+  }
+
   .small {
     font-size: 9pt;
     color: #666;
@@ -274,6 +280,19 @@
   .plan-controls {
     border-bottom: 1pt solid #eee;
     padding-bottom: 10px;
+  }
+
+  .backchain-msg {
+    position: relative;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    padding: 16px;
+    .dismiss {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+    }
   }
 
   .operation {

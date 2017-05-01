@@ -83,10 +83,6 @@
   textarea {
     border: 1pt solid #eee;
     border-radius: 0;
-    &:focus {
-      background-color: #eef;
-      outline: none;
-    };    
     width: 100%;
     margin: 0px -2px -2px -2px;
   }
