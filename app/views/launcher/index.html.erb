@@ -72,11 +72,15 @@
 <% end %>
 
 <%= content_for :action1 do %>
-  <md-button ng-click="set_mode('running')" ng-if="mode == 'new' && status.plans == 'Ready'">
+  <md-button class='md-raised'
+             ng-click="set_mode('running')"
+             ng-if="mode == 'new' && status.plans == 'Ready'">
       <md-tooltip md-direction="bottom">List all of your plans</md-tooltip>
       List
   </md-button>
-  <md-button ng-click="set_mode('new')" ng-if="mode == 'running' && status.operation_types == 'Ready' && status.plans == 'Ready'">
+  <md-button class='md-raised'
+             ng-click="set_mode('new')" 
+             ng-if="mode == 'running' && status.operation_types == 'Ready' && status.plans == 'Ready'">
       <md-tooltip md-direction="bottom">Design a new plan</md-tooltip>
       New
   </md-button>    
