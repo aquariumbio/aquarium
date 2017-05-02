@@ -8,8 +8,8 @@
     w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
   } 
 
-  w.controller('operationTypeTestCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
-                               function (  $scope,   $http,   $attrs,   $cookies ) {
+  w.controller('operationTypeTestCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', 
+                               function (  $scope,   $http,   $attrs,   $cookies,   $sce ) {
 
     $scope.randomize = function(ot) {
 
@@ -80,13 +80,16 @@
 
     $scope.content_type = function(line) {
       var type = Object.keys(line)[0];
-      if ( type == "item") { console.log(type); }
       return type;
     }
 
     $scope.content_value = function(line) {
       var k = Object.keys(line)[0];
-      return line[k];
+      if ( typeof line[k] === "string" ) {
+        return $sce.trustAsHtml(line[k]);
+      } else {
+        return line[k];
+      }
     }  
 
     $scope.table_class = function(cell) {

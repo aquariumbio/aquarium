@@ -1,12 +1,12 @@
 <script type="text/ng-template" id="title">
   <div class='content content-title'>
-    {{content_value(line)}}
+    <span ng-bind-html="content_value(line)"></span>
   </div>
 </script>
 
 <script type="text/ng-template" id="note">
   <div class='content content-note'>
-    {{content_value(line)}}
+    <span ng-bind-html="content_value(line)"></span>
   </div>
 </script>
 
@@ -25,25 +25,19 @@
 
 <script type="text/ng-template" id="bullet">
   <div class='content content-note'>
-    {{content_value(line)}}
+    &#9675; <span ng-bind-html="content_value(line)"></span>
   </div>
 </script>
 
 <script type="text/ng-template" id="warning">
   <div class='content content-note'>
-    {{content_value(line)}}
-  </div>
-</script>
-
-<script type="text/ng-template" id="bullet">
-  <div class='content content-note'>
-    {{content_value(line)}}
+    <span ng-bind-html="content_value(line)"></span>
   </div>
 </script>
 
 <script type="text/ng-template" id="check">
   <div class='content content-note'>
-    {{content_value(line)}}
+    <span ng-bind-html="content_value(line)"></span>
   </div>
 </script>
 
