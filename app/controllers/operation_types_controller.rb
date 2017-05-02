@@ -242,7 +242,7 @@ class OperationTypesController < ApplicationController
 
       plans = []
       ops.each do |op|
-        plan = Plan.new user_id: current_user.id
+        plan = Plan.new user_id: current_user.id, budget_id: Budget.all.first.id
         plan.save        
         plans << plan
         pa = PlanAssociation.new operation_id: op.id, plan_id: plan.id
@@ -289,7 +289,7 @@ class OperationTypesController < ApplicationController
           # render the resulting data including the job and the operations
           render json: {
             operations: ops.as_json(methods: [:field_values,:associations]),
-            plans: plans.collect { |p| p.as_json(include: :operations, methods: [:associations]) },
+            plans: plans.collect { |p| p.as_json(include: :operations, methods: [:associations, :costs]) },
             job: job.reload
           }
 

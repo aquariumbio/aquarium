@@ -140,15 +140,25 @@
         <th>Id</th>
         <th>Status</th>
         <th>Data</th>
-        <th>Materials</th>
         <th>Labor</th>
+        <th>Materials</th>
+        <th>Labor Rate</th>
+        <th>Markup</th>                        
+        <th>Total Cost</th>                                
       </tr>
-      <tr ng-repeat="op in current_ot.test_results.operations">
+      <tr ng-repeat="op in current_ot.test_results.operations track by $index">
         <td>{{op.id}}</td>
         <td>{{op.status}}</td>
         <td><span ng-repeat="(k,v) in op.associations">{{k}}: {{v}}</span></td>
-        <td>{{op.materials|currency}}</td>
-        <td>{{op.labor|currency}}</td>
+        <td>{{current_ot.test_results.plans[$index].costs[0].labor}} min</td>
+        <td>{{current_ot.test_results.plans[$index].costs[0].materials|currency}}</td>
+        <td>${{current_ot.test_results.plans[$index].costs[0].labor_rate}}/min</td>
+        <td>{{current_ot.test_results.plans[$index].costs[0].markup_rate}}%</td>
+        <td>{{
+              ( current_ot.test_results.plans[$index].costs[0].labor * current_ot.test_results.plans[$index].costs[0].labor_rate + 
+                current_ot.test_results.plans[$index].costs[0].materials ) * 
+               ( 1 + current_ot.test_results.plans[$index].costs[0].markup_rate ) | currency
+            }}</td>                                
       </tr>
     </table>
   </div>
