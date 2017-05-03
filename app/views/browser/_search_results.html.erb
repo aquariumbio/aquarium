@@ -1,8 +1,5 @@
 <div ng-show="views.search.selected">
 
-  <b ng-if="views.search.count == 1">1 Sample</b>
-  <b ng-if="views.search.count > 1">{{views.search.count}} Samples</b>
-
   <div class='search-pager' ng-if="views.search.pages.length > 1">
     <span ng-repeat="page in views.search.pages" 
           ng-click="search(page)"

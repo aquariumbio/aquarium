@@ -1,4 +1,4 @@
-<% provide(:title, 'Browser') %>
+<% provide(:title, 'Inventory') %>
 
 <style>
   body {
@@ -18,46 +18,69 @@
   } 
 </style>
 
-<div ng-app="aquarium" class='browser'>
 
-  <div ng-controller='browserCtrl as browser'>
+<!-- TEMPLATES -->
+<%= render partial: "sample_router" %>
+<%= render partial: "sample_heading" %>    
+<%= render partial: "sample" %>
+<%= render partial: "inventory" %>    
+<%= render partial: "form" %>
+<%= render partial: "/data_associations/list" %>
 
-    <!-- TEMPLATES -->
-    <%= render partial: "sample_router" %>
-    <%= render partial: "sample_heading" %>    
-    <%= render partial: "sample" %>
-    <%= render partial: "inventory" %>    
-    <%= render partial: "form" %>
-    <%= render partial: "/data_associations/list" %>
+<%= content_for :class do %>browser<% end %>
+<%= content_for :controller do %>browserCtrl as browser<% end %>
 
-    <div class='two-column'>
+<%= content_for :sidebar do %>
+  <%= render partial: "search_control" %>  
+  <hr>        
+  <%= render partial: "create_control" %>                         
+<% end %>
 
-      <div class='two-column-left'>        
-        <%= render partial: "search_control" %>
-            
-        <%= render partial: "create_control" %>                         
-        <% if false %>
-          <%= render partial: "recent_navigator" %>  
-          <%= render partial: "user_control" %>              
-          <%= render partial: "project_navigator" %>         
-          <%= render partial: "sample_type_navigator" %>               
-        <% end %>
-      </div>
+<%= content_for :specific_title do %>
+  &rang; 
 
-      <div class='two-column-right sample-view'>
-        <%= render partial: "view_heading" %>        
-        <%= render partial: "messages" %>
-        <%= render partial: "new_samples" %>
-        <%= render partial: "search_results" %>           
-        <% if false %>    
-          <%= render partial: "project_view" %>                   
-          <%= render partial: "sample_types" %>  
-          <%= render partial: "recent_samples" %>        
-        <% end %>
-      </div>
+  <span ng-if="views.create.selected">Unsaved Samples</span>
 
-    </div> 
+  <span ng-if="views.search.selected">
+    <span ng-show="views.search.sample_type != ''">{{views.search.sample_type}} &rang;</span>
+    <span ng-show="views.search.project_filter != ''">{{views.search.project}} &rang;</span>
+    <span ng-show="views.search.user_filter != ''">{{views.search.user}} &rang;</span>    
+    <span ng-if="views.search.count == 1">1 Sample</span>
+    <span ng-if="views.search.count > 1">{{views.search.count}} Samples</span>
+  </span>
 
-  </div> <!-- controller -->
+<% end %>
 
-</div> <!-- app -->
+<% content_for :action1 do %>
+  <md-button ng-class="views.search.selected ? 'md-raised md-primary' : 'md-raised'" 
+   ng-click="search(0); select_view('search')">Search</md-button> 
+<% end %>
+
+<% content_for :action2 do %>
+  <md-menu>
+
+    <md-button class='md-raised' ng-click="openMenu($mdMenu, $event)">New</md-button>
+
+    <md-menu-content>
+      <md-menu-item ng-repeat="st in sample_types">
+        <md-button ng-click="new_sample(st)">{{st.name}}</md-button>
+      </md-menu-item>
+    </md-menu-content>
+
+  </md-menu>  
+<% end %>
+
+<% content_for :action3 do %>
+  <md-button class='md-raised md-primary'
+     ng-click="save_new_samples()"
+     ng-disabled="views.create.samples.length == 0">
+    Save
+  </md-button>
+<% end %>
+
+<%= content_for :main do %>
+  <%= render partial: "view_heading" %>        
+  <%= render partial: "messages" %>
+  <%= render partial: "new_samples" %>
+  <%= render partial: "search_results" %>           
+<% end %>

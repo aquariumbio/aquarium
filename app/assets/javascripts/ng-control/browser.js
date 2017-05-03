@@ -487,6 +487,11 @@
 
     }     
 
+    $scope.openMenu = function($mdMenu, ev) {
+      originatorEv = ev;
+      $mdMenu.open(ev);
+    };    
+
   }]);
 
 })();
