@@ -198,11 +198,8 @@ class OperationTypesController < ApplicationController
 
         else
 
-          puts "Considering #{io.name}, #{io.role}"
-          puts "test_op[:field_values] = #{test_op[:field_values].collect { |fv| fv[:name] }}"
           fvlist = test_op[:field_values].select { |fv| fv[:name] == io.name && fv[:role] == io.role }
           fv = fvlist[0]
-          puts "FV = #{fv}"
           aft = AllowableFieldType.find_by_id(fv[:allowable_field_type_id])
           actual_fv = op.set_property(fv[:name], Sample.find_by_id(fv[:child_sample_id]), fv[:role],true,aft)
           raise "Nil value Error: Could not set #{fv}" unless actual_fv

@@ -62,20 +62,22 @@
     }
 
     $scope.test = function(ot) {
-      ot.test_results = null;
-      ot.test_error = null;
-      ot.running_test = true;
-      $http.post("/operation_types/test", ot.remove_predecessors()).then(function(response) {
-        ot.running_test = false;
-        aq.each(ot.field_types, ft => ft.recompute_getter('predecessors'));        
-        if ( response.data.error ) {
-          ot.test_error = response.data.error.replace(/\(eval\):/g, "Line ");
-          console.log(test_error);
-        } else {
-          ot.test_results = response.data;
-          ot.test_results.job.backtrace = JSON.parse(ot.test_results.job.state);
-        }
-      });
+      if ( ot.test_operations && ot.test_operations.length > 0 ) {
+        ot.test_results = null;
+        ot.test_error = null;
+        ot.running_test = true;
+        $http.post("/operation_types/test", ot.remove_predecessors()).then(function(response) {
+          ot.running_test = false;
+          aq.each(ot.field_types, ft => ft.recompute_getter('predecessors'));        
+          if ( response.data.error ) {
+            ot.test_error = response.data.error.replace(/\(eval\):/g, "Line ");
+            console.log(test_error);
+          } else {
+            ot.test_results = response.data;
+            ot.test_results.job.backtrace = JSON.parse(ot.test_results.job.state);
+          }
+        });
+      }
     }
 
     $scope.content_type = function(line) {
