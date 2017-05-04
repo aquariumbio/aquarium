@@ -43,7 +43,7 @@
 <% end %>
 
 <%= content_for :action1 do %>
-  <md-button aria-label="Schedule" 
+  <md-button aria-label="Schedule"  md-class='md-raised'
     ng-if="!current.ot.on_the_fly && current.status == 'pending_true'"
     ng-click="batch(current.ot)">
     Schedule
@@ -51,7 +51,7 @@
 <% end %>
 
 <%= content_for :action2 do %>
-  <md-button aria-label="Click" 
+  <md-button aria-label="Click"  md-class='md-raised'
     ng-if="!current.ot.on_the_fly && current.status == 'pending_true'"
     ng-click="choose(current.ot,'pending',true)">
     All
@@ -59,7 +59,7 @@
 <% end %>
 
 <%= content_for :action3 do %>
-  <md-button aria-label="Click" 
+  <md-button aria-label="Click" md-class='md-raised'
     ng-if="!current.ot.on_the_fly && current.status == 'pending_true'"  
     ng-click="choose(current.ot,'pending',false)">
     None
@@ -76,7 +76,7 @@
 
   <div ng-if="current.ot && current.status == 'scheduled'">
 
-    <div ng-if="jobs.length > 0" ng-repeat="job_id in jobs" class='job'>
+    <div ng-if="jobs.length > 0" ng-repeat="job_id in jobs" class='job'  style='margin: 16px'>
 
       <md-toolbar class="job-toolbar">
 

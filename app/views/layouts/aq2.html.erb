@@ -110,11 +110,7 @@
 
         </md-toolbar>
 
-        <% if content_for? :main_no_padding %>
-          <md-content class='main-no-padding scrollable'>
-        <% else %>
-          <md-content class='main scrollable'>
-        <% end %>
+        <md-content class='main scrollable'>
            <%= yield :main %>
         </md-content>
 

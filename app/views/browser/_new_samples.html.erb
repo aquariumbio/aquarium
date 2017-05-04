@@ -1,5 +1,6 @@
 <div ng-show="views.create.selected"
-     ng-if="views.create.samples.length > 0">
+     ng-if="views.create.samples.length > 0"
+     layout-padding>
 
   <div>
     <ul class='sample-tree-list'>
@@ -14,7 +15,7 @@
 
 <div ng-show="views.create.selected"
      ng-if="views.create.samples.length == 0"
-     class='well'>
+     layout-padding>
 
   <p><b>To create new samples</b>: Choose a samle type from the "Create" menu on the left. Edit 
   your samples. Click "Save".</p>

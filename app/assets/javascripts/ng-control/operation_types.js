@@ -99,7 +99,7 @@
     }    
 
     $scope.ot_class = function(ot) {
-      var c = "op-type";
+      var c = "clickable op-type";
       if ( $scope.current_ot == ot ) {
         c += " op-type-current";
       } 

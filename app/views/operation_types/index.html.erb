@@ -19,7 +19,7 @@
 
     <li ng-repeat="category in categories track by $index">
 
-      <b ng-click="choose_category(category)" class="no-highlight">
+      <b ng-click="choose_category(category)" class="no-highlight clickable">
         <span ng-if="current_category != category">&#9658;</span>
         <span ng-if="current_category == category">&#9660;</span>             
         {{category}}
@@ -62,7 +62,7 @@
 
 <% content_for :action3 do %>
   <md-button class='md-raised' ng-if="current_category" ng-click="export_category(current_category)">
-    Export {{current_category}}
+    Export Category
   </md-button>
 <% end %>
 
