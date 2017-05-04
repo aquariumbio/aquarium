@@ -14,17 +14,11 @@
     AQ.init($http);
     AQ.update = () => { $scope.$apply(); }
     AQ.confirm = (msg) => { return confirm(msg); }
+    AQ.sce = $sce;
 
     $scope.operation_types = [];
     $scope.current_ot = null;
     $scope.user = new User($http);  
-
-    if ( $cookies.getObject("DeveloperMode") ) {
-      $scope.mode = $cookies.getObject("DeveloperMode");
-    } else {
-      $scope.mode = 'definition';
-    }
-
     $scope.default_protocol = "";
     $scope.categories = [];
     $scope.initialized = false;
@@ -55,7 +49,12 @@
         $scope.current_ot = $scope.operation_types[0];
       }
       make_categories();
-      $scope.initialized = true;      
+      if ( $cookies.getObject("DeveloperMode") ) {
+        $scope.mode = $cookies.getObject("DeveloperMode");
+      } else {
+        $scope.mode = 'definition';
+      }      
+      $scope.initialized = true;            
       $scope.$apply();
     });
 

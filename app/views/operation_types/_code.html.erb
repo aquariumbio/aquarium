@@ -30,27 +30,29 @@
     </div>
 
     <div class='code-controls' ng-if="current_ot.mode != 'versions'">
-      <a href='#' 
-         class='btn' 
+      <md-button
+         class="md-raised md-medium"
          ng-click="save(current_ot,name)" 
          ng-disabled="!current_ot[name].changed">
          Save
-      </a>
-      <a href='#' 
-         class='btn' 
+      </md-button>
+      <md-button
+         class="md-raised md-medium"
          ng-click="current_ot.mode = 'versions'">
          Versions
-      </a>
-      <a href='#' class='btn' ng-if="name == 'documentation'" ng-click="render_docs(current_ot)">Preview</a>
+      </md-button>
+      <md-button class='md-raised md-medium'
+          ng-if="name == 'documentation'" ng-click="render_docs(current_ot)">
+        Preview
+      </md-button>
 
     </div>
 
     <div class='code-controls' ng-if="current_ot.mode == 'versions'">
-      <a href='#' 
-         class='btn' 
+      <md-button class='md-raised md-medium'
          ng-click="current_ot.mode = null">
-         Current Version
-      </a>
+         Current
+      </md-button>
     </div>
 
   </div>

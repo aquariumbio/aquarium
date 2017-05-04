@@ -12,7 +12,7 @@ class OperationTypesController < ApplicationController
 
     respond_to do |format|
       format.json { render json: OperationType.all.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation]) }
-      format.html { render layout: 'browser' }
+      format.html { render layout: 'aq2' }
     end    
     
   end

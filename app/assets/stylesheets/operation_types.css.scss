@@ -1,5 +1,9 @@
 .operation_types {
 
+  .definition {
+    margin-top: 16px;
+  }
+
   .op-type-list {
     list-style: none;
     margin-left: 0;    
@@ -82,10 +86,10 @@
 
   .ace_editor {
     position: absolute;
-    right: 10px;
-    left: 0;
+    right: 0px;
+    left: 0px;
     bottom: 45px;
-    top: 48px;
+    top: 49px;
     resize: none;
     font-weight: bold;
     background: transparent;

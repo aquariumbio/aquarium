@@ -1,17 +1,17 @@
-<div ng-show="mode == 'definition'" ng-controller="operationTypeDefinitionCtrl as opdef">
+<div ng-show="mode == 'definition'" ng-controller="operationTypeDefinitionCtrl as opdef" class='definition' layout-padding>
 
   <form>
 
     <div class="row-fluid">
-      <div class="span4">
+      <div class="span3">
         <label class="label-bold">Operation Name (id: {{current_ot.id}})</label>
-        <input type='text' ng-model="current_ot.name" ng-change="change(current_ot)" class="input-xlarge">
+        <input type='text' ng-model="current_ot.name" ng-change="change(current_ot)" class="input-large">
       </div>
-      <div class="span4">
+      <div class="span3">
         <label class="label-bold">Category</label>
-        <input type='text' ng-model="current_ot.category" ng-change="change(current_ot)" class="input-xlarge">
+        <input type='text' ng-model="current_ot.category" ng-change="change(current_ot)" class="input-large">
       </div>   
-      <div class="span1">
+      <div class="span2">
         <label class="label-bold">On the fly?</label>
         <input type='checkbox' ng-change="change(current_ot)" ng-model="current_ot.on_the_fly">
       </div>
@@ -20,7 +20,7 @@
         <input type='checkbox' ng-change="change(current_ot)" ng-model="current_ot.deployed">
       </div>
 
-      <div class="span2">
+      <div class="span3">
 
         <button class="btn btn-primary pull-right btn-mini" 
                 ng-click="save_ot(current_ot)" 
@@ -34,8 +34,10 @@
                 class="btn btn-mini pull-right"  style="margin-left: 5px"
                 ng-click="delete_ot(current_ot)"><span>Delete</span></button>
 
-        <button class="btn btn-mini pull-right" 
+        <button class="btn btn-mini pull-right" style="margin-left: 5px"
                 ng-click="export_ot(current_ot)"><span>Export</span></button>
+
+       <button class='btn btn-mini pull-right' ng-if="current_ot.id" ng-click="copy(current_ot)">Copy</button>
 
       </div>
 

@@ -215,7 +215,6 @@ AQ.OperationType.record_getters.rendered_docs = function() {
   var docs = "Rendering..."
 
   delete ot.rendered_docs;
-  ot.rendered_docs = AQ.sce.trustAsHtml(docs);
 
   AQ.Code.where({parent_class: "OperationType", parent_id: ot.id, name: 'documentation'}).then(codes => {
 
@@ -236,7 +235,7 @@ AQ.OperationType.record_getters.rendered_docs = function() {
 
   });
 
-  return docs;
+  return AQ.sce.trustAsHtml("Rendering ...");
 
 }
 

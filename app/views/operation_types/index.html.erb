@@ -1,108 +1,122 @@
 <% provide(:title, 'Developer') %>
 
-<div ng-app="aquarium" ng-controller="operationTypesCtrl as planner" class='operation_types'>
+<%= render partial: 'io_form' %>
+<%= render partial: 'show_block' %>
+<%= render partial: 'steps' %>     
+<%= render partial: 'code' %>   
 
-  <div class='two-column' ng-if="operation_types">
+<%= content_for :class do %>operation_types<% end %>
+<%= content_for :controller do %>operationTypesCtrl as planner<% end %>    
+<%= content_for :main_no_padding do %>true<% end %>
 
-    <%= render partial: 'io_form' %>
-    <%= render partial: 'show_block' %>
-    <%= render partial: 'steps' %>     
-    <%= render partial: 'code' %>   
+<%= content_for :sidebar do %>
 
-    <div ng-if="!initialized">Loading ...</div>
+  <div class="title">
+    <h1 class="md-title">Categories</h1>
+  </div>
 
-    <div class='two-column-left' ng-if="initialized">
+  <ul class='op-type-list'>    
 
-      <div class="two-column-control">
+    <li ng-repeat="category in categories track by $index">
 
-        <ul class='op-type-list'>    
+      <b ng-click="choose_category(category)" class="no-highlight">
+        <span ng-if="current_category != category">&#9658;</span>
+        <span ng-if="current_category == category">&#9660;</span>             
+        {{category}}
+        ({{category_size(category)}})
+      </b>
 
-          <li><br /></li>
+      <ul ng-if="current_category == category" class='op-type-sublist'>
+        <li ng-repeat="ot in operation_types | filter: { category: category } : true track by $index" 
+            ng-click="choose(ot)"
+            ng-class="ot_class(ot)">{{ot.name}}</li>
+      </ul>
 
-          <li>
-            <button class='btn btn-mini btn-primary' ng-click="new_operation_type()">New</button>
-            <button class='btn btn-mini' ng-if="current_ot.id" ng-click="copy(current_ot)">Copy</button>
+    </li>
 
-            <label class="btn btn-default btn-file btn-mini">
-              Import <input type=file
-                              id="import"
-                              file="import"
-                              style="display: none;"
-                              custom-on-change="import">
-            </label>
+  </ul>
 
-            <button class='btn btn-mini' ng-if="current_category" ng-click="export_category(current_category)">
-              Export {{current_category}}
-            </button>
+<% end %>
 
-          </li>
+<% content_for :specific_title do %>
 
-          <li><hr /></li>
+  <span ng-if="initialized">
+    &rang; {{current_category}} &rang; {{current_ot.name}}
+  </span>
 
-          <li ng-repeat="category in categories track by $index">
+<% end %>
 
-            <b ng-click="choose_category(category)" class="no-highlight">
-              <span ng-if="current_category != category">&#9658;</span>
-              <span ng-if="current_category == category">&#9660;</span>             
-              {{category}}
-              ({{category_size(category)}})
-            </b>
+<% content_for :action1 do %>
+  <md-button class="md-raised" ng-click="new_operation_type()">New</md-button>
+<% end %>
 
-            <ul ng-if="current_category == category" class='op-type-sublist'>
-              <li ng-repeat="ot in operation_types | filter: { category: category } : true track by $index" 
-                  ng-click="choose(ot)"
-                  ng-class="ot_class(ot)">{{ot.name}}</li>
-            </ul>
+<% content_for :action2 do %>
+      <label class="md-button md-raised">
+        Import <input type=file
+                        id="import"
+                        file="import"
+                        style="display: none;"
+                        custom-on-change="import">
+      </label>
+<% end %>
 
-          </li>
+<% content_for :action3 do %>
+  <md-button class='md-raised' ng-if="current_category" ng-click="export_category(current_category)">
+    Export {{current_category}}
+  </md-button>
+<% end %>
 
-        </ul>
+<%= content_for :main do %>
 
+  <div flex layout-padding ng-if="!initialized">
+    <div layout="row">
+      <div flex="25"></div>
+      <div flex="50">
+        <br /><br />
+        <h2 class="md-title">Loading ...</h2>
+        <br />
+        <md-progress-linear md-mode="indeterminate"></md-progress-linear>
       </div>
-
     </div>
- 
-    <div class='two-column-right' ng-show="operation_types && current_ot"> 
+  </div>
 
-      <ul class="nav nav-tabs">
-        <li ng-class="tab('definition')"><a href="#" ng-click="set_mode('definition')">Definition</a></li>
-        <li ng-class="tab('protocol')"><a href="#" ng-click="set_mode('protocol')">Protocol</a></li>
-        <li ng-class="tab('precondition')"><a href="#" ng-click="set_mode('precondition')">Precondition</a></li>
-        <li ng-class="tab('cost')"><a href="#" ng-click="set_mode('cost')">Cost</a></li>
-        <li ng-class="tab('documentation')"><a href="#" ng-click="set_mode('documentation')">Documentation</a></li>
-        <li ng-class="tab('test')"><a href="#" ng-click="set_mode('test')">Test</a></li>
-      </ul> 
+  <div ng-show="operation_types && current_ot"> 
 
-      <div class="ot-part-container">
+    <md-nav-bar md-selected-nav-item="mode" nav-bar-aria-label="Operation Type Editing Modes" md-no-ink-bar='false'>
+      <md-nav-item md-nav-click="set_mode('definition')" name='definition'>Definition</md-nav-item>
+      <md-nav-item md-nav-click="set_mode('protocol')" name="protocol">Protocol</md-nav-item>
+      <md-nav-item md-nav-click="set_mode('precondition')" name="precondition">Precondition</md-nav-item>
+      <md-nav-item md-nav-click="set_mode('cost')" name="cost">Cost</md-nav-item>
+      <md-nav-item ng-if="mode != 'documentation_view'" md-nav-click="set_mode('documentation')" name="documentation">Documentation</md-nav-item>
+      <md-nav-item ng-if="mode == 'documentation_view'" md-nav-click="set_mode('documentation')" name="documentation_view">Documentation</md-nav-item>
+      <md-nav-item md-nav-click="set_mode('test')" name="test">Test</md-nav-item>
+    </md-nav-bar> 
 
-        <%= render partial: 'definition' %>
+    <div class="ot-part-container">
 
-        <div ng-include="'code'" ng-init="name='protocol'"      ng-if="current_ot.protocol && mode == 'protocol'" ></div>
-        <div ng-include="'code'" ng-init="name='precondition'"  ng-if="current_ot.precondition && mode == 'precondition'"></div>
-        <div ng-include="'code'" ng-init="name='cost_model'"    ng-if="current_ot.cost_model && mode == 'cost'"></div>        
+      <%= render partial: 'definition' %>
 
-        <div ng-include="'code'" ng-init="name='documentation'" ng-if="current_ot.documentation && mode == 'documentation'"></div>
-        <div ng-if="current_ot.documentation && mode == 'documentation_view'" ng-controller="codeCtrl as code">
-          <div ng-bind-html="current_ot.rendered_docs"></div>
+      <div ng-include="'code'" ng-init="name='protocol'"      ng-if="current_ot.protocol && mode == 'protocol'" ></div>
+      <div ng-include="'code'" ng-init="name='precondition'"  ng-if="current_ot.precondition && mode == 'precondition'"></div>
+      <div ng-include="'code'" ng-init="name='cost_model'"    ng-if="current_ot.cost_model && mode == 'cost'"></div>        
 
-          <div class='code-controls'>
-            <a href='#' class='btn' 
-                        ng-click="save(current_ot,'documentation')" 
-                        ng-disabled="!current_ot.documentation.changed">Save</a>
-            <a href='#' class='btn' ng-click="edit_docs(current_ot)">Edit</a>
-          </div>  
+      <div ng-include="'code'" ng-init="name='documentation'" ng-if="current_ot.documentation && mode == 'documentation'"></div>
+      <div ng-if="current_ot.documentation && mode == 'documentation_view'" ng-controller="codeCtrl as code" layout-padding>
+        <div ng-bind-html="current_ot.rendered_docs"></div>
 
+        <div class='code-controls'>
+          <md-button class='md-raised md-medium'
+                      ng-click="save(current_ot,'documentation')" 
+                      ng-disabled="!current_ot.documentation.changed">Save</md-button>
+          <md-button class='md-raised md-medium' ng-click="edit_docs(current_ot)">Edit</md-button>
         </div>  
 
+      </div>  
 
-        <%= render partial: 'test' %>
-
-      </div>
+      <%= render partial: 'test' %>
 
     </div>
 
   </div>
 
-</div>
-
-
+<% end %>
