@@ -230,4 +230,13 @@ class LauncherController < ApplicationController
 
   end
 
+  def spent 
+
+    b = Budget.find(params[:id])
+    uid = current_user.id
+
+    render json: { total: b.spent(uid), this_month: b.spent_this_month(uid) }
+
+  end  
+
 end

@@ -71,7 +71,7 @@ Bioturk::Application.routes.draw do
 
   get '/budgets/add/:bid/:uid/:quota',           to: 'budgets#add_user'
   get '/budgets/remove/:bid/:uid',               to: 'budgets#remove_user'  
-  get '/budgets/:id/spent',                      to: 'budgets#spent'
+  get '/budgets/:id/spent',                      to: 'launcher#spent'
   resources :budgets
 
   post '/invoices/note',                         to: "invoices#note"

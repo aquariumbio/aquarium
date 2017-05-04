@@ -20,41 +20,45 @@
             <md-button>Statistics</md-button>
           </md-menu-item>          
 
-          <md-menu-divider></md-menu-divider>
+          <% if current_user && current_user.is_admin %>
 
-          <md-menu-item>
-            <md-button href="/signup">New User</md-button>
-          </md-menu-item>
-          <md-menu-item>
-            <md-button href="/password">Change a Password</md-button>
-          </md-menu-item>
-          <md-menu-item>
-            <md-button href="/users">Users</md-button>
-          </md-menu-item>
-          <md-menu-item>
-            <md-button href="/groups">Groups</md-button>
-          </md-menu-item>          
+            <md-menu-divider></md-menu-divider>
 
-          <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+              <md-button href="/signup">New User</md-button>
+            </md-menu-item>
+            <md-menu-item>
+              <md-button href="/password">Change a Password</md-button>
+            </md-menu-item>
+            <md-menu-item>
+              <md-button href="/users">Users</md-button>
+            </md-menu-item>
+            <md-menu-item>
+              <md-button href="/groups">Groups</md-button>
+            </md-menu-item>          
 
-          <md-menu-item>
-            <md-button href="/budgets">Budgets</md-button>
-          </md-menu-item>
-          <md-menu-item>
-            <md-button href="/invoices?all=true">Invoices</md-button>
-          </md-menu-item>
-          <md-menu-item>
-            <md-button href="/parameters">Parameters</md-button>
-          </md-menu-item>
+            <md-menu-divider></md-menu-divider>
 
-          <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+              <md-button href="/budgets">Budgets</md-button>
+            </md-menu-item>
+            <md-menu-item>
+              <md-button href="/invoices?all=true">Invoices</md-button>
+            </md-menu-item>
+            <md-menu-item>
+              <md-button href="/parameters">Parameters</md-button>
+            </md-menu-item>
 
-          <md-menu-item>
-            <md-button href="/sample_types">Sample Type Definitions</md-button>
-          </md-menu-item>
-          <md-menu-item>
-            <md-button href="/wizards">Location Wizards</md-button>
-          </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+
+            <md-menu-item>
+              <md-button href="/sample_types">Sample Type Definitions</md-button>
+            </md-menu-item>
+            <md-menu-item>
+              <md-button href="/wizards">Location Wizards</md-button>
+            </md-menu-item>
+
+          <% end %>
 
         </md-menu-content>
 
