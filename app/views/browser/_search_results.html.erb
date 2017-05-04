@@ -14,8 +14,11 @@
     </li>
   </ul>
 
-  <div ng-if="views.search.samples.length == 0 && views.search.status == 'done'">
-    No results.
+  <div ng-if="views.search.samples.length == 0 && views.search.status == 'done'" 
+       layout-align="center center"
+       layout="row"
+       layout-padding>
+    <div class="md-title">No results</div>
   </div>
 
   <div flex layout-padding ng-if="views.search.status == 'searching' || views.search.status == 'preparing'" >
