@@ -4,15 +4,13 @@ module Krill
 
     def operations opts={force:false}
 
-      if opts[:force]
-        @operations = Operation.includes(:operation_type).where(job_id: jid)
-      else
-        @operations ||= Operation.includes(:operation_type).where(job_id: jid)
+      if opts[:force] || !@operations
+        op_ids = JobAssociation.where(job_id: jid).collect { |ja| ja.operation_id }       
+        @operations = Operation.includes(:operation_type).find(op_ids)
+        @operations.extend(OperationList)
+        @operations.protocol = self
+        @operations.length # force db query
       end
-
-      @operations.extend(OperationList)
-      @operations.protocol = self
-      @operations.length # force db query
 
       @operations
 

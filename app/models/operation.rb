@@ -10,12 +10,13 @@ class Operation < ActiveRecord::Base
 
   belongs_to :operation_type
   belongs_to :user
-  belongs_to :job
+  has_many :job_associations
+  has_many :jobs, through: :job_associations
 
   has_many :plan_associations
   has_many :plans, through: :plan_associations
 
-  attr_accessible :status, :user_id, :job_id
+  attr_accessible :status, :user_id
 
   def virtual?
     false

@@ -6,6 +6,9 @@ AQ.Plan.record_methods.upgrade = function() {
     operation.field_values = aq.collect(operation.field_values,(fv) => {
       return AQ.FieldValue.record(fv);  
     })
+    op.jobs = aq.collect(op.jobs, job => {
+      return AQ.Job.record(job);
+    });    
     return operation;
   });
   plan.open = true;
@@ -20,7 +23,7 @@ AQ.Plan.record_methods.reload = function() {
   AQ.PlanAssociation.where({plan_id: plan.id}).then(pas => {
     AQ.Operation.where(
       {id: aq.collect(pas,pa => pa.operation_id)},
-      {methods: [ "field_values", "operation_type" ] }
+      {methods: [ "field_values", "operation_type", "jobs" ] }
     ).then(ops => {
       plan.operations = ops;
       plan.recompute_getter('costs');
@@ -28,6 +31,9 @@ AQ.Plan.record_methods.reload = function() {
         op.field_values = aq.collect(op.field_values,(fv) => {
           return AQ.FieldValue.record(fv);  
         })
+        op.jobs = aq.collect(op.jobs, job => {
+          return AQ.Job.record(job);
+        });
         op.reload().then(op => {
           op.open = false;
           AQ.update();
@@ -205,6 +211,9 @@ AQ.Plan.list = function(offset) {
               aq.where(response.data.field_values, (fv) => {
                 return fv.parent_id == operation.id;
               }), (fv) => { return AQ.FieldValue.record(fv); })
+            operation.jobs = aq.collect(op.jobs, job => {
+              return AQ.Job.record(job);
+            });            
             return operation;
           });
           return plan;

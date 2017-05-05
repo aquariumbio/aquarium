@@ -139,10 +139,12 @@
 
   <!-- JOB TEMPLATE -->
 
-  <span ng-if="operation.job_id">
-    <span ng-bind-html="'Job ' + operation.job.url | trust"></span>
-    <span ng-bind-html="'performed by ' + operation.job.user.url | trust"></span> on 
-    <span>{{operation.job.updated_at|date}}</span>
+  <span ng-if="operation.jobs && operation.jobs.length > 0">
+    <span ng-repeat="job in operation.jobs">
+      <span ng-bind-html="'Job ' + job.url | trust"></span>
+      <span ng-bind-html="'performed by ' + job.user.url | trust"></span> on 
+      <span>{{operation.jobs[operation.jobs.length-1].updated_at|date}}</span>
+    </span>
   </span>
 
 </script>

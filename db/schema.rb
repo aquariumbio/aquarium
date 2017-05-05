@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20170426225719) do
+ActiveRecord::Schema.define(:version => 20170504212208) do
 
   create_table "account_logs", :force => true do |t|
     t.integer  "row1"
@@ -204,6 +204,13 @@ ActiveRecord::Schema.define(:version => 20170426225719) do
 
   add_index "items", ["object_type_id"], :name => "index_items_on_object_type_id"
 
+  create_table "job_associations", :force => true do |t|
+    t.integer  "job_id"
+    t.integer  "operation_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
   create_table "jobs", :force => true do |t|
     t.string   "user_id"
     t.string   "sha"
@@ -292,12 +299,10 @@ ActiveRecord::Schema.define(:version => 20170426225719) do
     t.integer  "operation_type_id"
     t.string   "status"
     t.integer  "user_id"
-    t.integer  "job_id"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
   end
 
-  add_index "operations", ["job_id"], :name => "index_operations_on_job_id"
   add_index "operations", ["operation_type_id"], :name => "index_operations_on_operation_type_id"
   add_index "operations", ["user_id"], :name => "index_operations_on_user_id"
 

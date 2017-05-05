@@ -3,7 +3,7 @@ class OperationsController < ApplicationController
   before_filter :signed_in_user
 
   def active_and_pending_jobs
-    job_ids = Operation.pluck(:job_id).uniq.select { |jid| jid }
+    job_ids = JobAssociation.joins(:job, :operation).where("pc != -2 && status != 'error'").collect { |ja| ja.job_id }.uniq
     { 
       ids: job_ids,
       pending: Job.includes(:predecessors).where(pc: -1, id: job_ids).as_json(methods: :active_predecessors),
@@ -43,13 +43,16 @@ class OperationsController < ApplicationController
     ops = params[:operation_ids].collect { |oid| Operation.find(oid) }
 
     ops.each do |op|
-      job = op.job
-      op.job_id = nil
+      jas = op.job_associations.select { |ja| ja.job.pc == Job.NOT_STARTED }
+      jobs = jas.collect { |ja| ja.job }
+      jas.each { |ja| ja.destroy }
+      jobs.each do |job| 
+        if job.job_associations.length == 0 
+          job.cancel current_user
+        end
+      end
       op.status = 'pending';
       op.save
-      if job.reload.operations.length == 0
-        job.cancel current_user
-      end
     end
 
     render json: { operations: ops }

@@ -223,7 +223,7 @@ class LauncherController < ApplicationController
       .where(parent_class: "Operation", parent_id: oids)
 
     render json: { 
-      plans: plans.reverse.as_json(include: { operations: { include: :operation_type } } ),
+      plans: plans.reverse.as_json(include: { operations: { include: :operation_type, methods: :jobs } } ),
       field_values: field_values,
       num_plans: Plan.where(user_id: current_user.id).count
     }

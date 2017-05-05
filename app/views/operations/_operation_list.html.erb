@@ -15,7 +15,7 @@
       </tr>
 
       <tr ng-repeat="op in operations"
-          ng-if="!jobid || op.job_id == jobid">
+          ng-if="!jobid || op.last_job.id == jobid">
 
         <td>
           <input type='checkbox' 
@@ -26,8 +26,8 @@
         <td>{{op.user.name}}</td>
 
         <td>
-          <a ng-if="op.job_id" href="/jobs/{{op.job_id}}" ng-if>{{op.job_id}}</a>
-          <span ng-if="!op.job_id">-</span>
+          <a ng-if="op.last_job" href="/jobs/{{op.job_id}}" ng-if>{{op.last_jobs.id}}</a>
+          <span ng-if="!op.last_job">-</span>
         </td>
 
         <td>

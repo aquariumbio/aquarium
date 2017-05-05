@@ -107,6 +107,7 @@ module Bioturk
         Plan.count
         Wire.count
         PlanAssociation.count
+        JobAssociation.count
     end
 
     #Added to enable CORS

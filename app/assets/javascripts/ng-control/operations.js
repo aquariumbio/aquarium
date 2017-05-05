@@ -81,7 +81,7 @@
         operation_type_id: ot.id, 
         status: actual_status
       },{
-        methods: ['user','field_values', 'precondition_value', 'plans']
+        methods: ['user','field_values', 'precondition_value', 'plans', 'jobs']
       }).then(operations => {
         if ( status == 'pending_false' ) {
           ot.operations = aq.where(operations, op => { return !op.precondition_value || op.status == 'waiting' });
@@ -97,7 +97,9 @@
             }
           })
         })
-        $scope.jobs = aq.uniq(aq.collect(ot.operations,op => op.job_id));
+        $scope.jobs = aq.uniq(aq.collect(ot.operations,op => {
+          return op.jobs.length > 0 ? op.last_job.id : null
+        }));
         $scope.$apply();
       })
 
@@ -105,7 +107,7 @@
 
     $scope.choose = function(ot,status,val,job_id) {
       aq.each(ot.operations, op => {
-        if ( op.operation_type_id == ot.id && op.status == status && ( !job_id || op.job_id == job_id )) {
+        if ( op.operation_type_id == ot.id && op.status == status && ( !job_id || op.last_job.id == job_id )) {
           op.selected = val;
         }
       });
@@ -128,7 +130,7 @@
 
     $scope.unschedule = function(ot,jid) {
 
-      var ops = aq.where(ot.operations,op => op.selected && op.job_id == jid);
+      var ops = aq.where(ot.operations,op => op.selected && op.last_jobs.id == jid);
 
       if ( ops.length > 0 ) {     
         ot.unschedule(ops).then( () => {

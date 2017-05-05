@@ -82,7 +82,7 @@ class OperationType < ActiveRecord::Base
 
     ops.each do |op|
       op.status = "scheduled"
-      op.job_id = job.id
+      JobAssociation.create job_id: job.id, operation_id: op.id
       op.save
     end
 

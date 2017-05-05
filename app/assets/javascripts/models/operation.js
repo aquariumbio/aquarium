@@ -279,3 +279,21 @@ AQ.Operation.record_getters.types_and_values = function() {
   return tvs;
 
 }
+
+AQ.Operation.record_getters.last_job = function() {
+
+  var op = this;
+  delete op.last_job;
+
+  if ( op.jobs && op.jobs.length > 0 ) {
+    op.last_job = op.jobs[op.jobs.length-1];
+  } else {
+    op.last_job = null;
+  }
+
+  console.log(op.last_job)
+
+  return op.last_job;
+
+}
+
