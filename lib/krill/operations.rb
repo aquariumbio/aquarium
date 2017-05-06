@@ -32,6 +32,9 @@ module Krill
       before = @operations[0,index]
       after = @operations[index,@operations.length-index]
       @operations = before + [element] + after
+      @operations.extend(OperationList)
+      @operations.protocol = self
+      @operations.length # force db query
       @operations
     end
 
