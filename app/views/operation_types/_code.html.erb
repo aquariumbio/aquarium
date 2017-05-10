@@ -3,7 +3,7 @@
   <div ng-controller="codeCtrl as code">
 
     <div ng-model="current_ot[name].content"
-         ng-if="current_ot.mode != 'versions'"
+         ng-if="current_ot.mode != 'versions' && name != 'documentation'"
          ui-ace="{
                    useWrapMode : true,
                    mode: 'ruby',
@@ -14,6 +14,20 @@
          ng-change="change(current_ot[name])"
          ng-readonly="current_ot[name].no_edit">
     </div>
+
+    <div ng-model="current_ot[name].content"
+         ng-if="current_ot.mode != 'versions' && name == 'documentation'"
+         ui-ace="{
+                   useWrapMode : true,
+                   mode: 'markdown',
+                   onLoad: aceLoaded,
+                   onChange: aceChanged,
+                   theme:'tomorrow'
+                 }"
+         ng-change="change(current_ot[name])"
+         ng-readonly="current_ot[name].no_edit">
+    </div>
+
 
     <div ng-if="current_ot.mode == 'versions'" class="versions">
       <h4>Past Versions</h4>
