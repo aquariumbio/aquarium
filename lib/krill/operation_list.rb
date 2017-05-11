@@ -87,7 +87,9 @@ module Krill
       @output_collections
     end
 
-    def make opts={errored:false,role:'output'}
+    def make custom_opts={}
+
+      opts = {errored:false,role:'output',only:[]}.merge custom_opts
 
       puts "MAKE #{opts[:role]}"
 
@@ -97,8 +99,9 @@ module Krill
       ops.each_with_index do |op,i|
 
         puts "  Make for op #{op.virtual? ? 'virtual' : op.id}"
+        puts "  opts = #{opts}"
 
-        op.field_values.select { |fv| fv.role == opts[:role] }.each do |fv| 
+        op.field_values.select { |fv| fv.role == opts[:role] && ( !opts[:only] || opts[:only].length == 0 || opts[:only].member?(fv.name) )  }.each do |fv| 
 
           if fv.part?
 
