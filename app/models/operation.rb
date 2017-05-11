@@ -95,6 +95,24 @@ class Operation < ActiveRecord::Base
     field_values.find { |fv| fv.name == name && fv.role == role }
   end
 
+  def pass input_name, output_name
+
+    output_name = input_name unless output_name
+
+    fv_in = input(input_name)
+    fv_out = output(output_name)
+
+    raise "Could not find input '#{input_name}' in pass" unless fv_in
+    raise "Could not find input '#{output_name}' in pass" unless fv_out
+
+    fv_out.child_sample_id = fv_in.child_sample_id
+    fv_out.child_item_id = fv_in.child_item_id
+    fv_out.save
+
+    return self
+
+  end
+
   def recurse &block
     block.call(self)
     inputs.each do |input|
