@@ -107,6 +107,11 @@ operations.each do |operation|
 end
 ```
 
+If only some of the outputs need to be made, use the only option as, for example, in
+```ruby
+operations.make only: ["Plasmid"]
+```
+
 If an output item is simply the same as the input item, and no new item item needs to be made, use pass, as in
 ```ruby
 operations.each do |op|
