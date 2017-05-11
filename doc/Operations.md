@@ -107,6 +107,20 @@ operations.each do |operation|
 end
 ```
 
+If an output item is simply the same as the input item, and no new item item needs to be made, use pass, as in
+```ruby
+operations.each do |op|
+  op.pass("Plasmid")
+end
+```
+
+or, if the input and output have different names, do for example:
+```ruby
+operations.each do |op|
+  op.pass("Plasmid", "Another Plasmid")
+end
+```
+
 If an output of an operation is a part, then **make** will create new collections to put the outputs in. For example, say 26 operations are being processed and they have an output part that should be put into a 3x4 collection. Then three collections will be made, and the outputs of the operations will fill up the first two collections, and two wells of the third collection. After running **make**, you can retrieve a hash of the collections created with 
 ```ruby
 operations.output_collections
