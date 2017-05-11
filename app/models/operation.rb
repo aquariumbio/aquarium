@@ -95,7 +95,7 @@ class Operation < ActiveRecord::Base
     field_values.find { |fv| fv.name == name && fv.role == role }
   end
 
-  def pass input_name, output_name
+  def pass input_name, output_name=nil
 
     output_name = input_name unless output_name
 
