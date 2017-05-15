@@ -60,6 +60,8 @@ class LauncherController < ApplicationController
 
   def estimate
 
+    logger.info "Started at #{DateTime.now}"
+
     costs = []
     labor_rate = Parameter.get_float("labor rate") 
     markup = Parameter.get_float("markup rate")
@@ -97,6 +99,8 @@ class LauncherController < ApplicationController
     else
       render json: costs
     end
+
+    logger.info "Ended at #{DateTime.now}"
 
   end
 
@@ -156,7 +160,6 @@ class LauncherController < ApplicationController
       end
 
       if current_user.id != uba.user_id || uba.budget.spent_this_month(current_user.id) >= uba.quota
-        puts "User #{current_user.login} not authorized or overspent for budget #{uba.budget.name}"
         render json: { errors: "User #{current_user.login} not authorized or overspent for budget #{uba.budget.name}"}, status: 422
         raise ActiveRecord::Rollback        
       end
@@ -170,10 +173,6 @@ class LauncherController < ApplicationController
 
       plan.budget_id = uba.budget.id
       plan.save
-
-      plan.operations.each do |op|
-        puts "Controller: Starting op #{op.id}: #{op.field_values.collect { |fv| [fv.name,fv.child_item_id]}.join(', ')}"
-      end
 
       plan.start
 
