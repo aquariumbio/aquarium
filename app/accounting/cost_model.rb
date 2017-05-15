@@ -108,6 +108,13 @@ module CostModel
 
       when ["discard_item","discarded"]                 then basic(:default,0.0, 0.51)
 
+      # MIDIPREP ############################################################################################
+
+      when ["plate_midiprep","plated"]                      then basic(:default,0.80,5.52)
+      when ["small_inoculation_midiprep","small overnight"] then basic(:default,0.15,2.08)
+      when ["large_inoculation_midiprep","large overnight"] then basic(:default,2.22,6.05)
+      when ["midiprep","plasmid extracted"]                 then basic(:default,29.30,43.33)
+
       # MAXIPREP ############################################################################################
 
       when ["start_overnight_glycerol_stock","overnight"] then basic(:default,9.83,9.09)
