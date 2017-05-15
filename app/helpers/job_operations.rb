@@ -86,7 +86,6 @@ module JobOperations # included in Job model
   end
 
   def stop status="done"
-    puts "STOPPING"
     if self.pc >= 0
       self.pc = Job.COMPLETED
       save
