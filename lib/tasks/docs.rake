@@ -12,7 +12,8 @@ namespace :docs do
     "Oyster",
     "DataAssociation",
     "Operations",
-    "Tables"
+    "Data Structures",
+    "Operation Lifetime"
   ]
 
   task :md do 
