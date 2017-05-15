@@ -304,6 +304,30 @@ class OperationType < ActiveRecord::Base
 
   end
 
+  def stats 
+
+    r = { "done" => 0, "error" => 0 }
+
+    operations.each do |op|
+      r[op.status] ||= 0
+      r[op.status] = r[op.status] + 1
+    end
+
+    if r["done"] + r["error"] != 0 
+      r["success"] = r["done"].to_f / ( r["done"] + r["error"] )
+    else 
+      r["success"] = 0.0
+    end
+
+    if operations.length > 0
+      r["first_run"] = operations[0].updated_at
+      r["last_run"] = operations.last.updated_at    
+    end
+
+    r
+
+  end
+
 end
 
 

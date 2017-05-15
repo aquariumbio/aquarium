@@ -396,5 +396,9 @@ class OperationTypesController < ApplicationController
 
   end
 
+  def stats
+    render json: OperationType.find(params[:id]).stats
+  end
+
 end
 

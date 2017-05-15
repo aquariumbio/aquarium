@@ -75,6 +75,24 @@ AQ.OperationType.record_getters.numbers = function() {
 
 }
 
+AQ.OperationType.record_getters.stats = function() {
+
+  var ot = this;
+
+  delete ot.stats;
+  ot.stats = {};
+  
+  AQ.get("/operation_types/"+ot.id+"/stats").then((response) => {
+    ot.stats = response.data;
+    console.log(response.data)
+  }).catch((response) => {
+    console.log(["error", response.data]);
+  })
+
+  return {};
+
+}
+
 AQ.OperationType.record_methods.schedule = function(operations) {
 
   var op_ids = aq.collect(operations,(op) => {

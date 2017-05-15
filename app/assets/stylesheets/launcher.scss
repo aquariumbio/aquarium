@@ -233,7 +233,7 @@
       box-sizing: border-box;   
   }  
 
-  .documentation {
+  .documentation, .stats {
     padding: 0 16px 0 16px;
     p {
       line-height: 20px;
@@ -249,6 +249,10 @@
         background: #eee;
       }
     }
+  }
+
+  .stats {
+    font-weight: bold;
   }
 
   .dropdown {
