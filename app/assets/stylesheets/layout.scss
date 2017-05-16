@@ -48,6 +48,9 @@
         margin: 0;
         line-height: 20pt;
         height: 20pt;
+        &:hover {
+          text-decoration: none;
+        };
       }
 
       .version {

@@ -5,6 +5,9 @@ class StaticPagesController < ApplicationController
   def home
     temp = Announcement.last
     @announcement = temp if temp && temp.active && cookies[:latest_announcement].to_i != temp.id
+    respond_to do |format|
+      format.html { render layout: 'aq2' }
+    end    
   end
 
   def dismiss

@@ -1,65 +1,67 @@
 
-<% if @announcement %>
-	<div class='announcement'>
-		<h4 style='text-align: center'>
-			Announcement: <%= @announcement.title %>
-			<p><%= @announcement.created_at.strftime '%A %B %e, %Y' %></p>
-		</h4>
-		<p><%= simple_format(@announcement.message).html_safe %></p>
-		<span class='close-x btn-small'>
-			<a href='/dismiss'>✕</a>
-		</span>
-	</div>
+<%= content_for :class do %>main-navigation<% end %>
+
+<%= content_for :controller do %>homeCtrl<% end %>
+
+<%= content_for :sidebar do %>
+  <md-content layout-align="center center" style="padding-left: 5px">
+    <h2 class='md-title'>Discussions</h2>
+  </md-content>
+  <iframe class='discussion-iframe' allowtransparency="true" src='/posts/'></iframe>
 <% end %>
-	
-<div class='row-fluid'>
 
-  <div class='span4 discussion-index discussion-home'>
-    <h2 class="md-title">Discussions</h2>
-    <iframe class='discussion-iframe' allowtransparency="true" src='/posts/'></iframe>
-  </div>
+<% content_for :specific_title do %>
+  <%= Bioturk::Application.config.instance_name %>
+  &rang; 
+  Main
+<% end %>
 
-  <div class='span8 main-navigation' ng-app="aquarium" ng-controller="homeCtrl">
+<% content_for :main do %>
 
-    <br />
-    <br />
-    <h1 class='md-display-1'>Welcome to the <%= Bioturk::Application.config.instance_name %></h1>
-    <h1 class='md-title'>Powered by Aquarium</h1>
-    <br />
-    <br />
+  <% if @announcement %>
+    <div style="padding: 50px 50px 0 50px; position: relative">
+      <h4>Announcement: <%= @announcement.title %></h4>
+      <p><%= @announcement.created_at.strftime '%A %B %e, %Y' %></p>
+      <p><%= simple_format(@announcement.message).html_safe %></p>
+      <div class='close-x btn-small' style='position: absolute; top: 55px; right: 60px;'>
+        <a href='/dismiss' style="font-size: 24px">&times</a>
+      </div>
+    </div>
+  <% end %>
 
+  <div style="padding: 50px">
     <md-grid-list 
         md-cols="2" md-cols-md="2"
         md-row-height="4:1"
-        md-gutter="32px">   
+        md-gutter="50px">   
 
-        <md-grid-tile class="big-link" md-rowspan="1" md-colspan="1">
-          <a href="/browser">
-            <h1 class="md-title">Manage Samples</h1>
-          </a>
-        </md-grid-tile>
+      <md-grid-tile class="big-link" md-rowspan="1" md-colspan="1">
+        <a href="/browser">
+          <h1 class="md-title">Manage Samples</h1>
+        </a>
+      </md-grid-tile>
 
-        <md-grid-tile class="big-link" md-rowspan="1" md-colspan="1">
-          <a href="/launcher">
-            <h1 class="md-title">Create and Manage Plans</h1>
-          </a>      
-        </md-grid-tile>
+      <md-grid-tile class="big-link" md-rowspan="1" md-colspan="1">
+        <a href="/launcher">
+          <h1 class="md-title">Create and Manage Plans</h1>
+        </a>      
+      </md-grid-tile>
 
-        <md-grid-tile class="big-link" md-rowspan="1" md-colspan="1">
-          <a href="/operations">
-             <h1 class="md-title">Manage Jobs</h1>
-          </a>      
-        </md-grid-tile>
+      <md-grid-tile class="big-link" md-rowspan="1" md-colspan="1">
+        <a href="/operations">
+           <h1 class="md-title">Manage Jobs</h1>
+        </a>      
+      </md-grid-tile>
 
-        <md-grid-tile class="big-link" md-rowspan="1" md-colspan="1">
-          <a href="/operation_types">
-            <h1 class="md-title">Develop Workflows</h1>
-          </a> 
-        </md-grid-tile>
+      <md-grid-tile class="big-link" md-rowspan="1" md-colspan="1">
+        <a href="/operation_types">
+          <h1 class="md-title">Develop Workflows</h1>
+        </a> 
+      </md-grid-tile>
 
-      </md-grid-list>
+    </md-grid-list>
 
   </div>
 
-</div>
+<% end %>
 
