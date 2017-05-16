@@ -329,6 +329,14 @@
       font-weight: normal;
       color: #888;
     }
+
+    .success-rate {
+      color: #999;
+    }
+
+    .node-selected {
+      background: #eee;
+    }
     
     .name {
       position: relative;
@@ -368,7 +376,7 @@
     .collapse-closed {
       font-weight: bold;
       a {
-        color: black;
+        color: #0b0;
       }      
       width: 14px;            
     }
@@ -398,6 +406,11 @@
     .sample-with-item {
       width: calc(100% - 210px) !important;
       display: inline-block;      
+    }
+
+    .items-in-stock {
+      background: #eeffee;
+      color: #060;
     }
  
     .sample-only {

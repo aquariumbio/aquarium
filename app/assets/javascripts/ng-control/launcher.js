@@ -41,7 +41,7 @@
         $scope.status.plans = "Ready";        
         $scope.getting_plans = false;
 
-        AQ.OperationType.all_with_content().then((operation_types) => {
+        AQ.OperationType.all_with_content(true).then((operation_types) => {
 
           $scope.operation_types = aq.where(operation_types,ot => ot.deployed);
           AQ.OperationType.compute_categories($scope.operation_types);
@@ -71,9 +71,9 @@
     }
 
     $scope.io_focus = function(op,ft,fv) {
-      $scope.current_operation = op;
-      $scope.current_fv = fv;
-      $scope.current_ft = ft;
+      $scope.plan.current_operation = op;
+      $scope.plan.current_fv = fv;
+      $scope.plan.current_ft = ft;
       delete $scope.plan.status;
       aq.each($scope.plan.wires, w => {
         aq.each(w.to_op.field_values, field_value => { 
@@ -87,9 +87,9 @@
     }
 
     $scope.io_blur = function() {
-      $scope.current_operation = null;
-      $scope.current_fv = null;
-      $scope.current_ft = null;  
+      $scope.plan.current_operation = null;
+      $scope.plan.current_fv = null;
+      $scope.plan.current_ft = null;  
     }
 
     $scope.select = function(operation_type) {
@@ -103,7 +103,7 @@
         ]
       });
 
-      $scope.set_current_op($scope.plan.operations[0])
+      $scope.plan.current_operation = $scope.plan.operations[0];
 
     }
 
@@ -133,7 +133,9 @@
         $scope.plan = null;
         $scope.unselect_ubas($scope.current_user);
       }
-      $scope.current_operation = null;
+      if ( $scope.plan ) {
+        $scope.plan.current_operation = null;
+      }
     }
 
     $scope.add_goal = function() {
@@ -146,7 +148,7 @@
         }).set_type($scope.plan.operations[0].operation_type);
 
       $scope.plan.operations.unshift(op)
-      $scope.set_current_op(op);
+      $scope.plan.current_operation = op;
 
     }
 
@@ -156,7 +158,6 @@
       $scope.plan.submit().then((plan) => {
         $scope.plan = null;
         $scope.unselect_ubas($scope.current_user);
-        $scope.current_operation = null;
         $scope.mode = 'running';
         plan.link_operation_types($scope.operation_types);
         $scope.plans.unshift(plan);
@@ -196,7 +197,7 @@
     }
 
     $scope.more_plans = function() {
-      $scope.plan_offset += 15;
+      $scope.plan_offset += 10;
       $scope.getting_plans = true;
       AQ.Plan.list($scope.plan_offset).then((plans) => {
         if ( plans.length == 0 ) {
@@ -241,11 +242,6 @@
         item.selected_row = r;
         item.selected_column = c;
       }
-    }
-
-    $scope.set_current_op = function(op) {
-      $scope.current_operation = op;
-      $scope.current_fv = null;
     }
 
   }]);

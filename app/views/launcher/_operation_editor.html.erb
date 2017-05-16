@@ -16,22 +16,27 @@
 
       <li>
 
-        <node ng-click="set_current_op(operation)">
+        <node ng-click="plan.current_operation = operation; plan.current_fv = null"
+              ng-class="operation == plan.current_operation ? 'node-selected' : ''">
+
           <span class="collapse-open" ng-if="!operation.closed && operation.inputs.length != 0">
             <a href="#" ng-click="operation.closed = true">&#9660;</a>
           </span>
+
           <span class="collapse-closed" ng-if="operation.closed && operation.inputs.length != 0">
             <a href="#" ng-click="operation.closed = false">&#9658;</a>
           </span>
-          <span class="collapse-closed" ng-if="operation.inputs.length == 0">
-            &#9679;
-          </span>
+
+          <span class="collapse-closed" ng-if="operation.inputs.length == 0">&#9679;</span>
           <span>{{operation.operation_type.name}}</span>
+          <span class='success-rate'>({{100*operation.operation_type.stats.success|number: 1}}%)</span>
           <span class='no-cost' ng-if='operation.cost === null'>Cost undetermined</span>      
           <span class='cost' ng-if='operation.cost !== null'>{{operation.cost|currency}}</span>
+
           <span class='cancel pull-right'>
             <a href="#" ng-click="remove_operation(operation); plan.unwire(operation)">&times;</a>
           </span> 
+
         </node>
 
         <ul>

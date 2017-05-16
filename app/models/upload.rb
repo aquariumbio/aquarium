@@ -20,7 +20,7 @@ class Upload < ActiveRecord::Base
   end  
 
   def url
-    self.upload.url
+    self.upload.url.split('?')[0]
   end
 
   def path

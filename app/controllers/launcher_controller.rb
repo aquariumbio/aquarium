@@ -208,10 +208,11 @@ class LauncherController < ApplicationController
       .includes(operations: :operation_type)
       .where(user_id: current_user.id)
       .order('created_at DESC')
-      .limit(15)
+      .limit(10)
       .offset(params[:offset] || 0)
 
     oids = plans.collect { |p| p.operations.collect { |o| o.id } }.flatten
+
     field_values = FieldValue
       .includes(
         :child_sample, 

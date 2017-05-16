@@ -12,7 +12,7 @@
         <input type='text' ng-if="da.unsaved" ng-model=da.key class="da-key">
       </div>
 
-      <div flex="55">
+      <div flex="55" ng-controller="daCtrl">
 
         <input type='text' ng-model=da.new_value ng-if="!da.upload_id" class="da-input">
 
@@ -27,7 +27,7 @@
           <div modal='da.modal' title="da.key + ': ' + da.upload.upload_file_name" 
                width='50%' height='70%' ng-if="da.modal">
             <div class='da-upload'>
-              <img ng-src="{{da.url}}" class='image'>
+              <img ng-src="{{da.url}}" class='image' ng-if="is_image(da)">
               <h4>Notes: </h4>
               <textarea ng-model=da.new_value ng-init="da.new_value=da.value" class='value'></textarea>
               <a href="#" class='btn btn-primary save' 
@@ -35,7 +35,7 @@
                           ng-disabled="da.new_value == da.value">Save Notes</a>
               <div class='download'>
                 <b>Download:</b> <a href="{{da.url}}" download>{{da.upload.upload_file_name}}</a>
-              </div>         
+              </div>
             </div>    
           </div>  
 

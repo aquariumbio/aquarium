@@ -117,15 +117,18 @@ AQ.FieldValue.record_methods.backchain = function(plan,operation) {
       preop.instantiate(plan,output,output.samp_id(preop)).then( () => {    
         aq.each(preop.field_values, pfv => {
           if ( pfv.role == 'input' ) {
+            console.log("  considering input " + pfv.name + "(" + pfv.rid + ")")
             var has_sample = preop.form[pfv.role][pfv.name].aft.sample_type_id;
             if ( has_sample && pfv.samp_id(preop) ) {
               pfv.find_items(pfv.samp_id(preop)).then( items => {
+                console.log("   has_sample: recursively calling backchain on " + preop.operation_type.name + "(" + preop.rid + ")")                
                 pfv.backchain(plan,preop).then(() => {
                   fv.backchaining = false;
                 });
               });
             } else if ( !has_sample ) {
-              fv.backchain(plan,preop).then(() => {
+              console.log("   !has_sample: recursively calling backchain on " + preop.operation_type.name + "(" + preop.rid + ")")
+              pfv.backchain(plan,preop).then(() => {
                 fv.backchaining = false;
               });
             } 

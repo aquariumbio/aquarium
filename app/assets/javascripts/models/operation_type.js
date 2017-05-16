@@ -19,16 +19,31 @@ AQ.OperationType.all = function(rest) {
 
 }
 
-AQ.OperationType.all_with_content = function() {
+AQ.OperationType.all_with_content = function(deployed) {
 
-  return this.array_query(
-      'all', [], 
-      { methods: [ 'field_types', 'cost_model', 'documentation' ] }
-    ).then((ots) => {
-      aq.each(ots,function(ot) { ot.upgrade_field_types(); })
-      this.compute_categories(ots);
-      return ots;
-    });
+  if ( deployed ) {
+
+    return this.array_query(
+        'where', {deployed: true}, 
+        { methods: [ 'field_types', 'cost_model', 'documentation' ] }
+      ).then((ots) => {
+        aq.each(ots,function(ot) { ot.upgrade_field_types(); })
+        this.compute_categories(ots);
+        return ots;
+      });
+
+  } else {
+
+    return this.array_query(
+        'all', [], 
+        { methods: [ 'field_types', 'cost_model', 'documentation' ] }
+      ).then((ots) => {
+        aq.each(ots,function(ot) { ot.upgrade_field_types(); })
+        this.compute_categories(ots);
+        return ots;
+      });
+
+  }
 
 }
 
