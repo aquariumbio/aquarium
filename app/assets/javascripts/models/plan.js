@@ -80,14 +80,20 @@ AQ.Plan.record_methods.cost_to_amount = function(c) {
 
 AQ.Plan.record_methods.estimate_cost = function() {
 
+  console.log("Starting estimate at " + Date(Date.now()) )
+
   var plan = this;
   plan.estimating;
 
   if ( !plan.estimating ) {
   
     plan.estimating = true;
+    var exported_plan = plan.export();
+    console.log("Completed export at " + Date(Date.now()) )
 
-    AQ.post('/launcher/estimate',plan.export()).then( response => {
+    AQ.post('/launcher/estimate',exported_plan).then( response => {
+
+      console.log("Recieved data at " + Date(Date.now()) )
 
       if ( response.data.errors ) {
 
@@ -126,6 +132,8 @@ AQ.Plan.record_methods.estimate_cost = function() {
           }
         });
       });
+
+      console.log("Completed at " + Date(Date.now()) )
 
       plan.estimating = false;
 
@@ -392,6 +400,10 @@ AQ.Plan.record_methods.add_wire = function(fv,op,pred) {
     routing: {},
     form: { input: {}, output: {} }
   }).set_type(pred.operation_type);
+
+  console.log("add_wire to " + op.operation_type.name + "(" + op.rid + ") from "
+                             + preop.operation_type.name + "(" + preop.rid + ") via "
+                             + fv.name + "(" + fv.rid + ")" );  
 
   var preop_output = preop.output(pred.output.name);
 

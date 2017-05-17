@@ -84,9 +84,14 @@
 
           <h2 flex md-truncate>
             Job <a href="/jobs/{{job_id}}">{{job_id}}</a>
+            <span ng-if="debugging_job_id == job_id">
+              <md-progress-circular class="md-hue-2" md-diameter="20px" style="display: inline-block">
+              </md-progress-circular> 
+            </span>
           </h2>
         
           <md-button class='md-small' ng-href="/krill/start?job={{job_id}}" aria-lable="Run">Run</md-button>
+          <md-button class='md-small' ng-click="debug(current.ot,job_id)" aria-lable="Debug">Debug</md-button>
           <md-button class='md-small' ng-click="unschedule(current.ot,job_id)" aria-lable="Unschedule">Remove</md-button>
           <md-button class='md-small' ng-click="$parent.choose(current.ot,'scheduled',true,job_id)" aria-label="All">All</md-button>
           <md-button class='md-small' ng-click="$parent.choose(current.ot,'scheduled',false,job_id)" aria-lable="None">None</md-button>

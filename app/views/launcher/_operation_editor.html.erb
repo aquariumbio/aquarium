@@ -28,7 +28,8 @@
           </span>
 
           <span class="collapse-closed" ng-if="operation.inputs.length == 0">&#9679;</span>
-          <span>{{operation.operation_type.name}}</span>
+          <span ng-class="operation.inputs.length == 0 ? 'no-inputs' : ''">{{operation.operation_type.name}}</span>
+
           <span class='success-rate'>({{100*operation.operation_type.stats.success|number: 1}}%)</span>
           <span class='no-cost' ng-if='operation.cost === null'>Cost undetermined</span>      
           <span class='cost' ng-if='operation.cost !== null'>{{operation.cost|currency}}</span>

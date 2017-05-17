@@ -172,6 +172,7 @@ Bioturk::Application.routes.draw do
   get "interpreter/edit"
   get "interpreter/resubmit"
 
+  get "krill/debug/:id", to: "krill#debug"
   get "krill/arguments"
   get "krill/submit"
   get "krill/start"

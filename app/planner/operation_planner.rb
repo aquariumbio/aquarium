@@ -108,8 +108,11 @@ module OperationPlanner
 
     recurse do |op|
       ready = op.ready?
-      if op.status == "planning" && op.leaf? && !ready
-        issues << "Operation '#{op.operation_type.name}' is not ready (#{ready}). #{@@ready_errors.join(' ')}"
+      if op.on_the_fly
+        # do nothing
+      elsif op.status == "planning" && op.leaf? && !ready
+        issues << "Operation '#{op.operation_type.name}' is not ready " + 
+                  "(on_the_fly = #{op.on_the_fly}, ready = #{ready}, leaf=#{op.leaf?}, status=#{op.status})."
       elsif op.status == "planning" && op.undetermined_inputs?
         issues << "Operation '#{op.operation_type.name}' has unspecified inputs."
       elsif op.has_no_stock_or_method

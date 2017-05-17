@@ -110,6 +110,43 @@ class KrillController < ApplicationController
 
   end
 
+  def debug
+
+    errors = []
+    @job = Job.find(params[:id])
+
+    # if not running, then start
+    if @job.pc == Job.NOT_STARTED
+
+      @job.user_id = current_user.id
+      @job.save
+
+      begin
+        manager = Krill::Manager.new @job.id, true, "master", "master"
+      rescue Exception => e
+        error = e
+      end
+
+      if error
+        errors << error
+      else
+
+        begin
+          manager.run
+        rescue Exception => e        
+          errors << e.message
+        end
+
+      end
+ 
+    end
+
+    Operation.step
+
+    render json: { errors: errors, operations: @job.reload.operations, job: @job }
+
+  end
+
   def error
 
     @message = params[:message]

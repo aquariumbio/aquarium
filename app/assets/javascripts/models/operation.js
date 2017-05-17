@@ -88,7 +88,9 @@ AQ.Operation.record_methods.array_add = function(field_type) {
   }
 
   this.field_values.push(fv);
+
   this.recompute_getter('types_and_values');
+
   return this;
 
 }
@@ -259,13 +261,20 @@ AQ.Operation.record_getters.types_and_values = function() {
   var op = this,
       tvs = [];
 
+  aq.each(this.field_values, fv => { if(fv.role == 'input') console.log(fv.name + "(" + fv.rid + "): " + fv.items.length)});
+
   delete op.types_and_values;
+
+  aq.each(this.field_values, fv => { if(fv.role == 'input') console.log(fv.name + "(" + fv.rid + "): " + fv.items.length)});
 
   aq.each(op.operation_type.field_types, ft => {
     if ( ft.role == 'input' && ft.ftype == 'sample' ) {
       aq.each(op.field_values, fv => {
         if ( fv.role == 'input' && ft.name == fv.name ) {
-          tvs.push({type: ft, value: fv})
+          console.log(fv.name + "(fv " + fv.rid + "):" + fv.items.length)
+          var tv = {type: ft, value: fv};
+          tvs.push(tv)
+          console.log(tv.value.name + "(tv.value " + tv.value.rid + "):" + tv.value.items.length)
         }
       });
       if ( ft.array ) {
@@ -275,6 +284,8 @@ AQ.Operation.record_getters.types_and_values = function() {
   });
 
   op.types_and_values = tvs;
+
+  aq.each(this.field_values, fv => { if(fv.role == 'input') console.log(fv.name + "(" + fv.rid + "): " + fv.items.length)});
 
   return tvs;
 

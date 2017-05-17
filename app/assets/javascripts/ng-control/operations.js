@@ -143,6 +143,23 @@
 
     }
 
+    $scope.debug = function(ot,job_id) {
+
+      $scope.debugging_job_id = job_id;
+
+      var num = aq.where(ot.operations, op => op.last_job.id == job_id).length;
+
+      ot.numbers.scheduled -= num;
+      ot.numbers.running += num;      
+
+      $http.get("/krill/debug/" + job_id).then(response => {
+        aq.each($scope.operation_types, ot => ot.recompute_getter('numbers'));
+        aq.remove($scope.jobs,job_id);
+        delete $scope.debugging_job_id;
+      })
+
+    }
+
   }]);
 
 })();
