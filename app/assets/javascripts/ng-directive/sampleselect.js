@@ -109,7 +109,9 @@
               source: AQ.sample_names_for(name),
               select: autocomp
             });
-            fv.clear();
+            if ( !ft.array ) {
+              fv.clear();
+            }
           }
         });    
 
