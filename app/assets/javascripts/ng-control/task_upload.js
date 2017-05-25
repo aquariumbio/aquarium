@@ -52,7 +52,10 @@
         if ( response.data.errors.length > 0 ) {
           aq.each(response.data.errors,function(e) { $scope.errors.push(e); });
         } else {
-          aq.each(response.data.tasks, function(t) { t.new = true; });
+          aq.each(response.data.tasks, function(t) { 
+            t.new = true; 
+            t.task_prototype.status_options = JSON.parse(t.task_prototype.status_options)            
+          });
           $scope.tasks = response.data.tasks.concat($scope.tasks);
           $scope.messages.push("No errors")
         }

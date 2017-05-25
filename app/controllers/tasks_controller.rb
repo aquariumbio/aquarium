@@ -278,7 +278,23 @@ class TasksController < ApplicationController
         tasks = []
         errors = []
 
-        ActiveRecord::Base.transaction do     
+        ActiveRecord::Base.transaction do
+
+          budget = Budget.find_by_name(params[:budget])
+
+          if !budget
+            errors << "Could not find budget '#{params[:budget]}'"
+            raise ActiveRecord::Rollback 
+          else 
+            ubas = UserBudgetAssociation.where(user_id: current_user.id, budget_id: budget.id)
+            if ubas.length == 0 
+              errors << "User #{current_user.login} does not have permission to use budget '#{params[:budget]}'"
+              raise ActiveRecord::Rollback 
+            elsif ubas[0].quota <= budget.spent_this_month(current_user.id)
+              errors << "User #{current_user.login} has spent more than the quota (#{ubas[0].quota}) for budget '#{params[:budget]}'"
+              raise ActiveRecord::Rollback              
+            end
+          end
 
           params[:tasks].each do |t|
 
@@ -289,7 +305,7 @@ class TasksController < ApplicationController
                 name: t[:name], 
                 specification: t[:specification].to_json, 
                 user_id: current_user.id,
-                budget_id: 1
+                budget_id: budget.id
               )
               task.status = t[:status] || tp.status_option_list.first
               task.save
