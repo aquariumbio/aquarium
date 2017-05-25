@@ -81,7 +81,7 @@ class OperationType < ActiveRecord::Base
     job.save
 
     ops.each do |op|
-      op.status = "scheduled"
+      op.schedule
       JobAssociation.create job_id: job.id, operation_id: op.id
       op.save
     end
@@ -108,22 +108,46 @@ class OperationType < ActiveRecord::Base
 
   end
 
+  # def schedule ops, user, group, opts={}
+
+  #   scheduled_ops = ops
+  #   job = schedule_aux ops, user, group, opts
+
+  #   primed_list = primed ops
+
+  #   unless primed_list.empty?
+  #     ot = primed_list.first.operation_type
+  #     j,more_ops = ot.schedule primed_list, user, group, successor: job
+  #     scheduled_ops += more_ops
+  #   end
+
+  #   [job,scheduled_ops]
+
+  # end
+
   def schedule ops, user, group, opts={}
 
-    scheduled_ops = ops
-    job = schedule_aux ops, user, group, opts
+    ops_to_schedule = []
 
-    primed_list = primed ops
+    ops.each do |op|
 
-    unless primed_list.empty?
-      ot = primed_list.first.operation_type
-      j,more_ops = ot.schedule primed_list, user, group, successor: job
-      scheduled_ops += more_ops
+      pps = op.primed_predecessors
+
+      if pps.length >0
+        ops_to_schedule = ops_to_schedule + pps
+        op.defer
+      else 
+        ops_to_schedule << op
+      end
+
     end
 
-    [job,scheduled_ops]
+    job = schedule_aux ops_to_schedule, user, group, opts
 
+    [job,ops_to_schedule]
+    
   end
+
 
   #
   # Update Methods for Field Types from Front End Start Here

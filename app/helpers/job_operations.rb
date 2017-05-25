@@ -81,7 +81,9 @@ module JobOperations # included in Job model
     if self.pc == Job.NOT_STARTED
       self.pc = 0
       save
-      set_op_status "running"
+      operations.each do |op|
+        op.run
+      end
     end
   end
 
@@ -89,9 +91,11 @@ module JobOperations # included in Job model
     if self.pc >= 0
       self.pc = Job.COMPLETED
       save
-      set_op_status status
       if status == 'done'
         charge
+        operations.each do |op|
+          op.finish
+        end
       elsif status == 'error'
         cancel_plans
       end

@@ -168,7 +168,7 @@ class OperationTypesController < ApplicationController
 
     tops.collect do |test_op|
 
-      op = ot.operations.create status: "ready", user_id: test_op[:user_id]
+      op = ot.operations.create status: "pending", user_id: test_op[:user_id]
 
       (ot.inputs + ot.outputs).each do |io|
 
@@ -276,7 +276,7 @@ class OperationTypesController < ApplicationController
           ops.make(role: 'input')
 
           ops.each do |op|
-            op.set_status "running"
+            op.run # sets operation status to running
           end
 
           manager.run
@@ -366,7 +366,8 @@ class OperationTypesController < ApplicationController
 
   def numbers
 
-    ops = Operation.where(operation_type_id: params[:id]).where( "status = 'waiting' OR status = 'pending' OR status = 'scheduled' OR status = 'running'" )
+    ops = Operation.where(operation_type_id: params[:id])
+                   .where( "status = 'waiting' OR status = 'pending' OR status = 'scheduled' OR status = 'deferred' OR status = 'running'" )
 
     puts "ops.length = #{ops.length}"
 
@@ -385,11 +386,13 @@ class OperationTypesController < ApplicationController
     s = ops.select { |op| op.status == 'scheduled' }.length
     r = ops.select { |op| op.status == 'running' }.length
     w = ops.select { |op| op.status == 'waiting' }.length
+    d = ops.select { |op| op.status == 'deferred' }.length
 
     render json: {
       pending_true: pending_true.length,
       pending_false: pending_false.length + w,
       scheduled: s,
+      deferred: d,
       running: r,
       waiting: w
     }

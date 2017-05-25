@@ -194,12 +194,16 @@ class PlansController < ApplicationController
       begin
         manager = Krill::Manager.new job.id, true, "master", "master"
       rescue Exception => e
-        error = e
+        error = e.to_s
       end
 
       if error
 
         errors << error
+
+        ops.each do |op|
+          op.plan.error "Could not start job: #{error}", :job_start
+        end
 
       else
 
@@ -208,7 +212,7 @@ class PlansController < ApplicationController
           ops.extend(Krill::OperationList)
 
           ops.each do |op|
-            op.set_status "running"
+            op.run
           end
 
           manager.run
@@ -223,7 +227,7 @@ class PlansController < ApplicationController
 
     end # type_ids.each
 
-    Operation.step(plan.operations.select { |op| op.status == "waiting" })
+    Operation.step(plan.operations.select { |op| op.status == "waiting" || op.status == "deferred" })
 
     render json: { errors: errors }
 

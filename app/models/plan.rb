@@ -18,24 +18,19 @@ class Plan < ActiveRecord::Base
 
     if issues.empty?
 
-      gs.each do |goal|
+      operations.each do |op|
 
-        goal.start_on_the_fly
-        
-        goal.start
-
-        goal.recurse do |op|
-          op.user_id = user_id
-          op.save
-        end       
+        op.start
+        op.user_id = user_id
+        op.save
 
       end
 
-      []
-
     else
+
       Rails.logger.info "Plan has issues: #{issues}"
       errors.add :start_plan, issues.to_s
+
     end
 
   end
@@ -43,7 +38,7 @@ class Plan < ActiveRecord::Base
   def error msg, key=:job_crash
 
     operations.each do |op|
-      if op.status == 'pending' || op.status == 'waiting' || op.status == 'scheduled'
+      if op.status != "done"
         op.error key, msg
       end
     end
@@ -217,23 +212,3 @@ class Plan < ActiveRecord::Base
   end
 
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

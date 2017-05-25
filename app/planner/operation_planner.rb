@@ -55,7 +55,6 @@ module OperationPlanner
                      pred.status == 'unplanned' ||
                      pred.status == 'planning' )
                 @@ready_errors << "Operation #{id} is waiting for operation #{pred.id} which has status #{pred.status}"
-                Rails.logger.info "Ready: #{@@ready_errors}"
                 return false
               end            
 
@@ -64,7 +63,6 @@ module OperationPlanner
           elsif !i.satisfied_by_environment
 
             @@ready_errors << "No items in stock available for input '#{i.name}' of operation #{id}"
-            Rails.logger.info "Ready: #{@@ready_errors}"            
             return false
 
           end #if

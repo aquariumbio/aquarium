@@ -75,11 +75,13 @@ module FieldValueKrill
 
   def make_part collection, r, c
 
-    collection.set r, c, child_sample
-    self.child_item_id = collection.id
-    self.row = r
-    self.column = c
-    self.save
+    if collection
+      collection.set r, c, child_sample
+      self.child_item_id = collection.id
+      self.row = r
+      self.column = c
+      self.save
+    end
 
   end
 

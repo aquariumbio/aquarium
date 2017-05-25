@@ -51,7 +51,11 @@ class FieldValue < ActiveRecord::Base
   end
 
   def collection
-    Collection.find(child_item.id)
+    if child_item
+      Collection.find(child_item.id)
+    else
+      nil
+    end
   end
 
   def val

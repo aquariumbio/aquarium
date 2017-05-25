@@ -3,6 +3,7 @@ class Operation < ActiveRecord::Base
   include DataAssociator
   include FieldValuer
   include OperationPlanner
+  include OperationStatus
   
   def parent_type # interface with FieldValuer
     operation_type
@@ -28,17 +29,6 @@ class Operation < ActiveRecord::Base
 
   def on_the_fly
     operation_type.on_the_fly
-  end
-
-  def set_status str
-    self.status = str
-    self.save
-    raise "Could not set status" unless self.errors.empty?
-  end
-
-  def error error_type, msg
-    set_status "error"
-    associate error_type, msg
   end
 
   def plan
@@ -134,7 +124,6 @@ class Operation < ActiveRecord::Base
 
   def set_status_recursively str
     recurse do |op|
-      puts "Setting operation #{op.id} status to #{str}"
       op.status = str
       op.save
     end
@@ -174,6 +163,20 @@ class Operation < ActiveRecord::Base
 
   end
 
+  def primed_predecessors
+
+    ops = []
+
+    inputs.each do |input|
+      input.predecessors.each do |pred|        
+        ops << pred.operation if pred.operation.status == "primed"
+      end
+    end
+
+    ops
+
+  end
+
   def siblings
 
     ops = outputs.collect do |output|
@@ -187,7 +190,6 @@ class Operation < ActiveRecord::Base
   end
 
   def activate
-    puts "Activating operation #{id}"
     set_status "planning"
     outputs.each do |output|
       output.wires_as_source.each do |wire|
@@ -198,7 +200,6 @@ class Operation < ActiveRecord::Base
   end
 
   def deactivate
-    puts "Deactivating operation #{id}"    
     set_status "unplanned"
     outputs.each do |output|
       output.wires_as_source.each do |wire|
@@ -211,18 +212,12 @@ class Operation < ActiveRecord::Base
   def self.step ops=nil
 
     if !ops
-      ops = Operation.includes(:operation_type).where(status: "waiting")
+      ops = Operation.includes(:operation_type)
+                     .where("status = 'waiting' OR status = 'deferred'")
     end
 
     ops.each do |op|
-      begin
-        if op.ready?
-          op.status = "pending"
-          op.save
-        end
-      rescue Exception => e
-        Rails.logger.info "COULD NOT STEP OPERATION #{op.id}"
-      end
+      op.step
     end
 
   end
@@ -329,60 +324,15 @@ class Operation < ActiveRecord::Base
   ###################################################################################################
   # STARTING PLANS
 
-  def start_on_the_fly
-
-    puts "======== CONSIDERING #{id} (#{status})"
-
-    if on_the_fly && leaf?
-
-      puts "=============== Setting op #{id} to 'primed'"
-      set_status "primed"
-      return true
-
-    else
-
-      start = on_the_fly
-
-      inputs.each do |input|
-        input.predecessors.each do |pred|          
-          if pred.operation.status == "planning"
-            start = pred.operation.start_on_the_fly && start
-          end
-        end
-      end
-
-      if start
-        puts "=============== Setting op #{id} to 'primed'"
-        set_status "primed"
-        return true
-      else 
-        puts "=============== No start on the fly for op #{id}"
-        return false
-      end
-
-    end
-
-  end
-
-  def start
-
-    recurse do |op|
-      if op.status == "planning" && !op.on_the_fly
-        op.set_status(op.leaf? ? "pending" : "waiting")
-        puts "=================== set op #{op.id} to #{op.status}"
-      else
-        puts "=================== skipped #{op.id} because its 'on the fly'"
-      end
-    end
-  end
-
   def leaf?
 
     inputs.each do |i|
 
       if i.predecessors.count > 0
         i.predecessors.each do |pred|
-          if pred.operation.status != "primed"
+          if pred.operation.on_the_fly
+            return pred.operation.leaf?
+          else
             return false
           end
         end

@@ -194,13 +194,15 @@ class LauncherController < ApplicationController
   def relaunch
     plan = Plan.find(params[:id])
     newplan = plan.relaunch
+    puts "Starting plan #{newplan.id}"
     issues = newplan.start
+    puts "Plan started with issues = #{issues.join(', ')}"
     newplan.reload
     render json: { 
       plan: newplan.as_json(include: { operations: { include: :operation_type, methods: [ 'field_values' ] } } ),
       issues: issues 
     }
-  end  
+  end
 
   def plans
 
