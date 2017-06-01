@@ -142,3 +142,12 @@ AQ.FieldValue.record_methods.backchain = function(plan,operation) {
   });
 
 }
+
+AQ.FieldValue.record_methods.sid = function() {
+  var fv = this;
+  if ( fv.child_sample ) {
+    return "" + fv.child_sample.id + ": " + fv.child_sample.name;
+  } else {
+    return "";
+  }
+} 

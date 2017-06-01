@@ -40,33 +40,33 @@
 
         <md-menu-content width="4" class="scrollable" flex>
 
-          <md-menu-item>
+          <md-menu-item aria-label="Reload">
             <md-button ng-click="plan.reload()">Reload</md-button>
           </md-menu-item> 
 
-          <md-menu-item>
+          <md-menu-item aria-label="Cancel">
             <md-button ng-click="plan.cancel('Canceled via user interface')">Cancel</md-button>
           </md-menu-item> 
 
-          <md-menu-item>
+          <md-menu-item aria-label="Debug">
             <md-button ng-disabled="plan.debugging" ng-click="plan.debug()">Debug</md-button>
           </md-menu-item> 
 
-          <md-menu-item>
+          <md-menu-item aria-label="Copy">
             <md-button ng-disabled="plan.relaunching" ng-click="relaunch(plan)">Copy</md-button>
           </md-menu-item>
 
-          <md-menu-item>
+          <md-menu-item aria-label="Replan">
             <md-button ng-disabled="plan.relaunching" ng-click="replan(plan)">Replan</md-button>
           </md-menu-item>           
 
           <md-menu-divider></md-menu-divider>
 
-          <md-menu-item>
+          <md-menu-item aria-label="Add Data">
             <md-button ng-click="plan.new_data_association()">Add Data</md-button>
           </md-menu-item>
 
-          <md-menu-item>
+          <md-menu-item aria-label="Upload">
             <md-button><upload record='plan'></upload></md-button>
           </md-menu-item>
 

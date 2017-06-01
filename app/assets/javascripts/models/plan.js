@@ -60,6 +60,8 @@ AQ.Plan.record_methods.submit = function() {
 
   var plan = this.export();
 
+  console.log(plan);
+
   return new Promise(function(resolve,reject) {
     AQ.post('/launcher/submit',plan).then(
       (response) => {
@@ -457,16 +459,25 @@ AQ.Plan.record_methods.relaunch = function() {
 
 AQ.Plan.getter(AQ.Budget,"budget");
 
-AQ.Plan.record_methods.wire_aux = function(op) {
+AQ.Plan.record_methods.wire_aux = function(op, wires, operations) {
+
   var plan = this;
-  aq.each(plan.wires, w => {
-    aq.each(op.field_values, fv => {
-      // console.log(["to?",w,fv])
-      if ( w.to_id == fv.id ) {
-        // console.log(["  to!",w,fv])
-      }
-    });
+
+  aq.each(wires, w => {
+    var fv = op.field_value_with_id(w.to_id);
+    if ( fv ) {
+      aq.each(operations,from_op => {
+        var from_fv = from_op.field_value_with_id(w.from_id);
+        if ( from_fv ) {
+          var new_from_op = from_op.copy(),
+              new_from_fv = new_from_op.field_value_like(from_fv);
+          plan.wire(new_from_op, new_from_fv, op, fv)
+              .wire_aux(new_from_op,wires, operations);
+        }
+      });
+    }
   });
+
 }
 
 AQ.Plan.record_methods.copy = function() {
@@ -475,20 +486,17 @@ AQ.Plan.record_methods.copy = function() {
 
   return new Promise(function(resolve, reject) {
 
-    AQ.Plan.where({id: old_plan.id},{methods: ['wires','operations','goals']}).then( plans => {
+    AQ.Plan.where({id: old_plan.id},{methods: ['wires','goals']}).then( plans => {
 
       var plan = AQ.Plan.record(plans[0]),
           new_plan = AQ.Plan.record({});
-
-      new_plan.wires = plans[0].wires;
 
       new_plan.operations = aq.collect(plan.goals, g => {
         return AQ.Operation.record(g).copy();
       });
 
-      // figure out wires
       aq.each(new_plan.operations, op => {
-        new_plan.wire_aux(op);
+        new_plan.wire_aux(op, plans[0].wires, old_plan.operations);
       });
 
       resolve(new_plan);

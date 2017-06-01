@@ -60,8 +60,6 @@ class LauncherController < ApplicationController
 
   def estimate
 
-    logger.info "Started at #{DateTime.now}"
-
     costs = []
     labor_rate = Parameter.get_float("labor rate") 
     markup = Parameter.get_float("markup rate")
@@ -100,8 +98,6 @@ class LauncherController < ApplicationController
       render json: costs
     end
 
-    logger.info "Ended at #{DateTime.now}"
-
   end
 
   def plan_from params
@@ -130,11 +126,14 @@ class LauncherController < ApplicationController
     if params[:wires]
       params[:wires].each do |form_wire|
         wire = Wire.new({
-          from_id: @id_map[form_wire[:from][:rid]],
+          from_id: @id_map[form_wire[:from][:rid]], 
           to_id: @id_map[form_wire[:to][:rid]],
           active: true
         })
         wire.save
+        unless wire.errors.empty? 
+          raise wire.errors.full_messages.join(", ")
+        end
         wire.to_op.field_values.each do |fv| # remove inputs from non-leaves
           if fv.child_item_id
             fv.child_item_id = nil
@@ -194,9 +193,7 @@ class LauncherController < ApplicationController
   def relaunch
     plan = Plan.find(params[:id])
     newplan = plan.relaunch
-    puts "Starting plan #{newplan.id}"
     issues = newplan.start
-    puts "Plan started with issues = #{issues.join(', ')}"
     newplan.reload
     render json: { 
       plan: newplan.as_json(include: { operations: { include: :operation_type, methods: [ 'field_values' ] } } ),
