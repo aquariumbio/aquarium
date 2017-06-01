@@ -5,24 +5,20 @@ AQ.Operation.record_methods.set_type = function(operation_type) {
   op.operation_type = operation_type;
   op.field_values = [];
 
-  aq.each(operation_type.field_types,function(ft) {
+  aq.each(operation_type.field_types, ft => {
 
     var fv = AQ.FieldValue.record({ 
       name: ft.name, 
       role: ft.role, 
       items: [],
       routing: ft.routing,
-      field_type: ft 
+      field_type: ft
     });
 
     if ( ft.allowable_field_types.length > 0 ) {
       fv.aft = ft.allowable_field_types[0];
       fv.aft_id = ft.allowable_field_types[0].id;
     }
-
-    // if ( ft.choices_array.length > 0 ) {
-    //   fv.value = ft.choices_array[0];
-    // }    
 
     op.field_values.push(fv);
 
@@ -31,6 +27,59 @@ AQ.Operation.record_methods.set_type = function(operation_type) {
     }
 
   });
+
+  return this;
+
+}
+
+AQ.Operation.record_methods.set_type_with_field_values = function(operation_type,fvs) {
+
+  var op = this;
+  op.operation_type_id = operation_type.id;
+  op.operation_type = operation_type;
+  op.field_values = [];
+  op.routing = {};
+
+  aq.each(operation_type.field_types, ft => {
+
+    aq.each(fvs, old_fv => {
+
+      if ( old_fv.role == ft.role && old_fv.name == ft.name ) {
+
+        var fv = AQ.FieldValue.record({
+          name: ft.name, 
+          role: ft.role, 
+          items: [],
+          routing: ft.routing,
+          field_type: ft,
+          id: old_fv.id,
+          child_sample: old_fv.child_sample
+        });     
+
+        if ( ft.allowable_field_types.length > 0 ) {
+          fv.aft = ft.allowable_field_types[0];
+          fv.aft_id = ft.allowable_field_types[0].id;
+        }
+
+        op.field_values.push(fv);
+
+        if ( ft.allowable_field_types.length > 0 ) {
+          op.set_aft(ft,ft.allowable_field_types[0])
+        }
+
+        if ( ft.array ) {
+          fv.sample_identifier = "" + fv.child_sample.id + ": " + fv.child_sample.name;
+        } else {
+          op.routing[ft.routing] = "" + fv.child_sample.id + ": " + fv.child_sample.name;
+        }           
+
+      }
+
+    });
+
+  });
+
+  console.log(op)
 
   return this;
 
@@ -271,10 +320,8 @@ AQ.Operation.record_getters.types_and_values = function() {
     if ( ft.role == 'input' && ft.ftype == 'sample' ) {
       aq.each(op.field_values, fv => {
         if ( fv.role == 'input' && ft.name == fv.name ) {
-          console.log(fv.name + "(fv " + fv.rid + "):" + fv.items.length)
           var tv = {type: ft, value: fv};
           tvs.push(tv)
-          console.log(tv.value.name + "(tv.value " + tv.value.rid + "):" + tv.value.items.length)
         }
       });
       if ( ft.array ) {
@@ -302,9 +349,22 @@ AQ.Operation.record_getters.last_job = function() {
     op.last_job = null;
   }
 
-  console.log(op.last_job)
-
   return op.last_job;
+
+}
+
+AQ.Operation.record_methods.copy = function() {
+
+  var op = this,
+      new_op = AQ.Operation.record({});
+  
+  new_op.form = { input: {}, output: {} };
+  new_op.set_type_with_field_values(
+    aq.find(AQ.operation_types,ot => ot.id == op.operation_type_id),
+    op.field_values
+  );
+
+  return new_op;
 
 }
 

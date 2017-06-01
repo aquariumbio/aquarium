@@ -35,7 +35,7 @@ gem "flot-rails"
 
 gem 'underscore-rails'
 
-gem 'git'
+# gem 'git'
 
 gem 'rails-patch-json-encode'
 gem 'oj'

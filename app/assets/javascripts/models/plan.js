@@ -456,3 +456,44 @@ AQ.Plan.record_methods.relaunch = function() {
 }
 
 AQ.Plan.getter(AQ.Budget,"budget");
+
+AQ.Plan.record_methods.wire_aux = function(op) {
+  var plan = this;
+  aq.each(plan.wires, w => {
+    aq.each(op.field_values, fv => {
+      // console.log(["to?",w,fv])
+      if ( w.to_id == fv.id ) {
+        // console.log(["  to!",w,fv])
+      }
+    });
+  });
+}
+
+AQ.Plan.record_methods.copy = function() {
+
+  var old_plan = this;
+
+  return new Promise(function(resolve, reject) {
+
+    AQ.Plan.where({id: old_plan.id},{methods: ['wires','operations','goals']}).then( plans => {
+
+      var plan = AQ.Plan.record(plans[0]),
+          new_plan = AQ.Plan.record({});
+
+      new_plan.wires = plans[0].wires;
+
+      new_plan.operations = aq.collect(plan.goals, g => {
+        return AQ.Operation.record(g).copy();
+      });
+
+      // figure out wires
+      aq.each(new_plan.operations, op => {
+        new_plan.wire_aux(op);
+      });
+
+      resolve(new_plan);
+
+    });
+  });
+
+}

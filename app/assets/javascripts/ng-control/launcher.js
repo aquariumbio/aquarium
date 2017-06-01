@@ -188,6 +188,19 @@
 
     }
 
+    $scope.replan = function(plan) {
+
+      console.log(plan);
+
+      plan.copy().then(plan => {
+        $scope.plan = plan;
+        $scope.plan.current_operation = $scope.plan.operations[0];
+        $scope.set_mode('new');
+        $scope.$apply();
+      })
+
+    }
+
     $scope.op_mode = function(op,m) {
       var c = "btn btn-mini";
       if ( op.mode == m ) {
