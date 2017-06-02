@@ -352,6 +352,55 @@ class OperationType < ActiveRecord::Base
 
   end
 
+  def precondition_value code, op
+
+    rval = true
+
+    begin
+      eval(code.content)
+      rval = precondition(op)
+    rescue Exception => e
+      rval = false # default if there is no precondition or it crashes
+    end
+
+    rval
+
+  end  
+
+  def num_in_status s
+    self.operations.select { |o| o.status == s }.length
+  end
+
+  def self.numbers
+
+    result = {}
+    ots = OperationType.includes(:operations).where(deployed: true)
+    preconditions = Code.where(name: "precondition", parent_class: "OperationType", parent_id: ots.collect { |ot| ot.id } )
+
+    ots.collect { |ot|
+
+      precode = preconditions.select { |p| p.parent_id == ot.id }.last
+      pending = ot.operations.select { |o| o.status == "pending" }
+      pending_true_length = ot.operations.select { |o| o.status == "pending" && ot.precondition_value(precode,o) }.length
+
+      result[ot.id] = {
+        pending_true:  pending_true_length,
+        pending_false: pending.length - pending_true_length,  
+        waiting:       ot.num_in_status("waiting"),
+        scheduled:     ot.num_in_status("scheduled"),
+        running:       ot.num_in_status("running"),
+        deferred:      ot.num_in_status("deferred"),
+        primed:        ot.num_in_status("primed"),
+        done:          ot.num_in_status("done"),
+        error:         ot.num_in_status("error")
+      }
+
+    }
+
+    return result
+
+  end
+
 end
 
 

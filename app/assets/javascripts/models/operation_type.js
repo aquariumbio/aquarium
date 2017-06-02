@@ -47,6 +47,16 @@ AQ.OperationType.all_with_content = function(deployed) {
 
 }
 
+AQ.OperationType.numbers = function() {
+
+  return new Promise(function(resolve,resject) {
+    AQ.get("/operation_types/numbers").then(response => {
+      resolve(response.data);
+    })
+  });
+
+}
+
 // RECORD METHODS ==================================================
 
 AQ.OperationType.record_methods.upgrade_field_types = function() {
@@ -71,23 +81,6 @@ AQ.OperationType.record_methods.new_operation = function() {
   return new Promise(function(resolve,reject) {
     resolve("New Operation");
   });
-}
-
-AQ.OperationType.record_getters.numbers = function() {
-
-  var ot = this;
-
-  delete ot.numbers;
-  ot.numbers = {};
-  
-  AQ.post("/operation_types/numbers",ot).then((response) => {
-    ot.numbers = response.data;
-  }).catch((response) => {
-    console.log(["error", response.data]);
-  })
-
-  return {};
-
 }
 
 AQ.OperationType.record_getters.stats = function() {
@@ -271,4 +264,6 @@ AQ.OperationType.record_getters.rendered_docs = function() {
   return AQ.sce.trustAsHtml("Rendering ...");
 
 }
+
+
 

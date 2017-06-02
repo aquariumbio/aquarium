@@ -366,36 +366,36 @@ class OperationTypesController < ApplicationController
 
   def numbers
 
-    ops = Operation.where(operation_type_id: params[:id])
-                   .where( "status = 'waiting' OR status = 'pending' OR status = 'scheduled' OR status = 'deferred' OR status = 'running'" )
+    render json: OperationType.numbers
 
-    puts "ops.length = #{ops.length}"
+    # ops = Operation.where(operation_type_id: params[:id])
+    #                .where( "status = 'waiting' OR status = 'pending' OR status = 'scheduled' OR status = 'deferred' OR status = 'running'" )
 
-    pending = ops.select { |op| op.status == 'pending' }
+    # pending = ops.select { |op| op.status == 'pending' }
 
-    pending_true = []
-    pending_false = []
-    pending.each do |op|
-      if op.precondition_value
-        pending_true << op
-      else
-        pending_false << op
-      end
-    end
+    # pending_true = []
+    # pending_false = []
+    # pending.each do |op|
+    #   if op.precondition_value
+    #     pending_true << op
+    #   else
+    #     pending_false << op
+    #   end
+    # end
     
-    s = ops.select { |op| op.status == 'scheduled' }.length
-    r = ops.select { |op| op.status == 'running' }.length
-    w = ops.select { |op| op.status == 'waiting' }.length
-    d = ops.select { |op| op.status == 'deferred' }.length
+    # s = ops.select { |op| op.status == 'scheduled' }.length
+    # r = ops.select { |op| op.status == 'running' }.length
+    # w = ops.select { |op| op.status == 'waiting' }.length
+    # d = ops.select { |op| op.status == 'deferred' }.length
 
-    render json: {
-      pending_true: pending_true.length,
-      pending_false: pending_false.length + w,
-      scheduled: s,
-      deferred: d,
-      running: r,
-      waiting: w
-    }
+    # render json: {
+    #   pending_true: pending_true.length,
+    #   pending_false: pending_false.length + w,
+    #   scheduled: s,
+    #   deferred: d,
+    #   running: r,
+    #   waiting: w
+    # }
 
   end
 

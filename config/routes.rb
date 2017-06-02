@@ -28,7 +28,7 @@ Bioturk::Application.routes.draw do
   resources :operations
 
   post '/operation_types/import',                to: 'operation_types#import'    
-  post '/operation_types/numbers',               to: 'operation_types#numbers'    
+  get '/operation_types/numbers',                to: 'operation_types#numbers'    
   get '/operation_types/:id/stats',              to: 'operation_types#stats'
   get '/operation_types/:id/random/:num',        to: 'operation_types#random'
   get '/operation_types/:id/export',             to: 'operation_types#export'  

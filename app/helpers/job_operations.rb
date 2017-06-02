@@ -37,39 +37,43 @@ module JobOperations # included in Job model
 
       else
 
-        materials = Account.new(
-          user_id: op.user_id, 
-          category: "materials", 
-          amount: c[:materials],
-          budget_id: op.plan.budget_id,
-          description: "Materials",
-          labor_rate: labor_rate,
-          markup_rate: markup_rate,
-          operation_id: op.id,
-          job_id: id,
-          transaction_type: "debit"
-        )
+        if op.plan && op.plan.budget_id
 
-        materials.save
+          materials = Account.new(
+            user_id: op.user_id, 
+            category: "materials", 
+            amount: c[:materials],
+            budget_id: op.plan.budget_id,
+            description: "Materials",
+            labor_rate: labor_rate,
+            markup_rate: markup_rate,
+            operation_id: op.id,
+            job_id: id,
+            transaction_type: "debit"
+          )
 
-        op.associate :cost_error, materials.errors.full_messages.join(', ') unless materials.errors.empty?
+          materials.save
 
-        labor = Account.new(
-          user_id: op.user_id, 
-          category: "labor", 
-          amount: c[:labor] * labor_rate,
-          budget_id: op.plan.budget_id,
-          description: "Labor: #{c[:labor]} minutes @ $#{labor_rate}/min",
-          labor_rate: labor_rate,
-          markup_rate: markup_rate,
-          operation_id: op.id,
-          job_id: id,
-          transaction_type: "debit"
-        )
+          op.associate :cost_error, materials.errors.full_messages.join(', ') unless materials.errors.empty?
 
-        labor.save
+          labor = Account.new(
+            user_id: op.user_id, 
+            category: "labor", 
+            amount: c[:labor] * labor_rate,
+            budget_id: op.plan.budget_id,
+            description: "Labor: #{c[:labor]} minutes @ $#{labor_rate}/min",
+            labor_rate: labor_rate,
+            markup_rate: markup_rate,
+            operation_id: op.id,
+            job_id: id,
+            transaction_type: "debit"
+          )
 
-        op.associate :cost_error, labor.errors.full_messages.join(', ') unless labor.errors.empty? 
+          labor.save
+
+          op.associate :cost_error, labor.errors.full_messages.join(', ') unless labor.errors.empty? 
+
+        end
 
       end
 

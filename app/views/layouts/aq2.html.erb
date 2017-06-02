@@ -49,6 +49,21 @@
       position: fixed;
     }
 
+    <% if content_for? :wider_sidebar %>
+
+      md-sidenav, 
+      md-sidenav.md-locked-open, 
+      md-sidenav.md-closed.md-locked-open-add-active {
+          width: 400px !important;
+          max-width: 400px !important;
+      }     
+
+      .main {
+        width: calc(100vw - 400px) !important;
+      }      
+
+    <% end %>
+
   </style>
 
   </head>

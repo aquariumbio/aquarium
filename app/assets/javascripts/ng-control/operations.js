@@ -18,36 +18,50 @@
 
     $scope.operation_types = [];
 
-    $scope.current = {
-      ot: null,
-      status: null
+    function category_index(c) {
+      $scope.categories.indexOf(c);
     }
 
-    $scope.status = 'Loading Operation Types ...';
-    AQ.OperationType.all().then(operation_types => {
-      $scope.status = "Fetching user information ...";
-      AQ.User.current().then( user => {
-        $scope.status = "Ready";
-        AQ.operation_types = operation_types;
-        $scope.operation_types = operation_types;
-        $scope.current_user = user;
-        $scope.$apply();
-      });
-    });
+    function init() {
 
-    $scope.show_operation_type = function() {
-      return function(ot) {
-        var s = 0;
-        for ( key in ot.numbers ) {
-          s += ot.numbers[key];
+      if ( $cookies.getObject("managerState") ) {
+        $scope.current = $cookies.getObject("managerState");
+        if ( $scope.current.ot != null && $scope.current.status != null ) {
+          var ot = aq.find(AQ.operation_types, ot => ot.id == $scope.current.ot.id);
+          $scope.current.category_index = $scope.categories.indexOf(ot.category);
+          $scope.select(ot,$scope.current.status,[]);
+        }       
+      } else {
+        $scope.current = {
+          ot: null,
+          status: null,
+          category_index: 0
         }
-        return s != 0;
       }
     }
 
+    $scope.status = 'Loading Operation Types ...';
+    AQ.OperationType.where({deployed: true}).then(operation_types => {
+      $scope.status = "Fetching user information ...";
+      AQ.User.current().then( user => {
+        AQ.OperationType.numbers().then(numbers => {
+          $scope.status = "Ready";
+          AQ.operation_types = operation_types;
+          $scope.operation_types = operation_types;
+          $scope.categories = aq.uniq(aq.collect(operation_types, ot => ot.category)).sort();
+          $scope.current_user = user;
+          $scope.numbers = numbers;
+          init();
+          $scope.$apply();
+        });
+      });
+    });
+
     $scope.status_selector = function(ot,status) {
       var c = "";
-      if ( ot.numbers[status] == 0 ) {
+      if ( status == 'waiting' && $scope.numbers[ot.id]['waiting'] + $scope.numbers[ot.id]['pending_false'] != 0 ) {
+        c += " number-some";
+      } else if ( $scope.numbers[ot.id][status] == 0 ) {
         c += " number-none";
       } else {
         c += " number-some";
@@ -64,6 +78,10 @@
 
       $scope.current.ot = ot; 
       $scope.current.status = status;
+      $scope.current.category_index = $scope.categories.indexOf(ot.category);
+
+      $cookies.putObject("managerState", $scope.current);
+
       delete ot.operations;
       delete $scope.jobs;
 
@@ -71,7 +89,7 @@
 
       if ( status == 'pending_true' ) {
         actual_status = 'pending';
-      } else if ( status == 'pending_false' ) {
+      } else if ( status == 'waiting' ) {
         actual_status = ['pending','waiting'];
       } else {
         actual_status = status;
@@ -83,10 +101,10 @@
       },{
         methods: ['user','field_values', 'precondition_value', 'plans', 'jobs']
       }).then(operations => {
-        if ( status == 'pending_false' ) {
-          ot.operations = aq.where(operations, op => { return !op.precondition_value || op.status == 'waiting' });
+        if ( status == 'waiting' ) {
+          ot.operations = aq.where(operations, op => { return (op.status == 'pending' && !op.precondition_value) || op.status == 'waiting' });
         } else if ( status == 'pending_true' ) {
-          ot.operations = aq.where(operations, op => op.precondition_value);
+          ot.operations = aq.where(operations, op => op.status == "pending" && op.precondition_value);
         } else {
           ot.operations = operations;
         }
@@ -119,10 +137,11 @@
 
       if ( ops.length > 0 ) {
         ot.schedule(ops).then( () => {
-          ot.numbers.pending_true -= ops.length;
-          ot.numbers.scheduled += ops.length;        
-          $scope.select(ot,'scheduled',ops);
-          $scope.$apply();
+          AQ.OperationType.numbers().then(numbers => {
+            $scope.numbers = numbers;
+            $scope.select(ot,'scheduled',ops);
+            $scope.$apply();
+          });
         });
       }
 
@@ -133,11 +152,12 @@
       var ops = aq.where(ot.operations,op => op.selected && op.last_jobs.id == jid);
 
       if ( ops.length > 0 ) {     
-        ot.unschedule(ops).then( () => {
-          ot.numbers.pending_true += ops.length;
-          ot.numbers.scheduled -= ops.length;    
-          $scope.select(ot,'pending_true',ops);    
-          $scope.$apply();
+        ot.unschedule(ops).then( () => { 
+          AQ.OperationType.numbers().then(numbers => {
+            $scope.numbers = numbers;
+            $scope.select(ot,'pending_true',ops);    
+            $scope.$apply();
+          });
         });
       } 
 
@@ -149,13 +169,13 @@
 
       var num = aq.where(ot.operations, op => op.last_job.id == job_id).length;
 
-      ot.numbers.scheduled -= num;
-      ot.numbers.running += num;      
-
       $http.get("/krill/debug/" + job_id).then(response => {
-        aq.each($scope.operation_types, ot => ot.recompute_getter('numbers'));
-        aq.remove($scope.jobs,job_id);
-        delete $scope.debugging_job_id;
+        AQ.OperationType.numbers().then(numbers => {
+          $scope.numbers = numbers;
+          aq.remove($scope.jobs,job_id);
+          delete $scope.debugging_job_id;
+          $scope.$apply();
+        });
       })
 
     }

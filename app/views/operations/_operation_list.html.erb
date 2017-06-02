@@ -7,8 +7,8 @@
 
       <tr>
         <th class='selector'></th>
+        <th>Id</th>        
         <th>Submitted by</th>
-        <th>Job</th>
         <th class='output'>Output</th>
         <th>Plan</th>
         <th>Last Update</th>
@@ -23,12 +23,9 @@
                  ng-if="!ot.on_the_fly && ( status == 'pending_true' || status == 'scheduled')">
         </td>
 
-        <td>{{op.user.name}}</td>
+        <td>{{op.id}}</td>
 
-        <td>
-          <a ng-if="op.last_job" href="/jobs/{{op.job_id}}" ng-if>{{op.last_job.id}}</a>
-          <span ng-if="!op.last_job">-</span>
-        </td>
+        <td>{{op.user.name}}</td>
 
         <td>
           <ul class='input-list'>
@@ -40,6 +37,7 @@
 
         <td>
           <a ng-repeat="plan in op.plans" href="/launcher?plan_id={{plan.id}}">{{plan.id}}{{$last ? '' : ', '}}</a>
+          <span ng-if="op.plans.length == 0">n/a</span>
         </td>
 
         <td>{{op.updated_at|date}}</td>
