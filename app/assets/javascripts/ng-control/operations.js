@@ -9,8 +9,8 @@
     w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
   } 
 
-  w.controller('operationsCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
-                        function (  $scope,   $http,   $attrs,   $cookies ) {
+  w.controller('operationsCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$interval', 
+                        function (  $scope,   $http,   $attrs,   $cookies,   $interval ) {
 
     AQ.init($http);
     AQ.update = () => { $scope.$apply(); }
@@ -38,6 +38,8 @@
           category_index: 0
         }
       }
+
+      $interval(reload, 30000);
 
     }
 
@@ -106,7 +108,6 @@
 
       if ( status == "error" || status == "done" ) {
         options = { offset: ot.list[status].offset, limit: ot.list[status].limit, reverse: true };
-        console.log([status,options])
       } else {
         options = {};
       }
@@ -146,6 +147,16 @@
     $scope.more = function(status) {
       $scope.current.ot.list[status].offset += 10;
       $scope.select($scope.current.ot,status,[],true);
+    }
+
+    function reload() {
+      var old_val = $scope.numbers[$scope.current.ot.id][$scope.current.status];
+      AQ.OperationType.numbers().then(numbers => {
+        $scope.numbers = numbers;
+        if ( old_val != $scope.numbers[$scope.current.ot.id][$scope.current.status] ) {
+          $scope.select($scope.current.ot, $scope.current.status,[])
+        }
+      });
     }
 
     $scope.choose = function(ot,status,val,job_id) {

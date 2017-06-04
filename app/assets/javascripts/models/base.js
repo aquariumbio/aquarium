@@ -46,7 +46,6 @@ AQ.Base.prototype.array_query = function(method,args,rest,opts={}) {
 
   var base = this;
   var options = $.extend({offset: -1, limit: -1, reverse: false},opts);
-  console.log(['array_query',opts,options])
   var query = { model: base.model, method: method, arguments: args, options: options };
 
   return new Promise(function(resolve,reject) {
@@ -72,7 +71,6 @@ AQ.Base.prototype.all = function(rest={},limit=-1,opts={}) {
 
 AQ.Base.prototype.where = function(criteria,methods={},opts={}) {
   var options = $.extend({offset: -1, limit: -1, reverse: false},opts);
-  console.log(['where',opts,options])  
   return this.array_query('where',criteria,methods,options);
 }
 
