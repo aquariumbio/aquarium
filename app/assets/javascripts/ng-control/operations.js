@@ -38,6 +38,7 @@
           category_index: 0
         }
       }
+
     }
 
     $scope.status = 'Loading Operation Types ...';
@@ -48,6 +49,12 @@
           $scope.status = "Ready";
           AQ.operation_types = operation_types;
           $scope.operation_types = operation_types;
+          aq.each($scope.operation_types,ot => { 
+            ot.list = {
+              done: { offset: 0, limit: 10 },
+              error: { offset: 0, limit: 10 }
+            }
+          });
           $scope.categories = aq.uniq(aq.collect(operation_types, ot => ot.category)).sort();
           $scope.current_user = user;
           $scope.numbers = numbers;
@@ -74,7 +81,7 @@
       return c;
     }
 
-    $scope.select = function(ot,status,selected_ops) {
+    $scope.select = function(ot,status,selected_ops,append=false) {
 
       $scope.current.ot = ot; 
       $scope.current.status = status;
@@ -82,10 +89,12 @@
 
       $cookies.putObject("managerState", $scope.current);
 
-      delete ot.operations;
+      if ( !append ) {
+        delete ot.operations;
+      }
       delete $scope.jobs;
 
-      var actual_status;
+      var actual_status, options;
 
       if ( status == 'pending_true' ) {
         actual_status = 'pending';
@@ -95,18 +104,29 @@
         actual_status = status;
       }
 
+      if ( status == "error" || status == "done" ) {
+        options = { offset: ot.list[status].offset, limit: ot.list[status].limit, reverse: true };
+        console.log([status,options])
+      } else {
+        options = {};
+      }
+
       AQ.Operation.where({
         operation_type_id: ot.id, 
         status: actual_status
       },{
         methods: ['user','field_values', 'precondition_value', 'plans', 'jobs']
-      }).then(operations => {
+      },options).then(operations => {
         if ( status == 'waiting' ) {
           ot.operations = aq.where(operations, op => { return (op.status == 'pending' && !op.precondition_value) || op.status == 'waiting' });
         } else if ( status == 'pending_true' ) {
           ot.operations = aq.where(operations, op => op.status == "pending" && op.precondition_value);
         } else {
-          ot.operations = operations;
+          if ( append ) {
+            ot.operations = ot.operations.concat(operations);
+          } else {
+            ot.operations = operations;
+          }
         }
         aq.each(ot.operations, op => { 
           aq.each(selected_ops, sop => {
@@ -121,6 +141,11 @@
         $scope.$apply();
       })
 
+    }
+
+    $scope.more = function(status) {
+      $scope.current.ot.list[status].offset += 10;
+      $scope.select($scope.current.ot,status,[],true);
     }
 
     $scope.choose = function(ot,status,val,job_id) {

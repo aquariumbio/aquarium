@@ -24,7 +24,15 @@ class JsonController < ApplicationController
       result = Object.const_get(params[:model])
       result = result.find(params[:id]) if params[:id] 
       result = result.send(params[:method],*params[:arguments]) if method_ok(params[:method]) && params[:method] != "where"
-      result = result.where(params[:arguments]) if params[:method] == "where"
+
+      if params[:method] == "where"
+        puts params[:options]
+        result = result.where(params[:arguments]) 
+        result = result.limit(params[:options][:limit]) if params[:options] && params[:options][:limit] && params[:options][:limit].to_i > 0
+        result = result.offset(params[:options][:offset]) if params[:options] && params[:options][:offset] && params[:options][:offset].to_i > 0
+        result = result.reverse if params[:options] && params[:options][:reverse]                
+      end
+
       result = result.as_json(methods: params[:methods]) if ( params[:methods] )
       result = result.as_json(include: params[:include]) if ( params[:include] )
 

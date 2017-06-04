@@ -20,17 +20,23 @@
 
       <table class='table table-condensed status-table'>
         <tr>
-          <th class='operation-name'></th>
-          <th ng-repeat="status in [ 'Waiting', 'Pending', 'Deferred', 'Scheduled', 'Running' ]"
-              class='rotate'>
+          <th class='operation-name'>
+            <md-switch ng-model="current.show_completed" aria-label="Show completed" style="padding-left: 16px; padding-top: 16px">
+              Completed
+            </md-switch>
+          </th>
+          <th ng-repeat="status in [ 'Waiting', 'Pending', 'Deferred', 'Scheduled', 'Running', 'Error', 'Done' ]"
+              class='rotate'
+              ng-if="current.show_completed || ( status != 'Error' && status != 'Done' )">
             <div><span>{{status}}</span></div>
           </th>
         </tr>
         <tr ng-repeat="ot in operation_types | filter: { category: cat }" ng-click="choose(ot)">
           <td class="operation-name">{{ot.name}}</td>
-          <td ng-repeat="status in [ 'waiting', 'pending_true', 'deferred', 'scheduled', 'running' ]"
+          <td ng-repeat="status in [ 'waiting', 'pending_true', 'deferred', 'scheduled', 'running', 'error', 'done' ]"
               ng-class="$parent.status_selector(ot,status)"
-              ng-click="$parent.select(ot,status)">
+              ng-click="$parent.select(ot,status)"
+              ng-if="current.show_completed || ( status != 'error' && status != 'done' )">
               {{status == "waiting" ? numbers[ot.id]["waiting"] + numbers[ot.id]["pending_false"] : numbers[ot.id][status]}}
           </td>
         </tr>

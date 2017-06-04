@@ -42,10 +42,12 @@ AQ.Base.prototype.find_by_name = function(name) {
   });
 }
 
-AQ.Base.prototype.array_query = function(method,args,rest) {
+AQ.Base.prototype.array_query = function(method,args,rest,opts={}) {
 
   var base = this;
-  var query = { model: base.model, method: method, arguments: args };
+  var options = $.extend({offset: -1, limit: -1, reverse: false},opts);
+  console.log(['array_query',opts,options])
+  var query = { model: base.model, method: method, arguments: args, options: options };
 
   return new Promise(function(resolve,reject) {
     AQ.post('/json',$.extend(query,rest)).then(
@@ -63,12 +65,15 @@ AQ.Base.prototype.array_query = function(method,args,rest) {
 
 }
 
-AQ.Base.prototype.all = function(rest={}) {
-  return this.array_query('all',[],rest);
+AQ.Base.prototype.all = function(rest={},limit=-1,opts={}) {
+  var options = $.extend({offset: -1, limit: -1, reverse: false},opts);
+  return this.array_query('all',[],rest,options);
 }
 
-AQ.Base.prototype.where = function(criteria,methods={}) {
-  return this.array_query('where',criteria,methods);
+AQ.Base.prototype.where = function(criteria,methods={},opts={}) {
+  var options = $.extend({offset: -1, limit: -1, reverse: false},opts);
+  console.log(['where',opts,options])  
+  return this.array_query('where',criteria,methods,options);
 }
 
 AQ.Base.prototype.exec = function(method, args) {
