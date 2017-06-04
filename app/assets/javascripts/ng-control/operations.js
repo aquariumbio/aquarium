@@ -85,13 +85,11 @@
 
     $scope.select = function(ot,status,selected_ops,append=false) {
 
-      $scope.current.ot = ot; 
-      $scope.current.status = status;
-      $scope.current.category_index = $scope.categories.indexOf(ot.category);
-
-      $cookies.putObject("managerState", $scope.current);
-
       if ( !append ) {
+        $scope.current.ot = ot; 
+        $scope.current.status = status;
+        $scope.current.category_index = $scope.categories.indexOf(ot.category);
+        $cookies.putObject("managerState", $scope.current);        
         delete ot.operations;
       }
       delete $scope.jobs;
