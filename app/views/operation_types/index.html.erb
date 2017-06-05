@@ -83,12 +83,12 @@
   <div ng-show="operation_types && current_ot"> 
 
     <md-nav-bar md-selected-nav-item="mode" nav-bar-aria-label="Operation Type Editing Modes" md-no-ink-bar='false'>
-      <md-nav-item md-nav-click="set_mode('definition')" name='definition'>Definition</md-nav-item>
+      <md-nav-item md-nav-click="set_mode('definition')" name='definition'>Def</md-nav-item>
       <md-nav-item md-nav-click="set_mode('protocol')" name="protocol">Protocol</md-nav-item>
-      <md-nav-item md-nav-click="set_mode('precondition')" name="precondition">Precondition</md-nav-item>
+      <md-nav-item md-nav-click="set_mode('precondition')" name="precondition">Pre</md-nav-item>
       <md-nav-item md-nav-click="set_mode('cost')" name="cost">Cost</md-nav-item>
-      <md-nav-item ng-if="mode != 'documentation_view'" md-nav-click="set_mode('documentation')" name="documentation">Documentation</md-nav-item>
-      <md-nav-item ng-if="mode == 'documentation_view'" md-nav-click="set_mode('documentation')" name="documentation_view">Documentation</md-nav-item>
+      <md-nav-item ng-if="mode != 'documentation_view'" md-nav-click="set_mode('documentation')" name="documentation">Docs</md-nav-item>
+      <md-nav-item ng-if="mode == 'documentation_view'" md-nav-click="set_mode('documentation')" name="documentation_view">Docs</md-nav-item>
       <md-nav-item md-nav-click="set_mode('timing')" name="timing">Timing</md-nav-item>
       <md-nav-item md-nav-click="set_mode('test')" name="test">Test</md-nav-item>
     </md-nav-bar> 

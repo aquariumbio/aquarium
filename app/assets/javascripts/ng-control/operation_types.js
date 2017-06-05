@@ -34,9 +34,17 @@
       }
     }
 
-    AQ.OperationType.all({methods: ["field_types"]}).then(operation_types => {
+    AQ.OperationType.all({methods: ["field_types", "timing"]}).then(operation_types => {
       $scope.operation_types = operation_types;
-      aq.each($scope.operation_types,ot => ot.upgrade_field_types());
+      aq.each($scope.operation_types, ot => {
+        ot.upgrade_field_types();
+        if ( ot.timing ) {
+          ot.timing = AQ.Timing.record(ot.timing);
+        } else { 
+          ot.set_default_timing();
+        }
+        ot.timing.make_form();
+      });
       AQ.operation_types = $scope.operation_types;
       if ( $cookies.getObject("DeveloperCurrentOperationTypeId") ) {
         var ots = aq.where($scope.operation_types,ot => ot.id == $cookies.getObject("DeveloperCurrentOperationTypeId") );

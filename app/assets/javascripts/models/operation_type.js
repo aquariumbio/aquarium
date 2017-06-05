@@ -265,5 +265,13 @@ AQ.OperationType.record_getters.rendered_docs = function() {
 
 }
 
+AQ.OperationType.record_methods.set_default_timing = function() {
+  var ot = this;
+  ot.timing = AQ.Timing.default();
+  ot.timing.parent_class = "OperationType";
+  ot.timing.parent_id = ot.id;
+  return ot;
+}
+
 
 

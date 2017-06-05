@@ -1,6 +1,6 @@
 class Timing < ActiveRecord::Base
 
-  attr_accessible :parent_class, :parent_id, :start, :stop, :days
+  attr_accessible :parent_class, :parent_id, :start, :stop, :days, :active
 
   def days_of_week
 

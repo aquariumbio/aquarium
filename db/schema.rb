@@ -415,6 +415,7 @@ ActiveRecord::Schema.define(:version => 20170604165355) do
     t.string   "days"
     t.integer  "start"
     t.integer  "stop"
+    t.boolean  "active"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end

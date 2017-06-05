@@ -6,6 +6,7 @@ class Timing < ActiveRecord::Migration
       t.string :days
       t.integer :start
       t.integer :stop
+      t.boolean :active
       t.timestamps
     end
   end
