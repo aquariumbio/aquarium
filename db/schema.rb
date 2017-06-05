@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20170504212208) do
+ActiveRecord::Schema.define(:version => 20170604165355) do
 
   create_table "account_logs", :force => true do |t|
     t.integer  "row1"
@@ -407,6 +407,16 @@ ActiveRecord::Schema.define(:version => 20170504212208) do
     t.integer  "task_prototype_id"
     t.integer  "user_id",           :default => 0
     t.integer  "budget_id"
+  end
+
+  create_table "timings", :force => true do |t|
+    t.integer  "parent_id"
+    t.string   "parent_class"
+    t.string   "days"
+    t.integer  "start"
+    t.integer  "stop"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "touches", :force => true do |t|

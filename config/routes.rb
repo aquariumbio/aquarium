@@ -1,5 +1,7 @@
 Bioturk::Application.routes.draw do
  
+  resources :timings, only: [ :update, :create ]
+
   get '/json/current',             to: 'json#current'
   post '/json/items',              to: 'json#items'
   post '/json/save',               to: 'json#save'  

@@ -6,6 +6,7 @@ class OperationType < ActiveRecord::Base
   include OperationTypeExport
   include OperationTypeWorkflow
   include OperationTypeRandom
+  include HasTiming
 
   has_many :operations
   # has_many :fts, foreign_key: "parent_id", class_name: "FieldType"
