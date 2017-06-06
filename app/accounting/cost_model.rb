@@ -140,10 +140,10 @@ module CostModel
 
       # MAXIPREP ############################################################################################
 
-      when ["plate_midiprep","plated"]                      then basic(:default,0.0,0.0)
-      when ["small_inoculation_midiprep","small overnight"] then basic(:default,0.0,0.0)
-      when ["large_inoculation_midiprep","large overnight"] then basic(:default,9.83,9.09)
-      when ["midiprep","plasmid extracted"]                 then basic(:default,40.5,40.1)
+      when ["plate_maxiprep","plated"]                      then basic(:default,0.0,0.0)
+      when ["small_inoculation_maxiprep","small overnight"] then basic(:default,0.0,0.0)
+      when ["large_inoculation_maxiprep","large overnight"] then basic(:default,9.83,9.09)
+      when ["maxiprep","plasmid extracted"]                 then basic(:default,40.5,40.1)
 
       # AGRO TRANSFORMATION #################################################################################
 
