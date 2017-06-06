@@ -49,6 +49,29 @@ module CostModel
       when ["image_plate","imaged and stored in fridge"]    then basic(:default,0.02,0.78)
       when ["image_plate","no colonies"]                    then basic(:default,0.0,0.78)
 
+      # E coli QC #######################################################################################
+
+      when ["make_ecoli_lysate","lysate"]
+        n = simple_spec[:num_colonies].inject { |sum,x| sum+x }
+        {
+          materials: 0.08 * n,
+          labor: 0.48 * n * labor_rate
+        }
+
+      when ["ecoli_colony_PCR","pcr"]
+        n = simple_spec[:num_colonies].inject { |sum,x| sum+x }
+        {
+          materials: 0.27 * n,
+          labor: 0.46 * n * labor_rate
+        }
+
+      when ["fragment_analyzing_ecoli","gel imaged"]
+        n = simple_spec[:num_colonies].inject { |sum,x| sum+x }
+        {
+          materials: 0.55 * n,
+          labor: 0.39 * n * labor_rate
+        }
+
       # PLASMID VERIFICATION ################################################################################
       when ["start_overnight_plate","overnight"] 
         if simple_spec[:num_colonies]
@@ -117,8 +140,10 @@ module CostModel
 
       # MAXIPREP ############################################################################################
 
-      when ["start_overnight_glycerol_stock","overnight"] then basic(:default,9.83,9.09)
-      when ["maxiprep","plasmid extracted"]               then basic(:default,40.5,40.1)
+      when ["plate_midiprep","plated"]                      then basic(:default,0.0,0.0)
+      when ["small_inoculation_midiprep","small overnight"] then basic(:default,0.0,0.0)
+      when ["large_inoculation_midiprep","large overnight"] then basic(:default,9.83,9.09)
+      when ["midiprep","plasmid extracted"]                 then basic(:default,40.5,40.1)
 
       # AGRO TRANSFORMATION #################################################################################
 
