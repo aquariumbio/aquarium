@@ -112,4 +112,25 @@
 
   }
 
+  .timing-bullet-past {
+    color: #ccc;
+  }
+
+  .timing-bullet-present {
+    color: darkgreen;
+  }
+
+  .timing-bullet-future {
+    color: orange;
+  }
+
+  .timing-bullet-none {
+    color: white;
+  }
+
+  .timing-info {
+    margin: 16px 0 0 42px;
+    color: #666;
+  }
+
 }

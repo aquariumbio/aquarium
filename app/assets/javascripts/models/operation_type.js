@@ -25,9 +25,14 @@ AQ.OperationType.all_with_content = function(deployed) {
 
     return this.array_query(
         'where', {deployed: true}, 
-        { methods: [ 'field_types', 'cost_model', 'documentation' ] }
+        { methods: [ 'field_types', 'cost_model', 'documentation', 'timing' ] }
       ).then((ots) => {
-        aq.each(ots,function(ot) { ot.upgrade_field_types(); })
+        aq.each(ots,function(ot) { 
+          ot.upgrade_field_types();
+          if ( ot.timing ) {
+            ot.timing = AQ.Timing.record(ot.timing);
+          }
+        })
         this.compute_categories(ots);
         return ots;
       });
@@ -36,9 +41,14 @@ AQ.OperationType.all_with_content = function(deployed) {
 
     return this.array_query(
         'all', [], 
-        { methods: [ 'field_types', 'cost_model', 'documentation' ] }
+        { methods: [ 'field_types', 'cost_model', 'documentation', 'timing' ] }
       ).then((ots) => {
-        aq.each(ots,function(ot) { ot.upgrade_field_types(); })
+        aq.each(ots,function(ot) { 
+          ot.upgrade_field_types(); 
+          if ( ot.timing ) {
+            ot.timing = AQ.Timing.record(ot.timing);
+          }          
+        })
         this.compute_categories(ots);
         return ots;
       });
@@ -273,5 +283,10 @@ AQ.OperationType.record_methods.set_default_timing = function() {
   return ot;
 }
 
+AQ.OperationType.timing_sort_compare = function(ot1, ot2) {
+  return (ot1.timing ? ot1.timing.start : 10000) - (ot2.timing ? ot2.timing.start : 10000)
+}
 
-
+AQ.OperationType.sort_by_timing = function(ots) {
+  return ots.sort(AQ.OperationType.timing_sort_compare);
+}

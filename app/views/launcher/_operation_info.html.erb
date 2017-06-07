@@ -4,6 +4,14 @@
 
     <div class="title">
       <h1 class="md-title">{{plan.current_operation.operation_type.name}}</h1>
+      <p class='timing md-body'
+         ng-if="plan.current_operation.operation_type.timing && plan.current_operation.operation_type.timing.active">
+        {{plan.current_operation.operation_type.timing.as_string}}
+      </p>
+      <p class='timing md-body'
+         ng-if="!plan.current_operation.operation_type.timing || !plan.current_operation.operation_type.timing.active">
+        Scheduled as needed
+      </p>
     </div>
 
   <div class='documentation md-body-1' ng-bind-html="plan.current_operation.operation_type.rendered_docs"></div>
@@ -38,10 +46,8 @@
       Last run {{plan.current_operation.operation_type.stats.last_run|date: 'shortDate'}}
     </p>
 
-
   </div>
 
   </md-content>
-
 
 </script>

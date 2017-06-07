@@ -44,18 +44,19 @@
     }
 
     $scope.status = 'Loading Operation Types ...';
-    AQ.OperationType.where({deployed: true}).then(operation_types => {
+    AQ.OperationType.where({deployed: true},{methods: ["timing"]}).then(operation_types => {
       $scope.status = "Fetching user information ...";
       AQ.User.current().then( user => {
         AQ.OperationType.numbers().then(numbers => {
           $scope.status = "Ready";
-          AQ.operation_types = operation_types;
-          $scope.operation_types = operation_types;
+          AQ.operation_types = AQ.OperationType.sort_by_timing(operation_types);
+          $scope.operation_types = AQ.operation_types;
           aq.each($scope.operation_types,ot => { 
             ot.list = {
               done: { offset: 0, limit: 10 },
               error: { offset: 0, limit: 10 }
-            }
+            };
+            ot.timing = AQ.Timing.record(ot.timing);
           });
           $scope.categories = aq.uniq(aq.collect(operation_types, ot => ot.category)).sort();
           $scope.current_user = user;
@@ -212,6 +213,14 @@
         });
       })
 
+    }
+
+    $scope.timing_bullet = function(ot) {
+      if ( ot.timing ) {
+        return 'timing-bullet-' + ot.timing.status;
+      } else {
+        return 'timing-bullet-none';
+      }
     }
 
   }]);
