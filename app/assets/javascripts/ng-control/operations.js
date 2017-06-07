@@ -24,7 +24,7 @@
 
     function init() {
 
-      if ( $cookies.getObject("managerState") ) {
+      if ( false || $cookies.getObject("managerState") ) {
         $scope.current = $cookies.getObject("managerState");
         if ( $scope.current.ot != null && $scope.current.status != null ) {
           var ot = aq.find(AQ.operation_types, ot => ot.id == $scope.current.ot.id);
@@ -35,7 +35,8 @@
         $scope.current = {
           ot: null,
           status: null,
-          category_index: 0
+          category_index: 0,
+          show_completed: false
         }
       }
 
@@ -90,7 +91,12 @@
         $scope.current.ot = ot; 
         $scope.current.status = status;
         $scope.current.category_index = $scope.categories.indexOf(ot.category);
-        $cookies.putObject("managerState", $scope.current);        
+        $cookies.putObject("managerState", {
+          ot: { id: $scope.current.ot.id },
+          status: $scope.current.status,
+          category_index: $scope.current.category_index,
+          show_completed: $scope.current.show_completed
+        });        
         delete ot.operations;
       }
       delete $scope.jobs;
