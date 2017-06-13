@@ -7,7 +7,7 @@
       <li ng-repeat="da in parent.data_associations | filter: { key: '!notes' }">
 
         <span class='data-key'>{{da.key}}:</span> 
-        <span class='data-value' ng-if="!da.url">{{da.value()}}</span>
+        <span class='data-value' ng-if="!da.url">{{da.value}}</span>
 
         <span class='data-upload' ng-if="da.url">
 
@@ -15,7 +15,7 @@
           ({{da.upload.upload_file_size|bytes}})
 
           <div modal='da.modal' title='title(da)' width='750px' height='80%'>
-            <div class="ng-modal-data">{{da.value()}}</div>          
+            <div class="ng-modal-data">{{da.value}}</div>          
             <div ng-if="is_image(da)">
               <img ng-src="{{da.url}}" ng-if="da.modal"></img>
             </div>
@@ -50,5 +50,3 @@
   </div>
 
 </script>
-
-

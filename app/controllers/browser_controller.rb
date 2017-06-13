@@ -141,7 +141,7 @@ class BrowserController < ApplicationController
     sample = Sample.find(params[:id])
     item_list = Item.includes(:locator).where(sample_id: params[:id])
     containers = ObjectType.where(sample_type_id: sample.sample_type_id)
-    render json: { items: item_list.as_json(include: [:locator], methods: :data_associations), 
+    render json: { items: item_list.as_json(include: [:locator]), 
                    containers: containers.as_json(only:[:name,:id]) }
   end
 

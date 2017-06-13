@@ -34,14 +34,16 @@ Sample.prototype.get_inventory = function(promise) {
     sample.containers = response.data.containers;    
 
     sample.items = aq.collect(response.data.items, function(raw) { 
-      return new Item(sample.http).from(raw); 
+      var i = AQ.Item.record(raw);
+      console.log([i,i.data_associations])
+      return i;
     });
 
     promise();
 
     sample.http.get('/browser/collections/' + sample.id + '.json').then(function(response) {
       sample.collections = aq.collect(response.data.collections, function(raw) {
-        return new Collection(sample.http).from(raw);
+        return AQ.Collection.record(raw);
       });
       sample.collection_containers = response.data.containers;
       

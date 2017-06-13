@@ -14,3 +14,14 @@ AQ.DataAssociation.record_getters.upload = function() {
   return {};
 
 }
+
+AQ.DataAssociation.record_getters.value = function() {
+
+  console.log(da)
+  var da = this;
+  delete da.value;
+  da.value = JSON.parse(da.object)[da.key];
+  console.log(da)
+  return da.value;
+
+}

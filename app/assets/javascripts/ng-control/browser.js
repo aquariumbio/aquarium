@@ -14,8 +14,13 @@
     }]);
   } 
 
-  w.controller('browserCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
-                     function (  $scope,   $http,   $attrs,   $cookies ) {
+  w.controller('browserCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', 
+                     function (  $scope,   $http,   $attrs,   $cookies,   $sce ) {
+
+    AQ.init($http);
+    AQ.update = () => { $scope.$apply(); }
+    AQ.confirm = (msg) => { return confirm(msg); }
+    AQ.sce = $sce;                      
 
     function cookie() {
 

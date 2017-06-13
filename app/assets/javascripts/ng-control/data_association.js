@@ -26,7 +26,7 @@
     $scope.notes = function(parent) {
       var das = aq.where(parent.data_associations,function(da) { return da.key == "notes"; });      
       if ( das.length > 0 ) {
-        return das[0].value();
+        return das[0].value;
       } else {
         return null;
       }
