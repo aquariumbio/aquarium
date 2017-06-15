@@ -133,10 +133,10 @@ module CostModel
 
       # MIDIPREP ############################################################################################
 
-      when ["plate_midiprep","plated"]                      then basic(:default,0.80,5.52)
-      when ["small_inoculation_midiprep","small overnight"] then basic(:default,0.15,2.08)
-      when ["large_inoculation_midiprep","large overnight"] then basic(:default,2.22,6.05)
-      when ["midiprep","plasmid extracted"]                 then basic(:default,29.30,43.33)
+      when ["plate_midiprep","plated"]                      then basic(:default,0.83,5.52)
+      when ["small_inoculation_midiprep","small overnight"] then basic(:default,0.29,2.08)
+      when ["large_inoculation_midiprep","large overnight"] then basic(:default,4.26,6.05)
+      when ["midiprep","plasmid extracted"]                 then basic(:default,16.03,43.33)
 
       # MAXIPREP ############################################################################################
 
