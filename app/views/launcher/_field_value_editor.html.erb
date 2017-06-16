@@ -1,7 +1,6 @@
 <script type="text/ng-template" id="field_value_editor">
 
-  <md-content class="field-value-editor" 
-    ng-if="mode=='new'">
+  <md-content class="field-value-editor" ng-if="mode=='new'">
 
     <div class="title">
       <h1 class="md-title">{{plan.current_operation.operation_type.name}}</h1>
@@ -47,7 +46,7 @@
               ng-disabled="plan.current_fv.wired || plan.current_fv.role == 'output'">
             </md-checkbox>
 
-            <p>{{item.id}}</p>
+            <p><div item="item" container="aft.object_type" sample="item.sample"></div></p>
             <span flex></span>
             <p>{{item.location}}</p>
 
@@ -72,8 +71,12 @@
 
             </span>
 
-              <p><b>{{item.collection.id}} ({{item.selected_row}},{{item.selected_column}})</b><br/>
-                 {{item.collection.location}}</p>
+              <p>
+                <b>
+                  <span item="item.collection" container="item.collection.object_type" sample="item.sample"></span>
+                  ({{item.selected_row}},{{item.selected_column}})
+                </b><br/>
+              </p>
 
             <span flex></span>
 

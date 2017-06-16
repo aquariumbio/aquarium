@@ -35,7 +35,6 @@ Sample.prototype.get_inventory = function(promise) {
 
     sample.items = aq.collect(response.data.items, function(raw) { 
       var i = AQ.Item.record(raw);
-      console.log([i,i.data_associations])
       return i;
     });
 
@@ -43,7 +42,9 @@ Sample.prototype.get_inventory = function(promise) {
 
     sample.http.get('/browser/collections/' + sample.id + '.json').then(function(response) {
       sample.collections = aq.collect(response.data.collections, function(raw) {
-        return AQ.Collection.record(raw);
+        var c = AQ.Collection.record(raw);
+        c.sample = AQ.Sample.record(sample);
+        return c;
       });
       sample.collection_containers = response.data.containers;
       

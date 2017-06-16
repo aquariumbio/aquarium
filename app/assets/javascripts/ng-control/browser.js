@@ -95,13 +95,7 @@
 
       cookie();
 
-      $scope.messages = [ "Welcome to the updated Aquarium browser. The search feature "
-                        + "has been expanded and is now the way to find samples by name, "
-                        + "sample type, project, and user. In addition, the sample "
-                        + "creation tool now allows you to upload samples from a "
-                        + "spreadsheet. Note that the format of the spreadsheet has "
-                        + "changed, which you can read about on the 'New Samples' "
-                        + "page." ]
+      $scope.messages = []
 
     } else {
       if ( !$scope.views.sample_type ) {

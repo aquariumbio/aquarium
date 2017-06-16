@@ -149,7 +149,7 @@ class BrowserController < ApplicationController
     s = Sample.find(params[:sample_id])
     collections = Collection.containing(s)
     containers = collections.collect { |c| c.object_type }.uniq
-    render json: { collections: collections.as_json(include: :object_type, methods: :data_associations), 
+    render json: { collections: collections.as_json(include: :object_type), 
                    containers: containers.as_json(only: [:name,:id]) }
   end  
 

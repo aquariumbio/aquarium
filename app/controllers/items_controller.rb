@@ -108,6 +108,13 @@ class ItemsController < ApplicationController
 
   end
 
+  def move
+    i = Item.find(params[:id])
+    i.move_to params[:location]
+    render json: { message: "Item #{i.id} successfully moved to #{i.location}" } if i.errors.empty?
+    render json: { error: "Could not move item #{i.id} to #{params[:location]}: #{i.errors.full_messages.join(', ')}" } unless i.errors.empty?  
+  end
+
   def update
 
     if params[:item] 

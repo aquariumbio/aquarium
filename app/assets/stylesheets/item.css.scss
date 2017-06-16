@@ -1,0 +1,82 @@
+.item-modal {
+
+  position: fixed;
+  z-index: 10000;
+
+  .item-modal-content {
+
+    width: 70%;
+    height: 80%;
+
+    .item-toolbar {
+      max-height: 44px !important;
+      min-height: 44px !important;
+      margin-bottom: 8px;
+    }
+
+    .ng-modal-close {
+      top: 5px;
+    }
+
+    .sample-name, .details, .location-editor, .data-associations {
+      padding: 2px 16px 2px 16px;
+      margin: 0;
+    }
+
+    .location-editor {
+
+      margin-top: 8px;
+      border-top: 1pt solid #bbb;
+      border-bottom: 1pt solid #bbb;
+      padding: 16px 16px 10px 16px;
+
+      .location-input {
+
+        width: 100% !important;
+        margin-bottom: 2px;
+        padding: 2px 4px 2px 4px;
+
+      }
+
+      .buttons {
+        text-align: right;
+      }
+
+    }
+
+    .data-associations {
+      margin-top: 10px;
+    }
+
+    .tiny-collection {
+      border: 1pt solid #aaa;
+      padding: 1pt;
+      margin: 5px;
+      tr { 
+        margin: 0;
+        padding: 0;
+        border: none;
+      }
+      td {
+        margin: 0;
+        padding: 0;
+        border: 1pt solid #aaa;
+        width: 10px;
+        height: 10px;      
+      }
+      .filled {
+        background: #aaf; 
+        cursor: pointer;
+      }
+      .blank {
+      }  
+      .selected {
+        background: #00f; 
+        cursor: pointer;      
+      }               
+
+    }  
+
+  }
+
+}

@@ -12,13 +12,15 @@
   .aq2-navigation {
     position: relative;
     min-height: calc(100vh - 44px);
-    max-height: calc(100vh - 44px);   
+    max-height: calc(100vh - 44px);  
+    transform: none !important; 
   }
 
   .site-sidenav {
     background: #106CC8 !important;
     color: white;
     border-right: 1pt solid #aaa;
+    transform: none !important;
   }
 
   .site-sidenav md-content {
@@ -26,6 +28,8 @@
   }
 
   .main-toolbar {
+
+    transform: none !important;
 
     background-color: #106CC8;
     background: -webkit-linear-gradient(#185694, #106cc8);
@@ -114,6 +118,7 @@
 
   .page-specific-nav {
     padding: 5px 5px 5px 8px;
+    transform: none !important;
   }
 
   .menu {
@@ -134,6 +139,8 @@
     max-width: 100%;
     min-width: 100%;
     padding-right: 10px;
+    transform: none !important;   
+    z-index: 0; 
   }
 
   .content-container {   

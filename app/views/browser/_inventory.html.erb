@@ -25,7 +25,9 @@
         <b ng-if="$first">{{container.name}}</b>
       </td>
 
-      <td style="width: 55px"><b><a href="/items/{{item.id}}">{{item.id}}</a></b></td>
+      <td style="width: 55px">
+        <div item="item" container="container" sample="sample"></div>
+      </td>
 
       <td style="width: 80px">
         <span ng-if="item.location == 'deleted'" class='deleted-item'>{{item.location}}</span>

@@ -27,7 +27,7 @@
   .da-input {
     width: 100% !important;
     margin-bottom: 2px;
-    padding: 2px;
+    padding: 2px 4px 2px 4px;
   }
 
   .da-key {
@@ -46,6 +46,10 @@
 
   .md-small {
     margin-bottom: 2px;
+  }
+
+  .da-row {
+    margin-bottom: 4px;
   }
 
 }

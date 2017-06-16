@@ -4,3 +4,5 @@ AQ.Sample.record_getters.identifier = function() {
   s.identifier = s.id + ": " + s.name;
   return s.identifier;
 }
+
+AQ.Sample.getter(AQ.User,"user");

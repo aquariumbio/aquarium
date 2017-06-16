@@ -5,14 +5,15 @@
     <div layout="row" layout-wrap layout-align="start center"
          ng-if="record.data_associations.length > 0"
          ng-repeat="da in record.data_associations"
-         ng-init="da.new_value=da.value">
+         ng-init="da.new_value=da.value"
+         class="da-row">
 
-      <div flex="25" class="left-pad">
+      <div flex="20" class="left-pad">
         <span class='md-body-2' ng-if="!da.unsaved">{{da.key}}</span>
         <input type='text' ng-if="da.unsaved" ng-model=da.key class="da-key">
       </div>
 
-      <div flex="55" ng-controller="daCtrl">
+      <div flex="60" ng-controller="daCtrl">
 
         <input type='text' ng-model=da.new_value ng-if="!da.upload_id" class="da-input">
 
@@ -45,20 +46,20 @@
 
       <div flex="20">
         <div layout="row" layout-align="end center">
-          <md-button ng-click="save(da)" 
-                     ng-if="da.new_value != da.value || da.unsaved"
-                     class='md-small md-raised right-margin'>Save</md-button>
-          <md-button ng-click="da.new_value=da.value"
-                     ng-if="da.new_value != da.value && !da.unsaved"
-                     class='md-small md-raised right-margin'>Cancel</md-button>
-          <md-button ng-click="record.drop(da)"
-                     ng-if="da.unsaved"
-                     class='md-small md-raised right-margin'>Cancel</md-button>                    
-          <md-button ng-click="record.delete_data_association(da)" 
-                     ng-if="!da.unsaved" 
-                     class="md-small md-raised right-margin">Drop</md-button>
+          <a href="#" ng-click="save(da)" ng-if="da.new_value != da.value || da.unsaved" class="no-highlight">
+            <ng-md-icon icon="system_update_alt" size="22" aria-label="Update Location" style="fill: #444"></ng-md-icon>
+          </a>
+          <a href="#" ng-click="da.new_value=da.value" ng-if="da.new_value != da.value && !da.unsaved" class="no-highlight">
+            <ng-md-icon icon="undo" size="22" aria-label="Undo Change" style="fill: #444"></ng-md-icon>         
+          </a>
+          <a href="#"  ng-click="record.drop(da)" ng-if="da.unsaved" class="no-highlight">
+            <ng-md-icon icon="undo" size="22" aria-label="Undo Change" style="fill: #444"></ng-md-icon>                     
+          </a>                    
+          <a href="#"  ng-click="record.delete_data_association(da)" ng-if="!da.unsaved" class="no-highlight">
+            <ng-md-icon icon="delete" size="22" aria-label="Delete" style="fill: #444"></ng-md-icon>  
+          </a>
         </div>
-      </div>      
+      </div>
 
     </div>
 

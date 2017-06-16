@@ -28,8 +28,11 @@ class DataAssociation < ActiveRecord::Base
 
   def may_delete user
     parent = DataAssociation.find_parent(parent_class,parent_id)
-    if parent_class == "Item" 
-      return parent.sample && parent.sample.user_id = user.id
+    puts "Class = #{parent_class}"
+    if parent_class == "Item"
+      return parent.sample && parent.sample.user_id = user.id 
+    elsif parent_class == "Collection"
+      return user.is_admin # since collections are managed by admins?
     elsif parent_class == "Operation"
       return true # since operations don't yet have owners
     elsif parent_class == "Plan"
