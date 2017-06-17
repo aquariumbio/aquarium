@@ -190,8 +190,6 @@
 
     $scope.replan = function(plan) {
 
-      console.log(plan);
-
       plan.copy().then(plan => {
         $scope.plan = plan;
         $scope.plan.current_operation = $scope.plan.operations[0];
@@ -245,7 +243,6 @@
         } else {
           i.selected = (i.id == item.id);        
         }
-        console.log((i.id || i.collection.id) + ": " + i.selected);
       });
       fv.selected_item = item;
     }

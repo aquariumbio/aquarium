@@ -5,17 +5,22 @@
 
   .item-modal-content {
 
-    width: 70%;
+    width: 55%;
     height: 80%;
 
     .item-toolbar {
       max-height: 44px !important;
       min-height: 44px !important;
       margin-bottom: 8px;
+      position: relative;
     }
 
-    .ng-modal-close {
-      top: 5px;
+    .item-close {
+      position: absolute;
+      top: 9px !important;
+      right: 12px !important;
+      cursor: pointer;
+      font-weight: bold;
     }
 
     .sample-name, .details, .location-editor, .data-associations {

@@ -16,7 +16,7 @@
           <div class="md-toolbar-tools">
             <h2 flex md-truncate>Item {{item.id}}: {{container.name}}</h2> 
           </div>
-          <div class='ng-modal-close' ng-click='item.modal=false'>&times;</div>
+          <div class='item-close' ng-click='item.modal=false'>&times;</div>
         </md-toolbar>
          
         <div class="sample-name md-subhead" layout="row" layout-align="center center">{{sample.name}}</div>
@@ -25,7 +25,7 @@
 
           <div class='details md-body-2' flex="40">
             <div class="created-at">Created: {{item.created_at|date}}</div>
-            <div class="owner">Sample Owner: {{item.sample.user.name}}</div>
+            <div class="owner">Sample Owner: {{sample.user ? sample.user.name : item.sample.user.name}}</div>
           </div>
 
           <div flex="60" layout="column" layout-align="center center">
@@ -60,8 +60,8 @@
           <da record="item"></da>  
           <br>
           <div layout="row" layout-align="center center">
-            <md-button ng-click="item.new_data_association()" class="md-raised">Add Data</md-button>
-            <md-button class="md-raised"><upload record='item'></upload></md-button>
+            <md-button ng-click="item.new_data_association()" class="md-raised" aria-label="Add Data">Add Data</md-button>
+            <md-button class="md-raised"><upload record='item' aria-label="Upload"></upload></md-button>
           </div>
         </div>
 

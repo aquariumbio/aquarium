@@ -44,13 +44,13 @@ AQ.items_for = function(sample_id,object_type_id) {
 
   return new Promise(function(resolve,reject) {
 
-    AQ.post('/json/items/',{ sid: sample_id, oid: object_type_id }) .then(
+    AQ.post('/json/items/', { sid: sample_id, oid: object_type_id }) .then(
       (response) => {
         resolve(aq.collect(response.data, (item) => { 
           if ( item.collection ) {
             var i = item;
-            i.collection.matrix = JSON.parse(i.collection.data).matrix;
-            return new AQ.Record(AQ.Item,item); 
+            i.collection = AQ.Collection.record(i.collection);
+            return new AQ.Record(AQ.Item,item);
           } else {
             return new AQ.Record(AQ.Item,item); 
           }

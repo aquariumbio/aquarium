@@ -1,3 +1,5 @@
+AQ.Collection.getter(AQ.ObjectType,"object_type");
+
 AQ.Collection.record_getters.matrix = function() {
 
   var c = this;

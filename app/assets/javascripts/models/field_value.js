@@ -72,6 +72,17 @@ AQ.FieldValue.record_methods.find_items = function(sid) {
 
 }
 
+AQ.FieldValue.record_getters.sample = function() {
+  var fv = this;
+  delete fv.sample;
+  if ( fv.sid ) {
+    AQ.Sample.find(fv.sid.split(": ")[0]).then(s => {
+      fv.sample = s;
+    })
+  } 
+  return undefined;
+}
+
 AQ.FieldValue.record_methods.preferred_predecessor = function(operation) {
   var fv = this;
   var preds = aq.where(fv.predecessors, p => {
