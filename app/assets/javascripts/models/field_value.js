@@ -75,11 +75,13 @@ AQ.FieldValue.record_methods.find_items = function(sid) {
 AQ.FieldValue.record_getters.sample = function() {
   var fv = this;
   delete fv.sample;
-  if ( fv.sid ) {
+  if ( fv.sid && typeof fv.sid == 'string' ) {
     AQ.Sample.find(fv.sid.split(": ")[0]).then(s => {
       fv.sample = s;
     })
-  } 
+  } else {
+    console.log("Warning: fv.sid = '" + fv.sid + "'")
+  }
   return undefined;
 }
 

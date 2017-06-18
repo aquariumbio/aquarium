@@ -112,6 +112,11 @@ AQ.Base.prototype.getter = function(child_model, child_name,id=null) {
       base[hidden_name] = {};    
       child_model.find(base[id_name]).then((x) => { 
         base[hidden_name] = x;
+        if ( base[hidden_name].location ) {
+          // This is a hack to get the item popup to properly initialize, since ng-init
+          // in the location input box doesn't always work
+          base[hidden_name].new_location = base[hidden_name].location;
+        }
         AQ.update();
       });    
       return null;  

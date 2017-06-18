@@ -22,3 +22,27 @@ AQ.Item.record_methods.move = function(new_location) {
   });
 
 }
+
+AQ.Collection.record_methods.move = AQ.Item.record_methods.move;
+
+AQ.Item.record_getters.matrix = function() {
+
+  var item = this;
+  delete item.matrix;
+
+  try {
+
+    var data = JSON.parse(item.data);
+    console.log(["data", data]);
+
+    if ( data.matrix ) {
+      item.matrix = data.matrix
+    } 
+
+  } catch(e) {}
+
+  console.log(["matrix", item.matrix, item.data])
+
+  return item.matrix;
+
+}

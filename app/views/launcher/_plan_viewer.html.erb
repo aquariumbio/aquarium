@@ -82,44 +82,22 @@
        ng-class="fv.open ? 'plan-header plan-row plan-row-open' : 'plan-header plan-row'">
 
     <div flex="20">
-      <opener model="fv.open" 
-              disabled="!fv.child_item_id"
-              class='no-highlight clickable no-margin'></opener>&nbsp;
       {{fv.name}} <span class='small'>({{ fv.child_sample || fv.item  || !fv.value ? fv.role : 'param'}})</span>
     </div>
 
-    <div flex="10">
-      <span ng-bind-html="fv.item.url | trust"></span><span ng-if="fv.row != null">[{{fv.row}},{{fv.column}}]</span>
+    <div flex="10" ng-if="fv.row == null">
+      <div item="fv.item" container="fv.item.object_type" sample="fv.item.sample"></div>
     </div> 
+
+    <div flex="10" ng-if="fv.row != null">
+      <div item="fv.item" container="fv.item.object_type" sample="fv.item.sample ? fv.item.sample : fv.child_sample"></div>
+      <span ng-if="fv.row != null">[{{fv.row}},{{fv.column}}]</span>
+    </div>
 
     <div flex="10" ng-if="!fv.value">{{fv.item.location}}</div> 
     <div flex="15" ng-if="!fv.value">{{fv.item.object_type.name}}</div>         
-    <div flex="35" ng-if="!fv.value">{{fv.child_sample.name}}</div> 
-    <div flex="70" ng-if="fv.value">{{fv.value}}</div>
-
-    <div flex="10" layout="row" layout-align="end center" ng-if="fv.open">
-      <md-menu layout="row">
-
-        <div class='detail-menu clickable'
-             ng-click="openMenu($mdMenu, $event)">
-          <ng-md-icon icon="menu" size="20" aria-label="Menu"></ng-md-icon>
-        </div>
-
-        <md-menu-content width="4" class="scrollable" flex>
-
-          <md-menu-item aria-label="Add Data">
-            <md-button ng-click="fv.item.new_data_association()">Add Data</md-button>
-          </md-menu-item>
-
-          <md-menu-item aria-label="Upload">
-            <md-button><upload record='fv.item'></upload></md-button>
-          </md-menu-item>
-
-        </md-menu-content>
-
-      </md-menu>
-    </div>   
-
+    <div flex="55" ng-if="!fv.value">{{fv.child_sample.name}}</div> 
+    <div flex="80" ng-if="fv.value">{{fv.value}}</div>  
 
   </div>
 

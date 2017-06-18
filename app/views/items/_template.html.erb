@@ -29,7 +29,7 @@
           </div>
 
           <div flex="60" layout="column" layout-align="center center">
-            <div ng-if="item.matrix">Position in collection</div>
+            <div ng-if="item.matrix">Position(s) in collection</div>
             <table class='tiny-collection' ng-if="item.matrix">
               <tr ng-repeat="row in item.matrix track by $index">
                 <td ng-repeat="el in row track by $index" 
