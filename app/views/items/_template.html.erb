@@ -19,7 +19,9 @@
           <div class='item-close' ng-click='item.modal=false'>&times;</div>
         </md-toolbar>
          
-        <div class="sample-name md-subhead" layout="row" layout-align="center center">{{sample.name}}</div>
+        <div class="sample-name md-subhead" layout="row" layout-align="center center">
+          <a href="/browser?sid={{sample.id}}">{{sample.name}}</a>
+        </div>
 
         <div layout="row">
 

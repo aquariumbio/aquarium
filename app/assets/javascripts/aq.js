@@ -6,6 +6,19 @@ function Aq() {
   };
 }
 
+Aq.prototype.url_params = function() {
+  var query = window.location.search.split('?');
+  var result = {};
+  if ( query.length == 2 ) {
+    var parts = query[1].split('&');
+    var result = {};
+    aq.each(parts,part => {
+      result[part.split('=')[0]] = part.split('=')[1];
+    });
+  } 
+  return result;
+}
+
 Aq.prototype.template = function(name,args) {
   return $(_.template($('#'+name).html())(args));
 }

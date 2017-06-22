@@ -30,7 +30,9 @@
         <td>
           <ul class='input-list'>
             <li ng-repeat="fv in op.field_values | filter: { role: 'output' }">
-              {{fv.name}}<span ng-if="fv.child_sample">: {{fv.child_sample.name}}</span>
+              {{fv.name}}<span ng-if="fv.child_sample">: 
+                <a href="/browser?sid={{fv.child_sample.id}}">{{fv.child_sample.name}}</a>
+              </span>
             </li>
           </ul>              
         </td>

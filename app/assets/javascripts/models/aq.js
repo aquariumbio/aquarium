@@ -40,6 +40,10 @@ AQ.id_from = function(sid) {
   return sid.split(":")[0];
 }
 
+AQ.sid_from = function(id) { 
+  
+}
+
 AQ.items_for = function(sample_id,object_type_id) {
 
   return new Promise(function(resolve,reject) {
