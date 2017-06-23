@@ -14,9 +14,9 @@
     }]);
   } 
 
-  w.config(function($locationProvider) {
+  w.config(['$locationProvider', function($locationProvider) {
       $locationProvider.html5Mode({ enabled: true, requireBase: false, rewriteLinks: false });
-  });  
+  }]);  
 
   w.controller('browserCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', '$window',
                      function (  $scope,   $http,   $attrs,   $cookies,   $sce ,  $window ) {
