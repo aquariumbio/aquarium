@@ -14,7 +14,7 @@
 
       restrict: 'AE',
 
-      scope: { item: '=', container: "=", sample: "=" },
+      scope: { item: '=', container: "=", sample: "=", nolink: "=" },
 
       link: function($scope,$element,$attributes) {
 

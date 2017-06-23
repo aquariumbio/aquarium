@@ -14,8 +14,12 @@
     }]);
   } 
 
-  w.controller('browserCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce',
-                     function (  $scope,   $http,   $attrs,   $cookies,   $sce ) {
+  w.config(function($locationProvider) {
+      $locationProvider.html5Mode({ enabled: true, requireBase: false, rewriteLinks: false });
+  });  
+
+  w.controller('browserCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', '$window',
+                     function (  $scope,   $http,   $attrs,   $cookies,   $sce ,  $window ) {
 
     AQ.init($http);
     AQ.update = () => { $scope.$apply(); }
@@ -47,6 +51,7 @@
           project_filter: $scope.views.search.project_filter,          
           user: $scope.views.search.user,
           user_filter: $scope.views.search.user_filter,
+          item_id: $scope.views.search.item_id
         },
         sample_type: {
           selected: $scope.views.sample_type.selected,   
@@ -345,6 +350,16 @@
           
     }
 
+    $scope.item_search = function() {
+      AQ.Item.find($scope.views.search.item_id).then( item => {
+        $scope.views.search.item = item;
+        $scope.views.search.item.modal = true;
+        $scope.views.search.item.new_location = $scope.views.search.item.location;
+        cookie();
+        AQ.update();
+      });
+    }
+
     $scope.page_class = function(page) {
       var c = "page";
       if ( page == $scope.views.search.page ) {
@@ -450,6 +465,9 @@
         $scope.views.search.query = sample.identifier;
         $scope.views.search.sample_type = "";
         $scope.views.search.user_filter = false;
+        $scope.views.search.project = "";
+        $scope.views.search.project_filter = false; 
+        $window.history.replaceState(null, document.title, "/browser");  
         cookie();
         init();
       }).catch(result => init())

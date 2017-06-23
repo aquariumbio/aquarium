@@ -34,10 +34,21 @@
     </md-switch> 
   </div>    
 
-
-  <div layout="row"  layout-align="center center">
-  <md-button ng-class="views.search.selected ? 'md-raised md-primary' : 'md-raised'" 
-   ng-click="search(0); select_view('search')">Search</md-button> 
+  <div layout="row" layout-align="center center">
+    <md-button ng-class="views.search.selected ? 'md-raised md-primary' : 'md-raised'" 
+               ng-click="search(0); select_view('search')">Search</md-button> 
   </div>
+
+  <hr>
+
+  <div layout="column" layout-align="center center">
+    <input type="text" style="width: 50%" ng-model="views.search.item_id">
+    <md-button style="width: 30%; margin-bottom: 0px" class="md-raised" ng-click="item_search()">Find Item</md-button>
+  </div>
+
+  <div item="views.search.item" 
+       container="views.search.item.object_type"
+       sample="views.search.item.sample"
+       nolink="true"></div>
 
 </div>

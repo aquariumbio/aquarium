@@ -33,15 +33,12 @@ AQ.Item.record_getters.matrix = function() {
   try {
 
     var data = JSON.parse(item.data);
-    console.log(["data", data]);
 
     if ( data.matrix ) {
       item.matrix = data.matrix
     } 
 
   } catch(e) {}
-
-  console.log(["matrix", item.matrix, item.data])
 
   return item.matrix;
 

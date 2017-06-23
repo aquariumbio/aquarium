@@ -32,9 +32,7 @@
 <%= content_for :controller do %>browserCtrl as browser<% end %>
 
 <%= content_for :sidebar do %>
-  <%= render partial: "search_control" %>  
-  <hr>        
-  <%= render partial: "create_control" %>                         
+  <%= render partial: "search_control" %>        
 <% end %>
 
 <%= content_for :specific_title do %>
@@ -80,6 +78,10 @@
      ng-disabled="views.create.samples.length == 0">
     Save
   </md-button>
+<% end %>
+
+<% content_for :action4 do %>
+  <%= render partial: "create_control" %> 
 <% end %>
 
 <%= content_for :main do %>
