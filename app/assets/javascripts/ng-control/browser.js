@@ -357,7 +357,7 @@
         $scope.views.search.item.new_location = $scope.views.search.item.location;
         cookie();
         AQ.update();
-      });
+      }).catch(() => alert("Could not find item with id " + $scope.views.search.item_id));
     }
 
     $scope.page_class = function(page) {
