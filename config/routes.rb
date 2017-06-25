@@ -215,6 +215,7 @@ Bioturk::Application.routes.draw do
   get "repo/get"
   get "repo/pull"
 
+  get "/items/store/:id",      to: "items#store"
   get "/items/make/:sid/:oid", to: "items#make"
   get "/items/move/:id",       to: "items#move"
   resources :items

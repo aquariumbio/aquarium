@@ -46,18 +46,7 @@
           ng-init='parent = item; matrix = item.matrix'>
       </td>
 
-      <td style="width: 85px">{{item.created_at|date}}</td>
-
-      <td style="width: 20px">
-        <span ng-if="item.location != 'deleted' && allowed(sample)"
-              class='pull-right'>
-          <a href="#" ng-click="delete(item)" class='item-small-icon'>&times;</a>
-        </span>
-        <span ng-if="item.location == 'deleted' && allowed(sample)"
-              class='pull-right'>
-          <a href="#" ng-click="restore(item)" class='item-small-icon'>&#8617;</a>
-        </span>              
-      </td>
+      <td style="width: 105px">{{item.created_at|date}}</td>
 
     </tr>
 

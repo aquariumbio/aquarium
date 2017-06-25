@@ -43,3 +43,30 @@ AQ.Item.record_getters.matrix = function() {
   return item.matrix;
 
 }
+
+AQ.Item.record_methods.store = function() {
+
+  var item = this;
+
+  AQ.get("/items/store/" + item.id + ".json").then( response => {
+    item.location = response.data.location;
+    item.new_location = response.data.location;
+  }).catch( response => {
+    alert(response.data.error);
+  })
+
+}
+
+
+AQ.Item.record_methods.mark_as_deleted = function() {
+
+  var item = this;
+
+  AQ.http.delete("/items/" + item.id + ".json").then( response => {
+    item.location = "deleted"
+    item.new_location = "deleted";
+  }).catch( response => {    
+    alert(response.data);
+  })
+
+}
