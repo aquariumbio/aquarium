@@ -20,7 +20,7 @@ class LauncherController < ApplicationController
   def operation_from form
 
     ot = OperationType.find(form[:operation_type][:id])
-    op = ot.operations.create status: "planning", user_id: current_user.id
+    op = ot.operations.create status: "planning", user_id: @user.id
 
     form[:field_values].each do |fv|
 
@@ -59,6 +59,8 @@ class LauncherController < ApplicationController
   end
 
   def estimate
+
+    @user = current_user
 
     costs = []
     labor_rate = Parameter.get_float("labor rate") 
@@ -102,7 +104,7 @@ class LauncherController < ApplicationController
 
   def plan_from params
 
-    plan = current_user.plans.create
+    plan = @user.plans.create
     @id_map = {}
 
     unless plan.errors.empty?
@@ -149,6 +151,9 @@ class LauncherController < ApplicationController
 
   def submit
 
+    @user = params[:user_id] ? User.find(params[:user_id]) : current_user
+    puts "user = #{@user.inspect}"
+
     ActiveRecord::Base.transaction do    
 
       if params[:user_budget_association]
@@ -158,7 +163,7 @@ class LauncherController < ApplicationController
         raise ActiveRecord::Rollback                
       end
 
-      if current_user.id != uba.user_id || uba.budget.spent_this_month(current_user.id) >= uba.quota
+      if !current_user.is_admin || @user.id != uba.user_id || uba.budget.spent_this_month(@user.id) >= uba.quota 
         render json: { errors: "User #{current_user.login} not authorized or overspent for budget #{uba.budget.name}"}, status: 422
         raise ActiveRecord::Rollback        
       end
@@ -203,9 +208,11 @@ class LauncherController < ApplicationController
 
   def plans
 
+    user = params[:user_id] ? User.find(params[:user_id]) : current_user
+
     plans = Plan
       .includes(operations: :operation_type)
-      .where(user_id: current_user.id)
+      .where(user_id: user.id)
       .order('created_at DESC')
       .limit(10)
       .offset(params[:offset] || 0)
@@ -224,7 +231,7 @@ class LauncherController < ApplicationController
     render json: { 
       plans: plans.reverse.as_json(include: { operations: { include: :operation_type, methods: :jobs } } ),
       field_values: field_values,
-      num_plans: Plan.where(user_id: current_user.id).count
+      num_plans: Plan.where(user_id: user.id).count
     }
 
   end

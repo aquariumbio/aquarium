@@ -5,6 +5,13 @@
     <div class="title">
 
       <span class="md-title" ng-if="plan && plan.operations.length > 0">{{plan.operations[0].operation_type.name}}</span>
+      <% if current_user && current_user.is_admin %>
+        <div ng-if="current_user.id != <%= current_user.id %>">
+          <span class='md-body other-user-alert'>
+            for {{current_user.name}}
+          </span>
+        </div>
+      <% end %>
 
       <div ng-if="plan.estimating" layout="row" layout-align="center center">
         <md-progress-circular class="md-hue-2" md-diameter="20px">

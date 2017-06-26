@@ -56,14 +56,13 @@ AQ.Plan.record_methods.export = function() {
 
 }
 
-AQ.Plan.record_methods.submit = function() {
+AQ.Plan.record_methods.submit = function(user) {
 
-  var plan = this.export();
-
-  console.log(plan);
+  var plan = this.export(),
+      user_query = user ? "?user_id=" + user.id : "";
 
   return new Promise(function(resolve,reject) {
-    AQ.post('/launcher/submit',plan).then(
+    AQ.post('/launcher/submit'+user_query,plan).then(
       (response) => {
         resolve(AQ.Plan.record(response.data).upgrade());
       }, (response) => {
@@ -82,8 +81,6 @@ AQ.Plan.record_methods.cost_to_amount = function(c) {
 
 AQ.Plan.record_methods.estimate_cost = function() {
 
-  console.log("Starting estimate at " + Date(Date.now()) )
-
   var plan = this;
   plan.estimating;
 
@@ -91,11 +88,8 @@ AQ.Plan.record_methods.estimate_cost = function() {
   
     plan.estimating = true;
     var exported_plan = plan.export();
-    console.log("Completed export at " + Date(Date.now()) )
 
     AQ.post('/launcher/estimate',exported_plan).then( response => {
-
-      console.log("Recieved data at " + Date(Date.now()) )
 
       if ( response.data.errors ) {
 
@@ -134,8 +128,6 @@ AQ.Plan.record_methods.estimate_cost = function() {
           }
         });
       });
-
-      console.log("Completed at " + Date(Date.now()) )
 
       plan.estimating = false;
 
@@ -206,10 +198,12 @@ AQ.Plan.record_methods.link_operation_types = function(operation_types) {
 
 }
 
-AQ.Plan.list = function(offset) {
+AQ.Plan.list = function(offset,user) {
+
+  var user_query = user ? "&user_id=" + user.id : "";
 
   return new Promise(function(resolve,reject) {
-    AQ.get('/launcher/plans?offset='+offset).then(
+    AQ.get('/launcher/plans?offset='+offset+user_query).then(
       (response) => {
         AQ.Plan.num_plans = response.data.num_plans;
         resolve(aq.collect(response.data.plans,(p) => { 

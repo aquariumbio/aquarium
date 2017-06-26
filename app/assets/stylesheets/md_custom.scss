@@ -65,3 +65,15 @@ $buttonHighlight: rgb(73, 91, 281);
   outline: none;
   border: 0;
  }
+
+ /* MD_SELECT ***************************************************************/
+
+.md-plain-select {
+  border: 1pt solid #bbb; 
+  padding: 2px 2px 2px 4px;
+
+ .md-select-value {
+    border: none !important;
+ }
+
+}

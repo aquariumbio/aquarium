@@ -6,6 +6,13 @@
 
       <span class='md-headline'>
          {{plan.operations[0].operation_type.name}}
+      <% if current_user && current_user.is_admin %>
+        <span ng-if="current_user.id != <%= current_user.id %>">
+          <span class='md-body other-user-alert'>
+            for {{current_user.name}}
+          </span>
+        </span>
+      <% end %>         
       </span>
 
       <span flex></span>

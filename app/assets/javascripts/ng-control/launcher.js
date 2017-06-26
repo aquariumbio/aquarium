@@ -29,37 +29,44 @@
       plans: "Loading"
     }
 
-    AQ.User.current().then((user) => {
+    AQ.User.active_users().then(users => {
 
-      $scope.current_user = user;
-      $scope.status.user_info = "Ready";      
-      $scope.getting_plans = true;      
+      $scope.users = users;
 
-      AQ.Plan.list($scope.plan_offset).then((plans) => {
+      AQ.User.current().then((user) => {
 
-        $scope.plans = plans.reverse();        
-        $scope.status.plans = "Ready";        
-        $scope.getting_plans = false;
+        $scope.current_user = user;
+        $scope.status.user_info = "Ready";      
+        $scope.getting_plans = true;    
+        $scope.status.selected_user_id = $scope.current_user.id;  
 
-        AQ.OperationType.all_with_content(true).then((operation_types) => {
+        AQ.Plan.list($scope.plan_offset).then((plans) => {
 
-          $scope.operation_types = aq.where(operation_types,ot => ot.deployed);
-          AQ.OperationType.compute_categories($scope.operation_types);
-          AQ.operation_types = $scope.operation_types;
-          aq.each($scope.plans, (plan)=> { 
-            plan.link_operation_types($scope.operation_types) 
-          });       
+          $scope.plans = plans.reverse();        
+          $scope.status.plans = "Ready";        
+          $scope.getting_plans = false;
 
-          $scope.status.operation_types = "Ready";
+          AQ.OperationType.all_with_content(true).then((operation_types) => {
 
-          AQ.get_sample_names().then(() =>  {
-            $scope.status.sample_names = "Ready";
+            $scope.operation_types = aq.where(operation_types,ot => ot.deployed);
+            AQ.OperationType.compute_categories($scope.operation_types);
+            AQ.operation_types = $scope.operation_types;
+            aq.each($scope.plans, (plan)=> { 
+              plan.link_operation_types($scope.operation_types) 
+            });       
+
+            $scope.status.operation_types = "Ready";
+
+            AQ.get_sample_names().then(() =>  {
+              $scope.status.sample_names = "Ready";
+            });
+
+            $scope.$apply();
+
           });
-
-          $scope.$apply();
-
         });
       });
+
     });
 
     $scope.set_mode = function(m) {
@@ -155,7 +162,7 @@
     $scope.submit_plan = function() {
       $scope.error = null;
       $scope.plan.status = 'planning';
-      $scope.plan.submit().then((plan) => {
+      $scope.plan.submit($scope.current_user).then((plan) => {
         $scope.plan = null;
         $scope.unselect_ubas($scope.current_user);
         $scope.mode = 'running';
@@ -252,6 +259,21 @@
         item.selected_row = r;
         item.selected_column = c;
       }
+    }
+
+    $scope.select_user = function() {
+
+      AQ.User.find($scope.status.selected_user_id).then(user => {
+        $scope.current_user = user;
+        AQ.update();
+        AQ.Plan.list($scope.plan_offset,$scope.current_user).then((plans) => {
+          $scope.plans = plans.reverse();        
+          $scope.status.plans = "Ready";        
+          $scope.getting_plans = false;        
+          AQ.update();
+        });
+      });
+
     }
 
   }]);

@@ -20,7 +20,7 @@
 
         $scope.toggle = function() {
           if ( !$scope.disabled ) {
-            $scope.model = !$scope.model;
+            $scope.modal = !$scope.modal;
           }
         }
 

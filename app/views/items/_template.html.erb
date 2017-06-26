@@ -1,6 +1,6 @@
 <script type="text/ng-template" id="item_template">
 
-  <span>
+  <span ng-init="item.new_location = item.location">
 
     <span ng-if="!nolink">
       <a href='#' ng-click='item.modal=true' ng-init="item.modal=false">{{item.id}}</a>
@@ -43,11 +43,17 @@
 
         </div>
 
-        <div class="location-editor" layout="row" layout-wrap>
+        <div class="location-editor" layout="column" layout-wrap ng-if="item.location == 'deleted'">
+          <div><b>Deleted on {{item.updated_at|date}}</b></div>
+          <% if current_user && current_user.is_admin %>          
+            <div><md-button class='md-raised md-small' ng-click="item.store()">Restore</md-button></div>
+          <% end %>
+        </div>
+
+        <div class="location-editor" layout="row" layout-wrap ng-if="item.location != 'deleted'">
           <div flex="20" class='md-body-2'>Location</div>
           <div flex="60"><input type='text' class='location-input'
-                                ng-model="item.new_location"
-                                ng-init="item.new_location = item.location"></div>
+                                ng-model="item.new_location"></div>
           <div flex="20" class='buttons'>
             <a href="#" ng-click="item.move(item.new_location)" ng-if="item.new_location != item.location">
               <ng-md-icon icon="system_update_alt" size="22" aria-label="Update Location" style="fill: #444"></ng-md-icon>
@@ -55,6 +61,11 @@
             <a href="#" ng-click="item.new_location = item.location" ng-if="item.new_location != item.location">
               <ng-md-icon icon="undo" size="22" aria-label="Undo" style="fill: #444"></ng-md-icon>  
             </a>
+            <% if current_user && current_user.is_admin %>
+              <a href="#" ng-click="item.mark_as_deleted()" class="no-highlight">
+                <ng-md-icon icon="delete" size="22" aria-label="Delete" style="fill: #444"></ng-md-icon>  
+              </a>   
+            <% end %>      
           </div>
         </div>
 
