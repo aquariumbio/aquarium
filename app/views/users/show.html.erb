@@ -18,7 +18,12 @@
     <md-list>
       <md-list-item ng-repeat="view in views" 
                     ng-click="status.view = view"
-                    ng-class="view == status.view ? 'md-body-2 selected-view' : 'md-body-2'">{{view}}</md-button>
+                    ng-class="view == status.view ? 'md-body-2 selected-view' : 'md-body-2'">
+        <p>{{view}}</p>
+        <span ng-if="view == 'Information' &&  ( !user.params.email.value || !user.params.phone.value )" class="notice-me">!</span>
+        <span ng-if="view == 'BIOFAB Agreement' && user.params.biofab.value != 'true'" class="notice-me">!</span>
+        <span ng-if="view == 'Aquarium Agreement' && user.params.aquarium.value != 'true'" class="notice-me">!</span>
+      </md-list-item>
     </md-list>
   <% else %>
     <md-list>
@@ -35,7 +40,7 @@
 
 <%= content_for :main do %>
 
-  <md-content layout-padding layout="row" ng-if="status.view == 'Information'">
+  <md-content flex layout-fill layout-padding layout="row" ng-if="status.view == 'Information'">
 
     <div flex="33">
 
@@ -50,17 +55,17 @@
 
         <md-input-container>
           <label>Full Name</label>
-          <input ng-model="user.name">
+          <input ng-model="user.name" ng-change="user.changed = true">
         </md-input-container>
 
         <md-input-container>
           <label>Email Address</label>
-          <input ng-model="user.params.email.value">
+          <input ng-model="user.params.email.value" ng-change="user.changed = true">
         </md-input-container>
 
         <md-input-container>
           <label>Phone Number</label>
-          <input ng-model="user.params.phone.value">        
+          <input ng-model="user.params.phone.value" ng-change="user.changed = true">        
         </md-input-container>    
 
       <% else %>
@@ -75,55 +80,44 @@
 
   </md-content>
 
-  <md-content layout-padding ng-if="status.view == 'Preferences'">
+  <% if current_user.id == @user.id || current_user.is_admin %>
 
-    <% if current_user.id == @user.id || current_user.is_admin %>
-  
-    <md-list>
-      <md-list-item ng-repeat="pref in preferences">
-        <md-input-container ng-if="pref.type == 'number' || pref.type == 'string'">
-          <label>{{pref.name}}</label>
-          <input ng-model="user.params[pref.name].value">
-        </md-input-container>
-        <md-input-container ng-if="pref.type == 'boolean'">
-          <md-switch class="md-primary" 
-                     ng-model="user.params[pref.name].value"
-                     ng-true-value="'true'"
-                     ng0-false-value="'false'">
-            {{pref.name}}
-          </md-switch>
-        </md-input-container>
-      </md-list-item>
-    </md-list>
+    <md-content flex layout-fill layout-padding ng-if="status.view == 'Preferences'">
+    
+      <md-list>
+        <md-list-item ng-repeat="pref in preferences">
+          <md-input-container ng-if="pref.type == 'number' || pref.type == 'string'">
+            <label>{{pref.name}}</label>
+            <input ng-model="user.params[pref.name].value" ng-change="user.changed = true">
+          </md-input-container>
+          <md-input-container ng-if="pref.type == 'boolean'">
+            <md-switch class="md-primary" 
+                       ng-model="user.params[pref.name].value"
+                       ng-change="user.changed = true"
+                       ng-true-value="'true'"
+                       ng0-false-value="'false'">
+              {{pref.name}}
+            </md-switch>
+          </md-input-container>
+        </md-list-item>
+      </md-list>
 
-    <% else %>
-      <p>Access Restricted</p>
-    <% end %>
+    </md-content>  
 
-  </md-content>  
+    <md-content flex layout-fill layout-padding ng-if="status.view == 'Memberships'">
+          
+      <md-list>
+        <md-list-item class="md-2-line" ng-repeat="group in user.groups">
+          <div class="md-list-item-text" layout="column">
+            <div class="md-headline">{{group.name}}</div>  
+            <div class="md-body-2">{{group.description}}</div>
+          </div>
+        </md-list-item>
+      </md-list>
 
-  <md-content layout-padding ng-if="status.view == 'Memberships'">
+    </md-content>
 
-    <% if current_user.id == @user.id || current_user.is_admin %>
-  
-    <md-list>
-      <md-list-item class="md-2-line" ng-repeat="group in user.groups">
-        <div class="md-list-item-text" layout="column">
-          <div class="md-headline">{{group.name}}</div>  
-          <div class="md-body-2">{{group.description}}</div>
-        </div>
-      </md-list-item>
-    </md-list>
-
-    <% else %>
-      <p>Access Restricted</p>
-    <% end %>
-
-  </md-content>
-
-  <md-content layout-padding ng-if="status.view == 'Change Password'">
-
-    <% if current_user.id == @user.id || current_user.is_admin %>  
+    <md-content flex layout-fill layout-padding ng-if="status.view == 'Change Password'">
 
       <md-list>
 
@@ -149,17 +143,9 @@
 
       </md-list>
 
-    <% else %>
+    </md-content>
 
-      <p>Access Restricted</p>
-
-    <% end %>
-
-  </md-content>
-
-  <md-content layout-padding ng-if="status.view == 'Budgets'">
-
-    <% if current_user.id == @user.id || current_user.is_admin %>  
+    <md-content flex layout-fill layout-padding ng-if="status.view == 'Budgets'">
 
       <md-list ng-repeat="uba in user.user_budget_associations" flex>
         <md-list-item ng-if="uba.budget && uba.budget.spent.this_month != null">
@@ -177,17 +163,45 @@
         User {{user.name}} has no defined budgets. Please talk to the lab manager to set one up.
       </p>
 
-    <% else %>
-      <p>Access Restricted</p>
-    <% end %>     
+    </md-content>
 
-  </md-content>
+    <md-content flex layout-fill layout-padding ng-if="status.view == 'BIOFAB Agreement'">    
+      <%= render partial: 'biofab_agreement' %>
+      <hr>
+      <% if current_user.id == @user.id %>      
+        <md-button class='md-raised md-primary' 
+                   ng-click="agree('biofab')"
+                   ng-if="!user.params.biofab.value || user.params.biofab.value == 'false'">Agree</md-button>
+      <% else %>
+      <p class='md-body-2'
+         ng-if="user.params.biofab.value != 'true'">This user has not agreed to this document.</p>
+      <% end %>
+      <p class='md-body-2'
+         ng-if="user.params.biofab.value == 'true'">Agreed on {{user.params.biofab.updated_at|date}}.</p>
+    </md-content>
+
+    <md-content flex layout-fill layout-padding ng-if="status.view == 'Aquarium Agreement'">    
+      <%= render partial: 'aquarium_agreement' %>
+      <hr>
+      <% if current_user.id == @user.id %>
+        <md-button class='md-raised md-primary' 
+                   ng-click="agree('aquarium')"
+                   ng-if="!user.params.aquarium.value || user.params.aquarium.value == 'false'">Agree</md-button>
+      <% else %>
+      <p class='md-body-2'
+         ng-if="user.params.aquarium.value != 'true'">This user has not agreed to this document.</p>
+      <% end %>
+      <p class='md-body-2'
+         ng-if="user.params.aquarium.value == 'true'">Agreed on {{user.params.aquarium.updated_at|date}}.</p>
+    </md-content>    
+
+  <% end %>
 
 <% end %>
 
 <%= content_for :action1 do %>
   <% if current_user.id == @user.id || current_user.is_admin %>
-    <md-button ng-if="status.view == 'Information' || status.view == 'Preferences'" 
+    <md-button ng-if="user.changed && ( status.view == 'Information' || status.view == 'Preferences' )" 
                ng-click="user.save()" 
                class="md-raised md-primary">Save</md-button>
     <md-button ng-if="status.view == 'Change Password' && user.password && status.password_ok" 
@@ -198,7 +212,7 @@
 
 <%= content_for :action2 do %>
   <% if current_user.id == @user.id || current_user.is_admin %>
-    <md-button ng-if="status.view == 'Information' || status.view == 'Preferences'" 
+    <md-button ng-if="user.changed && ( status.view == 'Information' || status.view == 'Preferences' )" 
                ng-click="reload()"
                class="md-raised">Cancel</md-button>
   <% end %>

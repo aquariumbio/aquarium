@@ -91,7 +91,8 @@ AQ.User.record_methods.save = function() {
   }
 
   AQ.http.put("/users/"+user.id,user).then(result => {
-    console.log(result)
+    console.log(result);
+    user.changed = false;
   }).catch(response => alert(response.data.error));
 
 }

@@ -3,10 +3,19 @@
   .selected-view {
     background: #80d8ff;
   }
-  
+
   .warning {
     background: yellow;
     color: black !important;
+  }
+
+  .notice-me {
+    color: red;
+    font-weight: bold;
+  }
+
+  .md-content {
+    background: white;
   }
 
 }
