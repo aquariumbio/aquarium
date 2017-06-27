@@ -49,3 +49,68 @@ AQ.User.active_users = function() {
   });
 
 }
+
+AQ.User.record_methods.init_params = function(names) {
+
+  var user = this;
+
+  if ( !user.params ) {
+    user.params = {};
+  }
+
+  aq.each(names, n => user.params[n] = { key: n} );
+
+}
+
+AQ.User.record_getters.parameters = function() {
+
+  var user = this;
+  delete user.parameters;
+
+  AQ.Parameter.where({user_id: user.id}).then(plist => {
+    user.parameters = plist;
+    if ( !user.params ) { user.params = {} };
+    aq.each(user.parameters,p => {
+      user.params[p.key] = p;
+    })
+    AQ.update();
+  })
+
+  return user.parameters;
+
+}
+
+AQ.User.record_methods.save = function() {
+
+  var user = this;
+
+  delete user.parameters;
+  user.parameters = [];
+  for ( key in user.params ) {
+    user.parameters.push(user.params[key]);
+  }
+
+  AQ.http.put("/users/"+user.id,user).then(result => {
+    console.log(result)
+  }).catch(response => alert(response.data.error));
+
+}
+
+AQ.User.record_methods.change_password = function() {
+
+  var user = this;
+
+  AQ.http.put('/users/password', user).then( response => {
+
+    delete user.password;
+    delete user.password_confirmation;
+
+  }).catch( response => {
+
+    alert(response.data.error);
+
+  })
+
+}
+
+

@@ -1,16 +1,6 @@
-class ProductionUser < User
-end
-
-class ProductionGroup < Group
-end
-
-class ProductionMembership < Membership
-end
-
 class UsersController < ApplicationController
 
   before_filter :signed_in_user, only: [:edit, :update]
-  before_filter :correct_user,   only: [:edit, :update]
   before_filter :signed_in_user, only: [:index, :edit, :update]
   before_filter :admin_user,     only: :destroy
   before_filter :admin_user,     only: :new
@@ -33,6 +23,8 @@ class UsersController < ApplicationController
       redirect_to @user
       return
     end
+
+    render layout: 'aq2'
 
   end
 
@@ -90,13 +82,60 @@ class UsersController < ApplicationController
   end
 
   def update
-    if @user.update_attributes(params[:user])
-      flash[:success] = "Profile updated"
-      sign_in @user
-      redirect_to @user
-    else
-      render 'edit'
+
+    user = User.find(params[:id])
+
+    unless user.id == current_user.id || current_user.is_admin
+      render json: { error: "User #{current_user.login} is not authorized to update user #{user.login}'s profile." }, status: 422
+      return
     end
+
+    if params[:name] != user.name
+      user.name = params[:name]
+      user.save
+      unless user.errors.empty?
+        render json: { error: user.errors.full_messages.join('') }, status: 422
+        return
+      end
+    end
+
+    params[:parameters].each do |p|
+      plist = Parameter.where(user_id: user.id, id: p[:id])
+      if plist.length == 0 
+        user.parameters.create key: p[:key], value: p[:value]
+      elsif plist.length == 1 
+        plist[0].value = p[:value]
+        plist[0].save
+        unless plist[0].errors.empty?
+          render json: { error: plist[0].errors.full_messages.join('') }
+          return
+        end        
+      end
+    end
+
+    render json: user
+
+  end
+
+  def update_password
+
+    user = User.find(params[:id])
+
+    unless user.id == current_user.id || current_user.is_admin
+      render json: { error: "User #{current_user.login} is not authorized to change #{user.login}'s password." }, status: 422
+      return
+    end
+
+    user.password = params[:password]
+    user.password_confirmation = params[:password_confirmation]
+    user.save
+
+    if user.errors.empty?
+      render json: user
+    else
+      render json: { error: user.errors.full_messages.join(', ') }, status: 422
+    end
+
   end
 
   def index
@@ -120,8 +159,6 @@ class UsersController < ApplicationController
 
   def destroy
 
-    logger.info "retire"
-
     u = User.find(params[:id])
     ret = Group.find_by_name('retired')
 
@@ -136,66 +173,6 @@ class UsersController < ApplicationController
     end
 
     redirect_to users_url
-
-  end
-
-  def copy_users_from_production
-    
-    if Rails.env != 'production'
-
-      # Delete current users 
-      User.all.each do |u|
-        u.destroy
-      end
-    
-      # Delete current groups
-      Group.all.each do |g|
-        g.destroy # should destroy memberships too
-      end
-
-      # Delete current memberships just in case there are some left
-      Membership.all.each do |m|
-        m.destroy 
-      end
-
-      # Copy users
-      ProductionUser.switch_connection_to(:production_server)
-
-      ProductionUser.all.each do |u|
-        new_user = User.new
-        new_user.copy u
-      end
-
-      # Copy groups
-      ProductionGroup.switch_connection_to(:production_server)
-
-      ProductionGroup.all.each do |g|
-        new_group = Group.new(g.attributes.except("created_at","updated_at"))
-        new_group.id = g.id
-        new_group.save
-      end
-
-      # Copy memberships
-      ProductionMembership.switch_connection_to(:production_server)
-
-      ProductionMembership.all.each do |m|
-        new_mem = Membership.new(m.attributes.except("created_at","updated_at"))
-        new_mem.id = m.id
-        begin
-          new_mem.save
-        rescue Exception => e
-          logger.info "ERROR: Could not insert #{new_mem.inspect}"
-          flash[:error] = "ERROR: Could not insert #{new_mem.inspect}"
-        end
-      end
-
-      redirect_to production_interface_path, notice: "#{User.all.length} users and #{Group.all.length} groups copied."
-
-    else
-   
-      redirect_to production_interface_path, notice: "This functionality is not available in production mode."
-
-    end
 
   end
 

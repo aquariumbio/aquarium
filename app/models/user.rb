@@ -14,8 +14,8 @@ class User < ActiveRecord::Base
   has_many :account
   has_many :user_budget_associations
   has_many :plans
+  has_many :parameters
   
-  # Q: Why not = user.login.downcase?
   before_create { |user| user.login = login.downcase }
   before_create :create_remember_token
 

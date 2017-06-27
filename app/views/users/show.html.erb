@@ -1,150 +1,206 @@
 <% provide(:title, @user.name) %>
 
-<div class="row-fluid">
+<%= content_for :class do %>user<% end %>
+<%= content_for :controller do %>userCtrl as userCtrl<% end %>
 
-  <div class="span3 user-info">
+<%= content_for :sidebar do %>
 
-    <ul>
-      <li>Name: <b><%= @user.name %></b></li>
-      <li>Login: <b><%= @user.login %></b></li>
-      <li>Joined: <b><%= time_ago_in_words @user.created_at %> ago</b></li>
-    </ul>
+  <% if current_user.id != @user.id && current_user.is_admin %>
 
-  </div>
+    <h1 class="warning">
+      <span class="md-body-2">Admin access to profile:</span><br>
+      <span class="md-title">{{user.name}}</span>
+    </h1>
 
-  <div class="span9 user-info">
+  <% end %>
 
-    <ul>
-      <% if @user.id == current_user.id %>
-        <li>
-          API Key: <b><%= @user.key ? @user.key : "none" %></b>
-        </li>
-        <li>
-          <%= link_to "Generate New Key", 
-              { action: "show", id: @user.id, keygen: true }, 
-              class: "btn btn-mini btn-info" %>
-        </li>
+  <% if current_user.id == @user.id || current_user.is_admin %>
+    <md-list>
+      <md-list-item ng-repeat="view in views" 
+                    ng-click="status.view = view"
+                    ng-class="view == status.view ? 'md-body-2 selected-view' : 'md-body-2'">{{view}}</md-button>
+    </md-list>
+  <% else %>
+    <md-list>
+      <md-list-item ng-click="status.view = 'Information'"
+                    class="md-body-2 selected-view">Information</md-button>
+    </md-list>
+  <% end %>
+
+<% end %>
+
+<%= content_for :specific_title do %>
+  &rang; Profile &rang; {{status.view}}
+<% end %>
+
+<%= content_for :main do %>
+
+  <md-content layout-padding layout="row" ng-if="status.view == 'Information'">
+
+    <div flex="33">
+
+      <p class='md-title'>Login: <b>{{user.login}}</b></p>
+      <p>Joined <%= time_ago_in_words(@user.created_at) %> ago.</p>
+
+    </div>
+
+    <div flex="33" layout="column">
+
+      <% if current_user.id == @user.id || current_user.is_admin %>
+
+        <md-input-container>
+          <label>Full Name</label>
+          <input ng-model="user.name">
+        </md-input-container>
+
+        <md-input-container>
+          <label>Email Address</label>
+          <input ng-model="user.params.email.value">
+        </md-input-container>
+
+        <md-input-container>
+          <label>Phone Number</label>
+          <input ng-model="user.params.phone.value">        
+        </md-input-container>    
+
+      <% else %>
+
+        <p>Full Name: {{user.name}}</p>
+        <p>Email Address: {{user.params.email.value}}</p>
+        <p>Phone Number: {{user.params.phone.value}}</p>
+
       <% end %>
-    </ul>
 
-  </div>
-
-</div>
-
-<div class='row-fluid'>
-
-  <div class='span4'>
-    <center><p><b>Protocol Usage (Last 100 Days)</p></b></center>
-    <div id="protocols" style='height: 300px'>
-      <center><%= image_tag 'waiting_animation.gif' %></center>
     </div>
-  </div>
 
-  <div class='span4'>
-    <center><p><b>Activity (Last 100 Days)</p></b></center>  
-    <div id="activity" style='height: 300px'>
-      <center><%= image_tag 'waiting_animation.gif' %></center>
-    </div>
-  </div>
+  </md-content>
 
-  <div class='span4'>
-    <%= render partial: "items_owned" %>
-  </div>
+  <md-content layout-padding ng-if="status.view == 'Preferences'">
 
-</div>
+    <% if current_user.id == @user.id || current_user.is_admin %>
+  
+    <md-list>
+      <md-list-item ng-repeat="pref in preferences">
+        <md-input-container ng-if="pref.type == 'number' || pref.type == 'string'">
+          <label>{{pref.name}}</label>
+          <input ng-model="user.params[pref.name].value">
+        </md-input-container>
+        <md-input-container ng-if="pref.type == 'boolean'">
+          <md-switch class="md-primary" 
+                     ng-model="user.params[pref.name].value"
+                     ng-true-value="'true'"
+                     ng0-false-value="'false'">
+            {{pref.name}}
+          </md-switch>
+        </md-input-container>
+      </md-list-item>
+    </md-list>
 
-<script>
+    <% else %>
+      <p>Access Restricted</p>
+    <% end %>
 
-function select_field ( results, field ) {
- 
-  var L = [];
+  </md-content>  
 
-  for ( var i=0; i<results.length; i++ ) {
-    L.push(results[i][field]);
-    console.log(results[i][field]);
-  }
+  <md-content layout-padding ng-if="status.view == 'Memberships'">
 
-  return L;
+    <% if current_user.id == @user.id || current_user.is_admin %>
+  
+    <md-list>
+      <md-list-item class="md-2-line" ng-repeat="group in user.groups">
+        <div class="md-list-item-text" layout="column">
+          <div class="md-headline">{{group.name}}</div>  
+          <div class="md-body-2">{{group.description}}</div>
+        </div>
+      </md-list-item>
+    </md-list>
 
-}
+    <% else %>
+      <p>Access Restricted</p>
+    <% end %>
 
-function displayProtocols() {
+  </md-content>
 
-  $.ajax({
-    type: 'GET',
-    url: '/stats/user_activity?user_id=<%= @user.id %>',
-    dataType: "json",
+  <md-content layout-padding ng-if="status.view == 'Change Password'">
 
-    success: function(data,status) {
+    <% if current_user.id == @user.id || current_user.is_admin %>  
 
-      var ticks = [];
-      var nums = [];
+      <md-list>
 
-      for ( var i=0; i<data.protocol_usage.length; i++ ) {
-        ticks.push([i,data.protocol_usage[i][0]]);
-        nums.push([data.protocol_usage[i][1],i]);
-      }
+        <md-list-item>
+          <md-input-container>
+            <label>New Password</label>
+            <input ng-model="user.password" ng-change="check_password()" style="-webkit-text-security: disc;" >        
+          </md-input-container>  
+        </md-list-item>
 
-      if ( ticks.length > 0 ) {
+        <md-list-item>
+          <md-input-container>
+            <label>Re-enter New Password</label>
+            <input ng-model="user.password_confirmation" ng-change="check_password()" style="-webkit-text-security: disc;">        
+          </md-input-container>   
+        </md-list-item>
 
-        $('#protocols').css('height',20*(1+ticks.length));
+        <md-list-item>
+          <p style="color: red" ng-if="!status.password_ok">
+            Passwords must match, and be at least 10 characters long.
+          </p>
+        </md-list-item>
 
-        $('#protocols').plot([ { data: nums, label: " # Associated Jobs" } ],{
+      </md-list>
 
-            yaxis: { ticks: ticks, tickColor: "#fff", tickDecimals: 0 },
-            xaxis: { tickColor: "#eee", tickDecimals: 0 },
-            series: { bars: { show: true } },
+    <% else %>
 
-            bars: {
-              align: "center",
-              barWidth: 0.5,
-              horizontal: true
-            },
+      <p>Access Restricted</p>
 
-            grid: {
-              minBorderMargin: 0,
-              borderWidth: { top: 0, right: 0, bottom: 0, left: 1 }
-            },
+    <% end %>
 
-            legend: {
-              position: "se"
-            }
+  </md-content>
 
-        });
+  <md-content layout-padding ng-if="status.view == 'Budgets'">
 
-      } else {
+    <% if current_user.id == @user.id || current_user.is_admin %>  
 
-        $('#protocols').html("No jobs in past 100 days");
+      <md-list ng-repeat="uba in user.user_budget_associations" flex>
+        <md-list-item ng-if="uba.budget && uba.budget.spent.this_month != null">
+          <div class="md-list-item-text" layout="column">
+            <div class="md-headline">{{uba.budget.name}}</div>
+            <div class="md-body-2">{{uba.budget.description}}.</div>
+            <div class="md-body-1">
+                {{uba.budget.spent.this_month|currency}}
+              / {{uba.quota|currency}} spent this month</div>
+          </div>
+        </md-list-item>
+      </md-list>  
 
-      }
+      <p ng-if="user.user_budget_associations.length == 0">
+        User {{user.name}} has no defined budgets. Please talk to the lab manager to set one up.
+      </p>
 
-      $('#activity').plot([
-        {data: data.completions, label: "Jobs Completed", color: "rgb(0,200,0)"}
-      ],{
-        xaxis: {
-          tickColor: "#fff",
-          mode: "time",
-          timeformat: "%b %d"
-        },        grid: {
-          minBorderMargin: 0,
-          borderWidth: {
-            top: 0, right: 0, bottom: 1, left: 0
-          }
-        },
-        lines: {
-          steps: true,
-          fill: true,
-          fillColor: "rgba(0,200,0,0.5)"
-        }
-      }
-      );
+    <% else %>
+      <p>Access Restricted</p>
+    <% end %>     
 
-    }
+  </md-content>
 
-  });
+<% end %>
 
-}
+<%= content_for :action1 do %>
+  <% if current_user.id == @user.id || current_user.is_admin %>
+    <md-button ng-if="status.view == 'Information' || status.view == 'Preferences'" 
+               ng-click="user.save()" 
+               class="md-raised md-primary">Save</md-button>
+    <md-button ng-if="status.view == 'Change Password' && user.password && status.password_ok" 
+               ng-click="user.change_password()"
+               class="md-raised md-primary">Change Password</md-button>
+  <% end %>
+<% end %>
 
-displayProtocols();
+<%= content_for :action2 do %>
+  <% if current_user.id == @user.id || current_user.is_admin %>
+    <md-button ng-if="status.view == 'Information' || status.view == 'Preferences'" 
+               ng-click="reload()"
+               class="md-raised">Cancel</md-button>
+  <% end %>
+<% end %>
 
-</script>
