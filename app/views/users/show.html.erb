@@ -14,6 +14,16 @@
 
   <% end %>
 
+  <% if current_user.id == @user.id %>
+
+    <p class="md-body-2 not-up-to-date"
+       ng-if="!user.params.email.value || !user.params.phone.value || user.params.biofab.value != 'true' || 
+               user.params.aquarium.value != 'true' && !user.changed">
+      Please save your email and phone number and agree to the BIOFAB and Aquarium user agreements.
+    </p>  
+
+  <% end %>  
+
   <% if current_user.id == @user.id || current_user.is_admin %>
     <md-list>
       <md-list-item ng-repeat="view in views" 

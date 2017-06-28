@@ -1,6 +1,7 @@
 class GroupsController < ApplicationController
 
   before_filter :signed_in_user
+  before_filter :up_to_date_user  
   
   # GET /groups
   # GET /groups.json

@@ -1,6 +1,7 @@
 class OperationsController < ApplicationController
 
   before_filter :signed_in_user
+  before_filter :up_to_date_user    
 
   def active_and_pending_jobs
     job_ids = JobAssociation.joins(:job, :operation).where("pc != -2 && status != 'error'").collect { |ja| ja.job_id }.uniq

@@ -1,5 +1,7 @@
 class ParametersController < ApplicationController
 
+  before_filter :up_to_date_user    
+
   before_filter {
     unless current_user && current_user.is_admin
       redirect_to root_path, notice: "Administrative privileges required to access parameters."

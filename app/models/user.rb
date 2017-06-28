@@ -84,6 +84,17 @@ class User < ActiveRecord::Base
     }
   end    
 
+  def up_to_date
+
+    email  = self.parameters.find { |p| p.key == 'email' && p.value.length > 0 } != nil
+    phone  = self.parameters.find { |p| p.key == 'phone' && p.value.length > 0 } != nil
+    biofab = self.parameters.find { |p| p.key == 'biofab' && p.value == 'true' }  != nil
+    aq     = self.parameters.find { |p| p.key == 'aquarium' && p.value == 'true' } != nil
+
+    email && phone && biofab && aq
+
+  end
+
   private
 
     def create_remember_token

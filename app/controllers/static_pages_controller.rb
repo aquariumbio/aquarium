@@ -1,6 +1,7 @@
 class StaticPagesController < ApplicationController
 
   before_filter :signed_in_user
+  before_filter :up_to_date_user  
 
   def home
     temp = Announcement.last

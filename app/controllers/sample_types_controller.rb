@@ -1,6 +1,7 @@
 class SampleTypesController < ApplicationController
 
   before_filter :signed_in_user
+  before_filter :up_to_date_user  
 
   # GET /sample_types
   # GET /sample_types.json
