@@ -15,49 +15,51 @@
 
 <%= content_for :sidebar do %>
 
-    <h1 class='md-title'><%= @invoice.user.name %></h1>
-    <h1 class='md-subhead'>Budget</b>: <%= link_to @invoice.budget.name, @invoice.budget %></h1>
-    <b>Contact</b>: <%= @invoice.budget.contact %> (<%= @invoice.budget.email %>)<br />
-    <b>Contact phone</b>: <%= @invoice.budget.phone %> <br />    
+  <h1 class='md-title'><%= @invoice.user.name %></h1>
+  <h1 class='md-subhead'>Budget</b>: <%= link_to @invoice.budget.name, @invoice.budget %></h1>
+  <b>Contact</b>: <%= @invoice.budget.contact %> (<%= @invoice.budget.email %>)<br />
+  <b>Contact phone</b>: <%= @invoice.budget.phone %> <br />    
 
+  <hr>
+
+  <b>Base Cost</b>: <%= number_to_currency(@base) %><br />
+  <b>Operating Costs</b>: <%= number_to_currency(@markup) %><br />
+  <b>Total</b>: <%= number_to_currency(@total) %>
+
+  <hr>
+
+  <b>Status</b>:
+
+  <% if @invoice.in_progress %>
+    <span class='text-error'>In progress</span><br>
+  <% else %>
+    <br /> <select id="status">
+      <%= ["ready", "approval_requested", "reconciled"].each do |s| %>
+        <option <%= @invoice.status == s ? "selected" : "" %> ><%= s %></option>
+      <% end %>
+    </select><br />
+  <% end %>
+
+  <% if false %>
+    <b>Notes</b>:<br />
+      <textarea id="notes" style="width:600px; height: 100px"><%= @invoice.notes %></textarea>
+    </p>
+  <% end %>
+
+  <% if !@invoice.in_progress %>
     <hr>
+    <md-button class='md-raised' id="save" onclick="save_status()">Save Changes</md-button>
+  <% end %>
 
-    <b>Base Cost</b>: <%= number_to_currency(@base) %><br />
-    <b>Operating Costs</b>: <%= number_to_currency(@markup) %><br />
-    <b>Total</b>: <%= number_to_currency(@total) %>
+  <hr>
 
-    <hr>
-
-    <b>Status</b>:
-
-    <% if @invoice.in_progress %>
-      <span class='text-error'>In progress</span><br>
-    <% else %>
-      <br /> <select id="status">
-        <%= ["ready", "approval_requested", "reconciled"].each do |s| %>
-          <option <%= @invoice.status == s ? "selected" : "" %> ><%= s %></option>
-        <% end %>
-      </select><br />
-    <% end %>
-
-    <% if false %>
-      <b>Notes</b>:<br />
-        <textarea id="notes" style="width:600px; height: 100px"><%= @invoice.notes %></textarea>
-      </p>
-    <% end %>
-
-    <% if !@invoice.in_progress %>
-      <hr>
-      <md-button class='md-raised' id="save" onclick="save_status()">Save Changes</md-button>
-    <% end %>
-
-    <hr>
-
-    <p>Contact <b>Amanda McCracken</b> (mccracken1029@gmail.com) with questions about this invoice.</p> 
+  <p>Contact <b>Amanda McCracken</b> (mccracken1029@gmail.com) with questions about this invoice.</p> 
 
 <% end %>    
 
 <%= content_for :main do %>
+
+  <div layout-padding>
 
   <%= render partial: 'details' %>
   <%= render partial: "note_dialog" %>

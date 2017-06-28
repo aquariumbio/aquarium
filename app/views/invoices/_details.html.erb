@@ -14,7 +14,7 @@
 
       <div>
 
-        <table style="table-layout: fixed; margin-left: 3px; width: 100%">
+        <table style="table-layout: fixed; margin-left: 3px; width: 100%; margin-bottom: 5px">
 
           <tr style="vertical-align: top">
 
@@ -23,7 +23,7 @@
                  <span id="operation-<%= operation_id %>-budget" class='change'></span>
             </td>
 
-            <td width="25%">
+            <td width="50%">
               <% if current_user && current_user.is_admin %>
                 <div class='pull-right'>
                 <md-button class='md-small md-raised no-print' onclick="change_budget(<%= operation_id %>)">Change</md-button>  
