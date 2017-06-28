@@ -16,48 +16,80 @@
   font-size: 14pt;
   margin-bottom: 0;
 }
+.selected-view {
+  background: #80d8ff;
+}
 </style>
 
+<%= content_for :controller do %>invoicesCtrl as invoicesCtrl<% end %>
+
 <%= content_for :specific_title do %>
-  Invoices
+  Invoices &rang; 
+  <% if params[:all] %>
+    All
+  <% else %>
+    <%= current_user.name %>
+  <% end %>
 <% end %>
 
 <% content_for :sidebar do %>
-  Under construction: Choose a specific user. 
+
+  <md-list ng-init="status.month = '<%= @data[0][:date] %>'">
+
+    <% @data.each do |datum| %>
+
+      <md-list-item ng-click="status.month = '<%= datum[:date] %>'"
+                    ng-class="status.month == '<%= datum[:date] %>' ? 'md-body-2 selected-view' : 'md-body-2'">
+        <p><%= datum[:date].strftime("%B %Y") %></p>
+        <span>
+        <% if params[:all] %>
+          <%= number_to_currency(datum[:entries].collect { |e| e[:spent] }.inject{|s,x| s + x}) %>
+        <% end %>
+        </span>
+      </md-list-item>
+
+    <% end %>
+
+  </md-list>
+
 <% end %>
 
 <%= content_for :main do %>
 
   <% @data.each do |datum| %>
 
-    <h3>
-      <%= datum[:date].strftime("%B %Y") %>
-      <% if params[:all] %>
-        : <%= number_to_currency(datum[:entries].collect { |e| e[:spent] }.inject{|s,x| s + x}) %>
-      <% end %>
-    </h3>
+    <md-content layout-padding ng-show="status.month == '<%= datum[:date] %>'">
 
-    <% datum[:entries].collect { |e| e[:budget] }.uniq.each do |b| %>
-
-      <p class='indent budget-name'><b><%= link_to b.name, b %></b> (<%= b.contact %>): <%= b.description %> </p>
-
-      <table class='table table-condensed users' style="table-layout: fixed">
-        <% datum[:entries].select { |e| e[:budget].id == b.id }.each do |e| %>
-          <tr>
-            <td><%= e[:user].name %> (<%= link_to "#{e[:user].login}", e[:user] %>)</td>
-            <td><i><%= e[:invoice].in_progress ? "in progress" : e[:invoice].status %></i></td>
-            <td><%= link_to number_to_currency(e[:spent]), e[:invoice] %></td>        
-          </tr>
+      <h3>
+        <%= datum[:date].strftime("%B %Y") %>
+        <% if params[:all] %>
+          : <%= number_to_currency(datum[:entries].collect { |e| e[:spent] }.inject{|s,x| s + x}) %>
         <% end %>
-        <% total = datum[:entries].select { |e| e[:budget].id == b.id }.collect { |e| e[:spent] }.inject{|sum,x| sum+x} %>
-        <tr>
-        <td></td>
-        <td></td>
-        <td><b><%= number_to_currency(total) %></b></td>
-        </tr>
-      </table>
+      </h3>
 
-    <% end %>
+      <% datum[:entries].collect { |e| e[:budget] }.uniq.each do |b| %>
+
+        <p class='indent budget-name'><b><%= link_to b.name, b %></b> (<%= b.contact %>): <%= b.description %> </p>
+
+        <table class='table table-condensed users' style="table-layout: fixed">
+          <% datum[:entries].select { |e| e[:budget].id == b.id }.each do |e| %>
+            <tr>
+              <td><%= e[:user].name %> (<%= link_to "#{e[:user].login}", e[:user] %>)</td>
+              <td><i><%= e[:invoice].in_progress ? "in progress" : e[:invoice].status %></i></td>
+              <td><%= link_to number_to_currency(e[:spent]), e[:invoice] %></td>        
+            </tr>
+          <% end %>
+          <% total = datum[:entries].select { |e| e[:budget].id == b.id }.collect { |e| e[:spent] }.inject{|sum,x| sum+x} %>
+          <tr>
+          <td></td>
+          <td></td>
+          <td><b><%= number_to_currency(total) %></b></td>
+          </tr>
+        </table>
+
+      <% end %>
+
+    </md-content>
 
   <% end %>
 
