@@ -13,9 +13,10 @@ class BudgetsController < ApplicationController
   # GET /budgets.json
   def index
     @budgets = Budget.all
+    @budget = Budget.new
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html { render layout: 'aq2' } # index.html.erb
       format.json { render json: @budgets }
     end
   end
@@ -28,7 +29,7 @@ class BudgetsController < ApplicationController
     @users = (User.all.reject { |u| u.retired? }).sort { |a,b| a[:login] <=> b[:login] }
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render layout: 'aq2' } 
       format.json { render json: @budget }
     end
 
@@ -40,7 +41,7 @@ class BudgetsController < ApplicationController
     @budget = Budget.new
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render layout: 'aq2' } 
       format.json { render json: @budget }
     end
   end
@@ -48,6 +49,10 @@ class BudgetsController < ApplicationController
   # GET /budgets/1/edit
   def edit
     @budget = Budget.find(params[:id])
+    respond_to do |format|
+      format.html { render layout: 'aq2' } 
+      format.json { render json: @budget }
+    end    
   end
 
   # POST /budgets
