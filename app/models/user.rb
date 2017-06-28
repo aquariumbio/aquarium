@@ -86,10 +86,12 @@ class User < ActiveRecord::Base
 
   def up_to_date
 
-    email  = self.parameters.find { |p| p.key == 'email' && p.value.length > 0 } != nil
-    phone  = self.parameters.find { |p| p.key == 'phone' && p.value.length > 0 } != nil
-    biofab = self.parameters.find { |p| p.key == 'biofab' && p.value == 'true' }  != nil
-    aq     = self.parameters.find { |p| p.key == 'aquarium' && p.value == 'true' } != nil
+    return false if self.parameters.length == 0
+
+    email  = self.parameters.find { |p| p.key == 'email' && p.value && p.value.length > 0 } != nil
+    phone  = self.parameters.find { |p| p.key == 'phone' && p.value && p.value.length > 0 } != nil
+    biofab = self.parameters.find { |p| p.key == 'biofab' && p.value && p.value == 'true' }  != nil
+    aq     = self.parameters.find { |p| p.key == 'aquarium' && p.value && p.value == 'true' } != nil
 
     email && phone && biofab && aq
 
