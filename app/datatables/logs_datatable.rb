@@ -20,8 +20,7 @@ class LogsDatatable < Datatable
 
       [
         link_to(job.id, job),
-        job.path ? job.path.split('/').last : "?",
-        "<span class='showhide'>#{args}</span>",
+        job.operations.first.operation_type.name,
         job.submitter + mc,
         job.doer,
         job.created_at.to_formatted_s(:short),

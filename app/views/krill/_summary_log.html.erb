@@ -1,70 +1,30 @@
 
-<%
-  protocol = ProtocolSummary.new({ protocol: @job.path, sha: @job.sha })
-%>
+<% protocol = ProtocolSummary.new({ protocol: @job.path, sha: @job.sha }) %>
 
-<div class='row-fluid' id='log-title-box' style='position: relative'>
+<div layout-padding>
 
-  <div class='span7'>
-    <h1 class='log-h'><span style='color: #888'>Job <%= @job.id %> :</span>
-       <% if @job.operations.length > 0 %>
-         <%= @job.operations[0].operation_type.name %>
-       <% else %>
-         <%= @job.path.split('/').last %>
-       <% end %>
-    </h1>
-    <p>
-      <% if @job.operations.length == 0 %>
-        Full Path: <a href='/jobs/summary?path=<%= @job.path %>'><%= @job.path %></a> ( ...
-                        <a href='/jobs/summary?path=<%= @job.path %>&sha=<%= @job.sha %>'><%= @job.sha ? @job.sha[-10,10] : "--" %></a> )
-                        <%= render partial: '/posts/discussion', locals: { topic: protocol, link: "Discuss Protocol" } %>
-      <% end %>
-      Submitted by <a href='/users/<%= @submitter.id %>'><%= @submitter.login %></a>
-      for group <a href='/groups/<%= @group.id %>'><%= @group.name %></a>
-      <% if @performer %>
-        and performed by <a href='/users/<%= @performer.id %>'><%= @performer.login %></a>
-      <% end %>
-      <br />
-      <% if @job.metacol %>
-        Part of Metacol <%= link_to @job.metacol.id, @job.metacol %> ( <%= @job.metacol.path %> )<br />
-      <% end %>
-      <% if @job.workflow_process && @job.workflow_process.workflow %>
-        Part of Workflow Process <%= link_to "#{@job.workflow_process.id}: #{@job.workflow_process.workflow.name}", @job.workflow_process %><br />
-      <% end %>
-      <%= link_to( '/jobs/' + (@job.id-1).to_s ) do %>
-        <i class="icon-arrow-left"></i>
-      <% end %>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <%= link_to( '/jobs/' + (@job.id+1).to_s ) do %>
-        <i class="icon-arrow-right"></i>
-      <% end %>      
-    </p>
+  <p>
 
-  </div>
+    Submitted by <a href='/users/<%= @submitter.id %>'><%= @submitter.name %></a><br>
+    For group <a href='/groups/<%= @group.id %>'><%= @group.name %></a><br>
 
-  <div class='span5'>
-    <h3 class='log-status'>
-      Submitted <%= @job.created_at.to_formatted_s(:long) %> 
-    </h3>
-    <h3 class='log-status'>
-      <% if @job.pc == Job.COMPLETED %>
-        <b>Completed</b> <%= @job.updated_at.to_formatted_s(:long) %> 
-      <% elsif @job.pc == Job.NOT_STARTED %>
-        <b>Pending</b>
-      <% else %>
-        <b>Running</b>
-      <% end %>
-    </h3>
-    <br />
-    <div class='log-status' style='position: absolute; bottom: 10px; right: 10px'>
-      <%= render partial: '/posts/discussion', locals: { topic: @job, button_class: "btn-small" } %>&nbsp;
-      <% unless @job.pc == Job.NOT_STARTED %>
-        <a href='/krill/ui?job=<%= @job.id %>' class='btn btn-small'>View Steps</a>&nbsp;
-        <button id='send' class='btn btn-small btn-primary'>Send To ...</button>
-      <% end %>
-    </div>
-  </div>
+    <% if @performer %>
+      Performed by <a href='/users/<%= @performer.id %>'><%= @performer.name %></a><br>
+    <% end %>
+
+    <b>Submitted</b> <%= @job.created_at.to_formatted_s(:long) %><br>
+
+    <% if @job.pc == Job.COMPLETED %>
+      <b>Completed</b> <%= @job.updated_at.to_formatted_s(:long) %> 
+    <% elsif @job.pc == Job.NOT_STARTED %>
+      <b>Pending</b>
+    <% else %>
+      <b>Running</b>
+    <% end %>
+
+  </p>
+
+
 
 </div>
-
 

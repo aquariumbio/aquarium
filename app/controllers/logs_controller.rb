@@ -8,7 +8,7 @@ class LogsController < ApplicationController
     cookies[:logs_search_string] ||= current_user.login
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html { render layout: 'aq2' }
       format.json { render json: LogsDatatable.new(view_context) }
     end
 
@@ -18,7 +18,7 @@ class LogsController < ApplicationController
     @log = Log.find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render layout: 'aq2' }
       format.json { render json: @log }
     end
   end

@@ -279,6 +279,8 @@ class KrillController < ApplicationController
     @tasks = ( ( @job.touches.select { |t| t.task } ).collect { |t| t.task } ).uniq { |task| task.id }
     @inventory = @job.takes.collect { |t| t.item_id }
 
+    render layout: 'aq2'
+
   end
 
   def ui
