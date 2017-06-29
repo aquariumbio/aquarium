@@ -291,6 +291,8 @@ class KrillController < ApplicationController
       redirect_to krill_error_path(job: @job.id, message: "interpreter: Job not started") 
     end
 
+    render layout: 'aq2-plain'
+
   end
 
   def inventory

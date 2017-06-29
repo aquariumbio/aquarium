@@ -45,7 +45,7 @@ Krill.prototype.info = function() {
     note = "<br /><h3>completed</h3><p><a href='log?job="+this.job+"'>view log</a></p>";
   }
   if ( this.metacol ) {
-    metacol = " / Metacol <a href='/metacols/"  + this.metacol + "'>" + this.metacol + "</a>";
+    metacol = " / Metacol <a href='/metacols/" + this.metacol + "'>" + this.metacol + "</a>";
   }
   var job_info = $('<div>Job '+this.job+metacol+'<br />'+this.path+' '+note+'</div>').addClass('krill-job-info');
   $('#krill-info').append(job_info);
