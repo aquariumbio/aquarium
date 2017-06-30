@@ -228,3 +228,9 @@
   <% end %>
 <% end %>
 
+<% content_for :action3 do %>
+  <% if current_user.is_admin %>
+    <a href="/users" class="md-raised md-button">All</a>
+  <% end %>
+<% end %>
+

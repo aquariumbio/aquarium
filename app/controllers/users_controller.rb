@@ -2,8 +2,7 @@ class UsersController < ApplicationController
 
   before_filter :signed_in_user, only: [:edit, :update]
   before_filter :signed_in_user, only: [:index, :edit, :update]
-  before_filter :admin_user,     only: :destroy
-  before_filter :admin_user,     only: :new
+  before_filter :admin_user,     only: [:destroy, :new, :password, :index]
 
   def new
     @user = User.new
@@ -68,7 +67,7 @@ class UsersController < ApplicationController
       @user.password_confirmation = params[:user][:password_confirmation]
       if @user.save
         flash[:success] = "#{params[:user][:login]}'s password changed."
-        redirect_to @user
+        redirect_to users_path
       else
         flash[:error] = "#{params[:user][:login]}'s password not changed."
         redirect_to password_path
@@ -131,7 +130,7 @@ class UsersController < ApplicationController
     user.save
 
     if user.errors.empty?
-      render json: user
+      redirect_to :users_url
     else
       render json: { error: user.errors.full_messages.join(', ') }, status: 422
     end
@@ -140,13 +139,25 @@ class UsersController < ApplicationController
 
   def index
 
+    @user = User.new
+
     respond_to do |format|
+
       format.html {
+
         retired = Group.find_by_name('retired')
         rid = retired ? retired.id : -1
-        @users = ((User.includes(:tasks).select{|u| !u.member? rid }).sort { |a,b| a[:login] <=> b[:login] }).paginate(page: params[:page], :per_page => 15)        
+
+        @users = User.includes(memberships: :group)
+                     .select { |u| !u.member? rid }
+                     .sort { |a,b| a[:login] <=> b[:login] }
+                     .paginate(page: params[:page], :per_page => 15)    
+
+        render layout: 'aq2' 
+
       }
       format.json { render json: User.includes(memberships: :group).all.sort { |a,b| a[:login] <=> b[:login] } }
+
     end
 
   end
