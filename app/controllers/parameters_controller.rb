@@ -11,12 +11,13 @@ class ParametersController < ApplicationController
   # GET /parameters
   # GET /parameters.json
   def index
-    @parameters = Parameter.all
+    @parameters = Parameter.where(user_id: nil)
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html { render layout: 'aq2-plain' }
       format.json { render json: @parameters }
     end
+
   end
 
   # GET /parameters/1
