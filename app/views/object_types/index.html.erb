@@ -1,58 +1,117 @@
-<% provide(:title,  'Inventory') %>
+<% provide(:title,  'Containers') %>
 
-<h1>Objects</h1>
+<% content_for :controller do %>noCtrl<% end %>
 
+<% content_for :class do %>object-types<% end %>
 
-
-<table class="table">
-  <tr>
-    <th>Name</th>
-    <th>Description</th>
-    <% if @handler == 'collection' %>
-      <th>Collection Dimensions</th>
+<% content_for :sidebar do %>
+  <% flash.each do |key, value| %>
+    <div class='flash md-body-2'><%= value %></div>
+  <% end %>
+  <md-list ng-init="status.handler = '<%= @first %>'">
+    <% @all_handlers.sort.each do |u| %>
+      <md-list-item ng-click="status.handler = '<%= u %>'"
+                    ng-class="status.handler == '<%= u %>' ? 'md-body-2 selected' : 'md-body-2'"><%= u %></md-list-item>
     <% end %>
-    <th>Quantity</th>
-    <th>Range</th>
-    <th><span class="dropdown">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= @handler %><b class="caret"></b></a>
-      <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-        <% @all_handlers.sort.each do |u| %>
-          <li><%= link_to u, '/object_types?handler=' + u %></li>
-        <% end %>
-      </ul>
-    </th>
-    <th></th>
-    <th></th>    
-  </tr>
-
-<% @object_types.each do |object_type| %>
-  <tr>
-    <td><%= link_to object_type.name, object_type %></td>
-    <td><%= object_type.description %></td>
-    <% if @handler == 'collection' %>
-      <td><%= object_type.rows %>&times;<%= object_type.columns %></th>
-    <% end %>
-    <td>
-      <% if object_type.quantity < object_type.min %>
-        <span class="text-error">
-      <% else %>
-        <span class="text-success">
-      <% end %>
-      <%= pluralize( object_type.quantity, object_type.unit ) %>
-      </span>
-    </td>
-    <td><%= "[" + object_type.min.to_s + ", " + object_type.max.to_s + "]" %></td>
-    <td><%= object_type.handler %></td>
-    <td><%= link_to 'Edit', edit_object_type_path(object_type) %></td>
-    <td>            
-      <%= link_to object_type, method: :delete, data: {confirm: 'Are you sure you want to delete this object type??' } do %>
-        <icon class='icon-remove'></icon>
-      <% end %>
-    </td>
-  </tr>
+  </md-list>
 <% end %>
-</table>
 
-<br />
+<% content_for :specific_title do %>
+  &rang; {{status.handler}}
+<% end %>
 
-<%= link_to 'New Object type', new_object_type_path, class: "btn" %>
+<% content_for :main do %>
+
+  <div layout-padding>
+
+    <table class="table table-fixed"> 
+
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <% if @handler == 'collection' %>
+          <th>Collection Dimensions</th>
+        <% end %>
+        <th></th>
+        <th></th>    
+      </tr>
+
+      <% @object_types.each do |object_type| %>
+
+        <tr ng-if="status.handler == '<%= object_type.handler %>'">
+
+          <td><a href="#" ng-click="status['ot<%= object_type.id %>'] = !status['ot<%= object_type.id %>']"><%= object_type.name %></a></td>
+
+          <td>
+
+            <%= object_type.description %>
+
+            <div ng-if="status['ot<%= object_type.id %>']">
+
+              <% if  object_type.handler == 'sample_container' %>
+                <div>
+                  <p>Objects of this type contain samples of type
+                     <b><%= object_type.sample_type ? object_type.sample_type.name : '?' %></b>:
+                     <%= object_type.sample_type ? object_type.sample_type.description : '?' %>
+                  </p>
+                </div>
+              <% end %>
+
+              <ul>
+                <li><b>Min/Max:</b>     <%= object_type.min %>/<%= object_type.max %></li>
+                <li><b>Unit: </b>       <%= object_type.unit %>(<%= number_to_currency(object_type.cost)%> each)</li>
+
+                <% unless  object_type.handler == 'sample_container' %>
+                  <li><b>Handler: </b>
+                    <% if object_type.handler == 'collection' %>
+                      <%= object_type.rows %>&times;<%= object_type.columns %>
+                    <% end %>
+                    <%= object_type.handler %>
+                  </li>
+                <% end %>
+
+                <li><b>Release(<%= object_type.release_method.capitalize %>): </b><%= object_type.release_description %></li>
+                <li><b>Safety: </b>     <%= object_type.safety %></li>
+                <li><b>Cleanup: </b>    <%= object_type.cleanup %></li>
+
+                <li><b>Data: </b>       <%= object_type.data %>
+                  <% if object_type.data_object != {} %>
+                    <p style="color: green">(Parsed as JSON)</p>
+                  <% else %>
+                    <p style="color: red">(Could not parse as JSON)</p>
+                  <% end %>
+                </li>
+
+                <li><b>Vendor: </b>     <%= object_type.vendor %></li>
+                <li><b>Location Prefix: </b>     <%= object_type.prefix %></li>
+              </ul>
+            
+            </div>
+
+          </td>
+
+          <% if @handler == 'collection' %>
+            <td><%= object_type.rows %>&times;<%= object_type.columns %></th>
+          <% end %>
+
+          <td><%= link_to 'Edit', edit_object_type_path(object_type) %></td>
+
+          <td>            
+            <%= link_to object_type, method: :delete, data: {confirm: 'Are you sure you want to delete this object type??' } do %>
+              <icon class='icon-remove'></icon>
+            <% end %>
+          </td>
+
+        </tr>
+
+      <% end %>
+
+    </table>
+
+  </div>
+
+<% end %>
+
+<% content_for :action1 do %>
+  <%= link_to 'New', new_object_type_path, class: "md-button md-raised" %>
+<% end %>

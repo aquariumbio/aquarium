@@ -1,6 +1,14 @@
-<% provide(:title,  @object_type.name) %>
+<% provide(:title,  "Edit" + @object_type.name) %>
 
-<h2>Update Record for <%= @object_type.name %></h2>
+<%= content_for :controller do %>noCtrl<% end %>
 
-  <%= render 'form' %>
-  <%= link_to 'Cancel', object_types_path, class:'btn' %>
+<% content_for :main do %>
+  <div layout-padding>
+    <h2>Update Record for <%= @object_type.name %></h2>
+
+    <%= render 'form' %>
+    <%= link_to 'Cancel', object_types_path, class:'btn' %>  
+  </div>
+<% end %>
+
+

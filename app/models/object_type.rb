@@ -4,6 +4,8 @@ class ObjectType < ActiveRecord::Base
                   :vendor, :unit, :image, :cost, :release_method, :release_description,
                   :sample_type_id, :created_at, :prefix
 
+  belongs_to :sample_type
+
   validates :name, :presence => true
   validates :unit, :presence => true
   validates :min, :presence => true
