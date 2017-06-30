@@ -12,9 +12,10 @@ class ParametersController < ApplicationController
   # GET /parameters.json
   def index
     @parameters = Parameter.where(user_id: nil)
+    @parameter = Parameter.new
 
     respond_to do |format|
-      format.html { render layout: 'aq2-plain' }
+      format.html { render layout: 'aq2' }
       format.json { render json: @parameters }
     end
 
@@ -45,6 +46,7 @@ class ParametersController < ApplicationController
   # GET /parameters/1/edit
   def edit
     @parameter = Parameter.find(params[:id])
+    render layout: 'aq2-plain'
   end
 
   # POST /parameters
