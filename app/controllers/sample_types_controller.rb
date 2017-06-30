@@ -6,10 +6,15 @@ class SampleTypesController < ApplicationController
   # GET /sample_types
   # GET /sample_types.json
   def index
-    @sample_types = SampleType.all
+    @sample_types = SampleType.all.sort_by { |st| st.name }
+    if @sample_types.length 
+      @first = @sample_types[0].name
+    else
+      @first = 'no sample types'
+    end
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html { render layout: 'aq2' }
       format.json { render json: @sample_types
                                  .sort { |a,b| a.name <=> b.name }
                                  .to_json(methods: :field_types)
@@ -22,7 +27,7 @@ class SampleTypesController < ApplicationController
     @sample_type = SampleType.find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render layout: 'aq2-plain' }
       format.json { render json: @sample_type
                        .to_json(methods: :field_types) }
     end
@@ -35,7 +40,7 @@ class SampleTypesController < ApplicationController
     @sample_type = SampleType.new
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render layout: 'aq2-plain'}
       format.json { render json: @sample_type }
     end
   end
@@ -43,6 +48,7 @@ class SampleTypesController < ApplicationController
   # GET /sample_types/1/edit
   def edit
     @sample_type = SampleType.find(params[:id])
+    render layout: 'aq2-plain'
   end
 
   # POST /sample_types.json

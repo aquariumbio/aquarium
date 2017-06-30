@@ -1,14 +1,22 @@
 <% provide(:title, 'Edit Sample Type') %>
 
-<h1><u><%= @sample_type.name %></u> Type Definition</h1>
+<%= content_for :controller do %>noCtrl<% end %>
 
-<div class='alert alert-info'>
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
-  <strong>Note:</strong> Changing a sample type
-  can have far reaching effects! Edit with care.
-</div>
+<% content_for :main do %>
+  <div layout-padding>
+    <h1><u><%= @sample_type.name %></u> Type Definition</h1>
 
-<%= render 'form' %>
+    <div class='alert alert-info'>
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong>Note:</strong> Changing a sample type
+      can have far reaching effects! Edit with care.
+    </div>
+
+    <%= render 'form' %>
+  </div>
+<% end %>
+
+
 
 
 

@@ -470,7 +470,22 @@
         $window.history.replaceState(null, document.title, "/browser");  
         cookie();
         init();
+
       }).catch(result => init())
+
+    } else if ( aq.url_params().stid ) {
+
+      AQ.SampleType.find(parseInt(aq.url_params().stid)).then(st => {
+        $scope.views.search.query = "";
+        $scope.views.search.sample_type = st.name;
+        $scope.views.search.user_filter = false;
+        $scope.views.search.project = "";
+        $scope.views.search.project_filter = false; 
+        $window.history.replaceState(null, document.title, "/browser");  
+        cookie();
+        init();     
+
+      }).catch(result => init())        
 
     } else {
       init();

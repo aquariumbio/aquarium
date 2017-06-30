@@ -1,52 +1,96 @@
-<% provide(:title, 'Sample Types') %>
+<% provide(:title, 'Sample Type Definitions') %>
 
-<h1>Sample Type Definitions</h1>
+<%= content_for :controller do %>noCtrl<% end %>
 
-<div class='alert alert-info'>
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
-  <strong>Note:</strong> Each entry on this list describes a type of
-  sample. The name is used to distinguish different kinds of samples
-  in item, object type, and interpreter views. The field names and
-  types are used when indexing, viewing, and editing samples of a given
-  type. When in doubt, do not create a new sample type. Instead, see
-  if your sample type is close enough to an existing sample type and
-  use that.
-</div>
+<%= content_for :class do %>sample-types<% end %>
 
-<table class='table'>
-  <tr>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Datatype/Fields</th>
-    <th>Quantity</th>
-    <th></th>
-    <th></th>
-  </tr>
+<% content_for :sidebar do %>
 
-<% @sample_types.each do |sample_type| %>
-  <tr>
-    <td><b><%= link_to sample_type.name, sample_type %></b></td>
-    <td><%= sample_type.description %></td>
-    <td>
-      <%= render partial: 'fields', locals: { sample_type: sample_type } %>
-    </td>
-    <% n = sample_type.samples.all.length
-       s = pluralize n, sample_type.name %>
-    <td><%= link_to s, samples_path( sample_type_id: sample_type.id )%></td>
-    <td><%= link_to 'Edit', edit_sample_type_path(sample_type) %></td>
-    <td><%= link_to(sample_type, method: :delete, data: { confirm: "Are you sure you want to delete #{sample_type.name}?"}) do %>
-                 <i class='icon-remove'></i>
-               <% end %></td>    
-  </tr>
+  <% flash.each do |key, value| %>
+    <div class='flash md-body-2'><%= value %></div>
+  <% end %>
+
+  <md-list ng-init="status.st = '<%= @first %>'">
+
+    <% @sample_types.each do |sample_type| %>
+      <md-list-item ng-click="status.st = '<%= sample_type.name %>'"
+                    ng-class="status.st == '<%= sample_type.name %>' ? 'md-body-2 selected' : 'md-body-2'">
+        <%= sample_type.name %>
+      </md-list-item>
+    <% end %>
+
+  </md-list>
+
 <% end %>
 
-</table>
-
-<br />
-
-<% if current_user && current_user.is_admin %>
-  <%= link_to 'New Sample type', new_sample_type_path, class: 'btn' %>
+<% content_for :specific_title do %>
+  &rang; {{status.st}}
 <% end %>
 
+<% content_for :main do %>
 
+    <% @sample_types.each do |sample_type| %>
+
+      <div ng-if="status.st == '<%= sample_type.name %>'" layout="column" layout-padding>
+
+        <p class="md-title"><%= sample_type.description %></p>
+
+        <% if sample_type.field_types.length > 0 %>
+          <div>
+            <%= render partial: 'fields', locals: { sample_type: sample_type } %>
+          </div>       
+        <% end %>
+
+        <div>There are 
+          <%= sample_type.samples.all.length %> 
+          <a href="/browser?stid=<%= sample_type.id %>"><%= sample_type.name.pluralize %></a> 
+          in the inventory
+        </div>
+
+        <p class="md-title">Containers</p>
+
+        <ul>
+          <% sample_type.object_types.each do |ot| %>
+            <li><b> <%= link_to ot.name, ot %></b>: <%= ot.description %></li>
+          <% end %>
+          <li><%= link_to 'Add', new_object_type_path(sample_type_id: sample_type.id), class: 'btn btn-mini' %></li>
+        </ul>
+
+        <% if sample_type.object_types.length == 0 %>
+          No containers.
+        <% end %>        
+
+      </div>
+
+    <% end %>
+
+  </div>
+
+<% end %>
+
+<% content_for :action3 do %>
+  <% if current_user && current_user.is_admin %>
+    <%= link_to 'New', new_sample_type_path, class: 'md-button md-raised md-primary' %>
+  <% end %>
+<% end %>
+
+<% content_for :action1 do %>
+  <% @sample_types.each do |sample_type| %>
+   <a href="/sample_types/<%= sample_type.id %>/edit" 
+      class='md-button md-raised' 
+      ng-if="status.st == '<%= sample_type.name %>'">Edit</a>
+   <% end %>
+<% end %>
+
+<% content_for :action2 do %>
+  <% @sample_types.each do |sample_type| %>
+   <span ng-if="status.st == '<%= sample_type.name %>'">
+     <%= link_to( 'Delete', 
+                  sample_type, 
+                  method: :delete, 
+                  data: { confirm: "Are you sure you want to delete #{sample_type.name}?"},
+                  class: 'md-button md-raised') %>
+   </span>
+   <% end %>
+<% end %>
 

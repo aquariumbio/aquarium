@@ -15,6 +15,8 @@
     // otherwise don't have any logic. Helps make the aq2.html.erb layout look
     // better.
 
+    $scope.status = {};
+
   }]);
 
 })();                    
