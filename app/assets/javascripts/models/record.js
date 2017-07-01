@@ -22,6 +22,7 @@ AQ.Record = function(model,data) {
       record.data_associations = das;
       aq.each(record.data_associations,(da) => {
         da.value = JSON.parse(da.object)[da.key];
+        da.upload = AQ.Upload.record(da.upload)
       });
       AQ.update();   
     });

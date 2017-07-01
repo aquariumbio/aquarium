@@ -12,6 +12,8 @@
 
 # Igmore the installation specific configuration file
 /config/initializers/aquarium.rb
+config/environments/development.rb
+config/environments/production.rb
 
 # Ignore the default SQLite database.
 /db/*.sqlite3
@@ -52,3 +54,7 @@ ots.json
 public/components
 
 .DS_Store
+
+
+
+

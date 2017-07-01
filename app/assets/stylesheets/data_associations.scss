@@ -53,3 +53,13 @@
   }
 
 }
+
+.download-link {
+
+  color: #08c;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+
+}

@@ -20,7 +20,11 @@ class Upload < ActiveRecord::Base
   end  
 
   def url
-    self.upload.url.split('?')[0]
+    self.upload.expiring_url(10)
+  end
+
+  def expiring_url
+    self.upload.expiring_url(10)
   end
 
   def path

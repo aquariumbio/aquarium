@@ -4,11 +4,15 @@ gem 'rails', '3.2.19'
 gem 'bootstrap-sass', '2.3.2.0'
 gem 'yaml_db'
 gem 'paperclip'
+
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'sass-rails',   '~> 3.2.3'
-gem 'db-charmer', :require => 'db_charmer'
+# gem 'db-charmer', :require => 'db_charmer'
 gem 'mysql2', "~> 0.3.17"
+
+gem 'aws-sdk', '< 1.8'
+gem 'nokogiri', '< 1.5'
 
 group :development do
   gem 'binding_of_caller'
@@ -35,12 +39,10 @@ gem "flot-rails"
 
 gem 'underscore-rails'
 
-# gem 'git'
-
 gem 'rails-patch-json-encode'
 gem 'oj'
 
 gem 'angular_rails_csrf'
 
-gem 'yard'
+# gem 'yard'
 gem 'rack-cors', :require => 'rack/cors'
