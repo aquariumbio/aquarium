@@ -70,4 +70,19 @@ Bioturk::Application.configure do
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
+
+  # Paperclip => S3
+  
+  config.paperclip_defaults = {
+    storage: :s3,
+    s3_host_name: "s3-#{ENV['AWS_REGION']}.amazonaws.com",
+    s3_permissions: :private,
+    s3_credentials: {
+      bucket: ENV.fetch('S3_BUCKET_NAME'),
+      access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
+      secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY'),
+      s3_region: ENV.fetch('AWS_REGION')
+    }
+  }
+
 end
