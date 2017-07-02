@@ -13,7 +13,8 @@ namespace :docs do
     "DataAssociation",
     "Operations",
     "Data Structures",
-    "Operation Lifetime"
+    "Operation Lifetime",
+    "BugReportStyle"
   ]
 
   task :md do 
