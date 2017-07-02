@@ -699,6 +699,15 @@ font-size: $noteFontSize;
   color: red;
 }
 
+.krill-upload-input {
+  display: none;
+}
+
+.krill-upload-list-heading {
+  font-weight: bold;
+  display: none;
+}
+
 .krill-timer {
   border: 1pt solid #eee;
   background: yellow;
@@ -756,6 +765,20 @@ font-size: $noteFontSize;
 .krill-log-steps {
   list-style-type: none;
   margin: 0 !important;
+}
+
+.krill-log-summary {
+  .header {
+    border-bottom: 1pt solid #bbb;
+  }
+  ul {
+    margin-left: 0px;
+    li {
+      .name {
+        font-weight: bold;
+      }
+    }
+  }
 }
 
 .krill-log-step {

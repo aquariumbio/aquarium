@@ -15,6 +15,10 @@
     // otherwise don't have any logic. Helps make the aq2.html.erb layout look
     // better.
 
+    AQ.init($http);
+    AQ.update = () => { $scope.$apply(); }
+    AQ.confirm = (msg) => { return confirm(msg); }
+
     $scope.status = {};
 
   }]);
