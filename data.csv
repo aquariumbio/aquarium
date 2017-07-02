@@ -1,0 +1,159 @@
+/Users/ericklavins/Development/aquarium/lib/pdl/core
+Aquarium Version 1259 Starting!
+Task,Month,Number of tasks,Total materials,Total labor
+Daily,Jan 2017,0,0.0,0.0
+Daily,Feb 2017,0,0.0,0.0
+Daily,Mar 2017,0,0.0,0.0
+Daily,Apr 2017,0,0.0,0.0
+Daily,May 2017,0,0.0,0.0
+Daily,Jun 2017,0,0.0,0.0
+Weekly,Jan 2017,0,0.0,0.0
+Weekly,Feb 2017,0,0.0,0.0
+Weekly,Mar 2017,0,0.0,0.0
+Weekly,Apr 2017,0,0.0,0.0
+Weekly,May 2017,0,0.0,0.0
+Weekly,Jun 2017,0,0.0,0.0
+Recombineering,Jan 2017,0,0.0,0.0
+Recombineering,Feb 2017,0,0.0,0.0
+Recombineering,Mar 2017,0,0.0,0.0
+Recombineering,Apr 2017,0,0.0,0.0
+Recombineering,May 2017,0,0.0,0.0
+Recombineering,Jun 2017,0,0.0,0.0
+Gibson Assembly,Jan 2017,0,0.0,0.0
+Gibson Assembly,Feb 2017,0,0.0,0.0
+Gibson Assembly,Mar 2017,0,0.0,0.0
+Gibson Assembly,Apr 2017,5,0.0,0.0
+Gibson Assembly,May 2017,0,0.0,0.0
+Gibson Assembly,Jun 2017,0,0.0,0.0
+Fragment Construction,Jan 2017,0,0.0,0.0
+Fragment Construction,Feb 2017,0,0.0,0.0
+Fragment Construction,Mar 2017,0,0.0,0.0
+Fragment Construction,Apr 2017,0,0.0,0.0
+Fragment Construction,May 2017,0,0.0,0.0
+Fragment Construction,Jun 2017,0,0.0,0.0
+Sequencing,Jan 2017,0,0.0,0.0
+Sequencing,Feb 2017,0,0.0,0.0
+Sequencing,Mar 2017,0,0.0,0.0
+Sequencing,Apr 2017,0,0.0,0.0
+Sequencing,May 2017,0,0.0,0.0
+Sequencing,Jun 2017,0,0.0,0.0
+Plasmid Verification,Jan 2017,0,0.0,0.0
+Plasmid Verification,Feb 2017,0,0.0,0.0
+Plasmid Verification,Mar 2017,0,0.0,0.0
+Plasmid Verification,Apr 2017,5,0.0,0.0
+Plasmid Verification,May 2017,0,0.0,0.0
+Plasmid Verification,Jun 2017,0,0.0,0.0
+Yeast Strain QC,Jan 2017,0,0.0,0.0
+Yeast Strain QC,Feb 2017,0,0.0,0.0
+Yeast Strain QC,Mar 2017,0,0.0,0.0
+Yeast Strain QC,Apr 2017,0,0.0,0.0
+Yeast Strain QC,May 2017,0,0.0,0.0
+Yeast Strain QC,Jun 2017,0,0.0,0.0
+Yeast Transformation,Jan 2017,0,0.0,0.0
+Yeast Transformation,Feb 2017,0,0.0,0.0
+Yeast Transformation,Mar 2017,0,0.0,0.0
+Yeast Transformation,Apr 2017,5,0.0,0.0
+Yeast Transformation,May 2017,0,0.0,0.0
+Yeast Transformation,Jun 2017,0,0.0,0.0
+Mutagenized Fragment Construction,Jan 2017,0,0.0,0.0
+Mutagenized Fragment Construction,Feb 2017,0,0.0,0.0
+Mutagenized Fragment Construction,Mar 2017,0,0.0,0.0
+Mutagenized Fragment Construction,Apr 2017,0,0.0,0.0
+Mutagenized Fragment Construction,May 2017,0,0.0,0.0
+Mutagenized Fragment Construction,Jun 2017,0,0.0,0.0
+Primer Order,Jan 2017,0,0.0,0.0
+Primer Order,Feb 2017,0,0.0,0.0
+Primer Order,Mar 2017,0,0.0,0.0
+Primer Order,Apr 2017,0,0.0,0.0
+Primer Order,May 2017,0,0.0,0.0
+Primer Order,Jun 2017,0,0.0,0.0
+Cytometer Reading,Jan 2017,0,0.0,0.0
+Cytometer Reading,Feb 2017,0,0.0,0.0
+Cytometer Reading,Mar 2017,0,0.0,0.0
+Cytometer Reading,Apr 2017,0,0.0,0.0
+Cytometer Reading,May 2017,0,0.0,0.0
+Cytometer Reading,Jun 2017,0,0.0,0.0
+E coli Strain QC,Jan 2017,0,0.0,0.0
+E coli Strain QC,Feb 2017,0,0.0,0.0
+E coli Strain QC,Mar 2017,0,0.0,0.0
+E coli Strain QC,Apr 2017,0,0.0,0.0
+E coli Strain QC,May 2017,0,0.0,0.0
+E coli Strain QC,Jun 2017,0,0.0,0.0
+Glycerol Stock,Jan 2017,0,0.0,0.0
+Glycerol Stock,Feb 2017,0,0.0,0.0
+Glycerol Stock,Mar 2017,0,0.0,0.0
+Glycerol Stock,Apr 2017,0,0.0,0.0
+Glycerol Stock,May 2017,0,0.0,0.0
+Glycerol Stock,Jun 2017,0,0.0,0.0
+Discard Item,Jan 2017,0,0.0,0.0
+Discard Item,Feb 2017,0,0.0,0.0
+Discard Item,Mar 2017,0,0.0,0.0
+Discard Item,Apr 2017,0,0.0,0.0
+Discard Item,May 2017,0,0.0,0.0
+Discard Item,Jun 2017,0,0.0,0.0
+Streak Plate,Jan 2017,0,0.0,0.0
+Streak Plate,Feb 2017,0,0.0,0.0
+Streak Plate,Mar 2017,0,0.0,0.0
+Streak Plate,Apr 2017,0,0.0,0.0
+Streak Plate,May 2017,0,0.0,0.0
+Streak Plate,Jun 2017,0,0.0,0.0
+Sequencing Verification,Jan 2017,0,0.0,0.0
+Sequencing Verification,Feb 2017,0,0.0,0.0
+Sequencing Verification,Mar 2017,0,0.0,0.0
+Sequencing Verification,Apr 2017,0,0.0,0.0
+Sequencing Verification,May 2017,0,0.0,0.0
+Sequencing Verification,Jun 2017,0,0.0,0.0
+Yeast Mating,Jan 2017,0,0.0,0.0
+Yeast Mating,Feb 2017,0,0.0,0.0
+Yeast Mating,Mar 2017,0,0.0,0.0
+Yeast Mating,Apr 2017,0,0.0,0.0
+Yeast Mating,May 2017,0,0.0,0.0
+Yeast Mating,Jun 2017,0,0.0,0.0
+Yeast Competent Cell,Jan 2017,0,0.0,0.0
+Yeast Competent Cell,Feb 2017,0,0.0,0.0
+Yeast Competent Cell,Mar 2017,0,0.0,0.0
+Yeast Competent Cell,Apr 2017,0,0.0,0.0
+Yeast Competent Cell,May 2017,0,0.0,0.0
+Yeast Competent Cell,Jun 2017,0,0.0,0.0
+Plasmid Extraction,Jan 2017,0,0.0,0.0
+Plasmid Extraction,Feb 2017,0,0.0,0.0
+Plasmid Extraction,Mar 2017,0,0.0,0.0
+Plasmid Extraction,Apr 2017,0,0.0,0.0
+Plasmid Extraction,May 2017,0,0.0,0.0
+Plasmid Extraction,Jun 2017,0,0.0,0.0
+Ecoli Transformation,Jan 2017,0,0.0,0.0
+Ecoli Transformation,Feb 2017,0,0.0,0.0
+Ecoli Transformation,Mar 2017,0,0.0,0.0
+Ecoli Transformation,Apr 2017,0,0.0,0.0
+Ecoli Transformation,May 2017,0,0.0,0.0
+Ecoli Transformation,Jun 2017,0,0.0,0.0
+Yeast Cytometry,Jan 2017,0,0.0,0.0
+Yeast Cytometry,Feb 2017,0,0.0,0.0
+Yeast Cytometry,Mar 2017,0,0.0,0.0
+Yeast Cytometry,Apr 2017,0,0.0,0.0
+Yeast Cytometry,May 2017,0,0.0,0.0
+Yeast Cytometry,Jun 2017,0,0.0,0.0
+Bacteria Media,Jan 2017,0,0.0,0.0
+Bacteria Media,Feb 2017,0,0.0,0.0
+Bacteria Media,Mar 2017,0,0.0,0.0
+Bacteria Media,Apr 2017,0,0.0,0.0
+Bacteria Media,May 2017,0,0.0,0.0
+Bacteria Media,Jun 2017,0,0.0,0.0
+Yeast YPAD,Jan 2017,0,0.0,0.0
+Yeast YPAD,Feb 2017,0,0.0,0.0
+Yeast YPAD,Mar 2017,0,0.0,0.0
+Yeast YPAD,Apr 2017,0,0.0,0.0
+Yeast YPAD,May 2017,0,0.0,0.0
+Yeast YPAD,Jun 2017,0,0.0,0.0
+Yeast SDO or SC,Jan 2017,0,0.0,0.0
+Yeast SDO or SC,Feb 2017,0,0.0,0.0
+Yeast SDO or SC,Mar 2017,0,0.0,0.0
+Yeast SDO or SC,Apr 2017,0,0.0,0.0
+Yeast SDO or SC,May 2017,0,0.0,0.0
+Yeast SDO or SC,Jun 2017,0,0.0,0.0
+Direct Purchase,Jan 2017,0,0.0,0.0
+Direct Purchase,Feb 2017,0,0.0,0.0
+Direct Purchase,Mar 2017,0,0.0,0.0
+Direct Purchase,Apr 2017,0,0.0,0.0
+Direct Purchase,May 2017,0,0.0,0.0
+Direct Purchase,Jun 2017,0,0.0,0.0
