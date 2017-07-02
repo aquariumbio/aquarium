@@ -83,31 +83,31 @@ module Bioturk
     # representing those models. If you don't do this, you get "wrong constant" errors in
     # plugins and possibly other places.
     config.after_initialize do
-        Job.count
-        Sample.count
-        Item.count
-        User.count
-        Metacol.count
-        Group.count
-        Locator.count
-        Wizard.count
-        SampleType.count
-        ObjectType.count
-        TaskPrototype.count
-        Task.count
-        Parameter.count
-        DataAssociation.count
-        Upload.count
-        OperationType.count
-        FieldType.count
-        FieldValue.count
-        AllowableFieldType.count
-        Operation.count
-        VirtualOperation.count
-        Plan.count
-        Wire.count
-        PlanAssociation.count
-        JobAssociation.count
+        Job.count if Job.table_exists?
+        Sample.count if Sample.table_exists?
+        Item.count if Item.table_exists?
+        User.count if User.table_exists?
+        Metacol.count if Metacol.table_exists?
+        Group.count if Group.table_exists?
+        Locator.count if Locator.table_exists?
+        Wizard.count if Wizard.table_exists?
+        SampleType.count if SampleType.table_exists?
+        ObjectType.count if ObjectType.table_exists?
+        TaskPrototype.count if TaskPrototype.table_exists?
+        Task.count if Task.table_exists?
+        Parameter.count if Parameter.table_exists?
+        DataAssociation.count if DataAssociation.table_exists?
+        Upload.count if Upload.table_exists?
+        OperationType.count if OperationType.table_exists?
+        FieldType.count if FieldType.table_exists?
+        FieldValue.count if FieldValue.table_exists?
+        AllowableFieldType.count if AllowableFieldType.table_exists?
+        Operation.count if Operation.table_exists?
+        VirtualOperation.count if VirtualOperation.table_exists?
+        Plan.count if Plan.table_exists?
+        Wire.count if Wire.table_exists?
+        PlanAssociation.count if PlanAssociation.table_exists?
+        JobAssociation.count if JobAssociation.table_exists?
     end
 
     #Added to enable CORS

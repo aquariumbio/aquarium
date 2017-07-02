@@ -8,7 +8,6 @@ gem 'paperclip'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'sass-rails',   '~> 3.2.3'
-# gem 'db-charmer', :require => 'db_charmer'
 gem 'mysql2', "~> 0.3.17"
 
 gem 'aws-sdk', '< 1.8'
@@ -24,7 +23,6 @@ end
 # in production environments by default.
 group :assets do
   gem 'coffee-rails'
-  # gem 'uglifier', '>= 1.0.3'
   gem 'closure-compiler'
   gem 'bcrypt-ruby', "~> 3.0.0"
 end
@@ -44,5 +42,4 @@ gem 'oj'
 
 gem 'angular_rails_csrf'
 
-# gem 'yard'
 gem 'rack-cors', :require => 'rack/cors'

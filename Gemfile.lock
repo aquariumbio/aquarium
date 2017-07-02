@@ -22,6 +22,7 @@ GEM
       activesupport (= 3.2.19)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
+    activerecord-native_db_types_override (0.2.1)
     activeresource (3.2.19)
       activemodel (= 3.2.19)
       activesupport (= 3.2.19)
@@ -181,6 +182,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord-native_db_types_override
   angular_rails_csrf
   aws-sdk (< 1.8)
   bcrypt-ruby (~> 3.0.0)
