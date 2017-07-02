@@ -34,8 +34,8 @@
       replace: true,
 
       template: "<label>"
-              + "  <span ng-if='record.uploading'>Busy...</span>"
-              + "  <span ng-if='!record.uploading'>Upload</span>"              
+              + "  <span ng-if='record.uploading' class='md-body-2'>Busy...</span>"
+              + "  <span ng-if='!record.uploading' class='md-body-2'>Upload</span>"              
               + "    <input type=file"
               + "      id='upload'"
               + "      file='upload'"
@@ -49,16 +49,14 @@
         $(element).find('#upload').fileupload({
           dataType: "json",
           add: function(e,data) {
-            console.log("ASD");
             data.submit();
             scope.record.uploading = true;
             AQ.update();
           },        
           done: function(e,data) {
-            console.log("BSD");
             var da = scope.record.new_data_association();
             delete da.upload;
-            da.upload = data.result;
+            da.upload = AQ.Upload.record(data.result);
             da.upload_id = data.result.id;
             da.url = data.result.url;
             scope.record.uploading = false;

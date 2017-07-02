@@ -3,6 +3,16 @@
   position: fixed;
   z-index: 10000;
 
+  .upload-button {
+    height: 36px;
+    padding: 0 6px 0 6px;
+    margin: 6px;
+    label {
+      padding: 0;
+      margin: 0;
+    }
+  }  
+
   .item-modal-content {
 
     width: 55%;
