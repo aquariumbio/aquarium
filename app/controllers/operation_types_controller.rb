@@ -36,7 +36,9 @@ class OperationTypesController < ApplicationController
       ot.new_code(name, params[name]["content"])
     end
 
-    render json: ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation])
+    j = ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation])
+
+    render json: j
 
   end
 
