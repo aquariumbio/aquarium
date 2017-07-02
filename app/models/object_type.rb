@@ -4,6 +4,8 @@ class ObjectType < ActiveRecord::Base
                   :vendor, :unit, :image, :cost, :release_method, :release_description,
                   :sample_type_id, :created_at, :prefix
 
+  belongs_to :sample_type
+
   validates :name, :presence => true
   validates :unit, :presence => true
   validates :min, :presence => true
@@ -15,6 +17,30 @@ class ObjectType < ActiveRecord::Base
   validate :pos
   validate :proper_release_method
   validates_uniqueness_of :name
+
+  def rows
+    if handler == 'collection'
+      read_attribute(:rows) ? read_attribute(:rows) : 1
+    else
+      nil
+    end
+  end
+
+  def columns
+    if handler == 'collection'
+      read_attribute(:columns) ? read_attribute(:columns) : 12
+    else
+      nil
+    end
+  end
+
+  def rows=(value)
+    write_attribute :rows, value
+  end
+
+  def columns=(value)
+    write_attribute :columns, value
+  end
 
   def min_and_max
     errors.add(:min, "min must be greater than zero and less than or equal to max") unless
@@ -116,6 +142,3 @@ class ObjectType < ActiveRecord::Base
   end
 
 end
-
-
- 

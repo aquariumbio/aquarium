@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html ng-app='aquarium' ng-controller='layoutCtrl' ng-cloak>
+
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title><%= full_title(yield(:title)) %></title>
+
+    <%= render partial: 'layouts/vendor_code' %>
+    <%= stylesheet_link_tag    "application", media: "all" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+    <%= favicon_link_tag 'favicon.ico' %>      
+
+  <script>
+
+    $(function() {
+      $('.scrollable').on('wheel', function ( e ) {
+        var e0 = e.originalEvent,
+            delta = e0.wheelDelta || -e0.detail;
+        this.scrollTop -= delta/4;
+        e.preventDefault();
+      });
+    });
+
+    $(function() {
+      $('.not-scrollable').on('wheel', function ( e ) {
+        e.preventDefault();
+      });
+    });
+
+  </script>
+
+  <style>
+
+    body {
+      padding: 0 !important;
+      margin: 0 !important;
+      /*overflow: hidden!important;*/
+      max-width: 100%!important;
+      max-height: 100%!important;
+      position: relative!important;
+    }
+
+    body, html {
+      height: 100%;
+    }
+
+    html {
+      position: fixed;
+    }
+
+    <% if content_for? :wider_sidebar %>
+
+      md-sidenav, 
+      md-sidenav.md-locked-open, 
+      md-sidenav.md-closed.md-locked-open-add-active {
+          width: 400px !important;
+          max-width: 400px !important;
+      }     
+
+      .main {
+        width: calc(100vw - 400px) !important;
+      }      
+
+    <% end %>
+
+  </style>
+
+  </head>
+
+  <body layout='column' class='aq2'>
+
+    <%= render partial: '/layouts/aq2header' %>
+
+      <% if content_for? :controller %>
+        <div class="aq2-navigation <%= yield :class %>" 
+             layout='row' 
+             ng-controller="<%= yield :controller %>">
+      <% else %>
+        <div layout='row' class="<%= yield :class %>">
+      <% end %>
+
+      <%= yield %>
+
+      <md-sidenav class="site-sidenav md-sidenav-left"  ng-show="true"
+                  md-component-id="sidebar" hide-print md-disable-backdrop
+                  md-is-locked-open="true" style="z-index: 1">
+
+        <md-content flex role="navigation" class='page-specific-nav scrollable'>
+           <%= yield :sidebar %>
+        </md-content>
+
+      </md-sidenav>
+
+      <div class="content-container" layout="column" tabIndex="-1" flex>
+
+        <md-toolbar class="specific-toolbar not-scrollable">
+
+          <div class="md-toolbar-tools">
+
+            <h2 flex md-truncate>
+              <%= yield :title %>
+              <% if content_for? :specific_title %>
+                <%= yield :specific_title %>
+              <% end %>
+            </h2>
+
+            <% if content_for? :action1 %>
+              <%= yield :action1 %>
+            <% end %>
+
+            <% if content_for? :action2 %>
+              <%= yield :action2 %>
+            <% end %>
+
+            <% if content_for? :action3 %>
+              <%= yield :action3 %>
+            <% end %>    
+
+            <% if content_for? :action4 %>
+              <%= yield :action4 %>
+            <% end %>                        
+
+          </div>
+
+        </md-toolbar>
+
+        <md-content class='main scrollable'>
+           <%= yield :main %>
+        </md-content>
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

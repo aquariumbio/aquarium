@@ -1,0 +1,139 @@
+
+<script type="text/ng-template" id="plan_viewer">
+
+  <!-- PLAN TEMPLATE -->
+
+  <div class="md-subhead" ng-show="plan.cost_total != null">
+    {{plan.budget.name}}:  {{plan.cost_so_far|currency}} / {{plan.cost_total|currency}}
+  </div>
+
+  <da record="plan"></da>
+  <div class='md-subhead'>Operations</div>
+  <div ng-repeat="operation in plan.operations"
+       ng-include="'operation_viewer'"></div>
+
+</script>
+
+<script type="text/ng-template" id="operation_viewer">
+
+  <!-- OPERATION TEMPLATE -->
+
+  <div layout="row" layout-wrap
+       ng-class="operation.open ? 'plan-header plan-row plan-row-open' : 'plan-header plan-row'">
+    <div flex="25">
+      <opener model="operation.open" class='no-highlight clickable no-margin'></opener>&nbsp;
+      <span class='md-body-2'>{{operation.id}}: {{operation.operation_type.name}}</span>
+    </div>
+    <div flex="55">
+      <span ng-include="'job_info'" ng-include="'job_info'"></span>
+    </div> 
+    <div flex="10">
+      <span ng-class="'md-body-2 status-'+operation.status">{{operation.status}}</span>
+    </div>
+    <div flex="10" layout="row" layout-align="end center" ng-if="operation.status == 'done' && !operation.open">
+      <span class="md-body-2">{{operation.cost.total|currency}}</span>
+    </div>
+    <div flex="10" layout="row" layout-align="end center" ng-if="operation.open">
+      <md-menu layout="row">
+
+        <div class='detail-menu clickable'
+             ng-click="openMenu($mdMenu, $event)">
+          <ng-md-icon icon="menu" size="20" aria-label="Menu"></ng-md-icon>
+        </div>
+
+        <md-menu-content width="4" class="scrollable" flex>
+
+          <md-menu-item aria-label="Add Data">
+            <md-button ng-click="operation.new_data_association()">Add Data</md-button>
+          </md-menu-item>
+
+          <md-menu-item aria-label="Upload">
+            <md-button><upload record='oepration'></upload></md-button>
+          </md-menu-item>
+
+        </md-menu-content>
+
+      </md-menu>
+    </div>   
+  </div>
+
+  <!-- DETAILS -->
+
+  <div layout="column" layout-align="start stretch" ng-if="operation.open" class="plan-row plan-details"> 
+
+    <da record="operation"
+        ng-if="operation.data_associations.length > 0"></da>
+
+    <div layout="row" layout-align="space-between center">
+      <div class='md-subhead'>Inputs, Outputs, and Parameters</div>
+    </div>
+
+    <div layout="column" ng-include="'op_io'"></div> 
+
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="op_io">
+
+  <!-- FIELD VALUE TEMPLATE -->
+
+  <div layout="row" ng-repeat-start="fv in operation.field_values"
+       ng-class="fv.open ? 'plan-header plan-row plan-row-open' : 'plan-header plan-row'">
+
+    <div flex="20">
+      {{fv.name}} <span class='small'>({{ fv.child_sample || fv.item  || !fv.value ? fv.role : 'param'}})</span>
+    </div>
+
+    <div flex="10" ng-if="fv.row == null">
+      <div item="fv.item" container="fv.item.object_type" sample="fv.item.sample"></div>
+    </div> 
+
+    <div flex="10" ng-if="fv.row != null">
+      <div item="fv.item" container="fv.item.object_type" sample="fv.item.sample ? fv.item.sample : fv.child_sample"></div>
+      <span ng-if="fv.row != null">[{{fv.row}},{{fv.column}}]</span>
+    </div>
+
+    <div flex="10" ng-if="!fv.value">{{fv.item.location}}</div> 
+    <div flex="15" ng-if="!fv.value">{{fv.item.object_type.name}}</div>         
+    <div flex="55" ng-if="!fv.value">{{fv.child_sample.name}}</div> 
+    <div flex="80" ng-if="fv.value">{{fv.value}}</div>  
+
+  </div>
+
+  <div layout="column" ng-repeat-end layout-align="start stretch" ng-if="fv.open" class="plan-row plan-details">  
+
+    <div layout="row" layout-wrap layout-align="space-between center" ng-if="fv.open && fv.item">
+        <span class='md-subhead' ng-if="fv.item.data_associations.length == 0">No item Data</span>
+    </div>     
+
+    <da ng-if="fv.open" record="fv.item"></da>  
+
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="job_info">
+
+  <!-- JOB TEMPLATE -->
+
+  <span ng-if="operation.jobs && operation.jobs.length > 0">
+    <span ng-repeat="job in operation.jobs">
+      <span ng-bind-html="'Job ' + job.url | trust"></span>
+      <span ng-if="job.pc == -2">
+        <span ng-bind-html="'performed by ' + job.user.url | trust"></span>
+        on {{operation.jobs[operation.jobs.length-1].updated_at|date}}
+      </span> 
+      <span ng-if="job.pc == -1">
+        batched on {{operation.jobs[operation.jobs.length-1].created_at|date}}
+      </span>
+      <span ng-if="job.pc >= 0">
+        <span ng-bind-html="'last updated by ' + job.user.url | trust"></span>
+        on {{operation.jobs[operation.jobs.length-1].updated_at|date}}
+      </span>
+    </span>
+  </span>
+
+</script>
+
+

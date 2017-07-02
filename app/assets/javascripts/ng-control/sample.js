@@ -5,10 +5,11 @@
   try {
     w = angular.module('aquarium'); 
   } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace']); 
+    w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
   } 
 
-  w.controller('sampleCtrl', [ '$scope', '$http', '$attrs', function ($scope,$http,$attrs) {
+  w.controller('sampleCtrl', [ '$scope', '$http', '$attrs', 
+                    function (  $scope,   $http,   $attrs ) {
 
     $scope.user = new User($http);
 
@@ -107,10 +108,12 @@
     }     
 
     $scope.allowed = function(sample) {
-      var admin = aq.where($scope.user.current.groups,function(g) {
-        return g.name == 'admin';
-      });
-      return admin.length > 0 || $scope.user.current.id == sample.user_id;
+      if ( $scope.user.current ) {
+        var admin = aq.where($scope.user.current.groups,function(g) {
+          return g.name == 'admin';
+        });
+        return admin.length > 0 || $scope.user.current.id == sample.user_id;
+      }
     }    
 
     $scope.toggle_inventory = function(sample,val) {

@@ -1,5 +1,7 @@
 class ParametersController < ApplicationController
 
+  before_filter :up_to_date_user    
+
   before_filter {
     unless current_user && current_user.is_admin
       redirect_to root_path, notice: "Administrative privileges required to access parameters."
@@ -9,12 +11,14 @@ class ParametersController < ApplicationController
   # GET /parameters
   # GET /parameters.json
   def index
-    @parameters = Parameter.all
+    @parameters = Parameter.where(user_id: nil)
+    @parameter = Parameter.new
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html { render layout: 'aq2' }
       format.json { render json: @parameters }
     end
+
   end
 
   # GET /parameters/1
@@ -42,6 +46,7 @@ class ParametersController < ApplicationController
   # GET /parameters/1/edit
   def edit
     @parameter = Parameter.find(params[:id])
+    render layout: 'aq2-plain'
   end
 
   # POST /parameters

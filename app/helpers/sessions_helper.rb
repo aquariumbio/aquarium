@@ -32,6 +32,12 @@ module SessionsHelper
     end
   end
 
+  def up_to_date_user
+    unless current_user.up_to_date
+      redirect_to current_user
+    end
+  end
+
   def sign_out
     self.current_user = nil
     cookies.delete(remember_token_symbol)

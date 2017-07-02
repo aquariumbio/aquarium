@@ -8,7 +8,7 @@ module Krill
 
     def show
 
-      page = ShowBlock.new.run(&Proc.new)
+      page = ShowBlock.new(self).run(&Proc.new)
 
       # increment pc
       @job ||= Job.find(jid)
@@ -22,8 +22,18 @@ module Krill
         mutex().synchronize { thread_status().running = false }
         Thread.stop
 
-        # get technician input and return it
-        JSON.parse(@job.reload.state, symbolize_names: true).last[:inputs]
+        # get technician input 
+        input = JSON.parse(@job.reload.state, symbolize_names: true).last[:inputs]
+
+        # populate operations with table input data
+        input[:table_inputs].each do |ti|
+          op = operations.find { |op| op.id == ti[:opid] }
+          op.temporary[ti[:key].to_sym] = ti[:value].to_f if op && ti[:type] == 'number'
+          op.temporary[ti[:key].to_sym] = ti[:value]      if op && ti[:type] != 'number'          
+        end
+
+        # return the technician input 
+        input
 
       else
 
@@ -102,6 +112,17 @@ module Krill
           end
 
           i[var] = j[:select][:choices][dft]
+
+        elsif j[:table]
+
+          j[:table].each do |row|
+            row.each do |entry|
+              if entry.class == Hash && entry[:type]
+                op = operations.find { |op| op.id == entry[:operation_id] }
+                op.temporary[entry[:key]] = entry[:default] if op
+              end
+            end
+          end
 
         end
 

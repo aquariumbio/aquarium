@@ -1,49 +1,15 @@
-<div ng-class="browser_control_class('create')" 
-     ng-click="select_view('create')"
-     ng-show="sample_types">
+<div layout="row"  layout-align="center center" layout-padding ng-if="projects && sample_names && sample_type_names">
 
-  <div class='project-heading project-expander'>
-    New Samples
-  </div>
+    <label class="md-button md-raised upload-button">
+      Upload <input type=file
+                    id="spreadsheet"
+                    file="spreadsheet"
+                    style="display: none;"
+                    custom-on-change="upload_change">
+    </label>
 
-  <br />
-
-  <span>
-
-    <div class="btn-group">
-
-      <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
-        Create <span class="caret"></span>
-      </a>
-
-      <ul class="dropdown-menu scrollable-menu-small">
-        <li ng-repeat="st in sample_types"><a href="#" ng-click="new_sample(st)">{{st.name}}</a></li>
-      </ul>
-
-    </div>  
-
-    <a href="#" class='btn btn-small btn-primary controls'
-       ng-click="save_new_samples()"
-       ng-if="views.create.samples.length > 0">
-      Save
-    </a>
-
-    <div style="margin-top: 10px">
-
-      <label class="btn btn-default btn-file btn-small">
-        Upload Spreadsheet <input type=file
-                        id="spreadsheet"
-                        file="spreadsheet"
-                        style="display: none;"
-                        custom-on-change="upload_change">
-      </label>
-
-      <div ng-if="spreadsheet_name" style="margin-top: 10px">
-        <a href='#' class='btn btn-small btn-primary' ng-click="upload()">Upload</a>
-      </div>
-
-    </div>      
-
-  </span> 
+    <div ng-if="spreadsheet_name" style="margin-top: 10px">
+      <a href='#' class='btn btn-small btn-primary' ng-click="upload()">Upload</a>
+    </div>
 
 </div>

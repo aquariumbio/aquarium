@@ -13,7 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap
-//= require highcharts
 //= require jquery.ui.datepicker
 //= require jquery.ui.menu
 //= require jquery.ui.autocomplete
@@ -24,14 +23,5 @@
 //= require jquery.flot.resize
 //= require jquery.flot.time
 //= require underscore
-//= require d3
-//= require joint.nojquery
-//= require joint.layout.DirectedGraph
-//= require ace-rails-ap
-//= require ace/mode-ruby
-//= require angular
-//= require angular-resource
-//= require angular-cookies
-//= require go
 //= require_tree .
 

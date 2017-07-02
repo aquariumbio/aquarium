@@ -407,6 +407,31 @@ font-size: $noteFontSize;
   background: lightblue;
 }
 
+.krill-td-input {
+  
+}
+
+.krill-table-input {
+    display: inline-block;    
+    padding: 0;
+    margin: 0 !important;
+    border: none !important;
+    height: 100% !important;
+    line-height: 100%;
+    -webkit-appearance:none;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important; 
+}
+
+.krill-table-input-large {
+  font-size: 14pt !important;
+}
+
+.krill-table-input-prompt {
+  color: #aaa;
+}
+
 .krill-td-check:hover {
     outline: 2pt solid lightblue;
     cursor: pointer;
@@ -415,6 +440,10 @@ font-size: $noteFontSize;
 .krill-td-selected {
   background: blue;
   color: white;
+}
+
+.krill-td-null-cell {
+  background: yellow;
 }
 
 .td-filled-slot {
@@ -670,6 +699,15 @@ font-size: $noteFontSize;
   color: red;
 }
 
+.krill-upload-input {
+  display: none;
+}
+
+.krill-upload-list-heading {
+  font-weight: bold;
+  display: none;
+}
+
 .krill-timer {
   border: 1pt solid #eee;
   background: yellow;
@@ -726,6 +764,21 @@ font-size: $noteFontSize;
 
 .krill-log-steps {
   list-style-type: none;
+  margin: 0 !important;
+}
+
+.krill-log-summary {
+  .header {
+    border-bottom: 1pt solid #bbb;
+  }
+  ul {
+    margin-left: 0px;
+    li {
+      .name {
+        font-weight: bold;
+      }
+    }
+  }
 }
 
 .krill-log-step {

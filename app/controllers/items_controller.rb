@@ -100,12 +100,36 @@ class ItemsController < ApplicationController
     i = Item.find(params[:id])
     i.mark_as_deleted
     flash[:success] = "Item #{params[:id]} has been deleted."
-    if params[:sample_id]
-      redirect_to sample_url :id => params[:sample_id]
-    else
-      redirect_to object_type_url :id => i.object_type_id
-    end
 
+    respond_to do |format|
+      format.html {
+        puts "HTML"
+        if params[:sample_id]
+          redirect_to sample_url :id => params[:sample_id]
+        else
+          redirect_to object_type_url :id => i.object_type_id
+        end
+      }
+      format.json { 
+        puts "JSON"
+        render json: i
+      }
+    end    
+
+  end
+
+  def move
+    i = Item.find(params[:id])
+    i.move_to params[:location]
+    render json: { message: "Item #{i.id} successfully moved to #{i.location}" } if i.errors.empty?
+    render json: { error: "Could not move item #{i.id} to #{params[:location]}: #{i.errors.full_messages.join(', ')}" } unless i.errors.empty?  
+  end
+
+  def store
+    i = Item.find(params[:id])
+    i.store
+    render json: i if i.errors.empty?
+    render json: { error: "Could not move item #{i.id} to #{params[:location]}: #{i.errors.full_messages.join(', ')}" }, status: 422 unless i.errors.empty?  
   end
 
   def update

@@ -1,0 +1,82 @@
+<% provide(:title, 'Planner') %>
+
+<div ng-app="aquarium" 
+     ng-controller="plannerCtrl as planner" 
+     class='planner'>
+
+  <%= render partial: "/fields/field_type" %>  
+  <%= render partial: "/fields/field_value" %>  
+  <%= render partial: "operation" %> 
+  <%= render partial: "/data_associations/list" %>  
+
+  <script type="text/ng-template" id="plan_list">
+    <div ng-class='plan_choice_class(plan)' ng-click="select_plan(plan)">
+      {{plan.id}}. {{plan.goals[0].operation_type.name}}:
+      <span class="op-goal" ng-repeat="output in plan.goals[0].outputs">{{output.child_sample.name}}</span>
+    </div>
+  </script>
+
+  <div class='two-column' ng-if="ready">
+
+    <div class='two-column-left'>
+
+      <div class="two-column-control">
+
+        <h5>Under Construction</h5>
+
+        <ul class="plan-list">
+          <li ng-repeat="plan in plans | filter: { status: 'Under Construction' }" ng-include="'plan_list'"></li>
+        </ul>
+
+        <button class='btn btn-mini btn-primary' ng-click="set_mode('choose')">New</button>        
+
+      </div>
+
+      <div class="two-column-control">
+
+        <h5>Running</h5>
+
+        <ul class="plan-list">
+          <li ng-repeat="plan in plans | filter: { status: 'Running' }" ng-include="'plan_list'"></li>
+        </ul>
+
+      </div>
+
+      <div class="two-column-control">
+
+        <h5>Error</h5>
+
+        <ul class="plan-list">
+          <li ng-repeat="plan in plans | filter: { status: 'Error' }" ng-include="'plan_list'"></li>
+        </ul>        
+
+      </div>      
+
+      <div class="two-column-control">
+
+        <h5>Completed</h5>
+
+        <ul class="plan-list">
+          <li ng-repeat="plan in plans | filter: { status: 'Completed' }" ng-include="'plan_list'"></li>
+        </ul>        
+
+      </div>
+
+    </div>
+ 
+    <div class='two-column-right'>    
+      <div  style="margin-left: 15px">
+        <%= render partial: "main" %>
+        <%= render partial: "choose_goal" %>
+        <%= render partial: "build_plan" %>
+        <%= render partial: "view_edit_plan" %>
+      </div>
+    </div>
+
+  </div>
+
+  <div ng-if="!ready">
+    Loading...
+  </div>
+
+</div>

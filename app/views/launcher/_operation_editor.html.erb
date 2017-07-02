@@ -1,0 +1,70 @@
+<script type="text/ng-template" id="operation_editor">
+
+  <!-- Displays an operation editor, allowing the user to enter the samples and items
+       needed to add the operation to a plan and launch it -->
+
+  <div class='operation aq-list'>
+
+    <div ng-repeat="ft in operation.operation_type.field_types | 
+                    filter: { role: 'output', ftype: 'sample' }"
+         ng-if="!is_predecessor && operation.operation_type.num_outputs() > 0" 
+         ng-include="'io_editor'"
+         class='goal'>
+    </div>
+
+    <ul>
+
+      <li>
+
+        <node ng-click="plan.current_operation = operation; plan.current_fv = null"
+              ng-class="operation == plan.current_operation ? 'node-selected' : ''">
+
+          <span class="collapse-open" ng-if="!operation.closed && operation.inputs.length != 0">
+            <a href="#" ng-click="operation.closed = true">&#9660;</a>
+          </span>
+
+          <span class="collapse-closed" ng-if="operation.closed && operation.inputs.length != 0">
+            <a href="#" ng-click="operation.closed = false">&#9658;</a>
+          </span>
+
+          <span class="collapse-closed" ng-if="operation.inputs.length == 0">&#9679;</span>
+          <span ng-class="operation.inputs.length == 0 ? 'no-inputs' : ''">{{operation.operation_type.name}}</span>
+
+          <span class='success-rate'>({{100*operation.operation_type.stats.success|number: 1}}%)</span>
+          <span class='no-cost' ng-if='operation.cost === null'>Cost undetermined</span>      
+          <span class='cost' ng-if='operation.cost !== null'>{{operation.cost|currency}}</span>
+
+          <span class='cancel pull-right'>
+            <a href="#" ng-click="remove_operation(operation); plan.unwire(operation)">&times;</a>
+          </span> 
+
+        </node>
+
+        <ul>
+
+          <li ng-repeat="tv in operation.types_and_values" ng-if="!operation.closed">
+            <div sampleselect 
+                 ng-if="!tv.array_add_button"
+                 ft="tv.type" operation="operation" fv="tv.value" focus="io_focus" plan="plan" 
+                 class="no-highlight">
+            </div>
+            <div ng-if="tv.array_add_button">
+              <a href='#' class='btn btn-mini' ng-click="operation.array_add(tv.type)">+</a>
+            </div>
+          </li>
+
+          <li ng-if="operation.operation_type.num_inputs() > 0 && !operation.closed"
+              ng-repeat="ft in operation.operation_type.field_types |
+                            filter: { role: 'input', ftype: '!sample' }"
+              ng-include="'parameter_editor'">
+          </li>
+
+        </ul>
+
+      </li>
+
+    </ul>
+
+  </div>
+
+</script>

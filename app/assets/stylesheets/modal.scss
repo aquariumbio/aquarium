@@ -6,7 +6,7 @@
   left:0;
   width:100%;
   height:100%;
-  background-color:#000000;
+  background-color:black;
   opacity: 0.5;
 }
 
@@ -24,7 +24,7 @@
   -webkit-transform: translate(-50%, -50%);
   -moz-transform: translate(-50%, -50%);
 
-  background-color: #fff;
+  background-color: #fff !important;
   box-shadow: 4px 4px 80px #000;
 
   overflow: scroll;

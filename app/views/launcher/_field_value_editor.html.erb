@@ -1,0 +1,153 @@
+<script type="text/ng-template" id="field_value_editor">
+
+  <md-content class="field-value-editor" ng-if="mode=='new'">
+
+    <div class="title">
+      <h1 class="md-title">{{plan.current_operation.operation_type.name}}</h1>      
+      <h1 class="md-subhead">{{plan.current_fv.name}} ({{plan.current_fv.role}})</h1>
+    </div>
+
+      <md-subheader class="md-no-sticky">
+        Container Type
+      </md-subheader>
+
+      <md-list class='md-compact-list'>
+
+        <md-list-item ng-repeat="aft in plan.current_fv.field_type.allowable_field_types">
+
+          <md-checkbox
+            ng-click="plan.current_operation.set_aft(plan.current_fv.field_type,aft)"
+            ng-checked="plan.current_operation.form[plan.current_fv.role][plan.current_fv.name].aft_id == aft.id"
+            ng-disabled="plan.current_fv.field_type.allowable_field_types.length === 1">
+          </md-checkbox>
+
+          <p>{{aft.object_type_id ? aft.object_type.name : 'No container'}}</p>
+
+        </md-list-item>
+
+      </md-list>
+
+      <div ng-if="plan.current_fv.items.length > 0" class="nomargin">
+
+        <md-subheader class="md-no-sticky">
+          Inventory
+          <span ng-if="plan.current_fv.wired">(Not Used in Plan)</span>
+        </md-subheader>
+
+        <md-list class='md-compact-list' ng-if="!plan.current_fv.items[0].collection"> <!-- ITEMS /////////////////////////////// -->
+
+          <md-list-item class="md-compact" 
+            ng-repeat="item in plan.current_fv.items" 
+            ng-if="!item.collection">
+
+            <md-checkbox
+              ng-click="select_item(plan.current_fv,item)"
+              ng-checked="item.selected && !plan.current_fv.wired"
+              ng-disabled="plan.current_fv.wired || plan.current_fv.role == 'output'">
+            </md-checkbox>
+
+            <div item="item" container="aft.object_type" sample="item.sample"></div>
+            <span flex></span>
+            <p>{{item.location}}</p>
+
+          </md-list-item>
+
+        </md-list>
+
+        <md-list ng-if="plan.current_fv.items[0].collection"> <!-- COLLECTIONS /////////////////////////////////////////////////// -->
+
+          <md-list-item ng-repeat="item in plan.current_fv.items"
+              class="md-3-line"
+              ng-if="item.collection"
+              ng-init="choose_default_part(plan.current_fv,item)">
+
+            <span class='collection-checkbox-holder'>
+
+              <md-checkbox
+                ng-click="select_item(plan.current_fv,item)"
+                ng-checked="item.selected"
+                ng-disabled="plan.current_fv.wired || plan.current_fv.role == 'output'">
+              </md-checkbox>
+
+            </span>
+
+            <span style="padding-top: 8px">              
+              <div item="item.collection" container="item.collection.object_type" sample="plan.current_fv.sample"></div>
+              ({{item.selected_row}},{{item.selected_column}})
+              <br/>
+            </span>
+
+            <span flex></span>
+
+            <table class='tiny-collection'>
+              <tr ng-repeat="row in item.collection.matrix track by $index">
+                <td ng-repeat="el in row track by $index" 
+                    ng-class="plan.current_fv.sid == el ? (item.selected_row == $parent.$index && 
+                              item.selected_column == $index ? 'selected' : 'filled' ) : 'blank'"
+                    ng-click="select_row_column(plan.current_fv,el,item,$parent.$index,$index)">
+                </td>
+              </tr>
+            </table>
+
+          </md-list-item>
+
+        </md-list>
+
+      </div>
+
+    <md-subheader ng-if="plan.current_fv.items.length == 0 && !plan.current_fv.wired" class="md-no-sticky">
+      No Inventory
+    </md-subheader>
+
+    <div ng-if="plan.current_fv.role == 'input' && plan.current_fv.predecessors.length > 0">
+
+      <md-subheader class="md-no-sticky">
+        Predecessors
+      </md-subheader>
+
+      <md-list class="md-compact-list">
+        <md-list-item ng-repeat="pred in plan.current_fv.predecessors" ng-if="pred.operation_type.id != plan.current_operation.operation_type.id">
+          <p><b>{{pred.operation_type.name}}</b></p>
+          <md-button 
+            ng-class="plan.current_fv.field_type.preferred_operation_type_id == pred.operation_type.id ? 
+                     'md-raised md-primary md-secondary md-button-in-list' :
+                     'md-raised md-secondary md-button-in-list'"
+            ng-click="plan.add_wire(plan.current_fv,plan.current_operation,pred)">
+              <md-tooltip md-direction="bottom">
+                Use {{pred.operation_type.name}} from {{pred.operation_type.category}} to produce {{plan.current_fv.name}}
+              </md-tooltip>
+              Add
+          </md-button>
+        </md-list-item>
+
+        <md-divider style="margin: 2px"></md-divider>
+
+        <md-list-item>
+          <p></p>
+          <md-button 
+            class="md-raised md-small md-warn" 
+            ng-disabled="plan.current_fv.backchaining"
+            ng-click="plan.current_fv.backchain(plan,plan.current_operation)">
+              Auto
+          </md-button>
+        </md-list-item>
+
+      </md-list>
+
+      <div class="backchain-msg" ng-if="plan.current_fv.backchain_msg">
+        {{plan.current_fv.backchain_msg}}
+        <div class="dismiss"
+          ng-click="plan.current_fv.backchain_msg = false">
+          &times;
+        </div>
+      </div>
+
+    </div>
+
+    <md-subheader class="md-no-sticky" ng-if="plan.current_fv.predecessors.length == 0">
+      No Applicable Predecessors
+    </md-subheader>
+
+  </md-content>
+
+</script>

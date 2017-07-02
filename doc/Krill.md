@@ -1,4 +1,4 @@
-Authoring Protocols for Aquarium
+Authoring Protocols for Aquarium using the Krill Library
 ===
 
 Prerequisites
@@ -6,10 +6,7 @@ Prerequisites
 To author a protocol for Aquarium, you should
 
 * Have access to an Aquarium server, preferably a rehearsal server where mistakes don't matter.
-* Have access to a github repository that the Aquarium server can see when you choose "Protocols > Under Version Control" from the menu.
-* Understand enough about github to be able to create a new file, edit it, and save it.
 * Know a bit of the Ruby programming language. Check out the [Ruby Page](https://www.ruby-lang.org/en/) for documentation.
-
 
 Getting Started
 ---
@@ -25,11 +22,11 @@ class Protocol
 end
 ```
 
-Save this protocol and run it from within Aquarium. It should display a page to the user that says "Hello World!" and a "Next" button. When the user clicks next, the protocol will complete.
+Save this protocol and run it from within the Aquarium Developer Test tab. It should display output that says "Hello World!". If the protocol were run by a user, they would see a "Next" button. When the user clicks next, the protocol will complete.
 
 The above example illustrates several important aspects shared by all protocols.
 
-First, the code is all wrapped in a class called **Protocol**. Aquarium looks for this class when it starts the protocol. You must define it, otherwise you will get an error when you run the protocol. Of course, you can define other classes and modules as well, and call them whatever you want to call them.
+First, the code is all wrapped in a class called **Protocol**. Aquarium looks for this class when it starts the protocol. You must define it, otherwise you will get an error when you run the protocol. Of course, you can define other classes and modules as well, and call them whatever you want to call them. Aquarium also extends the Protocol class with all of the Krill library methods,  like show, take, and release. 
 
 Second, the method **main** is defined within the  **Protocol** class. This method is Aquarium's entry point into your protocol. You can of course define other methods as well. However, the names **main**, **arguments**, and **debug** have special meaning (see below).
 
@@ -94,7 +91,7 @@ choice = data[:choice]
 
 You can tell Aquarium to allow the user to select multiple items with the option **multiple: true**. In that case, the resulting data from the user will contain an array of all selected items.
 
-** timer **
+**timer**
 
 Show a rudimentary timer. By default, the timer starts at one minute and counts down. It starts beeping when it gets to zero, and keeps beeping until the user clicks "OK". You can specify the starting number of hours, minutes, and seconds, with for example
 ```ruby
@@ -165,100 +162,14 @@ show {
 
 shows a table with the 0,3 entry has special styling (any css code can go in the style hash) and the 1,0 entry is checkable, meaning the user can click on it and change its background color. This latter function is useful if you are presenting a number of things for the user to do, and want to have them check them off as they do them.
 
-**transfer a, b, routing**
+See the [Tables](md-viewer?doc=Tables) documentation for more information, including how to use the **Table** class to make tables more algorithmically. 
 
-You will need to read about "Collections" below before this function makes sense. The **transfer** function show an interactive transfer display to the user. The arguments **x** and **y** should be collections and **routing** should be an array of routes of the form { from: [a,b], to: [c,d], volume: v }. Here a,b,c, and d are integer indices into the collections a and b respectively. The "volume" key/value pair is in microliters and is optional. If no volume is specified, then it is expected that the user transfer all of the contents of the source well.
-
-**log data**
-
-You can silently log data along with each show using **log**. Logged data will not be displated to the user, but will show up in the log. For example,
-
-```ruby
-(1..10).each do |i|
-  show { 
-    title "Step #{i}"
-    log { i:i, msg: "This message will not be displayed to the user."}
-  }
-end
-```
-
-Input via Arguments
-===
-To specify arguments (a.k.a. parameters) to a protocol, define the method **arguments** in the **Protocol** class. The arguments are then available from within the protocol via the **input** method. For example,
-
-```ruby
-class Protocol
-
-  def arguments
-    { x: 1, y: "name" }
-  end
-
-  def main
-
-    x = input[:x]
-    y = input[:y]
-
-    show {
-    	title "Arguments"
-    	note "x = #{x}, y = #{y}"
-    }
-
-  end
-
-end
-```
-
-The keys in the hash returned by the **arguments** method define the names of the arguments. The default values for the arguments are values in the hash. They are presented to the user as defaults, but the user can overwrite them. Once the protocol starts running, the values passed in by the user are available via the **input** method. For technical reasons, the **input** method is not available from within a show block, so in the above code the arguments are extracted and assigned to local variables so they can be shown to the user.
-
-**Note**: The arguments method merely defines what is displayed to the user when the protocol starts and limits the user to setting only the arguments specified. However, if the protocol is started via a metacol, for example, then the arguments availble via the input method can be ay arbitrary hash or array containing integers, strings, arrays, and other hashes.
-
-Output via Return
-===
-
-For a protocol to return values to, for example, the metacol that called it, simply return a value from the main method. Note that in Ruby, methods return whatever value the last line of the method produces. So if you do not explicitly return something you might be returning nonsense. For example, here is a protocol that asks the user for a value and returns that value plus one.
-
-```ruby
-class Protocol
-
-  def main
-
-    user_input = show {
-      get "number", var: "x", label: "Enter a number", default: 0
-    }
-
-    return { y: user_input[:x] + 1 }
-
-  end
-
-end
-```
-
-A common pattern in protocols is to merge a hash obtained from the input to the protocol with more infomation. For example,
-
-```ruby
-class Protocol
-
-  def main
-
-    x = input
-
-    # Your code here wherein a variable y is computed based on,
-    # for example, input obtained from the user as (s)he runs
-    # the protocol or sample ids read from the inventory database.
-
-    return x.merge y
-
-  end
-
-end
-```
-
-The output of this protocol can then be fed to another protocol that adds even more information to its input.
+See the [Operations](md-viewer?doc=Operations) documentation for more information about how to construct tables automatically based on the inputs and outputs to a protocol's operation.
 
 Items, Objects and Samples
 ===
 
-The Aquarium inventory is managed via a structured database of Ruby objects with certain relationships, all of shich are available within protocols. The primary inventory objects are as follows. Note that Items, Samples, SampleTypes, and ObjectTypes inherit from **ActiveRecord::Base** which is a fundamental rails class with documentation [here](http://api.rubyonrails.org/classes/ActiveRecord/Base.html). The methods in this parent class are available from within a protocol, although care should be taken when using them. In general, it is preferable to use those methods discussed here.
+The Aquarium inventory is managed via a structured database of Ruby objects with certain relationships, all of shich are available within protocols. The primary inventory objects are listed below. Note that Items, Samples, SampleTypes, and ObjectTypes inherit from **ActiveRecord::Base** which is a fundamental rails class with documentation [here](http://api.rubyonrails.org/classes/ActiveRecord/Base.html). The methods in this parent class are available from within a protocol, although care should be taken when using them. In general, it is preferable to use only those methods discussed in the Krill documentation.
 
 The relationship between these various objects is as follows:
 
@@ -314,15 +225,7 @@ A physical item in the lab. It has an object type and may correspond to a sample
   * i.reload - if the item has changed somehow in the database, this method update **i** so that it has the latest information from the database.
   * i.mark_as_deleted - to delete an item, don't call delete, call this method instead. It actually just hides the item so old job logs that refer to it can still have something to point to.
 
-You can associate data, such as a measurement or uploaded data file, with an item using the DataAssociation model, described [here](/doc/md-viewer?doc=DataAssociation).
-
-Note that the **item.data** and **item.datum** interface has been deprecated. Most items in your database should have been upgraded. If they have not, you can use 
-
-```ruby
-item.upgrade
-```
-
-to upgrade them.
+You can associate data, such as a measurement or uploaded data file, with an item using the DataAssociation model, described [here](md-viewer?doc=DataAssociation).
 
 Taking Items
 ===
@@ -526,60 +429,3 @@ slices = distribute( gel, "Gel Slice", except: [ [0,0], [1,0] ], interactive: tr
   note "Label the tubes with the id shown"
 }
 ```
-
-Tasks
-===
-
-Tasks are used to store information that can be used as inputs to protocols or metacols. Within a protocol, available tasks can be found with the **find** function. For example, to find all "Daily" tasks that are "ready", do:
-
-```ruby
-tasks = find(:task,{task_prototype: {name: "Daily"},status: "ready"})
-```
-
-Tasks have associated specifications (see the Aquarum UI) that can be obtained using the spec field, as in
-<em>[[looks like the undocumented .simple_spec does what you'd "expect" here.  ie strip out the container hints from the keys  -CT]]</em> 
-
-```ruby
-task.spec
-```
-For example, if "Daily" tasks have a field called "warnings" that is set to an array of strings, one could display those warnings as follows.
-
-```ruby
-data = show {
-  title "Daily Task Warnings"
-  task.spec[:warnings].map { |w| warning w }
-}
-```
-
-Each task has a status field. The possible status fields can be obtained by looking at the task prototype. For example, if **task** is a "Daily" task, its possible status values might be
-
-```ruby
-task.task_prototype.status_options # => [ "ready", "running", "done" ]
-```
-
-To set a task's status, simply do
-
-```ruby
-set_task_status(task,"done")
-```
-
-This function sets the task status and "touches" the task, so that the job is associated with the task. In addition, a notification that the task's status was changed is sent to the owner of the task. Jobs associated with tasks are listed on the task's page in Aquarium. Tasks associated with jobs are listed under "Associations" in the Krill UI.
-
-Setting a task's status notifies the task's owner. To send other information to a task's owner without changing the task's status, do
-
-```ruby
-task.notify "Some information about the task", job_id: jid
-```
-
-Be sure to **save** your changes to the task so that they are reflected in the database.
-
-Including Other Files
-===
-
-To include another file, saved in a github repo that has been liked to your installation of Aquarium, use "needs". For example,
-
-```ruby
-needs "Krill/lib/standard"
-```
-
-This method is much like Ruby's require, except that it looks in the github repo named "Krill" for a file called "lib/standard". Usually, such included files contain Ruby modules.

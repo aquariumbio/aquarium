@@ -1,20 +1,3 @@
-class ProductionObjectType < ObjectType
-end
-
-class ProductionItem < Item
-end
-
-class ProductionSampleType < SampleType
-end
-
-class ProductionSample < Sample
-end
-
-class ProductionLocator < Locator
-end
-
-class ProductionWizard < Wizard
-end
 
 class ObjectTypesController < ApplicationController
 
@@ -26,14 +9,17 @@ class ObjectTypesController < ApplicationController
   # GET /object_types.json
   def index
 
-    @handler = params[:handler] ? params[:handler] : 'glassware'
-    @all_handlers = ObjectType.pluck(:handler).uniq
-    @object_types = ObjectType.where("handler = ?", @handler)
-
     respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @object_types }
+      format.html { # index.html.erb
+        @handler = params[:handler] ? params[:handler] : 'glassware'
+        @all_handlers = ObjectType.pluck(:handler).uniq.sort
+        @first = @all_handlers.length > 0 ? @all_handlers[0] : 'no handlers'
+        @object_types = ObjectType.all.sort_by { |ot| ot.name }
+        render layout: 'aq2'
+      }
+      format.json { render json: ObjectType.all.collect { |ot| { name: ot.name, handler: ot.handler } } }
     end
+
   end
 
   # GET /object_types/1
@@ -81,7 +67,7 @@ class ObjectTypesController < ApplicationController
     @object_type.cost = 0.01
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render layout: 'aq2-plain' }
       format.json { render json: @object_type }
     end
 
@@ -90,12 +76,18 @@ class ObjectTypesController < ApplicationController
   # GET /object_types/1/edit
   def edit
     @object_type = ObjectType.find(params[:id])
+    render layout: 'aq2-plain'
   end
 
   # POST /object_types
   # POST /object_types.json
   def create
-    @object_type = ObjectType.new(params[:object_type])
+    @object_type = ObjectType.new(params[:object_type].except(:rows, :columns))
+
+    if params[:handler] == 'collection'
+      @object_type.rows = params[:object_type][:rows]
+      @object_type.columns = params[:object_type][:columns]
+    end
 
     respond_to do |format|
       if @object_type.save
@@ -127,13 +119,21 @@ class ObjectTypesController < ApplicationController
       end
     end
 
+    ok = @object_type.update_attributes(params[:object_type].except(:rows, :columns))
+
+    if params[:object_type][:handler] == 'collection'
+      @object_type.rows = params[:object_type][:rows]
+      @object_type.columns = params[:object_type][:columns]
+      @object_type.save
+    end
+
     respond_to do |format|
-      if @object_type.update_attributes(params[:object_type])
+      if ok
         if @object_type.handler == 'sample_container'
-          format.html { redirect_to @object_type.sample_type, notice: 'Object type was successfully updated.' }
+          format.html { redirect_to object_types_path, notice: "Object type '#{@object_type.name}' was successfully updated." }
           format.json { head :no_content }
         else
-          format.html { redirect_to @object_type, notice: 'Object type was successfully updated.' }
+          format.html { redirect_to object_types_path, notice: "Object type '#{@object_type.name}' was successfully updated." }
           format.json { head :no_content }
         end
       else
@@ -148,7 +148,12 @@ class ObjectTypesController < ApplicationController
   # DELETE /object_types/1.json
   def destroy
     @object_type = ObjectType.find(params[:id])
-    @object_type.destroy
+
+    if @object_type.items.length > 0
+      flash[:notice] = "Could not delete object type definition #{@object_type.name} because it has items associated with it."
+    else
+      @object_type.destroy
+    end
 
     respond_to do |format|
       format.html { redirect_to object_types_url }
@@ -160,29 +165,6 @@ class ObjectTypesController < ApplicationController
 
     respond_to do |format|
       format.html
-    end
-
-  end
-
-  def delete_inventory
-
-    if Rails.env != 'production'
-
-      CartItem.delete_all
-      ObjectType.delete_all
-      Item.delete_all
-      SampleType.delete_all
-      Sample.delete_all
-      Touch.delete_all
-      Locator.delete_all
-      Wizard.delete_all
-
-      redirect_to production_interface_path, notice: "Deleted inventory. Pretty fast, huh?"
-
-    else
-
-      redirect_to production_interface_path, notice: "This functionality is not available in production mode."
-
     end
 
   end
@@ -239,33 +221,5 @@ class ObjectTypesController < ApplicationController
       render json: Sample.select([:id,:name]).collect { |h| "#{h.id}: #{h.name}" }      
     end
   end  
-
-  def copy_inventory_from_production
-
-    if Rails.env != 'production'
-
-      ProductionObjectType.switch_connection_to(:production_server)
-      ProductionItem.switch_connection_to(:production_server)
-      ProductionSampleType.switch_connection_to(:production_server)
-      ProductionSample.switch_connection_to(:production_server)
-      ProductionLocator.switch_connection_to(:production_server)
-      ProductionWizard.switch_connection_to(:production_server)
-
-      copy_table ProductionWizard, "wizards"
-      copy_table ProductionLocator, "locators"
-      copy_table ProductionObjectType, "object_types"
-      copy_table ProductionItem, "items"
-      copy_table ProductionSampleType, "sample_types"
-      copy_table ProductionSample, "samples"
-
-      redirect_to object_types_path, notice: "Copied #{ObjectType.count} object types, #{Item.count} items, #{SampleType.count} sample types, #{Sample.count} samples, #{Wizard.count} wizards, and #{Locator.count} locators. Whew."
-
-    else
-
-      redirect_to production_interface_path, notice: "This functionality is not available in production mode."
-
-    end
-
-  end
 
 end

@@ -8,8 +8,8 @@ module FieldTyper
     FieldType.includes(allowable_field_types: :sample_type).where(parent_class: self.class.to_s, parent_id: self.id)
   end
 
-  def type name
-    self.field_types.find { |ft| ft.name == name }
+  def type name, role=nil
+    self.field_types.find { |ft| ft.name == name && ( !role || ft.role == role ) }
   end
 
   def save_field_types raw_field_types
@@ -53,6 +53,35 @@ module FieldTyper
       end
 
     end
+
+  end  
+
+  def add_field name, sample_name, container_name, role, opts
+
+    if !self.id
+      raise "Can't add field to #{self.class} before it has been saved."
+    end
+
+    snames = sample_name.class == String ? [ sample_name ] : sample_name
+    cnames = ( !container_name || container_name.class == String ) ? [ container_name ] : container_name    
+
+    ft = field_types.create({parent_id: self.id, name: name, ftype: "sample", role: role}.merge opts)
+    ft.save
+
+    if snames
+      (0..snames.length-1).each do |i|
+        sample = SampleType.find_by_name(snames[i])    
+        container = ObjectType.find_by_name(cnames[i])
+        # raise "Could not find sample #{snames[i]}" unless sample
+        # raise "Could not find container #{cnames[i]}" unless container
+        ft.allowable_field_types.create(
+          sample_type_id: sample ? sample.id : nil, 
+          object_type_id: container ? container.id : nil
+        )
+      end
+    end
+    
+    self
 
   end  
 

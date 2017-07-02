@@ -1,4 +1,49 @@
 Bioturk::Application.routes.draw do
+ 
+  resources :timings, only: [ :update, :create ]
+
+  get '/json/current',             to: 'json#current'
+  post '/json/items',              to: 'json#items'
+  post '/json/save',               to: 'json#save'  
+  post '/json/delete',             to: 'json#delete'    
+  post '/json/upload',             to: 'json#upload'    
+  post '/json',                    to: 'json#index'
+
+  post '/launcher/estimate',                     to: 'launcher#estimate'
+  post '/launcher/submit',                       to: 'launcher#submit'  
+  get '/launcher/plans',                         to: 'launcher#plans'  
+  get '/launcher',                               to: 'launcher#index'
+  get '/launcher/:id/relaunch',                  to: 'launcher#relaunch'  
+
+  get '/plans/:pid/select/:oid',                 to: 'plans#select'
+  get '/plans/start/:id',                        to: 'plans#start'
+  get '/plans/costs/:id',                         to: 'plans#costs'
+  get '/plans/cancel/:id/:msg',                  to: 'plans#cancel' 
+  get '/plans/:id/debug',                        to: 'plans#debug'
+  post '/plans/replan',                          to: 'plans#replan'
+  post '/plans/plan',                            to: 'plans#plan'  
+  resources :plans
+
+  post '/operations/batch',                      to: 'operations#batch'
+  post '/operations/unbatch',                    to: 'operations#unbatch'  
+  get '/operations/jobs',                        to: 'operations#jobs'
+  resources :operations
+
+  post '/operation_types/import',                to: 'operation_types#import'    
+  get '/operation_types/numbers',                to: 'operation_types#numbers'    
+  get '/operation_types/:id/stats',              to: 'operation_types#stats'
+  get '/operation_types/:id/random/:num',        to: 'operation_types#random'
+  get '/operation_types/:id/export',             to: 'operation_types#export'  
+  get '/operation_types/export_category/:category',  to: 'operation_types#export_category'  
+  get '/operation_types/:id/copy',               to: 'operation_types#copy'  
+
+  resources :operation_types do
+    collection do 
+      get 'default'
+      post 'code'
+      post 'test'
+    end
+  end
 
   resources :announcements
 
@@ -29,6 +74,7 @@ Bioturk::Application.routes.draw do
 
   get '/budgets/add/:bid/:uid/:quota',           to: 'budgets#add_user'
   get '/budgets/remove/:bid/:uid',               to: 'budgets#remove_user'  
+  get '/budgets/:id/spent',                      to: 'launcher#spent'
   resources :budgets
 
   post '/invoices/note',                         to: "invoices#note"
@@ -128,6 +174,7 @@ Bioturk::Application.routes.draw do
   get "interpreter/edit"
   get "interpreter/resubmit"
 
+  get "krill/debug/:id", to: "krill#debug"
   get "krill/arguments"
   get "krill/submit"
   get "krill/start"
@@ -168,7 +215,9 @@ Bioturk::Application.routes.draw do
   get "repo/get"
   get "repo/pull"
 
+  get "/items/store/:id",      to: "items#store"
   get "/items/make/:sid/:oid", to: "items#make"
+  get "/items/move/:id",       to: "items#move"
   resources :items
 
   match "project", to: 'samples#project'
@@ -183,7 +232,8 @@ Bioturk::Application.routes.draw do
 
   root to: 'static_pages#home'
 
-  match '/',           to: 'static_pages#home'
+  match '/',            to: 'static_pages#home'
+  match '/template',    to: 'static_pages#template'
 
   match '/help',       to: 'static_pages#help'
   match '/about',      to: 'static_pages#about'
@@ -218,6 +268,8 @@ Bioturk::Application.routes.draw do
 
   get 'users/current',        to: 'users#current'
   get 'users/billing/:id',    to: 'users#billing' 
+  put 'users/password',       to: 'users#update_password'
+  
   resources :users do 
     get 'change_password'
   end
@@ -237,3 +289,4 @@ Bioturk::Application.routes.draw do
   get "oyster/items"
 
 end
+ 

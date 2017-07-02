@@ -1,0 +1,93 @@
+<script type="text/ng-template" id="plan_list">
+
+  <div layout="row" layout-wrap ng-repeat-start="plan in plans" 
+       ng-class="plan.open ? 'plan-header plan-row plan-row-open' : 'plan-header plan-row'">
+
+    <div flex="25" class='no-wrap'>
+      <opener model="plan.open" class='no-highlight clickable no-margin'></opener>&nbsp;
+      <span class="md-body-2">{{plan.id}}: {{plan.operations[0].operation_type.name}}</span>
+    </div>
+
+    <div flex="55" class='no-wrap left-pad' ng-if="!plan.open">
+      <span ng-repeat="fv in plan.operations[0].field_values | filter : { role: 'output' }" class='md-body-2 sample-name'>
+        {{fv.name}}: {{fv.child_sample.name}}
+      </span>
+    </div>      
+
+    <div flex="55" class='no-wrap left-pad' ng-if="plan.open">
+      <span ng-repeat="fv in plan.operations[0].field_values | filter : { role: 'output' }" class='md-body-2 sample-name'>
+        {{fv.name}}: {{fv.child_sample.name}}
+      </span>
+    </div>
+
+    <div flex="10" class='no-wrap left-pad'>
+      <span ng-class="'md-body-2 status-'+plan.operations[0].status">
+        {{plan.operations[0].status}}
+      </span>
+    </div>
+
+    <div flex="10" class='no-wrap' class='md-body-1' layout="row" layout-align="end center" ng-if="!plan.open">
+      <div>{{plan.created_at|date}}</div>
+    </div>
+
+    <div flex="10" ng-if="plan.open" layout="row" layout-align="end center">
+      <md-menu layout="row">
+
+        <div class='detail-menu clickable'
+             ng-click="openMenu($mdMenu, $event)">
+          <ng-md-icon icon="menu" size="20" aria-label="Menu"></ng-md-icon>
+        </div>
+
+        <md-menu-content width="4" class="scrollable" flex>
+
+          <md-menu-item aria-label="Reload">
+            <md-button ng-click="plan.reload()">Reload</md-button>
+          </md-menu-item> 
+
+          <md-menu-item aria-label="Cancel">
+            <md-button ng-click="plan.cancel('Canceled via user interface')">Cancel</md-button>
+          </md-menu-item> 
+
+          <md-menu-item aria-label="Debug">
+            <md-button ng-disabled="plan.debugging" ng-click="plan.debug()">Debug</md-button>
+          </md-menu-item> 
+
+          <md-menu-item aria-label="Copy">
+            <md-button ng-disabled="plan.relaunching" ng-click="relaunch(plan)">Copy</md-button>
+          </md-menu-item>
+
+          <md-menu-item aria-label="Replan">
+            <md-button ng-disabled="plan.relaunching" ng-click="replan(plan)">Replan</md-button>
+          </md-menu-item>           
+
+          <md-menu-divider></md-menu-divider>
+
+          <md-menu-item aria-label="Add Data">
+            <md-button ng-click="plan.new_data_association()">Add Data</md-button>
+          </md-menu-item>
+
+          <md-menu-item aria-label="Upload">
+            <md-button><upload record='plan'></upload></md-button>
+          </md-menu-item>
+
+        </md-menu-content>
+
+      </md-menu>
+    </div>
+
+  </div>
+
+  <div layout="row" layout-wrap ng-if="plan.open" ng-repeat-end="" class="plan-row plan-details"> 
+    <div flex="100" ng-include="'plan_viewer'"></div>
+  </div>
+
+  <br />
+
+  <md-button ng-if="!no_more_plans"
+    class='md-raised md-primary md-small' 
+    ng-disabled="getting_plans"
+    ng-click="more_plans()">More</md-button>
+
+  <br /><br />
+ 
+</script>

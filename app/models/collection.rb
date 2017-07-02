@@ -7,6 +7,7 @@ class Collection < Item
   end
 
   def self.containing s, ot=nil
+    return [] unless s
     i = s.id.to_s
     r = Regexp.new '\[' + i + ',|,' + i + ',|,' + i + '\]|\[' + i + '\]'
     if ot
@@ -28,6 +29,14 @@ class Collection < Item
       end
     end
     return nil
+  end
+
+  def self.parts s, ot=nil
+    plist = []
+    Collection.containing(s,ot).reject { |c| c.deleted? }.each do |c|
+      plist << Collection.find(c.id).position(s).merge(collection: c)
+    end
+    return plist
   end
 
   def self.spread samples, name, rows, cols
@@ -59,14 +68,14 @@ class Collection < Item
 
   # METHODS #########################################################################
 
-  def self.new_collection name, r, c
+  def self.new_collection name
 
     o = ObjectType.find_by_name(name)
     raise "Could not find object type named '#{name}'." unless o
 
     i = Collection.new
     i.object_type_id = o.id
-    i.apportion r,c
+    i.apportion(o.rows, o.columns)
     i.quantity = 1
     i.inuse = 0
     i.location = "Bench"

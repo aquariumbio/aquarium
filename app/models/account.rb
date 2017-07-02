@@ -4,10 +4,11 @@ class Account < ActiveRecord::Base
   belongs_to :budget
   belongs_to :task
   belongs_to :job
+  belongs_to :operation
   has_many :first_row_logs,  class_name: "AccountLog", foreign_key: :row1
   has_many :second_row_logs, class_name: "AccountLog", foreign_key: :row2
 
-  attr_accessible :user_id, :budget_id, :amount, :category, :transaction_type, :description, :job_id, :task_id, :labor_rate, :markup_rate
+  attr_accessible :user_id, :budget_id, :amount, :category, :transaction_type, :description, :job_id, :operation_id, :labor_rate, :markup_rate
 
   validates :user,  presence: true
   validates :budget,  presence: true 

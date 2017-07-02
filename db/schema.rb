@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20170106204721) do
+ActiveRecord::Schema.define(:version => 20170627173019) do
 
   create_table "account_logs", :force => true do |t|
     t.integer  "row1"
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(:version => 20170106204721) do
     t.text     "description"
     t.float    "labor_rate"
     t.float    "markup_rate"
+    t.integer  "operation_id"
   end
 
   add_index "accounts", ["budget_id"], :name => "index_accounts_on_budget_id"
@@ -94,6 +95,16 @@ ActiveRecord::Schema.define(:version => 20170106204721) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "codes", :force => true do |t|
+    t.string   "name"
+    t.text     "content"
+    t.integer  "parent_id"
+    t.string   "parent_class"
+    t.integer  "child_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
   create_table "data_associations", :force => true do |t|
     t.integer  "parent_id"
     t.string   "parent_class"
@@ -113,9 +124,14 @@ ActiveRecord::Schema.define(:version => 20170106204721) do
     t.string   "choices"
     t.boolean  "array"
     t.boolean  "required"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
     t.string   "parent_class"
+    t.string   "role"
+    t.boolean  "part"
+    t.string   "routing"
+    t.integer  "preferred_operation_type_id"
+    t.integer  "preferred_field_type_id"
   end
 
   add_index "field_types", ["parent_id"], :name => "index_field_types_on_sample_type_id"
@@ -125,13 +141,36 @@ ActiveRecord::Schema.define(:version => 20170106204721) do
     t.string   "value"
     t.integer  "child_sample_id"
     t.integer  "child_item_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
     t.string   "name"
     t.string   "parent_class"
+    t.string   "role"
+    t.integer  "field_type_id"
+    t.integer  "row"
+    t.integer  "column"
+    t.integer  "allowable_field_type_id"
   end
 
+  add_index "field_values", ["allowable_field_type_id"], :name => "index_field_values_on_allowable_field_type_id"
+  add_index "field_values", ["field_type_id"], :name => "index_field_values_on_field_type_id"
   add_index "field_values", ["parent_id"], :name => "index_field_values_on_sample_id"
+
+  create_table "folder_contents", :force => true do |t|
+    t.integer  "sample_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.integer  "folder_id"
+    t.integer  "workflow_id"
+  end
+
+  create_table "folders", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "user_id"
+    t.integer  "parent_id"
+  end
 
   create_table "groups", :force => true do |t|
     t.string   "name"
@@ -165,6 +204,13 @@ ActiveRecord::Schema.define(:version => 20170106204721) do
 
   add_index "items", ["object_type_id"], :name => "index_items_on_object_type_id"
 
+  create_table "job_associations", :force => true do |t|
+    t.integer  "job_id"
+    t.integer  "operation_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
   create_table "jobs", :force => true do |t|
     t.string   "user_id"
     t.string   "sha"
@@ -179,6 +225,10 @@ ActiveRecord::Schema.define(:version => 20170106204721) do
     t.datetime "desired_start_time"
     t.datetime "latest_start_time"
     t.integer  "metacol_id"
+<<<<<<< HEAD
+=======
+    t.integer  "successor_id"
+>>>>>>> planner
   end
 
   create_table "locators", :force => true do |t|
@@ -235,7 +285,29 @@ ActiveRecord::Schema.define(:version => 20170106204721) do
     t.integer  "sample_type_id"
     t.string   "image"
     t.string   "prefix"
+    t.integer  "rows"
+    t.integer  "columns"
   end
+
+  create_table "operation_types", :force => true do |t|
+    t.string   "name"
+    t.string   "category"
+    t.boolean  "deployed"
+    t.boolean  "on_the_fly"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "operations", :force => true do |t|
+    t.integer  "operation_type_id"
+    t.string   "status"
+    t.integer  "user_id"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  add_index "operations", ["operation_type_id"], :name => "index_operations_on_operation_type_id"
+  add_index "operations", ["user_id"], :name => "index_operations_on_user_id"
 
   create_table "parameters", :force => true do |t|
     t.string   "key"
@@ -243,7 +315,27 @@ ActiveRecord::Schema.define(:version => 20170106204721) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
     t.text     "description"
+    t.integer  "user_id"
   end
+
+  create_table "plan_associations", :force => true do |t|
+    t.integer  "plan_id"
+    t.integer  "operation_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "plan_associations", ["operation_id"], :name => "index_plan_associations_on_operation_id"
+  add_index "plan_associations", ["plan_id"], :name => "index_plan_associations_on_plan_id"
+
+  create_table "plans", :force => true do |t|
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "budget_id"
+  end
+
+  add_index "plans", ["user_id"], :name => "index_plans_on_user_id"
 
   create_table "post_associations", :force => true do |t|
     t.integer  "post_id"
@@ -267,43 +359,18 @@ ActiveRecord::Schema.define(:version => 20170106204721) do
   create_table "sample_types", :force => true do |t|
     t.string   "name"
     t.string   "description"
-    t.string   "field1name"
-    t.string   "field1type"
-    t.string   "field2name"
-    t.string   "field2type"
-    t.string   "field3name"
-    t.string   "field3type"
-    t.string   "field4name"
-    t.string   "field4type"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
-    t.string   "field5name"
-    t.string   "field5type"
-    t.string   "field6name"
-    t.string   "field6type"
-    t.string   "field7name"
-    t.string   "field7type"
-    t.string   "field8name"
-    t.string   "field8type"
-    t.text     "datatype"
   end
 
   create_table "samples", :force => true do |t|
     t.string   "name"
     t.integer  "sample_type_id"
     t.string   "project"
-    t.string   "field1"
-    t.string   "field2"
-    t.string   "field3"
-    t.string   "field4"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
-    t.string   "field5"
-    t.string   "field6"
     t.integer  "user_id"
     t.string   "description"
-    t.string   "field7"
-    t.string   "field8"
     t.text     "data"
   end
 
@@ -344,6 +411,17 @@ ActiveRecord::Schema.define(:version => 20170106204721) do
     t.integer  "task_prototype_id"
     t.integer  "user_id",           :default => 0
     t.integer  "budget_id"
+  end
+
+  create_table "timings", :force => true do |t|
+    t.integer  "parent_id"
+    t.string   "parent_class"
+    t.string   "days"
+    t.integer  "start"
+    t.integer  "stop"
+    t.boolean  "active"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "touches", :force => true do |t|
@@ -391,12 +469,52 @@ ActiveRecord::Schema.define(:version => 20170106204721) do
   add_index "users", ["login"], :name => "index_users_on_login", :unique => true
   add_index "users", ["remember_token"], :name => "index_users_on_remember_token"
 
+  create_table "wires", :force => true do |t|
+    t.integer  "from_id"
+    t.integer  "to_id"
+    t.boolean  "active"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "wizards", :force => true do |t|
     t.string   "name"
     t.string   "specification"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
     t.string   "description"
+  end
+
+  create_table "workflow_associations", :force => true do |t|
+    t.integer  "thread_id"
+    t.integer  "process_id"
+    t.integer  "sample_id"
+    t.integer  "item_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "workflow_processes", :force => true do |t|
+    t.integer  "workflow_id"
+    t.text     "state"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "workflow_threads", :force => true do |t|
+    t.integer  "process_id"
+    t.text     "specification"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.integer  "workflow_id"
+    t.integer  "user_id"
+  end
+
+  create_table "workflows", :force => true do |t|
+    t.string   "name"
+    t.text     "specification"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
 end

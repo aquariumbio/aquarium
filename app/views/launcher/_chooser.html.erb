@@ -1,0 +1,24 @@
+<script type="text/ng-template" id="operation_type_chooser">
+
+  <section ng-repeat="category in operation_types.categories" layout-padding>
+
+    <div class="md-title category-title">{{category}}</div>
+
+    <md-grid-list 
+        md-cols-gt-md="6" md-cols="2" md-cols-md="4"
+        md-row-height-gt-md="3:1" md-row-height="3:1"
+        md-gutter-gt-md="16px" md-gutter-md="8px" md-gutter="4px">    
+
+      <md-grid-tile 
+        class="operation-type-choice" 
+        md-ink-ripple
+        ng-repeat="operation_type in operation_types | filter : { category: category }"
+        ng-click="select(operation_type)">
+          {{operation_type.name}}
+      </md-grid-tile>
+
+    </md-grid-list>
+
+  </section>
+
+</script>

@@ -7,28 +7,68 @@
     float: left;
     width: 300px;
     overflow-y: auto;
-    overflow-x: visible;
+    overflow-x: hidden;
     position: relative;
   }
+
+  .two-column-left-wide {
+    float: left;
+    width: 350px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+  }  
 
   .two-column-right {
     float: left;
     width: calc(100% - 310px);
-    overflow-y: scroll;
-    overflow-x: visible;
+    overflow-y: auto;
+    overflow-x: hidden;
     padding: 10px 10px 0 0;
+    position: relative;  
+  }
+
+  .two-column-right-narrow {
+    float: left;
+    width: calc(100% - 380px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 10px 20px 0 10px;
     position: relative;  
   }
 
   .two-column-control {
     width: 250px;
-    padding: 10px 15px 15px 15px;
+    padding: 5px 15px 15px 15px;
     margin: 10px 10px 0 10px;
     border: 1pt solid #ccc;
     word-wrap: break-word;   
     cursor: pointer;
     display: block;
+
+    h5 {
+      text-align: center;
+      margin: 5px;
+      padding: 0;
+    }    
   }
+
+  .two-column-control-wide {
+    width: 300px;
+    padding: 5px 15px 15px 15px;
+    margin: 10px 10px 0 10px;
+    border: 1pt solid #ccc;
+    word-wrap: break-word;   
+    cursor: pointer;
+    display: block;
+
+    h5 {
+      text-align: center;
+      margin: 5px;
+      padding: 0;
+    }    
+  }
+
 
   .two-column-control-on {  
     box-shadow: 0 0 10px #9ecaed;

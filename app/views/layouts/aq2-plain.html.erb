@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html ng-app='aquarium' ng-controller='layoutCtrl' ng-cloak>
+
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title><%= full_title(yield(:title)) %></title>
+
+    <%= render partial: 'layouts/vendor_code' %>
+    <%= stylesheet_link_tag    "application", media: "all" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+    <%= favicon_link_tag 'favicon.ico' %>      
+
+  <style>
+
+    body {
+      padding: 0 !important;
+      margin: 0 !important;
+      /*overflow: hidden!important;*/
+      max-width: 100%!important;
+      max-height: 100%!important;
+      position: relative!important;
+    }
+
+    body, html {
+      height: 100%;
+    }
+
+    html {
+      position: fixed;
+    }
+
+    <% if content_for? :wider_sidebar %>
+
+      md-sidenav, 
+      md-sidenav.md-locked-open, 
+      md-sidenav.md-closed.md-locked-open-add-active {
+          width: 400px !important;
+          max-width: 400px !important;
+      }     
+
+      .main {
+        width: calc(100vw - 400px) !important;
+      }      
+
+    <% end %>
+
+  </style>
+
+  </head>
+
+  <body layout='column' class='aq2'>
+
+    <%= render partial: '/layouts/aq2header' %>
+
+      <% if content_for? :controller %>
+        <div class="aq2-navigation <%= yield :class %>" 
+             layout='row' 
+             ng-controller="<%= yield :controller %>">
+      <% else %>
+        <div layout='row' class="<%= yield :class %>">
+      <% end %>
+
+      <%= yield %>
+
+      <div class="content-container" layout="column" tabIndex="-1" flex>
+
+        <md-content class='main-plain scrollable'>
+           <%= yield :main %>
+        </md-content>
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

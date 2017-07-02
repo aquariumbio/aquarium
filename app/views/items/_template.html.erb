@@ -1,0 +1,87 @@
+<script type="text/ng-template" id="item_template">
+
+  <span ng-init="item.new_location = item.location">
+
+    <span ng-if="!nolink">
+      <a href='#' ng-click='item.modal=true' ng-init="item.modal=false">{{item.id}}</a>
+    </span>
+
+    <div class='ng-modal item-modal' ng-show='item.modal'>
+
+      <div class='ng-modal-overlay' ng-click='item.modal=false'></div>
+
+      <div class='ng-modal-dialog item-modal-content'>
+
+        <md-toolbar class="item-toolbar">
+          <div class="md-toolbar-tools">
+            <h2 flex md-truncate>Item {{item.id}}: {{container.name}}</h2> 
+          </div>
+          <div class='item-close' ng-click='item.modal=false'>&times;</div>
+        </md-toolbar>
+         
+        <div class="sample-name md-subhead" layout="row" layout-align="center center">
+          <a href="/browser?sid={{sample.id}}">{{sample.name}}</a>
+        </div>
+
+        <div layout="row">
+
+          <div class='details md-body-2' flex="40">
+            <div class="created-at">Created: {{item.created_at|date}}</div>
+            <div class="owner">Sample Owner: {{sample.user ? sample.user.name : item.sample.user.name}}</div>
+          </div>
+
+          <div flex="60" layout="column" layout-align="center center">
+            <div ng-if="item.matrix">Position(s) in collection</div>
+            <table class='tiny-collection' ng-if="item.matrix">
+              <tr ng-repeat="row in item.matrix track by $index">
+                <td ng-repeat="el in row track by $index" 
+                    ng-class="sample.id == el ? 'filled' : 'blank'">
+                </td>
+              </tr>
+            </table>
+          </div>
+
+        </div>
+
+        <div class="location-editor" layout="column" layout-wrap ng-if="item.location == 'deleted'">
+          <div><b>Deleted on {{item.updated_at|date}}</b></div>
+          <% if current_user && current_user.is_admin %>          
+            <div><md-button class='md-raised md-small' ng-click="item.store()">Restore</md-button></div>
+          <% end %>
+        </div>
+
+        <div class="location-editor" layout="row" layout-wrap ng-if="item.location != 'deleted'">
+          <div flex="20" class='md-body-2'>Location</div>
+          <div flex="60"><input type='text' class='location-input'
+                                ng-model="item.new_location"></div>
+          <div flex="20" class='buttons'>
+            <a href="#" ng-click="item.move(item.new_location)" ng-if="item.new_location != item.location">
+              <ng-md-icon icon="system_update_alt" size="22" aria-label="Update Location" style="fill: #444"></ng-md-icon>
+            </a>
+            <a href="#" ng-click="item.new_location = item.location" ng-if="item.new_location != item.location">
+              <ng-md-icon icon="undo" size="22" aria-label="Undo" style="fill: #444"></ng-md-icon>  
+            </a>
+            <% if current_user && current_user.is_admin %>
+              <a href="#" ng-click="item.mark_as_deleted()" class="no-highlight">
+                <ng-md-icon icon="delete" size="22" aria-label="Delete" style="fill: #444"></ng-md-icon>  
+              </a>   
+            <% end %>      
+          </div>
+        </div>
+
+        <div class='data-associations'>
+          <da record="item"></da>  
+          <br>
+          <div layout="row" layout-align="center center">
+            <md-button ng-click="item.new_data_association()" class="md-raised" aria-label="Add Data">Add Data</md-button>
+            <md-button class="md-raised upload-button"><upload record='item' aria-label="Upload"></upload></md-button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </span>
+
+</script>

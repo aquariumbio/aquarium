@@ -1,5 +1,5 @@
 <header class="navbar navbar-fixed-top navbar-inverse no-print" id="header">
-  <div class="navbar-inner">
+  <div class="navbar-inner" id="header-navbar">
     <div class="container-fluid" id="header-bar">
       <%= link_to "AQUARIUM", root_path, id: "logo" %>
       <div id='environment'>
@@ -10,6 +10,27 @@
       <div id="info-area"></div>
       <nav>
         <ul class="nav pull-right">
+
+          <li id="fat-menu" class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Workflows<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><%= link_to "Planner", launcher_path %></li>             
+              <!-- <li><%= link_to "Planner", plans_path %></li> -->
+              <li><%= link_to "Manager", operations_path %></li>              
+              <li><%= link_to "Developer", operation_types_path %></li>                            
+            </ul>
+          </li>        
+
+          <li id="fat-menu" class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Inventory<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="/browser">Samples</a></li>
+              <li><%= link_to "Containers", object_types_path %></li>
+              <li><%= link_to "Direct Purchase", "/krill/arguments?path=aqualib/purchasing/direct_purchase.rb" %></li>
+              <li class="divider"></li>             
+              <li><%= link_to "Import Samples from Spreadsheet", spreadsheet_path %></li>
+            </ul>
+          </li>
 
           <% if current_user && current_user.is_admin %>
 
@@ -28,40 +49,35 @@
               </ul>
             </li>
 
+          <% end %>         
+
+          <% if false %>
+
+            <li id="fat-menu" class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tasks<b class="caret"></b></a>
+              <ul class="dropdown-menu scrollable-menu">
+                <% TaskPrototype.order(:name).each do |tp| %>
+                  <% name = pluralize(2,tp.name)[2..-1] %>
+                  <li><%= link_to name, tasks_path(task_prototype_id: tp.id) %></li>
+                <% end %>
+                <li class="divider"></li>
+                <li><%= link_to "Batch Upload", tasks_upload_path %></li>
+                <li><%= link_to "New Prototype", new_task_prototype_path %></li>
+              </ul>
+            </li>
+
+            <li id="fat-menu" class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Protocols<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><%= link_to "Under Version Control", repo_list_path %></li>
+                <li><%= link_to "On Local Computer", protocol_tree_file_path %></li>
+                <li class="divider"></li>
+                <li><%= link_to "Pending Jobs", jobs_path %></li>
+                <li><%= link_to "Metacols", metacols_path(:active => true) %></li>
+              </ul>
+            </li>
+
           <% end %>
-
-          <li id="fat-menu" class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Inventory<b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li><a href="/browser">Samples</a></li>
-              <li><%= link_to "Containers", object_types_path %></li>
-              <li><%= link_to "Direct Purchase", "/krill/arguments?path=aqualib/purchasing/direct_purchase.rb" %></li>
-            </ul>
-          </li>
-
-          <li id="fat-menu" class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tasks<b class="caret"></b></a>
-            <ul class="dropdown-menu scrollable-menu">
-              <% TaskPrototype.order(:name).each do |tp| %>
-                <% name = pluralize(2,tp.name)[2..-1] %>
-                <li><%= link_to name, tasks_path(task_prototype_id: tp.id) %></li>
-              <% end %>
-              <li class="divider"></li>
-              <li><%= link_to "Batch Upload", tasks_upload_path %></li>
-              <li><%= link_to "New Prototype", new_task_prototype_path %></li>
-            </ul>
-          </li>
-
-          <li id="fat-menu" class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Protocols<b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li><%= link_to "Under Version Control", repo_list_path %></li>
-              <li><%= link_to "On Local Computer", protocol_tree_file_path %></li>
-              <li class="divider"></li>
-              <li><%= link_to "Pending Jobs", jobs_path %></li>
-              <li><%= link_to "Metacols", metacols_path(:active => true) %></li>
-            </ul>
-          </li>
 
           <% if signed_in? %>
 

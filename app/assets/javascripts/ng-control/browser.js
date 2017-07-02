@@ -5,11 +5,26 @@
   try {
     w = angular.module('aquarium'); 
   } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace']); 
+    w = angular.module('aquarium', 
+          ['ngCookies','ui.ace','ngMaterial','ngMdIcons'], 
+          [ '$rootScopeProvider', function($rootScopeProvider) { 
+      // This is an apparently well known hack that prevents digest errors when recursively
+      // rendering templates that nest more than 10 levels.
+      $rootScopeProvider.digestTtl(25); 
+    }]);
   } 
 
-  w.controller('browserCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
-                     function (  $scope,   $http,   $attrs,   $cookies ) {
+  w.config(['$locationProvider', function($locationProvider) {
+      $locationProvider.html5Mode({ enabled: true, requireBase: false, rewriteLinks: false });
+  }]);  
+
+  w.controller('browserCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', '$window',
+                     function (  $scope,   $http,   $attrs,   $cookies,   $sce ,  $window ) {
+
+    AQ.init($http);
+    AQ.update = () => { $scope.$apply(); }
+    AQ.confirm = (msg) => { return confirm(msg); }
+    AQ.sce = $sce;                  
 
     function cookie() {
 
@@ -36,6 +51,7 @@
           project_filter: $scope.views.search.project_filter,          
           user: $scope.views.search.user,
           user_filter: $scope.views.search.user_filter,
+          item_id: $scope.views.search.item_id
         },
         sample_type: {
           selected: $scope.views.sample_type.selected,   
@@ -84,13 +100,7 @@
 
       cookie();
 
-      $scope.messages = [ "Welcome to the updated Aquarium browser. The search feature "
-                        + "has been expanded and is now the way to find samples by name, "
-                        + "sample type, project, and user. In addition, the sample "
-                        + "creation tool now allows you to upload samples from a "
-                        + "spreadsheet. Note that the format of the spreadsheet has "
-                        + "changed, which you can read about on the 'New Samples' "
-                        + "page." ]
+      $scope.messages = []
 
     } else {
       if ( !$scope.views.sample_type ) {
@@ -98,26 +108,45 @@
       }
     }
 
-    $scope.helper = new SampleHelper($http);
-
-    $scope.user = new User($http,function(user_info) {
-      if ( $scope.views.search.user == -1 ) {
-        $scope.views.search.user = user_info.current.login;
-        $scope.search(0);
-      }
-      if ( !$scope.views.user.initialized ) {
-        $scope.views.user.initialized = true;
-        $scope.choose_user(user_info.current);
-      } else {
-        $scope.get_projects(function(){
-          $scope.$apply();
-        });      
-      }
-    });
-
     $scope.everyone = { login: 'everyone', id: 0, name: "All Projects" };
 
-    // Fetch data
+    function init() {
+
+      $scope.helper = new SampleHelper($http);
+
+      $scope.user = new User($http,function(user_info) {
+        if ( $scope.views.search.user == -1 ) {
+          $scope.views.search.user = user_info.current.login;
+          $scope.search(0);
+        }
+        if ( !$scope.views.user.initialized ) {
+          $scope.views.user.initialized = true;
+          $scope.choose_user(user_info.current);
+        } else {
+          $scope.get_projects(function(){
+            $scope.$apply();
+          });      
+        }
+      });
+
+      $http.get('/sample_types.json').
+        then(function(response) {
+          $scope.sample_types = response.data;
+          $scope.sample_type_names = aq.collect(response.data,function(st) {
+            return st.name;
+          });
+          if ( $scope.views.sample_type.selected && $scope.views.sample_type.selection ) {
+            get_samples($scope.views.sample_type.selection);
+          }        
+        });     
+        
+      load_sample_names();   
+
+      if ( $scope.views.search.user != -1 ) {
+        $scope.search(0);
+      }            
+
+    }
 
     $scope.get_projects = function(promise) {
       $scope.views.project.loaded = false;      
@@ -134,17 +163,6 @@
       });
     }
 
-    $http.get('/sample_types.json').
-      then(function(response) {
-        $scope.sample_types = response.data;
-        $scope.sample_type_names = aq.collect(response.data,function(st) {
-          return st.name;
-        });
-        if ( $scope.views.sample_type.selected && $scope.views.sample_type.selection ) {
-          get_samples($scope.views.sample_type.selection);
-        }        
-      });
-
     function load_sample_names() {
 
       $scope.helper.autocomplete(function(sample_names) {
@@ -152,8 +170,6 @@
       });
 
     }
-
-    load_sample_names();
 
     // View Selection
 
@@ -200,64 +216,6 @@
       });
 
     }
-
-    // Recent samples
-
-    $scope.fetch_recent = function() {
-      if ( !$scope.views.recent.samples || $scope.views.recent.samples.length == 0 ) {
-        $scope.helper.recent_samples($scope.views.user.current.id,function(samples) {
-          $scope.views.recent.samples = samples;
-          $scope.views.recent.sample_types = aq.uniq(aq.collect(samples, function(s) {
-            return s.sample_type_id;
-          })); 
-        });
-      }
-    }
-
-    $scope.fetch_recent();
-
-    // Project browsing
-
-    $scope.select_project = function(project) {
-      $scope.views.project.selection = { project: project.name, sample_type: null };
-    }    
-
-    $scope.unselect_project = function(project) {
-      if ( $scope.views.project.selection.project == project.name  ) {
-        $scope.views.project.selection.project = null;
-        $scope.views.project.selection.sample_type = null;
-      }
-    }    
-
-    $scope.show_sample_type = function(project,st) {
-      return project.sample_type_ids.indexOf(st.id) >= 0;
-    }
-
-    $scope.select_st = function(st, force) { // within project navigator
-
-      if ( $scope.views.project.selection.sample_type != st.id || force) {
-
-        $scope.views.project.selection.loaded = false;
-        $scope.views.project.selection.sample_type = st.id;
-        $scope.views.project.samples = [];
-        cookie();
-
-        $scope.helper.samples($scope.views.project.selection.project,
-                              $scope.views.project.selection.sample_type,
-                              function(samples) {
-          $scope.views.project.samples = samples;
-          $scope.views.project.selection.loaded = true;
-        });
-
-      }
-
-    }
-
-    $scope.unselect_st = function(st) {
-      if ( $scope.views.project.selection.sample_type == st.id ) {
-        $scope.views.project.selection.sample_type = null;       
-      } 
-    }  
 
     // Sample Type Chooser    
 
@@ -373,7 +331,17 @@
         then(function(response) { 
           $scope.views.search.status = "preparing";         
           $scope.views.search.samples = aq.collect(response.data.samples,function(s) {
-            return new Sample($http).from(s);
+            var sample = new Sample($http).from(s);
+            if ( aq.url_params().sid && sample.id === parseInt(aq.url_params().sid) ) {
+              sample.open = true;
+              sample.inventory = true;
+              sample.loading_inventory = true;
+              sample.get_inventory(function() {
+                sample.loading_inventory = false;            
+                sample.inventory = true;
+              });              
+            }
+            return sample;
           });
           $scope.views.search.count = response.data.count;
           $scope.views.search.pages = aq.range(response.data.count / 30);
@@ -382,17 +350,22 @@
           
     }
 
+    $scope.item_search = function() {
+      AQ.Item.find($scope.views.search.item_id).then( item => {
+        $scope.views.search.item = item;
+        $scope.views.search.item.modal = true;
+        $scope.views.search.item.new_location = $scope.views.search.item.location;
+        cookie();
+        AQ.update();
+      }).catch(() => alert("Could not find item with id " + $scope.views.search.item_id));
+    }
+
     $scope.page_class = function(page) {
       var c = "page";
       if ( page == $scope.views.search.page ) {
         c += " page-selected";
       }
       return c;
-    }
-
-
-    if ( $scope.views.search.user != -1 ) {
-      $scope.search(0);
     }
 
     // Messages 
@@ -480,6 +453,43 @@
       r.readAsBinaryString(f);
 
     }     
+
+    $scope.openMenu = function($mdMenu, ev) {
+      originatorEv = ev;
+      $mdMenu.open(ev);
+    };    
+
+    if ( aq.url_params().sid ) {
+
+      AQ.Sample.find(parseInt(aq.url_params().sid)).then(sample => {
+        $scope.views.search.query = sample.identifier;
+        $scope.views.search.sample_type = "";
+        $scope.views.search.user_filter = false;
+        $scope.views.search.project = "";
+        $scope.views.search.project_filter = false; 
+        $window.history.replaceState(null, document.title, "/browser");  
+        cookie();
+        init();
+
+      }).catch(result => init())
+
+    } else if ( aq.url_params().stid ) {
+
+      AQ.SampleType.find(parseInt(aq.url_params().stid)).then(st => {
+        $scope.views.search.query = "";
+        $scope.views.search.sample_type = st.name;
+        $scope.views.search.user_filter = false;
+        $scope.views.search.project = "";
+        $scope.views.search.project_filter = false; 
+        $window.history.replaceState(null, document.title, "/browser");  
+        cookie();
+        init();     
+
+      }).catch(result => init())        
+
+    } else {
+      init();
+    }    
 
   }]);
 

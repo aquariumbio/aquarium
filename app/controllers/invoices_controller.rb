@@ -1,6 +1,7 @@
 class InvoicesController < ApplicationController
 
   before_filter :signed_in_user
+  before_filter :up_to_date_user  
 
   def index
 
@@ -25,16 +26,23 @@ class InvoicesController < ApplicationController
       }
     }.reverse.reject { |d| d[:entries].length == 0 }
 
+    respond_to do |format|
+      format.html { render layout: 'aq2' }
+    end   
+
   end
 
   def show
     @invoice = Invoice.find(params[:id])
     @date = DateTime.new(@invoice.year,@invoice.month)
     @rows = @invoice.rows
-    @tps = TaskPrototype.all
+    @operation_types = OperationType.all
     @base = Account.total(@rows,false)
     @total = Account.total(@rows,true)
     @markup = @total - @base
+    respond_to do |format|
+      format.html { render layout: 'aq2' }
+    end       
   end
 
   def note
@@ -46,7 +54,6 @@ class InvoicesController < ApplicationController
         al = AccountLog.new({
           row1: row[:id],
           row2: nil,
-          task_id: row[:task_id],
           user_id: current_user.id,
           note: params[:note]
         })
@@ -122,7 +129,7 @@ class InvoicesController < ApplicationController
           markup_rate: 0.0,
           transaction_type: "credit",
           amount: (0.01*params[:percent].to_f)*transaction.amount*(1.0+transaction.markup_rate),
-          task_id: transaction.task_id,
+          operation_id: transaction.operation_id,
           category: "credit",
           description: "Credit due to a BIOFAB error or similar issue: credit"
         })
@@ -138,7 +145,6 @@ class InvoicesController < ApplicationController
         al = AccountLog.new({
           row1: row[:id],
           row2: credit.id,
-          task_id: row[:task_id],
           user_id: current_user.id,
           note: "#{params[:percent]}% credit. " + params[:note]
         })

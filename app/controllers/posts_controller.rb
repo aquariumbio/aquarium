@@ -16,7 +16,7 @@ class PostsController < ApplicationController
 
       respond_to do |format|
         format.html # index.html.erb
-        format.json { render json: @posts.as_json }
+        format.json { render json: @posts.as_json, layout: 'plugin' }
       end
 
     else

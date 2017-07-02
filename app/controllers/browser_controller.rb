@@ -1,10 +1,11 @@
 class BrowserController < ApplicationController
 
   before_filter :signed_in_user
+  before_filter :up_to_date_user
 
   def browser
     respond_to do |format|
-      format.html { render layout: 'browser' }
+      format.html { render layout: 'aq2' }
     end
   end
 
@@ -141,7 +142,7 @@ class BrowserController < ApplicationController
     sample = Sample.find(params[:id])
     item_list = Item.includes(:locator).where(sample_id: params[:id])
     containers = ObjectType.where(sample_type_id: sample.sample_type_id)
-    render json: { items: item_list.as_json(include: [:locator], methods: :data_associations), 
+    render json: { items: item_list.as_json(include: [:locator]), 
                    containers: containers.as_json(only:[:name,:id]) }
   end
 
@@ -149,7 +150,7 @@ class BrowserController < ApplicationController
     s = Sample.find(params[:sample_id])
     collections = Collection.containing(s)
     containers = collections.collect { |c| c.object_type }.uniq
-    render json: { collections: collections.as_json(include: :object_type, methods: :data_associations), 
+    render json: { collections: collections.as_json(include: :object_type), 
                    containers: containers.as_json(only: [:name,:id]) }
   end  
 

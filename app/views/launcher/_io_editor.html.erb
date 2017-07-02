@@ -1,0 +1,90 @@
+<script type="text/ng-template" id="io_editor">
+
+  <!-- Sample Chooser -->
+  <div sampleselect 
+       ng-repeat="fv in operation.field_values | filter: { name: ft.name, role: ft.role }" 
+       ft="ft" operation="operation" fv="fv" focus="io_focus" plan="plan" 
+       class="no-highlight">
+  </div> 
+
+  <!-- Add array element button -->
+  <div ng-if="ft.array">
+    <a href='#' class='btn btn-mini' ng-click="operation.array_add(ft)">+</a>
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="parameter_editor">
+
+  <div 
+       ng-repeat="fv in operation.field_values | filter: { role: ft.role }" 
+       ng-if="fv.name == ft.name">
+
+    <input ng-if="ft.choices_array.length == 0 && ft.ftype != 'json'"
+           type="string" 
+           ng-model="fv.value"
+           placeholder="{{ft.name}} ({{ft.ftype}})"
+           ng-focus='io_blur()'>
+
+    <div ng-if="ft.ftype == 'json'">
+
+      <textarea
+             ng-model="fv.value"
+             placeholder="{{ft.name}} (JSON)"
+             ng-focus="io_blur()"></textarea>
+
+    </div>
+    
+    <div ng-if="ft.choices_array.length > 0  && ft.ftype != 'json'" class='select-container'>
+      <select ng-model="fv.value"
+              ng-focus='io_blur()'
+              ng-options="choice for choice in ft.choices_array">
+        <option value="" disabled selected>{{fv.name}}</option>
+      </select>
+    </div>
+
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="sample_select">
+
+  <!-- basic sample -->
+
+  <input type='string' 
+         placeholder="{{fv.name}}"
+         id="sample-io"
+         ng-model="operation.routing[ft.routing]"
+         ng-focus="focus(operation,ft,fv)"        
+         ng-class="fv.items.length != 0 ? 'items-in-stock' : ''"
+         ng-if="!ft.array && operation.form[ft.role][ft.name].aft.sample_type_id">
+
+  <!-- element of sample array -->
+  <input type='string' 
+         placeholder="{{fv.name}}"
+         id="sample-io"
+         ng-model="fv.sample_identifier"
+         ng-focus="focus(operation,ft,fv)"
+         ng-class="fv.items.length != 0 ? 'items-in-stock' : ''"
+         ng-if="ft.array && operation.form[ft.role][ft.name].aft.sample_type_id">
+
+  <!-- not a sample -->
+  <span ng-click="focus(operation,ft,fv)"
+        ng-if="!operation.form[ft.role][ft.name].aft.sample_type_id"
+        ng-class="$parent.$parent.current_fv.rid == fv.rid ? 'selected-input' : ''">
+    {{fv.name}}
+  </span>
+
+  <a ng-if="ft.array" 
+     href="#" 
+     ng-click="operation.array_remove(fv)" 
+     class='array-remove'>&times;</a>
+
+  <br />
+
+  <div ng-repeat="wire in plan.wires | filter: fv.is_wired_to"
+       ng-include="'operation_editor'" 
+       ng-init="operation = wire.from_op; is_predecessor=true; io_focus=focus">
+  </div>
+
+</script>

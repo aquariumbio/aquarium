@@ -184,3 +184,26 @@
     width:0;
     height:0
 }
+
+.main-navigation {
+
+  .big-link {
+    border: 1pt solid #bbb;
+    color: black;
+    background: #eee;
+    padding: 10px;
+    &:hover {
+      cursor: pointer;
+      background: #bcf;
+    }
+    h1 {
+      color: black;
+    }
+  }
+}
+
+.discussion-home {
+  border-right: 1pt solid #bbb;
+  padding-right: 32px;
+  margin-right: 0px;
+}

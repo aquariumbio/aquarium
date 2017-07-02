@@ -11,4 +11,8 @@ class AllowableFieldType < ActiveRecord::Base
     super include: [ :sample_type, :object_type ]
   end
 
+  def equals other
+    sample_type == other.sample_type && object_type == other.object_type
+  end
+
 end 

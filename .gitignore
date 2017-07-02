@@ -46,4 +46,13 @@ awc.sh
 /public/doc/images/
 /public/doc/operation-api/
 
+ots.json
+
+# ignore bower installed components
+public/components
+
 .DS_Store
+
+
+
+

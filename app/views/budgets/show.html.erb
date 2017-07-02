@@ -1,67 +1,88 @@
-<p id="notice"><%= notice %></p>
+<% provide(:title, "Budget #{@budget.id}") %>
 
-<h2>
-  <%= @budget.name %>: <%= @budget.description %>
-</h2>
+<%= content_for :controller do %>noCtrl<% end %>
 
-<p>
-  Contact: <%= @budget.contact %><br />
-  Phone:  <%= @budget.phone %><br />
-  Email:  <%= @budget.email %>  
-</p>
+<% content_for :sidebar do %>
 
-<table class='table' style='width: 70%'>
+  <div layout-padding>
 
-  <tr>
-    <th>User</th>
-    <th>Quota</th>
-    <th>Spent this month (so far)</th>    
-    <th>Spent total</th>
-    <th></th>
-    <th></th>
-  </tr>
+    <% if notice %><p id="notice"><%= notice %></p><% end %>
 
-  <% @budget.user_budget_associations.each do |uba| %>
-    <% invoice = Invoice.for(user_id: uba.user_id, budget_id: uba.budget_id, month: Date.today.month, year: Date.today.year) %>
-    <% all = Account.where(user_id: uba.user_id, budget_id: uba.budget_id) %>
+    <h2 class='md-title'>
+      <%= @budget.name %>: <%= @budget.description %>
+    </h2>
 
-    <tr>
-      <td><%= link_to uba.user.name, uba.user %></td>
-      <td><%= number_to_currency(uba.quota) %></td>
-      <td><%= number_to_currency(Account.total(invoice.rows)) %></td>
-      <td><%= number_to_currency(Account.total(all)) %></td>      
-      <td><%= uba.disabled ? 'disabled' : '' %></td>
-      <td><a href='#' class='remove-user' data-uid=<%= uba.user_id %> 
-             onclick="return confirm('Are you sure you want to delete this association?')"><icon class='icon-remove'></icon></a></td>
-    </tr>
-  <% end %>
+    <p>
+      Contact: <%= @budget.contact %><br />
+      Phone:  <%= @budget.phone %><br />
+      Email:  <%= @budget.email %>  
+    </p>
 
-</table>
+    <% if current_user.is_admin %>
 
-<p><b>Note:</b> The above table lists only current user/budget associations. There may be other expenditures for users that were associated with this budget in the past, but for which the association has been deleted.</p>
+      <div class='well'>
+        <h4>Add new user</h4>
+        User:
+        <select id='user'>
+          <% @users.each do |u| %>
+            <option value=<%= u.id %>><%= u.name %> (<%= u.login %>)</option>
+          <% end %>
+        </select><br/>
+        Monthly Max: $<input id='quota' type=number value=1000></input><br />
+        <button class='btn btn-small' id="add-user">Add</button>
+      </div>
 
-<% if current_user.is_admin %>
+      <p>
 
-  <div class='well'>
-    <h4>Add new user</h4>
-    User:
-    <select id='user'>
-      <% @users.each do |u| %>
-        <option value=<%= u.id %>><%= u.name %> (<%= u.login %>)</option>
-      <% end %>
-    </select><br/>
-    Monthly Max: $<input id='quota' type=number value=1000></input><br />
-    <button class='btn btn-small' id="add-user">Add</button>
+      </p>
+
+    <% end %>  
+
   </div>
-
-  <p>
-    <%= link_to 'Edit', edit_budget_path(@budget), class: "btn" %> 
-    <%= link_to 'Back', budgets_path, class: "btn"  %>
-  </p>
 
 <% end %>
 
-<script>
+<% content_for :specific_title do %>
+  &rang; <%= @budget.name %>
+<% end %>
+
+<% content_for :main do %>
+
+  <div flex layout-padding>
+
+  <table class='table' style='width: 70%'>
+
+    <tr>
+      <th>User</th>
+      <th>Quota</th>
+      <th>Spent this month (so far)</th>    
+      <th>Spent total</th>
+      <th></th>
+      <th></th>
+    </tr>
+
+    <% @budget.user_budget_associations.each do |uba| %>
+      <% invoice = Invoice.for(user_id: uba.user_id, budget_id: uba.budget_id, month: Date.today.month, year: Date.today.year) %>
+      <% all = Account.where(user_id: uba.user_id, budget_id: uba.budget_id) %>
+
+      <tr>
+        <td><%= link_to uba.user.name, uba.user %></td>
+        <td><%= number_to_currency(uba.quota) %></td>
+        <td><%= number_to_currency(Account.total(invoice.rows)) %></td>
+        <td><%= number_to_currency(Account.total(all)) %></td>      
+        <td><%= uba.disabled ? 'disabled' : '' %></td>
+        <td><a href='#' class='remove-user' data-uid=<%= uba.user_id %> 
+               onclick="return confirm('Are you sure you want to delete this association?')"><icon class='icon-remove'></icon></a></td>
+      </tr>
+    <% end %>
+
+  </table>
+
+  <p><b>Note:</b> The above table lists only current user/budget associations. There may be other expenditures for users that were associated with this budget in the past, but for which the association has been deleted.</p>
+
+  </div>
+
+  <script>
 
   $('#add-user').click(function() {
     var uid = $('#user').val();
@@ -75,3 +96,14 @@
   });
 
 </script>
+
+<% end %>
+
+<% content_for :action1 do %>
+  <%= link_to 'Edit', edit_budget_path(@budget), class: "md-button md-raised md-primary" %> 
+<% end %>
+
+<% content_for :action1 do %>
+  <%= link_to 'All', budgets_path, class: "md-button md-raised" %>
+<% end %>
+

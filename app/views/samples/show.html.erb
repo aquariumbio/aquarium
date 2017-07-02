@@ -1,4 +1,4 @@
-<% provide(:title, @sample_type.name + '|' + @sample.name ) %>
+<% provide(:title,  "#{@sample.id}: #{@sample.name}" ) %>
 
 <div class='sample-title-box'>
   <h1><span class='sample-id'><%= @sample_type.name %> <%= @sample.id %>:</span>

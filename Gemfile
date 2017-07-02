@@ -4,12 +4,15 @@ gem 'rails', '3.2.19'
 gem 'bootstrap-sass', '2.3.2.0'
 gem 'yaml_db'
 gem 'paperclip'
+
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'sass-rails',   '~> 3.2.3'
-gem 'db-charmer', :require => 'db_charmer'
-gem "highcharts-rails", "~> 3.0.0"
+# gem 'db-charmer', :require => 'db_charmer'
 gem 'mysql2', "~> 0.3.17"
+
+gem 'aws-sdk', '< 1.8'
+gem 'nokogiri', '< 1.5'
 
 group :development do
   gem 'binding_of_caller'
@@ -17,12 +20,12 @@ group :development do
   gem 'rspec-rails'
 end
 
-
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
   gem 'coffee-rails'
-  gem 'uglifier', '>= 1.0.3'
+  # gem 'uglifier', '>= 1.0.3'
+  gem 'closure-compiler'
   gem 'bcrypt-ruby', "~> 3.0.0"
 end
 
@@ -36,16 +39,10 @@ gem "flot-rails"
 
 gem 'underscore-rails'
 
-gem 'd3-rails'
-
-gem 'git'
-
 gem 'rails-patch-json-encode'
 gem 'oj'
 
-gem 'angularjs-rails'
 gem 'angular_rails_csrf'
-gem 'ace-rails-ap'
 
-gem 'yard'
+# gem 'yard'
 gem 'rack-cors', :require => 'rack/cors'

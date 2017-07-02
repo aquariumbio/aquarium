@@ -22,7 +22,7 @@ module Krill
     #
     # @return [Table] A Table object.
     #
-    def initialize columns
+    def initialize columns={}
       @columns = columns
       @selection = {}
       @rows = []
@@ -41,6 +41,23 @@ module Krill
       self
     end
 
+    def has_columns?
+      !@columns.keys.empty?
+    end
+
+    def has_column? key
+      @columns[key] != nil
+    end    
+
+    # Set a value in the current row
+    #
+    # @param [symbol] name The name of the column
+    # @param [] value Value to set
+    def set name, value
+      @selection[name] = value   
+      self
+    end
+
     # Clear the currently selected columns, and result from and to.
     # @return [Table] The table, can be chained.
     def clear
@@ -53,11 +70,9 @@ module Krill
     # Append a row defined by the currently selectors.
     # @return [Table] The table, can be chained.    
     def append
-
       @rows << @selection
       clear
       self
-
     end
 
     # Select all columns.
@@ -106,6 +121,15 @@ module Krill
 
     end
 
+    def add_column name, values
+      column(name.to_sym, name)
+      values.each_with_index do |v,i|
+        @rows[i] ||= {}
+        @rows[i][name.to_sym] = v
+      end
+      self
+    end
+
     private
 
     # @private
@@ -116,8 +140,7 @@ module Krill
     def method_missing m, *args, &block
 
       if @columns[m]
-        @selection[m] = args[0]
-        self
+        set(m,args[0])
       else
         super
       end

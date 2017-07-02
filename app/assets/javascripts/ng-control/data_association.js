@@ -5,10 +5,11 @@
   try {
     w = angular.module('aquarium'); 
   } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace']); 
+    w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
   } 
 
-  w.controller('daCtrl', [ '$scope', '$http', '$attrs', function ($scope,$http,$attrs) {
+  w.controller( 'daCtrl', [ '$scope', '$http', '$attrs', 
+                  function ( $scope,   $http,   $attrs ) {
 
     $scope.toggle_modal = function(da) {
       da.modal = !da.modal;
@@ -25,7 +26,7 @@
     $scope.notes = function(parent) {
       var das = aq.where(parent.data_associations,function(da) { return da.key == "notes"; });      
       if ( das.length > 0 ) {
-        return das[0].value();
+        return das[0].value;
       } else {
         return null;
       }

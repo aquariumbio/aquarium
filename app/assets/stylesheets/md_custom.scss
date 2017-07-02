@@ -1,0 +1,79 @@
+/* BUTTON STYLING *********************************************************/
+
+$buttonHighlight: rgb(73, 91, 281);
+
+.md-button.md-small {
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  min-height: 20px;
+  min-width: 50px;
+  vertical-align: top;
+  font-size: 10px;
+  padding: 0 0;
+  margin: 0;
+}
+
+.md-button.md-medium {
+  height: 24px;
+  line-height: 20px;
+  min-height: 20px;
+  vertical-align: top;
+  font-size: 10px;
+  padding: 0 0;
+  margin: 5px;
+}
+
+.md-button.md-highlight {
+  background: $buttonHighlight;
+}
+
+/* LISTS *******************************************************************/
+
+.md-compact-list {
+  .md-no-proxy {
+    height: 28px;
+    min-height: 28px;
+  }
+  .md-proxy-focus {
+    height: 28px;
+    min-height: 28px;
+  }  
+  .md-checkbox, .md-button, .md-list-item-inner, .md-secondary-container {
+    height: 28px;
+    min-height: 28px;    
+  } 
+  md-checkbox {
+    margin: 4px !important;
+  }
+  .md-button-in-list {
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    min-height: 20px;
+    min-width: 50px;
+    vertical-align: top;
+    font-size: 10px;
+    padding: 0 0;
+    margin: 0;
+  }
+}
+
+/* NG_CLICK *****************************************************************/
+
+.no-highlight:focus {
+  outline: none;
+  border: 0;
+ }
+
+ /* MD_SELECT ***************************************************************/
+
+.md-plain-select {
+  border: 1pt solid #bbb; 
+  padding: 2px 2px 2px 4px;
+
+ .md-select-value {
+    border: none !important;
+ }
+
+}

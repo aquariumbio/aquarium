@@ -1,6 +1,8 @@
 class Parameter < ActiveRecord::Base
 
-  attr_accessible :key, :value, :description
+  attr_accessible :key, :value, :description, :user_id
+
+  belongs_to :user
 
   def self.make key, value
     p = Parameter.new key: key, value: value, description: "Edit me"

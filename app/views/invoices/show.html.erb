@@ -1,69 +1,74 @@
-<div class='invoice'>
+<%= content_for :specific_title do %>
 
-  <h1>
-    UW BIOFAB: Invoice for <%= @date.strftime("%B %Y") %>  
-  </h1>
+  Invoice &rang;
+  UW BIOFAB &rang; 
+  <%= @date.strftime("%B %Y") %> &rang; 
+  Generated <%= Date.today.strftime("%D") %>
 
-  <center>
-    <p>Generated <%= Date.today.strftime("%D") %></p>
-  </center>
+<% end %>
 
-  <div class='container row-fluid well' style='width: 90%'>
+<%= content_for :action1 do %>
 
-    <div class='span4'>
+  <md-button ng-href="/invoices/">All</md-button>
 
-      <p><b>User</b>: <%= @invoice.user.name %> (<%= link_to @invoice.user.login, @invoice.user %>)<br />
-         <b>Budget</b>: <%= link_to @invoice.budget.name, @invoice.budget %><br />
-         <b>Contact</b>: <%= @invoice.budget.contact %> (<%= @invoice.budget.email %>)<br />
-         <b>Contact phone</b>: <%= @invoice.budget.phone %> <br />    
+<% end %>
 
-    </div>
+<%= content_for :sidebar do %>
 
-    <div class='span3'>
+  <h1 class='md-title'><%= @invoice.user.name %></h1>
+  <h1 class='md-subhead'>Budget</b>: <%= link_to @invoice.budget.name, @invoice.budget %></h1>
+  <b>Contact</b>: <%= @invoice.budget.contact %> (<%= @invoice.budget.email %>)<br />
+  <b>Contact phone</b>: <%= @invoice.budget.phone %> <br />    
 
-      <p>
+  <hr>
 
-      <b>Base Cost</b>: <%= number_to_currency(@base) %><br />
-      <b>Operating Costs</b>: <%= number_to_currency(@markup) %><br />
-      <b>Total</b>: <%= number_to_currency(@total) %>
+  <b>Base Cost</b>: <%= number_to_currency(@base) %><br />
+  <b>Operating Costs</b>: <%= number_to_currency(@markup) %><br />
+  <b>Total</b>: <%= number_to_currency(@total) %>
 
-      </p>
+  <hr>
 
-    </div>
+  <b>Status</b>:
 
-    <div class='span5'>
-
-      <b>Status</b>:
-      <% if @invoice.in_progress %>
-        <span class='text-error'>In progress<br />
-      <% else %>
-        <br /> <select id="status">
-          <%= ["ready", "approval_requested", "reconciled"].each do |s| %>
-            <option <%= @invoice.status == s ? "selected" : "" %> ><%= s %></option>
-          <% end %>
-        </select><br />
+  <% if @invoice.in_progress %>
+    <span class='text-error'>In progress</span><br>
+  <% else %>
+    <br /> <select id="status">
+      <%= ["ready", "approval_requested", "reconciled"].each do |s| %>
+        <option <%= @invoice.status == s ? "selected" : "" %> ><%= s %></option>
       <% end %>
+    </select><br />
+  <% end %>
 
-      <% if false %>
-      <b>Notes</b>:<br />
-        <textarea id="notes" style="width:600px; height: 100px"><%= @invoice.notes %></textarea>
-      </p>
-      <% end %>
+  <% if false %>
+    <b>Notes</b>:<br />
+      <textarea id="notes" style="width:600px; height: 100px"><%= @invoice.notes %></textarea>
+    </p>
+  <% end %>
 
-      <button class='btn btn-warning' id="save" onclick="save_status()">Save Changes</button>
+  <% if !@invoice.in_progress %>
+    <hr>
+    <md-button class='md-raised' id="save" onclick="save_status()">Save Changes</md-button>
+  <% end %>
 
-    </div>
+  <hr>
 
-  </div>
+  <p>Contact <b>Amanda McCracken</b> (mccracken1029@gmail.com) with questions about this invoice.</p> 
 
-  <p>Please contact <b>Amanda McCracken</b> (mccracken1029@gmail.com) regarding payment and questions about this invoice.</p> 
+<% end %>    
+
+<%= content_for :main do %>
+
+  <div layout-padding>
 
   <%= render partial: 'details' %>
   <%= render partial: "note_dialog" %>
   <%= render partial: "credit_dialog" %>
   <%= render partial: "change_budget_dialog" %>  
 
-</div>
+  </div>
+
+<% end %>
 
 <script>
 
@@ -79,14 +84,14 @@
   $('#status').change(show_save);
   $('#notes').keydown(show_save);
 
-  function choose_all(task_id) {
+  function choose_all(operation_id) {
 
     var rows = $('.chooser').filter(function() {
-      return $(this).data('task-id') == task_id;
+      return $(this).data('operation-id') == operation_id;
     });
 
     var checked_rows = $('.chooser').filter(function() {
-      return $(this).data('task-id') == task_id && $(this).prop('checked');
+      return $(this).data('operation-id') == operation_id && $(this).prop('checked');
     });    
 
     if ( checked_rows.length > 0 ) {
@@ -99,16 +104,16 @@
 
   function note(task_id) {
     rows = $('.chooser:checked').filter(function() {
-      return $(this).data('task-id') == task_id && $(this).prop('checked');
+      return $(this).data('operation-id') == task_id && $(this).prop('checked');
     });
     if ( rows.length > 0 ) {
       $("#noteDialog").modal('show');
     }
   }
 
-  function credit(task_id) {
+  function credit(operation_id) {
     rows = $('.chooser:checked').filter(function() {
-      return $(this).data('task-id') == task_id && $(this).prop('checked');
+      return $(this).data('operation-id') == operation_id && $(this).prop('checked');
     });     
     if ( rows.length > 0 ) {
       var total = aq.sum(rows,function(row) { return parseFloat($(row).data('row-amount')); } );
@@ -149,7 +154,6 @@
       url: "/invoices/note",
       data: note_data,
       success: function(data) {
-        console.log(["success", data]);
         $("#noteDialog").modal('hide');
         location.reload();
       },
@@ -175,7 +179,6 @@
         url: "/invoices/credit",
         data: credit_data,
         success: function(data) {
-          console.log(["success", data]);
           $("#creditDialog").modal('hide');
           location.reload();
         },
@@ -199,7 +202,6 @@
         url: "/invoices/change_budget/",
         data: change_data,
         success: function(data) {
-          console.log(["success", data]);
           $('#task-'+current_task_id+"-budget").html("&#xffeb; " + data.budget.name);
           aq.each(data.rows,function(row) {
             $('#row-'+row.id+"-budget").html("&#xffeb; " + data.budget.name);

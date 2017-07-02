@@ -1,3 +1,136 @@
-// Place all the styles related to the Operation controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.operations {
+
+  .op-type {
+
+  }
+  .op-type-selected {
+    font-weight: bold;
+  }
+  .op-type-none {
+    color: #ccc;
+  }  
+
+  .input-list {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  .ot-list {
+    list-style: none;
+  }
+
+  .launch-buttons {
+    margin-bottom: 5px;
+  }
+
+  .info {
+    padding-left: 20px;
+  }
+
+  .number:hover {
+    background: #eee;
+  }
+
+  .number-none {
+    color: #eee;
+    cursor: pointer;
+  }
+
+  .number-some {
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .number-selected {
+    background: yellow;
+    outline: 1pt solid black;
+    cursor: pointer;
+  }
+
+  .capitalize {
+     text-transform: capitalize;
+  }  
+
+  .job {
+    border: 1pt solid #bbb;
+    .job-toolbar {
+      background: #80d8ff;
+      color: black;
+      min-height: 34px;
+      max-height: 34px;         
+    }
+    margin-bottom: 10px;
+  }
+
+  .oplist {
+    padding: 10px 10px 0 10px;
+    margin: 0;
+  }
+
+  .status-table {
+
+    .operation-name {
+      width: 66%;
+    }
+
+    tr:hover {
+      background: white;
+    };
+
+    td:not(:first-child) {
+      text-align: center;
+    }
+
+    th.rotate {
+      /* Something you can count on */
+      height: 80px;
+      white-space: nowrap;
+      /*outline: 1pt solid red;*/
+      padding: 0;
+      margin: 0;
+
+    }
+
+    th.rotate > div {
+      transform: 
+        translate(0px, 55px)
+        rotate(270deg);
+      width: 20px;
+      /*outline: 1pt solid blue;*/
+      padding: 0;
+      margin: 0;
+    }
+    th.rotate > div > span {
+      padding: 0;
+      margin: 0;
+      /*outline: 1pt solid green;*/
+
+    }
+
+  }
+
+  .timing-bullet-past {
+    color: #ccc;
+  }
+
+  .timing-bullet-present {
+    color: darkgreen;
+  }
+
+  .timing-bullet-future {
+    color: orange;
+  }
+
+  .timing-bullet-none {
+    color: white;
+  }
+
+  .timing-info {
+    margin: 16px 0 0 42px;
+    color: #666;
+  }
+
+}

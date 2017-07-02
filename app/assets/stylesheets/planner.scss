@@ -1,0 +1,240 @@
+.planner {
+
+  .space {
+    margin: 5px;
+  }
+
+  .op-type-name {
+    font-size: 24pt;
+    font-weight: bold;
+    margin: 5px;
+  }
+
+  .item-plain {
+  }
+
+  .item-selected {
+    font-weight: bold;
+  }
+
+  .clickable {
+    cursor: pointer;
+  }
+
+  .highlight {
+    border-radius: 2px;
+    padding: 0 2px 0 2px;
+  }
+
+  .highlight-error {
+    background: #f99;
+  }
+
+  .highlight-done {
+    background: cyan;
+  }
+
+  .highlight-pending, .highlight-waiting {
+    background: #ff9;
+  }
+
+  .highlight-running {
+    background: #9f9;
+  }
+
+  .highlight-running-low {
+    background: white;
+  }
+
+  .op-table {
+    width: 100%;
+    th {
+      font-weight: bold;
+    }
+    table-layout: fixed;
+    .small-col {
+      width: 30px;
+    }
+    .arrow {
+      font-size: 24pt;
+    }
+    th {
+      border-bottom: 1pt solid #bbb
+    }
+    td {
+      border: none;
+    }
+  }
+
+  .plan-list {
+    list-style: none;
+    font-size: 11pt;
+    margin: 0;    
+    .plan-choice-selected {
+      font-weight: bold;
+      background: yellow;          
+    }  
+    li {
+      overflow: hidden;
+      white-space: nowrap;
+      &:hover {
+        color: blue;
+      };
+    }
+    .op-name {
+    }
+    .op-goal {
+    }
+  }
+
+  .goal-list {
+    .goal-item {
+      cursor: pointer;
+    };
+    .has-goal {
+      color: green;
+      font-weight: bold;
+    }    
+    .goal-size {
+      color: green;
+    }
+  }
+
+  .operation-details {
+    border: 1pt solid #ccc;
+    padding: 10px;
+  }
+
+  .node {
+    font-weight: bold;
+    border: 1pt solid #aaa;
+    border-radius: 3px;
+    padding: 1px 5px 1px 2px;
+    margin: 1px;
+    background: white;
+    cursor: pointer;
+    background: #ffa;
+  }
+
+  .node-selected {
+    border: 1pt solid #444;      
+    box-shadow:0 0 4px #55f;   
+  }
+
+  .node-ready {
+    background: #afa;     
+  }
+
+  .node-unplanned {
+    background: #eee;
+    color: #aaa;
+  }
+
+  .node-problem {
+    background: #faa;
+  }
+
+  .available {
+    color: green;
+  }
+
+  .no-plan {
+    font-weight: bold;
+    background: red;
+  }
+
+  .plan {
+
+    .available {
+      color: green;
+    }
+
+    .problem {
+      color: red;
+    }
+
+    /*border: 1pt solid red;*/
+    font-size: 10pt; 
+
+    ul {
+
+      margin:0 0 10px 10px; /* indentation */
+      padding: 0;
+      list-style:none;
+      position:relative; 
+
+      &:before {
+        content:"";
+        display:block;
+        width:0;
+        position:absolute;
+        top:0;
+        bottom:0;
+        left:0;
+        border-left: 1px solid #bbb;
+      }  
+
+      li {
+        margin:0;
+        padding: 0 0 0 10px; /* indentation + .5em */
+        line-height: 22px; /* default list item's `line-height` */
+        /*font-weight: bold;*/
+        position:relative;
+      }
+
+      li:before {
+        content:"";
+        display:block;
+        width:5px; /* same with indentation */
+        height:0;
+        border-top:1px solid #bbb;
+        margin-top:-1px; /* border top width */
+        position:absolute;
+        top: 11px; /* (line-height/2) */
+        left:0;
+      }
+
+      li:last-child:before {
+        background: white; /* same with body background */
+        height:auto;
+        top:11px; /* (line-height/2) */
+        bottom:0;
+      }
+
+      li:last-child {
+        margin-bottom: 0;
+      }
+
+      .operation-details {
+        &:before {
+          border: none;
+        }
+        li:before {
+          border: none;
+        }
+      }
+
+    }
+
+  }
+
+  .field_value_form {
+    width: auto;
+    input {
+      margin: 3px;
+      height: 11pt;
+      width: 250px;
+    }
+   }
+
+   .replan {
+      td {
+      vertical-align: top;
+      }
+      tr td:first-child{
+          width:1%;
+          white-space:nowrap;
+      }    
+   }
+
+}

@@ -1,0 +1,14 @@
+<script type="text/ng-template" id="operation">
+
+  <ul class='operation-details'>
+    <li>Job: <a href="/krill/log?job={{operation.job.id}}">{{operation.job.id}}</a>, last updated {{operation.job.updated_at|date}}
+             submitted by {{user.find(operation.job.submitted_by).login}},
+             and run by {{user.find(operation.job.user_id).login}}</li>
+      <li ng-include="'dataList'" 
+          ng-init="parent = operation; type='Operation'">
+      </li>
+  </ul>
+
+  <!--pre>{{operation|json}}</pre -->
+
+</script>

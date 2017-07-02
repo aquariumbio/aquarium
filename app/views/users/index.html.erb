@@ -1,20 +1,84 @@
 <% provide(:title, 'All users') %>
 
-<h1>All users</h1>
+<% content_for :class do %>users<% end %>
 
-<%= will_paginate @users %>
+<%= content_for :controller do %>noCtrl<% end %>
 
-<table class="table">
-   <tr>
-    <th>login</th>
-    <th>Name</th>
-    <th>Since</th>
-    <th>Task in last 3 months</th>
-    <th></th>
-    <th></th>    
-    <th></th>    
-   </tr>
-   <%= render @users %>
-</table>
+<% content_for :sidebar do %>
 
-<%= will_paginate @users %>
+  <div layout-padding>
+
+  <% flash.each do |key, value| %>
+    <div class='flash md-body-2'><%= value %></div>
+  <% end %>
+
+    <%= form_for(@user) do |f| %>
+
+      <%= render 'shared/error_messages' %>
+
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+
+      <%= f.label :login %>
+      <%= f.text_field :login %>
+
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+
+      <%= f.label :password_confirmation, "Confirmation" %>
+      <%= f.password_field :password_confirmation %>
+
+      <%= f.submit "New User", class: "md-button md-raised md-primary" %>
+
+    <% end %>
+
+    <hr>
+
+    <%= form_for(@user, html: { action: 'change_password' }) do |f| %>
+
+      <%= render 'shared/error_messages' %>
+
+      <%= f.label :login %>
+      <%= f.select(:login, options_for_select( 
+            User.all.sort_by { |u| u.login }
+                    .collect { |u| [ u.login, u.login ] }, current_user.id )) %>
+
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+
+      <%= f.label :password_confirmation, "Confirm Password" %>
+      <%= f.password_field :password_confirmation %>
+
+      <input id="change_password" name="change_password" type="hidden" value="true" />
+
+      <br />
+
+      <%= f.submit "Change", class: "md-button md-raised md-primary" %>
+      <%= link_to "Cancel", users_path, class: "md-button md-raised" %>
+
+    <% end %>  
+
+  </div>
+
+<% end %>
+
+<% content_for :main do %>
+
+  <div layout-padding>
+
+    <table class="table">
+       <tr>
+        <th>login</th>
+        <th>Name</th>
+        <th>Since</th>
+        <th></th>
+        <th></th>    
+       </tr>
+       <%= render @users %>
+    </table>
+
+    <%= will_paginate @users, previous_label: 'Previous', next_label: 'Next' %>
+
+  </div>
+
+<% end %>

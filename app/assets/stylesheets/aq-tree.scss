@@ -1,0 +1,99 @@
+.aq-list {
+
+  .goal {
+    margin-bottom: 2px !important;
+  }
+
+  ul {
+
+    margin:0 0 0px 5px; /* indentation */
+    padding: 0;
+    list-style:none;
+    position:relative;  
+
+    &:before {
+      content:"";
+      display:block;
+      width:0;
+      position:absolute;
+      top:0;
+      bottom:0;
+      left:0;
+      border-left: 1px solid #bbb;
+    }  
+
+    li {
+      margin:0;
+      padding: 0 0 0 0.9em; /* indentation + .5em */
+      line-height:1.75em; /* default list item's `line-height` */
+      font-weight:bold;
+      position:relative;
+    }
+
+    li:before {
+      content:"";
+      display:block;
+      width:10px; /* same with indentation */
+      height:0;
+      border-top:1px solid #bbb;
+      margin-top:-1px; /* border top width */
+      position:absolute;
+      top:1em; /* (line-height/2) */
+      left:0;
+    }
+
+    li:last-child:before {
+      background: white; /* same with body background */
+      height:auto;
+      top:1em; /* (line-height/2) */
+      bottom:0;
+    }
+
+    li:last-child {
+      margin-bottom: 0;
+    }
+
+  }
+
+  node {
+    height: 20px !important;
+    line-height: 20px !important;
+    padding: 0 10px 0 0;
+    margin-top: 3px;
+    margin-bottom: 0px;
+    margin-left: -1px;
+    display: inline-block;
+    font-weight: bold;
+    width: calc(100% - 10px);
+    &:hover {
+      background-color: #efefff;
+      cursor: pointer;
+    };
+  }
+
+  input {
+    height: 20px !important;
+    line-height: 20px !important; 
+    margin: -2px;
+    padding-left: 2px;
+    width: 100%;
+    border: 1pt solid #eee;
+  }
+
+  textarea {
+    border: 1pt solid #eee;
+    border-radius: 0;
+    width: 100%;
+    margin: 0px -2px -2px -2px;
+  }
+
+  select {
+    border: 1pt solid #eee;
+    border-radius: 0;
+    &:focus {
+      background-color: #eef;
+      outline: none;
+    };
+  }
+
+}

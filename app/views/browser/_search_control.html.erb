@@ -1,10 +1,11 @@
+<div ng-if="projects && sample_names && sample_type_names" layout="column" layout-padding>
 
-<div ng-class="browser_control_class('search')" 
-     ng-click="select_view('search')"
-     ng-if="projects && sample_names && sample_type_names">
+  <div class="title">
+    <h1 class="md-title">Search Parameters</h1>
+  </div>
 
   <div class="search-part">
-    <label>Search String</label>
+    <label>Sample Name or ID</label>
     <input type="text" ng-model="views.search.query" style="width: 100%" samplecomplete="'all'">
   </div>
 
@@ -13,26 +14,41 @@
     <input type="text" ng-model="views.search.sample_type" style="width: 100%" sampletypecomplete> 
   </div>
 
-  <div class="search-part">
-    <label>Project</label>
-    <input type="text" ng-model="views.search.project" style="width: 70%" projectcomplete>
-    <label class="checkbox user-filter" style="display: inline-block;">
-      <input type=checkbox 
-             ng-model='views.search.project_filter' 
-             ng-checked='views.search.project_filter' /> Filter?
-    </label>    
+  <div class="search-part" layout="row">
+    <div>
+      <label>Project</label>
+      <input type="text" ng-model="views.search.project" style="width: 70%" projectcomplete>
+    </div>
+    <md-switch ng-model='views.search.project_filter'>
+      Filter?
+    </md-switch>    
   </div>
 
-  <div class="search-part">
-    <label>User</label>
-    <input type="text" ng-model="views.search.user" style="width: 70%" usercomplete>
-    <label class="checkbox user-filter" style="display: inline-block;">
-      <input type=checkbox 
-             ng-model='views.search.user_filter' 
-             ng-checked='views.search.user_filter' /> Filter?
-    </label>    
-  </div>   
+  <div class="search-part" layout="row">  
+    <div>
+      <label>User</label>
+      <input type="text" ng-model="views.search.user" style="width: 70%" usercomplete>    
+    </div>
+    <md-switch ng-model='views.search.user_filter'>
+      Filter?
+    </md-switch> 
+  </div>    
 
-  <a class="btn" type="button" ng-click="search(0)">Search</a>  
+  <div layout="row" layout-align="center center">
+    <md-button ng-class="views.search.selected ? 'md-raised md-primary' : 'md-raised'" 
+               ng-click="search(0); select_view('search')">Search</md-button> 
+  </div>
+
+  <hr>
+
+  <div layout="column" layout-align="center center">
+    <input type="text" style="width: 50%" ng-model="views.search.item_id">
+    <md-button style="width: 30%; margin-bottom: 0px" class="md-raised" ng-click="item_search()">Find Item</md-button>
+  </div>
+
+  <div item="views.search.item" 
+       container="views.search.item.object_type"
+       sample="views.search.item.sample"
+       nolink="true"></div>
 
 </div>

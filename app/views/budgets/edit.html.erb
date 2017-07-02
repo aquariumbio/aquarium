@@ -1,6 +1,19 @@
-<h1>Editing budget</h1>
+<%= content_for :controller do %>noCtrl<% end %>
 
-<%= render 'form' %>
+<% provide(:title, "Budget #{@budget.id}") %>
 
-<%= link_to 'Show', @budget, class: 'btn' %> 
-<%= link_to 'Back', budgets_path, class: 'btn' %>
+<% content_for :main do %>
+
+  <div layout-padding>
+    <%= render 'form' %>
+  </div>
+
+<% end %>
+
+<% content_for :specific_title do %>
+  &rang; Edit
+<% end %>
+
+<% content_for :action1 do %>
+  <a href="/budgets" class='md-button md-raised md-button'>Cancel</a>
+<% end %>

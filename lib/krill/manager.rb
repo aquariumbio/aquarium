@@ -19,7 +19,15 @@ module Krill
       # Get job info
       @jid = jid
       @job = Job.find(jid)
-      @code = Repo::contents @job.path, @job.sha, directory, branch
+
+      if @job.sha
+        @code = Repo::contents @job.path, @job.sha, directory, branch
+      elsif !@job.operations.empty?
+        @code = @job.operations.first.operation_type.code("protocol").content
+      else
+        raise "No path specified for job #{@job.id}. Cannot start."
+      end
+
       initial_state = JSON.parse @job.state, symbolize_names: true
       @args = initial_state[0][:arguments]
 
@@ -50,8 +58,7 @@ module Krill
 
         begin
 
-          @job.reload.pc = 0          # what if this fails?
-          @job.save                   # what if this fails?
+          @job.start          # what if this fails?
           appended_complete = false
 
           begin
@@ -70,9 +77,11 @@ module Krill
 
           ensure
 
-            @job.reload.pc = Job.COMPLETED # what if this fails?
-
-            unless appended_complete
+            if appended_complete
+              @job.stop
+            else 
+              @job.stop "error"
+              @job.reload
               @job.append_step operation: "next", time: Time.now, inputs: {}
               @job.append_step operation: "aborted", rval: {}
             end
@@ -104,8 +113,7 @@ module Krill
 
       begin
 
-        @job.reload.pc = 0          # what if this fails?
-        @job.save                   # what if this fails?
+        @job.start          # what if this fails?
         appended_complete = false
 
         begin
@@ -124,9 +132,11 @@ module Krill
 
         ensure
 
-          @job.reload.pc = Job.COMPLETED # what if this fails?
-
-          unless appended_complete
+          if appended_complete
+            @job.stop # what if this fails?
+          else
+            @job.reload
+            @job.stop "error"
             @job.append_step operation: "next", time: Time.now, inputs: {}
             @job.append_step operation: "aborted", rval: {}
           end

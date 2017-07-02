@@ -1,8 +1,22 @@
+
 function Aq() {
   _.templateSettings = {
     interpolate: /\{\{\=(.+?)\}\}/g,
     evaluate: /\{\{(.+?)\}\}/g
   };
+}
+
+Aq.prototype.url_params = function() {
+  var query = window.location.search.split('?');
+  var result = {};
+  if ( query.length == 2 ) {
+    var parts = query[1].split('&');
+    var result = {};
+    aq.each(parts,part => {
+      result[part.split('=')[0]] = part.split('=')[1];
+    });
+  } 
+  return result;
 }
 
 Aq.prototype.template = function(name,args) {
@@ -147,6 +161,23 @@ Aq.prototype.where = function(array,f) {
   return result;
 }
 
+Aq.prototype.find = function(array,f) {
+  var results = this.where(array,f);
+  if ( results.length > 0 ) {
+    return results[0];
+  } else {
+    return undefined;
+  }
+}
+
+Aq.prototype.remove = function(array,element) {
+  var i = array.indexOf(element);
+  if ( i > -1 ) {
+    array.splice(i,1);
+  }
+  return array;
+}
+
 Aq.prototype.range = function(n) {
   var result = [];
   for ( var i=0; i<n; i++ ) {
@@ -192,6 +223,25 @@ Aq.prototype.pluck = function(obj,fields) {
 
 Aq.prototype.currency = function(num) {
   return '$' + parseFloat(num, 10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
+}
+
+Aq.prototype.query = function() {
+
+  var query_string = window.location.search.split('?')[1];
+  var o = {};
+
+  if ( query_string ) {
+    
+    aq.each(query_string.split('&'), function(p) { 
+      var key = p.split("=")[0],
+          val = p.split("=")[1];
+      o[key] = val;
+    });
+    
+  } 
+
+  return o;
+
 }
 
 aq = new Aq();

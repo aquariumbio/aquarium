@@ -3,7 +3,7 @@
     <li>
       <b><%= ft.name %></b>:
       <% if ft.ftype == 'sample' %>
-        <%= ft.allowable_field_types.collect{ |aft| link_to(aft.sample_type.name, aft.sample_type) }.join(" | " ).html_safe %>
+        <%= ft.allowable_field_types.collect{ |aft| link_to(aft.sample_type ? aft.sample_type.name : "?", aft.sample_type) }.join(" | " ).html_safe %>
       <% else %>
         <%= ft.ftype %>
       <% end %>

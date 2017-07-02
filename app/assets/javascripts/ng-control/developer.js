@@ -5,10 +5,11 @@
   try {
     w = angular.module('aquarium'); 
   } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace']); 
+    w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
   } 
 
-  w.controller('developerCtrl', [ '$scope', '$http', '$attrs', '$cookies', function ($scope,$http,$attrs,$cookies) {
+  w.controller('developerCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
+                        function ( $scope,   $http,   $attrs,   $cookies ) {
 
     $scope.errors = [];
     $scope.messages = [];

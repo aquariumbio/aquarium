@@ -1,8 +1,5 @@
 <div ng-show="views.search.selected">
 
-  <b ng-if="views.search.count == 1">1 Sample</b>
-  <b ng-if="views.search.count > 1">{{views.search.count}} Samples</b>
-
   <div class='search-pager' ng-if="views.search.pages.length > 1">
     <span ng-repeat="page in views.search.pages" 
           ng-click="search(page)"
@@ -17,16 +14,24 @@
     </li>
   </ul>
 
-  <div ng-if="views.search.samples.length == 0 && views.search.status == 'done'">
-    No results.
+  <div ng-if="views.search.samples.length == 0 && views.search.status == 'done'" 
+       layout-align="center center"
+       layout="row"
+       layout-padding>
+    <div class="md-title">No results</div>
   </div>
 
-  <div ng-if="views.search.status == 'searching'">
-    Retrieving data ...
-  </div>  
-
-  <div ng-if="views.search.status == 'preparing'">
-    Preparing data ...
-  </div>   
+  <div flex layout-padding ng-if="views.search.status == 'searching' || views.search.status == 'preparing'" >
+    <div layout="row">
+      <div flex="25"></div>
+      <div flex="50">
+        <br /><br />
+        <h2 ng-if="views.search.status == 'searching'" class="md-title">Retrieving data ...</h2>
+        <h2 ng-if="views.search.status == 'preparing'" class="md-title">Preparing data ...</h2>        
+        <br />
+        <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+      </div>
+    </div>
+  </div>
 
 </div>

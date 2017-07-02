@@ -1,0 +1,50 @@
+<script type="text/ng-template" id="field_value">
+  FIELD VALUE: {{ft}}, {{fv}}, {{parent}}
+</script>
+
+<script type="text/ng-template" id="field_value_form">
+
+  <div class='field_value_form'>
+
+    <div ng-if="ft.ftype != 'sample'">{{ft.ftype}} NOT IMPLEMENTED</div>
+
+    <span ng-if="ft.ftype == 'sample' && !ft.array">
+      <input type='string' 
+             ftsamplecomplete="ft"
+             aft="operation['form_'+ft.role+'s'][ft.name].aft"
+             ng-model="operation.routing[ft.routing]">
+    </span>
+
+    <span ng-if="ft.ftype == 'sample' && ft.array">
+      <div ng-repeat="sid in operation['form_'+ft.role+'s'][ft.name].sample track by $index">
+        <input type='string' 
+               ftsamplecomplete="ft" 
+               aft="operation['form_'+ft.role+'s'][ft.name].aft"
+               ng-model="operation.routing[ft.routing][$index]">
+        <a href="#" ng-click="delete_from_fvs(operation['form_' + ft.role+'s'][ft.name].sample,$index)">&times;</a>
+      </div>
+      <button class='btn btn-mini' ng-click="add_to_array(operation['form_'+ft.role+'s'],ft.name)">+</button>
+    </span>
+
+    <div>
+      <form>
+        <div ng-repeat="aft in ft.allowable_field_types track by $index">
+          <label class="radio-label">
+          <input type="radio"
+                 class="radio"
+                 name="ft.name + '_' + ft.role"
+                 ng-value="aft.id"
+                 ng-disabled="ft.allowable_field_types.length == 1"
+                 ng-model="operation['form_' + ft.role+'s'][ft.name].aft_id"
+                 ng-change="operation['form_' + ft.role+'s'][ft.name].aft = aft">
+                 {{aft.object_type.name}}
+          </label>
+        </div>        
+      </form>
+    </div>    
+
+    <pre>{{operation.routing|json}}</pre>
+
+  </div>
+
+</script>

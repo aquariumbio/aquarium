@@ -13,8 +13,9 @@ class User < ActiveRecord::Base
   has_many :tasks
   has_many :account
   has_many :user_budget_associations
+  has_many :plans
+  has_many :parameters
   
-  # Q: Why not = user.login.downcase?
   before_create { |user| user.login = login.downcase }
   before_create :create_remember_token
 
@@ -82,6 +83,19 @@ class User < ActiveRecord::Base
       locked: true
     }
   end    
+
+  def up_to_date
+
+    return false if self.parameters.length == 0
+
+    email  = self.parameters.find { |p| p.key == 'email' && p.value && p.value.length > 0 } != nil
+    phone  = self.parameters.find { |p| p.key == 'phone' && p.value && p.value.length > 0 } != nil
+    biofab = self.parameters.find { |p| p.key == 'biofab' && p.value && p.value == 'true' }  != nil
+    aq     = self.parameters.find { |p| p.key == 'aquarium' && p.value && p.value == 'true' } != nil
+
+    email && phone && biofab && aq
+
+  end
 
   private
 

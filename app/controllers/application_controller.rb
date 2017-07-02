@@ -1,13 +1,3 @@
-# class ExpectionMailer < ActionMailer::Base
-#   #default from: 'bioturk@localhost'
-
-#   def error_email e
-#     @e = e
-#     mail(to: 'klavins@uw.edu', subject: "Aquarium error")
-#   end
-
-# end
-
 class ApplicationController < ActionController::Base
 
   protect_from_forgery

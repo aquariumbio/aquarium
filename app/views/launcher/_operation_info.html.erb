@@ -1,0 +1,53 @@
+<script type="text/ng-template" id="operation_info">
+
+  <md-content class="field-value-editor" ng-if="mode=='new'">
+
+    <div class="title">
+      <h1 class="md-title">{{plan.current_operation.operation_type.name}}</h1>
+      <p class='timing md-body'
+         ng-if="plan.current_operation.operation_type.timing && plan.current_operation.operation_type.timing.active">
+        {{plan.current_operation.operation_type.timing.as_string}}
+      </p>
+      <p class='timing md-body'
+         ng-if="!plan.current_operation.operation_type.timing || !plan.current_operation.operation_type.timing.active">
+        Scheduled as needed
+      </p>
+    </div>
+
+  <div class='documentation md-body-1' ng-bind-html="plan.current_operation.operation_type.rendered_docs"></div>
+
+  <hr>
+
+  <div class="stats md-body-1">
+
+    <p>
+      Run {{plan.current_operation.operation_type.stats.error + 
+            plan.current_operation.operation_type.stats.done}} times
+
+    </p>
+
+    <p ng-if="plan.current_operation.operation_type.stats.error == 1">
+      1 error
+    </span>
+
+    <p ng-if="plan.current_operation.operation_type.stats.error != 1">
+      {{plan.current_operation.operation_type.stats.error}} errors
+    </span>
+
+    <p>
+      {{100*plan.current_operation.operation_type.stats.success | number: 1}}% success rate
+    </p>
+
+    <p ng-if="plan.current_operation.operation_type.stats.first_run">
+      First run {{plan.current_operation.operation_type.stats.first_run|date: 'shortDate'}}
+    </p>
+
+    <p ng-if="plan.current_operation.operation_type.stats.last_run">
+      Last run {{plan.current_operation.operation_type.stats.last_run|date: 'shortDate'}}
+    </p>
+
+  </div>
+
+  </md-content>
+
+</script>

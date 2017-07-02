@@ -1,0 +1,65 @@
+<div ng-if="mode == 'build'" ng-controller="buildPlanCtrl as builder">
+
+  <div ng-if="build_errors.length > 0" class="alert">
+    <ul>
+      <li ng-repeat="error in build_errors">{{error}}</li>
+    </ul>
+  </div>
+
+  <div class='op-doc' ng-bind-html="goal.rendered_docs"></div>
+
+  <table class='table op-table'>
+
+    <thead>
+
+      <tr>
+        <th class='small-col'></th>
+        <th ng-repeat="ft in incomplete_field_types(goal,'input')">{{ft.name}}</th>
+        <th class='small-col arrow'>&#8658;</th>
+        <th ng-repeat="ft in incomplete_field_types(goal,'output')">{{ft.name}}</th> 
+        <th class='small-col'></th>     
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      <tr ng-repeat="operation in goal.operations track by $index"> <!-- operation rows -->
+
+        <td>{{$index+1}}.</td>
+
+        <td ng-repeat="ft in incomplete_field_types(goal,'input')" 
+            ng-include="'field_value_form'"></td>
+
+        <td></td>
+
+        <td ng-repeat="ft in incomplete_field_types(goal,'output')" 
+            ng-include="'field_value_form'"></td>
+
+        <td><a href='#' ng-click="drop(goal,operation)">&times;</a></td>              
+
+      </tr>
+
+      <tr> <!-- controls row -->
+
+        <td ng-repeat="ft in incomplete_field_types(goal,'input')"></td>
+        <td></td>
+        <td ng-repeat="ft in incomplete_field_types(goal,'output')"></td>
+
+        <td>
+          <a href="#" class='btn btn-mini btn-primary pull-right space' ng-click='plan(goal)'>Plan</button> 
+          <a href='#' class='btn btn-mini pull-right space' ng-click="more(goal)">Add</a>
+        </td>
+
+        <td></td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+  <!-- pre>{{goal.operations|json}}</pre -->
+
+</div>
+

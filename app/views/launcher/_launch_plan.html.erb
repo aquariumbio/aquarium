@@ -1,0 +1,72 @@
+<script type="text/ng-template" id="launch_plan">
+
+  <md-content ng-if="mode=='new'">
+
+    <div class="title">
+
+      <span class="md-title" ng-if="plan && plan.operations.length > 0">{{plan.operations[0].operation_type.name}}</span>
+      <% if current_user && current_user.is_admin %>
+        <div ng-if="current_user.id != <%= current_user.id %>">
+          <span class='md-body other-user-alert'>
+            for {{current_user.name}}
+          </span>
+        </div>
+      <% end %>
+
+      <div ng-if="plan.estimating" layout="row" layout-align="center center">
+        <md-progress-circular class="md-hue-2" md-diameter="20px">
+        </md-progress-circular> 
+        &nbsp;
+        <span class="md-body-2">Estimating Cost</span>
+      </div>
+
+      <div ng-if="!plan.estimating" layout="row" layout-align="center center">
+        <span class="md-body-2 cost-error" ng-if="plan.cost.error ">
+          Cost Undetermined: 
+          <span class="md-body-1">{{plan.cost.error}}</span>
+        </span>
+        <span class="md-body-2" ng-if="!plan.cost.error">
+          {{plan.cost.total|currency}}
+        </span>
+      </div>
+
+    </div>
+
+    <md-list ng-repeat="uba in current_user.user_budget_associations" flex>
+      <md-list-item ng-if="uba.budget && uba.budget.spent.this_month != null">
+        <div class="md-list-item-text" layout="column">
+          <div class="md-body-2">
+            <md-checkbox
+              aria-label="Budget Choice"
+              class='budget-checkbox'
+              ng-click="select_uba(current_user,uba)"
+              ng-checked="uba.selected"
+              ng-disabled="uba.budget.spent.this_month > uba.quota">
+            </md-checkbox>
+            {{uba.budget.name}}
+          </div>
+
+          <div class="md-body-1">{{uba.budget.description}}.</div>
+          <div class="md-body-1">
+              {{uba.budget.spent.this_month|currency}}
+            / {{uba.quota|currency}} spent</div>
+        </div>
+      </md-list-item>
+    </md-list>
+
+    <hr>
+
+    <div layout="row" layout-align="center center">
+      <md-button 
+        ng-click="submit_plan()"
+        ng-disabled="plan.estimating || plan.cost.error || plan.status == 'planning' || !plan.uba"
+        class="md-raised md-primary"
+        aria-label="Submit Plan">
+        <span ng-if="plan.status != 'planning'">Submit</span>
+        <span ng-if="plan.status == 'planning'">Planning...</span>        
+      </md-button>
+    </div>    
+
+  </md-content>
+
+</script>

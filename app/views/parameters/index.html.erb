@@ -1,32 +1,40 @@
-<h1>Aquarium Parameters</h1>
-
-<p>
-  <b>Edit with care:</b> 
-  Changes here can have far reaching consequences.
-</p>
-
-<table class='table'>
-  <tr>
-    <th>Key</th>
-    <th>Value</th>
-    <th>Description</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @parameters.each do |parameter| %>
-  <tr>
-    <td><%= parameter.key %></td>
-    <td><%= parameter.value %></td>
-    <td><%= parameter.description %></td>    
-    <td><%= link_to 'Show', parameter %></td>
-    <td><%= link_to 'Edit', edit_parameter_path(parameter) %></td>
-    <td><%= link_to 'Destroy', parameter, method: :delete, data: { confirm: 'Are you sure you want to undefine this parameter?' } %></td>
-  </tr>
+<% provide(:title, 'Aquarium Parameters') %>
+<%= content_for :controller do %>noCtrl<% end %>
+<% content_for :sidebar do %>
+  <div layout-padding>
+    <%= render 'form' %>
+  </div>
 <% end %>
-</table>
 
-<br />
+<% content_for :main do %>
 
-<%= link_to 'New Parameter', new_parameter_path, class: 'btn' %>
+  <div layout-padding>
+
+    <p>
+      <b>Edit with care:</b> 
+      Changes here can have far reaching consequences.
+    </p>
+
+    <table class='table'>
+      <tr>
+        <th>Key</th>
+        <th>Value</th>
+        <th>Description</th>
+        <th></th>
+        <th></th>
+      </tr>
+
+    <% @parameters.each do |parameter| %>
+      <tr>
+        <td><%= parameter.key %></td>
+        <td><%= parameter.value %></td>
+        <td><%= parameter.description %></td>    
+        <td><%= link_to 'Edit', edit_parameter_path(parameter) %></td>
+        <td><%= link_to 'Destroy', parameter, method: :delete, data: { confirm: 'Are you sure you want to undefine this parameter?' } %></td>
+      </tr>
+    <% end %>
+    </table>
+
+  </div>
+
+<% end %>

@@ -77,6 +77,16 @@
 
   </div>
 
+   <% if @object_type.handler == 'collection' || !@object_type.id %>
+
+     <%= f.label 'Rows' %>
+     <%= f.number_field :rows %>
+
+     <%= f.label 'Columns' %>
+     <%= f.number_field :columns %>
+
+   <% end %>  
+
   <div id='sample_type_selector' style='display: none'>Sample type selector</div>
 
   <br />

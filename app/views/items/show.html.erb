@@ -1,3 +1,5 @@
+<% provide(:title, "#{@item.id}") %>
+
 <h1>Item <%= @item.id %>
   <% if @item.deleted? %>
     : Deleted

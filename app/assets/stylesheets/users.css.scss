@@ -6,3 +6,16 @@
     }
   }
 }
+
+.users {
+  .next, .prev {
+    a {
+      height: 20px;
+    }
+  }
+  .flash {
+    padding: 10px;
+    width: 100%;
+    background: lightyellow;
+  }
+}

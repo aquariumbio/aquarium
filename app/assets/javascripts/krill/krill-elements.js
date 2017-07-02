@@ -43,11 +43,18 @@ Krill.prototype.upload = function(x) {
   var container = $(this.template('upload')(y));
   var input = $('.krill-upload-input',container);
   var list = $('.krill-upload-list',container);
+  var button = $('.krill-upload-button',container);
+  var list_heading = $('.krill-upload-list-heading',container);
   var that = this;
+
+  button.click(function() { 
+    console.log("clicked")
+    input.click();
+  })
 
   $(function(e) {
 
-    input.fileupload({
+    var config = {
 
       dataType: 'json',
 
@@ -56,10 +63,12 @@ Krill.prototype.upload = function(x) {
           name: data.files[0].name,
           id: data.result.upload_id
         })));
+        input.fileupload(config);
       },
 
       add: function (e,data) {
         var el = $(that.template('upload-waiting')({name: data.files[0].name}));
+        list_heading.show();        
         data.context = el;
         list.append(el);
         data.submit();
@@ -69,7 +78,9 @@ Krill.prototype.upload = function(x) {
         console.log('failed');
       }
 
-    });
+    }
+
+    input.fileupload(config);
 
   });
 
@@ -82,13 +93,31 @@ Krill.prototype.table = function(x) {
   var tab = $('<table></table>').addClass('krill-table');
 
   for( var i=0; i<x.length; i++) {
+
     var tr = $('<tr></tr>');
+
     if ( x[i] ) {
+
       for( var j=0; j<x[i].length; j++ ) {
+
         if ( typeof x[i][j] != "object" ) {
           var td = $('<td>'+x[i][j]+'</td>');
         } else if ( x[i][j] == null ) {
           var td = $('<td></td>');
+        } else if ( x[i][j].type ) {
+
+          var td = $('<td></td>');
+
+          td.append("<span class='krill-table-input-prompt'>&#9656;</span");
+
+          td.append("<input type=" + x[i][j].type 
+                                   + " value='"     + x[i][j].default + "'"
+                                   + " data-opid="  + x[i][j].operation_id 
+                                   + " data-key='"  + x[i][j].key     + "'"
+                                   + " data-type='" + x[i][j].type    + "'"
+                                   + " class='krill-table-input krill-table-input-large'"
+                                   + "></input>");  
+
         } else {
 
           var td = $('<td>'+x[i][j].content+'</td>');

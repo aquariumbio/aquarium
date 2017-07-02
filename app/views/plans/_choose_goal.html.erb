@@ -1,0 +1,18 @@
+<div ng-if="mode=='choose'">
+
+  <h4>Goal Selection</h4>
+
+  <p>Choose an operation type from the list below to set the goal or your workflow and start building a new plan.</p>
+
+  <ul class='goal-list'>
+    <li ng-repeat="ot in operation_types | filter : { deployed: true }">
+      <span class="goal-item" ng-click="open_goal(ot)">
+        <span ng-class="ot.operations ? 'has-goal' : ''">{{ot.name}}</span>        
+        <span ng-if="ot.operations.length > 0" class='goal-size'>({{ot.operations.length}})</span>
+      </span>
+    </li>
+  </ul>
+
+  <button class='btn btn-mini' ng-click="set_mode('main')">Hide</button>
+
+</div>

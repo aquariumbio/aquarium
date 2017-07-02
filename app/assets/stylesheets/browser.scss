@@ -5,7 +5,8 @@ $selected-sample-outline-color: #e0ffff;
 .browser {
 
   .search-part {
-    margin-top: 3px;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 
   .page {
@@ -16,6 +17,10 @@ $selected-sample-outline-color: #e0ffff;
     display: inline-block;
     text-align: center;
     cursor: pointer;
+  }
+
+  .search-pager {
+    padding: 0 16px 0 16px;
   }
 
   .page-selected {
@@ -486,6 +491,13 @@ $selected-sample-outline-color: #e0ffff;
 
   .toggle-se {
     cursor: pointer;
+  }
+
+  .upload-button {
+    height: 36px;
+    max-height: 36px;
+    padding: 0 6px 0 6px;
+    margin: 0 8px 0 8px;
   }
 
 }

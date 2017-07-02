@@ -1,4 +1,11 @@
-<h1>Editing parameter</h1>
+<% provide(:title, "Parameter #{@parameter.key}") %>
 
-<%= render 'form' %>
+<% content_for :main do %>
+
+  <div layout-padding>
+    <%= render 'form' %>
+    <a href="/parameters" class='md-button md-raised' style="height: 36px; padding:0; margin: 18px">Cancel</a>
+  </div>
+
+<% end %>
 

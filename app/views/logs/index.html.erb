@@ -1,41 +1,54 @@
-<h1>Completed Jobs</h1>
+<% provide(:title, 'Jobs') %>
 
-<table class='table table-condensed compact' id='log-table' data-source='<%= logs_url(format: 'json') %>'>
-  <thead>  
-    <tr>
-      <th>Job</th>
-      <th>Protocol*</th>
-      <th>Arguments</th>
-      <th>Submitted by (metacol)*<sup>,+</sup></th>
-      <th>Performed by*</th>
-      <th>Submitted</th>
-      <th>Completed</th>
-    </tr> 
-  </thead>
-  <tbody>
-  </tbody>
-</table>
+<%= content_for :controller do %>noCtrl<% end %>
 
-<p>*Searchable.<br />
-<sup>+</sup>Use a search term like <i>mxyz</i> to get only jobs related to metacol <i>xyz</i>.</p>
+<% content_for :specific_title do %>&rang; Completed<% end %>
 
-<div style='height: 40px'></div>
+<% content_for :sidebar do %>
+  <p>*Searchable.<br />
+  <sup>+</sup>Use a search term like <i>mxyz</i> to get only jobs related to metacol <i>xyz</i>.</p>
+<% end %>
 
-<script>
+<% content_for :main do %>
 
-  $('#log-table').dataTable({
-    "bProcessing": true,
-    "bServerSide": true,
-    "sAjaxSource": $('#log-table').data('source'),
-    "order": [ 0, 'desc' ],
-    "lengthMenu": [ 15, 25, 50, 75, 100 ],
-    "search": { 
-      "search": '<%= cookies[:logs_search_string] %>'
-    },
-    "columnDefs":[ {
-      "targets": [2,3,4],
-      "orderable": false
-    } ]
-  });
+  <div flex layout-padding>
 
-</script>
+    <table class='table table-condensed compact' style="width: 100%" id='log-table' data-source='<%= logs_url(format: 'json') %>'>
+      <thead>  
+        <tr>
+          <th>Job</th>
+          <th>Protocol*</th>
+          <th>Submitted by (metacol)*<sup>,+</sup></th>
+          <th>Performed by*</th>
+          <th>Submitted</th>
+          <th>Completed</th>
+        </tr> 
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+
+  </div>
+
+  <div style='height: 40px'></div>
+
+  <script>
+
+    $('#log-table').dataTable({
+      "bProcessing": true,
+      "bServerSide": true,
+      "sAjaxSource": $('#log-table').data('source'),
+      "order": [ 0, 'desc' ],
+      "lengthMenu": [ 15, 25, 50, 75, 100 ],
+      "search": { 
+        "search": '<%= cookies[:logs_search_string] %>'
+      },
+      "columnDefs":[ {
+        "targets": [2,3,4],
+        "orderable": false
+      } ]
+    });
+
+  </script>
+
+<% end %>

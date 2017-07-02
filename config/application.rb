@@ -96,6 +96,18 @@ module Bioturk
         TaskPrototype.count
         Task.count
         Parameter.count
+        DataAssociation.count
+        Upload.count
+        OperationType.count
+        FieldType.count
+        FieldValue.count
+        AllowableFieldType.count
+        Operation.count
+        VirtualOperation.count
+        Plan.count
+        Wire.count
+        PlanAssociation.count
+        JobAssociation.count
     end
 
     #Added to enable CORS

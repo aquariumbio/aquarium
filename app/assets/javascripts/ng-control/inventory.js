@@ -5,7 +5,7 @@
   try {
     w = angular.module('aquarium'); 
   } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace']); 
+    w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
   } 
 
   w.controller('inventoryCtrl', [ '$scope', '$http', '$attrs', 
@@ -39,6 +39,7 @@
     $scope.restore = function(item) {
       $http.get("/browser/restore_item/" + item.id).then(function(response) {
         item.location = response.data.location;
+        item.new_location = response.data.location;
         if ( response.data.errors ) {
           aq.each(response.data.errors,function(e) {
             console.log(e);

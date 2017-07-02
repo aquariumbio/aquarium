@@ -33,13 +33,45 @@ Krill.prototype.initialize = function() {
     
     var that = this;
     $('#krill-note').click(function(){
-        console.log('asd');
         var b = $("#Job_"+that.job+"_discussion_button");
-        console.log(b);
         b.click();
     });
     $('#krill-abort').click(function(){that.abort();});
 
+    $(window).keyup(function(e) {
+
+      if ( e.keyCode == 39 /* arrow right */ ) {
+
+        if ( that.current_position == that.step_list.length && that.ok_to_advance() ) {            
+
+          that.carousel_move_to(that.step_list.length,250);
+
+          if ( that.check_again ) {
+            that.send("check_again",this);
+          } else {
+            that.send("next",this);
+          }
+
+        } else {
+
+          e.preventDefault();            
+          that.carousel_inc(1);  
+
+        }
+
+      } else if ( e.keyCode == 37 /* arrow left */ ) {
+
+        that.carousel_inc(-1);  
+
+      }
+
+    });
+
+}
+
+Krill.prototype.ok_to_advance = function() {
+  var last = this.state[this.state.length -1];
+  return last.operation != 'complete' && last.operation != 'error';
 }
 
 Krill.prototype.update = function() {
@@ -232,6 +264,18 @@ Krill.prototype.pending_link = function() {
 
 }
 
+Krill.prototype.operations_link = function() { 
+
+    var that = this;
+
+    var btn = $('<button>Operations</button>').addClass('btn').click(function(){
+        window.location = '/operations';
+    });
+
+    return $('<li \>').append(btn).addClass('krill-note');
+
+}
+
 Krill.prototype.step = function(state,number) {    
 
     var container = $('<div></div>').addClass('krill-step');
@@ -281,7 +325,7 @@ Krill.prototype.step = function(state,number) {
             ul.append($('<li>'+line_info+'</li>').addClass('krill-note'));
         });
 
-        ul.append(this.log_link(),this.pending_link());
+        ul.append(this.log_link(),this.pending_link(),this.operations_link());
         container.append(titlebar,ul);
 
     } else {
@@ -308,7 +352,7 @@ Krill.prototype.step = function(state,number) {
 
 
         ul.append(p);
-        ul.append(this.log_link(),this.pending_link());
+        ul.append(this.log_link(),this.pending_link(),this.operations_link());
 
         container.append(titlebar,ul);
 
@@ -352,6 +396,7 @@ Krill.prototype.get = function() {
 
     var inputs = $(".krill-input-box",this.step_list[this.step_list.length-1]);
     var selects = $(".krill-select",this.step_list[this.step_list.length-1]);
+    var table_inputs = $(".krill-table-input",this.step_list[this.step_list.length-1]);
  
     var values = { timestamp: Date.now()/1000 };
 
@@ -367,6 +412,16 @@ Krill.prototype.get = function() {
     $.each(selects,function(i,e) {
         var name = $(e).attr("id");
         values[name] = $(e).val();
+    });
+
+    values.table_inputs = [];
+    $.each(table_inputs,function(i,e) {
+        values.table_inputs.push({ 
+            value: $(e).val(), 
+            opid: $(e).data('opid'), 
+            key: $(e).data('key'),
+            type: $(e).data('type')
+        });
     });
 
     var a = [];

@@ -12,54 +12,38 @@
     </div>
   <% end %>
 
-  <div class='row-fluid'>
-
-    <div class='span2'></div>
-
-    <div class='span4'>
-
-      <div class="field">
-        <%= f.label "Budget Number / short name" %>
-        <%= f.text_field :name %>
-      </div>
-
-      <div class="field">
-        <%= f.label :description %>
-        <%= f.text_field :description %>
-      </div>
-
-      <div class="field">
-        <%= f.label "Contact name / principal investigator" %>
-        <%= f.text_field :contact %>
-      </div>      
-
-    </div>
-
-    <div class='span4'>
-
-      <div class="field">
-        <%= f.label "Contact's email" %>
-        <%= f.text_field :email %>
-      </div>
-
-      <div class="field">
-        <%= f.label "Contact's phone" %>
-        <%= f.text_field :phone %>
-      </div>
-
-      <div class="actions">
-        <br />
-        <%= f.submit 'Save', class: 'btn btn-primary' %>
-        <%= link_to 'Cancel', budgets_path, class: "btn" %> 
-      </div>
-           
-
-    </div>
-
-    <div class='span2'></div>
-
+  <div class="field">
+    <%= f.label "Budget Number / short name" %>
+    <%= f.text_field :name %>
   </div>
 
+  <div class="field">
+    <%= f.label :description %>
+    <%= f.text_field :description %>
+  </div>
 
+  <div class="field">
+    <%= f.label "Contact" %>
+    <%= f.text_field :contact %>
+  </div>      
 
+  <div class="field">
+    <%= f.label "Contact's email" %>
+    <%= f.text_field :email %>
+  </div>
+
+  <div class="field">
+    <%= f.label "Contact's phone" %>
+    <%= f.text_field :phone %>
+  </div>
+
+  <div class="actions">
+    <br />
+    <% if @budget.id %>
+      <%= f.submit 'Save', class: 'md-button md-raised md-primary' %>
+    <% else %>
+      <%= f.submit 'New Budget', class: 'md-button md-raised md-primary' %>
+    <% end %>
+  </div>
+       
 <% end %>

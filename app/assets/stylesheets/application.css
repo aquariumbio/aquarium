@@ -16,11 +16,15 @@
  *= require jquery.fileupload-ui
  */
 
-
 @media print
 {    
     .no-print, .no-print *
     {
         display: none !important;
     }
+}
+
+body {
+  padding-top: 48px !important;
+  padding-bottom: 0px;
 }

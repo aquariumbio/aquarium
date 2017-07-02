@@ -29,12 +29,24 @@ Bioturk::Application.configure do
   # with SQLite, MySQL, and PostgreSQL)
   config.active_record.auto_explain_threshold_in_seconds = 0.5
 
-  # Do not compress assets
+  # Assets
   config.assets.compress = false
-
-  # Expands the lines which load the assets
+#  config.serve_static_assets = false
   config.assets.debug = false
 
   # config.time_zone = "Pacific Time (US & Canada)"
+
+  # Paperclip => S3
+  config.paperclip_defaults = {
+    storage: :s3,
+    s3_host_name: "s3-#{ENV['AWS_REGION']}.amazonaws.com",
+    s3_permissions: :private,
+    s3_credentials: {
+      bucket: ENV.fetch('S3_BUCKET_NAME'),
+      access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
+      secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY'),
+      s3_region: ENV.fetch('AWS_REGION')
+    }
+  }
 
 end

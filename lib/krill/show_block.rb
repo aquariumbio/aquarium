@@ -6,9 +6,9 @@ module Krill
     @@select_counter = 0
     @@upload_counter = 0
 
-    def initialize
+    def initialize base
+      @base = base
       @parts = []
-
     end
 
     def title str
@@ -36,7 +36,11 @@ module Krill
     end
 
     def table m
-      @parts.push({table: m})
+      if m.class == Table
+        @parts.push({table: m.all.render})
+      else
+        @parts.push({table: m})        
+      end
     end
 
     def item t
@@ -133,6 +137,16 @@ module Krill
     def run &block
     	instance_eval(&block)
     	@parts
+    end
+
+    def method_missing m, *args, &block
+
+      if m == :show
+        raise "Cannot call 'show' within a show block." 
+      else
+        @base.send(m,*args,&block)
+      end
+
     end
 
   end

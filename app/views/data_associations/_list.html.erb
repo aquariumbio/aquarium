@@ -7,37 +7,22 @@
       <li ng-repeat="da in parent.data_associations | filter: { key: '!notes' }">
 
         <span class='data-key'>{{da.key}}:</span> 
-        <span class='data-value' ng-if="!da.url">{{da.value()}}</span>
+        <span class='data-value' ng-if="!da.url">{{da.value}}</span>
 
         <span class='data-upload' ng-if="da.url">
-
-          <a href="#" ng-click="toggle_modal(da)">{{da.upload.upload_content_type}}</a>
-          ({{da.upload.upload_file_size|bytes}})
-
-          <div modal='da.modal' title='title(da)' width='750px' height='80%'>
-            <div class="ng-modal-data">{{da.value()}}</div>          
-            <div ng-if="is_image(da)">
-              <img ng-src="{{da.url}}" ng-if="da.modal"></img>
-            </div>
-            <div ng-if="!is_image(da)">
-              <b>Download:</b> <a href="{{da.url}}" download>{{da.upload.upload_file_name}}</a>
-            </div>          
-          </div>
-
-        </span>          
+          <a href='#' ng-click='item.modal=true'>{{da.upload.upload_file_name}}</a>
+          ({{da.upload.upload_content_type}},
+           {{da.upload.upload_file_size|bytes}})
+        </span>
 
       </li>
 
       <li>
 
-        <span class="da-notes">{{notes(parent)}}</span>
-
-        <a href="#" ng-click="edit_note(item)" class='edit-note item-small-icon small-note'>[note]</a>
-
-        <div modal='item.edit_modal' title="'Notes for item ' + item.id" width='40%' height='40%'>
-          <textarea ng-model="item.note" class='note-editor'></textarea>
+        <div modal='parent.edit_modal' title="'Notes for item ' + item.id" width='40%' height='40%'>
+          <textarea ng-model="parent.note" class='note-editor'></textarea>
           <div class='pull-right'>
-            <button class='btn btn-small btn-primary' ng-click="save_note(item,'Item')">
+            <button class='btn btn-small btn-primary' ng-click="save_note(parent,type)">
               Save
             </button>            
           </div>            
@@ -50,5 +35,3 @@
   </div>
 
 </script>
-
-

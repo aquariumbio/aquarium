@@ -103,13 +103,47 @@ class KrillController < ApplicationController
           backtrace: [])
       end
 
-      # tell manta we're starting a protocol
-      Manta::start @job, current_user, request, cookies, self
-
     end
 
     # redirect to ui
     redirect_to krill_ui_path(job: params[:job]) 
+
+  end
+
+  def debug
+
+    errors = []
+    @job = Job.find(params[:id])
+
+    # if not running, then start
+    if @job.pc == Job.NOT_STARTED
+
+      @job.user_id = current_user.id
+      @job.save
+
+      begin
+        manager = Krill::Manager.new @job.id, true, "master", "master"
+      rescue Exception => e
+        error = e
+      end
+
+      if error
+        errors << error
+      else
+
+        begin
+          manager.run
+        rescue Exception => e        
+          errors << e.message
+        end
+
+      end
+ 
+    end
+
+    Operation.step
+
+    render json: { errors: errors, operations: @job.reload.operations, job: @job }
 
   end
 
@@ -137,7 +171,7 @@ class KrillController < ApplicationController
     else
 
       @job = Job.find(params[:job])
-      @job.pc = Job.COMPLETED
+      @job.stop "error"
 
       state = JSON.parse @job.state, symbolize_names: true
       if state.length % 2 == 1 # backtrace ends with a 'next'
@@ -149,9 +183,6 @@ class KrillController < ApplicationController
       # add next and final
       @job.append_step operation: "next", time: Time.now, inputs: {}
       @job.append_step operation: "aborted", rval: {}
-
-      # tell manta we're done
-      # Manta::stop @job, request, 'true', self
 
       logger.info "ABORTING KRILL JOB #{@job.id}"
 
@@ -204,11 +235,14 @@ class KrillController < ApplicationController
 
       if result[:response] == "done"
 
-        # tell manta we're done
-        # Manta::stop @job, request, (@exception ? 'true' : 'false'), self
-
-        # step the job's workflow
+        # step the job's workflow (remove once workflows are removed)
         @job.reload.step_workflow
+
+        Thread.new do # this goes in the background because it can take a 
+                      # while, and the technician interface should not have
+                      # to wait
+          Operation.step
+        end        
 
       else
 
@@ -245,6 +279,8 @@ class KrillController < ApplicationController
     @tasks = ( ( @job.touches.select { |t| t.task } ).collect { |t| t.task } ).uniq { |task| task.id }
     @inventory = @job.takes.collect { |t| t.item_id }
 
+    render layout: 'aq2'
+
   end
 
   def ui
@@ -254,6 +290,8 @@ class KrillController < ApplicationController
     if @job.pc == Job.NOT_STARTED
       redirect_to krill_error_path(job: @job.id, message: "interpreter: Job not started") 
     end
+
+    render layout: 'aq2-plain'
 
   end
 
