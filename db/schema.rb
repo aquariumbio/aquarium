@@ -225,10 +225,7 @@ ActiveRecord::Schema.define(:version => 20170627173019) do
     t.datetime "desired_start_time"
     t.datetime "latest_start_time"
     t.integer  "metacol_id"
-<<<<<<< HEAD
-=======
     t.integer  "successor_id"
->>>>>>> planner
   end
 
   create_table "locators", :force => true do |t|
