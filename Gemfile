@@ -10,8 +10,8 @@ gem 'bootstrap-will_paginate'
 gem 'sass-rails',   '~> 3.2.3'
 gem 'mysql2', "~> 0.3.17"
 
-gem 'aws-sdk', '< 1.8'
-gem 'nokogiri', '< 1.5'
+gem 'nokogiri', "~> 1.7.1"
+gem 'aws-sdk'
 
 group :development do
   gem 'binding_of_caller'

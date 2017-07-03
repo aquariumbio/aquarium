@@ -22,7 +22,6 @@ GEM
       activesupport (= 3.2.19)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
-    activerecord-native_db_types_override (0.2.1)
     activeresource (3.2.19)
       activemodel (= 3.2.19)
       activesupport (= 3.2.19)
@@ -95,10 +94,12 @@ GEM
       railties (>= 3.0.0, < 5.2.0)
     mime-types (1.25.1)
     mimemagic (0.3.0)
+    mini_portile2 (2.1.0)
     multi_json (1.12.1)
     multi_xml (0.6.0)
     mysql2 (0.3.21)
-    nokogiri (1.4.7)
+    nokogiri (1.7.2)
+      mini_portile2 (~> 2.1.0)
     oj (3.2.0)
     paperclip (4.3.7)
       activemodel (>= 3.2.0)
@@ -182,9 +183,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord-native_db_types_override
   angular_rails_csrf
-  aws-sdk (< 1.8)
+  aws-sdk
   bcrypt-ruby (~> 3.0.0)
   binding_of_caller
   bootstrap-sass (= 2.3.2.0)
@@ -199,7 +199,7 @@ DEPENDENCIES
   jquery-ui-rails (~> 4.2.1)
   meta_request
   mysql2 (~> 0.3.17)
-  nokogiri (< 1.5)
+  nokogiri (~> 1.7.1)
   oj
   paperclip
   rack-cors
@@ -212,4 +212,4 @@ DEPENDENCIES
   yaml_db
 
 BUNDLED WITH
-   1.11.2
+   1.15.1
