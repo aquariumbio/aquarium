@@ -1,44 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html ng-app='aquarium' ng-controller='layoutCtrl' ng-cloak>
 
   <head>
-    <title>Aquarium</title>
+    <title>%= Bioturk::Application.config.instance_name %></title>
 
     <%= render partial: 'layouts/vendor_code' %>
     <%= stylesheet_link_tag    "application", media: "all" %>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
+    <%= favicon_link_tag 'favicon.ico' %>   
 
   </head>
 
-   <body style="background-color:transparent">
+  <body style="background-color:transparent">
 
-    <header class="navbar navbar-fixed-top navbar-inverse" id="header">
-      <div class="navbar-inner">
-        <div class="container-fluid" id="header-bar">
-          <%= link_to "AQUARIUM", root_path, id: "logo" %>
-          <div id='environment'><%= Rails.env %></div>
-          <div class='info' id="info-area"></div>
-          <nav>
-          </nav>
-        </div>
+    <%= yield %>
+
+    <div layout-padding layout="column" layout-align="center center">
+      <div style="text-align: center">
+        <md-list layout-padding>
+          <% flash.each do |key, value| %>
+            <md-list-item>
+              <p class="md-title" style="color: #b66"><%= value.class == Array ? value.join('<br />').html_safe : value %></p>
+            </md-list-item>
+          <% end %>
+        </md-list>
       </div>
-    </header>
-
-    <div class="container-fluid">
-
-      <% flash.each do |key, value| %>
-        <div class="alert alert-<%= key %>"><%= value.class == Array ? value.join('<br />').html_safe : value %></div>
-      <% end %>
-
-      <%= yield %>
-
-      <%= render 'layouts/footer' %>
-
-    </div>
+    </div>    
 
   </body>
-
-  <%= render 'layouts/color_guard' %>
 
 </html>
