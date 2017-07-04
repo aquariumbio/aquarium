@@ -13,9 +13,10 @@ class AnnouncementsController < ApplicationController
   def index
     @announcements = Announcement.all
     @latest_announcement = @announcements.last
+    @announcement = Announcement.new
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html { render layout: 'aq2' }
       format.json { render json: @announcements }
     end
   end
@@ -45,6 +46,7 @@ class AnnouncementsController < ApplicationController
   # GET /announcements/1/edit
   def edit
     @announcement = Announcement.find(params[:id])
+    render layout: 'aq2-plain'
   end
 
   # POST /announcements

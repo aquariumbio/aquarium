@@ -15,15 +15,20 @@
     <%= f.label :title %><br />
     <%= f.text_field :title %>
   </div>
+
   <div class="field">
     <%= f.label :message %><br />
     <%= f.text_area :message, style: 'width: 100%;' %>
   </div>
+
   <div class="field">
     <%= f.label :active %>
     <%= f.check_box :active %>
   </div>
+
+  <br>
+
   <div class="actions">
-    <%= f.submit class: 'btn' %>
+    <%= f.submit class: 'md-button md-raised md-primary' %>
   </div>
 <% end %>
