@@ -15,12 +15,12 @@ class LogsDatatable < Datatable
       if job.metacol_id
         mc = " (<a href='metacols/#{job.metacol_id}'>#{job.metacol_id}</a>)"      
       else
-        mc = ""
+        mc = " (" + job.operations.collect { |o| o.plan.id }.join(", ") + ")"
       end
 
       [
         link_to(job.id, job),
-        job.operations.first.operation_type.name,
+        job.operations.first ? job.operations.first.operation_type.name : '?',
         job.submitter + mc,
         job.doer,
         job.created_at.to_formatted_s(:short),
