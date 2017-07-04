@@ -1,45 +1,22 @@
 #
-# Installation specific stuff here. It needs to be moved to config/initializers/aquarium.rb to work.
+# Installation specific stuff here
 #
 
 #
 # Name of the instance (Change to the name of your lab)
 # 
-Bioturk::Application.config.instance_name = 'generic'
+Bioturk::Application.config.instance_name = "Your Lab"
 
 #
-# Gitub path
-#
-Bioturk::Application.config.github_path = "https://github.com/your_lab_here/"
-
-#
-# Prefix for URL for images
-#
-Bioturk::Application.config.image_server_interface = 'http://your.image.server/image?name='
-
-#
-# URL of vision server. Leave as empty string if you don't have one.
-#
-Bioturk::Application.config.vision_server_interface = '' 
-
-#
-# API
+# URLs
 #
 
-if Rails.env == "production"
+Bioturk::Application.config.github_path = "https://github.com/yourlab"
+Bioturk::Application.config.image_server_interface = 'http://your.image.server'
+Bioturk::Application.config.vision_server_interface = ''
 
-  # limit number of samples created via the API in a 24 hour period
-  Bioturk::Application.config.sample_creation_limit = 24 
+#
+# Configuration
+# 
+Bioturk::Application.config.debug_tools = true # false will hide debug buttons in planner and manager
 
-  # limit number of tasks created via the API in a 24 hour period
-  Bioturk::Application.config.task_creation_limit = 24 
-
-else 
-
-  # limit number of samples created via the API in a 24 hour period
-  Bioturk::Application.config.sample_creation_limit = 100 
-
-  # limit number of tasks created via the API in a 24 hour period
-  Bioturk::Application.config.task_creation_limit = 100
-
-end
