@@ -28,8 +28,12 @@
         $scope.current = $cookies.getObject("managerState");
         if ( $scope.current.ot != null && $scope.current.status != null ) {
           var ot = aq.find(AQ.operation_types, ot => ot.id == $scope.current.ot.id);
-          $scope.current.category_index = $scope.categories.indexOf(ot.category);
-          $scope.select(ot,$scope.current.status,[]);
+          if ( ot ) {
+            $scope.current.category_index = $scope.categories.indexOf(ot.category);
+            $scope.select(ot,$scope.current.status,[]);
+          } else {
+            $scope.current.category_index = 0;
+          }
         }       
       } else {
         $scope.current = {
