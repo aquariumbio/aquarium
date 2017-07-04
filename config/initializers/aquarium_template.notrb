@@ -19,4 +19,4 @@ Bioturk::Application.config.vision_server_interface = ''
 # Configuration
 # 
 Bioturk::Application.config.debug_tools = true # false will hide debug buttons in planner and manager
-
+Bioturk::Application.config.krill_port = 3500 
