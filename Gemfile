@@ -11,12 +11,16 @@ gem 'sass-rails',   '~> 3.2.3'
 gem 'mysql2', "~> 0.3.17"
 
 gem 'nokogiri', "~> 1.7.1"
-gem 'aws-sdk'
+gem 'aws-sdk', "~> 1.7.1"
 
 group :development do
   gem 'binding_of_caller'
   gem 'meta_request'
   gem 'rspec-rails'
+end
+
+group :production do
+  gem 'puma'  
 end
 
 # Gems used only for assets and not required
@@ -25,7 +29,6 @@ group :assets do
   gem 'coffee-rails'
   gem 'closure-compiler'
   gem 'bcrypt-ruby', "~> 3.0.0"
-  gem 'puma'  
 end
 
 gem 'jquery-rails'
