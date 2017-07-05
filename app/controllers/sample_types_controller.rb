@@ -7,7 +7,7 @@ class SampleTypesController < ApplicationController
   # GET /sample_types.json
   def index
     @sample_types = SampleType.all.sort_by { |st| st.name }
-    if @sample_types.length 
+    if @sample_types.any?
       @first = @sample_types[0].name
     else
       @first = 'no sample types'
