@@ -242,7 +242,22 @@
         $http.post("/operation_types/import", { operation_types: json }).then(function(response) {
           if ( !response.data.error ) {
             if ( response.data.operation_types.length > 0 ) {
-              $scope.operation_types = $scope.operation_types.concat(response.data.operation_types);
+
+              var operation_types = aq.collect(response.data.operation_types, rawot => {
+                var ot = AQ.OperationType.record(rawot);
+                ot.upgrade_field_types();
+                console.log(rawot)
+                if ( rawot.timing ) {
+                  console.log("found timing")
+                  ot.timing = AQ.Timing.record(rawot.timing);
+                } else { 
+                  ot.set_default_timing();
+                }
+                ot.timing.make_form();
+                return ot;
+              });
+
+              $scope.operation_types = $scope.operation_types.concat(operation_types);
               aq.each(response.data.operation_types,o => console.log(o.category))
               make_categories();
               $scope.current_ot = response.data.operation_types[0];     

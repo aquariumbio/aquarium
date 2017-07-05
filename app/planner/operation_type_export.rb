@@ -36,7 +36,9 @@ module OperationTypeExport
       protocol: protocol ? protocol.content : "",
       precondition: precondition ? precondition.content : "",
       cost_model: cost_model ? cost_model.content : "",
-      documentation: documentation ? documentation.content : ""
+      documentation: documentation ? documentation.content : "",
+
+      timing: timing ? timing.export : nil
 
     }
 
@@ -82,6 +84,14 @@ module OperationTypeExport
       ot.new_code 'precondition', obj[:precondition]
       ot.new_code 'cost_model', obj[:cost_model]
       ot.new_code 'documentation', obj[:documentation]
+
+      if obj[:timing]
+        puts "Timing: " + obj[:timing].inspect
+        ot.timing = obj[:timing]
+        puts "  ==> " + ot.timing.inspect
+      else
+        puts "No Timing?"
+      end
 
       ot
 

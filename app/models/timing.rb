@@ -19,4 +19,13 @@ class Timing < ActiveRecord::Base
 
   end
 
+  def export
+    {
+      start: self.start,
+      stop: self.stop,
+      days: self.days,
+      active: self.active
+    }
+  end
+
 end

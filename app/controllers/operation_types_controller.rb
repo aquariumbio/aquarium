@@ -343,7 +343,7 @@ class OperationTypesController < ApplicationController
 
       render json: { 
         operation_types: ots.collect { |ot| 
-          ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation]) 
+          ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation, :timing]) 
         } 
       }
 

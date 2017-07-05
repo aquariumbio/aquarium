@@ -103,7 +103,7 @@ AQ.Timing.record_methods.make_form = function() {
     };
 
   aq.each(["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"], m => {
-    t[m] = t.days_of_week.indexOf(m) >= 0
+    t[m] = t.days_of_week ? (t.days_of_week.indexOf(m) >= 0) : false
   });
 
   return t;
