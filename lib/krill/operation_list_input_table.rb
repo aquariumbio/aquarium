@@ -2,6 +2,8 @@ module Krill
 
   module OperationList
 
+
+
     def custom_input key, opts={heading: "Custom Input", checkable: false, type: "string", style_block: nil}, &default_block
       self.each.with_index do |op, i|
         op.temporary[:uid] = i
@@ -48,7 +50,7 @@ module Krill
           valid = vblock.call(op, val) if vblock
           if not valid
             msghash = op.temporary[:validation_messages]
-            msgblock = msghash[key]
+            msgblock = msghash[key] if msghash
             validation_message = msgblock.call(op, key, val) if msgblock
             validation_message ||= "Input invalid: operation_id: #{op.id}, key: #{key}, value: #{val}"
             messages << validation_message
