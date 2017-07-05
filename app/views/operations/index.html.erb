@@ -117,7 +117,9 @@
           </h2>
         
           <md-button ng-if="current.status != 'running'" class='md-small' ng-href="/krill/start?job={{job_id}}" aria-lable="Run">Run</md-button>
-          <md-button ng-if="current.status != 'running'" class='md-small' ng-click="debug(current.ot,job_id)" aria-lable="Debug">Debug</md-button>
+          <% if Bioturk::Application.config.debug_tools %>
+            <md-button ng-if="current.status != 'running'" class='md-small' ng-click="debug(current.ot,job_id)" aria-lable="Debug">Debug</md-button>
+          <% end %>
           <md-button ng-if="current.status != 'running'" class='md-small' ng-click="unschedule(current.ot,job_id)" aria-lable="Unschedule">Remove</md-button>
           <md-button ng-if="current.status != 'running'" class='md-small' ng-click="$parent.choose(current.ot,'scheduled',true,job_id)" aria-label="All">All</md-button>
           <md-button ng-if="current.status != 'running'" class='md-small' ng-click="$parent.choose(current.ot,'scheduled',false,job_id)" aria-lable="None">None</md-button>

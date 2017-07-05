@@ -11,12 +11,17 @@ gem 'sass-rails',   '~> 3.2.3'
 gem 'mysql2', "~> 0.3.17"
 
 gem 'nokogiri', "~> 1.7.1"
-gem 'aws-sdk'
+gem 'aws-sdk', "~> 1.7.1"
+gem 'test-unit'
 
 group :development do
   gem 'binding_of_caller'
   gem 'meta_request'
   gem 'rspec-rails'
+end
+
+group :production do
+  gem 'puma'  
 end
 
 # Gems used only for assets and not required

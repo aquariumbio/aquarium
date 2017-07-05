@@ -1,6 +1,20 @@
-<h1>Editing announcement</h1>
+<% content_for :controller do %>noCtrl<% end %>
 
-<%= render 'form' %>
+<% content_for :main do %>
 
-<%= link_to 'Show', @announcement %> |
-<%= link_to 'Back', announcements_path %>
+  <div layout-padding layout="row">
+
+    <div flex="25"></div>
+
+    <div flex="50">
+      <h1>Edit Annoucement <%= @announcement.id %></h1>
+
+      <%= render 'form' %>
+
+      <%= link_to 'Cancel', announcements_path, class: 'md-button md-raised' %>
+
+    </div>
+
+  </div>
+
+<% end %>
