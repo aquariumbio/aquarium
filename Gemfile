@@ -12,6 +12,7 @@ gem 'mysql2', "~> 0.3.17"
 
 gem 'nokogiri', "~> 1.7.1"
 gem 'aws-sdk', "~> 1.7.1"
+gem 'test-unit'
 
 group :development do
   gem 'binding_of_caller'
