@@ -48,9 +48,11 @@
             <md-button ng-click="plan.cancel('Canceled via user interface')">Cancel</md-button>
           </md-menu-item> 
 
-          <md-menu-item aria-label="Debug">
-            <md-button ng-disabled="plan.debugging" ng-click="plan.debug()">Debug</md-button>
-          </md-menu-item> 
+          <% if Bioturk::Application.config.debug_tools %>
+            <md-menu-item aria-label="Debug">
+              <md-button ng-disabled="plan.debugging" ng-click="plan.debug()">Debug</md-button>
+            </md-menu-item>
+          <% end %>
 
           <md-menu-item aria-label="Copy">
             <md-button ng-disabled="plan.relaunching" ng-click="relaunch(plan)">Copy</md-button>

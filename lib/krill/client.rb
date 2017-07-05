@@ -7,12 +7,7 @@ module Krill
     def initialize
 
       @hostname = 'localhost'
-      
-      if Rails.env == 'production'
-        @port = 3501
-      else
-        @port = 3500
-      end
+      @port = Bioturk::Application.config.krill_port 
 
     end
 
