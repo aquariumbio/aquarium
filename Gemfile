@@ -25,6 +25,7 @@ group :assets do
   gem 'coffee-rails'
   gem 'closure-compiler'
   gem 'bcrypt-ruby', "~> 3.0.0"
+  gem 'puma'  
 end
 
 gem 'jquery-rails'
