@@ -1,5 +1,7 @@
 class Collection < Item
 
+  EMPTY = -1 # definition of empty
+
   # CLASS METHODS ###################################################################
 
   def self.every
@@ -19,16 +21,8 @@ class Collection < Item
   end
 
   def position s
-    rows,cols = self.dimensions
-    m = self.matrix
-    (0..rows-1).each do |r|
-      (0..cols-1).each do |c|
-        if m[r][c] == s.id
-          return { row: r, column: c }
-        end
-      end
-    end
-    return nil
+    pos = self.get_where self.to_sample_id(s)
+    pos.first
   end
 
   def self.parts s, ot=nil
@@ -39,31 +33,20 @@ class Collection < Item
     return plist
   end
 
-  def self.spread samples, name, rows, cols
-
-    samples_per_collection = rows * cols
-    num_collections = ( samples.length / samples_per_collection.to_f ).ceil
-    s = 0
-
-    collections = (1..num_collections).collect do |i|
-      c = self.new_collection name, rows, cols
-      m = c.matrix
-      (0..rows-1).each do |r|
-        (0..cols-1).each do |c|
-          if s < samples.length
-            m[r][c] = samples[s].id
-          end
-          s += 1
-        end
+  def self.spread samples, name, options={}
+    opts = { reverse: false }.merge(options)
+    remaining = samples
+    collections = []
+    while remaining.any?
+      c = self.new_collection name
+      old_size = remaining.size
+      remaining = c.add_samples(remaining, opts)
+      if old_size <= remaining.size
+        raise "There was an error adding samples #{samples.map { |s| self.to_sample_id(s) }} to collection of type #{name}"
       end
-      c.matrix = m
-      c.save
-      c
-
+      collections << c
     end
-
-    return collections
-
+    collections
   end
 
   # METHODS #########################################################################
@@ -85,7 +68,145 @@ class Collection < Item
   end
 
   def apportion r, c
-    self.matrix = (Array.new(r,Array.new(c,-1)))
+    self.matrix = (Array.new(r,Array.new(c,EMPTY)))
+  end
+
+  # Finds rows, cols in which block is true
+  def matrix_where
+    raise "need selection block" unless block_given?
+    self.matrix.map.with_index do |row, r|
+      cols_where = row.each_index.select { |i| Proc.new.call(row[i]) }
+      cols_where.map { |c| [r, c] }
+    end.select { |d| d.any? }.flatten(1)
+  end
+
+  # Finds rows, cols that equal val
+  def get_where val
+    self.matrix_where { |x| x == self.to_sample_id(val) }
+  end
+
+  # Gets all empty rows, cols
+  def get_empty
+    self.matrix_where { |x| x == EMPTY }
+  end
+
+  # Gets all non-empty rows, cols
+  def get_non_empty
+    self.matrix_where { |x| x != EMPTY }
+  end
+
+  def num_samples
+    get_non_empty.size
+  end
+
+  # Changes Item, String, or Sample to a sample.id for storing into a collection matrix
+  def to_sample_id x
+    r = EMPTY
+    case
+      when x.class == Fixnum
+        r = x
+      when x.class == Item
+        if x.sample
+          r = x.sample.id
+        else
+          raise "When the third argument to Collection.set is an item, it should be associated with a sample."
+        end
+      when x.class == Sample
+        r = x.id
+      when x.class == String
+        r = x.split(':')[0].to_i
+      when !x
+        r = EMPTY
+      else
+        raise "The third argument to Collection.set should be an item, a sample, or a sample id, but it was '#{x}' which is a #{x.class}"
+    end
+    r
+  end
+
+  # Adds sample, item, or number to collection
+  # ==== Examples
+  #
+  # c = Collection.find_by_id(1)
+  # c.matrix # [[-1, -1, 3], [4, -1, -1]]
+  # c.add_one(777)
+  # c.matrix
+  #   [ [777, -1, 3],
+  #     [4, -1, -1] ]
+  # c.add_one(888)
+  #   [ [777, 888, 3],
+  #     [4, -1, -1] ]
+  # c.add_one(999, reverse: true)
+  #   [ [777, 888, 3],
+  #     [4, -1, 999] ]
+  def add_one x, options={}
+    opts = { reverse: false }.merge(options)
+    r, c = [nil, nil]
+    if opts[:reverse]
+      r, c = self.get_empty.last
+    else
+      r, c = self.get_empty.first
+    end
+    self.set r, c, x
+    [r, c, x]
+  end
+
+  def remove_one x=nil, options={}
+    self.subtract_one(x, options)
+  end
+
+  def subtract_one x=nil, options={}
+    opts = { reverse: true }.merge(options)
+    r, c = [nil, nil]
+    sel = self.get_non_empty
+    sel = self.get_where x if not x.nil?
+    if opts[:reverse]
+      r,c = sel.last
+    else
+      r,c = sel.first
+    end
+    self.set r, c, EMPTY
+    [r, c, x]
+  end
+
+  def capacity
+    d = self.dimensions
+    d[0] * d[1]
+  end
+
+  def full?
+    self.get_empty.empty?
+  end
+
+  def set r, c, x
+    if self.full?
+      raise "Cannot set, collection is full (#{self.num_samples} samples)"
+    end
+    m = self.matrix
+    d = self.dimensions
+    if r >= d[0] or c >= d[1]
+      raise "Set matrix error: Indices #{r},#{c} greater than allowed for matrix dimensions #{d[0]}x#{d[1]}"
+    end
+    m[r][c] = self.to_sample_id(x)
+    self.matrix = m
+    self.save
+  end
+
+  # Fill collecion with samples
+  # Return samples that were not filled
+  def add_samples samples, options={}
+    opts = { reverse: false }.merge(options)
+    non_empty_arr = self.get_empty
+    non_empty_arr.reverse! if opts[:reverse]
+    remaining = []
+    samples.zip(non_empty_arr).each do |s, rc|
+      if rc.nil?
+        remaining << s
+      else
+        r, c = rc
+        set r, c, s
+      end
+    end
+    remaining
   end
 
   def associate sample_matrix
@@ -102,8 +223,7 @@ class Collection < Item
       end
     end
 
-    self.datum = { matrix: m }
-    self.save
+    self.matrix = m
 
   end
 
@@ -124,29 +244,6 @@ class Collection < Item
     self.datum = d.merge( { matrix: m } )
   end
 
-  def set r, c, x
-    m = self.matrix
-    if x.class == Fixnum
-      m[r][c] = x
-    elsif x.class == Item
-      if x.sample
-        m[r][c] = x.sample.id
-      else
-        raise "When the third argument to Collection.set is an item, it should be associated with a sample."
-      end
-    elsif x.class == Sample
-      m[r][c] = x.id
-    elsif x.class == String
-      m[r][c] = x.split(':')[0].to_i
-    elsif !x
-      m[r][c] = -1
-    else
-      raise "The third argument to Collection.set should be an item, a sample, or a sample id, but it was '#{x}' which is a #{x.class}"
-    end
-    self.matrix = m
-    self.save
-  end
-
   def next r, c, options={}
 
     opts = { skip_non_empty: false }.merge options
@@ -157,7 +254,7 @@ class Collection < Item
     (r..nr-1).each do |row|
       (0..nc-1).each do |col|
         if row > r || col > c
-          if !opts[:skip_non_empty] || m[row][col] == -1
+          if !opts[:skip_non_empty] || m[row][col] == EMPTY
             return [ row, col ]
           end
         end
@@ -181,23 +278,6 @@ class Collection < Item
     end
   end
 
-  def num_samples
-
-    m = self.matrix
-    s = 0
-
-    (0..m.length-1).each do |r|
-      (0..m[r].length-1).each do |c|
-        if m[r][c] != -1
-          s += 1
-        end
-      end
-    end
-
-    s
-
-  end
-
   def non_empty_string
 
     m = self.matrix
@@ -205,7 +285,7 @@ class Collection < Item
 
     (0..m.length-1).each do |r|
       (0..m[r].length-1).each do |c|
-        if m[r][c] != -1
+        if m[r][c] != EMPTY
           max = [r,c]
         end
       end
