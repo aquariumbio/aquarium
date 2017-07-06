@@ -34,6 +34,21 @@ module Krill
       ops
     end
 
+    def group_by &block
+      grouped_ops = super(&block)
+      grouped_ops = grouped_ops.map { |key, ops|
+        ops.extend(OperationList)
+        ops.protocol = @protocol
+        [key, ops]
+      }.to_h
+      grouped_ops
+    end
+
+    def bar
+
+      "foo"
+    end
+
     def running
       result = select { |op| 
         op.status != "error"
