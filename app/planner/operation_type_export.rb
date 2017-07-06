@@ -6,39 +6,60 @@ module OperationTypeExport
 
   def export
 
+    sample_types = []
+    object_types = []
+
+    field_types.select { |ft| ft.role == 'input' || ft.role == 'output' }.collect do |ft|
+      ft.allowable_field_types.each do |aft|
+        sample_types += aft.sample_type.required_sample_types if aft.sample_type
+        object_types << aft.object_type if aft.object_type
+      end
+    end
+
+    sample_types = sample_types.uniq
+    object_types = object_types.uniq
+
     {
 
-      name: name,
-      category: category,
-      deployed: false,
-      on_the_fly: on_the_fly ? true : false,
+      sample_types: sample_types.as_json(methods: [:field_types]),
 
-      field_types: field_types.select { |ft| ft.role }.collect { |ft|
+      object_types: object_types,
 
-        {
+      operation_type: {
 
-          ftype: ft.ftype,
-          role: ft.role, 
-          name: ft.name,
-          sample_types: ft.allowable_field_types.collect { |aft| aft.sample_type ? aft.sample_type.name : "" },
-          object_types: ft.allowable_field_types.collect { |aft| aft.object_type ? aft.object_type.name : "" },
-          part: ft.part ? true : false,
-          array: ft.array ? true : false,
-          routing: ft.routing,
-          preferred_operation_type_id: ft.preferred_operation_type_id,
-          preferred_field_type_id: ft.preferred_field_type_id,
-          choices: ft.choices
+        name: name,
+        category: category,
+        deployed: false,
+        on_the_fly: on_the_fly ? true : false,
 
-        }
+        field_types: field_types.select { |ft| ft.role }.collect { |ft|
 
-      },
+          {
 
-      protocol: protocol ? protocol.content : "",
-      precondition: precondition ? precondition.content : "",
-      cost_model: cost_model ? cost_model.content : "",
-      documentation: documentation ? documentation.content : "",
+            ftype: ft.ftype,
+            role: ft.role, 
+            name: ft.name,
+            sample_types: ft.allowable_field_types.collect { |aft| aft.sample_type ? aft.sample_type.name : "" },
+            object_types: ft.allowable_field_types.collect { |aft| aft.object_type ? aft.object_type.name : "" },
+            part: ft.part ? true : false,
+            array: ft.array ? true : false,
+            routing: ft.routing,
+            preferred_operation_type_id: ft.preferred_operation_type_id,
+            preferred_field_type_id: ft.preferred_field_type_id,
+            choices: ft.choices
 
-      timing: timing ? timing.export : nil
+          }
+
+        },
+
+        protocol: protocol ? protocol.content : "",
+        precondition: precondition ? precondition.content : "",
+        cost_model: cost_model ? cost_model.content : "",
+        documentation: documentation ? documentation.content : "",
+
+        timing: timing ? timing.export : nil
+
+      }
 
     }
 
@@ -59,7 +80,11 @@ module OperationTypeExport
 
   module ClassMethods
 
-    def import obj
+    def import data
+
+      SampleType.check_for data[:sample_types]
+
+      obj = data[:operation_type]
 
       ot = OperationType.new name: obj[:name], category: obj[:category], deployed: obj[:deployed], on_the_fly: obj[:on_the_fly]
       ot.save
