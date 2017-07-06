@@ -44,11 +44,6 @@ module Krill
       grouped_ops
     end
 
-    def bar
-
-      "foo"
-    end
-
     def running
       result = select { |op| 
         op.status != "error"
