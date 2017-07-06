@@ -11,8 +11,8 @@ module OperationTypeRandom
     users = User.all.sample(n)
 
     (0..n-1).collect do |i|
-
-      op = operations.create(status: "pending", user_id: users[i].id)
+      u = users[i] || users.sample
+      op = operations.create(status: "pending", user_id: u.id)
       samples = {}
 
       field_types.each do |ft|
