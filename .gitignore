@@ -51,6 +51,9 @@ ots.json
 # ignore bower installed components
 public/components
 
+# ignore IDE generated files
+.idea/*
+
 .DS_Store
 
 
