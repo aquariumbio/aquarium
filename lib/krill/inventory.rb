@@ -49,8 +49,9 @@ module Krill
       Collection.find id
     end
 
-    def spread samples, name, rows, cols
-      Collection.spread samples, name, rows, cols
+    def spread samples, name, options={}
+      opts = { reverse: false }.merge(options)
+      Collection.spread samples, name, opts
     end
 
     # sorts items alphanumerically by freezer, hotel, box, then slot
