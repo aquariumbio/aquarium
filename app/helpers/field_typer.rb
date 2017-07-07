@@ -8,6 +8,16 @@ module FieldTyper
     FieldType.includes(allowable_field_types: :sample_type).where(parent_class: self.class.to_s, parent_id: self.id)
   end
 
+  def export_field_types
+    fts = FieldType.includes(allowable_field_types: :sample_type).where(parent_class: self.class.to_s, parent_id: self.id)
+    fts.collect do |ft|
+      rft = ft.as_json
+      rft[:sample_types] = ft.allowable_field_types.collect { |aft| aft.sample_type ? aft.sample_type.name : nil }
+      rft[:object_types] = ft.allowable_field_types.collect { |aft| aft.object_type ? aft.object_type.name : nil }      
+      rft
+    end
+  end
+
   def type name, role=nil
     self.field_types.find { |ft| ft.name == name && ( !role || ft.role == role ) }
   end

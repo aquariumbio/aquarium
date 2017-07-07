@@ -16,14 +16,20 @@ module OperationTypeExport
       end
     end
 
-    sample_types = sample_types.uniq
-    object_types = object_types.uniq
+    sample_types = sample_types.uniq.as_json(methods: [:export_field_types])
+
+    sample_types.each do |st|
+      st[:field_types = st[:export_field_types]]
+      st[:export_field_types] = nil
+    end
+
+    object_types = object_types.uniq.as_json(methods: [:sample_type_name])
 
     {
 
-      sample_types: sample_types.as_json(methods: [:field_types]),
+      sample_types: sample_types
 
-      object_types: object_types.as_json(methods: [:sample_type_name]),
+      object_types: object_types
 
       operation_type: {
 
