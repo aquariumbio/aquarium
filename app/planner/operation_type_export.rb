@@ -19,7 +19,7 @@ module OperationTypeExport
     sample_types = sample_types.uniq.as_json(methods: [:export_field_types])
 
     sample_types.each do |st|
-      st[:field_types = st[:export_field_types]]
+      st[:field_types] = st[:export_field_types]
       st[:export_field_types] = nil
     end
 
@@ -27,9 +27,9 @@ module OperationTypeExport
 
     {
 
-      sample_types: sample_types
+      sample_types: sample_types,
 
-      object_types: object_types
+      object_types: object_types,
 
       operation_type: {
 
