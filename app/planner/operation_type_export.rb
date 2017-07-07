@@ -23,7 +23,7 @@ module OperationTypeExport
 
       sample_types: sample_types.as_json(methods: [:field_types]),
 
-      object_types: object_types,
+      object_types: object_types.as_json(methods: [:sample_type_name]),
 
       operation_type: {
 
@@ -39,8 +39,8 @@ module OperationTypeExport
             ftype: ft.ftype,
             role: ft.role, 
             name: ft.name,
-            sample_types: ft.allowable_field_types.collect { |aft| aft.sample_type ? aft.sample_type.name : "" },
-            object_types: ft.allowable_field_types.collect { |aft| aft.object_type ? aft.object_type.name : "" },
+            sample_types: ft.allowable_field_types.collect { |aft| aft.sample_type ? aft.sample_type.name : nil },
+            object_types: ft.allowable_field_types.collect { |aft| aft.object_type ? aft.object_type.name : nil },
             part: ft.part ? true : false,
             array: ft.array ? true : false,
             routing: ft.routing,
@@ -82,7 +82,28 @@ module OperationTypeExport
 
     def import data
 
-      SampleType.check_for data[:sample_types]
+      issues1 = SampleType.compare_and_upgrade(data[:sample_types] ? data[:sample_types] : [])
+
+      if issues1[:inconsistencies].any?
+        issues2 = { notes: [], inconsistencies: []}
+      else
+        issues2 = ObjectType.compare_and_upgrade data[:object_types]
+      end
+
+      issues = { notes: issues1[:notes] + issues2[:notes], 
+                 inconsistencies: issues1[:inconsistencies] + issues2[:inconsistencies] }
+
+      if issues[:inconsistencies].any?
+        issues[:notes] << "Operation Type '#{data[:operation_type][:name]}' not imported."
+        return issues 
+      end
+
+      # add any allowable field_type linkes that resolved to nil before the all sample type
+      # and object types were made
+      # SampleType.clean_up_allowable_field_types data[:sample_types] 
+
+      # add any sample_type_ids to object_types now that all sample types have been made
+      # ObjectType.clean_up_sample_type_links data[:object_types]
 
       obj = data[:operation_type]
 
@@ -118,7 +139,11 @@ module OperationTypeExport
         puts "No Timing?"
       end
 
-      ot
+      issues[:notes] << "Created new operation type '#{ot.name}'"
+
+      issues[:object_type] = ot
+
+      issues
 
     end
 

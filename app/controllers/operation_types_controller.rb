@@ -337,14 +337,16 @@ class OperationTypesController < ApplicationController
 
     begin 
       
-      ots = params[:operation_types].collect { |x|
+      issues_list = params[:operation_types].collect { |x|
         OperationType.import(x.merge(deployed: false))
       }
 
       render json: { 
-        operation_types: ots.collect { |ot| 
+        operation_types: issues_list.collect { |issues| issues[:object_type] }.collect { |ot| 
           ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation, :timing]) 
-        } 
+        },
+        notes: issues_list.collect { |issues| issues[:notes] }.flatten,
+        inconsistencies: issues_list.collect { |issues| issues[:inconsistencies] }.flatten
       }
 
     rescue Exception => e

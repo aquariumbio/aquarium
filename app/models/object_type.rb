@@ -141,4 +141,53 @@ class ObjectType < ActiveRecord::Base
     return result
   end
 
+  def sample_type_name
+    sample_type ? sample_type.name : nil
+  end
+
+  def self.compare_and_upgrade raw_ots
+
+    parts = [ :cleanup, :data, :description, :handler, :max, :min, :name, :safety, 
+              :vendor, :unit, :cost, :release_method, :release_description, :prefix ]
+    icons = []
+    notes = []
+    make = []
+
+    raw_ots.each do |raw_ot|
+
+      ot = ObjectType.find_by_name raw_ot[:name]
+      i = []
+
+      if ot 
+        parts.each do |part|
+          icons << "Container '#{raw_ot[:name]}': field #{part} differs from imported container's corresponding field." unless ot[part] == raw_ot[part]
+        end     
+        notes << "Container '#{raw_ot[:name]}' matches existing container type." unless icons.any?
+      else
+        make << raw_ot
+      end
+
+    end
+
+    if !icons.any?
+      make.each do |raw_ot|
+        ot = ObjectType.new
+        parts.each do |part|
+          ot[part] = raw_ot[part]
+        end
+        ot.save
+        if ot.errors.any?
+          icons << "Could not create '#{raw_ot[:name]}': #{ot.errors.full_messages.join(', ')}"
+        else
+          notes << "Created new container '#{raw_ot[:name]}' with id #{ot.id}"
+        end
+      end
+    else 
+      notes << "Could not create required container(s) due to type definition inconsistencies."
+    end
+
+    { notes: notes, inconsistencies: icons }
+
+  end
+
 end

@@ -117,9 +117,47 @@
       <%= render partial: 'test' %>
       <%= render partial: 'timing' %>
 
-
     </div>
 
   </div>
 
+  <div class='ng-modal item-modal' ng-show='import_popup.show'>
+    <div class='ng-modal-overlay' ng-click='import_popup.show=false'></div>
+      <div class='ng-modal-dialog item-modal-content scrollable' layout-padding>
+
+          <md-toolbar class="item-toolbar">
+            <div class="md-toolbar-tools">
+              <h2 flex md-truncate>Import Results</h2> 
+            </div>
+            <div class='item-close' ng-click='import_popup.show=false'>&times;</div>
+          </md-toolbar>
+
+          <p ng-if="import_popup.inconsistencies.length > 0"><b>
+            Import notes:
+          </b></p>
+
+          <ul>
+            <li ng-repeat="note in import_popup.notes">
+              {{note}}
+            </li>
+          </ul>
+
+          <p ng-if="import_popup.inconsistencies.length > 0"><b>
+            The following issues need to be addressed before this import can be completed:
+          </b></p>
+          <ul>
+            <li ng-repeat="i in import_popup.inconsistencies">
+              {{i}}
+            </li>
+          </ul>
+
+      </div>
+    </div>
+  </div>  
+
 <% end %>
+
+
+
+
+

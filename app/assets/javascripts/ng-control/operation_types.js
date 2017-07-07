@@ -23,6 +23,8 @@
     $scope.categories = [];
     $scope.initialized = false;
 
+    $scope.import_popup = {};
+
     function make_categories() {
       $scope.categories = aq.uniq(aq.collect($scope.operation_types,function(ot) {
         return ot.category;
@@ -240,7 +242,13 @@
         }
 
         $http.post("/operation_types/import", { operation_types: json }).then(function(response) {
-          if ( !response.data.error ) {
+
+          console.log(response.data);
+
+          if ( response.data.error ) {
+            alert (response.data.error)
+          } else  if ( response.data.inconsistencies.length == 0 ) {
+
             if ( response.data.operation_types.length > 0 ) {
 
               var operation_types = aq.collect(response.data.operation_types, rawot => {
@@ -262,18 +270,25 @@
               make_categories();
               $scope.current_ot = response.data.operation_types[0];     
               $scope.current_category = $scope.current_ot.category;         
+              $scope.import_notification(response.data);
             } else {
               alert ( "No operation types found in file." );
             }
           } else {
-            alert ( response.data.error );
+            $scope.import_notification(response.data);
           }
+
         });
 
       }
 
       r.readAsBinaryString(f);
 
+    }
+
+    $scope.import_notification = function(data) {
+      $scope.import_popup = data;
+      $scope.import_popup.show = true;
     }
 
     $scope.new_operation_type = function() {
