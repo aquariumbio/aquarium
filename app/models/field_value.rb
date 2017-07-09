@@ -263,6 +263,53 @@ class FieldValue < ActiveRecord::Base
     self.save
   end
 
+  # TODO: Support for collection replacement?
+  Replaces field value item
+  Examples =====
+
+  # Automatically find replacement item based on allowable field types
+  # replacement = op.input("some input").replace_item # finds replacement item based on allowable field types
+  #
+  # # Replacing with a particular item (essentially the same as .set)
+  # replacement = op.input("some input").replace_item item: Item.first
+  #
+  # # Automatically find replacement item based on given list of containers
+  # obj_type = ObjectType.find_by_name("1ng/ul Plasmid Stock")
+  # containers = [obj_type, "Plasmid Stock", "Fragment Stock"] # a list of ObjectTypes or ObjectType names
+  # replacment = op.input("some input").replace_item object_types=containers }
+  #
+  # # Find replacement items based on some criteria
+  # replacement = op.input("some input").replace_item { |i| i.get(:volume) > 50.0 } # get items whose volume is greater than 50.0
+  # if replacement.nil?
+  #     op.error :no_replacment "A replacement item could not be found."
+  # end
+  def replace_item options={}
+    ft = self.field_type
+    ots = ft.allowable_object_types.select { |obj_type| obj_type }
+    obj_types = ft.allowable_field_types.map { |aft| aft.object_type }
+    if options[:object_types]
+      options[:object_types] = options[:object_types].map { |x|
+        x = ObjectType.find_by_name(x) if x.is_a? String
+        x
+      }
+    end
+
+    opts = { item: nil, object_types: obj_types }.merge(options)
+
+    if opts[:item].nil?
+      allowable_items = opts[:object_types].map { |obj_type|
+        Item.where(sample_id: self.sample.id, object_type_id: obj_type.id).where("location != ?", "deleted").to_a
+      }.flatten.uniq
+      allowable_items.select! { |i| i != self.item }
+      allowable_items.select! &Proc.new if block_given?
+
+      opts[:item] = allowable_items.first
+    end
+
+    self.set item: opts[:item]
+    opts[:item]
+  end
+
   def copy_inventory fv
     self.child_item_id = fv.child_item_id 
     self.row = fv.row
