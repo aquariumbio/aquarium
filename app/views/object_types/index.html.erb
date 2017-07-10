@@ -8,7 +8,7 @@
   <% flash.each do |key, value| %>
     <div class='flash md-body-2'><%= value %></div>
   <% end %>
-  <md-list ng-init="status.handler = '<%= @first %>'">
+  <md-list ng-init="status.handler = '<%= @first %>'" class='md-compact-list'>
     <% @all_handlers.sort.each do |u| %>
       <md-list-item ng-click="status.handler = '<%= u %>'"
                     ng-class="status.handler == '<%= u %>' ? 'md-body-2 selected' : 'md-body-2'"><%= u %></md-list-item>

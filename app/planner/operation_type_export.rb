@@ -11,7 +11,11 @@ module OperationTypeExport
 
     field_types.select { |ft| ft.role == 'input' || ft.role == 'output' }.collect do |ft|
       ft.allowable_field_types.each do |aft|
-        sample_types += aft.sample_type.required_sample_types if aft.sample_type
+        if aft.sample_type
+          sample_types << aft.sample_type 
+          sample_types += aft.sample_type.required_sample_types
+        end
+        puts sample_types.collect { |st| st.name }
         object_types << aft.object_type if aft.object_type
       end
     end
@@ -24,6 +28,8 @@ module OperationTypeExport
     end
 
     object_types = object_types.uniq.as_json(methods: [:sample_type_name])
+
+    # ISSUE: This code misses object types referred to by sub-samples of samples mentioned in the io.
 
     {
 
@@ -104,12 +110,12 @@ module OperationTypeExport
         return issues 
       end
 
-      # add any allowable field_type linkes that resolved to nil before the all sample type
+      # Add any allowable field_type linkes that resolved to nil before the all sample type
       # and object types were made
-      # SampleType.clean_up_allowable_field_types data[:sample_types] 
+      SampleType.clean_up_allowable_field_types data[:sample_types] 
 
-      # add any sample_type_ids to object_types now that all sample types have been made
-      # ObjectType.clean_up_sample_type_links data[:object_types]
+      # Add any sample_type_ids to object_types now that all sample types have been made
+      ObjectType.clean_up_sample_type_links data[:object_types]
 
       obj = data[:operation_type]
 

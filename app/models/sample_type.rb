@@ -53,7 +53,7 @@ class SampleType < ActiveRecord::Base
       if fts.length == 1 
         results += fts[0].inconsistencies(rft, name)
       else
-        results << "#{name} does not have a field named #{rst[:name]}, although the imported version of this sample type does."
+        results << "#{name} does not have a field named #{raw_sample_type[:name]}, although the imported version of this sample type does."
       end
     end
 
@@ -94,12 +94,21 @@ class SampleType < ActiveRecord::Base
       # make sample types
       make.each do |rst|
         st = SampleType.create_from_raw rst
-        notes << "Created new sample type #{st.name} with id #{st.id}"
+        if st.errors.any?
+          inconsistencies << "Error: Could not create sample type #{rst[:name]}: #{st.errors.full_messages.join(', ')}"
+        else
+          notes << "Created new sample type #{st.name} with id #{st.id}"
+        end
       end
 
-      # make allowable field types (assumes sample type shave been made)
+      # make allowable field types (assumes sample types have been made)
       make.each do |rst|
+        st = SampleType.find_by_name rst[:name]
         st.create_afts_from_raw rst
+        if st.errors.any?
+          inconsistencies << "Could not create sample type #{rst[:name]}: #{st.errors.full_messages.join(', ')}"
+          st.destroy
+        end
       end
 
     end
@@ -113,32 +122,44 @@ class SampleType < ActiveRecord::Base
     st = SampleType.new name: raw_sample_type[:name], description: raw_sample_type[:description]
     st.save
 
-    rst[:field_types].each do |rft|
+    raw_sample_type[:field_types].each do |rft|
+
+      puts "Creating ft #{rft[:name]}"
 
       ft = FieldType.new({
+        name: rft[:name],
         parent_id: st.id,
-        array: rst[:array],
-        choices: rst[:choices],
-        required: rst[:required],
-        ftype: rst[:ftype],
-        role: rst[:role],
-        routing: rst[:routing]
+        parent_class: "SampleType",
+        array: rft[:array],
+        choices: rft[:choices],
+        required: rft[:required],
+        ftype: rft[:ftype],
+        role: rft[:role],
+        routing: rft[:routing]
        })
 
       ft.save
 
+      if ft.errors.any? 
+        st.errors.add :field_type_creation, "Could not create field type named #{rft[:name]}: #{ft.errors.full_messages.join(', ')}"
+        puts "ft create errors: #{ft.errors.full_messages.join(', ')}"
+      end
+
     end
+
+    st
 
   end
 
   def create_afts_from_raw raw_sample_type
 
     field_types.each do |ft|
-      rst[:field_types].each do |rst|
-        if ft.name == rst[:name]
-          (0..rst[:sample_types].length-1).each do |i|
-            st = SampleType.find_by_name(rst[:sample_types][i])
-            ot = ObjectType.find_by_name(rst[:sample_types][i])            
+      raw_sample_type[:field_types].each do |rft|
+        if ft.name == rft[:name]
+          l = rft[:sample_types] ? rft[:sample_types].length : 0
+          (0..l-1).each do |i|
+            st = SampleType.find_by_name(rft[:sample_types][i])
+            ot = ObjectType.find_by_name(rft[:sample_types][i])            
             aft = AllowableFieldType.new({
               field_type_id: ft.id, 
               sample_type_id: st ? st.id : nil, 
@@ -148,6 +169,41 @@ class SampleType < ActiveRecord::Base
           end
         end
       end
+    end
+
+  end
+
+  def self.clean_up_allowable_field_types raw_sample_types
+
+    raw_sample_types.each do |rst|
+
+      st = SampleType.find_by_name rst[:name]
+
+      st.field_types.each do |ft|
+        rst[:field_types].each do |rft|
+          if ft.name == rft[:name] && ft.role == rft[:role] && ft.ftype == 'sample'
+            puts "#{st.name}"
+            puts "-----------------------------------------------------------"
+            puts "  sts = [#{rft[:sample_types].join(', ')}]" if rft[:sample_types]
+            puts "  ots = [#{rft[:object_types].join(', ')}]" if rft[:object_types]
+            puts "  afts = [#{ft.allowable_field_types}.join(', ')]" if ft.allowable_field_types
+            names = rft[:sample_types]
+            ft.allowable_field_types.each do |aft|
+              if names.member? aft.sample_type.name
+                names.delete aft.sample_type.name
+              end
+            end
+            names.each do |name|
+              empty_afts = ft.allowable_field_types.select { |aft| aft.sample_type_id == nil }
+              if empty_afts.any?
+                st = SampleType.find_by_name(name)
+                empty_afts[0].sample_type_id = st ? st.name : nil
+              end
+            end
+          end
+        end
+      end
+
     end
 
   end

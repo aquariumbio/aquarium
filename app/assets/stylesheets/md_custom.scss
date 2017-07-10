@@ -31,6 +31,7 @@ $buttonHighlight: rgb(73, 91, 281);
 /* LISTS *******************************************************************/
 
 .md-compact-list {
+
   .md-no-proxy {
     height: 28px;
     min-height: 28px;
@@ -39,9 +40,9 @@ $buttonHighlight: rgb(73, 91, 281);
     height: 28px;
     min-height: 28px;
   }  
-  .md-checkbox, .md-button, .md-list-item-inner, .md-secondary-container {
-    height: 28px;
-    min-height: 28px;    
+  .md-checkbox, .md-button, ._md-button-wrap, .md-list-item-inner, .md-secondary-container {
+    height: 28px !important;
+    min-height: 28px !important;    
   } 
   md-checkbox {
     margin: 4px !important;

@@ -1,7 +1,8 @@
 module FieldTyper
 
   def destroy_fields
-    field_types.destroy_all
+    fts = field_types
+    fts.each { |ft| puts ft.inspect }
   end
 
   def field_types
