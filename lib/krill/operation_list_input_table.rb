@@ -47,7 +47,7 @@ module Krill
           valid = true
           valid = vblock.call(op, val) if vblock
           if not valid
-            msghash = op.temporary[:validation_messages]
+            msghash = op.temporary[:validation_messages] || Hash.new
             msgblock = msghash[key]
             validation_message = msgblock.call(op, key, val) if msgblock
             validation_message ||= "Input invalid: operation_id: #{op.id}, key: #{key}, value: #{val}"
