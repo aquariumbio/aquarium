@@ -4,8 +4,7 @@ class StaticPagesController < ApplicationController
   before_filter :up_to_date_user  
 
   def home
-    temp = Announcement.last
-    @announcement = temp if temp && temp.active && cookies[:latest_announcement].to_i != temp.id
+    @announcements = Announcement.find(:all, :order => "id desc", :limit => 5)
     respond_to do |format|
       format.html { render layout: 'aq2' }
     end    

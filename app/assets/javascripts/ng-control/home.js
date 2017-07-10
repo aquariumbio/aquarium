@@ -12,6 +12,8 @@
                   function (  $scope,   $http,   $attrs,   $cookies ) {
 
 
+    $scope.is_chrome = !!window.chrome && !!window.chrome.webstore;
+
   }]);
 
 })();                    

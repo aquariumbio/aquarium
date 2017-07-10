@@ -5,6 +5,18 @@
 
 <%= content_for :sidebar do %>
 
+  <md-list>
+    <md-list-item id="chrome" class="md-3-line" layout-padding style="display: none">
+      <div class="md-list-item-text" layout="column">
+        <h2 class='md-title'>Chrome Not Detected</h2>
+        <h3 class='md-subtitle' style="color: red; font-weight: bold">Warning!</h3>
+        <p>You are not using Google Chrome. Some features may not be available. 
+           Aquarium has been tested extensively with Google Chrome and we highly recommend you use
+           it instead. Install it <a href="https://www.google.com/chrome/index.html">here</a>.</p>
+      </div>
+    </md-list-item>  
+  </md-list>
+
   <% if current_user.id != @user.id && current_user.is_admin %>
 
     <h1 class="warning">
@@ -49,6 +61,15 @@
 <% end %>
 
 <%= content_for :main do %>
+
+  <script type="text/javascript">    
+  $(function() {
+    if ( ! ( !!window.chrome && !!window.chrome.webstore) )  {
+      console.log("No chrome!")
+      $("#chrome").show()
+    }
+  });
+  </script>
 
   <div  class='scrollable'>
 

@@ -64,6 +64,21 @@
 
     <% end %>
 
+    <% if content_for? :much_wider_sidebar %>
+
+      md-sidenav, 
+      md-sidenav.md-locked-open, 
+      md-sidenav.md-closed.md-locked-open-add-active {
+          width: 500px !important;
+          max-width: 500px !important;
+      }     
+
+      .main {
+        width: calc(100vw - 500px) !important;
+      }      
+
+    <% end %>    
+
   </style>
 
   </head>
