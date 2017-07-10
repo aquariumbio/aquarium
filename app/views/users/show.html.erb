@@ -50,6 +50,8 @@
 
 <%= content_for :main do %>
 
+  <div  class='scrollable'>
+
   <md-content flex layout-fill layout-padding layout="row" ng-if="status.view == 'Information'">
 
     <div flex="33">
@@ -183,11 +185,12 @@
                    ng-click="agree('biofab')"
                    ng-if="!user.params.biofab.value || user.params.biofab.value == 'false'">Agree</md-button>
       <% else %>
-      <p class='md-body-2'
+      <p class='md-title'
          ng-if="user.params.biofab.value != 'true'">This user has not agreed to this document.</p>
       <% end %>
-      <p class='md-body-2'
-         ng-if="user.params.biofab.value == 'true'">Agreed on {{user.params.biofab.updated_at|date}}.</p>
+      <p class='md-title'
+         ng-if="user.params.biofab.value == 'true'">
+         {{user.name}} agreed on {{user.params.biofab.updated_at|date}}.</p>
     </md-content>
 
     <md-content flex layout-fill layout-padding ng-if="status.view == 'Aquarium Agreement'">    
@@ -198,14 +201,17 @@
                    ng-click="agree('aquarium')"
                    ng-if="!user.params.aquarium.value || user.params.aquarium.value == 'false'">Agree</md-button>
       <% else %>
-      <p class='md-body-2'
+      <p class='md-title'
          ng-if="user.params.aquarium.value != 'true'">This user has not agreed to this document.</p>
       <% end %>
-      <p class='md-body-2'
-         ng-if="user.params.aquarium.value == 'true'">Agreed on {{user.params.aquarium.updated_at|date}}.</p>
+      <p class='md-title'
+         ng-if="user.params.aquarium.value == 'true'">
+         {{user.name}} agreed on {{user.params.aquarium.updated_at|date}}.</p>
     </md-content>    
 
   <% end %>
+
+  </div>
 
 <% end %>
 
