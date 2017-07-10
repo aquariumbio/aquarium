@@ -82,23 +82,21 @@ class FieldType < ActiveRecord::Base
     results << "#{parent_name} field '#{name}' has role is #{!!role} but imported field of the same name has role = #{!!raw_field_type[:role]}" unless raw_field_type[:role] == role
     results << "#{parent_name} field '#{name}' has routing symbol is #{!!routing} but imported field of the same name has routing symbol = #{!!raw_field_type[:routing]}." unless raw_field_type[:role] == role
 
-    l1 = allowable_field_types.collect { |aft| [
-      aft.sample_type ? aft.sample_type.name : nil, 
-      aft.object_type ? aft.object_type.name : nil 
-    ] }
+    if ftype == 'sample'
 
-    a = raw_field_type[:sample_types] || []
-    b = raw_field_type[:object_types] || []
-    l2 = a.zip b
+      l1 = allowable_field_types.collect { |aft| [
+        aft.sample_type ? aft.sample_type.name : nil, 
+        aft.object_type ? aft.object_type.name : nil 
+      ] }
 
-    if ! ( l1.conjoin { |x| l2.member? x } && l2.conjoin { |x| l1.member? x } )
-      results << "#{parent_name}: Field '#{name}'' has different associated sample and object types than does the imported field by the same name." 
-      puts "asts differ --------"
-      puts "existing sample type: " + l1.to_s
-      puts "importing sample type: " + l2.to_s
-      puts self.inspect
-      puts raw_field_type
-      puts "--------------------"
+      a = raw_field_type[:sample_types] || []
+      b = raw_field_type[:object_types] || []
+      l2 = a.zip b
+
+      if ! ( l1.conjoin { |x| l2.member? x } && l2.conjoin { |x| l1.member? x } )
+        results << "#{parent_name}: Field '#{name}'' has different associated sample and object types than does the imported field by the same name." 
+      end
+
     end
 
     return results

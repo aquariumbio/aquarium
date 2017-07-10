@@ -53,7 +53,7 @@ class SampleType < ActiveRecord::Base
       if fts.length == 1 
         results += fts[0].inconsistencies(rft, name)
       else
-        results << "#{name} does not have a field named #{raw_sample_type[:name]}, although the imported version of this sample type does."
+        results << "#{name} does not have a field named #{rft[:name]}, although the imported version of this sample type does."
       end
     end
 
@@ -124,8 +124,6 @@ class SampleType < ActiveRecord::Base
 
     raw_sample_type[:field_types].each do |rft|
 
-      puts "Creating ft #{rft[:name]}"
-
       ft = FieldType.new({
         name: rft[:name],
         parent_id: st.id,
@@ -142,7 +140,6 @@ class SampleType < ActiveRecord::Base
 
       if ft.errors.any? 
         st.errors.add :field_type_creation, "Could not create field type named #{rft[:name]}: #{ft.errors.full_messages.join(', ')}"
-        puts "ft create errors: #{ft.errors.full_messages.join(', ')}"
       end
 
     end
@@ -182,11 +179,6 @@ class SampleType < ActiveRecord::Base
       st.field_types.each do |ft|
         rst[:field_types].each do |rft|
           if ft.name == rft[:name] && ft.role == rft[:role] && ft.ftype == 'sample'
-            puts "#{st.name}"
-            puts "-----------------------------------------------------------"
-            puts "  sts = [#{rft[:sample_types].join(', ')}]" if rft[:sample_types]
-            puts "  ots = [#{rft[:object_types].join(', ')}]" if rft[:object_types]
-            puts "  afts = [#{ft.allowable_field_types}.join(', ')]" if ft.allowable_field_types
             names = rft[:sample_types]
             ft.allowable_field_types.each do |aft|
               if names.member? aft.sample_type.name

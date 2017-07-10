@@ -247,6 +247,7 @@
 
           if ( response.data.error ) {
             alert (response.data.error)
+            console.log(response.data)
           } else  if ( response.data.inconsistencies.length == 0 ) {
 
             if ( response.data.operation_types.length > 0 ) {

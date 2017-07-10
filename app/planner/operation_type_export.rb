@@ -99,7 +99,7 @@ module OperationTypeExport
       if issues1[:inconsistencies].any?
         issues2 = { notes: [], inconsistencies: []}
       else
-        issues2 = ObjectType.compare_and_upgrade data[:object_types]
+        issues2 = ObjectType.compare_and_upgrade(data[:object_types] ? data[:object_types] : [])
       end
 
       issues = { notes: issues1[:notes] + issues2[:notes], 
@@ -112,10 +112,10 @@ module OperationTypeExport
 
       # Add any allowable field_type linkes that resolved to nil before the all sample type
       # and object types were made
-      SampleType.clean_up_allowable_field_types data[:sample_types] 
+      SampleType.clean_up_allowable_field_types(data[:sample_types] ? data[:sample_types] : [])
 
       # Add any sample_type_ids to object_types now that all sample types have been made
-      ObjectType.clean_up_sample_type_links data[:object_types]
+      ObjectType.clean_up_sample_type_links(data[:sample_types] ? data[:sample_types] : [])
 
       obj = data[:operation_type]
 

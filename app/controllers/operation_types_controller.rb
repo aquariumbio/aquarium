@@ -334,6 +334,7 @@ class OperationTypesController < ApplicationController
   def import
 
     ots = []
+    error = false
 
     ActiveRecord::Base.transaction do
 
@@ -345,23 +346,26 @@ class OperationTypesController < ApplicationController
 
         notes = issues_list.collect { |issues| issues[:notes] }.flatten
         inconsistencies = issues_list.collect { |issues| issues[:inconsistencies] }.flatten
+        error = true if inconsistencies.any?
 
-        raise ActiveRecord::Rollback if inconsistencies.any?
+        notes << "Import canceled due to inconsistencies. No changes made." if inconsistencies.any?
 
         render json: { 
           operation_types: issues_list.collect { |issues| issues[:object_type] }.collect { |ot| 
             ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation, :timing]) 
           },
-          notes: notes,
-          inconsistencies: inconsistencies
+          notes: notes.uniq,
+          inconsistencies: inconsistencies.uniq
         }
 
       rescue Exception => e
 
-        ActiveRecord::Rollback 
-        render json: { error: "Rails could not import operation types: " + e.to_s + ": " + e.backtrace.to_s }
+        error = true 
+        render json: { error: "Rails could not import operation types: " + e.to_s + ": " + e.backtrace.to_s, issues_list: issues_list }
 
       end
+
+      raise ActiveRecord::Rollback if error      
 
     end
 

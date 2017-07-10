@@ -127,10 +127,21 @@
 
           <md-toolbar class="item-toolbar">
             <div class="md-toolbar-tools">
-              <h2 flex md-truncate>Import Results</h2> 
+              <h2 flex md-truncate>Import Results
+              <span ng-if="import_popup.inconsistencies.length > 0" style="color: #900">IMPORT FAILED</span>
+              </h2> 
             </div>
             <div class='item-close' ng-click='import_popup.show=false'>&times;</div>
           </md-toolbar>
+
+          <p ng-if="import_popup.inconsistencies.length > 0"><b style="color: #900">
+            The following issues need to be addressed before this import can be completed:
+          </b></p>
+          <ul>
+            <li ng-repeat="i in import_popup.inconsistencies track by $index" style="color: #900">
+              {{i}}
+            </li>
+          </ul>          
 
           <p ng-if="import_popup.inconsistencies.length > 0"><b>
             Import notes:
@@ -139,15 +150,6 @@
           <ul>
             <li ng-repeat="note in import_popup.notes track by $index">
               {{note}}
-            </li>
-          </ul>
-
-          <p ng-if="import_popup.inconsistencies.length > 0"><b>
-            The following issues need to be addressed before this import can be completed:
-          </b></p>
-          <ul>
-            <li ng-repeat="i in import_popup.inconsistencies track by $index">
-              {{i}}
             </li>
           </ul>
 
