@@ -64,30 +64,49 @@
 <% end %>
 
 <%= content_for :action1 do %>
-  <md-button aria-label="Schedule"  md-class='md-raised'
+  <md-button aria-label="Schedule"  class='md-raised'
     ng-if="!current.ot.on_the_fly && current.status == 'pending_true'"
     ng-click="batch(current.ot)">
     Schedule
   </md-button>
+
+  <md-button aria-label="Retry" class='md-raised'
+    ng-if="current.status == 'error'"
+    ng-click="retry(current.ot)">
+    Retry
+  </md-button>
+
 <% end %>
 
 <%= content_for :action2 do %>
-  <md-button aria-label="Click"  md-class='md-raised'
+  <md-button aria-label="Click"  class='md-raised'
     ng-if="!current.ot.on_the_fly && current.status == 'pending_true'"
     ng-click="choose(current.ot,'pending',true)">
     All
   </md-button>
+  <md-button aria-label="Click"  class='md-raised'
+    ng-if="!current.ot.on_the_fly && current.status == 'error'"
+    ng-click="choose(current.ot,'error',true)">
+    All
+  </md-button>  
 <% end %>
 
 <%= content_for :action3 do %>
-  <md-button aria-label="Click" md-class='md-raised'
+  <md-button aria-label="Click" class='md-raised'
     ng-if="!current.ot.on_the_fly && current.status == 'pending_true'"  
     ng-click="choose(current.ot,'pending',false)">
     None
   </md-button>
+  <md-button aria-label="Click"  class='md-raised'
+    ng-if="!current.ot.on_the_fly && current.status == 'error'"
+    ng-click="choose(current.ot,'error',false)">
+    None
+  </md-button>  
 <% end %>
 
 <%= content_for :main do %>
+
+   <%= render partial: '/data_associations/template' %> 
 
    <div class='timing md-subhead timing-info'
          ng-if="current.ot.timing && current.ot.timing.active">

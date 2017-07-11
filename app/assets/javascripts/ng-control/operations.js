@@ -127,6 +127,9 @@
       },{
         methods: ['user','field_values', 'precondition_value', 'plans', 'jobs']
       },options).then(operations => {
+        aq.each(operations,op => {
+          op.jobs = aq.collect(op.jobs, job => AQ.Job.record(job))
+        });
         if ( status == 'waiting' ) {
           ot.operations = aq.where(operations, op => { return (op.status == 'pending' && !op.precondition_value) || op.status == 'waiting' });
         } else if ( status == 'pending_true' ) {
@@ -191,6 +194,22 @@
       }
 
     }
+
+    $scope.retry = function(ot) {
+
+      var ops = aq.where(ot.operations, op => op.selected);
+
+      aq.each(ops, op => {
+        op.set_status("pending").then( op => {
+          AQ.OperationType.numbers().then(numbers => {
+            $scope.numbers = numbers;
+            $scope.select(ot,'pending',ops);
+            $scope.$apply();
+          });
+        });
+      });
+
+    }    
 
     $scope.unschedule = function(ot,jid) {
 

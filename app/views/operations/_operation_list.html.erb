@@ -9,7 +9,8 @@
         <th class='selector'></th>
         <th>Id</th>        
         <th>Submitted by</th>
-        <th class='output'>Output</th>
+        <th class="output">Output/Data</th>
+        <th>Job(s)</th>
         <th>Plan</th>
         <th>Last Update</th>
       </tr>
@@ -20,7 +21,7 @@
         <td>
           <input type='checkbox' 
                  ng-model='op.selected' 
-                 ng-if="!ot.on_the_fly && ( status == 'pending_true' || status == 'scheduled')">
+                 ng-if="!ot.on_the_fly && ( status == 'pending_true' || status == 'scheduled' || status == 'error' )">
         </td>
 
         <td>{{op.id}}</td>
@@ -34,7 +35,15 @@
                 <a href="/browser?sid={{fv.child_sample.id}}">{{fv.child_sample.name}}</a>
               </span>
             </li>
-          </ul>              
+          </ul>
+          <da ng-if="op.data_associations && op.data_associations.length > 0" record="op" noedit="true"></da>
+        </td>
+
+        <td>
+          <div ng-if="op.jobs.length > 0" ng-repeat="job in op.jobs">
+            <a href="/jobs/{{job.id}}">{{job.id}}</a> (<span>{{job.status}}</span>)
+          </div>
+          <div ng-if="op.jobs.length == 0">--</div>          
         </td>
 
         <td>

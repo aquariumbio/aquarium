@@ -14,7 +14,7 @@
 
       restrict: 'AE',
 
-      scope: { record: '=' },
+      scope: { record: '=', noedit: '=' },
 
       link: function($scope,$element,$attributes) {
 

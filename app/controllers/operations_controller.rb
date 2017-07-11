@@ -60,4 +60,18 @@ class OperationsController < ApplicationController
 
   end  
 
+  def set_status
+
+    op = Operation.find(params[:id])
+    op.status = params[:status]
+    op.save
+
+    if op.errors.empty? 
+      render json: op
+    else
+      render json: { errors: op.errors.full_messages }
+    end
+
+  end
+
 end

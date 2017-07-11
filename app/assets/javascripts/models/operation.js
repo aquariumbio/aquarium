@@ -384,4 +384,19 @@ AQ.Operation.record_methods.field_value_with_id = function(id) {
 
 }
 
+AQ.Operation.record_methods.set_status = function(status) {
+
+  var op = this;
+
+  return new Promise(function(resolve,reject) {
+    AQ.get("/operations/" + op.id + "/status/" + status).then(response => {
+      if ( response.data.status == status ) {
+        op.status = status;
+        resolve(op);
+      }
+    });
+  });
+
+}
+
 

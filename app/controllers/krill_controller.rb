@@ -172,6 +172,9 @@ class KrillController < ApplicationController
 
       @job = Job.find(params[:job])
       @job.stop "error"
+      @job.operations.each do |op|
+        op.associate :aborted, "Operation was canceled when job #{@job.id} was aborted"
+      end
 
       state = JSON.parse @job.state, symbolize_names: true
       if state.length % 2 == 1 # backtrace ends with a 'next'

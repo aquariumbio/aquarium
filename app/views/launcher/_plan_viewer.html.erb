@@ -118,7 +118,7 @@
   <!-- JOB TEMPLATE -->
 
   <span ng-if="operation.jobs && operation.jobs.length > 0">
-    <span ng-repeat="job in operation.jobs">
+    <div ng-repeat="job in operation.jobs">
       <span ng-bind-html="'Job ' + job.url | trust"></span>
       <span ng-if="job.pc == -2">
         <span ng-bind-html="'performed by ' + job.user.url | trust"></span>
@@ -131,7 +131,7 @@
         <span ng-bind-html="'last updated by ' + job.user.url | trust"></span>
         on {{operation.jobs[operation.jobs.length-1].updated_at|date}}
       </span>
-    </span>
+    </div>
   </span>
 
 </script>

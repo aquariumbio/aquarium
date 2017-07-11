@@ -27,6 +27,7 @@ Bioturk::Application.routes.draw do
   post '/operations/batch',                      to: 'operations#batch'
   post '/operations/unbatch',                    to: 'operations#unbatch'  
   get '/operations/jobs',                        to: 'operations#jobs'
+  get '/operations/:id/status/:status',          to: 'operations#set_status'
   resources :operations
 
   post '/operation_types/import',                to: 'operation_types#import'    

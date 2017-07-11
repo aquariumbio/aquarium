@@ -100,8 +100,10 @@ module JobOperations # included in Job model
         operations.each do |op|
           op.finish
         end
-      elsif status == 'error'
-        cancel_plans
+      else
+        operations.each do |op|
+          op.change_status "error"
+        end
       end
     end
   end

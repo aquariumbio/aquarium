@@ -10,12 +10,14 @@
 
       <div flex="20" class="left-pad">
         <span class='md-body-2' ng-if="!da.unsaved">{{da.key}}</span>
-        <input type='text' ng-if="da.unsaved" ng-model=da.key class="da-key">
+        <input type='text' ng-if="da.unsaved && !noedit" ng-model=da.key class="da-key">
       </div>
 
       <div flex="60" ng-controller="daCtrl">
 
-        <input type='text' ng-model=da.new_value ng-if="!da.upload_id" class="da-input">
+        <input type='text' ng-model=da.new_value ng-if="!da.upload_id && !noedit" class="da-input">
+
+        <span ng-if="noedit">{{da.value}}</span>
 
         <div ng-if="da.upload_id">
 
@@ -45,7 +47,7 @@
       </div>
 
       <div flex="20">
-        <div layout="row" layout-align="end center">
+        <div layout="row" layout-align="end center" ng-if="!noedit">
           <a href="#" ng-click="save(da)" ng-if="da.new_value != da.value || da.unsaved" class="no-highlight">
             <ng-md-icon icon="system_update_alt" size="22" aria-label="Update Location" style="fill: #444"></ng-md-icon>
           </a>

@@ -81,6 +81,10 @@ module Krill
               @job.stop
             else 
               @job.stop "error"
+              @job.operations.each do |op|
+                puts "notifying #{op.id}"
+                op.associate :job_crash, "Operation canceled when job #{@job.id} crashed"
+              end
               @job.reload
               @job.append_step operation: "next", time: Time.now, inputs: {}
               @job.append_step operation: "aborted", rval: {}
