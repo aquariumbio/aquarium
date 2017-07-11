@@ -146,6 +146,9 @@ class Collection < Item
     else
       r, c = self.get_empty.first
     end
+    if r.nil? or c.nil?
+      return nil
+    end
     self.set r, c, x
     [r, c, x]
   end
@@ -159,13 +162,17 @@ class Collection < Item
     r, c = [nil, nil]
     sel = self.get_non_empty
     sel = self.get_where x if not x.nil?
+    if sel.empty?
+      return nil
+    end
     if opts[:reverse]
       r,c = sel.last
     else
       r,c = sel.first
     end
+    s = self.matrix[r][c]
     self.set r, c, EMPTY
-    [r, c, x]
+    [r, c, s]
   end
 
   def capacity
@@ -177,10 +184,11 @@ class Collection < Item
     self.get_empty.empty?
   end
 
+  def empty?
+    self.get_non_empty.empty?
+  end
+
   def set r, c, x
-    if self.full?
-      raise "Cannot set, collection is full (#{self.num_samples} samples)"
-    end
     m = self.matrix
     d = self.dimensions
     if r >= d[0] or c >= d[1]
