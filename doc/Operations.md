@@ -23,6 +23,25 @@ my_ops = operations.running.select do |op|
 end
 ```
 
+You can group operations which can be useful 
+if you want to display a show block for a unique item, sample, or collection.
+
+```ruby
+grouped_by_collection = operations.running.group_by do |op| 
+  op.input("input").collection
+end
+
+grouped_by_collection.each do |collection, ops|
+    show do
+      title "For collection #{collection.id}"
+      
+      table ops.start_table
+        .input_item("input")
+        .end_table
+    end    
+end
+```
+
 Checking and Changing Operation Status
 ===
 
