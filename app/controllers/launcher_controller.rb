@@ -164,7 +164,7 @@ class LauncherController < ApplicationController
         raise ActiveRecord::Rollback                
       end
 
-      if !current_user.is_admin || @user.id != uba.user_id || uba.budget.spent_this_month(@user.id) >= uba.quota 
+      if !( current_user.is_admin || ( @user.id == uba.user_id && uba.budget.spent_this_month(@user.id) < uba.quota ) )
         render json: { errors: "User #{current_user.login} not authorized or overspent for budget #{uba.budget.name}"}, status: 422
         raise ActiveRecord::Rollback        
       end
