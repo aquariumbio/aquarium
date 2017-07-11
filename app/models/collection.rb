@@ -104,7 +104,8 @@ class Collection < Item
     get_non_empty.size
   end
 
-  # Changes Item, String, or Sample to a sample.id for storing into a collection matrix
+  # Changes Item, String, or Sample to a sample.id for storing into a collection matrix. Maybe should be private
+  # class method?
   def to_sample_id x
     r = EMPTY
     case

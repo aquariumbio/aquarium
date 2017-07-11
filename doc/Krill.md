@@ -358,6 +358,14 @@ Collection Methods
 
 Collections inherit all of the methods of Item. In addition, there are a few more methods. Suppose **col** is a collection.
 
+**Collection.new_collection "collection_type_name"** - Creates a new collection of type "collection_type_name" 
+with a matrix of size defined by the rows and columns in the collection type.
+
+**Collection.spread sample_list, "collection_type_name"** - Creates an appropriate number of collections of "collection_type_name"
+and fills collections with the sample_list. The sample list can be Samples, Items, or integers.
+
+**Collection.EMPTY** - definition of "empty", which is set as -1
+
 **col.apportion r, c** - Sets the matrix for the collection to an empty rxc matrix and saves the collection to the database. Whatever matrix was associated with the collection is lost.
 
 **col.matrix** - Returns the matrix associated with the collection.
@@ -375,6 +383,32 @@ Collections inherit all of the methods of Item. In addition, there are a few mor
 **col.num_samples** - Returns the number of non empty slots in the matrix.
 
 **col.non_empty_string** - Returns a string describing the indices of the non empty elements in the collection. For example, the method might return the string "1,1 - 5,9" to indicate that collection contains samples in those indices. Note that the string is adjustd for viewing by the user, so starts with 1 instead of 0 for rows and columns.
+
+**col.empty?** - Whether the matrix is empty
+
+**col.full?** - Whether the matrix has no EMPTY slots
+
+**col.select &block** - Returns set of [r,c] such that the block is true. 
+
+**col.find x** - Finds set of [r,c] that equal **x**, where **x** can be a Sample, Item, or integer.
+
+**col.include? x** - Whether the matrix includes **x**.
+
+**col.get_empty** - Returns set of [r,c] that are EMPTY
+
+**col.get_non_empty** - Returns set of [r,c] that are not EMPTY
+
+**col.add_one x, reverse: false** - Adds **x** to the first empty [r,c]. If reverse: true, adds **x** to the 
+last empty [r,c]. Returns 
+
+**col.subtract_one x, reverse: true** - Find last [r,c] that equals **x** and sets to EMPTY. If **x.nil?** then 
+it finds the last non_empty slot. If reverse: false then finds the first [r,c] equal to x. Returns **[r,c,sample_at_rc]** if x is in collection.
+or **nil** if **x** is not found or the col.empty?
+
+**col.remove_one x, reverse: true** - Synonym for subtract_one
+
+**remaining = col.add_samples sample_list** - Fills collection with samples from sample list. Once filled, returns the remaining samples. 
+The sample list can contain Samples, Items, or integers.
 
 Collection Helpers
 ---
