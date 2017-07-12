@@ -48,6 +48,8 @@ module OperationStatus
       if ready?
         if on_the_fly
           change_status "primed"
+        elsif status == "deferred"
+          change_status "scheduled"
         else
           change_status "pending"
         end

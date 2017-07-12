@@ -82,7 +82,11 @@ class OperationType < ActiveRecord::Base
     job.save
 
     ops.each do |op|
-      op.schedule
+      if opts[:defer]
+        op.defer
+      else
+        op.schedule
+      end
       JobAssociation.create job_id: job.id, operation_id: op.id
       op.save
     end
@@ -129,20 +133,22 @@ class OperationType < ActiveRecord::Base
   def schedule ops, user, group, opts={}
 
     ops_to_schedule = []
+    ops_to_defer = []
 
     ops.each do |op|
 
       pps = op.primed_predecessors
 
-      if pps.length >0
+      if pps.length > 0
         ops_to_schedule = ops_to_schedule + pps
-        op.defer
+        ops_to_defer << op
       else 
         ops_to_schedule << op
       end
 
     end
 
+    deferred_job = schedule_aux ops_to_defer, user, group, opts.merge(defer: true)
     job = schedule_aux ops_to_schedule, user, group, opts
 
     [job,ops_to_schedule]
