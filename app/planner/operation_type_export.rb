@@ -31,6 +31,13 @@ module OperationTypeExport
 
     # ISSUE: This code misses object types referred to by sub-samples of samples mentioned in the io.
 
+    # Not sure why precondition ? precondition.content : "" doesn't work, but this does:
+    if precondition
+      pre_code = precondition.content
+    else
+      pre_code = "NO PRECONDITION"
+    end
+
     {
 
       sample_types: sample_types,
@@ -65,7 +72,7 @@ module OperationTypeExport
         },
 
         protocol: protocol ? protocol.content : "",
-        precondition: precondition ? precondition.content : "",
+        precondition: pre_code,
         cost_model: cost_model ? cost_model.content : "",
         documentation: documentation ? documentation.content : "",
 
