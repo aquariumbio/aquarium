@@ -364,9 +364,11 @@ class OperationType < ActiveRecord::Base
     rval = true
 
     begin
-      eval(code.content)
-      rval = precondition(op)
+      eval("class TemporaryPreconditionClass; #{code.content}; end")
+      tpc = TemporaryPreconditionClass.new
+      rval = tpc.precondition(op)
     rescue Exception => e
+      puts "Could not evaluate precondition: #{e.to_s}"
       rval = false # default if there is no precondition or it crashes
     end
 
