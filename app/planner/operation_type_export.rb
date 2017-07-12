@@ -82,12 +82,15 @@ module OperationTypeExport
   end  
 
   def copy
-    ot = OperationType.import(export)
+
+    ot = OperationType.simple_import(export)
+
     ot.name += " (copy)"
     ot.category = category
     ot.deployed = false
     ot.save
     ot
+
   end
 
   module ClassMethods
@@ -153,9 +156,49 @@ module OperationTypeExport
 
       issues[:notes] << "Created new operation type '#{ot.name}'"
 
-      issues[:object_type] = ot
+      issues[:operation_type] = ot
 
       issues
+
+    end
+
+    def simple_import data
+
+      obj = data[:operation_type]
+
+      ot = OperationType.new name: obj[:name], category: obj[:category], deployed: obj[:deployed], on_the_fly: obj[:on_the_fly]
+      ot.save
+    
+      raise "Could not save operation type: " + ot.errors.full_messages.join(', ') unless ot.errors.empty?   
+
+      if obj[:field_types]
+        obj[:field_types].each do |ft|
+          ot.add_io(
+            ft[:name], ft[:sample_types], ft[:object_types], ft[:role], 
+            part: ft[:part], 
+            array: ft[:array], 
+            routing: ft[:routing], 
+            ftype: ft[:ftype],
+            preferred_operation_type_id: ft[:preferred_operation_type_id],
+            preferred_field_type_id: ft[:preferred_field_type_id]
+          )
+        end
+      end
+
+      ot.new_code 'protocol', obj[:protocol]
+      ot.new_code 'precondition', obj[:precondition]
+      ot.new_code 'cost_model', obj[:cost_model]
+      ot.new_code 'documentation', obj[:documentation]
+
+      if obj[:timing]
+        puts "Timing: " + obj[:timing].inspect
+        ot.timing = obj[:timing]
+        puts "  ==> " + ot.timing.inspect
+      else
+        puts "No Timing?"
+      end
+
+      ot
 
     end
 

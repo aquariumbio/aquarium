@@ -104,10 +104,12 @@ class SampleType < ActiveRecord::Base
       # make allowable field types (assumes sample types have been made)
       make.each do |rst|
         st = SampleType.find_by_name rst[:name]
-        st.create_afts_from_raw rst
-        if st.errors.any?
-          inconsistencies << "Could not create sample type #{rst[:name]}: #{st.errors.full_messages.join(', ')}"
-          st.destroy
+        if st 
+          st.create_afts_from_raw rst
+          if st.errors.any?
+            inconsistencies << "Could not create sample type #{rst[:name]}: #{st.errors.full_messages.join(', ')}"
+            st.destroy
+          end
         end
       end
 
