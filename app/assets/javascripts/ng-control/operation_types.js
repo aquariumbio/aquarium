@@ -241,13 +241,18 @@
           return;
         }
 
+        $scope.import_popup.loading = true;
+
         $http.post("/operation_types/import", { operation_types: json }).then(function(response) {
 
           console.log(response.data);
+          $scope.import_popup.loading = false;
 
           if ( response.data.error ) {
+
             alert (response.data.error)
             console.log(response.data)
+
           } else  if ( response.data.inconsistencies.length == 0 ) {
 
             if ( response.data.operation_types.length > 0 ) {
@@ -272,11 +277,17 @@
               $scope.current_ot = response.data.operation_types[0];     
               $scope.current_category = $scope.current_ot.category;         
               $scope.import_notification(response.data);
+
             } else {
+
               alert ( "No operation types found in file." );
+
             }
+
           } else {
+
             $scope.import_notification(response.data);
+
           }
 
         });
@@ -288,6 +299,7 @@
     }
 
     $scope.import_notification = function(data) {
+      console.log('import notification')
       $scope.import_popup = data;
       $scope.import_popup.show = true;
     }

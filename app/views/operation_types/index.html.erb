@@ -3,7 +3,7 @@
 <%= render partial: 'io_form' %>
 <%= render partial: 'show_block' %>
 <%= render partial: 'steps' %>     
-<%= render partial: 'code' %>   
+<%= render partial: 'code' %>  
 
 <%= content_for :class do %>operation_types<% end %>
 <%= content_for :controller do %>operationTypesCtrl as planner<% end %>    
@@ -11,9 +11,14 @@
 
 <%= content_for :sidebar do %>
 
-  <div class="title">
+  <div class="title" ng-if="categories.length > 0">
     <h1 class="md-title">Categories</h1>
   </div>
+
+  <div class="title" ng-if="categories.length == 0">
+    <h1 class="md-title">No Operation Types</h1>
+  </div>
+
 
   <ul class='op-type-list'>    
 
@@ -51,8 +56,10 @@
 <% end %>
 
 <% content_for :action2 do %>
-      <label class="md-button md-raised">
-        Import <input type=file
+      <label ng-class="import_popup.loading ? 'md-button md-raised md-accent' : 'md-button md-raised'">
+        <span ng-if="import_popup.loading">Importing...</span>
+        <span ng-if="!import_popup.loading">Import</span>
+                <input type=file
                         id="import"
                         file="import"
                         style="display: none;"
@@ -61,12 +68,14 @@
 <% end %>
 
 <% content_for :action3 do %>
-  <md-button class='md-raised' ng-if="current_category" ng-click="export_category(current_category)">
+  <md-button class='md-raised' ng-if="categories.length > 0 && current_category" ng-click="export_category(current_category)">
     Export Category
   </md-button>
 <% end %>
 
 <%= content_for :main do %>
+
+  <%= render partial: 'import' %> 
 
   <div flex layout-padding ng-if="!initialized">
     <div layout="row">
@@ -102,6 +111,7 @@
       <div ng-include="'code'" ng-init="name='cost_model'"    ng-if="current_ot.cost_model && mode == 'cost'"></div>        
 
       <div ng-include="'code'" ng-init="name='documentation'" ng-if="current_ot.documentation && mode == 'documentation'"></div>
+
       <div ng-if="current_ot.documentation && mode == 'documentation_view'" ng-controller="codeCtrl as code" layout-padding>
         <div ng-bind-html="current_ot.rendered_docs"></div>
 
@@ -120,42 +130,6 @@
     </div>
 
   </div>
-
-  <div class='ng-modal item-modal' ng-show='import_popup.show'>
-    <div class='ng-modal-overlay' ng-click='import_popup.show=false'></div>
-      <div class='ng-modal-dialog item-modal-content scrollable' layout-padding>
-
-          <md-toolbar class="item-toolbar">
-            <div class="md-toolbar-tools">
-              <h2 flex md-truncate>Import Results
-              <span ng-if="import_popup.inconsistencies.length > 0" style="color: #900">IMPORT FAILED</span>
-              </h2> 
-            </div>
-            <div class='item-close' ng-click='import_popup.show=false'>&times;</div>
-          </md-toolbar>
-
-          <p ng-if="import_popup.inconsistencies.length > 0"><b style="color: #900">
-            The following issues need to be addressed before this import can be completed:
-          </b></p>
-          <ul>
-            <li ng-repeat="i in import_popup.inconsistencies track by $index" style="color: #900">
-              {{i}}
-            </li>
-          </ul>          
-
-          <p ng-if="import_popup.inconsistencies.length > 0"><b>
-            Import notes:
-          </b></p>
-
-          <ul>
-            <li ng-repeat="note in import_popup.notes track by $index">
-              {{note}}
-            </li>
-          </ul>
-
-      </div>
-    </div>
-  </div>  
 
 <% end %>
 
