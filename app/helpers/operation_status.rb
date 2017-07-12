@@ -61,7 +61,7 @@ module OperationStatus
   end
 
   def finish
-    change_status "done"
+    change_status "done" if self.status != "error"
   end
 
   def error error_type, msg
