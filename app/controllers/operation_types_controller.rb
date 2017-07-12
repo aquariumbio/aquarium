@@ -318,16 +318,26 @@ class OperationTypesController < ApplicationController
   end
 
   def export
-    render json: [ OperationType.find(params[:id]).export ]
+    begin
+      render json: [ OperationType.find(params[:id]).export ]
+    rescue Exception => e
+      render json: { error: "Could not export: " + e.to_s + ", " + e.backtrace[0] }
+    end
   end
 
   def export_category
 
-    ots = OperationType.where(category: params[:category]).collect { |ot|
-      ot.export
-    }
+    begin
 
-    render json: ots
+      ots = OperationType.where(category: params[:category]).collect { |ot|
+        ot.export
+      }
+
+      render json: ots
+
+    rescue Exception => e
+      render json: { error: "Could not export: " + e.to_s + ", " + e.backtrace[0] }
+    end
 
   end
  

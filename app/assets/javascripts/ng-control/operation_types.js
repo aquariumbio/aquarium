@@ -206,11 +206,19 @@
     $scope.export_ot = function(ot) {
       $http.get("/operation_types/" + ot.id + "/export").then(function(response) {
 
-        var blob = new Blob([JSON.stringify(response.data)], { type:"application/json;charset=utf-8;" });     
-        var downloadLink = angular.element('<a></a>');
-                          downloadLink.attr('href',window.URL.createObjectURL(blob));
-                          downloadLink.attr('download', ot.name + '.json');
-        downloadLink[0].click();
+        if ( response.data.error ) {
+
+          alert(response.data.error);
+
+        } else {
+
+          var blob = new Blob([JSON.stringify(response.data)], { type:"application/json;charset=utf-8;" });     
+          var downloadLink = angular.element('<a></a>');
+                            downloadLink.attr('href',window.URL.createObjectURL(blob));
+                            downloadLink.attr('download', ot.name + '.json');
+          downloadLink[0].click();
+
+        }
 
       });
     }
@@ -218,11 +226,19 @@
     $scope.export_category = function(category) {
       $http.get("/operation_types/export_category/" + category).then(function(response) {
 
-        var blob = new Blob([JSON.stringify(response.data)], { type:"application/json;charset=utf-8;" });     
-        var downloadLink = angular.element('<a></a>');
-                          downloadLink.attr('href',window.URL.createObjectURL(blob));
-                          downloadLink.attr('download', category + '.json');
-        downloadLink[0].click();
+        if ( response.data.error ) {
+
+          alert(response.data.error);
+
+        } else {        
+
+          var blob = new Blob([JSON.stringify(response.data)], { type:"application/json;charset=utf-8;" });     
+          var downloadLink = angular.element('<a></a>');
+                            downloadLink.attr('href',window.URL.createObjectURL(blob));
+                            downloadLink.attr('download', category + '.json');
+          downloadLink[0].click();
+
+        }
 
       });
     }
