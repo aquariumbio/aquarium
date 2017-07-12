@@ -394,6 +394,17 @@
       -webkit-transform: rotate(90deg);    
     }
 
+    .container-note, .container-note-wide  {
+      position: absolute; 
+      right: 10px; 
+      color: royalblue;
+      font-weight: normal;
+    }
+
+    .container-note-wide {
+      right: 24px; 
+    }    
+
     .array-item-input {
       width: 170px !important;
       margin: 2px;
@@ -403,7 +414,7 @@
       width: 10px;
       margin: 2px;   
       position: absolute;   
-      top: -2x;
+      top: -2px;
       right: 6px;
     }
 

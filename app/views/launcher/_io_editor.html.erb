@@ -51,6 +51,22 @@
 
   <!-- basic sample -->
 
+  <div ng-class="ft.array ? 'container-note-wide' : 'container-note'" ng-if="ft.role == 'input'">
+    <div ng-repeat="aft in ft.allowable_field_types">
+      <span ng-if="operation.form[ft.role][ft.name].aft_id == aft.id">
+        {{aft.object_type_id ? aft.object_type.name : 'No container'}}
+      </span>
+    </div>
+  </div>
+
+  <div class="container-note-wide" ng-if="ft.role == 'output'">
+    <div ng-repeat="aft in ft.allowable_field_types">
+      <span ng-if="operation.form[ft.role][ft.name].aft_id == aft.id">
+        {{aft.object_type_id ? aft.object_type.name : 'No container'}}
+      </span>
+    </div>
+  </div>  
+
   <input type='string' 
          placeholder="{{fv.name}}"
          id="sample-io"
