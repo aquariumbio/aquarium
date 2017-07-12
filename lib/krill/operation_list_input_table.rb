@@ -135,7 +135,7 @@ module Krill
               warning m
             end
           end
-          table input_table
+          table input_table.render
         end
 
         msgs = ops.cleanup_input_table
