@@ -359,6 +359,7 @@
         AQ.update();
       }).catch(() => alert("Could not find item with id " + $scope.views.search.item_id));
     }
+ 
 
     $scope.page_class = function(page) {
       var c = "page";

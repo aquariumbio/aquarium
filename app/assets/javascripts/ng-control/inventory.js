@@ -48,6 +48,40 @@
       });
     }
 
+    $scope.visible_inventory = function(sample) {
+
+      var cons = sample.containers.concat(sample.collection_containers);
+
+      var s = aq.sum(cons,function(con) {
+        return $scope.num_items(sample,con) + $scope.num_collections(sample,con);
+      });
+
+      return s;
+
+    }
+
+    $scope.num_items = function(sample,container) {
+
+      var items = aq.where(sample.items,function(i) {
+        // console.log(["ITEM", i.id, container.name, sample.show_deleted, i.location, i.object_type_id, container.id])
+        return ( sample.show_deleted || i.location != 'deleted' ) && i.object_type_id == container.id;
+      });
+
+      return items.length; // items.length;
+
+    }
+
+    $scope.num_collections = function(sample,container) {
+
+      var collections = aq.where(sample.collections,function(c) {
+        // console.log(["COLLECTION", c.id, container.name, sample.show_deleted, c.location, c.object_type_id, container.id])
+        return ( sample.show_deleted || c.location != 'deleted' ) && c.object_type_id == container.id;
+      });
+
+      return collections.length; //collections.length;
+
+    }     
+
   }]);
 
 })();
