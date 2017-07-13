@@ -106,6 +106,8 @@ AQ.User.record_methods.change_password = function() {
     delete user.password;
     delete user.password_confirmation;
 
+    alert("Password successfully changed")
+
   }).catch( response => {
 
     alert(response.data.error);

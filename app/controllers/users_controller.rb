@@ -130,7 +130,7 @@ class UsersController < ApplicationController
     user.save
 
     if user.errors.empty?
-      redirect_to :users_url
+      render json: user
     else
       render json: { error: user.errors.full_messages.join(', ') }, status: 422
     end
