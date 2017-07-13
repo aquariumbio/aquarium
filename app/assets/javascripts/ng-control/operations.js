@@ -128,7 +128,8 @@
         methods: ['user','field_values', 'precondition_value', 'plans', 'jobs']
       },options).then(operations => {
         aq.each(operations,op => {
-          op.jobs = aq.collect(op.jobs, job => AQ.Job.record(job))
+          op.jobs = aq.collect(op.jobs, job => AQ.Job.record(job));
+          op.field_values = aq.collect(op.field_values, fv => AQ.FieldValue.record(fv))
         });
         if ( status == 'waiting' ) {
           ot.operations = aq.where(operations, op => { return (op.status == 'pending' && !op.precondition_value) || op.status == 'waiting' });
