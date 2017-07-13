@@ -26,7 +26,7 @@ module FieldValueKrill
         @item = items[0]
         self.child_item_id = @item.id
         if @item.class == Collection
-          p = @item.position self.child_sample
+          p = @item.position_as_hash self.child_sample
           self.row = p[:row]
           self.column = p[:column]
         end

@@ -21,8 +21,7 @@ class Collection < Item
   end
 
   def position s
-    pos = self.find self.to_sample_id(s)
-    pos.first
+    self.find(s).first
   end
 
   def position_as_hash s
