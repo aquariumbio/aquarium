@@ -25,10 +25,15 @@ class Collection < Item
     pos.first
   end
 
+  def position_as_hash s
+    pos = self.find self.to_sample_id(s)
+    { row: pos.first[0], column: pos.first[1] }
+  end  
+
   def self.parts s, ot=nil
     plist = []
     Collection.containing(s,ot).reject { |c| c.deleted? }.each do |c|
-      plist << Collection.find(c.id).position(s).merge(collection: c)
+      plist << Collection.find(c.id).position_as_hash(s).merge(collection: c)
     end
     return plist
   end

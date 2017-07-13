@@ -118,7 +118,6 @@ class JsonController < ApplicationController
       if sample && ot
 
         if ot.handler == 'collection'
-          logger.info Collection.parts(sample,ot) 
           render json: Collection.parts(sample,ot) 
         else
           render json: sample.items.reject { |i| i.deleted? || i.object_type_id != ot.id }
@@ -136,7 +135,7 @@ class JsonController < ApplicationController
 
     rescue Exception => e
 
-      render json: { errors: "Could not find sample: #{e.to_s}" }, status: 422
+      render json: { errors: "Could not find sample: #{e.to_s}: #{e.backtrace.to_s}" }, status: 422
 
     end
 
