@@ -14,3 +14,16 @@ AQ.Collection.record_getters.matrix = function() {
   return c.matrix;
 
 }
+
+AQ.Collection.record_methods.store = function() {
+
+  var collection = this;
+
+  AQ.get("/items/store/" + collection.id + ".json").then( response => {
+    collection.location = response.data.location;
+    collection.new_location = response.data.location;
+  }).catch( response => {
+    alert(response.data.error);
+  })
+
+}
