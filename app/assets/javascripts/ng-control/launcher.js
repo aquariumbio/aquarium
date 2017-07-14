@@ -217,7 +217,8 @@
     $scope.more_plans = function() {
       $scope.plan_offset += 10;
       $scope.getting_plans = true;
-      AQ.Plan.list($scope.plan_offset).then((plans) => {
+      console.log("getting plans for " + $scope.current_user.name)
+      AQ.Plan.list($scope.plan_offset,$scope.current_user).then((plans) => {
         if ( plans.length == 0 ) {
           $scope.no_more_plans = true;
         } else {
