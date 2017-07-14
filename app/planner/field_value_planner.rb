@@ -63,15 +63,21 @@ module FieldValuePlanner
 
           print "  While Looking for '#{val.id}: #{val.name}' as part of a collection of type #{object_type.name}"            
 
-          if collections.empty?
-            puts "  ... found nothing"            
-            return false
+          if !self.child_item_id 
+
+            if collections.empty?
+              puts "  ... found nothing"            
+              return false
+            else
+              puts "  ... found collection #{collections[0].id} at #{collections[0].location} with matrix #{collections[0].matrix}"
+              self.child_item_id = collections[0].id
+              self.save
+              return true
+            end
           else
-            puts "  ... found collection #{collections[0].id} at #{collections[0].location} with matrix #{collections[0].matrix}"
-            self.child_item_id = collections[0].id
-            self.save
+            puts "already has an item specified"
             return true
-          end
+          end            
 
         else
 
@@ -87,7 +93,7 @@ module FieldValuePlanner
             else
               puts "already has an item specified"
             end
-              true
+            true
           else
             puts "not found"
             false

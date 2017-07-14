@@ -35,6 +35,27 @@ class LauncherController < ApplicationController
 
       item = ( fv[:role] == 'input' && fv[:selected_item] ) ? fv[:selected_item] : nil
 
+      if fv[:role] == 'input' && fv[:selected_item]
+
+        puts "raw row = #{fv[:selected_row]}"
+
+        puts "raw collection = #{fv[:selected_item][:collection]}"
+
+        if fv[:selected_item][:collection]
+          item = fv[:selected_item][:collection]
+          row = fv[:selected_row]
+          column = fv[:selected_column]
+          puts "r = #{row}, c = #{column}, collection = #{item}"          
+        else
+          item = fv[:selected_item]
+          row = nil
+          column = nil  
+          puts "item = #{item}"                    
+        end
+      else
+        item = nil
+      end
+
       field_value = op.field_values.create(
         name: fv[:name], 
         role: fv[:role], 
@@ -42,10 +63,12 @@ class LauncherController < ApplicationController
         child_sample_id: sid,
         child_item_id: item ? item[:id] : nil,
         allowable_field_type_id: fv[:aft_id],
-        row: item ? item[:selected_row] : nil,
-        column: item ? item[:selected_column] : nil,
+        row: item ? row : nil,
+        column: item ? column : nil,
         value: fv[:value]
       )
+
+      puts field_value.inspect
 
       map_id fv[:rid], field_value.id
 

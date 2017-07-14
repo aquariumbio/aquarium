@@ -252,12 +252,16 @@
         }
       });
       fv.selected_item = item;
+      fv.selected_row = item.selected_row;
+      fv.selected_column = item.selected_column;
+      console.log(fv.selected_item);
     }
 
     $scope.select_row_column = function(fv,element,item,r,c) {
       if ( fv.sid == element ) {
         item.selected_row = r;
         item.selected_column = c;
+        console.log("set r,c to " + item.selected_row + ", " + item.selected_column)
       }
     }
 
