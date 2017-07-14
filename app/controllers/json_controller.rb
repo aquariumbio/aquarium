@@ -30,7 +30,7 @@ class JsonController < ApplicationController
         result = result.where(params[:arguments]) 
         result = result.limit(params[:options][:limit]) if params[:options] && params[:options][:limit] && params[:options][:limit].to_i > 0
         result = result.offset(params[:options][:offset]) if params[:options] && params[:options][:offset] && params[:options][:offset].to_i > 0
-        result = result.reverse if params[:options] && params[:options][:reverse]                
+        result = result.order('created_at DESC') if params[:options] && params[:options][:reverse]                
       end
 
       result = result.as_json(methods: params[:methods]) if ( params[:methods] )
