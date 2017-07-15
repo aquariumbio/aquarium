@@ -7,7 +7,7 @@ class Operation < ActiveRecord::Base
   
   def parent_type # interface with FieldValuer
     operation_type
-  end  
+  end
 
   belongs_to :operation_type
   belongs_to :user

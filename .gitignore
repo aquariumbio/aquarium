@@ -4,6 +4,9 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile ~/.gitignore_global
 
+# Gemfile.lock
+Gemfile.lock
+
 # Ignore bundler config
 /.bundle
 
@@ -35,8 +38,7 @@
 # temporary vim files
 *.swp
 
-# Gemfile.lock
-Gemfile.lock
+
 
 awc.sh
 
@@ -58,3 +60,5 @@ public/components
 
 
 
+
+Gemfile.lock

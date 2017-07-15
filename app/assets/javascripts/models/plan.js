@@ -100,8 +100,9 @@ AQ.Plan.record_methods.estimate_cost = function() {
         var errors = [];
 
         plan.cost = {
-          costs: response.data,
-          total: aq.sum(response.data, c => {
+          messages: response.data.messages,
+          costs: response.data.costs,
+          total: aq.sum(response.data.costs, c => {
             if ( c.error ) {
               errors.push(c.error.replace(/\(eval\)/g, 'cost'));
               return 0;

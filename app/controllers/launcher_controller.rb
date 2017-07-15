@@ -37,20 +37,14 @@ class LauncherController < ApplicationController
 
       if fv[:role] == 'input' && fv[:selected_item]
 
-        puts "raw row = #{fv[:selected_row]}"
-
-        puts "raw collection = #{fv[:selected_item][:collection]}"
-
         if fv[:selected_item][:collection]
           item = fv[:selected_item][:collection]
           row = fv[:selected_row]
           column = fv[:selected_column]
-          puts "r = #{row}, c = #{column}, collection = #{item}"          
         else
           item = fv[:selected_item]
           row = nil
           column = nil  
-          puts "item = #{item}"                    
         end
       else
         item = nil
@@ -67,8 +61,6 @@ class LauncherController < ApplicationController
         column: item ? column : nil,
         value: fv[:value]
       )
-
-      puts field_value.inspect
 
       map_id fv[:rid], field_value.id
 
@@ -90,11 +82,12 @@ class LauncherController < ApplicationController
     labor_rate = Parameter.get_float("labor rate") 
     markup = Parameter.get_float("markup rate")
     error = nil
+    messages = []
     
     ActiveRecord::Base.transaction do 
 
       begin
-        plan = plan_from params
+        plan,messages = plan_from params
       rescue Exception => e
         error = e.to_s
         raise ActiveRecord::Rollback
@@ -121,7 +114,7 @@ class LauncherController < ApplicationController
     if error
       render json: { errors: error }
     else
-      render json: costs
+      render json: { costs: costs, messages: messages }
     end
 
   end
@@ -169,14 +162,15 @@ class LauncherController < ApplicationController
       end
     end
 
-    return plan
+    messages = PlanOptimizer.new(plan).optimize
+
+    return [ plan, messages ]
 
   end
 
   def submit
 
     @user = params[:user_id] ? User.find(params[:user_id]) : current_user
-    puts "user = #{@user.inspect}"
 
     ActiveRecord::Base.transaction do    
 
@@ -193,7 +187,7 @@ class LauncherController < ApplicationController
       end
 
       begin
-        plan = plan_from params
+        plan,messages = plan_from params
       rescue Exception => e
         render json: { errors: e }
         raise ActiveRecord::Rollback
