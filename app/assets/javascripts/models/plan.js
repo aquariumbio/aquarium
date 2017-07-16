@@ -51,7 +51,8 @@ AQ.Plan.record_methods.export = function() {
   return AQ.Plan.record({
     operations: plan.operations_from_wires(),
     wires: plan.wires,
-    user_budget_association: plan.uba
+    user_budget_association: plan.uba,
+    optimize: plan.optimize
   })
 
 }

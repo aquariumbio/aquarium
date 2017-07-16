@@ -17,6 +17,15 @@
 
       <span flex></span>
 
+      <div class="optimization-switch-container">
+        <md-switch ng-model="plan.optimize" aria-label="Optimize" style="padding-left: 16px; padding-top: 16px">
+          Optimize
+          <md-tooltip md-direction="bottom">
+            Choose whether to equate similar operations.
+          </md-tooltip>             
+        </md-switch>
+      </div>
+
       <md-button 
         class="md-raised md-primary" 
         ng-click="plan.estimate_cost(); plan.status = 'launch'" 

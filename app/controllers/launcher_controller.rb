@@ -162,7 +162,14 @@ class LauncherController < ApplicationController
       end
     end
 
-    messages = PlanOptimizer.new(plan).optimize
+    messages = []
+
+    if params[:optimize]
+      messages << "Looking for like operations."
+      opts = PlanOptimizer.new(plan).optimize 
+      messages = messages + opts if opts.any?
+      messages << "No similar operations found." unless opts.any?
+    end
 
     return [ plan, messages ]
 
