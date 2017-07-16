@@ -500,3 +500,5 @@ AQ.Plan.record_methods.copy = function() {
   });
 
 }
+
+

@@ -1,0 +1,54 @@
+.plans {
+
+  .plan-editor {
+    border: 1pt solid #eee;
+    width: 100%;
+    height: 100%;
+  }
+
+  .op, .op-selected {
+    fill: white;
+    stroke: black;
+    stroke-width: 1;  
+    rx: 2px;
+    ry: 2px;       
+    cursor: pointer;  
+  }
+
+  .op-selected {
+    fill: azure;  
+    stroke-width: 1.5; 
+    box-shadow: 10px 10px 5px yellow;
+  }
+
+  .op-name {
+    font-size: 9pt;
+    text-anchor: middle;
+    cursor: pointer;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;    
+  }
+
+  .field-value, .field-value-selected {
+    fill: white;
+    stroke: black;
+    cursor: pointer;
+    r: 5;
+  }
+
+  .field-value-selected {
+    fill: orange;
+  }
+
+  .wire, .wire-selected {
+    stroke: #bbb;
+    stroke-width: 2;
+  }
+
+  .wire-selected {
+    stroke: black;
+  }
+
+}

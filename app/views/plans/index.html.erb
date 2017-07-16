@@ -1,82 +1,76 @@
 <% provide(:title, 'Planner') %>
 
-<div ng-app="aquarium" 
-     ng-controller="plannerCtrl as planner" 
-     class='planner'>
+<% content_for :controller do %>planCtrl<% end %>
 
-  <%= render partial: "/fields/field_type" %>  
-  <%= render partial: "/fields/field_value" %>  
-  <%= render partial: "operation" %> 
-  <%= render partial: "/data_associations/list" %>  
+<% content_for :class do %>plans<% end %>
 
-  <script type="text/ng-template" id="plan_list">
-    <div ng-class='plan_choice_class(plan)' ng-click="select_plan(plan)">
-      {{plan.id}}. {{plan.goals[0].operation_type.name}}:
-      <span class="op-goal" ng-repeat="output in plan.goals[0].outputs">{{output.child_sample.name}}</span>
-    </div>
-  </script>
+<% content_for :sidebar do %>
+  <div>{{current_op.operation_type.name}}</div>
+  <div>{{current_fv.id}}: {{current_fv.name}}</div>
+  <div ng-repeat="wire in plan.wires">
+    {{wire.from_id}} => {{wire.to_id}}
+  </div>
 
-  <div class='two-column' ng-if="ready">
+<% end %>
 
-    <div class='two-column-left'>
+<% content_for :main do %>
 
-      <div class="two-column-control">
+  <div ng-keydown="keyDown($event)" style="height: 100%" tabindex="0">
 
-        <h5>Under Construction</h5>
+    <svg class="plan-editor"
+         xmlns="http://www.w3.org/2000/svg"
+         ng-mousedown="mouseDown($event)"
+         ng-mousemove="mouseMove($event)">
 
-        <ul class="plan-list">
-          <li ng-repeat="plan in plans | filter: { status: 'Under Construction' }" ng-include="'plan_list'"></li>
-        </ul>
+       <g ng-repeat="wire in plan.wires">
+         <g ng-repeat="from_op in plan.operations">
+           <g ng-repeat="from in outputs = ( from_op.field_values | filter: { role: 'output' } ) track by $index" ng-init="from_index = $index">
+             <g ng-repeat="to_op in plan.operations" >
+               <g ng-repeat="to in inputs = ( to_op.field_values | filter: { role: 'input' } ) track by $index">
+                 <line ng-attr-class="{{wire == current_wire ? 'wire-selected' : 'wire'}}" 
+                       ng-mousedown="wireMouseDown($event, wire)" 
+                       ng-if="wire.from_id == from.id && wire.to_id == to.id"
+                       ng-attr-x1="{{from_op.x + from_op.width/2 + (from_index - outputs.length/2.0 + 0.5)*20}}"
+                       ng-attr-y1="{{from_op.y}}"
+                       ng-attr-x2="{{to_op.x + to_op.width/2 + ($index - inputs.length/2.0 + 0.5)*20}}"
+                       ng-attr-y2="{{to_op.y + to_op.height}}">
+                 </line>
+               </g>
+             </g>
+           </g>
+         </g>
+       </g>
 
-        <button class='btn btn-mini btn-primary' ng-click="set_mode('choose')">New</button>        
+       <g ng-repeat="op in plan.operations" 
+          ng-attr-transform="translate({{op.x}}, {{op.y}})">
 
-      </div>
+         <rect ng-attr-width="{{op.width}}" ng-attr-height="{{op.height}}"
+               ng-attr-class="{{op == current_op ? 'op op-selected' : 'op'}}"
+               ng-mousedown="opMouseDown($event, op)" 
+               ng-mouseup="opMouseUp($event, op)" 
+               ng-mousemove="opMouseMove($event, op)" >
+         </rect>
 
-      <div class="two-column-control">
+         <text ng-attr-x="{{op.width/2}}" y="20" class='op-name'>{{op.operation_type.name}}</text>
 
-        <h5>Running</h5>
+         <circle ng-repeat="fv in outputs = ( op.field_values | filter: { role: 'output' } ) track by $index" 
+           ng-attr-class="{{fv == current_fv ? 'field-value-selected' : 'field-value'}}"
+           ng-attr-cx="{{op.width/2 + ($index - outputs.length/2.0 + 0.5)*snap}}" 
+           ng-mousedown="fvMouseDown($event, op, fv)" 
+           cy="0" r="5"></circle>
 
-        <ul class="plan-list">
-          <li ng-repeat="plan in plans | filter: { status: 'Running' }" ng-include="'plan_list'"></li>
-        </ul>
+         <circle ng-repeat="fv in inputs = ( op.field_values | filter: { role: 'input' } ) track by $index" 
+           ng-attr-class="{{fv == current_fv ? 'field-value-selected' : 'field-value'}}"
+           ng-attr-cx="{{op.width/2 + ($index - inputs.length/2.0 + 0.5)*snap}}" 
+           ng-mousedown="fvMouseDown($event, op, fv)" 
+           ng-attr-cy="{{op.height}}"></circle>         
 
-      </div>
+       </g>
 
-      <div class="two-column-control">
-
-        <h5>Error</h5>
-
-        <ul class="plan-list">
-          <li ng-repeat="plan in plans | filter: { status: 'Error' }" ng-include="'plan_list'"></li>
-        </ul>        
-
-      </div>      
-
-      <div class="two-column-control">
-
-        <h5>Completed</h5>
-
-        <ul class="plan-list">
-          <li ng-repeat="plan in plans | filter: { status: 'Completed' }" ng-include="'plan_list'"></li>
-        </ul>        
-
-      </div>
-
-    </div>
- 
-    <div class='two-column-right'>    
-      <div  style="margin-left: 15px">
-        <%= render partial: "main" %>
-        <%= render partial: "choose_goal" %>
-        <%= render partial: "build_plan" %>
-        <%= render partial: "view_edit_plan" %>
-      </div>
-    </div>
+    </svg>
 
   </div>
 
-  <div ng-if="!ready">
-    Loading...
-  </div>
+<% end %>
 
-</div>
+

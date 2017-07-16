@@ -32,6 +32,20 @@ AQ.Operation.record_methods.set_type = function(operation_type) {
 
 }
 
+AQ.Operation.record_getters.field_values = function() {
+
+  var op = this;
+  delete op.field_values;
+
+  AQ.FieldValue.where({parent_class: "Operation", parent_id: op.id}).then(fvs => {
+    op.field_values = fvs;
+    AQ.update();
+  })
+
+  return undefined;
+
+}
+
 AQ.Operation.record_methods.set_type_with_field_values = function(operation_type,fvs) {
 
   var op = this;
