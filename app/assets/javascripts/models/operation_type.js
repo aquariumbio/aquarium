@@ -102,7 +102,6 @@ AQ.OperationType.record_getters.stats = function() {
   
   AQ.get("/operation_types/"+ot.id+"/stats").then((response) => {
     ot.stats = response.data;
-    console.log(response.data)
   }).catch((response) => {
     console.log(["error", response.data]);
   })

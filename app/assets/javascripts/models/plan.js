@@ -239,18 +239,20 @@ AQ.Plan.record_methods.wire = function(from_op, from, to_op, to) {
     plan.wires = [];
   }
 
-  plan.wires.push(
-    AQ.Wire.record({
+  var wire = AQ.Wire.record({
       from_op: from_op,
       from: from,
       to_op: to_op,
-      to: to
-    })
-  );
+      to: to,
+      from_id: from.rid,
+      to_id: to.rid
+    });
+
+  plan.wires.push(wire);
 
   to.wired = true;
 
-  return plan;
+  return wire;
 
 }
 
@@ -393,10 +395,12 @@ AQ.Plan.record_methods.add_wire = function(fv,op,pred) {
 
   var plan = this;
 
-  var preop = operation = AQ.Operation.record({
+  var preop = AQ.Operation.record({
     routing: {},
     form: { input: {}, output: {} }
   }).set_type(pred.operation_type);
+
+  plan.operations.push(preop)
 
   console.log("add_wire to " + op.operation_type.name + "(" + op.rid + ") from "
                              + preop.operation_type.name + "(" + preop.rid + ") via "
@@ -405,7 +409,7 @@ AQ.Plan.record_methods.add_wire = function(fv,op,pred) {
   var preop_output = preop.output(pred.output.name);
 
   plan.remove_wires_to(op,fv);
-  plan.wire(preop,preop_output,op,fv);
+  var wire = plan.wire(preop,preop_output,op,fv);
 
   if ( fv.field_type.array ) {
     plan.propagate(op,fv,fv.sample_identifier);

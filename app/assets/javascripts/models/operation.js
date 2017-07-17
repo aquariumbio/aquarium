@@ -1,9 +1,12 @@
 AQ.Operation.record_methods.set_type = function(operation_type) {
 
   var op = this;
+
   op.operation_type_id = operation_type.id;
   op.operation_type = operation_type;
   op.field_values = [];
+
+  var input_index = 0, output_index = 0;
 
   aq.each(operation_type.field_types, ft => {
 
@@ -14,6 +17,14 @@ AQ.Operation.record_methods.set_type = function(operation_type) {
       routing: ft.routing,
       field_type: ft
     });
+
+    if ( fv.role == 'input' ) { // these indices are for methods that need to know
+      fv.index = input_index++; // which input the fv is (e.g. first, second, etc.)
+    }
+
+    if ( fv.role == 'output' ) {
+      fv.index = output_index++;
+    }    
 
     if ( ft.allowable_field_types.length > 0 ) {
       fv.aft = ft.allowable_field_types[0];
@@ -32,18 +43,18 @@ AQ.Operation.record_methods.set_type = function(operation_type) {
 
 }
 
-AQ.Operation.record_getters.field_values = function() {
-
+AQ.Operation.record_getters.num_inputs = function() {
   var op = this;
-  delete op.field_values;
+  delete op.num_inputs;
+  op.num_inputs = aq.sum(op.field_values, fv => fv.role == 'input' ? 1 : 0 );
+  return op.num_inputs;
+}
 
-  AQ.FieldValue.where({parent_class: "Operation", parent_id: op.id}).then(fvs => {
-    op.field_values = fvs;
-    AQ.update();
-  })
-
-  return undefined;
-
+AQ.Operation.record_getters.num_outputs = function() {
+  var op = this;
+  delete op.num_outputs;
+  op.num_outputs = aq.sum(op.field_values, fv => fv.role == 'output' ? 1 : 0 );
+  return op.num_outputs;
 }
 
 AQ.Operation.record_methods.set_type_with_field_values = function(operation_type,fvs) {

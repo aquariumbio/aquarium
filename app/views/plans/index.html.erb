@@ -1,21 +1,36 @@
 <% provide(:title, 'Planner') %>
 
+<%= render partial: 'field_value_editor' %>
+<%= render partial: 'operation_info' %>
+
 <% content_for :controller do %>planCtrl<% end %>
 
-<% content_for :class do %>plans<% end %>
+<% content_for :class do %>plans launcher<% end %>
 
 <% content_for :sidebar do %>
-  <div>{{current_op.operation_type.name}}</div>
-  <div>{{current_fv.id}}: {{current_fv.name}}</div>
-  <div ng-repeat="wire in plan.wires">
-    {{wire.from_id}} => {{wire.to_id}}
+
+  <div ng-repeat="category in operation_types.categories"
+       ng-if="!current_op && !current_fv">
+    <h2 class="md-title">{{category}}</h2>
+    <md-list class='md-compact-list'>
+      <md-list-item ng-repeat="ot in operation_types | filter: { category: category }">
+        <a href="#" ng-click="add_operation(ot)">{{ot.name}}</a>
+      </md-list-item>
+    </md-list>
+  </div>
+
+  <div ng-if="current_op && !current_fv" ng-include="'operation_info'">
+  </div>
+
+  <div ng-if="current_fv"
+       ng-include="'field_value_editor'">
   </div>
 
 <% end %>
 
 <% content_for :main do %>
 
-  <div ng-keydown="keyDown($event)" style="height: 100%" tabindex="0">
+  <div id="plan-editor-container" ng-keydown="keyDown($event)" class="plan-editor-container" tabindex="0">
 
     <svg class="plan-editor"
          xmlns="http://www.w3.org/2000/svg"
@@ -23,23 +38,14 @@
          ng-mousemove="mouseMove($event)">
 
        <g ng-repeat="wire in plan.wires">
-         <g ng-repeat="from_op in plan.operations">
-           <g ng-repeat="from in outputs = ( from_op.field_values | filter: { role: 'output' } ) track by $index" ng-init="from_index = $index">
-             <g ng-repeat="to_op in plan.operations" >
-               <g ng-repeat="to in inputs = ( to_op.field_values | filter: { role: 'input' } ) track by $index">
-                 <line ng-attr-class="{{wire == current_wire ? 'wire-selected' : 'wire'}}" 
-                       ng-mousedown="wireMouseDown($event, wire)" 
-                       ng-if="wire.from_id == from.id && wire.to_id == to.id"
-                       ng-attr-x1="{{from_op.x + from_op.width/2 + (from_index - outputs.length/2.0 + 0.5)*20}}"
-                       ng-attr-y1="{{from_op.y}}"
-                       ng-attr-x2="{{to_op.x + to_op.width/2 + ($index - inputs.length/2.0 + 0.5)*20}}"
-                       ng-attr-y2="{{to_op.y + to_op.height}}">
-                 </line>
-               </g>
-             </g>
-           </g>
-         </g>
-       </g>
+         <line ng-attr-class="{{wire == current_wire ? 'wire-selected' : 'wire'}}" 
+               ng-mousedown="wireMouseDown($event, wire)" 
+               ng-attr-x1="{{wire.from_op.x + wire.from_op.width/2 + (wire.from.index - wire.from_op.num_outputs/2.0 + 0.5)*snap}}"
+               ng-attr-y1="{{wire.from_op.y}}"
+               ng-attr-x2="{{wire.to_op.x + wire.to_op.width/2 + (wire.to.index - wire.to_op.num_inputs/2.0 + 0.5)*snap}}"
+               ng-attr-y2="{{wire.to_op.y + wire.to_op.height}}">
+         </line>
+       </g>    
 
        <g ng-repeat="op in plan.operations" 
           ng-attr-transform="translate({{op.x}}, {{op.y}})">

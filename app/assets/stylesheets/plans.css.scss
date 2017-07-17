@@ -1,9 +1,13 @@
 .plans {
 
+  .plan-editor-container {
+    height: 200%;
+  }
+
   .plan-editor {
     border: 1pt solid #eee;
     width: 100%;
-    height: 100%;
+    height: 200%;
   }
 
   .op, .op-selected {
@@ -44,7 +48,7 @@
 
   .wire, .wire-selected {
     stroke: #bbb;
-    stroke-width: 2;
+    stroke-width: 2.5;
   }
 
   .wire-selected {
