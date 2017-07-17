@@ -4,7 +4,6 @@
 
     <div class="title">
       <h1 class="md-title">{{current_op.operation_type.name}}</h1>
-      {{current_op.num_inputs}}, {{current_op.num_outputs}}
       <p class='timing md-body'
          ng-if="current_op.operation_type.timing && current_op.operation_type.timing.active">
         {{current_op.operation_type.timing.as_string}}

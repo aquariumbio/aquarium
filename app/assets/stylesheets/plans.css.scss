@@ -35,7 +35,7 @@
     -moz-user-select: none;    
   }
 
-  .field-value, .field-value-selected {
+  .field-value {
     fill: white;
     stroke: black;
     cursor: pointer;
@@ -44,6 +44,10 @@
 
   .field-value-selected {
     fill: orange;
+  }
+
+  .field-value-compatible {
+    fill: #aaa;
   }
 
   .wire, .wire-selected {

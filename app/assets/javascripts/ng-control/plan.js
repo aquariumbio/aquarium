@@ -142,7 +142,7 @@
 
       if ( $scope.current_fv && evt.shiftKey ) { // There is an fv already selected, so make a wire
 
-        if ( $scope.current_fv.role == 'output' ) {
+        if ( $scope.current_fv.role == 'output' && $scope.current_fv.field_type.can_produce(fv) ) {
 
           $scope.plan.wires.push(AQ.Wire.record({
             from_op: $scope.current_op,
@@ -153,7 +153,7 @@
             to: fv
           }));
 
-        } else {
+        } else if ( fv.field_type.can_produce($scope.current_fv) ) {
 
           $scope.plan.wires.push(AQ.Wire.record({
             to_id: $scope.current_fv.rid,
@@ -180,6 +180,24 @@
     $scope.wireMouseDown = function(evt, wire) {
       select(wire);
       evt.stopImmediatePropagation();         
+    }
+
+    // Computed Classes ///////////////////////////////////////////////////////////////////////////
+
+    $scope.io_class = function(fv) {
+      var c = "field-value";
+      if ( fv == $scope.current_fv ) {
+        c += " field-value-selected";
+      } else if ( $scope.current_fv && $scope.current_fv.role == 'input' && fv.role == 'output' ) {
+        if ( fv.field_type.can_produce($scope.current_fv) ) {
+          c += " field-value-compatible";
+        }
+      } else if ( $scope.current_fv && $scope.current_fv.role == 'output' && fv.role == 'input' ) {
+        if ( $scope.current_fv.field_type.can_produce(fv) ) {
+          c += " field-value-compatible";
+        }
+      } 
+      return c;
     }
 
   }]);

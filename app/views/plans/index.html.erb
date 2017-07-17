@@ -43,8 +43,7 @@
                ng-attr-x1="{{wire.from_op.x + wire.from_op.width/2 + (wire.from.index - wire.from_op.num_outputs/2.0 + 0.5)*snap}}"
                ng-attr-y1="{{wire.from_op.y}}"
                ng-attr-x2="{{wire.to_op.x + wire.to_op.width/2 + (wire.to.index - wire.to_op.num_inputs/2.0 + 0.5)*snap}}"
-               ng-attr-y2="{{wire.to_op.y + wire.to_op.height}}">
-         </line>
+               ng-attr-y2="{{wire.to_op.y + wire.to_op.height}}"/>
        </g>    
 
        <g ng-repeat="op in plan.operations" 
@@ -54,22 +53,21 @@
                ng-attr-class="{{op == current_op ? 'op op-selected' : 'op'}}"
                ng-mousedown="opMouseDown($event, op)" 
                ng-mouseup="opMouseUp($event, op)" 
-               ng-mousemove="opMouseMove($event, op)" >
-         </rect>
+               ng-mousemove="opMouseMove($event, op)"/>
 
          <text ng-attr-x="{{op.width/2}}" y="20" class='op-name'>{{op.operation_type.name}}</text>
 
          <circle ng-repeat="fv in outputs = ( op.field_values | filter: { role: 'output' } ) track by $index" 
-           ng-attr-class="{{fv == current_fv ? 'field-value-selected' : 'field-value'}}"
+           ng-attr-class="{{io_class(fv)}}"
            ng-attr-cx="{{op.width/2 + ($index - outputs.length/2.0 + 0.5)*snap}}" 
            ng-mousedown="fvMouseDown($event, op, fv)" 
-           cy="0" r="5"></circle>
+           cy="0" />
 
          <circle ng-repeat="fv in inputs = ( op.field_values | filter: { role: 'input' } ) track by $index" 
-           ng-attr-class="{{fv == current_fv ? 'field-value-selected' : 'field-value'}}"
+           ng-attr-class="{{io_class(fv)}}"
            ng-attr-cx="{{op.width/2 + ($index - inputs.length/2.0 + 0.5)*snap}}" 
            ng-mousedown="fvMouseDown($event, op, fv)" 
-           ng-attr-cy="{{op.height}}"></circle>         
+           ng-attr-cy="{{op.height}}" />
 
        </g>
 
