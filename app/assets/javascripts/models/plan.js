@@ -251,6 +251,7 @@ AQ.Plan.record_methods.wire = function(from_op, from, to_op, to) {
   plan.wires.push(wire);
 
   to.wired = true;
+  from.wired = true;
 
   return wire;
 
@@ -418,6 +419,22 @@ AQ.Plan.record_methods.add_wire = function(fv,op,pred) {
   }
 
   return preop;
+
+}
+
+AQ.Plan.record_methods.remove_wire = function(wire) {
+
+  var plan = this;
+  aq.remove(plan.wires, wire);
+  aq.each(plan.operations,op => {
+    aq.each(op.field_values, fv => {
+      fv.wired = false;
+    });
+  });
+  aq.each(plan.wires, w => {
+    w.to.wired = true;
+    w.from.wires = true;
+  });
 
 }
 

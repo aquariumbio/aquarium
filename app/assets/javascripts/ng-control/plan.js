@@ -9,7 +9,7 @@
   } 
 
   w.controller('planCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', 
-                      function (  $scope,   $http,   $attrs,   $cookies,   $sce ) {
+                  function (  $scope,   $http,   $attrs,   $cookies,   $sce ) {
 
     AQ.init($http);
     AQ.update = () => { $scope.$apply(); }
@@ -19,10 +19,13 @@
     $scope.snap = 16;
     $scope.last_place = 0;
     $scope.plan = AQ.Plan.record({operations: [], wires: []});
+    $scope.multiselect = {};
 
-    AQ.User.active_users().then(users => {
+    $scope.ready = false;
 
-      $scope.users = users;
+    // AQ.User.active_users().then(users => {
+
+    //   $scope.users = users;
 
       AQ.User.current().then((user) => {
 
@@ -36,39 +39,42 @@
           AQ.operation_types = $scope.operation_types;
 
           AQ.get_sample_names().then(() =>  {
-            console.log("Loading complete.");
-          });
-
-          $scope.$apply();
-
+            $scope.ready = true;
+            $scope.$apply();
+          });        
         });
       });
-    });   
+      
+    // });   
 
     // Actions ////////////////////////////////////////////////////////////////////////////////////
 
+    function all_ops(f) {
+      aq.each($scope.plan.operations,f);
+    }
+
     $scope.add_operation = function(ot) {
       var op = AQ.Operation.record({
-        x: $scope.snap + $scope.last_place, y: $scope.snap + $scope.last_place, width: 160, height: 30,
+        x: 3*$scope.snap + $scope.last_place, y: 2*$scope.snap + $scope.last_place, width: 160, height: 30,
         routing: {}, form: { input: {}, output: {} }
       });
-      $scope.last_place += 40;
+      $scope.last_place += 2*$scope.snap;
       op.set_type(ot);
       $scope.current_op = op;
       $scope.plan.operations.push(op);
-      document.getElementById("plan-editor-container").focus();
+      $scope.set_current_fv(op.field_values[0],true)
     }
 
     $scope.add_predecessor = function(fv,op,pred) {
       var newop = $scope.plan.add_wire(fv,op,pred);
       newop.x = op.x;
-      newop.y = op.y + 3*$scope.snap;
+      newop.y = op.y + 4*$scope.snap;
       newop.width = 160;
       newop.height = 30;
       select(newop);
       var fvs = aq.where(newop.field_values, fv => fv.role == 'input');
       if ( fvs.length > 0 ) {
-        $scope.current_fv = fvs[0];
+        $scope.set_current_fv(fvs[0]);
       }
     }
 
@@ -78,37 +84,112 @@
       $scope.current_wire = object && object.model.model == "Wire"       ? object : null;
     }
 
+    $scope.set_current_fv = function(fv,focus) {
+      $scope.current_fv = fv;
+      if ( focus ) { 
+        setTimeout(function() { 
+          var el = document.getElementById('fv-'+fv.rid);
+          if ( el ) { el.focus() }
+        }, 30);
+      }
+    }
+
+    function op_in_multiselect(op) {
+
+      var m = $scope.multiselect;
+
+      return  (( m.width >= 0 && m.x < op.x && op.x + op.width < m.x+m.width ) ||
+               ( m.width <  0 && m.x + m.width < op.x && op.x + op.width < m.x )) &&
+              (( m.height >= 0 && m.y < op.y && op.y + op.height < m.y+m.height ) ||
+               ( m.height <  0 && m.y + m.height < op.y && op.y + op.height < m.y ));
+
+    }
+
     // Main Events ////////////////////////////////////////////////////////////////////////////////
 
     $scope.mouseDown = function(evt) {
+
       select(null);
+      all_ops(op => op.multiselect = false);
+
+      $scope.multiselect = {
+        x: evt.offsetX,
+        y: evt.offsetY,
+        width: 0,
+        height: 0,
+        active: true,
+        dragging: false
+      }      
+
     }
 
     $scope.mouseMove = function(evt) {
+
       if ( $scope.current_op && $scope.current_op.drag ) {
+
         $scope.current_op.x = evt.offsetX - $scope.current_op.drag.localX;
         $scope.current_op.y = evt.offsetY - $scope.current_op.drag.localY;
         $scope.last_place = 0;
-      }   
+
+      } else if ( $scope.multiselect.dragging ) {
+
+        all_ops(op => {
+          if ( op.multiselect ) {
+            op.x = evt.offsetX - op.drag.localX;
+            op.y = evt.offsetY - op.drag.localY;
+          }
+        });
+
+      } else if ( $scope.multiselect.active ) {
+
+        $scope.multiselect.width = evt.offsetX - $scope.multiselect.x;
+        $scope.multiselect.height = evt.offsetY - $scope.multiselect.y;
+
+      }
+
     }    
+
+    $scope.mouseUp = function(evt) {
+
+      if ( $scope.multiselect.dragging ) {
+        $scope.multiselect.dragging = false;
+      } else if ( $scope.multiselect.active  ) {
+        all_ops(op => {
+          if ( op_in_multiselect(op) ) {
+            op.multiselect = true;
+          }
+        });
+        $scope.multiselect.active = false;        
+      }
+    }
 
     $scope.keyDown = function(evt) {
 
       switch(evt.key) {
+
         case "Backspace": 
+
           if ( $scope.current_wire ) {
-            aq.remove($scope.plan.wires, $scope.current_wire);
+            $scope.plan.remove_wire($scope.current_wire);
             $scope.current_wire = null;
           }
           if ( $scope.current_op && !$scope.current_fv ) {
-            aq.remove($scope.plan.operations, $scope.current_op);
+            aq.remove($scope.plan.operations, $scope.current_op);                      
+            $scope.plan.wires = aq.where($scope.plan.wires, w => {
+              return w.to_op != $scope.current_op && w.from_op != $scope.current_op;
+            });
             $scope.current_op = null;
-            // TODO: Remove wires too
           }
           break;
+
         case "Escape":
-          $scope.mouseDown(evt);
+          select(null);
+          all_ops(op => op.multiselect = false)
           break;
+
+
+        default:
+
       }
 
     }    
@@ -117,21 +198,49 @@
 
     $scope.opMouseDown = function(evt,op) {
 
-      select(op);
+      if ( op.multiselect ) {
 
-      $scope.current_op.drag = {
-        localX: evt.offsetX - op.x, 
-        localY: evt.offsetY - op.y
-      };
+        all_ops(op => {
+          if ( op.multiselect ) {
+            op.drag = {
+              localX: evt.offsetX - op.x, 
+              localY: evt.offsetY - op.y
+            }
+          }
+        });
+
+        $scope.multiselect.dragging = true;
+
+      } else {
+
+        select(op); 
+        all_ops(op=>op.multiselect=false);
+        $scope.current_op.drag = {
+          localX: evt.offsetX - op.x, 
+          localY: evt.offsetY - op.y
+        };   
+
+      }
 
       evt.stopImmediatePropagation();
 
     }
 
-    $scope.opMouseUp = function(evt,op) {
+    function snap(op) {
       op.x = Math.floor((op.x+$scope.snap/2) / $scope.snap) * $scope.snap;
-      op.y = Math.floor((op.y+$scope.snap/2) / $scope.snap) * $scope.snap;  
-      delete op.drag;
+      op.y = Math.floor((op.y+$scope.snap/2) / $scope.snap) * $scope.snap;      
+    }
+
+    $scope.opMouseUp = function(evt,op) {
+
+      if ( op.multiselect ) {
+        aq.each($scope.plan.operations, op => snap(op));
+        delete op.drag;
+      } else {
+        snap(op);
+        delete op.drag;
+      }        
+      
     }
 
     $scope.opMouseMove = function(evt,op) {}
@@ -140,7 +249,12 @@
 
     $scope.fvMouseDown = function(evt,op,fv) {
 
+      all_ops(op=>op.multiselect=false);
+
       if ( $scope.current_fv && evt.shiftKey ) { // There is an fv already selected, so make a wire
+
+        $scope.current_fv.wired = true;
+        fv.wired = true;
 
         if ( $scope.current_fv.role == 'output' && $scope.current_fv.field_type.can_produce(fv) ) {
 
@@ -167,8 +281,10 @@
         }
 
       } else {
+
         select(op);
-        $scope.current_fv = fv;
+        $scope.set_current_fv(fv,true);
+
       }
 
       evt.stopImmediatePropagation();
@@ -179,26 +295,88 @@
 
     $scope.wireMouseDown = function(evt, wire) {
       select(wire);
-      evt.stopImmediatePropagation();         
+      evt.stopImmediatePropagation();  
+      console.log(wire);       
     }
 
     // Computed Classes ///////////////////////////////////////////////////////////////////////////
 
-    $scope.io_class = function(fv) {
-      var c = "field-value";
-      if ( fv == $scope.current_fv ) {
-        c += " field-value-selected";
-      } else if ( $scope.current_fv && $scope.current_fv.role == 'input' && fv.role == 'output' ) {
-        if ( fv.field_type.can_produce($scope.current_fv) ) {
-          c += " field-value-compatible";
-        }
-      } else if ( $scope.current_fv && $scope.current_fv.role == 'output' && fv.role == 'input' ) {
-        if ( $scope.current_fv.field_type.can_produce(fv) ) {
-          c += " field-value-compatible";
-        }
-      } 
+    $scope.op_class = function(op) {
+      var c = "op";
+      if ( op == $scope.current_op || op.multiselect ) {
+        c += " op-selected";
+      }
       return c;
     }
+
+    $scope.io_class = function(op,fv) {
+
+      var c = "field-value";
+
+      if ( $scope.current_fv && $scope.current_fv.role == 'input' && fv.role == 'output' && fv.field_type.can_produce($scope.current_fv) ) {
+
+        c += " field-value-compatible";
+
+      } else if ( $scope.current_fv && $scope.current_fv.role == 'output' && fv.role == 'input' && $scope.current_fv.field_type.can_produce(fv)) {
+
+        c += " field-value-compatible";
+
+      } else {
+
+        if ( fv.routing && op.routing[fv.routing] != "" ) { // Has a sample associated with it
+          c += " field-value-with-sample";
+        } else if ( fv.field_type.array && fv.sample_identifier && fv.sample_identifier != "" ) {
+          c += " field-value-with-sample";
+        }
+
+        if ( !fv.wired && fv.role == 'input' && fv.items != "" ) { // Has items associated with it
+          c += " field-value-with-items";
+        }      
+
+        if ( !fv.wired && fv.role == 'input' && fv.items == "" ) { // Has no items associated with it, but should
+          c += " field-value-with-no-items";
+        }      
+
+      }
+
+      return c;
+
+    }
+
+    $scope.multiselect_x = function() {
+      return $scope.multiselect.width > 0 ? $scope.multiselect.x : $scope.multiselect.x + $scope.multiselect.width;
+    }
+
+    $scope.multiselect_y = function() {
+      return $scope.multiselect.height > 0 ? $scope.multiselect.y : $scope.multiselect.y + $scope.multiselect.height;
+    }    
+
+    $scope.multiselect_width = function() {
+      return Math.abs($scope.multiselect.width);
+    }
+
+    $scope.multiselect_height = function() {
+      return Math.abs($scope.multiselect.height);
+    }
+
+    // Inventory ////////////////////////////////////////////////////////////////////////////////////
+    $scope.select_item = function(fv, item) {
+      aq.each(fv.items, i => {
+        if ( i.collection ) {
+          i.selected = (i.collection.id == item.collection.id);
+        } else {
+          i.selected = (i.id == item.id);        
+        }
+      });
+      fv.selected_item = item;
+      fv.selected_row = item.selected_row;
+      fv.selected_column = item.selected_column;
+      console.log(fv.selected_item);
+      console.log(fv.items);
+    }
+
+    $scope.io_focus = function(op,ft,fv) {
+    }    
 
   }]);
 

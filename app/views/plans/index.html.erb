@@ -2,76 +2,63 @@
 
 <%= render partial: 'field_value_editor' %>
 <%= render partial: 'operation_info' %>
+<%= render partial: 'io_editor' %>
+<%= render partial: '/data_associations/template' %> 
+<%= render partial: "/items/template" %>
 
 <% content_for :controller do %>planCtrl<% end %>
-
 <% content_for :class do %>plans launcher<% end %>
+<% content_for :no_main_scroll_decision do %>true<% end %>
 
 <% content_for :sidebar do %>
 
-  <div ng-repeat="category in operation_types.categories"
-       ng-if="!current_op && !current_fv">
-    <h2 class="md-title">{{category}}</h2>
-    <md-list class='md-compact-list'>
-      <md-list-item ng-repeat="ot in operation_types | filter: { category: category }">
-        <a href="#" ng-click="add_operation(ot)">{{ot.name}}</a>
-      </md-list-item>
-    </md-list>
-  </div>
+  <div ng-if="ready">
 
-  <div ng-if="current_op && !current_fv" ng-include="'operation_info'">
-  </div>
+    <div ng-repeat="category in operation_types.categories"
+         ng-if="!current_op && !current_fv">
+      <h2 class="md-title">{{category}}</h2>
+      <md-list class='md-compact-list'>
+        <md-list-item ng-repeat="ot in operation_types | filter: { category: category }">
+          <a href="#" ng-click="add_operation(ot)">{{ot.name}}</a>
+        </md-list-item>
+      </md-list>
+    </div>
 
-  <div ng-if="current_fv"
-       ng-include="'field_value_editor'">
+    <div ng-if="current_op && !current_fv" ng-include="'operation_info'">
+    </div>
+
+    <div ng-if="current_fv"
+         ng-include="'field_value_editor'">
+    </div>
+
   </div>
 
 <% end %>
 
 <% content_for :main do %>
 
-  <div id="plan-editor-container" ng-keydown="keyDown($event)" class="plan-editor-container" tabindex="0">
+  <div flex layout-padding ng-if="!ready">
+    <div layout="row">
+      <div flex="34"></div>
+      <div flex="66">
+        <br /><br />
+        <h2 class="md-title">Loading ...</h2>
+        <br />
+        <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+      </div>
+    </div>
+  </div>  
 
-    <svg class="plan-editor"
-         xmlns="http://www.w3.org/2000/svg"
-         ng-mousedown="mouseDown($event)"
-         ng-mousemove="mouseMove($event)">
+  <div class="editor-main" layout="column" ng-if="ready">
 
-       <g ng-repeat="wire in plan.wires">
-         <line ng-attr-class="{{wire == current_wire ? 'wire-selected' : 'wire'}}" 
-               ng-mousedown="wireMouseDown($event, wire)" 
-               ng-attr-x1="{{wire.from_op.x + wire.from_op.width/2 + (wire.from.index - wire.from_op.num_outputs/2.0 + 0.5)*snap}}"
-               ng-attr-y1="{{wire.from_op.y}}"
-               ng-attr-x2="{{wire.to_op.x + wire.to_op.width/2 + (wire.to.index - wire.to_op.num_inputs/2.0 + 0.5)*snap}}"
-               ng-attr-y2="{{wire.to_op.y + wire.to_op.height}}"/>
-       </g>    
+    <div flex="20" class="operation-editor scrollable">
+      <%= render partial: 'operation_editor' %>
+    </div>   
 
-       <g ng-repeat="op in plan.operations" 
-          ng-attr-transform="translate({{op.x}}, {{op.y}})">
-
-         <rect ng-attr-width="{{op.width}}" ng-attr-height="{{op.height}}"
-               ng-attr-class="{{op == current_op ? 'op op-selected' : 'op'}}"
-               ng-mousedown="opMouseDown($event, op)" 
-               ng-mouseup="opMouseUp($event, op)" 
-               ng-mousemove="opMouseMove($event, op)"/>
-
-         <text ng-attr-x="{{op.width/2}}" y="20" class='op-name'>{{op.operation_type.name}}</text>
-
-         <circle ng-repeat="fv in outputs = ( op.field_values | filter: { role: 'output' } ) track by $index" 
-           ng-attr-class="{{io_class(fv)}}"
-           ng-attr-cx="{{op.width/2 + ($index - outputs.length/2.0 + 0.5)*snap}}" 
-           ng-mousedown="fvMouseDown($event, op, fv)" 
-           cy="0" />
-
-         <circle ng-repeat="fv in inputs = ( op.field_values | filter: { role: 'input' } ) track by $index" 
-           ng-attr-class="{{io_class(fv)}}"
-           ng-attr-cx="{{op.width/2 + ($index - inputs.length/2.0 + 0.5)*snap}}" 
-           ng-mousedown="fvMouseDown($event, op, fv)" 
-           ng-attr-cy="{{op.height}}" />
-
-       </g>
-
-    </svg>
+    <div flex="80" class="plan-editor-container scrollable"
+         ng-keydown="keyDown($event)" tabindex="0">
+      <%= render partial: 'plan_editor' %>
+    </div>
 
   </div>
 

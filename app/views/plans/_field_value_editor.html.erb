@@ -5,6 +5,7 @@
     <div class="title">
       <h1 class="md-title">{{current_op.operation_type.name}}</h1>      
       <h1 class="md-subhead">{{current_fv.name}} ({{current_fv.role}})</h1>
+      wired: {{current_fv.wired}}
     </div>
 
       <md-subheader class="md-no-sticky">
@@ -31,7 +32,7 @@
 
         <md-subheader class="md-no-sticky">
           Inventory
-          <span ng-if="current_fv.wired">(Not Used in Plan)</span>
+          <span ng-if="current_fv.wired || current_fv.role == 'output'">(Not Used in Plan)</span>
         </md-subheader>
 
         <md-list class='md-compact-list' ng-if="!current_fv.items[0].collection"> <!-- ITEMS /////////////////////////////// -->

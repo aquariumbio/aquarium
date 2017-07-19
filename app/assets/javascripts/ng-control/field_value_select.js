@@ -8,27 +8,26 @@
     w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
   } 
 
-  w.directive("sampleselect", function() {
+  w.directive("fv", function() {
 
     return {
 
       restrict: 'AE',
 
-      scope: { ft: '=', plan: "=", operation: '=', fv: '=', focus: '=' },
+      scope: { fv: '=', plan: "=", operation: '=' },
 
       link: function($scope,$element,$attributes) {
 
-        var ft = $scope.ft,
-            fv = $scope.fv,
+        var fv = $scope.fv,
+            ft = $scope.fv.field_type,
             op = $scope.operation,
             plan = $scope.plan,
-            op_type = $scope.operation.operation_type,
-            route = $scope.operation.routing;
-        
-        // Called when a sample input is updated. 
+            op_type = op.operation_type,
+            route = op.routing;    
+
         var autocomp = function(ev,ui) {
 
-          var sid = AQ.id_from(ui.item.value); 
+          var sid = AQ.id_from(ui.item.value);
 
           // send new sid to i/o of other operations
           plan.propagate(op,fv,ui.item.value); 
@@ -66,62 +65,37 @@
 
           $scope.$apply();
 
-        };
+        }   
 
-        $scope.input_class = function(current_fv) {
-          var c = "sample-only";
-          if ( fv.items.length > 0 ) {
-            c += " input-satisfied";
-          }
-          if ( current_fv && current_fv.rid == fv.rid ) {
-            c += " selected-input";
-          }
-          return c
-        }
+        $scope.$watch("operation.form[fv.field_type.role][fv.name].aft", function(new_aft, old_aft) {
 
-        $scope.select = function(item) {
-          fv.selected_item = item;
-        }
+          var aft = op.form[ft.role][fv.name].aft;
 
-        $scope.item_select_class = function(ft) {
-          var c = "btn dropdown-toggle dropdown";
-          if ( ft.array ) {
-            c += " array-item-input";
-          }
-          return c;
-        }
+          if ( aft && aft.sample_type ) {
 
-        $scope.show_item_select = function(ft) {
+            var name = aft.sample_type.name;
 
-          return ft.role == 'input' && 
-            aq.where(
-              ft.allowable_field_types,
-              (aft) => { return aft.object_type_id != null }
-            ).length > 0;
+            console.log("autocomplete for " + fv.name + " assigned")
 
-        }
-
-        $scope.$watch('operation.form[ft.role][ft.name].aft', function(new_aft,old_aft) {
-          if ( new_aft && new_aft.sample_type ) {
-            var name = new_aft.sample_type.name;
-            $($element).find("#sample-io").autocomplete({
+            $($element).autocomplete({
               source: AQ.sample_names_for(name),
               select: autocomp
             });
-            if ( !ft.array && (
+
+            if ( !ft.array && new_aft && old_aft && ( 
                  new_aft.object_type_id != old_aft.object_type_id || 
                  new_aft.sample_type_id != old_aft.sample_type_id ) ) {
               fv.clear();
             }
+
           }
-        });    
 
-      },
+        });         
 
-      template: $('#sample_select').html()
+      }
 
     }
 
   });
-  
+
 })();

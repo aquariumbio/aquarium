@@ -166,6 +166,8 @@ AQ.Operation.record_methods.array_add = function(field_type) {
   this.field_values.push(fv);
 
   this.recompute_getter('types_and_values');
+  this.recompute_getter('num_inputs');
+  this.recompute_getter('num_outputs');  
 
   return this;
 
@@ -337,18 +339,17 @@ AQ.Operation.record_getters.types_and_values = function() {
   var op = this,
       tvs = [];
 
-  aq.each(this.field_values, fv => { if(fv.role == 'input') console.log(fv.name + "(" + fv.rid + "): " + fv.items.length)});
-
   delete op.types_and_values;
 
-  aq.each(this.field_values, fv => { if(fv.role == 'input') console.log(fv.name + "(" + fv.rid + "): " + fv.items.length)});
+  var input_index = 0;
 
   aq.each(op.operation_type.field_types, ft => {
     if ( ft.role == 'input' && ft.ftype == 'sample' ) {
       aq.each(op.field_values, fv => {
         if ( fv.role == 'input' && ft.name == fv.name ) {
-          var tv = {type: ft, value: fv};
-          tvs.push(tv)
+          var tv = {type: ft, value: fv, role: 'input'};
+          tvs.push(tv);
+          fv.index = input_index++;
         }
       });
       if ( ft.array ) {
@@ -358,8 +359,6 @@ AQ.Operation.record_getters.types_and_values = function() {
   });
 
   op.types_and_values = tvs;
-
-  aq.each(this.field_values, fv => { if( fv.role == 'input') console.log(fv.name + "(" + fv.rid + "): " + fv.items.length)});
 
   return tvs;
 
