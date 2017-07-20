@@ -36,6 +36,7 @@
               {{fv.name}}
               <span ng-if="fv.child_sample">: 
                 <a href="/browser?sid={{fv.child_sample.id}}">{{fv.child_sample_id}}: {{fv.child_sample.name}}</a>
+                <span ng-if="fv.item.object_type"> as {{fv.item.object_type.name}}</span>
                 <span ng-if="fv.child_item_id">
                   ( <div ng-if="fv.child_item_id" 
                          item="fv.item" 
