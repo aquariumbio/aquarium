@@ -51,7 +51,7 @@
               <span ng-if="!$first" style="width: 18px; display: inline-block">&nbsp;</span>
               {{fv.name}}
               <span ng-if="fv.child_sample">: 
-                <a href="/browser?sid={{fv.child_sample.id}}">{{{fv.child_sample_id}}: {fv.child_sample.name}}</a>
+                <a href="/browser?sid={{fv.child_sample.id}}">{{fv.child_sample_id}}: {fv.child_sample.name}}</a>
                 <span ng-if="fv.child_item_id">
                   ( <div ng-if="fv.child_item_id" 
                          item="fv.item" 
