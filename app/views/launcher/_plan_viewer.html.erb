@@ -3,6 +3,14 @@
 
   <!-- PLAN TEMPLATE -->
 
+  <md-button class='md-raised md-warn' 
+    ng-if="plan.deletable" 
+    ng-click="delete_plan(plan)"
+    ng-disabled="plan.deleting">
+    <span ng-if="plan.deleting">DELETING...</span>
+    <span ng-if="!plan.deleting">DELETE</span>
+  </md-button>
+
   <div class="md-subhead" ng-show="plan.cost_total != null">
     {{plan.budget.name}}:  {{plan.cost_so_far|currency}} / {{plan.cost_total|currency}}
   </div>

@@ -281,6 +281,15 @@
 
     }
 
+    $scope.delete_plan = function(plan) {
+      
+      plan.deleting = true;
+      AQ.http.delete("/plans/"+plan.id).then( () => {
+        aq.remove($scope.plans,plan);
+      })
+
+    }    
+
   }]);
 
 })();

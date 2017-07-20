@@ -39,6 +39,7 @@ AQ.Plan.record_methods.reload = function() {
           AQ.update();
         });
       });
+      plan.recompute_getter("deletable")
     });
   });
 
@@ -182,7 +183,8 @@ AQ.Plan.record_methods.cancel = function(msg) {
     AQ.get('/plans/cancel/' + plan.id + "/" + msg).then(
       (response) => { 
         plan.reload();
-        resolve(response.data)
+        resolve(response.data);
+        plan.recompute_getter("deletable");
       },
       (response) => { reject(response.data.errors) }
     );
@@ -499,5 +501,22 @@ AQ.Plan.record_methods.copy = function() {
 
     });
   });
+
+}
+
+AQ.Plan.record_getters.deletable = function() {
+
+  var plan = this;
+
+  delete plan.deletable;
+  plan.deletable = true;
+
+  aq.each(plan.operations, op => {
+    if ( op.status != 'error' || op.jobs === undefined || op.jobs.length > 0 ) {
+      plan.deletable = false;
+    }
+  });
+
+  return plan.deletable;
 
 }
