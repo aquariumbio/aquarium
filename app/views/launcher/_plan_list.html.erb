@@ -10,7 +10,7 @@
 
     <div flex="55" class='no-wrap left-pad' ng-if="!plan.open">
       <span ng-repeat="fv in plan.operations[0].field_values | filter : { role: 'output' }" class='md-body-2 sample-name'>
-        {{fv.name}}: {{fv.child_sample.name}}
+        {{fv.name}}: <a href="/browser?sid={{fv.child_sample_id}}">{{fv.child_sample.name}}</a>
       </span>
     </div>      
 
