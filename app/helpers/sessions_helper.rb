@@ -18,7 +18,9 @@ module SessionsHelper
   end
 
   def current_user
-    @current_user ||= User.find_by_remember_token(cookies[remember_token_symbol])
+    rts = cookies[remember_token_symbol] ?  cookies[remember_token_symbol] : cookies["remember_token"] 
+    puts "RTS = #{rts}"
+    @current_user ||= User.find_by_remember_token(rts)
   end
 
   def current_user?(user)
@@ -26,6 +28,9 @@ module SessionsHelper
   end
 
   def signed_in_user
+    puts "SIGNED IN USER"
+    puts "remember_token = #{cookies[remember_token_symbol]}"
+    puts "COOKIES = #{cookies.inspect}"
     unless signed_in? 
       store_location
       redirect_to signin_url, notice: "Please sign in."
