@@ -5,12 +5,7 @@
      ng-mouseup="mouseUp($event)">
 
   <g ng-repeat="wire in plan.wires">
-    <line ng-attr-class="{{wire == current_wire ? 'wire-selected' : 'wire'}}" 
-          ng-mousedown="wireMouseDown($event, wire)" 
-          ng-attr-x1="{{wire.from_op.x + wire.from_op.width/2 + (wire.from.index - wire.from_op.num_outputs/2.0 + 0.5)*snap}}"
-          ng-attr-y1="{{wire.from_op.y}}"
-          ng-attr-x2="{{wire.to_op.x + wire.to_op.width/2 + (wire.to.index - wire.to_op.num_inputs/2.0 + 0.5)*snap}}"
-          ng-attr-y2="{{wire.to_op.y + wire.to_op.height}}"/>
+    <%= render partial: 'wire' %>
   </g>    
 
   <g ng-repeat="op in plan.operations" 

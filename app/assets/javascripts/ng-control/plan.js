@@ -23,30 +23,24 @@
 
     $scope.ready = false;
 
-    // AQ.User.active_users().then(users => {
+    AQ.User.current().then((user) => {
 
-    //   $scope.users = users;
+      $scope.current_user = user;
+      $scope.getting_plans = true;    
 
-      AQ.User.current().then((user) => {
+      AQ.OperationType.all_with_content(true).then((operation_types) => {
 
-        $scope.current_user = user;
-        $scope.getting_plans = true;    
+        $scope.operation_types = aq.where(operation_types,ot => ot.deployed);
+        AQ.OperationType.compute_categories($scope.operation_types);
+        AQ.operation_types = $scope.operation_types;
 
-        AQ.OperationType.all_with_content(true).then((operation_types) => {
-
-          $scope.operation_types = aq.where(operation_types,ot => ot.deployed);
-          AQ.OperationType.compute_categories($scope.operation_types);
-          AQ.operation_types = $scope.operation_types;
-
-          AQ.get_sample_names().then(() =>  {
-            $scope.ready = true;
-            $scope.$apply();
-          });        
-        });
+        AQ.get_sample_names().then(() =>  {
+          $scope.ready = true;
+          $scope.$apply();
+        });        
       });
-      
-    // });   
-
+    });
+    
     // Actions ////////////////////////////////////////////////////////////////////////////////////
 
     function all_ops(f) {
@@ -67,6 +61,7 @@
 
     $scope.add_predecessor = function(fv,op,pred) {
       var newop = $scope.plan.add_wire(fv,op,pred);
+      extend_wire($scope.plan.wires[$scope.plan.wires.length-1]);
       newop.x = op.x;
       newop.y = op.y + 4*$scope.snap;
       newop.width = 160;
@@ -255,30 +250,33 @@
 
         $scope.current_fv.wired = true;
         fv.wired = true;
+        var wire;
 
         if ( $scope.current_fv.role == 'output' && $scope.current_fv.field_type.can_produce(fv) ) {
 
-          $scope.plan.wires.push(AQ.Wire.record({
+          wire = AQ.Wire.record({
             from_op: $scope.current_op,
             from_id: $scope.current_fv.rid,
             from: $scope.current_fv,
             to_op: op,
             to_id: fv.rid,
             to: fv
-          }));
+          });
 
         } else if ( fv.field_type.can_produce($scope.current_fv) ) {
 
-          $scope.plan.wires.push(AQ.Wire.record({
+          wire = AQ.Wire.record({
             to_id: $scope.current_fv.rid,
             to_op: $scope.current_op,
             to: $scope.current_fv,
             from_id: fv.rid,
             from_op: op,
             from: fv
-          }));
+          });
 
         }
+
+        $scope.plan.wires.push(extend_wire(wire));
 
       } else {
 
@@ -371,12 +369,77 @@
       fv.selected_item = item;
       fv.selected_row = item.selected_row;
       fv.selected_column = item.selected_column;
-      console.log(fv.selected_item);
-      console.log(fv.items);
     }
 
     $scope.io_focus = function(op,ft,fv) {
     }    
+
+    function extend(obj,name,method) {
+      Object.defineProperty(obj,name,{ get: method, configurable: true});      
+    }
+
+    // Wires //////////////////////////////////////////////////////////////////////////////////////////
+
+    function extend_wire ( wire ) {
+
+      extend(wire,"x0", () => wire.from_op.x + wire.from_op.width/2 + (wire.from.index - wire.from_op.num_outputs/2.0 + 0.5)*$scope.snap );
+      extend(wire,"y0", () => wire.from_op.y );
+      extend(wire,"x1", () => wire.to_op.x + wire.to_op.width/2 + (wire.to.index - wire.to_op.num_inputs/2.0 + 0.5)*$scope.snap );
+      extend(wire,"y1", () => wire.to_op.y + wire.to_op.height );
+
+      extend(wire,"ymid", () => { 
+        if ( !wire.ymid_frac ) { wire.ymid_frac = 0.5; }
+        return wire.ymid_frac*(wire.y0 + wire.y1);
+      });
+
+      extend(wire,"xmid", () => { 
+        if ( !wire.xmid_frac ) { wire.xmid_frac = 0.5; }
+        return wire.xmid_frac*(wire.x0 + wire.x1);
+      });      
+
+      extend(wire,"yint0", () => { 
+        return wire.y0 - $scope.snap;
+      });       
+
+      extend(wire,"yint1", () => { 
+        return wire.y1 + $scope.snap;
+      });           
+
+      extend(wire,"path", () => {
+
+        if ( wire.y0 >= wire.y1 + 2 * $scope.snap ) {
+
+          return ""   + wire.x0 + "," + wire.y0 + 
+                 " "  + wire.x0 + "," + wire.ymid + 
+                 " "  + wire.x1 + "," + wire.ymid +    
+                 " "  + wire.x1 + "," + wire.y1;
+
+         } else {
+
+          return ""   + wire.x0   + "," + wire.y0 + 
+                 " "  + wire.x0   + " " + wire.yint0 +           
+                 " "  + wire.xmid + "," + wire.yint0 + 
+                 " "  + wire.xmid + "," + wire.yint1 +   
+                 " "  + wire.x1   + "," + wire.yint1 +                 
+                 " "  + wire.x1   + "," + wire.y1;          
+
+         }
+
+      }); 
+
+      extend(wire,"arrowhead", () => {
+
+        return "M "  + wire.x1 + " " + (wire.y1 + 5) + 
+               " L " + (wire.x1 + 0.25*$scope.snap) + " " + (wire.y1 + 0.75*$scope.snap) + 
+               " L " + (wire.x1 - 0.25*$scope.snap) + " " + (wire.y1 + 0.75*$scope.snap) + " Z";
+
+      });
+
+      console.log(wire)
+
+      return wire;
+
+    }
 
   }]);
 

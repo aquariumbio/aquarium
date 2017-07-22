@@ -9,7 +9,7 @@
     .operation-editor {
 
       outline: none;
-      border-bottom: 1pt solid #ccc;
+      border-top: 1pt solid #ccc;
       overflow: scroll;
       margin-top: 5px;
       margin-right: 5px;
@@ -147,13 +147,28 @@
   }
 
   .wire, .wire-selected {
-    stroke: #bbb;
-    stroke-width: 2.5;
+    fill: none;
+    stroke: #555;
+    stroke-width: 1.5;
   }
 
   .wire-selected {
     stroke: black;
+    stroke-width: 2.5;    
   }
+
+  .wire-arrowhead, .wire-arrowhead-selected {
+    fill: #555;
+    /*stroke: #555;*/
+    /*stroke-width: 1.5;*/
+  }
+
+  .wire-arrowhead-selected {
+    fill: black;
+    /*stroke: black;*/
+    /*stroke-width: 2.5;    */
+  }
+
 
   .multiselect {
     stroke: black;
