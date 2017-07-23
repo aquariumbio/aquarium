@@ -48,15 +48,17 @@ class SampleType < ActiveRecord::Base
       return false 
     end
 
-    raw_sample_type[:field_types].each do |rft|
-      fts = field_types.select { |ft| ft.name == rft[:name] }
-      if fts.length == 1 
-        results += fts[0].inconsistencies(rft, name)
-      else
-        results << "#{name} does not have a field named #{rft[:name]}, although the imported version of this sample type does."
+    if raw_sample_type[:field_types]
+      raw_sample_type[:field_types].each do |rft|
+        fts = field_types.select { |ft| ft.name == rft[:name] }
+        if fts.length == 1 
+          results += fts[0].inconsistencies(rft, name)
+        else
+          results << "#{name} does not have a field named #{rft[:name]}, although the imported version of this sample type does."
+        end
       end
     end
-
+    
     results
 
   end
