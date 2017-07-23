@@ -235,12 +235,31 @@ class LauncherController < ApplicationController
 
     user = params[:user_id] ? User.find(params[:user_id]) : current_user
 
-    plans = Plan
-      .includes(operations: :operation_type)
-      .where(user_id: user.id)
-      .order('created_at DESC')
-      .limit(10)
-      .offset(params[:offset] || 0)
+
+    if params[:plan_id]
+
+      if current_user.id == user.id || current_user.is_admin
+
+        plans = Plan
+          .includes(operations: :operation_type)
+          .where(id: params[:plan_id])
+
+      else
+
+        plans = []
+
+      end
+
+    else
+
+      plans = Plan
+        .includes(operations: :operation_type)
+        .where(user_id: user.id)
+        .order('created_at DESC')
+        .limit(10)
+        .offset(params[:offset] || 0)
+
+    end
 
     oids = plans.collect { |p| p.operations.collect { |o| o.id } }.flatten
 
@@ -254,9 +273,9 @@ class LauncherController < ApplicationController
       .where(parent_class: "Operation", parent_id: oids)
 
     render json: { 
-      plans: plans.reverse.as_json(include: { operations: { include: :operation_type, methods: :jobs } } ),
+      plans: plans.reverse.as_json(include: [ :user, operations: { include: [:operation_type], methods: :jobs } ] ),
       field_values: field_values,
-      num_plans: Plan.where(user_id: user.id).count
+      num_plans: params[:plan_id] ? 1 : Plan.where(user_id: user.id).count
     }
 
   end

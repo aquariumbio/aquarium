@@ -5,7 +5,10 @@
 
     <div flex="25" class='no-wrap'>
       <opener model="plan.open" class='no-highlight clickable no-margin'></opener>&nbsp;
-      <span class="md-body-2">{{plan.id}}: {{plan.operations[0].operation_type.name}}</span>
+      <span class="md-body-2">
+        {{plan.id}}: {{plan.operations[0].operation_type.name}}
+        <span ng-if="plan.user_id != current_user.id">({{plan.user.login}})</span>
+      </span>
     </div>
 
     <div flex="55" class='no-wrap left-pad' ng-if="!plan.open">
@@ -89,6 +92,10 @@
     class='md-raised md-primary md-small' 
     ng-disabled="getting_plans"
     ng-click="more_plans()">More</md-button>
+
+  <md-button ng-if="single_plan_query"
+    class='md-raised md-primary md-small' 
+    href="/launcher">All</md-button>    
 
   <br /><br />
  

@@ -202,12 +202,14 @@ AQ.Plan.record_methods.link_operation_types = function(operation_types) {
 
 }
 
-AQ.Plan.list = function(offset,user) {
+AQ.Plan.list = function(offset,user,plan_id) {
 
   var user_query = user ? "&user_id=" + user.id : "";
 
+  var plan_query = plan_id ? "&plan_id=" + plan_id : "";
+
   return new Promise(function(resolve,reject) {
-    AQ.get('/launcher/plans?offset='+offset+user_query).then(
+    AQ.get('/launcher/plans?offset='+offset+user_query+plan_query).then(
       (response) => {
         AQ.Plan.num_plans = response.data.num_plans;
         resolve(aq.collect(response.data.plans,(p) => { 
