@@ -22,25 +22,28 @@
       $scope.categories.indexOf(c);
     }
 
-    function init() {
+    function init1() {
 
       if ( false || $cookies.getObject("managerState") ) {
+
         $scope.current = $cookies.getObject("managerState");
-        if ( $scope.current.ot != null && $scope.current.status != null ) {
-          var ot = aq.find(AQ.operation_types, ot => ot.id == $scope.current.ot.id);
-          if ( ot ) {
-            $scope.current.category_index = $scope.categories.indexOf(ot.category);
-            $scope.select(ot,$scope.current.status,[]);
-          } else {
-            $scope.current.category_index = 0;
-          }
-        }       
+
+        if ( $scope.current.selected_user ) {
+          $scope.current.selected_user = AQ.User.record({
+            id: $scope.current.selected_user.id, 
+            name: $scope.current.selected_user.name, 
+            login: $scope.current.selected_user.login,
+          })
+        }
+      
       } else {
         $scope.current = {
           ot: null,
           status: null,
           category_index: 0,
-          show_completed: false
+          show_completed: false,
+          filter_user: false,
+          selected_user: null
         }
       }
 
@@ -48,45 +51,83 @@
 
     }
 
+    function init2() {
+      if ( $scope.current.ot != null && $scope.current.status != null ) {
+        var ot = aq.find(AQ.operation_types, ot => ot.id == $scope.current.ot.id);
+        if ( ot ) {
+          $scope.current.category_index = $scope.categories.indexOf(ot.category);
+          $scope.select(ot,$scope.current.status,[]);
+        } else {
+          $scope.current.category_index = 0;
+        }
+      }       
+    }
+
+    function get_numbers() {
+      console.log([$scope.current.selected_user,$scope.current.filter_user])
+      return AQ.OperationType.numbers($scope.current.selected_user,$scope.current.filter_user)      
+    }    
+
+    init1();
+
     $scope.status = 'Loading Operation Types ...';
+
     AQ.OperationType.where({deployed: true},{methods: ["timing"]}).then(operation_types => {
       $scope.status = "Fetching user information ...";
       AQ.User.current().then( user => {
-        AQ.OperationType.numbers().then(numbers => {
-          $scope.status = "Ready";
-          AQ.operation_types = AQ.OperationType.sort_by_timing(operation_types);
-          $scope.operation_types = AQ.operation_types;
-          aq.each($scope.operation_types,ot => { 
-            ot.list = {
-              done: { offset: 0, limit: 10 },
-              error: { offset: 0, limit: 10 }
-            };
-            ot.timing = AQ.Timing.record(ot.timing);
+        AQ.User.active_users().then(users => {
+          $scope.users = users;
+          get_numbers().then(numbers => { 
+
+            $scope.status = "Ready";
+            AQ.operation_types = AQ.OperationType.sort_by_timing(operation_types);
+            $scope.operation_types = AQ.operation_types;
+            aq.each($scope.operation_types,ot => { 
+              ot.list = {
+                done: { offset: 0, limit: 10 },
+                error: { offset: 0, limit: 10 }
+              };
+              ot.timing = AQ.Timing.record(ot.timing);
+            });
+            $scope.categories = aq.uniq(aq.collect(operation_types, ot => ot.category)).sort();
+            $scope.current_user = user;
+            $scope.numbers = numbers;            
+            $scope.$apply();
+            init2();
+
           });
-          $scope.categories = aq.uniq(aq.collect(operation_types, ot => ot.category)).sort();
-          $scope.current_user = user;
-          $scope.numbers = numbers;
-          init();
-          $scope.$apply();
         });
       });
     });
 
     $scope.status_selector = function(ot,status) {
       var c = "";
-      if ( status == 'waiting' && $scope.numbers[ot.id]['waiting'] + $scope.numbers[ot.id]['pending_false'] != 0 ) {
-        c += " number-some";
-      } else if ( $scope.numbers[ot.id][status] == 0 ) {
-        c += " number-none";
-      } else {
-        c += " number-some";
-      }
-      if ( $scope.current.ot == ot && $scope.current.status == status ) {
-        c += " number-selected"
-      } else {
-        c += " number";
+      if ( $scope.numbers[ot.id] ) {
+        if ( status == 'waiting' && $scope.numbers[ot.id]['waiting'] + $scope.numbers[ot.id]['pending_false'] != 0 ) {
+          c += " number-some";
+        } else if ( $scope.numbers[ot.id][status] == 0 ) {
+          c += " number-none";
+        } else {
+          c += " number-some";
+        }
+        if ( $scope.current.ot == ot && $scope.current.status == status ) {
+          c += " number-selected"
+        } else {
+          c += " number";
+        }
       }
       return c;
+    }
+
+    function store_cookie() {
+      $cookies.putObject("managerState", {
+        ot: { id: $scope.current.ot.id },
+        status: $scope.current.status,
+        category_index: $scope.current.category_index,
+        show_completed: $scope.current.show_completed,
+        selected_user: $scope.current.selected_user,
+        filter_user: $scope.current.filter_user
+      });          
     }
 
     $scope.select = function(ot,status,selected_ops,append=false) {
@@ -95,12 +136,7 @@
         $scope.current.ot = ot; 
         $scope.current.status = status;
         $scope.current.category_index = $scope.categories.indexOf(ot.category);
-        $cookies.putObject("managerState", {
-          ot: { id: $scope.current.ot.id },
-          status: $scope.current.status,
-          category_index: $scope.current.category_index,
-          show_completed: $scope.current.show_completed
-        });        
+        store_cookie();
         delete ot.operations;
       }
       delete $scope.jobs;
@@ -121,10 +157,18 @@
         options = {};
       }
 
-      AQ.Operation.where({
+      var criteria = { 
         operation_type_id: ot.id, 
         status: actual_status
-      },{
+      };
+
+      if ( $scope.current.filter_user && $scope.current.selected_user ) {
+        criteria.user_id = $scope.current.selected_user.id
+      } else if ( !$scope.current_user.is_admin ) {
+        criteria.user_id = $scope.current_user.id;
+      }
+
+      AQ.Operation.where(criteria,{
         methods: ['user','field_values', 'precondition_value', 'plans', 'jobs']
       },options).then(operations => {
         aq.each(operations,op => {
@@ -164,9 +208,9 @@
 
     function reload() {
       var old_val = $scope.numbers[$scope.current.ot.id][$scope.current.status];
-      AQ.OperationType.numbers().then(numbers => {
+      get_numbers().then(numbers => {
         $scope.numbers = numbers;
-        if ( old_val != $scope.numbers[$scope.current.ot.id][$scope.current.status] ) {
+        if ( $scope.numbers[$scope.current.ot.id] && old_val != $scope.numbers[$scope.current.ot.id][$scope.current.status] ) {
           $scope.select($scope.current.ot, $scope.current.status,[])
         }
       });
@@ -186,7 +230,7 @@
 
       if ( ops.length > 0 ) {
         ot.schedule(ops).then( () => {
-          AQ.OperationType.numbers().then(numbers => {
+          get_numbers().then(numbers => { 
             $scope.numbers = numbers;
             $scope.select(ot,'scheduled',ops);
             $scope.$apply();
@@ -202,7 +246,7 @@
 
       aq.each(ops, op => {
         op.set_status("pending").then( op => {
-          AQ.OperationType.numbers().then(numbers => {
+          get_numbers().then(numbers => { 
             $scope.numbers = numbers;
             $scope.select(ot,'pending',ops);
             $scope.$apply();
@@ -218,7 +262,7 @@
 
       if ( ops.length > 0 ) {     
         ot.unschedule(ops).then( () => { 
-          AQ.OperationType.numbers().then(numbers => {
+          get_numbers().then(numbers => {
             $scope.numbers = numbers;
             $scope.select(ot,'pending_true',ops);    
             $scope.$apply();
@@ -235,7 +279,7 @@
       var num = aq.where(ot.operations, op => op.last_job.id == job_id).length;
 
       $http.get("/krill/debug/" + job_id).then(response => {
-        AQ.OperationType.numbers().then(numbers => {
+        get_numbers().then(numbers => { 
           $scope.numbers = numbers;
           aq.remove($scope.jobs,job_id);
           delete $scope.debugging_job_id;
@@ -251,6 +295,11 @@
       } else {
         return 'timing-bullet-none';
       }
+    }
+
+    $scope.select_user = function() {
+      store_cookie();      
+      reload();
     }
 
   }]);

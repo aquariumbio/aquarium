@@ -57,10 +57,12 @@ AQ.OperationType.all_with_content = function(deployed) {
 
 }
 
-AQ.OperationType.numbers = function() {
+AQ.OperationType.numbers = function(user,filter) {
+
+  var id = user ? user.id : null;
 
   return new Promise(function(resolve,resject) {
-    AQ.get("/operation_types/numbers").then(response => {
+    AQ.get("/operation_types/numbers/" + id + "/" + filter).then(response => {
       resolve(response.data);
     })
   });

@@ -19,9 +19,11 @@
           ng-if="!jobid || op.last_job.id == jobid">
 
         <td>
-          <input type='checkbox' 
-                 ng-model='op.selected' 
-                 ng-if="!ot.on_the_fly && ( status == 'pending_true' || status == 'scheduled' || status == 'error' )">
+          <% if current_user && current_user.is_admin %>
+            <input type='checkbox' 
+                   ng-model='op.selected' 
+                   ng-if="!ot.on_the_fly && ( status == 'pending_true' || status == 'scheduled' || status == 'error' )">
+          <% end %>
         </td>
 
         <td>{{op.id}}</td>

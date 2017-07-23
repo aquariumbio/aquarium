@@ -30,20 +30,8 @@ AQ.User.active_users = function() {
 
   return new Promise(function(resolve, reject) {
 
-    AQ.User.all({methods: [ "retired?" ]}).then( users => {
-
-      var rval = aq.where(users, u => !u["retired?"]).sort((u1,u2) => {
-        if (u1.login < u2.login) {
-          return -1;
-        } else if (u1.login > u2.login) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
-
-      resolve(rval);
-
+    AQ.get("/users/active").then(response => {
+      resolve(aq.collect(response.data, u => AQ.User.record(u)));
     }).catch(response => reject(response.data.errors));
 
   });

@@ -26,7 +26,6 @@ class JsonController < ApplicationController
       result = result.send(params[:method],*params[:arguments]) if method_ok(params[:method]) && params[:method] != "where"
 
       if params[:method] == "where"
-        puts params[:options]
         result = result.where(params[:arguments]) 
         result = result.limit(params[:options][:limit]) if params[:options] && params[:options][:limit] && params[:options][:limit].to_i > 0
         result = result.offset(params[:options][:offset]) if params[:options] && params[:options][:offset] && params[:options][:offset].to_i > 0
@@ -142,7 +141,7 @@ class JsonController < ApplicationController
   end
 
   def current
-    render json: current_user
+    render json: current_user.as_json(methods: :is_admin)
   end
 
 end

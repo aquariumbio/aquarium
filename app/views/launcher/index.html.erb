@@ -85,7 +85,7 @@
       <md-input-container layout-margin layout="column">
         <md-select ng-model="status.selected_user_id" class="md-plain-select"
                    md-on-close="select_user()">
-          <md-option ng-repeat="user in users | filter: { 'retired?': false }" 
+          <md-option ng-repeat="user in users" 
                      ng-value="user.id">
             {{user.login}} ( {{user.name}} )
           </md-option>
