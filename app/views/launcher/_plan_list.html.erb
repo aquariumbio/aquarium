@@ -1,10 +1,11 @@
 <script type="text/ng-template" id="plan_list">
 
   <div layout="row" layout-wrap ng-repeat-start="plan in plans" 
-       ng-class="plan.open ? 'plan-header plan-row plan-row-open' : 'plan-header plan-row'">
+       ng-click="plan.open = !plan.open"
+       ng-class="plan.open ? 'plan-header plan-row plan-row-open clickable no-highlight' : 'plan-header plan-row clickable no-highlight'">
 
     <div flex="25" class='no-wrap'>
-      <opener model="plan.open" class='no-highlight clickable no-margin'></opener>&nbsp;
+      <opener model="plan.open_dummy" class='no-highlight clickable no-margin'></opener>&nbsp;
       <span class="md-body-2">
         {{plan.id}}: {{plan.operations[0].operation_type.name}}
         <span ng-if="plan.user_id != current_user.id">({{plan.user.login}})</span>
