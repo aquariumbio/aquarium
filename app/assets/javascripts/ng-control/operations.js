@@ -195,6 +195,7 @@
         $scope.jobs = aq.uniq(aq.collect(ot.operations,op => {
           return op.jobs.length > 0 ? op.last_job.id : null
         }));
+        $scope.applying_user_filter = false;
         $scope.$apply();
       })
 
@@ -220,7 +221,7 @@
         }
         $scope.$apply();
       });
-      
+
     }
 
     $scope.choose = function(ot,status,val,job_id) {
@@ -305,7 +306,8 @@
     }
 
     $scope.select_user = function() {
-      store_cookie();      
+      store_cookie();
+      $scope.applying_user_filter = true;
       reload();
     }
 
