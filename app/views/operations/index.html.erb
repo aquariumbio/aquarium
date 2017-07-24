@@ -32,7 +32,7 @@
               <div><span>{{status}}</span></div>
             </th>
           </tr>
-          <tr ng-repeat="ot in operation_types | filter: { category: cat }" ng-click="choose(ot)">
+          <tr ng-repeat="ot in operation_types | filter: { category: cat }: true" ng-click="choose(ot)">
             <td class="operation-name">
               <span ng-class="timing_bullet(ot)">&#9679;</span>          
               {{ot.name}}

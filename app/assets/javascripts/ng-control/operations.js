@@ -64,7 +64,6 @@
     }
 
     function get_numbers() {
-      console.log([$scope.current.selected_user,$scope.current.filter_user])
       return AQ.OperationType.numbers($scope.current.selected_user,$scope.current.filter_user)      
     }    
 

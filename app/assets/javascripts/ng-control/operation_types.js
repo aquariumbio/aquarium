@@ -26,14 +26,17 @@
     $scope.import_popup = {};
 
     function make_categories() {
+
       $scope.categories = aq.uniq(aq.collect($scope.operation_types,function(ot) {
         return ot.category;
       })).sort();
+
       if ( $cookies.getObject("DeveloperCurrentCategory") ) {
         $scope.choose_category($cookies.getObject("DeveloperCurrentCategory"));
       } else if ( $scope.categories.length > 0 && !$scope.current_category ) {
         $scope.choose_category($scope.categories[0]);
       }
+
     }
 
     AQ.OperationType.all({methods: ["field_types", "timing"]}).then(operation_types => {
