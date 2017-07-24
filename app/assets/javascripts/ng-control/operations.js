@@ -206,13 +206,21 @@
     }
 
     function reload() {
-      var old_val = $scope.numbers[$scope.current.ot.id][$scope.current.status];
+
+      var old_val;
+
+      if ( $scope.numbers[$scope.current.ot.id] ) {
+        old_val = $scope.numbers[$scope.current.ot.id][$scope.current.status];
+      }
+
       get_numbers().then(numbers => {
         $scope.numbers = numbers;
         if ( $scope.numbers[$scope.current.ot.id] && old_val != $scope.numbers[$scope.current.ot.id][$scope.current.status] ) {
           $scope.select($scope.current.ot, $scope.current.status,[])
         }
+        $scope.$apply();
       });
+      
     }
 
     $scope.choose = function(ot,status,val,job_id) {
