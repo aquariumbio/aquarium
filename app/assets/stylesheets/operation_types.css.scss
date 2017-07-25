@@ -20,6 +20,33 @@
     }
   }  
 
+  .op-type {
+  }
+
+  .library {
+    font-style: italic;
+  }
+
+  .library-label {
+    font-weight: bold;
+    margin-top: 5px;
+    text-align: right;
+    padding-right: 5px;
+  }
+
+  .library-button {
+    margin-top: 5px;
+    margin-right: 5px;
+  }
+
+  .library-toolbar {
+    padding: 10px;
+  }
+
+  .op-type-selected, library-selected {
+    font-weight: bold;
+  } 
+
   .label-bold {
     font-weight: bold;
   }
@@ -28,6 +55,10 @@
     font-weight: bold;
     background: yellow;
   }
+
+  .library:before {       
+    content: "\25A0 \020";
+  }  
 
   .op-type:before {       
     content: "\25CB \020";

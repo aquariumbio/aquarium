@@ -46,6 +46,12 @@ Bioturk::Application.routes.draw do
     end
   end
 
+  resources :libraries do
+    collection do 
+      post 'code'
+    end
+  end
+
   resources :announcements
 
   get '/developer',                              to: 'developer#developer'
