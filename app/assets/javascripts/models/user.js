@@ -31,7 +31,19 @@ AQ.User.active_users = function() {
   return new Promise(function(resolve, reject) {
 
     AQ.get("/users/active").then(response => {
-      resolve(aq.collect(response.data, u => AQ.User.record(u)));
+
+      var rval = response.data.sort((u1,u2) => {
+        if (u1.login < u2.login) {
+          return -1;
+        } else if (u1.login > u2.login) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+
+      resolve(aq.collect(rval, u => AQ.User.record(u)));
+
     }).catch(response => reject(response.data.errors));
 
   });
