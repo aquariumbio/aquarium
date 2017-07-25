@@ -375,10 +375,11 @@
 
       $http.post("/libraries", lib).then( response => {
 
-        $scope.libraries.push(AQ.Library.record(response.data));
-        $scope.current_ot = lib;
+        var newlib = AQ.Library.record(response.data);
+        $scope.libraries.push(newlib);
+        $scope.current_ot = newlib;
         make_categories();
-        $scope.current_category = lib.category;
+        $scope.current_category = newlib.category;
         $scope.mode = 'source';
 
       });
