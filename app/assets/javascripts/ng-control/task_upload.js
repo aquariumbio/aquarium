@@ -1,12 +1,6 @@
 (function() {
 
-  var w;
-
-  try {
-    w = angular.module('aquarium'); 
-  } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace']); 
-  } 
+  var w = angular.module('aquarium'); 
 
   w.controller('taskUploadCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
                         function (  $scope,   $http,   $attrs,   $cookies ) {

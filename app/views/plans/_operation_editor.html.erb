@@ -1,14 +1,7 @@
 
 <!-- OUTPUTS -->
 
-<div ng-repeat="fv in outputs = current_op.field_values | filter: { role: 'output' } track by $index"
-     class="io-container">
-  <%= render partial: 'field_value_input' %>
-</div> 
-
-<!-- INPUTS -->
-
-<div ng-repeat="tv in current_op.types_and_values" ng-if="!operation.closed">
+<div ng-repeat="tv in current_op.types_and_values | filter: { role: 'output' }"" ng-if="!operation.closed">
   <div ng-if="!tv.array_add_button" ng-init="fv = tv.value" class="io-container">
     <%= render partial: 'field_value_input' %>
   </div>
@@ -16,7 +9,26 @@
     <div flex="5"></div>
     <div flex="10">{{tv.type.name}}</div>
     <div flex="85" class="add-array">
-      <a href='#' ng-click="current_op.array_add(tv.type)" >
+      <a href='#' ng-click="current_op.array_add(tv.type)" 
+                  class="md-button md-small md-raised" >
+        Add 
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- INPUTS -->
+
+<div ng-repeat="tv in current_op.types_and_values | filter: { role: 'input' }" ng-if="!operation.closed">
+  <div ng-if="!tv.array_add_button" ng-init="fv = tv.value" class="io-container">
+    <%= render partial: 'field_value_input' %>
+  </div>
+  <div ng-if="tv.array_add_button" layout="row" class="io-container">
+    <div flex="5"></div>
+    <div flex="10">{{tv.type.name}}</div>
+    <div flex="85" class="add-array">
+      <a href='#' ng-click="current_op.array_add(tv.type)"
+                  class="md-button md-small md-raised" >
         Add 
       </a>
     </div>

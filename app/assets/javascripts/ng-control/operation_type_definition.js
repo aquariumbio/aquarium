@@ -1,13 +1,7 @@
 (function() {
 
-  var w;
- 
-  try {
-    w = angular.module('aquarium'); 
-  } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
-  } 
-
+  var w = angular.module('aquarium'); 
+  
   w.controller('operationTypeDefinitionCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
                                      function (  $scope,   $http,   $attrs,   $cookies ) {
 

@@ -19,6 +19,8 @@
 
     <text ng-attr-x="{{op.width/2}}" y="20" class='op-name'>{{op.operation_type.name}}</text>
 
+    <!-- Outputs -->
+
     <circle ng-repeat="fv in outputs = ( op.field_values | filter: { role: 'output' } ) track by $index" 
             ng-if="fv == current_fv && fv.field_type.ftype == 'sample'"
             class="field-value field-value-selection"
@@ -42,7 +44,7 @@
     <!-- Inputs -->
 
     <circle ng-repeat="tv in inputs = ( op.types_and_values | filter: { role: 'input' } ) track by $index" 
-            ng-if="tv.value == current_fv && tv.type.ftype == 'sample'"
+            ng-if="tv.value == current_fv"
             class="field-value field-value-selection"
             ng-attr-cx="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap}}" 
             ng-attr-cy="{{op.height}}">
@@ -54,20 +56,22 @@
          </animate>              
     </circle>
 
-    <circle ng-repeat="tv in inputs = ( op.types_and_values | filter: { role: 'input' } ) track by $index" 
-            ng-attr-class="{{io_class(op,tv.value)}}"
-            ng-if="tv.value.field_type.ftype == 'sample'"
-            ng-attr-cx="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap}}" 
-            ng-mousedown="fvMouseDown($event, op, tv.value)" 
-            ng-attr-cy="{{op.height}}" />
+    <g ng-repeat="tv in inputs = ( op.types_and_values | filter: { role: 'input', array_add_button: '!true' } ) track by $index">
 
-    <!-- Parameters -->            
+      <circle ng-attr-class="{{io_class(op,tv.value)}}"
+              ng-if="tv.value.field_type.ftype == 'sample'"
+              ng-attr-cx="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap}}" 
+              ng-mousedown="fvMouseDown($event, op, tv.value)" 
+              ng-attr-cy="{{op.height}}" 
+              ng-attr-data-name="{{tv.value.name}}" />
 
-    <rect ng-repeat="fv in inputs = ( op.field_values | filter: { role: 'input' } ) track by $index" 
-          ng-if="fv.field_type.ftype != 'sample'"
-          class="parameter"
-          ng-attr-x="{{op.width/2 + ($index - inputs.length/2.0 + 0.5)*snap - 5}}"
-          ng-attr-y="{{op.height-5}}" width="10" height="10" />
+      <rect ng-if="tv.value.field_type.ftype != 'sample' && !tv.array_add_button"
+            class="parameter"
+            ng-attr-x="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap - 5}}"
+            ng-attr-y="{{op.height-5}}" width="10" height="10"
+            ng-attr-data-name="{{tv.value.name}}"  />
+
+    </g>
 
   </g>
 

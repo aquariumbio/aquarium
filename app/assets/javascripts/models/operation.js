@@ -341,21 +341,28 @@ AQ.Operation.record_getters.types_and_values = function() {
 
   delete op.types_and_values;
 
-  var input_index = 0;
+  var input_index = 0,
+      output_index = 0;
 
-  aq.each(op.operation_type.field_types, ft => {
-    if ( ft.role == 'input' && ft.ftype == 'sample' ) {
-      aq.each(op.field_values, fv => {
-        if ( fv.role == 'input' && ft.name == fv.name ) {
-          var tv = {type: ft, value: fv, role: 'input'};
-          tvs.push(tv);
-          fv.index = input_index++;
+  aq.each(['input', 'output'], role => {
+    aq.each(op.operation_type.field_types, ft => {
+      if ( ft.role == role ) {
+        aq.each(op.field_values, fv => {
+          if ( fv.role == ft.role && ft.name == fv.name ) {
+            var tv = {type: ft, value: fv, role: role};
+            tvs.push(tv);
+            if ( role == 'input' ) {
+              fv.index = input_index++;
+            } else {
+              fv.index = output_index++;
+            }
+          }
+        });
+        if ( ft.array ) {
+          tvs.push({type: ft, value: {}, array_add_button: true, role: ft.role});
         }
-      });
-      if ( ft.array ) {
-        tvs.push({type: ft, array_add_button: true});
-      }
-    }
+      } 
+    });
   });
 
   op.types_and_values = tvs;

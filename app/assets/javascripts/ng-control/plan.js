@@ -1,12 +1,6 @@
 (function() {
 
-  var w;
- 
-  try {
-    w = angular.module('aquarium'); 
-  } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
-  } 
+  var w = angular.module('aquarium'); 
 
   w.controller('planCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', 
                   function (  $scope,   $http,   $attrs,   $cookies,   $sce ) {
@@ -435,12 +429,40 @@
 
       });
 
-      console.log(wire)
-
       return wire;
 
     }
 
   }]);
+
+  w.directive('wrapper', [
+
+    function() {
+
+      return {
+
+        restrict: 'C',
+
+        link: function(scope, element) {
+
+          var innerElement = element.find('inner');
+
+          scope.$watch(
+            function() {
+              console.log(innerElement[0].offsetHeight);
+              return innerElement[0].offsetHeight;
+            },
+            function(value, oldValue) {
+              element.css('height', value+'px');
+              scope.status = value;
+            }, true);
+
+        }
+
+      };
+
+    }
+
+  ]);
 
 })();                    

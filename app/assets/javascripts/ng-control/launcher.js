@@ -1,12 +1,6 @@
 (function() {
 
-  var w;
- 
-  try {
-    w = angular.module('aquarium'); 
-  } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
-  } 
+  var w = angular.module('aquarium'); 
 
   w.controller('launcherCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', 
                       function (  $scope,   $http,   $attrs,   $cookies,   $sce ) {

@@ -10,6 +10,11 @@
 <% content_for :class do %>plans launcher<% end %>
 <% content_for :no_main_scroll_decision do %>true<% end %>
 
+<% content_for :specific_title do %>
+<span ng-if="current_op">&rang; {{current_op.operation_type.name}}</span>
+<span ng-if="current_fv">&rang; {{current_fv.name}}</span>
+<% end %>
+
 <% content_for :sidebar do %>
 
   <div ng-if="ready">
@@ -51,13 +56,15 @@
 
   <div class="editor-main" layout="column" ng-if="ready">
 
-    <div flex="80" class="plan-editor-container scrollable"
+    <div flex class="plan-editor-container scrollable"
          ng-keydown="keyDown($event)" tabindex="0">
       <%= render partial: 'plan_editor' %>
     </div>
 
-    <div flex="20" class="operation-editor scrollable">
-      <%= render partial: 'operation_editor' %>
+    <div class="wrapper operation-editor scrollable">
+      <inner>
+        <%= render partial: 'operation_editor' %>
+      </inner>
     </div>   
 
   </div>

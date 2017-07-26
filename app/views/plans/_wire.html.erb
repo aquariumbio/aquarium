@@ -1,4 +1,5 @@
 <polyline ng-attr-class="{{wire == current_wire ? 'wire-selected' : 'wire'}}"
+          ng-mousedown="wireMouseDown($event, wire)" 
           ng-attr-points="{{wire.path}}">
 </polyline>
 

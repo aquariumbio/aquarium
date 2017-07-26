@@ -1,12 +1,6 @@
 (function() {
 
-  var w;
-
-  try {
-    w = angular.module('aquarium'); 
-  } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
-  } 
+  var w = angular.module('aquarium'); 
 
   w.directive("fv", function() {
 
@@ -74,8 +68,6 @@
           if ( aft && aft.sample_type ) {
 
             var name = aft.sample_type.name;
-
-            console.log("autocomplete for " + fv.name + " assigned")
 
             $($element).autocomplete({
               source: AQ.sample_names_for(name),
