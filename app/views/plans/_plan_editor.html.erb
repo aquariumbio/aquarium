@@ -66,8 +66,9 @@
               ng-attr-data-name="{{tv.value.name}}" />
 
       <rect ng-if="tv.value.field_type.ftype != 'sample' && !tv.array_add_button"
-            class="parameter"
+            ng-attr-class="{{parameter_class(op,tv.value)}}"
             ng-attr-x="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap - 5}}"
+            ng-mousedown="fvMouseDown($event, op, tv.value)" 
             ng-attr-y="{{op.height-5}}" width="10" height="10"
             ng-attr-data-name="{{tv.value.name}}"  />
 

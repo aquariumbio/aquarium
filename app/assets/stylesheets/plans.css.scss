@@ -154,6 +154,14 @@
     cursor: pointer;
   }
 
+  .parameter-has-value {
+    fill: green;
+  }  
+
+  .parameter-has-no-value {
+    fill: orange;
+  }    
+
   .wire, .wire-selected {
     fill: none;
     stroke: #555;

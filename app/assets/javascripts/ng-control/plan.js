@@ -335,6 +335,16 @@
 
     }
 
+    $scope.parameter_class = function(op, fv) {
+      var c = "parameter";
+      if ( fv.value != undefined ) {
+        c += " parameter-has-value";
+      } else {
+        c += " parameter-has-no-value";
+      };
+      return c;
+    }
+
     $scope.multiselect_x = function() {
       return $scope.multiselect.width > 0 ? $scope.multiselect.x : $scope.multiselect.x + $scope.multiselect.width;
     }
@@ -449,7 +459,6 @@
 
           scope.$watch(
             function() {
-              console.log(innerElement[0].offsetHeight);
               return innerElement[0].offsetHeight;
             },
             function(value, oldValue) {
