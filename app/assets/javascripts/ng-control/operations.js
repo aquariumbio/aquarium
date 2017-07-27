@@ -266,7 +266,7 @@
 
     $scope.unschedule = function(ot,jid) {
 
-      var ops = aq.where(ot.operations,op => op.selected && op.last_jobs.id == jid);
+      var ops = aq.where(ot.operations,op => op.selected && op.last_job.id == jid);
 
       if ( ops.length > 0 ) {     
         ot.unschedule(ops).then( () => { 
