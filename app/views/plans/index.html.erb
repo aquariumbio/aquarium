@@ -19,17 +19,26 @@
 
   <div ng-if="ready">
 
-    <div ng-repeat="category in operation_types.categories"
-         ng-if="!current_op && !current_fv">
-      <h2 class="md-title">{{category}}</h2>
-      <md-list class='md-compact-list'>
-        <md-list-item ng-repeat="ot in operation_types | filter: { category: category }">
-          <a href="#" ng-click="add_operation(ot)">{{ot.name}}</a>
-        </md-list-item>
-      </md-list>
-    </div>
+    <md-tabs layout-fill 
+             class="md-compact-tabs"
+             md-selected="state.category_index" 
+             ng-if="!current_op && !current_fv">
 
-    <div ng-if="current_op && !current_fv" ng-include="'operation_info'">
+      <md-tab label="{{category}}" ng-click="choose_category(category)"
+              ng-repeat="category in operation_types.categories" layout-fill>
+
+        <md-list class='md-compact-list'>
+          <md-list-item ng-repeat="ot in operation_types | filter: { category: category }">
+            <a href="#" ng-click="add_operation(ot)">{{ot.name}}</a>
+          </md-list-item>
+        </md-list>
+
+      </md-tab>
+
+    </md-tabs>  
+
+    <div ng-if="current_op && !current_fv" 
+         ng-include="'operation_info'">
     </div>
 
     <div ng-if="current_fv"

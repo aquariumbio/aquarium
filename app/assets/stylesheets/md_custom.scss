@@ -82,3 +82,18 @@ $buttonHighlight: rgb(73, 91, 281);
  }
 
 }
+
+/* TABS *********************************************************************/
+
+.md-compact-tabs {
+  margin-top: 16px;
+  md-tabs-wrapper, md-tabs-canvas, md-pagination-wrapper, md-tabs-dummy-wrapper {
+    height: 24px;
+  }
+  .md-tab {
+    padding: 0px 10px 6px 10px !important;
+    font-size: 9pt;
+    .md-ripple-container {
+    }
+  }
+}

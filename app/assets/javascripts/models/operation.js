@@ -141,9 +141,13 @@ AQ.Operation.record_methods.array_remove = function(fv) {
   while ( this.field_values[j] != fv ) {
     j++;
   }
-
+  fv.deleted = true;
+  
   this.field_values.splice(j,1);
   this.recompute_getter('types_and_values');
+  this.recompute_getter('num_inputs');
+  this.recompute_getter('num_outputs');  
+
   return this;
 
 }

@@ -48,7 +48,7 @@
 
   <div flex="5" class="array-remove-container">
       <a href="#"  ng-if="fv.field_type.array" 
-       ng-click="current_op.array_remove(fv)">&times;</a>
+       ng-click="current_op.array_remove(fv); remove_orphan_wires(fv)">&times;</a>
   </div>  
 
 </div>

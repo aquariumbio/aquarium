@@ -17,6 +17,9 @@
 
     $scope.ready = false;
 
+    $scope.state = {
+    }
+
     AQ.User.current().then((user) => {
 
       $scope.current_user = user;
@@ -382,7 +385,24 @@
       Object.defineProperty(obj,name,{ get: method, configurable: true});      
     }
 
+    // Operation type selection ///////////////////////////////////////////////////////////////////////
+    $scope.choose_category = function(category) {
+      $scope.state.category_index = $scope.operation_types.categories.indexOf(category);
+    }
+
     // Wires //////////////////////////////////////////////////////////////////////////////////////////
+
+    $scope.remove_orphan_wires = function() {
+      var list = []
+      aq.each($scope.plan.wires, wire => {
+        if ( wire.from.deleted || wire.to.deleted ) {
+          list.push(wire);
+        }
+      });
+      aq.each(list,wire => {
+        aq.remove($scope.plan.wires,wire);
+      })
+    }
 
     function extend_wire ( wire ) {
 

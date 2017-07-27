@@ -3,16 +3,16 @@
   <md-content class="field-value-editor">
 
     <div class="title">
-      <h1 class="md-title">{{current_op.operation_type.name}}</h1>      
+      <h1 class="md-title">{{current_op.operation_type.name}}</h1>  
+      <h1 class="md-subhead" ng-if="current_fv.is_param">{{current_fv.type|capitalize}} Parameter</h1>    
       <h1 class="md-subhead">{{current_fv.name}} ({{current_fv.role}})</h1>
-      wired: {{current_fv.wired}}
     </div>
 
-      <md-subheader class="md-no-sticky">
+      <md-subheader class="md-no-sticky" ng-if="current_fv.is_sample">
         Container Type
       </md-subheader>
 
-      <md-list class='md-compact-list'>
+      <md-list class='md-compact-list' ng-if="current_fv.is_sample">
 
         <md-list-item ng-repeat="aft in current_fv.field_type.allowable_field_types">
 
@@ -28,7 +28,7 @@
 
       </md-list>
 
-      <div ng-if="current_fv.items.length > 0" class="nomargin">
+      <div ng-if="current_fv.is_sample && current_fv.items.length > 0" class="nomargin">
 
         <md-subheader class="md-no-sticky">
           Inventory
@@ -96,11 +96,11 @@
 
       </div>
 
-    <md-subheader ng-if="current_fv.items.length == 0 && !current_fv.wired" class="md-no-sticky">
+    <md-subheader ng-if="current_fv.is_sample && current_fv.items.length == 0 && !current_fv.wired" class="md-no-sticky">
       No Inventory
     </md-subheader>
 
-    <div ng-if="current_fv.role == 'input' && current_fv.predecessors.length > 0">
+    <div ng-if="current_fv.is_sample && current_fv.role == 'input' && current_fv.predecessors.length > 0">
 
       <md-subheader class="md-no-sticky">
         Predecessors
@@ -145,10 +145,14 @@
 
     </div>
 
-    <md-subheader class="md-no-sticky" ng-if="current_fv.predecessors.length == 0">
+    <md-subheader class="md-no-sticky" ng-if="current_fv.is_sample && current_fv.predecessors.length == 0">
       No Applicable Predecessors
     </md-subheader>
 
+    <md-subheader class='md-no-sticky' ng-if="current_fv.is_param">
+      Value: {{current_fv.value}}
+    </md-subheader>
+    
   </md-content>
 
 </script>

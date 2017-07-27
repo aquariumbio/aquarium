@@ -6,6 +6,18 @@ AQ.FieldValue.record_methods.clear = function() {
 
 AQ.FieldValue.getter(AQ.Item,"item","child_item_id");
 
+AQ.FieldValue.record_getters.is_sample = function() {
+  return this.field_type.ftype == 'sample';
+}
+
+AQ.FieldValue.record_getters.is_param = function() {
+  return this.field_type.ftype != 'sample';
+}
+
+AQ.FieldValue.record_getters.type = function() {
+  return this.field_type.ftype;
+}
+
 AQ.FieldValue.record_getters.predecessors = function() {
 
   var fv = this;
