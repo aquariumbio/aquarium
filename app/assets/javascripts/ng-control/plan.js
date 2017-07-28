@@ -193,6 +193,12 @@
           all_ops(op => op.multiselect = false)
           break;
 
+        case "A":
+        case "a":
+          all_ops(op => op.multiselect = true );
+          select(null);
+          break
+
 
         default:
 
@@ -305,7 +311,6 @@
     $scope.wireMouseDown = function(evt, wire) {
       select(wire);
       evt.stopImmediatePropagation();  
-      console.log(wire);       
     }
 
     // Computed Classes ///////////////////////////////////////////////////////////////////////////
