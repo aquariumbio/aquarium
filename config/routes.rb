@@ -17,7 +17,7 @@ Bioturk::Application.routes.draw do
 
   get '/plans/:pid/select/:oid',                 to: 'plans#select'
   get '/plans/start/:id',                        to: 'plans#start'
-  get '/plans/costs/:id',                         to: 'plans#costs'
+  get '/plans/costs/:id',                        to: 'plans#costs'
   get '/plans/cancel/:id/:msg',                  to: 'plans#cancel' 
   get '/plans/:id/debug',                        to: 'plans#debug'
   post '/plans/replan',                          to: 'plans#replan'
@@ -30,19 +30,25 @@ Bioturk::Application.routes.draw do
   get '/operations/:id/status/:status',          to: 'operations#set_status'
   resources :operations
 
-  post '/operation_types/import',                to: 'operation_types#import'    
-  get '/operation_types/numbers',                to: 'operation_types#numbers'    
-  get '/operation_types/:id/stats',              to: 'operation_types#stats'
-  get '/operation_types/:id/random/:num',        to: 'operation_types#random'
-  get '/operation_types/:id/export',             to: 'operation_types#export'  
+  post '/operation_types/import',                    to: 'operation_types#import'    
+  get '/operation_types/numbers/:user_id/:filter',   to: 'operation_types#numbers'    
+  get '/operation_types/:id/stats',                  to: 'operation_types#stats'
+  get '/operation_types/:id/random/:num',            to: 'operation_types#random'
+  get '/operation_types/:id/export',                 to: 'operation_types#export'  
   get '/operation_types/export_category/:category',  to: 'operation_types#export_category'  
-  get '/operation_types/:id/copy',               to: 'operation_types#copy'  
+  get '/operation_types/:id/copy',                   to: 'operation_types#copy'  
 
   resources :operation_types do
     collection do 
       get 'default'
       post 'code'
       post 'test'
+    end
+  end
+
+  resources :libraries do
+    collection do 
+      post 'code'
     end
   end
 
@@ -267,6 +273,7 @@ Bioturk::Application.routes.draw do
   match '/signup', to: 'users#new'
   match '/password', to: 'users#password'
 
+  get '/users/active',        to: 'users#active'
   get 'users/current',        to: 'users#current'
   get 'users/billing/:id',    to: 'users#billing' 
   put 'users/password',       to: 'users#update_password'

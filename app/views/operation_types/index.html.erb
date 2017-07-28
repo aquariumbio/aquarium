@@ -19,19 +19,24 @@
     <h1 class="md-title">No Operation Types</h1>
   </div>
 
-
   <ul class='op-type-list'>    
 
     <li ng-repeat="category in categories track by $index">
 
-      <b ng-click="choose_category(category)" class="no-highlight clickable">
-        <span ng-if="current_category != category">&#9658;</span>
-        <span ng-if="current_category == category">&#9660;</span>             
-        {{category}}
-        ({{category_size(category)}})
+      <b class="no-highlight clickable">
+        <span ng-if="current_category != category" ng-click="choose_category(category)" class='clickable'>&#9658;</span>
+        <span ng-if="current_category == category" ng-click="choose_category(category)" class='clickable'>&#9660;</span>             
+        <span ng-click="choose_category(category)" class='clickable'>{{category}}</span>
+        <span ng-click="choose_category(category)" class='clickable'>({{category_size(category)}})</span>
+        <md-button class='md-small pull-right' 
+                   ng-if="current_category == category"
+                   ng-click="export_category(current_category)">Export</md-button>
       </b>
 
       <ul ng-if="current_category == category" class='op-type-sublist'>
+        <li ng-repeat="lib in libraries | filter: { category: category } : true track by $index" 
+            ng-click="choose_lib(lib)"
+            ng-class="lib_class(lib)">{{lib.name}}</li>      
         <li ng-repeat="ot in operation_types | filter: { category: category } : true track by $index" 
             ng-click="choose(ot)"
             ng-class="ot_class(ot)">{{ot.name}}</li>
@@ -56,6 +61,10 @@
 <% end %>
 
 <% content_for :action2 do %>
+  <md-button class="md-raised" ng-click="new_library()">New Lib</md-button>
+<% end %>
+
+<% content_for :action3 do %>
       <label ng-class="import_popup.loading ? 'md-button md-raised md-accent' : 'md-button md-raised'">
         <span ng-if="import_popup.loading">Importing...</span>
         <span ng-if="!import_popup.loading">Import</span>
@@ -65,12 +74,6 @@
                         style="display: none;"
                         custom-on-change="import">
       </label>
-<% end %>
-
-<% content_for :action3 do %>
-  <md-button class='md-raised' ng-if="categories.length > 0 && current_category" ng-click="export_category(current_category)">
-    Export Category
-  </md-button>
 <% end %>
 
 <%= content_for :main do %>
@@ -87,7 +90,7 @@
     </div>
   </div> 
 
-  <div ng-show="operation_types && current_ot"> 
+  <div ng-show="operation_types && current_ot && current_ot.model.model == 'OperationType'"> 
 
     <md-nav-bar md-selected-nav-item="mode" nav-bar-aria-label="Operation Type Editing Modes" md-no-ink-bar='false'>
       <md-nav-item md-nav-click="set_mode('definition')" name='definition'>Def</md-nav-item>
@@ -128,6 +131,29 @@
     </div>
 
   </div>
+
+  <div ng-show="operation_types && current_ot && current_ot.model.model == 'Library'"> 
+
+    <div layout="row" class="library-toolbar" layout-align="start start">
+      <div flex="5" class="library-label">Name:</div>
+      <div flex="20">
+        <input type='text' ng-model="current_ot.name" ng-change="change(current_ot)" style='width: 100%'>
+      </div>
+      <div flex="10" class="library-label">Category:</div>
+      <div flex="20">
+        <input type='text' ng-model="current_ot.category" ng-change="change(current_ot)" style='width: 100%'>
+      </div>        
+      <div flex="70">
+        <md-button class='md-raised md-small md-primary pull-right library-button' 
+                   ng-click="update_library(current_ot)" 
+                   ng-disabled="!current_ot.changed">Update</md-button>
+        <md-button class='md-raised md-small pull-right library-button'
+                   ng-click="delete_library(current_ot)">Delete</md-button>        
+      </div>
+    </div>
+
+    <div ng-include="'code'" ng-init="name='source'" ng-if="current_ot.source && mode == 'source'" ></div>    
+  </div>  
 
   <%= render partial: 'import' %>  
 

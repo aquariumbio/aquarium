@@ -429,6 +429,7 @@
           $scope.views.create.samples = data.samples;
           $scope.messages = data.warnings;
           $scope.messages.push("Spreadsheet '" + f.name + "' processed. Review the new samples below and click 'Save' to save this data to Aquarium.");
+          $scope.select_view('create');
 
         } catch (e) {
 

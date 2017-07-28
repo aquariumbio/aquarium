@@ -32,6 +32,37 @@ Second, the method **main** is defined within the  **Protocol** class. This meth
 
 Third, **show** is a function made available to your code by Aquarium. It takes a Ruby block (denoted by curly braces, or by **do ... end** if you wish). Within the block, there are a number of functions that are available, including the function **title**, which takes a string as an argument. The **show** function is how you communicate with the user running your protocol. It is a blocking call, meaning that your code stops running until the user clicks "Next" from within Aquarium. You might think of it as simultaneous "puts" and "gets" calls. You can have any number of calls **show** in your code and you can put fairly complex stuff into the show block.
 
+Including Code from Other Files
+===
+You can make library code in Aquarium in the developer and include it in your protocol code using "needs". For example, suppose you have a library "hello" in the category "lib" with the following code
+
+```ruby
+module Hello
+  def hello thing
+    show {
+      title "Hello #{thing}"
+    }
+  end
+end
+```
+
+Then, in a protocol code block you can write
+
+```ruby
+needs "lib/hello"
+
+class Protocol
+
+  include Hello
+
+  hello "World"
+
+end
+```
+
+which will do the same thing as the first Hello World protocol above.
+
+
 All About Show
 ===
 

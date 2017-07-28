@@ -29,6 +29,8 @@ Bioturk::Application.configure do
   # with SQLite, MySQL, and PostgreSQL)
   config.active_record.auto_explain_threshold_in_seconds = 0.5
 
+  # config.logger = Logger.new(config.paths['log'].first, 1, 1024 * 1024)
+
   # Assets
   config.assets.compress = false
 #  config.serve_static_assets = false

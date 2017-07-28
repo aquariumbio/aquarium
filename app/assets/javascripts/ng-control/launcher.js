@@ -34,10 +34,20 @@
         $scope.getting_plans = true;    
         $scope.status.selected_user_id = $scope.current_user.id;  
 
-        AQ.Plan.list($scope.plan_offset).then((plans) => {
+        var plan_promise;
 
-          $scope.plans = plans.reverse();        
-          $scope.status.plans = "Ready";        
+        if ( aq.url_params().plan_id ) {
+          plan_promise =  AQ.Plan.list(0,$scope.current_user,aq.url_params().plan_id);
+          $scope.no_more_plans = true;
+          $scope.single_plan_query = true;
+        } else {
+          plan_promise =  AQ.Plan.list($scope.plan_offset)
+        }
+
+        plan_promise.then((plans) => {
+
+          $scope.plans = plans.reverse();
+          $scope.status.plans = "Ready";
           $scope.getting_plans = false;
 
           AQ.OperationType.all_with_content(true).then((operation_types) => {
@@ -58,7 +68,9 @@
             $scope.$apply();
 
           });
+
         });
+
       });
 
     });
@@ -211,7 +223,6 @@
     $scope.more_plans = function() {
       $scope.plan_offset += 10;
       $scope.getting_plans = true;
-      console.log("getting plans for " + $scope.current_user.name)
       AQ.Plan.list($scope.plan_offset,$scope.current_user).then((plans) => {
         if ( plans.length == 0 ) {
           $scope.no_more_plans = true;
@@ -249,14 +260,12 @@
       fv.selected_item = item;
       fv.selected_row = item.selected_row;
       fv.selected_column = item.selected_column;
-      console.log(fv.selected_item);
     }
 
     $scope.select_row_column = function(fv,element,item,r,c) {
       if ( fv.sid == element ) {
         item.selected_row = r;
         item.selected_column = c;
-        console.log("set r,c to " + item.selected_row + ", " + item.selected_column)
       }
     }
 
@@ -271,9 +280,21 @@
           $scope.getting_plans = false;        
           AQ.update();
         });
-      });
+      }).catch(data => {
+        console.log("Could not find user " + $scope.status.selected_user_id);
+        console.log(data)
+      })
 
     }
+
+    $scope.delete_plan = function(plan) {
+      
+      plan.deleting = true;
+      AQ.http.delete("/plans/"+plan.id).then( () => {
+        aq.remove($scope.plans,plan);
+      })
+
+    }    
 
   }]);
 

@@ -380,10 +380,16 @@ class OperationType < ActiveRecord::Base
     self.operations.select { |o| o.status == s }.length
   end
 
-  def self.numbers
+  def self.numbers user=nil
 
     result = {}
-    ots = OperationType.includes(:operations).where(deployed: true)
+
+    if user
+      ots = OperationType.includes(:operations).where(deployed: true, operations: { user_id: user.id })     
+    else
+      ots = OperationType.includes(:operations).where(deployed: true)
+    end
+
     preconditions = Code.where(name: "precondition", parent_class: "OperationType", parent_id: ots.collect { |ot| ot.id } )
 
     ots.collect { |ot|

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20170627173019) do
+ActiveRecord::Schema.define(:version => 20170725190809) do
 
   create_table "account_logs", :force => true do |t|
     t.integer  "row1"
@@ -210,6 +210,13 @@ ActiveRecord::Schema.define(:version => 20170627173019) do
     t.datetime "latest_start_time"
     t.integer  "metacol_id"
     t.integer  "successor_id"
+  end
+
+  create_table "libraries", :force => true do |t|
+    t.string   "name"
+    t.string   "category"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "locators", :force => true do |t|

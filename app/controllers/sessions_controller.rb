@@ -5,14 +5,28 @@ class SessionsController < ApplicationController
   end
 
   def create
+
     user = User.find_by_login(params[:session][:login].downcase)
+
     if user && user.authenticate(params[:session][:password])
       sign_in user
       flash[:success] = "Welcome to the Aquarium, #{user.login}. Your biological and technological distinctiveness will be added to our own."
-      redirect_to root_url
+      # redirect_to root_url
+
+      respond_to do |format|
+        format.html { redirect_to root_url } # index.html.erb
+        format.json { render json: { message: "Log in successful" } }
+      end
+
     else
       flash.now[:error] = 'Invalid login/password combination'
-      render 'new', layout: "blank.html.erb"
+      
+
+      respond_to do |format|
+        format.html { render 'new', layout: "blank.html.erb" } # index.html.erb
+        format.json { render json: { message: "Login failed"} }
+      end
+
     end
   end
 

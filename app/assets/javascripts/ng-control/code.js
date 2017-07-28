@@ -15,15 +15,24 @@
       $scope.editor.gotoLine(1); 
     };
 
-    $scope.save = function(ot,name) {
-      if ( !ot[name].no_edit ) {
-        $http.post("/operation_types/code",{
-          id: ot.id,
+    $scope.save = function(obj,name) {
+
+      var controller;
+
+      if ( obj.model.model == "OperationType" ) {
+        controller = "operation_types";
+      } else if ( obj.model.model == "Library" ) {
+        controller = "libraries";
+      }
+
+      if ( !obj[name].no_edit ) {
+        $http.post( "/" + controller + "/code",{
+          id: obj.id,
           name: name,
-          content: ot[name].content
+          content: obj[name].content
         }).then(function(response) {
-          ot[name] = response.data;
-          ot.recompute_getter('versions')
+          obj[name] = response.data;
+          obj.recompute_getter('versions')
         });
       }
     }

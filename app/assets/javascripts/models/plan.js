@@ -39,6 +39,7 @@ AQ.Plan.record_methods.reload = function() {
           AQ.update();
         });
       });
+      plan.recompute_getter("deletable")
     });
   });
 
@@ -51,7 +52,8 @@ AQ.Plan.record_methods.export = function() {
   return AQ.Plan.record({
     operations: plan.operations_from_wires(),
     wires: plan.wires,
-    user_budget_association: plan.uba
+    user_budget_association: plan.uba,
+    optimize: plan.optimize
   })
 
 }
@@ -181,7 +183,8 @@ AQ.Plan.record_methods.cancel = function(msg) {
     AQ.get('/plans/cancel/' + plan.id + "/" + msg).then(
       (response) => { 
         plan.reload();
-        resolve(response.data)
+        resolve(response.data);
+        plan.recompute_getter("deletable");
       },
       (response) => { reject(response.data.errors) }
     );
@@ -199,12 +202,14 @@ AQ.Plan.record_methods.link_operation_types = function(operation_types) {
 
 }
 
-AQ.Plan.list = function(offset,user) {
+AQ.Plan.list = function(offset,user,plan_id) {
 
   var user_query = user ? "&user_id=" + user.id : "";
 
+  var plan_query = plan_id ? "&plan_id=" + plan_id : "";
+
   return new Promise(function(resolve,reject) {
-    AQ.get('/launcher/plans?offset='+offset+user_query).then(
+    AQ.get('/launcher/plans?offset='+offset+user_query+plan_query).then(
       (response) => {
         AQ.Plan.num_plans = response.data.num_plans;
         resolve(aq.collect(response.data.plans,(p) => { 
@@ -555,4 +560,20 @@ AQ.Plan.record_methods.copy = function() {
 
 }
 
+AQ.Plan.record_getters.deletable = function() {
+
+  var plan = this;
+
+  delete plan.deletable;
+  plan.deletable = true;
+
+  aq.each(plan.operations, op => {
+    if ( op.status != 'error' || op.jobs === undefined || op.jobs.length > 0 ) {
+      plan.deletable = false;
+    }
+  });
+
+  return plan.deletable;
+
+}
 

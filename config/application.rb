@@ -108,6 +108,7 @@ module Bioturk
         Wire.count if Wire.table_exists?
         PlanAssociation.count if PlanAssociation.table_exists?
         JobAssociation.count if JobAssociation.table_exists?
+        Library.count if Library.table_exists?
     end
 
     #Added to enable CORS

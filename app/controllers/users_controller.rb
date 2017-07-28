@@ -168,6 +168,16 @@ class UsersController < ApplicationController
     render json: u
   end
 
+  def active
+
+    users = User.includes(memberships: :group)
+                .all
+                .reject { |u| u.groups.collect { |g| g.name }.member? 'retired' }
+
+    render json: users.collect { |u| { id: u.id, name: u.name, login: u.login } }
+
+  end
+
   def destroy
 
     u = User.find(params[:id])

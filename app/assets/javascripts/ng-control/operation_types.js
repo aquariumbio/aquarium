@@ -20,46 +20,62 @@
     $scope.import_popup = {};
 
     function make_categories() {
-      $scope.categories = aq.uniq(aq.collect($scope.operation_types,function(ot) {
+
+      $scope.categories = aq.uniq(aq.collect($scope.operation_types.concat($scope.libraries),function(ot) {
         return ot.category;
       })).sort();
+
       if ( $cookies.getObject("DeveloperCurrentCategory") ) {
         $scope.choose_category($cookies.getObject("DeveloperCurrentCategory"));
       } else if ( $scope.categories.length > 0 && !$scope.current_category ) {
         $scope.choose_category($scope.categories[0]);
       }
+
     }
 
     AQ.OperationType.all({methods: ["field_types", "timing"]}).then(operation_types => {
-      $scope.operation_types = operation_types;
-      aq.each($scope.operation_types, ot => {
-        ot.upgrade_field_types();
-        if ( ot.timing ) {
-          ot.timing = AQ.Timing.record(ot.timing);
-        } else { 
-          ot.set_default_timing();
-        }
-        ot.timing.make_form();
-      });
-      AQ.operation_types = $scope.operation_types;
-      if ( $cookies.getObject("DeveloperCurrentOperationTypeId") ) {
-        var ots = aq.where($scope.operation_types,ot => ot.id == $cookies.getObject("DeveloperCurrentOperationTypeId") );
-        if  ( ots.length == 1 ) {
-          $scope.current_ot = ots[0];
+
+      AQ.Library.all().then(libraries => {
+
+        $scope.operation_types = operation_types;
+        AQ.operation_types = $scope.operation_types;
+
+        $scope.libraries = libraries;
+
+        aq.each($scope.operation_types, ot => {
+          ot.upgrade_field_types();
+          if ( ot.timing ) {
+            ot.timing = AQ.Timing.record(ot.timing);
+          } else { 
+            ot.set_default_timing();
+          }
+          ot.timing.make_form();
+        });       
+
+        if ( $cookies.getObject("DeveloperCurrentOperationTypeId") ) {
+          var ots = aq.where($scope.operation_types,ot => ot.id == $cookies.getObject("DeveloperCurrentOperationTypeId") );
+          if  ( ots.length == 1 ) {
+            $scope.current_ot = ots[0];
+          } else {
+            $scope.current_ot = $scope.operation_types[0];         
+          }
         } else {
-          $scope.current_ot = $scope.operation_types[0];         
+          $scope.current_ot = $scope.operation_types[0];
         }
-      } else {
-        $scope.current_ot = $scope.operation_types[0];
-      }
-      make_categories();
-      if ( $cookies.getObject("DeveloperMode") ) {
-        $scope.mode = $cookies.getObject("DeveloperMode");
-      } else {
-        $scope.mode = 'definition';
-      }      
-      $scope.initialized = true;            
-      $scope.$apply();
+
+        make_categories();
+
+        if ( $cookies.getObject("DeveloperMode") ) {
+          $scope.mode = $cookies.getObject("DeveloperMode");
+        } else {
+          $scope.mode = 'definition';
+        }      
+
+        $scope.initialized = true;            
+        $scope.$apply();
+
+      });
+
     });
 
     $http.get('/object_types.json').then(function(response) {
@@ -87,7 +103,15 @@
       $scope.current_ot = ot;
       $scope.mode = 'definition';
       $cookies.putObject("DeveloperCurrentOperationTypeId", ot.id); 
+      $cookies.putObject("DeveloperSelectionType", "OperationType");             
     }
+
+    $scope.choose_lib = function(lib) {
+      $scope.current_ot = lib;
+      $scope.mode = 'source';
+      $cookies.putObject("DeveloperCurrentOperationTypeId", lib.id); 
+      $cookies.putObject("DeveloperSelectionType", "Library");       
+    }    
 
     $scope.choose_category = function(c) {
       if ( $scope.current_category == c ) {
@@ -112,6 +136,14 @@
       }
       return c;
     }
+
+    $scope.lib_class = function(lib) {
+      var c = "clickable library";
+      if ( $scope.current_ot == lib ) {
+        c += " library-current";
+      } 
+      return c;
+    }    
 
     $scope.capitalize = function(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
@@ -139,7 +171,6 @@
             var i = $scope.operation_types.indexOf(ot);
             if ( response.data.errors ) {
               alert ( "Could not update operation type definition: " + response.data.errors[0] );
-              console.log(response.data);
             } else {            
               $scope.operation_types[i] = AQ.OperationType.record(response.data);          
               $scope.current_ot = $scope.operation_types[i]
@@ -255,13 +286,11 @@
 
         $http.post("/operation_types/import", { operation_types: json }).then(function(response) {
 
-          console.log(response.data);
           $scope.import_popup.loading = false;
 
           if ( response.data.error ) {
 
             alert (response.data.error)
-            console.log(response.data)
 
           } else  if ( response.data.inconsistencies.length == 0 ) {
 
@@ -270,9 +299,7 @@
               var operation_types = aq.collect(response.data.operation_types, rawot => {
                 var ot = AQ.OperationType.record(rawot);
                 ot.upgrade_field_types();
-                console.log(rawot)
                 if ( rawot.timing ) {
-                  console.log("found timing")
                   ot.timing = AQ.Timing.record(rawot.timing);
                 } else { 
                   ot.set_default_timing();
@@ -282,7 +309,6 @@
               });
 
               $scope.operation_types = $scope.operation_types.concat(operation_types);
-              aq.each(response.data.operation_types,o => console.log(o.category))
               make_categories();
               $scope.current_ot = response.data.operation_types[0];     
               $scope.current_category = $scope.current_ot.category;         
@@ -315,22 +341,71 @@
     }
 
     $scope.new_operation_type = function() {
-      var new_ot = {
+      var new_ot = AQ.OperationType.record({
         name: "New Operation Type",
         category: $scope.current_category ? $scope.current_category : "Unsorted",
         deployed: false,
         changed: true,
         field_types:[],
-        protocol: { name: 'protocol', content: $scope.default_protocol },
-        cost_model: { name: 'cost_model', content: 'def cost(op)\n  { labor: 0, materials: 0 }\nend' },
-        precondition: { name: 'precondition', content: 'def precondition(op)\n  true\nend'},
-        documentation: { name: 'documentation', content: "Documentation here. Start with a paragraph, not a heading or title, as in most views, the title will be supplied by the view."}
-      };
+        protocol: AQ.Code.record({ name: 'protocol', content: $scope.default_protocol }),
+        cost_model: AQ.Code.record({ name: 'cost_model', content: 'def cost(op)\n  { labor: 0, materials: 0 }\nend' }),
+        precondition: AQ.Code.record({ name: 'precondition', content: 'def precondition(op)\n  true\nend'}),
+        documentation: AQ.Code.record({ name: 'documentation', content: "Documentation here. Start with a paragraph, not a heading or title, as in most views, the title will be supplied by the view."})
+      });
       $scope.operation_types.push(new_ot);
       $scope.current_ot = new_ot;
       make_categories();
       $scope.current_category = new_ot.category;
       $scope.mode = "definition";
+    }
+
+    $scope.new_library = function() {
+
+      var lib = AQ.Library.record({
+        name: "Library Code",
+        category: $scope.current_category && $scope.current_category != "" ? $scope.current_category : "Unsorted",
+        source: AQ.Code.record({ name: 'protocol', content: "# Library code here" }),
+      });
+
+      $http.post("/libraries", lib).then( response => {
+
+        var newlib = AQ.Library.record(response.data);
+        $scope.libraries.push(newlib);
+        $scope.current_ot = newlib;
+        make_categories();
+        $scope.current_category = newlib.category;
+        $scope.mode = 'source';
+
+      });
+
+    }
+
+    $scope.update_library = function(lib) {
+
+      if ( confirm("Are you sure you want to change the name and/or category of this library?") ) {
+
+        $http.put("/libraries/" + lib.id,lib).then(function(response) {
+          lib.changed = false;
+        });
+
+      }
+
+    }
+
+    $scope.delete_library = function(lib) {
+
+      if ( confirm("Are you sure you want to delete this library?") ) {
+
+        $http.delete("/libraries/" + lib.id,lib).then(function(response) {
+          if ( response.data.error ) {
+            alert ( "Could not delete library: " + response.data.error );
+          } else {
+            $scope.libraries = aq.remove($scope.libraries,lib);
+          }
+        });             
+
+      }
+
     }
 
     $scope.copy = function(ot) {

@@ -37,7 +37,10 @@ Bioturk::Application.configure do
   # config.force_ssl = true
 
   # See everything in the log (default is :info)
-  # config.log_level = :debug
+  config.log_level = :error
+
+  # Limit the size of log files
+  config.logger = Logger.new(config.paths['log'].first, 1, 1024 * 1024)
 
   # Prepend all log lines with the following tags
   # config.log_tags = [ :subdomain, :uuid ]

@@ -20,9 +20,11 @@
 
 
 <% content_for :action3 do %>
-  <% unless @job.pc == Job.NOT_STARTED %>
-    <a href='/krill/ui?job=<%= @job.id %>' class='md-button md-raised md-primary'>Steps</a>&nbsp;
-  <% end %>  
+  <% if current_user && current_user.is_admin %>
+    <% unless @job.pc == Job.NOT_STARTED %>
+      <a href='/krill/ui?job=<%= @job.id %>' class='md-button md-raised md-primary'>Steps</a>&nbsp;
+    <% end %>  
+  <% end %>
 <% end %>
 
 <%= content_for :main do %>
