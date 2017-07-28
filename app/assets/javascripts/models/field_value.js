@@ -37,6 +37,25 @@ AQ.FieldValue.record_getters.predecessors = function() {
 
 }
 
+AQ.FieldValue.record_getters.successors = function() {
+
+  var fv = this;
+  var sucs = [];
+
+  aq.each(AQ.operation_types,function(ot) {
+    aq.each(ot.field_types,function(ft) {
+      if ( ft.role == 'input' && ft.can_consume(fv) ) {
+        sucs.push({operation_type: ot, input: ft});
+      } 
+    });
+  });
+
+  delete fv.successors;
+  fv.successors = sucs;
+  return sucs;
+
+}
+
 AQ.FieldValue.record_getters.is_wired_to = function() {
   var fv = this;
   return function(wire) { return wire.to == fv; }

@@ -57,7 +57,7 @@
     }
 
     $scope.add_predecessor = function(fv,op,pred) {
-      var newop = $scope.plan.add_wire(fv,op,pred);
+      var newop = $scope.plan.add_wire_from(fv,op,pred);
       extend_wire($scope.plan.wires[$scope.plan.wires.length-1]);
       newop.x = op.x;
       newop.y = op.y + 4*$scope.snap;
@@ -69,6 +69,20 @@
         $scope.set_current_fv(fvs[0]);
       }
     }
+
+    $scope.add_successor = function(fv,op,suc) {
+      var newop = $scope.plan.add_wire_to(fv,op,suc);
+      extend_wire($scope.plan.wires[$scope.plan.wires.length-1]);
+      newop.x = op.x;
+      newop.y = op.y - 4*$scope.snap;
+      newop.width = 160;
+      newop.height = 30;
+      select(newop);
+      var fvs = aq.where(newop.field_values, fv => fv.role == 'output');
+      if ( fvs.length > 0 ) {
+        $scope.set_current_fv(fvs[0]);
+      }
+    }    
 
     function select(object) {
       $scope.current_op   = object && object.model.model == "Operation"  ? object : null;
@@ -482,8 +496,10 @@
               return innerElement[0].offsetHeight;
             },
             function(value, oldValue) {
-              element.css('height', value+'px');
-              scope.status = value;
+              setTimeout(function() {
+                element.css('height', innerElement[0].offsetHeight+'px');
+                scope.status = innerElement[0].offsetHeight;
+              }, 30);
             }, true);
 
         }

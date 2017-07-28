@@ -226,20 +226,25 @@ AQ.Operation.record_methods.update_cost = function() {
 
 }
 
-AQ.Operation.record_methods.output = function(name) {
+AQ.Operation.record_methods.io = function(name,role) {
+
+  console.log([this,name,role])
 
   var fvs = aq.where(
     this.field_values,
-    fv => fv.name == name && fv.role == 'output'
+    fv => fv.name == name && fv.role == role
   );
 
   if ( fvs.length > 0 ) {
     return fvs[0];
   } else {
-    throw "Attempted to access nonexistent output named '" + name + "'";
+    throw "Attempted to access nonexistent " + role + " named '" + name + "'";
   }
 
 }
+
+AQ.Operation.record_methods.output = function(name) { return this.io(name, 'output'); }
+AQ.Operation.record_methods.input = function(name) { return this.io(name, 'input');  }
 
 AQ.Operation.record_methods.reload = function() {
 

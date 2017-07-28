@@ -33,7 +33,7 @@ AQ.FieldType.record_methods.can_produce = function(fv) {
   var ft = this,
       rval = false;
 
-  if ( ft.ftype == "sample" && fv.field_type.ftype == "sample" ) {
+  if ( ft.ftype == "sample" && fv.field_type.ftype == "sample" ) {      
 
     aq.each(ft.allowable_field_types, (aft) => {
       if ( fv.aft.sample_type_id == aft.sample_type_id &&
@@ -53,6 +53,8 @@ AQ.FieldType.record_methods.can_produce = function(fv) {
   return rval;
 
 }
+
+AQ.FieldType.record_methods.can_consume = AQ.FieldType.record_methods.can_produce;
 
 AQ.FieldType.record_getters.choices_array = function() {
 

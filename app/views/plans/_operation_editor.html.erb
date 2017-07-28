@@ -9,7 +9,8 @@
     <div flex="5"></div>
     <div flex="10">{{tv.type.name}}</div>
     <div flex="85" class="add-array">
-      <a href='#' ng-click="current_op.array_add(tv.type)" 
+      <a href='#' ng-click="current_op.array_add(tv.type); 
+                            set_current_fv(current_op.field_values[current_op.field_values.length-1])" 
                   class="md-button md-small md-raised">
         Add
       </a>
@@ -25,7 +26,7 @@
   </div>
   <div ng-if="!tv.array_add_button && tv.type.ftype == 'sample'" ng-init="fv = tv.value" class="io-container">
     <%= render partial: 'field_value_input' %>
-  </div>  
+  </div>
   <div ng-if="tv.array_add_button" layout="row" class="io-container">
     <div flex="5"></div>
     <div flex="10">{{tv.type.name}}</div>

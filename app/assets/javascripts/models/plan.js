@@ -284,6 +284,20 @@ AQ.Plan.record_methods.remove_wires_to = function(op,fv) {
 
 }
 
+AQ.Plan.record_methods.remove_wires_from = function(op,fv) {
+
+  var plan = this;
+
+  aq.each(plan.wires, (wire) => {  
+    if ( wire.from_op == op && wire.from == fv ) {
+      aq.remove(plan.wires,wire);
+    }
+  });
+
+  return plan;
+
+}
+
 AQ.Plan.record_methods.is_wired = function(op,fv) {
 
   var plan = this,
@@ -392,7 +406,7 @@ AQ.Plan.record_methods.operations_from_wires = function() {
 
 }
 
-AQ.Plan.record_methods.add_wire = function(fv,op,pred) {
+AQ.Plan.record_methods.add_wire_from = function(fv,op,pred) {
 
   var plan = this;
 
@@ -402,10 +416,6 @@ AQ.Plan.record_methods.add_wire = function(fv,op,pred) {
   }).set_type(pred.operation_type);
 
   plan.operations.push(preop)
-
-  console.log("add_wire to " + op.operation_type.name + "(" + op.rid + ") from "
-                             + preop.operation_type.name + "(" + preop.rid + ") via "
-                             + fv.name + "(" + fv.rid + ")" );  
 
   var preop_output = preop.output(pred.output.name);
 
@@ -419,6 +429,29 @@ AQ.Plan.record_methods.add_wire = function(fv,op,pred) {
   }
 
   return preop;
+
+}
+
+AQ.Plan.record_methods.add_wire_to = function(fv,op,suc) {
+
+  var plan = this;
+
+  var postop = AQ.Operation.record({
+    routing: {},
+    form: { input: {}, output: {} }
+  }).set_type(suc.operation_type);
+
+  plan.operations.push(postop)
+
+  console.log(suc.operation_type);
+  var postop_input = postop.input(suc.input.name);
+  console.log("A")
+
+  plan.remove_wires_from(op,fv);
+
+  var wire = plan.wire(op,fv,postop,postop_input);
+
+  return postop;
 
 }
 

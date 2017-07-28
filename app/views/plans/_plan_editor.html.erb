@@ -9,7 +9,7 @@
   </g>    
 
   <g ng-repeat="op in plan.operations" 
-     ng-attr-transform="translate({{op.x}}, {{op.y}})">
+     ng-attr-transform="translate({{op.x}}, {{op.y}})">    
 
     <rect ng-attr-width="{{op.width}}" ng-attr-height="{{op.height}}"
           ng-attr-class="{{op_class(op)}}"
@@ -21,43 +21,48 @@
 
     <!-- Outputs -->
 
-    <circle ng-repeat="fv in outputs = ( op.field_values | filter: { role: 'output' } ) track by $index" 
-            ng-if="fv == current_fv && fv.field_type.ftype == 'sample'"
-            class="field-value field-value-selection"
-            ng-attr-cx="{{op.width/2 + ($index - outputs.length/2.0 + 0.5)*snap}}" 
-            cy="0">
-        <animate
-            attributeName="stroke"
-            values="#000;#fff;#000"
-            dur="0.8s"
-            repeatCount="indefinite">
-         </animate>                         
-    </circle>
+    <g ng-repeat="fv in outputs = ( op.field_values | filter: { role: 'output' } ) track by $index">
 
-    <circle ng-repeat="fv in outputs = ( op.field_values | filter: { role: 'output' } ) track by $index" 
-            ng-attr-class="{{io_class(op,fv)}}"
-            ng-if="fv.field_type.ftype == 'sample'"
-            ng-attr-cx="{{op.width/2 + ($index - outputs.length/2.0 + 0.5)*snap}}" 
-            ng-mousedown="fvMouseDown($event, op, fv)" 
-            cy="0" />
+      <!-- Cursor -->
+      <circle ng-if="fv == current_fv && fv.field_type.ftype == 'sample'"
+              class="field-value field-value-selection"
+              ng-attr-cx="{{op.width/2 + ($index - outputs.length/2.0 + 0.5)*snap}}" 
+              cy="0">
+          <animate
+              attributeName="stroke"
+              values="#000;#fff;#000"
+              dur="0.8s"
+              repeatCount="indefinite">
+           </animate>                         
+      </circle>
+
+      <!-- IO -->
+      <circle ng-attr-class="{{io_class(op,fv)}}"
+              ng-if="fv.field_type.ftype == 'sample'"
+              ng-attr-cx="{{op.width/2 + ($index - outputs.length/2.0 + 0.5)*snap}}" 
+              ng-mousedown="fvMouseDown($event, op, fv)" 
+              cy="0" />
+
+    </g>
 
     <!-- Inputs -->
 
-    <circle ng-repeat="tv in inputs = ( op.types_and_values | filter: { role: 'input' } ) track by $index" 
-            ng-if="tv.value == current_fv"
-            class="field-value field-value-selection"
-            ng-attr-cx="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap}}" 
-            ng-attr-cy="{{op.height}}">
-        <animate
-            attributeName="stroke"
-            values="#000;#fff;#000"
-            dur="0.8s"
-            repeatCount="indefinite">
-         </animate>              
-    </circle>
-
     <g ng-repeat="tv in inputs = ( op.types_and_values | filter: { role: 'input', array_add_button: '!true' } ) track by $index">
 
+      <!-- Cursor -->
+      <circle ng-if="tv.value == current_fv"
+              class="field-value field-value-selection"
+              ng-attr-cx="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap}}" 
+              ng-attr-cy="{{op.height}}">
+          <animate
+              attributeName="stroke"
+              values="#000;#fff;#000"
+              dur="0.8s"
+              repeatCount="indefinite">
+           </animate>              
+      </circle>    
+
+      <!-- IO -->
       <circle ng-attr-class="{{io_class(op,tv.value)}}"
               ng-if="tv.value.field_type.ftype == 'sample'"
               ng-attr-cx="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap}}" 
@@ -65,6 +70,7 @@
               ng-attr-cy="{{op.height}}" 
               ng-attr-data-name="{{tv.value.name}}" />
 
+      <!-- Parameter -->
       <rect ng-if="tv.value.field_type.ftype != 'sample' && !tv.array_add_button"
             ng-attr-class="{{parameter_class(op,tv.value)}}"
             ng-attr-x="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap - 5}}"
@@ -76,6 +82,7 @@
 
   </g>
 
+  <!-- Selection Box -->
   <rect ng-if="multiselect.active"
         class='multiselect'
         ng-attr-x="{{multiselect_x()}}"
