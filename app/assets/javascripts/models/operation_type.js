@@ -74,6 +74,11 @@ AQ.OperationType.numbers = function(user,filter) {
 AQ.OperationType.record_methods.upgrade_field_types = function() {
   this.field_types = aq.collect(this.field_types,(ft) => { 
     var upgraded_ft = AQ.FieldType.record(ft);
+    upgraded_ft.allowable_field_types = aq.collect(ft.allowable_field_types, aft => {
+      var uaft = AQ.AllowableFieldType.record(aft);
+      uaft.upgrade();
+      return uaft;
+    });
     if ( ft.allowable_field_types.length > 0 ) {
       upgraded_ft.current_aft_id = ft.allowable_field_types[0].id;
     }

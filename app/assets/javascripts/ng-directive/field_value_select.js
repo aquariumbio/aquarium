@@ -70,8 +70,25 @@
             var name = aft.sample_type.name;
 
             $($element).autocomplete({
+
               source: AQ.sample_names_for(name),
-              select: autocomp
+
+              select: autocomp,
+
+              open: function(event, ui) {
+              
+                  var $input = $(event.target),
+                      $results = $input.autocomplete("widget"),
+                      desiredHeight = 300,
+                      newTop = - desiredHeight + $input.offset().top - 10;
+
+                   $results.css("width", $input.width())
+                           .css("overflow", "scroll")
+                           .css("height", desiredHeight + "px")
+                           .css("position", "absolute")
+                           .css("top", newTop + "px");
+              }
+
             });
 
             if ( !ft.array && new_aft && old_aft && ( 

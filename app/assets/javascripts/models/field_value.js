@@ -18,6 +18,16 @@ AQ.FieldValue.record_getters.type = function() {
   return this.field_type.ftype;
 }
 
+AQ.FieldValue.record_getters.num_wires = function() {
+  delete this.num_wires;
+  this.num_wires = 0;
+  return 0;
+}
+
+AQ.FieldValue.record_getters.wired = function() {
+  return this.num_wires > 0;
+}
+
 AQ.FieldValue.record_getters.predecessors = function() {
 
   var fv = this;

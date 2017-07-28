@@ -34,7 +34,8 @@
         AQ.get_sample_names().then(() =>  {
           $scope.ready = true;
           $scope.$apply();
-        });        
+        });  
+
       });
     });
     
@@ -46,7 +47,10 @@
 
     $scope.add_operation = function(ot) {
       var op = AQ.Operation.record({
-        x: 3*$scope.snap + $scope.last_place, y: 2*$scope.snap + $scope.last_place, width: 160, height: 30,
+        x: 3*$scope.snap + $scope.last_place, 
+        y: 2*$scope.snap + $scope.last_place, 
+        width: 160, 
+        height: 30,
         routing: {}, form: { input: {}, output: {} }
       });
       $scope.last_place += 2*$scope.snap;
@@ -109,6 +113,10 @@
               (( m.height >= 0 && m.y < op.y && op.y + op.height < m.y+m.height ) ||
                ( m.height <  0 && m.y + m.height < op.y && op.y + op.height < m.y ));
 
+    }
+
+    $scope.note = function(msg) {
+      console.log(msg);
     }
 
     // Main Events ////////////////////////////////////////////////////////////////////////////////
@@ -180,9 +188,13 @@
             $scope.current_wire = null;
           }
           if ( $scope.current_op && !$scope.current_fv ) {
-            aq.remove($scope.plan.operations, $scope.current_op);                      
+            aq.remove($scope.plan.operations, $scope.current_op);                               
             $scope.plan.wires = aq.where($scope.plan.wires, w => {
-              return w.to_op != $scope.current_op && w.from_op != $scope.current_op;
+              var remove = w.to_op == $scope.current_op || w.from_op == $scope.current_op;
+              if ( remove ) {
+                w.disconnect();
+              }              
+              return !remove;
             });
             $scope.current_op = null;
           }
@@ -265,13 +277,11 @@
 
       if ( $scope.current_fv && evt.shiftKey ) { // There is an fv already selected, so make a wire
 
-        $scope.current_fv.wired = true;
-        fv.wired = true;
         var wire;
 
         if ( $scope.current_fv.role == 'output' && $scope.current_fv.field_type.can_produce(fv) ) {
 
-          wire = AQ.Wire.record({
+          wire = AQ.Wire.make({
             from_op: $scope.current_op,
             from_id: $scope.current_fv.rid,
             from: $scope.current_fv,
@@ -282,7 +292,7 @@
 
         } else if ( fv.field_type.can_produce($scope.current_fv) ) {
 
-          wire = AQ.Wire.record({
+          wire = AQ.Wire.make({
             to_id: $scope.current_fv.rid,
             to_op: $scope.current_op,
             to: $scope.current_fv,
