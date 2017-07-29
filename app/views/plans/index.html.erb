@@ -17,9 +17,9 @@
 
 <% content_for :sidebar do %>
 
-  <div ng-if="ready" layout-fill>
+  <div ng-if="ready" layout-fill style="padding: 16px">
 
-    <md-tabs layout-fill 
+<!--     <md-tabs layout-fill 
              class="md-compact-tabs"
              md-selected="state.category_index" 
              ng-if="!current_op && !current_fv">
@@ -35,7 +35,39 @@
 
       </md-tab>
 
-    </md-tabs>  
+    </md-tabs>   -->
+
+    <div ng-if="!current_op && !current_fv">
+
+    <h3 class='md-title'>Operation Types</h3>
+
+      <div ng-repeat="category in operation_types.categories">
+        
+        <md-header ng-click="state.current_category = (state.current_category == category ? null : category)"
+                   class='clickable no-highlight'>
+          <span class='opener'>
+            {{state.current_category == category ? '&#9660;' : '&#9658;'}}
+          </span>
+          <span>{{category}}</span>
+        </md-header>
+
+        <md-list class='md-compact-list' ng-if="state.current_category == category" >
+          <md-list-item ng-repeat="ot in operation_types | filter: { category: category }">
+            <a href="#" ng-click="add_operation(ot)">{{ot.name}}</a>
+          </md-list-item>
+        </md-list>      
+
+      </div>
+
+      <h3 class='md-title'>Plans</h3>
+
+      <div>    
+
+        Unlaunched plans here
+
+      </div>
+
+    </div>
 
     <div ng-if="current_op && !current_fv" 
          ng-include="'operation_info'">
@@ -47,6 +79,14 @@
 
   </div>
 
+<% end %>
+
+<% content_for :action1 do %>
+  <md-button class='md-raised'>Save</md-button>
+<% end %>
+
+<% content_for :action2 do %>
+  <md-button class='md-raised'>Launch</md-button>
 <% end %>
 
 <% content_for :main do %>
