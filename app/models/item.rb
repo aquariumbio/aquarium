@@ -384,9 +384,37 @@ class Item < ActiveRecord::Base
     a
   end  
 
-def week
-  self.created_at.strftime('%W')
-end  
+  def week
+    self.created_at.strftime('%W')
+  end  
+
+
+  def self.items_for sid, oid
+
+    puts "FINDING ITEMS FOR #{sid}, #{oid}"
+
+    sample = Sample.find_by_id(sid)
+    ot = ObjectType.find_by_id(oid)
+
+    if sample && ot
+
+      if ot.handler == 'collection'
+        return Collection.parts(sample,ot) 
+      else
+        return sample.items.reject { |i| i.deleted? || i.object_type_id != ot.id }
+      end
+
+    elsif sample && !ot
+
+      return []
+
+    else
+
+      return ot.items.reject { |i| i.deleted? }
+
+    end  
+
+  end
 
 end
 

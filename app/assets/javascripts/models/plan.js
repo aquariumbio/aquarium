@@ -1,20 +1,3 @@
-AQ.Plan.record_methods.upgrade = function() {
-  var plan = this;
-  plan.operations = aq.collect(plan.operations, (op) => {
-    var operation = AQ.Operation.record(op);
-    operation.mode = 'io' // This is for the launcher
-    operation.field_values = aq.collect(operation.field_values,(fv) => {
-      return AQ.FieldValue.record(fv);  
-    })
-    op.jobs = aq.collect(op.jobs, job => {
-      return AQ.Job.record(job);
-    });    
-    return operation;
-  });
-  plan.open = true;
-  return plan;
-}
-
 AQ.Plan.record_methods.reload = function() {
 
   var plan = this;
@@ -45,28 +28,61 @@ AQ.Plan.record_methods.reload = function() {
 
 }
 
-AQ.Plan.record_methods.export = function() {
+AQ.Plan.record_methods.save = function() {
 
   var plan = this;
+  plan.saving = true;  
 
-  return AQ.Plan.record({
-    operations: plan.operations_from_wires(),
-    wires: plan.wires,
-    user_budget_association: plan.uba,
-    optimize: plan.optimize
-  })
+  if ( plan.id ) {
 
+    return new Promise((resolve,reject) => {
+      AQ.http.put('/plans/' + plan.id + '.json',plan.serialize()).then(response => {
+        var p = AQ.Plan.record(response.data).marshall();
+        console.log(p);
+        resolve(p);
+      }).catch(response => { 
+        console.log(response);
+        plan.errors = [ "PUT error" ]
+      });
+    });
+
+  } else {
+
+    return new Promise((resolve,reject) => {
+      AQ.post('/plans.json',plan.serialize()).then(response => {
+        var p = AQ.Plan.record(response.data).marshall();
+        console.log(p);
+        console.log(p.wires[0])
+        resolve(p);
+      }).catch(response => { 
+        console.log(response);
+        plan.errors = [ "POST error" ]
+      });
+    });
+
+  }
+
+}
+
+AQ.Plan.load = function(id) {
+  return new Promise((resolve,reject) => {
+    AQ.get("/plans/" + id + ".json").then(response => {   
+      var up = AQ.Plan.record(response.data).marshall();
+      console.log(up)
+      resolve(up);
+    })
+  });
 }
 
 AQ.Plan.record_methods.submit = function(user) {
 
-  var plan = this.export(),
+  var plan = this.serialize(),
       user_query = user ? "?user_id=" + user.id : "";
 
   return new Promise(function(resolve,reject) {
     AQ.post('/launcher/submit'+user_query,plan).then(
       (response) => {
-        resolve(AQ.Plan.record(response.data).upgrade());
+        resolve(AQ.Plan.record(response.data).marshall());
       }, (response) => {
         reject(response.data.errors);
       }
@@ -89,9 +105,9 @@ AQ.Plan.record_methods.estimate_cost = function() {
   if ( !plan.estimating ) {
   
     plan.estimating = true;
-    var exported_plan = plan.export();
+    var serializeed_plan = plan.serialize();
 
-    AQ.post('/launcher/estimate',exported_plan).then( response => {
+    AQ.post('/launcher/estimate',serializeed_plan).then( response => {
 
       if ( response.data.errors ) {
 
@@ -248,9 +264,7 @@ AQ.Plan.record_methods.wire = function(from_op, from, to_op, to) {
       from_op: from_op,
       from: from,
       to_op: to_op,
-      to: to,
-      from_id: from.rid,
-      to_id: to.rid
+      to: to
     });
 
   plan.wires.push(wire);
@@ -388,27 +402,27 @@ AQ.Plan.record_methods.propagate = function(op,fv,sid) {
 
 }
 
-AQ.Plan.record_methods.operations_from_wires = function() {
+// AQ.Plan.record_methods.operations_from_wires = function() {
 
-  var plan = this, 
-      ops = [];
+//   var plan = this, 
+//       ops = [];
 
-  aq.each(plan.operations,(op) => {
-    ops.push(op);
-  });
+//   aq.each(plan.operations,(op) => {
+//     ops.push(op);
+//   });
 
-  aq.each(plan.wires, (wire) => {
-    if ( ops.indexOf(wire.from_op) < 0 ) { 
-      ops.push(wire.from_op);
-    }
-    if ( ops.indexOf(wire.to_op) < 0 ) { 
-      ops.push(wire.to_op);
-    }
-  })
+//   aq.each(plan.wires, (wire) => {
+//     if ( ops.indexOf(wire.from_op) < 0 ) { 
+//       ops.push(wire.from_op);
+//     }
+//     if ( ops.indexOf(wire.to_op) < 0 ) { 
+//       ops.push(wire.to_op);
+//     }
+//   })
 
-  return ops;
+//   return ops;
 
-}
+// }
 
 AQ.Plan.record_methods.add_wire_from = function(fv,op,pred) {
 
@@ -490,7 +504,7 @@ AQ.Plan.record_methods.relaunch = function() {
   return new Promise(function(resolve,reject) {
     AQ.get("/launcher/" + plan.id + "/relaunch").then(
       response => {
-        var p = AQ.Plan.record(response.data.plan).upgrade();
+        var p = AQ.Plan.record(response.data.plan).marshall();
         resolve(p,response.data.issues)
       },
       response => reject(null,response.data.issues)

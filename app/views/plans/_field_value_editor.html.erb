@@ -22,7 +22,8 @@
           <md-checkbox
             ng-click="current_op.set_aft(current_fv.field_type,aft)"
             ng-checked="current_op.form[current_fv.role][current_fv.name].aft_id == aft.id"
-            ng-disabled="current_fv.field_type.allowable_field_types.length === 1">
+            ng-disabled="current_fv.field_type.allowable_field_types.length === 1"
+            aria-label="Item">
           </md-checkbox>
 
           <p>
@@ -50,7 +51,8 @@
             <md-checkbox
               ng-click="select_item(current_fv,item)"
               ng-checked="item.selected && !current_fv.wired"
-              ng-disabled="current_fv.wired || current_fv.role == 'output'">
+              ng-disabled="current_fv.wired || current_fv.role == 'output'"
+              aria-label="item">
             </md-checkbox>
 
             <div item="item" container="aft.object_type" sample="item.sample"></div>
@@ -73,7 +75,8 @@
               <md-checkbox
                 ng-click="select_item(current_fv,item)"
                 ng-checked="item.selected"
-                ng-disabled="current_fv.wired || current_fv.role == 'output'">
+                ng-disabled="current_fv.wired || current_fv.role == 'output'"
+                aria-label="Item">
               </md-checkbox>
 
             </span>

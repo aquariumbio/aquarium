@@ -14,39 +14,39 @@
       </p>
     </div>
 
-  <div class='documentation md-body-1' ng-bind-html="current_op.operation_type.rendered_docs"></div>
+    <div class='documentation md-body-1' ng-bind-html="current_op.operation_type.rendered_docs"></div>
 
-  <hr>
+    <hr>
 
-  <div class="stats md-body-1">
+    <div class="stats md-body-1">
 
-    <p>
-      Run {{current_op.operation_type.stats.error + 
-            current_op.operation_type.stats.done}} times
+      <p>
+        Run {{current_op.operation_type.stats.error + 
+              current_op.operation_type.stats.done}} times
 
-    </p>
+      </p>
 
-    <p ng-if="current_op.operation_type.stats.error == 1">
-      1 error
-    </span>
+      <p ng-if="current_op.operation_type.stats.error == 1">
+        1 error
+      </span>
 
-    <p ng-if="current_op.operation_type.stats.error != 1">
-      {{current_op.operation_type.stats.error}} errors
-    </span>
+      <p ng-if="current_op.operation_type.stats.error != 1">
+        {{current_op.operation_type.stats.error}} errors
+      </span>
 
-    <p>
-      {{100*current_op.operation_type.stats.success | number: 1}}% success rate
-    </p>
+      <p>
+        {{100*current_op.operation_type.stats.success | number: 1}}% success rate
+      </p>
 
-    <p ng-if="plan.current_operation.operation_type.stats.first_run">
-      First run {{current_op.operation_type.stats.first_run|date: 'shortDate'}}
-    </p>
+      <p ng-if="plan.current_operation.operation_type.stats.first_run">
+        First run {{current_op.operation_type.stats.first_run|date: 'shortDate'}}
+      </p>
 
-    <p ng-if="plan.current_operation.operation_type.stats.last_run">
-      Last run {{current_op.operation_type.stats.last_run|date: 'shortDate'}}
-    </p>
+      <p ng-if="plan.current_operation.operation_type.stats.last_run">
+        Last run {{current_op.operation_type.stats.last_run|date: 'shortDate'}}
+      </p>
 
-  </div>
+    </div>
 
   </md-content>
 

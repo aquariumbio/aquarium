@@ -10,37 +10,8 @@ class FieldValue < ActiveRecord::Base
   belongs_to :allowable_field_type
 
   attr_accessible :name, :child_item_id, :child_sample_id, :value, :role
-  attr_accessible :field_type_id, :item, :row, :column, :allowable_field_type_id
+  attr_accessible :field_type_id, :row, :column, :allowable_field_type_id
   attr_accessible :parent_class, :parent_id
-
-  validate :valid
-
-  def valid
-
-    if parent_class == "Operation"
-
-      unless field_type_id
-        errors.add(:field_type, "No field type specified for #{role} '#{name}'")
-        return false
-      end
-
-      Rails.logger.info "aft = #{allowable_field_type}"
-
-      if field_type.ftype == 'sample' && (!allowable_field_type || allowable_field_type.object_type.handler == 'sample_container')
-
-        unless child_sample_id
-          errors.add(:child_sample, "not specified for #{role} '#{name}'.")
-          Rails.logger.info "Validation error for field value #{name} with aft = #{allowable_field_type.inspect}"
-          return false
-        end
-
-      end
-
-    end
-
-    return true
-
-  end
 
   def sample
     child_sample

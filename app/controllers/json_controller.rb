@@ -109,7 +109,7 @@ class JsonController < ApplicationController
     str ? str.split(':')[0] : 0
   end
 
-  def items # ( sid, oid )
+  def items # ( sid, oid ) # This can be replaced by a call to Item.items_for sid, oid
 
     begin
 

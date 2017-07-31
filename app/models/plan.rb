@@ -1,9 +1,8 @@
 class Plan < ActiveRecord::Base
 
-  include PlanSerializer
   include DataAssociator
 
-  attr_accessible :user_id, :budget_id
+  attr_accessible :user_id, :budget_id, :name, :cost_limit, :status
 
   has_many :plan_associations
   has_many :operations, through: :plan_associations

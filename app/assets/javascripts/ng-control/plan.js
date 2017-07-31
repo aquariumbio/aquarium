@@ -12,13 +12,12 @@
 
     $scope.snap = 16;
     $scope.last_place = 0;
-    $scope.plan = AQ.Plan.record({operations: [], wires: []});
+    $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning"});
     $scope.multiselect = {};
 
     $scope.ready = false;
 
-    $scope.state = {
-    }
+    $scope.state = {}
 
     AQ.User.current().then((user) => {
 
@@ -31,10 +30,16 @@
         AQ.OperationType.compute_categories($scope.operation_types);
         AQ.operation_types = $scope.operation_types;
 
-        AQ.get_sample_names().then(() =>  {
-          $scope.ready = true;
-          $scope.$apply();
-        });  
+        AQ.Plan.where({status: "planning", user_id: user.id}).then(plans => {
+
+          $scope.plans = plans;
+
+          AQ.get_sample_names().then(() =>  {
+            $scope.ready = true;
+            $scope.$apply();
+          });  
+
+        });
 
       });
     });
@@ -117,6 +122,29 @@
 
     $scope.note = function(msg) {
       console.log(msg);
+    }
+
+    $scope.save = function(plan) {
+      plan.save().then(saved_plan => {
+        $scope.plan = saved_plan;
+        $scope.state.loading_plans = true;
+        $scope.$apply();
+        AQ.Plan.where({status: "planning", user_id: $scope.current_user.id}).then(plans => { 
+          $scope.state.loading_plans = false;
+          $scope.plans = plans;
+        });
+      });
+
+    }
+
+    $scope.load = function(plan) {
+
+      AQ.Plan.load(plan.id).then(p => {
+        $scope.plan = p;
+        console.log();
+        $scope.$apply();
+      })
+
     }
 
     // Main Events ////////////////////////////////////////////////////////////////////////////////
@@ -283,10 +311,8 @@
 
           wire = AQ.Wire.make({
             from_op: $scope.current_op,
-            from_id: $scope.current_fv.rid,
             from: $scope.current_fv,
             to_op: op,
-            to_id: fv.rid,
             to: fv,
             snap: $scope.snap
           });
@@ -294,10 +320,8 @@
         } else if ( fv.field_type.can_produce($scope.current_fv) ) {
 
           wire = AQ.Wire.make({
-            to_id: $scope.current_fv.rid,
             to_op: $scope.current_op,
             to: $scope.current_fv,
-            from_id: fv.rid,
             from_op: op,
             from: fv,
             snap: $scope.snap
