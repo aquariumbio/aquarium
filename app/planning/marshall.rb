@@ -84,8 +84,8 @@ module Marshall
           active: true
         })
         wire.save
-        wire.to.child_item_id = nil # remove inputs from non-leaves
-        wire.to.save
+        # wire.to.child_item_id = nil # remove inputs from non-leaves: TODO: Put this in the planner
+        # wire.to.save
       end
     end
 
@@ -100,8 +100,6 @@ module Marshall
     end
 
     ft = op.operation_type.type(fv[:name],fv[:role])
-
-    puts "FV: #{fv}"
 
     item = ( fv[:role] == 'input' && fv[:selected_item] ) ? fv[:selected_item] : nil
 
@@ -128,6 +126,7 @@ module Marshall
         allowable_field_type_id: fv[:allowable_field_type_id],
         row: item ? row : nil,
         column: item ? column : nil,
+        row: item ? row : nil,
         value: fv[:value]
       }
 
@@ -164,7 +163,6 @@ module Marshall
    
     # for each plan operation, if it is not in x, then delete it
     p.operations.each do |pop|
-      puts "#{x[:operations].collect { |o| o[:id] }}.member? #{pop.id}"
       unless x[:operations].collect { |o| o[:id] }.member?(pop.id)
         pop.destroy
       end
@@ -177,7 +175,6 @@ module Marshall
 
     # for each plan wire, if the wire is not in x, then delete it
     p.wires.each do |pwire|
-      puts "#{x[:wires].collect { |w| w[:id] }}.member? #{pwire.id}"
       unless !x[:wires] || x[:wires].collect { |w| w[:id] }.member?(pwire.id)
         pwire.destroy
       end

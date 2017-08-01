@@ -391,8 +391,6 @@ class Item < ActiveRecord::Base
 
   def self.items_for sid, oid
 
-    puts "FINDING ITEMS FOR #{sid}, #{oid}"
-
     sample = Sample.find_by_id(sid)
     ot = ObjectType.find_by_id(oid)
 
@@ -408,11 +406,15 @@ class Item < ActiveRecord::Base
 
       return []
 
-    else
+    elsif ot.handler != 'sample_container'
 
       return ot.items.reject { |i| i.deleted? }
 
-    end  
+    else
+
+      return []
+
+    end
 
   end
 

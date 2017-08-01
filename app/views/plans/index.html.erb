@@ -19,13 +19,6 @@
 
   {{plan.errors}}
 
-  <ul>
-    <li ng-repeat="wire in plan.wires">
-      {{wire.from_id}}, {{wire.from.rid}}, {{wire.from_op.rid}} &rang;
-      {{wire.to_id}}, {{wire.to.rid}}, {{wire.to_op.rid}}
-    </li>
-  </ul>
-
   <div ng-if="ready" layout-fill style="padding: 16px">
 
     <div ng-if="!current_op && !current_fv">

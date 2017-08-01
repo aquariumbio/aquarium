@@ -89,27 +89,59 @@ AQ.FieldValue.record_methods.route_compatible = function(other_fv) {
          (  other_fv.array &&  fv.array && other_fv.sample_identifier == fv.sample_identifier );
 }
 
+AQ.FieldValue.record_methods.clear_item = function() {
+  var fv = this;
+  delete fv.child_item;
+  delete fv.child_item_id;
+  delete fv.row;
+  delete fv.column;
+  return fv;
+}
+
 AQ.FieldValue.record_methods.find_items = function(sid) {
 
-  var fv = this;
+  var fv = this,
+      sample_id;
+
+  sample_id = AQ.id_from(sid);
+  fv.sid = sid;
+
+  delete fv.items;  
 
   return new Promise(function(resolve,reject) {    
 
-    AQ.items_for(sid,fv.aft.object_type_id).then( items => { 
+    AQ.items_for(sample_id,fv.aft.object_type_id).then( items => { 
 
-      if ( items.length > 0 ) {  
-        fv.items = items;
-        fv.items[0].selected = true;
-        fv.selected_item = items[0];
-        fv.sid = sid;
-        AQ.update();
-      } 
+      fv.items = items;
+
+      if ( fv.items.length > 0 ) {
+
+        if ( ! fv.child_item_id ) {
+          fv.child_item_id = items[0].id;
+        } 
+
+      }
 
       resolve(items);
 
     });
 
   });
+
+}
+
+AQ.FieldValue.record_getters.items = function() {
+
+  var fv = this;
+
+  delete fv.items;
+
+  fv.find_items(""+fv.child_sample_id).then(items => {
+    fv.items = items;
+    AQ.update();
+  })
+
+  return fv.items;
 
 }
 

@@ -24,7 +24,9 @@ AQ.Operation.record_methods.serialize = function() {
     operation_type_id: op.operation_type_id,
     field_values: aq.collect(op.field_values, fv => {
       var efv = fv.serialize();
-      efv.allowable_field_type_id = op.form[fv.role][fv.name] ? op.form[fv.role][fv.name].aft_id : null
+      efv.allowable_field_type_id = op.form[fv.role][fv.name] ? 
+                                    op.form[fv.role][fv.name].aft_id : 
+                                    null
       return efv;
     }),
     status: op.status,

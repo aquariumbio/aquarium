@@ -38,15 +38,6 @@ module Serialize
       end
     end
 
-    field_values.each do |fv|
-      if fv['aft']
-        fv["items"] = Item.items_for(fv['child_sample_id'],fv['aft']['object_type_id'])
-        fv["items"].each do |i|
-          i[:selected] = true if i['id'] = fv['child_item_id']
-        end
-      end
-    end
-
     sops = ops.as_json
 
     sops.each do |op|

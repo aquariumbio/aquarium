@@ -35,6 +35,17 @@
 
       </md-list>
 
+      <div ng-if="current_fv.is_sample && !current_fv.items" class="nomargin">
+        <md-subheader class="md-no-sticky">
+          Finding Inventory
+          <span ng-if="current_fv.wired || current_fv.role == 'output'">(Not Used in Plan)</span>
+        </md-subheader>
+        <div layout="column" layout-align="center center">
+          <md-progress-circular class="md-hue-2" md-diameter="20px">
+          </md-progress-circular>
+        </div>
+      </div>
+
       <div ng-if="current_fv.is_sample && current_fv.items.length > 0" class="nomargin">
 
         <md-subheader class="md-no-sticky">
@@ -50,7 +61,7 @@
 
             <md-checkbox
               ng-click="select_item(current_fv,item)"
-              ng-checked="item.selected && !current_fv.wired"
+              ng-checked="current_fv.child_item_id == item.id && !current_fv.wired"
               ng-disabled="current_fv.wired || current_fv.role == 'output'"
               aria-label="item">
             </md-checkbox>
@@ -63,7 +74,7 @@
 
         </md-list>
 
-        <md-list ng-if="current_fv.items[0].collection"> <!-- COLLECTIONS ///////// -->
+        <md-list ng-if="current_fv.items[0].collection"> <!-- COLLECTIONS ///////////////////////////////////// -->
 
           <md-list-item ng-repeat="item in current_fv.items"
               class="md-3-line"

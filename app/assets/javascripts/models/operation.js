@@ -228,8 +228,6 @@ AQ.Operation.record_methods.update_cost = function() {
 
 AQ.Operation.record_methods.io = function(name,role) {
 
-  console.log([this,name,role])
-
   var fvs = aq.where(
     this.field_values,
     fv => fv.name == name && fv.role == role
@@ -281,11 +279,16 @@ AQ.Operation.record_methods.instantiate_aux = function(plan,pairs,resolve) {
         sfv = pairs[0].sfv;
 
     AQ.Sample.find(sfv.child_sample_id).then(linked_sample => {
+
       operation.routing[ofv.routing] = linked_sample.identifier;
       plan.propagate_down(ofv,linked_sample.identifier);
-      ofv.find_items(linked_sample.identifier);
+
+      ofv.clear_item();
+      ofv.find_items(linked_sample.identifier).then(items => AQ.update());
+
       operation.instantiate_aux(plan,pairs.slice(1),resolve);
-      AQ.update();      
+      AQ.update();
+
     })    
 
   } else {
@@ -294,21 +297,29 @@ AQ.Operation.record_methods.instantiate_aux = function(plan,pairs,resolve) {
 
 }
 
-AQ.Operation.record_methods.instantiate = function(plan,field_value,sid) {
-
-  if ( sid ) {
-
+AQ.Operation.record_methods.instantiate = function(plan,field_value,sid) { // instantiate this operation's field values using the sid
+                                                                           // assuming it is being assigned to the argument field_value
+  if ( sid ) {                                                             // will need to look at the field_value's routing information
+                                                                           // as well as its sample definition
     var operation = this,
-        sample_id = AQ.id_from(sid); 
+        sample_id = AQ.id_from(sid);
 
+    // Find items associated with samples
+    aq.each(operation.field_values, fv => {
+      if ( fv.routing == field_value.routing ) {
+        fv.clear_item().find_items(sid);
+      }
+    })
+
+    // Next, find fvs that can be assigned from sample information (using linked samples)
     return new Promise(function(resolve,reject) {    
 
-      AQ.Sample.where({id: sample_id}, {methods: ["field_values"]}).then(samples => {
+      AQ.Sample.where({id: sample_id}, {methods: ["field_values"]}).then(samples => {  // get the sample corresponding to sid
 
-        if ( samples.length == 1 ) {
+        if ( samples.length == 1 ) { // there should only be one
 
-          var sample = samples[0],
-              pairs = [];
+          var sample = samples[0], 
+              pairs = [];            // pairs will hold a list of sample field values (sfv) and operation field_values (ofv) that should be identified
 
           aq.each(sample.field_values, sfv => {
             aq.each(operation.field_values, ofv => {
@@ -318,7 +329,7 @@ AQ.Operation.record_methods.instantiate = function(plan,field_value,sid) {
             })
           });
 
-          operation.instantiate_aux(plan,pairs,resolve);
+          operation.instantiate_aux(plan,pairs,resolve); // once all pairs are found, actually do the instantiate in instantiate_aux
 
         } 
 

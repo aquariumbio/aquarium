@@ -33,12 +33,14 @@ AQ.Plan.record_methods.save = function() {
   var plan = this;
   plan.saving = true;  
 
+  console.log(["saving", plan])
+
   if ( plan.id ) {
 
     return new Promise((resolve,reject) => {
       AQ.http.put('/plans/' + plan.id + '.json',plan.serialize()).then(response => {
         var p = AQ.Plan.record(response.data).marshall();
-        console.log(p);
+        console.log(["saved", p]);
         resolve(p);
       }).catch(response => { 
         console.log(response);
@@ -51,8 +53,7 @@ AQ.Plan.record_methods.save = function() {
     return new Promise((resolve,reject) => {
       AQ.post('/plans.json',plan.serialize()).then(response => {
         var p = AQ.Plan.record(response.data).marshall();
-        console.log(p);
-        console.log(p.wires[0])
+        console.log(["created",p]);
         resolve(p);
       }).catch(response => { 
         console.log(response);
@@ -331,15 +332,15 @@ AQ.Plan.record_methods.is_wired = function(op,fv) {
 
 }
 
-AQ.Plan.record_methods.propagate_down = function(fv,sid) {
+AQ.Plan.record_methods.propagate_down = function(fv,sid) { // propogate sid to incoming ops
 
   var plan = this;
 
   aq.each(plan.wires, wire => {
-    if ( wire.to.rid === fv.rid ) {
-      wire.from_op.routing[wire.from.routing] = sid; 
-      if ( wire.from.role == 'output' ) {
-        wire.from_op.instantiate(plan,wire.from,sid)
+    if ( wire.to.rid === fv.rid ) {                      // found an incoming wire
+      wire.from_op.routing[wire.from.routing] = sid;     // set the sid for the incoming op's routing symbol
+      if ( wire.from.role == 'output' ) {                // if the incoming wire is from an output to this fv (why wouldn't it be?)
+        wire.from_op.instantiate(plan,wire.from,sid)     // call instantiate on the incoming op's from field_value with sid
       }
       aq.each(wire.from_op.field_values, subfv => {
         if ( wire.from.route_compatible(subfv) ) {
@@ -377,8 +378,7 @@ AQ.Plan.record_methods.propagate_up = function(op,fv,sid) {
 
 }
 
-AQ.Plan.record_methods.propagate = function(op,fv,sid) {
-
+AQ.Plan.record_methods.propagate = function(op,fv,sid) { // propagate the choice of sid for fv to connected operations 
   var plan = this;
 
   if ( ! fv.field_type.array ) {
@@ -394,7 +394,6 @@ AQ.Plan.record_methods.propagate = function(op,fv,sid) {
     plan.propagate_down(fv,sid)
 
   }
-
 
   plan.propagate_up(op,fv,sid);
 

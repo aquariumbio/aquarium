@@ -21,10 +21,12 @@
 
         var autocomp = function(ev,ui) {
 
+          // respond when a new sample is chosen from the autocomplete
+
           var sid = AQ.id_from(ui.item.value);
 
           // send new sid to i/o of other operations
-          plan.propagate(op,fv,ui.item.value); 
+          plan.propagate(op,fv,ui.item.value);
 
           // use sample information to fill in inputs, if possible
           if ( fv.role == 'output' ) {
@@ -63,7 +65,14 @@
 
         $scope.$watch("operation.form[fv.field_type.role][fv.name].aft", function(new_aft, old_aft) {
 
+          // Update autocomplete when aft changes
+
           var aft = op.form[ft.role][fv.name].aft;
+
+          delete fv.child_item_id;
+          delete fv.child_item;
+          delete fv.row;
+          delete fv.column;                              
 
           if ( aft && aft.sample_type ) {
 

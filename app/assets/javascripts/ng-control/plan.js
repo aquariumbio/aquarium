@@ -66,17 +66,20 @@
     }
 
     $scope.add_predecessor = function(fv,op,pred) {
+
       var newop = $scope.plan.add_wire_from(fv,op,pred);
       $scope.plan.wires[$scope.plan.wires.length-1].snap = $scope.snap;
       newop.x = op.x;
       newop.y = op.y + 4*$scope.snap;
       newop.width = 160;
       newop.height = 30;
+
       select(newop);
-      var fvs = aq.where(newop.field_values, fv => fv.role == 'input');
-      if ( fvs.length > 0 ) {
-        $scope.set_current_fv(fvs[0]);
+      var inputs = aq.where(newop.field_values, fv => fv.role == 'input');
+      if ( inputs.length > 0 ) {
+        $scope.set_current_fv(inputs[0]);
       }
+
     }
 
     $scope.add_successor = function(fv,op,suc) {
@@ -363,31 +366,37 @@
 
       var c = "field-value";
 
-      if ( $scope.current_fv && $scope.current_fv.role == 'input' && fv.role == 'output' && fv.field_type.can_produce($scope.current_fv) ) {
+      // if ( $scope.current_fv && 
+      //      $scope.current_fv.role == 'input' && 
+      //      fv.role == 'output' && 
+      //      fv.field_type.can_produce($scope.current_fv) ) {
 
-        c += " field-value-compatible";
+      //   c += " field-value-compatible";
 
-      } else if ( $scope.current_fv && $scope.current_fv.role == 'output' && fv.role == 'input' && $scope.current_fv.field_type.can_produce(fv)) {
+      // } else if ( $scope.current_fv && 
+      //             $scope.current_fv.role == 'output' && 
+      //             fv.role == 'input' && 
+      //             $scope.current_fv.field_type.can_produce(fv) ) {
 
-        c += " field-value-compatible";
+      //   c += " field-value-compatible";
 
-      } else {
+      // } else {
 
-        if ( fv.routing && op.routing[fv.routing] != "" ) { // Has a sample associated with it
-          c += " field-value-with-sample";
-        } else if ( fv.field_type.array && fv.sample_identifier && fv.sample_identifier != "" ) {
-          c += " field-value-with-sample";
-        }
+      //   if ( fv.routing && op.routing[fv.routing] != "" ) { // Has a sample associated with it
+      //     c += " field-value-with-sample";
+      //   } else if ( fv.field_type.array && fv.sample_identifier && fv.sample_identifier != "" ) {
+      //     c += " field-value-with-sample";
+      //   }
 
-        if ( !fv.wired && fv.role == 'input' && fv.items != "" ) { // Has items associated with it
-          c += " field-value-with-items";
-        }      
+      //   if ( !fv.wired && fv.role == 'input' && fv.items != "" ) { // Has items associated with it
+      //     c += " field-value-with-items";
+      //   }      
 
-        if ( !fv.wired && fv.role == 'input' && fv.items == "" ) { // Has no items associated with it, but should
-          c += " field-value-with-no-items";
-        }      
+      //   if ( !fv.wired && fv.role == 'input' && fv.items == "" ) { // Has no items associated with it, but should
+      //     c += " field-value-with-no-items";
+      //   }      
 
-      }
+      // }
 
       return c;
 
@@ -421,16 +430,10 @@
 
     // Inventory ////////////////////////////////////////////////////////////////////////////////////
     $scope.select_item = function(fv, item) {
-      aq.each(fv.items, i => {
-        if ( i.collection ) {
-          i.selected = (i.collection.id == item.collection.id);
-        } else {
-          i.selected = (i.id == item.id);        
-        }
-      });
-      fv.selected_item = item;
-      fv.selected_row = item.selected_row;
-      fv.selected_column = item.selected_column;
+      fv.child_item_id = item.id;
+      fv.child_item = item;
+      fv.row = item.selected_row;
+      fv.column = item.selected_column;
     }
 
     $scope.io_focus = function(op,ft,fv) {
