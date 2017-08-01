@@ -338,9 +338,9 @@ AQ.Plan.record_methods.propagate_down = function(fv,sid) { // propogate sid to i
 
   aq.each(plan.wires, wire => {
     if ( wire.to.rid === fv.rid ) {                      // found an incoming wire
-      wire.from_op.routing[wire.from.routing] = sid;     // set the sid for the incoming op's routing symbol
+      wire.from_op.routing[wire.from.routing] = sid;     // set the sid for the source op's routing symbol
       if ( wire.from.role == 'output' ) {                // if the incoming wire is from an output to this fv (why wouldn't it be?)
-        wire.from_op.instantiate(plan,wire.from,sid)     // call instantiate on the incoming op's from field_value with sid
+        wire.from_op.instantiate(plan,wire.from,sid)     // call instantiate on the source op's from field_value with sid
       }
       aq.each(wire.from_op.field_values, subfv => {
         if ( wire.from.route_compatible(subfv) ) {
@@ -354,15 +354,37 @@ AQ.Plan.record_methods.propagate_down = function(fv,sid) { // propogate sid to i
 
 }
 
-AQ.Plan.record_methods.propagate_up = function(op,fv,sid) {
+AQ.Plan.record_methods.propagate_up = function(fv,sid) { // propogate sid to incoming ops
 
   var plan = this;
 
-  aq.each(op.field_values, other_fv => {
-    if ( fv.route_compatible(other_fv) ) {
-      aq.each(plan.wires, wire => {
-        if ( wire.from == other_fv ) {
-          wire.to_op.routing[wire.to.routing] = sid;
+  aq.each(plan.wires, wire => {
+    if ( wire.from.rid === fv.rid ) {                    // found an outgoing wire
+      wire.to_op.routing[wire.to.routing] = sid;            // set the sid for the destination op's routing symbol
+      if ( wire.to.role == 'input' ) {                   // if the outgoing wire is to an output to the other fv (why wouldn't it be?)
+        wire.to_op.instantiate(plan,wire.to,sid)          // call instantiate on the destination op's to field_value with sid
+      }
+      aq.each(wire.to_op.field_values, superfv => {
+        if ( wire.from.route_compatible(superfv) ) {
+          plan.propagate_up(superfv,sid);
+        }
+      })
+    }
+  });
+
+  return plan;
+
+}
+
+AQ.Plan.record_methods.propagate_up_old = function(op,fv,sid) {
+
+  var plan = this;
+
+  aq.each(op.field_values, other_fv => {                 
+    if ( fv.route_compatible(other_fv) ) {               
+      aq.each(plan.wires, wire => {                   
+        if ( wire.from == other_fv ) {                    
+          wire.to_op.routing[wire.to.routing] = sid;     
           wire.to.sample_identifier = sid;
           aq.each(wire.to_op.field_values, to_fv => {
             if ( to_fv.route_compatible(wire.to) ) {
@@ -379,6 +401,7 @@ AQ.Plan.record_methods.propagate_up = function(op,fv,sid) {
 }
 
 AQ.Plan.record_methods.propagate = function(op,fv,sid) { // propagate the choice of sid for fv to connected operations 
+
   var plan = this;
 
   if ( ! fv.field_type.array ) {
@@ -386,16 +409,16 @@ AQ.Plan.record_methods.propagate = function(op,fv,sid) { // propagate the choice
     aq.each(op.field_values,io => {
       if ( fv.route_compatible(io) ) {
         plan.propagate_down(io,sid)
+        plan.propagate_up(io,sid);
       }  
     })
 
   } else {
 
     plan.propagate_down(fv,sid)
+    plan.propagate_up(fv,sid)
 
   }
-
-  plan.propagate_up(op,fv,sid);
 
   return this;
 
@@ -464,6 +487,12 @@ AQ.Plan.record_methods.add_wire_to = function(fv,op,suc) {
   plan.remove_wires_from(op,fv);
 
   var wire = plan.wire(op,fv,postop,postop_input);  
+
+  if ( fv.field_type.array ) {
+    plan.propagate(op,fv,fv.sample_identifier);
+  } else {
+    plan.propagate(op,fv,op.routing[fv.routing])  
+  }  
 
   return postop;
 

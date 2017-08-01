@@ -111,19 +111,13 @@ AQ.FieldValue.record_methods.find_items = function(sid) {
   return new Promise(function(resolve,reject) {    
 
     AQ.items_for(sample_id,fv.aft.object_type_id).then( items => { 
-
       fv.items = items;
-
       if ( fv.items.length > 0 ) {
-
         if ( ! fv.child_item_id ) {
           fv.child_item_id = items[0].id;
         } 
-
       }
-
       resolve(items);
-
     });
 
   });

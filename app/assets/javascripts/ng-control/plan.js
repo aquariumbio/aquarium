@@ -83,17 +83,20 @@
     }
 
     $scope.add_successor = function(fv,op,suc) {
+
       var newop = $scope.plan.add_wire_to(fv,op,suc);
       $scope.plan.wires[$scope.plan.wires.length-1].snap = $scope.snap;
       newop.x = op.x;
       newop.y = op.y - 4*$scope.snap;
       newop.width = 160;
       newop.height = 30;
+
       select(newop);
       var fvs = aq.where(newop.field_values, fv => fv.role == 'output');
       if ( fvs.length > 0 ) {
         $scope.set_current_fv(fvs[0]);
       }
+      
     }    
 
     function select(object) {

@@ -8,7 +8,6 @@ class Item < ActiveRecord::Base
   belongs_to :sample
   has_many :touches
   has_one :part
-  has_many :cart_items
   has_many :takes
   has_one :locator, autosave: false
   has_many :post_associations
