@@ -12,7 +12,7 @@
 
     $scope.snap = 16;
     $scope.last_place = 0;
-    $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning"});
+    $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "New Plan"});
     $scope.multiselect = {};
 
     $scope.ready = false;
@@ -58,11 +58,11 @@
         height: 30,
         routing: {}, form: { input: {}, output: {} }
       });
-      $scope.last_place += 2*$scope.snap;
+      $scope.last_place += 4*$scope.snap;
       op.set_type(ot);
       $scope.current_op = op;
       $scope.plan.operations.push(op);
-      $scope.set_current_fv(op.field_values[0],true)
+      $scope.set_current_fv(op.field_values[0],true);
     }
 
     $scope.add_predecessor = function(fv,op,pred) {
@@ -96,7 +96,7 @@
       if ( fvs.length > 0 ) {
         $scope.set_current_fv(fvs[0]);
       }
-      
+
     }    
 
     function select(object) {
@@ -152,6 +152,10 @@
       })
 
     }
+
+    $scope.new = function() {
+      $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "New Plan"});
+    }    
 
     // Main Events ////////////////////////////////////////////////////////////////////////////////
 
@@ -433,10 +437,25 @@
 
     // Inventory ////////////////////////////////////////////////////////////////////////////////////
     $scope.select_item = function(fv, item) {
+
+      if ( fv.child_item_id != item.id ) {
+        item.assign_first(fv);
+      }
+
       fv.child_item_id = item.id;
       fv.child_item = item;
-      fv.row = item.selected_row;
-      fv.column = item.selected_column;
+
+    }
+
+    $scope.select_row_column = function(fv,sid,collection,r,c) {      
+      if ( fv.sid == sid ) {
+        console.log(["selecting", fv, collection, r, c])
+        fv.child_item_id = collection.id;
+        fv.child_item = collection;
+        fv.row = r;
+        fv.column = c;
+        console.log(["changed", fv.rid, fv.child_item_id, fv.row, fv.column])
+      }
     }
 
     $scope.io_focus = function(op,ft,fv) {

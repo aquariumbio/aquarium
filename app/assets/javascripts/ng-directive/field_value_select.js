@@ -23,7 +23,7 @@
 
           // respond when a new sample is chosen from the autocomplete
 
-          var sid = AQ.id_from(ui.item.value);
+          var sid = ui.item.value;
 
           // send new sid to i/o of other operations
           plan.propagate(op,fv,ui.item.value);
@@ -50,8 +50,8 @@
             op.each_field((field_type,field_value) => {
               if ( field_type.routing == fv.routing && !field_type.array ) {
                 var aft = op.form[field_value.role][field_value.name].aft;
-                if ( aft.object_type_id ) {
-                  field_value.clear();
+                if ( aft && aft.object_type_id ) {
+                  field_value.clear_item();
                   field_value.find_items(sid);
                 }               
               }
@@ -67,12 +67,7 @@
 
           // Update autocomplete when aft changes
 
-          var aft = op.form[ft.role][fv.name].aft;
-
-          delete fv.child_item_id;
-          delete fv.child_item;
-          delete fv.row;
-          delete fv.column;                              
+          var aft = op.form[ft.role][fv.name].aft;                          
 
           if ( aft && aft.sample_type ) {
 
@@ -103,7 +98,7 @@
             if ( !ft.array && new_aft && old_aft && ( 
                  new_aft.object_type_id != old_aft.object_type_id || 
                  new_aft.sample_type_id != old_aft.sample_type_id ) ) {
-              fv.clear();
+              fv.clear_item();
             }
 
           }

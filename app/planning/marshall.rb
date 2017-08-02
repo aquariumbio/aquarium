@@ -59,18 +59,18 @@ module Marshall
 
     operation = Operation.find op[:id]
 
-    x[:field_values].each do |fv|
-      self.field_value op, fv, x[:routing]
+    op[:field_values].each do |fv|
+      self.field_value operation, fv, op[:routing]
     end    
 
     # for each field value in operation, delete it if it is not in x
     operation.field_values.each do |fv|
-      unless x[:field_values].collect { |v| f.id }.member? fv.id
+      unless op[:field_values].collect { |v| fv[:id] }.member? fv.id
         fv.destroy
       end
     end
 
-    return op
+    return operation
 
   end
 
@@ -151,10 +151,12 @@ module Marshall
 
   def self.plan_update x
 
+    puts "MARSHALLING PLAN #{x[:id]} with name = '#{x[:name]}'"    
+
     p = Plan.find(x[:id])
-    p.name = x[:name],
-    p.cost_limit = x[:cost_limit],
-    p.status = x[:status],
+    p.name = x[:name] ? x[:name] : "New Plan"
+    p.cost_limit = x[:cost_limit]
+    p.status = x[:status]
     p.user_id = @@user.id
     p.save
 

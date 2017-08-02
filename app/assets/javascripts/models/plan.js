@@ -28,19 +28,45 @@ AQ.Plan.record_methods.reload = function() {
 
 }
 
+function diff(A,B) {
+
+  // This methodis used to recursively check that two plans are equal before and after saving.
+
+  for ( key in A ) {
+
+    if ( A[key] && key != '$$hashKey' && key != 'items' && typeof A[key] != 'function' && ( B[key] === undefined  || B[key] === null ) ) {
+
+      console.log([A, A.rid, " defines " + key + " as ", A[key], " but ", B, B.rid, " does not"])
+
+    }  else if ( typeof A[key] == "object" && B[key] ) {
+
+      diff(A[key], B[key])
+
+    } else if ( typeof A[key] != 'function' &&  key != "rid" && key != '$$hashKey' && key != 'items' && A[key] != B[key] ) {
+
+      console.log([A,B,A.rid, B.rid,key,A[key],B[key]])
+
+    }
+
+  }
+
+}
+
 AQ.Plan.record_methods.save = function() {
 
   var plan = this;
   plan.saving = true;  
 
-  console.log(["saving", plan])
+  var before = plan;
 
   if ( plan.id ) {
 
     return new Promise((resolve,reject) => {
       AQ.http.put('/plans/' + plan.id + '.json',plan.serialize()).then(response => {
-        var p = AQ.Plan.record(response.data).marshall();
-        console.log(["saved", p]);
+        delete plan.saving;
+        var p = AQ.Plan.record(response.data).marshall();   
+        console.log("- Differences before and after saving --------------------------")
+        diff(before,p)             
         resolve(p);
       }).catch(response => { 
         console.log(response);
@@ -52,8 +78,10 @@ AQ.Plan.record_methods.save = function() {
 
     return new Promise((resolve,reject) => {
       AQ.post('/plans.json',plan.serialize()).then(response => {
+        delete plan.saving;
         var p = AQ.Plan.record(response.data).marshall();
-        console.log(["created",p]);
+        console.log("- Differences before and after saving --------------------------")
+        diff(before,p)
         resolve(p);
       }).catch(response => { 
         console.log(response);
@@ -336,6 +364,8 @@ AQ.Plan.record_methods.propagate_down = function(fv,sid) { // propogate sid to i
 
   var plan = this;
 
+  console.log("propagate_down " + sid)
+
   aq.each(plan.wires, wire => {
     if ( wire.to.rid === fv.rid ) {                      // found an incoming wire
       wire.from_op.routing[wire.from.routing] = sid;     // set the sid for the source op's routing symbol
@@ -360,9 +390,11 @@ AQ.Plan.record_methods.propagate_up = function(fv,sid) { // propogate sid to inc
 
   aq.each(plan.wires, wire => {
     if ( wire.from.rid === fv.rid ) {                    // found an outgoing wire
-      wire.to_op.routing[wire.to.routing] = sid;            // set the sid for the destination op's routing symbol
+      console.log("A")
+      wire.to_op.routing[wire.to.routing] = sid;         // set the sid for the destination op's routing symbol
       if ( wire.to.role == 'input' ) {                   // if the outgoing wire is to an output to the other fv (why wouldn't it be?)
-        wire.to_op.instantiate(plan,wire.to,sid)          // call instantiate on the destination op's to field_value with sid
+        console.log("B")        
+        wire.to_op.instantiate(plan,wire.to,sid)         // call instantiate on the destination op's to field_value with sid
       }
       aq.each(wire.to_op.field_values, superfv => {
         if ( wire.from.route_compatible(superfv) ) {

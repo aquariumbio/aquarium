@@ -46,8 +46,14 @@
       <h3 class='md-title'>Plans {{state.loading_plans ? '... loading' : ''}}</h3>
 
       <md-list class='md-compact-list'>
-        <md-list-item ng-repeat="plan in plans">
-          <a href='#' class='no-highlight' ng-click="load(plan)">{{plan.id}}: {{plan.name}}</a>
+        <md-list-item ng-if="!plan.id">___: <input type=text class="plan-name-input" ng-model=plan.name></md-list-item>
+        <md-list-item ng-repeat="p in plans | orderBy:'-'" ">
+          <a href='#' class='no-highlight' ng-click="load(p)">
+            <span ng-if="p.id != plan.id">{{p.id}}: {{p.name}}</span>
+            <span ng-if="p.id == plan.id"><b>{{p.id}}:</b>
+              <input type=text class="plan-name-input" ng-model=plan.name>
+            </span>
+          </a>
         </md-list-item>
       </md-list>
 
@@ -66,10 +72,14 @@
 <% end %>
 
 <% content_for :action1 do %>
-  <md-button class='md-raised md-primary' ng-click="save(plan)" ng-disabled="plan.saving">Save</md-button>
+  <md-button class='md-raised' ng-click="new(plan)">New</md-button>
 <% end %>
 
 <% content_for :action2 do %>
+  <md-button class='md-raised' ng-click="save(plan)" ng-disabled="plan.saving">Save</md-button>
+<% end %>
+
+<% content_for :action3 do %>
   <md-button class='md-raised'>Launch</md-button>
 <% end %>
 

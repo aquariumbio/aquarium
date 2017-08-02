@@ -83,15 +83,15 @@ class Plan < ActiveRecord::Base
     goals_plain.as_json(include: :operation_type, methods: :field_values)
   end
 
-  def status
-    s = "Under Construction"
-    goals_plain.each do |g|
-      if g.status != "planning"
-        s = "Running"
-      end
-    end
-    s
-  end
+  # def status
+  #   s = "Under Construction"
+  #   goals_plain.each do |g|
+  #     if g.status != "planning"
+  #       s = "Running"
+  #     end
+  #   end
+  #   s
+  # end
 
   def select_subtree operation
 
@@ -105,38 +105,38 @@ class Plan < ActiveRecord::Base
 
   end
 
-  def self.list user
+  # def self.list user
 
-    plans = Plan.includes(operations: :operation_type).where(user_id: user.id).as_json(include: { operations: { include: :operation_type } }).as_json
-    op_ids = plans.collect { |p| p["operations"].collect { |o| o["id"] } }.flatten
-    fvs = FieldValue.includes(:child_sample).where(parent_class: "Operation", parent_id: op_ids)
+  #   plans = Plan.includes(operations: :operation_type).where(user_id: user.id).as_json(include: { operations: { include: :operation_type } }).as_json
+  #   op_ids = plans.collect { |p| p["operations"].collect { |o| o["id"] } }.flatten
+  #   fvs = FieldValue.includes(:child_sample).where(parent_class: "Operation", parent_id: op_ids)
 
-    plans.each do |plan|
-      running = false
-      done = true
-      error = false
-      plan["operations"].each do |op|
-        selected = op["status"] != "unplanned"
-        running = true if [ "pending", "waiting", "ready", "scheduled", "running" ].member? op["status"]
-        done = false unless !selected || [ "done", "error" ].member?(op["status"])
-        error = true if op["status"] == "error"
-        op["inputs"] = []
-        op["outputs"] = []        
-        fvs.each do |fv|
-          op["inputs"] << fv if fv["parent_id"] == op["id"] && fv["role"] == "input"
-          op["outputs"] << fv if fv["parent_id"] == op["id"] && fv["role"] == "output"
-        end
-      end
-      plan["goals"] = [ plan["operations"][0] ]
-      plan["status"] = "Under Construction" if !running && !done
-      plan["status"] = "Running" if running
-      plan["status"] = "Completed" if done   
-      plan["status"] = "Error" if error      
-    end
+  #   plans.each do |plan|
+  #     running = false
+  #     done = true
+  #     error = false
+  #     plan["operations"].each do |op|
+  #       selected = op["status"] != "unplanned"
+  #       running = true if [ "pending", "waiting", "ready", "scheduled", "running" ].member? op["status"]
+  #       done = false unless !selected || [ "done", "error" ].member?(op["status"])
+  #       error = true if op["status"] == "error"
+  #       op["inputs"] = []
+  #       op["outputs"] = []        
+  #       fvs.each do |fv|
+  #         op["inputs"] << fv if fv["parent_id"] == op["id"] && fv["role"] == "input"
+  #         op["outputs"] << fv if fv["parent_id"] == op["id"] && fv["role"] == "output"
+  #       end
+  #     end
+  #     plan["goals"] = [ plan["operations"][0] ]
+  #     plan["status"] = "Under Construction" if !running && !done
+  #     plan["status"] = "Running" if running
+  #     plan["status"] = "Completed" if done   
+  #     plan["status"] = "Error" if error      
+  #   end
 
-    plans
+  #   plans
 
-  end
+  # end
 
   def wires
 

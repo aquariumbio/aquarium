@@ -304,6 +304,8 @@ AQ.Operation.record_methods.instantiate = function(plan,field_value,sid) { // in
     var operation = this,
         sample_id = AQ.id_from(sid);
 
+    console.log("instantiate "  + sid)
+
     // Find items associated with samples
     aq.each(operation.field_values, fv => {
       if ( fv.routing == field_value.routing ) {

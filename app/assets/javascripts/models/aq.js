@@ -36,6 +36,19 @@ AQ.sample_names_for = function(sample_type_name) {
 
 }
 
+AQ.to_sample_identifier = function(id) {
+  var sid = "" + id + ": Name not found. AQ.sample_names may not be loaded";
+  for ( var st in AQ.sample_names ) {
+    aq.each(AQ.sample_names[st], s => {
+      var i = parseInt(s.split(": ")[0]);
+      if ( i == id ) {
+        sid = s;
+      }
+    })
+  }
+  return sid;
+}
+
 AQ.id_from = function(sid) { 
   return sid.split(":")[0];
 }

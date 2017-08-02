@@ -30,11 +30,11 @@ module Serialize
       fts = field_types.select { |ft| ft['id'] == fv['field_type_id'] }
       if fts.length == 1 
         fv['field_type'] = fts[0]
-        fts[0][:allowable_field_types].each do |aft|
-          if aft['id'] == fv['allowable_field_type_id']
-            fv['aft'] = aft
-          end
-        end
+        # fts[0][:allowable_field_types].each do |aft|
+        #   if aft['id'] == fv['allowable_field_type_id']
+        #     fv['aft'] = aft
+        #   end
+        # end
       end
     end
 
@@ -47,6 +47,7 @@ module Serialize
 
     {
       id: plan.id,
+      name: plan.name,
       user_id: plan.user_id,
       created_at: plan.created_at,
       updated_at: plan.updated_at,

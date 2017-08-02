@@ -2,6 +2,8 @@ AQ.Plan.record_methods.serialize = function() {
 
   var plan = this;
 
+  // console.log(["serializing", plan])
+
   return {
     id: plan.id,
     operations: aq.collect(plan.operations, op => op.serialize() ),
@@ -24,8 +26,9 @@ AQ.Operation.record_methods.serialize = function() {
     operation_type_id: op.operation_type_id,
     field_values: aq.collect(op.field_values, fv => {
       var efv = fv.serialize();
-      efv.allowable_field_type_id = op.form[fv.role][fv.name] ? 
-                                    op.form[fv.role][fv.name].aft_id : 
+      // console.log([efv.name, op.form[fv.role][fv.name]])
+      efv.allowable_field_type_id = op.form[fv.role][fv.name] && op.form[fv.role][fv.name] .aft ? 
+                                    op.form[fv.role][fv.name].aft.id :
                                     null
       return efv;
     }),
@@ -43,7 +46,7 @@ AQ.FieldValue.record_methods.serialize = function() {
 
   var fv = this,
       props = [ "id", "name", "child_item_id",, "child_sample_id", "value", "role", 
-                "field_type_id", "item", "row", "column",
+                "field_type_id", "item", "row", "column", 
                 "parent_class", "parent_id", "routing", "rid",
                 "selected_item", "selected_row", "selected_column" ],
       efv = {};

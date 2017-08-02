@@ -49,7 +49,10 @@
       <div ng-if="current_fv.is_sample && current_fv.items.length > 0" class="nomargin">
 
         <md-subheader class="md-no-sticky">
-          Inventory
+          Inventory: {{current_fv.child_item_id}} 
+            <span ng-if="current_fv.row >= 0">
+              [{{current_fv.row}},{{current_fv.column}}]
+            </span>
           <span ng-if="current_fv.wired || current_fv.role == 'output'">(Not Used in Plan)</span>
         </md-subheader>
 
@@ -76,16 +79,19 @@
 
         <md-list ng-if="current_fv.items[0].collection"> <!-- COLLECTIONS ///////////////////////////////////// -->
 
-          <md-list-item ng-repeat="item in current_fv.items"
+          <!-- Note that current_fv.items  in this case contains a list of collection containers each with
+               a collection field that holds the actual collection item. Should probably be refactored.  -->
+
+          <md-list-item ng-repeat="cc in current_fv.items"
               class="md-3-line"
-              ng-if="item.collection"
-              ng-init="choose_default_part(current_fv,item)">
+              ng-if="cc.collection"
+              ng-init="choose_default_part(current_fv,cc)">
 
             <span class='collection-checkbox-holder'>
 
               <md-checkbox
-                ng-click="select_item(current_fv,item)"
-                ng-checked="item.selected"
+                ng-click="select_item(current_fv,cc.collection)"
+                ng-checked="current_fv.child_item_id && current_fv.child_item_id == cc.collection.id"
                 ng-disabled="current_fv.wired || current_fv.role == 'output'"
                 aria-label="Item">
               </md-checkbox>
@@ -93,19 +99,19 @@
             </span>
 
             <span style="padding-top: 8px">              
-              <div item="item.collection" container="item.collection.object_type" sample="current_fv.sample"></div>
-              ({{item.selected_row}},{{item.selected_column}})
+              <div item="cc.collection" container="cc.collection.object_type" sample="current_fv.sample"></div>
               <br/>
             </span>
 
             <span flex></span>
 
             <table class='tiny-collection'>
-              <tr ng-repeat="row in item.collection.matrix track by $index">
-                <td ng-repeat="el in row track by $index" 
-                    ng-class="current_fv.sid == el ? (item.selected_row == $parent.$index && 
-                              item.selected_column == $index ? 'selected' : 'filled' ) : 'blank'"
-                    ng-click="select_row_column(current_fv,el,item,$parent.$index,$index)">
+              <tr ng-repeat="row in cc.collection.matrix track by $index">
+                <td ng-repeat="sid in row track by $index" 
+                    ng-class="current_fv.sid == sid ? (current_fv.row == $parent.$index && 
+                              current_fv.child_item_id == cc.collection.id &&
+                              current_fv.column == $index ? 'selected' : 'filled' ) : 'blank'"
+                    ng-click="select_row_column(current_fv,sid,cc.collection,$parent.$index,$index)">
                 </td>
               </tr>
             </table>
@@ -116,7 +122,7 @@
 
       </div>
 
-    <md-subheader ng-if="current_fv.is_sample && current_fv.items.length == 0 && !current_fv.wired" class="md-no-sticky">
+    <md-subheader ng-if="current_fv.is_sample && current_fv.items.length == 0" class="md-no-sticky">
       No Inventory
     </md-subheader>
 

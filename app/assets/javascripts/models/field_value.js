@@ -1,8 +1,3 @@
-AQ.FieldValue.record_methods.clear = function() {
-  this.items = [];
-  this.item = null;
-  return this;
-}
 
 AQ.FieldValue.getter(AQ.Item,"item","child_item_id");
 
@@ -90,12 +85,22 @@ AQ.FieldValue.record_methods.route_compatible = function(other_fv) {
 }
 
 AQ.FieldValue.record_methods.clear_item = function() {
+
   var fv = this;
+
+  console.log("Clearing fv " + fv.name)
+
   delete fv.child_item;
   delete fv.child_item_id;
   delete fv.row;
   delete fv.column;
   return fv;
+
+}
+
+AQ.FieldValue.record_methods.clear = function() {
+  console.log("Called FieldValue:clear(), which doesn't do anything anymore")
+  return this;
 }
 
 AQ.FieldValue.record_methods.find_items = function(sid) {
@@ -103,24 +108,36 @@ AQ.FieldValue.record_methods.find_items = function(sid) {
   var fv = this,
       sample_id;
 
-  sample_id = AQ.id_from(sid);
-  fv.sid = sid;
+  if ( fv.field_type.ftype == 'sample' ) {
 
-  delete fv.items;  
+    sample_id = AQ.id_from(sid);
+    // fv.sid = sid;
 
-  return new Promise(function(resolve,reject) {    
+    delete fv.items;  
 
-    AQ.items_for(sample_id,fv.aft.object_type_id).then( items => { 
-      fv.items = items;
-      if ( fv.items.length > 0 ) {
-        if ( ! fv.child_item_id ) {
-          fv.child_item_id = items[0].id;
-        } 
-      }
-      resolve(items);
+    return new Promise(function(resolve,reject) {    
+
+      AQ.items_for(sample_id,fv.aft.object_type_id).then( items => { 
+        fv.items = items;
+        if ( fv.items.length > 0 ) {
+          if ( ! fv.child_item_id && fv.role == 'input' && fv.num_wires == 0 ) {
+            if ( !items[0].collection ) {
+              fv.child_item_id = items[0].id;
+            } else {
+              fv.child_item_id = items[0].collection.id;
+              items[0].collection.assign_first(fv);
+            }
+          } 
+        }
+        AQ.update();
+        resolve(items);
+      });
+
     });
 
-  });
+    } else {
+      fv.items = [];
+    }
 
 }
 
@@ -128,14 +145,22 @@ AQ.FieldValue.record_getters.items = function() {
 
   var fv = this;
 
-  delete fv.items;
+  // console.log(["items getter: ", fv])
 
-  fv.find_items(""+fv.child_sample_id).then(items => {
-    fv.items = items;
-    AQ.update();
-  })
+  if ( fv.child_sample_id ) {
 
-  return fv.items;
+    delete fv.items;
+    // console.log("    finding items");
+    fv.find_items(""+fv.child_sample_id);
+
+  } else {
+
+    // console.log("    no items to find because no sample specificed");
+    delete fv.items;
+    fv.items = [];
+
+  }
+
 
 }
 
@@ -227,11 +252,11 @@ AQ.FieldValue.record_methods.backchain = function(plan,operation) {
 
 }
 
-AQ.FieldValue.record_methods.sid = function() {
-  var fv = this;
-  if ( fv.child_sample ) {
-    return "" + fv.child_sample.id + ": " + fv.child_sample.name;
-  } else {
-    return "";
-  }
-} 
+// AQ.FieldValue.record_methods.sid = function() {
+//   var fv = this;
+//   if ( fv.child_sample ) {
+//     return "" + fv.child_sample.id + ": " + fv.child_sample.name;
+//   } else {
+//     return "";
+//   }
+// } 
