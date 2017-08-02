@@ -78,6 +78,12 @@ AQ.Operation.record_methods.marshall = function() {
 
     if ( fv.child_sample_id ) {
       fv.sid = AQ.to_sample_identifier(fv.child_sample_id);
+      if ( fv.field_type.array ) {
+        console.log("setting sample_identifier to " + fv.sid)
+        fv.sample_identifier = fv.sid;
+      } else {
+        console.log("fv " + fv.rid + " does not seem to be an array")
+      }
       op.routing[fv.field_type.routing] = fv.sid;
     } else if ( fv.field_type.routing ) {
       op.routing[fv.field_type.routing] = "";

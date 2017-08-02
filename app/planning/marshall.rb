@@ -93,8 +93,8 @@ module Marshall
 
   def self.field_value op, fv, routing
 
-    if fv[:sample_identifier]
-      sid = self.sid(fv[:sample_identifier])
+    if fv[:child_sample_id]
+      sid = fv[:child_sample_id]
     else
       sid = self.sid(routing[fv[:routing]])
     end
@@ -122,7 +122,7 @@ module Marshall
         role: fv[:role], 
         field_type_id: ft.id,
         child_sample_id: sid,
-        child_item_id: item ? item[:id] : nil,
+        child_item_id: fv[:child_item_id],
         allowable_field_type_id: fv[:allowable_field_type_id],
         row: item ? row : nil,
         column: item ? column : nil,

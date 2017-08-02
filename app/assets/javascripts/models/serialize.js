@@ -53,6 +53,10 @@ AQ.FieldValue.record_methods.serialize = function() {
 
   aq.each(props, p => efv[p] = fv[p]); 
 
+  if ( fv.field_type.array ) {
+    efv.child_sample_id = AQ.id_from(fv.sample_identifier);
+  }
+
   return efv;
 
 }

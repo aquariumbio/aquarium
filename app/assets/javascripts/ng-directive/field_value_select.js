@@ -39,7 +39,7 @@
 
             var aft = op.form[fv.role][fv.name].aft;
             if ( aft.object_type_id ) {
-              fv.clear();
+              fv.clear_item();
               fv.find_items(sid);
             }               
 
@@ -95,7 +95,7 @@
 
             });
 
-            if ( !ft.array && new_aft && old_aft && ( 
+            if ( new_aft && old_aft && ( 
                  new_aft.object_type_id != old_aft.object_type_id || 
                  new_aft.sample_type_id != old_aft.sample_type_id ) ) {
               fv.clear_item();

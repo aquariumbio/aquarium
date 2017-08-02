@@ -134,6 +134,7 @@
       plan.save().then(saved_plan => {
         $scope.plan = saved_plan;
         $scope.state.loading_plans = true;
+        select(null);
         $scope.$apply();
         AQ.Plan.where({status: "planning", user_id: $scope.current_user.id}).then(plans => { 
           $scope.state.loading_plans = false;
@@ -155,6 +156,7 @@
 
     $scope.new = function() {
       $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "New Plan"});
+      select(null)
     }    
 
     // Main Events ////////////////////////////////////////////////////////////////////////////////
@@ -438,7 +440,7 @@
     // Inventory ////////////////////////////////////////////////////////////////////////////////////
     $scope.select_item = function(fv, item) {
 
-      if ( fv.child_item_id != item.id ) {
+      if ( fv.child_item_id != item.id && item.assign_first ) {
         item.assign_first(fv);
       }
 
