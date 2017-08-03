@@ -50,7 +50,22 @@ AQ.to_sample_identifier = function(id) {
 }
 
 AQ.id_from = function(sid) { 
-  return sid.split(":")[0];
+  var parts;
+  if ( typeof sid != "string" ) {
+    return -1;
+  } else {
+    parts = sid.split(": ");
+    if ( parts.length > 0 ) {
+      var id = parseInt(parts[0]);
+      if ( id ) {
+        return id
+      } else {
+        return -1;
+      }
+    } else {
+      return -1;
+    }
+  }
 }
 
 AQ.sid_from = function(id) { 

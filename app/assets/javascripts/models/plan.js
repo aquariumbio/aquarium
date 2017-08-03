@@ -28,30 +28,6 @@ AQ.Plan.record_methods.reload = function() {
 
 }
 
-function diff(A,B) {
-
-  // This methodis used to recursively check that two plans are equal before and after saving.
-
-  for ( key in A ) {
-
-    if ( A[key] && key != '$$hashKey' && key != 'items' && typeof A[key] != 'function' && ( B[key] === undefined  || B[key] === null ) ) {
-
-      console.log([A, A.rid, " defines " + key + " as ", A[key], " but ", B, B.rid, " does not"])
-
-    }  else if ( typeof A[key] == "object" && B[key] ) {
-
-      diff(A[key], B[key])
-
-    } else if ( typeof A[key] != 'function' &&  key != "rid" && key != '$$hashKey' && key != 'items' && A[key] != B[key] ) {
-
-      console.log([A,B,A.rid, B.rid,key,A[key],B[key]])
-
-    }
-
-  }
-
-}
-
 AQ.Plan.record_methods.save = function() {
 
   var plan = this;
@@ -65,8 +41,7 @@ AQ.Plan.record_methods.save = function() {
       AQ.http.put('/plans/' + plan.id + '.json',plan.serialize()).then(response => {
         delete plan.saving;
         var p = AQ.Plan.record(response.data).marshall();   
-        console.log("- Differences before and after saving --------------------------")
-        diff(before,p)             
+        AQ.Test.plan_diff(before,p)             
         resolve(p);
       }).catch(response => { 
         console.log(response);
@@ -80,8 +55,7 @@ AQ.Plan.record_methods.save = function() {
       AQ.post('/plans.json',plan.serialize()).then(response => {
         delete plan.saving;
         var p = AQ.Plan.record(response.data).marshall();
-        console.log("- Differences before and after saving --------------------------")
-        diff(before,p)
+        AQ.Test.plan_diff(before,p)
         resolve(p);
       }).catch(response => { 
         console.log(response);
@@ -364,11 +338,9 @@ AQ.Plan.record_methods.propagate_down = function(fv,sid) { // propogate sid to i
 
   var plan = this;
 
-  console.log("propagate_down " + sid)
-
   aq.each(plan.wires, wire => {
     if ( wire.to.rid === fv.rid ) {                      // found an incoming wire
-      wire.from_op.routing[wire.from.routing] = sid;     // set the sid for the source op's routing symbol
+      wire.from_op.assign_sample(wire.from,sid);         // assign sample
       if ( wire.from.role == 'output' ) {                // if the incoming wire is from an output to this fv (why wouldn't it be?)
         wire.from_op.instantiate(plan,wire.from,sid)     // call instantiate on the source op's from field_value with sid
       }
@@ -390,10 +362,8 @@ AQ.Plan.record_methods.propagate_up = function(fv,sid) { // propogate sid to inc
 
   aq.each(plan.wires, wire => {
     if ( wire.from.rid === fv.rid ) {                    // found an outgoing wire
-      console.log("A")
-      wire.to_op.routing[wire.to.routing] = sid;         // set the sid for the destination op's routing symbol
+      wire.to_op.assign_sample(wire.to,sid)              // assign sample
       if ( wire.to.role == 'input' ) {                   // if the outgoing wire is to an output to the other fv (why wouldn't it be?)
-        console.log("B")        
         wire.to_op.instantiate(plan,wire.to,sid)         // call instantiate on the destination op's to field_value with sid
       }
       aq.each(wire.to_op.field_values, superfv => {
@@ -403,30 +373,6 @@ AQ.Plan.record_methods.propagate_up = function(fv,sid) { // propogate sid to inc
       })
     }
   });
-
-  return plan;
-
-}
-
-AQ.Plan.record_methods.propagate_up_old = function(op,fv,sid) {
-
-  var plan = this;
-
-  aq.each(op.field_values, other_fv => {                 
-    if ( fv.route_compatible(other_fv) ) {               
-      aq.each(plan.wires, wire => {                   
-        if ( wire.from == other_fv ) {                    
-          wire.to_op.routing[wire.to.routing] = sid;     
-          wire.to.sample_identifier = sid;
-          aq.each(wire.to_op.field_values, to_fv => {
-            if ( to_fv.route_compatible(wire.to) ) {
-              plan.propagate_up(wire.to_op,to_fv,sid)
-            }
-          })
-        }
-      })
-    }
-  })
 
   return plan;
 

@@ -1,5 +1,13 @@
 module Serialize
 
+  def self.serialize_fv fv
+
+    rfv = {}
+    FieldValue.attribute_names.each { |name| rfv[name] = fv[name] }
+    rfv
+
+  end
+
   def self.serialize plan
 
     ops = plan.operations
@@ -18,9 +26,8 @@ module Serialize
     end
 
     field_values = FieldValue
-                   .includes(:child_sample,:child_item)
                    .where(parent_class: "Operation", parent_id: op_ids)
-                   .collect { |fv| fv.export }
+                   .collect { |fv| self.serialize_fv fv }
 
     fids = field_values.collect { |fv| fv["id"] }
 

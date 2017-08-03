@@ -25,6 +25,9 @@ module Marshall
   end
 
   def self.operations p, ops
+
+    ids = []
+
     ops.each do |op|
       begin
         if op[:id]
@@ -34,11 +37,14 @@ module Marshall
           operation.associate_plan p
           operation.save
         end
+        ids << operation.id
         @@id_map[operation.id] = op[:rid]
        rescue Exception => e
         raise "Marshalling error: #{e.to_s}: #{e.backtrace[0].to_s}"
       end
     end
+
+    ids
 
   end
 
@@ -59,6 +65,10 @@ module Marshall
 
     operation = Operation.find op[:id]
 
+    operation.x = op[:x]
+    operation.y = op[:y]
+    operation.save
+
     op[:field_values].each do |fv|
       self.field_value operation, fv, op[:routing]
     end    
@@ -76,27 +86,34 @@ module Marshall
 
   def self.wires p, wires
 
+    ids = []
+
     wires.each do |x_wire|
-      unless x_wire[:id]
+      if !x_wire[:id]
+        puts "    MAKING WIRE #{x_wire}"
         wire = Wire.new({
           from_id: @@id_map[x_wire[:from][:rid]], 
           to_id: @@id_map[x_wire[:to][:rid]],
           active: true
         })
         wire.save
-        # wire.to.child_item_id = nil # remove inputs from non-leaves: TODO: Put this in the planner
-        # wire.to.save
+        ids << wire.id
+      else
+        ids << x_wire[:id]
       end
     end
+
+    ids
 
   end
 
   def self.field_value op, fv, routing
 
-    if fv[:child_sample_id]
-      sid = fv[:child_sample_id]
-    else
+
+    if routing[fv[:routing]]
       sid = self.sid(routing[fv[:routing]])
+    elsif fv[:child_sample_id]
+      sid = fv[:child_sample_id]
     end
 
     ft = op.operation_type.type(fv[:name],fv[:role])
@@ -118,7 +135,7 @@ module Marshall
       item = nil
     end
 
-    atts =  { name: fv[:name], 
+    atts =  { name: fv[:name],
         role: fv[:role], 
         field_type_id: ft.id,
         child_sample_id: sid,
@@ -151,8 +168,6 @@ module Marshall
 
   def self.plan_update x
 
-    puts "MARSHALLING PLAN #{x[:id]} with name = '#{x[:name]}'"    
-
     p = Plan.find(x[:id])
     p.name = x[:name] ? x[:name] : "New Plan"
     p.cost_limit = x[:cost_limit]
@@ -161,23 +176,26 @@ module Marshall
     p.save
 
     # for each x operation, if the operation exists, update it, else create it
-    self.operations p, x[:operations]
+    op_ids = self.operations p, x[:operations]
    
     # for each plan operation, if it is not in x, then delete it
     p.operations.each do |pop|
-      unless x[:operations].collect { |o| o[:id] }.member?(pop.id)
+      unless op_ids.member?(pop.id)
         pop.destroy
       end
     end
 
+
     # for each x wire, if the wire doesn't exist, create it
-    if x[:wires] && p.errors.any?
-      self.wires p, x[:wires]
-    end 
+    if x[:wires] 
+      wire_ids = self.wires p, x[:wires]
+    else 
+      wire_ids = []
+    end
 
     # for each plan wire, if the wire is not in x, then delete it
     p.wires.each do |pwire|
-      unless !x[:wires] || x[:wires].collect { |w| w[:id] }.member?(pwire.id)
+      unless !x[:wires] || wire_ids.member?(pwire.id)
         pwire.destroy
       end
     end

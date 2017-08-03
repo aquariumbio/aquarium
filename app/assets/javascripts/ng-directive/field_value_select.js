@@ -25,6 +25,8 @@
 
           var sid = ui.item.value;
 
+          op.assign_sample(fv, sid);
+
           // send new sid to i/o of other operations
           plan.propagate(op,fv,ui.item.value);
 

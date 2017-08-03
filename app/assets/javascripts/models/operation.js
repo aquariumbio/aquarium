@@ -59,6 +59,8 @@ AQ.Operation.record_getters.num_outputs = function() {
 
 AQ.Operation.record_methods.set_type_with_field_values = function(operation_type,fvs) {
 
+  console.log(["set_type_with_field_values", operation_type, fvs])
+
   var op = this;
   op.operation_type_id = operation_type.id;
   op.operation_type = operation_type;
@@ -78,7 +80,7 @@ AQ.Operation.record_methods.set_type_with_field_values = function(operation_type
           routing: ft.routing,
           field_type: ft,
           id: old_fv.id,
-          child_sample: old_fv.child_sample
+          // child_sample: old_fv.child_sample
         });     
 
         if ( ft.allowable_field_types.length > 0 ) {
@@ -132,6 +134,24 @@ AQ.Operation.record_methods.clear = function() {
   delete this.operation_type;
   delete this.allowable_field_types;
   return this;
+}
+
+AQ.Operation.record_methods.assign_sample = function(fv,sid) {
+
+  var op = this;
+
+  op.routing[fv.routing] = sid;            // set the sid for the source op's routing symbol
+  fv.child_sample_id = AQ.id_from(sid);
+  fv.sid = sid;
+
+  if ( fv.field_type && fv.field_type.array ) {
+    fv.sample_identifier = sid;
+  } 
+
+  op.recompute_getter("types_and_values")
+
+  return op;
+
 }
 
 AQ.Operation.record_methods.array_remove = function(fv) {
@@ -281,6 +301,7 @@ AQ.Operation.record_methods.instantiate_aux = function(plan,pairs,resolve) {
     AQ.Sample.find(sfv.child_sample_id).then(linked_sample => {
 
       operation.routing[ofv.routing] = linked_sample.identifier;
+      operation.assign_sample(ofv,linked_sample.identifier );
       plan.propagate_down(ofv,linked_sample.identifier);
 
       ofv.clear_item();
@@ -304,7 +325,11 @@ AQ.Operation.record_methods.instantiate = function(plan,field_value,sid) { // in
     var operation = this,
         sample_id = AQ.id_from(sid);
 
-    console.log("instantiate "  + sid)
+    aq.each(operation.field_values, fv => {
+      if ( !fv.field_type.array && fv.routing == field_value.routing ) {
+        operation.assign_sample(fv, sid);
+      }
+    })
 
     // Find items associated with samples
     aq.each(operation.field_values, fv => {
