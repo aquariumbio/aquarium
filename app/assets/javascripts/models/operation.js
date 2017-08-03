@@ -122,9 +122,15 @@ AQ.Operation.record_methods.set_aft = function(ft,aft) {
       op.routing[ft.routing] = '';
       fv.aft = aft;
       fv.aft_id = aft.id;
-      fv.items = [];
+      fv.allowable_field_type_id = aft.id;
       fv.field_type = ft;
       fv.recompute_getter('predecessors');
+      fv.recompute_getter('successors');
+      delete fv.items;
+      delete fv.sid;
+      delete fv.sample_identifier;
+      delete fv.child_sample_id;
+      delete fv.child_item_id;
     }
   });
 }
