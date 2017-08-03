@@ -80,7 +80,7 @@
 <% end %>
 
 <% content_for :action3 do %>
-  <md-button class='md-raised'>Launch</md-button>
+  <md-button class='md-raised' ng-disabled="!plan.valid()">Launch</md-button>
 <% end %>
 
 <% content_for :main do %>

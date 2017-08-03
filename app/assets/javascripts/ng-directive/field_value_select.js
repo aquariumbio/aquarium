@@ -101,6 +101,7 @@
                  new_aft.object_type_id != old_aft.object_type_id || 
                  new_aft.sample_type_id != old_aft.sample_type_id ) ) {
               fv.clear_item();
+              fv.items = [];
             }
 
           }

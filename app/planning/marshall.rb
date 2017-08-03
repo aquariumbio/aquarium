@@ -90,7 +90,6 @@ module Marshall
 
     wires.each do |x_wire|
       if !x_wire[:id]
-        puts "    MAKING WIRE #{x_wire}"
         wire = Wire.new({
           from_id: @@id_map[x_wire[:from][:rid]], 
           to_id: @@id_map[x_wire[:to][:rid]],
@@ -178,13 +177,16 @@ module Marshall
     # for each x operation, if the operation exists, update it, else create it
     op_ids = self.operations p, x[:operations]
    
+    puts "op_ids = #{op_ids} while plan ops = #{p.operations.collect { |o| o.id }}"
+
     # for each plan operation, if it is not in x, then delete it
     p.operations.each do |pop|
       unless op_ids.member?(pop.id)
+        puts "Destroying op #{pop.id}"
         pop.destroy
+        puts pop.errors.full_messages.join(", ")
       end
     end
-
 
     # for each x wire, if the wire doesn't exist, create it
     if x[:wires] 
@@ -199,6 +201,8 @@ module Marshall
         pwire.destroy
       end
     end
+
+    p.reload
 
     p
 

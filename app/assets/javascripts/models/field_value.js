@@ -252,11 +252,20 @@ AQ.FieldValue.record_methods.backchain = function(plan,operation) {
 
 }
 
-// AQ.FieldValue.record_methods.sid = function() {
-//   var fv = this;
-//   if ( fv.child_sample ) {
-//     return "" + fv.child_sample.id + ": " + fv.child_sample.name;
-//   } else {
-//     return "";
-//   }
-// } 
+AQ.FieldValue.record_methods.valid = function() {
+  var fv = this;
+  if ( fv.field_type.ftype != 'sample' ) {
+    return !! fv.value;
+  } else if ( fv.aft && fv.aft.sample_type_id ) {
+    return fv.child_sample_id && ( fv.num_wires > 0 || fv.role == 'output' || fv.child_item_id );
+  } else {
+    return fv.num_wires > 0 || fv.role == 'output' || fv.child_item_id;
+  }
+} 
+
+AQ.FieldValue.record_methods.empty = function() {
+  var fv = this;
+  return fv.child_sample_id;
+} 
+
+

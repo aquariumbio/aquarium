@@ -34,6 +34,7 @@ AQ.Plan.record_methods.save = function() {
   plan.saving = true;  
 
   var before = plan;
+  console.log(plan);
 
   if ( plan.id ) {
 
@@ -41,6 +42,7 @@ AQ.Plan.record_methods.save = function() {
       AQ.http.put('/plans/' + plan.id + '.json',plan.serialize()).then(response => {
         delete plan.saving;
         var p = AQ.Plan.record(response.data).marshall();   
+        console.log(p);
         AQ.Test.plan_diff(before,p)             
         resolve(p);
       }).catch(response => { 
@@ -583,5 +585,19 @@ AQ.Plan.record_getters.deletable = function() {
 
   return plan.deletable;
 
+}
+
+AQ.Plan.record_methods.valid = function() {
+
+  var plan = this,
+      v = plan.operations.length > 0;
+
+  aq.each(plan.operations, op => {
+    aq.each(op.field_values, fv => {
+      v = v && fv.valid();
+    })
+  })
+
+  return v;
 }
 

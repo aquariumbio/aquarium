@@ -52,7 +52,7 @@ AQ.to_sample_identifier = function(id) {
 AQ.id_from = function(sid) { 
   var parts;
   if ( typeof sid != "string" ) {
-    return -1;
+    return undefined;
   } else {
     parts = sid.split(": ");
     if ( parts.length > 0 ) {
@@ -60,10 +60,10 @@ AQ.id_from = function(sid) {
       if ( id ) {
         return id
       } else {
-        return -1;
+        return undefined;
       }
     } else {
-      return -1;
+      return undefined;
     }
   }
 }

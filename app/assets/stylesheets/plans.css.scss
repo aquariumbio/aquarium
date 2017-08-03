@@ -134,15 +134,12 @@
     fill: #aaa;
   }
 
-  .field-value-with-sample {
+  .field-value-valid {
     fill: lightgreen;
   }
 
-  .field-value-with-items {
-    fill: green;
-  }
 
-  .field-value-with-no-items {
+  .field-value-invalid {
     fill: orange;
   }  
 
@@ -154,7 +151,7 @@
   }
 
   .parameter-has-value {
-    fill: green;
+    fill: lightgreen;
   }  
 
   .parameter-has-no-value {

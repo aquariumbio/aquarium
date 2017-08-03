@@ -375,37 +375,11 @@
 
       var c = "field-value";
 
-      // if ( $scope.current_fv && 
-      //      $scope.current_fv.role == 'input' && 
-      //      fv.role == 'output' && 
-      //      fv.field_type.can_produce($scope.current_fv) ) {
-
-      //   c += " field-value-compatible";
-
-      // } else if ( $scope.current_fv && 
-      //             $scope.current_fv.role == 'output' && 
-      //             fv.role == 'input' && 
-      //             $scope.current_fv.field_type.can_produce(fv) ) {
-
-      //   c += " field-value-compatible";
-
-      // } else {
-
-      //   if ( fv.routing && op.routing[fv.routing] != "" ) { // Has a sample associated with it
-      //     c += " field-value-with-sample";
-      //   } else if ( fv.field_type.array && fv.sample_identifier && fv.sample_identifier != "" ) {
-      //     c += " field-value-with-sample";
-      //   }
-
-      //   if ( !fv.wired && fv.role == 'input' && fv.items != "" ) { // Has items associated with it
-      //     c += " field-value-with-items";
-      //   }      
-
-      //   if ( !fv.wired && fv.role == 'input' && fv.items == "" ) { // Has no items associated with it, but should
-      //     c += " field-value-with-no-items";
-      //   }      
-
-      // }
+      if ( fv.valid() ) {
+        c += " field-value-valid";
+      } else {
+        c += " field-value-invalid";
+      }
 
       return c;
 
