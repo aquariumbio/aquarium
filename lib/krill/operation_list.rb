@@ -60,13 +60,14 @@ module Krill
     # Error out any operations for which items could not be retrieved.
     # Show item retrieval instructions (unless verbose is false)
     #
-    def retrieve opts={interactive:true, method: "boxes"}, &block
+    def retrieve opts={}, &block
+      opts = {interactive:true, method: "boxes", only: []}.merge opts
 
       items = []
 
-      each_with_index do |op,i|         
+      each_with_index do |op,i|
         op_items = []
-        op.inputs.each do |input|
+        op.inputs.select { |fv| opts[:only].empty? || opts[:only].include?(fv.name) }.each do |input|
           puts input.inspect
           input.retrieve unless input.child_item || input.value
           if input.child_item_id
