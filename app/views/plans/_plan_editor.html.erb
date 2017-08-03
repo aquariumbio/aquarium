@@ -4,7 +4,7 @@
      ng-mousemove="mouseMove($event)"
      ng-mouseup="mouseUp($event)">
 
-  <g ng-repeat="wire in plan.wires">
+  <g ng-repeat="wire in plan.wires track by $index">
     <%= render partial: 'wire' %>
   </g>    
 

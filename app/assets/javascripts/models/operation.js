@@ -43,6 +43,14 @@ AQ.Operation.record_methods.set_type = function(operation_type) {
 
 }
 
+AQ.Operation.record_methods.inputs = function() {
+  return aq.where(this.field_values, fv => fv.role == 'input');
+}
+
+AQ.Operation.record_methods.outputs = function() {
+  return aq.where(this.field_values, fv => fv.role == 'output');
+}
+
 AQ.Operation.record_getters.num_inputs = function() {
   var op = this;
   delete op.num_inputs;

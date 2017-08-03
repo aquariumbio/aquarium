@@ -321,27 +321,45 @@
 
         if ( $scope.current_fv.role == 'output' && $scope.current_fv.field_type.can_produce(fv) ) {
 
-          wire = AQ.Wire.make({
-            from_op: $scope.current_op,
-            from: $scope.current_fv,
-            to_op: op,
-            to: fv,
-            snap: $scope.snap
-          });
+          if ( $scope.plan.reachable(fv, $scope.current_fv) ) {
+
+            alert("Cyclic plans are not currently supported. Cannot add wire.")
+
+          } else {
+
+            wire = AQ.Wire.make({
+              from_op: $scope.current_op,
+              from: $scope.current_fv,
+              to_op: op,
+              to: fv,
+              snap: $scope.snap
+            });
+
+            $scope.plan.wires.push(wire);            
+
+          }
 
         } else if ( fv.field_type.can_produce($scope.current_fv) ) {
 
-          wire = AQ.Wire.make({
-            to_op: $scope.current_op,
-            to: $scope.current_fv,
-            from_op: op,
-            from: fv,
-            snap: $scope.snap
-          });
+          if ($scope.plan.reachable($scope.current_fv,fv)) {
+
+            alert("Cyclic plans are not currently supported. Cannot add wire.")            
+
+          } else {
+
+            wire = AQ.Wire.make({
+              to_op: $scope.current_op,
+              to: $scope.current_fv,
+              from_op: op,
+              from: fv,
+              snap: $scope.snap
+            });
+
+            $scope.plan.wires.push(wire);            
+
+          }
 
         }
-
-        $scope.plan.wires.push(wire);
 
       } else {
 
@@ -375,7 +393,21 @@
 
       var c = "field-value";
 
-      if ( fv.valid() ) {
+      if ( $scope.current_fv && 
+           $scope.current_fv.role == 'input' && 
+           fv.role == 'output' && 
+           fv.field_type.can_produce($scope.current_fv) ) {
+
+        c += " field-value-compatible";
+
+      } else if ( $scope.current_fv && 
+                  $scope.current_fv.role == 'output' && 
+                  fv.role == 'input' && 
+                  $scope.current_fv.field_type.can_produce(fv) ) {
+
+        c += " field-value-compatible";
+
+      } else if ( fv.valid() ) {
         c += " field-value-valid";
       } else {
         c += " field-value-invalid";
