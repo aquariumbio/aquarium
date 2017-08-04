@@ -5,7 +5,7 @@ AQ.Plan.record_methods.reachable = function(a,b) {
   // Unmark all fvs
   plan.unmark();
 
-  return plan.reachable_aux(plan.parent_of(a), a,b);
+  return plan.reachable_aux(plan.parent_of(a),a,b);
 
 }
 
@@ -55,6 +55,13 @@ AQ.Plan.record_methods.wires_out = function(op) {
 
 }
 
+AQ.Plan.record_methods.wires_from= function(fv) {
+
+  var plan = this;
+  return aq.where(plan.wires, w => w.from == fv);
+
+}
+
 AQ.Operation.record_methods.is_output = function(fv) {
   return this.outputs().includes(fv);
 }
@@ -62,6 +69,8 @@ AQ.Operation.record_methods.is_output = function(fv) {
 AQ.Plan.record_methods.reachable_aux = function(op,a,b) { // excpects that a is an input of op and b is an output of some possibly different op
 
   var plan = this;
+
+  console.log (a.rid + " --> " + b.rid)
 
   if ( a._marked ) {
 
@@ -83,12 +92,13 @@ AQ.Plan.record_methods.reachable_aux = function(op,a,b) { // excpects that a is 
 
       var result;
 
+      a._marked = true;
+
       // for each output o of the op containing a
-      aq.each(op.outputs, ofv => {
+      aq.each(op.outputs(), ofv => {
         // for each wire ofv => x
         aq.each(plan.wires_from(ofv), wire => {
-          wire.to._marked = true;
-          result = reachable_aux(wire.to,b);
+          result = plan.reachable_aux(wire.to_op,wire.to,b);
         });
       });
 
