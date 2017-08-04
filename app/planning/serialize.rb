@@ -48,7 +48,7 @@ module Serialize
     sops = ops.as_json
 
     sops.each do |op|
-      op["operation_type"] = operation_types.select { |ot| ot["id"] == op["operation_type_id"] }[0]
+#      op["operation_type"] = operation_types.select { |ot| ot["id"] == op["operation_type_id"] }[0]
       op["field_values"]  = field_values.select { |fv| fv["parent_id"] == op["id"] }
     end
 

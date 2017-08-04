@@ -64,6 +64,27 @@ $buttonHighlight: rgb(73, 91, 281);
   }
 }
 
+.md-very-compact-list {
+
+  padding: 2px;
+
+  .md-no-proxy {
+    height: 20px;
+    min-height: 20px;
+  }
+  .md-proxy-focus {
+    height: 20px;
+    min-height: 20px;
+  }  
+  .md-checkbox, .md-button, ._md-button-wrap, .md-list-item-inner, .md-secondary-container {
+    height: 20px !important;
+    min-height: 20px !important;    
+  } 
+  md-checkbox {
+    margin: 4px !important;
+  }
+}
+
 /* NG_CLICK *****************************************************************/
 
 .no-highlight:focus {

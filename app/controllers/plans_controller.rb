@@ -159,7 +159,8 @@ class PlansController < ApplicationController
   # end
 
   def destroy
-    Plan.find(params[:id]).remove
+    plan = Plan.find(params[:id])
+    plan.remove if plan.status == "planning"
     render json: {}
   end
 

@@ -6,7 +6,7 @@ AQ.Test.plan_diff_aux = function (A,B,pkey) {
   // This method is used to recursively check that two plans are equal before and after saving.
 
   var ignore = [
-    '$$hashKey', 'items', 'rid', 'multiselect', '_item', 'ymid_frac', 'xmid_frac', 'updated_at', 'created_at', "_marked"
+    '$$hashKey', 'items', 'rid', 'multiselect', '_item', 'ymid_frac', 'xmid_frac', 'updated_at', 'created_at', "_marked", "test"
   ]
 
   for ( key in A ) {

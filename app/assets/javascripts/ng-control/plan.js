@@ -12,7 +12,7 @@
 
     $scope.snap = 16;
     $scope.last_place = 0;
-    $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "New Plan"});
+    $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
     $scope.multiselect = {};
 
     $scope.ready = false;
@@ -144,6 +144,19 @@
 
     }
 
+    $scope.delete_plan = function(p) {
+
+      $scope.new();
+      $scope.state.deleting_plan = p;
+      p.destroy().then(() => {
+        AQ.Plan.where({status: "planning", user_id: $scope.current_user.id}).then(plans => { 
+          $scope.state.deleting_plan = null;
+          $scope.plans = plans;
+        });        
+      })
+
+    }
+
     $scope.load = function(plan) {
 
       AQ.Plan.load(plan.id).then(p => {
@@ -155,7 +168,7 @@
     }
 
     $scope.new = function() {
-      $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "New Plan"});
+      $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
       select(null)
     }    
 

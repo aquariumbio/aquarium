@@ -34,7 +34,6 @@ AQ.Plan.record_methods.save = function() {
   plan.saving = true;  
 
   var before = plan;
-  console.log(plan);
 
   if ( plan.id ) {
 
@@ -42,7 +41,6 @@ AQ.Plan.record_methods.save = function() {
       AQ.http.put('/plans/' + plan.id + '.json',plan.serialize()).then(response => {
         delete plan.saving;
         var p = AQ.Plan.record(response.data).marshall();   
-        console.log(p);
         AQ.Test.plan_diff(before,p)             
         resolve(p);
       }).catch(response => { 
@@ -73,7 +71,6 @@ AQ.Plan.load = function(id) {
   return new Promise((resolve,reject) => {
     AQ.get("/plans/" + id + ".json").then(response => {   
       var up = AQ.Plan.record(response.data).marshall();
-      console.log(up)
       resolve(up);
     })
   });
@@ -404,27 +401,6 @@ AQ.Plan.record_methods.propagate = function(op,fv,sid) { // propagate the choice
 
 }
 
-// AQ.Plan.record_methods.operations_from_wires = function() {
-
-//   var plan = this, 
-//       ops = [];
-
-//   aq.each(plan.operations,(op) => {
-//     ops.push(op);
-//   });
-
-//   aq.each(plan.wires, (wire) => {
-//     if ( ops.indexOf(wire.from_op) < 0 ) { 
-//       ops.push(wire.from_op);
-//     }
-//     if ( ops.indexOf(wire.to_op) < 0 ) { 
-//       ops.push(wire.to_op);
-//     }
-//   })
-
-//   return ops;
-
-// }
 
 AQ.Plan.record_methods.add_wire_from = function(fv,op,pred) {
 
@@ -599,5 +575,16 @@ AQ.Plan.record_methods.valid = function() {
   })
 
   return v;
+}
+
+AQ.Plan.record_methods.destroy = function() {
+
+  var plan = this;
+
+  return new Promise(function(resolve,reject) {
+    AQ.http.delete("/plans/" + plan.id);
+    resolve();
+  });
+
 }
 

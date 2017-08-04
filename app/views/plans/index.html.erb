@@ -23,36 +23,42 @@
 
     <div ng-if="!current_op && !current_fv">
 
-      <h3 class='md-title'>Operation Types</h3>
+      <h4 class='md-subhead'>Current Plan<span ng-if="plan.id">: {{plan.id}}</span></h4>
 
-      <div ng-repeat="category in operation_types.categories">
+      <div style="margin-left: 16px; margin-top: 16px">
+        <input type=text class="plan-name-input-" ng-model=plan.name>
+      </div>
+
+      <h4 class='md-subhead'>Operation Types</h4>
+
+      <div ng-repeat="category in operation_types.categories | orderBy:''">
         
         <md-header ng-click="state.current_category = (state.current_category == category ? null : category)"
-                   class='clickable no-highlight'>
+                   class='clickable no-highlight' style="margin-left: 16px">
           <span class='opener'>
             {{state.current_category == category ? '&#9660;' : '&#9658;'}}
           </span>
           <span>{{category}}</span>
         </md-header>
 
-        <md-list class='md-compact-list' ng-if="state.current_category == category" >
-          <md-list-item ng-repeat="ot in operation_types | filter: { category: category }">
+        <md-list class='md-very-compact-list' 
+                 style="margin-left: 16px"
+                 ng-if="state.current_category == category" >
+          <md-list-item ng-repeat="ot in operation_types | filter: { category: category } | orderBy:'name'">
             <a href="#" ng-click="add_operation(ot)">{{ot.name}}</a>
           </md-list-item>
         </md-list>      
 
       </div>
 
-      <h3 class='md-title'>Plans {{state.loading_plans ? '... loading' : ''}}</h3>
+      <h4 class='md-subhead'>Plans {{state.loading_plans ? '... loading' : ''}}</h4>
 
-      <md-list class='md-compact-list'>
-        <md-list-item ng-if="!plan.id">___: <input type=text class="plan-name-input" ng-model=plan.name></md-list-item>
+      <md-list class='md-very-compact-list'>        
         <md-list-item ng-repeat="p in plans | orderBy:'-'" ">
           <a href='#' class='no-highlight' ng-click="load(p)">
             <span ng-if="p.id != plan.id">{{p.id}}: {{p.name}}</span>
-            <span ng-if="p.id == plan.id"><b>{{p.id}}:</b>
-              <input type=text class="plan-name-input" ng-model=plan.name>
-            </span>
+            <span ng-if="p.id == plan.id"><b>{{p.id}}: {{p.name}}</b></span>
+            <span ng-if="state.deleting_plan.id == p.id"> .. deleting </span>
           </a>
         </md-list-item>
       </md-list>
@@ -76,11 +82,15 @@
 <% end %>
 
 <% content_for :action2 do %>
-  <md-button class='md-raised' ng-click="save(plan)" ng-disabled="plan.saving">Save</md-button>
+  <md-button class='md-raised' ng-click="save(plan)" ng-disabled="plan.saving || plan.operations.length == 0">Save</md-button>
 <% end %>
 
 <% content_for :action3 do %>
   <md-button class='md-raised' ng-disabled="!plan.valid()">Launch</md-button>
+<% end %>
+
+<% content_for :action4 do %>
+  <md-button class='md-raised' ng-disabled="!plan.id" ng-click="delete_plan(plan)">Delete</md-button>
 <% end %>
 
 <% content_for :main do %>
