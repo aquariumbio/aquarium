@@ -452,7 +452,7 @@
 
       }
 
-      r.readAsBinaryString(f);
+      r.readAsText(f);
 
     }     
 
