@@ -70,8 +70,6 @@ AQ.Plan.record_methods.reachable_aux = function(op,a,b) { // excpects that a is 
 
   var plan = this;
 
-  console.log (a.rid + " --> " + b.rid)
-
   if ( a._marked ) {
 
     return false;
@@ -90,7 +88,7 @@ AQ.Plan.record_methods.reachable_aux = function(op,a,b) { // excpects that a is 
 
     } else {
 
-      var result;
+      var result = false;
 
       a._marked = true;
 
@@ -98,7 +96,7 @@ AQ.Plan.record_methods.reachable_aux = function(op,a,b) { // excpects that a is 
       aq.each(op.outputs(), ofv => {
         // for each wire ofv => x
         aq.each(plan.wires_from(ofv), wire => {
-          result = plan.reachable_aux(wire.to_op,wire.to,b);
+          result = result || plan.reachable_aux(wire.to_op,wire.to,b);
         });
       });
 
