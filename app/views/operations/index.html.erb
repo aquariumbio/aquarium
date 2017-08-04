@@ -13,9 +13,9 @@
 
 <%= content_for :sidebar do %>
 
-  <div layout='column' layout-fill>
+  <div layout='column' layout-fill style="height: calc(100vh - 50px)"" !important">
 
-    <md-tabs flex md-selected="current.category_index">
+    <md-tabs flex  md-selected="current.category_index">
 
       <md-tab label="{{cat}}" ng-repeat="cat in categories" layout-fill>
 
