@@ -137,7 +137,7 @@ class ObjectTypesController < ApplicationController
           format.json { head :no_content }
         end
       else
-        format.html { render action: "edit" }
+        format.html { redirect_to edit_object_type_path, notice: "Object type could not be updated. #{@object_type.errors.full_messages.join(', ')}." }
         format.json { render json: @object_type.errors, status: :unprocessable_entity }
       end
     end
