@@ -84,9 +84,12 @@ class PlansController < ApplicationController
 
   def start
     p = Plan.find(params[:id])
-    issues = p.start
-    p.reload
-    render json: { plan: p.serialize, issues: issues }
+    errors = Planner.start p
+    if errors.any?
+      render json: errors, status: 422
+    else
+      render json: { result: "ok" }
+    end
   end
 
   def value data

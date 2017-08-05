@@ -6,7 +6,8 @@ AQ.Test.plan_diff_aux = function (A,B,pkey) {
   // This method is used to recursively check that two plans are equal before and after saving.
 
   var ignore = [
-    '$$hashKey', 'items', 'rid', 'multiselect', '_item', 'ymid_frac', 'xmid_frac', 'updated_at', 'created_at', "_marked", "test"
+    '$$hashKey', 'items', 'rid', 'multiselect', '_item', 'ymid_frac', 'xmid_frac', 'updated_at', 'created_at', 
+    '_marked', 'test', 'cost', 'estimating', 'drag'
   ]
 
   for ( key in A ) {
@@ -31,8 +32,8 @@ AQ.Test.plan_diff_aux = function (A,B,pkey) {
 
 AQ.Test.plan_diff = function (A,B) {
 
-  console.log("---- CHECKING FOR DIFFERENCES BETWEEN PLAN " + A.rid + " AND PLAN " + B.rid + " ----------------" );
+  console.log("---- CHECKING FOR DIFFERENCES BETWEEN BEFOR AND AFTER SAVING----------------" );
   AQ.Test.plan_diff_aux(A,B,"plan");
-  console.log("---- DONE CHECKING -----------------------------------------------------------------------------" );
+  console.log("---- DONE CHECKING ---------------------------------------------------------" );
 
 }

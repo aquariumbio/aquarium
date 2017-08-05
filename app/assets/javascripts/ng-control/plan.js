@@ -100,6 +100,7 @@
     }    
 
     function select(object) {
+      $scope.state.launch = false;
       $scope.current_op   = object && object.model.model == "Operation"  ? object : null;
       $scope.current_fv   = object && object.model.model == "FieldValue" ? object : null;
       $scope.current_wire = object && object.model.model == "Wire"       ? object : null;
@@ -161,7 +162,6 @@
 
       AQ.Plan.load(plan.id).then(p => {
         $scope.plan = p;
-        console.log();
         $scope.$apply();
       })
 
@@ -171,6 +171,41 @@
       $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
       select(null)
     }    
+
+    $scope.select_uba= function(user,s) {      
+      aq.each(user.user_budget_associations, uba => {
+        if ( uba.id == s.id ) {
+          uba.selected = true;
+          $scope.plan.uba = uba;
+        } else {
+          uba.selected = false;
+        }
+      });
+    }
+
+    $scope.launch = function() {
+
+      select(null)
+      $scope.state.launch = true;
+      $scope.plan.uba = null;
+      aq.each($scope.current_user.user_budget_associations, uba => uba.selected = false);
+
+      $scope.plan.save().then(saved_plan => {
+        $scope.plan = saved_plan;
+        $scope.plan.estimate_cost(); 
+      });
+      
+    }
+
+    $scope.submit_plan = function() {
+      $scope.state.planning = true;
+      $scope.plan.submit().then(() => {
+        $scope.state.messages = [ "Plan " + $scope.plan.id + " submitted." ]
+      }).catch(errors => {
+        console.log(errors)
+        $scope.plan.errors = errors;
+      })
+    }
 
     // Main Events ////////////////////////////////////////////////////////////////////////////////
 
@@ -235,6 +270,7 @@
       switch(evt.key) {
 
         case "Backspace": 
+        case "Delete":
 
           if ( $scope.current_wire ) {
             $scope.plan.remove_wire($scope.current_wire);

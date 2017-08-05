@@ -52,10 +52,7 @@
       <div ng-if="current_fv.is_sample && current_fv.items.length > 0" class="nomargin">
 
         <md-subheader class="md-no-sticky">
-          Inventory: {{current_fv.child_item_id}} 
-            <span ng-if="current_fv.row >= 0">
-              [{{current_fv.row}},{{current_fv.column}}]
-            </span>
+          Inventory: 
           <span ng-if="current_fv.wired || current_fv.role == 'output'">(Not Used in Plan)</span>
         </md-subheader>
 

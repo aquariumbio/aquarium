@@ -5,6 +5,7 @@
 <%= render partial: 'io_editor' %>
 <%= render partial: '/data_associations/template' %> 
 <%= render partial: "/items/template" %>
+<%= render partial: 'launch_plan' %>  
 
 <% content_for :controller do %>planCtrl<% end %>
 <% content_for :class do %>plans launcher<% end %>
@@ -19,9 +20,9 @@
 
   {{plan.errors}}
 
-  <div ng-if="ready" layout-fill style="padding: 16px">
+  <div ng-if="ready" layout-fill>
 
-    <div ng-if="!current_op && !current_fv">
+    <div ng-if="!current_op && !current_fv && !state.launch">
 
       <h4 class='md-subhead'>Current Plan<span ng-if="plan.id">: {{plan.id}}</span></h4>
 
@@ -58,7 +59,7 @@
           <a href='#' class='no-highlight' ng-click="load(p)">
             <span ng-if="p.id != plan.id">{{p.id}}: {{p.name}}</span>
             <span ng-if="p.id == plan.id"><b>{{p.id}}: {{p.name}}</b></span>
-            <span ng-if="state.deleting_plan.id == p.id"> .. deleting </span>
+            <span ng-if="state.deleting_plan.id == p.id"> ... deleting </span>
           </a>
         </md-list-item>
       </md-list>
@@ -73,6 +74,10 @@
          ng-include="'field_value_editor'">
     </div>
 
+    <div ng-if="state.launch" 
+         ng-include="'launch_plan'">ASD
+    </div>      
+
   </div>
 
 <% end %>
@@ -82,15 +87,27 @@
 <% end %>
 
 <% content_for :action2 do %>
-  <md-button class='md-raised' ng-click="save(plan)" ng-disabled="plan.saving || plan.operations.length == 0">Save</md-button>
+  <md-button class='md-raised' 
+             ng-click="save(plan)" 
+             ng-disabled="plan.saving || plan.operations.length == 0">
+             Save
+  </md-button>
 <% end %>
 
 <% content_for :action3 do %>
-  <md-button class='md-raised' ng-disabled="!plan.valid()">Launch</md-button>
+  <md-button class='md-raised' 
+             ng-click="launch()"
+             ng-disabled="!plan.id || !plan.valid() || state.launch">
+             Launch
+  </md-button>
 <% end %>
 
 <% content_for :action4 do %>
-  <md-button class='md-raised' ng-disabled="!plan.id" ng-click="delete_plan(plan)">Delete</md-button>
+  <md-button class='md-raised' 
+             ng-disabled="!plan.id"
+             ng-click="delete_plan(plan)">
+             Delete
+  </md-button>
 <% end %>
 
 <% content_for :main do %>

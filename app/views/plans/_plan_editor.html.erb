@@ -21,6 +21,10 @@
       {{op.operation_type.name}}
     </text>
 
+    <text ng-attr-x="{{0}}" y="-4" class='op-cost'>
+      {{op.cost|currency}}
+    </text>
+
     <!-- Outputs -->
 
     <g ng-repeat="fv in outputs = ( op.field_values | filter: { role: 'output' } ) track by $index">

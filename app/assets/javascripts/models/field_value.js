@@ -135,9 +135,9 @@ AQ.FieldValue.record_methods.find_items = function(sid) {
 
     });
 
-    } else {
-      fv.items = [];
-    }
+  } else {
+    fv.items = [];
+  }
 
 }
 

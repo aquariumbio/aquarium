@@ -13,7 +13,6 @@ AQ.Operation.record_methods.set_type = function(operation_type) {
     var fv = AQ.FieldValue.record({ 
       name: ft.name, 
       role: ft.role, 
-      items: [],
       routing: ft.routing,
       field_type: ft
     });
@@ -26,16 +25,13 @@ AQ.Operation.record_methods.set_type = function(operation_type) {
       fv.index = output_index++;
     }    
 
-    // if ( ft.allowable_field_types.length > 0 ) {
-    //   fv.aft = AQ.AllowableFieldType.record(ft.allowable_field_types[0]);
-    //   fv.aft_id = ft.allowable_field_types[0].id;
-    // }
-
     op.field_values.push(fv);
 
     if ( ft.allowable_field_types.length > 0 ) {
       op.set_aft(ft,ft.allowable_field_types[0])
     }
+
+    fv.items = [];
 
   });
 

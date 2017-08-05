@@ -82,11 +82,11 @@ AQ.Plan.record_methods.submit = function(user) {
       user_query = user ? "?user_id=" + user.id : "";
 
   return new Promise(function(resolve,reject) {
-    AQ.post('/launcher/submit'+user_query,plan).then(
+    AQ.get('/plans/start/'+plan.id+user_query,plan).then(
       (response) => {
-        resolve(AQ.Plan.record(response.data).marshall());
+        resolve();
       }, (response) => {
-        reject(response.data.errors);
+        reject(response.data);
       }
     );
   });
@@ -138,9 +138,9 @@ AQ.Plan.record_methods.estimate_cost = function() {
 
       } 
 
-      aq.each(plan.operations_from_wires(), op => {
-        aq.each(response.data, cost => {
-          if ( op.rid == cost.rid ) {
+      aq.each(plan.operations, op => {
+        aq.each(response.data.costs, cost => {
+          if ( op.id == cost.id ) {
             if ( !cost.error ) {
               op.cost = cost.total;  
             } else {
