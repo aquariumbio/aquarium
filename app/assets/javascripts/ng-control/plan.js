@@ -50,6 +50,13 @@
       aq.each($scope.plan.operations,f);
     }
 
+    function refresh_plan_list() {
+      AQ.Plan.where({status: "planning", user_id: $scope.current_user.id}).then(plans => { 
+        $scope.state.loading_plans = false;
+        $scope.plans = plans;
+      });
+    }
+
     $scope.add_operation = function(ot) {
       var op = AQ.Operation.record({
         x: 3*$scope.snap + $scope.last_place, 
@@ -137,10 +144,7 @@
         $scope.state.loading_plans = true;
         select(null);
         $scope.$apply();
-        AQ.Plan.where({status: "planning", user_id: $scope.current_user.id}).then(plans => { 
-          $scope.state.loading_plans = false;
-          $scope.plans = plans;
-        });
+        refresh_plan_list();
       });
 
     }
@@ -149,12 +153,7 @@
 
       $scope.new();
       $scope.state.deleting_plan = p;
-      p.destroy().then(() => {
-        AQ.Plan.where({status: "planning", user_id: $scope.current_user.id}).then(plans => { 
-          $scope.state.deleting_plan = null;
-          $scope.plans = plans;
-        });        
-      })
+      p.destroy().then(() =>  refresh_plan_list());
 
     }
 
@@ -200,10 +199,16 @@
     $scope.submit_plan = function() {
       $scope.state.planning = true;
       $scope.plan.submit().then(() => {
-        $scope.state.messages = [ "Plan " + $scope.plan.id + " submitted." ]
+        $scope.state.planning = false;
+        $scope.state.submitted_plan = $scope.plan;
+        $scope.new();
+        $scope.state.launch = false;
+        refresh_plan_list();
       }).catch(errors => {
-        console.log(errors)
+        console.log(errors);
+        $scope.state.planning = false;        
         $scope.plan.errors = errors;
+        $scope.$apply();
       })
     }
 

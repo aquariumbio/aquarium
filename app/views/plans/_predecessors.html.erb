@@ -6,7 +6,8 @@
 
   <md-list class="md-compact-list">
     <md-list-item ng-repeat="pred in current_fv.predecessors" 
-                  ng-if="pred.operation_type.id != current_op.operation_type.id">
+                  ng-if="pred.operation_type.id != current_op.operation_type.id"
+                  style="padding: 1px 16px 1px 16px">
       <p><b>{{pred.operation_type.name}} {{asd}}</b></p>
       <md-button 
         ng-class="current_fv.field_type.preferred_operation_type_id == pred.operation_type.id ? 
@@ -22,6 +23,7 @@
 
     <md-divider style="margin: 2px"></md-divider>
 
+    <!-- 
     <md-list-item>
       <p></p>
       <md-button 
@@ -30,7 +32,7 @@
         ng-click="current_fv.backchain(plan,current_op)">
           Auto
       </md-button>
-    </md-list-item>
+    </md-list-item> -->
 
   </md-list>
 

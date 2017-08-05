@@ -254,7 +254,7 @@ class LauncherController < ApplicationController
 
       plans = Plan
         .includes(operations: :operation_type)
-        .where(user_id: user.id)
+        .where(user_id: user.id, status: nil)
         .order('created_at DESC')
         .limit(10)
         .offset(params[:offset] || 0)

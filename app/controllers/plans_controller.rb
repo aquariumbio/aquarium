@@ -83,13 +83,15 @@ class PlansController < ApplicationController
   end
 
   def start
-    p = Plan.find(params[:id])
-    errors = Planner.start p
-    if errors.any?
-      render json: errors, status: 422
-    else
+
+    planner = Planner.new params[:id]
+    
+    if planner.start
       render json: { result: "ok" }
+    else
+      render json: planner.errors, status: 422
     end
+
   end
 
   def value data

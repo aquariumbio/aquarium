@@ -18,9 +18,16 @@
 
 <% content_for :sidebar do %>
 
-  {{plan.errors}}
+  <ul ng-if="plan.errors.length > 0">
+    <li ng-repeat="e in plan.errors">{{e}}</li>
+  </ul>
 
   <div ng-if="ready" layout-fill>
+
+    <div ng-if="state.submitted_plan" class="message">
+      <p>Successfully submitted plan <a href="/launcher?plan_id={{state.submitted_plan.id}}">{{state.submitted_plan.id}}</a>.</p>
+      <div class="dismiss clickable" ng-click="state.submitted_plan = null">&times;</div>
+    </div>  
 
     <div ng-if="!current_op && !current_fv && !state.launch">
 
@@ -76,7 +83,7 @@
 
     <div ng-if="state.launch" 
          ng-include="'launch_plan'">ASD
-    </div>      
+    </div>   
 
   </div>
 

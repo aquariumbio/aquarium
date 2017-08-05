@@ -165,8 +165,10 @@ AQ.FieldValue.record_getters.items = function() {
 }
 
 AQ.FieldValue.record_getters.sample = function() {
+
   var fv = this;
   delete fv.sample;
+
   if ( fv.sid && typeof fv.sid == 'string' ) {
     AQ.Sample.find(fv.sid.split(": ")[0]).then(s => {
       fv.sample = s;
@@ -179,6 +181,7 @@ AQ.FieldValue.record_getters.sample = function() {
     console.log("Warning: fv.sid = '" + fv.sid + "'")
   }
   return undefined;
+
 }
 
 AQ.FieldValue.record_methods.preferred_predecessor = function(operation) {

@@ -7,8 +7,8 @@ AQ.Test.plan_diff_aux = function (A,B,pkey) {
 
   var ignore = [
     '$$hashKey', 'items', 'rid', 'multiselect', '_item', 'ymid_frac', 'xmid_frac', 'updated_at', 'created_at', 
-    '_marked', 'test', 'cost', 'estimating', 'drag'
-  ]
+    '_marked', 'test', 'cost', 'estimating', 'drag', 'uba', 'errors', 'sample'
+  ];
 
   for ( key in A ) {
 

@@ -6,6 +6,19 @@
     }
   }
 
+  .dismiss {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
+
+  .message {
+    padding: 10px;
+    background: lightyellow;
+    position: relative;
+    border: 1pt solid #eee;    
+  }  
+
   .editor-main {
 
     height: 100%;
