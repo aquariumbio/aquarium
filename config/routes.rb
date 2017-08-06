@@ -22,6 +22,8 @@ Bioturk::Application.routes.draw do
   get '/plans/:id/debug',                        to: 'plans#debug'
   post '/plans/replan',                          to: 'plans#replan'
   post '/plans/plan',                            to: 'plans#plan'  
+  put '/plans/move',                             to: 'plans#move'
+  get '/plans/folders',                          to: 'plans#folders'
   resources :plans
 
   post '/operations/batch',                      to: 'operations#batch'

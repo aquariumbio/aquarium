@@ -8,14 +8,14 @@
 
       restrict: 'AE',
 
-      scope: { model: '=', invisible: '=', disabled: '=' },
+      scope: { model: '=', invisible: '=', disabled: '=', off: '=' },
 
       link: function($scope,$element,$attributes) {
 
         $scope.toggle = function() {
-          if ( !$scope.disabled ) {
+          if ( !$scope.disabled && !$scope.off ) {
             $scope.model = !$scope.model;
-          }
+          } 
         }
 
       },

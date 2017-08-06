@@ -220,14 +220,14 @@ AQ.Plan.record_methods.link_operation_types = function(operation_types) {
 
 }
 
-AQ.Plan.list = function(offset,user,plan_id) {
+AQ.Plan.list = function(offset,user,folder,plan_id) {
 
-  var user_query = user ? "&user_id=" + user.id : "";
-
-  var plan_query = plan_id ? "&plan_id=" + plan_id : "";
+  var user_query = user ? "&user_id=" + user.id : "",
+      plan_query = plan_id ? "&plan_id=" + plan_id : "",
+      folder_query = folder ? "&folder=" + folder : "";
 
   return new Promise(function(resolve,reject) {
-    AQ.get('/launcher/plans?offset='+offset+user_query+plan_query).then(
+    AQ.get('/launcher/plans?offset='+offset+user_query+plan_query+folder_query).then(
       (response) => {
         AQ.Plan.num_plans = response.data.num_plans;
         resolve(aq.collect(response.data.plans,(p) => { 
@@ -241,7 +241,7 @@ AQ.Plan.list = function(offset,user,plan_id) {
               }), (fv) => { return AQ.FieldValue.record(fv); })
             operation.jobs = aq.collect(op.jobs, job => {
               return AQ.Job.record(job);
-            });            
+            });
             return operation;
           });
           return plan;
@@ -584,6 +584,35 @@ AQ.Plan.record_methods.destroy = function() {
   return new Promise(function(resolve,reject) {
     AQ.http.delete("/plans/" + plan.id);
     resolve();
+  });
+
+}
+
+AQ.Plan.move = function(plans, folder) {
+
+  var pids = aq.collect(plans, plan => plan.id);
+
+  return new Promise(function(resolve, reject) {
+
+    AQ.http.put("/plans/move", {pids: pids, folder: folder}).then(() => {
+      aq.each(plans, plan => {
+        plan.folder = folder;
+      });
+      resolve();
+    }).catch(reject);
+
+  });
+
+}
+
+AQ.Plan.get_folders = function() {
+
+  return new Promise(function(resolve, reject) {
+
+    AQ.get("/plans/folders").then(response => {
+      resolve(response.data);
+    }).catch(reject);
+
   });
 
 }

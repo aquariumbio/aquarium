@@ -235,7 +235,6 @@ class LauncherController < ApplicationController
 
     user = params[:user_id] ? User.find(params[:user_id]) : current_user
 
-
     if params[:plan_id]
 
       if current_user.id == user.id || current_user.is_admin
@@ -254,7 +253,7 @@ class LauncherController < ApplicationController
 
       plans = Plan
         .includes(operations: :operation_type)
-        .where(user_id: user.id, status: nil)
+        .where(user_id: user.id, status: nil, folder: params[:folder])
         .order('created_at DESC')
         .limit(10)
         .offset(params[:offset] || 0)

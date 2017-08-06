@@ -283,4 +283,19 @@ class PlansController < ApplicationController
 
   end # def debug
 
+  def move
+
+    Plan.where(id: params[:pids]).each do |plan|
+      plan.folder = params[:folder]
+      plan.save
+    end
+
+    render json: { result: "okay" }
+
+  end
+
+  def folders
+    render json: Plan.where(user_id: current_user.id).pluck(:folder).uniq
+  end
+
 end

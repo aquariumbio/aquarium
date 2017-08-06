@@ -1,12 +1,5 @@
-<% provide(:title, 'Planner') %>
+<% provide(:title, 'Plans') %>
 
-<%= render partial: 'chooser' %>
-<%= render partial: 'plan_editor' %>  
-<%= render partial: 'operation_editor' %>
-<%= render partial: 'field_value_editor' %>
-<%= render partial: 'operation_info' %>
-<%= render partial: 'launch_plan' %>      
-<%= render partial: 'io_editor' %>
 <%= render partial: 'plan_list' %>  
 <%= render partial: 'plan_viewer' %>  
 <%= render partial: '/data_associations/template' %> 
@@ -17,123 +10,83 @@
 
 <%= content_for :sidebar do %>
 
-  <div ng-if="error">
-    <md-content class='launch-error'>
-      <div class="md-title title">Your Plan has Issues</div>
-      <p layout-padding>{{error}}</p>
-      <span class="md-title dismiss" ng-click="clear_error()">&times;</span>
-    </md-content>
-  </div>
+  <h4 class='md-subhead'>Folders</h4>
 
-  <div ng-if="plan.current_operation && plan.status != 'launch' && plan.status != 'planning' && plan.current_fv"
-       ng-include="'field_value_editor'">
-  </div>  
+  <md-list class='md-very-compact-list'>
+    <md-list-item ng-repeat="folder in folders" 
+                  ng-click="select_folder(folder)" 
+                  ng-class="state.folder == folder ? 'selected-folder' : ''">
+      <div ng-class="state.folder == folder ? 'selected-folder' : ''">
+        <span ng-if="folder">{{folder}}</span>
+        <span ng-if="!folder">Unsorted</span>    
+      </div>
+    </md-list-item>
+  </md-list>
 
-  <div ng-if="plan.current_operation && plan.status != 'launch' && plan.status != 'planning' && !plan.current_fv"
-       ng-include="'operation_info'">
-  </div>  
+  <% if current_user && current_user.is_admin %>
 
-  <div ng-if="plan && ( plan.status == 'launch' || plan.status == 'planning' )" 
-       ng-include="'launch_plan'">
-  </div>  
+    <hr>
 
-  <div ng-if="( mode == 'running' || 
-              ( mode == 'new' && plan == null ) ) && 
-              status.user_info == 'Ready'">
+    <md-input-container layout-margin layout="column">
+      <md-select ng-model="state.selected_user_id" class="md-plain-select"
+                 md-on-close="select_user()">
+        <md-option ng-repeat="user in users" 
+                   ng-value="user.id">
+          {{user.login}} ( {{user.name}} )
+        </md-option>
+      </md-select>
+    </md-input-container>
 
-    <h1 class="md-title" 
-        ng-if="current_user && 
-               current_user.user_budget_associations && 
-               current_user.user_budget_associations.length > 0 &&
-               current_user.user_budget_associations[0].budget &&
-               current_user.user_budget_associations[0].budget.spent.this_month !== null">
-      Budgets
-
-      <% if current_user && current_user.is_admin %>
-        <div ng-if="current_user.id != <%= current_user.id %>">
-          <span class='other-user-alert'>
-            {{current_user.name}}
-          </span>
-        </div>
-      <% end %>
-
-    </h1>
-
-    <h1 class='md-title'
-        ng-if="current_user && 
-               current_user.user_budget_associations && 
-               current_user.user_budget_associations.length == 0">
-      No Budgets for {{current_user.name}}
-    </h1>
-
-    <md-list ng-repeat="uba in current_user.user_budget_associations" flex>
-      <md-list-item ng-if="uba.budget && uba.budget.spent.this_month != null">
-        <div class="md-list-item-text" layout="column">
-          <div class="md-body-2">{{uba.budget.name}}</div>
-          <div class="md-body-1">{{uba.budget.description}}.</div>
-          <div class="md-body-1">
-              {{uba.budget.spent.this_month|currency}}
-            / {{uba.quota|currency}} spent</div>
-        </div>
-      </md-list-item>
-    </md-list>
-
-    <% if current_user && current_user.is_admin %>
-
-      <hr>
-
-      <md-input-container layout-margin layout="column">
-        <md-select ng-model="status.selected_user_id" class="md-plain-select"
-                   md-on-close="select_user()">
-          <md-option ng-repeat="user in users" 
-                     ng-value="user.id">
-            {{user.login}} ( {{user.name}} )
-          </md-option>
-        </md-select>
-      </md-input-container>
-
-    <% end %>
-
-  </div>
+  <% end %>
 
 <% end %>
 
 <%= content_for :specific_title do %>
-  <span>
-  &rang; <span ng-if="mode == 'new' && plan == null">Choose Goal</span>
-         <span ng-if="mode == 'new' && plan != null">Build Plan</span>
-         <span ng-if="mode == 'running'">
-           Plans
-           <% if current_user && current_user.is_admin %>
-             <span ng-if="current_user && current_user.id != <%= current_user.id %>">
-               <span class='other-user-alert'>
-                 ({{current_user.name}})
-               </span>
-             </span>
-           <% end %>
-         </span>    
-  </span>
+   <% if current_user && current_user.is_admin %>
+     <span ng-if="current_user && current_user.id != <%= current_user.id %>">
+       <span class='other-user-alert'>
+         &rang; ({{current_user.name}})
+        </span>
+      </span>
+    <% end %>
+    &rang; 
+    <span ng-if="folder">{{folder}}</span>
+    <span ng-if="!folder">Unsorted</span>  
 <% end %>
 
 <%= content_for :action1 do %>
   <md-button class='md-raised'
-             ng-click="set_mode('running')"
-             ng-if="mode == 'new' && status.plans == 'Ready'">
-      <md-tooltip md-direction="bottom">List all of your plans</md-tooltip>
-      List
-  </md-button>
-  <md-button class='md-raised'
              ng-click="set_mode('new')" 
-             ng-if="mode == 'running' && status.operation_types == 'Ready' && status.plans == 'Ready'">
+             href="/plans">
       <md-tooltip md-direction="bottom">Design a new plan</md-tooltip>
       New
   </md-button>    
-  <md-button 
-    ng-click="set_mode('new')" 
-    disabled=true
-    ng-if="mode == 'running' && status.operation_types != 'Ready' && status.plans == 'Ready'">
-    Loading Operation Types ...
-  </md-button>
+<% end %>
+
+<%= content_for :action2 do %>
+  <md-menu layout="row">
+
+    <md-button class='md-raised' ng-click="openMenu($mdMenu, $event)">
+      <md-tooltip md-direction="bottom">Move Plan to Folder</md-tooltip>
+      Move
+    </md-button>  
+
+    <md-menu-content width="4">
+      <md-menu-item ng-repeat="folder in folders">
+        <md-button ng-click="move(folder)">
+          <span ng-if="folder">{{folder}}</span>
+          <span ng-if="!folder">Unsorted</span>
+        </md-button>
+      </md-menu-item>
+      <md-divider></md-divider>
+      <md-menu-item>
+        <md-button ng-click="move_to_new(folder)">
+          New Folder
+        </md-button>
+      </md-menu-item>
+    </md-menu-content>
+
+  </md-menu>
 <% end %>
 
 <%= content_for :main do %>
@@ -148,11 +101,6 @@
         <md-progress-linear md-mode="indeterminate"></md-progress-linear>
       </div>
     </div>
-  </div>
-
-  <div ng-if="status.operation_types == 'Ready' && status.sample_names == 'Ready' && mode == 'new'">
-    <div ng-if="plan == null" ng-include="'operation_type_chooser'"></div> 
-    <div ng-if="plan != null" ng-include="'plan_editor'"></div> 
   </div>
 
   <div ng-if="status.plans == 'Ready' && mode != 'new'"
