@@ -605,11 +605,13 @@ AQ.Plan.move = function(plans, folder) {
 
 }
 
-AQ.Plan.get_folders = function() {
+AQ.Plan.get_folders = function(user_id=null) {
 
   return new Promise(function(resolve, reject) {
 
-    AQ.get("/plans/folders").then(response => {
+    var user_query = user_id ? "?user_id=" + user_id : "";
+
+    AQ.get("/plans/folders"+user_query).then(response => {
       resolve(response.data);
     }).catch(reject);
 

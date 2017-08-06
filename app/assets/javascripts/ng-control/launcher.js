@@ -78,7 +78,7 @@
     }
 
     $scope.more_plans = function() {
-      $scope.plan_offset += 10;
+      $scope.plan_offset += 20;
       $scope.getting_plans = true;
       AQ.Plan.list($scope.plan_offset,$scope.current_user,$scope.state.folder).then((plans) => {
         if ( plans.length == 0 ) {
@@ -109,12 +109,15 @@
 
       AQ.User.find($scope.state.selected_user_id).then(user => {
         $scope.current_user = user;
-        AQ.update();
-        AQ.Plan.list($scope.plan_offset,$scope.current_user).then((plans) => {
-          $scope.plans = plans.reverse();        
-          $scope.status.plans = "Ready";        
-          $scope.getting_plans = false;        
-          AQ.update();
+        AQ.Plan.get_folders($scope.state.selected_user_id).then(folders => {
+          $scope.state.folder = null;
+          $scope.folders = folders;
+          AQ.Plan.list($scope.plan_offset,$scope.current_user,$scope.state.folder).then((plans) => {
+            $scope.plans = plans.reverse();        
+            $scope.status.plans = "Ready";        
+            $scope.getting_plans = false;        
+            AQ.update();
+          });
         });
       }).catch(data => {
         console.log("Could not find user " + $scope.state.selected_user_id);
@@ -133,12 +136,14 @@
     }   
 
     $scope.move = function(folder) {
-      var plans = aq.where($scope.plans, plan => plan.selected);
-      AQ.Plan.move(plans, folder).then(() => {
-        aq.each(plans, plan => {
-          aq.remove($scope.plans, plan)
+      if ( $scope.state.folder != folder ) {
+        var plans = aq.where($scope.plans, plan => plan.selected);
+        AQ.Plan.move(plans, folder).then(() => {
+          aq.each(plans, plan => {
+            aq.remove($scope.plans, plan)
+          })
         })
-      })
+      }
     } 
 
     $scope.move_to_new = function() {

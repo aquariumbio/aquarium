@@ -295,7 +295,12 @@ class PlansController < ApplicationController
   end
 
   def folders
-    render json: Plan.where(user_id: current_user.id).pluck(:folder).uniq
+    if current_user && current_user.is_admin && params[:user_id]
+      uid = params[:user_id]
+    else
+      uid = current_user.id
+    end
+    render json: Plan.where(user_id: uid).pluck(:folder).uniq
   end
 
 end

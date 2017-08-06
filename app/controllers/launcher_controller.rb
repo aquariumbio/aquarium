@@ -255,7 +255,7 @@ class LauncherController < ApplicationController
         .includes(operations: :operation_type)
         .where(user_id: user.id, status: nil, folder: params[:folder])
         .order('created_at DESC')
-        .limit(10)
+        .limit(20)
         .offset(params[:offset] || 0)
 
     end
