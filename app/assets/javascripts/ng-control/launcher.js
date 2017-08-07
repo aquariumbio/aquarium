@@ -45,21 +45,33 @@
           $scope.single_plan_query = true;
         } else {
           plan_promise =  AQ.Plan.list($scope.plan_offset)
-        }
+        }        
 
         plan_promise.then((plans) => {
 
           $scope.plans = plans.reverse();
-          $scope.status.plans = "Ready";
           $scope.getting_plans = false;
 
-          AQ.Plan.get_folders().then(folders => {
+          AQ.OperationType.all_with_field_types(true).then((operation_types) => {
 
-            $scope.folders = folders;
-            if ( !$scope.folders.includes($scope.state.folder) ) {
-              $scope.state.folder = null;
-            }
-            $scope.$apply();
+            $scope.operation_types = aq.where(operation_types,ot => ot.deployed);
+            AQ.OperationType.compute_categories($scope.operation_types);
+            AQ.operation_types = $scope.operation_types;
+            aq.each($scope.plans, (plan)=> { 
+              plan.link_operation_types($scope.operation_types) 
+            });
+
+            AQ.Plan.get_folders().then(folders => {
+
+              $scope.folders = folders;
+              if ( !$scope.folders.includes($scope.state.folder) ) {
+                $scope.state.folder = null;
+              }
+
+              $scope.status.plans = "Ready";
+              $scope.$apply();
+
+            });
 
           });
 
@@ -97,6 +109,7 @@
       $scope.plan_offset = 0;
       $scope.getting_plans = true;
       $scope.no_more_plans = false;
+      $scope.plans = [];
       AQ.Plan.list($scope.plan_offset,$scope.current_user,$scope.state.folder).then((plans) => {
         $scope.getting_plans = false;
         $scope.plans = plans.reverse();
@@ -150,6 +163,39 @@
       var new_folder_name = window.prompt("New Folder Name");
       $scope.folders.push(new_folder_name);
       $scope.move(new_folder_name);
+    }
+
+    $scope.relaunch = function(plan) { // a.k.a. Copy
+
+      plan.relaunching = true;
+
+      plan.relaunch().then( (newplan,issues) => {
+        newplan.link_operation_types($scope.operation_types);
+        $scope.plans.unshift(newplan);
+        newplan.open = true;
+        plan.open = false;
+        delete plan.relaunching;
+        $scope.$apply();
+      }).catch( ()=> {console.log("oops")});
+
+    }  
+
+    $scope.plan_state_class = function(plan) {
+      var c = "status";
+      if ( plan.state == "Error" ) {
+        c += " status-error";
+      } else if ( plan.state == "Done" ) {
+        c += " status-done";
+      } else {
+        c += " status-pending";
+      }
+      return c;
+    }
+
+    $scope.replan = function(plan) {
+      plan.replan().then(newplan => {
+        window.location = "/plans?plan_id=" + newplan.id;
+      })
     }
 
   }]);

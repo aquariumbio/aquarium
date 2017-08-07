@@ -32,8 +32,10 @@
     <hr>
 
     <md-input-container layout-margin layout="column">
-      <md-select ng-model="state.selected_user_id" class="md-plain-select"
-                 md-on-close="select_user()">
+      <md-select ng-model="state.selected_user_id"
+                 class="md-plain-select"
+                 md-on-close="select_user()"
+                 aria-label="Select User">
         <md-option ng-repeat="user in users" 
                    ng-value="user.id">
           {{user.login}} ( {{user.name}} )
@@ -77,7 +79,7 @@
 
     <md-menu-content width="4">
       <md-menu-item ng-repeat="folder in folders">
-        <md-button ng-click="move(folder)">
+        <md-button ng-click="move(folder)" aria-label="{{folder}}">
           <span ng-if="folder">{{folder}}</span>
           <span ng-if="!folder">Unsorted</span>
         </md-button>

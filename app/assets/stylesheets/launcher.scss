@@ -131,6 +131,11 @@
     padding-bottom: 10px;
   }  
 
+  .status {
+    font-size: 10pt;
+    text-transform: uppercase;
+  }
+
   .status-running {
     color: green;
   }  
@@ -160,8 +165,7 @@
   .plan-row {
     padding: 5px;
     margin: 0 25px 0 0px;
-    min-width: 100%;
-    max-width: 100%;
+    transition: margin ease 0.1s;
   }
 
   .plan-header {
@@ -175,6 +179,9 @@
     border-right: 1pt solid $plan-border-color;
     border-left: 1pt solid $plan-border-color;
     background: $plan-header-color;
+    margin-top: 16px;
+    margin-left: 16px;
+    transition: margin ease 0.1s;
   }
 
   .plan-details {
@@ -182,7 +189,8 @@
     border-right: 1pt solid $plan-border-color;
     border-bottom: 1pt solid $plan-border-color;    
     background: $plan-details-color;    
-    margin: 0 25px 10px 0px;    
+    margin: 0 25px 16px 16px; 
+    transition: margin ease 0.2s;      
   }
 
   .no-side-margins {

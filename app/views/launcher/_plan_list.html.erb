@@ -4,7 +4,7 @@
        ng-class="plan.open ? 'plan-header plan-row plan-row-open clickable' : 'plan-header plan-row clickable'">
 
     <div flex="25" class='no-wrap no-highlight'>
-      <input type='checkbox' ng-model='plan.selected' style="margin-right: 5px">  
+      <input type='checkbox' ng-model='plan.selected' style="margin: -1px 5px 0 0">  
       <span ng-click="plan.open = !plan.open">
         <opener model="plan.open" class='no-highlight clickable no-margin' off="true"></opener>&nbsp;
       </span>
@@ -27,8 +27,8 @@
     </div>
 
     <div flex="10" class='no-wrap left-pad no-highlight' ng-click="plan.open = !plan.open">
-      <span ng-class="'md-body-2 status-'+plan.operations[0].status">
-        {{plan.operations[0].status}}
+      <span ng-class="plan_state_class(plan)">
+        {{plan.state}}
       </span>
     </div>
 
@@ -91,7 +91,7 @@
 
   <br />
 
-  <md-button ng-if="!no_more_plans"
+  <md-button ng-if="!no_more_plans && plans.length > 0"
     class='md-raised md-primary md-small' 
     ng-disabled="getting_plans"
     ng-click="more_plans()">More</md-button>

@@ -22,7 +22,8 @@ AQ.Plan.record_methods.reload = function() {
           AQ.update();
         });
       });
-      plan.recompute_getter("deletable")
+      plan.recompute_getter("deletable");
+      plan.recompute_getter("state");      
     });
   });
 
@@ -79,10 +80,11 @@ AQ.Plan.load = function(id) {
 AQ.Plan.record_methods.submit = function(user) {
 
   var plan = this.serialize(),
-      user_query = user ? "?user_id=" + user.id : "";
+      user_query = user ? "&user_id=" + user.id : "",
+      budget_query = "?budget_id=" + this.uba.budget_id;
 
   return new Promise(function(resolve,reject) {
-    AQ.get('/plans/start/'+plan.id+user_query,plan).then(
+    AQ.get('/plans/start/'+plan.id+budget_query+user_query,plan).then(
       (response) => {
         resolve();
       }, (response) => {
@@ -203,6 +205,7 @@ AQ.Plan.record_methods.cancel = function(msg) {
         plan.reload();
         resolve(response.data);
         plan.recompute_getter("deletable");
+        plan.recompute_getter("state");        
       },
       (response) => { reject(response.data.errors) }
     );
@@ -474,9 +477,9 @@ AQ.Plan.record_methods.debug = function() {
         console.log(response);
         plan.reload();
         plan.debugging = false;
+        plan.recompute_getter("state");
       }
     );
-
   });
   
 }
@@ -612,6 +615,42 @@ AQ.Plan.get_folders = function(user_id=null) {
     var user_query = user_id ? "?user_id=" + user_id : "";
 
     AQ.get("/plans/folders"+user_query).then(response => {
+      resolve(response.data);
+    }).catch(reject);
+
+  });
+
+}
+
+AQ.Plan.record_getters.state = function() {
+
+  var plan = this;
+  delete plan.state;
+  plan.state = "Pending";
+
+  // if all ops are done, the done
+  var not_done = aq.where(plan.operations, op => op.status != "done" );
+
+  if ( not_done.length == 0 ) {
+    plan.state = "Done";
+  } else {
+    var errors = aq.where(plan.operations, op => op.status == "error" );
+    if ( errors.length > 0 ) {
+      plan.state = "Error"
+    }
+  }
+
+  return plan.state;
+
+}
+
+AQ.Plan.record_methods.replan = function() {
+
+  var plan = this;
+
+  return new Promise(function(resolve, reject) {
+
+    AQ.get("/plans/replan/" + plan.id).then(response => {
       resolve(response.data);
     }).catch(reject);
 

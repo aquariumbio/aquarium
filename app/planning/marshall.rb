@@ -183,6 +183,8 @@ module Marshall
     p.operations.each do |pop|
       unless op_ids.member?(pop.id)
         puts "Destroying op #{pop.id}"
+        pas = PlanAssociation.where(plan_id: p.id, operation_id: pop.id)
+        pas.each { |pa| pa.destroy }
         pop.destroy
         puts pop.errors.full_messages.join(", ")
       end

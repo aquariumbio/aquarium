@@ -1,3 +1,5 @@
+// This controller is no longer used and can likely be deleted
+
 (function() {
 
   var w = angular.module('aquarium'); 

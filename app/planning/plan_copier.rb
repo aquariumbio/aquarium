@@ -1,0 +1,61 @@
+class PlanCopier
+
+  def initialize plan_id
+    @plan = Plan.includes(:operations).find(plan_id)
+    @fv_map = []
+  end
+
+  def copy
+
+    @new_plan = @plan.dup
+    @new_plan.status = "planning"
+    @new_plan.name = @plan.name + " (copy)"
+    @new_plan.save
+
+    copy_ops
+    copy_wires
+
+    @new_plan
+
+  end
+
+  def copy_ops
+
+    @plan.operations.each do |op|
+
+      new_op = op.dup
+      new_op.status = "pending"
+      new_op.save
+
+      pa = PlanAssociation.new plan_id: @new_plan.id, operation_id: new_op.id
+      pa.save
+
+      copy_fvs op, new_op
+
+    end
+
+  end
+
+  def copy_fvs op, new_op
+
+    op.field_values.each do |fv|
+
+      new_fv = fv.dup
+      new_fv.parent_id = new_op.id
+      new_fv.save
+      @fv_map[fv.id] = new_fv.id
+
+    end
+
+  end
+
+  def copy_wires
+
+    @plan.wires.each do |wire|
+      new_wire = Wire.new from_id: @fv_map[wire.from_id], to_id: @fv_map[wire.to_id]
+      new_wire.save
+    end
+
+  end
+
+end
