@@ -29,6 +29,18 @@
 
     <g ng-repeat="fv in outputs = ( op.field_values | filter: { role: 'output' } ) track by $index">
 
+      <!-- Name -->
+      <rect ng-if="fv == current_fv"
+            ng-attr-x="{{op.width/2 + ($index - outputs.length/2.0 + 0.5)*snap + 4}}"
+            ng-attr-y="{{-20}}" width="80" height="14" fill-opacity="0.6" fill="white" />                
+
+      <text ng-attr-x="{{op.width/2 + ($index - outputs.length/2.0 + 0.5)*snap + 4}}"  
+            y="-10"
+            ng-if="fv == current_fv"
+            class="field-name-help">
+        {{fv.name}}
+      </text>    
+
       <!-- Cursor -->
       <circle ng-if="fv == current_fv && fv.field_type.ftype == 'sample'"
               class="field-value field-value-selection"
@@ -49,19 +61,23 @@
               ng-mousedown="fvMouseDown($event, op, fv)" 
               cy="0" />
 
-      <!-- Name -->
-      <text ng-attr-x="{{op.width/2 + ($index - outputs.length/2.0 + 0.5)*snap + 4}}"  
-            y="-10"
-            ng-if="fv == current_fv"
-            class="field-name-help">
-        {{fv.name}}
-      </text>
-
     </g>
 
     <!-- Inputs -->
 
     <g ng-repeat="tv in inputs = ( op.types_and_values | filter: { role: 'input', array_add_button: '!true' } ) track by $index">
+
+      <!-- Name -->
+      <rect ng-if="tv.value == current_fv"
+            ng-attr-x="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap + 7}}"
+            ng-attr-y="{{op.height+8}}" width="80" height="14" fill-opacity="0.6" fill="white"/>
+
+      <text ng-attr-x="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap + 8}}"  
+            ng-attr-y="{{op.height+18}}"
+            ng-if="tv.value == current_fv"
+            class="field-name-help">
+        {{tv.value.name}}
+      </text>
 
       <!-- Cursor -->
       <circle ng-if="tv.value == current_fv"
@@ -91,14 +107,6 @@
             ng-mousedown="fvMouseDown($event, op, tv.value)" 
             ng-attr-y="{{op.height-5}}" width="10" height="10"
             ng-attr-data-name="{{tv.value.name}}" />
-
-      <!-- Name -->
-      <text ng-attr-x="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap + 8}}"  
-            ng-attr-y="{{op.height+18}}"
-            ng-if="tv.value == current_fv"
-            class="field-name-help">
-        {{tv.value.name}}
-      </text>
 
     </g>
 
