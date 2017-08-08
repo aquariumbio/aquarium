@@ -228,6 +228,7 @@ Bioturk::Application.routes.draw do
   get "/items/store/:id",      to: "items#store"
   get "/items/make/:sid/:oid", to: "items#make"
   get "/items/move/:id",       to: "items#move"
+  get "/items/history/:id",    to: "items#history"
   resources :items
 
   match "project", to: 'samples#project'

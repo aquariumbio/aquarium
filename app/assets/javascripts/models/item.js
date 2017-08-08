@@ -70,3 +70,31 @@ AQ.Item.record_methods.mark_as_deleted = function() {
   })
 
 }
+
+AQ.Item.record_methods.get_history = function() {
+
+  var item = this;
+
+  return new Promise(function(resolve, reject) {
+    AQ.get("/items/history/" + item.id).then(response => {
+      item.history = response.data;
+      aq.each(item.history, h => {
+        h.field_value = AQ.FieldValue.record(h.field_value);
+        h.operation = AQ.Operation.record(h.operation);
+        h.jobs = aq.collect(h.operation.jobs, job => {
+          return AQ.Job.record(job);
+        });
+      });
+      resolve(item.history);
+    })  
+  });
+
+}
+
+AQ.Item.record_getters.history = function() {
+  var item = this;
+  delete item.history; 
+  item.get_history();
+  return item.history;
+}
+

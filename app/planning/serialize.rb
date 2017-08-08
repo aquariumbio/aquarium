@@ -95,5 +95,20 @@ module Serialize
 
   end
 
+  def self.item_history item
+
+    fvs = FieldValue.where(parent_class: "Operation", child_item_id: item.id)
+    op_ids = fvs.collect { |fv| fv.parent_id }
+    ops = Operation.includes(:jobs, :operation_type, :plan_associations).where(id: op_ids)
+
+    fvs.collect { |fv|
+      {
+        field_value: fv,
+        operation: ops.find { |op| op.id == fv.parent_id }.as_json(include: [ :plan_associations, :operation_type, { jobs: { except: :state } } ] )
+      }
+    }
+
+  end
+
 end
 

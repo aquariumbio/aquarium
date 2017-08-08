@@ -6,6 +6,8 @@
       <h1 class="md-title">{{current_op.operation_type.name}}</h1>  
       <h1 class="md-subhead" ng-if="current_fv.is_param">{{current_fv.type|capitalize}} Parameter</h1>    
       <h1 class="md-subhead">{{current_fv.role|capitalize}} name: {{current_fv.name}}, {{current_fv.rid}}</h1>
+      {{current_fv.child_sample_id}}<br>
+      {{current_fv.sample_identifier}}
     </div>
 
       <md-subheader class="md-no-sticky" ng-if="current_fv.is_sample">

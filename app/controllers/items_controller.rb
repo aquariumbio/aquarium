@@ -219,4 +219,8 @@ class ItemsController < ApplicationController
 
   end
 
+  def history
+    render json: Serialize.item_history(Item.find(params[:id]))
+  end
+
 end
