@@ -251,7 +251,7 @@
 
     $scope.mouseMove = function(evt) {
 
-      if ( $scope.current_op && $scope.current_op.drag ) {
+      if ( $scope.current_op && $scope.current_op.drag && !$scope.current_fv ) {
 
         $scope.current_op.x = evt.offsetX - $scope.current_op.drag.localX;
         $scope.current_op.y = evt.offsetY - $scope.current_op.drag.localY;
