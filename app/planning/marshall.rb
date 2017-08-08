@@ -111,8 +111,7 @@ module Marshall
 
   def self.field_value op, fv, routing
 
-
-    if routing[fv[:routing]]
+    if !fv[:array] && routing[fv[:routing]]
       sid = self.sid(routing[fv[:routing]])
     elsif fv[:child_sample_id]
       sid = fv[:child_sample_id]

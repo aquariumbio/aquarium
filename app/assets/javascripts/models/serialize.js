@@ -27,7 +27,8 @@ AQ.Operation.record_methods.serialize = function() {
       efv.allowable_field_type_id = op.form[fv.role][fv.name] && op.form[fv.role][fv.name].aft ? 
                                     op.form[fv.role][fv.name].aft.id :
                                     null;
-      if ( fv.routing ) {
+      if ( !fv.field_type.array && fv.routing ) {
+        console.log("assigning fv " + fv.rid + " to " + op.routing[fv.routing])
         op.assign_sample(efv,op.routing[fv.routing])
       }
       return efv;
@@ -52,10 +53,16 @@ AQ.FieldValue.record_methods.serialize = function() {
 
   aq.each(props, p => efv[p] = fv[p]); 
 
+  // if ( fv.field_type.array ) {
+  //   efv.child_sample_id = AQ.id_from(fv.sample_identifier);
+  //   efv.sid = fv.sample_identifier;
+  // }
+
   if ( fv.field_type.array ) {
-    efv.child_sample_id = AQ.id_from(fv.sample_identifier);
-    efv.sid = fv.sample_identifier;
+    efv.array = true;
   }
+
+  console.log([fv,efv,fv.child_sample_id, efv.child_sample_id])
 
   return efv;
 

@@ -78,6 +78,28 @@
           </div>
         </div>
 
+        <div class="history" ng-if="item.history.length > 0">
+          <h4 class="md-body-2">Item History</h4>
+          <table class='table' style="width: 100%">
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Operation Id</th>
+              <th>Operation Typte</th>
+              <th>Plan</th>
+              <th>Jobs</th>
+            </tr>
+            <tr ng-repeat="h in item.history">
+              <td>{{h.field_value.name}}</td>
+              <td>{{h.field_value.role}}</td>
+              <td>{{h.operation.id}}</td>
+              <td>{{h.operation.operation_type.name}}</td>
+              <td><a href="/launcher?plan_id={{h.operation.plan_associations[0].plan_id}}">{{h.operation.plan_associations[0].plan_id}}</a></td>
+              <td>Job{{h.operation.jobs.length==1 ? '' : 's'}}: <a ng-repeat="job in h.operation.jobs" href="/jobs/{{job.id}}">{{job.id}}</a>              
+            </tr>
+          </table>
+        </div>
+
       </div>
 
     </div>
