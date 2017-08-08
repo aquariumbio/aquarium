@@ -59,15 +59,15 @@ module Serialize
 
   end
 
-  def self.fast_operation_types
+  def self.fast_operation_types dep=true
 
-    ots = OperationType.all
+    ots = OperationType.where(deployed: dep)
     ot_ids = ots.collect { |ot| ot.id }
     fts = FieldType.includes(:allowable_field_types).where(parent_class: "OperationType", parent_id: ot_ids)
     st_ids = fts.collect { |ft| ft.allowable_field_types.collect { |aft| aft.sample_type_id }}.flatten
     sts = SampleType.where(id: st_ids)
     ob_ids = fts.collect { |ft| ft.allowable_field_types.collect { |aft| aft.object_type_id }}.flatten
-    obs = ObjectType.where(id: st_ids)
+    obs = ObjectType.where(id: ob_ids)
 
     ots.collect { |ot| 
 
@@ -77,11 +77,14 @@ module Serialize
         .collect { |ft| 
            sft= ft.as_json plain: true
            sft[:allowable_field_types] = ft.allowable_field_types.collect { |aft| 
-             { sample_type_id: aft.sample_type_id, 
+             { 
+               id: aft.id,
+               sample_type_id: aft.sample_type_id, 
                object_type_id: aft.object_type_id,
                field_type_id: aft.field_type_id,
                sample_type: sts.find { |st| st.id == aft.sample_type_id }.as_json,
-               object_type: obs.find { |st| st.id == aft.object_type_id }.as_json  }
+               object_type: obs.find { |ot| ot.id == aft.object_type_id }.as_json
+             }
            }
            sft
          }
