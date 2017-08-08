@@ -24,7 +24,7 @@
       $scope.current_user = user;
       $scope.getting_plans = true;    
 
-      AQ.OperationType.all_with_content(true).then((operation_types) => {
+      AQ.OperationType.all_fast(true).then((operation_types) => {
 
         $scope.operation_types = aq.where(operation_types,ot => ot.deployed);
         AQ.OperationType.compute_categories($scope.operation_types);
