@@ -343,7 +343,7 @@ AQ.Operation.record_methods.instantiate = function(plan,field_value,sid) { // in
 
     // Find items associated with samples
     aq.each(operation.field_values, fv => {
-      if ( fv.routing == field_value.routing ) {
+      if ( !fv.field_type.array && fv.routing == field_value.routing ) {
         fv.clear_item().find_items(sid);
       }
     })
