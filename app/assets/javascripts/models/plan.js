@@ -59,8 +59,8 @@ AQ.Plan.record_methods.save = function() {
         AQ.Test.plan_diff(before,p)
         resolve(p);
       }).catch(response => { 
-        console.log(response);
-        plan.errors = [ "POST error" ]
+        console.log(response.data.errors);
+        plan.errors = response.data.errors;
       });
     });
 

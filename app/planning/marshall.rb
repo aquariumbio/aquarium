@@ -38,6 +38,7 @@ module Marshall
           operation.save
         end
         ids << operation.id
+        @@id_map ||= []
         @@id_map[operation.id] = op[:rid]
        rescue Exception => e
         raise "Marshalling error: #{e.to_s}: #{e.backtrace[0].to_s}"
@@ -53,8 +54,10 @@ module Marshall
     ot = OperationType.find(x[:operation_type_id])
     op = ot.operations.create status: "planning", user_id: @@user.id, x: x[:x], y: x[:y]
 
-    x[:field_values].each do |fv|
-      self.field_value op, fv, x[:routing]
+    if x[:field_values]
+      x[:field_values].each do |fv|
+        self.field_value op, fv, x[:routing]
+      end
     end
 
     return op
