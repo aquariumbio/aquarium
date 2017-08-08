@@ -9,7 +9,7 @@
         <opener model="plan.open" class='no-highlight clickable no-margin' off="true"></opener>&nbsp;
       </span>
       <span class="md-body-2 no-highlight" ng-click="plan.open = !plan.open">
-        {{plan.id}}: {{plan.operations[0].operation_type.name}}
+        {{plan.id}}: {{plan.name ? plan.name : plan.operations[0].operation_type.name}}
         <span ng-if="plan.user_id != current_user.id">({{plan.user.login}})</span>
       </span>
     </div>
@@ -60,9 +60,11 @@
             </md-menu-item>
           <% end %>
 
+          <% if false # This action should not be necessary since you can replan and relaunch instead %>
           <md-menu-item aria-label="Copy">
             <md-button ng-disabled="plan.relaunching" ng-click="relaunch(plan)">Copy</md-button>
           </md-menu-item>
+          <% end %>
 
           <md-menu-item aria-label="Replan">
             <md-button ng-disabled="plan.relaunching" ng-click="replan(plan)">Replan</md-button>
@@ -94,11 +96,7 @@
   <md-button ng-if="!no_more_plans && plans.length > 0"
     class='md-raised md-primary md-small' 
     ng-disabled="getting_plans"
-    ng-click="more_plans()">More</md-button>
-
-  <md-button ng-if="single_plan_query"
-    class='md-raised md-primary md-small' 
-    href="/launcher">All</md-button>    
+    ng-click="more_plans()">More</md-button>  
 
   <br /><br />
  

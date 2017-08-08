@@ -2,8 +2,8 @@
 
   var w = angular.module('aquarium'); 
 
-  w.controller('launcherCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', 
-                      function (  $scope,   $http,   $attrs,   $cookies,   $sce ) {
+  w.controller('launcherCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', '$window',
+                      function (  $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) {
 
     AQ.init($http);
     AQ.update = () => { $scope.$apply(); }
@@ -22,9 +22,7 @@
       plans: "Loading"
     };
 
-    $scope.state = {
-      folder: null
-    }
+    $scope.state = { folder: "__NO_FOLDER_SELECTED__" };
 
     AQ.User.active_users().then(users => {
 
@@ -43,6 +41,8 @@
           plan_promise =  AQ.Plan.list(0,$scope.current_user,$scope.state.folder,aq.url_params().plan_id);
           $scope.no_more_plans = true;
           $scope.single_plan_query = true;
+          $scope.state.plan_id = aq.url_params().plan_id;          
+          $window.history.replaceState(null, document.title, "/launcher"); 
         } else {
           plan_promise =  AQ.Plan.list($scope.plan_offset)
         }        
@@ -62,9 +62,8 @@
             });
 
             AQ.Plan.get_folders().then(folders => {
-
               $scope.folders = folders;
-              if ( !$scope.folders.includes($scope.state.folder) ) {
+              if ( !$scope.state.plan_id && !$scope.folders.includes($scope.state.folder) ) {
                 $scope.state.folder = null;
               }
 

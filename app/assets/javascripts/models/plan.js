@@ -577,6 +577,10 @@ AQ.Plan.record_methods.valid = function() {
     })
   })
 
+  aq.each(plan.wires, wire => {
+    v = v && wire.consistent();
+  });
+
   return v;
 }
 

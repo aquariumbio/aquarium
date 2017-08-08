@@ -49,12 +49,13 @@
               ng-mousedown="fvMouseDown($event, op, fv)" 
               cy="0" />
 
-      <!-- Mouseover => Name -->
-<!--       <text ng-attr-x="{{op.width/2 + ($index - outputs.length/2.0 + 0.5)*snap}}"  
-            y="0" 
+      <!-- Name -->
+      <text ng-attr-x="{{op.width/2 + ($index - outputs.length/2.0 + 0.5)*snap + 4}}"  
+            y="-10"
+            ng-if="fv == current_fv"
             class="field-name-help">
         {{fv.name}}
-      </text> -->
+      </text>
 
     </g>
 
@@ -89,7 +90,15 @@
             ng-attr-x="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap - 5}}"
             ng-mousedown="fvMouseDown($event, op, tv.value)" 
             ng-attr-y="{{op.height-5}}" width="10" height="10"
-            ng-attr-data-name="{{tv.value.name}}"  />
+            ng-attr-data-name="{{tv.value.name}}" />
+
+      <!-- Name -->
+      <text ng-attr-x="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap + 8}}"  
+            ng-attr-y="{{op.height+18}}"
+            ng-if="tv.value == current_fv"
+            class="field-name-help">
+        {{tv.value.name}}
+      </text>
 
     </g>
 

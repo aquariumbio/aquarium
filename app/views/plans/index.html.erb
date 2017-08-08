@@ -29,6 +29,11 @@
       <div class="dismiss clickable" ng-click="state.submitted_plan = null">&times;</div>
     </div>  
 
+    <div ng-if="state.message" class="message">
+      <p>{{state.message}}</p>
+      <div class="dismiss clickable" ng-click="state.message = null">&times;</div>
+    </div>
+
     <div ng-if="!current_op && !current_fv && !state.launch">
 
       <h4 class='md-subhead'>Current Plan<span ng-if="plan.id">: {{plan.id}}</span></h4>
@@ -51,7 +56,7 @@
 
         <md-list class='md-very-compact-list' 
                  style="margin-left: 16px"
-                 ng-if="state.current_category == category" >
+                 ng-if="state.current_category == category">
           <md-list-item ng-repeat="ot in operation_types | filter: { category: category } | orderBy:'name'">
             <a href="#" ng-click="add_operation(ot)">{{ot.name}}</a>
           </md-list-item>
@@ -59,7 +64,7 @@
 
       </div>
 
-      <h4 class='md-subhead'>Plans {{state.loading_plans ? '... loading' : ''}}</h4>
+      <h4 class='md-subhead'>Plans Under Construction {{state.loading_plans ? '... loading' : ''}}</h4>
 
       <md-list class='md-very-compact-list'>        
         <md-list-item ng-repeat="p in plans | orderBy:'-'" ">
@@ -114,6 +119,14 @@
              ng-disabled="!plan.id"
              ng-click="delete_plan(plan)">
              Delete
+  </md-button>
+<% end %>
+
+<% content_for :action5 do %>
+  <md-button class='md-raised' 
+             ng-disabled="plan.operations.length == 0"
+             ng-click="copy_plan(plan)">
+             Copy
   </md-button>
 <% end %>
 

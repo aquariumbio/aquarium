@@ -16,7 +16,8 @@
     padding: 10px;
     background: lightyellow;
     position: relative;
-    border: 1pt solid #eee;    
+    border: 1pt solid #eee;
+    padding-right: 20px;  
   }  
 
   .editor-main {
@@ -197,6 +198,11 @@
     stroke-width: 2.5;    
   }
 
+  .wire-inconsistent {
+    stroke-width: 2.5;
+    stroke: orange;
+  }
+
   .wire-arrowhead, .wire-arrowhead-selected {
     fill: #555;
     /*stroke: #555;*/
@@ -209,7 +215,11 @@
     /*stroke-width: 2.5;    */
   }
 
-
+  .wire-arrowhead-inconsistent {
+    fill: orange;
+    /*stroke: black;*/
+    /*stroke-width: 2.5;    */
+  }
   .multiselect {
     stroke: black;
     stroke-width: #bbb;

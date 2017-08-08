@@ -13,12 +13,12 @@
   <h4 class='md-subhead'>Folders</h4>
 
   <md-list class='md-very-compact-list'>
-    <md-list-item ng-click="select_folder(null)">
+    <md-list-item ng-click="select_folder(null)" ng-class="state.folder == null ? 'selected-folder' : ''">
       <div ng-class="state.folder == null ? 'selected-folder' : ''">
         Unsorted
       </div>
     </md-list-item>
-    <md-list-item ng-repeat="folder in folders | filter: ''" 
+    <md-list-item ng-repeat="folder in folders | filter: ''| orderBy:''" 
                   ng-click="select_folder(folder)" 
                   ng-class="state.folder == folder ? 'selected-folder' : ''">
       <div ng-class="state.folder == folder ? 'selected-folder' : ''">

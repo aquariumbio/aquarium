@@ -256,14 +256,24 @@ AQ.FieldValue.record_methods.backchain = function(plan,operation) {
 }
 
 AQ.FieldValue.record_methods.valid = function() {
-  var fv = this;
+
+  var fv = this, 
+       v;
+
   if ( fv.field_type.ftype != 'sample' ) {
-    return !! fv.value;
+    v = !! fv.value;
   } else if ( fv.aft && fv.aft.sample_type_id ) {
-    return fv.child_sample_id && ( fv.num_wires > 0 || fv.role == 'output' || fv.child_item_id );
+    v = fv.child_sample_id && ( fv.num_wires > 0 || fv.role == 'output' || fv.child_item_id );
   } else {
-    return fv.num_wires > 0 || fv.role == 'output' || fv.child_item_id;
+    v = fv.num_wires > 0 || fv.role == 'output' || fv.child_item_id;
   }
+
+  if ( fv.role == 'input' && fv.num_wires == 0 && fv.field_type.part && ( !fv.row || !fv.column ) ) {
+    v = false;
+  }
+
+  return v;
+
 } 
 
 AQ.FieldValue.record_methods.empty = function() {

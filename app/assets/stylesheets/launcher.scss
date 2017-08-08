@@ -165,7 +165,7 @@
   .plan-row {
     padding: 5px;
     margin: 0 25px 0 0px;
-    transition: margin ease 0.1s;
+    width: 100%;
   }
 
   .plan-header {
@@ -179,9 +179,6 @@
     border-right: 1pt solid $plan-border-color;
     border-left: 1pt solid $plan-border-color;
     background: $plan-header-color;
-    margin-top: 16px;
-    margin-left: 16px;
-    transition: margin ease 0.1s;
   }
 
   .plan-details {
@@ -189,8 +186,7 @@
     border-right: 1pt solid $plan-border-color;
     border-bottom: 1pt solid $plan-border-color;    
     background: $plan-details-color;    
-    margin: 0 25px 16px 16px; 
-    transition: margin ease 0.2s;      
+    margin-bottom: 16px;
   }
 
   .no-side-margins {

@@ -9,7 +9,7 @@ class PlanCopier
 
     @new_plan = @plan.dup
     @new_plan.status = "planning"
-    @new_plan.name = @plan.name + " (copy)"
+    @new_plan.name = @plan.name ? @plan.name + " (copy)" : "Copy of plan #{@plan.id}";
     @new_plan.save
 
     copy_ops
@@ -21,10 +21,19 @@ class PlanCopier
 
   def copy_ops
 
+    y = 16
+
     @plan.operations.each do |op|
 
       new_op = op.dup
-      new_op.status = "pending"
+      new_op.status = "planning"
+
+      new_op.x = 500 * rand unless op.x
+      unless op.y
+        new_op.y = y 
+        y += 64
+      end
+
       new_op.save
 
       pa = PlanAssociation.new plan_id: @new_plan.id, operation_id: new_op.id
