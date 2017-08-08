@@ -141,7 +141,11 @@
 
         </md-toolbar>
 
-        <md-content class='main scrollable'>
+        <% if content_for? :no_main_scroll_decision %>
+          <md-content class='main'>        
+        <% else %>
+          <md-content class='main scrollable'>
+        <% end %>
            <%= yield :main %>
         </md-content>
 

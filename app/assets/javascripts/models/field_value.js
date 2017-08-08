@@ -1,10 +1,27 @@
-AQ.FieldValue.record_methods.clear = function() {
-  this.items = [];
-  this.item = null;
-  return this;
-}
 
 AQ.FieldValue.getter(AQ.Item,"item","child_item_id");
+
+AQ.FieldValue.record_getters.is_sample = function() {
+  return this.field_type.ftype == 'sample';
+}
+
+AQ.FieldValue.record_getters.is_param = function() {
+  return this.field_type.ftype != 'sample';
+}
+
+AQ.FieldValue.record_getters.type = function() {
+  return this.field_type.ftype;
+}
+
+AQ.FieldValue.record_getters.num_wires = function() {
+  delete this.num_wires;
+  this.num_wires = 0;
+  return 0;
+}
+
+AQ.FieldValue.record_getters.wired = function() {
+  return this.num_wires > 0;
+}
 
 AQ.FieldValue.record_getters.predecessors = function() {
 
@@ -22,6 +39,25 @@ AQ.FieldValue.record_getters.predecessors = function() {
   delete fv.predecessors;
   fv.predecessors = preds;
   return preds;
+
+}
+
+AQ.FieldValue.record_getters.successors = function() {
+
+  var fv = this;
+  var sucs = [];
+
+  aq.each(AQ.operation_types,function(ot) {
+    aq.each(ot.field_types,function(ft) {
+      if ( ft.role == 'input' && ft.can_consume(fv) ) {
+        sucs.push({operation_type: ot, input: ft});
+      } 
+    });
+  });
+
+  delete fv.successors;
+  fv.successors = sucs;
+  return sucs;
 
 }
 
@@ -48,27 +84,83 @@ AQ.FieldValue.record_methods.route_compatible = function(other_fv) {
          (  other_fv.array &&  fv.array && other_fv.sample_identifier == fv.sample_identifier );
 }
 
-AQ.FieldValue.record_methods.find_items = function(sid) {
+AQ.FieldValue.record_methods.clear_item = function() {
 
   var fv = this;
 
-  return new Promise(function(resolve,reject) {    
+  console.log("Clearing fv " + fv.name)
 
-    AQ.items_for(sid,fv.aft.object_type_id).then( items => { 
+  delete fv.child_item;
+  delete fv.child_item_id;
+  delete fv.row;
+  delete fv.column;
+  return fv;
 
-      if ( items.length > 0 ) {  
+}
+
+AQ.FieldValue.record_methods.clear = function() {
+  console.log("Called FieldValue:clear(), which doesn't do anything anymore")
+  return this;
+}
+
+AQ.FieldValue.record_methods.find_items = function(sid) {
+
+  var fv = this,
+      sample_id;
+
+  if ( fv.field_type.ftype == 'sample' ) {
+
+    sample_id = AQ.id_from(sid);
+    // fv.sid = sid;
+
+    delete fv.items;  
+
+    return new Promise(function(resolve,reject) {    
+
+      AQ.items_for(sample_id,fv.aft.object_type_id).then( items => { 
         fv.items = items;
-        fv.items[0].selected = true;
-        fv.selected_item = items[0];
-        fv.sid = sid;
+        if ( fv.items.length > 0 ) {
+          if ( ! fv.child_item_id && fv.role == 'input' && fv.num_wires == 0 ) {
+            if ( !items[0].collection ) {
+              fv.child_item_id = items[0].id;
+            } else {
+              fv.child_item_id = items[0].collection.id;
+              items[0].collection.assign_first(fv);
+            }
+          } 
+        }
         AQ.update();
-      } 
-
-      resolve(items);
+        resolve(items);
+      });
 
     });
 
-  });
+  } else {
+    fv.items = [];
+  }
+
+}
+
+AQ.FieldValue.record_getters.items = function() {
+
+  var fv = this;
+
+  // console.log(["items getter: ", fv])
+
+  if ( fv.child_sample_id ) {
+
+    delete fv.items;
+    // console.log("    finding items");
+    fv.find_items(""+fv.child_sample_id);
+
+  } else {
+
+    // console.log("    no items to find because no sample specificed");
+    delete fv.items;
+    fv.items = [];
+
+  }
+
 
 }
 
@@ -160,11 +252,20 @@ AQ.FieldValue.record_methods.backchain = function(plan,operation) {
 
 }
 
-AQ.FieldValue.record_methods.sid = function() {
+AQ.FieldValue.record_methods.valid = function() {
   var fv = this;
-  if ( fv.child_sample ) {
-    return "" + fv.child_sample.id + ": " + fv.child_sample.name;
+  if ( fv.field_type.ftype != 'sample' ) {
+    return !! fv.value;
+  } else if ( fv.aft && fv.aft.sample_type_id ) {
+    return fv.child_sample_id && ( fv.num_wires > 0 || fv.role == 'output' || fv.child_item_id );
   } else {
-    return "";
+    return fv.num_wires > 0 || fv.role == 'output' || fv.child_item_id;
   }
 } 
+
+AQ.FieldValue.record_methods.empty = function() {
+  var fv = this;
+  return fv.child_sample_id;
+} 
+
+

@@ -87,7 +87,7 @@ class LauncherController < ApplicationController
     ActiveRecord::Base.transaction do 
 
       begin
-        plan,messages = plan_from params
+        plan = Plan.find(params[:id])
       rescue Exception => e
         error = e.to_s
         raise ActiveRecord::Rollback
@@ -98,9 +98,9 @@ class LauncherController < ApplicationController
         c = {}
 
         begin
-          c = op.nominal_cost.merge(labor_rate: labor_rate, markup_rate: markup, rid: @id_map[op.id])
+          c = op.nominal_cost.merge(labor_rate: labor_rate, markup_rate: markup, id: op.id)
         rescue Exception => e
-          c = { error: e.to_s }
+          c = { error: e.to_s + e.backtrace[0] }
         end
 
         c

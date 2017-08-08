@@ -2,11 +2,71 @@ class PlansController < ApplicationController
 
   before_filter :signed_in_user
 
-  def show
+  # Planner GUI
+
+  def index
     respond_to do |format|
-      format.html { render layout: 'browser' }
-    end    
+      format.json { render json: Plan.list(current_user).reverse }
+      format.html { render layout: 'aq2' }
+    end  
   end
+
+  def create
+
+    Marshall.user = current_user
+
+    ActiveRecord::Base.transaction do      
+      begin
+        @plan = Marshall.plan params
+      rescue Exception => e
+        @plan = Plan.new
+        @plan.errors.add :error, "Mashall failed"
+        @plan.errors.add :error, e.to_s + e.backtrace[0].to_s
+      end
+      raise ActiveRecord::Rollback unless @plan.errors.empty?
+    end
+
+    if @plan.errors.empty?
+      @plan.reload
+      render json: Serialize.serialize(@plan)
+    else
+      render json: { errors: @plan.errors }, status: 422
+    end
+
+  end
+
+  def update
+
+    Marshall.user = current_user   
+
+    ActiveRecord::Base.transaction do 
+      begin
+        @plan = Marshall.plan_update params
+      rescue Exception => e
+        @plan = Plan.new
+        @plan.errors.add :error, e.to_s
+      end
+      raise ActiveRecord::Rollback unless @plan.errors.empty?
+    end
+
+    if @plan.errors.empty?
+      render json: Serialize.serialize(@plan)
+    else
+      render json: { errors: @plan.errors }, status: 422
+    end
+
+  end
+
+  def show
+    respond_to do |format|      
+      format.html { 
+        redirect_to plans_url(params)
+      }
+      format.json { render json: Serialize.serialize(Plan.find(params[:id])) }
+    end           
+  end
+
+  # End Planner GUI
 
   def manager
     respond_to do |format|
@@ -22,20 +82,14 @@ class PlansController < ApplicationController
     end
   end
 
-  def show
-    respond_to do |format|      
-      format.html { 
-        redirect_to plans_url(params)
-      }
-      format.json { render json: Plan.find(params[:id]).serialize }
-    end           
-  end
-
   def start
     p = Plan.find(params[:id])
-    issues = p.start
-    p.reload
-    render json: { plan: p.serialize, issues: issues }
+    errors = Planner.start p
+    if errors.any?
+      render json: errors, status: 422
+    else
+      render json: { result: "ok" }
+    end
   end
 
   def value data
@@ -60,62 +114,56 @@ class PlansController < ApplicationController
     r ? r : "null"
   end
 
-  def plan
+  # def plan
 
-    ot = OperationType.find(params[:ot_id])
+  #   ot = OperationType.find(params[:ot_id])
 
-    errors = []
+  #   errors = []
 
-    operations = params[:operations].collect do |o|
+  #   operations = params[:operations].collect do |o|
 
-      op = ot.operations.create status: "planning", user_id: current_user.id
+  #     op = ot.operations.create status: "planning", user_id: current_user.id
 
-      ot.inputs.each do |input|       
-        if input.empty?
-          op.set_input input.name, nil 
-        else
-          v = routing_value o[:routing][route_name(input.routing)]
-          aft = AllowableFieldType.find_by_id(o[:form_inputs][input.name][:aft][:id])
-          op.set_input input.name, v, aft if v
-          errors << "Input '#{input.name}' not specified. IO specifications should be in the form id: name." unless v
-        end
-      end
+  #     ot.inputs.each do |input|       
+  #       if input.empty?
+  #         op.set_input input.name, nil 
+  #       else
+  #         v = routing_value o[:routing][route_name(input.routing)]
+  #         aft = AllowableFieldType.find_by_id(o[:form_inputs][input.name][:aft][:id])
+  #         op.set_input input.name, v, aft if v
+  #         errors << "Input '#{input.name}' not specified. IO specifications should be in the form id: name." unless v
+  #       end
+  #     end
 
-      ot.outputs.each do |output|
-        if output.empty?
-          op.set_output output.name, nil
-        else
-          v = routing_value o[:routing][route_name(output.routing)]
-          aft = AllowableFieldType.find_by_id(o[:form_outputs][output.name][:aft][:id])
-          op.set_output output.name, v, aft if v
-          errors << "Output '#{output.name}' not specified. IO specifications should be in the form id: name." unless v
-        end
-      end   
+  #     ot.outputs.each do |output|
+  #       if output.empty?
+  #         op.set_output output.name, nil
+  #       else
+  #         v = routing_value o[:routing][route_name(output.routing)]
+  #         aft = AllowableFieldType.find_by_id(o[:form_outputs][output.name][:aft][:id])
+  #         op.set_output output.name, v, aft if v
+  #         errors << "Output '#{output.name}' not specified. IO specifications should be in the form id: name." unless v
+  #       end
+  #     end   
 
-      op
+  #     op
 
-    end
+  #   end
 
-    if errors.empty?
-      planner = Planner.new OperationType.where(deployed: true)
-      planner.plan_trees operations   
-      planner.plan.reload
-      render json: planner.plan.serialize
-    else
-      render json: { errors: errors }
-    end
+  #   if errors.empty?
+  #     planner = Planner.new OperationType.where(deployed: true)
+  #     planner.plan_trees operations   
+  #     planner.plan.reload
+  #     render json: planner.plan.serialize
+  #   else
+  #     render json: { errors: errors }
+  #   end
 
-  end
-
-  def index
-    respond_to do |format|
-      format.json { render json: Plan.list(current_user).reverse }
-      format.html { render layout: 'browser' }
-    end  
-  end
+  # end
 
   def destroy
-    Plan.find(params[:id]).remove
+    plan = Plan.find(params[:id])
+    plan.remove if plan.status == "planning"
     render json: {}
   end
 

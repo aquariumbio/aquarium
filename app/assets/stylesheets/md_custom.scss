@@ -64,6 +64,27 @@ $buttonHighlight: rgb(73, 91, 281);
   }
 }
 
+.md-very-compact-list {
+
+  padding: 2px;
+
+  .md-no-proxy {
+    height: 20px;
+    min-height: 20px;
+  }
+  .md-proxy-focus {
+    height: 20px;
+    min-height: 20px;
+  }  
+  .md-checkbox, .md-button, ._md-button-wrap, .md-list-item-inner, .md-secondary-container {
+    height: 20px !important;
+    min-height: 20px !important;    
+  } 
+  md-checkbox {
+    margin: 4px !important;
+  }
+}
+
 /* NG_CLICK *****************************************************************/
 
 .no-highlight:focus {
@@ -81,4 +102,19 @@ $buttonHighlight: rgb(73, 91, 281);
     border: none !important;
  }
 
+}
+
+/* TABS *********************************************************************/
+
+.md-compact-tabs {
+  margin-top: 16px;
+  md-tabs-wrapper, md-tabs-canvas, md-pagination-wrapper, md-tabs-dummy-wrapper {
+    height: 24px;
+  }
+  .md-tab {
+    padding: 0px 10px 6px 10px !important;
+    font-size: 9pt;
+    .md-ripple-container {
+    }
+  }
 }

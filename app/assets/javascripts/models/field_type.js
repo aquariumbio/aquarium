@@ -33,12 +33,13 @@ AQ.FieldType.record_methods.can_produce = function(fv) {
   var ft = this,
       rval = false;
 
-  if ( ft.ftype == "sample" && fv.field_type.ftype == "sample" ) {
+  if ( ft.ftype == "sample" && fv.field_type.ftype == "sample" ) {      
 
     aq.each(ft.allowable_field_types, (aft) => {
       if ( fv.aft.sample_type_id == aft.sample_type_id &&
            fv.aft.object_type_id == aft.object_type_id && 
-           Number(fv.field_type.part) == Number(ft.part) ) { // Note, Number is used to compare null and false
+           Number(fv.field_type.part) == Number(ft.part) ) { // Note, Number is used to compare null and false.
+                                                             // Could also use !!
         rval = true;
       }
     });
@@ -52,6 +53,8 @@ AQ.FieldType.record_methods.can_produce = function(fv) {
   return rval;
 
 }
+
+AQ.FieldType.record_methods.can_consume = AQ.FieldType.record_methods.can_produce;
 
 AQ.FieldType.record_getters.choices_array = function() {
 

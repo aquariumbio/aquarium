@@ -27,3 +27,24 @@ AQ.Collection.record_methods.store = function() {
   })
 
 }
+
+AQ.Collection.record_methods.assign_first = function(fv) {
+
+  var r, c;
+
+  for ( r=0; r<this.matrix.length; r++ ) {
+    for ( c=0; c<this.matrix[r].length; c++ ) {
+      if ( this.matrix[r][c] == fv.sid ) {
+        fv.row = r;
+        fv.column = c;
+        return fv;
+      }
+    }
+  }
+
+  delete fv.row;
+  delete fv.column;
+
+  return fv;
+
+}

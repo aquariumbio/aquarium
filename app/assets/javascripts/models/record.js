@@ -60,8 +60,10 @@ AQ.Record.prototype.recompute_getter = function(gname) {
 
 AQ.Record.prototype.init = function(data) {
   for ( var key in data ) {
-    delete this[key]
-    this[key] = data[key];
+    if ( key != 'rid' ) {
+      delete this[key]
+      this[key] = data[key];
+    }
   }
   return this;
 }

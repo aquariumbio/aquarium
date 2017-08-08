@@ -1,82 +1,144 @@
 <% provide(:title, 'Planner') %>
 
-<div ng-app="aquarium" 
-     ng-controller="plannerCtrl as planner" 
-     class='planner'>
+<%= render partial: 'field_value_editor' %>
+<%= render partial: 'operation_info' %>
+<%= render partial: 'io_editor' %>
+<%= render partial: '/data_associations/template' %> 
+<%= render partial: "/items/template" %>
+<%= render partial: 'launch_plan' %>  
 
-  <%= render partial: "/fields/field_type" %>  
-  <%= render partial: "/fields/field_value" %>  
-  <%= render partial: "operation" %> 
-  <%= render partial: "/data_associations/list" %>  
+<% content_for :controller do %>planCtrl<% end %>
+<% content_for :class do %>plans launcher<% end %>
+<% content_for :no_main_scroll_decision do %>true<% end %>
 
-  <script type="text/ng-template" id="plan_list">
-    <div ng-class='plan_choice_class(plan)' ng-click="select_plan(plan)">
-      {{plan.id}}. {{plan.goals[0].operation_type.name}}:
-      <span class="op-goal" ng-repeat="output in plan.goals[0].outputs">{{output.child_sample.name}}</span>
+<% content_for :specific_title do %>
+  <span ng-if="current_op">&rang; {{current_op.operation_type.name}}</span>
+  <span ng-if="current_fv">&rang; {{current_fv.name}}</span>
+<% end %>
+
+<% content_for :sidebar do %>
+
+  {{plan.errors}}
+
+  <div ng-if="ready" layout-fill>
+
+    <div ng-if="!current_op && !current_fv && !state.launch">
+
+      <h4 class='md-subhead'>Current Plan<span ng-if="plan.id">: {{plan.id}}</span></h4>
+
+      <div style="margin-left: 16px; margin-top: 16px">
+        <input type=text class="plan-name-input-" ng-model=plan.name>
+      </div>
+
+      <h4 class='md-subhead'>Operation Types</h4>
+
+      <div ng-repeat="category in operation_types.categories | orderBy:''">
+        
+        <md-header ng-click="state.current_category = (state.current_category == category ? null : category)"
+                   class='clickable no-highlight' style="margin-left: 16px">
+          <span class='opener'>
+            {{state.current_category == category ? '&#9660;' : '&#9658;'}}
+          </span>
+          <span>{{category}}</span>
+        </md-header>
+
+        <md-list class='md-very-compact-list' 
+                 style="margin-left: 16px"
+                 ng-if="state.current_category == category" >
+          <md-list-item ng-repeat="ot in operation_types | filter: { category: category } | orderBy:'name'">
+            <a href="#" ng-click="add_operation(ot)">{{ot.name}}</a>
+          </md-list-item>
+        </md-list>      
+
+      </div>
+
+      <h4 class='md-subhead'>Plans {{state.loading_plans ? '... loading' : ''}}</h4>
+
+      <md-list class='md-very-compact-list'>        
+        <md-list-item ng-repeat="p in plans | orderBy:'-'" ">
+          <a href='#' class='no-highlight' ng-click="load(p)">
+            <span ng-if="p.id != plan.id">{{p.id}}: {{p.name}}</span>
+            <span ng-if="p.id == plan.id"><b>{{p.id}}: {{p.name}}</b></span>
+            <span ng-if="state.deleting_plan.id == p.id"> ... deleting </span>
+          </a>
+        </md-list-item>
+      </md-list>
+
     </div>
-  </script>
 
-  <div class='two-column' ng-if="ready">
-
-    <div class='two-column-left'>
-
-      <div class="two-column-control">
-
-        <h5>Under Construction</h5>
-
-        <ul class="plan-list">
-          <li ng-repeat="plan in plans | filter: { status: 'Under Construction' }" ng-include="'plan_list'"></li>
-        </ul>
-
-        <button class='btn btn-mini btn-primary' ng-click="set_mode('choose')">New</button>        
-
-      </div>
-
-      <div class="two-column-control">
-
-        <h5>Running</h5>
-
-        <ul class="plan-list">
-          <li ng-repeat="plan in plans | filter: { status: 'Running' }" ng-include="'plan_list'"></li>
-        </ul>
-
-      </div>
-
-      <div class="two-column-control">
-
-        <h5>Error</h5>
-
-        <ul class="plan-list">
-          <li ng-repeat="plan in plans | filter: { status: 'Error' }" ng-include="'plan_list'"></li>
-        </ul>        
-
-      </div>      
-
-      <div class="two-column-control">
-
-        <h5>Completed</h5>
-
-        <ul class="plan-list">
-          <li ng-repeat="plan in plans | filter: { status: 'Completed' }" ng-include="'plan_list'"></li>
-        </ul>        
-
-      </div>
-
+    <div ng-if="current_op && !current_fv" 
+         ng-include="'operation_info'">
     </div>
- 
-    <div class='two-column-right'>    
-      <div  style="margin-left: 15px">
-        <%= render partial: "main" %>
-        <%= render partial: "choose_goal" %>
-        <%= render partial: "build_plan" %>
-        <%= render partial: "view_edit_plan" %>
-      </div>
+
+    <div ng-if="current_fv"
+         ng-include="'field_value_editor'">
     </div>
+
+    <div ng-if="state.launch" 
+         ng-include="'launch_plan'">ASD
+    </div>      
 
   </div>
 
-  <div ng-if="!ready">
-    Loading...
+<% end %>
+
+<% content_for :action1 do %>
+  <md-button class='md-raised' ng-click="new(plan)">New</md-button>
+<% end %>
+
+<% content_for :action2 do %>
+  <md-button class='md-raised' 
+             ng-click="save(plan)" 
+             ng-disabled="plan.saving || plan.operations.length == 0">
+             Save
+  </md-button>
+<% end %>
+
+<% content_for :action3 do %>
+  <md-button class='md-raised' 
+             ng-click="launch()"
+             ng-disabled="!plan.id || !plan.valid() || state.launch">
+             Launch
+  </md-button>
+<% end %>
+
+<% content_for :action4 do %>
+  <md-button class='md-raised' 
+             ng-disabled="!plan.id"
+             ng-click="delete_plan(plan)">
+             Delete
+  </md-button>
+<% end %>
+
+<% content_for :main do %>
+
+  <div flex layout-padding ng-if="!ready">
+    <div layout="row">
+      <div flex="34"></div>
+      <div flex="66">
+        <br /><br />
+        <h2 class="md-title">Loading ...</h2>
+        <br />
+        <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+      </div>
+    </div>
+  </div>  
+
+  <div class="editor-main" layout="column" ng-if="ready">
+
+    <div flex class="plan-editor-container scrollable"
+         ng-keydown="keyDown($event)" tabindex="0">
+      <%= render partial: 'plan_editor' %>
+    </div>
+
+    <div class="wrapper operation-editor scrollable">
+      <inner>
+        <%= render partial: 'operation_editor' %>
+      </inner>
+    </div>   
+
   </div>
 
-</div>
+<% end %>
+
+

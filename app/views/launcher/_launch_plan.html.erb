@@ -1,10 +1,10 @@
 <script type="text/ng-template" id="launch_plan">
 
-  <md-content ng-if="mode=='new'">
+  <md-content>
 
     <div class="title">
 
-      <span class="md-title" ng-if="plan && plan.operations.length > 0">{{plan.operations[0].operation_type.name}}</span>
+      <span class="md-title" ng-if="plan && plan.operations.length > 0">{{plan.name}}</span>
       <% if current_user && current_user.is_admin %>
         <div ng-if="current_user.id != <%= current_user.id %>">
           <span class='md-body other-user-alert'>

@@ -1,0 +1,232 @@
+.plans {
+
+  .wrapper {
+    inner {
+      display: block;
+    }
+  }
+
+  .editor-main {
+
+    height: 100%;
+    width: calc(100vw - 320px);
+    position: relative;
+
+    .operation-editor {
+
+      outline: none;
+      border-top: 1pt solid #ccc;
+      overflow: scroll;
+      margin-top: 5px;
+      margin-right: 5px;
+      padding: 16px 0 26px 0;
+      transition: height ease .4s;
+
+      .io-container {
+
+        margin: 2px;
+
+        input {
+          height: 30px !important;
+          width: 100%;
+          outline: none;
+          border: 1pt solid #eee;
+          padding: 2px;
+          margin: 0px;
+          border-radius: 2px;
+
+          &:focus {
+            outline: none;
+            border-color: #9ecaed;
+            box-shadow: 0 0 10px #9ecaed;
+          }
+          
+        }
+        .io-type {
+          text-align: right;
+          font-weight: bold;
+          width: 100%;
+          display: inline-block;
+          padding-right: 8px;
+        }
+
+        .array-remove-container {
+          font-size: 14pt;
+          padding: 3px 3px 3px 12px;
+        }
+
+        .add-array {
+          padding: 3px;
+          height: 30px !important;
+        }
+
+      }
+
+    }
+
+    .plan-editor-container {
+
+      position: relative;
+      overflow: scroll;
+      outline: none;
+
+      .plan-editor {
+
+        outline: 1pt solid green;
+        margin: 50px;
+        border: none;
+        width: calc(100vw - 320px);
+        height: 250%;
+        cursor: arrow;
+        margin: 0px;
+
+        &:active {
+          cursor: arrow;
+        }
+
+      }     
+
+    }  
+
+  }
+
+  .field-name-help {
+    text-anchor: 'start';
+    background: white;
+  }
+
+  .op, .op-selected {
+    fill: white;
+    stroke: black;
+    stroke-width: 1.5;  
+    rx: 2px;
+    ry: 2px;       
+    cursor: pointer;  
+  }
+
+  .op-selected {
+    fill: azure;  
+    stroke-width: 2; 
+    box-shadow: 10px 10px 5px yellow;
+  }
+
+  .op-name {
+    font-size: 9pt;
+    text-anchor: middle;
+    cursor: pointer;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;    
+  }
+
+  .op-cost {
+    font-size: 8pt;
+    fill: blue;
+    text-anchor: start;
+    cursor: pointer;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;    
+  }  
+
+  .field-value {
+    fill: white;
+    stroke: black;
+    stroke-width: 1px;
+    cursor: pointer;
+    r: 5;
+  }
+
+  .field-value-selection {
+    r: 9;
+    stroke: cyan;
+    fill: none;
+  }
+
+  .field-value-compatible {
+    fill: cyan;
+  }
+
+  .field-value-valid {
+    fill: lightgreen;
+  }
+
+
+  .field-value-invalid {
+    fill: orange;
+  }  
+
+  .parameter {
+    fill: white;
+    stroke: black;
+    stroke-width: 1px; 
+    cursor: pointer;
+  }
+
+  .parameter-has-value {
+    fill: lightgreen;
+  }  
+
+  .parameter-has-no-value {
+    fill: orange;
+  }    
+
+  .wire, .wire-selected {
+    fill: none;
+    stroke: #555;
+    stroke-width: 1.5;
+  }
+
+  .wire-selected {
+    stroke: black;
+    stroke-width: 2.5;    
+  }
+
+  .wire-arrowhead, .wire-arrowhead-selected {
+    fill: #555;
+    /*stroke: #555;*/
+    /*stroke-width: 1.5;*/
+  }
+
+  .wire-arrowhead-selected {
+    fill: black;
+    /*stroke: black;*/
+    /*stroke-width: 2.5;    */
+  }
+
+
+  .multiselect {
+    stroke: black;
+    stroke-width: #bbb;
+    fill: none;
+    stroke-dasharray: 2;
+    cursor: arrow;
+  }
+
+  .multiselect:active {
+    cursor: arrow;
+  }
+
+  .items-in-stock {
+    background: #eeffee;
+    color: #060;
+  }  
+
+  .plan-name-input {
+    color: black;
+    display: inline-block;    
+    padding: 0;
+    margin: 0;
+    border: 1pt solid #eee !important;
+    height: 20px !important;
+    line-height: 20px;
+    -webkit-appearance:none;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+    background: transparent;
+  }
+
+}

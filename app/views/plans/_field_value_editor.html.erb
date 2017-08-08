@@ -1,0 +1,138 @@
+<script type="text/ng-template" id="field_value_editor">
+
+  <md-content class="field-value-editor">
+
+    <div class="title">
+      <h1 class="md-title">{{current_op.operation_type.name}}</h1>  
+      <h1 class="md-subhead" ng-if="current_fv.is_param">{{current_fv.type|capitalize}} Parameter</h1>    
+      <h1 class="md-subhead">{{current_fv.role|capitalize}} name: {{current_fv.name}}, {{current_fv.rid}}</h1>
+      <p>op-routing = {{current_op.routing[current_fv.field_type.routing]}}</p>
+      <p>sid = {{current_fv.sid}}</p>
+      <p>child_sample_id = {{current_fv.child_sample_id}}</p>
+      wired={{current_fv.wired}}<br>
+      wires={{current_fv.num_wires}}<br>
+      _marked = {{current_fv._marked}}
+    </div>
+
+      <md-subheader class="md-no-sticky" ng-if="current_fv.is_sample">
+        Sample Type / Container Type
+      </md-subheader>
+
+      <md-list class='md-compact-list' ng-if="current_fv.is_sample">
+
+        <md-list-item ng-repeat="aft in current_fv.field_type.allowable_field_types">
+
+          <md-checkbox
+            ng-click="current_op.set_aft(current_fv.field_type,aft)"
+            ng-checked="current_op.form[current_fv.role][current_fv.name].aft_id == aft.id"
+            ng-disabled="current_fv.field_type.allowable_field_types.length === 1"
+            aria-label="Item">
+          </md-checkbox>
+
+          <p>
+            {{aft.sample_type_id ? aft.sample_type.name : 'No Sample Type'}} /         
+            {{aft.object_type_id ? aft.object_type.name : 'No Container'}}
+          </p>
+
+        </md-list-item>
+
+      </md-list>
+
+      <div ng-if="current_fv.is_sample && !current_fv.items" class="nomargin">
+        <md-subheader class="md-no-sticky">
+          Finding Inventory
+          <span ng-if="current_fv.wired || current_fv.role == 'output'">(Not Used in Plan)</span>
+        </md-subheader>
+        <div layout="column" layout-align="center center">
+          <md-progress-circular class="md-hue-2" md-diameter="20px">
+          </md-progress-circular>
+        </div>
+      </div>
+
+      <div ng-if="current_fv.is_sample && current_fv.items.length > 0" class="nomargin">
+
+        <md-subheader class="md-no-sticky">
+          Inventory: 
+          <span ng-if="current_fv.wired || current_fv.role == 'output'">(Not Used in Plan)</span>
+        </md-subheader>
+
+        <md-list class='md-compact-list' ng-if="!current_fv.items[0].collection"> <!-- ITEMS ////////////////// -->
+
+          <md-list-item class="md-compact" 
+            ng-repeat="item in current_fv.items" 
+            ng-if="!item.collection">
+
+            <md-checkbox
+              ng-click="select_item(current_fv,item)"
+              ng-checked="current_fv.child_item_id == item.id && !current_fv.wired"
+              ng-disabled="current_fv.wired || current_fv.role == 'output'"
+              aria-label="item">
+            </md-checkbox>
+
+            <div item="item" container="current_fv.aft.object_type" sample="item.sample"></div>
+            <span flex></span>
+            <p>{{item.location}}</p>
+
+          </md-list-item>
+
+        </md-list>
+
+        <md-list ng-if="current_fv.items[0].collection"> <!-- COLLECTIONS ///////////////////////////////////// -->
+
+          <!-- Note that current_fv.items  in this case contains a list of collection containers each with
+               a collection field that holds the actual collection item. Should probably be refactored.  -->
+
+          <md-list-item ng-repeat="cc in current_fv.items"
+              class="md-3-line"
+              ng-if="cc.collection"
+              ng-init="choose_default_part(current_fv,cc)">
+
+            <span class='collection-checkbox-holder'>
+
+              <md-checkbox
+                ng-click="select_item(current_fv,cc.collection)"
+                ng-checked="current_fv.child_item_id && current_fv.child_item_id == cc.collection.id"
+                ng-disabled="current_fv.wired || current_fv.role == 'output'"
+                aria-label="Item">
+              </md-checkbox>
+
+            </span>
+
+            <span style="padding-top: 8px">              
+              <div item="cc.collection" container="cc.collection.object_type" sample="current_fv.sample"></div>
+              <br/>
+            </span>
+
+            <span flex></span>
+
+            <table class='tiny-collection'>
+              <tr ng-repeat="row in cc.collection.matrix track by $index">
+                <td ng-repeat="sid in row track by $index" 
+                    ng-class="current_fv.sid == sid ? (current_fv.row == $parent.$index && 
+                              current_fv.child_item_id == cc.collection.id &&
+                              current_fv.column == $index ? 'selected' : 'filled' ) : 'blank'"
+                    ng-click="select_row_column(current_fv,sid,cc.collection,$parent.$index,$index)">
+                </td>
+              </tr>
+            </table>
+
+          </md-list-item>
+
+        </md-list>
+
+      </div>
+
+    <md-subheader ng-if="current_fv.is_sample && current_fv.items.length == 0" class="md-no-sticky">
+      No Inventory
+    </md-subheader>
+
+    <%= render partial: 'predecessors' %>
+    <%= render partial: 'successors' %>
+
+    <md-subheader class='md-no-sticky' ng-if="current_fv.is_param">
+      Value: {{current_fv.value}}
+    </md-subheader>
+    
+  </md-content>
+
+</script>

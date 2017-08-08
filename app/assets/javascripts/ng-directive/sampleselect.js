@@ -1,12 +1,6 @@
 (function() {
 
-  var w;
-
-  try {
-    w = angular.module('aquarium'); 
-  } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
-  } 
+  var w = angular.module('aquarium'); 
 
   w.directive("sampleselect", function() {
 
@@ -24,7 +18,7 @@
             plan = $scope.plan,
             op_type = $scope.operation.operation_type,
             route = $scope.operation.routing;
-
+        
         // Called when a sample input is updated. 
         var autocomp = function(ev,ui) {
 
@@ -101,15 +95,16 @@
 
         }
 
-        $scope.$watch('operation.form[ft.role][ft.name].aft', 
-                      function(new_aft,old_aft) {
+        $scope.$watch('operation.form[ft.role][ft.name].aft', function(new_aft,old_aft) {
           if ( new_aft && new_aft.sample_type ) {
             var name = new_aft.sample_type.name;
             $($element).find("#sample-io").autocomplete({
               source: AQ.sample_names_for(name),
               select: autocomp
             });
-            if ( !ft.array ) {
+            if ( !ft.array && (
+                 new_aft.object_type_id != old_aft.object_type_id || 
+                 new_aft.sample_type_id != old_aft.sample_type_id ) ) {
               fv.clear();
             }
           }

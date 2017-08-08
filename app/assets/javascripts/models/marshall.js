@@ -1,0 +1,140 @@
+AQ.OperationType.record_methods.marshall = function() {
+  
+  var ot = this;
+
+  ot.field_types = aq.collect(ot.field_types, rft => {
+    var ft = AQ.FieldType.record(rft);
+    ft.allowable_field_types = aq.collect(ft.allowable_field_types, raft => {
+      var aft = AQ.AllowableFieldType.record(raft);
+      aft.sample_type = AQ.SampleType.record(aft.sample_type);
+      aft.object_type = AQ.ObjectType.record(aft.object_type);      
+      return aft;
+    });
+    return ft;
+  })
+
+  return ot;
+
+}
+
+function find_aft ( aft_id, ot ) {
+  var ids = [];
+  var rval = null;
+  aq.each(ot.field_types, ft => {
+    aq.each(ft.allowable_field_types, aft => {
+      ids.push(aft.id);
+      if ( aft_id == aft.id ) {
+        rval = aft;
+      }
+    })
+  })
+  if ( !rval ) {
+    console.log("Could not find " + aft_id + " in " + ids.join(","));
+  }
+  return rval;
+}
+
+AQ.Operation.record_methods.marshall = function() {
+
+  // This code is somewhat redunstant with AQ.Operation.record_methods.set_type, but different enough
+  // that much of that menthod is repeated here. 
+
+  var op = this;
+
+  op.routing = {};
+  op.form = { input: {}, output: {} };
+
+  // op.operation_type = AQ.OperationType.record(op.operation_type).marshall();
+  var ots = aq.where(AQ.operation_types, ot => ot.id == op.operation_type_id);
+
+  if ( ots.length != 1 ) {
+    console.log("WARNING: Could not find operation types in AQ. Make sure AQ.operation_types is initialized")
+  } else {
+    op.operation_type = ots[0];
+  }
+
+  var input_index = 0, output_index = 0;
+
+  op.field_values = aq.collect(op.field_values,(fv) => {
+    var ufv = AQ.FieldValue.record(fv);
+    aq.each(op.operation_type.field_types, ft => {
+      if ( ft.role == ufv.role && ft.name == ufv.name ) {
+        ufv.field_type = ft;
+        ufv.routing = ft.routing;
+        ufv.num_wires = 0;
+      }
+    });
+    if ( ufv.role == 'input' ) { // these indices are for methods that need to know
+      ufv.index = input_index++; // which input the fv is (e.g. first, second, etc.)
+    }
+
+    if ( ufv.role == 'output' ) {
+      ufv.index = output_index++;
+    }        
+    return ufv;
+  })
+
+  aq.each(op.field_values, fv => {
+
+    if ( fv.child_sample_id ) {
+
+      op.assign_sample(fv, AQ.to_sample_identifier(fv.child_sample_id));
+
+    } else if ( fv.field_type.routing ) {
+
+      op.routing[fv.field_type.routing] = "";
+      
+    }
+
+    if ( fv.allowable_field_type_id ) {
+      fv.aft = find_aft(fv.allowable_field_type_id, op.operation_type);
+      fv.aft_id = fv.allowable_field_type_id;
+      op.form[fv.role][fv.name] = { aft_id: fv.allowable_field_type_id, aft: fv.aft }
+    }
+
+  });
+
+  op.jobs = aq.collect(op.jobs, job => {
+    return AQ.Job.record(job);
+  });
+
+  op.width = 160;
+  op.height = 30; 
+
+  return op;  
+
+}
+
+AQ.Plan.record_methods.marshall = function() {
+
+  var plan = this;
+  plan.operations = aq.collect(plan.operations, (op) => AQ.Operation.record(op).marshall());
+  plan.wires = aq.collect(plan.wires, wire => AQ.Wire.record(wire));
+
+  aq.each(plan.wires, w => {
+    w.snap = 16;
+    aq.each(plan.operations, o => {
+      aq.each(o.field_values, fv => {
+        if ( w.to_id == fv.id ) {
+          w.to = fv;
+          w.to_op = o;
+          w.to.num_wires++;
+        }
+        if ( w.from_id == fv.id ) {
+          w.from = fv;
+          w.from_op = o;
+          w.from.num_wires++;
+        }
+        // fv.recompute_getter("num_wires");
+      })
+      o.recompute_getter("types_and_values")
+      o.recompute_getter('num_inputs');
+      o.recompute_getter('num_outputs');       
+    })   
+  })
+
+  plan.open = true;
+  return plan;
+
+}
+

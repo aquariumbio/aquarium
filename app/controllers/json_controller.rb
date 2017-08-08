@@ -32,8 +32,10 @@ class JsonController < ApplicationController
         result = result.order('created_at DESC') if params[:options] && params[:options][:reverse]                
       end
 
-      result = result.as_json(methods: params[:methods]) if ( params[:methods] )
-      result = result.as_json(include: params[:include]) if ( params[:include] )
+      result = result.as_json(methods: params[:methods]) if (  params[:methods] && !params[:include] )
+      result = result.as_json(include: params[:include]) if ( !params[:methods] &&  params[:include] )
+
+      result = result.as_json(include: params[:include], methods: params[:methods]) if ( params[:methods] && params[:include] )
 
       render json: result
 
@@ -107,7 +109,7 @@ class JsonController < ApplicationController
     str ? str.split(':')[0] : 0
   end
 
-  def items # ( sid, oid )
+  def items # ( sid, oid ) # This can be replaced by a call to Item.items_for sid, oid
 
     begin
 
