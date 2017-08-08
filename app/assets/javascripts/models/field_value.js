@@ -268,7 +268,10 @@ AQ.FieldValue.record_methods.valid = function() {
     v = fv.num_wires > 0 || fv.role == 'output' || fv.child_item_id;
   }
 
-  if ( fv.role == 'input' && fv.num_wires == 0 && fv.field_type.part && ( !fv.row || !fv.column ) ) {
+  if ( fv.role == 'input' && 
+       fv.num_wires == 0 && 
+       fv.field_type.part && 
+       ( typeof fv.row != 'number' || typeof fv.column != 'number' ) ) {
     v = false;
   }
 
