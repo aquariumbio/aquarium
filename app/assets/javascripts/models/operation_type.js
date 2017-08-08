@@ -87,6 +87,26 @@ AQ.OperationType.all_with_field_types = function(deployed) {
 
 }
 
+AQ.OperationType.all_fast = function() {
+
+  return new Promise(function(resolve, reject) {
+
+    AQ.get("/plans/operation_types").then( response => {
+
+      ots = aq.collect(response.data, rot => {
+        var ot = AQ.OperationType.record(rot);
+        ot.upgrade_field_types();
+        return ot;
+      });
+
+      resolve(ots);
+
+    }).catch(reject);
+
+  });
+
+}
+
 AQ.OperationType.numbers = function(user,filter) {
 
   var id = user ? user.id : null;

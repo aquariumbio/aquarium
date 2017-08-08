@@ -66,6 +66,10 @@ class PlansController < ApplicationController
     end           
   end
 
+  def operation_types
+    render json: Serialize.fast_operation_types
+  end
+
   # End Planner GUI
 
   def manager

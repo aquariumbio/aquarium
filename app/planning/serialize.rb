@@ -37,18 +37,12 @@ module Serialize
       fts = field_types.select { |ft| ft['id'] == fv['field_type_id'] }
       if fts.length == 1 
         fv['field_type'] = fts[0]
-        # fts[0][:allowable_field_types].each do |aft|
-        #   if aft['id'] == fv['allowable_field_type_id']
-        #     fv['aft'] = aft
-        #   end
-        # end
       end
     end
 
     sops = ops.as_json
 
     sops.each do |op|
-#      op["operation_type"] = operation_types.select { |ot| ot["id"] == op["operation_type_id"] }[0]
       op["field_values"]  = field_values.select { |fv| fv["parent_id"] == op["id"] }
     end
 
@@ -61,6 +55,39 @@ module Serialize
       status: plan.status,
       operations: sops,
       wires: wires
+    }
+
+  end
+
+  def self.fast_operation_types
+
+    ots = OperationType.all
+    ot_ids = ots.collect { |ot| ot.id }
+    fts = FieldType.includes(:allowable_field_types).where(parent_class: "OperationType", parent_id: ot_ids)
+    st_ids = fts.collect { |ft| ft.allowable_field_types.collect { |aft| aft.sample_type_id }}.flatten
+    sts = SampleType.where(id: st_ids)
+    ob_ids = fts.collect { |ft| ft.allowable_field_types.collect { |aft| aft.object_type_id }}.flatten
+    obs = ObjectType.where(id: st_ids)
+
+    ots.collect { |ot| 
+
+      sot = ot.as_json
+
+      sot[:field_types] = fts.select { |ft| ft.parent_id == ot.id }
+        .collect { |ft| 
+           sft= ft.as_json plain: true
+           sft[:allowable_field_types] = ft.allowable_field_types.collect { |aft| 
+             { sample_type_id: aft.sample_type_id, 
+               object_type_id: aft.object_type_id,
+               field_type_id: aft.field_type_id,
+               sample_type: sts.find { |st| st.id == aft.sample_type_id }.as_json,
+               object_type: obs.find { |st| st.id == aft.object_type_id }.as_json  }
+           }
+           sft
+         }
+
+      sot
+
     }
 
   end

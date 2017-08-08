@@ -66,7 +66,11 @@ class FieldType < ActiveRecord::Base
   end
 
   def as_json(options={})
-    super include: [ allowable_field_types: { include: [ :sample_type, :object_type ] } ]
+    if options[:plain]
+      super
+    else
+      super include: [ allowable_field_types: { include: [ :sample_type, :object_type ] } ]
+    end
   end
 
   def inconsistencies raw_field_type, parent_name

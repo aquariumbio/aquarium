@@ -20,10 +20,11 @@ Bioturk::Application.routes.draw do
   get '/plans/costs/:id',                        to: 'plans#costs'
   get '/plans/cancel/:id/:msg',                  to: 'plans#cancel' 
   get '/plans/:id/debug',                        to: 'plans#debug'
-  get '/plans/replan/:id',                      to: 'plans#replan'
+  get '/plans/replan/:id',                       to: 'plans#replan'
   post '/plans/plan',                            to: 'plans#plan'  
   put '/plans/move',                             to: 'plans#move'
   get '/plans/folders',                          to: 'plans#folders'
+  get '/plans/operation_types',                  to: 'plans#operation_types'
   resources :plans
 
   post '/operations/batch',                      to: 'operations#batch'
