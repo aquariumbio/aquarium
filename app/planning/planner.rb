@@ -26,7 +26,15 @@ class Planner
           end
 
         else
-          op.status = "waiting"
+
+          # if the op has an on the fly pred
+          if ready? op 
+            op.status = "pending"
+          else
+            op.status = "waiting"
+          end
+
+
         end
 
         op.save
@@ -58,6 +66,30 @@ class Planner
   def leaf? op
 
     ! @non_leaves.member? op.id
+
+  end
+
+  def preds fv
+
+    @plan.wires.select { |w|
+      w.to_id == fv.id
+    }.collect { |fv| 
+      fv.from_op
+    }
+
+  end
+
+  def ready? op
+
+    rval = true
+
+    op.field_values.each do |fv|
+      preds(fv).each do |pred|
+        rval = false unless pred.on_the_fly
+      end
+    end
+
+    rval
 
   end
 
