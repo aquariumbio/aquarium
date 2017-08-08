@@ -22,7 +22,8 @@ AQ.Plan.record_methods.reload = function() {
           AQ.update();
         });
       });
-      plan.recompute_getter("deletable")
+      plan.recompute_getter("deletable");
+      plan.recompute_getter("state");      
     });
   });
 
@@ -79,10 +80,11 @@ AQ.Plan.load = function(id) {
 AQ.Plan.record_methods.submit = function(user) {
 
   var plan = this.serialize(),
-      user_query = user ? "?user_id=" + user.id : "";
+      user_query = user ? "&user_id=" + user.id : "",
+      budget_query = "?budget_id=" + this.uba.budget_id;
 
   return new Promise(function(resolve,reject) {
-    AQ.get('/plans/start/'+plan.id+user_query,plan).then(
+    AQ.get('/plans/start/'+plan.id+budget_query+user_query,plan).then(
       (response) => {
         resolve();
       }, (response) => {
@@ -203,6 +205,7 @@ AQ.Plan.record_methods.cancel = function(msg) {
         plan.reload();
         resolve(response.data);
         plan.recompute_getter("deletable");
+        plan.recompute_getter("state");        
       },
       (response) => { reject(response.data.errors) }
     );
@@ -220,14 +223,14 @@ AQ.Plan.record_methods.link_operation_types = function(operation_types) {
 
 }
 
-AQ.Plan.list = function(offset,user,plan_id) {
+AQ.Plan.list = function(offset,user,folder,plan_id) {
 
-  var user_query = user ? "&user_id=" + user.id : "";
-
-  var plan_query = plan_id ? "&plan_id=" + plan_id : "";
+  var user_query = user ? "&user_id=" + user.id : "",
+      plan_query = plan_id ? "&plan_id=" + plan_id : "",
+      folder_query = folder ? "&folder=" + folder : "";
 
   return new Promise(function(resolve,reject) {
-    AQ.get('/launcher/plans?offset='+offset+user_query+plan_query).then(
+    AQ.get('/launcher/plans?offset='+offset+user_query+plan_query+folder_query).then(
       (response) => {
         AQ.Plan.num_plans = response.data.num_plans;
         resolve(aq.collect(response.data.plans,(p) => { 
@@ -241,7 +244,7 @@ AQ.Plan.list = function(offset,user,plan_id) {
               }), (fv) => { return AQ.FieldValue.record(fv); })
             operation.jobs = aq.collect(op.jobs, job => {
               return AQ.Job.record(job);
-            });            
+            });
             return operation;
           });
           return plan;
@@ -474,9 +477,9 @@ AQ.Plan.record_methods.debug = function() {
         console.log(response);
         plan.reload();
         plan.debugging = false;
+        plan.recompute_getter("state");
       }
     );
-
   });
   
 }
@@ -574,6 +577,10 @@ AQ.Plan.record_methods.valid = function() {
     })
   })
 
+  aq.each(plan.wires, wire => {
+    v = v && wire.consistent();
+  });
+
   return v;
 }
 
@@ -584,6 +591,73 @@ AQ.Plan.record_methods.destroy = function() {
   return new Promise(function(resolve,reject) {
     AQ.http.delete("/plans/" + plan.id);
     resolve();
+  });
+
+}
+
+AQ.Plan.move = function(plans, folder) {
+
+  var pids = aq.collect(plans, plan => plan.id);
+
+  return new Promise(function(resolve, reject) {
+
+    AQ.http.put("/plans/move", {pids: pids, folder: folder}).then(() => {
+      aq.each(plans, plan => {
+        plan.folder = folder;
+      });
+      resolve();
+    }).catch(reject);
+
+  });
+
+}
+
+AQ.Plan.get_folders = function(user_id=null) {
+
+  return new Promise(function(resolve, reject) {
+
+    var user_query = user_id ? "?user_id=" + user_id : "";
+
+    AQ.get("/plans/folders"+user_query).then(response => {
+      resolve(response.data);
+    }).catch(reject);
+
+  });
+
+}
+
+AQ.Plan.record_getters.state = function() {
+
+  var plan = this;
+  delete plan.state;
+  plan.state = "Pending";
+
+  // if all ops are done, the done
+  var not_done = aq.where(plan.operations, op => op.status != "done" );
+
+  if ( not_done.length == 0 ) {
+    plan.state = "Done";
+  } else {
+    var errors = aq.where(plan.operations, op => op.status == "error" );
+    if ( errors.length > 0 ) {
+      plan.state = "Error"
+    }
+  }
+
+  return plan.state;
+
+}
+
+AQ.Plan.record_methods.replan = function() {
+
+  var plan = this;
+
+  return new Promise(function(resolve, reject) {
+
+    AQ.get("/plans/replan/" + plan.id).then(response => {
+      resolve(response.data);
+    }).catch(reject);
+
   });
 
 }

@@ -34,7 +34,7 @@ AQ.Collection.record_methods.assign_first = function(fv) {
 
   for ( r=0; r<this.matrix.length; r++ ) {
     for ( c=0; c<this.matrix[r].length; c++ ) {
-      if ( this.matrix[r][c] == fv.sid ) {
+      if ( this.matrix[r][c] == fv.child_sample_id ) {
         fv.row = r;
         fv.column = c;
         return fv;

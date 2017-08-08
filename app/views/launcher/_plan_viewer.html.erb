@@ -94,7 +94,8 @@
     </div>
 
     <div flex="10" ng-if="fv.row == null">
-      <div item="fv.item" container="fv.item.object_type" sample="fv.item.sample"></div>
+      <div ng-if="fv.item" item="fv.item" container="fv.item.object_type" sample="fv.item.sample"></div>
+      <div ng-if="!fv.item">-</div>
     </div> 
 
     <div flex="10" ng-if="fv.row != null">

@@ -1,6 +1,15 @@
 
 .launcher {
 
+  .folder {
+    width: 100%;
+  }
+
+  .selected-folder {
+    font-weight: bold !important;
+    background: lightyellow;
+  }
+
   /* STYLES INTERACTING WITH ANGULAR MATERIAL ********************************************************* */
 
   .operation-type-choice {
@@ -122,6 +131,11 @@
     padding-bottom: 10px;
   }  
 
+  .status {
+    font-size: 10pt;
+    text-transform: uppercase;
+  }
+
   .status-running {
     color: green;
   }  
@@ -151,8 +165,7 @@
   .plan-row {
     padding: 5px;
     margin: 0 25px 0 0px;
-    min-width: 100%;
-    max-width: 100%;
+    width: 100%;
   }
 
   .plan-header {
@@ -173,7 +186,7 @@
     border-right: 1pt solid $plan-border-color;
     border-bottom: 1pt solid $plan-border-color;    
     background: $plan-details-color;    
-    margin: 0 25px 10px 0px;    
+    margin-bottom: 16px;
   }
 
   .no-side-margins {

@@ -13,6 +13,15 @@ AQ.Wire.make = function(specs) {
 
 }
 
+AQ.Wire.record_methods.consistent = function() {
+
+  var wire = this;
+
+  return wire.to.aft.sample_type_id == wire.from.aft.sample_type_id && 
+         wire.to.aft.object_type_id == wire.from.aft.object_type_id;
+        
+}
+
 AQ.Wire.record_methods.disconnect = function() {
 
   var wire = this;

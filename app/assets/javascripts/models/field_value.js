@@ -165,8 +165,10 @@ AQ.FieldValue.record_getters.items = function() {
 }
 
 AQ.FieldValue.record_getters.sample = function() {
+
   var fv = this;
   delete fv.sample;
+
   if ( fv.sid && typeof fv.sid == 'string' ) {
     AQ.Sample.find(fv.sid.split(": ")[0]).then(s => {
       fv.sample = s;
@@ -179,6 +181,7 @@ AQ.FieldValue.record_getters.sample = function() {
     console.log("Warning: fv.sid = '" + fv.sid + "'")
   }
   return undefined;
+
 }
 
 AQ.FieldValue.record_methods.preferred_predecessor = function(operation) {
@@ -253,14 +256,24 @@ AQ.FieldValue.record_methods.backchain = function(plan,operation) {
 }
 
 AQ.FieldValue.record_methods.valid = function() {
-  var fv = this;
+
+  var fv = this, 
+       v;
+
   if ( fv.field_type.ftype != 'sample' ) {
-    return !! fv.value;
+    v = !! fv.value;
   } else if ( fv.aft && fv.aft.sample_type_id ) {
-    return fv.child_sample_id && ( fv.num_wires > 0 || fv.role == 'output' || fv.child_item_id );
+    v = fv.child_sample_id && ( fv.num_wires > 0 || fv.role == 'output' || fv.child_item_id );
   } else {
-    return fv.num_wires > 0 || fv.role == 'output' || fv.child_item_id;
+    v = fv.num_wires > 0 || fv.role == 'output' || fv.child_item_id;
   }
+
+  if ( fv.role == 'input' && fv.num_wires == 0 && fv.field_type.part && ( !fv.row || !fv.column ) ) {
+    v = false;
+  }
+
+  return v;
+
 } 
 
 AQ.FieldValue.record_methods.empty = function() {

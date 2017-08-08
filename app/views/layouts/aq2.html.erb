@@ -137,6 +137,10 @@
               <%= yield :action4 %>
             <% end %>                        
 
+            <% if content_for? :action5 %>
+              <%= yield :action5 %>
+            <% end %>
+            
           </div>
 
         </md-toolbar>

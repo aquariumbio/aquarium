@@ -2,8 +2,8 @@
 
   var w = angular.module('aquarium'); 
 
-  w.controller('planCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', 
-                  function (  $scope,   $http,   $attrs,   $cookies,   $sce ) {
+  w.controller('planCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', '$window',
+                  function (  $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) {
 
     AQ.init($http);
     AQ.update = () => { $scope.$apply(); }
@@ -32,11 +32,21 @@
 
         AQ.Plan.where({status: "planning", user_id: user.id}).then(plans => {
 
-          $scope.plans = plans;
+          $scope.plans = plans;         
 
           AQ.get_sample_names().then(() =>  {
+
+            if ( aq.url_params().plan_id ) {              
+              AQ.Plan.load(aq.url_params().plan_id).then(p => {
+                $window.history.replaceState(null, document.title, "/plans"); 
+                $scope.plan = p;
+                $scope.$apply();
+              })
+            } 
+
             $scope.ready = true;
             $scope.$apply();
+
           });  
 
         });
@@ -48,6 +58,13 @@
 
     function all_ops(f) {
       aq.each($scope.plan.operations,f);
+    }
+
+    function refresh_plan_list() {
+      AQ.Plan.where({status: "planning", user_id: $scope.current_user.id}).then(plans => { 
+        $scope.state.loading_plans = false;
+        $scope.plans = plans;
+      });
     }
 
     $scope.add_operation = function(ot) {
@@ -63,6 +80,10 @@
       $scope.current_op = op;
       $scope.plan.operations.push(op);
       $scope.set_current_fv(op.field_values[0],true);
+      if ( $scope.plan.name == "Untitled Plan" ) {
+        $scope.plan.name = op.operation_type.name;
+        $scope.state.message = "Changed name of untitled plan to " + op.operation_type.name;
+      }
     }
 
     $scope.add_predecessor = function(fv,op,pred) {
@@ -137,10 +158,7 @@
         $scope.state.loading_plans = true;
         select(null);
         $scope.$apply();
-        AQ.Plan.where({status: "planning", user_id: $scope.current_user.id}).then(plans => { 
-          $scope.state.loading_plans = false;
-          $scope.plans = plans;
-        });
+        refresh_plan_list();
       });
 
     }
@@ -149,27 +167,27 @@
 
       $scope.new();
       $scope.state.deleting_plan = p;
-      p.destroy().then(() => {
-        AQ.Plan.where({status: "planning", user_id: $scope.current_user.id}).then(plans => { 
-          $scope.state.deleting_plan = null;
-          $scope.plans = plans;
-        });        
-      })
+      p.destroy().then(() =>  refresh_plan_list());
 
     }
 
     $scope.load = function(plan) {
-
       AQ.Plan.load(plan.id).then(p => {
         $scope.plan = p;
         $scope.$apply();
       })
-
     }
 
     $scope.new = function() {
       $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
       select(null)
+    }    
+
+    $scope.copy_plan = function(plan) {
+      plan.replan().then(newplan => {
+        $scope.plans.push(newplan);
+        $scope.load(newplan)
+      })
     }    
 
     $scope.select_uba= function(user,s) {      
@@ -200,10 +218,16 @@
     $scope.submit_plan = function() {
       $scope.state.planning = true;
       $scope.plan.submit().then(() => {
-        $scope.state.messages = [ "Plan " + $scope.plan.id + " submitted." ]
+        $scope.state.planning = false;
+        $scope.state.submitted_plan = $scope.plan;
+        $scope.new();
+        $scope.state.launch = false;
+        refresh_plan_list();
       }).catch(errors => {
-        console.log(errors)
+        console.log(errors);
+        $scope.state.planning = false;        
         $scope.plan.errors = errors;
+        $scope.$apply();
       })
     }
 
@@ -466,6 +490,30 @@
 
     }
 
+    $scope.wire_class = function(wire) {
+
+      var c = wire == $scope.current_wire ? 'wire-selected' : 'wire';
+
+      if ( !wire.consistent() ) {
+        c += " wire-inconsistent";
+      }
+
+      return c;
+
+    }
+
+    $scope.wire_arrow_class = function(wire) {
+
+      var c = wire == $scope.current_wire ? 'wire-arrowhead-selected' : 'wire-arrowhead';
+
+      if ( !wire.consistent() ) {
+        c += " wire-arrowhead-inconsistent";
+      }
+
+      return c;
+
+    }
+
     $scope.parameter_class = function(op, fv) {
       var c = "parameter";
       if ( fv.value != undefined ) {
@@ -505,13 +553,11 @@
     }
 
     $scope.select_row_column = function(fv,sid,collection,r,c) {      
-      if ( fv.sid == sid ) {
-        console.log(["selecting", fv, collection, r, c])
+      if ( fv.child_sample_id == sid ) {
         fv.child_item_id = collection.id;
         fv.child_item = collection;
         fv.row = r;
         fv.column = c;
-        console.log(["changed", fv.rid, fv.child_item_id, fv.row, fv.column])
       }
     }
 

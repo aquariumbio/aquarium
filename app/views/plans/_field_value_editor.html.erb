@@ -6,12 +6,6 @@
       <h1 class="md-title">{{current_op.operation_type.name}}</h1>  
       <h1 class="md-subhead" ng-if="current_fv.is_param">{{current_fv.type|capitalize}} Parameter</h1>    
       <h1 class="md-subhead">{{current_fv.role|capitalize}} name: {{current_fv.name}}, {{current_fv.rid}}</h1>
-      <p>op-routing = {{current_op.routing[current_fv.field_type.routing]}}</p>
-      <p>sid = {{current_fv.sid}}</p>
-      <p>child_sample_id = {{current_fv.child_sample_id}}</p>
-      wired={{current_fv.wired}}<br>
-      wires={{current_fv.num_wires}}<br>
-      _marked = {{current_fv._marked}}
     </div>
 
       <md-subheader class="md-no-sticky" ng-if="current_fv.is_sample">
@@ -108,7 +102,7 @@
             <table class='tiny-collection'>
               <tr ng-repeat="row in cc.collection.matrix track by $index">
                 <td ng-repeat="sid in row track by $index" 
-                    ng-class="current_fv.sid == sid ? (current_fv.row == $parent.$index && 
+                    ng-class="current_fv.child_sample_id == sid ? (current_fv.row == $parent.$index && 
                               current_fv.child_item_id == cc.collection.id &&
                               current_fv.column == $index ? 'selected' : 'filled' ) : 'blank'"
                     ng-click="select_row_column(current_fv,sid,cc.collection,$parent.$index,$index)">

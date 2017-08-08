@@ -83,13 +83,19 @@ class PlansController < ApplicationController
   end
 
   def start
-    p = Plan.find(params[:id])
-    errors = Planner.start p
-    if errors.any?
-      render json: errors, status: 422
-    else
+
+    plan = Plan.find(params[:id])
+    plan.budget_id = params[:budget_id]
+    plan.save
+    
+    planner = Planner.new params[:id]
+    
+    if planner.start
       render json: { result: "ok" }
+    else
+      render json: planner.errors, status: 422
     end
+
   end
 
   def value data
@@ -114,56 +120,10 @@ class PlansController < ApplicationController
     r ? r : "null"
   end
 
-  # def plan
-
-  #   ot = OperationType.find(params[:ot_id])
-
-  #   errors = []
-
-  #   operations = params[:operations].collect do |o|
-
-  #     op = ot.operations.create status: "planning", user_id: current_user.id
-
-  #     ot.inputs.each do |input|       
-  #       if input.empty?
-  #         op.set_input input.name, nil 
-  #       else
-  #         v = routing_value o[:routing][route_name(input.routing)]
-  #         aft = AllowableFieldType.find_by_id(o[:form_inputs][input.name][:aft][:id])
-  #         op.set_input input.name, v, aft if v
-  #         errors << "Input '#{input.name}' not specified. IO specifications should be in the form id: name." unless v
-  #       end
-  #     end
-
-  #     ot.outputs.each do |output|
-  #       if output.empty?
-  #         op.set_output output.name, nil
-  #       else
-  #         v = routing_value o[:routing][route_name(output.routing)]
-  #         aft = AllowableFieldType.find_by_id(o[:form_outputs][output.name][:aft][:id])
-  #         op.set_output output.name, v, aft if v
-  #         errors << "Output '#{output.name}' not specified. IO specifications should be in the form id: name." unless v
-  #       end
-  #     end   
-
-  #     op
-
-  #   end
-
-  #   if errors.empty?
-  #     planner = Planner.new OperationType.where(deployed: true)
-  #     planner.plan_trees operations   
-  #     planner.plan.reload
-  #     render json: planner.plan.serialize
-  #   else
-  #     render json: { errors: errors }
-  #   end
-
-  # end
 
   def destroy
     plan = Plan.find(params[:id])
-    plan.remove if plan.status == "planning"
+    plan.remove 
     render json: {}
   end
 
@@ -178,26 +138,7 @@ class PlansController < ApplicationController
 
   def replan
 
-    # Find the plan
-    operation = Operation.find(params[:id])
-
-    routes = {}
-    params[:operation_type][:inputs].each { |i| routes[i[:name]] = i[:routing] }
-
-    params[:form_inputs].each do |key,val|
-      aft = AllowableFieldType.find_by_id(val[:aft][:id])
-      v = routing_value params[:routing][route_name(routes[key])]
-      operation.set_input(key,v,aft)
-    end
-
-    # Replan the operation
-    planner = Planner.new(OperationType.where(deployed: true), operation.plan)
-    planner.plan_tree operation
-    planner.mark_shortest operation
-    planner.mark_unused operation
-
-    # render the plan
-    redirect_to plan_path(id: operation.plan.id, format: :json)
+    render json: PlanCopier.new(params[:id]).copy
 
   end
 
@@ -280,5 +221,25 @@ class PlansController < ApplicationController
     render json: { errors: errors }
 
   end # def debug
+
+  def move
+
+    Plan.where(id: params[:pids]).each do |plan|
+      plan.folder = params[:folder]
+      plan.save
+    end
+
+    render json: { result: "okay" }
+
+  end
+
+  def folders
+    if current_user && current_user.is_admin && params[:user_id]
+      uid = params[:user_id]
+    else
+      uid = current_user.id
+    end
+    render json: Plan.where(user_id: uid).pluck(:folder).uniq
+  end
 
 end

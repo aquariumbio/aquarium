@@ -57,6 +57,36 @@ AQ.OperationType.all_with_content = function(deployed) {
 
 }
 
+AQ.OperationType.all_with_field_types = function(deployed) {
+
+  if ( deployed ) {
+
+    return this.array_query(
+        'where', {deployed: true}, 
+        { methods: [ 'field_types' ] }
+      ).then((ots) => {
+        aq.each(ots,function(ot) { 
+          ot.upgrade_field_types();
+        })
+        return ots;
+      });
+
+  } else {
+
+    return this.array_query(
+        'all', [], 
+        { methods: [ 'field_types' ] }
+      ).then((ots) => {
+        aq.each(ots,function(ot) { 
+          ot.upgrade_field_types();        
+        })
+        return ots;
+      });
+
+  }
+
+}
+
 AQ.OperationType.numbers = function(user,filter) {
 
   var id = user ? user.id : null;

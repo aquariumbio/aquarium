@@ -6,6 +6,20 @@
     }
   }
 
+  .dismiss {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
+
+  .message {
+    padding: 10px;
+    background: lightyellow;
+    position: relative;
+    border: 1pt solid #eee;
+    padding-right: 20px;  
+  }  
+
   .editor-main {
 
     height: 100%;
@@ -93,6 +107,7 @@
   .field-name-help {
     text-anchor: 'start';
     background: white;
+    font-size: 9pt;
   }
 
   .op, .op-selected {
@@ -184,6 +199,11 @@
     stroke-width: 2.5;    
   }
 
+  .wire-inconsistent {
+    stroke-width: 2.5;
+    stroke: orange;
+  }
+
   .wire-arrowhead, .wire-arrowhead-selected {
     fill: #555;
     /*stroke: #555;*/
@@ -196,7 +216,11 @@
     /*stroke-width: 2.5;    */
   }
 
-
+  .wire-arrowhead-inconsistent {
+    fill: orange;
+    /*stroke: black;*/
+    /*stroke-width: 2.5;    */
+  }
   .multiselect {
     stroke: black;
     stroke-width: #bbb;

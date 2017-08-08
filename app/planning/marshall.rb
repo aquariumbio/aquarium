@@ -117,32 +117,14 @@ module Marshall
 
     ft = op.operation_type.type(fv[:name],fv[:role])
 
-    item = ( fv[:role] == 'input' && fv[:selected_item] ) ? fv[:selected_item] : nil
-
-    if fv[:role] == 'input' && fv[:selected_item]
-
-      if fv[:selected_item][:collection]
-        item = fv[:selected_item][:collection]
-        row = fv[:selected_row]
-        column = fv[:selected_column]
-      else
-        item = fv[:selected_item]
-        row = nil
-        column = nil  
-      end
-    else
-      item = nil
-    end
-
     atts =  { name: fv[:name],
         role: fv[:role], 
         field_type_id: ft.id,
         child_sample_id: sid,
         child_item_id: fv[:child_item_id],
         allowable_field_type_id: fv[:allowable_field_type_id],
-        row: item ? row : nil,
-        column: item ? column : nil,
-        row: item ? row : nil,
+        row: fv[:row],
+        column: fv[:column],
         value: fv[:value]
       }
 
@@ -183,6 +165,8 @@ module Marshall
     p.operations.each do |pop|
       unless op_ids.member?(pop.id)
         puts "Destroying op #{pop.id}"
+        pas = PlanAssociation.where(plan_id: p.id, operation_id: pop.id)
+        pas.each { |pa| pa.destroy }
         pop.destroy
         puts pop.errors.full_messages.join(", ")
       end
