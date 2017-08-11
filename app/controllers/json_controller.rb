@@ -130,7 +130,9 @@ class JsonController < ApplicationController
 
       else
 
-        items = Item.includes(locator: :wizard).where(object_type_id: ot.id).limit(100).reject { |i| i.deleted? }
+        items = Item.includes(locator: :wizard)
+                    .where("object_type_id = ? AND location != 'deleted'", ot.id)
+                    .limit(100)
 
         render json: items
 
