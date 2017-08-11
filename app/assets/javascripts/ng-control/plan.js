@@ -17,7 +17,9 @@
 
     $scope.ready = false;
 
-    $scope.state = {}
+    $scope.state = {
+      sidebar: { op_types: false, plans: true }
+    }
 
     AQ.User.current().then((user) => {
 
@@ -30,24 +32,31 @@
         AQ.OperationType.compute_categories($scope.operation_types);
         AQ.operation_types = $scope.operation_types;
 
-        AQ.Plan.where({status: "planning", user_id: user.id}).then(plans => {
+        AQ.Plan.where({status: ["planning", "template"], user_id: user.id}).then(plans => {
 
-          $scope.plans = plans;         
+          $scope.plans = aq.where(plans, p => p.status == 'planning');
+          $scope.templates = aq.where(plans, p => p.status == 'template');
 
-          AQ.get_sample_names().then(() =>  {
+          AQ.Plan.where({status: "system_template"}).then(templates => {
 
-            if ( aq.url_params().plan_id ) {              
-              AQ.Plan.load(aq.url_params().plan_id).then(p => {
-                $window.history.replaceState(null, document.title, "/plans"); 
-                $scope.plan = p;
-                $scope.$apply();
-              })
-            } 
+            $scope.system_templates = templates;
 
-            $scope.ready = true;
-            $scope.$apply();
+            AQ.get_sample_names().then(() =>  {
 
-          });  
+              if ( aq.url_params().plan_id ) {              
+                AQ.Plan.load(aq.url_params().plan_id).then(p => {
+                  $window.history.replaceState(null, document.title, "/plans"); 
+                  $scope.plan = p;
+                  $scope.$apply();
+                })
+              } 
+
+              $scope.ready = true;
+              $scope.$apply();
+
+            });  
+
+          });
 
         });
 
@@ -153,6 +162,7 @@
     }
 
     $scope.save = function(plan) {
+
       plan.save().then(saved_plan => {
         $scope.plan = saved_plan;
         $scope.state.loading_plans = true;
@@ -163,11 +173,35 @@
 
     }
 
+    $scope.create_template = function(p) {
+
+      p.status = "template";
+      $scope.save(p);
+      $scope.templates.push(p);
+      $scope.state.sidebar.templates = true;
+      $scope.state.sidebar.your_templates = true;
+
+    }
+
+    $scope.create_system_template = function(p) {
+
+      p.status = "system_template";
+      $scope.save(p);
+      $scope.system_templates.push(p);
+      $scope.state.sidebar.templates = true;
+      $scope.state.sidebar.system_templates = true;
+
+    }    
+
     $scope.delete_plan = function(p) {
 
-      $scope.new();
-      $scope.state.deleting_plan = p;
-      p.destroy().then(() =>  refresh_plan_list());
+      if ( confirm("Are you sure you want to delete plan " + p.id + "?") ) {
+
+        $scope.new();
+        $scope.state.deleting_plan = p;
+        p.destroy().then(() =>  refresh_plan_list());
+
+      }
 
     }
 
@@ -177,6 +211,13 @@
         $scope.$apply();
       })
     }
+
+    $scope.paste_plan = function(plan) {
+      AQ.Plan.load(plan.id).then(p => {
+        $scope.plan.paste_plan(p);
+        $scope.$apply();
+      })
+    }    
 
     $scope.new = function() {
       $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
@@ -444,6 +485,11 @@
       evt.stopImmediatePropagation();
 
     }    
+
+    $scope.openMenu = function($mdMenu, ev) {
+      originatorEv = ev;
+      $mdMenu.open(ev);
+    };    
 
     // Wire Events ////////////////////////////////////////////////////////////////////////////////
 

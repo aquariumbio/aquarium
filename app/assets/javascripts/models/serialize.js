@@ -1,6 +1,6 @@
 AQ.Plan.record_methods.serialize = function() {
 
-  var plan = this;
+  var plan = this, ops;
 
   return {
     id: plan.id,
@@ -28,7 +28,6 @@ AQ.Operation.record_methods.serialize = function() {
                                     op.form[fv.role][fv.name].aft.id :
                                     null;
       if ( !fv.field_type.array && fv.routing ) {
-        console.log("assigning fv " + fv.rid + " to " + op.routing[fv.routing])
         op.assign_sample(efv,op.routing[fv.routing])
       }
       return efv;
@@ -38,7 +37,7 @@ AQ.Operation.record_methods.serialize = function() {
     x: op.x,
     y: op.y,
     routing: op.routing,
-    rod: op.rid
+    rid: op.rid
   };
 
 }
@@ -53,16 +52,10 @@ AQ.FieldValue.record_methods.serialize = function() {
 
   aq.each(props, p => efv[p] = fv[p]); 
 
-  // if ( fv.field_type.array ) {
-  //   efv.child_sample_id = AQ.id_from(fv.sample_identifier);
-  //   efv.sid = fv.sample_identifier;
-  // }
 
   if ( fv.field_type.array ) {
     efv.array = true;
   }
-
-  console.log([fv,efv,fv.child_sample_id, efv.child_sample_id])
 
   return efv;
 
