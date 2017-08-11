@@ -8,7 +8,8 @@
     PlanSetup($scope,$http,$attrs,$cookies,$sce,$window);
     PlanMouse($scope,$http,$attrs,$cookies,$sce,$window);
     PlanKeyboard($scope,$http,$attrs,$cookies,$sce,$window);
-    PlanClasses($scope,$http,$attrs,$cookies,$sce,$window);    
+    PlanClasses($scope,$http,$attrs,$cookies,$sce,$window);
+    PlanModules($scope,$http,$attrs,$cookies,$sce,$window);
    
     // Actions ////////////////////////////////////////////////////////////////////////////////////
 
@@ -211,6 +212,7 @@
     };    
 
      // Inventory ////////////////////////////////////////////////////////////////////////////////////
+
     $scope.select_item = function(fv, item) {
 
       if ( fv.child_item_id != item.id && item.assign_first ) {
@@ -231,10 +233,8 @@
       }
     }
 
-    $scope.io_focus = function(op,ft,fv) {
-    }    
-
     // Operation type selection ///////////////////////////////////////////////////////////////////////
+
     $scope.choose_category = function(category) {
       $scope.state.category_index = $scope.operation_types.categories.indexOf(category);
     }
