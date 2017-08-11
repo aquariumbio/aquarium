@@ -431,8 +431,7 @@ Finally, suppose **fragments**<em>[[should this be **sample_list**? -CT]]</em> i
 collections = produce spread sample_list, "Stripwell"
 ```
 
-This call to **spread** returns a list of collections, which is sent to **produce** to take them. In this example, if there were, say, 30 samples in **sample_list**, then the returned list will contain three 1x12 collections with the first two completely, and the last half full. The first sample in the list is associated with the first well of the first collection, and so on.
-<i> 
+This call to **spread** returns a list of collections, which is sent to **produce** to take them. In this example, if there were, say, 30 samples in **sample_list**, then the returned list will contain three 1x12 collections with the first two completely, and the last half full. The first sample in the list is associated with the first well of the first collection, and so on. 
 
 Collection Methods
 ---
