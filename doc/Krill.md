@@ -34,10 +34,10 @@ Third, **show** is a function made available to your code by Aquarium. It takes 
 
 Including Code from Other Files
 ===
-You can make library code in Aquarium in the developer and include it in your protocol code using "needs". For example, suppose you have a library "hello" in the category "lib" with the following code
+You can make library code in Aquarium in the developer and include it in your protocol code using "needs". For example, suppose you have a library "Say Hello" in the category "My Lib" with the following code
 
 ```ruby
-module Hello
+module SayHello
   def hello thing
     show {
       title "Hello #{thing}"
@@ -49,18 +49,68 @@ end
 Then, in a protocol code block you can write
 
 ```ruby
-needs "lib/hello"
+needs "my lib/say hello"
 
 class Protocol
 
-  include Hello
+  include SayHello
 
   hello "World"
 
 end
 ```
 
-which will do the same thing as the first Hello World protocol above.
+which will do the same thing as the first Hello World protocol above. You can also use instance variables and attribute accessors to make variables from the protocol available in the library
+
+```ruby
+needs "my lib/say hello"
+
+class Protocol
+
+  include SayHello
+  
+  attr_accessor :myvar2
+
+  def main
+      
+    @myvar1 = 100
+    @myvar2 = 200
+
+    hello "world"
+    
+  end
+
+end
+```
+
+Then in the library
+
+```ruby
+module SayHello
+    
+    def hello thing
+        
+        v1 = @myvar1 # You can access the class variables of 
+        v2 = @myvar2 # any class that includes this module. Of course, it isn't a very 
+                     # modular thing to do, since the module doesn't know what classes
+                     # it will be included in. Here I we assume the including class
+                     # will have defined these variables before calling this method.
+        
+        # Class variables within show are tricky though. This is because the block of a show actually lives in
+        # a different class with methods like title, note, etc. But you can still acccess @myvar1 and @myvar2.
+        show do
+            title "Hello #{thing}"
+            note "v1 = #{v1}, v2 = #{v2}"
+            note "@myvar = #{@myvar1}"          # @myvar is not accessible in show, so this doesn't work.
+            note "self.myvar2 = #{self.myvar2}" # But self.myvar2 will work, because @myvar2 was declared an accessor.
+        end
+        
+    end
+    
+end
+```
+
+Note that instance variables are not availabe within show blocks. Finally, note that within a library you can refer to the including protocol's operations as `self.operations`.
 
 
 All About Show
