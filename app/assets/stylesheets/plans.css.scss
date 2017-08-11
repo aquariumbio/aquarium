@@ -1,6 +1,6 @@
 .plans {
 
-  .wrapper {
+  .opeditbar {
     inner {
       display: block;
     }
@@ -85,7 +85,7 @@
       outline: none;
 
       .plan-editor {
-
+        /*background: linear-gradient(white, lightblue);*/
         outline: 1pt solid green;
         margin: 50px;
         border: none;
