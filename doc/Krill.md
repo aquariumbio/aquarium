@@ -296,17 +296,42 @@ A specific (yet still abstract) sample, not to be confused with a sample type or
 
 ### Item
 
-A physical item in the lab. It has an object type and may correspond to a sample, see the examples below. If **i** is an item, then the following methods are available:
-  * i.id - the id of the item. Every item in the lab has such an id that can by used to find information about the item (see Finding Items and Samples).
-  * i.location - a string describing where in the lab the item can be found.
-  * i.object_type_id - the object type id associated with the item.
-  * i.object_type - the object type associated with the item.
-  * i.sample - the corresponding sample, if any. Some items correspond to samples and some do not. For example, an item whose object type is "1 L Bottle" does not correspond to a sample. An item whose object type is "Plasmid Stock" will have a corresponding sample, whose name might be something like "pLAB1".
-  * i.save - if you make changes to an item, you have to call i.save to make sure the changes are saved to the database.
-  * i.reload - if the item has changed somehow in the database, this method update **i** so that it has the latest information from the database.
-  * i.mark_as_deleted - to delete an item, don't call delete, call this method instead. It actually just hides the item so old job logs that refer to it can still have something to point to.
+A physical item in the lab. It belongs to an ObjectType and may belong to a Sample (see the examples below). For Item **itm**:
 
-You can associate data, such as a measurement or uploaded data file, with an item using the DataAssociation model, described [here](md-viewer?doc=DataAssociation).
+
+#### Attributes
+* **itm.id** - the id of the Item. Every Item in the lab has a unique id that can by used to refer to it (see finding Items and Samples).
+
+* **itm.location** - a string describing the physical location in the lab where the Item's physical manifestation can be found.
+
+#### Associations
+* **itm.object_type** - the ObjectType associated with the Item.
+
+* **itm.object_type_id** - the id of the ObjectType associated with the Item.
+
+* **itm.sample** - the corresponding Sample, if any. Some Items correspond to Samples and some do not. For example, an Item whose object type is "1 L Bottle" does not correspond to a sample. An item whose ObjectType is "Plasmid Stock" will have a corresponding Sample, whose name might be something like "pLAB1".
+
+* **itm.sample_id** - the id of the Sample that may be associated with the Item.
+
+#### Instance methods
+* **itm.save** - saves **itm** to the database. If you make changes to an Item's attributes or associations, you may have to call `itm.save` to save the changes to the database (see below).
+
+* **itm.reload** - reloads an item from the database. If **itm** has changed in the database, call this method to be sure that you are working with the current data.
+
+* **itm.mark_as_deleted** - records that the **physical manifestation** of the item has been discarded. (*DO NOT* use `itm.delete` as this removes the Item from the database altogether.) `itm.mark_as_deleted` saves to the database automatically, and does not require a subsequenquent `itm.save` call.
+
+#### Making changes to an Item
+Generally, there are two ways to change an Item's attributes. First, you can assign them using the `=` operator. In this case, you will need to save the changes:
+```ruby
+itm.location = "The big red barn."
+itm.save
+```
+Alternatively, you can accomplish the same thing in one line using `update_attributes` method:
+```ruby
+itm.update_attributes(location: "The big red barn.")
+```
+
+You can associate arbitrary data, such as a measurement or uploaded data file, with an item using the DataAssociation model, described [here](md-viewer?doc=DataAssociation).
 
 Taking Items
 ===
