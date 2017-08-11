@@ -342,7 +342,11 @@ class Operation < ActiveRecord::Base
 
     return true
 
-  end  
+  end
+
+  def tmp
+    self.temporary
+  end
 
   def temporary
     @temporary ||= {}
