@@ -41,6 +41,50 @@ The show block will repeat up to `num_times` until all inputs are valid.
 Warning messages for invalid inputs will be displayed at the top of show block. 
 These messages can be customized via the `.validation_message` method.
 
+#### Other methods
+
+##### custom_selection
+`custom_selection` allows techs to input a string or number from a number choices. 
+The choices will be displayed next to the heading. Technician will be instructed to 
+re-enter the choice if he/she doesn't enter one of the choices.
+
+```ruby
+choice_table = Proc.new { |ops|
+  ops.start_table
+    .custom_selection(:choice, 
+      heading: "Choose", 
+      choices: ["Yes", "Maybe", "No"], 
+      type: "string") { |op| "No" }
+    .end_table.all
+}
+
+show_with_input_table(operations.running, choice_table)
+```
+
+##### custom_boolean
+Similar to custom_selection but detects "Y/N" from the string input and saves
+boolean to temporary key.
+
+For example, the following code errors out operations that are contaminated.
+```ruby
+boolean_table = Proc.new { |ops|
+  ops.start_table
+    .input_item("Plasmid")
+    .custom_selection(:contaminated, heading: "Contaminated?") { |op| "y" }
+    .end_table.all
+}
+
+show_with_input_table(operations.running, boolean_table) do
+  title "Check items for contamination"
+end
+
+operations.running.each do |op|
+  if op.temporary[:contaminated]
+    op.error :contaminated, "Item is contaminated"
+  end
+end
+```
+
 ### Complex Example
 
 Virtual operations can be used as well. 
