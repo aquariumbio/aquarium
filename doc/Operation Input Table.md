@@ -51,9 +51,8 @@ re-enter the choice if he/she doesn't enter one of the choices.
 ```ruby
 choice_table = Proc.new { |ops|
   ops.start_table
-    .custom_selection(:choice, 
-      heading: "Choose", 
-      choices: ["Yes", "Maybe", "No"], 
+    .custom_selection(:choice, ["Yes", "Maybe", "No"], 
+      heading: "Choose",  
       type: "string") { |op| "No" }
     .end_table.all
 }
