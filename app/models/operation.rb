@@ -48,6 +48,44 @@ class Operation < ActiveRecord::Base
     set_property name, val, "output", false, aft
   end
 
+  def add_input name, sample, container 
+
+    # Adds a new input to an operation, even if that operation doesn't specify the input
+    # in its definition. Useful for example when an operation determines which enzymes it
+    # will use once launched.
+      
+    items = Item.where(sample_id: sample.id, object_type_id: container.id)
+    
+    if items.any?
+        
+        item = items.first
+   
+      ft = FieldType.new(
+          name: name,
+          ftype: "sample",
+          parent_class: "OperationType",
+          parent_id: self.operation_type.id
+      )
+      ft.save
+    
+      fv = FieldValue.new(
+          name: name,
+          child_item_id: item.id,
+          child_sample_id: sample.id,
+          role: 'input',
+          parent_class: "Operation",
+          parent_id: self.id,
+          field_type_id: ft.id)
+      fv.save
+      
+      return item
+      
+    end
+    
+    return nil
+      
+  end  
+
   def inputs
     field_values.select { |ft| ft.role == 'input' }
   end
