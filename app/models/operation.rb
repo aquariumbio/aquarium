@@ -54,7 +54,7 @@ class Operation < ActiveRecord::Base
     # in its definition. Useful for example when an operation determines which enzymes it
     # will use once launched.
       
-    items = Item.where(sample_id: sample.id, object_type_id: container.id)
+    items = Item.where(sample_id: sample.id, object_type_id: container.id).reject { |i| i.deleted? }
     
     if items.any?
         

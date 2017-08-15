@@ -298,6 +298,39 @@ will return a Ruby object with the same structure as the json, and with symbols 
 
   { error: “JSON parse error description”, original_value: “whatever you put as the input” }.
 
+Adding Inputs After the Protocol has Started
+===
+Note that for the items associated with an operatioj to be tracked, the have to be inputs or outputs. Sometimes, however, you don't know what items a protocol will use ahead of time, or do not need the user to specify them in the planner. In this case, you can add an input online using op.add_input as in the following code:
+
+```ruby
+# This is a default, one-size-fits all protocol that shows how you can 
+# access the inputs and outputs of the operations associated with a job.
+# Add specific instructions for this protocol!
+
+class Protocol
+  
+  def main
+      
+    primer = Sample.find_by_name("GAI-L2-r")
+    container = ObjectType.find_by_name("Primer Aliquot")
+    
+    operations.each do |op|
+      item = op.add_input "Computed Input", primer, container
+    end      
+
+    operations.retrieve.make
+    
+    operations.store
+    
+    return {}
+    
+  end
+
+end
+```
+
+Here, we know we want the protocol to always use the specified primer (a contrived example), so it is hard coded. But which item is used is determied by op.add_input. The chosen item is the return value and should be checked for non-nil, meaning the method found an item.
+
 Data Associations
 ===
 
