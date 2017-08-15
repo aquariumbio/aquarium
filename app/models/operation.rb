@@ -64,7 +64,7 @@ class Operation < ActiveRecord::Base
           name: name,
           ftype: "sample",
           parent_class: "OperationType",
-          parent_id: self.operation_type.id
+          parent_id: nil
       )
       ft.save
     
