@@ -29,17 +29,18 @@ AQ.Plan.record_methods.reload = function() {
 
 }
 
-AQ.Plan.record_methods.save = function() {
+AQ.Plan.record_methods.save = function(user) {
 
-  var plan = this;
-  plan.saving = true;  
+  var plan = this,
+      before = plan,
+      user_query = user ? "?user_id=" + user.id : "";
 
-  var before = plan;
+  plan.saving = true;
 
   if ( plan.id ) {
 
     return new Promise((resolve,reject) => {
-      AQ.http.put('/plans/' + plan.id + '.json',plan.serialize()).then(response => {
+      AQ.http.put('/plans/' + plan.id + '.json'+user_query,plan.serialize()).then(response => {
         delete plan.saving;
         var p = AQ.Plan.record(response.data).marshall();   
         AQ.Test.plan_diff(before,p)             
@@ -53,7 +54,7 @@ AQ.Plan.record_methods.save = function() {
   } else {
 
     return new Promise((resolve,reject) => {
-      AQ.post('/plans.json',plan.serialize()).then(response => {
+      AQ.post('/plans.json'+user_query,plan.serialize()).then(response => {
         delete plan.saving;
         var p = AQ.Plan.record(response.data).marshall();
         AQ.Test.plan_diff(before,p)

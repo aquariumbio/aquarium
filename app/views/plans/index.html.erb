@@ -18,6 +18,10 @@
 
 <% content_for :sidebar do %>
 
+  <h1 class="md-title" ng-if="current_user.id != <%= current_user.id %>">Acting as 
+    <span style="background: yellow">{{current_user.login}}</span>
+  </h1>
+
   <ul ng-if="plan.errors.length > 0">
     <li ng-repeat="e in plan.errors">{{e}}</li>
   </ul>
@@ -47,8 +51,24 @@
     </div>
 
     <div ng-if="state.launch" 
-         ng-include="'launch_plan'">ASD
+         ng-include="'launch_plan'">
     </div>   
+
+    <% if current_user && current_user.is_admin %>
+
+      <hr>
+
+      <md-input-container layout-margin layout="column">
+        <md-select ng-model="state.selected_user_id" class="md-plain-select"
+                   md-on-close="select_user()">
+          <md-option ng-repeat="user in users" 
+                     ng-value="user.id">
+            {{user.login}} ( {{user.name}} )
+          </md-option>
+        </md-select>
+      </md-input-container>
+
+    <% end %>    
 
   </div>
 

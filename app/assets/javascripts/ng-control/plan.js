@@ -96,7 +96,7 @@
 
     $scope.save = function(plan) {
 
-      plan.save().then(saved_plan => {
+      plan.save($scope.current_user).then(saved_plan => {
         $scope.plan = saved_plan;
         $scope.state.loading_plans = true;
         $scope.select(null);
@@ -182,7 +182,7 @@
       $scope.plan.uba = null;
       aq.each($scope.current_user.user_budget_associations, uba => uba.selected = false);
 
-      $scope.plan.save().then(saved_plan => {
+      $scope.plan.save($scope.current_user).then(saved_plan => {
         $scope.plan = saved_plan;
         $scope.plan.estimate_cost(); 
       });

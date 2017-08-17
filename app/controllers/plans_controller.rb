@@ -13,7 +13,13 @@ class PlansController < ApplicationController
 
   def create
 
-    Marshall.user = current_user
+    puts "CREATING PLAN WITH USER_ID = #{params[:user_id]}"
+
+    if current_user.is_admin && params[:user_id] && params[:user_id] != current_user.id
+      Marshall.user = User.find(params[:user_id])
+    else
+      Marshall.user = current_user
+    end
 
     ActiveRecord::Base.transaction do      
       begin
@@ -37,7 +43,11 @@ class PlansController < ApplicationController
 
   def update
 
-    Marshall.user = current_user   
+    if current_user.is_admin && params[:user_id] && params[:user_id] != current_user.id
+      Marshall.user = User.find(params[:user_id])
+    else
+      Marshall.user = current_user
+    end
 
     ActiveRecord::Base.transaction do 
       begin
