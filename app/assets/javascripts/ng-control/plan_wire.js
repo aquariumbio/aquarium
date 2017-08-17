@@ -37,7 +37,6 @@ function PlanWire($scope,$http,$attrs,$cookies,$sce,$window) {
 
   $scope.connect = function(io1, object1, io2, object2) {
 
-    // console.log(["connect", from.record_type, from_object.record_type, to.record_type, to_object.record_type])
 
     if ( io1.record_type == "FieldValue" && io2.record_type == "FieldValue" ) {
 

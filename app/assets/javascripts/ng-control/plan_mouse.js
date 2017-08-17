@@ -163,6 +163,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
     } else {
       $scope.select(obj);
       $scope.set_current_io(io,true);
+      console.log($scope.current_io);
     }
 
     evt.stopImmediatePropagation();
