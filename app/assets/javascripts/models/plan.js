@@ -662,3 +662,24 @@ AQ.Plan.record_methods.replan = function() {
 
 }
 
+AQ.Plan.record_methods.find_by_rid = function(rid) {
+
+  var plan = this, 
+      object = null;
+
+  aq.each(plan.operations, op => {
+    if ( op.rid == rid ) {
+      object = op;
+    } else {
+      aq.each(op.field_values, fv => {
+        if ( fv.rid == rid ) {
+          object = fv;
+        }
+      })
+    }
+  })
+
+  return object;
+
+}
+

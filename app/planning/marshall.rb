@@ -20,6 +20,9 @@ module Marshall
     self.operations p, x[:operations]   
     self.wires p, x[:wires] if x[:wires] && p.errors.empty?
 
+    p.layout = x[:layout].to_json
+    p.save
+
     p
 
   end
@@ -52,7 +55,7 @@ module Marshall
   def self.operation x
 
     ot = OperationType.find(x[:operation_type_id])
-    op = ot.operations.create status: "planning", user_id: @@user.id, x: x[:x], y: x[:y]
+    op = ot.operations.create status: "planning", user_id: @@user.id, x: x[:x], y: x[:y], parent_id: x[:parent_id]
 
     if x[:field_values]
       x[:field_values].each do |fv|
@@ -70,6 +73,7 @@ module Marshall
 
     operation.x = op[:x]
     operation.y = op[:y]
+    operation.parent_id = op[:parent_id]
     operation.save
 
     op[:field_values].each do |fv|
@@ -144,7 +148,9 @@ module Marshall
     self.map_id fv[:rid], field_value.id
 
     unless field_value.errors.empty?
-      raise "Marshalling error: " + op.operation_type.name + " operation: " + field_value.errors.full_messages.join(", ")
+      raise "Marshalling error: " + 
+            op.operation_type.name + " operation: " +
+            field_value.errors.full_messages.join(", ")
     end
 
   end    
@@ -187,6 +193,9 @@ module Marshall
         pwire.destroy
       end
     end
+
+    p.layout = x[:layout].to_json
+    p.save    
 
     p.reload
 

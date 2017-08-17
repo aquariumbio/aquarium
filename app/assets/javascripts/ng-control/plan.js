@@ -9,15 +9,27 @@
     PlanMouse($scope,$http,$attrs,$cookies,$sce,$window);
     PlanKeyboard($scope,$http,$attrs,$cookies,$sce,$window);
     PlanClasses($scope,$http,$attrs,$cookies,$sce,$window);
-    PlanModules($scope,$http,$attrs,$cookies,$sce,$window);
+    PlanWire($scope,$http,$attrs,$cookies,$sce,$window);
    
     // Actions ////////////////////////////////////////////////////////////////////////////////////
 
     $scope.select = function(object) {
+
       $scope.state.launch = false;
-      $scope.current_op   = object && object.model.model == "Operation"  ? object : null;
-      $scope.current_fv   = object && object.model.model == "FieldValue" ? object : null;
-      $scope.current_wire = object && object.model.model == "Wire"       ? object : null;
+
+      $scope.current_draggable = object && ( object.model.model == "Operation" ||
+                                             object.model.model == "Module" ||
+                                             object.model.model == "ModuleIO" ) ? object : null;
+
+      $scope.current_op     = object && object.model.model == "Operation" ? object : null;
+
+      $scope.current_io     = object && ( object.model.model == "FieldValue" ||
+                                          object.model.model == "ModuleIO" ) ? object : null;
+
+      $scope.current_fv     = object && object.model.model == "FieldValue" ? object : null;      
+
+      $scope.current_wire   = object && object.model.model == "Wire"       ? object : null;
+
     }
 
     function refresh_plan_list() {
@@ -33,13 +45,14 @@
         y: 2*$scope.snap + $scope.last_place, 
         width: 160, 
         height: 30,
-        routing: {}, form: { input: {}, output: {} }
+        routing: {}, form: { input: {}, output: {} },
+        parent_id: $scope.plan.current_module.id
       });
       $scope.last_place += 4*$scope.snap;
       op.set_type(ot);
       $scope.current_op = op;
       $scope.plan.operations.push(op);
-      $scope.set_current_fv(op.field_values[0],true);
+      $scope.set_current_io(op.field_values[0],true);
       if ( $scope.plan.name == "Untitled Plan" ) {
         $scope.plan.name = op.operation_type.name;
         $scope.state.message = "Changed name of untitled plan to " + op.operation_type.name;
@@ -54,11 +67,12 @@
       newop.y = op.y + 4*$scope.snap;
       newop.width = 160;
       newop.height = 30;
+      newop.parent_id = $scope.plan.current_module.id;
 
       $scope.select(newop);
       var inputs = aq.where(newop.field_values, fv => fv.role == 'input');
       if ( inputs.length > 0 ) {
-        $scope.set_current_fv(inputs[0]);
+        $scope.set_current_io(inputs[0]);
       }
 
     }
@@ -71,20 +85,24 @@
       newop.y = op.y - 4*$scope.snap;
       newop.width = 160;
       newop.height = 30;
+      newop.parent_id = $scope.plan.current_module.id;
 
       $scope.select(newop);
       var fvs = aq.where(newop.field_values, fv => fv.role == 'output');
       if ( fvs.length > 0 ) {
-        $scope.set_current_fv(fvs[0]);
+        $scope.set_current_io(fvs[0]);
       }
 
     }    
 
-    $scope.set_current_fv = function(fv,focus) {
-      $scope.current_fv = fv;
+    $scope.set_current_io = function(io,focus) {
+      $scope.current_io = io;
+      if ( io.model.model == "FieldValue" ) {
+        $scope.current_fv = io;
+      }
       if ( focus ) { 
         setTimeout(function() { 
-          var el = document.getElementById('fv-'+fv.rid);
+          var el = document.getElementById('fv-'+io.rid);
           if ( el ) { el.focus() }
         }, 30);
       }
@@ -254,5 +272,34 @@
     }
 
   }]);
+
+  w.directive('ngRightClick', function($parse) {
+      return function(scope, element, attrs) {
+          var fn = $parse(attrs.ngRightClick);
+          element.bind('contextmenu', function(event) {
+              scope.$apply(function() {
+                  event.preventDefault();
+                  fn(scope, {$event:event});
+              });
+          });
+      };
+  });
+
+  w.directive('plannerCursor', function() {
+
+    return {
+
+      restrict: 'AE',
+      scope: { x: '=', y: '=' },
+      link: function() {
+        console.log("planner cursor")
+        console.log($('#planner-cursor-template'))
+      },
+      replace: true,
+      template: $('#planner-cursor-template').html()
+
+    }
+
+  });
 
 })();                    

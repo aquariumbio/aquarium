@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20170806145525) do
+ActiveRecord::Schema.define(:version => 20170813203843) do
 
   create_table "account_logs", :force => true do |t|
     t.integer  "row1"
@@ -294,6 +294,7 @@ ActiveRecord::Schema.define(:version => 20170806145525) do
     t.datetime "updated_at",        :null => false
     t.float    "x"
     t.float    "y"
+    t.integer  "parent_id"
   end
 
   add_index "operations", ["operation_type_id"], :name => "index_operations_on_operation_type_id"
@@ -327,6 +328,7 @@ ActiveRecord::Schema.define(:version => 20170806145525) do
     t.string   "status"
     t.float    "cost_limit"
     t.string   "folder"
+    t.text     "layout"
   end
 
   add_index "plans", ["user_id"], :name => "index_plans_on_user_id"

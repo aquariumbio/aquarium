@@ -54,7 +54,8 @@ module Serialize
       updated_at: plan.updated_at,
       status: plan.status,
       operations: sops,
-      wires: wires
+      wires: wires,
+      layout: plan.layout
     }
 
   end
