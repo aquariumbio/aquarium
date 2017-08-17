@@ -20,7 +20,7 @@ module Marshall
     self.operations p, x[:operations]   
     self.wires p, x[:wires] if x[:wires] && p.errors.empty?
 
-    p.layout = x[:layout].to_json
+    p.layout = self.mod(x[:layout]).to_json
     p.save
 
     p
@@ -41,8 +41,7 @@ module Marshall
           operation.save
         end
         ids << operation.id
-        @@id_map ||= []
-        @@id_map[operation.id] = op[:rid]
+        map_id op[:rid], operation.id
        rescue Exception => e
         raise "Marshalling error: #{e.to_s}: #{e.backtrace[0].to_s}"
       end
@@ -76,8 +75,10 @@ module Marshall
     operation.parent_id = op[:parent_id]
     operation.save
 
-    op[:field_values].each do |fv|
-      self.field_value operation, fv, op[:routing]
+    if op[:field_values]
+      op[:field_values].each do |fv|
+        self.field_value operation, fv, op[:routing]
+      end
     end    
 
     # for each field value in operation, delete it if it is not in x
@@ -194,7 +195,7 @@ module Marshall
       end
     end
 
-    p.layout = x[:layout].to_json
+    p.layout = self.mod(x[:layout]).to_json
     p.save    
 
     p.reload
@@ -211,5 +212,29 @@ module Marshall
     @@id_map ||= []
     @@id_map[rid] = id
   end  
+
+  def self.mod m
+
+    mod = m
+
+    mod[:wires] = mod[:wires].collect { |w| 
+
+      wire = w
+
+      wire[:from_op] = { id: @@id_map[w[:from_op][:rid]] }  if w[:from_op] 
+      wire[:to_op]   = { id: @@id_map[w[:to_op][:rid]]   }  if w[:to_op]   
+      wire[:from]    = { record_type: "FieldValue", id: @@id_map[w[:from][:rid]] } if w[:from][:record_type] == "FieldValue"
+      wire[:to]      = { record_type: "FieldValue", id: @@id_map[w[:to][:rid]] }   if w[:to][:record_type] == "FieldValue"
+
+      wire
+
+    } if mod[:wires]
+
+    mod[:children] = mod[:children].collect { |c| self.mod c } if mod[:children]
+
+    mod
+
+  end
+
 
 end

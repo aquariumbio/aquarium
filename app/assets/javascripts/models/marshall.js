@@ -158,7 +158,7 @@ AQ.Plan.record_methods.marshall_layout = function() {
 
   if ( plan.layout ) {
 
-    plan.base_module = new Module().from_object(JSON.parse(plan.layout));
+    plan.base_module = new Module().from_object(JSON.parse(plan.layout),plan);
     delete plan.current_module;
 
   } else {

@@ -683,3 +683,24 @@ AQ.Plan.record_methods.find_by_rid = function(rid) {
 
 }
 
+AQ.Plan.record_methods.find_by_id = function(id) {
+
+  var plan = this, 
+      object = null;
+
+  aq.each(plan.operations, op => {
+    if ( op.id == id ) {
+      object = op;
+    } else {
+      aq.each(op.field_values, fv => {
+        if ( fv.id == id ) {
+          object = fv;
+        }
+      })
+    }
+  })
+
+  return object;
+
+}
+

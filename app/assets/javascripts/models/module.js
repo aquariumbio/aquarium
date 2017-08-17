@@ -24,7 +24,9 @@ class Module {
 
   }
 
-  from_object(object) {
+  from_object(object,plan) {
+
+    console.log(["Module::from_object", plan])
 
     for ( var p in object ) {
       this[p] = object[p];
@@ -40,8 +42,8 @@ class Module {
 
     this.input = aq.collect(this.input,       i => new ModuleIO().from_object(i) )
     this.output = aq.collect(this.output,     o => new ModuleIO().from_object(o) )
-    this.children = aq.collect(this.children, c => new Module().from_object(c) )
-    this.full_wires = [];    
+    this.children = aq.collect(this.children, c => new Module().from_object(c,plan) )
+    this.wires = aq.collect(this.wires,       w => new ModuleWire().from_object(w,this,plan) )
 
     return this;
 
@@ -71,12 +73,27 @@ class Module {
   }
 
   connect_to_op(from, to, to_op) {
-    this.wires.push(new ModuleWire({
+    this.wires.push(new ModuleWire().build({
+      type: "mod2op",
       from_module: this,
       from: from,
       to_op: to_op,
       to: to
     }));
+  }
+
+  connect_from_op(to, from, from_op) {  
+    this.wires.push(new ModuleWire().build({
+      type: "op2mod",
+      to_module: this,
+      to: to,
+      from_op: from_op,
+      from: from
+    }));
+  }
+
+  num_inputs() {
+    return this.inputs.length;
   }
 
 }
@@ -124,32 +141,102 @@ class ModuleIO {
 
 class ModuleWire {
 
-  constructor(object) {
+  constructor() {
+    this.snap = 16;
+  }
+
+  build(object) {
     for ( var p in object ) {
       this[p] = object[p];
     }
-    this.snap = 16;
     return this;    
+  }
+
+  from_object(w,module,plan) {
+
+    console.log(["ModuleWire::from_object", plan])
+
+    for ( var p in w ) {
+      this[p] = w[p];
+    }
+
+    if ( this.from_module ) this.from_module = module;
+    if ( this.to_module )  this.to_module = module;
+
+    if ( this.from_op ) this.from_op = plan.find_by_id(this.from_op.id);
+    if ( this.to_op )   this.to_op = plan.find_by_id(this.to_op.id);
+
+    if ( this.from && this.from.record_type == "FieldValue" ) this.from = plan.find_by_id(this.from.id);
+    if ( this.to && this.to.record_type == "FieldValue" )   this.to   = plan.find_by_id(this.to.id); 
+
+    if ( this.from && this.from.record_type == "ModuleIO" ) this.from = aq.find(module.input, i => i.id == this.from.id );
+    if ( this.to && this.to.record_type == "ModuleIO" )   this.to   = aq.find(module.output, i => i.id == this.to.id );
+
+    console.log(this)
+
+    return this;
+
   }
 
   consistent() {
     return true;
   }
 
+  serialize() {
+
+    var wire = { type: this.type };
+
+    if ( this.from_module ) wire.from_module = { id: this.from_module.id };
+    if ( this.to_module )   wire.to_module   = { id: this.to_module.id };
+
+    if ( this.from_op ) wire.from_op = { rid: this.from_op.rid };
+    if ( this.to_op )   wire.to_op   = { rid: this.to_op.rid };
+
+    if ( this.from.record_type == "FieldValue" ) wire.from = { record_type: "FieldValue", rid: this.from.rid }
+    if ( this.to.record_type == "FieldValue" )   wire.to =   { record_type: "FieldValue", rid: this.to.rid }
+
+    if ( this.from.record_type == "ModuleIO" ) wire.from = { record_type: "ModuleIO", id: this.from.id }
+    if ( this.to.record_type == "ModuleIO" )   wire.to =   { record_type: "ModuleIO",   id: this.to.id }
+
+    return wire;
+
+  }
+
   get x0() {
-    return this.from.x + this.from.width/2;
+    switch ( this.type  ) {
+      case "mod2op":     
+        return this.from.x + this.from.width/2;
+      case "op2mod":
+        return this.from_op.x + this.from_op.width/2 + (this.from.index - this.from_op.num_outputs/2.0 + 0.5)*this.snap;
+    }
   }
 
   get y0() {
-    return this.from.y;
+    switch ( this.type  ) {
+      case "mod2op":     
+        return this.from.y;
+      case "op2mod":
+        return this.from_op.y;
+    }    
   }
 
   get x1() {
-    return this.to_op.x + this.to_op.width/2 + (this.to.index - this.to_op.num_inputs/2.0 + 0.5)*this.snap
+    switch ( this.type  ) {
+      case "mod2op": 
+        return this.to_op.x + this.to_op.width/2 + (this.to.index - this.to_op.num_inputs/2.0 + 0.5)*this.snap
+      case "op2mod":
+        return this.to.x + this.to.width/2;    
+    }
+
   }
 
   get y1() {
-    return this.to_op.y + this.to_op.height;
+    switch ( this.type  ) {
+      case "mod2op":     
+        return this.to_op.y + this.to_op.height;
+      case "op2mod":
+        return this.to.y + this.to.height;      
+    }
   }  
 
   get ymid() { 

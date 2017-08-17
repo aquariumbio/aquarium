@@ -31,6 +31,7 @@ AQ.Plan.record_methods.serialize_module = function(m) {
   }
 
   sm.children = aq.collect(m.children, c => plan.serialize_module(c));
+  sm.wires = aq.collect(m.wires, w => w.serialize())
 
   return sm;
 

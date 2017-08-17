@@ -291,10 +291,6 @@
 
       restrict: 'AE',
       scope: { x: '=', y: '=' },
-      link: function() {
-        console.log("planner cursor")
-        console.log($('#planner-cursor-template'))
-      },
       replace: true,
       template: $('#planner-cursor-template').html()
 
