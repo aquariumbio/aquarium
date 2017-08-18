@@ -91,9 +91,14 @@
                ng-if="templates.length > 0 && state.sidebar.your_templates"
                style="margin-left: 16px">        
         <md-list-item ng-repeat="p in templates | orderBy:'-'" ">
-          <a href='#' class='no-highlight' ng-click="paste_plan(p)">
-            <span>{{p.id}}: {{p.name}}</span>
-          </a>
+          <p><a href='#' class='no-highlight' ng-click="paste_plan(p)">
+            {{p.id}}: {{p.name}}         
+          </a></p>
+          <% if current_user.is_admin %>
+              <div class="md-secondary">
+                <a href='#' style="font-size: 7pt" ng-click="create_system_template(p)">SHARE</a>
+              </div>
+          <% end %>             
         </md-list-item>
       </md-list>
 

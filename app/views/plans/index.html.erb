@@ -56,92 +56,66 @@
 
 <% end %>
 
+<% content_for :no_specific_padding do %>true<% end %>
+
 <% content_for :action1 do %>
-  <md-button class='md-raised' ng-click="new(plan)">New</md-button>
-<% end %>
 
-<% content_for :action2 do %>
-  <md-button class='md-raised' 
-             ng-click="save(plan)" 
-             ng-disabled="plan.saving || plan.operations.length == 0">
-             Save
-  </md-button>
-<% end %>
+  <planner-action ng-click="" icon="select_all" name="All" tooltip="Select All (Ctrl-A)"></planner-action>  
 
-<% content_for :action3 do %>
-  <md-button class='md-raised' 
-             ng-click="launch()"
-             ng-disabled="!plan.id || !plan.valid() || state.launch">
-             Launch
-  </md-button>
-<% end %>
+  <planner-action ng-click="" icon="clear" name="Delete" tooltip="Delete (Delete/Backspace)"></planner-action>    
 
-<% content_for :action4 do %>
-  <md-menu>
-    <md-button ng-click="openMenu($mdMenu, $event)" class="md-icon-button" style="padding-top:5px">
-      <ng-md-icon icon="menu" size="30" aria-label="Menu"></ng-md-icon>
-    </md-button>
-    <md-menu-content>
+  <div style="width: 1px; height: 100%; border-left: 1pt solid #eee; margin: 5px"></div>
 
-      <md-menu-item>
-        <md-button class='md-raised' 
-                   ng-disabled="!plan.id"
-                   ng-click="create_template(plan)">
-                   Create Template
-        </md-button>
-      </md-menu-item>
+  <planner-action ng-click="plan.create_module(current_op)"
+                  icon="module" name="Module"
+                  tooltip="New Module (Ctrl-M)"></planner-action>  
 
-      <% if current_user.is_admin %>
-        <md-menu-item>
-          <md-button class='md-raised' 
-                     ng-disabled="!plan.id"
-                     ng-click="create_system_template(plan)">
-                     Create System Template
-          </md-button>
-        </md-menu-item>
-      <% end %>
+  <planner-action ng-click="plan.current_module.add_input()"
+                  ng-disabled="plan.current_module.id == 0"
+                  icon="input" name="Input"
+                  tooltip="New Module Input (Ctrl-I)"></planner-action>  
 
-      <md-menu-item>
-        <md-button class='md-raised' 
-                   ng-disabled="!plan.id"
-                   ng-click="delete_plan(plan)">
-                   Delete
-        </md-button>
-      </md-menu-item>
+  <planner-action ng-click="plan.current_module.add_output()"
+             ng-disabled="plan.current_module.id == 0"        
+             icon="output" name="Output"
+             tooltip="New Module Output (Ctrl-O)"></planner-action>  
 
-      <md-menu-item>
-        <md-button class='md-raised' 
-                   ng-disabled="plan.operations.length == 0"
-                   ng-click="copy_plan(plan)">
-                   Copy
-        </md-button>  
-      </md-menu-item>
+  <div style="width: 1px; height: 100%; border-left: 1pt solid #eee; margin: 5px"></div>
 
-      <md-menu-item>
-        <md-button class='md-raised' 
-                   ng-click="plan.create_module(current_op)">
-                   Create Module
-        </md-button>  
-      </md-menu-item>
+  <planner-action ng-click="create_template(plan)"
+                  ng-disabled="!plan.id"
+                  icon="share" name="Template"
+                  tooltip="Save as Template (Ctrl-T)"></planner-action>
 
-      <md-menu-item>
-        <md-button class='md-raised' 
-                   ng-disabled="plan.current_module.id == 0"
-                   ng-click="plan.current_module.add_input()">
-                   Add Module Input
-        </md-button>  
-      </md-menu-item>      
+  <div style="width: 1px; height: 100%; border-left: 1pt solid #eee; margin: 5px"></div>
 
-      <md-menu-item>
-        <md-button class='md-raised' 
-                   ng-disabled="plan.current_module.id == 0"        
-                   ng-click="plan.current_module.add_output()">
-                   Add Module Output
-        </md-button>  
-      </md-menu-item>
+  <planner-action ng-click="new(plan)" icon="note_add" name="New" tooltip="New Plan (Ctrl-N)"></planner-action>
 
-    </md-menu-content>
-  </md-menu>
+  <planner-action ng-click="save(plan)" 
+                  ng-disabled="plan.saving || plan.operations.length == 0" 
+                  icon="save" name="Save"
+                  tooltip="Save Plan (Ctrl-S)"></planner-action>
+
+  <planner-action ng-click="copy_plan(plan)"
+             ng-disabled="plan.operations.length == 0"
+             icon="content_copy" name='Copy'
+             tooltip="Copy (Save as New) Plan (Ctrl-C)"></planner-action>                    
+
+  <planner-action ng-click="delete_plan(plan)"
+                  ng-disabled="!plan.id"
+                  icon="delete" name="Trash"
+                  tooltip="Delete Plan"></planner-action>
+
+  <div style="width: 1px; height: 100%; border-left: 1pt solid #eee; margin: 5px"></div>
+
+  <planner-action ng-click="launch()"
+                  ng-disabled="!plan.id || !plan.valid() || state.launch" 
+                  icon="launch" name="Launch"
+                  tooltip="Launch Plan"></planner-action>
+
+  <div style="width: 1px; height: 100%; border-left: 1pt solid #eee; margin: 5px"></div>
+
+
 <% end %>
 
 <% content_for :main do %>
