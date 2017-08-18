@@ -4,6 +4,7 @@ AQ.Plan.record_methods.close_current_module = function() {
 }    
 
 AQ.Plan.record_methods.open_module = function(module) {
+  console.log(module)
   this.current_module = module;
 }
 

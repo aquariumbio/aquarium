@@ -181,7 +181,7 @@
        ng-attr-transform="translate({{output.x}}, {{output.y}})">    
 
       <rect ng-attr-width="{{output.width}}" ng-attr-height="{{output.height}}"
-            ng-attr-class="module-io"
+            ng-attr-class="{{op_class(output)}}"
             ng-mousedown="draggableMouseDown($event, output)" 
             ng-mouseup="draggableMouseUp($event, output)" 
             ng-mousemove="draggableMouseMove($event, output)"/>   
@@ -201,7 +201,7 @@
        ng-attr-transform="translate({{input.x}}, {{input.y}})">    
 
       <rect ng-attr-width="{{input.width}}" ng-attr-height="{{input.height}}"
-            ng-attr-class="module-io"
+            ng-attr-class="{{op_class(input)}}"
             ng-mousedown="draggableMouseDown($event, input)" 
             ng-mouseup="draggableMouseUp($event, input)" 
             ng-mousemove="draggableMouseMove($event, input)"/>   

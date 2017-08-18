@@ -18,6 +18,7 @@ class Module {
     this.wires = [];
     this.full_wires = [];
     this.parent_id = parent ? parent.id : -1;
+
     this.inc_next_id();
 
     return this;
@@ -45,11 +46,14 @@ class Module {
     this.children = aq.collect(this.children, c => new Module().from_object(c,plan) )
     this.wires = aq.collect(this.wires,       w => new ModuleWire().from_object(w,this,plan) )
 
+    this.constructor.next_module_id++;
+
     return this;
 
   }
 
   get next_id() {
+    console.log("next_id: " + this.constructor.next_module_id)
     if ( !this.constructor.next_module_id ) {
       this.constructor.next_module_id = 0;
     }

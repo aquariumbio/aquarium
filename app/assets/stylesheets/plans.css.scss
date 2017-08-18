@@ -287,16 +287,36 @@
     }
     .action-name {
       font-size: 9pt;
+      color: #444;
     }
     .active-icon {
-      fill: #333;
-      stroke: #333;
+      fill: #444;
+      stroke: #444;
     }
     .disabled-icon {
       fill: #bbb;
       stroke: #bbb;
     }
 
+  }
+
+  .compact-list {
+    padding: 0;
+    margin: 0 0 0 16px;
+    li {
+      padding: 0 0 0 5px;
+      a {
+        &:active, &:hover, &:visited, &:link {
+          text-decoration: none;
+        };
+      }
+      border: 1px solid white;
+      border-left: 5px solid white;
+    }
+    .active-plan {
+      /*background: #ff9;*/
+      border-color: #999;
+    }
   }
 
 }

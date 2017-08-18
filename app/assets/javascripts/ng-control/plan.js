@@ -2,12 +2,11 @@
 
   var w = angular.module('aquarium'); 
 
-  w.controller('planCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', '$window',
-                  function (  $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) {
+  w.controller('planCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', '$window', '$mdDialog',
+                  function (  $scope,   $http,   $attrs,   $cookies,   $sce,   $window,   $mdDialog ) {
 
     PlanSetup($scope,$http,$attrs,$cookies,$sce,$window);
     PlanMouse($scope,$http,$attrs,$cookies,$sce,$window);
-    PlanKeyboard($scope,$http,$attrs,$cookies,$sce,$window);
     PlanClasses($scope,$http,$attrs,$cookies,$sce,$window);
     PlanWire($scope,$http,$attrs,$cookies,$sce,$window);
    
@@ -41,8 +40,8 @@
 
     $scope.add_operation = function(ot) {
       var op = AQ.Operation.record({
-        x: 3*$scope.snap + $scope.last_place, 
-        y: 2*$scope.snap + $scope.last_place, 
+        x: 100+3*$scope.snap + $scope.last_place, 
+        y: 100+2*$scope.snap + $scope.last_place, 
         width: 160, 
         height: 30,
         routing: {}, form: { input: {}, output: {} },
@@ -50,9 +49,7 @@
       });
       $scope.last_place += 4*$scope.snap;
       op.set_type(ot);
-      $scope.current_op = op;
       $scope.plan.operations.push(op);
-      $scope.set_current_io(op.field_values[0],true);
       if ( $scope.plan.name == "Untitled Plan" ) {
         $scope.plan.name = op.operation_type.name;
         $scope.state.message = "Changed name of untitled plan to " + op.operation_type.name;
@@ -147,21 +144,66 @@
 
     $scope.delete_plan = function(p) {
 
-      if ( confirm("Are you sure you want to delete plan " + p.id + "?") ) {
+      var confirm = $mdDialog.confirm()
+          .title('Delete Plan?')
+          .textContent("Do you really want to delete the plan \"" + plan.name + "\"?")
+          .ariaLabel('Delete')
+          .ok('Yes')
+          .cancel('No')
 
-        $scope.new();
-        $scope.state.deleting_plan = p;
-        p.destroy().then(() =>  refresh_plan_list());
+      if ( $scope.plan.id ) {
+
+        $mdDialog.show(confirm).then( () => {
+
+          $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
+          $scope.select(null)
+          $scope.state.deleting_plan = p;
+          p.destroy().then(() =>  refresh_plan_list());
+
+        }, () => null );
 
       }
 
     }
 
-    $scope.load = function(plan) {
+    function save_first(msg) {
+
+      return new Promise( function(resolve,reject) {
+
+        if ( $scope.plan.operations.length > 0 ) {
+
+          var dialog = $mdDialog.confirm()
+              .clickOutsideToClose(true)
+              .title('Save First?')
+              .textContent(msg ? msg : "Save the current plan before loading \"" + plan.name + "\"?")
+              .ariaLabel('Save First?')
+              .ok('Yes')
+              .cancel('No');
+
+          $mdDialog.show(dialog).then( 
+            () => $scope.plan.save().then(resolve),
+            resolve
+          )        
+
+        } else {
+
+          resolve();
+
+        }
+
+      })
+
+    }
+
+    function load_aux(plan) {
       AQ.Plan.load(plan.id).then(p => {
         $scope.plan = p;
         $scope.$apply();
-      })
+      })      
+    }
+
+    $scope.load = function(plan) {
+      save_first().then(() => load_aux(plan));
     }
 
     $scope.paste_plan = function(plan) {
@@ -172,14 +214,16 @@
     }    
 
     $scope.new = function() {
-      $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
-      $scope.select(null)
+      save_first("Save current plan before creating new plan?").then( () => {
+        $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
+        $scope.select(null)
+      });
     }    
 
     $scope.copy_plan = function(plan) {
       plan.replan().then(newplan => {
         $scope.plans.push(newplan);
-        $scope.load(newplan)
+        load_aux(newplan);
       })
     }    
 
@@ -311,19 +355,6 @@
     }
 
   });  
-
-  w.config(['ngMdIconServiceProvider', function(ngMdIconServiceProvider) {
-    ngMdIconServiceProvider
-      .addShapes({
-          'input': '<rect x="6" y="6" width="16" height="16" stroke-width="2" fill="none" />' + 
-                   '<circle cx="14" cy="6" r="3" stroke-width="2" fill="white"/>',
-          'output': '<rect x="6" y="4" width="16" height="16" stroke-width="2" fill="none" />' + 
-                   '<circle cx="14" cy="20" r="3" stroke-width="2" fill="white"/>',    
-          'module': '<rect x="1" y="6" width="22" height="16" stroke-width="2" fill="none" />' + 
-                    '<rect x="8" y="13" width="12" height="6" stroke-width="2" fill="white" />' +
-                    '<rect x="4" y="9" width="12" height="6" stroke-width="2" fill="white" />'                               
-      });
-  }]);
-  
+ 
 
 })();                    

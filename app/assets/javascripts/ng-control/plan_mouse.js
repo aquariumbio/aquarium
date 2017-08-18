@@ -3,15 +3,15 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
   function all_draggable(f) {
     aq.each($scope.plan.operations,f); 
     aq.each($scope.plan.modules,f);
-    aq.each(plan.current_module.input,f);    
-    aq.each(plan.current_module.output,f);        
+    aq.each($scope.plan.current_module.input,f);    
+    aq.each($scope.plan.current_module.output,f);        
   }  
 
   function current_draggable(f) {
-    aq.each(aq.where($scope.plan.operations, op => op.parent_id == plan.current_module),f); 
-    aq.each(aq.where($scope.plan.modules,     m =>  m.parent_id == plan.current_module.id),f);
-    aq.each(plan.current_module.input,f);    
-    aq.each(plan.current_module.output,f);        
+    aq.each(aq.where($scope.plan.operations, op => op.parent_id == $scope.plan.current_module.id),f); 
+    aq.each(aq.where($scope.plan.modules,     m =>  m.parent_id == $scope.plan.current_module.id),f);
+    aq.each($scope.plan.current_module.input,f);    
+    aq.each($scope.plan.current_module.output,f);        
   }  
 
   function draggable_in_multiselect(obj) {
@@ -97,7 +97,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
     if ( obj.multiselect ) {
 
       current_draggable(obj => {
-        if ( op.multiselect ) {
+        if ( obj.multiselect ) {
           obj.drag = {
             localX: evt.offsetX - obj.x, 
             localY: evt.offsetY - obj.y
@@ -176,5 +176,67 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
     $scope.select(wire);
     evt.stopImmediatePropagation();  
   }  
+
+  // Keyboard
+
+  $scope.select_all = function() {
+    current_draggable(obj => obj.multiselect = true );
+    $scope.select(null);    
+  }
+
+  $scope.keyDown = function(evt) {
+
+    switch(evt.key) {
+
+      case "Backspace": 
+      case "Delete":
+
+        if ( $scope.current_wire ) {
+          $scope.plan.remove_wire($scope.current_wire);
+          $scope.current_wire = null;
+        }
+        if ( $scope.current_op && !$scope.current_fv ) {
+          aq.remove($scope.plan.operations, $scope.current_op);                               
+          $scope.plan.wires = aq.where($scope.plan.wires, w => {
+            var remove = w.to_op == $scope.current_op || w.from_op == $scope.current_op;
+            if ( remove ) {
+              w.disconnect();
+            }              
+            return !remove;
+          });
+          $scope.current_op = null;
+        }
+        break;
+
+      case "Escape":
+        $scope.select(null);
+        all_ops(op => op.multiselect = false)
+        break;
+
+      case "A":
+      case "a":
+        if (evt.ctrlKey) $scope.select_all()
+        break
+
+      case "M":
+      case "m":
+        if ( evt.ctrlKey ) $scope.plan.create_module($scope.current_op);
+        break;
+
+      case "O":
+      case "o":
+        if ( evt.ctrlKey ) $scope.plan.current_module.add_output();
+        break;
+
+      case "I":
+      case "i":
+        if ( evt.ctrlKey ) $scope.plan.current_module.add_input();
+        break;
+
+      default:
+
+    }
+
+  }      
 
 }

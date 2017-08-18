@@ -4,7 +4,7 @@ function PlanClasses($scope,$http,$attrs,$cookies,$sce,$window) {
 
   $scope.op_class = function(op) {
     var c = "op";
-    if ( op == $scope.current_op || op.multiselect ) {
+    if ( op == $scope.current_draggable || op.multiselect ) {
       c += " op-selected";
     }
     return c;
