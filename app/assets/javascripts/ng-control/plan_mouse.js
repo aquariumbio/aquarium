@@ -184,28 +184,31 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
     $scope.select(null);    
   }
 
+  $scope.delete = function() {
+    if ( $scope.current_wire ) {
+      $scope.plan.remove_wire($scope.current_wire);
+      $scope.current_wire = null;
+    }
+    if ( $scope.current_draggable && !$scope.current_fv ) {
+      $scope.delete_object($scope.current_draggable);
+    }
+    if ( $scope.multiselect ) {
+      current_draggable(obj => {
+        if ( obj.multiselect ) {
+          $scope.delete_object(obj);
+          $scope.select(null)
+        }
+      });      
+    }
+  }      
+
   $scope.keyDown = function(evt) {
 
     switch(evt.key) {
 
       case "Backspace": 
       case "Delete":
-
-        if ( $scope.current_wire ) {
-          $scope.plan.remove_wire($scope.current_wire);
-          $scope.current_wire = null;
-        }
-        if ( $scope.current_op && !$scope.current_fv ) {
-          aq.remove($scope.plan.operations, $scope.current_op);                               
-          $scope.plan.wires = aq.where($scope.plan.wires, w => {
-            var remove = w.to_op == $scope.current_op || w.from_op == $scope.current_op;
-            if ( remove ) {
-              w.disconnect();
-            }              
-            return !remove;
-          });
-          $scope.current_op = null;
-        }
+        $scope.delete();
         break;
 
       case "Escape":

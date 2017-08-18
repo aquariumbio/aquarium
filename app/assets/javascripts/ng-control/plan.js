@@ -216,7 +216,8 @@
     $scope.new = function() {
       save_first("Save current plan before creating new plan?").then( () => {
         $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
-        $scope.select(null)
+        $scope.select(null);
+        $scope.$apply();
       });
     }    
 
@@ -274,7 +275,36 @@
       $mdMenu.open(ev);
     };    
 
-     // Inventory ////////////////////////////////////////////////////////////////////////////////////
+    $scope.delete_object = function(obj) {
+
+      if ( obj.record_type == "Operation" ) {
+        aq.remove($scope.plan.operations, obj);                               
+        $scope.plan.wires = aq.where($scope.plan.wires, w => {
+          var remove = w.to_op == obj || w.from_op == obj;
+          if ( remove ) {
+            w.disconnect();
+          }              
+          return !remove;
+        });
+        $scope.current_op = null;
+      } else if ( obj.record_type == "Module" ) {
+         var confirm = $mdDialog.confirm()
+          .title('Delete Module?')
+          .textContent("Do you really want to delete the module \"" + obj.name + "\" and all of its contents?")
+          .ariaLabel('Delete')
+          .ok('Yes')
+          .cancel('No');
+        $mdDialog.show(confirm).then( 
+          () => $scope.plan.current_module.remove(obj,$scope.plan),
+          () => null);
+
+      } else if ( obj.record_type == "ModuleIO" ) {        
+        $scope.plan.current_module.remove_io(obj);
+      }
+
+    }
+
+    // Inventory ////////////////////////////////////////////////////////////////////////////////////
 
     $scope.select_item = function(fv, item) {
 

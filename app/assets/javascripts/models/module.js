@@ -100,6 +100,23 @@ class Module {
     return this.inputs.length;
   }
 
+  remove_child_operations(plan) {
+    var module = this;
+    plan.operations = aq.where(plan.operations, op => op.parent_id != module.id);
+    aq.each(module.children, c => c.remove_child_operations(plan));
+  }
+
+  remove(child,plan) {
+    child.remove_child_operations(plan);
+    aq.remove(this.children, child);
+  }
+
+  remove_io(io) {
+    aq.remove(this.input, io);
+    aq.remove(this.output, io);
+    this.wires = aq.where(this.wires, w => w.from != io && w.to != io);
+  }
+
 }
 
 class ModuleIO {
