@@ -58,6 +58,23 @@
 
 <% content_for :no_specific_padding do %>true<% end %>
 
+
+<script type="text/ng-template" id="planner-action-template">
+
+  <button layout='column' layout-align='center center'
+          ng-disabled='isDisabled'
+          class='planner-action clickable no-highlight'>
+
+    <ng-md-icon icon='{{icon}}' size='28' aria-label='{{name}}' ng-class="isDisabled ? 'disabled-icon' : 'active-icon'"/>
+
+    <span class='action-name'>{{name}}</span>
+
+    <md-tooltip md-direction='bottom'>{{tooltip}}</md-tooltip>
+
+  </button>
+
+</script>
+
 <% content_for :action1 do %>
 
   <planner-action ng-click="" icon="select_all" name="All" tooltip="Select All (Ctrl-A)"></planner-action>  
@@ -71,19 +88,19 @@
                   tooltip="New Module (Ctrl-M)"></planner-action>  
 
   <planner-action ng-click="plan.current_module.add_input()"
-                  ng-disabled="plan.current_module.id == 0"
+                  is-disabled="plan.current_module.id == 0"
                   icon="input" name="Input"
                   tooltip="New Module Input (Ctrl-I)"></planner-action>  
 
   <planner-action ng-click="plan.current_module.add_output()"
-             ng-disabled="plan.current_module.id == 0"        
+             is-disabled="plan.current_module.id == 0"        
              icon="output" name="Output"
              tooltip="New Module Output (Ctrl-O)"></planner-action>  
 
   <div style="width: 1px; height: 100%; border-left: 1pt solid #eee; margin: 5px"></div>
 
   <planner-action ng-click="create_template(plan)"
-                  ng-disabled="!plan.id"
+                  is-disabled="!plan.id"
                   icon="share" name="Template"
                   tooltip="Save as Template (Ctrl-T)"></planner-action>
 
@@ -92,24 +109,24 @@
   <planner-action ng-click="new(plan)" icon="note_add" name="New" tooltip="New Plan (Ctrl-N)"></planner-action>
 
   <planner-action ng-click="save(plan)" 
-                  ng-disabled="plan.saving || plan.operations.length == 0" 
+                  is-disabled="plan.saving || plan.operations.length == 0" 
                   icon="save" name="Save"
                   tooltip="Save Plan (Ctrl-S)"></planner-action>
 
   <planner-action ng-click="copy_plan(plan)"
-             ng-disabled="plan.operations.length == 0"
+             is-disabled="plan.operations.length == 0"
              icon="content_copy" name='Copy'
-             tooltip="Copy (Save as New) Plan (Ctrl-C)"></planner-action>                    
+             tooltip="Copy (Save as New) Plan"></planner-action>                    
 
   <planner-action ng-click="delete_plan(plan)"
-                  ng-disabled="!plan.id"
+                  is-disabled="!plan.id"
                   icon="delete" name="Trash"
                   tooltip="Delete Plan"></planner-action>
 
   <div style="width: 1px; height: 100%; border-left: 1pt solid #eee; margin: 5px"></div>
 
   <planner-action ng-click="launch()"
-                  ng-disabled="!plan.id || !plan.valid() || state.launch" 
+                  is-disabled="!plan.id || !plan.valid() || state.launch" 
                   icon="launch" name="Launch"
                   tooltip="Launch Plan"></planner-action>
 

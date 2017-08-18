@@ -304,13 +304,10 @@
     return {
 
       restrict: 'AE',
-      scope: { icon: '@', name: '@', tooltip: '@' }, // note: using @ so that caller can say icon="x" instead of icon="'x'"
+      scope: { icon: '@', name: '@', tooltip: '@', isDisabled: "=" }, // note: using @ so that caller can say icon="x" instead of icon="'x'"
       replace: true,
-      template: "<a layout='column' layout-align='center center' class='planner-action clickable no-highlight'>" + 
-                  "<ng-md-icon icon='{{icon}}' size='28' aria-label='{{name}}' style='fill: #444' />" +
-                  "<span class='action-name'>{{name}}</span>" +
-                  "<md-tooltip md-direction='bottom'>{{tooltip}}</md-tooltip>" +
-                "</a>"
+      template: $('#planner-action-template').html()
+
     }
 
   });  
@@ -318,17 +315,15 @@
   w.config(['ngMdIconServiceProvider', function(ngMdIconServiceProvider) {
     ngMdIconServiceProvider
       .addShapes({
-          'input': '<rect x="6" y="6" width="16" height="16" stroke="#444" stroke-width="2" fill="none" />' + 
-                   '<circle cx="14" cy="6" r="3" stroke="#444" stroke-width="2" fill="white"/>',
-          'output': '<rect x="6" y="4" width="16" height="16" stroke="#444" stroke-width="2" fill="none" />' + 
-                   '<circle cx="14" cy="20" r="3" stroke="#444" stroke-width="2" fill="white"/>',    
-          'module': '<rect x="1" y="6" width="22" height="16" stroke="#444" stroke-width="2" fill="none" />' + 
-                    '<rect x="8" y="13" width="12" height="6" stroke="#444" stroke-width="2" fill="white" />' +
-                    '<rect x="4" y="9" width="12" height="6" stroke="#444" stroke-width="2" fill="white" />'                               
+          'input': '<rect x="6" y="6" width="16" height="16" stroke-width="2" fill="none" />' + 
+                   '<circle cx="14" cy="6" r="3" stroke-width="2" fill="white"/>',
+          'output': '<rect x="6" y="4" width="16" height="16" stroke-width="2" fill="none" />' + 
+                   '<circle cx="14" cy="20" r="3" stroke-width="2" fill="white"/>',    
+          'module': '<rect x="1" y="6" width="22" height="16" stroke-width="2" fill="none" />' + 
+                    '<rect x="8" y="13" width="12" height="6" stroke-width="2" fill="white" />' +
+                    '<rect x="4" y="9" width="12" height="6" stroke-width="2" fill="white" />'                               
       });
   }]);
   
-  
-
 
 })();                    

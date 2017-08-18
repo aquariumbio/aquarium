@@ -273,9 +273,30 @@
   .planner-action {
     width: 42px;
     margin: 0 5px 0 5px;
-    .action-name {
-      font-size: 8pt;
+    border: none;
+    background: none;
+    padding: none;
+    &:disabled {
+      cursor: not-allowed;
+      .action-name {
+        color: #aaa;
+      }      
     }
+    &:enabled:active {
+      background: #bbb;
+    }
+    .action-name {
+      font-size: 9pt;
+    }
+    .active-icon {
+      fill: #333;
+      stroke: #333;
+    }
+    .disabled-icon {
+      fill: #bbb;
+      stroke: #bbb;
+    }
+
   }
 
 }
