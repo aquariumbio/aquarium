@@ -27,8 +27,6 @@ class Module {
 
   from_object(object,plan) {
 
-    console.log(["Module::from_object", plan])
-
     for ( var p in object ) {
       this[p] = object[p];
     }
@@ -99,20 +97,20 @@ class Module {
     return this.constructor.output_pos;
   }  
 
-  connect_to_op(from, to, to_op) {
+  connect_mod_to_op(from, from_module, to, to_op) {
     this.wires.push(new ModuleWire().build({
       type: "mod2op",
-      from_module: this,
+      from_module: from_module,
       from: from,
       to_op: to_op,
       to: to
     }));
   }
 
-  connect_from_op(to, from, from_op) {  
+  connect_mod_from_op(to, to_module, from, from_op) {  
     this.wires.push(new ModuleWire().build({
       type: "op2mod",
-      to_module: this,
+      to_module: to_module,
       to: to,
       from_op: from_op,
       from: from
@@ -140,193 +138,24 @@ class Module {
     this.wires = aq.where(this.wires, w => w.from != io && w.to != io);
   }
 
-}
-
-class ModuleIO {
-
-  constructor() {
+  index_of_input(io) {
+    return this.input.indexOf(io);
   }
 
-  build() { 
-    this.id = this.next_id;
-    this.inc_next_id();
-    this.x = 160; this.y = this.next_pos;
-    this.width = 32; this.height = 32;
-    this.model = { model: "ModuleIO" }; // for compatability with AQ.Record
-    return this;
-  }
-
-  from_object(object) {
-    for ( var p in object ) {
-      this[p] = object[p];
-    }
-    this.id = this.next_id;
-    this.inc_next_id();
-    this.width = 32; this.height = 32;
-    return this;
-  }
-
-  get record_type() {
-    return "ModuleIO";
-  }
-
-  get next_id() {
-    if ( !this.constructor.next_io_id ) {
-      this.constructor.next_io_id = 0;
-    }
-    return this.constructor.next_io_id;
-  }
-
-  inc_next_id() {
-    this.constructor.next_io_id++;
+  index_of_output(io) {
+    return this.output.indexOf(io);
   }  
 
-}
-
-class ModuleWire {
-
-  constructor() {
-    this.snap = 16;
-  }
-
-  build(object) {
-    for ( var p in object ) {
-      this[p] = object[p];
-    }
-    return this;    
-  }
-
-  from_object(w,module,plan) {
-
-    console.log(["ModuleWire::from_object", plan])
-
-    for ( var p in w ) {
-      this[p] = w[p];
-    }
-
-    if ( this.from_module ) this.from_module = module;
-    if ( this.to_module )  this.to_module = module;
-
-    if ( this.from_op ) this.from_op = plan.find_by_id(this.from_op.id);
-    if ( this.to_op )   this.to_op = plan.find_by_id(this.to_op.id);
-
-    if ( this.from && this.from.record_type == "FieldValue" ) this.from = plan.find_by_id(this.from.id);
-    if ( this.to && this.to.record_type == "FieldValue" )   this.to   = plan.find_by_id(this.to.id); 
-
-    if ( this.from && this.from.record_type == "ModuleIO" ) this.from = aq.find(module.input, i => i.id == this.from.id );
-    if ( this.to && this.to.record_type == "ModuleIO" )   this.to   = aq.find(module.output, i => i.id == this.to.id );
-
-    console.log(this)
-
-    return this;
-
-  }
-
-  consistent() {
-    return true;
-  }
-
-  serialize() {
-
-    var wire = { type: this.type };
-
-    if ( this.from_module ) wire.from_module = { id: this.from_module.id };
-    if ( this.to_module )   wire.to_module   = { id: this.to_module.id };
-
-    if ( this.from_op ) wire.from_op = { rid: this.from_op.rid };
-    if ( this.to_op )   wire.to_op   = { rid: this.to_op.rid };
-
-    if ( this.from.record_type == "FieldValue" ) wire.from = { record_type: "FieldValue", rid: this.from.rid }
-    if ( this.to.record_type == "FieldValue" )   wire.to =   { record_type: "FieldValue", rid: this.to.rid }
-
-    if ( this.from.record_type == "ModuleIO" ) wire.from = { record_type: "ModuleIO", id: this.from.id }
-    if ( this.to.record_type == "ModuleIO" )   wire.to =   { record_type: "ModuleIO",   id: this.to.id }
-
-    return wire;
-
-  }
-
-  get x0() {
-    switch ( this.type  ) {
-      case "mod2op":     
-        return this.from.x + this.from.width/2;
-      case "op2mod":
-        return this.from_op.x + this.from_op.width/2 + (this.from.index - this.from_op.num_outputs/2.0 + 0.5)*this.snap;
-    }
-  }
-
-  get y0() {
-    switch ( this.type  ) {
-      case "mod2op":     
-        return this.from.y;
-      case "op2mod":
-        return this.from_op.y;
-    }    
-  }
-
-  get x1() {
-    switch ( this.type  ) {
-      case "mod2op": 
-        return this.to_op.x + this.to_op.width/2 + (this.to.index - this.to_op.num_inputs/2.0 + 0.5)*this.snap
-      case "op2mod":
-        return this.to.x + this.to.width/2;    
-    }
-
-  }
-
-  get y1() {
-    switch ( this.type  ) {
-      case "mod2op":     
-        return this.to_op.y + this.to_op.height;
-      case "op2mod":
-        return this.to.y + this.to.height;      
-    }
-  }  
-
-  get ymid() { 
-    if ( !this.ymid_frac ) { this.ymid_frac = 0.5; }
-    return this.ymid_frac*(this.y0 + this.y1);
-  }  
-
-  get xmid() { 
-    if ( !this.xmid_frac ) { this.xmid_frac = 0.5; }
-    return this.xmid_frac*(this.x0 + this.x1);
-  }
-
-  get yint0() { 
-    return this.y0 - this.snap;
-  };       
-
-  get yint1() { 
-    return this.y1 + this.snap;
-  };           
-
-  get path() {
-
-    if ( this.y0 >= this.y1 + 2 * this.snap ) {
-
-      return ""   + this.x0 + "," + this.y0 + 
-             " "  + this.x0 + "," + this.ymid + 
-             " "  + this.x1 + "," + this.ymid +    
-             " "  + this.x1 + "," + this.y1;
-
+  find_by_id(mid) {
+    var result;
+    if ( this.id == mid ) {
+      result = this;
     } else {
-
-      return ""   + this.x0   + "," + this.y0 + 
-             " "  + this.x0   + " " + this.yint0 +           
-             " "  + this.xmid + "," + this.yint0 + 
-             " "  + this.xmid + "," + this.yint1 +   
-             " "  + this.x1   + "," + this.yint1 +                 
-             " "  + this.x1   + "," + this.y1;          
-
-     }
-
-  }  
-
-  get arrowhead() {
-      return "M "  + this.x1 + " " + (this.y1 + 5) + 
-         " L " + (this.x1 + 0.25*this.snap) + " " + (this.y1 + 0.75*this.snap) + 
-         " L " + (this.x1 - 0.25*this.snap) + " " + (this.y1 + 0.75*this.snap) + " Z";
+      result = aq.find(this.children, c => c.id == mid);
+    }
+    console.log(this)
+    console.log(result)
+    return result;
   }
 
 }

@@ -160,10 +160,10 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
     if ( $scope.current_io && evt.shiftKey ) { // There is an io already selected, so make a wire
       $scope.connect($scope.current_io, $scope.current_draggable, io, obj);
+      console.log($scope.plan.base_module)
     } else {
       $scope.select(obj);
       $scope.set_current_io(io,true);
-      console.log($scope.current_io);
     }
 
     evt.stopImmediatePropagation();

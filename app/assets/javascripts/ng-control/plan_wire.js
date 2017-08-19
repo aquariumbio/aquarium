@@ -37,25 +37,40 @@ function PlanWire($scope,$http,$attrs,$cookies,$sce,$window) {
 
   $scope.connect = function(io1, object1, io2, object2) {
 
-
     if ( io1.record_type == "FieldValue" && io2.record_type == "FieldValue" ) {
 
       connect_fv_to_fv(io1,object1,io2,object2);
 
     } else if ( io1.record_type == "ModuleIO" && io2.record_type == "FieldValue" ) {
 
+      var parent;
+
+      if ( object1.parent_id != object2.parent_id ) { // wire connects a module io block with an operation
+        parent = object1;
+      } else { // wire connects a module io pin to an operation
+        parent = $scope.plan.current_module;
+      }      
+
       if ( io2.role == 'input') {
-        object1.connect_to_op(io1, io2, object2);
+        parent.connect_mod_to_op(io1, object1, io2, object2);
       } else {
-        object1.connect_from_op(io1, io2, object2);
+        parent.connect_mod_from_op(io1, object1, io2, object2);
       }
 
     } else if ( io1.record_type == "FieldValue" && io2.record_type == "ModuleIO" ) {
 
+      var parent;
+
+      if ( object1.parent_id != object2.parent_id ) { // wire connects a module io block with an operation
+        parent = object2;
+      } else { // wire connects a module io pin to an operation
+        parent = $scope.plan.current_module;
+      }
+
       if ( io1.role == 'output' ) {
-        object2.connect_from_op(io2, io1, object1)
+        parent.connect_mod_from_op(io2, object2, io1, object1)
       } else {
-        object2.connect_to_op(io2, io1, object1);        
+        parent.connect_mod_to_op(io2, object2, io1, object1);        
       }
 
     } else if ( io1.record_type == "ModuleIO" && io2.record_type == "ModuleIO" ) {
