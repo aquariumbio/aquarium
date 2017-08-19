@@ -125,7 +125,7 @@
     box-shadow: 10px 10px 5px yellow;
   }
 
-  .op-name, .module-name {
+  .op-name, .module-name, .module-io-index {
     font-size: 9pt;
     text-anchor: middle;
     cursor: pointer;
@@ -133,6 +133,10 @@
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;    
+  }
+
+  .module-io-index {
+    font-size: 11pt;
   }
 
   .module-name {
@@ -311,11 +315,11 @@
         };
       }
       border: 1px solid white;
-      border-left: 5px solid white;
+      /*border-left: 5px solid white;*/
     }
     .active-plan {
-      /*background: #ff9;*/
-      border-color: #999;
+      background: #eee;
+      /*border-color: #999;*/
     }
   }
 

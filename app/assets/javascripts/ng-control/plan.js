@@ -16,18 +16,18 @@
 
       $scope.state.launch = false;
 
-      $scope.current_draggable = object && ( object.model.model == "Operation" ||
-                                             object.model.model == "Module" ||
-                                             object.model.model == "ModuleIO" ) ? object : null;
+      $scope.current_draggable = object && ( object.record_type == "Operation" ||
+                                             object.record_type == "Module" ||
+                                             object.record_type == "ModuleIO" ) ? object : null;
 
-      $scope.current_op     = object && object.model.model == "Operation" ? object : null;
+      $scope.current_op     = object && object.record_type == "Operation" ? object : null;
 
-      $scope.current_io     = object && ( object.model.model == "FieldValue" ||
-                                          object.model.model == "ModuleIO" ) ? object : null;
+      $scope.current_io     = object && ( object.record_type == "FieldValue" ||
+                                          object.record_type == "ModuleIO" ) ? object : null;
 
-      $scope.current_fv     = object && object.model.model == "FieldValue" ? object : null;      
+      $scope.current_fv     = object && object.record_type == "FieldValue" ? object : null;      
 
-      $scope.current_wire   = object && object.model.model == "Wire"       ? object : null;
+      $scope.current_wire   = object && object.record_type == "Wire"       ? object : null;
 
     }
 

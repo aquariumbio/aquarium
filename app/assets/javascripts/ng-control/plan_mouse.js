@@ -193,12 +193,19 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
       $scope.delete_object($scope.current_draggable);
     }
     if ( $scope.multiselect ) {
-      current_draggable(obj => {
+
+      var objects = [];
+
+      current_draggable(obj => {  
         if ( obj.multiselect ) {
-          $scope.delete_object(obj);
-          $scope.select(null)
+          objects.push(obj);
         }
-      });      
+      });   
+
+      aq.each(objects, obj => $scope.delete_object(obj));
+
+      $scope.select(null)   
+
     }
   }      
 
@@ -213,7 +220,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
       case "Escape":
         $scope.select(null);
-        all_ops(op => op.multiselect = false)
+        all_draggable(op => op.multiselect = false)
         break;
 
       case "A":

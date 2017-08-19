@@ -53,7 +53,6 @@ class Module {
   }
 
   get next_id() {
-    console.log("next_id: " + this.constructor.next_module_id)
     if ( !this.constructor.next_module_id ) {
       this.constructor.next_module_id = 0;
     }
@@ -69,12 +68,36 @@ class Module {
   }
 
   add_input(fv) {
-    this.input.push(new ModuleIO().build());
+    var m = new ModuleIO().build();
+    m.x = this.next_input_pos;
+    m.y = 320;
+    this.input.push(m);
   }
 
   add_output(fv) {
-    this.output.push(new ModuleIO().build());
+    var m = new ModuleIO().build();
+    m.x = this.next_output_pos;
+    m.y = 32;
+    this.output.push(m);
   }
+
+  get next_input_pos() {
+    if ( !this.constructor.input_pos) {
+      this.constructor.input_pos = 48;
+    } else {
+      this.constructor.input_pos += 48;
+    }
+    return this.constructor.input_pos;
+  }
+
+  get next_output_pos() {
+    if ( !this.constructor.output_pos) {
+      this.constructor.output_pos = 48;
+    } else {
+      this.constructor.output_pos += 48;
+    }
+    return this.constructor.output_pos;
+  }  
 
   connect_to_op(from, to, to_op) {
     this.wires.push(new ModuleWire().build({
@@ -127,7 +150,7 @@ class ModuleIO {
   build() { 
     this.id = this.next_id;
     this.inc_next_id();
-    this.x = 160; this.y = 160;
+    this.x = 160; this.y = this.next_pos;
     this.width = 32; this.height = 32;
     this.model = { model: "ModuleIO" }; // for compatability with AQ.Record
     return this;
