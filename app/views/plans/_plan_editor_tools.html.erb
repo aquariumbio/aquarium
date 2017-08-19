@@ -63,13 +63,20 @@
 
       <ul class='compact-list' style="margin: 5px 0 5px 28px"
           ng-if="system_templates.length > 0 && state.sidebar.system_templates">        
-        <li ng-repeat="p in system_templates | orderBy:'-'" layout="row">
+        <li ng-repeat="p in system_templates | orderBy:'-'" layout="row"
+            ng-mouseover="note('asd'); p.hover = true" 
+            ng-mouseleave="p.hover = false">
           <div style="margin-right: 5px">{{p.id}}: </div>
-          <a href='#' class='no-highlight' ng-click="paste_plan(p)">{{p.name}}</a>
+          <div flex><a href='#' class='no-highlight' ng-click="paste_plan(p)">{{p.name}}</a></div>
+          <div style="padding-left: 6px" ng-if="p.user_id == current_user.id"> 
+            <a href='#' style="color: #333; font-size: 12pt" 
+               ng-show="p.hover"
+               ng-click="revert_template(p)">&times;<md-tooltip md-direction='right'>Revert to Normal Plan</md-tooltip></a>                 
+          </div> 
         </li>
       </ul>
 
-      <span ng-if="system_templates.length == 0 && state.sidebar.system_templates" style="margin-left: 16px">No templates</span>
+      <span ng-if="system_templates.length == 0 && state.sidebar.system_templates" style="margin-left: 28px">No templates</span>
 
       <div class='clickable no-highlight' style="margin-left: 16px"
            ng-click="state.sidebar.your_templates = !state.sidebar.your_templates">
@@ -80,19 +87,35 @@
       <ul class='compact-list' style="margin: 5px 0 5px 28px"
                ng-if="templates.length > 0 && state.sidebar.your_templates"
                style="margin-left: 28px">        
-        <li ng-repeat="p in templates | orderBy:'-'" layout="row">
+
+        <li ng-repeat="p in templates | orderBy:'-'" 
+            layout="row" 
+            ng-mouseover="note('asd'); p.hover = true" 
+            ng-mouseleave="p.hover = false">
+
           <div style="margin-right: 5px">{{p.id}}:</div>
-          <div>
-            <a href='#' class='no-highlight' ng-click="paste_plan(p)">{{p.name}}</a>        
-            <% if current_user.is_admin %>
-                <a href='#' style="font-size: 7pt; padding-right: 5px; color: #888" 
-                   ng-click="create_system_template(p)">SHARE</a>
-            <% end %>             
+
+          <div flex><a href='#' class='no-highlight' ng-click="paste_plan(p)">{{p.name}}</a></div>
+
+          <% if current_user.is_admin %>
+          <div style="padding-left: 6px">
+              <a href='#' style="font-size: 7pt; color: #333; font-size: 12pt" 
+                 ng-show="p.hover"
+                 ng-click="create_system_template(p)">&#8679;<md-tooltip md-direction='right'>Share as Global Template</md-tooltip></a>
           </div>
+          <% end %>            
+
+          <div style="padding-left: 6px"> 
+            <a href='#' style="color: #333; font-size: 12pt" 
+               ng-show="p.hover"
+               ng-click="revert_template(p)">&times;<md-tooltip md-direction='right'>Revert to Normal Plan</md-tooltip></a>                 
+          </div>
+
         </li>
+
       </ul>
 
-      <span ng-if="templates.length == 0 && state.sidebar.your_templates" style="margin-left: 16px">No templates</span>
+      <span ng-if="templates.length == 0 && state.sidebar.your_templates" style="margin-left: 28px">No templates</span>
 
   </div>
 

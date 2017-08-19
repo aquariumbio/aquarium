@@ -121,24 +121,54 @@
 
     }
 
+    function open_templates() {
+      $scope.state.sidebar.templates = true;        
+      $scope.state.sidebar.your_templates = true;
+      $scope.state.sidebar.system_templates = true;      
+    }
+
     $scope.create_template = function(p) {
 
       p.status = "template";
-      $scope.save(p);
-      $scope.templates.push(p);
-      $scope.state.sidebar.templates = true;
-      $scope.state.sidebar.your_templates = true;
+      p.save().then(() => {
+        $scope.templates.push(p);
+        open_templates() 
+        $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
+        $scope.select(null);  
+        refresh_plan_list();
+      })
 
     }
 
     $scope.create_system_template = function(p) {
 
-      p.status = "system_template";
-      $scope.save(p);
-      $scope.system_templates.push(p);
-      $scope.state.sidebar.templates = true;
-      $scope.state.sidebar.system_templates = true;
-      aq.remove($scope.templates, p);
+      AQ.Plan.load(p.id).then(p => {
+        p.status = "system_template";
+        p.save().then(() => {
+          aq.remove($scope.templates, p);  
+          $scope.system_templates.push(p);
+          open_templates() 
+          $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
+          $scope.select(null);  
+          $scope.$apply();    
+        })
+      })      
+
+    }
+
+    $scope.revert_template = function(plan) {
+
+      AQ.Plan.load(plan.id).then(p => {
+        p.status = "planning";
+        p.save().then(p => {
+          aq.remove($scope.templates, plan);  
+          aq.remove($scope.system_templates, plan); 
+          $scope.plan = p
+          refresh_plan_list();
+          $scope.select(null);  
+          $scope.$apply();    
+        })
+      })      
 
     }    
 
@@ -146,12 +176,12 @@
 
       var confirm = $mdDialog.confirm()
           .title('Delete Plan?')
-          .textContent("Do you really want to delete the plan \"" + plan.name + "\"?")
+          .textContent("Do you really want to delete the plan \"" + p.name + "\"?")
           .ariaLabel('Delete')
           .ok('Yes')
           .cancel('No')
 
-      if ( $scope.plan.id ) {
+      if ( p.id ) {
 
         $mdDialog.show(confirm).then( () => {
 
@@ -219,7 +249,7 @@
         $scope.select(null);
         $scope.$apply();
       });
-    }    
+    }
 
     $scope.copy_plan = function(plan) {
       plan.replan().then(newplan => {
