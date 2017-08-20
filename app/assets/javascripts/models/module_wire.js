@@ -65,7 +65,10 @@ class ModuleWire {
 
   get x0() {
     if ( this.from_module ) {
-      if ( this.from_module.parent_id != this.to_op.parent_id ) {  
+      var to_object = this.to_op ? this.to_op : this.to_module;
+      if ( this.from_module.parent_id == to_object.id ) {
+        return this.from_module.output_pin_x(this.from);
+      } else if ( this.from_module.parent_id != to_object.parent_id ) {  
         return this.from.output_pin_x();
       } else {
         return this.from_module.output_pin_x(this.from);
@@ -76,8 +79,11 @@ class ModuleWire {
   }
 
   get y0() {
+    var to_object = this.to_op ? this.to_op : this.to_module;    
     if ( this.from_module ) {
-      if ( this.from_module.parent_id != this.to_op.parent_id ) {    
+      if ( this.from_module.parent_id == to_object.id ) {
+        return this.from_module.output_pin_y();
+      } else if ( this.from_module.parent_id != to_object.parent_id ) {    
         return this.from.output_pin_y(); 
       } else {
         return this.from_module.output_pin_y();
@@ -88,8 +94,11 @@ class ModuleWire {
   }
 
   get x1() {
+    var from_object = this.from_op ? this.from_op : this.from_module;
     if ( this.to_module ) {
-      if ( this.from_op.parent_id != this.to_module.parent_id ) {
+      if ( this.to_module.parent_id == from_object.id ) {
+        return this.to_module.input_pin_x(this.to); 
+      } else if ( from_object.parent_id != this.to_module.parent_id ) {
         return this.to.input_pin_x(); 
       } else {
         return this.to_module.input_pin_x(this.to); 
@@ -100,11 +109,14 @@ class ModuleWire {
   }
 
   get y1() {
+    var from_object = this.from_op ? this.from_op : this.from_module;    
     if ( this.to_module ) {
-      if ( this.from_op.parent_id != this.to_module.parent_id ) {      
+      if ( this.to_module.parent_id == from_object.id ) {
+        return this.to_module.input_pin_y(this.to);
+      } else if ( from_object.parent_id != this.to_module.parent_id ) {      
         return this.to.input_pin_y(); 
       } else {
-        return this.to_module.input_pin_y();
+        return this.to_module.input_pin_y(this.to);
       }
     } else {
       return this.to_op.input_pin_y(); 

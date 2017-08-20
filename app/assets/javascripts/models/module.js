@@ -107,27 +107,9 @@ class Module {
       to_module:   object2.record_type == 'Module'    ? object2 : null 
     });
     this.wires.push(wire);
-    console.log(wire);
+    console.log(['new wire', wire]);
     return wire;
   }
-
-  // connect_mod_to_op(from, from_module, to, to_op) {
-  //   this.wires.push(new ModuleWire().build({
-  //     from_module: from_module,
-  //     from: from,
-  //     to_op: to_op,
-  //     to: to
-  //   }));
-  // }
-
-  // connect_mod_from_op(to, to_module, from, from_op) {  
-  //   this.wires.push(new ModuleWire().build({
-  //     to_module: to_module,
-  //     to: to,
-  //     from_op: from_op,
-  //     from: from
-  //   }));
-  // }
 
   num_inputs() {
     return this.inputs.length;

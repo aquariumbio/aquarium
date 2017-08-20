@@ -66,9 +66,11 @@ function PlanWire($scope,$http,$attrs,$cookies,$sce,$window) {
         if ( object1.record_type == "Module" && object2.record_type == "Module" ) {             // 12 or 21
 
           if ( object2.parent_id == object1.id ) {                                              // 12
-            console.log(12)
+            if ( role1 == 'input'  && role2 == 'input' )  module.connect(io1, object1, io2, object2);
+            if ( role1 == 'output' && role2 == 'output' ) module.connect(io2, object2, io1, object1);
           } else if ( object1.parent_id == object2.id ) {                                       // 21
-            console.log(21)
+            if ( role1 == 'input'  && role2 == 'input' )  module.connect(io2, object2, io1, object1);
+            if ( role1 == 'output' && role2 == 'output' ) module.connect(io1, object1, io2, object2);            
           } 
 
         } else {                                                                                 // 13 or 31
@@ -87,9 +89,7 @@ function PlanWire($scope,$http,$attrs,$cookies,$sce,$window) {
 
           if ( object1 == object2 ) {                                                            // 11
             console.log("Cannot connect io ports within the same module.")
-          } else if ( object1.record_type == "Module" && object2.record_type == "Module" ) {     // 22
-            console.log(22)
-          } else  { 
+          } else {                                                                               // 22, 23, 32
             if ( role1 == 'output' && role2 == 'input' ) module.connect(io1, object1, io2, object2);
             else module.connect(io2, object2, io1, object1);
           } 
