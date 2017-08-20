@@ -97,25 +97,37 @@ class Module {
     return this.constructor.output_pos;
   }  
 
-  connect_mod_to_op(from, from_module, to, to_op) {
-    this.wires.push(new ModuleWire().build({
-      type: "mod2op",
-      from_module: from_module,
-      from: from,
-      to_op: to_op,
-      to: to
-    }));
+  connect(io1, object1, io2, object2) {
+    var wire = new ModuleWire().build({
+      from: io1,
+      to: io2,
+      from_op:     object1.record_type == 'Operation' ? object1 : null,
+      to_op:       object2.record_type == 'Operation' ? object2 : null,
+      from_module: object1.record_type == 'Module'    ? object1 : null,
+      to_module:   object2.record_type == 'Module'    ? object2 : null 
+    });
+    this.wires.push(wire);
+    console.log(wire);
+    return wire;
   }
 
-  connect_mod_from_op(to, to_module, from, from_op) {  
-    this.wires.push(new ModuleWire().build({
-      type: "op2mod",
-      to_module: to_module,
-      to: to,
-      from_op: from_op,
-      from: from
-    }));
-  }
+  // connect_mod_to_op(from, from_module, to, to_op) {
+  //   this.wires.push(new ModuleWire().build({
+  //     from_module: from_module,
+  //     from: from,
+  //     to_op: to_op,
+  //     to: to
+  //   }));
+  // }
+
+  // connect_mod_from_op(to, to_module, from, from_op) {  
+  //   this.wires.push(new ModuleWire().build({
+  //     to_module: to_module,
+  //     to: to,
+  //     from_op: from_op,
+  //     from: from
+  //   }));
+  // }
 
   num_inputs() {
     return this.inputs.length;
@@ -153,9 +165,40 @@ class Module {
     } else {
       result = aq.find(this.children, c => c.id == mid);
     }
-    console.log(this)
-    console.log(result)
     return result;
+  }
+
+  get snap() {
+    return 16;
+  }
+
+  input_pin_x(io) {
+    return this.x + this.width/2 - 
+           (this.index_of_input(io) - this.input.length/2.0 + 0.5) * this.snap;
+  }
+
+  input_pin_y(io) {
+    return this.y + this.height;
+  }  
+
+  output_pin_x(io) {
+    return this.x + this.width/2 - 
+           (this.index_of_output(io) - this.output.length/2.0 + 0.5) * this.snap;
+  }
+
+  output_pin_y(io) {
+    return this.y;
+  }  
+
+  role(io) {
+    console.log(["role", this, io])
+    if ( this.input.includes(io) ) {
+      return 'input';
+    } else if ( this.output.includes(io) ) {
+      return 'output';
+    } else {
+      return null;
+    }
   }
 
 }

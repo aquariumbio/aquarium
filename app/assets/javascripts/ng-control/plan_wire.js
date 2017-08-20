@@ -35,50 +35,68 @@ function PlanWire($scope,$http,$attrs,$cookies,$sce,$window) {
 
   }
 
+  //                 | 1          | 2         | 3         |
+  //                 | IO Block   | Module    | Operation |
+  //                 | in    out  | in   out  | in    out | 
+  // ----------------+-----+------+-----+-----+-----+-----+-
+  // 1 IO Block   in | x     x    |       x   |       x   |
+  //             out | x     x    | x         | x         |
+  // ----------------+------------+-----------+-----------+-
+  // 2 Module     in |       x    | x         | x         |
+  //             out | x          |       x   |       x   |
+  // ----------------+------------+-----------+-----------+-
+  // 3 Operation  in |       x    | x         | x         |
+  //             out | x          |       x   |       x   | 
+  // ----------------+------------+-----------+-----------+-
+
   $scope.connect = function(io1, object1, io2, object2) {
 
-    if ( io1.record_type == "FieldValue" && io2.record_type == "FieldValue" ) {
+    var module = $scope.plan.current_module,
+        role1 = object1.role(io1),
+        role2 = object2.role(io2);
+
+    if ( io1.record_type == "FieldValue" && io2.record_type == "FieldValue" ) {                 // 33
 
       connect_fv_to_fv(io1,object1,io2,object2);
 
-    } else if ( io1.record_type == "ModuleIO" && io2.record_type == "FieldValue" ) {
+    } else { 
 
-      var parent;
+      if ( object1.parent_id != object2.parent_id ) {                                           // 12, 13, 21, or 31
 
-      if ( object1.parent_id != object2.parent_id ) { // wire connects a module io block with an operation
-        parent = object1;
-      } else { // wire connects a module io pin to an operation
-        parent = $scope.plan.current_module;
-      }      
+        if ( object1.record_type == "Module" && object2.record_type == "Module" ) {             // 12 or 21
 
-      if ( io2.role == 'input') {
-        parent.connect_mod_to_op(io1, object1, io2, object2);
-      } else {
-        parent.connect_mod_from_op(io1, object1, io2, object2);
+          if ( object2.parent_id == object1.id ) {                                              // 12
+            console.log(12)
+          } else if ( object1.parent_id == object2.id ) {                                       // 21
+            console.log(21)
+          } 
+
+        } else {                                                                                 // 13 or 31
+
+          if ( object1.record_type == "Module" && object2.record_type == "Operation" ) {         // 13
+            if ( role1 == 'input' && role2 == 'input' )   module.connect(io1, object1, io2, object2);
+            if ( role1 == 'output' && role2 == 'output' ) module.connect(io2, object2, io1, object1);
+          } else {                                                                               // 31
+            if ( role2 == 'input' && role1 == 'input' )   module.connect(io2, object2, io1, object1);
+            if ( role2 == 'output' && role1 == 'output' ) module.connect(io1, object1, io2, object2);
+          }
+
+        }
+
+      } else {                                                                                   // 11, 22, 23, 32
+
+          if ( object1 == object2 ) {                                                            // 11
+            console.log("Cannot connect io ports within the same module.")
+          } else if ( object1.record_type == "Module" && object2.record_type == "Module" ) {     // 22
+            console.log(22)
+          } else  { 
+            if ( role1 == 'output' && role2 == 'input' ) module.connect(io1, object1, io2, object2);
+            else module.connect(io2, object2, io1, object1);
+          } 
+
       }
 
-    } else if ( io1.record_type == "FieldValue" && io2.record_type == "ModuleIO" ) {
-
-      var parent;
-
-      if ( object1.parent_id != object2.parent_id ) { // wire connects a module io block with an operation
-        parent = object2;
-      } else { // wire connects a module io pin to an operation
-        parent = $scope.plan.current_module;
-      }
-
-      if ( io1.role == 'output' ) {
-        parent.connect_mod_from_op(io2, object2, io1, object1)
-      } else {
-        parent.connect_mod_to_op(io2, object2, io1, object1);        
-      }
-
-    } else if ( io1.record_type == "ModuleIO" && io2.record_type == "ModuleIO" ) {
-
-      // TODO: CHECK THAT THE USER IS NOT SIMPLY CONNECTING A MODULE INPUT TO THE SAME MODULE OUTPUT
-      object1.connect_to_module(io1,io2,object2);
-
-    } 
+    }
 
   }
 

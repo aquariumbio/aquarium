@@ -37,4 +37,20 @@ class ModuleIO {
     this.constructor.next_io_id++;
   }  
 
+  input_pin_x() {
+    return this.x + this.width/2;
+  }
+
+  input_pin_y() {
+    return this.y + this.height;;
+  }  
+
+  output_pin_x() {
+    return this.x + this.width/2;
+  }
+
+  output_pin_y() {
+    return this.y;
+  }  
+
 }

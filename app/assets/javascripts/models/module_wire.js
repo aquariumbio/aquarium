@@ -64,56 +64,50 @@ class ModuleWire {
   }
 
   get x0() {
-    switch ( this.type  ) {
-      case "mod2op":   
-        if ( this.from_module.parent_id != this.to_op.parent_id ) {  
-          return this.from.x + this.from.width/2;
-        } else {
-          return this.from_module.x + this.from_module.width/2 - 
-                 (this.from_module.index_of_output(this.from) - this.from_module.output.length/2.0 + 0.5) * this.snap;
-        }
-      case "op2mod":
-        return this.from_op.x + this.from_op.width/2 + (this.from.index - this.from_op.num_outputs/2.0 + 0.5)*this.snap;
+    if ( this.from_module ) {
+      if ( this.from_module.parent_id != this.to_op.parent_id ) {  
+        return this.from.output_pin_x();
+      } else {
+        return this.from_module.output_pin_x(this.from);
+      }
+    } else {
+      return this.from_op.output_pin_x(this.from);
     }
   }
 
   get y0() {
-    switch ( this.type  ) {
-      case "mod2op":  
-        if ( this.from_module.parent_id != this.to_op.parent_id ) {    
-          return this.from.y;
-        } else {
-          return this.from_module.y;
-        }
-      case "op2mod":
-        return this.from_op.y;
-    }    
+    if ( this.from_module ) {
+      if ( this.from_module.parent_id != this.to_op.parent_id ) {    
+        return this.from.output_pin_y(); 
+      } else {
+        return this.from_module.output_pin_y();
+      }
+    } else {
+      return this.from_op.output_pin_y();
+    }  
   }
 
   get x1() {
-    switch ( this.type  ) {
-      case "mod2op": 
-        return this.to_op.x + this.to_op.width/2 + (this.to.index - this.to_op.num_inputs/2.0 + 0.5)*this.snap;
-      case "op2mod":
-        if ( this.from_op.parent_id != this.to_module.parent_id ) {
-          return this.to.x + this.to.width/2;      
-        } else {
-          return this.to_module.x + this.to_module.width/2 - 
-                (this.to_module.index_of_input(this.to) - this.to_module.input.length/2.0 + 0.5) * this.snap;
-        }
+    if ( this.to_module ) {
+      if ( this.from_op.parent_id != this.to_module.parent_id ) {
+        return this.to.input_pin_x(); 
+      } else {
+        return this.to_module.input_pin_x(this.to); 
+      }
+    } else {
+      return this.to_op.input_pin_x(this.to); 
     }
   }
 
   get y1() {
-    switch ( this.type  ) {
-      case "mod2op":     
-        return this.to_op.y + this.to_op.height;
-      case "op2mod":
-        if ( this.from_op.parent_id != this.to_module.parent_id ) {      
-          return this.to.y + this.to.height;      
-        } else {
-          return this.to_module.y + this.to_module.height;
-        }
+    if ( this.to_module ) {
+      if ( this.from_op.parent_id != this.to_module.parent_id ) {      
+        return this.to.input_pin_y(); 
+      } else {
+        return this.to_module.input_pin_y();
+      }
+    } else {
+      return this.to_op.input_pin_y(); 
     }
   }  
 

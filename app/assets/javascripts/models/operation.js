@@ -487,4 +487,27 @@ AQ.Operation.record_methods.set_status = function(status) {
 
 }
 
+AQ.Operation.record_getters.snap = function() {
+  return 16;
+}
 
+AQ.Operation.record_methods.input_pin_x = function(fv) {
+  return this.x + this.width/2 + (fv.index - this.num_inputs/2.0 + 0.5)*this.snap;
+}
+
+AQ.Operation.record_methods.input_pin_y = function(fv) {
+  return this.y + this.height;
+}
+
+
+AQ.Operation.record_methods.output_pin_x = function(fv) {
+  return this.x + this.width/2 + (fv.index - this.num_outputs/2.0 + 0.5)*this.snap;  
+}
+
+AQ.Operation.record_methods.output_pin_y = function(fv) {
+  return this.y;
+}
+
+AQ.Operation.record_methods.role = function(fv) {
+  return fv.role;
+}
