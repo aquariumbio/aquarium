@@ -704,3 +704,47 @@ AQ.Plan.record_methods.find_by_id = function(id) {
 
 }
 
+AQ.Plan.record_methods.connect = function(from, from_op, to, to_op) {
+
+  if ( from.role == 'output' && from.field_type.can_produce(to) ) {
+    if ( ! this.reachable(to, from ) ) {
+      this.wires.push(AQ.Wire.make({
+        from_op: from_op,
+        from: from,
+        to_op: to_op,
+        to: to,
+        snap: AQ.snap
+      }));
+    }
+  } else if ( to.field_type.can_produce(from) ) {
+    if ( ! reachable(from,to) ) {
+      this.wires.push(Wire.make({
+        to_op: from_op,
+        to: from,
+        from_op: to_op,
+        from: to,
+        snap: AQ.snap
+      }));
+    }
+  }
+
+}
+
+AQ.Plan.record_methods.num_plan_wires_into = function(io) {
+
+  var plan = this;
+  return aq.where(plan.wires, w => w.to.rid == io.rid).length;
+
+}
+
+AQ.Plan.record_methods.num_module_wires_into = function(io) {
+
+  return this.base_module.num_wires_into(io);
+}
+
+AQ.Plan.record_methods.num_wires_into = function(io) {
+
+  var plan = this;
+  return plan.num_plan_wires_into(io) + plan.num_module_wires_into(io);
+
+}

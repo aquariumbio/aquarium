@@ -2,7 +2,6 @@
 class ModuleWire {
 
   constructor() {
-    this.snap = 16;
   }
 
   build(object) {
@@ -134,16 +133,16 @@ class ModuleWire {
   }
 
   get yint0() { 
-    return this.y0 - this.snap;
+    return this.y0 - AQ.snap;
   };       
 
   get yint1() { 
-    return this.y1 + this.snap;
+    return this.y1 + AQ.snap;
   };           
 
   get path() {
 
-    if ( this.y0 >= this.y1 + 2 * this.snap ) {
+    if ( this.y0 >= this.y1 + 2 * AQ.snap ) {
 
       return ""   + this.x0 + "," + this.y0 + 
              " "  + this.x0 + "," + this.ymid + 
@@ -165,8 +164,8 @@ class ModuleWire {
 
   get arrowhead() {
       return "M "  + this.x1 + " " + (this.y1 + 5) + 
-         " L " + (this.x1 + 0.25*this.snap) + " " + (this.y1 + 0.75*this.snap) + 
-         " L " + (this.x1 - 0.25*this.snap) + " " + (this.y1 + 0.75*this.snap) + " Z";
+         " L " + (this.x1 + 0.25*AQ.snap) + " " + (this.y1 + 0.75*AQ.snap) + 
+         " L " + (this.x1 - 0.25*AQ.snap) + " " + (this.y1 + 0.75*AQ.snap) + " Z";
   }
 
 }

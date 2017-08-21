@@ -42,7 +42,7 @@ AQ.Wire.record_methods.disconnect = function() {
 }
 
 AQ.Wire.record_getters.x0 = function() {
-  return this.from_op.x + this.from_op.width/2 + (this.from.index - this.from_op.num_outputs/2.0 + 0.5)*this.snap;
+  return this.from_op.x + this.from_op.width/2 + (this.from.index - this.from_op.num_outputs/2.0 + 0.5)*AQ.snap;
 }
 
 AQ.Wire.record_getters.y0 = function() {
@@ -50,7 +50,7 @@ AQ.Wire.record_getters.y0 = function() {
 }
 
 AQ.Wire.record_getters.x1 = function() {
-  return this.to_op.x + this.to_op.width/2 + (this.to.index - this.to_op.num_inputs/2.0 + 0.5)*this.snap
+  return this.to_op.x + this.to_op.width/2 + (this.to.index - this.to_op.num_inputs/2.0 + 0.5)*AQ.snap
 }
 
 AQ.Wire.record_getters.y1 = function() {
@@ -69,16 +69,16 @@ AQ.Wire.record_getters.xmid = function() {
 }
 
 AQ.Wire.record_getters.yint0 = function() { 
-  return this.y0 - this.snap;
+  return this.y0 - AQ.snap;
 };       
 
 AQ.Wire.record_getters.yint1 = function() { 
-  return this.y1 + this.snap;
+  return this.y1 + AQ.snap;
 };           
 
 AQ.Wire.record_getters.path = function() {
 
-  if ( this.y0 >= this.y1 + 2 * this.snap ) {
+  if ( this.y0 >= this.y1 + 2 * AQ.snap ) {
 
     return ""   + this.x0 + "," + this.y0 + 
            " "  + this.x0 + "," + this.ymid + 
@@ -101,7 +101,7 @@ AQ.Wire.record_getters.path = function() {
 AQ.Wire.record_getters.arrowhead = function() {
 
   return "M "  + this.x1 + " " + (this.y1 + 5) + 
-         " L " + (this.x1 + 0.25*this.snap) + " " + (this.y1 + 0.75*this.snap) + 
-         " L " + (this.x1 - 0.25*this.snap) + " " + (this.y1 + 0.75*this.snap) + " Z";
+         " L " + (this.x1 + 0.25*AQ.snap) + " " + (this.y1 + 0.75*AQ.snap) + 
+         " L " + (this.x1 - 0.25*AQ.snap) + " " + (this.y1 + 0.75*AQ.snap) + " Z";
 
 }

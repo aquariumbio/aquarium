@@ -63,8 +63,7 @@ AQ.Plan.record_methods.paste_wire = function(wire) {
     to_op: plan.paste_map.operations[wire.to_op.rid],
     to: plan.paste_map.field_values[wire.to.rid],
     from_op: plan.paste_map.operations[wire.from_op.rid],
-    from: plan.paste_map.field_values[wire.from.rid],
-    snap: wire.snap
+    from: plan.paste_map.field_values[wire.from.rid]
   });
 
   plan.wires.push(new_wire);

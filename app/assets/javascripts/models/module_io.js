@@ -26,6 +26,10 @@ class ModuleIO {
     return "ModuleIO";
   }
 
+  get rid() {
+    return this.id; // for compatability with AQ.Record
+  }
+
   get next_id() {
     if ( !this.constructor.next_io_id ) {
       this.constructor.next_io_id = 0;

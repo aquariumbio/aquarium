@@ -150,13 +150,9 @@ class Module {
     return result;
   }
 
-  get snap() {
-    return 16;
-  }
-
   input_pin_x(io) {
     return this.x + this.width/2 - 
-           (this.index_of_input(io) - this.input.length/2.0 + 0.5) * this.snap;
+           (this.index_of_input(io) - this.input.length/2.0 + 0.5) * AQ.snap;
   }
 
   input_pin_y(io) {
@@ -165,7 +161,7 @@ class Module {
 
   output_pin_x(io) {
     return this.x + this.width/2 - 
-           (this.index_of_output(io) - this.output.length/2.0 + 0.5) * this.snap;
+           (this.index_of_output(io) - this.output.length/2.0 + 0.5) * AQ.snap;
   }
 
   output_pin_y(io) {
@@ -173,7 +169,6 @@ class Module {
   }  
 
   role(io) {
-    console.log(["role", this, io])
     if ( this.input.includes(io) ) {
       return 'input';
     } else if ( this.output.includes(io) ) {
@@ -181,6 +176,18 @@ class Module {
     } else {
       return null;
     }
+  }
+
+  num_wires_into(io) {
+
+    var n = aq.where(this.wires, w => w.to.rid == io.rid).length;
+
+    aq.each(this.children, c => {
+      n += c.num_wires_into(io);
+    });
+
+    return n;
+
   }
 
 }

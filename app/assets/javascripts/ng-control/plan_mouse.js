@@ -26,8 +26,8 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
   }  
 
   function snap(obj) {
-    obj.x = Math.floor((obj.x+$scope.snap/2) / $scope.snap) * $scope.snap;
-    obj.y = Math.floor((obj.y+$scope.snap/2) / $scope.snap) * $scope.snap;      
+    obj.x = Math.floor((obj.x+AQ.snap/2) / AQ.snap) * AQ.snap;
+    obj.y = Math.floor((obj.y+AQ.snap/2) / AQ.snap) * AQ.snap;      
   }  
 
  $scope.multiselect = {};

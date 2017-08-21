@@ -40,14 +40,14 @@
 
     $scope.add_operation = function(ot) {
       var op = AQ.Operation.record({
-        x: 100+3*$scope.snap + $scope.last_place, 
-        y: 100+2*$scope.snap + $scope.last_place, 
+        x: 100+3*AQ.snap + $scope.last_place, 
+        y: 100+2*AQ.snap + $scope.last_place, 
         width: 160, 
         height: 30,
         routing: {}, form: { input: {}, output: {} },
         parent_id: $scope.plan.current_module.id
       });
-      $scope.last_place += 4*$scope.snap;
+      $scope.last_place += 4*AQ.snap;
       op.set_type(ot);
       $scope.plan.operations.push(op);
       if ( $scope.plan.name == "Untitled Plan" ) {
@@ -59,9 +59,9 @@
     $scope.add_predecessor = function(fv,op,pred) {
 
       var newop = $scope.plan.add_wire_from(fv,op,pred);
-      $scope.plan.wires[$scope.plan.wires.length-1].snap = $scope.snap;
+      $scope.plan.wires[$scope.plan.wires.length-1].snap = AQ.snap;
       newop.x = op.x;
-      newop.y = op.y + 4*$scope.snap;
+      newop.y = op.y + 4*AQ.snap;
       newop.width = 160;
       newop.height = 30;
       newop.parent_id = $scope.plan.current_module.id;
@@ -77,9 +77,9 @@
     $scope.add_successor = function(fv,op,suc) {
 
       var newop = $scope.plan.add_wire_to(fv,op,suc);
-      $scope.plan.wires[$scope.plan.wires.length-1].snap = $scope.snap;
+      $scope.plan.wires[$scope.plan.wires.length-1].snap = AQ.snap;
       newop.x = op.x;
-      newop.y = op.y - 4*$scope.snap;
+      newop.y = op.y - 4*AQ.snap;
       newop.width = 160;
       newop.height = 30;
       newop.parent_id = $scope.plan.current_module.id;
