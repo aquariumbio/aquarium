@@ -25,6 +25,7 @@ function PlanWire($scope,$http,$attrs,$cookies,$sce,$window) {
 
     if ( !is_wired_to(io2) ) {
       $scope.plan.current_module.connect(io1, object1, io2, object2);
+      $scope.plan.base_module.associate_fvs();
     } else {
       console.log("Fan in not allowed")
     }

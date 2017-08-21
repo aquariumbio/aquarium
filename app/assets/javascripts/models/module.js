@@ -228,7 +228,7 @@ class Module {
         wire = aq.find(this.all_wires, w => io.id == w.to.id);
 
     if ( wire ) {
-      console.log("io " + io.id + " is the end of wire " + wire.from.rid + " ---> " + wire.to.rid)
+      // console.log("origin: io " + io.id + " is the end of wire " + wire.from.rid + " ---> " + wire.to.rid)
       if ( wire.from.record_type == "FieldValue" ) {
         result = wire.from;
       } else {
@@ -248,10 +248,12 @@ class Module {
         module = this,
         wires = aq.where(this.all_wires, w => io.id == w.from.id);
 
+        // console.log(["destinations", io, module])
+
     if ( wires.length > 0 ) {
 
       for ( w in wires ) {
-        console.log("io " + io.id + " is the start of wire " + wires[w].from.rid + " ---> " + wires[w].to.rid);
+        // console.log("destinations: io " + io.id + " is the start of wire " + wires[w].from.rid + " ---> " + wires[w].to.rid);
         results = results.concat(module.destinations(wires[w].to));
       }
    
@@ -266,6 +268,38 @@ class Module {
 
   }
 
+  get io() {
+    return this.input.concat(this.output);
+  }
+
+  get all_io() {
+    var io_list = this.input.concat(this.output);
+    for ( var c in this.children ) {
+      io_list = io_list.concat(this.children[c].all_io);
+    }
+    return io_list;
+  }
+
+  clear_fvs() {
+    aq.each(this.all_io, io => {
+      io.origin_fv = null;
+      io.destination_fvs = [];
+    });
+  }
+
+  associate_fvs() {
+
+    var module = this;
+
+    aq.each(this.all_io, io => {
+      var origin = module.origin(io),
+          dests = module.destinations(io);
+      io.origin_fv = origin.record_type == "FieldValue" ? origin : null;
+      io.destination_fvs = aq.where(dests, d => d.record_type == "FieldValue");
+      console.log("" + io.rid + ". origin: " + (io.origin_fv ? io.origin_fv.rid : null) + 
+                                ", destinations: [" +  aq.collect(io.destination_fvs, fv => fv.rid).join(", ") + "]");
+    });
+
+  }
+
 }
-
-

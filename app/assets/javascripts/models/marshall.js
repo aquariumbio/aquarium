@@ -143,7 +143,6 @@ AQ.Plan.record_methods.marshall = function() {
   })
 
   plan.layout = plan.marshall_layout();
-
   plan.open = true;
   return plan;
 
@@ -169,5 +168,7 @@ AQ.Plan.record_methods.marshall_layout = function() {
   }
 
   plan.current_module = plan.base_module;
+
+  plan.base_module.associate_fvs();
 
 }

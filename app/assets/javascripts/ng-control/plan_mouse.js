@@ -167,8 +167,8 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
     if ( io.record_type == "ModuleIO" ) {
       console.log(io)
-      console.log(["origin: ", $scope.plan.base_module.origin(io)]);
-      console.log(["destinations: ", $scope.plan.base_module.destinations(io)]);
+      console.log("origin: " +       $scope.plan.base_module.origin(io).rid);
+      console.log("destinations: [" + aq.collect($scope.plan.base_module.destinations(io), io => io.rid).join(", ") + "]");
     }
 
     evt.stopImmediatePropagation();
@@ -201,6 +201,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
       $scope.plan.current_module.remove_wire($scope.current_wire);
       $scope.current_wire = null;      
+      $scope.plan.base_module.associate_fvs();
 
     } else if ( $scope.current_draggable && !$scope.current_fv ) {
 
@@ -210,11 +211,11 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
       var objects = [];
 
-      current_draggable(obj => {  
+      current_draggable(obj => { 
         if ( obj.multiselect ) {
           objects.push(obj);
         }
-      });   
+      });
 
       aq.each(objects, obj => $scope.delete_object(obj));
 
