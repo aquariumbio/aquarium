@@ -77,7 +77,7 @@ function PlanWire($scope,$http,$attrs,$cookies,$sce,$window) {
           console.log("Cannot connect io ports within the same module.")
         } else {                                                                                 // 22, 23, 32
           if ( role1 == 'output' && role2 == 'input' ) connect(io1, object1, io2, object2);
-          else connect(io2, object2, io1, object1);
+          else if ( role1 == 'input' && role2 == 'output' ) connect(io2, object2, io1, object1);
         } 
 
       }
