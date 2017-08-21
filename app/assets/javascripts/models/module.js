@@ -16,7 +16,6 @@ class Module {
     this.input = []; 
     this.output = [];
     this.wires = [];
-    this.full_wires = [];
     this.parent_id = parent ? parent.id : -1;
 
     this.inc_next_id();
@@ -148,6 +147,23 @@ class Module {
       result = aq.find(this.children, c => c.id == mid);
     }
     return result;
+  }
+
+  find_io_by_id(id) {
+
+    var result = aq.find(this.input, i => i.id == id);
+    if ( result ) return result;
+
+    result = aq.find(this.output, o => o.id == id);
+    if ( result ) return result;
+
+    for ( var c in this.children ) {
+      result = this.children[c].find_io_by_id(id);
+      if ( result ) return result;
+    }
+
+    return null;
+
   }
 
   input_pin_x(io) {

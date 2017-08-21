@@ -27,11 +27,11 @@ class ModuleWire {
     if ( this.to && this.to.record_type == "FieldValue" )     this.to   = plan.find_by_id(this.to.id); 
 
     if ( this.from && this.from.record_type == "ModuleIO" ) {
-      this.from = aq.find(this.from_module.input.concat(this.from_module.output), i => i.id == this.from.id );
+      this.from = this.from_module.find_io_by_id(this.from.id);
     }
 
     if ( this.to && this.to.record_type == "ModuleIO" ) {
-      this.to   = aq.find(this.to_module.input.concat(this.to_module.output), i => i.id == this.to.id );
+      this.to = this.to_module.find_io_by_id(this.to.id);
     }
 
     return this;

@@ -16,7 +16,7 @@ class ModuleIO {
     for ( var p in object ) {
       this[p] = object[p];
     }
-    this.id = this.next_id;
+    // this.id = this.next_id;
     this.inc_next_id();
     this.width = 32; this.height = 32;
     return this;
