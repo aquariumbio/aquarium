@@ -38,6 +38,10 @@ class ModuleWire {
 
   }
 
+  get record_type() {
+    return "ModuleWire";
+  }
+
   consistent() {
     return true;
   }

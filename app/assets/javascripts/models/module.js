@@ -190,4 +190,8 @@ class Module {
 
   }
 
+  remove_wire(wire) {
+    aq.remove(this.wires,wire);
+  }
+
 }

@@ -27,7 +27,10 @@
 
       $scope.current_fv     = object && object.record_type == "FieldValue" ? object : null;      
 
-      $scope.current_wire   = object && object.record_type == "Wire"       ? object : null;
+      $scope.current_wire   = object && ( object.record_type == "Wire" || 
+                                          object.record_type == "ModuleWire" ) ? object : null;
+
+      console.log([object,$scope.current_wire]);
 
     }
 

@@ -17,8 +17,9 @@
      ng-mousemove="mouseMove($event)"
      ng-mouseup="mouseUp($event)">
 
-  <g ng-repeat="wire in plan.wires track by $index"
-     ng-if="plan.visible(wire)">
+  <!-- PLAN WIRES -->
+
+  <g ng-repeat="wire in plan.wires track by $index" ng-if="plan.visible(wire)">
     <%= render partial: 'wire' %>
   </g>    
 

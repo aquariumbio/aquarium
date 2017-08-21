@@ -173,8 +173,9 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
   // Wire Events ////////////////////////////////////////////////////////////////////////////////
 
   $scope.wireMouseDown = function(evt, wire) {
+    console.log(["mouse", wire])
     $scope.select(wire);
-    evt.stopImmediatePropagation();  
+    evt.stopImmediatePropagation();
   }  
 
   // Keyboard
@@ -185,14 +186,22 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
   }
 
   $scope.delete = function() {
-    if ( $scope.current_wire ) {
+
+    if ( $scope.current_wire && $scope.current_wire.record_type == "Wire" ) {
+
       $scope.plan.remove_wire($scope.current_wire);
       $scope.current_wire = null;
-    }
-    if ( $scope.current_draggable && !$scope.current_fv ) {
+
+    } else if ( $scope.current_wire && $scope.current_wire.record_type == "ModuleWire" ) {
+
+      $scope.plan.current_module.remove_wire($scope.current_wire);
+      $scope.current_wire = null;      
+
+    } else if ( $scope.current_draggable && !$scope.current_fv ) {
+
       $scope.delete_object($scope.current_draggable);
-    }
-    if ( $scope.multiselect ) {
+
+    } else if ( $scope.multiselect ) {
 
       var objects = [];
 
