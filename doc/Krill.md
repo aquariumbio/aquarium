@@ -436,6 +436,8 @@ Collections can be made in a few different ways, either from nothing, from items
 
 To make an entirely new collection, use, for example,
 
+[[ Note: this syntax doestn't seem to support three arguments as written. -Devin ]]
+
 ```ruby
 i = produce new_collection "Gel", 2, 6
 ```
