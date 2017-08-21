@@ -194,6 +194,17 @@ class Module {
     }
   }
 
+  get all_wires() {
+
+    var wires = this.wires;
+
+    aq.each(this.children, c => {
+      wires = wires.concat(c.all_wires)
+    });
+
+    return wires;
+  }
+
   num_wires_into(io) {
 
     var n = aq.where(this.wires, w => w.to.rid == io.rid).length;
@@ -210,4 +221,51 @@ class Module {
     aq.remove(this.wires,wire);
   }
 
+  origin(io) {
+
+    var result = null,
+        module = this,
+        wire = aq.find(this.all_wires, w => io.id == w.to.id);
+
+    if ( wire ) {
+      console.log("io " + io.id + " is the end of wire " + wire.from.rid + " ---> " + wire.to.rid)
+      if ( wire.from.record_type == "FieldValue" ) {
+        result = wire.from;
+      } else {
+        result = module.origin(wire.from);
+      }
+    } else {
+      result = io;
+    }
+
+    return result;
+
+  }
+
+  destinations(io) {
+
+    var results = [],
+        module = this,
+        wires = aq.where(this.all_wires, w => io.id == w.from.id);
+
+    if ( wires.length > 0 ) {
+
+      for ( w in wires ) {
+        console.log("io " + io.id + " is the start of wire " + wires[w].from.rid + " ---> " + wires[w].to.rid);
+        results = results.concat(module.destinations(wires[w].to));
+      }
+   
+    } else {
+
+      results = [io]
+
+    }
+
+    return results;
+
+
+  }
+
 }
+
+

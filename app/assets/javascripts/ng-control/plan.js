@@ -94,8 +94,10 @@
     }    
 
     $scope.set_current_io = function(io,focus) {
+
       $scope.current_io = io;
-      if ( io.model.model == "FieldValue" ) {
+
+      if ( io.record_type == "FieldValue" ) {
         $scope.current_fv = io;
       }
       if ( focus ) { 
@@ -104,6 +106,7 @@
           if ( el ) { el.focus() }
         }, 30);
       }
+
     }
 
     $scope.note = function(msg) {

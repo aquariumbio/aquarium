@@ -52,7 +52,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
   $scope.mouseMove = function(evt) {
 
-    if ( $scope.current_draggable && $scope.current_draggable.drag && !$scope.current_fv ) {
+    if ( $scope.current_draggable && $scope.current_draggable.drag && !$scope.current_fv && !$scope.current_io ) {
 
       $scope.current_draggable.x = evt.offsetX - $scope.current_draggable.drag.localX;
       $scope.current_draggable.y = evt.offsetY - $scope.current_draggable.drag.localY;
@@ -160,10 +160,15 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
     if ( $scope.current_io && evt.shiftKey ) { // There is an io already selected, so make a wire
       $scope.connect($scope.current_io, $scope.current_draggable, io, obj);
-      console.log($scope.plan.base_module)
     } else {
       $scope.select(obj);
       $scope.set_current_io(io,true);
+    }
+
+    if ( io.record_type == "ModuleIO" ) {
+      console.log(io)
+      console.log(["origin: ", $scope.plan.base_module.origin(io)]);
+      console.log(["destinations: ", $scope.plan.base_module.destinations(io)]);
     }
 
     evt.stopImmediatePropagation();
