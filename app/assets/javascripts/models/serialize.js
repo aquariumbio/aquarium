@@ -30,10 +30,27 @@ AQ.Plan.record_methods.serialize_module = function(m) {
     sm[props[p]] = m[props[p]];
   }
 
+  sm.input  = aq.collect(m.input, i => plan.serialize_module_io(i));
+  sm.output = aq.collect(m.output, o => plan.serialize_module_io(o));  
+
   sm.children = aq.collect(m.children, c => plan.serialize_module(c));
   sm.wires = aq.collect(m.wires, w => w.serialize())
 
   return sm;
+
+}
+
+AQ.Plan.record_methods.serialize_module_io = function(io) {
+
+  var plan = this,
+      props = [ "id", "x", "y", "width", "height", "model" ],
+      sio = {};
+
+  for ( var p in props ) {
+    sio[props[p]] = io[props[p]];
+  }  
+  
+  return sio;
 
 }
 

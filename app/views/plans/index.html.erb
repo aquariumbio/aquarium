@@ -96,12 +96,12 @@
                   icon="zoom_out_map" name="Expand"
                   tooltip="Expand Module (Right Click)"></planner-action>                  
 
-  <planner-action ng-click="plan.current_module.add_input()"
+  <planner-action ng-click="add_module_input()"
                   is-disabled="plan.current_module.id == 0"
                   icon="input" name="Input"
                   tooltip="New Module Input (Ctrl-I)"></planner-action>  
 
-  <planner-action ng-click="plan.current_module.add_output()"
+  <planner-action ng-click="add_module_output()"
              is-disabled="plan.current_module.id == 0"        
              icon="output" name="Output"
              tooltip="New Module Output (Ctrl-O)"></planner-action>  
@@ -166,7 +166,12 @@
 
     <div class="opeditbar operation-editor scrollable">
       <inner>
-        <%= render partial: 'operation_editor' %>
+        <div ng-if="current_op">
+          <%= render partial: 'operation_editor' %>
+        </div>
+        <div ng-if="current_draggable && current_draggable.record_type == 'Module'">
+          <%= render partial: 'module_io_editor' %>
+        </div>
       </inner>
     </div>   
 

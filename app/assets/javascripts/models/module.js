@@ -230,19 +230,19 @@ class Module {
     if ( wire ) {
       // console.log("origin: io " + io.id + " is the end of wire " + wire.from.rid + " ---> " + wire.to.rid)
       if ( wire.from.record_type == "FieldValue" ) {
-        result = wire.from;
+        result = { io: wire.from, op: wire.from_op };
       } else {
         result = module.origin(wire.from);
       }
     } else {
-      result = io;
+      result = { io: io, op: null }
     }
 
     return result;
 
   }
 
-  destinations(io) {
+  destinations(io,op=null) {
 
     var results = [],
         module = this,
@@ -254,17 +254,16 @@ class Module {
 
       for ( w in wires ) {
         // console.log("destinations: io " + io.id + " is the start of wire " + wires[w].from.rid + " ---> " + wires[w].to.rid);
-        results = results.concat(module.destinations(wires[w].to));
+        results = results.concat(module.destinations(wires[w].to, wires[w].to_op));
       }
    
     } else {
 
-      results = [io]
+      results = [{ io: io, op: op }]
 
     }
 
     return results;
-
 
   }
 
@@ -283,7 +282,7 @@ class Module {
   clear_fvs() {
     aq.each(this.all_io, io => {
       io.origin_fv = null;
-      io.destination_fvs = [];
+      io.destinations = [];
     });
   }
 
@@ -292,12 +291,21 @@ class Module {
     var module = this;
 
     aq.each(this.all_io, io => {
+
       var origin = module.origin(io),
           dests = module.destinations(io);
-      io.origin_fv = origin.record_type == "FieldValue" ? origin : null;
-      io.destination_fvs = aq.where(dests, d => d.record_type == "FieldValue");
-      console.log("" + io.rid + ". origin: " + (io.origin_fv ? io.origin_fv.rid : null) + 
-                                ", destinations: [" +  aq.collect(io.destination_fvs, fv => fv.rid).join(", ") + "]");
+
+      if ( origin.io.record_type == "FieldValue" ) {
+        io.origin = origin;
+      }
+
+      io.destinations = aq.where(dests, d => d.io.record_type == "FieldValue");
+
+      console.log(["assocaite_fvs", io.destinations])
+
+      console.log("" + io.rid + ". origin: " + (io.origin ? io.origin.io.rid : null) + 
+                                ", destinations: [" +  aq.collect(io.destinations, d => d.io.rid).join(", ") + "]");
+
     });
 
   }

@@ -30,6 +30,8 @@
       $scope.current_wire   = object && ( object.record_type == "Wire" || 
                                           object.record_type == "ModuleWire" ) ? object : null;
 
+      console.log(["selected", object])
+
     }
 
     function refresh_plan_list() {
@@ -229,11 +231,29 @@
 
     }
 
+    $scope.report_error = function(title, msg, details) {
+
+      var alert = $mdDialog.alert()
+          .clickOutsideToClose(true)
+          .title(title)
+          .textContent(msg)
+          .ariaLabel(title)
+          .ok('Ok');
+
+      console.log(details)
+
+      $mdDialog.show(alert).then()        
+
+    }
+
     function load_aux(plan) {
       AQ.Plan.load(plan.id).then(p => {
         $scope.plan = p;
+        $scope.select(null)
         $scope.$apply();
-      })      
+      }).catch(error => {
+        $scope.report_error("Could not read plan '" + plan.name + "'.", error.message, error.stack)
+      })
     }
 
     $scope.load = function(plan) {

@@ -13,7 +13,7 @@
 
   <g ng-repeat="output in module.output track by $index">
 
-    <circle ng-attr-class="field-value"
+    <circle ng-attr-class="{{module_io_class(output, 'output')}}"
             ng-attr-cx="{{module.width/2 - ($index - module.output.length/2.0+0.5)*snap}}"
             ng-mousedown="ioMouseDown($event, module, output)"
             cy="0" 
@@ -27,7 +27,7 @@
 
   <g ng-repeat="input in module.input track by $index">
 
-    <circle ng-attr-class="field-value"
+    <circle ng-attr-class="{{module_io_class(input, 'input')}}"
             ng-attr-cx="{{module.width/2 - ($index - module.input.length/2.0+0.5)*snap}}"            
             ng-attr-cy="{{module.height}}" 
             ng-mousedown="ioMouseDown($event, module, input)" 

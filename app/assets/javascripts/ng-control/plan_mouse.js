@@ -52,7 +52,10 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
   $scope.mouseMove = function(evt) {
 
-    if ( $scope.current_draggable && $scope.current_draggable.drag && !$scope.current_fv && !$scope.current_io ) {
+    if ( $scope.current_draggable && $scope.current_draggable.drag && !$scope.current_fv 
+        // && the current draggable is not the module containing on of its selected io block
+        && ! ( $scope.current_draggable.record_type == "Module" && $scope.current_draggable.io.includes($scope.current_io) )
+        ) {
 
       $scope.current_draggable.x = evt.offsetX - $scope.current_draggable.drag.localX;
       $scope.current_draggable.y = evt.offsetY - $scope.current_draggable.drag.localY;
@@ -109,7 +112,8 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
     } else {
 
-      $scope.select(obj); 
+      $scope.select(obj);
+
       all_draggable(d=>d.multiselect=false);
       $scope.current_draggable.drag = {
         localX: evt.offsetX - obj.x, 
@@ -167,8 +171,11 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
     if ( io.record_type == "ModuleIO" ) {
       console.log(io)
-      console.log("origin: " +       $scope.plan.base_module.origin(io).rid);
-      console.log("destinations: [" + aq.collect($scope.plan.base_module.destinations(io), io => io.rid).join(", ") + "]");
+      console.log("origin: " +       $scope.plan.base_module.origin(io).io.rid);
+      console.log("destinations: [" + aq.collect($scope.plan.base_module.destinations(io), d => d.io.rid).join(", ") + "]");
+      if ( io.origin && io.origin.io ) $scope.current_fv = io.origin.io;
+      else if ( io.destinations.length > 0 ) $scope.current_fv = io.destinations[0].io;
+      console.log(["current_fv", $scope.current_fv])
     }
 
     evt.stopImmediatePropagation();
@@ -224,6 +231,16 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
     }
   }      
 
+  $scope.add_module_input = function() {
+    $scope.plan.current_module.add_input();
+    $scope.plan.base_module.associate_fvs();    
+  }
+
+  $scope.add_module_output = function() {
+    $scope.plan.current_module.add_output();
+    $scope.plan.base_module.associate_fvs();  
+  }  
+
   $scope.keyDown = function(evt) {
 
     switch(evt.key) {
@@ -250,12 +267,12 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
       case "O":
       case "o":
-        if ( evt.ctrlKey ) $scope.plan.current_module.add_output();
+        if ( evt.ctrlKey ) $scope.add_module_output();
         break;
 
       case "I":
       case "i":
-        if ( evt.ctrlKey ) $scope.plan.current_module.add_input();
+        if ( evt.ctrlKey ) $scope.add_module_input();
         break;
 
       default:

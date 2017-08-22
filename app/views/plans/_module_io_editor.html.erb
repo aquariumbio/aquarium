@@ -1,0 +1,22 @@
+
+<!-- OUTPUTS -->
+
+<div ng-repeat="output in current_draggable.output">
+  <div ng-if="output.origin.io"
+       ng-init="fv = output.origin.io; current_op = output.origin.op" 
+       class="io-container">
+    <%= render partial: 'field_value_input' %>
+  </div>
+</div>
+
+<!-- INPUTS -->
+
+<div ng-repeat="input in current_draggable.input">
+  <div ng-if="input.destinations.length > 0" 
+       ng-init="fv = input.destinations[0].io; current_op = input.destinations[0].op" 
+       class="io-container">
+    <%= render partial: 'field_value_input' %>
+  </div>
+</div>
+
+

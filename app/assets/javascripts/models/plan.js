@@ -71,8 +71,12 @@ AQ.Plan.record_methods.save = function() {
 AQ.Plan.load = function(id) {
   return new Promise((resolve,reject) => {
     AQ.get("/plans/" + id + ".json").then(response => {   
-      var up = AQ.Plan.record(response.data).marshall();
-      resolve(up);
+      try {
+        var up = AQ.Plan.record(response.data).marshall();
+        resolve(up);
+      } catch (error) {
+        reject(error)
+      }
     })
   });
 }
