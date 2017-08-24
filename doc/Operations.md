@@ -187,7 +187,7 @@ title "Ingredients Table"
 table operations.start_table
   .input_item("Forward Primer")
   .input_item("Reverse Primer")
-  .custom_column("Master Mix (uL)") { |op| 50 }
+  .custom_column(heading: "Master Mix (uL)") { |op| 50 }
   .output_collection("Fragment", heading: "Frag")
   .output_row("Fragment")
   .output_column("Fragment")
