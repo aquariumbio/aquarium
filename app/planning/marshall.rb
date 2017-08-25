@@ -155,8 +155,10 @@ module Marshall
     p.name = x[:name] ? x[:name] : "New Plan"
     p.cost_limit = x[:cost_limit]
     p.status = x[:status]
-    p.user_id = @@user.id
+    # p.user_id = @@user.id
     p.save
+
+    @@user.id = p.user.id
 
     # for each x operation, if the operation exists, update it, else create it
     op_ids = self.operations p, x[:operations]

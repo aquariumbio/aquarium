@@ -62,7 +62,16 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
         AQ.OperationType.compute_categories($scope.operation_types);
         AQ.operation_types = $scope.operation_types;
 
-        get_plans_and_templates();
+        if ( aq.url_params().plan_id ) {
+          AQ.Plan.load(aq.url_params().plan_id).then(p => {
+            AQ.User.find(p.user_id ).then(user => {
+              $scope.current_user = user;
+              get_plans_and_templates();
+            });
+          });
+        } else {
+          get_plans_and_templates();        
+        }
 
       });
     });    
