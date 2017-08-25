@@ -54,7 +54,7 @@ function PlanClasses($scope,$http,$attrs,$cookies,$sce,$window) {
         fv = io.destinations[0].io;
         op = io.destinations[0].op;
       }
-    } else {
+    } else if ( io.origin ) {
       fv = io.origin.io;
       op = io.origin.op;
     }
