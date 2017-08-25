@@ -123,12 +123,18 @@ class Module {
   remove(child,plan) {
     child.remove_child_operations(plan);
     aq.remove(this.children, child);
+    console.log([child, this.wires])
+    this.wires = aq.where(this.wires, w => w.from_module != child && w.to_module != child);
   }
 
   remove_io(io) {
     aq.remove(this.input, io);
     aq.remove(this.output, io);
     this.wires = aq.where(this.wires, w => w.from != io && w.to != io);
+  }
+
+  remove_operation(op) {
+    this.wires = aq.where(this.wires, w => w.from_op != op && w.to_op != op);
   }
 
   index_of_input(io) {
@@ -265,7 +271,7 @@ class Module {
 
     return results;
 
-  }
+  } 
 
   get io() {
     return this.input.concat(this.output);

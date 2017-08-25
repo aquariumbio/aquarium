@@ -265,6 +265,11 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
         if ( evt.ctrlKey ) $scope.plan.create_module($scope.current_op);
         break;
 
+      case "N":
+      case "n":
+        if ( evt.ctrlKey ) $scope.new();
+        break;        
+
       case "O":
       case "o":
         if ( evt.ctrlKey ) $scope.add_module_output();

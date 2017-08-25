@@ -340,6 +340,7 @@
           }              
           return !remove;
         });
+        $scope.plan.current_module.remove_operation(obj);
         $scope.current_op = null;
       } else if ( obj.record_type == "Module" ) {
          var confirm = $mdDialog.confirm()
