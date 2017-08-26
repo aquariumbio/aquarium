@@ -51,21 +51,143 @@ AQ.Plan.record_methods.create_base_module = function() {
   return plan.base_module;
 }
 
-AQ.Plan.record_methods.create_module = function(selected_op) {
+AQ.Plan.record_methods.create_module = function() {
 
   var plan = this,
       module,
-      current = plan.current_module; // have to call this first
+      selected_ops = aq.where(plan.operations, op => op.multiselect),
+      current = plan.current_module, // have to call this first (getter with a side effect of 
+                                     // making the current module if it doesn't exist)
+      selected_modules = aq.where(current.children, child => child.multiselect),                                     
+      x = 0, y = 0, n = 0;
 
   module = new Module().for_parent(plan.current_module);
 
-  aq.each(aq.where(plan.operations, op => op.multiselect), op => {
-    op.parent_id = module.id;
-  });   
-
   current.children.push(module);
 
+  aq.each(selected_ops, op => {
+    op.parent_id = module.id;
+    x += op.x;
+    y += op.y;
+    n++;
+  });
+
+  aq.each(selected_modules, child => {
+    child.parent_id = module.id;
+    aq.remove(current.children, child);
+    module.children.push(child);
+    x += child.x;
+    y += child.y;
+    n++;
+  });  
+
+  if ( n > 0 ) {
+    module.x = x/n;
+    module.y = y/n;
+    plan.add_module_wires_from_real(module);
+    plan.add_module_wires_from_module_wires(module);
+    plan.delete_old_module_wires(module);
+  }
+
+  plan.base_module.associate_fvs();
+
   return module;
+
+}
+
+AQ.Plan.record_methods.add_module_wires_from_real = function(new_module) {
+
+  var plan = this,
+      current = plan.current_module;
+
+  aq.each_in_reverse(plan.wires, w => {
+
+    if ( w.from_op.parent_id == current.id && w.to_op.parent_id == new_module.id ) {
+      var new_io = new_module.add_input();
+      plan.connect(w.from, w.from_op, new_io, new_module);
+      plan.current_module = new_module;
+      plan.connect(new_io, new_module, w.to, w.to_op);      
+      plan.current_module = current;
+    }
+
+  });
+
+  aq.each(plan.wires, w => {  
+
+    if ( w.from_op.parent_id == new_module.id && w.to_op.parent_id == current.id ) {
+      var new_io = new_module.add_output();
+      plan.current_module = new_module;      
+      plan.connect(w.from, w.from_op, new_io, new_module);
+      plan.current_module = current;   
+      plan.connect(new_io, new_module, w.to, w.to_op);      
+    }      
+
+  });
+
+}
+
+AQ.Plan.record_methods.add_module_wires_from_module_wires = function(new_module) {
+
+  var plan = this,
+      current = plan.current_module;
+
+  aq.each_in_reverse(current.wires, w => {
+
+    if ( ( w.from_obj.parent_id == current.id && w.to_obj.parent_id == new_module.id ) ||
+         ( w.from_obj.parent_id == current.parent_id && w.to_obj.parent_id == new_module.id ) ) {
+
+      console.log("Building new wires for " + w.to_s);
+
+      var new_io = new_module.add_input();
+
+      plan.connect(w.from, w.from_obj, new_io, new_module);
+      plan.current_module = new_module;
+      plan.connect(new_io, new_module, w.to, w.to_obj);      
+      plan.current_module = current;      
+
+    }
+
+  });
+
+  aq.each(current.wires, w => {
+
+    if ( ( w.from_obj.parent_id == new_module.id && w.to_obj.parent_id == current.id ) ||
+         ( w.from_obj.parent_id == new_module.id && w.to_obj.parent_id == current.parent_id ) ) {
+
+      console.log("Building new wires for " + w.to_s);
+
+      var new_io = new_module.add_output();
+
+      plan.current_module = new_module;      
+      plan.connect(w.from, w.from_obj, new_io, new_module);
+      plan.current_module = current;   
+      plan.connect(new_io, new_module, w.to, w.to_obj);   
+
+    }          
+
+  });
+
+}
+
+//
+// For deleting wires, its always from the current module and its any module wire that ends
+// in the selection. Should delete wires after adding the new ones,
+// because you need the old ones to figure out what the new ones are.
+// 
+
+AQ.Plan.record_methods.delete_old_module_wires = function(new_module) {
+
+  var plan = this;
+  plan.current_module.wires = aq.where(plan.current_module.wires, w => !plan.uses_module(w, new_module));
+
+}
+
+AQ.Plan.record_methods.uses_module = function(w,new_module) {
+
+  return ( w.from_module && w.from_module.parent_id == new_module.id ) ||
+         ( w.from_op     && w.from_op.parent_id     == new_module.id ) ||
+         ( w.to_module   && w.to_module.parent_id   == new_module.id ) ||
+         ( w.to_op       && w.to_op.parent_id       == new_module.id );
 
 }
 

@@ -50,7 +50,7 @@ function PlanClasses($scope,$http,$attrs,$cookies,$sce,$window) {
         op = null;
 
     if ( role == 'input' ) {
-      if ( io.destinations.length > 0 ) {
+      if ( io.destinations && io.destinations.length > 0 ) {
         fv = io.destinations[0].io;
         op = io.destinations[0].op;
       }

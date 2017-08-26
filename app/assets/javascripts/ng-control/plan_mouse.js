@@ -18,7 +18,8 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
     var m = $scope.multiselect;
 
-    return  (( m.width >= 0 && m.x < obj.x && obj.x + obj.width < m.x+m.width ) ||
+    return  obj.parent_id == $scope.plan.current_module.id &&
+            (( m.width >= 0 && m.x < obj.x && obj.x + obj.width < m.x+m.width ) ||
              ( m.width <  0 && m.x + m.width < obj.x && obj.x + obj.width < m.x )) &&
             (( m.height >= 0 && m.y < obj.y && obj.y + obj.height < m.y+m.height ) ||
              ( m.height <  0 && m.y + m.height < obj.y && obj.y + obj.height < m.y ));
@@ -89,6 +90,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
           obj.multiselect = true;
         }
       });
+      // console.log(aq.where($scope.plan.operations, op => op.multiselect))
       $scope.multiselect.active = false;        
     }
   }

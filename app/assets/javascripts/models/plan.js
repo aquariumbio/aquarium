@@ -708,7 +708,7 @@ AQ.Plan.record_methods.find_by_id = function(id) {
 
 }
 
-AQ.Plan.record_methods.connect = function(from, from_op, to, to_op) {
+AQ.Plan.record_methods.add_wire = function(from, from_op, to, to_op) {
 
   if ( from.role == 'output' && from.field_type.can_produce(to) ) {
     if ( ! this.reachable(to, from ) ) {
@@ -721,7 +721,7 @@ AQ.Plan.record_methods.connect = function(from, from_op, to, to_op) {
       }));
     }
   } else if ( to.field_type.can_produce(from) ) {
-    if ( ! reachable(from,to) ) {
+    if ( ! this.reachable(from,to) ) {
       this.wires.push(Wire.make({
         to_op: from_op,
         to: from,

@@ -105,3 +105,5 @@ AQ.Wire.record_getters.arrowhead = function() {
          " L " + (this.x1 - 0.25*AQ.snap) + " " + (this.y1 + 0.75*AQ.snap) + " Z";
 
 }
+
+

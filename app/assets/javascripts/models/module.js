@@ -64,18 +64,20 @@ class Module {
     this.constructor.next_module_id++;
   }
 
-  add_input(fv) {
+  add_input(fv) { // why does this have an fv argument that it ignores?
     var m = new ModuleIO().build();
     m.x = this.next_input_pos;
     m.y = 320;
     this.input.push(m);
+    return m;
   }
 
-  add_output(fv) {
+  add_output(fv) { // why does this have an fv argument that it ignores?
     var m = new ModuleIO().build();
     m.x = this.next_output_pos;
     m.y = 32;
     this.output.push(m);
+    return m;
   }
 
   get next_input_pos() {
@@ -105,8 +107,8 @@ class Module {
       from_module: object1.record_type == 'Module'    ? object1 : null,
       to_module:   object2.record_type == 'Module'    ? object2 : null 
     });
-    this.wires.push(wire);
-    console.log(['new wire', wire]);
+    this.wires.push(wire);  
+    // console.log([this.name, this.wires])
     return wire;
   }
 
@@ -123,7 +125,7 @@ class Module {
   remove(child,plan) {
     child.remove_child_operations(plan);
     aq.remove(this.children, child);
-    console.log([child, this.wires])
+    // console.log([child, this.wires])
     this.wires = aq.where(this.wires, w => w.from_module != child && w.to_module != child);
   }
 
@@ -307,10 +309,10 @@ class Module {
 
       io.destinations = aq.where(dests, d => d.io.record_type == "FieldValue");
 
-      console.log(["assocaite_fvs", io.destinations])
+      // console.log(["assocaite_fvs", io.destinations])
 
-      console.log("" + io.rid + ". origin: " + (io.origin ? io.origin.io.rid : null) + 
-                                ", destinations: [" +  aq.collect(io.destinations, d => d.io.rid).join(", ") + "]");
+      // console.log("" + io.rid + ". origin: " + (io.origin ? io.origin.io.rid : null) + 
+      //                           ", destinations: [" +  aq.collect(io.destinations, d => d.io.rid).join(", ") + "]");
 
     });
 

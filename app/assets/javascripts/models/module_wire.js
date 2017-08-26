@@ -172,4 +172,36 @@ class ModuleWire {
          " L " + (this.x1 - 0.25*AQ.snap) + " " + (this.y1 + 0.75*AQ.snap) + " Z";
   }
 
+  get to_s() {
+
+    var wire = this,
+        str = "Wire. ";
+
+    if ( wire.from_module ) {
+      str += "Module " + wire.from_module.id + " (io " + wire.from.rid + ")";
+    } else {
+      str += "Operation " + wire.from_op.rid + " (fv " + wire.from.rid + ")";
+    }
+
+    str += " --> "
+
+    if ( wire.to_module ) {
+      str += "Module " + wire.to_module.id + " (io " + wire.to.rid + ")";
+    } else {
+      str += "Operation " + wire.to_op.rid + " (fv " + wire.to.rid + ")";
+    }
+
+    return str;
+
+  }
+
+  get from_obj() {
+    return this.from_module ? this.from_module : this.from_op;    
+  }
+
+  get to_obj() {
+    return this.to_module ? this.to_module : this.to_op;    
+  }  
+
 }
+
