@@ -33,7 +33,7 @@
       <span>{{category}}</span>
     </md-header>
 
-    <ul class='compact-list' 
+    <ul class='compact-list'
         style="margin-left: 28px"
         ng-if="state.current_category == category">
       <li ng-repeat="ot in operation_types | filter: { category: category } | orderBy:'name'">

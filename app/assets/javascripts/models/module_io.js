@@ -57,4 +57,13 @@ class ModuleIO {
     return this.y;
   }  
 
+  get is_param() {
+    var io = this;
+    if ( io.destinations && io.destinations.length > 0 ) {
+      return io.destinations[0].io;
+    } else {
+      return null;
+    }
+  }
+
 }

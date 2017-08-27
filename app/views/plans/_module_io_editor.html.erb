@@ -12,11 +12,16 @@
 <!-- INPUTS -->
 
 <div ng-repeat="input in current_draggable.input">
-  <div ng-if="input.destinations.length > 0" 
+  <div ng-if="input.destinations.length > 0 && input.destinations[0].io.ftype == 'sample'" 
        ng-init="fv = input.destinations[0].io; current_op = input.destinations[0].op" 
        class="io-container">
     <%= render partial: 'field_value_input' %>
   </div>
+  <div ng-if="input.destinations.length > 0 && input.destinations[0].io.ftype != 'sample'" 
+       ng-init="fv = input.destinations[0].io; current_op = input.destinations[0].op" 
+       class="io-container">
+    <%= render partial: 'parameter_input' %>    
+  </div>  
 </div>
 
 

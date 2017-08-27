@@ -97,4 +97,19 @@ function PlanClasses($scope,$http,$attrs,$cookies,$sce,$window) {
     return c;
   }
 
+  $scope.parameter_io_class = function(io) {
+
+    var c = "parameter";
+
+    var fv = null,
+        op = null;
+
+    if ( io.destinations && io.destinations.length > 0 ) {
+      fv = io.destinations[0].io;
+      op = io.destinations[0].op;
+    }
+
+    return $scope.parameter_class(op,fv);
+  }  
+
 }
