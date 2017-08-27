@@ -5,7 +5,16 @@ AQ.Plan.record_methods.paste_plan = function (p) {
   plan.past_module(p);  
   aq.each(plan.operations, op => op.multiselect = false);
   aq.each(p.operations, op => plan.paste_operation(op));
-  plan.wires = plan.wires.concat(p.wires);
+  // plan.wires = plan.wires.concat(p.wires);
+
+  aq.each(p.wires, w => {
+    delete w.id;
+    delete w.from_id;
+    delete w.to_id;
+    delete w.parent_id;
+    plan.wires.push(w);
+    console.log(w);
+  });
 
   return plan;
 
