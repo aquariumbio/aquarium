@@ -259,7 +259,11 @@
     }
 
     $scope.paste_plan = function(plan) {
+      var temp1 = Module.next_module_id,
+          temp2 = ModuleIO.next_io_id;
       AQ.Plan.load(plan.id).then(p => {
+        Module.next_module_id = temp1;
+        ModuleIO.next_io_id = temp2;
         $scope.plan.paste_plan(p);
         $scope.$apply();
       })

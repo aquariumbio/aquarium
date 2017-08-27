@@ -60,9 +60,9 @@ class ModuleIO {
   get is_param() {
     var io = this;
     if ( io.destinations && io.destinations.length > 0 ) {
-      return io.destinations[0].io;
+      return io.destinations[0].io.field_type.ftype != 'sample';
     } else {
-      return null;
+      return false;
     }
   }
 

@@ -51,6 +51,7 @@ class Module {
 
   get next_id() {
     if ( !this.constructor.next_module_id ) {
+      console.log("Resetting Module.next_id to zero")
       this.constructor.next_module_id = 0;
     }
     return this.constructor.next_module_id;
@@ -261,8 +262,10 @@ class Module {
     if ( wires.length > 0 ) {
 
       for ( w in wires ) {
-        // console.log("destinations: io " + io.id + " is the start of wire " + wires[w].from.rid + " ---> " + wires[w].to.rid);
-        results = results.concat(module.destinations(wires[w].to, wires[w].to_op));
+        if ( io.id ) { // not sure why this is needed, but it prevents an inf loop
+                       // when modularizig a selection in an unsaved plan.
+          results = results.concat(module.destinations(wires[w].to, wires[w].to_op));
+        }
       }
    
     } else {
@@ -314,6 +317,42 @@ class Module {
       // console.log("" + io.rid + ". origin: " + (io.origin ? io.origin.io.rid : null) + 
       //                           ", destinations: [" +  aq.collect(io.destinations, d => d.io.rid).join(", ") + "]");
 
+    });
+
+  }
+
+  renumber() {
+
+    var module = this,
+        old_id = module.id;
+
+    module.id = module.next_id;
+    module.inc_next_id();        
+
+    if ( !this.constructor.id_map ) this.constructor.id_map = []
+    this.constructor.id_map[old_id] = module.id;
+
+    aq.each(this.input.concat(this.output), io => {
+      io.id = ModuleIO.next_io_id;
+      io.inc_next_id();
+    });
+
+    aq.each(module.children, child => {
+      child.parent_id = module.id;
+      child.renumber();
+    })
+
+  }
+
+  merge(new_module) {
+
+    var module = this;
+
+    module.wires = module.wires.concat(new_module.wires);
+
+    aq.each(new_module.children, new_child => {
+      new_child.parent_id = module.id;
+      module.children.push(new_child);
     });
 
   }

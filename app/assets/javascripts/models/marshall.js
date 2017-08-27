@@ -152,7 +152,7 @@ AQ.Plan.record_methods.marshall_layout = function() {
   
   var plan = this;
 
-  Module.next_module_id = 0;
+  Module.next_module_id = 0; 
   ModuleIO.next_io_id = 0;
 
   if ( plan.layout ) {
