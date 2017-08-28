@@ -100,7 +100,7 @@ AQ.Plan.record_methods.add_module_wires_from_real = function(new_module) {
   var plan = this,
       current = plan.current_module;
 
-  aq.each_in_reverse(plan.wires, w => {
+  aq.each(plan.wires, w => {
 
     if ( w.from_op.parent_id == current.id && w.to_op.parent_id == new_module.id ) {
       var new_io = new_module.add_input();
@@ -112,7 +112,7 @@ AQ.Plan.record_methods.add_module_wires_from_real = function(new_module) {
 
   });
 
-  aq.each(plan.wires, w => {  
+  aq.each(plan.wires, w => {
 
     if ( w.from_op.parent_id == new_module.id && w.to_op.parent_id == current.id ) {
       var new_io = new_module.add_output();

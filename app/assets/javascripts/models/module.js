@@ -237,40 +237,41 @@ class Module {
         wire = aq.find(this.all_wires, w => io.id == w.to.id);
 
     if ( wire ) {
-      // console.log("origin: io " + io.id + " is the end of wire " + wire.from.rid + " ---> " + wire.to.rid)
+      // console.log("A: origin: io " + io.id + " is the end of wire " + wire.from.rid + " ---> " + wire.to.rid)
       if ( wire.from.record_type == "FieldValue" ) {
         result = { io: wire.from, op: wire.from_op };
       } else {
         result = module.origin(wire.from);
       }
     } else {
-      result = { io: io, op: null }
+      result = { io: {}, op: {} }
     }
 
     return result;
 
   }
 
-  destinations(io,op=null) {
+  destinations_aux(io,op=null) {
 
     var results = [],
         module = this,
         wires = aq.where(this.all_wires, w => io.id == w.from.id);
 
-        // console.log(["destinations", io, module])
-
     if ( wires.length > 0 ) {
 
+      console.log(["destinations", io, module, wires])      
+
       for ( w in wires ) {
-        if ( io.id ) { // not sure why this is needed, but it prevents an inf loop
-                       // when modularizig a selection in an unsaved plan.
-          results = results.concat(module.destinations(wires[w].to, wires[w].to_op));
+        if ( !wires[w].marked ) { // not sure why this is needed, but it prevents an inf loop
+                                  // when modularizig a selection in an unsaved plan.
+          wires[w].marked = true;
+          results = results.concat(module.destinations_aux(wires[w].to, wires[w].to_op));
         }
       }
    
     } else {
 
-      results = [{ io: io, op: op }]
+      results = [{io: io, op: op}]
 
     }
 
@@ -278,14 +279,27 @@ class Module {
 
   } 
 
+  destinations(io,op) {
+    aq.each(this.all_wires, w => delete w.marked);
+    return this.destinations_aux(io,op);
+  }
+
   get io() {
     return this.input.concat(this.output);
   }
 
-  get all_io() {
-    var io_list = this.input.concat(this.output);
+  get all_input() {
+    var io_list = this.input;
     for ( var c in this.children ) {
-      io_list = io_list.concat(this.children[c].all_io);
+      io_list = io_list.concat(this.children[c].all_input);
+    }
+    return io_list;
+  }
+
+  get all_output() {
+    var io_list = this.output;
+    for ( var c in this.children ) {
+      io_list = io_list.concat(this.children[c].all_output);
     }
     return io_list;
   }
@@ -299,25 +313,35 @@ class Module {
 
   associate_fvs() {
 
-    var module = this;
+    var module = this, 
+        dests,
+        origin;
 
-    aq.each(this.all_io, io => {
+    aq.each(module.all_input, io => {
 
-      var origin = module.origin(io),
-          dests = module.destinations(io);
-
-      if ( origin.io.record_type == "FieldValue" ) {
-        io.origin = origin;
-      }
+      dests = module.destinations(io);
 
       io.destinations = aq.where(dests, d => d.io.record_type == "FieldValue");
 
-      // console.log(["assocaite_fvs", io.destinations])
-
-      // console.log("" + io.rid + ". origin: " + (io.origin ? io.origin.io.rid : null) + 
-      //                           ", destinations: [" +  aq.collect(io.destinations, d => d.io.rid).join(", ") + "]");
+      console.log("associate_fvs: " + io.rid + ". origin: " + (io.origin ? io.origin.io.rid : null) + 
+                ", destinations: [" +  aq.collect(io.destinations, d => d.io.rid).join(", ") + "]");
 
     });
+
+    aq.each(module.all_output, io => {
+
+      origin = module.origin(io);
+
+      if ( origin.io.record_type == "FieldValue" ) {
+        io.origin = origin;
+      } else {
+        io.origin = null;
+      }
+
+      console.log("associate_fvs: " + io.rid + ". origin: " + (io.origin ? io.origin.io.rid : null) + 
+                ", destinations: [" +  aq.collect(io.destinations, d => d.io.rid).join(", ") + "]");
+
+    });  
 
   }
 

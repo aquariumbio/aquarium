@@ -722,7 +722,7 @@ AQ.Plan.record_methods.add_wire = function(from, from_op, to, to_op) {
     }
   } else if ( to.field_type.can_produce(from) ) {
     if ( ! this.reachable(from,to) ) {
-      this.wires.push(Wire.make({
+      this.wires.push(AQ.Wire.make({
         to_op: from_op,
         to: from,
         from_op: to_op,

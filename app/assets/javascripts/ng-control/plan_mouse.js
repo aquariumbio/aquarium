@@ -33,12 +33,17 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
  $scope.multiselect = {};
 
+ $scope.clear_multiselect = function() {
+   all_draggable(obj => obj.multiselect = false);
+   $scope.multiselect = {};
+ }
+
  // Global mouse events ////////////////////////////////////////////////////////////////////////
 
  $scope.mouseDown = function(evt) {
 
     $scope.select(null);
-    all_draggable(obj => obj.multiselect = false);
+    $scope.clear_multiselect();
 
     $scope.multiselect = {
       x: evt.offsetX,

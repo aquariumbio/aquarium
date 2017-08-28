@@ -32,12 +32,9 @@ AQ.Plan.record_methods.connect_aux = function(io1, object1, io2, object2) {
 
   var plan = this;
 
-  // if ( !plan.is_wired_to(io2) ) {
-    plan.current_module.connect(io1, object1, io2, object2);
-    plan.base_module.associate_fvs();
-  // } else {
-  //   console.log("Fan in not allowed");
-  // }
+  plan.current_module.connect(io1, object1, io2, object2);
+  plan.base_module.associate_fvs();
+
 }
 
 AQ.Plan.record_methods.connect = function(io1, object1, io2, object2) {

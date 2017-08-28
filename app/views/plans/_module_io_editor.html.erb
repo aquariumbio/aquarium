@@ -1,7 +1,7 @@
 
 <!-- OUTPUTS -->
 
-<div ng-repeat="output in current_draggable.output">
+<div ng-repeat="output in current_draggable.output track by $index">
   <div ng-if="output.origin.io"
        ng-init="fv = output.origin.io; current_op = output.origin.op" 
        class="io-container">
@@ -11,13 +11,13 @@
 
 <!-- INPUTS -->
 
-<div ng-repeat="input in current_draggable.input">
-  <div ng-if="input.destinations.length > 0 && input.destinations[0].io.ftype == 'sample'" 
+<div ng-repeat="input in current_draggable.input track by $index">
+  <div ng-if="input.destinations.length > 0 && input.destinations[0].io.field_type.ftype == 'sample'" 
        ng-init="fv = input.destinations[0].io; current_op = input.destinations[0].op" 
        class="io-container">
-    <%= render partial: 'field_value_input' %>
+       <%= render partial: 'field_value_input' %>
   </div>
-  <div ng-if="input.destinations.length > 0 && input.destinations[0].io.ftype != 'sample'" 
+  <div ng-if="input.destinations.length > 0 && input.destinations[0].io.field_type.ftype != 'sample'" 
        ng-init="fv = input.destinations[0].io; current_op = input.destinations[0].op" 
        class="io-container">
     <%= render partial: 'parameter_input' %>    
