@@ -106,4 +106,7 @@ AQ.Wire.record_getters.arrowhead = function() {
 
 }
 
+AQ.Wire.record_getters.to_s = function() {
+  return "" + this.from.rid + "->" + this.to.rid;
+}
 

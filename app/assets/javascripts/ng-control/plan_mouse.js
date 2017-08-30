@@ -213,13 +213,18 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
     } else if ( $scope.current_wire && $scope.current_wire.record_type == "ModuleWire" ) {
 
+      var old_wires = $scope.plan.get_implied_wires();
       $scope.plan.current_module.remove_wire($scope.current_wire);
+
       $scope.current_wire = null;      
       $scope.plan.base_module.associate_fvs();
+
+      $scope.plan.delete_obsolete_wires(old_wires);
 
     } else if ( $scope.current_draggable && !$scope.current_fv ) {
 
       $scope.delete_object($scope.current_draggable);
+      $scope.plan.update_wires();
 
     } else if ( $scope.multiselect ) {
 

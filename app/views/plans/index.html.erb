@@ -13,7 +13,7 @@
 
 <% content_for :specific_title do %>
   <span ng-if="plan.current_module.id !=0" 
-        ng-repeat="mod_name in plan.path_to_current_module()">
+        ng-repeat="mod_name in plan.path_to_current_module() track by $index">
     &rang; {{mod_name}}
   </span>
 <% end %>
@@ -171,6 +171,11 @@
         </div>
         <div ng-if="current_draggable && current_draggable.record_type == 'Module'">
           <%= render partial: 'module_io_editor' %>
+        </div>
+        <div ng-if="current_draggable && current_draggable.record_type == 'ModuleIO'">
+          {{current_draggable.origin.io.record_type|json}}<br>
+          origin: {{current_draggable.origin.io.rid}}<br>
+          destinations: <span ng-repeat="d in current_draggable.destinations">{{d.io.rid}} </span>
         </div>
       </inner>
     </div>   

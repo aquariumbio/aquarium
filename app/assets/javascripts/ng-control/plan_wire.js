@@ -34,6 +34,7 @@ AQ.Plan.record_methods.connect_aux = function(io1, object1, io2, object2) {
 
   plan.current_module.connect(io1, object1, io2, object2);
   plan.base_module.associate_fvs();
+  plan.add_implied_wires();
 
 }
 
@@ -93,6 +94,87 @@ AQ.Plan.record_methods.connect = function(io1, object1, io2, object2) {
     }
 
   }
+
+}
+
+AQ.Plan.record_methods.wire_equiv = function(wire1, wire2) {
+
+  var r = wire1.from.rid == wire2.from.rid && wire1.to.rid == wire2.to.rid;
+  return r;
+}
+
+
+AQ.Plan.record_methods.wire_in_set = function(wires, wire) {
+
+  var rval = false;
+
+  aq.each(wires, w => {
+    if ( plan.wire_equiv(w, wire) ) rval = true;
+  });
+
+  return rval;
+
+}
+
+AQ.Plan.record_methods.get_implied_wires = function() {
+
+  var plan = this, wires_from_modules = [];
+
+  aq.each(plan.base_module.all_io, io => {
+    if ( io.origin ) {
+      aq.each(io.destinations, d => {
+        wires_from_modules.push(AQ.Wire.record({
+          from: io.origin.io,
+          from_op: io.origin.op,
+          to: d.io,
+          to_op: d.op
+        }));
+      })
+    }
+  });
+
+  return wires_from_modules;
+
+}
+
+AQ.Plan.record_methods.add_implied_wires = function() {
+
+  var plan = this,
+      wires_from_modules = plan.get_implied_wires(),
+      wires_to_add = [],
+      wires_to_delete = [];
+
+  wires_to_add = aq.where(wires_from_modules, w => !plan.wire_in_set(plan.wires, w));
+  plan.wires = plan.wires.concat(wires_to_add);
+
+  console.log("Added " + wires_to_add.length + " wires");
+
+}
+
+AQ.Plan.record_methods.delete_obsolete_wires = function(old_wires) {
+
+  var plan = this, 
+      new_wires = plan.get_implied_wires(),
+      wires_to_delete = [];
+
+  aq.each(plan.wires, w => {
+    if ( plan.wire_in_set(old_wires,w) && !plan.wire_in_set(new_wires,w) ) {
+      wires_to_delete.push(w);
+    }
+  })
+
+  aq.each(wires_to_delete, w => aq.remove(plan.wires,w));
+
+  console.log("Deleted " + wires_to_delete.length + " wires");  
+
+}
+
+AQ.Plan.record_methods.associated_wires = function(io) {
+
+  var plan = this,
+      dests = aq.collect(io.destinations, d => d.io);
+
+  return aq.where(plan.wires, w => io.origin && w.from == io.origin.io && dests.includes(w.to));
 
 }
 

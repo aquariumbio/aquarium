@@ -30,6 +30,11 @@
       $scope.current_wire   = object && ( object.record_type == "Wire" || 
                                           object.record_type == "ModuleWire" ) ? object : null;
 
+      if ( $scope.current_io && $scope.current_io.record_type == "ModuleIO" ) {
+        console.log($scope.plan)
+        console.log($scope.plan.associated_wires($scope.current_io));
+      }
+
     }
 
     function refresh_plan_list() {

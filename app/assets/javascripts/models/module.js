@@ -255,7 +255,7 @@ class Module {
 
     var results = [],
         module = this,
-        wires = aq.where(this.all_wires, w => io.id == w.from.id);
+        wires = aq.where(this.all_wires, w => io.rid == w.from.rid);
 
     if ( wires.length > 0 ) {
 
@@ -288,6 +288,14 @@ class Module {
     return this.input.concat(this.output);
   }
 
+  get all_io() {
+    var io_list = this.io;
+    for ( var c in this.children ) {
+      io_list = io_list.concat(this.children[c].all_io);
+    }
+    return io_list;
+  }  
+
   get all_input() {
     var io_list = this.input;
     for ( var c in this.children ) {
@@ -317,18 +325,18 @@ class Module {
         dests,
         origin;
 
-    aq.each(module.all_input, io => {
+    aq.each(module.all_io, io => {
 
       dests = module.destinations(io);
 
       io.destinations = aq.where(dests, d => d.io.record_type == "FieldValue");
 
-      console.log("associate_fvs: " + io.rid + ". origin: " + (io.origin ? io.origin.io.rid : null) + 
-                ", destinations: [" +  aq.collect(io.destinations, d => d.io.rid).join(", ") + "]");
+      // console.log("associate_fvs: " + io.rid + ". origin: " + (io.origin ? io.origin.io.rid : null) + 
+      //           ", destinations: [" +  aq.collect(io.destinations, d => d.io.rid).join(", ") + "]");
 
     });
 
-    aq.each(module.all_output, io => {
+    aq.each(module.all_io, io => {
 
       origin = module.origin(io);
 
@@ -338,8 +346,8 @@ class Module {
         io.origin = null;
       }
 
-      console.log("associate_fvs: " + io.rid + ". origin: " + (io.origin ? io.origin.io.rid : null) + 
-                ", destinations: [" +  aq.collect(io.destinations, d => d.io.rid).join(", ") + "]");
+      // console.log("associate_fvs: " + io.rid + ". origin: " + (io.origin ? io.origin.io.rid : null) + 
+      //           ", destinations: [" +  aq.collect(io.destinations, d => d.io.rid).join(", ") + "]");
 
     });  
 
