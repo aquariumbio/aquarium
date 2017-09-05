@@ -119,9 +119,11 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
     } else {
 
+      $scope.select(null);
       $scope.select(obj);
 
       all_draggable(d=>d.multiselect=false);
+
       $scope.current_draggable.drag = {
         localX: evt.offsetX - obj.x, 
         localY: evt.offsetY - obj.y

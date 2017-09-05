@@ -16,6 +16,8 @@
 
       $scope.state.launch = false;
 
+      console.log(object);
+
       $scope.current_draggable = object && ( object.record_type == "Operation" ||
                                              object.record_type == "Module" ||
                                              object.record_type == "ModuleIO" ) ? object : null;
@@ -42,7 +44,7 @@
       var selected_fv_rid;
       $scope.current_io = io;
 
-      console.log("Setting current_io", io, focus)
+      console.log("Setting current_io", io, focus,role)
 
       if ( io.record_type == "FieldValue" ) {
 
@@ -469,6 +471,31 @@
     }
 
   });  
- 
 
+  w.directive('fieldValueForm', function() {
+
+    return {
+
+      restrict: 'E',
+      scope: { io: '=', op: '=', role: '=', cfv: '=', plan: "=", setiomethod: '='},
+      replace: true,
+      template: $('#field-value-form').html()
+
+    }
+
+  });    
+
+  w.directive('parameterForm', function() {
+
+    return {
+
+      restrict: 'E',
+      scope: { cfv: '=', io: "=", setiomethod: '='},
+      replace: true,
+      template: $('#parameter-form').html()
+
+    }
+
+  });   
+ 
 })();                    

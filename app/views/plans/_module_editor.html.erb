@@ -51,7 +51,7 @@
     <!-- Parameter -->
     <rect ng-if="input.is_param"
           ng-attr-class="{{parameter_io_class(input)}}"
-          ng-attr-x="{{module.width/2 - ($index - module.output.length/2.0+0.5)*snap-5}}"
+          ng-attr-x="{{module.width/2 + ($index - module.input.length/2.0+0.5)*snap-5}}"
           ng-mousedown="ioMouseDown($event, module, input)" 
           ng-attr-y="{{module.height-5}}" width="10" height="10" /> 
 

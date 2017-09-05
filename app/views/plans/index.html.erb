@@ -6,6 +6,8 @@
 <%= render partial: '/data_associations/template' %> 
 <%= render partial: "/items/template" %>
 <%= render partial: 'launch_plan' %>  
+<%= render partial: 'field_value_form' %>
+<%= render partial: 'parameter_form' %>
 
 <% content_for :controller do %>planCtrl<% end %>
 <% content_for :class do %>plans launcher<% end %>
