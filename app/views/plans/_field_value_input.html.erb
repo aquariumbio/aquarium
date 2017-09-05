@@ -6,7 +6,7 @@
   </div>
 
   <div flex="10">
-    {{fv.name}}, {{fv.rid}}
+    {{fv.name}}: {{fv.rid}}
   </div>
 
   <div flex="80">
@@ -17,9 +17,8 @@
            type='string'       
            placeholder="{{current_op.form[fv.field_type.role][fv.name].aft.object_type.name}}"
            ng-attr-id="{{'fv-'+fv.rid}}"
-           ng-focus="set_current_fv(fv)"
+           ng-focus="set_current_io(io,false,role)"
            ng-model="current_op.routing[fv.field_type.routing]"
-           ng-class="fv.items.length != 0 ? 'items-in-stock' : ''"
            ng-if="fv.field_type.ftype == 'sample' && !fv.field_type.array && 
                   current_op.form[fv.field_type.role][fv.name].aft.sample_type_id">
 
@@ -30,9 +29,8 @@
            placeholder="{{current_op.form[fv.field_type.role][fv.name].aft.object_type.name}}"
            id="sample-io"
            ng-attr-id="{{'fv-'+fv.rid}}"
-           ng-focus="set_current_fv(fv)"           
+           ng-focus="set_current_io(io,false,role)"           
            ng-model="fv.sample_identifier"
-           ng-class="fv.items.length != 0 ? 'items-in-stock' : ''"
            ng-if="fv.field_type.ftype == 'sample' &&  fv.field_type.array && 
                   current_op.form[fv.field_type.role][fv.field_type.name].aft.sample_type_id">
 
@@ -46,7 +44,7 @@
 
   <div flex="5" class="array-remove-container">
       <a href="#"  ng-if="fv.field_type.array" 
-       ng-click="current_op.array_remove(fv); remove_orphan_wires(fv)">&times;</a>
+         ng-click="current_op.array_remove(fv); remove_orphan_wires(fv)">&times;</a>
   </div>  
 
 </div>

@@ -1,8 +1,11 @@
 
 <!-- OUTPUTS -->
 
-<div ng-repeat="tv in current_op.types_and_values | filter: { role: 'output' }"" ng-if="!operation.closed">
-  <div ng-if="!tv.array_add_button" ng-init="fv = tv.value" class="io-container">
+<div ng-repeat="tv in current_op.types_and_values | filter: { role: 'output' }"" 
+     ng-if="!operation.closed">
+  <div ng-if="!tv.array_add_button"
+       ng-init="fv = tv.value; io = tv.value"
+       class="io-container">
     <%= render partial: 'field_value_input' %>
   </div>
   <div ng-if="tv.array_add_button" layout="row" class="io-container">
@@ -20,13 +23,21 @@
 
 <!-- INPUTS -->
 
-<div ng-repeat="tv in current_op.types_and_values | filter: { role: 'input' }" ng-if="!operation.closed">
-  <div ng-if="!tv.array_add_button && tv.type.ftype != 'sample'" ng-init="fv = tv.value" class="io-container">
+<div ng-repeat="tv in current_op.types_and_values | filter: { role: 'input' }" 
+     ng-if="!operation.closed">
+
+  <div ng-if="!tv.array_add_button && tv.type.ftype != 'sample'" 
+       ng-init="fv = tv.value; io=fv.value"
+       class="io-container">
     <%= render partial: 'parameter_input' %>
   </div>
-  <div ng-if="!tv.array_add_button && tv.type.ftype == 'sample'" ng-init="fv = tv.value" class="io-container">
+
+  <div ng-if="!tv.array_add_button && tv.type.ftype == 'sample'" 
+       ng-init="fv = tv.value; io=tv.value" 
+       class="io-container">
     <%= render partial: 'field_value_input' %>
   </div>
+
   <div ng-if="tv.array_add_button" layout="row" class="io-container">
     <div flex="5"></div>
     <div flex="10">{{tv.type.name}}</div>
@@ -37,6 +48,7 @@
       </a>
     </div>
   </div>
+
 </div>
 
 <div ng-if="operation.operation_type.num_inputs() > 0 && !operation.closed"
@@ -47,5 +59,10 @@
 
 <!-- NO SELECTON -->
 
-<div ng-if="!current_op" class='io-container' disabled="true" layout-padding>No operation selected</div>
+<div ng-if="!current_op" 
+     class='io-container' 
+     disabled="true" 
+     layout-padding>
+  No operation selected
+</div>
 

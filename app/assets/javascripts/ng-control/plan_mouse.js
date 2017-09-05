@@ -29,7 +29,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
   function snap(obj) {
     obj.x = Math.floor((obj.x+AQ.snap/2) / AQ.snap) * AQ.snap;
     obj.y = Math.floor((obj.y+AQ.snap/2) / AQ.snap) * AQ.snap;      
-  }  
+  }
 
  $scope.multiselect = {};
 
@@ -165,24 +165,35 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
   // Field Value Events ///////////////////////////////////////////////////////////////////////
 
-  $scope.ioMouseDown = function(evt,obj,io) {
+  $scope.ioMouseDown = function(evt,obj,io,role) {
 
     all_draggable(d=>d.multiselect=false);
 
     if ( $scope.current_io && evt.shiftKey ) { // There is an io already selected, so make a wire
-      $scope.connect($scope.current_io, $scope.current_draggable, io, obj);
-    } else {
-      $scope.select(obj);
-      $scope.set_current_io(io,true);
-    }
 
-    if ( io.record_type == "ModuleIO" ) {
-      console.log(io)
-      console.log("origin: " +       $scope.plan.base_module.origin(io).io.rid);
-      console.log("destinations: [" + aq.collect($scope.plan.base_module.destinations(io), d => d.io.rid).join(", ") + "]");
-      if ( io.origin && io.origin.io ) $scope.current_fv = io.origin.io;
-      else if ( io.destinations.length > 0 ) $scope.current_fv = io.destinations[0].io;
-      console.log(["current_fv", $scope.current_fv])
+      $scope.connect($scope.current_io, $scope.current_draggable, io, obj);
+
+    } else {
+
+      if ( io.record_type == "FieldValue" ) {
+      
+        $scope.select(obj);
+        $scope.set_current_io(io,true);
+
+      } else if ( io.record_type == "ModuleIO" ) {
+
+        $scope.current_draggable = obj;
+        $scope.current_op = null;
+
+        console.log("ioMouseDown", obj,io,role)
+
+        if ( ( io.origin && io.origin.io ) || io.destinations.length > 0 ) {
+          $scope.set_current_io(io,true,role);
+        }
+
+      }
+
+
     }
 
     evt.stopImmediatePropagation();
@@ -192,7 +203,6 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
   // Wire Events ////////////////////////////////////////////////////////////////////////////////
 
   $scope.wireMouseDown = function(evt, wire) {
-    console.log(["mouse", wire])
     $scope.select(wire);
     evt.stopImmediatePropagation();
   }  

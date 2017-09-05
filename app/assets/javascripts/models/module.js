@@ -51,7 +51,7 @@ class Module {
 
   get next_id() {
     if ( !this.constructor.next_module_id ) {
-      console.log("Resetting Module.next_id to zero")
+      // console.log("Resetting Module.next_id to zero")
       this.constructor.next_module_id = 0;
     }
     return this.constructor.next_module_id;
@@ -176,7 +176,7 @@ class Module {
   }
 
   input_pin_x(io) {
-    return this.x + this.width/2 - 
+    return this.x + this.width/2 +
            (this.index_of_input(io) - this.input.length/2.0 + 0.5) * AQ.snap;
   }
 
@@ -185,7 +185,7 @@ class Module {
   }  
 
   output_pin_x(io) {
-    return this.x + this.width/2 - 
+    return this.x + this.width/2 +
            (this.index_of_output(io) - this.output.length/2.0 + 0.5) * AQ.snap;
   }
 
@@ -259,7 +259,7 @@ class Module {
 
     if ( wires.length > 0 ) {
 
-      console.log(["destinations", io, module, wires])      
+      // console.log(["destinations", io, module, wires])      
 
       for ( w in wires ) {
         if ( !wires[w].marked ) { // not sure why this is needed, but it prevents an inf loop

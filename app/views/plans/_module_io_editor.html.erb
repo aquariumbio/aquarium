@@ -1,9 +1,11 @@
 
+<h1 class="md-body-2">{{current_draggable.name}}</h1>
+
 <!-- OUTPUTS -->
 
 <div ng-repeat="output in current_draggable.output track by $index">
   <div ng-if="output.origin.io"
-       ng-init="fv = output.origin.io; current_op = output.origin.op" 
+       ng-init="fv = output.origin.io; current_op = output.origin.op; io=output; role='output'" 
        class="io-container">
     <%= render partial: 'field_value_input' %>
   </div>
@@ -13,15 +15,13 @@
 
 <div ng-repeat="input in current_draggable.input track by $index">
   <div ng-if="input.destinations.length > 0 && input.destinations[0].io.field_type.ftype == 'sample'" 
-       ng-init="fv = input.destinations[0].io; current_op = input.destinations[0].op" 
+       ng-init="fv = input.destinations[0].io; current_op = input.destinations[0].op; io = input; role='input'" 
        class="io-container">
        <%= render partial: 'field_value_input' %>
   </div>
   <div ng-if="input.destinations.length > 0 && input.destinations[0].io.field_type.ftype != 'sample'" 
-       ng-init="fv = input.destinations[0].io; current_op = input.destinations[0].op" 
+       ng-init="fv = input.destinations[0].io; current_op = input.destinations[0].op; io = input; role='input'" 
        class="io-container">
     <%= render partial: 'parameter_input' %>    
   </div>  
 </div>
-
-

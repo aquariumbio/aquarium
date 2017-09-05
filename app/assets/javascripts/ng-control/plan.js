@@ -30,12 +30,45 @@
       $scope.current_wire   = object && ( object.record_type == "Wire" || 
                                           object.record_type == "ModuleWire" ) ? object : null;
 
-      if ( $scope.current_io && $scope.current_io.record_type == "ModuleIO" ) {
-        console.log($scope.plan)
-        console.log($scope.plan.associated_wires($scope.current_io));
-      }
+      // if ( $scope.current_io && $scope.current_io.record_type == "ModuleIO" ) {
+      //   console.log($scope.plan)
+      //   console.log($scope.plan.associated_wires($scope.current_io));
+      // }
 
     }
+
+    $scope.set_current_io = function(io,focus,role) {
+
+      var selected_fv_rid;
+      $scope.current_io = io;
+
+      console.log("Setting current_io", io, focus)
+
+      if ( io.record_type == "FieldValue" ) {
+
+        $scope.current_fv = io;
+        selected_fv_rid = io.rid;
+
+      } else if ( io.record_type == "ModuleIO" ) {
+        if ( io.origin && role == 'output' ) {
+          $scope.current_fv = io.origin.io;
+          selected_fv_rid = $scope.current_fv.rid;
+        }
+        if ( io.destinations.length > 0 && role == 'input' ) {
+          $scope.current_fv = io.destinations[0].io;
+          selected_fv_rid = $scope.current_fv.rid;
+        }
+      }
+
+      if ( focus ) { 
+        setTimeout(function() { 
+          var el = document.getElementById('fv-'+selected_fv_rid);
+          console.log("selected_fv = " + selected_fv_rid);
+          if ( el ) { el.focus() }
+        }, 100);
+      }
+
+    }    
 
     function refresh_plan_list() {
       AQ.Plan.where({status: "planning", user_id: $scope.current_user.id}).then(plans => { 
@@ -97,22 +130,6 @@
       }
 
     }    
-
-    $scope.set_current_io = function(io,focus) {
-
-      $scope.current_io = io;
-
-      if ( io.record_type == "FieldValue" ) {
-        $scope.current_fv = io;
-      }
-      if ( focus ) { 
-        setTimeout(function() { 
-          var el = document.getElementById('fv-'+io.rid);
-          if ( el ) { el.focus() }
-        }, 30);
-      }
-
-    }
 
     $scope.note = function(msg) {
       console.log(msg);
