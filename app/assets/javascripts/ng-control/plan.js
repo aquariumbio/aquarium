@@ -127,7 +127,7 @@
             newop = $scope.plan.add_wire_from(fv,op,pred);
 
         newop.x = module.x;
-        newop.y = module.y + 4 * AQ.snap;
+        newop.y = module.y + 6 * AQ.snap;
         newop.width = 160;
         newop.height = 30;
         newop.parent_id = $scope.plan.current_module.id;

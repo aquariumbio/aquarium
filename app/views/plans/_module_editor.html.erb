@@ -65,6 +65,10 @@
     {{module.name}} <!--, id={{module.id}}, {{module.parent_id}}, {{plan.current_module.id}} -->
   </text>
 
+  <text ng-attr-x="{{0}}" y="-4" class='op-cost'>
+    {{module.cost|currency}}
+  </text>  
+
 </g>
 
 <!-- Current Module Innards -->

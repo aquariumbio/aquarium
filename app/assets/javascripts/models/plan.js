@@ -156,6 +156,8 @@ AQ.Plan.record_methods.estimate_cost = function() {
         });
       });
 
+      plan.base_module.compute_cost(plan);
+
       plan.estimating = false;
 
     });
@@ -191,7 +193,7 @@ AQ.Plan.record_getters.costs = function() {
           }
         }
       })
-    })
+    });
 
   });
 

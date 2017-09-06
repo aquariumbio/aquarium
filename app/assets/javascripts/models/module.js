@@ -389,4 +389,26 @@ class Module {
 
   }
 
+  compute_cost(plan) {
+
+    var module = this;
+
+    console.log("Computing cost");
+
+    module.cost = 0;
+
+    aq.each(module.children,child => {
+      module.cost += child.compute_cost(plan);
+    });
+
+    aq.each(plan.operations, op => {
+      if ( op.parent_id == module.id ) {
+        module.cost += op.cost;
+      }
+    })
+
+    return module.cost;
+
+  }
+
 }
