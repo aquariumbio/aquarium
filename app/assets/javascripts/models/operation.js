@@ -158,7 +158,7 @@ AQ.Operation.record_methods.assign_sample = function(fv,sid) {
     fv.sample_identifier = sid;
   } 
 
-  op.recompute_getter("types_and_values")
+  op.recompute_getter("types_and_values")  
 
   return op;
 

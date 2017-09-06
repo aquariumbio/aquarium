@@ -396,7 +396,12 @@
 
       $scope.plan.save().then(saved_plan => {
         $scope.plan = saved_plan;
-        $scope.plan.estimate_cost(); 
+        if ( $scope.plan.valid() ) {
+          $scope.plan.estimate_cost(); 
+        } else {
+          $scope.state.launch = false;
+          $scope.state.message = "Could not launch plan, because one or more inputs or outputs was found to be not valid after saving";
+        }
       });
       
     }

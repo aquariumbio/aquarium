@@ -142,11 +142,8 @@ class Module {
     var module = this,
         old_wires = plan.get_implied_wires();
 
-    console.log("" + old_wires.length + " implied wires")
-
     child.remove_child_operations(plan);
     aq.remove(this.children, child);
-    // console.log([child, this.wires])
     this.wires = aq.where(this.wires, w => w.from_module != child && w.to_module != child);
 
     plan.delete_obsolete_wires(old_wires);

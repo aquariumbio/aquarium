@@ -25,6 +25,8 @@
 
           var sid = ui.item.value;
 
+          console.log(sid)
+
           op.assign_sample(fv, sid);
 
           // send new sid to i/o of other operations
@@ -80,6 +82,23 @@
               source: AQ.sample_names_for(name),
 
               select: autocomp,
+
+              // change: () => console.log("change"),
+              // // close: () => console.log("close"),
+              // create: () => console.log("create"),
+              // focus: () => console.log("focus"),                            
+              // open: () => console.log("open"),                            
+              // response: () => console.log("response"),                            
+              // search: () => console.log("search"),                                                                      
+
+              // close: function(event, ui) { 
+              //   console.log("close",ui)
+              //   if ( !ui.item && $($element) != "" ) {
+              //     alert($($element).val() + " is not a valid sample id / name for field " + fv.name);
+              //     $($element).val("")
+              //   }
+
+              // },
 
               open: function(event, ui) {
               

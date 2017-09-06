@@ -79,7 +79,7 @@ module Marshall
       op[:field_values].each do |fv|
         self.field_value operation, fv, op[:routing]
       end
-    end    
+    end
 
     # for each field value in operation, delete it if it is not in x
     operation.field_values.each do |fv|
@@ -123,6 +123,13 @@ module Marshall
     end
 
     ft = op.operation_type.type(fv[:name],fv[:role])
+
+    aft = AllowableFieldType.find_by_id(fv[:allowable_field_type_id])
+    sample = Sample.find_by_id(sid)
+
+    if aft && ( !sample || aft.sample_type_id != sample.sample_type_id )
+      sid = nil
+    end
 
     atts =  { name: fv[:name],
         role: fv[:role], 
