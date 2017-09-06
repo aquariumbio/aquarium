@@ -117,28 +117,79 @@ class Module {
     return this.inputs.length;
   }
 
+
   remove_child_operations(plan) {
-    var module = this;
+
+    var module = this,
+        ops = aq.where(plan.operations, op => op.parent_id == module.id);
+
+    plan.wires = aq.where(plan.wires, w => {
+      var remove = ops.includes(w.to_op) || ops.includes(w.from_op);
+      if ( remove ) {
+        w.disconnect();
+      }              
+      return !remove;
+    });
+
     plan.operations = aq.where(plan.operations, op => op.parent_id != module.id);
+
     aq.each(module.children, c => c.remove_child_operations(plan));
+
   }
 
   remove(child,plan) {
+
+    var module = this,
+        old_wires = plan.get_implied_wires();
+
+    console.log("" + old_wires.length + " implied wires")
+
     child.remove_child_operations(plan);
     aq.remove(this.children, child);
     // console.log([child, this.wires])
     this.wires = aq.where(this.wires, w => w.from_module != child && w.to_module != child);
+
+    plan.delete_obsolete_wires(old_wires);
+    module.associate_fvs();
+    plan.recount_fv_wires();
+
   }
 
-  remove_io(io) {
-    aq.remove(this.input, io);
-    aq.remove(this.output, io);
-    this.wires = aq.where(this.wires, w => w.from != io && w.to != io);
+  remove_io(io, plan) {
+
+    var module = this,
+        old_wires = plan.get_implied_wires();
+
+    plan.base_module.remove_wires_connected_to(io);
+
+    aq.remove(module.input, io);
+    aq.remove(module.output, io);    
+
+    plan.delete_obsolete_wires(old_wires);
+    module.associate_fvs();
+    plan.recount_fv_wires();    
+
+  }
+
+  remove_wires_connected_to(io) {
+
+    var module = this;  
+    var old_wires = plan.get_implied_wires();
+
+    module.wires = aq.where(module.wires, w => w.from != io && w.to != io);
+    aq.each(module.children, c => c.remove_wires_connected_to(io));
+
+    plan.delete_obsolete_wires(old_wires);
+    module.associate_fvs();
+    plan.recount_fv_wires();    
+
   }
 
   remove_operation(op) {
     this.wires = aq.where(this.wires, w => w.from_op != op && w.to_op != op);
   }
+
+
 
   index_of_input(io) {
     return this.input.indexOf(io);

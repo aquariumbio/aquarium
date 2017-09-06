@@ -37,6 +37,7 @@ AQ.Plan.record_methods.connect_aux = function(io1, object1, io2, object2) {
   plan.current_module.connect(io1, object1, io2, object2);
   plan.base_module.associate_fvs();
   plan.add_implied_wires();
+  plan.recount_fv_wires();
 
 }
 

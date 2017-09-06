@@ -426,6 +426,7 @@
     $scope.delete_object = function(obj) {
 
       if ( obj.record_type == "Operation" ) {
+
         aq.remove($scope.plan.operations, obj);                               
         $scope.plan.wires = aq.where($scope.plan.wires, w => {
           var remove = w.to_op == obj || w.from_op == obj;
@@ -436,20 +437,27 @@
         });
         $scope.plan.current_module.remove_operation(obj);
         $scope.current_op = null;
+
       } else if ( obj.record_type == "Module" ) {
+
          var confirm = $mdDialog.confirm()
           .title('Delete Module?')
-          .textContent("Do you really want to delete the module \"" + obj.name + "\" and all of its contents?")
+          .textContent("Do you really want to delete the module \"" + obj.name + 
+                        "\" and all of its contents?")
           .ariaLabel('Delete')
           .ok('Yes')
           .cancel('No');
+
         $mdDialog.show(confirm).then( 
           () => $scope.plan.current_module.remove(obj,$scope.plan),
-          () => null);
+          () => null
+        );
 
-      } else if ( obj.record_type == "ModuleIO" ) {        
-        $scope.plan.current_module.remove_io(obj);
-      }
+      } else if ( obj.record_type == "ModuleIO" ) {   
+
+        $scope.plan.current_module.remove_io(obj, $scope.plan);
+
+      } 
 
     }
 

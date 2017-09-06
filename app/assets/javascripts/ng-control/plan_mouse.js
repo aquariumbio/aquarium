@@ -60,7 +60,8 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
     if ( $scope.current_draggable && $scope.current_draggable.drag && !$scope.current_fv 
         // && the current draggable is not the module containing on of its selected io block
-        && ! ( $scope.current_draggable.record_type == "Module" && $scope.current_draggable.io.includes($scope.current_io) )
+        && ! ( $scope.current_draggable.record_type == "Module" && 
+               $scope.current_draggable.io.includes($scope.current_io) )
         ) {
 
       $scope.current_draggable.x = evt.offsetX - $scope.current_draggable.drag.localX;
@@ -187,8 +188,6 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
         $scope.current_draggable = obj;
         $scope.current_op = null;
 
-        // console.log("ioMouseDown", obj,io,role)
-
         if ( ( io.origin && io.origin.io ) || io.destinations.length > 0 ) {
           $scope.set_current_io(io,true,role);
         }
@@ -202,7 +201,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
   }    
 
-  // Wire Events ////////////////////////////////////////////////////////////////////////////////
+  // Wire Events //////////////////////////////////////////////////////////////////////////
 
   $scope.wireMouseDown = function(evt, wire) {
     $scope.select(wire);
@@ -222,6 +221,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
       $scope.plan.remove_wire($scope.current_wire);
       $scope.current_wire = null;
+      $scope.plan.base_module.associate_fvs();
 
     } else if ( $scope.current_wire && $scope.current_wire.record_type == "ModuleWire" ) {
 
@@ -230,13 +230,12 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
       $scope.current_wire = null;      
       $scope.plan.base_module.associate_fvs();
-
       $scope.plan.delete_obsolete_wires(old_wires);
+      $scope.plan.recount_fv_wires();
 
     } else if ( $scope.current_draggable && !$scope.current_fv ) {
 
       $scope.delete_object($scope.current_draggable);
-      $scope.plan.update_wires();
 
     } else if ( $scope.multiselect ) {
 

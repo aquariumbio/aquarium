@@ -754,3 +754,22 @@ AQ.Plan.record_methods.num_wires_into = function(io) {
   return plan.num_plan_wires_into(io) + plan.num_module_wires_into(io);
 
 }
+
+AQ.Plan.record_methods.recount_fv_wires = function() {
+
+  var plan = this;
+
+  aq.each(plan.operations, op => {
+    aq.each(op.field_values, fv => {
+      fv.num_wires = 0;
+    })
+  })  
+
+  aq.each(plan.wires, w => {
+    w.from.num_wires++;
+    w.to.num_wires++;
+  })
+
+
+
+}
