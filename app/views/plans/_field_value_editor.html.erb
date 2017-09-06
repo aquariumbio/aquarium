@@ -52,7 +52,7 @@
           <span ng-if="current_fv.wired || current_fv.role == 'output'">(Not Used in Plan)</span>
         </md-subheader>
 
-        <md-list class='md-compact-list' ng-if="!current_fv.items[0].collection"> <!-- ITEMS ////////////////// -->
+        <md-list class='md-compact-list' ng-if="!current_fv.items[0].collection"> <!-- ITEMS //////// -->
 
           <md-list-item class="md-compact" 
             ng-repeat="item in current_fv.items" 
@@ -73,7 +73,7 @@
 
         </md-list>
 
-        <md-list ng-if="current_fv.items[0].collection"> <!-- COLLECTIONS ///////////////////////////////////// -->
+        <md-list ng-if="current_fv.items[0].collection"> <!-- COLLECTIONS ////////////////////////// -->
 
           <!-- Note that current_fv.items  in this case contains a list of collection containers each with
                a collection field that holds the actual collection item. Should probably be refactored.  -->

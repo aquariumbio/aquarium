@@ -12,7 +12,7 @@
         ng-class="current_fv.field_type.preferred_operation_type_id == suc.operation_type.id ? 
                  'md-raised md-primary md-secondary md-button-in-list' :
                  'md-raised md-secondary md-button-in-list'"
-        ng-click="add_successor(current_fv,current_op,suc)">
+        ng-click="add_successor(current_io,current_draggable,suc)">
           <md-tooltip md-direction="bottom">
             Use {{suc.operation_type.name}} from {{suc.operation_type.category}} to produce {{current_fv.name}}
           </md-tooltip>
@@ -25,6 +25,7 @@
 </div>
 
 
-<md-subheader class="md-no-sticky" ng-if="current_fv.is_sample && current_fv.successors.length == 0">
+<md-subheader class="md-no-sticky" 
+              ng-if="current_fv.is_sample && current_fv.successors.length == 0">
   No Applicable Successors
 </md-subheader>

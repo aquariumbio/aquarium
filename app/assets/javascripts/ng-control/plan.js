@@ -16,7 +16,7 @@
 
       $scope.state.launch = false;
 
-      console.log(object);
+      // console.log(object);
 
       $scope.current_draggable = object && ( object.record_type == "Operation" ||
                                              object.record_type == "Module" ||
@@ -44,7 +44,7 @@
       var selected_fv_rid;
       $scope.current_io = io;
 
-      console.log("Setting current_io", io, focus,role)
+      // console.log("Setting current_io", io, focus,role)
 
       if ( io.record_type == "FieldValue" ) {
 
@@ -65,7 +65,7 @@
       if ( focus ) { 
         setTimeout(function() { 
           var el = document.getElementById('fv-'+selected_fv_rid);
-          console.log("selected_fv = " + selected_fv_rid);
+          // console.log("selected_fv = " + selected_fv_rid);
           if ( el ) { el.focus() }
         }, 100);
       }
@@ -97,38 +97,101 @@
       }
     }
 
-    $scope.add_predecessor = function(fv,op,pred) {
+    $scope.add_predecessor = function(io,obj,pred) {
 
-      var newop = $scope.plan.add_wire_from(fv,op,pred);
-      $scope.plan.wires[$scope.plan.wires.length-1].snap = AQ.snap;
-      newop.x = op.x;
-      newop.y = op.y + 4*AQ.snap;
-      newop.width = 160;
-      newop.height = 30;
-      newop.parent_id = $scope.plan.current_module.id;
+      if ( obj.record_type == "Operation" && io.record_type == "FieldValue" ) {
 
-      $scope.select(newop);
-      var inputs = aq.where(newop.field_values, fv => fv.role == 'input');
-      if ( inputs.length > 0 ) {
-        $scope.set_current_io(inputs[0]);
+        var op = obj,
+            fv = io,
+            newop = $scope.plan.add_wire_from(fv,op,pred);
+
+        newop.x = op.x;
+        newop.y = op.y + 4 * AQ.snap;
+        newop.width = 160;
+        newop.height = 30;
+        newop.parent_id = $scope.plan.current_module.id;
+
+        $scope.select(newop);
+
+        var inputs = aq.where(newop.field_values, fv => fv.role == 'input');
+
+        if ( inputs.length > 0 ) {
+          $scope.set_current_io(inputs[0]);
+        }
+
+      } else if ( obj.record_type == "Module" && io.record_type == "ModuleIO" )  {
+
+        var module = obj,
+            fv = io.destinations[0].io,
+            op = io.destinations[0].op,
+            newop = $scope.plan.add_wire_from(fv,op,pred);
+
+        newop.x = module.x;
+        newop.y = module.y + 4 * AQ.snap;
+        newop.width = 160;
+        newop.height = 30;
+        newop.parent_id = $scope.plan.current_module.id;
+
+        $scope.select(newop);
+
+        $scope.connect(newop.output(pred.output.name),newop,io,module);
+
+        var inputs = aq.where(newop.field_values, fv => fv.role == 'input');
+
+        if ( inputs.length > 0 ) {
+          $scope.set_current_io(inputs[0]);
+        }
+
       }
 
     }
 
-    $scope.add_successor = function(fv,op,suc) {
+    $scope.add_successor = function(io,obj,suc) {
 
-      var newop = $scope.plan.add_wire_to(fv,op,suc);
-      $scope.plan.wires[$scope.plan.wires.length-1].snap = AQ.snap;
-      newop.x = op.x;
-      newop.y = op.y - 4*AQ.snap;
-      newop.width = 160;
-      newop.height = 30;
-      newop.parent_id = $scope.plan.current_module.id;
+      if ( obj.record_type == "Operation" && io.record_type == "FieldValue" ) {      
 
-      $scope.select(newop);
-      var fvs = aq.where(newop.field_values, fv => fv.role == 'output');
-      if ( fvs.length > 0 ) {
-        $scope.set_current_io(fvs[0]);
+        var op = obj,
+            fv = io,
+            newop = $scope.plan.add_wire_to(fv,op,suc);
+
+        $scope.plan.wires[$scope.plan.wires.length-1].snap = AQ.snap;
+        newop.x = op.x;
+        newop.y = op.y - 4*AQ.snap;
+        newop.width = 160;
+        newop.height = 30;
+        newop.parent_id = $scope.plan.current_module.id;
+
+        $scope.select(newop);
+
+        var fvs = aq.where(newop.field_values, fv => fv.role == 'output');
+        if ( fvs.length > 0 ) {
+          $scope.set_current_io(fvs[0]);
+        }
+
+      } else if ( obj.record_type == "Module" && io.record_type == "ModuleIO" )  {
+
+        var module = obj,
+            fv = io.origin.io,
+            op = io.origin.op,
+            newop = $scope.plan.add_wire_to(fv,op,suc);
+
+          $scope.plan.wires[$scope.plan.wires.length-1].snap = AQ.snap;
+          newop.x = module.x;
+          newop.y = module.y - 4*AQ.snap;
+          newop.width = 160;
+          newop.height = 30;
+          newop.parent_id = $scope.plan.current_module.id;
+
+          $scope.select(newop);
+
+          $scope.connect(io,module,newop.input(suc.input.name),newop);          
+          
+          var fvs = aq.where(newop.field_values, fv => fv.role == 'output');
+          if ( fvs.length > 0 ) {
+            $scope.set_current_io(fvs[0]);
+          }
+
+
       }
 
     }    
@@ -477,7 +540,7 @@
     return {
 
       restrict: 'E',
-      scope: { io: '=', op: '=', role: '=', cfv: '=', plan: "=", setiomethod: '='},
+      scope: { io: '=', op: '=', role: '=', cfv: '=', plan: "=", setiomethod: '=', first: "="},
       replace: true,
       template: $('#field-value-form').html()
 
@@ -490,7 +553,7 @@
     return {
 
       restrict: 'E',
-      scope: { cfv: '=', io: "=", setiomethod: '='},
+      scope: { cfv: '=', io: "=", setiomethod: '=', first: "="},
       replace: true,
       template: $('#parameter-form').html()
 

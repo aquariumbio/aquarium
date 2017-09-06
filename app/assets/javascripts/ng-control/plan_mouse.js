@@ -187,7 +187,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
         $scope.current_draggable = obj;
         $scope.current_op = null;
 
-        console.log("ioMouseDown", obj,io,role)
+        // console.log("ioMouseDown", obj,io,role)
 
         if ( ( io.origin && io.origin.io ) || io.destinations.length > 0 ) {
           $scope.set_current_io(io,true,role);

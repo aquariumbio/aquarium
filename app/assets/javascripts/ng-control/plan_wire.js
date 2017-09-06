@@ -32,6 +32,8 @@ AQ.Plan.record_methods.connect_aux = function(io1, object1, io2, object2) {
 
   var plan = this;
 
+  console.log("connect_aux",io1, object1, io2, object2)
+
   plan.current_module.connect(io1, object1, io2, object2);
   plan.base_module.associate_fvs();
   plan.add_implied_wires();
@@ -60,6 +62,7 @@ AQ.Plan.record_methods.connect = function(io1, object1, io2, object2) {
 
     if ( object1.parent_id != object2.parent_id ) {                                           // 12, 13, 21, or 31
 
+
       if ( object1.record_type == "Module" && object2.record_type == "Module" ) {             // 12 or 21
 
         if ( object2.parent_id == object1.id ) {                                              // 12
@@ -83,6 +86,7 @@ AQ.Plan.record_methods.connect = function(io1, object1, io2, object2) {
       }
 
     } else {                                                                                   // 11, 22, 23, 32
+
 
       if ( object1 == object2 ) {                                                              // 11
         console.log("Cannot connect io ports within the same module.")

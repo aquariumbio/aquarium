@@ -3,12 +3,12 @@
   <div layout="row">
 
     <div flex="5">
-      <div class="io-type" ng-if="$first && cfv.role == 'input'">in:&nbsp;&nbsp;&nbsp;</div>
-      <div class="io-type" ng-if="$first && cfv.role == 'output'">out:&nbsp;&nbsp;&nbsp;</div>    
+      <div class="io-type" ng-if="first && cfv.role == 'input'">in:&nbsp;&nbsp;&nbsp;</div>
+      <div class="io-type" ng-if="first && cfv.role == 'output'">out:&nbsp;&nbsp;&nbsp;</div>    
     </div>
 
     <div flex="10">
-      {{cfv.name}}: {{cfv.rid}}
+      {{cfv.name}}
     </div>
 
     <div flex="80">
