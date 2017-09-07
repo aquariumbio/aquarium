@@ -2,51 +2,64 @@ AQ.Plan.record_methods.paste_plan = function (p) {
 
   var plan = this;
 
-  plan.clear_paste_map();
+  plan.past_module(p);  
   aq.each(plan.operations, op => op.multiselect = false);
   aq.each(p.operations, op => plan.paste_operation(op));
-  aq.each(p.wires, w => plan.paste_wire(w));
-  delete plan.paste_map;
+  // plan.wires = plan.wires.concat(p.wires);
+
+  aq.each(p.wires, w => {
+    delete w.id;
+    delete w.from_id;
+    delete w.to_id;
+    delete w.parent_id;
+    plan.wires.push(w);
+    console.log(w);
+  });
 
   return plan;
 
 }
 
-AQ.Plan.record_methods.clear_paste_map = function () {
+AQ.Plan.record_methods.past_module = function(p) {
 
-  var plan = this;
+  var plan = this, 
+      module_id_map;
 
-  plan.paste_map = {
-    operations: [],    
-    field_values: []
-  }
+  Module.id_map = [];
 
-  return plan;
+  p.base_module.renumber();
+  aq.each(p.base_module.children, c => c.multiselect = true);
+  plan.current_module.merge(p.base_module);
+
+  Module.id_map[0] = plan.current_module.id;  
+
+  aq.each(p.operations, op => {
+    op.parent_id = Module.id_map[op.parent_id];
+  });
 
 }
 
 AQ.Plan.record_methods.paste_operation = function(op) {
 
   var plan = this,
-      new_op = AQ.Operation.record(op);
+      new_op = op;
 
   delete new_op.id;
-  delete new_op.field_values;
   new_op.multiselect = true;
 
-  plan.paste_map.operations[op.rid] = new_op;
-
-  new_op.field_values = aq.collect(op.field_values, fv => {
-    var new_fv = AQ.FieldValue.record(fv);
-    delete new_fv.id;
-    delete new_fv.parent_id;
-    plan.paste_map.field_values[fv.rid] = new_fv;
-    return new_fv;
+  aq.each(new_op.field_values, fv => {
+    delete fv.child_item_id;
+    delete fv.row;
+    delete fv.column
+    delete fv.id;
+    delete fv.parent_id;
+    fv.recompute_getter("items");
+    return fv;
   });
 
   new_op.recompute_getter("types_and_values");
   new_op.recompute_getter("inputs");
-  // new_op.recompute_getter("outputs");
+  new_op.recompute_getter("outputs");
 
   plan.operations.push(new_op);
 
@@ -54,21 +67,3 @@ AQ.Plan.record_methods.paste_operation = function(op) {
 
 }
 
-AQ.Plan.record_methods.paste_wire = function(wire) {
-
-  var plan = this,
-      new_wire;
-
-  new_wire = AQ.Wire.record({
-    to_op: plan.paste_map.operations[wire.to_op.rid],
-    to: plan.paste_map.field_values[wire.to.rid],
-    from_op: plan.paste_map.operations[wire.from_op.rid],
-    from: plan.paste_map.field_values[wire.from.rid],
-    snap: wire.snap
-  });
-
-  plan.wires.push(new_wire);
-
-  return plan;
-
-}

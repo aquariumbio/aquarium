@@ -1,21 +1,44 @@
+<script type="text/ng-template" id="planner-cursor-template">
+  <circle class="field-value field-value-selection"
+          ng-attr-cx="{{x}}" 
+          ng-attr-cy="{{y}}">
+      <animate
+          attributeName="stroke"
+          values="#000;#fff;#000"
+          dur="0.8s"
+          repeatCount="indefinite">
+       </animate>                         
+  </circle>   
+</script>
+
 <svg class="plan-editor"
      xmlns="http://www.w3.org/2000/svg"
      ng-mousedown="mouseDown($event)"
      ng-mousemove="mouseMove($event)"
      ng-mouseup="mouseUp($event)">
 
-  <g ng-repeat="wire in plan.wires track by $index">
+  <!-- PLAN WIRES -->
+
+  <g ng-repeat="wire in plan.wires track by $index" ng-if="plan.visible(wire)">
     <%= render partial: 'wire' %>
   </g>    
 
+  <!-- MODULE WIRES -->
+
+  <g ng-repeat="wire in plan.current_module.wires">
+    <%= render partial: 'wire' %>    
+  </g>
+
+  <!-- OPERATIONS -->
   <g ng-repeat="op in plan.operations" 
+     ng-if="plan.visible(op)"
      ng-attr-transform="translate({{op.x}}, {{op.y}})">    
 
     <rect ng-attr-width="{{op.width}}" ng-attr-height="{{op.height}}"
           ng-attr-class="{{op_class(op)}}"
-          ng-mousedown="opMouseDown($event, op)" 
-          ng-mouseup="opMouseUp($event, op)" 
-          ng-mousemove="opMouseMove($event, op)"/>
+          ng-mousedown="draggableMouseDown($event, op)" 
+          ng-mouseup="draggableMouseUp($event, op)" 
+          ng-mousemove="draggableMouseMove($event, op)"/>
 
     <text ng-attr-x="{{op.width/2}}" y="20" class='op-name'>
       {{op.operation_type.name}}
@@ -30,35 +53,27 @@
     <g ng-repeat="fv in outputs = ( op.field_values | filter: { role: 'output' } ) track by $index">
 
       <!-- Name -->
-      <rect ng-if="fv == current_fv"
+      <rect ng-if="fv == current_io && fv == current_fv"
             ng-attr-x="{{op.width/2 + ($index - outputs.length/2.0 + 0.5)*snap + 4}}"
             ng-attr-y="{{-20}}" width="80" height="14" fill-opacity="0.6" fill="white" />                
 
       <text ng-attr-x="{{op.width/2 + ($index - outputs.length/2.0 + 0.5)*snap + 4}}"  
             y="-10"
-            ng-if="fv == current_fv"
+            ng-if="fv == current_io && fv == current_fv"
             class="field-name-help">
         {{fv.name}}
       </text>    
 
       <!-- Cursor -->
-      <circle ng-if="fv == current_fv && fv.field_type.ftype == 'sample'"
-              class="field-value field-value-selection"
-              ng-attr-cx="{{op.width/2 + ($index - outputs.length/2.0 + 0.5)*snap}}" 
-              cy="0">
-          <animate
-              attributeName="stroke"
-              values="#000;#fff;#000"
-              dur="0.8s"
-              repeatCount="indefinite">
-           </animate>                         
-      </circle>
+      <planner-cursor ng-if="fv == current_io && fv == current_fv && fv.field_type.ftype == 'sample'"
+           x="op.width/2 + ($index - outputs.length/2.0 + 0.5)*snap" 
+           y="0"/>
 
       <!-- IO -->
       <circle ng-attr-class="{{io_class(op,fv)}}"
               ng-if="fv.field_type.ftype == 'sample'"
               ng-attr-cx="{{op.width/2 + ($index - outputs.length/2.0 + 0.5)*snap}}" 
-              ng-mousedown="fvMouseDown($event, op, fv)" 
+              ng-mousedown="ioMouseDown($event, op, fv)" 
               cy="0" />
 
     </g>
@@ -68,43 +83,35 @@
     <g ng-repeat="tv in inputs = ( op.types_and_values | filter: { role: 'input', array_add_button: '!true' } ) track by $index">
 
       <!-- Name -->
-      <rect ng-if="tv.value == current_fv"
+      <rect ng-if="tv.value == current_io && tv.value == current_fv"
             ng-attr-x="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap + 7}}"
             ng-attr-y="{{op.height+8}}" width="80" height="14" fill-opacity="0.6" fill="white"/>
 
       <text ng-attr-x="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap + 8}}"  
             ng-attr-y="{{op.height+18}}"
-            ng-if="tv.value == current_fv"
+            ng-if="tv.value == current_io && tv.value == current_fv"
             class="field-name-help">
         {{tv.value.name}}
       </text>
 
       <!-- Cursor -->
-      <circle ng-if="tv.value == current_fv"
-              class="field-value field-value-selection"
-              ng-attr-cx="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap}}" 
-              ng-attr-cy="{{op.height}}">
-          <animate
-              attributeName="stroke"
-              values="#000;#fff;#000"
-              dur="0.8s"
-              repeatCount="indefinite">
-           </animate>              
-      </circle>    
+      <planner-cursor ng-if="tv.value == current_io && tv.value == current_fv"
+              x="op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap" 
+              y="op.height"/>
 
       <!-- IO -->
       <circle ng-attr-class="{{io_class(op,tv.value)}}"
               ng-if="tv.value.field_type.ftype == 'sample'"
               ng-attr-cx="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap}}" 
-              ng-mousedown="fvMouseDown($event, op, tv.value)" 
+              ng-mousedown="ioMouseDown($event, op, tv.value)" 
               ng-attr-cy="{{op.height}}" 
               ng-attr-data-name="{{tv.value.name}}" />
-
+       
       <!-- Parameter -->
       <rect ng-if="tv.value.field_type.ftype != 'sample' && !tv.array_add_button"
             ng-attr-class="{{parameter_class(op,tv.value)}}"
             ng-attr-x="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap - 5}}"
-            ng-mousedown="fvMouseDown($event, op, tv.value)" 
+            ng-mousedown="ioMouseDown($event, op, tv.value)" 
             ng-attr-y="{{op.height-5}}" width="10" height="10"
             ng-attr-data-name="{{tv.value.name}}" />
 
@@ -120,4 +127,7 @@
         ng-attr-width="{{multiselect_width()}}"
         ng-attr-height="{{multiselect_height()}}"/>
 
+  <%= render partial: "module_editor" %>
+
 </svg>
+

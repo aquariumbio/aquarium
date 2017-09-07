@@ -8,31 +8,20 @@
     <md-list-item ng-repeat="pred in current_fv.predecessors" 
                   ng-if="pred.operation_type.id != current_op.operation_type.id"
                   style="padding: 1px 16px 1px 16px">
-      <p><b>{{pred.operation_type.name}} {{asd}}</b></p>
+      <p><b>{{pred.operation_type.name}}</b></p>
       <md-button 
         ng-class="current_fv.field_type.preferred_operation_type_id == pred.operation_type.id ? 
                  'md-raised md-primary md-secondary md-button-in-list' :
                  'md-raised md-secondary md-button-in-list'"
-        ng-click="add_predecessor(current_fv,current_op,pred)">
+        ng-click="add_predecessor(current_io,current_draggable,pred)">
           <md-tooltip md-direction="bottom">
-            Use {{pred.operation_type.name}} from {{pred.operation_type.category}} to produce {{current_fv.name}}
+            Use {{pred.operation_type.name}} 
+            from {{pred.operation_type.category}} 
+            to produce {{current_fv.name}}
           </md-tooltip>
           Add
       </md-button>
     </md-list-item>
-
-    <md-divider style="margin: 2px"></md-divider>
-
-    <!-- 
-    <md-list-item>
-      <p></p>
-      <md-button 
-        class="md-raised md-small md-warn" 
-        ng-disabled="current_fv.backchaining"
-        ng-click="current_fv.backchain(plan,current_op)">
-          Auto
-      </md-button>
-    </md-list-item> -->
 
   </md-list>
 
@@ -46,6 +35,7 @@
 
 </div>
 
-<md-subheader class="md-no-sticky" ng-if="current_fv.is_sample && current_fv.predecessors.length == 0">
+<md-subheader class="md-no-sticky"
+              ng-if="current_fv.is_sample && current_fv.predecessors.length == 0">
   No Applicable Predecessors
 </md-subheader>

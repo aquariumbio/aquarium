@@ -17,7 +17,7 @@ class Operation < ActiveRecord::Base
   has_many :plan_associations
   has_many :plans, through: :plan_associations
 
-  attr_accessible :status, :user_id, :x, :y
+  attr_accessible :status, :user_id, :x, :y, :parent_id
 
   def virtual?
     false

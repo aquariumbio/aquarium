@@ -31,6 +31,8 @@ AQ.Record = function(model,data) {
 
   }
 
+  model.record_getters.record_type = function() { return this.model.model }
+
   for ( var method_name in model.record_getters ) {
 
     Object.defineProperty(

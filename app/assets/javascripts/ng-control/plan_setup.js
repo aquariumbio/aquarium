@@ -5,7 +5,9 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
   AQ.confirm = (msg) => { return confirm(msg); }
   AQ.sce = $sce;
 
-  $scope.snap = 16;
+  AQ.snap = 16;
+  $scope.snap = AQ.snap;
+  
   $scope.last_place = 0;
   $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
 

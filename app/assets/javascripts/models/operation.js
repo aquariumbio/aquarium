@@ -158,7 +158,7 @@ AQ.Operation.record_methods.assign_sample = function(fv,sid) {
     fv.sample_identifier = sid;
   } 
 
-  op.recompute_getter("types_and_values")
+  op.recompute_getter("types_and_values")  
 
   return op;
 
@@ -487,4 +487,23 @@ AQ.Operation.record_methods.set_status = function(status) {
 
 }
 
+AQ.Operation.record_methods.input_pin_x = function(fv) {
+  return this.x + this.width/2 + (fv.index - this.num_inputs/2.0 + 0.5)*AQ.snap;
+}
 
+AQ.Operation.record_methods.input_pin_y = function(fv) {
+  return this.y + this.height;
+}
+
+
+AQ.Operation.record_methods.output_pin_x = function(fv) {
+  return this.x + this.width/2 + (fv.index - this.num_outputs/2.0 + 0.5)*AQ.snap;  
+}
+
+AQ.Operation.record_methods.output_pin_y = function(fv) {
+  return this.y;
+}
+
+AQ.Operation.record_methods.role = function(fv) {
+  return fv.role;
+}

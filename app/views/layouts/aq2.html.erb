@@ -110,9 +110,11 @@
 
       <div class="content-container" layout="column" tabIndex="-1" flex>
 
-        <md-toolbar class="specific-toolbar not-scrollable">
+        <md-toolbar class="specific-toolbar not-scrollable" 
+                    <% if content_for? :no_specific_padding %>style="padding-right: 0px !important" <% end %> >
 
-          <div class="md-toolbar-tools">
+          <div class="md-toolbar-tools" 
+               <% if content_for? :no_specific_padding %>style="padding-right: 0px !important" <% end %> >
 
             <h2 flex md-truncate>
               <%= yield :title %>

@@ -113,6 +113,16 @@ Aq.prototype.each = function(array,f) {
   return this;
 }
 
+Aq.prototype.each_in_reverse = function(array,f) {
+
+  if ( array ) {
+    for ( var i=array.length-1; i>=0; i-- ) {
+      f(array[i],i);
+    }
+  }
+  return this;
+}
+
 Aq.prototype.uniq = function(array) {
 
   var result = [];

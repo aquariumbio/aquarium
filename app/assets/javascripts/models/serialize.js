@@ -2,7 +2,7 @@ AQ.Plan.record_methods.serialize = function() {
 
   var plan = this, ops;
 
-  return {
+  p = {
     id: plan.id,
     operations: aq.collect(plan.operations, op => op.serialize() ),
     wires: aq.collect(plan.wires, w => w.serialize() ),
@@ -10,8 +10,47 @@ AQ.Plan.record_methods.serialize = function() {
     status: plan.status,
     cost_limit: plan.cost_limit,
     name: plan.name,
-    rid: plan.rid
+    rid: plan.rid,
+    layout: plan.serialize_module(plan.base_module)
   }
+
+  console.log(["Serialized Plan", p]);
+
+  return p;
+
+}
+
+AQ.Plan.record_methods.serialize_module = function(m) {
+
+  var plan = this,
+      props = [ "id", "parent_id", "name", "x", "y", "width", "height", "model", "input", "output" ],
+      sm = {};
+
+  for ( var p in props ) {
+    sm[props[p]] = m[props[p]];
+  }
+
+  sm.input  = aq.collect(m.input, i => plan.serialize_module_io(i));
+  sm.output = aq.collect(m.output, o => plan.serialize_module_io(o));  
+
+  sm.children = aq.collect(m.children, c => plan.serialize_module(c));
+  sm.wires = aq.collect(m.wires, w => w.serialize())
+
+  return sm;
+
+}
+
+AQ.Plan.record_methods.serialize_module_io = function(io) {
+
+  var plan = this,
+      props = [ "id", "x", "y", "width", "height", "model" ],
+      sio = {};
+
+  for ( var p in props ) {
+    sio[props[p]] = io[props[p]];
+  }  
+  
+  return sio;
 
 }
 
@@ -37,7 +76,8 @@ AQ.Operation.record_methods.serialize = function() {
     x: op.x,
     y: op.y,
     routing: op.routing,
-    rid: op.rid
+    rid: op.rid,
+    parent_id: op.parent_id
   };
 
 }
