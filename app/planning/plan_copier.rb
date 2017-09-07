@@ -15,6 +15,12 @@ class PlanCopier
     copy_ops
     copy_wires
 
+    @base_module = JSON.parse @plan.layout, symbolize_names: true
+
+    port_module_wires @base_module
+    @new_plan.layout = @base_module.to_json
+    @new_plan.save
+
     @new_plan
 
   end
@@ -63,6 +69,30 @@ class PlanCopier
     @plan.wires.each do |wire|
       new_wire = Wire.new from_id: @fv_map[wire.from_id], to_id: @fv_map[wire.to_id]
       new_wire.save
+    end
+
+  end
+
+  def port_module_wires m
+
+    if m[:wires]
+      m[:wires].each do |wire|
+        if wire[:from][:record_type] == "FieldValue"
+          print "#{wire[:from][:id]} => "
+          wire[:from][:id] = @fv_map[wire[:from][:id]]
+          puts " to #{wire[:from][:id]}"
+        end
+        if wire[:to][:record_type] == "FieldValue"
+          wire[:to][:id] = @fv_map[wire[:to][:id]]
+          puts "Changed to"
+        end
+      end
+    end
+
+    if m[:children]
+      m[:children].each do |child|
+        port_module_wires child
+      end
     end
 
   end

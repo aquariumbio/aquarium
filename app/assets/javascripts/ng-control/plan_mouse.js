@@ -305,6 +305,11 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
         if ( evt.ctrlKey ) $scope.add_module_input();
         break;
 
+      case "S":
+      case "s":
+        if ( evt.ctrlKey ) $scope.save($scope.plan);
+        break;
+
       default:
 
     }

@@ -400,7 +400,8 @@
           $scope.plan.estimate_cost(); 
         } else {
           $scope.state.launch = false;
-          $scope.state.message = "Could not launch plan, because one or more inputs or outputs was found to be not valid after saving";
+          $scope.state.message = "Could not launch plan, because one or more inputs " + 
+                                 "or outputs was found to be invalid after saving.";
         }
       });
       
