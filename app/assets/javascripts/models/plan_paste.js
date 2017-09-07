@@ -48,8 +48,12 @@ AQ.Plan.record_methods.paste_operation = function(op) {
   new_op.multiselect = true;
 
   aq.each(new_op.field_values, fv => {
+    delete fv.child_item_id;
+    delete fv.row;
+    delete fv.column
     delete fv.id;
     delete fv.parent_id;
+    fv.recompute_getter("items");
     return fv;
   });
 

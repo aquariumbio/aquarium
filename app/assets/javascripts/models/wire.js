@@ -18,7 +18,8 @@ AQ.Wire.record_methods.consistent = function() {
   var wire = this;
 
   return wire.to.aft.sample_type_id == wire.from.aft.sample_type_id && 
-         wire.to.aft.object_type_id == wire.from.aft.object_type_id;
+         wire.to.aft.object_type_id == wire.from.aft.object_type_id &&
+         wire.to_op.routing[wire.to.routing] == wire.from_op.routing[wire.from.routing];
         
 }
 

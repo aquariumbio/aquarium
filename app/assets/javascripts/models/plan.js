@@ -654,6 +654,18 @@ AQ.Plan.record_getters.state = function() {
 
 }
 
+AQ.Plan.record_methods.find_items = function() {
+
+  var plan = this;
+
+  aq.each(plan.operations, op => {
+    aq.each(op.field_values, fv => {
+      fv.recompute_getter("items")
+    })
+  })
+
+}
+
 AQ.Plan.record_methods.replan = function() {
 
   var plan = this;

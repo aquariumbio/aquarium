@@ -62,7 +62,7 @@
   </g>
 
   <text ng-attr-x="{{module.width/2}}" y="35" class='module-name'>
-    {{module.name}} <!--, id={{module.id}}, {{module.parent_id}}, {{plan.current_module.id}} -->
+    {{module.name}}({{module.id}},{{module.parent_id}},{{plan.current_module.id}})
   </text>
 
   <text ng-attr-x="{{0}}" y="-4" class='op-cost'>
@@ -94,7 +94,7 @@
     <text ng-attr-x="{{output.width/2}}"
           ng-attr-y="{{output.height/2+6}}"
           class="module-io-index">
-          {{$index}}
+          {{$index}}:{{output.id}}
     </text>
 
     <planner-cursor ng-if="output == current_io" x="output.width/2"  y="output.height"/>                 
@@ -120,7 +120,7 @@
     <text ng-attr-x="{{input.width/2}}"
           ng-attr-y="{{input.height/2+6}}"
           class="module-io-index">
-          {{$index}}
+          {{$index}}:{{input.id}}
     </text>                 
 
     <planner-cursor ng-if="input == current_io" x="input.width/2"  y="0"/>  

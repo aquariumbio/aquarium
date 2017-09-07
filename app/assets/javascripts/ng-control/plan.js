@@ -334,6 +334,7 @@
     function load_aux(plan) {
       AQ.Plan.load(plan.id).then(p => {
         $scope.plan = p;
+        $scope.plan.find_items();
         $scope.select(null)
         $scope.$apply();
       }).catch(error => {
@@ -412,7 +413,9 @@
       $scope.plan.submit().then(() => {
         $scope.state.planning = false;
         $scope.state.submitted_plan = $scope.plan;
-        $scope.new();
+        $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
+        $scope.select(null);
+        $scope.$apply();
         $scope.state.launch = false;
         refresh_plan_list();
       }).catch(errors => {

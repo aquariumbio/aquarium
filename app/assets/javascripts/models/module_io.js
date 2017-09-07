@@ -38,6 +38,9 @@ class ModuleIO {
   }
 
   inc_next_id() {
+    if ( !this.constructor.next_io_id ) {
+      this.constructor.next_io_id = 0;
+    }    
     this.constructor.next_io_id++;
   }  
 
