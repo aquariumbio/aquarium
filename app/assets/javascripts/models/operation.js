@@ -63,8 +63,6 @@ AQ.Operation.record_getters.num_outputs = function() {
 
 AQ.Operation.record_methods.set_type_with_field_values = function(operation_type,fvs) {
 
-  console.log(["set_type_with_field_values", operation_type, fvs])
-
   var op = this;
   op.operation_type_id = operation_type.id;
   op.operation_type = operation_type;

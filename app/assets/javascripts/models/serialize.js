@@ -14,8 +14,6 @@ AQ.Plan.record_methods.serialize = function() {
     layout: plan.serialize_module(plan.base_module)
   }
 
-  console.log(["Serialized Plan", p]);
-
   return p;
 
 }

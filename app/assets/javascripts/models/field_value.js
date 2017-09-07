@@ -88,8 +88,6 @@ AQ.FieldValue.record_methods.clear_item = function() {
 
   var fv = this;
 
-  console.log("Clearing fv " + fv.name)
-
   delete fv.child_item;
   delete fv.child_item_id;
   delete fv.row;
@@ -99,7 +97,7 @@ AQ.FieldValue.record_methods.clear_item = function() {
 }
 
 AQ.FieldValue.record_methods.clear = function() {
-  console.log("Called FieldValue:clear(), which doesn't do anything anymore")
+  console.log("WARNING: Called FieldValue:clear(), which doesn't do anything anymore")
   return this;
 }
 

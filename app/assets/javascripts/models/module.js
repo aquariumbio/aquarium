@@ -441,8 +441,6 @@ class Module {
 
     var module = this;
 
-    console.log("Computing cost");
-
     module.cost = 0;
 
     aq.each(module.children,child => {

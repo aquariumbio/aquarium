@@ -95,7 +95,7 @@ GEM
     mime-types (1.25.1)
     mimemagic (0.3.0)
     mini_portile2 (2.1.0)
-    multi_json (1.12.1)
+    multi_json (1.12.2)
     multi_xml (0.6.0)
     mysql2 (0.3.21)
     nokogiri (1.7.2)
@@ -108,12 +108,12 @@ GEM
       mime-types
       mimemagic (= 0.3.0)
     polyglot (0.3.5)
-    power_assert (1.0.2)
-    puma (3.9.1)
+    power_assert (1.1.0)
+    puma (3.10.0)
     rack (1.4.7)
-    rack-cache (1.7.0)
+    rack-cache (1.7.1)
       rack (>= 0.4)
-    rack-contrib (1.5.0)
+    rack-contrib (1.6.0)
       rack (~> 1.4)
     rack-cors (1.0.1)
     rack-ssl (1.3.4)
@@ -224,4 +224,4 @@ DEPENDENCIES
   yaml_db
 
 BUNDLED WITH
-   1.15.1
+   1.15.4

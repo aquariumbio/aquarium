@@ -481,7 +481,6 @@ AQ.Plan.record_methods.debug = function() {
 
     AQ.get("/plans/" + plan.id + "/debug").then(
       response => {
-        console.log(response);
         plan.reload();
         plan.debugging = false;
         plan.recompute_getter("state");

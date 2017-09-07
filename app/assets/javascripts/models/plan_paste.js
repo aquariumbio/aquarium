@@ -13,7 +13,6 @@ AQ.Plan.record_methods.paste_plan = function (p) {
     delete w.to_id;
     delete w.parent_id;
     plan.wires.push(w);
-    console.log(w);
   });
 
   return plan;
