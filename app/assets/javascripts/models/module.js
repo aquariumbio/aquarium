@@ -413,7 +413,7 @@ class Module {
     this.constructor.id_map[old_id] = module.id;
 
     aq.each(this.input.concat(this.output), io => {
-      io.id = ModuleIO.next_io_id;
+      io.id = io.next_id;
       io.inc_next_id();
     });
 
