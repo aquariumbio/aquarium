@@ -38,7 +38,8 @@ Gemfile.lock
 # temporary vim files
 *.swp
 
-
+# for IntelliJ IDEA based environments
+.idea/
 
 awc.sh
 
