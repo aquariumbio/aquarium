@@ -292,6 +292,7 @@ class KrillController < ApplicationController
 
     if @job.pc == Job.NOT_STARTED
       redirect_to krill_error_path(job: @job.id, message: "interpreter: Job not started") 
+      return
     end
 
     render layout: 'aq2-plain'
