@@ -514,7 +514,7 @@
 
   }]);
 
-  w.directive('ngRightClick', function($parse) {
+  w.directive('ngRightClick', [ '$parse', function($parse) {
       return function(scope, element, attrs) {
           var fn = $parse(attrs.ngRightClick);
           element.bind('contextmenu', function(event) {
@@ -524,7 +524,7 @@
               });
           });
       };
-  });
+  }]);
 
   w.directive('plannerCursor', function() {
 
