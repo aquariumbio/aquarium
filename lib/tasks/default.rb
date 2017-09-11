@@ -2,7 +2,11 @@
 # access the inputs and outputs of the operations associated with a job.
 # Add specific instructions for this protocol!
 
+needs "Standard Libs/Debug"
+
 class Protocol
+
+  include Debug
 
   def main
 
