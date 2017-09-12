@@ -10,6 +10,9 @@ Gemfile.lock
 # Ignore bundler config
 /.bundle
 
+# Ignore Yardoc config
+/.yardoc
+
 # Ignore the actual database config file
 /config/database.yml
 
