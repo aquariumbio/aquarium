@@ -98,7 +98,7 @@
 
       <%= yield %>
 
-      <md-sidenav class="site-sidenav md-sidenav-left"  ng-show="true"
+      <md-sidenav class="site-sidenav md-sidenav-left no-print"  ng-show="true"
                   md-component-id="sidebar" hide-print md-disable-backdrop
                   md-is-locked-open="true" style="z-index: 1">
 
@@ -113,7 +113,7 @@
         <md-toolbar class="specific-toolbar not-scrollable" 
                     <% if content_for? :no_specific_padding %>style="padding-right: 0px !important" <% end %> >
 
-          <div class="md-toolbar-tools" 
+          <div class="md-toolbar-tools no-print" 
                <% if content_for? :no_specific_padding %>style="padding-right: 0px !important" <% end %> >
 
             <h2 flex md-truncate>
