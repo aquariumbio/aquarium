@@ -34,16 +34,16 @@
 
 <% content_for :sidebar do %>
 
-  <md-list ng-init="status.month = '<%= @data[0][:date] %>'">
+  <md-list ng-init="status.month = '<%= @monthly_invoices[0][:date] %>'">
 
-    <% @data.each do |datum| %>
+    <% @monthly_invoices.each do |invoices| %>
 
-      <md-list-item ng-click="status.month = '<%= datum[:date] %>'"
-                    ng-class="status.month == '<%= datum[:date] %>' ? 'md-body-2 selected-view' : 'md-body-2'">
-        <p><%= datum[:date].strftime("%B %Y") %></p>
+      <md-list-item ng-click="status.month = '<%= invoices[:date] %>'"
+                    ng-class="status.month == '<%= invoices[:date] %>' ? 'md-body-2 selected-view' : 'md-body-2'">
+        <p><%= invoices[:date].strftime("%B %Y") %></p>
         <span>
         <% if params[:all] %>
-          <%= number_to_currency(datum[:entries].collect { |e| e[:spent] }.inject{|s,x| s + x}) %>
+          <%= number_to_currency(invoices[:entries].collect { |e| e[:spent] }.inject{|s,x| s + x}) %>
         <% end %>
         </span>
       </md-list-item>
@@ -56,33 +56,49 @@
 
 <%= content_for :main do %>
 
-  <% @data.each do |datum| %>
+  <% @monthly_invoices.each do |invoices| %>
 
-    <md-content layout-padding ng-show="status.month == '<%= datum[:date] %>'">
+    <md-content layout-padding ng-show="status.month == '<%= invoices[:date] %>'">
 
       <h3>
-        <%= datum[:date].strftime("%B %Y") %>
+        <%= invoices[:date].strftime("%B %Y") %>
         <% if params[:all] %>
-          : <%= number_to_currency(datum[:entries].collect { |e| e[:spent] }.inject{|s,x| s + x}) %>
+          : <%= number_to_currency(invoices[:entries].collect { |e| e[:spent] }.inject{|s,x| s + x}) %>
         <% end %>
       </h3>
 
-      <% datum[:entries].collect { |e| e[:budget] }.uniq.each do |b| %>
+      <% invoices[:entries].collect { |account| account[:budget] }.uniq.each do |b| %>
 
         <p class='indent budget-name'><b><%= link_to b.name, b %></b> (<%= b.contact %>): <%= b.description %> </p>
 
         <table class='table table-condensed users' style="table-layout: fixed">
-          <% datum[:entries].select { |e| e[:budget].id == b.id }.each do |e| %>
+          <tr>
+            <th></th>
+            <th></th>
+            <th>Labor</th>
+            <th>Materials</th>
+            <th>Overhead</th>
+            <th>Total</th>
+          </tr>
+          <% invoices[:entries].select { |account| account[:budget].id == b.id }.each do |entry| %>
             <tr>
-              <td><%= e[:user].name %> (<%= link_to "#{e[:user].login}", e[:user] %>)</td>
-              <td><i><%= e[:invoice].in_progress ? "in progress" : e[:invoice].status %></i></td>
-              <td><%= link_to number_to_currency(e[:spent]), e[:invoice] %></td>        
+              <td><%= entry[:user].name %> (<%= link_to "#{entry[:user].login}", entry[:user] %>)</td>
+              <td><i><%= entry[:invoice].in_progress ? "in progress" : entry[:invoice].status %></i></td>
+              <td><%= number_to_currency(entry[:spent_labor]) %></td>
+              <td><%= number_to_currency(entry[:spent_materials]) %></td>
+              <td><%= number_to_currency(entry[:spent] - (entry[:spent_labor] + entry[:spent_materials])) %></td>
+              <td><%= link_to number_to_currency(entry[:spent]), entry[:invoice] %></td>
             </tr>
           <% end %>
-          <% total = datum[:entries].select { |e| e[:budget].id == b.id }.collect { |e| e[:spent] }.inject{|sum,x| sum+x} %>
+          <% total_labor = invoices[:entries].select { |e| e[:budget].id == b.id }.collect { |e| e[:spent_labor] }.inject{|sum,x| sum+x} %>
+          <% total_materials = invoices[:entries].select { |e| e[:budget].id == b.id }.collect { |e| e[:spent_materials] }.inject{|sum,x| sum+x} %>
+          <% total = invoices[:entries].select { |e| e[:budget].id == b.id }.collect { |e| e[:spent] }.inject{|sum,x| sum+x} %>
           <tr>
           <td></td>
           <td></td>
+            <td><b><%= number_to_currency(total_labor) %></b></td>
+            <td><b><%= number_to_currency(total_materials) %></b></td>
+            <td><b><%= number_to_currency(total - (total_labor + total_materials)) %></b></td>
           <td><b><%= number_to_currency(total) %></b></td>
           </tr>
         </table>

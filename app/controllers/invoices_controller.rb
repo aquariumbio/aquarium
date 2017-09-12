@@ -17,12 +17,12 @@ class InvoicesController < ApplicationController
       user = current_user
     end
 
-    @data = (1..12).collect { |m| 
+    @monthly_invoices = (1..12).collect { |m|
       { 
         month: m,
         year: year,
         date: DateTime.new(year,m),
-        entries: Account.users_and_budgets(year, m,user)
+        entries: Account.users_and_budgets(year, m, user)
       }
     }.reverse.reject { |d| d[:entries].length == 0 }
 
@@ -38,6 +38,8 @@ class InvoicesController < ApplicationController
     @rows = @invoice.rows
     @operation_types = OperationType.all
     @base = Account.total(@rows,false)
+    @base_labor = Account.total(@rows.select { |row| row.category == "labor" }, false)
+    @base_materials = Account.total(@rows.select { |row| row.category == "materials"}, false)
     @total = Account.total(@rows,true)
     @markup = @total - @base
     respond_to do |format|
