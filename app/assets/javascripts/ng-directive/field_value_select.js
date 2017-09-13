@@ -65,7 +65,18 @@
 
           $scope.$apply();
 
-        }   
+        }  
+
+        var change = function(ev,ui)  {
+
+          if ( !ui.item ) {
+
+            console.log("changed value to '" + ui.item + "'");
+            op.assign_sample(fv, null);
+
+          }
+
+        }
 
         $scope.$watch("operation.form[fv.field_type.role][fv.name].aft", function(new_aft, old_aft) {
 
@@ -83,7 +94,7 @@
 
               select: autocomp,
 
-              // change: () => console.log("change"),
+              change: change,
               // // close: () => console.log("close"),
               // create: () => console.log("create"),
               // focus: () => console.log("focus"),                            
