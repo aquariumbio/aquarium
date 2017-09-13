@@ -81,8 +81,8 @@
 
     $scope.add_operation = function(ot) {
       var op = AQ.Operation.record({
-        x: 100+3*AQ.snap + $scope.last_place, 
-        y: 100+2*AQ.snap + $scope.last_place, 
+        x: 60+3*AQ.snap + $scope.last_place, 
+        y: 60+2*AQ.snap + $scope.last_place, 
         width: 160, 
         height: 30,
         routing: {}, form: { input: {}, output: {} },
@@ -356,11 +356,12 @@
       AQ.Plan.load(plan.id).then(p => {
         Module.next_module_id = temp1;
         ModuleIO.next_io_id = temp2;
-        $scope.plan.paste_plan(p);
+        $scope.plan.paste_plan(p,$scope.last_place);
+        $scope.last_place += 4*AQ.snap;
         $scope.$apply();
       })
 
-    }    
+    }
 
     $scope.new = function() {
       save_first("Save current plan before creating new plan?").then( () => {
