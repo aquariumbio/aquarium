@@ -282,32 +282,50 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
       case "A":
       case "a":
-        if (evt.ctrlKey) $scope.select_all()
+        if ( evt.ctrlKey || evt.metaKey ) {
+          $scope.select_all();
+          evt.preventDefault()
+        }
         break
 
       case "M":
       case "m":
-        if ( evt.ctrlKey ) $scope.plan.create_module($scope.current_op);
+        if ( evt.ctrlKey || evt.metaKey ) {
+          $scope.plan.create_module($scope.current_op);
+          evt.preventDefault()
+        }          
         break;
 
-      case "N":
-      case "n":
-        if ( evt.ctrlKey ) $scope.new();
-        break;        
+      // case "N":
+      // case "n":
+      //   if ( evt.ctrlKey || evt.metaKey ) {
+      //     $scope.new();
+      //     evt.preventDefault();
+      //   }              
+      //   break;        
 
       case "O":
       case "o":
-        if ( evt.ctrlKey ) $scope.add_module_output();
+        if ( evt.ctrlKey || evt.metaKey ) {
+          $scope.add_module_output();
+          evt.preventDefault()          
+        }
         break;
 
       case "I":
       case "i":
-        if ( evt.ctrlKey ) $scope.add_module_input();
+        if ( evt.ctrlKey || evt.metaKey ) {
+          $scope.add_module_input();
+          evt.preventDefault()          
+        }          
         break;
 
       case "S":
       case "s":
-        if ( evt.ctrlKey ) $scope.save($scope.plan);
+        if ( evt.ctrlKey || evt.metaKey ) {
+          $scope.save($scope.plan);
+          evt.preventDefault()          
+        }               
         break;
 
       default:
