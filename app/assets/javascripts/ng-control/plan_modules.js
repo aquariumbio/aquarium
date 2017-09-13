@@ -20,14 +20,14 @@ AQ.Plan.record_methods.visible = function(obj) {
 
   var plan = this;
 
-  switch ( obj.model.model ) {
+  switch ( obj.record_type) {
 
     case "Operation":
     case "Module":
       if ( !obj.parent_id ) {
         obj.parent_id = 0;
       }
-      return obj.parent_id == plan.current_module.id;
+      return obj.id != 0 && obj.parent_id == plan.current_module.id;
 
     case "Wire":
       if ( !obj.from_op.parent_id ) {
