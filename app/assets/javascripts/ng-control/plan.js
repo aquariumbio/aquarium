@@ -247,17 +247,28 @@
 
     $scope.revert_template = function(plan) {
 
-      AQ.Plan.load(plan.id).then(p => {
-        p.status = "planning";
-        p.save().then(p => {
-          aq.remove($scope.templates, plan);  
-          aq.remove($scope.system_templates, plan); 
-          $scope.plan = p
-          refresh_plan_list();
-          $scope.select(null);  
-          $scope.$apply();    
-        })
-      })      
+      var confirm = $mdDialog.confirm()
+          .title('Revert Template?')
+          .textContent("Do you really want to revert this template to a normal plan?")
+          .ariaLabel('Revert')
+          .ok('Yes')
+          .cancel('No')      
+
+      $mdDialog.show(confirm).then(() => {
+
+        AQ.Plan.load(plan.id).then(p => {
+          p.status = "planning";
+          p.save().then(p => {
+            aq.remove($scope.templates, plan);  
+            aq.remove($scope.system_templates, plan); 
+            // $scope.plan = p
+            refresh_plan_list();
+            $scope.select(null);  
+            $scope.$apply();    
+          })
+        })      
+
+      });
 
     }    
 
