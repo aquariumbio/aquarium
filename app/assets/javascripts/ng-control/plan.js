@@ -44,8 +44,6 @@
       var selected_fv_rid;
       $scope.current_io = io;
 
-      // console.log("Setting current_io", io, focus,role)
-
       if ( io.record_type == "FieldValue" ) {
 
         $scope.current_fv = io;
@@ -70,7 +68,7 @@
         }, 100);
       }
 
-    }    
+    }           
 
     function refresh_plan_list() {
       AQ.Plan.where({status: "planning", user_id: $scope.current_user.id}).then(plans => { 

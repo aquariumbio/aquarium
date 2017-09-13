@@ -190,6 +190,11 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
         if ( ( io.origin && io.origin.io ) || io.destinations.length > 0 ) {
           $scope.set_current_io(io,true,role);
+          // if ( io.origin ) {
+          //   $scope.current_op = io.origin.op;
+          // } else if ( io.destinations.length > 0 ) {
+          //   $scope.current_op = io.destinations[0].op;
+          // }
         } else {
           $scope.set_current_io(io,false,role);
         }
