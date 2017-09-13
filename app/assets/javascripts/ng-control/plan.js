@@ -261,6 +261,24 @@
 
     }    
 
+    $scope.confirm_delete = function() {
+
+      return new Promise(function(resolve,reject) {
+
+         var confirm = $mdDialog.confirm()
+          .title('Delete Selection?')
+          .textContent("Do you really want to delete the selection" + 
+                       "including the contents of any selected modules?")
+          .ariaLabel('Delete')
+          .ok('Yes')
+          .cancel('No');
+
+        $mdDialog.show(confirm).then(resolve, () => null );
+
+      });
+
+    }    
+
     $scope.delete_plan = function(p) {
 
       var confirm = $mdDialog.confirm()
@@ -448,18 +466,7 @@
 
       } else if ( obj.record_type == "Module" ) {
 
-         var confirm = $mdDialog.confirm()
-          .title('Delete Module?')
-          .textContent("Do you really want to delete the module \"" + obj.name + 
-                        "\" and all of its contents?")
-          .ariaLabel('Delete')
-          .ok('Yes')
-          .cancel('No');
-
-        $mdDialog.show(confirm).then( 
-          () => $scope.plan.current_module.remove(obj,$scope.plan),
-          () => null
-        );
+        $scope.plan.current_module.remove(obj,$scope.plan);
 
       } else if ( obj.record_type == "ModuleIO" ) {   
 

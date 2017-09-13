@@ -242,7 +242,14 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
     } else if ( $scope.current_draggable && !$scope.current_fv ) {
 
-      $scope.delete_object($scope.current_draggable);
+      if ( $scope.current_draggable.record_type == "Module" ) {
+        $scope.confirm_delete().then(() => {
+          $scope.delete_object($scope.current_draggable);
+          $scope.$apply();
+        })
+      } else {
+        $scope.delete_object($scope.current_draggable);
+      }
 
     } else if ( $scope.multiselect ) {
 
@@ -254,7 +261,10 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
         }
       });
 
-      aq.each(objects, obj => $scope.delete_object(obj));
+      $scope.confirm_delete().then(() => {
+        aq.each(objects, obj => $scope.delete_object(obj));
+        $scope.$apply();
+      });
 
       $scope.select(null)   
 
