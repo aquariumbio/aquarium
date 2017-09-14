@@ -328,17 +328,19 @@ AQ.Operation.record_methods.instantiate_aux = function(plan,pairs,resolve) {
 
 AQ.Operation.record_methods.instantiate = function(plan,field_value,sid) { // instantiate this operation's field values using the sid
                                                                            // assuming it is being assigned to the argument field_value
-  if ( sid ) {                                                             // will need to look at the field_value's routing information
+                                                                           // will need to look at the field_value's routing information
                                                                            // as well as its sample definition
-    var operation = this,
-        sample_id = AQ.id_from(sid);
+  var operation = this,
+      sample_id = AQ.id_from(sid);
 
-    aq.each(operation.field_values, fv => {
-      if ( !fv.field_type.array && fv.routing == field_value.routing ) {
-        operation.assign_sample(fv, sid);
-      }
-    })
+  aq.each(operation.field_values, fv => {
+    if ( !fv.field_type.array && fv.routing == field_value.routing ) {
+      operation.assign_sample(fv, sid);
+    }
+  })
 
+  if ( sid ) {
+    
     // Find items associated with samples
     aq.each(operation.field_values, fv => {
       if ( !fv.field_type.array && fv.routing == field_value.routing ) {

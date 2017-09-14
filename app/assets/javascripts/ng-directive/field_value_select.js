@@ -66,17 +66,11 @@
               aft = op.form[ft.role][fv.name].aft;
 
           if ( aft && aft.sample_type && !AQ.sample_names_for(aft.sample_type.name).includes(sid) ) {
-            console.log(sid + " is not a valid sample sample identifier");
+            console.log("String '" + sid + "' is not a valid sample identifier");
             op.assign_sample(fv, null);
+            op.instantiate(plan,fv,null);
+            $scope.$apply();
           }
-
-
-          // if ( !ui.item ) {
-
-            // console.log("changed value to '" + ui.item + "'");
-            // op.assign_sample(fv, null);
-
-          // }
 
         }
 
