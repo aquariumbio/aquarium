@@ -1,13 +1,38 @@
 (function() {
 
-  var w = angular.module('aquarium'); 
+  let w = angular.module('aquarium');
+
+  // Broadcast event to angular
+  // see https://gist.github.com/981746/3b6050052ffafef0b4df
+  //
+  w.factory('beforeUnload', function ($rootScope, $window) {
+      // Events are broadcast outside the Scope Lifecycle
+
+      $window.onbeforeunload = function (e) {
+          var confirmation = {};
+          var event = $rootScope.$broadcast('onBeforeUnload', confirmation);
+          if (event.defaultPrevented) {
+              console.log("default was prevented?");
+          } else {
+              return true;
+          }
+      };
+
+      $window.onunload = function () {
+          $rootScope.$broadcast('onUnload');
+      };
+      return {};
+  })
+  .run(function (beforeUnload) {
+       // Must invoke the service at least once
+   });
 
   w.controller('operationTypesCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', '$mdDialog',
                             function (  $scope,   $http,   $attrs,   $cookies,   $sce, $mdDialog ) {
 
     AQ.init($http);
-    AQ.update = () => { $scope.$apply(); }
-    AQ.confirm = (msg) => { return confirm(msg); }
+    AQ.update = () => { $scope.$apply(); };
+    AQ.confirm = (msg) => { return confirm(msg); };
     AQ.sce = $sce;
 
     $scope.operation_types = [];
@@ -18,6 +43,22 @@
     $scope.initialized = false;
 
     $scope.import_popup = {};
+
+    /*
+     * Set handler for onbeforeunload.
+     * See factory definition above.
+     */
+    $scope.$on('onBeforeUnload', function (e, confirmation) {
+        console.log("handling onbeforeunload");
+        if ($scope.current_operation_type.changed
+            || $scope.current_operation_type.protocol.changed
+            || $scope.current_operation_type.precondition.changed) {
+            console.log("changed operation type");
+        } else {
+            console.log("unchanged operation type");
+            e.preventDefault();
+        }
+    });
 
     function make_categories() {
 
@@ -68,7 +109,7 @@
         });       
 
         if ( get_object("DeveloperCurrentOperationTypeId") ) {
-          var ots = aq.where($scope.operation_types,ot => ot.id === get_object("DeveloperCurrentOperationTypeId") );
+          let ots = aq.where($scope.operation_types,ot => ot.id === get_object("DeveloperCurrentOperationTypeId") );
           if  ( ots.length === 1 ) {
             $scope.current_operation_type = ots[0];
           } else {
@@ -139,10 +180,10 @@
 
     $scope.category_size = function(category) {
       return aq.where($scope.operation_types,function(ot) { return ot.category === category; }).length;
-    }    
+    };
 
     $scope.operation_type_class = function(operation_type) {
-      var c = "clickable op-type";
+      let c = "clickable op-type";
       if ( $scope.current_operation_type === operation_type ) {
         c += " op-type-current";
       } 
@@ -153,7 +194,7 @@
     };
 
     $scope.lib_class = function(library) {
-      var c = "clickable library";
+      let c = "clickable library";
       if ( $scope.current_operation_type === library ) {
         c += " library-current";
       } 
@@ -172,7 +213,7 @@
               alert ( "Could not update operation type definition: " + response.data.errors[0] );
               console.log(response.data.errors);
             } else {
-              var i = $scope.operation_types.indexOf(operation_type);
+              let i = $scope.operation_types.indexOf(operation_type);
               $scope.operation_types[i] = AQ.OperationType.record(response.data);
               $scope.current_operation_type = $scope.operation_types[i];
               $scope.current_operation_type.upgrade_field_types();
@@ -183,7 +224,7 @@
           });          
         } else {
           $http.post("/operation_types",operation_type).then(function(response) {
-            var i = $scope.operation_types.indexOf(operation_type);
+            let i = $scope.operation_types.indexOf(operation_type);
             if ( response.data.errors ) {
               alert ( "Could not update operation type definition: " + response.data.errors[0] );
             } else {            
@@ -203,7 +244,7 @@
     function after_delete(c) {
       make_categories();
       if ( $scope.category_size(c) > 0 ) {
-        var ots = aq.where($scope.operation_types, ot => ot.category === c );
+        let ots = aq.where($scope.operation_types, ot => ot.category === c );
         $scope.current_operation_type = ots[0];
         put_object("DeveloperCurrentOperationTypeId", $scope.current_operation_type.id);
         $scope.current_category = c;
@@ -216,26 +257,26 @@
       }      
     }
 
-    $scope.delete_operation_type = function(ot) {
+    $scope.delete_operation_type = function(operation_type) {
       if ( confirm ( "Are you sure you want delete this operation type definition?" ) ) {
 
-        if ( ot.id ) {
+        if ( operation_type.id ) {
 
-          $http.delete("/operation_types/" + ot.id,ot).then(function(response) {
+          $http.delete("/operation_types/" + operation_type.id,operation_type).then(function(response) {
             if ( response.data.error ) {
               alert ( "Could not delete operation type: " + response.data.error );
             } else {
-              var i = $scope.operation_types.indexOf(ot),
-                  c = ot.category;
+              let i = $scope.operation_types.indexOf(operation_type),
+                  c = operation_type.category;
               $scope.operation_types.splice(i,1);
               after_delete(c);
             }
           });             
 
-        } else { // ot hasn't been saved yet
+        } else { // operation type hasn't been saved yet
 
-          var i = $scope.operation_types.indexOf(ot),
-              c = ot.category;
+          let i = $scope.operation_types.indexOf(operation_type),
+              c = operation_type.category;
           $scope.operation_types.splice(i,1);
           after_delete(c);          
         }
@@ -252,8 +293,8 @@
 
         } else {
 
-          var blob = new Blob([JSON.stringify(response.data)], { type:"application/json;charset=utf-8;" });     
-          var downloadLink = angular.element('<a></a>');
+          let blob = new Blob([JSON.stringify(response.data)], { type:"application/json;charset=utf-8;" });
+          let downloadLink = angular.element('<a></a>');
                             downloadLink.attr('href',window.URL.createObjectURL(blob));
                             downloadLink.attr('download', operation_type.name + '.json');
           downloadLink[0].click();
@@ -272,8 +313,8 @@
 
         } else {        
 
-          var blob = new Blob([JSON.stringify(response.data)], { type:"application/json;charset=utf-8;" });     
-          var downloadLink = angular.element('<a></a>');
+          let blob = new Blob([JSON.stringify(response.data)], { type:"application/json;charset=utf-8;" });
+          let downloadLink = angular.element('<a></a>');
                             downloadLink.attr('href',window.URL.createObjectURL(blob));
                             downloadLink.attr('download', category + '.json');
           downloadLink[0].click();
@@ -281,17 +322,17 @@
         }
 
       });
-    }
+    };
 
     $scope.import = function() {
 
-      var f = document.getElementById('import').files[0],
-          r = new FileReader();
+      let file = document.getElementById('import').files[0],
+          reader = new FileReader();
 
-      r.onloadend = function(e) {
+      reader.onloadend = function(e) {
 
         try {
-          var json = JSON.parse(e.target.result);
+          let json = JSON.parse(e.target.result);
         } catch(e) {
           alert("Could not parse file: " + e);
           return;
@@ -311,16 +352,16 @@
 
             if ( response.data.operation_types.length > 0 ) {
 
-              var operation_types = aq.collect(response.data.operation_types, rawot => {
-                var ot = AQ.OperationType.record(rawot);
-                ot.upgrade_field_types();
-                if ( rawot.timing ) {
-                  ot.timing = AQ.Timing.record(rawot.timing);
+              let operation_types = aq.collect(response.data.operation_types, raw_operation_type => {
+                let operation_type = AQ.OperationType.record(raw_operation_type);
+                operation_type.upgrade_field_types();
+                if ( raw_operation_type.timing ) {
+                  operation_type.timing = AQ.Timing.record(raw_operation_type.timing);
                 } else { 
-                  ot.set_default_timing();
+                  operation_type.set_default_timing();
                 }
-                ot.timing.make_form();
-                return ot;
+                operation_type.timing.make_form();
+                return operation_type;
               });
 
               $scope.operation_types = $scope.operation_types.concat(operation_types);
@@ -343,17 +384,17 @@
 
         });
 
-      }
+      };
 
-      r.readAsBinaryString(f);
+      reader.readAsBinaryString(file);
 
-    }
+    };
 
     $scope.import_notification = function(data) {
-      console.log('import notification')
+      console.log('import notification');
       $scope.import_popup = data;
       $scope.import_popup.show = true;
-    }
+    };
 
     $scope.new_operation_type = function() {
       var new_operation_type = AQ.OperationType.record({
@@ -372,7 +413,7 @@
       make_categories();
       $scope.current_category = new_operation_type.category;
       $scope.mode = "definition";
-    }
+    };
 
     $scope.new_library = function() {
 
@@ -393,7 +434,7 @@
 
       });
 
-    }
+    };
 
     $scope.update_library = function(library) {
 
@@ -405,7 +446,7 @@
 
       }
 
-    }
+    };
 
     $scope.delete_library = function(library) {
 
@@ -421,36 +462,7 @@
 
       }
 
-    }
-
-    function save_first(msg) {
-
-      return new Promise( function(resolve,reject) {
-
-        if ( $scope.plan.operations.length > 0 ) {
-
-          var dialog = $mdDialog.confirm()
-              .clickOutsideToClose(true)
-              .title('Save First?')
-              .textContent(msg ? msg : "Save the current operation \"" + operation.name + "\" first?")
-              .ariaLabel('Save First?')
-              .ok('Yes')
-              .cancel('No');
-
-          $mdDialog.show(dialog).then(
-            () => $scope.plan.save().then(resolve),
-            resolve
-          )
-
-        } else {
-
-          resolve();
-
-        }
-
-      })
-
-    }
+    };
 
     $scope.copy = function(operation_type) {
 
