@@ -134,15 +134,14 @@
     Your Plans {{state.loading_plans ? '... loading' : ''}}
   </h4>
 
-  <ul class='compact-list'
-      ng-if="state.sidebar.plans">        
-    <li ng-repeat="p in plans | orderBy:'-'" " ng-class="plan.id == p.id ? 'active-plan' : ''" layout="row">
+  <ul class='compact-list' ng-if="state.sidebar.plans">
+    <li ng-repeat="p in plans | orderBy:'-'" ng-class="plan.id == p.id ? 'active-plan' : ''" layout="row">
       <div style="margin-right: 5px">{{p.id}}:</div>
       <a href='#' class='no-highlight' ng-click="load(p)">
         {{p.name}}
         <span ng-if="state.deleting_plan.id == p.id"> ... deleting </span>
       </a>
     </li>
-  </li>
+  </ul>
 
 </div>
