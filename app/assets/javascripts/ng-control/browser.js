@@ -12,7 +12,22 @@
     AQ.init($http);
     AQ.update = () => { $scope.$apply(); }
     AQ.confirm = (msg) => { return confirm(msg); }
-    AQ.sce = $sce;                  
+    AQ.sce = $sce;
+
+    /*
+     * Cookie management -- common to operation.js, developer.js and operation_type.js --- should be factored out
+     */
+     function cookie_name(name) {
+       return aquarium_environment_name + "_" + name;
+     }
+
+     function put_object(name, object) {
+       $cookies.putObject(cookie_name(name), object);
+     }
+
+     function get_object(name) {
+       return $cookies.getObject(cookie_name(name))
+     }
 
     function cookie() {
 
@@ -29,7 +44,7 @@
         },
         create: {
           selected: $scope.views.create.selected,
-          samples: [],
+          samples: []
         },
         search: {
           selected: $scope.views.search.selected,
@@ -53,11 +68,11 @@
         user: $scope.views.user
       };
 
-      $cookies.putObject("browserViews", data);
+      put_object("browserViews", data);
 
     }
 
-    $scope.views = $cookies.getObject("browserViews");
+    $scope.views = get_object("browserViews");
 
     if ( !$scope.views || $scope.views.version != 2 ) {
 

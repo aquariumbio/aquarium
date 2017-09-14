@@ -18,9 +18,9 @@
 
     function init1() {
 
-      if ( false || $cookies.getObject("managerState") ) {
+      if ( false || get_object("managerState") ) {
 
-        $scope.current = $cookies.getObject("managerState");
+        $scope.current = get_object("managerState");
 
         if ( $scope.current.selected_user ) {
           $scope.current.selected_user = AQ.User.record({
@@ -93,27 +93,27 @@
       });
     });
 
-    $scope.status_selector = function(ot,status) {
+    $scope.status_selector = function(operation_type, status) {
       var c = "";
-      if ( $scope.numbers[ot.id] ) {
-        if ( status == 'waiting' && $scope.numbers[ot.id]['waiting'] + $scope.numbers[ot.id]['pending_false'] != 0 ) {
+      if ( $scope.numbers[operation_type.id] ) {
+        if ( status == 'waiting' && $scope.numbers[operation_type.id]['waiting'] + $scope.numbers[operation_type.id]['pending_false'] != 0 ) {
           c += " number-some";
-        } else if ( $scope.numbers[ot.id][status] == 0 ) {
+        } else if ( $scope.numbers[operation_type.id][status] == 0 ) {
           c += " number-none";
         } else {
           c += " number-some";
         }
-        if ( $scope.current.ot == ot && $scope.current.status == status ) {
+        if ( $scope.current.ot == operation_type && $scope.current.status == status ) {
           c += " number-selected"
         } else {
           c += " number";
         }
       }
       return c;
-    }
+    };
 
     function store_cookie() {
-      $cookies.putObject("managerState", {
+      put_object("managerState", {
         ot: { id: $scope.current.ot.id },
         status: $scope.current.status,
         category_index: $scope.current.category_index,
@@ -122,6 +122,22 @@
         filter_user: $scope.current.filter_user
       });          
     }
+
+    /*
+     * Cookie management -- common to developer.js, operation_types.js and browser.js --- should be factored out
+     */
+    function cookie_name(name) {
+        return aquarium_environment_name + "_" + name;
+    }
+
+    function put_object(name, object) {
+        $cookies.putObject(cookie_name(name), object);
+    }
+
+    function get_object(name) {
+        return $cookies.getObject(cookie_name(name))
+    }
+
 
     $scope.select = function(ot,status,selected_ops,append=false) {
 
