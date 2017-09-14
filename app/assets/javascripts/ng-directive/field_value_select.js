@@ -25,17 +25,8 @@
 
           var sid = ui.item.value;
 
-          console.log(sid)
-
           op.assign_sample(fv, sid);
-
-          // send new sid to i/o of other operations
-          plan.propagate(op,fv,ui.item.value);
-
-          // use sample information to fill in inputs, if possible
-          if ( fv.role == 'output' ) {
-            op.instantiate(plan,fv,sid);
-          }
+          op.instantiate(plan,fv,sid);
 
           if ( ft.array ) {
 
@@ -63,18 +54,29 @@
 
           }
 
+          plan.propagate(op,fv,ui.item.value);          
+
           $scope.$apply();
 
         }  
 
         var change = function(ev,ui)  {
 
-          if ( !ui.item ) {
+          var sid = ft.array ? fv.sample_identifier : route[ft.routing];
+              aft = op.form[ft.role][fv.name].aft;
 
-            console.log("changed value to '" + ui.item + "'");
+          if ( aft && aft.sample_type && !AQ.sample_names_for(aft.sample_type.name).includes(sid) ) {
+            console.log(sid + " is not a valid sample sample identifier");
             op.assign_sample(fv, null);
-
           }
+
+
+          // if ( !ui.item ) {
+
+            // console.log("changed value to '" + ui.item + "'");
+            // op.assign_sample(fv, null);
+
+          // }
 
         }
 

@@ -120,8 +120,10 @@
 
       </div>
 
-    <md-subheader ng-if="current_fv.is_sample && current_fv.items.length == 0" class="md-no-sticky">
-      No Inventory
+    <md-subheader ng-if="current_fv.is_sample && current_fv.items.length == 0" 
+                  class="md-no-sticky">
+      <span ng-if="current_fv.wired || current_fv.role == 'output'">No Inventory</span>
+      <span ng-if="!current_fv.wired && current_fv.role != 'output'" class="no-inventory">No Inventory</span>
     </md-subheader>
 
     <%= render partial: 'predecessors' %>
