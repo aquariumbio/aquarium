@@ -18,26 +18,26 @@
 
       // console.log(object);
 
-      $scope.current_draggable = object && ( object.record_type == "Operation" ||
-                                             object.record_type == "Module" ||
-                                             object.record_type == "ModuleIO" ) ? object : null;
+      $scope.current_draggable = object && ( object.record_type === "Operation" ||
+                                             object.record_type === "Module" ||
+                                             object.record_type === "ModuleIO" ) ? object : null;
 
-      $scope.current_op     = object && object.record_type == "Operation" ? object : null;
+      $scope.current_op     = object && object.record_type === "Operation" ? object : null;
 
-      $scope.current_io     = object && ( object.record_type == "FieldValue" ||
-                                          object.record_type == "ModuleIO" ) ? object : null;
+      $scope.current_io     = object && ( object.record_type === "FieldValue" ||
+                                          object.record_type === "ModuleIO" ) ? object : null;
 
-      $scope.current_fv     = object && object.record_type == "FieldValue" ? object : null;      
+      $scope.current_fv     = object && object.record_type === "FieldValue" ? object : null;
 
-      $scope.current_wire   = object && ( object.record_type == "Wire" || 
-                                          object.record_type == "ModuleWire" ) ? object : null;
+      $scope.current_wire   = object && ( object.record_type === "Wire" ||
+                                          object.record_type === "ModuleWire" ) ? object : null;
 
       // if ( $scope.current_io && $scope.current_io.record_type == "ModuleIO" ) {
       //   console.log($scope.plan)
       //   console.log($scope.plan.associated_wires($scope.current_io));
       // }
 
-    }
+    };
 
     $scope.set_current_io = function(io,focus,role) {
 
@@ -46,17 +46,17 @@
 
       // console.log("Setting current_io", io, focus,role)
 
-      if ( io.record_type == "FieldValue" ) {
+      if ( io.record_type === "FieldValue" ) {
 
         $scope.current_fv = io;
         selected_fv_rid = io.rid;
 
-      } else if ( io.record_type == "ModuleIO" ) {
-        if ( io.origin && role == 'output' ) {
+      } else if ( io.record_type === "ModuleIO" ) {
+        if ( io.origin && role === 'output' ) {
           $scope.current_fv = io.origin.io;
           selected_fv_rid = $scope.current_fv.rid;
         }
-        if ( io.destinations.length > 0 && role == 'input' ) {
+        if ( io.destinations.length > 0 && role === 'input' ) {
           $scope.current_fv = io.destinations[0].io;
           selected_fv_rid = $scope.current_fv.rid;
         }
@@ -70,7 +70,7 @@
         }, 100);
       }
 
-    }    
+    };
 
     function refresh_plan_list() {
       AQ.Plan.where({status: "planning", user_id: $scope.current_user.id}).then(plans => { 
@@ -79,7 +79,7 @@
       });
     }
 
-    $scope.add_operation = function(ot) {
+    $scope.add_operation = function(operation_type) {
       var op = AQ.Operation.record({
         x: 100+3*AQ.snap + $scope.last_place, 
         y: 100+2*AQ.snap + $scope.last_place, 
@@ -89,9 +89,9 @@
         parent_id: $scope.plan.current_module.id
       });
       $scope.last_place += 4*AQ.snap;
-      op.set_type(ot);
+      op.set_type(operation_type);
       $scope.plan.operations.push(op);
-      if ( $scope.plan.name == "Untitled Plan" ) {
+      if ( $scope.plan.name === "Untitled Plan" ) {
         $scope.plan.name = op.operation_type.name;
         $scope.state.message = "Changed name of untitled plan to " + op.operation_type.name;
       }
@@ -99,7 +99,7 @@
 
     $scope.add_predecessor = function(io,obj,pred) {
 
-      if ( obj.record_type == "Operation" && io.record_type == "FieldValue" ) {
+      if ( obj.record_type === "Operation" && io.record_type === "FieldValue" ) {
 
         var op = obj,
             fv = io,
@@ -113,7 +113,7 @@
 
         $scope.select(newop);
 
-        var inputs = aq.where(newop.field_values, fv => fv.role == 'input');
+        var inputs = aq.where(newop.field_values, fv => { fv.role == 'input' });
 
         if ( inputs.length > 0 ) {
           $scope.set_current_io(inputs[0]);
@@ -168,7 +168,7 @@
           $scope.set_current_io(fvs[0]);
         }
 
-      } else if ( obj.record_type == "Module" && io.record_type == "ModuleIO" )  {
+      } else if ( obj.record_type === "Module" && io.record_type === "ModuleIO" )  {
 
         var module = obj,
             fv = io.origin.io,
@@ -184,9 +184,9 @@
 
           $scope.select(newop);
 
-          $scope.connect(io,module,newop.input(suc.input.name),newop);          
-          
-          var fvs = aq.where(newop.field_values, fv => fv.role == 'output');
+          $scope.connect(io,module,newop.input(suc.input.name),newop);
+
+          var fvs = aq.where(newop.field_values, fv => fv.role === 'output');
           if ( fvs.length > 0 ) {
             $scope.set_current_io(fvs[0]);
           }
@@ -194,7 +194,7 @@
 
       }
 
-    }    
+    }
 
     $scope.note = function(msg) {
       console.log(msg);
@@ -223,7 +223,7 @@
       p.status = "template";
       p.save().then(() => {
         $scope.templates.push(p);
-        open_templates() 
+        open_templates()
         $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
         $scope.select(null);  
         refresh_plan_list();
@@ -238,7 +238,7 @@
         p.save().then(() => {
           aq.remove($scope.templates, p);  
           $scope.system_templates.push(p);
-          open_templates() 
+          open_templates();
           $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
           $scope.select(null);  
           $scope.$apply();    
@@ -261,7 +261,7 @@
         })
       })      
 
-    }    
+    }
 
     $scope.delete_plan = function(p) {
 
@@ -360,7 +360,7 @@
         $scope.$apply();
       })
 
-    }    
+    }
 
     $scope.new = function() {
       save_first("Save current plan before creating new plan?").then( () => {
@@ -375,7 +375,7 @@
         $scope.plans.push(newplan);
         load_aux(newplan);
       })
-    }    
+    }
 
     $scope.select_uba= function(user,s) {      
       aq.each(user.user_budget_associations, uba => {
@@ -405,7 +405,7 @@
                                  "or outputs was found to be invalid after saving.";
         }
       });
-      
+
     }
 
     $scope.submit_plan = function() {
@@ -462,7 +462,7 @@
           () => null
         );
 
-      } else if ( obj.record_type == "ModuleIO" ) {   
+      } else if ( obj.record_type == "ModuleIO" ) {
 
         $scope.plan.current_module.remove_io(obj, $scope.plan);
 

@@ -19,9 +19,9 @@
 
       var controller;
 
-      if ( obj.model.model == "OperationType" ) {
+      if ( obj.model.model === "OperationType" ) {
         controller = "operation_types";
-      } else if ( obj.model.model == "Library" ) {
+      } else if ( obj.model.model === "Library" ) {
         controller = "libraries";
       }
 
