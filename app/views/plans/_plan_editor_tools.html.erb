@@ -5,13 +5,13 @@
   <input type=text class="plan-name-input-" ng-model=plan.name>
 </div>
 
-<div>
+<!-- <div>
   <ul style="font-size: 6pt">
     <li ng-repeat="w in plan.wires">
       {{w.from_op.operation_type.name}}: {{w.from.name}} =>  {{w.to_op.operation_type.name}}: {{w.to.name}}
     </li>
   </ul>
-</div>
+</div> -->
 
 <div ng-if="plan.current_module.id != 0" layout="column" layout-align="center center">
   <h3 class='md-body-2'>Current Module</h3>
