@@ -1,11 +1,13 @@
-AQ.Plan.record_methods.paste_plan = function (p) {
+AQ.Plan.record_methods.paste_plan = function (p,offset) {
 
   var plan = this;
 
-  plan.past_module(p);  
+  plan.past_module(p,offset);  
+
   aq.each(plan.operations, op => op.multiselect = false);
-  aq.each(p.operations, op => plan.paste_operation(op));
-  // plan.wires = plan.wires.concat(p.wires);
+  aq.each(p.operations, op => { 
+    plan.paste_operation(op, offset)
+  });
 
   aq.each(p.wires, w => {
     delete w.id;
@@ -19,7 +21,7 @@ AQ.Plan.record_methods.paste_plan = function (p) {
 
 }
 
-AQ.Plan.record_methods.past_module = function(p) {
+AQ.Plan.record_methods.past_module = function(p,offset) {
 
   var plan = this, 
       module_id_map;
@@ -27,6 +29,10 @@ AQ.Plan.record_methods.past_module = function(p) {
   Module.id_map = [];
 
   p.base_module.renumber();
+  aq.each(p.base_module.children, c => {
+    c.x += offset;
+    c.y += offset;
+  });
   aq.each(p.base_module.children, c => c.multiselect = true);
   plan.current_module.merge(p.base_module);
 
@@ -38,13 +44,18 @@ AQ.Plan.record_methods.past_module = function(p) {
 
 }
 
-AQ.Plan.record_methods.paste_operation = function(op) {
+AQ.Plan.record_methods.paste_operation = function(op, offset) {
 
   var plan = this,
       new_op = op;
 
   delete new_op.id;
   new_op.multiselect = true;
+
+  if ( new_op.parent_id == 0 ) {
+    new_op.x += offset;
+    new_op.y += offset;  
+  }
 
   aq.each(new_op.field_values, fv => {
     delete fv.child_item_id;
@@ -65,4 +76,3 @@ AQ.Plan.record_methods.paste_operation = function(op) {
   return plan;
 
 }
-

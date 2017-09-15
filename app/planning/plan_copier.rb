@@ -16,7 +16,11 @@ class PlanCopier
     copy_ops
     copy_wires
 
-    @base_module = JSON.parse @plan.layout, symbolize_names: true
+    begin
+      @base_module = JSON.parse @plan.layout, symbolize_names: true
+    rescue Exception => e
+      @base_module = { id: 0 }
+    end
 
     port_module_wires @base_module
     @new_plan.layout = @base_module.to_json

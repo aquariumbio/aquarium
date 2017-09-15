@@ -30,14 +30,23 @@ AQ.Plan.record_methods.is_wired_to = function(io) {
 
 AQ.Plan.record_methods.connect_aux = function(io1, object1, io2, object2) {
 
-  var plan = this;
+  var plan = this,
+      new_wire,
+      cycle;
 
   console.log("connect_aux",io1, object1, io2, object2)
 
-  plan.current_module.connect(io1, object1, io2, object2);
-  plan.base_module.associate_fvs();
-  plan.add_implied_wires();
+  new_wire = plan.current_module.connect(io1, object1, io2, object2);
+  plan.base_module.associate_fvs();  
+  cycle = plan.add_implied_wires();
   plan.recount_fv_wires();
+
+  if ( cycle ) {
+    plan.current_module.remove_wire(new_wire);
+    plan.base_module.associate_fvs();    
+    plan.recount_fv_wires();  
+    alert("Cycle detected. Could not add wire.")
+  }
 
 }
 
@@ -90,7 +99,7 @@ AQ.Plan.record_methods.connect = function(io1, object1, io2, object2) {
 
 
       if ( object1 == object2 ) {                                                              // 11
-        console.log("Cannot connect io ports within the same module.")
+        alert("Cannot connect io ports within the same module.")
       } else {                                                                                 // 22, 23, 32
         if ( role1 == 'output' && role2 == 'input' ) plan.connect_aux(io1, object1, io2, object2);
         else if ( role1 == 'input' && role2 == 'output' ) plan.connect_aux(io2, object2, io1, object1);
@@ -142,6 +151,23 @@ AQ.Plan.record_methods.get_implied_wires = function() {
 
 }
 
+AQ.Plan.record_methods.makes_cycle= function(wires) {
+
+  var plan = this;
+
+  console.log("Cycle?")
+
+  for ( i in wires ) {
+    console.log("    Checking for cycle: " + wires[i].to_s)
+    if ( plan.reachable(wires[i].from, wires[i].to) ) {
+      return true;
+    }
+  }
+
+  return false;
+
+}
+
 AQ.Plan.record_methods.add_implied_wires = function() {
 
   var plan = this,
@@ -150,9 +176,14 @@ AQ.Plan.record_methods.add_implied_wires = function() {
       wires_to_delete = [];
 
   wires_to_add = aq.where(wires_from_modules, w => !plan.wire_in_set(plan.wires, w));
-  plan.wires = plan.wires.concat(wires_to_add);
 
-  console.log("Added " + wires_to_add.length + " wires");
+  if ( plan.makes_cycle(wires_to_add) ) {
+    return true;
+  } else {
+    plan.wires = plan.wires.concat(wires_to_add);
+    console.log("Added " + wires_to_add.length + " wires");
+    return false;
+  }
 
 }
 

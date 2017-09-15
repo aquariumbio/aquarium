@@ -25,17 +25,8 @@
 
           var sid = ui.item.value;
 
-          console.log(sid)
-
           op.assign_sample(fv, sid);
-
-          // send new sid to i/o of other operations
-          plan.propagate(op,fv,ui.item.value);
-
-          // use sample information to fill in inputs, if possible
-          if ( fv.role == 'output' ) {
-            op.instantiate(plan,fv,sid);
-          }
+          op.instantiate(plan,fv,sid);
 
           if ( ft.array ) {
 
@@ -63,9 +54,25 @@
 
           }
 
+          plan.propagate(op,fv,ui.item.value);          
+
           $scope.$apply();
 
-        }   
+        }  
+
+        var change = function(ev,ui)  {
+
+          var sid = ft.array ? fv.sample_identifier : route[ft.routing];
+              aft = op.form[ft.role][fv.name].aft;
+
+          if ( aft && aft.sample_type && !AQ.sample_names_for(aft.sample_type.name).includes(sid) ) {
+            console.log("String '" + sid + "' is not a valid sample identifier");
+            op.assign_sample(fv, null);
+            op.instantiate(plan,fv,null);
+            $scope.$apply();
+          }
+
+        }
 
         $scope.$watch("operation.form[fv.field_type.role][fv.name].aft", function(new_aft, old_aft) {
 
@@ -83,7 +90,7 @@
 
               select: autocomp,
 
-              // change: () => console.log("change"),
+              change: change,
               // // close: () => console.log("close"),
               // create: () => console.log("create"),
               // focus: () => console.log("focus"),                            

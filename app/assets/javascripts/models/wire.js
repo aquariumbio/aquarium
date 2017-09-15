@@ -13,21 +13,50 @@ AQ.Wire.make = function(specs) {
 
 }
 
-AQ.Wire.record_methods.consistent = function() {
+AQ.Wire.record_methods.matching_aft = function() {
 
   var wire = this;
 
   if ( wire.to.aft && wire.from.aft ) {
 
     return wire.to.aft.sample_type_id == wire.from.aft.sample_type_id && 
-           wire.to.aft.object_type_id == wire.from.aft.object_type_id &&
-           wire.to_op.routing[wire.to.routing] == wire.from_op.routing[wire.from.routing];
+           wire.to.aft.object_type_id == wire.from.aft.object_type_id  
 
   } else {
 
-    return wire.to_op.routing[wire.to.routing] == wire.from_op.routing[wire.from.routing];
+    return true;
 
   }
+
+}
+
+AQ.Wire.record_methods.matching_sample = function() {
+
+  var wire = this,
+      from_sid, 
+      to_sid;
+
+  if ( wire.from.field_type.array ) {
+    from_sid = wire.from.sample_identifier;
+  } else {
+    from_sid = wire.from_op.routing[wire.from.routing]
+  }
+
+  if ( wire.to.field_type.array ) {
+    to_sid = wire.to.sample_identifier;
+  } else {
+    to_sid = wire.to_op.routing[wire.to.routing]
+  }
+
+  return !from_sid || !to_sid || from_sid == to_sid;
+
+}
+
+AQ.Wire.record_methods.consistent = function() {
+
+  var wire = this;
+
+  return wire.matching_aft() && wire.matching_sample();
         
 }
 

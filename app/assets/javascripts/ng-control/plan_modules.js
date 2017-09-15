@@ -20,14 +20,14 @@ AQ.Plan.record_methods.visible = function(obj) {
 
   var plan = this;
 
-  switch ( obj.model.model ) {
+  switch ( obj.record_type) {
 
     case "Operation":
     case "Module":
       if ( !obj.parent_id ) {
         obj.parent_id = 0;
       }
-      return obj.parent_id == plan.current_module.id;
+      return obj.id != 0 && obj.parent_id == plan.current_module.id;
 
     case "Wire":
       if ( !obj.from_op.parent_id ) {
@@ -58,8 +58,11 @@ AQ.Plan.record_methods.create_module = function() {
       selected_ops = aq.where(plan.operations, op => op.multiselect),
       current = plan.current_module, // have to call this first (getter with a side effect of 
                                      // making the current module if it doesn't exist)
-      selected_modules = aq.where(current.children, child => child.multiselect),                                     
+      selected_modules = aq.where(current.children, child => child.multiselect),  
+      wires_to_be_moved = [];                                   
       x = 0, y = 0, n = 0;
+
+  aq.each(plan.base_module.all_wires, w => console.log("   " + w.to_s));
 
   module = new Module().for_parent(plan.current_module);
 
@@ -72,26 +75,62 @@ AQ.Plan.record_methods.create_module = function() {
     n++;
   });
 
-  aq.each(selected_modules, child => {
-    child.parent_id = module.id;
-    aq.remove(current.children, child);
-    module.children.push(child);
-    x += child.x;
-    y += child.y;
+  aq.each(selected_modules, selected_module => {
+
+    // collect wires that connect things to selected module to newly created module
+    aq.each(current.wires, wire => {
+      if ( wire.from_module == selected_module || wire.to_module == selected_module ) {
+        if ( !plan.wire_in_module(current,wire) ) {
+          wires_to_be_moved.push(wire);
+        }
+      }
+    })
+
+    selected_module.parent_id = module.id;
+    aq.remove(current.children, selected_module);
+    module.children.push(selected_module);
+
+    x += selected_module.x;
+    y += selected_module.y; 
     n++;
+
   });  
 
   if ( n > 0 ) {
+
     module.x = x/n;
     module.y = y/n;
+    console.log("new module pos", x, y, n, module.x, module.y)
     plan.add_module_wires_from_real(module);
     plan.add_module_wires_from_module_wires(module);
+
+    aq.each(wires_to_be_moved, wire => { 
+      console.log("  Moving " + wire.to_s)
+      aq.remove(current.wires, wire)
+      module.wires.push(wire);
+    });
+
     plan.delete_old_module_wires(module);
+
   }
+
+  console.log("----------")
+  aq.each(plan.base_module.all_wires, w => console.log("   " + w.to_s));
 
   plan.base_module.associate_fvs();
 
   return module;
+
+}
+
+AQ.Plan.record_methods.wire_in_module = function(current, wire) {
+
+  var p1 = wire.from_module ? wire.from_module.parent_id : wire.from_op.parent_id,
+      p2 = wire.to_module ? wire.to_module.parent_id : wire.to_op.parent_id;
+
+      console.log(current.id, p1,p2)
+
+  return p1 == current.id && p2 == current.id;
 
 }
 
@@ -178,6 +217,11 @@ AQ.Plan.record_methods.add_module_wires_from_module_wires = function(new_module)
 AQ.Plan.record_methods.delete_old_module_wires = function(new_module) {
 
   var plan = this;
+  aq.each(plan.current_module.wires, w => {
+    if ( plan.uses_module(w, new_module) ) {
+      console.log("  Removing " + w.to_s)
+    }
+  });
   plan.current_module.wires = aq.where(plan.current_module.wires, w => !plan.uses_module(w, new_module));
 
 }

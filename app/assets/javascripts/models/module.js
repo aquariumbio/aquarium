@@ -33,6 +33,17 @@ class Module {
     this.width = 160;
     this.height = 60;    
 
+    if ( typeof this.x == 'string' ) {
+      console.log("WARNING: module x coordinate is a string. Converting");
+      this.x = parseFloat(this.x);
+      console.log("got ", this.x)
+    }
+
+    if ( typeof this.y == 'string' ) {
+      console.log("WARNING: module x coordinate is a string. Converting");
+      this.y = parseFloat(this.y);
+    }
+
     if ( !this.children ) this.children = [];
     if ( !this.input ) this.input = [];
     if ( !this.output ) this.output = [];
@@ -185,8 +196,6 @@ class Module {
   remove_operation(op) {
     this.wires = aq.where(this.wires, w => w.from_op != op && w.to_op != op);
   }
-
-
 
   index_of_input(io) {
     return this.input.indexOf(io);

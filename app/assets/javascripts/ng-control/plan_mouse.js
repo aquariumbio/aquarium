@@ -190,6 +190,11 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
         if ( ( io.origin && io.origin.io ) || io.destinations.length > 0 ) {
           $scope.set_current_io(io,true,role);
+          // if ( io.origin ) {
+          //   $scope.current_op = io.origin.op;
+          // } else if ( io.destinations.length > 0 ) {
+          //   $scope.current_op = io.destinations[0].op;
+          // }
         } else {
           $scope.set_current_io(io,false,role);
         }
@@ -237,7 +242,14 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
     } else if ( $scope.current_draggable && !$scope.current_fv ) {
 
-      $scope.delete_object($scope.current_draggable);
+      if ( $scope.current_draggable.record_type == "Module" ) {
+        $scope.confirm_delete().then(() => {
+          $scope.delete_object($scope.current_draggable);
+          $scope.$apply();
+        })
+      } else {
+        $scope.delete_object($scope.current_draggable);
+      }
 
     } else if ( $scope.multiselect ) {
 
@@ -249,7 +261,10 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
         }
       });
 
-      aq.each(objects, obj => $scope.delete_object(obj));
+      $scope.confirm_delete().then(() => {
+        aq.each(objects, obj => $scope.delete_object(obj));
+        $scope.$apply();
+      });
 
       $scope.select(null)   
 
@@ -282,32 +297,50 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
       case "A":
       case "a":
-        if (evt.ctrlKey) $scope.select_all()
+        if ( evt.ctrlKey || evt.metaKey ) {
+          $scope.select_all();
+          evt.preventDefault()
+        }
         break
 
       case "M":
       case "m":
-        if ( evt.ctrlKey ) $scope.plan.create_module($scope.current_op);
+        if ( evt.ctrlKey || evt.metaKey ) {
+          $scope.plan.create_module($scope.current_op);
+          evt.preventDefault()
+        }          
         break;
 
-      case "N":
-      case "n":
-        if ( evt.ctrlKey ) $scope.new();
-        break;        
+      // case "N":
+      // case "n":
+      //   if ( evt.ctrlKey || evt.metaKey ) {
+      //     $scope.new();
+      //     evt.preventDefault();
+      //   }              
+      //   break;        
 
       case "O":
       case "o":
-        if ( evt.ctrlKey ) $scope.add_module_output();
+        if ( evt.ctrlKey || evt.metaKey ) {
+          $scope.add_module_output();
+          evt.preventDefault()          
+        }
         break;
 
       case "I":
       case "i":
-        if ( evt.ctrlKey ) $scope.add_module_input();
+        if ( evt.ctrlKey || evt.metaKey ) {
+          $scope.add_module_input();
+          evt.preventDefault()          
+        }          
         break;
 
       case "S":
       case "s":
-        if ( evt.ctrlKey ) $scope.save($scope.plan);
+        if ( evt.ctrlKey || evt.metaKey ) {
+          $scope.save($scope.plan);
+          evt.preventDefault()          
+        }               
         break;
 
       default:

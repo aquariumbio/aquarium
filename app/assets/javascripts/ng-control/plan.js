@@ -1,6 +1,6 @@
 (function() {
 
-  var w = angular.module('aquarium'); 
+  let w = angular.module('aquarium');
 
   w.controller('planCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', '$window', '$mdDialog',
                   function (  $scope,   $http,   $attrs,   $cookies,   $sce,   $window,   $mdDialog ) {
@@ -44,8 +44,6 @@
       var selected_fv_rid;
       $scope.current_io = io;
 
-      // console.log("Setting current_io", io, focus,role)
-
       if ( io.record_type === "FieldValue" ) {
 
         $scope.current_fv = io;
@@ -81,8 +79,8 @@
 
     $scope.add_operation = function(operation_type) {
       var op = AQ.Operation.record({
-        x: 100+3*AQ.snap + $scope.last_place, 
-        y: 100+2*AQ.snap + $scope.last_place, 
+        x: 60+3*AQ.snap + $scope.last_place,
+        y: 60+2*AQ.snap + $scope.last_place,
         width: 160, 
         height: 30,
         routing: {}, form: { input: {}, output: {} },
@@ -95,7 +93,7 @@
         $scope.plan.name = op.operation_type.name;
         $scope.state.message = "Changed name of untitled plan to " + op.operation_type.name;
       }
-    }
+    };
 
     $scope.add_predecessor = function(io,obj,pred) {
 
@@ -113,13 +111,13 @@
 
         $scope.select(newop);
 
-        var inputs = aq.where(newop.field_values, fv => { fv.role == 'input' });
+        var inputs = aq.where(newop.field_values, fv => fv.role === 'input');
 
         if ( inputs.length > 0 ) {
           $scope.set_current_io(inputs[0]);
         }
 
-      } else if ( obj.record_type == "Module" && io.record_type == "ModuleIO" )  {
+      } else if ( obj.record_type === "Module" && io.record_type === "ModuleIO" )  {
 
         var module = obj,
             fv = io.destinations[0].io,
@@ -136,7 +134,7 @@
 
         $scope.connect(newop.output(pred.output.name),newop,io,module);
 
-        var inputs = aq.where(newop.field_values, fv => fv.role == 'input');
+        var inputs = aq.where(newop.field_values, fv => fv.role === 'input');
 
         if ( inputs.length > 0 ) {
           $scope.set_current_io(inputs[0]);
@@ -148,7 +146,7 @@
 
     $scope.add_successor = function(io,obj,suc) {
 
-      if ( obj.record_type == "Operation" && io.record_type == "FieldValue" ) {      
+      if ( obj.record_type === "Operation" && io.record_type === "FieldValue" ) {
 
         var op = obj,
             fv = io,
@@ -163,7 +161,7 @@
 
         $scope.select(newop);
 
-        var fvs = aq.where(newop.field_values, fv => fv.role == 'output');
+        var fvs = aq.where(newop.field_values, fv => fv.role === 'output');
         if ( fvs.length > 0 ) {
           $scope.set_current_io(fvs[0]);
         }
@@ -184,8 +182,8 @@
 
           $scope.select(newop);
 
-          $scope.connect(io,module,newop.input(suc.input.name),newop);
-
+          $scope.connect(io,module,newop.input(suc.input.name),newop);          
+          
           var fvs = aq.where(newop.field_values, fv => fv.role === 'output');
           if ( fvs.length > 0 ) {
             $scope.set_current_io(fvs[0]);
@@ -194,11 +192,11 @@
 
       }
 
-    }
+    };
 
     $scope.note = function(msg) {
       console.log(msg);
-    }
+    };
 
     $scope.save = function(plan) {
 
@@ -210,7 +208,7 @@
         refresh_plan_list();
       });
 
-    }
+    };
 
     function open_templates() {
       $scope.state.sidebar.templates = true;        
@@ -223,13 +221,13 @@
       p.status = "template";
       p.save().then(() => {
         $scope.templates.push(p);
-        open_templates()
+        open_templates();
         $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
         $scope.select(null);  
         refresh_plan_list();
       })
 
-    }
+    };
 
     $scope.create_system_template = function(p) {
 
@@ -245,39 +243,67 @@
         })
       })      
 
-    }
+    };
 
     $scope.revert_template = function(plan) {
 
-      AQ.Plan.load(plan.id).then(p => {
-        p.status = "planning";
-        p.save().then(p => {
-          aq.remove($scope.templates, plan);  
-          aq.remove($scope.system_templates, plan); 
-          $scope.plan = p
-          refresh_plan_list();
-          $scope.select(null);  
-          $scope.$apply();    
-        })
-      })      
+      let confirm = $mdDialog.confirm()
+          .title('Revert Template?')
+          .textContent("Do you really want to revert this template to a normal plan?")
+          .ariaLabel('Revert')
+          .ok('Yes')
+          .cancel('No');
 
-    }
+      $mdDialog.show(confirm).then(() => {
+
+        AQ.Plan.load(plan.id).then(p => {
+          p.status = "planning";
+          p.save().then(p => {
+            aq.remove($scope.templates, plan);
+            aq.remove($scope.system_templates, plan);
+            // $scope.plan = p
+            refresh_plan_list();
+            $scope.select(null);
+            $scope.$apply();
+          })
+        })
+      });
+
+    };
+
+    $scope.confirm_delete = function() {
+
+      return new Promise(function(resolve,reject) {
+
+         let confirm = $mdDialog.confirm()
+          .title('Delete Selection?')
+          .textContent("Do you really want to delete the selection" +
+                       "including the contents of any selected modules?")
+          .ariaLabel('Delete')
+          .ok('Yes')
+          .cancel('No');
+
+        $mdDialog.show(confirm).then(resolve, () => null );
+
+      });
+
+    };
 
     $scope.delete_plan = function(p) {
 
-      var confirm = $mdDialog.confirm()
+      let confirm = $mdDialog.confirm()
           .title('Delete Plan?')
           .textContent("Do you really want to delete the plan \"" + p.name + "\"?")
           .ariaLabel('Delete')
           .ok('Yes')
-          .cancel('No')
+          .cancel('No');
 
       if ( p.id ) {
 
         $mdDialog.show(confirm).then( () => {
 
           $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
-          $scope.select(null)
+          $scope.select(null);
           $scope.state.deleting_plan = p;
           p.destroy().then(() =>  refresh_plan_list());
 
@@ -285,7 +311,7 @@
 
       }
 
-    }
+    };
 
     function save_first(msg) {
 
@@ -293,7 +319,7 @@
 
         if ( $scope.plan.operations.length > 0 ) {
 
-          var dialog = $mdDialog.confirm()
+          let dialog = $mdDialog.confirm()
               .clickOutsideToClose(true)
               .title('Save First?')
               .textContent(msg ? msg : "Save the current plan before loading \"" + plan.name + "\"?")
@@ -318,24 +344,24 @@
 
     $scope.report_error = function(title, msg, details) {
 
-      var alert = $mdDialog.alert()
+      let alert = $mdDialog.alert()
           .clickOutsideToClose(true)
           .title(title)
           .textContent(msg)
           .ariaLabel(title)
           .ok('Ok');
 
-      console.log(details)
+      console.log(details);
 
       $mdDialog.show(alert).then()        
 
-    }
+    };
 
     function load_aux(plan) {
       AQ.Plan.load(plan.id).then(p => {
         $scope.plan = p;
         $scope.plan.find_items();
-        $scope.select(null)
+        $scope.select(null);
         $scope.$apply();
       }).catch(error => {
         $scope.report_error("Could not read plan '" + plan.name + "'.", error.message, error.stack)
@@ -344,11 +370,11 @@
 
     $scope.load = function(plan) {
       save_first().then(() => load_aux(plan));
-    }
+    };
 
     $scope.paste_plan = function(plan) {
 
-      var temp1 = Module.next_module_id,
+      let temp1 = Module.next_module_id,
           temp2 = ModuleIO.next_io_id;
 
       $scope.clear_multiselect();
@@ -356,11 +382,12 @@
       AQ.Plan.load(plan.id).then(p => {
         Module.next_module_id = temp1;
         ModuleIO.next_io_id = temp2;
-        $scope.plan.paste_plan(p);
+        $scope.plan.paste_plan(p,$scope.last_place);
+        $scope.last_place += 4*AQ.snap;
         $scope.$apply();
       })
 
-    }
+    };
 
     $scope.new = function() {
       save_first("Save current plan before creating new plan?").then( () => {
@@ -368,29 +395,29 @@
         $scope.select(null);
         $scope.$apply();
       });
-    }
+    };
 
     $scope.copy_plan = function(plan) {
       plan.replan().then(newplan => {
         $scope.plans.push(newplan);
         load_aux(newplan);
       })
-    }
+    };
 
     $scope.select_uba= function(user,s) {      
       aq.each(user.user_budget_associations, uba => {
-        if ( uba.id == s.id ) {
+        if ( uba.id === s.id ) {
           uba.selected = true;
           $scope.plan.uba = uba;
         } else {
           uba.selected = false;
         }
       });
-    }
+    };
 
     $scope.launch = function() {
 
-      $scope.select(null)
+      $scope.select(null);
       $scope.state.launch = true;
       $scope.plan.uba = null;
       aq.each($scope.current_user.user_budget_associations, uba => uba.selected = false);
@@ -405,8 +432,8 @@
                                  "or outputs was found to be invalid after saving.";
         }
       });
-
-    }
+      
+    };
 
     $scope.submit_plan = function() {
       $scope.state.planning = true;
@@ -424,7 +451,7 @@
         $scope.plan.errors = errors;
         $scope.$apply();
       })
-    }
+    };
 
  
     $scope.openMenu = function($mdMenu, ev) {
@@ -434,11 +461,11 @@
 
     $scope.delete_object = function(obj) {
 
-      if ( obj.record_type == "Operation" ) {
+      if ( obj.record_type === "Operation" ) {
 
         aq.remove($scope.plan.operations, obj);                               
         $scope.plan.wires = aq.where($scope.plan.wires, w => {
-          var remove = w.to_op == obj || w.from_op == obj;
+          let remove = w.to_op === obj || w.from_op === obj;
           if ( remove ) {
             w.disconnect();
           }              
@@ -447,61 +474,50 @@
         $scope.plan.current_module.remove_operation(obj);
         $scope.current_op = null;
 
-      } else if ( obj.record_type == "Module" ) {
+      } else if ( obj.record_type === "Module" ) {
 
-         var confirm = $mdDialog.confirm()
-          .title('Delete Module?')
-          .textContent("Do you really want to delete the module \"" + obj.name + 
-                        "\" and all of its contents?")
-          .ariaLabel('Delete')
-          .ok('Yes')
-          .cancel('No');
+        $scope.plan.current_module.remove(obj,$scope.plan);
 
-        $mdDialog.show(confirm).then( 
-          () => $scope.plan.current_module.remove(obj,$scope.plan),
-          () => null
-        );
-
-      } else if ( obj.record_type == "ModuleIO" ) {
+      } else if ( obj.record_type === "ModuleIO" ) {
 
         $scope.plan.current_module.remove_io(obj, $scope.plan);
 
       } 
 
-    }
+    };
 
     // Inventory ////////////////////////////////////////////////////////////////////////////////////
 
     $scope.select_item = function(fv, item) {
 
-      if ( fv.child_item_id != item.id && item.assign_first ) {
+      if ( fv.child_item_id !== item.id && item.assign_first ) {
         item.assign_first(fv);
       }
 
       fv.child_item_id = item.id;
       fv.child_item = item;
 
-    }
+    };
 
     $scope.select_row_column = function(fv,sid,collection,r,c) {      
-      if ( fv.child_sample_id == sid ) {
+      if ( fv.child_sample_id === sid ) {
         fv.child_item_id = collection.id;
         fv.child_item = collection;
         fv.row = r;
         fv.column = c;
       }
-    }
+    };
 
     // Operation type selection ///////////////////////////////////////////////////////////////////////
 
     $scope.choose_category = function(category) {
       $scope.state.category_index = $scope.operation_types.categories.indexOf(category);
-    }
+    };
 
     // Wires //////////////////////////////////////////////////////////////////////////////////////////
 
     $scope.remove_orphan_wires = function() {
-      var list = []
+      let list = [];
       aq.each($scope.plan.wires, wire => {
         if ( wire.from.deleted || wire.to.deleted ) {
           list.push(wire);
@@ -516,7 +532,7 @@
 
   w.directive('ngRightClick', [ '$parse', function($parse) {
       return function(scope, element, attrs) {
-          var fn = $parse(attrs.ngRightClick);
+          let fn = $parse(attrs.ngRightClick);
           element.bind('contextmenu', function(event) {
               scope.$apply(function() {
                   event.preventDefault();

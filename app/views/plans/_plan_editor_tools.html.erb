@@ -44,7 +44,7 @@
     <ul class='compact-list'
         style="margin-left: 28px"
         ng-if="state.current_category == category">
-      <li ng-repeat="ot in operation_types | filter: { category: category } | orderBy:'name'">
+      <li ng-repeat="ot in operation_types | filter: { category: category } : true | orderBy:'name'">
         <a href="#" ng-click="add_operation(ot)">
         {{ot.name | limitTo:32:0}}
         {{ot.name.length > 32 ? '...' : ''}}
