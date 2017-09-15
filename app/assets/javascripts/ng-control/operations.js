@@ -3,8 +3,8 @@
 
   let w = angular.module('aquarium');
 
-  w.controller('operationsCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$interval', 
-                        function (  $scope,   $http,   $attrs,   $cookies,   $interval ) {
+  w.controller('operationsCtrl', [ '$scope', '$http', '$attrs', 'aqCookieManager', '$interval',
+                        function (  $scope,   $http,   $attrs,   aqCookieManager,   $interval ) {
 
     AQ.init($http);
     AQ.update = () => { $scope.$apply(); };
@@ -18,7 +18,7 @@
 
     function init1() {
 
-      let manager_state = get_object("managerState");
+      let manager_state = aqCookieManager.get_object("managerState");
       if ( manager_state ) {
         $scope.current = manager_state;
         if ( $scope.current.selected_user ) {
@@ -112,7 +112,7 @@
     };
 
     function store_cookie() {
-      put_object("managerState", {
+      aqCookieManager.put_object("managerState", {
         operation_type: { id: $scope.current.operation_type.id },
         status: $scope.current.status,
         category_index: $scope.current.category_index,
@@ -121,22 +121,6 @@
         filter_user: $scope.current.filter_user
       });          
     }
-
-    /*
-     * Cookie management -- common to developer.js, operation_types.js and browser.js --- should be factored out
-     */
-    function cookie_name(name) {
-        return aquarium_environment_name + "_" + name;
-    }
-
-    function put_object(name, object) {
-        $cookies.putObject(cookie_name(name), object);
-    }
-
-    function get_object(name) {
-        return $cookies.getObject(cookie_name(name))
-    }
-
 
     $scope.select = function(operation_type,status,selected_ops,append=false) {
 

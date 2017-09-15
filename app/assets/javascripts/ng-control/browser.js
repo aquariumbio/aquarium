@@ -6,28 +6,13 @@
       $locationProvider.html5Mode({ enabled: true, requireBase: false, rewriteLinks: false });
   }]);  
 
-  w.controller('browserCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', '$window',
-                     function (  $scope,   $http,   $attrs,   $cookies,   $sce ,  $window ) {
+  w.controller('browserCtrl', [ '$scope', '$http', '$attrs', 'aqCookieManager', '$sce', '$window',
+                     function (  $scope,   $http,   $attrs,   aqCookieManager,   $sce ,  $window ) {
 
     AQ.init($http);
     AQ.update = () => { $scope.$apply(); }
     AQ.confirm = (msg) => { return confirm(msg); }
     AQ.sce = $sce;
-
-    /*
-     * Cookie management -- common to operation.js, developer.js and operation_type.js --- should be factored out
-     */
-     function cookie_name(name) {
-       return aquarium_environment_name + "_" + name;
-     }
-
-     function put_object(name, object) {
-       $cookies.putObject(cookie_name(name), object);
-     }
-
-     function get_object(name) {
-       return $cookies.getObject(cookie_name(name))
-     }
 
     function cookie() {
 
@@ -68,11 +53,11 @@
         user: $scope.views.user
       };
 
-      put_object("browserViews", data);
+      aqCookieManager.put_object("browserViews", data);
 
     }
 
-    $scope.views = get_object("browserViews");
+    $scope.views = aqCookieManager.get_object("browserViews");
 
     if ( !$scope.views || $scope.views.version != 2 ) {
 

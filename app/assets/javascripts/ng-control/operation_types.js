@@ -2,8 +2,8 @@
 
   let w = angular.module('aquarium');
 
-  w.controller('operationTypesCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', '$mdDialog',
-                            function (  $scope,   $http,   $attrs,   $cookies,   $sce, $mdDialog ) {
+  w.controller('operationTypesCtrl', [ '$scope', '$http', '$attrs', 'aqCookieManager', '$sce', '$mdDialog',
+                            function (  $scope,   $http,   $attrs,   aqCookieManager,   $sce, $mdDialog ) {
 
     AQ.init($http);
     AQ.update = () => { $scope.$apply(); };
@@ -53,7 +53,7 @@
           || ($scope.current_operation_type.model.model === 'Library'
             && $scope.current_operation_type.source.changed)
         );
-    }
+    };
 
     function make_categories() {
 
@@ -61,7 +61,7 @@
         return ot.category;
       })).sort();
 
-      let category = get_object("DeveloperCurrentCategory");
+      let category = aqCookieManager.get_object("DeveloperCurrentCategory");
       if ( category ) {
         $scope.choose_category(category);
       } else if ( $scope.categories.length > 0 && !$scope.current_category ) {
@@ -70,20 +70,6 @@
 
     }
 
-    /*
-     * Cookie management -- common to operation.js, developer.js and browser.js --- should be factored out
-     */
-     function cookie_name(name) {
-       return aquarium_environment_name + "_" + name;
-     }
-
-     function put_object(name, object) {
-       $cookies.putObject(cookie_name(name), object);
-     }
-
-     function get_object(name) {
-        return $cookies.getObject(cookie_name(name))
-     }
 
     AQ.OperationType.all({methods: ["field_types", "timing"]}).then(operation_types => {
 
@@ -100,7 +86,7 @@
           operation_type.timing.make_form();
       });
 
-      let current_operation_type_id = get_object("DeveloperCurrentOperationTypeId");
+      let current_operation_type_id = aqCookieManager.get_object("DeveloperCurrentOperationTypeId");
       if ( current_operation_type_id ) {
           let operation_types = aq.where($scope.operation_types,operation_type => operation_type.id === current_operation_type_id );
           if  ( operation_types.length === 1 ) {
@@ -118,12 +104,11 @@
       });
 
 
-      let mode = get_object("DeveloperMode");
+      let mode = aqCookieManager.get_object("DeveloperMode");
       if ( mode ) {
         $scope.set_mode(mode);
       } else {
-        $scope.set_mode('operation_type');
-        $scope.set_tab('definition');
+        $scope.set_mode('definition');
       }
 
       $scope.initialized = true;
@@ -144,22 +129,22 @@
 
     //TODO need to manage tabs separately from library/operation-type, currently mode means tab (mostly)
     $scope.set_mode = function(mode) {
-      put_object("DeveloperMode",mode);
+      aqCookieManager.put_object("DeveloperMode",mode);
       $scope.mode = mode;
     };
 
     $scope.choose = function(operation_type) {
       $scope.current_operation_type = operation_type;
       $scope.set_mode('definition');
-      put_object("DeveloperCurrentOperationTypeId", operation_type.id);
-      put_object("DeveloperSelectionType", "OperationType");
+      aqCookieManager.put_object("DeveloperCurrentOperationTypeId", operation_type.id);
+      aqCookieManager.put_object("DeveloperSelectionType", "OperationType");
     };
 
     $scope.choose_lib = function(library) {
       $scope.current_operation_type = library;
       $scope.set_mode('source');
-      put_object("DeveloperCurrentOperationTypeId", library.id);
-      put_object("DeveloperSelectionType", "Library");
+      aqCookieManager.put_object("DeveloperCurrentOperationTypeId", library.id);
+      aqCookieManager.put_object("DeveloperSelectionType", "Library");
     };
 
     $scope.choose_category = function(category) {
@@ -167,7 +152,7 @@
         delete $scope.current_category;
       } else {
         $scope.current_category = category;
-        put_object("DeveloperCurrentCategory", category);
+        aqCookieManager.put_object("DeveloperCurrentCategory", category);
       }
     };
 
@@ -212,7 +197,7 @@
               $scope.current_operation_type.upgrade_field_types();
               make_categories();
               $scope.current_category = $scope.current_operation_type.category;
-              put_object("DeveloperCurrentCategory", $scope.current_operation_type.category);
+              aqCookieManager.put_object("DeveloperCurrentCategory", $scope.current_operation_type.category);
             }
           });          
         } else {
@@ -226,8 +211,8 @@
               $scope.current_operation_type.upgrade_field_types();
               make_categories();
               $scope.current_category = $scope.current_operation_type.category;
-              put_object("DeveloperCurrentOperationTypeId", $scope.current_operation_type.id);
-              put_object("DeveloperCurrentCategory", $scope.current_operation_type.category);
+              aqCookieManager.put_object("DeveloperCurrentOperationTypeId", $scope.current_operation_type.id);
+              aqCookieManager.put_object("DeveloperCurrentCategory", $scope.current_operation_type.category);
             }
           });
         }
@@ -239,14 +224,14 @@
       if ( $scope.category_size(c) > 0 ) {
         let ots = aq.where($scope.operation_types, ot => ot.category === c );
         $scope.current_operation_type = ots[0];
-        put_object("DeveloperCurrentOperationTypeId", $scope.current_operation_type.id);
+        aqCookieManager.put_object("DeveloperCurrentOperationTypeId", $scope.current_operation_type.id);
         $scope.current_category = c;
-        put_object("DeveloperCurrentCategory", c);
+        aqCookieManager.put_object("DeveloperCurrentCategory", c);
       } else if ( $scope.operation_types.length > 0 ) {
         $scope.current_operation_type = $scope.operation_types[0];
-        put_object("DeveloperCurrentOperationTypeId", $scope.current_operation_type.id);
+        aqCookieManager.put_object("DeveloperCurrentOperationTypeId", $scope.current_operation_type.id);
         $scope.current_category = $scope.current_operation_type.category;
-        put_object("DeveloperCurrentCategory", $scope.current_operation_type.category);
+        aqCookieManager.put_object("DeveloperCurrentCategory", $scope.current_operation_type.category);
       }      
     }
 

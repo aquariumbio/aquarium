@@ -2,8 +2,8 @@
 
   var w = angular.module('aquarium'); 
 
-  w.controller('developerCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
-                        function ( $scope,   $http,   $attrs,   $cookies ) {
+  w.controller('developerCtrl', [ '$scope', '$http', '$attrs', 'aqCookieManager',
+                        function ( $scope,   $http,   $attrs,   aqCookieManager ) {
 
     $scope.errors = [];
     $scope.messages = [];
@@ -31,21 +31,6 @@
       }));  
     }
 
-    /*
-     * Cookie management -- common to operation.js, operation_types.js and browser.js --- should be factored out
-     */
-     function cookie_name(name) {
-       return aquarium_environment_name + "_" + name;
-     }
-
-     function put_object(name, object) {
-       $cookies.putObject(cookie_name(name), object);
-     }
-
-     function get_object(name) {
-       return $cookies.getObject(cookie_name(name))
-     }
-
     $scope.get = function() {
 
       var path = $scope.path;
@@ -53,7 +38,7 @@
       $scope.cookie.path = $scope.path;
       $scope.cookie.arguments = $scope.arguments;
       $scope.cookie.branch = $scope.branch;  
-      put_object("developer", $scope.cookie);
+      aqCookieManager.put_object("developer", $scope.cookie);
 
       if ( path == "" ) {
         path = "_NOT_SPECIFIED_";
@@ -104,7 +89,7 @@
         }
 
         $scope.cookie.branch = $scope.branch;  
-        put_object("developer", $scope.cookie);
+        aqCookieManager.put_object("developer", $scope.cookie);
         $scope.busy = true;
         
         $http.post("/developer/save",{ path: $scope.path, content: $scope.editor.getValue(), branch: $scope.branch }).then(
@@ -216,7 +201,7 @@
 
     // Initialize 
 
-    $scope.cookie = get_object("developer");
+    $scope.cookie = aqCookieManager.get_object("developer");
 
     if ( $scope.cookie && $scope.cookie.path ) {
       $scope.path = $scope.cookie.path;
@@ -225,7 +210,7 @@
       $scope.get();
     } else {
       $scope.cookie = { path: "", arguments: {}, branch: "master" };
-      put_object("developer", $scope.cookie);
+      aqCookieManager.put_object("developer", $scope.cookie);
       $scope.path = "";
       $scope.arguments = {};
       $scope.branch = "master";
