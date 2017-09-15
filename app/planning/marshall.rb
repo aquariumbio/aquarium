@@ -83,7 +83,7 @@ module Marshall
 
     # for each field value in operation, delete it if it is not in x
     operation.field_values.each do |fv|
-      unless op[:field_values].collect { |v| fv[:id] }.member? fv.id
+      unless op[:field_values].collect { |fv| fv[:id] }.member? fv.id
         fv.destroy
       end
     end
