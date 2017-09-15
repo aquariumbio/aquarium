@@ -15,24 +15,24 @@
       $scope.editor.gotoLine(1); 
     };
 
-    $scope.save = function(obj,name) {
+    $scope.save = function(code_object,component_name) {
 
       var controller;
 
-      if ( obj.model.model === "OperationType" ) {
+      if ( code_object.model.model === "OperationType" ) {
         controller = "operation_types";
-      } else if ( obj.model.model === "Library" ) {
+      } else if ( code_object.model.model === "Library" ) {
         controller = "libraries";
       }
 
-      if ( !obj[name].no_edit ) {
+      if ( !code_object[component_name].no_edit ) {
         $http.post( "/" + controller + "/code",{
-          id: obj.id,
-          name: name,
-          content: obj[name].content
+          id: code_object.id,
+          name: component_name,
+          content: code_object[component_name].content
         }).then(function(response) {
-          obj[name] = response.data;
-          obj.recompute_getter('versions')
+          code_object[component_name] = response.data;
+          code_object.recompute_getter('versions')
         });
       }
     }
