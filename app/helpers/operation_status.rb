@@ -9,7 +9,7 @@ module OperationStatus
     return str
   end
 
-  def start 
+  def start
 
     raise "Cannot start operation #{id} from state #{status}" unless status == "planning"
 
@@ -52,6 +52,7 @@ module OperationStatus
           change_status "scheduled"
         else
           change_status "pending"
+          get_items_from_predecessor
         end
       end
     rescue Exception => e
@@ -74,6 +75,21 @@ module OperationStatus
   def redo
     change_status "pending"
     # TODO: Change preds to pending? At least on_the_fly_preds/
+  end
+
+  def get_items_from_predecessor
+
+    inputs.each do |i|
+
+      Wire.where(to_id: i.id).each do |wire|
+        i.child_item_id = wire.from.child_item_id
+        i.row = wire.from.row
+        i.column = wire.from.column
+        i.save
+      end
+
+    end
+
   end
 
 end
