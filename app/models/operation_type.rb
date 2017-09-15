@@ -359,23 +359,6 @@ class OperationType < ActiveRecord::Base
 
   end
 
-  def precondition_value code, op
-
-    rval = true
-
-    begin
-      eval("class TemporaryPreconditionClass; #{code.content}; end")
-      tpc = TemporaryPreconditionClass.new
-      rval = tpc.precondition(op)
-    rescue Exception => e
-      puts "Could not evaluate precondition: #{e.to_s}"
-      rval = false # default if there is no precondition or it crashes
-    end
-
-    rval
-
-  end  
-
   def num_in_status s
     self.operations.select { |o| o.status == s }.length
   end
@@ -396,7 +379,7 @@ class OperationType < ActiveRecord::Base
 
       precode = preconditions.select { |p| p.parent_id == ot.id }.last
       pending = ot.operations.select { |o| o.status == "pending" }
-      pending_true_length = ot.operations.select { |o| o.status == "pending" && ot.precondition_value(precode,o) }.length
+      pending_true_length = ot.operations.select { |o| o.status == "pending" && o.precondition_value }.length
 
       result[ot.id] = {
         pending_true:  pending_true_length,
