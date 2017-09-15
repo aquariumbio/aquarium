@@ -197,8 +197,6 @@ class Module {
     this.wires = aq.where(this.wires, w => w.from_op != op && w.to_op != op);
   }
 
-
-
   index_of_input(io) {
     return this.input.indexOf(io);
   }
