@@ -319,8 +319,7 @@
 
         if ( $scope.plan.operations.length > 0 ) {
 
-          let dialog = $mdDialog.confirm()
-              .clickOutsideToClose(true)
+          var dialog = $mdDialog.confirm()
               .title('Save First?')
               .textContent(msg ? msg : "Save the current plan before loading \"" + plan.name + "\"?")
               .ariaLabel('Save First?')
