@@ -2,8 +2,8 @@
 
   <div ng-controller="codeCtrl as code">
 
-    <div ng-model="current_operation_type[name].content"
-         ng-if="current_operation_type.mode != 'versions' && name != 'documentation'"
+    <div ng-model="current_operation_type[component_name].content"
+         ng-if="current_operation_type.mode != 'versions' && component_name != 'documentation'"
          ui-ace="{
                    useWrapMode : true,
                    mode: 'ruby',
@@ -12,12 +12,12 @@
                    theme:'tomorrow',
                    tabSize: 2
                  }"
-         ng-change="change(current_operation_type[name])"
-         ng-readonly="current_operation_type[name].no_edit">
+         ng-change="change(current_operation_type[component_name])"
+         ng-readonly="current_operation_type[component_name].no_edit">
     </div>
 
-    <div ng-model="current_operation_type[name].content"
-         ng-if="current_operation_type.mode != 'versions' && name == 'documentation'"
+    <div ng-model="current_operation_type[component_name].content"
+         ng-if="current_operation_type.mode != 'versions' && component_name == 'documentation'"
          ui-ace="{
                    useWrapMode : true,
                    mode: 'markdown',
@@ -25,14 +25,14 @@
                    onChange: aceChanged,
                    theme:'tomorrow'
                  }"
-         ng-change="change(current_operation_type[name])"
-         ng-readonly="current_operation_type[name].no_edit">
+         ng-change="change(current_operation_type[component_name])"
+         ng-readonly="current_operation_type[component_name].no_edit">
     </div>
 
     <div ng-if="current_operation_type.mode == 'versions'" class="versions">
       <h4>Past Versions</h4>
       <ul>
-        <li ng-repeat="version in current_operation_type.versions[name]">
+        <li ng-repeat="version in current_operation_type.versions[component_name]">
           <a href="#" ng-click="version.open = !version.open">{{version.id}}</a>
           {{version.updated_at|date:'medium'}} : 
           {{version.content.length/1000}} kb
@@ -46,8 +46,8 @@
     <div class='code-controls' ng-if="current_operation_type.mode != 'versions'">
       <md-button
          class="md-raised md-medium"
-         ng-click="save(current_operation_type,name)"
-         ng-disabled="!current_operation_type[name].changed">
+         ng-click="save(current_operation_type,component_name)"
+         ng-disabled="!current_operation_type[component_name].changed">
          Save
       </md-button>
       <md-button
@@ -56,7 +56,7 @@
          Versions
       </md-button>
       <md-button class='md-raised md-medium'
-          ng-if="name == 'documentation'" ng-click="render_docs(current_operation_type)">
+          ng-if="component_name == 'documentation'" ng-click="render_docs(current_operation_type)">
         Preview
       </md-button>
 

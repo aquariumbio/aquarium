@@ -106,11 +106,11 @@
 
       <%= render partial: 'definition' %>
 
-      <div ng-include="'code'" ng-init="name='protocol'"      ng-if="current_operation_type.protocol && mode == 'protocol'" ></div>
-      <div ng-include="'code'" ng-init="name='precondition'"  ng-if="current_operation_type.precondition && mode == 'precondition'"></div>
-      <div ng-include="'code'" ng-init="name='cost_model'"    ng-if="current_operation_type.cost_model && mode == 'cost'"></div>
+      <div ng-include="'code'" ng-init="component_name='protocol'"      ng-if="current_operation_type.protocol && mode == 'protocol'" ></div>
+      <div ng-include="'code'" ng-init="component_name='precondition'"  ng-if="current_operation_type.precondition && mode == 'precondition'"></div>
+      <div ng-include="'code'" ng-init="component_name='cost_model'"    ng-if="current_operation_type.cost_model && mode == 'cost'"></div>
 
-      <div ng-include="'code'" ng-init="name='documentation'" ng-if="current_operation_type.documentation && mode == 'documentation'"></div>
+      <div ng-include="'code'" ng-init="component_name='documentation'" ng-if="current_operation_type.documentation && mode == 'documentation'"></div>
 
       <div ng-if="current_operation_type.documentation && mode == 'documentation_view'" ng-controller="codeCtrl as code" layout-padding>
         <div ng-bind-html="current_operation_type.rendered_docs"></div>
@@ -151,7 +151,7 @@
       </div>
     </div>
 
-    <div ng-include="'code'" ng-init="name='source'" ng-if="current_operation_type.source && mode == 'source'" ></div>
+    <div ng-include="'code'" ng-init="component_name='source'" ng-if="current_operation_type.source && mode == 'source'" ></div>
   </div>  
 
   <%= render partial: 'import' %>  
