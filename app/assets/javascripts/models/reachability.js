@@ -67,7 +67,6 @@ AQ.Plan.record_methods.wires_from= function(fv) {
 }
 
 AQ.Operation.record_methods.is_output = function(fv) {
-  console.log(this)
   return this.outputs().includes(fv);
 }
 
