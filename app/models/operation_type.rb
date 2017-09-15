@@ -373,11 +373,8 @@ class OperationType < ActiveRecord::Base
       ots = OperationType.includes(:operations).where(deployed: true)
     end
 
-    preconditions = Code.where(name: "precondition", parent_class: "OperationType", parent_id: ots.collect { |ot| ot.id } )
-
     ots.collect { |ot|
 
-      precode = preconditions.select { |p| p.parent_id == ot.id }.last
       pending = ot.operations.select { |o| o.status == "pending" }
       pending_true_length = ot.operations.select { |o| o.status == "pending" && o.precondition_value }.length
 
