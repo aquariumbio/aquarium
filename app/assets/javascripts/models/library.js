@@ -1,25 +1,25 @@
-AQ.Library.record_methods.code = function(name) {
+AQ.Library.record_methods.code = function(component_name) {
 
   var lib = this;
 
-  delete lib[name];
-  lib[name]= { content: "Loading " + name, name: "name", no_edit: true };
+  delete lib[component_name];
+  lib[component_name]= { content: "Loading " + component_name, name: "name", no_edit: true };
 
-  AQ.Code.where({parent_class: "Library", parent_id: lib.id, name: name}).then(codes => {
+  AQ.Code.where({parent_class: "Library", parent_id: lib.id, name: component_name}).then(codes => {
     if ( codes.length > 0 ) {
       latest = aq.where(codes,code => { return code.child_id == null });
       if ( latest.length >= 1 ) {
-        lib[name] = latest[0];
+        lib[component_name] = latest[0];
       } else {
-        lib[name]= { content: "# Add code here.", name: "name" };
+        lib[component_name]= { content: "# Add code here.", name: "name" };
       }
     } else { 
-      lib[name]= { content: "# Add code here.", name: "name" };
+      lib[component_name]= { content: "# Add code here.", name: "name" };
     }
     AQ.update();
   });
 
-  return lib[name];
+  return lib[component_name];
 
 }
 

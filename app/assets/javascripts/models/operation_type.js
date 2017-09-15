@@ -201,28 +201,31 @@ AQ.OperationType.record_methods.unschedule = function(operations) {
 
 }
 
-AQ.OperationType.record_methods.code = function(name) {
+/*
+ * Returns the named component: protocol, documentation, cost_model, or precondition.
+ */
+AQ.OperationType.record_methods.code = function(component_name) {
 
-  var ot = this;
+  var operation_type = this;
 
-  delete ot[name];
-  ot[name]= { content: "Loading " + name, name: "name", no_edit: true };
+  delete operation_type[component_name];
+  operation_type[component_name]= { content: "Loading " + component_name, name: "name", no_edit: true };
 
-  AQ.Code.where({parent_class: "OperationType", parent_id: ot.id, name: name}).then(codes => {
+  AQ.Code.where({parent_class: "OperationType", parent_id: operation_type.id, name: component_name}).then(codes => {
     if ( codes.length > 0 ) {
       latest = aq.where(codes,code => { return code.child_id == null });
       if ( latest.length >= 1 ) {
-        ot[name] = latest[0];
+        operation_type[component_name] = latest[0];
       } else {
-        ot[name]= { content: "# Add code here.", name: "name" };
+        operation_type[component_name]= { content: "# Add code here.", name: "name" };
       }
     } else { 
-      ot[name]= { content: "# Add code here.", name: "name" };
+      operation_type[component_name]= { content: "# Add code here.", name: "name" };
     }
     AQ.update();
   });
 
-  return ot[name];
+  return operation_type[component_name];
 
 }
 
