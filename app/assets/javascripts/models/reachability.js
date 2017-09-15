@@ -25,7 +25,7 @@ AQ.Plan.record_methods.unmark = function(a,b) {
 
 }
 
-AQ.Plan.record_methods.parent_of= function(x) {
+AQ.Plan.record_methods.parent_of = function(x) {
 
   var plan = this, 
       parent;
@@ -67,6 +67,7 @@ AQ.Plan.record_methods.wires_from= function(fv) {
 }
 
 AQ.Operation.record_methods.is_output = function(fv) {
+  console.log(this)
   return this.outputs().includes(fv);
 }
 

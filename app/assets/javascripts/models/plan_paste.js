@@ -2,7 +2,7 @@ AQ.Plan.record_methods.paste_plan = function (p,offset) {
 
   var plan = this;
 
-  plan.past_module(p,offset);  
+  plan.paste_module(p,offset);  
 
   aq.each(plan.operations, op => op.multiselect = false);
   aq.each(p.operations, op => { 
@@ -21,7 +21,7 @@ AQ.Plan.record_methods.paste_plan = function (p,offset) {
 
 }
 
-AQ.Plan.record_methods.past_module = function(p,offset) {
+AQ.Plan.record_methods.paste_module = function(p,offset) {
 
   var plan = this, 
       module_id_map;
@@ -69,7 +69,6 @@ AQ.Plan.record_methods.paste_operation = function(op, offset) {
 
   new_op.recompute_getter("types_and_values");
   new_op.recompute_getter("inputs");
-  new_op.recompute_getter("outputs");
 
   plan.operations.push(new_op);
 
