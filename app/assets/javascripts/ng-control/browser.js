@@ -1,6 +1,6 @@
 (function() {
 
-  var w = angular.module('aquarium'); 
+  let w = angular.module('aquarium');
 
   w.config(['$locationProvider', function($locationProvider) {
       $locationProvider.html5Mode({ enabled: true, requireBase: false, rewriteLinks: false });
