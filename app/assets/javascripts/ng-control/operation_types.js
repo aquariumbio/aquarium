@@ -2,31 +2,6 @@
 
   let w = angular.module('aquarium');
 
-  // Broadcast event to angular
-  // see https://gist.github.com/981746/3b6050052ffafef0b4df
-  //
-  w.factory('beforeUnload', function ($rootScope, $window) {
-      // Events are broadcast outside the Scope Lifecycle
-
-      $window.onbeforeunload = function (e) {
-          var confirmation = {};
-          var event = $rootScope.$broadcast('onBeforeUnload', confirmation);
-          if (event.defaultPrevented) {
-              console.log("default was prevented?");
-          } else {
-              return true;
-          }
-      };
-
-      $window.onunload = function () {
-          $rootScope.$broadcast('onUnload');
-      };
-      return {};
-  })
-  .run(function (beforeUnload) {
-       // Must invoke the service at least once
-   });
-
   w.controller('operationTypesCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', '$mdDialog',
                             function (  $scope,   $http,   $attrs,   $cookies,   $sce, $mdDialog ) {
 
@@ -45,20 +20,40 @@
     $scope.import_popup = {};
 
     /*
-     * Set handler for onbeforeunload.
-     * See factory definition above.
+     * Listener for `onBeforeUnload` event broadcast by the handler for browser `onbeforeunload`.
+     * Sets the event defaultPrevented flag if any changes have been made to the operation type definition.
+     *
+     * See factory definition in ng-helper/beforeunload_factory.js.
      */
-    $scope.$on('onBeforeUnload', function (e, confirmation) {
-        console.log("handling onbeforeunload");
-        if ($scope.current_operation_type.changed
-            || $scope.current_operation_type.protocol.changed
-            || $scope.current_operation_type.precondition.changed) {
-            console.log("changed operation type");
+    $scope.$on('onBeforeUnload', function (e) {
+      if ($scope.current_operation_type) {
+        console.log(`operation type defined: ${$scope.current_operation_type.name}`);
+        if ($scope.current_operation_type.changed) {
+          console.log("operation type changed");
         } else {
-            console.log("unchanged operation type");
-            e.preventDefault();
+          console.log("operation type not changed");
         }
+      } else {
+        console.log("operation type not defined");
+      }
+
+      if ($scope.operation_type_changed()) {
+          e.preventDefault();
+      }
     });
+
+    $scope.operation_type_changed = function() {
+      "use strict";
+      return $scope.current_operation_type
+        && ($scope.current_operation_type.changed
+          || ($scope.current_operation_type.model.model === 'OperationType'
+            && ($scope.current_operation_type.protocol.changed
+              || $scope.current_operation_type.precondition.changed
+              || $scope.current_operation_type.documentation.changed))
+          || ($scope.current_operation_type.model.model === 'Library'
+            && $scope.current_operation_type.source.changed)
+        );
+    }
 
     function make_categories() {
 
@@ -66,8 +61,9 @@
         return ot.category;
       })).sort();
 
-      if ( get_object("DeveloperCurrentCategory") ) {
-        $scope.choose_category(get_object("DeveloperCurrentCategory"));
+      let category = get_object("DeveloperCurrentCategory");
+      if ( category ) {
+        $scope.choose_category(category);
       } else if ( $scope.categories.length > 0 && !$scope.current_category ) {
         $scope.choose_category($scope.categories[0]);
       }
@@ -91,47 +87,47 @@
 
     AQ.OperationType.all({methods: ["field_types", "timing"]}).then(operation_types => {
 
-      AQ.Library.all().then(libraries => {
+      $scope.operation_types = operation_types;
+      AQ.operation_types = $scope.operation_types;
 
-        $scope.operation_types = operation_types;
-        AQ.operation_types = $scope.operation_types;
-
-        $scope.libraries = libraries;
-
-        aq.each($scope.operation_types, ot => {
-          ot.upgrade_field_types();
-          if ( ot.timing ) {
-            ot.timing = AQ.Timing.record(ot.timing);
-          } else { 
-            ot.set_default_timing();
-          }
-          ot.timing.make_form();
-        });       
-
-        if ( get_object("DeveloperCurrentOperationTypeId") ) {
-          let ots = aq.where($scope.operation_types,ot => ot.id === get_object("DeveloperCurrentOperationTypeId") );
-          if  ( ots.length === 1 ) {
-            $scope.current_operation_type = ots[0];
+      aq.each($scope.operation_types, operation_type => {
+          operation_type.upgrade_field_types();
+          if ( operation_type.timing ) {
+              operation_type.timing = AQ.Timing.record(operation_type.timing);
           } else {
-            $scope.current_operation_type = $scope.operation_types[0];
+              operation_type.set_default_timing();
           }
-        } else {
-          $scope.current_operation_type = $scope.operation_types[0];
-        }
-
-        make_categories();
-
-        if ( get_object("DeveloperMode") ) {
-          $scope.mode = get_object("DeveloperMode");
-        } else {
-          $scope.mode = 'definition';
-        }      
-
-        $scope.initialized = true;            
-        $scope.$apply();
-
+          operation_type.timing.make_form();
       });
 
+      let current_operation_type_id = get_object("DeveloperCurrentOperationTypeId");
+      if ( current_operation_type_id ) {
+          let operation_types = aq.where($scope.operation_types,operation_type => operation_type.id === current_operation_type_id );
+          if  ( operation_types.length === 1 ) {
+              $scope.current_operation_type = operation_types[0];
+          } else {
+              $scope.current_operation_type = $scope.operation_types[0];
+          }
+      } else {
+          $scope.current_operation_type = $scope.operation_types[0];
+      }
+
+      AQ.Library.all().then(libraries => {
+        $scope.libraries = libraries;
+        make_categories();
+      });
+
+
+      let mode = get_object("DeveloperMode");
+      if ( mode ) {
+        $scope.set_mode(mode);
+      } else {
+        $scope.set_mode('operation_type');
+        $scope.set_tab('definition');
+      }
+
+      $scope.initialized = true;
+      $scope.$apply();
     });
 
     $http.get('/object_types.json').then(function(response) {
@@ -146,10 +142,7 @@
       $scope.default_protocol = response.data.content;
     });
 
-    $scope.tab = function(mode) {
-      return mode === $scope.mode ? "active" : "";
-    };
-
+    //TODO need to manage tabs separately from library/operation-type, currently mode means tab (mostly)
     $scope.set_mode = function(mode) {
       put_object("DeveloperMode",mode);
       $scope.mode = mode;
@@ -157,14 +150,14 @@
 
     $scope.choose = function(operation_type) {
       $scope.current_operation_type = operation_type;
-      $scope.mode = 'definition';
+      $scope.set_mode('definition');
       put_object("DeveloperCurrentOperationTypeId", operation_type.id);
       put_object("DeveloperSelectionType", "OperationType");
     };
 
     $scope.choose_lib = function(library) {
       $scope.current_operation_type = library;
-      $scope.mode = 'source';
+      $scope.set_mode('source');
       put_object("DeveloperCurrentOperationTypeId", library.id);
       put_object("DeveloperSelectionType", "Library");
     };
@@ -397,7 +390,7 @@
     };
 
     $scope.new_operation_type = function() {
-      var new_operation_type = AQ.OperationType.record({
+      let new_operation_type = AQ.OperationType.record({
         name: "New Operation Type",
         category: $scope.current_category ? $scope.current_category : "Unsorted",
         deployed: false,
@@ -412,26 +405,26 @@
       $scope.current_operation_type = new_operation_type;
       make_categories();
       $scope.current_category = new_operation_type.category;
-      $scope.mode = "definition";
+      $scope.set_mode("definition");
     };
 
     $scope.new_library = function() {
 
-      var lib = AQ.Library.record({
-        name: "Library Code",
+      let lib = AQ.Library.record({
+        name: "New Library Code",
         category: $scope.current_category && $scope.current_category !== "" ? $scope.current_category : "Unsorted",
         source: AQ.Code.record({ name: 'protocol', content: "# Library code here" })
       });
 
       $http.post("/libraries", lib).then( response => {
 
-        var newlib = AQ.Library.record(response.data);
+        let newlib = AQ.Library.record(response.data);
+        $scope.change(newlib);
         $scope.libraries.push(newlib);
         $scope.current_operation_type = newlib;
         make_categories();
         $scope.current_category = newlib.category;
-        $scope.mode = 'source';
-
+        $scope.set_mode('source');
       });
 
     };
@@ -441,7 +434,7 @@
       if ( confirm("Are you sure you want to change the name and/or category of this library?") ) {
 
         $http.put("/libraries/" + library.id,library).then(function(response) {
-          library.changed = false;
+          $scope.unchange(library);
         });
 
       }
@@ -451,17 +444,18 @@
     $scope.delete_library = function(library) {
 
       if ( confirm("Are you sure you want to delete this library?") ) {
+        let category = library.category;
 
         $http.delete("/libraries/" + library.id,library).then(function(response) {
           if ( response.data.error ) {
             alert ( "Could not delete library: " + response.data.error );
           } else {
             $scope.libraries = aq.remove($scope.libraries,library);
+            after_delete(category);
+            $scope.set_mode('definition');
           }
         });             
-
       }
-
     };
 
     $scope.copy = function(operation_type) {
@@ -482,11 +476,11 @@
     $scope.render_docs = function(operation_type) {
       var md = window.markdownit();
       operation_type.rendered_docs = $sce.trustAsHtml(md.render(operation_type.documentation.content));
-      $scope.mode = 'documentation_view'; 
+      $scope.set_mode('documentation_view');
     };
 
     $scope.edit_docs = function(operation_type) {
-      $scope.mode = 'documentation';
+      $scope.set_mode('documentation');
     };
 
     $scope.containers_for = function(sample_name)  {
@@ -494,11 +488,11 @@
     };
 
     $scope.change = function(thing) {
-      thing.changed = true;
+      thing['changed'] = true;
     };
 
     $scope.unchange = function(thing) {
-      thing.changed = false;
+      thing['changed'] = false;
     }
 
   }]);
