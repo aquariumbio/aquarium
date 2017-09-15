@@ -26,17 +26,6 @@
      * See factory definition in ng-helper/beforeunload_factory.js.
      */
     $scope.$on('onBeforeUnload', function (e) {
-      if ($scope.current_operation_type) {
-        console.log(`operation type defined: ${$scope.current_operation_type.name}`);
-        if ($scope.current_operation_type.changed) {
-          console.log("operation type changed");
-        } else {
-          console.log("operation type not changed");
-        }
-      } else {
-        console.log("operation type not defined");
-      }
-
       if ($scope.operation_type_changed()) {
           e.preventDefault();
       }
