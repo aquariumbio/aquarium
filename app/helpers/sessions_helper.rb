@@ -1,7 +1,7 @@
 module SessionsHelper
 
   def remember_token_symbol
-    "remember_token_#{Rails.env}".to_sym
+    "remember_token_#{Bioturk::Application.environment_name}".to_sym
   end
 
   def sign_in(user)

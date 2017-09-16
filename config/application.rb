@@ -125,9 +125,10 @@ module Bioturk
     #
     # @return [String] the environment name for the Aquarium instance
     def self.environment_name
-      config.instance_name
+      instance_name =config.instance_name
           .encode(Encoding::US_ASCII, :undef => :replace, :invalid => :replace, :replace => "")
-          .gsub(/[^[:alnum:]]/,'') + Rails.env.to_s
+          .gsub(/[^[:alnum:]]/,'')
+      "#{instance_name}_#{Rails.env}"
     end
 
 
