@@ -39,7 +39,7 @@
             ng-class="lib_class(lib)">{{lib.name}}</li>      
         <li ng-repeat="ot in operation_types | filter: { category: category } : true track by $index" 
             ng-click="choose(ot)"
-            ng-class="ot_class(ot)">{{ot.name}}</li>
+            ng-class="operation_type_class(ot)">{{ot.name}}</li>
       </ul>
 
     </li>
@@ -51,7 +51,7 @@
 <% content_for :specific_title do %>
 
   <span ng-if="initialized">
-    &rang; {{current_category}} &rang; {{current_ot.name}}
+    &rang; {{current_category}} &rang; {{current_operation_type.name}}
   </span>
 
 <% end %>
@@ -70,7 +70,6 @@
         <span ng-if="!import_popup.loading">Import</span>
                 <input type=file
                         id="import"
-                        file="import"
                         style="display: none;"
                         custom-on-change="import">
       </label>
@@ -90,7 +89,7 @@
     </div>
   </div> 
 
-  <div ng-show="operation_types && current_ot && current_ot.model.model == 'OperationType'"> 
+  <div ng-show="operation_types && current_operation_type && current_operation_type.model.model == 'OperationType'">
 
     <md-nav-bar md-selected-nav-item="mode" nav-bar-aria-label="Operation Type Editing Modes" md-no-ink-bar='false'>
       <md-nav-item md-nav-click="set_mode('definition')" name='definition'>Def</md-nav-item>
@@ -107,20 +106,20 @@
 
       <%= render partial: 'definition' %>
 
-      <div ng-include="'code'" ng-init="name='protocol'"      ng-if="current_ot.protocol && mode == 'protocol'" ></div>
-      <div ng-include="'code'" ng-init="name='precondition'"  ng-if="current_ot.precondition && mode == 'precondition'"></div>
-      <div ng-include="'code'" ng-init="name='cost_model'"    ng-if="current_ot.cost_model && mode == 'cost'"></div>        
+      <div ng-include="'code'" ng-init="component_name='protocol'"      ng-if="current_operation_type.protocol && mode == 'protocol'" ></div>
+      <div ng-include="'code'" ng-init="component_name='precondition'"  ng-if="current_operation_type.precondition && mode == 'precondition'"></div>
+      <div ng-include="'code'" ng-init="component_name='cost_model'"    ng-if="current_operation_type.cost_model && mode == 'cost'"></div>
 
-      <div ng-include="'code'" ng-init="name='documentation'" ng-if="current_ot.documentation && mode == 'documentation'"></div>
+      <div ng-include="'code'" ng-init="component_name='documentation'" ng-if="current_operation_type.documentation && mode == 'documentation'"></div>
 
-      <div ng-if="current_ot.documentation && mode == 'documentation_view'" ng-controller="codeCtrl as code" layout-padding>
-        <div ng-bind-html="current_ot.rendered_docs"></div>
+      <div ng-if="current_operation_type.documentation && mode == 'documentation_view'" ng-controller="codeCtrl as code" layout-padding>
+        <div ng-bind-html="current_operation_type.rendered_docs"></div>
 
         <div class='code-controls'>
           <md-button class='md-raised md-medium'
-                      ng-click="save(current_ot,'documentation')" 
-                      ng-disabled="!current_ot.documentation.changed">Save</md-button>
-          <md-button class='md-raised md-medium' ng-click="edit_docs(current_ot)">Edit</md-button>
+                      ng-click="save(current_operation_type,'documentation')"
+                      ng-disabled="!current_operation_type.documentation.changed">Save</md-button>
+          <md-button class='md-raised md-medium' ng-click="edit_docs(current_operation_type)">Edit</md-button>
         </div>  
 
       </div>  
@@ -132,27 +131,27 @@
 
   </div>
 
-  <div ng-show="operation_types && current_ot && current_ot.model.model == 'Library'"> 
+  <div ng-show="operation_types && current_operation_type && current_operation_type.model.model == 'Library'">
 
     <div layout="row" class="library-toolbar" layout-align="start start">
       <div flex="5" class="library-label">Name:</div>
       <div flex="20">
-        <input type='text' ng-model="current_ot.name" ng-change="change(current_ot)" style='width: 100%'>
+        <input type='text' ng-model="current_operation_type.name" ng-change="change(current_operation_type)" style='width: 100%'>
       </div>
       <div flex="10" class="library-label">Category:</div>
       <div flex="20">
-        <input type='text' ng-model="current_ot.category" ng-change="change(current_ot)" style='width: 100%'>
+        <input type='text' ng-model="current_operation_type.category" ng-change="change(current_operation_type)" style='width: 100%'>
       </div>        
       <div flex="70">
         <md-button class='md-raised md-small md-primary pull-right library-button' 
-                   ng-click="update_library(current_ot)" 
-                   ng-disabled="!current_ot.changed">Update</md-button>
+                   ng-click="update_library(current_operation_type)"
+                   ng-disabled="!current_operation_type.changed">Update</md-button>
         <md-button class='md-raised md-small pull-right library-button'
-                   ng-click="delete_library(current_ot)">Delete</md-button>        
+                   ng-click="delete_library(current_operation_type)">Delete</md-button>
       </div>
     </div>
 
-    <div ng-include="'code'" ng-init="name='source'" ng-if="current_ot.source && mode == 'source'" ></div>    
+    <div ng-include="'code'" ng-init="component_name='source'" ng-if="current_operation_type.source && mode == 'source'" ></div>
   </div>  
 
   <%= render partial: 'import' %>  

@@ -1,57 +1,56 @@
 <div ng-show="mode == 'test'" ng-controller="operationTypeTestCtrl as tester" layout-padding>
 
-  <h4 ng-if="!current_ot.id">Save this operation type's definition before testing.</h4>
+  <h4 ng-if="!current_operation_type.id">Save this operation type's definition before testing.</h4>
 
   <form class='form-inline'>
 
     <label>Batch Size: </label>
 
     <input type='number' 
-           ng-model="current_ot.batch_size" 
+           ng-model="current_operation_type.batch_size"
            placeholder="Batch Size"
            class="input-small">
-    </input>
 
     <a href="#" 
-       ng-if="!current_ot.randomizing"
+       ng-if="!current_operation_type.randomizing"
        class="btn" 
-       ng-click="randomize(current_ot)" 
-       ng-disabled="!current_ot.id">
+       ng-click="randomize(current_operation_type)"
+       ng-disabled="!current_operation_type.id">
       Generate Operations
     </a>
 
     <a href="#" 
-       ng-if="current_ot.randomizing"
+       ng-if="current_operation_type.randomizing"
        class="btn" 
-       ng-click="randomize(current_ot)" 
+       ng-click="randomize(current_operation_type)"
        ng-disabled="true">
       Generate Operations ...
     </a>
 
     <a href="#"
             class="btn btn-warning"
-            ng-click="test(current_ot)"
-            ng-if="!current_ot.running_test && !current_ot.changed && !current_ot.protocol.changed && !current_ot.precondition.changed"            
-            ng-disabled="!current_ot.id || !current_ot.test_operations || current_ot.test_operations.length == 0">
+            ng-click="test(current_operation_type)"
+            ng-if="!current_operation_type.running_test && !current_operation_type.changed && !current_operation_type.protocol.changed && !current_operation_type.precondition.changed"
+            ng-disabled="!current_operation_type.id || !current_operation_type.test_operations || current_operation_type.test_operations.length == 0">
       Test
     </a>
 
     <button class="btn btn-warning"
-            ng-click="save_and_test(current_ot)"
-            ng-if="!current_ot.running_test && ( current_ot.changed || current_ot.protocol.changed || current_ot.precondition.changed )"
-            ng-disabled="!current_ot.id || !current_ot.test_operations || current_ot.test_operations.length == 0">
+            ng-click="save_and_test(current_operation_type)"
+            ng-if="!current_operation_type.running_test && ( current_operation_type.changed || current_operation_type.protocol.changed || current_operation_type.precondition.changed )"
+            ng-disabled="!current_operation_type.id || !current_operation_type.test_operations || current_operation_type.test_operations.length == 0">
       Save and Test
     </button>   
 
     <a href="#"
             class="btn btn-warning"
-            ng-if="current_ot.running_test"
+            ng-if="current_operation_type.running_test"
             ng-disabled="true">
       Testing...
     </a>      
 
     <label class='pull-right'>
-      <input type="checkbox" ng-model='current_ot.use_precondition'>
+      <input type="checkbox" ng-model='current_operation_type.use_precondition'>
       Use Precondition
     </label>
 
@@ -59,9 +58,9 @@
 
   <h4>Input Operations</h4>
 
-  <div ng-show="!current_ot.test_operations">No test operations definied.</div>
+  <div ng-show="!current_operation_type.test_operations">No test operations defined.</div>
 
-  <table class='table table-fixed table-condensed' ng-show="current_ot.test_operations">
+  <table class='table table-fixed table-condensed' ng-show="current_operation_type.test_operations">
 
     <tr>
       <th>User</th>
@@ -70,7 +69,7 @@
       <th>Outputs</th> 
     </tr>
 
-    <tr ng-repeat="op in current_ot.test_operations | filter: { operation_type_id: current_ot.id, status: 'pending'}">
+    <tr ng-repeat="op in current_operation_type.test_operations | filter: { operation_type_id: current_operation_type.id, status: 'pending'}">
 
       <td>{{user.find(op.user_id).name}}</td>
 
@@ -84,7 +83,7 @@
               <a href="/browser?sid={{fv.child_sample.id}}">{{fv.child_sample.name}}</a>
             </span>
             <span ng-if="fv.allowable_field_type.object_type && fv.allowable_field_type.object_type.name">
-              (<span ng-if="is_part(current_ot,fv)">Part of a </span>{{fv.allowable_field_type.object_type.name}})
+              (<span ng-if="is_part(current_operation_type,fv)">Part of a </span>{{fv.allowable_field_type.object_type.name}})
             </span>
             <span ng-if="fv.ftype != 'sample'"> {{fv.value}}</span>
           </li>
@@ -98,7 +97,7 @@
               <a href="/browser?sid={{fv.child_sample.id}}">{{fv.child_sample.name}}</a>
             </span>
             <span ng-if="fv.allowable_field_type.object_type && fv.allowable_field_type.object_type.name">
-              (<span ng-if="is_part(current_ot,fv)">Part of a </span>{{fv.allowable_field_type.object_type.name}})
+              (<span ng-if="is_part(current_operation_type,fv)">Part of a </span>{{fv.allowable_field_type.object_type.name}})
             </span>
           </li>
         </ul>              
@@ -110,35 +109,35 @@
 
   <hr />
 
-  <div ng-show="current_ot.test_error" class='alert alert-error'>
+  <div ng-show="current_operation_type.test_error" class='alert alert-error'>
     <h4>Error</h4>
     <div>
-      <b style='white-space: pre-wrap; font-family: "courier"'>{{current_ot.test_error}}</b>
+      <b style='white-space: pre-wrap; font-family: "courier", monospace'>{{current_operation_type.test_error}}</b>
     </div>
   </div>
 
   <h4>Backtrace</h4>  
 
-  <div ng-if="current_ot.test_results && current_ot.use_precondition">
-    <span class='alert'>Number of operations passing preconditions: {{current_ot.test_results.operations.length}}.</span>
+  <div ng-if="current_operation_type.test_results && current_operation_type.use_precondition">
+    <span class='alert'>Number of operations passing preconditions: {{current_operation_type.test_results.operations.length}}.</span>
     <br />
     <br />
   </div>
 
-  <div ng-show="!current_ot.test_results">No backtrace has been generated.</div>
+  <div ng-show="!current_operation_type.test_results">No backtrace has been generated.</div>
 
-  <div ng-show="current_ot.test_results">
+  <div ng-show="current_operation_type.test_results">
     <ul class="backtrace" >
-      <li ng-repeat="step in current_ot.test_results.job.backtrace" ng-include="step.operation"></li>
+      <li ng-repeat="step in current_operation_type.test_results.job.backtrace" ng-include="step.operation"></li>
     </ul>
   </div>
 
   <hr />
   <h4>Operation Information</h4>    
 
-  <div ng-show="!current_ot.test_results">No operations have been affected.</div>
+  <div ng-show="!current_operation_type.test_results">No operations have been affected.</div>
 
-  <div ng-show="current_ot.test_results">
+  <div ng-show="current_operation_type.test_results">
     <table class='table'>
       <tr>
         <th>Id</th>
@@ -150,19 +149,20 @@
         <th>Markup</th>                        
         <th>Total Cost</th>                                
       </tr>
-      <tr ng-repeat="op in current_ot.test_results.operations track by $index">
+      <tr ng-repeat="op in current_operation_type.test_results.operations track by $index">
         <td>{{op.id}}</td>
         <td>{{op.status}}</td>
         <td><span ng-repeat="(k,v) in op.associations">{{k}}: {{v}}</span></td>
-        <td>{{current_ot.test_results.plans[$index].costs[0].labor}} min</td>
-        <td>{{current_ot.test_results.plans[$index].costs[0].materials|currency}}</td>
-        <td>${{current_ot.test_results.plans[$index].costs[0].labor_rate}}/min</td>
-        <td>{{current_ot.test_results.plans[$index].costs[0].markup_rate}}%</td>
+        <td>{{current_operation_type.test_results.plans[$index].costs[0].labor}} min</td>
+        <td>{{current_operation_type.test_results.plans[$index].costs[0].materials|currency}}</td>
+        <td>${{current_operation_type.test_results.plans[$index].costs[0].labor_rate}}/min</td>
+        <td>{{current_operation_type.test_results.plans[$index].costs[0].markup_rate}}%</td>
         <td>{{
-              ( current_ot.test_results.plans[$index].costs[0].labor * current_ot.test_results.plans[$index].costs[0].labor_rate + 
-                current_ot.test_results.plans[$index].costs[0].materials ) * 
-               ( 1 + current_ot.test_results.plans[$index].costs[0].markup_rate ) | currency
-            }}</td>                                
+          ( current_operation_type.test_results.plans[$index].costs[0].labor *
+          current_operation_type.test_results.plans[$index].costs[0].labor_rate +
+          current_operation_type.test_results.plans[$index].costs[0].materials ) *
+          ( 1 + current_operation_type.test_results.plans[$index].costs[0].markup_rate ) | currency
+          }}</td>
       </tr>
     </table>
   </div>
@@ -170,10 +170,10 @@
   <hr />
   <h4>Plan Information</h4>
 
-  <div ng-repeat="plan in current_ot.test_results.plans">
+  <div ng-repeat="plan in current_operation_type.test_results.plans">
     <pre>{{plan|json}}</pre>
   </div>
 
-  <!-- pre>{{current_ot.test_results.operations|json}}</pre -->
+  <!-- pre>{{current_operation_type.test_results.operations|json}}</pre -->
  
 </div>

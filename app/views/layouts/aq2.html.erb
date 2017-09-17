@@ -13,6 +13,9 @@
 
   <script>
 
+    // set the environment name for use in cookies
+    aquarium_environment_name = '<%= Bioturk::Application.environment_name %>';
+
     $(function() {
       $('.scrollable').on('wheel', function ( e ) {
         var e0 = e.originalEvent,

@@ -119,6 +119,19 @@ module Bioturk
       end
     end
 
+    # Creates the environment name for the Aquarium instance by concatenating with the instance name with the
+    # environment type.
+    # The name is a US-ASCII string consisting only of alphanumeric characters.
+    #
+    # @return [String] the environment name for the Aquarium instance
+    def self.environment_name
+      instance_name =config.instance_name
+          .encode(Encoding::US_ASCII, :undef => :replace, :invalid => :replace, :replace => "")
+          .gsub(/[^[:alnum:]]/,'')
+      "#{instance_name}_#{Rails.env}"
+    end
+
+
   end
 
 end

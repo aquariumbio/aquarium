@@ -22,7 +22,7 @@
           <% if current_user && current_user.is_admin %>
             <input type='checkbox' 
                    ng-model='op.selected' 
-                   ng-if="!ot.on_the_fly && ( status == 'pending_true' || status == 'scheduled' || status == 'error' )">
+                   ng-if="!operation_type.on_the_fly && ( status == 'pending_true' || status == 'scheduled' || status == 'error' )">
           <% end %>
         </td>
 
@@ -86,7 +86,7 @@
 
       </tr>
 
-      <tr ng-if="( status == 'error' || status == 'done' ) && operations.length < $parent.$parent.numbers[ot.id][status]">
+      <tr ng-if="( status == 'error' || status == 'done' ) && operations.length < $parent.$parent.numbers[operation_type.id][status]">
         <td></td>
         <td colspan=5 style='padding-top: 16px'>
           <md-button class='md-raised md-primary md-small' ng-click="$parent.$parent.more(status)">More</md-button>

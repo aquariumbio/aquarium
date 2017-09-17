@@ -1,18 +1,18 @@
 (function() {
 
-  var w = angular.module('aquarium'); 
+  let w = angular.module('aquarium');
 
   w.config(['$locationProvider', function($locationProvider) {
       $locationProvider.html5Mode({ enabled: true, requireBase: false, rewriteLinks: false });
   }]);  
 
-  w.controller('browserCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', '$window',
-                     function (  $scope,   $http,   $attrs,   $cookies,   $sce ,  $window ) {
+  w.controller('browserCtrl', [ '$scope', '$http', '$attrs', 'aqCookieManager', '$sce', '$window',
+                     function (  $scope,   $http,   $attrs,   aqCookieManager,   $sce ,  $window ) {
 
     AQ.init($http);
     AQ.update = () => { $scope.$apply(); }
     AQ.confirm = (msg) => { return confirm(msg); }
-    AQ.sce = $sce;                  
+    AQ.sce = $sce;
 
     function cookie() {
 
@@ -29,7 +29,7 @@
         },
         create: {
           selected: $scope.views.create.selected,
-          samples: [],
+          samples: []
         },
         search: {
           selected: $scope.views.search.selected,
@@ -53,11 +53,11 @@
         user: $scope.views.user
       };
 
-      $cookies.putObject("browserViews", data);
+      aqCookieManager.put_object("browserViews", data);
 
     }
 
-    $scope.views = $cookies.getObject("browserViews");
+    $scope.views = aqCookieManager.get_object("browserViews");
 
     if ( !$scope.views || $scope.views.version != 2 ) {
 

@@ -7,40 +7,40 @@
       <div class='span3'>
 
         <label>Begin</label>
-        <input class="input-mini" type="number" ng-model="current_ot.timing.start_form.hour" ng-disabled="!current_ot.timing.active" ng-change="current_ot.changed = true"> : 
-        <input class="input-mini" type="number" ng-model="current_ot.timing.start_form.minute" ng-disabled="!current_ot.timing.active" ng-change="current_ot.changed = true"><br>
-        <input type="radio" name="start-ampm" value="am" ng-model="current_ot.timing.start_form.ampm" ng-disabled="!current_ot.timing.active" ng-change="current_ot.changed = true"> <div class='radio-text'>AM</div>
-        <input type="radio" name="start-ampm" value="pm" ng-model="current_ot.timing.start_form.ampm" ng-disabled="!current_ot.timing.active" ng-change="current_ot.changed = true"> <div class='radio-text'>PM</div>
+        <input class="input-mini" type="number" ng-model="current_operation_type.timing.start_form.hour" ng-disabled="!current_operation_type.timing.active" ng-change="current_operation_type.changed = true"> :
+        <input class="input-mini" type="number" ng-model="current_operation_type.timing.start_form.minute" ng-disabled="!current_operation_type.timing.active" ng-change="current_operation_type.changed = true"><br>
+        <input type="radio" name="start-ampm" value="am" ng-model="current_operation_type.timing.start_form.ampm" ng-disabled="!current_operation_type.timing.active" ng-change="current_operation_type.changed = true"> <div class='radio-text'>AM</div>
+        <input type="radio" name="start-ampm" value="pm" ng-model="current_operation_type.timing.start_form.ampm" ng-disabled="!current_operation_type.timing.active" ng-change="current_operation_type.changed = true"> <div class='radio-text'>PM</div>
 
       </div>
 
       <div class='span3'>
 
         <label>End</label>
-        <input class="input-mini" type="number" ng-model="current_ot.timing.stop_form.hour" ng-disabled="!current_ot.timing.active" ng-change="current_ot.changed = true"> : 
-        <input class="input-mini" type="number" ng-model="current_ot.timing.stop_form.minute" ng-disabled="!current_ot.timing.active" ng-change="current_ot.changed = true"><br>
-        <input type="radio" name="stop-ampm" value="am" ng-model="current_ot.timing.stop_form.ampm" ng-disabled="!current_ot.timing.active" ng-change="current_ot.changed = true"> <div class='radio-text'>AM</div>
-        <input type="radio" name="stop-ampm" value="pm" ng-model="current_ot.timing.stop_form.ampm" ng-disabled="!current_ot.timing.active" ng-change="current_ot.changed = true"> <div class='radio-text'>PM</div>        
+        <input class="input-mini" type="number" ng-model="current_operation_type.timing.stop_form.hour" ng-disabled="!current_operation_type.timing.active" ng-change="current_operation_type.changed = true"> :
+        <input class="input-mini" type="number" ng-model="current_operation_type.timing.stop_form.minute" ng-disabled="!current_operation_type.timing.active" ng-change="current_operation_type.changed = true"><br>
+        <input type="radio" name="stop-ampm" value="am" ng-model="current_operation_type.timing.stop_form.ampm" ng-disabled="!current_operation_type.timing.active" ng-change="current_operation_type.changed = true"> <div class='radio-text'>AM</div>
+        <input type="radio" name="stop-ampm" value="pm" ng-model="current_operation_type.timing.stop_form.ampm" ng-disabled="!current_operation_type.timing.active" ng-change="current_operation_type.changed = true"> <div class='radio-text'>PM</div>
 
       </div>       
 
       <div class="span3">
 
-        <input type="checkbox" ng-model="current_ot.timing.Su" ng-disabled="!current_ot.timing.active" ng-change="current_ot.changed = true"> <div class='radio-text'>Sunday</div><br>
-        <input type="checkbox" ng-model="current_ot.timing.Mo" ng-disabled="!current_ot.timing.active" ng-change="current_ot.changed = true"> <div class='radio-text'>Monday</div><br>
-        <input type="checkbox" ng-model="current_ot.timing.Tu" ng-disabled="!current_ot.timing.active" ng-change="current_ot.changed = true"> <div class='radio-text'>Tuesday</div><br>
-        <input type="checkbox" ng-model="current_ot.timing.We" ng-disabled="!current_ot.timing.active" ng-change="current_ot.changed = true"> <div class='radio-text'>Wednesday</div><br>
-        <input type="checkbox" ng-model="current_ot.timing.Th" ng-disabled="!current_ot.timing.active" ng-change="current_ot.changed = true"> <div class='radio-text'>Thursday</div><br>
-        <input type="checkbox" ng-model="current_ot.timing.Fr" ng-disabled="!current_ot.timing.active" ng-change="current_ot.changed = true"> <div class='radio-text'>Friday</div><br>
-        <input type="checkbox" ng-model="current_ot.timing.Sa" ng-disabled="!current_ot.timing.active" ng-change="current_ot.changed = true"> <div class='radio-text'>Saturday</div>                        
+        <input type="checkbox" ng-model="current_operation_type.timing.Su" ng-disabled="!current_operation_type.timing.active" ng-change="current_operation_type.changed = true"> <div class='radio-text'>Sunday</div><br>
+        <input type="checkbox" ng-model="current_operation_type.timing.Mo" ng-disabled="!current_operation_type.timing.active" ng-change="current_operation_type.changed = true"> <div class='radio-text'>Monday</div><br>
+        <input type="checkbox" ng-model="current_operation_type.timing.Tu" ng-disabled="!current_operation_type.timing.active" ng-change="current_operation_type.changed = true"> <div class='radio-text'>Tuesday</div><br>
+        <input type="checkbox" ng-model="current_operation_type.timing.We" ng-disabled="!current_operation_type.timing.active" ng-change="current_operation_type.changed = true"> <div class='radio-text'>Wednesday</div><br>
+        <input type="checkbox" ng-model="current_operation_type.timing.Th" ng-disabled="!current_operation_type.timing.active" ng-change="current_operation_type.changed = true"> <div class='radio-text'>Thursday</div><br>
+        <input type="checkbox" ng-model="current_operation_type.timing.Fr" ng-disabled="!current_operation_type.timing.active" ng-change="current_operation_type.changed = true"> <div class='radio-text'>Friday</div><br>
+        <input type="checkbox" ng-model="current_operation_type.timing.Sa" ng-disabled="!current_operation_type.timing.active" ng-change="current_operation_type.changed = true"> <div class='radio-text'>Saturday</div>
 
       </div>
 
       <div class='span3'>
         <br>
-        <input type="checkbox" name="active" ng-model="current_ot.timing.active" ng-change="current_ot.changed = true"> <div class="radio-text">Using Timing Information</div>
+        <input type="checkbox" name="active" ng-model="current_operation_type.timing.active" ng-change="current_operation_type.changed = true"> <div class="radio-text">Using Timing Information</div>
         <br><br>
-        <a href="#" class="btn btn-small btn-primary" ng-click="current_ot.timing.save(); current_ot.changed = false" ng-disabled="!current_ot.changed">Save</a>
+        <a href="#" class="btn btn-small btn-primary" ng-click="current_operation_type.timing.save(); current_operation_type.changed = false" ng-disabled="!current_operation_type.changed">Save</a>
       </div>      
 
     </div>

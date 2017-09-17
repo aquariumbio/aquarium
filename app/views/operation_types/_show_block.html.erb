@@ -79,10 +79,10 @@
             ng-class="table_class(cell)">
           <span ng-if="cell.type" style="color: #aaa;">&gt;</span>
           <input ng-if="cell.type" type="{{cell.type}}" value="{{cell.default}}"
-                 data-opid="{{cell.operation.id}}" class="krill-table-input"></input>
+                 data-opid="{{cell.operation.id}}" class="krill-table-input">
           <span ng-if="!cell.type && cell.content == undefined">{{cell}}</span>
           <span ng-if="!cell.type && cell.content != undefined">{{cell.content}}</span>
-        </row>
+        </td>
       </tr>
     </table>
   </div>
