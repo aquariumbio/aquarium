@@ -54,7 +54,7 @@
 
           }
 
-          plan.propagate(op,fv,ui.item.value);          
+          plan.propagate(op,fv,ui.item.value);       
 
           $scope.$apply();
 
