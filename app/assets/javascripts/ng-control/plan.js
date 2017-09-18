@@ -52,11 +52,15 @@
       } else if ( io.record_type === "ModuleIO" ) {
         if ( io.origin && role === 'output' ) {
           $scope.current_fv = io.origin.io;
+         $scope.current_op = io.origin.op;          
           selected_fv_rid = $scope.current_fv.rid;
         }
         if ( io.destinations.length > 0 && role === 'input' ) {
           $scope.current_fv = io.destinations[0].io;
+          $scope.current_op = io.destinations[0].op;
           selected_fv_rid = $scope.current_fv.rid;
+        } else {
+          console.log("WARNING: Could not set fv from io in set_current_io")
         }
       }
 

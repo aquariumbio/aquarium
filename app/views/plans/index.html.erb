@@ -188,7 +188,7 @@
 
     <div class="opeditbar operation-editor scrollable">
       <inner>
-        <div ng-if="current_op">
+        <div ng-if="current_op && current_draggable.record_type != 'Module'">
           <%= render partial: 'operation_editor' %>
         </div>
         <div ng-if="current_draggable && current_draggable.record_type == 'Module'">

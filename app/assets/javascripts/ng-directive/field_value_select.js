@@ -12,14 +12,14 @@
 
       link: function($scope,$element,$attributes) {
 
-        var fv = $scope.fv,
-            ft = $scope.fv.field_type,
-            op = $scope.operation,
-            plan = $scope.plan,
-            op_type = op.operation_type,
-            route = op.routing;    
-
         var autocomp = function(ev,ui) {
+
+          var fv = $scope.fv,
+              ft = $scope.fv.field_type,
+              op = $scope.operation,
+              plan = $scope.plan,
+              op_type = op.operation_type,
+              route = op.routing;              
 
           // respond when a new sample is chosen from the autocomplete
 
@@ -62,10 +62,18 @@
 
         var change = function(ev,ui)  {
 
+          var fv = $scope.fv,
+              ft = $scope.fv.field_type,
+              op = $scope.operation,
+              plan = $scope.plan,
+              op_type = op.operation_type,
+              route = op.routing;            
+
           var sid = ft.array ? fv.sample_identifier : route[ft.routing];
               aft = op.form[ft.role][fv.name].aft;
 
           if ( aft && aft.sample_type && !AQ.sample_names_for(aft.sample_type.name).includes(sid) ) {
+            console.log("Invalid sample name: " + sid)
             op.assign_sample(fv, null);
             op.instantiate(plan,fv,null);
             fv.clear_item(); 
@@ -78,6 +86,13 @@
         $scope.$watch("operation.form[fv.field_type.role][fv.name].aft", function(new_aft, old_aft) {
 
           // Update autocomplete when aft changes
+
+          var fv = $scope.fv,
+              ft = $scope.fv.field_type,
+              op = $scope.operation,
+              plan = $scope.plan,
+              op_type = op.operation_type,
+              route = op.routing;            
 
           var aft = op.form[ft.role][fv.name].aft;                          
 
@@ -92,22 +107,6 @@
               select: autocomp,
 
               change: change,
-
-              // // close: () => console.log("close"),
-              // create: () => console.log("create"),
-              // focus: () => console.log("focus"),                            
-              // open: () => console.log("open"),                            
-              // response: (a,b) => console.log("response",a,b),                            
-              // search: (a,b) => console.log("search",a,b),                                                                       
-
-              // close: function(event, ui) { 
-              //   console.log("close",ui)
-              //   if ( !ui.item && $($element) != "" ) {
-              //     alert($($element).val() + " is not a valid sample id / name for field " + fv.name);
-              //     $($element).val("")
-              //   }
-
-              // },
 
               open: function(event, ui) {
               
