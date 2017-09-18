@@ -66,9 +66,10 @@
               aft = op.form[ft.role][fv.name].aft;
 
           if ( aft && aft.sample_type && !AQ.sample_names_for(aft.sample_type.name).includes(sid) ) {
-            console.log("String '" + sid + "' is not a valid sample identifier");
             op.assign_sample(fv, null);
             op.instantiate(plan,fv,null);
+            fv.clear_item(); 
+            fv.items=[];
             $scope.$apply();
           }
 
@@ -91,12 +92,13 @@
               select: autocomp,
 
               change: change,
+
               // // close: () => console.log("close"),
               // create: () => console.log("create"),
               // focus: () => console.log("focus"),                            
               // open: () => console.log("open"),                            
-              // response: () => console.log("response"),                            
-              // search: () => console.log("search"),                                                                      
+              // response: (a,b) => console.log("response",a,b),                            
+              // search: (a,b) => console.log("search",a,b),                                                                       
 
               // close: function(event, ui) { 
               //   console.log("close",ui)
