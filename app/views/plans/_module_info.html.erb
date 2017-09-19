@@ -1,0 +1,61 @@
+<script type="text/ng-template" id="module_info">
+
+  <md-content class="field-value-editor" layout='column' layout-align="center center">
+
+    <div class="title">
+
+      <h1 ng-if="!current_draggable.edit_documentation"
+          class="md-title">{{current_draggable.name}}</h1>
+
+      <input ng-if="current_draggable.edit_documentation"
+             ng-model="current_draggable.new_name"
+             class="plan-name-input-">
+
+    </div>
+
+    <div ng-if="!current_draggable.edit_documentation"
+         class='documentation md-body-1' 
+         ng-bind-html="current_draggable.rendered_docs">
+    </div>
+
+
+    <textarea ng-model="current_draggable.new_documentation"
+              ng-if="current_draggable.edit_documentation"
+              style="width: 100%; height: 300px"
+              class="scrollable"></textarea>
+
+    <div style="font-size=6pt" ng-if="current_draggable.edit_documentation">Use plain text or markdown!</div>
+
+    <br>
+
+    <md-divider></md-divider>
+
+    <div layout="row" layout-align="space-around center" style="width: 80%">
+
+      <md-button ng-if="current_draggable.edit_documentation"
+                 ng-click="current_draggable.documentation = current_draggable.new_documentation; 
+                           current_draggable.name = current_draggable.new_name; 
+                           current_draggable.edit_documentation = !current_draggable.edit_documentation"
+                 class="md-raised md-medium md-button-in-list md-primary">
+        View
+      </md-button>
+
+      <md-button ng-if="current_draggable.edit_documentation"
+                 ng-click="current_draggable.edit_documentation = !current_draggable.edit_documentation"
+                 class="md-raised md-medium md-button-in-list md-secondary">
+        Discard
+      </md-button>   
+
+      <md-button ng-if="!current_draggable.edit_documentation"
+                 ng-click="current_draggable.new_documentation = current_draggable.documentation;
+                           current_draggable.new_name = current_draggable.name;
+                           current_draggable.edit_documentation = !current_draggable.edit_documentation"
+                 class="md-raised md-medium md-button-in-list md-secondary">
+        Edit
+      </md-button>
+
+    </div>
+
+  </md-content>
+
+</script>

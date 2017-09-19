@@ -2,6 +2,7 @@
 
 <%= render partial: 'field_value_editor' %>
 <%= render partial: 'operation_info' %>
+<%= render partial: 'module_info' %>
 <%= render partial: 'io_editor' %>
 <%= render partial: '/data_associations/template' %> 
 <%= render partial: "/items/template" %>
@@ -42,13 +43,17 @@
       <div class="dismiss clickable" ng-click="state.message = null">&times;</div>
     </div>
 
-    <div ng-if="!current_op && !current_fv && !state.launch">
+    <div ng-if="!current_op && !current_fv && !state.launch && current_draggable.record_type != 'Module'">
       <%= render partial: "plan_editor_tools" %>
     </div>
 
     <div ng-if="current_op && !current_fv" 
          ng-include="'operation_info'">
     </div>
+
+    <div ng-if="current_draggable.record_type == 'Module' && !current_fv" 
+         ng-include="'module_info'">
+    </div>    
 
     <div ng-if="current_fv"
          ng-include="'field_value_editor'">

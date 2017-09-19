@@ -17,6 +17,7 @@ class Module {
     this.output = [];
     this.wires = [];
     this.parent_id = parent ? parent.id : -1;
+    this.documentation = "No documentation yet for this module."
 
     this.inc_next_id();
 
@@ -53,6 +54,10 @@ class Module {
     this.output = aq.collect(this.output,     o => new ModuleIO().from_object(o) )
     this.children = aq.collect(this.children, c => new Module().from_object(c,plan) )
     this.wires = aq.collect(this.wires,       w => new ModuleWire().from_object(w,this,plan) )
+
+    if ( !this.documentation ) {
+      this.documentation = "No documentation yet for this module."
+    }
 
     this.constructor.next_module_id++;
 
@@ -465,5 +470,13 @@ class Module {
     return module.cost;
 
   }
+
+  get rendered_docs() {
+
+    var module = this;
+    var md = window.markdownit();
+    return AQ.sce.trustAsHtml(md.render(module.documentation));
+
+  }  
 
 }
