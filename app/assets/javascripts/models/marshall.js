@@ -58,7 +58,9 @@ AQ.Operation.record_methods.marshall = function() {
 
   var input_index = 0, output_index = 0;
 
-  op.field_values = aq.collect(op.field_values,(fv) => {
+  var updated_field_values = [];
+
+  aq.each(op.field_values,(fv) => {
 
     var ufv = AQ.FieldValue.record(fv);
     AQ.id_map[fv.id] = ufv.rid;
@@ -71,17 +73,29 @@ AQ.Operation.record_methods.marshall = function() {
       }
     });
 
-    if ( ufv.role == 'input' ) { // these indices are for methods that need to know
-      ufv.index = input_index++; // which input the fv is (e.g. first, second, etc.)
+    if ( !ufv.field_type ) {
+
+      alert("Field type for " + ufv.role + " '" + ufv.name + "' of '" + op.operation_type.name + "'  is undefined. " + 
+            "This i/o has been dropped. " +
+            "The operation type may have changed since this plan was last saved and you probably should not trust this plan.")
+
+    } else {
+
+      if ( ufv.role == 'input' ) { // these indices are for methods that need to know
+        ufv.index = input_index++; // which input the fv is (e.g. first, second, etc.)
+      }
+
+      if ( ufv.role == 'output' ) {
+        ufv.index = output_index++;
+      }        
+
+      updated_field_values.push(ufv);
+
     }
 
-    if ( ufv.role == 'output' ) {
-      ufv.index = output_index++;
-    }        
-
-    return ufv;
-
   })
+
+  op.field_values = updated_field_values;
 
   aq.each(op.field_values, fv => {
 
