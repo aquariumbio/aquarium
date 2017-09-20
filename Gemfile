@@ -48,3 +48,6 @@ gem 'oj'
 gem 'angular_rails_csrf'
 
 gem 'rack-cors', :require => 'rack/cors'
+
+gem 'yard'
+gem 'yard-activerecord'

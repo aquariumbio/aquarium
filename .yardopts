@@ -1,0 +1,9 @@
+--output-dir /yard-doc
+--no-private
+--title "Aquarium Documentation"
+--exclude foo --exclude bar
+app/helpers/*.rb
+app/krill/*.rb
+app/models/*.rb
+lib/krill/*.rb
+db/schema.rb
