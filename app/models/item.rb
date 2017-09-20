@@ -1,11 +1,11 @@
 # Class that represents a physical object in the lab
-# 
 
 class Item < ActiveRecord::Base
 
   include DataAssociator
 
   # associations #######################################################
+
 
   belongs_to :object_type
   belongs_to :sample
@@ -17,6 +17,7 @@ class Item < ActiveRecord::Base
 
   # accessors ###########################################################
 
+
   attr_accessible :quantity, :inuse, :sample_id, :data, :object_type_id,
                   :created_at, :collection_id, :locator_id, :location,
                   :sample_attributes, :object_type_attributes
@@ -24,6 +25,7 @@ class Item < ActiveRecord::Base
   accepts_nested_attributes_for :sample, :object_type
 
   # validations #########################################################
+
 
   validates :quantity, :presence => true
   validate :quantity_nonneg
@@ -42,6 +44,7 @@ class Item < ActiveRecord::Base
   end
 
   # location methods ###############################################################
+
 
   def primitive_location
     self[:location]
@@ -269,6 +272,7 @@ class Item < ActiveRecord::Base
   end
 
   # other methods ############################################################################
+
 
   def set_data d
     self.data = d.to_json

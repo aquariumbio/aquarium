@@ -1,4 +1,4 @@
---output-dir /yard-doc
+--output-dir ./yard-doc
 --no-private
 --title "Aquarium Documentation"
 --exclude foo --exclude bar
