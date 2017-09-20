@@ -81,6 +81,13 @@
       });
     }
 
+    function inc_last_place() {
+      $scope.last_place += 4*AQ.snap;
+      if ( $scope.last_place > 5*4*AQ.snap) {
+        $scope.last_place = 0
+      }   
+    }
+
     $scope.add_operation = function(operation_type) {
       var op = AQ.Operation.record({
         x: 60+3*AQ.snap + $scope.last_place,
@@ -90,7 +97,7 @@
         routing: {}, form: { input: {}, output: {} },
         parent_id: $scope.plan.current_module.id
       });
-      $scope.last_place += 4*AQ.snap;
+      inc_last_place();
       op.set_type(operation_type);
       $scope.plan.operations.push(op);
       if ( $scope.plan.name === "Untitled Plan" ) {
@@ -386,7 +393,7 @@
         Module.next_module_id = temp1;
         ModuleIO.next_io_id = temp2;
         $scope.plan.paste_plan(p,$scope.last_place);
-        $scope.last_place += 4*AQ.snap;
+        inc_last_place();
         $scope.$apply();
       })
 
