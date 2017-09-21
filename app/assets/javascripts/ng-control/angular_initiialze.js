@@ -14,7 +14,9 @@
       $httpProvider.interceptors.push(function(){
         return {
           'request': function(config) {
-            config['xsrfCookieName'] = 'XSRF-TOKEN_' + aquarium_environment_name;
+            let cookie_name = 'XSRF-TOKEN_' + aquarium_environment_name;
+            config['xsrfCookieName'] = cookie_name;
+            config['xsrfHeaderName'] = 'X-' + cookie_name;
             return config;
           }
         };
