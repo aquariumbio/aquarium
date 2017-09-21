@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/bjkeller/angular_rails_csrf.git
+  revision: 38de0798dc04dccd2946df970e9b49bf459b202e
+  ref: 38de079
+  specs:
+    angular_rails_csrf (2.1.1)
+      railties (>= 3, < 5.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -191,6 +199,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  angular_rails_csrf!
   aws-sdk (~> 1.7.1)
   bcrypt-ruby (~> 3.0.0)
   binding_of_caller
