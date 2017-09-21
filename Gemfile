@@ -45,6 +45,6 @@ gem 'underscore-rails'
 gem 'rails-patch-json-encode'
 gem 'oj'
 
-gem 'angular_rails_csrf'
+gem 'angular_rails_csrf', :git => 'https://github.com/bjkeller/angular_rails_csrf.git'
 
 gem 'rack-cors', :require => 'rack/cors'
