@@ -21,7 +21,7 @@ group :development do
 end
 
 group :production do
-  gem 'puma'  
+  gem 'puma'
 end
 
 # Gems used only for assets and not required
@@ -44,7 +44,5 @@ gem 'underscore-rails'
 
 gem 'rails-patch-json-encode'
 gem 'oj'
-
-gem 'angular_rails_csrf', :git => 'https://github.com/bjkeller/angular_rails_csrf.git'
 
 gem 'rack-cors', :require => 'rack/cors'
