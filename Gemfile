@@ -21,7 +21,7 @@ group :development do
 end
 
 group :production do
-  gem 'puma'  
+  gem 'puma'
 end
 
 # Gems used only for assets and not required
@@ -48,3 +48,5 @@ gem 'oj'
 gem 'angular_rails_csrf'
 
 gem 'rack-cors', :require => 'rack/cors'
+
+gem 'activerecord-native_db_types_override'
