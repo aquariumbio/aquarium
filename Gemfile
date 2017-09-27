@@ -48,3 +48,5 @@ gem 'oj'
 gem 'angular_rails_csrf', :git => 'https://github.com/bjkeller/angular_rails_csrf.git', :ref => '38de079'
 
 gem 'rack-cors', :require => 'rack/cors'
+
+gem 'activerecord-native_db_types_override'

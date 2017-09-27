@@ -30,6 +30,7 @@ GEM
       activesupport (= 3.2.22)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
+    activerecord-native_db_types_override (0.2.1)
     activeresource (3.2.22)
       activemodel (= 3.2.22)
       activesupport (= 3.2.22)

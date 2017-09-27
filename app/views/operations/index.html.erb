@@ -169,11 +169,11 @@
    <%= render partial: '/data_associations/template' %> 
 
    <div class='timing md-subhead timing-info'
-         ng-if="current.operation_type.timing && current.operation_type.timing.active">
+        ng-if="current.operation_type.timing && current.operation_type.timing.active">
         Usually Scheduled {{current.operation_type.timing.as_string}}
    </div>
 
-  <oplist operation_type="current.operation_type"
+  <oplist operationtype="current.operation_type"
           operations="current.operation_type.operations"
           status="current.status"
           ng-if="current.operation_type && current.status != 'scheduled' && current.status != 'running'">

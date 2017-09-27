@@ -6,7 +6,7 @@
 
     return {
       restrict: 'E',
-      scope: { operations: '=', status: '=', operation_type: '=', jobid: '=' },
+      scope: { operations: '=', status: '=', operationtype: '=', jobid: '=' },
       replace: true,
       template: $('#operation-list').html()
     }
