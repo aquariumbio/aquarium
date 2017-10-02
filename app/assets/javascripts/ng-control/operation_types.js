@@ -26,6 +26,18 @@
      * See factory definition in ng-helper/beforeunload_factory.js.
      */
     $scope.$on('onBeforeUnload', function (e) {
+      if ($scope.current_operation_type) {
+        console.log("op type defined");
+        if ($scope.current_operation_type.changed) {
+          console.log("op type changed " + $scope.current_operation_type.model.model);
+
+        } else {
+          console.log("op type not changed");
+        }
+      } else {
+        console.log("op type not defined");
+      }
+
       if ($scope.operation_type_changed()) {
           e.preventDefault();
       }
@@ -320,7 +332,7 @@
             if ( response.data.operation_types.length > 0 ) {
 
               let operation_types = aq.collect(response.data.operation_types, raw_operation_type => {
-                var operation_type = AQ.OperationType.record(raw_operation_type);
+                let operation_type = AQ.OperationType.record(raw_operation_type);
                 operation_type.upgrade_field_types();
                 if ( raw_operation_type.timing ) {
                   operation_type.timing = AQ.Timing.record(raw_operation_type.timing);

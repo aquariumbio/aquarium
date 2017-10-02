@@ -10,6 +10,9 @@ module SessionsHelper
   end
 
   def signed_in?
+    if current_user.nil?
+      puts "NOT SIGNED IN!!!"
+    end
     !current_user.nil?
   end
 
@@ -19,6 +22,7 @@ module SessionsHelper
 
   def current_user
     rts = cookies[remember_token_symbol] ?  cookies[remember_token_symbol] : cookies["remember_token"] 
+    puts "rts = #{rts}"
     @current_user ||= User.find_by_remember_token(rts)
   end
 
@@ -41,11 +45,13 @@ module SessionsHelper
 
   def sign_out
     self.current_user = nil
+    puts "SIGN_OUT DELETING!"
     cookies.delete(remember_token_symbol)
   end
 
   def redirect_back_or(default)
     redirect_to(session[:return_to] || default)
+    puts "REDICTR_BACK_OR DELETING!"    
     session.delete(:return_to)
   end
 
