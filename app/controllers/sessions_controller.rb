@@ -30,7 +30,6 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    puts "DESTROYING"
     sign_out
     render 'new', layout: "blank.html.erb"
   end

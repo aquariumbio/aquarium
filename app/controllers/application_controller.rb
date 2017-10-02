@@ -11,9 +11,8 @@ class ApplicationController < ActionController::Base
 
   # Force signout to prevent CSRF attacks
   def handle_unverified_request
-    puts "UNVERIFIED REQUEST!"
-    # sign_out
-    # super
+    sign_out
+    super
   end
 
   def sequence_new_job sha, path, from
