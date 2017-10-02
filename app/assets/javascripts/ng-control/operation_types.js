@@ -299,7 +299,7 @@
       reader.onloadend = function(e) {
 
         try {
-          let json = JSON.parse(e.target.result);
+          var json = JSON.parse(e.target.result);
         } catch(e) {
           alert("Could not parse file: " + e);
           return;
@@ -320,7 +320,7 @@
             if ( response.data.operation_types.length > 0 ) {
 
               let operation_types = aq.collect(response.data.operation_types, raw_operation_type => {
-                let operation_type = AQ.OperationType.record(raw_operation_type);
+                var operation_type = AQ.OperationType.record(raw_operation_type);
                 operation_type.upgrade_field_types();
                 if ( raw_operation_type.timing ) {
                   operation_type.timing = AQ.Timing.record(raw_operation_type.timing);
