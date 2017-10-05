@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   # CSRF handling. CSRF tokens are needed as long as we have cookies that affect the state of the system 
   # especially for authentication (see https://security.stackexchange.com/a/166798 for discussion).
   #
-  # (Details here correspond to changes to $httpProvider defaults in angular_initiialze.js (sic))
+  # (Details here correspond to changes to $httpProvider defaults in angular_initialize.js)
   # 1. Using angular_rails_csrf gem modified to allow renaming of cookie
   # 2. indicate that we are using CSRF 
 
