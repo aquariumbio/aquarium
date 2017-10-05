@@ -13,8 +13,8 @@ class ApplicationController < ActionController::Base
   # 3. Handle error
   def handle_unverified_request
     # Force signout to prevent CSRF attacks
-    #    sign_out
-    #    super
+    sign_out
+    super
   end
 
   # CSRF Notes:
