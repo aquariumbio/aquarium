@@ -203,13 +203,16 @@
 
         var old_val;
 
-        if ($scope.numbers[$scope.current.operation_type.id]) {
+        if ($scope.current.operation_type
+          && $scope.current.operation_type && $scope.numbers[$scope.current.operation_type.id]) {
           old_val = $scope.numbers[$scope.current.operation_type.id][$scope.current.status];
         }
 
         get_numbers().then(numbers => {
           $scope.numbers = numbers;
-          if ($scope.numbers[$scope.current.operation_type.id] && old_val !== $scope.numbers[$scope.current.operation_type.id][$scope.current.status]) {
+          if ($scope.current.operation_type
+            && $scope.numbers[$scope.current.operation_type.id]
+            && old_val !== $scope.numbers[$scope.current.operation_type.id][$scope.current.status]) {
             $scope.select($scope.current.operation_type, $scope.current.status, [])
           }
           $scope.$apply();
