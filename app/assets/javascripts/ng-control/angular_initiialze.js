@@ -17,9 +17,9 @@
     // so this must be done in an interceptor. If hard-coded could set 
     // $httpProvider.defaults.xsrfCookieName and xsrfHeaderName directly.
     // See ApplicationController for corresponding server-side details
-    $httpProvider.interceptors.push(function () {
+    $httpProvider.interceptors.push(() => {
       return {
-        'request': function (config) {
+        'request': (config) => {
           if (aquarium_environment_name) {
             let cookie_name = 'XSRF-TOKEN_' + aquarium_environment_name;
             config.xsrfCookieName = cookie_name;
@@ -31,14 +31,14 @@
     })
   }]);
 
-  w.factory('csrfInterceptor', ['$q', '$injector', function ($q, $injector) {
+  w.factory('csrfInterceptor', ['$q', '$injector', ($q, $injector) => {
     return {
-      'responseError': function (rejection) {
+      'responseError': (rejection) => {
         if (rejection.status == 422 && rejection.data == 'Invalid authenticity token') {
           deferred = $q.defer()
 
-          successCallback = function (resp) { deferred.resolve(resp); }
-          errorCallback = function (resp) { deferred.reject(resp); }
+          successCallback = (resp) => { deferred.resolve(resp); }
+          errorCallback = (resp) => { deferred.reject(resp); }
           $http = $http || $injector.get('$http') // avoids circular dependency
           $http(rejection).config.then(successCallback, errorCallback)
           return deferred.promise
@@ -49,7 +49,7 @@
     };
   }]);
 
-  w.config(['$httpProvider', function ($httpProvider) {
+  w.config(['$httpProvider', ($httpProvider) => {
     $httpProvider.interceptors.push('csrfInterceptor');
   }]);
 
