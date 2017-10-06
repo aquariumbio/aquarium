@@ -1,5 +1,10 @@
+# Module that includes status-related methods for {Operation}
+
 module OperationStatus
 
+  # Set and save {Operation} status
+  # @param str [String] ("waiting", "pending", "primed", "deferred", "scheduled", "running", "done", "error")
+  # @return [String] Status
   def change_status str
     temp = self.status
     self.status = str
@@ -67,11 +72,19 @@ module OperationStatus
     change_status "done" if self.status == "running"
   end
 
+  # Error the {Operation}
+  # @param error_type [Symbol] name of error
+  # @param msg [String] Error message
+  # @example Error {Operation}s with no plate colonies
+  #   op.error :no_colonies, "There are no colonies for plate #{plate}"
+  # @see DataAssociator#associate
   def error error_type, msg
     change_status "error"
     associate error_type, msg
   end
 
+  # Set {Operation} status to "pending"
+  # @see #change_status
   def redo
     change_status "pending"
     # TODO: Change preds to pending? At least on_the_fly_preds/
