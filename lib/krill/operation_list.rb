@@ -54,7 +54,7 @@ module Krill
     end    
 
     # Select {Operation}s with status "error"
-    # @return the object
+    # @return {Array} extended with {OperationList}
     def errored
       select { |op| op.status == "error" }
     end
@@ -66,7 +66,7 @@ module Krill
     # @option opts [Bool] :interactive Show Krill slides
     # @option opts [String] :method ("boxes") Show boxes slide
     # @option opts [Array<String>] :only Retrieve only inputs of provided names
-    # @return the object
+    # @return {Array} extended with {OperationList}
     def retrieve opts={}, &block
       opts = {interactive:true, method: "boxes", only: []}.merge opts
 
@@ -114,7 +114,7 @@ module Krill
     # @option custom_opts [Bool] :errored Include {Operation}s with status "error"
     # @option custom_opts [String] :role "input" or "output"
     # @option custom_opts [Array<String>] :only Make only outputs of provided names
-    # @return the object
+    # @return {Array} extended with {OperationList}
     def make custom_opts={}
 
       opts = {errored:false,role:'output',only:[]}.merge custom_opts
@@ -174,7 +174,7 @@ module Krill
     # @option opts [String] :method ("boxes") Show boxes slide
     # @option opts [Bool] :errored Store {Operation}s with status "error"
     # @option opts [String] :io ("all", "input", "output") Store inputs, outputs, or both
-    # @return the object
+    # @return {Array} extended with {OperationList}
     def store opts={interactive:true,method: "boxes",errored:false,io:"all"}
 
       items = []
