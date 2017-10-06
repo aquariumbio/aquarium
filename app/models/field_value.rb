@@ -1,3 +1,5 @@
+# An input, output, or parameter of an {Operation}
+
 class FieldValue < ActiveRecord::Base
 
   include FieldValuePlanner
@@ -13,14 +15,20 @@ class FieldValue < ActiveRecord::Base
   attr_accessible :field_type_id, :row, :column, :allowable_field_type_id
   attr_accessible :parent_class, :parent_id
 
+  # Return associated {Sample}
+  # @return [Sample]
   def sample
     child_sample
   end
 
+  # Return associated {Item}
+  # @return [Item]
   def item
     child_item
   end
 
+  # Return associated {Collection}
+  # @return [Collection]
   def collection
     if child_item
       Collection.find(child_item.id)
@@ -29,6 +37,8 @@ class FieldValue < ActiveRecord::Base
     end
   end
 
+  # Return associated parameter value
+  # @return [Float, String, Hash]
   def val
 
     if field_type
@@ -226,6 +236,12 @@ class FieldValue < ActiveRecord::Base
     end
   end
 
+  # Set {Item}, {Collection}, or row or column
+  # @param opts [Hash]
+  # @option opts [Item] :item
+  # @option opts [Collection] :collection
+  # @option opts [Integer] :row
+  # @option opts [Integer] :column
   def set opts={}
     self.child_item_id = opts[:item].id if opts[:item]   
     self.child_item_id = opts[:collection].id if opts[:collection]
