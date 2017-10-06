@@ -145,25 +145,29 @@
 
   # Inputs as Array extended with {#IOList}
   # @param name [String]
-  # @return [Array]
+  # @return [Array<FieldValue>]
   def input_array name
     inputs.select { |i| i.name == name }.extend(IOList)
   end
 
   # Outputs as Array extended with {#IOList}
   # @param name [String]
-  # @return [Array]
+  # @return [Array<FieldValue>]
   def output_array name
     outputs.select { |o| o.name == name } .extend(IOList)   
   end
 
   # @param name [String]
   # @param role [String]
-  # @return [Array<FieldValue>]
+  # @return [FieldValue]
   def get_field_value name, role="input"
     field_values.find { |fv| fv.name == name && fv.role == role }
   end
 
+  # Passes an input item to an output (alternative to {Krill::OperationList#make})
+  # @param input_name [String]
+  # @param output_name [String]
+  # @return [Operation]
   def pass input_name, output_name=nil
 
     output_name = input_name unless output_name
