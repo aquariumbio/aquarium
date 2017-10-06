@@ -1,3 +1,5 @@
+# A named, biologically unique definition for an instance of a {SampleType}, such as a specific Primer, Fragment, Plasmid, or Yeast Strain
+
 class Sample < ActiveRecord::Base
 
   include ActionView::Helpers::DateHelper
@@ -135,6 +137,11 @@ class Sample < ActiveRecord::Base
 
   end
 
+  # Return all items of this {Sample} in the provided {ObjectType}
+  # @param container [String] {ObjectType} name
+  # @example Find a 1 kb ladder for gel electrophoresis
+  #   ladder_1k = Sample.find_by_name("1 kb Ladder").in("Ladder Aliquot")
+  # @return [Array<Item>]
   def in container
 
     c = ObjectType.find_by_name container
@@ -150,6 +157,8 @@ class Sample < ActiveRecord::Base
     "<a href='/samples/#{self.id}' class='aquarium-item' id='#{self.id}'>#{self.id}</a>"
   end
 
+  # Return {User} who owns this {Sample}
+  # @return [User]
   def owner
     u = User.find_by_id(self.user_id)
     if u
