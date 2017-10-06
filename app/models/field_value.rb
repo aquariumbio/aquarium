@@ -242,6 +242,11 @@ class FieldValue < ActiveRecord::Base
   # @option opts [Collection] :collection
   # @option opts [Integer] :row
   # @option opts [Integer] :column
+  # @example For debugging, set input to specific plate
+  #  if debug
+  #    plate = Item.find(125234)
+  #    operations.first.input("Plate").set item: plate if plate
+  #  end
   def set opts={}
     self.child_item_id = opts[:item].id if opts[:item]   
     self.child_item_id = opts[:collection].id if opts[:collection]
