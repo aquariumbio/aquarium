@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app='aquarium' ng-controller='layoutCtrl' ng-cloak style="overflow: hidden">
+<html ng-app='aquarium' ng-controller='layoutCtrl' ng-cloak style="overflow: hidden" ng-strict-di>
 
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -10,6 +10,11 @@
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
     <%= favicon_link_tag 'favicon.ico' %>      
+
+  <script>
+    // set the environment name for use in cookies
+    aquarium_environment_name = '<%= Bioturk::Application.environment_name %>';
+  </script>
 
   <style>
 

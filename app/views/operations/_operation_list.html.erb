@@ -86,10 +86,11 @@
 
       </tr>
 
-      <tr ng-if="( status == 'error' || status == 'done' ) && operations.length < $parent.$parent.numbers[operation_type.id][status]">
+      <tr ng-if="( status == 'error' || status == 'done' ) && operations.length < $parent.$parent.numbers[operationtype.id][status]">
         <td></td>
         <td colspan=5 style='padding-top: 16px'>
-          <md-button class='md-raised md-primary md-small' ng-click="$parent.$parent.more(status)">More</md-button>
+          <md-button class='md-raised md-primary md-small' 
+                     ng-click="$parent.$parent.more(status)">More</md-button>
         </td>
       </tr>
 

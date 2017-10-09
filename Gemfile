@@ -21,7 +21,7 @@ group :development do
 end
 
 group :production do
-  gem 'puma'  
+  gem 'puma'
 end
 
 # Gems used only for assets and not required
@@ -51,3 +51,4 @@ gem 'rack-cors', :require => 'rack/cors'
 
 gem 'yard'
 gem 'yard-activerecord'
+gem 'activerecord-native_db_types_override'

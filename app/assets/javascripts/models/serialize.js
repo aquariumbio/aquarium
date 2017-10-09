@@ -21,7 +21,7 @@ AQ.Plan.record_methods.serialize = function() {
 AQ.Plan.record_methods.serialize_module = function(m) {
 
   var plan = this,
-      props = [ "id", "parent_id", "name", "x", "y", "width", "height", "model", "input", "output" ],
+      props = [ "id", "parent_id", "name", "x", "y", "width", "height", "model", "input", "output", "documentation" ],
       sm = {};
 
   for ( var p in props ) {

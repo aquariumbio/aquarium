@@ -48,17 +48,21 @@ AQ.Operation.record_methods.marshall = function() {
   }
 
   // op.operation_type = AQ.OperationType.record(op.operation_type).marshall();
-  var ots = aq.where(AQ.operation_types, ot => ot.id == op.operation_type_id);
+  var ots = aq.where(AQ.operation_types, ot => ot.deployed && ot.id == op.operation_type_id);
 
   if ( ots.length != 1 ) {
-    console.log("WARNING: Could not find operation types in AQ. Make sure AQ.operation_types is initialized")
+    alert("Operation " + op.id + " does not have a (deployed) operation type. Skipping.")
+    console.log("WARNING: Could not find operation types in AQ. Make sure AQ.operation_types is initialized");
+    return null;
   } else {
     op.operation_type = ots[0];
   }
 
   var input_index = 0, output_index = 0;
 
-  op.field_values = aq.collect(op.field_values,(fv) => {
+  var updated_field_values = [];
+
+  aq.each(op.field_values,(fv) => {
 
     var ufv = AQ.FieldValue.record(fv);
     AQ.id_map[fv.id] = ufv.rid;
@@ -71,17 +75,29 @@ AQ.Operation.record_methods.marshall = function() {
       }
     });
 
-    if ( ufv.role == 'input' ) { // these indices are for methods that need to know
-      ufv.index = input_index++; // which input the fv is (e.g. first, second, etc.)
+    if ( !ufv.field_type ) {
+
+      alert("Field type for " + ufv.role + " '" + ufv.name + "' of '" + op.operation_type.name + "'  is undefined. " + 
+            "This i/o has been dropped. " +
+            "The operation type may have changed since this plan was last saved and you probably should not trust this plan.")
+
+    } else {
+
+      if ( ufv.role == 'input' ) { // these indices are for methods that need to know
+        ufv.index = input_index++; // which input the fv is (e.g. first, second, etc.)
+      }
+
+      if ( ufv.role == 'output' ) {
+        ufv.index = output_index++;
+      }        
+
+      updated_field_values.push(ufv);
+
     }
 
-    if ( ufv.role == 'output' ) {
-      ufv.index = output_index++;
-    }        
-
-    return ufv;
-
   })
+
+  op.field_values = updated_field_values;
 
   aq.each(op.field_values, fv => {
 
@@ -117,8 +133,21 @@ AQ.Operation.record_methods.marshall = function() {
 AQ.Plan.record_methods.marshall = function() {
 
   var plan = this;
-  plan.operations = aq.collect(plan.operations, (op) => AQ.Operation.record(op).marshall());
+
+  var marshalled_operations = [];
+
+  aq.each(plan.operations, op => {
+    var op = AQ.Operation.record(op).marshall();
+    if ( op ) {
+      marshalled_operations.push(op);
+    }
+  });
+
+  plan.operations = marshalled_operations;
+
   plan.wires = aq.collect(plan.wires, wire => AQ.Wire.record(wire));
+
+  var skip_wires = [];
 
   aq.each(plan.wires, w => {
     w.snap = 16;
@@ -139,8 +168,14 @@ AQ.Plan.record_methods.marshall = function() {
       o.recompute_getter("types_and_values")
       o.recompute_getter('num_inputs');
       o.recompute_getter('num_outputs');       
-    })   
+    });
+    if ( !w.to || !w.from ) {
+      skip_wires.push(w);
+      console.log("WARNING: Skipping wire, probably because operation was deleted.")
+    }
   })
+
+  plan.wires = aq.where(plan.wires, w => !skip_wires.includes(w));
 
   plan.layout = plan.marshall_layout();
   plan.open = true;

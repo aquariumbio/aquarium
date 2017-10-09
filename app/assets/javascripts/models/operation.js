@@ -296,7 +296,6 @@ AQ.Operation.record_methods.reload = function() {
 
 AQ.Operation.getter(AQ.Job,"job");
 
-
 AQ.Operation.record_methods.instantiate_aux = function(plan,pairs,resolve) {
 
   var operation = this;

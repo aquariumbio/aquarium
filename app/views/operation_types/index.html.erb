@@ -34,12 +34,25 @@
       </b>
 
       <ul ng-if="current_category == category" class='op-type-sublist'>
-        <li ng-repeat="lib in libraries | filter: { category: category } : true track by $index" 
-            ng-click="choose_lib(lib)"
-            ng-class="lib_class(lib)">{{lib.name}}</li>      
-        <li ng-repeat="ot in operation_types | filter: { category: category } : true track by $index" 
-            ng-click="choose(ot)"
-            ng-class="operation_type_class(ot)">{{ot.name}}</li>
+
+        <li ng-if="(libraries | filter: { category: category } : true).length > 0">
+          Libraries:
+          <ul class='op-type-sublist'>
+            <li ng-repeat="lib in libraries | filter: { category: category } : true track by $index"
+                ng-click="choose_lib(lib)"
+                ng-class="lib_class(lib)">{{lib.name}}</li>
+          </ul>
+        </li>
+
+        <li ng-if="(operation_types | filter: { category: category } : true).length > 0">
+          Operation Types:
+          <ul class='op-type-sublist'>
+            <li ng-repeat="ot in operation_types | filter: { category: category } : true track by $index"
+                ng-click="choose(ot)"
+                ng-class="operation_type_class(ot)">{{ot.name}}</li>
+          </ul>
+        </li>
+
       </ul>
 
     </li>

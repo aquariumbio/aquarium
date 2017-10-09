@@ -26,18 +26,6 @@
      * See factory definition in ng-helper/beforeunload_factory.js.
      */
     $scope.$on('onBeforeUnload', function (e) {
-      if ($scope.current_operation_type) {
-        console.log("op type defined");
-        if ($scope.current_operation_type.changed) {
-          console.log("op type changed " + $scope.current_operation_type.model.model);
-
-        } else {
-          console.log("op type not changed");
-        }
-      } else {
-        console.log("op type not defined");
-      }
-
       if ($scope.operation_type_changed()) {
           e.preventDefault();
       }
@@ -311,7 +299,7 @@
       reader.onloadend = function(e) {
 
         try {
-          let json = JSON.parse(e.target.result);
+          var json = JSON.parse(e.target.result);
         } catch(e) {
           alert("Could not parse file: " + e);
           return;

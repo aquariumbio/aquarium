@@ -387,7 +387,7 @@ AQ.Plan.record_methods.propagate_up = function(fv,sid) { // propogate sid to inc
 
 }
 
-AQ.Plan.record_methods.propagate = function(op,fv,sid) { // propagate the choice of sid for fv to connected operations 
+AQ.Plan.record_methods.propagate_aux = function(op,fv,sid) { // propagate the choice of sid for fv to connected operations 
 
   var plan = this;
 
@@ -396,14 +396,14 @@ AQ.Plan.record_methods.propagate = function(op,fv,sid) { // propagate the choice
     aq.each(op.field_values,io => {
       if ( fv.route_compatible(io) ) {
         plan.propagate_down(io,sid)
-        plan.propagate_up(io,sid);
+        plan.propagate_up(io,sid)
       }  
     })
 
   } else {
 
-    plan.propagate_down(fv,sid)
-    plan.propagate_up(fv,sid)
+    plan.propagate_down(fv,sid);
+    plan.propagate_up(fv,sid);
 
   }
 
@@ -411,6 +411,41 @@ AQ.Plan.record_methods.propagate = function(op,fv,sid) { // propagate the choice
 
 }
 
+AQ.Plan.record_methods.propagate = function(op,fv,sid) {
+
+  var plan = this;
+
+  plan.propagate_aux(op, fv, sid);
+
+  aq.each(plan.siblings(fv), sibling => {
+    sibling.op.assign_sample(sibling.fv,sid) 
+    sibling.op.instantiate(plan,sibling.fv,sid) 
+    plan.propagate_aux(sibling.op, sibling.fv, sid);
+  });
+
+}
+
+AQ.Plan.record_methods.siblings = function(fv) {
+
+  var plan = this,
+      from_module_io,
+      sibs = [];
+
+  aq.each(plan.base_module.all_wires, wire => {
+    if ( wire.to == fv && wire.from_module ) {
+      from_module_io = wire.from;
+    } 
+  });
+
+  aq.each(plan.base_module.all_wires, wire => {
+    if ( wire.to != fv && wire.to.record_type == "FieldValue" && wire.from == from_module_io ) {
+      sibs.push({ fv: wire.to, op: wire.to_op });
+    }
+  });
+
+  return sibs;
+
+}
 
 AQ.Plan.record_methods.add_wire_from = function(fv,op,pred) {
 
