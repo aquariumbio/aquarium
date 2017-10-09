@@ -1,7 +1,20 @@
---output-dir ./yard-doc
+--output-dir ./doc/api
 --no-private
 --title "Aquarium Documentation"
---exclude foo --exclude bar
+--exclude app/models/account.rb
+--exclude app/models/account_log.rb
+--exclude app/models/announcement.rb
+--exclude app/models/blob.rb
+--exclude app/models/budget.rb
+--exclude app/models/cart_item.rb
+--exclude app/models/code.rb
+--exclude app/models/group.rb
+--exclude app/models/invoice.rb
+--exclude app/models/library.rb
+--exclude app/models/log.rb
+--exclude app/models/membership.rb
+--exclude app/models/metacol.rb
+--exclude lib/krill/client.rb
 app/helpers/*.rb
 app/krill/*.rb
 app/models/*.rb
