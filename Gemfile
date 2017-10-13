@@ -49,4 +49,4 @@ gem 'angular_rails_csrf'
 
 gem 'rack-cors', :require => 'rack/cors'
 
-gem 'activerecord-native_db_types_override'
+# gem 'activerecord-native_db_types_override'
