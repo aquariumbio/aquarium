@@ -155,6 +155,15 @@
         <% else %>
           <md-content class='main scrollable'>
         <% end %>
+
+          <% if content_for? :show_errors %>
+            <div class="container-fluid">
+              <% flash.each do |key, value| %>
+                <div class="alert alert-<%= key %>"><%= value.class == Array ? value.join('<br />').html_safe : value %></div>
+              <% end %>
+            </div>
+          <% end %>
+
            <%= yield :main %>
         </md-content>
 

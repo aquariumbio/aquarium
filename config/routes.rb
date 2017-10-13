@@ -258,6 +258,8 @@ Bioturk::Application.routes.draw do
 
   match '/yeast_qc', to: 'static_pages#yeast_qc'
 
+  get '/static_pages/direct_purchase', to: 'static_pages#direct_purchase'
+
   match '/glass', to: 'sessions#glass'
 
   match '/search', to: 'search#search'

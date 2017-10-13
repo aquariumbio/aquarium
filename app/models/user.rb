@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   has_many :tasks
   has_many :account
   has_many :user_budget_associations
+  has_many :budgets, through: :user_budget_associations
   has_many :plans
   has_many :parameters
   
