@@ -1,0 +1,49 @@
+<% provide(:title, "Job #{@job_id}") %>
+
+<%= content_for :controller do %>technicianCtrl<% end %>
+
+<%= content_for :class do %>technician<% end %>
+
+<% content_for :sidebar do %>
+  <div layout-padding>
+    <div ng-repeat="step in job.steps | filter: { operation: 'display' } track by $index"
+         ng-class="$index == state.index ? 'no-highlight step-index-selected' : 'no-highlight step-index'"
+         ng-click="state.index = $index">
+        {{$index+1}}. {{step.content[0].title}}
+    </div>
+  </div>
+<% end %>
+
+<% content_for :no_title do %>true<% end %>
+
+<% content_for :keydown do %>keyDown($event)<% end %>
+
+<% content_for :specific_title do %>
+  Step {{state.index + 1}}
+<% end %>
+
+<% content_for :action1 do %>
+  <md-button ng-click="state.index = state.index - 1" ng-disabled="state.index == 0">&#8678;</md-button>
+<% end %>
+
+<% content_for :action2 do %>
+  <span class="ok">
+    <md-button class='md-raised md-primary'
+               ng-disabled="state.index != job.steps.length-1"
+               ng-click="ok()">OK</md-button>
+  </span>
+<% end %>
+
+<% content_for :action3 do %>
+  <md-button ng-click="state.index = state.index + 1" ng-disabled="state.index >= job.steps.length-1">&#8680;</md-button>
+<% end %>
+
+<% content_for :main do %>
+
+  <div ng-repeat="step in job.steps | filter: { operation: 'display' } track by $index"
+       ng-show="$index == state.index"
+       class="step-container animate-show-hide">
+      {{step.content}}
+  </div>
+
+<% end %>

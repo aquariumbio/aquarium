@@ -1,48 +1,48 @@
 Bioturk::Application.routes.draw do
- 
+
   resources :timings, only: [ :update, :create ]
 
   get '/json/current',             to: 'json#current'
   post '/json/items',              to: 'json#items'
-  post '/json/save',               to: 'json#save'  
-  post '/json/delete',             to: 'json#delete'    
-  post '/json/upload',             to: 'json#upload'    
+  post '/json/save',               to: 'json#save'
+  post '/json/delete',             to: 'json#delete'
+  post '/json/upload',             to: 'json#upload'
   post '/json',                    to: 'json#index'
 
   post '/launcher/estimate',                     to: 'launcher#estimate'
-  post '/launcher/submit',                       to: 'launcher#submit'  
-  get '/launcher/plans',                         to: 'launcher#plans'  
+  post '/launcher/submit',                       to: 'launcher#submit'
+  get '/launcher/plans',                         to: 'launcher#plans'
   get '/launcher',                               to: 'launcher#index'
-  get '/launcher/:id/relaunch',                  to: 'launcher#relaunch'  
+  get '/launcher/:id/relaunch',                  to: 'launcher#relaunch'
 
   get '/plans/:pid/select/:oid',                 to: 'plans#select'
   get '/plans/start/:id',                        to: 'plans#start'
   get '/plans/costs/:id',                        to: 'plans#costs'
-  get '/plans/cancel/:id/:msg',                  to: 'plans#cancel' 
+  get '/plans/cancel/:id/:msg',                  to: 'plans#cancel'
   get '/plans/:id/debug',                        to: 'plans#debug'
   get '/plans/replan/:id',                       to: 'plans#replan'
-  post '/plans/plan',                            to: 'plans#plan'  
+  post '/plans/plan',                            to: 'plans#plan'
   put '/plans/move',                             to: 'plans#move'
   get '/plans/folders',                          to: 'plans#folders'
   get '/plans/operation_types',                  to: 'plans#operation_types'
   resources :plans
 
   post '/operations/batch',                      to: 'operations#batch'
-  post '/operations/unbatch',                    to: 'operations#unbatch'  
+  post '/operations/unbatch',                    to: 'operations#unbatch'
   get '/operations/jobs',                        to: 'operations#jobs'
   get '/operations/:id/status/:status',          to: 'operations#set_status'
   resources :operations
 
-  post '/operation_types/import',                    to: 'operation_types#import'    
-  get '/operation_types/numbers/:user_id/:filter',   to: 'operation_types#numbers'    
+  post '/operation_types/import',                    to: 'operation_types#import'
+  get '/operation_types/numbers/:user_id/:filter',   to: 'operation_types#numbers'
   get '/operation_types/:id/stats',                  to: 'operation_types#stats'
   get '/operation_types/:id/random/:num',            to: 'operation_types#random'
-  get '/operation_types/:id/export',                 to: 'operation_types#export'  
-  get '/operation_types/export_category/:category',  to: 'operation_types#export_category'  
-  get '/operation_types/:id/copy',                   to: 'operation_types#copy'  
+  get '/operation_types/:id/export',                 to: 'operation_types#export'
+  get '/operation_types/export_category/:category',  to: 'operation_types#export_category'
+  get '/operation_types/:id/copy',                   to: 'operation_types#copy'
 
   resources :operation_types do
-    collection do 
+    collection do
       get 'default'
       post 'code'
       post 'test'
@@ -50,7 +50,7 @@ Bioturk::Application.routes.draw do
   end
 
   resources :libraries do
-    collection do 
+    collection do
       post 'code'
     end
   end
@@ -58,54 +58,54 @@ Bioturk::Application.routes.draw do
   resources :announcements
 
   get '/developer',                              to: 'developer#developer'
-  post '/developer/get/',                        to: 'developer#get'  
-  post '/developer/save',                        to: 'developer#save'    
-  post '/developer/test',                        to: 'developer#test'      
-  post '/developer/pull',                        to: 'developer#pull'        
+  post '/developer/get/',                        to: 'developer#get'
+  post '/developer/save',                        to: 'developer#save'
+  post '/developer/test',                        to: 'developer#test'
+  post '/developer/pull',                        to: 'developer#pull'
 
   get '/browser',                                to: 'browser#browser'
-  get '/browser/all',                            to: 'browser#all'  
-  get '/browser/projects',                       to: 'browser#projects'    
-  get '/browser/samples_for_tree',               to: 'browser#samples_for_tree'  
-  get '/browser/samples/:id/:offset(/:user_id)', to: 'browser#samples'  
+  get '/browser/all',                            to: 'browser#all'
+  get '/browser/projects',                       to: 'browser#projects'
+  get '/browser/samples_for_tree',               to: 'browser#samples_for_tree'
+  get '/browser/samples/:id/:offset(/:user_id)', to: 'browser#samples'
   get '/browser/sub/:id',                        to: 'browser#subsamples'
-  get '/browser/annotate/:id/:note',             to: 'browser#annotate'  
+  get '/browser/annotate/:id/:note',             to: 'browser#annotate'
   get '/browser/items/:id',                      to: 'browser#items'
   post '/browser/create_samples',                to: 'browser#create_samples'
   post '/browser/save',                          to: 'browser#save'
-  post '/browser/save_data_association',         to: 'browser#save_data_association'    
-  get '/browser/recent_samples/:id',             to: 'browser#recent_samples'  
-  post '/browser/search',                        to: 'browser#search' 
+  post '/browser/save_data_association',         to: 'browser#save_data_association'
+  get '/browser/recent_samples/:id',             to: 'browser#recent_samples'
+  post '/browser/search',                        to: 'browser#search'
   get '/browser/collections/:sample_id',         to: 'browser#collections'
-  get '/browser/delete_item/:item_id',           to: 'browser#delete_item'  
-  get '/browser/restore_item/:item_id',          to: 'browser#restore_item'  
+  get '/browser/delete_item/:item_id',           to: 'browser#delete_item'
+  get '/browser/restore_item/:item_id',          to: 'browser#restore_item'
 
   resources :parameters
 
   get '/budgets/add/:bid/:uid/:quota',           to: 'budgets#add_user'
-  get '/budgets/remove/:bid/:uid',               to: 'budgets#remove_user'  
+  get '/budgets/remove/:bid/:uid',               to: 'budgets#remove_user'
   get '/budgets/:id/spent',                      to: 'launcher#spent'
   resources :budgets
 
   post '/invoices/note',                         to: "invoices#note"
-  post '/invoices/credit',                       to: "invoices#credit"  
-  get '/invoices/year/:year',                    to: 'invoices#index'  
-  post '/invoices/change_budget',                to: 'invoices#change_budget'  
+  post '/invoices/credit',                       to: "invoices#credit"
+  get '/invoices/year/:year',                    to: 'invoices#index'
+  post '/invoices/change_budget',                to: 'invoices#change_budget'
   get '/invoices/change_status/:id/:status',     to: 'invoices#change_status'
   resources :invoices
 
-  get '/accounts',                               to: 'accounts#index'  
+  get '/accounts',                               to: 'accounts#index'
   get '/accounts/deposit',                       to: 'accounts#deposit'
-  get '/accounts/:uid',                          to: 'accounts#index'  
-  get '/accounts/:uid/:month/:year',             to: 'accounts#index'      
+  get '/accounts/:uid',                          to: 'accounts#index'
+  get '/accounts/:uid/:month/:year',             to: 'accounts#index'
 
-  get '/sample_tree/samples',                    to: 'sample_tree#samples'  
-  get '/sample_tree/jobs/:id',                   to: 'sample_tree#jobs'  
+  get '/sample_tree/samples',                    to: 'sample_tree#samples'
+  get '/sample_tree/jobs/:id',                   to: 'sample_tree#jobs'
   get '/sample_tree/annotate/:id/:note',         to: 'sample_tree#annotate'
   get '/sample_tree/:id',                        to: 'sample_tree#show'
-  
-  get 'containers_list',                         to: 'object_types#containers'  
-  get 'collection_containers_list',              to: 'object_types#collection_containers'    
+
+  get 'containers_list',                         to: 'object_types#containers'
+  get 'collection_containers_list',              to: 'object_types#collection_containers'
   get 'sample_types_list',                       to: 'object_types#sample_types'
   get 'sample_list/:id',                         to: 'object_types#samples'
   get 'sample_list',                             to: 'object_types#samples'
@@ -149,7 +149,7 @@ Bioturk::Application.routes.draw do
     get 'narguments', on: :new
     get 'launch', on: :new
     get 'stop'
-  end 
+  end
 
   get "/groups/names"
 
@@ -184,6 +184,8 @@ Bioturk::Application.routes.draw do
   get "interpreter/edit"
   get "interpreter/resubmit"
 
+  get "technician/:job_id", to: "technician#index"
+
   get "krill/debug/:id", to: "krill#debug"
   get "krill/arguments"
   get "krill/submit"
@@ -212,7 +214,7 @@ Bioturk::Application.routes.draw do
   get "stats/processes"
   get "stats/empty"
   get "stats/timing"
-  get "stats/user_items" 
+  get "stats/user_items"
   get "stats/protocol_version_info"
   get "jobs/index"
   get "jobs/summary"
@@ -233,7 +235,7 @@ Bioturk::Application.routes.draw do
 
   match "project", to: 'samples#project'
 
-  resources :object_types do 
+  resources :object_types do
     resources :items do
       collection do
         get 'update'
@@ -263,11 +265,11 @@ Bioturk::Application.routes.draw do
   match '/glass', to: 'sessions#glass'
 
   match '/search', to: 'search#search'
-  
+
   match '/inventory_stats', to: 'static_pages#inventory_stats'
   match '/inventory_critical', to: 'static_pages#inventory_critical'
   match '/protocol_usage', to: 'static_pages#protocol_usage'
-  match '/cost_report', to: 'static_pages#cost_report'  
+  match '/cost_report', to: 'static_pages#cost_report'
 
   get '/production_interface', to: 'object_types#production_interface'
   get '/delete_inventory', to: 'object_types#delete_inventory'
@@ -281,10 +283,10 @@ Bioturk::Application.routes.draw do
 
   get '/users/active',        to: 'users#active'
   get 'users/current',        to: 'users#current'
-  get 'users/billing/:id',    to: 'users#billing' 
+  get 'users/billing/:id',    to: 'users#billing'
   put 'users/password',       to: 'users#update_password'
-  
-  resources :users do 
+
+  resources :users do
     get 'change_password'
   end
 
@@ -303,4 +305,3 @@ Bioturk::Application.routes.draw do
   get "oyster/items"
 
 end
- 

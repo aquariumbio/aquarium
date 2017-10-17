@@ -1,0 +1,46 @@
+.technician {
+
+  .animate-show-hide.ng-hide {
+    opacity: 0;
+  }
+
+  .animate-show-hide.ng-hide-add {
+    transition: all linear 0.0s;
+  }
+  .animate-show-hide.ng-hide-remove {
+    transition: all linear 0.5s;
+  }
+
+  .step-container {
+    opacity: 1;
+    padding: 20px;
+  }
+
+  .step-index,
+  .step-index-selected {
+    cursor: pointer;
+  }
+
+  .step-index-selected {
+    background: yellow;
+  }
+
+  .ok {
+
+    .md-button {
+      color : white;
+      background: green;
+    }
+
+    .md-button:not([disabled]):hover {
+      background-color: green;
+    }
+
+    .md-button[disabled] {
+      color : white;
+      background-color: lightgrey;
+    }
+
+  }
+
+}

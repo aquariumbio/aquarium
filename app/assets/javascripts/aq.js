@@ -15,7 +15,7 @@ Aq.prototype.url_params = function() {
     aq.each(parts,part => {
       result[part.split('=')[0]] = part.split('=')[1];
     });
-  } 
+  }
   return result;
 }
 
@@ -77,7 +77,7 @@ Aq.prototype.nice_time = function(date,seconds) {
   } else {
     s = "";
   }
-  
+
   return h + ":" + m + s + " " + ap;
 
 }
@@ -241,16 +241,22 @@ Aq.prototype.query = function() {
   var o = {};
 
   if ( query_string ) {
-    
-    aq.each(query_string.split('&'), function(p) { 
+
+    aq.each(query_string.split('&'), function(p) {
       var key = p.split("=")[0],
           val = p.split("=")[1];
       o[key] = val;
     });
-    
-  } 
+
+  }
 
   return o;
+
+}
+
+Aq.prototype.url_path = function() {
+
+  return window.location.pathname.split("/");
 
 }
 
