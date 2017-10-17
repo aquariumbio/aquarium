@@ -12,8 +12,118 @@
   }
 
   .step-container {
+
     opacity: 1;
-    padding: 20px;
+    padding: 30px;
+
+    .content {
+      // font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .content-title {
+      font-weight: bold;
+      font-size: 22pt;
+      margin-bottom: 16pt;
+    }
+
+    .content-note {
+      font-weight: normal;
+      font-size: 12pt;
+      margin-bottom: 6pt;
+    }
+
+    .content-select {
+    }
+
+    table {
+
+      border: 1pt solid #aaa;
+      font-size: 12pt;
+      line-height: 12pt;
+      margin: 15px;
+
+      td {
+        border: 1pt solid #aaa;
+        text-align: center;
+        padding: 4px;
+      }
+
+      .empty {
+        background: #f5f5f5;
+        color: #ddd;
+        font-size: 18pt;
+      }
+
+      .full {
+        background: #fff;
+      }
+
+      .selected {
+        background: yellow;
+      }
+
+    }
+
+    .td-check {
+      background: lightblue;
+    }
+
+    .td-input {
+
+    }
+
+    .table-input {
+        display: inline-block;
+        padding: 0;
+        margin: 0 !important;
+        border: none !important;
+        height: 100% !important;
+        line-height: 100%;
+        -webkit-appearance:none;
+        -webkit-box-shadow: none !important;
+        -moz-box-shadow: none !important;
+        box-shadow: none !important;
+    }
+
+    .table-input-large {
+      font-size: 14pt !important;
+    }
+
+    .table-input-prompt {
+      color: #aaa;
+    }
+
+    .td-check:hover {
+        outline: 2pt solid lightblue;
+        cursor: pointer;
+    }
+
+    .td-selected {
+      background: blue;
+      color: white;
+    }
+
+    .td-null-cell {
+      background: yellow;
+    }
+
+    .td-filled-slot {
+      border: 1pt solid #aaa;
+      width: 37px;
+      height: 37px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 10pt;
+    }
+
+    .td-empty-slot {
+      width: 37px;
+      height: 37px;
+      background: #f5f5f5;
+      color: #ddd;
+      font-size: 18pt;
+    }
+
   }
 
   .step-index,
@@ -22,7 +132,7 @@
   }
 
   .step-index-selected {
-    background: yellow;
+    background: lightblue;
   }
 
   .ok {

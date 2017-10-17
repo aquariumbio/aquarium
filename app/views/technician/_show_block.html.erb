@@ -1,0 +1,111 @@
+<script type="text/ng-template" id="title">
+  <div class='content content-title'>
+    <span ng-bind-html="content_value(line)"></span>
+  </div>
+</script>
+
+<script type="text/ng-template" id="note">
+  <div class='content content-note'>
+    <span ng-bind-html="content_value(line)"></span>
+  </div>
+</script>
+
+<script type="text/ng-template" id="select">
+  <div class='content content-select'>
+    <b>{{content_value(line).var}}</b> = {{content_value(line).label}} from
+    [ <span ng-repeat="choice in content_value(line).choices">{{choice}}<span ng-if="!$last">, </span></span> ]
+  </div>
+</script>
+
+<script type="text/ng-template" id="input">
+  <div class='content content-note'>
+    <b>{{content_value(line).var}}</b> = {{content_value(line).label}} ({{content_value(line).type}})
+  </div>
+</script>
+
+<script type="text/ng-template" id="bullet">
+  <div class='content content-note'>
+    &#9675; <span ng-bind-html="content_value(line)"></span>
+  </div>
+</script>
+
+<script type="text/ng-template" id="warning">
+  <div class='content content-note'>
+    <span ng-bind-html="content_value(line)"></span>
+  </div>
+</script>
+
+<script type="text/ng-template" id="check">
+  <div class='content content-note'>
+    <span ng-bind-html="content_value(line)"></span>
+  </div>
+</script>
+
+<script type="text/ng-template" id="timer">
+  <div class='content content-note'>
+    {{content_value(line)}}
+  </div>
+</script>
+
+<script type="text/ng-template" id="upload">
+  <div class='content content-note'>
+    {{content_value(line)}}
+  </div>
+</script>
+
+<script type="text/ng-template" id="separator">
+  <div class='content content-note'>
+    {{content_value(line)}}
+  </div>
+</script>
+
+<script type="text/ng-template" id="take">
+  <div class='content content-note'>
+    Item {{content_value(line).id}} at {{content_value(line).location}}
+  </div>
+</script>
+
+<script type="text/ng-template" id="item">
+  <div class='content content-note'>
+    Item {{content_value(line).id}} at {{content_value(line).location}}
+  </div>
+</script>
+
+<script type="text/ng-template" id="table">
+    <table>
+      <tr ng-repeat="row in content_value(line)">
+        <td ng-repeat="cell in row track by $index"
+            ng-class="table_class(cell)">
+          <span ng-if="cell.type" style="color: #aaa;">&gt;</span>
+          <input ng-if="cell.type" type="{{cell.type}}" value="{{cell.default}}"
+                 data-opid="{{cell.operation.id}}" class="krill-table-input">
+          <span ng-if="!cell.type && cell.content == undefined">{{cell}}</span>
+          <span ng-if="!cell.type && cell.content != undefined">{{cell.content}}</span>
+        </td>
+      </tr>
+    </table>
+</script>
+
+<script type="text/ng-template" id="transfer">
+  <div class='content content-note'>
+    {{content_value(line)}}
+  </div>
+</script>
+
+<script type="text/ng-template" id="log">
+  <div class='content content-note'>
+    {{content_value(line)}}
+  </div>
+</script>
+
+<script type="text/ng-template" id="image">
+  <div class='content content-note'>
+    {{content_value(line)}}
+  </div>
+</script>
+
+<script type="text/ng-template" id="aborted">
+  <div class='content content-note'>
+    Aborted
+  </div>
+</script>

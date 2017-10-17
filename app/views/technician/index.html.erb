@@ -1,3 +1,5 @@
+<%= render partial: 'show_block' %>
+
 <% provide(:title, "Job #{@job_id}") %>
 
 <%= content_for :controller do %>technicianCtrl<% end %>
@@ -43,7 +45,10 @@
   <div ng-repeat="step in job.steps | filter: { operation: 'display' } track by $index"
        ng-show="$index == state.index"
        class="step-container animate-show-hide">
-      {{step.content}}
+
+      <div ng-repeat="line in step.content" ng-include="content_type(line)"></div>
+
+    </script>
   </div>
 
 <% end %>
