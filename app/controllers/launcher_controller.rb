@@ -265,7 +265,7 @@ class LauncherController < ApplicationController
     field_values = FieldValue
       .includes(
         :child_sample, 
-        :wires_as_dest, 
+        :wires_as_dest,
         :wires_as_source, 
         field_type: { allowable_field_types: [ :sample_type, :object_type ] }
         )

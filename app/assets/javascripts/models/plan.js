@@ -675,14 +675,15 @@ AQ.Plan.record_getters.state = function() {
 
   // if all ops are done, the done
   var not_done = aq.where(plan.operations, op => op.status != "done" );
+  var errors = aq.where(plan.operations, op => op.status == "error" );
+  var delays = aq.where(plan.operations, op => op.status == "delayed" );
 
   if ( not_done.length == 0 ) {
     plan.state = "Done";
-  } else {
-    var errors = aq.where(plan.operations, op => op.status == "error" );
-    if ( errors.length > 0 ) {
-      plan.state = "Error"
-    }
+  } else if ( errors.length > 0 ) {
+    plan.state = "Error";
+  } else if ( delays.length > 0 ) {
+    plan.state = "Delayed";
   }
 
   return plan.state;
