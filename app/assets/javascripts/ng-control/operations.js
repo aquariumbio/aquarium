@@ -158,9 +158,7 @@
           criteria.user_id = $scope.current_user.id;
         }
 
-        AQ.Operation.where(criteria, {
-          methods: ['user', 'field_values', 'plans', 'jobs']
-        }, options).then(operations => {
+        AQ.Operation.manager_list(criteria, options).then(operations => {
           aq.each(operations, op => {
             op.jobs = aq.collect(op.jobs, job => AQ.Job.record(job));
             op.field_values = aq.collect(op.field_values, fv => AQ.FieldValue.record(fv))

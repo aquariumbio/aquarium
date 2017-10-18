@@ -27,6 +27,7 @@ Bioturk::Application.routes.draw do
   get '/plans/operation_types',                  to: 'plans#operation_types'
   resources :plans
 
+  post '/operations/manager_list',               to: 'operations#manager_list'
   get '/operations/step',                        to: 'operations#step'
   post '/operations/batch',                      to: 'operations#batch'
   post '/operations/unbatch',                    to: 'operations#unbatch'  

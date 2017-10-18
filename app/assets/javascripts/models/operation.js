@@ -512,3 +512,34 @@ AQ.Operation.step_all = function() {
   return AQ.get("/operations/step");
 
 }
+
+AQ.Operation.manager_list = function(criteria,options) {
+        // AQ.Operation.where(criteria, {
+        //   methods: ['user', 'field_values', 'plans', 'jobs']
+        // }, options).
+
+  return new Promise(function(resolve,reject) {
+
+    AQ.post("/operations/manager_list", { criteria: criteria, options: options }).then(response => {
+      let ops = aq.collect(response.data, op => AQ.Operation.record(op));
+      aq.each(ops, op => { 
+        op.job = AQ.Job.record(op.job);
+        op.user = AQ.User.record(op.user);
+        op.plans = aq.collect(op.plans, plan => AQ.Plan.record(plan));
+        op.field_values = aq.collect(op.field_values, raw_fv => {
+          fv = AQ.FieldValue.record(raw_fv)
+          if ( fv.item ) { 
+            fv.item = AQ.Item.record(fv.item); 
+            fv.item.object_type = AQ.ObjectType.record(fv.item.object_type);
+          }
+          if ( fv.sample ) { fv.sample = AQ.Sample.record(fv.sample); }
+          return fv;
+        });
+        op.data_associations = aq.collect(op.data_associations, da => AQ.DataAssociation.record(da))
+      });
+      resolve(ops)
+    })
+
+  });      
+
+}
