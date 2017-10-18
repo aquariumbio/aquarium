@@ -159,7 +159,7 @@
         }
 
         AQ.Operation.where(criteria, {
-          methods: ['user', 'field_values', 'precondition_value', 'plans', 'jobs']
+          methods: ['user', 'field_values', 'plans', 'jobs']
         }, options).then(operations => {
           aq.each(operations, op => {
             op.jobs = aq.collect(op.jobs, job => AQ.Job.record(job));
