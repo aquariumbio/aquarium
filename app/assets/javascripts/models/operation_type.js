@@ -79,36 +79,6 @@ AQ.OperationType.deployed_with_timing = function() {
 
 }
 
-// AQ.OperationType.all_with_field_types = function(deployed) {
-
-//   if ( deployed ) {
-
-//     return this.array_query(
-//         'where', {deployed: true}, 
-//         { methods: [ 'field_types' ] }
-//       ).then((ots) => {
-//         aq.each(ots,function(ot) { 
-//           ot.upgrade_field_types();
-//         })
-//         return ots;
-//       });
-
-//   } else {
-
-//     return this.array_query(
-//         'all', [], 
-//         { methods: [ 'field_types' ] }
-//       ).then((ots) => {
-//         aq.each(ots,function(ot) { 
-//           ot.upgrade_field_types();        
-//         })
-//         return ots;
-//       });
-
-//   }
-
-// }
-
 AQ.OperationType.all_fast = function(deployed_only=false) {
 
   return new Promise(function(resolve, reject) {
