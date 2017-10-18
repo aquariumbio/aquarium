@@ -13,8 +13,9 @@
 
     AQ.Job.find(job_id).then(job => {
       $scope.job = job;
+      // these should be moved to the model   V
       $scope.job.state = JSON.parse($scope.job.state);
-      $scope.job.steps = aq.where($scope.job.state, s => s.operation == 'display')
+      $scope.job.steps = aq.where($scope.job.state, s => s.operation == 'display');
     })
 
     $scope.state = {

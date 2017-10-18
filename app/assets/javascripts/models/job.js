@@ -18,5 +18,18 @@ AQ.Job.record_getters.status = function() {
   }
 
   return this.status;
-  
+
+}
+
+AQ.Job.record_getters.operations = function() {
+  let job = this;
+  delete job.operations;
+  AQ.JobAssociation.where({job_id: job.id} ).then(jas => {
+    let ids = aq.collect(jas, ja => ja.operation_id);
+    AQ.Operation.where({id: ids}, { include: "operation_type" }).then(ops => {
+      job.operations = ops;
+      console.log(job.operations)
+      AQ.update();
+    })
+  })
 }

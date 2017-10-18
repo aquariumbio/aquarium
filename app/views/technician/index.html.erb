@@ -7,6 +7,7 @@
 <%= content_for :class do %>technician<% end %>
 
 <% content_for :sidebar do %>
+  <h1 class="md-title">{{job.operations[0].operation_type.name}}</h1>
   <div layout-padding>
     <div ng-repeat="step in job.steps | filter: { operation: 'display' } track by $index"
          ng-class="$index == state.index ? 'no-highlight step-index-selected' : 'no-highlight step-index'"
