@@ -110,7 +110,7 @@ class OperationsController < ApplicationController
     end
 
     ops.each do |op|
-      op["jobs"] = jas.select { |ja| op["id"] == ja["operation_id"] }
+      op["jobs"] = jas.select { |ja| op["id"] == ja["operation_id"] }.collect { |ja| ja["job"] }
       op["user"] = users.find { |u| u["id"] == op["user_id"] }
       op["plans"] = pas.select { |pa| op["id"] == pa["operation_id"] }.collect { |pa| pa["plan"] }
       op["field_values"] = fvs.select { |fv| op["id"] == fv["parent_id"] }
