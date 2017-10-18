@@ -54,6 +54,7 @@ class OperationsController < ApplicationController
       end
       op.status = 'pending';
       op.save
+      op.step
     end
 
     render json: { operations: ops }

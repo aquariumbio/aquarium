@@ -17,7 +17,11 @@ module OperationStatus
       change_status "primed"
     elsif leaf? # note that this op is considered a leaf if it has no preds, 
                 # or if its preds are all on_the_fly leaves
-      change_status "pending"
+      if self.precondition_value
+        change_status "pending"
+      else
+        change_status "delayed"
+      end
     elsif
       change_status "waiting"
     end
@@ -77,7 +81,11 @@ module OperationStatus
   end
 
   def redo
-    change_status "pending"
+      if self.precondition_value
+        change_status "pending"
+      else
+        change_status "delayed"
+      end
     # TODO: Change preds to pending? At least on_the_fly_preds/
   end
 

@@ -251,7 +251,7 @@ class Operation < ActiveRecord::Base
 
     if !ops
       ops = Operation.includes(:operation_type)
-                     .where("status = 'waiting' OR status = 'deferred'")
+                     .where("status = 'waiting' OR status = 'deferred' OR status = 'delayed'")
     end
 
     ops.each do |op|
