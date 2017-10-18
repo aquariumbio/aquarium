@@ -79,41 +79,41 @@ AQ.OperationType.deployed_with_timing = function() {
 
 }
 
-AQ.OperationType.all_with_field_types = function(deployed) {
+// AQ.OperationType.all_with_field_types = function(deployed) {
 
-  if ( deployed ) {
+//   if ( deployed ) {
 
-    return this.array_query(
-        'where', {deployed: true}, 
-        { methods: [ 'field_types' ] }
-      ).then((ots) => {
-        aq.each(ots,function(ot) { 
-          ot.upgrade_field_types();
-        })
-        return ots;
-      });
+//     return this.array_query(
+//         'where', {deployed: true}, 
+//         { methods: [ 'field_types' ] }
+//       ).then((ots) => {
+//         aq.each(ots,function(ot) { 
+//           ot.upgrade_field_types();
+//         })
+//         return ots;
+//       });
 
-  } else {
+//   } else {
 
-    return this.array_query(
-        'all', [], 
-        { methods: [ 'field_types' ] }
-      ).then((ots) => {
-        aq.each(ots,function(ot) { 
-          ot.upgrade_field_types();        
-        })
-        return ots;
-      });
+//     return this.array_query(
+//         'all', [], 
+//         { methods: [ 'field_types' ] }
+//       ).then((ots) => {
+//         aq.each(ots,function(ot) { 
+//           ot.upgrade_field_types();        
+//         })
+//         return ots;
+//       });
 
-  }
+//   }
 
-}
+// }
 
-AQ.OperationType.all_fast = function() {
+AQ.OperationType.all_fast = function(deployed_only=false) {
 
   return new Promise(function(resolve, reject) {
 
-    AQ.get("/plans/operation_types").then( response => {
+    AQ.get("/plans/operation_types/"+deployed_only).then( response => {
 
       ots = aq.collect(response.data, rot => {
         var ot = AQ.OperationType.record(rot);
@@ -128,6 +128,8 @@ AQ.OperationType.all_fast = function() {
   });
 
 }
+
+AQ.OperationType.all_with_field_types = AQ.OperationType.all_fast;
 
 AQ.OperationType.numbers = function(user,filter) {
 
