@@ -24,9 +24,11 @@ Bioturk::Application.routes.draw do
   post '/plans/plan',                            to: 'plans#plan'
   put '/plans/move',                             to: 'plans#move'
   get '/plans/folders',                          to: 'plans#folders'
-  get '/plans/operation_types',                  to: 'plans#operation_types'
+  get '/plans/operation_types/:deployed_only',   to: 'plans#operation_types'
   resources :plans
 
+  post '/operations/manager_list',               to: 'operations#manager_list'
+  get '/operations/step',                        to: 'operations#step'
   post '/operations/batch',                      to: 'operations#batch'
   post '/operations/unbatch',                    to: 'operations#unbatch'
   get '/operations/jobs',                        to: 'operations#jobs'
@@ -37,9 +39,16 @@ Bioturk::Application.routes.draw do
   get '/operation_types/numbers/:user_id/:filter',   to: 'operation_types#numbers'
   get '/operation_types/:id/stats',                  to: 'operation_types#stats'
   get '/operation_types/:id/random/:num',            to: 'operation_types#random'
+<<<<<<< HEAD
   get '/operation_types/:id/export',                 to: 'operation_types#export'
   get '/operation_types/export_category/:category',  to: 'operation_types#export_category'
   get '/operation_types/:id/copy',                   to: 'operation_types#copy'
+=======
+  get '/operation_types/:id/export',                 to: 'operation_types#export'  
+  get '/operation_types/export_category/:category',  to: 'operation_types#export_category'  
+  get '/operation_types/:id/copy',                   to: 'operation_types#copy'  
+  get '/operation_types/deployed_with_timing',       to: 'operation_types#deployed_with_timing'
+>>>>>>> master
 
   resources :operation_types do
     collection do

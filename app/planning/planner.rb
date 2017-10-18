@@ -22,14 +22,22 @@ class Planner
           if op.operation_type.on_the_fly?
             op.status = "primed"
           else
-            op.status = "pending"
+            if op.precondition_value
+              op.status = "pending"
+            else
+              op.status = "delayed"              
+            end
           end
 
         else
 
           # if the op has an on the fly pred
           if ready? op 
-            op.status = "pending"
+            if op.precondition_value
+              op.status = "pending"
+            else
+              op.status = "delayed"              
+            end
           else
             op.status = "waiting"
           end

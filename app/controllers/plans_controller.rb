@@ -77,7 +77,7 @@ class PlansController < ApplicationController
   end
 
   def operation_types
-    render json: Serialize.fast_operation_types
+    render json: Serialize.fast_operation_types(params[:deployed_only])
   end
 
   # End Planner GUI

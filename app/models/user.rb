@@ -28,12 +28,13 @@ class User < ActiveRecord::Base
 
   def is_admin
     g = Group.find_by_name('admin')
-    return (!g || g.memberships.length == 0 || g.member?(id))
+    g && Membership.where(group_id: g.id, user_id: self.id).length > 0
+    # return (!g || g.memberships.length == 0 || g.member?(id))
   end
 
   def member? group_id
-    g = Group.find_by_id(group_id)
-    g && g.member?(id)
+    Membership.where(group_id: group_id, user_id: self.id).length > 0
+    # g && g.member?(id)
   end
 
   def retired?
