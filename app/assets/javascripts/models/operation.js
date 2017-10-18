@@ -506,3 +506,9 @@ AQ.Operation.record_methods.output_pin_y = function(fv) {
 AQ.Operation.record_methods.role = function(fv) {
   return fv.role;
 }
+
+AQ.Operation.step_all = function() {
+
+  return AQ.get("/operations/step");
+
+}

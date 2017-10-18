@@ -75,4 +75,11 @@ class OperationsController < ApplicationController
 
   end
 
+  def step
+
+    Operation.step
+    render json: { result: "ok" }
+
+  end
+
 end

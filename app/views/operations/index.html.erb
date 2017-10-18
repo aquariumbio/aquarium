@@ -161,6 +161,18 @@
   <% end %>
 <% end %>
 
+<% if current_user && current_user.is_admin %>
+  <%= content_for :action4 do %>
+    <md-button class="md-raised md-primary" ng-click="step_all()" ng-disabled="current.stepping">
+      <span ng-if="!current.stepping">Step All</span>
+      <span ng-if="current.stepping">
+        <md-progress-linear class="md-hue-2" md-diameter="20px" style="display: inline-block">
+        </md-progress-linear>       
+      </span>
+    </md-button>
+  <% end %>
+<% end %>
+
 <%= content_for :main do %>
 
    <%= render partial: '/data_associations/template' %> 

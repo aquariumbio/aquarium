@@ -305,6 +305,16 @@
         reload();
       }
 
+      $scope.step_all = function() {
+        if ( confirm("Are you sure you want to force all operations to update? This can take a while and may load the server.")) {
+          $scope.current.stepping = true;
+          AQ.Operation.step_all().then(() => {
+            reload();
+            delete $scope.current.stepping;
+          });
+        }
+      }
+
     }]);
 
 })();
