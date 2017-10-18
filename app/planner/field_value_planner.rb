@@ -46,7 +46,7 @@ module FieldValuePlanner
   end
 
   def operation
-    Operation.find(parent_id)
+    Operation.find_by_id(parent_id)
   end
 
   def satisfied_by_environment

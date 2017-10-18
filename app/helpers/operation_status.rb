@@ -45,16 +45,20 @@ module OperationStatus
   def step # not to be confused with def self.step in Operation.rb
 
     begin
+      print "op #{self.id}: #{self.status}"
       if ready?
         if on_the_fly
           change_status "primed"
         elsif status == "deferred"
           change_status "scheduled"
-        else
+        elsif self.precondition_value
           change_status "pending"
           get_items_from_predecessor
+        else
+          change_status "delayed"
         end
       end
+      puts " ==> #{self.status}"
     rescue Exception => e
       Rails.logger.info "COULD NOT STEP OPERATION #{op.id}: #{e.to_s}"
     end    

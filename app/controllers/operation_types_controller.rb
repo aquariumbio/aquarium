@@ -427,6 +427,22 @@ class OperationTypesController < ApplicationController
 
   end
 
+  def deployed_with_timing
+
+    ots = OperationType.where(deployed: true).as_json
+    ot_ids = ots.collect { |ot| ot["id"] }
+    timings = Timing.where(parent_id: ot_ids, parent_class: "OperationType")
+    
+    ots.each do |ot|
+      timings.each do |timing|
+        ot["timing"] = timing.as_json if ot["id"] == timing.parent_id
+      end
+    end
+
+    render json: ots
+
+  end  
+
   def stats
     render json: OperationType.find(params[:id]).stats
   end

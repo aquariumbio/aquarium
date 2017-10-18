@@ -207,7 +207,7 @@ class Operation < ActiveRecord::Base
 
     inputs.each do |input|
       input.predecessors.each do |pred|        
-        ops << pred.operation if pred.operation.status == "primed"
+        ops << pred.operation if pred.operation && pred.operation.status == "primed"
       end
     end
 

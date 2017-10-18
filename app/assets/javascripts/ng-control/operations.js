@@ -64,7 +64,7 @@
 
       $scope.status = 'Loading Operation Types ...';
 
-      AQ.OperationType.where({ deployed: true }, { methods: ["timing"] }).then(operation_types => {
+      AQ.OperationType.deployed_with_timing().then(operation_types => {
         $scope.status = "Fetching user information ...";
         AQ.User.current().then(user => {
           AQ.User.active_users().then(users => {
@@ -95,9 +95,7 @@
       $scope.status_selector = function (operation_type, status) {
         var selector = "";
         if ($scope.numbers[operation_type.id]) {
-          if (status === 'waiting' && $scope.numbers[operation_type.id]['waiting'] + $scope.numbers[operation_type.id]['pending_false'] !== 0) {
-            selector += " number-some";
-          } else if ($scope.numbers[operation_type.id][status] === 0) {
+          if ($scope.numbers[operation_type.id][status] === 0) {
             selector += " number-none";
           } else {
             selector += " number-some";

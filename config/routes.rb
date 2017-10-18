@@ -40,6 +40,7 @@ Bioturk::Application.routes.draw do
   get '/operation_types/:id/export',                 to: 'operation_types#export'  
   get '/operation_types/export_category/:category',  to: 'operation_types#export_category'  
   get '/operation_types/:id/copy',                   to: 'operation_types#copy'  
+  get '/operation_types/deployed_with_timing',       to: 'operation_types#deployed_with_timing'
 
   resources :operation_types do
     collection do 

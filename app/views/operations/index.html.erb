@@ -26,7 +26,7 @@
                 Completed
               </md-switch>
             </th>
-            <th ng-repeat="status in [ 'Waiting', 'Pending', 'Deferred', 'Scheduled', 'Running', 'Error', 'Done' ]"
+            <th ng-repeat="status in [ 'Waiting', 'Delayed', 'Pending', 'Deferred', 'Scheduled', 'Running', 'Error', 'Done' ]"
                 class='rotate'
                 ng-if="current.show_completed || ( status != 'Error' && status != 'Done' )">
               <div><span>{{status}}</span></div>
@@ -37,11 +37,11 @@
               <span ng-class="timing_bullet(operation_type)">&#9679;</span>
               {{operation_type.name}}
             </td>
-            <td ng-repeat="status in [ 'waiting', 'pending_true', 'deferred', 'scheduled', 'running', 'error', 'done' ]"
+            <td ng-repeat="status in [ 'waiting', 'delayed', 'pending', 'deferred', 'scheduled', 'running', 'error', 'done' ]"
                 ng-class="$parent.status_selector(operation_type,status)"
                 ng-click="$parent.select(operation_type,status)"
                 ng-if="current.show_completed || ( status != 'error' && status != 'done' )">
-                {{status == "waiting" ? numbers[operation_type.id]["waiting"] + numbers[operation_type.id]["pending_false"] : numbers[operation_type.id][status]}}
+                {{numbers[operation_type.id][status]}}
             </td>
           </tr>
         </table>
@@ -108,10 +108,7 @@
   <span ng-if="current.operation_type">
     &rang; {{current.operation_type.category}} &rang; {{current.operation_type.name}} &rang;
     <span class='capitalize'>
-      {{
-        current.status == 'pending_false' ? 'Waiting' : 
-        current.status == 'pending_true' ? 'Pending' : current.status
-      }}
+      {{current.status}}
     </span>
   </span>
 <% end %>
@@ -120,7 +117,7 @@
   <%= content_for :action1 do %>
 
     <md-button aria-label="Schedule"  class='md-raised'
-      ng-if="!current.operation_type.on_the_fly && current.status == 'pending_true'"
+      ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
       ng-click="batch(current.operation_type)">
       Schedule
     </md-button>
@@ -137,7 +134,7 @@
 <% if current_user && current_user.is_admin %>
   <%= content_for :action2 do %>
     <md-button aria-label="Click"  class='md-raised'
-      ng-if="!current.operation_type.on_the_fly && current.status == 'pending_true'"
+      ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
       ng-click="choose(current.operation_type,'pending',true)">
       All
     </md-button>
@@ -152,7 +149,7 @@
 <% if current_user && current_user.is_admin %>
   <%= content_for :action3 do %>
     <md-button aria-label="Click" class='md-raised'
-      ng-if="!current.operation_type.on_the_fly && current.status == 'pending_true'"
+      ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
       ng-click="choose(current.operation_type,'pending',false)">
       None
     </md-button>

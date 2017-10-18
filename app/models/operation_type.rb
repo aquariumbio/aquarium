@@ -375,12 +375,9 @@ class OperationType < ActiveRecord::Base
 
     ots.collect { |ot|
 
-      pending = ot.operations.select { |o| o.status == "pending" }
-      pending_true_length = ot.operations.select { |o| o.status == "pending" && o.precondition_value }.length
-
       result[ot.id] = {
-        pending_true:  pending_true_length,
-        pending_false: pending.length - pending_true_length,  
+        pending:       ot.num_in_status("pending"),
+        delayed:      ot.num_in_status("delayed"), 
         waiting:       ot.num_in_status("waiting"),
         scheduled:     ot.num_in_status("scheduled"),
         running:       ot.num_in_status("running"),

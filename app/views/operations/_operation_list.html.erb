@@ -22,7 +22,7 @@
           <% if current_user && current_user.is_admin %>
             <input type='checkbox' 
                    ng-model='op.selected' 
-                   ng-if="!operation_type.on_the_fly && ( status == 'pending_true' || status == 'scheduled' || status == 'error' )">
+                   ng-if="!operation_type.on_the_fly && ( status == 'pending' || status == 'scheduled' || status == 'error' )">
           <% end %>
         </td>
 

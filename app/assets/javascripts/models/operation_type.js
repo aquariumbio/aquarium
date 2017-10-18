@@ -57,6 +57,28 @@ AQ.OperationType.all_with_content = function(deployed) {
 
 }
 
+AQ.OperationType.deployed_with_timing = function() {
+
+  return new Promise(function(resolve, reject) {
+    
+    AQ.get("/operation_types/deployed_with_timing").then(raw_ots => {
+
+      let ots = aq.collect(raw_ots.data, raw_ot => {
+        let ot = AQ.OperationType.record(raw_ot);
+        ot.timing = AQ.Timing.record(ot.timing);
+        return ot;        
+      });
+
+      console.log(raw_ots)
+
+      resolve(ots);
+
+    })
+
+  });
+
+}
+
 AQ.OperationType.all_with_field_types = function(deployed) {
 
   if ( deployed ) {
