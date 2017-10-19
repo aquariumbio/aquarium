@@ -52,16 +52,9 @@ class SamplesController < ApplicationController
         end
 
       }
-
+      
       format.json { 
-
-        render json: Sample
-          .find(params[:id])
-          .to_json(
-            include: { sample_type: { include: :object_types, methods: :field_types } },
-            methods: :field_values
-          )
-
+        render json: Sample.find(params[:id]).full_json
       }
 
     end
@@ -83,9 +76,7 @@ class SamplesController < ApplicationController
 
   def render_full_sample sid
     render json: Sample
-      .find(sid)
-      .to_json(include: { sample_type: { methods: :field_types } }, 
-               methods: :field_values)
+      .find(sid).full_json
   end
 
   # POST /samples

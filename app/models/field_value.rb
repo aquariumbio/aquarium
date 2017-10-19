@@ -231,4 +231,18 @@ class FieldValue < ActiveRecord::Base
     ft ? ft.routing : nil
   end
 
+  def full_json(options={})
+    self.as_json( include: [ 
+      :child_sample, 
+      :wires_as_source, 
+      :wires_as_dest, 
+      allowable_field_type: { 
+        include: [ 
+          :object_type, 
+          :sample_type 
+        ]
+      } 
+    ] )
+  end  
+
 end 
