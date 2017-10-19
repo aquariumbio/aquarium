@@ -9,6 +9,12 @@ module FieldValuer
               .where(parent_class: self.class.to_s, parent_id: self.id)
   end
 
+  def full_field_values
+    FieldValue.includes(:child_sample, :allowable_field_type, wires_as_dest: :to, wires_as_source: :from)
+              .where(parent_class: self.class.to_s, parent_id: self.id)
+              .collect { |fv| fv.full_json }
+  end  
+
   def set_property_aux ft, fv, val
 
     # puts "SETTING #{fv.name}(#{fv.role}) to #{val.inspect}"
