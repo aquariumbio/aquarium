@@ -1,72 +1,69 @@
 <script type="text/ng-template" id="title">
-  <div class='content content-title'>
-    <span ng-bind-html="content_value(line)"></span>
-  </div>
+  <h2 class="md-display-2 title" ng-bind-html="content_value(line)"></h2>
 </script>
 
 <script type="text/ng-template" id="note">
-  <div class='content content-note'>
-    <span ng-bind-html="content_value(line)"></span>
-  </div>
+  <p ng-bind-html="content_value(line)" class='md-subhead'></p>
 </script>
 
 <script type="text/ng-template" id="select">
-  <div class='content content-select'>
-    <b>{{content_value(line).var}}</b> = {{content_value(line).label}} from
-    [ <span ng-repeat="choice in content_value(line).choices">{{choice}}<span ng-if="!$last">, </span></span> ]
-  </div>
+    <span class='md-subhead bold'>{{content_value(line).label}}: </span><br>
+    <md-input-container class="select-container">
+      <md-select ng-model="choice.value" ng-init="choice.value = content_value(line).choices[0]">
+        <md-option ng-repeat="choice in content_value(line).choices" ng-value="choice">
+          {{choice}}
+        </md-option>
+      </md-select>
+    </md-input-container>
 </script>
 
 <script type="text/ng-template" id="input">
-  <div class='content content-note'>
-    <b>{{content_value(line).var}}</b> = {{content_value(line).label}} ({{content_value(line).type}})
-  </div>
+  <!-- <span class='md-subhead bold'>Input Data</span><br> -->
+  <md-input-container class="input-container">
+    <label class='md-subhead'>{{content_value(line).label}}</label>
+    <input ng-model="content.value">
+  </md-input-container>
+
 </script>
 
 <script type="text/ng-template" id="bullet">
-  <div class='content content-note'>
-    &#9675; <span ng-bind-html="content_value(line)"></span>
-  </div>
+  <span class='md-subhead'>&#9675; <span ng-bind-html="content_value(line)"></span></span>
 </script>
 
 <script type="text/ng-template" id="warning">
-  <div class='content content-note'>
-    <span ng-bind-html="content_value(line)"></span>
-  </div>
+  <p ng-bind-html="content_value(line)" class='md-subhead technician-warning'></p>
 </script>
 
 <script type="text/ng-template" id="check">
-  <div class='content content-note'>
-    <span ng-bind-html="content_value(line)"></span>
-  </div>
+    <md-checkbox aria-label="Checkbox">
+      <span class="md-subhead" ng-bind-html="content_value(line)"></span>
+    </md-checkbox>
 </script>
 
 <script type="text/ng-template" id="timer">
-  <div class='content content-note'>
+  <div class='content content-timer'>
     {{content_value(line)}}
   </div>
 </script>
 
 <script type="text/ng-template" id="upload">
-  <div class='content content-note'>
+  <div class='content content-upload'>
     {{content_value(line)}}
   </div>
 </script>
 
 <script type="text/ng-template" id="separator">
-  <div class='content content-note'>
-    {{content_value(line)}}
-  </div>
+  <md-divider></md-divider>
 </script>
 
 <script type="text/ng-template" id="take">
-  <div class='content content-note'>
+  <div class='md-subhead content content-take'>
     Item {{content_value(line).id}} at {{content_value(line).location}}
   </div>
 </script>
 
 <script type="text/ng-template" id="item">
-  <div class='content content-note'>
+  <div class='md-subhead content content-item'>
     Item {{content_value(line).id}} at {{content_value(line).location}}
   </div>
 </script>
@@ -87,25 +84,25 @@
 </script>
 
 <script type="text/ng-template" id="transfer">
-  <div class='content content-note'>
+  <div class='content content-transfer'>
     {{content_value(line)}}
   </div>
 </script>
 
 <script type="text/ng-template" id="log">
-  <div class='content content-note'>
+  <div class='content content-log'>
     {{content_value(line)}}
   </div>
 </script>
 
 <script type="text/ng-template" id="image">
-  <div class='content content-note'>
-    {{content_value(line)}}
+  <div class='content content-image'>
+    <img src='{{content_value(line)}}' class="image">
   </div>
 </script>
 
 <script type="text/ng-template" id="aborted">
-  <div class='content content-note'>
+  <div class='content content-aborted'>
     Aborted
   </div>
 </script>

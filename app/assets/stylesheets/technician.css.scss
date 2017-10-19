@@ -1,3 +1,6 @@
+$title-bottom-margin: 24px;
+$bottom-margin: 12px;
+
 .technician {
 
   .animate-show-hide.ng-hide {
@@ -11,36 +14,66 @@
     transition: all linear 0.5s;
   }
 
+  .bold {
+    font-weight: bold;
+  }
+
   .step-container {
 
     opacity: 1;
-    padding: 30px;
+    margin: 10px 30px 0px 30px;
 
     .content {
       // font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
 
-    .content-title {
+    .title {
+      margin-top: 0
+    }
+    //
+    // .content-note {
+    //   font-weight: normal;
+    //   font-size: 12pt;
+    //   margin-bottom: $bottom-margin;
+    // }
+    //
+    // .content-warning {
+    //   margin-bottom: $bottom-margin;
+    //   font-size: 12pt;
+    // }
+    //
+    .technician-warning {
+      color: black;
       font-weight: bold;
-      font-size: 22pt;
-      margin-bottom: 16pt;
+      background: orange;
+      padding-left: 4px;
+      padding-right: 4px;
+      display: inline-block;
     }
-
-    .content-note {
-      font-weight: normal;
-      font-size: 12pt;
-      margin-bottom: 6pt;
+    //
+    // .content-image {
+    //   margin-bottom: $bottom-margin;
+    // }
+    //
+    // .content-select {
+    // }
+    //
+    .input-container {
+       width: 50%
     }
-
-    .content-select {
-    }
+    //
+    // .select-label {
+    //   margin-right: 6px;
+    //   font-size: 12pt;
+    // }
 
     table {
 
       border: 1pt solid #aaa;
       font-size: 12pt;
       line-height: 12pt;
-      margin: 15px;
+      margin-bottom: 15px;
+      margin-left: 15px;
 
       td {
         border: 1pt solid #aaa;
@@ -151,6 +184,11 @@
       background-color: lightgrey;
     }
 
+  }
+
+  .image {
+    max-width: 500px;
+    margin: 10px 0 10px 0;
   }
 
 }

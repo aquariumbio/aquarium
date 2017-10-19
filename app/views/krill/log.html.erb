@@ -22,8 +22,8 @@
 <% content_for :action3 do %>
   <% if current_user && current_user.is_admin %>
     <% unless @job.pc == Job.NOT_STARTED %>
-      <a href='/krill/ui?job=<%= @job.id %>' class='md-button md-raised md-primary'>Steps</a>&nbsp;
-    <% end %>  
+      <a href='/technician/<%= @job.id %>' class='md-button md-raised md-primary'>Steps</a>&nbsp;
+    <% end %>
   <% end %>
 <% end %>
 
@@ -38,7 +38,7 @@
   <script>
 
     $(function() {
-     
+
       <% if @job.pc != Job.NOT_STARTED %>
         kl = new KrillLog(JSON.parse('<%= escape_javascript(@history.html_safe) %>'));
         kl.render($('#history-json'));
@@ -48,7 +48,7 @@
 
       $('#send').click(function() {
         window.location = '/repo/list?from=' + '<%= @job.id %>';
-      });    
+      });
 
       $('#upload').fileupload({
 
