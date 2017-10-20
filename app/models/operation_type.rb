@@ -373,21 +373,19 @@ class OperationType < ActiveRecord::Base
       ots = OperationType.includes(:operations).where(deployed: true)
     end
 
-    ots.collect { |ot|
+    t1 = Time.now
 
-      result[ot.id] = {
-        pending:       ot.num_in_status("pending"),
-        delayed:      ot.num_in_status("delayed"), 
-        waiting:       ot.num_in_status("waiting"),
-        scheduled:     ot.num_in_status("scheduled"),
-        running:       ot.num_in_status("running"),
-        deferred:      ot.num_in_status("deferred"),
-        primed:        ot.num_in_status("primed"),
-        done:          ot.num_in_status("done"),
-        error:         ot.num_in_status("error")
-      }
+    ots.collect do |ot|
+      result[ot.id] = { planning: 0, waiting: 0, pending: 0, delayed: 0, deferred: 0, primed: 0, scheduled: 0, running: 0, error: 0, done: 0 }
+      ot.operations.each do |op|
+        if result[ot.id][op.status.to_sym] == nil
+          puts "no sym: #{op.status}"
+        end
+        result[ot.id][op.status.to_sym] += 1
+      end
+    end
 
-    }
+    puts "dt = #{(1000*(Time.now - t1)).to_i} ms"
 
     return result
 
