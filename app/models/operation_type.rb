@@ -359,35 +359,32 @@ class OperationType < ActiveRecord::Base
 
   end
 
-  def num_in_status s
-    self.operations.select { |o| o.status == s }.length
-  end
-
   def self.numbers user=nil
 
-    result = {}
-
-    if user
-      ots = OperationType.includes(:operations).where(deployed: true, operations: { user_id: user.id })     
+    if user == nil
+      q = "
+        SELECT   status, operation_type_id, COUNT(status)
+        FROM     operations
+        GROUP BY operation_type_id, status
+      "
     else
-      ots = OperationType.includes(:operations).where(deployed: true)
+      q = "
+        SELECT   status, operation_type_id, COUNT(status)
+        FROM     operations
+        WHERE    user_id = #{user.id}
+        GROUP BY operation_type_id, status
+      "
     end
 
-    t1 = Time.now
+    r = ActiveRecord::Base.connection.execute(q).entries
 
-    ots.collect do |ot|
-      result[ot.id] = { planning: 0, waiting: 0, pending: 0, delayed: 0, deferred: 0, primed: 0, scheduled: 0, running: 0, error: 0, done: 0 }
-      ot.operations.each do |op|
-        if result[ot.id][op.status.to_sym] == nil
-          puts "no sym: #{op.status}"
-        end
-        result[ot.id][op.status.to_sym] += 1
-      end
+    result = {}
+    r.each do |status,ot_id,count|
+      result[ot_id] ||= { planning: 0, waiting: 0, pending: 0, delayed: 0, deferred: 0, primed: 0, scheduled: 0, running: 0, error: 0, done: 0 }
+      result[ot_id][status] = count
     end
 
-    puts "dt = #{(1000*(Time.now - t1)).to_i} ms"
-
-    return result
+    result
 
   end
 

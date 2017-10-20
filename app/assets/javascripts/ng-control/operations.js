@@ -95,7 +95,7 @@
       $scope.status_selector = function (operation_type, status) {
         var selector = "";
         if ($scope.numbers[operation_type.id]) {
-          if ($scope.numbers[operation_type.id][status] === 0) {
+          if (!$scope.numbers[operation_type.id][status] || $scope.numbers[operation_type.id][status] === 0) {
             selector += " number-none";
           } else {
             selector += " number-some";
@@ -105,6 +105,8 @@
           } else {
             selector += " number";
           }
+        } else {
+          selector += " number-none";
         }
         return selector;
       };
