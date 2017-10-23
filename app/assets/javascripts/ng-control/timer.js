@@ -1,0 +1,110 @@
+(function() {
+
+  var w = angular.module('aquarium');
+
+  w.controller('timerCtrl', [ '$scope', '$http', '$attrs', '$cookies',
+                  function (  $scope,   $http,   $attrs,   $cookies ) {
+
+    var beep_interval_id,
+        beep_cleared = false,
+        target,
+        beep = new Audio('/audios/beep.wav');
+
+    $scope.running = false;
+    $scope.blink = false;
+
+    $scope.set_target = function() {
+
+      if ( $scope.minutes < 0 ) {
+        $scope.minutes = 0;
+      }
+
+      if ( $scope.minutes > 59 ) {
+        $scope.minutes = 59;
+      }
+
+      if ( $scope.seconds < 0 ) {
+        $scope.seconds = 0;
+      }
+
+      if ( $scope.seconds > 59 ) {
+        $scope.seconds = 59;
+      }
+
+      target = new Date();
+      target.setHours(target.getHours() + $scope.hours);
+      target.setMinutes(target.getMinutes() + $scope.minutes);
+      target.setSeconds(target.getSeconds() + $scope.seconds);
+      $scope.past = false;
+
+    }
+
+    $scope.toggle = function() {
+      if ( !$scope.running ) {
+        $scope.set_target();
+        beep_false = true;
+      } else {
+        stop_beeping();
+        beep_cleared = true;
+      }
+      $scope.running = !$scope.running;
+    }
+
+    $scope.init = function(spec) {
+
+      $scope.hours = spec.initial.hours;
+      $scope.minutes = spec.initial.minutes;
+      $scope.seconds = spec.initial.seconds;
+      $scope.set_target();
+
+      setInterval(function () {
+
+        if ( $scope.running && !$scope.past ) {
+
+          var current_date = new Date().getTime();
+          var seconds_left = (target - current_date) / 1000;
+
+          if ( seconds_left <= 0 ) {
+
+              $scope.past = true;
+              beep_cleared = false;
+              start_beeping();
+              seconds_left = 0;
+
+          } else {
+
+            seconds_left = seconds_left % 86400;
+
+            $scope.hours = parseInt(seconds_left / 3600);
+            seconds_left = seconds_left % 3600;
+            $scope.minutes = parseInt(seconds_left / 60);
+            $scope.seconds = parseInt(seconds_left % 60);
+
+          }
+
+          $scope.$apply();
+
+        }
+
+      }, 1000);
+
+    }
+
+    function start_beeping() {
+      if ( !beep_cleared ) {
+        beep_interval_id = setInterval(function() {
+          beep.play();
+          $scope.blink = !$scope.blink;
+          $scope.$apply();
+        },1000);
+      }
+    }
+
+    function stop_beeping() {
+      clearInterval(beep_interval_id);
+      $scope.blink = false;
+    }
+
+  }]);
+
+})();

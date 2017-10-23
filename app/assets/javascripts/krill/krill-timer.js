@@ -72,7 +72,7 @@ KrillTimer.prototype.start = function() {
     }
 
     seconds_left = seconds_left % 86400;
-   
+
     that.t.hours = parseInt(seconds_left / 3600);
     seconds_left = seconds_left % 3600;
     that.t.minutes = parseInt(seconds_left / 60);

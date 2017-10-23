@@ -6,6 +6,8 @@
 
 <%= content_for :class do %>technician<% end %>
 
+<% content_for :wider_sidebar do %>true<% end %>
+
 <% content_for :sidebar do %>
   <h1 class="md-title">{{job.operations[0].operation_type.name}}</h1>
   <div layout-padding>

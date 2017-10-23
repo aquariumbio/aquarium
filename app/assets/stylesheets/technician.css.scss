@@ -28,44 +28,46 @@ $bottom-margin: 12px;
     }
 
     .title {
-      margin-top: 0
+      margin-top: 0;
+      margin-left: -4px;
     }
-    //
-    // .content-note {
-    //   font-weight: normal;
-    //   font-size: 12pt;
-    //   margin-bottom: $bottom-margin;
-    // }
-    //
-    // .content-warning {
-    //   margin-bottom: $bottom-margin;
-    //   font-size: 12pt;
-    // }
-    //
+
     .technician-warning {
-      color: black;
+      color: orange;
       font-weight: bold;
-      background: orange;
-      padding-left: 4px;
-      padding-right: 4px;
+      // background: orange;
       display: inline-block;
     }
-    //
-    // .content-image {
-    //   margin-bottom: $bottom-margin;
-    // }
-    //
-    // .content-select {
-    // }
-    //
-    .input-container {
-       width: 50%
+
+    .input-box {
+      padding: 10px 10px 0px 10px;
+      margin: 5px 0 5px 0;
+      border-radius: 5px;
+      border: 1pt solid  #999;
+      width: 50%;
+      .input-icon {
+        svg {
+          margin-top: 22px;
+        }
+      }
     }
-    //
-    // .select-label {
-    //   margin-right: 6px;
-    //   font-size: 12pt;
-    // }
+
+    .input-container {
+       width: 100%;
+       margin-left: 5px;
+       .md-errors-spacer {
+         min-height: 0px !important;
+       }
+    }
+
+    .select-container {
+      width: 100%;
+      margin-top: 0px;
+    }
+
+    .checkbox {
+      margin-left: 5px;
+    }
 
     table {
 
@@ -73,7 +75,7 @@ $bottom-margin: 12px;
       font-size: 12pt;
       line-height: 12pt;
       margin-bottom: 15px;
-      margin-left: 15px;
+      // margin-left: 15px;
 
       td {
         border: 1pt solid #aaa;

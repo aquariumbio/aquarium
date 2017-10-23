@@ -7,22 +7,30 @@
 </script>
 
 <script type="text/ng-template" id="select">
-    <span class='md-subhead bold'>{{content_value(line).label}}: </span><br>
-    <md-input-container class="select-container">
-      <md-select ng-model="choice.value" ng-init="choice.value = content_value(line).choices[0]">
-        <md-option ng-repeat="choice in content_value(line).choices" ng-value="choice">
-          {{choice}}
-        </md-option>
-      </md-select>
-    </md-input-container>
+  <div class='input-box' layout='row'>
+    <div flex>
+      <span class='md-subhead'>{{content_value(line).label}}</span><br>
+      <md-input-container class="select-container">
+        <md-select ng-model="choice.value" ng-init="choice.value = content_value(line).choices[0]">
+          <md-option ng-repeat="choice in content_value(line).choices" ng-value="choice">
+            {{choice}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+    </div>
 </script>
 
 <script type="text/ng-template" id="input">
   <!-- <span class='md-subhead bold'>Input Data</span><br> -->
-  <md-input-container class="input-container">
-    <label class='md-subhead'>{{content_value(line).label}}</label>
-    <input ng-model="content.value">
-  </md-input-container>
+  <div class='input-box' layout='row'>
+    <div><ng-md-icon icon="create" size="22" aria-label="Input" style="fill: #444" class="input-icon"></ng-md-icon></div>
+    <md-input-container class="input-container">
+      <div class="padding">
+        <label>{{content_value(line).label}}</label>
+        <input class="md-subhead" ng-model="content.value">
+      </div>
+    </md-input-container>
+  </div>
 
 </script>
 
@@ -35,14 +43,35 @@
 </script>
 
 <script type="text/ng-template" id="check">
-    <md-checkbox aria-label="Checkbox">
+    <md-checkbox aria-label="Checkbox" clas="checkbox">
       <span class="md-subhead" ng-bind-html="content_value(line)"></span>
     </md-checkbox>
 </script>
 
 <script type="text/ng-template" id="timer">
-  <div class='content content-timer'>
-    {{content_value(line)}}
+  <div ng-class="blink ? 'technician-timer technician-timer-blink' : 'technician-timer'"
+       ng-controller="timerCtrl"
+       ng-init="init(content_value(line))"
+       layout=row>
+    <div layout="column" class="timer-part">
+      <span class="name">Hours</span>
+      <input ng-model="hours" ng-blur="set_target()" type=number ng-disabled="running">
+    </div>
+    <div layout="column" class="timer-part">
+      <span class="name">Minutes</span>
+      <input ng-model="minutes" ng-blur="set_target()" type=number ng-disabled="running">
+    </div>
+    <div layout="column" class="timer-part">
+      <span class="name">Seconds</span>
+      <input ng-model="seconds" ng-blur="set_target()" type=number ng-disabled="running">
+    </div>
+    <div layout="column" class="timer-part">
+      <span class="name">&nbsp;</span>
+      <div ng-click="toggle()" class='no-highlight start-stop'>
+        <ng-md-icon ng-if="!running" icon="play_arrow" size="52" aria-label="Start Timer" style="fill: #444"></ng-md-icon>
+        <ng-md-icon ng-if="running" icon="pause" size="52" aria-label="Stop Timer" style="fill: #444"></ng-md-icon>
+      </div>
+    </div>
   </div>
 </script>
 

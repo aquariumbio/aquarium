@@ -1,0 +1,25 @@
+.technician-timer {
+  border: 1pt solid #eee;
+  padding: 10px 10px 10px 24px;
+  width: 50%;
+  input[type="number"] {
+    font-size: 36px;
+    width: 80px;
+    &:disabled {
+      background: white;
+    }
+  }
+  .timer-part {
+    margin: 5px;
+    .name {
+      font-size: 9pt;
+    }
+  }
+  .start-stop {
+    cursor: pointer;
+  }
+}
+
+.technician-timer-blink {
+  background: orange;
+}
