@@ -149,8 +149,6 @@ class StaticPagesController < ApplicationController
 
   def yeast_qc
 
-    # u = User.find_by_login("dyounger")
-  
     @items = Item.includes(:sample => [ :sample_type, :user ] )
               .where("samples.sample_type_id = ?", SampleType.find_by_name("Yeast Strain").id )
               .select { |i| i.datum[:QC_result]  }
@@ -162,5 +160,30 @@ class StaticPagesController < ApplicationController
 
   end
 
+  def direct_purchase
+
+    dp = OperationType.find_by_name("Direct Purchase")
+
+    unless dp
+      flash[:error] = "No direct purchase protocol found. Contact the lab manager."
+      redirect_to "/"
+    end
+
+    budgets = current_user.budgets
+
+    unless budgets.length > 0
+      flash[:error] = "No budgets for user #{current_user.name} found. Contact the lab manager."
+      redirect_to "/"      
+    end 
+
+    plan = Plan.new(name: "Direct Purchase by " + current_user.name, budget_id: budgets[0].id)
+    plan.save
+    op = dp.operations.create status: "pending", user_id: current_user.id, x: 100, y: 100, parent_id: -1
+    op.associate_plan plan
+    job,operations = dp.schedule([op], current_user, Group.find_by_name(current_user.login))
+
+    redirect_to("/krill/start?job=#{job.id}")
+
+  end
 
 end

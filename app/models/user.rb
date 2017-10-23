@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   has_many :tasks
   has_many :account
   has_many :user_budget_associations
+  has_many :budgets, through: :user_budget_associations
   has_many :plans
   has_many :parameters
   
@@ -27,12 +28,13 @@ class User < ActiveRecord::Base
 
   def is_admin
     g = Group.find_by_name('admin')
-    return (!g || g.memberships.length == 0 || g.member?(id))
+    g && Membership.where(group_id: g.id, user_id: self.id).length > 0
+    # return (!g || g.memberships.length == 0 || g.member?(id))
   end
 
   def member? group_id
-    g = Group.find_by_id(group_id)
-    g && g.member?(id)
+    Membership.where(group_id: group_id, user_id: self.id).length > 0
+    # g && g.member?(id)
   end
 
   def retired?

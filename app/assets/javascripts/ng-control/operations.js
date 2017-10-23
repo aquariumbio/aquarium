@@ -64,7 +64,7 @@
 
       $scope.status = 'Loading Operation Types ...';
 
-      AQ.OperationType.where({ deployed: true }, { methods: ["timing"] }).then(operation_types => {
+      AQ.OperationType.deployed_with_timing().then(operation_types => {
         $scope.status = "Fetching user information ...";
         AQ.User.current().then(user => {
           AQ.User.active_users().then(users => {
@@ -95,9 +95,7 @@
       $scope.status_selector = function (operation_type, status) {
         var selector = "";
         if ($scope.numbers[operation_type.id]) {
-          if (status === 'waiting' && $scope.numbers[operation_type.id]['waiting'] + $scope.numbers[operation_type.id]['pending_false'] !== 0) {
-            selector += " number-some";
-          } else if ($scope.numbers[operation_type.id][status] === 0) {
+          if (!$scope.numbers[operation_type.id][status] || $scope.numbers[operation_type.id][status] === 0) {
             selector += " number-none";
           } else {
             selector += " number-some";
@@ -107,6 +105,8 @@
           } else {
             selector += " number";
           }
+        } else {
+          selector += " number-none";
         }
         return selector;
       };
@@ -160,9 +160,7 @@
           criteria.user_id = $scope.current_user.id;
         }
 
-        AQ.Operation.where(criteria, {
-          methods: ['user', 'field_values', 'precondition_value', 'plans', 'jobs']
-        }, options).then(operations => {
+        AQ.Operation.manager_list(criteria, options).then(operations => {
           aq.each(operations, op => {
             op.jobs = aq.collect(op.jobs, job => AQ.Job.record(job));
             op.field_values = aq.collect(op.field_values, fv => AQ.FieldValue.record(fv))
@@ -305,6 +303,16 @@
         store_cookie();
         $scope.applying_user_filter = true;
         reload();
+      }
+
+      $scope.step_all = function() {
+        if ( confirm("Are you sure you want to force all operations to update? This can take a while and may load the server.")) {
+          $scope.current.stepping = true;
+          AQ.Operation.step_all().then(() => {
+            reload();
+            delete $scope.current.stepping;
+          });
+        }
       }
 
     }]);

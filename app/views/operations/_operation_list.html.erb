@@ -22,7 +22,7 @@
           <% if current_user && current_user.is_admin %>
             <input type='checkbox' 
                    ng-model='op.selected' 
-                   ng-if="!operation_type.on_the_fly && ( status == 'pending_true' || status == 'scheduled' || status == 'error' )">
+                   ng-if="!operation_type.on_the_fly && ( status == 'pending' || status == 'scheduled' || status == 'error' )">
           <% end %>
         </td>
 
@@ -36,8 +36,8 @@
               <span ng-if="$first"  style="width: 26px; display: inline-block"><b>out:</b></span>
               <span ng-if="!$first" style="width: 26px; display: inline-block">&nbsp;</span>
               {{fv.name}}
-              <span ng-if="fv.child_sample">: 
-                <a href="/browser?sid={{fv.child_sample.id}}">{{fv.child_sample_id}}: {{fv.child_sample.name}}</a>
+              <span ng-if="fv.sample">: 
+                <a href="/browser?sid={{fv.sample.id}}">{{fv.sample_id}}: {{fv.sample.name}}</a>
                 <span ng-if="fv.item.object_type"> as {{fv.item.object_type.name}}</span>
                 <span ng-if="fv.child_item_id">
                   ( <div ng-if="fv.child_item_id" 
@@ -52,8 +52,8 @@
               <span ng-if="$first"  style="width: 18px; display: inline-block"><b>in:</b></span>
               <span ng-if="!$first" style="width: 18px; display: inline-block">&nbsp;</span>
               {{fv.name}}
-              <span ng-if="fv.child_sample">: 
-                <a href="/browser?sid={{fv.child_sample.id}}">{{fv.child_sample_id}}: {{fv.child_sample.name}}</a>
+              <span ng-if="fv.sample">: 
+                <a href="/browser?sid={{fv.sample.id}}">{{fv.sample_id}}: {{fv.sample.name}}</a>
                 <span ng-if="fv.child_item_id">
                   ( <div ng-if="fv.child_item_id" 
                          item="fv.item" 

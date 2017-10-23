@@ -181,7 +181,7 @@
 
     $scope.plan_state_class = function(plan) {
       var c = "status";
-      if ( plan.state == "Error" ) {
+      if ( plan.state == "Error" || plan.state == "Delayed" ) {
         c += " status-error";
       } else if ( plan.state == "Done" ) {
         c += " status-done";

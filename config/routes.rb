@@ -24,9 +24,11 @@ Bioturk::Application.routes.draw do
   post '/plans/plan',                            to: 'plans#plan'  
   put '/plans/move',                             to: 'plans#move'
   get '/plans/folders',                          to: 'plans#folders'
-  get '/plans/operation_types',                  to: 'plans#operation_types'
+  get '/plans/operation_types/:deployed_only',   to: 'plans#operation_types'
   resources :plans
 
+  post '/operations/manager_list',               to: 'operations#manager_list'
+  get '/operations/step',                        to: 'operations#step'
   post '/operations/batch',                      to: 'operations#batch'
   post '/operations/unbatch',                    to: 'operations#unbatch'  
   get '/operations/jobs',                        to: 'operations#jobs'
@@ -40,6 +42,7 @@ Bioturk::Application.routes.draw do
   get '/operation_types/:id/export',                 to: 'operation_types#export'  
   get '/operation_types/export_category/:category',  to: 'operation_types#export_category'  
   get '/operation_types/:id/copy',                   to: 'operation_types#copy'  
+  get '/operation_types/deployed_with_timing',       to: 'operation_types#deployed_with_timing'
 
   resources :operation_types do
     collection do 
@@ -257,6 +260,8 @@ Bioturk::Application.routes.draw do
   get "/dismiss",      to: 'static_pages#dismiss'
 
   match '/yeast_qc', to: 'static_pages#yeast_qc'
+
+  get '/static_pages/direct_purchase', to: 'static_pages#direct_purchase'
 
   match '/glass', to: 'sessions#glass'
 

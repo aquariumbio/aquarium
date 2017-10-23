@@ -3,7 +3,7 @@
 <%= content_for :controller do %>noCtrl<% end %>
 
 <% content_for :specific_title do %>
-  &rang; <%= @job.operations.first.operation_type.name %>
+  &rang; <%= @job.operations.length > 0 ? @job.operations.first.operation_type.name : 'Unknown Operation Type' %>
 <% end %>
 
 <% content_for :sidebar do %>

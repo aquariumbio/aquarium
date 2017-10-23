@@ -114,7 +114,9 @@ class Sample < ActiveRecord::Base
                 fv.value = raw_fv[:value]
               end
 
+              puts "before fv saved: {fv.inspect}"
               fv.save
+              puts "fv saved. now #{fv.inspect}"
 
               unless fv.errors.empty? 
                 errors.add :field_value, "Could not save field #{raw_fv[:name]}: #{stringify_errors(fv.errors)}"
@@ -193,5 +195,19 @@ class Sample < ActiveRecord::Base
   def data_hash
     JSON.parse(self.data,symbolize_names:true)
   end
+
+  def full_json
+
+    sample_hash = self.as_json(
+            include: { sample_type: { include: :object_types, methods: :field_types } },
+            methods: :full_field_values
+          )
+
+    # rename field for compatibility with ng-control/sample.js
+    sample_hash[:field_values] = sample_hash.delete :full_field_values 
+
+    sample_hash
+      
+  end   
 
 end

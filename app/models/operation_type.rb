@@ -359,40 +359,32 @@ class OperationType < ActiveRecord::Base
 
   end
 
-  def num_in_status s
-    self.operations.select { |o| o.status == s }.length
-  end
-
   def self.numbers user=nil
 
-    result = {}
-
-    if user
-      ots = OperationType.includes(:operations).where(deployed: true, operations: { user_id: user.id })     
+    if user == nil
+      q = "
+        SELECT   status, operation_type_id, COUNT(status)
+        FROM     operations
+        GROUP BY operation_type_id, status
+      "
     else
-      ots = OperationType.includes(:operations).where(deployed: true)
+      q = "
+        SELECT   status, operation_type_id, COUNT(status)
+        FROM     operations
+        WHERE    user_id = #{user.id}
+        GROUP BY operation_type_id, status
+      "
     end
 
-    ots.collect { |ot|
+    r = ActiveRecord::Base.connection.execute(q).entries
 
-      pending = ot.operations.select { |o| o.status == "pending" }
-      pending_true_length = ot.operations.select { |o| o.status == "pending" && o.precondition_value }.length
+    result = {}
+    r.each do |status,ot_id,count|
+      result[ot_id] ||= { planning: 0, waiting: 0, pending: 0, delayed: 0, deferred: 0, primed: 0, scheduled: 0, running: 0, error: 0, done: 0 }
+      result[ot_id][status] = count
+    end
 
-      result[ot.id] = {
-        pending_true:  pending_true_length,
-        pending_false: pending.length - pending_true_length,  
-        waiting:       ot.num_in_status("waiting"),
-        scheduled:     ot.num_in_status("scheduled"),
-        running:       ot.num_in_status("running"),
-        deferred:      ot.num_in_status("deferred"),
-        primed:        ot.num_in_status("primed"),
-        done:          ot.num_in_status("done"),
-        error:         ot.num_in_status("error")
-      }
-
-    }
-
-    return result
+    result
 
   end
 

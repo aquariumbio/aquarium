@@ -252,23 +252,11 @@ Krill.prototype.log_link = function() {
 
 }
 
-Krill.prototype.pending_link = function() { 
-
-    var that = this;
-
-    var btn = $('<button>View Pending Jobs</button>').addClass('btn').click(function(){
-        window.location = '/jobs';
-    });
-
-    return $('<li \>').append(btn).addClass('krill-note');
-
-}
-
 Krill.prototype.operations_link = function() { 
 
     var that = this;
 
-    var btn = $('<button>Operations</button>').addClass('btn').click(function(){
+    var btn = $('<button>Back to Manager</button>').addClass('btn').click(function(){
         window.location = '/operations';
     });
 
@@ -325,7 +313,7 @@ Krill.prototype.step = function(state,number) {
             ul.append($('<li>'+line_info+'</li>').addClass('krill-note'));
         });
 
-        ul.append(this.log_link(),this.pending_link(),this.operations_link());
+        ul.append(this.log_link(),this.operations_link());
         container.append(titlebar,ul);
 
     } else {
@@ -352,7 +340,7 @@ Krill.prototype.step = function(state,number) {
 
 
         ul.append(p);
-        ul.append(this.log_link(),this.pending_link(),this.operations_link());
+        ul.append(this.log_link(),this.operations_link());
 
         container.append(titlebar,ul);
 

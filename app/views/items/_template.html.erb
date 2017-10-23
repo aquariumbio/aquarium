@@ -6,7 +6,7 @@
       <a href='#' ng-click='item.modal=true' ng-init="item.modal=false">{{item.id}}</a>
     </span>
 
-    <div class='ng-modal item-modal' ng-show='item.modal'>
+    <div class='ng-modal item-modal' ng-if='item.modal'>
 
       <div class='ng-modal-overlay' ng-click='item.modal=false'></div>
 

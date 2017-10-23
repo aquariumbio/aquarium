@@ -252,7 +252,7 @@ class LauncherController < ApplicationController
     else
 
       plans = Plan
-        .includes(operations: :operation_type)
+        .includes(operations: [ :operation_type, job_associations: :job ])
         .where(user_id: user.id, status: nil, folder: params[:folder])
         .order('created_at DESC')
         .limit(20)
@@ -265,14 +265,26 @@ class LauncherController < ApplicationController
     field_values = FieldValue
       .includes(
         :child_sample, 
-        :wires_as_dest, 
+        :wires_as_dest,
         :wires_as_source, 
         field_type: { allowable_field_types: [ :sample_type, :object_type ] }
         )
       .where(parent_class: "Operation", parent_id: oids)
 
+    # serialized_plans = plans.reverse.as_json(include: [ :user, operations: ] ).as_json
+
+    serialized_plans = plans.collect do |plan|
+      serialized_plan = plan.as_json(include: :user)
+      serialized_plan["operations"] = plan.operations.collect do |op|
+        serialzed_op = op.as_json(include: [ :operation_type, job_associations: { include: :job }])
+        serialzed_op["jobs"] = op.job_associations.collect { |ja| ja.job }
+        serialzed_op
+      end
+      serialized_plan
+    end
+
     render json: { 
-      plans: plans.reverse.as_json(include: [ :user, operations: { include: [:operation_type], methods: :jobs } ] ),
+      plans: serialized_plans.reverse,
       field_values: field_values,
       num_plans: params[:plan_id] ? 1 : Plan.where(user_id: user.id).count
     }
