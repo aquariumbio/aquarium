@@ -161,7 +161,11 @@ class OperationTypesController < ApplicationController
         end
 
         if !error
-          render json: ops.as_json(methods: [ :field_values, :precondition_value ])
+          ops_json = ops.as_json(methods: [ :field_values, :precondition_value ])
+          ops_json.each do |op| 
+            op[:field_values] = op[:field_values].collect { |fv| fv.full_json }
+          end
+          render json: ops_json
         else
           render json: { error: "One or more preconditions could not be evaluated." }
         end
