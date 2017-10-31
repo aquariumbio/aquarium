@@ -140,7 +140,7 @@
     };
 
     $scope.choose_lib = function(library) {
-      $scope.current_operation_type = library;    
+      $scope.current_operation_type = library;
       $scope.set_mode('source');
       aqCookieManager.put_object("DeveloperCurrentOperationTypeId", library.id);
       aqCookieManager.put_object("DeveloperSelectionType", "Library");
@@ -192,7 +192,7 @@
             } else {
               let i = $scope.operation_types.indexOf(operation_type);
               $scope.operation_types[i] = AQ.OperationType.record(response.data);
-              $scope.current_operation_type = $scope.operation_types[i];             
+              $scope.current_operation_type = $scope.operation_types[i];
               $scope.current_operation_type.upgrade_field_types();
               make_categories();
               $scope.current_category = $scope.current_operation_type.category;
@@ -206,7 +206,7 @@
               alert ( "Could not update operation type definition: " + response.data.errors[0] );
             } else {            
               $scope.operation_types[i] = AQ.OperationType.record(response.data);          
-              $scope.current_operation_type = $scope.operation_types[i];             
+              $scope.current_operation_type = $scope.operation_types[i];
               $scope.current_operation_type.upgrade_field_types();
               make_categories();
               $scope.current_category = $scope.current_operation_type.category;
@@ -222,12 +222,12 @@
       make_categories();
       if ( $scope.category_size(c) > 0 ) {
         let ots = aq.where($scope.operation_types, ot => ot.category === c );
-        $scope.current_operation_type = ots[0];      
+        $scope.current_operation_type = ots[0];
         aqCookieManager.put_object("DeveloperCurrentOperationTypeId", $scope.current_operation_type.id);
         $scope.current_category = c;
         aqCookieManager.put_object("DeveloperCurrentCategory", c);
       } else if ( $scope.operation_types.length > 0 ) {
-        $scope.current_operation_type = $scope.operation_types[0];      
+        $scope.current_operation_type = $scope.operation_types[0];
         aqCookieManager.put_object("DeveloperCurrentOperationTypeId", $scope.current_operation_type.id);
         $scope.current_category = $scope.current_operation_type.category;
         aqCookieManager.put_object("DeveloperCurrentCategory", $scope.current_operation_type.category);
@@ -343,7 +343,7 @@
 
               $scope.operation_types = $scope.operation_types.concat(operation_types);
               make_categories();
-              $scope.current_operation_type = response.data.operation_types[0];            
+              $scope.current_operation_type = response.data.operation_types[0];
               $scope.current_category = $scope.current_operation_type.category;
               $scope.import_notification(response.data);
 
@@ -386,7 +386,7 @@
         documentation: AQ.Code.record({ name: 'documentation', content: "Documentation here. Start with a paragraph, not a heading or title, as in most views, the title will be supplied by the view."})
       });
       $scope.operation_types.push(new_operation_type);
-      $scope.current_operation_type = new_operation_type;      
+      $scope.current_operation_type = new_operation_type;
       make_categories();
       $scope.current_category = new_operation_type.category;
       $scope.set_mode("definition");
@@ -405,7 +405,7 @@
         let newlib = AQ.Library.record(response.data);
         $scope.change(newlib);
         $scope.libraries.push(newlib);
-        $scope.current_operation_type = newlib;       
+        $scope.current_operation_type = newlib;
         make_categories();
         $scope.current_category = newlib.category;
         $scope.set_mode('source');
@@ -446,7 +446,7 @@
 
       $http.get("/operation_types/" + operation_type.id + "/copy/").then(function(response) {
         if ( !response.data.error ) { 
-          $scope.current_operation_type = response.data.operation_type;         
+          $scope.current_operation_type = response.data.operation_type;
           $scope.operation_types.push($scope.current_operation_type);
           make_categories();
           $scope.current_category = $scope.current_operation_type.category;
