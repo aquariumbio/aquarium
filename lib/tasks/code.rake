@@ -21,7 +21,7 @@ namespace :code do
             puts "     #{i}:\t#{versions[i].id}\t#{versions[i].created_at}\t-->\t#{versions[i+1].id}"
           end
 
-          puts "   Current version of #{name} for #{ot.name} is now #{ot.protocol.id}"        
+          puts "   Current version of #{name} for #{ot.name} is now #{ot.code(name).id}"
 
         end
 
