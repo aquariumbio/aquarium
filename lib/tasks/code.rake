@@ -9,7 +9,7 @@ namespace :code do
       versions = Code.where(parent_class: "OperationType", parent_id: ot.id, name: "protocol")
       num_childless = versions.select { |c| c.child_id == nil }.length
 
-      if num_childless >= 1
+      if num_childless > 1
 
         puts "Fixing versions for #{ot.name} which has #{num_childless} childless versions out of #{versions.length}"
 
