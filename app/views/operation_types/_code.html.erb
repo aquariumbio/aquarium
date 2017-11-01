@@ -33,7 +33,9 @@
       <h4>Past Versions</h4>
       <ul>
         <li ng-repeat="version in current_operation_type.versions[component_name]">
-          <a href="#" ng-click="version.open = !version.open">{{version.id}}</a>
+          <span ng-if="version.id == current_operation_type[component_name].id" ng-style="font-weight: bold">[</span>
+            <a href="#" ng-click="version.open = !version.open">{{version.id}}</a>
+          <span ng-if="version.id == current_operation_type[component_name].id">]</span>
           {{version.updated_at|date:'medium'}} : 
           {{version.content.length/1000}} kb
           <div ng-if='version.open'>
