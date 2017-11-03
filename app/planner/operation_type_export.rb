@@ -81,9 +81,9 @@ module OperationTypeExport
     base.extend(ClassMethods)
   end  
 
-  def copy
+  def copy user
 
-    ot = OperationType.simple_import(export)
+    ot = OperationType.simple_import(export, user)
 
     ot.name += " (copy)"
     ot.category = category
@@ -95,7 +95,7 @@ module OperationTypeExport
 
   module ClassMethods
 
-    def import data
+    def import data, user
 
       issues1 = SampleType.compare_and_upgrade(data[:sample_types] ? data[:sample_types] : [])
 
@@ -141,10 +141,10 @@ module OperationTypeExport
         end
       end
 
-      ot.new_code 'protocol', obj[:protocol]
-      ot.new_code 'precondition', obj[:precondition]
-      ot.new_code 'cost_model', obj[:cost_model]
-      ot.new_code 'documentation', obj[:documentation]
+      ot.new_code 'protocol', obj[:protocol], user
+      ot.new_code 'precondition', obj[:precondition], user
+      ot.new_code 'cost_model', obj[:cost_model], user
+      ot.new_code 'documentation', obj[:documentation], user
 
       if obj[:timing]
         puts "Timing: " + obj[:timing].inspect
@@ -162,7 +162,7 @@ module OperationTypeExport
 
     end
 
-    def simple_import data
+    def simple_import data, user
 
       obj = data[:operation_type]
 
@@ -185,10 +185,10 @@ module OperationTypeExport
         end
       end
 
-      ot.new_code 'protocol', obj[:protocol]
-      ot.new_code 'precondition', obj[:precondition]
-      ot.new_code 'cost_model', obj[:cost_model]
-      ot.new_code 'documentation', obj[:documentation]
+      ot.new_code 'protocol', obj[:protocol], user
+      ot.new_code 'precondition', obj[:precondition], user
+      ot.new_code 'cost_model', obj[:cost_model], user
+      ot.new_code 'documentation', obj[:documentation], user
 
       if obj[:timing]
         puts "Timing: " + obj[:timing].inspect

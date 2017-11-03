@@ -319,22 +319,6 @@
 
             if ( response.data.operation_types.length > 0 ) {
 
-              let operation_types = aq.collect(response.data.operation_types, raw_operation_type => {
-                let operation_type = AQ.OperationType.record(raw_operation_type);
-                operation_type.upgrade_field_types();
-                if ( raw_operation_type.timing ) {
-                  operation_type.timing = AQ.Timing.record(raw_operation_type.timing);
-                } else { 
-                  operation_type.set_default_timing();
-                }
-                operation_type.timing.make_form();
-                return operation_type;
-              });
-
-              $scope.operation_types = $scope.operation_types.concat(operation_types);
-              make_categories();
-              $scope.current_operation_type = response.data.operation_types[0];
-              $scope.current_category = $scope.current_operation_type.category;
               $scope.import_notification(response.data);
 
             } else {
@@ -436,10 +420,8 @@
 
       $http.get("/operation_types/" + operation_type.id + "/copy/").then(function(response) {
         if ( !response.data.error ) { 
-          $scope.current_operation_type = response.data.operation_type;
-          $scope.operation_types.push($scope.current_operation_type);
-          make_categories();
-          $scope.current_category = $scope.current_operation_type.category;
+          alert("Copy successful. Developer page will reload.")
+          $scope.reload();
         } else {
           alert ( response.data.error );
         }
@@ -467,6 +449,10 @@
 
     $scope.unchange = function(thing) {
       thing['changed'] = false;
+    }
+
+    $scope.reload = function() {
+      window.location = "/operation_types"
     }
 
   }]);
