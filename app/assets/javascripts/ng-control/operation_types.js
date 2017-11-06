@@ -355,8 +355,8 @@
         changed: true,
         field_types:[],
         protocol: AQ.Code.record({ name: 'protocol', content: $scope.default_protocol }),
-        cost_model: AQ.Code.record({ name: 'cost_model', content: 'def cost(op)\n  { labor: 0, materials: 0 }\nend' }),
-        precondition: AQ.Code.record({ name: 'precondition', content: 'def precondition(op)\n  true\nend'}),
+        cost_model: AQ.Code.record({ name: 'cost_model', content: 'def cost(_op)\n  { labor: 0, materials: 0 }\nend' }),
+        precondition: AQ.Code.record({ name: 'precondition', content: 'def precondition(_op)\n  true\nend'}),
         documentation: AQ.Code.record({ name: 'documentation', content: "Documentation here. Start with a paragraph, not a heading or title, as in most views, the title will be supplied by the view."})
       });
       $scope.operation_types.push(new_operation_type);
