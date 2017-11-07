@@ -67,7 +67,7 @@
           aq.each(operation_type.field_types, ft => ft.recompute_getter('predecessors'));
           if ( response.data.error ) {
             operation_type.test_error = response.data.error.replace(/\(eval\):/g, "Line ");
-            console.log(test_error);
+            console.log(operation_type.test_error);
           } else {
             operation_type.test_results = response.data;
             operation_type.test_results.job.backtrace = JSON.parse(operation_type.test_results.job.state);

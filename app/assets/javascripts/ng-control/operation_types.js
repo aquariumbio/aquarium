@@ -4,7 +4,6 @@
 
   w.controller('operationTypesCtrl', [ '$scope', '$http', '$attrs', 'aqCookieManager', '$sce', '$mdDialog',
                             function (  $scope,   $http,   $attrs,   aqCookieManager,   $sce, $mdDialog ) {
-
     AQ.init($http);
     AQ.update = () => { $scope.$apply(); };
     AQ.confirm = (msg) => { return confirm(msg); };
@@ -31,15 +30,20 @@
       }
     });
 
+    function isType(operation_type, type) {
+      "use strict";
+      return operation_type && operation_type.model && operation_type.model.model === type;
+    }
+
     $scope.operation_type_changed = function() {
       "use strict";
       return $scope.current_operation_type
         && ($scope.current_operation_type.changed
-          || ($scope.current_operation_type.model.model === 'OperationType'
+          || (isType($scope.current_operation_type, 'OperationType')
             && ($scope.current_operation_type.protocol.changed
               || $scope.current_operation_type.precondition.changed
               || $scope.current_operation_type.documentation.changed))
-          || ($scope.current_operation_type.model.model === 'Library'
+          || (isType($scope.current_operation_type.model.model, 'Library')
             && $scope.current_operation_type.source.changed)
         );
     };
@@ -59,6 +63,22 @@
 
     }
 
+    function getCurrentOperationType(aqCookieManager, $scope) {
+      let current_operation_type_id = aqCookieManager.get_object("DeveloperCurrentOperationTypeId");
+      if (current_operation_type_id) {
+          let operation_types = aq.where($scope.operation_types, operation_type => operation_type.id === current_operation_type_id);
+          if (operation_types.length === 1) {
+              return operation_types[0];
+          }
+          else {
+              return $scope.operation_types[0];
+          }
+      }
+      else {
+          return $scope.operation_types[0];
+      }
+  }
+
 
     AQ.OperationType.all({methods: ["field_types", "timing"]}).then(operation_types => {
 
@@ -75,17 +95,7 @@
           operation_type.timing.make_form();
       });
 
-      let current_operation_type_id = aqCookieManager.get_object("DeveloperCurrentOperationTypeId");
-      if ( current_operation_type_id ) {
-          let operation_types = aq.where($scope.operation_types,operation_type => operation_type.id === current_operation_type_id );
-          if  ( operation_types.length === 1 ) {
-              $scope.current_operation_type = operation_types[0];
-          } else {
-              $scope.current_operation_type = $scope.operation_types[0];
-          }
-      } else {
-          $scope.current_operation_type = $scope.operation_types[0];
-      }
+      $scope.current_operation_type = getCurrentOperationType(aqCookieManager, $scope);
 
       AQ.Library.all().then(libraries => {
         $scope.libraries = libraries;
