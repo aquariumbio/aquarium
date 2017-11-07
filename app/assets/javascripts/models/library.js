@@ -7,13 +7,8 @@ AQ.Library.record_methods.code = function(component_name) {
 
   AQ.Code.where({parent_class: "Library", parent_id: lib.id, name: component_name}).then(codes => {
     if ( codes.length > 0 ) {
-      latest = aq.where(codes,code => { return code.child_id === null });
-      if ( latest.length >= 1 ) {
-        lib[component_name] = latest[0];
-      } else {
-        lib[component_name]= { content: "# Add code here.", name: "name" };
-      }
-    } else { 
+      lib[component_name] = codes[codes.length-1];
+     } else { 
       lib[component_name]= { content: "# Add code here.", name: "name" };
     }
     AQ.update();

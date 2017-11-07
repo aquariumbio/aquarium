@@ -8,7 +8,7 @@
             <span ng-if="import_popup.inconsistencies.length > 0" style="color: #900">IMPORT FAILED</span>
             </h2> 
           </div>
-          <div class='item-close' ng-click='import_popup.show=false'>&times;</div>
+          <div class='item-close' ng-click='import_popup.show=false; reload()'>&times;</div>
         </md-toolbar>
 
         <p ng-if="import_popup.inconsistencies.length > 0"><b style="color: #900">
@@ -30,5 +30,8 @@
           </li>
         </ul>
 
+        <p>Developer page will be reloaded.</p>
+
     </div>
+
 </div>

@@ -113,23 +113,6 @@ class OperationType < ActiveRecord::Base
 
   end
 
-  # def schedule ops, user, group, opts={}
-
-  #   scheduled_ops = ops
-  #   job = schedule_aux ops, user, group, opts
-
-  #   primed_list = primed ops
-
-  #   unless primed_list.empty?
-  #     ot = primed_list.first.operation_type
-  #     j,more_ops = ot.schedule primed_list, user, group, successor: job
-  #     scheduled_ops += more_ops
-  #   end
-
-  #   [job,scheduled_ops]
-
-  # end
-
   def schedule ops, user, group, opts={}
 
     ops_to_schedule = []
