@@ -27,4 +27,12 @@ namespace :docs do
     sh "cp -r doc/images public/doc"
   end
 
+  task :auto do
+    puts "Autogenerating yard docs"
+    sh "rm -rf public/doc/autodocs"
+    sh "mkdir public/doc/autodocs"    
+    sh "yardoc"
+    sh "mv ./doc/api public/doc/autodocs"
+  end
+
 end
