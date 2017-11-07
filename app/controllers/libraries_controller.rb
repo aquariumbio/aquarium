@@ -16,9 +16,9 @@ class LibrariesController < ApplicationController
       
       unless params[:no_edit]
         if c
-          c = c.commit(params[:content])
+          c = c.commit(params[:content],current_user)
         else
-          c = lib.new_code(params[:name], params[:content])
+          c = lib.new_code(params[:name], params[:content],current_user)
         end
       end
 
@@ -34,7 +34,7 @@ class LibrariesController < ApplicationController
 
     lib = Library.new name: params[:name], category: params[:category]
     lib.save
-    lib.new_code("source", params[:source][:content])
+    lib.new_code("source", params[:source][:content],current_user)
 
     render json: lib
 

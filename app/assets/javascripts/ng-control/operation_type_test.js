@@ -38,6 +38,8 @@
           content: operation_type.protocol.content
         }).then(function(response) {
           
+          operation_type.recompute_getter("protocol");
+
           if ( !operation_type.precondition.no_edit ) {
             $http.post("/operation_types/code", {
               id: operation_type.id,

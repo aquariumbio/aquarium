@@ -30,19 +30,25 @@
     </div>
 
     <div ng-if="current_operation_type.mode == 'versions'" class="versions">
-      <h4>Past Versions</h4>
-      <ul>
-        <li ng-repeat="version in current_operation_type.versions[component_name]">
-          <span ng-if="version.id == current_operation_type[component_name].id" ng-style="font-weight: bold">[</span>
-            <a href="#" ng-click="version.open = !version.open">{{version.id}}</a>
-          <span ng-if="version.id == current_operation_type[component_name].id">]</span>
-          {{version.updated_at|date:'medium'}} : 
-          {{version.content.length/1000}} kb
-          <div ng-if='version.open'>
-            <pre>{{version.content}}</pre>
-          </div>
-        </li>
-      </ul>
+      <h4>Versions</h4>
+      <table class='table'>
+        <tr ng-repeat-start="version in current_operation_type.versions[component_name]">
+          <td style="width: 5%">
+            <span ng-if="version.id == current_operation_type[component_name].id" style="font-weight: bold">&#9632;</span>
+          </td>
+          <td style="width: 20%"><a href="#" ng-click="version.open = !version.open">{{version.id}}</a></td>
+          <td style="width: 25%">{{version.user_id ? version.user.login : '-'}}</td>
+          <td style="width: 25%">{{version.created_at|date:'medium'}}</td>
+          <td style="width: 25%">{{version.content.length/1000}} kb</td>
+        </tr>
+        <tr ng-repeat-end ng-show="version.open">
+          <td colspan=5>
+            <div ng-if='version.open'>
+              <pre>{{version.content}}</pre>
+            </div>
+          </td>
+        </tr>
+      </table>
     </div>
 
     <div class='code-controls' ng-if="current_operation_type.mode != 'versions'">

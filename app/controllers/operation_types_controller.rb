@@ -31,7 +31,7 @@ class OperationTypesController < ApplicationController
     end
 
     ["protocol", "precondition", "cost_model", "documentation"].each do |name|
-      ot.new_code(name, params[name]["content"])
+      ot.new_code(name, params[name]["content"], current_user)
     end
 
     j = ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation])
@@ -70,9 +70,9 @@ class OperationTypesController < ApplicationController
       
       unless params[:no_edit]
         if c
-          c = c.commit(params[:content])
+          c = c.commit(params[:content],current_user)
         else
-          c = ot.new_code(params[:name], params[:content])
+          c = ot.new_code(params[:name], params[:content],current_user)
         end
       end
 
@@ -374,7 +374,7 @@ class OperationTypesController < ApplicationController
       begin 
         
         issues_list = params[:operation_types].collect { |x|
-          OperationType.import(x.merge(deployed: false))
+          OperationType.import(x.merge(deployed: false),current_user)
         }
 
         notes = issues_list.collect { |issues| issues[:notes] }.flatten
@@ -409,7 +409,7 @@ class OperationTypesController < ApplicationController
     redirect_to root_path, notice: "Administrative privileges required to access operation type definitions." unless current_user.is_admin
 
     begin
-      ot = OperationType.find(params[:id]).copy
+      ot = OperationType.find(params[:id]).copy current_user
       render json: { operation_type: ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation]) }
     rescue Exception => e
       render json: { error: "Could not copy operation type: " + e.to_s }
