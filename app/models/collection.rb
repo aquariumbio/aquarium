@@ -24,6 +24,7 @@ class Collection < Item
   end
 
   # Returns first Array element from #find
+  # 
   # @see #find
   def position s
     self.find(s).first
@@ -79,6 +80,7 @@ class Collection < Item
 
   # Sets the matrix for the collection to an empty rxc matrix and saves the collection to the database.
   # Whatever matrix was associated with the collection is lost
+  # 
   # @param r [Integer] Row
   # @param c [Integer] Column
   def apportion r, c
@@ -86,6 +88,7 @@ class Collection < Item
   end
 
   # Whether the matrix includes x
+  #
   # @param x [Fixnum, Sample, Item]
   # @return [Boolean]
   def include? x
@@ -94,6 +97,7 @@ class Collection < Item
   end
 
   # Finds rows, cols in which block is true
+  #
   # @return [Array<Array<Fixnum>>] Array of form [[r1, c1], [r2, c2]]
   def select
     raise "need selection block" unless block_given?
@@ -104,6 +108,7 @@ class Collection < Item
   end
 
   # Finds rows, cols that equal val
+  #
   # @param val [Fixnum, Sample, Item]
   # @return [Array<Array<Fixnum>>] Array of form [[r1, c1], [r2, c2]]
   def find val
@@ -111,24 +116,28 @@ class Collection < Item
   end
 
   # Gets all empty rows, cols
+  #
   # @return [Array<Array<Fixnum>>] Array of form [[r1, c1], [r2, c2]]
   def get_empty
     self.select { |x| x == EMPTY }
   end
 
   # Gets all non-empty rows, cols
+  #
   # @return [Array<Array<Fixnum>>] Array of form [[r1, c1], [r2, c2]]
   def get_non_empty
     self.select { |x| x != EMPTY }
   end
 
   # Returns the number of non empty slots in the matrix
+  #
   # @return [Fixnum]
   def num_samples
     get_non_empty.size
   end
 
   # Changes Item, String, or Sample to a sample.id for storing into a collection matrix. Maybe should be private
+  #
   # class method?
   def to_sample_id x
     r = EMPTY
@@ -154,6 +163,7 @@ class Collection < Item
   end
 
   # Adds sample, item, or number to collection
+  #
   # @param x [Fixnum, Sample, Item]
   # @param options [Hash]
   # @option options [Bool] :reverse Start from end of matrix
@@ -192,6 +202,7 @@ class Collection < Item
 
   # Find last [r,c] that equals x and sets to EMPTY. If x.nil? then it finds the last non_empty slot. If reverse: false
   # then finds the first [r,c] equal to x. Returns [r,c,sample_at_rc] if x is in collection. or nil if x is not found or the col.empty?
+  #
   # @param x [Fixnum, Sample, Item]
   # @param options [Hash]
   # @option options [Bool] :reverse Begin from the end of the matrix
@@ -219,18 +230,21 @@ class Collection < Item
   end
 
   # Whether the matrix has no EMPTY slots
+  #
   # @return [Bool]
   def full?
     self.get_empty.empty?
   end
 
   # Whether the matrix is empty
+  #
   # @return [Bool]
   def empty?
     self.get_non_empty.empty?
   end
 
   # Set the [r,c] entry of the matrix to id of the Sample s. If s=nil, then the [r,c] entry is cleared
+  #
   # @param r [Integer] Row
   # @param c [Integer] Column
   # @param x [Fixnum, Sample, Item]
@@ -265,6 +279,7 @@ class Collection < Item
 
   # Sets the matrix associated with the collection to the matrix m where m can be either a matrix of Samples or
   # a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix was associated with the collection is lost
+  #
   # @param sample_matrix [Array<Array<Sample>>, Array<Array<Fixnum>>]
   def associate sample_matrix
 
@@ -294,6 +309,7 @@ class Collection < Item
   end
 
   # Return matrix of {Sample} ids
+  #
   # @return [Array<Array<Integer>>]
   def matrix
     self.datum[:matrix]
@@ -307,6 +323,7 @@ class Collection < Item
 
   # With no options, returns the indices of the next element of the collections, skipping to the next column or row if necessary.
   # With the option skip_non_empty: true, returns the next non empty indices. Returns nil if [r,c] is the last element of the collection
+  #
   # @param r [Integer] Row
   # @param c [Integer] Column
   # @param options [Hash]
@@ -333,6 +350,7 @@ class Collection < Item
   end
 
   # Returns the dimensions of the matrix associated with the collection
+  #
   # @return [Array<Fixnum>]
   def dimensions
     m = self.matrix
@@ -346,6 +364,7 @@ class Collection < Item
   # Returns a string describing the indices of the non empty elements in the collection. For example,
   # the method might return the string "1,1 - 5,9" to indicate that collection contains samples in
   # those indices. Note that the string is adjusted for viewing by the user, so starts with 1 instead of 0 for rows and columns
+  #
   # @return [String]
   def non_empty_string
 

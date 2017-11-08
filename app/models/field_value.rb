@@ -16,18 +16,21 @@ class FieldValue < ActiveRecord::Base
   attr_accessible :parent_class, :parent_id
 
   # Return associated {Sample}
+  #
   # @return [Sample]
   def sample
     child_sample
   end
 
   # Return associated {Item}
+  #
   # @return [Item]
   def item
     child_item
   end
 
   # Return associated {Collection}
+  #
   # @return [Collection]
   def collection
     if child_item
@@ -37,8 +40,11 @@ class FieldValue < ActiveRecord::Base
     end
   end
 
-  # Return associated parameter value
-  # @return [Float, String, Hash]
+  # Return associated parameter value.
+  #
+  # @return [Float, String, Hash, Sample, Item] The value of the
+  #   {FieldValue} of the type specified in the operation type
+  #   definition
   def val
 
     if field_type
@@ -222,6 +228,7 @@ class FieldValue < ActiveRecord::Base
   end
 
   # Set {Item}, {Collection}, or row or column
+  # 
   # @param opts [Hash]
   # @option opts [Item] :item
   # @option opts [Collection] :collection

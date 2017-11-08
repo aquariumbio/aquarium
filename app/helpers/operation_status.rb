@@ -3,8 +3,9 @@
 module OperationStatus
 
   # Set and save {Operation} status
+  # 
   # @param str [String] ("waiting", "pending", "primed", "deferred", "scheduled", "running", "done", "error")
-  # @return [String] Status
+  # @return [String] The {Operation} status
   def change_status str
     temp = self.status
     self.status = str
@@ -80,8 +81,10 @@ module OperationStatus
     change_status "done" if self.status == "running"
   end
 
-  # Error the {Operation}
-  # @param error_type [Symbol] name of error
+  # Set the {Operation} to "error", and create a {DataAssociation} to 
+  # describe why the operation errored
+  # 
+  # @param error_type [Symbol] Name of error
   # @param msg [String] Error message
   # @example Error {Operation}s with no plate colonies
   #   op.error :no_colonies, "There are no colonies for plate #{plate}"
@@ -91,7 +94,10 @@ module OperationStatus
     associate error_type, msg
   end
 
-  # Set {Operation} status to "pending"
+  # Set {Operation} status to "pending" if its precondition evaluates to true;
+  # sets status to "delayed" otherwise. This is particularly useful for
+  # operations that are not yet ready to be run or need to be run periodically.
+  # 
   # @see #change_status
   def redo
       if self.precondition_value

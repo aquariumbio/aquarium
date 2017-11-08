@@ -51,6 +51,7 @@ class Item < ActiveRecord::Base
   end
 
   # Returns the location of the Item
+  # 
   # @return [String] the location as a string
   def location
     if self.locator
@@ -72,7 +73,8 @@ class Item < ActiveRecord::Base
     write_attribute(:location,locstr) 
   end
 
-  # Sets item location to empty slot based on location wizard. By default sets to "Bench"
+  # Sets item location to empty slot based on location {Wizard}. By default sets to "Bench"
+  # 
   # @return [Item] self
   def store
     wiz = Wizard.find_by_name(object_type.prefix)
@@ -84,7 +86,8 @@ class Item < ActiveRecord::Base
     end
   end
 
-  # Sets item location to provided string or to string's associated location wizard if it exists
+  # Sets item location to provided string or to string's associated location {Wizard} if it exists
+  # 
   # @param locstr [String] the location string
   # @return [Item] self
   def move_to locstr 
@@ -182,6 +185,7 @@ class Item < ActiveRecord::Base
   end
 
   # (see #move_to)
+  # 
   # @note for backwards compatability
   def move locstr
     move_to locstr
@@ -245,6 +249,7 @@ class Item < ActiveRecord::Base
   end
  
   # Delete the Item (sets item's location to "deleted")
+  # 
   # @return [Bool] Item deleted?
   def mark_as_deleted 
 
@@ -266,6 +271,7 @@ class Item < ActiveRecord::Base
   end
 
   # Returns whether the Item is deleted
+  # 
   # @return [Bool] Item deleted?
   def deleted?
     primitive_location == 'deleted'

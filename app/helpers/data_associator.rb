@@ -31,7 +31,10 @@ module DataAssociator
     h
   end 
 
-  # @see #get
+  # Get the {DataAssociation} with the given key for this object.
+  #
+  # @param key [String] the key for the association
+  # @return [DataAssociation] with the key, or `nil`
   def get_association key
     das = data_associations key
     das.length >= 1 ? das[0] : nil
