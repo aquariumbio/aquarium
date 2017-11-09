@@ -1,8 +1,11 @@
+# A subclass of {Item} that has a matrix of Sample ids and does not belong to a {SampleType}
+
 class Collection < Item
 
   EMPTY = -1 # definition of empty
 
   # CLASS METHODS ###################################################################
+
 
   def self.every
     Item.joins(:object_type).where(object_types: { handler: "collection" })
@@ -20,6 +23,9 @@ class Collection < Item
     end
   end
 
+  # Returns first Array element from #find
+  # 
+  # @see #find
   def position s
     self.find(s).first
   end
@@ -55,6 +61,7 @@ class Collection < Item
 
   # METHODS #########################################################################
 
+
   def self.new_collection name
 
     o = ObjectType.find_by_name(name)
@@ -71,16 +78,27 @@ class Collection < Item
 
   end
 
+  # Sets the matrix for the collection to an empty rxc matrix and saves the collection to the database.
+  # Whatever matrix was associated with the collection is lost
+  # 
+  # @param r [Integer] Row
+  # @param c [Integer] Column
   def apportion r, c
     self.matrix = (Array.new(r,Array.new(c,EMPTY)))
   end
 
+  # Whether the matrix includes x
+  #
+  # @param x [Fixnum, Sample, Item]
+  # @return [Boolean]
   def include? x
     sel = self.find x
     sel.any?
   end
 
   # Finds rows, cols in which block is true
+  #
+  # @return [Array<Array<Fixnum>>] Array of form [[r1, c1], [r2, c2]]
   def select
     raise "need selection block" unless block_given?
     self.matrix.map.with_index do |row, r|
@@ -90,25 +108,36 @@ class Collection < Item
   end
 
   # Finds rows, cols that equal val
+  #
+  # @param val [Fixnum, Sample, Item]
+  # @return [Array<Array<Fixnum>>] Array of form [[r1, c1], [r2, c2]]
   def find val
     self.select { |x| x == self.to_sample_id(val) }
   end
 
   # Gets all empty rows, cols
+  #
+  # @return [Array<Array<Fixnum>>] Array of form [[r1, c1], [r2, c2]]
   def get_empty
     self.select { |x| x == EMPTY }
   end
 
   # Gets all non-empty rows, cols
+  #
+  # @return [Array<Array<Fixnum>>] Array of form [[r1, c1], [r2, c2]]
   def get_non_empty
     self.select { |x| x != EMPTY }
   end
 
+  # Returns the number of non empty slots in the matrix
+  #
+  # @return [Fixnum]
   def num_samples
     get_non_empty.size
   end
 
   # Changes Item, String, or Sample to a sample.id for storing into a collection matrix. Maybe should be private
+  #
   # class method?
   def to_sample_id x
     r = EMPTY
@@ -134,20 +163,23 @@ class Collection < Item
   end
 
   # Adds sample, item, or number to collection
-  # ==== Examples
   #
-  # c = Collection.find_by_id(1)
-  # c.matrix # [[-1, -1, 3], [4, -1, -1]]
-  # c.add_one(777)
-  # c.matrix
-  #   [ [777, -1, 3],
-  #     [4, -1, -1] ]
-  # c.add_one(888)
-  #   [ [777, 888, 3],
-  #     [4, -1, -1] ]
-  # c.add_one(999, reverse: true)
-  #   [ [777, 888, 3],
-  #     [4, -1, 999] ]
+  # @param x [Fixnum, Sample, Item]
+  # @param options [Hash]
+  # @option options [Bool] :reverse Start from end of matrix
+  # @example
+  #   c = Collection.find_by_id(1)
+  #   c.matrix # [[-1, -1, 3], [4, -1, -1]]
+  #   c.add_one(777)
+  #   c.matrix
+  #     [ [777, -1, 3],
+  #       [4, -1, -1] ]
+  #   c.add_one(888)
+  #     [ [777, 888, 3],
+  #       [4, -1, -1] ]
+  #   c.add_one(999, reverse: true)
+  #     [ [777, 888, 3],
+  #       [4, -1, 999] ]
   def add_one x, options={}
     opts = { reverse: false }.merge(options)
     r, c = [nil, nil]
@@ -163,10 +195,17 @@ class Collection < Item
     [r, c, x]
   end
 
+  # @see #subtract_one
   def remove_one x=nil, options={}
     self.subtract_one(x, options)
   end
 
+  # Find last [r,c] that equals x and sets to EMPTY. If x.nil? then it finds the last non_empty slot. If reverse: false
+  # then finds the first [r,c] equal to x. Returns [r,c,sample_at_rc] if x is in collection. or nil if x is not found or the col.empty?
+  #
+  # @param x [Fixnum, Sample, Item]
+  # @param options [Hash]
+  # @option options [Bool] :reverse Begin from the end of the matrix
   def subtract_one x=nil, options={}
     opts = { reverse: true }.merge(options)
     r, c = [nil, nil]
@@ -190,14 +229,25 @@ class Collection < Item
     d[0] * d[1]
   end
 
+  # Whether the matrix has no EMPTY slots
+  #
+  # @return [Bool]
   def full?
     self.get_empty.empty?
   end
 
+  # Whether the matrix is empty
+  #
+  # @return [Bool]
   def empty?
     self.get_non_empty.empty?
   end
 
+  # Set the [r,c] entry of the matrix to id of the Sample s. If s=nil, then the [r,c] entry is cleared
+  #
+  # @param r [Integer] Row
+  # @param c [Integer] Column
+  # @param x [Fixnum, Sample, Item]
   def set r, c, x
     m = self.matrix
     d = self.dimensions
@@ -227,6 +277,10 @@ class Collection < Item
     remaining
   end
 
+  # Sets the matrix associated with the collection to the matrix m where m can be either a matrix of Samples or
+  # a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix was associated with the collection is lost
+  #
+  # @param sample_matrix [Array<Array<Sample>>, Array<Array<Fixnum>>]
   def associate sample_matrix
 
     m = self.get_data[:matrix]
@@ -245,6 +299,7 @@ class Collection < Item
 
   end
 
+  # @see #associate
   def set_matrix m
     self.associate m
   end
@@ -253,15 +308,26 @@ class Collection < Item
     self.datum[:matrix]
   end
 
+  # Return matrix of {Sample} ids
+  #
+  # @return [Array<Array<Integer>>]
   def matrix
     self.datum[:matrix]
   end
 
+  # Set the matrix associated with the collection to the matrix of Sample ids m. Whatever matrix was associated with the collection is lost
   def matrix= m
     d = self.datum
     self.datum = d.merge( { matrix: m } )
   end
 
+  # With no options, returns the indices of the next element of the collections, skipping to the next column or row if necessary.
+  # With the option skip_non_empty: true, returns the next non empty indices. Returns nil if [r,c] is the last element of the collection
+  #
+  # @param r [Integer] Row
+  # @param c [Integer] Column
+  # @param options [Hash]
+  # @option options [Bool] :skip_non_empty Return next non-empty indices
   def next r, c, options={}
 
     opts = { skip_non_empty: false }.merge options
@@ -283,10 +349,9 @@ class Collection < Item
 
   end
 
-  #def [](i)
-  #  self.matrix[i]
-  #end
-
+  # Returns the dimensions of the matrix associated with the collection
+  #
+  # @return [Array<Fixnum>]
   def dimensions
     m = self.matrix
     if m && m[0]
@@ -296,6 +361,11 @@ class Collection < Item
     end
   end
 
+  # Returns a string describing the indices of the non empty elements in the collection. For example,
+  # the method might return the string "1,1 - 5,9" to indicate that collection contains samples in
+  # those indices. Note that the string is adjusted for viewing by the user, so starts with 1 instead of 0 for rows and columns
+  #
+  # @return [String]
   def non_empty_string
 
     m = self.matrix

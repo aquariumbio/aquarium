@@ -2,11 +2,24 @@ module Krill
 
   module OperationList
 
+    # Begin building a table from {OperationList}
+    # @param opts [Hash]
+    # @option opts [Bool] :errored Include {Operation}s with status "error"
+    # @example Make a table for pipetting primers into a stripwell for PCR
+    #  table operations.start_table
+    #    .output_collection("Fragment", heading: "Stripwell")
+    #    .custom_column(heading: "Well") { |op| op.output("Fragment").column + 1 }
+    #    .input_item(FWD, heading: "Forward Primer, 2.5 µL", checkable: true)
+    #    .input_item(REV, heading: "Reverse Primer, 2.5 µL", checkable: true)
+    #  .end_table
+    # @return {Array} extended with {OperationList}
     def start_table opts={errored:false}
       @table = Table.new
       self
     end
 
+    # Finish building a table
+    # @see #start_table
     def end_table
       @table
     end
@@ -23,6 +36,14 @@ module Krill
 
     end
 
+    # Add column with input/output {Item} ids
+    # @param name [String] Input/Output name
+    # @param role [String] ("input", "output")
+    # @param opts [Hash]
+    # @option opts [String] Column heading (defaults to input/output name)
+    # @option opts [Bool] Column cells can be clicked
+    # @see #input_item
+    # @see #output_item
     def item name, role, opts={}
       @table.add_column( opts[:heading] || "#{name} Item ID (#{role})", running.collect { |op|
             property op, :child_item_id, name, role, opts[:checkable]
@@ -30,6 +51,14 @@ module Krill
       self
     end
 
+    # Add column with input/output {Sample} ids
+    # @param name [String] Input/Output name
+    # @param role [String] ("input", "output")
+    # @param opts [Hash]
+    # @option opts [String] Column heading (defaults to input/output name)
+    # @option opts [Bool] Column cells can be clicked
+    # @see #input_sample
+    # @see #output_sample
     def sample name, role, opts={}
       @table.add_column( opts[:heading] || "#{name} Sample ID (#{role})", running.collect { |op|
             property op, :child_sample_id, name, role, opts[:checkable]
@@ -37,6 +66,14 @@ module Krill
       self
     end    
 
+    # Add column with input/output {Collection} ids
+    # @param name [String] Input/Output name
+    # @param role [String] ("input", "output")
+    # @param opts [Hash]
+    # @option opts [String] Column heading (defaults to input/output name)
+    # @option opts [Bool] Column cells can be clicked
+    # @see #input_collection
+    # @see #output_collection
     def collection name, role, opts={}
       @table.add_column( opts[:heading] || "#{name} Collecton ID (#{role})", running.collect { |op|
         property op, :child_item_id, name, role, opts[:checkable]
@@ -44,6 +81,14 @@ module Krill
       self
     end
 
+    # Add column with input/output row (if part of a {Collection})
+    # @param name [String] Input/Output name
+    # @param role [String] ("input", "output")
+    # @param opts [Hash]
+    # @option opts [String] Column heading (defaults to input/output name)
+    # @option opts [Bool] Column cells can be clicked
+    # @see #input_row
+    # @see #output_row
     def row name, role, opts={}
       @table.add_column( opts[:heading] || "#{name} Row (#{role})", running.collect { |op|
         property op, :row, name, role, opts[:checkable]
@@ -51,6 +96,14 @@ module Krill
       self      
     end
 
+    # Add column with input/output column (if part of a {Collection})
+    # @param name [String] Input/Output name
+    # @param role [String] ("input", "output")
+    # @param opts [Hash]
+    # @option opts [String] Column heading (defaults to input/output name)
+    # @option opts [Bool] Column cells can be clicked
+    # @see #input_column
+    # @see #output_column
     def column name, role, opts={}
       @table.add_column( opts[:heading] || "#{name} Column (#{role})", running.collect { |op|
         property op, :column, name, role, opts[:checkable]
@@ -58,6 +111,10 @@ module Krill
       self      
     end    
 
+    # Add column with custom content
+    # @param opts [Hash]
+    # @option opts [String] Column heading
+    # @option opts [Bool] Column cells can be clicked
     def custom_column opts={heading: "Custom Column", checkable: false }, &block
       @table.add_column opts[:heading], running.collect(&block).collect { |x| 
         opts[:checkable] ? ({ content: x, check: true }) : x
