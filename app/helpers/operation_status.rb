@@ -57,16 +57,17 @@ module OperationStatus
     begin
       print "op #{self.id}: #{self.status}"
       if ready?
+
+        get_items_from_predecessor
+
         if on_the_fly
           change_status "primed"
         elsif status == "deferred"
           change_status "scheduled"
         elsif self.precondition_value
           change_status "pending"
-          get_items_from_predecessor
         else
           change_status "delayed"
-          get_items_from_predecessor
         end
       end
       puts " ==> #{self.status}"
@@ -74,7 +75,7 @@ module OperationStatus
       Rails.logger.info "COULD NOT STEP OPERATION #{op.id}: #{e.to_s}"
     end    
 
-    # TODO: Change deferred op to scheduled 
+    # TODO: Change deferred op to scheduled
 
   end
 
