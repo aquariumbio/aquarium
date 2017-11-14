@@ -66,6 +66,7 @@ module OperationStatus
           get_items_from_predecessor
         else
           change_status "delayed"
+          get_items_from_predecessor
         end
       end
       puts " ==> #{self.status}"
