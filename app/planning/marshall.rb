@@ -74,16 +74,18 @@ module Marshall
     operation.y = op[:y]
     operation.parent_id = op[:parent_id]
     operation.save
+    current_fvs = []
 
     if op[:field_values]
-      op[:field_values].each do |fv|
-        self.field_value operation, fv, op[:routing]
+      op[:field_values].each do |raw_fv|
+        current_fv = self.field_value operation, raw_fv, op[:routing]
+        current_fvs << current_fv
       end
     end
 
-    # for each field value in operation, delete it if it is not in x
+    # for each field value in operation, delete it if it is not a raw_fv
     operation.field_values.each do |fv|
-      unless op[:field_values].collect { |fv| fv[:id] }.member? fv.id
+      unless current_fvs.collect { |current_fv| current_fv[:id] }.member? fv.id
         fv.destroy
       end
     end
@@ -160,6 +162,8 @@ module Marshall
             op.operation_type.name + " operation: " +
             field_value.errors.full_messages.join(", ")
     end
+
+    field_value
 
   end    
 
