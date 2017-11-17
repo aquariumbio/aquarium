@@ -51,4 +51,3 @@ gem 'rack-cors', :require => 'rack/cors'
 
 gem 'yard'
 gem 'yard-activerecord'
-gem 'activerecord-native_db_types_override'
