@@ -16,7 +16,7 @@ operations.each do |op|
   # Do something with op here
 end
 ```
-You can also specify whether to iterate over running or errored operations, and use select, reject, and collect operations. For example, to collect all running operations whose "Template" input has a concnentration greater than 100 nM, do the following.
+You can also specify whether to iterate over running or errored operations, and use select, reject, and collect operations. For example, to collect all running operations whose "Template" input has a concentration greater than 100 nM, do the following.
 ```ruby
 my_ops = operations.running.select do |op|
   op.input_data("Template", :concentration) > 70.0
