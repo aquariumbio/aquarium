@@ -111,6 +111,50 @@
       
   end  
 
+  # Adds a new output to an operation, even if that operation doesn't specify the output
+  # in its definition.
+  # @param name [String]
+  # @param sample [Sample]
+  # @param container [ObjectType]
+  # @example Add output to be made
+  #   sample = Sample.find_by_name("YEB medium")
+  #   container = ObjectType.find_by_name("200 mL Liquid")
+  #   operations.each do |op|
+  #     add_output "Media", sample, container
+  #   end
+  #   operations.make
+  def add_output name, sample, container
+
+    ft = FieldType.new(
+      name: name,
+      ftype: "sample",
+      parent_class: "OperationType",
+      parent_id: nil
+    )
+    ft.save
+
+    aft = AllowableFieldType.new({
+      field_type_id: ft.id,
+      sample_type_id: sample.sample_type.id,
+      object_type_id: container.id
+    })
+    aft.save
+
+    fv = FieldValue.new(
+      name: name,
+      child_item_id: nil,
+      child_sample_id: sample.id,
+      role: 'output',
+      parent_class: "Operation",
+      parent_id: self.id,
+      field_type_id: ft.id)
+    fv.allowable_field_type_id = aft.id
+    fv.save
+
+    return nil
+
+  end
+
   # @return [Array<FieldValue>]
   def inputs
     field_values.select { |ft| ft.role == 'input' }
