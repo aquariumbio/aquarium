@@ -1,25 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  name: MyString
+  name: JunkYeast
   description: MyString
-  field1name: MyString
-  field1type: MyString
-  field2name: MyString
-  field2type: MyString
-  field3name: MyString
-  field3type: MyString
-  field4name: MyString
-  field4type: MyString
+  created_at: "2017-08-02 03:39:06"
+  updated_at: "2017-08-02 03:39:06"
 
 two:
-  name: MyString
+  name: JunkBacteria
   description: MyString
-  field1name: MyString
-  field1type: MyString
-  field2name: MyString
-  field2type: MyString
-  field3name: MyString
-  field3type: MyString
-  field4name: MyString
-  field4type: MyString
+  created_at: "2017-08-02 03:39:06"
+  updated_at: "2017-08-02 03:39:06"

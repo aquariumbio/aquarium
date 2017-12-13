@@ -1,11 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  name: MyString
-  protocol_path: MyString
-  specification: MyText
+  id: 1
+  operation_type_id: 1,
+  status: "error"
+  user_id: 1
 
 two:
-  name: MyString
-  protocol_path: MyString
-  specification: MyText
+  id: 2
+  operation_type_id: 2,
+  status: "error"
+  user_id: 2
