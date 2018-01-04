@@ -11,6 +11,8 @@
 
     let job_id = parseInt(aq.url_path()[2]);
 
+    $scope.uploads = {}; // Change this to get data from the server about all uploads associated with teh job so far
+
     AQ.Job.find(job_id).then(job => {
       $scope.job = job;
       // these should be moved to the model   V
@@ -76,6 +78,76 @@
 
     }
 
+    $scope.start_upload = function(varname) {
+
+      $("#upload-"+varname).click();
+      $scope.upload_varname = varname;      
+
+    }
+
+    function send_file(file) {
+
+      var r = new FileReader();
+
+      r.onload = function(e) {
+
+        var data = e.target.result;
+        var fd = new FormData();
+
+        var uri = "/krill/upload";
+        var xhr = new XMLHttpRequest();
+        
+        xhr.open("POST", uri, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                alert(xhr.responseText); // handle response.
+            }
+        };
+
+        fd.append('file', file)
+        fd.append('authenticity_token', $("#authenticity_token").val());
+        fd.append('job', $scope.job.id)
+        xhr.send(fd);          
+
+      }
+
+      r.readAsBinaryString(file);         
+
+    }
+
+    $scope.complete_upload = function(files) {
+
+      for ( var i=0; i<files.length; i++ ) {
+
+        if ( ! $scope.uploads[$scope.upload_varname] ) {
+          $scope.uploads[$scope.upload_varname] = [];
+        }
+
+        $scope.uploads[$scope.upload_varname].push({name: files[i].name});
+        $scope.$apply();
+
+        send_file(files[i])
+
+      }
+
+    }
+
+
   }]);
 
 })();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

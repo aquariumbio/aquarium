@@ -64,7 +64,6 @@
 
           var img = $("<image src='" + url + "'></a>");
           $($element).append(img);
-          console.log("fetched");
 
         })  
 

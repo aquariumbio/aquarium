@@ -319,13 +319,11 @@ class KrillController < ApplicationController
 
   def upload
 
-    logger.info "upload = #{params[:files][0]}"
-
     u = Upload.new
 
-    File.open(params[:files][0].tempfile) do |f|
-      u.upload = f # just assign the logo attribute to a file
-      u.name = params[:files][0].original_filename
+    File.open(params[:file].tempfile) do |f|
+      u.upload = f
+      u.name = params[:file].original_filename
       u.job_id = params[:job]
       u.save
     end
@@ -336,7 +334,7 @@ class KrillController < ApplicationController
       return
     end
 
-    render json: { upload_id: u.id, name: u.name }
+    render json: u
 
   end
 

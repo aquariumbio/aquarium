@@ -63,4 +63,48 @@
 
   });
 
+  w.controller ('uploadDialogCtrl', [ '$scope', '$mdDialog', function($scope,$mdDialog) {
+
+    $scope.close_dialog = function() {
+      $mdDialog.hide();
+    }
+
+    $scope.is_image = function(record) {
+      return record.upload_content_type.split("/")[0] == "image";
+    }   
+
+
+  }]);
+
+  w.directive('uploadViewer', ['$mdDialog', function($mdDialog) {
+
+
+    return {
+
+      restrict: "EA",
+      transclude: true,
+      scope: { record: "=" },
+      replace: true,
+
+      template: $('#upload_viewer').html(),
+
+      link: function(scope,element,attrs) {
+
+        scope.show_dialog = function() {
+
+          $mdDialog.show({
+            template: $('#upload_viewer_dialog').html(),
+            scope: scope,
+            preserveScope: true,
+            controller: 'uploadDialogCtrl'
+          });
+
+        }
+
+      }
+
+    }
+
+  }]);
+
 })();

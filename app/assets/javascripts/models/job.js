@@ -33,3 +33,14 @@ AQ.Job.record_getters.operations = function() {
     })
   })
 }
+
+AQ.Job.record_getters.uploads = function() {
+
+  let job = this;
+  delete job.uploads;
+
+  AQ.Upload.where({job_id: job.id}).then(uploads => {
+    job.uploads = uploads;
+  });
+
+}

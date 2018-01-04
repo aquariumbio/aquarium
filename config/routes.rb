@@ -202,10 +202,11 @@ Bioturk::Application.routes.draw do
   get "krill/inventory"
   get "krill/abort"
   get "krill/jobs"
-  post "krill/upload"
+  post "krill/upload"               
   get "krill/uploads"
   get "krill/tasks"
   post "krill/attach"
+
 
   get "stats/jobs"
   get "stats/users"

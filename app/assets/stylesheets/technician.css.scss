@@ -69,6 +69,20 @@ $bottom-margin: 12px;
       margin-left: 5px;
     }
 
+    .upload-list {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      li {
+        line-height: 1;
+        margin: 0 0 5px 0;
+      }
+    }    
+
+    .upload-hidden-input {
+      display: none;
+    }
+
     table {
 
       border: 1pt solid #aaa;

@@ -1,4 +1,5 @@
 <%= render partial: 'show_block' %>
+<%= render partial: 'uploads/upload_viewer' %>
 
 <% provide(:title, "Job #{@job_id}") %>
 
@@ -9,14 +10,46 @@
 <% content_for :wider_sidebar do %>true<% end %>
 
 <% content_for :sidebar do %>
-  <h1 class="md-title">{{job.operations[0].operation_type.name}}</h1>
-  <div layout-padding>
-    <div ng-repeat="step in job.steps | filter: { operation: 'display' } track by $index"
-         ng-class="$index == state.index ? 'no-highlight step-index-selected' : 'no-highlight step-index'"
-         ng-click="state.index = $index">
-        {{$index+1}}. {{step.content[0].title}}
-    </div>
-  </div>
+
+  <md-tabs md-dynamic-height md-border-bottom>
+    <md-tab label="steps">
+      <md-content layout-padding>
+          <br/>
+          <div ng-repeat="step in job.steps | filter: { operation: 'display' } track by $index"
+               ng-class="$index == state.index ? 'no-highlight step-index-selected' : 'no-highlight step-index'"
+               ng-click="state.index = $index">
+            {{$index+1}}. {{step.content[0].title}}
+         </div>
+      </md-content>
+    </md-tab>
+
+    <md-tab label="plans">
+      <md-content layout-padding>
+      </md-content>
+    </md-tab>
+
+    <md-tab label="uploads">
+      <md-content layout-padding>
+
+      <br/>
+   
+      <ul ng-if="job.uploads.length > 0">
+        <li ng-repeat="upload in job.uploads">
+          <upload-viewer record="upload"></upload-viewer>
+          <span class="pull-right">{{upload.upload_file_size|bytes}}</span>
+        </li>
+      </ul>
+
+      <div ng-if="job.uploads.length == 0">
+        <h1 class="md-title">No uploads</h1>
+      </div>
+
+      </md-content>
+    </md-tab>
+
+  </md-tabs>
+
+
 <% end %>
 
 <% content_for :no_title do %>true<% end %>
@@ -24,7 +57,7 @@
 <% content_for :keydown do %>keyDown($event)<% end %>
 
 <% content_for :specific_title do %>
-  Step {{state.index + 1}}
+  {{job.operations[0].operation_type.name}}: Step {{state.index + 1}}
 <% end %>
 
 <% content_for :action1 do %>
