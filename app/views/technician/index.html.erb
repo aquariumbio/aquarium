@@ -33,7 +33,8 @@
 
       <br/>
    
-      <ul ng-if="job.uploads.length > 0">
+      <ul ng-if="job.uploads.length > 0"
+          class="upload-list">
         <li ng-repeat="upload in job.uploads">
           <upload-viewer record="upload"></upload-viewer>
           <span class="pull-right">{{upload.upload_file_size|bytes}}</span>

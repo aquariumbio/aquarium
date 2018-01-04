@@ -16,10 +16,15 @@
 
       <div>
 
+        <div ng-if="!is_image(record)">Preview Not Available<br>{{record.upload_content_type}}</div>
+
         <downloadimage model="record" ng-if="is_image(record)"></downloadimage>
+
+        <hr>
+
         <div class='download'>
           <b>Download:</b> <download model="record"></download>
-          <span class="pull-right">{{record.upload_file_size|bytes}}</span>
+          <div>{{record.upload_file_size|bytes}}</div>
         </div>
       </div>    
 
