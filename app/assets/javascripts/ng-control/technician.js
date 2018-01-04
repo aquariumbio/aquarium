@@ -89,18 +89,42 @@
 
       var r = new FileReader();
 
+      file.status = "loading";
+      file.percent = 0;
+
+      if ( ! $scope.uploads[$scope.upload_varname] ) {
+        $scope.uploads[$scope.upload_varname] = [];
+      }
+
+      $scope.uploads[$scope.upload_varname].push(file);
+
+      $scope.$apply();
+
+      r.onprogress = function(e) {
+        file.progress = e;
+        $scope.$apply();
+      }
+
       r.onload = function(e) {
 
         var data = e.target.result;
         var fd = new FormData();
-
         var uri = "/krill/upload";
         var xhr = new XMLHttpRequest();
+
+        file.status = "sending";
+        $scope.$apply();
         
         xhr.open("POST", uri, true);
+
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {
-                alert(xhr.responseText); // handle response.
+                console.log(xhr.responseText); 
+                var upload = AQ.Upload.record(JSON.parse(xhr.responseText));
+                console.log(upload)
+                $scope.job.uploads.push(upload)
+                file.status = "complete";
+                $scope.$apply();
             }
         };
 
@@ -117,17 +141,8 @@
 
     $scope.complete_upload = function(files) {
 
-      for ( var i=0; i<files.length; i++ ) {
-
-        if ( ! $scope.uploads[$scope.upload_varname] ) {
-          $scope.uploads[$scope.upload_varname] = [];
-        }
-
-        $scope.uploads[$scope.upload_varname].push({name: files[i].name});
-        $scope.$apply();
-
+      for ( var i=0; i<files.length; i++ ) {      
         send_file(files[i])
-
       }
 
     }

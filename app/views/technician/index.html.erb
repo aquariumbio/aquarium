@@ -44,6 +44,23 @@
         <h1 class="md-title">No uploads</h1>
       </div>
 
+     <div class="upload-button-container">
+
+        <form id="upload-form-generic" action="/krill/upload" method="post">
+          <input id="upload-generic" 
+                 type="file"
+                 name="files[]"
+                 custom-on-change="complete_upload"
+                 multiple></input>
+          <input type="submit">
+          <input id="authenticity_token" name="authenticity_token" type="hidden" value="<%=form_authenticity_token %>" />
+        </form>
+        <md-button
+          class="md-raised md-primary" 
+          ng-click="start_upload('generic')">Upload File(s)</md-button>      
+
+      </div>
+
       </md-content>
     </md-tab>
 

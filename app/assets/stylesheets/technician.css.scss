@@ -18,6 +18,16 @@ $bottom-margin: 12px;
     font-weight: bold;
   }
 
+  .upload-button-container {
+    form {
+      height: 0;
+      margin: 0;
+    }
+    input {
+      display: none;
+    }
+  }
+
   .step-container {
 
     opacity: 1;
@@ -78,10 +88,6 @@ $bottom-margin: 12px;
         margin: 0 0 5px 0;
       }
     }    
-
-    .upload-hidden-input {
-      display: none;
-    }
 
     table {
 
