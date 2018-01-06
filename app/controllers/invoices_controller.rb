@@ -20,6 +20,15 @@ class InvoicesController < ApplicationController
     @monthly_invoices = (1..12).collect { |m|
       { 
         month: m,
+        year: year-1,
+        date: DateTime.new(year-1,m),
+        entries: Account.users_and_budgets(year-1, m, user)
+      }
+    }.reverse.reject { |d| d[:entries].length == 0 }    
+
+    @monthly_invoices += (1..12).collect { |m|
+      { 
+        month: m,
         year: year,
         date: DateTime.new(year,m),
         entries: Account.users_and_budgets(year, m, user)
