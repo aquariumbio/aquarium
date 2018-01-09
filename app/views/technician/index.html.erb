@@ -15,10 +15,10 @@
     <md-tab label="steps">
       <md-content layout-padding>
           <br/>
-          <div ng-repeat="step in job.steps | filter: { operation: 'display' } track by $index"
+          <div ng-repeat="step in backtrace track by $index"
                ng-class="$index == state.index ? 'no-highlight step-index-selected' : 'no-highlight step-index'"
                ng-click="state.index = $index">
-            {{$index+1}}. {{step.content[0].title}}
+            {{$index+1}}. {{step.display.content ? step.display.content[0].title : 'Complete'}}
          </div>
       </md-content>
     </md-tab>
@@ -75,6 +75,8 @@
 <% content_for :keydown do %>keyDown($event)<% end %>
 
 <% content_for :specific_title do %>
+  <span ng-if="backtrace && is_complete()"
+        class="specific-title-complete">[COMPLETED] </span>
   {{job.operations[0].operation_type.name}}: Step {{state.index + 1}}
 <% end %>
 
@@ -85,7 +87,7 @@
 <% content_for :action2 do %>
   <span class="ok">
     <md-button class='md-raised md-primary'
-               ng-disabled="state.index != job.steps.length-1"
+               ng-disabled="state.index != backtrace.length-1 || is_complete()"
                ng-click="ok()">OK</md-button>
   </span>
 <% end %>
@@ -96,11 +98,21 @@
 
 <% content_for :main do %>
 
-  <div ng-repeat="step in job.steps | filter: { operation: 'display' } track by $index"
+  <div ng-repeat="step in backtrace track by $index"
        ng-show="$index == state.index"
        class="step-container animate-show-hide">
 
-      <div ng-repeat="line in step.content" ng-include="content_type(line)"></div>
+      <div ng-if="step.display.operation == 'display'"
+           ng-repeat="line in step.display.content" 
+           ng-include="content_type(line)" 
+           track by $index></div> 
+
+      <div ng-if="step.display.operation == 'complete'"
+           ng-include="'complete'"></div>   
+
+      <pre>{{step.display|json}}</pre> 
+      <hr>
+      <pre>{{step.response|json}}</pre>                      
 
     </script>
   </div>

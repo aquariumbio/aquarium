@@ -11,9 +11,13 @@
     <div flex>
       <span class='md-subhead'>{{content_value(line).label}}</span><br>
       <md-input-container class="select-container">
-        <md-select ng-model="choice.value" ng-init="choice.value = content_value(line).choices[0]">
-          <md-option ng-repeat="choice in content_value(line).choices" ng-value="choice">
-            {{choice}}
+        <md-select ng-model="choice.value" 
+                   aria-label="Select" 
+                   ng-init="choice.value = (step.response ? step.response.inputs[line.select.var] : content_value(line).choices[0]); 
+                            choice.var = line.select.var"
+                   ng-disabled="step.response">
+          <md-option ng-repeat="c in content_value(line).choices" ng-value="c">
+            {{c}}
           </md-option>
         </md-select>
       </md-input-container>
@@ -21,13 +25,15 @@
 </script>
 
 <script type="text/ng-template" id="input">
-  <!-- <span class='md-subhead bold'>Input Data</span><br> -->
   <div class='input-box' layout='row'>
     <div><ng-md-icon icon="create" size="22" aria-label="Input" style="fill: #444" class="input-icon"></ng-md-icon></div>
     <md-input-container class="input-container">
       <div class="padding">
         <label>{{content_value(line).label}}</label>
-        <input class="md-subhead" ng-model="content.value">
+        <input class="md-subhead" 
+               ng-model="content.value" 
+               ng-value="step.response.inputs[line.input.var]"
+              ng-disabled="step.response">
       </div>
     </md-input-container>
   </div>
@@ -43,8 +49,9 @@
 </script>
 
 <script type="text/ng-template" id="check">
-    <md-checkbox aria-label="Checkbox" clas="checkbox">
-      <span class="md-subhead" ng-bind-html="content_value(line)"></span>
+    <md-checkbox aria-label="Checkbox" ng-checked="step.response" ng-disabled="step.response">
+      <span class="md-subhead" 
+            ng-bind-html="content_value(line)"></span>
     </md-checkbox>
 </script>
 
@@ -125,9 +132,15 @@
       <tr ng-repeat="row in content_value(line)">
         <td ng-repeat="cell in row track by $index"
             ng-class="table_class(cell)">
-          <span ng-if="cell.type" style="color: #aaa;">&gt;</span>
-          <input ng-if="cell.type" type="{{cell.type}}" value="{{cell.default}}"
-                 data-opid="{{cell.operation.id}}" class="krill-table-input">
+          <span ng-if="cell.type">
+            <ng-md-icon icon="create" size="16" aria-label="Input" style="fill: #444" class="input-icon"></ng-md-icon>
+          </span>
+          <input ng-if="cell.type" 
+                 type="{{cell.type}}" 
+                 value="{{step.response ? table_input(cell,step.response) : cell.default}}"
+                 data-opid="{{cell.operation.id}}" 
+                 class="krill-table-input"
+                 ng-disabled="step.response">
           <span ng-if="!cell.type && cell.content == undefined">{{cell}}</span>
           <span ng-if="!cell.type && cell.content != undefined">{{cell.content}}</span>
         </td>
@@ -156,5 +169,11 @@
 <script type="text/ng-template" id="aborted">
   <div class='content content-aborted'>
     Aborted
+  </div>
+</script>
+
+<script type="text/ng-template" id="complete">
+  <div class='content'>
+    <h2 class="md-display-2 title">Protocol Completed</h2>
   </div>
 </script>

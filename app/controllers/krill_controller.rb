@@ -225,7 +225,7 @@ class KrillController < ApplicationController
         @job.save
       end
 
-      # Tell Krill server to take continue in the protocol 
+      # Tell Krill server to continue in the protocol 
       begin
         result = ( Krill::Client.new.continue params[:job] )
       rescue Exception => e
@@ -237,9 +237,6 @@ class KrillController < ApplicationController
       end
 
       if result[:response] == "done"
-
-        # step the job's workflow (remove once workflows are removed)
-        @job.reload.step_workflow
 
         Thread.new do # this goes in the background because it can take a 
                       # while, and the technician interface should not have

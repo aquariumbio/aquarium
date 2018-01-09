@@ -13,11 +13,14 @@
 
     $scope.uploads = {}; // Change this to get data from the server about all uploads associated with teh job so far
 
+    $scope.selects = [];
+
     AQ.Job.find(job_id).then(job => {
       $scope.job = job;
       // these should be moved to the model   V
       $scope.job.state = JSON.parse($scope.job.state);
-      $scope.job.steps = aq.where($scope.job.state, s => s.operation == 'display');
+      make_backtrace();
+      $scope.state.index = $scope.backtrace.length - 1;
       $scope.$apply();
     })
 
@@ -25,10 +28,29 @@
       index: 0
     };
 
+    make_backtrace = function() {
+      $scope.backtrace = [];
+      for ( var i=1; i<$scope.job.state.length/2+3; i+=2) {
+        $scope.backtrace.push({
+          display: $scope.job.state[i],
+          response: $scope.job.state[i+1]
+        })
+      }
+    }
+
+    $scope.is_complete = function() {
+      return $scope.backtrace[$scope.backtrace.length-1].display.operation == 'complete'
+    }
+
     $scope.content_type = function(line) {
       var type = Object.keys(line)[0];
       return type;
     };
+
+    $scope.table_input = function(cell,response) {
+      let x = aq.where(response.inputs.table_inputs, input => input.opid == cell.operation_id && input.key == cell.key)[0].value;
+      return x;
+    }
 
     $scope.content_value = function(line) {
       var k = Object.keys(line)[0];
@@ -67,7 +89,7 @@
           break;
         case "ArrowRight":
         case "ArrowDown":
-          if ( $scope.state.index < $scope.job.steps.length - 1 ) {
+          if ( $scope.state.index < $scope.backtrace.length - 1 ) {
             $scope.state.index++;
           }
           break;
@@ -144,6 +166,38 @@
       for ( var i=0; i<files.length; i++ ) {      
         send_file(files[i])
       }
+
+    }
+
+    $scope.ok = function() {
+
+      // todo: Disable the OK button
+  
+      // $http.post("/krill/next?command=next&job="+$scope.job.id,{
+      //   inputs: JSON.stringify({
+      //     timestamp: Date.now()/1000,
+      //     table_inputs: []
+      //   })
+
+      // }).then( response => {
+
+      //   let result = response.data.result;
+
+      //   if ( result.response == "ready" || result.response == "done" ) {
+
+      //     $scope.job.state = response.data.state;
+      //     make_backtrace();
+      //     $scope.state.index++;
+
+      //   } else {
+
+      //     alert ( "The protocol is still preparing the next step. Please try clicking 'OK' again or reloading the page.")
+
+      //   }
+
+        // todo: enable the OK button
+
+      // });
 
     }
 
