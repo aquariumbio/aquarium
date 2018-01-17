@@ -135,6 +135,22 @@ ActiveRecord::Schema.define(:version => 20180529204642) do
   add_index "field_values", ["field_type_id"], :name => "index_field_values_on_field_type_id"
   add_index "field_values", ["parent_id"], :name => "index_field_values_on_sample_id"
 
+  create_table "folder_contents", :force => true do |t|
+    t.integer  "sample_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.integer  "folder_id"
+    t.integer  "workflow_id"
+  end
+
+  create_table "folders", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "user_id"
+    t.integer  "parent_id"
+  end
+
   create_table "groups", :force => true do |t|
     t.string   "name"
     t.string   "description"
@@ -378,6 +394,38 @@ ActiveRecord::Schema.define(:version => 20180529204642) do
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
     t.string   "description"
+  end
+
+  create_table "workflow_associations", :force => true do |t|
+    t.integer  "thread_id"
+    t.integer  "process_id"
+    t.integer  "sample_id"
+    t.integer  "item_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "workflow_processes", :force => true do |t|
+    t.integer  "workflow_id"
+    t.text     "state"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "workflow_threads", :force => true do |t|
+    t.integer  "process_id"
+    t.text     "specification"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.integer  "workflow_id"
+    t.integer  "user_id"
+  end
+
+  create_table "workflows", :force => true do |t|
+    t.string   "name"
+    t.text     "specification"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
 end
