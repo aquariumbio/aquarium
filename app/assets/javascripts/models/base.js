@@ -13,7 +13,11 @@ AQ.Base.prototype.super = function(name) {
 }
 
 AQ.Base.prototype.record = function(extras) {
-  return new AQ.Record(this,extras);
+  let record = new AQ.Record(this,extras);
+  if ( record.upgrade ) {
+    record.upgrade();
+  }
+  return record;
 }
 
 AQ.Base.prototype.find = function(id) {

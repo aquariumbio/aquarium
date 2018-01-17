@@ -58,6 +58,13 @@ $bottom-margin: 12px;
       display: inline-block;
     }
 
+    .technician-error {
+      color: orange;
+      font-weight: bold;
+      // background: orange;
+      display: inline-block;
+    }    
+
     .input-box {
       padding: 10px 10px 0px 10px;
       margin: 5px 0 5px 0;

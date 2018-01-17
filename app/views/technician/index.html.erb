@@ -15,11 +15,17 @@
     <md-tab label="steps">
       <md-content layout-padding>
           <br/>
-          <div ng-repeat="step in backtrace track by $index"
-               ng-class="$index == state.index ? 'no-highlight step-index-selected' : 'no-highlight step-index'"
-               ng-click="state.index = $index">
-            {{$index+1}}. {{step.display.content ? step.display.content[0].title : 'Complete'}}
+          <span ng-if="!job.started">No steps</span>
+
+          <div ng-repeat="step in job.backtrace track by $index"
+               ng-class="$index == job.state.index ? 
+                         'no-highlight step-index-selected' : 
+                         'no-highlight step-index'"
+               ng-click="job.state.index = $index"
+               ng-if="step.type != 'aborted'">
+            {{$index+1}}. {{step.title}}
          </div>
+
       </md-content>
     </md-tab>
 
@@ -75,43 +81,55 @@
 <% content_for :keydown do %>keyDown($event)<% end %>
 
 <% content_for :specific_title do %>
-  <span ng-if="backtrace && is_complete()"
+  <span ng-if="job.backtrace && job.is_complete"
         class="specific-title-complete">[COMPLETED] </span>
-  {{job.operations[0].operation_type.name}}: Step {{state.index + 1}}
+  <span ng-if="job.started">
+    {{job.operations[0].operation_type.name}}: Step {{job.state.index + 1}}
+  </span>
+  <span ng-if="!job.started">
+    JOB NOT STARTED
+  </span>
 <% end %>
 
 <% content_for :action1 do %>
-  <md-button ng-click="state.index = state.index - 1" ng-disabled="state.index == 0">&#8678;</md-button>
+  <md-button ng-if="job.started"
+             ng-click="state.index = state.index - 1"
+             ng-disabled="state.index == 0">&#8678;
+  </md-button>
 <% end %>
 
 <% content_for :action2 do %>
-  <span class="ok">
+  <span class="ok" 
+        ng-if="job.started">
     <md-button class='md-raised md-primary'
-               ng-disabled="state.index != backtrace.length-1 || is_complete()"
+               ng-disabled="job.state.index != job.backtrace.length-1 || job.is_complete"
                ng-click="ok()">OK</md-button>
   </span>
 <% end %>
 
 <% content_for :action3 do %>
-  <md-button ng-click="state.index = state.index + 1" ng-disabled="state.index >= job.steps.length-1">&#8680;</md-button>
+  <md-button ng-if="job.started"
+             ng-click="state.index = state.index + 1"
+             ng-disabled="state.index >= job.steps.length-1">&#8680;
+  </md-button>
 <% end %>
 
 <% content_for :main do %>
 
-  <div ng-repeat="step in backtrace track by $index"
-       ng-show="$index == state.index"
+  <div ng-if="job.started"
+       ng-repeat="step in job.backtrace track by $index"
+       ng-show="$index == job.state.index"
        class="step-container animate-show-hide">
 
-      <div ng-if="step.display.operation == 'display'"
+      <div ng-if="step.type == 'display'"
            ng-repeat="line in step.display.content" 
            ng-include="content_type(line)" 
            track by $index></div> 
 
-      <div ng-if="step.display.operation == 'complete'"
-           ng-include="'complete'"></div>   
+      <div ng-if="step.type == 'complete'" ng-include="'complete'"></div>  
+      <div ng-if="step.type == 'error'" ng-include="'error'"></div>         
 
-      <pre>{{step.display|json}}</pre> 
-      <hr>
+      <pre>{{step.display|json}}</pre><hr>
       <pre>{{step.response|json}}</pre>                      
 
     </script>

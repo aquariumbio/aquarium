@@ -11,11 +11,9 @@
     <div flex>
       <span class='md-subhead'>{{content_value(line).label}}</span><br>
       <md-input-container class="select-container">
-        <md-select ng-model="choice.value" 
+        <md-select ng-model="step.response.inputs[line.select.var]" 
                    aria-label="Select" 
-                   ng-init="choice.value = (step.response ? step.response.inputs[line.select.var] : content_value(line).choices[0]); 
-                            choice.var = line.select.var"
-                   ng-disabled="step.response">
+                   ng-disabled="!step.response.in_progress">
           <md-option ng-repeat="c in content_value(line).choices" ng-value="c">
             {{c}}
           </md-option>
@@ -24,6 +22,7 @@
     </div>
 </script>
 
+
 <script type="text/ng-template" id="input">
   <div class='input-box' layout='row'>
     <div><ng-md-icon icon="create" size="22" aria-label="Input" style="fill: #444" class="input-icon"></ng-md-icon></div>
@@ -31,9 +30,8 @@
       <div class="padding">
         <label>{{content_value(line).label}}</label>
         <input class="md-subhead" 
-               ng-model="content.value" 
-               ng-value="step.response.inputs[line.input.var]"
-              ng-disabled="step.response">
+               ng-model="step.response.inputs[line.input.var]"
+              ng-disabled="!step.response.in_progress">
       </div>
     </md-input-container>
   </div>
@@ -136,11 +134,11 @@
             <ng-md-icon icon="create" size="16" aria-label="Input" style="fill: #444" class="input-icon"></ng-md-icon>
           </span>
           <input ng-if="cell.type" 
-                 type="{{cell.type}}" 
-                 value="{{step.response ? table_input(cell,step.response) : cell.default}}"
+                 dtype="{{cell.type}}" 
+                 ng-model="step.response.inputs.table_inputs[cell.key][cell.operation_id].value"
                  data-opid="{{cell.operation.id}}" 
                  class="krill-table-input"
-                 ng-disabled="step.response">
+                 ng-disabled="!step.response.in_progress">
           <span ng-if="!cell.type && cell.content == undefined">{{cell}}</span>
           <span ng-if="!cell.type && cell.content != undefined">{{cell.content}}</span>
         </td>
@@ -175,5 +173,17 @@
 <script type="text/ng-template" id="complete">
   <div class='content'>
     <h2 class="md-display-2 title">Protocol Completed</h2>
+  </div>
+</script>
+
+<script type="text/ng-template" id="error">
+  <div class='content'>
+    <h2 class="md-display-2 title">Runtime Error</h2>
+    <p class='md-subhead technician-error'>{{step.display.message}}</p>
+    <ul>
+      <li ng-repeat="location in step.display.backtrace">
+        {{pretty(location)}}
+      </li>
+    </ul>
   </div>
 </script>

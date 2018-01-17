@@ -17,30 +17,8 @@
 
     AQ.Job.find(job_id).then(job => {
       $scope.job = job;
-      // these should be moved to the model   V
-      $scope.job.state = JSON.parse($scope.job.state);
-      make_backtrace();
-      $scope.state.index = $scope.backtrace.length - 1;
       $scope.$apply();
-    })
-
-    $scope.state = {
-      index: 0
-    };
-
-    make_backtrace = function() {
-      $scope.backtrace = [];
-      for ( var i=1; i<$scope.job.state.length/2+3; i+=2) {
-        $scope.backtrace.push({
-          display: $scope.job.state[i],
-          response: $scope.job.state[i+1]
-        })
-      }
-    }
-
-    $scope.is_complete = function() {
-      return $scope.backtrace[$scope.backtrace.length-1].display.operation == 'complete'
-    }
+    })  
 
     $scope.content_type = function(line) {
       var type = Object.keys(line)[0];
@@ -48,8 +26,12 @@
     };
 
     $scope.table_input = function(cell,response) {
-      let x = aq.where(response.inputs.table_inputs, input => input.opid == cell.operation_id && input.key == cell.key)[0].value;
-      return x;
+      let x = aq.where(response.inputs.table_inputs, input => input.opid == cell.operation_id && input.key == cell.key)[0];
+      if ( x ) {
+        return x.value;
+      } else {
+        return null;
+      }
     }
 
     $scope.content_value = function(line) {
@@ -83,14 +65,14 @@
 
         case "ArrowLeft":
         case "ArrowUp":
-          if ( $scope.state.index > 0 ) {
-            $scope.state.index--;
+          if ( $scope.job.state.index > 0 ) {
+            $scope.job.state.index--;
           }
           break;
         case "ArrowRight":
         case "ArrowDown":
-          if ( $scope.state.index < $scope.backtrace.length - 1 ) {
-            $scope.state.index++;
+          if ( $scope.job.state.index < $scope.job.backtrace.length - 1 ) {
+            $scope.job.state.index++;
           }
           break;
 
@@ -170,35 +152,15 @@
     }
 
     $scope.ok = function() {
+      $scope.job.advance().then(() => {
+        console.log("ok done")
+        $scope.$apply();
 
-      // todo: Disable the OK button
-  
-      // $http.post("/krill/next?command=next&job="+$scope.job.id,{
-      //   inputs: JSON.stringify({
-      //     timestamp: Date.now()/1000,
-      //     table_inputs: []
-      //   })
+      })
+    }
 
-      // }).then( response => {
-
-      //   let result = response.data.result;
-
-      //   if ( result.response == "ready" || result.response == "done" ) {
-
-      //     $scope.job.state = response.data.state;
-      //     make_backtrace();
-      //     $scope.state.index++;
-
-      //   } else {
-
-      //     alert ( "The protocol is still preparing the next step. Please try clicking 'OK' again or reloading the page.")
-
-      //   }
-
-        // todo: enable the OK button
-
-      // });
-
+    $scope.pretty = function(loc) {
+      return loc.replace("(eval)", "Protocol")
     }
 
 

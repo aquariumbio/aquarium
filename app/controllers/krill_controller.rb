@@ -106,7 +106,7 @@ class KrillController < ApplicationController
     end
 
     # redirect to ui
-    redirect_to krill_ui_path(job: params[:job]) 
+    redirect_to "/technician/#{params[:job]}"
 
   end
 
@@ -218,8 +218,8 @@ class KrillController < ApplicationController
       unless state.last[:operation] == "next" || params[:command] == "check_again"
         state.push( { 
           operation: params[:command], 
-          time: Time.now, inputs: 
-          JSON.parse(params[:inputs], symbolize_names: true)
+          time: Time.now,
+          inputs: params[:inputs] # JSON.parse(params[:inputs], symbolize_names: true)
         } )
         @job.state = state.to_json
         @job.save
