@@ -85,21 +85,21 @@ AQ.Job.record_methods.advance = function() {
 
   return new Promise(function(resolve,reject) {
 
-    AQ.http.post("/krill/next?command=next&job="+job.id,job.backtrace.last_response()).then(
+    AQ.http.post("/krill/next?command=next&job="+job.id,job.backtrace.last_response).then(
 
       response => {
 
         let result = response.data.result;
 
-        console.log("response to advance:", result, response.data.state);
+        console.log(result);
 
-        if ( result.response == "ready" || result.response == "done" ) {
+        // if ( result.response == "ready" || result.response == "done" ) {
 
           job.state = response.data.state;
           job.recompute_getter("backtrace");
           job.state.index = job.backtrace.length - 1;
 
-        }
+        // }
 
         resolve();
 

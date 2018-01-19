@@ -216,10 +216,12 @@ class KrillController < ApplicationController
       state = JSON.parse @job.state, symbolize_names: true
 
       unless state.last[:operation] == "next" || params[:command] == "check_again"
+        inputs = params[:inputs]
+        inputs[:table_inputs] = [] unless inputs[:table_inputs]
         state.push( { 
           operation: params[:command], 
           time: Time.now,
-          inputs: params[:inputs] # JSON.parse(params[:inputs], symbolize_names: true)
+          inputs: inputs # JSON.parse(params[:inputs], symbolize_names: true)
         } )
         @job.state = state.to_json
         @job.save
@@ -244,11 +246,9 @@ class KrillController < ApplicationController
           Operation.step
         end        
 
-      else
-
-        @job.reload
-
       end
+
+      @job.reload
 
     else 
 

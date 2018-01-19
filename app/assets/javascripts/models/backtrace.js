@@ -23,6 +23,8 @@ class Step {
       case "display":
         if ( this.display.content && this.display.content[0].title ) {
           return this.display.content[0].title
+        } else {
+          return "(Untitled Step)"
         }
         break;
       case "error":
@@ -36,28 +38,30 @@ class Step {
 
   new_response() {
 
-    this.response = { in_progress: true, inputs: { table_inputs:[] } }
+    let step = this;
 
-    for ( var j=0; j<this.display.content.length; j++ ) {
+    step.response = { in_progress: true, inputs: { table_inputs:[] } }
 
-      var line = this.display.content[i];
+    for ( var j=0; j<step.display.content.length; j++ ) {
+
+      let line = step.display.content[j];
 
       if ( line ) {
 
         if ( line.select ) {
-          this.response.inputs[line.select.var] = line.select.choices[line.select.default];
+          step.response.inputs[line.select.var] = line.select.choices[line.select.default];
         }
         if ( line.input ) {
-          this.response.inputs[line.input.var] = line.input.default;
+          step.response.inputs[line.input.var] = line.input.default;
         }   
         if ( line.table ) {
-          this.response.inputs.table_inputs = this.new_table_inputs(line);
+          step.response.inputs.table_inputs = step.new_table_inputs(line);
         }
       }
 
     }
 
-    return this.response;
+    return step.response;
 
   }
 
@@ -88,8 +92,17 @@ class Step {
     // Backend returns [ { opid: __, key: __, value: __, type: __}, ...]
     // Frontend wants { key1: { opid1: { ... }, opid2: { ... } }, key2: { ... } }
 
-    var frontend_table_inputs = {},
-        backend_table_inputs = this.response.inputs.table_inputs; 
+    console.log(this.response)
+
+    let step = this,
+        frontend_table_inputs = {},
+        backend_table_inputs;
+
+    if ( !step.response.inputs ) {
+      step.response.inputs = { table_inputs: [] }
+    }
+
+    backend_table_inputs = step.response.inputs.table_inputs;
 
     if ( backend_table_inputs ) {
 
@@ -105,9 +118,9 @@ class Step {
 
     }
 
-    this.response.inputs.table_inputs = frontend_table_inputs;
+    step.response.inputs.table_inputs = frontend_table_inputs;
 
-    return this.response;
+    return step.response;
 
   }
 
@@ -120,7 +133,7 @@ class Step {
       for ( var opid in frontend_table_inputs[key] ) {
         backend_table_inputs.push({ 
           key: key, 
-          opid: opid, 
+          opid: parseInt(opid), 
           value: frontend_table_inputs[key][opid].value,
           type: frontend_table_inputs[key][opid].type
         })
@@ -135,7 +148,8 @@ class Step {
     let inputs = this.response.inputs;
     inputs.table_inputs = this.prepare_table_inputs();
     inputs.timestamp = Date.now()/1000;
-    return inputs;
+    this.response.inputs = inputs;
+    return this.response;
   }
 
 }
@@ -163,12 +177,13 @@ class Backtrace extends Array {
 
    return backtrace.length > 0 &&
           backtrace[backtrace.length-1].display &&
-          backtrace[backtrace.length-1].display.operation == 'complete'
+          backtrace[backtrace.length-1].display.operation != 'display';
 
   }
 
   get last() {
-    return this.backtrace[this.backtrace.length-1];
+    let backtrace = this;
+    return backtrace[backtrace.length-1];
   }
 
   get last_response() {

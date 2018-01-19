@@ -13,7 +13,8 @@ namespace :technician do
       exit 0
     end
 
-    op = ot.operations.create status: "pending", user_id: 0, x: 0, y: 0, parent_id: 0
+    # op = ot.operations.create status: "pending", user_id: 0, x: 0, y: 0, parent_id: 0
+    ops = ot.random(3)
 
     # make plan
     plan = Plan.new(
@@ -25,14 +26,16 @@ namespace :technician do
 
     plan.budget_id = Budget.last.id
     plan.save
-    op.associate_plan plan
+    ops.each do |op|
+      op.associate_plan plan
+    end
 
     # submit plan
     planner = Planner.new plan.id
     planner.start
 
     # schedule job
-    job, operations = ot.schedule([op], User.find(1), Group.find_by_name("technicians"))
+    job, operations = ot.schedule(ops, User.find(1), Group.find_by_name("technicians"))
 
     # launch brower window
     cmd = "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome "
