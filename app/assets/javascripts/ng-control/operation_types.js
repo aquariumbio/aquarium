@@ -63,8 +63,6 @@
 
     }
 
-<<<<<<< HEAD
-=======
     function getCurrentOperationType(aqCookieManager, $scope) {
       let current_operation_type_id = aqCookieManager.get_object("DeveloperCurrentOperationTypeId");
       if (current_operation_type_id) {
@@ -79,10 +77,8 @@
       else {
           return $scope.operation_types[0];
       }
-  }
+    }
 
-
->>>>>>> master
     AQ.OperationType.all({methods: ["field_types", "timing"]}).then(operation_types => {
 
       $scope.operation_types = operation_types;
@@ -331,25 +327,6 @@
 
             if ( response.data.operation_types.length > 0 ) {
 
-<<<<<<< HEAD
-              let operation_types = aq.collect(response.data.operation_types, raw_operation_type => {
-                let operation_type = AQ.OperationType.record(raw_operation_type);
-                operation_type.upgrade_field_types();
-                if ( raw_operation_type.timing ) {
-                  operation_type.timing = AQ.Timing.record(raw_operation_type.timing);
-                } else {
-                  operation_type.set_default_timing();
-                }
-                operation_type.timing.make_form();
-                return operation_type;
-              });
-
-              $scope.operation_types = $scope.operation_types.concat(operation_types);
-              make_categories();
-              $scope.current_operation_type = response.data.operation_types[0];
-              $scope.current_category = $scope.current_operation_type.category;
-=======
->>>>>>> master
               $scope.import_notification(response.data);
 
             } else {
@@ -450,17 +427,10 @@
     $scope.copy = function(operation_type) {
 
       $http.get("/operation_types/" + operation_type.id + "/copy/").then(function(response) {
-<<<<<<< HEAD
-        if ( !response.data.error ) {
-          $scope.current_operation_type = response.data.operation_type;
-          $scope.operation_types.push($scope.current_operation_type);
-          make_categories();
-          $scope.current_category = $scope.current_operation_type.category;
-=======
+
         if ( !response.data.error ) { 
           alert("Copy successful. Developer page will reload.")
           $scope.reload();
->>>>>>> master
         } else {
           alert ( response.data.error );
         }
