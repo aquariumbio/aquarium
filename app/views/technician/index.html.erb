@@ -93,8 +93,8 @@
 
 <% content_for :action1 do %>
   <md-button ng-if="job.started"
-             ng-click="state.index = state.index - 1"
-             ng-disabled="state.index == 0">&#8678;
+             ng-click="job.state.index = job.state.index - 1"
+             ng-disabled="job.state.index == 0">&#8678;
   </md-button>
 <% end %>
 
@@ -102,15 +102,17 @@
   <span class="ok" 
         ng-if="job.started">
     <md-button class='md-raised md-primary'
-               ng-disabled="job.state.index != job.backtrace.length-1 || job.is_complete"
-               ng-click="ok()">OK</md-button>
+               ng-disabled="job.state.index != job.backtrace.length-1 || job.is_complete || job.sending"
+               ng-click="ok()">
+      {{job.sending ? 'Waiting' : 'OK'}}
+    </md-button>
   </span>
 <% end %>
 
 <% content_for :action3 do %>
   <md-button ng-if="job.started"
-             ng-click="state.index = state.index + 1"
-             ng-disabled="state.index >= job.steps.length-1">&#8680;
+             ng-click="job.state.index = job.state.index + 1"
+             ng-disabled="job.state.index >= job.backtrace.length-1">&#8680;
   </md-button>
 <% end %>
 
@@ -129,7 +131,8 @@
       <div ng-if="step.type == 'complete'" ng-include="'complete'"></div>  
       <div ng-if="step.type == 'error'" ng-include="'error'"></div>         
 
-      <md-button class="md-small md-raised pull-right" 
+      <md-button ng-if="step.type == 'display'"
+                 class="md-small md-raised pull-right" 
                  ng-click="job.show_debug_info = !job.show_debug_info">
                  Debug
       </md-button>

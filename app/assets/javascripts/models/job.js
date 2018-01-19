@@ -83,27 +83,30 @@ AQ.Job.record_methods.advance = function() {
 
   var job = this;
 
+  job.sending = true;
+
   return new Promise(function(resolve,reject) {
 
     AQ.http.post("/krill/next?command=next&job="+job.id,job.backtrace.last_response).then(
 
-      response => {
+      response => {        
 
         let result = response.data.result;
 
-        console.log(result);
+        job.state = response.data.state;
+        job.recompute_getter("backtrace");
+        job.state.index = job.backtrace.length - 1;
+        if ( job.backtrace[job.state.index].type == 'aborted' ) {
+          job.state.index -= 1;
+        }
 
-        // if ( result.response == "ready" || result.response == "done" ) {
-
-          job.state = response.data.state;
-          job.recompute_getter("backtrace");
-          job.state.index = job.backtrace.length - 1;
-
-        // }
+        job.sending = false;
 
         resolve();
 
       }, response => {
+
+        job.sending = false;        
 
         reject(respose.data);
 

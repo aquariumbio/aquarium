@@ -92,8 +92,6 @@ class Step {
     // Backend returns [ { opid: __, key: __, value: __, type: __}, ...]
     // Frontend wants { key1: { opid1: { ... }, opid2: { ... } }, key2: { ... } }
 
-    console.log(this.response)
-
     let step = this,
         frontend_table_inputs = {},
         backend_table_inputs;

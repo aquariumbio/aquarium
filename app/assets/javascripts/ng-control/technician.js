@@ -123,9 +123,7 @@
 
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {
-                console.log(xhr.responseText); 
                 var upload = AQ.Upload.record(JSON.parse(xhr.responseText));
-                console.log(upload)
                 $scope.job.uploads.push(upload)
                 file.status = "complete";
                 $scope.$apply();
@@ -153,7 +151,6 @@
 
     $scope.ok = function() {
       $scope.job.advance().then(() => {
-        console.log("ok done")
         $scope.$apply();
 
       })
