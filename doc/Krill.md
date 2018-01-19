@@ -243,8 +243,6 @@ show {
 
 shows a table with the 0,3 entry has special styling (any css code can go in the style hash) and the 1,0 entry is checkable, meaning the user can click on it and change its background color. This latter function is useful if you are presenting a number of things for the user to do, and want to have them check them off as they do them.
 
-See the [Tables](md-viewer?doc=Tables) documentation for more information, including how to use the **Table** class to make tables more algorithmically. 
-
 See the [Operations](md-viewer?doc=Operations) documentation for more information about how to construct tables automatically based on the inputs and outputs to a protocol's operation.
 
 Items, Objects and Samples

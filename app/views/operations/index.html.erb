@@ -41,7 +41,7 @@
                 ng-class="$parent.status_selector(operation_type,status)"
                 ng-click="$parent.select(operation_type,status)"
                 ng-if="current.show_completed || ( status != 'error' && status != 'done' )">
-                {{numbers[operation_type.id][status]}}
+                {{numbers[operation_type.id][status] ? numbers[operation_type.id][status] : 0}}
             </td>
           </tr>
         </table>

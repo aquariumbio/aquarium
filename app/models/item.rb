@@ -1,8 +1,11 @@
+# Class that represents a physical object in the lab
+
 class Item < ActiveRecord::Base
 
   include DataAssociator
 
   # associations #######################################################
+
 
   belongs_to :object_type
   belongs_to :sample
@@ -14,6 +17,7 @@ class Item < ActiveRecord::Base
 
   # accessors ###########################################################
 
+
   attr_accessible :quantity, :inuse, :sample_id, :data, :object_type_id,
                   :created_at, :collection_id, :locator_id, :location,
                   :sample_attributes, :object_type_attributes
@@ -21,6 +25,7 @@ class Item < ActiveRecord::Base
   accepts_nested_attributes_for :sample, :object_type
 
   # validations #########################################################
+
 
   validates :quantity, :presence => true
   validate :quantity_nonneg
@@ -40,10 +45,14 @@ class Item < ActiveRecord::Base
 
   # location methods ###############################################################
 
+
   def primitive_location
     self[:location]
   end
 
+  # Returns the location of the Item
+  # 
+  # @return [String] the location as a string
   def location
     if self.locator
       self.locator.to_s
@@ -54,6 +63,7 @@ class Item < ActiveRecord::Base
     end
   end
 
+  # @param x [String] the location string
   def location= x
     move_to x
     write_attribute(:location,x) # just for consistency
@@ -63,6 +73,9 @@ class Item < ActiveRecord::Base
     write_attribute(:location,locstr) 
   end
 
+  # Sets item location to empty slot based on location {Wizard}. By default sets to "Bench"
+  # 
+  # @return [Item] self
   def store
     wiz = Wizard.find_by_name(object_type.prefix)
     if wiz
@@ -73,6 +86,10 @@ class Item < ActiveRecord::Base
     end
   end
 
+  # Sets item location to provided string or to string's associated location {Wizard} if it exists
+  # 
+  # @param locstr [String] the location string
+  # @return [Item] self
   def move_to locstr 
 
     if object_type
@@ -167,16 +184,14 @@ class Item < ActiveRecord::Base
 
   end
 
-  def move locstr # for backwards compatability
+  # (see #move_to)
+  # 
+  # @note for backwards compatability
+  def move locstr
     move_to locstr
   end
 
   def self.make params, opts={} 
-
-    # Make a new item with the specified object type and sample information.
-    # This method creates a new locator if the object_type is associated with a
-    # location wizard.
-
     o = { object_type: nil, sample: nil, location: nil }.merge opts
 
     if o[:object_type]
@@ -233,6 +248,9 @@ class Item < ActiveRecord::Base
 
   end
  
+  # Delete the Item (sets item's location to "deleted")
+  # 
+  # @return [Bool] Item deleted?
   def mark_as_deleted 
 
     write_attribute(:location,'deleted')
@@ -252,11 +270,15 @@ class Item < ActiveRecord::Base
 
   end
 
+  # Returns whether the Item is deleted
+  # 
+  # @return [Bool] Item deleted?
   def deleted?
     primitive_location == 'deleted'
   end
 
   # other methods ############################################################################
+
 
   def set_data d
     self.data = d.to_json
@@ -267,6 +289,7 @@ class Item < ActiveRecord::Base
     JSON.parse self.data, symbolize_names: true
   end
 
+  # @deprecated Use {DataAssociator} methods instead of datum
   def datum
     begin
       JSON.parse self.data, symbolize_names: true
@@ -275,6 +298,7 @@ class Item < ActiveRecord::Base
     end
   end
 
+  # (see #datum)
   def datum= d
     self.data = d.to_json
   end

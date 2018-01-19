@@ -83,7 +83,7 @@ class JsonController < ApplicationController
 
     record.save
 
-    if params[:model][:model] == "DataAssociation" && record.parent_class = "Plan"
+    if params[:model][:model] == "DataAssociation" && record.parent_class == "Plan"
       Operation.step(Plan.find(record.parent_id)
                          .operations
                          .reject { |op| ['done', 'error', 'scheduled', 'running'].member?(op.status) })

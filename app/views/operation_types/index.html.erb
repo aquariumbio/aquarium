@@ -122,7 +122,6 @@
       <div ng-include="'code'" ng-init="component_name='protocol'"      ng-if="current_operation_type.protocol && mode == 'protocol'" ></div>
       <div ng-include="'code'" ng-init="component_name='precondition'"  ng-if="current_operation_type.precondition && mode == 'precondition'"></div>
       <div ng-include="'code'" ng-init="component_name='cost_model'"    ng-if="current_operation_type.cost_model && mode == 'cost'"></div>
-
       <div ng-include="'code'" ng-init="component_name='documentation'" ng-if="current_operation_type.documentation && mode == 'documentation'"></div>
 
       <div ng-if="current_operation_type.documentation && mode == 'documentation_view'" ng-controller="codeCtrl as code" layout-padding>

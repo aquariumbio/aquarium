@@ -1,0 +1,45 @@
+--output-dir ./doc/api
+--no-private
+--quiet
+
+--title "Aquarium Documentation"
+
+--exclude app/models/account.rb
+--exclude app/models/account_log.rb
+--exclude app/models/announcement.rb
+--exclude app/models/blob.rb
+--exclude app/models/budget.rb
+--exclude app/models/cart_item.rb
+--exclude app/models/code.rb
+--exclude app/models/group.rb
+--exclude app/models/invoice.rb
+--exclude app/models/library.rb
+--exclude app/models/log.rb
+--exclude app/models/membership.rb
+--exclude app/models/metacol.rb
+--exclude app/models/post.rb
+--exclude app/models/post_association.rb
+--exclude app/models/protocol_summary.rb
+--exclude app/models/sample_tree.rb
+--exclude app/models/task.rb
+--exclude app/models/task_notification.rb
+--exclude app/models/task_prototype.rb
+--exclude app/models/timing.rb
+--exclude app/helpers/application_helper.rb
+--exclude app/helpers/code_helper.rb
+--exclude app/helpers/field_typer.rb
+--exclude app/helpers/field_valuer.rb
+--exclude app/helpers/has_timing.rb
+--exclude app/helpers/sample_validator.rb
+--exclude app/helpers/sessions_helper.rb
+--exclude lib/krill/client.rb
+--exclude lib/krill/server.rb
+--exclude lib/krill/task_validator.rb
+--exclude lib/krill/manager.rb
+--exclude lib/krill/utils.rb
+
+app/helpers/*.rb
+app/krill/*.rb
+app/models/*.rb
+lib/krill/*.rb
+db/schema.rb

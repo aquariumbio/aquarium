@@ -2,7 +2,7 @@
 
   var w = angular.module('aquarium'); 
 
-  w.controller('codeCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
+  w.controller('codeCtrl', [ '$scope', '$http', '$attrs', '$cookies',
                   function (  $scope,   $http,   $attrs,   $cookies ) {
 
     $scope.editor = null;
@@ -16,9 +16,7 @@
     };
 
     $scope.save = function(code_object,component_name) {
-
       var controller;
-
       if ( code_object.model.model === "OperationType" ) {
         controller = "operation_types";
       } else if ( code_object.model.model === "Library" ) {

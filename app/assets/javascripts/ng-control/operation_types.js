@@ -4,7 +4,6 @@
 
   w.controller('operationTypesCtrl', [ '$scope', '$http', '$attrs', 'aqCookieManager', '$sce', '$mdDialog',
                             function (  $scope,   $http,   $attrs,   aqCookieManager,   $sce, $mdDialog ) {
-
     AQ.init($http);
     AQ.update = () => { $scope.$apply(); };
     AQ.confirm = (msg) => { return confirm(msg); };
@@ -31,15 +30,20 @@
       }
     });
 
+    function isType(operation_type, type) {
+      "use strict";
+      return operation_type && operation_type.model && operation_type.model.model === type;
+    }
+
     $scope.operation_type_changed = function() {
       "use strict";
       return $scope.current_operation_type
         && ($scope.current_operation_type.changed
-          || ($scope.current_operation_type.model.model === 'OperationType'
+          || (isType($scope.current_operation_type, 'OperationType')
             && ($scope.current_operation_type.protocol.changed
               || $scope.current_operation_type.precondition.changed
               || $scope.current_operation_type.documentation.changed))
-          || ($scope.current_operation_type.model.model === 'Library'
+          || (isType($scope.current_operation_type.model.model, 'Library')
             && $scope.current_operation_type.source.changed)
         );
     };
@@ -59,6 +63,26 @@
 
     }
 
+<<<<<<< HEAD
+=======
+    function getCurrentOperationType(aqCookieManager, $scope) {
+      let current_operation_type_id = aqCookieManager.get_object("DeveloperCurrentOperationTypeId");
+      if (current_operation_type_id) {
+          let operation_types = aq.where($scope.operation_types, operation_type => operation_type.id === current_operation_type_id);
+          if (operation_types.length === 1) {
+              return operation_types[0];
+          }
+          else {
+              return $scope.operation_types[0];
+          }
+      }
+      else {
+          return $scope.operation_types[0];
+      }
+  }
+
+
+>>>>>>> master
     AQ.OperationType.all({methods: ["field_types", "timing"]}).then(operation_types => {
 
       $scope.operation_types = operation_types;
@@ -74,17 +98,7 @@
           operation_type.timing.make_form();
       });
 
-      let current_operation_type_id = aqCookieManager.get_object("DeveloperCurrentOperationTypeId");
-      if ( current_operation_type_id ) {
-          let operation_types = aq.where($scope.operation_types,operation_type => operation_type.id === current_operation_type_id );
-          if  ( operation_types.length === 1 ) {
-              $scope.current_operation_type = operation_types[0];
-          } else {
-              $scope.current_operation_type = $scope.operation_types[0];
-          }
-      } else {
-          $scope.current_operation_type = $scope.operation_types[0];
-      }
+      $scope.current_operation_type = getCurrentOperationType(aqCookieManager, $scope);
 
       AQ.Library.all().then(libraries => {
         $scope.libraries = libraries;
@@ -317,6 +331,7 @@
 
             if ( response.data.operation_types.length > 0 ) {
 
+<<<<<<< HEAD
               let operation_types = aq.collect(response.data.operation_types, raw_operation_type => {
                 let operation_type = AQ.OperationType.record(raw_operation_type);
                 operation_type.upgrade_field_types();
@@ -333,6 +348,8 @@
               make_categories();
               $scope.current_operation_type = response.data.operation_types[0];
               $scope.current_category = $scope.current_operation_type.category;
+=======
+>>>>>>> master
               $scope.import_notification(response.data);
 
             } else {
@@ -369,8 +386,8 @@
         changed: true,
         field_types:[],
         protocol: AQ.Code.record({ name: 'protocol', content: $scope.default_protocol }),
-        cost_model: AQ.Code.record({ name: 'cost_model', content: 'def cost(op)\n  { labor: 0, materials: 0 }\nend' }),
-        precondition: AQ.Code.record({ name: 'precondition', content: 'def precondition(op)\n  true\nend'}),
+        cost_model: AQ.Code.record({ name: 'cost_model', content: 'def cost(_op)\n  { labor: 0, materials: 0 }\nend' }),
+        precondition: AQ.Code.record({ name: 'precondition', content: 'def precondition(_op)\n  true\nend'}),
         documentation: AQ.Code.record({ name: 'documentation', content: "Documentation here. Start with a paragraph, not a heading or title, as in most views, the title will be supplied by the view."})
       });
       $scope.operation_types.push(new_operation_type);
@@ -433,11 +450,17 @@
     $scope.copy = function(operation_type) {
 
       $http.get("/operation_types/" + operation_type.id + "/copy/").then(function(response) {
+<<<<<<< HEAD
         if ( !response.data.error ) {
           $scope.current_operation_type = response.data.operation_type;
           $scope.operation_types.push($scope.current_operation_type);
           make_categories();
           $scope.current_category = $scope.current_operation_type.category;
+=======
+        if ( !response.data.error ) { 
+          alert("Copy successful. Developer page will reload.")
+          $scope.reload();
+>>>>>>> master
         } else {
           alert ( response.data.error );
         }
@@ -465,6 +488,10 @@
 
     $scope.unchange = function(thing) {
       thing['changed'] = false;
+    }
+
+    $scope.reload = function() {
+      window.location = "/operation_types"
     }
 
   }]);

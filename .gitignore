@@ -16,6 +16,7 @@ Gemfile.lock
 # don't include the yardoc generated api directory
 /doc/api 
 
+
 # Ignore the actual database config file
 /config/database.yml
 
@@ -53,6 +54,7 @@ awc.sh
 /lib/krill/workflow/doc/
 /public/doc/md/
 /public/doc/images/
+/public/doc/autodocs/
 /public/doc/operation-api/
 
 ots.json

@@ -38,6 +38,8 @@
           content: operation_type.protocol.content
         }).then(function(response) {
           
+          operation_type.recompute_getter("protocol");
+
           if ( !operation_type.precondition.no_edit ) {
             $http.post("/operation_types/code", {
               id: operation_type.id,
@@ -65,7 +67,7 @@
           aq.each(operation_type.field_types, ft => ft.recompute_getter('predecessors'));
           if ( response.data.error ) {
             operation_type.test_error = response.data.error.replace(/\(eval\):/g, "Line ");
-            console.log(test_error);
+            console.log(operation_type.test_error);
           } else {
             operation_type.test_results = response.data;
             operation_type.test_results.job.backtrace = JSON.parse(operation_type.test_results.job.state);
