@@ -81,14 +81,19 @@
 <% content_for :keydown do %>keyDown($event)<% end %>
 
 <% content_for :specific_title do %>
-  <span ng-if="job.backtrace && job.is_complete"
-        class="specific-title-complete">[COMPLETED] </span>
   <span ng-if="job.started">
-    {{job.operations[0].operation_type.name}}: Step {{job.state.index + 1}}
+    <span class="step-number">
+      <span ng-if="job.backtrace[job.state.index].type == 'display'">{{job.state.index + 1}}</span>
+      <span ng-if="job.backtrace[job.state.index].type == 'complete'">✓</span>
+      <span ng-if="job.backtrace[job.state.index].type == 'error'">!</span>
+    </span> 
+    <span class="step-title">{{job.operations[0].operation_type.name}}</span>
   </span>
   <span ng-if="!job.started">
     JOB NOT STARTED
   </span>
+  <span ng-if="job.backtrace && job.is_complete"
+        class="specific-title-complete">[COMPLETED] </span>  
 <% end %>
 
 <% content_for :action1 do %>

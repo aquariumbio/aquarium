@@ -54,7 +54,8 @@
       if ( cell == null ) {
         c += " td-null-cell";
       } else if ( cell.class ) {
-        c += cell.class;
+        c += " " + cell.class;
+        console.log(cell.class)
       }
       if ( cell && cell.check && ( cell.checked || !step.response.in_progress ) ) {
         c += " td-checked";

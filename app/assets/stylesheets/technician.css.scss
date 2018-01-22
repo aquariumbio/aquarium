@@ -37,12 +37,30 @@ $bottom-margin: 12px;
     margin-left: 0;
   }   
 
+  .step-number {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: white;
+    font-weight: bold;
+    background: orange;
+    width: 90px;
+    height: 64px;
+    margin-right: 10px;
+    font-size: 28pt;
+    text-align: center;
+    padding-top: 10px;
+  }
+
+  .step-title {
+    margin-left: 90px;
+  }
+
   .step-container {
 
     opacity: 1;
     margin: 10px 30px 0px 30px;
     
-
     .content {
       /*font-size: 18px;*/
     }
