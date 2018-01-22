@@ -102,7 +102,10 @@
   <span class="ok" 
         ng-if="job.started">
     <md-button class='md-raised md-primary'
-               ng-disabled="job.state.index != job.backtrace.length-1 || job.is_complete || job.sending"
+               ng-disabled="job.state.index != job.backtrace.length-1 || 
+                            job.is_complete || 
+                            job.sending || 
+                            !job.backtrace.ready"
                ng-click="ok()">
       {{job.sending ? 'Waiting' : 'OK'}}
     </md-button>

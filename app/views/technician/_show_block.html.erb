@@ -6,6 +6,35 @@
   <p ng-bind-html="content_value(line)" class='md-subhead'></p>
 </script>
 
+<script type="text/ng-template" id="bullet">
+  <span class='bullet md-subhead'>
+    <span class="bullet-circle">&#9679;</span>
+    <span ng-bind-html="content_value(line)"></span>
+  </span>
+</script>
+
+<script type="text/ng-template" id="warning">
+  <p ng-bind-html="content_value(line)" class='md-subhead technician-warning'></p>
+</script>
+
+<script type="text/ng-template" id="check">
+  <div class="checkbox-container">
+    <md-checkbox aria-label="Checkbox" 
+                 ng-checked="!step.response.in_progress"
+                 ng-disabled="!step.response.in_progress"
+                 ng-model="line.checked">
+      <span class="md-subhead" 
+            ng-bind-html="content_value(line)"></span>
+    </md-checkbox>
+  </div>
+</script>
+
+<script type="text/ng-template" id="item">
+  <div class='md-subhead content content-item'>
+    Item {{content_value(line).id}} at {{content_value(line).location}}
+  </div>
+</script>
+
 <script type="text/ng-template" id="select">
   <div class='input-box' layout='row'>
     <div flex>
@@ -36,21 +65,6 @@
     </md-input-container>
   </div>
 
-</script>
-
-<script type="text/ng-template" id="bullet">
-  <span class='md-subhead'>&#9675; <span ng-bind-html="content_value(line)"></span></span>
-</script>
-
-<script type="text/ng-template" id="warning">
-  <p ng-bind-html="content_value(line)" class='md-subhead technician-warning'></p>
-</script>
-
-<script type="text/ng-template" id="check">
-    <md-checkbox aria-label="Checkbox" ng-checked="step.response" ng-disabled="step.response">
-      <span class="md-subhead" 
-            ng-bind-html="content_value(line)"></span>
-    </md-checkbox>
 </script>
 
 <script type="text/ng-template" id="timer">
@@ -110,7 +124,7 @@
 </script>
 
 <script type="text/ng-template" id="separator">
-  <md-divider></md-divider>
+  <md-divider class="separator"></md-divider>
 </script>
 
 <script type="text/ng-template" id="take">
@@ -119,17 +133,13 @@
   </div>
 </script>
 
-<script type="text/ng-template" id="item">
-  <div class='md-subhead content content-item'>
-    Item {{content_value(line).id}} at {{content_value(line).location}}
-  </div>
-</script>
-
 <script type="text/ng-template" id="table">
     <table>
       <tr ng-repeat="row in content_value(line)">
         <td ng-repeat="cell in row track by $index"
-            ng-class="table_class(cell)">
+            ng-class="table_class(cell,step)"
+            ng-click="check(cell)"
+            ng-style="cell.style">
           <span ng-if="cell.type">
             <ng-md-icon icon="create" size="16" aria-label="Input" style="fill: #444" class="input-icon"></ng-md-icon>
           </span>
@@ -140,7 +150,13 @@
                  class="krill-table-input"
                  ng-disabled="!step.response.in_progress">
           <span ng-if="!cell.type && cell.content == undefined">{{cell}}</span>
-          <span ng-if="!cell.type && cell.content != undefined">{{cell.content}}</span>
+          <span ng-if="!cell.type && cell.content != undefined && ( !cell.check || !step.response.in_progress )">
+            {{cell.content}}
+          </span>
+          <span ng-if="!cell.type && cell.content != undefined && cell.check && step.response.in_progress"
+                class="no-highlight">
+            {{cell.content}}
+          </span>          
         </td>
       </tr>
     </table>

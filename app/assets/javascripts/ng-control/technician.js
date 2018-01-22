@@ -43,15 +43,24 @@
       }
     };
 
-    $scope.table_class = function(cell) {
-      var c = "";
+    $scope.check = function(cell) {
+      if ( cell.check ) {
+        cell.checked = !cell.checked;
+      }
+    }
+
+    $scope.table_class = function(cell,step) {
+      var c = "no-highlight";
       if ( cell == null ) {
         c += " td-null-cell";
       } else if ( cell.class ) {
         c += cell.class;
       }
-      if ( cell && cell.check ) {
-        c += " td-check"
+      if ( cell && cell.check && ( cell.checked || !step.response.in_progress ) ) {
+        c += " td-checked";
+      }
+      if ( cell && cell.check && !cell.checked && step.response.in_progress ) {
+        c += " td-notchecked";
       }
       if ( cell && cell.type ) {
         c += " td-input"

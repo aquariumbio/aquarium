@@ -18,6 +18,26 @@ class Step {
 
   }
 
+  get ready() {
+    let step = this;
+    for ( var j=0; j<step.display.content.length; j++ ) {
+      let line = step.display.content[j];
+      if ( line && line.check && !line.checked ) {
+        return false;
+      }
+      if ( line && line.table ) {
+        for ( var x=0; x<line.table.length; x++ ) {
+          for ( var y=0; y<line.table[x].length; y++ ) {
+            if ( line.table[x][y].check && !line.table[x][y].checked ) {
+              return false;
+            }
+          }
+        }
+      }
+    }  
+    return true;
+  }
+
   get title() {
     switch(this.type) {
       case "display":
@@ -182,6 +202,10 @@ class Backtrace extends Array {
   get last() {
     let backtrace = this;
     return backtrace[backtrace.length-1];
+  }
+
+  get ready() {
+    return this.last.ready;
   }
 
   get last_response() {

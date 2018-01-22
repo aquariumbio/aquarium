@@ -41,9 +41,10 @@ $bottom-margin: 12px;
 
     opacity: 1;
     margin: 10px 30px 0px 30px;
+    
 
     .content {
-      // font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      /*font-size: 18px;*/
     }
 
     .title {
@@ -52,10 +53,13 @@ $bottom-margin: 12px;
     }
 
     .technician-warning {
-      color: orange;
+      color: black;
+      background: yellow;
       font-weight: bold;
-      // background: orange;
       display: inline-block;
+      border: 1pt solid #aaa;
+      border-radius: 5px;
+      padding: 5px 10px 5px 10px;
     }
 
     .technician-error {
@@ -91,17 +95,33 @@ $bottom-margin: 12px;
       margin-top: 0px;
     }
 
-    .checkbox {
-      margin-left: 5px;
+    .checkbox-container {
+      display: inline-block;
+      margin-top: 2px;   
+      .md-container {
+        top: 14px;
+      }   
     }   
+
+    .bullet {
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .bullet-circle {
+      font-size: 20px;
+    }
+
+    .separator {
+      margin: 14px 0 14px 0;
+    }
 
     table {
 
       border: 1pt solid #aaa;
       font-size: 12pt;
       line-height: 12pt;
-      margin-bottom: 15px;
-      // margin-left: 15px;
+      margin: 15px;
 
       td {
         border: 1pt solid #aaa;
@@ -125,9 +145,19 @@ $bottom-margin: 12px;
 
     }
 
-    .td-check {
-      background: lightblue;
+    .td-checked, .td-notchecked {
+      cursor: pointer;
     }
+
+    .td-notchecked {
+      outline: none;
+      border-color: #9ecaed;
+      box-shadow: 0 0 10px #9ecaed;
+    }
+
+    .td-checked {
+      background: lightblue;
+    }    
 
     .td-input {
 
