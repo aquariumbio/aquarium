@@ -10,6 +10,7 @@
     AQ.confirm = (msg) => { return confirm(msg); }
 
     let job_id = parseInt(aq.url_path()[2]);
+    $scope.job_id = job_id;
 
     $scope.uploads = {}; // Change this to get data from the server about all uploads associated with teh job so far
 
@@ -20,7 +21,10 @@
     AQ.Job.find(job_id).then(job => {
       $scope.job = job;
       $scope.$apply();
-    })  
+    }).catch(job => {
+      $scope.not_found = true;
+      $scope.$apply();
+    })
 
     $scope.content_type = function(line) {
       var type = Object.keys(line)[0];
@@ -172,8 +176,7 @@
 
     $scope.ok = function() {
       $scope.job.advance().then(() => {
-        $scope.$apply();
-
+        $scope.job.recompute_getter("operations")
       })
     }
 
@@ -186,7 +189,6 @@
         if ( items.length > 0 ) {
           $scope.item = items[0];
           $scope.item.modal = true;
-          console.log($scope.item)
           $scope.$apply();
         } else {
           alert("Item " + id + " not found.")

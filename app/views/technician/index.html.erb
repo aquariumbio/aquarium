@@ -3,6 +3,7 @@
 <%= render partial: "/items/template" %>
 <%= render partial: "/data_associations/list" %>
 <%= render partial: '/data_associations/template' %> 
+<%= render partial: '/operations/operation_list_short' %> 
 
 <% provide(:title, "Job #{@job_id}") %>
 
@@ -32,13 +33,18 @@
       </md-content>
     </md-tab>
 
-    <md-tab label="plans">
+    <md-tab label="Operations">
       <md-content layout-padding>
+        <oplist-short operationtype="job.operations[0].operation_type"
+                operations="job.operations"
+                status="running"
+                short="true">
+        </oplist>        
       </md-content>
     </md-tab>
 
     <md-tab label="uploads">
-      <md-content layout-padding>
+      <md-content layout-padding ng-if="!not_found">
 
       <br/>
    
@@ -84,19 +90,24 @@
 <% content_for :keydown do %>keyDown($event)<% end %>
 
 <% content_for :specific_title do %>
-  <span ng-if="job.started">
-    <span class="step-number">
-      <span ng-if="job.backtrace[job.state.index].type == 'display'">{{job.state.index + 1}}</span>
-      <span ng-if="job.backtrace[job.state.index].type == 'complete'">✓</span>
-      <span ng-if="job.backtrace[job.state.index].type == 'error'">!</span>
-    </span> 
-    <span class="step-title">{{job.operations[0].operation_type.name}}</span>
+  <span ng-if="!not_found">
+    <span ng-if="job.started">
+      <span class="step-number">
+        <span ng-if="job.backtrace[job.state.index].type == 'display'">{{job.state.index + 1}}</span>
+        <span ng-if="job.backtrace[job.state.index].type == 'complete'">✓</span>
+        <span ng-if="job.backtrace[job.state.index].type == 'error'">!</span>
+      </span> 
+      <span class="step-title">{{job.operations[0].operation_type.name}}</span>
+    </span>
+    <span ng-if="!job.started">
+      JOB {{job_id}} NOT STARTED
+    </span>
+    <span ng-if="job.backtrace && job.is_complete"
+          class="specific-title-complete">[COMPLETED] </span>  
   </span>
-  <span ng-if="!job.started">
-    JOB NOT STARTED
+  <span ng-if="not_found" class="not-found">
+    JOB {{job_id}} NOT FOUND
   </span>
-  <span ng-if="job.backtrace && job.is_complete"
-        class="specific-title-complete">[COMPLETED] </span>  
 <% end %>
 
 <% content_for :action1 do %>

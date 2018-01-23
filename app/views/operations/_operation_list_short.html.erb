@@ -1,0 +1,61 @@
+<script type="text/ng-template" id="operation-list-short">
+
+  <div class='oplist'>
+
+    <table class='table table-condensed op-table'
+           ng-show="operations.length > 0">
+
+      <tr>
+        <th>Id</th>
+        <th>Plan</th>
+        <th style="width: 25%">User</th>
+        <th style="width: 50%">I/O</th>
+      </tr>
+
+      <tr ng-repeat="op in operations"
+          ng-if="!jobid || op.last_job.id == jobid">
+
+        <td>{{op.id}}</td>
+
+        <td>
+          <a ng-repeat="plan in op.plans" href="/launcher?plan_id={{plan.id}}" target="plan {{plan.id}}">{{plan.id}}{{$last ? '' : ', '}}</a>
+          <span ng-if="op.plans.length == 0">n/a</span>
+        </td>
+
+        <td>{{op.user.login}}</td>
+
+        <td>
+          <ul style="margin-left: 0">
+            <li ng-repeat="fv in op.alt_field_values | filter: { role: 'output' } track by $index">
+              <span ng-if="$first"><b>out:</b></span>
+              <span ng-if="!$first">&nbsp;</span>
+              {{fv.name}}
+              <span ng-if="fv.child_item_id">
+                  <a href="#" ng-click="open_item_ui(fv.child_item_id)">{{fv.child_item_id}}</a>
+                  <span ng-if="fv.row != null">[{{fv.row}},{{fv.column}}]</span>
+              </span>                
+            </li>
+            <li ng-repeat="fv in op.alt_field_values | filter: { role: 'input' } track by $index">
+              <span ng-if="$first"><b>in:</b></span>
+              <span ng-if="!$first">&nbsp;</span>
+              {{fv.name}}
+              <span ng-if="fv.child_item_id">
+                  <a href="#" ng-click="open_item_ui(fv.child_item_id)">{{fv.child_item_id}}</a>
+                  <span ng-if="fv.row != null">[{{fv.row}},{{fv.column}}]</span> 
+              </span>
+              <span ng-if="fv.value">{{fv.value}}</span>
+            </li>
+          </ul>
+        </td>
+
+      </tr>
+
+    </table>
+
+    <h1 ng-if="operations.length == 0" class='md-title'>No operations</h1>
+
+    <h1 ng-if="!operations" class='md-title'>Checking for operations...</h1>
+
+  </div>
+
+</script>

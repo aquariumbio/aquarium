@@ -3,6 +3,10 @@ $bottom-margin: 12px;
 
 .technician {
 
+  .op-table {
+    font-size: 9pt;
+  }
+
   .animate-show-hide.ng-hide {
     opacity: 0;
   }
@@ -35,7 +39,12 @@ $bottom-margin: 12px;
 
   .upload-list {
     margin-left: 0;
-  }   
+  }
+
+  .not-found {
+    color: orange;
+    font-weight: bold;
+  }
 
   .step-number {
     position: absolute;
