@@ -44,7 +44,16 @@
       } else {
         return line[k];
       }
-    };
+    }
+
+    $scope.sce = function(data) {
+
+      if ( typeof data== "string" ) {
+        return $sce.trustAsHtml(data);
+      } else {
+        return $sce.trustAsHtml(JSON.stringify(data));;
+      }
+    }
 
     $scope.check = function(cell) {
       if ( cell.check ) {

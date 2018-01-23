@@ -151,13 +151,13 @@
                  data-opid="{{cell.operation.id}}" 
                  class="krill-table-input"
                  ng-disabled="!step.response.in_progress">
-          <span ng-if="!cell.type && cell.content == undefined">{{cell}}</span>
+          <span ng-if="!cell.type && cell.content == undefined"><span ng-bind-html="sce(cell)"></span></span>
           <span ng-if="!cell.type && cell.content != undefined && ( !cell.check || !step.response.in_progress )">
-            {{cell.content}}
+            <span ng-bind-html="sce(cell.content)"></span>
           </span>
           <span ng-if="!cell.type && cell.content != undefined && cell.check && step.response.in_progress"
                 class="no-highlight">
-            {{cell.content}}
+            <span ng-bind-html="sce(cell.content)"></span>
           </span>          
         </td>
       </tr>
