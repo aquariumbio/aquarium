@@ -143,6 +143,8 @@ AQ.Record.prototype.new_data_association = function() {
     this.data_associations.push(da);
   }
 
+  console.log(this.data_associations)  
+
   return da;
 
 }

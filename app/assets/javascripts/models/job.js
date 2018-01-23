@@ -9,7 +9,6 @@ AQ.Job.record_methods.upgrade = function() {
       job.state.index -= 1;
     }
   } catch(e) {
-    console.log("failed",e)
   }
 
   return this;

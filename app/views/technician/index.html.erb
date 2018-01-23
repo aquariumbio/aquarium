@@ -1,5 +1,8 @@
 <%= render partial: 'show_block' %>
 <%= render partial: 'uploads/upload_viewer' %>
+<%= render partial: "/items/template" %>
+<%= render partial: "/data_associations/list" %>
+<%= render partial: '/data_associations/template' %> 
 
 <% provide(:title, "Job #{@job_id}") %>
 
@@ -153,4 +156,12 @@
     </script>
   </div>
 
+  <div item="item" sample="item.sample" container="item.object_type" nolink='true'></div>
+
 <% end %>
+
+<script>
+function open_item_ui(id) {
+  angular.element($('#technicianCtrl')).scope().open_item_ui(id);
+} 
+</script>

@@ -31,7 +31,8 @@
 
 <script type="text/ng-template" id="item">
   <div class='md-subhead content content-item'>
-    Item {{content_value(line).id}} at {{content_value(line).location}}
+    Item <a href='#' onclick='open_item_ui({{content_value(line).id}})'>#{self.id}</a>
+    at {{content_value(line).location}}
   </div>
 </script>
 
@@ -129,7 +130,8 @@
 
 <script type="text/ng-template" id="take">
   <div class='md-subhead content content-take'>
-    Item {{content_value(line).id}} at {{content_value(line).location}}
+    Retrieve/Return Item <a href='#' ng-click='open_item_ui(content_value(line).id)'>{{content_value(line).id}}</a>
+    at {{content_value(line).location}}
   </div>
 </script>
 

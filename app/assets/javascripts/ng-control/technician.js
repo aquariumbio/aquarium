@@ -15,6 +15,8 @@
 
     $scope.selects = [];
 
+    $scope.item = null;
+
     AQ.Job.find(job_id).then(job => {
       $scope.job = job;
       $scope.$apply();
@@ -37,7 +39,8 @@
     $scope.content_value = function(line) {
       var k = Object.keys(line)[0];
       if ( typeof line[k] === "string" ) {
-        return $sce.trustAsHtml(line[k]);
+        let html = $sce.trustAsHtml(line[k]);
+        return html;
       } else {
         return line[k];
       }
@@ -55,7 +58,6 @@
         c += " td-null-cell";
       } else if ( cell.class ) {
         c += " " + cell.class;
-        console.log(cell.class)
       }
       if ( cell && cell.check && ( cell.checked || !step.response.in_progress ) ) {
         c += " td-checked";
@@ -170,6 +172,18 @@
       return loc.replace("(eval)", "Protocol")
     }
 
+    $scope.open_item_ui = function(id) {
+      AQ.Item.where({id: id}, { include: ["object_type", "sample"]}).then(items => {
+        if ( items.length > 0 ) {
+          $scope.item = items[0];
+          $scope.item.modal = true;
+          console.log($scope.item)
+          $scope.$apply();
+        } else {
+          alert("Item " + id + " not found.")
+        }
+      });
+    }
 
   }]);
 

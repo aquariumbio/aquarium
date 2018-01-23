@@ -1,6 +1,23 @@
 AQ.Item.getter(AQ.ObjectType,"object_type");
 AQ.Item.getter(AQ.Sample,"sample");
 
+AQ.Item.record_methods.upgrade = function() {
+
+  let item = this;
+
+  if ( item.sample ) {
+    item.sample = AQ.Sample.record(item.sample);
+  }
+  if ( item.object_type ) {
+    item.object_type = AQ.ObjectType.record(item.object_type);
+  }
+
+  item.new_location = item.location;
+
+  item.recompute_getter("data_associations")
+
+}
+
 AQ.Item.record_getters.url = function() {
   delete this.url;
   return this.url = "<a href='/items/" + this.id + "'>" + this.id + "</a>";

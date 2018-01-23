@@ -95,7 +95,8 @@
         <div class="aq2-navigation <%= yield :class %>"
              layout='row'
              <% if content_for?(:keydown) %>ng-keydown="<%= yield :keydown %>"<% end %>
-             ng-controller="<%= yield :controller %>">
+             ng-controller="<%= yield :controller %>"
+             id="<%= yield :controller %>">
       <% else %>
         <div layout='row' class="<%= yield :class %>">
       <% end %>
