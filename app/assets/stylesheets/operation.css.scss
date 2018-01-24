@@ -3,20 +3,21 @@
 
   .category-container {
     padding-top: 15px;
-    padding-right: 5px;
+    padding-right: 8px;
     /*border-right: 1px solid #eee;*/
     /*border-bottom: 2px solid #eee;*/
-    width: 25%;
+    width: 30%;
   }
 
   .selected-category, .unselected-category {
     cursor: pointer;
     font-size: 9pt;
     overflow: hidden;
-    border: 1pt solid #eee;
+    border: 1pt solid #ddd;
     border-radius: 5px;
     margin: 0 0 5px 0;
-    padding: 2px;
+    padding: 4px;
+    color: #777;
   }
 
  .unselected-category {   
@@ -28,6 +29,16 @@
 
   .selected-category {
     background: lightblue;
+  }  
+
+  .active-category {
+    font-weight: bold;
+    color: black;
+  }
+
+  .alt-category {
+    font-weight: bold;
+    color: black;
   }  
 
   .op-type-none {
@@ -94,13 +105,13 @@
   }
 
   .switch-user-container {
-    width: 75%;    
+    width: 70%;    
   }
 
   .status-table {
 
     font-size: 9pt;
-    width: 75%;
+    width: 70%;
 
     .operation-name {
       width: 66%;

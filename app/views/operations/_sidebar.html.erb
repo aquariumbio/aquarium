@@ -4,9 +4,7 @@
 
       <div ng-repeat="cat in categories track by $index"
           ng-click="current.category_index = $index; current.switch_user = false"
-          ng-class="current.category_index == $index ? 
-                               'no-highlight selected-category' : 
-                               'no-highlight unselected-category'">
+          ng-class="category_class($index)">
           {{cat}}
       </div>
 
@@ -16,8 +14,8 @@
 
         <div ng-click="current.category_index = -1; current.switch_user = true"
              ng-class="current.switch_user ? 
-                                 'no-highlight selected-category' : 
-                                 'no-highlight unselected-category'">
+                                 'no-highlight selected-category alt-category' : 
+                                 'no-highlight unselected-category alt-category'">
             Switch User
         </div>
 

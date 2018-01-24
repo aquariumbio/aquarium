@@ -37,7 +37,8 @@
             show_completed: false,
             filter_user: false,
             selected_user: null,
-            switch_user: false
+            switch_user: false,
+            active: {}
           }
         }
 
@@ -85,6 +86,7 @@
               $scope.categories = aq.uniq(aq.collect(operation_types, operation_type => operation_type.category)).sort();
               $scope.current_user = user;
               $scope.numbers = numbers;
+              highlight_categories(numbers);
               $scope.$apply();
               init2();
 
@@ -121,6 +123,19 @@
           selected_user: $scope.current.selected_user,
           filter_user: $scope.current.filter_user
         });
+      }
+
+      function highlight_categories(numbers) {
+        $scope.current.active = {};
+        for ( var n in numbers ) {
+          aq.each($scope.operation_types, operation_type => {
+            if ( operation_type.id == n ) {
+              if ( numbers[n].pending > 0 || numbers[n].scheduled > 0 || numbers[n].running > 0 ) {
+                $scope.current.active[operation_type.category] = true;
+              }
+            }
+          })
+        }
       }
 
       $scope.select = function (operation_type, status, selected_ops, append = false) {
@@ -209,6 +224,7 @@
 
         get_numbers().then(numbers => {
           $scope.numbers = numbers;
+          highlight_categories(numbers);
           if ($scope.current.operation_type
             && $scope.numbers[$scope.current.operation_type.id]
             && old_val !== $scope.numbers[$scope.current.operation_type.id][$scope.current.status]) {
@@ -314,6 +330,24 @@
             delete $scope.current.stepping;
           });
         }
+      }
+
+      $scope.category_class = function(index) {
+
+        let c = "no-highlight";
+
+        if ( $scope.current.category_index == index ) {
+          c += ' selected-category';
+        } else {
+          c += ' unselected-category';
+        }
+
+        if ( $scope.current.active[$scope.categories[index]] ) {          
+          c += " active-category";
+        }
+
+        return c;
+
       }
 
     }]);
