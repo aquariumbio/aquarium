@@ -25,10 +25,16 @@
                ng-class="$index == job.state.index ? 
                          'no-highlight step-index-selected' : 
                          'no-highlight step-index'"
-               ng-click="job.state.index = $index"
-               ng-if="step.type != 'aborted'">
+               ng-click="job.state.index = $index">
             {{$index+1}}. {{step.title}}
          </div>
+
+         <br><br>
+         <md-divider></md-divider>
+
+         <md-button ng-if="job.status == 'running'"
+                    class="md-warn" 
+                    ng-click="cancel()">Cancel</md-button>
 
       </md-content>
     </md-tab>
@@ -96,14 +102,18 @@
         <span ng-if="job.backtrace[job.state.index].type == 'display'">{{job.state.index + 1}}</span>
         <span ng-if="job.backtrace[job.state.index].type == 'complete'">✓</span>
         <span ng-if="job.backtrace[job.state.index].type == 'error'">!</span>
+        <span ng-if="job.backtrace[job.state.index].type == 'aborted'">!</span>
       </span> 
       <span class="step-title">{{job.operations[0].operation_type.name}}</span>
     </span>
     <span ng-if="!job.started">
       JOB {{job_id}} NOT STARTED
     </span>
+    <span ng-if="zombie" class="not-found">
+      &nbsp;[ZOMBIE]
+    </span>
     <span ng-if="job.backtrace && job.is_complete"
-          class="specific-title-complete">[COMPLETED] </span>  
+          class="specific-title-complete">&nbsp;[COMPLETED] </span>  
   </span>
   <span ng-if="not_found" class="not-found">
     JOB {{job_id}} NOT FOUND
@@ -151,7 +161,8 @@
            track by $index></div> 
 
       <div ng-if="step.type == 'complete'" ng-include="'complete'"></div>  
-      <div ng-if="step.type == 'error'" ng-include="'error'"></div>         
+      <div ng-if="step.type == 'error'" ng-include="'error'"></div>   
+      <div ng-if="step.type == 'aborted'" ng-include="'aborted'"></div>              
 
       <md-button ng-if="step.type == 'display'"
                  class="md-small md-raised pull-right" 

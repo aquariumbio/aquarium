@@ -198,10 +198,11 @@
   <div class='content'>
     <h2 class="md-display-2 title">Runtime Error</h2>
     <p class='md-subhead technician-error'>{{step.display.message}}</p>
-    <ul>
-      <li ng-repeat="location in step.display.backtrace">
-        {{pretty(location)}}
-      </li>
-    </ul>
+  </div>
+</script>
+
+<script type="text/ng-template" id="aborted">
+  <div class='content'>
+    <h2 class="md-display-2 title">This job was canceled</h2>
   </div>
 </script>

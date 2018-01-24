@@ -48,8 +48,10 @@ class Step {
         }
         break;
       case "error":
-      case "aborted":
         return "Runtime Error";
+        break;      
+      case "aborted":
+        return "Job Canceled";
         break;
       case "complete": 
         return "Complete";

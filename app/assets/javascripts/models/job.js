@@ -5,9 +5,9 @@ AQ.Job.record_methods.upgrade = function() {
   try {
     job.state = JSON.parse(job.state);
     job.state.index = job.backtrace.length - 1;
-    if ( job.state.index > 0 && job.backtrace[job.state.index].type == 'aborted' ) {
-      job.state.index -= 1;
-    }
+    // if ( job.state.index > 0 && job.backtrace[job.state.index].type == 'aborted' ) {
+    //   job.state.index -= 1;
+    // }
   } catch(e) {
   }
 
@@ -110,6 +110,32 @@ AQ.Job.record_methods.advance = function() {
         reject(respose.data);
 
       });
+
+  });
+
+}
+
+AQ.Job.record_methods.abort = function() {
+
+  let job = this;
+
+  return new Promise(function(resolve,reject) {
+
+    AQ.http.get("/krill/abort?job="+job.id).then(response => {
+      resolve(response.data.result);
+    });
+
+  });  
+
+}
+
+AQ.Job.active_jobs = function() {
+
+  return new Promise(function(resolve,reject) {
+
+    AQ.http.get("/krill/jobs").then(response => {
+      resolve(response.data.jobs);
+    });
 
   });
 

@@ -10,17 +10,25 @@
     AQ.confirm = (msg) => { return confirm(msg); }
 
     let job_id = parseInt(aq.url_path()[2]);
+
     $scope.job_id = job_id;
-
-    $scope.uploads = {}; // Change this to get data from the server about all uploads associated with teh job so far
-
+    $scope.uploads = {}; 
     $scope.selects = [];
-
     $scope.item = null;
 
+
     AQ.Job.find(job_id).then(job => {
+
       $scope.job = job;
-      $scope.$apply();
+
+      AQ.Job.active_jobs().then(job_ids => {
+        console.log("Active Jobs", job_ids);
+        if ( job_ids.indexOf($scope.job_id) == -1 && !job.backtrace.complete ) {
+          $scope.zombie = true;
+        }
+        $scope.$apply();
+      })      
+
     }).catch(job => {
       $scope.not_found = true;
       $scope.$apply();
@@ -194,6 +202,18 @@
           alert("Item " + id + " not found.")
         }
       });
+    }
+
+    $scope.cancel = function() {
+      if ( confirm("Are you sure you want to cancel this job?") ) {
+        $scope.job.abort().then(response => {
+          AQ.Job.find($scope.job_id).then(job => {            
+            $scope.job = job;  
+            $scope.zombie = false;
+            $scope.$apply();
+          })
+        })
+      }
     }
 
   }]);
