@@ -7,95 +7,15 @@
 
 <%= content_for :controller do %>operationsCtrl as planner<% end %>
 
-<% content_for :wider_sidebar do %>
+<% content_for :much_wider_sidebar do %>
   true
 <% end %>
 
 <%= content_for :sidebar do %>
 
-  <div layout='column' layout-fill style="height: calc(100vh - 50px) !important">
-
-    <md-tabs flex  md-selected="current.category_index">
-
-      <md-tab label="{{cat}}" ng-repeat="cat in categories" layout-fill>
-
-        <table class='table table-condensed status-table'>
-          <tr>
-            <th class='operation-name'>
-              <md-switch ng-model="current.show_completed" aria-label="Show completed" style="padding-left: 16px; padding-top: 16px">
-                Completed
-              </md-switch>
-            </th>
-            <th ng-repeat="status in [ 'Waiting', 'Delayed', 'Pending', 'Deferred', 'Scheduled', 'Running', 'Error', 'Done' ]"
-                class='rotate'
-                ng-if="current.show_completed || ( status != 'Error' && status != 'Done' )">
-              <div><span>{{status}}</span></div>
-            </th>
-          </tr>
-          <tr ng-repeat="operation_type in operation_types | filter: { category: cat }: true" ng-click="choose(operation_type)">
-            <td class="operation-name">
-              <span ng-class="timing_bullet(operation_type)">&#9679;</span>
-              {{operation_type.name}}
-            </td>
-            <td ng-repeat="status in [ 'waiting', 'delayed', 'pending', 'deferred', 'scheduled', 'running', 'error', 'done' ]"
-                ng-class="$parent.status_selector(operation_type,status)"
-                ng-click="$parent.select(operation_type,status)"
-                ng-if="current.show_completed || ( status != 'error' && status != 'done' )">
-                {{numbers[operation_type.id][status] ? numbers[operation_type.id][status] : 0}}
-            </td>
-          </tr>
-        </table>
-
-      </md-tab>
-
-    </md-tabs>
-
-    <div>
-
-      <% if current_user && current_user.is_admin %>
-
-        <hr>
-
-        <div ng-if="users && users.length > 0" layout="column">
-
-          <div layout="row">
-
-            <div flex="60">
-              <md-switch ng-model="current.filter_user" 
-                         aria-label="Filter User"
-                         style="margin: 8px 0 0 32px">
-                Filter by User 
-              </md-switch>    
-            </div>
-
-            <div flex="40">
-              <md-button class='md-raised' ng-disabled="applying_user_filter" ng-click="select_user()">Apply</md-button>
-            </div>
-
-          </div>
-
-          <md-input-container layout-margin layout="column">
-            <md-select ng-model="current.selected_user" 
-                       class="md-plain-select">
-              <md-option ng-repeat="user in users" 
-                         ng-value="user"
-                         ng-selected="user.id == current.selected_user.id">
-                {{user.login}} ( {{user.name}} )
-              </md-option>
-            </md-select>
-          </md-input-container>
-
-        </div>
-
-        <div ng-if="!users || users.length == 0">
-          <p>Loading user list.</p>
-        </div>
-
-      <% end %>  
-
-     </div>
-
-   </div>
+  <div layout='column' layout-fill>
+    <%= render partial: 'sidebar' %> 
+  </div>
 
 <% end %>
 

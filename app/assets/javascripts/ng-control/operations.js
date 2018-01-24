@@ -36,7 +36,8 @@
             category_index: 0,
             show_completed: false,
             filter_user: false,
-            selected_user: null
+            selected_user: null,
+            switch_user: false
           }
         }
 

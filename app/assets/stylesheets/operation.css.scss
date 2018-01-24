@@ -1,6 +1,35 @@
 
 .operations {
 
+  .category-container {
+    padding-top: 15px;
+    padding-right: 5px;
+    /*border-right: 1px solid #eee;*/
+    /*border-bottom: 2px solid #eee;*/
+    width: 25%;
+  }
+
+  .selected-category, .unselected-category {
+    cursor: pointer;
+    font-size: 9pt;
+    overflow: hidden;
+    border: 1pt solid #eee;
+    border-radius: 5px;
+    margin: 0 0 5px 0;
+    padding: 2px;
+  }
+
+ .unselected-category {   
+    background: #eee; 
+    &:hover {
+      background: #ccc;
+    };
+  }
+
+  .selected-category {
+    background: lightblue;
+  }  
+
   .op-type-none {
     color: #ccc;
   }  
@@ -64,7 +93,14 @@
     margin: 0;
   }
 
+  .switch-user-container {
+    width: 75%;    
+  }
+
   .status-table {
+
+    font-size: 9pt;
+    width: 75%;
 
     .operation-name {
       width: 66%;
