@@ -38,6 +38,7 @@
             filter_user: false,
             selected_user: null,
             switch_user: false,
+            active_jobs: false,
             active: {}
           }
         }
@@ -94,6 +95,18 @@
           });
         });
       });
+
+      function get_running_jobs() {
+        AQ.Job.where("pc >= 0", { include: [ { operations: { include: "operation_type" } }, "user" ] }).then(jobs => {
+          AQ.http.get("/krill/jobs").then(response => {
+            $scope.running_jobs = jobs.reverse();
+            $scope.krill_job_ids = response.data.jobs;
+            $scope.$apply();
+          });
+        });
+      }
+
+      get_running_jobs();
 
       $scope.status_selector = function (operation_type, status) {
         var selector = "";
@@ -232,6 +245,8 @@
           }
           $scope.$apply();
         });
+
+        get_running_jobs();        
 
       }
 

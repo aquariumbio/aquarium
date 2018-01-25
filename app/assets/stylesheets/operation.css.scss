@@ -2,7 +2,7 @@
 .operations {
 
   .category-container {
-    padding-top: 15px;
+    padding-top: 4px;
     padding-right: 8px;
     /*border-right: 1px solid #eee;*/
     /*border-bottom: 2px solid #eee;*/
@@ -14,10 +14,10 @@
     font-size: 9pt;
     overflow: hidden;
     border: 1pt solid #ddd;
-    border-radius: 5px;
+    /*border-radius: 5px;*/
     margin: 0 0 5px 0;
     padding: 4px;
-    color: #777;
+    color: #999;
   }
 
  .unselected-category {   
@@ -106,6 +106,18 @@
 
   .switch-user-container {
     width: 70%;    
+  }
+
+  .active-jobs-table {
+    font-size: 9pt;
+    width: 70%;    
+    .type {
+      width: 20%;;
+    }
+    .zombie {
+      font-size: 7pt;
+      color: orange;
+    }
   }
 
   .status-table {

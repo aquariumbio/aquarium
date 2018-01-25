@@ -14,6 +14,16 @@ AQ.Job.record_methods.upgrade = function() {
   return this;
 }
 
+AQ.Job.record_getters.type = function() {
+  let job = this;
+  if ( job.operations && job.operations.length > 0 ) {
+    if ( job.operations[0].operation_type ) {
+      return job.operations[0].operation_type.name;
+    }
+  }
+  return "Unknown";
+}
+
 AQ.Job.record_getters.url = function() {
   delete this.url;
   return this.url = "<a href='/jobs/" + this.id + "'>" + this.id + "</a>";
