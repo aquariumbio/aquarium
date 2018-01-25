@@ -50,11 +50,23 @@
       $scope.running = !$scope.running;
     }
 
-    $scope.init = function(spec) {
+    $scope.stop = function() {
+      stop_beeping();
+      beep_cleared = true;
+      $scope.running = false;      
+    }
 
+    $scope.set = function(spec) {
       $scope.hours = spec.initial.hours;
       $scope.minutes = spec.initial.minutes;
       $scope.seconds = spec.initial.seconds;
+    }
+
+    $scope.init = function(spec) {
+
+      $scope.hours = 0; 
+      $scope.minutes = 1;
+      $scope.seconds = 0; 
       $scope.set_target();
 
       setInterval(function () {
@@ -90,6 +102,8 @@
 
     }
 
+    $scope.init();
+
     function start_beeping() {
       if ( !beep_cleared ) {
         beep_interval_id = setInterval(function() {
@@ -105,6 +119,36 @@
       $scope.blink = false;
     }
 
+    $scope.to_s = function() {
+      return "" + $scope.hours + ":" 
+                + ($scope.minutes < 10 ? "0" : "") + $scope.minutes + ":" 
+                + ($scope.seconds < 10 ? "0" : "") + $scope.seconds;
+    }
+
   }]);
 
 })();
+
+function set_timer(timer_spec) {
+  return angular.element($('#timerCtrl')).scope().set(timer_spec);
+} 
+
+function timer_string() {
+  return angular.element($('#timerCtrl')).scope().to_s();
+} 
+
+function timer_on() {
+  return angular.element($('#timerCtrl')).scope().running;
+} 
+
+function timer_past() {
+  return angular.element($('#timerCtrl')).scope().past;
+} 
+
+function timer_blink() {
+  return angular.element($('#timerCtrl')).scope().blink;
+} 
+
+function timer_stop() {
+  return angular.element($('#timerCtrl')).scope().stop();
+} 

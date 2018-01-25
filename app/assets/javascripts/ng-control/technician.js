@@ -15,24 +15,39 @@
     $scope.uploads = {}; 
     $scope.selects = [];
     $scope.item = null;
-
+    $scope.mode = "steps";
 
     AQ.Job.find(job_id).then(job => {
 
       $scope.job = job;
 
       AQ.Job.active_jobs().then(job_ids => {
-        console.log("Active Jobs", job_ids);
         if ( job_ids.indexOf($scope.job_id) == -1 && !job.backtrace.complete ) {
           $scope.zombie = true;
         }
+        if ( job.backtrace.last.timer && !job.backtrace.complete ) {
+          show_timer(job.backtrace.last.timer);
+        }
         $scope.$apply();
-      })      
+      })
 
     }).catch(job => {
       $scope.not_found = true;
       $scope.$apply();
     })
+
+    function show_timer(timer_spec) {
+      $scope.mode = "timer";
+      set_timer(timer_spec);
+    }
+
+    $scope.timer_button_text = function() {
+      if ( timer_on() && $scope.mode != "timer" ) {
+        return timer_string();
+      } else {
+        return "Timer";
+      }
+    }
 
     $scope.content_type = function(line) {
       var type = Object.keys(line)[0];
@@ -184,6 +199,11 @@
 
     $scope.ok = function() {
       $scope.job.advance().then(() => {
+        $scope.mode = "steps";
+        timer_stop();
+        if ( $scope.job.backtrace.last.timer && !$scope.job.backtrace.complete ) {
+          show_timer($scope.job.backtrace.last.timer);
+        }        
         $scope.job.recompute_getter("operations")
       })
     }
@@ -216,21 +236,20 @@
       }
     }
 
+    $scope.mode_class = function(mode) {
+      let c = "mode-button md-squished md-raised";
+      if ( $scope.mode != "timer" && mode == "timer" && timer_past() && timer_on() && timer_blink() ) {
+        c += " md-warn";
+      } else if ( mode == $scope.mode ) {
+        c += " md-primary";
+      }
+      return c;
+    }
+
   }]);
 
 })();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function open_item_ui(id) {
+  angular.element($('#technicianCtrl')).scope().open_item_ui(id);
+} 

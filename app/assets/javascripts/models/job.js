@@ -70,6 +70,7 @@ AQ.Job.record_getters.uploads = function() {
 
   AQ.Upload.where({job_id: job.id}).then(uploads => {
     job.uploads = uploads;
+    AQ.update();
   });
 
 }

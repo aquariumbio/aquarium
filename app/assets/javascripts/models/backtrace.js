@@ -172,6 +172,15 @@ class Step {
     return this.response;
   }
 
+  get timer() {
+    for ( var i in this.display.content ) {
+      if ( this.display.content[i].timer ) {
+        return this.display.content[i].timer;
+      }
+    }
+    return undefined;
+  }
+
 }
 
 

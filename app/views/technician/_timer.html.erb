@@ -1,0 +1,24 @@
+<div ng-class="blink ? 'technician-timer technician-timer-blink' : 'technician-timer'"
+     ng-controller="timerCtrl"
+     id="timerCtrl"
+     layout=row>
+  <div layout="column" class="timer-part">
+    <span class="name">Hours</span>
+    <input ng-model="hours" ng-blur="set_target()" type=number ng-disabled="running">
+  </div>
+  <div layout="column" class="timer-part">
+    <span class="name">Minutes</span>
+    <input ng-model="minutes" ng-blur="set_target()" type=number ng-disabled="running">
+  </div>
+  <div layout="column" class="timer-part">
+    <span class="name">Seconds</span>
+    <input ng-model="seconds" ng-blur="set_target()" type=number ng-disabled="running">
+  </div>
+  <div layout="column" class="timer-part">
+    <span class="name">&nbsp;</span>
+    <div ng-click="toggle()" class='no-highlight start-stop'>
+      <ng-md-icon ng-if="!running" icon="play_arrow" size="52" aria-label="Start Timer" style="fill: #444"></ng-md-icon>
+      <ng-md-icon ng-if="running" icon="pause" size="52" aria-label="Stop Timer" style="fill: #444"></ng-md-icon>
+    </div>
+  </div>
+</div>

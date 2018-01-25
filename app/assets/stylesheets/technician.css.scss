@@ -3,6 +3,11 @@ $bottom-margin: 12px;
 
 .technician {
 
+  .mode-button {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
   .op-table {
     font-size: 9pt;
   }
@@ -35,6 +40,7 @@ $bottom-margin: 12px;
     input {
       display: none;
     }
+    padding: 0;
   }
 
   .upload-list {
