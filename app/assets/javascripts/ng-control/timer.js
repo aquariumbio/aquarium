@@ -9,6 +9,7 @@
         beep_cleared = false,
         target;
 
+    // From http://soundbible.com/free-sound-effects-1.html
     $scope.beeps = [
           { name: "Beep", sound: new Audio('/audios/beep.wav') },
           { name: "Squeak", sound: new Audio('/audios/squeak.wav') },
