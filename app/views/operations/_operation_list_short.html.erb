@@ -6,19 +6,21 @@
            ng-show="operations.length > 0">
 
       <tr>
-        <th>Id</th>
-        <th>Plan</th>
-        <th style="width: 25%">User</th>
-        <th style="width: 50%">I/O</th>
+        <th style="width: 12%">Id</th>
+        <th style="width: 12%">Plan</th>
+        <th style="width: 20%">User</th>
+        <th style="width: 46%">I/O</th>
+        <th style="width: 10%"></th>
       </tr>
 
-      <tr ng-repeat="op in operations"
-          ng-if="!jobid || op.last_job.id == jobid">
+      <tr ng-repeat="op in operations">
 
         <td>{{op.id}}</td>
 
         <td>
-          <a ng-repeat="plan in op.plans" href="/launcher?plan_id={{plan.id}}" target="plan {{plan.id}}">{{plan.id}}{{$last ? '' : ', '}}</a>
+          <a ng-repeat="plan in op.plans" 
+             href="/launcher?plan_id={{plan.id}}" 
+             target="plan {{plan.id}}">{{plan.id}}{{$last ? '' : ', '}}</a>
           <span ng-if="op.plans.length == 0">n/a</span>
         </td>
 
@@ -28,8 +30,8 @@
           <ul style="margin-left: 0">
             <li ng-repeat="fv in op.alt_field_values | filter: { role: 'output' } track by $index">
               <span ng-if="$first"><b>out:</b></span>
-              <span ng-if="!$first">&nbsp;</span>
-              {{fv.name}}
+              <!-- <span ng-if="!$first">&nbsp;</span> -->
+              {{fv.name}}:
               <span ng-if="fv.child_item_id">
                   <a href="#" ng-click="open_item_ui(fv.child_item_id)">{{fv.child_item_id}}</a>
                   <span ng-if="fv.row != null">[{{fv.row}},{{fv.column}}]</span>
@@ -37,8 +39,8 @@
             </li>
             <li ng-repeat="fv in op.alt_field_values | filter: { role: 'input' } track by $index">
               <span ng-if="$first"><b>in:</b></span>
-              <span ng-if="!$first">&nbsp;</span>
-              {{fv.name}}
+              <!-- <span ng-if="!$first">&nbsp;</span> -->
+              {{fv.name}}:
               <span ng-if="fv.child_item_id">
                   <a href="#" ng-click="open_item_ui(fv.child_item_id)">{{fv.child_item_id}}</a>
                   <span ng-if="fv.row != null">[{{fv.row}},{{fv.column}}]</span> 
@@ -47,6 +49,8 @@
             </li>
           </ul>
         </td>
+
+        <td><span><upload small='true' record='op' jobid='jobid' auto=true></upload></span></td>
 
       </tr>
 

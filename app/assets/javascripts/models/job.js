@@ -54,9 +54,15 @@ AQ.Job.record_getters.status = function() {
 AQ.Job.record_getters.operations = function() {
   let job = this;
   delete job.operations;
-  AQ.JobAssociation.where({job_id: job.id} ).then(jas => {
+  AQ.JobAssociation.where({job_id: job.id}).then(jas => {
     let ids = aq.collect(jas, ja => ja.operation_id);
-    AQ.Operation.where({id: ids}, { include: "operation_type" }).then(ops => {
+    AQ.Operation.where({id: ids}, { include: "operation_type", methods: [ "data_associations"] }).then(ops => {
+      aq.each(ops,op => {
+        op.data_associations = aq.collect(
+          op.data_associations, 
+          da => AQ.DataAssociation.record(da)
+        );
+      });
       job.operations = ops;
       AQ.update();
     })
