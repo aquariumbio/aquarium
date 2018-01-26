@@ -49,7 +49,7 @@
           {{$index+1}}. {{step.title}}
        </div>
 
-       <div ng-if="job.status == 'running'">
+       <div ng-if="job.status == 'running' && !job.backtrace.complete">
          <md-button class="md-raised md-medium md-warn" 
                     ng-click="cancel()">Cancel</md-button>
        </div>
