@@ -7,9 +7,19 @@
 
     var beep_interval_id,
         beep_cleared = false,
-        target,
-        beep = new Audio('/audios/beep.wav');
+        target;
 
+    $scope.beeps = [
+          { name: "Beep", sound: new Audio('/audios/beep.wav') },
+          { name: "Squeak", sound: new Audio('/audios/squeak.wav') },
+          { name: "Chewbacca", sound: new Audio('/audios/chewbacca.wav') },
+          { name: "Horn", sound: new Audio('/audios/horn.wav') },
+          { name: "Door Bell", sound: new Audio('/audios/doorbell.wav') },
+          { name: "Ping", sound: new Audio('/audios/ping.wav') },
+          { name: "Tone", sound: new Audio('/audios/tone.wav') }
+        ];
+
+    $scope.beep_index = 0;
     $scope.running = false;
     $scope.blink = false;
 
@@ -86,7 +96,6 @@
           } else {
 
             seconds_left = seconds_left % 86400;
-
             $scope.hours = parseInt(seconds_left / 3600);
             seconds_left = seconds_left % 3600;
             $scope.minutes = parseInt(seconds_left / 60);
@@ -106,8 +115,9 @@
 
     function start_beeping() {
       if ( !beep_cleared ) {
+        $scope.beeps[$scope.beep_index].sound.play();
         beep_interval_id = setInterval(function() {
-          beep.play();
+          $scope.beeps[$scope.beep_index].sound.play();
           $scope.blink = !$scope.blink;
           $scope.$apply();
         },1000);
