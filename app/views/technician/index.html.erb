@@ -46,7 +46,8 @@
                        'no-highlight step-index-selected' : 
                        'no-highlight step-index'"
              ng-click="job.state.index = $index">
-          {{$index+1}}. {{step.title}}
+          {{$index+1}}. 
+          <span ng-bind-html="sce(step.title)"></span>
        </div>
 
        <div ng-if="job.status == 'running' && !job.backtrace.complete">
@@ -127,6 +128,7 @@
         <span ng-if="job.backtrace[job.state.index].type == 'complete'">✓</span>
         <span ng-if="job.backtrace[job.state.index].type == 'error'">!</span>
         <span ng-if="job.backtrace[job.state.index].type == 'aborted'">!</span>
+        <span ng-if="job.backtrace.length == 0">!</span>
       </span> 
       <span class="step-title">{{job.operations[0].operation_type.name}}</span>
     </span>

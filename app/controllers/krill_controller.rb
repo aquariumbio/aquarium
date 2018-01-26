@@ -153,6 +153,10 @@ class KrillController < ApplicationController
     @backtrace = params[:backtrace]|| []
     @job = Job.find(params[:job])
 
+    respond_to do |format|
+      format.html { render layout: 'aq2-plain' }
+    end    
+
   end
 
   def state

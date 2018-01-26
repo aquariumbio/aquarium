@@ -253,10 +253,14 @@ $bottom-margin: 12px;
   .step-index,
   .step-index-selected {
     cursor: pointer;
+    a {
+      color: darkblue;
+    }
   }
 
   .step-index-selected {
     background: lightblue;
+    border-radius: 3px;
   }
 
   .ok {

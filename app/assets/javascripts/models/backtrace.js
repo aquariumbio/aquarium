@@ -216,7 +216,11 @@ class Backtrace extends Array {
   }
 
   get ready() {
-    return this.last.ready;
+    if ( this.last ) {
+      return this.last.ready;
+    } else {
+      return false;
+    }
   }
 
   get last_response() {

@@ -105,7 +105,8 @@
 
     </div>
 
-    <table ng-if="current.active_jobs" class='table table-condensed active-jobs-table'>
+    <table ng-if="current.active_jobs" 
+           class='table table-condensed active-jobs-table'>
 
       <tr>
         <th>Id</th>
@@ -120,10 +121,12 @@
         <td>{{job.type}}</td>
         <td>{{job.user.login}}</td>
         <td>{{job.created_at|date: 'M/d'}}</td>
-        <td class="zombie">{{krill_job_ids.indexOf(job.id) > 0 ? '' : 'Zombie'}}</td>
+        <td class="zombie">
+          <span ng-if="krill_job_ids.indexOf(job.id) < 0">Zombie</span>
+        </td>
       </tr>
 
-    </table>
+    </table><br>
 
 
   <% end %>

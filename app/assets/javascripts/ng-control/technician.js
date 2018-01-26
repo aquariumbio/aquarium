@@ -25,7 +25,7 @@
         if ( job_ids.indexOf($scope.job_id) == -1 && !job.backtrace.complete ) {
           $scope.zombie = true;
         }
-        if ( job.backtrace.last.timer && !job.backtrace.complete ) {
+        if ( job.backtrace.last && job.backtrace.last.timer && !job.backtrace.complete ) {
           show_timer(job.backtrace.last.timer);
         }
         $scope.$apply();
