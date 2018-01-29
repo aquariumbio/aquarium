@@ -52,7 +52,7 @@ Checking and Changing Operation Status
 Each operation **`op`** has a status, **`op.status`**. When a protocol first starts, the status should be "running". When the protocol completes, Aquarium automatically sets the status to "done". If for some reason an operation has a problem, your protocol can set the status to "error" as in
 
 ```ruby
-op.set_status "error"
+op.change_status "error"
 ```
 
 which sets the status and saves the operation. Subsequent calls to **`operations`** can be filtered by doing **`operations.running`** or **`operations.errored`**. Note that table operations **`operations.start_table...`** described below default to running operations.
@@ -60,7 +60,7 @@ which sets the status and saves the operation. Subsequent calls to **`operations
 It is common to provide the owner of the operation some information about why you are setting their operation's status to "error". You can do this with something like
 
 ```ruby
-  op.set_status "error"
+  op.change_status "error"
   op.associate :no_growth, "The overnight has no growth." 
 ```
 
