@@ -148,3 +148,11 @@ AQ.Record.prototype.new_data_association = function() {
   return da;
 
 }
+
+AQ.Record.prototype.process_upload_complete = function() {
+
+  let record = this;
+  console.log("Completed upload!", record);
+
+}
+

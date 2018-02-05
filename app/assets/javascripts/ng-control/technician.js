@@ -246,6 +246,11 @@
       return c;
     }
 
+    $scope.update_job_uploads = function() {
+      $scope.job.recompute_getter("uploads");
+      console.log("recomputed job's uploads list")
+    }
+
   }]);
 
 })();
@@ -253,3 +258,8 @@
 function open_item_ui(id) {
   angular.element($('#technicianCtrl')).scope().open_item_ui(id);
 } 
+
+function update_job_uploads() {
+  console.log("here")
+  angular.element($('#technicianCtrl')).scope().update_job_uploads();  
+}

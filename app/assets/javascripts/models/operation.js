@@ -1,5 +1,14 @@
 AQ.Operation.getter(AQ.User,"user");
 
+AQ.Operation.record_methods.upgrade = function() {
+
+  let operation = this;
+  operation.show_uploads = false;
+
+  return this;
+
+}
+
 AQ.Operation.record_getters.plans = function() {
   let op = this;
   delete op.plans;
@@ -565,4 +574,14 @@ AQ.Operation.manager_list = function(criteria,options) {
 
   });      
 
+}
+
+AQ.Operation.record_methods.process_upload_complete = function() {
+  let operation = this;
+  try {
+    console.log("trying");
+    update_job_uploads();
+  } catch(e) {
+    console.log("failed", e)
+  }
 }

@@ -54,14 +54,17 @@
             delete da.upload;
             da.upload = AQ.Upload.record(data.result);
             da.upload_id = data.result.id;
+            da.job_id = scope.jobid;
             da.url = data.result.url;
             if ( scope.auto ) {
               da.save().then(da => {
                 scope.record.uploading = false;
-                AQ.update();
+                scope.record.process_upload_complete();
+                 AQ.update();
               });
             } else {
               scope.record.uploading = false;
+              scope.record.process_upload_complete();
               AQ.update();  
             }
           }

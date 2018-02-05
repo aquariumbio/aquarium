@@ -9,7 +9,13 @@
         <th style="width: 12%">Id</th>
         <th style="width: 12%">Plan</th>
         <th style="width: 20%">User</th>
-        <th style="width: 46%">I/O</th>
+        <th style="width: 46%">
+          <a href="#" ng-click="operations.show_uploads = false"  ng-if="operations.show_uploads">I/O</a>
+          <span ng-if="!operations.show_uploads">I/O</span>
+          &nbsp;
+          <a href="#" ng-click="operations.show_uploads = true" ng-if="!operations.show_uploads">Uploads</a>
+          <span ng-if="operations.show_uploads">Uploads</span>          
+        </th>
         <th style="width: 10%"></th>
       </tr>
 
@@ -26,7 +32,7 @@
 
         <td>{{op.user.login}}</td>
 
-        <td>
+        <td ng-if="!operations.show_uploads">
           <ul style="margin-left: 0">
             <li ng-repeat="fv in op.alt_field_values | filter: { role: 'output' } track by $index">
               <span ng-if="$first"><b>out:</b></span>
@@ -50,7 +56,19 @@
           </ul>
         </td>
 
-        <td><span><upload small='true' record='op' jobid='jobid' auto=true></upload></span></td>
+        <td ng-if="operations.show_uploads">
+          <ul style="margin-left: 0">
+            <li ng-repeat="da in op.data_associations">
+              <upload-viewer record="da.upload"></upload_viewer>
+            </li>
+          </ul>          
+        </td>     
+
+        <td><span>
+          <upload small='true' record='op' jobid='jobid' auto=true 
+                  ng-click="operations.show_uploads=true">
+          </upload></span>
+        </td>
 
       </tr>
 
