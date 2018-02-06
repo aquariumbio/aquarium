@@ -2,6 +2,8 @@ namespace :technician do
 
   desc 'Submit jobs so that they can be tested with the technician interface'
 
+  # To invoke, do something like: rake technician:schedule["My Operation Type Name"]
+
   task :schedule, [:operation_type_name] => [:environment] do |t, args|
 
     # define operation
