@@ -8,3 +8,4 @@ AQ.Upload.record_methods.get_expiring_url = function() {
     });
   });
 }
+

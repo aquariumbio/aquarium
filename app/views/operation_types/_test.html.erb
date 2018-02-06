@@ -133,6 +133,10 @@
   </div>
 
   <hr />
+  <h4>Raw Job Data</h4>   
+  <pre>{{current_operation_type.test_results.job.backtrace|json}}</pre>
+
+  <hr />
   <h4>Operation Information</h4>    
 
   <div ng-show="!current_operation_type.test_results">No operations have been affected.</div>

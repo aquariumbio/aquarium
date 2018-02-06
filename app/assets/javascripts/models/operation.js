@@ -1,3 +1,35 @@
+AQ.Operation.getter(AQ.User,"user");
+
+AQ.Operation.record_methods.upgrade = function() {
+
+  let operation = this;
+  operation.show_uploads = false;
+
+  return this;
+
+}
+
+AQ.Operation.record_getters.plans = function() {
+  let op = this;
+  delete op.plans;
+  AQ.PlanAssociation.where({operation_id: op.id}, { include: "plan"}).then(pas => {
+    op.plans = aq.collect(pas, pa => AQ.Plan.record(pa.plan));
+  })
+  return [];
+}
+
+AQ.Operation.record_getters.alt_field_values = function() {
+  // Note this method should replace field_values, but can't because of some
+  // backward compatability issues in the planner.
+  let op = this;
+  delete op.alt_field_values;
+  AQ.FieldValue.where({parent_id: op.id, parent_class: "Operation"}).then(fvs => {
+    op.alt_field_values = aq.collect(fvs, fv => AQ.FieldValue.record(fv));
+    AQ.update();
+  })
+  return [];
+}
+
 AQ.Operation.record_methods.set_type = function(operation_type) {
 
   var op = this;
@@ -542,4 +574,14 @@ AQ.Operation.manager_list = function(criteria,options) {
 
   });      
 
+}
+
+AQ.Operation.record_methods.process_upload_complete = function() {
+  let operation = this;
+  try {
+    console.log("trying");
+    update_job_uploads();
+  } catch(e) {
+    console.log("failed", e)
+  }
 }

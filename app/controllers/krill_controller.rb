@@ -106,7 +106,7 @@ class KrillController < ApplicationController
     end
 
     # redirect to ui
-    redirect_to krill_ui_path(job: params[:job]) 
+    redirect_to "/technician/#{params[:job]}"
 
   end
 
@@ -152,6 +152,10 @@ class KrillController < ApplicationController
     @message = params[:message]
     @backtrace = params[:backtrace]|| []
     @job = Job.find(params[:job])
+
+    respond_to do |format|
+      format.html { render layout: 'aq2-plain' }
+    end    
 
   end
 
@@ -216,16 +220,18 @@ class KrillController < ApplicationController
       state = JSON.parse @job.state, symbolize_names: true
 
       unless state.last[:operation] == "next" || params[:command] == "check_again"
+        inputs = params[:inputs]
+        inputs[:table_inputs] = [] unless inputs[:table_inputs]
         state.push( { 
           operation: params[:command], 
-          time: Time.now, inputs: 
-          JSON.parse(params[:inputs], symbolize_names: true)
+          time: Time.now,
+          inputs: inputs # JSON.parse(params[:inputs], symbolize_names: true)
         } )
         @job.state = state.to_json
         @job.save
       end
 
-      # Tell Krill server to take continue in the protocol 
+      # Tell Krill server to continue in the protocol 
       begin
         result = ( Krill::Client.new.continue params[:job] )
       rescue Exception => e
@@ -238,20 +244,15 @@ class KrillController < ApplicationController
 
       if result[:response] == "done"
 
-        # step the job's workflow (remove once workflows are removed)
-        @job.reload.step_workflow
-
         Thread.new do # this goes in the background because it can take a 
                       # while, and the technician interface should not have
                       # to wait
           Operation.step
         end        
 
-      else
-
-        @job.reload
-
       end
+
+      @job.reload
 
     else 
 
@@ -319,15 +320,28 @@ class KrillController < ApplicationController
 
   def upload
 
-    logger.info "upload = #{params[:files][0]}"
-
     u = Upload.new
 
-    File.open(params[:files][0].tempfile) do |f|
-      u.upload = f # just assign the logo attribute to a file
-      u.name = params[:files][0].original_filename
+    File.open(params[:file].tempfile) do |f|
+      u.upload = f
+      u.name = params[:file].original_filename
       u.job_id = params[:job]
       u.save
+
+      if params[:assoc_operations] == "true"
+        Job.find(params[:job]).operations.each do |operation|
+          operation.associate :technician_upload, "File upload #{params[:file].original_filename}", u, duplicates: true
+        end
+      end
+
+      if params[:assoc_plans] == "true"
+        plan_ids = Job.find(params[:job]).operations.collect { |operation| operation.plan.id }.flatten.uniq
+        plans = Plan.find(plan_ids)
+        plans.each do |plan|
+          plan.associate :technician_upload, "File upload #{params[:file].original_filename}", u, duplicates: true
+        end
+      end
+      
     end
 
     unless u.errors.empty?
@@ -336,7 +350,7 @@ class KrillController < ApplicationController
       return
     end
 
-    render json: { upload_id: u.id, name: u.name }
+    render json: u
 
   end
 
@@ -354,4 +368,3 @@ class KrillController < ApplicationController
   end
 
 end
-

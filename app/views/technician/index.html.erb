@@ -1,0 +1,172 @@
+<%= render partial: 'show_block' %>
+<%= render partial: 'uploads/upload_viewer' %>
+<%= render partial: "/items/template" %>
+<%= render partial: "/data_associations/list" %>
+<%= render partial: '/data_associations/template' %> 
+<%= render partial: '/operations/operation_list_short' %> 
+
+<% provide(:title, "Job #{@job_id}") %>
+
+<%= content_for :controller do %>technicianCtrl<% end %>
+
+<%= content_for :class do %>technician<% end %>
+
+<% content_for :wider_sidebar do %>true<% end %>
+
+<% content_for :sidebar do %>
+
+    <div layout="row" layout-align="space-around center">
+
+      <md-button ng-class="mode_class('steps')"
+                 ng-click="mode='steps'">Steps</md-button>
+
+      <md-button ng-class="mode_class('operations')"
+                 ng-click="mode='operations'">Ops</md-button>
+
+      <md-button ng-class="mode_class('uploads')"
+                 ng-click="mode='uploads'">Uploads</md-button>
+
+      <md-button ng-class="mode_class('timer')"
+                 ng-click="mode='timer'">
+                 {{timer_button_text()}}
+      </md-button>   
+
+    </div>
+
+    <md-content ng-if="mode=='steps'" layout-padding>
+
+      <div>
+        <span class="md-title">Steps</span>
+      </div>        
+
+        <span ng-if="!job.started">No steps</span>
+
+        <div ng-repeat="step in job.backtrace track by $index"
+             ng-class="$index == job.state.index ? 
+                       'no-highlight step-index-selected' : 
+                       'no-highlight step-index'"
+             ng-click="job.state.index = $index">
+          {{$index+1}}. 
+          <span ng-bind-html="sce(step.title)"></span>
+       </div>
+
+       <div ng-if="job.status == 'running' && !job.backtrace.complete">
+         <md-button class="md-raised md-medium md-warn" 
+                    ng-click="cancel()">Cancel</md-button>
+       </div>
+
+    </md-content>
+
+    <md-content ng-if="mode=='operations'" layout-padding>
+      <div>
+        <span class="md-title">Operations</span>
+      </div>    
+      <oplist-short operationtype="job.operations[0].operation_type"
+              operations="job.operations"
+              status="running"
+              short="true"
+              jobid="job.id">
+      </oplist>
+    </md-content>
+
+    <%= render partial: "uploads" %>
+
+    <md-content layout-padding ng-show="mode=='timer'">
+      <%= render partial: 'timer' %>
+    </md-content>
+
+
+<% end %>
+
+<% content_for :no_title do %>true<% end %>
+
+<% content_for :keydown do %>keyDown($event)<% end %>
+
+<% content_for :specific_title do %>
+  <span ng-if="!not_found">
+    <span ng-if="job.started">
+      <span class="step-number">
+        <span ng-if="job.backtrace[job.state.index].type == 'display'">{{job.state.index + 1}}</span>
+        <span ng-if="job.backtrace[job.state.index].type == 'complete'">✓</span>
+        <span ng-if="job.backtrace[job.state.index].type == 'error'">!</span>
+        <span ng-if="job.backtrace[job.state.index].type == 'aborted'">!</span>
+        <span ng-if="job.backtrace.length == 0">!</span>
+      </span> 
+      <span class="step-title">{{job.operations[0].operation_type.name}}</span>
+    </span>
+    <span ng-if="!job.started">
+      JOB {{job_id}} NOT STARTED
+    </span>
+    <span ng-if="zombie" class="not-found">
+      &nbsp;[ZOMBIE]
+    </span>
+    <span ng-if="job.backtrace && job.is_complete"
+          class="specific-title-complete">&nbsp;[COMPLETED] </span>  
+  </span>
+  <span ng-if="not_found" class="not-found">
+    JOB {{job_id}} NOT FOUND
+  </span>
+<% end %>
+
+<% content_for :action1 do %>
+  <md-button ng-if="job.started"
+             ng-click="job.state.index = job.state.index - 1"
+             ng-disabled="job.state.index == 0">&#8678;
+  </md-button>
+<% end %>
+
+<% content_for :action2 do %>
+  <span class="ok" 
+        ng-if="job.started">
+    <md-button class='md-raised md-primary'
+               ng-disabled="job.state.index != job.backtrace.length-1 || 
+                            job.is_complete || 
+                            job.sending || 
+                            !job.backtrace.ready"
+               ng-click="ok()">
+      {{job.sending ? 'Waiting' : 'OK'}}
+    </md-button>
+  </span>
+<% end %>
+
+<% content_for :action3 do %>
+  <md-button ng-if="job.started"
+             ng-click="job.state.index = job.state.index + 1"
+             ng-disabled="job.state.index >= job.backtrace.length-1">&#8680;
+  </md-button>
+<% end %>
+
+<% content_for :main do %>
+
+  <div ng-if="job.started"
+       ng-repeat="step in job.backtrace track by $index"
+       ng-show="$index == job.state.index"
+       class="step-container animate-show-hide">
+
+      <div ng-if="step.type == 'display'"
+           ng-repeat="line in step.display.content" 
+           ng-include="content_type(line)" 
+           track by $index></div> 
+
+      <div ng-if="step.type == 'complete'" ng-include="'complete'"></div>  
+      <div ng-if="step.type == 'error'" ng-include="'error'"></div>   
+      <div ng-if="step.type == 'aborted'" ng-include="'aborted'"></div>              
+
+      <md-button ng-if="step.type == 'display'"
+                 class="md-small md-raised pull-right" 
+                 ng-click="job.show_debug_info = !job.show_debug_info">
+                 Debug
+      </md-button>
+
+      <div ng-if="job.show_debug_info">
+        <pre>{{step.display|json}}</pre><hr>
+        <pre>{{step.response|json}}</pre>                      
+      </div>
+
+    </script>
+  </div>
+
+  <div item="item" sample="item.sample" container="item.object_type" nolink='true'></div>
+
+<% end %>
+

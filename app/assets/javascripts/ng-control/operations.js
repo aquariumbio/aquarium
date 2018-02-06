@@ -36,7 +36,10 @@
             category_index: 0,
             show_completed: false,
             filter_user: false,
-            selected_user: null
+            selected_user: null,
+            switch_user: false,
+            active_jobs: false,
+            active: {}
           }
         }
 
@@ -84,6 +87,7 @@
               $scope.categories = aq.uniq(aq.collect(operation_types, operation_type => operation_type.category)).sort();
               $scope.current_user = user;
               $scope.numbers = numbers;
+              highlight_categories(numbers);
               $scope.$apply();
               init2();
 
@@ -91,6 +95,18 @@
           });
         });
       });
+
+      function get_running_jobs() {
+        AQ.Job.where("pc >= 0", { include: [ { operations: { include: "operation_type" } }, "user" ] }).then(jobs => {
+          AQ.http.get("/krill/jobs").then(response => {
+            $scope.running_jobs = jobs.reverse();
+            $scope.krill_job_ids = response.data.jobs;
+            $scope.$apply();
+          });
+        });
+      }
+
+      get_running_jobs();
 
       $scope.status_selector = function (operation_type, status) {
         var selector = "";
@@ -120,6 +136,19 @@
           selected_user: $scope.current.selected_user,
           filter_user: $scope.current.filter_user
         });
+      }
+
+      function highlight_categories(numbers) {
+        $scope.current.active = {};
+        for ( var n in numbers ) {
+          aq.each($scope.operation_types, operation_type => {
+            if ( operation_type.id == n ) {
+              if ( numbers[n].pending > 0 || numbers[n].scheduled > 0 || numbers[n].running > 0 ) {
+                $scope.current.active[operation_type.category] = true;
+              }
+            }
+          })
+        }
       }
 
       $scope.select = function (operation_type, status, selected_ops, append = false) {
@@ -208,6 +237,7 @@
 
         get_numbers().then(numbers => {
           $scope.numbers = numbers;
+          highlight_categories(numbers);
           if ($scope.current.operation_type
             && $scope.numbers[$scope.current.operation_type.id]
             && old_val !== $scope.numbers[$scope.current.operation_type.id][$scope.current.status]) {
@@ -215,6 +245,8 @@
           }
           $scope.$apply();
         });
+
+        get_running_jobs();        
 
       }
 
@@ -313,6 +345,24 @@
             delete $scope.current.stepping;
           });
         }
+      }
+
+      $scope.category_class = function(index) {
+
+        let c = "no-highlight";
+
+        if ( $scope.current.category_index == index ) {
+          c += ' selected-category';
+        } else {
+          c += ' unselected-category';
+        }
+
+        if ( $scope.current.active[$scope.categories[index]] ) {          
+          c += " active-category";
+        }
+
+        return c;
+
       }
 
     }]);
