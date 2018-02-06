@@ -17,6 +17,11 @@
     $scope.item = null;
     $scope.mode = "steps";
 
+    $scope.upload_config = {
+      associate_with_operations: false,
+      associate_with_plans: true
+    }
+
     AQ.Job.find(job_id).then(job => {
 
       $scope.job = job;
@@ -161,7 +166,8 @@
 
         var data = e.target.result;
         var fd = new FormData();
-        var uri = "/krill/upload";
+        var uri = "/krill/upload?assoc_operations=" + $scope.upload_config.associate_with_operations + 
+                                    "&assoc_plans=" + $scope.upload_config.associate_with_plans;
         var xhr = new XMLHttpRequest();
 
         file.status = "sending";
@@ -174,6 +180,10 @@
                 var upload = AQ.Upload.record(JSON.parse(xhr.responseText));
                 $scope.job.uploads.push(upload)
                 file.status = "complete";
+                if ( $scope.upload_config.associate_with_operations ) {
+                  console.log("updating op uploads")
+                  aq.each($scope.job.operations, operation => operation.recompute_getter("data_associations"));
+                }
                 $scope.$apply();
             }
         };
@@ -248,7 +258,6 @@
 
     $scope.update_job_uploads = function() {
       $scope.job.recompute_getter("uploads");
-      console.log("recomputed job's uploads list")
     }
 
   }]);
@@ -260,6 +269,5 @@ function open_item_ui(id) {
 } 
 
 function update_job_uploads() {
-  console.log("here")
   angular.element($('#technicianCtrl')).scope().update_job_uploads();  
 }

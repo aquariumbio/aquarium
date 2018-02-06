@@ -69,46 +69,7 @@
       </oplist>
     </md-content>
 
-    <md-content layout-padding ng-if="mode=='uploads' && !not_found">
-
-      <div ng-if="!job.uploads">
-        <span class="md-title">Finding Uploads</span>
-      </div>
-
-      <div ng-if="job.uploads.length == 0">
-        <span class="md-title">No uploads</span>
-      </div>
-
-      <div ng-if="job.uploads.length > 0">
-        <span class="md-title">Current Uploads</span>
-      </div>   
-   
-      <ul ng-if="job.uploads.length > 0"
-          class="upload-list">
-        <li ng-repeat="upload in job.uploads">
-          <upload-viewer record="upload"></upload-viewer>
-          <span class="pull-right">{{upload.upload_file_size|bytes}}</span>
-        </li>
-      </ul>   
-
-     <div class="upload-button-container">     
-
-        <form id="upload-form-generic" action="/krill/upload" method="post">
-          <input id="upload-generic" 
-                 type="file"
-                 name="files[]"
-                 custom-on-change="complete_upload"
-                 multiple></input>
-          <input type="submit">
-          <input id="authenticity_token" name="authenticity_token" type="hidden" value="<%=form_authenticity_token %>" />
-        </form>
-        <md-button
-          class="md-raised md-medium" 
-          ng-click="start_upload('generic')">Upload File(s)</md-button>      
-
-      </div>
-
-    </md-content>
+    <%= render partial: "uploads" %>
 
     <md-content layout-padding ng-show="mode=='timer'">
       <%= render partial: 'timer' %>

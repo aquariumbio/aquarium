@@ -327,6 +327,21 @@ class KrillController < ApplicationController
       u.name = params[:file].original_filename
       u.job_id = params[:job]
       u.save
+
+      if params[:assoc_operations] == "true"
+        Job.find(params[:job]).operations.each do |operation|
+          operation.associate :technician_upload, "File upload #{params[:file].original_filename}", u, duplicates: true
+        end
+      end
+
+      if params[:assoc_plans] == "true"
+        plan_ids = Job.find(params[:job]).operations.collect { |operation| operation.plan.id }.flatten.uniq
+        plans = Plan.find(plan_ids)
+        plans.each do |plan|
+          plan.associate :technician_upload, "File upload #{params[:file].original_filename}", u, duplicates: true
+        end
+      end
+      
     end
 
     unless u.errors.empty?
@@ -353,4 +368,3 @@ class KrillController < ApplicationController
   end
 
 end
-
