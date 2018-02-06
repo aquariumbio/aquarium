@@ -58,7 +58,7 @@
 
         <td ng-if="operations.show_uploads">
           <ul style="margin-left: 0">
-            <li ng-repeat="da in op.data_associations">
+            <li ng-repeat="da in op.data_associations track by $index">
               <upload-viewer record="da.upload"></upload_viewer>
             </li>
           </ul>          

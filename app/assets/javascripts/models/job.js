@@ -60,7 +60,13 @@ AQ.Job.record_getters.operations = function() {
       aq.each(ops,op => {
         op.data_associations = aq.collect(
           op.data_associations, 
-          da => AQ.DataAssociation.record(da)
+          da => { 
+            AQ.DataAssociation.record(da)
+            if ( da.upload_id ) {
+              da.upload = AQ.Upload.record(da.upload);
+            }
+            return da;
+          }
         );
       });
       job.operations = ops;

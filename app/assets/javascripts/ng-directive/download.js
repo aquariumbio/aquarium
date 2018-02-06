@@ -58,8 +58,6 @@
 
       link: function($scope,$element,$attrs) {
 
-        console.log("fetching image")
-
         $scope.model.get_expiring_url().then(url => {
 
           var img = $("<image src='" + url + "'></a>");
