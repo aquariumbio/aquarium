@@ -186,9 +186,7 @@ class Step {
 
 class Backtrace extends Array {
   
-  constructor(state) {
-
-    super();
+  init(state) {
 
     let backtrace = this;
 

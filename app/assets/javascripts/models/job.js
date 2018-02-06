@@ -91,7 +91,8 @@ AQ.Job.record_getters.backtrace = function() {
 
   var job = this;
   delete job.backtrace;
-  job.backtrace = new Backtrace(job.state);
+  job.backtrace = new Backtrace()
+  job.backtrace.init(job.state);
   return job.backtrace;
 
 }
