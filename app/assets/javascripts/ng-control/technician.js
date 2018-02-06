@@ -16,6 +16,7 @@
     $scope.selects = [];
     $scope.item = null;
     $scope.mode = "steps";
+    $scope.uploading = false;
 
     $scope.upload_config = {
       associate_with_operations: false,
@@ -25,6 +26,7 @@
     AQ.Job.find(job_id).then(job => {
 
       $scope.job = job;
+      $scope.job.recompute_getter("uploads");
 
       AQ.Job.active_jobs().then(job_ids => {
         if ( job_ids.indexOf($scope.job_id) == -1 && !job.backtrace.complete ) {
@@ -138,7 +140,8 @@
     $scope.start_upload = function(varname) {
 
       $("#upload-"+varname).click();
-      $scope.upload_varname = varname;      
+      $scope.upload_varname = varname;
+      $scope.uploading = true;
 
     }
 
@@ -181,11 +184,11 @@
                 $scope.job.uploads.push(upload)
                 file.status = "complete";
                 if ( $scope.upload_config.associate_with_operations ) {
-                  console.log("updating op uploads")
                   aq.each($scope.job.operations, operation => operation.recompute_getter("data_associations"));
                 }
                 $scope.$apply();
             }
+            $scope.uploading = false;
         };
 
         fd.append('file', file)

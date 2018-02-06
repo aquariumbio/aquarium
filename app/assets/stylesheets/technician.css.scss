@@ -52,6 +52,10 @@ $bottom-margin: 12px;
     font-weight: bold;
   }
 
+  .upload-sending {
+    animation: blinker 1s ease infinite;
+  }
+
   .step-number {
     position: absolute;
     top: 0;

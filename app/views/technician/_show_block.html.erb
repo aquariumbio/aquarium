@@ -86,7 +86,10 @@
 
     <ul>
       <li ng-repeat="file in uploads[content_value(line).var]">
-        <b>{{file.name}}</b>: {{file.status}}
+        <b>{{file.name}}</b>: <span ng-if="file.status == 'sending'">
+                                <span class="upload-sending">{{file.status}}</span>
+                              </span>
+                              <span ng-if="file.status != 'sending'">{{file.status}}</span>
       </li>
     </ul>
 
@@ -97,12 +100,16 @@
              custom-on-change="complete_upload"
              multiple></input>
       <input type="submit">
-      <input id="authenticity_token" name="authenticity_token" type="hidden" value="<%=form_authenticity_token %>" />
+      <input id="authenticity_token"
+             name="authenticity_token"
+             type="hidden"
+             value="<%=form_authenticity_token %>" />
     </form>
 
     <md-button
       class="md-raised md-primary" 
-      ng-click="start_upload(content_value(line).var)">Upload File(s)
+      ng-click="start_upload(content_value(line).var)"
+      ng-disabled="uploading">Upload File(s)
     </md-button>
 
   </div>
