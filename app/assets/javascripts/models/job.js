@@ -91,8 +91,7 @@ AQ.Job.record_getters.backtrace = function() {
 
   var job = this;
   delete job.backtrace;
-  job.backtrace = new Backtrace()
-  job.backtrace.init(job.state);
+  job.backtrace = new Backtrace(job.state);
   return job.backtrace;
 
 }
@@ -119,7 +118,7 @@ AQ.Job.record_methods.advance = function() {
         job.state = response.data.state;
         job.recompute_getter("backtrace");
         job.state.index = job.backtrace.length - 1;
-        if ( job.backtrace[job.state.index].type == 'aborted' ) {
+        if ( job.backtrace.array[job.state.index].type == 'aborted' ) {
           job.state.index -= 1;
         }
 

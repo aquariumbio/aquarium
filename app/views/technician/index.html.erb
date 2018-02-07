@@ -41,7 +41,7 @@
 
         <span ng-if="!job.started">No steps</span>
 
-        <div ng-repeat="step in job.backtrace track by $index"
+        <div ng-repeat="step in job.backtrace.array track by $index"
              ng-class="$index == job.state.index ? 
                        'no-highlight step-index-selected' : 
                        'no-highlight step-index'"
@@ -86,10 +86,10 @@
   <span ng-if="!not_found">
     <span ng-if="job.started">
       <span class="step-number">
-        <span ng-if="job.backtrace[job.state.index].type == 'display'">{{job.state.index + 1}}</span>
-        <span ng-if="job.backtrace[job.state.index].type == 'complete'">✓</span>
-        <span ng-if="job.backtrace[job.state.index].type == 'error'">!</span>
-        <span ng-if="job.backtrace[job.state.index].type == 'aborted'">!</span>
+        <span ng-if="job.backtrace.array[job.state.index].type == 'display'">{{job.state.index + 1}}</span>
+        <span ng-if="job.backtrace.array[job.state.index].type == 'complete'">✓</span>
+        <span ng-if="job.backtrace.array[job.state.index].type == 'error'">!</span>
+        <span ng-if="job.backtrace.array[job.state.index].type == 'aborted'">!</span>
         <span ng-if="job.backtrace.length == 0">!</span>
       </span> 
       <span class="step-title">{{job.operations[0].operation_type.name}}</span>
@@ -139,7 +139,7 @@
 <% content_for :main do %>
 
   <div ng-if="job.started"
-       ng-repeat="step in job.backtrace track by $index"
+       ng-repeat="step in job.backtrace.array track by $index"
        ng-show="$index == job.state.index"
        class="step-container animate-show-hide">
 

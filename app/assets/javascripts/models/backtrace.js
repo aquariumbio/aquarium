@@ -184,15 +184,17 @@ class Step {
 }
 
 
-class Backtrace extends Array {
+class Backtrace { // This should extend array, but the closure compiler used in
+                  // production doesn't let you do that.
   
-  init(state) {
+  constructor(state) {
 
     let backtrace = this;
+    backtrace.array = [];
 
     for ( var i=1; i<state.length; i+=2) {
-      if ( state[i] ) {
-        backtrace.push(new Step(state[i], state[i+1]));
+      if ( state[i] ) {    
+        backtrace.array.push(new Step(state[i], state[i+1]));
       }
     }
 
@@ -202,15 +204,19 @@ class Backtrace extends Array {
 
    let backtrace = this;
 
-   return backtrace.length > 0 &&
-          backtrace[backtrace.length-1].display &&
-          backtrace[backtrace.length-1].display.operation != 'display';
+   return backtrace.array.length > 0 &&
+          backtrace.array[backtrace.array.length-1].display &&
+          backtrace.array[backtrace.array.length-1].display.operation != 'display';
 
+  }
+
+  get length() {
+    return this.array.length;
   }
 
   get last() {
     let backtrace = this;
-    return backtrace[backtrace.length-1];
+    return backtrace.array[backtrace.array.length-1];
   }
 
   get ready() {
