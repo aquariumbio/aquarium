@@ -2,6 +2,10 @@ AQ.Job.record_methods.upgrade = function() {
 
   var job = this;
 
+  if ( ! job.state ) {
+    return []
+  }
+
   try {
     job.state = JSON.parse(job.state.replace(/Infinity/g, '"Inf"'));
     job.state.index = job.backtrace.length - 1;

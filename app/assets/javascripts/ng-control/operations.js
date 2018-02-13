@@ -101,7 +101,7 @@
           AQ.http.get("/krill/jobs").then(response => {
             $scope.running_jobs = jobs.reverse();
             $scope.krill_job_ids = response.data.jobs;
-            $scope.$apply();
+            // $scope.$apply();
           });
         });
       }
@@ -136,6 +136,7 @@
           selected_user: $scope.current.selected_user,
           filter_user: $scope.current.filter_user
         });
+        console.log(aqCookieManager.get_object("managerState"));
       }
 
       function highlight_categories(numbers) {
@@ -149,6 +150,15 @@
             }
           })
         }
+      }
+
+      $scope.toggle_show_completed = function() {
+        // This is a hack. When you click the toggle switch, the ng-click method is called first.
+        // After that, the md-switch directive changes the value of show_completed to reflect the
+        // new switch state. 
+        $scope.current.show_completed = !$scope.current.show_completed;
+        store_cookie();
+        $scope.current.show_completed = !$scope.current.show_completed;
       }
 
       $scope.select = function (operation_type, status, selected_ops, append = false) {

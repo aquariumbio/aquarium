@@ -29,6 +29,7 @@
 
   .selected-category {
     background: lightblue;
+    border: 1pt solid #aaf;    
   }  
 
   .active-category {
@@ -39,6 +40,7 @@
   .alt-category {
     font-weight: bold;
     color: black;
+    background: #efe;
   }  
 
   .op-type-none {
