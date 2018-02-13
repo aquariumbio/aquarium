@@ -159,7 +159,7 @@
       <% if current_user && current_user.is_admin %>
         <div class='pull-right'>
         <md-button ng-if="step.type == 'display'"
-                   class="md-small md-raised" 
+                   class="md-medium md-raised" 
                    ng-click="job.show_debug_info = !job.show_debug_info">
                  Debug
         </md-button>
@@ -167,7 +167,7 @@
         &nbsp;
 
         <md-button ng-if="step.type == 'display'"
-                   class="md-small md-raised"
+                   class="md-medium md-raised"
                    ng-click="step.check_all()">
                  Check All
         </md-button>
