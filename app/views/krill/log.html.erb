@@ -44,6 +44,7 @@
         kl.render($('#history-json'));
       <% else %>
         $('#history').append('<p>This job has not yet started.</p>')
+                     .append('<a class="md-button md-raised md-primary" href="/krill/start?job='+<%= @job.id %>+'">Start</a>')
       <% end %>
 
       $('#send').click(function() {

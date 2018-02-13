@@ -101,7 +101,6 @@
           AQ.http.get("/krill/jobs").then(response => {
             $scope.running_jobs = jobs.reverse();
             $scope.krill_job_ids = response.data.jobs;
-            // $scope.$apply();
           });
         });
       }
