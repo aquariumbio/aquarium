@@ -58,6 +58,26 @@ class Step {
     }
   }
 
+  check_all() {
+    let step = this;
+    for ( var j=0; j<step.display.content.length; j++ ) {
+      let line = step.display.content[j];
+      if ( line && line.check ) {
+        line.checked = true;
+      }
+      if ( line && line.table ) {
+        for ( var x=0; x<line.table.length; x++ ) {
+          for ( var y=0; y<line.table[x].length; y++ ) {
+            if ( line.table[x][y].check ) {
+              line.table[x][y].checked  = true;
+            }
+          }
+        }
+      }
+    }  
+    return true;    
+  }
+
   new_response() {
 
     let step = this;

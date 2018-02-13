@@ -155,11 +155,24 @@
       <div ng-if="step.type == 'error'" ng-include="'error'"></div>   
       <div ng-if="step.type == 'aborted'" ng-include="'aborted'"></div>              
 
-      <md-button ng-if="step.type == 'display'"
-                 class="md-small md-raised pull-right" 
-                 ng-click="job.show_debug_info = !job.show_debug_info">
+
+      <% if current_user && current_user.is_admin %>
+        <div class='pull-right'>
+        <md-button ng-if="step.type == 'display'"
+                   class="md-small md-raised" 
+                   ng-click="job.show_debug_info = !job.show_debug_info">
                  Debug
-      </md-button>
+        </md-button>
+
+        &nbsp;
+
+        <md-button ng-if="step.type == 'display'"
+                   class="md-small md-raised"
+                   ng-click="step.check_all()">
+                 Check All
+        </md-button>
+        </div>
+      <% end %>
 
       <div ng-if="job.show_debug_info">
         <pre>{{step.display|json}}</pre><hr>
