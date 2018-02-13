@@ -277,7 +277,7 @@ class KrillController < ApplicationController
     @submitter = User.find(@job.submitted_by)
     @performer = @job.user
 
-    @history = @job.state
+    @history = @job.state.gsub("Infinity", '"Inf"')
     @rval = @job.return_value
     @touches = (@job.touches.select { |t| t.item_id }).collect { |t| t.item_id }
     @tasks = ( ( @job.touches.select { |t| t.task } ).collect { |t| t.task } ).uniq { |task| task.id }
