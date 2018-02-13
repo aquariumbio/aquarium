@@ -3,12 +3,21 @@ AQ.Job.record_methods.upgrade = function() {
   var job = this;
 
   try {
-    job.state = JSON.parse(job.state);
+    job.state = JSON.parse(job.state.replace(/Infinity/g, '"Inf"'));
     job.state.index = job.backtrace.length - 1;
-    // if ( job.state.index > 0 && job.backtrace[job.state.index].type == 'aborted' ) {
-    //   job.state.index -= 1;
-    // }
   } catch(e) {
+    console.log("Could not parse job state: " + e);
+    job.state = [
+      {},
+      { 
+        operation: "error",
+        message: "Aquarium could not parse the state of this job and cannot proceed: " + e 
+      },
+      {
+        operation: "next",
+        inputs: {}
+      }
+    ];
   }
 
   return this;
