@@ -108,7 +108,7 @@
 
     <md-button
       class="md-raised md-primary" 
-      ng-click="start_upload(content_value(line).var)"
+      ng-click="upload_config.associate_with_operations = false; upload_config.associate_with_plans = false; start_upload(content_value(line).var)"
       ng-disabled="uploading">Upload File(s)
     </md-button>
 

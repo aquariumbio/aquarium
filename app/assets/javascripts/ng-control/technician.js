@@ -186,6 +186,16 @@
                 if ( $scope.upload_config.associate_with_operations ) {
                   aq.each($scope.job.operations, operation => operation.recompute_getter("data_associations"));
                 }
+                let step = $scope.job.backtrace.last;
+                if ( $scope.upload_varname != '__generic__' ) {
+                  if ( !step.response.inputs[$scope.upload_varname] ) {
+                    step.response.inputs[$scope.upload_varname] = [];
+                  }
+                  step.response.inputs[$scope.upload_varname].push({
+                    name: upload.upload_file_name,
+                    id: upload.id
+                  })
+                }
                 $scope.$apply();
             }
             $scope.uploading = false;
