@@ -342,7 +342,6 @@
 
       $scope.select_user = function () {
         store_cookie();
-        $scope.applying_user_filter = true;
         reload();
       }
 
