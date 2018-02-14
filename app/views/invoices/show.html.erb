@@ -74,7 +74,7 @@
 
 <script>
 
-  var current_task_id = -1;
+  var current_operation_id = -1;
 
   $('#save').css('display', 'none');
   function show_save() {
@@ -124,13 +124,13 @@
     }
   }
 
-  function change_budget(task_id) {    
+  function change_budget(operation_id) {    
     rows = $('.chooser:checked').filter(function() {
-      return $(this).data('task-id') == task_id && $(this).prop('checked');
+      return $(this).data('operation-id') == operation_id && $(this).prop('checked');
     });     
-    $('#change-budget-task-id').html(task_id);
+    $('#change-budget-task-id').html(operation_id);
     $("#changeBudgetDialog").modal('show');
-    current_task_id = task_id;
+    current_operation_id = operation_id;
   }  
 
   function save_status() {
@@ -194,9 +194,9 @@
     var bid = $('#change-budget-select').val();
 
     var change_data = {
-      rows: aq.collect(rows,function(row) { return { id: $(row).data('row-id'), task_id: $(row).data('task-id') } } ),
+      rows: aq.collect(rows,function(row) { return { id: $(row).data('row-id'), operation_id: $(row).data('operation-id') } } ),
       budget_id: $('#change-budget-select').val(),
-      task_id: current_task_id
+      operation_id: current_operation_id
     }
 
     $.ajax({
@@ -204,11 +204,12 @@
         url: "/invoices/change_budget/",
         data: change_data,
         success: function(data) {
-          $('#task-'+current_task_id+"-budget").html("&#xffeb; " + data.budget.name);
+          $('#task-'+current_operation_id+"-budget").html("&#xffeb; " + data.budget.name);
           aq.each(data.rows,function(row) {
             $('#row-'+row.id+"-budget").html("&#xffeb; " + data.budget.name);
           });
           $("#changeBudgetDialog").modal('hide');
+          location.reload()
         },
         dataType: 'json'
       });          
