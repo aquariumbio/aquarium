@@ -190,6 +190,9 @@
   <div class='content'>
     <h2 class="md-display-2 title">Runtime Error</h2>
     <p class='md-subhead technician-error'>{{step.display.message}}</p>
+    <ul>
+      <li ng-repeat="line in step.display.backtrace">{{fix(line)}}</li>
+    </ul>
   </div>
 </script>
 

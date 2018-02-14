@@ -257,6 +257,10 @@
       }
     }
 
+    $scope.fix = function(line) {
+      return line.replace("(eval)", "protocol")
+    }
+
     $scope.mode_class = function(mode) {
       let c = "mode-button md-squished md-raised";
       if ( $scope.mode != "timer" && mode == "timer" && timer_past() && timer_on() && timer_blink() ) {
