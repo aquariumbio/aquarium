@@ -222,12 +222,10 @@
 
     $scope.ok = function() {
       $scope.job.advance().then(() => {
-        $scope.mode = "steps";
-        timer_stop();
         if ( $scope.job.backtrace.last.timer && !$scope.job.backtrace.complete ) {
           show_timer($scope.job.backtrace.last.timer);
         }        
-        $scope.job.recompute_getter("operations")
+        $scope.job.recompute_getter("operations");
       })
     }
 
