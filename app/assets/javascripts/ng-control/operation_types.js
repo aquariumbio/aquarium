@@ -464,6 +464,18 @@
       window.location = "/operation_types"
     }
 
+    $scope.open_item_ui = function(id) {
+      AQ.Item.where({id: id}, { include: ["object_type", "sample"]}).then(items => {
+        if ( items.length > 0 ) {
+          $scope.item = items[0];
+          $scope.item.modal = true;
+          $scope.$apply();
+        } else {
+          alert("Item " + id + " not found. It may have been generated to run this test and then deleted once the test was completed.")
+        }
+      });
+    }      
+
   }]);
 
 })();

@@ -5,8 +5,13 @@
 <%= render partial: 'steps' %>     
 <%= render partial: 'code' %>  
 
+<%= render partial: '/uploads/upload_viewer' %>
+<%= render partial: "/items/template" %>
+<%= render partial: "/data_associations/list" %>
+<%= render partial: '/data_associations/template' %> 
+
 <%= content_for :class do %>operation_types<% end %>
-<%= content_for :controller do %>operationTypesCtrl as planner<% end %>    
+<%= content_for :controller do %>operationTypesCtrl<% end %>    
 <%= content_for :main_no_padding do %>true<% end %>
 
 <%= content_for :sidebar do %>

@@ -28,6 +28,15 @@
 
     };
 
+    $scope.sce = function(data) {
+
+      if ( typeof data== "string" ) {
+        return $sce.trustAsHtml(data);
+      } else {
+        return $sce.trustAsHtml(JSON.stringify(data));;
+      }
+    }
+
     $scope.save_and_test = function(operation_type) {
 
       if ( !operation_type.protocol.no_edit ) {
