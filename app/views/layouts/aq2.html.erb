@@ -31,6 +31,11 @@
       });
     });
 
+  $(function() {
+    // Set focus of keyboard events to main content, so keydown events work.
+    window.setTimeout(() => $("#content-container").focus(), 500)
+  });
+
   </script>
 
   <style>
@@ -113,7 +118,7 @@
 
       </md-sidenav>
 
-      <div class="content-container" layout="column" tabIndex="-1" flex>
+      <div class="content-container" id="content-container" layout="column" tabIndex="-1" flex>
 
           <md-toolbar class="specific-toolbar not-scrollable"
                       <% if content_for? :no_specific_padding %>style="padding-right: 0px !important" <% end %> >
