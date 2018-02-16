@@ -44,6 +44,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
     $scope.select(null);
     $scope.clear_multiselect();
+    $scope.nav.sidebar = 'design';
 
     $scope.multiselect = {
       x: evt.offsetX,
@@ -190,6 +191,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
         if ( ( io.origin && io.origin.io ) || io.destinations.length > 0 ) {
           $scope.set_current_io(io,true,role);
+          console.log("A")
           // if ( io.origin ) {
           //   $scope.current_op = io.origin.op;
           // } else if ( io.destinations.length > 0 ) {

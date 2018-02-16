@@ -9,14 +9,26 @@
     PlanMouse($scope,$http,$attrs,$cookies,$sce,$window);
     PlanClasses($scope,$http,$attrs,$cookies,$sce,$window);
     PlanWire($scope,$http,$attrs,$cookies,$sce,$window);
+
+    // Navigation /////////////////////////////////////////////////////////////////////////////////
+
+    $scope.nav = {
+      sidebar: "plans"
+    }
+
+    $scope.sidebar_button_class = function(name) {
+      let c = "sidebar-button no-highlight";
+      if ( $scope.nav.sidebar == name ) {
+        c += " sidebar-button-selected"
+      }
+      return c;
+    }
    
     // Actions ////////////////////////////////////////////////////////////////////////////////////
 
     $scope.select = function(object) {
 
       $scope.state.launch = false;
-
-      // console.log(object);
 
       $scope.current_draggable = object && ( object.record_type === "Operation" ||
                                              object.record_type === "Module" ||
@@ -31,11 +43,6 @@
 
       $scope.current_wire   = object && ( object.record_type === "Wire" ||
                                           object.record_type === "ModuleWire" ) ? object : null;
-
-      // if ( $scope.current_io && $scope.current_io.record_type == "ModuleIO" ) {
-      //   console.log($scope.plan)
-      //   console.log($scope.plan.associated_wires($scope.current_io));
-      // }
 
     };
 
@@ -67,7 +74,6 @@
       if ( focus ) { 
         setTimeout(function() { 
           var el = document.getElementById('fv-'+selected_fv_rid);
-          // console.log("selected_fv = " + selected_fv_rid);
           if ( el ) { el.focus() }
         }, 100);
       }

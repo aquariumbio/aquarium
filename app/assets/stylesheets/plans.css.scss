@@ -336,4 +336,24 @@
     color: orange;
   }
 
+  .sidebar-button {
+    margin: 3px;
+    border: 1pt solid #aaa;
+    font-size: 9pt;
+    padding-left: 10px;
+    padding-right: 10px;
+    cursor: pointer;
+    &:hover {
+      background: #eee;
+    }
+  }
+
+  .sidebar-button-selected {
+    background: blue;
+    color: white;
+    &:hover {
+      background: blue;
+    }    
+  }  
+
 }

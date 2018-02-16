@@ -36,7 +36,7 @@
 
     <rect ng-attr-width="{{op.width}}" ng-attr-height="{{op.height}}"
           ng-attr-class="{{op_class(op)}}"
-          ng-mousedown="draggableMouseDown($event, op)" 
+          ng-mousedown="draggableMouseDown($event, op); nav.sidebar = 'node'" 
           ng-mouseup="draggableMouseUp($event, op)" 
           ng-mousemove="draggableMouseMove($event, op)"/>
 
@@ -73,7 +73,7 @@
       <circle ng-attr-class="{{io_class(op,fv)}}"
               ng-if="fv.field_type.ftype == 'sample'"
               ng-attr-cx="{{op.width/2 + ($index - outputs.length/2.0 + 0.5)*snap}}" 
-              ng-mousedown="ioMouseDown($event, op, fv)" 
+              ng-mousedown="ioMouseDown($event, op, fv); nav.sidebar = 'io'" 
               cy="0" />
 
     </g>
@@ -103,7 +103,7 @@
       <circle ng-attr-class="{{io_class(op,tv.value)}}"
               ng-if="tv.value.field_type.ftype == 'sample'"
               ng-attr-cx="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap}}" 
-              ng-mousedown="ioMouseDown($event, op, tv.value)" 
+              ng-mousedown="ioMouseDown($event, op, tv.value); nav.sidebar = 'io'" 
               ng-attr-cy="{{op.height}}" 
               ng-attr-data-name="{{tv.value.name}}" />
        
@@ -111,7 +111,7 @@
       <rect ng-if="tv.value.field_type.ftype != 'sample' && !tv.array_add_button"
             ng-attr-class="{{parameter_class(op,tv.value)}}"
             ng-attr-x="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap - 5}}"
-            ng-mousedown="ioMouseDown($event, op, tv.value)" 
+            ng-mousedown="ioMouseDown($event, op, tv.value); nav.sidebar = 'io'" 
             ng-attr-y="{{op.height-5}}" width="10" height="10"
             ng-attr-data-name="{{tv.value.name}}" />
 

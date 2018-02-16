@@ -1,5 +1,3 @@
-<% provide(:title, 'Planner') %>
-
 <%= render partial: 'field_value_editor' %>
 <%= render partial: 'operation_info' %>
 <%= render partial: 'module_info' %>
@@ -15,6 +13,7 @@
 <% content_for :no_main_scroll_decision do %>true<% end %>
 
 <% content_for :specific_title do %>
+  {{plan.name}} 
   <span ng-if="plan.current_module.id !=0" 
         ng-repeat="mod_name in plan.path_to_current_module() track by $index">
     &rang; {{mod_name}}
@@ -22,65 +21,7 @@
 <% end %>
 
 <% content_for :sidebar do %>
-
-  <h1 class="md-title" ng-if="current_user.id != <%= current_user.id %>">Acting as 
-    <span style="background: yellow">{{current_user.login}}</span>
-  </h1>
-
-  <ul ng-if="plan.errors.length > 0">
-    <li ng-repeat="e in plan.errors">{{e}}</li>
-  </ul>
-
-  <div ng-if="ready" layout-fill>
-
-    <div ng-if="state.submitted_plan" class="message">
-      <p>Successfully submitted plan <a href="/launcher?plan_id={{state.submitted_plan.id}}">{{state.submitted_plan.id}}</a>.</p>
-      <div class="dismiss clickable" ng-click="state.submitted_plan = null">&times;</div>
-    </div>  
-
-    <div ng-if="state.message" class="message">
-      <p>{{state.message}}</p>
-      <div class="dismiss clickable" ng-click="state.message = null">&times;</div>
-    </div>
-
-    <div ng-if="!current_op && !current_fv && !state.launch && current_draggable.record_type != 'Module'">
-      <%= render partial: "plan_editor_tools" %>
-    </div>
-
-    <div ng-if="current_op && !current_fv" 
-         ng-include="'operation_info'">
-    </div>
-
-    <div ng-if="current_draggable.record_type == 'Module' && !current_fv" 
-         ng-include="'module_info'">
-    </div>    
-
-    <div ng-if="current_fv"
-         ng-include="'field_value_editor'">
-    </div>
-
-    <div ng-if="state.launch" 
-         ng-include="'launch_plan'">
-    </div>   
-
-    <% if current_user && current_user.is_admin %>
-
-      <hr>
-
-      <md-input-container layout-margin layout="column">
-        <md-select ng-model="state.selected_user_id" class="md-plain-select"
-                   md-on-close="select_user()">
-          <md-option ng-repeat="user in users" 
-                     ng-value="user.id">
-            {{user.login}} ( {{user.name}} )
-          </md-option>
-        </md-select>
-      </md-input-container>
-
-    <% end %>    
-
-  </div>
-
+  <%= render partial: 'sidebar' %>
 <% end %>
 
 <% content_for :no_specific_padding do %>true<% end %>
@@ -159,12 +100,12 @@
                   icon="delete" name="Trash"
                   tooltip="Delete Plan"></planner-action>
 
-  <div style="width: 1px; height: 100%; border-left: 1pt solid #eee; margin: 5px"></div>
+<!--   <div style="width: 1px; height: 100%; border-left: 1pt solid #eee; margin: 5px"></div>
 
   <planner-action ng-click="launch()"
                   is-disabled="!plan.id || !plan.valid() || state.launch" 
                   icon="launch" name="Launch"
-                  tooltip="Launch Plan"></planner-action>
+                  tooltip="Launch Plan"></planner-action> -->
 
   <div style="width: 1px; height: 100%; border-left: 1pt solid #eee; margin: 5px"></div>
 
@@ -199,11 +140,11 @@
         <div ng-if="current_draggable && current_draggable.record_type == 'Module'">
           <%= render partial: 'module_io_editor' %>
         </div>
-        <div ng-if="current_draggable && current_draggable.record_type == 'ModuleIO'">
+<!--         <div ng-if="current_draggable && current_draggable.record_type == 'ModuleIO'">
           {{current_draggable.origin.io.record_type|json}}<br>
           origin: {{current_draggable.origin.io.rid}}<br>
           destinations: <span ng-repeat="d in current_draggable.destinations">{{d.io.rid}} </span>
-        </div>
+        </div> -->
       </inner>
     </div>   
 
