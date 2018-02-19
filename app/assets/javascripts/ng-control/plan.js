@@ -9,20 +9,6 @@
     PlanMouse($scope,$http,$attrs,$cookies,$sce,$window);
     PlanClasses($scope,$http,$attrs,$cookies,$sce,$window);
     PlanWire($scope,$http,$attrs,$cookies,$sce,$window);
-
-    // Navigation /////////////////////////////////////////////////////////////////////////////////
-
-    $scope.nav = {
-      sidebar: "plans"
-    }
-
-    $scope.sidebar_button_class = function(name) {
-      let c = "sidebar-button no-highlight";
-      if ( $scope.nav.sidebar == name ) {
-        c += " sidebar-button-selected"
-      }
-      return c;
-    }
    
     // Actions ////////////////////////////////////////////////////////////////////////////////////
 
@@ -79,13 +65,6 @@
       }
 
     };
-
-    function refresh_plan_list() {
-      AQ.Plan.where({status: "planning", user_id: $scope.current_user.id}).then(plans => { 
-        $scope.state.loading_plans = false;
-        $scope.plans = plans;
-      });
-    }
 
     function inc_last_place() {
       $scope.last_place += 4*AQ.snap;
@@ -221,8 +200,9 @@
         $scope.plan = saved_plan;
         $scope.state.loading_plans = true;
         $scope.select(null);
+        $scope.nav.sidebar = "plans";
         $scope.$apply();
-        refresh_plan_list();
+        $scope.refresh_plan_list();
       });
 
     };
@@ -241,7 +221,7 @@
         open_templates();
         $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
         $scope.select(null);  
-        refresh_plan_list();
+        $scope.refresh_plan_list();
       })
 
     };
@@ -279,7 +259,7 @@
             aq.remove($scope.templates, plan);
             aq.remove($scope.system_templates, plan);
             // $scope.plan = p
-            refresh_plan_list();
+            $scope.refresh_plan_list();
             $scope.select(null);
             $scope.$apply();
           })
@@ -322,7 +302,7 @@
           $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
           $scope.select(null);
           $scope.state.deleting_plan = p;
-          p.destroy().then(() =>  refresh_plan_list());
+          p.destroy().then(() =>  $scope.refresh_plan_list());
 
         }, () => null );
 
@@ -378,6 +358,7 @@
         $scope.plan = p;
         $scope.plan.find_items();
         $scope.select(null);
+        aq.each($scope.plans, plan => plan.selected = false);
         $scope.$apply();
       }).catch(error => {
         $scope.report_error("Could not read plan '" + plan.name + "'.", error.message, error.stack)
@@ -460,7 +441,7 @@
         $scope.select(null);
         $scope.$apply();
         $scope.state.launch = false;
-        refresh_plan_list();
+        $scope.refresh_plan_list();
       }).catch(errors => {
         console.log(errors);
         $scope.state.planning = false;        
@@ -501,6 +482,43 @@
       } 
 
     };
+
+    $scope.move_to_folder = function(folder) {
+      console.log("folder", folder)
+      var plans = aq.where($scope.plans, plan => plan.selected);
+      AQ.Plan.move(plans, folder).then(() => {
+        aq.each(plans, plan => {
+          plan.folder = folder;
+          plan.selected = false;
+        });
+        if ( folder ) { 
+          $scope.folders.push(folder);
+          $scope.folders.sort();
+        } 
+        $scope.$apply();
+      })
+    }
+
+    $scope.move_to_new_folder = function() {
+      var new_folder_name = window.prompt("New Folder Name");
+      if ( new_folder_name ) {
+        $scope.move_to_folder(new_folder_name);
+      }
+    }  
+
+    $scope.delete_folder = function(name) {
+      if ( window.confirm("Are you sure you want to deleted this folder? Plans in it will be moved to 'Unsorted'.") ) {        
+        var plans = aq.where($scope.plans, plan => plan.folder == name);
+        AQ.Plan.move(plans, null).then(() => {
+          aq.each(plans, plan => {
+            plan.folder = null;
+            plan.selected = false;
+          });
+          aq.remove($scope.folders, name);
+          $scope.$apply();
+        })     
+      }
+    }
 
     // Inventory ////////////////////////////////////////////////////////////////////////////////////
 

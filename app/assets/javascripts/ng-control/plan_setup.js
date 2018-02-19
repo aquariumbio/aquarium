@@ -17,12 +17,44 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
     sidebar: { op_types: false, plans: true }
   }
 
+  // Navigation /////////////////////////////////////////////////////////////////////////////////
+
+  $scope.nav = { // TODO: consolidate with $scope.state
+    sidebar: "plans",
+    folder: { uc: true, unsorted: false }
+  }
+
+  $scope.sidebar_button_class = function(name) {
+    let c = "sidebar-button no-highlight";
+    if ( $scope.nav.sidebar == name ) {
+      c += " sidebar-button-selected"
+    }
+    return c;
+  }
+
+  // INITIALIZATION /////////////////////////////////////////////////////////////////////////////
+
+  $scope.refresh_plan_list = function() {
+
+    return AQ.Plan.where({user_id: $scope.current_user.id}).then(plans => {
+
+      $scope.plans = aq.where(plans, p => p.status != 'template');
+      $scope.templates = aq.where(plans, p => p.status == 'template');
+
+      AQ.Plan.get_folders().then(folders => {
+
+        $scope.folders = folders;
+        $scope.state.loading_plans = false;
+
+      });
+
+    });
+
+  }  
+
   function get_plans_and_templates() {
 
-    AQ.Plan.where({status: ["planning", "template"], user_id: $scope.current_user.id}).then(plans => {
-
-      $scope.plans = aq.where(plans, p => p.status == 'planning');
-      $scope.templates = aq.where(plans, p => p.status == 'template');
+    $scope.refresh_plan_list().then(() => { 
 
       AQ.Plan.where({status: "system_template"}).then(templates => {
 
@@ -34,12 +66,13 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
             AQ.Plan.load(aq.url_params().plan_id).then(p => {
               $window.history.replaceState(null, document.title, "/plans"); 
               $scope.plan = p;
+              $scope.ready = true;
               $scope.$apply();
             })
-          } 
-
-          $scope.ready = true;
-          $scope.$apply();
+          } else {
+            $scope.ready = true;
+            $scope.$apply();
+          }
 
         });  
 

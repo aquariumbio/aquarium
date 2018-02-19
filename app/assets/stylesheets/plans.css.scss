@@ -269,18 +269,9 @@
   }  
 
   .plan-name-input {
-    color: black;
-    display: inline-block;    
-    padding: 0;
-    margin: 0;
-    border: 1pt solid #eee !important;
-    height: 20px !important;
-    line-height: 20px;
-    -webkit-appearance:none;
-    -webkit-box-shadow: none !important;
-    -moz-box-shadow: none !important;
-    box-shadow: none !important;
-    background: transparent;
+    margin-top: 9px;
+    padding: 8px;
+    border-radius: 3px;
   }
 
   .planner-action {
@@ -327,7 +318,7 @@
       /*border-left: 5px solid white;*/
     }
     .active-plan {
-      background: #eee;
+      background: orange;
       /*border-color: #999;*/
     }
   }
@@ -354,6 +345,21 @@
     &:hover {
       background: blue;
     }    
-  }  
+  } 
+
+  .plan-list-element {
+    margin-right: 5px;
+    cursor: pointer; 
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */       
+  } 
+
+  .folder-delete-icon {
+    color: #333;
+    font-size: 12pt;
+    margin-top: -1px;
+  }
 
 }

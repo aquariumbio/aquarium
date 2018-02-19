@@ -44,7 +44,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
     $scope.select(null);
     $scope.clear_multiselect();
-    $scope.nav.sidebar = 'design';
+    // $scope.nav.sidebar = 'design';
 
     $scope.multiselect = {
       x: evt.offsetX,

@@ -660,7 +660,7 @@ AQ.Plan.get_folders = function(user_id=null) {
     var user_query = user_id ? "?user_id=" + user_id : "";
 
     AQ.get("/plans/folders"+user_query).then(response => {
-      resolve(response.data);
+      resolve(response.data.sort());
     }).catch(reject);
 
   });

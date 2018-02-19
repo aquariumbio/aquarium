@@ -13,7 +13,8 @@
 <% content_for :no_main_scroll_decision do %>true<% end %>
 
 <% content_for :specific_title do %>
-  {{plan.name}} 
+  <span ng-if="plan.id">{{plan.id}}: </span>
+  <input type=text class="plan-name-input" ng-model=plan.name>
   <span ng-if="plan.current_module.id !=0" 
         ng-repeat="mod_name in plan.path_to_current_module() track by $index">
     &rang; {{mod_name}}
@@ -100,13 +101,6 @@
                   icon="delete" name="Trash"
                   tooltip="Delete Plan"></planner-action>
 
-<!--   <div style="width: 1px; height: 100%; border-left: 1pt solid #eee; margin: 5px"></div>
-
-  <planner-action ng-click="launch()"
-                  is-disabled="!plan.id || !plan.valid() || state.launch" 
-                  icon="launch" name="Launch"
-                  tooltip="Launch Plan"></planner-action> -->
-
   <div style="width: 1px; height: 100%; border-left: 1pt solid #eee; margin: 5px"></div>
 
 <% end %>
@@ -140,11 +134,6 @@
         <div ng-if="current_draggable && current_draggable.record_type == 'Module'">
           <%= render partial: 'module_io_editor' %>
         </div>
-<!--         <div ng-if="current_draggable && current_draggable.record_type == 'ModuleIO'">
-          {{current_draggable.origin.io.record_type|json}}<br>
-          origin: {{current_draggable.origin.io.rid}}<br>
-          destinations: <span ng-repeat="d in current_draggable.destinations">{{d.io.rid}} </span>
-        </div> -->
       </inner>
     </div>   
 
