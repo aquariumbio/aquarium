@@ -41,10 +41,11 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
       $scope.plans = aq.where(plans, p => p.status != 'template');
       $scope.templates = aq.where(plans, p => p.status == 'template');
 
-      AQ.Plan.get_folders().then(folders => {
+      AQ.Plan.get_folders($scope.current_user.id).then(folders => {
 
         $scope.folders = folders;
         $scope.state.loading_plans = false;
+        $scope.$apply();
 
       });
 
@@ -74,7 +75,7 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
             $scope.$apply();
           }
 
-        });  
+        });
 
       });
 
