@@ -113,14 +113,22 @@ class User < ActiveRecord::Base
 
     Thread.new do
 
-      ses = AWS::SimpleEmailService.new
+      begin
 
-      ses.send_email(
-        subject: subject,
-        from: from,
-        to: to,
-        body_text: "This email is better viewed with an email handler capable of rendering HTML\n\n#{message}",
-        body_html: message)
+        ses = AWS::SimpleEmailService.new
+
+        ses.send_email(
+          subject: subject,
+          from: from,
+          to: to,
+          body_text: "This email is better viewed with an email handler capable of rendering HTML\n\n#{message}",
+          body_html: message)
+
+      rescue Exception => e
+
+        Rails.logger.error "Emailer Error: #{e}"
+
+      end
 
     end
 
