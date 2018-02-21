@@ -99,6 +99,33 @@ class User < ActiveRecord::Base
 
   end
 
+  # Send an email to the user
+  # @param subject [String] The subject of the email
+  # @param message [String] The body of the email, in html
+  def send_email subject, message
+
+    email_parameters = Parameter.where(user_id: id, key: "email")
+    raise "Email address not defined for user {id}: #{name}" if email_parameters.empty?
+    from = "aquarium@uwbiofab.org"
+    to = email_parameters[0].value
+
+    sleep 0.1 # Throttle email sending rate in case this method is called from within a loop
+
+    Thread.new do
+
+      ses = AWS::SimpleEmailService.new
+
+      ses.send_email(
+        subject: subject,
+        from: from,
+        to: to,
+        body_text: "This email is better viewed with an email handler capable of rendering HTML\n\n#{message}",
+        body_html: message)
+
+    end
+
+  end
+
   private
 
     def create_remember_token

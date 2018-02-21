@@ -405,3 +405,11 @@ class Protocol
 end
 ```
 
+Sending Email to Users
+===
+
+You can send email to users using User.send_email as in the following example.
+```ruby
+operation.user.send_email "Hello from Krill", "<p>This is a message about operation #{operation.id}.</p>" if not debug
+```
+
