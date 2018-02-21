@@ -112,4 +112,10 @@ function PlanClasses($scope,$http,$attrs,$cookies,$sce,$window) {
     return $scope.parameter_class(op,fv);
   }  
 
+  $scope.op_status_class = function(op) {
+
+    return "op-status op-status-" + op.status;
+
+  }
+
 }

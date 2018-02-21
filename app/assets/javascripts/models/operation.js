@@ -459,6 +459,20 @@ AQ.Operation.record_getters.types_and_values = function() {
 
 }
 
+AQ.Operation.record_getters.jobs = function() {
+
+  let op = this;
+  delete op.jobs;
+
+  AQ.JobAssociation.where({ operation_id: op.id }, { include: "job" }).then(jas => {
+    op.jobs = aq.collect(jas, ja => AQ.Job.record(ja.job));
+    AQ.update();
+  })
+
+  return op.jobs;
+
+}
+
 AQ.Operation.record_getters.last_job = function() {
 
   var op = this;

@@ -131,8 +131,31 @@
     cursor: pointer;
     pointer-events: none;
     user-select: none;
+    color: #555;
     -webkit-user-select: none;
     -moz-user-select: none;    
+  }
+
+  .op-status {
+    font-size: 7pt;
+    text-anchor: left;
+    cursor: pointer;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;     
+  }
+
+  .op-status-error {
+    fill: red;
+  }
+
+  .op-status-pending {
+    fill: blue;
+  }
+
+  .op-status-running {
+    fill: green;
   }
 
   .module-io-index {
@@ -347,6 +370,10 @@
     }    
   } 
 
+  .fv-pad {
+    padding: 2px;
+  }
+
   .plan-list-element {
     margin-right: 5px;
     cursor: pointer; 
@@ -360,6 +387,14 @@
     color: #333;
     font-size: 12pt;
     margin-top: -1px;
+  }
+
+  .operation-info-heading {
+    margin-top: -16px;
+    padding: 8px 8px 4px 6px;
+    margin-bottom: 6px;
+    border-bottom: 1pt solid #eee;
+    background: #eee;
   }
 
 }

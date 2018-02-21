@@ -7,6 +7,7 @@
 <%= render partial: 'launch_plan' %>  
 <%= render partial: 'field_value_form' %>
 <%= render partial: 'parameter_form' %>
+<%= render partial: 'operation_viewer' %>
 
 <% content_for :controller do %>planCtrl<% end %>
 <% content_for :class do %>plans launcher<% end %>
@@ -97,7 +98,7 @@
              tooltip="Copy (Save as New) Plan"></planner-action>                    
 
   <planner-action ng-click="delete_plan(plan)"
-                  is-disabled="!plan.id"
+                  is-disabled="!plan.id || plan.status != 'planning'"
                   icon="delete" name="Trash"
                   tooltip="Delete Plan"></planner-action>
 
@@ -128,9 +129,12 @@
 
     <div class="opeditbar operation-editor scrollable">
       <inner>
-        <div ng-if="current_op && current_draggable.record_type != 'Module'">
+        <div ng-if="current_op && current_op.status == 'planning' && current_draggable.record_type != 'Module'">
           <%= render partial: 'operation_editor' %>
         </div>
+        <div ng-if="current_op && current_op.status != 'planning' && current_draggable.record_type != 'Module'">
+          <div class="launcher" ng-include="'operation_viewer'"></div>
+        </div>        
         <div ng-if="current_draggable && current_draggable.record_type == 'Module'">
           <%= render partial: 'module_io_editor' %>
         </div>
