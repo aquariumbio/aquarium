@@ -119,7 +119,7 @@ class User < ActiveRecord::Base
 
         ses.send_email(
           subject: subject,
-          from: from,
+          from: Bioturk::Application.config.email_from_address,
           to: to,
           body_text: "This email is better viewed with an email handler capable of rendering HTML\n\n#{message}",
           body_html: message)
