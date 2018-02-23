@@ -400,7 +400,7 @@
   .text-box {
     fill: white;
     fill-opacity: 0.0;
-    stroke: #eee;
+    stroke: none;
     stroke-width: 1px; 
   }
 
@@ -439,8 +439,12 @@
       td, th {
         border: 1px solid #AAA;
         padding: 4px;
-        text-align: left;
       }
+    }
+    hr {
+      color: black;
+      background-color: black;
+      height: 1px;
     }
   }
 

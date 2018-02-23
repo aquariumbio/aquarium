@@ -4,21 +4,23 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
     aq.each($scope.plan.operations,f); 
     aq.each($scope.plan.modules,f);
     aq.each($scope.plan.current_module.input,f);    
-    aq.each($scope.plan.current_module.output,f);        
+    aq.each($scope.plan.current_module.output,f);
+    aq.each($scope.plan.current_module.text_boxes,f);      
   }  
 
   function current_draggable(f) {
     aq.each(aq.where($scope.plan.operations, op => op.parent_id == $scope.plan.current_module.id),f); 
     aq.each(aq.where($scope.plan.modules,     m =>  m.parent_id == $scope.plan.current_module.id),f);
     aq.each($scope.plan.current_module.input,f);    
-    aq.each($scope.plan.current_module.output,f);        
+    aq.each($scope.plan.current_module.output,f); 
+    aq.each($scope.plan.current_module.text_boxes,f);       
   }  
 
   function draggable_in_multiselect(obj) {
 
     var m = $scope.multiselect;
 
-    return  ( obj.parent_id == $scope.plan.current_module.id || obj.record_type == "ModuleIO" ) &&
+    return  ( obj.parent_id == $scope.plan.current_module.id || obj.record_type == "ModuleIO" || obj.record_type == "TextBox" ) &&
             (( m.width >= 0 && m.x < obj.x && obj.x + obj.width < m.x+m.width ) ||
              ( m.width <  0 && m.x + m.width < obj.x && obj.x + obj.width < m.x )) &&
             (( m.height >= 0 && m.y < obj.y && obj.y + obj.height < m.y+m.height ) ||
@@ -34,7 +36,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
  $scope.multiselect = {};
 
  $scope.clear_multiselect = function() {
-   all_draggable(obj => obj.multiselect = false);
+   all_draggable(obj => { console.log("clear", obj); obj.multiselect = false });
    $scope.multiselect = {};
  }
 
@@ -44,7 +46,6 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
     $scope.select(null);
     $scope.clear_multiselect();
-    // $scope.nav.sidebar = 'design';
 
     $scope.multiselect = {
       x: evt.offsetX,
