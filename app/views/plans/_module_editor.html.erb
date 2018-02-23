@@ -121,8 +121,34 @@
           {{$index}}
     </text>                 
 
-    <!-- <planner-cursor ng-if="input == current_io" x="input.width/2"  y="0"/>   -->
+    <!-- <planner-cursor ng-if="input == current_io" x="input.width/2"  y="0"/>   -->  
 
-  </g>    
+  </g>  
+
+  <!-- TEXT BOXES -->
+
+  <g ng-repeat="box in plan.current_module.text_boxes track by $index"
+     ng-attr-transform="translate({{box.x}}, {{box.y}})">
+
+    <foreignObject ng-attr-width="{{box.width}}" ng-attr-height="{{box.height}}">
+      <body xmlns="http://www.w3.org/1999/xhtml">
+        <div class="text-box-content no-highlight"
+             ng-bind-html="box.rendered_content">
+        </div>
+      </body>
+    </foreignObject>
+
+    <rect ng-attr-width="{{box.width}}" ng-attr-height="{{box.height}}"
+          ng-attr-class="{{text_box_class(box)}}"
+          ng-mousedown="draggableMouseDown($event, box)" 
+          ng-mouseup="draggableMouseUp($event, box)" 
+          ng-mousemove="draggableMouseMove($event, box)"/>
+
+    <rect ng-attr-x="{{box.anchor.x-3}}" ng-attr-y="{{box.anchor.y-3}}"
+          ng-attr-class="{{text_box_anchor_class(box)}}"
+          ng-mousedown="draggableMouseDown($event, box.anchor)" 
+          ng-mouseup="draggableMouseUp($event, box.anchor)" 
+          ng-mousemove="draggableMouseMove($event, box.anchor)"/>
+  </g>
 
 </g>

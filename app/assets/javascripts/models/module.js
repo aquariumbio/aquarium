@@ -16,6 +16,7 @@ class Module {
     this.input = []; 
     this.output = [];
     this.wires = [];
+    this.text_boxes = [];
     this.parent_id = parent ? parent.id : -1;
     this.documentation = "No documentation yet for this module."
 
@@ -54,6 +55,7 @@ class Module {
     this.output = aq.collect(this.output,     o => new ModuleIO().from_object(o) )
     this.children = aq.collect(this.children, c => new Module().from_object(c,plan) )
     this.wires = aq.collect(this.wires,       w => new ModuleWire().from_object(w,this,plan) )
+    this.text_boxes = aq.collect(this.text_boxes, box => new TextBox().from_object(box));
 
     if ( !this.documentation ) {
       this.documentation = "No documentation yet for this module."
@@ -477,6 +479,18 @@ class Module {
     var md = window.markdownit();
     return AQ.sce.trustAsHtml(md.render(module.documentation));
 
-  }  
+  }
+
+  create_text_box() {
+
+    let module = this;
+
+    if ( !module.text_boxes ) {
+      module.text_boxes = [];
+    }
+
+    module.text_boxes.push(new TextBox())
+
+  }
 
 }

@@ -118,4 +118,20 @@ function PlanClasses($scope,$http,$attrs,$cookies,$sce,$window) {
 
   }
 
+  $scope.text_box_class = function(box) {
+    let c = "text-box";
+    if ( box == $scope.current_draggable || box.anchor == $scope.current_draggable || box.multiselect ) {
+      c += " text-box-selected";
+    }
+    return c;
+  }
+
+  $scope.text_box_anchor_class = function(box) {
+    let c = "text-box-anchor";
+    if ( box == $scope.current_draggable || box.multiselect ) {
+      c += " text-box-anchor-selected";
+    }
+    return c;
+  }  
+
 }

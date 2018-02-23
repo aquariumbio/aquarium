@@ -57,19 +57,23 @@
 
   <div style="width: 1px; height: 100%; border-left: 1pt solid #eee; margin: 5px"></div>
 
+  <planner-action ng-click="plan.create_text_box()"
+                  icon="text_fields" name="Text"
+                  tooltip="New Text (Ctrl-T)"></planner-action>
+
   <planner-action ng-click="select(plan.create_module(current_op))"
                   icon="module" name="Module"
-                  tooltip="New Module (Ctrl-M)"></planner-action>  
+                  tooltip="New Module (Ctrl-M)"></planner-action>
 
   <planner-action ng-click="plan.open_module(current_draggable)"
                   is_disabled="!(current_draggable && current_draggable.record_type == 'Module')"
                   icon="zoom_out_map" name="Expand"
-                  tooltip="Expand Module (Right Click)"></planner-action>                  
+                  tooltip="Expand Module (Right Click)"></planner-action>
 
   <planner-action ng-click="add_module_input()"
                   is-disabled="plan.current_module.id == 0"
                   icon="input" name="Input"
-                  tooltip="New Module Input (Ctrl-I)"></planner-action>  
+                  tooltip="New Module Input (Ctrl-I)"></planner-action>
 
   <planner-action ng-click="add_module_output()"
              is-disabled="plan.current_module.id == 0"        
@@ -138,6 +142,9 @@
         <div ng-if="current_draggable && current_draggable.record_type == 'Module'">
           <%= render partial: 'module_io_editor' %>
         </div>
+        <div ng-if="current_draggable && current_draggable.record_type == 'TextBox'">
+          <textarea class="text-box-editor" ng-model="current_draggable.markdown"></textarea>
+        </div>        
       </inner>
     </div>   
 

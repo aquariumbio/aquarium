@@ -65,16 +65,16 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
                $scope.current_draggable.io.includes($scope.current_io) )
         ) {
 
-      $scope.current_draggable.x = evt.offsetX - $scope.current_draggable.drag.localX;
-      $scope.current_draggable.y = evt.offsetY - $scope.current_draggable.drag.localY;
+      $scope.current_draggable.x = Math.max(10,evt.offsetX - $scope.current_draggable.drag.localX);
+      $scope.current_draggable.y = Math.max(10,evt.offsetY - $scope.current_draggable.drag.localY);
       $scope.last_place = 0;
 
     } else if ( $scope.multiselect.dragging ) {
 
       current_draggable(obj => {
         if ( obj.multiselect ) {
-          obj.x = evt.offsetX - obj.drag.localX;
-          obj.y = evt.offsetY - obj.drag.localY;
+          obj.x = Math.max(10,evt.offsetX - obj.drag.localX);
+          obj.y = Math.max(10,evt.offsetY - obj.drag.localY);
         }
       });
 
@@ -106,7 +106,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
   $scope.draggableMouseDown = function(evt,obj) {
 
-    if ( obj.multiselect ) {
+    if ( obj.multiselect && obj.type != "TextBoxAnchor" ) {
 
       current_draggable(obj => {
         if ( obj.multiselect ) {

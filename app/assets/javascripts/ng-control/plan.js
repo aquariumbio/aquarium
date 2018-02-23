@@ -18,7 +18,9 @@
 
       $scope.current_draggable = object && ( object.record_type === "Operation" ||
                                              object.record_type === "Module" ||
-                                             object.record_type === "ModuleIO" ) ? object : null;
+                                             object.record_type === "ModuleIO" ||
+                                             object.record_type === "TextBox" ||
+                                             object.record_type === "TextBoxAnchor" ) ? object : null;
 
       $scope.current_op     = object && object.record_type === "Operation" ? object : null;
 

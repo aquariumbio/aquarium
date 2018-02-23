@@ -822,6 +822,11 @@ AQ.Plan.record_methods.recount_fv_wires = function() {
     w.to.num_wires++;
   })
 
+}
 
+AQ.Plan.record_methods.create_text_box = function() {
+
+  let plan = this;
+  plan.current_module.create_text_box();
 
 }

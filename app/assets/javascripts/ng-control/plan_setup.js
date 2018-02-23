@@ -68,6 +68,8 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
               $window.history.replaceState(null, document.title, "/plans"); 
               $scope.plan = p;
               $scope.ready = true;
+              $scope.nav.folder[p.folder ? p.folder : null] = true;
+              console.log($scope.plan);
               $scope.$apply();
             })
           } else {
