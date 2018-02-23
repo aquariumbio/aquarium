@@ -69,6 +69,17 @@
                 <ng-md-icon icon="delete" size="22" aria-label="Delete" style="fill: #444"></ng-md-icon>  
               </a>   
             <% end %>
+		<a href="#" ng-click="item.mark_as_deleted()" class="no-highlight">
+               	<ng-md-icon icon="delete" size="22" aria-label="Delete" style="fill: red"></ng-md-icon>  
+		</a>
+	    <% end %>
+ 
+	    <a href="#" ng-click="item.request_delete()" class="no-highlight">
+               	<ng-md-icon icon="delete" size="22" aria-label="Request delete" style="fill: #444"></ng-md-icon> 
+ 
+	    <a href="#" ng-click="item.approve_sequencing()" ng-if="item.has_sequencing" class="no-highlight" style="position: relative; top: -5px">
+               	<md-icon md-svg-src='/assets/seq_ok.svg' aria-label="Approve sequencing" size="22" style="width: 45px; height: 20px"></md-icon>  
+	    </a>
           </div>
         </div>
 
