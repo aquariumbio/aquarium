@@ -481,7 +481,11 @@
 
         $scope.plan.current_module.remove_io(obj, $scope.plan);
 
-      } 
+      } else if ( obj.record_type == "TextBox" ) {
+
+        aq.remove($scope.plan.current_module.text_boxes, obj);
+
+      }
 
     };
 

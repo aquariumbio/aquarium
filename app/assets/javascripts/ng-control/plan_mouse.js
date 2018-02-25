@@ -36,7 +36,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
  $scope.multiselect = {};
 
  $scope.clear_multiselect = function() {
-   all_draggable(obj => { console.log("clear", obj); obj.multiselect = false });
+   all_draggable(obj => obj.multiselect = false);
    $scope.multiselect = {};
  }
 

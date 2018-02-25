@@ -406,14 +406,14 @@
 
   .text-box-selected {
     stroke: #555;
-    fill-opacity: 0.5;
     stroke-dasharray: 2;
   }
 
   .text-box-anchor {
     height: 7px;
     width: 7px;
-    fill: #efefef;
+    fill: white;
+    fill-opacity: 0.0;
     &:hover {
       fill: #555;
     }
@@ -421,6 +421,7 @@
 
   .text-box-anchor-selected {
     fill: #555;   
+    fill-opacity: 1.0;
   }
 
   .text-box-content {

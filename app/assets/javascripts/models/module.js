@@ -483,13 +483,16 @@ class Module {
 
   create_text_box() {
 
-    let module = this;
+    let module = this,
+        box = new TextBox();
 
     if ( !module.text_boxes ) {
       module.text_boxes = [];
     }
 
-    module.text_boxes.push(new TextBox())
+    module.text_boxes.push(box);
+
+    return box;
 
   }
 

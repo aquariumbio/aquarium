@@ -11,11 +11,12 @@ class TextBoxAnchor {
 class TextBox {
 
   constructor() {
-    this.markdown = "Text";
-    if ( !this.constructor.next_position ) {
+    this.markdown = "Put any **markdown** code here.";
+    if ( !this.constructor.next_position ||
+         this.constructor.next_position > 300 ) {
       this.constructor.next_position = 0;
     }
-    this.constructor.next_position += 50;
+    this.constructor.next_position += 10;
     this.x = 100 + this.constructor.next_position;
     this.y = 100 + this.constructor.next_position;
     this.anchor = new TextBoxAnchor(200,100);
