@@ -58,7 +58,7 @@
     <div><ng-md-icon icon="create" size="22" aria-label="Input" style="fill: #444" class="input-icon"></ng-md-icon></div>
     <md-input-container class="input-container">
       <div class="padding">
-        <label>{{content_value(line).label}}</label>
+        <label ng-bind-html="sce(content_value(line).label)"></label>
         <input class="md-subhead" 
                ng-model="step.response.inputs[line.input.var]"
               ng-disabled="!step.response.in_progress">
