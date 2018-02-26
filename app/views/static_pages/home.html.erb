@@ -101,7 +101,85 @@
 
     <% end %>
 
-  </div>
+  <div layout="column" layout-padding>
+
+    <div layout="row">
+
+      <div flex="50" class="box">
+        <md-toolbar class="md-hue-4"><div class="md-toolbar-tools"><h2>Video Tutorial Series</h2></div></md-toolbar>
+        <p style="margin-left: 20px; margin-top: 10px; margin-bottom: 0px">
+           Garrett Newman has made a great series of videos on how to use Aquarium 2.0. Please start here if you are new
+           to the system.</p>
+
+        <md-list style="margin-left: 40px">
+          <md-list-item>
+            <ng-md-icon icon="videocam" size="24" aria-label="Help" style="fill: #444"></ng-md-icon> 
+            <h4>&nbsp;<a href="https://www.youtube.com/watch?v=ydN51ew1JmI&feature=youtu.be">1. Populating your Inventory</a></h4>
+          </md-list-item> 
+
+          <md-list-item>
+            <ng-md-icon icon="videocam" size="24" aria-label="Help" style="fill: #444"></ng-md-icon> 
+            <h4>&nbsp;<a href="https://www.youtube.com/watch?v=kYnDc8RIsNg&feature=youtu.be">
+              2a. Planning with Templates and Modules
+              <span style="background: yellow; color: black; padding: 3px; border: 1pt solid #ddd">New!!</span>
+            </a></h4>
+          </md-list-item>            
+
+          <md-list-item>
+            <ng-md-icon icon="videocam" size="24" aria-label="Help" style="fill: #444"></ng-md-icon> 
+            <h4>&nbsp;<a href="https://www.youtube.com/watch?v=xDrv4f2AZlM&feature=youtu.be">
+              2b. Building a Workflow (Old Version)
+            </a></h4>
+          </md-list-item>  
+
+          <md-list-item>
+            <ng-md-icon icon="videocam" size="24" aria-label="Help" style="fill: #444"></ng-md-icon> 
+            <h4>&nbsp;<a href="https://www.youtube.com/watch?v=WCTmuz5yBAo&feature=youtu.be">
+              4. Monitoring your Plan
+            </a></h4>
+          </md-list-item>  
+
+        </md-list>
+
+      </div>
+
+      
+
+      <div flex="50" class="box">
+        <md-toolbar class="md-hue-4"><div class="md-toolbar-tools"><h2>Improve Aquarium</h2></div></md-toolbar>
+          <md-list>
+            <md-list-item>
+              <ng-md-icon icon="bug_report" size="52" aria-label="Bugs" style="fill: #444"></ng-md-icon> 
+              <p style="margin-left: 20px; margin-top: 10px"> We are using slack to keep track of issues, bugs, and feature requests. Go to the 
+              <a href="https://damplab.slack.com/messages/C9F4CPVBN">bugs channel on our Slack to submit an issue</a>
+              to submit a bug report or feature reqeust.<br><br>
+                <a href="mailto:damplabnorthaquarium@gmail.com">Contact the DAMP Lab North</a> if you have any questions
+              </p>
+            </md-list-item>           
+          </md-list>
+      </div>
+
+    </div>
+
+    <div layout="row">
+
+      <div flex="50" class="box">
+        <md-toolbar class="md-hue-4"><div class="md-toolbar-tools"><h2>We're on Slack</h2></div></md-toolbar>
+          <md-list>
+            <md-list-item>
+              <%= image_tag 'slack.png', style: 'width: 100px' %>
+              <p style="margin-left: 20px; margin-top: 10px">We have a Slack page for our users to
+              discuss their workflows and experiments with the DAMP Lab North staff.
+              Sign up <a href="https://join.slack.com/t/damplab/signup">here</a>.
+              <a href="mailto:damplabnorthaquarium@gmail.com">email</a>.</p>
+            </md-list-item>
+          </md-list>
+      </div>
+
+      <div flex="50" class="box" style="border: none">
+      </div>      
+
+    </div>    
 
   <div layout="row" class="leaderboard">
     
