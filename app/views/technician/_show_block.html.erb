@@ -59,10 +59,17 @@
     <md-input-container class="input-container">
       <div class="padding">
         <label ng-bind-html="sce(content_value(line).label)"></label>
-        <input class="md-subhead" 
+        <input class="md-subhead"
+               ng-if="content_value(line).type == 'number'"
+               type = 'number'
                ng-model="step.response.inputs[line.input.var]"
-              ng-disabled="!step.response.in_progress">
+               ng-disabled="!step.response.in_progress">
+        <input class="md-subhead"
+               ng-if="content_value(line).type != 'number'"
+               ng-model="step.response.inputs[line.input.var]"
+               ng-disabled="!step.response.in_progress">               
       </div>
+      {{content_value(line).type}}
     </md-input-container>
   </div>
 
