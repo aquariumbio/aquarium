@@ -137,7 +137,6 @@
     }
 
     $scope.start_upload = function(varname) {
-      console.log("start upload", $("#upload-"+varname))      
       $("[id='upload-"+varname+"']").click();
     }
 
@@ -208,9 +207,7 @@
     }
 
     $scope.complete_upload_method = function(varname) {
-      console.log("complete_upload_method: " + varname)
       return function(files) {
-        console.log("within complete_upload_method: " + varname);
         if ( files.length != 0 ) {
           for ( var i=0; i<files.length; i++ ) {      
             send_file(varname,files[i])

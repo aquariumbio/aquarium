@@ -9,14 +9,11 @@
         var onChangeFunc = scope.$eval(attrs.customOnChange);
         element.bind('change', function(event){
           var files = event.target.files;
-          console.log("change")
           onChangeFunc(files);
         });       
         element.bind('click', function(){
-          console.log("click");
           element.val('');
         });
-        console.log("link", scope.$eval(attrs.customOnChange),element)        
       }
     }
   });
