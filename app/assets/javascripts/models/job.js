@@ -143,7 +143,7 @@ AQ.Job.record_methods.advance = function() {
 
         job.sending = false;        
 
-        reject(respose.data);
+        reject(response.data);
 
       });
 

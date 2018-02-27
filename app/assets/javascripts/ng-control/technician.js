@@ -16,7 +16,6 @@
     $scope.selects = [];
     $scope.item = null;
     $scope.mode = "steps";
-    $scope.uploading = false;
 
     $scope.upload_config = {
       associate_with_operations: false,
@@ -138,25 +137,22 @@
     }
 
     $scope.start_upload = function(varname) {
-
-      $("#upload-"+varname).click();
-      $scope.upload_varname = varname;
-      $scope.uploading = true;
-
+      console.log("start upload", $("#upload-"+varname))      
+      $("[id='upload-"+varname+"']").click();
     }
 
-    function send_file(file) {
+    function send_file(varname,file) {
 
       var r = new FileReader();
 
       file.status = "loading";
       file.percent = 0;
 
-      if ( ! $scope.uploads[$scope.upload_varname] ) {
-        $scope.uploads[$scope.upload_varname] = [];
+      if ( ! $scope.uploads[varname] ) {
+        $scope.uploads[varname] = [];
       }
 
-      $scope.uploads[$scope.upload_varname].push(file);
+      $scope.uploads[varname].push(file);
 
       $scope.$apply();
 
@@ -187,18 +183,17 @@
                   aq.each($scope.job.operations, operation => operation.recompute_getter("data_associations"));
                 }
                 let step = $scope.job.backtrace.last;
-                if ( $scope.upload_varname != '__generic__' ) {
-                  if ( !step.response.inputs[$scope.upload_varname] ) {
-                    step.response.inputs[$scope.upload_varname] = [];
+                if ( varname != '__generic__' ) {
+                  if ( !step.response || !step.response.inputs[varname] ) {
+                    step.response.inputs[varname] = [];
                   }
-                  step.response.inputs[$scope.upload_varname].push({
+                  step.response.inputs[varname].push({
                     name: upload.upload_file_name,
                     id: upload.id
                   })
                 }
                 $scope.$apply();
             }
-            $scope.uploading = false;
         };
 
         fd.append('file', file)
@@ -212,12 +207,16 @@
 
     }
 
-    $scope.complete_upload = function(files) {
-
-      for ( var i=0; i<files.length; i++ ) {      
-        send_file(files[i])
+    $scope.complete_upload_method = function(varname) {
+      console.log("complete_upload_method: " + varname)
+      return function(files) {
+        console.log("within complete_upload_method: " + varname);
+        if ( files.length != 0 ) {
+          for ( var i=0; i<files.length; i++ ) {      
+            send_file(varname,files[i])
+          }        
+        } 
       }
-
     }
 
     $scope.ok = function() {

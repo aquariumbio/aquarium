@@ -3,7 +3,11 @@ class Step {
   constructor(display,response) {
 
     this.display = display;
-    this.response = response;
+    if ( response ) {
+      this.response = response;
+    } else {
+      this.response = { inputs: {} };
+    }
     this.type = this.display.operation
 
     if ( this.type == "display" ) {

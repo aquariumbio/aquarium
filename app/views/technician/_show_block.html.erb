@@ -67,7 +67,7 @@
         <input class="md-subhead"
                ng-if="content_value(line).type != 'number'"
                ng-model="step.response.inputs[line.input.var]"
-               ng-disabled="!step.response.in_progress">               
+               ng-disabled="!step.response.in_progress">
       </div>
       {{content_value(line).type}}
     </md-input-container>
@@ -100,11 +100,12 @@
       </li>
     </ul>
 
-    <form id="upload-form-{{content_value(line).var}}" action="/krill/upload" method="post">
-      <input id="upload-{{content_value(line).var}}" 
+    <form id="{{'upload-form-' + content_value(line).var}}" action="/krill/upload" method="post">
+      <input id="{{'upload-' + content_value(line).var}}" 
              type="file"
              name="files[]"
-             custom-on-change="complete_upload"
+             value="xyz"
+             custom-on-change="complete_upload_method(content_value(line).var)"
              multiple></input>
       <input type="submit">
       <input id="authenticity_token"
@@ -115,8 +116,9 @@
 
     <md-button
       class="md-raised md-primary" 
-      ng-click="upload_config.associate_with_operations = false; upload_config.associate_with_plans = false; start_upload(content_value(line).var)"
-      ng-disabled="uploading">Upload File(s)
+      ng-click="upload_config.associate_with_operations = false; 
+                upload_config.associate_with_plans = false; 
+                start_upload(content_value(line).var)">Upload File(s)
     </md-button>
 
   </div>
