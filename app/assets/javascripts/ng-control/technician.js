@@ -136,22 +136,23 @@
 
     }
 
-    $scope.start_upload = function(varname) {
-      $("[id='upload-"+varname+"']").click();
+    $scope.start_upload = function(id) {
+      $("#upload-"+id).click();
+      console.log(id)
     }
 
-    function send_file(varname,file) {
+    function send_file(varname,id,file) {
 
       var r = new FileReader();
 
       file.status = "loading";
       file.percent = 0;
 
-      if ( ! $scope.uploads[varname] ) {
-        $scope.uploads[varname] = [];
+      if ( ! $scope.uploads[id] ) {
+        $scope.uploads[id] = [];
       }
 
-      $scope.uploads[varname].push(file);
+      $scope.uploads[id].push(file);
 
       $scope.$apply();
 
@@ -206,11 +207,11 @@
 
     }
 
-    $scope.complete_upload_method = function(varname) {
+    $scope.complete_upload_method = function(varname,id) {
       return function(files) {
         if ( files.length != 0 ) {
           for ( var i=0; i<files.length; i++ ) {      
-            send_file(varname,files[i])
+            send_file(varname,id,files[i])
           }        
         } 
       }

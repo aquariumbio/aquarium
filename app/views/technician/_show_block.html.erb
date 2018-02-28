@@ -92,7 +92,7 @@
   <div class='content upload-button-container'>
 
     <ul>
-      <li ng-repeat="file in uploads[content_value(line).var]">
+      <li ng-repeat="file in uploads[line._id]">
         <b>{{file.name}}</b>: <span ng-if="file.status == 'sending'">
                                 <span class="upload-sending">{{file.status}}</span>
                               </span>
@@ -100,12 +100,12 @@
       </li>
     </ul>
 
-    <form id="{{'upload-form-' + content_value(line).var}}" action="/krill/upload" method="post">
-      <input id="{{'upload-' + content_value(line).var}}" 
+    <form id="{{'upload-form-' + line.id}}" action="/krill/upload" method="post">
+      <input id="{{'upload-' + line._id}}" 
              type="file"
              name="files[]"
              value="xyz"
-             custom-on-change="complete_upload_method(content_value(line).var)"
+             custom-on-change="complete_upload_method(content_value(line).var,line._id)"
              multiple></input>
       <input type="submit">
       <input id="authenticity_token"
@@ -118,7 +118,7 @@
       class="md-raised md-primary" 
       ng-click="upload_config.associate_with_operations = false; 
                 upload_config.associate_with_plans = false; 
-                start_upload(content_value(line).var)">Upload File(s)
+                start_upload(line._id)">Upload File(s)
     </md-button>
 
   </div>

@@ -2,25 +2,39 @@ class Step {
 
   constructor(display,response) {
 
-    this.display = display;
-    if ( response ) {
-      this.response = response;
-    } else {
-      this.response = { inputs: {} };
-    }
-    this.type = this.display.operation
+    let step = this;
 
-    if ( this.type == "display" ) {
+    step.display = display;
+
+    aq.each(step.display.content, line => {
+      line._id = step.next_line_id;
+    });
+
+    if ( response ) {
+      step.response = response;
+    } else {
+      step.response = { inputs: {} };
+    }
+    step.type = step.display.operation
+
+    if ( step.type == "display" ) {
 
       if ( !response ) {
-        this.response = this.new_response();
+        step.response = step.new_response();
       } else {
-        this.response = this.marshall_response();
+        step.response = step.marshall_response();
       }
 
     }    
 
   }
+
+  get next_line_id() {
+    if ( !this.constructor.next_line_id ) {
+      this.constructor.next_line_id = 0;
+    }
+    return this.constructor.next_line_id++;
+  }  
 
   get ready() {
     let step = this;
