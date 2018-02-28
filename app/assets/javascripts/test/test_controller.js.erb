@@ -10,9 +10,9 @@
     AQ.confirm = (msg) => { return confirm(msg); }
 
     <% if Rails.env.development? %>  
-      $scope.tests = aq_test.tests;  
+      $scope.test = shark.test;  
       $scope.run = function() {
-        aq_test.run();
+        shark.run();
       }
     <% else %>
       $scope.tests = {};

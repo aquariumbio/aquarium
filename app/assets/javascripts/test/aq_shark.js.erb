@@ -1,0 +1,86 @@
+<% if Rails.env.development? %>
+
+  class Shark {
+
+    constructor() {
+      let shark = this;
+      shark.test = { path: "", its: [], subtests: {} };
+      shark.current = shark.test;
+    }
+
+    run() {
+      let shark = this;
+      shark.current = shark.test;
+      shark.run_aux(shark.current);
+    }
+
+    run_aux(test) {
+
+      let shark = this;    
+
+      test.its.forEach(it => {
+        it.results = [];
+        if ( it.method ) {  
+          try {
+            it.method(shark.make_done_doer(it));
+            it.results.push("tested");
+          } catch(e) {
+            it.results.push("failed");
+            it.results.push(e);
+            shark.show_error(it, e)
+          }
+        } else {
+          it.results.push("unimplemented")
+        }
+      });
+
+      for ( var test_name in test.subtests ) {
+        shark.run_aux(test.subtests[test_name])
+      }
+
+    }
+
+    make_done_doer(it) {
+      let shark = this;
+      return function(err) {
+        if ( err ) {
+          shark.show_error(it, err.stack)
+          it.results.push('failed');
+          it.results.push(err);
+          it.results.push(err.stack);
+          console.log(err)
+        } else {
+          it.results.push("done");
+        }
+      }
+    }
+
+    show_error(it,e) {
+      console.log("%cError: " + it.path, "color: red", it.description, e);
+    }
+
+  }
+
+  shark = new Shark();
+
+  function describe(test_name, method) {
+    let temp = shark.current;
+    shark.current.subtests[test_name] = {
+      path: shark.current.path + "/" + test_name, 
+      its: [],
+      subtests: {}
+    };
+    shark.current = shark.current.subtests[test_name];
+    method();
+    shark.current = temp;
+  }
+
+  function it(description, method) {
+    shark.current.its.push({
+      path: shark.current.path,
+      description: description,
+      method: method
+    })
+  }
+
+<% end %>

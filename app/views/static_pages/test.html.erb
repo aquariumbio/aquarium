@@ -3,8 +3,8 @@
   <script type="text/ng-template" id="describe">
     <div style="margin-left: 16px">
       <h4>{{name}}</h4>
-      <ul ng-if="tests.its.length > 0">
-        <li ng-repeat="it in tests.its">
+      <ul ng-if="test.its.length > 0">
+        <li ng-repeat="it in test.its">
           <b>{{it.description}}</b>
           <ul>
             <li ng-repeat='result in it.results track by $index'>
@@ -15,9 +15,9 @@
           </ul>
         </li>
       </ul>
-      <div ng-repeat="(name,subtests) in tests" 
+      <div ng-repeat="(name,subtest) in test.subtests" 
            ng-if="name != 'its' && name != 'path'"
-           ng-include="'describe'" ng-init="name = name; tests = subtests">
+           ng-include="'describe'" ng-init="name = name; test = subtest">
       </div>
     </div>
   </script>
