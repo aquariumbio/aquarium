@@ -1,10 +1,38 @@
 <% if Rails.env.development? %>
 
+  class SharkTest {
+
+    constructor() {
+      this.its = [];
+      this.subtests = {};
+    }
+
+  }
+
+  class SharkTestAction {
+
+    constructor(description, method) {
+      this.description = description;
+      this.method = method;
+      this.results = [];
+    }
+
+    note(msg) {
+      this.results.push(msg);
+      return this;
+    }    
+
+    async() {
+      return this.note("asynchronous");
+    }
+
+  }
+
   class Shark {
 
     constructor() {
       let shark = this;
-      shark.test = { path: "", its: [], subtests: {} };
+      shark.test = new SharkTest();
       shark.current = shark.test;
     }
 
@@ -19,18 +47,17 @@
       let shark = this;    
 
       test.its.forEach(it => {
-        it.results = [];
         if ( it.method ) {  
           try {
             it.method(shark.make_done_doer(it));
-            it.results.push("tested");
+            it.note("visited");
           } catch(e) {
-            it.results.push("failed");
-            it.results.push(e);
+            it.note("failed")
+              .note(e);
             shark.show_error(it, e)
           }
         } else {
-          it.results.push("unimplemented")
+          it.note("unimplemented")
         }
       });
 
@@ -45,18 +72,17 @@
       return function(err) {
         if ( err ) {
           shark.show_error(it, err.stack)
-          it.results.push('failed');
-          it.results.push(err);
-          it.results.push(err.stack);
-          console.log(err)
+          it.note('failed asynchronously')
+            .note(err)
+            .note(err.stack);
         } else {
-          it.results.push("done");
+          it.note("finished asynchronously");
         }
       }
     }
 
     show_error(it,e) {
-      console.log("%cError: " + it.path, "color: red", it.description, e);
+      console.log("%cError: ", "color: red", it.description, e);
     }
 
   }
@@ -65,22 +91,16 @@
 
   function describe(test_name, method) {
     let temp = shark.current;
-    shark.current.subtests[test_name] = {
-      path: shark.current.path + "/" + test_name, 
-      its: [],
-      subtests: {}
-    };
+    shark.current.subtests[test_name] = new SharkTest();
     shark.current = shark.current.subtests[test_name];
     method();
     shark.current = temp;
   }
 
   function it(description, method) {
-    shark.current.its.push({
-      path: shark.current.path,
-      description: description,
-      method: method
-    })
+    let it = new SharkTestAction(description, method);
+    shark.current.its.push(it);
+    return it;
   }
 
 <% end %>

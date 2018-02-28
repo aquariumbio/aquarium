@@ -10,14 +10,13 @@
     AQ.confirm = (msg) => { return confirm(msg); }
 
     <% if Rails.env.development? %>  
-      $scope.test = shark.test;  
-      $scope.run = function() {
-        shark.run();
-      }
+      $scope.shark = shark;
+      $scope.shark.run();
     <% else %>
-      $scope.tests = {};
-      $scope.run = function() {
-        alert("Tests not availale in production")
+      $scope.shark = { 
+        run: function() {
+          alert("Tests not availale in production")
+        }
       }
     <% end %>
 

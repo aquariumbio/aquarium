@@ -1,16 +1,20 @@
-<% if current_user && current_user.is_admin %>
+<% provide(:title, 'Unit Tests') %>
+
+<% if current_user && current_user.is_admin && Rails.env == 'development' %>
 
   <script type="text/ng-template" id="describe">
     <div style="margin-left: 16px">
-      <h4>{{name}}</h4>
+      <h4>
+        {{name}}
+      </h4>
       <ul ng-if="test.its.length > 0">
         <li ng-repeat="it in test.its">
           <b>{{it.description}}</b>
           <ul>
             <li ng-repeat='result in it.results track by $index'>
-              <span ng-if="result == 'failed' || result == 'unimplemented'"
+              <span ng-if="result == 'failed' || result == 'failed asynchronously' || result == 'unimplemented'"
                     style="color: red">{{result}}</span>
-              <span ng-if="result != 'failed' && result != 'unimplemented'">{{result}}</span>
+              <span ng-if="result != 'failed' && result != 'failed asynchronously' && result != 'unimplemented'">{{result}}</span>
             </li>
           </ul>
         </li>
@@ -26,17 +30,23 @@
   <script src="/components/should/should.js" type="text/javascript"></script>
 
   <%= content_for :sidebar do %><% end %>
-  <%= content_for :specific_title do %>AQUARIUM UNIT TESTS PAGE<% end %>
   <% content_for :controller do %>testCtrl<% end %>
 
   <%= content_for :action1 do %>
-    <md-button class="md-raised" ng-click="run()">Run</md-button>
+    <md-button class="md-raised" ng-click="shark.run()">Run</md-button>
   <% end %>
 
   <%= content_for :main do %>
     <div layout-padding id="aq_test">
-      <div ng-include="'describe'" ng-init="name = 'Aquarium Tests'"></div>
+      <div ng-include="'describe'" ng-init="test = shark.test; name = 'Aquarium Tests'"></div>
     </div>
+  <% end %>
+
+<% else %>
+
+  <%= content_for :sidebar do %><% end %>
+  <%= content_for :main do %>
+    <div layout-padding>Tests not available in <%= Rails.env %></div>
   <% end %>
 
 <% end %>

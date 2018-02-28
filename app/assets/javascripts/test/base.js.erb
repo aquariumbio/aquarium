@@ -1,0 +1,27 @@
+<% if Rails.env.development? %>
+
+  describe('AQ', function() {
+
+    describe('get_sample_names', () => {
+
+      it("should populate AQ with sample names", done => {
+
+        AQ.get_sample_names().then(() => {
+
+          AQ.should.property("sample_names");
+          AQ.sample_names.should.be.Object();
+          for ( var type in AQ.sample_names ) {
+            AQ.sample_names[type].should.be.Array();
+            AQ.sample_names[type].forEach(n => n.should.be.String());
+          }
+          done();
+
+        }).catch(done);
+
+      }).async();
+
+    });
+
+  });
+
+<% end %>

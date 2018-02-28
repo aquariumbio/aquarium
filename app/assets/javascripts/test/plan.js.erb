@@ -1,0 +1,55 @@
+<% if Rails.env.development? %>
+
+  describe('AQ.Plan', function() {
+
+    describe('get_folders', function() {
+      it('should return a list of folders', function(done) {
+
+        AQ.User.find(1).then(user => {
+          user.id.should.be.equal(1);
+          AQ.Plan.get_folders(user.id).then(folders => {
+            folders.should.be.Array();
+            folders.forEach(folder => !folder || folder.should.be.String());
+            done();
+          }).catch(done)
+        }).catch(done)
+
+      }).async();
+    });
+
+    describe('load plan', function() {
+      it('should load a plan', function(done, results) {
+
+        AQ.OperationType.all_fast(true).then(operation_types => {
+
+          AQ.operation_types = operation_types;
+
+          // Should eventually replace this with a method that makes a plan and that
+          // can be called from all other methods that need a plan to exist
+
+          AQ.Plan.load(9093).then(plan => {
+            plan.id.should.be.equal(9093);
+            plan.operations.should.be.Array();
+            plan.operations.forEach(operation => {
+              operation.record_type.should.be.equal("Operation");
+              operation.should.property("operation_type");
+              operation.operation_type.record_type.should.be.equal("OperationType");
+            });
+            plan.wires.should.be.Array();
+            plan.wires.forEach(wire => {
+              wire.record_type.should.be.equal("Wire");
+              wire.from.record_type.should.be.equal("FieldValue");
+              wire.to.record_type.should.be.equal("FieldValue");              
+            })
+            done();
+          }).catch(done);
+
+        }).catch(done);
+
+      }).async().note("Note: Using plan " + 9093);
+
+    });
+
+  });
+
+<% end %>

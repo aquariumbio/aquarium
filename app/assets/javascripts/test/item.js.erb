@@ -1,14 +1,25 @@
 <% if Rails.env.development? %>
 
   describe('AQ.Item', function() {
+
     describe('find', function() {
       it('should return an item', function(done) {
         AQ.Item.find(12345).then(item => {
-          item.id.should.be.equal(1234);
+          item.id.should.be.equal(12345);
           done();
-        }).catch(response => done(response))
-      });
+        }).catch(done)
+      }).async();
     });
+
+    describe('where', function() {
+      it('should give no more than the requested number of records', function(done) {
+        AQ.Item.where("id > 0", {}, { limit: 10 }).then(items => {
+          items.length.should.be.belowOrEqual(10);
+          done();
+        }).catch(done);
+      }).async();
+    });
+
   });
 
 <% end %>
