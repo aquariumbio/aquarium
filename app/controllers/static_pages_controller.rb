@@ -10,6 +10,12 @@ class StaticPagesController < ApplicationController
     end    
   end
 
+  def test
+    respond_to do |format|
+      format.html { render layout: 'aq2' }
+    end    
+  end  
+
   def dismiss
     cookies[:latest_announcement] = Announcement.last.id
     redirect_to root_path

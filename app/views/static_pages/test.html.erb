@@ -1,0 +1,25 @@
+<!-- SHOULD ASSERTIONS -->
+<script src="/components/should/should.js" type="text/javascript"></script>
+
+<!-- TEST FRAMEWORK -->
+<script src="test/test.js" type="text/javascript"></script>
+
+<!-- SPECIFIC UNIT TESTS -->
+<script src="test/array.js"></script>
+<script src="test/item.js"></script>
+
+<%= content_for :sidebar do %><% end %>
+<%= content_for :specific_title do %>AQUARIUM UNIT TESTS PAGE<% end %>
+<% content_for :controller do %>noCtrl<% end %>
+
+<%= content_for :main do %>
+  <p>Open the javascript console for details.</p>
+  <script>
+  $(function() {   
+    aq_test.run();
+  });
+  </script>
+<% end %>
+
+
+

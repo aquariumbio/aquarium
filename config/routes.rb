@@ -251,6 +251,7 @@ Bioturk::Application.routes.draw do
 
   match '/',            to: 'static_pages#home'
   match '/template',    to: 'static_pages#template'
+  match '/test',        to: 'static_pages#test'
 
   match '/help',       to: 'static_pages#help'
   match '/about',      to: 'static_pages#about'
