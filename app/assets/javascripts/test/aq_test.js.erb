@@ -1,3 +1,5 @@
+<% if Rails.env.development? %>
+
 class AqTest {
 
   constructor() {
@@ -16,15 +18,18 @@ class AqTest {
 
   run_aux(tests) {
 
+    let aq_test = this;    
+
     for ( var i=0; i<tests.its.length; i++ ) {
       tests.its[i].results = [];
       if ( tests.its[i].method ) {  
         try {
           tests.its[i].method(aq_test.make_done_doer(tests.its[i]));
+          tests.its[i].results.push("tested");
         } catch(e) {
           tests.its[i].results.push("failed");
           tests.its[i].results.push(e);
-          console.log(tests.its[i].path + ":" + tests.its[i].description + ": " +  e)
+          aq_test.show_error(tests.its[i], e)
         }
       } else {
         tests.its[i].results.push("unimplemented")
@@ -40,14 +45,21 @@ class AqTest {
   }
 
   make_done_doer(it) {
+    let aq_test = this;
     return function(err) {
       if ( err ) {
-        console.log(it.path + ":" + it.description + ": " +  err.stack)
-        it.results.push(err)
+        aq_test.show_error(it, err.stack)
+        it.results.push('failed');
+        it.results.push(err);
+        it.results.push(err.stack);
       } else {
         it.results.push("done");
       }
     }
+  }
+
+  show_error(it,e) {
+    console.log("%cError: " + it.path, "color: red", it.description, e);
   }
 
 }
@@ -75,3 +87,5 @@ function it(description, method) {
     method: method
   })
 }
+
+<% end %>

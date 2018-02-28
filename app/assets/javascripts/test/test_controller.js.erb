@@ -1,0 +1,26 @@
+(function() {
+
+  var w = angular.module('aquarium'); 
+
+  w.controller('testCtrl', [ '$scope', '$http', 
+                function (  $scope,   $http ) {
+
+    AQ.init($http);
+    AQ.update = () => { $scope.$apply(); }
+    AQ.confirm = (msg) => { return confirm(msg); }
+
+    <% if Rails.env.development? %>  
+      $scope.tests = aq_test.tests;  
+      $scope.run = function() {
+        aq_test.run();
+      }
+    <% else %>
+      $scope.tests = {};
+      $scope.run = function() {
+        alert("Tests not availale in production")
+      }
+    <% end %>
+
+  }]);
+
+})();                    
