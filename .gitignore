@@ -35,6 +35,7 @@ docker-compose.yml
 
 # Ignore all logfiles and tempfiles.
 /log/*.log
+/log/*.log.0
 /tmp
 /public/assets
 
