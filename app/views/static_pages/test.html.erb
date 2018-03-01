@@ -10,6 +10,8 @@
       <ul ng-if="test.its.length > 0">
         <li ng-repeat="it in test.its">
           <b>{{it.description}}</b>
+          <span ng-if="it.is_async && !it.done" style="color: green"> ... running</span>
+          <span ng-if="it.is_async && it.done"> ... done</span>          
           <ul>
             <li ng-repeat='result in it.results track by $index'>
               <span ng-if="result == 'failed' || result == 'failed asynchronously' || result == 'unimplemented'"

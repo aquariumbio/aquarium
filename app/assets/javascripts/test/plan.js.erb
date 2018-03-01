@@ -20,12 +20,15 @@
     describe('load plan', function() {
       it('should load a plan', function(done, results) {
 
+        let action = this;
+
         AQ.OperationType.all_fast(true).then(operation_types => {
 
           AQ.operation_types = operation_types;
 
           // Should eventually replace this with a method that makes a plan and that
           // can be called from all other methods that need a plan to exist
+          action.log("Note: Using plan " + 9093);
 
           AQ.Plan.load(9093).then(plan => {
             plan.id.should.be.equal(9093);
@@ -46,7 +49,7 @@
 
         }).catch(done);
 
-      }).async().note("Note: Using plan " + 9093);
+      }).async();
 
     });
 

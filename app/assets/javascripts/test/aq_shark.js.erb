@@ -15,15 +15,35 @@
       this.description = description;
       this.method = method;
       this.results = [];
+      this.is_async = false;
+      this.done = false;
     }
 
-    note(msg) {
+    log(msg) {
       this.results.push(msg);
       return this;
     }    
 
     async() {
-      return this.note("asynchronous");
+      this.is_async = true;
+      return this.log("asynchronous");
+    }
+
+  }
+
+  class SharkMethodWrapper {
+
+    constructor(test_action,method) {
+      this.test_action = test_action;
+      this.method = method;
+    }
+
+    log(msg) {
+      this.test_action.log(msg);
+    }
+
+    async() {
+      this.test_action.async();
     }
 
   }
@@ -49,15 +69,16 @@
       test.its.forEach(it => {
         if ( it.method ) {  
           try {
-            it.method(shark.make_done_doer(it));
-            it.note("visited");
+            let shark_method_wrapper = new SharkMethodWrapper(it, it.method);
+            shark_method_wrapper.method(shark.make_done_doer(it));
+            it.log("visited");
           } catch(e) {
-            it.note("failed")
-              .note(e);
+            it.log("failed")
+              .log(e);
             shark.show_error(it, e)
           }
         } else {
-          it.note("unimplemented")
+          it.log("unimplemented")
         }
       });
 
@@ -72,12 +93,14 @@
       return function(err) {
         if ( err ) {
           shark.show_error(it, err.stack)
-          it.note('failed asynchronously')
-            .note(err)
-            .note(err.stack);
+          it.log('failed asynchronously')
+            .log(err)
+            .log(err.stack);
         } else {
-          it.note("finished asynchronously");
+          it.log("finished asynchronously");
         }
+        it.done = true;
+        AQ.update();
       }
     }
 
