@@ -20,6 +20,25 @@
 
       }).async();
 
+      it("should be logged in", function(done) {
+        AQ.User.current().then(user => {
+          this.log("current user is " + user.login);
+          done();
+        }).catch(done);
+      }).async();
+
+      it("should keep time", function(done) {
+        let t = Date.now()
+        setTimeout( () => { 
+          try {
+            let dt = Date.now() - t;
+            this.log("dt = " + dt);
+            dt.should.be.greaterThanOrEqual(1000);
+            done();
+          } catch(e) { done(e); }
+        }, 1000);
+      }).async();
+
     });
 
   });

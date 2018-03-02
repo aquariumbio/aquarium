@@ -31,16 +31,27 @@
   <!-- SHOULD ASSERTIONS -->
   <script src="/components/should/should.js" type="text/javascript"></script>
 
-  <%= content_for :sidebar do %><% end %>
+  <%= content_for :sidebar do %>
+  <h3>Test Categories</h3>
+  <ul>
+      <li ng-class="md-subhead">
+        <a href="/test">All Tests</a><br><br>
+      </li>
+      <li ng-repeat="test in shark.test.subtests" ng-class="md-subhead">
+        <a href="/test?category={{test.name}}">{{test.name}}</a>
+      </li>
+  </ul>
+  <% end %>
+
   <% content_for :controller do %>testCtrl<% end %>
 
   <%= content_for :action1 do %>
-    <md-button class="md-raised" ng-click="shark.run()">Run</md-button>
+    <md-button class="md-raised" ng-click="refresh()">Refresh</md-button>
   <% end %>
 
   <%= content_for :main do %>
     <div layout-padding id="aq_test">
-      <div ng-include="'describe'" ng-init="test = shark.test; name = 'Aquarium Tests'"></div>
+      <div ng-include="'describe'" ng-init="test = test; name = ''"></div>
     </div>
   <% end %>
 

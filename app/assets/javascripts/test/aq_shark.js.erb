@@ -3,13 +3,31 @@
   /**
   * Shark: A simple javascript test framework.
   * @example 
+  *     // A simple, synchronous test
   *     describe("String", function() {
   *         describe("length", function() {
   *             it("should be non-negative", function() {
   *                 "abc".length.should.be.greaterThanOrEqual(0);
-  *             })
-  *         })
-  *     })
+  *             });
+  *         });
+  *     });
+  * @example
+  *     // A simple, asynchronous test
+  *     describe("setTimeout", function() {
+  *         it("should keep time", function(done) {
+  *             let t = Date.now()
+  *             setTimeout( () => { 
+  *                 try {
+  *                     let dt = Date.now() - t;
+  *                     // Log extra information 
+  *                     this.log("dt = " + dt);
+  *                     dt.should.be.greaterThan(1000);
+  *                     // Tell shark the test is complete
+  *                     done();
+  *                  } catch(e) { done(e); }
+  *             }, 1000);
+  *        }).async(); // tell shark this is an asynchronous test
+  *     });
   * @main Shark
   * @module Shark
   */
@@ -137,19 +155,31 @@
   */
   class Shark {
 
-    constructor() {
+    constructor(update=null) {
       let shark = this;
       shark.test = new SharkTest();
       shark.current = shark.test;
+      shark.update = null;
+    }
+
+    /**
+    * Set a method to call after each asyncrhonous update.
+    * @method associate_update
+    * @param {Function} update Method to call upon finishing an asynchronous test.
+    * @chainable
+    */
+    associate_update(update) {
+      this.update = update;
+      return this;
     }
 
     /**
     * Run all tests that have been declared using describe() and it()
     * @method run
     */
-    run() {
+    run(path=[]) {
       let shark = this;
-      shark.current = shark.test;
+      shark.current = this.search(path);
       shark.run_aux(shark.current);
       return this;
     }
@@ -228,6 +258,7 @@
           it.log("finished asynchronously");
         }
         it.done = true;
+        if ( shark.update ) { shark.update(); }        
       }
     }
 

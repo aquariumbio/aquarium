@@ -10,8 +10,24 @@
     AQ.confirm = (msg) => { return confirm(msg); }
 
     <% if Rails.env.development? %>  
+
+      if ( aq.url_params().category ) {
+          $scope.path = [aq.url_params().category];
+          $scope.test = shark.test.subtests[$scope.path]
+      } else {
+          $scope.path = [];
+          $scope.test = shark.test;
+      }
+
       $scope.shark = shark;
-      $scope.shark.run();
+      $scope.shark.associate_update(AQ.update);
+      $scope.shark.run($scope.path);
+      $scope.refresh = 0;
+
+      $scope.refresh = function() {
+        $scope.refresh++;
+      }
+
     <% else %>
       $scope.shark = { 
         run: function() {
