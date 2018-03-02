@@ -1,29 +1,124 @@
 <% if Rails.env.development? %>
 
+  /**
+  * Shark: A simple javascript test framework.
+  * @example 
+  *     describe("String", function() {
+  *         describe("length", function() {
+  *             it("should be non-negative", function() {
+  *                 "abc".length.should.be.greaterThanOrEqual(0);
+  *             })
+  *         })
+  *     })
+  * @main Shark
+  * @module Shark
+  */
+
+  /**
+  * A container class for holding the test actions and subtests for a given
+  * category of tests. When you specify a category of tests using the describe(...)
+  * method, it makes one of these, so don't use the constructor of this class
+  * directly. Shark puts nested describes (more SharkTest objects)
+  * in the subtests hash.
+  *
+  * @class SharkTest
+  * @constructor
+  */
   class SharkTest {
 
     constructor() {
       this.its = [];
       this.subtests = {};
+      this.path = [];
+    }
+
+    /**
+    * Set the path of the test using a parent's path and a name. Used in describe to 
+    * record the path to a newly added test so it can be looked up later by shark.search.
+    * @method set_path
+    * @param {Array} parent_path
+    * @param {String} new_name
+    * @chainable
+    * @private
+    */
+    set_path(parent_path,new_name) {
+      for ( var i=0; i<parent_path.length; i++ ) {
+        this.path.push(parent_path[i])
+      }
+      this.path.push(new_name);
+      return this;
+    }
+
+    /**
+    * The name of this test, if any.
+    * @method name
+    * @return {String}
+    */
+    get name() {
+      let n = this.path.length;
+      if ( n > 0 ) {
+        return this.path[n-1];
+      } else {
+        return undefined;
+      }
     }
 
   }
 
+  /**
+  * Defines a specific test action and a place to store the results.
+  * You specify a test action when you call the it(...) method, so do not use the
+  * constructor of this class directly.
+  *
+  * @class SharkTestAction
+  * @constructor
+  * @param {String} description A description of the form 'should do something', as
+  *   defined by a call to it().
+  * @param {Function} method A function that performs the test action. It will be wrapped
+  *   by an instantiation of the SharkMethodWrapper class so that that classes 
+  *   methods will be available.
+  *
+  */
   class SharkTestAction {
 
     constructor(description, method) {
+
       this.description = description;
       this.method = method;
       this.results = [];
+
+      /**
+      * Indictates whether the action is was marked asynchronous.
+      * @property is_async {Boolean}
+      */
       this.is_async = false;
+
+      /**
+      * Indictates whether the action is done, assuming it was marked asynchronous.
+      * @property done {Boolean}
+      */
       this.done = false;
+
     }
 
+    /**
+    * Adds a message to the log for this test action.
+    * @method log
+    * @param {String} msg A message.
+    * @chainable
+    */
     log(msg) {
       this.results.push(msg);
       return this;
     }    
 
+    /**
+    * Marks this test action as asynchronous, so that the is_async property is true.
+    * The action will not be considered done until its method calls its done argument.
+    * This method also writes the word "asynchronous" to the log.
+    * @method async
+    * @chainable
+    */
     async() {
       this.is_async = true;
       return this.log("asynchronous");
@@ -31,23 +126,15 @@
 
   }
 
-  class SharkMethodWrapper {
-
-    constructor(test_action,method) {
-      this.test_action = test_action;
-      this.method = method;
-    }
-
-    log(msg) {
-      this.test_action.log(msg);
-    }
-
-    async() {
-      this.test_action.async();
-    }
-
-  }
-
+  /**
+  * A class define top level methods for running tests with shark. The Shark class
+  * is automatically instantiated with a single obect, called shark, which you use
+  * to run tests. For example, once shark.js is include, you do
+  *     shark.run()
+  * to run all tests. 
+  * @class Shark
+  * @constructor
+  */
   class Shark {
 
     constructor() {
@@ -56,12 +143,22 @@
       shark.current = shark.test;
     }
 
+    /**
+    * Run all tests that have been declared using describe() and it()
+    * @method run
+    */
     run() {
       let shark = this;
       shark.current = shark.test;
       shark.run_aux(shark.current);
+      return this;
     }
 
+    /**
+    * Auxilliary method for running tests that can be called recursively.
+    * @method run_aux
+    * @private
+    */
     run_aux(test) {
 
       let shark = this;    
@@ -69,8 +166,7 @@
       test.its.forEach(it => {
         if ( it.method ) {  
           try {
-            let shark_method_wrapper = new SharkMethodWrapper(it, it.method);
-            shark_method_wrapper.method(shark.make_done_doer(it));
+            it.method(shark.make_done_doer(it));
             it.log("visited");
           } catch(e) {
             it.log("failed")
@@ -88,6 +184,38 @@
 
     }
 
+    /**
+    * Find a subtest whose path matches the given path.
+    * @method search
+    * @param {Array} path Array of strings defining the path.
+    * @return {SharkTest}
+    */
+    search(path) {
+      return this.search_aux(this.test, path);
+    }
+
+    search_aux(test,path) {
+      if ( path.length == 0 ) {
+        return test;
+      } else {
+        for ( var i in test.subtests ) {
+          if ( test.subtests[i].name == path[0] ) {
+            return this.search_aux(test.subtests[i], path.slice(1));
+          }
+        }
+        return null;
+      }
+    }
+
+    /**
+    * Create an action specific method for signaling that an asynchronous action
+    * has been completed. When an it method is called, the method returned by 
+    * make_done_doer is called.
+    * @method make_done_doer
+    * @param {SharkTestAction} it The action to make a done doer for.
+    * @return {Function} The done doer.
+    * @private
+    */
     make_done_doer(it) {
       let shark = this;
       return function(err) {
@@ -100,10 +228,16 @@
           it.log("finished asynchronously");
         }
         it.done = true;
-        AQ.update();
       }
     }
 
+    /**
+    * Print an error to the console.
+    * @method show_error
+    * @param {SharkTestAction} it
+    * @param {String} e The error message
+    * @private
+    */
     show_error(it,e) {
       console.log("%cError: ", "color: red", it.description, e);
     }
@@ -112,14 +246,33 @@
 
   shark = new Shark();
 
+  /*
+  * Describe a category of tests.
+  * @method describe
+  * @param {String} test_name The name of a category of tests.
+  * @param {Function} method A method that defines the test, either with more calls to describe(),
+  *   or with called to it().
+  * @return {SharkTest} 
+  */  
   function describe(test_name, method) {
-    let temp = shark.current;
-    shark.current.subtests[test_name] = new SharkTest();
+    let temp = shark.current,
+        test = new SharkTest();
+    test.set_path(shark.current.path, test_name);
+    shark.current.subtests[test_name] = test;
     shark.current = shark.current.subtests[test_name];
     method();
     shark.current = temp;
+    return temp;
   }
 
+  /*
+  * Describe a specific test.
+  * @method it
+  * @param {String} description
+  * @param {Function} method A method defining how to do the test. The method will be evaulated
+  *   as a method of an instance of {SharkTestAction}.
+  * @return {SharkTestAction}
+  */
   function it(description, method) {
     let it = new SharkTestAction(description, method);
     shark.current.its.push(it);
