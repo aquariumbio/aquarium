@@ -60,7 +60,9 @@
   </div>  
   <div ng-if="plan.id && plan.valid() && state.launch" ng-include="'launch_plan'"></div>
   <div ng-if="!plan.id" layout-padding>This plan cannot be launched because it has not been saved.</div>
-  <div ng-if="plan.id && !plan.valid()" layout-padding>This plan cannot be launched because it is not valid (all I/O should be green).</div>
+  <div ng-if="plan.id && !plan.valid()" layout-padding>
+    This plan cannot be launched because it is not valid (all I/O should be green and all wires should be black).
+  </div>
 
 </div>
 

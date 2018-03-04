@@ -138,6 +138,28 @@ AQ.OperationType.record_methods.num_outputs = function() {
   return aq.where(this.field_types,(ft) => { return ft.role === 'output' }).length;
 }
 
+AQ.OperationType.record_getters.inputs = function() {
+
+  var ot = this;
+  delete ot.inputs;
+
+  ot.inputs = aq.where(ot.field_types, ft => ft.role == 'input');
+
+  return ot.inputs;
+
+}
+
+AQ.OperationType.record_getters.outputs = function() {
+
+  var ot = this;
+  delete ot.outputs;
+
+  ot.outputs = aq.where(ot.field_types, ft => ft.role == 'output');
+
+  return ot.outputs;
+
+}
+
 AQ.OperationType.record_methods.new_operation = function() {
   return new Promise(function(resolve,reject) {
     resolve("New Operation");
@@ -337,4 +359,14 @@ AQ.OperationType.timing_sort_compare = function(ot1, ot2) {
 
 AQ.OperationType.sort_by_timing = function(ots) {
   return ots.sort(AQ.OperationType.timing_sort_compare);
+}
+
+AQ.OperationType.find_cached = function(name) {
+
+  if ( AQ.operation_types ) {
+    return aq.find(AQ.operation_types, ot => ot.name == name);
+  } else {
+    return null;
+  }
+
 }

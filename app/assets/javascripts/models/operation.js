@@ -1,5 +1,23 @@
 AQ.Operation.getter(AQ.User,"user");
 
+AQ.Operation.new_operation = function(operation_type, parent_module_id=0, x=100, y=100) {
+
+  var op = AQ.Operation.record({
+    x: x,
+    y: y,
+    width: 160, 
+    height: 30,
+    routing: {},
+    form: { input: {}, output: {} },
+    parent_id: parent_module_id,
+    status: "planning"
+  });
+  op.set_type(operation_type);
+
+  return op;
+
+}
+
 AQ.Operation.record_methods.upgrade = function() {
 
   let operation = this;
@@ -69,14 +87,6 @@ AQ.Operation.record_methods.set_type = function(operation_type) {
 
   return this;
 
-}
-
-AQ.Operation.record_methods.inputs = function() {
-  return aq.where(this.field_values, fv => fv.role == 'input');
-}
-
-AQ.Operation.record_methods.outputs = function() {
-  return aq.where(this.field_values, fv => fv.role == 'output');
 }
 
 AQ.Operation.record_getters.num_inputs = function() {
@@ -358,9 +368,9 @@ AQ.Operation.record_methods.instantiate_aux = function(plan,pairs,resolve) {
 }
 
 AQ.Operation.record_methods.instantiate = function(plan,field_value,sid) { // instantiate this operation's field values using the sid
-                                                                           // assuming it is being assigned to the argument field_value
+                                                                           // assuming it is being assigned to the argument field_value.
                                                                            // will need to look at the field_value's routing information
-                                                                           // as well as its sample definition
+                                                                           // as well as its sample definition.
   var operation = this,
       sample_id = AQ.id_from(sid);
 
@@ -387,7 +397,8 @@ AQ.Operation.record_methods.instantiate = function(plan,field_value,sid) { // in
         if ( samples.length == 1 ) { // there should only be one
 
           var sample = samples[0], 
-              pairs = [];            // pairs will hold a list of sample field values (sfv) and operation field_values (ofv) that should be identified
+              pairs = [];            // pairs will hold a list of sample field values (sfv) and 
+                                     // operation field_values (ofv) that should be identified
 
           aq.each(sample.field_values, sfv => {
             aq.each(operation.field_values, ofv => {
@@ -419,6 +430,17 @@ AQ.Operation.record_getters.inputs = function() {
   op.inputs = aq.where(op.field_values, fv => fv.role == 'input');
 
   return op.inputs;
+
+}
+
+AQ.Operation.record_getters.outputs = function() {
+
+  var op = this;
+  delete op.outputs;
+
+  op.outputs = aq.where(op.field_values, fv => fv.role == 'output');
+
+  return op.outputs;
 
 }
 

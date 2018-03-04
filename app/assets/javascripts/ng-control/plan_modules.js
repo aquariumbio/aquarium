@@ -7,15 +7,6 @@ AQ.Plan.record_methods.open_module = function(module) {
   this.current_module = module;
 }
 
-AQ.Plan.record_getters.current_module = function() {
-
-  plan = this;
-  delete plan.current_module;
-  plan.current_module = plan.create_base_module();
-  return plan.current_module;
-
-}
-
 AQ.Plan.record_methods.visible = function(obj) {
 
   var plan = this;

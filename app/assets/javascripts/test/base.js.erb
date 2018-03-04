@@ -1,46 +1,46 @@
 <% if Rails.env.development? %>
 
-  describe('AQ', function() {
+describe('AQ', function() {
 
-    describe('get_sample_names', function() {
+  describe('get_sample_names', function() {
 
-      it("should populate AQ with sample names", function(done) {
+    it("should populate AQ with sample names", function(done) {
 
-        AQ.get_sample_names().then(() => {
+      AQ.get_sample_names().then(() => {
 
-          AQ.should.property("sample_names");
-          AQ.sample_names.should.be.Object();
-          for ( var type in AQ.sample_names ) {
-            AQ.sample_names[type].should.be.Array();
-            AQ.sample_names[type].forEach(n => n.should.be.String());
-          }
+        AQ.should.property("sample_names");
+        AQ.sample_names.should.be.Object();
+        for ( var type in AQ.sample_names ) {
+          AQ.sample_names[type].should.be.Array();
+          AQ.sample_names[type].forEach(n => n.should.be.String());
+        }
+        done();
+
+      }).catch(done);
+
+    }).async();
+
+    it("should be logged in", function(done) {
+      AQ.User.current().then(user => {
+        this.log("current user is " + user.login);
+        done();
+      }).catch(done);
+    }).async();
+
+    it("should keep time", function(done) {
+      let t = Date.now()
+      setTimeout( () => { 
+        try {
+          let dt = Date.now() - t;
+          this.log("dt = " + dt);
+          dt.should.be.greaterThanOrEqual(1000);
           done();
-
-        }).catch(done);
-
-      }).async();
-
-      it("should be logged in", function(done) {
-        AQ.User.current().then(user => {
-          this.log("current user is " + user.login);
-          done();
-        }).catch(done);
-      }).async();
-
-      it("should keep time", function(done) {
-        let t = Date.now()
-        setTimeout( () => { 
-          try {
-            let dt = Date.now() - t;
-            this.log("dt = " + dt);
-            dt.should.be.greaterThanOrEqual(1000);
-            done();
-          } catch(e) { done(e); }
-        }, 1000);
-      }).async();
-
-    });
+        } catch(e) { done(e); }
+      }, 1000);
+    }).async();
 
   });
+
+});
 
 <% end %>

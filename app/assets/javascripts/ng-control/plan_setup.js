@@ -9,7 +9,7 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
   $scope.snap = AQ.snap;
   
   $scope.last_place = 0;
-  $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
+  $scope.plan = AQ.Plan.new_plan("Untitled Plan");
 
   $scope.ready = false;
 

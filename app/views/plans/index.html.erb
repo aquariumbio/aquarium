@@ -136,7 +136,7 @@
         <div ng-if="current_op && current_op.status == 'planning' && current_draggable.record_type != 'Module'">
           <%= render partial: 'operation_editor' %>
         </div>
-        <div ng-if="current_op && current_op.status != 'planning' && current_draggable.record_type != 'Module'">
+        <div ng-if="current_op && current_op.id && current_op.status != 'planning' && current_draggable.record_type != 'Module'">
           <div class="launcher" ng-include="'operation_viewer'"></div>
         </div>        
         <div ng-if="current_draggable && current_draggable.record_type == 'Module'">

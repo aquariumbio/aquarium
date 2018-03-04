@@ -31,19 +31,21 @@ module Marshall
 
     ids = []
 
-    ops.each do |op|
-      begin
-        if op[:id]
-          operation = self.operation_update op
-        else
-          operation = self.operation op
-          operation.associate_plan p
-          operation.save
+    if ops
+      ops.each do |op|
+        begin
+          if op[:id]
+            operation = self.operation_update op
+          else
+            operation = self.operation op
+            operation.associate_plan p
+            operation.save
+          end
+          ids << operation.id
+          map_id op[:rid], operation.id
+         rescue Exception => e
+          raise "Marshalling error: #{e.to_s}: #{e.backtrace[0].to_s}"
         end
-        ids << operation.id
-        map_id op[:rid], operation.id
-       rescue Exception => e
-        raise "Marshalling error: #{e.to_s}: #{e.backtrace[0].to_s}"
       end
     end
 

@@ -1,0 +1,19 @@
+<% if Rails.env.development? %>
+
+function make_example_plan(name) {
+
+  let plan = AQ.Plan.new_plan(name),
+      assemble_type = AQ.OperationType.find_cached("Assemble Plasmid"),
+      assemble = AQ.Operation.new_operation(assemble_type, 0, 160, 160),
+      purify_type = AQ.OperationType.find_cached("Purify Gel Slice"),
+      pcr_type = AQ.OperationType.find_cached("Make PCR Fragment");
+
+  plan.operations.push(assemble);
+  plan.add_wire_from(assemble.inputs[0], assemble, { operation_type: purify_type, output: purify_type.outputs[0]});
+  plan.add_wire_to(assemble.outputs[0], assemble, { operation_type: pcr_type, input: pcr_type.inputs[2]});
+
+  return plan;
+
+}
+
+<% end %>

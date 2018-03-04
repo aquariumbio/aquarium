@@ -1,3 +1,17 @@
+AQ.Plan.new_plan = function(name)  {
+
+  var plan = AQ.Plan.record({
+    operations: [], 
+    wires: [], 
+    status: "planning", 
+    name: name
+  });
+
+  plan.create_base_module();
+  return plan;
+
+}
+
 AQ.Plan.record_methods.reload = function() {
 
   var plan = this;
@@ -75,10 +89,10 @@ AQ.Plan.load = function(id) {
       try {
         var up = AQ.Plan.record(response.data).marshall();
         resolve(up);
-      } catch (error) {
-        reject(error)
+      } catch (e) {
+        reject(e)
       }
-    })
+    }).catch(response => reject(response.data))
   });
 }
 
@@ -449,19 +463,16 @@ AQ.Plan.record_methods.siblings = function(fv) {
 
 AQ.Plan.record_methods.add_wire_from = function(fv,op,pred) {
 
-  var plan = this;
+  // pred is expected to be of the form { operation_type: ___, output: ___}
 
-  var preop = AQ.Operation.record({
-    routing: {},
-    form: { input: {}, output: {} }
-  }).set_type(pred.operation_type);
+  let plan = this,
+      preop = AQ.Operation.new_operation(pred.operation_type, plan.current_module.id, op.x, op.y + 4*AQ.snap),
+      preop_output = preop.output(pred.output.name);
 
-  plan.operations.push(preop)
-
-  var preop_output = preop.output(pred.output.name);
+  plan.operations.push(preop);
   plan.remove_wires_to(op,fv);
 
-  var wire = plan.wire(preop,preop_output,op,fv); 
+  let wire = plan.wire(preop,preop_output,op,fv); 
 
   if ( fv.field_type.array ) {
     plan.propagate(op,fv,fv.sample_identifier);
@@ -475,19 +486,14 @@ AQ.Plan.record_methods.add_wire_from = function(fv,op,pred) {
 
 AQ.Plan.record_methods.add_wire_to = function(fv,op,suc) {
 
-  var plan = this;
-
-  var postop = AQ.Operation.record({
-    routing: {},
-    form: { input: {}, output: {} }
-  }).set_type(suc.operation_type);
+  let plan = this,
+      postop = AQ.Operation.new_operation(suc.operation_type, plan.current_module.id, op.x, op.y - 4*AQ.snap),
+      postop_input = postop.input(suc.input.name);
 
   plan.operations.push(postop);
-
-  var postop_input = postop.input(suc.input.name);
   plan.remove_wires_from(op,fv);
 
-  var wire = plan.wire(op,fv,postop,postop_input);  
+  let wire = plan.wire(op,fv,postop,postop_input);  
 
   if ( fv.field_type.array ) {
     plan.propagate(op,fv,fv.sample_identifier);

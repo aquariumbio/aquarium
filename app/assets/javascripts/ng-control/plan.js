@@ -76,43 +76,33 @@
     }
 
     $scope.add_operation = function(operation_type) {
-      var op = AQ.Operation.record({
-        x: 60+3*AQ.snap + $scope.last_place,
-        y: 60+2*AQ.snap + $scope.last_place,
-        width: 160, 
-        height: 30,
-        routing: {}, form: { input: {}, output: {} },
-        parent_id: $scope.plan.current_module.id
-      });
+
+      var op = AQ.Operation.new_operation(
+        operation_type,
+        $scope.plan.current_module.id,
+        60+3*AQ.snap + $scope.last_place,
+        60+2*AQ.snap + $scope.last_place);
+
       inc_last_place();
-      op.set_type(operation_type);
+
       $scope.plan.operations.push(op);
+
       if ( $scope.plan.name === "Untitled Plan" ) {
         $scope.plan.name = op.operation_type.name;
         $scope.state.message = "Changed name of untitled plan to " + op.operation_type.name;
       }
+
     };
 
     $scope.add_predecessor = function(io,obj,pred) {
 
       if ( obj.record_type === "Operation" && io.record_type === "FieldValue" ) {
 
-        var op = obj,
-            fv = io,
-            newop = $scope.plan.add_wire_from(fv,op,pred);
-
-        newop.x = op.x;
-        newop.y = op.y + 4 * AQ.snap;
-        newop.width = 160;
-        newop.height = 30;
-        newop.parent_id = $scope.plan.current_module.id;
+        let newop = $scope.plan.add_wire_from(io,obj,pred);
 
         $scope.select(newop);
-
-        var inputs = aq.where(newop.field_values, fv => fv.role === 'input');
-
-        if ( inputs.length > 0 ) {
-          $scope.set_current_io(inputs[0]);
+        if ( newop.num_inputs > 0 ) { 
+          $scope.set_current_io(newop.inputs[0]);
         }
 
       } else if ( obj.record_type === "Module" && io.record_type === "ModuleIO" )  {
@@ -146,22 +136,13 @@
 
       if ( obj.record_type === "Operation" && io.record_type === "FieldValue" ) {
 
-        var op = obj,
-            fv = io,
-            newop = $scope.plan.add_wire_to(fv,op,suc);
+        let newop = $scope.plan.add_wire_to(io,obj,suc);
 
         $scope.plan.wires[$scope.plan.wires.length-1].snap = AQ.snap;
-        newop.x = op.x;
-        newop.y = op.y - 4*AQ.snap;
-        newop.width = 160;
-        newop.height = 30;
-        newop.parent_id = $scope.plan.current_module.id;
-
         $scope.select(newop);
 
-        var fvs = aq.where(newop.field_values, fv => fv.role === 'output');
-        if ( fvs.length > 0 ) {
-          $scope.set_current_io(fvs[0]);
+        if ( newop.num_outputs > 0 ) {
+          $scope.set_current_io(newop.outputs[0]);
         }
 
       } else if ( obj.record_type === "Module" && io.record_type === "ModuleIO" )  {
@@ -320,7 +301,7 @@
 
           var dialog = $mdDialog.confirm()
               .title('Save First?')
-              .textContent(msg ? msg : "Save the current plan before loading \"" + plan.name + "\"?")
+              .textContent(msg ? msg : "Save the current plan before loading \"" + $scope.plan.name + "\"?")
               .ariaLabel('Save First?')
               .ok('Yes')
               .cancel('No');
@@ -390,7 +371,7 @@
 
     $scope.new = function() {
       save_first("Save current plan before creating new plan?").then( () => {
-        $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
+        $scope.plan = AQ.Plan.new_plan("Untitled Plan");
         $scope.select(null);
         $scope.$apply();
       });
