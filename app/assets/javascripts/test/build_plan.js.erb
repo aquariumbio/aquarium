@@ -26,8 +26,6 @@ shark.make_pcr_plan = function(sample, container) {
       rehydrate = AQ.OperationType.find_cached("Rehydrate Primer").create(0, 160, 320),
       order =     AQ.OperationType.find_cached("Order Primer").create(0, 160, 400);
 
-  console.log(order)
-
   plan.operations = [ extract, run, pour, pcr, rehydrate, order ];
 
   plan.connect(order.output("Primer"),             order,     rehydrate.input("Primer"),   rehydrate);
@@ -40,7 +38,7 @@ shark.make_pcr_plan = function(sample, container) {
   plan.equiv(pcr, pcr.output("Fragment"), rehydrate, rehydrate.output("Primer Aliquot")).should.equal(false);
   plan.equiv(run, run.output("Fragment"), extract, extract.input("Fragment")).should.equal(true);
 
-  plan.classes().length.should.equal(6)
+  order.input("Urgent?").value = "yes";
 
   return Promise
      .resolve(plan)
@@ -99,7 +97,7 @@ describe('Plan_Creation', function() {
         .then(plan => plan.save(shark.current_user))
         .then(plan => plan.show_assignments())
         .then(plan => plan.destroy())
-        .then(done)
+        .then(plan => done())
         .catch(done);
 
   }).async();
