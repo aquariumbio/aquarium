@@ -101,41 +101,41 @@ AQ.FieldValue.record_methods.clear = function() {
   return this;
 }
 
+AQ.FieldValue.record_methods.choose_item = function(items) {
+
+  let fv = this;
+  fv.items = items;
+
+  if ( items.length > 0 ) {
+    if ( ! fv.child_item_id && fv.role == 'input' && fv.num_wires == 0 ) {
+      if ( !items[0].collection ) {
+        fv.child_item_id = items[0].id;
+      } else {
+        fv.child_item_id = items[0].collection.id;
+        items[0].collection.assign_first(fv);
+      }
+    }
+  }  
+
+  return fv.child_item_id;
+
+}
+
 AQ.FieldValue.record_methods.find_items = function(sid) {
 
   var fv = this,
-      sample_id;
+      promise = Promise.resolve(),
+      sample_id = typeof sid == 'string' ? AQ.id_from(sid) : sid;
 
   if ( fv.field_type.ftype == 'sample' ) {
-
-    sample_id = AQ.id_from(sid);
-    // fv.sid = sid;
-
-    delete fv.items;  
-
-    return new Promise(function(resolve,reject) {    
-
-      AQ.items_for(sample_id,fv.aft.object_type_id).then( items => { 
-        fv.items = items;
-        if ( fv.items.length > 0 ) {
-          if ( ! fv.child_item_id && fv.role == 'input' && fv.num_wires == 0 ) {
-            if ( !items[0].collection ) {
-              fv.child_item_id = items[0].id;
-            } else {
-              fv.child_item_id = items[0].collection.id;
-              items[0].collection.assign_first(fv);
-            }
-          } 
-        }
-        AQ.update();
-        resolve(items);
-      });
-
-    });
-
+    promise = promise
+      .then( () => AQ.items_for(sample_id,fv.aft.object_type_id) )
+      .then( items => fv.choose_item(items) )
   } else {
     fv.items = [];
   }
+
+  return promise;
 
 }
 
@@ -158,7 +158,6 @@ AQ.FieldValue.record_getters.items = function() {
     fv.items = [];
 
   }
-
 
 }
 

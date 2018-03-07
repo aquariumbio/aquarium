@@ -18,20 +18,15 @@ shark.use_succ_and_pred = function(name) {
 
 shark.make_pcr_plan = function(sample, container) {
 
-  let plan =          AQ.Plan.new_plan("PCR Plan Construction Test"),
-      extract_type =  AQ.OperationType.find_cached("Extract Gel Slice"),
-      run_type =      AQ.OperationType.find_cached("Run Gel"),
-      pour_type =     AQ.OperationType.find_cached("Pour Gel"),
-      pcr_type =      AQ.OperationType.find_cached("Make PCR Fragment"),
-      rehdrate_type = AQ.OperationType.find_cached("Rehydrate Primer"),
-      order_type =    AQ.OperationType.find_cached("Order Primer");   
+  let plan =      AQ.Plan.new_plan("PCR Plan Construction Test"),
+      extract =   AQ.OperationType.find_cached("Extract Gel Slice").create(0, 160, 80),
+      run =       AQ.OperationType.find_cached("Run Gel").create(0, 160, 160),
+      pour =      AQ.OperationType.find_cached("Pour Gel").create(0, 360, 240),
+      pcr =       AQ.OperationType.find_cached("Make PCR Fragment").create(0, 160, 240),
+      rehydrate = AQ.OperationType.find_cached("Rehydrate Primer").create(0, 160, 320),
+      order =     AQ.OperationType.find_cached("Order Primer").create(0, 160, 400);
 
-  let extract =   AQ.Operation.new_operation(extract_type, 0, 160, 80),
-      run =       AQ.Operation.new_operation(run_type, 0, 160, 160),
-      pour =      AQ.Operation.new_operation(pour_type, 0, 360, 240),      
-      pcr =       AQ.Operation.new_operation(pcr_type, 0, 160, 240),      
-      rehydrate = AQ.Operation.new_operation(rehdrate_type, 0, 160, 320),      
-      order =     AQ.Operation.new_operation(order_type, 0, 160, 400);
+  console.log(order)
 
   plan.operations = [ extract, run, pour, pcr, rehydrate, order ];
 
@@ -47,7 +42,10 @@ shark.make_pcr_plan = function(sample, container) {
 
   plan.classes().length.should.equal(6)
 
-  return plan.assign(extract.output("Fragment"), sample, container); // returns a promise
+  return Promise
+     .resolve(plan)
+     .then(plan => plan.assign(extract.output("Fragment"), sample, container))
+     .then(plan => plan.choose_items());
 
 }
 
@@ -61,6 +59,12 @@ shark.aq_setup = function() {
     .then(user => shark.current_user = user)
     .then(AQ.get_sample_names)  
 
+}
+
+function wait(t, plan) {
+  return new Promise(function(resolve,reject) {
+    setTimeout(() => resolve(plan), t);
+  });
 }
 
 describe('Plan_Creation', function() {
@@ -89,16 +93,13 @@ describe('Plan_Creation', function() {
 
     shark.aq_setup()
         .then(() => AQ.Sample.find_by_name("ADF3 right"))
-        .then(s => { 
-            sample = s; 
-            return AQ.ObjectType.find_by_name("Fragment / Gel Slice") 
-        })
+        .then(s => sample = s)
+        .then(() => AQ.ObjectType.find_by_name("Fragment / Gel Slice"))
         .then(container => shark.make_pcr_plan(sample,container))
         .then(plan => plan.save(shark.current_user))
-        .then(plan => {  
-            plan.field_values().forEach(fv => console.log(fv.name + ": " + fv.sid));
-            done();
-        })
+        .then(plan => plan.show_assignments())
+        .then(plan => plan.destroy())
+        .then(done)
         .catch(done);
 
   }).async();

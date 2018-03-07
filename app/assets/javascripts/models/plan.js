@@ -850,3 +850,35 @@ AQ.Plan.record_methods.parent_operation = function(field_value) {
   return null;
 }
 
+AQ.Plan.record_methods.choose_items = function() {
+
+  let plan = this,
+      promise = Promise.resolve();
+
+  plan.field_values().forEach(field_value => {
+
+    if ( field_value.leaf ) {
+      promise = promise.then(() => field_value.find_items(field_value.child_sample_id));
+    }
+
+  })
+
+  return promise.then(() => plan);
+
+}
+
+AQ.Plan.record_methods.show_assignments = function() {
+
+  var plan = this;
+
+  plan.field_values().forEach(fv => {
+    let str = fv.name + ": " + fv.sid;
+    if ( fv.child_item_id ) {
+      str += ", item id = " + fv.child_item_id;
+    }
+    console.log(str);
+  });
+
+  return plan;
+
+}

@@ -370,3 +370,9 @@ AQ.OperationType.find_cached = function(name) {
   }
 
 }
+
+AQ.OperationType.record_methods.create = function(parent_module_id=0, x=100, y=100) {
+
+  return AQ.Operation.new_operation(this, parent_module_id, x, y);
+
+}
