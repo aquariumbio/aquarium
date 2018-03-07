@@ -256,14 +256,14 @@ AQ.FieldValue.record_methods.backchain = function(plan,operation) {
 AQ.FieldValue.record_methods.valid = function() {
 
   var fv = this, 
-       v;
+      v = false;
 
   if ( fv.field_type.ftype != 'sample' ) {
     v = !! fv.value;
   } else if ( fv.aft && fv.aft.sample_type_id ) {
-    v = fv.child_sample_id && ( fv.num_wires > 0 || fv.role == 'output' || fv.child_item_id );
+    v = !!fv.child_sample_id && ( fv.num_wires > 0 || fv.role == 'output' || !!fv.child_item_id );
   } else {
-    v = fv.num_wires > 0 || fv.role == 'output' || fv.child_item_id;
+    v = fv.num_wires > 0 || fv.role == 'output' || !!fv.child_item_id;
   }
 
   if ( fv.role == 'input' && 
@@ -282,4 +282,17 @@ AQ.FieldValue.record_methods.empty = function() {
   return fv.child_sample_id;
 } 
 
+AQ.FieldValue.record_methods.assign = function(sample) {
 
+  let field_value = this;
+
+  field_value.child_sample_id = sample.id;
+  field_value.sid = sample.identifier;
+
+  if ( field_value.field_type && field_value.field_type.array ) {
+    field_value.sample_identifier = sample.identifier;
+  } 
+
+  return field_value;
+
+}

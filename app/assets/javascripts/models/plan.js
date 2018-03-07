@@ -629,6 +629,7 @@ AQ.Plan.record_methods.valid = function() {
   });
 
   return v;
+
 }
 
 AQ.Plan.record_methods.destroy = function() {
@@ -836,3 +837,16 @@ AQ.Plan.record_methods.create_text_box = function() {
   return plan.current_module.create_text_box();
 
 }
+
+AQ.Plan.record_methods.parent_operation = function(field_value) {
+  let plan = this;
+  for ( var i=0; i<plan.operations.length; i++ ) {
+    for ( var j=0; j<plan.operations[i].field_values.length; j++ ) {
+      if ( plan.operations[i].field_values[j] == field_value ) {
+        return plan.operations[i];
+      }
+    }
+  }
+  return null;
+}
+

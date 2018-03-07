@@ -137,7 +137,7 @@
         sample.items.push(i);
      
       });
-    }
+    }   
 
   }]);
 

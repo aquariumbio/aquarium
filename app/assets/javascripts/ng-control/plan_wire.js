@@ -34,7 +34,7 @@ AQ.Plan.record_methods.connect_aux = function(io1, object1, io2, object2) {
       new_wire,
       cycle;
 
-  console.log("connect_aux",io1, object1, io2, object2)
+  // console.log("connect_aux",io1, object1, io2, object2)
 
   new_wire = plan.current_module.connect(io1, object1, io2, object2);
   plan.base_module.associate_fvs();  
@@ -52,7 +52,10 @@ AQ.Plan.record_methods.connect_aux = function(io1, object1, io2, object2) {
 
 AQ.Plan.record_methods.connect = function(io1, object1, io2, object2) {
 
-  console.log(["plan.connect", io1, object1, io2, object2])
+  // io1,2: FieldValue or Module IO
+  // object1,2: Operation or Module
+
+  // console.log(["plan.connect", io1, object1, io2, object2])
 
   var plan = this;
 

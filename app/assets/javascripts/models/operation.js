@@ -417,7 +417,7 @@ AQ.Operation.record_methods.instantiate = function(plan,field_value,sid) { // in
     });
 
   } else {
-    return new Promise(function(resolve,reject) {});
+    return new Promise(function(resolve,reject) { resolve() });
   }
 
 }

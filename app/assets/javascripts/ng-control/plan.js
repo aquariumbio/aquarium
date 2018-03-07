@@ -282,7 +282,7 @@
 
         $mdDialog.show(confirm).then( () => {
 
-          $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
+          $scope.plan = AQ.Plan.new_plan("Untitled Plan");
           $scope.select(null);
           $scope.state.deleting_plan = p;
           p.destroy().then(() =>  $scope.refresh_plan_list());

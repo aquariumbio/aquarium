@@ -48,7 +48,7 @@
                 if ( aft && aft.object_type_id ) {
                   field_value.clear_item();
                   field_value.find_items(sid);
-                }               
+                }
               }
             });
 

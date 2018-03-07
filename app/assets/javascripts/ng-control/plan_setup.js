@@ -102,13 +102,13 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
 
         if ( aq.url_params().plan_id ) {
           AQ.Plan.load(aq.url_params().plan_id).then(p => {
-            AQ.User.find(p.user_id ).then(user => {
+            AQ.User.find(p.user_id).then(user => {
               $scope.current_user = user;
               get_plans_and_templates();
             });
           });
         } else {
-          get_plans_and_templates();        
+          get_plans_and_templates();
         }
 
       });

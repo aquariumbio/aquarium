@@ -260,4 +260,8 @@ Aq.prototype.url_path = function() {
 
 }
 
+Aq.prototype.member = function(set, element) {
+  return set.indexOf(element) >= 0;
+}
+
 aq = new Aq();
