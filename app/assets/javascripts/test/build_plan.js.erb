@@ -1,22 +1,27 @@
 <% if Rails.env.development? %>
 
-shark.use_succ_and_pred = function(name) {
+shark.use_succ_and_pred = function(plasmid, frag1, frag2) {
 
-  let plan = AQ.Plan.new_plan(name),
+  let plan = AQ.Plan.new_plan("Suc and Pred Test"),
       assemble_type = AQ.OperationType.find_cached("Assemble Plasmid"),
       assemble = AQ.Operation.new_operation(assemble_type, 0, 160, 160),
       purify_type = AQ.OperationType.find_cached("Purify Gel Slice"),
       pcr_type = AQ.OperationType.find_cached("Make PCR Fragment");
 
-  plan.operations.push(assemble);
-  plan.add_wire_from(assemble.inputs[0], assemble, { operation_type: purify_type, output: purify_type.outputs[0]});
-  plan.add_wire_to(assemble.outputs[0], assemble, { operation_type: pcr_type, input: pcr_type.inputs[2]});
+  plan.operations = [assemble];
 
-  return plan;
+  assemble.array_add(assemble_type.input("Fragment"))
+
+  return Promise.resolve(plan)  
+    .then(plan => plan.assign(assemble.output("Assembled Plasmid"), plasmid))
+    .then(plan => plan.assign(assemble.input("Fragment", 0), frag1))
+    .then(plan => plan.assign(assemble.input("Fragment", 1), frag2))
+    .then(plan => plan.add_wire_from(assemble.inputs[0], assemble, { operation_type: purify_type, output: purify_type.outputs[0]}))
+    .then(plan => plan.add_wire_to(assemble.outputs[0], assemble, { operation_type: pcr_type, input: pcr_type.inputs[2]}))
 
 }
 
-shark.make_pcr_plan = function(sample, container) {
+shark.make_pcr_plan = function(sample) {
 
   let plan =      AQ.Plan.new_plan("PCR Plan Construction Test"),
       extract =   AQ.OperationType.find_cached("Extract Gel Slice").create(0, 160, 80),
@@ -42,7 +47,7 @@ shark.make_pcr_plan = function(sample, container) {
 
   return Promise
      .resolve(plan)
-     .then(plan => plan.assign(extract.output("Fragment"), sample, container))
+     .then(plan => plan.assign(extract.output("Fragment"), sample))
      .then(plan => plan.choose_items());
 
 }
@@ -67,33 +72,48 @@ function wait(t, plan) {
 
 describe('Plan_Creation', function() {
 
-  // it("should use successors and predecessors", function(done) {
+  it("should use successors and predecessors", function(done) {
 
-  //   shark.aq_setup().then(() => {
+    shark.aq_setup().then(() => {
 
-  //     let unsaved_plan = shark.use_succ_and_pred("Successor/predecessor test");
-  //     unsaved_plan.save(shark.current_user).then(saved_plan => {
-  //       saved_plan.record_type.should.be.equal("Plan");
-  //       saved_plan.name.should.be.equal("Successor/predecessor test");
-  //       saved_plan.operations.length.should.be.equal(3);
-  //       saved_plan.wires.length.should.be.equal(2);
-  //       saved_plan.valid().should.be.equal(false);
-  //       saved_plan.destroy().then(done).catch(done);
-  //     }).catch(done);
+      Promise.all([
+          AQ.Sample.find_by_name("pGFP"),
+          AQ.Sample.find_by_name("ADF3 right"),
+          AQ.Sample.find_by_name("ADF3 left")
+        ])
+        .then(samples => shark.use_succ_and_pred(samples[0], samples[1], samples[2]))
+        // .then(plan => wait(2000, plan))
+        .then(plan => { console.log("saving"); return plan.save(shark.current_user) })
+        .then(plan => {
+          plan.id.should.not.equal(null);
+          plan.record_type.should.be.equal("Plan");
+          plan.operations.length.should.be.equal(3);
+          plan.wires.length.should.be.equal(2);
+          plan.valid().should.be.equal(false);
+          plan.classes().forEach(set => {
+            console.log(aq.collect(set, fv => fv.name + "(" + fv.role + ")"))
+          })
+          plan.operations.forEach(operation => {
+            console.log("" + operation.id + ": " + operation.operation_type.name)
+            operation.field_values.forEach(fv => {
+              console.log("  " + fv.name + "(" + fv.role + "): sample.id = " + fv.child_sample_id)
+            })
+          })
+          return plan;
+        })
+        // .then(plan => plan.destroy())
+        .then(plan => done())
+        .catch(done);
 
-  //   });
+    });
 
-  // }).async();
+  }).async();
 
-  it("should make a pcr plan", function(done) {
-
-    var sample;
+  sit("should make a pcr plan", function(done) {
 
     shark.aq_setup()
         .then(() => AQ.Sample.find_by_name("ADF3 right"))
-        .then(s => sample = s)
-        .then(() => AQ.ObjectType.find_by_name("Fragment / Gel Slice"))
-        .then(container => shark.make_pcr_plan(sample,container))
+        .then(sample => shark.make_pcr_plan(sample))
         .then(plan => plan.save(shark.current_user))
         .then(plan => plan.show_assignments())
         .then(plan => plan.destroy())

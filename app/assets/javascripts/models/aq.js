@@ -6,6 +6,7 @@ AQ.init = function(http) {
   AQ.get = http.get;
   AQ.post = http.post;
   AQ.next_record_id = 0;
+  AQ.sample_cache = {};
 
 }
 

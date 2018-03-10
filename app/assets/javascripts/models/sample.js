@@ -23,21 +23,40 @@ AQ.Sample.record_methods.upgrade = function() {
 
 AQ.Sample.find_by_identifier = function(sid) {
 
+  // This method is primarily used by the planner autocomplete method and planner assign methods, 
+  // which is why it incluees field values (so subsamples can be looked up).
+
   sample_id = AQ.id_from(sid);
 
-  return new Promise(function(resolve, reject) {
+  if ( sample_id ) {
 
-    // get sid sample
-    AQ.Sample.where({id: sample_id}, {methods: ["field_values"]}).then(samples => {  // get the sample corresponding to sid
+    if ( AQ.sample_cache[sample_id] ) {
 
-      if ( samples.length == 1 ) { // there should only be one
-        resolve(samples[0]);
-      } else {
-        reject("Sample " + sid + " not found");
-      }
+      return Promise.resolve(AQ.sample_cache[sample_id]);
 
-    }).catch(reject);
+    } else {
 
-  });
+      return new Promise(function(resolve, reject) {
+
+        // get sid sample
+        AQ.Sample.where({id: sample_id}, {methods: ["field_values"]}).then(samples => {  // get the sample corresponding to sid
+
+          if ( samples.length == 1 ) { // there should only be one       
+            resolve(samples[0]);
+            AQ.sample_cache[samples[0].id] = samples[0];
+          } else {
+            reject("Sample " + sid + " not found");
+          }
+
+        }).catch(reject);
+
+      });
+
+    }
+
+  } else {
+    console.log("Could not find sample " + sid)
+    return Promise.reject("Could not find sample " + sid);
+  }
 
 }

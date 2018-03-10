@@ -98,12 +98,16 @@
 
       if ( obj.record_type === "Operation" && io.record_type === "FieldValue" ) {
 
-        let newop = $scope.plan.add_wire_from(io,obj,pred);
-
-        $scope.select(newop);
-        if ( newop.num_inputs > 0 ) { 
-          $scope.set_current_io(newop.inputs[0]);
-        }
+        $scope.plan
+          .add_wire_from(io,obj,pred)
+          .then(plan => {
+            let newop = plan.operations[plan.operations.length-1];
+            $scope.select(newop);
+            if ( newop.num_inputs > 0 ) { 
+              $scope.set_current_io(newop.inputs[0]);
+            }   
+            $scope.$apply();         
+          })
 
       } else if ( obj.record_type === "Module" && io.record_type === "ModuleIO" )  {
 
@@ -136,14 +140,16 @@
 
       if ( obj.record_type === "Operation" && io.record_type === "FieldValue" ) {
 
-        let newop = $scope.plan.add_wire_to(io,obj,suc);
-
-        $scope.plan.wires[$scope.plan.wires.length-1].snap = AQ.snap;
-        $scope.select(newop);
-
-        if ( newop.num_outputs > 0 ) {
-          $scope.set_current_io(newop.outputs[0]);
-        }
+        let newop = $scope.plan
+          .add_wire_to(io,obj,suc)
+          .then(plan => {
+            let newop = plan.operations[plan.operations.length - 1];
+            $scope.select(newop);
+            if ( newop.num_outputs > 0 ) {
+              $scope.set_current_io(newop.outputs[0]);
+            }    
+            $scope.$apply();        
+          })
 
       } else if ( obj.record_type === "Module" && io.record_type === "ModuleIO" )  {
 

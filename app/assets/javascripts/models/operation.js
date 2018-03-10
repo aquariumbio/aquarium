@@ -243,6 +243,8 @@ AQ.Operation.record_methods.array_add = function(field_type) {
   this.recompute_getter('num_inputs');
   this.recompute_getter('num_outputs');  
 
+  console.log(this)
+
   return this;
 
 }
@@ -296,23 +298,23 @@ AQ.Operation.record_methods.update_cost = function() {
 
 }
 
-AQ.Operation.record_methods.io = function(name,role) {
+AQ.Operation.record_methods.io = function(name,role,index=0) {
 
   var fvs = aq.where(
     this.field_values,
     fv => fv.name == name && fv.role == role
   );
 
-  if ( fvs.length > 0 ) {
-    return fvs[0];
+  if ( fvs.length > index ) {
+    return fvs[index];
   } else {
-    throw "Attempted to access nonexistent " + role + " named '" + name + "'";
+    throw "Attempted to access nonexistent " + role + " named '" + name + "'" + " indexed by " + index;
   }
 
 }
 
-AQ.Operation.record_methods.output = function(name) { return this.io(name, 'output'); }
-AQ.Operation.record_methods.input = function(name) { return this.io(name, 'input');  }
+AQ.Operation.record_methods.output = function(name, index=0) { return this.io(name, 'output', index); }
+AQ.Operation.record_methods.input = function(name, index=0) { return this.io(name, 'input', index);  }
 
 AQ.Operation.record_methods.reload = function() {
 
@@ -371,6 +373,9 @@ AQ.Operation.record_methods.instantiate = function(plan,field_value,sid) { // in
                                                                            // assuming it is being assigned to the argument field_value.
                                                                            // will need to look at the field_value's routing information
                                                                            // as well as its sample definition.
+
+  console.log("INSTANTIATE: THIS SHOULD BE FIXED")
+
   var operation = this,
       sample_id = AQ.id_from(sid);
 

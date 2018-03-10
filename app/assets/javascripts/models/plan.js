@@ -472,15 +472,21 @@ AQ.Plan.record_methods.add_wire_from = function(fv,op,pred) {
   plan.operations.push(preop);
   plan.remove_wires_to(op,fv);
 
-  let wire = plan.wire(preop,preop_output,op,fv); 
+  let wire = plan.wire(preop,preop_output,op,fv),
+      sid = null;
 
   if ( fv.field_type.array ) {
-    plan.propagate(op,fv,fv.sample_identifier);
+    sid = fv.sample_identifier;
   } else {
-    plan.propagate(op,fv,op.routing[fv.routing])  
+    sid = op.routing[fv.routing]
   }
 
-  return preop;
+  if ( sid ) {
+    return AQ.Sample.find_by_identifier(sid)
+      .then(sample => plan.assign(fv,sample))
+  } else {
+    return Promise.resolve(plan);
+  }
 
 }
 
@@ -496,12 +502,19 @@ AQ.Plan.record_methods.add_wire_to = function(fv,op,suc) {
   let wire = plan.wire(op,fv,postop,postop_input);  
 
   if ( fv.field_type.array ) {
-    plan.propagate(op,fv,fv.sample_identifier);
+    sid = fv.sample_identifier;
   } else {
-    plan.propagate(op,fv,op.routing[fv.routing])  
-  }  
+    sid = op.routing[fv.routing]
+  }
 
-  return postop;
+  if ( sid ) {
+    return AQ.Sample.find_by_identifier(sid)
+      .then(sample => plan.assign(fv,sample))
+  } else {
+    return Promise.resolve(plan);
+  }
+
+  return Promise.resolve(plan);  
 
 }
 

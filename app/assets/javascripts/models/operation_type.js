@@ -160,6 +160,24 @@ AQ.OperationType.record_getters.outputs = function() {
 
 }
 
+AQ.OperationType.record_methods.io = function(name,role) {
+
+  var fts = aq.where(
+    this.field_types,
+    ft => ft.name == name && ft.role == role
+  );
+
+  if ( fts.length > 0 ) {
+    return fts[0];
+  } else {
+    throw "Attempted to access nonexistent " + role + " named '" + name + "'";
+  }
+
+}
+
+AQ.OperationType.record_methods.output = function(name) { return this.io(name, 'output'); }
+AQ.OperationType.record_methods.input = function(name) { return this.io(name, 'input');  }
+
 AQ.OperationType.record_methods.new_operation = function() {
   return new Promise(function(resolve,reject) {
     resolve("New Operation");
