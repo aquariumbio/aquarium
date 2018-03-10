@@ -8,7 +8,7 @@ shark.use_succ_and_pred = function(plasmid, frag1, frag2) {
       purify_type = AQ.OperationType.find_cached("Purify Gel Slice"),
       pcr_type = AQ.OperationType.find_cached("Make PCR Fragment");
 
-  plan.operations = [assemble];
+  plan.add_operation(assemble);
 
   assemble.array_add(assemble_type.input("Fragment"))
 
@@ -18,6 +18,7 @@ shark.use_succ_and_pred = function(plasmid, frag1, frag2) {
     .then(plan => plan.assign(assemble.input("Fragment", 1), frag2))
     .then(plan => plan.add_wire_from(assemble.inputs[0], assemble, { operation_type: purify_type, output: purify_type.outputs[0]}))
     .then(plan => plan.add_wire_to(assemble.outputs[0], assemble, { operation_type: pcr_type, input: pcr_type.inputs[2]}))
+    .then(plan => plan.choose_items())    
 
 }
 
@@ -31,7 +32,13 @@ shark.make_pcr_plan = function(sample) {
       rehydrate = AQ.OperationType.find_cached("Rehydrate Primer").create(0, 160, 320),
       order =     AQ.OperationType.find_cached("Order Primer").create(0, 160, 400);
 
-  plan.operations = [ extract, run, pour, pcr, rehydrate, order ];
+  plan
+    .add_operation(extract)
+    .add_operation(run)
+    .add_operation(pour)
+    .add_operation(pcr)
+    .add_operation(rehydrate)
+    .add_operation(order);
 
   plan.connect(order.output("Primer"),             order,     rehydrate.input("Primer"),   rehydrate);
   plan.connect(rehydrate.output("Primer Aliquot"), rehydrate, pcr.input("Forward Primer"), pcr);
@@ -39,11 +46,14 @@ shark.make_pcr_plan = function(sample) {
   plan.connect(pour.output("Lane"),                pour,      run.input("Gel"),            run);  
   plan.connect(run.output("Fragment"),             run,       extract.input("Fragment"),   extract); 
 
+  pcr.set_aft(pcr.input("Template").field_type,pcr.input("Template").field_type.allowable_field_types[5]);
+
+  order.input("Urgent?").value = "yes";  
+
+  // Some tests
   plan.equiv(rehydrate, rehydrate.input("Primer"), rehydrate, rehydrate.output("Primer Aliquot")).should.equal(true);
   plan.equiv(pcr, pcr.output("Fragment"), rehydrate, rehydrate.output("Primer Aliquot")).should.equal(false);
   plan.equiv(run, run.output("Fragment"), extract, extract.input("Fragment")).should.equal(true);
-
-  order.input("Urgent?").value = "yes";
 
   return Promise
      .resolve(plan)
@@ -72,7 +82,7 @@ function wait(t, plan) {
 
 describe('Plan_Creation', function() {
 
-  it("should use successors and predecessors", function(done) {
+  sit("should use successors and predecessors", function(done) {
 
     shark.aq_setup().then(() => {
 
@@ -83,7 +93,7 @@ describe('Plan_Creation', function() {
         ])
         .then(samples => shark.use_succ_and_pred(samples[0], samples[1], samples[2]))
         // .then(plan => wait(2000, plan))
-        .then(plan => { console.log("saving"); return plan.save(shark.current_user) })
+        .then(plan => plan.save(shark.current_user))
         .then(plan => {
           plan.id.should.not.equal(null);
           plan.record_type.should.be.equal("Plan");
@@ -109,14 +119,14 @@ describe('Plan_Creation', function() {
 
   }).async();
 
-  sit("should make a pcr plan", function(done) {
+  it("should make a pcr plan", function(done) {
 
     shark.aq_setup()
         .then(() => AQ.Sample.find_by_name("ADF3 right"))
         .then(sample => shark.make_pcr_plan(sample))
         .then(plan => plan.save(shark.current_user))
         .then(plan => plan.show_assignments())
-        .then(plan => plan.destroy())
+        // .then(plan => plan.destroy())
         .then(plan => done())
         .catch(done);
 

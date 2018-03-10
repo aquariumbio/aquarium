@@ -26,7 +26,11 @@ AQ.Sample.find_by_identifier = function(sid) {
   // This method is primarily used by the planner autocomplete method and planner assign methods, 
   // which is why it incluees field values (so subsamples can be looked up).
 
-  sample_id = AQ.id_from(sid);
+  if ( typeof sid == "string") {
+    sample_id = AQ.id_from(sid);
+  } else {
+    sample_id = sid;
+  }
 
   if ( sample_id ) {
 

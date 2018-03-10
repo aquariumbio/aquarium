@@ -85,7 +85,7 @@
 
       inc_last_place();
 
-      $scope.plan.operations.push(op);
+      $scope.plan.add_operation(op);
 
       if ( $scope.plan.name === "Untitled Plan" ) {
         $scope.plan.name = op.operation_type.name;
@@ -534,6 +534,30 @@
         fv.column = c;
       }
     };
+
+    $scope.set_allowable_field_type = function(aft) {
+
+      if ( $scope.current_op ) {
+        $scope.current_op.set_aft($scope.current_fv.field_type,aft)
+      } else if ( $scope.current_io.origin ) {
+        $scope.current_io.origin.op.set_aft($scope.current_fv.field_type,aft)
+      } else {
+        $scope.current_io.destinations[0].op.set_aft($scope.current_fv.field_type,aft)
+      }
+
+    }
+
+    $scope.allowable_field_type_checked = function(aft) {
+
+      if ( $scope.current_op ) {
+        return $scope.current_op.form[$scope.current_fv.role][$scope.current_fv.name].aft_id == aft.id;
+      } else if ( $scope.current_io.origin ) {
+        return $scope.current_io.origin.op.form[$scope.current_fv.role][$scope.current_fv.name].aft_id == aft.id;
+      } else {
+        return $scope.current_io.destinations[0].op.form[$scope.current_fv.role][$scope.current_fv.name].aft_id == aft.id;
+      }
+
+    }
 
     // Operation type selection ///////////////////////////////////////////////////////////////////////
 

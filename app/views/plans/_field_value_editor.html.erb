@@ -17,12 +17,8 @@
         <md-list-item ng-repeat="aft in current_fv.field_type.allowable_field_types">
 
           <md-checkbox
-            ng-click="current_op ? current_op.set_aft(current_fv.field_type,aft) 
-                                 : ( current_io.origin ? current_io.origin.op.set_aft(current_fv.field_type,aft)
-                                                       : current_io.destinations[0].op.set_aft(current_fv.field_type,aft) )"
-            ng-checked="current_op ? current_op.form[current_fv.role][current_fv.name].aft_id == aft.id
-                                   : ( current_io.origin ? current_io.origin.op.form[current_fv.role][current_fv.name].aft_id == aft.id
-                                                         : current_io.destinations[0].op.form[current_fv.role][current_fv.name].aft_id == aft.id )"
+            ng-click="set_allowable_field_type(aft)"
+            ng-checked="allowable_field_type_checked(aft)"
             ng-disabled="current_fv.field_type.allowable_field_types.length === 1"
             aria-label="Item">
           </md-checkbox>

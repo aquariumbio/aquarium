@@ -1,4 +1,4 @@
-function equivalence_class_of(partition, field_value) {
+AQ.Plan.equivalence_class_of = function(partition, field_value) {
 
   for(var i=0; i<partition.length; i++ ) {
     if ( aq.member(partition[i], field_value) ) {
@@ -9,7 +9,7 @@ function equivalence_class_of(partition, field_value) {
   return null;
 }
 
-function join(sets, partition_1, partition_2) {
+AQ.Plan.join = function(sets, partition_1, partition_2) {
   aq.remove(sets,partition_1);
   aq.remove(sets,partition_2);
   sets.push(partition_1.concat(partition_2));
@@ -67,11 +67,11 @@ AQ.Plan.record_methods.classes = function() {
         operation_1.field_values.forEach(field_value_1 => {
           operation_2.field_values.forEach(field_value_2 => {
             if ( field_value_1 != field_value_2 ) {
-              let class_1 = equivalence_class_of(sets, field_value_1);
-              let class_2 = equivalence_class_of(sets, field_value_2);
+              let class_1 = AQ.Plan.equivalence_class_of(sets, field_value_1);
+              let class_2 = AQ.Plan.equivalence_class_of(sets, field_value_2);
               if ( plan.equiv(operation_1, field_value_1, operation_2, field_value_2 ) && 
                    class_1 && class_2 && class_1 != class_2 ) {
-                sets = join(sets, class_1, class_2)
+                sets = AQ.Plan.join(sets, class_1, class_2)
                 changed = true;
               }              
             }
@@ -113,10 +113,10 @@ AQ.Plan.record_methods.assign_aux = function(field_value, sample) {
     "assign_aux", 
     plan.parent_operation(field_value).operation_type.name + ", " +
     field_value.name + ": ",
-    aq.collect(equivalence_class_of(plan.equivalences, field_value), e => e.name + "(" + e.role + ")").join(", ")
+    aq.collect(AQ.Plan.equivalence_class_of(plan.equivalences, field_value), e => e.name + "(" + e.role + ")").join(", ")
   )
 
-  equivalence_class_of(plan.equivalences, field_value).forEach(other_field_value => {
+  AQ.Plan.equivalence_class_of(plan.equivalences, field_value).forEach(other_field_value => {
 
     if ( !other_field_value.marked ) {
       other_field_value.marked = true;

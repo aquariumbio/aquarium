@@ -12,6 +12,13 @@ AQ.Plan.new_plan = function(name)  {
 
 }
 
+AQ.Plan.record_methods.add_operation = function(operation) {
+  let plan = this;
+  plan.operations.push(operation);
+  operation.plan = plan;
+  return plan;
+}
+
 AQ.Plan.record_methods.reload = function() {
 
   var plan = this;
@@ -357,87 +364,6 @@ AQ.Plan.record_methods.is_wired = function(op,fv) {
 
 }
 
-AQ.Plan.record_methods.propagate_down = function(fv,sid) { // propogate sid to incoming ops
-
-  var plan = this;
-
-  aq.each(plan.wires, wire => {
-    if ( wire.to.rid === fv.rid ) {                      // found an incoming wire
-      wire.from_op.assign_sample(wire.from,sid);         // assign sample
-      if ( wire.from.role == 'output' ) {                // if the incoming wire is from an output to this fv (why wouldn't it be?)
-        wire.from_op.instantiate(plan,wire.from,sid)     // call instantiate on the source op's from field_value with sid
-      }
-      aq.each(wire.from_op.field_values, subfv => {
-        if ( wire.from.route_compatible(subfv) ) {
-          plan.propagate_down(subfv,sid);
-        }
-      })
-    }
-  });
-
-  return plan;
-
-}
-
-AQ.Plan.record_methods.propagate_up = function(fv,sid) { // propogate sid to incoming ops
-
-  var plan = this;
-
-  aq.each(plan.wires, wire => {
-    if ( wire.from.rid === fv.rid ) {                    // found an outgoing wire
-      wire.to_op.assign_sample(wire.to,sid)              // assign sample
-      if ( wire.to.role == 'input' ) {                   // if the outgoing wire is to an output to the other fv (why wouldn't it be?)
-        wire.to_op.instantiate(plan,wire.to,sid)         // call instantiate on the destination op's to field_value with sid
-      }
-      aq.each(wire.to_op.field_values, superfv => {
-        if ( wire.from.route_compatible(superfv) ) {
-          plan.propagate_up(superfv,sid);
-        }
-      })
-    }
-  });
-
-  return plan;
-
-}
-
-AQ.Plan.record_methods.propagate_aux = function(op,fv,sid) { // propagate the choice of sid for fv to connected operations 
-
-  var plan = this;
-
-  if ( ! fv.field_type.array ) {
-
-    aq.each(op.field_values,io => {
-      if ( fv.route_compatible(io) ) {
-        plan.propagate_down(io,sid)
-        plan.propagate_up(io,sid)
-      }  
-    })
-
-  } else {
-
-    plan.propagate_down(fv,sid);
-    plan.propagate_up(fv,sid);
-
-  }
-
-  return this;
-
-}
-
-AQ.Plan.record_methods.propagate = function(op,fv,sid) {
-
-  var plan = this;
-
-  plan.propagate_aux(op, fv, sid);
-
-  aq.each(plan.siblings(fv), sibling => {
-    sibling.op.assign_sample(sibling.fv,sid) 
-    sibling.op.instantiate(plan,sibling.fv,sid) 
-    plan.propagate_aux(sibling.op, sibling.fv, sid);
-  });
-
-}
 
 AQ.Plan.record_methods.siblings = function(fv) {
 
@@ -469,7 +395,7 @@ AQ.Plan.record_methods.add_wire_from = function(fv,op,pred) {
       preop = AQ.Operation.new_operation(pred.operation_type, plan.current_module.id, op.x, op.y + 4*AQ.snap),
       preop_output = preop.output(pred.output.name);
 
-  plan.operations.push(preop);
+  plan.add_operation(preop);
   plan.remove_wires_to(op,fv);
 
   let wire = plan.wire(preop,preop_output,op,fv),
@@ -484,6 +410,7 @@ AQ.Plan.record_methods.add_wire_from = function(fv,op,pred) {
   if ( sid ) {
     return AQ.Sample.find_by_identifier(sid)
       .then(sample => plan.assign(fv,sample))
+      .then(plan => plan.choose_items())
   } else {
     return Promise.resolve(plan);
   }
@@ -496,7 +423,7 @@ AQ.Plan.record_methods.add_wire_to = function(fv,op,suc) {
       postop = AQ.Operation.new_operation(suc.operation_type, plan.current_module.id, op.x, op.y - 4*AQ.snap),
       postop_input = postop.input(suc.input.name);
 
-  plan.operations.push(postop);
+  plan.add_operation(postop);
   plan.remove_wires_from(op,fv);
 
   let wire = plan.wire(op,fv,postop,postop_input);  
@@ -510,6 +437,7 @@ AQ.Plan.record_methods.add_wire_to = function(fv,op,suc) {
   if ( sid ) {
     return AQ.Sample.find_by_identifier(sid)
       .then(sample => plan.assign(fv,sample))
+      .then(plan => plan.choose_items())
   } else {
     return Promise.resolve(plan);
   }
