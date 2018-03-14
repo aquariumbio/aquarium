@@ -25,6 +25,7 @@ User Documentation
 * [Monitoring a Plan](https://www.youtube.com/watch?v=WCTmuz5yBAo&feature=youtu.be) : Video on how to track an experiment as it is being run.
 * [Managing the Lab](http://todo.com) : TODO
 * [Defining new Sample Types](http://todo.com) : TODO
+* [Locations](doc/Locations.md) : Aquarium's freezer location system.
 
 Documentation for Protocol Authors
 ---
@@ -33,5 +34,4 @@ Documentation for Protocol Authors
 * [Krill](doc/Krill.md) : How to write protocols in Ruby using Aquairum's Krill Library.
 * [Operations](doc/Opertations.md) : How to handle operations in protocol code.
 * [Data Associations](doc/DataAssociation.md) : How to associate data with items, operations, and plans.
-* [Locations](doc/Locations.md) : Aquarium's freezer location system.
-
+* [Aquarium/Krill API Reference](http://klavinslab.org/aquarium-api/) : Detailed method reference.
