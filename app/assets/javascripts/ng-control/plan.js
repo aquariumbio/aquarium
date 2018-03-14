@@ -545,6 +545,8 @@
         $scope.current_io.destinations[0].op.set_aft($scope.current_fv.field_type,aft)
       }
 
+      $scope.current_fv.find_items();
+
     }
 
     $scope.allowable_field_type_checked = function(aft) {

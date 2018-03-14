@@ -31,6 +31,7 @@
             .find_by_identifier(sid)
             .then(sample => plan.assign(fv, sample))
             .then(plan => plan.choose_items())
+            .then(plan => fv.find_items())
             .then(plan => $scope.$apply())
 
         }  
@@ -48,9 +49,8 @@
               aft = op.form[ft.role][fv.name].aft;
 
           if ( aft && aft.sample_type && !AQ.sample_names_for(aft.sample_type.name).includes(sid) ) {
-            console.log("Invalid sample name: " + sid)
+            console.log("Invalid sample name: '" + sid + "'")
             op.assign_sample(fv, null);
-            op.instantiate(plan,fv,null);
             fv.clear_item(); 
             fv.items=[];
             $scope.$apply();

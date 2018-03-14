@@ -162,8 +162,6 @@ AQ.Operation.record_methods.set_aft = function(ft,aft) {
 
   let  op = this;
 
-  console.log(":::" + op.operation_type.name + ".set_aft")       
-
   op.form[ft.role][ft.name] = { aft_id: aft.id, aft: aft };
 
   aq.each(op.field_values,function(fv) {
@@ -185,6 +183,7 @@ AQ.Operation.record_methods.set_aft = function(ft,aft) {
 
       if ( op.plan ) {
 
+        // try to assign a sample by looking at equivalent field values
         let assigned_fvs = aq.where(
           AQ.Plan.equivalence_class_of(op.plan.classes(), fv), 
           other_fv => other_fv.child_sample_id );

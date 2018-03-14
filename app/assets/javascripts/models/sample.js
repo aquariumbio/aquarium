@@ -17,8 +17,17 @@ AQ.Sample.record_methods.upgrade = function() {
     }
   }
 
+  if ( sample.sample_type ) {
+    sample.sample_type = AQ.SampleType.record(sample.sample_type);
+  }
+
   return this;
 
+}
+
+AQ.Sample.record_methods.field_value = function(name) {
+  let sample = this;
+  return aq.find(sample.field_values,fv => fv.name == name);
 }
 
 AQ.Sample.find_by_identifier = function(sid) {
@@ -40,21 +49,30 @@ AQ.Sample.find_by_identifier = function(sid) {
 
     } else {
 
-      return new Promise(function(resolve, reject) {
+      let temp_sample = null;
 
-        // get sid sample
-        AQ.Sample.where({id: sample_id}, {methods: ["field_values"]}).then(samples => {  // get the sample corresponding to sid
-
+      // get sid sample
+      return AQ.Sample
+        .where({id: sample_id}, {methods: ["field_values"], include: ["sample_type"]})
+        .then(samples => {  // get the sample corresponding to sid
           if ( samples.length == 1 ) { // there should only be one       
-            resolve(samples[0]);
-            AQ.sample_cache[samples[0].id] = samples[0];
+            return samples[0];
           } else {
-            reject("Sample " + sid + " not found");
+            raise("Sample " + sid + " not found");
           }
-
-        }).catch(reject);
-
-      });
+        })
+        .then(sample => {
+          AQ.sample_cache[sample.id] = sample;
+          return sample;
+        })
+        .then(sample => {
+          temp_sample = sample;
+          return AQ.FieldType.where({parent_class: "SampleType", parent_id: sample.sample_type.id});
+        })
+        .then(field_types => {
+          temp_sample.sample_type.field_types = field_types;
+          return temp_sample;
+        })
 
     }
 

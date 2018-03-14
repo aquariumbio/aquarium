@@ -109,12 +109,12 @@ AQ.Plan.record_methods.assign_aux = function(field_value, sample) {
   let plan = this, 
       promise = Promise.resolve();
 
-  console.log(
-    "assign_aux", 
-    plan.parent_operation(field_value).operation_type.name + ", " +
-    field_value.name + ": ",
-    aq.collect(AQ.Plan.equivalence_class_of(plan.equivalences, field_value), e => e.name + "(" + e.role + ")").join(", ")
-  )
+  // console.log(
+  //   "assign_aux", 
+  //   plan.parent_operation(field_value).operation_type.name + ", " +
+  //   field_value.name + ": ",
+  //   aq.collect(AQ.Plan.equivalence_class_of(plan.equivalences, field_value), e => e.name + "(" + e.role + ")").join(", ")
+  // )
 
   AQ.Plan.equivalence_class_of(plan.equivalences, field_value).forEach(other_field_value => {
 
@@ -123,7 +123,7 @@ AQ.Plan.record_methods.assign_aux = function(field_value, sample) {
       other_field_value.assign(sample);
       promise = promise.then(() => 
         plan.parent_operation(other_field_value)
-            .new_instantiate(plan, other_field_value, sample.identifier))
+            .instantiate(plan, other_field_value, sample.identifier))
     }
 
   });
@@ -132,12 +132,12 @@ AQ.Plan.record_methods.assign_aux = function(field_value, sample) {
 
 }
 
-AQ.Operation.record_methods.new_instantiate = function(plan, field_value, sid) {
+AQ.Operation.record_methods.instantiate = function(plan, field_value, sid) {
 
   let operation = this,
       promise = Promise.resolve();
 
-  console.log("instantiating " + operation.operation_type.name + ", " + field_value.name + " with " + sid)
+  // console.log("instantiating " + operation.operation_type.name + ", " + field_value.name + " with " + sid)
 
   promise = promise
     .then(() => AQ.Sample.find_by_identifier(sid))
@@ -153,15 +153,26 @@ AQ.Operation.record_methods.new_instantiate = function(plan, field_value, sid) {
         }
 
         // instantiate subsamples from sample inventory info
-        sample.field_values.forEach(sample_field_value => { 
-          if ( sample_field_value.name == operation_field_value.name && sample_field_value.child_sample_id ) {
-            (function(ofv) {
-              sub_promise = sub_promise
-                .then(() => AQ.Sample.find(sample_field_value.child_sample_id))
-                .then(child_sample => plan.assign_aux(ofv, child_sample))
-            })(operation_field_value);
-          } 
+        sample.sample_type.field_types.forEach(sample_field_type => { 
+          if ( operation_field_value != field_value && sample_field_type.name == operation_field_value.name ) {
+            let sample_field_value = sample.field_value(sample_field_type.name);
+            if ( sample_field_value && sample_field_value.child_sample_id ) {
+              (function(ofv) {
+                sub_promise = sub_promise
+                  .then(() => AQ.Sample.find(sample_field_value.child_sample_id))
+                  .then(child_sample => plan.assign_aux(ofv, child_sample))
+              })(operation_field_value);
+            } else if ( operation_field_value.routing != field_value.routing ) {
+              operation_field_value.assign(null);
+              operation.routing[operation_field_value.routing] = null;            
+            }
+          }
         })
+
+        // if ( !found && operation_field_value != field_value && operation_field_value.routing != field_value.routing )  {
+        //   operation_field_value.assign(null);
+        //   operation.routing[operation_field_value.routing] = null;
+        // }        
 
       });
 
