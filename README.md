@@ -36,3 +36,8 @@ Documentation for Protocol Authors
 * [Operations](https://github.com/klavinslab/aquarium/doc/Opertations.md) : How to handle operations in protocol code.
 * [Data Associations](https://github.com/klavinslab/aquarium/doc/DataAssociation.md) : How to associate data with items, operations, and plans.
 * [Aquarium/Krill API Reference](http://klavinslab.org/aquarium-api/) : Detailed method reference.
+
+Documentation for Developers
+---
+
+* [Trident](https://github.com/klavinslab/trident) : A Python interface to Aquarium!
