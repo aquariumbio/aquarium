@@ -13,7 +13,8 @@ Aquarium is a product of the [Klavins Lab](http://klavinslab.org).
 Installation
 ---
 
-* [Installation](doc/Installation.md) : How to install Aquarium.
+* [Github](https://github.com/klavinslab/aquarium) : The latest code.
+* [Installation](https://github.com/klavinslab/aquarium/doc/Installation.md) : How to install Aquarium.
 * [Dockerized Aquarium](https://github.com/klavinslab/aquadocked) : Makes Aquarium relatively easy to install and run.
 
 User Documentation
@@ -31,7 +32,7 @@ Documentation for Protocol Authors
 ---
 
 * [Developer Interface](http://todo.com) : How to develop protocols using the Aquarium IDE.
-* [Krill](doc/Krill.md) : How to write protocols in Ruby using Aquairum's Krill Library.
-* [Operations](doc/Opertations.md) : How to handle operations in protocol code.
-* [Data Associations](doc/DataAssociation.md) : How to associate data with items, operations, and plans.
+* [Krill](https://github.com/klavinslab/aquarium/doc/Krill.md) : How to write protocols in Ruby using Aquairum's Krill Library.
+* [Operations](https://github.com/klavinslab/aquarium/doc/Opertations.md) : How to handle operations in protocol code.
+* [Data Associations](https://github.com/klavinslab/aquarium/doc/DataAssociation.md) : How to associate data with items, operations, and plans.
 * [Aquarium/Krill API Reference](http://klavinslab.org/aquarium-api/) : Detailed method reference.
