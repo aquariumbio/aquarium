@@ -264,4 +264,12 @@ Aq.prototype.member = function(set, element) {
   return set.indexOf(element) >= 0;
 }
 
+Aq.prototype.first = function(list) {
+  if ( list.length > 0 ) {
+    return list[0];
+  } else {
+    raise("Could not take first element of empty list.")
+  }
+}
+
 aq = new Aq();

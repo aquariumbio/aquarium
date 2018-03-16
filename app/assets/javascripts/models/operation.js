@@ -211,9 +211,12 @@ AQ.Operation.record_methods.assign_sample = function(fv,sid) {
 
   var op = this;
 
-  op.routing[fv.routing] = sid;            // set the sid for the source op's routing symbol
   fv.child_sample_id = AQ.id_from(sid);
   fv.sid = sid;
+
+  if ( fv.field_type && !fv.field_type.array ) {
+    op.routing[fv.routing] = sid;          
+  }
 
   if ( fv.field_type && fv.field_type.array ) {
     fv.sample_identifier = sid;
@@ -263,8 +266,6 @@ AQ.Operation.record_methods.array_add = function(field_type) {
   this.recompute_getter('types_and_values');
   this.recompute_getter('num_inputs');
   this.recompute_getter('num_outputs');  
-
-  console.log(this)
 
   return this;
 

@@ -30,16 +30,28 @@ AQ.Sample.record_methods.field_value = function(name) {
   return aq.find(sample.field_values,fv => fv.name == name);
 }
 
+AQ.Sample.record_methods.complete_sample_type = function() {
+  let sample = this;
+  if ( AQ.sample_type_cache[sample.sample_type_id] ) {
+    sample.sample_type = AQ.sample_type_cache[sample.sample_type_id];
+    return sample;
+  } else {
+    return AQ.FieldType
+      .where({parent_class: "SampleType", parent_id: sample.sample_type.id})
+      .then(field_types => {
+        sample.sample_type.field_types = field_types
+        AQ.sample_type_cache[sample.sample_type_id] = sample.sample_type;
+        return sample;
+      })
+  }  
+}
+
+/* This method is used by the planner autocomplete method and planner assign methods, 
+ * which is why it incluees field values (so subsamples can be looked up).
+ */
 AQ.Sample.find_by_identifier = function(sid) {
 
-  // This method is primarily used by the planner autocomplete method and planner assign methods, 
-  // which is why it incluees field values (so subsamples can be looked up).
-
-  if ( typeof sid == "string") {
-    sample_id = AQ.id_from(sid);
-  } else {
-    sample_id = sid;
-  }
+  let sample_id = AQ.id_from(sid);
 
   if ( sample_id ) {
 
@@ -49,36 +61,18 @@ AQ.Sample.find_by_identifier = function(sid) {
 
     } else {
 
-      let temp_sample = null;
-
-      // get sid sample
       return AQ.Sample
         .where({id: sample_id}, {methods: ["field_values"], include: ["sample_type"]})
-        .then(samples => {  // get the sample corresponding to sid
-          if ( samples.length == 1 ) { // there should only be one       
-            return samples[0];
-          } else {
-            raise("Sample " + sid + " not found");
-          }
-        })
-        .then(sample => {
-          AQ.sample_cache[sample.id] = sample;
-          return sample;
-        })
-        .then(sample => {
-          temp_sample = sample;
-          return AQ.FieldType.where({parent_class: "SampleType", parent_id: sample.sample_type.id});
-        })
-        .then(field_types => {
-          temp_sample.sample_type.field_types = field_types;
-          return temp_sample;
-        })
+        .then(aq.first)
+        .then(sample => sample.complete_sample_type())
+        .then(sample => AQ.sample_cache[sample.id] = sample);
 
     }
 
   } else {
-    console.log("Could not find sample " + sid)
+
     return Promise.reject("Could not find sample " + sid);
+
   }
 
 }

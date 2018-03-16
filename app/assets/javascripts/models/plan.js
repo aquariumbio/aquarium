@@ -56,6 +56,8 @@ AQ.Plan.record_methods.save = function(user) {
       before = plan,
       user_query = user ? "?user_id=" + user.id : "";
 
+  console.log("Saving plan '" + plan.name + "'")
+
   plan.saving = true;
 
   if ( plan.id ) {

@@ -134,12 +134,9 @@ AQ.Plan.record_methods.assign_aux = function(field_value, sample) {
 
 AQ.Operation.record_methods.instantiate = function(plan, field_value, sid) {
 
-  let operation = this,
-      promise = Promise.resolve();
+  let operation = this;
 
-  // console.log("instantiating " + operation.operation_type.name + ", " + field_value.name + " with " + sid)
-
-  promise = promise
+  return Promise.resolve()
     .then(() => AQ.Sample.find_by_identifier(sid))
     .then(sample => {
 
@@ -147,40 +144,38 @@ AQ.Operation.record_methods.instantiate = function(plan, field_value, sid) {
 
       operation.field_values.forEach(operation_field_value => {
 
-        // define routing
-        if ( !operation_field_value.field_type.array && operation_field_value.routing == field_value.routing ) {
+        if ( operation_field_value.routing == field_value.routing ) {
           operation.assign_sample(operation_field_value, sid);
         }
 
-        // instantiate subsamples from sample inventory info
-        sample.sample_type.field_types.forEach(sample_field_type => { 
-          if ( operation_field_value != field_value && sample_field_type.name == operation_field_value.name ) {
-            let sample_field_value = sample.field_value(sample_field_type.name);
-            if ( sample_field_value && sample_field_value.child_sample_id ) {
-              (function(ofv) {
-                sub_promise = sub_promise
-                  .then(() => AQ.Sample.find(sample_field_value.child_sample_id))
-                  .then(child_sample => plan.assign_aux(ofv, child_sample))
-              })(operation_field_value);
-            } else if ( operation_field_value.routing != field_value.routing ) {
-              operation_field_value.assign(null);
-              operation.routing[operation_field_value.routing] = null;            
-            }
-          }
-        })
+        if ( operation_field_value != field_value ) {
 
-        // if ( !found && operation_field_value != field_value && operation_field_value.routing != field_value.routing )  {
-        //   operation_field_value.assign(null);
-        //   operation.routing[operation_field_value.routing] = null;
-        // }        
+          if ( !sample.sample_type.field_types ) {
+            raise("No field types defined for sample " + sample.name)
+          }
+
+          sample.sample_type.field_types.forEach(sample_field_type => { 
+            if ( sample_field_type.name == operation_field_value.name ) {
+              let sample_field_value = sample.field_value(sample_field_type.name);
+              if ( sample_field_value && sample_field_value.child_sample_id ) {
+                (function(ofv) {
+                  sub_promise = sub_promise
+                    .then(() => AQ.Sample.find_by_identifier(sample_field_value.child_sample_id))
+                    .then(child_sample => plan.assign_aux(ofv, child_sample))
+                })(operation_field_value);
+              } else if ( operation_field_value.routing != field_value.routing ) {
+                operation.assign_sample(operation_field_value, null);
+              }
+            }
+          })
+
+        }
 
       });
 
       return sub_promise;
 
     });
-
-  return promise;
 
 }
 

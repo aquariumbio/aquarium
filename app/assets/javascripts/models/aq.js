@@ -6,7 +6,8 @@ AQ.init = function(http) {
   AQ.get = http.get;
   AQ.post = http.post;
   AQ.next_record_id = 0;
-  AQ.sample_cache = {};
+  AQ.sample_cache = {}; // used by AQ.Sample.find_by_identifier
+  AQ.sample_type_cache = {}; // used by AQ.Sample.find_by_identifier
 
 }
 
@@ -52,7 +53,9 @@ AQ.to_sample_identifier = function(id) {
 
 AQ.id_from = function(sid) { 
   var parts;
-  if ( typeof sid != "string" ) {
+  if ( typeof sid == "number" ) {
+    return sid;
+  } else if ( typeof sid != "string" ) {
     return undefined;
   } else {
     parts = sid.split(": ");

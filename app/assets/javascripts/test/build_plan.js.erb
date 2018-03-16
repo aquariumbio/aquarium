@@ -82,6 +82,16 @@ function wait(t, plan) {
 
 describe('Plan_Creation', function() {
 
+  sit("Should get field types with samples", function(done) {
+
+    AQ.Sample.find_by_identifier('4927: ADF3 right')
+      .then(sample => {
+        sample.sample_type.should.have.property('field_types');
+        done();
+      })
+
+  }).async();
+
   it("should use successors and predecessors", function(done) {
 
     shark.aq_setup().then(() => {
@@ -92,7 +102,6 @@ describe('Plan_Creation', function() {
           AQ.Sample.find_by_name("ADF3 left")
         ])
         .then(samples => shark.use_succ_and_pred(samples[0], samples[1], samples[2]))
-        // .then(plan => wait(2000, plan))
         .then(plan => plan.save(shark.current_user))
         .then(plan => {
           plan.id.should.not.equal(null);
@@ -100,18 +109,10 @@ describe('Plan_Creation', function() {
           plan.operations.length.should.be.equal(3);
           plan.wires.length.should.be.equal(2);
           plan.valid().should.be.equal(false);
-          plan.classes().forEach(set => {
-            console.log(aq.collect(set, fv => fv.name + "(" + fv.role + ")"))
-          })
-          plan.operations.forEach(operation => {
-            console.log("" + operation.id + ": " + operation.operation_type.name)
-            operation.field_values.forEach(fv => {
-              console.log("  " + fv.name + "(" + fv.role + "): sample.id = " + fv.child_sample_id)
-            })
-          })
+          plan.check_operations();
           return plan;
         })
-        // .then(plan => plan.destroy())
+        .then(plan => plan.destroy())
         .then(plan => done())
         .catch(done);
 
@@ -125,8 +126,9 @@ describe('Plan_Creation', function() {
         .then(() => AQ.Sample.find_by_name("ADF3 right"))
         .then(sample => shark.make_pcr_plan(sample))
         .then(plan => plan.save(shark.current_user))
-        .then(plan => plan.show_assignments())
-        // .then(plan => plan.destroy())
+        .then(plan => plan.check_operations())
+        // .then(plan => plan.show_assignments())
+        .then(plan => plan.destroy())
         .then(plan => done())
         .catch(done);
 
