@@ -104,9 +104,12 @@ AQ.FieldValue.record_methods.clear = function() {
 AQ.FieldValue.record_methods.choose_item = function(items) {
 
   let fv = this;
+
+  delete fv.items;
   fv.items = items;
 
-  if ( items.length > 0 ) {
+  // Only choose an item if one is not already chosen 
+  if ( items.length > 0 && ( !fv.child_item_id || !aq.member(aq.collect(items, i => i.id), fv.child_item_id ) ) ) {
     if ( fv.role == 'input' && fv.num_wires == 0 ) {
       if ( !items[0].collection ) {
         fv.child_item_id = items[0].id;
@@ -135,12 +138,19 @@ AQ.FieldValue.record_methods.find_items = function(sid) {
     promise = promise
       .then( () => AQ.items_for(sample_id,fv.aft.object_type_id) )
       .then( items => fv.choose_item(items) )
+      .then( () => AQ.update() )
   } else {
     fv.items = [];
   }
 
   return promise;
 
+}
+
+AQ.FieldValue.record_methods.assign_item = function(item) {
+  let fv = this;
+  fv.child_item_id = item.id;
+  fv.child_item = item;
 }
 
 AQ.FieldValue.record_getters.items = function() {

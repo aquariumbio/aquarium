@@ -115,3 +115,9 @@ AQ.Item.record_getters.history = function() {
   return item.history;
 }
 
+AQ.Item.record_getters.is_collection = function() {
+  return false;
+}
+
+
+

@@ -92,7 +92,7 @@ describe('Plan_Creation', function() {
 
   }).async();
 
-  it("should use successors and predecessors", function(done) {
+  sit("should use successors and predecessors", function(done) {
 
     shark.aq_setup().then(() => {
 
@@ -123,11 +123,39 @@ describe('Plan_Creation', function() {
   it("should make a pcr plan", function(done) {
 
     shark.aq_setup()
-        .then(() => AQ.Sample.find_by_name("ADF3 right"))
+        .then(() => AQ.Sample.find_by_name("ADF3 left"))
         .then(sample => shark.make_pcr_plan(sample))
         .then(plan => plan.save(shark.current_user))
         .then(plan => plan.check_operations())
-        // .then(plan => plan.show_assignments())
+        .then(plan => {
+          return plan.operations[3].input("Reverse Primer")
+                     .find_items()
+                     .then(() => plan)
+        })
+        .then(plan => {
+           let rp = plan.operations[3].input("Reverse Primer");
+               item = rp.items[1];
+           rp.assign_item(rp.items[1]);
+           return plan;
+        })
+        .then(plan => {
+          let rp = plan.operations[3].input("Reverse Primer");
+          this.log(`Before saving, ${rp.name} is assigned item ${rp.child_item_id} from [${aq.collect(rp.items, i => i.id)}]`)
+          return plan;
+        })
+        .then(plan => plan.save(shark.current_user))
+        .then(plan => {
+          return plan.operations[3].input("Reverse Primer")
+                     .find_items()
+                     .then(() => plan)
+         })        
+        .then(plan => {
+          let rp = plan.operations[3].input("Reverse Primer"),
+              item = rp.items[1];
+          this.log(`After saving, ${rp.name} is assigned item ${rp.child_item_id}`)
+          rp.child_item_id.should.be.equal(item.id);
+          return plan;
+        })
         .then(plan => plan.destroy())
         .then(plan => done())
         .catch(done);

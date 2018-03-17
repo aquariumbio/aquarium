@@ -517,12 +517,11 @@
 
     $scope.select_item = function(fv, item) {
 
-      if ( fv.child_item_id !== item.id && item.assign_first ) {
+      if ( fv.child_item_id !== item.id && item.is_collection ) {
         item.assign_first(fv);
       }
 
-      fv.child_item_id = item.id;
-      fv.child_item = item;
+      fv.assign_item(item);
 
     };
 
