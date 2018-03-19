@@ -3,7 +3,7 @@
 Data may be associated with `Item`, `Operation` and `Plan` objects.
 This data should either be serializable as JSON (e.g., a hash), or be an `Upload` object.
 
-This is supported by the `DataAssociation` model in Krill, but the standard library also provides the `AssociationMap` class that hids some of the details.
+This is supported by the `DataAssociation` model in Krill, but the standard library also provides the `AssociationMap` class that hides some details.
 Both are described here.
 
 ## AssociationMap
