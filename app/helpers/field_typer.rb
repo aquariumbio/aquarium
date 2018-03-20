@@ -1,3 +1,4 @@
+# @api krill
 module FieldTyper
 
   def destroy_fields

@@ -1,9 +1,15 @@
 module Krill
 
+  # @api krill
   class ShowBlock
 
+    # @api private
     @@get_counter = 0  
+
+    # @api private    
     @@select_counter = 0
+
+    # @api private    
     @@upload_counter = 0
 
     def initialize base

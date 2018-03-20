@@ -1,7 +1,27 @@
+# @api krill
 module Krill
 
-  # Module that includes methods for an array of {Operation}s
-  
+  # @api krill
+  # In protocol code, the operations method will return an OperationList, which is an
+  # extension of the [Array] class. 
+  #
+  # @example Iterate through operations
+  #   operations.each do |operation|
+  #     show do
+  #       title "This is operation #{operation.id}"
+  #     end
+  #   end
+  # @example Tell the technician to retrieve all required inventory, and make new inventory ids required for the protocol
+  #   operations.retrieve.make
+  # @example Make and display a table based on the operations input and output
+  #   show do
+  #     table operations.start_table
+  #       .output_collection("Fragment", heading: "Stripwell")
+  #       .custom_column(heading: "Well") { |op| op.output("Fragment").column + 1 }
+  #       .input_item(FWD, heading: "Forward Primer, 2.5 µL", checkable: true)
+  #       .input_item(REV, heading: "Reverse Primer, 2.5 µL", checkable: true)
+  #       .end_table
+  #   end
   module OperationList
 
     def protocol= p

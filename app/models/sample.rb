@@ -1,4 +1,5 @@
 # A named, biologically unique definition for an instance of a {SampleType}, such as a specific Primer, Fragment, Plasmid, or Yeast Strain
+# @api krill
 
 class Sample < ActiveRecord::Base
 
