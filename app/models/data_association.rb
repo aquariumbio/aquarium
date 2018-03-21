@@ -1,3 +1,4 @@
+# @api krill
 class DataAssociation < ActiveRecord::Base
 
   belongs_to :upload

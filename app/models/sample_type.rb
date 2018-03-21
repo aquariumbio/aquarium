@@ -1,3 +1,4 @@
+# @api krill
 class SampleType < ActiveRecord::Base
 
   include FieldTyper

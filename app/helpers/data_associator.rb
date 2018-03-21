@@ -1,4 +1,5 @@
 # Associates and manages {DataAssociation}s
+# @api krill
 
 module DataAssociator 
 
