@@ -1,5 +1,6 @@
 # Class that represents a physical object in the lab
 
+# @api krill
 class Item < ActiveRecord::Base
 
   include DataAssociator
@@ -330,7 +331,7 @@ class Item < ActiveRecord::Base
   end
 
   def to_s
-    "<a href='/items/#{self.id}' class='aquarium-item' id='#{self.id}'>#{self.id}</a>"
+    "<a href='#' onclick='open_item_ui(#{self.id})'>#{self.id}</a>"
   end
 
   def upgrade force=false # upgrades data field to data association (if no data associations exist)

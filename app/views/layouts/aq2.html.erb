@@ -9,7 +9,7 @@
     <%= stylesheet_link_tag    "application", media: "all" %>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
-    <%= favicon_link_tag 'favicon.ico' %>      
+    <%= favicon_link_tag 'favicon.ico' %>
 
   <script>
 
@@ -30,6 +30,11 @@
         e.preventDefault();
       });
     });
+
+  $(function() {
+    // Set focus of keyboard events to main content, so keydown events work.
+    window.setTimeout(() => $("#content-container").focus(), 500)
+  });
 
   </script>
 
@@ -55,33 +60,33 @@
 
     <% if content_for? :wider_sidebar %>
 
-      md-sidenav, 
-      md-sidenav.md-locked-open, 
+      md-sidenav,
+      md-sidenav.md-locked-open,
       md-sidenav.md-closed.md-locked-open-add-active {
           width: 400px !important;
           max-width: 400px !important;
-      }     
+      }
 
       .main {
         width: calc(100vw - 400px) !important;
-      }      
+      }
 
     <% end %>
 
     <% if content_for? :much_wider_sidebar %>
 
-      md-sidenav, 
-      md-sidenav.md-locked-open, 
+      md-sidenav,
+      md-sidenav.md-locked-open,
       md-sidenav.md-closed.md-locked-open-add-active {
-          width: 500px !important;
-          max-width: 500px !important;
-      }     
+          width: 550px !important;
+          max-width: 550px !important;
+      }
 
       .main {
-        width: calc(100vw - 500px) !important;
-      }      
+        width: calc(100vw - 550px) !important;
+      }
 
-    <% end %>    
+    <% end %>
 
   </style>
 
@@ -92,9 +97,11 @@
     <%= render partial: '/layouts/aq2header' %>
 
       <% if content_for? :controller %>
-        <div class="aq2-navigation <%= yield :class %>" 
-             layout='row' 
-             ng-controller="<%= yield :controller %>">
+        <div class="aq2-navigation <%= yield :class %>"
+             layout='row'
+             <% if content_for?(:keydown) %>ng-keydown="<%= yield :keydown %>"<% end %>
+             ng-controller="<%= yield :controller %>"
+             id="<%= yield :controller %>">
       <% else %>
         <div layout='row' class="<%= yield :class %>">
       <% end %>
@@ -111,16 +118,18 @@
 
       </md-sidenav>
 
-      <div class="content-container" layout="column" tabIndex="-1" flex>
+      <div class="content-container" id="content-container" layout="column" tabIndex="-1" flex>
 
-        <md-toolbar class="specific-toolbar not-scrollable" 
-                    <% if content_for? :no_specific_padding %>style="padding-right: 0px !important" <% end %> >
+          <md-toolbar class="specific-toolbar not-scrollable"
+                      <% if content_for? :no_specific_padding %>style="padding-right: 0px !important" <% end %> >
 
-          <div class="md-toolbar-tools no-print" 
+          <div class="md-toolbar-tools no-print"
                <% if content_for? :no_specific_padding %>style="padding-right: 0px !important" <% end %> >
 
             <h2 flex md-truncate>
-              <%= yield :title %>
+              <% if !content_for?(:no_title) %>
+                <%= yield :title %>
+              <% end %>
               <% if content_for? :specific_title %>
                 <%= yield :specific_title %>
               <% end %>
@@ -136,22 +145,22 @@
 
             <% if content_for? :action3 %>
               <%= yield :action3 %>
-            <% end %>    
+            <% end %>
 
             <% if content_for? :action4 %>
               <%= yield :action4 %>
-            <% end %>                        
+            <% end %>
 
             <% if content_for? :action5 %>
               <%= yield :action5 %>
             <% end %>
-            
+
           </div>
 
         </md-toolbar>
 
         <% if content_for? :no_main_scroll_decision %>
-          <md-content class='main'>        
+          <md-content class='main'>
         <% else %>
           <md-content class='main scrollable'>
         <% end %>

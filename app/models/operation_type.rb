@@ -1,3 +1,4 @@
+# @api krill
 class OperationType < ActiveRecord::Base
 
   include FieldTyper

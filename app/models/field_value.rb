@@ -1,4 +1,5 @@
 # An input, output, or parameter of an {Operation}
+# @api krill
 
 class FieldValue < ActiveRecord::Base
 
@@ -27,6 +28,17 @@ class FieldValue < ActiveRecord::Base
   # @return [Item]
   def item
     child_item
+  end 
+
+  # Return an html link to the item ui for the {Item} associated with this field value
+  #
+  # @return [String]
+  def item_link
+    if child_item_id
+      child_item.to_s
+    else
+      "?"
+    end
   end
 
   # Return associated {Collection}

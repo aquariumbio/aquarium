@@ -26,6 +26,15 @@ class InvoicesController < ApplicationController
       }
     }.reverse.reject { |d| d[:entries].length == 0 }
 
+    @monthly_invoices += (1..12).collect { |m|
+      { 
+        month: m,
+        year: year-1,
+        date: DateTime.new(year-1,m),
+        entries: Account.users_and_budgets(year-1, m, user)
+      }
+    }.reverse.reject { |d| d[:entries].length == 0 }    
+
     respond_to do |format|
       format.html { render layout: 'aq2' }
     end   
@@ -74,7 +83,7 @@ class InvoicesController < ApplicationController
 
   def change_budget
 
-    task = Task.find(params[:task_id])
+    operation = Operation.find(params[:operation_id])
     budget = Budget.find(params[:budget_id])
     rows = []
 
@@ -84,18 +93,12 @@ class InvoicesController < ApplicationController
         row = Account.find(val[:id])
         row.budget_id = budget.id
         row.save
+        logger.info "Errors: #{row.errors.any?}"
         rows << row
       end
     end
 
-    task.budget_id = params[:budget_id]
-    task.save
-
-    if task.errors.empty?
-      render json: { task: task, budget: budget, rows: rows }
-    else
-      render json: { error: task.errors.full_messages.join(', ') }
-    end
+    render json: { budget: budget, rows: rows }
 
   end 
 

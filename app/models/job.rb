@@ -310,4 +310,15 @@ class Job < ActiveRecord::Base
     predecessors.reject { |p| p.done? }
   end
 
+  def reset
+
+    puts Krill::Client.new.abort id
+    self.state = [{"operation"=>"initialize", "arguments"=>{}, "time"=>"2017-06-02T11:40:20-07:00"}].to_json
+    self.pc = 0
+    save
+    puts Krill::Client.new.start id
+    reload
+
+  end
+
 end

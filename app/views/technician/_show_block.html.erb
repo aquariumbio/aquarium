@@ -1,0 +1,214 @@
+<script type="text/ng-template" id="title">
+  <h2 class="md-display-2 title" ng-bind-html="content_value(line)"></h2>
+</script>
+
+<script type="text/ng-template" id="note">
+  <p ng-bind-html="content_value(line)" class='md-subhead'></p>
+</script>
+
+<script type="text/ng-template" id="bullet">
+  <span class='bullet md-subhead'>
+    <span class="bullet-circle">&#9679;</span>
+    <span ng-bind-html="content_value(line)"></span>
+  </span>
+</script>
+
+<script type="text/ng-template" id="warning">
+  <p ng-bind-html="content_value(line)" class='md-subhead technician-warning'></p>
+</script>
+
+<script type="text/ng-template" id="check">
+  <div class="checkbox-container">
+    <md-checkbox aria-label="Checkbox" 
+                 ng-checked="!step.response.in_progress"
+                 ng-disabled="!step.response.in_progress"
+                 ng-model="line.checked">
+      <span class="md-subhead" 
+            ng-bind-html="content_value(line)"></span>
+    </md-checkbox>
+  </div>
+</script>
+
+<script type="text/ng-template" id="item">
+  <div class='md-subhead content content-item'>
+    Item <a href='#' onclick='open_item_ui({{content_value(line).id}})'>#{self.id}</a>
+    {{content_value(line).sample.sample_type.name}} ({{content_value(line).sample.name}})
+    at {{content_value(line).location}}
+  </div>
+</script>
+
+<script type="text/ng-template" id="select">
+  <div class='input-box' layout='row'>
+    <div flex>
+      <span class='md-subhead'>{{content_value(line).label}}</span><br>
+      <md-input-container class="select-container">
+        <md-select ng-model="step.response.inputs[line.select.var]" 
+                   aria-label="Select" 
+                   ng-disabled="!step.response.in_progress">
+          <md-option ng-repeat="c in content_value(line).choices" ng-value="c">
+            {{c}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+    </div>
+</script>
+
+
+<script type="text/ng-template" id="input">
+  <div class='input-box' layout='row'>
+    <div><ng-md-icon icon="create" size="22" aria-label="Input" style="fill: #444" class="input-icon"></ng-md-icon></div>
+    <md-input-container class="input-container">
+      <div class="padding">
+        <label ng-bind-html="sce(content_value(line).label)"></label>
+        <input class="md-subhead"
+               ng-if="content_value(line).type == 'number'"
+               type = 'number'
+               ng-model="step.response.inputs[line.input.var]"
+               ng-disabled="!step.response.in_progress">
+        <input class="md-subhead"
+               ng-if="content_value(line).type != 'number'"
+               ng-model="step.response.inputs[line.input.var]"
+               ng-disabled="!step.response.in_progress">
+      </div>
+      {{content_value(line).type}}
+    </md-input-container>
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="timer">
+
+  <p class='md-subhead'>
+    Set timer for 
+      {{content_value(line).initial.hours}} hour(s), 
+      {{content_value(line).initial.minutes}} minutes(s), and 
+      {{content_value(line).initial.seconds}} second(s). 
+    Proceed when time is up.
+  </p>
+
+</script>
+
+<script type="text/ng-template" id="upload">
+
+  <div class='content upload-button-container'>
+
+    <ul>
+      <li ng-repeat="file in uploads[line._id]">
+        <b>{{file.name}}</b>: <span ng-if="file.status == 'sending'">
+                                <span class="upload-sending">{{file.status}}</span>
+                              </span>
+                              <span ng-if="file.status != 'sending'">{{file.status}}</span>
+      </li>
+    </ul>
+
+    <form id="{{'upload-form-' + line.id}}" action="/krill/upload" method="post">
+      <input id="{{'upload-' + line._id}}" 
+             type="file"
+             name="files[]"
+             value="xyz"
+             custom-on-change="complete_upload_method(content_value(line).var,line._id)"
+             multiple></input>
+      <input type="submit">
+      <input id="authenticity_token"
+             name="authenticity_token"
+             type="hidden"
+             value="<%=form_authenticity_token %>" />
+    </form>
+
+    <md-button
+      class="md-raised md-primary" 
+      ng-click="upload_config.associate_with_operations = false; 
+                upload_config.associate_with_plans = false; 
+                start_upload(line._id)">Upload File(s)
+    </md-button>
+
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="separator">
+  <md-divider class="separator"></md-divider>
+</script>
+
+<script type="text/ng-template" id="take">
+  <div class='md-subhead content content-take'>
+    Item <a href='#' ng-click='open_item_ui(content_value(line).id)'>{{content_value(line).id}}</a>:
+    {{content_value(line).name}} ({{content_value(line).sample}})
+    at {{content_value(line).location}}
+  </div>
+</script>
+
+<script type="text/ng-template" id="table">
+    <table>
+      <tr ng-repeat="row in content_value(line)">
+        <td ng-repeat="cell in row track by $index"
+            ng-class="table_class(cell,step)"
+            ng-click="check(cell)"
+            ng-style="cell.style">
+          <span ng-if="cell.type">
+            <ng-md-icon icon="create" size="16" aria-label="Input" style="fill: #444" class="input-icon"></ng-md-icon>
+          </span>
+          <input ng-if="cell.type" 
+                 dtype="{{cell.type}}" 
+                 ng-model="step.response.inputs.table_inputs[cell.key][cell.operation_id].value"
+                 data-opid="{{cell.operation.id}}" 
+                 class="krill-table-input"
+                 ng-disabled="!step.response.in_progress">
+          <span ng-if="!cell.type && cell.content == undefined"><span ng-bind-html="sce(cell)"></span></span>
+          <span ng-if="!cell.type && cell.content != undefined && ( !cell.check || !step.response.in_progress )">
+            <span ng-bind-html="sce(cell.content)"></span>
+          </span>
+          <span ng-if="!cell.type && cell.content != undefined && cell.check && step.response.in_progress"
+                class="no-highlight">
+            <span ng-bind-html="sce(cell.content)"></span>
+          </span>          
+        </td>
+      </tr>
+    </table>
+</script>
+
+<script type="text/ng-template" id="transfer">
+  <div class='content content-transfer'>
+    {{content_value(line)}}
+  </div>
+</script>
+
+<script type="text/ng-template" id="log">
+  <div class='content content-log'>
+    {{content_value(line)}}
+  </div>
+</script>
+
+<script type="text/ng-template" id="image">
+  <div class='content content-image'>
+    <img src='{{content_value(line)}}' class="image">
+  </div>
+</script>
+
+<script type="text/ng-template" id="aborted">
+  <div class='content content-aborted'>
+    Aborted
+  </div>
+</script>
+
+<script type="text/ng-template" id="complete">
+  <div class='content' layout-fill layout="row" layout-align="center center">
+    <h1 class="md-display-2 title">Protocol<br>Completed</h1>
+  </div>
+</script>
+
+<script type="text/ng-template" id="error">
+  <div class='content'>
+    <h2 class="md-display-2 title">Runtime Error</h2>
+    <p class='md-subhead technician-error'>{{step.display.message}}</p>
+    <ul>
+      <li ng-repeat="line in step.display.backtrace">{{fix(line)}}</li>
+    </ul>
+  </div>
+</script>
+
+<script type="text/ng-template" id="aborted">
+  <div class='content'>
+    <h2 class="md-display-2 title">This job was canceled</h2>
+  </div>
+</script>

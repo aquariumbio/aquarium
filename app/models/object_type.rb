@@ -1,3 +1,4 @@
+# @api krill
 class ObjectType < ActiveRecord::Base
 
   attr_accessible :cleanup, :data, :description, :handler, :max, :min, :name, :safety, 

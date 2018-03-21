@@ -294,30 +294,21 @@ AQ.OperationType.record_methods.remove_predecessors = function() {
 
 AQ.OperationType.record_getters.rendered_docs = function() {
 
-  var ot = this;
+  var operation_type = this;
   var md = window.markdownit();
   var docs = "Rendering..."
 
-  delete ot.rendered_docs;
+  delete operation_type.rendered_docs;
 
-  AQ.Code.where({parent_class: "OperationType", parent_id: ot.id, name: 'documentation'}).then(codes => {
-
+  AQ.Code.where({parent_class: "OperationType", parent_id: operation_type.id, name: 'documentation'}).then(codes => {
     if ( codes.length > 0 ) {
-      latest = aq.where(codes,code => { return code.child_id == null });
-      if ( latest.length >= 1 ) {
-        docs = latest[0].content;
-      } else {
-        docs = "This operation type has not yet been documented";
-      }
+      docs = codes[codes.length-1];
     } else { 
-      docs = "This operation type has not yet been documented";
+      docs = { content: "# Add code here.", name: "name" };
     }
-
-    ot.rendered_docs = AQ.sce.trustAsHtml(md.render(docs));
-
+    operation_type.rendered_docs = AQ.sce.trustAsHtml(docs.content);
     AQ.update();
-
-  });
+  });  
 
   return AQ.sce.trustAsHtml("Rendering ...");
 

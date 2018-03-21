@@ -46,7 +46,7 @@ module Krill
     # @see #output_item
     def item name, role, opts={}
       @table.add_column( opts[:heading] || "#{name} Item ID (#{role})", running.collect { |op|
-            property op, :child_item_id, name, role, opts[:checkable]
+            property op, :item_link, name, role, opts[:checkable]
           })
       self
     end

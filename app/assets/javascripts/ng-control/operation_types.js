@@ -11,7 +11,7 @@
 
     $scope.operation_types = [];
     $scope.current_operation_type = null;
-    $scope.user = new User($http);  
+    $scope.user = new User($http);
     $scope.default_protocol = "";
     $scope.categories = [];
     $scope.initialized = false;
@@ -77,8 +77,7 @@
       else {
           return $scope.operation_types[0];
       }
-  }
-
+    }
 
     AQ.OperationType.all({methods: ["field_types", "timing"]}).then(operation_types => {
 
@@ -101,7 +100,6 @@
         $scope.libraries = libraries;
         make_categories();
       });
-
 
       let mode = aqCookieManager.get_object("DeveloperMode");
       if ( mode ) {
@@ -163,7 +161,7 @@
       let c = "clickable op-type";
       if ( $scope.current_operation_type === operation_type ) {
         c += " op-type-current";
-      } 
+      }
       if ( operation_type.deployed ) {
         c += " op-type-deployed"
       }
@@ -174,7 +172,7 @@
       let c = "clickable library";
       if ( $scope.current_operation_type === library ) {
         c += " library-current";
-      } 
+      }
       return c;
     };
 
@@ -198,14 +196,14 @@
               $scope.current_category = $scope.current_operation_type.category;
               aqCookieManager.put_object("DeveloperCurrentCategory", $scope.current_operation_type.category);
             }
-          });          
+          });
         } else {
           $http.post("/operation_types",operation_type).then(function(response) {
             let i = $scope.operation_types.indexOf(operation_type);
             if ( response.data.errors ) {
               alert ( "Could not update operation type definition: " + response.data.errors[0] );
-            } else {            
-              $scope.operation_types[i] = AQ.OperationType.record(response.data);          
+            } else {
+              $scope.operation_types[i] = AQ.OperationType.record(response.data);
               $scope.current_operation_type = $scope.operation_types[i];
               $scope.current_operation_type.upgrade_field_types();
               make_categories();
@@ -231,7 +229,7 @@
         aqCookieManager.put_object("DeveloperCurrentOperationTypeId", $scope.current_operation_type.id);
         $scope.current_category = $scope.current_operation_type.category;
         aqCookieManager.put_object("DeveloperCurrentCategory", $scope.current_operation_type.category);
-      }      
+      }
     }
 
     $scope.delete_operation_type = function(operation_type) {
@@ -248,14 +246,14 @@
               $scope.operation_types.splice(i,1);
               after_delete(c);
             }
-          });             
+          });
 
         } else { // operation type hasn't been saved yet
 
           let i = $scope.operation_types.indexOf(operation_type),
               c = operation_type.category;
           $scope.operation_types.splice(i,1);
-          after_delete(c);          
+          after_delete(c);
         }
 
       }
@@ -288,7 +286,7 @@
 
           alert(response.data.error);
 
-        } else {        
+        } else {
 
           let blob = new Blob([JSON.stringify(response.data)], { type:"application/json;charset=utf-8;" });
           let downloadLink = angular.element('<a></a>');
@@ -422,13 +420,14 @@
             after_delete(category);
             $scope.set_mode('definition');
           }
-        });             
+        });
       }
     };
 
     $scope.copy = function(operation_type) {
 
       $http.get("/operation_types/" + operation_type.id + "/copy/").then(function(response) {
+
         if ( !response.data.error ) { 
           alert("Copy successful. Developer page will reload.")
           $scope.reload();
@@ -464,6 +463,18 @@
     $scope.reload = function() {
       window.location = "/operation_types"
     }
+
+    $scope.open_item_ui = function(id) {
+      AQ.Item.where({id: id}, { include: ["object_type", "sample"]}).then(items => {
+        if ( items.length > 0 ) {
+          $scope.item = items[0];
+          $scope.item.modal = true;
+          $scope.$apply();
+        } else {
+          alert("Item " + id + " not found. It may have been generated to run this test and then deleted once the test was completed.")
+        }
+      });
+    }      
 
   }]);
 

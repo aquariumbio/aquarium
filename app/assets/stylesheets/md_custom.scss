@@ -28,6 +28,16 @@ $buttonHighlight: rgb(73, 91, 281);
   margin: 5px;
 }
 
+.md-button.md-squished {
+  /*height: 24px;*/
+  /*line-height: 20px;*/
+  /*min-height: 20px;*/
+  vertical-align: top;
+  font-size: 12px;
+  padding: 0 0;
+  margin: 5px;
+}
+
 .md-button.md-highlight {
   background: $buttonHighlight;
 }

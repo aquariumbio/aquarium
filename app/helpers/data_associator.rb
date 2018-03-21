@@ -1,4 +1,5 @@
 # Associates and manages {DataAssociation}s
+# @api krill
 
 module DataAssociator 
 
@@ -82,11 +83,12 @@ module DataAssociator
   # @param key [String] the key for the new association
   # @param value [Object] the value for the new association (may be any serializable value)
   # @param upload [Upload] the upload object (default: `nil`)
+  # params options[:duplicates] [Boolean] whether to duplicate an existing key. Default is false
   # @example Associate concentration with an operation's input
   #   op.input("Fragment").item.associate :concentration, 42
-  def associate key, value, upload=nil
+  def associate key, value, upload=nil, options={duplicates: false}
 
-    if data_associations(key).empty? 
+    if options[:duplicates] || data_associations(key).empty? 
       da = DataAssociation.new({
         parent_id: id,
         parent_class: self.class.to_s,

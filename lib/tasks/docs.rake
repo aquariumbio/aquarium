@@ -31,7 +31,7 @@ namespace :docs do
     puts "Autogenerating yard docs"
     sh "rm -rf public/doc/autodocs"
     sh "mkdir public/doc/autodocs"    
-    sh "yardoc"
+    sh "yardoc --main README.md --api krill --files README.md,license.md,doc/Krill.md,doc/Opertations.md,doc/DataAssociation.md,doc/Installation.md"
     sh "mv ./doc/api public/doc/autodocs"
   end
 

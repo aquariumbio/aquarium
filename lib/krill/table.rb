@@ -1,5 +1,6 @@
 module Krill
 
+  # @api krill
   # A class that makes making tables for calls to 'show' easier.
   # @example Create a table, add rows, and display it.
   #   t = Table.new(

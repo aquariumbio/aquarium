@@ -1,3 +1,4 @@
+# @api krill
 class FieldType < ActiveRecord::Base
 
   include FieldTypePlanner
