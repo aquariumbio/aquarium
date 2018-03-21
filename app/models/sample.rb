@@ -39,21 +39,21 @@ class Sample < ActiveRecord::Base
     end
   end
 
-  # @example
-  # s = Sample.creator(
-  #   {
-  #     sample_type_id: SampleType.find_by_name("Primer").id,
-  #     description: "This is a test",
-  #     name: "Yet Another Primer Test", 
-  #     project: "Auxin",
-  #     field_values: [ 
-  #       { name: "Anneal Sequence", value: "ATTCTA" }, 
-  #       { name: "Overhang Sequence", value: "ATCTCGAGCT" },
-  #       { name: "T Anneal", value: 70 }
-  #     ]
-  #   }, User.find(1))
-  #
-  #   s.errors.any?
+  # @example Create a new primer
+  #   s = Sample.creator(
+  #     {
+  #       sample_type_id: SampleType.find_by_name("Primer").id,
+  #       description: "This is a test",
+  #       name: "Yet Another Primer Test", 
+  #       project: "Auxin",
+  #       field_values: [ 
+  #         { name: "Anneal Sequence", value: "ATTCTA" }, 
+  #         { name: "Overhang Sequence", value: "ATCTCGAGCT" },
+  #         { name: "T Anneal", value: 70 }
+  #       ]
+  #     }, User.find(1))
+  #     
+  #     s.errors.any?
   def self.creator raw, user
 
     sample = Sample.new
