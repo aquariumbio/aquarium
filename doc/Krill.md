@@ -1,15 +1,14 @@
-Authoring Protocols for Aquarium using the Krill Library
-===
+# Authoring Protocols for Aquarium using the Krill Library
 
-Prerequisites
----
+## Prerequisites
+
 To author a protocol for Aquarium, you should
 
 * Have access to an Aquarium server, preferably a rehearsal server where mistakes don't matter.
 * Know a bit of the Ruby programming language. Check out the [Ruby Page](https://www.ruby-lang.org/en/) for documentation.
 
-Getting Started
----
+## Getting Started
+
 Here is very a simple protocol that displays "Hello World!" to the user.
 
 ```ruby
@@ -26,14 +25,14 @@ Save this protocol and run it from within the Aquarium Developer Test tab. It sh
 
 The above example illustrates several important aspects shared by all protocols.
 
-First, the code is all wrapped in a class called **Protocol**. Aquarium looks for this class when it starts the protocol. You must define it, otherwise you will get an error when you run the protocol. Of course, you can define other classes and modules as well, and call them whatever you want to call them. Aquarium also extends the Protocol class with all of the Krill library methods,  like show, take, and release. 
+First, the code is all wrapped in a class called **Protocol**. Aquarium looks for this class when it starts the protocol. You must define it, otherwise you will get an error when you run the protocol. Of course, you can define other classes and modules as well, and call them whatever you want to call them. Aquarium also extends the Protocol class with all of the Krill library methods, like show, take, and release.
 
-Second, the method **main** is defined within the  **Protocol** class. This method is Aquarium's entry point into your protocol. You can of course define other methods as well. However, the names **main**, **arguments**, and **debug** have special meaning (see below).
+Second, the method **main** is defined within the **Protocol** class. This method is Aquarium's entry point into your protocol. You can of course define other methods as well. However, the names **main**, **arguments**, and **debug** have special meaning (see below).
 
 Third, **show** is a function made available to your code by Aquarium. It takes a Ruby block (denoted by curly braces, or by **do ... end** if you wish). Within the block, there are a number of functions that are available, including the function **title**, which takes a string as an argument. The **show** function is how you communicate with the user running your protocol. It is a blocking call, meaning that your code stops running until the user clicks "Next" from within Aquarium. You might think of it as simultaneous "puts" and "gets" calls. You can have any number of calls **show** in your code and you can put fairly complex stuff into the show block.
 
-Including Code from Other Files
-===
+# Including Code from Other Files
+
 You can make library code in Aquarium in the developer and include it in your protocol code using "needs". For example, suppose you have a library "Say Hello" in the category "My Lib" with the following code
 
 ```ruby
@@ -68,16 +67,16 @@ needs "my lib/say hello"
 class Protocol
 
   include SayHello
-  
+
   attr_accessor :myvar2
 
   def main
-      
+
     @myvar1 = 100
     @myvar2 = 200
 
     hello "world"
-    
+
   end
 
 end
@@ -87,15 +86,15 @@ Then in the library
 
 ```ruby
 module SayHello
-    
+
     def hello thing
-        
-        v1 = @myvar1 # You can access the class variables of 
-        v2 = @myvar2 # any class that includes this module. Of course, it isn't a very 
+
+        v1 = @myvar1 # You can access the class variables of
+        v2 = @myvar2 # any class that includes this module. Of course, it isn't a very
                      # modular thing to do, since the module doesn't know what classes
                      # it will be included in. Here I we assume the including class
                      # will have defined these variables before calling this method.
-        
+
         # Class variables within show are tricky though. This is because the block of a show actually lives in
         # a different class with methods like title, note, etc. But you can still acccess @myvar1 and @myvar2.
         show do
@@ -104,17 +103,15 @@ module SayHello
             note "@myvar = #{@myvar1}"          # @myvar is not accessible in show, so this doesn't work.
             note "self.myvar2 = #{self.myvar2}" # But self.myvar2 will work, because @myvar2 was declared an accessor.
         end
-        
+
     end
-    
+
 end
 ```
 
 Note that instance variables are not availabe within show blocks. Finally, note that within a library you can refer to the including protocol's operations as `self.operations`.
 
-
-All About Show
-===
+# All About Show
 
 The **show** function takes a block of code that can call the following functions:
 
@@ -175,6 +172,7 @@ You can tell Aquarium to allow the user to select multiple items with the option
 **timer**
 
 Show a rudimentary timer. By default, the timer starts at one minute and counts down. It starts beeping when it gets to zero, and keeps beeping until the user clicks "OK". You can specify the starting number of hours, minutes, and seconds, with for example
+
 ```ruby
 show {
   timer initial: { hours: 0, minutes: 20, seconds: 30}
@@ -183,7 +181,7 @@ show {
 
 **upload**
 
-To have the user upload files associated with the step, use 
+To have the user upload files associated with the step, use
 
 ```ruby
 show {
@@ -193,6 +191,7 @@ show {
 ```
 
 which will insert a button that starts a file upload dialog. If a variable name is included, as in
+
 ```ruby
 data = show {
   upload var: "myvar"
@@ -227,7 +226,7 @@ show {
 }
 ```
 
-shows a simple 2x2 table. The entries in the table can be strings or  integers, as above, or they can be hashes with more information about what to display. For example,
+shows a simple 2x2 table. The entries in the table can be strings or integers, as above, or they can be hashes with more information about what to display. For example,
 
 ```ruby
 m = [
@@ -245,21 +244,20 @@ shows a table with the 0,3 entry has special styling (any css code can go in the
 
 See the [Operations](md-viewer?doc=Operations) documentation for more information about how to construct tables automatically based on the inputs and outputs to a protocol's operation.
 
-Items, Objects and Samples
-===
+# Items, Objects and Samples
 
 The Aquarium inventory is managed via a structured database of Ruby objects with certain relationships, all of shich are available within protocols. The primary inventory objects are listed below. Note that Items, Samples, SampleTypes, and ObjectTypes inherit from **ActiveRecord::Base** which is a fundamental rails class with documentation [here](http://api.rubyonrails.org/classes/ActiveRecord/Base.html). The methods in this parent class are available from within a protocol, although care should be taken when using them. In general, it is preferable to use only those methods discussed in the Krill documentation.
 
 The relationship between these various objects is as follows:
 
-* A SampleType 
-    * Has many Samples of that type
-* A Sample 
-    * Belongs to a SampleType that defines what information should be associated with it
-    * Has many Items in inventory
-* An Item 
-    * Belongs to an ObjectType that defines what kind of container it is in 
-    * May belong to and a Sample that says what kind of item it is
+* A SampleType
+  * Has many Samples of that type
+* A Sample
+  * Belongs to a SampleType that defines what information should be associated with it
+  * Has many Items in inventory
+* An Item
+  * Belongs to an ObjectType that defines what kind of container it is in
+  * May belong to and a Sample that says what kind of item it is
 
 For example, suppose we have a primer "fwd" with several aliquots and a stock in the inventory. Using various ActiveRecord nicities, we could write
 
@@ -272,37 +270,41 @@ fwd.items.select { |i| i.object_type_id == aliquot_type.id } => List of primer a
 
 ### ObjectType (a.k.a. Container)
 
-An object type might be named a "1 L Bottle" or a "Primer Aliquot". If the variable **o** is an ObjectType, then the following methods are available:*
-  * o.name - returns the name of the object type, as in "1 L Bottle"
-  * o.handler - returns the name that classifies the object type, as in "liquid_media". This name is used by the aquarium UI to categorize object types. The special handler "collection" is used to show that items with this given object type are collections (see below)
+An object type might be named a "1 L Bottle" or a "Primer Aliquot". If the variable **o** is an ObjectType, then the following methods are available:\*
+
+* o.name - returns the name of the object type, as in "1 L Bottle"
+* o.handler - returns the name that classifies the object type, as in "liquid_media". This name is used by the aquarium UI to categorize object types. The special handler "collection" is used to show that items with this given object type are collections (see below)
 
 ### SampleType
 
- A sample type might be something like "Primer" or "Yeast Strain". It defines a class of samples that all have the same basic properties. For example, all Primers have a sequence. If **st** is a sample type, then the following methods are available:*
-  * st.name - the name of the sample type, as in "Primer"
-  * st.fieldnname - the name of the nth field, for n=1..8. Probably not useful directly. See the Sample object.
-  * st.fieldntype - the type of the nth field, either "number", "string", "url", or "sample". Se the Sample object for how to use these fields.
+A sample type might be something like "Primer" or "Yeast Strain". It defines a class of samples that all have the same basic properties. For example, all Primers have a sequence. If **st** is a sample type, then the following methods are available:\*
+
+* st.name - the name of the sample type, as in "Primer"
+* st.fieldnname - the name of the nth field, for n=1..8. Probably not useful directly. See the Sample object.
+* st.fieldntype - the type of the nth field, either "number", "string", "url", or "sample". Se the Sample object for how to use these fields.
 
 ### Sample
 
 A specific (yet still abstract) sample, not to be confused with a sample type or an item. For example, a primer with a certain sequence and name will have sample type "Primer" and possibly many items in the lab for the given sample. If **s** is a sample, then the following methods are available:
-  * s.id - The id of the sample.
-  * s.name: The name of the sample. For example, a sample whose SampleType is "Plasmid" might be named "pLAB1".
-  * s.sample_type_id - The sample type id of the sample.
-  * s.properties - A hash of the form { key1: value1, ..., key8: value8 } where the nth key is named according to the s.sample_type.fieldnname (as a symbol, not a string).
-  * s.make_item object_type_name - Returns an item associated with the sample and in the container described by object_type_name The location of the item is determined by the location wizard.
+
+* s.id - The id of the sample.
+* s.name: The name of the sample. For example, a sample whose SampleType is "Plasmid" might be named "pLAB1".
+* s.sample_type_id - The sample type id of the sample.
+* s.properties - A hash of the form { key1: value1, ..., key8: value8 } where the nth key is named according to the s.sample_type.fieldnname (as a symbol, not a string).
+* s.make_item object_type_name - Returns an item associated with the sample and in the container described by object_type_name The location of the item is determined by the location wizard.
 
 ### Item
 
 A physical item in the lab. It belongs to an ObjectType and may belong to a Sample (see the examples below). For Item **itm**:
 
-
 #### Attributes
+
 * **itm.id** - the id of the Item. Every Item in the lab has a unique id that can by used to refer to it (see finding Items and Samples).
 
 * **itm.location** - a string describing the physical location in the lab where the Item's physical manifestation can be found.
 
 #### Associations
+
 * **itm.object_type** - the ObjectType associated with the Item.
 
 * **itm.object_type_id** - the id of the ObjectType associated with the Item.
@@ -312,27 +314,31 @@ A physical item in the lab. It belongs to an ObjectType and may belong to a Samp
 * **itm.sample_id** - the id of the Sample that may be associated with the Item.
 
 #### Instance methods
+
 * **itm.save** - saves **itm** to the database. If you make changes to an Item's attributes or associations, you may have to call `itm.save` to save the changes to the database (see below).
 
 * **itm.reload** - reloads an item from the database. If **itm** has changed in the database, call this method to be sure that you are working with the current data.
 
-* **itm.mark_as_deleted** - records that the **physical manifestation** of the item has been discarded. (*DO NOT* use `itm.delete` as this removes the Item from the database altogether.) `itm.mark_as_deleted` saves to the database automatically, and does not require a subsequenquent `itm.save` call.
+* **itm.mark_as_deleted** - records that the **physical manifestation** of the item has been discarded. (_DO NOT_ use `itm.delete` as this removes the Item from the database altogether.) `itm.mark_as_deleted` saves to the database automatically, and does not require a subsequenquent `itm.save` call.
 
 #### Making changes to an Item
+
 Generally, there are two ways to change an Item's attributes. First, you can assign them using the `=` operator. In this case, you will need to save the changes:
+
 ```ruby
 itm.location = "The big red barn."
 itm.save
 ```
+
 Alternatively, you can accomplish the same thing in one line using `update_attributes` method:
+
 ```ruby
 itm.update_attributes(location: "The big red barn.")
 ```
 
 You can associate arbitrary data, such as a measurement or uploaded data file, with an item using the DataAssociation model, described [here](md-viewer?doc=DataAssociation).
 
-Taking Items
-===
+# Taking Items
 
 If a protocol has a list called, say, **items** returned by **find**, that does not mean the user of the protocol necessarily has taken those items from their locations and brought them to the bench. To tell the user to take the items, one must call take. The effect is to associate the item with the job running the protocol, until it is released (see below). It also "touches" the item by the job, so that one can later determine that the item was used by the job.
 
@@ -378,8 +384,7 @@ release items
 
 More sophisticated patterns for release are shown below.
 
-Producing and Releasing Items
-===
+# Producing and Releasing Items
 
 To make new items you use either **new_object** or **new_sample**, which both return Items. Typically, these functions are used with the **produce** function so that the items returned are (a) put in the databased with new unique ids and (b) associated with the job (i.e. they are "taken").
 
@@ -388,6 +393,7 @@ To make new items you use either **new_object** or **new_sample**, which both re
 ```ruby
 i = produce new_object "1 L Bottle"
 ```
+
 which would return a new item in the variable **i**.
 
 **new_sample sample_name, of: sample_type_name, as: object_type_name** - This function takes a sample name and an object type name and makes a new item with that name. For example, you might do
@@ -412,7 +418,7 @@ This version of release simply release the items i and j (i.e. it marks them as 
 release([i,j],interactive: true)
 ```
 
-This version calls **show** and tells the user to put the items away, or dispose of them, etc.  Once the user clicks "Next", the items in the list are marked as not taken.
+This version calls **show** and tells the user to put the items away, or dispose of them, etc. Once the user clicks "Next", the items in the list are marked as not taken.
 
 ```ruby
 release([i,j],interactive: true) {
@@ -422,13 +428,11 @@ release([i,j],interactive: true) {
 
 This version also calls **show**, like the previous version, but also adds the **show** code block to the **show** that release does, so that you can add various notes, warnings, images, etc. to the page shown to the user.
 
-Collections
-===
+# Collections
 
 A **Collection** is a special kind of **Item** that has a matrix of **Sample** ids associated with it. The matrix is stored in the datum field of the item as in the format { matrix: [ [ ... ], ..., [ ... ] ], ... }. For easy manipulation of such items, Aquarium provides the class Collection, which inherits from Item.
 
-Constructing Collections
----
+## Constructing Collections
 
 Collections can be made in a few different ways, either from nothing, from items whose object types have the handler "collection", or by spreading a number of samples accross a new collection.
 
@@ -450,20 +454,19 @@ which creates and takes a new collection object with an empty 2x6 matrix and an 
 
 Finally, suppose **fragments**<em>[[should this be **sample_list**? -CT]]</em> is a list of fragment sample (obtained from a call to **find** for example). You can construct a new collection whose matrix is populated with those samples as in the following example:
 
-<em>[[In the above it's not initially clear to what "list of fragment sample" is. Is it a list of samples (not items)  that in this case happen to be fragments"-CT]]</em>
+<em>[[In the above it's not initially clear to what "list of fragment sample" is. Is it a list of samples (not items) that in this case happen to be fragments"-CT]]</em>
 
 ```ruby
 collections = produce spread sample_list, "Stripwell"
 ```
 
-This call to **spread** returns a list of collections, which is sent to **produce** to take them. In this example, if there were, say, 30 samples in **sample_list**, then the returned list will contain three 1x12 collections with the first two completely, and the last half full. The first sample in the list is associated with the first well of the first collection, and so on. 
+This call to **spread** returns a list of collections, which is sent to **produce** to take them. In this example, if there were, say, 30 samples in **sample_list**, then the returned list will contain three 1x12 collections with the first two completely, and the last half full. The first sample in the list is associated with the first well of the first collection, and so on.
 
-Collection Methods
----
+## Collection Methods
 
 Collections inherit all of the methods of Item. In addition, there are a few more methods. Suppose **col** is a collection.
 
-**Collection.new_collection "collection_type_name"** - Creates a new collection of type "collection_type_name" 
+**Collection.new_collection "collection_type_name"** - Creates a new collection of type "collection_type_name"
 with a matrix of size defined by the rows and columns in the collection type.
 
 **Collection.spread sample_list, "collection_type_name"** - Creates an appropriate number of collections of "collection_type_name"
@@ -493,7 +496,7 @@ and fills collections with the sample_list. The sample list can be Samples, Item
 
 **col.full?** - Whether the matrix has no EMPTY slots
 
-**col.select &block** - Returns set of [r,c] such that the block is true. 
+**col.select &block** - Returns set of [r,c] such that the block is true.
 
 **col.find x** - Finds set of [r,c] that equal **x**, where **x** can be a Sample, Item, or integer.
 
@@ -503,24 +506,23 @@ and fills collections with the sample_list. The sample list can be Samples, Item
 
 **col.get_non_empty** - Returns set of [r,c] that are not EMPTY
 
-**col.add_one x, reverse: false** - Adds **x** to the first empty [r,c]. If reverse: true, adds **x** to the 
-last empty [r,c]. Returns 
+**col.add_one x, reverse: false** - Adds **x** to the first empty [r,c]. If reverse: true, adds **x** to the
+last empty [r,c]. Returns
 
-**col.subtract_one x, reverse: true** - Find last [r,c] that equals **x** and sets to EMPTY. If **x.nil?** then 
+**col.subtract_one x, reverse: true** - Find last [r,c] that equals **x** and sets to EMPTY. If **x.nil?** then
 it finds the last non_empty slot. If reverse: false then finds the first [r,c] equal to x. Returns **[r,c,sample_at_rc]** if x is in collection.
 or **nil** if **x** is not found or the col.empty?
 
 **col.remove_one x, reverse: true** - Synonym for subtract_one
 
-**remaining = col.add_samples sample_list** - Fills collection with samples from sample list. Once filled, returns the remaining samples. 
+**remaining = col.add_samples sample_list** - Fills collection with samples from sample list. Once filled, returns the remaining samples.
 The sample list can contain Samples, Items, or integers.
 
-Collection Helpers
----
+## Collection Helpers
 
 **load_samples headings, ingredients, collections //optional block//**
 
-This helper function displays a table to the user that describes how to load a number of samples into a collection. The argument **headings** is an array of strings that describe how much to transfer of each ingredient. The argument **ingredients** is an array of array of **Items** to be transfered. The argument **collections** is an array of collections. And **block** is an option **show** style block. Note that this function *does not* change the matrix associated with the collection. This is because the sample that is created by combining the ingredients is likely different than the **Samples** associated with the ingredients. For example, the code below shows the user a table that describes how to arrays of templates, forward primers, and reverse primers into a set of stripwell tubes. The stripwells, after a PCR reaction is run, will contain fragment samples, which should be associated with the collections in a separate step.
+This helper function displays a table to the user that describes how to load a number of samples into a collection. The argument **headings** is an array of strings that describe how much to transfer of each ingredient. The argument **ingredients** is an array of array of **Items** to be transfered. The argument **collections** is an array of collections. And **block** is an option **show** style block. Note that this function _does not_ change the matrix associated with the collection. This is because the sample that is created by combining the ingredients is likely different than the **Samples** associated with the ingredients. For example, the code below shows the user a table that describes how to arrays of templates, forward primers, and reverse primers into a set of stripwell tubes. The stripwells, after a PCR reaction is run, will contain fragment samples, which should be associated with the collections in a separate step.
 
 ```ruby
 load_samples(
