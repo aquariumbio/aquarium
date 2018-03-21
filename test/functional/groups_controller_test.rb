@@ -5,18 +5,18 @@ class GroupsControllerTest < ActionController::TestCase
     @group = groups(:one)
   end
 
-  test "should get index" do
+  test 'should get index' do
     get :index
     assert_response :success
     assert_not_nil assigns(:groups)
   end
 
-  test "should get new" do
+  test 'should get new' do
     get :new
     assert_response :success
   end
 
-  test "should create group" do
+  test 'should create group' do
     assert_difference('Group.count') do
       post :create, group: { description: @group.description, name: @group.name }
     end
@@ -24,22 +24,22 @@ class GroupsControllerTest < ActionController::TestCase
     assert_redirected_to group_path(assigns(:group))
   end
 
-  test "should show group" do
+  test 'should show group' do
     get :show, id: @group
     assert_response :success
   end
 
-  test "should get edit" do
+  test 'should get edit' do
     get :edit, id: @group
     assert_response :success
   end
 
-  test "should update group" do
+  test 'should update group' do
     put :update, id: @group, group: { description: @group.description, name: @group.name }
     assert_redirected_to group_path(assigns(:group))
   end
 
-  test "should destroy group" do
+  test 'should destroy group' do
     assert_difference('Group.count', -1) do
       delete :destroy, id: @group
     end
