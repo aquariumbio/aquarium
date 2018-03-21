@@ -1,17 +1,15 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  job: 1
-  protocol_sha: MyString
-  protcol_name: MyString
-  user: MyString
-  type: 
-  data: MyText
+  id: 1
+  job_id: 1
+  user_id: 1
+  entry_type: Cancel
+  data: "{}"
 
 two:
-  job: 1
-  protocol_sha: MyString
-  protcol_name: MyString
-  user: MyString
-  type: 
-  data: MyText
+  id: 2
+  job_id: 1
+  user_id: 1
+  entry_type: Start
+  data: "{}"

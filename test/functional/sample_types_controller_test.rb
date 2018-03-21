@@ -18,7 +18,7 @@ class SampleTypesControllerTest < ActionController::TestCase
 
   test "should create sample_type" do
     assert_difference('SampleType.count') do
-      post :create, sample_type: { description: @sample_type.description, field1name: @sample_type.field1name, field1type: @sample_type.field1type, field2name: @sample_type.field2name, field2type: @sample_type.field2type, field3name: @sample_type.field3name, field3type: @sample_type.field3type, field4name: @sample_type.field4name, field4type: @sample_type.field4type, name: @sample_type.name }
+      post :create, sample_type: { description: @sample_type.description, name: @sample_type.name, created_at: @sample_type.created_at, updated_at: @sample_type.updated_at }
     end
 
     assert_redirected_to sample_type_path(assigns(:sample_type))
@@ -35,7 +35,7 @@ class SampleTypesControllerTest < ActionController::TestCase
   end
 
   test "should update sample_type" do
-    put :update, id: @sample_type, sample_type: { description: @sample_type.description, field1name: @sample_type.field1name, field1type: @sample_type.field1type, field2name: @sample_type.field2name, field2type: @sample_type.field2type, field3name: @sample_type.field3name, field3type: @sample_type.field3type, field4name: @sample_type.field4name, field4type: @sample_type.field4type, name: @sample_type.name }
+    put :update, id: @sample_type, sample_type: { description: @sample_type.description, name: @sample_type.name, created_at: @sample_type.created_at, updated_at: @sample_type.updated_at }
     assert_redirected_to sample_type_path(assigns(:sample_type))
   end
 
