@@ -221,6 +221,9 @@ class Collection < Item
     end
     s = self.matrix[r][c]
     self.set r, c, EMPTY
+
+    self.mark_as_deleted if self.num_samples == 0
+
     [r, c, s]
   end
 
