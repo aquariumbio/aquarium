@@ -1,5 +1,4 @@
-Operation Table Inputs
----
+# Operation Table Inputs
 
 Create a table proc that validates numbered inputs between [1,10] initialized with a random default value between [0,20].
 
@@ -13,39 +12,41 @@ Create a table proc that validates numbered inputs between [1,10] initialized wi
         }
         .end_table
      }
-            
+
     show_with_input_table(operations.running, create_table, num_times=5) do
       title "Fill in Input Table"
-      
+
       # warnings for invalid inputs will show up here
-      
+
       note "Go through each row and fill in."
       warning "Be sure to fill in the table correctly!"
-      
+
       # table will be displayed below
     end
 ```
 
-#### Temporary values
+## Temporary values
 
 Inputted values are saved to each operations temporary hash by the key indicated in `.custom_input`
 
-#### Default Values
+## Default Values
 
 Default values for each row in the column are specified by the block following `.custom_input` method
 
-#### Validation
-The show block will repeat up to `num_times` until all inputs are valid. 
+## Validation
 
-#### Validation Messages
-Warning messages for invalid inputs will be displayed at the top of show block. 
+The show block will repeat up to `num_times` until all inputs are valid.
+
+## Validation Messages
+
+Warning messages for invalid inputs will be displayed at the top of show block.
 These messages can be customized via the `.validation_message` method.
 
-### Complex Example
+## Complex Example
 
-Virtual operations can be used as well. 
-In the following example, a virtual operation is created for each plate. 
-The Virtual Operation list is used to create an input table. 
+Virtual operations can be used as well.
+In the following example, a virtual operation is created for each plate.
+The Virtual Operation list is used to create an input table.
 
 This is useful for things like checking concentrations, volumes, etc. of many tubes
 
@@ -54,10 +55,10 @@ This is useful for things like checking concentrations, volumes, etc. of many tu
     plates.each_with_index do |p, i|
       insert_operation i, VirtualOperation.new
     end
-    
+
     myops = operations.select { |op| op.virtual? }
     myops.zip(plates).each { |op| op.temporary[:plate] = p }
-   
+
 # Setup table
     create_table = Proc.new {|ops|
           ops.start_table
