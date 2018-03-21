@@ -2,6 +2,8 @@ module Krill
 
   module Base
 
+    # @api private
+    # This method is deprecated. Use ActiveRecord methods instead.
     def find name, spec
 
       if name == :project

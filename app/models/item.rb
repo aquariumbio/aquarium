@@ -1,5 +1,6 @@
 # Class that represents a physical object in the lab
 
+# @api krill
 class Item < ActiveRecord::Base
 
   include DataAssociator

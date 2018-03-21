@@ -1,3 +1,4 @@
+# @api krill
 class Locator < ActiveRecord::Base
 
   attr_accessible :item_id, :number, :wizard_id

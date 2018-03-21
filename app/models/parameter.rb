@@ -1,3 +1,4 @@
+# @api krill
 class Parameter < ActiveRecord::Base
 
   attr_accessible :key, :value, :description, :user_id
