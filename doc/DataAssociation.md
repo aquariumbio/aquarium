@@ -3,53 +3,6 @@
 Data may be associated with `Item`, `Operation` and `Plan` objects.
 This data should either be serializable as JSON (e.g., a hash), or be an `Upload` object.
 
-This is supported by the `DataAssociation` model in Krill, but the standard library also provides the `AssociationMap` class that hides some details.
-Both are described here.
-
-## AssociationMap
-
-An `AssociationMap`  manages the data associations for an item, operation or plan.
-The class is available as a standard library and must be imported using
-
-```ruby
-needs "StandardLibs/AssociationManagement"
-```
-
-The class can then be included directly into a protocol or library, or referenced directly.
-
-A map is associated with an object using the initializer.
-For instance, for the `Item` reference `item` the command
-
-```ruby
-map = AssociationMap.new(item)
-```
-
-creates a new `AssociationMap` that includes any data already associated with the object `item`.
-
-To add a new association, use
-
-```ruby
-map.put(key, data)
-```
-
-where `data` may be a serializable or `Upload` object.
-
-Objects can then be retrieved by the key value using
-
-```ruby
-map.get(key)
-```
-
-The associations in the `AssociationMap` must be explicitly saved to the database with
-
-```ruby
-map.save()
-```
-
-otherwise, the data will not be accessible later.
-
-## DataAssociation
-
 Data associations are managed directly using the `DataAssociation` model.
 (The `AssociationMap` class is a wrapper for this model class, making associations easier to use, but hiding details.)
 

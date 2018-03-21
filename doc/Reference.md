@@ -41,14 +41,19 @@ The Diagram above shows the relationship between all the models in the Aquarium 
 
 * **SampleType**
 
-  * Defines a class of samples that all have the same basic properties. For example, "Primer" or "Yeast Strain" can both be sample types, and there can be many different kinds of Primers with different sequences, where each of these are individual samples. There can also be multiple items of this same sample (having same sequence, name, etc.) either in with the same object type, or in different object types. For a SampleType `st`:
+  * Defines a class of samples that all have the same basic properties.
+  For example, `"Primer"` or `"Yeast Strain"` can both be sample types, and there can be many different kinds of Primers with different sequences, where each of these are individual samples.
+  There can also be multiple items of this same sample (having same sequence, name, etc.) either in with the same object type, or in different object types.
+  For a `SampleType` `st`:
     * `st.name`: Name of the sample type.
     * `st.fieldnname`: Name of the nth field (n=1,2....8).
     * `st.fieldntype`: Type of the nth field ("number", "string", "url", or "sample"). See Sample object to see how to use these fields.
 
 * **Collections**
-  * Special kind of Item that has a matrix of Sample IDs associated with it. This matrix is stored in the datum field of the item in this form: { matrix: [ [ ... ], ..., [ ... ] ], ... }. Aquarium provides the class Collections, which inherits from Item
-    * `i = produce new_collection "Gel", 2, 6`: Make an entirely new collection. This creates and takes a new collection object with an empty 2x6 matrix and ObjectType of "Gel". The ObjectType associated with a collection **must** have its handler set to "collection".
+  * Special kind of Item that has a matrix of Sample IDs associated with it. This matrix is stored in the datum field of the item in this form: `{ matrix: [ [ ... ], ..., [ ... ] ], ... }`.
+  Aquarium provides the class Collections, which inherits from `Item`
+    * `i = produce new_collection "Gel", 2, 6`: Make an entirely new collection.
+    This creates and takes a new collection object with an empty 2x6 matrix and ObjectType of `"Gel"`. The `ObjectType` associated with a collection **must** have its handler set to `"collection"`.
     * `c = collection_from i`: Promotes an Item `i` to a collection.
     * `collections = produce spread sample_list , "Stripwell", 1, 12`: This call to `spread` returns a list of collections, which is sent to `produce` to take them. If there were 30 samples in `sample_lost`, then the returned list will containt three 1x12 collections, with the first two completely full and the last only half full. The first sample in the list is associated with the first well of the first collection and so on.
   * For a Collection `c`: (Collections inherits all of the methods of item plus the additional methods listed below)
