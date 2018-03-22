@@ -88,7 +88,8 @@
     <!-- IO -->
     <circle class="field-value"
             ng-attr-cx="{{output.width/2}}" 
-            ng-attr-cy="{{output.height}}" />
+            ng-attr-cy="{{output.height}}" 
+            ng-mousedown="ioMouseDown($event, plan.current_module, output)" />
 
     <text ng-attr-x="{{output.width/2}}"
           ng-attr-y="{{output.height/2+6}}"
@@ -96,7 +97,7 @@
           {{$index}}
     </text>
 
-    <!-- <planner-cursor ng-if="output == current_io" x="output.width/2"  y="output.height"/>                  -->
+    <planner-cursor ng-if="output == current_io" x="output.width/2"  y="output.height"/>                 
 
   </g>  
 
@@ -113,7 +114,8 @@
     <!-- IO -->
     <circle class="field-value"
             ng-attr-cx="{{input.width/2}}" 
-            cy="0" />
+            cy="0" /
+            ng-mousedown="ioMouseDown($event, plan.current_module, input)" />
 
     <text ng-attr-x="{{input.width/2}}"
           ng-attr-y="{{input.height/2+6}}"
@@ -121,7 +123,7 @@
           {{$index}}
     </text>                 
 
-    <!-- <planner-cursor ng-if="input == current_io" x="input.width/2"  y="0"/>   -->  
+    <planner-cursor ng-if="input == current_io" x="input.width/2"  y="0"/>    
 
   </g>  
 

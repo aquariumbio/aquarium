@@ -55,7 +55,7 @@ AQ.Plan.record_methods.connect = function(io1, object1, io2, object2) {
   // io1,2: FieldValue or Module IO
   // object1,2: Operation or Module
 
-  // console.log(["plan.connect", io1, object1, io2, object2])
+  console.log(["plan.connect", io1, object1, io2, object2])
 
   var plan = this;
 
@@ -123,7 +123,8 @@ AQ.Plan.record_methods.wire_equiv = function(wire1, wire2) {
 
 AQ.Plan.record_methods.wire_in_set = function(wires, wire) {
 
-  var rval = false;
+  let plan = this,
+      rval = false;
 
   aq.each(wires, w => {
     if ( plan.wire_equiv(w, wire) ) rval = true;

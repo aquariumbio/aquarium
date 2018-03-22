@@ -62,6 +62,23 @@ shark.make_pcr_plan = function(sample) {
 
 }
 
+shark.make_transform_plan = function() {
+
+  let plan =      AQ.Plan.new_plan("PCR Collection Test"),
+      transform = AQ.OperationType.find_cached("Transform Cells").create(0, 160, 80),
+      input1 = transform.input("Plasmid"),
+      input2 = transform.input("Comp Cells");
+
+  plan.add_operation(transform);
+
+  transform.set_aft(
+    input1.field_type,
+    input1.field_type.allowable_field_types[2]);
+
+  return Promise.resolve(plan)
+
+}
+
 shark.aq_setup = function() {
 
   AQ.snap = 16;
@@ -82,7 +99,7 @@ function wait(t, plan) {
 
 describe('Plan_Creation', function() {
 
-  sit("Should get field types with samples", function(done) {
+  it("Should get field types with samples", function(done) {
 
     AQ.Sample.find_by_identifier('4927: ADF3 right')
       .then(sample => {
@@ -92,7 +109,7 @@ describe('Plan_Creation', function() {
 
   }).async();
 
-  sit("should use successors and predecessors", function(done) {
+  it("should use successors and predecessors", function(done) {
 
     shark.aq_setup().then(() => {
 
@@ -127,35 +144,44 @@ describe('Plan_Creation', function() {
         .then(sample => shark.make_pcr_plan(sample))
         .then(plan => plan.save(shark.current_user))
         .then(plan => plan.check_operations())
+        .then(plan => plan.choose_items())
         .then(plan => {
-          return plan.operations[3].input("Reverse Primer")
-                     .find_items()
-                     .then(() => plan)
-        })
-        .then(plan => {
-           let rp = plan.operations[3].input("Reverse Primer");
-               item = rp.items[1];
+           let rp = plan.operation("Make PCR Fragment").input("Reverse Primer");
+           rp.should.have.property("items");
            rp.assign_item(rp.items[1]);
            return plan;
         })
-        .then(plan => {
-          let rp = plan.operations[3].input("Reverse Primer");
-          this.log(`Before saving, ${rp.name} is assigned item ${rp.child_item_id} from [${aq.collect(rp.items, i => i.id)}]`)
-          return plan;
-        })
         .then(plan => plan.save(shark.current_user))
+        .then(plan => plan.choose_items())       
         .then(plan => {
-          return plan.operations[3].input("Reverse Primer")
-                     .find_items()
-                     .then(() => plan)
-         })        
-        .then(plan => {
-          let rp = plan.operations[3].input("Reverse Primer"),
-              item = rp.items[1];
-          this.log(`After saving, ${rp.name} is assigned item ${rp.child_item_id}`)
-          rp.child_item_id.should.be.equal(item.id);
+          let rp = plan.operation("Make PCR Fragment").input("Reverse Primer");
+          rp.child_item_id.should.be.equal(rp.items[1].id);
           return plan;
         })
+        .then(plan => plan.destroy())
+        .then(plan => done())
+        .catch(done);
+
+  }).async();
+
+  it("should choose collection parts correctly", function(done) {
+
+    shark.aq_setup()
+        .then(sample => shark.make_transform_plan())
+        .then(plan => {
+          return AQ.Sample.find_by_name("pGFP")
+            .then(sample => plan.assign(plan.operation("Transform Cells").input("Plasmid"), sample))
+            .then(() => plan)
+        })
+        .then(plan => {
+          return AQ.Sample.find_by_name("DH5alpha")
+            .then(sample => plan.assign(plan.operation("Transform Cells").input("Comp Cells"), sample))
+            .then(() => plan)
+        })        
+        .then(plan => plan.choose_items())
+        .then(plan => plan.save(shark.current_user))
+        .then(plan => plan.check_operations())
+        .then(plan => plan.show_assignments())
         .then(plan => plan.destroy())
         .then(plan => done())
         .catch(done);

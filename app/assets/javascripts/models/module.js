@@ -175,7 +175,7 @@ class Module {
     var module = this,
         old_wires = plan.get_implied_wires();
 
-    plan.base_module.remove_wires_connected_to(io);
+    plan.base_module.remove_wires_connected_to(io, plan);
 
     aq.remove(module.input, io);
     aq.remove(module.output, io);    
@@ -186,13 +186,13 @@ class Module {
 
   }
 
-  remove_wires_connected_to(io) {
+  remove_wires_connected_to(io, plan) {
 
     var module = this;  
     var old_wires = plan.get_implied_wires();
 
     module.wires = aq.where(module.wires, w => w.from != io && w.to != io);
-    aq.each(module.children, c => c.remove_wires_connected_to(io));
+    aq.each(module.children, c => c.remove_wires_connected_to(io,plan));
 
     plan.delete_obsolete_wires(old_wires);
     module.associate_fvs();

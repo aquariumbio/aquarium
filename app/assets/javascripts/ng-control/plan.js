@@ -113,24 +113,19 @@
 
         var module = obj,
             fv = io.destinations[0].io,
-            op = io.destinations[0].op,
-            newop = $scope.plan.add_wire_from(fv,op,pred);
+            op = io.destinations[0].op;
 
-        newop.x = module.x;
-        newop.y = module.y + 6 * AQ.snap;
-        newop.width = 160;
-        newop.height = 30;
-        newop.parent_id = $scope.plan.current_module.id;
-
-        $scope.select(newop);
-
-        $scope.connect(newop.output(pred.output.name),newop,io,module);
-
-        var inputs = aq.where(newop.field_values, fv => fv.role === 'input');
-
-        if ( inputs.length > 0 ) {
-          $scope.set_current_io(inputs[0]);
-        }
+        $scope.plan
+          .add_wire_from(fv,op,pred)
+          .then(plan => {
+            let newop = plan.operations[plan.operations.length-1];
+            $scope.select(newop);
+            $scope.connect(newop.output(pred.output.name),newop,io,module);
+            if ( newop.num_inputs > 0 ) {
+              $scope.set_current_io(newop.inputs[0]);
+            }   
+            $scope.$apply()         
+          });
 
       }
 
@@ -155,25 +150,20 @@
 
         var module = obj,
             fv = io.origin.io,
-            op = io.origin.op,
-            newop = $scope.plan.add_wire_to(fv,op,suc);
+            op = io.origin.op;
 
-          $scope.plan.wires[$scope.plan.wires.length-1].snap = AQ.snap;
-          newop.x = module.x;
-          newop.y = module.y - 4*AQ.snap;
-          newop.width = 160;
-          newop.height = 30;
-          newop.parent_id = $scope.plan.current_module.id;
-
-          $scope.select(newop);
-
-          $scope.connect(io,module,newop.input(suc.input.name),newop);          
-          
-          var fvs = aq.where(newop.field_values, fv => fv.role === 'output');
-          if ( fvs.length > 0 ) {
-            $scope.set_current_io(fvs[0]);
-          }
-
+        $scope.plan
+          .add_wire_to(fv,op,suc)
+          .then(plan => {
+            let newop = plan.operations[plan.operations.length-1];
+            $scope.select(newop);
+            if ( newop.num_outputs > 0 ) {
+              $scope.set_current_io(newop.outputs[0]);
+            }   
+            $scope.connect(io,module,newop.input(suc.input.name),newop); 
+            $scope.plan.wires[$scope.plan.wires.length-1].snap = AQ.snap;
+            $scope.$apply() 
+          })
 
       }
 

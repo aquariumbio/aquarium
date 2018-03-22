@@ -793,20 +793,21 @@ AQ.Plan.record_methods.parent_operation = function(field_value) {
   return null;
 }
 
+AQ.Plan.record_getters.leaves = function() {
+  let plan = this;
+  plan.mark_leaves();
+  return aq.where(plan.field_values(), fv => fv.leaf);
+}
+
 AQ.Plan.record_methods.choose_items = function() {
 
-  let plan = this,
-      promise = Promise.resolve();
+  let plan = this;
 
-  plan.field_values().forEach(field_value => {
-
-    if ( field_value.leaf ) {
-      promise = promise.then(() => field_value.find_items(field_value.child_sample_id));
-    }
-
+  return Promise.all(
+    aq.collect(plan.leaves, fv => fv.find_items(fv.child_sample_id))
+  ).then(() => {
+    return plan;
   })
-
-  return promise.then(() => plan);
 
 }
 
@@ -818,10 +819,26 @@ AQ.Plan.record_methods.show_assignments = function() {
     let str = fv.name + ": " + fv.sid;
     if ( fv.child_item_id ) {
       str += ", item id = " + fv.child_item_id;
+      if ( typeof fv.row == 'number' && typeof fv.column == 'number' ) {
+        str += `[${fv.row}, ${fv.column}]`
+      }
     }
     console.log(str);
   });
 
   return plan;
+
+}
+
+AQ.Plan.record_methods.operation = function(type_name, index=0) {
+
+  let plan = this,
+      operations = aq.where(plan.operations, op => op.operation_type.name == type_name);
+
+  if ( operations.length > index ) {
+    return operations[index];
+  } else {
+    raise(`Could not find operation ${index} of type '${type_name}' in plan '${plan.name}'`)
+  }
 
 }

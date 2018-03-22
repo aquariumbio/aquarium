@@ -53,6 +53,8 @@ AQ.Plan.record_methods.create_module = function() {
       wires_to_be_moved = [];                                   
       x = 0, y = 0, n = 0;
 
+      console.log(plan)
+
   aq.each(plan.base_module.all_wires, w => console.log("   " + w.to_s));
 
   module = new Module().for_parent(plan.current_module);
