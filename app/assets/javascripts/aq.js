@@ -272,4 +272,12 @@ Aq.prototype.first = function(list) {
   }
 }
 
+Aq.prototype.last = function(list) {
+  if ( list.length > 0 ) {
+    return list[list.length-1];
+  } else {
+    raise("Could not take last element of empty list.")
+  }
+}
+
 aq = new Aq();

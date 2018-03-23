@@ -107,19 +107,13 @@ AQ.Plan.load = function(id) {
 
 AQ.Plan.record_methods.submit = function(user) {
 
-  var plan = this.serialize(),
+  var original_plan = this,
+      plan = this.serialize(),
       user_query = user ? "&user_id=" + user.id : "",
       budget_query = "?budget_id=" + this.uba.budget_id;
 
-  return new Promise(function(resolve,reject) {
-    AQ.get('/plans/start/'+plan.id+budget_query+user_query,plan).then(
-      (response) => {
-        resolve();
-      }, (response) => {
-        reject(response.data);
-      }
-    );
-  });
+  return AQ.get('/plans/start/'+plan.id+budget_query+user_query, plan)
+    .then(response => original_plan); // caller should reload the plan if needed to get updated operation status
 
 }
 
@@ -132,14 +126,13 @@ AQ.Plan.record_methods.cost_to_amount = function(c) {
 AQ.Plan.record_methods.estimate_cost = function() {
 
   var plan = this;
-  plan.estimating;
 
   if ( !plan.estimating ) {
   
     plan.estimating = true;
     var serializeed_plan = plan.serialize();
 
-    AQ.post('/launcher/estimate',serializeed_plan).then( response => {
+    return AQ.post('/launcher/estimate',serializeed_plan).then( response => {
 
       if ( response.data.errors ) {
 
@@ -184,8 +177,10 @@ AQ.Plan.record_methods.estimate_cost = function() {
 
       plan.estimating = false;
 
-    });
+    }).then(() => plan);
 
+  } else {
+    return Promise.resolve(plan);
   }
 
 }
@@ -461,16 +456,13 @@ AQ.Plan.record_methods.debug = function() {
   var plan = this;
   plan.debugging = true;
 
-  return new Promise(function(resolve,reject) {  
-
-    AQ.get("/plans/" + plan.id + "/debug").then(
-      response => {
-        plan.reload();
-        plan.debugging = false;
-        plan.recompute_getter("state");
-      }
-    );
-  });
+  return AQ.get("/plans/" + plan.id + "/debug").then(
+    response => {
+      plan.reload();
+      plan.debugging = false;
+      plan.recompute_getter("state");
+    }
+  ).then(() => plan);
   
 }
 

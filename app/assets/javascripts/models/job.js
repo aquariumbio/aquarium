@@ -48,6 +48,10 @@ AQ.Job.record_getters.started = function() {
   return this.pc != -1;
 }
 
+AQ.Job.record_methods.debug = function() {
+  return AQ.http.get("/krill/debug/" + this.id)
+}
+
 AQ.Job.record_getters.status = function() {
 
   delete this.status;

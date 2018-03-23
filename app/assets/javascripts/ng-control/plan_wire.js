@@ -55,7 +55,7 @@ AQ.Plan.record_methods.connect = function(io1, object1, io2, object2) {
   // io1,2: FieldValue or Module IO
   // object1,2: Operation or Module
 
-  console.log(["plan.connect", io1, object1, io2, object2])
+  // console.log(["plan.connect", io1, object1, io2, object2])
 
   var plan = this;
 

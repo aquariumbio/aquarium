@@ -1,0 +1,72 @@
+<% if Rails.env.development? %>
+
+AQ.Plan.record_methods.schedule_pending_operations = function() {
+
+  let plan = this,
+      pending = aq.where(plan.operations, operation => (operation.status == 'pending') );
+
+  return Promise.all(
+    aq.collect(
+      pending, 
+      operation => operation.operation_type.schedule([operation])
+    )
+  ).then(() => AQ.Plan.load(plan.id))
+
+}
+
+AQ.Plan.record_methods.run_scheduled_operations = function() {
+
+  let plan = this,
+      scheduled = aq.where(plan.operations, operation => (operation.status == 'scheduled') );
+
+  return Promise.all(
+    aq.collect(
+      scheduled,
+      operation => AQ.JobAssociation.where({ operation_id: operation.id }, { include: "job"})
+                     .then(jas => aq.last(jas).job.debug())
+    )
+  ).then(response => AQ.Plan.load(plan.id))
+
+}
+
+AQ.Plan.record_methods.show_operation_status = function() {
+  let plan = this;
+  plan.operations.forEach(op => {
+    console.log(`${op.id} : ${op.operation_type.name} : ${op.status}`);
+  })
+  return plan;
+}
+
+describe('Launch', function() {
+
+  it("should launch and run a plan", function(done) {
+
+    shark.aq_setup()
+      .then(() => AQ.Sample.find_by_name("ADF3 left"))
+      .then(sample => shark.make_pcr_plan(sample))
+      .then(plan => plan.save(shark.current_user))
+      .then(plan => {
+        plan.valid().should.equal(true);
+        return plan;
+      })
+      .then(plan => plan.estimate_cost())
+      .then(plan => {
+        this.log("Plan cost: $" + plan.cost.total.toPrecision(4));
+        return AQ.UserBudgetAssociation.where({user_id: shark.current_user.id}).then(ubas => {
+          plan.uba = ubas[0];
+          return plan;
+        }).then(plan => plan);
+      })
+      .then(plan => plan.submit(shark.current_user))
+      .then(plan => AQ.Plan.load(plan.id))
+      .then(plan => plan.schedule_pending_operations())
+      .then(plan => plan.run_scheduled_operations())
+      .then(plan => plan.show_operation_status())
+      .then(plan => done())
+      .catch(done);
+
+  }).async();
+
+});
+
+<% end %>[]
