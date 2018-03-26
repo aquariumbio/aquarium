@@ -3,7 +3,7 @@
 AQ.Plan.record_methods.schedule_pending_operations = function() {
 
   let plan = this,
-      pending = aq.where(plan.operations, operation => (operation.status == 'pending') );
+      pending = aq.where(plan.operations, operation => (operation.status == 'pending' || operation.status == 'deferred') );
 
   return Promise.all(
     aq.collect(
@@ -37,6 +37,30 @@ AQ.Plan.record_methods.show_operation_status = function() {
   return plan;
 }
 
+AQ.Plan.record_methods.step_plan = function(plan) {
+
+  let promise = Promise.resolve(plan);
+
+  console.log("Stepping. plan.state = " + plan.state)
+
+  promise = promise
+    .then(plan => plan.schedule_pending_operations())
+    .then(plan => plan.run_scheduled_operations())
+    .then(plan => plan.show_operation_status())
+    .then(plan => {
+      if ( plan.state == "Pending" ) {
+        return step_plan(plan);
+      } else if ( plan.state == "Error" ) {
+        throw("Plan threw an error in one of the operations")
+      } else {
+        return plan;
+      }
+    })
+
+  return promise;
+
+}
+
 describe('Launch', function() {
 
   it("should launch and run a plan", function(done) {
@@ -51,17 +75,15 @@ describe('Launch', function() {
       })
       .then(plan => plan.estimate_cost())
       .then(plan => {
-        this.log("Plan cost: $" + plan.cost.total.toPrecision(4));
+        this.log("plan cost: $" + plan.cost.total.toPrecision(4));
         return AQ.UserBudgetAssociation.where({user_id: shark.current_user.id}).then(ubas => {
           plan.uba = ubas[0];
           return plan;
-        }).then(plan => plan);
+        })
       })
       .then(plan => plan.submit(shark.current_user))
       .then(plan => AQ.Plan.load(plan.id))
-      .then(plan => plan.schedule_pending_operations())
-      .then(plan => plan.run_scheduled_operations())
-      .then(plan => plan.show_operation_status())
+      .then(plan => plan.step())
       .then(plan => done())
       .catch(done);
 
@@ -69,4 +91,4 @@ describe('Launch', function() {
 
 });
 
-<% end %>[]
+<% end %>

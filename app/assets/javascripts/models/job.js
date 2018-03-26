@@ -10,7 +10,7 @@ AQ.Job.record_methods.upgrade = function() {
     job.state = JSON.parse(job.state.replace(/Infinity/g, '"Inf"'));
     job.state.index = job.backtrace.length - 1;
   } catch(e) {
-    console.log("Could not parse job state: " + e);
+    // console.log("Could not parse job state: " + e);
     job.state = [
       {},
       { 
