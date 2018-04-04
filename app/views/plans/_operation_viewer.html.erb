@@ -19,6 +19,10 @@
 
         <md-menu-content width="4" class="scrollable" flex>
 
+          <md-menu-item aria-label="Change to Waiting" ng-if="current_op.status == 'error'">
+            <md-button ng-click="try_again(current_op)">Try Again</md-button>
+          </md-menu-item>
+
           <md-menu-item aria-label="Add Data">
             <md-button ng-click="current_op.new_data_association()">Add Data</md-button>
           </md-menu-item>

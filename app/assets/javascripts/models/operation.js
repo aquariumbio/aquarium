@@ -492,6 +492,27 @@ AQ.Operation.record_methods.set_status = function(status) {
 
 }
 
+/*
+ * If the operation is a leaf or if its inputs are ready and its precondition is true,
+ * then set the operation to 'pending' else set it to 'waiting'.
+ */
+AQ.Operation.record_methods.retry = function() {
+
+  let op = this;
+
+  return new Promise(function(resolve, reject) {
+    AQ.get(`/operations/${op.id}/retry`)
+      .then(response => {
+        console.log(response)
+        if ( response.data.status ) {
+          op.status = response.data.status;
+          resolve(op);
+        }
+      })
+   });
+
+}
+
 AQ.Operation.record_methods.input_pin_x = function(fv) {
   return this.x + this.width/2 + (fv.index - this.num_inputs/2.0 + 0.5)*AQ.snap;
 }

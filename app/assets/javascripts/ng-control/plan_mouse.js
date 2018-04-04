@@ -306,6 +306,14 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
         }
         break
 
+      case "R":
+      case "r":
+        if ( evt.ctrlKey || evt.metaKey ) {
+          $scope.reload();
+          evt.preventDefault()
+        }
+        break        
+
       case "M":
       case "m":
         if ( evt.ctrlKey || evt.metaKey ) {

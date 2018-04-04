@@ -247,6 +247,25 @@
 
     };
 
+    /*
+     * Set the status of the operation back to 'waiting'
+     */
+    $scope.try_again = function(operation) {
+
+      let confirm = $mdDialog.confirm()
+          .title("Attempt top rerun this operation?")
+          .textContent("Do you really want to try to rerun this operation?\n" + 
+                       "This action can result in additional work for technicians and costs charged to your budget.")
+          .ariaLabel('Try Again')
+          .ok('Yes')
+          .cancel('No');     
+
+      $mdDialog
+        .show(confirm)
+        .then(() => operation.retry())
+
+    }
+
     $scope.confirm_delete = function() {
 
       return new Promise(function(resolve,reject) {
@@ -342,6 +361,10 @@
       }).catch(error => {
         $scope.report_error("Could not read plan '" + plan.name + "'.", error.message, error.stack)
       })
+    }
+
+    $scope.reload = function() {
+      load_aux($scope.plan);
     }
 
     $scope.load = function(plan) {

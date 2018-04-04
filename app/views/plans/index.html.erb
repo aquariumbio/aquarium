@@ -47,6 +47,13 @@
 
 <% content_for :action1 do %>
 
+  <planner-action ng-click="reload()"
+                  ng-if="plan.status != 'planning'"
+                  icon="replay" name="Reload" 
+                  tooltip="Reload (Ctrl-R)"></planner-action>    
+
+  <div style="width: 1px; height: 100%; border-left: 1pt solid #eee; margin: 5px"></div>
+
   <planner-action ng-click="select_all()"                    
                   icon="select_all" name="All" 
                   tooltip="Select All (Ctrl-A)"></planner-action>  
