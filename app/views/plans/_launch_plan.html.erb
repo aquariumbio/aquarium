@@ -2,7 +2,8 @@
 
   <div class="title">
 
-    <span class="md-title" ng-if="plan && plan.operations.length > 0">{{plan.operations[0].operation_type.name}}</span>
+    <span class="md-title" ng-if="plan">{{plan.name}}</span>
+
     <% if current_user && current_user.is_admin %>
       <div ng-if="current_user.id != <%= current_user.id %>">
         <span class='md-body other-user-alert'>
@@ -11,25 +12,53 @@
       </div>
     <% end %>
 
-    <div ng-if="plan.estimating" layout="row" layout-align="center center">
-      <md-progress-circular class="md-hue-2" md-diameter="20px">
-      </md-progress-circular> 
-      &nbsp;
-      <span class="md-body-2">Estimating Cost</span>
+    <div ng-if="plan.status == 'planning'">
+
+      <div ng-if="plan.estimating" layout="row" layout-align="center center">
+        <md-progress-circular class="md-hue-2" md-diameter="20px">
+        </md-progress-circular> 
+        &nbsp;
+        <span class="md-body-2">Estimating Cost</span>
+      </div>
+
+      <div ng-if="!plan.estimating" layout="row" layout-align="center center">
+        <span class="md-body-2 cost-error" ng-if="plan.cost.error ">
+          Cost Undetermined: 
+          <span class="md-body-1">{{plan.cost.error}}</span>
+        </span>
+        <span class="md-body-2" ng-if="!plan.cost.error">
+          {{plan.cost.total|currency}}
+        </span>
+      </div>
+
     </div>
 
-    <div ng-if="!plan.estimating" layout="row" layout-align="center center">
-      <span class="md-body-2 cost-error" ng-if="plan.cost.error ">
-        Cost Undetermined: 
-        <span class="md-body-1">{{plan.cost.error}}</span>
-      </span>
-      <span class="md-body-2" ng-if="!plan.cost.error">
-        {{plan.cost.total|currency}}
-      </span>
-    </div>
   </div>
 
-  <md-list ng-repeat="uba in current_user.user_budget_associations" flex>
+  <!-- PLAN INFORMATION ///////////////////////////////////////////////////////////////// -->
+  <div ng-if="plan.status != 'planning'">
+
+    <div><b>Cost (so far):</b> {{plan.cost_total|currency}}<span ng-if="!plan.cost_total">...calculating</span></div>
+    <div><b>Last Updated:</b> {{plan.updated_at|date}}</div>
+    <hr>
+    <div ng-if="plan.data_associations">
+      <da record="plan" ng-if="plan.data_associations.length > 0" narrow=true></da>
+      <br>
+      <br>
+      <md-button class="md-raised md-medium" ng-click="plan.new_data_association()">Add Data</md-button>
+      <md-button class="md-raised md-medium"><upload record='plan'></upload></md-button>
+    </div>
+    <div ng-if="!plan.data_associations">    
+      Loading Data Associations
+    </div>
+    
+  </div>  
+
+
+  <!-- BUDGETS ///////////////////////////////////////////////////////////////////////// -->
+  <md-list ng-repeat="uba in current_user.user_budget_associations"
+           ng-if="plan.status == 'planning'"
+           flex>
     <md-list-item ng-if="uba.budget && uba.budget.spent.this_month != null">
       <div class="md-list-item-text" layout="column">
         <div class="md-body-2">
@@ -53,7 +82,9 @@
 
   <hr>
 
-  <div layout="row" layout-align="center center">
+  <div layout="row" 
+       layout-align="center center" 
+       ng-if="plan.status == 'planning'">
     <md-button 
       ng-click="submit_plan()"
       ng-disabled="plan.estimating || plan.cost.error || !plan.uba || state.planning"
@@ -62,16 +93,6 @@
       <span ng-if="!state.planning">Submit</span>
       <span ng-if="state.planning">Planning...</span>        
     </md-button>
-  </div>    
-
-  <hr>
-
-  <div ng-if="!plan.estimating && plan.cost.messages.length > 0" layout="column"> 
-    <md-subheader>Optimizations</md-subheader>
-    <md-list>
-      <md-list-item ng-repeat="m in plan.cost.messages">{{m}}</md-list-item>
-    </md-list>
-  </div>    
-
+  </div>
 
 </script>

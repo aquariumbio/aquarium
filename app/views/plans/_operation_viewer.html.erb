@@ -7,7 +7,6 @@
     <div>{{current_op.id}}: {{current_op.operation_type.name}}</div>
     <div ng-include="'job_info'"></div>
     <div>{{current_op.status}}</div>
-    <div layout-align="end center" ng-if="current_op.status == 'done'">COST: {{current_op.cost.total|currency}}</div>
 
     <div>
       <md-menu layout="row">

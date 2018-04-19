@@ -205,7 +205,8 @@ AQ.Plan.record_getters.costs = function() {
     aq.each(plan.costs, cost => {
       aq.each(plan.operations, op => {
         if ( cost.id == op.id ) {
-          op.cost = cost;
+          cost.total = plan.cost_to_amount(cost);
+          op.cost = cost.total;
           plan.cost_total += plan.cost_to_amount(cost);
           if ( op.status == "done" ) {
             plan.cost_so_far += plan.cost_to_amount(cost);

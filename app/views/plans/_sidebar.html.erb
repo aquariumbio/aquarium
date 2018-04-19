@@ -5,7 +5,16 @@
   <div ng-class="sidebar_button_class('design')"    ng-click="nav.sidebar = 'design'">Design</div>
   <div ng-class="sidebar_button_class('node')"      ng-click="nav.sidebar = 'node'">Node</div>
   <div ng-class="sidebar_button_class('io')"        ng-click="nav.sidebar = 'io'">I/O</div>
-  <div ng-class="sidebar_button_class('launch')"    ng-click="nav.sidebar = 'launch'; plan.id && plan.valid() ? launch() : ''">Launch       
+
+  <div ng-class="sidebar_button_class('launch')"    
+       ng-click="nav.sidebar = 'launch'; plan.id && plan.valid() ? launch() : ''"
+       ng-if="plan.status=='planning'">
+    Launch
+  </div>
+  <div ng-class="sidebar_button_class('launch')"
+        ng-if="plan && plan.status!='planning'"
+        ng-click="nav.sidebar = 'launch'">
+    Plan Info
   </div>
 </div>
 
@@ -58,7 +67,7 @@
     <p>Successfully submitted plan <a href="/launcher?plan_id={{state.submitted_plan.id}}">{{state.submitted_plan.id}}</a>.</p>
     <div class="dismiss clickable" ng-click="state.submitted_plan = null">&times;</div>
   </div>  
-  <div ng-if="plan.id && plan.valid() && state.launch" ng-include="'launch_plan'"></div>
+  <div ng-if="plan.id && plan.valid() && nav.sidebar" ng-include="'launch_plan'"></div>
   <div ng-if="!plan.id" layout-padding>This plan cannot be launched because it has not been saved.</div>
   <div ng-if="plan.id && !plan.valid()" layout-padding>
     This plan cannot be launched because it is not valid (all I/O should be green and all wires should be black).
