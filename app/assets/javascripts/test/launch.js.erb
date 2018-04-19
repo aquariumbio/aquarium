@@ -37,9 +37,10 @@ AQ.Plan.record_methods.show_operation_status = function() {
   return plan;
 }
 
-AQ.Plan.record_methods.step_plan = function(plan) {
+AQ.Plan.record_methods.step = function() {
 
-  let promise = Promise.resolve(plan);
+  let plan = this,
+      promise = Promise.resolve(plan);
 
   console.log("Stepping. plan.state = " + plan.state)
 
@@ -49,7 +50,7 @@ AQ.Plan.record_methods.step_plan = function(plan) {
     .then(plan => plan.show_operation_status())
     .then(plan => {
       if ( plan.state == "Pending" ) {
-        return step_plan(plan);
+        return plan.step();
       } else if ( plan.state == "Error" ) {
         throw("Plan threw an error in one of the operations")
       } else {

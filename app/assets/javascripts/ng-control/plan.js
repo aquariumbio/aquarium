@@ -439,11 +439,12 @@
       $scope.plan.submit().then(() => {
         $scope.state.planning = false;
         $scope.state.submitted_plan = $scope.plan;
-        $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
-        $scope.select(null);
-        $scope.$apply();
+        load_aux($scope.plan);
         $scope.state.launch = false;
-        $scope.refresh_plan_list();
+        $scope.refresh_plan_list().then(() => {
+          $scope.nav.folder.uc = false;
+          $scope.nav.folder.unsorted = true;
+        })
       }).catch(errors => {
         console.log(errors);
         $scope.state.planning = false;        
