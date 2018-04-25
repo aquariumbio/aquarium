@@ -84,6 +84,16 @@ ActiveRecord::Schema.define(:version => 20180529204642) do
     t.integer  "user_id"
   end
 
+  create_table "collections", :force => true do |t|
+    t.string   "name"
+    t.string   "project"
+    t.integer  "object_type_id"
+    t.integer  "rows"
+    t.integer  "columns"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
   create_table "data_associations", :force => true do |t|
     t.integer  "parent_id"
     t.string   "parent_class"
@@ -292,6 +302,15 @@ ActiveRecord::Schema.define(:version => 20180529204642) do
     t.datetime "updated_at",  :null => false
     t.text     "description"
     t.integer  "user_id"
+  end
+
+  create_table "parts", :force => true do |t|
+    t.integer  "collection_id"
+    t.integer  "item_id"
+    t.integer  "row"
+    t.integer  "column"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "plan_associations", :force => true do |t|
