@@ -79,7 +79,8 @@ docs/.sass-cache/**
 # ignore config file for google sheets (contains authentication secret)
 google_sheets_config.json
 
-
+# ignore .sql dump files (database backups)
+*.sql
 
 
 Gemfile.lock
