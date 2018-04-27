@@ -16,9 +16,9 @@ gem 'nokogiri', '~> 1.7.1'
 gem 'aws-sdk', '~> 1.7.1'
 gem 'test-unit'
 
-group :test do
-  gem 'sqlite3'
-end
+#group :test do
+#    gem 'sqlite3'
+#end
 
 group :development do
   gem 'binding_of_caller'
