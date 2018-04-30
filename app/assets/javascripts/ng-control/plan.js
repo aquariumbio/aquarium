@@ -272,7 +272,7 @@
 
          let confirm = $mdDialog.confirm()
           .title('Delete Selection?')
-          .textContent("Do you really want to delete the selection" +
+          .textContent("Do you really want to delete the selection " +
                        "including the contents of any selected modules?")
           .ariaLabel('Delete')
           .ok('Yes')

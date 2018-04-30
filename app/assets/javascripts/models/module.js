@@ -459,7 +459,7 @@ class Module {
 
     module.cost = 0;
 
-    aq.each(module.children,child => {
+    aq.each(module.children, child => {
       module.cost += child.compute_cost(plan);
     });
 
@@ -495,5 +495,22 @@ class Module {
     return box;
 
   }
+
+  deletable(plan) {
+    
+    let module = this,
+        answer = true;
+
+    console.log("Checking whether " + module.name + " can be deleted.")
+
+    aq.each(plan.operations, op => answer = answer && ( op.parent_id == module.id && op.status == 'planning' ) );
+    aq.each(module.children, child => answer = answer && child.deletable() );
+
+    console.log("answer = " + answer)
+
+    return answer;
+
+  }
+
 
 }

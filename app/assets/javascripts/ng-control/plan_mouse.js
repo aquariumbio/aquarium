@@ -246,10 +246,14 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
     } else if ( $scope.current_draggable && !$scope.current_fv ) {
 
       if ( $scope.current_draggable.record_type == "Module" ) {
-        $scope.confirm_delete().then(() => {
-          $scope.delete_object($scope.current_draggable);
-          $scope.$apply();
-        })
+        if ( $scope.current_draggable.deletable($scope.plan) ) {
+          $scope.confirm_delete().then(() => {
+            $scope.delete_object($scope.current_draggable);
+            $scope.$apply();
+          })
+        } else {
+          alert("Module can not be deleted because it contains active operations.")
+        }
       } else {
         $scope.delete_object($scope.current_draggable);
       }
@@ -290,7 +294,11 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
       case "Backspace": 
       case "Delete":
-        $scope.delete();
+        if ( $scope.current_draggable && (
+               $scope.current_draggable.record_type == 'Module' || $scope.current_draggable.status == 'pending' 
+            ) ) {
+          $scope.delete();
+        }
         break;
 
       case "Escape":
