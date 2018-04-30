@@ -7,6 +7,9 @@ function PlanClasses($scope,$http,$attrs,$cookies,$sce,$window) {
     if ( op == $scope.current_draggable || op.multiselect ) {
       c += " op-selected";
     }
+    if ( op.status != 'planning' ) {
+      c += " op-active";
+    }
     return c;
   }
 

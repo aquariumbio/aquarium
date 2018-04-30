@@ -114,8 +114,6 @@
     fill: white;
     stroke: black;
     stroke-width: 1px;  
-/*    rx: 2px;
-    ry: 2px;    */   
     cursor: pointer;  
   }
 
@@ -123,6 +121,10 @@
     fill: azure;  
     stroke-width: 2; 
     box-shadow: 10px 10px 5px yellow;
+  }
+
+  .op-active {
+    fill: #eee;
   }
 
   .op-name, .module-name, .module-io-index {
