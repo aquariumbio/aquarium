@@ -227,6 +227,8 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
   $scope.delete = function() {
 
+    console.log("delete")
+
     if ( $scope.current_wire && $scope.current_wire.record_type == "Wire" ) {
 
       $scope.plan.remove_wire($scope.current_wire);
@@ -294,10 +296,13 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
       case "Backspace": 
       case "Delete":
-        if ( $scope.current_draggable && (
-               $scope.current_draggable.record_type == 'Module' || $scope.current_draggable.status == 'pending' 
-            ) ) {
-          $scope.delete();
+        if ( $scope.current_draggable ) {
+          if ( $scope.current_draggable.record_type == 'Module' || $scope.current_draggable.status == 'pending' ) {
+            $scope.delete();
+          }
+        }
+        if ( $scope.current_wire ) {
+          $scope.delete();         
         }
         break;
 
