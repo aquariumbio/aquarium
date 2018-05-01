@@ -1,6 +1,7 @@
 .plans {
 
   .opeditbar {
+    width: calc(100vw - 400px);
     inner {
       display: block;
     }
@@ -23,7 +24,7 @@
   .editor-main {
 
     height: 100%;
-    width: calc(100vw - 320px);
+    width: calc(100vw - 400px);
     position: relative;
 
     .operation-editor {
@@ -89,7 +90,7 @@
         outline: 1pt solid green;
         margin: 50px;
         border: none;
-        width: calc(100vw - 320px);
+        width: calc(100vw - 400px);
         height: 250%;
         cursor: arrow;
         margin: 0px;
