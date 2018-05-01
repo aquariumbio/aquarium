@@ -1,3 +1,5 @@
+<% provide(:title,  "Editor" ) %>
+
 <%= render partial: 'field_value_editor' %>
 <%= render partial: 'operation_info' %>
 <%= render partial: 'module_info' %>
@@ -9,10 +11,8 @@
 <%= render partial: 'parameter_form' %>
 <%= render partial: 'operation_viewer' %>
 
-<% content_for :wider_sidebar do %>
-  true
-<% end %>
-
+<% content_for :wider_sidebar do %>true<% end %>
+<% content_for :no_title do %>true<% end %>
 <% content_for :controller do %>planCtrl<% end %>
 <% content_for :class do %>plans launcher<% end %>
 <% content_for :no_main_scroll_decision do %>true<% end %>
