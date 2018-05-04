@@ -36,7 +36,7 @@ module OperationStatus
 
   def retry
 
-    raise "Cannot restart operation #{id} because it is not in an error state" unless status == "error"
+    raise "Cannot restart operation #{id} because it is not in an error state" unless status == "error" || status == "done"
     change_status "waiting"
     step
 

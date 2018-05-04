@@ -141,12 +141,24 @@
 
   .op-status {
     font-size: 7pt;
-    text-anchor: left;
+    text-anchor: start;
     cursor: pointer;
     pointer-events: none;
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;     
+  }
+
+  .op-retry {
+    font-size: 11pt;
+    font-weight: bold;
+    text-anchor: end;
+    fill: black;
+    cursor: pointer;
+    /*pointer-events: none;*/
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;   
   }
 
   .op-status-error {
@@ -460,6 +472,16 @@
     margin-bottom: -24px;
     border: none;
     resize: none;
+  }
+
+  .plan-wait-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background-color: rgba(0,0,0,0.25);     
   }
 
 }

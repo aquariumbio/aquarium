@@ -508,7 +508,7 @@ AQ.Operation.record_methods.retry = function() {
           op.status = response.data.status;
           resolve(op);
         }
-      })
+      }).catch(e => console.log("Could not retry action", e))
    });
 
 }

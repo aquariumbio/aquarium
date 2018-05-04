@@ -48,6 +48,15 @@
       {{op.status}}
     </text>    
 
+    <% if current_user && current_user.is_admin %>
+      <text ng-attr-x="{{op.width}}" y="44"
+            class='op-retry'
+            ng-click="try_again(op)"
+            ng-if="op.status == 'done' || op.status == 'error'">
+        &#8617;
+      </text>
+    <% end %>
+
     <text ng-attr-x="{{0}}" y="-4" class='op-cost'>
       {{op.cost|currency}}
     </text>

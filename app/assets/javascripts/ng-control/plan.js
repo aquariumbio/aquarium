@@ -253,16 +253,22 @@
     $scope.try_again = function(operation) {
 
       let confirm = $mdDialog.confirm()
-          .title("Attempt top rerun this operation?")
+          .title("Attempt to rerun this operation?")
           .textContent("Do you really want to try to rerun this operation?\n" + 
-                       "This action can result in additional work for technicians and costs charged to your budget.")
+                       "This action may result in additional work for technicians and costs charged to your budget.")
           .ariaLabel('Try Again')
           .ok('Yes')
           .cancel('No');     
 
       $mdDialog
         .show(confirm)
-        .then(() => operation.retry())
+        .then(() => {
+          $scope.wait = true;
+          operation.retry().then(() => {
+            $scope.wait = false;
+            $scope.$apply();
+          })
+        });
 
     }
 
