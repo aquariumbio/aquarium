@@ -96,7 +96,7 @@
   <div style="width: 1px; height: 100%; border-left: 1pt solid #eee; margin: 5px"></div>
 
   <planner-action ng-click="create_template(plan)"
-                  is-disabled="!plan.id"
+                  is-disabled="!plan.id || plan.status != 'planning'"
                   icon="share" name="Template"
                   tooltip="Save as Template (Ctrl-T)"></planner-action>
 

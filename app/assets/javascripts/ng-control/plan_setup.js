@@ -49,6 +49,10 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
 
   }  
 
+  function close_folders() {
+    $scope.nav.folder = { uc: false, unsorted: false }
+  }
+
   function get_plans_and_templates() {
 
     $scope.refresh_plan_list().then(() => { 
@@ -64,9 +68,18 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
               $window.history.replaceState(null, document.title, "/plans"); 
               $scope.plan = p;
               $scope.ready = true;
-              $scope.nav.folder[p.folder ? p.folder : null] = true;
-              console.log($scope.plan);
-              $scope.$apply();
+              close_folders();
+              if ( p.folder ) {
+                $scope.nav.folder[p.folder] = true;
+              } else if ( p.status == 'planning ') {
+                $scope.nav.folder.uc = true;
+              } else {
+                $scope.nav.folder.unsorted = true;
+              }
+              AQ.User.find(p.user_id).then(user => {
+              $scope.current_user = user;
+                $scope.$apply();        
+              });              
             })
           } else {
             $scope.ready = true;
@@ -95,17 +108,8 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
         $scope.operation_types = aq.where(operation_types,ot => ot.deployed);
         AQ.OperationType.compute_categories($scope.operation_types);
         AQ.operation_types = $scope.operation_types;
+        get_plans_and_templates();
 
-        if ( aq.url_params().plan_id ) {
-          AQ.Plan.load(aq.url_params().plan_id).then(p => {
-            AQ.User.find(p.user_id).then(user => {
-              $scope.current_user = user;
-              get_plans_and_templates();
-            });
-          });
-        } else {
-          get_plans_and_templates();
-        }
 
       });
     });    

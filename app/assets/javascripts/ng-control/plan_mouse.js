@@ -297,7 +297,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
       case "Backspace": 
       case "Delete":
         if ( $scope.current_draggable ) {
-          if ( $scope.current_draggable.record_type == 'Module' || $scope.current_draggable.status == 'pending' ) {
+          if ( $scope.current_draggable.record_type == 'Module' || $scope.current_draggable.status == 'planning' ) {
             $scope.delete();
           }
         }

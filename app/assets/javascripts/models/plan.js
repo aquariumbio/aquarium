@@ -93,6 +93,7 @@ AQ.Plan.record_methods.save = function(user) {
 }
 
 AQ.Plan.load = function(id) {
+  console.log("Loading plan " + id)
   return new Promise((resolve,reject) => {
     AQ.get("/plans/" + id + ".json").then(response => {   
       try {
