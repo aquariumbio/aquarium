@@ -14,7 +14,8 @@
   <div ng-class="sidebar_button_class('launch')"
         ng-if="plan && plan.status!='planning'"
         ng-click="nav.sidebar = 'launch'">
-    Plan Info
+    <span ng-if="plan.has_new_ops">Launch New</span>
+    <span ng-if="!plan.has_new_ops">Plan Info</span>    
   </div>
 </div>
 
@@ -64,13 +65,15 @@
 
 <div ng-if="nav.sidebar == 'launch'">
   <div ng-if="state.submitted_plan" class="message">
-    <p>Successfully submitted plan <a href="/launcher?plan_id={{state.submitted_plan.id}}">{{state.submitted_plan.id}}</a>.</p>
+    <p>Successfully submitted or extended plan <a href="/launcher?plan_id={{state.submitted_plan.id}}">{{state.submitted_plan.id}}</a>.</p>
     <div class="dismiss clickable" ng-click="state.submitted_plan = null">&times;</div>
   </div>  
   <div ng-if="plan.id && plan.valid() && nav.sidebar" ng-include="'launch_plan'"></div>
   <div ng-if="!plan.id" layout-padding>This plan cannot be launched because it has not been saved.</div>
   <div ng-if="plan.id && !plan.valid()" layout-padding>
-    This plan cannot be launched because it is not valid (all I/O should be green and all wires should be black).
+    This plan cannot be launched because it is not valid. All I/O should be defined (green), and all wires should be consistent (black).
+    Note that Aquarium does not currently check the validity of wires to and from modules, so they may appear black even if their source
+    and destination samples do not match. 
   </div>
 
 </div>

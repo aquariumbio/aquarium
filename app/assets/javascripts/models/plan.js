@@ -835,3 +835,22 @@ AQ.Plan.record_methods.operation = function(type_name, index=0) {
   }
 
 }
+
+/* Returns true if this plan has active operations and new, inactive, operations.
+ */
+AQ.Plan.record_getters.has_new_ops = function() {
+  
+  let active   = aq.where(this.operations, op => op.status != 'planning').length,
+      inactive = aq.where(this.operations, op => op.status == 'planning').length;
+
+  return active > 0 && inactive > 0;
+
+}
+
+
+
+
+
+
+
+

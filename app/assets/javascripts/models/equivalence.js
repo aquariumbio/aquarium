@@ -52,6 +52,12 @@ AQ.Plan.record_methods.equiv = function(operation_1, field_value_1, operation_2,
 
 }
 
+AQ.Plan.record_getters.planned_operations = function() {
+
+  return aq.where(this.operations, op => op.status == 'planning');
+
+}
+
 AQ.Plan.record_methods.classes = function() {
 
   let plan = this,
@@ -62,8 +68,8 @@ AQ.Plan.record_methods.classes = function() {
 
   while ( changed ) {
     changed = false
-    plan.operations.forEach(operation_1 => {
-      plan.operations.forEach(operation_2 => {
+    plan.planned_operations.forEach(operation_1 => {
+      plan.planned_operations.forEach(operation_2 => {
         operation_1.field_values.forEach(field_value_1 => {
           operation_2.field_values.forEach(field_value_2 => {
             if ( field_value_1 != field_value_2 ) {
@@ -87,7 +93,8 @@ AQ.Plan.record_methods.classes = function() {
 
 /**
 * Assigns the given field value to the sample, and makes all other assignments
-* that are implied by wires, routing, or inventory information.
+* that are implied by wires, routing, or inventory information. Ignores samples
+* associated with active operations.
 * @method assign
 * @param {FieldValue} field_value 
 * @param {Sample} sample
