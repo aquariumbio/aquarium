@@ -82,7 +82,13 @@ class JsonController < ApplicationController
       record[name] = params[name]
     end
 
-    record.save
+    begin
+      record.save
+    rescue ActiveRecord::RecordNotUnique => err
+      render json: { error: err.to_s },
+             status: :bad_request
+      return
+    end
 
     if params[:model][:model] == "DataAssociation" && record.parent_class == "Plan"
       Operation.step(Plan.find(record.parent_id)
