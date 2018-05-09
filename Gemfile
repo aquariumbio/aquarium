@@ -9,11 +9,14 @@ gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'sass-rails',   '~> 3.2.3'
 gem 'mysql2', "~> 0.3.17"
-gem 'sqlite3'
 
 gem 'nokogiri', "~> 1.7.1"
 gem 'aws-sdk', "~> 1.7.1"
 gem 'test-unit'
+
+group :test do
+    gem 'sqlite3'
+end
 
 group :development do
   gem 'binding_of_caller'
@@ -46,10 +49,12 @@ gem 'underscore-rails'
 gem 'rails-patch-json-encode'
 gem 'oj'
 
-gem 'angular_rails_csrf'
+gem 'angular_rails_csrf', '2.1.1'
 
 gem 'rack-cors', :require => 'rack/cors'
 
+gem 'redcarpet'
+gem 'github-markup'
 gem 'yard'
 gem 'yard-activerecord'
 

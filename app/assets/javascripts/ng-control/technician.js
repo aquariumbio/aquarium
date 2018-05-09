@@ -115,6 +115,8 @@
 
     $scope.keyDown = function(evt) {
 
+      console.log(evt.key, evt)
+
       switch(evt.key) {
 
         case "ArrowLeft":
@@ -127,8 +129,14 @@
         case "ArrowDown":
           if ( $scope.job.state.index < $scope.job.backtrace.length - 1 ) {
             $scope.job.state.index++;
+          } else {
+            $scope.ok();
           }
           break;
+        case "a":
+          if ( evt.ctrlKey ) {
+            $scope.job.backtrace.last.check_all();
+          }
 
         default:
 
