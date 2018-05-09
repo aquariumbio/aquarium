@@ -1,7 +1,7 @@
 class OperationTypesController < ApplicationController
 
   before_filter :signed_in_user
-  before_filter :up_to_date_user  
+  before_filter :up_to_date_user
 
   def index
 
@@ -10,8 +10,8 @@ class OperationTypesController < ApplicationController
     respond_to do |format|
       format.json { render json: OperationType.all.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation]) }
       format.html { render layout: 'aq2' }
-    end    
-    
+    end
+
   end
 
   def create
@@ -19,30 +19,36 @@ class OperationTypesController < ApplicationController
     redirect_to root_path, notice: "Administrative privileges required to access operation type definitions." unless current_user.is_admin    
 
     ot = OperationType.new(
-      name: params[:name], category: params[:category], 
+      name: params[:name], category: params[:category],
       deployed: params[:deployed], on_the_fly: params[:on_the_fly])
 
-    ot.save
+    begin
+      ot.save
 
-    if params[:field_types]
-      params[:field_types].each do |ft|
-        ot.add_new_field_type ft
+      if params[:field_types]
+        params[:field_types].each do |ft|
+          ot.add_new_field_type ft
+        end
       end
+
+      ["protocol", "precondition", "cost_model", "documentation"].each do |name|
+        ot.new_code(name, params[name]["content"], current_user)
+      end
+
+      j = ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation])
+
+      render json: j
+
+    rescue ActiveRecord::RecordNotUnique => err
+      render json: { error: err.to_s }, 
+             status: :bad_request,
+             message: "An operation type with #{ot.name} already exists."
     end
-
-    ["protocol", "precondition", "cost_model", "documentation"].each do |name|
-      ot.new_code(name, params[name]["content"], current_user)
-    end
-
-    j = ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation])
-
-    render json: j
-
   end
 
   def destroy
 
-   redirect_to root_path, notice: "Administrative privileges required to access operation type definitions." unless current_user.is_admin    
+    redirect_to root_path, notice: "Administrative privileges required to access operation type definitions." unless current_user.is_admin    
 
     ot = OperationType.find(params[:id])
 
