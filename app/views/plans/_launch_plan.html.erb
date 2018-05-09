@@ -38,7 +38,7 @@
   <!-- PLAN INFORMATION ///////////////////////////////////////////////////////////////// -->
   <div ng-if="plan.status != 'planning'">
 
-    <div><b>Cost (so far):</b> {{plan.cost_total|currency}}<span ng-if="!plan.cost_total">...calculating</span></div>
+    <div><b>Cost (so far):</b> {{plan.cost_so_far|currency}}<span ng-if="!plan.cost_so_far">...calculating</span></div>
     <div><b>Budget</b>: {{plan.budget.name}}</div>
     <div><b>Last Updated:</b> {{plan.updated_at|date}}</div>
     <div ng-if="plan.data_associations">

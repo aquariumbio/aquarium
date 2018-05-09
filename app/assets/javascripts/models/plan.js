@@ -191,6 +191,39 @@ AQ.Plan.record_getters.cost_total = function() {
   this.costs;
 }
 
+AQ.Plan.record_getters.transactions = function() {
+
+  delete this.transactions;
+  this.cost_so_far;
+  return [];
+
+}
+
+AQ.Plan.record_getters.cost_so_far = function() {
+
+  let plan = this,
+      opids = aq.collect(plan.operations, op => op.id);
+
+  delete plan.cost_so_far;
+
+  AQ.Account.where({operation_id: opids}).then(transactions => {
+    plan.transactions = transactions;
+    plan.cost_so_far = 0;
+    aq.each(transactions, t => {
+      if ( true || t.transaction_type == 'debit' ) {
+        plan.cost_so_far += t.amount * (1+t.markup_rate);
+      } else {
+        plan.cost_so_far -= t.amount * (1+t.markup_rate);
+      }
+    });
+    AQ.update();
+    console.log(plan.cost_so_far)
+  });
+
+  return plan.cost_so_far;
+
+}
+
 AQ.Plan.record_getters.costs = function() {
 
   var plan = this;
