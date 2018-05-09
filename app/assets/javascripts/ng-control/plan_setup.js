@@ -61,32 +61,31 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
 
         $scope.system_templates = templates;
 
-        AQ.get_sample_names().then(() =>  {
-
-          if ( aq.url_params().plan_id ) {              
-            AQ.Plan.load(aq.url_params().plan_id).then(p => {
-              $window.history.replaceState(null, document.title, "/plans"); 
-              $scope.plan = p;
-              $scope.ready = true;
-              close_folders();
-              if ( p.folder ) {
-                $scope.nav.folder[p.folder] = true;
-              } else if ( p.status == 'planning ') {
-                $scope.nav.folder.uc = true;
-              } else {
-                $scope.nav.folder.unsorted = true;
-              }
-              AQ.User.find(p.user_id).then(user => {
-              $scope.current_user = user;
-                $scope.$apply();        
-              });              
-            })
-          } else {
+        if ( aq.url_params().plan_id ) {              
+          AQ.Plan.load(aq.url_params().plan_id).then(p => {
+            $window.history.replaceState(null, document.title, "/plans"); 
+            $scope.plan = p;
             $scope.ready = true;
-            $scope.$apply();
-          }
+            close_folders();
+            if ( p.folder ) {
+              $scope.nav.folder[p.folder] = true;
+            } else if ( p.status == 'planning ') {
+              $scope.nav.folder.uc = true;
+            } else {
+              $scope.nav.folder.unsorted = true;
+            }
+            AQ.User.find(p.user_id).then(user => {
+              $scope.current_user = user;
+              $scope.$apply();        
+            });              
+          })
+        } else {
+          $scope.ready = true;
+          $scope.$apply();
+        }
 
-        });
+        AQ.get_sample_names(); // Note: this is asynchronous and takes a couple of seconds. Hopefully, the user
+                               // won't start autocompleting anything before its done. 
 
       });
 

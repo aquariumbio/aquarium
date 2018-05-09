@@ -2,14 +2,15 @@
 
 <script type="text/ng-template" id="plan-list-element">
   <input type=checkbox ng-model="p.selected" ng-if="p.status != 'planning'">
+  <span ng-if="p.status != 'planning'">&nbsp;</span>
   <div class="plan-list-element no-highlight"
        layout="row"
        layout-align="space-between center"
        ng-click="p.selected = !p.selected"
        ng-dblclick="load(p)">
     <div>
-      &nbsp; {{p.id}}: {{p.name ? p.name : "[Untitled]"}}
-      <span ng-if="state.deleting_plan.id == p.id"> ... deleting </span>
+      <b>{{p.id}}</b>: {{p.name ? p.name : "[Untitled]"}}
+      <span ng-if="state.deleting_plan.id == p.id" style="color: orange"> ... deleting </span>
       <md-tooltip md-direction="right" md-delay="2500">Click to select. Double click to open.</md-tooltip>
     </div>
     <div>
