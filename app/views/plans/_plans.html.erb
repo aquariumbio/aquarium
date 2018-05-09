@@ -33,7 +33,7 @@
     </span>
 
     <md-menu-content width="4">
-      <md-menu-item ng-repeat="folder in folders">
+      <md-menu-item ng-repeat="folder in folders track by $index">
         <md-button ng-click="move_to_folder(folder)" aria-label="{{folder}}">
           <span ng-if="folder">{{folder}}</span>
           <span ng-if="!folder"><b>Unsorted</b></span>
@@ -95,7 +95,7 @@
 
   <!-- FOLDERS -->
 
-  <div ng-repeat='name in folders' ng-if="name">
+  <div ng-repeat='name in folders track by $index' ng-if="name">
 
     <h4 class='md-subhead clickable no-highlight' ng-click="nav.folder[name] = !nav.folder[name]">
       <span class='opener'>{{nav.folder[name] ? '&#9660;' : '&#9658;'}}</span>  
