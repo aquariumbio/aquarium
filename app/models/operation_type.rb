@@ -14,7 +14,8 @@ class OperationType < ActiveRecord::Base
 
   attr_accessible :name, :category, :deployed, :on_the_fly
 
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true
+  validates :name, uniqueness: { scope: :category, case_sensitive: false }
   validates :category, presence: true
 
   def add_io name, sample_name, container_name, role, opts
