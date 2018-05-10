@@ -1,16 +1,14 @@
 desc "Changes duplicate names in OperationTypes"
-task :rem_optype_dups => [:environment] do
-    duplicates = OperationType.find_by_sql(
-        "SELECT t.name FROM operation_types t GROUP BY t.name HAVING COUNT(t.name) > 1")
-    duplicates.each do |duplicate|
-        puts(duplicate.name)
-        OperationType.where(name: duplicate.name).each do |op_type|
-            # the goal here would be to rename any operation types with 
-            # duplicate names within a category to allow a unique index to be
-            # created.
-            # However, current model doesn't allow this since versions occur as
-            # different records.
-            puts("category: #{op_type.category}, name: #{op_type.name}")
+task :rename_optype_duplicates => [:environment] do
+    categories = OperationType.select(:category).group(:category).collect{|op_type| op_type.category}
+    categories.each do |category|
+        duplicate_names = OperationType.find_by_sql("SELECT t.name FROM operation_types t WHERE t.category = '#{category}' GROUP BY t.name HAVING COUNT(t.name) > 1").collect{|op_type| op_type.name}
+        duplicate_names.each do |name|
+            op_types = OperationType.where({category: category, name: name})
+            op_types.each do |op_type|
+                puts("category: #{op_type.category}, name: #{op_type.name}, id: #{op_type.id}, deployed: #{op_type.deployed}")
+            end
         end
     end
 end
+
