@@ -4,7 +4,9 @@ task rename_optype_duplicates: [:environment] do
   categories = OperationType.select(:category).group(:category).collect{|op_type| op_type.category}
   categories.each do |category|
     # find the duplicate names within the category
-    duplicate_names = OperationType.find_by_sql("SELECT t.name FROM operation_types t WHERE t.category = '#{category}' GROUP BY t.name HAVING COUNT(t.name) > 1").collect{|op_type| op_type.name}
+    duplicate_names = OperationType.find_by_sql(
+        "SELECT t.name FROM operation_types t WHERE t.category = '#{category}' GROUP BY t.name HAVING COUNT(t.name) > 1"
+        ).collect{|op_type| op_type.name}
     duplicate_names.each do |name|
       puts("\nCategory: #{category}")
       # collect the operation types with the same name within the category
@@ -26,13 +28,13 @@ task rename_optype_duplicates: [:environment] do
         select_list = op_types
       end
       selected = select_list.min{|a,b| a.id <=> b.id}
-      puts("-Keeping \"#{category}\" \"#{selected.name}\" (id: #{selected.id})")
+      puts("- Keeping \"#{selected.name}\" (id: #{selected.id})")
 
       # for the rest, change the name with a counter value
       rename_list = op_types - [selected]
       rename_list.each_with_index do |op_type, index|
         new_name = "#{op_type.name} (duplicate #{index+1})"
-        puts("-Renaming \"#{category}\" \"#{op_type.name}\" (id: #{op_type.id}) to #{new_name}")
+        puts("- Renaming \"#{op_type.name}\" (id: #{op_type.id}) to #{new_name}")
         op_type.name = new_name
         op_type.save
       end
