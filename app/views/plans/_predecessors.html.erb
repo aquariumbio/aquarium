@@ -9,7 +9,7 @@
                   ng-if="pred.operation_type.id != current_op.operation_type.id"
                   style="padding: 1px 16px 1px 16px">
       <p><b>{{pred.operation_type.name}}</b></p>
-      <md-button 
+      <md-button
         ng-class="current_fv.field_type.preferred_operation_type_id == pred.operation_type.id ? 
                  'md-raised md-primary md-secondary md-button-in-list' :
                  'md-raised md-secondary md-button-in-list'"

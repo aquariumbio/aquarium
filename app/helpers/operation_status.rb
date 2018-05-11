@@ -34,6 +34,14 @@ module OperationStatus
 
   end
 
+  def retry
+
+    raise "Cannot restart operation #{id} because it is not in an error state" unless status == "error" || status == "done"
+    change_status "waiting"
+    step
+
+  end
+
   def schedule
     raise "Cannot schedule operation #{id} from state #{status}" unless status == "pending" || status == "deferred" || status == "primed"
     change_status "scheduled"

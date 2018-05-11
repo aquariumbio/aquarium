@@ -33,6 +33,7 @@ Bioturk::Application.routes.draw do
   post '/operations/unbatch',                    to: 'operations#unbatch'
   get '/operations/jobs',                        to: 'operations#jobs'
   get '/operations/:id/status/:status',          to: 'operations#set_status'
+  get '/operations/:id/retry',                   to: 'operations#retry'  
   resources :operations
 
   post '/operation_types/import',                    to: 'operation_types#import'
@@ -251,6 +252,7 @@ Bioturk::Application.routes.draw do
 
   match '/',            to: 'static_pages#home'
   match '/template',    to: 'static_pages#template'
+  match '/test',        to: 'static_pages#test'
 
   match '/help',       to: 'static_pages#help'
   match '/about',      to: 'static_pages#about'

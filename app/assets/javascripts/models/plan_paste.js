@@ -70,7 +70,7 @@ AQ.Plan.record_methods.paste_operation = function(op, offset) {
   new_op.recompute_getter("types_and_values");
   new_op.recompute_getter("inputs");
 
-  plan.operations.push(new_op);
+  plan.add_operation(new_op);
 
   return plan;
 

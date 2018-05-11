@@ -49,6 +49,8 @@ module Serialize
     {
       id: plan.id,
       name: plan.name,
+      budget_id: plan.budget_id,
+      folder: plan.folder,
       user_id: plan.user_id,
       created_at: plan.created_at,
       updated_at: plan.updated_at,

@@ -17,35 +17,39 @@ class Planner
       # set all leaves to pending
       @plan.operations.each do |op|
 
-        if leaf? op
+        if op.status == 'planning'
 
-          if op.operation_type.on_the_fly?
-            op.status = "primed"
-          else
-            if op.precondition_value
-              op.status = "pending"
+          if leaf? op
+
+            if op.operation_type.on_the_fly?
+              op.status = "primed"
             else
-              op.status = "delayed"              
+              if op.precondition_value
+                op.status = "pending"
+              else
+                op.status = "delayed"              
+              end
             end
+
+          else
+
+            # if the op has an on the fly pred
+            if ready? op 
+              if op.precondition_value
+                op.status = "pending"
+              else
+                op.status = "delayed"              
+              end
+            else
+              op.status = "waiting"
+            end
+
+
           end
 
-        else
-
-          # if the op has an on the fly pred
-          if ready? op 
-            if op.precondition_value
-              op.status = "pending"
-            else
-              op.status = "delayed"              
-            end
-          else
-            op.status = "waiting"
-          end
-
+          op.save
 
         end
-
-        op.save
 
       end
 

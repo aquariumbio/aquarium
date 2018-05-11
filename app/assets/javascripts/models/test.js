@@ -6,7 +6,7 @@ AQ.Test.plan_diff_aux = function (A,B,pkey) {
 
   var ignore = [
     '$$hashKey', 'items', 'rid', 'multiselect', '_item', 'ymid_frac', 'xmid_frac', 'updated_at', 'created_at', 
-    '_marked', 'test', 'cost', 'estimating', 'drag', 'uba', 'errors', 'sample', 
+    '_marked', 'test', 'cost', 'estimating', 'drag', 'uba', 'errors', 'sample', "leaf", "marked", "equivalences",
     'next_module_id', 'inputs', 'outputs', 'current_module', "from_module", "to_module", "module_list"
   ];
 

@@ -16,6 +16,7 @@ class Module {
     this.input = []; 
     this.output = [];
     this.wires = [];
+    this.text_boxes = [];
     this.parent_id = parent ? parent.id : -1;
     this.documentation = "No documentation yet for this module."
 
@@ -54,6 +55,7 @@ class Module {
     this.output = aq.collect(this.output,     o => new ModuleIO().from_object(o) )
     this.children = aq.collect(this.children, c => new Module().from_object(c,plan) )
     this.wires = aq.collect(this.wires,       w => new ModuleWire().from_object(w,this,plan) )
+    this.text_boxes = aq.collect(this.text_boxes, box => new TextBox().from_object(box));
 
     if ( !this.documentation ) {
       this.documentation = "No documentation yet for this module."
@@ -173,7 +175,7 @@ class Module {
     var module = this,
         old_wires = plan.get_implied_wires();
 
-    plan.base_module.remove_wires_connected_to(io);
+    plan.base_module.remove_wires_connected_to(io, plan);
 
     aq.remove(module.input, io);
     aq.remove(module.output, io);    
@@ -184,13 +186,13 @@ class Module {
 
   }
 
-  remove_wires_connected_to(io) {
+  remove_wires_connected_to(io, plan) {
 
     var module = this;  
     var old_wires = plan.get_implied_wires();
 
     module.wires = aq.where(module.wires, w => w.from != io && w.to != io);
-    aq.each(module.children, c => c.remove_wires_connected_to(io));
+    aq.each(module.children, c => c.remove_wires_connected_to(io,plan));
 
     plan.delete_obsolete_wires(old_wires);
     module.associate_fvs();
@@ -457,7 +459,7 @@ class Module {
 
     module.cost = 0;
 
-    aq.each(module.children,child => {
+    aq.each(module.children, child => {
       module.cost += child.compute_cost(plan);
     });
 
@@ -477,6 +479,38 @@ class Module {
     var md = window.markdownit();
     return AQ.sce.trustAsHtml(md.render(module.documentation));
 
-  }  
+  }
+
+  create_text_box() {
+
+    let module = this,
+        box = new TextBox();
+
+    if ( !module.text_boxes ) {
+      module.text_boxes = [];
+    }
+
+    module.text_boxes.push(box);
+
+    return box;
+
+  }
+
+  deletable(plan) {
+    
+    let module = this,
+        answer = true;
+
+    console.log("Checking whether " + module.name + " can be deleted.")
+
+    aq.each(plan.operations, op => answer = answer && ( op.parent_id == module.id && op.status == 'planning' ) );
+    aq.each(module.children, child => answer = answer && child.deletable() );
+
+    console.log("answer = " + answer)
+
+    return answer;
+
+  }
+
 
 }

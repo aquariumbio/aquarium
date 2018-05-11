@@ -9,7 +9,7 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
   $scope.snap = AQ.snap;
   
   $scope.last_place = 0;
-  $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
+  $scope.plan = AQ.Plan.new_plan("Untitled Plan");
 
   $scope.ready = false;
 
@@ -17,31 +17,75 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
     sidebar: { op_types: false, plans: true }
   }
 
+  // Navigation /////////////////////////////////////////////////////////////////////////////////
+
+  $scope.nav = { // TODO: consolidate with $scope.state
+    sidebar: "plans",
+    folder: { uc: true, unsorted: false }
+  }
+
+  $scope.sidebar_button_class = function(name) {
+    let c = "sidebar-button no-highlight";
+    if ( $scope.nav.sidebar == name ) {
+      c += " sidebar-button-selected"
+    }
+    return c;
+  }
+
+  // INITIALIZATION /////////////////////////////////////////////////////////////////////////////
+
+  $scope.refresh_plan_list = function() {
+
+    return AQ.Plan.where({user_id: $scope.current_user.id})
+      .then(plans => {
+        $scope.plans = aq.where(plans, p => p.status != 'template');
+        $scope.templates = aq.where(plans, p => p.status == 'template');
+        return AQ.Plan.get_folders($scope.current_user.id).then(folders => {
+          $scope.folders = folders;
+          $scope.state.loading_plans = false;
+          $scope.$apply();
+        });
+    });
+
+  }  
+
+  function close_folders() {
+    $scope.nav.folder = { uc: false, unsorted: false }
+  }
+
   function get_plans_and_templates() {
 
-    AQ.Plan.where({status: ["planning", "template"], user_id: $scope.current_user.id}).then(plans => {
-
-      $scope.plans = aq.where(plans, p => p.status == 'planning');
-      $scope.templates = aq.where(plans, p => p.status == 'template');
+    $scope.refresh_plan_list().then(() => { 
 
       AQ.Plan.where({status: "system_template"}).then(templates => {
 
         $scope.system_templates = templates;
 
-        AQ.get_sample_names().then(() =>  {
-
-          if ( aq.url_params().plan_id ) {              
-            AQ.Plan.load(aq.url_params().plan_id).then(p => {
-              $window.history.replaceState(null, document.title, "/plans"); 
-              $scope.plan = p;
-              $scope.$apply();
-            })
-          } 
-
+        if ( aq.url_params().plan_id ) {              
+          AQ.Plan.load(aq.url_params().plan_id).then(p => {
+            $window.history.replaceState(null, document.title, "/plans"); 
+            $scope.plan = p;
+            $scope.ready = true;
+            close_folders();
+            if ( p.folder ) {
+              $scope.nav.folder[p.folder] = true;
+            } else if ( p.status == 'planning ') {
+              $scope.nav.folder.uc = true;
+            } else {
+              $scope.nav.folder.unsorted = true;
+            }
+            AQ.User.find(p.user_id).then(user => {
+              $scope.current_user = user;
+              $scope.$apply();        
+            });              
+          })
+        } else {
           $scope.ready = true;
           $scope.$apply();
+        }
 
-        });  
+        AQ.get_sample_names(); // Note: this is asynchronous and takes a couple of seconds. Hopefully, the user
+                               // won't start autocompleting anything before its done. 
 
       });
 
@@ -63,17 +107,8 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
         $scope.operation_types = aq.where(operation_types,ot => ot.deployed);
         AQ.OperationType.compute_categories($scope.operation_types);
         AQ.operation_types = $scope.operation_types;
+        get_plans_and_templates();
 
-        if ( aq.url_params().plan_id ) {
-          AQ.Plan.load(aq.url_params().plan_id).then(p => {
-            AQ.User.find(p.user_id ).then(user => {
-              $scope.current_user = user;
-              get_plans_and_templates();
-            });
-          });
-        } else {
-          get_plans_and_templates();        
-        }
 
       });
     });    

@@ -260,4 +260,24 @@ Aq.prototype.url_path = function() {
 
 }
 
+Aq.prototype.member = function(set, element) {
+  return set.indexOf(element) >= 0;
+}
+
+Aq.prototype.first = function(list) {
+  if ( list.length > 0 ) {
+    return list[0];
+  } else {
+    raise("Could not take first element of empty list.")
+  }
+}
+
+Aq.prototype.last = function(list) {
+  if ( list.length > 0 ) {
+    return list[list.length-1];
+  } else {
+    raise("Could not take last element of empty list.")
+  }
+}
+
 aq = new Aq();

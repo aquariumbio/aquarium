@@ -31,19 +31,21 @@ module Marshall
 
     ids = []
 
-    ops.each do |op|
-      begin
-        if op[:id]
-          operation = self.operation_update op
-        else
-          operation = self.operation op
-          operation.associate_plan p
-          operation.save
+    if ops
+      ops.each do |op|
+        begin
+          if op[:id]
+            operation = self.operation_update op
+          else
+            operation = self.operation op
+            operation.associate_plan p
+            operation.save
+          end
+          ids << operation.id
+          map_id op[:rid], operation.id
+         rescue Exception => e
+          raise "Marshalling error: #{e.to_s}: #{e.backtrace[0].to_s}"
         end
-        ids << operation.id
-        map_id op[:rid], operation.id
-       rescue Exception => e
-        raise "Marshalling error: #{e.to_s}: #{e.backtrace[0].to_s}"
       end
     end
 
@@ -186,7 +188,6 @@ module Marshall
     # for each plan operation, if it is not in x, then delete it
     p.operations.each do |pop|
       unless op_ids.member?(pop.id)
-        puts "Destroying op #{pop.id}"
         pas = PlanAssociation.where(plan_id: p.id, operation_id: pop.id)
         pas.each { |pa| pa.destroy }
         pop.destroy

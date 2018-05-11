@@ -72,7 +72,14 @@ class PlansController < ApplicationController
       format.html { 
         redirect_to plans_url(params)
       }
-      format.json { render json: Serialize.serialize(Plan.find(params[:id])) }
+      format.json { 
+        p = Plan.find_by_id(params[:id])
+        if p 
+          render json: Serialize.serialize(p)
+        else
+          render json: { errors: "Could not find plan with id #{params[:id]}" }, status: 404
+        end
+      }
     end           
   end
 

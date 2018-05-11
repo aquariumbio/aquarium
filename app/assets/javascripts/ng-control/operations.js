@@ -3,8 +3,8 @@
 
   let w = angular.module('aquarium');
 
-  w.controller('operationsCtrl', ['$scope', '$http', '$attrs', 'aqCookieManager', '$interval',
-    function ($scope, $http, $attrs, aqCookieManager, $interval) {
+  w.controller('operationsCtrl', ['$scope', '$http', '$attrs', 'aqCookieManager', '$interval', '$mdDialog',
+                        function ($scope,    $http,   $attrs,   aqCookieManager,   $interval,   $mdDialog) {
 
       AQ.init($http);
       AQ.update = () => { $scope.$apply(); };
@@ -62,6 +62,8 @@
       function get_numbers() {
         return AQ.OperationType.numbers($scope.current.selected_user, $scope.current.filter_user)
       }
+
+      $scope.get_numbers = get_numbers;
 
       init1();
 
@@ -376,3 +378,4 @@
     }]);
 
 })();
+

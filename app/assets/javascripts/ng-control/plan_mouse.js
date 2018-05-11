@@ -4,21 +4,23 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
     aq.each($scope.plan.operations,f); 
     aq.each($scope.plan.modules,f);
     aq.each($scope.plan.current_module.input,f);    
-    aq.each($scope.plan.current_module.output,f);        
+    aq.each($scope.plan.current_module.output,f);
+    aq.each($scope.plan.current_module.text_boxes,f);      
   }  
 
   function current_draggable(f) {
     aq.each(aq.where($scope.plan.operations, op => op.parent_id == $scope.plan.current_module.id),f); 
     aq.each(aq.where($scope.plan.modules,     m =>  m.parent_id == $scope.plan.current_module.id),f);
     aq.each($scope.plan.current_module.input,f);    
-    aq.each($scope.plan.current_module.output,f);        
+    aq.each($scope.plan.current_module.output,f); 
+    aq.each($scope.plan.current_module.text_boxes,f);       
   }  
 
   function draggable_in_multiselect(obj) {
 
     var m = $scope.multiselect;
 
-    return  ( obj.parent_id == $scope.plan.current_module.id || obj.record_type == "ModuleIO" ) &&
+    return  ( obj.parent_id == $scope.plan.current_module.id || obj.record_type == "ModuleIO" || obj.record_type == "TextBox" ) &&
             (( m.width >= 0 && m.x < obj.x && obj.x + obj.width < m.x+m.width ) ||
              ( m.width <  0 && m.x + m.width < obj.x && obj.x + obj.width < m.x )) &&
             (( m.height >= 0 && m.y < obj.y && obj.y + obj.height < m.y+m.height ) ||
@@ -64,16 +66,16 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
                $scope.current_draggable.io.includes($scope.current_io) )
         ) {
 
-      $scope.current_draggable.x = evt.offsetX - $scope.current_draggable.drag.localX;
-      $scope.current_draggable.y = evt.offsetY - $scope.current_draggable.drag.localY;
+      $scope.current_draggable.x = Math.max(10,evt.offsetX - $scope.current_draggable.drag.localX);
+      $scope.current_draggable.y = Math.max(10,evt.offsetY - $scope.current_draggable.drag.localY);
       $scope.last_place = 0;
 
     } else if ( $scope.multiselect.dragging ) {
 
       current_draggable(obj => {
         if ( obj.multiselect ) {
-          obj.x = evt.offsetX - obj.drag.localX;
-          obj.y = evt.offsetY - obj.drag.localY;
+          obj.x = Math.max(10,evt.offsetX - obj.drag.localX);
+          obj.y = Math.max(10,evt.offsetY - obj.drag.localY);
         }
       });
 
@@ -105,7 +107,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
   $scope.draggableMouseDown = function(evt,obj) {
 
-    if ( obj.multiselect ) {
+    if ( obj.multiselect && obj.type != "TextBoxAnchor" ) {
 
       current_draggable(obj => {
         if ( obj.multiselect ) {
@@ -190,6 +192,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
         if ( ( io.origin && io.origin.io ) || io.destinations.length > 0 ) {
           $scope.set_current_io(io,true,role);
+          console.log("A")
           // if ( io.origin ) {
           //   $scope.current_op = io.origin.op;
           // } else if ( io.destinations.length > 0 ) {
@@ -224,6 +227,8 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
   $scope.delete = function() {
 
+    console.log("delete")
+
     if ( $scope.current_wire && $scope.current_wire.record_type == "Wire" ) {
 
       $scope.plan.remove_wire($scope.current_wire);
@@ -243,10 +248,14 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
     } else if ( $scope.current_draggable && !$scope.current_fv ) {
 
       if ( $scope.current_draggable.record_type == "Module" ) {
-        $scope.confirm_delete().then(() => {
-          $scope.delete_object($scope.current_draggable);
-          $scope.$apply();
-        })
+        if ( $scope.current_draggable.deletable($scope.plan) ) {
+          $scope.confirm_delete().then(() => {
+            $scope.delete_object($scope.current_draggable);
+            $scope.$apply();
+          })
+        } else {
+          alert("Module can not be deleted because it contains active operations.")
+        }
       } else {
         $scope.delete_object($scope.current_draggable);
       }
@@ -287,7 +296,14 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
       case "Backspace": 
       case "Delete":
-        $scope.delete();
+        if ( $scope.current_draggable ) {
+          if ( $scope.current_draggable.record_type == 'Module' || $scope.current_draggable.status == 'planning' ) {
+            $scope.delete();
+          }
+        }
+        if ( $scope.current_wire ) {
+          $scope.delete();         
+        }
         break;
 
       case "Escape":
@@ -302,6 +318,14 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
           evt.preventDefault()
         }
         break
+
+      case "R":
+      case "r":
+        if ( evt.ctrlKey || evt.metaKey ) {
+          $scope.reload();
+          evt.preventDefault()
+        }
+        break        
 
       case "M":
       case "m":
