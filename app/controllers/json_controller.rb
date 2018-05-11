@@ -43,7 +43,7 @@ class JsonController < ApplicationController
 
       logger.info e.inspect
       logger.info e.backtrace
-      render json: { errors: e.to_s }, status: 422
+      render json: { errors: e.to_s }, status: :unprocessable_entity
 
     end
 
@@ -82,7 +82,13 @@ class JsonController < ApplicationController
       record[name] = params[name]
     end
 
-    record.save
+    begin
+      record.save
+    rescue ActiveRecord::RecordNotUnique => err
+      render json: { error: err.to_s },
+             status: :unprocessable_entity
+      return
+    end
 
     if params[:model][:model] == "DataAssociation" && record.parent_class == "Plan"
       Operation.step(Plan.find(record.parent_id)
@@ -94,7 +100,7 @@ class JsonController < ApplicationController
       render json: record
     else
       logger.into record.errors.full_messages.join(', ')
-      render json: { errors: record.errors }, status: 422    
+      render json: { errors: record.errors }, status: :unprocessable_entity    
     end
 
   end
@@ -107,7 +113,7 @@ class JsonController < ApplicationController
       record.delete
       render json: record      
     else 
-      render json: { errors: [ "Insufficient permission to delete" ] }, status: 422 
+      render json: { errors: [ "Insufficient permission to delete" ] }, status: :unprocessable_entity 
     end 
 
   end
@@ -147,7 +153,7 @@ class JsonController < ApplicationController
 
     rescue Exception => e
 
-      render json: { errors: "Could not find sample: #{e.to_s}: #{e.backtrace.to_s}" }, status: 422
+      render json: { errors: "Could not find sample: #{e.to_s}: #{e.backtrace.to_s}" }, status: :unprocessable_entity
 
     end
 

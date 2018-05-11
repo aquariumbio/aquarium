@@ -1,17 +1,20 @@
 class OperationTypesController < ApplicationController
 
   before_filter :signed_in_user
-  before_filter :up_to_date_user  
+  before_filter :up_to_date_user
 
   def index
 
     redirect_to root_path, notice: "Administrative privileges required to access operation type definitions." unless current_user.is_admin
 
     respond_to do |format|
-      format.json { render json: OperationType.all.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation]) }
-      format.html { render layout: 'aq2' }
-    end    
-    
+      format.json { 
+        render json: OperationType.all.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation]),
+               status: :ok
+      }
+      format.html { render layout: 'aq2', status: :ok }
+    end
+
   end
 
   def create
@@ -19,11 +22,24 @@ class OperationTypesController < ApplicationController
     redirect_to root_path, notice: "Administrative privileges required to access operation type definitions." unless current_user.is_admin    
 
     ot = OperationType.new(
-      name: params[:name], category: params[:category], 
+      name: params[:name], category: params[:category],
       deployed: params[:deployed], on_the_fly: params[:on_the_fly])
 
-    ot.save
+    if (!ot.valid?)
+      if (ot.errors.messages.key?(:name))
+        message = "An operation type named #{ot.name} already exists."
+        Rails.logger.info(message)
+        render json: { error: message }, 
+             status: :unprocessable_entity
+      else
+        render json: { error: 'invalid operation type' },
+               status: :unprocessable_entity
+      end
+      return      
+    end
 
+    ot.save
+    
     if params[:field_types]
       params[:field_types].each do |ft|
         ot.add_new_field_type ft
@@ -36,23 +52,24 @@ class OperationTypesController < ApplicationController
 
     j = ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation])
 
-    render json: j
-
+    render json: j, status: :ok
   end
 
   def destroy
 
-   redirect_to root_path, notice: "Administrative privileges required to access operation type definitions." unless current_user.is_admin    
+    redirect_to root_path, notice: "Administrative privileges required to access operation type definitions." unless current_user.is_admin    
 
     ot = OperationType.find(params[:id])
 
     if ot.operations.count != 0
-      render json: { error: "Operation Type #{ot.name} has associated operations." }
+      render json: { error: "Operation Type #{ot.name} has associated operations." },
+             status: :unprocessable_entity
     elsif ot.deployed
-      render json: { error: "Operation Type #{ot.name} has been deployed." }
+      render json: { error: "Operation Type #{ot.name} has been deployed." },
+             status: :unprocessable_entity
     else
       ot.destroy
-      render json: { ok: true }
+      render json: { ok: true }, status: :ok
     end
 
   end
@@ -61,7 +78,7 @@ class OperationTypesController < ApplicationController
 
     if params[:no_edit]
 
-      render json: {}
+      render json: {}, status: :ok
 
     else
 
@@ -76,7 +93,7 @@ class OperationTypesController < ApplicationController
         end
       end
 
-      render json: c
+      render json: c, status: :ok
 
     end
 
@@ -127,15 +144,18 @@ class OperationTypesController < ApplicationController
 
     ot = update_from_ui params
     if ot[:update_errors].empty?
-      render json: ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation])
+      render json: ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation]),
+             status: :ok
     else
-      render json: { errors: ot.update_errors }     
+      render json: { errors: ot.update_errors },
+             status: :unprocessable_entity   
     end
   end
 
   def default
     redirect_to root_path, notice: "Administrative privileges required to access operation type definitions." unless current_user.is_admin    
-    render json: { content: File.open("lib/tasks/default.rb", "r").read }
+    render json: { content: File.open("lib/tasks/default.rb", "r").read },
+           status: :ok
   end
 
   def random
@@ -165,16 +185,18 @@ class OperationTypesController < ApplicationController
           ops_json.each do |op| 
             op[:field_values] = op[:field_values].collect { |fv| fv.full_json }
           end
-          render json: ops_json
+          render json: ops_json, status: :ok
         else
-          render json: { error: "One or more preconditions could not be evaluated." }
+          render json: { error: "One or more preconditions could not be evaluated." },
+                 status: :unprocessable_entity
         end
         raise ActiveRecord::Rollback
 
       end
 
     rescue Exception => e
-      render json: { error: e.to_s, backtrace: e.backtrace }
+      render json: { error: e.to_s, backtrace: e.backtrace },
+             status: :unprocessable_entity
     end
     
   end
@@ -242,7 +264,7 @@ class OperationTypesController < ApplicationController
     ot = update_from_ui params, false
 
     if !ot[:update_errors].empty? 
-      render json: { errors: ot.update_errors }
+      render json: { errors: ot.update_errors }, status: :unprocessable_entity
       return
     end
 
@@ -285,7 +307,8 @@ class OperationTypesController < ApplicationController
         render json: {
           error: error.message,
           backtrace: error.backtrace
-        }
+        },
+        status: :unprocessable_entity
 
       else
 
@@ -307,7 +330,8 @@ class OperationTypesController < ApplicationController
             operations: ops.as_json(methods: [:field_values,:associations]),
             plans: plans.collect { |p| p.as_json(include: :operations, methods: [:associations, :costs]) },
             job: job.reload
-          }
+          },
+          status: :ok
 
         rescue Exception => e
 
@@ -320,7 +344,8 @@ class OperationTypesController < ApplicationController
           render json: {
             error: "Bug encountered while testing: " + e.message + " at " + e.backtrace.join("\n") + ". ",
             backtrace: e.backtrace
-          }          
+          },
+          status: :unprocessable_entity      
 
         end
 
@@ -338,9 +363,10 @@ class OperationTypesController < ApplicationController
    redirect_to root_path, notice: "Administrative privileges required to access operation type definitions." unless current_user.is_admin
 
     begin
-      render json: [ OperationType.find(params[:id]).export ]
+      render json: [ OperationType.find(params[:id]).export ], status: :ok
     rescue Exception => e
-      render json: { error: "Could not export: " + e.to_s + ", " + e.backtrace[0] }
+      render json: { error: "Could not export: " + e.to_s + ", " + e.backtrace[0] },
+      status: :internal_server_error
     end
   end
 
@@ -354,10 +380,11 @@ class OperationTypesController < ApplicationController
         ot.export
       }
 
-      render json: ots
+      render json: ots, status: ok
 
     rescue Exception => e
-      render json: { error: "Could not export: " + e.to_s + ", " + e.backtrace[0] }
+      render json: { error: "Could not export: " + e.to_s + ", " + e.backtrace[0] },
+             status: :internal_server_error
     end
 
   end
@@ -389,13 +416,13 @@ class OperationTypesController < ApplicationController
           },
           notes: notes.uniq,
           inconsistencies: inconsistencies.uniq
-        }
+        }, status: :ok
 
       rescue Exception => e
 
         error = true 
-        render json: { error: "Rails could not import operation types: " + e.to_s + ": " + e.backtrace.to_s, issues_list: issues_list }
-
+        render json: { error: "Rails could not import operation types: " + e.to_s + ": " + e.backtrace.to_s, issues_list: issues_list },
+               status: :unprocessable_entity
       end
 
       raise ActiveRecord::Rollback if error      
@@ -410,9 +437,11 @@ class OperationTypesController < ApplicationController
 
     begin
       ot = OperationType.find(params[:id]).copy current_user
-      render json: { operation_type: ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation]) }
+      render json: { operation_type: ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation]) },
+             status: :ok
     rescue Exception => e
-      render json: { error: "Could not copy operation type: " + e.to_s }
+      render json: { error: "Could not copy operation type: " + e.to_s },
+             status: :internal_server_error
     end
 
   end
@@ -421,12 +450,15 @@ class OperationTypesController < ApplicationController
 
     if current_user.is_admin
       if params[:user_id] && params[:filter] == "true"
-        render json: OperationType.numbers(User.find(params[:user_id]))
+        render json: OperationType.numbers(User.find(params[:user_id])),
+               status: :ok
       else
-        render json: OperationType.numbers
+        render json: OperationType.numbers,
+               status: :ok
       end
     else
-      render json: OperationType.numbers(current_user)
+      render json: OperationType.numbers(current_user),
+             status: :ok
     end
 
   end
@@ -443,12 +475,12 @@ class OperationTypesController < ApplicationController
       end
     end
 
-    render json: ots
+    render json: ots, status: :ok
 
   end  
 
   def stats
-    render json: OperationType.find(params[:id]).stats
+    render json: OperationType.find(params[:id]).stats, status: :ok
   end
 
 end

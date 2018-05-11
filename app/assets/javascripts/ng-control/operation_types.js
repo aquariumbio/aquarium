@@ -226,14 +226,8 @@
                 "/operation_types/" + operation_type.id,
                 operation_type.remove_predecessors()
               )
-              .then(function(response) {
-                if (response.data.errors) {
-                  alert(
-                    "Could not update operation type definition: " +
-                      response.data.errors[0]
-                  );
-                  console.log(response.data.errors);
-                } else {
+              .then(
+                function successCallback(response) {
                   let i = $scope.operation_types.indexOf(operation_type);
                   $scope.operation_types[i] = AQ.OperationType.record(
                     response.data
@@ -247,37 +241,48 @@
                     "DeveloperCurrentCategory",
                     $scope.current_operation_type.category
                   );
-                }
-              });
-          } else {
-            $http
-              .post("/operation_types", operation_type)
-              .then(function(response) {
-                let i = $scope.operation_types.indexOf(operation_type);
-                if (response.data.errors) {
+                },
+                function failureCallback(response) {
                   alert(
-                    "Could not update operation type definition: " +
-                      response.data.errors[0]
+                    "Error: Could not save operation type: " +
+                      response.data.error
                   );
-                } else {
-                  $scope.operation_types[i] = AQ.OperationType.record(
-                    response.data
-                  );
-                  $scope.current_operation_type = $scope.operation_types[i];
-                  $scope.current_operation_type.upgrade_field_types();
-                  make_categories();
-                  $scope.current_category =
-                    $scope.current_operation_type.category;
-                  aqCookieManager.put_object(
-                    "DeveloperCurrentOperationTypeId",
-                    $scope.current_operation_type.id
-                  );
-                  aqCookieManager.put_object(
-                    "DeveloperCurrentCategory",
-                    $scope.current_operation_type.category
-                  );
+                  console.log("Error: " + response.data.error);
+                  let i = $scope.operation_types.indexOf(operation_type);
+                  $scope.operation_types.splice(i, 1);
                 }
-              });
+              );
+          } else {
+            $http.post("/operation_types", operation_type).then(
+              function successCallback(response) {
+                let i = $scope.operation_types.indexOf(operation_type);
+                $scope.operation_types[i] = AQ.OperationType.record(
+                  response.data
+                );
+                $scope.current_operation_type = $scope.operation_types[i];
+                $scope.current_operation_type.upgrade_field_types();
+                make_categories();
+                $scope.current_category =
+                  $scope.current_operation_type.category;
+                aqCookieManager.put_object(
+                  "DeveloperCurrentOperationTypeId",
+                  $scope.current_operation_type.id
+                );
+                aqCookieManager.put_object(
+                  "DeveloperCurrentCategory",
+                  $scope.current_operation_type.category
+                );
+              },
+              function failureCallback(response) {
+                alert(
+                  "Could not update operation type definition: " +
+                    response.data.error
+                );
+                console.log("Error: " + response.data.error);
+                let i = $scope.operation_types.indexOf(operation_type);
+                $scope.operation_types.splice(i, 1);
+              }
+            );
           }
         }
       };
@@ -316,18 +321,19 @@
           if (operation_type.id) {
             $http
               .delete("/operation_types/" + operation_type.id, operation_type)
-              .then(function(response) {
-                if (response.data.error) {
-                  alert(
-                    "Could not delete operation type: " + response.data.error
-                  );
-                } else {
+              .then(
+                function successCallback(response) {
                   let i = $scope.operation_types.indexOf(operation_type),
                     c = operation_type.category;
                   $scope.operation_types.splice(i, 1);
                   after_delete(c);
+                },
+                function failureCallback(response) {
+                  alert(
+                    "Could not delete operation type: " + response.data.error
+                  );
                 }
-              });
+              );
           } else {
             // operation type hasn't been saved yet
 
@@ -340,39 +346,37 @@
       };
 
       $scope.export_operation_type = function(operation_type) {
-        $http
-          .get("/operation_types/" + operation_type.id + "/export")
-          .then(function(response) {
-            if (response.data.error) {
-              alert(response.data.error);
-            } else {
-              let blob = new Blob([JSON.stringify(response.data)], {
-                type: "application/json;charset=utf-8;"
-              });
-              let downloadLink = angular.element("<a></a>");
-              downloadLink.attr("href", window.URL.createObjectURL(blob));
-              downloadLink.attr("download", operation_type.name + ".json");
-              downloadLink[0].click();
-            }
-          });
+        $http.get("/operation_types/" + operation_type.id + "/export").then(
+          function successCallback(response) {
+            let blob = new Blob([JSON.stringify(response.data)], {
+              type: "application/json;charset=utf-8;"
+            });
+            let downloadLink = angular.element("<a></a>");
+            downloadLink.attr("href", window.URL.createObjectURL(blob));
+            downloadLink.attr("download", operation_type.name + ".json");
+            downloadLink[0].click();
+          },
+          function failureCallback(response) {
+            alert(response.data.error);
+          }
+        );
       };
 
       $scope.export_category = function(category) {
-        $http
-          .get("/operation_types/export_category/" + category)
-          .then(function(response) {
-            if (response.data.error) {
-              alert(response.data.error);
-            } else {
-              let blob = new Blob([JSON.stringify(response.data)], {
-                type: "application/json;charset=utf-8;"
-              });
-              let downloadLink = angular.element("<a></a>");
-              downloadLink.attr("href", window.URL.createObjectURL(blob));
-              downloadLink.attr("download", category + ".json");
-              downloadLink[0].click();
-            }
-          });
+        $http.get("/operation_types/export_category/" + category).then(
+          function successCallback(response) {
+            let blob = new Blob([JSON.stringify(response.data)], {
+              type: "application/json;charset=utf-8;"
+            });
+            let downloadLink = angular.element("<a></a>");
+            downloadLink.attr("href", window.URL.createObjectURL(blob));
+            downloadLink.attr("download", category + ".json");
+            downloadLink[0].click();
+          },
+          function failureCallback(response) {
+            alert(response.data.error);
+          }
+        );
       };
 
       $scope.import = function() {
@@ -391,12 +395,10 @@
 
           $http
             .post("/operation_types/import", { operation_types: json })
-            .then(function(response) {
+            .then(function successCallback(response) {
               $scope.import_popup.loading = false;
 
-              if (response.data.error) {
-                alert(response.data.error);
-              } else if (response.data.inconsistencies.length === 0) {
+              if (response.data.inconsistencies.length === 0) {
                 if (response.data.operation_types.length > 0) {
                   $scope.import_notification(response.data);
                 } else {
@@ -405,6 +407,8 @@
               } else {
                 $scope.import_notification(response.data);
               }
+            }, function failureCallback(response) {
+              alert(response.data.error);
             });
         };
 
@@ -492,32 +496,28 @@
       $scope.delete_library = function(library) {
         if (confirm("Are you sure you want to delete this library?")) {
           let category = library.category;
-
-          $http
-            .delete("/libraries/" + library.id, library)
-            .then(function(response) {
-              if (response.data.error) {
-                alert("Could not delete library: " + response.data.error);
-              } else {
-                $scope.libraries = aq.remove($scope.libraries, library);
-                after_delete(category);
-                $scope.set_mode("definition");
-              }
-            });
+          $http.delete("/libraries/" + library.id, library).then(
+            function successCallback(response) {
+              $scope.libraries = aq.remove($scope.libraries, library);
+              after_delete(category);
+              $scope.set_mode("definition");
+            },
+            function failureCallback(response) {
+              alert("Could not delete library: " + response.data.error);
+            }
+          );
         }
       };
 
       $scope.copy = function(operation_type) {
-        $http
-          .get("/operation_types/" + operation_type.id + "/copy/")
-          .then(function(response) {
-            if (!response.data.error) {
-              alert("Copy successful. Developer page will reload.");
-              $scope.reload();
-            } else {
-              alert(response.data.error);
-            }
-          });
+        $http.get("/operation_types/" + operation_type.id + "/copy/").then(
+          function successCallback(response) {
+            $scope.reload();
+          },
+          function failureCallback(response) {
+            alert(response.data.error);
+          }
+        );
       };
 
       $scope.render_docs = function(operation_type) {

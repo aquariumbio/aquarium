@@ -36,7 +36,7 @@ class PlansController < ApplicationController
       @plan.reload
       render json: Serialize.serialize(@plan)
     else
-      render json: { errors: @plan.errors }, status: 422
+      render json: { errors: @plan.errors }, status: :unprocessable_entity
     end
 
   end
@@ -62,7 +62,7 @@ class PlansController < ApplicationController
     if @plan.errors.empty?
       render json: Serialize.serialize(@plan)
     else
-      render json: { errors: @plan.errors }, status: 422
+      render json: { errors: @plan.errors }, status: :unprocessable_entity
     end
 
   end
@@ -114,7 +114,7 @@ class PlansController < ApplicationController
     if planner.start
       render json: { result: "ok" }
     else
-      render json: planner.errors, status: 422
+      render json: planner.errors, status: :unprocessable_entity
     end
 
   end
