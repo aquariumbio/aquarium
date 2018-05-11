@@ -512,7 +512,6 @@
       $scope.copy = function(operation_type) {
         $http.get("/operation_types/" + operation_type.id + "/copy/").then(
           function successCallback(response) {
-            alert("Copy successful. Developer page will reload.");
             $scope.reload();
           },
           function failureCallback(response) {
