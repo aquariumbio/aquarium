@@ -13,6 +13,9 @@
         <th>Job(s)</th>
         <th>Plan</th>
         <th>Last Update</th>
+        <% if current_user && current_user.is_admin %>
+          <th ng-if="status != 'scheduled' || status != 'running'">
+        <% end %>
       </tr>
 
       <tr ng-repeat="op in operations"
@@ -83,6 +86,32 @@
         </td>
 
         <td>{{op.updated_at|date}}</td>
+
+        <% if current_user && current_user.is_admin %>
+          <td ng-if="status != 'scheduled' || status != 'running'">
+
+            <md-menu layout="row">
+
+              <span ng-click="$mdMenu.open($event)"
+                    style="color: #333; font-size: 9pt; cursor: pointer"
+                    class="no-highlight">
+                <md-tooltip md-direction="bottom" md-delay="2500">Force operation to a different status.</md-tooltip>
+                Force
+              </span>
+
+              <md-menu-content width="4">
+                <md-menu-item ng-repeat="s in ['waiting', 'pending', 'deferred', 'delayed', 'done', 'error']" ng-if="op.status != s">
+                  <md-button ng-click="change_status(op,s)" aria-label="Change to {{s}}">
+                    {{s}}
+                  </md-button>
+                </md-menu-item>           
+              </md-menu-content>
+
+            </md-menu>
+
+          </td>
+
+        <% end %>
 
       </tr>
 
