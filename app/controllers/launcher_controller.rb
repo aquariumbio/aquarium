@@ -189,7 +189,7 @@ class LauncherController < ApplicationController
       end
 
       if !( current_user.is_admin || ( @user.id == uba.user_id && uba.budget.spent_this_month(@user.id) < uba.quota ) )
-        render json: { errors: "User #{current_user.login} not authorized or overspent for budget #{uba.budget.name}"}, status: 422
+        render json: { errors: "User #{current_user.login} not authorized or overspent for budget #{uba.budget.name}"}, status: :unprocessable_entity
         raise ActiveRecord::Rollback        
       end
 
@@ -212,7 +212,7 @@ class LauncherController < ApplicationController
       if plan.errors.empty?
         render json: plan.as_json(include: { operations: { include: :operation_type, methods: [ 'field_values' ] } } )
       else
-        render json: { errors: "Could not start plan. " + plan.errors.full_messages.join(", ") }, status: 422        
+        render json: { errors: "Could not start plan. " + plan.errors.full_messages.join(", ") }, status: :unprocessable_entity        
         raise ActiveRecord::Rollback
       end
 

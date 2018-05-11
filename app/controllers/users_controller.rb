@@ -85,7 +85,7 @@ class UsersController < ApplicationController
     user = User.find(params[:id])
 
     unless user.id == current_user.id || current_user.is_admin
-      render json: { error: "User #{current_user.login} is not authorized to update user #{user.login}'s profile." }, status: 422
+      render json: { error: "User #{current_user.login} is not authorized to update user #{user.login}'s profile." }, status: :unprocessable_entity
       return
     end
 
@@ -93,7 +93,7 @@ class UsersController < ApplicationController
       user.name = params[:name]
       user.save
       unless user.errors.empty?
-        render json: { error: user.errors.full_messages.join('') }, status: 422
+        render json: { error: user.errors.full_messages.join('') }, status: :unprocessable_entity
         return
       end
     end
@@ -121,7 +121,7 @@ class UsersController < ApplicationController
     user = User.find(params[:id])
 
     unless user.id == current_user.id || current_user.is_admin
-      render json: { error: "User #{current_user.login} is not authorized to change #{user.login}'s password." }, status: 422
+      render json: { error: "User #{current_user.login} is not authorized to change #{user.login}'s password." }, status: :unprocessable_entity
       return
     end
 
@@ -132,7 +132,7 @@ class UsersController < ApplicationController
     if user.errors.empty?
       render json: user
     else
-      render json: { error: user.errors.full_messages.join(', ') }, status: 422
+      render json: { error: user.errors.full_messages.join(', ') }, status: :unprocessable_entity
     end
 
   end

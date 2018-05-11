@@ -129,7 +129,7 @@ class ItemsController < ApplicationController
     i = Item.find(params[:id])
     i.store
     render json: i if i.errors.empty?
-    render json: { error: "Could not move item #{i.id} to #{params[:location]}: #{i.errors.full_messages.join(', ')}" }, status: 422 unless i.errors.empty?  
+    render json: { error: "Could not move item #{i.id} to #{params[:location]}: #{i.errors.full_messages.join(', ')}" }, status: :unprocessable_entity unless i.errors.empty?  
   end
 
   def update
