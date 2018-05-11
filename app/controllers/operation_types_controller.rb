@@ -424,7 +424,8 @@ class OperationTypesController < ApplicationController
       ot = OperationType.find(params[:id]).copy current_user
       render json: { operation_type: ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation]) }
     rescue Exception => e
-      render json: { error: "Could not copy operation type: " + e.to_s }
+      render json: { error: "Could not copy operation type: " + e.to_s },
+             status: :internal_server_error
     end
 
   end
