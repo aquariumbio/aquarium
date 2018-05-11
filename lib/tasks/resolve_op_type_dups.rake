@@ -8,7 +8,7 @@ task rename_optype_duplicates: [:environment] do
         "SELECT t.name FROM operation_types t WHERE t.category = '#{category}' GROUP BY t.name HAVING COUNT(t.name) > 1"
         ).collect{|op_type| op_type.name}
     duplicate_names.each do |name|
-      puts("\nCategory: #{category}")
+      puts("\nCategory: \"#{category}\"")
       # collect the operation types with the same name within the category
       deployed = []
       undeployed = []
@@ -34,7 +34,7 @@ task rename_optype_duplicates: [:environment] do
       rename_list = op_types - [selected]
       rename_list.each_with_index do |op_type, index|
         new_name = "#{op_type.name} (duplicate #{index+1})"
-        puts("- Renaming \"#{op_type.name}\" (id: #{op_type.id}) to #{new_name}")
+        puts("- Renaming \"#{op_type.name}\" (id: #{op_type.id}) to \"#{new_name}\"")
         op_type.name = new_name
         op_type.save
       end
