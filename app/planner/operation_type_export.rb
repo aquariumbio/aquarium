@@ -81,11 +81,19 @@ module OperationTypeExport
     base.extend(ClassMethods)
   end  
 
-  def copy user
+  def copy(user)
+    # Choose a name for the copy that is not already used
+    exported = export
+    original_name = exported[:operation_type][:name]
+    counter = 0
+    copy_name = original_name + " (copy)"
+    while (!OperationType.where(category: category, name: copy_name).empty?)
+      counter += 1
+      copy_name = original_name + " (copy #{counter})"
+    end
+    exported[:operation_type][:name] = copy_name
 
-    ot = OperationType.simple_import(export, user)
-
-    ot.name += " (copy)"
+    ot = OperationType.simple_import(exported, user)
     ot.category = category
     ot.deployed = false
     ot.save
@@ -162,8 +170,8 @@ module OperationTypeExport
 
     end
 
-    def simple_import data, user
-
+    def simple_import (data, user)
+      
       obj = data[:operation_type]
 
       ot = OperationType.new name: obj[:name], category: obj[:category], deployed: obj[:deployed], on_the_fly: obj[:on_the_fly]
