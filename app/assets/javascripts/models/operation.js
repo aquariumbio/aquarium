@@ -1,5 +1,23 @@
 AQ.Operation.getter(AQ.User,"user");
 
+AQ.Operation.new_operation = function(operation_type, parent_module_id=0, x=100, y=100) {
+
+  var op = AQ.Operation.record({
+    x: x,
+    y: y,
+    width: 160, 
+    height: 30,
+    routing: {},
+    form: { input: {}, output: {} },
+    parent_id: parent_module_id,
+    status: "planning"
+  });
+  op.set_type(operation_type);
+
+  return op;
+
+}
+
 AQ.Operation.record_methods.upgrade = function() {
 
   let operation = this;
@@ -69,14 +87,6 @@ AQ.Operation.record_methods.set_type = function(operation_type) {
 
   return this;
 
-}
-
-AQ.Operation.record_methods.inputs = function() {
-  return aq.where(this.field_values, fv => fv.role == 'input');
-}
-
-AQ.Operation.record_methods.outputs = function() {
-  return aq.where(this.field_values, fv => fv.role == 'output');
 }
 
 AQ.Operation.record_getters.num_inputs = function() {
@@ -149,10 +159,15 @@ AQ.Operation.record_methods.set_type_with_field_values = function(operation_type
 }
 
 AQ.Operation.record_methods.set_aft = function(ft,aft) {
-  var op = this;
+
+  let  op = this;
+
   op.form[ft.role][ft.name] = { aft_id: aft.id, aft: aft };
+
   aq.each(op.field_values,function(fv) {
+
     if ( fv.name == ft.name && fv.role == ft.role ) {
+
       op.routing[ft.routing] = '';
       fv.aft = aft;
       fv.aft_id = aft.id;
@@ -165,8 +180,24 @@ AQ.Operation.record_methods.set_aft = function(ft,aft) {
       delete fv.sample_identifier;
       delete fv.child_sample_id;
       delete fv.child_item_id;
+
+      if ( op.plan ) {
+
+        // try to assign a sample by looking at equivalent field values
+        let assigned_fvs = aq.where(
+          AQ.Plan.equivalence_class_of(op.plan.classes(), fv), 
+          other_fv => other_fv.child_sample_id );
+
+        if ( assigned_fvs.length > 0 ) {
+          op.assign_sample(fv,assigned_fvs[0].sid);
+        }
+
+      }
+
     }
+
   });
+
 }
 
 AQ.Operation.record_methods.clear = function() {
@@ -180,9 +211,12 @@ AQ.Operation.record_methods.assign_sample = function(fv,sid) {
 
   var op = this;
 
-  op.routing[fv.routing] = sid;            // set the sid for the source op's routing symbol
   fv.child_sample_id = AQ.id_from(sid);
   fv.sid = sid;
+
+  if ( fv.field_type && !fv.field_type.array ) {
+    op.routing[fv.routing] = sid;          
+  }
 
   if ( fv.field_type && fv.field_type.array ) {
     fv.sample_identifier = sid;
@@ -286,23 +320,23 @@ AQ.Operation.record_methods.update_cost = function() {
 
 }
 
-AQ.Operation.record_methods.io = function(name,role) {
+AQ.Operation.record_methods.io = function(name,role,index=0) {
 
   var fvs = aq.where(
     this.field_values,
     fv => fv.name == name && fv.role == role
   );
 
-  if ( fvs.length > 0 ) {
-    return fvs[0];
+  if ( fvs.length > index ) {
+    return fvs[index];
   } else {
-    throw "Attempted to access nonexistent " + role + " named '" + name + "'";
+    throw "Attempted to access nonexistent " + role + " named '" + name + "'" + " indexed by " + index;
   }
 
 }
 
-AQ.Operation.record_methods.output = function(name) { return this.io(name, 'output'); }
-AQ.Operation.record_methods.input = function(name) { return this.io(name, 'input');  }
+AQ.Operation.record_methods.output = function(name, index=0) { return this.io(name, 'output', index); }
+AQ.Operation.record_methods.input = function(name, index=0) { return this.io(name, 'input', index);  }
 
 AQ.Operation.record_methods.reload = function() {
 
@@ -326,91 +360,6 @@ AQ.Operation.record_methods.reload = function() {
 
 }
 
-AQ.Operation.getter(AQ.Job,"job");
-
-AQ.Operation.record_methods.instantiate_aux = function(plan,pairs,resolve) {
-
-  var operation = this;
-
-  if ( pairs.length > 0 ) {
-
-    var ofv = pairs[0].ofv,
-        sfv = pairs[0].sfv;
-
-    AQ.Sample.find(sfv.child_sample_id).then(linked_sample => {
-
-      operation.routing[ofv.routing] = linked_sample.identifier;
-      operation.assign_sample(ofv,linked_sample.identifier );
-      plan.propagate_down(ofv,linked_sample.identifier);
-
-      ofv.clear_item();
-      ofv.find_items(linked_sample.identifier).then(items => AQ.update());
-
-      operation.instantiate_aux(plan,pairs.slice(1),resolve);
-      AQ.update();
-
-    })    
-
-  } else {
-    resolve();
-  }
-
-}
-
-AQ.Operation.record_methods.instantiate = function(plan,field_value,sid) { // instantiate this operation's field values using the sid
-                                                                           // assuming it is being assigned to the argument field_value
-                                                                           // will need to look at the field_value's routing information
-                                                                           // as well as its sample definition
-  var operation = this,
-      sample_id = AQ.id_from(sid);
-
-  aq.each(operation.field_values, fv => {
-    if ( !fv.field_type.array && fv.routing == field_value.routing ) {
-      operation.assign_sample(fv, sid);
-    }
-  })
-
-  if ( sid ) {
-    
-    // Find items associated with samples
-    aq.each(operation.field_values, fv => {
-      if ( !fv.field_type.array && fv.routing == field_value.routing ) {
-        fv.clear_item().find_items(sid);
-      }
-    })
-
-    // Next, find fvs that can be assigned from sample information (using linked samples)
-    return new Promise(function(resolve,reject) {    
-
-      AQ.Sample.where({id: sample_id}, {methods: ["field_values"]}).then(samples => {  // get the sample corresponding to sid
-
-        if ( samples.length == 1 ) { // there should only be one
-
-          var sample = samples[0], 
-              pairs = [];            // pairs will hold a list of sample field values (sfv) and operation field_values (ofv) that should be identified
-
-          aq.each(sample.field_values, sfv => {
-            aq.each(operation.field_values, ofv => {
-              if ( ofv != field_value && sfv.name == ofv.name && sfv.child_sample_id ) {
-                pairs.push({sfv:sfv,ofv: ofv})
-              } 
-            })
-          });
-
-          operation.instantiate_aux(plan,pairs,resolve); // once all pairs are found, actually do the instantiate in instantiate_aux
-
-        } 
-
-      });
-
-    });
-
-  } else {
-    return new Promise(function(resolve,reject) {});
-  }
-
-}
-
 AQ.Operation.record_getters.inputs = function() {
 
   var op = this;
@@ -419,6 +368,17 @@ AQ.Operation.record_getters.inputs = function() {
   op.inputs = aq.where(op.field_values, fv => fv.role == 'input');
 
   return op.inputs;
+
+}
+
+AQ.Operation.record_getters.outputs = function() {
+
+  var op = this;
+  delete op.outputs;
+
+  op.outputs = aq.where(op.field_values, fv => fv.role == 'output');
+
+  return op.outputs;
 
 }
 
@@ -456,6 +416,20 @@ AQ.Operation.record_getters.types_and_values = function() {
   op.types_and_values = tvs;
 
   return tvs;
+
+}
+
+AQ.Operation.record_getters.jobs = function() {
+
+  let op = this;
+  delete op.jobs;
+
+  AQ.JobAssociation.where({ operation_id: op.id }, { include: "job" }).then(jas => {
+    op.jobs = aq.collect(jas, ja => AQ.Job.record(ja.job));
+    AQ.update();
+  })
+
+  return op.jobs;
 
 }
 
@@ -515,6 +489,27 @@ AQ.Operation.record_methods.set_status = function(status) {
       }
     });
   });
+
+}
+
+/*
+ * If the operation is a leaf or if its inputs are ready and its precondition is true,
+ * then set the operation to 'pending' else set it to 'waiting'.
+ */
+AQ.Operation.record_methods.retry = function() {
+
+  let op = this;
+
+  return new Promise(function(resolve, reject) {
+    AQ.get(`/operations/${op.id}/retry`)
+      .then(response => {
+        console.log(response)
+        if ( response.data.status ) {
+          op.status = response.data.status;
+          resolve(op);
+        }
+      }).catch(e => console.log("Could not retry action", e))
+   });
 
 }
 

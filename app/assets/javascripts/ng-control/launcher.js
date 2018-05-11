@@ -191,11 +191,15 @@
       return c;
     }
 
+    $scope.edit = function(plan) {
+      window.location = "/plans?plan_id=" + plan.id;
+    }
+
     $scope.replan = function(plan) {
       plan.replan().then(newplan => {
         window.location = "/plans?plan_id=" + newplan.id;
       })
-    }
+    }    
 
   }]);
 

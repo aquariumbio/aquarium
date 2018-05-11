@@ -140,6 +140,7 @@ AQ.Plan.record_methods.marshall = function() {
     var op = AQ.Operation.record(op).marshall();
     if ( op ) {
       marshalled_operations.push(op);
+      op.plan = plan;
     }
   });
 

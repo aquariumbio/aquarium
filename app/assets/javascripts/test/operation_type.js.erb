@@ -1,0 +1,20 @@
+<% if Rails.env.development? %>
+
+describe('AQ.OperationType', function() {
+
+  describe('find', function() {
+
+    it("should find chached operation types", function(done) {
+      AQ.OperationType.all_fast(true).then(operation_types => {
+        AQ.operation_types = operation_types;           
+        ot = AQ.OperationType.find_cached("Assemble Plasmid");
+        should(ot).not.be.equal(null);
+        done();
+      }).catch(done);
+    }).async();
+
+  });
+
+});
+
+<% end %>

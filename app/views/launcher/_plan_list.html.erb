@@ -60,15 +60,13 @@
             </md-menu-item>
           <% end %>
 
-          <% if false # This action should not be necessary since you can replan and relaunch instead %>
-          <md-menu-item aria-label="Copy">
-            <md-button ng-disabled="plan.relaunching" ng-click="relaunch(plan)">Copy</md-button>
+          <md-menu-item aria-label="Edit">
+            <md-button ng-disabled="plan.relaunching" ng-click="edit(plan)">Edit</md-button>
           </md-menu-item>
-          <% end %>
 
-          <md-menu-item aria-label="Replan">
-            <md-button ng-disabled="plan.relaunching" ng-click="replan(plan)">Replan</md-button>
-          </md-menu-item>           
+          <md-menu-item aria-label="Copy">
+            <md-button ng-disabled="plan.relaunching" ng-click="replan(plan)">Copy</md-button>
+          </md-menu-item>          
 
           <md-menu-divider></md-menu-divider>
 

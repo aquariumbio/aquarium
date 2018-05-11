@@ -36,13 +36,26 @@
 
     <rect ng-attr-width="{{op.width}}" ng-attr-height="{{op.height}}"
           ng-attr-class="{{op_class(op)}}"
-          ng-mousedown="draggableMouseDown($event, op)" 
+          ng-mousedown="draggableMouseDown($event, op); nav.sidebar = 'node'" 
           ng-mouseup="draggableMouseUp($event, op)" 
           ng-mousemove="draggableMouseMove($event, op)"/>
 
     <text ng-attr-x="{{op.width/2}}" y="20" class='op-name'>
       {{op.operation_type.name}}
     </text>
+
+    <text ng-attr-x="{{0}}" y="40" ng-class='op_status_class(op)' ng-if="op.status != 'planning'">
+      {{op.status}}
+    </text>    
+
+    <% if current_user && current_user.is_admin %>
+      <text ng-attr-x="{{op.width}}" y="44"
+            class='op-retry'
+            ng-click="try_again(op)"
+            ng-if="op.status == 'done' || op.status == 'error'">
+        &#8617;
+      </text>
+    <% end %>
 
     <text ng-attr-x="{{0}}" y="-4" class='op-cost'>
       {{op.cost|currency}}
@@ -73,7 +86,7 @@
       <circle ng-attr-class="{{io_class(op,fv)}}"
               ng-if="fv.field_type.ftype == 'sample'"
               ng-attr-cx="{{op.width/2 + ($index - outputs.length/2.0 + 0.5)*snap}}" 
-              ng-mousedown="ioMouseDown($event, op, fv)" 
+              ng-mousedown="ioMouseDown($event, op, fv); nav.sidebar = 'io'" 
               cy="0" />
 
     </g>
@@ -103,7 +116,7 @@
       <circle ng-attr-class="{{io_class(op,tv.value)}}"
               ng-if="tv.value.field_type.ftype == 'sample'"
               ng-attr-cx="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap}}" 
-              ng-mousedown="ioMouseDown($event, op, tv.value)" 
+              ng-mousedown="ioMouseDown($event, op, tv.value); nav.sidebar = 'io'" 
               ng-attr-cy="{{op.height}}" 
               ng-attr-data-name="{{tv.value.name}}" />
        
@@ -111,7 +124,7 @@
       <rect ng-if="tv.value.field_type.ftype != 'sample' && !tv.array_add_button"
             ng-attr-class="{{parameter_class(op,tv.value)}}"
             ng-attr-x="{{op.width/2 + (tv.value.index - inputs.length/2.0 + 0.5)*snap - 5}}"
-            ng-mousedown="ioMouseDown($event, op, tv.value)" 
+            ng-mousedown="ioMouseDown($event, op, tv.value); nav.sidebar = 'io'" 
             ng-attr-y="{{op.height-5}}" width="10" height="10"
             ng-attr-data-name="{{tv.value.name}}" />
 

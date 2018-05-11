@@ -7,6 +7,9 @@ function PlanClasses($scope,$http,$attrs,$cookies,$sce,$window) {
     if ( op == $scope.current_draggable || op.multiselect ) {
       c += " op-selected";
     }
+    if ( op.record_type == "Operation" && op.status != 'planning' ) {
+      c += " op-active";
+    }
     return c;
   }
 
@@ -110,6 +113,28 @@ function PlanClasses($scope,$http,$attrs,$cookies,$sce,$window) {
     }
 
     return $scope.parameter_class(op,fv);
+  }  
+
+  $scope.op_status_class = function(op) {
+
+    return "op-status op-status-" + op.status;
+
+  }
+
+  $scope.text_box_class = function(box) {
+    let c = "text-box";
+    if ( box == $scope.current_draggable || box.anchor == $scope.current_draggable || box.multiselect ) {
+      c += " text-box-selected";
+    }
+    return c;
+  }
+
+  $scope.text_box_anchor_class = function(box) {
+    let c = "text-box-anchor";
+    if ( box == $scope.current_draggable || box.multiselect ) {
+      c += " text-box-anchor-selected";
+    }
+    return c;
   }  
 
 }

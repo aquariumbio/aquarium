@@ -10,7 +10,7 @@ AQ.Job.record_methods.upgrade = function() {
     job.state = JSON.parse(job.state.replace(/Infinity/g, '"Inf"'));
     job.state.index = job.backtrace.length - 1;
   } catch(e) {
-    console.log("Could not parse job state: " + e);
+    // console.log("Could not parse job state: " + e);
     job.state = [
       {},
       { 
@@ -46,6 +46,10 @@ AQ.Job.getter(AQ.User,"user");
 
 AQ.Job.record_getters.started = function() {
   return this.pc != -1;
+}
+
+AQ.Job.record_methods.debug = function() {
+  return AQ.http.get("/krill/debug/" + this.id)
 }
 
 AQ.Job.record_getters.status = function() {

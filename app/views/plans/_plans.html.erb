@@ -1,0 +1,145 @@
+<!-- PLAN LIST ELEMENT -->
+
+<script type="text/ng-template" id="plan-list-element">
+  <input type=checkbox ng-model="p.selected" ng-if="p.status != 'planning'">
+  <span ng-if="p.status != 'planning'">&nbsp;</span>
+  <div class="plan-list-element no-highlight"
+       layout="row"
+       layout-align="space-between center"
+       ng-click="p.selected = !p.selected"
+       ng-dblclick="load(p)">
+    <div>
+      <b>{{p.id}}</b>: {{p.name ? p.name : "[Untitled]"}}
+      <span ng-if="state.deleting_plan.id == p.id" style="color: orange"> ... deleting </span>
+      <md-tooltip md-direction="right" md-delay="2500">Click to select. Double click to open.</md-tooltip>
+    </div>
+    <div>
+      <span ng-if="p.status == 'planning'" class="pull-right">
+        <a href="#" ng-click="delete_plan(p)">&times;</a>
+      </span>
+    </div>
+  </div>
+</script>
+
+<!-- MOVER  /////////////////////////////////////////////// --> 
+
+<script type="text/ng-template" id="plan-move-button">
+
+  <md-menu layout="row" style="display: inline-block" class="pull-right">
+
+    <span ng-click="openMenu($mdMenu, $event)"
+          style="color: #333; font-size: 12pt" >
+      <md-tooltip md-direction="bottom" md-delay="2500">Move selected plans to folder.</md-tooltip>
+      &#8680;
+    </span>
+
+    <md-menu-content width="4">
+      <md-menu-item ng-repeat="folder in folders track by $index">
+        <md-button ng-click="move_to_folder(folder)" aria-label="{{folder}}">
+          <span ng-if="folder">{{folder}}</span>
+          <span ng-if="!folder"><b>Unsorted</b></span>
+        </md-button>
+      </md-menu-item>
+      <md-divider></md-divider>
+      <md-menu-item>
+        <md-button ng-click="move_to_new_folder(folder)">
+          New Folder
+        </md-button>
+      </md-menu-item>
+    </md-menu-content>
+
+  </md-menu>
+
+</script>
+
+<!-- PLANS ///////////////////////////////////////////////// -->
+
+  <!-- UNDER CONSTRUCTION -->
+
+  <div>
+
+    <h4 class='md-subhead clickable no-highlight' ng-click="nav.folder.uc = !nav.folder.uc">
+
+    <span class='opener'>{{nav.folder.uc ? '&#9660;' : '&#9658;'}}</span>  
+      Under Construction {{state.loading_plans ? '... loading' : ''}}
+    </h4>
+
+    <ul class='compact-list' ng-if="nav.folder.uc">
+      <li ng-repeat="p in plans | filter: { status: 'planning' } | orderBy:'-'" 
+          ng-include="'plan-list-element'" 
+          ng-class="plan.id == p.id ? 'active-plan' : ''" 
+          layout="row">
+      </li>
+    </ul>
+
+  </div>
+
+  <!-- UNSORTED -->
+
+  <div>
+
+    <h4 class='md-subhead clickable no-highlight' ng-click="nav.folder.unsorted = !nav.folder.unsorted">
+      <span class='opener'>{{nav.folder.unsorted ? '&#9660;' : '&#9658;'}}</span>  
+      Unsorted {{state.loading_plans ? '... loading' : ''}}
+      <span ng-include="'plan-move-button'" ng-if="nav.folder.unsorted"></span>
+    </h4>
+
+    <ul class='compact-list' ng-if="nav.folder.unsorted">
+      <li ng-repeat="p in plans | filter: { folder: '!', status: '!planning' } | orderBy:'-'" 
+          ng-include="'plan-list-element'" 
+          ng-class="plan.id == p.id ? 'active-plan' : ''" 
+          layout="row">
+      </li>
+    </ul>
+
+  </div>  
+
+  <!-- FOLDERS -->
+
+  <div ng-repeat='name in folders track by $index' ng-if="name">
+
+    <h4 class='md-subhead clickable no-highlight' ng-click="nav.folder[name] = !nav.folder[name]">
+      <span class='opener'>{{nav.folder[name] ? '&#9660;' : '&#9658;'}}</span>  
+      {{name}} {{state.loading_plans ? '... loading' : ''}}
+      <span ng-click="delete_folder(name)" 
+            ng-if="nav.folder[name]"
+            class="folder-delete-icon no-highlight pull-right">
+        &nbsp; &times;
+        <md-tooltip md-direction="right" md-delay="2500">Delete folder and mark all its plans as unsorted.</md-tooltip>
+      </span>
+      <span ng-include="'plan-move-button'" ng-if="nav.folder[name]"></span>
+    </h4>
+
+    <ul class='compact-list' ng-if="nav.folder[name]">
+      <li ng-repeat="p in plans | filter: { folder: name, status: '!planning' } | orderBy:'-'" 
+          ng-include="'plan-list-element'" 
+          ng-class="plan.id == p.id ? 'active-plan' : ''"
+          layout="row">
+      </li>
+    </ul>
+
+  </div>  
+
+
+<!-- USER ////////////////////////////////////////////////// -->
+
+<div ng-if="ready" layout-fill>
+
+  <% if current_user && current_user.is_admin %>
+
+    <hr>
+
+    <md-input-container layout-margin layout="column">
+      <md-select ng-model="state.selected_user_id" class="md-plain-select"
+                 md-on-close="select_user()"
+                 aria-label="User">
+        <md-option ng-repeat="user in users" 
+                   ng-value="user.id">
+          {{user.login}} ( {{user.name}} )
+        </md-option>
+      </md-select>
+    </md-input-container>
+
+  <% end %>    
+
+</div>

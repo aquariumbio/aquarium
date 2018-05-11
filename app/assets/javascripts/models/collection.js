@@ -48,3 +48,7 @@ AQ.Collection.record_methods.assign_first = function(fv) {
   return fv;
 
 }
+
+AQ.Collection.record_getters.is_collection = function() {
+  return true;
+}
