@@ -155,7 +155,7 @@ class OperationTypesController < ApplicationController
   def default
     redirect_to root_path, notice: "Administrative privileges required to access operation type definitions." unless current_user.is_admin    
     render json: { content: File.open("lib/tasks/default.rb", "r").read },
-           status: :unprocessable_entity
+           status: :ok
   end
 
   def random
@@ -453,11 +453,11 @@ class OperationTypesController < ApplicationController
         render json: OperationType.numbers(User.find(params[:user_id])),
                status: :ok
       else
-        render json: OperationType.numbers
+        render json: OperationType.numbers,
                status: :ok
       end
     else
-      render json: OperationType.numbers(current_user)
+      render json: OperationType.numbers(current_user),
              status: :ok
     end
 
