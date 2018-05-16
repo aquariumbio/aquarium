@@ -1,6 +1,7 @@
 .plans {
 
   .opeditbar {
+    width: calc(100vw - 400px);
     inner {
       display: block;
     }
@@ -23,7 +24,7 @@
   .editor-main {
 
     height: 100%;
-    width: calc(100vw - 320px);
+    width: calc(100vw - 400px);
     position: relative;
 
     .operation-editor {
@@ -89,7 +90,7 @@
         outline: 1pt solid green;
         margin: 50px;
         border: none;
-        width: calc(100vw - 320px);
+        width: calc(100vw - 400px);
         height: 250%;
         cursor: arrow;
         margin: 0px;
@@ -114,8 +115,6 @@
     fill: white;
     stroke: black;
     stroke-width: 1px;  
-/*    rx: 2px;
-    ry: 2px;    */   
     cursor: pointer;  
   }
 
@@ -125,14 +124,53 @@
     box-shadow: 10px 10px 5px yellow;
   }
 
+  .op-active {
+    fill: #eee;
+  }
+
   .op-name, .module-name, .module-io-index {
     font-size: 9pt;
     text-anchor: middle;
     cursor: pointer;
     pointer-events: none;
     user-select: none;
+    color: #555;
     -webkit-user-select: none;
     -moz-user-select: none;    
+  }
+
+  .op-status {
+    font-size: 7pt;
+    text-anchor: start;
+    cursor: pointer;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;     
+  }
+
+  .op-retry {
+    font-size: 11pt;
+    font-weight: bold;
+    text-anchor: end;
+    fill: black;
+    cursor: pointer;
+    /*pointer-events: none;*/
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;   
+  }
+
+  .op-status-error {
+    fill: red;
+  }
+
+  .op-status-pending {
+    fill: blue;
+  }
+
+  .op-status-running {
+    fill: green;
   }
 
   .module-io-index {
@@ -269,18 +307,9 @@
   }  
 
   .plan-name-input {
-    color: black;
-    display: inline-block;    
-    padding: 0;
-    margin: 0;
-    border: 1pt solid #eee !important;
-    height: 20px !important;
-    line-height: 20px;
-    -webkit-appearance:none;
-    -webkit-box-shadow: none !important;
-    -moz-box-shadow: none !important;
-    box-shadow: none !important;
-    background: transparent;
+    margin-top: 9px;
+    padding: 8px;
+    border-radius: 3px;
   }
 
   .planner-action {
@@ -327,13 +356,132 @@
       /*border-left: 5px solid white;*/
     }
     .active-plan {
-      background: #eee;
+      background: orange;
       /*border-color: #999;*/
     }
   }
 
   .no-inventory {
     color: orange;
+  }
+
+  .sidebar-button {
+    margin: 3px;
+    border: 1pt solid #aaa;
+    font-size: 9pt;
+    padding-left: 10px;
+    padding-right: 10px;
+    cursor: pointer;
+    &:hover {
+      background: #eee;
+    }
+  }
+
+  .sidebar-button-selected {
+    background: blue;
+    color: white;
+    &:hover {
+      background: blue;
+    }    
+  } 
+
+  .fv-pad {
+    padding: 2px;
+  }
+
+  .plan-list-element {
+    margin-right: 5px;
+    cursor: pointer; 
+    width: 100%;
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */       
+  } 
+
+  .folder-delete-icon {
+    color: #333;
+    font-size: 12pt;
+    margin-top: -1px;
+  }
+
+  .operation-info-heading {
+    margin-top: -16px;
+    padding: 8px 8px 4px 6px;
+    margin-bottom: 6px;
+    border-bottom: 1pt solid #eee;
+    background: #eee;
+  }
+
+  .text-box {
+    fill: white;
+    fill-opacity: 0.0;
+    stroke: none;
+    stroke-width: 1px; 
+  }
+
+  .text-box-selected {
+    stroke: #555;
+    stroke-dasharray: 2;
+  }
+
+  .text-box-anchor {
+    height: 7px;
+    width: 7px;
+    fill: white;
+    fill-opacity: 0.0;
+    &:hover {
+      fill: #555;
+    }
+  }    
+
+  .text-box-anchor-selected {
+    fill: #555;   
+    fill-opacity: 1.0;
+  }
+
+  .text-box-content {
+    margin: 1px; 
+    height: calc(100% - 2px);
+    overflow: hidden;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+    p {
+      line-height: 1.2;
+    }
+    table {
+      width: 100%;
+      td, th {
+        border: 1px solid #AAA;
+        padding: 4px;
+      }
+    }
+    hr {
+      color: black;
+      background-color: black;
+      height: 1px;
+    }
+  }
+
+  .text-box-editor {
+    width: 100%;
+    height: 150px;
+    margin-top: -16px;
+    margin-bottom: -24px;
+    border: none;
+    resize: none;
+  }
+
+  .plan-wait-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background-color: rgba(0,0,0,0.25);     
   }
 
 }

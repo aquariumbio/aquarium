@@ -1,7 +1,8 @@
 
 <!-- OUTPUTS -->
 
-<div ng-repeat="output in current_draggable.output track by $index">
+<div ng-if="plan.status == 'planning'"
+     ng-repeat="output in current_draggable.output track by $index">
 
   <div ng-if="output.origin.io"
        class="io-container">
@@ -20,7 +21,8 @@
 
 <!-- INPUTS -->
 
-<div ng-repeat="input in current_draggable.input track by $index">
+<div ng-if="plan.status == 'planning'"
+     ng-repeat="input in current_draggable.input track by $index">
 
   <div ng-if="input.destinations.length > 0 && input.destinations[0].io.field_type.ftype == 'sample'" 
        class="io-container">
@@ -47,4 +49,6 @@
   </div>  
 
 </div>
+
+
 

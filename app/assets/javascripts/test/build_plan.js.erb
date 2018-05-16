@@ -1,0 +1,193 @@
+<% if Rails.env.development? %>
+
+shark.use_succ_and_pred = function(plasmid, frag1, frag2) {
+
+  let plan = AQ.Plan.new_plan("Suc and Pred Test"),
+      assemble_type = AQ.OperationType.find_cached("Assemble Plasmid"),
+      assemble = AQ.Operation.new_operation(assemble_type, 0, 160, 160),
+      purify_type = AQ.OperationType.find_cached("Purify Gel Slice"),
+      pcr_type = AQ.OperationType.find_cached("Make PCR Fragment");
+
+  plan.add_operation(assemble);
+
+  assemble.array_add(assemble_type.input("Fragment"))
+
+  return Promise.resolve(plan)  
+    .then(plan => plan.assign(assemble.output("Assembled Plasmid"), plasmid))
+    .then(plan => plan.assign(assemble.input("Fragment", 0), frag1))
+    .then(plan => plan.assign(assemble.input("Fragment", 1), frag2))
+    .then(plan => plan.add_wire_from(assemble.inputs[0], assemble, { operation_type: purify_type, output: purify_type.outputs[0]}))
+    .then(plan => plan.add_wire_to(assemble.outputs[0], assemble, { operation_type: pcr_type, input: pcr_type.inputs[2]}))
+    .then(plan => plan.choose_items())    
+
+}
+
+shark.make_pcr_plan = function(sample) {
+
+  let plan =      AQ.Plan.new_plan("PCR Plan Construction Test"),
+      extract =   AQ.OperationType.find_cached("Extract Gel Slice").create(0, 160, 80),
+      run =       AQ.OperationType.find_cached("Run Gel").create(0, 160, 160),
+      pour =      AQ.OperationType.find_cached("Pour Gel").create(0, 360, 240),
+      pcr =       AQ.OperationType.find_cached("Make PCR Fragment").create(0, 160, 240),
+      rehydrate = AQ.OperationType.find_cached("Rehydrate Primer").create(0, 160, 320),
+      order =     AQ.OperationType.find_cached("Order Primer").create(0, 160, 400);
+
+  plan
+    .add_operation(extract)
+    .add_operation(run)
+    .add_operation(pour)
+    .add_operation(pcr)
+    .add_operation(rehydrate)
+    .add_operation(order);
+
+  plan.connect(order.output("Primer"),             order,     rehydrate.input("Primer"),   rehydrate);
+  plan.connect(rehydrate.output("Primer Aliquot"), rehydrate, pcr.input("Forward Primer"), pcr);
+  plan.connect(pcr.output("Fragment"),             pcr,       run.input("Fragment"),       run);  
+  plan.connect(pour.output("Lane"),                pour,      run.input("Gel"),            run);  
+  plan.connect(run.output("Fragment"),             run,       extract.input("Fragment"),   extract); 
+
+  pcr.set_aft(pcr.input("Template").field_type,pcr.input("Template").field_type.allowable_field_types[5]);
+
+  order.input("Urgent?").value = "yes";  
+
+  // Some tests
+  plan.equiv(rehydrate, rehydrate.input("Primer"), rehydrate, rehydrate.output("Primer Aliquot")).should.equal(true);
+  plan.equiv(pcr, pcr.output("Fragment"), rehydrate, rehydrate.output("Primer Aliquot")).should.equal(false);
+  plan.equiv(run, run.output("Fragment"), extract, extract.input("Fragment")).should.equal(true);
+
+  return Promise
+     .resolve(plan)
+     .then(plan => plan.assign(extract.output("Fragment"), sample))
+     .then(plan => plan.choose_items());
+
+}
+
+shark.make_transform_plan = function() {
+
+  let plan =      AQ.Plan.new_plan("PCR Collection Test"),
+      transform = AQ.OperationType.find_cached("Transform Cells").create(0, 160, 80),
+      input1 = transform.input("Plasmid"),
+      input2 = transform.input("Comp Cells");
+
+  plan.add_operation(transform);
+
+  transform.set_aft(
+    input1.field_type,
+    input1.field_type.allowable_field_types[2]);
+
+  return Promise.resolve(plan)
+
+}
+
+shark.aq_setup = function() {
+
+  AQ.snap = 16;
+
+  return AQ.OperationType.all_fast(true)
+    .then(operation_types => AQ.operation_types = operation_types)
+    .then(AQ.User.current)
+    .then(user => shark.current_user = user)
+    .then(AQ.get_sample_names)  
+
+}
+
+function wait(t, plan) {
+  return new Promise(function(resolve,reject) {
+    setTimeout(() => resolve(plan), t);
+  });
+}
+
+describe('Plan_Creation', function() {
+
+  it("Should get field types with samples", function(done) {
+
+    AQ.Sample.find_by_identifier('4927: ADF3 right')
+      .then(sample => {
+        sample.sample_type.should.have.property('field_types');
+        done();
+      })
+
+  }).async();
+
+  it("should use successors and predecessors", function(done) {
+
+    shark.aq_setup().then(() => {
+
+      Promise.all([
+          AQ.Sample.find_by_name("pGFP"),
+          AQ.Sample.find_by_name("ADF3 right"),
+          AQ.Sample.find_by_name("ADF3 left")
+        ])
+        .then(samples => shark.use_succ_and_pred(samples[0], samples[1], samples[2]))
+        .then(plan => plan.save(shark.current_user))
+        .then(plan => {
+          plan.id.should.not.equal(null);
+          plan.record_type.should.be.equal("Plan");
+          plan.operations.length.should.be.equal(3);
+          plan.wires.length.should.be.equal(2);
+          plan.valid().should.be.equal(false);
+          plan.check_operations();
+          return plan;
+        })
+        .then(plan => plan.destroy())
+        .then(plan => done())
+        .catch(done);
+
+    });
+
+  }).async();
+
+  it("should make a pcr plan", function(done) {
+
+    shark.aq_setup()
+        .then(() => AQ.Sample.find_by_name("ADF3 left"))
+        .then(sample => shark.make_pcr_plan(sample))
+        .then(plan => plan.save(shark.current_user))
+        .then(plan => plan.check_operations())
+        .then(plan => plan.choose_items())
+        .then(plan => {
+           let rp = plan.operation("Make PCR Fragment").input("Reverse Primer");
+           rp.should.have.property("items");
+           rp.assign_item(rp.items[1]);
+           return plan;
+        })
+        .then(plan => plan.save(shark.current_user))
+        .then(plan => plan.choose_items())       
+        .then(plan => {
+          let rp = plan.operation("Make PCR Fragment").input("Reverse Primer");
+          rp.child_item_id.should.be.equal(rp.items[1].id);
+          return plan;
+        })
+        .then(plan => plan.destroy())
+        .then(plan => done())
+        .catch(done);
+
+  }).async();
+
+  it("should choose collection parts correctly", function(done) {
+
+    shark.aq_setup()
+        .then(sample => shark.make_transform_plan())
+        .then(plan => {
+          return AQ.Sample.find_by_name("pGFP")
+            .then(sample => plan.assign(plan.operation("Transform Cells").input("Plasmid"), sample))
+            .then(() => plan)
+        })
+        .then(plan => {
+          return AQ.Sample.find_by_name("DH5alpha")
+            .then(sample => plan.assign(plan.operation("Transform Cells").input("Comp Cells"), sample))
+            .then(() => plan)
+        })        
+        .then(plan => plan.choose_items())
+        .then(plan => plan.save(shark.current_user))
+        .then(plan => plan.check_operations())
+        .then(plan => plan.show_assignments())
+        .then(plan => plan.destroy())
+        .then(plan => done())
+        .catch(done);
+
+  }).async();
+
+});
+
+<% end %>

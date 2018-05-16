@@ -36,7 +36,7 @@ class PlansController < ApplicationController
       @plan.reload
       render json: Serialize.serialize(@plan)
     else
-      render json: { errors: @plan.errors }, status: 422
+      render json: { errors: @plan.errors }, status: :unprocessable_entity
     end
 
   end
@@ -62,7 +62,7 @@ class PlansController < ApplicationController
     if @plan.errors.empty?
       render json: Serialize.serialize(@plan)
     else
-      render json: { errors: @plan.errors }, status: 422
+      render json: { errors: @plan.errors }, status: :unprocessable_entity
     end
 
   end
@@ -72,7 +72,14 @@ class PlansController < ApplicationController
       format.html { 
         redirect_to plans_url(params)
       }
-      format.json { render json: Serialize.serialize(Plan.find(params[:id])) }
+      format.json { 
+        p = Plan.find_by_id(params[:id])
+        if p 
+          render json: Serialize.serialize(p)
+        else
+          render json: { errors: "Could not find plan with id #{params[:id]}" }, status: 404
+        end
+      }
     end           
   end
 
@@ -107,7 +114,7 @@ class PlansController < ApplicationController
     if planner.start
       render json: { result: "ok" }
     else
-      render json: planner.errors, status: 422
+      render json: planner.errors, status: :unprocessable_entity
     end
 
   end

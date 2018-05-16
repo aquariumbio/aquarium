@@ -151,10 +151,9 @@
            ng-include="content_type(line)" 
            track by $index></div> 
 
-      <div ng-if="step.type == 'complete'" ng-include="'complete'"></div>  
-      <div ng-if="step.type == 'error'" ng-include="'error'"></div>   
-      <div ng-if="step.type == 'aborted'" ng-include="'aborted'"></div>              
-
+      <div ng-if="step.type == 'complete'" ng-include="'complete'"></div>
+      <div ng-if="step.type == 'error'"    ng-include="'error'"></div>
+      <div ng-if="step.type == 'aborted'"  ng-include="'aborted'"></div>
 
       <% if current_user && current_user.is_admin %>
         <div class='pull-right'>

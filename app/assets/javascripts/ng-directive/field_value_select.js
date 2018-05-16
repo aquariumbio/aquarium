@@ -25,38 +25,14 @@
 
           var sid = ui.item.value;
 
-          op.assign_sample(fv, sid);
-          op.instantiate(plan,fv,sid);
+          // console.log("autocomp " + sid)
 
-          if ( ft.array ) {
-
-            fv.sample_identifier = ui.item.value;
-
-            var aft = op.form[fv.role][fv.name].aft;
-            if ( aft.object_type_id ) {
-              fv.clear_item();
-              fv.find_items(sid);
-            }               
-
-          } else {
-
-            route[ft.routing] = ui.item.value; // Updates other sample ids with same routing
-
-            op.each_field((field_type,field_value) => {
-              if ( field_type.routing == fv.routing && !field_type.array ) {
-                var aft = op.form[field_value.role][field_value.name].aft;
-                if ( aft && aft.object_type_id ) {
-                  field_value.clear_item();
-                  field_value.find_items(sid);
-                }               
-              }
-            });
-
-          }
-
-          plan.propagate(op,fv,ui.item.value);       
-
-          $scope.$apply();
+          AQ.Sample
+            .find_by_identifier(sid)
+            .then(sample => plan.assign(fv, sample))
+            .then(plan => plan.choose_items())
+            .then(plan => fv.find_items())
+            .then(plan => $scope.$apply())
 
         }  
 
@@ -73,9 +49,8 @@
               aft = op.form[ft.role][fv.name].aft;
 
           if ( aft && aft.sample_type && !AQ.sample_names_for(aft.sample_type.name).includes(sid) ) {
-            console.log("Invalid sample name: " + sid)
+            console.log("Invalid sample name: '" + sid + "'")
             op.assign_sample(fv, null);
-            op.instantiate(plan,fv,null);
             fv.clear_item(); 
             fv.items=[];
             $scope.$apply();

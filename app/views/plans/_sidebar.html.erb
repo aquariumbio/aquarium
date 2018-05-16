@@ -1,0 +1,82 @@
+<!-- NAVIGATION BUTTONS ////////////////////////////////////////////////////// -->
+
+<div layout="row" layout-align="space-between center" style="margin-top: 14px; margin-bottom: 14px">
+  <div ng-class="sidebar_button_class('plans')"     ng-click="nav.sidebar = 'plans'">Plans</div>
+  <div ng-class="sidebar_button_class('design')"    ng-click="nav.sidebar = 'design'">Design</div>
+  <div ng-class="sidebar_button_class('node')"      ng-click="nav.sidebar = 'node'">Node</div>
+  <div ng-class="sidebar_button_class('io')"        ng-click="nav.sidebar = 'io'">I/O</div>
+
+  <div ng-class="sidebar_button_class('launch')"    
+       ng-click="nav.sidebar = 'launch'; plan.id && plan.valid() ? launch() : ''"
+       ng-if="plan.status=='planning'">
+    Launch
+  </div>
+  <div ng-class="sidebar_button_class('launch')"
+        ng-if="plan && plan.status!='planning'"
+        ng-click="nav.sidebar = 'launch'">
+    <span ng-if="plan.has_new_ops">Launch New</span>
+    <span ng-if="!plan.has_new_ops">Plan Info</span>    
+  </div>
+</div>
+
+<!-- MESSAGES //////////////////////////////////////////////////////////////// -->
+
+<h1 class="md-title" ng-if="current_user.id != <%= current_user.id %>">Acting as 
+  <span style="background: yellow">{{current_user.login}}</span>
+</h1>
+
+<div ng-if="state.message" class="message">
+  <p>{{state.message}}</p>
+  <div class="dismiss clickable" ng-click="state.message = null">&times;</div>
+</div>
+
+<ul ng-if="plan.errors.length > 0">
+  <li ng-repeat="e in plan.errors">{{e}}</li>
+</ul>
+
+<!-- ELEMENTS //////////////////////////////////////////////////////////////// -->
+
+<div ng-if="nav.sidebar == 'plans'">
+  <%= render partial: 'plans' %>
+</div>
+
+<div ng-if="nav.sidebar == 'design'">
+  <%= render partial: "types_and_templates" %>
+</div>
+
+<div ng-if="nav.sidebar == 'node'">
+
+  <div ng-if="current_op && !current_fv" ng-include="'operation_info'"></div>
+
+  <div ng-if="current_draggable.record_type == 'Module'" ng-include="'module_info'"></div>   
+
+  <div ng-if="!current_op && current_draggable.record_type != 'Module'" layout-padding>
+    No Operation or Module Selected
+  </div>
+
+</div>
+
+<div ng-if="nav.sidebar == 'io'">
+  <div ng-if="current_fv" ng-include="'field_value_editor'"></div> 
+  <div ng-if="!current_fv" layout-padding>
+    No I/O Pin Selected
+  </div>     
+</div>
+
+<div ng-if="nav.sidebar == 'launch'">
+  <div ng-if="state.submitted_plan" class="message">
+    <p>Successfully submitted or extended plan <a href="/launcher?plan_id={{state.submitted_plan.id}}">{{state.submitted_plan.id}}</a>.</p>
+    <div class="dismiss clickable" ng-click="state.submitted_plan = null">&times;</div>
+  </div>  
+  <div ng-if="plan.id && plan.valid() && nav.sidebar" ng-include="'launch_plan'"></div>
+  <div ng-if="!plan.id" layout-padding>This plan cannot be launched because it has not been saved.</div>
+  <div ng-if="plan.id && !plan.valid()" layout-padding>
+    This plan cannot be launched because it is not valid. All I/O should be defined (green), and all wires should be consistent (black).
+    Note that Aquarium does not currently check the validity of wires to and from modules, so they may appear black even if their source
+    and destination samples do not match. 
+  </div>
+
+</div>
+
+
+

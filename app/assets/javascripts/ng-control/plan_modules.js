@@ -7,15 +7,6 @@ AQ.Plan.record_methods.open_module = function(module) {
   this.current_module = module;
 }
 
-AQ.Plan.record_getters.current_module = function() {
-
-  plan = this;
-  delete plan.current_module;
-  plan.current_module = plan.create_base_module();
-  return plan.current_module;
-
-}
-
 AQ.Plan.record_methods.visible = function(obj) {
 
   var plan = this;
@@ -61,6 +52,8 @@ AQ.Plan.record_methods.create_module = function() {
       selected_modules = aq.where(current.children, child => child.multiselect),  
       wires_to_be_moved = [];                                   
       x = 0, y = 0, n = 0;
+
+      console.log(plan)
 
   aq.each(plan.base_module.all_wires, w => console.log("   " + w.to_s));
 

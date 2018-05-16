@@ -67,7 +67,7 @@ AQ.Plan.record_methods.wires_from= function(fv) {
 }
 
 AQ.Operation.record_methods.is_output = function(fv) {
-  return this.outputs().includes(fv);
+  return this.outputs.includes(fv);
 }
 
 AQ.Plan.record_methods.reachable_aux = function(op,a,b) { // excpects that a is an input of op and b is an output of some possibly different op
@@ -97,7 +97,7 @@ AQ.Plan.record_methods.reachable_aux = function(op,a,b) { // excpects that a is 
       a._marked = true;
 
       // for each output o of the op containing a
-      aq.each(op.outputs(), ofv => {
+      aq.each(op.outputs, ofv => {
         // for each wire ofv => x
         aq.each(plan.wires_from(ofv), wire => {
           result = result || plan.reachable_aux(wire.to_op,wire.to,b);
