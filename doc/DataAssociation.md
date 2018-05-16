@@ -22,17 +22,23 @@ Using an `Item` reference `item` as an example, the following methods are availa
 
 * `item.associations`:
   Returns `HashWithIndifferentAccess` `h` where `h[key]` is the value of the datum for the key.
-  The value can be any legal combination of hashes, arrays, strings, or numbers. The key may be a symbol or a string. May be chained.
+  The value can be any legal combination of hashes, arrays, strings, or numbers.
+  The key may be a symbol or a string.
+  May be chained.
 
-* `item.get key`: Returns the value of the data assocated with given key. May be chained.
+* `item.get key`: Returns the value of the data assocated with given key.
+  May be chained.
 
-* `upload key`: Returns the uploaded data, if any, associated with the given key. May be chained.
+* `upload key`: Returns the uploaded data, if any, associated with the given key.
+  May be chained.
 
-* `item.notes`: The key `"notes"` (or `:notes`) is reserved for a text valued datum holding a user's textual notes on the object `item`. For example, in the sample browser UI, the user may add notes by finding the item and clicking on the notes icon.
+* `item.notes`: The key `"notes"` (or `:notes`) is reserved for a text valued datum holding a user's textual notes on the object `item`.
+  For example, in the sample browser UI, the user may add notes by finding the item and clicking on the notes icon.
 
 ### Example
 
-As an example, suppose `item` is an `Item` and `upload` is an `Upload`. Then one might do
+As an example, suppose `item` is an `Item` and `upload` is an `Upload`.
+Then one might do
 
 ```ruby
 item.associate(:row, 12).associate(:col, 14).associate(:image,{},u)

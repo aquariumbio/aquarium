@@ -1,12 +1,15 @@
 # The Aquarium Operation Interface
 
-Operations are created by the user in the Aquarium planner and then batched together by the lab manager in the Aquarium manager to be sent to a protocol. From within a protocol, it is easy to get a list of the operations that were sent to your protocol with
+Operations are created by the user in the Aquarium planner and then batched together by the lab manager in the Aquarium manager to be sent to a protocol.
+From within a protocol, it is easy to get a list of the operations that were sent to your protocol with
 
 ```ruby
     operations
 ```
 
-which returns something like an array of operations. Actually, it is a Rails [ActiveRecord::Relation](http://api.rubyonrails.org/classes/ActiveRecord/Relation.html) object extended with a number of Aquarium specific methods, discussed here. Just remember that in addition to what you see here, there are also all the standard array methods (like **`each`**, **`collect`**, **`select`**, **`reject`**, ...) and of course the Rails operations (which you probably won't need).
+which returns something like an array of operations.
+Actually, it is a Rails [ActiveRecord::Relation](http://api.rubyonrails.org/classes/ActiveRecord/Relation.html) object extended with a number of Aquarium specific methods, discussed here.
+Just remember that in addition to what you see here, there are also all the standard array methods (like **`each`**, **`collect`**, **`select`**, **`reject`**, ...) and of course the Rails operations (which you probably won't need).
 
 ## Iterating Through Operatons
 
@@ -18,7 +21,8 @@ operations.each do |op|
 end
 ```
 
-You can also specify whether to iterate over running or errored operations, and use select, reject, and collect operations. For example, to collect all running operations whose "Template" input has a concentration greater than 100 nM, do the following.
+You can also specify whether to iterate over running or errored operations, and use select, reject, and collect operations.
+For example, to collect all running operations whose "Template" input has a concentration greater than 100 nM, do the following.
 
 ```ruby
 my_ops = operations.running.select do |op|
@@ -46,15 +50,21 @@ end
 
 ## Checking and Changing Operation Status
 
-Each operation **`op`** has a status, **`op.status`**. When a protocol first starts, the status should be "running". When the protocol completes, Aquarium automatically sets the status to "done". If for some reason an operation has a problem, your protocol can set the status to "error" as in
+Each operation **`op`** has a status, **`op.status`**.
+When a protocol first starts, the status should be "running".
+When the protocol completes, Aquarium automatically sets the status to "done".
+If for some reason an operation has a problem, your protocol can set the status to "error" as in
 
 ```ruby
 op.change_status "error"
 ```
 
-which sets the status and saves the operation. Subsequent calls to **`operations`** can be filtered by doing **`operations.running`** or **`operations.errored`**. Note that table operations **`operations.start_table...`** described below default to running operations.
+which sets the status and saves the operation.
+Subsequent calls to **`operations`** can be filtered by doing **`operations.running`** or **`operations.errored`**.
+Note that table operations **`operations.start_table...`** described below default to running operations.
 
-It is common to provide the owner of the operation some information about why you are setting their operation's status to "error". You can do this with something like
+It is common to provide the owner of the operation some information about why you are setting their operation's status to "error".
+You can do this with something like
 
 ```ruby
   op.change_status "error"
@@ -101,12 +111,16 @@ The methods retrieve, make, and store are described next.
 
 **`retrieve`**
 
-This method looks through all of the sample inputs to all of the operations and attempts to find inventory items for them. **Note:** If retrieve is unable to find all required items for any given operation, then that operation's status is set to "error" and is skipped (by default) in subsequent operation list methods. The retrieve method then calls `take` (see [Basic Krill](md-viewer?doc=Krill)) on the list of items. The retrieve method takes the following options (defaults listed);
+This method looks through all of the sample inputs to all of the operations and attempts to find inventory items for them. **Note:** If retrieve is unable to find all required items for any given operation, then that operation's status is set to "error" and is skipped (by default) in subsequent operation list methods.
+The retrieve method then calls `take` (see [Basic Krill](md-viewer?doc=Krill)) on the list of items.
+The retrieve method takes the following options (defaults listed);
 
 * interactive:true => Whether the to show the user where to find the items
-* method:"boxes" => Show the user the freezer box locations. Any value besides "boxes" simply makes the method list locations.
+* method:"boxes" => Show the user the freezer box locations.
+Any value besides "boxes" simply makes the method list locations.
 
-The retrieve method also takes an optional block, which should contain `show` methods, such as `note` or `warning`. For example,
+The retrieve method also takes an optional block, which should contain `show` methods, such as `note` or `warning`.
+For example,
 
 ```ruby
 operations.retrieve(method:nil) {
@@ -116,7 +130,10 @@ operations.retrieve(method:nil) {
 
 **`make`**
 
-This method creates inventory items and/or collections for the output associated with the operations. Outputs can either be stand alone items or parts of collections. The I/O definition page for an operation type has a checkbox labeled **`part?`** for whether an output is a part. For such outputs, **`make`** creates a new collection and assigns output samples to spaces in that collection.
+This method creates inventory items and/or collections for the output associated with the operations.
+Outputs can either be stand alone items or parts of collections.
+The I/O definition page for an operation type has a checkbox labeled **`part?`** for whether an output is a part.
+For such outputs, **`make`** creates a new collection and assigns output samples to spaces in that collection.
 
 Once **`make`** has been run, an operation's inventory can be found via the **`outputs`** method, as in
 
@@ -153,7 +170,10 @@ operations.each do |op|
 end
 ```
 
-If an output of an operation is a part, then **`make`** will create new collections to put the outputs in. For example, say 26 operations are being processed and they have an output part that should be put into a 3x4 collection. Then three collections will be made, and the outputs of the operations will fill up the first two collections, and two wells of the third collection. After running **`make`**, you can retrieve a hash of the collections created with
+If an output of an operation is a part, then **`make`** will create new collections to put the outputs in.
+For example, say 26 operations are being processed and they have an output part that should be put into a 3x4 collection.
+Then three collections will be made, and the outputs of the operations will fill up the first two collections, and two wells of the third collection.
+After running **`make`**, you can retrieve a hash of the collections created with
 
 ```ruby
 operations.output_collections
@@ -162,7 +182,11 @@ operations.output_collections
 which is indexed by the name of the output.
 For example, `operations.output_collections["Fragment"]` would give a list of collections into which the "Fragment"` outputs were placed.
 
-Sometimes you need to make more parts of a collection than you have operations. For example, if you need to reserve some lanes of a gel for ladder. In that case, you can insert a `VirtualOperation` to your operations list, and then make. For example, Lets say you have n 2x6 gels and want to not associate any operation with lanes 0,0 and 1,0. Then you could do
+Sometimes you need to make more parts of a collection than you have operations.
+For example, if you need to reserve some lanes of a gel for ladder.
+In that case, you can insert a `VirtualOperation` to your operations list, and then make.
+For example, Lets say you have n 2x6 gels and want to not associate any operation with lanes 0,0 and 1,0.
+Then you could do
 
 ```ruby
 (0...n/6).each do |m|
@@ -172,7 +196,8 @@ operations.make
 ```
 
 In this case, make will skip parts of the output collections associated with the new virtual operations.
-If you use this feature, make sure to insert the virtual operations just before you call make, as other methods that act on the operations may be affected. If you need to use the operations list after inserting, you can use `op.virtual?` to check whether an operation is virtual.
+If you use this feature, make sure to insert the virtual operations just before you call make, as other methods that act on the operations may be affected.
+If you need to use the operations list after inserting, you can use `op.virtual?` to check whether an operation is virtual.
 
 Note that you an also make individual operations, instead of the whole list.
 For example, given an operation `op`, you can call
@@ -189,11 +214,14 @@ op.mark_part(c,2,3)
 
 **`store`**
 
-This method produces instructions for the technician to follow to return inputs and or outputs of a protocol to their proper place in the lab (e.g. a freezer). You can specify `interactive: true` and `method: "boxes"` as with `retrieve`. You can also specify whether to store the input inventory with `io: "input"` (the default) or the output inventory with `io: "output"`.
+This method produces instructions for the technician to follow to return inputs and or outputs of a protocol to their proper place in the lab (e.g. a freezer).
+You can specify `interactive: true` and `method: "boxes"` as with `retrieve`.
+You can also specify whether to store the input inventory with `io: "input"` (the default) or the output inventory with `io: "output"`.
 
 ## Creating Tables
 
-The `operations` list makes it easy to construct tables, with a number of methods that operate on or return [`Table`](md-viewer?doc=Tables) objects. For example, the following code builds a table that includes item ids, collections, rows, columns, and custom columns.
+The `operations` list makes it easy to construct tables, with a number of methods that operate on or return [`Table`](md-viewer?doc=Tables) objects.
+For example, the following code builds a table that includes item ids, collections, rows, columns, and custom columns.
 
 ```ruby
 operations.retrieve
@@ -255,7 +283,8 @@ end
 ```
 
 After this show is complete, this data can be retrieved from an operation op via `op.temporary[:x]`.
-You can of course use any symbol, not just `:x`. To show a table of operation data, do
+You can of course use any symbol, not just `:x`.
+To show a table of operation data, do
 
 ```ruby
 show do
@@ -313,19 +342,23 @@ op.input("X").val
 
 The `val` method will return a value of the defined type for the parameter.
 
-Paramters can be numbers, strings, or JSON. If the parameter is of type JSON then
+Paramters can be numbers, strings, or JSON.
+If the parameter is of type JSON then
 
 ```ruby
   op.input(“x”).val
 ```
 
-will return a Ruby object with the same structure as the JSON, and with symbols (not strings) for keys. Note that if the JSON does not parse, you will get an object of the form.
+will return a Ruby object with the same structure as the JSON, and with symbols (not strings) for keys.
+Note that if the JSON does not parse, you will get an object of the form.
 
 { error: “JSON parse error description”, original_value: “whatever you put as the input” }.
 
 ## Adding Inputs After the Protocol has Started
 
-Note that for the items associated with an operatioj to be tracked, the have to be inputs or outputs. Sometimes, however, you don't know what items a protocol will use ahead of time, or do not need the user to specify them in the planner. In this case, you can add an input online using op.add_input as in the following code:
+Note that for the items associated with an operatioj to be tracked, the have to be inputs or outputs.
+Sometimes, however, you don't know what items a protocol will use ahead of time, or do not need the user to specify them in the planner.
+In this case, you can add an input online using op.add_input as in the following code:
 
 ```ruby
 # This is a default, one-size-fits all protocol that shows how you can
@@ -354,15 +387,22 @@ class Protocol
 end
 ```
 
-Here, we know we want the protocol to always use the specified primer (a contrived example), so it is hard coded. But which item is used is determied by `op.add_input`. The chosen item is the return value and should be checked for non-`nil`, meaning the method found an item.
+Here, we know we want the protocol to always use the specified primer (a contrived example), so it is hard coded.
+But which item is used is determied by `op.add_input`.
+The chosen item is the return value and should be checked for non-`nil`, meaning the method found an item.
 
 ## Data Associations
 
-You can associate data with operations, or with the items associated with operations. These will show up in different places when the user goes looking for them. For example, if you associate data with an operation, the user will find it when looking through an executed plan. If you associate the data with an item, then the suer will find it when they go looking for their items in the sample browser.
+You can associate data with operations, or with the items associated with operations.
+These will show up in different places when the user goes looking for them.
+For example, if you associate data with an operation, the user will find it when looking through an executed plan.
+If you associate the data with an item, then the suer will find it when they go looking for their items in the sample browser.
 
-To work with data associations for an operation, you can use the [`Data Associations`](md-viewer?doc=DataAssociation) methods. Read that documentation and assume that **p** in the first paragraph is an operation, such as might be found in the middle of an `operations.each` block.
+To work with data associations for an operation, you can use the [`Data Associations`](md-viewer?doc=DataAssociation) methods.
+Read that documentation and assume that **p** in the first paragraph is an operation, such as might be found in the middle of an `operations.each` block.
 
-To work with data associations for inputs and outputs of operations, Aquarium provides the convenience routines `input_data`, `output_data`, `set_input_data`, `set_output_data`. For example,
+To work with data associations for inputs and outputs of operations, Aquarium provides the convenience routines `input_data`, `output_data`, `set_input_data`, `set_output_data`.
+For example,
 
 ```ruby
 op.set_input_data "Plasmid", :concentration, 123.4 # sets the concentration
@@ -371,7 +411,8 @@ c = op.output_data "Fragment", :concentraton       # returns the concentration o
                                                    # the output plasmid
 ```
 
-Here is a more complete example. Assume that the operation type associated with this protocol has an input called `"Plasmid"`.
+Here is a more complete example.
+Assume that the operation type associated with this protocol has an input called `"Plasmid"`.
 Then it is possible to ask the user to input concentrations for each plasmid, and display what they entered in a table.
 
 ```ruby
@@ -416,4 +457,5 @@ You can send email to users using User.send_email as in the following example.
 operation.user.send_email "Hello from Krill", "<p>This is a message about operation #{operation.id}.</p>" unless debug
 ```
 
-Emails will be sent in a background thread. You send no more than
+Emails will be sent in a background thread.
+You send no more than

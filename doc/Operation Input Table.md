@@ -8,7 +8,8 @@ Create a table proc that validates numbered inputs between [1,10] initialized wi
         .custom_input(:new_input, heading: "Tech input", type: "number") { |op| op.temporary[:new_input] || rand(20) }
         .validate(:new_input) { |op, val| val.between?(1,10) }
         .validation_message(:new_input) { |op, key, value|
-          "The value #{value} you entered for for operation #{op.id} for key #{key} is incorrect. It must be between [1,10]!"
+          "The value #{value} you entered for for operation #{op.id} for key #{key} is incorrect.
+It must be between [1,10]!"
         }
         .end_table
      }

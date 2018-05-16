@@ -8,7 +8,8 @@ Depending on your circumstances, it may be easier for you to use the [Dockerized
 
 * [Ruby on rails](http://rubyonrails.org/)
 * [git](https://github.com/)
-* A Unix-like environment, e.g. Mac OSX or Linux
+* A Unix-like environment, e.g.
+Mac OSX or Linux
 * A MySQL server (optional for a full, production level installation)
 
 ## Get the code
@@ -84,7 +85,8 @@ Run
 RAILS_ENV=development rails s
 ```
 
-to start aquarium. Then go do `http://localhost:3000/` and see if it works!
+to start aquarium.
+Then go do `http://localhost:3000/` and see if it works!
 
 This procedure starts a *development* mode version using the local SQL database in the db directory.
 This could be enough for some labs.

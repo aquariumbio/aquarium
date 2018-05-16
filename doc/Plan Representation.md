@@ -1,9 +1,11 @@
 # Plan Representation
 
-Plans are represented differently in the front end and the back end. Mainly,
+Plans are represented differently in the front end and the back end.
+Mainly,
 the front end adds fields that are useful for manipulating the user interface,
 while the back end only represents those fields that are stored in the
-database. Thus, when sending plans back and forth between the two ends,
+database.
+Thus, when sending plans back and forth between the two ends,
 the json representing the plans needs to be marshalled and serialized on
 each side.
 
