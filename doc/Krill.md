@@ -22,7 +22,8 @@ class Protocol
 end
 ```
 
-**THIS NEEDS DETAILS ON HOW TO USE DEVELOPER**
+**[TODO: THIS NEEDS DETAILS ON HOW TO USE DEVELOPER]**
+
 Save this protocol and run it from within the Aquarium Developer Test tab.
 It should display output that says "Hello World!".
 If the protocol were run by a user, they would see a "Next" button.

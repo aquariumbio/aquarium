@@ -8,8 +8,7 @@ Depending on your circumstances, it may be easier for you to use the [Dockerized
 
 * [Ruby on rails](http://rubyonrails.org/)
 * [git](https://github.com/)
-* A Unix-like environment, e.g.
-Mac OSX or Linux
+* A Unix-like environment, e.g. Mac OSX or Linux
 * A MySQL server (optional for a full, production level installation)
 
 ## Get the code
@@ -48,7 +47,7 @@ cd ..  # aquarium/config
 cp database_template.yml database.yml
 ```
 
-This is sufficient if you are running Aquarium with the default database, but,otherwise, you need to set up a MySQL server and associate a user name and password.
+This is sufficient if you are running Aquarium with the default database, but, otherwise, you need to set up a MySQL server and associate a user name and password.
 Note that you can set different database servers for different modes.
 (The `test` mode for Aquarium development testing should use the `sqlite3` server.)
 
