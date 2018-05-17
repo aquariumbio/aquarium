@@ -1,4 +1,4 @@
---output-dir ./doc/api
+--output-dir ./docs/api
 --no-private
 --quiet
 

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Module: ObjectTypesHelper
+  
+    &mdash; Aquarium Documentation
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "ObjectTypesHelper";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index (O)</a> &raquo;
+    
+    
+    <span class="title">ObjectTypesHelper</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Module: ObjectTypesHelper
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>app/helpers/object_types_helper.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+  
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="ObjectTypesHelper/CollectionHandler.html" title="ObjectTypesHelper::CollectionHandler (class)">CollectionHandler</a></span>, <span class='object_link'><a href="ObjectTypesHelper/Handler.html" title="ObjectTypesHelper::Handler (class)">Handler</a></span>, <span class='object_link'><a href="ObjectTypesHelper/SampleContainerHandler.html" title="ObjectTypesHelper::SampleContainerHandler (class)">SampleContainerHandler</a></span>
+    
+  
+</p>
+
+
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#make_handler-instance_method" title="#make_handler (instance method)">#<strong>make_handler</strong>(ot)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="make_handler-instance_method">
+  
+    #<strong>make_handler</strong>(ot)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/helpers/object_types_helper.rb', line 3</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_make_handler'>make_handler</span> <span class='id identifier rubyid_ot'>ot</span>
+
+  <span class='kw'>case</span> <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_handler'>handler</span>
+
+    <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>collection</span><span class='tstring_end'>&#39;</span></span>
+      <span class='const'><span class='object_link'><a href="ObjectTypesHelper/CollectionHandler.html" title="ObjectTypesHelper::CollectionHandler (class)">CollectionHandler</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="ObjectTypesHelper/CollectionHandler.html#initialize-instance_method" title="ObjectTypesHelper::CollectionHandler#initialize (method)">new</a></span></span> <span class='id identifier rubyid_ot'>ot</span>
+    <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sample_container</span><span class='tstring_end'>&#39;</span></span>
+      <span class='const'><span class='object_link'><a href="ObjectTypesHelper/SampleContainerHandler.html" title="ObjectTypesHelper::SampleContainerHandler (class)">SampleContainerHandler</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="ObjectTypesHelper/SampleContainerHandler.html#initialize-instance_method" title="ObjectTypesHelper::SampleContainerHandler#initialize (method)">new</a></span></span> <span class='id identifier rubyid_ot'>ot</span>
+    <span class='kw'>else</span>
+      <span class='const'><span class='object_link'><a href="ObjectTypesHelper/Handler.html" title="ObjectTypesHelper::Handler (class)">Handler</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="ObjectTypesHelper/Handler.html#initialize-instance_method" title="ObjectTypesHelper::Handler#initialize (method)">new</a></span></span> <span class='id identifier rubyid_ot'>ot</span>
+  <span class='kw'>end</span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Mon Oct  9 13:38:40 2017 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.9 (ruby-2.2.0).
+</div>
+
+    </div>
+  </body>
+</html>
