@@ -11,7 +11,7 @@ class TextBoxAnchor {
 class TextBox {
 
   constructor() {
-    this.markdown = "Put any **markdown** code here.";
+    this.markdown = "Put **markdown** here.";
     if ( !this.constructor.next_position ||
          this.constructor.next_position > 300 ) {
       this.constructor.next_position = 0;

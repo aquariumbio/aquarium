@@ -89,7 +89,7 @@
 
       if ( $scope.plan.name === "Untitled Plan" ) {
         $scope.plan.name = op.operation_type.name;
-        $scope.state.message = "Changed name of untitled plan to " + op.operation_type.name;
+        $scope.state.messages.push("Changed name of untitled plan to " + op.operation_type.name);
       }
 
     };
@@ -358,6 +358,7 @@
     };
 
     function load_aux(plan) {
+      $scope.state.messages = [];
       AQ.Plan.load(plan.id).then(p => {
         $scope.plan = p;
         $scope.plan.find_items();
@@ -572,7 +573,11 @@
     $scope.allowable_field_type_checked = function(aft) {
 
       if ( $scope.current_op ) {
-        return $scope.current_op.form[$scope.current_fv.role][$scope.current_fv.name].aft_id == aft.id;
+        if ( !$scope.current_op.form[$scope.current_fv.role][$scope.current_fv.name] ) {
+          return null; // should probably report an error here. This means the container name can't be found.
+        } else {
+          return $scope.current_op.form[$scope.current_fv.role][$scope.current_fv.name].aft_id == aft.id;
+        }
       } else if ( $scope.current_io.origin ) {
         return $scope.current_io.origin.op.form[$scope.current_fv.role][$scope.current_fv.name].aft_id == aft.id;
       } else {
@@ -604,7 +609,6 @@
     $(function() {
       $scope.help_markdown = $sce.trustAsHtml(window.markdownit().render($('#help-markdown').text())); 
     });
-
 
   }]);
 
@@ -672,4 +676,12 @@
 
   });   
  
-})();                    
+})();         
+
+
+function add_designer_message(msg) {
+  let el = angular.element($('#planCtrl'));
+  if (el) {
+    el.scope().state.messages.push(msg);
+  }
+}           
