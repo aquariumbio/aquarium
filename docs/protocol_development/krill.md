@@ -1,16 +1,9 @@
-# Authoring Protocols for Aquarium using the Krill Library
+# Protocol Tutorial
 
-## Prerequisites
 
-To author a protocol for Aquarium, you should
+## A simple protocol
 
-* Have access to an Aquarium server, preferably a rehearsal server where mistakes don't matter.
-* Know a bit of the Ruby programming language.
-Check out the [Ruby Page](https://www.ruby-lang.org/en/) for documentation.
-
-## Getting Started
-
-Here is very a simple protocol that displays "Hello World!" to the user.
+Let's start with a simple protocol that displays "Hello World!" to the user.
 
 ```ruby
 class Protocol
@@ -21,8 +14,6 @@ class Protocol
   end
 end
 ```
-
-**[TODO: THIS NEEDS DETAILS ON HOW TO USE DEVELOPER]**
 
 Save this protocol and run it from within the Aquarium Developer Test tab.
 It should display output that says "Hello World!".
@@ -308,7 +299,7 @@ See the [Operations](md-viewer?doc=Operations) documentation for more informatio
 
 ## Items, Objects and Samples
 
-The Aquarium inventory is managed via a structured database of Ruby objects with certain relationships, all of shich are available within protocols.
+The Aquarium inventory is managed via a structured database of Ruby objects with certain relationships, all of which are available within protocols.
 The primary inventory objects are listed below.
 Note that `Item`s, `Sample`s, `SampleType`s, and `ObjectType`s inherit from `ActiveRecord::Base` which is a fundamental rails class with documentation [here](http://api.rubyonrails.org/classes/ActiveRecord/Base.html).
 The methods in this parent class are available from within a protocol, although care should be taken when using them.
@@ -335,8 +326,7 @@ aliquot_type = ObjectType.find_by_name("Primer Aliquot")
 fwd.items.select { |i| i.object_type_id == aliquot_type.id } => List of primer aliquots containing "fwd"
 ```
 
-### ObjectType (a.k.a.
-Container)
+### Containers (a.k.a.Container)
 
 An object type might be a `"1 L Bottle"` or a `"Primer Aliquot"`.
 If the variable `o` is an `ObjectType`, then the following methods are available:\*

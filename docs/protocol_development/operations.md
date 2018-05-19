@@ -356,7 +356,7 @@ Note that if the JSON does not parse, you will get an object of the form.
 
 ## Adding Inputs After the Protocol has Started
 
-Note that for the items associated with an operatioj to be tracked, the have to be inputs or outputs.
+Note that for the items associated with an operation to be tracked, they have to be inputs or outputs.
 Sometimes, however, you don't know what items a protocol will use ahead of time, or do not need the user to specify them in the planner.
 In this case, you can add an input online using op.add_input as in the following code:
 
