@@ -1,20 +1,56 @@
 # Protocol Tutorial
 
-## Protocol Basics
+This is an introduction to writing protocols for Aquarium in the Krill domain specific langauge.
+We try to introduce the most common (and recommended) patterns in Krill, but this is not a comprehensive reference.
+See the [API documentation](../api/index.html) for more details on the functions that Krill provides.
 
-A protocol is a Ruby class with a `main` method like
+If you haven't already, visit the [protocol development documentation](index.md) for information about getting started.
+
+---
+
+## Table of Contents
+
+* [The Basic Protocol](#the-basic-protocol)
+* [Creating Technician Instructions](#creating-technician-instructions)
+* [Try an Example](#try-an-example)
+* [Working with Samples](#working-with-samples)
+  * [Provisioning Items](#provisioning-samples)
+  * [Creating Items and Samples](#creating-items-and-samples)
+* [Managing Operations](#managing-operations)
+* [Protocol Patterns](#protocol-patterns)
+  * [Protocols that Create New Items](#protocols-that-create-new-items)
+  * [Protocols that Measure Items](#protocols-that-measure-items)
+  * [Protocols that Modify Items](#protocols-that-modify-items)
+* [Building libraries](#building-libraries)
+
+
+---
+
+## The Basic Protocol
+
+A protocol is a Ruby class named `Protocol` with a `main` method that includes code that defines what happens in the protocol.
+A simple example is
 
 ```ruby
 class Protocol
   def main
-
+    show { title "Getting Started" }
   end
 end
 ```
 
-where ordinarily the body of main includes code that defines what happens in the protocol.
+where the body of `main` displays a single page titled "Getting Started".
+When the protocol is started, Aquarium extends the Protocol class with the Krill methods described below.
 
-Aquarium looks for the Protocol class when it starts the protocol, and extends the protocol class with the methods we learn about below.
+## Running a Protocol
+
+You'll probably want to follow along with the examples as you go through this tutorial.
+To do this, decide on a category name for your operation types.
+An obvious name is `tutorial`, but if you are working on a shared Aquarium you'll need to be more creative.
+
+
+
+[ADD instructions]
 
 ## Creating Technician Instructions
 
@@ -58,22 +94,19 @@ where the technicians must tap each checkbox before they can move to the next pa
 
 There are several other style functions that can be used in a `show`-block that are covered later.
 
-## Try an Example
 
-[ADD TRY-IT Instructions]
-
-## Working with samples
+## Working with Samples
 
 * [basic definitions with realistic examples]
 * [sample, containers (object type) and items (and collections) through examples]
 
 * [Want to provide basic examples that illustrate important concepts around items that are commonly used]
 
-### Provisioning items
+### Provisioning Items
 
 * [take and release]
 
-### Creating items and samples
+### Creating Items and Samples
 
 * [produce and release]
 
@@ -103,7 +136,7 @@ end
 
 The `operation_task` helper function defines the tasks for an operation. Organizing the code this way separates the part of the protocol that operates over all operations from the part that operates over an individual operation.
 
-This *single operation* idiom is useful, but there may be other scenarios where a *grouped operation* idiom is better.
+This _single operation_ idiom is useful, but there may be other scenarios where a _grouped operation_ idiom is better.
 
 ```ruby
 class Protocol
@@ -131,9 +164,7 @@ class Protocol
 end
 ```
 
-
-
-## About Protocols
+## Protocol Patterns
 
 Most protocol tasks fall into one of three categories:
 
@@ -141,7 +172,7 @@ Most protocol tasks fall into one of three categories:
 * Tasks that modify their input items, and
 * Tasks that measure their input items, producing files.
 
-### A Transforming Protocol
+### Protocols that Create New Items
 
 The most common form of protocol takes input items and generates output items.
 Such protocols will follow these general steps:
@@ -153,7 +184,6 @@ Such protocols will follow these general steps:
 
 We saw earlier that we can write protocols that do these steps at a detailed level, but Aquarium provides functions that will do them over the inputs and outputs of the batched operations.
 So, we can write the protocol to manage these tasks relative to the batched operations, which is simpler.
-
 
 A protocol is able to refer to a batch of operation using the symbol `operations`, and calls `operations.retrieve`, `operations.make` and `operations.store` to perform the steps above.
 
@@ -179,7 +209,7 @@ end
 
 The use of `ensure` in this example makes certain that `operations.store` is called even if an exception is raised by the call to `operation_task`.
 
-### Accessing inputs and outputs
+[Accessing Inputs and Outputs]
 
 ```ruby
 def operation_task(operation)
@@ -188,3 +218,23 @@ def operation_task(operation)
   end
 end
 ```
+
+### Protocols that Measure Items
+
+Another common protocol uses an instrument to measure a sample.
+Instruments frequently save the measurements to a file, and so the protocol consists of instructions for first taking the measurement, and then uploading the file(s).
+
+[data associations]
+
+### Protocols that Modify Items
+
+[handling time: timers vs scheduling]
+
+## Building Libraries
+
+[saving work with shared functions - include, extend, direct call]
+
+[simplifying with kinds of ducks: using classes]
+
+[things that go awry: show blocks in libraries]
+
