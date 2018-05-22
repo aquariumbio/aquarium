@@ -139,7 +139,7 @@ We could also get all samples with sample_type 'Yeast Strain' :
 yeast_strain_st = SampleType.find_by_name('Yeast Strain')
 samps = Sample.where(sample_type: yeast_strain_st)
 ```
-It is possible to construct powerful and complex queries with active record finder methods by chaining queries. To collect all items that contain samples of sample type yeast strain, excluding ones that are marked as deleted, we would use the following query:
+It is possible to construct powerful and complex queries with active record finder methods by chaining queries. To collect all items that contain samples of sample type yeast strain, excluding ones that are marked as deleted, we could use the following query:
 ```ruby
 ys_itms = Item.where(sample: Sample.where(sample_type: yeast_strain_st)).where('location != deleted')
 ```
@@ -148,6 +148,7 @@ In depth documentation on how to use the activerecord query interface can be fou
 
 ### Sample
 
+A specific (yet still abstract) sample, not to be confused with a sample type (more abstract) or an item (more specific)
 Suppose **s** is a sample.
 
 #### Attributes
@@ -164,7 +165,7 @@ Suppose **s** is a sample.
   * We can access properties with **s.properties** as in:
 
   ```ruby
-  s.properties["Mating Type"] #=> 'alpha'
+  mating = s.properties["Mating Type"]
   ```
 
 * **s.sample_type** - A Sample Belongs to a `SampleType` that defines what properties the sample can have
