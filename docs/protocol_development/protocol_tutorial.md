@@ -10,29 +10,29 @@ If you haven't already, visit the [protocol development documentation](index.md)
 
 ## Table of Contents
 
-* [Protocol Tutorial](#protocol-tutorial)
-  * [Table of Contents](#table-of-contents)
-  * [The Basic Protocol](#the-basic-protocol)
-  * [Running a Protocol](#running-a-protocol)
-  * [Creating Technician Instructions](#creating-technician-instructions)
-  * [Working with the Aquarium Inventory](#working-with-the-aquarium-inventory)
-    * [Database Queries](#database-queries)
-    * [Sample](#sample)
-      * [Attributes](#attributes)
-      * [Associations](#associations)
-    * [Object Type (a.k.a. Container)](#object-type-aka-container)
-    * [Item](#item)
-      * [Attributes](#attributes)
-      * [Associations](#associations)
-      * [Instance methods](#instance-methods)
-    * [Provisioning Items](#provisioning-items)
-    * [Creating Items and Samples](#creating-items-and-samples)
-  * [Managing Operations](#managing-operations)
-  * [Protocol Patterns](#protocol-patterns)
-    * [Protocols that Create New Items](#protocols-that-create-new-items)
-    * [Protocols that Measure Items](#protocols-that-measure-items)
-    * [Protocols that Modify Items](#protocols-that-modify-items)
-  * [Building Libraries](#building-libraries)
+- [Protocol Tutorial](#protocol-tutorial)
+  - [Table of Contents](#table-of-contents)
+  - [The Basic Protocol](#the-basic-protocol)
+  - [Running a Protocol](#running-a-protocol)
+  - [Creating Technician Instructions](#creating-technician-instructions)
+  - [Working with the Aquarium Inventory](#working-with-the-aquarium-inventory)
+    - [Database Queries](#database-queries)
+    - [Sample](#sample)
+      - [Attributes](#attributes)
+      - [Associations](#associations)
+    - [Object Type (a.k.a. Container)](#object-type-aka-container)
+    - [Item](#item)
+      - [Attributes](#attributes)
+      - [Associations](#associations)
+      - [Instance methods](#instance-methods)
+    - [Provisioning Items](#provisioning-items)
+    - [Creating Items and Samples](#creating-items-and-samples)
+  - [Managing Operations](#managing-operations)
+  - [Protocol Patterns](#protocol-patterns)
+    - [Protocols that Create New Items](#protocols-that-create-new-items)
+    - [Protocols that Measure Items](#protocols-that-measure-items)
+    - [Protocols that Modify Items](#protocols-that-modify-items)
+  - [Building Libraries](#building-libraries)
 
 ---
 
@@ -117,7 +117,34 @@ The `Item` representing the earlier example of a W303alpha yeast culture in a pe
 
 ### Database Queries
 
-Within a protocol, often it is necessary to bring an item, sample, object type, etc into the protocol namespace, in order to access its fields or modify it.
+Within a protocol, often it is necessary to bring an item, sample, object type, etc from the database into the protocol namespace as a variable, in order to access its fields or modify it. 
+
+Any aquarium object can be directly recovered from the database with its id or name using the Object.find(), and Object.find_by_name() static methods respectively. Find returns the first item in the list of all items with the given attribute.
+For example, finding item with id 1234:
+```ruby
+itm = Item.find(1234);
+```
+And finding item with name 'My favorite W303alpha':
+```ruby
+itm = Item.find_by_name('My favorite W303alpha');
+```
+
+We can also recover a list of objects that satisfy a given attribute using Object.where(). 
+For example, getting all items with location bench:
+```ruby
+itms = Item.where(location: 'Bench')
+```
+We could also get all samples with sample_type 'Yeast Strain' :
+```ruby
+yeast_strain_st = SampleType.find_by_name('Yeast Strain')
+samps = Sample.where(sample_type: yeast_strain_st)
+```
+It is possible to construct powerful and complex queries with active record finder methods by chaining queries. To collect all items that contain samples of sample type yeast strain, excluding ones that are marked as deleted, we would use the following query:
+```ruby
+ys_itms = Item.where(sample: Sample.where(sample_type: yeast_strain_st)).where('location != deleted')
+```
+
+In depth documentation on how to use the activerecord query interface can be found [here](http://guides.rubyonrails.org/v3.2.21/active_record_querying.html).
 
 ### Sample
 
@@ -150,8 +177,8 @@ As seen below from the inventory view, the W303alpha `Sample` has an property sp
 
 ![Samples have multiple information fields](images/w303sample.png)
 
-The same sample can be inside multiple items.
-As seen below from the inventory view, the W303alpha `Sample` is inside an `Item` with id '14014,' at location 'M80.1.9.0,' with `ObjectType` 'Yeast Glycerol Stock'
+The same sample can be used for multiple items.
+As seen below from the inventory view, one such item that the W303alpha `Sample` is used in, is an `Item` with id '14014,' at location 'M80.1.9.0,' with `ObjectType` 'Yeast Glycerol Stock'
 
 ![Samples have multiple Items](images/w303items.png)
 
