@@ -10,6 +10,7 @@ If you haven't already, visit the [protocol development documentation](index.md)
 
 ## Table of Contents
 
+<<<<<<< HEAD
 - [Protocol Tutorial](#protocol-tutorial)
   - [Table of Contents](#table-of-contents)
   - [The Basic Protocol](#the-basic-protocol)
@@ -33,6 +34,20 @@ If you haven't already, visit the [protocol development documentation](index.md)
     - [Protocols that Measure Items](#protocols-that-measure-items)
     - [Protocols that Modify Items](#protocols-that-modify-items)
   - [Building Libraries](#building-libraries)
+=======
+* [The Basic Protocol](#the-basic-protocol)
+* [Running a Protocol](#running-a-protocol)
+* [Creating Technician Instructions](#creating-technician-instructions)
+* [Working with Samples](#working-with-samples)
+  * [Provisioning Items](#provisioning-samples)
+  * [Creating Items and Samples](#creating-items-and-samples)
+* [Managing Operations](#managing-operations)
+* [Protocol Patterns](#protocol-patterns)
+  * [Protocols that Create New Items](#protocols-that-create-new-items)
+  * [Protocols that Measure Items](#protocols-that-measure-items)
+  * [Protocols that Modify Items](#protocols-that-modify-items)
+* [Building libraries](#building-libraries)
+>>>>>>> 5c5efe293f1d2a769427e04203deab493c4a0148
 
 
 ---

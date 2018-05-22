@@ -25,9 +25,13 @@
   <span style="background: yellow">{{current_user.login}}</span>
 </h1>
 
-<div ng-if="state.message" class="message">
-  <p>{{state.message}}</p>
-  <div class="dismiss clickable" ng-click="state.message = null">&times;</div>
+<div ng-if="state.messages.length > 0" class="message">
+  <ul class="message-list">
+    <li ng-repeat="message in state.messages">
+      {{message}}
+    </li>
+  </ul>
+  <div class="dismiss clickable" ng-click="state.messages = []">&times;</div>
 </div>
 
 <ul ng-if="plan.errors.length > 0">

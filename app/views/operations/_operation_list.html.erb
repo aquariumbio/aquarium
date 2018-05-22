@@ -14,7 +14,7 @@
         <th>Plan</th>
         <th>Last Update</th>
         <% if current_user && current_user.is_admin %>
-          <th ng-if="status != 'scheduled' || status != 'running'">
+          <th ng-if="status != 'scheduled' && status != 'running'">
         <% end %>
       </tr>
 
@@ -88,7 +88,8 @@
         <td>{{op.updated_at|date}}</td>
 
         <% if current_user && current_user.is_admin %>
-          <td ng-if="status != 'scheduled' || status != 'running'">
+
+          <td ng-if="op.status != 'scheduled' && op.status != 'running'">
 
             <md-menu layout="row">
 
@@ -96,7 +97,7 @@
                     style="color: #333; font-size: 9pt; cursor: pointer"
                     class="no-highlight">
                 <md-tooltip md-direction="bottom" md-delay="2500">Force operation to a different status.</md-tooltip>
-                Force
+                {{op.status}}&#9660;
               </span>
 
               <md-menu-content width="4">

@@ -37,13 +37,12 @@ AQ.FieldType.record_methods.can_produce = function(fv) {
 
     aq.each(ft.allowable_field_types, (aft) => {
       if ( !fv.aft ) {
-        console.log("Warning: field value " + fv.name + " has no aft.")
-      }
-      if ( fv.aft.sample_type_id == aft.sample_type_id &&
-           fv.aft.object_type_id == aft.object_type_id && 
-           Number(fv.field_type.part) == Number(ft.part) ) { // Note, Number is used to compare null and false.
+        console.log("Warning. field value " + fv.name + " has no fv.aft.")
+      } else if ( fv.aft.sample_type_id == aft.sample_type_id &&
+         fv.aft.object_type_id == aft.object_type_id && 
+         Number(fv.field_type.part) == Number(ft.part) ) { // Note, Number is used to compare null and false.
                                                              // Could also use !!
-        rval = true;
+          rval = true;
       }
     });
 
