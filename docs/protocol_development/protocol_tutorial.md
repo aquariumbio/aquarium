@@ -129,6 +129,7 @@ The state of an `Item` is composed of a `Sample`, a `ObjectType`, and a location
 We can think of a `Sample` as comprising the *biological specimen* in the `Item`, while the `ObjectType` represents the type of *physical container which holds that specimen*. The location field will allow the lab staff to know where to find the `Item`. To reiterate: an `Item` is a unique instantiation of a `Sample` inside an `ObjectType`.
 
 The `Item` representing the earlier example of a W303alpha yeast culture in a petri dish on the lab bench would have the following state:
+
 * The `Sample` is 'W303alpha'
 * The `ObjectType` is 'Yeast Plate'
 * The **location** is 'Lab bench'
@@ -138,6 +139,7 @@ The `Item` representing the earlier example of a W303alpha yeast culture in a pe
   Within a protocol, often it is necessary to bring an item, sample, object type, etc into the protocol namespace, in order to access its fields or modify it. 
 
 ### Sample
+
 Suppose **s** is a sample.
 
 #### Attributes
