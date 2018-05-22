@@ -346,7 +346,7 @@ AQ.OperationType.record_getters.rendered_docs = function() {
     } else { 
       docs = { content: "# Add code here.", name: "name" };
     }
-    operation_type.rendered_docs = AQ.sce.trustAsHtml(docs.content);
+    operation_type.rendered_docs = AQ.sce.trustAsHtml(md.render(docs.content));
     AQ.update();
   });  
 

@@ -14,7 +14,8 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
   $scope.ready = false;
 
   $scope.state = {
-    sidebar: { op_types: false, plans: true }
+    sidebar: { op_types: false, plans: true },
+    messages: []
   }
 
   // Navigation /////////////////////////////////////////////////////////////////////////////////
