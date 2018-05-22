@@ -28,7 +28,6 @@ If you haven't already, visit the [protocol development documentation](index.md)
     - [Collection](#collection)
       - [Additional associations](#additional-associations)
       - [Additional instance methods](#additional-instance-methods)
-      - [Collection helper methods:](#collection-helper-methods)
     - [Provisioning Items](#provisioning-items)
     - [Creating Items and Samples](#creating-items-and-samples)
     - [Creating Collections](#creating-collections)
@@ -285,7 +284,7 @@ A special type of `Item` associated with certain object types that allows for mo
 
   * **remaining = col.add_samples sample_list** - Fills collection with samples from sample list. Once filled, returns the remaining samples. The sample list can contain Samples, Items, or integers.
 
-    #### Collection helper methods:
+    **Collection helper methods:**
 
   * **load_samples headings, ingredients, collections //optional block//**
 
