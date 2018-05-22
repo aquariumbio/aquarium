@@ -10,30 +10,29 @@ If you haven't already, visit the [protocol development documentation](index.md)
 
 ## Table of Contents
 
-- [Protocol Tutorial](#protocol-tutorial)
-  - [Table of Contents](#table-of-contents)
-  - [The Basic Protocol](#the-basic-protocol)
-  - [Running a Protocol](#running-a-protocol)
-  - [Creating Technician Instructions](#creating-technician-instructions)
-  - [Working with the Aquarium Inventory](#working-with-the-aquarium-inventory)
-    - [Database Queries](#database-queries)
-    - [Sample](#sample)
-      - [Attributes](#attributes)
-      - [Associations](#associations)
-    - [Object Type (a.k.a. Container)](#object-type-aka-container)
-    - [Item](#item)
-      - [Attributes](#attributes)
-      - [Associations](#associations)
-      - [Instance methods](#instance-methods)
-    - [Provisioning Items](#provisioning-items)
-    - [Creating Items and Samples](#creating-items-and-samples)
-  - [Managing Operations](#managing-operations)
-  - [Protocol Patterns](#protocol-patterns)
-    - [Protocols that Create New Items](#protocols-that-create-new-items)
-    - [Protocols that Measure Items](#protocols-that-measure-items)
-    - [Protocols that Modify Items](#protocols-that-modify-items)
-  - [Building Libraries](#building-libraries)
-
+* [Protocol Tutorial](#protocol-tutorial)
+  * [Table of Contents](#table-of-contents)
+  * [The Basic Protocol](#the-basic-protocol)
+  * [Running a Protocol](#running-a-protocol)
+  * [Creating Technician Instructions](#creating-technician-instructions)
+  * [Working with the Aquarium Inventory](#working-with-the-aquarium-inventory)
+    * [Database Queries](#database-queries)
+    * [Sample](#sample)
+      * [Attributes](#attributes)
+      * [Associations](#associations)
+    * [Object Type (a.k.a. Container)](#object-type-aka-container)
+    * [Item](#item)
+      * [Attributes](#attributes)
+      * [Associations](#associations)
+      * [Instance methods](#instance-methods)
+    * [Provisioning Items](#provisioning-items)
+    * [Creating Items and Samples](#creating-items-and-samples)
+  * [Managing Operations](#managing-operations)
+  * [Protocol Patterns](#protocol-patterns)
+    * [Protocols that Create New Items](#protocols-that-create-new-items)
+    * [Protocols that Measure Items](#protocols-that-measure-items)
+    * [Protocols that Modify Items](#protocols-that-modify-items)
+  * [Building Libraries](#building-libraries)
 
 ---
 
@@ -58,8 +57,6 @@ When the protocol is started, Aquarium extends the Protocol class with the Krill
 You'll probably want to follow along with the examples as you go through this tutorial.
 To do this, decide on a category name for your operation types.
 An obvious name is `tutorial`, but if you are working on a shared Aquarium you'll need to be more creative.
-
-
 
 [ADD instructions]
 
@@ -105,13 +102,12 @@ where the technicians must tap each checkbox before they can move to the next pa
 
 There are several other style functions that can be used in a `show`-block that are covered later.
 
-
 ## Working with the Aquarium Inventory
 
 Aquarium represents biological specimens in an intuitive way. Any unique item in the lab will be represented by an `Item` object. For Example, a W303alpha yeast culture in a petri dish on the lab bench would be represented by an `Item`.
-The state of an `Item` is composed of a `Sample`, a `ObjectType`, and a location String. 
+The state of an `Item` is composed of a `Sample`, a `ObjectType`, and a location String.
 
-We can think of a `Sample` as comprising the *biological specimen* in the `Item`, while the `ObjectType` represents the type of *physical container which holds that specimen*. The location field will allow the lab staff to know where to find the `Item`. To reiterate: an `Item` is a unique instantiation of a `Sample` inside an `ObjectType`.
+We can think of a `Sample` as comprising the _biological specimen_ in the `Item`, while the `ObjectType` represents the type of _physical container which holds that specimen_. The location field will allow the lab staff to know where to find the `Item`. To reiterate: an `Item` is a unique instantiation of a `Sample` inside an `ObjectType`.
 
 The `Item` representing the earlier example of a W303alpha yeast culture in a petri dish on the lab bench would have the following state:
 
@@ -121,13 +117,14 @@ The `Item` representing the earlier example of a W303alpha yeast culture in a pe
 
 ### Database Queries
 
-  Within a protocol, often it is necessary to bring an item, sample, object type, etc into the protocol namespace, in order to access its fields or modify it. 
+Within a protocol, often it is necessary to bring an item, sample, object type, etc into the protocol namespace, in order to access its fields or modify it.
 
 ### Sample
 
 Suppose **s** is a sample.
 
 #### Attributes
+
 * **s.id** - The unique id of the sample
   * W303alpha has id 30
 * **s.name** - The String name of the sample
@@ -136,7 +133,9 @@ Suppose **s** is a sample.
 #### Associations
 
 * **s.properties** - Samples have many additional information fields associated with them, called properties.
+
   * We can access properties with **s.properties** as in:
+
   ```ruby
   s.properties["Mating Type"] #=> 'alpha'
   ```
@@ -156,10 +155,9 @@ As seen below from the inventory view, the W303alpha `Sample` is inside an `Item
 
 ![Samples have multiple Items](images/w303items.png)
 
-
 ### Object Type (a.k.a. Container)
 
-An object type might be named 'Yeast Plate' or '1 L Flask' If **o** is an ObjectType, then **o.name** returns the name of the object type, as in 'Yeast Plate' 
+An object type might be named 'Yeast Plate' or '1 L Flask' If **o** is an ObjectType, then **o.name** returns the name of the object type, as in 'Yeast Plate'
 
 Object types have location wizards, which can automatically assign locations to items of that object type. For example, it is helpful to have all items with object type 'plasmid glycerol stock' to automatically have a location in the M80 freezer.
 
@@ -167,16 +165,19 @@ Object types have location wizards, which can automatically assign locations to 
 
 A physical item in the lab. It belongs to an `ObjectType` and may belong to a `Sample` (see the examples below). Suppose **itm** is an `Item`
 
-
 #### Attributes
+
 * **id** - the id of the Item. Every Item in the lab has a unique id that can by used to refer to it (see finding Items and Samples).
 
 * **location** - a string describing the physical location in the lab where the Item's physical manifestation can be found. The location of an item can be modified in a protocol with **itm.move_to**, as in:
- ```ruby
+
+
+```ruby
 itm.move_to("The big red barn.")
 ```
 
 #### Associations
+
 * **itm.object_type** - the ObjectType associated with the Item.
 
 * **itm.object_type_id** - the id of the ObjectType associated with the Item.
@@ -186,15 +187,14 @@ itm.move_to("The big red barn.")
 * **itm.sample_id** - the id of the Sample that may be associated with the Item.
 
 #### Instance methods
+
 * **itm.save** - saves **itm** to the database. If you make changes to an Item's attributes or associations, you may have to call `itm.save` to save the changes to the database (see below).
 
 * **itm.reload** - reloads an item from the database. If **itm** has changed in the database, call this method to be sure that you are working with the current data.
 
-* **itm.mark_as_deleted** - records that the **physical manifestation** of the item has been discarded. (*DO NOT* use `itm.delete` as this removes the Item from the database altogether.) `itm.mark_as_deleted` saves to the database automatically, and does not require a subsequenquent `itm.save` call.
-
+* **itm.mark_as_deleted** - records that the **physical manifestation** of the item has been discarded. (_DO NOT_ use `itm.delete` as this removes the Item from the database altogether.) `itm.mark_as_deleted` saves to the database automatically, and does not require a subsequenquent `itm.save` call.
 
 You can associate arbitrary data, such as a measurement or uploaded data file, with an item using the DataAssociation model, described [here](md-viewer?doc=DataAssociation).
-
 
 ### Provisioning Items
 
@@ -240,7 +240,6 @@ Note that when the protocol is done with the items, it should release them. The 
 release items
 ```
 
-
 ### Creating Items and Samples
 
 To make new items you use either **new_object** or **new_sample**, which both return Items. Typically, these functions are used with the **produce** function so that the items returned are (a) put in the databased with new unique ids and (b) associated with the job (i.e. they are "taken").
@@ -250,6 +249,7 @@ To make new items you use either **new_object** or **new_sample**, which both re
 ```ruby
 i = produce new_object "1 L Bottle"
 ```
+
 which would return a new item in the variable **i**.
 
 **new_sample sample_name, of: sample_type_name, as: object_type_name** - This function takes a sample name and an object type name and makes a new item with that name. For example, you might do
@@ -274,7 +274,7 @@ This version of release simply release the items i and j (i.e. it marks them as 
 release([i,j],interactive: true)
 ```
 
-This version calls **show** and tells the user to put the items away, or dispose of them, etc.  Once the user clicks "Next", the items in the list are marked as not taken.
+This version calls **show** and tells the user to put the items away, or dispose of them, etc. Once the user clicks "Next", the items in the list are marked as not taken.
 
 ```ruby
 release([i,j],interactive: true) {
@@ -283,7 +283,6 @@ release([i,j],interactive: true) {
 ```
 
 This version also calls **show**, like the previous version, but also adds the **show** code block to the **show** that release does, so that you can add various notes, warnings, images, etc. to the page shown to the user.
-
 
 ## Managing Operations
 
@@ -412,4 +411,3 @@ Instruments frequently save the measurements to a file, and so the protocol cons
 [simplifying with kinds of ducks: using classes]
 
 [things that go awry: show blocks in libraries]
-
