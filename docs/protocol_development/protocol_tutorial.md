@@ -148,7 +148,7 @@ In depth documentation on how to use the activerecord query interface can be fou
 
 ### Sample
 
-A specific (yet still abstract) sample, not to be confused with a sample type (more abstract) or an item (more specific)
+A specific (yet still abstract) specimen in the lab inventory, not to be confused with a sample type (more abstract) or an item (more specific)
 Suppose **s** is a sample.
 
 #### Attributes
