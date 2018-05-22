@@ -11,8 +11,8 @@ If you haven't already, visit the [protocol development documentation](index.md)
 ## Table of Contents
 
 * [The Basic Protocol](#the-basic-protocol)
+* [Running a Protocol](#running-a-protocol)
 * [Creating Technician Instructions](#creating-technician-instructions)
-* [Try an Example](#try-an-example)
 * [Working with Samples](#working-with-samples)
   * [Provisioning Items](#provisioning-samples)
   * [Creating Items and Samples](#creating-items-and-samples)
