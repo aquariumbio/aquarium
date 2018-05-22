@@ -25,8 +25,13 @@ If you haven't already, visit the [protocol development documentation](index.md)
       - [Attributes](#attributes)
       - [Associations](#associations)
       - [Instance methods](#instance-methods)
+    - [Collection](#collection)
+      - [Additional associations](#additional-associations)
+      - [Additional instance methods](#additional-instance-methods)
+      - [Collection helper methods:](#collection-helper-methods)
     - [Provisioning Items](#provisioning-items)
     - [Creating Items and Samples](#creating-items-and-samples)
+    - [Creating Collections](#creating-collections)
   - [Managing Operations](#managing-operations)
   - [Protocol Patterns](#protocol-patterns)
     - [Protocols that Create New Items](#protocols-that-create-new-items)
@@ -185,9 +190,11 @@ As seen below from the inventory view, one such item that the W303alpha `Sample`
 
 ### Object Type (a.k.a. Container)
 
-An object type might be named 'Yeast Plate' or '1 L Flask' If **o** is an ObjectType, then **o.name** returns the name of the object type, as in 'Yeast Plate'
+The type of container which holds a `Sample` in an `Item`. An object type might be named 'Yeast Plate' or '1 L Flask' If **o** is an ObjectType, then **o.name** returns the name of the object type, as in 'Yeast Plate'
 
-Object types have location wizards, which can automatically assign locations to items of that object type. For example, it is helpful to have all items with object type 'plasmid glycerol stock' to automatically have a location in the M80 freezer.
+Object types have a **handler** attribute, which is used to categorize them.
+
+Object types have associated **[location wizards](#location_wizards)**, which can automatically assign locations to items of that object type. For example, it is helpful to have all items with object type 'plasmid glycerol stock' to automatically have a location in the M80 freezer.
 
 ### Item
 
@@ -223,6 +230,117 @@ itm.move_to("The big red barn.")
 * **itm.mark_as_deleted** - records that the **physical manifestation** of the item has been discarded. (_DO NOT_ use `itm.delete` as this removes the Item from the database altogether.) `itm.mark_as_deleted` saves to the database automatically, and does not require a subsequenquent `itm.save` call.
 
 You can associate arbitrary data, such as a measurement or uploaded data file, with an item using the DataAssociation model, described [here](md-viewer?doc=DataAssociation).
+
+### Collection
+A special type of `Item` associated with certain object types that allows for more than one associated sample. For example, an item created with a 'stripwell' object type will be a `Collection` capable of holding 12 samples. 
+
+**`Collection` inherits all associations, attributes, instance methods from `Item`**, and it has the following additional associations and methods. Suppose **coll** is a collection.
+
+#### Additional associations
+
+* **coll.matrix** - the `Collection`'s equivalent to itm.sample. It is a matrix of `Sample` ids, which represent the samples that are used in the collection, and their location (assuming a grid like container).
+  * The sample matrix is immutable. A `Collection`'s sample matrix cannot be changed, but can be replaced using **coll.matrix = m**
+  * Empty slots in the matrix are represented by `-1`
+* **coll.dimensions** - the row, column dimensions of the `Collection`'s sample matrix as a tuple array, [r, c]
+  * For a stripwell with 12 wells, col.dimensions => [1, 12]
+
+#### Additional instance methods
+
+* **coll.matrix[r, c]** - Get the [r,c] entry of the matrix as a sample id
+
+* **coll.set r, c, s** - Set the [r,c] entry of the matrix to id of the Sample **s**. If **s**=nil, then the [r,c] entry is cleared.
+
+* **coll.num_samples** - Returns the number of non empty slots in the matrix.
+
+* **coll.empty?** - Whether the matrix is empty
+
+* **coll.full?** - Whether the matrix has no empty slots
+
+<details> 
+  <summary> Advanced Collection Methods </summary>
+
+  ---
+
+  * **coll.apportion r, c** - Sets the matrix for the collection to an empty rxc matrix and saves the collection to the database. Whatever matrix was associated with the collection is lost.
+
+  * **coll.next r, c, opts={}** - With no options, returns the indices of the next element of the collections, skipping to the next column or row if necessary. With the option skip_non_empty: true, returns the next non empty indices. Returns nil if [r,c] is the last element of the collection.
+
+  * **coll.non_empty_string** - Returns a string describing the indices of the non empty elements in the collection. For example, the method might return the string "1,1 - 5,9" to indicate that collection contains samples in those indices. Note that the string is adjustd for viewing by the user, so starts with 1 instead of 0 for rows and columns.
+  
+  * **coll.select &block** - Returns set of [r,c] such that the block is true. 
+
+  * **coll.find x** - Finds set of [r,c] that equal **x**, where **x** can be a Sample, Item, or integer.
+
+  * **coll.include? x** - Whether the matrix includes **x**.
+
+  * **coll.get_empty** - Returns set of [r,c] that are EMPTY
+
+  * **coll.get_non_empty** - Returns set of [r,c] that are not EMPTY
+
+  * **coll.add_one x, reverse: false** - Adds **x** to the first empty [r,c]. If reverse: true, adds **x** to the  last empty [r,c]. 
+
+  * **coll.subtract_one x, reverse: true** - Find last [r,c] that equals **x** and sets to EMPTY. If **x.nil?** then it finds the last non_empty slot. If reverse: false then finds the first [r,c] equal to x. Returns **[r,c,sample_at_rc]** if x is in collection or **nil** if **x** is not found or the col.empty?
+
+  * **coll.remove_one x, reverse: true** - Synonym for subtract_one
+
+  * **remaining = col.add_samples sample_list** - Fills collection with samples from sample list. Once filled, returns the remaining samples. The sample list can contain Samples, Items, or integers.
+
+    #### Collection helper methods:
+
+  * **load_samples headings, ingredients, collections //optional block//**
+
+    * This helper function displays a table to the user that describes how to load a number of samples into a collection. The argument **headings** is an array of strings that describe how much to transfer of each ingredient. The argument **ingredients** is an array of array of **Items** to be transfered. The argument **collections** is an array of collections. And **block** is an option **show** style block. Note that this function *does not* change the matrix associated with the collection. This is because the sample that is created by combining the ingredients is likely different than the **Samples** associated with the ingredients. For example, the code below shows the user a table that describes how to arrays of templates, forward primers, and reverse primers into a set of stripwell tubes. The stripwells, after a PCR reaction is run, will contain fragment samples, which should be associated with the collections in a separate step.
+
+    ```ruby
+    load_samples(
+      [ "Template, 1 µL", "Forward Primer, 2.5 µL", "Reverse Primer, 2.5 µL" ],
+      [  templates,        forward_primers,          reverse_primers         ],
+      stripwells ) {
+        note "Load templates first, then forward primers, then reverse primers."
+        warning "Use a fresh pipette tip for each transfer."
+      }
+    ```
+
+  * **show : transfer x, y, routing**
+
+    * One of the functions available within a show is **transfer**. The arguments x and y should be collections, and routing is a list of from, to, volume triples. Volume is optional. As an example, you can do
+
+    ```ruby
+    routing = [
+      { from: [0,0], to: [0,0], volume: 10 },
+      { from: [0,1], to: [1,1] }
+    ]
+
+    show do
+      title "Transfer"
+      transfer x, y, routing
+    end
+    ```
+
+  * **transfer sources, destinations, options={} //optional block//**
+
+    * This powerful method displays a set of pages using the transfer method from show to the user to that describe how to transfer the individual parts of some quantity of source wells to some quantity of destination wells. The routing arguments are computed automatically. For example, suppose you want the user to transfer all the wells in a set of stripwell tubes into the non-empty lanes of a set of gels. Then you might do something like
+
+    ```ruby
+    transfer( stripwells, gels ) {
+      note "Use a 100 µL pipetter to transfer 10 µL from the PCR results to the gel as indicated."
+    }
+    ```
+
+  * **distribute collection, object_type_name, options = {} //optional block//**
+
+    * This method is the opposite of **load_samples**. It returns an array of new items that are made from the samples in the collection. The object type of the items is defined by the **object_type_name** argument. The only option to the method is **:except**, which should be a list of collection indices to skip. For example, suppose you had a gel with ladder in lanes (1,1) and (2,1) and you wanted to make gel fragments from the lanes. You could do
+
+    ```ruby
+    slices = distribute( gel, "Gel Slice", except: [ [0,0], [1,0] ], interactive: true ) {
+      title "Cut gel slices and place them in new 1.5 mL tubes"
+      note "Label the tubes with the id shown"
+    }
+    ```
+---
+</details>
+
+
 
 ### Provisioning Items
 
@@ -262,6 +380,18 @@ take items, interactive: true,  method: "boxes"
 
 which displays a new page to the user for every freezer box required to take the items. A diagram of the freezer box is shown and the user can check the items as (s)he takes them. Any items not in freezer boxes are displayed in a final page that simply lists the remaining items and their locations.
 
+If the object type of an item has handler 'collection', it will be useful to have access to the collection methods. To promote an item **i** to a collection, use
+
+```ruby
+c = collection_from i
+```
+
+And likewise, for a list of items
+
+```ruby
+colls = items.map { |i| collection_from i }
+```
+
 Note that when the protocol is done with the items, it should release them. The simplest form for release is
 
 ```ruby
@@ -272,45 +402,46 @@ release items
 
 To make new items you use either **new_object** or **new_sample**, which both return Items. Typically, these functions are used with the **produce** function so that the items returned are (a) put in the databased with new unique ids and (b) associated with the job (i.e. they are "taken").
 
-**new_object name** - This function takes the name of an object type and makes a new item with that object type. An object type with that name must exist in the database. For example, you might do
+* **new_object name** - This function takes the name of an object type and makes a new item with that object type. An object type with that name must exist in the database. For example, you might do the following, which would return a new item in the variable **i**.
 
-```ruby
-i = produce new_object "1 L Bottle"
-```
+  ```ruby
+  i = produce new_object "1 L Bottle"
+  ```
 
-which would return a new item in the variable **i**.
+* **new_sample sample_name, of: sample_type_name, as: object_type_name** - This function takes a sample name and an object type name and makes a new item with that name. For example, you might do the following, which returns a new item in the variable **i** whose object type is "Plasmid Stock", whose corresponding sample is "pLAB1" and whose sample type is "Plasmid".
+  ```ruby
+  j = produce new_sample "pLAB1", of: "Plasmid", as: "Plasmid Stock"
+  ```
+  
+  When a protocol is done with a an item, it should release it. This is done with the release function.
 
-**new_sample sample_name, of: sample_type_name, as: object_type_name** - This function takes a sample name and an object type name and makes a new item with that name. For example, you might do
+* **release item_list, opts={} //optional block//** -- release an item. This function has many forms. Suppose **i** and **j** are items currently ''taken'' by the protocol.
 
-```ruby
-j = produce new_sample "pLAB1", of: "Plasmid", as: "Plasmid Stock"
-```
+  ```ruby
+  release([i,j])
+  ```
 
-which returns a new item in the variable **i** whose object type is "Plasmid Stock", whose corresponding sample is "pLAB1" and whose sample type is "Plasmid".
+  * ^ This version of release simply release the items i and j (i.e. it marks them as not taken by the job running the protocol).
 
-When a protocol is done with a an item, it should release it. This is done with the release function.
+  ```ruby
+  release([i,j],interactive: true)
+  ```
 
-**release item_list, opts={} //optional block//** -- release an item. This function has many forms. Suppose **i** and **j** are items currently ''taken'' by the protocol.
+  * ^ This version calls **show** and tells the user to put the items away, or dispose of them, etc. Once the user clicks "Next", the items in the list are marked as not taken.
 
-```ruby
-release([i,j])
-```
+  ```ruby
+  release([i,j],interactive: true) {
+    warning "Be careful with these items."
+  }
+  ```
 
-This version of release simply release the items i and j (i.e. it marks them as not taken by the job running the protocol).
+  * ^ This version also calls **show**, like the previous version, but also adds the **show** code block to the **show** that release does, so that you can add various notes, warnings, images, etc. to the page shown to the user.
 
-```ruby
-release([i,j],interactive: true)
-```
+### Creating Collections
+Collections can be made manually by making a new item with a collection-friendly object type as above, and promoting it to a collection. You can also use the following static Collection methods for convienence
+* **Colllection.new_collection "collection_type_name"** - Creates a new collection of type "collection_type_name" with a matrix of size defined by the rows and columns in the collection type.
 
-This version calls **show** and tells the user to put the items away, or dispose of them, etc. Once the user clicks "Next", the items in the list are marked as not taken.
-
-```ruby
-release([i,j],interactive: true) {
-  warning "Be careful with these items."
-}
-```
-
-This version also calls **show**, like the previous version, but also adds the **show** code block to the **show** that release does, so that you can add various notes, warnings, images, etc. to the page shown to the user.
+* **Colllection.spread sample_list, "collection_type_name"** - Creates an appropriate number of collections of "collection_type_name" and fills collections with the sample_list. The sample list can be Samples, Items, or integers.
 
 ## Managing Operations
 
