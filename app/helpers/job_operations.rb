@@ -108,4 +108,14 @@ module JobOperations # included in Job model
     end
   end
 
+  def all_operations
+
+    all_ops = []
+    operations.collect { |o| o.plan }.uniq.each do |plan|
+      all_ops.concat plan.operations
+    end
+    all_ops
+
+  end
+
 end

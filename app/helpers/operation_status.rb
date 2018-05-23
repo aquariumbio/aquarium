@@ -64,7 +64,11 @@ module OperationStatus
 
     begin
       print "op #{self.id}: #{self.status}"
-      if ready?
+      if status != "scheduled" && 
+         status != "running" && 
+         status != "done" && 
+         status != "error" &&
+         ready? # in planner/operation_planner.rb
 
         get_items_from_predecessor
 

@@ -247,14 +247,14 @@ class KrillController < ApplicationController
         Thread.new do # this goes in the background because it can take a 
                       # while, and the technician interface should not have
                       # to wait
-          Operation.step
+          Operation.step(@job.all_operations) # defined in models/Operation.rb
         end        
 
       end
 
       @job.reload
 
-    else 
+    else
 
       result = { response: "error", error: "Job is no longer running." }
 

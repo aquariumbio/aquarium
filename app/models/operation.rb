@@ -301,7 +301,7 @@
     end
 
     ops.each do |op|
-      op.step
+      op.step # defined in helpers/operation_status.rb
     end
 
   end
