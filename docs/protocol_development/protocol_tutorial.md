@@ -136,10 +136,10 @@ Item.where(
   )
 ```
 
-which returns a list of `Item` objects (that is probably empty).
+which returns a list of `Item` objects.
 
 It is tempting to use constant values to search with record identifiers, but these identifiers are determined by how the database is built and could change.
-The catch, of course, is that the names you should use are also determined by the inventory of your Aquarium instance.
+So, use the sample names instead; though, the catch is that the names you should use are also determined by the inventory of your Aquarium instance.
 
 **TODO: explain how to get common definition and/or to manage objects**
 
