@@ -21,6 +21,7 @@ If you haven't already, visit the [protocol development documentation](index.md)
       - [Attributes](#attributes)
       - [Associations](#associations)
     - [Object Type (a.k.a. Container)](#object-type-aka-container)
+      - [Attributes](#attributes)
     - [Item](#item)
       - [Attributes](#attributes)
       - [Associations](#associations)
@@ -119,6 +120,20 @@ The `Item` representing the earlier example of a W303alpha yeast culture in a pe
 * The `ObjectType` is 'Yeast Plate'
 * The **location** is 'Lab bench'
 
+
+As another example, if dominos pizza products were available in aquarium, the breakdown of `Sample`, `SampleType`, `item`, `ObjectType` would be the following:
+* The sample types would be different general food categories 
+  * pizza, breadstick, calzone, and soda
+* The samples would be specific types of food. 
+  * Underneath the sample type of pizza, we might have: margherita pizza, pepperoni pizza, and hawaiian pizza
+* The object types would be things that hold the food 
+  * pizza boxes, plates, and trays. 
+  * Some object types may be specific to certain sample types.
+* The items would be actual physical food items - specific instances of a sample on a object type
+  * The full package of a margherita pizza in a pizza box would be an item. 
+  * There can be many replicates of a margherita pizza in a pizza box that are each unique.
+
+
 ### Database Queries
 
 Within a protocol, often it is necessary to bring an item, sample, object type, etc from the database into the protocol namespace as a variable, in order to access its fields or modify it. 
@@ -153,7 +168,8 @@ In depth documentation on how to use the activerecord query interface can be fou
 ### Sample
 
 A specific (yet still abstract) specimen in the lab inventory, not to be confused with a sample type (more abstract) or an item (more specific)
-Suppose **s** is a sample.
+With the pizza analogy, a sample represents a specific type of pizza, but not a specific physical instance of pizza. Suppose **s** is a sample. 
+
 
 #### Attributes
 
@@ -189,9 +205,12 @@ As seen below from the inventory view, one such item that the W303alpha `Sample`
 
 ### Object Type (a.k.a. Container)
 
-The type of container which holds a `Sample` in an `Item`. An object type might be named 'Yeast Plate' or '1 L Flask' If **o** is an ObjectType, then **o.name** returns the name of the object type, as in 'Yeast Plate'
+The type of container which holds a `Sample` in an `Item`. An object type might be named 'Yeast Plate' or '1 L Flask'. Suppose **ot** is an ObjectType.
 
-Object types have a **handler** attribute, which is used to categorize them.
+#### Attributes
+
+**ot.name** returns the name of the object type, as in 'Yeast Plate'
+**ot.handler** attribute, which is used to categorize them.
 
 Object types have associated **[location wizards](#location_wizards)**, which can automatically assign locations to items of that object type. For example, it is helpful to have all items with object type 'plasmid glycerol stock' to automatically have a location in the M80 freezer.
 
@@ -201,9 +220,9 @@ A physical item in the lab. It belongs to an `ObjectType` and may belong to a `S
 
 #### Attributes
 
-* **id** - the id of the Item. Every Item in the lab has a unique id that can by used to refer to it (see finding Items and Samples).
+* **itm.id** - the id of the Item. Every Item in the lab has a unique id that can by used to refer to it (see finding Items and Samples).
 
-* **location** - a string describing the physical location in the lab where the Item's physical manifestation can be found. The location of an item can be modified in a protocol with **itm.move_to**, as in:
+* **itm.location** - a string describing the physical location in the lab where the Item's physical manifestation can be found. The location of an item can be modified in a protocol with **itm.move_to**, as in:
 
 
 ```ruby
@@ -231,13 +250,13 @@ itm.move_to("The big red barn.")
 You can associate arbitrary data, such as a measurement or uploaded data file, with an item using the DataAssociation model, described [here](md-viewer?doc=DataAssociation).
 
 ### Collection
-A special type of `Item` associated with certain object types that allows for more than one associated sample. For example, an item created with a 'stripwell' object type will be a `Collection` capable of holding 12 samples. 
+A special type of `Item` that allows for more than one associated sample. An `Item` can only be a `Collection` if the associated object type has the 'collection' handler. For example, an item created with a 'stripwell' object type will be a `Collection` capable of holding 12 samples.
 
 **`Collection` inherits all associations, attributes, instance methods from `Item`**, and it has the following additional associations and methods. Suppose **coll** is a collection.
 
 #### Additional associations
 
-* **coll.matrix** - the `Collection`'s equivalent to itm.sample. It is a matrix of `Sample` ids, which represent the samples that are used in the collection, and their location (assuming a grid like container).
+* **coll.matrix** - the `Collection`'s equivalent to itm.sample. It is a matrix of `Sample` ids, which represent the samples that are used in the collection, and their coordinate location (assuming a grid like container).
   * The sample matrix is immutable. A `Collection`'s sample matrix cannot be changed, but can be replaced using **coll.matrix = m**
   * Empty slots in the matrix are represented by `-1`
 * **coll.dimensions** - the row, column dimensions of the `Collection`'s sample matrix as a tuple array, [r, c]
