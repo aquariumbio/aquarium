@@ -22,12 +22,12 @@ class Task < ActiveRecord::Base
 
   def legal_status
     begin
-      if ! JSON.parse(self.task_prototype.status_options).include? self.status
+      if !JSON.parse(self.task_prototype.status_options).include? self.status
         errors.add(:status_choice, "Status must be one of " + self.task_prototype.status_options);
         return
       end
-    rescue Exception => e 
-      errors.add(:status_udpate, "Could not update status: #{e.to_s}")
+    rescue Exception => e
+      errors.add(:status_udpate, "Could not update status: #{e}")
       return
     end
   end
@@ -38,7 +38,7 @@ class Task < ActiveRecord::Base
     begin
       spec = JSON.parse self.specification, symbolize_names: true
     rescue Exception => e
-      errors.add(:task_json, "Error parsing JSON in prototype. #{e.to_s}")
+      errors.add(:task_json, "Error parsing JSON in prototype. #{e}")
       return
     end
 
@@ -56,7 +56,7 @@ class Task < ActiveRecord::Base
     #   result = tv.check
     # rescue Exception => e
     #   errors.add(:validator_exec_error,e.to_s)
-    #   return 
+    #   return
     # end
 
     # unless result == true
@@ -79,74 +79,73 @@ class Task < ActiveRecord::Base
 
     case p
 
-      when String
+    when String
 
-        result = (s.class == String)
-        # puts "wrong atomic 1" unless result
-        errors.add(:task_constant, ": Wrong atomic type encountered") unless result 
+      result = (s.class == String)
+      # puts "wrong atomic 1" unless result
+      errors.add(:task_constant, ": Wrong atomic type encountered") unless result
 
-      when Fixnum, Float
+    when Integer, Float
 
-        result = (s.class == Fixnum || s.class == Float)
-        # puts "wrong atomic 1" unless result
-        errors.add(:task_constant, ": Wrong atomic type encountered") unless result 
+      result = (s.class == Integer || s.class == Float)
+      # puts "wrong atomic 1" unless result
+      errors.add(:task_constant, ": Wrong atomic type encountered") unless result
 
-      when Hash
+    when Hash
 
-        result = (s.class == Hash)
-        errors.add(:task_hash, ": Type mismatch") unless result 
+      result = (s.class == Hash)
+      errors.add(:task_hash, ": Type mismatch") unless result
 
-        # check all requred key/values are present
-        if result
-          p.keys.each do |k|
-            result = result && has_consistent_key?(s,k) && type_check( get_part(p,k), get_part(s,k) )
-            errors.add(:task_missing_key_value, ": Specification #{s} is missing the key '#{k}' (a #{k.class})") unless result   
-            errors.add(:task_missing_key_value, ": Specification #{s[k]} has the wrong type. Should match #{p[k]}") unless result
-          end
+      # check all requred key/values are present
+      if result
+        p.keys.each do |k|
+          result = result && has_consistent_key?(s, k) && type_check(get_part(p, k), get_part(s, k))
+          errors.add(:task_missing_key_value, ": Specification #{s} is missing the key '#{k}' (a #{k.class})") unless result
+          errors.add(:task_missing_key_value, ": Specification #{s[k]} has the wrong type. Should match #{p[k]}") unless result
         end
-
-        # check that no other keys are present
-        if result
-            s.keys.each do |k|
-              result = result && has_consistent_key?(p,k)
-              errors.add(:task_extra_key, ": Specification has the key #{k} but prototype does not") unless result 
-            end
-        end
-
-        when Array
-
-          result = (s.class == Array && s.length >= p.length )
-          errors.add(:task_array, ": #{s} is not an array, or is not an array of length at last #{p.length}") unless result 
-
-          # check that elements in spec match those in prototype 
-          (0..p.length-1).each do |i|
-            result = result && type_check( p[i], s[i] )
-            errors.add(:task_array, ": Specification has mismatch at element #{i} of #{s}") unless result 
-          end          
-
-          # check that extra elements in spec match last in prototype
-          if result && p.length > 0 && s.length > p.length
-            ( p.length-1 .. s.length-1 ).each do |i|
-              result = result && type_check( p.last, s[i] )
-              errors.add(:task_array, ": Specification has mismatch at element #{i} of #{s}. Its type should match the type of the last element of p") unless result 
-            end
-          end
-
-        else
-          errors.add(:task_type_check, ": Unknown type in task prototype: #{p.class}")
-          result = false
-
       end
+
+      # check that no other keys are present
+      if result
+        s.keys.each do |k|
+          result = result && has_consistent_key?(p, k)
+          errors.add(:task_extra_key, ": Specification has the key #{k} but prototype does not") unless result
+        end
+      end
+
+    when Array
+
+      result = (s.class == Array && s.length >= p.length)
+      errors.add(:task_array, ": #{s} is not an array, or is not an array of length at last #{p.length}") unless result
+
+      # check that elements in spec match those in prototype
+      (0..p.length - 1).each do |i|
+        result = result && type_check(p[i], s[i])
+        errors.add(:task_array, ": Specification has mismatch at element #{i} of #{s}") unless result
+      end
+
+      # check that extra elements in spec match last in prototype
+      if result && p.length > 0 && s.length > p.length
+        (p.length - 1..s.length - 1).each do |i|
+          result = result && type_check(p.last, s[i])
+          errors.add(:task_array, ": Specification has mismatch at element #{i} of #{s}. Its type should match the type of the last element of p") unless result
+        end
+      end
+
+    else
+      errors.add(:task_type_check, ": Unknown type in task prototype: #{p.class}")
+      result = false
+    end
 
     result
 
   end
 
-  def get_part spec,key
+  def get_part spec, key
 
     name = key.to_s.split(' ')[0]
 
-    spec.each do |k,v|
+    spec.each do |k, v|
       sname = k.to_s.split(' ')[0]
       if name == sname
         return v
@@ -157,19 +156,19 @@ class Task < ActiveRecord::Base
 
   end
 
-  def has_consistent_key?(s,k) 
+  def has_consistent_key?(s, k)
 
     # puts "checking specification #{s} for existence of #{k}"
 
     name = k.to_s.split(' ')[0]
-    types = k.to_s.split(' ')[1,100].join(' ').split('|')
+    types = k.to_s.split(' ')[1, 100].join(' ').split('|')
     found = false
 
-    s.each do |key,val| 
+    s.each do |key, _val|
       sname = key.to_s.split(' ')[0]
-      stypes = key.to_s.split(' ')[1,100].join(' ').split('|')
+      stypes = key.to_s.split(' ')[1, 100].join(' ').split('|')
       # puts "  checking if #{name} == #{sname} and #{stypes} is a subset of #{types}" unless found
-      if name == sname && ( stypes.all? { |i| types.include?(i) } || types.all? { |i| stypes.include?(i) } )
+      if name == sname && (stypes.all? { |i| types.include?(i) } || types.all? { |i| stypes.include?(i) })
         found = true
         # puts "  #{name} is okay"
       end
@@ -188,7 +187,7 @@ class Task < ActiveRecord::Base
       begin
         @parsed_spec = JSON.parse self.specification, symbolize_names: true
       rescue Exception => e
-        @parsed_spec = { warnings: [ "Failed to parse task specification", e ]}
+        @parsed_spec = { warnings: ["Failed to parse task specification", e] }
       end
 
     end
@@ -211,8 +210,8 @@ class Task < ActiveRecord::Base
     attributes
   end
 
-  def mentions? thing # returns true if any field of the task specification refers to 
-                       # this particular sample
+  def mentions? thing # returns true if any field of the task specification refers to
+    # this particular sample
     if thing.class == Sample
       return mentions_aux spec, thing.id, thing.sample_type.name
     elsif thing.class == Item
@@ -226,9 +225,9 @@ class Task < ActiveRecord::Base
 
     if sp.class == Hash
 
-      sp.each do |k,v|
+      sp.each do |k, v|
 
-        name,type = k.to_s.split(' ')
+        name, type = k.to_s.split(' ')
 
         if type
           types = type.split('|')
@@ -238,7 +237,7 @@ class Task < ActiveRecord::Base
             else
               return id == v
             end
-          else 
+          else
             return false
           end
         else
@@ -256,9 +255,9 @@ class Task < ActiveRecord::Base
   end
 
   def references? thing
-    s,i = self.references
+    s, i = self.references
     if thing.class == Item
-      return i.member?(thing.id) || ( thing.sample && s.member?(thing.sample.id) )
+      return i.member?(thing.id) || (thing.sample && s.member?(thing.sample.id))
     elsif thing.class == Sample
       return s.member?(thing.id)
     end
@@ -278,9 +277,9 @@ class Task < ActiveRecord::Base
 
     if sp.class == Hash
 
-      sp.each do |k,v|
+      sp.each do |k, v|
 
-        name,type = k.to_s.split(' ',2)
+        name, type = k.to_s.split(' ', 2)
 
         if type
           types = type.split('|')
@@ -292,13 +291,13 @@ class Task < ActiveRecord::Base
               new_samples << v
             end
           elsif (types & @object_type_names) != []
-            puts "item: #{types}"            
+            puts "item: #{types}"
             item_list = []
             if v.class == Array
               item_list += v
             else
               item_list << v
-            end            
+            end
             new_items += item_list
             temp = Item.includes(:sample).find(item_list)
             new_samples += temp.collect { |i| i.sample.id }
@@ -311,19 +310,18 @@ class Task < ActiveRecord::Base
 
     end
 
-    [ new_samples, new_items ]
+    [new_samples, new_items]
 
   end
 
+  def notify msg, opts = {}
 
-
-  def notify msg, opts={}
-
-    tn = TaskNotification.new( { 
-      task_id: self.id, 
-      content: msg, 
-      job_id: nil, 
-      read: false }.merge opts )
+    tn = TaskNotification.new({
+      task_id: self.id,
+      content: msg,
+      job_id: nil,
+      read: false
+    }.merge opts)
 
     tn.save
 
@@ -331,7 +329,7 @@ class Task < ActiveRecord::Base
 
   def notifications
     task_notifications
-  end 
+  end
 
   def self.okay_to_drop? task, user
 
@@ -339,11 +337,11 @@ class Task < ActiveRecord::Base
     warn "Not allowed to delete task #{task.id}"                                    and return false unless task.user_id == user.id
     warn "Could not delete task #{task.id} because it has associated jobs"          and return false unless task.touches.length == 0
     warn "Could not delete task #{task.id} because it has associated posts"         and return false unless task.posts.length == 0
-    warn "Could not delete task #{task.id} because it has associated notifications" and return false unless task.notifications.length == 0        
+    warn "Could not delete task #{task.id} because it has associated notifications" and return false unless task.notifications.length == 0
 
     true
 
-  end   
+  end
 
   def after_save_setup
 
@@ -356,11 +354,11 @@ class Task < ActiveRecord::Base
     code = Repo.contents self.task_prototype.after_save, sha
     eval "module TempAfterSaveModule; #{code}; end; self.extend(TempAfterSaveModule)"
 
-    if self.respond_to?:after_save
+    if self.respond_to? :after_save
       self.after_save
     end
 
-  end 
+  end
 
   def size
     begin
@@ -376,83 +374,83 @@ class Task < ActiveRecord::Base
 
     case task_prototype.name
 
-      when "Fragment Construction"
-        simple_spec[:"fragments"].length
+    when "Fragment Construction"
+      simple_spec[:"fragments"].length
 
-      when "Gibson"
-        1
+    when "Gibson"
+      1
 
-      when "Gibson Assembly"
-        1
+    when "Gibson Assembly"
+      1
 
-      when "Plasmid Verification"
+    when "Plasmid Verification"
 
-        n = simple_spec[:"plate_ids"].length
+      n = simple_spec[:"plate_ids"].length
 
-        (0..n-1).collect { |i| 
+      (0..n - 1).collect { |i|
 
-          if i < simple_spec[:"num_colonies"].length 
-            nc = simple_spec[:"num_colonies"][i]
-          else
-            nc = simple_spec[:"num_colonies"][0]
-          end
+        if i < simple_spec[:"num_colonies"].length
+          nc = simple_spec[:"num_colonies"][i]
+        else
+          nc = simple_spec[:"num_colonies"][0]
+        end
 
-          if simple_spec[:"primer_ids"].class == Array
-            if simple_spec[:"primer_ids"][i].class == Array
-              nc*simple_spec[:"primer_ids"][i].length
-            else
-              nc             
-            end
+        if simple_spec[:"primer_ids"].class == Array
+          if simple_spec[:"primer_ids"][i].class == Array
+            nc * simple_spec[:"primer_ids"][i].length
           else
             nc
           end
-        }.inject{ |sum,x| sum+x }
+        else
+          nc
+        end
+      }.inject { |sum, x| sum + x }
 
-      when "Sequencing"
-        if simple_spec[:"plasmid_stock_id"] && simple_spec[:"plasmid_stock_id"].class == Array
-          n = simple_spec[:"plasmid_stock_id"].length
-        else 
-          n = 1
-        end;
-        (0..n-1).collect { |i| 
-          if simple_spec[:"primer_ids"] && simple_spec[:"primer_ids"].class == Array
-            if simple_spec[:"primer_ids"][i].class == Array
-              simple_spec[:"primer_ids"][i].length 
-            else
-              1
-            end
+    when "Sequencing"
+      if simple_spec[:"plasmid_stock_id"] && simple_spec[:"plasmid_stock_id"].class == Array
+        n = simple_spec[:"plasmid_stock_id"].length
+      else
+        n = 1
+      end;
+      (0..n - 1).collect { |i|
+        if simple_spec[:"primer_ids"] && simple_spec[:"primer_ids"].class == Array
+          if simple_spec[:"primer_ids"][i].class == Array
+            simple_spec[:"primer_ids"][i].length
           else
             1
           end
-        }.inject{ |sum,x| sum+x }        
+        else
+          1
+        end
+      }.inject { |sum, x| sum + x }
 
-      when "Yeast Strain QC"
-        n = simple_spec[:"yeast_plate_ids"].length
-        (0..n-1).collect { |i| simple_spec[:"num_colonies"][i] }.inject{ |sum,x| sum+x }
+    when "Yeast Strain QC"
+      n = simple_spec[:"yeast_plate_ids"].length
+      (0..n - 1).collect { |i| simple_spec[:"num_colonies"][i] }.inject { |sum, x| sum + x }
 
-      when "Yeast Transformation"
-        simple_spec[:"yeast_transformed_strain_ids"].length
+    when "Yeast Transformation"
+      simple_spec[:"yeast_transformed_strain_ids"].length
 
-      when "Primer Order"
-        simple_spec[:"primer_ids"].length        
+    when "Primer Order"
+      simple_spec[:"primer_ids"].length
 
-      when "Glycerol Stock"
-        simple_spec[:"item_ids"].length  
+    when "Glycerol Stock"
+      simple_spec[:"item_ids"].length
 
-      when "Discard Item"
-        simple_spec[:"item_ids"].length          
+    when "Discard Item"
+      simple_spec[:"item_ids"].length
 
-      when "Streak Plate"
-        simple_spec[:"item_ids"].length    
+    when "Streak Plate"
+      simple_spec[:"item_ids"].length
 
-      when "Sequencing Verification"
-        simple_spec[:"plasmid_stock_ids"].length + simple_spec[:"overnight_ids"].length
+    when "Sequencing Verification"
+      simple_spec[:"plasmid_stock_ids"].length + simple_spec[:"overnight_ids"].length
 
-      when "Yeast Competent Cell"
-        simple_spec[:"yeast_strain_ids"].length
+    when "Yeast Competent Cell"
+      simple_spec[:"yeast_strain_ids"].length
 
-      else
-        1
+    else
+      1
 
     end
 

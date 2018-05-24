@@ -2,7 +2,7 @@ namespace :cleanup do
 
   desc "Clean up various things in ways that are hard to do with the UI"
 
-  task :running_metacols => :environment do 
+  task :running_metacols => :environment do
     n = 0
     Metacol.where(status: "RUNNING").each do |m|
       m.status = "DONE"

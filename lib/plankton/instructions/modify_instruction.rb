@@ -38,7 +38,7 @@ module Plankton
 
       end
 
-      keys = [ :inuse, :dinuse, :iinuse, :quantity, :dquantity, :iquantity ]
+      keys = [:inuse, :dinuse, :iinuse, :quantity, :dquantity, :iquantity]
 
       keys.each do |key|
 
@@ -73,16 +73,16 @@ module Plankton
       item.save
 
       # Probably should not delete items because then you can't get their histories
-      #if item.quantity == 0
+      # if item.quantity == 0
       #  item.destroy
-      #end
+      # end
 
       log = Log.new
       log.job_id = params[:job]
       log.user_id = scope.stack.first[:user_id]
       log.entry_type = 'MODIFY'
-      log.data = { pc: @pc, item_id: @info[:item][:id], 
-                   old: old.to_json, 
+      log.data = { pc: @pc, item_id: @info[:item][:id],
+                   old: old.to_json,
                    new: { location: item.location, inuse: item.inuse, quantity: item.quantity } }.to_json
       log.save
 

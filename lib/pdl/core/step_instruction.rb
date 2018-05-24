@@ -15,7 +15,7 @@ class StepInstruction < Instruction
 
   # RAILS #############################################################################################
 
-  def description 
+  def description
     str = ""
     @parts.each do |a|
       str = a[:description] if a.has_key?(:description)
@@ -65,23 +65,23 @@ class StepInstruction < Instruction
     g
   end
 
-  def pre_render scope, params
+  def pre_render scope, _params
 
     @parts = []
 
     @part_exprs.each do |a|
-      a.each do |k,v|
+      a.each do |k, v|
         begin
           if k == :getdata
-            @parts.push( getdata: { var: v[:var], type: v[:type], description: scope.substitute( v[:description] ) } )
+            @parts.push(getdata: { var: v[:var], type: v[:type], description: scope.substitute(v[:description]) })
           elsif k == :select
             choice_evals = []
             v[:choices].each do |c|
               choice_evals.push scope.substitute c
             end
-            @parts.push( select: { var: v[:var], description: scope.substitute( v[:description] ), choices: choice_evals } )
+            @parts.push(select: { var: v[:var], description: scope.substitute(v[:description]), choices: choice_evals })
           else
-            @parts.push( k => scope.substitute( v ) )
+            @parts.push(k => scope.substitute(v))
           end
         rescue Exception => e
           raise "In <step>: " + e.to_s
@@ -118,7 +118,7 @@ class StepInstruction < Instruction
       log.job_id = params[:job]
       log.user_id = scope.stack.first[:user_id]
       log.entry_type = 'GETDATA'
-      log.data = {pc: @pc, getdatas: log_data}.to_json
+      log.data = { pc: @pc, getdatas: log_data }.to_json
       log.save
     end
 
@@ -130,8 +130,8 @@ class StepInstruction < Instruction
 
   # TERMINAL ##########################################################################################
 
-  def render_description d, scope 
-    return "  Description: " +  (scope.substitute d) + "\n"
+  def render_description d, scope
+    return "  Description: " + (scope.substitute d) + "\n"
   end
 
   def render_note n, scope
@@ -142,13 +142,13 @@ class StepInstruction < Instruction
     return "  !!!!Warning: " + (scope.substitute n) + "!!!!\n"
   end
 
-  def render_getdata d, scope
+  def render_getdata d, _scope
     data_str = ""
     data_str += "Please input data for the following inputs, respectively:"
     data_str += "\n Press Enter after each input >"
     data_str += "\n\t" + d[:var] + ": " +  d[:description]
     return data_str
-  end  
+  end
 
   def render scope
 
@@ -156,45 +156,44 @@ class StepInstruction < Instruction
 
     str = ""
     @parts.each do |a|
-        
-        if a.has_key?(:description)
-          str += render_description a[:description], scope
-	end
 
-        if a.has_key?(:note)
-          str += render_note a[:note], scope
-	end
- 
-        if a.has_key?(:warning)
-	  str += render_warning a[:warning], scope
-	end
+      if a.has_key?(:description)
+        str += render_description a[:description], scope
+      end
 
-	if a.has_key?(:getdata)
-	  str += render_getdata a[:getdata], scope
-          @has_get_datas = true
-	end
+      if a.has_key?(:note)
+        str += render_note a[:note], scope
+      end
+
+      if a.has_key?(:warning)
+        str += render_warning a[:warning], scope
+      end
+
+      if a.has_key?(:getdata)
+        str += render_getdata a[:getdata], scope
+        @has_get_datas = true
+      end
 
     end
 
-    puts eval ( "\"" + str + "\"" ) # Note, extra quotes for interpolation
+    puts eval ( "\"" + str + "\"") # Note, extra quotes for interpolation
 
     print "\nPress [ENTER] to continue: " unless @has_get_datas
-
 
   end
 
   def execute scope
-   
+
     @parts.each do |a|
-        if a.has_key?(:getdata)
-	  scope.set a[:getdata][:var].to_sym, gets.chomp
-        end
+      if a.has_key?(:getdata)
+        scope.set a[:getdata][:var].to_sym, gets.chomp
+      end
     end
-    
+
     unless @has_get_datas
       gets
     end
-  
+
   end
 
 end

@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe "parameters/new", :type => :view do
   before(:each) do
     assign(:parameter, Parameter.new(
-      :key => "",
-      :value => "MyString"
-    ))
+                         :key => "",
+                         :value => "MyString"
+                       ))
   end
 
   it "renders new parameter form" do

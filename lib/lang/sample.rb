@@ -24,7 +24,7 @@ module Lang
         puts "GOT #{s.inspect} and #{o.inspect}"
 
         if o && s
-          result = Item.where("sample_id = ? AND object_type_id = ?",s.id, o.id).length
+          result = Item.where("sample_id = ? AND object_type_id = ?", s.id, o.id).length
         end
 
       else
@@ -34,7 +34,7 @@ module Lang
       end
 
       result
- 
+
     end
 
     def min_quantity obj
@@ -70,7 +70,7 @@ module Lang
 
         return i.sample.attributes.symbolize_keys
 
-      elsif x.class == Fixnum
+      elsif x.class == Integer
 
         s = Sample.find_by_id(x)
 

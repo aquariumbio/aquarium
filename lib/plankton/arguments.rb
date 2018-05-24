@@ -3,17 +3,17 @@ module Plankton
   class Parser
 
     def argument
-  
-      var =  @tok.eat_a_variable
-             @tok.eat_a ':'
+
+      var = @tok.eat_a_variable
+      @tok.eat_a ':'
       type = @tok.eat_a_argtype
-      
+
       unless type == 'number' || type == 'string' || type == 'sample' || type == 'object' || type == 'generic'
         raise "Unknown type '#{type}' in argument."
       end
- 
+
       if type == 'object' # convert to old type specifier for object types
-         type = 'objecttype'
+        type = 'objecttype'
       end
 
       if type == 'sample'
@@ -48,16 +48,16 @@ module Plankton
 
       if @include_stack.length <= 1
         a = ArgumentInstruction.new var, type, description
-        if sample_type 
+        if sample_type
           a.sample_type = sample_type
         end
         push_arg a
       end
-  
+
     end # argument
 
     def argument_list
-      
+
       @tok.eat_a 'argument'
       while @tok.current != 'end' && @tok.current != 'EOF'
         argument
@@ -84,6 +84,6 @@ module Plankton
 
     end # arguments_only
 
-  end 
+  end
 
 end

@@ -1,8 +1,8 @@
 class GroupsController < ApplicationController
 
   before_filter :signed_in_user
-  before_filter :up_to_date_user  
-  
+  before_filter :up_to_date_user
+
   # GET /groups
   # GET /groups.json
   def index
@@ -27,16 +27,16 @@ class GroupsController < ApplicationController
     # Add new users
     if params[:user_id]
 
-      m = Membership.find_by_user_id_and_group_id( params[:user_id], @group.id )
+      m = Membership.find_by_user_id_and_group_id(params[:user_id], @group.id)
 
-      if !m 
+      if !m
 
         u = User.find(params[:user_id])
         m = Membership.new
         m.user_id = u.id
         m.group_id = @group.id
         m.save
-        #flash[:notice] = "Added #{u.login} to #{@group.name}."
+        # flash[:notice] = "Added #{u.login} to #{@group.name}."
 
       end
 
@@ -45,8 +45,8 @@ class GroupsController < ApplicationController
     # Delete users
     if params[:drop_user]
 
-      m = Membership.find_by_user_id_and_group_id( params[:drop_user], @group.id )
-  
+      m = Membership.find_by_user_id_and_group_id(params[:drop_user], @group.id)
+
       if m
         m.destroy
       end

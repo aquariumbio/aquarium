@@ -6,7 +6,7 @@ class Api
   include ApiFind
   include ApiCreate
   include ApiDrop
-  include ApiSubmit  
+  include ApiSubmit
 
   def initialize params
     @params = symbolize params
@@ -19,13 +19,13 @@ class Api
   def symbolize hash
     hash.inject({}) { |result, (key, value)|
       new_key = case key
-        when String then key.to_sym
-        else key
-      end
+                when String then key.to_sym
+                else key
+                end
       new_value = case value
-        when Hash then symbolize value
-        else value
-      end
+                  when Hash then symbolize value
+                  else value
+                  end
       result[new_key] = new_value
       result
     }
@@ -59,7 +59,7 @@ class Api
         begin
           direct params[:run][:method], params[:run][:args]
         rescue Exception => e
-          error "Could not execute request: #{e.to_s}, #{e.backtrace.first}"
+          error "Could not execute request: #{e}, #{e.backtrace.first}"
         end
       else
         warn "No run section found"
@@ -77,8 +77,8 @@ class Api
 
   def direct method, args
 
-    routes = { "find"   => method(:find), 
-               "create" => method(:create), 
+    routes = { "find"   => method(:find),
+               "create" => method(:create),
                "submit" => method(:submit),
                "drop" => method(:drop) }
 

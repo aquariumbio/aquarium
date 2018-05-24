@@ -14,11 +14,11 @@ end
 
 s = "A step with a foreach and with L=%{L}"
 
-scope = { x: 1, y: 2, L: [1,2,3] }
+scope = { x: 1, y: 2, L: [1, 2, 3] }
 
 q = separate_string s.to_s
 
 puts q
-e = eval( q % scope )
+e = eval(q % scope)
 
 puts e

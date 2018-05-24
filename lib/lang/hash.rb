@@ -1,6 +1,6 @@
 module Lang
 
-  class Scope 
+  class Scope
 
     def merge g, h
 

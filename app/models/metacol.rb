@@ -11,7 +11,7 @@ class Metacol < ActiveRecord::Base
   end
 
   def arguments
-  	begin
+    begin
       (JSON.parse self.state, symbolize_names: true)[:stack][0]
     rescue
       { error: "Could not parse arguments" }

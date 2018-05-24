@@ -8,7 +8,7 @@ module Krill
 
       @task = task
       @errors = []
-      
+
       path = @task.task_prototype.validator
 
       if path
@@ -19,7 +19,7 @@ module Krill
           code = Repo::contents path, sha
         rescue Exception => e
           @name = :validator_not_found
-          @errors.push "Could not find validator at #{path} for task #{@task.name} because #{e.to_s}."          
+          @errors.push "Could not find validator at #{path} for task #{@task.name} because #{e}."
           @checker = nil
           return # there is no valid validator path
         end
@@ -37,7 +37,6 @@ module Krill
 
           # Make protocol
           @checker = namespace::Validator.new
-
         rescue Exception => e
           @errors.push "Error while parsing #{path}"
           @errors.push e.to_s
@@ -57,14 +56,14 @@ module Krill
       if @errors.length > 0
         return @errors
       else
-        return ! @checker || @checker.check(@task)
+        return !@checker || @checker.check(@task)
       end
     end
 
     def make_base
 
       b = Module.new
-      b.send(:include,Base)
+      b.send(:include, Base)
       b
 
     end
@@ -79,10 +78,10 @@ module Krill
           eigenclass = class << self
             self
           end
-          eigenclass.send(:include,mod) unless eigenclass.include? mod
+          eigenclass.send(:include, mod) unless eigenclass.include? mod
           insert_base_class k, mod
         elsif k.class == Class
-          k.send(:include,mod) unless k.include? mod
+          k.send(:include, mod) unless k.include? mod
           insert_base_class k, mod
         end
 

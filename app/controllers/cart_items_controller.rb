@@ -25,10 +25,10 @@ class CartItemsController < ApplicationController
     @item = Item.find(params[:item_id])
 
     # check whether the item is already in the cart
-    i = CartItem.find(:first, conditions: { user_id: current_user.id, item_id: params[:item_id] } )
+    i = CartItem.find(:first, conditions: { user_id: current_user.id, item_id: params[:item_id] })
 
     if !i
-      @ci = current_user.cart_items.create({ item_id: params[:item_id]})
+      @ci = current_user.cart_items.create({ item_id: params[:item_id] })
       redirect_to @item.sample, notice: "Item #{@item.id} (#{@item.object_type.name}) added to your cart."
     else
       redirect_to @item.sample, notice: "Item #{@item.id} (#{@item.object_type.name}) is already in your cart."

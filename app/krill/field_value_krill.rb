@@ -43,7 +43,7 @@ module FieldValueKrill
   def make
 
     if object_type
-      @item = Item.make( { quantity: 1, inuse: 0 }, sample: child_sample, object_type: object_type )
+      @item = Item.make({ quantity: 1, inuse: 0 }, sample: child_sample, object_type: object_type)
       @item.store if @item.location == "Unknown"
       self.child_item_id = @item.id
       self.save
@@ -57,7 +57,7 @@ module FieldValueKrill
 
   def make_collection
 
-    ot = object_type    
+    ot = object_type
 
     if ot && ot.handler == 'collection'
       c = Collection.new_collection(object_type.name)
@@ -109,7 +109,7 @@ module FieldValueKrill
       end
     end
 
-    "#{name}: { sample: #{si}, item: #{ii}, array: #{field_type.array ? 'true' : 'false' }, part: #{field_type.part ? [row,column] : '-' } }"
+    "#{name}: { sample: #{si}, item: #{ii}, array: #{field_type.array ? 'true' : 'false'}, part: #{field_type.part ? [row, column] : '-'} }"
 
   end
 

@@ -6,7 +6,7 @@ module IOList
 
   def item_ids
     collect { |io| io.item.id }
-  end  
+  end
 
   def samples
     collect { |io| io.sample }
@@ -14,7 +14,7 @@ module IOList
 
   def sample_ids
     collect { |io| io.sample.id }
-  end  
+  end
 
   def collections
     collect { |io| io.collection }
@@ -22,7 +22,7 @@ module IOList
 
   def collection_ids
     collect { |io| io.collection.id }
-  end  
+  end
 
   def rows
     collect { |io| io.row }
@@ -30,10 +30,10 @@ module IOList
 
   def columns
     collect { |io| io.column }
-  end 
+  end
 
   def rcs
-    collect { |io| [io.row,io.column] }
-  end 
+    collect { |io| [io.row, io.column] }
+  end
 
 end

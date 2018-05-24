@@ -18,7 +18,7 @@ class OperationsControllerTest < ActionController::TestCase
 
   test "should create operation" do
     assert_difference('Operation.count') do
-      post :create, operation: {  }
+      post :create, operation: {}
     end
 
     assert_redirected_to operation_path(assigns(:operation))
@@ -35,7 +35,7 @@ class OperationsControllerTest < ActionController::TestCase
   end
 
   test "should update operation" do
-    put :update, id: @operation, operation: {  }
+    put :update, id: @operation, operation: {}
     assert_redirected_to operation_path(assigns(:operation))
   end
 

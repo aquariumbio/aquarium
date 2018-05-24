@@ -18,7 +18,7 @@ module Plankton
 
     # RAILS ###########################################################################################
 
-    def bt_execute scope, params
+    def bt_execute scope, _params
 
       begin
         scope.set_complex @lhs, @rhs, @new

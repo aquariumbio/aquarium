@@ -16,14 +16,14 @@ RSpec.describe Krill do
     tem = (spec[:inputs].find { |i| i[:name] == "template" })
     fra = (spec[:outputs].find { |i| i[:name] == "fragment" })
     ant = (spec[:parameters].find { |i| i[:name] == "annealing_temperature" })
-    tc  = (spec[:data].find { |i| i[:name] == "tc" })    
+    tc  = (spec[:data].find { |i| i[:name] == "tc" })
 
-    fwd[:instantiation] = (1..3).collect { |j| { sample: primers[rand(primers.length)].id } }
-    rev[:instantiation] = (1..3).collect { |j| { sample: primers[rand(primers.length)].id } }    
-    tem[:instantiation] = (1..3).collect { |j| { sample: plasmids[rand(plasmids.length)].id } }
-    fra[:instantiation] = (1..3).collect { |j| { sample: frags[rand(frags.length)].id } }
-    ant[:instantiation] = (1..3).collect { |k| { value: 70 + 0.1*k } }    
-    tc[:instantiation]  = (1..3).collect { |k| {} }        
+    fwd[:instantiation] = (1..3).collect { |_j| { sample: primers[rand(primers.length)].id } }
+    rev[:instantiation] = (1..3).collect { |_j| { sample: primers[rand(primers.length)].id } }
+    tem[:instantiation] = (1..3).collect { |_j| { sample: plasmids[rand(plasmids.length)].id } }
+    fra[:instantiation] = (1..3).collect { |_j| { sample: frags[rand(frags.length)].id } }
+    ant[:instantiation] = (1..3).collect { |k| { value: 70 + 0.1 * k } }
+    tc[:instantiation]  = (1..3).collect { |_k| {} }
 
     spec
 
@@ -38,7 +38,7 @@ RSpec.describe Krill do
       o.input.all.release
       o.output.fragment.produce
       o.data.tc[0] = 1
-      o.data.tc = [ 1, 2, 3 ]
+      o.data.tc = [1, 2, 3]
       puts o.parameter.annealing_temperature[0]
     end
   end

@@ -8,13 +8,13 @@ class RepoController < ApplicationController
 
   def dev_path
     "repos/development/"
-  end  
+  end
 
-  def directory_hash(path, name=nil)
-    data = {:data => (name || path)}
+  def directory_hash(path, name = nil)
+    data = { :data => (name || path) }
     data[:children] = children = []
     Dir.entries(path).sort.each do |entry|
-      next if ( /^\./ =~ entry )
+      next if (/^\./ =~ entry)
       full_path = File.join(path, entry)
       if File.directory?(full_path)
         children << directory_hash(full_path, entry)
@@ -32,7 +32,7 @@ class RepoController < ApplicationController
     Rails.logger.info @repos
 
     @repos[:children].each do |r|
-      r[:info] = Repo::info( r[:data] )
+      r[:info] = Repo::info(r[:data])
     end
 
     if params[:highlight]
@@ -47,7 +47,6 @@ class RepoController < ApplicationController
 
   end
 
-  
   def get
 
     begin
@@ -62,24 +61,24 @@ class RepoController < ApplicationController
       if params[:from]
         sequence_new_job @version, params[:path], params[:from].to_i
       else
-        redirect_to interpreter_arguments_path(sha: @version, path: params[:path]) 
+        redirect_to interpreter_arguments_path(sha: @version, path: params[:path])
       end
     else
       redirect_to arguments_new_metacol_path(sha: @version, path: params[:path])
     end
-    
-  end 
+
+  end
 
   def pull
 
     begin
       m = Git.open(master_path + params[:name]).pull()
       d = Git.open(dev_path    + params[:name]).pull()
-      flash[:notice] = ( "MASTER:\n" + m + "\n\n" + "DEVELOPMENT:\n" + d ).gsub(/\r|\n/,"<br />").html_safe
+      flash[:notice] = ("MASTER:\n" + m + "\n\n" + "DEVELOPMENT:\n" + d).gsub(/\r|\n/, "<br />").html_safe
     rescue Exception => e
       flash[:notice] = "Could not pull: " + e.to_s
     end
-    redirect_to repo_list_path( highlight: params[:name])
+    redirect_to repo_list_path(highlight: params[:name])
 
   end
 

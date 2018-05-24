@@ -1,15 +1,15 @@
 class OperationsController < ApplicationController
 
   before_filter :signed_in_user
-  before_filter :up_to_date_user    
+  before_filter :up_to_date_user
 
   def active_and_pending_jobs
     job_ids = JobAssociation.joins(:job, :operation).where("pc != -2 && status != 'error'").collect { |ja| ja.job_id }.uniq
-    { 
+    {
       ids: job_ids,
       pending: Job.includes(:predecessors).where(pc: -1, id: job_ids).as_json(methods: :active_predecessors),
       running: Job.where(pc: 0..10000, id: job_ids)
-    }    
+    }
   end
 
   def jobs
@@ -19,11 +19,13 @@ class OperationsController < ApplicationController
   def index
 
     respond_to do |format|
-      format.json { render json: Operation.where(status: [ 'pending', 'scheduled', 'running', 'primed' ])
-                                          .as_json(methods: [:field_values, :plans, :precondition_value]) }
+      format.json {
+        render json: Operation.where(status: ['pending', 'scheduled', 'running', 'primed'])
+                              .as_json(methods: [:field_values, :plans, :precondition_value])
+      }
       format.html { render layout: 'aq2' }
     end
-    
+
   end
 
   def batch
@@ -32,7 +34,7 @@ class OperationsController < ApplicationController
 
     unless ops.empty?
       ot = ops.first.operation_type
-      job,operations = ot.schedule(ops, current_user, Group.find_by_name('technicians'))
+      job, operations = ot.schedule(ops, current_user, Group.find_by_name('technicians'))
     end
 
     render json: { operations: operations, jobs: active_and_pending_jobs }
@@ -47,8 +49,8 @@ class OperationsController < ApplicationController
       jas = op.job_associations.select { |ja| ja.job.pc == Job.NOT_STARTED }
       jobs = jas.collect { |ja| ja.job }
       jas.each { |ja| ja.destroy }
-      jobs.each do |job| 
-        if job.job_associations.length == 0 
+      jobs.each do |job|
+        if job.job_associations.length == 0
           job.cancel current_user
         end
       end
@@ -59,7 +61,7 @@ class OperationsController < ApplicationController
 
     render json: { operations: ops }
 
-  end  
+  end
 
   def set_status
 
@@ -67,7 +69,7 @@ class OperationsController < ApplicationController
     op.status = params[:status]
     op.save
 
-    if op.errors.empty? 
+    if op.errors.empty?
       render json: op
     else
       render json: { errors: op.errors.full_messages }
@@ -92,14 +94,14 @@ class OperationsController < ApplicationController
 
   end
 
-  def manager_list 
+  def manager_list
 
     ops = Operation.where(params[:criteria])
     ops = ops.limit(params[:options][:limit])   if params[:options] && params[:options][:limit] && params[:options][:limit].to_i > 0
     ops = ops.offset(params[:options][:offset]) if params[:options] && params[:options][:offset] && params[:options][:offset].to_i > 0
-    ops = ops.order('created_at DESC')          if params[:options] && params[:options][:reverse]     
+    ops = ops.order('created_at DESC')          if params[:options] && params[:options][:reverse]
     ops = ops.as_json
-    
+
     op_ids = ops.collect { |op| op["id"] }
     user_ids = ops.collect { |op| op["user_id"] }
 

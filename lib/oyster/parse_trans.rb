@@ -52,7 +52,7 @@ module Oyster
       end
 
       @tok.eat_a 'end'
-  
+
       parents.each do |i|
         t.parent @metacol.places[i]
       end
@@ -61,7 +61,7 @@ module Oyster
         t.child @metacol.places[i]
       end
 
-      t.cond cond     
+      t.cond cond
       @metacol.transition t
 
     end

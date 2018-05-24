@@ -1,7 +1,6 @@
 begin
   Bioturk::Application.config.aquarium_version = `git rev-list HEAD --count`.strip
-
-rescue 
+rescue
   Bioturk::Application.config.aquarium_version = "unknown"
 end
 

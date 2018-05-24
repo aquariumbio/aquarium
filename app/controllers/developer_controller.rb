@@ -5,7 +5,7 @@ class DeveloperController < ApplicationController
   def developer
     respond_to do |format|
       format.html { render layout: 'developer' }
-    end    
+    end
   end
 
   def get
@@ -18,7 +18,7 @@ class DeveloperController < ApplicationController
       content = Repo::contents path, sha, 'development', branch
       render json: { path: path, sha: sha, content: content, errors: [] }
     rescue Exception => e
-      render json: { errors: [ e.to_s ] }
+      render json: { errors: [e.to_s] }
     end
 
   end
@@ -26,13 +26,13 @@ class DeveloperController < ApplicationController
   def save
 
     path = params[:path] + ".rb"
-    branch = params[:branch]    
+    branch = params[:branch]
 
     begin
       sha = Repo::save path, params[:content], 'development', branch
       render json: { errors: [], sha: sha }
     rescue Exception => e
-      render json: { errors: [ e.to_s ] }
+      render json: { errors: [e.to_s] }
     end
 
   end
@@ -40,12 +40,12 @@ class DeveloperController < ApplicationController
   def test
 
     path = params[:path] + ".rb"
-    branch = params[:branch]    
+    branch = params[:branch]
 
     begin
       sha = Repo::version path, 'development', branch
     rescue Exception => e
-      render json: { errors: [ e.to_s ] }
+      render json: { errors: [e.to_s] }
       return
     end
 
@@ -68,18 +68,18 @@ class DeveloperController < ApplicationController
     result = Krill::Client.new.start job.id, true, 'development', branch
 
     if result[:response] == "error"
-      render json: { errors: [ "Krill could not start #{job.id}" ] + result[:error].split(",")[0,5] }
+      render json: { errors: ["Krill could not start #{job.id}"] + result[:error].split(",")[0, 5] }
       return
     end
 
     job.reload
 
     if job.error?
-      render json: { errors: [ "Job #{job.id} failed" ], job: job }
+      render json: { errors: ["Job #{job.id} failed"], job: job }
     else
-      render json: { job: job }      
+      render json: { job: job }
     end
 
-  end    
+  end
 
 end

@@ -3,7 +3,7 @@
 module OperationStatus
 
   # Set and save {Operation} status
-  # 
+  #
   # @param str [String] ("waiting", "pending", "primed", "deferred", "scheduled", "running", "done", "error")
   # @return [String] The {Operation} status
   def change_status str
@@ -21,14 +21,14 @@ module OperationStatus
 
     if on_the_fly
       change_status "primed"
-    elsif leaf? # note that this op is considered a leaf if it has no preds, 
-                # or if its preds are all on_the_fly leaves
+    elsif leaf? # note that this op is considered a leaf if it has no preds,
+      # or if its preds are all on_the_fly leaves
       if self.precondition_value
         change_status "pending"
       else
         change_status "delayed"
       end
-    elsif
+    else
       change_status "waiting"
     end
 
@@ -55,7 +55,7 @@ module OperationStatus
   def defer
     raise "Cannot defer operation #{id} from state #{status}" unless status == "pending"
     change_status "deferred"
-  end    
+  end
 
   def unbatch
   end
@@ -64,9 +64,9 @@ module OperationStatus
 
     begin
       print "op #{self.id}: #{self.status}"
-      if status != "scheduled" && 
-         status != "running" && 
-         status != "done" && 
+      if status != "scheduled" &&
+         status != "running" &&
+         status != "done" &&
          status != "error" &&
          ready? # in planner/operation_planner.rb
 
@@ -84,8 +84,8 @@ module OperationStatus
       end
       puts " ==> #{self.status}"
     rescue Exception => e
-      Rails.logger.info "COULD NOT STEP OPERATION #{id}: #{e.to_s}"
-    end    
+      Rails.logger.info "COULD NOT STEP OPERATION #{id}: #{e}"
+    end
 
     # TODO: Change deferred op to scheduled
 
@@ -95,9 +95,9 @@ module OperationStatus
     change_status "done" if self.status == "running"
   end
 
-  # Set the {Operation} to "error", and create a {DataAssociation} to 
+  # Set the {Operation} to "error", and create a {DataAssociation} to
   # describe why the operation errored
-  # 
+  #
   # @param error_type [Symbol] Name of error
   # @param msg [String] Error message
   # @example Error {Operation}s with no plate colonies
@@ -111,14 +111,14 @@ module OperationStatus
   # Set {Operation} status to "pending" if its precondition evaluates to true;
   # sets status to "delayed" otherwise. This is particularly useful for
   # operations that are not yet ready to be run or need to be run periodically.
-  # 
+  #
   # @see #change_status
   def redo
-      if self.precondition_value
-        change_status "pending"
-      else
-        change_status "delayed"
-      end
+    if self.precondition_value
+      change_status "pending"
+    else
+      change_status "delayed"
+    end
     # TODO: Change preds to pending? At least on_the_fly_preds/
   end
 
@@ -138,4 +138,3 @@ module OperationStatus
   end
 
 end
-

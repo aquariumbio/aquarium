@@ -17,7 +17,7 @@ module Marshall
 
     p.save
 
-    self.operations p, x[:operations]   
+    self.operations p, x[:operations]
     self.wires p, x[:wires] if x[:wires] && p.errors.empty?
 
     p.layout = self.mod(x[:layout]).to_json
@@ -43,8 +43,8 @@ module Marshall
           end
           ids << operation.id
           map_id op[:rid], operation.id
-         rescue Exception => e
-          raise "Marshalling error: #{e.to_s}: #{e.backtrace[0].to_s}"
+        rescue Exception => e
+          raise "Marshalling error: #{e}: #{e.backtrace[0]}"
         end
       end
     end
@@ -96,17 +96,17 @@ module Marshall
 
   end
 
-  def self.wires p, wires
+  def self.wires _p, wires
 
     ids = []
 
     wires.each do |x_wire|
       if !x_wire[:id]
         wire = Wire.new({
-          from_id: @@id_map[x_wire[:from][:rid]], 
-          to_id: @@id_map[x_wire[:to][:rid]],
-          active: true
-        })
+                          from_id: @@id_map[x_wire[:from][:rid]],
+                          to_id: @@id_map[x_wire[:to][:rid]],
+                          active: true
+                        })
         wire.save
         ids << wire.id
       else
@@ -126,25 +126,24 @@ module Marshall
       sid = fv[:child_sample_id]
     end
 
-    ft = op.operation_type.type(fv[:name],fv[:role])
+    ft = op.operation_type.type(fv[:name], fv[:role])
 
     aft = AllowableFieldType.find_by_id(fv[:allowable_field_type_id])
     sample = Sample.find_by_id(sid)
 
-    if aft && ( !sample || aft.sample_type_id != sample.sample_type_id )
+    if aft && (!sample || aft.sample_type_id != sample.sample_type_id)
       sid = nil
     end
 
-    atts =  { name: fv[:name],
-        role: fv[:role], 
-        field_type_id: ft.id,
-        child_sample_id: sid,
-        child_item_id: fv[:child_item_id],
-        allowable_field_type_id: fv[:allowable_field_type_id],
-        row: fv[:row],
-        column: fv[:column],
-        value: fv[:value]
-      }
+    atts = { name: fv[:name],
+             role: fv[:role],
+             field_type_id: ft.id,
+             child_sample_id: sid,
+             child_item_id: fv[:child_item_id],
+             allowable_field_type_id: fv[:allowable_field_type_id],
+             row: fv[:row],
+             column: fv[:column],
+             value: fv[:value] }
 
     if fv[:id]
 
@@ -160,14 +159,14 @@ module Marshall
     self.map_id fv[:rid], field_value.id
 
     unless field_value.errors.empty?
-      raise "Marshalling error: " + 
+      raise "Marshalling error: " +
             op.operation_type.name + " operation: " +
             field_value.errors.full_messages.join(", ")
     end
 
     field_value
 
-  end    
+  end
 
   def self.plan_update x
 
@@ -182,7 +181,7 @@ module Marshall
 
     # for each x operation, if the operation exists, update it, else create it
     op_ids = self.operations p, x[:operations]
-   
+
     puts "op_ids = #{op_ids} while plan ops = #{p.operations.collect { |o| o.id }}"
 
     # for each plan operation, if it is not in x, then delete it
@@ -196,9 +195,9 @@ module Marshall
     end
 
     # for each x wire, if the wire doesn't exist, create it
-    if x[:wires] 
+    if x[:wires]
       wire_ids = self.wires p, x[:wires]
-    else 
+    else
       wire_ids = []
     end
 
@@ -210,7 +209,7 @@ module Marshall
     end
 
     p.layout = self.mod(x[:layout]).to_json
-    p.save    
+    p.save
 
     p.reload
 
@@ -220,23 +219,23 @@ module Marshall
 
   def self.sid str
     str ? str.split(':')[0] : nil
-  end  
+  end
 
   def self.map_id rid, id
     @@id_map ||= []
     @@id_map[rid] = id
-  end  
+  end
 
   def self.mod m
 
     mod = m
 
-    mod[:wires] = mod[:wires].collect { |w| 
+    mod[:wires] = mod[:wires].collect { |w|
 
       wire = w
 
-      wire[:from_op] = { id: @@id_map[w[:from_op][:rid]] }  if w[:from_op] 
-      wire[:to_op]   = { id: @@id_map[w[:to_op][:rid]]   }  if w[:to_op]   
+      wire[:from_op] = { id: @@id_map[w[:from_op][:rid]] }  if w[:from_op]
+      wire[:to_op]   = { id: @@id_map[w[:to_op][:rid]]   }  if w[:to_op]
       wire[:from]    = { record_type: "FieldValue", id: @@id_map[w[:from][:rid]] } if w[:from][:record_type] == "FieldValue"
       wire[:to]      = { record_type: "FieldValue", id: @@id_map[w[:to][:rid]] }   if w[:to][:record_type] == "FieldValue"
 
@@ -249,6 +248,5 @@ module Marshall
     mod
 
   end
-
 
 end

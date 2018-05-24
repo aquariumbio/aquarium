@@ -2,7 +2,7 @@ class Job < ActiveRecord::Base
 
   include JobOperations
 
-  attr_accessible :arguments, :sha, :state, :user_id, :pc, :submitted_by, :group_id, 
+  attr_accessible :arguments, :sha, :state, :user_id, :pc, :submitted_by, :group_id,
                   :desired_start_time, :latest_start_time, :metacol_id, :successor
 
   has_many :job_associations
@@ -35,11 +35,11 @@ class Job < ActiveRecord::Base
   def self.params_to_time p
 
     DateTime.civil_from_format(:local,
-      p["dt(1i)"].to_i, 
-      p["dt(2i)"].to_i,
-      p["dt(3i)"].to_i,
-      p["dt(4i)"].to_i,
-      p["dt(5i)"].to_i).to_time
+                               p["dt(1i)"].to_i,
+                               p["dt(2i)"].to_i,
+                               p["dt(3i)"].to_i,
+                               p["dt(4i)"].to_i,
+                               p["dt(5i)"].to_i).to_time
 
   end
 
@@ -51,11 +51,11 @@ class Job < ActiveRecord::Base
     self.pc == Job.NOT_STARTED
   end
 
-  def pending? 
+  def pending?
     self.not_started?
   end
 
-  def active? 
+  def active?
     self.pc >= 0
   end
 
@@ -65,8 +65,8 @@ class Job < ActiveRecord::Base
     elsif self.pc == Job.NOT_STARTED
       status = 'PENDING'
     else
-      entries = (self.logs.reject { |log| 
-        log.entry_type != 'ERROR' && log.entry_type != 'ABORT' && log.entry_type != 'CANCEL' 
+      entries = (self.logs.reject { |log|
+        log.entry_type != 'ERROR' && log.entry_type != 'ABORT' && log.entry_type != 'CANCEL'
       }).collect { |log| log.entry_type }
       if entries.length > 0
         status = entries[0] == 'ERROR' ? entries[0] : entries[0] + "ED"
@@ -84,32 +84,32 @@ class Job < ActiveRecord::Base
   def append_steps steps
     bt = self.backtrace
     bt.concat steps
-    self.state = Oj.dump(bt,mode: :compat)
+    self.state = Oj.dump(bt, mode: :compat)
     self.save
   end
 
   def append_step step
     bt = self.backtrace
     bt.push step
-    self.state = Oj.dump(bt,mode: :compat)
-    self.save 
+    self.state = Oj.dump(bt, mode: :compat)
+    self.save
   end
 
   def submitter
     u = User.find_by_id(self.submitted_by)
     if u
-        u.login
+      u.login
     else
-        "?"
+      "?"
     end
   end
 
   def doer
     u = User.find_by_id(self.user_id.to_i)
     if u
-        u.login
+      u.login
     else
-        "?"
+      "?"
     end
   end
 
@@ -118,14 +118,14 @@ class Job < ActiveRecord::Base
       if /\.rb$/ =~ self.path
         (JSON.parse(self.state)).first["arguments"]
       else
-        (JSON.parse(self.state))['stack'].first.reject { |k,v| k == 'user_id' }
+        (JSON.parse(self.state))['stack'].first.reject { |k, _v| k == 'user_id' }
       end
     rescue Exception => e
       { error: "unable to parse arguments" }
     end
   end
 
-  def start_link el, opts={}
+  def start_link el, opts = {}
 
     options = { confirm: false }.merge opts
 
@@ -133,39 +133,39 @@ class Job < ActiveRecord::Base
 
     if /\.rb$/ =~ self.path
 
-      if self.pc == Job.NOT_STARTED 
+      if self.pc == Job.NOT_STARTED
         "<a #{confirm} target=_top href='/krill/start?job=#{self.id}'>#{el}</a>".html_safe
-      else 
+      else
         "<a #{confirm} target=_top href='/krill/ui?job=#{self.id}'>#{el}</a>".html_safe
-      end 
+      end
 
-    else 
+    else
 
-      if self.pc == Job.NOT_STARTED 
-        "<a #{confirm} target=_top href='/interpreter/advance?job=#{self.id}'>#{el}</a>".html_safe 
-      elsif self.pc != Job.COMPLETED 
-        "<a #{confirm} target=_top href='/interpreter/current?job=#{self.id}'>#{el}</a>".html_safe 
-      end 
+      if self.pc == Job.NOT_STARTED
+        "<a #{confirm} target=_top href='/interpreter/advance?job=#{self.id}'>#{el}</a>".html_safe
+      elsif self.pc != Job.COMPLETED
+        "<a #{confirm} target=_top href='/interpreter/current?job=#{self.id}'>#{el}</a>".html_safe
+      end
 
-    end 
+    end
 
   end
 
   def remove_types p
 
     case p
-      when String, Fixnum, Float, TrueClass, FalseClass
-        p
-      when Hash
-        h = {}
-        p.keys.each do |key|
-          h[key.to_s.split(' ')[0].to_sym] = remove_types(p[key])
-        end
-        h
-      when Array
-        p.collect do |a|
-          remove_types a
-        end
+    when String, Integer, Float, TrueClass, FalseClass
+      p
+    when Hash
+      h = {}
+      p.keys.each do |key|
+        h[key.to_s.split(' ')[0].to_sym] = remove_types(p[key])
+      end
+      h
+    when Array
+      p.collect do |a|
+        remove_types a
+      end
     end
 
   end
@@ -173,7 +173,7 @@ class Job < ActiveRecord::Base
   def set_arguments a
 
     if /\.rb$/ =~ self.path
-      self.state = [{operation: "initialize", arguments: (remove_types a), time: Time.now}].to_json
+      self.state = [{ operation: "initialize", arguments: (remove_types a), time: Time.now }].to_json
     else
       raise "Could not set arguments of non-krill protocol"
     end
@@ -188,7 +188,7 @@ class Job < ActiveRecord::Base
         @rval = JSON.parse(self.state, symbolize_names: true).last[:rval] || {}
       rescue
         @rval = { error: "Could not find return value." }
-      end      
+      end
 
     else
 
@@ -196,7 +196,7 @@ class Job < ActiveRecord::Base
       if entries.length == 0
         return nil
       else
-        JSON.parse(entries.first.data,:symbolize_names => true)
+        JSON.parse(entries.first.data, :symbolize_names => true)
       end
 
     end
@@ -209,7 +209,7 @@ class Job < ActiveRecord::Base
       self.user_id = user.id
       if /\.rb$/ =~ self.path
         Krill::Client.new.abort self.id
-        self.abort_krill 
+        self.abort_krill
       end
       self.save
     end
@@ -229,11 +229,11 @@ class Job < ActiveRecord::Base
     else
       return false
     end
-  end  
+  end
 
   def error?
 
-    if krill? 
+    if krill?
       begin
         return self.done? && self.backtrace.last[:operation] != "complete"
       rescue
@@ -254,7 +254,7 @@ class Job < ActiveRecord::Base
 
   def error_backtrace
     self.backtrace[-3][:backtrace]
-  end  
+  end
 
   def abort_krill
 
@@ -262,9 +262,10 @@ class Job < ActiveRecord::Base
 
     state = JSON.parse self.state, symbolize_names: true
     if state.length % 2 == 1 # backtrace ends with a 'next'
-      self.append_step operation: "display", content: [ 
+      self.append_step operation: "display", content: [
         { title: "Interrupted" },
-        { note: "This step was being prepared by the protocol when the 'abort' signal was received."} ]
+        { note: "This step was being prepared by the protocol when the 'abort' signal was received." }
+      ]
     end
 
     # add next and final
@@ -313,7 +314,7 @@ class Job < ActiveRecord::Base
   def reset
 
     puts Krill::Client.new.abort id
-    self.state = [{"operation"=>"initialize", "arguments"=>{}, "time"=>"2017-06-02T11:40:20-07:00"}].to_json
+    self.state = [{ "operation" => "initialize", "arguments" => {}, "time" => "2017-06-02T11:40:20-07:00" }].to_json
     self.pc = 0
     save
     puts Krill::Client.new.start id

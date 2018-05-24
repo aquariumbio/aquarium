@@ -3,15 +3,15 @@ require 'rails_helper'
 RSpec.describe "parameters/index", :type => :view do
   before(:each) do
     assign(:parameters, [
-      Parameter.create!(
-        :key => "",
-        :value => "Value"
-      ),
-      Parameter.create!(
-        :key => "",
-        :value => "Value"
-      )
-    ])
+             Parameter.create!(
+               :key => "",
+               :value => "Value"
+             ),
+             Parameter.create!(
+               :key => "",
+               :value => "Value"
+             )
+           ])
   end
 
   it "renders a list of parameters" do

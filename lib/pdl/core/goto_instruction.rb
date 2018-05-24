@@ -10,7 +10,7 @@ class GotoInstruction < Instruction
     @destination = dest
   end
 
-  def set_pc scope
+  def set_pc _scope
     return @destination
   end
 

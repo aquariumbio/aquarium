@@ -12,7 +12,7 @@ class InformationInstruction < Instruction
 
   # RAILS ###########################################################################################
 
-  def pre_render scope, params
+  def pre_render scope, _params
     begin
       @content = scope.substitute @content
     rescue Exception => e
@@ -32,10 +32,8 @@ class InformationInstruction < Instruction
     print "\nPress [ENTER] to continue: "
   end
 
-  def execute scope
+  def execute _scope
     gets
   end
 
 end
-
-

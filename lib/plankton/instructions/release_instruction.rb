@@ -14,16 +14,16 @@ module Plankton
 
     # RAILS ###########################################################################################
 
-    def pre_render scope, params
+    def pre_render scope, _params
 
       begin
         @item_list = scope.evaluate @expr
       rescue Exception => e
-        raise "In <release>: Could not evaluate object list (" + @expr + "): " + e.message 
+        raise "In <release>: Could not evaluate object list (" + @expr + "): " + e.message
       end
 
       unless @item_list && @item_list.class == Array
-        raise "In <release>: item list evaluated to non array (" + @expr + "): " 
+        raise "In <release>: item list evaluated to non array (" + @expr + "): "
       end
 
       @item_list.each do |item|
@@ -45,28 +45,28 @@ module Plankton
         m = params["method_#{i}"]
         i += 1
         x = Item.find_by_id(item[:id])
-        raise 'no such item:' + item[:name] if !x 
+        raise 'no such item:' + item[:name] if !x
 
         case m
 
-          when 'return'
-            x.inuse -= 1
+        when 'return'
+          x.inuse -= 1
 
-          when 'dispose'
-            if x.sample 
-              x.mark_as_deleted
-            else
-              x.inuse    -= 1
-              x.quantity -= 1
-            end
-
+        when 'dispose'
+          if x.sample
+            x.mark_as_deleted
           else
-            raise 'unknown method in release'
+            x.inuse    -= 1
+            x.quantity -= 1
+          end
+
+        else
+          raise 'unknown method in release'
 
         end
 
         # Items should not be destroyed, because we might want to know their histories.
-        x.save 
+        x.save
 
         log_data.push id: x[:id], method: m, location: x[:location]
 
@@ -93,50 +93,50 @@ module Plankton
       # TODO: check that @pi is a pdl_item
 
       if !@pi.kind_of?(Array)
-          nm     = @pi.object[:name]
-          loc    = @pi.item[:location]
-          method = @pi.object[:release_description]
-          release_method = @pi.object[:release_method]
-          length = 1
+        nm     = @pi.object[:name]
+        loc    = @pi.item[:location]
+        method = @pi.object[:release_description]
+        release_method = @pi.object[:release_method]
+        length = 1
       else
-          nm     = @pi[0].object[:name]
-          loc    = @pi[0].item[:location]
-          method = @pi[0].object[:release_description]
-          release_method = @pi[0].object[:release_method]
-          length = @pi.length
+        nm     = @pi[0].object[:name]
+        loc    = @pi[0].item[:location]
+        method = @pi[0].object[:release_description]
+        release_method = @pi[0].object[:release_method]
+        length = @pi.length
       end
 
       case release_method
 
-        when 'return'
-          puts "Please return the #{length} #{nm} taken from #{loc}."
-          puts "  Details: #{method}"
-          print "Press [ENTER] when finished: "
+      when 'return'
+        puts "Please return the #{length} #{nm} taken from #{loc}."
+        puts "  Details: #{method}"
+        print "Press [ENTER] when finished: "
 
-        when 'dispose'
-          puts "Please dispose of the #{length} #{nm} taken from #{loc}."
-          puts "  Details: #{method}"
-          print "Press [ENTER] when finished: "
+      when 'dispose'
+        puts "Please dispose of the #{length} #{nm} taken from #{loc}."
+        puts "  Details: #{method}"
+        print "Press [ENTER] when finished: "
 
-        when 'query'
-          puts "Please specify whether the #{length} #{nm} taken from #{loc} will be (1) returned or (2) disposed of."
-          puts "  Details: #{method}\n\n"
-          print "Enter (1) if you returned it or (2) if you disposed of it: "
+      when 'query'
+        puts "Please specify whether the #{length} #{nm} taken from #{loc} will be (1) returned or (2) disposed of."
+        puts "  Details: #{method}\n\n"
+        print "Enter (1) if you returned it or (2) if you disposed of it: "
 
       end
 
     end
 
-    def execute scope
+    def execute _scope
 
       input = gets
 
       if !@pi.kind_of?(Array)
-          release_method = @pi.object[:release_method]
-          length = 1
+        release_method = @pi.object[:release_method]
+        length = 1
       else
-          release_method = @pi[0].object[:release_method]
-          length = @pi.length
+        release_method = @pi[0].object[:release_method]
+        length = @pi.length
       end
 
       if release_method == 'query'
@@ -149,8 +149,8 @@ module Plankton
         method = release_method
       end
 
-      if !@pi.kind_of?(Array) 
-        liaison 'release', { id: @pi.item[:id], method: method, quantity: 1 } 
+      if !@pi.kind_of?(Array)
+        liaison 'release', { id: @pi.item[:id], method: method, quantity: 1 }
       else
         count = 0
         while count < length

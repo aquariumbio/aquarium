@@ -6,7 +6,7 @@ class Datatable
     @view = view
   end
 
-  def as_json(options = {})
+  def as_json(_options = {})
     {
       sEcho: params[:sEcho].to_i,
       iTotalRecords: rows.count,
@@ -26,11 +26,11 @@ class Datatable
   end
 
   def page
-    params[:iDisplayStart].to_i/per_page + 1
+    params[:iDisplayStart].to_i / per_page + 1
   end
 
   def sort_column
-    columns = Array.new(20,"id") # redefine in child class
+    columns = Array.new(20, "id") # redefine in child class
     columns[params[:iSortCol_0].to_i]
   end
 

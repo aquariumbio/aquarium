@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
   has_many :budgets, through: :user_budget_associations
   has_many :plans
   has_many :parameters
-  
+
   before_create { |user| user.login = login.downcase }
   before_create :create_remember_token
 
@@ -70,21 +70,20 @@ class User < ActiveRecord::Base
     self.memberships.collect { |m| m.group }
   end
 
-  def as_json opts={}
+  def as_json opts = {}
     j = super opts
     j[:groups] = self.groups.as_json
     j
   end
 
   def self.folders current_user
-    { id: -1, 
-      name: "Users", 
+    { id: -1,
+      name: "Users",
       children: (User.all.reject { |u| u.retired? }).collect { |u|
-        Folder.tree(u,locked:u.id != current_user.id)
+        Folder.tree(u, locked: u.id != current_user.id)
       },
-      locked: true
-    }
-  end    
+      locked: true }
+  end
 
   def up_to_date
 
@@ -92,7 +91,7 @@ class User < ActiveRecord::Base
 
     email  = self.parameters.find { |p| p.key == 'email' && p.value && p.value.length > 0 } != nil
     phone  = self.parameters.find { |p| p.key == 'phone' && p.value && p.value.length > 0 } != nil
-    biofab = self.parameters.find { |p| p.key == 'biofab' && p.value && p.value == 'true' }  != nil
+    biofab = self.parameters.find { |p| p.key == 'biofab' && p.value && p.value == 'true' } != nil
     aq     = self.parameters.find { |p| p.key == 'aquarium' && p.value && p.value == 'true' } != nil
 
     email && phone && biofab && aq
@@ -114,7 +113,6 @@ class User < ActiveRecord::Base
     Thread.new do
 
       begin
-
         ses = AWS::SimpleEmailService.new
 
         ses.send_email(
@@ -122,12 +120,10 @@ class User < ActiveRecord::Base
           from: Bioturk::Application.config.email_from_address,
           to: to,
           body_text: "This email is better viewed with an email handler capable of rendering HTML\n\n#{message}",
-          body_html: message)
-
+          body_html: message
+        )
       rescue Exception => e
-
         Rails.logger.error "Emailer Error: #{e}"
-
       end
 
     end
@@ -136,10 +132,8 @@ class User < ActiveRecord::Base
 
   private
 
-    def create_remember_token
-      self.remember_token = SecureRandom.urlsafe_base64
-    end
+  def create_remember_token
+    self.remember_token = SecureRandom.urlsafe_base64
+  end
 
 end
-
-

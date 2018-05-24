@@ -17,7 +17,7 @@ class SampleType < ActiveRecord::Base
     attributes
   end
 
-  def required_sample_types st_list=[]
+  def required_sample_types st_list = []
 
     field_types.select { |ft| ft.ftype == 'sample' }.each do |ft|
 
@@ -40,26 +40,26 @@ class SampleType < ActiveRecord::Base
 
     results = []
 
-    unless name == raw_sample_type[:name] 
+    unless name == raw_sample_type[:name]
       results << "names #{name} and #{raw_sample_type[:name]} do not agree."
     end
 
     unless description == raw_sample_type[:description]
       results << "#{name} descriptions do not agree"
-      return false 
+      return false
     end
 
     if raw_sample_type[:field_types]
       raw_sample_type[:field_types].each do |rft|
         fts = field_types.select { |ft| ft.name == rft[:name] }
-        if fts.length == 1 
+        if fts.length == 1
           results += fts[0].inconsistencies(rft, name)
         else
           results << "#{name} does not have a field named #{rft[:name]}, although the imported version of this sample type does."
         end
       end
     end
-    
+
     results
 
   end
@@ -78,7 +78,7 @@ class SampleType < ActiveRecord::Base
         note = "Found sample type '#{rst[:name]}'"
         sample_type_inconsistencies = st.inconsistencies rst
         inconsistencies += sample_type_inconsistencies
-        if !sample_type_inconsistencies.any? 
+        if !sample_type_inconsistencies.any?
           note += " with same definition as imported type."
           notes << note
         else
@@ -107,7 +107,7 @@ class SampleType < ActiveRecord::Base
       # make allowable field types (assumes sample types have been made)
       make.each do |rst|
         st = SampleType.find_by_name rst[:name]
-        if st 
+        if st
           st.create_afts_from_raw rst
           if st.errors.any?
             inconsistencies << "Could not create sample type #{rst[:name]}: #{st.errors.full_messages.join(', ')}"
@@ -122,7 +122,7 @@ class SampleType < ActiveRecord::Base
 
   end
 
-  def self.create_from_raw raw_sample_type 
+  def self.create_from_raw raw_sample_type
 
     st = SampleType.new name: raw_sample_type[:name], description: raw_sample_type[:description]
     st.save
@@ -130,20 +130,20 @@ class SampleType < ActiveRecord::Base
     raw_sample_type[:field_types].each do |rft|
 
       ft = FieldType.new({
-        name: rft[:name],
-        parent_id: st.id,
-        parent_class: "SampleType",
-        array: rft[:array],
-        choices: rft[:choices],
-        required: rft[:required],
-        ftype: rft[:ftype],
-        role: rft[:role],
-        routing: rft[:routing]
-       })
+                           name: rft[:name],
+                           parent_id: st.id,
+                           parent_class: "SampleType",
+                           array: rft[:array],
+                           choices: rft[:choices],
+                           required: rft[:required],
+                           ftype: rft[:ftype],
+                           role: rft[:role],
+                           routing: rft[:routing]
+                         })
 
       ft.save
 
-      if ft.errors.any? 
+      if ft.errors.any?
         st.errors.add :field_type_creation, "Could not create field type named #{rft[:name]}: #{ft.errors.full_messages.join(', ')}"
       end
 
@@ -159,14 +159,14 @@ class SampleType < ActiveRecord::Base
       raw_sample_type[:field_types].each do |rft|
         if ft.name == rft[:name]
           l = rft[:sample_types] ? rft[:sample_types].length : 0
-          (0..l-1).each do |i|
+          (0..l - 1).each do |i|
             st = SampleType.find_by_name(rft[:sample_types][i])
-            ot = ObjectType.find_by_name(rft[:sample_types][i])            
+            ot = ObjectType.find_by_name(rft[:sample_types][i])
             aft = AllowableFieldType.new({
-              field_type_id: ft.id, 
-              sample_type_id: st ? st.id : nil, 
-              object_type_id: ot ? ot.id : nil
-            })
+                                           field_type_id: ft.id,
+                                           sample_type_id: st ? st.id : nil,
+                                           object_type_id: ot ? ot.id : nil
+                                         })
             aft.save
           end
         end
@@ -206,8 +206,3 @@ class SampleType < ActiveRecord::Base
   end
 
 end
-
-
-
-
-

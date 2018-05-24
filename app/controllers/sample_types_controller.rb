@@ -1,7 +1,7 @@
 class SampleTypesController < ApplicationController
 
   before_filter :signed_in_user
-  before_filter :up_to_date_user  
+  before_filter :up_to_date_user
 
   # GET /sample_types
   # GET /sample_types.json
@@ -15,10 +15,11 @@ class SampleTypesController < ApplicationController
 
     respond_to do |format|
       format.html { render layout: 'aq2' }
-      format.json { render json: @sample_types
-                                 .sort { |a,b| a.name <=> b.name }
-                                 .to_json(methods: :field_types)
-                  }
+      format.json {
+        render json: @sample_types
+          .sort { |a, b| a.name <=> b.name }
+          .to_json(methods: :field_types)
+      }
     end
   end
 
@@ -28,8 +29,10 @@ class SampleTypesController < ApplicationController
 
     respond_to do |format|
       format.html { render layout: 'aq2-plain' }
-      format.json { render json: @sample_type
-                       .to_json(methods: :field_types) }
+      format.json {
+        render json: @sample_type
+          .to_json(methods: :field_types)
+      }
     end
 
   end
@@ -40,7 +43,7 @@ class SampleTypesController < ApplicationController
     @sample_type = SampleType.new
 
     respond_to do |format|
-      format.html { render layout: 'aq2-plain'}
+      format.html { render layout: 'aq2-plain' }
       format.json { render json: @sample_type }
     end
   end

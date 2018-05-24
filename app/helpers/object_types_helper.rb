@@ -4,12 +4,12 @@ module ObjectTypesHelper
 
     case ot.handler
 
-      when 'collection'
-        CollectionHandler.new ot
-      when 'sample_container'
-        SampleContainerHandler.new ot
-      else
-        Handler.new ot
+    when 'collection'
+      CollectionHandler.new ot
+    when 'sample_container'
+      SampleContainerHandler.new ot
+    else
+      Handler.new ot
     end
 
   end
@@ -21,11 +21,11 @@ module ObjectTypesHelper
     end
 
     def new_item_partial
-       "handlers/default_new_item"
+      "handlers/default_new_item"
     end
 
     def current_inventory_partial
-       "handlers/default_current_inventory"
+      "handlers/default_current_inventory"
     end
 
     def show_item_partial
@@ -33,7 +33,7 @@ module ObjectTypesHelper
     end
 
     def new_item params
-      Item.make(params[:item],object_type: @object_type)
+      Item.make(params[:item], object_type: @object_type)
     end
 
   end
@@ -45,11 +45,11 @@ module ObjectTypesHelper
     end
 
     def new_item_partial
-       "handlers/collection_new_item"
+      "handlers/collection_new_item"
     end
 
     def current_inventory_partial
-       "handlers/collection_current_inventory"
+      "handlers/collection_current_inventory"
     end
 
     def show_item_partial
@@ -62,11 +62,11 @@ module ObjectTypesHelper
       c = params[:item][:cols].to_i
 
       item = Item.make({
-          quantity: 1,
-          inuse: 0,
-          data: { matrix: Array.new(r,Array.new(c,-1)) }.to_json
-        },object_type: @object_type)
-    
+                         quantity: 1,
+                         inuse: 0,
+                         data: { matrix: Array.new(r, Array.new(c, -1)) }.to_json
+                       }, object_type: @object_type)
+
       item.location = params[:item][:location]
       item
 
@@ -90,7 +90,7 @@ module ObjectTypesHelper
 
     def size item
       m = matrix item
-      [ m.length, m[0].length ]
+      [m.length, m[0].length]
     end
 
   end
@@ -102,11 +102,11 @@ module ObjectTypesHelper
     end
 
     def new_item_partial
-       "handlers/sample_container_new_item"
+      "handlers/sample_container_new_item"
     end
 
     def current_inventory_partial
-       "handlers/sample_container_current_inventory"
+      "handlers/sample_container_current_inventory"
     end
 
     def show_item_partial
@@ -114,6 +114,5 @@ module ObjectTypesHelper
     end
 
   end
-
 
 end

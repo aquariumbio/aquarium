@@ -11,8 +11,8 @@ RSpec.describe "Planner" do
       p = Plan.find(2)
       ops = p.operations.includes(:operation_type)
       fvs = FieldValue.includes(:child_sample, :child_item, :wires_as_source, :wires_as_dest)
-                      .where(parent_class: "Operation", parent_id: ops.collect {|o| o.id })
-    
+                      .where(parent_class: "Operation", parent_id: ops.collect { |o| o.id })
+
       sops = []
 
       ops.each do |op|

@@ -1,12 +1,12 @@
 class TaskPrototypesController < ApplicationController
 
   before_filter :signed_in_user
-  
+
   # GET /task_prototypes
   # GET /task_prototypes.json
   def index
     @task_prototypes = TaskPrototype.all
-    
+
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @task_prototypes }

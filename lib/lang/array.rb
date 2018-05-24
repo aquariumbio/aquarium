@@ -1,6 +1,6 @@
 module Lang
 
-  class Scope 
+  class Scope
 
     def length a
 
@@ -59,8 +59,8 @@ module Lang
 
     def take m, start, num # take num entries from m, starting at entry start
 
-      if m.class == Array && start.class == Fixnum && num.class == Fixnum
-        m[start,num]
+      if m.class == Array && start.class == Integer && num.class == Integer
+        m[start, num]
       else
         raise "Called take with the wrong kind of arguments."
       end
@@ -68,12 +68,12 @@ module Lang
     end
 
     def range a, b, delta
-      if a.class != Fixnum || a.class != Fixnum || a.class != Fixnum
+      if a.class != Integer || a.class != Integer || a.class != Integer
         raise "Non-integers in call to range."
       end
       i = a
       r = []
-      while i<=b
+      while i <= b
         r.push(i)
         i += delta
       end

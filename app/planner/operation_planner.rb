@@ -50,13 +50,13 @@ module OperationPlanner
 
             preds.each do |pred|
 
-              if ! ( pred.status == 'primed' || 
-                     pred.status == 'done' || 
+              if !(pred.status == 'primed' ||
+                     pred.status == 'done' ||
                      pred.status == 'unplanned' ||
-                     pred.status == 'planning' )
+                     pred.status == 'planning')
                 @@ready_errors << "Operation #{id} is waiting for operation #{pred.id} which has status #{pred.status}"
                 return false
-              end            
+              end
 
             end
 
@@ -65,9 +65,9 @@ module OperationPlanner
             @@ready_errors << "No items in stock available for input '#{i.name}' of operation #{id}"
             return false
 
-          end #if
+          end # if
 
-        end #if 
+        end # if
 
       end # each
 
@@ -92,7 +92,7 @@ module OperationPlanner
 
   def has_no_stock_or_method
     inputs.select { |i| i.field_type.ftype == 'sample' }.each do |i|
-      if i.predecessors.length == 0 && !i.satisfied_by_environment 
+      if i.predecessors.length == 0 && !i.satisfied_by_environment
         return true
       end
     end
@@ -109,7 +109,7 @@ module OperationPlanner
       if op.on_the_fly
         # do nothing
       elsif op.status == "planning" && op.leaf? && !ready
-        issues << "Operation '#{op.operation_type.name}' is not ready " + 
+        issues << "Operation '#{op.operation_type.name}' is not ready " +
                   "(on_the_fly = #{op.on_the_fly}, ready = #{ready}, leaf=#{op.leaf?}, status=#{op.status})."
       elsif op.status == "planning" && op.undetermined_inputs?
         issues << "Operation '#{op.operation_type.name}' has unspecified inputs."
@@ -122,14 +122,14 @@ module OperationPlanner
 
   end
 
-  def show_plan space=""
+  def show_plan space = ""
 
     op = self
 
     if op.status == "planning"
       print "#{space}\e[95m#{op.operation_type.name} #{op.id}, status: #{op.status}\e[39m"
     else
-      print "#{space}\e[90m#{op.operation_type.name} #{op.id}, status: #{op.status}\e[39m"      
+      print "#{space}\e[90m#{op.operation_type.name} #{op.id}, status: #{op.status}\e[39m"
     end
 
     if op.ready?
@@ -157,7 +157,7 @@ module OperationPlanner
         end
 
         i.predecessors.each do |p|
-          p.operation.show_plan space+"    "
+          p.operation.show_plan space + "    "
         end
 
       end
@@ -169,9 +169,9 @@ module OperationPlanner
 
     end
 
-  end  
-  
-  def serialize override_status=nil
+  end
+
+  def serialize override_status = nil
 
     problem = false
     input_list = []
@@ -180,15 +180,15 @@ module OperationPlanner
 
       op_inputs = inputs.select { |i| i.name == ot_input.name }
 
-      if op_inputs.length > 0 
+      if op_inputs.length > 0
 
-        op_inputs.each do |i| 
+        op_inputs.each do |i|
 
           sat = i.satisfied_by_environment
           preds = i.predecessors
           os = override_status if (override_status)
           os = status if (!override_status && status == "unplanned")
-          problem = problem || ( !sat && preds.length == 0 )
+          problem = problem || (!sat && preds.length == 0)
 
           input_list << {
             name: i.name,
@@ -207,7 +207,7 @@ module OperationPlanner
 
       else
         problem = true
-        input_list << { 
+        input_list << {
           name: ot_input.name,
           missing: true
         }
@@ -226,7 +226,6 @@ module OperationPlanner
 
     }
 
-  end  
+  end
 
 end
-

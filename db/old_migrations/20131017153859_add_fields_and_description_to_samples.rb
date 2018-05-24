@@ -17,5 +17,3 @@ class AddFieldsAndDescriptionToSamples < ActiveRecord::Migration
   end
 
 end
-
-

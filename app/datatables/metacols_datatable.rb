@@ -1,13 +1,13 @@
 class MetacolsDatatable < Datatable
 
-  private  
+  private
 
   def data
 
     rows.map do |m|
       args = m.arguments.to_json
       if args.length > 50
-        args = args[0,49] + '...'
+        args = args[0, 49] + '...'
       end
       cols = [
         "<a href='metacols/#{m.id}'>#{m.id}</a>" + (m.status == "ERROR" ? " <span style='color:red'>(ERROR)</span>" : ""),
@@ -15,7 +15,7 @@ class MetacolsDatatable < Datatable
         args,
         m.user.login,
         m.created_at.to_formatted_s(:short),
-        m.updated_at.to_formatted_s(:short) 
+        m.updated_at.to_formatted_s(:short)
       ]
       if m.status == 'RUNNING'
         cols.push "<a href='metacols/#{m.id}/stop'><i class='icon-stop'></i></a>"
@@ -47,15 +47,15 @@ class MetacolsDatatable < Datatable
       u = User.find_by_login(key)
 
       if u
-        metacols = metacols.where(prefix + " and user_id = :uid", status: params[:status], uid: u.id.to_s )
-      else 
-        metacols = metacols.where(prefix + " and path like :search", status: params[:status], search: "%#{key}%" )
+        metacols = metacols.where(prefix + " and user_id = :uid", status: params[:status], uid: u.id.to_s)
+      else
+        metacols = metacols.where(prefix + " and path like :search", status: params[:status], search: "%#{key}%")
       end
 
     else
 
-      metacols = metacols.where(prefix, status: params[:status] )
-        
+      metacols = metacols.where(prefix, status: params[:status])
+
     end
 
     metacols
@@ -68,4 +68,3 @@ class MetacolsDatatable < Datatable
   end
 
 end
-

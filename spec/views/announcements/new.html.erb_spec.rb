@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe "announcements/new", :type => :view do
   before(:each) do
     assign(:announcement, Announcement.new(
-      :message => "MyText",
-      :active => false
-    ))
+                            :message => "MyText",
+                            :active => false
+                          ))
   end
 
   it "renders new announcement form" do

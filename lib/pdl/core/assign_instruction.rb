@@ -11,8 +11,8 @@ class AssignInstruction < Instruction
 
   # RAILS ###########################################################################################
 
-  def bt_execute scope, params
-    scope.set( @lhs.to_sym, scope.evaluate( @rhs ) )
+  def bt_execute scope, _params
+    scope.set(@lhs.to_sym, scope.evaluate(@rhs))
   end
 
   def html
@@ -22,10 +22,9 @@ class AssignInstruction < Instruction
   # TERMINAL #########################################################################################
 
   def execute scope
-    x = scope.evaluate( @rhs )
+    x = scope.evaluate(@rhs)
     puts "setting " + @lhs + " to " + @rhs + " with evaluation " + x.to_s
-    scope.set( @lhs.to_sym, x )
+    scope.set(@lhs.to_sym, x)
   end
-  
 
 end

@@ -9,7 +9,7 @@ module Plankton
     def stop
       true
     end
- 
+
   end
 
 end

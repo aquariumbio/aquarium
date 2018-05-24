@@ -10,8 +10,3 @@ t.execute s
 
 r.render s
 r.execute s
-
-
-
-
-

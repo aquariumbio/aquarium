@@ -14,7 +14,7 @@ module FieldTypePlanner
 
           allowable_field_types.each do |aft|
             puts "  #{aft.object_type ? aft.object_type.name : '?'} =? #{fv.object_type ? fv.object_type.name : '?'}"
-            if aft.sample_type && fv.sample_type == aft.sample_type && fv.object_type == aft.object_type            
+            if aft.sample_type && fv.sample_type == aft.sample_type && fv.object_type == aft.object_type
               puts "... yes.\e[39m"
               return true
             end
@@ -75,19 +75,18 @@ module FieldTypePlanner
 
   def random
 
-    if allowable_field_types.length == 0 
+    if allowable_field_types.length == 0
       return [nil, nil]
     else
       aft = allowable_field_types.sample
       if !aft.sample_type
-        return [ nil, aft ]
-      elsif
-        aft.sample_type.samples.length == 0
+        return [nil, aft]
+      elsif aft.sample_type.samples.length == 0
         raise "There are no samples of type #{aft.sample_type.name}"
       elsif array
-        return [ aft.sample_type.samples.sample(3), aft ]
+        return [aft.sample_type.samples.sample(3), aft]
       else
-        return [ aft.sample_type.samples.sample, aft ]
+        return [aft.sample_type.samples.sample, aft]
       end
     end
 
@@ -99,7 +98,7 @@ module FieldTypePlanner
       aft.sample_type_id == sample.sample_type.id
     }
 
-    if afts.length > 0 
+    if afts.length > 0
       afts.sample
     else
       nil
