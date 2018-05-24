@@ -66,7 +66,43 @@ You'll probably want to follow along with the examples as you go through this tu
 To do this, decide on a category name for your operation types.
 An obvious name is `tutorial`, but if you are working on a shared Aquarium you'll need to be more creative.
 
-[ADD instructions]
+1. Starting from the developer tab, click the *New* button in the upper right corner.
+
+   ![the aquarium developer tab](images/developer_tab.png)
+
+   This will create a new operation type in the current category.
+
+   ![a new operation type](images/new_operation_type.png)
+
+2. Change the operation type name and category and click the *Update* button.
+
+   ![renamed new operation type](images/new_operation_type2.png)
+
+   For this example, we use the name `BasicProtocol` and category `tutorial_adev` ("adev" is the login name).
+
+3. Click *Protocol*, and then replace the body of the main method with `show { title "Getting Started" }` like in our example above.
+
+   ![the protocol of the new operation type](images/basic_protocol.png)
+
+4. Click *Test*
+
+   ![the test view](images/basic_protocol_test.png)
+
+   and then *Generate Operations* to generate instances of the operation type with random inputs
+
+   ![the test with operations](images/basic_protocol_test2.png)
+
+5. Clicking the *Test* button will run the operation(s) with the inputs and show the trace with any output
+
+   ![the test results](images/basic_protocol_test3.png)
+
+In this case, we see the page title "Getting Started" as output.
+
+Running the protocol this way will not show you the screens as the technician will see them.
+To do this, you need to create and launch a plan using the *Designer* tab, and then schedule and run the job from the *Manager* tab.
+[MORE LATER/ELSEWHERE]
+
+To run the examples below, either create a new operation type in your tutorial category, or simply edit this one.
 
 ## Creating Technician Instructions
 
