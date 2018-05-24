@@ -101,7 +101,7 @@ class OperationTypesController < ApplicationController
 
   def update_from_ui data, update_fields=true
 
-   redirect_to root_path, notice: "Administrative privileges required to access operation type definitions." unless current_user.is_admin    
+    redirect_to root_path, notice: "Administrative privileges required to access operation type definitions." unless current_user.is_admin    
 
     ot = OperationType.find(data[:id])
     update_errors = []
@@ -116,6 +116,7 @@ class OperationTypesController < ApplicationController
 
       if !ot.errors.empty?
         update_errors += ot.errors.full_messages
+        logger.error("Error saving operation type: #{ot.errors.full_messages}")
         raise ActiveRecord::Rollback
       end
 
@@ -125,6 +126,7 @@ class OperationTypesController < ApplicationController
           ot.update_field_types data[:field_types]
         rescue Exception => e
           update_errors << e.to_s << e.backtrace.to_s
+          logger.error("Error updating operation type field types: #{e.backtrace.to_s}")
           raise ActiveRecord::Rollback
         end
 
@@ -132,9 +134,7 @@ class OperationTypesController < ApplicationController
 
     end
 
-    ot[:update_errors] = update_errors
-
-    ot
+    { op_type: ot, update_errors: update_errors }
 
   end
 
@@ -144,11 +144,12 @@ class OperationTypesController < ApplicationController
 
     ot = update_from_ui params
     if ot[:update_errors].empty?
-      render json: ot.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation]),
+      operation_type = ot[:op_type]
+      render json: operation_type.as_json(methods: [:field_types, :protocol, :precondition, :cost_model, :documentation]),
              status: :ok
     else
-      render json: { errors: ot.update_errors },
-             status: :unprocessable_entity   
+      render json: { errors: ot[:update_errors] },
+             status: :unprocessable_entity
     end
   end
 
@@ -264,7 +265,7 @@ class OperationTypesController < ApplicationController
     ot = update_from_ui params, false
 
     if !ot[:update_errors].empty? 
-      render json: { errors: ot.update_errors }, status: :unprocessable_entity
+      render json: { errors: ot[:update_errors] }, status: :unprocessable_entity
       return
     end
 
@@ -288,12 +289,12 @@ class OperationTypesController < ApplicationController
       end
 
       if params[:use_precondition]
-        logger.info "Using Precondition to filter operation types"
         ops = ops.select { |op| op.precondition_value }
       end      
 
       # run the protocol
-      job,newops = ot.schedule(ops, current_user, Group.find_by_name('technicians'))
+      operation_type = ot[:op_type]
+      job,newops = operation_type.schedule(ops, current_user, Group.find_by_name('technicians'))
       error = nil
 
       begin
@@ -303,7 +304,6 @@ class OperationTypesController < ApplicationController
       end
 
       if error
-
         render json: {
           error: error.message,
           backtrace: error.backtrace
@@ -311,7 +311,6 @@ class OperationTypesController < ApplicationController
         status: :unprocessable_entity
 
       else
-
         begin
 
           ops.extend(Krill::OperationList)
