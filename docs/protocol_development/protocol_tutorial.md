@@ -21,7 +21,9 @@ If you haven't already, visit the [protocol development documentation](index.md)
         - [Running a Deployed Protocol](#running-a-deployed-protocol)
     - [Creating Technician Instructions](#creating-technician-instructions)
     - [Working with Samples](#working-with-samples)
-        - [Database Queries](#database-queries)
+        - [Practicing Queries](#practicing-queries)
+        - [Common definitions and record identifiers](#common-definitions-and-record-identifiers)
+        - [Provisioning Items](#provisioning-items)
         - [Sample](#sample)
             - [Attributes](#attributes)
             - [Associations](#associations)
@@ -34,7 +36,6 @@ If you haven't already, visit the [protocol development documentation](index.md)
         - [Collection](#collection)
             - [Additional associations](#additional-associations)
             - [Additional instance methods](#additional-instance-methods)
-        - [Provisioning Items](#provisioning-items)
         - [Creating Items and Samples](#creating-items-and-samples)
         - [Creating Collections](#creating-collections)
     - [Managing Operations](#managing-operations)
@@ -223,55 +224,112 @@ Item.where(
 
 which returns a list of `Item` objects.
 
+We want our protocols to work with particular items, and they wont generally be on the bench.
+So, the item we want may be in a -80C freezer with location `M80C.2.0.21` (see the [locations reference](locations.md) for an explanation).
+This query
+
+```ruby
+Item.where(
+  sample_id: Sample.find_by_name('W303alpha').id,
+  location: "M80C.2.0.21"
+  )
+```
+
+returns a list with a single item with object type `"Yeast Competent Cell"`.
+
+TODO: introduce collections here
+
+If the object type of an item has handler 'collection', it will be useful to have access to the collection methods.
+To promote an item `i` to a collection, use
+
+```ruby
+c = collection_from i
+```
+
+And likewise, for a list of items
+
+```ruby
+colls = items.map { |i| collection_from i }
+```
+
+### Practicing Queries
+
+You can use the Rails console for Aquarium to try queries like this.
+At the command line, start the rails console with `rails c` and use it interactively to evaluate queries.
+The allowable queries are standard with Ruby on Rails `ActiveRecord` models.
+
+In depth documentation on how to use the activerecord query interface can be found [here](http://guides.rubyonrails.org/v3.2.21/active_record_querying.html).
+
+TODO: more here, but not too much
+
+### Common definitions and record identifiers
+
 It is tempting to use constant values to search with record identifiers, but these identifiers are determined by how the database is built and could change.
 So, use the sample names instead; though, the catch is that the names you should use are also determined by the inventory of your Aquarium instance.
 
 **TODO: explain how to get common definition and/or to manage objects**
 
+
+### Provisioning Items
+
+You can search for items all you want in your protocol, but to have something done with them, they need to be brought to the bench.
+A protocol that has a list of items that need to be brought to the bench will use `take` to provision the items, and `release` to return them.
+
+For instance, the following protocol first finds a list with the W303&alpha; yeast competent cells, calls `take` to have the technician bring the item to the bench, does something with the item, and then has the technician return the item.
+
+```ruby
+class Protocol
+  def main
+    items = find_items
+    take(items, interactive: true,  method: 'boxes') {
+      warning "Be careful not to leave the freezer open for too long"
+    }
+    use_items(items)
+  ensure
+    release items
+  end
+
+  def find_items
+    Item.where(
+      sample_id: Sample.find_by_name('W303alpha').id,
+      location: "M80C.2.0.21"
+    )
+  end
+
+  def use_items(items)
+    show { title "do something with yeast competent cells" }
+  end
+end
+```
+
+Note that the use of `ensure` allows the `release` to be performed even if an exception is raised by the earlier steps.
+
+The call to `take` 
+
+```ruby
+take(items, interactive: true,  method: 'boxes') {
+  warning "Be careful not to leave the freezer open for too long"
+}
+```
+
+uses `interactive: true` to indicate that instructions should be shown to the technician,
+`method: 'boxes'` to show the organization of items in the freezer, and
+a show block to print a customized warning message about leaving the freezer open.
+
+TODO: show, in other contexts, the use of take to associate items with the job
+
+--- 
+
+TODO: use above details from below
+
+
+
+
 **TODO: change the following so that it shows how to work with samples and is not a list of attributes or methods**
 
 TODO: rewrite the following text to show how to work with a particular item
 
-### Database Queries
 
-Within a protocol, often it is necessary to bring an item, sample, object type, etc from the database into the protocol namespace as a variable, in order to access its fields or modify it.
-
-Any aquarium object can be directly recovered from the database with its id or name using the Object.find(), and Object.find_by_name() static methods respectively.
-Find returns the first item in the list of all items with the given attribute.
-For example, finding item with id 1234:
-
-```ruby
-itm = Item.find(1234);
-```
-
-And finding item with name 'My favorite W303alpha':
-
-```ruby
-itm = Item.find_by_name('My favorite W303alpha');
-```
-
-We can also recover a list of objects that satisfy a given attribute using Object.where().
-For example, getting all items with location bench:
-
-```ruby
-itms = Item.where(location: 'Bench')
-```
-
-We could also get all samples with sample_type 'Yeast Strain' :
-
-```ruby
-yeast_strain_st = SampleType.find_by_name('Yeast Strain')
-samps = Sample.where(sample_type: yeast_strain_st)
-```
-
-It is possible to construct powerful and complex queries with active record finder methods by chaining queries.
-To collect all items that contain samples of sample type yeast strain, excluding ones that are marked as deleted, we could use the following query:
-
-```ruby
-ys_itms = Item.where(sample: Sample.where(sample_type: yeast_strain_st))
-```
-
-In depth documentation on how to use the activerecord query interface can be found [here](http://guides.rubyonrails.org/v3.2.21/active_record_querying.html).
 
 ### Sample
 
@@ -521,71 +579,7 @@ Suppose `coll` is a collection.
 
 </details>
 
-### Provisioning Items
 
-If a protocol has a list called, say, `items` returned by `find`, that does not mean the user of the protocol necessarily has taken those items from their locations and brought them to the bench.
-To tell the user to take the items, one must call take.
-The effect is to associate the item with the job running the protocol, until it is released (see below).
-It also "touches" the item by the job, so that one can later determine that the item was used by the job.
-
-There are several forms of take.
-To illustrate them, suppose we have a list of items obtained from `find` as follows
-
-```ruby
-items = find(:item, { sample: { name: "pLAB1" }, object_type: { name: "Plasmid Stock" } } )
-```
-
-The most basic form of take is simply to do
-
-```ruby
-take items
-```
-
-which silently (i.e. without telling the user) takes the items.
-One may also tell the user to take them, which shows the user a page that says where the items are.
-
-```ruby
-take items, interactive: true
-```
-
-If there are more instructions to give the user, you can add an extra `show` block, as in
-
-```ruby
-take(items, interactive: true) {
-  warning "Do not leave the freezer open too long!"
-}
-```
-
-Finally, there is a method of taking a long list of items that goes through freezer boxes in a reasonably intelligent way, so as to reduce the number of freezer door openings and closings.
-This form of take looks like
-
-```ruby
-take items, interactive: true,  method: "boxes"
-```
-
-which displays a new page to the user for every freezer box required to take the items.
-A diagram of the freezer box is shown and the user can check the items as (s)he takes them.
-Any items not in freezer boxes are displayed in a final page that simply lists the remaining items and their locations.
-
-If the object type of an item has handler 'collection', it will be useful to have access to the collection methods.
-To promote an item `i` to a collection, use
-
-```ruby
-c = collection_from i
-```
-
-And likewise, for a list of items
-
-```ruby
-colls = items.map { |i| collection_from i }
-```
-
-Note that when the protocol is done with the items, it should release them.
-The simplest form for release is
-
-```ruby
-release items
-```
 
 ### Creating Items and Samples
 
