@@ -14,7 +14,6 @@ If you haven't already, visit the [protocol development documentation](index.md)
 
 - [Protocol Tutorial](#protocol-tutorial)
     - [Table of Contents](#table-of-contents)
-    - [<!-- /TOC -->](#---toc---)
     - [The Basic Protocol](#the-basic-protocol)
     - [Running a Protocol](#running-a-protocol)
         - [Creating a Protocol](#creating-a-protocol)
