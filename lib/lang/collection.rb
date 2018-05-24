@@ -22,7 +22,7 @@ module Lang
 
       [col, data[:matrix]]
 
-     end
+    end
 
     def col_dimensions c
 

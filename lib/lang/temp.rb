@@ -27,7 +27,7 @@ def complete x
 
   temp
 
-    end
+end
 
 def pluralize_table_names spec
 
