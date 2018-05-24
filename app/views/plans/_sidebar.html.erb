@@ -13,7 +13,7 @@
   </div>
   <div ng-class="sidebar_button_class('launch')"
         ng-if="plan && plan.status!='planning'"
-        ng-click="nav.sidebar = 'launch'">
+        ng-click="nav.sidebar = 'launch'; plan.estimate_cost()">
     <span ng-if="plan.has_new_ops">Launch New</span>
     <span ng-if="!plan.has_new_ops">Plan Info</span>    
   </div>
