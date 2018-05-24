@@ -135,8 +135,7 @@ class Task < ActiveRecord::Base
     else
       errors.add(:task_type_check, ": Unknown type in task prototype: #{p.class}")
       result = false
-
-      end
+    end
 
     result
 

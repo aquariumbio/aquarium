@@ -173,7 +173,7 @@ module Lang
           f = app
         else
           f = '%{' + @tok.eat + '}'
-         end
+        end
 
       when @tok.number
         f = @tok.eat

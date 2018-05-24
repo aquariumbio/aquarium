@@ -21,11 +21,11 @@ class Api
       new_key = case key
                 when String then key.to_sym
                 else key
-      end
+                end
       new_value = case value
                   when Hash then symbolize value
                   else value
-      end
+                  end
       result[new_key] = new_value
       result
     }

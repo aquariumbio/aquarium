@@ -31,7 +31,7 @@ module Lang
           x
         else
           y
-         end
+        end
       else
         raise "Attempted to take min of a #{x.class} and a #{y.class}."
       end
@@ -43,7 +43,7 @@ module Lang
           x
         else
           y
-         end
+        end
       else
         raise "Attempted to take max of a #{x.class} and a #{y.class}."
       end

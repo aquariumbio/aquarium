@@ -159,15 +159,15 @@ class StepInstruction < Instruction
 
       if a.has_key?(:description)
         str += render_description a[:description], scope
-  end
+      end
 
       if a.has_key?(:note)
         str += render_note a[:note], scope
-end
+      end
 
       if a.has_key?(:warning)
         str += render_warning a[:warning], scope
-end
+      end
 
       if a.has_key?(:getdata)
         str += render_getdata a[:getdata], scope

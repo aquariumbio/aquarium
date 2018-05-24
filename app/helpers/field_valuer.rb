@@ -154,7 +154,7 @@ module FieldValuer
         if values.length == 1
           p[ft.name] = values[0]
         end
-       end
+      end
 
     end
 

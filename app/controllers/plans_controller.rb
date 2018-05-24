@@ -124,7 +124,7 @@ class PlansController < ApplicationController
       data.collect { |str| Sample.find(sid(str)) }
     else
       Sample.find_by_id(sid(data))
-   end
+    end
   end
 
   def routing_value route

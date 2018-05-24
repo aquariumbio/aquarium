@@ -73,7 +73,7 @@ class JobsDatatable < Datatable
            else
              mid = params[:type].split('-').last.to_i
              Job.where("pc != -2 AND metacol_id = ?", mid)
-    end
+           end
 
     # unless /metacol/ =~ params[:type]
     if params[:filter] == "user-radio"

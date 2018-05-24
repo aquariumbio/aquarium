@@ -58,7 +58,7 @@ class ReleaseInstruction < Instruction
         else
           x.inuse -= 1
           x.quantity -= 1
-         end
+        end
 
       else
         raise 'unknown method in release'
