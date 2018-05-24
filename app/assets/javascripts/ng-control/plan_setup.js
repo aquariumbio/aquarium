@@ -78,8 +78,12 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
             AQ.User.find(p.user_id).then(user => {
               $scope.current_user = user;
               $scope.$apply();        
-            });              
-          })
+            })
+          }).catch(e => {
+            add_designer_message(`Could not find plan ${aq.url_params().plan_id} specified in URL`);
+            $scope.ready = true;
+            $scope.$apply();            
+          });
         } else {
           $scope.ready = true;
           $scope.$apply();

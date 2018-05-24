@@ -103,6 +103,7 @@ AQ.Plan.record_methods.classes = function() {
 AQ.Plan.record_methods.assign = function(field_value, sample) {
 
   let plan = this;
+
   plan.field_values().forEach(fv => fv.marked = false);
   plan.mark_leaves();
   plan.equivalences = plan.classes();
@@ -151,7 +152,7 @@ AQ.Operation.record_methods.instantiate = function(plan, field_value, sid) {
 
       operation.field_values.forEach(operation_field_value => {
 
-        if ( operation_field_value.routing == field_value.routing ) {
+        if ( !operation_field_value.field_type.array && operation_field_value.routing == field_value.routing ) {
           operation.assign_sample(operation_field_value, sid);
         }
 
