@@ -28,7 +28,7 @@ module OperationStatus
       else
         change_status "delayed"
       end
-    elsif
+    else
       change_status "waiting"
     end
 

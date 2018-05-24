@@ -81,8 +81,7 @@ module FieldTypePlanner
       aft = allowable_field_types.sample
       if !aft.sample_type
         return [nil, aft]
-      elsif
-        aft.sample_type.samples.length == 0
+      elsif aft.sample_type.samples.length == 0
         raise "There are no samples of type #{aft.sample_type.name}"
       elsif array
         return [aft.sample_type.samples.sample(3), aft]
