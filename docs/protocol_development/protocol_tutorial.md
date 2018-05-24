@@ -16,6 +16,9 @@ If you haven't already, visit the [protocol development documentation](index.md)
     - [Table of Contents](#table-of-contents)
     - [The Basic Protocol](#the-basic-protocol)
     - [Running a Protocol](#running-a-protocol)
+        - [Creating a Protocol](#creating-a-protocol)
+        - [Running a Protocol from the Developer Test Tab](#running-a-protocol-from-the-developer-test-tab)
+        - [Running a Deployed Protocol](#running-a-deployed-protocol)
     - [Creating Technician Instructions](#creating-technician-instructions)
     - [Working with Samples](#working-with-samples)
         - [Database Queries](#database-queries)
@@ -64,9 +67,14 @@ When the protocol is started, Aquarium extends the Protocol class with the Krill
 
 You'll probably want to follow along with the examples as you go through this tutorial.
 To do this, decide on a category name for your operation types.
-An obvious name is `tutorial`, but if you are working on a shared Aquarium you'll need to be more creative.
+For our example, we use `tutorial_adev` where "adev" is the user name.
+You'll also want to decide whether you will use the same operation type to try the examples as you go, or make a new one.
 
-1. Starting from the developer tab, click the *New* button in the upper right corner.
+And, in case the admonition hasn't yet settled in, **don't** use a production server for testing.
+
+### Creating a Protocol
+
+1. Starting from the developer tab, click the **New** button in the upper right corner.
 
    ![the aquarium developer tab](images/developer_tab.png)
 
@@ -74,35 +82,77 @@ An obvious name is `tutorial`, but if you are working on a shared Aquarium you'l
 
    ![a new operation type](images/new_operation_type.png)
 
-2. Change the operation type name and category and click the *Update* button.
+2. Change the operation type name and category and click the **Save** button.
 
    ![renamed new operation type](images/new_operation_type2.png)
 
    For this example, we use the name `BasicProtocol` and category `tutorial_adev` ("adev" is the login name).
 
-3. Click *Protocol*, and then replace the body of the main method with `show { title "Getting Started" }` like in our example above.
+3. Click **Protocol**, replace the body of the main method with the code `show { title "Getting Started" }` like in our example, and click the **Save** button at the bottom right.
 
    ![the protocol of the new operation type](images/basic_protocol.png)
 
-4. Click *Test*
+### Running a Protocol from the Developer Test Tab
+
+The simplest way to run a protocol is by using testing in the Developer Tab.
+
+1. Click **Test**
 
    ![the test view](images/basic_protocol_test.png)
 
-   and then *Generate Operations* to generate instances of the operation type with random inputs
+2. Click the **Generate Operations** button to generate instances of the operation type with random inputs
 
    ![the test with operations](images/basic_protocol_test2.png)
 
-5. Clicking the *Test* button will run the operation(s) with the inputs and show the trace with any output
+2. Click the **Test** button to run the operation(s) with the inputs and show the trace with any output
 
    ![the test results](images/basic_protocol_test3.png)
 
 In this case, we see the page title "Getting Started" as output.
 
-Running the protocol this way will not show you the screens as the technician will see them.
-To do this, you need to create and launch a plan using the *Designer* tab, and then schedule and run the job from the *Manager* tab.
-[MORE LATER/ELSEWHERE]
+### Running a Deployed Protocol
 
-To run the examples below, either create a new operation type in your tutorial category, or simply edit this one.
+You can run the protocol so that it will show you the screens as the technician will see them, but this is more involved.
+
+1. In the Developer **Def** view, click the **Deployed** checkbox
+
+   ![click the deploy box](images/deployed_basic_protocol.png)
+
+2. Click the *Designer* tab at the top of the page, click *Design*, and then choose your category under *Operation Types*
+
+   ![choosing operation for a plan](images/plan_design_view.png)
+
+3. Click the operation type name `BasicProtocol` to add the operation to the plan
+
+   ![the basic protocol plan](images/basic_protocol_plan.png)
+
+4. Save the plan, and then click **Launch**. You'll have to select and confirm your budget, and click *Submit*
+
+   ![confirm the budget for the plan](images/launch_basic_protocol_plan.png)
+
+5. Select the **Manager** tab, and click your category in the list on the left.
+
+   ![Selecting the job](images/pending_plan.png)
+
+6. Click the pending job for `BasicProtocol`, click the *All* button and click *Schedule*
+
+   ![Scheduling the job](images/selecting_basic_protocol_job.png)
+
+7. Click the pending ID under **Jobs**
+
+    ![Selecting job](images/scheduling_basic_protocol_job.png)
+
+8. Click *Start*
+
+   ![Starting job](images/scheduled_basic_protocol_job.png)
+
+9. Use the buttons in the Technician view to move through the protocol.
+
+   ![Basic Protocol in the Technician View](images/running_basic_protocol.png)
+
+   Ordinarily, clicking **OK** will move to the next slide, but since there is only one there, the protocol will end.
+
+This process is involved, but under normal operation, there are at least three people involved in these steps: the plan designer, a manager, and a technician.
 
 ## Creating Technician Instructions
 
