@@ -81,8 +81,9 @@ class FieldType < ActiveRecord::Base
     results << "#{parent_name} field '#{name}' and imported field #{raw_field_type[:name]} should match." unless raw_field_type[:name] == name
     results << "#{parent_name} field '#{name}' has different choices than important field with same name" unless raw_field_type[:choices] == choices
     results << "#{parent_name} field '#{name}' has array = #{!!array} but imported field of the same name has array = #{!!raw_field_type[:array]}." unless !!raw_field_type[:array] == !!array
-    results << "#{parent_name} field '#{name}' has required = #{!!required} but imported field of the same name has required = #{!!raw_field_type[:required]}." unless !!raw_field_type[:required] == !!required &&
-                                                                                                                                                                       results << "#{parent_name} field '#{name}' has part = #{!!part} but imported field of the same name has part = #{!!raw_field_type[:part]}." unless !!raw_field_type[:part] == !!part
+    # TODO: make sure the following line is correct.  previously had a && at the end
+    results << "#{parent_name} field '#{name}' has required = #{!!required} but imported field of the same name has required = #{!!raw_field_type[:required]}." unless !!raw_field_type[:required] == !!required
+    results << "#{parent_name} field '#{name}' has part = #{!!part} but imported field of the same name has part = #{!!raw_field_type[:part]}." unless !!raw_field_type[:part] == !!part
     results << "#{parent_name} field '#{name}' has type is #{!!ftype} but imported field of the same name has type = #{!!raw_field_type[:ftype]}." unless raw_field_type[:ftype] == ftype
     results << "#{parent_name} field '#{name}' has role is #{!!role} but imported field of the same name has role = #{!!raw_field_type[:role]}" unless raw_field_type[:role] == role
     results << "#{parent_name} field '#{name}' has routing symbol is #{!!routing} but imported field of the same name has routing symbol = #{!!raw_field_type[:routing]}." unless raw_field_type[:role] == role
