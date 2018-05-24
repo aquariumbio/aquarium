@@ -5,14 +5,14 @@ module Krill
     def load_samples(headings, ingredients, collections) # needs a better name
 
       user_shows = if block_given?
-        ShowBlock.new.run(&Proc.new)
-      else
-        []
+                     ShowBlock.new.run(&Proc.new)
+                   else
+                     []
                    end
 
-      raise 'Empty collection list' unless !collections.empty?
+      raise 'Empty collection list' if collections.empty?
 
-      heading = [[(collections[0].object_type.name).to_s, 'Location'] + headings]
+      heading = [[collections[0].object_type.name.to_s, 'Location'] + headings]
       i = 0
 
       collections.each do |col|
@@ -24,11 +24,11 @@ module Krill
           (0..m[r].length - 1).each do |c|
             if i < ingredients[0].length
               loc = if m.length == 1
-                "#{c + 1}"
-              else
-                "#{r + 1},#{c + 1}"
-              end
-              tab.push([col.id, loc] + ingredients.collect { |ing| { content: ing[i].is_a? Item ? ing[i].id : ing[i], check: true } })
+                      (c + 1).to_s
+                    else
+                      "#{r + 1},#{c + 1}"
+                    end
+              tab.push([col.id, loc] + ingredients.collect { |ing| { content: (ing[i].is_a? Item) ? ing[i].id : ing[i], check: true } })
             end
             i += 1
           end
@@ -53,9 +53,9 @@ module Krill
       opts = { skip_non_empty: true }.merge options
 
       user_shows = if block_given?
-        ShowBlock.new.run(&Proc.new)
-      else
-        []
+                     ShowBlock.new.run(&Proc.new)
+                   else
+                     []
                    end
 
       # source and destination indices
@@ -71,7 +71,7 @@ module Krill
 
       routing = []
 
-      while !sr.nil?
+      until sr.nil?
 
         # add to routing table
         routing.push(from: [sr, sc], to: [dr, dc])
@@ -107,7 +107,7 @@ module Krill
           s += 1
           return unless s < sources.length
           sr = 0
-            sc = 0
+          sc = 0
         end
         # END BUGFIX
 
@@ -116,18 +116,16 @@ module Krill
           s += 1
           return unless s < sources.length
           sr = 0
-            sc = 0
+          sc = 0
         end
 
         # update destination indices
-        unless dc
-          d += 1
-          return unless d < destinations.length
-          dr = 0
-            dc = 0
-          dr, dc = destinations[d].next 0, 0, skip_non_empty: true unless destinations[d].matrix[dr][dc] == -1
-        end
-
+        next if dc
+        d += 1
+        return unless d < destinations.length
+        dr = 0
+        dc = 0
+        dr, dc = destinations[d].next 0, 0, skip_non_empty: true unless destinations[d].matrix[dr][dc] == -1
 
       end
 
@@ -143,9 +141,9 @@ module Krill
       raise "Could not find object type #{object_type_name} in distribute" unless object_type
 
       user_shows = if block_given?
-        ShowBlock.new.run(&Proc.new)
-      else
-        []
+                     ShowBlock.new.run(&Proc.new)
+                   else
+                     []
                    end
 
       m = col.matrix
