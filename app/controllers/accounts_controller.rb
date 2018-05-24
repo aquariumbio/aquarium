@@ -17,27 +17,27 @@ class AccountsController < ApplicationController
     if @user == current_user || current_user.is_admin
 
       @all_rows = Account.where(
-        "user_id = ?",
+        'user_id = ?',
         @user.id
       )
 
       @current_rows = Account.where(
-        "user_id = ? and ? <= created_at and created_at < ?",
+        'user_id = ? and ? <= created_at and created_at < ?',
         @user.id,
         @start_date,
         @end_date
       )
 
       @prev_rows = Account.where(
-        "user_id = ? and created_at < ?",
+        'user_id = ? and created_at < ?',
         @user.id,
         @start_date
       )
 
       @balances = @all_rows
-                  .collect { |row| row.budget_id }
+                  .collect(&:budget_id)
                   .uniq
-                  .collect { |bid|
+                  .collect do |bid|
         {
           budget: Budget.find(bid),
           prev: @prev_rows
@@ -54,10 +54,10 @@ class AccountsController < ApplicationController
             .inject(0) { |sum, x| sum + x },
           credits: @current_rows
             .select { |r| r.budget_id == bid && r.transaction_type == 'credit' }
-            .collect { |r| r.amount }
+            .collect(&:amount)
             .inject(0) { |sum, x| sum + x }
         }
-      }
+      end
 
     else
 
@@ -72,7 +72,7 @@ class AccountsController < ApplicationController
 
     if current_user.is_admin
 
-      if params[:amount] != "" && params[:amount].to_f > 0
+      if params[:amount] != '' && params[:amount].to_f > 0
 
         user = User.find(params[:uid])
         budget = Budget.find(params[:bid])
@@ -86,7 +86,7 @@ class AccountsController < ApplicationController
           description: description,
           task_id: -1,
           job_id: -1,
-          transaction_type: "credit"
+          transaction_type: 'credit'
         )
 
         row.save
@@ -101,7 +101,7 @@ class AccountsController < ApplicationController
 
     else
 
-      flash[:error] = "Not admin"
+      flash[:error] = 'Not admin'
       redirect_to :accounts
 
     end

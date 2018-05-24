@@ -1,4 +1,4 @@
-puts "#{File.dirname(__FILE__)}"
+puts File.dirname(__FILE__).to_s
 
 require_relative 'protocol'
 require_relative 'scope'

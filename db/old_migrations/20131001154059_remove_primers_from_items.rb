@@ -4,6 +4,5 @@ class RemovePrimersFromItems < ActiveRecord::Migration
     remove_column :items, :table_entry_id
   end
 
-  def down
-  end
+  def down; end
 end

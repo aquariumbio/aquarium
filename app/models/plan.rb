@@ -13,7 +13,7 @@ class Plan < ActiveRecord::Base
 
     gs = goals_plain
 
-    issues = gs.collect { |g| g.issues }.flatten
+    issues = gs.collect(&:issues).flatten
 
     if issues.empty?
 
@@ -34,12 +34,10 @@ class Plan < ActiveRecord::Base
 
   end
 
-  def error msg, key = :job_crash
+  def error(msg, key = :job_crash)
 
     operations.each do |op|
-      if op.status != "done"
-        op.error key, msg
-      end
+      op.error key, msg if op.status != 'done'
     end
 
     associate key, msg
@@ -69,13 +67,13 @@ class Plan < ActiveRecord::Base
     end
 
     puts "destroying plan #{id}"
-    self.delete
+    delete
 
   end
 
   def goals_plain
     # TODO: Make this faster.
-    operations.select { |op| op.successors.length == 0 }
+    operations.select { |op| op.successors.empty? }
   end
 
   def goals
@@ -83,7 +81,7 @@ class Plan < ActiveRecord::Base
     goals_plain.as_json(include: :operation_type, methods: :field_values)
   end
 
-  def select_subtree operation
+  def select_subtree(operation)
 
     operation.siblings.each do |op|
       if op == operation
@@ -99,8 +97,8 @@ class Plan < ActiveRecord::Base
 
     fvs = []
 
-    op_ids = operations.collect { |op| op.id }
-    FieldValue.where(parent_class: "Operation", parent_id: op_ids).each do |fv|
+    op_ids = operations.collect(&:id)
+    FieldValue.where(parent_class: 'Operation', parent_id: op_ids).each do |fv|
       fvs << fv.id
     end
 
@@ -120,16 +118,16 @@ class Plan < ActiveRecord::Base
     operations.each do |op|
       newop = op.operation_type.operations.create status: 'planning', user_id: op.user_id
       op.field_values.each do |fv|
-        newfv = FieldValue.new({
-                                 name: fv.name,
-                                 child_sample_id: fv.child_sample_id,
-                                 value: fv.value,
-                                 role: fv.role,
-                                 field_type_id: fv.field_type_id,
-                                 allowable_field_type_id: fv.allowable_field_type_id,
-                                 parent_class: "Operation",
-                                 parent_id: newop.id
-                               })
+        newfv = FieldValue.new(
+          name: fv.name,
+          child_sample_id: fv.child_sample_id,
+          value: fv.value,
+          role: fv.role,
+          field_type_id: fv.field_type_id,
+          allowable_field_type_id: fv.allowable_field_type_id,
+          parent_class: 'Operation',
+          parent_id: newop.id
+        )
         newfv.save
         fv_maps[fv.id] = newfv.id
       end
@@ -147,10 +145,10 @@ class Plan < ActiveRecord::Base
 
   def costs
 
-    labor_rate = Parameter.get_float("labor rate")
-    markup_rate = Parameter.get_float("markup rate")
+    labor_rate = Parameter.get_float('labor rate')
+    markup_rate = Parameter.get_float('markup rate')
 
-    op_ids = PlanAssociation.where(plan_id: id).collect { |pa| pa.operation_id }
+    op_ids = PlanAssociation.where(plan_id: id).collect(&:operation_id)
     ops = Operation.includes(:operation_type).find(op_ids)
 
     ops.collect do |op|

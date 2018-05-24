@@ -4,7 +4,7 @@ module Plankton
 
     attr_reader :info_expr
 
-    def initialize info_expr, options = {}
+    def initialize(info_expr, options = {})
 
       super 'http', options
       @info_expr = info_expr
@@ -12,7 +12,7 @@ module Plankton
 
     end
 
-    def bt_execute scope, params
+    def bt_execute(scope, params)
 
       info = {}
 
@@ -29,7 +29,7 @@ module Plankton
         end
       end
 
-      puts "http-scope info_expr:"
+      puts 'http-scope info_expr:'
       puts @info_expr
       uri = URI(info[:host] + ':' + info[:port] + info[:path])
       uri.query = URI.encode_www_form(info[:query])

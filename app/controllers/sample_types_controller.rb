@@ -6,20 +6,20 @@ class SampleTypesController < ApplicationController
   # GET /sample_types
   # GET /sample_types.json
   def index
-    @sample_types = SampleType.all.sort_by { |st| st.name }
-    if @sample_types.any?
-      @first = @sample_types[0].name
-    else
-      @first = 'no sample types'
-    end
+    @sample_types = SampleType.all.sort_by(&:name)
+    @first = if @sample_types.any?
+               @sample_types[0].name
+             else
+               'no sample types'
+             end
 
     respond_to do |format|
       format.html { render layout: 'aq2' }
-      format.json {
+      format.json do
         render json: @sample_types
           .sort { |a, b| a.name <=> b.name }
           .to_json(methods: :field_types)
-      }
+      end
     end
   end
 
@@ -29,10 +29,10 @@ class SampleTypesController < ApplicationController
 
     respond_to do |format|
       format.html { render layout: 'aq2-plain' }
-      format.json {
+      format.json do
         render json: @sample_type
           .to_json(methods: :field_types)
-      }
+      end
     end
 
   end
@@ -87,7 +87,7 @@ class SampleTypesController < ApplicationController
 
     @sample_type = SampleType.find(params[:id])
 
-    if @sample_type.samples.length > 0
+    if !@sample_type.samples.empty?
       flash[:notice] = "Could not delete sample type definition #{@sample_type.name} because it has samples associated with it."
     else
       @sample_type.destroy

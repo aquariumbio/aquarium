@@ -4,7 +4,7 @@ module Krill
 
     attr_accessor :name
 
-    def initialize task
+    def initialize(task)
 
       @task = task
       @errors = []
@@ -15,8 +15,8 @@ module Krill
 
         begin
           @name = path.split('/').last.split('.').first.to_sym
-          sha = Repo::version path
-          code = Repo::contents path, sha
+          sha = Repo.version path
+          code = Repo.contents path, sha
         rescue Exception => e
           @name = :validator_not_found
           @errors.push "Could not find validator at #{path} for task #{@task.name} because #{e}."
@@ -26,7 +26,7 @@ module Krill
 
         begin
           # Create Namespace
-          namespace = Krill::make_namespace code
+          namespace = Krill.make_namespace code
 
           # Add base_class ancestor to user's code
           base_class = make_base
@@ -53,10 +53,10 @@ module Krill
     end
 
     def check
-      if @errors.length > 0
-        return @errors
+      if !@errors.empty?
+        @errors
       else
-        return !@checker || @checker.check(@task)
+        !@checker || @checker.check(@task)
       end
     end
 
@@ -68,7 +68,7 @@ module Krill
 
     end
 
-    def insert_base_class obj, mod
+    def insert_base_class(obj, mod)
 
       obj.constants.each do |c|
 

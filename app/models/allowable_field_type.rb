@@ -8,10 +8,10 @@ class AllowableFieldType < ActiveRecord::Base
   belongs_to :object_type  # the container that is allowed (if any)
 
   def as_json(_options = {})
-    super include: [:sample_type, :object_type]
+    super include: %i[sample_type object_type]
   end
 
-  def equals other
+  def equals(other)
     sample_type == other.sample_type && object_type == other.object_type
   end
 

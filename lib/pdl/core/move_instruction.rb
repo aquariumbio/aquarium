@@ -1,6 +1,6 @@
 class MoveInstruction < Instruction
 
-  def initialize item_expr, location_expr, var, options = {}
+  def initialize(item_expr, location_expr, var, options = {})
     @item_expr = item_expr
     @location_expr = location_expr
     @renderable = false
@@ -10,29 +10,23 @@ class MoveInstruction < Instruction
 
   # RAILS ##################################################################################
 
-  def bt_execute scope, params
+  def bt_execute(scope, params)
 
     begin
       item_hash = scope.evaluate @item_expr
       location = scope.evaluate @location_expr
     rescue Exception => e
-      raise "Move: item and/or location expressions did not evaluate correctly. The item should be an item returned by produce, for example. The location should evaluate to a string (you might need quotes around string constants). Check the syntax. " + e.message
+      raise 'Move: item and/or location expressions did not evaluate correctly. The item should be an item returned by produce, for example. The location should evaluate to a string (you might need quotes around string constants). Check the syntax. ' + e.message
     end
 
     c = item_hash.class
     console "Attempting move #{item_hash} to #{@location_expr}"
 
-    unless item_hash.class == Hash
-      raise "#{@item_expr} evaluates to #{item_hash}, which is not a Hash describing an item."
-    end
+    raise "#{@item_expr} evaluates to #{item_hash}, which is not a Hash describing an item." unless item_hash.class == Hash
 
-    unless item_hash[:id]
-      raise "Could not <move> #{@item_expr} to #{@location_expr}"
-    end
+    raise "Could not <move> #{@item_expr} to #{@location_expr}" unless item_hash[:id]
 
-    unless location.class == String
-      raise "#{@location_expr} evaluates to #{location_expr}, which is not a String"
-    end
+    raise "#{@location_expr} evaluates to #{location_expr}, which is not a String" unless location.class == String
 
     begin
       item = Item.find(item_hash[:id])

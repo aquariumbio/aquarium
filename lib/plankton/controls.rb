@@ -96,7 +96,7 @@ module Plankton
       temp = "__FOREACH#{@temp_variable_counter}__"
       @temp_variable_counter += 1
 
-      push AssignInstruction.new temp, "0", lines
+      push AssignInstruction.new temp, '0', lines
       push PushInstruction.new
       foreach_pc = pc
       ins = WhileInstruction.new "%{#{temp}} < (#{array_expr}).length", pc + 1, lines

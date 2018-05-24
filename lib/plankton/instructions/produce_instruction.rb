@@ -5,7 +5,7 @@ module Plankton
     attr_reader :object_type_name, :quantity, :release, :var, :item, :note, :location
     attr_accessor :sample_expr, :data_expr, :sample_name_expr, :sample_project_expr, :note_expr, :loc_expr, :renderable
 
-    def initialize object_type_expr, quantity_expr, release_expr, var, options = {}
+    def initialize(object_type_expr, quantity_expr, release_expr, var, options = {})
 
       @object_type_expr = object_type_expr
       @quantity_expr = quantity_expr
@@ -19,14 +19,14 @@ module Plankton
       @renderable = true
       super 'produce', options
 
-      @loc_expr = ""
-      @location = ""
+      @loc_expr = ''
+      @location = ''
 
     end
 
     # RAILS ##############################################################################################
 
-    def pre_render scope, params
+    def pre_render(scope, params)
 
       # Evaluate arguments
       @object_type_name = scope.evaluate @object_type_expr
@@ -34,17 +34,13 @@ module Plankton
       @release = (@release_expr ? (scope.evaluate @release_expr) : nil)
       @note = scope.evaluate @note_expr
 
-      if @release && @release.class != Array
-        @release = [@release]
-      end
+      @release = [@release] if @release && @release.class != Array
 
       # If derived from a sample, then figure out which one and put it in @sample
       if @sample_expr
         begin
           sample_item = scope.evaluate @sample_expr
-          if sample_item.class != Hash || !sample_item[:id]
-            raise "In produce #{@sample_expr} does not refer to a single item."
-          end
+          raise "In produce #{@sample_expr} does not refer to a single item." if sample_item.class != Hash || !sample_item[:id]
           @sample = Item.find(sample_item[:id]).sample
         rescue Exception => e
           raise "Could not find sample #{@sample_expr} => #{sample_item} for produce instruction. " + e.message
@@ -55,13 +51,9 @@ module Plankton
       if @sample_name_expr
         @sample_name = scope.evaluate @sample_name_expr
         begin
-          if @sample_name.class != String
-            raise "Sample name must be a string"
-          end
+          raise 'Sample name must be a string' if @sample_name.class != String
           @sample = Sample.find_by_name(@sample_name)
-          unless @sample
-            raise "Could not find sample with name=#{@sample_name}."
-          end
+          raise "Could not find sample with name=#{@sample_name}." unless @sample
         rescue Exception => e
           raise "Could not find sample with name=#{@sample_name}."
         end
@@ -75,7 +67,7 @@ module Plankton
         end
         @data = temp.to_json
       else
-        @data = "{}"
+        @data = '{}'
       end
 
       # find the object, or report an error
@@ -119,7 +111,7 @@ module Plankton
 
     end
 
-    def bt_execute scope, params
+    def bt_execute(scope, params)
 
       # evaluate the expressions to get the item produced when the page was first rendered
       pre_render scope, params
@@ -128,7 +120,7 @@ module Plankton
       if params['location']
         @item.location = params['location']
         @item.save
-      elsif @location != ""
+      elsif @location != ''
         @item.location = @location
         @item.save
       end
@@ -149,14 +141,12 @@ module Plankton
 
           y = Item.find_by_id(item[:id])
 
-          raise 'no such object:' + item[:name] if !y
+          raise 'no such object:' + item[:name] unless y
 
           y.quantity -= 1
           y.inuse = 0
 
-          if y.quantity <= 0
-            y.mark_as_deleted
-          end
+          y.mark_as_deleted if y.quantity <= 0
 
           y.save
 

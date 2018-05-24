@@ -4,7 +4,7 @@ module Plankton
 
     def simple_type
       if @tok.current == 'number' || @tok.current == 'string'
-        return @tok.eat
+        @tok.eat
       else
         raise "Expected 'number' or 'string' at '#{@tok.current}'"
       end
@@ -13,18 +13,16 @@ module Plankton
     def optional_description
       if @tok.current == ','
         @tok.eat
-        return expr
+        expr
       else
-        return ""
+        ''
       end
     end
 
     def optional_choices
       if @tok.current == ','
         @tok.eat
-        return expr
-      else
-        return nil
+        expr
       end
     end
 
@@ -48,10 +46,10 @@ module Plankton
         choices = optional_choices
 
         if !choices
-          parts.push({ flavor: :get,
-                       var: var,
-                       type: type,
-                       description: description })
+          parts.push(flavor: :get,
+                     var: var,
+                     type: type,
+                     description: description)
         else
           parts.push ( { flavor: :select,
                          var: var,
@@ -77,9 +75,7 @@ module Plankton
       @tok.eat_a 'in'
       fe[:list] = expr
 
-      while @tok.current != 'end'
-        fe[:statements].push step_statement
-      end
+      fe[:statements].push step_statement while @tok.current != 'end'
 
       @tok.eat_a 'end'
 
@@ -109,7 +105,7 @@ module Plankton
 
       end
 
-      return s
+      s
 
     end
 
@@ -121,9 +117,7 @@ module Plankton
       lines[:startline] = @tok.line
       @tok.eat_a 'step'
 
-      while @tok.current != 'end'
-        statements.push step_statement
-      end
+      statements.push step_statement while @tok.current != 'end'
 
       lines[:endline] = @tok.line
       @tok.eat_a 'end'

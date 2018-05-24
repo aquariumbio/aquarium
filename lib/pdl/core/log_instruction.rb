@@ -4,7 +4,7 @@ class LogInstruction < Instruction
 
   attr_reader :type, :data, :log_file
 
-  def initialize type, data, log_file, options = {}
+  def initialize(type, data, log_file, options = {})
 
     super 'log', options
     @type = type
@@ -17,7 +17,7 @@ class LogInstruction < Instruction
 
   # RAILS ###################################################################################################
 
-  def bt_execute scope, params
+  def bt_execute(scope, params)
 
     data_value = scope.evaluate @data
 
@@ -32,7 +32,7 @@ class LogInstruction < Instruction
 
   # TERMINAL ###############################################################################################
 
-  def execute scope
+  def execute(scope)
     # log_str = "Log: " + @type.to_s + " at time " + Time.now.to_s
     log_str = @type.to_s + "\t" + (scope.substitute @data).to_s + "\n"
     # log_file = File.open(@log_path, "w")

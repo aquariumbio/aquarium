@@ -2,7 +2,7 @@ module Plankton
 
   class StopInstruction < Instruction
 
-    def initialize options = {}
+    def initialize(options = {})
       super 'stop', options
     end
 

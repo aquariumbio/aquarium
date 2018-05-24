@@ -3,18 +3,18 @@ class RepoController < ApplicationController
   before_filter :signed_in_user
 
   def master_path
-    "repos/master/"
+    'repos/master/'
   end
 
   def dev_path
-    "repos/development/"
+    'repos/development/'
   end
 
   def directory_hash(path, name = nil)
-    data = { :data => (name || path) }
+    data = { data: (name || path) }
     data[:children] = children = []
     Dir.entries(path).sort.each do |entry|
-      next if (/^\./ =~ entry)
+      next if /^\./ =~ entry
       full_path = File.join(path, entry)
       if File.directory?(full_path)
         children << directory_hash(full_path, entry)
@@ -22,7 +22,7 @@ class RepoController < ApplicationController
         children << entry
       end
     end
-    return data
+    data
   end
 
   def list
@@ -32,14 +32,14 @@ class RepoController < ApplicationController
     Rails.logger.info @repos
 
     @repos[:children].each do |r|
-      r[:info] = Repo::info(r[:data])
+      r[:info] = Repo.info(r[:data])
     end
 
-    if params[:highlight]
-      @highlight = params[:highlight]
-    else
-      @highlight = @repos[:children].last[:data]
-    end
+    @highlight = if params[:highlight]
+                   params[:highlight]
+                 else
+                   @repos[:children].last[:data]
+                 end
 
     respond_to do |format|
       format.html
@@ -50,8 +50,8 @@ class RepoController < ApplicationController
   def get
 
     begin
-      @version = Repo::version(params[:path])
-    rescue
+      @version = Repo.version(params[:path])
+    rescue StandardError
       flash[:error] = "The file #{params[:path]} exists but is not under version control. Do you need to commit it?"
       redirect_to repo_list_path
       return
@@ -72,11 +72,11 @@ class RepoController < ApplicationController
   def pull
 
     begin
-      m = Git.open(master_path + params[:name]).pull()
-      d = Git.open(dev_path    + params[:name]).pull()
-      flash[:notice] = ("MASTER:\n" + m + "\n\n" + "DEVELOPMENT:\n" + d).gsub(/\r|\n/, "<br />").html_safe
+      m = Git.open(master_path + params[:name]).pull
+      d = Git.open(dev_path    + params[:name]).pull
+      flash[:notice] = ("MASTER:\n" + m + "\n\n" + "DEVELOPMENT:\n" + d).gsub(/\r|\n/, '<br />').html_safe
     rescue Exception => e
-      flash[:notice] = "Could not pull: " + e.to_s
+      flash[:notice] = 'Could not pull: ' + e.to_s
     end
     redirect_to repo_list_path(highlight: params[:name])
 

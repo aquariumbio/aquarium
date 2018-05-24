@@ -1,14 +1,14 @@
-def plan_gibson n
+def plan_gibson(n)
 
-  gibson = OperationType.find_by_name "Gibson Assembly"
+  gibson = OperationType.find_by_name 'Gibson Assembly'
 
-  gop = gibson.operations.create status: "planning", user_id: User.find_by_login("klavins").id
+  gop = gibson.operations.create status: 'planning', user_id: User.find_by_login('klavins').id
 
-  frags = SampleType.find_by_name("Fragment").samples
+  frags = SampleType.find_by_name('Fragment').samples
 
-  gop.set_output("Assembled Plasmid", SampleType.find_by_name("Plasmid").samples.last)
-     .set_input("Fragment", frags.sample(n))
-     .set_input("Comp cell", Sample.find_by_name("DH5alpha"))
+  gop.set_output('Assembled Plasmid', SampleType.find_by_name('Plasmid').samples.last)
+     .set_input('Fragment', frags.sample(n))
+     .set_input('Comp cell', Sample.find_by_name('DH5alpha'))
 
   puts
   puts "\e[93mPlanning #{gop}\e[39m"

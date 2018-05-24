@@ -6,7 +6,7 @@ module Lang
 
       t = Time.now
 
-      return {
+      {
         seconds: t.sec,
         minutes: t.min,
         hours: t.hour,

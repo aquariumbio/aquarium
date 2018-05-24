@@ -4,20 +4,16 @@ module Plankton
 
     def function_def ############################################################################
 
-      if @in_function_def
-        raise "Functions may only be defined outside all other function definitions."
-      end
+      raise 'Functions may only be defined outside all other function definitions.' if @in_function_def
 
       @tok.eat_a 'function'
       fname = @tok.eat_a_variable
 
       @tok.eat_a '('
       args = []
-      while @tok.current != ')' and @tok.current != 'EOF'
+      while (@tok.current != ')') && (@tok.current != 'EOF')
         args.push @tok.eat_a_variable
-        if @tok.current == ','
-          @tok.eat_a ','
-        end
+        @tok.eat_a ',' if @tok.current == ','
       end
       @tok.eat_a ')'
 
@@ -26,9 +22,7 @@ module Plankton
 
       statements
 
-      unless last.name == 'return'
-        push ReturnInstruction.new "false"
-      end
+      push ReturnInstruction.new 'false' unless last.name == 'return'
 
       @in_function_def = false
 
@@ -39,7 +33,7 @@ module Plankton
     def return_statement #########################################################################
 
       if !@in_function_def
-        raise "Encountered a return statement outside of a function definition."
+        raise 'Encountered a return statement outside of a function definition.'
       else
         lines = {}
         lines[:startline] = @tok.line
@@ -54,7 +48,7 @@ module Plankton
     def function_call_id
       fid = "fid#{@function_call_num}".to_sym
       @function_call_num += 1
-      return fid
+      fid
     end
 
     def function_call #############################################################################
@@ -65,28 +59,22 @@ module Plankton
 
       @tok.eat_a '('
       arg_exprs = []
-      while @tok.current != ')' and @tok.current != 'EOF'
+      while (@tok.current != ')') && (@tok.current != 'EOF')
         arg_exprs.push expr
-        if @tok.current == ','
-          @tok.eat_a ','
-        end
+        @tok.eat_a ',' if @tok.current == ','
       end
       @tok.eat_a ')'
 
-      if !@function_specs[fname.to_sym]
-        raise "Unknown function '#{fname.to_sym}'"
-      end
+      raise "Unknown function '#{fname.to_sym}'" unless @function_specs[fname.to_sym]
 
-      if @function_specs[fname.to_sym][:arg_names].length != arg_exprs.length
-        raise "Wrong number of arguments to #{fname} (#{arg_exprs.length} instead of #{@function_specs[fname.to_sym][:arg_names].length})"
-      end
+      raise "Wrong number of arguments to #{fname} (#{arg_exprs.length} instead of #{@function_specs[fname.to_sym][:arg_names].length})" if @function_specs[fname.to_sym][:arg_names].length != arg_exprs.length
 
       fid = function_call_id
       push FunctionCallInstruction.new(fid.to_sym, pc + 1, @function_specs[fname.to_sym], arg_exprs, lines)
 
       lines[:endline] = @tok.line
 
-      return "__function_return_value__(:#{fid})"
+      "__function_return_value__(:#{fid})"
 
     end # function_call
 
@@ -97,9 +85,7 @@ module Plankton
       offset = pc
 
       @function_space.each do |i|
-        if i.respond_to? :adjust_offset
-          i.adjust_offset offset
-        end
+        i.adjust_offset offset if i.respond_to? :adjust_offset
       end
 
       @function_specs.each do |k, v|
@@ -118,22 +104,20 @@ module Lang
 
   class Scope
 
-    def __function_return_value__ fid
+    def __function_return_value__(fid)
 
       # puts "Getting latest return value for fid = #{fid} with scope = #{inspect}"
 
       retvals = get :__RETVALS__
 
-      if !retvals[fid.to_sym]
-        raise "Could not find return value for #{fid} with retvals = #{retvals} and scope = #{inspect}."
-      end
+      raise "Could not find return value for #{fid} with retvals = #{retvals} and scope = #{inspect}." unless retvals[fid.to_sym]
 
       rval = retvals[fid.to_sym].pop
 
       # puts "    Got #{rval}"
 
       set :__RETVALS__, retvals
-      return rval
+      rval
 
     end
 

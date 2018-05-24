@@ -5,35 +5,35 @@ class InvoicesController < ApplicationController
 
   def index
 
-    if !params[:year]
-      year = Date.today.year
-    else
-      year = params[:year].to_i
-    end
+    year = if !params[:year]
+             Date.today.year
+           else
+             params[:year].to_i
+           end
 
-    if params[:all] && current_user.is_admin
-      user = nil
-    else
-      user = current_user
-    end
+    user = if params[:all] && current_user.is_admin
+             nil
+           else
+             current_user
+           end
 
-    @monthly_invoices = (1..12).collect { |m|
+    @monthly_invoices = (1..12).collect do |m|
       {
         month: m,
         year: year,
         date: DateTime.new(year, m),
         entries: Account.users_and_budgets(year, m, user)
       }
-    }.reverse.reject { |d| d[:entries].length == 0 }
+    end.reverse.reject { |d| d[:entries].empty? }
 
-    @monthly_invoices += (1..12).collect { |m|
+    @monthly_invoices += (1..12).collect do |m|
       {
         month: m,
         year: year - 1,
         date: DateTime.new(year - 1, m),
         entries: Account.users_and_budgets(year - 1, m, user)
       }
-    }.reverse.reject { |d| d[:entries].length == 0 }
+    end.reverse.reject { |d| d[:entries].empty? }
 
     respond_to do |format|
       format.html { render layout: 'aq2' }
@@ -47,8 +47,8 @@ class InvoicesController < ApplicationController
     @rows = @invoice.rows
     @operation_types = OperationType.all
     @base = Account.total(@rows, false)
-    @base_labor = Account.total(@rows.select { |row| row.category == "labor" }, false)
-    @base_materials = Account.total(@rows.select { |row| row.category == "materials" }, false)
+    @base_labor = Account.total(@rows.select { |row| row.category == 'labor' }, false)
+    @base_materials = Account.total(@rows.select { |row| row.category == 'materials' }, false)
     @total = Account.total(@rows, true)
     @markup = @total - @base
     respond_to do |format|
@@ -60,14 +60,14 @@ class InvoicesController < ApplicationController
 
     if current_user.is_admin
 
-      notes = [];
+      notes = []
       params[:rows].each do |_k, row|
-        al = AccountLog.new({
-                              row1: row[:id],
-                              row2: nil,
-                              user_id: current_user.id,
-                              note: params[:note]
-                            })
+        al = AccountLog.new(
+          row1: row[:id],
+          row2: nil,
+          user_id: current_user.id,
+          note: params[:note]
+        )
         al.save
         notes << al
       end
@@ -75,7 +75,7 @@ class InvoicesController < ApplicationController
 
     else
 
-      render json: { error: "Only users in the admin group can make notes to transactions." }
+      render json: { error: 'Only users in the admin group can make notes to transactions.' }
 
     end
 
@@ -120,24 +120,24 @@ class InvoicesController < ApplicationController
 
     if current_user.is_admin
 
-      notes = [];
-      rows = [];
+      notes = []
+      rows = []
 
       params[:rows].each do |_k, row|
 
         transaction = Account.find(row[:id])
 
-        credit = Account.new({
-                               user_id: transaction.user_id,
-                               budget_id: transaction.budget_id,
-                               labor_rate: 0.0,
-                               markup_rate: 0.0,
-                               transaction_type: "credit",
-                               amount: (0.01 * params[:percent].to_f) * transaction.amount * (1.0 + transaction.markup_rate),
-                               operation_id: transaction.operation_id,
-                               category: "credit",
-                               description: "Credit due to a BIOFAB error or similar issue: credit"
-                             })
+        credit = Account.new(
+          user_id: transaction.user_id,
+          budget_id: transaction.budget_id,
+          labor_rate: 0.0,
+          markup_rate: 0.0,
+          transaction_type: 'credit',
+          amount: (0.01 * params[:percent].to_f) * transaction.amount * (1.0 + transaction.markup_rate),
+          operation_id: transaction.operation_id,
+          category: 'credit',
+          description: 'Credit due to a BIOFAB error or similar issue: credit'
+        )
 
         credit.save
         logger.info credit.errors.full_messages
@@ -147,12 +147,12 @@ class InvoicesController < ApplicationController
           return
         end
 
-        al = AccountLog.new({
-                              row1: row[:id],
-                              row2: credit.id,
-                              user_id: current_user.id,
-                              note: "#{params[:percent]}% credit. " + params[:note]
-                            })
+        al = AccountLog.new(
+          row1: row[:id],
+          row2: credit.id,
+          user_id: current_user.id,
+          note: "#{params[:percent]}% credit. " + params[:note]
+        )
 
         al.save
         notes << al
@@ -164,7 +164,7 @@ class InvoicesController < ApplicationController
 
     else
 
-      render json: { error: "Only users in the admin group can make notes to transactions." }
+      render json: { error: 'Only users in the admin group can make notes to transactions.' }
 
     end
 

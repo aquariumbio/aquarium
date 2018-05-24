@@ -1,8 +1,8 @@
 module JobOperations # included in Job model
 
-  def set_op_status str, force = false
+  def set_op_status(str, force = false)
     operations.each do |op|
-      if op.status != "error" || force
+      if op.status != 'error' || force
         Rails.logger.info "#{op.id}: SETTING STATUS FROM #{op.status} to #{str}"
         op.set_status str
       else
@@ -12,7 +12,7 @@ module JobOperations # included in Job model
   end
 
   def cancel_plans
-    plans = operations.collect { |op| op.plan }.uniq
+    plans = operations.collect(&:plan).uniq
     plans.each do |plan|
       plan.error "All operations in this plan were canceled because job number #{id} crashed."
     end
@@ -20,8 +20,8 @@ module JobOperations # included in Job model
 
   def charge
 
-    labor_rate = Parameter.get_float("labor rate")
-    markup_rate = Parameter.get_float("markup rate")
+    labor_rate = Parameter.get_float('labor rate')
+    markup_rate = Parameter.get_float('markup rate')
 
     operations.each do |op|
 
@@ -36,15 +36,15 @@ module JobOperations # included in Job model
 
           materials = Account.new(
             user_id: op.user_id,
-            category: "materials",
+            category: 'materials',
             amount: c[:materials],
             budget_id: op.plan.budget_id,
-            description: "Materials",
+            description: 'Materials',
             labor_rate: labor_rate,
             markup_rate: markup_rate,
             operation_id: op.id,
             job_id: id,
-            transaction_type: "debit"
+            transaction_type: 'debit'
           )
 
           materials.save
@@ -53,7 +53,7 @@ module JobOperations # included in Job model
 
           labor = Account.new(
             user_id: op.user_id,
-            category: "labor",
+            category: 'labor',
             amount: c[:labor] * labor_rate,
             budget_id: op.plan.budget_id,
             description: "Labor: #{c[:labor]} minutes @ $#{labor_rate}/min",
@@ -61,7 +61,7 @@ module JobOperations # included in Job model
             markup_rate: markup_rate,
             operation_id: op.id,
             job_id: id,
-            transaction_type: "debit"
+            transaction_type: 'debit'
           )
 
           labor.save
@@ -76,27 +76,23 @@ module JobOperations # included in Job model
   end
 
   def start
-    if self.pc == Job.NOT_STARTED
+    if pc == Job.NOT_STARTED
       self.pc = 0
       save
-      operations.each do |op|
-        op.run
-      end
+      operations.each(&:run)
     end
   end
 
-  def stop status = "done"
-    if self.pc >= 0
+  def stop(status = 'done')
+    if pc >= 0
       self.pc = Job.COMPLETED
       save
       if status == 'done'
         charge
-        operations.each do |op|
-          op.finish
-        end
+        operations.each(&:finish)
       else
         operations.each do |op|
-          op.change_status "error"
+          op.change_status 'error'
         end
       end
     end
@@ -105,7 +101,7 @@ module JobOperations # included in Job model
   def all_operations
 
     all_ops = []
-    operations.collect { |o| o.plan }.uniq.each do |plan|
+    operations.collect(&:plan).uniq.each do |plan|
       all_ops.concat plan.operations
     end
     all_ops

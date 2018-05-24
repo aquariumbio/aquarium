@@ -10,30 +10,30 @@ class Protocol
     @program = []
     @args = []
     @include_stack = []; # has the form [ { xmldoc: x , ce: c }, ... ]
-    @control_stack = [];
-    @log_path = ""
-    @debug = "New protocol<br />"
+    @control_stack = []
+    @log_path = ''
+    @debug = 'New protocol<br />'
     @job_id = -1
   end
 
-  def write_debug msg
-    @debug += ("<span style='width: 20px'>&nbsp;</span>" * (@include_stack.length)) + msg + "<br />"
+  def write_debug(msg)
+    @debug += ("<span style='width: 20px'>&nbsp;</span>" * @include_stack.length) + msg + '<br />'
   end
 
-  def push i
+  def push(i)
     i.pc = @program.length
     @program.push i
   end
 
-  def push_arg a
+  def push_arg(a)
     @args.push a
   end
 
-  def children_as_text e
+  def children_as_text(e)
     result = e.elements.collect { |p| { p.name.to_sym => p.text } }.reduce :merge
-    if !result
+    unless result
       @bad_xml = e
-      raise "No children present in tag."
+      raise 'No children present in tag.'
     end
     result
   end
@@ -41,20 +41,20 @@ class Protocol
   def show
     pc = 0
     @program.each do |i|
-      puts pc.to_s + ": " + i.to_s
+      puts pc.to_s + ': ' + i.to_s
       pc += 1
     end
   end
 
   def info
-    str = ""
+    str = ''
     @program.each do |i|
-      str = str + i.content if i.name == 'information'
+      str += i.content if i.name == 'information'
     end
     str
   end
 
-  def open path
+  def open(path)
 
     write_debug "Open: #{path}"
 
@@ -65,32 +65,28 @@ class Protocol
     end
 
     parse_xml file[:content]
-    return file[:sha]
+    file[:sha]
 
   end
 
-  def parse_xml file
+  def parse_xml(file)
 
     begin
       xml = Document.new(file)
     rescue REXML::ParseException => ex
-      raise "XML Error: " + ex.message[0..120] + " ..."
+      raise 'XML Error: ' + ex.message[0..120] + ' ...'
     end
 
-    unless xml && xml.root
-      raise "The PDL program is empty. No identifiable tags. Nothing."
-    end
+    raise 'The PDL program is empty. No identifiable tags. Nothing.' unless xml && xml.root
 
-    unless xml.root.elements.first
-      raise "The protocol does not have any content."
-    end
+    raise 'The protocol does not have any content.' unless xml.root.elements.first
 
-    @include_stack.push({ xmldoc: xml, ce: xml.root.elements.first })
-    return true
+    @include_stack.push(xmldoc: xml, ce: xml.root.elements.first)
+    true
 
   end
 
-  def increment el
+  def increment(el)
 
     msg = "Increment: #{el.name} --> "
 
@@ -100,26 +96,26 @@ class Protocol
       x = e.parent.next_element
       while e && !x
         e = e.parent
-        if e
-          x = e.next_element
-        else
-          x = nil # isn't x just nil anyway at this point?
-        end
+        x = if e
+              e.next_element
+            else
+              nil # isn't x just nil anyway at this point?
+            end
       end
       e = x
     else
       e = e.next_element
     end
 
-    if e
-      msg += "#{e.name}."
-    else
-      msg += "EOF."
-    end
+    msg += if e
+             "#{e.name}."
+           else
+             'EOF.'
+           end
 
     write_debug msg
 
-    return e
+    e
 
   end
 
@@ -134,7 +130,7 @@ class Protocol
           name = c[:name]
         else
           @bad_xml = e
-          raise "Parse Error: No name specified for argument."
+          raise 'Parse Error: No name specified for argument.'
         end
 
         if c[:type] == 'number' || c[:type] == 'sample'
@@ -143,7 +139,7 @@ class Protocol
           type = 'string'
         else
           @bad_xml = e
-          raise "Parse Error: No valid type (number, string, sample, or objecttype) specified for argument."
+          raise 'Parse Error: No valid type (number, string, sample, or objecttype) specified for argument.'
         end
 
         push_arg ArgumentInstruction.new name, c[:type], c[:description]
@@ -181,15 +177,15 @@ class Protocol
               cat = children_as_text tag
               unless cat[:var] && cat[:type] && cat[:description]
                 @bad_xml = tag
-                raise "In <getdata>: Missing subtags"
+                raise 'In <getdata>: Missing subtags'
               end
-              parts.push({ :getdata => (children_as_text tag) })
+              parts.push(getdata: (children_as_text tag))
 
             when 'select' ######################################################################
               choices = []
               v = nil
               d = nil
-              msg = ""
+              msg = ''
               tag.elements.each do |el|
                 msg += el.name + ' '
                 if el.name == 'var'
@@ -200,14 +196,14 @@ class Protocol
                   choices.push(el.text)
                 end
               end
-              unless v && d && choices.length > 0
+              unless v && d && !choices.empty?
                 @bad_xml = tag
-                raise "In <select>: Missing subtags. Select should have a var, description, and at least one choice"
+                raise 'In <select>: Missing subtags. Select should have a var, description, and at least one choice'
               end
-              parts.push({ :select => { var: v, description: d, choices: choices } })
+              parts.push(select: { var: v, description: d, choices: choices })
 
             else ###############################################################################
-              parts.push({ tag.name.to_sym => tag.text })
+              parts.push(tag.name.to_sym => tag.text)
 
             end
 
@@ -226,14 +222,14 @@ class Protocol
             lhs = c[:lhs]
           else
             @bad_xml = e
-            raise "Parse error: no lhs subtag in assignment."
+            raise 'Parse error: no lhs subtag in assignment.'
           end
 
           if c[:rhs]
             rhs = c[:rhs]
           else
             @bad_xml = e
-            raise "Parse error: no rhs subtag in assignment."
+            raise 'Parse error: no rhs subtag in assignment.'
           end
 
           push AssignInstruction.new lhs, rhs, xml: e
@@ -248,7 +244,7 @@ class Protocol
             name = c[:name]
           else
             @bad_xml = e
-            raise "Parse Error: No name specified for argument."
+            raise 'Parse Error: No name specified for argument.'
           end
 
           if c[:type] == 'number' || c[:type] == 'sample'
@@ -257,21 +253,19 @@ class Protocol
             type = 'string'
           else
             @bad_xml = e
-            raise "Parse Error: No valid type (number, string, sample, or objecttype) specified for argument."
+            raise 'Parse Error: No valid type (number, string, sample, or objecttype) specified for argument.'
           end
 
-          if @include_stack.length <= 1
-            push_arg ArgumentInstruction.new name, c[:type], c[:description], xml: e
-          end
+          push_arg ArgumentInstruction.new name, c[:type], c[:description], xml: e if @include_stack.length <= 1
 
           e = increment e
 
           ##########################################################################################
         when 'include'
           args = []
-          file = ""
+          file = ''
           rsym = nil
-          rval = ""
+          rval = ''
           sha = ''
           temp = e
           e.elements.each do |tag|
@@ -280,15 +274,15 @@ class Protocol
               file = tag.text
               @include_stack.last[:ce] = increment e # e.next_element
               begin
-                sha = self.open tag.text
+                sha = open tag.text
               rescue Exception => ex
                 @bad_xml = e
                 push StartIncludeInstruction.new args, file, sha, xml: temp
-                raise "Could not include file. " + ex.message
+                raise 'Could not include file. ' + ex.message
               end
               e = @include_stack.last[:ce]
             when 'setarg'
-              args.push(children_as_text tag)
+              args.push(children_as_text(tag))
             when 'return'
               r = children_as_text tag
               rsym = r[:var].to_sym
@@ -340,11 +334,11 @@ class Protocol
           ##########################################################################################
         when 'else'
           program[@control_stack.last].mark_else @program.length
-          if e.elements.first
-            e = e.elements.first
-          else
-            e = increment e
-          end
+          e = if e.elements.first
+                e.elements.first
+              else
+                increment e
+              end
 
           ##########################################################################################
         when 'end_else'
@@ -397,13 +391,13 @@ class Protocol
 
             unless (c[:id] && c[:var]) || (c[:type] && c[:quantity] && c[:var])
               @bad_xml = item_tag
-              raise "Protocol error: take/item sub-tags (type, quantity, var) or id not present."
+              raise 'Protocol error: take/item sub-tags (type, quantity, var) or id not present.'
             end
 
             if c[:name] || c[:project]
               unless c[:name] && c[:project]
                 @bad_xml = item_tag
-                raise "Protocol error: when taking an item either both or neither name and project should be specified."
+                raise 'Protocol error: when taking an item either both or neither name and project should be specified.'
               end
             end
 
@@ -420,7 +414,7 @@ class Protocol
         when 'release'
           unless e.text && e.elements.empty?
             @bad_xml = e
-            raise "Protocol error: No expression found in <release> (note: do not use subtags for this tag)"
+            raise 'Protocol error: No expression found in <release> (note: do not use subtags for this tag)'
           end
           push ReleaseInstruction.new e.text, xml: e
           e = increment e
@@ -429,34 +423,26 @@ class Protocol
         when 'produce'
 
           c = children_as_text e
-          result_name = c[:var] ? c[:var] : "_most_recently_produced_item"
+          result_name = c[:var] ? c[:var] : '_most_recently_produced_item'
           instruction = ProduceInstruction.new c[:object], c[:quantity], c[:release], result_name, xml: e
 
-          if c[:sample] # if the item is a sample
-            instruction.sample_expr = c[:sample]
-          end
+          instruction.sample_expr = c[:sample] if c[:sample] # if the item is a sample
 
-          if c[:note] # if there is a note.
-            instruction.note = c[:note]
-          end
+          instruction.note = c[:note] if c[:note] # if there is a note.
 
-          if c[:data] # there is data
-            instruction.data_expr = c[:data]
-          end
+          instruction.data_expr = c[:data] if c[:data] # there is data
 
           if c[:sample_name] || c[:sample_project]
             if !(c[:sample_name] && c[:sample_project])
               @bad_xml = e
-              raise "Both a sample name or sample project must be specified if either is specified"
+              raise 'Both a sample name or sample project must be specified if either is specified'
             else
               instruction.sample_name_expr = c[:sample_name]
               instruction.sample_project_expr = c[:sample_project]
             end
           end
 
-          if e.attributes['render'] && e.attributes['render'] == 'false'
-            instruction.do_not_render
-          end
+          instruction.do_not_render if e.attributes['render'] && e.attributes['render'] == 'false'
 
           push instruction
           e = increment e
@@ -464,7 +450,7 @@ class Protocol
           ##########################################################################################
         when 'move'
           c = children_as_text e
-          result_name = c[:var] ? c[:var] : "_most_recently_moved_item"
+          result_name = c[:var] ? c[:var] : '_most_recently_moved_item'
           push MoveInstruction.new c[:item], c[:location], result_name, xml: e
           e = increment e
 
@@ -473,7 +459,7 @@ class Protocol
           c = children_as_text e
           unless c && c[:type] && c[:data]
             @bad_xml = e
-            raise "In log: missing sub-tags"
+            raise 'In log: missing sub-tags'
           end
           push LogInstruction.new c[:type], c[:data], 'log_file', xml: e
           e = increment e
@@ -526,11 +512,11 @@ class Protocol
 
       # Done with current included file, pop it and move on.
       @include_stack.pop
-      write_debug "EOF"
+      write_debug 'EOF'
 
     end # while include_stack is not empty
 
-    return true
+    true
 
   end
 

@@ -1,4 +1,4 @@
-generic = "lambda { |spec| { materials: 0, labor: 0 } }"
+generic = 'lambda { |spec| { materials: 0, labor: 0 } }'
 
 TaskPrototype.all.each do |tp|
 
@@ -10,6 +10,6 @@ TaskPrototype.all.each do |tp|
 
   puts s.join(",\n")
 
-  puts "}, "
+  puts '}, '
 
 end

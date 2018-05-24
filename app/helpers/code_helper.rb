@@ -1,22 +1,22 @@
 module CodeHelper
 
-  def code name = nil
+  def code(name = nil)
 
-    Code.where(parent_id: self.id, parent_class: self.class.to_s, name: name)
-        .first(:order => "id desc", :limit => 1)
+    Code.where(parent_id: id, parent_class: self.class.to_s, name: name)
+        .first(order: 'id desc', limit: 1)
 
   end
 
-  def new_code name, content, user
+  def new_code(name, content, user)
 
     if code(name)
 
-      raise "Could not save code: #{name} already exists for #{self.class} #{self.id}"
+      raise "Could not save code: #{name} already exists for #{self.class} #{id}"
 
     else
 
       f = Code.new(
-        parent_id: self.id,
+        parent_id: id,
         parent_class: self.class.to_s,
         name: name,
         content: content.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: ''),

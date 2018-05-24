@@ -1,15 +1,15 @@
 module OperationPlanner
 
-  def associate_plan plan
+  def associate_plan(plan)
     pa = plan_associations.create plan_id: plan.id
     pa.save
-    if !plan.user_id
+    unless plan.user_id
       plan.user_id = user_id
       plan.save
     end
   end
 
-  def predecessors_aux i, wires, pred_outputs, predecessors
+  def predecessors_aux(i, wires, pred_outputs, predecessors)
 
     preds = []
 
@@ -35,39 +35,38 @@ module OperationPlanner
 
     else
 
-      inputs = FieldValue.includes(:field_type).where(parent_class: "Operation", parent_id: id, role: "input")
-      wires = Wire.where(to_id: inputs.collect { |fv| fv.id })
-      pred_outputs = FieldValue.where(id: wires.collect { |w| w.from_id })
-      predecessors = Operation.where(id: pred_outputs.collect { |o| o.parent_id })
+      inputs = FieldValue.includes(:field_type).where(parent_class: 'Operation', parent_id: id, role: 'input')
+      wires = Wire.where(to_id: inputs.collect(&:id))
+      pred_outputs = FieldValue.where(id: wires.collect(&:from_id))
+      predecessors = Operation.where(id: pred_outputs.collect(&:parent_id))
 
       inputs.each do |i|
 
-        if i.field_type.ftype == 'sample'
+        next unless i.field_type.ftype == 'sample'
 
-          preds = predecessors_aux i, wires, pred_outputs, predecessors
+        preds = predecessors_aux i, wires, pred_outputs, predecessors
 
-          if preds.length > 0
+        if !preds.empty?
 
-            preds.each do |pred|
+          preds.each do |pred|
 
-              if !(pred.status == 'primed' ||
-                     pred.status == 'done' ||
-                     pred.status == 'unplanned' ||
-                     pred.status == 'planning')
-                @@ready_errors << "Operation #{id} is waiting for operation #{pred.id} which has status #{pred.status}"
-                return false
-              end
-
-            end
-
-          elsif !i.satisfied_by_environment
-
-            @@ready_errors << "No items in stock available for input '#{i.name}' of operation #{id}"
+            next if pred.status == 'primed' ||
+                    pred.status == 'done' ||
+                    pred.status == 'unplanned' ||
+                    pred.status == 'planning'
+            @@ready_errors << "Operation #{id} is waiting for operation #{pred.id} which has status #{pred.status}"
             return false
 
-          end # if
+          end
+
+        elsif !i.satisfied_by_environment
+
+          @@ready_errors << "No items in stock available for input '#{i.name}' of operation #{id}"
+          return false
 
         end # if
+
+        # if
 
       end # each
 
@@ -81,22 +80,18 @@ module OperationPlanner
 
     operation_type.inputs.each do |i|
       input_list = inputs.select { |j| j.name == i.name }
-      if input_list.empty? # && ! i.array # arrays need to have at least one element (for now)
-        return true
-      end
+      return true if input_list.empty? # && ! i.array # arrays need to have at least one element (for now)
     end
 
-    return false
+    false
 
   end
 
   def has_no_stock_or_method
     inputs.select { |i| i.field_type.ftype == 'sample' }.each do |i|
-      if i.predecessors.length == 0 && !i.satisfied_by_environment
-        return true
-      end
+      return true if i.predecessors.empty? && !i.satisfied_by_environment
     end
-    return false
+    false
   end
 
   def issues
@@ -108,34 +103,34 @@ module OperationPlanner
       ready = op.ready?
       if op.on_the_fly
         # do nothing
-      elsif op.status == "planning" && op.leaf? && !ready
-        issues << "Operation '#{op.operation_type.name}' is not ready " +
+      elsif op.status == 'planning' && op.leaf? && !ready
+        issues << "Operation '#{op.operation_type.name}' is not ready " \
                   "(on_the_fly = #{op.on_the_fly}, ready = #{ready}, leaf=#{op.leaf?}, status=#{op.status})."
-      elsif op.status == "planning" && op.undetermined_inputs?
+      elsif op.status == 'planning' && op.undetermined_inputs?
         issues << "Operation '#{op.operation_type.name}' has unspecified inputs."
       elsif op.has_no_stock_or_method
         issues << "No way to make at least one input of operation '#{op.operation_type.name}'."
       end
     end
 
-    return issues
+    issues
 
   end
 
-  def show_plan space = ""
+  def show_plan(space = '')
 
     op = self
 
-    if op.status == "planning"
+    if op.status == 'planning'
       print "#{space}\e[95m#{op.operation_type.name} #{op.id}, status: #{op.status}\e[39m"
     else
       print "#{space}\e[90m#{op.operation_type.name} #{op.id}, status: #{op.status}\e[39m"
     end
 
     if op.ready?
-      puts ", ready"
+      puts ', ready'
     else
-      puts ", not ready"
+      puts ', not ready'
     end
 
     op.operation_type.inputs.each do |j|
@@ -148,16 +143,16 @@ module OperationPlanner
         print " #{i.child_sample.name}"
         print " (#{i.object_type ? i.object_type.name : 'NO OBJECT TYPE'})"
 
-        if i.predecessors.length > 0
+        if !i.predecessors.empty?
           puts " ... #{i.predecessors.length} option(s)"
         elsif i.satisfied_by_environment
-          puts " ... available"
+          puts ' ... available'
         else
-          puts " ... no inventory and no way to make this sample"
+          puts ' ... no inventory and no way to make this sample'
         end
 
         i.predecessors.each do |p|
-          p.operation.show_plan space + "    "
+          p.operation.show_plan space + '    '
         end
 
       end
@@ -171,7 +166,7 @@ module OperationPlanner
 
   end
 
-  def serialize override_status = nil
+  def serialize(override_status = nil)
 
     problem = false
     input_list = []
@@ -180,27 +175,27 @@ module OperationPlanner
 
       op_inputs = inputs.select { |i| i.name == ot_input.name }
 
-      if op_inputs.length > 0
+      if !op_inputs.empty?
 
         op_inputs.each do |i|
 
           sat = i.satisfied_by_environment
           preds = i.predecessors
-          os = override_status if (override_status)
-          os = status if (!override_status && status == "unplanned")
-          problem = problem || (!sat && preds.length == 0)
+          os = override_status if override_status
+          os = status if !override_status && status == 'unplanned'
+          problem ||= (!sat && preds.empty?)
 
           input_list << {
             name: i.name,
             satisfied: sat,
-            issue: !sat && preds.length == 0,
-            predecessors: preds.reject { |p| p.operation.status == "unplanned" }.collect { |p|
+            issue: !sat && preds.empty?,
+            predecessors: preds.reject { |p| p.operation.status == 'unplanned' }.collect do |p|
               {
                 id: p.id,
                 name: p.name,
                 operation: p.operation.serialize(os)
               }
-            }
+            end
           }
 
         end

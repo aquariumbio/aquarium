@@ -2,11 +2,11 @@ module Plankton
 
   class PushInstruction < Instruction
 
-    def initialize options = {}
+    def initialize(options = {})
       super 'push', options
     end
 
-    def bt_execute scope, _params
+    def bt_execute(scope, _params)
       scope.push
     end
 

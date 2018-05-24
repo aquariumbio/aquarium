@@ -8,7 +8,7 @@ class Api
   include ApiDrop
   include ApiSubmit
 
-  def initialize params
+  def initialize(params)
     @params = symbolize params
     @errors = []
     @warnings = []
@@ -16,8 +16,8 @@ class Api
     @user = nil
   end
 
-  def symbolize hash
-    hash.inject({}) { |result, (key, value)|
+  def symbolize(hash)
+    hash.each_with_object({}) do |(key, value), result|
       new_key = case key
                 when String then key.to_sym
                 else key
@@ -27,27 +27,26 @@ class Api
                   else value
                   end
       result[new_key] = new_value
-      result
-    }
+    end
   end
 
   def error?
-    @errors.length > 0
+    !@errors.empty?
   end
 
   def warning?
-    @warnings.length > 0
+    !@warnings.empty?
   end
 
-  def error e
+  def error(e)
     @errors.push e
   end
 
-  def warn w
+  def warn(w)
     @warnings.push w
   end
 
-  def add r
+  def add(r)
     @rows += r
   end
 
@@ -62,30 +61,30 @@ class Api
           error "Could not execute request: #{e}, #{e.backtrace.first}"
         end
       else
-        warn "No run section found"
+        warn 'No run section found'
       end
 
     end
 
     if error?
-      return { result: "error", errors: @errors }
+      return { result: 'error', errors: @errors }
     else
-      return { result: "ok", warnings: @warnings, rows: @rows }
+      return { result: 'ok', warnings: @warnings, rows: @rows }
     end
 
   end
 
-  def direct method, args
+  def direct(method, args)
 
-    routes = { "find"   => method(:find),
-               "create" => method(:create),
-               "submit" => method(:submit),
-               "drop" => method(:drop) }
+    routes = { 'find'   => method(:find),
+               'create' => method(:create),
+               'submit' => method(:submit),
+               'drop' => method(:drop) }
 
     if routes[method]
       routes[method].call(args)
     else
-      warn "No valid methods found"
+      warn 'No valid methods found'
     end
 
   end

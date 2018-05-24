@@ -23,13 +23,13 @@ module Krill
     #
     # @return [Table] A Table object.
     #
-    def initialize columns = {}
+    def initialize(columns = {})
       @columns = columns
       @selection = {}
       @rows = []
       @choice = []
       @from = 0
-      @to = 100000
+      @to = 100_000
     end
 
     # Add a column to the table.
@@ -37,7 +37,7 @@ module Krill
     # @param [symbol] name The name of the column.
     # @param [String] heading A string to use for the heading of the column.
     # @return [Table] The table with the heading added to it, can be chained.
-    def column name, heading
+    def column(name, heading)
       @columns[name] = heading
       self
     end
@@ -46,7 +46,7 @@ module Krill
       !@columns.keys.empty?
     end
 
-    def has_column? key
+    def has_column?(key)
       @columns[key] != nil
     end
 
@@ -54,7 +54,7 @@ module Krill
     #
     # @param [symbol] name The name of the column
     # @param [] value Value to set
-    def set name, value
+    def set(name, value)
       @selection[name] = value
       self
     end
@@ -64,7 +64,7 @@ module Krill
     def clear
       @selection = {}
       @from = 0
-      @to = 100000
+      @to = 100_000
       self
     end
 
@@ -86,7 +86,7 @@ module Krill
     # Choose which columns to display in a subsequent call to render.
     # @param [Array] columns An array of column names, as in [:x, :y, :z].
     # @return [Table] The table, can be chained.
-    def choose columns
+    def choose(columns)
       @choice = columns
       self
     end
@@ -94,7 +94,7 @@ module Krill
     # Define the row to start with in a subsequent call to render.
     # @param [Fixnum] i The column to start with.
     # @return [Table] The table, can be chained.
-    def from i
+    def from(i)
       raise "Table: from(#{i}) is out of range" unless i < @rows.length
       @from = i
       self
@@ -103,7 +103,7 @@ module Krill
     # Define the row to end with (actually i-1) in a subsequent call to render.
     # @param [Fixnum] i The column to end just before.
     # @return [Table] The table, can be chained.
-    def to i
+    def to(i)
       @to = i
       self
     end
@@ -122,7 +122,7 @@ module Krill
 
     end
 
-    def add_column name, values
+    def add_column(name, values)
       column(name.to_sym, name)
       values.each_with_index do |v, i|
         @rows[i] ||= {}
@@ -138,7 +138,7 @@ module Krill
     #
     # @example Suppose a table t has a row named :x. Then you can do
     #   t.x("whatever").append
-    def method_missing m, *args, &block
+    def method_missing(m, *args, &block)
 
       if @columns[m]
         set(m, args[0])

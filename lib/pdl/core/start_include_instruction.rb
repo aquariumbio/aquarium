@@ -2,7 +2,7 @@ class StartIncludeInstruction < Instruction
 
   attr_reader :arguments, :filename
 
-  def initialize args, file, sha, options = {}
+  def initialize(args, file, sha, options = {})
     super 'start_include', options
     @arguments = args
     @filename = file
@@ -10,7 +10,7 @@ class StartIncludeInstruction < Instruction
     @sha = sha
   end
 
-  def bt_execute scope, params
+  def bt_execute(scope, params)
 
     # push a new scope so we don't overwrite the variables in the including file
     scope.push
@@ -35,11 +35,11 @@ class StartIncludeInstruction < Instruction
     @arguments.each do |a|
       h += "#{a[:var]}=#{a[:value]}, "
     end
-    return h[0..-3]
+    h[0..-3]
   end
 
   def to_html
-    "start include " + @filename
+    'start include ' + @filename
   end
 
 end

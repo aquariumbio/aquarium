@@ -13,17 +13,17 @@ class OysterController < ApplicationController
   def submit
 
     error = false
-    error_msg = ""
+    error_msg = ''
 
     if params[:sha]
 
       begin
         sha = params[:sha]
-        blob = Blob.get sha, ""
-        file = (blob).xml
+        blob = Blob.get sha, ''
+        file = blob.xml
       rescue Exception => e
         error = true
-        error_msg += "Could not find protocol by sha. "
+        error_msg += 'Could not find protocol by sha. '
       end
 
     elsif params[:path]
@@ -35,13 +35,13 @@ class OysterController < ApplicationController
         sha = b[:sha]
       rescue Exception => e
         error = true
-        error_msg += "Could not find protocol with path #{params[:path]}. " + e.to_s + ". " + "Here, b = " + b.to_s + ". "
+        error_msg += "Could not find protocol with path #{params[:path]}. " + e.to_s + '. ' + 'Here, b = ' + b.to_s + '. '
       end
 
     else
 
       error = true
-      error_msg += "Could not find protocol because neither the path nor the sha were specified."
+      error_msg += 'Could not find protocol because neither the path nor the sha were specified.'
 
     end
 
@@ -51,14 +51,14 @@ class OysterController < ApplicationController
       protocol.parse_xml file
     rescue Exception => e
       error = true
-      error_msg += "Could not parse xml. "
+      error_msg += 'Could not parse xml. '
     end
 
     begin
       protocol.parse
     rescue Exception => e
       error = true
-      error_msg = "Could not parse pdl. "
+      error_msg = 'Could not parse pdl. '
     end
 
     begin
@@ -68,7 +68,11 @@ class OysterController < ApplicationController
       error_msg = "Could not find user #{params[:login]}. "
     end
 
-    unless error
+    if error
+
+      render json: { action: 'submit', error: error_msg }
+
+    else
 
       scope = Scope.new {}
 
@@ -95,11 +99,7 @@ class OysterController < ApplicationController
       job.state = { stack: scope.stack }.to_json
       job.save
 
-      render json: { action: "submit", job: job.id }
-
-    else
-
-      render json: { action: "submit", error: error_msg }
+      render json: { action: 'submit', job: job.id }
 
     end
 
@@ -117,13 +117,13 @@ class OysterController < ApplicationController
       j = Job.find(params[:job].to_i)
     rescue Exception => e
       error = true
-      error_msg = "Could not parse xml. "
+      error_msg = 'Could not parse xml. '
     end
 
     if error
-      render json: { action: "status", error: error_msg }
+      render json: { action: 'status', error: error_msg }
     else
-      render json: { action: "status", pc: j.pc }
+      render json: { action: 'status', pc: j.pc }
     end
 
   end
@@ -132,13 +132,13 @@ class OysterController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: { action: "cancel" } }
+      format.json { render json: { action: 'cancel' } }
     end
 
   end
 
-  def convert_log log
-    log.attributes.merge({ data: JSON.parse(log.data) })
+  def convert_log(log)
+    log.attributes.merge(data: JSON.parse(log.data))
   end
 
   def log
@@ -149,13 +149,13 @@ class OysterController < ApplicationController
       j = Job.find(params[:job].to_i)
     rescue Exception => e
       error = true
-      error_msg = "Could not parse xml. "
+      error_msg = 'Could not parse xml. '
     end
 
     if error
-      render json: { action: "log", error: error_msg }
+      render json: { action: 'log', error: error_msg }
     else
-      render json: { action: "log", log: j.logs.map { |l| convert_log l } }
+      render json: { action: 'log', log: j.logs.map { |l| convert_log l } }
     end
 
   end
@@ -167,7 +167,7 @@ class OysterController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: { action: "ping", host: request.host_with_port, env: Rails.env } }
+      format.json { render json: { action: 'ping', host: request.host_with_port, env: Rails.env } }
     end
 
   end
@@ -186,15 +186,15 @@ class OysterController < ApplicationController
 
     o = ObjectType.find_by_name(params[:type])
 
-    if !o
+    unless o
       error = true
       error_msg = "Could not find object type #{params[:type]}"
     end
 
     if error
-      render json: { action: "info", error: error_msg }
+      render json: { action: 'info', error: error_msg }
     else
-      render json: { action: "info", info: o.attributes }
+      render json: { action: 'info', info: o.attributes }
     end
 
   end
@@ -205,17 +205,17 @@ class OysterController < ApplicationController
 
     o = ObjectType.find_by_name(params[:type])
 
-    if !o
+    unless o
       error = true
       error_msg = "Could not find object type #{params[:type]}"
     end
 
-    i = o.items.collect { |j| j.attributes }
+    i = o.items.collect(&:attributes)
 
     if error
-      render json: { action: "items", error: error_msg }
+      render json: { action: 'items', error: error_msg }
     else
-      render json: { action: "items", items: i }
+      render json: { action: 'items', items: i }
     end
 
   end

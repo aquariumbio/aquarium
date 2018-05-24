@@ -4,60 +4,60 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
 end
 
-RSpec.describe Workflow, :type => :model do
+RSpec.describe Workflow, type: :model do
 
-  context "forms" do
-    it "makes forms" do
+  context 'forms' do
+    it 'makes forms' do
       Workflow.find(11).form
     end
   end
 
   def make_random_thread_spec
 
-    primers = SampleType.find_by_name("Primer").samples
-    plasmids = SampleType.find_by_name("Plasmid").samples
-    frags = SampleType.find_by_name("Fragment").samples
+    primers = SampleType.find_by_name('Primer').samples
+    plasmids = SampleType.find_by_name('Plasmid').samples
+    frags = SampleType.find_by_name('Fragment').samples
 
     begin
       fwd = primers[rand(primers.length)]
-    end while fwd.items.length == 0
+    end while fwd.items.empty?
 
     begin
       rev = primers[rand(primers.length)]
-    end while rev.items.length == 0
+    end while rev.items.empty?
 
     begin
       template = plasmids[rand(plasmids.length)]
-    end while template.items.length == 0
+    end while template.items.empty?
 
     frag = frags[rand(frags.length)]
 
     [
-      { name: "fwd",      sample: fwd.id },
-      { name: "rev",      sample: rev.id },
-      { name: "template", sample: template.id },
-      { name: "fragment", sample: frag.id },
-      { name: "annealing_temperature", value: 71.3 }
+      { name: 'fwd',      sample: fwd.id },
+      { name: 'rev',      sample: rev.id },
+      { name: 'template', sample: template.id },
+      { name: 'fragment', sample: frag.id },
+      { name: 'annealing_temperature', value: 71.3 }
     ]
 
   end
 
-  def make_process wid, n
+  def make_process(wid, n)
 
     w = Workflow.find(wid)
 
-    threads = (1..n).collect { |_i|
+    threads = (1..n).collect do |_i|
       (w.new_thread make_random_thread_spec).reload
-    }
+    end
 
     p = WorkflowProcess.create w, threads
     p.reload
 
   end
 
-  context "threads" do
+  context 'threads' do
 
-    it "makes new threads and associations" do
+    it 'makes new threads and associations' do
 
       num_threads = WorkflowThread.count
       num_associations = WorkflowAssociation.count
@@ -70,21 +70,19 @@ RSpec.describe Workflow, :type => :model do
 
   end
 
-  context "process" do
+  context 'process' do
 
-    it "initializes" do
+    it 'initializes' do
 
       p = make_process 11, 3
 
       p.all_parts.each do |part|
-        if !part[:shared]
-          expect(part[:instantiation].length).to eq(3.0)
-        end
+        expect(part[:instantiation].length).to eq(3.0) unless part[:shared]
       end
 
     end
 
-    it "launches initial protocols" do
+    it 'launches initial protocols' do
 
       RSpec.configure do |config|
         config.use_transactional_fixtures = false
@@ -112,19 +110,17 @@ RSpec.describe Workflow, :type => :model do
       p.record_result_of jobs[0]
       p.record_result_of jobs[1]
 
-      unless p.errors.empty?
-        raise "Could not record results of jobs."
-      end
+      raise 'Could not record results of jobs.' unless p.errors.empty?
 
       puts "#{jobs[0].id}: #{jobs[0].status}, #{jobs[1].id}: #{jobs[1].status}\n\n"
-      puts "#{jobs[0].backtrace.select { |o| o[:operation] == "error" }}\n\n"
-      puts "#{jobs[1].backtrace.select { |o| o[:operation] == "error" }}"
+      puts "#{jobs[0].backtrace.select { |o| o[:operation] == 'error' }}\n\n"
+      puts (jobs[1].backtrace.select { |o| o[:operation] == 'error' }).to_s
 
       exec "open http://localhost:3000/workflow_processes/#{p.id}"
 
     end
 
-    it "runs a workflow" do
+    it 'runs a workflow' do
 
       # make a process with workflow number 11 (fragment construction) and five threads
       p = make_process 11, 5
@@ -139,14 +135,12 @@ RSpec.describe Workflow, :type => :model do
       while !p.completed? && i < 10
 
         # run all jobs associated with the workflow
-        puts "Workflow jobs: #{p.jobs.collect { |j| j.id }}"
-        (p.jobs.select { |job| job.not_started? }).each do |job|
+        puts "Workflow jobs: #{p.jobs.collect(&:id)}"
+        p.jobs.select(&:not_started?).each do |job|
           puts "starting job #{job.id}"
           result = Krill::Client.new.start job.id
           puts result
-          if result[:response] == "error"
-            raise "Krill could not start #{job.id}: #{result[:error]}"
-          end
+          raise "Krill could not start #{job.id}: #{result[:error]}" if result[:response] == 'error'
           job.reload
           if job.error?
             puts "Job #{job.id} failed: #{job.error_message}"

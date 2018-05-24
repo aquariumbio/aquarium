@@ -1,6 +1,6 @@
 class PlanOptimizer
 
-  def initialize plan
+  def initialize(plan)
     @plan = plan
     @ops = Operation.joins(:plan_associations).includes(:operation_type).where("plan_id = #{plan.id}")
     @size = @ops.length
@@ -9,22 +9,20 @@ class PlanOptimizer
     @messages = []
   end
 
-  def equivalent_fvs? fv1, fv2
+  def equivalent_fvs?(fv1, fv2)
 
-    attrs = [:name, :child_item_id, :child_sample_id, :value, :role,
-             :field_type_id, :row, :column, :allowable_field_type_id]
+    attrs = %i[name child_item_id child_sample_id value role
+               field_type_id row column allowable_field_type_id]
 
     attrs.each do |a|
-      if fv1[a] != fv2[a]
-        return false
-      end
+      return false if fv1[a] != fv2[a]
     end
 
-    return true
+    true
 
   end
 
-  def equivalent_ops? op1, op2
+  def equivalent_ops?(op1, op2)
 
     fvs1 = op1.field_values
     fvs2 = op2.field_values
@@ -43,10 +41,10 @@ class PlanOptimizer
         return [i, j] if @matrix[i][j] == 1
       end
     end
-    return nil
+    nil
   end
 
-  def erase n
+  def erase(n)
     (0..@size - 1).each do |i|
       (i + 1..@size - 1).each do |j|
         @matrix[i][j] = nil if i == n || j == n
@@ -82,7 +80,7 @@ class PlanOptimizer
 
   end
 
-  def equate winner, loser
+  def equate(winner, loser)
 
     puts "equating #{winner.id} and #{loser.id}"
 
@@ -125,13 +123,13 @@ class PlanOptimizer
       e = next_equiv
     end
 
-    @orphans.each { |o|
+    @orphans.each do |o|
       @messages << "#{o.operation_type.name} #{o.id} is redundant and was removed from plan."
       PlanAssociation.where(plan_id: @plan ? @plan.id : @plan.id,
                             operation_id: o ? o.id : nil)
-                     .each { |pa| pa.destroy }
+                     .each(&:destroy)
       o.destroy
-    }
+    end
 
     @messages
 

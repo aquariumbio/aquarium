@@ -36,9 +36,9 @@ module Oyster
           @tok.eat_a ':'
           path = @metacol.scope.evaluate expr
           if /:/ =~ path
-            p.proto ( path.split(':').join('/'))
+            p.proto path.split(':').join('/')
           else
-            p.proto(@default_repo + "/" + path)
+            p.proto(@default_repo + '/' + path)
           end
 
         when 'group'
@@ -51,9 +51,7 @@ module Oyster
 
           @tok.eat_a 'marked'
           @tok.eat_a ':'
-          if @metacol.scope.evaluate expr
-            p.mark
-          end
+          p.mark if @metacol.scope.evaluate expr
 
         when 'start'
 

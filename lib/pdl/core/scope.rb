@@ -1,6 +1,6 @@
 class Scope
 
-  attr_reader :stack;
+  attr_reader :stack
 
   def initialize(opts = {})
     o = {
@@ -9,15 +9,15 @@ class Scope
     @stack = [o[:base]]
   end
 
-  def set_stack stack
+  def set_stack(stack)
     @stack = stack
   end
 
-  def set symbol, value
+  def set(symbol, value)
     @stack.last[symbol] = value
   end
 
-  def set_base_symbol symbol, value
+  def set_base_symbol(symbol, value)
     @stack.first[symbol] = value
   end
 
@@ -29,12 +29,10 @@ class Scope
     @stack.pop
   end
 
-  def get symbol
+  def get(symbol)
     i = @stack.length - 1
-    while @stack[i][symbol] == nil && i >= 0
-      i -= 1
-    end
-    return @stack[i][symbol]
+    i -= 1 while @stack[i][symbol].nil? && i >= 0
+    @stack[i][symbol]
   end
 
   def collapse
@@ -42,15 +40,15 @@ class Scope
     @stack.reverse.each do |h|
       result = h.merge result
     end
-    return result
+    result
   end
 
-  def substitute str
-    begin
-      str % collapse
-    rescue Exception => e
-      raise "Unkown symbol in text. " + e.message.sub('key', '%')
-    end
+  def substitute(str)
+
+    str % collapse
+  rescue Exception => e
+    raise 'Unkown symbol in text. ' + e.message.sub('key', '%')
+
   end
 
   def symbol_subs
@@ -61,11 +59,11 @@ class Scope
     syms
   end
 
-  def evaluate str
+  def evaluate(str)
     begin
       expr = str % symbol_subs
     rescue Exception => e
-      raise "Unknown symbol in expression. " + e.message.sub('key', '%')
+      raise 'Unknown symbol in expression. ' + e.message.sub('key', '%')
     end
     begin
       result = eval(expr)
@@ -76,23 +74,23 @@ class Scope
   end
 
   def to_s
-    s = ""
-    indent = "  "
+    s = ''
+    indent = '  '
     @stack.reverse.each do |table|
       table.each do |key, value|
         s += indent + key.to_s + ': '
-        if value.kind_of?(Array)
+        if value.is_a?(Array)
           s += "\n"
           value.each do |el|
-            s += indent + indent + el.to_s + "<br />"
+            s += indent + indent + el.to_s + '<br />'
           end
         else
-          s += value.to_s + "<br />"
+          s += value.to_s + '<br />'
         end
       end
-      indent += "  "
+      indent += '  '
     end
-    return s
+    s
   end
 
 end

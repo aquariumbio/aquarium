@@ -8,12 +8,12 @@ class Code < ActiveRecord::Base
   # @param new_content [String] the content of the new version
   # @param user [User] the user creating the new version
   # @returns the new version of this object with the new content
-  def commit new_content, user
+  def commit(new_content, user)
 
     c = Code.new(
-      parent_id: self.parent_id,
-      parent_class: self.parent_class,
-      name: self.name,
+      parent_id: parent_id,
+      parent_class: parent_class,
+      name: name,
       content: new_content,
       user_id: user.id
     )
@@ -25,7 +25,7 @@ class Code < ActiveRecord::Base
 
   # Returns all versions of this object
   def versions
-    Code.where(parent_id: self.parent_id, parent_class: self.parent_class, name: self.name)
+    Code.where(parent_id: parent_id, parent_class: parent_class, name: name)
   end
 
 end

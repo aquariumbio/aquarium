@@ -4,7 +4,7 @@ module Lang
 
     attr_reader :line
 
-    def initialize str
+    def initialize(str)
 
       @str = str
       @tokens = str.scan(re).reject { |t| comment.match t }
@@ -26,7 +26,7 @@ module Lang
 
     end
 
-    def num_newlines t
+    def num_newlines(t)
       if t
         t.scan(/\n|\r/).length
       else
@@ -39,22 +39,20 @@ module Lang
       # puts "Advancing at #{@tokens[@i]}"
 
       @line += num_newlines(@tokens[@i])
-      @i = @i + 1
+      @i += 1
 
       while /^\s$/.match(@tokens[@i])
-        if /\n|\r/.match(@tokens[@i])
-          @line += 1
-        end
-        @i = @i + 1
+        @line += 1 if /\n|\r/.match(@tokens[@i])
+        @i += 1
       end
 
     end
 
     def current
       if @i < @tokens.length
-        return @tokens[@i]
+        @tokens[@i]
       else
-        return 'EOF'
+        'EOF'
       end
     end
 
@@ -62,9 +60,7 @@ module Lang
 
       j = @i + 1
 
-      while j < @tokens.length && /^\s$/.match(@tokens[j])
-        j = j + 1
-      end
+      j += 1 while j < @tokens.length && /^\s$/.match(@tokens[j])
 
       if j < @tokens.length
         return @tokens[j]
@@ -78,14 +74,14 @@ module Lang
       t = current
       # puts '--> ' + t
       advance
-      return t
+      t
     end
 
-    def eat_a thing
+    def eat_a(thing)
       if current != thing
         error "Expected '#{thing}' at '#{@tokens[@i]}'."
       else
-        return eat
+        eat
       end
     end
 
@@ -94,18 +90,14 @@ module Lang
       j = @i
       k = @i
 
-      while j >= 0 && !/\n|\r/.match(@tokens[j])
-        j -= 1
-      end
+      j -= 1 while j >= 0 && !/\n|\r/.match(@tokens[j])
 
-      while k < @tokens.length && !/\n|\r/.match(@tokens[k])
-        k += 1
-      end
+      k += 1 while k < @tokens.length && !/\n|\r/.match(@tokens[k])
 
       @line_elements = @tokens[j + 1, k - j - 1]
 
       if @line_elements
-        @line_elements[@i - j - 1] = "<span style='font-weight: bold; color: red'>" + @line_elements[@i - j - 1].to_s + "</span>"
+        @line_elements[@i - j - 1] = "<span style='font-weight: bold; color: red'>" + @line_elements[@i - j - 1].to_s + '</span>'
         @line_elements.join
       else
         "<span style='font-weight: bold; color: red'>Could not determine context. The error may be an unterminated string constant.</span>"
@@ -113,7 +105,7 @@ module Lang
 
     end
 
-    def error msg
+    def error(msg)
       raise "Parse error on line #{@line}. " + msg
     end
 
@@ -145,7 +137,7 @@ module Lang
     end
 
     def isa_operator
-      /^(\+|-|\/|\*\*|%|\*|<=|>=|<|>|==|!=|\|\||&&|!)$/.match(self.current) != nil
+      !/^(\+|-|\/|\*\*|%|\*|<=|>=|<|>|==|!=|\|\||&&|!)$/.match(current).nil?
     end
 
     def trans_op

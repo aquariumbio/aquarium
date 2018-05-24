@@ -10,23 +10,23 @@ class FinderController < ApplicationController
 
     spec = JSON.parse(params[:spec], symbolize_names: true)
 
-    if params[:filter] != ""
+    if params[:filter] != ''
 
       # Determine if filter an object type
       ot = ObjectType.find_by_name(params[:filter])
-      if ot && ot.sample_type
-        samp = ot.sample_type.name
-      else
-        samp = params[:filter]
-      end
+      samp = if ot && ot.sample_type
+               ot.sample_type.name
+             else
+               params[:filter]
+             end
 
     end
 
-    if samp != ""
-      types = "(" + (samp.split('|').collect { |t| "sample_types.name = '#{t}'" }).join(" OR ") + ")"
+    if samp != ''
+      types = '(' + (samp.split('|').collect { |t| "sample_types.name = '#{t}'" }).join(' OR ') + ')'
       render json: (Sample.includes('sample_type').where("project = ? and #{types}", spec[:project]).collect { |s| { id: s.sample_type.id, name: s.sample_type.name } }).uniq.sort { |a, b| a[:name] <=> b[:name] }
     else
-      render json: (Sample.includes('sample_type').where("project = ?", spec[:project]).collect { |s| { id: s.sample_type.id, name: s.sample_type.name } }).uniq.sort { |a, b| a[:name] <=> b[:name] }
+      render json: (Sample.includes('sample_type').where('project = ?', spec[:project]).collect { |s| { id: s.sample_type.id, name: s.sample_type.name } }).uniq.sort { |a, b| a[:name] <=> b[:name] }
     end
 
   end
@@ -39,22 +39,22 @@ class FinderController < ApplicationController
 
   def containers
     spec = JSON.parse(params[:spec], symbolize_names: true)
-    logger.info "spec = " + spec.to_json
+    logger.info 'spec = ' + spec.to_json
     filter = ObjectType.find_by_name(params[:filter])
 
-    if filter
-      con = (ObjectType
-        .joins(:items => :sample)
-        .where(:name => filter.name, :samples => { project: spec[:project], name: spec[:sample] })
-        .collect { |o| { id: o.id, name: o.name } })
-    else
-      con = (ObjectType
-        .joins(:items => :sample)
-        .where(:samples => { project: spec[:project], name: spec[:sample] })
-        .collect { |o| { id: o.id, name: o.name } })
-    end
+    con = if filter
+            (ObjectType
+              .joins(items: :sample)
+              .where(name: filter.name, samples: { project: spec[:project], name: spec[:sample] })
+              .collect { |o| { id: o.id, name: o.name } })
+          else
+            (ObjectType
+              .joins(items: :sample)
+              .where(samples: { project: spec[:project], name: spec[:sample] })
+              .collect { |o| { id: o.id, name: o.name } })
+          end
 
-    col = ObjectType.where(handler: "collection")
+    col = ObjectType.where(handler: 'collection')
 
     render json: (con + col).uniq.sort { |a, b| a[:name] <=> b[:name] }
 
@@ -66,22 +66,22 @@ class FinderController < ApplicationController
 
     ot = ObjectType.where(name: spec[:container])[0]
 
-    if ot.handler == "collection"
+    if ot.handler == 'collection'
 
       sample = Sample.find_by_name(spec[:sample])
 
-      render json: ((Collection.joins(:object_type)
-        .where(:object_types => { id: ot.id })
-        .reject { |i| i.deleted? })
+      render json: (Collection.joins(:object_type)
+        .where(object_types: { id: ot.id })
+        .reject(&:deleted?)
         .select { |c| c.matrix && c.matrix.flatten.index(sample.id) })
         .collect { |i| { id: i.id, name: i.id } }
 
     else
 
-      render json: ((
+      render json: (
         Item.joins(:sample, :object_type)
-        .where(:samples => { project: spec[:project], name: spec[:sample] }, :object_types => { name: spec[:container] })
-        .reject { |i| i.deleted? })
+        .where(samples: { project: spec[:project], name: spec[:sample] }, object_types: { name: spec[:container] })
+        .reject(&:deleted?)
         .collect { |i| { id: i.id, name: i.id } })
 
     end
@@ -94,24 +94,22 @@ class FinderController < ApplicationController
     props = { id: s.id, name: s.name, created_at: s.created_at, updated_at: s.updated_at, description: s.description }
     (1..8).each do |i|
       prop = s.sample_type["field#{i}name"]
-      if prop != "" && prop != nil
-        props[s.sample_type["field#{i}name"].to_sym] = s["field#{i}"]
-      end
+      props[s.sample_type["field#{i}name"].to_sym] = s["field#{i}"] if prop != '' && !prop.nil?
     end
     render json: props
   end
 
   def type
 
-    t = params[:type].split "|"
+    t = params[:type].split '|'
 
     if SampleType.find_by_name(t.first)
-      render json: { type: "Samples" }
+      render json: { type: 'Samples' }
     else
       if ObjectType.find_by_name(t.first)
-        render json: { type: "Items" }
+        render json: { type: 'Items' }
       else
-        render json: { type: "Unknown" }
+        render json: { type: 'Unknown' }
       end
     end
   end

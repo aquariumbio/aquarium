@@ -68,10 +68,8 @@ module Lang
 
     end
 
-    def add_function name, num_args ##################################################################
-      if !@functions
-        @functions = {}
-      end
+    def add_function(name, num_args) ##################################################################
+      @functions ||= {}
       @functions[name] = num_args
     end
 
@@ -80,13 +78,11 @@ module Lang
       e = @tok.eat_a '['
       while @tok.current != ']'
         e += expr
-        if @tok.current == ','
-          e += @tok.eat_a ','
-        end
+        e += @tok.eat_a ',' if @tok.current == ','
       end
       e += @tok.eat_a ']'
 
-      return e
+      e
 
     end
 
@@ -99,15 +95,13 @@ module Lang
         e += @tok.eat_a_variable
         e += @tok.eat_a ':'
         e += expr
-        if @tok.current == ','
-          e += @tok.eat_a ','
-        end
+        e += @tok.eat_a ',' if @tok.current == ','
 
       end
 
       e += @tok.eat_a '}'
 
-      return e
+      e
 
     end
 
@@ -121,9 +115,7 @@ module Lang
         e += @tok.eat_a '('
         (1..@functions[name.to_sym]).each do |i|
           e += expr
-          if i < @functions[name.to_sym]
-            e += @tok.eat_a ','
-          end
+          e += @tok.eat_a ',' if i < @functions[name.to_sym]
         end
         e += @tok.eat_a ')'
       elsif @function_callback
@@ -132,24 +124,24 @@ module Lang
         raise "Could not find definition for '#{@tok.current}' on line #{@tok.line}."
       end
 
-      return e
+      e
 
     end
 
-    def separate_string s
+    def separate_string(s)
       # Note: This very poorly written method separates a string that may have
       # things like %{x} in it into an expression where the %{x} is by itself. This
       # makes it easier to evaluate later.
       # For example, it turns "The answer is %{x}" into "The answer is " + %{x}.to_s
       t = (s.gsub /(%\{[^\}]*\})/, '__PLUS__\1__PLUS__').split('__PLUS__')
-      r = "\"\""
+      r = '""'
       t.each do |p|
-        r = r + "+"
-        if /(%\{[^\}]*\})/.match p
-          r = r + p + ".to_s"
-        else
-          r = r + "\"" + p + "\""
-        end
+        r += '+'
+        r = if /(%\{[^\}]*\})/.match p
+              r + p + '.to_s'
+            else
+              r + '"' + p + '"'
+            end
       end
       r
     end
@@ -169,11 +161,11 @@ module Lang
         f = @tok.eat + @tok.eat_a_variable
 
       when @tok.variable
-        if @tok.next == '('
-          f = app
-        else
-          f = '%{' + @tok.eat + '}'
-        end
+        f = if @tok.next == '('
+              app
+            else
+              '%{' + @tok.eat + '}'
+            end
 
       when @tok.number
         f = @tok.eat
@@ -194,7 +186,7 @@ module Lang
 
       end
 
-      return f
+      f
 
     end # primary
 
@@ -208,7 +200,7 @@ module Lang
         @tok.eat_a ']'
       end
 
-      return f
+      f
 
     end # accessor
 
@@ -221,19 +213,19 @@ module Lang
         f = expr
       end
 
-      return f
+      f
 
     end # index
 
     def unary #########################################################################################
 
-      if @tok.current == '!' || @tok.current == '-'
-        f = (@tok.eat) + accessor
-      else
-        f = accessor
-      end
+      f = if @tok.current == '!' || @tok.current == '-'
+            @tok.eat + accessor
+          else
+            accessor
+          end
 
-      return f
+      f
 
     end # unary
 
@@ -247,7 +239,7 @@ module Lang
         e += unary
       end
 
-      return e
+      e
 
     end # expr
 
@@ -255,7 +247,7 @@ module Lang
 
       begin
         v = @tok.eat_a_variable
-        f = ""
+        f = ''
 
         while @tok.current == '['
           @tok.eat_a '['
@@ -263,10 +255,10 @@ module Lang
           @tok.eat_a ']'
         end
       rescue Exception => e
-        raise "Expression is not a proper left hand side for an assignment: " + e.to_s
+        raise 'Expression is not a proper left hand side for an assignment: ' + e.to_s
       end
 
-      return { var: v.to_sym, accessor: f }
+      { var: v.to_sym, accessor: f }
 
     end # is_lhs
 

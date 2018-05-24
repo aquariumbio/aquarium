@@ -4,19 +4,19 @@ RSpec.describe Krill do
 
   def rand_op_spec
 
-    primers = SampleType.find_by_name("Primer").samples
-    plasmids = SampleType.find_by_name("Plasmid").samples
-    frags = SampleType.find_by_name("Fragment").samples
+    primers = SampleType.find_by_name('Primer').samples
+    plasmids = SampleType.find_by_name('Plasmid').samples
+    frags = SampleType.find_by_name('Fragment').samples
 
-    pcr = Operation.find_by_name("PCR")
+    pcr = Operation.find_by_name('PCR')
     spec = pcr.parse_spec
 
-    fwd = (spec[:inputs].find { |i| i[:name] == "fwd" })
-    rev = (spec[:inputs].find { |i| i[:name] == "rev" })
-    tem = (spec[:inputs].find { |i| i[:name] == "template" })
-    fra = (spec[:outputs].find { |i| i[:name] == "fragment" })
-    ant = (spec[:parameters].find { |i| i[:name] == "annealing_temperature" })
-    tc  = (spec[:data].find { |i| i[:name] == "tc" })
+    fwd = (spec[:inputs].find { |i| i[:name] == 'fwd' })
+    rev = (spec[:inputs].find { |i| i[:name] == 'rev' })
+    tem = (spec[:inputs].find { |i| i[:name] == 'template' })
+    fra = (spec[:outputs].find { |i| i[:name] == 'fragment' })
+    ant = (spec[:parameters].find { |i| i[:name] == 'annealing_temperature' })
+    tc  = (spec[:data].find { |i| i[:name] == 'tc' })
 
     fwd[:instantiation] = (1..3).collect { |_j| { sample: primers[rand(primers.length)].id } }
     rev[:instantiation] = (1..3).collect { |_j| { sample: primers[rand(primers.length)].id } }
@@ -29,10 +29,10 @@ RSpec.describe Krill do
 
   end
 
-  context "workflow interface" do
-    it "makes a random spec" do
+  context 'workflow interface' do
+    it 'makes a random spec' do
       o = Krill::Op.new rand_op_spec
-      puts "#{o.name}"
+      puts o.name.to_s
       o.input.fwd.take
       o.input.rev.template.take
       o.input.all.release

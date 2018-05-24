@@ -2,7 +2,7 @@ class SamplesDatatable < Datatable
 
   private
 
-  def limit s
+  def limit(s)
     if s && s.length > 20
       s[0, 20] + '...'
     else
@@ -57,15 +57,15 @@ class SamplesDatatable < Datatable
     if params[:sSearch].present?
       key = params[:sSearch]
       u = User.find_by_login(key)
-      if u
-        samples = samples.where("sample_type_id = :stid and user_id like :uid", stid: params[:sample_type_id], uid: u.id)
-      elsif key.to_i != 0
-        samples = samples.where("sample_type_id = :stid and id like :search", stid: params[:sample_type_id], search: key.to_i)
-      else
-        samples = samples.where("sample_type_id = :stid and ( name like :search or project like :search )", stid: params[:sample_type_id], search: "%#{key}%")
-      end
+      samples = if u
+                  samples.where('sample_type_id = :stid and user_id like :uid', stid: params[:sample_type_id], uid: u.id)
+                elsif key.to_i != 0
+                  samples.where('sample_type_id = :stid and id like :search', stid: params[:sample_type_id], search: key.to_i)
+                else
+                  samples.where('sample_type_id = :stid and ( name like :search or project like :search )', stid: params[:sample_type_id], search: "%#{key}%")
+                end
     else
-      samples = samples.where("sample_type_id = :stid", stid: params[:sample_type_id])
+      samples = samples.where('sample_type_id = :stid', stid: params[:sample_type_id])
     end
 
     samples

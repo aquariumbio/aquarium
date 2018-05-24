@@ -1,25 +1,21 @@
 module Oyster
 
-  def Oyster.get_sha path
+  def self.get_sha(path)
 
-    Repo::version path
+    Repo.version path
 
   end
 
-  def Oyster.submit h
+  def self.submit(h)
 
-    if /\.rb/ =~ h[:path]
-      return Oyster.submit_krill_protocol h
-    end
+    return Oyster.submit_krill_protocol h if /\.rb/ =~ h[:path]
 
     group = Group.find_by_name(h[:group])
 
-    unless group
-      raise "No valid group specified when submitting '#{h[:path]}'"
-    end
+    raise "No valid group specified when submitting '#{h[:path]}'" unless group
 
     # get the blob and parse its arguments
-    content = Repo::contents h[:path], h[:sha]
+    content = Repo.contents h[:path], h[:sha]
     protocol = Plankton::Parser.new(h[:path], content)
     # protocol.job_id = -1
     protocol.parse_arguments_only
@@ -60,7 +56,7 @@ module Oyster
 
   end
 
-  def Oyster.submit_krill_protocol h
+  def self.submit_krill_protocol(h)
 
     puts "Submitting protocol #{h[:path]} with args = #{h[:args]}"
 

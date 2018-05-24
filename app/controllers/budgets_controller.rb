@@ -3,11 +3,9 @@ class BudgetsController < ApplicationController
   before_filter :signed_in_user
   before_filter :up_to_date_user
 
-  before_filter {
-    unless current_user && current_user.is_admin
-      redirect_to root_path, notice: "Administrative privileges required to access budgets."
-    end
-  }
+  before_filter do
+    redirect_to root_path, notice: 'Administrative privileges required to access budgets.' unless current_user && current_user.is_admin
+  end
 
   # GET /budgets
   # GET /budgets.json
@@ -26,7 +24,7 @@ class BudgetsController < ApplicationController
   def show
 
     @budget = Budget.find(params[:id])
-    @users = (User.all.reject { |u| u.retired? }).sort { |a, b| a[:login] <=> b[:login] }
+    @users = User.all.reject(&:retired?).sort { |a, b| a[:login] <=> b[:login] }
 
     respond_to do |format|
       format.html { render layout: 'aq2' }
@@ -65,7 +63,7 @@ class BudgetsController < ApplicationController
         format.html { redirect_to @budget, notice: 'Budget was successfully created.' }
         format.json { render json: @budget, status: :created, location: @budget }
       else
-        format.html { render action: "new" }
+        format.html { render action: 'new' }
         format.json { render json: @budget.errors, status: :unprocessable_entity }
       end
     end
@@ -81,7 +79,7 @@ class BudgetsController < ApplicationController
         format.html { redirect_to @budget, notice: 'Budget was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render action: 'edit' }
         format.json { render json: @budget.errors, status: :unprocessable_entity }
       end
     end
@@ -105,10 +103,10 @@ class BudgetsController < ApplicationController
       uba.budget_id = params[:bid].to_i
       uba.user_id = params[:uid].to_i
       uba.quota = params[:quota].to_i
-      uba.disabled = false;
+      uba.disabled = false
       uba.save
     else
-      flash[:warning] = "Only admins can add users to budgets"
+      flash[:warning] = 'Only admins can add users to budgets'
     end
     redirect_to Budget.find(params[:bid])
   end
@@ -116,11 +114,9 @@ class BudgetsController < ApplicationController
   def remove_user
     if current_user.is_admin
       ubas = UserBudgetAssociation.where(budget_id: params[:bid].to_i, user_id: params[:uid])
-      if ubas.length > 0
-        ubas[0].destroy
-      end
+      ubas[0].destroy unless ubas.empty?
     else
-      flash["warning"] = "Only admins can remove users from budgets"
+      flash['warning'] = 'Only admins can remove users from budgets'
     end
     redirect_to Budget.find(params[:bid])
   end

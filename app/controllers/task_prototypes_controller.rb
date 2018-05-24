@@ -50,7 +50,7 @@ class TaskPrototypesController < ApplicationController
         format.html { redirect_to @task_prototype, notice: 'Task prototype was successfully created.' }
         format.json { render json: @task_prototype, status: :created, location: @task_prototype }
       else
-        format.html { render action: "new" }
+        format.html { render action: 'new' }
         format.json { render json: @task_prototype.errors, status: :unprocessable_entity }
       end
     end
@@ -66,7 +66,7 @@ class TaskPrototypesController < ApplicationController
         format.html { redirect_to @task_prototype, notice: 'Task prototype was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render action: 'edit' }
         format.json { render json: @task_prototype.errors, status: :unprocessable_entity }
       end
     end

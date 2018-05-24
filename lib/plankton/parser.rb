@@ -5,18 +5,18 @@ module Plankton
     attr_reader :program, :args, :info, :include_stack, :debug
     attr_writer :job_id, :function_callback
 
-    def initialize name, contents
+    def initialize(name, contents)
 
       # puts "New Parser with contents = #{contents}"
 
-      @tok = Lang::Tokenizer.new ( contents)
+      @tok = Lang::Tokenizer.new contents
       @program = []
       @function_space = []
       @function_pointers = []
       @args = []
       @include_stack = [{ tokens: @tok, path: name, returns: [] }]
-      @info = ""
-      @debug = "No debug info available"
+      @info = ''
+      @debug = 'No debug info available'
       @job_id = -1
       @repo = name.split('/')[0]
 
@@ -35,7 +35,7 @@ module Plankton
     end
 
     def bad_xml
-      line.to_s + ": " + @tok.get_line
+      line.to_s + ': ' + @tok.get_line
     end
 
     def line
@@ -50,7 +50,7 @@ module Plankton
       end
     end
 
-    def push i
+    def push(i)
       if @in_function_def
         i.pc = @function_space.length
         @function_space.push i
@@ -68,14 +68,14 @@ module Plankton
       end
     end
 
-    def push_arg a
+    def push_arg(a)
       @args.push a
     end
 
     def show
       pc = 0
       @program.each do |i|
-        puts pc.to_s + ": " + i.to_s
+        puts pc.to_s + ': ' + i.to_s
         pc += 1
       end
       @function_specs.each do |k, v|
@@ -93,22 +93,22 @@ module Plankton
       @include_stack.last[:path] + ': ' + @tok.get_line
     end
 
-    def get_file path
+    def get_file(path)
 
-      if /:/ =~ path
-        repo_path = path.split(/:/).join('/')
-      else
-        repo_path = @repo + "/" + path
-      end
+      repo_path = if /:/ =~ path
+                    path.split(/:/).join('/')
+                  else
+                    @repo + '/' + path
+                  end
 
       begin
-        sha = Repo::version(repo_path)
-        file = Repo::contents(repo_path, sha)
+        sha = Repo.version(repo_path)
+        file = Repo.contents(repo_path, sha)
       rescue Exception => e
         raise "Could not find file '#{path}': " + e.to_s
       end
 
-      return { content: file, sha: sha }
+      { content: file, sha: sha }
 
     end
 

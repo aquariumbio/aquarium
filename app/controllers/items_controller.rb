@@ -26,7 +26,7 @@ class ItemsController < ApplicationController
 
     @item = Item.find_by_id(params[:id])
 
-    if @item == nil
+    if @item.nil?
       flash[:error] = "Could not find item with id #{params[:id]}"
       redirect_to search_path
       return
@@ -61,10 +61,10 @@ class ItemsController < ApplicationController
     @item = @handler.new_item params
     @item.save
 
-    if (@item.errors.size > 0)
-      flash[:error] = ""
+    unless @item.errors.empty?
+      flash[:error] = ''
       @item.errors.full_messages.each do |e|
-        flash[:error] += e + " "
+        flash[:error] += e + ' '
       end
     end
 
@@ -102,18 +102,18 @@ class ItemsController < ApplicationController
     flash[:success] = "Item #{params[:id]} has been deleted."
 
     respond_to do |format|
-      format.html {
-        puts "HTML"
+      format.html do
+        puts 'HTML'
         if params[:sample_id]
-          redirect_to sample_url :id => params[:sample_id]
+          redirect_to sample_url id: params[:sample_id]
         else
-          redirect_to object_type_url :id => i.object_type_id
+          redirect_to object_type_url id: i.object_type_id
         end
-      }
-      format.json {
-        puts "JSON"
+      end
+      format.json do
+        puts 'JSON'
         render json: i
-      }
+      end
     end
 
   end
@@ -144,9 +144,9 @@ class ItemsController < ApplicationController
       flash[:warning] = "Could not move item: #{i.errors.full_messages.join(',')}" unless i.errors.empty?
 
       if params[:item][:return_page] == 'item_show'
-        redirect_to item_url :id => i.id
+        redirect_to item_url id: i.id
       else
-        redirect_to sample_url({ id: i.sample_id, active_item: i.id })
+        redirect_to sample_url(id: i.sample_id, active_item: i.id)
       end
 
     else # called with just the id
@@ -157,11 +157,11 @@ class ItemsController < ApplicationController
 
       when 'update'
         i.quantity = params[:quantity]
-        flash[:success] = "Quantity at location " + i.location + " updated to " + i.quantity.to_s if i.save
+        flash[:success] = 'Quantity at location ' + i.location + ' updated to ' + i.quantity.to_s if i.save
 
       when 'take'
         i.inuse = params[:inuse]
-        flash[:success] = "Number of items at location " + i.location + " updated to " + i.inuse.to_s if i.save
+        flash[:success] = 'Number of items at location ' + i.location + ' updated to ' + i.inuse.to_s if i.save
 
       when 'move'
         i.move_to params[:location]
@@ -170,17 +170,17 @@ class ItemsController < ApplicationController
 
       end
 
-      if (i.errors.size > 0)
-        flash[:error] = ""
+      unless i.errors.empty?
+        flash[:error] = ''
         i.errors.full_messages.each do |e|
-          flash[:error] += e + " "
+          flash[:error] += e + ' '
         end
       end
 
       if params[:return_page] == 'item_show'
-        redirect_to item_url :id => i.id
+        redirect_to item_url id: i.id
       else
-        redirect_to object_type_url :id => params[:oid]
+        redirect_to object_type_url id: params[:oid]
       end
 
     end
@@ -191,28 +191,27 @@ class ItemsController < ApplicationController
 
     data = "id,object type,sample,sample type,location,user,created,updated\n"
 
-    Item.includes(:object_type, sample: [:sample_type, :user], locator: [:wizard]).all.each do |i|
-      if !i.deleted?
-        if i.object_type
-          oname = i.object_type.name
-        else
-          oname = ""
-        end
-        if i.sample
-          sname = i.sample.name
-          stype = i.sample.sample_type.name
-          if i.sample.user
-            user = i.sample.user.login
-          else
-            user = ""
-          end
-        else
-          sname = ""
-          stype = ""
-          user = ""
-        end
-        data += "#{i.id},#{oname},\"#{sname}\",#{stype},#{i.location},#{user},#{i.created_at},#{i.updated_at}\n"
+    Item.includes(:object_type, sample: %i[sample_type user], locator: [:wizard]).all.each do |i|
+      next if i.deleted?
+      oname = if i.object_type
+                i.object_type.name
+              else
+                ''
+              end
+      if i.sample
+        sname = i.sample.name
+        stype = i.sample.sample_type.name
+        user = if i.sample.user
+                 i.sample.user.login
+               else
+                 ''
+               end
+      else
+        sname = ''
+        stype = ''
+        user = ''
       end
+      data += "#{i.id},#{oname},\"#{sname}\",#{stype},#{i.location},#{user},#{i.created_at},#{i.updated_at}\n"
     end
 
     render text: data

@@ -9,7 +9,7 @@ class TimingsController < ApplicationController
     if @timing.save
       render json: @timing
     else
-      render json: { error: "error: could not save timing" }
+      render json: { error: 'error: could not save timing' }
     end
   end
 
@@ -20,7 +20,7 @@ class TimingsController < ApplicationController
     if @timing.update_attributes(params[:timing].slice(:start, :stop, :days, :active))
       render json: @timing
     else
-      render json: { error: "error: could not update timing" }
+      render json: { error: 'error: could not update timing' }
     end
   end
 

@@ -2,7 +2,7 @@ module Plankton
 
   class FunctionCallInstruction < Instruction
 
-    def initialize fid, return_to, fspec, arg_exprs, options = {}
+    def initialize(fid, return_to, fspec, arg_exprs, options = {})
       @return_to = return_to
       @fspec = fspec
       @arg_exprs = arg_exprs
@@ -11,7 +11,7 @@ module Plankton
       # puts "New function call (#{fid}) returning to #{return_to}"
     end
 
-    def bt_execute scope, _params
+    def bt_execute(scope, _params)
 
       scope.push
 
@@ -28,12 +28,12 @@ module Plankton
 
     end
 
-    def adjust_offset o
+    def adjust_offset(o)
       super o
       @return_to += o
     end
 
-    def set_pc _scope
+    def set_pc(_scope)
       @fspec[:pc]
     end
 

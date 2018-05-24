@@ -24,7 +24,7 @@ module Plankton
         rhs = expr
       end
 
-      push AssignInstruction.new lhs, rhs, lines.merge({ new: local })
+      push AssignInstruction.new lhs, rhs, lines.merge(new: local)
 
     end
 
@@ -65,7 +65,7 @@ module Plankton
 
         # Check that lhs is proper. Throw away parts.
         temp_lhs = lhs.gsub /%{([a-zA-Z][a-zA-Z_0-9]*)}/, '\1'
-        temp_parser = Plankton::Parser.new("n/a", temp_lhs)
+        temp_parser = Plankton::Parser.new('n/a', temp_lhs)
         temp_parser.get_lhs_parts
 
         @tok.eat_a '='
@@ -84,7 +84,7 @@ module Plankton
 
       lines[:endline] = @tok.line
 
-      push AssignInstruction.new lhs, rhs, lines.merge({ new: local })
+      push AssignInstruction.new lhs, rhs, lines.merge(new: local)
 
     end
 

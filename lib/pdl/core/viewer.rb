@@ -1,6 +1,6 @@
 class InformationInstruction
   def to_html
-    "#{@content}"
+    @content.to_s
   end
 end
 
@@ -30,18 +30,18 @@ end
 
 class StepInstruction
   def to_html
-    str = ""
+    str = ''
     @parts.each do |p|
       case p.keys.first
       when :description
-        str += "#{p[:description]}"
+        str += (p[:description]).to_s
       when :note
         str += "<span class='note'>Note: #{p[:note]}</span>"
       when :getdata
         str += "<span class='getdata'>Input: <i>#{p[:getdata][:var]}</i>: #{p[:getdata][:description]}.</span>"
       end
     end
-    return str
+    str
   end
 end
 
@@ -59,7 +59,7 @@ end
 
 class GotoInstruction
   def to_html
-    "#{@destination}"
+    @destination.to_s
   end
 end
 

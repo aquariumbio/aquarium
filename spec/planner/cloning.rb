@@ -1,19 +1,19 @@
-require "rails_helper"
-require_relative "gibson"
-require_relative "runner"
+require 'rails_helper'
+require_relative 'gibson'
+require_relative 'runner'
 
-RSpec.describe "Planner" do
+RSpec.describe 'Planner' do
 
-  context "plans" do
+  context 'plans' do
 
-    it "edits plans" do
+    it 'edits plans' do
 
       # build_workflow
 
-      seq = OperationType.find_by_name "Sequencing"
+      seq = OperationType.find_by_name 'Sequencing'
 
-      goal = seq.operations.create status: "planning", user_id: User.find_by_login("klavins").id
-      goal.set_input("Plasmid", SampleType.find_by_name("Plasmid").samples.last)
+      goal = seq.operations.create status: 'planning', user_id: User.find_by_login('klavins').id
+      goal.set_input('Plasmid', SampleType.find_by_name('Plasmid').samples.last)
 
       puts
       puts "\e[93mPlanning #{goal}\e[39m"
@@ -42,12 +42,12 @@ RSpec.describe "Planner" do
 
       puts
       puts "\e[93mDefining inputs for Gibson and planning\e[39m"
-      ops = goal.find "Gibson Assembly"
+      ops = goal.find 'Gibson Assembly'
 
-      if !ops.empty?
+      unless ops.empty?
         puts "Found Gibson Assembly: Op #{ops[0].id}"
         op = ops[0]
-        op.set_input("Fragments", SampleType.find_by_name("Fragment").samples.sample(2))
+        op.set_input('Fragments', SampleType.find_by_name('Fragment').samples.sample(2))
         planner.plan_tree op
         planner.mark_shortest op
         planner.mark_unused op
@@ -60,12 +60,12 @@ RSpec.describe "Planner" do
 
       puts
       puts "\e[93mDefining inputs for E coli Transformation\e[39m"
-      ops = goal.find "Transform E coli"
+      ops = goal.find 'Transform E coli'
 
-      if !ops.empty?
+      unless ops.empty?
         puts "Found Transform E coli: Op #{ops[0].id}"
         op = ops[0]
-        op.set_input("Comp cell", Sample.find_by_name("DH5alpha"))
+        op.set_input('Comp cell', Sample.find_by_name('DH5alpha'))
         planner.plan_tree op
         planner.mark_shortest op
         planner.mark_unused op
@@ -85,8 +85,8 @@ RSpec.describe "Planner" do
         puts "No issues. Starting plan.\e[39m"
         goal.recurse do |op|
           op.user_id = goal.user_id
-          if op.status == "planning"
-            op.status = op.leaf? ? "pending" : "waiting"
+          if op.status == 'planning'
+            op.status = op.leaf? ? 'pending' : 'waiting'
           end
           op.save
         end

@@ -1,19 +1,19 @@
 names = [
-  ["Borgman", "Joshua"],
-  ["Chavali", "Venkata"],
-  ["Hassanzadeh", "Pegah"],
-  ["Jain", "Sonal"],
-  ["Lavania", "Chandashekhar"],
-  ["Ma", "Patrick"],
-  ["Newton", "Michael"],
-  ["Pollard", "Timothy"],
-  ["Xiao", "Sa"],
-  ["Baryshev", "Alexander"],
-  ["Josberger", "Erik"],
-  ["Kim", "Bonghoe"],
-  ["Nelson", "Gregory"],
-  ["Rollins", "Nathanael"],
-  ["Starkebaum", "David"]
+  %w[Borgman Joshua],
+  %w[Chavali Venkata],
+  %w[Hassanzadeh Pegah],
+  %w[Jain Sonal],
+  %w[Lavania Chandashekhar],
+  %w[Ma Patrick],
+  %w[Newton Michael],
+  %w[Pollard Timothy],
+  %w[Xiao Sa],
+  %w[Baryshev Alexander],
+  %w[Josberger Erik],
+  %w[Kim Bonghoe],
+  %w[Nelson Gregory],
+  %w[Rollins Nathanael],
+  %w[Starkebaum David]
 ]
 
 names.each do |name|

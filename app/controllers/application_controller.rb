@@ -15,9 +15,9 @@ class ApplicationController < ActionController::Base
     super
   end
 
-  def sequence_new_job sha, path, from
+  def sequence_new_job(sha, path, from)
 
-    data = ""
+    data = ''
 
     begin
       data = (Job.find(from).logs.select { |j| j.entry_type == 'return' }).first.data

@@ -29,7 +29,7 @@ class GroupsController < ApplicationController
 
       m = Membership.find_by_user_id_and_group_id(params[:user_id], @group.id)
 
-      if !m
+      unless m
 
         u = User.find(params[:user_id])
         m = Membership.new
@@ -47,9 +47,7 @@ class GroupsController < ApplicationController
 
       m = Membership.find_by_user_id_and_group_id(params[:drop_user], @group.id)
 
-      if m
-        m.destroy
-      end
+      m.destroy if m
 
     end
 
@@ -85,7 +83,7 @@ class GroupsController < ApplicationController
         format.html { redirect_to @group, notice: 'Group was successfully created.' }
         format.json { render json: @group, status: :created, location: @group }
       else
-        format.html { render action: "new" }
+        format.html { render action: 'new' }
         format.json { render json: @group.errors, status: :unprocessable_entity }
       end
     end
@@ -101,7 +99,7 @@ class GroupsController < ApplicationController
         format.html { redirect_to @group, notice: 'Group was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render action: 'edit' }
         format.json { render json: @group.errors, status: :unprocessable_entity }
       end
     end

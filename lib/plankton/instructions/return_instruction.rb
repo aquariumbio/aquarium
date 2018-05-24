@@ -2,20 +2,18 @@ module Plankton
 
   class ReturnInstruction < Instruction
 
-    def initialize ret_expr, options = {}
+    def initialize(ret_expr, options = {})
       @destination = 0
       @ret_expr = ret_expr
       super 'return', options
     end
 
-    def bt_execute scope, _params
+    def bt_execute(scope, _params)
 
       retvals = scope.get :__RETVALS__
       fid = scope.get :__FUNCTION_CALL_ID__
 
-      if !retvals[fid.to_sym]
-        retvals[fid.to_sym] = []
-      end
+      retvals[fid.to_sym] = [] unless retvals[fid.to_sym]
 
       # puts "About to evaluate #{@ret_expr}"
 
@@ -28,9 +26,7 @@ module Plankton
       @destination = scope.get :__RETURN_PC__
 
       # pop local variables and any other scopes (e.g. if return statement is in an if or while
-      while !scope.defined_in_top :__FUNCTION_CALL_ID__
-        scope.pop
-      end
+      scope.pop until scope.defined_in_top :__FUNCTION_CALL_ID__
 
       # pop arguments
       scope.pop
@@ -41,7 +37,7 @@ module Plankton
 
     end
 
-    def set_pc _scope
+    def set_pc(_scope)
       @destination
     end
 

@@ -2,7 +2,7 @@ module Lang
 
   class Scope
 
-    def merge g, h
+    def merge(g, h)
 
       if g.class == Hash && h.class == Hash
         g.merge h
@@ -12,7 +12,7 @@ module Lang
 
     end
 
-    def keys h
+    def keys(h)
 
       if h.class == Hash
         h.keys
@@ -22,7 +22,7 @@ module Lang
 
     end
 
-    def delete h, k
+    def delete(h, k)
 
       if h.class == Hash && k.class == Symbol
         g = h.dup
@@ -34,10 +34,10 @@ module Lang
 
     end
 
-    def key h, k
+    def key(h, k)
 
       if h.class == Hash && k.class == Symbol
-        h.has_key? k
+        h.key? k
       else
         raise "Attempted to find #{k.class} in a #{h.class}."
       end

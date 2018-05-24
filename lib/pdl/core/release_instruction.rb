@@ -2,7 +2,7 @@ class ReleaseInstruction < Instruction
 
   attr_reader :expr, :item_list
 
-  def initialize expr, options = {}
+  def initialize(expr, options = {})
 
     @expr = expr
     @renderable = true
@@ -12,27 +12,23 @@ class ReleaseInstruction < Instruction
 
   # RAILS ###########################################################################################
 
-  def pre_render scope, _params
+  def pre_render(scope, _params)
 
     begin
       @item_list = scope.evaluate @expr
     rescue Exception => e
-      raise "In <release>: Could not evaluate object list (" + @expr + "): " + e.message
+      raise 'In <release>: Could not evaluate object list (' + @expr + '): ' + e.message
     end
 
-    unless @item_list && @item_list.class == Array
-      raise "In <release>: item list evaluated to non array (" + @expr + "): "
-    end
+    raise 'In <release>: item list evaluated to non array (' + @expr + '): ' unless @item_list && @item_list.class == Array
 
     @item_list.each do |item|
-      unless item[:id] && item[:name]
-        raise "Release error: %{item_list} does not appear to quack like an item."
-      end
+      raise 'Release error: %{item_list} does not appear to quack like an item.' unless item[:id] && item[:name]
     end
 
   end
 
-  def bt_execute scope, params
+  def bt_execute(scope, params)
 
     pre_render scope, params
     i = 0
@@ -43,7 +39,7 @@ class ReleaseInstruction < Instruction
       m = params["method_#{i}"]
       i += 1
       x = Item.find_by_id(item[:id])
-      raise 'no such item:' + item[:name] if !x
+      raise 'no such item:' + item[:name] unless x
 
       case m
 
@@ -86,12 +82,12 @@ class ReleaseInstruction < Instruction
 
   # TERMINAL ########################################################################################
 
-  def render scope
+  def render(scope)
 
     @pi = scope.evaluate @expr
     # TODO: check that @pi is a pdl_item
 
-    if !@pi.kind_of?(Array)
+    if !@pi.is_a?(Array)
       nm     = @pi.object[:name]
       loc    = @pi.item[:location]
       method = @pi.object[:release_description]
@@ -110,27 +106,27 @@ class ReleaseInstruction < Instruction
     when 'return'
       puts "Please return the #{length} #{nm} taken from #{loc}."
       puts "  Details: #{method}"
-      print "Press [ENTER] when finished: "
+      print 'Press [ENTER] when finished: '
 
     when 'dispose'
       puts "Please dispose of the #{length} #{nm} taken from #{loc}."
       puts "  Details: #{method}"
-      print "Press [ENTER] when finished: "
+      print 'Press [ENTER] when finished: '
 
     when 'query'
       puts "Please specify whether the #{length} #{nm} taken from #{loc} will be (1) returned or (2) disposed of."
       puts "  Details: #{method}\n\n"
-      print "Enter (1) if you returned it or (2) if you disposed of it: "
+      print 'Enter (1) if you returned it or (2) if you disposed of it: '
 
     end
 
   end
 
-  def execute _scope
+  def execute(_scope)
 
     input = gets
 
-    if !@pi.kind_of?(Array)
+    if !@pi.is_a?(Array)
       release_method = @pi.object[:release_method]
       length = 1
     else
@@ -138,23 +134,23 @@ class ReleaseInstruction < Instruction
       length = @pi.length
     end
 
-    if release_method == 'query'
-      if input.to_i == 1
-        method = 'return'
-      else
-        method = 'dispose'
-      end
-    else
-      method = release_method
-    end
+    method = if release_method == 'query'
+               if input.to_i == 1
+                 'return'
+               else
+                 'dispose'
+                        end
+             else
+               release_method
+             end
 
-    if !@pi.kind_of?(Array)
-      liaison 'release', { id: @pi.item[:id], method: method, quantity: 1 }
+    if !@pi.is_a?(Array)
+      liaison 'release', id: @pi.item[:id], method: method, quantity: 1
     else
       count = 0
       while count < length
-        liaison 'release', { id: @pi[count].item[:id], method: method, quantity: 1 }
-        count = count + 1
+        liaison 'release', id: @pi[count].item[:id], method: method, quantity: 1
+        count += 1
       end
 
     end

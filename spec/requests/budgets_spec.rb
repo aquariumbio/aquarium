@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe "Budgets", :type => :request do
-  describe "GET /budgets" do
-    it "works! (now write some real specs)" do
+RSpec.describe 'Budgets', type: :request do
+  describe 'GET /budgets' do
+    it 'works! (now write some real specs)' do
       get budgets_path
       expect(response).to have_http_status(200)
     end

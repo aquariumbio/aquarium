@@ -22,11 +22,11 @@ class WizardsController < ApplicationController
     @boxes = @wizard.boxes
     @object_types = ObjectType.where(prefix: @wizard.name)
 
-    if params[:box]
-      @selected_box = params[:box]
-    else
-      @selected_box = @boxes.first
-    end
+    @selected_box = if params[:box]
+                      params[:box]
+                    else
+                      @boxes.first
+                    end
 
     respond_to do |format|
       format.html # show.html.erb
@@ -65,7 +65,7 @@ class WizardsController < ApplicationController
         format.html { redirect_to @wizard, notice: 'Wizard was successfully created.' }
         format.json { render json: @wizard, status: :created, location: @wizard }
       else
-        format.html { render action: "new" }
+        format.html { render action: 'new' }
         format.json { render json: @wizard.errors, status: :unprocessable_entity }
       end
     end
@@ -88,7 +88,7 @@ class WizardsController < ApplicationController
         format.html { redirect_to @wizard, notice: 'Wizard was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render action: 'edit' }
         format.json { render json: @wizard.errors, status: :unprocessable_entity }
       end
     end

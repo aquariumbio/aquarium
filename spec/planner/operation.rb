@@ -1,8 +1,8 @@
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.describe "Planner" do
+RSpec.describe 'Planner' do
 
-  OperationType.all.collect { |ot| ot.name }.each do |name|
+  OperationType.all.collect(&:name).each do |name|
 
     it name do
 
@@ -27,7 +27,7 @@ RSpec.describe "Planner" do
       puts "\e[93mStarting job #{job.id}\e[39m"
       puts
 
-      manager = Krill::Manager.new job.id, true, "master", "master"
+      manager = Krill::Manager.new job.id, true, 'master', 'master'
       manager.run
 
       puts "\e[93mBacktrace\e[39m"

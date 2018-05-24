@@ -1,11 +1,11 @@
 require_relative 'testlib'
 
 ###################################################################################
-Test.verify("Find all samples owned by a particular user", {
+Test.verify('Find all samples owned by a particular user', {
               login: Test.login,
               key: Test.key,
               run: {
-                method: "find",
+                method: 'find',
                 args: {
                   model: :sample,
                   where: { user_id: 64 }
@@ -27,14 +27,14 @@ puts
                 login: Test.login,
                 key: Test.key,
                 run: {
-                  method: "find",
+                  method: 'find',
                   args: {
                     model: thing,
                     where: { id: id }
                   }
                 }
               }, loud: true) do |response|
-    response[:result] == "ok"           \
+    response[:result] == 'ok'           \
     && response[:rows]                  \
     && response[:rows].length == 1      \
     && response[:rows][0][:id] == id
@@ -45,35 +45,33 @@ end
 puts
 
 #####################################################################################
-Test.verify("Find all users", {
-              login: Test.login,
-              key: Test.key,
-              run: {
-                method: "find",
-                args: {
-                  model: :user
-                }
+Test.verify('Find all users',
+            login: Test.login,
+            key: Test.key,
+            run: {
+              method: 'find',
+              args: {
+                model: :user
               }
             }) do |response|
-  puts " --> " + (response[:rows].collect { |r|
+  puts ' --> ' + (response[:rows].collect do |r|
     return false unless r[:login]
     r[:login]
-  }).join(", ")
+  end).join(', ')
   true
 end
 
 puts
 
 #####################################################################################
-Test.verify("Get a job backtrace", {
-              login: Test.login,
-              key: Test.key,
-              run: {
-                method: "find",
-                args: {
-                  model: :job,
-                  where: { id: 5001 }
-                }
+Test.verify('Get a job backtrace',
+            login: Test.login,
+            key: Test.key,
+            run: {
+              method: 'find',
+              args: {
+                model: :job,
+                where: { id: 5001 }
               }
             }) do |response|
   bt = response[:rows][0][:backtrace].collect { |step| step[:operation] }
@@ -84,37 +82,36 @@ end
 puts
 
 ########################################################################################
-Test.verify("Get all items assocated with a sample", {
+Test.verify('Get all items assocated with a sample', {
               login: Test.login,
               key: Test.key,
               run: {
-                method: "find",
+                method: 'find',
                 args: {
                   model: :item,
-                  where: { sample: { name: "CFP_r" } },
+                  where: { sample: { name: 'CFP_r' } },
                   includes: :sample
                 }
               }
             }, loud: true) do |response|
-  puts " --> " + (response[:rows].collect { |r|
+  puts ' --> ' + (response[:rows].collect do |r|
     return false unless r[:id]
     r[:id]
-  }).join(", ")
+  end).join(', ')
   true
 end
 
 puts
 
 ########################################################################################
-Test.verify("Get 32 items", {
-              login: Test.login,
-              key: Test.key,
-              run: {
-                method: "find",
-                args: {
-                  model: :item,
-                  limit: 32
-                }
+Test.verify('Get 32 items',
+            login: Test.login,
+            key: Test.key,
+            run: {
+              method: 'find',
+              args: {
+                model: :item,
+                limit: 32
               }
             }) do |response|
   response[:rows].length == 32
@@ -122,11 +119,11 @@ end
 
 puts
 
-Test.verify("Get three particular items", {
+Test.verify('Get three particular items', {
               login: Test.login,
               key: Test.key,
               run: {
-                method: "find",
+                method: 'find',
                 args: {
                   model: :item,
                   where: { id: [200, 300, 400] }

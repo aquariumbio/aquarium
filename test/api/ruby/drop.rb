@@ -3,24 +3,23 @@ require 'securerandom'
 
 (1..10).each do |_i|
 
-  name = "Test" + SecureRandom.hex(4)
+  name = 'Test' + SecureRandom.hex(4)
 
-  Test.verify("Create a sample named #{name}", {
-                login: Test.login,
-                key: Test.key,
-                run: {
-                  method: "create",
-                  args: {
-                    model: "sample",
-                    type: "Primer",
-                    name: name,
-                    project: "Test",
-                    description: "This is a test of the create api method",
-                    fields: {
-                      "Overhang Sequence" => "atccaggactaggacta",
-                      "Anneal Sequence" => "atctcggctatatcgac",
-                      "T Anneal" => 67.8
-                    }
+  Test.verify("Create a sample named #{name}",
+              login: Test.login,
+              key: Test.key,
+              run: {
+                method: 'create',
+                args: {
+                  model: 'sample',
+                  type: 'Primer',
+                  name: name,
+                  project: 'Test',
+                  description: 'This is a test of the create api method',
+                  fields: {
+                    'Overhang Sequence' => 'atccaggactaggacta',
+                    'Anneal Sequence' => 'atctcggctatatcgac',
+                    'T Anneal' => 67.8
                   }
                 }
               }) do |response|
@@ -34,33 +33,32 @@ end
 
 samples = []
 
-Test.verify("Find all Test samples", {
+Test.verify('Find all Test samples', {
               login: Test.login,
               key: Test.key,
               run: {
-                method: "find",
+                method: 'find',
                 args: {
                   model: :sample,
-                  where: { project: "Test" },
+                  where: { project: 'Test' }
                 }
               }
             }, loud: false) do |response|
   samples = response[:rows].collect { |r| r[:id] }
-  puts " --> " + samples.to_s
+  puts ' --> ' + samples.to_s
   true
 end
 
-Test.verify("Drop Test samples", {
-              login: Test.login,
-              key: Test.key,
-              run: {
-                method: "drop",
-                args: {
-                  model: "sample",
-                  ids: samples
-                }
+Test.verify('Drop Test samples',
+            login: Test.login,
+            key: Test.key,
+            run: {
+              method: 'drop',
+              args: {
+                model: 'sample',
+                ids: samples
               }
             }) do |response|
   puts " --> warnings: '#{response[:warnings].join(', ')}'"
-  response[:warnings].length == 0
+  response[:warnings].empty?
 end

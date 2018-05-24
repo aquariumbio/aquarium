@@ -5,7 +5,7 @@ module Lang
     # Numerical functions
     math_function :log, :log2, :log10, :cos, :sin, :tan, :acos, :asin, :atan, :sqrt
 
-    def floor x
+    def floor(x)
       if x.class == Integer
         x
       elsif x.class == Float
@@ -15,7 +15,7 @@ module Lang
       end
     end
 
-    def ceil x
+    def ceil(x)
       if x.class == Integer
         x
       elsif x.class == Float
@@ -25,7 +25,7 @@ module Lang
       end
     end
 
-    def min x, y
+    def min(x, y)
       if (x.class == Integer || x.class == Float) || (y.class == Integer || y.class == Float)
         if x < y
           x
@@ -37,7 +37,7 @@ module Lang
       end
     end
 
-    def max x, y
+    def max(x, y)
       if (x.class == Integer || x.class == Float) || (y.class == Integer || y.class == Float)
         if x > y
           x
@@ -49,7 +49,7 @@ module Lang
       end
     end
 
-    def atan2 y, x
+    def atan2(y, x)
       if (x.class == Integer || x.class == Float) || (y.class == Integer || y.class == Float)
         Math.atan2(y, x)
       else
@@ -57,11 +57,11 @@ module Lang
       end
     end
 
-    def mod x, y
+    def mod(x, y)
       if x.class == Integer || y.class == Float
         x % y
       else
-        raise "Attempted to modulo non-integers."
+        raise 'Attempted to modulo non-integers.'
       end
     end
 

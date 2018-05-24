@@ -1,6 +1,6 @@
 class SampleTree
 
-  def initialize sid
+  def initialize(sid)
     @sample = Sample
               .includes(:sample_type)
               .find(sid)
@@ -21,9 +21,9 @@ class SampleTree
 
   def as_json
 
-    samp = @sample.as_json(:include => [
+    samp = @sample.as_json(include: [
                              :sample_type,
-                             :items => { :include => :object_type }
+                             items: { include: :object_type }
                            ])
 
     samp[:user_login] = @sample.user.login
@@ -32,22 +32,22 @@ class SampleTree
       begin
         i['data'] = JSON.parse i['data']
         if i['data']['from']
-          if i['data']['from'].class == String
-            i['data']['from'] = [Item.find_by_id(i['data']['from']).as_json(:include => :object_type)]
-          else
-            i['data']['from'] = i['data']['from'].collect { |id|
-              Item.find_by_id(id).as_json(:include => :object_type)
-            }
-          end
+          i['data']['from'] = if i['data']['from'].class == String
+                                [Item.find_by_id(i['data']['from']).as_json(include: :object_type)]
+                              else
+                                i['data']['from'].collect do |id|
+                                  Item.find_by_id(id).as_json(include: :object_type)
+                                end
+                              end
         end
-      rescue
+      rescue StandardError
         i['data'] = {}
       end
     end
 
     {
       sample: samp,
-      parents: @parents.collect { |p| p.as_json }
+      parents: @parents.collect(&:as_json)
     }
 
   end

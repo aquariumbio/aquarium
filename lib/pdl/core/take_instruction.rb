@@ -5,7 +5,7 @@ class TakeInstruction < Instruction
 
   attr_reader :item_list, :object_list
 
-  def initialize item_list_expr, options = {}
+  def initialize(item_list_expr, options = {})
 
     @item_list_expr = item_list_expr
     @renderable = true
@@ -19,7 +19,7 @@ class TakeInstruction < Instruction
 
   # RAILS ###########################################################################################
 
-  def pre_render scope, _params
+  def pre_render(scope, _params)
 
     # To render the list of items to be taken, we have to evaluate item_list_expr, in case
     # involves complicated expressions and nost just string constants describing the items.
@@ -32,15 +32,15 @@ class TakeInstruction < Instruction
     # make a list of the evaluated expressions for each item in the list to be taken
     @item_list_expr.each do |item_expr|
 
-      if item_expr[:type]
-        description = {
-          type: (scope.substitute item_expr[:type]),
-          quantity: (scope.evaluate item_expr[:quantity]).to_i,
-          var: item_expr[:var]
-        }
-      else
-        description = {}
-      end
+      description = if item_expr[:type]
+                      {
+                        type: (scope.substitute item_expr[:type]),
+                        quantity: (scope.evaluate item_expr[:quantity]).to_i,
+                        var: item_expr[:var]
+                      }
+                    else
+                      {}
+                    end
 
       # if its a sample
       if item_expr[:name]
@@ -52,17 +52,13 @@ class TakeInstruction < Instruction
       if item_expr[:id]
         val = (scope.evaluate item_expr[:id]).to_i
         i = Item.find(val)
-        unless i
-          raise "Could not find item with id = #{item_expr[:id]} = #{val}. "
-        end
+        raise "Could not find item with id = #{item_expr[:id]} = #{val}. " unless i
         description[:id] = val
         description[:type] = i.object_type.name
         description[:quantity] = 1
         description[:var] = item_expr[:var]
         if i.object_type.handler == 'sample_container'
-          unless i.sample
-            raise "Item #{val} has object type sample_container, but does not point to a sample"
-          end
+          raise "Item #{val} has object type sample_container, but does not point to a sample" unless i.sample
           description[:name] = i.sample.name
           description[:project] = i.sample.project
         end
@@ -93,18 +89,18 @@ class TakeInstruction < Instruction
   end
 
   def html
-    h = "<b>take</b>"
+    h = '<b>take</b>'
     @item_list_expr.each do |ie|
-      if ie[:type]
-        h += ie[:type] + ", "
-      else
-        h += '[only id specified], '
-      end
+      h += if ie[:type]
+             ie[:type] + ', '
+           else
+             '[only id specified], '
+           end
     end
-    return h[0..-3]
+    h[0..-3]
   end
 
-  def log var, r, scope, params
+  def log(var, r, scope, params)
 
     data = []
 
@@ -117,7 +113,7 @@ class TakeInstruction < Instruction
 
   end
 
-  def bt_execute scope, params
+  def bt_execute(scope, params)
 
     # Evalute @object_list in current scope
     pre_render scope, params
@@ -126,7 +122,7 @@ class TakeInstruction < Instruction
     choices = JSON.parse(params[:choices])
 
     # Iterate over all items to be taken
-    for j in 0..((@object_list.length) - 1)
+    for j in 0..(@object_list.length - 1)
 
       result = []
 
@@ -137,7 +133,7 @@ class TakeInstruction < Instruction
         item = Item.find(i)
 
         q.times do
-          result.push(pdl_item item)
+          result.push(pdl_item(item))
         end
 
         item.inuse += q
@@ -160,19 +156,17 @@ class TakeInstruction < Instruction
 
   # TERMINAL ########################################################################################
 
-  def render scope
+  def render(scope)
 
     # ask btor for object info
     @object_type = scope.substitute @object_type
-    @obj = liaison 'info', { name: @object_type }
+    @obj = liaison 'info', name: @object_type
 
-    if @obj[:error]
-      raise @obj[:error]
-    end
+    raise @obj[:error] if @obj[:error]
 
     # show all the locations and quantities
     puts "Locations for object type #{@object_type}"
-    puts "-------------------------------------------"
+    puts '-------------------------------------------'
     puts "   \tLocation\tQuantity Available"
     n = 0
     @obj[:inventory].each do |item|
@@ -182,26 +176,26 @@ class TakeInstruction < Instruction
         puts "  #{n}.\t#{item[:location]}\t\t#{available} "
       end
     end
-    puts "-------------------------------------------"
+    puts '-------------------------------------------'
 
-    puts "Scope in render of take is: "
+    puts 'Scope in render of take is: '
     puts scope
 
-    puts "In render:: quantity = "
+    puts 'In render:: quantity = '
     @quantity = scope.evaluate(scope.substitute(@quantity.to_s))
     puts @quantity
 
     # prompt the user for which location(s) they want to use
-    if (n > 0)
+    if n > 0
       puts "You need #{@quantity - @num_taken} more"
-      print "Choose the location from which you will take one more item and press return: "
+      print 'Choose the location from which you will take one more item and press return: '
     else
       raise "not enough items of type #{@object_type} available"
     end
 
   end
 
-  def execute scope
+  def execute(scope)
 
     scope.set @var.to_sym, []
 
@@ -210,25 +204,21 @@ class TakeInstruction < Instruction
       location = gets.to_i - 1
 
       # take the object
-      @item = liaison 'take', { id: @obj[:inventory][location][:id], quantity: 1 }
+      @item = liaison 'take', id: @obj[:inventory][location][:id], quantity: 1
 
-      if @item[:error]
-        raise @item[:error]
-      end
+      raise @item[:error] if @item[:error]
 
       # add a PdlItem to scope
       v = scope.get(@var.to_sym)
       scope.set(@var.to_sym, v.push(PdlItem.new(@obj, @item)))
 
       # @quantity = scope.evaluate( scope.substitute( @quantity ) )
-      puts "In execute:: quantity = "
+      puts 'In execute:: quantity = '
       puts @quantity
 
       # update number taken
       @num_taken += 1
-      if @num_taken < @quantity
-        render scope
-      end
+      render scope if @num_taken < @quantity
     end while @num_taken < @quantity
 
     # if only one object, return it instead of an array containing it

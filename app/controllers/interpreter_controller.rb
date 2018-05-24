@@ -4,7 +4,7 @@ class InterpreterController < ApplicationController
 
   before_filter :signed_in_user
 
-  def get_protocol path, sha
+  def get_protocol(path, sha)
 
     @path = path
     @sha = sha
@@ -13,18 +13,18 @@ class InterpreterController < ApplicationController
       blob = Blob.get @sha, @path
       @content = blob.xml.force_encoding('UTF-8')
     else
-      @content = Repo::contents @path, @sha
+      @content = Repo.contents @path, @sha
     end
 
     @protocol = Plankton::Parser.new(@path, @content)
 
-    @parse_errors = ""
+    @parse_errors = ''
 
-    if params[:job]
-      @protocol.job_id = params[:job].to_i
-    else
-      @protocol.job_id = -1
-    end
+    @protocol.job_id = if params[:job]
+                         params[:job].to_i
+                       else
+                         -1
+                       end
 
   end
 
@@ -38,7 +38,7 @@ class InterpreterController < ApplicationController
     begin
       @protocol.parse
     rescue Exception => e
-      @parse_errors = "Error while parsing. " + e.message # + ": " + e.backtrace.to_s
+      @parse_errors = 'Error while parsing. ' + e.message # + ": " + e.backtrace.to_s
     end
 
   end
@@ -50,12 +50,12 @@ class InterpreterController < ApplicationController
 
     get_protocol params[:path], params[:sha]
 
-    if @parse_errors == ""
+    if @parse_errors == ''
 
       begin
         @protocol.parse_arguments_only
       rescue Exception => e
-        @parse_errors = "Error while parsing arguments. " # + e.message + ": " + e.backtrace.to_s
+        @parse_errors = 'Error while parsing arguments. ' # + e.message + ": " + e.backtrace.to_s
       end
 
     end
@@ -84,8 +84,8 @@ class InterpreterController < ApplicationController
     # has changed or not, creates a new Blob. Once the blob is made, it is parsed and the
     # arguments dialog is shown.
 
-    @path = params[:protocol_file].original_filename;
-    @sha = 'local_file_' + session[:session_id].to_s + '_' + Time.now.to_i.to_s;
+    @path = params[:protocol_file].original_filename
+    @sha = 'local_file_' + session[:session_id].to_s + '_' + Time.now.to_i.to_s
 
     blob = Blob.new
     blob.path = @path
@@ -120,7 +120,7 @@ class InterpreterController < ApplicationController
     @path = @job.path
     @user = current_user
 
-    @current_args = JSON.parse(@job.state, { :symbolize_names => true })[:stack][0]
+    @current_args = JSON.parse(@job.state, symbolize_names: true)[:stack][0]
 
     parse_args_only
 
@@ -137,7 +137,7 @@ class InterpreterController < ApplicationController
     @sha = params[:sha]
     @path = params[:path]
 
-    @info = JSON.parse(params[:info], :symbolize_names => true)
+    @info = JSON.parse(params[:info], symbolize_names: true)
 
     @desired = Time.at(@info[:date])
     @window = @info[:window].to_f
@@ -158,7 +158,7 @@ class InterpreterController < ApplicationController
       elsif a.type == 'generic'
         begin
           if val.class == String # arg was entered in by user
-            scope.set a.name.to_sym, JSON.parse(val, :symbolize_names => true)
+            scope.set a.name.to_sym, JSON.parse(val, symbolize_names: true)
           else # arg was obtained from previous job's args
             scope.set a.name.to_sym, val.symbolize_keys
           end
@@ -207,7 +207,7 @@ class InterpreterController < ApplicationController
 
     $CURRENT_JOB_ID = @job.id
 
-    state = JSON.parse(@job.state, { :symbolize_names => true })
+    state = JSON.parse(@job.state, symbolize_names: true)
 
     # Get the protocol
     @sha = @job.sha
@@ -218,8 +218,8 @@ class InterpreterController < ApplicationController
 
       parse
 
-      if @parse_errors != ""
-        log 'ERROR', { error: @parse_errors, pc: @job.pc }
+      if @parse_errors != ''
+        log 'ERROR', error: @parse_errors, pc: @job.pc
         @pc = Job.COMPLETED
         @job.pc = Job.COMPLETED
         @job.save
@@ -233,18 +233,18 @@ class InterpreterController < ApplicationController
 
     else
 
-      @parse_errors = ""
+      @parse_errors = ''
 
     end
 
   end
 
-  def process_error msg
+  def process_error(msg)
 
     @exception = true
     @error = msg
     @error_pc = @pc
-    log "ERROR", { pc: @pc, message: msg, instruction: @instruction.name }
+    log 'ERROR', pc: @pc, message: msg, instruction: @instruction.name
     stop
     @job.pc = @pc
     @job.state = { stack: @scope.stack }.to_json
@@ -256,14 +256,10 @@ class InterpreterController < ApplicationController
 
     # Calls pre-render for the current instruction
 
-    begin
-      @instruction.pre_render @scope, params if @instruction.respond_to?('pre_render')
-      if @instruction.flash != ""
-        flash[:alert] = @instruction.flash.html_safe
-      end
-    rescue Exception => e
-      process_error "Error in pre_render of " + @instruction.name + ": " + e.to_s # + ", " + e.backtrace.to_s
-    end
+    @instruction.pre_render @scope, params if @instruction.respond_to?('pre_render')
+    flash[:alert] = @instruction.flash.html_safe if @instruction.flash != ''
+  rescue Exception => e
+    process_error 'Error in pre_render of ' + @instruction.name + ': ' + e.to_s # + ", " + e.backtrace.to_s
 
   end
 
@@ -271,9 +267,7 @@ class InterpreterController < ApplicationController
 
     get_current
 
-    unless @pc == Job.COMPLETED
-      pre_render
-    end
+    pre_render unless @pc == Job.COMPLETED
 
     render 'current'
 
@@ -283,12 +277,10 @@ class InterpreterController < ApplicationController
 
     if @instruction.respond_to?('bt_execute')
       @instruction.bt_execute @scope, params
-      if @instruction.flash != ""
-        flash[:alert] = @instruction.flash.html_safe
-      end
+      flash[:alert] = @instruction.flash.html_safe if @instruction.flash != ''
     end
 
-    if @instruction.respond_to?("set_pc")
+    if @instruction.respond_to?('set_pc')
       @pc = @instruction.set_pc @scope
     else
       @pc += 1
@@ -296,7 +288,7 @@ class InterpreterController < ApplicationController
 
   end
 
-  def log type, data
+  def log(type, data)
     log = Log.new
     log.job_id = @job.id
     log.user_id = current_user.id
@@ -308,16 +300,14 @@ class InterpreterController < ApplicationController
   def start
 
     # initialize
-    log "START", { location: cookies[:location] ? cookies[:location] : 'undefined' }
+    log 'START', location: cookies[:location] ? cookies[:location] : 'undefined'
     @pc = 0
     @job.user_id = current_user.id
 
     # tell manta we're starting a protocol
-    Manta::start @job, current_user, request, cookies
+    Manta.start @job, current_user, request, cookies
 
-    if @parse_errors != ""
-      stop
-    end
+    stop if @parse_errors != ''
 
   end
 
@@ -325,10 +315,10 @@ class InterpreterController < ApplicationController
 
     # finalize stuff
     @pc = Job.COMPLETED
-    log "STOP", { location: cookies[:location] ? cookies[:location] : 'undefined' }
+    log 'STOP', location: cookies[:location] ? cookies[:location] : 'undefined'
 
     # tell manta we're done
-    Manta::stop @job, request, (@exception ? 'true' : 'false')
+    Manta.stop @job, request, (@exception ? 'true' : 'false')
 
   end
 
@@ -348,10 +338,8 @@ class InterpreterController < ApplicationController
     if @pc != Job.COMPLETED
 
       if @pc >= 0
-        log "NEXT", { pc: @pc, instruction: @instruction.name }
-        if params[:lognote]
-          log "NOTE", { pc: @pc, content: params[:lognote] }
-        end
+        log 'NEXT', pc: @pc, instruction: @instruction.name
+        log 'NOTE', pc: @pc, content: params[:lognote] if params[:lognote]
         begin
           execute
         rescue Exception => e
@@ -375,7 +363,7 @@ class InterpreterController < ApplicationController
         while !@instruction.renderable && @pc < @protocol.program.length && !@instruction.respond_to?(:stop)
 
           if numreps > 1000
-            process_error "Executed 1000 steps without rendering anything. You may have an infinite loop."
+            process_error 'Executed 1000 steps without rendering anything. You may have an infinite loop.'
             render 'current'
             return
           end
@@ -411,9 +399,7 @@ class InterpreterController < ApplicationController
       @job.state = { stack: @scope.stack }.to_json
       @job.save
 
-      if @pc != Job.COMPLETED
-        pre_render
-      end
+      pre_render if @pc != Job.COMPLETED
 
     end
 
@@ -424,14 +410,14 @@ class InterpreterController < ApplicationController
   def abort
     @job = Job.find(params[:job])
     @job.cancel current_user
-    log "ABORT", {}
+    log 'ABORT', {}
     render 'abort'
   end
 
   def cancel
     @job = Job.find(params[:job])
     @job.cancel current_user
-    log "CANCEL", {}
+    log 'CANCEL', {}
     flash[:success] = "Job #{params[:job]} has been cancelled."
     redirect_to jobs_url
   end

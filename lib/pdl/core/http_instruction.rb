@@ -2,7 +2,7 @@ class HTTPInstruction < Instruction
 
   attr_reader :info_expr
 
-  def initialize info_expr, options = {}
+  def initialize(info_expr, options = {})
 
     super 'http', options
     @info_expr = info_expr
@@ -10,7 +10,7 @@ class HTTPInstruction < Instruction
 
   end
 
-  def bt_execute scope, params
+  def bt_execute(scope, params)
 
     info = {}
 

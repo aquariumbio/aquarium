@@ -4,27 +4,25 @@ class Timing < ActiveRecord::Base
 
   def days_of_week
 
-    begin
-      return(JSON.parse self.days)
-    rescue Exception => e
-      return []
-    end
+    (JSON.parse days)
+  rescue Exception => e
+    []
 
   end
 
-  def days_of_week= list
+  def days_of_week=(list)
 
     self.days = list.to_json
-    self.save
+    save
 
   end
 
   def export
     {
-      start: self.start,
-      stop: self.stop,
-      days: self.days,
-      active: self.active
+      start: start,
+      stop: stop,
+      days: days,
+      active: active
     }
   end
 

@@ -8,7 +8,7 @@ proto.program.each { |i| puts i.name }
 
 puts "\nScope       \n--------------------------------"
 
-str = "x = %{x} and y = %{y}"
+str = 'x = %{x} and y = %{y}'
 s = Scope.new
 
 s.set :x, 1

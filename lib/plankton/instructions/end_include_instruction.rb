@@ -4,13 +4,13 @@ module Plankton
 
     attr_reader :returns
 
-    def initialize rets, options = {}
+    def initialize(rets, options = {})
       super 'end_include', options
       @returns = rets
       @renderable = false
     end
 
-    def bt_execute scope, _params
+    def bt_execute(scope, _params)
 
       evals = {}
 

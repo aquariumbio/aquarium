@@ -1,48 +1,47 @@
-require_relative "testlib"
+require_relative 'testlib'
 require 'securerandom'
 
 ########################################################################################
-name = "Test" + SecureRandom.hex(4)
+name = 'Test' + SecureRandom.hex(4)
 
-Test.verify("Get an error if property does not exist", {
+Test.verify('Get an error if property does not exist', {
               login: Test.login,
               key: Test.key,
               run: {
-                method: "create",
+                method: 'create',
                 args: {
-                  model: "sample",
-                  type: "Primer",
+                  model: 'sample',
+                  type: 'Primer',
                   name: name,
-                  project: "Test",
-                  description: "This is a test of the create api method",
+                  project: 'Test',
+                  description: 'This is a test of the create api method',
                   fields: {
-                    "Overhung Sequence" => "atccaggactaggacta"
+                    'Overhung Sequence' => 'atccaggactaggacta'
                   }
                 }
               }
             }, loud: true) do |response|
-  response[:result] == "error"
+  response[:result] == 'error'
 end
 
 ########################################################################################
-name = "Test" + SecureRandom.hex(4)
+name = 'Test' + SecureRandom.hex(4)
 
-Test.verify("Create a sample named #{name}", {
-              login: Test.login,
-              key: Test.key,
-              run: {
-                method: "create",
-                args: {
-                  model: "sample",
-                  type: "Primer",
-                  name: name,
-                  project: "Test",
-                  description: "This is a test of the create api method",
-                  fields: {
-                    "Overhang Sequence" => "atccaggactaggacta",
-                    "Anneal Sequence" => "atctcggctatatcgac",
-                    "T Anneal" => 67.8
-                  }
+Test.verify("Create a sample named #{name}",
+            login: Test.login,
+            key: Test.key,
+            run: {
+              method: 'create',
+              args: {
+                model: 'sample',
+                type: 'Primer',
+                name: name,
+                project: 'Test',
+                description: 'This is a test of the create api method',
+                fields: {
+                  'Overhang Sequence' => 'atccaggactaggacta',
+                  'Anneal Sequence' => 'atctcggctatatcgac',
+                  'T Anneal' => 67.8
                 }
               }
             }) do |response|
@@ -50,39 +49,37 @@ Test.verify("Create a sample named #{name}", {
   response[:rows][0][:name] == name
 end
 
-Test.verify("Get an error if the sample name is already in use", {
-              login: Test.login,
-              key: Test.key,
-              run: {
-                method: "create",
-                args: {
-                  model: "sample",
-                  type: "Primer",
-                  name: name,
-                  project: "Test",
-                  description: "This is a test of the create api method",
-                  fields: {
-                    "Overhang Sequence" => "atccaggactaggacta",
-                    "Anneal Sequence" => "atctcggctatatcgac",
-                    "T Anneal" => 67.8
-                  }
+Test.verify('Get an error if the sample name is already in use',
+            login: Test.login,
+            key: Test.key,
+            run: {
+              method: 'create',
+              args: {
+                model: 'sample',
+                type: 'Primer',
+                name: name,
+                project: 'Test',
+                description: 'This is a test of the create api method',
+                fields: {
+                  'Overhang Sequence' => 'atccaggactaggacta',
+                  'Anneal Sequence' => 'atctcggctatatcgac',
+                  'T Anneal' => 67.8
                 }
               }
             }) do |response|
-  response[:result] == "error"
+  response[:result] == 'error'
 end
 
-Test.verify("Drop the sample named #{name}", {
-              login: Test.login,
-              key: Test.key,
-              run: {
-                method: "drop",
-                args: {
-                  model: "sample",
-                  names: [name]
-                }
+Test.verify("Drop the sample named #{name}",
+            login: Test.login,
+            key: Test.key,
+            run: {
+              method: 'drop',
+              args: {
+                model: 'sample',
+                names: [name]
               }
             }) do |response|
-  puts " --> " + response[:warnings].join(', ')
-  response[:warnings].length == 0
+  puts ' --> ' + response[:warnings].join(', ')
+  response[:warnings].empty?
 end

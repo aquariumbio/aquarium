@@ -1,6 +1,6 @@
 require './lib/pdl'
 
-t = TakeInstruction.new "1000 mL Bottle", 2, 'x'
+t = TakeInstruction.new '1000 mL Bottle', 2, 'x'
 r = ReleaseInstruction.new '%{x}[0]'
 
 s = Scope.new

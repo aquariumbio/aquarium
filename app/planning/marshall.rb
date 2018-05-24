@@ -1,12 +1,12 @@
 module Marshall
 
-  def self.user= u
+  def self.user=(u)
     @@user = u
   end
 
-  def self.plan x
+  def self.plan(x)
 
-    raise "No user defined in Marhsall method" unless @@user
+    raise 'No user defined in Marhsall method' unless @@user
 
     p = Plan.new(
       name: x[:name],
@@ -17,17 +17,17 @@ module Marshall
 
     p.save
 
-    self.operations p, x[:operations]
-    self.wires p, x[:wires] if x[:wires] && p.errors.empty?
+    operations p, x[:operations]
+    wires p, x[:wires] if x[:wires] && p.errors.empty?
 
-    p.layout = self.mod(x[:layout]).to_json
+    p.layout = mod(x[:layout]).to_json
     p.save
 
     p
 
   end
 
-  def self.operations p, ops
+  def self.operations(p, ops)
 
     ids = []
 
@@ -35,7 +35,7 @@ module Marshall
       ops.each do |op|
         begin
           if op[:id]
-            operation = self.operation_update op
+            operation = operation_update op
           else
             operation = self.operation op
             operation.associate_plan p
@@ -53,22 +53,22 @@ module Marshall
 
   end
 
-  def self.operation x
+  def self.operation(x)
 
     ot = OperationType.find(x[:operation_type_id])
-    op = ot.operations.create status: "planning", user_id: @@user.id, x: x[:x], y: x[:y], parent_id: x[:parent_id]
+    op = ot.operations.create status: 'planning', user_id: @@user.id, x: x[:x], y: x[:y], parent_id: x[:parent_id]
 
     if x[:field_values]
       x[:field_values].each do |fv|
-        self.field_value op, fv, x[:routing]
+        field_value op, fv, x[:routing]
       end
     end
 
-    return op
+    op
 
   end
 
-  def self.operation_update op
+  def self.operation_update(op)
 
     operation = Operation.find op[:id]
 
@@ -80,33 +80,31 @@ module Marshall
 
     if op[:field_values]
       op[:field_values].each do |raw_fv|
-        current_fv = self.field_value operation, raw_fv, op[:routing]
+        current_fv = field_value operation, raw_fv, op[:routing]
         current_fvs << current_fv
       end
     end
 
     # for each field value in operation, delete it if it is not a raw_fv
     operation.field_values.each do |fv|
-      unless current_fvs.collect { |current_fv| current_fv[:id] }.member? fv.id
-        fv.destroy
-      end
+      fv.destroy unless current_fvs.collect { |current_fv| current_fv[:id] }.member? fv.id
     end
 
-    return operation
+    operation
 
   end
 
-  def self.wires _p, wires
+  def self.wires(_p, wires)
 
     ids = []
 
     wires.each do |x_wire|
       if !x_wire[:id]
-        wire = Wire.new({
-                          from_id: @@id_map[x_wire[:from][:rid]],
-                          to_id: @@id_map[x_wire[:to][:rid]],
-                          active: true
-                        })
+        wire = Wire.new(
+          from_id: @@id_map[x_wire[:from][:rid]],
+          to_id: @@id_map[x_wire[:to][:rid]],
+          active: true
+        )
         wire.save
         ids << wire.id
       else
@@ -118,7 +116,7 @@ module Marshall
 
   end
 
-  def self.field_value op, fv, routing
+  def self.field_value(op, fv, routing)
 
     if !fv[:array] && routing[fv[:routing]]
       sid = self.sid(routing[fv[:routing]])
@@ -131,9 +129,7 @@ module Marshall
     aft = AllowableFieldType.find_by_id(fv[:allowable_field_type_id])
     sample = Sample.find_by_id(sid)
 
-    if aft && (!sample || aft.sample_type_id != sample.sample_type_id)
-      sid = nil
-    end
+    sid = nil if aft && (!sample || aft.sample_type_id != sample.sample_type_id)
 
     atts = { name: fv[:name],
              role: fv[:role],
@@ -156,22 +152,22 @@ module Marshall
 
     end
 
-    self.map_id fv[:rid], field_value.id
+    map_id fv[:rid], field_value.id
 
     unless field_value.errors.empty?
-      raise "Marshalling error: " +
-            op.operation_type.name + " operation: " +
-            field_value.errors.full_messages.join(", ")
+      raise 'Marshalling error: ' +
+            op.operation_type.name + ' operation: ' +
+            field_value.errors.full_messages.join(', ')
     end
 
     field_value
 
   end
 
-  def self.plan_update x
+  def self.plan_update(x)
 
     p = Plan.find(x[:id])
-    p.name = x[:name] ? x[:name] : "New Plan"
+    p.name = x[:name] ? x[:name] : 'New Plan'
     p.cost_limit = x[:cost_limit]
     p.status = x[:status]
     # p.user_id = @@user.id
@@ -180,35 +176,32 @@ module Marshall
     @@user.id = p.user.id
 
     # for each x operation, if the operation exists, update it, else create it
-    op_ids = self.operations p, x[:operations]
+    op_ids = operations p, x[:operations]
 
-    puts "op_ids = #{op_ids} while plan ops = #{p.operations.collect { |o| o.id }}"
+    puts "op_ids = #{op_ids} while plan ops = #{p.operations.collect(&:id)}"
 
     # for each plan operation, if it is not in x, then delete it
     p.operations.each do |pop|
-      unless op_ids.member?(pop.id)
-        pas = PlanAssociation.where(plan_id: p.id, operation_id: pop.id)
-        pas.each { |pa| pa.destroy }
-        pop.destroy
-        puts pop.errors.full_messages.join(", ")
-      end
+      next if op_ids.member?(pop.id)
+      pas = PlanAssociation.where(plan_id: p.id, operation_id: pop.id)
+      pas.each(&:destroy)
+      pop.destroy
+      puts pop.errors.full_messages.join(', ')
     end
 
     # for each x wire, if the wire doesn't exist, create it
-    if x[:wires]
-      wire_ids = self.wires p, x[:wires]
-    else
-      wire_ids = []
-    end
+    wire_ids = if x[:wires]
+                 wires p, x[:wires]
+               else
+                 []
+               end
 
     # for each plan wire, if the wire is not in x, then delete it
     p.wires.each do |pwire|
-      unless !x[:wires] || wire_ids.member?(pwire.id)
-        pwire.destroy
-      end
+      pwire.destroy unless !x[:wires] || wire_ids.member?(pwire.id)
     end
 
-    p.layout = self.mod(x[:layout]).to_json
+    p.layout = mod(x[:layout]).to_json
     p.save
 
     p.reload
@@ -217,31 +210,33 @@ module Marshall
 
   end
 
-  def self.sid str
+  def self.sid(str)
     str ? str.split(':')[0] : nil
   end
 
-  def self.map_id rid, id
+  def self.map_id(rid, id)
     @@id_map ||= []
     @@id_map[rid] = id
   end
 
-  def self.mod m
+  def self.mod(m)
 
     mod = m
 
-    mod[:wires] = mod[:wires].collect { |w|
+    if mod[:wires]
+      mod[:wires] = mod[:wires].collect do |w|
 
-      wire = w
+        wire = w
 
-      wire[:from_op] = { id: @@id_map[w[:from_op][:rid]] }  if w[:from_op]
-      wire[:to_op]   = { id: @@id_map[w[:to_op][:rid]]   }  if w[:to_op]
-      wire[:from]    = { record_type: "FieldValue", id: @@id_map[w[:from][:rid]] } if w[:from][:record_type] == "FieldValue"
-      wire[:to]      = { record_type: "FieldValue", id: @@id_map[w[:to][:rid]] }   if w[:to][:record_type] == "FieldValue"
+        wire[:from_op] = { id: @@id_map[w[:from_op][:rid]] }  if w[:from_op]
+        wire[:to_op]   = { id: @@id_map[w[:to_op][:rid]]   }  if w[:to_op]
+        wire[:from]    = { record_type: 'FieldValue', id: @@id_map[w[:from][:rid]] } if w[:from][:record_type] == 'FieldValue'
+        wire[:to]      = { record_type: 'FieldValue', id: @@id_map[w[:to][:rid]] }   if w[:to][:record_type] == 'FieldValue'
 
-      wire
+        wire
 
-    } if mod[:wires]
+      end
+    end
 
     mod[:children] = mod[:children].collect { |c| self.mod c } if mod[:children]
 

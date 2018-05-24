@@ -25,7 +25,7 @@ class SamplesController < ApplicationController
 
     respond_to do |format|
 
-      format.html {
+      format.html do
 
         if params[:delete]
 
@@ -47,15 +47,15 @@ class SamplesController < ApplicationController
 
         if params[:toggle]
           @item = Item.find(params[:toggle])
-          @item.inuse = @item.inuse > 0 ? 0 : 1;
+          @item.inuse = @item.inuse > 0 ? 0 : 1
           @item.save
         end
 
-      }
+      end
 
-      format.json {
+      format.json do
         render json: Sample.find(params[:id]).full_json
-      }
+      end
 
     end
 
@@ -74,7 +74,7 @@ class SamplesController < ApplicationController
     @sample_type = @sample.sample_type
   end
 
-  def render_full_sample sid
+  def render_full_sample(sid)
     render json: Sample
       .find(sid).full_json
   end
@@ -109,7 +109,7 @@ class SamplesController < ApplicationController
     @sample = Sample.find(params[:id])
     id = @sample.sample_type_id
 
-    if @sample.items.length > 0
+    if !@sample.items.empty?
       flash[:notice] = "Could not delete sample #{@sample.name} because there are items associated with it."
     else
       @sample.destroy
@@ -129,27 +129,26 @@ class SamplesController < ApplicationController
 
     else
 
-      @samples = Sample.where('project = ?', params[:name]).sort { |a, b|
+      @samples = Sample.where('project = ?', params[:name]).sort do |a, b|
         [a.sample_type.name, a.name] <=> [b.sample_type.name, b.name]
-      }
+      end
 
     end
 
   end
 
-  def spreadsheet
-  end
+  def spreadsheet; end
 
-  def schema sample_type
+  def schema(sample_type)
 
-    fields = ['name', 'project']
+    fields = %w[name project]
 
     (1..8).each do |i|
       fn = "field#{i}name".to_sym
       ft = "field#{i}type".to_sym
       f = "field#{i}".to_sym
 
-      if sample_type[ft] != 'not used' && sample_type[ft] != nil
+      if sample_type[ft] != 'not used' && !sample_type[ft].nil?
         fields.push sample_type[ft]
       else
         fields.push :unused
@@ -161,21 +160,17 @@ class SamplesController < ApplicationController
 
   end
 
-  def make_samples data
+  def make_samples(data)
 
     samples = []
 
-    if data.length == 0
-      redirect_to spreadsheet_path, notice: "Samples not imported. File contains no parsable data"
-    end
+    redirect_to spreadsheet_path, notice: 'Samples not imported. File contains no parsable data' if data.empty?
 
     name = data.shift[0]
     @sample_type = SampleType.find_by_name(name)
     @schema = schema @sample_type
 
-    if !@sample_type
-      redirect_to spreadsheet_path, notice: "Samples not imported. Could not find sample type #{name}"
-    end
+    redirect_to spreadsheet_path, notice: "Samples not imported. Could not find sample type #{name}" unless @sample_type
 
     data.each do |row|
 
@@ -209,7 +204,7 @@ class SamplesController < ApplicationController
 
   end
 
-  def upgrade s, st
+  def upgrade(s, st)
 
     (1..8).each do |i|
       n = st.fieldname i
@@ -224,14 +219,14 @@ class SamplesController < ApplicationController
       fv.save if fv
     end
 
-    return s
+    s
 
   end
 
   def process_spreadsheet
 
     if !params[:spreadsheet]
-      redirect_to spreadsheet_path, notice: "No path specified"
+      redirect_to spreadsheet_path, notice: 'No path specified'
     else
 
       path = params[:spreadsheet].original_filename
@@ -242,7 +237,7 @@ class SamplesController < ApplicationController
 
       @samples = make_samples @data
 
-      if @samples.length > 0
+      unless @samples.empty?
         @samples.each do |s|
           s.save
           upgrade(s, s.sample_type)

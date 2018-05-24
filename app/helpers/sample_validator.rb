@@ -25,7 +25,7 @@ module SampleValidator
   # Constraint Specific Methods
   #
 
-  def validate_constraint_present ft, val
+  def validate_constraint_present(ft, val)
     v = value ft
     if val && !v
       validation_error "Field #{ft.name} is not present"
@@ -40,18 +40,18 @@ module SampleValidator
   # Logic
   #
 
-  def validate_constraint_or ft, constraints
+  def validate_constraint_or(ft, constraints)
 
     if !constraints || constraints.class != Array
-      validation_error "Or does not apply to a list of constraints."
+      validation_error 'Or does not apply to a list of constraints.'
     else
       puts "Checking #{constraints}"
       constraints.each do |c|
         puts "Checking #{c}"
         return true if validate_aux ft, c
-        puts "  ... False"
+        puts '  ... False'
       end
-      return validation_error "Or: #{constraints} not satisfied"
+      validation_error "Or: #{constraints} not satisfied"
     end
 
   end
@@ -60,41 +60,41 @@ module SampleValidator
   # Base Validator Methods
   #
 
-  def validation_error msg
+  def validation_error(msg)
     @validation_errors << msg
     false
   end
 
-  def validate_aux ft, c
+  def validate_aux(ft, c)
     if ft.type == 'sample'
       child_sample.validate c
     else
       results = c.collect do |type, val|
-        self.method("validate_constraint_#{type}").call(ft, val)
+        method("validate_constraint_#{type}").call(ft, val)
       end
       results.inject { |prod, x| prod && x }
     end
   end
 
-  def validate sv
+  def validate(sv)
 
     @validation_errors ||= []
     is_valid = true
 
     sv.each do |key, c|
       ft = field_type(key)
-      if ft
-        is_valid = is_valid && validate_aux(ft, c)
-      else
-        is_valid = validation_error "Field '#{key}' not found"
-      end
+      is_valid = if ft
+                   is_valid && validate_aux(ft, c)
+                 else
+                   validation_error "Field '#{key}' not found"
+                 end
     end
 
     @validation_errors.each do |e|
-      self.errors.add :validate, e
+      errors.add :validate, e
     end
 
-    return is_valid
+    is_valid
 
   end
 

@@ -1,12 +1,12 @@
-require "rails_helper"
-require_relative "gibson"
-require_relative "runner"
+require 'rails_helper'
+require_relative 'gibson'
+require_relative 'runner'
 
-RSpec.describe "Planner" do
+RSpec.describe 'Planner' do
 
-  context "plans" do
+  context 'plans' do
 
-    it "executes plans" do
+    it 'executes plans' do
 
       # build_workflow
 
@@ -28,15 +28,15 @@ RSpec.describe "Planner" do
           puts "No issues. Starting plan.\e[39m"
           gop.recurse do |op|
             op.user_id = gop.user_id
-            if op.status == "planning"
-              op.status = op.leaf? ? "pending" : "waiting"
+            if op.status == 'planning'
+              op.status = op.leaf? ? 'pending' : 'waiting'
             end
             op.save
           end
 
         else
 
-          puts "Issues: " + issues.join(', ') + " \e[39m"
+          puts 'Issues: ' + issues.join(', ') + " \e[39m"
 
         end
 

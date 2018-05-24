@@ -2,7 +2,7 @@ module Oyster
 
   class Parser < Lang::Parser
 
-    def initialize path, contents
+    def initialize(path, contents)
       @tok = Lang::Tokenizer.new contents
       @metacol = Metacol.new
       @path = path
@@ -20,7 +20,7 @@ module Oyster
       add_function :minutes_elapsed, 2
     end
 
-    def parse args = {}
+    def parse(args = {})
       @metacol.set_args args
       statements
       @metacol
@@ -62,19 +62,11 @@ module Oyster
 
       while @tok.current != 'EOF'
 
-        while @tok.current != 'EOF' && @tok.current != 'argument' && @tok.current != 'place'
-          @tok.eat
-        end
+        @tok.eat while @tok.current != 'EOF' && @tok.current != 'argument' && @tok.current != 'place'
 
-        if @tok.current == 'place'
-          while @tok.current != 'EOF'
-            @tok.eat
-          end
-        end
+        @tok.eat while @tok.current != 'EOF' if @tok.current == 'place'
 
-        if @tok.current == 'argument'
-          arguments
-        end
+        arguments if @tok.current == 'argument'
 
       end
 

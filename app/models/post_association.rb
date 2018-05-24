@@ -10,32 +10,32 @@ class PostAssociation < ActiveRecord::Base
 
   default_scope eager_load(:job, :item, :sample, :task)
 
-  def self.get field, key
+  def self.get(field, key)
 
-    if field == :protocol_id
-      pas = PostAssociation.includes(post: [:user]).where(:sha => key)
-    else
-      pas = PostAssociation.includes(post: [:user]).where(field => key)
-    end
+    pas = if field == :protocol_id
+            PostAssociation.includes(post: [:user]).where(sha: key)
+          else
+            PostAssociation.includes(post: [:user]).where(field => key)
+          end
 
-    (pas.collect { |pa| pa.post }).reverse
+    pas.collect(&:post).reverse
 
   end
 
   def info
 
-    if self.job
-      { type: "Job", id: self.job.id, path: "/jobs/#{self.job.id}" }
-    elsif self.item
-      { type: "Item", id: self.item.id, path: "/items/#{self.item.id}" }
-    elsif self.task
-      { type: "Task", id: self.task.id, path: "/tasks/#{self.task.id}" }
-    elsif self.sample
-      { type: "Sample", id: self.sample.id, path: "/samples/#{self.sample.id}" }
-    elsif self.sha
-      path = Job.limit(1).find_by_sha(self.sha).path
+    if job
+      { type: 'Job', id: job.id, path: "/jobs/#{job.id}" }
+    elsif item
+      { type: 'Item', id: item.id, path: "/items/#{item.id}" }
+    elsif task
+      { type: 'Task', id: task.id, path: "/tasks/#{task.id}" }
+    elsif sample
+      { type: 'Sample', id: sample.id, path: "/samples/#{sample.id}" }
+    elsif sha
+      path = Job.limit(1).find_by_sha(sha).path
       id = path.split('/').last
-      { type: "Protocol", id: id, path: "/jobs/summary?path=#{path}" }
+      { type: 'Protocol', id: id, path: "/jobs/summary?path=#{path}" }
     else
       {}
     end

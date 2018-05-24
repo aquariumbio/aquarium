@@ -31,7 +31,7 @@ class CollectionsDatatable < Datatable
   def fetch_rows
     cols = Collection.includes(:user).containing Sample.find(params[:sample_id])
     if !params[:show_deleted]
-      cols.reject { |c| c.deleted? }
+      cols.reject(&:deleted?)
     else
       cols
     end

@@ -7,8 +7,8 @@ class FieldValue < ActiveRecord::Base
   include FieldValueKrill
 
   # belongs_to :sample # Not sure if this is used anywhere
-  belongs_to :child_sample, class_name: "Sample", foreign_key: :child_sample_id
-  belongs_to :child_item, class_name: "Item", foreign_key: :child_item_id
+  belongs_to :child_sample, class_name: 'Sample', foreign_key: :child_sample_id
+  belongs_to :child_item, class_name: 'Item', foreign_key: :child_item_id
   belongs_to :field_type
   belongs_to :allowable_field_type
 
@@ -37,7 +37,7 @@ class FieldValue < ActiveRecord::Base
     if child_item_id
       child_item.to_s
     else
-      "?"
+      '?'
     end
   end
 
@@ -45,11 +45,7 @@ class FieldValue < ActiveRecord::Base
   #
   # @return [Collection]
   def collection
-    if child_item
-      Collection.find(child_item.id)
-    else
-      nil
-    end
+    Collection.find(child_item.id) if child_item
   end
 
   # Return associated parameter value.
@@ -61,8 +57,8 @@ class FieldValue < ActiveRecord::Base
 
     if field_type
       ft = field_type
-    elsif self.sample && self.sample_type
-      fts = self.sample.sample_type.field_types.select { |ft| ft.name == self.name }
+    elsif sample && sample_type
+      fts = sample.sample_type.field_types.select { |ft| ft.name == name }
       if fts.length == 1
         ft = fts[0]
       else
@@ -74,27 +70,27 @@ class FieldValue < ActiveRecord::Base
 
     case ft.ftype
     when 'string', 'url'
-      return self.value
+      return value
     when 'json'
       begin
-        return JSON.parse self.value, :symbolize_names => true
+        return JSON.parse value, symbolize_names: true
       rescue Exception => e
-        return { error: e, original_value: self.value }
+        return { error: e, original_value: value }
       end
     when 'number'
-      return self.value.to_f
+      return value.to_f
     when 'sample'
-      return self.child_sample
+      return child_sample
     when 'item'
-      return self.child_item
+      return child_item
     end
 
   end
 
-  def self.create_string sample, ft, vals
+  def self.create_string(sample, ft, vals)
     vals.each do |v|
-      if ft.choices && ft.choices != ""
-        choices = ft.choices.split(",")
+      if ft.choices && ft.choices != ''
+        choices = ft.choices.split(',')
         unless choices.member? v
           sample.errors.add :choices, "#{v} is not a valid choice for #{ft.name}"
           raise ActiveRecord::Rollback
@@ -105,10 +101,10 @@ class FieldValue < ActiveRecord::Base
     end
   end
 
-  def self.create_number sample, ft, vals
+  def self.create_number(sample, ft, vals)
     vals.each do |v|
-      if ft.choices && ft.choices != ""
-        choices = ft.choices.split(",").collect { |c| c.to_f }
+      if ft.choices && ft.choices != ''
+        choices = ft.choices.split(',').collect(&:to_f)
         unless choices.member? v.to_f
           sample.errors.add :choices, "#{v} is not a valid choice for #{ft.name}"
           raise ActiveRecord::Rollback
@@ -119,14 +115,14 @@ class FieldValue < ActiveRecord::Base
     end
   end
 
-  def self.create_url sample, ft, vals
+  def self.create_url(sample, ft, vals)
     vals.each do |v|
       fv = sample.field_values.create name: ft.name, value: v
       fv.save
     end
   end
 
-  def self.create_sample sample, ft, vals
+  def self.create_sample(sample, ft, vals)
 
     vals.each do |v|
 
@@ -153,7 +149,7 @@ class FieldValue < ActiveRecord::Base
     end
   end
 
-  def self.create_item sample, ft, vals
+  def self.create_item(sample, ft, vals)
     vals.each do |v|
       if v.class == Item
         item = v
@@ -178,7 +174,7 @@ class FieldValue < ActiveRecord::Base
     end
   end
 
-  def self.creator sample, field_type, raw # sample, field_type, raw_field_data
+  def self.creator(sample, field_type, raw) # sample, field_type, raw_field_data
 
     vals = []
     if field_type.array
@@ -191,7 +187,7 @@ class FieldValue < ActiveRecord::Base
       vals = [raw]
     end
 
-    self.method("create_" + field_type.ftype).call(sample, field_type, vals)
+    method('create_' + field_type.ftype).call(sample, field_type, vals)
 
   end
 
@@ -217,26 +213,18 @@ class FieldValue < ActiveRecord::Base
   end
 
   def export
-    attributes.merge({
-                       child_sample: child_sample.as_json,
-                       child_item: child_item.as_json,
-                     })
+    attributes.merge(
+      child_sample: child_sample.as_json,
+      child_item: child_item.as_json
+    )
   end
 
-  def child_data name
-    if child_item_id
-      child_item.get(name)
-    else
-      nil
-    end
+  def child_data(name)
+    child_item.get(name) if child_item_id
   end
 
-  def set_child_data name, value
-    if child_item_id
-      child_item.associate name, value
-    else
-      nil
-    end
+  def set_child_data(name, value)
+    child_item.associate name, value if child_item_id
   end
 
   # Set {Item}, {Collection}, or row or column
@@ -251,19 +239,19 @@ class FieldValue < ActiveRecord::Base
   #    plate = Item.find(125234)
   #    operations.first.input("Plate").set item: plate if plate
   #  end
-  def set opts = {}
+  def set(opts = {})
     self.child_item_id = opts[:item].id if opts[:item]
     self.child_item_id = opts[:collection].id if opts[:collection]
     self.row = opts[:row] if opts[:row]
     self.column = opts[:column] if opts[:column]
-    self.save
+    save
   end
 
-  def copy_inventory fv
+  def copy_inventory(fv)
     self.child_item_id = fv.child_item_id
     self.row = fv.row
     self.column = fv.column
-    self.save
+    save
   end
 
   def routing
@@ -272,17 +260,17 @@ class FieldValue < ActiveRecord::Base
   end
 
   def full_json(_options = {})
-    self.as_json(include: [
-                   :child_sample,
-                   :wires_as_source,
-                   :wires_as_dest,
-                   allowable_field_type: {
-                     include: [
-                       :object_type,
-                       :sample_type
-                     ]
-                   }
-                 ])
+    as_json(include: [
+              :child_sample,
+              :wires_as_source,
+              :wires_as_dest,
+              allowable_field_type: {
+                include: %i[
+                  object_type
+                  sample_type
+                ]
+              }
+            ])
   end
 
 end

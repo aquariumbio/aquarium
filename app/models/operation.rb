@@ -40,27 +40,23 @@ class Operation < ActiveRecord::Base
   # @return [Plan] The plan that contains this Operation
   def plan
     pset = plans
-    if pset.length > 0
-      pset[0]
-    else
-      nil
-    end
+    pset[0] unless pset.empty?
   end
 
   # Assigns a Sample to an input
   # @param name [String]
   # @param val [Sample]
   # @param aft [AllowableFieldType]
-  def set_input name, val, aft = nil
-    set_property name, val, "input", false, aft
+  def set_input(name, val, aft = nil)
+    set_property name, val, 'input', false, aft
   end
 
   # Assigns a Sample to an output
   # @param name [String]
   # @param val [Sample]
   # @param aft [AllowableFieldType]
-  def set_output name, val, aft = nil
-    set_property name, val, "output", false, aft
+  def set_output(name, val, aft = nil)
+    set_property name, val, 'output', false, aft
   end
 
   # Adds a new input to an operation, even if that operation doesn't specify the input
@@ -79,8 +75,8 @@ class Operation < ActiveRecord::Base
   #       op.input(n).set item: i
   #     end
   #   end
-  def add_input name, sample, container
-    items = Item.where(sample_id: sample.id, object_type_id: container.id).reject { |i| i.deleted? }
+  def add_input(name, sample, container)
+    items = Item.where(sample_id: sample.id, object_type_id: container.id).reject(&:deleted?)
 
     if items.any?
 
@@ -88,8 +84,8 @@ class Operation < ActiveRecord::Base
 
       ft = FieldType.new(
         name: name,
-        ftype: "sample",
-        parent_class: "OperationType",
+        ftype: 'sample',
+        parent_class: 'OperationType',
         parent_id: nil
       )
       ft.save
@@ -99,8 +95,8 @@ class Operation < ActiveRecord::Base
         child_item_id: item.id,
         child_sample_id: sample.id,
         role: 'input',
-        parent_class: "Operation",
-        parent_id: self.id,
+        parent_class: 'Operation',
+        parent_id: id,
         field_type_id: ft.id
       )
       fv.save
@@ -109,7 +105,7 @@ class Operation < ActiveRecord::Base
 
     end
 
-    return nil
+    nil
 
   end
 
@@ -125,44 +121,44 @@ class Operation < ActiveRecord::Base
 
   # @param name [String]
   # @return [FieldValue]
-  def get_input name
+  def get_input(name)
     puts "================= FINDING #{name}"
     inputs.find { |i| i.name == name }
   end
 
   # (see #get_input)
-  def get_output name
+  def get_output(name)
     outputs.find { |o| o.name == name }
   end
 
   # (see #get_input)
-  def input name
+  def input(name)
     get_input name
   end
 
   # (see #get_input)
-  def output name
+  def output(name)
     get_output name
   end
 
   # Inputs as Array extended with {#IOList}
   # @param name [String]
   # @return [Array<FieldValue>]
-  def input_array name
+  def input_array(name)
     inputs.select { |i| i.name == name }.extend(IOList)
   end
 
   # Outputs as Array extended with {#IOList}
   # @param name [String]
   # @return [Array<FieldValue>]
-  def output_array name
+  def output_array(name)
     outputs.select { |o| o.name == name } .extend(IOList)
   end
 
   # @param name [String]
   # @param role [String]
   # @return [FieldValue]
-  def get_field_value name, role = "input"
+  def get_field_value(name, role = 'input')
     field_values.find { |fv| fv.name == name && fv.role == role }
   end
 
@@ -170,9 +166,9 @@ class Operation < ActiveRecord::Base
   # @param input_name [String]
   # @param output_name [String]
   # @return [Operation]
-  def pass input_name, output_name = nil
+  def pass(input_name, output_name = nil)
 
-    output_name = input_name unless output_name
+    output_name ||= input_name
 
     fv_in = input(input_name)
     fv_out = output(output_name)
@@ -184,11 +180,11 @@ class Operation < ActiveRecord::Base
     fv_out.child_item_id = fv_in.child_item_id
     fv_out.save
 
-    return self
+    self
 
   end
 
-  def recurse &block
+  def recurse(&block)
     block.call(self)
     inputs.each do |input|
       input.predecessors.each do |pred|
@@ -197,17 +193,15 @@ class Operation < ActiveRecord::Base
     end
   end
 
-  def find name
+  def find(name)
     ops = []
     recurse do |op|
-      if op.operation_type.name == name
-        ops << op
-      end
+      ops << op if op.operation_type.name == name
     end
-    return ops
+    ops
   end
 
-  def set_status_recursively str
+  def set_status_recursively(str)
     recurse do |op|
       op.status = str
       op.save
@@ -215,9 +209,9 @@ class Operation < ActiveRecord::Base
   end
 
   def to_s
-    ins = (inputs.collect { |fv| "#{fv.name}: #{fv.child_sample ? fv.child_sample.name : 'NO SAMPLE'}" }).join(", ")
-    outs = (outputs.collect { |fv| "#{fv.name}: #{fv.child_sample ? fv.child_sample.name : 'NO SAMPLE'}" }).join(", ")
-    "#{operation_type.name} #{id} ( " + ins + " ) ==> ( " + outs + " )"
+    ins = (inputs.collect { |fv| "#{fv.name}: #{fv.child_sample ? fv.child_sample.name : 'NO SAMPLE'}" }).join(', ')
+    outs = (outputs.collect { |fv| "#{fv.name}: #{fv.child_sample ? fv.child_sample.name : 'NO SAMPLE'}" }).join(', ')
+    "#{operation_type.name} #{id} ( " + ins + ' ) ==> ( ' + outs + ' )'
   end
 
   def successors
@@ -254,7 +248,7 @@ class Operation < ActiveRecord::Base
 
     inputs.each do |input|
       input.predecessors.each do |pred|
-        ops << pred.operation if pred.operation && pred.operation.status == "primed"
+        ops << pred.operation if pred.operation && pred.operation.status == 'primed'
       end
     end
 
@@ -266,7 +260,7 @@ class Operation < ActiveRecord::Base
 
     ops = outputs.collect do |output|
       output.wires_as_source.collect do |wire|
-        wire.to.predecessors.collect { |pred| pred.operation }
+        wire.to.predecessors.collect(&:operation)
       end
     end
 
@@ -275,7 +269,7 @@ class Operation < ActiveRecord::Base
   end
 
   def activate
-    set_status "planning"
+    set_status 'planning'
     outputs.each do |output|
       output.wires_as_source.each do |wire|
         wire.active = true
@@ -285,7 +279,7 @@ class Operation < ActiveRecord::Base
   end
 
   def deactivate
-    set_status "unplanned"
+    set_status 'unplanned'
     outputs.each do |output|
       output.wires_as_source.each do |wire|
         wire.active = false
@@ -294,35 +288,31 @@ class Operation < ActiveRecord::Base
     end
   end
 
-  def self.step ops = nil
+  def self.step(ops = nil)
 
-    if !ops
-      ops = Operation.includes(:operation_type)
+    ops ||= Operation.includes(:operation_type)
                      .where("status = 'waiting' OR status = 'deferred' OR status = 'delayed' OR status = 'pending'")
-    end
 
-    ops.each do |op|
-      op.step # defined in helpers/operation_status.rb
-    end
+    ops.each(&:step)
 
   end
 
   def nominal_cost
 
     begin
-      eval(operation_type.code("cost_model").content)
+      eval(operation_type.code('cost_model').content)
     rescue Exception => e
-      raise "Could not evaluate cost function definition: " + e.to_s
+      raise 'Could not evaluate cost function definition: ' + e.to_s
     end
 
-    temp = self.status
-    self.status = "done"
+    temp = status
+    self.status = 'done'
 
     begin
       c = cost(self)
     rescue Exception => e
       self.status = temp
-      raise "Could not evaluate cost function on the given operation: " + e.to_s
+      raise 'Could not evaluate cost function on the given operation: ' + e.to_s
     end
 
     self.status = temp
@@ -330,31 +320,31 @@ class Operation < ActiveRecord::Base
 
   end
 
-  def child_data child_name, child_role, data_name
+  def child_data(child_name, child_role, data_name)
     fv = get_input(child_name) if child_role == 'input'
     fv = get_output(child_name) if child_role == 'output'
     fv ? fv.child_data(data_name) : nil
   end
 
-  def input_data input_name, data_name
+  def input_data(input_name, data_name)
     child_data input_name, 'input', data_name
   end
 
-  def output_data input_name, data_name
+  def output_data(input_name, data_name)
     child_data input_name, 'output', data_name
   end
 
-  def set_child_data child_name, child_role, data_name, value
+  def set_child_data(child_name, child_role, data_name, value)
     fv = get_input(child_name) if child_role == 'input'
     fv = get_output(child_name) if child_role == 'output'
     fv ? fv.set_child_data(data_name, value) : nil
   end
 
-  def set_input_data input_name, data_name, value
+  def set_input_data(input_name, data_name, value)
     set_child_data input_name, 'input', data_name, value
   end
 
-  def set_output_data input_name, data_name, value
+  def set_output_data(input_name, data_name, value)
     set_child_data input_name, 'output', data_name, value
   end
 
@@ -363,11 +353,11 @@ class Operation < ActiveRecord::Base
     rval = true
 
     begin
-      eval(operation_type.code("precondition").content)
+      eval(operation_type.code('precondition').content)
       rval = precondition(self)
     rescue Exception => e
       Rails.logger.info "PRECONDITION FOR OPERATION #{id} crashed"
-      plan.associate "Precondition Evalution Error", e.message.to_s + ": " + e.backtrace[0].to_s.sub("(eval)", "line")
+      plan.associate 'Precondition Evalution Error', e.message.to_s + ': ' + e.backtrace[0].to_s.sub('(eval)', 'line')
       rval = false # default if there is no precondition or it crashes
     end
 
@@ -375,12 +365,12 @@ class Operation < ActiveRecord::Base
 
   end
 
-  def add_successor opts
+  def add_successor(opts)
 
     ot = OperationType.find_by_name(opts[:type])
 
     op = ot.operations.create(
-      status: "waiting",
+      status: 'waiting',
       user_id: user_id
     )
 
@@ -413,19 +403,18 @@ class Operation < ActiveRecord::Base
 
     inputs.each do |i|
 
-      if i.predecessors.count > 0
-        i.predecessors.each do |pred|
-          if pred.operation.on_the_fly
-            return pred.operation.leaf?
-          else
-            return false
-          end
+      next unless i.predecessors.count > 0
+      i.predecessors.each do |pred|
+        if pred.operation.on_the_fly
+          return pred.operation.leaf?
+        else
+          return false
         end
       end
 
     end
 
-    return true
+    true
 
   end
 

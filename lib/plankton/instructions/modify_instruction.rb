@@ -2,7 +2,7 @@ module Plankton
 
   class ModifyInstruction < Instruction
 
-    def initialize info, options = {}
+    def initialize(info, options = {})
       @info_expr = info
       @renderable = false
       super 'move', options
@@ -10,7 +10,7 @@ module Plankton
 
     # RAILS ##################################################################################
 
-    def bt_execute scope, params
+    def bt_execute(scope, params)
 
       @info = {}
 
@@ -20,9 +20,7 @@ module Plankton
         raise "Could not evaluate '#{@info_expr[:item]}' in modify block." + e.message
       end
 
-      if @info[:item].class != Hash || @info[:item][:id] == nil
-        raise "Item expression '#{@info[:item]}' is not an item hash."
-      end
+      raise "Item expression '#{@info[:item]}' is not an item hash." if @info[:item].class != Hash || @info[:item][:id].nil?
 
       if @info_expr[:location]
 
@@ -32,24 +30,20 @@ module Plankton
           raise "Location expression '#{@info_expr[:location]}' did not evaluate correctly."
         end
 
-        if @info[:location].class != String
-          raise "Location expression '#{@info_expr[:location]}' did not evaluate to a string."
-        end
+        raise "Location expression '#{@info_expr[:location]}' did not evaluate to a string." if @info[:location].class != String
 
       end
 
-      keys = [:inuse, :dinuse, :iinuse, :quantity, :dquantity, :iquantity]
+      keys = %i[inuse dinuse iinuse quantity dquantity iquantity]
 
       keys.each do |key|
 
-        if @info_expr[key]
+        next unless @info_expr[key]
 
-          begin
-            @info[key] = (scope.evaluate @info_expr[key]).to_i
-          rescue Exception => e
-            raise "Inuse expression '#{@info_expr[key]}' did not evaluate correctly."
-          end
-
+        begin
+          @info[key] = (scope.evaluate @info_expr[key]).to_i
+        rescue Exception => e
+          raise "Inuse expression '#{@info_expr[key]}' did not evaluate correctly."
         end
 
       end
@@ -62,13 +56,13 @@ module Plankton
 
       old = { location: item.location, inuse: item.inuse, quantity: item.quantity }
 
-      if @info[:location];  item.location  = @info[:location];  end
-      if @info[:inuse];     item.inuse     = @info[:inuse];     end
-      if @info[:dinuse];    item.inuse    -= @info[:dinuse];    end
-      if @info[:iinuse];    item.inuse    += @info[:iinuse];    end
-      if @info[:quantity];  item.quantity  = @info[:quantity];  end
-      if @info[:dquantity]; item.quantity -= @info[:dquantity]; end
-      if @info[:iquantity]; item.quantity += @info[:iquantity]; end
+      item.location  = @info[:location] if @info[:location]
+      item.inuse     = @info[:inuse] if @info[:inuse]
+      item.inuse    -= @info[:dinuse] if @info[:dinuse]
+      item.inuse    += @info[:iinuse] if @info[:iinuse]
+      item.quantity  = @info[:quantity] if @info[:quantity]
+      item.quantity -= @info[:dquantity] if @info[:dquantity]
+      item.quantity += @info[:iquantity] if @info[:iquantity]
 
       item.save
 

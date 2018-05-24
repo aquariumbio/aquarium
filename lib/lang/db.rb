@@ -2,7 +2,7 @@ module Lang
 
   class Scope
 
-    def complete x
+    def complete(x)
 
       temp = x.attributes.symbolize_keys
 
@@ -15,14 +15,12 @@ module Lang
           temp[:sample][:sample_type] = x.sample.sample_type.attributes.symbolize_keys
         end
 
-        if x.object_type
-          temp[:object_type] = x.object_type.attributes.symbolize_keys
-        end
+        temp[:object_type] = x.object_type.attributes.symbolize_keys if x.object_type
 
         begin
           temp[:data] = JSON.parse(temp[:data], symbolize_names: true)
-        rescue
-          temp[:data] = { error: "Could not parse data field" }
+        rescue StandardError
+          temp[:data] = { error: 'Could not parse data field' }
         end
 
       when Sample
@@ -41,7 +39,7 @@ module Lang
 
     end
 
-    def fix val
+    def fix(val)
 
       if val.class == String
         "'#{val}'"
@@ -51,7 +49,7 @@ module Lang
 
     end
 
-    def pluralize_table_names spec
+    def pluralize_table_names(spec)
 
       newspec = spec.clone
 
@@ -61,7 +59,7 @@ module Lang
                 task_prototype: :task_prototypes }
 
       spec.each do |k, v|
-        if reps.has_key? k
+        if reps.key? k
           newspec.delete(k)
           newspec[reps[k]] = v
         end
@@ -71,7 +69,7 @@ module Lang
 
     end
 
-    def find name, spec
+    def find(name, spec)
 
       #
       # Define available tables. Note, no queries should be made at this point
@@ -79,8 +77,8 @@ module Lang
       tables = {
         item: Item.includes(sample: [:sample_type]).includes(:object_type).where("location != 'deleted'"),
         sample: Sample.includes(:sample_type),
-        sample_type: SampleType.includes(),
-        object_type: ObjectType.includes(),
+        sample_type: SampleType.includes,
+        object_type: ObjectType.includes,
         task: Task.includes(:task_prototype)
       }
 

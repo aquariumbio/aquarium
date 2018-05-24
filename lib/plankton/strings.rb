@@ -14,7 +14,7 @@ module Plankton
 
     def string_expr
 
-      result = ""
+      result = ''
 
       result += @tok.eat_a_string.remove_quotes
 
@@ -23,7 +23,7 @@ module Plankton
         result += string_expr
       end
 
-      return result
+      result
 
     end # string_expr
 

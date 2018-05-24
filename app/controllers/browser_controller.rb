@@ -14,38 +14,34 @@ class BrowserController < ApplicationController
     sts = SampleType.includes(:samples).all
     result = {}
 
-    sts.each { |st|
-      result[st.name] = st.samples.collect { |s|
+    sts.each do |st|
+      result[st.name] = st.samples.collect do |s|
         "#{s.id}: #{s.name}"
-      }.reverse
-    }
+      end.reverse
+    end
 
     render json: result
 
   end
 
   def recent_samples
-    if params[:id]
-      user = User.find_by_id(params[:id])
-    end
+    user = User.find_by_id(params[:id]) if params[:id]
     if !user
       render json: Sample
         .last(25)
         .reverse
-        .to_json(only: [:name, :id, :user_id, :data, :sample_type_id])
+        .to_json(only: %i[name id user_id data sample_type_id])
     else
       render json: Sample
         .where(user_id: user.id)
         .last(25)
         .reverse
-        .to_json(only: [:name, :id, :user_id, :data, :sample_type_id])
+        .to_json(only: %i[name id user_id data sample_type_id])
     end
   end
 
   def projects
-    if params[:uid]
-      user = User.find_by_id(params[:uid])
-    end
+    user = User.find_by_id(params[:uid]) if params[:uid]
     if !user
       render json: {
         projects: Sample.uniq.pluck(:project)
@@ -67,7 +63,7 @@ class BrowserController < ApplicationController
     render json: Sample
       .where(project: params[:project], sample_type_id: params[:sample_type_id].to_i)
       .reverse
-      .to_json(only: [:name, :id, :user_id, :data])
+      .to_json(only: %i[name id user_id data])
   end
 
   def gory_details_of_samples_for_tree
@@ -76,22 +72,22 @@ class BrowserController < ApplicationController
       .where(project: params[:project], sample_type_id: params[:sample_type_id].to_i)
       .reverse
       .to_json(include: {
-                 field_values: { include: :child_sample },
-               }, except: [:field1, :field2, :field3, :field4, :field5, :field6, :field7, :field8])
+                 field_values: { include: :child_sample }
+               }, except: %i[field1 field2 field3 field4 field5 field6 field7 field8])
   end
 
   def subsamples
     render json: Sample.find(params[:id]).properties
   end
 
-  def sample_name_from_identifier str
-    parts = str.split(": ")
-    if parts.length == 0
-      ""
+  def sample_name_from_identifier(str)
+    parts = str.split(': ')
+    if parts.empty?
+      ''
     elsif parts.length == 1
       parts[0]
     else
-      parts[1..-1].join(": ")
+      parts[1..-1].join(': ')
     end
   end
 
@@ -107,15 +103,15 @@ class BrowserController < ApplicationController
           if sample.errors.empty?
             @samples << sample
           else
-            @errors << sample.errors.full_messages.join(", ")
+            @errors << sample.errors.full_messages.join(', ')
             raise ActiveRecord::Rollback
           end
         end
       end
     rescue Exception => e
-      render json: { errors: [e.to_s, e.backtrace[0..5].join(", ")] }
+      render json: { errors: [e.to_s, e.backtrace[0..5].join(', ')] }
     else
-      if @errors.length > 0
+      if !@errors.empty?
         render json: { errors: @errors }
       else
         render json: { samples: @samples }
@@ -131,7 +127,7 @@ class BrowserController < ApplicationController
     rescue Exception => e
       data = {}
     end
-    data[:note] = (params[:note] == "_EMPTY_" ? "" : params[:note])
+    data[:note] = (params[:note] == '_EMPTY_' ? '' : params[:note])
     s.data = data.to_json
     s.save
     render json: s
@@ -143,20 +139,20 @@ class BrowserController < ApplicationController
     item_list = Item.includes(:locator).where(sample_id: params[:id])
     containers = ObjectType.where(sample_type_id: sample.sample_type_id)
     render json: { items: item_list.as_json(include: [:locator]),
-                   containers: containers.as_json(only: [:name, :id]) }
+                   containers: containers.as_json(only: %i[name id]) }
   end
 
   def collections
     s = Sample.find(params[:sample_id])
     collections = Collection.containing(s)
-    containers = collections.collect { |c| c.object_type }.uniq
+    containers = collections.collect(&:object_type).uniq
     render json: { collections: collections.as_json(include: :object_type),
-                   containers: containers.as_json(only: [:name, :id]) }
+                   containers: containers.as_json(only: %i[name id]) }
   end
 
   def search
 
-    samples = Sample.where("name like ? or id = ?", "%#{params[:query]}%", params[:query].to_i)
+    samples = Sample.where('name like ? or id = ?', "%#{params[:query]}%", params[:query].to_i)
 
     if params[:user_filter]
       user = User.find_by_login(params[:user])
@@ -172,7 +168,7 @@ class BrowserController < ApplicationController
     sample_list =  samples.offset(params[:page] * 30)
                           .last(30)
                           .reverse
-                          .as_json(only: [:name, :id, :user_id, :data, :sample_type_id])
+                          .as_json(only: %i[name id user_id data sample_type_id])
 
     render json: { samples: sample_list, count: samples.count }
 
@@ -180,14 +176,14 @@ class BrowserController < ApplicationController
 
   def samples
 
-    if params[:user_id]
-      samples = Sample.where(sample_type_id: params[:id], user_id: params[:user_id])
-    else
-      samples = Sample.where(sample_type_id: params[:id])
-    end
+    samples = if params[:user_id]
+                Sample.where(sample_type_id: params[:id], user_id: params[:user_id])
+              else
+                Sample.where(sample_type_id: params[:id])
+              end
 
     render json: samples.offset(params[:offset]).last(30).reverse
-                        .to_json(only: [:name, :id, :user_id, :data, :created_at])
+                        .to_json(only: %i[name id user_id data created_at])
 
   end
 
