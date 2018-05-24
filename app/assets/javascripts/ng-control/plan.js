@@ -499,14 +499,13 @@
     };
 
     $scope.move_to_folder = function(folder) {
-      console.log("folder", folder)
       var plans = aq.where($scope.plans, plan => plan.selected);
       AQ.Plan.move(plans, folder).then(() => {
         aq.each(plans, plan => {
           plan.folder = folder;
           plan.selected = false;
         });
-        if ( folder ) { 
+        if ( folder && $scope.folders.indexOf(folder) < 0 ) { 
           $scope.folders.push(folder);
           $scope.folders.sort();
         } 
