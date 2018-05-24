@@ -12,13 +12,14 @@
     <span class="md-title">Current Uploads</span>
   </div>   
 
-  <ul ng-if="job.uploads.length > 0"
+  <ul ng-if="job.uploads.length > 0 || uploading"
       class="upload-list">
     <li ng-repeat="upload in job.uploads">
       <upload-viewer record="upload"></upload-viewer>
       <span class="pull-right">{{upload.upload_file_size|bytes}}</span>
     </li>
-  </ul>   
+    <li ng-if="uploading">uploading...</li>
+  </ul>
 
  <div class="upload-button-container">     
 
@@ -26,7 +27,7 @@
       <input id="upload-__generic__" 
              type="file"
              name="files[]"
-             custom-on-change="complete_upload"
+             custom-on-change="complete_upload_method('_no_variable_', 0)"
              multiple></input>
       <input type="submit">
       <input id="authenticity_token" 
