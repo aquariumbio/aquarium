@@ -2,7 +2,7 @@ class Planner
 
   attr_accessor :errors
 
-  def initialize plan_id
+  def initialize(plan_id)
     @plan = Plan.includes(operations: :operation_type).find_by_id(plan_id)
     @errors = []
     @errors << "Could not find plan #{plan_id}" unless @plan
@@ -17,39 +17,36 @@ class Planner
       # set all leaves to pending
       @plan.operations.each do |op|
 
-        if op.status == 'planning'
+        next unless op.status == 'planning'
 
-          if leaf? op
+        op.status = if leaf? op
 
-            if op.operation_type.on_the_fly?
-              op.status = "primed"
-            else
-              if op.precondition_value
-                op.status = "pending"
-              else
-                op.status = "delayed"              
-              end
-            end
+                      if op.operation_type.on_the_fly?
+                        'primed'
+                      else
+                        op.status = if op.precondition_value
+                                      'pending'
+                                    else
+                                      'delayed'
+                                    end
+                      end
 
-          else
+                    else
 
-            # if the op has an on the fly pred
-            if ready? op 
-              if op.precondition_value
-                op.status = "pending"
-              else
-                op.status = "delayed"              
-              end
-            else
-              op.status = "waiting"
-            end
+                      # if the op has an on the fly pred
+                      if ready? op
+                        if op.precondition_value
+                          'pending'
+                        else
+                          'delayed'
+                        end
+                      else
+                        'waiting'
+                      end
 
+                    end
 
-          end
-
-          op.save
-
-        end
+        op.save
 
       end
 
@@ -75,23 +72,21 @@ class Planner
 
   end
 
-  def leaf? op
+  def leaf?(op)
 
-    ! @non_leaves.member? op.id
+    !@non_leaves.member? op.id
 
   end
 
-  def preds fv
+  def preds(fv)
 
-    @plan.wires.select { |w|
+    @plan.wires.select do |w|
       w.to_id == fv.id
-    }.collect { |fv| 
-      fv.from_op
-    }
+    end.collect(&:from_op)
 
   end
 
-  def ready? op
+  def ready?(op)
 
     rval = true
 

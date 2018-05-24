@@ -30,7 +30,7 @@ module Oyster
         @tok.eat_a '=>'
         to = @metacol.scope.evaluate expr
 
-        @metacol.wire from, "*", to, "*"
+        @metacol.wire from, '*', to, '*'
 
       end
 

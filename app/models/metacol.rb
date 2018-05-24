@@ -7,15 +7,15 @@ class Metacol < ActiveRecord::Base
   belongs_to :user
 
   def num_pending_jobs
-    (self.jobs.select { |j| j.pc == Job.NOT_STARTED || j.pc >= 0 }).length
+    (jobs.select { |j| j.pc == Job.NOT_STARTED || j.pc >= 0 }).length
   end
 
   def arguments
-  	begin
-      (JSON.parse self.state, symbolize_names: true)[:stack][0]
-    rescue
-      { error: "Could not parse arguments" }
-    end
+
+    (JSON.parse state, symbolize_names: true)[:stack][0]
+  rescue StandardError
+    { error: 'Could not parse arguments' }
+
   end
 
 end

@@ -1,11 +1,11 @@
 module A
 
-  def A.f x
+  def self.f(x)
     x + 1
   end
 
   class B
-    def initialize x
+    def initialize(x)
       puts A.f x
     end
   end

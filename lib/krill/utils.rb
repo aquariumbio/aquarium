@@ -2,18 +2,18 @@ module Krill
 
   class ProtocolHandler
 
-    def needs path
+    def needs(path)
 
       p = "#{path}.rb"
-      s = Repo::version p
+      s = Repo.version p
 
-      content = Repo::contents p, s
+      content = Repo.contents p, s
 
       eval(content)
 
     end
 
-    def with mod
+    def with(mod)
 
       class_eval do
         include mod

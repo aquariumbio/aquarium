@@ -8,25 +8,25 @@ class PlansController < ApplicationController
     respond_to do |format|
       format.json { render json: Plan.list(current_user).reverse }
       format.html { render layout: 'aq2' }
-    end  
+    end
   end
 
   def create
 
     puts "CREATING PLAN WITH USER_ID = #{params[:user_id]}"
 
-    if current_user.is_admin && params[:user_id] && params[:user_id] != current_user.id
-      Marshall.user = User.find(params[:user_id])
-    else
-      Marshall.user = current_user
-    end
+    Marshall.user = if current_user.is_admin && params[:user_id] && params[:user_id] != current_user.id
+                      User.find(params[:user_id])
+                    else
+                      current_user
+                    end
 
-    ActiveRecord::Base.transaction do      
+    ActiveRecord::Base.transaction do
       begin
         @plan = Marshall.plan params
       rescue Exception => e
         @plan = Plan.new
-        @plan.errors.add :error, "Mashall failed"
+        @plan.errors.add :error, 'Mashall failed'
         @plan.errors.add :error, e.to_s + e.backtrace[0].to_s
       end
       raise ActiveRecord::Rollback unless @plan.errors.empty?
@@ -43,13 +43,13 @@ class PlansController < ApplicationController
 
   def update
 
-    if current_user.is_admin && params[:user_id] && params[:user_id] != current_user.id
-      Marshall.user = User.find(params[:user_id])
-    else
-      Marshall.user = current_user
-    end
+    Marshall.user = if current_user.is_admin && params[:user_id] && params[:user_id] != current_user.id
+                      User.find(params[:user_id])
+                    else
+                      current_user
+                    end
 
-    ActiveRecord::Base.transaction do 
+    ActiveRecord::Base.transaction do
       begin
         @plan = Marshall.plan_update params
       rescue Exception => e
@@ -68,19 +68,19 @@ class PlansController < ApplicationController
   end
 
   def show
-    respond_to do |format|      
-      format.html { 
+    respond_to do |format|
+      format.html do
         redirect_to plans_url(params)
-      }
-      format.json { 
+      end
+      format.json do
         p = Plan.find_by_id(params[:id])
-        if p 
+        if p
           render json: Serialize.serialize(p)
         else
           render json: { errors: "Could not find plan with id #{params[:id]}" }, status: 404
         end
-      }
-    end           
+      end
+    end
   end
 
   def operation_types
@@ -92,10 +92,10 @@ class PlansController < ApplicationController
   def manager
     respond_to do |format|
       format.html { render layout: 'browser' }
-    end    
+    end
   end
 
-  def sid str
+  def sid(str)
     if str
       str.split(':')[0]
     else
@@ -108,39 +108,38 @@ class PlansController < ApplicationController
     plan = Plan.find(params[:id])
     plan.budget_id = params[:budget_id]
     plan.save
-    
+
     planner = Planner.new params[:id]
-    
+
     if planner.start
-      render json: { result: "ok" }
+      render json: { result: 'ok' }
     else
       render json: planner.errors, status: :unprocessable_entity
     end
 
   end
 
-  def value data
-     if data.class == Array
+  def value(data)
+    if data.class == Array
       data.collect { |str| Sample.find(sid(str)) }
     else
       Sample.find_by_id(sid(data))
     end
   end
 
-  def routing_value route
+  def routing_value(route)
 
     if route.class == String
       Sample.find_by_id(sid(route))
     else
-      route.keys.collect { |k| Sample.find_by_id(sid(route[k]))}      
+      route.keys.collect { |k| Sample.find_by_id(sid(route[k])) }
     end
 
   end
 
-  def route_name r
-    r ? r : "null"
+  def route_name(r)
+    r ? r : 'null'
   end
-
 
   def destroy
     plan = Plan.find(params[:id])
@@ -165,9 +164,9 @@ class PlansController < ApplicationController
 
   def cancel
 
-    Plan.find(params[:id]).error(params[:msg] + " (user: #{current_user.login})",:canceled)
+    Plan.find(params[:id]).error(params[:msg] + " (user: #{current_user.login})", :canceled)
 
-    render json: { result: "ok" }
+    render json: { result: 'ok' }
 
   end
 
@@ -186,15 +185,15 @@ class PlansController < ApplicationController
     pending = plan.operations.select { |o| o.status == 'pending' && o.precondition_value }
 
     # group them by operation type
-    type_ids = pending.collect { |op| op.operation_type_id }.uniq
+    type_ids = pending.collect(&:operation_type_id).uniq
 
     # batch each group and run a job
     type_ids.each do |ot_id|
 
       ops = pending.select { |op| op.operation_type_id == ot_id }
 
-      job,newops = OperationType.find(ot_id)
-        .schedule(ops, current_user, Group.find_by_name('technicians'))
+      job, newops = OperationType.find(ot_id)
+                                 .schedule(ops, current_user, Group.find_by_name('technicians'))
 
       error = nil
 
@@ -202,7 +201,7 @@ class PlansController < ApplicationController
       job.save
 
       begin
-        manager = Krill::Manager.new job.id, true, "master", "master"
+        manager = Krill::Manager.new job.id, true, 'master', 'master'
       rescue Exception => e
         error = e.to_s
       end
@@ -218,26 +217,20 @@ class PlansController < ApplicationController
       else
 
         begin
-
           ops.extend(Krill::OperationList)
 
-          ops.each do |op|
-            op.run
-          end
+          ops.each(&:run)
 
           manager.run
-
         rescue Exception => e
-
-          errors << "Bug encountered while testing: " + e.message + " at " + e.backtrace.join("\n") + ". "
-
+          errors << 'Bug encountered while testing: ' + e.message + ' at ' + e.backtrace.join("\n") + '. '
         end # begin
 
       end # if
 
     end # type_ids.each
 
-    Operation.step(plan.operations.select { |op| op.status == "waiting" || op.status == "deferred" })
+    Operation.step(plan.operations.select { |op| op.status == 'waiting' || op.status == 'deferred' })
 
     render json: { errors: errors }
 
@@ -250,16 +243,16 @@ class PlansController < ApplicationController
       plan.save
     end
 
-    render json: { result: "okay" }
+    render json: { result: 'okay' }
 
   end
 
   def folders
-    if current_user && current_user.is_admin && params[:user_id]
-      uid = params[:user_id]
-    else
-      uid = current_user.id
-    end
+    uid = if current_user && current_user.is_admin && params[:user_id]
+            params[:user_id]
+          else
+            current_user.id
+          end
     render json: Plan.where(user_id: uid).pluck(:folder).uniq
   end
 

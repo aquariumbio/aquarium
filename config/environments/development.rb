@@ -33,7 +33,7 @@ Bioturk::Application.configure do
 
   # Assets
   config.assets.compress = false
-#  config.serve_static_assets = false
+  #  config.serve_static_assets = false
   config.assets.debug = false
 
   # config.time_zone = "Pacific Time (US & Canada)"
@@ -54,12 +54,12 @@ Bioturk::Application.configure do
   # AWS Simple Email Service Config
 
   AWS.config(
-    :region => ENV.fetch('AWS_REGION'), 
-    :simple_email_service_endpoint => "email.#{ENV.fetch('AWS_REGION')}.amazonaws.com",
-    :simple_email_service_region => ENV.fetch('AWS_REGION'),
-    :ses => { :region => ENV.fetch('AWS_REGION') },
-    :access_key_id => ENV.fetch('AWS_ACCESS_KEY_ID'),
-    :secret_access_key => ENV.fetch('AWS_SECRET_ACCESS_KEY')
+    region: ENV.fetch('AWS_REGION'),
+    simple_email_service_endpoint: "email.#{ENV.fetch('AWS_REGION')}.amazonaws.com",
+    simple_email_service_region: ENV.fetch('AWS_REGION'),
+    ses: { region: ENV.fetch('AWS_REGION') },
+    access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
+    secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY')
   )
 
 end

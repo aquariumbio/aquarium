@@ -1,8 +1,8 @@
 module Lang
 
-  class Scope 
+  class Scope
 
-    def length a
+    def length(a)
 
       if a.class == Array
         a.length
@@ -12,7 +12,7 @@ module Lang
 
     end
 
-    def append a, x
+    def append(a, x)
 
       if a.class == Array
         b = a.dup
@@ -24,7 +24,7 @@ module Lang
 
     end
 
-    def concat a, b
+    def concat(a, b)
 
       if a.class == Array && b.class == Array
         x = a.dup
@@ -37,7 +37,7 @@ module Lang
 
     end
 
-    def unique a # returns an array that represents the same set, but with no repeats
+    def unique(a) # returns an array that represents the same set, but with no repeats
       if a.class == Array
         a.uniq
       else
@@ -45,35 +45,33 @@ module Lang
       end
     end
 
-    def transpose m # transposes the array of array M
+    def transpose(m) # transposes the array of array M
 
       begin
         mt = m.transpose
       rescue Exception => e
-        raise "Could not transpose matrix: " + e.to_s
+        raise 'Could not transpose matrix: ' + e.to_s
       end
 
-      return mt
+      mt
 
     end
 
-    def take m, start, num # take num entries from m, starting at entry start
+    def take(m, start, num) # take num entries from m, starting at entry start
 
-      if m.class == Array && start.class == Fixnum && num.class == Fixnum
-        m[start,num]
+      if m.class == Array && start.class == Integer && num.class == Integer
+        m[start, num]
       else
-        raise "Called take with the wrong kind of arguments."
+        raise 'Called take with the wrong kind of arguments.'
       end
 
     end
 
-    def range a, b, delta
-      if a.class != Fixnum || a.class != Fixnum || a.class != Fixnum
-        raise "Non-integers in call to range."
-      end
+    def range(a, b, delta)
+      raise 'Non-integers in call to range.' if a.class != Integer || a.class != Integer || a.class != Integer
       i = a
       r = []
-      while i<=b
+      while i <= b
         r.push(i)
         i += delta
       end

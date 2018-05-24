@@ -1,6 +1,6 @@
 Bioturk::Application.routes.draw do
 
-  resources :timings, only: [ :update, :create ]
+  resources :timings, only: %i[update create]
 
   get '/json/current',             to: 'json#current'
   post '/json/items',              to: 'json#items'
@@ -33,7 +33,7 @@ Bioturk::Application.routes.draw do
   post '/operations/unbatch',                    to: 'operations#unbatch'
   get '/operations/jobs',                        to: 'operations#jobs'
   get '/operations/:id/status/:status',          to: 'operations#set_status'
-  get '/operations/:id/retry',                   to: 'operations#retry'  
+  get '/operations/:id/retry',                   to: 'operations#retry'
   resources :operations
 
   post '/operation_types/import',                    to: 'operation_types#import'
@@ -91,8 +91,8 @@ Bioturk::Application.routes.draw do
   get '/budgets/:id/spent',                      to: 'launcher#spent'
   resources :budgets
 
-  post '/invoices/note',                         to: "invoices#note"
-  post '/invoices/credit',                       to: "invoices#credit"
+  post '/invoices/note',                         to: 'invoices#note'
+  post '/invoices/credit',                       to: 'invoices#credit'
   get '/invoices/year/:year',                    to: 'invoices#index'
   post '/invoices/change_budget',                to: 'invoices#change_budget'
   get '/invoices/change_status/:id/:status',     to: 'invoices#change_status'
@@ -114,39 +114,39 @@ Bioturk::Application.routes.draw do
   get 'sample_list/:id',                         to: 'object_types#samples'
   get 'sample_list',                             to: 'object_types#samples'
 
-  resources :posts, only: [ :index, :create ]
+  resources :posts, only: %i[index create]
   resources :wizards
 
-  match "api", to: "api#main"
+  match 'api', to: 'api#main'
 
-  get "plugin/tester"
-  get "plugin/show"
-  get "plugin/ajax"
+  get 'plugin/tester'
+  get 'plugin/show'
+  get 'plugin/ajax'
 
-  get "finder/projects"
-  get "finder/types"
-  get "finder/samples"
-  get "finder/containers"
-  get "finder/items"
-  get "finder/sample_info"
-  get "finder/type"
+  get 'finder/projects'
+  get 'finder/types'
+  get 'finder/samples'
+  get 'finder/containers'
+  get 'finder/items'
+  get 'finder/sample_info'
+  get 'finder/type'
 
-  match "rich_id", to: "tasks#rich_id"
-  match "item_list", to: "items#item_list"
-  match "upload", to: "jobs#upload"
+  match 'rich_id', to: 'tasks#rich_id'
+  match 'item_list', to: 'items#item_list'
+  match 'upload', to: 'jobs#upload'
 
-  match "tasks/upload", to: "tasks#upload"
-  match "tasks/list/:offset", to: "tasks#list"
+  match 'tasks/upload', to: 'tasks#upload'
+  match 'tasks/list/:offset', to: 'tasks#list'
 
   resources :tasks
   resources :task_prototypes
 
-  match "notifications", to: "tasks#notifications"
-  match "notification_list", to: "tasks#notification_list"
-  match "read", to: "tasks#read"
+  match 'notifications', to: 'tasks#notifications'
+  match 'notification_list', to: 'tasks#notification_list'
+  match 'read', to: 'tasks#read'
 
-  get "metacols/draw"
-  match 'viewer',        to: 'metacols#viewer'
+  get 'metacols/draw'
+  match 'viewer', to: 'metacols#viewer'
 
   resources :metacols do
     get 'arguments', on: :new
@@ -155,7 +155,7 @@ Bioturk::Application.routes.draw do
     get 'stop'
   end
 
-  get "/groups/names"
+  get '/groups/names'
 
   resources :groups
 
@@ -167,78 +167,77 @@ Bioturk::Application.routes.draw do
     end
   end
 
-  resources :cart_items, only: [ :index, :new, :destroy ]
+  resources :cart_items, only: %i[index new destroy]
   resources :samples
   resources :sample_types
 
   match '/spreadsheet', to: 'samples#spreadsheet'
   match '/process_spreadsheet', to: 'samples#process_spreadsheet'
 
-  match "interpreter/open_local_file", to: 'interpreter#open_local_file', via: [:post]
+  match 'interpreter/open_local_file', to: 'interpreter#open_local_file', via: [:post]
 
-  get "interpreter/arguments"
-  get "interpreter/narguments"
-  get "interpreter/submit"
-  get "interpreter/current"
-  get "interpreter/advance"
-  get "interpreter/abort"
-  get "interpreter/cancel"
-  get "interpreter/error"
-  get "interpreter/release"
-  get "interpreter/edit"
-  get "interpreter/resubmit"
+  get 'interpreter/arguments'
+  get 'interpreter/narguments'
+  get 'interpreter/submit'
+  get 'interpreter/current'
+  get 'interpreter/advance'
+  get 'interpreter/abort'
+  get 'interpreter/cancel'
+  get 'interpreter/error'
+  get 'interpreter/release'
+  get 'interpreter/edit'
+  get 'interpreter/resubmit'
 
-  get "technician/:job_id", to: "technician#index"
+  get 'technician/:job_id', to: 'technician#index'
 
-  get "krill/debug/:id", to: "krill#debug"
-  get "krill/arguments"
-  get "krill/submit"
-  get "krill/start"
-  get "krill/continue"
-  get "krill/log"
-  get "krill/ui"
-  get "krill/state"
-  post "krill/next"
-  get "krill/error"
-  get "krill/inventory"
-  get "krill/abort"
-  get "krill/jobs"
-  post "krill/upload"               
-  get "krill/uploads"
-  get "krill/tasks"
-  post "krill/attach"
+  get 'krill/debug/:id', to: 'krill#debug'
+  get 'krill/arguments'
+  get 'krill/submit'
+  get 'krill/start'
+  get 'krill/continue'
+  get 'krill/log'
+  get 'krill/ui'
+  get 'krill/state'
+  post 'krill/next'
+  get 'krill/error'
+  get 'krill/inventory'
+  get 'krill/abort'
+  get 'krill/jobs'
+  post 'krill/upload'
+  get 'krill/uploads'
+  get 'krill/tasks'
+  post 'krill/attach'
 
+  get 'stats/jobs'
+  get 'stats/users'
+  get 'stats/user_activity'
+  get 'stats/protocols'
+  get 'stats/outcomes'
+  get 'stats/samples'
+  get 'stats/objects'
+  get 'stats/processes'
+  get 'stats/empty'
+  get 'stats/timing'
+  get 'stats/user_items'
+  get 'stats/protocol_version_info'
+  get 'jobs/index'
+  get 'jobs/summary'
+  match 'joblist', to: 'jobs#joblist'
 
-  get "stats/jobs"
-  get "stats/users"
-  get "stats/user_activity"
-  get "stats/protocols"
-  get "stats/outcomes"
-  get "stats/samples"
-  get "stats/objects"
-  get "stats/processes"
-  get "stats/empty"
-  get "stats/timing"
-  get "stats/user_items"
-  get "stats/protocol_version_info"
-  get "jobs/index"
-  get "jobs/summary"
-  match "joblist", to: "jobs#joblist"
+  get 'protocol_tree/file'
+  get 'protocol_tree/recent'
 
-  get "protocol_tree/file"
-  get "protocol_tree/recent"
+  get 'repo/list'
+  get 'repo/get'
+  get 'repo/pull'
 
-  get "repo/list"
-  get "repo/get"
-  get "repo/pull"
-
-  get "/items/store/:id",      to: "items#store"
-  get "/items/make/:sid/:oid", to: "items#make"
-  get "/items/move/:id",       to: "items#move"
-  get "/items/history/:id",    to: "items#history"
+  get '/items/store/:id',      to: 'items#store'
+  get '/items/make/:sid/:oid', to: 'items#make'
+  get '/items/move/:id',       to: 'items#move'
+  get '/items/history/:id',    to: 'items#history'
   resources :items
 
-  match "project", to: 'samples#project'
+  match 'project', to: 'samples#project'
 
   resources :object_types do
     resources :items do
@@ -262,7 +261,7 @@ Bioturk::Application.routes.draw do
   match '/analytics',  to: 'static_pages#analytics'
   match '/jobchart',   to: 'static_pages#jobchart'
   match '/location',   to: 'static_pages#location'
-  get "/dismiss",      to: 'static_pages#dismiss'
+  get '/dismiss',      to: 'static_pages#dismiss'
 
   match '/yeast_qc', to: 'static_pages#yeast_qc'
 
@@ -296,18 +295,18 @@ Bioturk::Application.routes.draw do
     get 'change_password'
   end
 
-  resources :sessions, only: [:new, :create, :destroy]
-  resources :jobs, only: [:index, :destroy, :show]
-  resources :logs, only: [:index, :show]
+  resources :sessions, only: %i[new create destroy]
+  resources :jobs, only: %i[index destroy show]
+  resources :logs, only: %i[index show]
 
   match '/logout', to: 'sessions#destroy'
   match '/item', to: 'items#update'
 
-  get "oyster/ping"
-  get "oyster/submit"
-  get "oyster/status"
-  get "oyster/log"
-  get "oyster/info"
-  get "oyster/items"
+  get 'oyster/ping'
+  get 'oyster/submit'
+  get 'oyster/status'
+  get 'oyster/log'
+  get 'oyster/info'
+  get 'oyster/items'
 
 end
