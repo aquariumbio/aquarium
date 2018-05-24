@@ -1,15 +1,17 @@
-Plans are represented differently in the front end and the back end. Mainly, 
-the front end adds fields that are useful for manipulating the user interface, 
+# Plan Representation
+
+Plans are represented differently in the front end and the back end.
+Mainly,
+the front end adds fields that are useful for manipulating the user interface,
 while the back end only represents those fields that are stored in the
-database. Thus, when sending plans back and forth between the two ends, 
+database.
+Thus, when sending plans back and forth between the two ends,
 the json representing the plans needs to be marshalled and serialized on
 each side.
 
-Plan
-===
+## Plan
 
 ```json
-
   {
 
     /* Common fields */
@@ -31,14 +33,11 @@ Plan
     rid: INTEGER // Record ID, used by front end to keep track of objects
 
   }
-
 ```
 
-Operation
-===
+## Operation
 
 ```json
-
   {
 
     /* Common fields */
@@ -66,53 +65,47 @@ Operation
 
     form: {                           // Describes which aft is being used for which i/o
       input: {                        // and needs to be consistent with the field value afts
-        io_name: {                    
+        io_name: {
           aft_id: INTEGER
-          aft: ALLOWABLE_FIELD_TYPE 
+          aft: ALLOWABLE_FIELD_TYPE
         },
         ...
       },
       output: {
-        io_name: { 
+        io_name: {
           aft_id: INTEGER
-          aft: ALLOWABLE_FIELD_TYPE 
+          aft: ALLOWABLE_FIELD_TYPE
         },
         ...
       }
     }
 
   }
-
 ```
 
-Wire
-===
+## Wire
 
 ```json
-
   {
 
     /* Common Fields */
-    id: INTEGER, 
+    id: INTEGER,
     to_id: REFERENCE TO FIELD VALUE,
     from_id: REFERENCE TO FIELD VALUE,
 
     /* Front end fields */
-    rid: INTEGER, // Record ID    
+    rid: INTEGER, // Record ID
     to: FIELD VALUE,
     from: FIELD_VALUE,
     to_op: OPERATION,
     from_op: OPERATION
 
-  } 
-
+  }
 ```
 
-OperationType
-===
+## OperationType
 
 ```json
-
   {
 
     /* Common Fields */
@@ -129,14 +122,11 @@ OperationType
     rid: INTEGER ,// Record ID
 
   }
-
 ```
 
-FieldType
-===
+## FieldType
 
-```json 
-
+```json
   {
 
     /* Common Fields */
@@ -162,14 +152,11 @@ FieldType
     rid: INTEGER // Record ID
 
   }
-
 ```
 
-AllowableFieldType
-===
+## AllowableFieldType
 
-```json 
-
+```json
   {
 
     /* Common Fields */
@@ -185,14 +172,11 @@ AllowableFieldType
     rid: INTEGER
 
   }
-
 ```
 
-FieldValue
-===
+## FieldValue
 
-```json 
-
+```json
   {
 
     /* Common Fields */
@@ -200,10 +184,10 @@ FieldValue
     child_item_id: REFERENCE,
     child_sample_id: REFERENCE,
     value: STRING, // Numbers are represented as strings
-    role: STRING, 
+    role: STRING,
     field_type_id: REFERENCES,
-    row: INTEGER, 
-    column: INTEGER, 
+    row: INTEGER,
+    column: INTEGER,
     allowable_field_type_id: REFERENCE,
     parent_class: STRING,
     parent_id: REFERENCE,
@@ -218,5 +202,4 @@ FieldValue
     rid: INTEGER
 
   }
-
 ```

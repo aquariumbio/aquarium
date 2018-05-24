@@ -47,7 +47,7 @@ cd ..  # aquarium/config
 cp database_template.yml database.yml
 ```
 
-This is sufficient if you are running Aquarium with the default database, but,otherwise, you need to set up a MySQL server and associate a user name and password.
+This is sufficient if you are running Aquarium with the default database, but, otherwise, you need to set up a MySQL server and associate a user name and password.
 Note that you can set different database servers for different modes.
 (The `test` mode for Aquarium development testing should use the `sqlite3` server.)
 
@@ -84,7 +84,8 @@ Run
 RAILS_ENV=development rails s
 ```
 
-to start aquarium. Then go do `http://localhost:3000/` and see if it works!
+to start aquarium.
+Then go do `http://localhost:3000/` and see if it works!
 
 This procedure starts a *development* mode version using the local SQL database in the db directory.
 This could be enough for some labs.
