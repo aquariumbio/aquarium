@@ -29,7 +29,7 @@ class Planner
                                     else
                                       'delayed'
                                     end
-                                  end
+                      end
 
                     else
 
@@ -39,10 +39,10 @@ class Planner
                           'pending'
                         else
                           'delayed'
-                                    end
+                        end
                       else
                         'waiting'
-                                  end
+                      end
 
                     end
 

@@ -237,7 +237,7 @@ class LauncherController < ApplicationController
 
                 []
 
-                      end
+              end
 
             else
 

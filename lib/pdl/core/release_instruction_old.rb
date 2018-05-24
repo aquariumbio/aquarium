@@ -132,7 +132,7 @@ class ReleaseInstruction < Instruction
                  'return'
                else
                  'dispose'
-                        end
+               end
              else
                release_method
              end
