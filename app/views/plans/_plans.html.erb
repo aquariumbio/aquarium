@@ -6,12 +6,10 @@
   <div class="plan-list-element no-highlight"
        layout="row"
        layout-align="space-between center"
-       ng-click="p.selected = !p.selected"
-       ng-dblclick="load(p)">
+       ng-click="load(p)">
     <div>
       <b>{{p.id}}</b>: {{p.name ? p.name : "[Untitled]"}}
       <span ng-if="state.deleting_plan.id == p.id" style="color: orange"> ... deleting </span>
-      <md-tooltip md-direction="right" md-delay="2500">Click to select. Double click to open.</md-tooltip>
     </div>
     <div>
       <span ng-if="p.status == 'planning'" class="pull-right">
