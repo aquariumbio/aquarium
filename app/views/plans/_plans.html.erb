@@ -5,14 +5,13 @@
   <span ng-if="p.status != 'planning'">&nbsp;</span>
   <div class="plan-list-element no-highlight"
        layout="row"
-       layout-align="space-between center"
-       ng-click="load(p)">
-    <div>
+       layout-align="space-between center">
+    <div class="plan-list-name no-highlight" ng-click="load(p)">
       <b>{{p.id}}</b>: {{p.name ? p.name : "[Untitled]"}}
       <span ng-if="state.deleting_plan.id == p.id" style="color: orange"> ... deleting </span>
     </div>
     <div>
-      <span ng-if="p.status == 'planning'" class="pull-right">
+      <span ng-if="p.status == 'planning'" class="pull-right no-highlight">
         <a href="#" ng-click="delete_plan(p)">&times;</a>
       </span>
     </div>

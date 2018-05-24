@@ -401,9 +401,12 @@
     padding: 2px;
   }
 
+  .plan-list-name {
+    cursor: pointer;
+  }
+
   .plan-list-element {
     margin-right: 5px;
-    cursor: pointer; 
     width: 100%;
     -webkit-user-select: none; /* Safari */        
     -moz-user-select: none; /* Firefox */

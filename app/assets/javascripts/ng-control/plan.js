@@ -306,7 +306,10 @@
           $scope.plan = AQ.Plan.new_plan("Untitled Plan");
           $scope.select(null);
           $scope.state.deleting_plan = p;
-          p.destroy().then(() =>  $scope.refresh_plan_list());
+          p.destroy().then(() =>  {
+            // $scope.state.deleting_plan = null;
+            $scope.refresh_plan_list();
+          });
 
         }, () => null );
 
