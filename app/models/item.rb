@@ -63,18 +63,18 @@ class Item < ActiveRecord::Base
   # @param x [String] the location string
   def location=(x)
     move_to x
-    write_attribute(:location, x) # just for consistency
+    self[:location] = x # just for consistency
   end
 
   def set_primitive_location(locstr)
-    write_attribute(:location, locstr)
+    self[:location] = locstr
   end
 
   # Sets item location to empty slot based on location {Wizard}. By default sets to "Bench"
   #
   # @return [Item] self
   def store
-    wiz = Wizard.find_by_name(object_type.prefix)
+    wiz = Wizard.find_by(name: object_type.prefix)
     if wiz
       locator = wiz.next
       move_to(wiz.int_to_location(locator.number))
@@ -89,7 +89,7 @@ class Item < ActiveRecord::Base
   # @return [Item] self
   def move_to(locstr)
 
-    wiz = Wizard.find_by_name(object_type.prefix) if object_type
+    wiz = Wizard.find_by(name: object_type.prefix) if object_type
 
     if object_type && wiz && wiz.has_correct_form(locstr) # item and location managed by a wizard
 
@@ -117,10 +117,10 @@ class Item < ActiveRecord::Base
 
       if newloc.item_id.nil?
 
-        oldloc = Locator.find_by_id(locator_id)
+        oldloc = Locator.find_by(id: locator_id)
         oldloc.item_id = nil if oldloc
         self.locator_id = newloc.id
-        write_attribute(:location, locstr)
+        self[:location] = locstr
         self.quantity = 1
         self.inuse = 0
         newloc.item_id = id
@@ -146,10 +146,10 @@ class Item < ActiveRecord::Base
 
     else # location is not in the form managed by a wizard
 
-      loc = Locator.find_by_id(locator_id)
+      loc = Locator.find_by(id: locator_id)
       loc.item_id = nil if loc
 
-      write_attribute(:location, locstr)
+      self[:location] = locstr
       self.locator_id = nil
 
       transaction do
@@ -169,7 +169,7 @@ class Item < ActiveRecord::Base
 
   def non_wizard_location?
 
-    wiz = Wizard.find_by_name(object_type.prefix)
+    wiz = Wizard.find_by(name: object_type.prefix)
 
     if wiz && locator.nil?
       return false
@@ -203,7 +203,7 @@ class Item < ActiveRecord::Base
 
     if o[:object_type]
       item.object_type_id = o[:object_type].id
-      wiz = Wizard.find_by_name(o[:object_type].prefix)
+      wiz = Wizard.find_by(name: o[:object_type].prefix)
       locator = wiz.next if wiz
       item.set_primitive_location locator.to_s if wiz
     end
@@ -246,7 +246,7 @@ class Item < ActiveRecord::Base
   # @return [Bool] Item deleted?
   def mark_as_deleted
 
-    write_attribute(:location, 'deleted')
+    self[:location] = 'deleted'
     self.quantity = -1
     self.inuse = -1
     self.locator_id = nil
@@ -365,7 +365,7 @@ class Item < ActiveRecord::Base
     olist = ObjectType.where('name = ?', spec[:as])
     raise "Could not find container named '#{spec[:as]}'." if olist.empty?
 
-    sample_type_id = SampleType.find_by_name(spec[:of])
+    sample_type_id = SampleType.find_by(name: spec[:of])
     raise "Could not find sample type named '#{spec[:of]}'." unless sample_type_id
 
     slist = Sample.where('name = ? AND sample_type_id = ?', name, sample_type_id)
@@ -398,8 +398,8 @@ class Item < ActiveRecord::Base
 
   def self.items_for(sid, oid)
 
-    sample = Sample.find_by_id(sid)
-    ot = ObjectType.find_by_id(oid)
+    sample = Sample.find_by(id: sid)
+    ot = ObjectType.find_by(id: oid)
 
     if sample && ot
 

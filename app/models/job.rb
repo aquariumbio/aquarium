@@ -96,7 +96,7 @@ class Job < ActiveRecord::Base
   end
 
   def submitter
-    u = User.find_by_id(submitted_by)
+    u = User.find_by(id: submitted_by)
     if u
       u.login
     else
@@ -105,7 +105,7 @@ class Job < ActiveRecord::Base
   end
 
   def doer
-    u = User.find_by_id(user_id.to_i)
+    u = User.find_by(id: user_id.to_i)
     if u
       u.login
     else

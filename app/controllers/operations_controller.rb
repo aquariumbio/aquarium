@@ -34,7 +34,7 @@ class OperationsController < ApplicationController
 
     unless ops.empty?
       ot = ops.first.operation_type
-      job, operations = ot.schedule(ops, current_user, Group.find_by_name('technicians'))
+      job, operations = ot.schedule(ops, current_user, Group.find_by(name: 'technicians'))
     end
 
     render json: { operations: operations, jobs: active_and_pending_jobs }

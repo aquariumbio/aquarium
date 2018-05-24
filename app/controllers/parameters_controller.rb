@@ -69,7 +69,7 @@ class ParametersController < ApplicationController
     @parameter = Parameter.find(params[:id])
 
     respond_to do |format|
-      if @parameter.update_attributes(params[:parameter])
+      if @parameter.update(params[:parameter])
         format.html { redirect_to parameters_path, notice: 'Parameter was successfully updated.' }
         format.json { head :no_content }
       else

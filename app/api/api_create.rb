@@ -55,7 +55,7 @@ module ApiCreate
 
   def create_sample(args)
 
-    st = SampleType.find_by_name(args[:type])
+    st = SampleType.find_by(name: args[:type])
     return error "Could not find sample type #{args[:type]}" unless st
 
     num_samples = Sample.where('created_at > ? AND user_id = ?', 1.day.ago, @user.id).count

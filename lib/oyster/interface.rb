@@ -10,7 +10,7 @@ module Oyster
 
     return Oyster.submit_krill_protocol h if /\.rb/ =~ h[:path]
 
-    group = Group.find_by_name(h[:group])
+    group = Group.find_by(name: h[:group])
 
     raise "No valid group specified when submitting '#{h[:path]}'" unless group
 
@@ -36,7 +36,7 @@ module Oyster
 
     scope.push
 
-    sub = User.find_by_id(h[:who])
+    sub = User.find_by(id: h[:who])
 
     # create a new job
     job = Job.new
@@ -60,10 +60,10 @@ module Oyster
 
     puts "Submitting protocol #{h[:path]} with args = #{h[:args]}"
 
-    group = Group.find_by_name(h[:group])
+    group = Group.find_by(name: h[:group])
     raise "No valid group specified when submitting '#{h[:path]}'" unless group
 
-    sub = User.find_by_id(h[:who])
+    sub = User.find_by(id: h[:who])
 
     job = Job.new
     job.sha = h[:sha]

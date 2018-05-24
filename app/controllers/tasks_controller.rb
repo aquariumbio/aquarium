@@ -126,7 +126,7 @@ class TasksController < ApplicationController
   def update
     @task = Task.find(params[:id])
     respond_to do |format|
-      if @task.update_attributes(params[:task])
+      if @task.update(params[:task])
         @task.after_save_setup
         format.html { redirect_to tasks_url(task_prototype_id: @task.task_prototype.id), notice: 'Task was successfully updated.' }
         format.json { head :no_content }
@@ -213,17 +213,17 @@ class TasksController < ApplicationController
     id = params[:id].to_i
     type = params[:type]
 
-    st = SampleType.find_by_name(type.split('|')[0])
+    st = SampleType.find_by(name: type.split('|')[0])
 
     if st
-      s = Sample.find_by_id(id)
+      s = Sample.find_by(id: id)
       if s
         render json: { sample_id: id, sample_name: s.name, type: st.name }
       else
         render json: { error: "sample #{id} not found" }
       end
     else
-      i = Item.find_by_id(id)
+      i = Item.find_by(id: id)
       if !i
         render json: { error: "item #{id} not found" }
       elsif i.sample
@@ -274,7 +274,7 @@ class TasksController < ApplicationController
 
         ActiveRecord::Base.transaction do
 
-          budget = Budget.find_by_name(params[:budget])
+          budget = Budget.find_by(name: params[:budget])
 
           if !budget
             errors << "Could not find budget '#{params[:budget]}'"
@@ -292,7 +292,7 @@ class TasksController < ApplicationController
 
           params[:tasks].each do |t|
 
-            tp = TaskPrototype.find_by_name(t[:type])
+            tp = TaskPrototype.find_by(name: t[:type])
 
             if tp
               task = tp.tasks.create(

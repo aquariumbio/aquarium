@@ -17,26 +17,26 @@ class ObjectType < ActiveRecord::Base
   validates :cost, presence: true
   validate :pos
   validate :proper_release_method
-  validates_uniqueness_of :name
+  validates :name, uniqueness: true
 
   def rows
     if handler == 'collection'
-      read_attribute(:rows) ? read_attribute(:rows) : 1
+      self[:rows] ? self[:rows] : 1
     end
   end
 
   def columns
     if handler == 'collection'
-      read_attribute(:columns) ? read_attribute(:columns) : 12
+      self[:columns] ? self[:columns] : 12
     end
   end
 
   def rows=(value)
-    write_attribute :rows, value
+    self[:rows] = value
   end
 
   def columns=(value)
-    write_attribute :columns, value
+    self[:columns] = value
   end
 
   def min_and_max
@@ -150,7 +150,7 @@ class ObjectType < ActiveRecord::Base
 
     raw_ots.each do |raw_ot|
 
-      ot = ObjectType.find_by_name raw_ot[:name]
+      ot = ObjectType.find_by name: raw_ot[:name]
       i = []
 
       if ot
@@ -187,8 +187,8 @@ class ObjectType < ActiveRecord::Base
 
   def self.clean_up_sample_type_links(raw_object_types)
     raw_object_types.each do |rot|
-      ot = ObjectType.find_by_name rot[:name]
-      st = SampleType.find_by_name rot[:sample_type_name]
+      ot = ObjectType.find_by name: rot[:name]
+      st = SampleType.find_by name: rot[:sample_type_name]
       if st && ot
         ot.sample_type_id = st.id
         ot.save

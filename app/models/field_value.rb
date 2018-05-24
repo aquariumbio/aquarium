@@ -129,7 +129,7 @@ class FieldValue < ActiveRecord::Base
       if v.class == Sample
         child = v
       elsif v.class == Integer
-        child = Sample.find_by_id(v)
+        child = Sample.find_by(id: v)
         unless sample
           sample.errors.add :sample, "Could not find sample with id #{v} for #{ft.name}"
           raise ActiveRecord::Rollback
@@ -193,14 +193,14 @@ class FieldValue < ActiveRecord::Base
 
   def to_s
     if child_sample_id
-      c = Sample.find_by_id(child_sample_id)
+      c = Sample.find_by(id: child_sample_id)
       if c
         "<a href='/samples/#{c.id}'>#{c.name}</a>"
       else
         "? #{child_sample_id} not found ?"
       end
     elsif child_item_id
-      c = Item.includes(:object_type).find_by_id(child_sample_id)
+      c = Item.includes(:object_type).find_by(id: child_sample_id)
       if c
         "<a href='/items/#{c.id}'>#{c.object_type.name} #{c.id}</a>"
       else

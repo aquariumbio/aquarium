@@ -134,7 +134,7 @@ class StatsController < ApplicationController
     completed = []
 
     Metacol.where("status='RUNNING'").each do |m|
-      login = User.find_by_id(m.user_id).login
+      login = User.find_by(id: m.user_id).login
       name = if m.path
                m.path.split('.').first
              else

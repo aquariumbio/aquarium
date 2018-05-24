@@ -15,7 +15,7 @@ class FieldType < ActiveRecord::Base
   validates :name, presence: true
   validates :ftype, presence: true
 
-  validates_inclusion_of :ftype, in: %w[string number url sample item json]
+  validates :ftype, inclusion: { in: %w[string number url sample item json] }
 
   def destroy
     allowable_field_types.each(&:destroy)

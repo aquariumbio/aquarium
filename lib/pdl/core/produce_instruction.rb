@@ -46,7 +46,7 @@ class ProduceInstruction < Instruction
       @sample_project = scope.substitute @sample_project_expr
       begin
         raise 'Sample name and project must be strings' if @sample_name.class != String || @sample_project.class != String
-        @sample = Sample.find_by_name_and_project(@sample_name, @sample_project)
+        @sample = Sample.find_by(name: @sample_name, project: @sample_project)
       rescue Exception => e
         raise "Could not find sample with name=#{@sample_name} and project=#{@sample_project}."
       end
@@ -59,7 +59,7 @@ class ProduceInstruction < Instruction
             end
 
     # find the object, or report an error
-    @object_type = ObjectType.find_by_name(@object_type_name)
+    @object_type = ObjectType.find_by(name: @object_type_name)
 
     if !@object_type && Rails.env != 'production'
       @object_type = ObjectType.new
@@ -114,7 +114,7 @@ class ProduceInstruction < Instruction
     release_data = []
     if @release
       @release.each do |item|
-        y = Item.find_by_id(item[:id])
+        y = Item.find_by(id: item[:id])
         raise 'no such object:' + item[:name] unless y
         y.quantity -= 1
         y.inuse = 0

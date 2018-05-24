@@ -4,7 +4,7 @@ module Lang
 
     def tasks(prototype, status)
 
-      tp = TaskPrototype.find_by_name(prototype)
+      tp = TaskPrototype.find_by(name: prototype)
       result = []
 
       if tp
@@ -21,7 +21,7 @@ module Lang
 
     def get_task_status(task)
 
-      t = Task.find_by_id(task[:id])
+      t = Task.find_by(id: task[:id])
 
       if t
         t.status
@@ -41,7 +41,7 @@ module Lang
 
       tasks.each do |task|
 
-        t = Task.find_by_id(task[:id])
+        t = Task.find_by(id: task[:id])
 
         next unless t
 

@@ -62,7 +62,7 @@ module Manta
 
   def self.blinker
 
-    if Rails.env == 'development' && Bioturk::Application.config.vision_server_interface != ''
+    if Rails.env.development? && Bioturk::Application.config.vision_server_interface != ''
 
       "var headerColor = document.getElementById('header-bar').style.background;
       var cameraIsOn = false;
@@ -117,7 +117,7 @@ module Manta
 
   def self.sensor_data(job, _request)
 
-    if Rails.env == 'development' && Bioturk::Application.config.vision_server_interface != ''
+    if Rails.env.development? && Bioturk::Application.config.vision_server_interface != ''
 
       begin
         # Get recording info from Manta

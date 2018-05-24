@@ -25,7 +25,7 @@ class BrowserController < ApplicationController
   end
 
   def recent_samples
-    user = User.find_by_id(params[:id]) if params[:id]
+    user = User.find_by(id: params[:id]) if params[:id]
     if !user
       render json: Sample
         .last(25)
@@ -41,7 +41,7 @@ class BrowserController < ApplicationController
   end
 
   def projects
-    user = User.find_by_id(params[:uid]) if params[:uid]
+    user = User.find_by(id: params[:uid]) if params[:uid]
     if !user
       render json: {
         projects: Sample.uniq.pluck(:project)
@@ -155,14 +155,14 @@ class BrowserController < ApplicationController
     samples = Sample.where('name like ? or id = ?', "%#{params[:query]}%", params[:query].to_i)
 
     if params[:user_filter]
-      user = User.find_by_login(params[:user])
+      user = User.find_by(login: params[:user])
       samples = samples.where(user_id: user.id) if user
     end
 
     project = params[:project]
     samples = samples.where(project: params[:project]) if params[:project_filter]
 
-    sample_type = SampleType.find_by_name(params[:sample_type])
+    sample_type = SampleType.find_by(name: params[:sample_type])
     samples = samples.where(sample_type_id: sample_type.id) if sample_type
 
     sample_list =  samples.offset(params[:page] * 30)

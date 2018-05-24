@@ -117,7 +117,7 @@ class ObjectTypesController < ApplicationController
       end
     end
 
-    ok = @object_type.update_attributes(params[:object_type].except(:rows, :columns))
+    ok = @object_type.update(params[:object_type].except(:rows, :columns))
 
     if params[:object_type][:handler] == 'collection'
       @object_type.rows = params[:object_type][:rows]

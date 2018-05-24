@@ -13,10 +13,10 @@ def run
       next unless ot.pending.count > 0
 
       ops = ot.pending
-      job = ot.schedule(ops, User.find_by_login('klavins'), Group.find_by_name('technicians'))
+      job = ot.schedule(ops, User.find_by(login: 'klavins'), Group.find_by(name: 'technicians'))
       puts "  Scheduled job #{job.id}"
 
-      job.user_id = User.find_by_login('klavins').id
+      job.user_id = User.find_by(login: 'klavins').id
       job.save
 
       puts "  Starting job #{job.id}"

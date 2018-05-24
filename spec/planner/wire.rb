@@ -8,12 +8,12 @@ RSpec.describe 'Planner' do
 
       # build_workflow
 
-      primer = SampleType.find_by_name('Primer').samples.sample
+      primer = SampleType.find_by(name: 'Primer').samples.sample
 
-      op1 = OperationType.find_by_name('Order Primer').operations.create status: 'planning'
+      op1 = OperationType.find_by(name: 'Order Primer').operations.create status: 'planning'
       op1.set_output('Primer', primer)
 
-      op2 = OperationType.find_by_name('Receive Primer').operations.create status: 'planning'
+      op2 = OperationType.find_by(name: 'Receive Primer').operations.create status: 'planning'
       op2.set_input('Primer', primer)
          .set_output('Primer', primer)
 

@@ -118,8 +118,8 @@ class JsonController < ApplicationController
 
   def items # ( sid, oid ) # This can be replaced by a call to Item.items_for sid, oid
 
-    sample = Sample.find_by_id(params[:sid])
-    ot = ObjectType.find_by_id(params[:oid])
+    sample = Sample.find_by(id: params[:sid])
+    ot = ObjectType.find_by(id: params[:oid])
 
     if sample && ot
 

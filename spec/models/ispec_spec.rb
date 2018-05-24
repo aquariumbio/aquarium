@@ -17,7 +17,7 @@ RSpec.describe Ispec, type: :model do
 
   context 'satisfied by an item' do
 
-    st = SampleType.find_by_name('Primer')
+    st = SampleType.find_by(name: 'Primer')
     s = st.samples[100]
     i = s.items.last
 
@@ -55,7 +55,7 @@ RSpec.describe Ispec, type: :model do
 
   context 'satisfied_by a matrix' do
 
-    st = SampleType.find_by_name('Primer')
+    st = SampleType.find_by(name: 'Primer')
     s = st.samples[100]
     i = s.items.last
 
@@ -68,8 +68,8 @@ RSpec.describe Ispec, type: :model do
 
   context 'satisfied by a part of a collection' do
 
-    col = Collection.new quantity: 1, inuse: 0, object_type_id: ObjectType.find_by_name('Stripwell').id
-    col.matrix = [[SampleType.find_by_name('Primer').samples.first.id]]
+    col = Collection.new quantity: 1, inuse: 0, object_type_id: ObjectType.find_by(name: 'Stripwell').id
+    col.matrix = [[SampleType.find_by(name: 'Primer').samples.first.id]]
     col.save
     part = Part.new col, 0, 0
     s = part.sample

@@ -97,10 +97,10 @@ class Locator < ActiveRecord::Base
 
   def self.port_all
 
-    port Wizard.find_by_name('M20')
-    port Wizard.find_by_name('M80')
-    port Wizard.find_by_name('SF2')
-    port Wizard.find_by_name('DFP')
+    port Wizard.find_by(name: 'M20')
+    port Wizard.find_by(name: 'M80')
+    port Wizard.find_by(name: 'SF2')
+    port Wizard.find_by(name: 'DFP')
 
   end
 

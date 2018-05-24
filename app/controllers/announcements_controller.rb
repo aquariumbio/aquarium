@@ -69,7 +69,7 @@ class AnnouncementsController < ApplicationController
     @announcement = Announcement.find(params[:id])
 
     respond_to do |format|
-      if @announcement.update_attributes(params[:announcement])
+      if @announcement.update(params[:announcement])
         format.html { redirect_to @announcement, notice: 'Announcement was successfully updated.' }
         format.json { head :no_content }
       else

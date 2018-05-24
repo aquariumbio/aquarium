@@ -57,7 +57,7 @@ class KrillController < ApplicationController
     @desired = Time.at(@info[:date])
     @window = @info[:window].to_f
     @latest = Time.at(@desired + @window.hours)
-    @group = Group.find_by_name(@info[:group])
+    @group = Group.find_by(name: @info[:group])
 
     # Make a new job
     @job = Job.new

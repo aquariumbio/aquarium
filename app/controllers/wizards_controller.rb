@@ -77,7 +77,7 @@ class WizardsController < ApplicationController
 
     @wizard = Wizard.find(params[:id])
 
-    result = @wizard.update_attributes(
+    result = @wizard.update(
       name: params[:wizard][:name],
       description: params[:wizard][:description],
       specification: params[:wizard][:specification].to_json

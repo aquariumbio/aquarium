@@ -43,7 +43,7 @@ class LogsDatatable < Datatable
     if params[:sSearch].present?
 
       key = params[:sSearch]
-      u = User.find_by_login(key)
+      u = User.find_by(login: key)
 
       jobs = if u
                jobs.where('pc = -2 and ( user_id like :uid or submitted_by like :sid )', search: "%#{key}%", uid: u.id.to_s, sid: u.id)

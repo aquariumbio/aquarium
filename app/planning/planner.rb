@@ -3,7 +3,7 @@ class Planner
   attr_accessor :errors
 
   def initialize(plan_id)
-    @plan = Plan.includes(operations: :operation_type).find_by_id(plan_id)
+    @plan = Plan.includes(operations: :operation_type).find_by(id: plan_id)
     @errors = []
     @errors << "Could not find plan #{plan_id}" unless @plan
   end

@@ -33,7 +33,7 @@ class PostAssociation < ActiveRecord::Base
     elsif sample
       { type: 'Sample', id: sample.id, path: "/samples/#{sample.id}" }
     elsif sha
-      path = Job.limit(1).find_by_sha(sha).path
+      path = Job.limit(1).find_by(sha: sha).path
       id = path.split('/').last
       { type: 'Protocol', id: id, path: "/jobs/summary?path=#{path}" }
     else

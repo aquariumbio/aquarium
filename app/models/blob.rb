@@ -8,7 +8,7 @@ class Blob < ActiveRecord::Base
 
   def self.get(sha, _path)
 
-    b = find_by_sha sha
+    b = find_by sha: sha
 
     unless b
 
@@ -30,7 +30,7 @@ class Blob < ActiveRecord::Base
 
   def self.get_tree(sha)
 
-    b = find_by_sha sha
+    b = find_by sha: sha
 
     if b
 

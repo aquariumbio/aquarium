@@ -20,14 +20,14 @@ module ApiDrop
   def drop_aux(model, args)
     if args[:names]
       args[:names].each do |name|
-        m = model.find_by_name name
+        m = model.find_by name: name
         m.destroy if model.okay_to_drop? m, @user
       end
     end
 
     if args[:ids]
       args[:ids].each do |id|
-        m = model.find_by_id id
+        m = model.find_by id: id
         m.destroy if model.okay_to_drop? m, @user
       end
     end

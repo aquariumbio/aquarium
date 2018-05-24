@@ -112,7 +112,7 @@ module Plankton
 
           e.type_value.each do |type|
 
-            ob = ObjectType.find_by_name(type)
+            ob = ObjectType.find_by(name: type)
 
             # make a new object if one doesn't exist (and we're not in production mode)
             if !ob && Rails.env != 'production'

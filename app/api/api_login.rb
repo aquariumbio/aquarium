@@ -2,7 +2,7 @@ module ApiLogin
 
   def login
 
-    @user = User.find_by_login(params[:login])
+    @user = User.find_by(login: params[:login])
 
     if @user && @user.key == params[:key]
       return true

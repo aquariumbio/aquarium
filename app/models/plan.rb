@@ -98,7 +98,7 @@ class Plan < ActiveRecord::Base
     fvs = []
 
     op_ids = operations.collect(&:id)
-    FieldValue.where(parent_class: 'Operation', parent_id: op_ids).each do |fv|
+    FieldValue.where(parent_class: 'Operation', parent_id: op_ids).find_each do |fv|
       fvs << fv.id
     end
 

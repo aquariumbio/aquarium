@@ -137,7 +137,7 @@ module Krill
 
       opts = { except: [], interactive: false }.merge options
 
-      object_type = ObjectType.find_by_name(object_type_name)
+      object_type = ObjectType.find_by(name: object_type_name)
       raise "Could not find object type #{object_type_name} in distribute" unless object_type
 
       user_shows = if block_given?

@@ -20,7 +20,7 @@ class Sample < ActiveRecord::Base
   has_many :items
   has_many :post_associations
 
-  validates_uniqueness_of :name, message: "The sample name '%{value}' is the name of an existing sample"
+  validates :name, uniqueness: { message: "The sample name '%{value}' is the name of an existing sample" }
 
   validates :name, presence: true
   validates :project, presence: true
@@ -29,7 +29,7 @@ class Sample < ActiveRecord::Base
   def self.sample_from_identifier(str)
     if str
       parts = str.split(': ')
-      Sample.find_by_name(parts[1..-1].join(': ')) if parts.length > 1
+      Sample.find_by(name: parts[1..-1].join(': ')) if parts.length > 1
     end
   end
 
@@ -85,7 +85,7 @@ class Sample < ActiveRecord::Base
 
             if ft && raw_fv[:id] && raw_fv[:deleted]
 
-              fv = FieldValue.find_by_id(raw_fv[:id])
+              fv = FieldValue.find_by(id: raw_fv[:id])
               fv.destroy if fv
 
             elsif ft && !raw_fv[:deleted] # fv might have been made and marked deleted without ever having been saved
@@ -156,7 +156,7 @@ class Sample < ActiveRecord::Base
   # @return [Array<Item>]
   def in(container)
 
-    c = ObjectType.find_by_name container
+    c = ObjectType.find_by name: container
     if c
       Item.where("sample_id = ? AND object_type_id = ? AND NOT ( location = 'deleted' )", id, c.id)
     else
@@ -172,7 +172,7 @@ class Sample < ActiveRecord::Base
   # Return {User} who owns this {Sample}
   # @return [User]
   def owner
-    u = User.find_by_id(user_id)
+    u = User.find_by(id: user_id)
     if u
       u.login
     else
@@ -182,7 +182,7 @@ class Sample < ActiveRecord::Base
 
   def make_item(object_type_name)
 
-    ot = ObjectType.find_by_name(object_type_name)
+    ot = ObjectType.find_by(name: object_type_name)
     raise "Could not find object type #{name}" unless ot
     Item.make({ quantity: 1, inuse: 0 }, sample: self, object_type: ot)
 

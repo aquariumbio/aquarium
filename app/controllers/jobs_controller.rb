@@ -4,7 +4,7 @@ class JobsController < ApplicationController
 
   def index
 
-    @users = User.all - User.includes(memberships: :group).where(memberships: { group_id: Group.find_by_name('retired') })
+    @users = User.all - User.includes(memberships: :group).where(memberships: { group_id: Group.find_by(name: 'retired') })
     @groups = Group.includes(:memberships).all.reject { |g| g.memberships.length == 1 }
     @metacols = Metacol.where(status: 'RUNNING')
 
@@ -26,11 +26,11 @@ class JobsController < ApplicationController
 
     return redirect_to krill_log_path(job: @job.id) if /\.rb$/ =~ @job.path
 
-    @group = (Group.find_by_id(@job.group_id) if @job.group_id)
+    @group = (Group.find_by(id: @job.group_id) if @job.group_id)
 
-    @user = (User.find_by_id(@job.user_id) if @job.user_id.to_i >= 0)
+    @user = (User.find_by(id: @job.user_id) if @job.user_id.to_i >= 0)
 
-    @submitter = (User.find_by_id(@job.submitted_by) if @job.submitted_by)
+    @submitter = (User.find_by(id: @job.submitted_by) if @job.submitted_by)
 
     @status = @job.status
 

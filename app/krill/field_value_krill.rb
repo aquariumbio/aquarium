@@ -5,7 +5,7 @@ module FieldValueKrill
 
     if child_item_id
 
-      @item = Item.find_by_id(child_item_id)
+      @item = Item.find_by(id: child_item_id)
 
     elsif !predecessors.empty?
 
@@ -92,7 +92,7 @@ module FieldValueKrill
     ii = 'No Item'
 
     if child_sample_id
-      sample = Sample.find_by_id(child_sample_id)
+      sample = Sample.find_by(id: child_sample_id)
       si = if sample
              "#{sample.sample_type.name} #{sample.id} (#{sample.name})"
            else
@@ -101,7 +101,7 @@ module FieldValueKrill
     end
 
     if child_item_id
-      item = Item.includes(:object_type).find_by_id(child_item_id)
+      item = Item.includes(:object_type).find_by(id: child_item_id)
       ii = if item
              "#{item.object_type.name} #{item.id} at #{item.location}"
            else

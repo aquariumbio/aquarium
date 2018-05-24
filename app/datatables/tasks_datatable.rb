@@ -60,7 +60,7 @@ class TasksDatatable < Datatable
     if params[:sSearch].present?
 
       key = params[:sSearch]
-      u = User.find_by_login(key)
+      u = User.find_by(login: key)
 
       tasks = if u
                 tasks.where('task_prototype_id = :tpid and status = :status and user_id like :uid',
@@ -82,7 +82,7 @@ class TasksDatatable < Datatable
                             status: @status,
                             tpid: @tp.id)
       elsif params[:sample_id]
-        sample = Sample.find_by_id(params[:sample_id])
+        sample = Sample.find_by(id: params[:sample_id])
         jobs = sample.items.collect(&:touches).flatten.collect(&:job)
         touches = jobs.collect(&:touches).flatten
         tasks = touches.collect(&:task).flatten.select(&:!)

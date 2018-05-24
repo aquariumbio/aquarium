@@ -10,7 +10,7 @@ class Part
   end
 
   def sample
-    Sample.find_by_id(@collection.matrix[@x][@y])
+    Sample.find_by(id: @collection.matrix[@x][@y])
   end
 
   def sample_type

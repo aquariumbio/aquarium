@@ -8,7 +8,7 @@ namespace :technician do
 
     # define operation
 
-    ot = OperationType.find_by_name(args[:operation_type_name])
+    ot = OperationType.find_by(name: args[:operation_type_name])
 
     unless ot
       puts "Could not find #{args[:operation_type_name]}"
@@ -37,7 +37,7 @@ namespace :technician do
     planner.start
 
     # schedule job
-    job, operations = ot.schedule(ops, User.find(1), Group.find_by_name('technicians'))
+    job, operations = ot.schedule(ops, User.find(1), Group.find_by(name: 'technicians'))
 
     # launch brower window
     cmd = '/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome '

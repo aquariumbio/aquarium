@@ -40,7 +40,7 @@ class MetacolsDatatable < Datatable
     if params[:sSearch].present?
 
       key = params[:sSearch]
-      u = User.find_by_login(key)
+      u = User.find_by(login: key)
 
       metacols = if u
                    metacols.where(prefix + ' and user_id = :uid', status: params[:status], uid: u.id.to_s)

@@ -56,7 +56,7 @@ class DeveloperController < ApplicationController
     # Set up job parameters
     job.pc = Job.NOT_STARTED
     job.set_arguments params[:arguments]
-    job.group_id = Group.find_by_name('admin').id
+    job.group_id = Group.find_by(name: 'admin').id
     job.submitted_by = current_user.id
     job.user_id = current_user.id
     job.desired_start_time = DateTime.now

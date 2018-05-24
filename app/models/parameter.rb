@@ -12,7 +12,7 @@ class Parameter < ActiveRecord::Base
   end
 
   def self.get_float(key)
-    p = Parameter.find_by_key(key)
+    p = Parameter.find_by(key: key)
     if p
       p.value.to_f
     else
@@ -22,7 +22,7 @@ class Parameter < ActiveRecord::Base
   end
 
   def self.get_string(key)
-    p = Parameter.find_by_key(key)
+    p = Parameter.find_by(key: key)
     if p
       p.value
     else

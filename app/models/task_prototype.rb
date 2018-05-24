@@ -4,7 +4,7 @@ class TaskPrototype < ActiveRecord::Base
   has_many :tasks
 
   validates :name, presence: true
-  validates_uniqueness_of :name
+  validates :name, uniqueness: true
   validates :description, presence: true
   validate :legal_json
   validate :legal_options

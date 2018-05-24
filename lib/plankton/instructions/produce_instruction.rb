@@ -52,7 +52,7 @@ module Plankton
         @sample_name = scope.evaluate @sample_name_expr
         begin
           raise 'Sample name must be a string' if @sample_name.class != String
-          @sample = Sample.find_by_name(@sample_name)
+          @sample = Sample.find_by(name: @sample_name)
           raise "Could not find sample with name=#{@sample_name}." unless @sample
         rescue Exception => e
           raise "Could not find sample with name=#{@sample_name}."
@@ -71,7 +71,7 @@ module Plankton
       end
 
       # find the object, or report an error
-      @object_type = ObjectType.find_by_name(@object_type_name)
+      @object_type = ObjectType.find_by(name: @object_type_name)
 
       if !@object_type && Rails.env != 'production'
         @object_type = ObjectType.new
@@ -139,7 +139,7 @@ module Plankton
       if @release
         @release.each do |item|
 
-          y = Item.find_by_id(item[:id])
+          y = Item.find_by(id: item[:id])
 
           raise 'no such object:' + item[:name] unless y
 

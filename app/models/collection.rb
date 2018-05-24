@@ -60,7 +60,7 @@ class Collection < Item
 
   def self.new_collection(name)
 
-    o = ObjectType.find_by_name(name)
+    o = ObjectType.find_by(name: name)
     raise "Could not find object type named '#{name}'." unless o
 
     i = Collection.new

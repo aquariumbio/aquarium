@@ -71,7 +71,7 @@ class TakeInstruction < Instruction
     # Find the objects associated with the :type specifications in the db
     @item_list.each do |i|
 
-      ob = ObjectType.find_by_name(i[:type])
+      ob = ObjectType.find_by(name: i[:type])
 
       # make a new object if one doesn't exist (and we're not in production mode)
       if !ob && Rails.env != 'production'

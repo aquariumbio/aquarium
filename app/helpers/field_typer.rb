@@ -32,11 +32,11 @@ module FieldTyper
 
         if raw_ft[:id]
           if raw_ft[:deleted]
-            temp = FieldType.find_by_id(raw_ft[:id])
+            temp = FieldType.find_by(id: raw_ft[:id])
             temp.destroy if temp
           else
             ft = FieldType.find(raw_ft[:id])
-            ft.update_attributes(raw_ft.slice(:name, :ftype, :required, :array, :choices))
+            ft.update(raw_ft.slice(:name, :ftype, :required, :array, :choices))
             ft.save
           end
         else
@@ -52,7 +52,7 @@ module FieldTyper
               AllowableFieldType.find(raw_aft[:id]).destroy
             else
               aft = AllowableFieldType.find(raw_aft[:id])
-              aft.update_attributes(raw_aft.slice(:sample_type_id, :object_type_id))
+              aft.update(raw_aft.slice(:sample_type_id, :object_type_id))
             end
           else
             aft = ft.allowable_field_types.create(raw_aft.slice(:sample_type_id, :object_type_id))
@@ -78,8 +78,8 @@ module FieldTyper
 
     if snames
       (0..snames.length - 1).each do |i|
-        sample = SampleType.find_by_name(snames[i])
-        container = ObjectType.find_by_name(cnames[i])
+        sample = SampleType.find_by(name: snames[i])
+        container = ObjectType.find_by(name: cnames[i])
         # raise "Could not find sample #{snames[i]}" unless sample
         # raise "Could not find container #{cnames[i]}" unless container
         ft.allowable_field_types.create(

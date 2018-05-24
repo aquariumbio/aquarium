@@ -14,9 +14,9 @@ RSpec.describe Workflow, type: :model do
 
   def make_random_thread_spec
 
-    primers = SampleType.find_by_name('Primer').samples
-    plasmids = SampleType.find_by_name('Plasmid').samples
-    frags = SampleType.find_by_name('Fragment').samples
+    primers = SampleType.find_by(name: 'Primer').samples
+    plasmids = SampleType.find_by(name: 'Plasmid').samples
+    frags = SampleType.find_by(name: 'Fragment').samples
 
     begin
       fwd = primers[rand(primers.length)]

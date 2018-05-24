@@ -14,9 +14,9 @@ class Account < ActiveRecord::Base
   validates :budget, presence: true
   validates :description, presence: true
 
-  validates_numericality_of :amount, greater_than_or_equal_to: 0.0
-  validates_inclusion_of :transaction_type, in: %w[credit debit]
-  validates_inclusion_of :category, in: [nil, 'materials', 'labor', 'overhead', 'credit']
+  validates :amount, numericality: { greater_than_or_equal_to: 0.0 }
+  validates :transaction_type, inclusion: { in: %w[credit debit] }
+  validates :category, inclusion: { in: [nil, 'materials', 'labor', 'overhead', 'credit'] }
 
   after_create do |row|
     row.labor_rate = Parameter.get_float('labor rate')

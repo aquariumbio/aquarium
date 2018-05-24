@@ -144,9 +144,9 @@ class OperationType < ActiveRecord::Base
 
   def add_new_allowable_field_type(ft, newaft)
 
-    st = (SampleType.find_by_name(newaft[:sample_type][:name]) if newaft[:sample_type])
+    st = (SampleType.find_by(name: newaft[:sample_type][:name]) if newaft[:sample_type])
 
-    ot = (ObjectType.find_by_name(newaft[:object_type][:name]) if newaft[:object_type] && newaft[:object_type][:name] != '')
+    ot = (ObjectType.find_by(name: newaft[:object_type][:name]) if newaft[:object_type] && newaft[:object_type][:name] != '')
 
     ft.allowable_field_types.create(
       sample_type_id: st ? st.id : nil,
@@ -158,14 +158,14 @@ class OperationType < ActiveRecord::Base
   def update_allowable_field_type(oldaft, newaft)
 
     if newaft[:sample_type]
-      st = SampleType.find_by_name(newaft[:sample_type][:name])
+      st = SampleType.find_by(name: newaft[:sample_type][:name])
       oldaft.sample_type_id = st.id if st
     else
       oldaft.sample_type_id = nil
     end
 
     if newaft[:object_type] && newaft[:object_type][:name] != ''
-      ot = ObjectType.find_by_name(newaft[:object_type][:name])
+      ot = ObjectType.find_by(name: newaft[:object_type][:name])
       oldaft.object_type_id = ot.id if ot
     else
       oldaft.sample_type_id = nil
@@ -186,7 +186,7 @@ class OperationType < ActiveRecord::Base
       container_names = newft[:allowable_field_types]
                         .select { |aft| aft[:object_type] && aft[:object_type][:name] && aft[:object_type][:name] != '' }
                         .collect do |aft|
-        raise "Object type '#{aft[:object_type][:name]}' not definied by browser for #{ft[:name]}." unless ObjectType.find_by_name(aft[:object_type][:name])
+        raise "Object type '#{aft[:object_type][:name]}' not definied by browser for #{ft[:name]}." unless ObjectType.find_by(name: aft[:object_type][:name])
         aft[:object_type][:name]
       end
 
@@ -292,7 +292,7 @@ class OperationType < ActiveRecord::Base
 
   def error_out_obsolete_operations
 
-    Operation.where(operation_type_id: id, status: %w[pending scheduled]).each do |op|
+    Operation.where(operation_type_id: id, status: %w[pending scheduled]).find_each do |op|
 
       op.field_values.each do |fv|
 

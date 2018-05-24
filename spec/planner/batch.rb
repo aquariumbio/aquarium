@@ -9,18 +9,18 @@ RSpec.describe 'Planner' do
 
       # build_workflow
 
-      gibson = OperationType.find_by_name 'Gibson Assembly'
-      pcr = OperationType.find_by_name 'PCR'
+      gibson = OperationType.find_by name: 'Gibson Assembly'
+      pcr = OperationType.find_by name: 'PCR'
 
-      common_fragment = SampleType.find_by_name('Fragment').samples.sample
+      common_fragment = SampleType.find_by(name: 'Fragment').samples.sample
 
       ops = (1..4).collect do |_i|
 
-        gop = gibson.operations.create status: 'planning', user_id: User.find_by_login('klavins').id
+        gop = gibson.operations.create status: 'planning', user_id: User.find_by(login: 'klavins').id
 
-        gop.set_output('Assembled Plasmid', SampleType.find_by_name('Plasmid').samples.last)
-           .set_input('Fragments', SampleType.find_by_name('Fragment').samples.sample(2) << common_fragment)
-           .set_input('Comp cell', Sample.find_by_name('DH5alpha'))
+        gop.set_output('Assembled Plasmid', SampleType.find_by(name: 'Plasmid').samples.last)
+           .set_input('Fragments', SampleType.find_by(name: 'Fragment').samples.sample(2) << common_fragment)
+           .set_input('Comp cell', Sample.find_by(name: 'DH5alpha'))
 
         gop
 

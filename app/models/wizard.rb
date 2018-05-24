@@ -4,7 +4,7 @@ class Wizard < ActiveRecord::Base
 
   validates :name, presence: true
   validates :description, presence: true
-  validates_uniqueness_of :name
+  validates :name, uniqueness: true
 
   has_many :locators
 
@@ -189,7 +189,7 @@ class Wizard < ActiveRecord::Base
   end
 
   def self.wizard_for(locstr)
-    find_by_name(locstr.split('.').first)
+    find_by(name: locstr.split('.').first)
   end
 
   def self.find_locator(locstr)

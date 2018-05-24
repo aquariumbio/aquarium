@@ -62,7 +62,7 @@ class TaskPrototypesController < ApplicationController
     @task_prototype = TaskPrototype.find(params[:id])
 
     respond_to do |format|
-      if @task_prototype.update_attributes(params[:task_prototype])
+      if @task_prototype.update(params[:task_prototype])
         format.html { redirect_to @task_prototype, notice: 'Task prototype was successfully updated.' }
         format.json { head :no_content }
       else

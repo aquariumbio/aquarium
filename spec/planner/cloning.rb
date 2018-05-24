@@ -10,10 +10,10 @@ RSpec.describe 'Planner' do
 
       # build_workflow
 
-      seq = OperationType.find_by_name 'Sequencing'
+      seq = OperationType.find_by name: 'Sequencing'
 
-      goal = seq.operations.create status: 'planning', user_id: User.find_by_login('klavins').id
-      goal.set_input('Plasmid', SampleType.find_by_name('Plasmid').samples.last)
+      goal = seq.operations.create status: 'planning', user_id: User.find_by(login: 'klavins').id
+      goal.set_input('Plasmid', SampleType.find_by(name: 'Plasmid').samples.last)
 
       puts
       puts "\e[93mPlanning #{goal}\e[39m"
@@ -47,7 +47,7 @@ RSpec.describe 'Planner' do
       unless ops.empty?
         puts "Found Gibson Assembly: Op #{ops[0].id}"
         op = ops[0]
-        op.set_input('Fragments', SampleType.find_by_name('Fragment').samples.sample(2))
+        op.set_input('Fragments', SampleType.find_by(name: 'Fragment').samples.sample(2))
         planner.plan_tree op
         planner.mark_shortest op
         planner.mark_unused op
@@ -65,7 +65,7 @@ RSpec.describe 'Planner' do
       unless ops.empty?
         puts "Found Transform E coli: Op #{ops[0].id}"
         op = ops[0]
-        op.set_input('Comp cell', Sample.find_by_name('DH5alpha'))
+        op.set_input('Comp cell', Sample.find_by(name: 'DH5alpha'))
         planner.plan_tree op
         planner.mark_shortest op
         planner.mark_unused op

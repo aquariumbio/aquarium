@@ -124,7 +124,7 @@ class MetacolsController < ApplicationController
 
     logger.info "arguments from parse_arguments_only = #{@arguments}"
 
-    group = Group.find_by_name(@info[:group])
+    group = Group.find_by(name: @info[:group])
 
     group.memberships.each do |m|
 

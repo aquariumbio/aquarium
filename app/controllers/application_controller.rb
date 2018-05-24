@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
     job.path = path
     job.desired_start_time = Time.now
     job.latest_start_time = Time.now + 1.day
-    job.group_id = Group.find_by_name(User.find(current_user.id).login).id
+    job.group_id = Group.find_by(name: User.find(current_user.id).login).id
     job.submitted_by = current_user.id
     job.user_id = current_user.id
     job.pc = Job.NOT_STARTED

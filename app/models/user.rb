@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
   validates :password_confirmation, presence: true, on: :create
 
   def is_admin
-    g = Group.find_by_name('admin')
+    g = Group.find_by(name: 'admin')
     g && !Membership.where(group_id: g.id, user_id: id).empty?
     # return (!g || g.memberships.length == 0 || g.member?(id))
   end
@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
   end
 
   def retired?
-    g = Group.find_by_name('retired')
+    g = Group.find_by(name: 'retired')
     g && g.member?(id)
   end
 

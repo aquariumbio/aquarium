@@ -58,7 +58,7 @@ class LibrariesController < ApplicationController
 
     lib = Library.find(params[:id])
 
-    if lib.update_attributes(name: params[:name], category: params[:category])
+    if lib.update(name: params[:name], category: params[:category])
       render json: lib
     else
       render json: { errors: lib.update_errors }

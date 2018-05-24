@@ -33,10 +33,10 @@ class SampleTree
         i['data'] = JSON.parse i['data']
         if i['data']['from']
           i['data']['from'] = if i['data']['from'].class == String
-                                [Item.find_by_id(i['data']['from']).as_json(include: :object_type)]
+                                [Item.find_by(id: i['data']['from']).as_json(include: :object_type)]
                               else
                                 i['data']['from'].collect do |id|
-                                  Item.find_by_id(id).as_json(include: :object_type)
+                                  Item.find_by(id: id).as_json(include: :object_type)
                                 end
                               end
         end

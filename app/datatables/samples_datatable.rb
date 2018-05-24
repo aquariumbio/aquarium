@@ -56,7 +56,7 @@ class SamplesDatatable < Datatable
 
     if params[:sSearch].present?
       key = params[:sSearch]
-      u = User.find_by_login(key)
+      u = User.find_by(login: key)
       samples = if u
                   samples.where('sample_type_id = :stid and user_id like :uid', stid: params[:sample_type_id], uid: u.id)
                 elsif key.to_i != 0

@@ -142,7 +142,7 @@ class InterpreterController < ApplicationController
     @desired = Time.at(@info[:date])
     @window = @info[:window].to_f
     @latest = Time.at(@desired + @window.hours)
-    @group = Group.find_by_name(@info[:group])
+    @group = Group.find_by(name: @info[:group])
 
     parse_args_only
 
@@ -426,7 +426,7 @@ class InterpreterController < ApplicationController
 
     if params[:item]
 
-      i = Item.find_by_id(params[:item])
+      i = Item.find_by(id: params[:item])
       if i
         i.inuse = 0
         i.save
@@ -436,7 +436,7 @@ class InterpreterController < ApplicationController
     elsif params[:itemlist]
 
       JSON.parse(params[:itemlist]).each do |n|
-        i = Item.find_by_id(n)
+        i = Item.find_by(id: n)
         if i
           i.inuse = 0
           i.save

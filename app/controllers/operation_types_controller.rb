@@ -227,9 +227,9 @@ class OperationTypesController < ApplicationController
 
           fvs = test_op[:field_values].select { |fv| fv[:name] == io.name && fv[:role] == io.role }
           unless fvs.empty?
-            aft = AllowableFieldType.find_by_id(fvs[0][:allowable_field_type_id])
+            aft = AllowableFieldType.find_by(id: fvs[0][:allowable_field_type_id])
             samples = fvs.collect do |fv|
-              Sample.find_by_id(fv[:child_sample_id])
+              Sample.find_by(id: fv[:child_sample_id])
             end
             actual_fvs = op.set_property(io.name, samples, io.role, true, aft)
             raise "Nil value Error: Could not set #{fvs}" unless actual_fvs
@@ -239,8 +239,8 @@ class OperationTypesController < ApplicationController
 
           fvlist = test_op[:field_values].select { |fv| fv[:name] == io.name && fv[:role] == io.role }
           fv = fvlist[0]
-          aft = AllowableFieldType.find_by_id(fv[:allowable_field_type_id])
-          actual_fv = op.set_property(fv[:name], Sample.find_by_id(fv[:child_sample_id]), fv[:role], true, aft)
+          aft = AllowableFieldType.find_by(id: fv[:allowable_field_type_id])
+          actual_fv = op.set_property(fv[:name], Sample.find_by(id: fv[:child_sample_id]), fv[:role], true, aft)
           raise "Nil value Error: Could not set #{fv}" unless actual_fv
           raise "Active Record Error: Could not set #{fv}: #{actual_fv.errors.full_messages.join(', ')}" unless actual_fv.errors.empty?
 
@@ -289,7 +289,7 @@ class OperationTypesController < ApplicationController
 
       # run the protocol
       operation_type = ot[:op_type]
-      job, newops = operation_type.schedule(ops, current_user, Group.find_by_name('technicians'))
+      job, newops = operation_type.schedule(ops, current_user, Group.find_by(name: 'technicians'))
       error = nil
 
       begin

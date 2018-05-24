@@ -41,8 +41,8 @@ RSpec.describe Collection, type: :model do
 
     it 'can make nice tables' do
 
-      primer_stocks = ObjectType.find_by_name('Primer Stock').items
-      frags = SampleType.find_by_name('Fragment').samples
+      primer_stocks = ObjectType.find_by(name: 'Primer Stock').items
+      frags = SampleType.find_by(name: 'Fragment').samples
 
       ca = Krill::CollectionArray.new
 

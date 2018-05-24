@@ -75,7 +75,7 @@ class BudgetsController < ApplicationController
     @budget = Budget.find(params[:id])
 
     respond_to do |format|
-      if @budget.update_attributes(params[:budget])
+      if @budget.update(params[:budget])
         format.html { redirect_to @budget, notice: 'Budget was successfully updated.' }
         format.json { head :no_content }
       else

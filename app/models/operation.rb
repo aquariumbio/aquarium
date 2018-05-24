@@ -28,14 +28,10 @@ class Operation < ActiveRecord::Base
   end
 
   # @return [String] OperationType name
-  def name
-    operation_type.name
-  end
+  delegate :name, to: :operation_type
 
   # @return [Bool] Whether OperationType is on-the-fly
-  def on_the_fly
-    operation_type.on_the_fly
-  end
+  delegate :on_the_fly, to: :operation_type
 
   # @return [Plan] The plan that contains this Operation
   def plan
@@ -367,7 +363,7 @@ class Operation < ActiveRecord::Base
 
   def add_successor(opts)
 
-    ot = OperationType.find_by_name(opts[:type])
+    ot = OperationType.find_by(name: opts[:type])
 
     op = ot.operations.create(
       status: 'waiting',

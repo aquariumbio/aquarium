@@ -4,11 +4,11 @@ RSpec.describe Krill do
 
   def rand_op_spec
 
-    primers = SampleType.find_by_name('Primer').samples
-    plasmids = SampleType.find_by_name('Plasmid').samples
-    frags = SampleType.find_by_name('Fragment').samples
+    primers = SampleType.find_by(name: 'Primer').samples
+    plasmids = SampleType.find_by(name: 'Plasmid').samples
+    frags = SampleType.find_by(name: 'Fragment').samples
 
-    pcr = Operation.find_by_name('PCR')
+    pcr = Operation.find_by(name: 'PCR')
     spec = pcr.parse_spec
 
     fwd = (spec[:inputs].find { |i| i[:name] == 'fwd' })

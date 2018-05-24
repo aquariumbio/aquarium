@@ -62,7 +62,7 @@ class OysterController < ApplicationController
     end
 
     begin
-      user_id = User.find_by_login params[:login]
+      user_id = User.find_by login: params[:login]
     rescue Exception => e
       error = true
       error_msg = "Could not find user #{params[:login]}. "
@@ -184,7 +184,7 @@ class OysterController < ApplicationController
 
     error = false
 
-    o = ObjectType.find_by_name(params[:type])
+    o = ObjectType.find_by(name: params[:type])
 
     unless o
       error = true
@@ -203,7 +203,7 @@ class OysterController < ApplicationController
 
     error = false
 
-    o = ObjectType.find_by_name(params[:type])
+    o = ObjectType.find_by(name: params[:type])
 
     unless o
       error = true

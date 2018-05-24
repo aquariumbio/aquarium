@@ -38,7 +38,7 @@ class ReleaseInstruction < Instruction
 
       m = params["method_#{i}"]
       i += 1
-      x = Item.find_by_id(item[:id])
+      x = Item.find_by(id: item[:id])
       raise 'no such item:' + item[:name] unless x
 
       case m

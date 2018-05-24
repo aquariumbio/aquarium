@@ -15,7 +15,7 @@ class Task < ActiveRecord::Base
   validates :budget_id, presence: true
   validates :name, presence: true
   validates :status, presence: true
-  validates_uniqueness_of :name, scope: :task_prototype_id
+  validates :name, uniqueness: { scope: :task_prototype_id }
   validate :legal_status
 
   validate :valid_task

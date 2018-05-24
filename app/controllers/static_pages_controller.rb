@@ -150,7 +150,7 @@ class StaticPagesController < ApplicationController
   def yeast_qc
 
     @items = Item.includes(sample: %i[sample_type user])
-                 .where('samples.sample_type_id = ?', SampleType.find_by_name('Yeast Strain').id)
+                 .where('samples.sample_type_id = ?', SampleType.find_by(name: 'Yeast Strain').id)
                  .select { |i| i.datum[:QC_result] }
 
     respond_to do |format|
@@ -162,7 +162,7 @@ class StaticPagesController < ApplicationController
 
   def direct_purchase
 
-    dp = OperationType.find_by_name('Direct Purchase')
+    dp = OperationType.find_by(name: 'Direct Purchase')
 
     unless dp
       flash[:error] = 'No direct purchase protocol found. Contact the lab manager.'
@@ -180,7 +180,7 @@ class StaticPagesController < ApplicationController
     plan.save
     op = dp.operations.create status: 'pending', user_id: current_user.id, x: 100, y: 100, parent_id: -1
     op.associate_plan plan
-    job, operations = dp.schedule([op], current_user, Group.find_by_name(current_user.login))
+    job, operations = dp.schedule([op], current_user, Group.find_by(name: current_user.login))
 
     redirect_to("/krill/start?job=#{job.id}")
 

@@ -8,7 +8,7 @@ module Lang
 
       if obj.class == String
 
-        o = ObjectType.find_by_name(obj)
+        o = ObjectType.find_by(name: obj)
 
         result = o.quantity if o
 
@@ -16,8 +16,8 @@ module Lang
 
         puts "QUANTITY: Evaluating quantity(#{obj})"
 
-        s = Sample.find_by_name(obj[:sample])
-        o = ObjectType.find_by_name(obj[:object])
+        s = Sample.find_by(name: obj[:sample])
+        o = ObjectType.find_by(name: obj[:object])
 
         puts "GOT #{s.inspect} and #{o.inspect}"
 
@@ -34,7 +34,7 @@ module Lang
     end
 
     def min_quantity(obj)
-      o = ObjectType.find_by_name(obj)
+      o = ObjectType.find_by(name: obj)
       if o
         o.min
       else
@@ -43,7 +43,7 @@ module Lang
     end
 
     def max_quantity(obj)
-      o = ObjectType.find_by_name(obj)
+      o = ObjectType.find_by(name: obj)
       if o
         o.max
       else
@@ -55,7 +55,7 @@ module Lang
 
       if x.class == Hash && x[:id]
 
-        i = Item.find_by_id(x[:id])
+        i = Item.find_by(id: x[:id])
 
         raise "Could not find item #{x[:id]} in argument passed to 'info'" unless i
         raise "Item #{x[:id]} in argument passed to 'info' is not a sample" unless i.sample
@@ -64,7 +64,7 @@ module Lang
 
       elsif x.class == Integer
 
-        s = Sample.find_by_id(x)
+        s = Sample.find_by(id: x)
 
         raise "Could not find sample #{x} in argument passed to 'info'" unless s
 

@@ -283,8 +283,8 @@ module Krill
     def add_static_inputs(name, sample_name, container_name)
 
       each do |op|
-        sample = Sample.find_by_name(sample_name)
-        container = ObjectType.find_by_name(container_name)
+        sample = Sample.find_by(name: sample_name)
+        container = ObjectType.find_by(name: container_name)
         op.add_input name, sample, container
         op.input(name).set item: sample.in(container.name).first
       end

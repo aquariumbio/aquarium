@@ -127,7 +127,7 @@ class PlanOptimizer
       @messages << "#{o.operation_type.name} #{o.id} is redundant and was removed from plan."
       PlanAssociation.where(plan_id: @plan ? @plan.id : @plan.id,
                             operation_id: o ? o.id : nil)
-                     .each(&:destroy)
+                     .find_each(&:destroy)
       o.destroy
     end
 
