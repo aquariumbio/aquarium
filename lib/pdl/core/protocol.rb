@@ -96,11 +96,7 @@ class Protocol
       x = e.parent.next_element
       while e && !x
         e = e.parent
-        x = if e
-              e.next_element
-            else
-              nil # isn't x just nil anyway at this point?
-            end
+        x = e.next_element if e
       end
       e = x
     else

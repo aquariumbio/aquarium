@@ -89,10 +89,10 @@ class User < ActiveRecord::Base
 
     return false if parameters.empty?
 
-    email  = parameters.find { |p| p.key == 'email' && p.value && !p.value.empty? } != nil
-    phone  = parameters.find { |p| p.key == 'phone' && p.value && !p.value.empty? } != nil
-    biofab = parameters.find { |p| p.key == 'biofab' && p.value && p.value == 'true' } != nil
-    aq     = parameters.find { |p| p.key == 'aquarium' && p.value && p.value == 'true' } != nil
+    email  = parameters.find { |p| p.key == 'email' && p.value && !p.value.empty? }.nil?
+    phone  = parameters.find { |p| p.key == 'phone' && p.value && !p.value.empty? }.nil?
+    biofab = parameters.find { |p| p.key == 'biofab' && p.value && p.value == 'true' }.nil?
+    aq     = parameters.find { |p| p.key == 'aquarium' && p.value && p.value == 'true' }.nil?
 
     email && phone && biofab && aq
 
