@@ -13,7 +13,7 @@ module Krill
     #    .input_item(REV, heading: "Reverse Primer, 2.5 µL", checkable: true)
     #  .end_table
     # @return {Array} extended with {OperationList}
-    def start_table opts = { errored: false }
+    def start_table _opts = { errored: false }
       @table = Table.new
       self
     end

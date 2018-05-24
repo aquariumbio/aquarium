@@ -6,7 +6,7 @@ module Plankton
       super 'push', options
     end
 
-    def bt_execute scope, params
+    def bt_execute scope, _params
       scope.push
     end
 

@@ -11,7 +11,7 @@ class AssignInstruction < Instruction
 
   # RAILS ###########################################################################################
 
-  def bt_execute scope, params
+  def bt_execute scope, _params
     scope.set(@lhs.to_sym, scope.evaluate(@rhs))
   end
 

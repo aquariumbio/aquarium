@@ -8,7 +8,7 @@ module Plankton
       super 'return', options
     end
 
-    def bt_execute scope, params
+    def bt_execute scope, _params
 
       retvals = scope.get :__RETVALS__
       fid = scope.get :__FUNCTION_CALL_ID__
@@ -41,7 +41,7 @@ module Plankton
 
     end
 
-    def set_pc scope
+    def set_pc _scope
       @destination
     end
 

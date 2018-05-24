@@ -1,7 +1,7 @@
 require_relative 'testlib'
 require 'securerandom'
 
-(1..10).each do |i|
+(1..10).each do |_i|
 
   name = "Test" + SecureRandom.hex(4)
 

@@ -44,7 +44,7 @@ module Marshall
           ids << operation.id
           map_id op[:rid], operation.id
         rescue Exception => e
-          raise "Marshalling error: #{e.to_s}: #{e.backtrace[0].to_s}"
+          raise "Marshalling error: #{e}: #{e.backtrace[0]}"
         end
       end
     end
@@ -96,7 +96,7 @@ module Marshall
 
   end
 
-  def self.wires p, wires
+  def self.wires _p, wires
 
     ids = []
 

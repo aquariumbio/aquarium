@@ -34,7 +34,7 @@ module Lang
 
     def col_get c, i, j
 
-      if c.class != Fixnum || c.class != Fixnum || c.class != Fixnum
+      if c.class != Integer || c.class != Integer || c.class != Integer
         raise "Invalid arguments to col_get(c,i,j). c should be an item id. i and j should be non-negative integers."
       end
 
@@ -50,7 +50,7 @@ module Lang
 
     def col_get_matrix c
 
-      if c.class != Fixnum || c.class != Fixnum || c.class != Fixnum
+      if c.class != Integer || c.class != Integer || c.class != Integer
         raise "Invalid arguments to col_get_matrix(c). c should be an item id."
       end
 
@@ -61,7 +61,7 @@ module Lang
 
     def col_set c, i, j, val
 
-      if c.class != Fixnum || c.class != Fixnum || c.class != Fixnum || val.class != Fixnum
+      if c.class != Integer || c.class != Integer || c.class != Integer || val.class != Integer
         raise "Invalid arguments to col_set(c,i,j). c should be an item id. i and j should be non-negative integers. val should be a sample id."
       end
 

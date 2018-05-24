@@ -74,7 +74,7 @@ class JsonController < ApplicationController
       record = Object.const_get(params[:model][:model]).new
     end
 
-    record.attributes.each do |name, val|
+    record.attributes.each do |name, _val|
       record[name] = params[name]
     end
 
@@ -146,7 +146,7 @@ class JsonController < ApplicationController
 
       end
     rescue Exception => e
-      render json: { errors: "Could not find sample: #{e.to_s}: #{e.backtrace.to_s}" }, status: :unprocessable_entity
+      render json: { errors: "Could not find sample: #{e}: #{e.backtrace}" }, status: :unprocessable_entity
     end
 
   end

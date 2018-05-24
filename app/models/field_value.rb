@@ -132,7 +132,7 @@ class FieldValue < ActiveRecord::Base
 
       if v.class == Sample
         child = v
-      elsif v.class == Fixnum
+      elsif v.class == Integer
         child = Sample.find_by_id(v)
         unless sample
           sample.errors.add :sample, "Could not find sample with id #{v} for #{ft.name}"
@@ -157,7 +157,7 @@ class FieldValue < ActiveRecord::Base
     vals.each do |v|
       if v.class == Item
         item = v
-      elsif v.class == Fixnum
+      elsif v.class == Integer
         item = Item.find(v)
         unless item
           sample.errors.add :item, "Could not find item with id #{v} for #{ft.name}"
@@ -271,7 +271,7 @@ class FieldValue < ActiveRecord::Base
     ft ? ft.routing : nil
   end
 
-  def full_json(options = {})
+  def full_json(_options = {})
     self.as_json(include: [
                    :child_sample,
                    :wires_as_source,

@@ -162,7 +162,7 @@ class MetacolsController < ApplicationController
       begin
         @metacol = Oyster::Parser.new(params[:path], @content).parse args
       rescue Exception => e
-        flash[:error] = "Could not start metacol due to parse error. #{e.to_s}"
+        flash[:error] = "Could not start metacol due to parse error. #{e}"
         return redirect_to arguments_new_metacol_path(sha: params[:sha], path: params[:path])
       end
 

@@ -15,7 +15,7 @@ module Plankton
 
     end
 
-    def evaluate_input_statements scope, params, s
+    def evaluate_input_statements scope, _params, s
 
       e = { type: :input, parts: [] }
 

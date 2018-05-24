@@ -97,7 +97,7 @@ class JobsController < ApplicationController
         end
       end
 
-      @infos.each do |k, v|
+      @infos.each do |k, _v|
         @infos[k][:posts] = PostAssociation.where(sha: k).count
       end
 

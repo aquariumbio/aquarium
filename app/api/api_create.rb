@@ -49,7 +49,7 @@ module ApiCreate
 
   end
 
-  def create_job args
+  def create_job _args
     return error "Create job not yet implemented"
   end
 

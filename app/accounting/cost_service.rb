@@ -4,7 +4,7 @@ module CostService
     cost_model job.name, status
   end
 
-  def description job, status
+  def description _job, status
     "#{self.name}: #{status}"
   end
 

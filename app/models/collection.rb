@@ -140,7 +140,7 @@ class Collection < Item
   def to_sample_id x
     r = EMPTY
     case
-    when x.class == Fixnum
+    when x.class == Integer
       r = x
     when x.class == Item
       if x.sample

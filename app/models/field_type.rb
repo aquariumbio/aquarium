@@ -29,7 +29,7 @@ class FieldType < ActiveRecord::Base
     when "string", "url"
       return val.class == String
     when "number"
-      return val.class == Fixnum || val.class == Float
+      return val.class == Integer || val.class == Float
     when "sample"
       return allowable_field_types.collect { |aft| aft.sample_type.id }.member? val.sample_type_id
     when "item"

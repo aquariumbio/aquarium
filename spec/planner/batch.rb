@@ -14,7 +14,7 @@ RSpec.describe "Planner" do
 
       common_fragment = SampleType.find_by_name("Fragment").samples.sample
 
-      ops = (1..4).collect { |i|
+      ops = (1..4).collect { |_i|
 
         gop = gibson.operations.create status: "planning", user_id: User.find_by_login("klavins").id
 

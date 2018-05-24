@@ -65,7 +65,7 @@ class StepInstruction < Instruction
     g
   end
 
-  def pre_render scope, params
+  def pre_render scope, _params
 
     @parts = []
 
@@ -142,7 +142,7 @@ class StepInstruction < Instruction
     return "  !!!!Warning: " + (scope.substitute n) + "!!!!\n"
   end
 
-  def render_getdata d, scope
+  def render_getdata d, _scope
     data_str = ""
     data_str += "Please input data for the following inputs, respectively:"
     data_str += "\n Press Enter after each input >"

@@ -55,7 +55,7 @@ class Scope
 
   def symbol_subs
     syms = {}
-    collapse.each do |k, v|
+    collapse.each do |k, _v|
       syms[k] = "(get :#{k})"
     end
     syms

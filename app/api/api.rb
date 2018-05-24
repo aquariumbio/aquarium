@@ -59,7 +59,7 @@ class Api
         begin
           direct params[:run][:method], params[:run][:args]
         rescue Exception => e
-          error "Could not execute request: #{e.to_s}, #{e.backtrace.first}"
+          error "Could not execute request: #{e}, #{e.backtrace.first}"
         end
       else
         warn "No run section found"

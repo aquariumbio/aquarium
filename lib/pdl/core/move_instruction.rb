@@ -20,10 +20,10 @@ class MoveInstruction < Instruction
     end
 
     c = item_hash.class
-    console "Attempting move #{item_hash.to_s} to #{@location_expr}"
+    console "Attempting move #{item_hash} to #{@location_expr}"
 
     unless item_hash.class == Hash
-      raise "#{@item_expr} evaluates to #{item_hash.to_s}, which is not a Hash describing an item."
+      raise "#{@item_expr} evaluates to #{item_hash}, which is not a Hash describing an item."
     end
 
     unless item_hash[:id]
@@ -31,7 +31,7 @@ class MoveInstruction < Instruction
     end
 
     unless location.class == String
-      raise "#{@location_expr} evaluates to #{location_expr.to_s}, which is not a String"
+      raise "#{@location_expr} evaluates to #{location_expr}, which is not a String"
     end
 
     begin

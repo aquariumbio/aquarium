@@ -46,7 +46,7 @@ RSpec.describe Workflow, :type => :model do
 
     w = Workflow.find(wid)
 
-    threads = (1..n).collect { |i|
+    threads = (1..n).collect { |_i|
       (w.new_thread make_random_thread_spec).reload
     }
 

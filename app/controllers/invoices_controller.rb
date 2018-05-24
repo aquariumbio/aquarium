@@ -61,7 +61,7 @@ class InvoicesController < ApplicationController
     if current_user.is_admin
 
       notes = [];
-      params[:rows].each do |k, row|
+      params[:rows].each do |_k, row|
         al = AccountLog.new({
                               row1: row[:id],
                               row2: nil,
@@ -88,7 +88,7 @@ class InvoicesController < ApplicationController
     rows = []
 
     if params[:rows]
-      params[:rows].each do |index, val|
+      params[:rows].each do |_index, val|
         logger.info val[:id]
         row = Account.find(val[:id])
         row.budget_id = budget.id
@@ -123,7 +123,7 @@ class InvoicesController < ApplicationController
       notes = [];
       rows = [];
 
-      params[:rows].each do |k, row|
+      params[:rows].each do |_k, row|
 
         transaction = Account.find(row[:id])
 

@@ -10,7 +10,7 @@ module Plankton
       @renderable = false
     end
 
-    def bt_execute scope, params
+    def bt_execute scope, _params
 
       evals = {}
 

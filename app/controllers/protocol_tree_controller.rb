@@ -12,7 +12,7 @@ class ProtocolTreeController < ApplicationController
       @recents.push({
                       path: j.path,
                       sha: j.sha,
-                      args: args = (JSON.parse(j.state))['stack'].first.reject { |k, v| k == 'user_id' }
+                      args: args = (JSON.parse(j.state))['stack'].first.reject { |k, _v| k == 'user_id' }
                     })
     end
 

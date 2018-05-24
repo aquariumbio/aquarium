@@ -19,7 +19,7 @@ class TakeInstruction < Instruction
 
   # RAILS ###########################################################################################
 
-  def pre_render scope, params
+  def pre_render scope, _params
 
     # To render the list of items to be taken, we have to evaluate item_list_expr, in case
     # involves complicated expressions and nost just string constants describing the items.

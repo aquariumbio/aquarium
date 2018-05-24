@@ -11,7 +11,7 @@ module Plankton
       # puts "New function call (#{fid}) returning to #{return_to}"
     end
 
-    def bt_execute scope, params
+    def bt_execute scope, _params
 
       scope.push
 
@@ -33,7 +33,7 @@ module Plankton
       @return_to += o
     end
 
-    def set_pc scope
+    def set_pc _scope
       @fspec[:pc]
     end
 

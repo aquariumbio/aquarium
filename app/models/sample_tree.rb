@@ -10,7 +10,7 @@ class SampleTree
   def parents
     parents = @sample
               .properties
-              .select { |k, v| v.class == Sample }
+              .select { |_k, v| v.class == Sample }
               .each_with_object({}) { |(k, sample), h| h[k] = SampleTree.new sample }
   end
 

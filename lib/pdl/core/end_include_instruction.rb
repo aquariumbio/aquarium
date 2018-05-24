@@ -9,7 +9,7 @@ class EndIncludeInstruction < Instruction
     @renderable = false
   end
 
-  def bt_execute scope, params
+  def bt_execute scope, _params
     eval_return_val = scope.evaluate return_value
     scope.pop
     scope.set return_symbol, eval_return_val

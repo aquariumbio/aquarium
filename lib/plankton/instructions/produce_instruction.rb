@@ -47,7 +47,7 @@ module Plankton
           end
           @sample = Item.find(sample_item[:id]).sample
         rescue Exception => e
-          raise "Could not find sample #{@sample_expr} => #{sample_item.to_s} for produce instruction. " + e.message
+          raise "Could not find sample #{@sample_expr} => #{sample_item} for produce instruction. " + e.message
         end
       end
 

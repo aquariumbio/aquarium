@@ -11,7 +11,7 @@ RSpec.describe "Planner" do
       # build_workflow
 
       # do some planning
-      (1..6).each do |i|
+      (1..6).each do |_i|
 
         gop = plan_gibson 2
 

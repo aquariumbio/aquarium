@@ -76,7 +76,7 @@ module Krill
       begin
         task.charge(Job.find(jid), status)
       rescue Exception => e
-        puts "Could not charge for task #{task.id}, job #{jid}, '#{status}': #{e.to_s}"
+        puts "Could not charge for task #{task.id}, job #{jid}, '#{status}': #{e}"
       end
 
       task

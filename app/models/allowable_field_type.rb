@@ -7,7 +7,7 @@ class AllowableFieldType < ActiveRecord::Base
   belongs_to :sample_type  # the sample type that is allowed (if any)
   belongs_to :object_type  # the container that is allowed (if any)
 
-  def as_json(options = {})
+  def as_json(_options = {})
     super include: [:sample_type, :object_type]
   end
 

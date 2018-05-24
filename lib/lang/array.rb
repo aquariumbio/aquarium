@@ -59,7 +59,7 @@ module Lang
 
     def take m, start, num # take num entries from m, starting at entry start
 
-      if m.class == Array && start.class == Fixnum && num.class == Fixnum
+      if m.class == Array && start.class == Integer && num.class == Integer
         m[start, num]
       else
         raise "Called take with the wrong kind of arguments."
@@ -68,7 +68,7 @@ module Lang
     end
 
     def range a, b, delta
-      if a.class != Fixnum || a.class != Fixnum || a.class != Fixnum
+      if a.class != Integer || a.class != Integer || a.class != Integer
         raise "Non-integers in call to range."
       end
       i = a

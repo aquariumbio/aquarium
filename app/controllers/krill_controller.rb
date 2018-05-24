@@ -235,7 +235,7 @@ class KrillController < ApplicationController
       begin
         result = (Krill::Client.new.continue params[:job])
       rescue Exception => e
-        result = { response: "error", error: "Call to server raised #{e.to_s}" }
+        result = { response: "error", error: "Call to server raised #{e}" }
       end
 
       if !result

@@ -87,12 +87,12 @@ module Krill
     # @option opts [String] :method ("boxes") Show boxes slide
     # @option opts [Array<String>] :only Retrieve only inputs of provided names
     # @return {Array} extended with {OperationList}
-    def retrieve opts = {}, &block
+    def retrieve opts = {}
       opts = { interactive: true, method: "boxes", only: [] }.merge opts
 
       items = []
 
-      each_with_index do |op, i|
+      each_with_index do |op, _i|
         op_items = []
         op.inputs.select { |fv| opts[:only].empty? || opts[:only].include?(fv.name) }.each do |input|
           puts input.inspect
@@ -161,7 +161,7 @@ module Krill
             size = rows * columns
 
             unless @output_collections[fv.name]
-              @output_collections[fv.name] = (0..(ops.length - 1) / size).collect do |c|
+              @output_collections[fv.name] = (0..(ops.length - 1) / size).collect do |_c|
                 fv.make_collection
               end
             end
@@ -199,7 +199,7 @@ module Krill
 
       items = []
 
-      select { |op| opts[:errored] || op.status != "error" }.each_with_index do |op, i|
+      select { |op| opts[:errored] || op.status != "error" }.each_with_index do |op, _i|
         op.field_values.select { |fv| fv.field_type.ftype == 'sample' && (opts[:io] == "all" || fv.role == opts[:io]) }.each do |input|
           items << input.child_item if input.child_item.location != "deleted"
         end
@@ -235,7 +235,7 @@ module Krill
 
       t = Table.new
 
-      each_with_index do |op, i|
+      each_with_index do |op, _i|
 
         op.field_values.select { |fv| fv.role == role }.each do |fv|
 

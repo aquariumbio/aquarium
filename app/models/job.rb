@@ -118,7 +118,7 @@ class Job < ActiveRecord::Base
       if /\.rb$/ =~ self.path
         (JSON.parse(self.state)).first["arguments"]
       else
-        (JSON.parse(self.state))['stack'].first.reject { |k, v| k == 'user_id' }
+        (JSON.parse(self.state))['stack'].first.reject { |k, _v| k == 'user_id' }
       end
     rescue Exception => e
       { error: "unable to parse arguments" }
@@ -154,7 +154,7 @@ class Job < ActiveRecord::Base
   def remove_types p
 
     case p
-    when String, Fixnum, Float, TrueClass, FalseClass
+    when String, Integer, Float, TrueClass, FalseClass
       p
     when Hash
       h = {}

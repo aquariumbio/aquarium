@@ -14,7 +14,7 @@ module Plankton
 
     # RAILS ###########################################################################################
 
-    def pre_render scope, params
+    def pre_render scope, _params
       begin
         @content = scope.substitute @content
       rescue Exception => e

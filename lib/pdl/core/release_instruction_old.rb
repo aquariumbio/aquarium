@@ -12,7 +12,7 @@ class ReleaseInstruction < Instruction
 
   # RAILS ###########################################################################################
 
-  def pre_render scope, params
+  def pre_render scope, _params
 
     begin
       @item_list = scope.evaluate @expr
@@ -119,7 +119,7 @@ class ReleaseInstruction < Instruction
 
   end
 
-  def execute scope
+  def execute _scope
 
     input = gets
 

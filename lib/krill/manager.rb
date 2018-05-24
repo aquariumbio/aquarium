@@ -63,7 +63,7 @@ module Krill
           begin
             rval = @protocol.main
           rescue Exception => e
-            puts "#{@job.id}: EXCEPTION #{e.to_s} + #{e.backtrace[0, 10]}"
+            puts "#{@job.id}: EXCEPTION #{e} + #{e.backtrace[0, 10]}"
             @base_object.error e
           else
             @job.reload.append_step operation: "complete", rval: rval
@@ -89,7 +89,7 @@ module Krill
             @mutex.synchronize { @thread_status.running = false }
           end
         rescue Exception => main_error
-          puts "#{@job.id}: SERIOUS EXCEPTION #{main_error.to_s}: #{main_error.backtrace[0, 10]}"
+          puts "#{@job.id}: SERIOUS EXCEPTION #{main_error}: #{main_error.backtrace[0, 10]}"
 
           if (ActiveRecord::Base.connection && ActiveRecord::Base.connection.active?)
             ActiveRecord::Base.connection.close
@@ -110,7 +110,7 @@ module Krill
         begin
           rval = @protocol.main
         rescue Exception => e
-          puts "#{@job.id}: EXCEPTION #{e.to_s} + #{e.backtrace[0, 10]}"
+          puts "#{@job.id}: EXCEPTION #{e} + #{e.backtrace[0, 10]}"
           @base_object.error e
         else
           @job.reload.append_step operation: "complete", rval: rval
@@ -128,7 +128,7 @@ module Krill
           @job.save # what if this fails?
         end
       rescue Exception => main_error
-        puts "#{@job.id}: SERIOUS EXCEPTION #{main_error.to_s}: #{main_error.backtrace[0, 10]}"
+        puts "#{@job.id}: SERIOUS EXCEPTION #{main_error}: #{main_error.backtrace[0, 10]}"
 
         if (ActiveRecord::Base.connection && ActiveRecord::Base.connection.active?)
           ActiveRecord::Base.connection.close

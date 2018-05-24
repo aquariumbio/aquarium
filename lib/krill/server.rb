@@ -34,8 +34,8 @@ module Krill
             begin
               status = @managers[jid].run
             rescue Exception => e
-              puts "Exception sent to client: #{e.to_s}: #{e.backtrace[0, 5]}"
-              client.puts({ response: "error", error: "Krill Server: #{command[:operation]} resulted in: #{e.to_s}: #{e.backtrace[0, 5]}" }.to_json)
+              puts "Exception sent to client: #{e}: #{e.backtrace[0, 5]}"
+              client.puts({ response: "error", error: "Krill Server: #{command[:operation]} resulted in: #{e}: #{e.backtrace[0, 5]}" }.to_json)
               @managers.delete(jid)
             else
               @managers.delete(jid) if status == "done"
@@ -49,7 +49,7 @@ module Krill
               begin
                 status = @managers[jid].send(command[:operation])
               rescue Exception => e
-                str = "Krill Server: #{command[:operation]} on job #{jid} resulted in: #{e.to_s}: #{e.backtrace[0, 5]}."
+                str = "Krill Server: #{command[:operation]} on job #{jid} resulted in: #{e}: #{e.backtrace[0, 5]}."
                 client.puts({ response: "error", error: str }.to_json)
                 @managers.delete(jid)
               else
@@ -98,7 +98,7 @@ module Krill
 
     def delete_old_jobs
 
-      @managers = @managers.reject { |k, v| !v.thread.alive? }
+      @managers = @managers.reject { |_k, v| !v.thread.alive? }
 
     end
 

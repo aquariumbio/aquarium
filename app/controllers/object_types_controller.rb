@@ -174,7 +174,7 @@ class ObjectTypesController < ApplicationController
     all_inserts = from.all.collect { |pw|
       "(" + (pw.attributes.values.collect { |v|
         if v.class == String
-          "'#{v.gsub(/'/) { |s| "''" }}'"
+          "'#{v.gsub(/'/) { |_s| "''" }}'"
         elsif v.class == ActiveSupport::TimeWithZone
           "'#{v}'"
         elsif v == nil

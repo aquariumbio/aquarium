@@ -19,7 +19,7 @@ class TaskPrototype < ActiveRecord::Base
       okay = false
     end
 
-    errors.add(:json, "Error parsing JSON in prototype. #{e.to_s}") unless okay
+    errors.add(:json, "Error parsing JSON in prototype. #{e}") unless okay
 
     return okay
 

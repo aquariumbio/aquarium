@@ -72,13 +72,13 @@ class StaticPagesController < ApplicationController
     end
 
     max = 1
-    @protocol_summaries.each do |k, v|
+    @protocol_summaries.each do |_k, v|
       if max < v[:count]
         max = v[:count]
       end
     end
 
-    @protocol_summaries.each do |k, v|
+    @protocol_summaries.each do |_k, v|
       v[:percent] = v[:count].to_f / max.to_f
     end
 

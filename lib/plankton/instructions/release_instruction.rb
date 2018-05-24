@@ -14,7 +14,7 @@ module Plankton
 
     # RAILS ###########################################################################################
 
-    def pre_render scope, params
+    def pre_render scope, _params
 
       begin
         @item_list = scope.evaluate @expr
@@ -127,7 +127,7 @@ module Plankton
 
     end
 
-    def execute scope
+    def execute _scope
 
       input = gets
 

@@ -51,7 +51,7 @@ module SampleValidator
         return true if validate_aux ft, c
         puts "  ... False"
       end
-      return validation_error "Or: #{constraints.to_s} not satisfied"
+      return validation_error "Or: #{constraints} not satisfied"
     end
 
   end

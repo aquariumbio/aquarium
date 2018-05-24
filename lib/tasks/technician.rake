@@ -4,7 +4,7 @@ namespace :technician do
 
   # To invoke, do something like: rake technician:schedule["My Operation Type Name"]
 
-  task :schedule, [:operation_type_name] => [:environment] do |t, args|
+  task :schedule, [:operation_type_name] => [:environment] do |_t, args|
 
     # define operation
 

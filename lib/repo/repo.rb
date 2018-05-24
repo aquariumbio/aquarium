@@ -28,7 +28,7 @@ module Repo
       git = Git.open(base(directory) + (repo_name path))
       git.branch(branch).checkout
     rescue Exception => e
-      raise "Repo Module could not find or open the repository named '#{repo_name path}': #{e.to_s}"
+      raise "Repo Module could not find or open the repository named '#{repo_name path}': #{e}"
     end
 
     begin

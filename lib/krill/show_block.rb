@@ -116,7 +116,7 @@ module Krill
       if c.class == Array
         if c.length > 0
           t = c[0].class
-          return false unless t == Fixnum || t == Float || t == String
+          return false unless t == Integer || t == Float || t == String
           c.each do |x|
             return false if t != x.class
           end

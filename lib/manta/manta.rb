@@ -6,7 +6,7 @@ module Manta
 
       Thread.new do
 
-        server = "#{Socket.gethostname}:#{request.port.to_s}"
+        server = "#{Socket.gethostname}:#{request.port}"
 
         url = Bioturk::Application.config.vision_server_interface + "start?&job=#{job.id}&server=" + server + "&user=" + (user.login) + "&protocol=#{job.path}" + "&location=" + (cookies[:location] ? cookies[:location] : 'undefined')
 
@@ -41,7 +41,7 @@ module Manta
       Thread.new do
 
         begin
-          server = "#{Socket.gethostname}:#{request.port.to_s}"
+          server = "#{Socket.gethostname}:#{request.port}"
           url = Bioturk::Application.config.vision_server_interface + "stop?&job=#{job.id}&server=" + server + "&abort=" + aborted
           uri = URI(url)
           res = Net::HTTP.get(uri)
@@ -115,7 +115,7 @@ module Manta
 
   end
 
-  def self.sensor_data job, request
+  def self.sensor_data job, _request
 
     if Rails.env == 'development' && Bioturk::Application.config.vision_server_interface != ''
 
@@ -131,7 +131,7 @@ module Manta
         steps = job.logs.select { |log| log.entry_type == "NEXT" }
 
         i = 1
-        steps.each do |step|
+        steps.each do |_step|
           html += "<li>#{i}</li>"
           i += 1
         end

@@ -17,7 +17,7 @@ class DataAssociation < ActiveRecord::Base
     h[h.keys.first]
   end
 
-  def as_json(options = {})
+  def as_json(_options = {})
     result = super(include: :upload)
     result = result.merge url: upload.url if upload
     result

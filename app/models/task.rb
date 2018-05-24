@@ -27,7 +27,7 @@ class Task < ActiveRecord::Base
         return
       end
     rescue Exception => e
-      errors.add(:status_udpate, "Could not update status: #{e.to_s}")
+      errors.add(:status_udpate, "Could not update status: #{e}")
       return
     end
   end
@@ -38,7 +38,7 @@ class Task < ActiveRecord::Base
     begin
       spec = JSON.parse self.specification, symbolize_names: true
     rescue Exception => e
-      errors.add(:task_json, "Error parsing JSON in prototype. #{e.to_s}")
+      errors.add(:task_json, "Error parsing JSON in prototype. #{e}")
       return
     end
 
@@ -85,9 +85,9 @@ class Task < ActiveRecord::Base
       # puts "wrong atomic 1" unless result
       errors.add(:task_constant, ": Wrong atomic type encountered") unless result
 
-    when Fixnum, Float
+    when Integer, Float
 
-      result = (s.class == Fixnum || s.class == Float)
+      result = (s.class == Integer || s.class == Float)
       # puts "wrong atomic 1" unless result
       errors.add(:task_constant, ": Wrong atomic type encountered") unless result
 
@@ -164,7 +164,7 @@ class Task < ActiveRecord::Base
     types = k.to_s.split(' ')[1, 100].join(' ').split('|')
     found = false
 
-    s.each do |key, val|
+    s.each do |key, _val|
       sname = key.to_s.split(' ')[0]
       stypes = key.to_s.split(' ')[1, 100].join(' ').split('|')
       # puts "  checking if #{name} == #{sname} and #{stypes} is a subset of #{types}" unless found

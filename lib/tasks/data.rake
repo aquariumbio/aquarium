@@ -40,7 +40,7 @@ namespace :data do
 
         end
       rescue Exception => e
-        puts "Could not parse data for item #{item.id}: #{e.to_s}"
+        puts "Could not parse data for item #{item.id}: #{e}"
       end
 
     end

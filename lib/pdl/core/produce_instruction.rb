@@ -41,7 +41,7 @@ class ProduceInstruction < Instruction
         end
         @sample = Item.find(sample_item[:id]).sample
       rescue Exception => e
-        raise "Could not find sample #{@sample_expr} => #{sample_item.to_s} for produce instruction. " + e.message
+        raise "Could not find sample #{@sample_expr} => #{sample_item} for produce instruction. " + e.message
       end
     end
 
@@ -152,7 +152,7 @@ class ProduceInstruction < Instruction
 
   # TERMINAL ###########################################################################################
 
-  def render scope
+  def render _scope
 
     # Ask the use where they put the produced object
     puts "Please enter the new location of #{@object_type_name} and press return: "

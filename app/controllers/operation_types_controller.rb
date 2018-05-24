@@ -127,7 +127,7 @@ class OperationTypesController < ApplicationController
           ot.update_field_types data[:field_types]
         rescue Exception => e
           update_errors << e.to_s << e.backtrace.to_s
-          logger.error("Error updating operation type field types: #{e.backtrace.to_s}")
+          logger.error("Error updating operation type field types: #{e.backtrace}")
           raise ActiveRecord::Rollback
         end
 

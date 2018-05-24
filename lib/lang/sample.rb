@@ -70,7 +70,7 @@ module Lang
 
         return i.sample.attributes.symbolize_keys
 
-      elsif x.class == Fixnum
+      elsif x.class == Integer
 
         s = Sample.find_by_id(x)
 

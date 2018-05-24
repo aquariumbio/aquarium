@@ -39,7 +39,7 @@ module ActiveRecord
       relation.select_values = args
       klass.connection.select_all(relation.arel).map! do |attributes|
         initialized_attributes = klass.initialize_attributes(attributes)
-        attributes.each do |key, attribute|
+        attributes.each do |key, _attribute|
           attributes[key] = klass.type_cast_attribute(key, initialized_attributes)
         end
       end

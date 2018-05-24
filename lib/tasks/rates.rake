@@ -9,7 +9,7 @@ namespace :rates do
     y = 2016
     m = 10
 
-    (1..4).each do |i|
+    (1..4).each do |_i|
 
       start = Date.new(y, m).beginning_of_month
 

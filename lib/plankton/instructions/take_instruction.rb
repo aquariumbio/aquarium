@@ -38,7 +38,7 @@ module Plankton
 
     end # initialize
 
-    def pre_render scope, params
+    def pre_render scope, _params
 
       # Check all evaluations ###################################################################################
       @entry_list.each do |e|
@@ -51,10 +51,10 @@ module Plankton
 
           e.item_value = scope.evaluate e.item_expr
 
-          if e.item_value.class == Fixnum
+          if e.item_value.class == Integer
             e.item_value = [e.item_value]
           elsif e.item_value.class == Array
-            if (e.item_value.select { |v| v.class != Fixnum }).length > 0
+            if (e.item_value.select { |v| v.class != Integer }).length > 0
               raise "Item array should be an array of numbers."
             end
           else
@@ -73,7 +73,7 @@ module Plankton
           elsif e.type_value.class == Array
             if (e.type_value.select { |v| v.class != String }).length > 0 ||
                e.quantity_value.class != Array ||
-               (e.quantity_value.select { |q| q.class != Fixnum }).length > 0 ||
+               (e.quantity_value.select { |q| q.class != Integer }).length > 0 ||
                e.quantity_value.length != e.type_value.length
               raise "Object type array should be an array of strings with a corresponding quantity array of Fixnums."
             end
@@ -183,7 +183,7 @@ module Plankton
 
           j = 0
 
-          e.item_value.each do |item_id|
+          e.item_value.each do |_item_id|
 
             puts "Finding #{take[i][j]}"
             item = Item.find(take[i][j][:id])
@@ -210,14 +210,14 @@ module Plankton
 
           j = 0
 
-          e.type_value.each do |type|
+          e.type_value.each do |_type|
 
             puts "#{i}, #{j}: #{take[i][j]}, quantity=#{e.quantity_value[j]}"
 
             item = Item.find(take[i][j][:id])
 
             if item.quantity - item.inuse >= e.quantity_value[j]
-              (1..(e.quantity_value[j])).each do |i|
+              (1..(e.quantity_value[j])).each do |_i|
                 result.push(pdl_item item)
               end
               item.inuse += e.quantity_value[j]

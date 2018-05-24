@@ -19,7 +19,7 @@ module Krill
           code = Repo::contents path, sha
         rescue Exception => e
           @name = :validator_not_found
-          @errors.push "Could not find validator at #{path} for task #{@task.name} because #{e.to_s}."
+          @errors.push "Could not find validator at #{path} for task #{@task.name} because #{e}."
           @checker = nil
           return # there is no valid validator path
         end

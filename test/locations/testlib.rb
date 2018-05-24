@@ -48,7 +48,7 @@ def generic_sample st
   samp
 end
 
-def generic_object st, wiz
+def generic_object _st, wiz
   object_name = "O" + SecureRandom.hex(3)
   ot = ObjectType.new name: object_name, description: "A test object"
   ot.handler = "sample_container"

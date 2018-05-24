@@ -18,12 +18,12 @@ RSpec.describe Krill do
     ant = (spec[:parameters].find { |i| i[:name] == "annealing_temperature" })
     tc  = (spec[:data].find { |i| i[:name] == "tc" })
 
-    fwd[:instantiation] = (1..3).collect { |j| { sample: primers[rand(primers.length)].id } }
-    rev[:instantiation] = (1..3).collect { |j| { sample: primers[rand(primers.length)].id } }
-    tem[:instantiation] = (1..3).collect { |j| { sample: plasmids[rand(plasmids.length)].id } }
-    fra[:instantiation] = (1..3).collect { |j| { sample: frags[rand(frags.length)].id } }
+    fwd[:instantiation] = (1..3).collect { |_j| { sample: primers[rand(primers.length)].id } }
+    rev[:instantiation] = (1..3).collect { |_j| { sample: primers[rand(primers.length)].id } }
+    tem[:instantiation] = (1..3).collect { |_j| { sample: plasmids[rand(plasmids.length)].id } }
+    fra[:instantiation] = (1..3).collect { |_j| { sample: frags[rand(frags.length)].id } }
     ant[:instantiation] = (1..3).collect { |k| { value: 70 + 0.1 * k } }
-    tc[:instantiation]  = (1..3).collect { |k| {} }
+    tc[:instantiation]  = (1..3).collect { |_k| {} }
 
     spec
 

@@ -4,7 +4,7 @@ class PlanOptimizer
     @plan = plan
     @ops = Operation.joins(:plan_associations).includes(:operation_type).where("plan_id = #{plan.id}")
     @size = @ops.length
-    @matrix = (0..@size - 1).collect { |i| (0..@size - 1).collect { |j| nil } }
+    @matrix = (0..@size - 1).collect { |_i| (0..@size - 1).collect { |_j| nil } }
     @orphans = []
     @messages = []
   end
