@@ -4,16 +4,16 @@ module Oyster
 
     def argument
 
-      var =  @tok.eat_a_variable
-             @tok.eat_a ':'
+      var = @tok.eat_a_variable
+      @tok.eat_a ':'
       type = @tok.eat_a_argtype
-      
+
       unless type == 'number' || type == 'string' || type == 'sample' || type == 'object' || type == 'generic' || type == 'group'
         raise "Unknown type '#{type}' in argument"
       end
 
       if type == 'object' # convert to old type specifier for object types
-         type = 'objecttype'
+        type = 'objecttype'
       end
 
       if type == 'sample'
@@ -42,12 +42,12 @@ module Oyster
         description = ""
       end
 
-      @metacol.arguments.push( { name: var, type: type, description: description, sample_type: sample_type } )
-  
+      @metacol.arguments.push({ name: var, type: type, description: description, sample_type: sample_type })
+
     end
 
     def arguments
-      
+
       @tok.eat_a 'argument'
       while @tok.current != 'end' && @tok.current != 'EOF'
         argument

@@ -10,7 +10,7 @@ class Post < ActiveRecord::Base
   has_many :responses, class_name: "Post", foreign_key: "parent_id"
   belongs_to :parent,  class_name: "Post"
 
-  default_scope eager_load(:user,responses: [:user,:post_associations],post_associations: [ :job, :task, :item, :sample ])
+  default_scope eager_load(:user, responses: [:user, :post_associations], post_associations: [:job, :task, :item, :sample])
 
   after_create :update_root
 
@@ -44,23 +44,23 @@ class Post < ActiveRecord::Base
 
   def as_json
 
-   j = {
-     :id => self.id,
-     :parent_id => self.parent_id,
-     :content => self.content,
-     :created_at => self.created_at,
-     :nice_date => time_ago_in_words(self.created_at) + " ago",
-     :username => self.user ? self.user.name : "?",
-     :login => self.user ? self.user.login : "?",
-     :user_id => self.user ? self.user.id : "-1",
-     :responses => (self.responses.sort.collect { |p| p.as_json }).reverse   
-   }
+    j = {
+      :id => self.id,
+      :parent_id => self.parent_id,
+      :content => self.content,
+      :created_at => self.created_at,
+      :nice_date => time_ago_in_words(self.created_at) + " ago",
+      :username => self.user ? self.user.name : "?",
+      :login => self.user ? self.user.login : "?",
+      :user_id => self.user ? self.user.id : "-1",
+      :responses => (self.responses.sort.collect { |p| p.as_json }).reverse
+    }
 
-   if self.topic_info?
-     j = j.merge( topic_info: self.topic_info )
-   end
+    if self.topic_info?
+      j = j.merge(topic_info: self.topic_info)
+    end
 
-   j
+    j
 
   end
 

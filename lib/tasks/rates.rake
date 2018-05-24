@@ -2,7 +2,7 @@ namespace :rates do
 
   desc 'Summarize Costs'
 
-  task :summary => :environment do 
+  task :summary => :environment do
 
     puts "Month,Task,Number of tasks,Total materials,Total labor"
 
@@ -19,7 +19,7 @@ namespace :rates do
         y = 2017
       end
 
-      stop = Date.new(y, m).beginning_of_month 
+      stop = Date.new(y, m).beginning_of_month
 
       puts start.strftime("%b %d, %Y") + " - " + (stop - 1.day).strftime("%b %d, %Y")
 
@@ -32,8 +32,8 @@ namespace :rates do
 
         tasks.each do |task|
 
-          materials = materials + task.accounts.select { |a| a.category == 'materials' }.inject(0) { |sum,a| sum + a.amount }
-          labor = labor + task.accounts.select { |a| a.category == 'labor' }.inject(0){|sum,a| sum + a.amount }
+          materials = materials + task.accounts.select { |a| a.category == 'materials' }.inject(0) { |sum, a| sum + a.amount }
+          labor = labor + task.accounts.select { |a| a.category == 'labor' }.inject(0) { |sum, a| sum + a.amount }
 
         end
 

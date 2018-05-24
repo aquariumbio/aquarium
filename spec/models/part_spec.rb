@@ -12,7 +12,7 @@ RSpec.describe Part, :type => :model do
     end
 
     it "does not initialize if x or y is out of range" do
-      ( expect { Part.new col, 12, 23 } ).to raise_error "out of range"
+      (expect { Part.new col, 12, 23 }).to raise_error "out of range"
     end
 
     it "responds to sample" do
@@ -23,7 +23,7 @@ RSpec.describe Part, :type => :model do
     it "responds to object type" do
       part = Part.new col, 0, 0
       expect(part.object_type).to eq(col.object_type)
-    end    
+    end
 
   end
 

@@ -8,7 +8,7 @@ class FieldValue < ActiveRecord::Base
 
   # belongs_to :sample # Not sure if this is used anywhere
   belongs_to :child_sample, class_name: "Sample", foreign_key: :child_sample_id
-  belongs_to :child_item, class_name: "Item", foreign_key: :child_item_id  
+  belongs_to :child_item, class_name: "Item", foreign_key: :child_item_id
   belongs_to :field_type
   belongs_to :allowable_field_type
 
@@ -28,7 +28,7 @@ class FieldValue < ActiveRecord::Base
   # @return [Item]
   def item
     child_item
-  end 
+  end
 
   # Return an html link to the item ui for the {Item} associated with this field value
   #
@@ -97,7 +97,7 @@ class FieldValue < ActiveRecord::Base
         choices = ft.choices.split(",")
         unless choices.member? v
           sample.errors.add :choices, "#{v} is not a valid choice for #{ft.name}"
-          raise ActiveRecord::Rollback                    
+          raise ActiveRecord::Rollback
         end
       end
       fv = sample.field_values.create name: ft.name, value: v
@@ -111,19 +111,19 @@ class FieldValue < ActiveRecord::Base
         choices = ft.choices.split(",").collect { |c| c.to_f }
         unless choices.member? v.to_f
           sample.errors.add :choices, "#{v} is not a valid choice for #{ft.name}"
-          raise ActiveRecord::Rollback                    
+          raise ActiveRecord::Rollback
         end
       end
       fv = sample.field_values.create name: ft.name, value: v.to_f
       fv.save
-    end 
+    end
   end
 
   def self.create_url sample, ft, vals
     vals.each do |v|
       fv = sample.field_values.create name: ft.name, value: v
       fv.save
-    end 
+    end
   end
 
   def self.create_sample sample, ft, vals
@@ -136,11 +136,11 @@ class FieldValue < ActiveRecord::Base
         child = Sample.find_by_id(v)
         unless sample
           sample.errors.add :sample, "Could not find sample with id #{v} for #{ft.name}"
-          raise ActiveRecord::Rollback  
+          raise ActiveRecord::Rollback
         end
       else
         sample.errors.add :sample, "#{v} should be a sample for #{ft.name}"
-        raise ActiveRecord::Rollback  
+        raise ActiveRecord::Rollback
       end
 
       unless ft.allowed? child
@@ -150,7 +150,7 @@ class FieldValue < ActiveRecord::Base
 
       fv = sample.field_values.create name: ft.name, child_sample_id: child.id
       fv.save
-    end  
+    end
   end
 
   def self.create_item sample, ft, vals
@@ -161,21 +161,21 @@ class FieldValue < ActiveRecord::Base
         item = Item.find(v)
         unless item
           sample.errors.add :item, "Could not find item with id #{v} for #{ft.name}"
-          raise ActiveRecord::Rollback  
-        end                
+          raise ActiveRecord::Rollback
+        end
       else
         sample.errors.add :sample, "#{v} should be an item for #{ft.name}"
-        raise ActiveRecord::Rollback  
-      end    
+        raise ActiveRecord::Rollback
+      end
 
       unless ft.allowed? child
         sample.errors.add :sample, "#{v} is not an allowable sample_type for #{ft.name}"
         raise ActiveRecord::Rollback
-      end  
+      end
 
       fv = sample.field_values.create name: ft.name, child_item_id: sid
       fv.save
-    end 
+    end
   end
 
   def self.creator sample, field_type, raw # sample, field_type, raw_field_data
@@ -184,14 +184,14 @@ class FieldValue < ActiveRecord::Base
     if field_type.array
       if raw.class != Array
         sample.errors.add :array, "#{field_type.name} should be an array."
-        raise ActiveRecord::Rollback              
+        raise ActiveRecord::Rollback
       end
       vals = raw
     else
-      vals = [ raw ]
+      vals = [raw]
     end
 
-    self.method("create_"+field_type.ftype).call(sample,field_type,vals)
+    self.method("create_" + field_type.ftype).call(sample, field_type, vals)
 
   end
 
@@ -218,9 +218,9 @@ class FieldValue < ActiveRecord::Base
 
   def export
     attributes.merge({
-      child_sample: child_sample.as_json,
-      child_item: child_item.as_json,      
-    })
+                       child_sample: child_sample.as_json,
+                       child_item: child_item.as_json,
+                     })
   end
 
   def child_data name
@@ -240,7 +240,7 @@ class FieldValue < ActiveRecord::Base
   end
 
   # Set {Item}, {Collection}, or row or column
-  # 
+  #
   # @param opts [Hash]
   # @option opts [Item] :item
   # @option opts [Collection] :collection
@@ -251,8 +251,8 @@ class FieldValue < ActiveRecord::Base
   #    plate = Item.find(125234)
   #    operations.first.input("Plate").set item: plate if plate
   #  end
-  def set opts={}
-    self.child_item_id = opts[:item].id if opts[:item]   
+  def set opts = {}
+    self.child_item_id = opts[:item].id if opts[:item]
     self.child_item_id = opts[:collection].id if opts[:collection]
     self.row = opts[:row] if opts[:row]
     self.column = opts[:column] if opts[:column]
@@ -260,10 +260,10 @@ class FieldValue < ActiveRecord::Base
   end
 
   def copy_inventory fv
-    self.child_item_id = fv.child_item_id 
+    self.child_item_id = fv.child_item_id
     self.row = fv.row
     self.column = fv.column
-    self.save    
+    self.save
   end
 
   def routing
@@ -271,18 +271,18 @@ class FieldValue < ActiveRecord::Base
     ft ? ft.routing : nil
   end
 
-  def full_json(options={})
-    self.as_json( include: [ 
-      :child_sample, 
-      :wires_as_source, 
-      :wires_as_dest, 
-      allowable_field_type: { 
-        include: [ 
-          :object_type, 
-          :sample_type 
-        ]
-      } 
-    ] )
-  end  
+  def full_json(options = {})
+    self.as_json(include: [
+                   :child_sample,
+                   :wires_as_source,
+                   :wires_as_dest,
+                   allowable_field_type: {
+                     include: [
+                       :object_type,
+                       :sample_type
+                     ]
+                   }
+                 ])
+  end
 
-end 
+end

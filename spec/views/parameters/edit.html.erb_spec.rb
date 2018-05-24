@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe "parameters/edit", :type => :view do
   before(:each) do
     @parameter = assign(:parameter, Parameter.create!(
-      :key => "",
-      :value => "MyString"
-    ))
+                                      :key => "",
+                                      :value => "MyString"
+                                    ))
   end
 
   it "renders the edit parameter form" do

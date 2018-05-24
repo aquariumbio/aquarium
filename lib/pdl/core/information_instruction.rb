@@ -37,5 +37,3 @@ class InformationInstruction < Instruction
   end
 
 end
-
-

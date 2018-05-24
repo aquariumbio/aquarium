@@ -8,7 +8,7 @@ class PostAssociation < ActiveRecord::Base
   belongs_to :task
   belongs_to :post
 
-  default_scope eager_load(:job,:item,:sample,:task)
+  default_scope eager_load(:job, :item, :sample, :task)
 
   def self.get field, key
 
@@ -16,7 +16,7 @@ class PostAssociation < ActiveRecord::Base
       pas = PostAssociation.includes(post: [:user]).where(:sha => key)
     else
       pas = PostAssociation.includes(post: [:user]).where(field => key)
-    end 
+    end
 
     (pas.collect { |pa| pa.post }).reverse
 

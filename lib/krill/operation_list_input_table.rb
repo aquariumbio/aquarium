@@ -2,7 +2,7 @@ module Krill
 
   module OperationList
 
-    def custom_input key, opts={heading: "Custom Input", checkable: false, type: "string", style_block: nil}, &default_block
+    def custom_input key, opts = { heading: "Custom Input", checkable: false, type: "string", style_block: nil }, &default_block
       self.each.with_index do |op, i|
         op.temporary[:uid] = i
       end
@@ -11,17 +11,17 @@ module Krill
         # d = op.temporary[key] # Prefer to default to last inputted value
         d ||= default_block.call(op)
       end
-      @table.add_column opts[:heading], self.zip(default_values).map {|op, d|
+      @table.add_column opts[:heading], self.zip(default_values).map { |op, d|
         # Save a list of temporary keys to be deleted later
         new_key = _create_temp_key(key, op)
         temporary_keys = op.temporary[:temporary_keys] || []
         temporary_keys.push(new_key)
         op.temporary[:temporary_keys] = temporary_keys
         o = {
-            type: opts[:type],
-            operation_id: temp_op.id,
-            key: new_key,
-            default: d
+          type: opts[:type],
+          operation_id: temp_op.id,
+          key: new_key,
+          default: d
         }
         style = opts[:style_block].call(op) if opts[:style_block]
         o.merge!(style) if style
@@ -103,6 +103,7 @@ module Krill
     end
 
     private
+
     def _create_temp_key(key, op)
       "#{op.temporary[:uid]}__#{key}".to_sym
     end
@@ -117,7 +118,7 @@ module Krill
     # Create a Proc that details how to create the table
     # Pass in operations (virtual or non-virtual)
     # Pass optional block with additional instructions
-    def show_with_input_table ops, create_block, num_tries=5
+    def show_with_input_table ops, create_block, num_tries = 5
       ops.extend(OperationList)
       counter = 0
       results = nil

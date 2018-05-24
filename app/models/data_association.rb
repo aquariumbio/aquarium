@@ -6,7 +6,7 @@ class DataAssociation < ActiveRecord::Base
 
   def full_object
     begin
-      HashWithIndifferentAccess.new(JSON.parse object, symbolize_names: true)    
+      HashWithIndifferentAccess.new(JSON.parse object, symbolize_names: true)
     rescue Exception => e
       HashWithIndifferentAccess.new
     end
@@ -17,7 +17,7 @@ class DataAssociation < ActiveRecord::Base
     h[h.keys.first]
   end
 
-  def as_json(options={})
+  def as_json(options = {})
     result = super(include: :upload)
     result = result.merge url: upload.url if upload
     result
@@ -28,10 +28,10 @@ class DataAssociation < ActiveRecord::Base
   end
 
   def may_delete user
-    parent = DataAssociation.find_parent(parent_class,parent_id)
+    parent = DataAssociation.find_parent(parent_class, parent_id)
     puts "Class = #{parent_class}"
     if parent_class == "Item"
-      return parent.sample && parent.sample.user_id = user.id 
+      return parent.sample && parent.sample.user_id = user.id
     elsif parent_class == "Collection"
       return user.is_admin # since collections are managed by admins?
     elsif parent_class == "Operation"
@@ -39,8 +39,7 @@ class DataAssociation < ActiveRecord::Base
     elsif parent_class == "Plan"
       return true # plans don't have owners yet either
     end
-      
+
   end
 
 end
- 

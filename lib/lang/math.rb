@@ -1,12 +1,12 @@
 module Lang
 
-  class Scope 
+  class Scope
 
     # Numerical functions
     math_function :log, :log2, :log10, :cos, :sin, :tan, :acos, :asin, :atan, :sqrt
 
     def floor x
-      if x.class == Fixnum 
+      if x.class == Fixnum
         x
       elsif x.class == Float
         x.floor
@@ -16,7 +16,7 @@ module Lang
     end
 
     def ceil x
-      if x.class == Fixnum 
+      if x.class == Fixnum
         x
       elsif x.class == Float
         x.ceil
@@ -26,8 +26,8 @@ module Lang
     end
 
     def min x, y
-      if ( x.class == Fixnum || x.class == Float ) || ( y.class == Fixnum || y.class == Float )
-        if x < y 
+      if (x.class == Fixnum || x.class == Float) || (y.class == Fixnum || y.class == Float)
+        if x < y
           x
         else
           y
@@ -38,8 +38,8 @@ module Lang
     end
 
     def max x, y
-      if ( x.class == Fixnum || x.class == Float ) || ( y.class == Fixnum || y.class == Float )
-        if x > y 
+      if (x.class == Fixnum || x.class == Float) || (y.class == Fixnum || y.class == Float)
+        if x > y
           x
         else
           y
@@ -50,15 +50,15 @@ module Lang
     end
 
     def atan2 y, x
-      if ( x.class == Fixnum || x.class == Float ) || ( y.class == Fixnum || y.class == Float )
-        Math.atan2(y,x)
+      if (x.class == Fixnum || x.class == Float) || (y.class == Fixnum || y.class == Float)
+        Math.atan2(y, x)
       else
         raise "Attempted to take atan2 of a #{y.class} and a #{x.class}."
       end
     end
 
     def mod x, y
-      if x.class == Fixnum || y.class == Float 
+      if x.class == Fixnum || y.class == Float
         x % y
       else
         raise "Attempted to modulo non-integers."

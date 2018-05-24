@@ -51,7 +51,7 @@ module Plankton
       file = get_file path
 
       @tok = Lang::Tokenizer.new file[:content]
-      @include_stack.push( { tokens: @tok, path: path, returns: rets } )
+      @include_stack.push({ tokens: @tok, path: path, returns: rets })
 
       push StartIncludeInstruction.new args, path, file[:sha], lines
 

@@ -1,12 +1,12 @@
 class TasksDatatable < Datatable
 
-  def initialize(view,status,tp) 
+  def initialize(view, status, tp)
     @status = status
     @tp = tp # task prototype id
     super(view)
   end
 
-  private  
+  private
 
   def status_selector task
 
@@ -15,7 +15,7 @@ class TasksDatatable < Datatable
     task.task_prototype.status_option_list.each do |opt|
 
       if opt == task.status
-        html += "<option selected>#{opt}</option>"        
+        html += "<option selected>#{opt}</option>"
       else
         html += "<option>#{opt}</option>"
       end
@@ -44,7 +44,7 @@ class TasksDatatable < Datatable
 
     end
 
-  end 
+  end
 
   def rows
     @rows ||= fetch_rows
@@ -65,24 +65,24 @@ class TasksDatatable < Datatable
       u = User.find_by_login(key)
 
       if u
-        tasks = tasks.where("task_prototype_id = :tpid and status = :status and user_id like :uid", 
-          search: "%#{key}%", 
-          uid: u.id.to_s, 
-          status: @status,
-          tpid: @tp.id)
+        tasks = tasks.where("task_prototype_id = :tpid and status = :status and user_id like :uid",
+                            search: "%#{key}%",
+                            uid: u.id.to_s,
+                            status: @status,
+                            tpid: @tp.id)
       else
         tasks = tasks.where("task_prototype_id = :tpid and status = :status and name like :search",
-          search: "%#{key}%",
-          status: @status,
-          tpid: @tp.id)
+                            search: "%#{key}%",
+                            status: @status,
+                            tpid: @tp.id)
       end
 
     else
 
       if @tp
         tasks = tasks.where("task_prototype_id = :tpid and status = :status",
-          status: @status,
-          tpid: @tp.id)
+                            status: @status,
+                            tpid: @tp.id)
       elsif params[:sample_id]
         sample = Sample.find_by_id(params[:sample_id])
         jobs = (sample.items.collect { |i| i.touches }).flatten.collect { |t| t.job }
@@ -104,4 +104,3 @@ class TasksDatatable < Datatable
   end
 
 end
-

@@ -34,13 +34,13 @@ module Plankton
 
       @tok.eat_a 'end'
 
-    end # end function_def 
+    end # end function_def
 
     def return_statement #########################################################################
 
       if !@in_function_def
         raise "Encountered a return statement outside of a function definition."
-      else 
+      else
         lines = {}
         lines[:startline] = @tok.line
         @tok.eat_a 'return'
@@ -82,14 +82,14 @@ module Plankton
       end
 
       fid = function_call_id
-      push FunctionCallInstruction.new( fid.to_sym, pc+1, @function_specs[fname.to_sym], arg_exprs, lines )
-      
+      push FunctionCallInstruction.new(fid.to_sym, pc + 1, @function_specs[fname.to_sym], arg_exprs, lines)
+
       lines[:endline] = @tok.line
 
       return "__function_return_value__(:#{fid})"
 
     end # function_call
- 
+
     def append_function_space #######################################################################
 
       push StopInstruction.new
@@ -102,7 +102,7 @@ module Plankton
         end
       end
 
-      @function_specs.each do |k,v|
+      @function_specs.each do |k, v|
         @function_specs[k][:pc] = v[:pc] + offset
       end
 
@@ -116,10 +116,10 @@ end
 
 module Lang
 
-  class Scope 
+  class Scope
 
     def __function_return_value__ fid
-       
+
       # puts "Getting latest return value for fid = #{fid} with scope = #{inspect}"
 
       retvals = get :__RETVALS__

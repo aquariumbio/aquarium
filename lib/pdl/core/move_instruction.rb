@@ -16,7 +16,7 @@ class MoveInstruction < Instruction
       item_hash = scope.evaluate @item_expr
       location = scope.evaluate @location_expr
     rescue Exception => e
-      raise "Move: item and/or location expressions did not evaluate correctly. The item should be an item returned by produce, for example. The location should evaluate to a string (you might need quotes around string constants). Check the syntax. " + e.message 
+      raise "Move: item and/or location expressions did not evaluate correctly. The item should be an item returned by produce, for example. The location should evaluate to a string (you might need quotes around string constants). Check the syntax. " + e.message
     end
 
     c = item_hash.class
@@ -26,7 +26,7 @@ class MoveInstruction < Instruction
       raise "#{@item_expr} evaluates to #{item_hash.to_s}, which is not a Hash describing an item."
     end
 
-    unless item_hash[:id] 
+    unless item_hash[:id]
       raise "Could not <move> #{@item_expr} to #{@location_expr}"
     end
 
@@ -44,7 +44,7 @@ class MoveInstruction < Instruction
     item.location = scope.evaluate @location_expr
     item.save
 
-    scope.set( @var.to_sym, pdl_item( item ) )
+    scope.set(@var.to_sym, pdl_item(item))
 
     log = Log.new
     log.job_id = params[:job]

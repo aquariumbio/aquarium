@@ -14,32 +14,32 @@ module FieldValuer
     FieldValue.includes(:child_sample, :allowable_field_type, wires_as_dest: :to, wires_as_source: :from)
               .where(parent_class: self.class.to_s, parent_id: self.id)
               .collect { |fv| fv.full_json }
-  end  
+  end
 
   def set_property_aux ft, fv, val
 
     # puts "SETTING #{fv.name}(#{fv.role}) to #{val.inspect}"
 
-    case ft.ftype 
+    case ft.ftype
 
     when 'string', 'url', 'json'
-      self.errors.add(:set_property,"#{val} is not a string") unless val.class == String
+      self.errors.add(:set_property, "#{val} is not a string") unless val.class == String
       fv.value = val
 
     when 'number'
-      self.errors.add(:set_property,"#{val} is not a number") unless val.respond_to? :to_f
+      self.errors.add(:set_property, "#{val} is not a number") unless val.respond_to? :to_f
       fv.value = val.to_s
-  
+
     when 'sample'
       if val
-        self.errors.add(:set_property,"#{val} is not a sample") unless val.class == Sample
+        self.errors.add(:set_property, "#{val} is not a sample") unless val.class == Sample
         fv.child_sample_id = val.id
       else
         fv.child_sample_id = nil # this is used for empty samples in the planner
       end
 
     when 'item'
-      self.errors.add(:set_property,"#{val} is not a item") unless val.class == Item
+      self.errors.add(:set_property, "#{val} is not a item") unless val.class == Item
       fv.child_item_id = val.id
 
     end
@@ -48,12 +48,12 @@ module FieldValuer
 
   end
 
-  def set_property name, val, role=nil, override_array=false, aft=nil
+  def set_property name, val, role = nil, override_array = false, aft = nil
 
     ft = field_type name, role
 
     unless ft
-      self.errors.add(:no_such_property,"#{self.class} #{id} does not have a property named #{name} with role #{role}.")
+      self.errors.add(:no_such_property, "#{self.class} #{id} does not have a property named #{name} with role #{role}.")
       return self
     end
 
@@ -62,12 +62,12 @@ module FieldValuer
     if ft.array && val.class == Array
 
       new_fvs = val.collect { |v|
-        fv = set_property_aux(ft,field_values.create(name: name,field_type_id:ft.id,role:role),v)
+        fv = set_property_aux(ft, field_values.create(name: name, field_type_id: ft.id, role: role), v)
         fv.allowable_field_type_id = aft.id if aft
         fv
       }
 
-      if self.errors.empty? 
+      if self.errors.empty?
         new_fvs.each { |fv| fv.save }
         fvs.each { |fv| fv.destroy }
       end
@@ -76,25 +76,25 @@ module FieldValuer
 
     elsif ft.array && val.class != Array && !override_array
 
-      self.errors.add(:set_property,"Tried to set property #{ft.name}, an array, to something that is not an array.")
+      self.errors.add(:set_property, "Tried to set property #{ft.name}, an array, to something that is not an array.")
       return self
 
     elsif !ft.array && val.class == Array
 
-      self.errors.add(:set_property,"Tried to set property #{ft.name}, which is not an array, to something is an array.")
+      self.errors.add(:set_property, "Tried to set property #{ft.name}, which is not an array, to something is an array.")
       return self
 
     elsif !ft.array || override_array
 
       if fvs.length == 0
-        fvs = [ field_values.create(name: name,field_type_id:ft.id,role:role) ]
+        fvs = [field_values.create(name: name, field_type_id: ft.id, role: role)]
       end
 
       if ft && fvs.length == 1
-        fv = set_property_aux(ft,fvs[0],val)
-        fv.allowable_field_type_id = aft.id if aft        
-      else 
-        self.errors.add(:set_property,"Could not set #{self.class} #{id} property #{name} to #{val}")
+        fv = set_property_aux(ft, fvs[0], val)
+        fv.allowable_field_type_id = aft.id if aft
+      else
+        self.errors.add(:set_property, "Could not set #{self.class} #{id} property #{name} to #{val}")
         return self
       end
 
@@ -109,18 +109,18 @@ module FieldValuer
     else
 
       Rails.logger.info "Could not set #{self.class} #{id} property #{name} to #{val}. No case matches conditions."
-      self.errors.add(:set_property,"Could not set #{self.class} #{id} property #{name} to #{val}. No case matches conditions.")
+      self.errors.add(:set_property, "Could not set #{self.class} #{id} property #{name} to #{val}. No case matches conditions.")
       return self
 
     end
 
-  end  
+  end
 
   def basic_value ft, fv
 
     if fv.value
 
-      ft = field_type fv.name 
+      ft = field_type fv.name
 
       if ft.ftype == 'number'
         fv.value.to_f
@@ -136,7 +136,7 @@ module FieldValuer
 
       fv.child_item
 
-    end    
+    end
 
   end
 
@@ -146,15 +146,15 @@ module FieldValuer
 
     parent_type.field_types.each do |ft|
 
-     values = field_values.select { |fv| fv.name == ft.name }.collect { |fv| basic_value ft, fv }
+      values = field_values.select { |fv| fv.name == ft.name }.collect { |fv| basic_value ft, fv }
 
-     if ft.array
+      if ft.array
         p[ft.name] = values
       else
         if values.length == 1
           p[ft.name] = values[0]
         end
-      end
+       end
 
     end
 
@@ -178,7 +178,7 @@ module FieldValuer
 
   end
 
-  def field_type name, role=nil
+  def field_type name, role = nil
     fts = parent_type.field_types.select { |ft| ft.name == name && ft.role == role }
     if fts.length > 0
       fts[0]
@@ -198,6 +198,6 @@ module FieldValuer
       end
     end
 
-  end  
+  end
 
 end

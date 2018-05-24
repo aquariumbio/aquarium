@@ -12,18 +12,18 @@ module Budgeting
   def balance bid
 
     amounts = balance_sheet
-      .select { |row| row.budget_id == bid }
-      .collect { |row| 
-        row.transaction_type == "credit" ? row.amount : -row.amount
-      }
+              .select { |row| row.budget_id == bid }
+              .collect { |row|
+      row.transaction_type == "credit" ? row.amount : -row.amount
+    }
 
-    amounts.inject { |sum,x| sum+x }
+    amounts.inject { |sum, x| sum + x }
 
   end
 
   def budget_info
 
-    user_budget_associations.collect { |uba| 
+    user_budget_associations.collect { |uba|
       b = Budget.find_by_id(uba.budget_id)
       if b
         {
@@ -31,7 +31,7 @@ module Budgeting
           quota: uba.quota,
           spent_this_month: b.spent_this_month(uba.user_id)
         }
-      else 
+      else
         nil
       end
     }.select { |bi| bi }

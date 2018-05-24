@@ -27,23 +27,22 @@ class Planner
               if op.precondition_value
                 op.status = "pending"
               else
-                op.status = "delayed"              
+                op.status = "delayed"
               end
             end
 
           else
 
             # if the op has an on the fly pred
-            if ready? op 
+            if ready? op
               if op.precondition_value
                 op.status = "pending"
               else
-                op.status = "delayed"              
+                op.status = "delayed"
               end
             else
               op.status = "waiting"
             end
-
 
           end
 
@@ -77,7 +76,7 @@ class Planner
 
   def leaf? op
 
-    ! @non_leaves.member? op.id
+    !@non_leaves.member? op.id
 
   end
 
@@ -85,7 +84,7 @@ class Planner
 
     @plan.wires.select { |w|
       w.to_id == fv.id
-    }.collect { |fv| 
+    }.collect { |fv|
       fv.from_op
     }
 

@@ -39,7 +39,7 @@ module Oyster
     end
 
     def wire s, ret, d, arg
-      @wires.push( Wire.new(  { place: s, name: ret }, { place: d, name: arg } ) )
+      @wires.push(Wire.new({ place: s, name: ret }, { place: d, name: arg }))
       self
     end
 
@@ -51,7 +51,7 @@ module Oyster
     def set_args args
 
       # Set argument values in scope
-      args.each do |k,v|
+      args.each do |k, v|
         @scope.set k, v
       end
 
@@ -59,7 +59,7 @@ module Oyster
 
     end
 
-    def start 
+    def start
 
       # Start all marked places
       # puts "Starting metacol with scope = #{scope.inspect}"
@@ -86,8 +86,8 @@ module Oyster
 
     def check_transitions
 
-      @transitions.each do |t| 
-        t.firing = markings(t).inject(:*) > 0 && ( t.check_condition @scope )
+      @transitions.each do |t|
+        t.firing = markings(t).inject(:*) > 0 && (t.check_condition @scope)
       end
 
     end # check_transitions
@@ -134,7 +134,7 @@ module Oyster
           if w.source[:name] == "*" # wire all outputs
 
             if r && r.class == Hash
-              r.each do |k,v|
+              r.each do |k, v|
                 if v.class == String
                   p.arg_expressions[k] = '"' + v + '"'
                 else
@@ -170,7 +170,7 @@ module Oyster
     end
 
     def update
-      check_transitions  
+      check_transitions
       fire
     end
 
@@ -194,7 +194,7 @@ module Oyster
 
       # puts "In metacol:state, @who = #{@who}"
 
-      { 
+      {
         places: @places.collect { |p| { marking: p.marking, started: p.started, jobs: p.jobs, sha: p.sha } },
         stack: @scope.stack,
         who: @who
@@ -203,7 +203,7 @@ module Oyster
     end
 
     def for_layout
-      { 
+      {
         places: @places.collect { |p| { name: p.name, marking: p.marking } },
         transitions: @transitions.collect { |t| { preset: t.parents.collect { |p| p.name }, postset: t.children.collect { |c| c.name } } }
       }
@@ -211,7 +211,7 @@ module Oyster
 
     def set_state s
 
-      for i in 0..(@places.length-1)
+      for i in 0..(@places.length - 1)
 
         @places[i].marking = s[:places][i][:marking]
         @places[i].started = s[:places][i][:started]

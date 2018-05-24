@@ -1,7 +1,7 @@
 module Plankton
 
-class Instruction
- 
+  class Instruction
+
     attr_reader :name, :renderable, :flash, :console_messages, :startline, :endline
     attr_writer :pc
 
@@ -25,22 +25,22 @@ class Instruction
       uri = URI("http://bioturk.ee.washington.edu:3010/liaison/#{verb}.json")
       uri.query = URI.encode_www_form(args)
       result = Net::HTTP.get_response(uri)
-      JSON.parse(result.body, {:symbolize_names => true})
+      JSON.parse(result.body, { :symbolize_names => true })
     end
 
     def to_s
-      @name + "\n  " + ( instance_variables.map { |i| "#{i}: " + (instance_variable_get i).to_s } ).join("\n  ")
+      @name + "\n  " + (instance_variables.map { |i| "#{i}: " + (instance_variable_get i).to_s }).join("\n  ")
     end
 
     def html
       h = "<b>#{@name}</b><ul class='list'>"
-      instance_variables.each { |i| 
+      instance_variables.each { |i|
         h += "<li>#{i}: #{instance_variable_get i}</li>"
       }
       h += "</ul>"
       return h
     end
-  
+
     def do_not_render
       @renderable = false
     end
@@ -55,7 +55,7 @@ class Instruction
       else
         d = item.data ? item.data : '{ "error": "Could not parse json data" }'
         begin
-          data = JSON.parse(d.gsub(/\b0*(\d+)/, '\1'),:symbolize_names => true)
+          data = JSON.parse(d.gsub(/\b0*(\d+)/, '\1'), :symbolize_names => true)
         rescue Exception => e
           data = {}
         end
@@ -63,6 +63,6 @@ class Instruction
       end
     end
 
-  end
+    end
 
 end

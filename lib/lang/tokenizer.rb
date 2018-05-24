@@ -4,7 +4,7 @@ module Lang
 
     attr_reader :line
 
-    def initialize str 
+    def initialize str
 
       @str = str
       @tokens = str.scan(re).reject { |t| comment.match t }
@@ -13,16 +13,16 @@ module Lang
 
       advance
 
-      #i=0
-      #while i<@tokens.length
+      # i=0
+      # while i<@tokens.length
       #  if /^\n|^\r/.match(@tokens[i])
       #    puts "#{i}: \\n"
       #  else
       #    puts "#{i}: #{@tokens[i]}"
       #  end
       #  i += 1
-      #end
-      #puts '-----------'
+      # end
+      # puts '-----------'
 
     end
 
@@ -36,16 +36,16 @@ module Lang
 
     def advance
 
-      #puts "Advancing at #{@tokens[@i]}"
+      # puts "Advancing at #{@tokens[@i]}"
 
-      @line += num_newlines( @tokens[@i] )
-      @i=@i+1
+      @line += num_newlines(@tokens[@i])
+      @i = @i + 1
 
-      while /^\s$/.match( @tokens[@i] )
-        if /\n|\r/.match( @tokens[@i] )
+      while /^\s$/.match(@tokens[@i])
+        if /\n|\r/.match(@tokens[@i])
           @line += 1
         end
-        @i = @i+1
+        @i = @i + 1
       end
 
     end
@@ -60,12 +60,12 @@ module Lang
 
     def next
 
-      j=@i+1
+      j = @i + 1
 
-      while j < @tokens.length && /^\s$/.match( @tokens[j] )
-        j=j+1
+      while j < @tokens.length && /^\s$/.match(@tokens[j])
+        j = j + 1
       end
-      
+
       if j < @tokens.length
         return @tokens[j]
       else
@@ -94,18 +94,18 @@ module Lang
       j = @i
       k = @i
 
-      while j >= 0 && ! /\n|\r/.match(@tokens[j])
+      while j >= 0 && !/\n|\r/.match(@tokens[j])
         j -= 1
       end
 
-      while k < @tokens.length && ! /\n|\r/.match(@tokens[k])
+      while k < @tokens.length && !/\n|\r/.match(@tokens[k])
         k += 1
       end
 
-      @line_elements = @tokens[j+1,k-j-1]
+      @line_elements = @tokens[j + 1, k - j - 1]
 
       if @line_elements
-        @line_elements[@i-j-1] = "<span style='font-weight: bold; color: red'>" + @line_elements[@i-j-1].to_s + "</span>"
+        @line_elements[@i - j - 1] = "<span style='font-weight: bold; color: red'>" + @line_elements[@i - j - 1].to_s + "</span>"
         @line_elements.join
       else
         "<span style='font-weight: bold; color: red'>Could not determine context. The error may be an unterminated string constant.</span>"
@@ -125,22 +125,22 @@ module Lang
     end
 
     def boolean
-       /true|false/
+      /true|false/
     end
 
-    def argtype 
-      /number|string|object|sample|generic|group/ 
+    def argtype
+      /number|string|object|sample|generic|group/
     end
 
     def variable
       /[a-zA-Z_][a-zA-Z_0-9]*/
     end
 
-    def string 
-      /"[^"]*"/ 
+    def string
+      /"[^"]*"/
     end
 
-    def operator  
+    def operator
       /\+|-|\/|\*\*|\*|%|<=|>=|<|>|==|!=|\|\||&&|!/
     end
 
@@ -178,17 +178,11 @@ module Lang
 
     checker :string, :whitespace, :variable, :argtype, :take_ops, :trans_op, :operator, :equals, :punctuation, :number, :boolean, :junk, :comment
 
-    # utilities   
+    # utilities
     def positive_integer
       /^[1-9][0-9]*$/.match current
     end
 
-
   end
 
 end
-
-
-
-
-

@@ -7,10 +7,10 @@ module FieldValuePlanner
     has_many :wires
 
     has_many :wires_as_source, class_name: "Wire", foreign_key: :from_id
-    has_many :wires_as_dest, class_name: "Wire", foreign_key: :to_id 
+    has_many :wires_as_dest, class_name: "Wire", foreign_key: :to_id
 
     has_many :successors, through: :wires_as_source, source: :to
-    has_many :predecessors, through: :wires_as_dest, source: :from    
+    has_many :predecessors, through: :wires_as_dest, source: :from
 
   end
 
@@ -21,12 +21,12 @@ module FieldValuePlanner
   def add_predecessor fv
     # puts "adding predecessor #{fv} to #{self}"
     wires_as_dest.create from_id: fv.id, active: true
-  end  
+  end
 
   def sample_type
     if child_sample
-      child_sample.sample_type    
-    elsif allowable_field_type 
+      child_sample.sample_type
+    elsif allowable_field_type
       allowable_field_type.sample_type
     else
       nil
@@ -58,15 +58,15 @@ module FieldValuePlanner
       if object_type
 
         if object_type.handler == 'collection' && field_type.part
-         
+
           collections = Collection.containing(val, object_type).reject { |c| c.deleted? }
 
-          print "  While Looking for '#{val.id}: #{val.name}' as part of a collection of type #{object_type.name}"            
+          print "  While Looking for '#{val.id}: #{val.name}' as part of a collection of type #{object_type.name}"
 
-          if !self.child_item_id 
+          if !self.child_item_id
 
             if collections.empty?
-              puts "  ... found nothing"            
+              puts "  ... found nothing"
               return false
             else
               puts "  ... found collection #{collections[0].id} at #{collections[0].location} with matrix #{collections[0].matrix}"
@@ -77,19 +77,19 @@ module FieldValuePlanner
           else
             puts "already has an item specified"
             return true
-          end            
+          end
 
         else
 
-          puts "Checking whether input #{name} #{val.name} (#{object_type.name}) needs to be made ... "  
+          puts "Checking whether input #{name} #{val.name} (#{object_type.name}) needs to be made ... "
 
           items = val.items.select { |i| !i.deleted? && i.object_type_id == object_type.id }
 
-          if items.length > 0 
+          if items.length > 0
             if !self.child_item_id
               puts "found #{items[0].object_type.name} #{items[0].id}"
               self.child_item_id = items[0].id
-              self.save        
+              self.save
             else
               puts "already has an item specified"
             end
@@ -105,7 +105,7 @@ module FieldValuePlanner
 
         false
 
-      end 
+      end
 
     else # Not a sample
 

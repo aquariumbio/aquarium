@@ -1,11 +1,11 @@
 class TaskNotificationDatatable < Datatable
 
-  def initialize(view) 
+  def initialize(view)
     @view = view
     super(view)
   end
 
-  private  
+  private
 
   def data
 
@@ -34,7 +34,7 @@ class TaskNotificationDatatable < Datatable
 
     end
 
-  end 
+  end
 
   def rows
     @rows ||= fetch_rows
@@ -42,26 +42,25 @@ class TaskNotificationDatatable < Datatable
 
   def fetch_rows
 
-    if @view.params[:task_id] 
+    if @view.params[:task_id]
 
       tns = TaskNotification.where(task_id: @view.params[:task_id]).page(page).per_page(per_page).order("id DESC")
-     
+
       if @view.params[:include_unread] == "true"
         tns
       else
-        tns.where(read:false)
+        tns.where(read: false)
       end
 
     else
 
-      tns = TaskNotification.page(page).per_page(per_page).joins(:task).order("id DESC").where(tasks: { user_id: params[:user_id] } )
+      tns = TaskNotification.page(page).per_page(per_page).joins(:task).order("id DESC").where(tasks: { user_id: params[:user_id] })
 
       if @view.params[:include_unread] == "true"
         tns
       else
-        tns.where(read:false)
+        tns.where(read: false)
       end
-
 
     end
 
@@ -73,4 +72,3 @@ class TaskNotificationDatatable < Datatable
   end
 
 end
-

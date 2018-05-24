@@ -44,20 +44,20 @@ class Sample < ActiveRecord::Base
   #     {
   #       sample_type_id: SampleType.find_by_name("Primer").id,
   #       description: "This is a test",
-  #       name: "Yet Another Primer Test", 
+  #       name: "Yet Another Primer Test",
   #       project: "Auxin",
-  #       field_values: [ 
-  #         { name: "Anneal Sequence", value: "ATTCTA" }, 
+  #       field_values: [
+  #         { name: "Anneal Sequence", value: "ATTCTA" },
   #         { name: "Overhang Sequence", value: "ATCTCGAGCT" },
   #         { name: "T Anneal", value: 70 }
   #       ]
   #     }, User.find(1))
-  #     
+  #
   #     s.errors.any?
   def self.creator raw, user
 
     sample = Sample.new
-    sample.user_id = user.id    
+    sample.user_id = user.id
     sample.sample_type_id = raw[:sample_type_id]
     sample.updater raw
 
@@ -69,13 +69,13 @@ class Sample < ActiveRecord::Base
     elist.full_messages.join(",")
   end
 
-  def updater raw, user=nil
+  def updater raw, user = nil
 
     self.name = raw[:name]
     self.description = raw[:description]
     self.project = raw[:project]
 
-    Sample.transaction do 
+    Sample.transaction do
 
       save
 
@@ -89,7 +89,7 @@ class Sample < ActiveRecord::Base
 
             ft = sample_type.type(raw_fv[:name])
 
-            if ft && raw_fv[:id] && raw_fv[:deleted] 
+            if ft && raw_fv[:id] && raw_fv[:deleted]
 
               fv = FieldValue.find_by_id(raw_fv[:id])
               fv.destroy if fv
@@ -98,7 +98,7 @@ class Sample < ActiveRecord::Base
 
               if raw_fv[:id]
                 begin
-                  fv = FieldValue.find(raw_fv[:id])            
+                  fv = FieldValue.find(raw_fv[:id])
                 rescue Exception => e
                   errors.add :missing_field_value, "Field value #{raw_fv[:id]} not found in db."
                   errors.add :missing_field_value, e.to_s
@@ -122,11 +122,11 @@ class Sample < ActiveRecord::Base
                 end
                 unless !child || child.errors.empty?
                   errors.add :child_error, "#{ft.name}: " + stringify_errors(child.errors)
-                  raise ActiveRecord::Rollback  
+                  raise ActiveRecord::Rollback
                 end
               elsif ft.ftype == 'number'
                 fv.value = raw_fv[:value].to_f
-              else # string, url 
+              else # string, url
                 fv.value = raw_fv[:value]
               end
 
@@ -134,7 +134,7 @@ class Sample < ActiveRecord::Base
               fv.save
               puts "fv saved. now #{fv.inspect}"
 
-              unless fv.errors.empty? 
+              unless fv.errors.empty?
                 errors.add :field_value, "Could not save field #{raw_fv[:name]}: #{stringify_errors(fv.errors)}"
                 raise ActiveRecord::Rollback
               end
@@ -145,7 +145,7 @@ class Sample < ActiveRecord::Base
 
         end # if
 
-      else 
+      else
 
         raise ActiveRecord::Rollback
 
@@ -164,7 +164,7 @@ class Sample < ActiveRecord::Base
 
     c = ObjectType.find_by_name container
     if c
-      Item.where("sample_id = ? AND object_type_id = ? AND NOT ( location = 'deleted' )", self.id, c.id )
+      Item.where("sample_id = ? AND object_type_id = ? AND NOT ( location = 'deleted' )", self.id, c.id)
     else
       []
     end
@@ -190,7 +190,7 @@ class Sample < ActiveRecord::Base
 
     ot = ObjectType.find_by_name(object_type_name)
     raise "Could not find object type #{name}" unless ot
-    Item.make( { quantity: 1, inuse: 0 }, sample: self, object_type: ot )
+    Item.make({ quantity: 1, inuse: 0 }, sample: self, object_type: ot)
 
   end
 
@@ -209,21 +209,21 @@ class Sample < ActiveRecord::Base
   end
 
   def data_hash
-    JSON.parse(self.data,symbolize_names:true)
+    JSON.parse(self.data, symbolize_names: true)
   end
 
   def full_json
 
     sample_hash = self.as_json(
-            include: { sample_type: { include: :object_types, methods: :field_types } },
-            methods: :full_field_values
-          )
+      include: { sample_type: { include: :object_types, methods: :field_types } },
+      methods: :full_field_values
+    )
 
     # rename field for compatibility with ng-control/sample.js
-    sample_hash[:field_values] = sample_hash.delete :full_field_values 
+    sample_hash[:field_values] = sample_hash.delete :full_field_values
 
     sample_hash
-      
-  end   
+
+  end
 
 end

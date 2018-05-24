@@ -17,7 +17,7 @@ class StartIncludeInstruction < Instruction
 
     # take the evaluated args and push then onto the scope
     arguments.each do |a|
-      scope.set a[:var].to_sym, scope.evaluate( a[:value] )
+      scope.set a[:var].to_sym, scope.evaluate(a[:value])
     end
 
     # log the result
@@ -27,7 +27,7 @@ class StartIncludeInstruction < Instruction
     log.entry_type = 'INCLUDE'
     log.data = { pc: @pc, file: @filename, sha: @sha }.to_json
     log.save
-    
+
   end
 
   def html

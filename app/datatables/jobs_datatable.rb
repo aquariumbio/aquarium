@@ -1,6 +1,6 @@
 class JobsDatatable < Datatable
 
-  private  
+  private
 
   def window t1, t2, pc
 
@@ -15,10 +15,10 @@ class JobsDatatable < Datatable
     elsif t1 <= now && now < t2 # current
       msg = sp + ">Start within " + @view.time_ago_in_words(t2) + "</span>"
     else # past due!
-      msg = sp + "style='color: red'>" + @view.distance_of_time_in_words(now-t2) + " past due</span>"
+      msg = sp + "style='color: red'>" + @view.distance_of_time_in_words(now - t2) + " past due</span>"
     end
 
-    msg.gsub(/about/,"")
+    msg.gsub(/about/, "")
 
   end
 
@@ -29,23 +29,24 @@ class JobsDatatable < Datatable
       sub = User.find(j.submitted_by)
       doer = User.find_by_id(j.user_id)
       group = Group.find(j.group_id)
-      name = j.path.split('/').last.split('.').first 
+      name = j.path.split('/').last.split('.').first
       meta = (j.metacol_id && !(/metacol/ =~ params[:type])) ? (" (" + link_to(j.metacol_id, j.metacol) + ")") : ""
- 
+
       stop = link_to(
-          '/interpreter/cancel?job=' + j.id.to_s, 
-          data: { confirm: "Are you sure you want to cancel job #{j.id}, protocol '#{name}'?" },
-          class: "stop" ) do 
-        "<i class='icon-remove'></i>".html_safe 
+        '/interpreter/cancel?job=' + j.id.to_s,
+        data: { confirm: "Are you sure you want to cancel job #{j.id}, protocol '#{name}'?" },
+        class: "stop"
+      ) do
+        "<i class='icon-remove'></i>".html_safe
       end
 
-      [ 
-        link_to(j.id,j,class: "jobs-jid"), 
+      [
+        link_to(j.id, j, class: "jobs-jid"),
         "<b>" + name + "</b>",
         link_to(sub.login, sub) + meta.html_safe,
-        doer ? link_to(doer.login,doer) : "-",
-        link_to(group.name,group),
-        window(j.desired_start_time,j.latest_start_time,j.pc),
+        doer ? link_to(doer.login, doer) : "-",
+        link_to(group.name, group),
+        window(j.desired_start_time, j.latest_start_time, j.pc),
         j.updated_at.to_formatted_s(:short),
         j.start_link("<i class='icon-play'></i>"),
         stop
@@ -61,26 +62,26 @@ class JobsDatatable < Datatable
   def fetch_rows
 
     now = Time.now
- 
+
     jobs = case params[:type]
-      when "table-pending"
-        Job.where("pc = -1 AND (latest_start_time < ? OR ( desired_start_time < ? AND ? <= latest_start_time) )", now, now, now )
-      when "table-future"
-        Job.where("pc = -1 AND ? <= desired_start_time", now)
-      when "table-active"
-        Job.where("pc >= 0")
-      else
-        mid = params[:type].split('-').last.to_i
-        Job.where("pc != -2 AND metacol_id = ?", mid)
+           when "table-pending"
+             Job.where("pc = -1 AND (latest_start_time < ? OR ( desired_start_time < ? AND ? <= latest_start_time) )", now, now, now)
+           when "table-future"
+             Job.where("pc = -1 AND ? <= desired_start_time", now)
+           when "table-active"
+             Job.where("pc >= 0")
+           else
+             mid = params[:type].split('-').last.to_i
+             Job.where("pc != -2 AND metacol_id = ?", mid)
     end
 
     # unless /metacol/ =~ params[:type]
-      if params[:filter] == "user-radio"
-        uid = params[:user_id].to_i
-        jobs = jobs.where("submitted_by = ? OR user_id = ?", uid, uid)
-      elsif params[:filter] == "group-radio"
-        jobs = jobs.where(group_id: params[:group_id].to_i)
-      end
+    if params[:filter] == "user-radio"
+      uid = params[:user_id].to_i
+      jobs = jobs.where("submitted_by = ? OR user_id = ?", uid, uid)
+    elsif params[:filter] == "group-radio"
+      jobs = jobs.where(group_id: params[:group_id].to_i)
+    end
     # end
 
     jobs = jobs.page(page).per_page(10000)

@@ -18,7 +18,7 @@ class PluginController < ApplicationController
 
     path = "#{params[:path]}/#{part}"
     sha = Repo::version path
-    Repo::contents path,sha
+    Repo::contents path, sha
 
   end
 
@@ -45,7 +45,7 @@ class PluginController < ApplicationController
       control = get "interface.rb"
       ns = Krill::make_namespace control
       plugin = ns::PluginInterface.new view_context
-      arg = JSON.parse(params[:params],symbolize_names:true)
+      arg = JSON.parse(params[:params], symbolize_names: true)
       data = plugin.data(arg)
     rescue Exception => e
       render json: { error: e.message + e.backtrace.inspect }

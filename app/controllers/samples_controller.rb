@@ -36,24 +36,24 @@ class SamplesController < ApplicationController
             flash[:notice] = "Deleted item #{i.id}."
           else
             flash[:warning] = "Could not delete #{i.id}: #{i.errors.full_messages.join(', ')}"
-          end   
+          end
 
           i.reload
 
         end
 
-        @sample = Sample.includes(:sample_type,items: [locator: [:wizard]]).find(params[:id])
+        @sample = Sample.includes(:sample_type, items: [locator: [:wizard]]).find(params[:id])
         @sample_type = @sample.sample_type
 
-        if params[:toggle] 
+        if params[:toggle]
           @item = Item.find(params[:toggle])
           @item.inuse = @item.inuse > 0 ? 0 : 1;
           @item.save
         end
 
       }
-      
-      format.json { 
+
+      format.json {
         render json: Sample.find(params[:id]).full_json
       }
 
@@ -94,7 +94,7 @@ class SamplesController < ApplicationController
   # PUT /samples/1.json
   def update
     @sample = Sample.find(params[:sample][:id])
-    @sample.updater(params[:sample],current_user)
+    @sample.updater(params[:sample], current_user)
     if @sample.errors.empty?
       render_full_sample @sample.id
     else
@@ -109,7 +109,7 @@ class SamplesController < ApplicationController
     @sample = Sample.find(params[:id])
     id = @sample.sample_type_id
 
-    if @sample.items.length > 0 
+    if @sample.items.length > 0
       flash[:notice] = "Could not delete sample #{@sample.name} because there are items associated with it."
     else
       @sample.destroy
@@ -129,8 +129,8 @@ class SamplesController < ApplicationController
 
     else
 
-      @samples = Sample.where('project = ?', params[:name]).sort { |a,b|
-        [ a.sample_type.name, a.name ] <=> [ b.sample_type.name, b.name ]
+      @samples = Sample.where('project = ?', params[:name]).sort { |a, b|
+        [a.sample_type.name, a.name] <=> [b.sample_type.name, b.name]
       }
 
     end
@@ -142,14 +142,14 @@ class SamplesController < ApplicationController
 
   def schema sample_type
 
-    fields = [ 'name', 'project' ]
+    fields = ['name', 'project']
 
-    (1..8).each do |i| 
+    (1..8).each do |i|
       fn = "field#{i}name".to_sym
-      ft = "field#{i}type".to_sym 
-      f = "field#{i}".to_sym 
+      ft = "field#{i}type".to_sym
+      f = "field#{i}".to_sym
 
-      if sample_type[ft] != 'not used' && sample_type[ft] !=nil 
+      if sample_type[ft] != 'not used' && sample_type[ft] != nil
         fields.push sample_type[ft]
       else
         fields.push :unused
@@ -196,8 +196,8 @@ class SamplesController < ApplicationController
       sample.user_id = current_user.id
       sample.sample_type_id = @sample_type.id
 
-      (2..(@schema.length-1)).each do |i|
-        ff = "field#{i-1}".to_sym
+      (2..(@schema.length - 1)).each do |i|
+        ff = "field#{i - 1}".to_sym
         sample[ff] = row[i]
       end
 
@@ -212,11 +212,11 @@ class SamplesController < ApplicationController
   def upgrade s, st
 
     (1..8).each do |i|
-      n = st.fieldname i       
-      t = st.fieldtype i 
-      if t == [ 'string' ] || t == [ 'url' ] || t == [ 'number' ]
+      n = st.fieldname i
+      t = st.fieldtype i
+      if t == ['string'] || t == ['url'] || t == ['number']
         fv = s.field_values.new name: n, value: s["field#{i}"].to_s
-      elsif t != [ 'not used' ] && s["field#{i}"] && s["field#{i}"] != '-none-' && s["field#{i}"] != '' && s["field#{i}"] != 'NA'
+      elsif t != ['not used'] && s["field#{i}"] && s["field#{i}"] != '-none-' && s["field#{i}"] != '' && s["field#{i}"] != 'NA'
         c = Sample.find_by_name(s["field#{i}"])
         @messages << "Sample #{s.id}: #{n}: Could not find '#{s["field#{i}"]}' with type in #{t}." unless c
         fv = s.field_values.new(name: n, child_sample_id: c.id) if c
@@ -254,4 +254,3 @@ class SamplesController < ApplicationController
   end
 
 end
-

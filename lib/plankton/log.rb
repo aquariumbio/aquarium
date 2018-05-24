@@ -14,7 +14,7 @@ module Plankton
         @tok.eat_a ':'
         lines[:endline] = @tok.line
         push LogInstruction.new key, expr, 'log_file', lines
-       
+
       end
 
       @tok.eat_a 'end'

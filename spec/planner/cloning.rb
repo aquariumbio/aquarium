@@ -14,7 +14,7 @@ RSpec.describe "Planner" do
 
       goal = seq.operations.create status: "planning", user_id: User.find_by_login("klavins").id
       goal.set_input("Plasmid", SampleType.find_by_name("Plasmid").samples.last)
-     
+
       puts
       puts "\e[93mPlanning #{goal}\e[39m"
 
@@ -26,22 +26,22 @@ RSpec.describe "Planner" do
       planner.mark_shortest goal
 
       puts
-      puts "\e[93mMarking unused operations\e[39m"  
+      puts "\e[93mMarking unused operations\e[39m"
       planner.mark_unused goal
 
       puts
-      puts "\e[93mPlan\e[39m"  
+      puts "\e[93mPlan\e[39m"
       goal.reload
       goal.show_plan
 
       puts
-      puts "\e[93mStatus: #{goal.issues.join(', ')}\e[39m" 
+      puts "\e[93mStatus: #{goal.issues.join(', ')}\e[39m"
       goal.recurse do |op|
         puts "op #{op.id} has inputs that need to be defined" if op.undetermined_inputs?
       end
 
       puts
-      puts "\e[93mDefining inputs for Gibson and planning\e[39m" 
+      puts "\e[93mDefining inputs for Gibson and planning\e[39m"
       ops = goal.find "Gibson Assembly"
 
       if !ops.empty?
@@ -54,12 +54,12 @@ RSpec.describe "Planner" do
       end
 
       puts
-      puts "\e[93mNew Plan\e[39m"  
+      puts "\e[93mNew Plan\e[39m"
       goal.reload
-      goal.show_plan      
+      goal.show_plan
 
       puts
-      puts "\e[93mDefining inputs for E coli Transformation\e[39m" 
+      puts "\e[93mDefining inputs for E coli Transformation\e[39m"
       ops = goal.find "Transform E coli"
 
       if !ops.empty?
@@ -72,13 +72,13 @@ RSpec.describe "Planner" do
       end
 
       puts
-      puts "\e[93mNew Plan\e[39m"  
+      puts "\e[93mNew Plan\e[39m"
       goal.reload
-      goal.show_plan         
+      goal.show_plan
       issues = goal.issues
 
       puts
-      puts "\e[92mPlan #{goal.plan.id} issues: [ " + issues.join(', ') + "]\e[39m"      
+      puts "\e[92mPlan #{goal.plan.id} issues: [ " + issues.join(', ') + "]\e[39m"
 
       if issues.empty?
 
@@ -88,7 +88,7 @@ RSpec.describe "Planner" do
           if op.status == "planning"
             op.status = op.leaf? ? "pending" : "waiting"
           end
-          op.save            
+          op.save
         end
 
         run

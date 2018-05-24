@@ -1,9 +1,9 @@
 
-  #
-  # Aquarium metacol daemon
-  #
-  # This daemon periodically updates all active metacols. 
-  #
+#
+# Aquarium metacol daemon
+#
+# This daemon periodically updates all active metacols.
+#
 
 module MetacolDaemon
 
@@ -14,7 +14,7 @@ module MetacolDaemon
     while true
 
       update
-      sleep 15      
+      sleep 15
 
     end
 
@@ -31,7 +31,7 @@ module MetacolDaemon
 
     is_valid_query = true
 
-    begin 
+    begin
       procs = Metacol.where("status = 'RUNNING'")
       l = procs.length # This line forces active record to query the db here, instead of at procs.each below
     rescue Exception => e
@@ -44,7 +44,7 @@ module MetacolDaemon
       procs.each do |process|
 
         unless process.num_pending_jobs > 10 # to keep poorly written metacols from spiraling out of control
-                                             # we limit the number of pending jobs they can have to 11
+          # we limit the number of pending jobs they can have to 11
 
           # Get the metacol and parse it, checking for parse errors along the way
 
@@ -59,7 +59,7 @@ module MetacolDaemon
           args = (JSON.parse process.state, :symbolize_names => true)[:stack].first
 
           begin
-            m = Oyster::Parser.new(process.path,content).parse args
+            m = Oyster::Parser.new(process.path, content).parse args
           rescue Exception => e
             error = true
             process.message = "#{Time.now}: Error in Daemon while parsing #{process.path}: " + e.message.split('[')[0]
@@ -68,11 +68,11 @@ module MetacolDaemon
             process.save
           end
 
-          if !error 
+          if !error
 
             # Parsing was successful, so update the process.
 
-            m.set_state( JSON.parse process.state, :symbolize_names => true )
+            m.set_state(JSON.parse process.state, :symbolize_names => true)
             m.id = process.id
 
             begin
@@ -103,4 +103,3 @@ module MetacolDaemon
   end
 
 end
-

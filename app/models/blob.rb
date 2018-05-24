@@ -1,16 +1,16 @@
 class Blob < ActiveRecord::Base
 
   # Note: Blobs used to be used to cache local copies of things from github or local files. The new
-  # scheme is to have local github repos, so blobs are not used for that anymore. They only use for 
+  # scheme is to have local github repos, so blobs are not used for that anymore. They only use for
   # blobs at this point is to remember the content of protocols launched from local files.
 
   attr_accessible :path, :sha, :xml, :dir, :job_id
 
   def self.get sha, path
 
-    b  = self.find_by_sha ( sha )
+    b = self.find_by_sha ( sha)
 
-    if !b 
+    if !b
 
       if !/local/.match sha
 
@@ -29,14 +29,14 @@ class Blob < ActiveRecord::Base
   end
 
   def self.get_tree sha
-  
-    b  = self.find_by_sha ( sha )
+
+    b = self.find_by_sha ( sha)
 
     if b
- 
+
       result = YAML.load(b.dir).tree
 
-    else 
+    else
 
       client = Octokit::Client.new(login: Bioturk::Application.config.repo_user, password: Bioturk::Application.config.repo_password)
       gh = (client.tree Bioturk::Application.config.protocol_repo, sha)
@@ -80,7 +80,7 @@ class Blob < ActiveRecord::Base
         b.save
       end
 
-    else 
+    else
 
       b = blist.first
 

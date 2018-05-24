@@ -16,13 +16,13 @@ module Plankton
 
       info = {}
 
-      @info_expr.each do |k,v|
+      @info_expr.each do |k, v|
 
         if k != :query
           info[k] = scope.substitute v
         else
           info[:query] = {}
-          v.each do |q,w|
+          v.each do |q, w|
             evaled = scope.evaluate w
             info[:query][q] = scope.substitute evaled
           end
@@ -55,7 +55,6 @@ module Plankton
     def to_html
       info_expr.to_s
     end
-
 
   end
 

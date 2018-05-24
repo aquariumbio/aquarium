@@ -4,7 +4,7 @@ class ItemsController < ApplicationController
 
   def index
 
-    if params[:type] == 'collection' 
+    if params[:type] == 'collection'
 
       respond_to do |format|
         format.html # index.html.erb
@@ -31,14 +31,14 @@ class ItemsController < ApplicationController
       redirect_to search_path
       return
     end
-    
+
     @object_type = @item.object_type
     @handler = view_context.make_handler @object_type
 
     @active_item = params[:active_item]
     @touches = @item.touches
 
-    if @item.locator 
+    if @item.locator
       @wizard = @item.locator.wizard
       @box = @item.locator.to_s.split('.')[0..2].join('.')
     end
@@ -58,10 +58,10 @@ class ItemsController < ApplicationController
 
     @handler = view_context.make_handler @object_type
 
-    @item = @handler.new_item params 
+    @item = @handler.new_item params
     @item.save
 
-    if (@item.errors.size > 0 )
+    if (@item.errors.size > 0)
       flash[:error] = ""
       @item.errors.full_messages.each do |e|
         flash[:error] += e + " "
@@ -70,7 +70,7 @@ class ItemsController < ApplicationController
 
     if @object_type.handler == 'sample_container'
 
-      redirect_to sample_path( @item.sample )     
+      redirect_to sample_path(@item.sample)
 
     else
 
@@ -89,7 +89,7 @@ class ItemsController < ApplicationController
 
     if !item.errors.empty?
       render json: { errors: item.errors.full_messages }
-    else 
+    else
       render json: { item: item.as_json(include: [:locator]) }
     end
 
@@ -110,11 +110,11 @@ class ItemsController < ApplicationController
           redirect_to object_type_url :id => i.object_type_id
         end
       }
-      format.json { 
+      format.json {
         puts "JSON"
         render json: i
       }
-    end    
+    end
 
   end
 
@@ -122,19 +122,19 @@ class ItemsController < ApplicationController
     i = Item.find(params[:id])
     i.move_to params[:location]
     render json: { message: "Item #{i.id} successfully moved to #{i.location}" } if i.errors.empty?
-    render json: { error: "Could not move item #{i.id} to #{params[:location]}: #{i.errors.full_messages.join(', ')}" } unless i.errors.empty?  
+    render json: { error: "Could not move item #{i.id} to #{params[:location]}: #{i.errors.full_messages.join(', ')}" } unless i.errors.empty?
   end
 
   def store
     i = Item.find(params[:id])
     i.store
     render json: i if i.errors.empty?
-    render json: { error: "Could not move item #{i.id} to #{params[:location]}: #{i.errors.full_messages.join(', ')}" }, status: :unprocessable_entity unless i.errors.empty?  
+    render json: { error: "Could not move item #{i.id} to #{params[:location]}: #{i.errors.full_messages.join(', ')}" }, status: :unprocessable_entity unless i.errors.empty?
   end
 
   def update
 
-    if params[:item] 
+    if params[:item]
 
       i = Item.find(params[:item][:id])
       i.data = params[:item][:data]
@@ -146,7 +146,7 @@ class ItemsController < ApplicationController
       if params[:item][:return_page] == 'item_show'
         redirect_to item_url :id => i.id
       else
-        redirect_to sample_url( { id: i.sample_id, active_item: i.id } )
+        redirect_to sample_url({ id: i.sample_id, active_item: i.id })
       end
 
     else # called with just the id
@@ -155,22 +155,22 @@ class ItemsController < ApplicationController
 
       case params['update_action']
 
-        when 'update'
-          i.quantity = params[:quantity]
-          flash[:success] = "Quantity at location " + i.location + " updated to " + i.quantity.to_s if i.save
+      when 'update'
+        i.quantity = params[:quantity]
+        flash[:success] = "Quantity at location " + i.location + " updated to " + i.quantity.to_s if i.save
 
-        when 'take'
-          i.inuse = params[:inuse]
-          flash[:success] = "Number of items at location " + i.location + " updated to " + i.inuse.to_s if i.save
+      when 'take'
+        i.inuse = params[:inuse]
+        flash[:success] = "Number of items at location " + i.location + " updated to " + i.inuse.to_s if i.save
 
-        when 'move'
-          i.move_to params[:location]
-          flash[:success] = "Item #{i.id} moved to #{i.location}" if i.errors.empty?
-          flash[:error] = "Could not move item #{i.id} to #{i.location}." unless i.errors.empty?        
+      when 'move'
+        i.move_to params[:location]
+        flash[:success] = "Item #{i.id} moved to #{i.location}" if i.errors.empty?
+        flash[:error] = "Could not move item #{i.id} to #{i.location}." unless i.errors.empty?
 
       end
 
-      if ( i.errors.size > 0 )
+      if (i.errors.size > 0)
         flash[:error] = ""
         i.errors.full_messages.each do |e|
           flash[:error] += e + " "
@@ -191,7 +191,7 @@ class ItemsController < ApplicationController
 
     data = "id,object type,sample,sample type,location,user,created,updated\n"
 
-    Item.includes(:object_type, sample: [:sample_type,:user], locator: [:wizard]).all.each do |i|
+    Item.includes(:object_type, sample: [:sample_type, :user], locator: [:wizard]).all.each do |i|
       if !i.deleted?
         if i.object_type
           oname = i.object_type.name

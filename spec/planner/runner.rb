@@ -3,8 +3,8 @@ def run
   while Operation.where(status: "pending").count > 0
 
     puts
-    puts "\e[93mScheduling and running operations!\e[39m"   
-    puts "\e[93m----------------------------------------------------------------------------------\e[39m"                
+    puts "\e[93mScheduling and running operations!\e[39m"
+    puts "\e[93m----------------------------------------------------------------------------------\e[39m"
 
     OperationType.all.each do |ot|
 
@@ -29,7 +29,7 @@ def run
 
         if job.error?
           puts "Job #{job.id} failed: #{job.error_message}"
-          puts job.error_backtrace.join("\n")            
+          puts job.error_backtrace.join("\n")
           raise "Job #{job.id} failed"
         else
           ops.each do |op|
@@ -42,19 +42,19 @@ def run
                 suc.status = "pending"
                 suc.save
                 suc.reload
-                puts "  #{suc.id}'s status is now #{suc.status}."                      
+                puts "  #{suc.id}'s status is now #{suc.status}."
                 puts "ERROR UPDATING STATUS" unless suc.errors.empty?
               end
             end
           end
         end
 
-      end          
+      end
 
     end
 
     puts "At end of round there are #{Operation.where(status: 'pending').count} pending, #{Operation.where(status: 'waiting').count} waiting, and #{Operation.where(status: 'done').count} done operations"
 
-  end 
+  end
 
 end

@@ -6,7 +6,7 @@ module Plankton
 
       # TODO THIS PART SHOULD BE AN EXPRESSION
       @tok.eat_a 'item'
-      return expr     
+      return expr
 
     end # item_expr
 
@@ -62,21 +62,21 @@ module Plankton
         elsif @tok.next == '='
 
           ta = take_assign
-   
+
           if ta[:object]
             puts "C"
             entry_list.push TakeEntry.new({
-              var: ta[:var], 
-              quantity_expr: ta[:object][:quantity], 
-              type_expr: ta[:object][:type]
-            })
+                                            var: ta[:var],
+                                            quantity_expr: ta[:object][:quantity],
+                                            type_expr: ta[:object][:type]
+                                          })
 
           else
 
             entry_list.push TakeEntry.new({
-              var: ta[:var], 
-              item_expr: ta[:item]
-            })
+                                            var: ta[:var],
+                                            item_expr: ta[:item]
+                                          })
 
           end
 
@@ -85,10 +85,10 @@ module Plankton
           ob = object_expr
 
           entry_list.push TakeEntry.new({
-            var: "most_recently_taken_item", 
-            quantity_expr: ob[:quantity], 
-            type_expr: ob[:type]
-          })
+                                          var: "most_recently_taken_item",
+                                          quantity_expr: ob[:quantity],
+                                          type_expr: ob[:type]
+                                        })
 
         end
 

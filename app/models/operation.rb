@@ -1,14 +1,14 @@
- # Class that represents an operation in the lab
- # Some very important methods include {#input}, {#output}, {#error}, {#pass}
+# Class that represents an operation in the lab
+# Some very important methods include {#input}, {#output}, {#error}, {#pass}
 # @api krill
 
- class Operation < ActiveRecord::Base
+class Operation < ActiveRecord::Base
 
   include DataAssociator
   include FieldValuer
   include OperationPlanner
   include OperationStatus
-  
+
   def parent_type # interface with FieldValuer
     operation_type
   end
@@ -51,7 +51,7 @@
   # @param name [String]
   # @param val [Sample]
   # @param aft [AllowableFieldType]
-  def set_input name, val, aft=nil
+  def set_input name, val, aft = nil
     set_property name, val, "input", false, aft
   end
 
@@ -59,7 +59,7 @@
   # @param name [String]
   # @param val [Sample]
   # @param aft [AllowableFieldType]
-  def set_output name, val, aft=nil
+  def set_output name, val, aft = nil
     set_property name, val, "output", false, aft
   end
 
@@ -72,45 +72,46 @@
   # @example Add input for items to discard
   #   items.each do |i|
   #     items_in_inputs = op.inputs.map { |input| input.item }.uniq
-  # 
+  #
   #     if not items_in_inputs.include? i
   #       n = "Discard Item #{i.id}"
   #       op.add_input n, i.sample, i.object_type
   #       op.input(n).set item: i
   #     end
   #   end
-  def add_input name, sample, container 
+  def add_input name, sample, container
     items = Item.where(sample_id: sample.id, object_type_id: container.id).reject { |i| i.deleted? }
-    
+
     if items.any?
-        
-        item = items.first
-   
+
+      item = items.first
+
       ft = FieldType.new(
-          name: name,
-          ftype: "sample",
-          parent_class: "OperationType",
-          parent_id: nil
+        name: name,
+        ftype: "sample",
+        parent_class: "OperationType",
+        parent_id: nil
       )
       ft.save
-    
+
       fv = FieldValue.new(
-          name: name,
-          child_item_id: item.id,
-          child_sample_id: sample.id,
-          role: 'input',
-          parent_class: "Operation",
-          parent_id: self.id,
-          field_type_id: ft.id)
+        name: name,
+        child_item_id: item.id,
+        child_sample_id: sample.id,
+        role: 'input',
+        parent_class: "Operation",
+        parent_id: self.id,
+        field_type_id: ft.id
+      )
       fv.save
-      
+
       return item
-      
+
     end
-    
+
     return nil
-      
-  end  
+
+  end
 
   # @return [Array<FieldValue>]
   def inputs
@@ -155,13 +156,13 @@
   # @param name [String]
   # @return [Array<FieldValue>]
   def output_array name
-    outputs.select { |o| o.name == name } .extend(IOList)   
+    outputs.select { |o| o.name == name } .extend(IOList)
   end
 
   # @param name [String]
   # @param role [String]
   # @return [FieldValue]
-  def get_field_value name, role="input"
+  def get_field_value name, role = "input"
     field_values.find { |fv| fv.name == name && fv.role == role }
   end
 
@@ -169,7 +170,7 @@
   # @param input_name [String]
   # @param output_name [String]
   # @return [Operation]
-  def pass input_name, output_name=nil
+  def pass input_name, output_name = nil
 
     output_name = input_name unless output_name
 
@@ -215,7 +216,7 @@
 
   def to_s
     ins = (inputs.collect { |fv| "#{fv.name}: #{fv.child_sample ? fv.child_sample.name : 'NO SAMPLE'}" }).join(", ")
-    outs = (outputs.collect { |fv| "#{fv.name}: #{fv.child_sample ? fv.child_sample.name : 'NO SAMPLE'}" }).join(", ")    
+    outs = (outputs.collect { |fv| "#{fv.name}: #{fv.child_sample ? fv.child_sample.name : 'NO SAMPLE'}" }).join(", ")
     "#{operation_type.name} #{id} ( " + ins + " ) ==> ( " + outs + " )"
   end
 
@@ -224,7 +225,7 @@
     ops = []
 
     outputs.each do |output|
-      output.successors.each do |suc|    
+      output.successors.each do |suc|
         ops << suc.operation
       end
     end
@@ -252,7 +253,7 @@
     ops = []
 
     inputs.each do |input|
-      input.predecessors.each do |pred|        
+      input.predecessors.each do |pred|
         ops << pred.operation if pred.operation && pred.operation.status == "primed"
       end
     end
@@ -293,7 +294,7 @@
     end
   end
 
-  def self.step ops=nil
+  def self.step ops = nil
 
     if !ops
       ops = Operation.includes(:operation_type)
@@ -346,7 +347,7 @@
   def set_child_data child_name, child_role, data_name, value
     fv = get_input(child_name) if child_role == 'input'
     fv = get_output(child_name) if child_role == 'output'
-    fv ? fv.set_child_data(data_name,value) : nil
+    fv ? fv.set_child_data(data_name, value) : nil
   end
 
   def set_input_data input_name, data_name, value
@@ -355,7 +356,7 @@
 
   def set_output_data input_name, data_name, value
     set_child_data input_name, 'output', data_name, value
-  end  
+  end
 
   def precondition_value
 
@@ -366,7 +367,7 @@
       rval = precondition(self)
     rescue Exception => e
       Rails.logger.info "PRECONDITION FOR OPERATION #{id} crashed"
-      plan.associate "Precondition Evalution Error", e.message.to_s + ": " + e.backtrace[0].to_s.sub("(eval)","line")
+      plan.associate "Precondition Evalution Error", e.message.to_s + ": " + e.backtrace[0].to_s.sub("(eval)", "line")
       rval = false # default if there is no precondition or it crashes
     end
 
@@ -379,8 +380,8 @@
     ot = OperationType.find_by_name(opts[:type])
 
     op = ot.operations.create(
-        status: "waiting",
-        user_id: user_id
+      status: "waiting",
+      user_id: user_id
     )
 
     plan.plan_associations.create operation_id: op.id
@@ -393,11 +394,11 @@
     end
 
     raise "Could not find output #{opts[:from]} of #{operation_type.name}" unless output(opts[:from])
-    raise "Could not find input #{opts[:to]} of #{opts[:type]} (inputs = #{op.field_values.inspect})" unless op.input(opts[:to])   
-    
+    raise "Could not find input #{opts[:to]} of #{opts[:type]} (inputs = #{op.field_values.inspect})" unless op.input(opts[:to])
+
     wire = Wire.new(
-      from_id: output(opts[:from]).id, 
-      to_id: op.input(opts[:to]).id, 
+      from_id: output(opts[:from]).id,
+      to_id: op.input(opts[:to]).id,
       active: true
     )
 
@@ -426,7 +427,7 @@
 
     return true
 
-  end  
+  end
 
   def temporary
     @temporary ||= {}
@@ -434,4 +435,3 @@
   end
 
 end
-

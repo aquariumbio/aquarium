@@ -1,6 +1,6 @@
 Bioturk::Application.routes.draw do
 
-  resources :timings, only: [ :update, :create ]
+  resources :timings, only: [:update, :create]
 
   get '/json/current',             to: 'json#current'
   post '/json/items',              to: 'json#items'
@@ -33,7 +33,7 @@ Bioturk::Application.routes.draw do
   post '/operations/unbatch',                    to: 'operations#unbatch'
   get '/operations/jobs',                        to: 'operations#jobs'
   get '/operations/:id/status/:status',          to: 'operations#set_status'
-  get '/operations/:id/retry',                   to: 'operations#retry'  
+  get '/operations/:id/retry',                   to: 'operations#retry'
   resources :operations
 
   post '/operation_types/import',                    to: 'operation_types#import'
@@ -114,7 +114,7 @@ Bioturk::Application.routes.draw do
   get 'sample_list/:id',                         to: 'object_types#samples'
   get 'sample_list',                             to: 'object_types#samples'
 
-  resources :posts, only: [ :index, :create ]
+  resources :posts, only: [:index, :create]
   resources :wizards
 
   match "api", to: "api#main"
@@ -146,7 +146,7 @@ Bioturk::Application.routes.draw do
   match "read", to: "tasks#read"
 
   get "metacols/draw"
-  match 'viewer',        to: 'metacols#viewer'
+  match 'viewer', to: 'metacols#viewer'
 
   resources :metacols do
     get 'arguments', on: :new
@@ -167,7 +167,7 @@ Bioturk::Application.routes.draw do
     end
   end
 
-  resources :cart_items, only: [ :index, :new, :destroy ]
+  resources :cart_items, only: [:index, :new, :destroy]
   resources :samples
   resources :sample_types
 
@@ -203,11 +203,10 @@ Bioturk::Application.routes.draw do
   get "krill/inventory"
   get "krill/abort"
   get "krill/jobs"
-  post "krill/upload"               
+  post "krill/upload"
   get "krill/uploads"
   get "krill/tasks"
   post "krill/attach"
-
 
   get "stats/jobs"
   get "stats/users"

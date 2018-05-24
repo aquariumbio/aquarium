@@ -11,7 +11,7 @@ module ApplicationHelper
   end
 
   def htmlstring x
-    raw("\""+x.to_s+"\"")
+    raw("\"" + x.to_s + "\"")
   end
 
   def pluralize_without_count(count, noun, text = nil)

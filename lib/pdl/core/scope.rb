@@ -1,8 +1,8 @@
-class Scope 
+class Scope
 
   attr_reader :stack;
 
-  def initialize(opts={})
+  def initialize(opts = {})
     o = {
       base: {}
     }.merge opts
@@ -21,8 +21,8 @@ class Scope
     @stack.first[symbol] = value
   end
 
-  def push 
-    @stack.push( {} )
+  def push
+    @stack.push({})
   end
 
   def pop
@@ -49,23 +49,23 @@ class Scope
     begin
       str % collapse
     rescue Exception => e
-      raise "Unkown symbol in text. " + e.message.sub('key','%')
+      raise "Unkown symbol in text. " + e.message.sub('key', '%')
     end
   end
 
   def symbol_subs
     syms = {}
-    collapse.each do |k,v|
+    collapse.each do |k, v|
       syms[k] = "(get :#{k})"
     end
     syms
   end
 
   def evaluate str
-    begin 
-      expr = str % symbol_subs 
+    begin
+      expr = str % symbol_subs
     rescue Exception => e
-      raise "Unknown symbol in expression. " + e.message.sub('key','%')
+      raise "Unknown symbol in expression. " + e.message.sub('key', '%')
     end
     begin
       result = eval(expr)
@@ -78,8 +78,8 @@ class Scope
   def to_s
     s = ""
     indent = "  "
-    @stack.reverse.each do |table| 
-      table.each do |key,value|
+    @stack.reverse.each do |table|
+      table.each do |key, value|
         s += indent + key.to_s + ': '
         if value.kind_of?(Array)
           s += "\n"

@@ -1,10 +1,10 @@
 module Lang
 
-  class Scope 
+  class Scope
 
     attr_reader :stack;
 
-    def initialize(opts={})
+    def initialize(opts = {})
       o = {
         base: {}
       }.merge opts
@@ -45,7 +45,7 @@ module Lang
     def set_complex lhs, rhs, new ################################################################################
 
       temp_lhs = lhs.gsub /%{([a-zA-Z][a-zA-Z_0-9]*)}/, '\1'
-      temp_parser = Plankton::Parser.new( "n/a", temp_lhs )
+      temp_parser = Plankton::Parser.new("n/a", temp_lhs)
       parts = temp_parser.get_lhs_parts
 
       # get the current value of the variable
@@ -54,15 +54,15 @@ module Lang
       eval(expr)
 
       if new
-        set_new( parts[:var].to_sym, v )
+        set_new(parts[:var].to_sym, v)
       else
-        set( parts[:var].to_sym, v )
+        set(parts[:var].to_sym, v)
       end
 
     end # set_complex #############################################################################################
 
-    def push 
-      @stack.push( {} )
+    def push
+      @stack.push({})
     end
 
     def pop
@@ -93,29 +93,29 @@ module Lang
       begin
         str % collapse
       rescue Exception => e
-        raise "Unkown symbol in text. " + e.message.sub('key','%')
+        raise "Unkown symbol in text. " + e.message.sub('key', '%')
       end
     end
 
     def symbol_subs
       syms = {}
-      collapse.each do |k,v|
+      collapse.each do |k, v|
         syms[k] = "(get :#{k})"
       end
       syms
     end
 
     def evaluate str
-      begin 
-        expr = str % symbol_subs 
+      begin
+        expr = str % symbol_subs
       rescue Exception => e
-        raise "Unknown symbol in expression. " + e.message.sub('key','%')
+        raise "Unknown symbol in expression. " + e.message.sub('key', '%')
       end
-      #puts "Evaluated #{str} and got #{expr}"
+      # puts "Evaluated #{str} and got #{expr}"
       begin
         result = eval(expr)
       rescue Exception => e
-        raise "Could not evaluate #{str} => #{expr}. " + e.message 
+        raise "Could not evaluate #{str} => #{expr}. " + e.message
       end
       result
     end
@@ -123,8 +123,8 @@ module Lang
     def to_s
       s = ""
       indent = "  "
-      @stack.reverse.each do |table| 
-        table.each do |key,value|
+      @stack.reverse.each do |table|
+        table.each do |key, value|
           s += indent + key.to_s + ': '
           if value.kind_of?(Array)
             s += "\n"

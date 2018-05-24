@@ -1,24 +1,24 @@
 # Associates and manages {DataAssociation}s
 # @api krill
 
-module DataAssociator 
+module DataAssociator
 
   ########################
-  # Getters 
+  # Getters
   #
 
-  # Return the {DataAssociation}s for this object that have the given key, or 
+  # Return the {DataAssociation}s for this object that have the given key, or
   # all associations if no key is given.
   # Includes the upload object for the association if there is one.
   #
   # @param key [String] the key for the association
   # @return [Array<DataAssociation>] the array of associations with the key
-  def data_associations key=nil
+  def data_associations key = nil
     if key
       DataAssociation.includes(:upload).where(parent_id: id, parent_class: self.class.to_s, key: key.to_s)
     else
       DataAssociation.includes(:upload).where(parent_id: id, parent_class: self.class.to_s)
-    end      
+    end
   end
 
   # Return the Hash of all {DataAssociation}s for this object.
@@ -30,7 +30,7 @@ module DataAssociator
       h[da.key] = da.value
     }
     h
-  end 
+  end
 
   # Get the {DataAssociation} with the given key for this object.
   #
@@ -77,7 +77,7 @@ module DataAssociator
   #
 
   # Add a {DataAssociation} to this object to a value and an `Upload`, and with the given key.
-  # 
+  #
   # If an association with the key exists, then the association will be modified (@see modify).
   #
   # @param key [String] the key for the new association
@@ -86,19 +86,19 @@ module DataAssociator
   # params options[:duplicates] [Boolean] whether to duplicate an existing key. Default is false
   # @example Associate concentration with an operation's input
   #   op.input("Fragment").item.associate :concentration, 42
-  def associate key, value, upload=nil, options={duplicates: false}
+  def associate key, value, upload = nil, options = { duplicates: false }
 
-    if options[:duplicates] || data_associations(key).empty? 
+    if options[:duplicates] || data_associations(key).empty?
       da = DataAssociation.new({
-        parent_id: id,
-        parent_class: self.class.to_s,
-        key: key.to_s,
-        object: { key => value }.to_json,
-        upload_id: upload ? upload.id : nil
-      })
+                                 parent_id: id,
+                                 parent_class: self.class.to_s,
+                                 key: key.to_s,
+                                 object: { key => value }.to_json,
+                                 upload_id: upload ? upload.id : nil
+                               })
       da.save
-      unless da.errors.empty?      
-        self.errors.add :data_association_error, "Could not save data association named '#{key}': #{da.errors.full_messages.join(', ')}"        
+      unless da.errors.empty?
+        self.errors.add :data_association_error, "Could not save data association named '#{key}': #{da.errors.full_messages.join(', ')}"
       end
     else
       modify key, value, upload
@@ -114,13 +114,13 @@ module DataAssociator
   # @param key [String] the key for the association
   # @param value [Object] the new value for the association (may be any serializable value)
   # @param upload [Upload] the upload object (default: `nil`)
-  def modify key, value, upload=nil
+  def modify key, value, upload = nil
     da = get_association key
     if da
       da.object = { key => value }.to_json
       da.upload = upload if upload
       da.save
-    else      
+    else
       self.errors.add :data_association_error, "Data association named '#{key}' not found."
     end
     self
@@ -136,7 +136,7 @@ module DataAssociator
       da.save
     else
       associate :notes, text.to_s
-    end    
+    end
     text
   end
 
@@ -151,7 +151,7 @@ module DataAssociator
       da.save
     else
       associate :notes, text.to_s
-    end    
+    end
     text
   end
 

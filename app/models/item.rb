@@ -7,7 +7,6 @@ class Item < ActiveRecord::Base
 
   # associations #######################################################
 
-
   belongs_to :object_type
   belongs_to :sample
   has_many :touches
@@ -18,7 +17,6 @@ class Item < ActiveRecord::Base
 
   # accessors ###########################################################
 
-
   attr_accessible :quantity, :inuse, :sample_id, :data, :object_type_id,
                   :created_at, :collection_id, :locator_id, :location,
                   :sample_attributes, :object_type_attributes
@@ -27,32 +25,30 @@ class Item < ActiveRecord::Base
 
   # validations #########################################################
 
-
   validates :quantity, :presence => true
   validate :quantity_nonneg
 
-  validates :inuse,    :presence => true
+  validates :inuse, :presence => true
   validate :inuse_less_than_quantity
 
   def quantity_nonneg
-    errors.add(:quantity, "Must be non-negative." ) unless
-      self.quantity && self.quantity >= -1 
+    errors.add(:quantity, "Must be non-negative.") unless
+      self.quantity && self.quantity >= -1
   end
 
   def inuse_less_than_quantity
-    errors.add(:inuse, "must non-negative and not greater than the quantity." ) unless
+    errors.add(:inuse, "must non-negative and not greater than the quantity.") unless
       self.quantity && self.inuse && self.inuse >= -1 && self.inuse <= self.quantity
   end
 
   # location methods ###############################################################
-
 
   def primitive_location
     self[:location]
   end
 
   # Returns the location of the Item
-  # 
+  #
   # @return [String] the location as a string
   def location
     if self.locator
@@ -67,57 +63,57 @@ class Item < ActiveRecord::Base
   # @param x [String] the location string
   def location= x
     move_to x
-    write_attribute(:location,x) # just for consistency
+    write_attribute(:location, x) # just for consistency
   end
 
   def set_primitive_location locstr
-    write_attribute(:location,locstr) 
+    write_attribute(:location, locstr)
   end
 
   # Sets item location to empty slot based on location {Wizard}. By default sets to "Bench"
-  # 
+  #
   # @return [Item] self
   def store
     wiz = Wizard.find_by_name(object_type.prefix)
     if wiz
       locator = wiz.next
-      move_to( wiz.int_to_location locator.number )
+      move_to(wiz.int_to_location locator.number)
     else
       move_to "Bench"
     end
   end
 
   # Sets item location to provided string or to string's associated location {Wizard} if it exists
-  # 
+  #
   # @param locstr [String] the location string
   # @return [Item] self
-  def move_to locstr 
+  def move_to locstr
 
     if object_type
       wiz = Wizard.find_by_name(object_type.prefix)
     end
 
-    if object_type && wiz && wiz.has_correct_form( locstr ) # item and location managed by a wizard
+    if object_type && wiz && wiz.has_correct_form(locstr) # item and location managed by a wizard
 
       unless wiz.has_correct_form locstr
-        errors.add(:wrong_form, "'#{locstr}'' is not in the form of a location for the #{wiz.name} wizard." )
+        errors.add(:wrong_form, "'#{locstr}'' is not in the form of a location for the #{wiz.name} wizard.")
         return
       end
 
       locs = Locator.where(wizard_id: wiz.id, number: (wiz.location_to_int locstr))
 
-      case locs.length 
-        when 0
-          newloc = wiz.addnew locstr
-        when 1
-          newloc = locs.first 
-        else         
-          errors.add(:too_many_locators, "There are multiple items at #{locstr}." )
-          return
+      case locs.length
+      when 0
+        newloc = wiz.addnew locstr
+      when 1
+        newloc = locs.first
+      else
+        errors.add(:too_many_locators, "There are multiple items at #{locstr}.")
+        return
       end
 
       if newloc == locator
-        errors.add(:already_there, "Item is already at #{locstr}." )
+        errors.add(:already_there, "Item is already at #{locstr}.")
         return nil
       end
 
@@ -126,12 +122,12 @@ class Item < ActiveRecord::Base
         oldloc = Locator.find_by_id(locator_id)
         oldloc.item_id = nil if oldloc
         self.locator_id = newloc.id
-        write_attribute(:location,locstr)
+        write_attribute(:location, locstr)
         self.quantity = 1
         self.inuse = 0
         newloc.item_id = id
 
-        transaction do 
+        transaction do
           self.save
           oldloc.save if oldloc
           newloc.save
@@ -142,7 +138,7 @@ class Item < ActiveRecord::Base
         puts "newloc = #{newloc.inspect}"
         newloc.reload
 
-        errors.add(:locator_save_error, "Error: '#{errors.full_messages.join(',')}'") unless errors.empty? 
+        errors.add(:locator_save_error, "Error: '#{errors.full_messages.join(',')}'") unless errors.empty?
 
       else
 
@@ -154,8 +150,8 @@ class Item < ActiveRecord::Base
 
       loc = Locator.find_by_id(locator_id)
       loc.item_id = nil if loc
-      
-      write_attribute(:location,locstr)
+
+      write_attribute(:location, locstr)
       self.locator_id = nil
 
       transaction do
@@ -186,22 +182,22 @@ class Item < ActiveRecord::Base
   end
 
   # (see #move_to)
-  # 
+  #
   # @note for backwards compatability
   def move locstr
     move_to locstr
   end
 
-  def self.make params, opts={} 
+  def self.make params, opts = {}
     o = { object_type: nil, sample: nil, location: nil }.merge opts
 
     if o[:object_type]
       loc = params["location"]
       params.delete "location"
-      item = self.new params.merge( object_type_id: o[:object_type].id )
+      item = self.new params.merge(object_type_id: o[:object_type].id)
       item.save
       item.location = loc if loc
-    else 
+    else
       item = self.new params
     end
 
@@ -248,19 +244,19 @@ class Item < ActiveRecord::Base
     end
 
   end
- 
-  # Delete the Item (sets item's location to "deleted")
-  # 
-  # @return [Bool] Item deleted?
-  def mark_as_deleted 
 
-    write_attribute(:location,'deleted')
+  # Delete the Item (sets item's location to "deleted")
+  #
+  # @return [Bool] Item deleted?
+  def mark_as_deleted
+
+    write_attribute(:location, 'deleted')
     self.quantity = -1
     self.inuse = -1
     self.locator_id = nil
     locator.item_id = nil if locator
 
-    r1,r2 = [false,false]
+    r1, r2 = [false, false]
 
     transaction do
       r1 = self.save
@@ -272,14 +268,13 @@ class Item < ActiveRecord::Base
   end
 
   # Returns whether the Item is deleted
-  # 
+  #
   # @return [Bool] Item deleted?
   def deleted?
     primitive_location == 'deleted'
   end
 
   # other methods ############################################################################
-
 
   def set_data d
     self.data = d.to_json
@@ -334,22 +329,18 @@ class Item < ActiveRecord::Base
     "<a href='#' onclick='open_item_ui(#{self.id})'>#{self.id}</a>"
   end
 
-  def upgrade force=false # upgrades data field to data association (if no data associations exist)
+  def upgrade force = false # upgrades data field to data association (if no data associations exist)
 
-    if force || associations.empty? 
-    
+    if force || associations.empty?
+
       begin
-
         obj = JSON.parse self.data
 
-        obj.each do |k,v|
+        obj.each do |k, v|
           self.associate k, v
         end
-
       rescue Exception => e
-
         self.notes = self.data if self.data
-
       end
 
     else
@@ -361,7 +352,7 @@ class Item < ActiveRecord::Base
   end
 
   ###########################################################################
-  # OLD 
+  # OLD
   ###########################################################################
 
   def self.new_object name
@@ -369,7 +360,7 @@ class Item < ActiveRecord::Base
     i = self.new
     olist = ObjectType.where("name = ?", name)
     raise "Could not find object type named '#{spec[:object_type]}'." unless olist.length > 0
-    Item.make( { quantity: 1, inuse: 0 }, object_type: olist[0] )
+    Item.make({ quantity: 1, inuse: 0 }, object_type: olist[0])
 
   end
 
@@ -387,7 +378,7 @@ class Item < ActiveRecord::Base
     slist = Sample.where("name = ? AND sample_type_id = ?", name, sample_type_id)
     raise "Could not find sample named #{name}" unless slist.length > 0
 
-    Item.make( { quantity: 1, inuse: 0 }, sample: slist[0], object_type: olist[0] )
+    Item.make({ quantity: 1, inuse: 0 }, sample: slist[0], object_type: olist[0])
 
   end
 
@@ -406,12 +397,11 @@ class Item < ActiveRecord::Base
     a[:sample] = sample.export if association(:sample).loaded?
     a[:object_type] = object_type.export if association(:object_type).loaded?
     a
-  end  
+  end
 
   def week
     self.created_at.strftime('%W')
-  end  
-
+  end
 
   def self.items_for sid, oid
 
@@ -421,7 +411,7 @@ class Item < ActiveRecord::Base
     if sample && ot
 
       if ot.handler == 'collection'
-        return Collection.parts(sample,ot) 
+        return Collection.parts(sample, ot)
       else
         return sample.items.reject { |i| i.deleted? || i.object_type_id != ot.id }
       end
@@ -443,4 +433,3 @@ class Item < ActiveRecord::Base
   end
 
 end
-
