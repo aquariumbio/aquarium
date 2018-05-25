@@ -47,7 +47,7 @@ RSpec.describe ParametersController, :type => :controller do
   describe "GET #show" do
     it "assigns the requested parameter as @parameter" do
       parameter = Parameter.create! valid_attributes
-      get :show, {:id => parameter.to_param}, valid_session
+      get :show, { :id => parameter.to_param }, valid_session
       expect(assigns(:parameter)).to eq(parameter)
     end
   end
@@ -62,7 +62,7 @@ RSpec.describe ParametersController, :type => :controller do
   describe "GET #edit" do
     it "assigns the requested parameter as @parameter" do
       parameter = Parameter.create! valid_attributes
-      get :edit, {:id => parameter.to_param}, valid_session
+      get :edit, { :id => parameter.to_param }, valid_session
       expect(assigns(:parameter)).to eq(parameter)
     end
   end
@@ -71,30 +71,30 @@ RSpec.describe ParametersController, :type => :controller do
     context "with valid params" do
       it "creates a new Parameter" do
         expect {
-          post :create, {:parameter => valid_attributes}, valid_session
+          post :create, { :parameter => valid_attributes }, valid_session
         }.to change(Parameter, :count).by(1)
       end
 
       it "assigns a newly created parameter as @parameter" do
-        post :create, {:parameter => valid_attributes}, valid_session
+        post :create, { :parameter => valid_attributes }, valid_session
         expect(assigns(:parameter)).to be_a(Parameter)
         expect(assigns(:parameter)).to be_persisted
       end
 
       it "redirects to the created parameter" do
-        post :create, {:parameter => valid_attributes}, valid_session
+        post :create, { :parameter => valid_attributes }, valid_session
         expect(response).to redirect_to(Parameter.last)
       end
     end
 
     context "with invalid params" do
       it "assigns a newly created but unsaved parameter as @parameter" do
-        post :create, {:parameter => invalid_attributes}, valid_session
+        post :create, { :parameter => invalid_attributes }, valid_session
         expect(assigns(:parameter)).to be_a_new(Parameter)
       end
 
       it "re-renders the 'new' template" do
-        post :create, {:parameter => invalid_attributes}, valid_session
+        post :create, { :parameter => invalid_attributes }, valid_session
         expect(response).to render_template("new")
       end
     end
@@ -108,20 +108,20 @@ RSpec.describe ParametersController, :type => :controller do
 
       it "updates the requested parameter" do
         parameter = Parameter.create! valid_attributes
-        put :update, {:id => parameter.to_param, :parameter => new_attributes}, valid_session
+        put :update, { :id => parameter.to_param, :parameter => new_attributes }, valid_session
         parameter.reload
         skip("Add assertions for updated state")
       end
 
       it "assigns the requested parameter as @parameter" do
         parameter = Parameter.create! valid_attributes
-        put :update, {:id => parameter.to_param, :parameter => valid_attributes}, valid_session
+        put :update, { :id => parameter.to_param, :parameter => valid_attributes }, valid_session
         expect(assigns(:parameter)).to eq(parameter)
       end
 
       it "redirects to the parameter" do
         parameter = Parameter.create! valid_attributes
-        put :update, {:id => parameter.to_param, :parameter => valid_attributes}, valid_session
+        put :update, { :id => parameter.to_param, :parameter => valid_attributes }, valid_session
         expect(response).to redirect_to(parameter)
       end
     end
@@ -129,13 +129,13 @@ RSpec.describe ParametersController, :type => :controller do
     context "with invalid params" do
       it "assigns the parameter as @parameter" do
         parameter = Parameter.create! valid_attributes
-        put :update, {:id => parameter.to_param, :parameter => invalid_attributes}, valid_session
+        put :update, { :id => parameter.to_param, :parameter => invalid_attributes }, valid_session
         expect(assigns(:parameter)).to eq(parameter)
       end
 
       it "re-renders the 'edit' template" do
         parameter = Parameter.create! valid_attributes
-        put :update, {:id => parameter.to_param, :parameter => invalid_attributes}, valid_session
+        put :update, { :id => parameter.to_param, :parameter => invalid_attributes }, valid_session
         expect(response).to render_template("edit")
       end
     end
@@ -145,13 +145,13 @@ RSpec.describe ParametersController, :type => :controller do
     it "destroys the requested parameter" do
       parameter = Parameter.create! valid_attributes
       expect {
-        delete :destroy, {:id => parameter.to_param}, valid_session
+        delete :destroy, { :id => parameter.to_param }, valid_session
       }.to change(Parameter, :count).by(-1)
     end
 
     it "redirects to the parameters list" do
       parameter = Parameter.create! valid_attributes
-      delete :destroy, {:id => parameter.to_param}, valid_session
+      delete :destroy, { :id => parameter.to_param }, valid_session
       expect(response).to redirect_to(parameters_url)
     end
   end

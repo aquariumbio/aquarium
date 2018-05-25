@@ -1,7 +1,7 @@
 # @api krill
 class ObjectType < ActiveRecord::Base
 
-  attr_accessible :cleanup, :data, :description, :handler, :max, :min, :name, :safety, 
+  attr_accessible :cleanup, :data, :description, :handler, :max, :min, :name, :safety,
                   :vendor, :unit, :image, :cost, :release_method, :release_description,
                   :sample_type_id, :created_at, :prefix
 
@@ -49,15 +49,15 @@ class ObjectType < ActiveRecord::Base
   end
 
   def pos
-    errors.add(:cost, "must be at least $0.01" ) unless
+    errors.add(:cost, "must be at least $0.01") unless
       self.cost && self.cost >= 0.01
   end
 
   def proper_release_method
     errors.add(:release_method, "must be either return, dispose, or query") unless
-      self.release_method && ( self.release_method == 'return'  || 
-                               self.release_method == 'dispose' || 
-                               self.release_method == 'query' )
+      self.release_method && (self.release_method == 'return' ||
+                               self.release_method == 'dispose' ||
+                               self.release_method == 'query')
   end
 
   has_many :items, dependent: :destroy
@@ -66,7 +66,7 @@ class ObjectType < ActiveRecord::Base
   def quantity
     q = 0
     self.items.each { |i|
-      if i.quantity >= 0 
+      if i.quantity >= 0
         q += i.quantity
       end
     }
@@ -106,28 +106,28 @@ class ObjectType < ActiveRecord::Base
 
   def export
     attributes
-  end 
+  end
 
   def default_dimensions # for collections
 
     if self.handler == "collection"
       begin
-        h = JSON.parse(self.data,symbolize_names: true)
+        h = JSON.parse(self.data, symbolize_names: true)
       rescue Exception => e
-        raise "Could not parse data field '#{self.data}' of object type #{self.id}. Please go to " + 
+        raise "Could not parse data field '#{self.data}' of object type #{self.id}. Please go to " +
               "<a href='/object_types/#{self.id}/edit'>Object Type #{self.id}</a> and edit the data " +
               "field so that it reads something like { \"rows\": 10, \"columns\": 10 }"
       end
       if h[:rows] && h[:columns]
-        [h[:rows],h[:columns]]
+        [h[:rows], h[:columns]]
       else
-        [1,1]
+        [1, 1]
       end
     else
       raise "Tried to get dimensions of a container that is not a collection"
     end
 
-  end  
+  end
 
   def to_s
     "<a href='/object_types/#{self.id}' class='aquarium-item' id='#{self.id}'>#{self.id}</a>"
@@ -135,7 +135,7 @@ class ObjectType < ActiveRecord::Base
 
   def data_object
     begin
-      result = JSON.parse(data,symbolize_names: true)
+      result = JSON.parse(data, symbolize_names: true)
     rescue Exception => e
       result = {}
     end
@@ -148,8 +148,8 @@ class ObjectType < ActiveRecord::Base
 
   def self.compare_and_upgrade raw_ots
 
-    parts = [ :cleanup, :data, :description, :handler, :max, :min, :name, :safety, 
-              :vendor, :unit, :cost, :release_method, :release_description, :prefix ]
+    parts = [:cleanup, :data, :description, :handler, :max, :min, :name, :safety,
+             :vendor, :unit, :cost, :release_method, :release_description, :prefix]
     icons = []
     notes = []
     make = []
@@ -159,10 +159,10 @@ class ObjectType < ActiveRecord::Base
       ot = ObjectType.find_by_name raw_ot[:name]
       i = []
 
-      if ot 
+      if ot
         parts.each do |part|
           icons << "Container '#{raw_ot[:name]}': field #{part} differs from imported container's corresponding field." unless ot[part] == raw_ot[part]
-        end     
+        end
         notes << "Container '#{raw_ot[:name]}' matches existing container type." unless icons.any?
       else
         make << raw_ot
@@ -183,7 +183,7 @@ class ObjectType < ActiveRecord::Base
           notes << "Created new container '#{raw_ot[:name]}' with id #{ot.id}"
         end
       end
-    else 
+    else
       notes << "Could not create required container(s) due to type definition inconsistencies."
     end
 
@@ -196,7 +196,7 @@ class ObjectType < ActiveRecord::Base
       ot = ObjectType.find_by_name rot[:name]
       st = SampleType.find_by_name rot[:sample_type_name]
       if st && ot
-        ot.sample_type_id = st.id 
+        ot.sample_type_id = st.id
         ot.save
       end
     end

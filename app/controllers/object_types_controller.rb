@@ -26,7 +26,7 @@ class ObjectTypesController < ApplicationController
   # GET /object_types/1.json
   def show
 
-    @object_type = ObjectType.includes( items: [ { locator: :wizard}, :sample ] ).find(params[:id])
+    @object_type = ObjectType.includes(items: [{ locator: :wizard }, :sample]).find(params[:id])
     @handler = view_context.make_handler @object_type
 
     if @object_type.handler == 'sample_container'
@@ -106,11 +106,11 @@ class ObjectTypesController < ApplicationController
 
     @object_type = ObjectType.find(params[:id])
 
-    if params[:object_type][:prefix] != @object_type.prefix 
+    if params[:object_type][:prefix] != @object_type.prefix
       entries = Item.joins(:locator).where("items.object_type_id = #{@object_type.id} AND locators.item_id = items.id").count
       if entries != 0
-        flash[:error] = "Cannot change location wizard to #{params[:object_type][:prefix]} because there 
-                      are items associated with this object type using the current wizard whose locations 
+        flash[:error] = "Cannot change location wizard to #{params[:object_type][:prefix]} because there
+                      are items associated with this object type using the current wizard whose locations
                       might get messed up. To change the wizard, (a) write down all the item numbers; (b)
                       delete all the items; (c) change the location wizard; (d) undelete all the items by
                       changing their locations to a location that works with the new location wizard."
@@ -171,16 +171,16 @@ class ObjectTypesController < ApplicationController
 
   def copy_table from, to
 
-    all_inserts = from.all.collect { |pw| 
-      "(" + (pw.attributes.values.collect { |v| 
-        if v.class == String 
-          "'#{v.gsub(/'/) {|s| "''"}}'"
-        elsif v.class == ActiveSupport::TimeWithZone          
+    all_inserts = from.all.collect { |pw|
+      "(" + (pw.attributes.values.collect { |v|
+        if v.class == String
+          "'#{v.gsub(/'/) { |s| "''" }}'"
+        elsif v.class == ActiveSupport::TimeWithZone
           "'#{v}'"
         elsif v == nil
           "NULL"
-        else          
-            v
+        else
+          v
         end
       }).join(',') + ")"
     }
@@ -189,11 +189,11 @@ class ObjectTypesController < ApplicationController
 
     max = 500
 
-    for i in 0..(all_inserts.length/max)
+    for i in 0..(all_inserts.length / max)
 
-      inserts = all_inserts[max*i,max]
+      inserts = all_inserts[max * i, max]
       if inserts.length > 0
-        puts "inserting #{max*i} to #{max*i+max}"
+        puts "inserting #{max * i} to #{max * i + max}"
         sql = "INSERT INTO #{to} (#{columns.join(',')}) VALUES #{inserts.join(',')}"
         ActiveRecord::Base.connection.execute sql
       end
@@ -203,23 +203,23 @@ class ObjectTypesController < ApplicationController
   end
 
   def containers
-    render json: ObjectType.select([:id,:name]).collect { |h| "#{h.id}: #{h.name}" }
+    render json: ObjectType.select([:id, :name]).collect { |h| "#{h.id}: #{h.name}" }
   end
 
   def collection_containers
-    render json: ObjectType.select([:id,:name]).collect { |h| "#{h.id}: #{h.name}" }
-  end    
+    render json: ObjectType.select([:id, :name]).collect { |h| "#{h.id}: #{h.name}" }
+  end
 
   def sample_types
-    render json: SampleType.select([:id,:name]).collect { |h| "#{h.id}: #{h.name}" }
-  end  
+    render json: SampleType.select([:id, :name]).collect { |h| "#{h.id}: #{h.name}" }
+  end
 
   def samples
     if params[:id]
-      render json: Sample.where(sample_type_id: params[:id]).select([:id,:name]).collect { |h| "#{h.id}: #{h.name}" }
+      render json: Sample.where(sample_type_id: params[:id]).select([:id, :name]).collect { |h| "#{h.id}: #{h.name}" }
     else
-      render json: Sample.select([:id,:name]).collect { |h| "#{h.id}: #{h.name}" }      
+      render json: Sample.select([:id, :name]).collect { |h| "#{h.id}: #{h.name}" }
     end
-  end  
+  end
 
 end

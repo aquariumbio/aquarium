@@ -18,7 +18,7 @@ class Upload < ActiveRecord::Base
 
   def size
     self.upload_file_size
-  end  
+  end
 
   def url
     self.upload.expiring_url(10)

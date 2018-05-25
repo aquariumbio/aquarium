@@ -6,25 +6,24 @@ class Collection < Item
 
   # CLASS METHODS ###################################################################
 
-
   def self.every
     Item.joins(:object_type).where(object_types: { handler: "collection" })
   end
 
-  def self.containing s, ot=nil
+  def self.containing s, ot = nil
     return [] unless s
     i = s.id.to_s
     r = Regexp.new '\[' + i + ',|,' + i + ',|,' + i + '\]|\[' + i + '\]'
     if ot
       Collection.includes(:object_type).where(object_type_id: ot.id)
-                .select { |i| r =~ i.datum[:matrix].to_json  }
+                .select { |i| r =~ i.datum[:matrix].to_json }
     else
       Collection.every.select { |i| r =~ i.datum[:matrix].to_json }
     end
   end
 
   # Returns first Array element from #find
-  # 
+  #
   # @see #find
   def position s
     self.find(s).first
@@ -33,17 +32,17 @@ class Collection < Item
   def position_as_hash s
     pos = self.find self.to_sample_id(s)
     { row: pos.first[0], column: pos.first[1] }
-  end  
+  end
 
-  def self.parts s, ot=nil
+  def self.parts s, ot = nil
     plist = []
-    Collection.containing(s,ot).reject { |c| c.deleted? }.each do |c|
+    Collection.containing(s, ot).reject { |c| c.deleted? }.each do |c|
       plist << Collection.find(c.id).position_as_hash(s).merge(collection: c)
     end
     return plist
   end
 
-  def self.spread samples, name, options={}
+  def self.spread samples, name, options = {}
     opts = { reverse: false }.merge(options)
     remaining = samples
     collections = []
@@ -60,7 +59,6 @@ class Collection < Item
   end
 
   # METHODS #########################################################################
-
 
   def self.new_collection name
 
@@ -80,11 +78,11 @@ class Collection < Item
 
   # Sets the matrix for the collection to an empty rxc matrix and saves the collection to the database.
   # Whatever matrix was associated with the collection is lost
-  # 
+  #
   # @param r [Integer] Row
   # @param c [Integer] Column
   def apportion r, c
-    self.matrix = (Array.new(r,Array.new(c,EMPTY)))
+    self.matrix = (Array.new(r, Array.new(c, EMPTY)))
   end
 
   # Whether the matrix includes x
@@ -142,22 +140,22 @@ class Collection < Item
   def to_sample_id x
     r = EMPTY
     case
-      when x.class == Fixnum
-        r = x
-      when x.class == Item
-        if x.sample
-          r = x.sample.id
-        else
-          raise "When the third argument to Collection.set is an item, it should be associated with a sample."
-        end
-      when x.class == Sample
-        r = x.id
-      when x.class == String
-        r = x.split(':')[0].to_i
-      when !x
-        r = EMPTY
+    when x.class == Fixnum
+      r = x
+    when x.class == Item
+      if x.sample
+        r = x.sample.id
       else
-        raise "The third argument to Collection.set should be an item, a sample, or a sample id, but it was '#{x}' which is a #{x.class}"
+        raise "When the third argument to Collection.set is an item, it should be associated with a sample."
+      end
+    when x.class == Sample
+      r = x.id
+    when x.class == String
+      r = x.split(':')[0].to_i
+    when !x
+      r = EMPTY
+    else
+      raise "The third argument to Collection.set should be an item, a sample, or a sample id, but it was '#{x}' which is a #{x.class}"
     end
     r
   end
@@ -180,7 +178,7 @@ class Collection < Item
   #   c.add_one(999, reverse: true)
   #     [ [777, 888, 3],
   #       [4, -1, 999] ]
-  def add_one x, options={}
+  def add_one x, options = {}
     opts = { reverse: false }.merge(options)
     r, c = [nil, nil]
     if opts[:reverse]
@@ -196,7 +194,7 @@ class Collection < Item
   end
 
   # @see #subtract_one
-  def remove_one x=nil, options={}
+  def remove_one x = nil, options = {}
     self.subtract_one(x, options)
   end
 
@@ -206,7 +204,7 @@ class Collection < Item
   # @param x [Fixnum, Sample, Item]
   # @param options [Hash]
   # @option options [Bool] :reverse Begin from the end of the matrix
-  def subtract_one x=nil, options={}
+  def subtract_one x = nil, options = {}
     opts = { reverse: true }.merge(options)
     r, c = [nil, nil]
     sel = self.get_non_empty
@@ -215,9 +213,9 @@ class Collection < Item
       return nil
     end
     if opts[:reverse]
-      r,c = sel.last
+      r, c = sel.last
     else
-      r,c = sel.first
+      r, c = sel.first
     end
     s = self.matrix[r][c]
     self.set r, c, EMPTY
@@ -261,7 +259,7 @@ class Collection < Item
 
   # Fill collecion with samples
   # Return samples that were not filled
-  def add_samples samples, options={}
+  def add_samples samples, options = {}
     opts = { reverse: false }.merge(options)
     non_empty_arr = self.get_empty
     non_empty_arr.reverse! if opts[:reverse]
@@ -285,8 +283,8 @@ class Collection < Item
 
     m = self.get_data[:matrix]
 
-    (0..sample_matrix.length-1).each do |r|
-      (0..sample_matrix[r].length-1).each do |c|
+    (0..sample_matrix.length - 1).each do |r|
+      (0..sample_matrix[r].length - 1).each do |c|
         if sample_matrix[r][c].class == Sample
           m[r][c] = sample_matrix[r][c].id
         else
@@ -318,7 +316,7 @@ class Collection < Item
   # Set the matrix associated with the collection to the matrix of Sample ids m. Whatever matrix was associated with the collection is lost
   def matrix= m
     d = self.datum
-    self.datum = d.merge( { matrix: m } )
+    self.datum = d.merge({ matrix: m })
   end
 
   # With no options, returns the indices of the next element of the collections, skipping to the next column or row if necessary.
@@ -328,24 +326,24 @@ class Collection < Item
   # @param c [Integer] Column
   # @param options [Hash]
   # @option options [Bool] :skip_non_empty Return next non-empty indices
-  def next r, c, options={}
+  def next r, c, options = {}
 
     opts = { skip_non_empty: false }.merge options
 
     m = self.matrix
     nr, nc = self.dimensions
 
-    (r..nr-1).each do |row|
-      (0..nc-1).each do |col|
+    (r..nr - 1).each do |row|
+      (0..nc - 1).each do |col|
         if row > r || col > c
           if !opts[:skip_non_empty] || m[row][col] == EMPTY
-            return [ row, col ]
+            return [row, col]
           end
         end
       end
     end
 
-    return [nil,nil]
+    return [nil, nil]
 
   end
 
@@ -355,9 +353,9 @@ class Collection < Item
   def dimensions
     m = self.matrix
     if m && m[0]
-      [ m.length, m[0].length ]
+      [m.length, m[0].length]
     else
-      [ 0, 0 ]
+      [0, 0]
     end
   end
 
@@ -369,20 +367,20 @@ class Collection < Item
   def non_empty_string
 
     m = self.matrix
-    max = [0,0]
+    max = [0, 0]
 
-    (0..m.length-1).each do |r|
-      (0..m[r].length-1).each do |c|
+    (0..m.length - 1).each do |r|
+      (0..m[r].length - 1).each do |c|
         if m[r][c] != EMPTY
-          max = [r,c]
+          max = [r, c]
         end
       end
     end
 
     if m.length > 1
-      "1,1 - #{max[0]+1}, #{max[1]+1}"
+      "1,1 - #{max[0] + 1}, #{max[1] + 1}"
     else
-      "1 - #{max[1]+1}"
+      "1 - #{max[1] + 1}"
     end
 
   end

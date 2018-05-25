@@ -27,58 +27,57 @@ class BrowserController < ApplicationController
   def recent_samples
     if params[:id]
       user = User.find_by_id(params[:id])
-    end    
+    end
     if !user
       render json: Sample
-          .last(25)      
-          .reverse
-          .to_json(only: [:name,:id,:user_id,:data,:sample_type_id])
+        .last(25)
+        .reverse
+        .to_json(only: [:name, :id, :user_id, :data, :sample_type_id])
     else
       render json: Sample
-          .where(user_id: user.id)
-          .last(25)
-          .reverse
-          .to_json(only: [:name,:id,:user_id,:data,:sample_type_id])
+        .where(user_id: user.id)
+        .last(25)
+        .reverse
+        .to_json(only: [:name, :id, :user_id, :data, :sample_type_id])
     end
   end
 
-  def projects 
+  def projects
     if params[:uid]
       user = User.find_by_id(params[:uid])
     end
     if !user
       render json: {
         projects: Sample.uniq.pluck(:project)
-                 .sort
-                 .collect { |p| { name: p, selected: false, sample_type_ids: Sample.where( project: p).pluck(:sample_type_id).uniq } }
+                        .sort
+                        .collect { |p| { name: p, selected: false, sample_type_ids: Sample.where(project: p).pluck(:sample_type_id).uniq } }
       }
     else
       render json: {
         projects: Sample.where(user_id: user.id)
-                    .uniq
-                    .pluck(:project)
-                    .sort
-                    .collect { |p| { name: p, selected: false, sample_type_ids: Sample.where( project: p).pluck(:sample_type_id).uniq  } }
+                        .uniq
+                        .pluck(:project)
+                        .sort
+                        .collect { |p| { name: p, selected: false, sample_type_ids: Sample.where(project: p).pluck(:sample_type_id).uniq } }
       }
     end
   end
 
   def samples_for_tree
     render json: Sample
-        .where(project: params[:project], sample_type_id: params[:sample_type_id].to_i)
-        .reverse
-        .to_json(only: [:name,:id,:user_id,:data])
+      .where(project: params[:project], sample_type_id: params[:sample_type_id].to_i)
+      .reverse
+      .to_json(only: [:name, :id, :user_id, :data])
   end
 
   def gory_details_of_samples_for_tree
     render json: Sample
-        .includes(field_values: :child_sample, sample_type: { field_types: { allowable_field_types: :sample_type } })
-        .where(project: params[:project], sample_type_id: params[:sample_type_id].to_i)
-        .reverse
-        .to_json(include: { 
-            field_values: { include: :child_sample },
-          }, except: [ :field1, :field2, :field3, :field4, :field5, :field6, :field7, :field8 ]        
-        )        
+      .includes(field_values: :child_sample, sample_type: { field_types: { allowable_field_types: :sample_type } })
+      .where(project: params[:project], sample_type_id: params[:sample_type_id].to_i)
+      .reverse
+      .to_json(include: {
+                 field_values: { include: :child_sample },
+               }, except: [:field1, :field2, :field3, :field4, :field5, :field6, :field7, :field8])
   end
 
   def subsamples
@@ -104,7 +103,7 @@ class BrowserController < ApplicationController
     begin
       Sample.transaction do
         params[:samples].each do |samp|
-          sample = Sample.creator(samp, current_user) 
+          sample = Sample.creator(samp, current_user)
           if sample.errors.empty?
             @samples << sample
           else
@@ -114,9 +113,9 @@ class BrowserController < ApplicationController
         end
       end
     rescue Exception => e
-      render json: { errors: [ e.to_s, e.backtrace[0..5].join(", ") ] }
+      render json: { errors: [e.to_s, e.backtrace[0..5].join(", ")] }
     else
-      if @errors.length > 0 
+      if @errors.length > 0
         render json: { errors: @errors }
       else
         render json: { samples: @samples }
@@ -142,18 +141,18 @@ class BrowserController < ApplicationController
 
     sample = Sample.find(params[:id])
     item_list = Item.includes(:locator).where(sample_id: params[:id])
-    containers = ObjectType.where(sample_type_id: sample.sample_type_id) 
-    render json: { items: item_list.as_json(include: [:locator]), 
-                   containers: containers.as_json(only:[:name,:id]) }
+    containers = ObjectType.where(sample_type_id: sample.sample_type_id)
+    render json: { items: item_list.as_json(include: [:locator]),
+                   containers: containers.as_json(only: [:name, :id]) }
   end
 
   def collections
     s = Sample.find(params[:sample_id])
     collections = Collection.containing(s)
     containers = collections.collect { |c| c.object_type }.uniq
-    render json: { collections: collections.as_json(include: :object_type), 
-                   containers: containers.as_json(only: [:name,:id]) }
-  end  
+    render json: { collections: collections.as_json(include: :object_type),
+                   containers: containers.as_json(only: [:name, :id]) }
+  end
 
   def search
 
@@ -170,10 +169,10 @@ class BrowserController < ApplicationController
     sample_type = SampleType.find_by_name(params[:sample_type])
     samples = samples.where(sample_type_id: sample_type.id) if sample_type
 
-    sample_list =  samples.offset(params[:page]*30)
+    sample_list =  samples.offset(params[:page] * 30)
                           .last(30)
                           .reverse
-                          .as_json(only: [:name,:id,:user_id,:data,:sample_type_id])
+                          .as_json(only: [:name, :id, :user_id, :data, :sample_type_id])
 
     render json: { samples: sample_list, count: samples.count }
 
@@ -188,7 +187,7 @@ class BrowserController < ApplicationController
     end
 
     render json: samples.offset(params[:offset]).last(30).reverse
-        .to_json(only: [:name,:id,:user_id,:data,:created_at])
+                        .to_json(only: [:name, :id, :user_id, :data, :created_at])
 
   end
 
@@ -207,14 +206,14 @@ class BrowserController < ApplicationController
     else
       render json: { location: item.location, errors: item.errors.full_messages }
     end
-  end  
+  end
 
   def save_data_association
-    parent = DataAssociation.find_parent(params[:parent_class],params[:id])
-    parent.associate(params[:key],params[:value])
+    parent = DataAssociation.find_parent(params[:parent_class], params[:id])
+    parent.associate(params[:key], params[:value])
     da = parent.get_association params[:key]
     Rails.logger.info "parent = #{parent.inspect}"
-    Rails.logger.info "da = #{da.inspect}"   
+    Rails.logger.info "da = #{da.inspect}"
     render json: { data_association: da, parent: parent, errors: parent.errors.full_messages }
   end
 

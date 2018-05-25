@@ -47,7 +47,7 @@ RSpec.describe BudgetsController, :type => :controller do
   describe "GET #show" do
     it "assigns the requested budget as @budget" do
       budget = Budget.create! valid_attributes
-      get :show, {:id => budget.to_param}, valid_session
+      get :show, { :id => budget.to_param }, valid_session
       expect(assigns(:budget)).to eq(budget)
     end
   end
@@ -62,7 +62,7 @@ RSpec.describe BudgetsController, :type => :controller do
   describe "GET #edit" do
     it "assigns the requested budget as @budget" do
       budget = Budget.create! valid_attributes
-      get :edit, {:id => budget.to_param}, valid_session
+      get :edit, { :id => budget.to_param }, valid_session
       expect(assigns(:budget)).to eq(budget)
     end
   end
@@ -71,30 +71,30 @@ RSpec.describe BudgetsController, :type => :controller do
     context "with valid params" do
       it "creates a new Budget" do
         expect {
-          post :create, {:budget => valid_attributes}, valid_session
+          post :create, { :budget => valid_attributes }, valid_session
         }.to change(Budget, :count).by(1)
       end
 
       it "assigns a newly created budget as @budget" do
-        post :create, {:budget => valid_attributes}, valid_session
+        post :create, { :budget => valid_attributes }, valid_session
         expect(assigns(:budget)).to be_a(Budget)
         expect(assigns(:budget)).to be_persisted
       end
 
       it "redirects to the created budget" do
-        post :create, {:budget => valid_attributes}, valid_session
+        post :create, { :budget => valid_attributes }, valid_session
         expect(response).to redirect_to(Budget.last)
       end
     end
 
     context "with invalid params" do
       it "assigns a newly created but unsaved budget as @budget" do
-        post :create, {:budget => invalid_attributes}, valid_session
+        post :create, { :budget => invalid_attributes }, valid_session
         expect(assigns(:budget)).to be_a_new(Budget)
       end
 
       it "re-renders the 'new' template" do
-        post :create, {:budget => invalid_attributes}, valid_session
+        post :create, { :budget => invalid_attributes }, valid_session
         expect(response).to render_template("new")
       end
     end
@@ -108,20 +108,20 @@ RSpec.describe BudgetsController, :type => :controller do
 
       it "updates the requested budget" do
         budget = Budget.create! valid_attributes
-        put :update, {:id => budget.to_param, :budget => new_attributes}, valid_session
+        put :update, { :id => budget.to_param, :budget => new_attributes }, valid_session
         budget.reload
         skip("Add assertions for updated state")
       end
 
       it "assigns the requested budget as @budget" do
         budget = Budget.create! valid_attributes
-        put :update, {:id => budget.to_param, :budget => valid_attributes}, valid_session
+        put :update, { :id => budget.to_param, :budget => valid_attributes }, valid_session
         expect(assigns(:budget)).to eq(budget)
       end
 
       it "redirects to the budget" do
         budget = Budget.create! valid_attributes
-        put :update, {:id => budget.to_param, :budget => valid_attributes}, valid_session
+        put :update, { :id => budget.to_param, :budget => valid_attributes }, valid_session
         expect(response).to redirect_to(budget)
       end
     end
@@ -129,13 +129,13 @@ RSpec.describe BudgetsController, :type => :controller do
     context "with invalid params" do
       it "assigns the budget as @budget" do
         budget = Budget.create! valid_attributes
-        put :update, {:id => budget.to_param, :budget => invalid_attributes}, valid_session
+        put :update, { :id => budget.to_param, :budget => invalid_attributes }, valid_session
         expect(assigns(:budget)).to eq(budget)
       end
 
       it "re-renders the 'edit' template" do
         budget = Budget.create! valid_attributes
-        put :update, {:id => budget.to_param, :budget => invalid_attributes}, valid_session
+        put :update, { :id => budget.to_param, :budget => invalid_attributes }, valid_session
         expect(response).to render_template("edit")
       end
     end
@@ -145,13 +145,13 @@ RSpec.describe BudgetsController, :type => :controller do
     it "destroys the requested budget" do
       budget = Budget.create! valid_attributes
       expect {
-        delete :destroy, {:id => budget.to_param}, valid_session
+        delete :destroy, { :id => budget.to_param }, valid_session
       }.to change(Budget, :count).by(-1)
     end
 
     it "redirects to the budgets list" do
       budget = Budget.create! valid_attributes
-      delete :destroy, {:id => budget.to_param}, valid_session
+      delete :destroy, { :id => budget.to_param }, valid_session
       expect(response).to redirect_to(budgets_url)
     end
   end

@@ -34,8 +34,7 @@ module ApiDrop
           m.destroy
         end
       end
-    end      
+    end
   end
-
 
 end

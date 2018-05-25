@@ -16,12 +16,11 @@ class Test
   def initialize
 
     begin
-
-      @wiz = generic_wizard 16, 81  
+      @wiz = generic_wizard 16, 81
       puts "    created " + @wiz.name
 
       st = SampleType.find_by_name("Primer")
-      @samp = generic_sample st    
+      @samp = generic_sample st
       puts "    created " + @samp.name
 
       @ot = generic_object st, @wiz
@@ -47,15 +46,12 @@ class Test
 
       cleanup
       pass
-
     rescue Exception => e
-
       puts "\n"
       puts e.to_s
       puts e.backtrace.join("\n")
       cleanup
       fail
-
     end
 
   end

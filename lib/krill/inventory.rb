@@ -16,7 +16,7 @@ module Krill
     def table
       t = Array.new(9)
       (0..8).each do |row|
-        t[row] = @slots[9*row,9]
+        t[row] = @slots[9 * row, 9]
       end
       t
     end
@@ -38,7 +38,7 @@ module Krill
       ot = ObjectType.find_by_name(spec[:as])
       raise "Unknown sample #{name}" unless s
       raise "Unknown container #{spec[:as]}" unless ot
-      Item.make( { quantity: 1, inuse: 0 }, sample: s, object_type: ot )
+      Item.make({ quantity: 1, inuse: 0 }, sample: s, object_type: ot)
     end
 
     def new_collection name
@@ -49,7 +49,7 @@ module Krill
       Collection.find id
     end
 
-    def spread samples, name, options={}
+    def spread samples, name, options = {}
       opts = { reverse: false }.merge(options)
       Collection.spread samples, name, opts
     end
@@ -58,11 +58,12 @@ module Krill
     def sort_by_location items
       return [] if items.empty?
       locations = items.map { |item| item.location.split(".") }
-      sorted_locations = locations.sort { |loc1, loc2| 
-                                                comp = loc1[0] <=> loc2[0]
-                                                comp = comp.zero? ? loc1[1].to_i <=> loc2[1].to_i : comp
-                                                comp = comp.zero? ? loc1[2].to_i <=> loc2[2].to_i : comp
-                                                comp.zero? ? loc1[3].to_i <=> loc2[3].to_i : comp }
+      sorted_locations = locations.sort { |loc1, loc2|
+        comp = loc1[0] <=> loc2[0]
+        comp = comp.zero? ? loc1[1].to_i <=> loc2[1].to_i : comp
+        comp = comp.zero? ? loc1[2].to_i <=> loc2[2].to_i : comp
+        comp.zero? ? loc1[3].to_i <=> loc2[3].to_i : comp
+      }
       loc_strings = sorted_locations.map { |loc| "#{loc[0]}.#{loc[1]}.#{loc[2]}.#{loc[3]}" }
       items.sort_by! { |item| loc_strings.index(item.location) }
     end # sort_by_location
@@ -73,7 +74,7 @@ module Krill
       loc_matched_items = []
       extras = []
 
-      r = Regexp.new ( '(M20|M80|SF[0-9]*)\.[0-9]+\.[0-9]+\.[0-9]+' )
+      r = Regexp.new ( '(M20|M80|SF[0-9]*)\.[0-9]+\.[0-9]+\.[0-9]+')
 
       loc_matched_items = items.select { |i| r.match(i.location) }
       extras = items - loc_matched_items
@@ -81,16 +82,16 @@ module Krill
       # make boxes for the items with valid box locations, sorted by location
       (sort_by_location loc_matched_items).each do |i|
 
-          freezer,hotel,box,slot = i.location.split('.')
-          slot = slot.to_i
-          name = "#{freezer}.#{hotel}.#{box}"
+        freezer, hotel, box, slot = i.location.split('.')
+        slot = slot.to_i
+        name = "#{freezer}.#{hotel}.#{box}"
 
-          boxes[name] = Box.new unless boxes[name]
-          boxes[name].highlight slot, i.id
+        boxes[name] = Box.new unless boxes[name]
+        boxes[name].highlight slot, i.id
 
       end
 
-      [ boxes, extras ]
+      [boxes, extras]
 
     end
 
@@ -108,7 +109,7 @@ module Krill
         extra_title = "Return the Following Additional Item(s)"
       else
         show_title = ""
-        box_note = "" 
+        box_note = ""
         extra_title = ""
       end
 
@@ -116,11 +117,11 @@ module Krill
         show {
           title "Boxes Required"
           note "You will need the following boxes from the freezer(s)"
-          table (boxes.keys.collect { |b| { content: b, check: true }}).each_slice(6).to_a
+          table (boxes.keys.collect { |b| { content: b, check: true } }).each_slice(6).to_a
         }
       end
 
-      boxes.each do |name,box|
+      boxes.each do |name, box|
         show {
           title show_title + name
           note box_note
@@ -142,10 +143,10 @@ module Krill
 
     end
 
-    def take items, args={}
+    def take items, args = {}
 
       if block_given?
-        user_shows = ShowBlock.new.run(&Proc.new) 
+        user_shows = ShowBlock.new.run(&Proc.new)
       else
         user_shows = []
       end
@@ -178,8 +179,8 @@ module Krill
       end
 
       items.each do |i|
-        Take.new( { job_id: jid, item_id: i.id } ).save
-        Touch.new( { job_id: jid, item_id: i.id } ).save
+        Take.new({ job_id: jid, item_id: i.id }).save
+        Touch.new({ job_id: jid, item_id: i.id }).save
       end
 
       items
@@ -187,13 +188,13 @@ module Krill
     end
 
     def touch item
-      Touch.new( { job_id: jid, item_id: item.id } ).save
+      Touch.new({ job_id: jid, item_id: item.id }).save
     end
 
-    def release items, args={}
+    def release items, args = {}
 
       if block_given?
-        user_shows = ShowBlock.new.run(&Proc.new) 
+        user_shows = ShowBlock.new.run(&Proc.new)
       else
         user_shows = []
       end
@@ -209,11 +210,11 @@ module Krill
         when "boxes"
 
           box_interactive items, :return, user_shows
-          
+
         else
 
           rels = items.collect { |i| i.features }
-          show { 
+          show {
             title "Return the Following Item(s)"
             rels.each do |r|
               item r

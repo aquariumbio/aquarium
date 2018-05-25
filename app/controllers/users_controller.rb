@@ -35,7 +35,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render json: @report }
-    end    
+    end
 
   end
 
@@ -59,7 +59,7 @@ class UsersController < ApplicationController
       else
         render 'new'
       end
- 
+
     else
 
       @user = User.find_by_login(params[:user][:login])
@@ -100,15 +100,15 @@ class UsersController < ApplicationController
 
     params[:parameters].each do |p|
       plist = Parameter.where(user_id: user.id, id: p[:id])
-      if plist.length == 0 
+      if plist.length == 0
         user.parameters.create key: p[:key], value: p[:value]
-      elsif plist.length == 1 
+      elsif plist.length == 1
         plist[0].value = p[:value]
         plist[0].save
         unless plist[0].errors.empty?
           render json: { error: plist[0].errors.full_messages.join('') }
           return
-        end        
+        end
       end
     end
 
@@ -150,13 +150,13 @@ class UsersController < ApplicationController
 
         @users = User.includes(memberships: :group)
                      .select { |u| !u.member? rid }
-                     .sort { |a,b| a[:login] <=> b[:login] }
-                     .paginate(page: params[:page], :per_page => 15)    
+                     .sort { |a, b| a[:login] <=> b[:login] }
+                     .paginate(page: params[:page], :per_page => 15)
 
-        render layout: 'aq2' 
+        render layout: 'aq2'
 
       }
-      format.json { render json: User.includes(memberships: :group).all.sort { |a,b| a[:login] <=> b[:login] } }
+      format.json { render json: User.includes(memberships: :group).all.sort { |a, b| a[:login] <=> b[:login] } }
 
     end
 
@@ -187,9 +187,9 @@ class UsersController < ApplicationController
       m = Membership.new
       m.user_id = u.id
       m.group_id = ret.id
-      m.save    
+      m.save
       flash[:success] = "The user has been disconnected. Why did they resist? We only wish to raise quality of life for all species."
-    else 
+    else
       flash[:error] = "Could not retire user because the 'retired' group does not exist. Go make it and try again."
     end
 
@@ -199,14 +199,14 @@ class UsersController < ApplicationController
 
   private
 
-    def correct_user
-      @user = User.find(params[:id])
-      redirect_to(root_path, notice: "You cannot edit someone else's profile") unless current_user?(@user)
-    end
+  def correct_user
+    @user = User.find(params[:id])
+    redirect_to(root_path, notice: "You cannot edit someone else's profile") unless current_user?(@user)
+  end
 
-    def admin_user
-      flash[:error] = "You do not have admin privileges" unless current_user.is_admin
-      redirect_to(root_path) unless current_user.is_admin
-    end
+  def admin_user
+    flash[:error] = "You do not have admin privileges" unless current_user.is_admin
+    redirect_to(root_path) unless current_user.is_admin
+  end
 
 end

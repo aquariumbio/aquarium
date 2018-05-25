@@ -16,10 +16,10 @@ class Wizard < ActiveRecord::Base
 
     elsif self.specification
 
-      s = JSON.parse(self.specification,symbolize_names:true)
+      s = JSON.parse(self.specification, symbolize_names: true)
       t = []
 
-      s[:fields].each do |k,v|
+      s[:fields].each do |k, v|
         vnew = { name: v[:name], capacity: v[:capacity].to_i }
         t[k.to_s.to_i] = vnew
       end
@@ -60,13 +60,13 @@ class Wizard < ActiveRecord::Base
     raise "Could not convert location string '#{loc}' to int." unless loc.class == String
 
     c = caps
-    mx,my,mz = c
-    w,x,y,z = parts loc
+    mx, my, mz = c
+    w, x, y, z = parts loc
 
     if c.length == 3
-      return z + mz*y + my*mz*x
+      return z + mz * y + my * mz * x
     elsif c.length == 2
-      return y + my*x
+      return y + my * x
     elsif c.length == 1
       return x
     else
@@ -78,11 +78,11 @@ class Wizard < ActiveRecord::Base
   def int_to_location n
 
     c = caps
-    mx,my,mz = c
+    mx, my, mz = c
 
     if c.length == 3
-      x = n / ( my*mz )
-      q = n % ( my*mz )
+      x = n / (my * mz)
+      q = n % (my * mz)
       y = q / mz
       z = q % mz
       return "#{self.name}.#{x}.#{y}.#{z}"
@@ -100,31 +100,31 @@ class Wizard < ActiveRecord::Base
 
   def has_correct_form loc
     return false unless loc.class == String
-    c = caps   
+    c = caps
     parts = loc.split('.')
-    return false unless parts[0] == name 
+    return false unless parts[0] == name
     return false unless parts.length - 1 == c.length
     (1..c.length).each do |i|
       if i == 1
-        return false unless parts[i].to_i >= 0 
-      else 
-        return false unless parts[i].to_i < c[i-1]
+        return false unless parts[i].to_i >= 0
+      else
+        return false unless parts[i].to_i < c[i - 1]
       end
     end
     return true
   end
 
-  def next 
+  def next
     n = Locator.first_empty self
     if !n
       max = (Locator.largest self).number
-      n = Locator.new wizard_id: id, number: max+1
+      n = Locator.new wizard_id: id, number: max + 1
     end
     n
   end
 
-  def addnew locstr # add all locations up to and including 
-                    # locstr, and return the last one
+  def addnew locstr # add all locations up to and including
+    # locstr, and return the last one
 
     m = Locator.largest self
 
@@ -134,15 +134,15 @@ class Wizard < ActiveRecord::Base
       loc = nil
 
       # insert block of new locators
-      (m.number+1..num).each do |n|
-         loc = Locator.new(
-           number: n, 
-           wizard_id: self.id, 
-         )
-         loc.save
+      (m.number + 1..num).each do |n|
+        loc = Locator.new(
+          number: n,
+          wizard_id: self.id,
+        )
+        loc.save
       end
 
-    else 
+    else
 
       loc = Locator.new number: 0, wizard_id: self.id
       loc.save
@@ -161,17 +161,17 @@ class Wizard < ActiveRecord::Base
 
     l = largest
 
-    if l 
+    if l
       loc = l.to_s
     else
       return []
     end
 
-    w,x,y,z = parts loc
-    mx,my,mz = caps
+    w, x, y, z = parts loc
+    mx, my, mz = caps
 
     b = (0..x).collect do |a|
-      (0..(a==x ? y : my)).collect do |b|
+      (0..(a == x ? y : my)).collect do |b|
         "#{name}.#{a}.#{b}"
       end
     end
@@ -199,5 +199,3 @@ class Wizard < ActiveRecord::Base
   end
 
 end
-
-

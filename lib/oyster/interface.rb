@@ -6,7 +6,7 @@ module Oyster
 
   end
 
-  def Oyster.submit h 
+  def Oyster.submit h
 
     if /\.rb/ =~ h[:path]
       return Oyster.submit_krill_protocol h
@@ -20,7 +20,7 @@ module Oyster
 
     # get the blob and parse its arguments
     content = Repo::contents h[:path], h[:sha]
-    protocol = Plankton::Parser.new( h[:path], content )
+    protocol = Plankton::Parser.new(h[:path], content)
     # protocol.job_id = -1
     protocol.parse_arguments_only
 
@@ -78,7 +78,7 @@ module Oyster
     job.submitted_by = sub ? sub.id : 0
     job.pc = Job.NOT_STARTED
     job.metacol_id = h[:metacol_id]
-    job.set_arguments( h[:args] )
+    job.set_arguments(h[:args])
     job.save
 
     puts "resulted in args = #{job.state}"
@@ -88,4 +88,3 @@ module Oyster
   end
 
 end
-

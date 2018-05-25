@@ -10,7 +10,7 @@ module Plankton
       lines[:startline] = @tok.line
       lines[:endline] = @tok.line
       push StopInstruction.new lines
-       
+
     end
 
   end

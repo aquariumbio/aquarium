@@ -8,7 +8,7 @@ class PlansController < ApplicationController
     respond_to do |format|
       format.json { render json: Plan.list(current_user).reverse }
       format.html { render layout: 'aq2' }
-    end  
+    end
   end
 
   def create
@@ -21,7 +21,7 @@ class PlansController < ApplicationController
       Marshall.user = current_user
     end
 
-    ActiveRecord::Base.transaction do      
+    ActiveRecord::Base.transaction do
       begin
         @plan = Marshall.plan params
       rescue Exception => e
@@ -49,7 +49,7 @@ class PlansController < ApplicationController
       Marshall.user = current_user
     end
 
-    ActiveRecord::Base.transaction do 
+    ActiveRecord::Base.transaction do
       begin
         @plan = Marshall.plan_update params
       rescue Exception => e
@@ -68,19 +68,19 @@ class PlansController < ApplicationController
   end
 
   def show
-    respond_to do |format|      
-      format.html { 
+    respond_to do |format|
+      format.html {
         redirect_to plans_url(params)
       }
-      format.json { 
+      format.json {
         p = Plan.find_by_id(params[:id])
-        if p 
+        if p
           render json: Serialize.serialize(p)
         else
           render json: { errors: "Could not find plan with id #{params[:id]}" }, status: 404
         end
       }
-    end           
+    end
   end
 
   def operation_types
@@ -92,7 +92,7 @@ class PlansController < ApplicationController
   def manager
     respond_to do |format|
       format.html { render layout: 'browser' }
-    end    
+    end
   end
 
   def sid str
@@ -108,9 +108,9 @@ class PlansController < ApplicationController
     plan = Plan.find(params[:id])
     plan.budget_id = params[:budget_id]
     plan.save
-    
+
     planner = Planner.new params[:id]
-    
+
     if planner.start
       render json: { result: "ok" }
     else
@@ -120,7 +120,7 @@ class PlansController < ApplicationController
   end
 
   def value data
-     if data.class == Array
+    if data.class == Array
       data.collect { |str| Sample.find(sid(str)) }
     else
       Sample.find_by_id(sid(data))
@@ -132,7 +132,7 @@ class PlansController < ApplicationController
     if route.class == String
       Sample.find_by_id(sid(route))
     else
-      route.keys.collect { |k| Sample.find_by_id(sid(route[k]))}      
+      route.keys.collect { |k| Sample.find_by_id(sid(route[k])) }
     end
 
   end
@@ -140,7 +140,6 @@ class PlansController < ApplicationController
   def route_name r
     r ? r : "null"
   end
-
 
   def destroy
     plan = Plan.find(params[:id])
@@ -165,7 +164,7 @@ class PlansController < ApplicationController
 
   def cancel
 
-    Plan.find(params[:id]).error(params[:msg] + " (user: #{current_user.login})",:canceled)
+    Plan.find(params[:id]).error(params[:msg] + " (user: #{current_user.login})", :canceled)
 
     render json: { result: "ok" }
 
@@ -193,8 +192,8 @@ class PlansController < ApplicationController
 
       ops = pending.select { |op| op.operation_type_id == ot_id }
 
-      job,newops = OperationType.find(ot_id)
-        .schedule(ops, current_user, Group.find_by_name('technicians'))
+      job, newops = OperationType.find(ot_id)
+                                 .schedule(ops, current_user, Group.find_by_name('technicians'))
 
       error = nil
 
@@ -218,7 +217,6 @@ class PlansController < ApplicationController
       else
 
         begin
-
           ops.extend(Krill::OperationList)
 
           ops.each do |op|
@@ -226,11 +224,8 @@ class PlansController < ApplicationController
           end
 
           manager.run
-
         rescue Exception => e
-
           errors << "Bug encountered while testing: " + e.message + " at " + e.backtrace.join("\n") + ". "
-
         end # begin
 
       end # if

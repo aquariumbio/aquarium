@@ -22,12 +22,12 @@ class OperationType < ActiveRecord::Base
     add_field name, sample_name, container_name, role, opts
   end
 
-  def add_input name, sample_name, container_name, opts={}
+  def add_input name, sample_name, container_name, opts = {}
     add_field name, sample_name, container_name, "input", opts
   end
 
-  def add_output name, sample_name, container_name, opts={}
-    add_field name, sample_name, container_name, "output", opts   
+  def add_output name, sample_name, container_name, opts = {}
+    add_field name, sample_name, container_name, "output", opts
   end
 
   def inputs
@@ -48,7 +48,7 @@ class OperationType < ActiveRecord::Base
 
   def done
     operations.where status: "done"
-  end  
+  end
 
   def protocol
     self.code "protocol"
@@ -60,22 +60,22 @@ class OperationType < ActiveRecord::Base
 
   def precondition
     self.code "precondition"
-  end  
+  end
 
   def documentation
     self.code "documentation"
   end
 
-  def schedule_aux ops, user, group, opts={}
+  def schedule_aux ops, user, group, opts = {}
 
     job = Job.new
-    
+
     job.path = "operation.rb"
     job.sha = nil # lame, but this is how I signal to the krill manager
-                  # that this is job is associated with an operation type
+    # that this is job is associated with an operation type
 
     job.pc = Job.NOT_STARTED
-    job.set_arguments({ operation_type_id: id})
+    job.set_arguments({ operation_type_id: id })
     job.group_id = group.id
     job.submitted_by = user.id
     job.desired_start_time = Time.now
@@ -115,7 +115,7 @@ class OperationType < ActiveRecord::Base
 
   end
 
-  def schedule ops, user, group, opts={}
+  def schedule ops, user, group, opts = {}
 
     ops_to_schedule = []
     ops_to_defer = []
@@ -127,7 +127,7 @@ class OperationType < ActiveRecord::Base
       if pps.length > 0
         ops_to_schedule = ops_to_schedule + pps
         ops_to_defer << op
-      else 
+      else
         ops_to_schedule << op
       end
 
@@ -136,10 +136,9 @@ class OperationType < ActiveRecord::Base
     deferred_job = schedule_aux ops_to_defer, user, group, opts.merge(defer: true)
     job = schedule_aux ops_to_schedule, user, group, opts
 
-    [job,ops_to_schedule]
-    
-  end
+    [job, ops_to_schedule]
 
+  end
 
   #
   # Update Methods for Field Types from Front End Start Here
@@ -157,14 +156,14 @@ class OperationType < ActiveRecord::Base
       ot = ObjectType.find_by_name(newaft[:object_type][:name])
     else
       ot = nil
-    end   
+    end
 
     ft.allowable_field_types.create(
       sample_type_id: st ? st.id : nil,
       object_type_id: ot ? ot.id : nil
     )
 
-  end 
+  end
 
   def update_allowable_field_type oldaft, newaft
 
@@ -180,7 +179,7 @@ class OperationType < ActiveRecord::Base
       oldaft.object_type_id = ot.id if ot
     else
       oldaft.sample_type_id = nil
-    end   
+    end
 
     oldaft.save
 
@@ -190,16 +189,16 @@ class OperationType < ActiveRecord::Base
 
     if newft[:allowable_field_types]
 
-      sample_type_names = newft[:allowable_field_types].collect { |aft| 
+      sample_type_names = newft[:allowable_field_types].collect { |aft|
         aft[:sample_type] ? aft[:sample_type][:name] : nil
       }
 
-      container_names =  newft[:allowable_field_types]
-        .select { |aft| aft[:object_type] && aft[:object_type][:name] && aft[:object_type][:name] != "" }
-        .collect { |aft|            
-          raise "Object type '#{aft[:object_type][:name]}' not definied by browser for #{ft[:name]}." unless ObjectType.find_by_name(aft[:object_type][:name])
-          aft[:object_type][:name]
-      }          
+      container_names = newft[:allowable_field_types]
+                        .select { |aft| aft[:object_type] && aft[:object_type][:name] && aft[:object_type][:name] != "" }
+                        .collect { |aft|
+        raise "Object type '#{aft[:object_type][:name]}' not definied by browser for #{ft[:name]}." unless ObjectType.find_by_name(aft[:object_type][:name])
+        aft[:object_type][:name]
+      }
 
     else
 
@@ -209,14 +208,14 @@ class OperationType < ActiveRecord::Base
     end
 
     add_io(
-      newft[:name], 
-      sample_type_names, 
-      container_names, 
-      newft[:role], 
-      array: newft[:array], 
-      part: newft[:part], 
-      routing: newft[:routing], 
-      ftype: newft[:ftype], 
+      newft[:name],
+      sample_type_names,
+      container_names,
+      newft[:role],
+      array: newft[:array],
+      part: newft[:part],
+      routing: newft[:routing],
+      ftype: newft[:ftype],
       choices: newft[:choices]
     )
 
@@ -232,8 +231,8 @@ class OperationType < ActiveRecord::Base
       oldft.routing = newft[:routing]
       oldft.array = newft[:array]
       oldft.part = newft[:part]
-      oldft.preferred_operation_type_id = newft[:preferred_operation_type_id]   
-      oldft.preferred_field_type_id = newft[:preferred_field_type_id]          
+      oldft.preferred_operation_type_id = newft[:preferred_operation_type_id]
+      oldft.preferred_field_type_id = newft[:preferred_field_type_id]
 
       puts "PREF(#{oldft.name}): #{newft[:preferred_field_type_id]}"
 
@@ -310,7 +309,7 @@ class OperationType < ActiveRecord::Base
       op.field_values.each do |fv|
 
         if !fv.field_type || !fv.allowable_field_type
-          puts "ERRORING OUT OP #{op.id}" 
+          puts "ERRORING OUT OP #{op.id}"
           op.error :obsolete, "The operation type definition for this operation has changed too much since it was created."
         end
 
@@ -320,7 +319,7 @@ class OperationType < ActiveRecord::Base
 
   end
 
-  def stats 
+  def stats
 
     r = { "done" => 0, "error" => 0 }
 
@@ -329,22 +328,22 @@ class OperationType < ActiveRecord::Base
       r[op.status] = r[op.status] + 1
     end
 
-    if r["done"] + r["error"] != 0 
-      r["success"] = r["done"].to_f / ( r["done"] + r["error"] )
-    else 
+    if r["done"] + r["error"] != 0
+      r["success"] = r["done"].to_f / (r["done"] + r["error"])
+    else
       r["success"] = 0.0
     end
 
     if operations.length > 0
       r["first_run"] = operations[0].updated_at
-      r["last_run"] = operations.last.updated_at    
+      r["last_run"] = operations.last.updated_at
     end
 
     r
 
   end
 
-  def self.numbers user=nil
+  def self.numbers user = nil
 
     if user == nil
       q = "
@@ -364,7 +363,7 @@ class OperationType < ActiveRecord::Base
     r = ActiveRecord::Base.connection.execute(q).entries
 
     result = {}
-    r.each do |status,ot_id,count|
+    r.each do |status, ot_id, count|
       result[ot_id] ||= { planning: 0, waiting: 0, pending: 0, delayed: 0, deferred: 0, primed: 0, scheduled: 0, running: 0, error: 0, done: 0 }
       result[ot_id][status] = count
     end
@@ -374,13 +373,3 @@ class OperationType < ActiveRecord::Base
   end
 
 end
-
-
-
-
-
-
-
-
-
-

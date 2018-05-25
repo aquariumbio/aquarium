@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe "parameters/show", :type => :view do
   before(:each) do
     @parameter = assign(:parameter, Parameter.create!(
-      :key => "",
-      :value => "Value"
-    ))
+                                      :key => "",
+                                      :value => "Value"
+                                    ))
   end
 
   it "renders attributes in <p>" do

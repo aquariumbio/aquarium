@@ -1,7 +1,7 @@
 class WizardsController < ApplicationController
 
   before_filter :signed_in_user
-  before_filter :up_to_date_user    
+  before_filter :up_to_date_user
 
   # GET /wizards
   # GET /wizards.json
@@ -74,7 +74,7 @@ class WizardsController < ApplicationController
   # PUT /wizards/1
   # PUT /wizards/1.json
   def update
-    
+
     @wizard = Wizard.find(params[:id])
 
     result = @wizard.update_attributes(
@@ -106,8 +106,8 @@ class WizardsController < ApplicationController
     end
   end
 
-  def group # params should have a location like M20.1.2.3. 
-            # this method returns all locations of the form M20.1.2.*
+  def group # params should have a location like M20.1.2.3.
+    # this method returns all locations of the form M20.1.2.*
 
   end
 

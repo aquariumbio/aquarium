@@ -25,24 +25,24 @@ module Krill
         mutex().synchronize { thread_status().running = false }
         Thread.stop
 
-        # get technician input 
+        # get technician input
         input = JSON.parse(@job.reload.state, symbolize_names: true).last[:inputs]
 
         # populate operations with table input data
         input[:table_inputs].each do |ti|
           op = operations.find { |op| op.id == ti[:opid] }
           op.temporary[ti[:key].to_sym] = ti[:value].to_f if op && ti[:type] == 'number'
-          op.temporary[ti[:key].to_sym] = ti[:value]      if op && ti[:type] != 'number'          
+          op.temporary[ti[:key].to_sym] = ti[:value]      if op && ti[:type] != 'number'
         end
 
-        # return the technician input 
+        # return the technician input
         input
 
       else
 
         # figure out default technician response
         i = simulated_input_for page
-        @job.append_step operation: "next", time: Time.now, inputs: i 
+        @job.append_step operation: "next", time: Time.now, inputs: i
 
         if @job.pc > 500
           raise "Job #{jid} executed too many steps (50) in debug mode. Could be an infinite loop."
@@ -55,7 +55,7 @@ module Krill
     end
 
     def error e
-      Job.find(jid).reload.append_step operation: "error", message: e.to_s, backtrace: e.backtrace[0,10]
+      Job.find(jid).reload.append_step operation: "error", message: e.to_s, backtrace: e.backtrace[0, 10]
     end
 
     def set_task_status task, status
@@ -74,7 +74,7 @@ module Krill
       touch.save
 
       begin
-        task.charge(Job.find(jid),status)
+        task.charge(Job.find(jid), status)
       rescue Exception => e
         puts "Could not charge for task #{task.id}, job #{jid}, '#{status}': #{e.to_s}"
       end
@@ -131,7 +131,7 @@ module Krill
 
       end
 
-      i[:timestamp] = 1000*Time.now.to_i
+      i[:timestamp] = 1000 * Time.now.to_i
 
       return i
 

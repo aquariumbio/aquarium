@@ -41,7 +41,7 @@ class PlanCopier
 
       new_op.x = 500 * rand unless op.x
       unless op.y
-        new_op.y = y 
+        new_op.y = y
         y += 64
       end
 

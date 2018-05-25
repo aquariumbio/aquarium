@@ -18,9 +18,9 @@ module Plankton
       scope.push
 
       # take the evaluated args and push then onto the scope
-      @arguments.each do |var,expr|
+      @arguments.each do |var, expr|
         begin
-          scope.set var.to_sym, scope.evaluate( expr )
+          scope.set var.to_sym, scope.evaluate(expr)
         rescue Exception => e
           raise "Could not evaluate '#{expr}' in include statement."
         end
@@ -38,7 +38,7 @@ module Plankton
 
     def html
       h = "<b>start include</b> #{@filename}, <b>args</b>: "
-      @arguments.each do |var,expr|
+      @arguments.each do |var, expr|
         h += "#{var} = #{expr}, "
       end
       return h[0..-3]

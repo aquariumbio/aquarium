@@ -10,17 +10,17 @@ class Locator < ActiveRecord::Base
   validate :has_wizard
 
   def has_wizard
-    errors.add(:no_wizard, "no wizard" ) unless
-      self.wizard_id && self.wizard_id >= 0 
+    errors.add(:no_wizard, "no wizard") unless
+      self.wizard_id && self.wizard_id >= 0
   end
 
   def no_collisions
     puts "Checking for collisions for #{self.id}"
-    c = Locator.where(wizard_id: wizard_id,number: number)
+    c = Locator.where(wizard_id: wizard_id, number: number)
     if c.length == 1 && c.first != self
-      errors.add(:locator_collision,"Locator #{c.first.id} already has number #{number}.")
+      errors.add(:locator_collision, "Locator #{c.first.id} already has number #{number}.")
     elsif c.length > 1
-      errors.add(:locator_collision,"Multiple Locators have number #{number}.")
+      errors.add(:locator_collision, "Multiple Locators have number #{number}.")
     end
   end
 
@@ -37,9 +37,9 @@ class Locator < ActiveRecord::Base
       locs = where(wizard_id: wizard.id, item_id: nil)
       if locs.length > 0
         locs.first
-      else 
+      else
         m = Locator.largest wizard
-        loc = Locator.new(wizard_id: wizard.id, number: m ? m.number+1 : 0)
+        loc = Locator.new(wizard_id: wizard.id, number: m ? m.number + 1 : 0)
         loc.save
         loc
       end
@@ -70,14 +70,14 @@ class Locator < ActiveRecord::Base
 
     # insert block of new locators
     (0..max).each do |n|
-       Locator.new(
-         number: n, 
-         wizard_id: wizard.id, 
-       ).save
+      Locator.new(
+        number: n,
+        wizard_id: wizard.id,
+      ).save
     end
 
     # insert locators
-    items.each do |i| 
+    items.each do |i|
 
       n = wizard.location_to_int(i.primitive_location)
       l = Locator.where(wizard_id: wizard.id, number: n).first
@@ -101,22 +101,20 @@ class Locator < ActiveRecord::Base
 
     port Wizard.find_by_name('M20')
     port Wizard.find_by_name('M80')
-    port Wizard.find_by_name('SF2')        
-    port Wizard.find_by_name('DFP')            
+    port Wizard.find_by_name('SF2')
+    port Wizard.find_by_name('DFP')
 
   end
 
   def clear
-    r1,r2 = [false,false]
+    r1, r2 = [false, false]
     transaction do
-      item.locator_id = nil      
-      r1 = item.save 
+      item.locator_id = nil
+      r1 = item.save
       self.item_id = nil
-      r2 = self.save 
+      r2 = self.save
     end
     r1 && r2
   end
 
 end
-
-

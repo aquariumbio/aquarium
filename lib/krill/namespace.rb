@@ -1,11 +1,11 @@
 module Krill
 
   module Namespace
-  
+
     def needs path
 
       parts = path.split("/")
-      raise "needs called with improper path. Should be of the form: 'Category/Name'" if parts.length != 2 
+      raise "needs called with improper path. Should be of the form: 'Category/Name'" if parts.length != 2
 
       libs = Library.where(name: parts[1], category: parts[0])
       raise "could not find library '#{path}'" if libs.length == 0

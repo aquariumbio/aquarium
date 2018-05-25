@@ -16,7 +16,7 @@ class InterpreterController < ApplicationController
       @content = Repo::contents @path, @sha
     end
 
-    @protocol = Plankton::Parser.new( @path, @content )
+    @protocol = Plankton::Parser.new(@path, @content)
 
     @parse_errors = ""
 
@@ -30,7 +30,7 @@ class InterpreterController < ApplicationController
 
   def parse
 
-    # Creates a protocol via get_protocol, which uses params[:path] to determine which file to use, 
+    # Creates a protocol via get_protocol, which uses params[:path] to determine which file to use,
     # and then parses the file to get a @protocol.progrom, which has a list of instructions.
 
     get_protocol @job.path, @job.sha
@@ -45,7 +45,7 @@ class InterpreterController < ApplicationController
 
   def parse_args_only
 
-    # Parses only the arguments of a protocol (to avoid descending into included files) so 
+    # Parses only the arguments of a protocol (to avoid descending into included files) so
     # that the protocol object can be used to display arguments to the user.
 
     get_protocol params[:path], params[:sha]
@@ -95,18 +95,18 @@ class InterpreterController < ApplicationController
 
     if /\.oy$/.match @path # its a metacol
 
-      redirect_to arguments_new_metacol_path(sha: @sha, path: @path) 
+      redirect_to arguments_new_metacol_path(sha: @sha, path: @path)
 
     elsif /\.rb$/.match @path
 
-      redirect_to krill_arguments_path(sha: @sha, path: @path) 
+      redirect_to krill_arguments_path(sha: @sha, path: @path)
 
     else # its a plaknton protocol
 
       if params[:from]
         sequence_new_job @sha, @path, params[:from].to_i
       else
-        redirect_to interpreter_arguments_path( path: @path, sha: @sha )
+        redirect_to interpreter_arguments_path(path: @path, sha: @sha)
       end
 
     end
@@ -120,7 +120,7 @@ class InterpreterController < ApplicationController
     @path = @job.path
     @user = current_user
 
-    @current_args = JSON.parse(@job.state, {:symbolize_names => true} )[:stack][0]
+    @current_args = JSON.parse(@job.state, { :symbolize_names => true })[:stack][0]
 
     parse_args_only
 
@@ -137,7 +137,7 @@ class InterpreterController < ApplicationController
     @sha = params[:sha]
     @path = params[:path]
 
-    @info = JSON.parse(params[:info],:symbolize_names => true)
+    @info = JSON.parse(params[:info], :symbolize_names => true)
 
     @desired = Time.at(@info[:date])
     @window = @info[:window].to_f
@@ -158,13 +158,13 @@ class InterpreterController < ApplicationController
       elsif a.type == 'generic'
         begin
           if val.class == String # arg was entered in by user
-            scope.set a.name.to_sym, JSON.parse(val,:symbolize_names => true)
+            scope.set a.name.to_sym, JSON.parse(val, :symbolize_names => true)
           else # arg was obtained from previous job's args
             scope.set a.name.to_sym, val.symbolize_keys
           end
         rescue Exception => e
           flash[:error] = "Error parsing json for generic argument #{a.name}: " + e.to_s
-          return redirect_to interpreter_arguments_path(sha: @sha, path: @path) 
+          return redirect_to interpreter_arguments_path(sha: @sha, path: @path)
         end
       else
         scope.set a.name.to_sym, val
@@ -195,7 +195,7 @@ class InterpreterController < ApplicationController
   end
 
   def get_current
- 
+
     # Get the job
 
     begin
@@ -207,7 +207,7 @@ class InterpreterController < ApplicationController
 
     $CURRENT_JOB_ID = @job.id
 
-    state = JSON.parse(@job.state, {:symbolize_names => true} )
+    state = JSON.parse(@job.state, { :symbolize_names => true })
 
     # Get the protocol
     @sha = @job.sha
@@ -217,7 +217,7 @@ class InterpreterController < ApplicationController
     if @pc != Job.COMPLETED
 
       parse
- 
+
       if @parse_errors != ""
         log 'ERROR', { error: @parse_errors, pc: @job.pc }
         @pc = Job.COMPLETED
@@ -258,12 +258,12 @@ class InterpreterController < ApplicationController
 
     begin
       @instruction.pre_render @scope, params if @instruction.respond_to?('pre_render')
-      if @instruction.flash != "" 
+      if @instruction.flash != ""
         flash[:alert] = @instruction.flash.html_safe
       end
     rescue Exception => e
       process_error "Error in pre_render of " + @instruction.name + ": " + e.to_s # + ", " + e.backtrace.to_s
-    end  
+    end
 
   end
 
@@ -283,7 +283,7 @@ class InterpreterController < ApplicationController
 
     if @instruction.respond_to?('bt_execute')
       @instruction.bt_execute @scope, params
-      if @instruction.flash != "" 
+      if @instruction.flash != ""
         flash[:alert] = @instruction.flash.html_safe
       end
     end
@@ -322,7 +322,7 @@ class InterpreterController < ApplicationController
   end
 
   def stop
-  
+
     # finalize stuff
     @pc = Job.COMPLETED
     log "STOP", { location: cookies[:location] ? cookies[:location] : 'undefined' }
@@ -365,14 +365,14 @@ class InterpreterController < ApplicationController
 
       # continue through instructions that are not renderable
 
-      if @pc < @protocol.program.length 
+      if @pc < @protocol.program.length
 
         @instruction = @protocol.program[@pc]
-        clear_params     
+        clear_params
 
         numreps = 0
 
-        while !@instruction.renderable && @pc < @protocol.program.length && ! @instruction.respond_to?( :stop )
+        while !@instruction.renderable && @pc < @protocol.program.length && !@instruction.respond_to?(:stop)
 
           if numreps > 1000
             process_error "Executed 1000 steps without rendering anything. You may have an infinite loop."
@@ -388,8 +388,8 @@ class InterpreterController < ApplicationController
             return
           end
 
-          if @pc < @protocol.program.length && ! @instruction.respond_to?( :stop )
-            @instruction = @protocol.program[@pc] 
+          if @pc < @protocol.program.length && !@instruction.respond_to?(:stop)
+            @instruction = @protocol.program[@pc]
             clear_params
           end
 
@@ -400,7 +400,7 @@ class InterpreterController < ApplicationController
       end
 
       # check if protocol is finished
-      if @pc < @protocol.program.length && ! @instruction.respond_to?( :stop )
+      if @pc < @protocol.program.length && !@instruction.respond_to?(:stop)
         @instruction = @protocol.program[@pc]
         clear_params
       else
@@ -414,7 +414,7 @@ class InterpreterController < ApplicationController
       if @pc != Job.COMPLETED
         pre_render
       end
-  
+
     end
 
     render 'current'

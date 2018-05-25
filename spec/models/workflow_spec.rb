@@ -8,7 +8,7 @@ RSpec.describe Workflow, :type => :model do
 
   context "forms" do
     it "makes forms" do
-      Workflow.find(11).form 
+      Workflow.find(11).form
     end
   end
 
@@ -18,7 +18,7 @@ RSpec.describe Workflow, :type => :model do
     plasmids = SampleType.find_by_name("Plasmid").samples
     frags = SampleType.find_by_name("Fragment").samples
 
-    begin 
+    begin
       fwd = primers[rand(primers.length)]
     end while fwd.items.length == 0
 
@@ -33,11 +33,11 @@ RSpec.describe Workflow, :type => :model do
     frag = frags[rand(frags.length)]
 
     [
-      {name: "fwd",      sample: fwd.id }, 
-      {name: "rev",      sample: rev.id }, 
-      {name: "template", sample: template.id },
-      {name: "fragment", sample: frag.id },     
-      {name: "annealing_temperature", value: 71.3}
+      { name: "fwd",      sample: fwd.id },
+      { name: "rev",      sample: rev.id },
+      { name: "template", sample: template.id },
+      { name: "fragment", sample: frag.id },
+      { name: "annealing_temperature", value: 71.3 }
     ]
 
   end
@@ -75,7 +75,7 @@ RSpec.describe Workflow, :type => :model do
     it "initializes" do
 
       p = make_process 11, 3
-      
+
       p.all_parts.each do |part|
         if !part[:shared]
           expect(part[:instantiation].length).to eq(3.0)
@@ -91,20 +91,20 @@ RSpec.describe Workflow, :type => :model do
       end
 
       t1 = Time.now
-      puts "#{((Time.now-t1).seconds*1000).to_i}: Making process"
+      puts "#{((Time.now - t1).seconds * 1000).to_i}: Making process"
 
       p = make_process 11, 5
       puts "Made process #{p.id}"
       p.launch
-      
-      puts "#{((Time.now-t1).seconds*1000).to_i}: Running process #{p.id}"
+
+      puts "#{((Time.now - t1).seconds * 1000).to_i}: Running process #{p.id}"
 
       jobs = Job.last(2)
 
       s1 = Krill::Client.new.start jobs[0].id
       s2 = Krill::Client.new.start jobs[1].id
 
-      puts "#{((Time.now-t1).seconds*1000).to_i}: Done"
+      puts "#{((Time.now - t1).seconds * 1000).to_i}: Done"
 
       jobs[0].reload
       jobs[1].reload
@@ -114,7 +114,7 @@ RSpec.describe Workflow, :type => :model do
 
       unless p.errors.empty?
         raise "Could not record results of jobs."
-      end 
+      end
 
       puts "#{jobs[0].id}: #{jobs[0].status}, #{jobs[1].id}: #{jobs[1].status}\n\n"
       puts "#{jobs[0].backtrace.select { |o| o[:operation] == "error" }}\n\n"
@@ -139,7 +139,7 @@ RSpec.describe Workflow, :type => :model do
       while !p.completed? && i < 10
 
         # run all jobs associated with the workflow
-        puts "Workflow jobs: #{p.jobs.collect{|j|j.id}}"
+        puts "Workflow jobs: #{p.jobs.collect { |j| j.id }}"
         (p.jobs.select { |job| job.not_started? }).each do |job|
           puts "starting job #{job.id}"
           result = Krill::Client.new.start job.id
@@ -150,7 +150,7 @@ RSpec.describe Workflow, :type => :model do
           job.reload
           if job.error?
             puts "Job #{job.id} failed: #{job.error_message}"
-            puts job.error_backtrace.join("\n")            
+            puts job.error_backtrace.join("\n")
             raise "Job #{job.id} failed"
           end
           p.record_result_of job
@@ -167,7 +167,7 @@ RSpec.describe Workflow, :type => :model do
 
       end
 
-      exec "open http://localhost:3000/workflow_processes/#{p.id}"      
+      exec "open http://localhost:3000/workflow_processes/#{p.id}"
 
     end
 

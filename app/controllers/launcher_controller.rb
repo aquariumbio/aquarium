@@ -31,9 +31,9 @@ class LauncherController < ApplicationController
         sid = sid(form[:routing][fv[:routing]])
       end
 
-      ft = ot.type(fv[:name],fv[:role])
+      ft = ot.type(fv[:name], fv[:role])
 
-      item = ( fv[:role] == 'input' && fv[:selected_item] ) ? fv[:selected_item] : nil
+      item = (fv[:role] == 'input' && fv[:selected_item]) ? fv[:selected_item] : nil
 
       if fv[:role] == 'input' && fv[:selected_item]
 
@@ -44,15 +44,15 @@ class LauncherController < ApplicationController
         else
           item = fv[:selected_item]
           row = nil
-          column = nil  
+          column = nil
         end
       else
         item = nil
       end
 
       field_value = op.field_values.create(
-        name: fv[:name], 
-        role: fv[:role], 
+        name: fv[:name],
+        role: fv[:role],
         field_type_id: ft.id,
         child_sample_id: sid,
         child_item_id: item ? item[:id] : nil,
@@ -79,12 +79,12 @@ class LauncherController < ApplicationController
     @user = current_user
 
     costs = []
-    labor_rate = Parameter.get_float("labor rate") 
+    labor_rate = Parameter.get_float("labor rate")
     markup = Parameter.get_float("markup rate")
     error = nil
     messages = []
-    
-    ActiveRecord::Base.transaction do 
+
+    ActiveRecord::Base.transaction do
 
       begin
         plan = Plan.find(params[:id])
@@ -145,12 +145,12 @@ class LauncherController < ApplicationController
     if params[:wires]
       params[:wires].each do |form_wire|
         wire = Wire.new({
-          from_id: @id_map[form_wire[:from][:rid]], 
-          to_id: @id_map[form_wire[:to][:rid]],
-          active: true
-        })
+                          from_id: @id_map[form_wire[:from][:rid]],
+                          to_id: @id_map[form_wire[:to][:rid]],
+                          active: true
+                        })
         wire.save
-        unless wire.errors.empty? 
+        unless wire.errors.empty?
           raise wire.errors.full_messages.join(", ")
         end
         wire.to_op.field_values.each do |fv| # remove inputs from non-leaves
@@ -166,12 +166,12 @@ class LauncherController < ApplicationController
 
     if params[:optimize]
       messages << "Looking for like operations."
-      opts = PlanOptimizer.new(plan).optimize 
+      opts = PlanOptimizer.new(plan).optimize
       messages = messages + opts if opts.any?
       messages << "No similar operations found." unless opts.any?
     end
 
-    return [ plan, messages ]
+    return [plan, messages]
 
   end
 
@@ -179,22 +179,22 @@ class LauncherController < ApplicationController
 
     @user = params[:user_id] ? User.find(params[:user_id]) : current_user
 
-    ActiveRecord::Base.transaction do    
+    ActiveRecord::Base.transaction do
 
       if params[:user_budget_association]
         uba = UserBudgetAssociation.find params[:user_budget_association][:id]
       else
         render json: { errors: "No budget specified" }
-        raise ActiveRecord::Rollback                
+        raise ActiveRecord::Rollback
       end
 
-      if !( current_user.is_admin || ( @user.id == uba.user_id && uba.budget.spent_this_month(@user.id) < uba.quota ) )
-        render json: { errors: "User #{current_user.login} not authorized or overspent for budget #{uba.budget.name}"}, status: :unprocessable_entity
-        raise ActiveRecord::Rollback        
+      if !(current_user.is_admin || (@user.id == uba.user_id && uba.budget.spent_this_month(@user.id) < uba.quota))
+        render json: { errors: "User #{current_user.login} not authorized or overspent for budget #{uba.budget.name}" }, status: :unprocessable_entity
+        raise ActiveRecord::Rollback
       end
 
       begin
-        plan,messages = plan_from params
+        plan, messages = plan_from params
       rescue Exception => e
         render json: { errors: e }
         raise ActiveRecord::Rollback
@@ -210,9 +210,9 @@ class LauncherController < ApplicationController
       end
 
       if plan.errors.empty?
-        render json: plan.as_json(include: { operations: { include: :operation_type, methods: [ 'field_values' ] } } )
+        render json: plan.as_json(include: { operations: { include: :operation_type, methods: ['field_values'] } })
       else
-        render json: { errors: "Could not start plan. " + plan.errors.full_messages.join(", ") }, status: :unprocessable_entity        
+        render json: { errors: "Could not start plan. " + plan.errors.full_messages.join(", ") }, status: :unprocessable_entity
         raise ActiveRecord::Rollback
       end
 
@@ -225,9 +225,9 @@ class LauncherController < ApplicationController
     newplan = plan.relaunch
     issues = newplan.start
     newplan.reload
-    render json: { 
-      plan: newplan.as_json(include: { operations: { include: :operation_type, methods: [ 'field_values' ] } } ),
-      issues: issues 
+    render json: {
+      plan: newplan.as_json(include: { operations: { include: :operation_type, methods: ['field_values'] } }),
+      issues: issues
     }
   end
 
@@ -240,8 +240,8 @@ class LauncherController < ApplicationController
       if current_user.id == user.id || current_user.is_admin
 
         plans = Plan
-          .includes(operations: :operation_type)
-          .where(id: params[:plan_id])
+                .includes(operations: :operation_type)
+                .where(id: params[:plan_id])
 
       else
 
@@ -252,38 +252,38 @@ class LauncherController < ApplicationController
     else
 
       plans = Plan
-        .includes(operations: [ :operation_type, job_associations: :job ])
-        .where(user_id: user.id, status: nil, folder: params[:folder])
-        .order('created_at DESC')
-        .limit(20)
-        .offset(params[:offset] || 0)
+              .includes(operations: [:operation_type, job_associations: :job])
+              .where(user_id: user.id, status: nil, folder: params[:folder])
+              .order('created_at DESC')
+              .limit(20)
+              .offset(params[:offset] || 0)
 
     end
 
     oids = plans.collect { |p| p.operations.collect { |o| o.id } }.flatten
 
     field_values = FieldValue
-      .includes(
-        :child_sample, 
-        :wires_as_dest,
-        :wires_as_source, 
-        field_type: { allowable_field_types: [ :sample_type, :object_type ] }
-        )
-      .where(parent_class: "Operation", parent_id: oids)
+                   .includes(
+                     :child_sample,
+                     :wires_as_dest,
+                     :wires_as_source,
+                     field_type: { allowable_field_types: [:sample_type, :object_type] }
+                   )
+                   .where(parent_class: "Operation", parent_id: oids)
 
     # serialized_plans = plans.reverse.as_json(include: [ :user, operations: ] ).as_json
 
     serialized_plans = plans.collect do |plan|
       serialized_plan = plan.as_json(include: :user)
       serialized_plan["operations"] = plan.operations.collect do |op|
-        serialzed_op = op.as_json(include: [ :operation_type, job_associations: { include: :job }])
+        serialzed_op = op.as_json(include: [:operation_type, job_associations: { include: :job }])
         serialzed_op["jobs"] = op.job_associations.collect { |ja| ja.job }
         serialzed_op
       end
       serialized_plan
     end
 
-    render json: { 
+    render json: {
       plans: serialized_plans.reverse,
       field_values: field_values,
       num_plans: params[:plan_id] ? 1 : Plan.where(user_id: user.id).count
@@ -291,13 +291,13 @@ class LauncherController < ApplicationController
 
   end
 
-  def spent 
+  def spent
 
     b = Budget.find(params[:id])
     uid = current_user.id
 
     render json: { total: b.spent(uid), this_month: b.spent_this_month(uid) }
 
-  end  
+  end
 
 end

@@ -3,14 +3,14 @@ module Oyster
   class Parser < Lang::Parser
 
     def initialize path, contents
-      @tok = Lang::Tokenizer.new contents 
+      @tok = Lang::Tokenizer.new contents
       @metacol = Metacol.new
       @path = path
       @default_repo = path.split('/')[0]
       functions
       time_functions
       super() # adds array, string, collection, sample functions
-    end   
+    end
 
     def functions
       add_function :completed, 1
@@ -32,25 +32,25 @@ module Oyster
 
         case @tok.current
 
-          when 'argument'
-            arguments
+        when 'argument'
+          arguments
 
-          when 'place'
-            place
+        when 'place'
+          place
 
-          when 'transition'
-            trans
+        when 'transition'
+          trans
 
-          when 'wire'
-            wire
+        when 'wire'
+          wire
 
+        else
+          if @tok.next == '='
+            a = assign
+            @metacol.scope.set a[:lhs], @metacol.scope.evaluate(a[:rhs])
           else
-            if @tok.next == '='
-              a = assign
-              @metacol.scope.set a[:lhs], @metacol.scope.evaluate( a[:rhs] )
-            else  
-              raise "Could not find a statement to parse at #{@tok.current}"
-            end
+            raise "Could not find a statement to parse at #{@tok.current}"
+          end
 
         end
 
@@ -81,7 +81,6 @@ module Oyster
       @metacol.arguments
 
     end # arguments_only
-
 
   end
 

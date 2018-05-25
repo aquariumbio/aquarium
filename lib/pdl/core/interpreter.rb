@@ -11,7 +11,7 @@ class Interpreter
   end
 
   def clear
-    #print "\e[2J\e[f"
+    # print "\e[2J\e[f"
   end
 
   def banner
@@ -20,7 +20,7 @@ class Interpreter
     puts "---------------------------------------------------------------------------\n"
   end
 
-  def step 
+  def step
 
     ins = @protocol.program[@pc]
 
@@ -48,8 +48,8 @@ class Interpreter
       banner
       print "Enter value for #{arg.var} (#{arg.description}): "
       input = gets
-	puts "In interpreter ARG TYPE is "
-	puts arg.type
+      puts "In interpreter ARG TYPE is "
+      puts arg.type
       if arg.type == "num"
         puts "The arg is a NUM"
         @scope.set arg.var.to_sym, input.chomp.to_i

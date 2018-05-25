@@ -60,14 +60,14 @@ class JobsController < ApplicationController
 
     if params[:sha]
 
-      @jobs = Job.where( 'path = ? AND sha = ?', params[:path], params[:sha] )
+      @jobs = Job.where('path = ? AND sha = ?', params[:path], params[:sha])
 
       if /local_file/ =~ params[:sha]
         blob = Blob.get params[:sha], params[:path]
         @content = blob.xml.force_encoding('UTF-8')
       else
         begin
-          @content = Repo::contents params[:path], params[:sha] 
+          @content = Repo::contents params[:path], params[:sha]
         rescue Exception => e
           @content = "Could not find '#{params[:path]}' with sha '#{params[:sha]}' in master branch.<br />"
           @content += "    This protocol may have been run from a development branch that has not yet been merged with master."
@@ -80,7 +80,7 @@ class JobsController < ApplicationController
       @infos = {}
 
       Job.where(path: params[:path]).reverse.each do |j|
-        if ! @infos[j.sha]
+        if !@infos[j.sha]
           @infos[j.sha] = {
             num: 1,
             successes: j.error? ? 0 : 1,
@@ -91,13 +91,13 @@ class JobsController < ApplicationController
           @infos[j.sha] = {
             num: @infos[j.sha][:num] + 1,
             successes: @infos[j.sha][:successes] + ((j.error?) ? 0 : 1),
-            last: @infos[j.sha][:last],      
+            last: @infos[j.sha][:last],
             first: j.created_at
           }
         end
       end
 
-      @infos.each do |k,v|
+      @infos.each do |k, v|
         @infos[k][:posts] = PostAssociation.where(sha: k).count
       end
 

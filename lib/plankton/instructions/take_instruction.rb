@@ -38,7 +38,6 @@ module Plankton
 
     end # initialize
 
-
     def pre_render scope, params
 
       # Check all evaluations ###################################################################################
@@ -53,7 +52,7 @@ module Plankton
           e.item_value = scope.evaluate e.item_expr
 
           if e.item_value.class == Fixnum
-            e.item_value = [ e.item_value ]
+            e.item_value = [e.item_value]
           elsif e.item_value.class == Array
             if (e.item_value.select { |v| v.class != Fixnum }).length > 0
               raise "Item array should be an array of numbers."
@@ -69,11 +68,11 @@ module Plankton
           e.type_value = scope.evaluate e.type_expr
 
           if e.type_value.class == String
-            e.type_value = [ e.type_value ]
-            e.quantity_value = [ e.quantity_value ] 
+            e.type_value = [e.type_value]
+            e.quantity_value = [e.quantity_value]
           elsif e.type_value.class == Array
             if (e.type_value.select { |v| v.class != String }).length > 0 ||
-               e.quantity_value.class != Array || 
+               e.quantity_value.class != Array ||
                (e.quantity_value.select { |q| q.class != Fixnum }).length > 0 ||
                e.quantity_value.length != e.type_value.length
               raise "Object type array should be an array of strings with a corresponding quantity array of Fixnums."
@@ -101,7 +100,7 @@ module Plankton
             description = {
               id: item_id,
               objecttype: i.object_type.name,
-              quantity: 1, 
+              quantity: 1,
               inuse: i.inuse,
               var: e.var,
               location: i.location
@@ -149,11 +148,9 @@ module Plankton
 
     end # pre_render
 
-
     def html
       "<b>take</b>" + @entry_list.to_json
     end # html
-
 
     def log var, r, scope, params
 
@@ -168,13 +165,12 @@ module Plankton
 
     end # log
 
-
     def bt_execute scope, params
 
       # Evalute @object_list in current scope
       pre_render scope, params
 
-      take = JSON.parse(params[:take],symbolize_names: true );
+      take = JSON.parse(params[:take], symbolize_names: true);
       puts "TAKE: #{take}"
 
       i = 0
@@ -193,7 +189,7 @@ module Plankton
             item = Item.find(take[i][j][:id])
 
             if item.inuse == 0
-              result.push( pdl_item item )
+              result.push(pdl_item item)
               item.inuse += 1
               item.save
             else
@@ -222,11 +218,11 @@ module Plankton
 
             if item.quantity - item.inuse >= e.quantity_value[j]
               (1..(e.quantity_value[j])).each do |i|
-                result.push( pdl_item item )
+                result.push(pdl_item item)
               end
               item.inuse += e.quantity_value[j]
               item.save
-            else 
+            else
               raise "Could not take #{e.type_value} (item #{item.id}) because it is in use (was it taken twice?)"
             end
 
@@ -241,15 +237,14 @@ module Plankton
 
         end
 
-        scope.set( e.var.to_sym, result )
+        scope.set(e.var.to_sym, result)
         log e.var, result, scope, params
 
         i += 1
 
-    end
+      end
 
     end # bt_execute
-
 
   end
 

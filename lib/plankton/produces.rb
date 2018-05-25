@@ -58,7 +58,7 @@ module Plankton
         elsif @tok.current == 'release'
 
           @tok.eat_a 'release'
-          if @tok.current == ':' 
+          if @tok.current == ':'
             @tok.eat_a ':'
           end
           rel = expr
@@ -66,7 +66,7 @@ module Plankton
         elsif @tok.current == 'note'
 
           @tok.eat_a 'note'
-          if @tok.current == ':' 
+          if @tok.current == ':'
             @tok.eat_a ':'
           end
           note = expr
@@ -74,7 +74,7 @@ module Plankton
         elsif @tok.current == 'location'
 
           @tok.eat_a 'location'
-          if @tok.current == ':' 
+          if @tok.current == ':'
             @tok.eat_a ':'
           end
           location = expr
@@ -111,4 +111,3 @@ module Plankton
   end
 
 end
-

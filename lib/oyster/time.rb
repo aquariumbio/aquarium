@@ -32,12 +32,12 @@ module Oyster
       end
 
       e += @tok.eat_a '('
-        (1..@tfunctions[name.to_sym]).each do |i|
-          e += expr
-          if i < @tfunctions[name.to_sym]
-            e += @tok.eat_a ','
-          end
+      (1..@tfunctions[name.to_sym]).each do |i|
+        e += expr
+        if i < @tfunctions[name.to_sym]
+          e += @tok.eat_a ','
         end
+      end
 
       e += @tok.eat_a ')'
 

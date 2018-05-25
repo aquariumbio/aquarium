@@ -1,9 +1,9 @@
 module Lang
 
-  class Scope 
+  class Scope
 
     def to_string x
-   
+
       return x.to_s
 
     end

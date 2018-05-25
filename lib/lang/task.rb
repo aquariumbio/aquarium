@@ -1,6 +1,6 @@
 module Lang
 
-  class Scope 
+  class Scope
 
     def tasks prototype, status
 
@@ -8,7 +8,7 @@ module Lang
       result = []
 
       if tp
-        result = Task.where("task_prototype_id = ? AND status = ?", tp.id, status).collect do |t| 
+        result = Task.where("task_prototype_id = ? AND status = ?", tp.id, status).collect do |t|
           result = t.attributes.symbolize_keys
           result[:specification] = JSON.parse(result[:specification], symbolize_names: true)
           result
@@ -21,7 +21,7 @@ module Lang
 
     def get_task_status task
 
-      t = Task.find_by_id( task[:id] )
+      t = Task.find_by_id(task[:id])
 
       if t
         t.status
@@ -34,14 +34,14 @@ module Lang
     def set_task_status a, status
 
       if a.class != Array
-        tasks = [ a ]
+        tasks = [a]
       else
         tasks = a
       end
-    
+
       tasks.each do |task|
 
-        t = Task.find_by_id( task[:id] )
+        t = Task.find_by_id(task[:id])
 
         if t
 
@@ -56,7 +56,7 @@ module Lang
             touch.save
 
           end
-  
+
         end
 
       end

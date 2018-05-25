@@ -20,10 +20,10 @@ class SessionsController < ApplicationController
 
     else
       flash.now[:error] = 'Invalid login/password combination'
-      
+
       respond_to do |format|
         format.html { render 'new', layout: "blank.html.erb" } # index.html.erb
-        format.json { render json: { message: "Login failed"}, status: :unprocessable_entity }
+        format.json { render json: { message: "Login failed" }, status: :unprocessable_entity }
       end
 
     end

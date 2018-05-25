@@ -1,7 +1,7 @@
 class BudgetsController < ApplicationController
 
   before_filter :signed_in_user
-  before_filter :up_to_date_user    
+  before_filter :up_to_date_user
 
   before_filter {
     unless current_user && current_user.is_admin
@@ -26,10 +26,10 @@ class BudgetsController < ApplicationController
   def show
 
     @budget = Budget.find(params[:id])
-    @users = (User.all.reject { |u| u.retired? }).sort { |a,b| a[:login] <=> b[:login] }
+    @users = (User.all.reject { |u| u.retired? }).sort { |a, b| a[:login] <=> b[:login] }
 
     respond_to do |format|
-      format.html { render layout: 'aq2' } 
+      format.html { render layout: 'aq2' }
       format.json { render json: @budget }
     end
 
@@ -41,7 +41,7 @@ class BudgetsController < ApplicationController
     @budget = Budget.new
 
     respond_to do |format|
-      format.html { render layout: 'aq2' } 
+      format.html { render layout: 'aq2' }
       format.json { render json: @budget }
     end
   end
@@ -50,9 +50,9 @@ class BudgetsController < ApplicationController
   def edit
     @budget = Budget.find(params[:id])
     respond_to do |format|
-      format.html { render layout: 'aq2' } 
+      format.html { render layout: 'aq2' }
       format.json { render json: @budget }
-    end    
+    end
   end
 
   # POST /budgets
@@ -123,6 +123,6 @@ class BudgetsController < ApplicationController
       flash["warning"] = "Only admins can remove users from budgets"
     end
     redirect_to Budget.find(params[:bid])
-  end  
+  end
 
 end

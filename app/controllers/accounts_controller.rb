@@ -9,7 +9,7 @@ class AccountsController < ApplicationController
     @month = params[:month] || Date.today.month
     @year = params[:year] || Date.today.year
 
-    @start_date = DateTime.new(@year.to_i,@month.to_i)
+    @start_date = DateTime.new(@year.to_i, @month.to_i)
     @end_date = @start_date.next_month
     @next_month = @start_date.next_month
     @prev_month = @start_date.prev_month
@@ -18,42 +18,46 @@ class AccountsController < ApplicationController
 
       @all_rows = Account.where(
         "user_id = ?",
-        @user.id )
+        @user.id
+      )
 
       @current_rows = Account.where(
-        "user_id = ? and ? <= created_at and created_at < ?", 
-        @user.id, 
-        @start_date, 
-        @end_date )
+        "user_id = ? and ? <= created_at and created_at < ?",
+        @user.id,
+        @start_date,
+        @end_date
+      )
 
       @prev_rows = Account.where(
-        "user_id = ? and created_at < ?", 
-        @user.id, 
-        @start_date )      
+        "user_id = ? and created_at < ?",
+        @user.id,
+        @start_date
+      )
 
       @balances = @all_rows
-        .collect { |row| row.budget_id }
-        .uniq
-        .collect { |bid| {
+                  .collect { |row| row.budget_id }
+                  .uniq
+                  .collect { |bid|
+        {
           budget: Budget.find(bid),
           prev: @prev_rows
             .select { |r| r.budget_id == bid }
             .collect { |r| r.transaction_type == 'credit' ? r.amount : - r.amount }
-            .inject(0) { |sum,x| sum+x },
+            .inject(0) { |sum, x| sum + x },
           current: (@current_rows + @prev_rows)
             .select { |r| r.budget_id == bid }
             .collect { |r| r.transaction_type == 'credit' ? r.amount : - r.amount }
-            .inject(0) { |sum,x| sum+x },
+            .inject(0) { |sum, x| sum + x },
           debits: @current_rows
-            .select { |r| r.budget_id == bid && r.transaction_type == 'debit'}
+            .select { |r| r.budget_id == bid && r.transaction_type == 'debit' }
             .collect { |r| -r.amount }
-            .inject(0) { |sum,x| sum+x },
+            .inject(0) { |sum, x| sum + x },
           credits: @current_rows
-            .select { |r| r.budget_id == bid && r.transaction_type == 'credit'}
+            .select { |r| r.budget_id == bid && r.transaction_type == 'credit' }
             .collect { |r| r.amount }
-            .inject(0) { |sum,x| sum+x }            
-          }
+            .inject(0) { |sum, x| sum + x }
         }
+      }
 
     else
 
@@ -75,9 +79,9 @@ class AccountsController < ApplicationController
         description = "#{current_user.name} deposited $#{params[:amount]} associated budget #{budget.name}."
 
         row = Account.new(
-          user_id: user.id, 
-          category: nil, 
-          amount: params[:amount].to_f, 
+          user_id: user.id,
+          category: nil,
+          amount: params[:amount].to_f,
           budget_id: budget.id,
           description: description,
           task_id: -1,
@@ -105,5 +109,3 @@ class AccountsController < ApplicationController
   end
 
 end
-
-

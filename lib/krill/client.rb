@@ -1,4 +1,4 @@
-require 'socket'              
+require 'socket'
 
 module Krill
 
@@ -7,12 +7,12 @@ module Krill
     def initialize
 
       @hostname = 'localhost'
-      @port = Bioturk::Application.config.krill_port 
+      @port = Bioturk::Application.config.krill_port
 
     end
 
     def open
-      begin      
+      begin
         @socket = TCPSocket.open(@hostname, @port)
       rescue
         raise "Could not connect to Krill server. It is probably not running."
@@ -31,8 +31,8 @@ module Krill
       @socket.puts msg
 
       answer = ""
-      while line = @socket.gets 
-        answer += line.chop 
+      while line = @socket.gets
+        answer += line.chop
       end
 
       close
@@ -41,7 +41,7 @@ module Krill
 
     end
 
-    def start jid, debug=false, directory='master', branch='master'
+    def start jid, debug = false, directory = 'master', branch = 'master'
       send operation: "start", jid: jid, debug: debug, directory: directory, branch: branch
     end
 
@@ -58,7 +58,7 @@ module Krill
     end
 
     def kill_zombies
-      send operation: "kill zombies" 
+      send operation: "kill zombies"
     end
 
   end

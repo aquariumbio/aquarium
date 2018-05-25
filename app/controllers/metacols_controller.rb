@@ -46,18 +46,18 @@ class MetacolsController < ApplicationController
     if @content
 
       begin
-        @metacol = Oyster::Parser.new(@path,@content).parse(JSON.parse(@mc.state, :symbolize_names => true )[:stack].first)
+        @metacol = Oyster::Parser.new(@path, @content).parse(JSON.parse(@mc.state, :symbolize_names => true)[:stack].first)
       rescue Exception => e
         @errors = "ERROR: " + e.to_s
       end
 
       begin
-        @metacol.set_state( JSON.parse @mc.state, :symbolize_names => true )
+        @metacol.set_state(JSON.parse @mc.state, :symbolize_names => true)
       rescue
         puts "Could not set metacol state"
       end
 
-      if @errors==""
+      if @errors == ""
         @metacol.id = @mc.id
       end
 
@@ -91,7 +91,7 @@ class MetacolsController < ApplicationController
     end
 
     begin
-      @arguments = Oyster::Parser.new(@path,@content).parse_arguments_only
+      @arguments = Oyster::Parser.new(@path, @content).parse_arguments_only
     rescue Exception => e
       @errors = e
     end
@@ -113,7 +113,7 @@ class MetacolsController < ApplicationController
 
     @sha = params[:sha]
     @path = params[:path]
-    @info = JSON.parse(params[:info],:symbolize_names => true)
+    @info = JSON.parse(params[:info], :symbolize_names => true)
 
     if /local_file/ =~ @sha
       blob = Blob.get @sha, @path
@@ -122,19 +122,19 @@ class MetacolsController < ApplicationController
       @content = Repo::contents @path, @sha
     end
 
-    @arguments = Oyster::Parser.new(params[:path],@content).parse_arguments_only
+    @arguments = Oyster::Parser.new(params[:path], @content).parse_arguments_only
 
     logger.info "arguments from parse_arguments_only = #{@arguments}"
 
     group = Group.find_by_name(@info[:group])
-    
+
     group.memberships.each do |m|
 
       user = m.user
       args = {}
 
       @arguments.each do |a|
-        
+
         ident = a[:name].to_sym
         val = @info[:args][ident]
 
@@ -146,10 +146,10 @@ class MetacolsController < ApplicationController
           args[ident] = val.to_f
         elsif a[:type] == 'generic'
           begin
-            args[ident] = JSON.parse(val,:symbolize_keys=>true)
+            args[ident] = JSON.parse(val, :symbolize_keys => true)
           rescue Exception => e
             flash[:error] = "Could not parse json (#{args[val]}) for argument #{a[:name]}: " + e.to_s
-            return redirect_to arguments_new_metacol_path(sha: params[:sha], path: params[:path]) 
+            return redirect_to arguments_new_metacol_path(sha: params[:sha], path: params[:path])
           end
         else
           args[ident] = val
@@ -160,10 +160,10 @@ class MetacolsController < ApplicationController
       args[:aquarium_user] = user.login
 
       begin
-        @metacol = Oyster::Parser.new(params[:path],@content).parse args
+        @metacol = Oyster::Parser.new(params[:path], @content).parse args
       rescue Exception => e
         flash[:error] = "Could not start metacol due to parse error. #{e.to_s}"
-        return redirect_to arguments_new_metacol_path(sha: params[:sha], path: params[:path]) 
+        return redirect_to arguments_new_metacol_path(sha: params[:sha], path: params[:path])
       end
 
       @metacol.who = current_user.id
@@ -200,7 +200,7 @@ class MetacolsController < ApplicationController
     end
 
     flash[:notice] = "Starting metacol for each member in group '#{group.name}'. Go to 'Protocols/Pending Jobs' to see jobs started by this metacol."
-    redirect_to metacols_path( active: true )
+    redirect_to metacols_path(active: true)
 
   end
 
@@ -234,7 +234,7 @@ class MetacolsController < ApplicationController
       format.html { redirect_to jobs_path }
       format.json { head :no_content }
     end
-    
+
   end
 
   def destroy

@@ -9,19 +9,19 @@ class HTTPInstruction < Instruction
     @renderable = false
 
   end
- 
+
   def bt_execute scope, params
 
     info = {}
 
-    @info_expr.each do |k,v| 
+    @info_expr.each do |k, v|
 
       if k != :query
         info[k] = scope.substitute v
-      else 
+      else
         info[:query] = {}
-        v.each do |q,w|
-          info[:query][q] = scope.substitute w 
+        v.each do |q, w|
+          info[:query][q] = scope.substitute w
         end
       end
     end
@@ -46,12 +46,9 @@ class HTTPInstruction < Instruction
     log.save
 
   end
-  
-  def to_html 
+
+  def to_html
     info_expr.to_s
   end
 
-
 end
-
-

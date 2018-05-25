@@ -1,9 +1,9 @@
 module Lang
 
-  class Scope 
+  class Scope
 
     def time
-   
+
       t = Time.now
 
       return {

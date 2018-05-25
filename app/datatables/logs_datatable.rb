@@ -1,6 +1,6 @@
 class LogsDatatable < Datatable
 
-  private  
+  private
 
   def data
 
@@ -9,11 +9,11 @@ class LogsDatatable < Datatable
       args = job.arguments.to_json
 
       if args.length > 50
-        args = args[0,49] + '...'
+        args = args[0, 49] + '...'
       end
 
       if job.metacol_id
-        mc = " (<a href='metacols/#{job.metacol_id}'>#{job.metacol_id}</a>)"      
+        mc = " (<a href='metacols/#{job.metacol_id}'>#{job.metacol_id}</a>)"
       else
         mc = " (" + job.operations.collect { |o| o.plan.id }.join(", ") + ")"
       end
@@ -24,7 +24,7 @@ class LogsDatatable < Datatable
         job.submitter + mc,
         job.doer,
         job.created_at.to_formatted_s(:short),
-        job.updated_at.to_formatted_s(:short) 
+        job.updated_at.to_formatted_s(:short)
       ]
 
     end
@@ -50,7 +50,7 @@ class LogsDatatable < Datatable
       if u
         jobs = jobs.where("pc = -2 and ( user_id like :uid or submitted_by like :sid )", search: "%#{key}%", uid: u.id.to_s, sid: u.id)
       elsif /m[0-9]+/ =~ key
-        jobs = jobs.where("pc = -2 and metacol_id = :mic", mic: key[1,10].to_i )
+        jobs = jobs.where("pc = -2 and metacol_id = :mic", mic: key[1, 10].to_i)
       else
         jobs = jobs.where("pc = -2 and path like :search", search: "%#{key}%")
       end
@@ -69,4 +69,3 @@ class LogsDatatable < Datatable
   end
 
 end
-

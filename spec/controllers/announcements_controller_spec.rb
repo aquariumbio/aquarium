@@ -47,7 +47,7 @@ RSpec.describe AnnouncementsController, :type => :controller do
   describe "GET #show" do
     it "assigns the requested announcement as @announcement" do
       announcement = Announcement.create! valid_attributes
-      get :show, {:id => announcement.to_param}, valid_session
+      get :show, { :id => announcement.to_param }, valid_session
       expect(assigns(:announcement)).to eq(announcement)
     end
   end
@@ -62,7 +62,7 @@ RSpec.describe AnnouncementsController, :type => :controller do
   describe "GET #edit" do
     it "assigns the requested announcement as @announcement" do
       announcement = Announcement.create! valid_attributes
-      get :edit, {:id => announcement.to_param}, valid_session
+      get :edit, { :id => announcement.to_param }, valid_session
       expect(assigns(:announcement)).to eq(announcement)
     end
   end
@@ -71,30 +71,30 @@ RSpec.describe AnnouncementsController, :type => :controller do
     context "with valid params" do
       it "creates a new Announcement" do
         expect {
-          post :create, {:announcement => valid_attributes}, valid_session
+          post :create, { :announcement => valid_attributes }, valid_session
         }.to change(Announcement, :count).by(1)
       end
 
       it "assigns a newly created announcement as @announcement" do
-        post :create, {:announcement => valid_attributes}, valid_session
+        post :create, { :announcement => valid_attributes }, valid_session
         expect(assigns(:announcement)).to be_a(Announcement)
         expect(assigns(:announcement)).to be_persisted
       end
 
       it "redirects to the created announcement" do
-        post :create, {:announcement => valid_attributes}, valid_session
+        post :create, { :announcement => valid_attributes }, valid_session
         expect(response).to redirect_to(Announcement.last)
       end
     end
 
     context "with invalid params" do
       it "assigns a newly created but unsaved announcement as @announcement" do
-        post :create, {:announcement => invalid_attributes}, valid_session
+        post :create, { :announcement => invalid_attributes }, valid_session
         expect(assigns(:announcement)).to be_a_new(Announcement)
       end
 
       it "re-renders the 'new' template" do
-        post :create, {:announcement => invalid_attributes}, valid_session
+        post :create, { :announcement => invalid_attributes }, valid_session
         expect(response).to render_template("new")
       end
     end
@@ -108,20 +108,20 @@ RSpec.describe AnnouncementsController, :type => :controller do
 
       it "updates the requested announcement" do
         announcement = Announcement.create! valid_attributes
-        put :update, {:id => announcement.to_param, :announcement => new_attributes}, valid_session
+        put :update, { :id => announcement.to_param, :announcement => new_attributes }, valid_session
         announcement.reload
         skip("Add assertions for updated state")
       end
 
       it "assigns the requested announcement as @announcement" do
         announcement = Announcement.create! valid_attributes
-        put :update, {:id => announcement.to_param, :announcement => valid_attributes}, valid_session
+        put :update, { :id => announcement.to_param, :announcement => valid_attributes }, valid_session
         expect(assigns(:announcement)).to eq(announcement)
       end
 
       it "redirects to the announcement" do
         announcement = Announcement.create! valid_attributes
-        put :update, {:id => announcement.to_param, :announcement => valid_attributes}, valid_session
+        put :update, { :id => announcement.to_param, :announcement => valid_attributes }, valid_session
         expect(response).to redirect_to(announcement)
       end
     end
@@ -129,13 +129,13 @@ RSpec.describe AnnouncementsController, :type => :controller do
     context "with invalid params" do
       it "assigns the announcement as @announcement" do
         announcement = Announcement.create! valid_attributes
-        put :update, {:id => announcement.to_param, :announcement => invalid_attributes}, valid_session
+        put :update, { :id => announcement.to_param, :announcement => invalid_attributes }, valid_session
         expect(assigns(:announcement)).to eq(announcement)
       end
 
       it "re-renders the 'edit' template" do
         announcement = Announcement.create! valid_attributes
-        put :update, {:id => announcement.to_param, :announcement => invalid_attributes}, valid_session
+        put :update, { :id => announcement.to_param, :announcement => invalid_attributes }, valid_session
         expect(response).to render_template("edit")
       end
     end
@@ -145,13 +145,13 @@ RSpec.describe AnnouncementsController, :type => :controller do
     it "destroys the requested announcement" do
       announcement = Announcement.create! valid_attributes
       expect {
-        delete :destroy, {:id => announcement.to_param}, valid_session
+        delete :destroy, { :id => announcement.to_param }, valid_session
       }.to change(Announcement, :count).by(-1)
     end
 
     it "redirects to the announcements list" do
       announcement = Announcement.create! valid_attributes
-      delete :destroy, {:id => announcement.to_param}, valid_session
+      delete :destroy, { :id => announcement.to_param }, valid_session
       expect(response).to redirect_to(announcements_url)
     end
   end
