@@ -24,6 +24,8 @@ If you haven't already, visit the [protocol development documentation](index.md)
         - [Practicing Queries](#practicing-queries)
         - [Common definitions and record identifiers](#common-definitions-and-record-identifiers)
         - [Provisioning Items](#provisioning-items)
+        - [Creating Items and Samples](#creating-items-and-samples)
+        - [Creating Collections](#creating-collections)
         - [Sample](#sample)
             - [Attributes](#attributes)
             - [Associations](#associations)
@@ -36,8 +38,6 @@ If you haven't already, visit the [protocol development documentation](index.md)
         - [Collection](#collection)
             - [Additional associations](#additional-associations)
             - [Additional instance methods](#additional-instance-methods)
-        - [Creating Items and Samples](#creating-items-and-samples)
-        - [Creating Collections](#creating-collections)
     - [Managing Operations](#managing-operations)
     - [Protocol Patterns](#protocol-patterns)
         - [Protocols that Create New Items](#protocols-that-create-new-items)
@@ -320,9 +320,68 @@ TODO: show, in other contexts, the use of take to associate items with the job
 
 --- 
 
-TODO: use above details from below
+TODO: use above, details from below
 
 
+### Creating Items and Samples
+
+To make new items you use either `new_object` or `new_sample`, which both return Items.
+Typically, these functions are used with the `produce` function so that the items returned are (a) put in the databased with new unique ids and (b) associated with the job (i.e. they are "taken").
+
+* `new_object name` - This function takes the name of an object type and makes a new item with that object type.
+  An object type with that name must exist in the database.
+  For example, you might do the following, which would return a new item in the variable `i`.
+
+  ```ruby
+  i = produce new_object "1 L Bottle"
+  ```
+
+* `new_sample sample_name, of: sample_type_name, as: object_type_name` - This function takes a sample name and an object type name and makes a new item with that name.
+  For example, you might do the following, which returns a new item in the variable `i` whose object type is "Plasmid Stock", whose corresponding sample is "pLAB1" and whose sample type is "Plasmid".
+
+  ```ruby
+  j = produce new_sample "pLAB1", of: "Plasmid", as: "Plasmid Stock"
+  ```
+
+  When a protocol is done with a an item, it should release it.
+  This is done with the release function.
+
+* **release item_list, opts={} //optional block//** -- release an item.
+  This function has many forms.
+  Suppose `i` and `j` are items currently ''taken'' by the protocol.
+
+  ```ruby
+  release([i,j])
+  ```
+
+  * ^ This version of release simply release the items i and j (i.e. it marks them as not taken by the job running the protocol).
+
+
+  ```ruby
+  release([i,j],interactive: true)
+  ```
+
+  * ^ This version calls `show` and tells the user to put the items away, or dispose of them, etc.
+    Once the user clicks "Next", the items in the list are marked as not taken.
+
+
+  ```ruby
+  release([i,j],interactive: true) {
+    warning "Be careful with these items."
+  }
+  ```
+
+  * ^ This version also calls `show`, like the previous version, but also adds the `show` code block to the `show` that release does, so that you can add various notes, warnings, images, etc. to the page shown to the user.
+
+### Creating Collections
+
+Collections can be made manually by making a new item with a collection-friendly object type as above, and promoting it to a collection.
+You can also use the following static Collection methods for convienence
+
+* **Colllection.new_collection "collection_type_name"** - Creates a new collection of type "collection_type_name" with a matrix of size defined by the rows and columns in the collection type.
+
+* **Colllection.spread sample_list, "collection_type_name"** - Creates an appropriate number of collections of "collection_type_name" and fills collections with the sample_list.
+  The sample list can be Samples, Items, or integers.
 
 
 **TODO: change the following so that it shows how to work with samples and is not a list of attributes or methods**
@@ -581,65 +640,6 @@ Suppose `coll` is a collection.
 
 
 
-### Creating Items and Samples
-
-To make new items you use either `new_object` or `new_sample`, which both return Items.
-Typically, these functions are used with the `produce` function so that the items returned are (a) put in the databased with new unique ids and (b) associated with the job (i.e. they are "taken").
-
-* `new_object name` - This function takes the name of an object type and makes a new item with that object type.
-  An object type with that name must exist in the database.
-  For example, you might do the following, which would return a new item in the variable `i`.
-
-  ```ruby
-  i = produce new_object "1 L Bottle"
-  ```
-
-* `new_sample sample_name, of: sample_type_name, as: object_type_name` - This function takes a sample name and an object type name and makes a new item with that name.
-  For example, you might do the following, which returns a new item in the variable `i` whose object type is "Plasmid Stock", whose corresponding sample is "pLAB1" and whose sample type is "Plasmid".
-
-  ```ruby
-  j = produce new_sample "pLAB1", of: "Plasmid", as: "Plasmid Stock"
-  ```
-
-  When a protocol is done with a an item, it should release it.
-  This is done with the release function.
-
-* **release item_list, opts={} //optional block//** -- release an item.
-  This function has many forms.
-  Suppose `i` and `j` are items currently ''taken'' by the protocol.
-
-  ```ruby
-  release([i,j])
-  ```
-
-  * ^ This version of release simply release the items i and j (i.e. it marks them as not taken by the job running the protocol).
-
-
-  ```ruby
-  release([i,j],interactive: true)
-  ```
-
-  * ^ This version calls `show` and tells the user to put the items away, or dispose of them, etc.
-    Once the user clicks "Next", the items in the list are marked as not taken.
-
-
-  ```ruby
-  release([i,j],interactive: true) {
-    warning "Be careful with these items."
-  }
-  ```
-
-  * ^ This version also calls `show`, like the previous version, but also adds the `show` code block to the `show` that release does, so that you can add various notes, warnings, images, etc. to the page shown to the user.
-
-### Creating Collections
-
-Collections can be made manually by making a new item with a collection-friendly object type as above, and promoting it to a collection.
-You can also use the following static Collection methods for convienence
-
-* **Colllection.new_collection "collection_type_name"** - Creates a new collection of type "collection_type_name" with a matrix of size defined by the rows and columns in the collection type.
-
-* **Colllection.spread sample_list, "collection_type_name"** - Creates an appropriate number of collections of "collection_type_name" and fills collections with the sample_list.
-  The sample list can be Samples, Items, or integers.
 
 ## Managing Operations
 
