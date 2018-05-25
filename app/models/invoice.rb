@@ -2,24 +2,24 @@ class Invoice < ActiveRecord::Base
 
   attr_accessible :budget_id, :month, :user_id, :year, :status, :notes
 
-  validates_inclusion_of :status, :in => [ "ready", "approval_requested", "reconciled" ]  
+  validates :status, inclusion: { in: %w[ready approval_requested reconciled] }
 
   belongs_to :user
   belongs_to :budget
 
-  def self.for x, y={}
+  def self.for(x, y = {})
     invoices = Invoice.where(x)
-    if invoices.length == 0
-      i = Invoice.new(x.merge y)
+    if invoices.empty?
+      i = Invoice.new(x.merge(y))
       i.save
       i
-    else 
+    else
       invoices[0]
-    end 
+    end
   end
 
   def rows
-    start_date = DateTime.new(year,month).change(:offset => "-7:00")
+    start_date = DateTime.new(year, month).change(offset: '-7:00')
     end_date = start_date.next_month
     Account.includes(first_row_logs: :user, second_row_logs: :user)
            .where(user_id: user_id, budget_id: budget_id)
@@ -27,7 +27,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def in_progress
-    Date.today < DateTime.new(year,month).end_of_month 
+    Date.today < DateTime.new(year, month).end_of_month
   end
 
 end

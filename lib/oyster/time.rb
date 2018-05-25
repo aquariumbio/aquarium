@@ -2,10 +2,8 @@ module Oyster
 
   class Parser
 
-    def add_time_function name, num_args
-      if !@tfunctions
-        @tfunctions = {}
-      end
+    def add_time_function(name, num_args)
+      @tfunctions ||= {}
       @tfunctions[name] = num_args
     end
 
@@ -27,17 +25,13 @@ module Oyster
       name = @tok.eat_a_variable
       e = name
 
-      unless @tfunctions[name.to_sym]
-        raise "Unknown time function '#{name}'"
-      end
+      raise "Unknown time function '#{name}'" unless @tfunctions[name.to_sym]
 
       e += @tok.eat_a '('
-        (1..@tfunctions[name.to_sym]).each do |i|
-          e += expr
-          if i < @tfunctions[name.to_sym]
-            e += @tok.eat_a ','
-          end
-        end
+      (1..@tfunctions[name.to_sym]).each do |i|
+        e += expr
+        e += @tok.eat_a ',' if i < @tfunctions[name.to_sym]
+      end
 
       e += @tok.eat_a ')'
 

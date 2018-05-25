@@ -1,12 +1,10 @@
 class AnnouncementsController < ApplicationController
-  
+
   before_filter :signed_in_user
 
-  before_filter {
-    unless current_user && current_user.is_admin
-      redirect_to root_path, notice: "Administrative privileges required to access budgets."
-    end
-  }
+  before_filter do
+    redirect_to root_path, notice: 'Administrative privileges required to access budgets.' unless current_user && current_user.is_admin
+  end
 
   # GET /announcements
   # GET /announcements.json
@@ -59,7 +57,7 @@ class AnnouncementsController < ApplicationController
         format.html { redirect_to @announcement, notice: 'Announcement was successfully created.' }
         format.json { render json: @announcement, status: :created, location: @announcement }
       else
-        format.html { render action: "new" }
+        format.html { render action: 'new' }
         format.json { render json: @announcement.errors, status: :unprocessable_entity }
       end
     end
@@ -71,11 +69,11 @@ class AnnouncementsController < ApplicationController
     @announcement = Announcement.find(params[:id])
 
     respond_to do |format|
-      if @announcement.update_attributes(params[:announcement])
+      if @announcement.update(params[:announcement])
         format.html { redirect_to @announcement, notice: 'Announcement was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render action: 'edit' }
         format.json { render json: @announcement.errors, status: :unprocessable_entity }
       end
     end

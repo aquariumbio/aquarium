@@ -1,12 +1,10 @@
 class ParametersController < ApplicationController
 
-  before_filter :up_to_date_user    
+  before_filter :up_to_date_user
 
-  before_filter {
-    unless current_user && current_user.is_admin
-      redirect_to root_path, notice: "Administrative privileges required to access parameters."
-    end
-  }
+  before_filter do
+    redirect_to root_path, notice: 'Administrative privileges required to access parameters.' unless current_user && current_user.is_admin
+  end
 
   # GET /parameters
   # GET /parameters.json
@@ -59,7 +57,7 @@ class ParametersController < ApplicationController
         format.html { redirect_to parameters_path, notice: 'Parameter was successfully created.' }
         format.json { render json: @parameter, status: :created, location: @parameter }
       else
-        format.html { render action: "new" }
+        format.html { render action: 'new' }
         format.json { render json: @parameter.errors, status: :unprocessable_entity }
       end
     end
@@ -71,11 +69,11 @@ class ParametersController < ApplicationController
     @parameter = Parameter.find(params[:id])
 
     respond_to do |format|
-      if @parameter.update_attributes(params[:parameter])
+      if @parameter.update(params[:parameter])
         format.html { redirect_to parameters_path, notice: 'Parameter was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render action: 'edit' }
         format.json { render json: @parameter.errors, status: :unprocessable_entity }
       end
     end

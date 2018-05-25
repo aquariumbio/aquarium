@@ -4,7 +4,7 @@ module Plankton
 
     attr_reader :statements, :evaluation, :has_image
 
-    def initialize stmts, options = {}
+    def initialize(stmts, options = {})
 
       @statements = stmts
       @evaluation = []
@@ -15,7 +15,7 @@ module Plankton
 
     end
 
-    def evaluate_input_statements scope, params, s
+    def evaluate_input_statements(scope, _params, s)
 
       e = { type: :input, parts: [] }
 
@@ -24,14 +24,10 @@ module Plankton
         q = { flavor: p[:flavor], var: p[:var], type: p[:type] }
 
         description = scope.evaluate(p[:description])
-        if description.class != String
-          description = description.to_s
-        end
+        description = description.to_s if description.class != String
         q[:description] = description
 
-        if p[:flavor] == :select
-          q[:choices] = scope.evaluate(p[:choices])
-        end
+        q[:choices] = scope.evaluate(p[:choices]) if p[:flavor] == :select
 
         e[:parts].push q
 
@@ -41,21 +37,19 @@ module Plankton
 
     end
 
-    def evaluate_foreach scope, params, s
+    def evaluate_foreach(scope, params, s)
 
       e = { type: s[:type], statements: [] }
-      list = scope.evaluate( s[:list] )
+      list = scope.evaluate(s[:list])
 
-      if list.class != Array
-        raise "#{e[:list]} is not an array"
-      end
+      raise "#{e[:list]} is not an array" if list.class != Array
 
       scope.push
 
       list.each do |el|
-        scope.set( s[:iterator], el )
+        scope.set(s[:iterator], el)
         s[:statements].each do |t|
-          e[:statements].push( evaluate_statement scope, params, t )
+          e[:statements].push(evaluate_statement(scope, params, t))
         end
       end
 
@@ -65,59 +59,51 @@ module Plankton
 
     end
 
-    def evaluate_statement scope, params, s
+    def evaluate_statement(scope, params, s)
 
       e = { type: s[:type] }
 
       case s[:type]
 
-        when :description, :note, :warning, :bullet, :check
+      when :description, :note, :warning, :bullet, :check
 
-          value = scope.evaluate( s[:expr] )
-          if value.class != String
-            value = value.to_s
+        value = scope.evaluate(s[:expr])
+        value = value.to_s if value.class != String
+        e[:value] = value
+
+      when :image
+        @has_image = true
+        name = scope.evaluate(s[:expr])
+        value = "#{Bioturk::Application.config.image_server_interface}#{name}"
+
+        value = value.to_s if value.class != String
+        e[:value] = value
+
+      when :timer
+
+        spec = { hours: 0, minutes: 0, seconds: 0 }
+        e[:value] = scope.evaluate(s[:expr])
+
+      when :table
+
+        value = scope.evaluate(s[:expr])
+
+        raise 'Expression for table is not an array of arrays' if value.class != Array
+
+        unless value.empty?
+          len = value[0].length
+          value.each do |row|
+            raise 'Expression for table is not an array of equal length arrays' if row.length != len
           end
-          e[:value] = value
+        end
 
-        when :image
-          @has_image = true
-          name = scope.evaluate(s[:expr])
-          value = "#{Bioturk::Application.config.image_server_interface}#{name}"
+        e[:value] = value
 
-          if value.class != String
-            value = value.to_s
-          end
-          e[:value] = value
+      when :input
+        e = evaluate_input_statements scope, params, s
 
-        when :timer
-
-          spec = { hours: 0, minutes: 0, seconds: 0 }
-          e[:value] = scope.evaluate( s[:expr] )
-
-        when :table
-
-          value = scope.evaluate( s[:expr] )
-
-          if value.class != Array
-            raise "Expression for table is not an array of arrays"
-          end
-
-          if value.length > 0
-            len = value[0].length
-            value.each do |row|
-              if row.length != len
-                raise "Expression for table is not an array of equal length arrays"
-              end
-            end
-          end
-
-          e[:value] = value
-
-        when :input
-          e = evaluate_input_statements scope, params, s
-
-        when :foreach
-          e = evaluate_foreach scope, params, s
+      when :foreach
+        e = evaluate_foreach scope, params, s
 
       end
 
@@ -125,21 +111,19 @@ module Plankton
 
     end
 
-    def pre_render scope, params
+    def pre_render(scope, params)
 
       @evaluation = []
 
       @statements.each do |s|
-        @evaluation.push( evaluate_statement scope, params, s )
+        @evaluation.push(evaluate_statement(scope, params, s))
       end
 
     end
 
-    def process_inputs e
+    def process_inputs(e); end
 
-    end
-
-    def bt_execute scope, params
+    def bt_execute(scope, params)
 
       log_data = {}
 
@@ -168,7 +152,7 @@ module Plankton
         log.job_id = params[:job]
         log.user_id = scope.stack.first[:user_id]
         log.entry_type = 'INPUT'
-        log.data = {pc: @pc, inputs: log_data}.to_json
+        log.data = { pc: @pc, inputs: log_data }.to_json
         log.save
       end
 

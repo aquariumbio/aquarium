@@ -4,7 +4,7 @@ module Plankton
 
     def simple_type
       if @tok.current == 'number' || @tok.current == 'string'
-        return @tok.eat
+        @tok.eat
       else
         raise "Expected 'number' or 'string' at '#{@tok.current}'"
       end
@@ -13,18 +13,16 @@ module Plankton
     def optional_description
       if @tok.current == ','
         @tok.eat
-        return expr
+        expr
       else
-        return ""
+        ''
       end
     end
 
     def optional_choices
       if @tok.current == ','
         @tok.eat
-        return expr
-      else
-        return nil
+        expr
       end
     end
 
@@ -40,24 +38,24 @@ module Plankton
 
       while @tok.current != 'end'
 
-        var =  @tok.eat_a_variable
-               @tok.eat_a ':'
+        var = @tok.eat_a_variable
+        @tok.eat_a ':'
 
         type = simple_type
         description = optional_description
         choices = optional_choices
- 
+
         if !choices
-          parts.push( { flavor: :get,
-                        var: var, 
-                        type: type, 
-                        description: description } )
+          parts.push(flavor: :get,
+                     var: var,
+                     type: type,
+                     description: description)
         else
           parts.push ( { flavor: :select,
-                         var: var, 
-                         type: type, 
-                         description: description, 
-                         choices: choices } )
+                         var: var,
+                         type: type,
+                         description: description,
+                         choices: choices })
         end
 
       end
@@ -76,10 +74,8 @@ module Plankton
       fe[:iterator] = @tok.eat_a_variable.to_sym
       @tok.eat_a 'in'
       fe[:list] = expr
-  
-      while @tok.current != 'end'
-        fe[:statements].push step_statement
-      end
+
+      fe[:statements].push step_statement while @tok.current != 'end'
 
       @tok.eat_a 'end'
 
@@ -93,23 +89,23 @@ module Plankton
 
       case @tok.current
 
-        when 'description', 'note', 'warning', 'bullet', 'check', 'image', 'timer', 'table'
-          s[:type] = @tok.eat.to_sym
-          @tok.eat_a ':'
-          s[:expr] = expr # should check that this evaluates to the right thing in pre_render
+      when 'description', 'note', 'warning', 'bullet', 'check', 'image', 'timer', 'table'
+        s[:type] = @tok.eat.to_sym
+        @tok.eat_a ':'
+        s[:expr] = expr # should check that this evaluates to the right thing in pre_render
 
-        when 'getdata', 'input'
-          s = getdata
+      when 'getdata', 'input'
+        s = getdata
 
-        when 'foreach'
-          s = step_foreach
+      when 'foreach'
+        s = step_foreach
 
-        else
-          raise "Unknown field '#{@tok.current}' in step"
+      else
+        raise "Unknown field '#{@tok.current}' in step"
 
       end
 
-      return s
+      s
 
     end
 
@@ -121,9 +117,7 @@ module Plankton
       lines[:startline] = @tok.line
       @tok.eat_a 'step'
 
-      while @tok.current != 'end'
-        statements.push step_statement
-      end
+      statements.push step_statement while @tok.current != 'end'
 
       lines[:endline] = @tok.line
       @tok.eat_a 'end'
@@ -135,4 +129,3 @@ module Plankton
   end
 
 end
-

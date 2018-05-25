@@ -15,10 +15,10 @@ Bioturk::Application.configure do
   config.assets.compress = true
   require 'closure-compiler'
   config.assets.js_compressor = Closure::Compiler.new(
-    compilation_level: 'SIMPLE_OPTIMIZATIONS', 
+    compilation_level: 'SIMPLE_OPTIMIZATIONS',
     language_in: 'ECMASCRIPT6',
     language_out: 'ES5'
-  )  
+  )
 
   # Don't fallback to assets pipeline if a precompiled asset is missed
   config.assets.compile = false
@@ -75,7 +75,7 @@ Bioturk::Application.configure do
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   # Paperclip => S3
-  
+
   config.paperclip_defaults = {
     storage: :s3,
     s3_host_name: "s3-#{ENV['AWS_REGION']}.amazonaws.com",
@@ -91,12 +91,12 @@ Bioturk::Application.configure do
   # AWS Simple Email Service Config
 
   AWS.config(
-    :region => ENV.fetch('AWS_REGION'), 
-    :simple_email_service_endpoint => "email.#{ENV.fetch('AWS_REGION')}.amazonaws.com",
-    :simple_email_service_region => ENV.fetch('AWS_REGION'),
-    :ses => { :region => ENV.fetch('AWS_REGION') },
-    :access_key_id => ENV.fetch('AWS_ACCESS_KEY_ID'),
-    :secret_access_key => ENV.fetch('AWS_SECRET_ACCESS_KEY')
-  )  
+    region: ENV.fetch('AWS_REGION'),
+    simple_email_service_endpoint: "email.#{ENV.fetch('AWS_REGION')}.amazonaws.com",
+    simple_email_service_region: ENV.fetch('AWS_REGION'),
+    ses: { region: ENV.fetch('AWS_REGION') },
+    access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
+    secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY')
+  )
 
 end

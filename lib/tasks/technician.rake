@@ -4,11 +4,11 @@ namespace :technician do
 
   # To invoke, do something like: rake technician:schedule["My Operation Type Name"]
 
-  task :schedule, [:operation_type_name] => [:environment] do |t, args|
+  task :schedule, [:operation_type_name] => [:environment] do |_t, args|
 
     # define operation
 
-    ot = OperationType.find_by_name(args[:operation_type_name])
+    ot = OperationType.find_by(name: args[:operation_type_name])
 
     unless ot
       puts "Could not find #{args[:operation_type_name]}"
@@ -22,7 +22,7 @@ namespace :technician do
     plan = Plan.new(
       name: "Test Plan #{Date.today}",
       cost_limit: 100,
-      status: "pending",
+      status: 'pending',
       user_id: 1
     )
 
@@ -37,10 +37,10 @@ namespace :technician do
     planner.start
 
     # schedule job
-    job, operations = ot.schedule(ops, User.find(1), Group.find_by_name("technicians"))
+    job, operations = ot.schedule(ops, User.find(1), Group.find_by(name: 'technicians'))
 
     # launch brower window
-    cmd = "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome "
+    cmd = '/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome '
     cmd += "http://localhost:3000/krill/start?job=#{job.id}"
     system cmd
 

@@ -9,7 +9,7 @@ class PdlItem
   # object info
   # item info
 
-  def initialize object_info, item_info
+  def initialize(object_info, item_info)
     @object = object_info
     @item = item_info
   end

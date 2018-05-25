@@ -4,7 +4,7 @@ module Plankton
 
     def if_block #################################################################################
 
-      #puts "starting if"
+      # puts "starting if"
 
       gotos = []
 
@@ -21,7 +21,7 @@ module Plankton
 
       statements
 
-      g = GotoInstruction.new 
+      g = GotoInstruction.new
       push g
       gotos.push g
 
@@ -39,7 +39,7 @@ module Plankton
 
         statements
 
-        g = GotoInstruction.new 
+        g = GotoInstruction.new
         push g
         gotos.push g
 
@@ -50,7 +50,7 @@ module Plankton
       if @tok.current == 'else'
         @tok.eat_a 'else'
         statements
-      end 
+      end
 
       @tok.eat_a 'end'
 
@@ -58,7 +58,7 @@ module Plankton
         g.mark_destination pc
       end
 
-     push PopInstruction.new
+      push PopInstruction.new
 
     end # if_block
 
@@ -71,7 +71,7 @@ module Plankton
       while_pc = pc
       cond = expr
       lines[:endline] = @tok.line
-      ins = WhileInstruction.new cond, pc+1, lines
+      ins = WhileInstruction.new cond, pc + 1, lines
       push ins
       statements
       gins = GotoInstruction.new
@@ -96,10 +96,10 @@ module Plankton
       temp = "__FOREACH#{@temp_variable_counter}__"
       @temp_variable_counter += 1
 
-      push AssignInstruction.new temp, "0", lines
+      push AssignInstruction.new temp, '0', lines
       push PushInstruction.new
       foreach_pc = pc
-      ins = WhileInstruction.new "%{#{temp}} < (#{array_expr}).length", pc+1, lines
+      ins = WhileInstruction.new "%{#{temp}} < (#{array_expr}).length", pc + 1, lines
       push ins
       push AssignInstruction.new iterator, "(#{array_expr})[%{#{temp}}]", lines
       statements

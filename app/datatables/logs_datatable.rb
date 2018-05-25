@@ -1,6 +1,6 @@
 class LogsDatatable < Datatable
 
-  private  
+  private
 
   def data
 
@@ -8,15 +8,13 @@ class LogsDatatable < Datatable
 
       args = job.arguments.to_json
 
-      if args.length > 50
-        args = args[0,49] + '...'
-      end
+      args = args[0, 49] + '...' if args.length > 50
 
-      if job.metacol_id
-        mc = " (<a href='metacols/#{job.metacol_id}'>#{job.metacol_id}</a>)"      
-      else
-        mc = " (" + job.operations.collect { |o| o.plan.id }.join(", ") + ")"
-      end
+      mc = if job.metacol_id
+             " (<a href='metacols/#{job.metacol_id}'>#{job.metacol_id}</a>)"
+           else
+             ' (' + job.operations.collect { |o| o.plan.id }.join(', ') + ')'
+           end
 
       [
         link_to(job.id, job),
@@ -24,7 +22,7 @@ class LogsDatatable < Datatable
         job.submitter + mc,
         job.doer,
         job.created_at.to_formatted_s(:short),
-        job.updated_at.to_formatted_s(:short) 
+        job.updated_at.to_formatted_s(:short)
       ]
 
     end
@@ -45,18 +43,18 @@ class LogsDatatable < Datatable
     if params[:sSearch].present?
 
       key = params[:sSearch]
-      u = User.find_by_login(key)
+      u = User.find_by(login: key)
 
-      if u
-        jobs = jobs.where("pc = -2 and ( user_id like :uid or submitted_by like :sid )", search: "%#{key}%", uid: u.id.to_s, sid: u.id)
-      elsif /m[0-9]+/ =~ key
-        jobs = jobs.where("pc = -2 and metacol_id = :mic", mic: key[1,10].to_i )
-      else
-        jobs = jobs.where("pc = -2 and path like :search", search: "%#{key}%")
-      end
+      jobs = if u
+               jobs.where('pc = -2 and ( user_id like :uid or submitted_by like :sid )', search: "%#{key}%", uid: u.id.to_s, sid: u.id)
+             elsif /m[0-9]+/ =~ key
+               jobs.where('pc = -2 and metacol_id = :mic', mic: key[1, 10].to_i)
+             else
+               jobs.where('pc = -2 and path like :search', search: "%#{key}%")
+             end
 
     else
-      jobs = jobs.where("pc = -2")
+      jobs = jobs.where('pc = -2')
     end
 
     jobs
@@ -69,4 +67,3 @@ class LogsDatatable < Datatable
   end
 
 end
-

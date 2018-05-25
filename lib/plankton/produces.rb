@@ -22,7 +22,7 @@ module Plankton
         var = @tok.eat_a_variable
         @tok.eat
       else
-        var = "most_recently_produced_item"
+        var = 'most_recently_produced_item'
       end
 
       ob = object_expr
@@ -37,8 +37,8 @@ module Plankton
         sample_name = expr
       end
 
-      note = ""
-      location = ""
+      note = ''
+      location = ''
 
       while @tok.current != 'end' && @tok.current != 'EOF'
 
@@ -58,25 +58,19 @@ module Plankton
         elsif @tok.current == 'release'
 
           @tok.eat_a 'release'
-          if @tok.current == ':' 
-            @tok.eat_a ':'
-          end
+          @tok.eat_a ':' if @tok.current == ':'
           rel = expr
 
         elsif @tok.current == 'note'
 
           @tok.eat_a 'note'
-          if @tok.current == ':' 
-            @tok.eat_a ':'
-          end
+          @tok.eat_a ':' if @tok.current == ':'
           note = expr
 
         elsif @tok.current == 'location'
 
           @tok.eat_a 'location'
-          if @tok.current == ':' 
-            @tok.eat_a ':'
-          end
+          @tok.eat_a ':' if @tok.current == ':'
           location = expr
 
         else
@@ -111,4 +105,3 @@ module Plankton
   end
 
 end
-

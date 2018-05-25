@@ -4,35 +4,35 @@ module Plankton
 
     attr_reader :end_then_pc, :then_pc, :else_pc
 
-    def initialize condition, options = {}
+    def initialize(condition, options = {})
       @condition = condition
       super 'if', options
     end
 
-    def mark_then pc
+    def mark_then(pc)
       @then_pc = pc
     end
 
-    def mark_else pc
+    def mark_else(pc)
       @else_pc = pc
     end
 
-    def mark_end_then pc
+    def mark_end_then(pc)
       @end_then_pc = pc
     end
 
-    def adjust_offset o
+    def adjust_offset(o)
       super o
       @then_pc += o
       @else_pc += o
       # @end_then_pc += o # legacy?
     end
 
-    def set_pc scope
+    def set_pc(scope)
       if scope.evaluate @condition
-        return @then_pc
+        @then_pc
       else
-        return @else_pc
+        @else_pc
       end
     end
 

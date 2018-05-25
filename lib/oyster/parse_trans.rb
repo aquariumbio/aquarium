@@ -8,9 +8,7 @@ module Oyster
       @tok.eat_a '['
       while @tok.current != ']' && @tok.current != 'EOF'
         pl.push @metacol.scope.evaluate expr
-        if @tok.current != ']'
-          @tok.eat_a ','
-        end
+        @tok.eat_a ',' if @tok.current != ']'
       end
       @tok.eat_a ']'
 
@@ -23,9 +21,7 @@ module Oyster
       a = []
       @tok.eat_a 'do'
 
-      while @tok.current != 'end' && @tok.current != 'EOF'
-        a.push assign
-      end
+      a.push assign while @tok.current != 'end' && @tok.current != 'EOF'
 
       @tok.eat_a 'end'
 
@@ -42,17 +38,13 @@ module Oyster
       @tok.eat_a '=>'
       children = place_list
       @tok.eat_a 'when'
-      if @tok.current == ':'
-        @tok.eat_a ':'
-      end
+      @tok.eat_a ':' if @tok.current == ':'
       cond = expr
 
-      if @tok.current == 'do'
-        t.prog assigns
-      end
+      t.prog assigns if @tok.current == 'do'
 
       @tok.eat_a 'end'
-  
+
       parents.each do |i|
         t.parent @metacol.places[i]
       end
@@ -61,7 +53,7 @@ module Oyster
         t.child @metacol.places[i]
       end
 
-      t.cond cond     
+      t.cond cond
       @metacol.transition t
 
     end

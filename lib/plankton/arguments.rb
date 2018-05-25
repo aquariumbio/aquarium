@@ -3,18 +3,14 @@ module Plankton
   class Parser
 
     def argument
-  
-      var =  @tok.eat_a_variable
-             @tok.eat_a ':'
+
+      var = @tok.eat_a_variable
+      @tok.eat_a ':'
       type = @tok.eat_a_argtype
-      
-      unless type == 'number' || type == 'string' || type == 'sample' || type == 'object' || type == 'generic'
-        raise "Unknown type '#{type}' in argument."
-      end
- 
-      if type == 'object' # convert to old type specifier for object types
-         type = 'objecttype'
-      end
+
+      raise "Unknown type '#{type}' in argument." unless type == 'number' || type == 'string' || type == 'sample' || type == 'object' || type == 'generic'
+
+      type = 'objecttype' if type == 'object' # convert to old type specifier for object types
 
       if type == 'sample'
         if @tok.current == '('
@@ -39,32 +35,26 @@ module Plankton
         @tok.eat
         description = @tok.eat_a_string.remove_quotes
       else
-        description = ""
+        description = ''
       end
 
-      if !@include_stack
-        raise "For some reason the include stack is not defined."
-      end
+      raise 'For some reason the include stack is not defined.' unless @include_stack
 
       if @include_stack.length <= 1
         a = ArgumentInstruction.new var, type, description
-        if sample_type 
-          a.sample_type = sample_type
-        end
+        a.sample_type = sample_type if sample_type
         push_arg a
       end
-  
+
     end # argument
 
     def argument_list
-      
+
       @tok.eat_a 'argument'
-      while @tok.current != 'end' && @tok.current != 'EOF'
-        argument
-      end
+      argument while @tok.current != 'end' && @tok.current != 'EOF'
       @tok.eat_a 'end'
 
-      return true
+      true
 
     end # argument_list
 
@@ -72,18 +62,14 @@ module Plankton
 
       while @tok.current != 'EOF'
 
-        while @tok.current != 'EOF' && @tok.current != 'argument'
-          @tok.eat
-        end
+        @tok.eat while @tok.current != 'EOF' && @tok.current != 'argument'
 
-        if @tok.current == 'argument'
-          argument_list
-        end
+        argument_list if @tok.current == 'argument'
 
       end
 
     end # arguments_only
 
-  end 
+  end
 
 end
