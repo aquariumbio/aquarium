@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 class TaskPrototype < ActiveRecord::Base
 
   attr_accessible :description, :name, :prototype, :status_options, :validator, :cost, :metacol
   has_many :tasks
 
-  validates :name, :presence => true
+  validates :name, presence: true
   validates_uniqueness_of :name
-  validates :description, :presence => true
+  validates :description, presence: true
   validate :legal_json
   validate :legal_options
 
@@ -14,20 +16,20 @@ class TaskPrototype < ActiveRecord::Base
     okay = true
 
     begin
-      result = JSON.parse self.prototype
+      result = JSON.parse prototype
     rescue Exception => e
-      okay = false      
+      okay = false
     end
 
-    errors.add(:json, "Error parsing JSON in prototype. #{e.to_s}") unless okay
+    errors.add(:json, "Error parsing JSON in prototype. #{e}") unless okay
 
-    return okay
+    okay
 
   end
 
   def prototype_hash
     begin
-      result = JSON.parse self.prototype, symbolize_names: true
+      result = JSON.parse prototype, symbolize_names: true
     rescue Exception => e
       result = {}
     end
@@ -39,24 +41,22 @@ class TaskPrototype < ActiveRecord::Base
     okay = true
 
     begin
-      result = JSON.parse self.status_options
+      result = JSON.parse status_options
     rescue Exception => e
-      okay = false      
-    end
-
-    if result.class != Array || ( result.select { |a| a.class != String } ) != []
       okay = false
     end
 
-    errors.add(:status, "Status options should be a json array of strings.") unless okay
+    okay = false if result.class != Array || (result.reject { |a| a.class == String }) != []
 
-    return okay
+    errors.add(:status, 'Status options should be a json array of strings.') unless okay
+
+    okay
 
   end
 
   def status_option_list
 
-    JSON.parse self.status_options
+    JSON.parse status_options
 
   end
 
@@ -65,15 +65,15 @@ class TaskPrototype < ActiveRecord::Base
   end
 
   def after_save
-    self.validator
+    validator
   end
 
-  def self.cost_report user_id=nil
+  def self.cost_report(user_id = nil)
 
     task_prototypes = TaskPrototype.all
     users = User.all
 
-    report = (0..11).collect do |i| 
+    report = (0..11).collect do |i|
 
       date = Date.today.at_beginning_of_month - i.month
       breakdown = {}
@@ -81,21 +81,21 @@ class TaskPrototype < ActiveRecord::Base
 
       task_summaries = task_prototypes.collect do |tp|
 
-        if user_id
-          tasks = Task.includes(:task_prototype)
-                      .where( "status != 'canceled' AND task_prototype_id = ? AND user_id = ? AND ? <= created_at AND created_at < ? ", 
-                              tp.id, user_id, date, date + 1.month )
-        else
-          tasks = Task.includes(:task_prototype)
-                      .where( "status != 'canceled' AND task_prototype_id = ? AND ? <= created_at AND created_at < ? ", 
-                              tp.id, date, date + 1.month )  
-        end # if
+        tasks = if user_id
+                  Task.includes(:task_prototype)
+                      .where("status != 'canceled' AND task_prototype_id = ? AND user_id = ? AND ? <= created_at AND created_at < ? ",
+                             tp.id, user_id, date, date + 1.month)
+                else
+                  Task.includes(:task_prototype)
+                      .where("status != 'canceled' AND task_prototype_id = ? AND ? <= created_at AND created_at < ? ",
+                             tp.id, date, date + 1.month)
+                end # if
 
-        if tasks.length > 0
-          number = tasks.collect { |t| t.size }.inject{|sum,x| sum + x }
-        else
-          number = 0
-        end # if
+        number = if !tasks.empty?
+                   tasks.collect(&:size).inject { |sum, x| sum + x }
+                 else
+                   0
+                 end # if
 
         r = {
           id: tp.id,
@@ -105,21 +105,21 @@ class TaskPrototype < ActiveRecord::Base
           total: tp.cost * number
         }
 
-        if !user_id
+        unless user_id
           users.each do |u|
             utasks = tasks.select { |t| t.user_id == u.id }
-            if utasks.length > 0
-              number = tasks.select { |t| t.user_id == u.id }.collect { |t| t.size }.inject{|sum,x| sum + x }
+            unless utasks.empty?
+              number = tasks.select { |t| t.user_id == u.id }.collect(&:size).inject { |sum, x| sum + x }
               breakdown[u.login][:cost] += tp.cost * number
             end
           end
-        end #if
+        end # if
 
         r
 
       end # collect task summaries
 
-      { date: date, task_summaries: task_summaries, breakdown: breakdown }      
+      { date: date, task_summaries: task_summaries, breakdown: breakdown }
 
     end # collect dates
 

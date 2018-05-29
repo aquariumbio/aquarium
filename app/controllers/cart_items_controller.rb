@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CartItemsController < ApplicationController
 
   before_filter :signed_in_user
@@ -6,11 +8,11 @@ class CartItemsController < ApplicationController
   # GET /carts.json
   def index
 
-    if params[:user_id]
-      @user = User.find(params[:user_id])
-    else
-      @user = current_user
-    end
+    @user = if params[:user_id]
+              User.find(params[:user_id])
+            else
+              current_user
+            end
 
     @cart_items = @user.cart_items
 
@@ -25,10 +27,10 @@ class CartItemsController < ApplicationController
     @item = Item.find(params[:item_id])
 
     # check whether the item is already in the cart
-    i = CartItem.find(:first, conditions: { user_id: current_user.id, item_id: params[:item_id] } )
+    i = CartItem.find(:first, conditions: { user_id: current_user.id, item_id: params[:item_id] })
 
     if !i
-      @ci = current_user.cart_items.create({ item_id: params[:item_id]})
+      @ci = current_user.cart_items.create(item_id: params[:item_id])
       redirect_to @item.sample, notice: "Item #{@item.id} (#{@item.object_type.name}) added to your cart."
     else
       redirect_to @item.sample, notice: "Item #{@item.id} (#{@item.object_type.name}) is already in your cart."

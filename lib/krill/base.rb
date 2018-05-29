@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Krill
 
   # @api krill
@@ -15,38 +17,36 @@ module Krill
 
       # increment pc
       @job ||= Job.find(jid)
-      @job.append_step operation: "display", content: page
+      @job.append_step operation: 'display', content: page
       # @job.pc += 1
       # @job.save
 
       if !debug
 
         # stop and wait for technician to click OK
-        mutex().synchronize { thread_status().running = false }
+        mutex.synchronize { thread_status.running = false }
         Thread.stop
 
-        # get technician input 
+        # get technician input
         input = JSON.parse(@job.reload.state, symbolize_names: true).last[:inputs]
 
         # populate operations with table input data
         input[:table_inputs].each do |ti|
           op = operations.find { |op| op.id == ti[:opid] }
           op.temporary[ti[:key].to_sym] = ti[:value].to_f if op && ti[:type] == 'number'
-          op.temporary[ti[:key].to_sym] = ti[:value]      if op && ti[:type] != 'number'          
+          op.temporary[ti[:key].to_sym] = ti[:value]      if op && ti[:type] != 'number'
         end
 
-        # return the technician input 
+        # return the technician input
         input
 
       else
 
         # figure out default technician response
         i = simulated_input_for page
-        @job.append_step operation: "next", time: Time.now, inputs: i 
+        @job.append_step operation: 'next', time: Time.now, inputs: i
 
-        if @job.pc > 500
-          raise "Job #{jid} executed too many steps (50) in debug mode. Could be an infinite loop."
-        end
+        raise "Job #{jid} executed too many steps (50) in debug mode. Could be an infinite loop." if @job.pc > 500
 
         i
 
@@ -54,19 +54,17 @@ module Krill
 
     end
 
-    def error e
-      Job.find(jid).reload.append_step operation: "error", message: e.to_s, backtrace: e.backtrace[0,10]
+    def error(e)
+      Job.find(jid).reload.append_step operation: 'error', message: e.to_s, backtrace: e.backtrace[0, 10]
     end
 
-    def set_task_status task, status
+    def set_task_status(task, status)
 
       old_status = task.status
       task.status = status
       task.save validate: false
 
-      unless task.errors.empty?
-        task.notify "Attempt to change status from '#{old_status}' to '#{status}' failed: #{task.full_messages.join(',')}", job_id: jid
-      end
+      task.notify "Attempt to change status from '#{old_status}' to '#{status}' failed: #{task.full_messages.join(',')}", job_id: jid unless task.errors.empty?
 
       touch = Touch.new
       touch.job_id = jid
@@ -74,9 +72,9 @@ module Krill
       touch.save
 
       begin
-        task.charge(Job.find(jid),status)
+        task.charge(Job.find(jid), status)
       rescue Exception => e
-        puts "Could not charge for task #{task.id}, job #{jid}, '#{status}': #{e.to_s}"
+        puts "Could not charge for task #{task.id}, job #{jid}, '#{status}': #{e}"
       end
 
       task
@@ -85,7 +83,7 @@ module Krill
 
     private
 
-    def simulated_input_for page
+    def simulated_input_for(page)
 
       i = {}
 
@@ -96,9 +94,9 @@ module Krill
           var = j[:input][:var].to_sym
           dft = j[:input][:default]
 
-          if !dft
-            if j[:input][:type] == "text"
-              dft = "user input string"
+          unless dft
+            if j[:input][:type] == 'text'
+              dft = 'user input string'
             else
               ddt = 0
             end
@@ -110,9 +108,7 @@ module Krill
           var = j[:select][:var].to_sym
           dft = j[:select][:default]
 
-          if !dft
-            dft = 0
-          end
+          dft ||= 0
 
           i[var] = j[:select][:choices][dft]
 
@@ -131,9 +127,9 @@ module Krill
 
       end
 
-      i[:timestamp] = 1000*Time.now.to_i
+      i[:timestamp] = 1000 * Time.now.to_i
 
-      return i
+      i
 
     end
 

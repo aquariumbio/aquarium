@@ -1,22 +1,24 @@
+# frozen_string_literal: true
+
 module Plankton
 
   class GotoInstruction < Instruction
 
     attr_reader :destination
 
-    def initialize options = {}
+    def initialize(options = {})
       super 'goto', options
     end
 
-    def mark_destination dest
+    def mark_destination(dest)
       @destination = dest
     end
 
-    def set_pc scope
-      return @destination
+    def set_pc(_scope)
+      @destination
     end
 
-    def adjust_offset o
+    def adjust_offset(o)
       super o
       @destination += o
     end

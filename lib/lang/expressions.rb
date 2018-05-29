@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Lang
 
   class Parser
 
-     attr_reader :functions
- 
-     def initialize ###################################################################################
+    attr_reader :functions
+
+    def initialize ###################################################################################
 
       # Numerical functions
       add_function :floor, 1
@@ -42,7 +44,7 @@ module Lang
 
       # String functions
       add_function :to_string, 1
-      
+
       # Collection functions
       add_function :col_dimensions, 1
       add_function :col_get, 3
@@ -66,213 +68,201 @@ module Lang
       # Time functions
       add_function :time, 0
 
-     end
+    end
 
-     def add_function name, num_args ##################################################################
-       if !@functions
-         @functions = {}
-       end
-       @functions[name] = num_args
-     end
+    def add_function(name, num_args) ##################################################################
+      @functions ||= {}
+      @functions[name] = num_args
+    end
 
-     def array_expr ###################################################################################
+    def array_expr ###################################################################################
 
-       e = @tok.eat_a '['
-       while @tok.current != ']'
-         e += expr
-         if @tok.current == ','
-           e += @tok.eat_a ','
-         end
-       end
-       e += @tok.eat_a ']'
+      e = @tok.eat_a '['
+      while @tok.current != ']'
+        e += expr
+        e += @tok.eat_a ',' if @tok.current == ','
+      end
+      e += @tok.eat_a ']'
 
-       return e
- 
-     end
+      e
 
-     def hash_expr ####################################################################################
-     
-       e = @tok.eat_a '{'
-    
-       while @tok.current != '}'
+    end
 
-         e += @tok.eat_a_variable
-         e += @tok.eat_a ':'
-         e += expr
-         if @tok.current == ','
-           e += @tok.eat_a ','
-         end
+    def hash_expr ####################################################################################
 
-       end
+      e = @tok.eat_a '{'
 
-       e += @tok.eat_a '}'
+      while @tok.current != '}'
 
-       return e
+        e += @tok.eat_a_variable
+        e += @tok.eat_a ':'
+        e += expr
+        e += @tok.eat_a ',' if @tok.current == ','
 
-     end
+      end
 
-     def app ##########################################################################################
+      e += @tok.eat_a '}'
 
-       name = @tok.current
-       
-       if @functions && @functions[name.to_sym]
-         name = @tok.eat_a_variable
-         e = name
-         e += @tok.eat_a '('
-           (1..@functions[name.to_sym]).each do |i|
-             e += expr
-             if i < @functions[name.to_sym]
-               e += @tok.eat_a ','
-             end
-           end
-         e += @tok.eat_a ')'
-       elsif @function_callback
-         e = @function_callback.call
-       else
-         raise "Could not find definition for '#{@tok.current}' on line #{@tok.line}."
-       end
+      e
 
-       return e
+    end
 
-     end
+    def app ##########################################################################################
 
-     def separate_string s
-       # Note: This very poorly written method separates a string that may have
-       # things like %{x} in it into an expression where the %{x} is by itself. This
-       # makes it easier to evaluate later.
-       # For example, it turns "The answer is %{x}" into "The answer is " + %{x}.to_s
-       t = (s.gsub /(%\{[^\}]*\})/, '__PLUS__\1__PLUS__').split('__PLUS__')
-       r = "\"\""
-       t.each do |p|
-         r = r + "+"
-         if /(%\{[^\}]*\})/.match p
-           r = r + p + ".to_s"
-         else
-           r = r + "\"" + p + "\""
-         end
-       end
-       r
-     end
+      name = @tok.current
 
-     def primary ######################################################################################
+      if @functions && @functions[name.to_sym]
+        name = @tok.eat_a_variable
+        e = name
+        e += @tok.eat_a '('
+        (1..@functions[name.to_sym]).each do |i|
+          e += expr
+          e += @tok.eat_a ',' if i < @functions[name.to_sym]
+        end
+        e += @tok.eat_a ')'
+      elsif @function_callback
+        e = @function_callback.call
+      else
+        raise "Could not find definition for '#{@tok.current}' on line #{@tok.line}."
+      end
 
-       case @tok.current
+      e
 
-         when @tok.string
-           str = @tok.eat.remove_quotes
-           f = separate_string str
+    end
 
-         when @tok.boolean 
-           f = @tok.eat
+    def separate_string(s)
+      # Note: This very poorly written method separates a string that may have
+      # things like %{x} in it into an expression where the %{x} is by itself. This
+      # makes it easier to evaluate later.
+      # For example, it turns "The answer is %{x}" into "The answer is " + %{x}.to_s
+      t = (s.gsub /(%\{[^\}]*\})/, '__PLUS__\1__PLUS__').split('__PLUS__')
+      r = '""'
+      t.each do |p|
+        r += '+'
+        r = if /(%\{[^\}]*\})/.match p
+              r + p + '.to_s'
+            else
+              r + '"' + p + '"'
+            end
+      end
+      r
+    end
 
-         when ':'
-           f = @tok.eat + @tok.eat_a_variable
+    def primary ######################################################################################
 
-         when @tok.variable
-           if @tok.next == '('
-             f = app
-           else
-             f = '%{' + @tok.eat + '}'
-           end
+      case @tok.current
 
-         when @tok.number
-           f = @tok.eat
+      when @tok.string
+        str = @tok.eat.remove_quotes
+        f = separate_string str
 
-         when '('
-           @tok.eat
-           f = '(' + expr + ')'
-           @tok.eat_a ')'
+      when @tok.boolean
+        f = @tok.eat
 
-         when '['
-            f = array_expr
- 
-         when '{'
-            f = hash_expr
+      when ':'
+        f = @tok.eat + @tok.eat_a_variable
 
-         else
-           @tok.error "Expected atomic expression at '#{@tok.current}'."
+      when @tok.variable
+        f = if @tok.next == '('
+              app
+            else
+              '%{' + @tok.eat + '}'
+            end
 
-       end
+      when @tok.number
+        f = @tok.eat
 
-       return f
+      when '('
+        @tok.eat
+        f = '(' + expr + ')'
+        @tok.eat_a ')'
 
-     end # primary
+      when '['
+        f = array_expr
 
-     def accessor ######################################################################################
+      when '{'
+        f = hash_expr
 
-       f = primary
+      else
+        @tok.error "Expected atomic expression at '#{@tok.current}'."
 
-       while @tok.current == '['
-         @tok.eat_a '['
-         f += '[' + index + ']'
-         @tok.eat_a ']'
-       end
+      end
 
-       return f
+      f
 
-     end # accessor
+    end # primary
 
-     def index #########################################################################################
- 
-       if @tok.current == ':' 
-         @tok.eat_a ':'
-         f = ':' + @tok.eat_a_variable
-       else
-         f = expr
-       end
+    def accessor ######################################################################################
 
-       return f
+      f = primary
 
-     end # index
+      while @tok.current == '['
+        @tok.eat_a '['
+        f += '[' + index + ']'
+        @tok.eat_a ']'
+      end
 
-     def unary #########################################################################################
+      f
 
-       if @tok.current == '!' || @tok.current == '-'
-         f = (@tok.eat) + accessor
-       else
-         f = accessor
-       end
+    end # accessor
 
-       return f
+    def index #########################################################################################
 
-     end # unary
+      if @tok.current == ':'
+        @tok.eat_a ':'
+        f = ':' + @tok.eat_a_variable
+      else
+        f = expr
+      end
 
-     def expr ###########################################################################################
+      f
 
-       e = unary
+    end # index
 
-       while @tok.isa_operator
-         # puts "eating operator"
-         e += @tok.eat
-         e += unary
-       end
+    def unary #########################################################################################
 
-       return e
+      f = if @tok.current == '!' || @tok.current == '-'
+            @tok.eat + accessor
+          else
+            accessor
+          end
 
-     end # expr
+      f
 
-     def get_lhs_parts ####################################################################################
+    end # unary
 
-       begin
+    def expr ###########################################################################################
 
-         v = @tok.eat_a_variable
-         f = ""
+      e = unary
 
-         while @tok.current == '['
-           @tok.eat_a '['
-           f += '[' + index + ']'
-           @tok.eat_a ']'
-         end
+      while @tok.isa_operator
+        # puts "eating operator"
+        e += @tok.eat
+        e += unary
+      end
 
-       rescue Exception => e
+      e
 
-         raise "Expression is not a proper left hand side for an assignment: " + e.to_s
+    end # expr
 
-       end       
+    def get_lhs_parts ####################################################################################
 
-       return { var: v.to_sym, accessor: f }
+      begin
+        v = @tok.eat_a_variable
+        f = ''
 
-     end # is_lhs
+        while @tok.current == '['
+          @tok.eat_a '['
+          f += '[' + index + ']'
+          @tok.eat_a ']'
+        end
+      rescue Exception => e
+        raise 'Expression is not a proper left hand side for an assignment: ' + e.to_s
+      end
+
+      { var: v.to_sym, accessor: f }
+
+    end # is_lhs
 
   end
 

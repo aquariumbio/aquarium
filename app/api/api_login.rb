@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApiLogin
 
   def login
@@ -7,7 +9,7 @@ module ApiLogin
     if @user && @user.key == params[:key]
       return true
     else
-      error "Invalid user / key combination"
+      error 'Invalid user / key combination'
       return false
     end
 

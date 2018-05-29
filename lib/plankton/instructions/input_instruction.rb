@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Plankton
 
   class InputInstruction < Instruction
 
-    def initialize repo, v, filename_expr, options = {}
+    def initialize(repo, v, filename_expr, options = {})
       @repo = repo
       @var = v
       @filename_expr = filename_expr
@@ -10,18 +12,18 @@ module Plankton
       super 'input', options
     end
 
-    def bt_execute scope, params
+    def bt_execute(scope, params)
 
       path = scope.evaluate @filename_expr
 
-      if /:/ =~ path
-        repo_path = path.split(/:/).join('/')
-      else
-        repo_path = @repo + "/" + path
-      end
+      repo_path = if /:/ =~ path
+                    path.split(/:/).join('/')
+                  else
+                    @repo + '/' + path
+                  end
 
-      sha = Repo::version repo_path
-      data = Repo::contents repo_path, sha
+      sha = Repo.version repo_path
+      data = Repo.contents repo_path, sha
 
       j = JSON.parse(data, symbolize_names: true)
       scope.set @var.to_sym, j

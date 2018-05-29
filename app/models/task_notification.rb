@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TaskNotification < ActiveRecord::Base
 
   attr_accessible :content, :job_id, :read, :task_id

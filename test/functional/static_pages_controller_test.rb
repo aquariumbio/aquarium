@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class StaticPagesControllerTest < ActionController::TestCase
-  test "should get home" do
+  test 'should get home' do
     get :home
     assert_response :success
   end
 
-  test "should get help" do
+  test 'should get help' do
     get :help
     assert_response :success
   end

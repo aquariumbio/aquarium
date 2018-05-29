@@ -1,14 +1,16 @@
-def plan_gibson n
+# frozen_string_literal: true
 
-  gibson = OperationType.find_by_name "Gibson Assembly"
+def plan_gibson(n)
 
-  gop = gibson.operations.create status: "planning", user_id: User.find_by_login("klavins").id
-  
-  frags = SampleType.find_by_name("Fragment").samples
+  gibson = OperationType.find_by_name 'Gibson Assembly'
 
-  gop.set_output("Assembled Plasmid", SampleType.find_by_name("Plasmid").samples.last)
-     .set_input("Fragment", frags.sample(n))
-     .set_input("Comp cell", Sample.find_by_name("DH5alpha"))
+  gop = gibson.operations.create status: 'planning', user_id: User.find_by_login('klavins').id
+
+  frags = SampleType.find_by_name('Fragment').samples
+
+  gop.set_output('Assembled Plasmid', SampleType.find_by_name('Plasmid').samples.last)
+     .set_input('Fragment', frags.sample(n))
+     .set_input('Comp cell', Sample.find_by_name('DH5alpha'))
 
   puts
   puts "\e[93mPlanning #{gop}\e[39m"
@@ -21,11 +23,10 @@ def plan_gibson n
   planner.mark_shortest gop
 
   puts
-  puts "\e[93mMarking unused operations\e[39m"  
+  puts "\e[93mMarking unused operations\e[39m"
   planner.mark_unused gop
 
   gop.reload
   gop
 
 end
-

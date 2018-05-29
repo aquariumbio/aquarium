@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 module Lang
 
-  class Scope 
+  class Scope
 
     # Numerical functions
     math_function :log, :log2, :log10, :cos, :sin, :tan, :acos, :asin, :atan, :sqrt
 
-    def floor x
-      if x.class == Fixnum 
+    def floor(x)
+      if x.class == Integer
         x
       elsif x.class == Float
         x.floor
@@ -15,8 +17,8 @@ module Lang
       end
     end
 
-    def ceil x
-      if x.class == Fixnum 
+    def ceil(x)
+      if x.class == Integer
         x
       elsif x.class == Float
         x.ceil
@@ -25,43 +27,43 @@ module Lang
       end
     end
 
-    def min x, y
-      if ( x.class == Fixnum || x.class == Float ) || ( y.class == Fixnum || y.class == Float )
-        if x < y 
+    def min(x, y)
+      if (x.class == Integer || x.class == Float) || (y.class == Integer || y.class == Float)
+        if x < y
           x
         else
           y
-         end
+        end
       else
         raise "Attempted to take min of a #{x.class} and a #{y.class}."
       end
     end
 
-    def max x, y
-      if ( x.class == Fixnum || x.class == Float ) || ( y.class == Fixnum || y.class == Float )
-        if x > y 
+    def max(x, y)
+      if (x.class == Integer || x.class == Float) || (y.class == Integer || y.class == Float)
+        if x > y
           x
         else
           y
-         end
+        end
       else
         raise "Attempted to take max of a #{x.class} and a #{y.class}."
       end
     end
 
-    def atan2 y, x
-      if ( x.class == Fixnum || x.class == Float ) || ( y.class == Fixnum || y.class == Float )
-        Math.atan2(y,x)
+    def atan2(y, x)
+      if (x.class == Integer || x.class == Float) || (y.class == Integer || y.class == Float)
+        Math.atan2(y, x)
       else
         raise "Attempted to take atan2 of a #{y.class} and a #{x.class}."
       end
     end
 
-    def mod x, y
-      if x.class == Fixnum || y.class == Float 
+    def mod(x, y)
+      if x.class == Integer || y.class == Float
         x % y
       else
-        raise "Attempted to modulo non-integers."
+        raise 'Attempted to modulo non-integers.'
       end
     end
 

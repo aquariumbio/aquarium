@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddFieldsAndDescriptionToSamples < ActiveRecord::Migration
 
   def change
@@ -17,5 +19,3 @@ class AddFieldsAndDescriptionToSamples < ActiveRecord::Migration
   end
 
 end
-
-

@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
 
   # Returns the full title on a per-page basis.
   def full_title(page_title)
-    base_title = "AQ"
+    base_title = 'AQ'
     if page_title.empty?
       base_title
     else
@@ -10,8 +12,8 @@ module ApplicationHelper
     end
   end
 
-  def htmlstring x
-    raw("\""+x.to_s+"\"")
+  def htmlstring(x)
+    raw('"' + x.to_s + '"')
   end
 
   def pluralize_without_count(count, noun, text = nil)

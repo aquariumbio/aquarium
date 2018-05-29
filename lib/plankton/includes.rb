@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Plankton
 
   class Parser
@@ -20,7 +22,7 @@ module Plankton
       args = {}
       rets = {}
 
-      if !req # this is an include statement, not a require statement, so there may be arguments
+      unless req # this is an include statement, not a require statement, so there may be arguments
 
         while @tok.current != 'end' && @tok.current != 'EOF'
 
@@ -51,7 +53,7 @@ module Plankton
       file = get_file path
 
       @tok = Lang::Tokenizer.new file[:content]
-      @include_stack.push( { tokens: @tok, path: path, returns: rets } )
+      @include_stack.push(tokens: @tok, path: path, returns: rets)
 
       push StartIncludeInstruction.new args, path, file[:sha], lines
 

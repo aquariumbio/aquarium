@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Plan < ActiveRecord::Base
 
   include DataAssociator
@@ -13,7 +15,7 @@ class Plan < ActiveRecord::Base
 
     gs = goals_plain
 
-    issues = gs.collect { |g| g.issues }.flatten
+    issues = gs.collect(&:issues).flatten
 
     if issues.empty?
 
@@ -34,12 +36,10 @@ class Plan < ActiveRecord::Base
 
   end
 
-  def error msg, key=:job_crash
+  def error(msg, key = :job_crash)
 
     operations.each do |op|
-      if op.status != "done"
-        op.error key, msg
-      end
+      op.error key, msg if op.status != 'done'
     end
 
     associate key, msg
@@ -58,7 +58,7 @@ class Plan < ActiveRecord::Base
         fv.wires_as_source.each do |w|
           puts "deleting wire #{w.id}"
           w.delete
-        end       
+        end
         puts "deleted fv #{fv.id}"
         fv.delete
       end
@@ -69,21 +69,21 @@ class Plan < ActiveRecord::Base
     end
 
     puts "destroying plan #{id}"
-    self.delete
+    delete
 
   end
 
   def goals_plain
-    # TODO: Make this faster. 
-    operations.select { |op| op.successors.length == 0 }
-  end  
+    # TODO: Make this faster.
+    operations.select { |op| op.successors.empty? }
+  end
 
   def goals
     # TODO: Make this faster. Note, fvs doesn't work, so will probably need to be some kind of SQL query.
     goals_plain.as_json(include: :operation_type, methods: :field_values)
   end
 
-  def select_subtree operation
+  def select_subtree(operation)
 
     operation.siblings.each do |op|
       if op == operation
@@ -99,8 +99,8 @@ class Plan < ActiveRecord::Base
 
     fvs = []
 
-    op_ids = operations.collect { |op| op.id }
-    FieldValue.where(parent_class: "Operation", parent_id: op_ids).each do |fv|
+    op_ids = operations.collect(&:id)
+    FieldValue.where(parent_class: 'Operation', parent_id: op_ids).each do |fv|
       fvs << fv.id
     end
 
@@ -120,16 +120,16 @@ class Plan < ActiveRecord::Base
     operations.each do |op|
       newop = op.operation_type.operations.create status: 'planning', user_id: op.user_id
       op.field_values.each do |fv|
-        newfv = FieldValue.new({
+        newfv = FieldValue.new(
           name: fv.name,
           child_sample_id: fv.child_sample_id,
           value: fv.value,
           role: fv.role,
           field_type_id: fv.field_type_id,
           allowable_field_type_id: fv.allowable_field_type_id,
-          parent_class: "Operation",
+          parent_class: 'Operation',
           parent_id: newop.id
-        })
+        )
         newfv.save
         fv_maps[fv.id] = newfv.id
       end
@@ -137,7 +137,7 @@ class Plan < ActiveRecord::Base
     end
 
     wires.each do |wire|
-      newwire = Wire.new from_id: fv_maps[wire.from_id] , to_id: fv_maps[wire.to_id]
+      newwire = Wire.new from_id: fv_maps[wire.from_id], to_id: fv_maps[wire.to_id]
       newwire.save
     end
 
@@ -147,10 +147,10 @@ class Plan < ActiveRecord::Base
 
   def costs
 
-    labor_rate = Parameter.get_float("labor rate") 
-    markup_rate = Parameter.get_float("markup rate")
+    labor_rate = Parameter.get_float('labor rate')
+    markup_rate = Parameter.get_float('markup rate')
 
-    op_ids = PlanAssociation.where(plan_id: id).collect { |pa| pa.operation_id }
+    op_ids = PlanAssociation.where(plan_id: id).collect(&:operation_id)
     ops = Operation.includes(:operation_type).find(op_ids)
 
     ops.collect do |op|
@@ -159,9 +159,9 @@ class Plan < ActiveRecord::Base
         c = op.nominal_cost.merge(labor_rate: labor_rate, markup_rate: markup_rate, id: op.id)
       rescue Exception => e
         c = {}
-      end 
+      end
 
-      c 
+      c
 
     end
 

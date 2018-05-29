@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class CollectionsDatatable < Datatable
 
-  private  
+  private
 
   def data
 
@@ -13,16 +15,16 @@ class CollectionsDatatable < Datatable
         @view.render(partial: '/handlers/collection_matrix', locals: { m: c.datum[:matrix], small: true, highlight: params[:sample_id].to_i }),
         c.created_at.to_formatted_s(:short),
         c.updated_at.to_formatted_s(:short),
-        link_to(@view.item_path(c,sample_id: params[:sample_id]), method: :delete, data: { 
-          confirm: 'Are you sure you want to delete this collection?'
-        })  do
+        link_to(@view.item_path(c, sample_id: params[:sample_id]), method: :delete, data: {
+                  confirm: 'Are you sure you want to delete this collection?'
+                }) do
           "<i class='icon-remove'></i>".html_safe
         end
       ]
 
     end
 
-  end 
+  end
 
   def rows
     @rows ||= fetch_rows
@@ -31,7 +33,7 @@ class CollectionsDatatable < Datatable
   def fetch_rows
     cols = Collection.includes(:user).containing Sample.find(params[:sample_id])
     if !params[:show_deleted]
-      cols.reject { |c| c.deleted? }
+      cols.reject(&:deleted?)
     else
       cols
     end
@@ -43,4 +45,3 @@ class CollectionsDatatable < Datatable
   end
 
 end
-

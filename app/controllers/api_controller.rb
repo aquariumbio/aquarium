@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApiController < ApplicationController
 
   def main
@@ -5,4 +7,3 @@ class ApiController < ApplicationController
   end
 
 end
-

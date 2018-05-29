@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AlterImageHandlingInObjectType < ActiveRecord::Migration
 
   def change
@@ -9,4 +11,3 @@ class AlterImageHandlingInObjectType < ActiveRecord::Migration
   end
 
 end
-

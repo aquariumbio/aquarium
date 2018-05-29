@@ -1,32 +1,34 @@
+# frozen_string_literal: true
+
 module Krill
 
   class TaskValidator
 
     attr_accessor :name
 
-    def initialize task
+    def initialize(task)
 
       @task = task
       @errors = []
-      
+
       path = @task.task_prototype.validator
 
       if path
 
         begin
           @name = path.split('/').last.split('.').first.to_sym
-          sha = Repo::version path
-          code = Repo::contents path, sha
+          sha = Repo.version path
+          code = Repo.contents path, sha
         rescue Exception => e
           @name = :validator_not_found
-          @errors.push "Could not find validator at #{path} for task #{@task.name} because #{e.to_s}."          
+          @errors.push "Could not find validator at #{path} for task #{@task.name} because #{e}."
           @checker = nil
           return # there is no valid validator path
         end
 
         begin
           # Create Namespace
-          namespace = Krill::make_namespace code
+          namespace = Krill.make_namespace code
 
           # Add base_class ancestor to user's code
           base_class = make_base
@@ -37,7 +39,6 @@ module Krill
 
           # Make protocol
           @checker = namespace::Validator.new
-
         rescue Exception => e
           @errors.push "Error while parsing #{path}"
           @errors.push e.to_s
@@ -54,22 +55,22 @@ module Krill
     end
 
     def check
-      if @errors.length > 0
-        return @errors
+      if !@errors.empty?
+        @errors
       else
-        return ! @checker || @checker.check(@task)
+        !@checker || @checker.check(@task)
       end
     end
 
     def make_base
 
       b = Module.new
-      b.send(:include,Base)
+      b.send(:include, Base)
       b
 
     end
 
-    def insert_base_class obj, mod
+    def insert_base_class(obj, mod)
 
       obj.constants.each do |c|
 
@@ -79,10 +80,10 @@ module Krill
           eigenclass = class << self
             self
           end
-          eigenclass.send(:include,mod) unless eigenclass.include? mod
+          eigenclass.send(:include, mod) unless eigenclass.include? mod
           insert_base_class k, mod
         elsif k.class == Class
-          k.send(:include,mod) unless k.include? mod
+          k.send(:include, mod) unless k.include? mod
           insert_base_class k, mod
         end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Plankton
 
   class Parser < Lang::Parser
@@ -5,22 +7,22 @@ module Plankton
     attr_reader :program, :args, :info, :include_stack, :debug
     attr_writer :job_id, :function_callback
 
-    def initialize name, contents
+    def initialize(name, contents)
 
       # puts "New Parser with contents = #{contents}"
 
-      @tok = Lang::Tokenizer.new ( contents )
+      @tok = Lang::Tokenizer.new contents
       @program = []
       @function_space = []
       @function_pointers = []
       @args = []
-      @include_stack = [ { tokens: @tok, path: name, returns: [] } ]
-      @info = ""
-      @debug = "No debug info available"
+      @include_stack = [{ tokens: @tok, path: name, returns: [] }]
+      @info = ''
+      @debug = 'No debug info available'
       @job_id = -1
       @repo = name.split('/')[0]
 
-      # user defined functions 
+      # user defined functions
       @function_callback = method(:function_call) # used in the app method of expressions
       @function_space = []                        # temporary space where function defintions are put
       @function_specs = {}                        # map from function names to function_space locations and arg specs
@@ -35,7 +37,7 @@ module Plankton
     end
 
     def bad_xml
-      line.to_s + ": " + @tok.get_line
+      line.to_s + ': ' + @tok.get_line
     end
 
     def line
@@ -50,8 +52,8 @@ module Plankton
       end
     end
 
-    def push i
-      if @in_function_def 
+    def push(i)
+      if @in_function_def
         i.pc = @function_space.length
         @function_space.push i
       else
@@ -61,24 +63,24 @@ module Plankton
     end
 
     def last
-      if @in_function_def 
+      if @in_function_def
         @function_space.last
       else
         @program.last
       end
     end
-    
-    def push_arg a
+
+    def push_arg(a)
       @args.push a
     end
 
     def show
       pc = 0
       @program.each do |i|
-        puts pc.to_s + ": " + i.to_s
+        puts pc.to_s + ': ' + i.to_s
         pc += 1
       end
-      @function_specs.each do |k,v|
+      @function_specs.each do |k, v|
         puts "#{k}: #{v}"
       end
     end
@@ -93,26 +95,25 @@ module Plankton
       @include_stack.last[:path] + ': ' + @tok.get_line
     end
 
-    def get_file path
+    def get_file(path)
 
-      if /:/ =~ path
-        repo_path = path.split(/:/).join('/')
-      else
-        repo_path = @repo + "/" + path
-      end
- 
+      repo_path = if /:/ =~ path
+                    path.split(/:/).join('/')
+                  else
+                    @repo + '/' + path
+                  end
+
       begin
-        sha = Repo::version( repo_path )
-        file = Repo::contents( repo_path, sha )
+        sha = Repo.version(repo_path)
+        file = Repo.contents(repo_path, sha)
       rescue Exception => e
         raise "Could not find file '#{path}': " + e.to_s
       end
 
-      return { content: file, sha: sha }
+      { content: file, sha: sha }
 
     end
 
   end
 
 end
-

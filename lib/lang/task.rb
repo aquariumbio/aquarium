@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 module Lang
 
-  class Scope 
+  class Scope
 
-    def tasks prototype, status
+    def tasks(prototype, status)
 
       tp = TaskPrototype.find_by_name(prototype)
       result = []
 
       if tp
-        result = Task.where("task_prototype_id = ? AND status = ?", tp.id, status).collect do |t| 
+        result = Task.where('task_prototype_id = ? AND status = ?', tp.id, status).collect do |t|
           result = t.attributes.symbolize_keys
           result[:specification] = JSON.parse(result[:specification], symbolize_names: true)
           result
@@ -19,45 +21,41 @@ module Lang
 
     end
 
-    def get_task_status task
+    def get_task_status(task)
 
-      t = Task.find_by_id( task[:id] )
+      t = Task.find_by_id(task[:id])
 
       if t
         t.status
       else
-        "UNKNOWN TASK"
+        'UNKNOWN TASK'
       end
 
     end
 
-    def set_task_status a, status
+    def set_task_status(a, status)
 
-      if a.class != Array
-        tasks = [ a ]
-      else
-        tasks = a
-      end
-    
+      tasks = if a.class != Array
+                [a]
+              else
+                a
+              end
+
       tasks.each do |task|
 
-        t = Task.find_by_id( task[:id] )
+        t = Task.find_by_id(task[:id])
 
-        if t
+        next unless t
 
-          t.status = status
-          t.save
+        t.status = status
+        t.save
 
-          if $CURRENT_JOB_ID >= 0
+        next unless $CURRENT_JOB_ID >= 0
 
-            touch = Touch.new
-            touch.job_id = $CURRENT_JOB_ID
-            touch.task_id = t.id
-            touch.save
-
-          end
-  
-        end
+        touch = Touch.new
+        touch.job_id = $CURRENT_JOB_ID
+        touch.task_id = t.id
+        touch.save
 
       end
 

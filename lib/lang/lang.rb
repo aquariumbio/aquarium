@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'strscan'
 require_relative 'meta'
 require_relative 'tokenizer'

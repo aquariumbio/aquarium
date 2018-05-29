@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Lang
 
   class Scope
 
-    def quantity obj
+    def quantity(obj)
 
       result = 0
 
@@ -10,11 +12,9 @@ module Lang
 
         o = ObjectType.find_by_name(obj)
 
-        if o
-          result = o.quantity
-        end
+        result = o.quantity if o
 
-      elsif obj.class == Hash && obj.has_key?(:sample) && obj.has_key?(:object)
+      elsif obj.class == Hash && obj.key?(:sample) && obj.key?(:object)
 
         puts "QUANTITY: Evaluating quantity(#{obj})"
 
@@ -23,9 +23,7 @@ module Lang
 
         puts "GOT #{s.inspect} and #{o.inspect}"
 
-        if o && s
-          result = Item.where("sample_id = ? AND object_type_id = ?",s.id, o.id).length
-        end
+        result = Item.where('sample_id = ? AND object_type_id = ?', s.id, o.id).length if o && s
 
       else
 
@@ -34,10 +32,10 @@ module Lang
       end
 
       result
- 
+
     end
 
-    def min_quantity obj
+    def min_quantity(obj)
       o = ObjectType.find_by_name(obj)
       if o
         o.min
@@ -46,7 +44,7 @@ module Lang
       end
     end
 
-    def max_quantity obj
+    def max_quantity(obj)
       o = ObjectType.find_by_name(obj)
       if o
         o.max
@@ -55,30 +53,24 @@ module Lang
       end
     end
 
-    def info x
+    def info(x)
 
       if x.class == Hash && x[:id]
 
         i = Item.find_by_id(x[:id])
 
-        if !i
-          raise "Could not find item #{x[:id]} in argument passed to 'info'"
-        end
-        if !i.sample
-          raise "Item #{x[:id]} in argument passed to 'info' is not a sample"
-        end
+        raise "Could not find item #{x[:id]} in argument passed to 'info'" unless i
+        raise "Item #{x[:id]} in argument passed to 'info' is not a sample" unless i.sample
 
-        return i.sample.attributes.symbolize_keys
+        i.sample.attributes.symbolize_keys
 
-      elsif x.class == Fixnum
+      elsif x.class == Integer
 
         s = Sample.find_by_id(x)
 
-        if !s
-          raise "Could not find sample #{x} in argument passed to 'info'"
-        end
+        raise "Could not find sample #{x} in argument passed to 'info'" unless s
 
-        return s.attributes.symbolize_keys
+        s.attributes.symbolize_keys
 
       else
 

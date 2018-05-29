@@ -1,17 +1,19 @@
+# frozen_string_literal: true
+
 class MetacolsController < ApplicationController
 
   before_filter :signed_in_user
 
-  def content sha, path
+  def content(sha, path)
 
     if /local_file/ =~ sha
       blob = Blob.get sha, path
       content = blob.xml.force_encoding('UTF-8')
     else
-      content = Repo::contents path, sha
+      content = Repo.contents path, sha
     end
 
-    return content
+    content
 
   end
 
@@ -36,30 +38,28 @@ class MetacolsController < ApplicationController
 
     begin
       @content = content @mc.sha, @mc.path
-    rescue
+    rescue StandardError
       flash[:error] = "Octokit Era Problem: Could not find metacol '#{@mc.path}' details, because the path probably has no repo information in it."
       @content = nil
     end
 
-    @errors = ""
+    @errors = ''
 
     if @content
 
       begin
-        @metacol = Oyster::Parser.new(@path,@content).parse(JSON.parse(@mc.state, :symbolize_names => true )[:stack].first)
+        @metacol = Oyster::Parser.new(@path, @content).parse(JSON.parse(@mc.state, symbolize_names: true)[:stack].first)
       rescue Exception => e
-        @errors = "ERROR: " + e.to_s
+        @errors = 'ERROR: ' + e.to_s
       end
 
       begin
-        @metacol.set_state( JSON.parse @mc.state, :symbolize_names => true )
-      rescue
-        puts "Could not set metacol state"
+        @metacol.set_state(JSON.parse(@mc.state, symbolize_names: true))
+      rescue StandardError
+        puts 'Could not set metacol state'
       end
 
-      if @errors==""
-        @metacol.id = @mc.id
-      end
+      @metacol.id = @mc.id if @errors == ''
 
     else
 
@@ -74,24 +74,24 @@ class MetacolsController < ApplicationController
 
   end
 
-  def parse_args sha, path
+  def parse_args(sha, path)
 
     logger.info "parse_args. sha = #{sha} and path = #{path}"
 
     @sha = sha
     @path = path
-    @parse_errors = ""
-    @errors = ""
+    @parse_errors = ''
+    @errors = ''
 
     if /local_file/ =~ @sha
       blob = Blob.get @sha, @path
       @content = blob.xml.force_encoding('UTF-8')
     else
-      @content = Repo::contents @path, @sha
+      @content = Repo.contents @path, @sha
     end
 
     begin
-      @arguments = Oyster::Parser.new(@path,@content).parse_arguments_only
+      @arguments = Oyster::Parser.new(@path, @content).parse_arguments_only
     rescue Exception => e
       @errors = e
     end
@@ -113,28 +113,28 @@ class MetacolsController < ApplicationController
 
     @sha = params[:sha]
     @path = params[:path]
-    @info = JSON.parse(params[:info],:symbolize_names => true)
+    @info = JSON.parse(params[:info], symbolize_names: true)
 
     if /local_file/ =~ @sha
       blob = Blob.get @sha, @path
       @content = blob.xml.force_encoding('UTF-8')
     else
-      @content = Repo::contents @path, @sha
+      @content = Repo.contents @path, @sha
     end
 
-    @arguments = Oyster::Parser.new(params[:path],@content).parse_arguments_only
+    @arguments = Oyster::Parser.new(params[:path], @content).parse_arguments_only
 
     logger.info "arguments from parse_arguments_only = #{@arguments}"
 
     group = Group.find_by_name(@info[:group])
-    
+
     group.memberships.each do |m|
 
       user = m.user
       args = {}
 
       @arguments.each do |a|
-        
+
         ident = a[:name].to_sym
         val = @info[:args][ident]
 
@@ -146,10 +146,10 @@ class MetacolsController < ApplicationController
           args[ident] = val.to_f
         elsif a[:type] == 'generic'
           begin
-            args[ident] = JSON.parse(val,:symbolize_keys=>true)
+            args[ident] = JSON.parse(val, symbolize_keys: true)
           rescue Exception => e
             flash[:error] = "Could not parse json (#{args[val]}) for argument #{a[:name]}: " + e.to_s
-            return redirect_to arguments_new_metacol_path(sha: params[:sha], path: params[:path]) 
+            return redirect_to arguments_new_metacol_path(sha: params[:sha], path: params[:path])
           end
         else
           args[ident] = val
@@ -160,10 +160,10 @@ class MetacolsController < ApplicationController
       args[:aquarium_user] = user.login
 
       begin
-        @metacol = Oyster::Parser.new(params[:path],@content).parse args
+        @metacol = Oyster::Parser.new(params[:path], @content).parse args
       rescue Exception => e
-        flash[:error] = "Could not start metacol due to parse error. #{e.to_s}"
-        return redirect_to arguments_new_metacol_path(sha: params[:sha], path: params[:path]) 
+        flash[:error] = "Could not start metacol due to parse error. #{e}"
+        return redirect_to arguments_new_metacol_path(sha: params[:sha], path: params[:path])
       end
 
       @metacol.who = current_user.id
@@ -191,7 +191,7 @@ class MetacolsController < ApplicationController
         mc.state = @metacol.state.to_json
         mc.status = 'RUNNING'
       else
-        mc.message = "On start: " + e.message.split('[')[0]
+        mc.message = 'On start: ' + e.message.split('[')[0]
         mc.status = 'ERROR'
       end
 
@@ -200,11 +200,11 @@ class MetacolsController < ApplicationController
     end
 
     flash[:notice] = "Starting metacol for each member in group '#{group.name}'. Go to 'Protocols/Pending Jobs' to see jobs started by this metacol."
-    redirect_to metacols_path( active: true )
+    redirect_to metacols_path(active: true)
 
   end
 
-  def log job, type, data
+  def log(job, type, data)
     log = Log.new
     log.job_id = job.id
     log.user_id = current_user.id
@@ -216,7 +216,7 @@ class MetacolsController < ApplicationController
   def stop
 
     @metacol = Metacol.find(params[:metacol_id])
-    @metacol.status = "DONE"
+    @metacol.status = 'DONE'
     @metacol.save
 
     n = 0
@@ -224,7 +224,7 @@ class MetacolsController < ApplicationController
       j.pc = Job.COMPLETED
       j.user_id = j.user_id || current_user.id
       j.save
-      log j, "CANCEL", {}
+      log j, 'CANCEL', {}
       n += 1
     end
 
@@ -234,7 +234,7 @@ class MetacolsController < ApplicationController
       format.html { redirect_to jobs_path }
       format.json { head :no_content }
     end
-    
+
   end
 
   def destroy
@@ -250,7 +250,6 @@ class MetacolsController < ApplicationController
 
   end
 
-  def viewer
-  end
+  def viewer; end
 
 end

@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 module Plankton
 
   class Parser
 
     def item_expr ################################################################################################
 
-      # TODO THIS PART SHOULD BE AN EXPRESSION
+      # TODO: THIS PART SHOULD BE AN EXPRESSION
       @tok.eat_a 'item'
-      return expr     
+      expr
 
     end # item_expr
 
@@ -14,7 +16,7 @@ module Plankton
 
       quantity = expr
       type = expr
-      return { quantity: quantity, type: type }
+      { quantity: quantity, type: type }
 
     end # object_expr
 
@@ -45,13 +47,13 @@ module Plankton
 
       @tok.eat_a 'take'
       entry_list = []
-      note = ""
+      note = ''
 
       while @tok.current != 'end' && @tok.current != 'EOF'
 
         if @tok.current == 'item'
 
-          entry_list.push TakeEntry.new var: "most_recently_taken_item", item_expr: item_expr
+          entry_list.push TakeEntry.new var: 'most_recently_taken_item', item_expr: item_expr
 
         elsif @tok.current == 'note'
 
@@ -62,21 +64,21 @@ module Plankton
         elsif @tok.next == '='
 
           ta = take_assign
-   
+
           if ta[:object]
-            puts "C"
-            entry_list.push TakeEntry.new({
-              var: ta[:var], 
-              quantity_expr: ta[:object][:quantity], 
+            puts 'C'
+            entry_list.push TakeEntry.new(
+              var: ta[:var],
+              quantity_expr: ta[:object][:quantity],
               type_expr: ta[:object][:type]
-            })
+            )
 
           else
 
-            entry_list.push TakeEntry.new({
-              var: ta[:var], 
+            entry_list.push TakeEntry.new(
+              var: ta[:var],
               item_expr: ta[:item]
-            })
+            )
 
           end
 
@@ -84,11 +86,11 @@ module Plankton
 
           ob = object_expr
 
-          entry_list.push TakeEntry.new({
-            var: "most_recently_taken_item", 
-            quantity_expr: ob[:quantity], 
+          entry_list.push TakeEntry.new(
+            var: 'most_recently_taken_item',
+            quantity_expr: ob[:quantity],
             type_expr: ob[:type]
-          })
+          )
 
         end
 

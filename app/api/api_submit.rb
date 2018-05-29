@@ -1,7 +1,7 @@
+# frozen_string_literal: true
+
 module ApiSubmit
 
-  def submit
-
-  end
+  def submit; end
 
 end

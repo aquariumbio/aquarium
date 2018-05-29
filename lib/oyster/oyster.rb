@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'interface'
 require_relative 'place'
 require_relative 'transition'
@@ -13,4 +15,3 @@ require_relative 'parse_args'
 require_relative 'time'
 
 require_relative 'daemon.rb'
-

@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Plankton
 
   class HTTPInstruction < Instruction
 
     attr_reader :info_expr
 
-    def initialize info_expr, options = {}
+    def initialize(info_expr, options = {})
 
       super 'http', options
       @info_expr = info_expr
@@ -12,24 +14,24 @@ module Plankton
 
     end
 
-    def bt_execute scope, params
+    def bt_execute(scope, params)
 
       info = {}
 
-      @info_expr.each do |k,v|
+      @info_expr.each do |k, v|
 
         if k != :query
           info[k] = scope.substitute v
         else
           info[:query] = {}
-          v.each do |q,w|
+          v.each do |q, w|
             evaled = scope.evaluate w
             info[:query][q] = scope.substitute evaled
           end
         end
       end
 
-      puts "http-scope info_expr:"
+      puts 'http-scope info_expr:'
       puts @info_expr
       uri = URI(info[:host] + ':' + info[:port] + info[:path])
       uri.query = URI.encode_www_form(info[:query])
@@ -55,7 +57,6 @@ module Plankton
     def to_html
       info_expr.to_s
     end
-
 
   end
 

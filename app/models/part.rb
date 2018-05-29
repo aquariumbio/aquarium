@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 class Part
 
   attr_accessor :collection, :x, :y
 
-  def initialize c, x, y
+  def initialize(c, x, y)
     @collection = c
     @x = x
     @y = y
-    raise "out of range" unless x < c.dimensions[0] && y < c.dimensions[1]
+    raise 'out of range' unless x < c.dimensions[0] && y < c.dimensions[1]
   end
 
   def sample

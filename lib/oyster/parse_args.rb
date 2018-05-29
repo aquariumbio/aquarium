@@ -1,20 +1,18 @@
+# frozen_string_literal: true
+
 module Oyster
 
   class Parser
 
     def argument
 
-      var =  @tok.eat_a_variable
-             @tok.eat_a ':'
+      var = @tok.eat_a_variable
+      @tok.eat_a ':'
       type = @tok.eat_a_argtype
-      
-      unless type == 'number' || type == 'string' || type == 'sample' || type == 'object' || type == 'generic' || type == 'group'
-        raise "Unknown type '#{type}' in argument"
-      end
 
-      if type == 'object' # convert to old type specifier for object types
-         type = 'objecttype'
-      end
+      raise "Unknown type '#{type}' in argument" unless type == 'number' || type == 'string' || type == 'sample' || type == 'object' || type == 'generic' || type == 'group'
+
+      type = 'objecttype' if type == 'object' # convert to old type specifier for object types
 
       if type == 'sample'
         if @tok.current == '('
@@ -39,19 +37,17 @@ module Oyster
         @tok.eat
         description = @tok.eat_a_string.remove_quotes
       else
-        description = ""
+        description = ''
       end
 
-      @metacol.arguments.push( { name: var, type: type, description: description, sample_type: sample_type } )
-  
+      @metacol.arguments.push(name: var, type: type, description: description, sample_type: sample_type)
+
     end
 
     def arguments
-      
+
       @tok.eat_a 'argument'
-      while @tok.current != 'end' && @tok.current != 'EOF'
-        argument
-      end
+      argument while @tok.current != 'end' && @tok.current != 'EOF'
       @tok.eat_a 'end'
 
     end

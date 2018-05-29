@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Plankton
 
   class Parser
@@ -10,7 +12,7 @@ module Plankton
 
       info = { item: expr }
 
-      keys = [ :location, :inuse, :dinuse, :iinuse, :quantity, :dquantity, :iquantity ]
+      keys = %i[location inuse dinuse iinuse quantity dquantity iquantity]
 
       while @tok.current != 'end' && @tok.current != 'EOF'
 
@@ -21,7 +23,7 @@ module Plankton
           info[k] = expr
 
         else
- 
+
           raise "Expected #{keys} in 'modify' block at #{@tok.current}."
 
         end

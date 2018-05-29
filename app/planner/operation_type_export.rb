@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module OperationTypeExport
 
   def nl
@@ -12,10 +14,10 @@ module OperationTypeExport
     field_types.select { |ft| ft.role == 'input' || ft.role == 'output' }.collect do |ft|
       ft.allowable_field_types.each do |aft|
         if aft.sample_type
-          sample_types << aft.sample_type 
+          sample_types << aft.sample_type
           sample_types += aft.sample_type.required_sample_types
         end
-        puts sample_types.collect { |st| st.name }
+        puts sample_types.collect(&:name)
         object_types << aft.object_type if aft.object_type
       end
     end
@@ -44,12 +46,12 @@ module OperationTypeExport
         deployed: false,
         on_the_fly: on_the_fly ? true : false,
 
-        field_types: field_types.select { |ft| ft.role }.collect { |ft|
+        field_types: field_types.select(&:role).collect do |ft|
 
           {
 
             ftype: ft.ftype,
-            role: ft.role, 
+            role: ft.role,
             name: ft.name,
             sample_types: ft.allowable_field_types.collect { |aft| aft.sample_type ? aft.sample_type.name : nil },
             object_types: ft.allowable_field_types.collect { |aft| aft.object_type ? aft.object_type.name : nil },
@@ -62,12 +64,12 @@ module OperationTypeExport
 
           }
 
-        },
+        end,
 
-        protocol: protocol ? protocol.content : "",
-        precondition: precondition ? precondition.content : "",
-        cost_model: cost_model ? cost_model.content : "",
-        documentation: documentation ? documentation.content : "",
+        protocol: protocol ? protocol.content : '',
+        precondition: precondition ? precondition.content : '',
+        cost_model: cost_model ? cost_model.content : '',
+        documentation: documentation ? documentation.content : '',
 
         timing: timing ? timing.export : nil
 
@@ -79,15 +81,15 @@ module OperationTypeExport
 
   def self.included(base)
     base.extend(ClassMethods)
-  end  
+  end
 
   def copy(user)
     # Choose a name for the copy that is not already used
     exported = export
     original_name = exported[:operation_type][:name]
     counter = 0
-    copy_name = original_name + " (copy)"
-    while (!OperationType.where(category: category, name: copy_name).empty?)
+    copy_name = original_name + ' (copy)'
+    until OperationType.where(category: category, name: copy_name).empty?
       counter += 1
       copy_name = original_name + " (copy #{counter})"
     end
@@ -103,22 +105,22 @@ module OperationTypeExport
 
   module ClassMethods
 
-    def import data, user
+    def import(data, user)
 
       issues1 = SampleType.compare_and_upgrade(data[:sample_types] ? data[:sample_types] : [])
 
-      if issues1[:inconsistencies].any?
-        issues2 = { notes: [], inconsistencies: []}
-      else
-        issues2 = ObjectType.compare_and_upgrade(data[:object_types] ? data[:object_types] : [])
-      end
+      issues2 = if issues1[:inconsistencies].any?
+                  { notes: [], inconsistencies: [] }
+                else
+                  ObjectType.compare_and_upgrade(data[:object_types] ? data[:object_types] : [])
+                end
 
-      issues = { notes: issues1[:notes] + issues2[:notes], 
+      issues = { notes: issues1[:notes] + issues2[:notes],
                  inconsistencies: issues1[:inconsistencies] + issues2[:inconsistencies] }
 
       if issues[:inconsistencies].any?
         issues[:notes] << "Operation Type '#{data[:operation_type][:name]}' not imported."
-        return issues 
+        return issues
       end
 
       # Add any allowable field_type linkes that resolved to nil before the all sample type
@@ -132,16 +134,16 @@ module OperationTypeExport
 
       ot = OperationType.new name: obj[:name], category: obj[:category], deployed: obj[:deployed], on_the_fly: obj[:on_the_fly]
       ot.save
-    
-      raise "Could not save operation type: " + ot.errors.full_messages.join(', ') unless ot.errors.empty?   
+
+      raise 'Could not save operation type: ' + ot.errors.full_messages.join(', ') unless ot.errors.empty?
 
       if obj[:field_types]
         obj[:field_types].each do |ft|
           ot.add_io(
-            ft[:name], ft[:sample_types], ft[:object_types], ft[:role], 
-            part: ft[:part], 
-            array: ft[:array], 
-            routing: ft[:routing], 
+            ft[:name], ft[:sample_types], ft[:object_types], ft[:role],
+            part: ft[:part],
+            array: ft[:array],
+            routing: ft[:routing],
             ftype: ft[:ftype],
             preferred_operation_type_id: ft[:preferred_operation_type_id],
             preferred_field_type_id: ft[:preferred_field_type_id]
@@ -155,11 +157,11 @@ module OperationTypeExport
       ot.new_code 'documentation', obj[:documentation], user
 
       if obj[:timing]
-        puts "Timing: " + obj[:timing].inspect
+        puts 'Timing: ' + obj[:timing].inspect
         ot.timing = obj[:timing]
-        puts "  ==> " + ot.timing.inspect
+        puts '  ==> ' + ot.timing.inspect
       else
-        puts "No Timing?"
+        puts 'No Timing?'
       end
 
       issues[:notes] << "Created new operation type '#{ot.name}'"
@@ -170,22 +172,22 @@ module OperationTypeExport
 
     end
 
-    def simple_import (data, user)
-      
+    def simple_import(data, user)
+
       obj = data[:operation_type]
 
       ot = OperationType.new name: obj[:name], category: obj[:category], deployed: obj[:deployed], on_the_fly: obj[:on_the_fly]
       ot.save
-    
-      raise "Could not save operation type: " + ot.errors.full_messages.join(', ') unless ot.errors.empty?   
+
+      raise 'Could not save operation type: ' + ot.errors.full_messages.join(', ') unless ot.errors.empty?
 
       if obj[:field_types]
         obj[:field_types].each do |ft|
           ot.add_io(
-            ft[:name], ft[:sample_types], ft[:object_types], ft[:role], 
-            part: ft[:part], 
-            array: ft[:array], 
-            routing: ft[:routing], 
+            ft[:name], ft[:sample_types], ft[:object_types], ft[:role],
+            part: ft[:part],
+            array: ft[:array],
+            routing: ft[:routing],
             ftype: ft[:ftype],
             preferred_operation_type_id: ft[:preferred_operation_type_id],
             preferred_field_type_id: ft[:preferred_field_type_id]
@@ -199,18 +201,18 @@ module OperationTypeExport
       ot.new_code 'documentation', obj[:documentation], user
 
       if obj[:timing]
-        puts "Timing: " + obj[:timing].inspect
+        puts 'Timing: ' + obj[:timing].inspect
         ot.timing = obj[:timing]
-        puts "  ==> " + ot.timing.inspect
+        puts '  ==> ' + ot.timing.inspect
       else
-        puts "No Timing?"
+        puts 'No Timing?'
       end
 
       ot
 
     end
 
-    def import_list op_type_list
+    def import_list(op_type_list)
 
       op_type_list.each do |ot|
         import ot
@@ -218,22 +220,20 @@ module OperationTypeExport
 
     end
 
-    def export_all filename=nil
+    def export_all(filename = nil)
 
-      ots = OperationType.all.collect { |ot| ot.export }
+      ots = OperationType.all.collect(&:export)
 
-      if filename
-        File.write(filename, ots.to_json)
-      end
+      File.write(filename, ots.to_json) if filename
 
       ots
 
-    end  
+    end
 
-    def import_from_file filename
+    def import_from_file(filename)
 
-      import_list(JSON.parse(File.open(filename, "rb").read, symbolize_names: true))
-      
+      import_list(JSON.parse(File.open(filename, 'rb').read, symbolize_names: true))
+
     end
 
   end

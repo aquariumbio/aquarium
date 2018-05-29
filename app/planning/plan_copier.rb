@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class PlanCopier
 
-  def initialize plan_id
+  def initialize(plan_id)
     @plan = Plan.includes(:operations).find(plan_id)
     @fv_map = []
     @op_map = []
@@ -9,8 +11,8 @@ class PlanCopier
   def copy
 
     @new_plan = @plan.dup
-    @new_plan.status = "planning"
-    @new_plan.name = @plan.name ? @plan.name + " (copy)" : "Copy of plan #{@plan.id}";
+    @new_plan.status = 'planning'
+    @new_plan.name = @plan.name ? @plan.name + ' (copy)' : "Copy of plan #{@plan.id}"
     @new_plan.save
 
     copy_ops
@@ -37,11 +39,11 @@ class PlanCopier
     @plan.operations.each do |op|
 
       new_op = op.dup
-      new_op.status = "planning"
+      new_op.status = 'planning'
 
       new_op.x = 500 * rand unless op.x
       unless op.y
-        new_op.y = y 
+        new_op.y = y
         y += 64
       end
 
@@ -58,7 +60,7 @@ class PlanCopier
 
   end
 
-  def copy_fvs op, new_op
+  def copy_fvs(op, new_op)
 
     op.field_values.each do |fv|
 
@@ -81,12 +83,12 @@ class PlanCopier
 
   end
 
-  def port_module_wires m
+  def port_module_wires(m)
 
     if m[:wires]
       m[:wires].each do |wire|
-        wire[:from][:id]    = @fv_map[wire[:from][:id]]    if wire[:from][:record_type] == "FieldValue"
-        wire[:to][:id]      = @fv_map[wire[:to][:id]]      if wire[:to][:record_type] == "FieldValue"
+        wire[:from][:id]    = @fv_map[wire[:from][:id]]    if wire[:from][:record_type] == 'FieldValue'
+        wire[:to][:id]      = @fv_map[wire[:to][:id]]      if wire[:to][:record_type] == 'FieldValue'
         wire[:from_op][:id] = @op_map[wire[:from_op][:id]] if wire[:from_op]
         wire[:to_op][:id]   = @op_map[wire[:to_op][:id]]   if wire[:to_op]
       end

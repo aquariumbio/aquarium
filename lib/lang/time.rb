@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 module Lang
 
-  class Scope 
+  class Scope
 
     def time
-   
+
       t = Time.now
 
-      return {
+      {
         seconds: t.sec,
         minutes: t.min,
         hours: t.hour,

@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 require './lib/pdl'
 
 puts "\nProtocol    \n--------------------------------"
 proto = Protocol.new
-proto.open( 'examples/log_test.xml' )
+proto.open('examples/log_test.xml')
 proto.parse
 proto.program.each { |i| puts i.name }
 
 puts "\nScope       \n--------------------------------"
 
-str = "x = %{x} and y = %{y}"
+str = 'x = %{x} and y = %{y}'
 s = Scope.new
 
 s.set :x, 1
