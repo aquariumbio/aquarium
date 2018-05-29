@@ -3,6 +3,5 @@ class DropPrimers < ActiveRecord::Migration
     drop_table :primers
   end
 
-  def down
-  end
+  def down; end
 end

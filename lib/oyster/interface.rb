@@ -1,26 +1,22 @@
 module Oyster
 
-  def Oyster.get_sha path
+  def self.get_sha(path)
 
-    Repo::version path
+    Repo.version path
 
   end
 
-  def Oyster.submit h 
+  def self.submit(h)
 
-    if /\.rb/ =~ h[:path]
-      return Oyster.submit_krill_protocol h
-    end
+    return Oyster.submit_krill_protocol h if /\.rb/ =~ h[:path]
 
-    group = Group.find_by_name(h[:group])
+    group = Group.find_by(name: h[:group])
 
-    unless group
-      raise "No valid group specified when submitting '#{h[:path]}'"
-    end
+    raise "No valid group specified when submitting '#{h[:path]}'" unless group
 
     # get the blob and parse its arguments
-    content = Repo::contents h[:path], h[:sha]
-    protocol = Plankton::Parser.new( h[:path], content )
+    content = Repo.contents h[:path], h[:sha]
+    protocol = Plankton::Parser.new(h[:path], content)
     # protocol.job_id = -1
     protocol.parse_arguments_only
 
@@ -40,7 +36,7 @@ module Oyster
 
     scope.push
 
-    sub = User.find_by_id(h[:who])
+    sub = User.find_by(id: h[:who])
 
     # create a new job
     job = Job.new
@@ -60,14 +56,14 @@ module Oyster
 
   end
 
-  def Oyster.submit_krill_protocol h
+  def self.submit_krill_protocol(h)
 
     puts "Submitting protocol #{h[:path]} with args = #{h[:args]}"
 
-    group = Group.find_by_name(h[:group])
+    group = Group.find_by(name: h[:group])
     raise "No valid group specified when submitting '#{h[:path]}'" unless group
 
-    sub = User.find_by_id(h[:who])
+    sub = User.find_by(id: h[:who])
 
     job = Job.new
     job.sha = h[:sha]
@@ -78,7 +74,7 @@ module Oyster
     job.submitted_by = sub ? sub.id : 0
     job.pc = Job.NOT_STARTED
     job.metacol_id = h[:metacol_id]
-    job.set_arguments( h[:args] )
+    job.set_arguments(h[:args])
     job.save
 
     puts "resulted in args = #{job.state}"
@@ -88,4 +84,3 @@ module Oyster
   end
 
 end
-

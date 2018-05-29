@@ -22,4 +22,3 @@ require_relative 'stop'
 # Instructions
 require_relative './instructions/instruction'
 Dir["#{File.dirname(__FILE__)}/instructions/*_instruction.rb"].each { |file| require_relative file }
-

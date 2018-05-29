@@ -1,10 +1,10 @@
 module Lang
 
-  class Scope 
+  class Scope
 
-    def to_string x
-   
-      return x.to_s
+    def to_string(x)
+
+      x.to_s
 
     end
 

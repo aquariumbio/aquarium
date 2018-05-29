@@ -1,12 +1,12 @@
 class TaskPrototypesController < ApplicationController
 
   before_filter :signed_in_user
-  
+
   # GET /task_prototypes
   # GET /task_prototypes.json
   def index
     @task_prototypes = TaskPrototype.all
-    
+
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @task_prototypes }
@@ -50,7 +50,7 @@ class TaskPrototypesController < ApplicationController
         format.html { redirect_to @task_prototype, notice: 'Task prototype was successfully created.' }
         format.json { render json: @task_prototype, status: :created, location: @task_prototype }
       else
-        format.html { render action: "new" }
+        format.html { render action: 'new' }
         format.json { render json: @task_prototype.errors, status: :unprocessable_entity }
       end
     end
@@ -62,11 +62,11 @@ class TaskPrototypesController < ApplicationController
     @task_prototype = TaskPrototype.find(params[:id])
 
     respond_to do |format|
-      if @task_prototype.update_attributes(params[:task_prototype])
+      if @task_prototype.update(params[:task_prototype])
         format.html { redirect_to @task_prototype, notice: 'Task prototype was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render action: 'edit' }
         format.json { render json: @task_prototype.errors, status: :unprocessable_entity }
       end
     end

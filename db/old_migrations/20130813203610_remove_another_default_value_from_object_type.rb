@@ -3,6 +3,5 @@ class RemoveAnotherDefaultValueFromObjectType < ActiveRecord::Migration
     change_column_default(:object_types, :release_description, nil)
   end
 
-  def down
-  end
+  def down; end
 end

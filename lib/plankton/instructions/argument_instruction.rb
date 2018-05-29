@@ -5,12 +5,12 @@ module Plankton
     attr_reader :var, :type, :description
     attr_accessor :sample_type
 
-    def initialize name, type, description, options = {}
+    def initialize(name, type, description, options = {})
       super 'argument', options
       @name = name
       @type = type
       @description = description
-      @sample_type = ""
+      @sample_type = ''
     end
 
   end

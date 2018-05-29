@@ -8,14 +8,14 @@ module Plankton
 
         if @tok.current == 'EOF' && @include_stack.length > 1
 
-          #puts "about to pop with current = '#{@tok.current}'"
+          # puts "about to pop with current = '#{@tok.current}'"
           p = @include_stack.pop
 
           @tok = @include_stack.last[:tokens]
           push EndIncludeInstruction.new p[:returns]
-          #puts "popped, now inc length = #{@include_stack.length} with current = '#{@tok.current}'"
+          # puts "popped, now inc length = #{@include_stack.length} with current = '#{@tok.current}'"
 
-        elsif @tok.current == 'EOF' 
+        elsif @tok.current == 'EOF'
 
           return
 
@@ -23,68 +23,68 @@ module Plankton
 
         case @tok.current
 
-          when 'EOF'
-            return
+        when 'EOF'
+          return
 
-          when 'information'
-            information
+        when 'information'
+          information
 
-          when 'argument'
-            argument_list
+        when 'argument'
+          argument_list
 
-          when 'step'
-            step
+        when 'step'
+          step
 
-          when 'take'
-            take
+        when 'take'
+          take
 
-          when 'produce'
-            produce
+        when 'produce'
+          produce
 
-          when 'modify'
-            modify
+        when 'modify'
+          modify
 
-          when 'release'
-            release
+        when 'release'
+          release
 
-          when 'log'
-            log
+        when 'log'
+          log
 
-          when 'input'
-            input
+        when 'input'
+          input
 
-          when 'if'
-            if_block
+        when 'if'
+          if_block
 
-          when 'while'
-            while_block
+        when 'while'
+          while_block
 
-          when 'foreach'
-            foreach_block
+        when 'foreach'
+          foreach_block
 
-          when 'function'
-            function_def
+        when 'function'
+          function_def
 
-          when 'return'
-            return_statement
+        when 'return'
+          return_statement
 
-          when 'http'
-            http
+        when 'http'
+          http
 
-          when 'include', 'require'
-            include
+        when 'include', 'require'
+          include
 
-          when 'end', 'elsif', 'else'
-            return
+        when 'end', 'elsif', 'else'
+          return
 
-          when 'stop'
-            stop
+        when 'stop'
+          stop
 
-          when 'local'
-            basic_statement
+        when 'local'
+          basic_statement
 
-          else
-            basic_statement
+        else
+          basic_statement
 
         end
 
@@ -93,7 +93,7 @@ module Plankton
     end # statements
 
     def information
-   
+
       @tok.eat_a 'information'
       push InformationInstruction.new string_expr
 

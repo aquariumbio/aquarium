@@ -1,8 +1,8 @@
 require './plankton'
 
 path = ARGV.shift
-contents =  File.read path
-p = Plankton::Parser.new( path, contents )
+contents = File.read path
+p = Plankton::Parser.new(path, contents)
 
 begin
   p.parse

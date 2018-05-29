@@ -9,4 +9,3 @@ class AlterImageHandlingInObjectType < ActiveRecord::Migration
   end
 
 end
-

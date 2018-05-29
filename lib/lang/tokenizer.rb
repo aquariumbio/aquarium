@@ -4,7 +4,7 @@ module Lang
 
     attr_reader :line
 
-    def initialize str 
+    def initialize(str)
 
       @str = str
       @tokens = str.scan(re).reject { |t| comment.match t }
@@ -13,20 +13,20 @@ module Lang
 
       advance
 
-      #i=0
-      #while i<@tokens.length
+      # i=0
+      # while i<@tokens.length
       #  if /^\n|^\r/.match(@tokens[i])
       #    puts "#{i}: \\n"
       #  else
       #    puts "#{i}: #{@tokens[i]}"
       #  end
       #  i += 1
-      #end
-      #puts '-----------'
+      # end
+      # puts '-----------'
 
     end
 
-    def num_newlines t
+    def num_newlines(t)
       if t
         t.scan(/\n|\r/).length
       else
@@ -36,36 +36,32 @@ module Lang
 
     def advance
 
-      #puts "Advancing at #{@tokens[@i]}"
+      # puts "Advancing at #{@tokens[@i]}"
 
-      @line += num_newlines( @tokens[@i] )
-      @i=@i+1
+      @line += num_newlines(@tokens[@i])
+      @i += 1
 
-      while /^\s$/.match( @tokens[@i] )
-        if /\n|\r/.match( @tokens[@i] )
-          @line += 1
-        end
-        @i = @i+1
+      while /^\s$/.match(@tokens[@i])
+        @line += 1 if /\n|\r/.match(@tokens[@i])
+        @i += 1
       end
 
     end
 
     def current
       if @i < @tokens.length
-        return @tokens[@i]
+        @tokens[@i]
       else
-        return 'EOF'
+        'EOF'
       end
     end
 
     def next
 
-      j=@i+1
+      j = @i + 1
 
-      while j < @tokens.length && /^\s$/.match( @tokens[j] )
-        j=j+1
-      end
-      
+      j += 1 while j < @tokens.length && /^\s$/.match(@tokens[j])
+
       if j < @tokens.length
         return @tokens[j]
       else
@@ -78,14 +74,14 @@ module Lang
       t = current
       # puts '--> ' + t
       advance
-      return t
+      t
     end
 
-    def eat_a thing
+    def eat_a(thing)
       if current != thing
         error "Expected '#{thing}' at '#{@tokens[@i]}'."
       else
-        return eat
+        eat
       end
     end
 
@@ -94,18 +90,14 @@ module Lang
       j = @i
       k = @i
 
-      while j >= 0 && ! /\n|\r/.match(@tokens[j])
-        j -= 1
-      end
+      j -= 1 while j >= 0 && !/\n|\r/.match(@tokens[j])
 
-      while k < @tokens.length && ! /\n|\r/.match(@tokens[k])
-        k += 1
-      end
+      k += 1 while k < @tokens.length && !/\n|\r/.match(@tokens[k])
 
-      @line_elements = @tokens[j+1,k-j-1]
+      @line_elements = @tokens[j + 1, k - j - 1]
 
       if @line_elements
-        @line_elements[@i-j-1] = "<span style='font-weight: bold; color: red'>" + @line_elements[@i-j-1].to_s + "</span>"
+        @line_elements[@i - j - 1] = "<span style='font-weight: bold; color: red'>" + @line_elements[@i - j - 1].to_s + '</span>'
         @line_elements.join
       else
         "<span style='font-weight: bold; color: red'>Could not determine context. The error may be an unterminated string constant.</span>"
@@ -113,7 +105,7 @@ module Lang
 
     end
 
-    def error msg
+    def error(msg)
       raise "Parse error on line #{@line}. " + msg
     end
 
@@ -125,27 +117,27 @@ module Lang
     end
 
     def boolean
-       /true|false/
+      /true|false/
     end
 
-    def argtype 
-      /number|string|object|sample|generic|group/ 
+    def argtype
+      /number|string|object|sample|generic|group/
     end
 
     def variable
       /[a-zA-Z_][a-zA-Z_0-9]*/
     end
 
-    def string 
-      /"[^"]*"/ 
+    def string
+      /"[^"]*"/
     end
 
-    def operator  
+    def operator
       /\+|-|\/|\*\*|\*|%|<=|>=|<|>|==|!=|\|\||&&|!/
     end
 
     def isa_operator
-      /^(\+|-|\/|\*\*|%|\*|<=|>=|<|>|==|!=|\|\||&&|!)$/.match(self.current) != nil
+      !/^(\+|-|\/|\*\*|%|\*|<=|>=|<|>|==|!=|\|\||&&|!)$/.match(current).nil?
     end
 
     def trans_op
@@ -178,17 +170,11 @@ module Lang
 
     checker :string, :whitespace, :variable, :argtype, :take_ops, :trans_op, :operator, :equals, :punctuation, :number, :boolean, :junk, :comment
 
-    # utilities   
+    # utilities
     def positive_integer
       /^[1-9][0-9]*$/.match current
     end
 
-
   end
 
 end
-
-
-
-
-

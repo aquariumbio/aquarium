@@ -1,8 +1,8 @@
 class GroupsController < ApplicationController
 
   before_filter :signed_in_user
-  before_filter :up_to_date_user  
-  
+  before_filter :up_to_date_user
+
   # GET /groups
   # GET /groups.json
   def index
@@ -22,21 +22,21 @@ class GroupsController < ApplicationController
   # GET /groups/1.json
   def show
 
-    @group = Group.find_by_id(params[:id])
+    @group = Group.find_by(id: params[:id])
 
     # Add new users
     if params[:user_id]
 
-      m = Membership.find_by_user_id_and_group_id( params[:user_id], @group.id )
+      m = Membership.find_by(user_id: params[:user_id], group_id: @group.id)
 
-      if !m 
+      unless m
 
         u = User.find(params[:user_id])
         m = Membership.new
         m.user_id = u.id
         m.group_id = @group.id
         m.save
-        #flash[:notice] = "Added #{u.login} to #{@group.name}."
+        # flash[:notice] = "Added #{u.login} to #{@group.name}."
 
       end
 
@@ -45,11 +45,9 @@ class GroupsController < ApplicationController
     # Delete users
     if params[:drop_user]
 
-      m = Membership.find_by_user_id_and_group_id( params[:drop_user], @group.id )
-  
-      if m
-        m.destroy
-      end
+      m = Membership.find_by(user_id: params[:drop_user], group_id: @group.id)
+
+      m.destroy if m
 
     end
 
@@ -85,7 +83,7 @@ class GroupsController < ApplicationController
         format.html { redirect_to @group, notice: 'Group was successfully created.' }
         format.json { render json: @group, status: :created, location: @group }
       else
-        format.html { render action: "new" }
+        format.html { render action: 'new' }
         format.json { render json: @group.errors, status: :unprocessable_entity }
       end
     end
@@ -97,11 +95,11 @@ class GroupsController < ApplicationController
     @group = Group.find(params[:id])
 
     respond_to do |format|
-      if @group.update_attributes(params[:group])
+      if @group.update(params[:group])
         format.html { redirect_to @group, notice: 'Group was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render action: 'edit' }
         format.json { render json: @group.errors, status: :unprocessable_entity }
       end
     end

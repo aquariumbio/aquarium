@@ -15,7 +15,7 @@ module Plankton
                   :type_value,
                   :object_list
 
-    def initialize x
+    def initialize(x)
       x.each_pair do |key, val|
         instance_variable_set('@' + key.to_s, val)
       end
@@ -28,60 +28,53 @@ module Plankton
     attr_reader :entry_list, :note
     attr_writer :note_expr
 
-    def initialize entry_list, options = {}
+    def initialize(entry_list, options = {})
 
-      @note_expr = ""
-      @note = ""
+      @note_expr = ''
+      @note = ''
       @entry_list = entry_list
       @renderable = true
       super 'take', options
 
     end # initialize
 
-
-    def pre_render scope, params
+    def pre_render(scope, _params)
 
       # Check all evaluations ###################################################################################
       @entry_list.each do |e|
 
-        if e.quantity_expr
-          e.quantity_value = scope.evaluate e.quantity_expr
-        end
+        e.quantity_value = scope.evaluate e.quantity_expr if e.quantity_expr
 
         if e.item_expr
 
           e.item_value = scope.evaluate e.item_expr
 
-          if e.item_value.class == Fixnum
-            e.item_value = [ e.item_value ]
+          if e.item_value.class == Integer
+            e.item_value = [e.item_value]
           elsif e.item_value.class == Array
-            if (e.item_value.select { |v| v.class != Fixnum }).length > 0
-              raise "Item array should be an array of numbers."
-            end
+            raise 'Item array should be an array of numbers.' unless (e.item_value.reject { |v| v.class == Integer }).empty?
           else
             raise "Item value should be an array of numbers or a number but it is an #{e.item_value.class}."
           end
 
         end
 
-        if e.type_expr
+        next unless e.type_expr
 
-          e.type_value = scope.evaluate e.type_expr
+        e.type_value = scope.evaluate e.type_expr
 
-          if e.type_value.class == String
-            e.type_value = [ e.type_value ]
-            e.quantity_value = [ e.quantity_value ] 
-          elsif e.type_value.class == Array
-            if (e.type_value.select { |v| v.class != String }).length > 0 ||
-               e.quantity_value.class != Array || 
-               (e.quantity_value.select { |q| q.class != Fixnum }).length > 0 ||
-               e.quantity_value.length != e.type_value.length
-              raise "Object type array should be an array of strings with a corresponding quantity array of Fixnums."
-            end
-          else
-            raise "Object type value should be an array of strings or a string but it is an #{e.type_value.class}."
+        if e.type_value.class == String
+          e.type_value = [e.type_value]
+          e.quantity_value = [e.quantity_value]
+        elsif e.type_value.class == Array
+          if !(e.type_value.reject { |v| v.class == String }).empty? ||
+             e.quantity_value.class != Array ||
+             !(e.quantity_value.reject { |q| q.class == Integer }).empty? ||
+             e.quantity_value.length != e.type_value.length
+            raise 'Object type array should be an array of strings with a corresponding quantity array of Fixnums.'
           end
-
+        else
+          raise "Object type value should be an array of strings or a string but it is an #{e.type_value.class}."
         end
 
       end
@@ -95,13 +88,11 @@ module Plankton
           e.item_list = []
           e.item_value.each do |item_id|
             i = Item.find(item_id)
-            unless i
-              raise "Could not find item with id = #{item_id}."
-            end
+            raise "Could not find item with id = #{item_id}." unless i
             description = {
               id: item_id,
               objecttype: i.object_type.name,
-              quantity: 1, 
+              quantity: 1,
               inuse: i.inuse,
               var: e.var,
               location: i.location
@@ -121,7 +112,7 @@ module Plankton
 
           e.type_value.each do |type|
 
-            ob = ObjectType.find_by_name(type)
+            ob = ObjectType.find_by(name: type)
 
             # make a new object if one doesn't exist (and we're not in production mode)
             if !ob && Rails.env != 'production'
@@ -149,13 +140,11 @@ module Plankton
 
     end # pre_render
 
-
     def html
-      "<b>take</b>" + @entry_list.to_json
+      '<b>take</b>' + @entry_list.to_json
     end # html
 
-
-    def log var, r, scope, params
+    def log(var, r, scope, params)
 
       data = []
 
@@ -168,13 +157,12 @@ module Plankton
 
     end # log
 
-
-    def bt_execute scope, params
+    def bt_execute(scope, params)
 
       # Evalute @object_list in current scope
       pre_render scope, params
 
-      take = JSON.parse(params[:take],symbolize_names: true );
+      take = JSON.parse(params[:take], symbolize_names: true)
       puts "TAKE: #{take}"
 
       i = 0
@@ -187,13 +175,13 @@ module Plankton
 
           j = 0
 
-          e.item_value.each do |item_id|
+          e.item_value.each do |_item_id|
 
             puts "Finding #{take[i][j]}"
             item = Item.find(take[i][j][:id])
 
             if item.inuse == 0
-              result.push( pdl_item item )
+              result.push(pdl_item(item))
               item.inuse += 1
               item.save
             else
@@ -214,19 +202,19 @@ module Plankton
 
           j = 0
 
-          e.type_value.each do |type|
+          e.type_value.each do |_type|
 
             puts "#{i}, #{j}: #{take[i][j]}, quantity=#{e.quantity_value[j]}"
 
             item = Item.find(take[i][j][:id])
 
             if item.quantity - item.inuse >= e.quantity_value[j]
-              (1..(e.quantity_value[j])).each do |i|
-                result.push( pdl_item item )
+              (1..(e.quantity_value[j])).each do |_i|
+                result.push(pdl_item(item))
               end
               item.inuse += e.quantity_value[j]
               item.save
-            else 
+            else
               raise "Could not take #{e.type_value} (item #{item.id}) because it is in use (was it taken twice?)"
             end
 
@@ -241,15 +229,14 @@ module Plankton
 
         end
 
-        scope.set( e.var.to_sym, result )
+        scope.set(e.var.to_sym, result)
         log e.var, result, scope, params
 
         i += 1
 
-    end
+      end
 
     end # bt_execute
-
 
   end
 

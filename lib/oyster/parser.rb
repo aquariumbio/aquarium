@@ -2,15 +2,15 @@ module Oyster
 
   class Parser < Lang::Parser
 
-    def initialize path, contents
-      @tok = Lang::Tokenizer.new contents 
+    def initialize(path, contents)
+      @tok = Lang::Tokenizer.new contents
       @metacol = Metacol.new
       @path = path
       @default_repo = path.split('/')[0]
       functions
       time_functions
       super() # adds array, string, collection, sample functions
-    end   
+    end
 
     def functions
       add_function :completed, 1
@@ -20,7 +20,7 @@ module Oyster
       add_function :minutes_elapsed, 2
     end
 
-    def parse args = {}
+    def parse(args = {})
       @metacol.set_args args
       statements
       @metacol
@@ -32,25 +32,25 @@ module Oyster
 
         case @tok.current
 
-          when 'argument'
-            arguments
+        when 'argument'
+          arguments
 
-          when 'place'
-            place
+        when 'place'
+          place
 
-          when 'transition'
-            trans
+        when 'transition'
+          trans
 
-          when 'wire'
-            wire
+        when 'wire'
+          wire
 
+        else
+          if @tok.next == '='
+            a = assign
+            @metacol.scope.set a[:lhs], @metacol.scope.evaluate(a[:rhs])
           else
-            if @tok.next == '='
-              a = assign
-              @metacol.scope.set a[:lhs], @metacol.scope.evaluate( a[:rhs] )
-            else  
-              raise "Could not find a statement to parse at #{@tok.current}"
-            end
+            raise "Could not find a statement to parse at #{@tok.current}"
+          end
 
         end
 
@@ -62,26 +62,17 @@ module Oyster
 
       while @tok.current != 'EOF'
 
-        while @tok.current != 'EOF' && @tok.current != 'argument' && @tok.current != 'place'
-          @tok.eat
-        end
+        @tok.eat while @tok.current != 'EOF' && @tok.current != 'argument' && @tok.current != 'place'
 
-        if @tok.current == 'place'
-          while @tok.current != 'EOF'
-            @tok.eat
-          end
-        end
+        @tok.eat while @tok.current != 'EOF' if @tok.current == 'place'
 
-        if @tok.current == 'argument'
-          arguments
-        end
+        arguments if @tok.current == 'argument'
 
       end
 
       @metacol.arguments
 
     end # arguments_only
-
 
   end
 

@@ -6,7 +6,7 @@ module Plankton
 
     attr_reader :type, :data, :log_file
 
-    def initialize type, data, log_file, options = {}
+    def initialize(type, data, log_file, options = {})
 
       super 'log', options
       @type = type
@@ -19,7 +19,7 @@ module Plankton
 
     # RAILS ###################################################################################################
 
-    def bt_execute scope, params
+    def bt_execute(scope, params)
 
       data_value = scope.evaluate @data
 
