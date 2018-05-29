@@ -3,13 +3,6 @@
 require File.expand_path('boot', __dir__)
 
 require 'rails/all'
-
-require './lib/pdl/core/pdl'
-require './lib/lang/lang'
-require './lib/plankton/plankton'
-require './lib/oyster/oyster'
-require './lib/repo/repo'
-require './lib/manta/manta'
 require './lib/krill/krill'
 
 if defined?(Bundler)
@@ -86,6 +79,7 @@ module Bioturk
       Job.count if Job.table_exists?
       Sample.count if Sample.table_exists?
       Item.count if Item.table_exists?
+      Collection.class
       User.count if User.table_exists?
       Metacol.count if Metacol.table_exists?
       Group.count if Group.table_exists?

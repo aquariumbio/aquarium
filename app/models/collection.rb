@@ -124,7 +124,7 @@ class Collection < Item
   #
   # @return [Array<Array<Fixnum>>] Array of form [[r1, c1], [r2, c2]]
   def get_non_empty
-    reject { |x| x == EMPTY }
+    select { |x| x != EMPTY }
   end
 
   # Returns the number of non empty slots in the matrix

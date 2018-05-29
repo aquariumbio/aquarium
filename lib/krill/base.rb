@@ -58,29 +58,6 @@ module Krill
       Job.find(jid).reload.append_step operation: 'error', message: e.to_s, backtrace: e.backtrace[0, 10]
     end
 
-    def set_task_status(task, status)
-
-      old_status = task.status
-      task.status = status
-      task.save validate: false
-
-      task.notify "Attempt to change status from '#{old_status}' to '#{status}' failed: #{task.full_messages.join(',')}", job_id: jid unless task.errors.empty?
-
-      touch = Touch.new
-      touch.job_id = jid
-      touch.task_id = task.id
-      touch.save
-
-      begin
-        task.charge(Job.find(jid), status)
-      rescue Exception => e
-        puts "Could not charge for task #{task.id}, job #{jid}, '#{status}': #{e}"
-      end
-
-      task
-
-    end
-
     private
 
     def simulated_input_for(page)

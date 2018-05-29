@@ -4,81 +4,6 @@ class KrillController < ApplicationController
 
   before_filter :signed_in_user
 
-  def arguments
-
-    begin
-      @path = params[:path]
-      @sha = if params[:sha]
-               params[:sha]
-             else
-               Repo.version @path
-             end
-      @content = Repo.contents @path, @sha
-    rescue Exception => e
-      flash[:error] = e.to_s + '. ' + e.backtrace[0].to_s
-      return redirect_to repo_list_path
-    end
-
-    if params[:from]
-
-      begin
-        @args = JSON.parse(Job.find(params[:from].to_i).state, symbolize_names: true).last[:rval]
-        argval = JSON.parse(Job.find(params[:from].to_i).state, symbolize_names: true).last[:rval]
-      rescue Exception => e
-        flash[:error] = "Could not parse arguments from job #{params[:from]}" + e.to_s
-        return redirect_to repo_list_path
-      end
-
-      # return redirect_to krill_submit_path(path: @path, sha: @sha, args: argval.to_json)
-
-    else
-
-      begin
-        @args = Krill.get_arguments @content
-      rescue Exception => e
-        flash[:error] = ("<b>Could not parse '#{@path}'</b><br />" + e.to_s.gsub(/\n/, '<br />').gsub(/\(eval\):/, 'line ')).html_safe
-        return redirect_to repo_list_path
-      end
-
-    end
-
-  end
-
-  def submit
-
-    # Parse arguments
-    begin
-      @arguments = JSON.parse params[:args], symbolize_names: true
-    rescue Exception => e
-      flash[:error] = 'Error parsing arguments: ' + e.to_s
-      return redirect_to krill_arguments_path(path: params[:path], sha: params[:sha], args: params[:args])
-    end
-
-    # Determine group and timing info
-    @info = JSON.parse(params[:info], symbolize_names: true)
-    @desired = Time.at(@info[:date])
-    @window = @info[:window].to_f
-    @latest = Time.at(@desired + @window.hours)
-    @group = Group.find_by_name(@info[:group])
-
-    # Make a new job
-    @job = Job.new
-    @job.path = params[:path]
-    @job.sha = params[:sha]
-
-    # Set up job parameters
-    @job.pc = Job.NOT_STARTED
-    @job.set_arguments @arguments
-    @job.group_id = @group.id
-    @job.submitted_by = current_user.id
-    @job.desired_start_time = @desired
-    @job.latest_start_time = @latest
-
-    # Save the job
-    @job.save
-
-  end
-
   def start
 
     @job = Job.find(params[:job])
@@ -286,36 +211,6 @@ class KrillController < ApplicationController
 
   end
 
-  def ui
-
-    @job = Job.find(params[:job])
-
-    if @job.pc == Job.NOT_STARTED
-      redirect_to krill_error_path(job: @job.id, message: 'interpreter: Job not started')
-      return
-    end
-
-    render layout: 'aq2-plain'
-
-  end
-
-  def inventory
-
-    job = Job.find(params[:job])
-
-    takes = job.takes.includes(item: %i[object_type sample]).collect do |t|
-      t.item.all_attributes
-    end
-
-    touches = (job.touches.includes(item: %i[object_type sample]).reject do |t|
-      !t.item_id || (takes.collect { |i| i[:id] }).include?(t.item_id)
-    end).collect do |t|
-      t.item.all_attributes
-    end
-
-    render json: { takes: takes, touches: touches }
-
-  end
 
   def upload
 

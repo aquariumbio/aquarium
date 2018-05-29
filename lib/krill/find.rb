@@ -20,7 +20,6 @@ module Krill
           sample: Sample.includes(:sample_type),
           sample_type: SampleType.includes,
           object_type: ObjectType.includes,
-          task: Task.includes(:task_prototype),
           group: Group.all,
           upload: Upload
         }
@@ -56,8 +55,7 @@ module Krill
 
       reps =  { object_type: :object_types,
                 sample: :samples,
-                sample_type: :sample_types,
-                task_prototype: :task_prototypes }
+                sample_type: :sample_types}
 
       spec.each do |k, v|
         if reps.key? k
