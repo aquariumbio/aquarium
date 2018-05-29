@@ -4,7 +4,6 @@ class Account < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :budget
-  belongs_to :task
   belongs_to :job
   belongs_to :operation
   has_many :first_row_logs,  class_name: 'AccountLog', foreign_key: :row1

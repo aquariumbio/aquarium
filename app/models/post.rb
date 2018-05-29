@@ -12,7 +12,7 @@ class Post < ActiveRecord::Base
   has_many :responses, class_name: 'Post', foreign_key: 'parent_id'
   belongs_to :parent,  class_name: 'Post'
 
-  default_scope eager_load(:user, responses: %i[user post_associations], post_associations: %i[job task item sample])
+  default_scope eager_load(:user, responses: %i[user post_associations], post_associations: %i[job item sample])
 
   after_create :update_root
 

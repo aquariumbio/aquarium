@@ -280,7 +280,6 @@ class KrillController < ApplicationController
     @history = @job.state.gsub('Infinity', '"Inf"')
     @rval = @job.return_value
     @touches = @job.touches.select(&:item_id).collect(&:item_id)
-    @tasks = @job.touches.select(&:task).collect(&:task).uniq(&:id)
     @inventory = @job.takes.collect(&:item_id)
 
     render layout: 'aq2'
@@ -357,13 +356,6 @@ class KrillController < ApplicationController
   def uploads
 
     render json: { uploads: Job.find(params[:job]).uploads.collect { |u| { id: u.id, name: u.name, url: u.url } } }
-
-  end
-
-  def tasks
-
-    job = Job.find(params[:job])
-    render json: { tasks: (job.touches.includes(task: [:task_prototype]).select(&:task_id).collect { |t| { id: t.task.id, name: t.task.name, type: t.task.task_prototype.name } }).uniq }
 
   end
 

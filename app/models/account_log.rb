@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AccountLog < ActiveRecord::Base
-  belongs_to :task
   belongs_to :user
   belongs_to :first_row, class_name: 'Account', foreign_key: :row1
   belongs_to :second_row, class_name: 'Account', foreign_key: :row2

@@ -29,18 +29,6 @@ class UsersController < ApplicationController
 
   end
 
-  def billing
-
-    @user = User.find(params[:id])
-    @report = TaskPrototype.cost_report @user.id
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @report }
-    end
-
-  end
-
   def create
 
     if !params[:change_password]

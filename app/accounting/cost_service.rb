@@ -22,7 +22,6 @@ module CostService
         amount: amount,
         budget_id: budget.id,
         description: description(job, status),
-        task_id: id,
         job_id: job.id,
         transaction_type: 'debit'
       )

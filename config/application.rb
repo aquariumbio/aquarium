@@ -93,8 +93,6 @@ module Bioturk
       Wizard.count if Wizard.table_exists?
       SampleType.count if SampleType.table_exists?
       ObjectType.count if ObjectType.table_exists?
-      TaskPrototype.count if TaskPrototype.table_exists?
-      Task.count if Task.table_exists?
       Parameter.count if Parameter.table_exists?
       DataAssociation.count if DataAssociation.table_exists?
       Upload.count if Upload.table_exists?

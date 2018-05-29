@@ -105,11 +105,6 @@ Bioturk::Application.routes.draw do
   get '/accounts/:uid',                          to: 'accounts#index'
   get '/accounts/:uid/:month/:year',             to: 'accounts#index'
 
-  get '/sample_tree/samples',                    to: 'sample_tree#samples'
-  get '/sample_tree/jobs/:id',                   to: 'sample_tree#jobs'
-  get '/sample_tree/annotate/:id/:note',         to: 'sample_tree#annotate'
-  get '/sample_tree/:id',                        to: 'sample_tree#show'
-
   get 'containers_list',                         to: 'object_types#containers'
   get 'collection_containers_list',              to: 'object_types#collection_containers'
   get 'sample_types_list',                       to: 'object_types#sample_types'
@@ -133,19 +128,8 @@ Bioturk::Application.routes.draw do
   get 'finder/sample_info'
   get 'finder/type'
 
-  match 'rich_id', to: 'tasks#rich_id'
   match 'item_list', to: 'items#item_list'
   match 'upload', to: 'jobs#upload'
-
-  match 'tasks/upload', to: 'tasks#upload'
-  match 'tasks/list/:offset', to: 'tasks#list'
-
-  resources :tasks
-  resources :task_prototypes
-
-  match 'notifications', to: 'tasks#notifications'
-  match 'notification_list', to: 'tasks#notification_list'
-  match 'read', to: 'tasks#read'
 
   get 'metacols/draw'
   match 'viewer', to: 'metacols#viewer'
@@ -207,7 +191,6 @@ Bioturk::Application.routes.draw do
   get 'krill/jobs'
   post 'krill/upload'
   get 'krill/uploads'
-  get 'krill/tasks'
   post 'krill/attach'
 
   get 'stats/jobs'
@@ -282,15 +265,12 @@ Bioturk::Application.routes.draw do
   get '/delete_inventory', to: 'object_types#delete_inventory'
   get '/copy_inventory_from_production', to: 'object_types#copy_inventory_from_production'
   get '/copy_users_from_production', to: 'users#copy_users_from_production'
-  get '/copy_tasks_from_production', to: 'tasks#copy_tasks_from_production'
-  get '/update_task_status', to: 'tasks#update_status'
 
   match '/signup', to: 'users#new'
   match '/password', to: 'users#password'
 
   get '/users/active',        to: 'users#active'
   get 'users/current',        to: 'users#current'
-  get 'users/billing/:id',    to: 'users#billing'
   put 'users/password',       to: 'users#update_password'
 
   resources :users do

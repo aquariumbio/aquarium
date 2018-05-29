@@ -37,17 +37,6 @@ class StaticPagesController < ApplicationController
     end
   end
 
-  def cost_report
-
-    @report = TaskPrototype.cost_report
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @report }
-    end
-
-  end
-
   def protocol_usage
 
     @since = params[:since] ? params[:since] : 30

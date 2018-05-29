@@ -12,7 +12,6 @@ class User < ActiveRecord::Base
   has_many :metacols
   has_many :cart_items
   has_many :memberships
-  has_many :tasks
   has_many :account
   has_many :user_budget_associations
   has_many :budgets, through: :user_budget_associations
@@ -91,10 +90,10 @@ class User < ActiveRecord::Base
 
     return false if parameters.empty?
 
-    email  = parameters.find { |p| p.key == 'email' && p.value && !p.value.empty? }.nil?
-    phone  = parameters.find { |p| p.key == 'phone' && p.value && !p.value.empty? }.nil?
-    biofab = parameters.find { |p| p.key == 'biofab' && p.value && p.value == 'true' }.nil?
-    aq     = parameters.find { |p| p.key == 'aquarium' && p.value && p.value == 'true' }.nil?
+    email  = ! parameters.find { |p| p.key == 'email' && p.value && !p.value.empty? }.nil?
+    phone  = ! parameters.find { |p| p.key == 'phone' && p.value && !p.value.empty? }.nil?
+    biofab = ! parameters.find { |p| p.key == 'biofab' && p.value && p.value == 'true' }.nil?
+    aq     = ! parameters.find { |p| p.key == 'aquarium' && p.value && p.value == 'true' }.nil?
 
     email && phone && biofab && aq
 

@@ -86,7 +86,6 @@ class AccountsController < ApplicationController
           amount: params[:amount].to_f,
           budget_id: budget.id,
           description: description,
-          task_id: -1,
           job_id: -1,
           transaction_type: 'credit'
         )

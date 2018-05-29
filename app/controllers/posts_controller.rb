@@ -9,7 +9,7 @@ class PostsController < ApplicationController
     if params[:klass]
 
       # Called on a specific object
-      #  klass (job,item,sample,task)
+      #  klass (job,item,sample)
       #  key (id or sha)
 
       field = (params[:klass].downcase + '_id').to_sym

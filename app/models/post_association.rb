@@ -2,15 +2,14 @@
 
 class PostAssociation < ActiveRecord::Base
 
-  attr_accessible :item_id, :job_id, :post_id, :sample_id, :task_id, :sha
+  attr_accessible :item_id, :job_id, :post_id, :sample_id, :sha
 
   belongs_to :job
   belongs_to :sample
   belongs_to :item
-  belongs_to :task
   belongs_to :post
 
-  default_scope eager_load(:job, :item, :sample, :task)
+  default_scope eager_load(:job, :item, :sample)
 
   def self.get(field, key)
 
@@ -30,8 +29,6 @@ class PostAssociation < ActiveRecord::Base
       { type: 'Job', id: job.id, path: "/jobs/#{job.id}" }
     elsif item
       { type: 'Item', id: item.id, path: "/items/#{item.id}" }
-    elsif task
-      { type: 'Task', id: task.id, path: "/tasks/#{task.id}" }
     elsif sample
       { type: 'Sample', id: sample.id, path: "/samples/#{sample.id}" }
     elsif sha

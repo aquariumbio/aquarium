@@ -58,27 +58,3 @@ Krill.prototype.uploads = function() {
     });
 
 }
-
-Krill.prototype.tasks = function() {
-
-    var that = this;
-
-    $.ajax({
-
-        url: 'tasks?job=' + that.job,
-
-    }).done(function(data){
-
-        var ul = $('<ul></ul>').addClass('krill-associations-tasks-list');
-
-        for ( var i in data.tasks ) {
-            ul.append(
-                $('<li><a href="/tasks/'+data.tasks[i].id +'"">' + data.tasks[i].id + ". " + data.tasks[i].name + "</a> (" + data.tasks[i].type + ')</li>')
-            )
-        }
-
-        that.tasks_tag.append(ul);
-
-    });
-
-}
