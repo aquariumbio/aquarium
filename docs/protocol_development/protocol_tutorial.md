@@ -198,55 +198,60 @@ There are several other style functions that can be used in a `show`-block that 
 
 ## Working with Samples
 
-In Aquarium, protocols work with an `Item` that is a unique instance of a sample in a container.
-Each sample is represented by a `Sample` object, and containers by an `ObjectType` object.
-The item is the physical object that is manipulated.
+In Aquarium, protocols work with an `Item` that is a unique instance of a sample in a container. Each sample is represented by a `Sample` object, and containers by an `ObjectType` object. The item is the physical object that is manipulated.
 
-As an example, a W303&alpha; yeast culture in a petri dish on the lab bench would be represented as an `Item` where the `Sample` is 'W303alpha', the `ObjectType` is 'Yeast Plate', and the `location` is 'Lab bench'.
+As an example, a pMOD8 plasmid streaked out onto a plate sitting on a lab bench would be represented as an `Item`, where the `Sample` is ‘pMOD8,’ the `ObjectType` is ‘E. coli Plate of Plasmid,’ and the location is ‘Lab Bench.’ The `SampleType` is ‘Plasmid.’
 
-These objects are managed in the Aquarium inventory, and we need to make queries to access them.
-To find the sample for W303&alpha; we can make the query
+These objects are managed in the Aquarium inventory, so to access them, you need to make queries.
+
+To find the sample for pMOD8, you can make the query:
 
 ```ruby
-Sample.find_by_name('W303alpha')
+Sample.find_by_name('pMOD8')
 ```
 
-Once we have an object, we can use the record identifier of the object in other queries.
-Continuing our example, we can look for all `Items` with sample W303&alpha; and container 'Yeast Plate' located on the bench using
+Once you have an object, you can use the record identifier of the object in other queries.
+
+Continuing our example, we can look for all `Items` with sample pMOD8 and container 'E. coli Plate of Plasmid' (i.e., the pMOD8 has been plated) located on the bench using the following query: 
 
 ```ruby
-Item.where(
-  sample_id: Sample.find_by_name('W303alpha').id,
-  object_type_id: ObjectType.find_by_name('Yeast Plate').id
+plate = Item.where(
+  sample_id: Sample.find_by_name('pMOD8').id,
+  object_type_id: ObjectType.find_by_name('E. coli Plate of Plasmid').id
   location: 'Bench'
   )
 ```
 
-which returns a list of `Item` objects.
+which returns a list of one `Item` object. To access it, you would say plate.first (.where always returns list for the sake of consistency, even if there’s only one object within the database that matches your query) . 
 
-We want our protocols to work with particular items, and they wont generally be on the bench.
-So, the item we want may be in a -80C freezer with location `M80C.2.0.21` (see the [locations reference](locations.md) for an explanation).
-This query
+Let’s say you’re interested in performing an _E. coli_ transformation. This means you also need Competent Cell aliquots. Those are located in the -80C freezer and are grouped into a batch, or collection.
+
+You can think of a collection as an item that has separate parts. Using the example of DH5alpha comp cells: The entire batch is represented under one item number — say, 67890 — but that item has n number of parts, one for each aliquot. In Aquarium, collections are represented using a matrix, or 2D array. 
+
+Why are DH5alpha comp cells represented as a batch rather than single, distinct items like a tube of plasmid? To make the decision about whether you should represent an aliquot as a batch or a distinct item, a good rule of thumb is asking yourself: Do I care which specific, physical aliquot (or plate, overnight, etc.) I use of this sample? 
+
+If the answer is yes — e.g., you have ten tubes of the sample pMOD8, but you want the one that has a concentration of 250 ng/uL — you should probably use an item to represent it. If the answer is no — e.g., you make a batch of seventy DH5alpha competent cell aliquots and don’t care which one you pull out of the freezer any time you want to use one — you should probably use a collection to represent it. 
+
+Suppose you make this query: 
 
 ```ruby
-Item.where(
-  sample_id: Sample.find_by_name('W303alpha').id,
+batch = Item.where(
+  sample_id: Sample.find_by_name('DH5alpha').id,
   location: "M80C.2.0.21"
-  )
+  ).first
 ```
 
-returns a list with a single item with object type `"Yeast Competent Cell"`.
+This returns a single item with object type `"E. coli Comp Cell Batch"` (since, after the .where() method, there’s a .first, which returns the first item in the list). 
 
-TODO: introduce collections here
+If the object type of an item has handler 'collection' (NOTE: has ‘handler’ been defined?), it will be useful to have access to the collection methods.
 
-If the object type of an item has handler 'collection', it will be useful to have access to the collection methods.
-To promote an item `i` to a collection, use
+To promote the item `batch` to a collection, use
 
 ```ruby
-c = collection_from i
+c = collection_from batch
 ```
 
-And likewise, for a list of items
+And likewise, for a list of items, `items`: 
 
 ```ruby
 colls = items.map { |i| collection_from i }
