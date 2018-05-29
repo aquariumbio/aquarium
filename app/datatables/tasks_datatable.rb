@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TasksDatatable < Datatable
 
   def initialize(view, status, tp)

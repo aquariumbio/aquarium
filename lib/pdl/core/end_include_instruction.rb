@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class EndIncludeInstruction < Instruction
 
   attr_reader :return_symbol, :return_value

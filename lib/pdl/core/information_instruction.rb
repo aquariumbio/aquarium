@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InformationInstruction < Instruction
 
   attr_reader :content

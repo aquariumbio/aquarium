@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Module that includes status-related methods for {Operation}
 
 module OperationStatus

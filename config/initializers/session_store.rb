@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Be sure to restart your server when you modify this file.
 
 Bioturk::Application.config.session_store :cookie_store, key: "_aquarium_#{Bioturk::Application.environment_name}_session"

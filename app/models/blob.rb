@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Blob < ActiveRecord::Base
 
   # Note: Blobs used to be used to cache local copies of things from github or local files. The new

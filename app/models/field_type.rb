@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @api krill
 class FieldType < ActiveRecord::Base
 

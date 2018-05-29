@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def make_user(name, login, password, opts = {})
   options = { admin: false }. merge opts
 

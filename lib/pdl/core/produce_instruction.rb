@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProduceInstruction < Instruction
 
   attr_reader :object_type_name, :quantity, :release, :var, :item, :location

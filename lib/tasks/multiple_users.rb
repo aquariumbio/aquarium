@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 names = [
   %w[Borgman Joshua],
   %w[Chavali Venkata],

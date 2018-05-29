@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'interface'
 require_relative 'place'
 require_relative 'transition'

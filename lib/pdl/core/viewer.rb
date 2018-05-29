@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InformationInstruction
   def to_html
     @content.to_s

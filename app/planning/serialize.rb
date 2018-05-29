@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Serialize
 
   def self.serialize_fv(fv)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Oyster
 
   def self.get_sha(path)

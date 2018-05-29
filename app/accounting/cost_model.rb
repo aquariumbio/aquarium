@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CostModel
 
   def cost_model(protocol, status)

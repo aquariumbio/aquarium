@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ArgumentInstruction < Instruction
 
   attr_reader :var, :type, :description

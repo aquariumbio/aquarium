@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PostAssociation < ActiveRecord::Base
 
   attr_accessible :item_id, :job_id, :post_id, :sample_id, :task_id, :sha

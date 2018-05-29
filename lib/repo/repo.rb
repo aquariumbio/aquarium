@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Repo
 
   def self.base(directory)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :ci do
 
   require 'rubocop/rake_task'

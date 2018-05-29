@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 puts File.dirname(__FILE__).to_s
 
 require_relative 'protocol'

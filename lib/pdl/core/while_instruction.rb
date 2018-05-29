@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WhileInstruction < Instruction
 
   attr_reader :true_pc, :false_pc

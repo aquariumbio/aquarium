@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def run
 
   while Operation.where(status: 'pending').count > 0

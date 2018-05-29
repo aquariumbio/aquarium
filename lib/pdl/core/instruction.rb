@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Instruction
 
   attr_reader :name, :renderable, :flash, :console_messages, :xml

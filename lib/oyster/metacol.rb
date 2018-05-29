@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Oyster
 
   class Argument # used for compatability with protocol arguments

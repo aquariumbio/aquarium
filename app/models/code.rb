@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Represents the version of a versioned object of "code"
 class Code < ActiveRecord::Base
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AccountLog < ActiveRecord::Base
   belongs_to :task
   belongs_to :user

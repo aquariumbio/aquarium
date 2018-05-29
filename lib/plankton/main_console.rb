@@ -1,5 +1,7 @@
 
 
+# frozen_string_literal: true
+
 path = '/Users/ericklavins/Development/protocols/plankton/sandbox/printer_include_status.pl'
 contents = File.read path
 p = Plankton::Parser.new(path, contents)

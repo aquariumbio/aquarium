@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Bioturk::Application.configure do
   # Paperclip => S3
   config.paperclip_defaults = {

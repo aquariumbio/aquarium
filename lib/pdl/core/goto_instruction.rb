@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GotoInstruction < Instruction
 
   attr_reader :destination

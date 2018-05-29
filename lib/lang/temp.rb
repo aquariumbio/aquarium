@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def complete(x)
 
   temp = x.attributes.symbolize_keys

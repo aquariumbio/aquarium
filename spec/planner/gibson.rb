@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def plan_gibson(n)
 
   gibson = OperationType.find_by_name 'Gibson Assembly'

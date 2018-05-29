@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Associates and manages {DataAssociation}s
 # @api krill
 

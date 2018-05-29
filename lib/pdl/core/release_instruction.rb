@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ReleaseInstruction < Instruction
 
   attr_reader :expr, :item_list

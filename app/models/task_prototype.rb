@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TaskPrototype < ActiveRecord::Base
 
   attr_accessible :description, :name, :prototype, :status_options, :validator, :cost, :metacol

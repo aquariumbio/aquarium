@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require './lib/pdl'
 require 'net/http'
 require 'json'

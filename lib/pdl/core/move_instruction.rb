@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MoveInstruction < Instruction
 
   def initialize(item_expr, location_expr, var, options = {})

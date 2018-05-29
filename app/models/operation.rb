@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Class that represents an operation in the lab
 # Some very important methods include {#input}, {#output}, {#error}, {#pass}
 # @api krill

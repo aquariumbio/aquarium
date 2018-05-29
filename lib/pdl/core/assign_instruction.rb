@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AssignInstruction < Instruction
 
   attr_reader :var, :value

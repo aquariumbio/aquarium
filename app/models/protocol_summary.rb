@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProtocolSummary
 
   attr_reader :protocol, :sha

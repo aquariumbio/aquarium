@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
 
   # Returns the full title on a per-page basis.

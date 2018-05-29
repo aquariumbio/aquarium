@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Interpreter
 
   def initialize(protocol, arguments)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PlanCopier
 
   def initialize(plan_id)

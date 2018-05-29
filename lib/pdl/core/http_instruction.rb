@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class HTTPInstruction < Instruction
 
   attr_reader :info_expr

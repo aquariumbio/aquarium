@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def separate_string(s)
   t = (s.gsub /(%\{[^\}]*\})/, '__PLUS__\1__PLUS__').split('__PLUS__')
   r = '""'

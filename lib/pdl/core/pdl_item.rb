@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # For PDL interpreter, need to know item info
 #

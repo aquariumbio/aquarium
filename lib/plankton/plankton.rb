@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Language Tools
 require_relative '../lang/lang'
 

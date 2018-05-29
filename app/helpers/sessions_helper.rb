@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SessionsHelper
 
   def remember_token_symbol

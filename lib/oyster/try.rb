@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module A
 
   def self.f(x)

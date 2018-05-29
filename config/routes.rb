@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Bioturk::Application.routes.draw do
 
   resources :timings, only: %i[update create]

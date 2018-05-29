@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TaskNotificationDatatable < Datatable
 
   def initialize(view)

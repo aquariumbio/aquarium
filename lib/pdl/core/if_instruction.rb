@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class IfInstruction < Instruction
 
   attr_reader :end_then_pc, :then_pc, :else_pc

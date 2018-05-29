@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateTouches < ActiveRecord::Migration
   def change
     create_table :touches do |t|

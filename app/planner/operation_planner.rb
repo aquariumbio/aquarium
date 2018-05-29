@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module OperationPlanner
 
   def associate_plan(plan)

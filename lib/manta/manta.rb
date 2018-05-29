@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Manta
 
   def self.start(job, user, request, cookies, view = nil)

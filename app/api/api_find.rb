@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApiFind
 
   def pluralize_table_names(spec)
