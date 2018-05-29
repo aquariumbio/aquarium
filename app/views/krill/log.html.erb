@@ -1,0 +1,80 @@
+<% provide(:title, "Job #{@job.id}" ) %>
+
+<%= content_for :controller do %>noCtrl<% end %>
+
+<% content_for :specific_title do %>
+  &rang; <%= @job.operations.length > 0 ? @job.operations.first.operation_type.name : 'Unknown Operation Type' %>
+<% end %>
+
+<% content_for :sidebar do %>
+  <%= render partial: 'summary_log' %>
+<% end %>
+
+<% content_for :action1 do %>
+  <%= link_to "Previous", '/jobs/' + (@job.id-1).to_s, class: "md-button md-raised" %>
+<% end %>
+
+<% content_for :action2 do %>
+  <%= link_to "Next", '/jobs/' + (@job.id+1).to_s, class: "md-button md-raised" %>
+<% end %>
+
+
+<% content_for :action3 do %>
+  <% if current_user && current_user.is_admin %>
+    <% unless @job.pc == Job.NOT_STARTED %>
+      <a href='/technician/<%= @job.id %>' class='md-button md-raised md-primary'>Steps</a>&nbsp;
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= content_for :main do %>
+
+  <%= render partial: 'log_templates' %>
+
+  <div flex layout-padding id='history'>
+    <div id='history-json'></div>
+  </div>
+
+  <script>
+    $(function() {
+      <% if @job.pc != Job.NOT_STARTED %>
+        kl = new KrillLog(JSON.parse('<%= escape_javascript(@history.html_safe) %>'));
+        kl.render($('#history-json'));
+      <% else %>
+        $('#history').append('<p>This job has not yet started.</p>')
+                     .append('<a class="md-button md-raised md-primary" href="/krill/start?job='+<%= @job.id %>+'">Start</a>')
+      <% end %>
+      $('#send').click(function() {
+        window.location = '/repo/list?from=' + '<%= @job.id %>';
+      });
+      $('#upload').fileupload({
+        dataType: 'json',
+        done: function (e, data) {
+          if ( data.result.error ) {
+            $('#upload-button').html('Attach File').prop('disabled',false);
+            $('#upload-result-list').append('<li>Upload failed: ' + data.result.error + "</li>");
+            $('#upload-result').css('display','block');
+          } else {
+            window.location = "/krill/log?job=<%= @job.id %>&upload=1"
+          }
+        },
+        add: function (e,data) {
+          $('#upload-button').html('Uploading...').prop('disabled',true);
+          data.submit();
+        },
+        fail: function(e,data) {
+          $('#upload-button').html('Attach File').prop('disabled',false);
+          $('#upload-result').html('Upload failed...').css('display','block');
+        }
+      });
+      $('#upload-button').click(function() {
+        $('#upload').click();
+      });
+      <% if params[:upload] %>
+        $('#tabs li:eq(1) a').tab('show');
+      <% end %>
+      showhide();
+    });
+  </script>
+
+<% end %>

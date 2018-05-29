@@ -1,0 +1,33 @@
+<script type='template' id='upload-template'> 
+  <li>
+    <a href="/upload?id={{= id }}" target='{{= name }}'>{{= name}}</a>
+  </li>
+</script>
+
+<script type='template' id='select-template'> 
+  <li>
+    <span>{{= label }} <i class='icon-arrow-right'></i> <b>{{= answer }}</b></span>
+  </li>
+</script>
+
+<script type='template' id='take-template'>
+  <li>
+    <a href="/items/{{= id }}">{{= id }}</a>: {{= name }}
+    {{ if ( sample ) { }}
+      ({{= sample }})
+    {{ } }}
+    from <span>{{= location }}</span>
+  </li>
+</script>
+
+<script type='template' id='result-template'>
+  <li>
+    <div class='krill-log-step'>
+      <div class='krill-step-heading {{= klass }}'>
+              <span class='krill-log-time'>{{= time }}</span>      
+        <span class='krill-log-title'>{{= title }}</span>
+      </div>
+      <div class='krill-log-json'></rval>
+    </div>
+  </li>
+</script>

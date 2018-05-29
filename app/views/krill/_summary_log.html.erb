@@ -1,0 +1,62 @@
+<% protocol = ProtocolSummary.new({ protocol: @job.path, sha: @job.sha }) %>
+
+<div class='krill-log-summary'>
+
+  <md-subheader class="header md-no-sticky">
+    Summary
+  </md-subheader>
+
+  <p layout-padding>
+
+    Submitted by <a href='/users/<%= @submitter.id %>'><%= @submitter.name %></a><br>
+    For group <a href='/groups/<%= @group.id %>'><%= @group.name %></a><br>
+
+    <% if @performer %>
+      Performed by <a href='/users/<%= @performer.id %>'><%= @performer.name %></a><br>
+    <% end %>
+
+    Submitted <%= @job.created_at.to_formatted_s(:long) %><br>
+
+    <% if @job.pc == Job.COMPLETED %>
+      Completed <%= @job.updated_at.to_formatted_s(:long) %> 
+    <% elsif @job.pc == Job.NOT_STARTED %>
+      Pending
+    <% else %>
+      Running
+    <% end %>
+
+  </p>
+
+  <md-subheader class="header md-no-sticky">
+    Operations
+  </md-subheader>
+
+  <ul class='upload-list' layout-padding>
+    <% @job.operations.each do |op| %>   
+      <% if op.plan %>    
+        <li>
+          <span class="name"><%= op.id %> from plan <a href="/launcher?plan_id=<%= op.plan.id %>"><%= op.plan.id %></span>
+          (<span class="login"><%= link_to op.user.login, op.user %></span>)
+        </li>
+      <% end %>    
+    <% end %>
+  </ul>
+
+  <% if @job.uploads.length > 0 %>
+
+    <md-subheader class="header md-no-sticky">
+      Uploads
+    </md-subheader>
+
+    <ul class='summary-list' layout-padding>
+      <% @job.uploads.each do |u| %>
+        <li>
+          <span class="name"><%= u.upload_file_name %></span>
+          <span class="size">(<%= number_to_human_size(u.upload_file_size) %>)</span>
+        </li>
+      <% end %>
+    </ul>
+
+  <% end %>
+
+</div>
