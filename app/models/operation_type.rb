@@ -73,9 +73,6 @@ class OperationType < ActiveRecord::Base
     job = Job.new
 
     job.path = 'operation.rb'
-    job.sha = nil # lame, but this is how I signal to the krill manager
-    # that this is job is associated with an operation type
-
     job.pc = Job.NOT_STARTED
     job.set_arguments(operation_type_id: id)
     job.group_id = group.id

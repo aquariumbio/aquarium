@@ -4,7 +4,7 @@ class Job < ActiveRecord::Base
 
   include JobOperations
 
-  attr_accessible :arguments, :sha, :state, :user_id, :pc, :submitted_by, :group_id,
+  attr_accessible :arguments, :state, :user_id, :pc, :submitted_by, :group_id,
                   :desired_start_time, :latest_start_time, :metacol_id, :successor
 
   has_many :job_associations

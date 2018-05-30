@@ -79,9 +79,7 @@ module Bioturk
       Job.count if Job.table_exists?
       Sample.count if Sample.table_exists?
       Item.count if Item.table_exists?
-      Collection.class
       User.count if User.table_exists?
-      Metacol.count if Metacol.table_exists?
       Group.count if Group.table_exists?
       Locator.count if Locator.table_exists?
       Wizard.count if Wizard.table_exists?

@@ -22,9 +22,7 @@ module Krill
       @jid = jid
       @job = Job.find(jid)
 
-      if @job.sha
-        @code = Repo.contents @job.path, @job.sha, directory, branch
-      elsif !@job.operations.empty?
+      if !@job.operations.empty?
         @code = @job.operations.first.operation_type.code('protocol').content
       else
         raise "No path specified for job #{@job.id}. Cannot start."
