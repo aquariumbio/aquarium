@@ -315,6 +315,8 @@ This code first finds the sample “pMOD”, and then finds all the items that a
 
 Another important thing both `retrieve` and `take` do is “touch” the item, which allows us to keep a record of all the items used in a job. This is extremely useful for troubleshooting. 
 
+To put items away, you can use `release` (which is used in conjunction with take and takes the same arguments) and/or `operations.store` (which is used in conjunction with `operations.retrieve`).
+
 --- 
 
 TODO: use above, details from below
