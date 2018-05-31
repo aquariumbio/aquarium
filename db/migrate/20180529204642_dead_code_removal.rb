@@ -34,6 +34,16 @@ class DeadCodeRemoval < ActiveRecord::Migration
     drop_table :takes if table_exists? :takes 
     drop_table :touches if table_exists? :touches  
 
+    # delete posts and post_associations
+    drop_table :posts if table_exists? :posts 
+    drop_table :post_associations if table_exists? :post_associations      
+
+    # drop workflow stuff
+    drop_table :workflows if table_exists? :workflows 
+    drop_table :workflow_processes if table_exists? :workflow_processes
+    drop_table :workflow_threads if table_exists? :workflow_threads
+    drop_table :workflow_associations if table_exists? :workflow_associations
+
   end
 
 end
