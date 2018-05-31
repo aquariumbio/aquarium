@@ -123,22 +123,6 @@ class SamplesController < ApplicationController
     end
   end
 
-  def project
-
-    if !params[:name]
-
-      @projects = Sample.uniq.pluck(:project).sort
-
-    else
-
-      @samples = Sample.where('project = ?', params[:name]).sort do |a, b|
-        [a.sample_type.name, a.name] <=> [b.sample_type.name, b.name]
-      end
-
-    end
-
-  end
-
   def spreadsheet; end
 
   def schema(sample_type)

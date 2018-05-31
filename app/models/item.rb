@@ -11,9 +11,7 @@ class Item < ActiveRecord::Base
 
   belongs_to :object_type
   belongs_to :sample
-  has_many :touches
   has_one :part
-  has_many :takes
   has_one :locator, autosave: false
   has_many :post_associations
 

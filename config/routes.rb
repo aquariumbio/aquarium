@@ -114,32 +114,8 @@ Bioturk::Application.routes.draw do
   resources :posts, only: %i[index create]
   resources :wizards
 
-  match 'api', to: 'api#main'
-
-  get 'plugin/tester'
-  get 'plugin/show'
-  get 'plugin/ajax'
-
-  get 'finder/projects'
-  get 'finder/types'
-  get 'finder/samples'
-  get 'finder/containers'
-  get 'finder/items'
-  get 'finder/sample_info'
-  get 'finder/type'
-
   match 'item_list', to: 'items#item_list'
   match 'upload', to: 'jobs#upload'
-
-  get 'metacols/draw'
-  match 'viewer', to: 'metacols#viewer'
-
-  resources :metacols do
-    get 'arguments', on: :new
-    get 'narguments', on: :new
-    get 'launch', on: :new
-    get 'stop'
-  end
 
   get '/groups/names'
 
@@ -153,36 +129,18 @@ Bioturk::Application.routes.draw do
     end
   end
 
-  resources :cart_items, only: %i[index new destroy]
   resources :samples
   resources :sample_types
 
   match '/spreadsheet', to: 'samples#spreadsheet'
   match '/process_spreadsheet', to: 'samples#process_spreadsheet'
 
-  match 'interpreter/open_local_file', to: 'interpreter#open_local_file', via: [:post]
-
-  get 'interpreter/arguments'
-  get 'interpreter/narguments'
-  get 'interpreter/submit'
-  get 'interpreter/current'
-  get 'interpreter/advance'
-  get 'interpreter/abort'
-  get 'interpreter/cancel'
-  get 'interpreter/error'
-  get 'interpreter/release'
-  get 'interpreter/edit'
-  get 'interpreter/resubmit'
-
   get 'technician/:job_id', to: 'technician#index'
 
   get 'krill/debug/:id', to: 'krill#debug'
-#  get 'krill/arguments'
-#  get 'krill/submit'
   get 'krill/start'
   get 'krill/continue'
   get 'krill/log'
-#  get 'krill/ui'
   get 'krill/state'
   post 'krill/next'
   get 'krill/error'
@@ -209,20 +167,11 @@ Bioturk::Application.routes.draw do
   get 'jobs/summary'
   match 'joblist', to: 'jobs#joblist'
 
-  get 'protocol_tree/file'
-  get 'protocol_tree/recent'
-
-  get 'repo/list'
-  get 'repo/get'
-  get 'repo/pull'
-
   get '/items/store/:id',      to: 'items#store'
   get '/items/make/:sid/:oid', to: 'items#make'
   get '/items/move/:id',       to: 'items#move'
   get '/items/history/:id',    to: 'items#history'
   resources :items
-
-  match 'project', to: 'samples#project'
 
   resources :object_types do
     resources :items do
@@ -238,31 +187,21 @@ Bioturk::Application.routes.draw do
   match '/template',    to: 'static_pages#template'
   match '/test',        to: 'static_pages#test'
 
-  match '/help',       to: 'static_pages#help'
-  match '/about',      to: 'static_pages#about'
   match '/signin',     to: 'sessions#new'
   match '/signout',    to: 'sessions#destroy', via: :delete
-  match '/status',     to: 'static_pages#status'
   match '/analytics',  to: 'static_pages#analytics'
   match '/jobchart',   to: 'static_pages#jobchart'
   match '/location',   to: 'static_pages#location'
   get '/dismiss',      to: 'static_pages#dismiss'
 
-  match '/yeast_qc', to: 'static_pages#yeast_qc'
-
   get '/static_pages/direct_purchase', to: 'static_pages#direct_purchase'
-
-  match '/glass', to: 'sessions#glass'
 
   match '/search', to: 'search#search'
 
   match '/inventory_stats', to: 'static_pages#inventory_stats'
   match '/cost_report', to: 'static_pages#cost_report'
 
-  get '/production_interface', to: 'object_types#production_interface'
   get '/delete_inventory', to: 'object_types#delete_inventory'
-  get '/copy_inventory_from_production', to: 'object_types#copy_inventory_from_production'
-  get '/copy_users_from_production', to: 'users#copy_users_from_production'
 
   match '/signup', to: 'users#new'
   match '/password', to: 'users#password'
@@ -281,12 +220,5 @@ Bioturk::Application.routes.draw do
 
   match '/logout', to: 'sessions#destroy'
   match '/item', to: 'items#update'
-
-  get 'oyster/ping'
-  get 'oyster/submit'
-  get 'oyster/status'
-  get 'oyster/log'
-  get 'oyster/info'
-  get 'oyster/items'
 
 end

@@ -180,17 +180,8 @@ module Krill
 
       end
 
-      items.each do |i|
-        Take.new(job_id: jid, item_id: i.id).save
-        Touch.new(job_id: jid, item_id: i.id).save
-      end
-
       items
 
-    end
-
-    def touch(item)
-      Touch.new(job_id: jid, item_id: item.id).save
     end
 
     def release(items, args = {})
@@ -225,10 +216,6 @@ module Krill
           end
         end
 
-      end
-
-      items.each do |i|
-        takes = Take.where(item_id: i.id).destroy_all
       end
 
       items

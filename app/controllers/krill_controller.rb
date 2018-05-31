@@ -192,7 +192,7 @@ class KrillController < ApplicationController
   def log
 
     begin
-      @job = Job.includes(:user, :group, :touches, :uploads, :takes).find(params[:job])
+      @job = Job.includes(:user, :group, :uploads).find(params[:job])
     rescue StandardError
       redirect_to logs_path
       return
@@ -204,8 +204,6 @@ class KrillController < ApplicationController
 
     @history = @job.state.gsub('Infinity', '"Inf"')
     @rval = @job.return_value
-    @touches = @job.touches.select(&:item_id).collect(&:item_id)
-    @inventory = @job.takes.collect(&:item_id)
 
     render layout: 'aq2'
 

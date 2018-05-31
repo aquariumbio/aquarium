@@ -21,10 +21,20 @@ class DeadCodeRemoval < ActiveRecord::Migration
 
     # Git rid of git related stuff
     drop_table :blobs, if_exists: true
-    
+
     if column_exists? :jobs, :sha
       remove_column :jobs, :sha
     end    
+
+    # delete metacols
+    drop_table :metacols, if_exists: true
+
+    # delete cart_items
+    drop_table :cart_items, if_exists: true    
+
+    # delete takes and touches
+    drop_table :takes, if_exists: true      
+    drop_table :touches, if_exists: true       
 
   end
 

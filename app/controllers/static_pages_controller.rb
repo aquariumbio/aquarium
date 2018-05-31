@@ -27,10 +27,6 @@ class StaticPagesController < ApplicationController
 
   def inventory_critical; end
 
-  def help; end
-
-  def about; end
-
   def template
     respond_to do |format|
       format.html { render layout: 'aq2' }
@@ -54,19 +50,6 @@ class StaticPagesController < ApplicationController
                         else
                           'undefined'
                         end
-
-  end
-
-  def yeast_qc
-
-    @items = Item.includes(sample: %i[sample_type user])
-                 .where('samples.sample_type_id = ?', SampleType.find_by_name('Yeast Strain').id)
-                 .select { |i| i.datum[:QC_result] }
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @qc }
-    end
 
   end
 

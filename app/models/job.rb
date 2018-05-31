@@ -22,10 +22,8 @@ class Job < ActiveRecord::Base
   end
 
   has_many :logs
-  has_many :touches
   belongs_to :user
   belongs_to :metacol
-  has_many :takes
   has_many :uploads
   belongs_to :group
   has_many :post_associations

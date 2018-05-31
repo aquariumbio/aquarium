@@ -38,7 +38,6 @@ class ItemsController < ApplicationController
     @handler = view_context.make_handler @object_type
 
     @active_item = params[:active_item]
-    @touches = @item.touches
 
     if @item.locator
       @wizard = @item.locator.wizard
