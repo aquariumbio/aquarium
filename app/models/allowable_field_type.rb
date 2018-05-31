@@ -1,5 +1,5 @@
 
-# frozen_string_literal: true
+
 
 class AllowableFieldType < ActiveRecord::Base
 

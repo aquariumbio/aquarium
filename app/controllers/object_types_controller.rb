@@ -1,6 +1,4 @@
 
-# frozen_string_literal: true
-
 class ObjectTypesController < ApplicationController
 
   helper ObjectTypesHelper

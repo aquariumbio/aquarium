@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+
 
 begin
   Bioturk::Application.config.aquarium_version = `git rev-list HEAD --count`.strip

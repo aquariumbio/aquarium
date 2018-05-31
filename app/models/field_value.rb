@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+
 
 # An input, output, or parameter of an {Operation}
 # @api krill

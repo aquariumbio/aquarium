@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+
 
 class TwoNewFields < ActiveRecord::Migration
   def change

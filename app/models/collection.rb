@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+
 
 # A subclass of {Item} that has a matrix of Sample ids and does not belong to a {SampleType}
 # @api krill
