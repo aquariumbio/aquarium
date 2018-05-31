@@ -23,7 +23,8 @@
     "angular-cookies": "latest",
     "angular-resource": "latest",
     "angular-material-icons": "latest",
-    "should": "latest"
+    "should": "latest",
+    "markdown-it": "latest"
   },
   "resolutions": {
     "jquery": ">= 1.8"
