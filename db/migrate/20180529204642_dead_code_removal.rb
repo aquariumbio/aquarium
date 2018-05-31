@@ -3,38 +3,36 @@ class DeadCodeRemoval < ActiveRecord::Migration
   def change
 
     # Get rid of all tasks stuff
-    drop_table :tasks, if_exists: true
-    drop_table :task_notification, if_exists: true
-    drop_table :task_prototype, if_exists: true
+    drop_table :tasks if table_exists? :tasks
+    drop_table :task_notifications if table_exists? :task_notifications
+    drop_table :task_prototypes if table_exists? :task_prototypes
 
     if column_exists? :account_logs, :task_id
-      remove_column :accounts_logs, :task_id
-      remove_index :accounts_logs, :task_id
+      remove_column :account_logs, :task_id
     end
 
     if column_exists? :accounts, :task_id
       remove_column :accounts, :task_id
-      remove_index :accounts, :task_id
     end
 
     # Note: task_id in post_associations and touches will be dropped later
 
     # Git rid of git related stuff
-    drop_table :blobs, if_exists: true
+    drop_table :blobs if table_exists? :blobs
 
     if column_exists? :jobs, :sha
       remove_column :jobs, :sha
     end    
 
     # delete metacols
-    drop_table :metacols, if_exists: true
+    drop_table :metacols if table_exists? :metacols
 
     # delete cart_items
-    drop_table :cart_items, if_exists: true    
+    drop_table :cart_items if table_exists? :cart_items
 
     # delete takes and touches
-    drop_table :takes, if_exists: true      
-    drop_table :touches, if_exists: true       
+    drop_table :takes if table_exists? :takes 
+    drop_table :touches if table_exists? :touches  
 
   end
 
