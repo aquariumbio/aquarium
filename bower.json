@@ -24,7 +24,8 @@
     "angular-resource": "latest",
     "angular-material-icons": "latest",
     "should": "latest",
-    "markdown-it": "latest"
+    "markdown-it": "latest",
+    "github-markdown-css": "latest"
   },
   "resolutions": {
     "jquery": ">= 1.8"
