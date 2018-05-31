@@ -1,3 +1,8 @@
+#
+# This migration is associated with the dead code removal branch and deletes all the old Aquarium 1.0
+# models, views, library code, etc. 
+#
+
 class DeadCodeRemoval < ActiveRecord::Migration
 
   def change
