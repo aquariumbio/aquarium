@@ -275,53 +275,45 @@ So, use the sample names instead; though, the catch is that the names you should
 **TODO: explain how to get common definition and/or to manage objects**
 
 
-### Provisioning Items
+### Working With Items in Operations
 
-You can search for items all you want in your protocol, but to have something done with them, they need to be brought to the bench.
-A protocol that has a list of items that need to be brought to the bench will use `take` to provision the items, and `release` to return them.
+Each instance of a protocol is contained within an operation. An operation is created by the user in the Aquarium planner and then batched together by the lab manager in the Aquarium manager into a job, which is then performed by the technician. 
 
-For instance, the following protocol first finds a list with the W303&alpha; yeast competent cells, calls `take` to have the technician bring the item to the bench, does something with the item, and then has the technician return the item.
+`Operations` also have an `OperationType`. As an example: Suppose you have created an `OperationType` with the name “E. coli Transformation.” You’ve written all the code you need, and now you’re read to run it. An `Operation` would be a specific instance of “E. coli Transformation” (the `OperationType`), and a job would be a batch of operations that have been submitted and need to be run. 
+
+There are two ways to retrieve items within a protocol, and the two methods are called `retrieve` and `take`. Both of them instruct the technician to retrieve items.
+
+`retrieve` is used on what’s called an `OperationList`, which is exactly what it sounds like — a list of operations being used in a specific job. To access all the operations, we use `operations`. `retrieve` is used to retrieve all of the input items associated with an operation. 
+
+To instigate a “retrieve,” you would write the following code:  
 
 ```ruby
 class Protocol
-  def main
-    items = find_items
-    take(items, interactive: true,  method: 'boxes') {
-      warning "Be careful not to leave the freezer open for too long"
-    }
-    use_items(items)
-  ensure
-    release items
-  end
-
-  def find_items
-    Item.where(
-      sample_id: Sample.find_by_name('W303alpha').id,
-      location: "M80C.2.0.21"
-    )
-  end
-
-  def use_items(items)
-    show { title "do something with yeast competent cells" }
+  def main 
+    operations.retrieve
+    …
   end
 end
 ```
 
-Note that the use of `ensure` allows the `release` to be performed even if an exception is raised by the earlier steps.
+`take`, on the other hand, takes an argument that’s an array of items, which makes it ideal for retrieving items that aren’t included as explicit inputs in the definition of an operation — e.g., master mix for a PCR, which isn’t something the user should need to explicitly select. 
 
-The call to `take` 
+To instigate a retrieve, you would write something like the following code: 
 
 ```ruby
-take(items, interactive: true,  method: 'boxes') {
-  warning "Be careful not to leave the freezer open for too long"
-}
+class Protocol
+  def main 
+    sample = Sample.find_by_name(“pMOD8”)
+    items_to_retrieve = Item.where(sample_id: sample.id)
+    take items_to_retrieve
+    …
+  end
+end
 ```
 
-uses `interactive: true` to indicate that instructions should be shown to the technician,
-`method: 'boxes'` to show the organization of items in the freezer, and
-a show block to print a customized warning message about leaving the freezer open.
+This code first finds the sample “pMOD”, and then finds all the items that are associated with that sample. The technician is then instructed to retrieve all of them. 
 
-TODO: show, in other contexts, the use of take to associate items with the job
+Another important thing both `retrieve` and `take` do is “touch” the item, which allows us to keep a record of all the items used in a job. This is extremely useful for troubleshooting. 
 
 --- 
 
