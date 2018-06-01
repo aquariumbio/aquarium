@@ -64,10 +64,4 @@ public/components
 
 .DS_Store
 
-docker/db
-
-
-
-
-
 Gemfile.lock
