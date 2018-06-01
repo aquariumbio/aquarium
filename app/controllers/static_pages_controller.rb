@@ -184,7 +184,7 @@ class StaticPagesController < ApplicationController
 
     plan = Plan.new(name: "Direct Purchase by " + current_user.name, budget_id: budgets[0].id)
     plan.save
-    op = dp.operations.create status: "pending", user_id: current_user.id, x: 100, y: 100, parent_id: -1
+    op = dp.operations.create status: "pending", user_id: current_user.id, x: 100, y: 100, parent_id: 0
     op.associate_plan plan
     job,operations = dp.schedule([op], current_user, Group.find_by_name(current_user.login))
 
