@@ -31,10 +31,6 @@
         <a href="#collections" data-toggle="tab">Collections<span class='sample-item-num' id='collections-num'></span></a>
       </li>
 
-      <li id='tasks-li'>
-        <a href="#tasks" data-toggle="tab">Tasks<span class='sample-item-num' id='tasks-num'></span></a>
-      </li>
-
     </ul>
 
   </div>
@@ -76,17 +72,7 @@
         <div id='collections-empty' style='display: none'>
           <p>No known collections are associated with this sample.</p>
         </div>
-      </div>
-
-      <div class="sample-item-tab tab-pane" id="tasks">
-        <div id='tasks-container'>
-          <%= render partial: 'tasks', locals: { sample: sample } %>
-        </div>
-        <div id='tasks-empty' style='display: none'>
-          <p>No processed tasks are associated with this sample.</p>
-          <p><b>Note:</b> Tasks that have yet to be processed by a job or metacol are not shown here.</p>
-        </div>
-      </div>      
+      </div>  
 
     </div>
 

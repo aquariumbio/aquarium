@@ -1,3 +1,5 @@
+
+
 class ChangeUserIdTypeInSamples < ActiveRecord::Migration
   def change
     remove_column :samples, :user_id

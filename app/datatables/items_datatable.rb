@@ -1,21 +1,22 @@
+
+
 class ItemsDatatable < Datatable
 
-  private  
+  private
 
   def data
 
     rows.map do |i|
-      [ link_to(i.id,i), 
-        i.location, 
-        "<span class='json'>#{i.data}</span>", 
-        i.created_at.to_formatted_s(:short), 
-        i.updated_at.to_formatted_s(:short),
-        link_to(@view.item_path(i,sample_id: params[:sample_id]), method: :delete, data: { 
-          confirm: 'Are you sure you want to delete this item?'
-        }) do
-          "<i class='icon-remove'></i>".html_safe
-        end
-      ]
+      [link_to(i.id, i),
+       i.location,
+       "<span class='json'>#{i.data}</span>",
+       i.created_at.to_formatted_s(:short),
+       i.updated_at.to_formatted_s(:short),
+       link_to(@view.item_path(i, sample_id: params[:sample_id]), method: :delete, data: {
+                 confirm: 'Are you sure you want to delete this item?'
+               }) do
+         "<i class='icon-remove'></i>".html_safe
+       end]
     end
 
   end
@@ -29,18 +30,18 @@ class ItemsDatatable < Datatable
     items = Item.page(page).per_page(per_page)
     @view.logger.info "sd = #{params[:deleted]}"
 
-    if params[:show_deleted]
-      items = items.where("sample_id = ? and object_type_id = ?", params[:sample_id], params[:object_type_id])
-    else
-      items = items.where("sample_id = ? and object_type_id = ? and location != 'deleted'", params[:sample_id], params[:object_type_id])
-    end
+    items = if params[:show_deleted]
+              items.where('sample_id = ? and object_type_id = ?', params[:sample_id], params[:object_type_id])
+            else
+              items.where("sample_id = ? and object_type_id = ? and location != 'deleted'", params[:sample_id], params[:object_type_id])
+            end
 
-    items    
+    items
 
   end
 
   def sort_column
-    columns = %w[id location data created_at updated_at ]
+    columns = %w[id location data created_at updated_at]
   end
 
 end

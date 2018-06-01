@@ -1,3 +1,5 @@
+
+
 # A named, biologically unique definition for an instance of a {SampleType}, such as a specific Primer, Fragment, Plasmid, or Yeast Strain
 # @api krill
 
@@ -26,16 +28,10 @@ class Sample < ActiveRecord::Base
   validates :project, presence: true
   validates :user_id, presence: true
 
-  def self.sample_from_identifier str
+  def self.sample_from_identifier(str)
     if str
       parts = str.split(': ')
-      if parts.length > 1
-        Sample.find_by_name(parts[1..-1].join(": "))
-      else
-        nil
-      end
-    else
-      nil
+      Sample.find_by_name(parts[1..-1].join(': ')) if parts.length > 1
     end
   end
 
@@ -44,38 +40,38 @@ class Sample < ActiveRecord::Base
   #     {
   #       sample_type_id: SampleType.find_by_name("Primer").id,
   #       description: "This is a test",
-  #       name: "Yet Another Primer Test", 
+  #       name: "Yet Another Primer Test",
   #       project: "Auxin",
-  #       field_values: [ 
-  #         { name: "Anneal Sequence", value: "ATTCTA" }, 
+  #       field_values: [
+  #         { name: "Anneal Sequence", value: "ATTCTA" },
   #         { name: "Overhang Sequence", value: "ATCTCGAGCT" },
   #         { name: "T Anneal", value: 70 }
   #       ]
   #     }, User.find(1))
-  #     
+  #
   #     s.errors.any?
-  def self.creator raw, user
+  def self.creator(raw, user)
 
     sample = Sample.new
-    sample.user_id = user.id    
+    sample.user_id = user.id
     sample.sample_type_id = raw[:sample_type_id]
     sample.updater raw
 
-    return sample
+    sample
 
   end
 
-  def stringify_errors elist
-    elist.full_messages.join(",")
+  def stringify_errors(elist)
+    elist.full_messages.join(',')
   end
 
-  def updater raw, user=nil
+  def updater(raw, user = nil)
 
     self.name = raw[:name]
     self.description = raw[:description]
     self.project = raw[:project]
 
-    Sample.transaction do 
+    Sample.transaction do
 
       save
 
@@ -89,7 +85,7 @@ class Sample < ActiveRecord::Base
 
             ft = sample_type.type(raw_fv[:name])
 
-            if ft && raw_fv[:id] && raw_fv[:deleted] 
+            if ft && raw_fv[:id] && raw_fv[:deleted]
 
               fv = FieldValue.find_by_id(raw_fv[:id])
               fv.destroy if fv
@@ -98,7 +94,7 @@ class Sample < ActiveRecord::Base
 
               if raw_fv[:id]
                 begin
-                  fv = FieldValue.find(raw_fv[:id])            
+                  fv = FieldValue.find(raw_fv[:id])
                 rescue Exception => e
                   errors.add :missing_field_value, "Field value #{raw_fv[:id]} not found in db."
                   errors.add :missing_field_value, e.to_s
@@ -109,32 +105,32 @@ class Sample < ActiveRecord::Base
               end
 
               if ft.ftype == 'sample'
-                if raw_fv[:new_child_sample]
-                  child = Sample.creator(raw_fv[:new_child_sample], user ? user : User.find(self.user_id))
-                else
-                  child = Sample.sample_from_identifier raw_fv[:child_sample_name]
-                end
+                child = if raw_fv[:new_child_sample]
+                          Sample.creator(raw_fv[:new_child_sample], user ? user : User.find(user_id))
+                        else
+                          Sample.sample_from_identifier raw_fv[:child_sample_name]
+                        end
                 fv.child_sample_id = child.id if child
-                fv.child_sample_id = nil if !child && raw_fv[:child_sample_name] == ""
-                if !child && ft.required && raw_fv[:child_sample_name] != ""
+                fv.child_sample_id = nil if !child && raw_fv[:child_sample_name] == ''
+                if !child && ft.required && raw_fv[:child_sample_name] != ''
                   errors.add :required, "Sample required for field '#{ft.name}' not found or not specified."
                   raise ActiveRecord::Rollback
                 end
                 unless !child || child.errors.empty?
                   errors.add :child_error, "#{ft.name}: " + stringify_errors(child.errors)
-                  raise ActiveRecord::Rollback  
+                  raise ActiveRecord::Rollback
                 end
               elsif ft.ftype == 'number'
                 fv.value = raw_fv[:value].to_f
-              else # string, url 
+              else # string, url
                 fv.value = raw_fv[:value]
               end
 
-              puts "before fv saved: {fv.inspect}"
+              puts 'before fv saved: {fv.inspect}'
               fv.save
               puts "fv saved. now #{fv.inspect}"
 
-              unless fv.errors.empty? 
+              unless fv.errors.empty?
                 errors.add :field_value, "Could not save field #{raw_fv[:name]}: #{stringify_errors(fv.errors)}"
                 raise ActiveRecord::Rollback
               end
@@ -145,7 +141,7 @@ class Sample < ActiveRecord::Base
 
         end # if
 
-      else 
+      else
 
         raise ActiveRecord::Rollback
 
@@ -160,11 +156,11 @@ class Sample < ActiveRecord::Base
   # @example Find a 1 kb ladder for gel electrophoresis
   #   ladder_1k = Sample.find_by_name("1 kb Ladder").in("Ladder Aliquot")
   # @return [Array<Item>]
-  def in container
+  def in(container)
 
     c = ObjectType.find_by_name container
     if c
-      Item.where("sample_id = ? AND object_type_id = ? AND NOT ( location = 'deleted' )", self.id, c.id )
+      Item.where("sample_id = ? AND object_type_id = ? AND NOT ( location = 'deleted' )", id, c.id)
     else
       []
     end
@@ -172,13 +168,13 @@ class Sample < ActiveRecord::Base
   end
 
   def to_s
-    "<a href='/samples/#{self.id}' class='aquarium-item' id='#{self.id}'>#{self.id}</a>"
+    "<a href='/samples/#{id}' class='aquarium-item' id='#{id}'>#{id}</a>"
   end
 
   # Return {User} who owns this {Sample}
   # @return [User]
   def owner
-    u = User.find_by_id(self.user_id)
+    u = User.find_by_id(user_id)
     if u
       u.login
     else
@@ -186,44 +182,44 @@ class Sample < ActiveRecord::Base
     end
   end
 
-  def make_item object_type_name
+  def make_item(object_type_name)
 
     ot = ObjectType.find_by_name(object_type_name)
     raise "Could not find object type #{name}" unless ot
-    Item.make( { quantity: 1, inuse: 0 }, sample: self, object_type: ot )
+    Item.make({ quantity: 1, inuse: 0 }, sample: self, object_type: ot)
 
   end
 
   def num_posts
-    self.post_associations.count
+    post_associations.count
   end
 
-  def self.okay_to_drop? sample, user
+  def self.okay_to_drop?(sample, user)
 
-    warn "Could not find sample"                                                and return false unless sample
-    warn "Not allowed to delete sample #{sample.id}"                            and return false unless sample.user_id == user.id
-    warn "Could not delete sample #{sample.id} because it has associated items" and return false unless sample.items.length == 0
+    warn('Could not find sample')                                                && (return false) unless sample
+    warn("Not allowed to delete sample #{sample.id}")                            && (return false) unless sample.user_id == user.id
+    warn("Could not delete sample #{sample.id} because it has associated items") && (return false) unless sample.items.empty?
 
     true
 
   end
 
   def data_hash
-    JSON.parse(self.data,symbolize_names:true)
+    JSON.parse(data, symbolize_names: true)
   end
 
   def full_json
 
-    sample_hash = self.as_json(
-            include: { sample_type: { include: :object_types, methods: :field_types } },
-            methods: :full_field_values
-          )
+    sample_hash = as_json(
+      include: { sample_type: { include: :object_types, methods: :field_types } },
+      methods: :full_field_values
+    )
 
     # rename field for compatibility with ng-control/sample.js
-    sample_hash[:field_values] = sample_hash.delete :full_field_values 
+    sample_hash[:field_values] = sample_hash.delete :full_field_values
 
     sample_hash
-      
-  end   
+
+  end
 
 end

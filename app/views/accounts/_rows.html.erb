@@ -17,10 +17,6 @@
         <td><%= row.updated_at.strftime("%b %d, %Y") %></td>
 
         <td>
-          <% if row.task %>
-            <%= row.task.task_prototype.name %>
-            <%= link_to row.task_id, row.task %>,
-          <% end %>
           <i><%= row.description %> <%= row.category ? "(#{row.category})" : "" %></i>
         </td>
 

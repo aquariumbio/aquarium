@@ -1,20 +1,22 @@
+
+
 # @api krill
 class ObjectType < ActiveRecord::Base
 
-  attr_accessible :cleanup, :data, :description, :handler, :max, :min, :name, :safety, 
+  attr_accessible :cleanup, :data, :description, :handler, :max, :min, :name, :safety,
                   :vendor, :unit, :image, :cost, :release_method, :release_description,
                   :sample_type_id, :created_at, :prefix
 
   belongs_to :sample_type
 
-  validates :name, :presence => true
-  validates :unit, :presence => true
-  validates :min, :presence => true
-  validates :max, :presence => true
-  validates :release_method, :presence => true
-  validates :description, :presence => true
+  validates :name, presence: true
+  validates :unit, presence: true
+  validates :min, presence: true
+  validates :max, presence: true
+  validates :release_method, presence: true
+  validates :description, presence: true
   validate :min_and_max
-  validates :cost, :presence => true
+  validates :cost, presence: true
   validate :pos
   validate :proper_release_method
   validates_uniqueness_of :name
@@ -22,16 +24,12 @@ class ObjectType < ActiveRecord::Base
   def rows
     if handler == 'collection'
       read_attribute(:rows) ? read_attribute(:rows) : 1
-    else
-      nil
     end
   end
 
   def columns
     if handler == 'collection'
       read_attribute(:columns) ? read_attribute(:columns) : 12
-    else
-      nil
     end
   end
 
@@ -44,20 +42,20 @@ class ObjectType < ActiveRecord::Base
   end
 
   def min_and_max
-    errors.add(:min, "min must be greater than zero and less than or equal to max") unless
-      self.min && self.max && self.min >= 0 && self.min <= self.max
+    errors.add(:min, 'min must be greater than zero and less than or equal to max') unless
+      min && max && min >= 0 && min <= max
   end
 
   def pos
-    errors.add(:cost, "must be at least $0.01" ) unless
-      self.cost && self.cost >= 0.01
+    errors.add(:cost, 'must be at least $0.01') unless
+      cost && cost >= 0.01
   end
 
   def proper_release_method
-    errors.add(:release_method, "must be either return, dispose, or query") unless
-      self.release_method && ( self.release_method == 'return'  || 
-                               self.release_method == 'dispose' || 
-                               self.release_method == 'query' )
+    errors.add(:release_method, 'must be either return, dispose, or query') unless
+      release_method && (release_method == 'return' ||
+                               release_method == 'dispose' ||
+                               release_method == 'query')
   end
 
   has_many :items, dependent: :destroy
@@ -65,38 +63,36 @@ class ObjectType < ActiveRecord::Base
 
   def quantity
     q = 0
-    self.items.each { |i|
-      if i.quantity >= 0 
-        q += i.quantity
-      end
-    }
-    return q
+    items.each do |i|
+      q += i.quantity if i.quantity >= 0
+    end
+    q
   end
 
   def in_use
     q = 0
-    self.items.each { |i|
+    items.each do |i|
       q += i.inuse
-    }
-    return q
+    end
+    q
   end
 
-  def save_as_test_type name
+  def save_as_test_type(name)
 
     self.name = name
-    self.handler = "temporary"
+    self.handler = 'temporary'
     self.unit = 'object'
     self.min = 0
     self.max = 100
-    self.safety = "No safety information"
-    self.cleanup = "No cleanup information"
-    self.data = "No data"
-    self.vendor = "No vendor information"
+    self.safety = 'No safety information'
+    self.cleanup = 'No cleanup information'
+    self.data = 'No data'
+    self.vendor = 'No vendor information'
     self.cost = 0.01
-    self.release_method = "return"
-    self.description = "An object type made on the fly."
-    self.save
-    i = self.items.new
+    self.release_method = 'return'
+    self.description = 'An object type made on the fly.'
+    save
+    i = items.new
     i.quantity = 1000
     i.inuse = 0
     i.location = 'A0.000'
@@ -106,50 +102,50 @@ class ObjectType < ActiveRecord::Base
 
   def export
     attributes
-  end 
+  end
 
   def default_dimensions # for collections
 
-    if self.handler == "collection"
+    if handler == 'collection'
       begin
-        h = JSON.parse(self.data,symbolize_names: true)
+        h = JSON.parse(data, symbolize_names: true)
       rescue Exception => e
-        raise "Could not parse data field '#{self.data}' of object type #{self.id}. Please go to " + 
-              "<a href='/object_types/#{self.id}/edit'>Object Type #{self.id}</a> and edit the data " +
-              "field so that it reads something like { \"rows\": 10, \"columns\": 10 }"
+        raise "Could not parse data field '#{data}' of object type #{id}. Please go to " \
+              "<a href='/object_types/#{id}/edit'>Object Type #{id}</a> and edit the data " \
+              'field so that it reads something like { "rows": 10, "columns": 10 }'
       end
       if h[:rows] && h[:columns]
-        [h[:rows],h[:columns]]
+        [h[:rows], h[:columns]]
       else
-        [1,1]
+        [1, 1]
       end
     else
-      raise "Tried to get dimensions of a container that is not a collection"
+      raise 'Tried to get dimensions of a container that is not a collection'
     end
 
-  end  
+  end
 
   def to_s
-    "<a href='/object_types/#{self.id}' class='aquarium-item' id='#{self.id}'>#{self.id}</a>"
+    "<a href='/object_types/#{id}' class='aquarium-item' id='#{id}'>#{id}</a>"
   end
 
   def data_object
     begin
-      result = JSON.parse(data,symbolize_names: true)
+      result = JSON.parse(data, symbolize_names: true)
     rescue Exception => e
       result = {}
     end
-    return result
+    result
   end
 
   def sample_type_name
     sample_type ? sample_type.name : nil
   end
 
-  def self.compare_and_upgrade raw_ots
+  def self.compare_and_upgrade(raw_ots)
 
-    parts = [ :cleanup, :data, :description, :handler, :max, :min, :name, :safety, 
-              :vendor, :unit, :cost, :release_method, :release_description, :prefix ]
+    parts = %i[cleanup data description handler max min name safety
+               vendor unit cost release_method release_description prefix]
     icons = []
     notes = []
     make = []
@@ -159,10 +155,10 @@ class ObjectType < ActiveRecord::Base
       ot = ObjectType.find_by_name raw_ot[:name]
       i = []
 
-      if ot 
+      if ot
         parts.each do |part|
           icons << "Container '#{raw_ot[:name]}': field #{part} differs from imported container's corresponding field." unless ot[part] == raw_ot[part]
-        end     
+        end
         notes << "Container '#{raw_ot[:name]}' matches existing container type." unless icons.any?
       else
         make << raw_ot
@@ -170,7 +166,7 @@ class ObjectType < ActiveRecord::Base
 
     end
 
-    if !icons.any?
+    if icons.none?
       make.each do |raw_ot|
         ot = ObjectType.new
         parts.each do |part|
@@ -183,20 +179,20 @@ class ObjectType < ActiveRecord::Base
           notes << "Created new container '#{raw_ot[:name]}' with id #{ot.id}"
         end
       end
-    else 
-      notes << "Could not create required container(s) due to type definition inconsistencies."
+    else
+      notes << 'Could not create required container(s) due to type definition inconsistencies.'
     end
 
     { notes: notes, inconsistencies: icons }
 
   end
 
-  def self.clean_up_sample_type_links raw_object_types
+  def self.clean_up_sample_type_links(raw_object_types)
     raw_object_types.each do |rot|
       ot = ObjectType.find_by_name rot[:name]
       st = SampleType.find_by_name rot[:sample_type_name]
       if st && ot
-        ot.sample_type_id = st.id 
+        ot.sample_type_id = st.id
         ot.save
       end
     end

@@ -42,42 +42,12 @@
                 <li><a href="/sample_tree/1">Chain of Custody</a></li>
                 <li><%= link_to "Cost Report", cost_report_path %></li>
                 <li><%= link_to "Status", status_path %></li>
-                <li><%= link_to "Protocol Usage", protocol_usage_path %></li>
                 <li><%= link_to "Protocol Versions", jobs_summary_path %></li>
                 <li><%= link_to "Inventory Statistics", inventory_stats_path %></li>
-                <!-- <li><%= link_to "Critical Inventory", inventory_critical_path %></li> -->
               </ul>
             </li>
 
           <% end %>         
-
-          <% if false %>
-
-            <li id="fat-menu" class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tasks<b class="caret"></b></a>
-              <ul class="dropdown-menu scrollable-menu">
-                <% TaskPrototype.order(:name).each do |tp| %>
-                  <% name = pluralize(2,tp.name)[2..-1] %>
-                  <li><%= link_to name, tasks_path(task_prototype_id: tp.id) %></li>
-                <% end %>
-                <li class="divider"></li>
-                <li><%= link_to "Batch Upload", tasks_upload_path %></li>
-                <li><%= link_to "New Prototype", new_task_prototype_path %></li>
-              </ul>
-            </li>
-
-            <li id="fat-menu" class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Protocols<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><%= link_to "Under Version Control", repo_list_path %></li>
-                <li><%= link_to "On Local Computer", protocol_tree_file_path %></li>
-                <li class="divider"></li>
-                <li><%= link_to "Pending Jobs", jobs_path %></li>
-                <li><%= link_to "Metacols", metacols_path(:active => true) %></li>
-              </ul>
-            </li>
-
-          <% end %>
 
           <% if signed_in? %>
 
