@@ -149,7 +149,8 @@
       <%= render partial: 'plan_editor' %>
     </div>
 
-    <div class="opeditbar operation-editor scrollable">
+    <div class="opeditbar operation-editor scrollable" 
+         ng-if="current_fv || current_op || current_draggable.record_type == 'Module' || current_draggable.record_type == 'TextBox'">
       <inner>
         <div ng-if="current_op && current_op.status == 'planning' && current_draggable.record_type != 'Module'">
           <%= render partial: 'operation_editor' %>

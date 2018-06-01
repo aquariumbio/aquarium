@@ -1,3 +1,5 @@
+
+
 def make_user(name, login, password, opts = {})
   options = { admin: false }. merge opts
 
@@ -16,7 +18,7 @@ def make_user(name, login, password, opts = {})
   m.save
 
   if user.admin
-    admin_id = Group.where(name: "admin").first.id
+    admin_id = Group.where(name: 'admin').first.id
     admin_membership = Membership.new
     admin_membership.group_id = admin_id
     admin_membership.user_id = user.id

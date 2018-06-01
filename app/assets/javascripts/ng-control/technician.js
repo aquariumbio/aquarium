@@ -202,6 +202,7 @@
                     id: upload.id
                   })
                 }
+                $scope.uploading = false;
                 $scope.$apply();
             }
         };
@@ -219,6 +220,7 @@
 
     $scope.complete_upload_method = function(varname,id) {
       return function(files) {
+        $scope.uploading = true;
         if ( files.length != 0 ) {
           for ( var i=0; i<files.length; i++ ) {      
             send_file(varname,id,files[i])

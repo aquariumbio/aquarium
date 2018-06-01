@@ -1,3 +1,5 @@
+
+
 require_relative 'client'
 require_relative 'server'
 require_relative 'manager'
@@ -7,7 +9,6 @@ require_relative 'show_block'
 require_relative 'find'
 require_relative 'inventory'
 require_relative 'transfers'
-require_relative 'task_validator'
 require_relative 'table'
 require_relative 'operations'
 require_relative 'operation_list'

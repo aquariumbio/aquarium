@@ -27,23 +27,3 @@
 <p>Locator_id: <%= @item.locator_id ? @item.locator_id : 'nil' %></p>
 <p>Locator.id: <%= @item.locator ? "id = #{@item.locator.id}, item_id = #{@item.locator.item_id}" : 'nil' %></p>
 <p>Primitive Location: <%= @item.primitive_location %></p>
-
-<h4>History</h4>
-
-<table class='table'>
-  <tr>
-    <th>Date/Time</th>
-    <th>Job</th>
-    <th>Protocol</th>
-    <th>User</th>
-  </tr>
-<% @touches.each do |t| %>
-  <% j = Job.find(t.job_id) %>
-  <tr>
-    <td><%= j.created_at.to_formatted_s(:short) %></td>
-    <td><%= link_to j.id, j %></td>
-    <td><%= j.path %></td>
-    <td><%= j.user ? j.user.login : '?' %></td>
-  </tr>
-<% end %>
-</table>

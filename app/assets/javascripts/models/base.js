@@ -15,7 +15,7 @@ AQ.Base.prototype.super = function(name) {
 AQ.Base.prototype.record = function(extras) {
   let record = new AQ.Record(this,extras);
   if ( record.upgrade ) {
-    record.upgrade();
+    record.upgrade(extras);
   }
   return record;
 }

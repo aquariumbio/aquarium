@@ -105,15 +105,6 @@
 
   }  
 
-  function note(task_id) {
-    rows = $('.chooser:checked').filter(function() {
-      return $(this).data('operation-id') == task_id && $(this).prop('checked');
-    });
-    if ( rows.length > 0 ) {
-      $("#noteDialog").modal('show');
-    }
-  }
-
   function credit(operation_id) {
     rows = $('.chooser:checked').filter(function() {
       return $(this).data('operation-id') == operation_id && $(this).prop('checked');
@@ -129,7 +120,7 @@
     rows = $('.chooser:checked').filter(function() {
       return $(this).data('operation-id') == operation_id && $(this).prop('checked');
     });     
-    $('#change-budget-task-id').html(operation_id);
+    $('#change-budget-operation-id').html(operation_id);
     $("#changeBudgetDialog").modal('show');
     current_operation_id = operation_id;
   }  
@@ -148,7 +139,7 @@
   function save_note() {
 
     var note_data = {
-      rows: aq.collect(rows,function(row) { return { id: $(row).data('row-id'), task_id: $(row).data('task-id') } } ),
+      rows: aq.collect(rows,function(row) { return { id: $(row).data('row-id'), operation_id: $(row).data('operation-id') } } ),
       note: $('#note-text').val()
     }
 
@@ -165,6 +156,15 @@
 
   }
 
+  function note(operation_id) {
+    rows = $('.chooser:checked').filter(function() {
+      return $(this).data('operation-id') == operation_id && $(this).prop('checked');
+    });
+    if ( rows.length > 0 ) {
+      $("#noteDialog").modal('show');
+    }
+  }  
+
   function save_credit() {
 
     var p = $('#transaction-percent').val();
@@ -173,7 +173,7 @@
       $('#credit-error').css("display", "block").html("Percent of total must be between 1 and 100.");
     } else {
       var credit_data = {
-        rows: aq.collect(rows,function(row) { return { id: $(row).data('row-id'), task_id: $(row).data('task-id') } } ),
+        rows: aq.collect(rows,function(row) { return { id: $(row).data('row-id'), operation_id: $(row).data('operation-id') } } ),
         percent: p,
         note: $('#credit-text').val()
       }
@@ -205,7 +205,7 @@
         url: "/invoices/change_budget/",
         data: change_data,
         success: function(data) {
-          $('#task-'+current_operation_id+"-budget").html("&#xffeb; " + data.budget.name);
+          $('#operation-'+current_operation_id+"-budget").html("&#xffeb; " + data.budget.name);
           aq.each(data.rows,function(row) {
             $('#row-'+row.id+"-budget").html("&#xffeb; " + data.budget.name);
           });

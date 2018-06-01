@@ -32,7 +32,7 @@
 
       </md-list>
 
-      <div ng-if="current_fv.is_sample && !current_fv.items" class="nomargin">
+      <div ng-if="current_fv.is_sample && !current_fv.items && !current_fv.corrupt" class="nomargin">
         <md-subheader class="md-no-sticky">
           Finding Inventory
           <span ng-if="current_fv.wired || current_fv.role == 'output'">(Not Used in Plan)</span>

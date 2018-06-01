@@ -1,20 +1,21 @@
 AQ.Item.getter(AQ.ObjectType,"object_type");
 AQ.Item.getter(AQ.Sample,"sample");
 
-AQ.Item.record_methods.upgrade = function() {
+AQ.Item.record_methods.upgrade = function(raw_data) {
 
   let item = this;
 
-  if ( item.sample ) {
+  if ( raw_data.sample ) {
     item.sample = AQ.Sample.record(item.sample);
   }
-  if ( item.object_type ) {
+
+  if ( raw_data.object_type ) {
     item.object_type = AQ.ObjectType.record(item.object_type);
   }
 
   item.new_location = item.location;
 
-  item.recompute_getter("data_associations")
+  // item.recompute_getter("data_associations")
 
 }
 
