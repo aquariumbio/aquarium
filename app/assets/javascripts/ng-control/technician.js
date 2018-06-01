@@ -121,14 +121,12 @@
 
       switch(evt.key) {
 
-        case "ArrowLeft":
-        case "ArrowUp":
+        case "PageUp":
           if ( $scope.job.state.index > 0 ) {
             $scope.job.state.index--;
           }
           break;
-        case "ArrowRight":
-        case "ArrowDown":
+        case "PageDown":
           if ( $scope.job.state.index < $scope.job.backtrace.length - 1 ) {
             $scope.job.state.index++;
           } else {
