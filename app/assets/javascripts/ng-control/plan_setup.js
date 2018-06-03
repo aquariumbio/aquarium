@@ -56,7 +56,9 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
 
   function get_plans_and_templates() {
 
-    $scope.refresh_plan_list().then(() => { 
+    $scope.refresh_plan_list()
+      .then(() => AQ.get_sample_names())
+      .then(() => { 
 
       AQ.Plan.where({status: "system_template"}).then(templates => {
 
@@ -88,9 +90,6 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
           $scope.ready = true;
           $scope.$apply();
         }
-
-        AQ.get_sample_names(); // Note: this is asynchronous and takes a couple of seconds. Hopefully, the user
-                               // won't start autocompleting anything before its done. 
 
       });
 
