@@ -177,6 +177,7 @@
 
       plan.save($scope.current_user).then(saved_plan => {
         $scope.plan = saved_plan;
+        $scope.select_uba_by_budget_id($scope.current_user, $scope.plan.budget_id)
         $scope.state.loading_plans = true;
         $scope.select(null);
         $scope.nav.sidebar = "plans";
@@ -367,6 +368,7 @@
         $scope.plan.find_items();
         $scope.select(null);
         aq.each($scope.plans, plan => plan.selected = false);
+        $scope.select_uba_by_budget_id($scope.current_user, $scope.plan.budget_id); // in case this plan is already running
         $scope.$apply();
       }).catch(error => {
         $scope.report_error("Could not read plan '" + plan.name + "'.", error.message, error.stack)
@@ -414,9 +416,9 @@
       })
     };
 
-    $scope.select_uba= function(user,s) {      
+    $scope.select_uba = function(user,seleted_uba) {      
       aq.each(user.user_budget_associations, uba => {
-        if ( uba.id === s.id ) {
+        if ( uba.id === seleted_uba.id ) {
           uba.selected = true;
           $scope.plan.uba = uba;
         } else {
@@ -424,6 +426,17 @@
         }
       });
     };
+
+    $scope.select_uba_by_budget_id = function(user,budget_id) {
+      aq.each(user.user_budget_associations, uba => {
+        if ( uba.id === budget_id ) {
+          uba.selected = true;
+          $scope.plan.uba = uba;
+        } else {
+          uba.selected = false;
+        }
+      });
+    };    
 
     $scope.launch = function() {
 
@@ -434,6 +447,7 @@
 
       $scope.plan.save($scope.current_user).then(saved_plan => {
         $scope.plan = saved_plan;
+        $scope.select_uba_by_budget_id($scope.current_user, $scope.plan.budget_id);
         if ( $scope.plan.valid() ) {
           $scope.plan.estimate_cost(); 
         } else {
