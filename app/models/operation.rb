@@ -8,6 +8,16 @@
   include FieldValuer
   include OperationPlanner
   include OperationStatus
+
+  before_destroy :destroy_field_values
+
+  def destroy_field_values
+    fvs = FieldValue.where parent_class: "Operation", parent_id: id
+    fvs.each do |fv|
+      puts "deleting fv #{fv.id}"
+      fv.destroy
+    end
+  end
   
   def parent_type # interface with FieldValuer
     operation_type
