@@ -110,7 +110,7 @@ module Serialize
         field_value: fv,
         operation: ops.find { |op| op.id == fv.parent_id }.as_json(include: [ :plan_associations, :operation_type, { jobs: { except: :state } } ] )
       }
-    }
+    }.reject { |h| !h[:operation] }
 
   end
 
