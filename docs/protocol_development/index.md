@@ -34,9 +34,39 @@ However, object-oriented Ruby can be useful for building a better library of pro
 
 ## Running the Dockerized development server
 
-[this needs a configured docker container and instructions...]
+To run an Aquarium instance on your machine, you will need to have Docker running on your computer, and you will need to clone the Aquarium repository.
+Once you have done both of these, `cd` into the `aquarium` directory and create the Docker images that will be used to run Aquarium by running
 
+```bash
+docker-compose build
+```
 
+It is a good idea to start the database before you start Aquarium for the first time.
+Do this by running
+
+```bash
+docker-compose up db
+```
+
+This will pull the contents of `docker/mysql_init/dump.sql` into the database, and write the database files to the `docker/db` directory.
+
+You can then start Aquarium with
+
+```bash
+docker-compose up
+```
+
+which is the command you can use for all future runs.
+Once all of the services for Aquarium have started, visit `localhost:3000` with the Chrome browser and you should find the Aquarium login page.
+The default database has a user login `neptune` with password `aquarium`.
+
+To stop the Aquarium services, you can either run
+
+```bash
+docker-compose down
+```
+
+in a different window, or type `ctrl-c`.
 
 ## Developer Tools
 
