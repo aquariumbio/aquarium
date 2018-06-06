@@ -12,9 +12,14 @@
   before_destroy :destroy_field_values
 
   def destroy_field_values
+    unless JobAssociation.where(operation_id: id).empty?
+      raise "Cannot destroy operation #{id} because it has jobs associated with it" 
+    end
     fvs = FieldValue.where parent_class: "Operation", parent_id: id
     fvs.each do |fv|
-      puts "deleting fv #{fv.id}"
+      Wire.where("from_id = #{fv.id} OR to_id = #{fv.id}").each do |wire|
+        wire.destroy
+      end
       fv.destroy
     end
   end
