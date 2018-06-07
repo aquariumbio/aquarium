@@ -291,6 +291,7 @@ Bioturk::Application.routes.draw do
   get 'users/current',        to: 'users#current'
   get 'users/billing/:id',    to: 'users#billing'
   put 'users/password',       to: 'users#update_password'
+  get 'users/stats/:id',      to: 'users#stats'
 
   resources :users do
     get 'change_password'

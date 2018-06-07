@@ -199,7 +199,7 @@ class StatsController < ApplicationController
 
     render json: @infos
 
-  end  
+  end
 
 end
 

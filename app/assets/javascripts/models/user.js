@@ -115,4 +115,20 @@ AQ.User.record_methods.change_password = function() {
 
 }
 
+AQ.User.record_getters.stats = function() {
+
+  let user = this;
+  delete user.stats;
+
+  AQ.http.get('/users/stats/' + user.id).then( response => {
+    user.stats = response.data;
+    // AQ.update();
+  }).catch( response => {
+    alert(response.data.error);
+  })
+
+  return undefined;
+
+}
+
 
