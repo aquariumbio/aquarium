@@ -24,3 +24,36 @@
   }
 
 }
+
+.user-op-stats {
+  margin-top: 10px;
+  .user-op-stat {  
+    margin: 2pt;
+  }
+  .name {
+    width: 25%;
+    font-weight: bold;
+    text-align: right;
+    display: inline-block;
+  }
+  .name-subdued {
+    width: 25%;
+    font-weight: normal;
+    text-align: right;
+    display: inline-block;
+    color: #aaa;
+  }  
+  .done {
+    display: inline-block;
+    background: lightgreen;
+    margin: 0;
+  }
+  .error {
+    display: inline-block;
+    background: orange;
+    margin: 0;    
+  }  
+  .number {
+    display: inline-block;  
+  }
+}

@@ -186,6 +186,10 @@ class UsersController < ApplicationController
 
   end
 
+  def stats
+    render json: User.find(params[:id]).stats
+  end  
+
   private
 
   def correct_user

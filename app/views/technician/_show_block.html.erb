@@ -192,9 +192,33 @@
 </script>
 
 <script type="text/ng-template" id="complete">
+
   <div class='content' layout-fill layout="row" layout-align="center center">
-    <h1 class="md-display-2 title">Protocol<br>Completed</h1>
+    <h1 class="md-display-2 title">Protocol Completed<br></h1>
   </div>
+
+  <div class='content' layout-fill layout="row" layout-align="center center">
+    <b>Thank you <a href="/users/{{job.user.id}}">{{job.user.name}}!</a></b>
+  </div>
+  <hr>
+
+  <md-content class='md-white user-op-stats'>
+      <div class="user-op-stat"?>
+        <div class="name">Operation Type</div>
+        <div class="done" style="width: 50px">Done</div>
+        <div class="error" style="width: 50px">Error</div>
+        <div class="number">Total Operations Performed</div>
+      </div>
+      <hr>
+      <div class="user-op-stat" ng-repeat="stat in job.user.stats">
+        <div class="name" ng-if="stat.name == job.operations[0].operation_type.name">{{stat.name}}</div>
+        <div class="name-subdued" ng-if="stat.name != job.operations[0].operation_type.name">{{stat.name}}</div>        
+        <div class="done" style="width: {{stat.done}}px">&nbsp;</div>
+        <div class="error" style="width: {{stat.error}}px">&nbsp;</div>
+        <div class="number">{{stat.count}}</div>
+      </div>
+  </md-content>  
+
 </script>
 
 <script type="text/ng-template" id="error">

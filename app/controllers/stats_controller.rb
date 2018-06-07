@@ -171,4 +171,34 @@ class StatsController < ApplicationController
 
   end
 
+  def protocol_version_info
+
+    @infos = {}
+
+    Job.where(path: params[:path]).reverse.each do |j|
+      if ! @infos[j.sha]
+        @infos[j.sha] = {
+          num: 1,
+          successes: j.error? ? 0 : 1,
+          first: j.created_at,
+          last: j.created_at
+        }
+      else
+        @infos[j.sha] = {
+          num: @infos[j.sha][:num] + 1,
+          successes: @infos[j.sha][:successes] + ((j.error?) ? 0 : 1),
+          last: @infos[j.sha][:last],      
+          first: j.created_at
+        }
+      end
+    end
+
+    @infos.each do |k,v|
+      @infos[k][:posts] = PostAssociation.where(sha: k).count
+    end
+
+    render json: @infos
+
+  end
+
 end
