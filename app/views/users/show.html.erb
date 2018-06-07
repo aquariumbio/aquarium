@@ -135,7 +135,21 @@
         </md-list-item>
       </md-list>
 
-    </md-content>  
+    </md-content> 
+
+    <md-content flex 
+                layout-fill 
+                ng-if="status.view == 'Statistics'"
+                class='md-white user-op-stats'>
+          
+        <div class="user-op-stat" ng-repeat="stat in user.stats">
+          <div class="name">{{stat.name}}</div>
+          <div class="done" style="width: {{stat.done}}px">&nbsp;</div>
+          <div class="error" style="width: {{stat.error}}px">&nbsp;</div>
+          <div class="number">{{stat.count}}</div>
+        </div>
+
+    </md-content>     
 
     <md-content flex layout-fill layout-padding ng-if="status.view == 'Memberships'" class='md-white'>
           

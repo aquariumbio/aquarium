@@ -11,6 +11,21 @@ class Operation < ActiveRecord::Base
   include OperationPlanner
   include OperationStatus
 
+  before_destroy :destroy_field_values
+
+  def destroy_field_values
+    unless JobAssociation.where(operation_id: id).empty?
+      raise "Cannot destroy operation #{id} because it has jobs associated with it" 
+    end
+    fvs = FieldValue.where parent_class: "Operation", parent_id: id
+    fvs.each do |fv|
+      Wire.where("from_id = #{fv.id} OR to_id = #{fv.id}").each do |wire|
+        wire.destroy
+      end
+      fv.destroy
+    end
+  end
+  
   def parent_type # interface with FieldValuer
     operation_type
   end

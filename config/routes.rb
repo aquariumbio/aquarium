@@ -209,6 +209,7 @@ Bioturk::Application.routes.draw do
   get '/users/active',        to: 'users#active'
   get 'users/current',        to: 'users#current'
   put 'users/password',       to: 'users#update_password'
+  get 'users/stats/:id',      to: 'users#stats'
 
   resources :users do
     get 'change_password'
