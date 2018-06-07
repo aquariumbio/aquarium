@@ -409,6 +409,14 @@ You also want to detract the comp cell aliquots used from the batch, so the onli
   operations.running.each { |op| op.input(“Comp Cells”).collection.remove_one op.input(“Comp Cells”).sample }
 ```
 
+Now that any potential operations without sufficient comp cells have errored out, it's time to do a `retrieve` and `make`. `make` creates the outputs of the protocol. 
+
+```ruby
+  operations.running.retrieve(only: ["Plasmid"]).make
+```
+
+`retrieve` has an optional argument -- you can choose which inputs you want the tech to retrieve using 'only', which takes in an array argument. 
+
 ```ruby
     # Prepare electroporator 
         show do
