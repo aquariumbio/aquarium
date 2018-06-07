@@ -84,7 +84,7 @@ AQ.FieldValue.record_methods.serialize = function() {
 
   var fv = this,
       props = [ "id", "name", "child_item_id",, "child_sample_id", "value", "role", 
-                "field_type_id", "item", "row", "column", "row", "column",
+                "field_type_id", "item", "row", "column", 
                 "parent_class", "parent_id", "routing", "rid" ],
       efv = {};
 
