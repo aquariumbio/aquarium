@@ -104,7 +104,7 @@ module Serialize
     op_ids = fvs.collect(&:parent_id)
     ops = Operation.includes(:jobs, :operation_type, :plan_associations).where(id: op_ids)
 
-    fvs.collect do |fv|
+    fvs.collect { |fv|
       {
         field_value: fv,
         operation: ops.find { |op| op.id == fv.parent_id }.as_json(include: [:plan_associations, :operation_type, { jobs: { except: :state } }])

@@ -1,3 +1,15 @@
+<% provide(:title, @wizard.name) %>
+
+<%= render partial: "/items/template" %>
+<%= render partial: "/data_associations/list" %>
+<%= render partial: '/data_associations/template' %> 
+
+<%= content_for :controller do %>wizardCtrl<% end %>
+
+<%= content_for :specific_title do %>
+  : <%= @wizard.description %> 
+<% end %>
+
 <% def symb(i) 
   if i >= 0
     i
@@ -6,29 +18,32 @@
   end
 end %>
 
-<p id="notice"><%= notice %></p>
+<%= content_for :sidebar do %>
 
-<h1><%= @wizard.name %>: <%= @wizard.description %><br /></h1>
-    
-<p><b>Spec:</b>
-    <%= (@wizard.spec[:fields].collect { |f| f[:name] }).join('.') %>, 
-    <%= (@wizard.spec[:fields].collect { |f| "[#{0},#{symb(f[:capacity]-1)}]" }).join('.').html_safe %>
-</p>
+  <p id="notice"><%= notice %></p>
 
-<div class='ot_list'>
+  <h2 class="md-title">Containers managed by <%= @wizard.name %></h2>
+
   <% @object_types.each do |ot| %>
     <div class='ot'><%= link_to ot.name, ot %></div>
   <% end %>
-</div>
 
-<div class='clear' />
+  <h2 class="md-title">Associating Wizards</h2>
 
-<div class='row-fluid'>
+  Go to the object type's edit page, or new page if you are creating a new object type, and enter the name of the wizard in for the "Location Prefix" field. All new items with that object type will use the wizard associated with that name, if there is one defined. Note that multiple object types can use the same wizard. For example, we store Primer Aliquots, Primer Stocks, Plasmid Stocks, etc. in the same type of freezer box.    
+
+<% end %>
+
+<%= content_for :main do %>
+
+<div class='row-fluid' layout-padding>
 
   <div class='span6 boxlist'>
 
     <% if @wizard.boxes.length > 0 %>
       <p><b>Boxes manged by <%= @wizard.name %> wizard</b></p>
+      <p><%= (@wizard.spec[:fields].collect { |f| f[:name] }).join('.') %>: 
+         <%= (@wizard.spec[:fields].collect { |f| "[#{0},#{symb(f[:capacity]-1)}]" }).join('.').html_safe %></p>
 
       <% @wizard.boxes.each do |box| %>
         <div <% if box == @selected_box %>
@@ -49,13 +64,16 @@ end %>
     <% end %>
   </div>
 
-
 </div>
 
-<div class='clear' />
-<br />
+<% end %>
 
-<%= link_to 'Edit', edit_wizard_path(@wizard), class: 'btn' %> 
-<%= link_to 'Back', wizards_path, class: 'btn' %>
+<%= content_for :action1 do %>
+  <%= link_to 'Edit', edit_wizard_path(@wizard), class: 'md-button md-raised' %> 
+<% end %>
 
-<div style='height: 50px' />
+<%= content_for :action2 do %>
+  <%= link_to 'All Wizards', wizards_path, class: 'md-button md-raised' %>
+<% end %>
+
+

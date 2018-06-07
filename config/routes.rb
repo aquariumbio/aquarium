@@ -112,6 +112,8 @@ Bioturk::Application.routes.draw do
   get 'sample_list',                             to: 'object_types#samples'
 
   resources :posts, only: %i[index create]
+
+  get 'wizards/contents/:id',               to: 'wizards#contents'
   resources :wizards
 
   match 'item_list', to: 'items#item_list'

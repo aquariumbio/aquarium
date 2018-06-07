@@ -33,7 +33,12 @@
              obj = box[el].item.object_type ? box[el].item.object_type.name : '?'
              tooltip = "Slot #{el}: Item #{box[el].item.id}. Sample #{sample} (#{obj}). (#{project})".html_safe %>
 
-          <td class='<%= cla %>'><%= link_to box[el].item.id, box[el].item, title: tooltip, rel: "tooltip" %></td>
+          <td class='<%= cla %>'>
+            <div item='contents[<%= el %>].item' 
+                 container="contents[<%= el %>].item.object_type"
+                 sample="contents[<%= el %>].item.sample"></div>
+            <md-tooltip><%= tooltip %></md-tooltip>
+          </td>
 
         <% end %>
 
@@ -42,9 +47,3 @@
     <% end %>
     </table>
   </div> 
-
-<script>
-  $(".tooltip").tooltip();
-  $("a[rel=tooltip]").tooltip();
-</script>
-
