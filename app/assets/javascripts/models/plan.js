@@ -881,7 +881,23 @@ AQ.Plan.record_getters.has_new_ops = function() {
 
 }
 
+AQ.Plan.record_getters.saved = function() {
 
+  var plan = this;
+
+  if ( !plan.id ) {
+    return false;
+  } else {
+    for ( var i=0; i<plan.operations.length; i++) {
+      if ( !plan.operations[i].id ) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+
+}
 
 
 

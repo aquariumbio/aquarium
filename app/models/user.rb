@@ -131,6 +131,26 @@ class User < ActiveRecord::Base
 
   end
 
+  def stats
+
+    job_ids = Job.where(user_id: id).pluck :id
+    ops = JobAssociation.includes(operation: :operation_type).where(job_id: job_ids).collect { |j| j.operation }
+
+    data = {}
+
+    ops.each do |op|
+      if op
+        data[op.operation_type.name] ||= { count: 0, done: 0, error: 0 }
+        data[op.operation_type.name][:count] += 1
+        data[op.operation_type.name][:done] += 1 if op.status == "done"
+        data[op.operation_type.name][:error] += 1 if op.status == "error"
+      end
+    end    
+
+    data.collect { |k,v| { name: k }.merge v }.sort_by { |stat| stat[:count] }.reverse
+
+  end    
+
   private
 
   def create_remember_token

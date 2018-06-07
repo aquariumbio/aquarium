@@ -72,8 +72,8 @@
     <p>Successfully submitted or extended plan <a href="/launcher?plan_id={{state.submitted_plan.id}}">{{state.submitted_plan.id}}</a>.</p>
     <div class="dismiss clickable" ng-click="state.submitted_plan = null">&times;</div>
   </div>  
-  <div ng-if="plan.id && plan.valid() && nav.sidebar" ng-include="'launch_plan'"></div>
-  <div ng-if="!plan.id" layout-padding>This plan cannot be launched because it has not been saved.</div>
+  <div ng-if="plan.saved && plan.valid() && nav.sidebar" ng-include="'launch_plan'"></div>
+  <div ng-if="!plan.saved" layout-padding>This plan cannot be launched or extended because it has not been saved.</div>
   <div ng-if="plan.id && !plan.valid()" layout-padding>
     This plan cannot be launched because it is not valid. All I/O should be defined (green), and all wires should be consistent (black).
     Note that Aquarium does not currently check the validity of wires to and from modules, so they may appear black even if their source

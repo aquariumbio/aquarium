@@ -12,7 +12,8 @@
     AQ.confirm = (msg) => { return confirm(msg); }
     AQ.sce = $sce;
 
-    $scope.views = [  "Information", "Preferences", "Memberships", "Change Password", "Budgets",
+    $scope.views = [  "Information", "Statistics", "Preferences", 
+                      "Memberships", "Change Password", "Budgets",
                       "BIOFAB Agreement", "Aquarium Agreement" ];    
 
     $scope.preferences = [
