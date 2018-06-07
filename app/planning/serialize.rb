@@ -86,7 +86,7 @@ module Serialize
             object_type_id: aft.object_type_id,
             field_type_id: aft.field_type_id,
             sample_type: sts.find { |st| st.id == aft.sample_type_id }.as_json,
-            object_type: obs.find { |ot| ot.id == aft.object_type_id }.as_json
+            object_type: obs.find { |object_type| object_type.id == aft.object_type_id }.as_json
           }
         end
         sft
@@ -104,12 +104,13 @@ module Serialize
     op_ids = fvs.collect(&:parent_id)
     ops = Operation.includes(:jobs, :operation_type, :plan_associations).where(id: op_ids)
 
-    fvs.collect do |fv|
+    history = fvs.collect do |fv|
       {
         field_value: fv,
         operation: ops.find { |op| op.id == fv.parent_id }.as_json(include: [:plan_associations, :operation_type, { jobs: { except: :state } }])
       }
-    }.reject { |h| !h[:operation] }
+    end
+    history.select { |h| h[:operation] }
 
   end
 
