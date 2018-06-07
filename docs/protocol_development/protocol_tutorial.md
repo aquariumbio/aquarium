@@ -403,6 +403,12 @@ This code sets a new comp cell batch as the “input” (through op.inputs(“Co
 
 Data associations are a great tool to pass information through Aquarium. You can upload messages, measurements, pictures, files, passive-aggressive notes — it’s all good. Operations, samples, items, etc. all have data associations, which means it’s very easy to attach and retrieve information from all of these. For a more detailed breakdown, click [here] (http://52.27.43.242/doc/md-viewer?doc=DataAssociation)
 
+You also want to detract the comp cell aliquots used from the batch, so the online inventory is accurate. To do so, there’s a `remove_one` method included in a library, which is used like so: 
+
+```ruby
+  operations.running.each { |op| op.input(“Comp Cells”).collection.remove_one op.input(“Comp Cells”).sample }
+```
+
 ```ruby
     # Prepare electroporator 
         show do
