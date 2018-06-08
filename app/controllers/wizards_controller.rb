@@ -1,5 +1,3 @@
-
-
 class WizardsController < ApplicationController
 
   before_filter :signed_in_user
@@ -11,7 +9,7 @@ class WizardsController < ApplicationController
     @wizards = Wizard.all
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html { render layout: 'aq2' }
       format.json { render json: @wizards }
     end
   end
@@ -31,7 +29,7 @@ class WizardsController < ApplicationController
                     end
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render layout: 'aq2' }
       format.json { render json: @wizard }
     end
   end
@@ -42,7 +40,7 @@ class WizardsController < ApplicationController
     @wizard = Wizard.new
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render layout: 'aq2' }
       format.json { render json: @wizard }
     end
   end
@@ -50,6 +48,7 @@ class WizardsController < ApplicationController
   # GET /wizards/1/edit
   def edit
     @wizard = Wizard.find(params[:id])
+    render layout: 'aq2'
   end
 
   # POST /wizards
@@ -110,6 +109,18 @@ class WizardsController < ApplicationController
 
   def group # params should have a location like M20.1.2.3.
     # this method returns all locations of the form M20.1.2.*
+  end
+
+  def contents
+
+    wizard = Wizard.find(params[:id])
+    if params[:box] != "undefined"
+      box = wizard.box(params[:box])
+    else
+      box = wizard.box(wizard.boxes.first)
+    end
+
+    render json: box.collect { |l| l.as_json(include: { item: { include: [:object_type, :sample] } } ) }
 
   end
 

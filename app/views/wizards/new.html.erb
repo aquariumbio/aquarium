@@ -1,5 +1,25 @@
-<h1>New Wizard Specification</h1>
 
-<%= render 'form' %>
+<% provide(:title, "New Wizard") %>
 
-<%= link_to 'Back', wizards_path, class: "btn" %>
+<%= content_for :controller do %>noCtrl<% end %>
+
+<%= content_for :specific_title do %>
+<% end %>
+
+<%= content_for :sidebar do %>
+
+  <h2 class="md-title">Editing Wizards</h2>
+
+  The wizard name should be short, such as "M20" as it will be used as the first part of the location. The description can be a sentence or so. The field names are used to remind the user what each field means. In the example above, we would use "Hotel", "Box", and "Slot". The capacity for the second two fields can be a finite, positive number. In the above example, we would use 16 for the Box field and 81 for the Slot field. The first field is always assumed to have infinite capacity (meaning you can go buy more freezers as you need them).  
+
+<% end %>
+
+<%= content_for :main do %>
+  <div layout-padding>
+    <%= render 'form' %>
+  </div>
+<% end %>
+
+<%= content_for :action2 do %>
+  <%= link_to 'All Wizards', wizards_path, class: "md-button md-raised" %>
+<% end %>
