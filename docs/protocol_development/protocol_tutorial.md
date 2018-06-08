@@ -198,55 +198,61 @@ There are several other style functions that can be used in a `show`-block that 
 
 ## Working with Samples
 
-In Aquarium, protocols work with an `Item` that is a unique instance of a sample in a container.
-Each sample is represented by a `Sample` object, and containers by an `ObjectType` object.
-The item is the physical object that is manipulated.
 
-As an example, a W303&alpha; yeast culture in a petri dish on the lab bench would be represented as an `Item` where the `Sample` is 'W303alpha', the `ObjectType` is 'Yeast Plate', and the `location` is 'Lab bench'.
+In Aquarium, protocols work with an `Item` that is a unique instance of a sample in a container. Each sample is represented by a `Sample` object, and containers by an `ObjectType` object. The item is the physical object that is manipulated.
 
-These objects are managed in the Aquarium inventory, and we need to make queries to access them.
-To find the sample for W303&alpha; we can make the query
+As an example, a pMOD8 plasmid streaked out onto a plate sitting on a lab bench would be represented as an `Item`, where the `Sample` is ‘pMOD8,’ the `ObjectType` is ‘E. coli Plate of Plasmid,’ and the location is ‘Lab Bench.’ The `SampleType` is ‘Plasmid.’
+
+These objects are managed in the Aquarium inventory, so to access them, you need to make queries.
+
+To find the sample for pMOD8, you can make the query
 
 ```ruby
-Sample.find_by_name('W303alpha')
+Sample.find_by_name('pMOD8')
 ```
 
-Once we have an object, we can use the record identifier of the object in other queries.
-Continuing our example, we can look for all `Items` with sample W303&alpha; and container 'Yeast Plate' located on the bench using
+Once you have an object, you can use the record identifier of the object in other queries.
+
+Continuing our example, we can look for all `Items` with sample pMOD8 and container 'E. coli Plate of Plasmid' (i.e., the pMOD8 has been plated) located on the bench using the following query: 
 
 ```ruby
-Item.where(
-  sample_id: Sample.find_by_name('W303alpha').id,
-  object_type_id: ObjectType.find_by_name('Yeast Plate').id
+plate = Item.where(
+  sample_id: Sample.find_by_name('pMOD8').id,
+  object_type_id: ObjectType.find_by_name('E. coli Plate of Plasmid').id
   location: 'Bench'
   )
 ```
 
-which returns a list of `Item` objects.
+which returns a list of one `Item` object. To access it, you would say plate.first (.where always returns list for the sake of consistency, even if there’s only one object within the database that matches your query) . 
 
-We want our protocols to work with particular items, and they wont generally be on the bench.
-So, the item we want may be in a -80C freezer with location `M80C.2.0.21` (see the [locations reference](locations.md) for an explanation).
-This query
+Let’s say you’re interested in performing an _E. coli_ transformation. This means you also need Competent Cell aliquots. Those are located in the -80C freezer and are grouped into a batch, or collection.
+
+You can think of a collection as an item that has separate parts. Using the example of DH5alpha comp cells: The entire batch is represented under one item ID — say, 67890 — but that item has n number of parts, one for each aliquot. In Aquarium, collections are represented using a matrix, or 2D array. 
+
+Why are DH5alpha comp cells represented as a batch rather than single, distinct items like a tube of plasmid? To make the decision about whether you should represent an aliquot as a batch or a distinct item, a good rule of thumb is asking yourself: Do I care which specific, physical aliquot (or plate, overnight, etc.) I use of this sample? 
+
+If the answer is yes — e.g., you have ten tubes of the sample pMOD8, but you want the one that has a concentration of 250 ng/uL — you should probably use an item to represent it. If the answer is no — e.g., you make a batch of seventy DH5alpha competent cell aliquots and don’t care which one you pull out of the freezer any time you want to use one — you should probably use a collection to represent it. 
+
+Suppose you make this query: 
 
 ```ruby
-Item.where(
-  sample_id: Sample.find_by_name('W303alpha').id,
+batch = Item.where(
+  sample_id: Sample.find_by_name('DH5alpha').id,
   location: "M80C.2.0.21"
-  )
+  ).first
 ```
 
-returns a list with a single item with object type `"Yeast Competent Cell"`.
+This returns a single item with object type `"E. coli Comp Cell Batch"` (since, after the .where() method, there’s a .first, which returns the first item in the list). 
 
-TODO: introduce collections here
+If the object type of an item has handler 'collection' (NOTE: has ‘handler’ been defined?), it will be useful to have access to the collection methods.
 
-If the object type of an item has handler 'collection', it will be useful to have access to the collection methods.
-To promote an item `i` to a collection, use
+To promote the item `batch` to a collection, use
 
 ```ruby
-c = collection_from i
+c = collection_from batch
 ```
 
-And likewise, for a list of items
+And likewise, for a list of items, `items`: 
 
 ```ruby
 colls = items.map { |i| collection_from i }
@@ -254,74 +260,303 @@ colls = items.map { |i| collection_from i }
 
 ### Practicing Queries
 
-You can use the Rails console for Aquarium to try queries like this.
-At the command line, start the rails console with `rails c` and use it interactively to evaluate queries.
+You can use the Rails console for Aquarium to try queries like this: At the command line, start the rails console with `rails c` and use it interactively to evaluate queries.
+
 The allowable queries are standard with Ruby on Rails `ActiveRecord` models.
 
 In depth documentation on how to use the activerecord query interface can be found [here](http://guides.rubyonrails.org/v3.2.21/active_record_querying.html).
 
-TODO: more here, but not too much
+The Rails console is extremely useful when you’re either trying to write a protocol or debugging a protocol. 
 
 ### Common definitions and record identifiers
 
 It is tempting to use constant values to search with record identifiers, but these identifiers are determined by how the database is built and could change.
-So, use the sample names instead; though, the catch is that the names you should use are also determined by the inventory of your Aquarium instance.
+
+So, use the sample names instead; however, the catch is that the names you should use are also determined by the inventory of your Aquarium instance.
 
 **TODO: explain how to get common definition and/or to manage objects**
 
 
-### Provisioning Items
+### Working With Items in Operations
 
-You can search for items all you want in your protocol, but to have something done with them, they need to be brought to the bench.
-A protocol that has a list of items that need to be brought to the bench will use `take` to provision the items, and `release` to return them.
+Each instance of a protocol is contained within an operation. An operation is created by the user in the Aquarium planner and then batched together by the lab manager in the Aquarium manager into a job, which is then performed by the technician. 
 
-For instance, the following protocol first finds a list with the W303&alpha; yeast competent cells, calls `take` to have the technician bring the item to the bench, does something with the item, and then has the technician return the item.
+`Operations` also have an `OperationType`. As an example: Suppose you have created an `OperationType` with the name “E. coli Transformation.” You’ve written all the code you need, and now you’re read to run it. An `Operation` would be a specific instance of “E. coli Transformation” (the `OperationType`), and a job would be a batch of operations that have been submitted and need to be run. 
+
+There are two ways to retrieve items within a protocol, and the two methods are called `retrieve` and `take`. Both of them instruct the technician to retrieve items.
+
+`retrieve` is used on what’s called an `OperationList`, which is exactly what it sounds like — a list of operations being used in a specific job. To access all the operations, we use `operations`. `retrieve` is used to retrieve all of the input items associated with an operation. 
+
+To instigate a “retrieve,” you would write the following code:  
 
 ```ruby
 class Protocol
-  def main
-    items = find_items
-    take(items, interactive: true,  method: 'boxes') {
-      warning "Be careful not to leave the freezer open for too long"
-    }
-    use_items(items)
-  ensure
-    release items
-  end
-
-  def find_items
-    Item.where(
-      sample_id: Sample.find_by_name('W303alpha').id,
-      location: "M80C.2.0.21"
-    )
-  end
-
-  def use_items(items)
-    show { title "do something with yeast competent cells" }
+  def main 
+    operations.retrieve
+    …
   end
 end
 ```
 
-Note that the use of `ensure` allows the `release` to be performed even if an exception is raised by the earlier steps.
+`take`, on the other hand, takes an argument that’s an array of items, which makes it ideal for retrieving items that aren’t included as explicit inputs in the definition of an operation — e.g., master mix for a PCR, which isn’t something the user should need to explicitly select. 
 
-The call to `take` 
+To instigate a retrieve, you would write something like the following code: 
 
 ```ruby
-take(items, interactive: true,  method: 'boxes') {
-  warning "Be careful not to leave the freezer open for too long"
-}
+class Protocol
+  def main 
+    sample = Sample.find_by_name(“pMOD8”)
+    items_to_retrieve = Item.where(sample_id: sample.id)
+    take items_to_retrieve
+    …
+  end
+end
 ```
 
-uses `interactive: true` to indicate that instructions should be shown to the technician,
-`method: 'boxes'` to show the organization of items in the freezer, and
-a show block to print a customized warning message about leaving the freezer open.
+This code first finds the sample “pMOD”, and then finds all the items that are associated with that sample. The technician is then instructed to retrieve all of them. 
 
-TODO: show, in other contexts, the use of take to associate items with the job
+Another important thing both `retrieve` and `take` do is “touch” the item, which allows us to keep a record of all the items used in a job. This is extremely useful for troubleshooting. 
 
---- 
+To put items away, you can use `release` (which is used in conjunction with `take` and takes the same arguments) and/or `operations.store` (which is used in conjunction with `operations.retrieve`).
 
-TODO: use above, details from below
+### Writing a Protocol
 
+To use a semi-realistic example, let’s write a simple version of the “E. coli Transformation” protocol from above. I won’t be going in-depth about all the methods being used, but I’ll leave categorizing each method (through the help of the [Aquarium docs] (http://52.27.43.242/doc/index.html) and detailed [method reference] (http://klavinslab.org/aquarium-api/) as an exercise for the reader. 
+
+Before writing a protocol, it’s always important to ask questions about how you want to structure it, such as: 
+
+- Who’s going to be using it?
+- Will it be “batched” together with other protocols? (The answer to this one is usually ‘yes.’)
+- What input/output structures do I want to use? Items, Collections, an array of items, etc.
+	* To figure this one out, it’s best to first ask yourself, “What are the pros/cons of doing it a specific way? Which operation types will be wired into this, which operation types will  be successors?” A protocol is rarely intended to be used as a standalone — it’s almost always a part of a larger workflow, so it’s important to figure out how you’re going to structure the entire workflow instead of going in all gung-ho, guns a blazin’.  
+
+
+Once you’ve figured out how you’re going to structure it, outlining the protocol is useful. An outline for the Transform E. Coli protocol is something like the following: 
+- Check if there are enough comp cells to perform the protocol
+- Instruct technician to retrieve cold items needed for transformation
+- Label the comp cells
+- Electroporate and rescue
+- Incubate transformants
+- Put away items 
+
+First, define what the inputs and outputs are going to be. This is a transformation protocol — the inputs are going to be comp cells and a plasmid. Comp cells are best represented as a batch, a plasmid as an item. The output is going to be a transformed _E. coli_ aliquot — also a plasmid. So:
+
+![input1](images/input_1.png)
+
+![input2](images/input_2.png)
+
+The “Plasmid” input represents the plasmid — I recommend you take a moment to get over that shocking revelation because there’s something even _more_ shocking coming: The “Comp Cells” input represents the comp cells. 
+
+“Plasmid” has multiple sample type / container combinations, because a plasmid can be held in many different containers and you want to give the user as much flexibility as possible. “Comp Cell” only has one sample type / container combination because you only want to use _E. coli_ comp cells, which are all held in the same type of container — a batch. 
+
+![output](images/outputs.png)
+
+The output is “Transformed E Coli” with container “Transformed E. coli Aliquot,” which will be plated after some incubation period. 
+
+This is the first section of the code, going through and trying to figure out whether or not there are enough comp cells for the operation: 
+
+```ruby
+class Protocol
+  def main 
+    operations.each do |op|
+      # If current batch is empty
+      if op.input(“Comp Cells”).collection.empty?
+        old_batch = op.input(“Comp Cells”).collection
+               
+        # Find replacement batches
+        all_batches = Collection.where(object_type_id: op.input(“Comp Cells”).object_type.id).keep_if { |b| !	b.empty? }
+        batches_of_cells = all_batches.select { |b| b.include? op.input(“Comp Cells”).sample && ! b.deleted? }.sort { |x| x.num_samples }
+        batches_of_cells.reject! { |b| b == old_batch } # debug specific rejection to force replacement
+```
+This looks like a lot, so let’s break it down. 
+
+To understand what’s happening here, the first thing you have to do is understand how a `Collection` is represented in Aquarium. 
+
+A `Collection` is represented as a matrix, and looks like the following: 
+
+![collections](images/collections_example.png)
+
+Each part of the collection is filled with a “7,” which is the sample ID for DH5alpha. In the database, it’s stored like this: [[7,7,7,7,7,7,7,7,7]…[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]], where “-1” indicates an empty slot. 
+
+Because a `Collection` is represented thusly, numerous array methods are used to sort through all collections in Aquarium and find the ones that we’re interested in, which is what all that code above is doing. 
+
+ ```ruby              
+        # Error if not enough
+        if batches_of_cells.empty?
+        op.error :not_enough_comp_cells, "There were not enough comp cells of  #{op.input(“Comp 	Cells”).sample.name} to complete the operation."
+        else
+```
+This lets the user know there weren’t enough comp cells of the correct strain (through ‘op.input(“Comp Cells”).sample.name’, which retrieves the sample name of that input) and errors the operation out. 
+
+```ruby
+        # Set input to new batch
+          op.input(“Comp Cells”).set collection: batches_of_cells.last
+                    
+          # Display warning
+          op.associate :comp_cell_batch_replaced, "There were not enough comp cells for this operation.            	Replaced batch #{old_batch.id} with batch #{op.input(CELLS).collection.id}"
+        end
+      end
+  end 
+```
+
+This code sets a new comp cell batch as the “input” (through op.inputs(“Comp Cells”).set) if there are other batches available and lets the user know know through a data association (`op.associate`, which takes in two arguments: The key and upload; here, “comp cell batch replaced” and the message letting the user know a new comp cell was used, respectively).
+
+Data associations are a great tool to pass information through Aquarium. You can upload messages, measurements, pictures, files, passive-aggressive notes — it’s all good. Operations, samples, items, etc. all have data associations, which means it’s very easy to attach and retrieve information from all of these. For a more detailed breakdown, click [here] (http://52.27.43.242/doc/md-viewer?doc=DataAssociation)
+
+You also want to detract the comp cell aliquots used from the batch, so the online inventory is accurate. To do so, there’s a `remove_one` method included in a library, which is used like so: 
+
+```ruby
+  operations.running.each { |op| op.input(“Comp Cells”).collection.remove_one op.input(“Comp Cells”).sample }
+```
+
+Now that any potential operations without sufficient comp cells have errored out, it's time to do a `retrieve` and `make`. `make` creates the outputs of the protocol. 
+
+```ruby
+  operations.running.retrieve(only: ["Plasmid"]).make
+```
+
+`retrieve` has an optional argument -- you can choose which inputs you want the tech to retrieve using 'only', which takes in an array argument. 
+
+```ruby
+    # Prepare electroporator 
+        show do
+            title "Prepare bench"
+            note "If the electroporator is off (no numbers displayed), turn it on using the ON/STDBY button."
+            note "Set the voltage to 1250V by clicking the up and down buttons."
+            note " Click the time constant button to show 0.0."
+            image "Actions/Transformation/initialize_electroporator.jpg"
+            
+            check "Retrieve and label #{operations.running.length} 1.5 mL tubes with the following ids: #{operations.running.collect { |op| "#{op.output(“Transformed E Coli”).item.id}"}.join(",")} "
+            check "Set your 3 pipettors to be 2 uL, 42 uL, and 300 uL
+            check "Prepare 10 uL, 100 uL, and 1000 uL pipette tips."      
+            check "Grab a Bench SOC liquid aliquot (sterile) and loosen the cap."
+        end
+```
+
+This is a show block, letting the tech know to prepare the electroporator and label the tubes. `operations.running` returns a list of all the un-errored operations, and because it returns an `OperationList`, you can use the built-in ruby enumerators on it (e.g., `collect`, `join`, etc.).
+
+Something to get used to, if you haven’t used Ruby before, is method chaining — the practice of putting multiple methods in one line, e.g., `operations.running.collect { … }.join`. This is the same thing as doing:
+
+```ruby
+  ops = operations.running
+  item_ids = ops.collect { … } 
+  message = item_ids.join(“,”)
+  note “"Retrieve and label … with the following ids: #{message}”
+```
+It’s easy to see why method chaining is preferred. 
+
+The next part is to label all the tubes: 
+
+```ruby
+# Label comp cells 
+  show do 
+    title "Label aliquots"
+    aliquotsLabeled = 0
+    operations.group_by { |op| op.input(“Comp Cells”).item }.each do |batch, grouped_ops|
+      if grouped_ops.size == 1
+        check "Label the electrocompetent aliquot of #{grouped_ops.first.input(“Comp Cells”).sample.name} as #{aliquotsLabeled + 1}."
+      else
+        check "Label each electrocompetent aliquot of #{grouped_ops.first.input(“Comp Cells”).sample.name} from #{aliquotsLabeled + 1}-#{grouped_ops.size + aliquotsLabeled}."
+      end
+      aliquotsLabeled += grouped_ops.size
+    end
+    note "If still frozen, wait till the cells have thawed to a slushy consistency."
+    warning "Transformation efficiency depends on keeping electrocompetent cells ice-cold until electroporation."
+    warning "Do not wait too long"
+    image "Actions/Transformation/thawed_electrocompotent_cells.jpg"
+  end
+```
+
+There’s a new option here — `image`, which allows you to insert an image into the show blocks. 
+
+The reason this section of code uses `group_by` (a Ruby method) is to group all the operations by the batch ID being used. So, each batch will be separated. Suppose you have ten operations; the first five use batch 1234, the next four use batch 4567, and the last one uses 78910. This is what the “groups” would look like: 
+
+batch 1234: operations 1, 2, 3, 4, 5 
+batch 4567: operations 6, 7, 8, 9
+batch 78910: operation 10
+
+The tech would be told to label the first four comp cells from “1-5”; the `aliquotsLabelled` variable would go up by 5, so the next time the loop is run, it would tell the tech to label the next four comp cells “6-9”; once more, `aliquotsLabelled` would go up (this time by four), and, finally, the tech would be told to label the last comp cell as “10.”
+
+Now, we need to write the instructions for the actual transformation: 
+
+```ruby
+1        index = 0 
+2        show do
+3            title "Add plasmid to electrocompetent aliquot, electroporate and rescue "
+4            note "Repeat for each row in the table:"
+5            check "Pipette 2 uL plasmid/gibson result into labeled electrocompetent aliquot, swirl the tip to mix and place back on the aluminum rack after mixing."
+6           check "Transfer 42 uL of e-comp cells to electrocuvette with P100"
+7           check "Slide into electroporator, press PULSE button twice, and QUICKLY add 300 uL of SOC"
+8            check "pipette cells up and down 3 times, then transfer 300 uL to appropriate 1.5 mL tube with P1000"
+9           table operations.running.start_table 
+10                .input_item("Plasmid")
+11                .custom_column(heading: "Electrocompetent Aliquot") { index = index + 1 }
+12                .output_item("Transformed E Coli", checkable: true)
+13                .end_table
+14        end
+```
+
+This uses a new Aquarium object — `Table`. The table looks like this: 
+
+![table](images/table.png)
+
+I’m going to break down the block of code that displays this table, because the rest of the show block is pretty standard. 
+
+The `table` (in line 9) is analogous to `note`, `check`, `warning`, etc. in that it’s used as a flag to display the following argument in a certain way. Without using `table`, your table won’t show up. 
+
+Method chaining can be either on the same line, or on multiple lines, too. So the block of code that says: 
+```ruby
+operations.running.start_table
+  .input_item("Plasmid")
+  .custom_column(heading: "Electrocompetent Aliquot") { index = index + 1 }
+  .output_item("Transformed E Coli", checkable: true)
+  .end_table
+```
+Is the same thing as `operations.running.start_table.input_item("Plasmid").custom_column(heading: "Electrocompetent Aliquot") { index = index + 1 }.output_item("Transformed E Coli", checkable: true).end_table`, except a) that doesn’t fit on one line and b) it’s much, much more confusing. As such, for clarity’s sake, it’s split onto multiple lines. 
+
+`start_table` is the method that starts the table. `input_item` adds a column that displays the input item associated with the input “Plasmid.” `custom_column` takes in two arguments: One for what heading should be displayed, and the other is a block that determines what will be displayed in each row of the column. In this case, it’s `index`, which is  way to number things 1–n, where n is the number of operations. 
+
+`output_item` is exactly like `input_item`, but instead references the output. `end_table` is what signals the end of the table, and to display a table, `end_table` is necessary because that is what returns the fully-formed table. 
+
+There are many table methods — refer to the more general [Operation documentation] (http://52.27.43.242/doc/md-viewer?doc=Operations) for an overview. 
+
+The next step is to incubate the transformants: 
+
+```ruby
+ show do 
+            title "Incubate transformants"
+            check "Grab a glass flask"
+            check "Place E. coli transformants inside flask laying sideways and place flask into shaking 37 C incubator."
+            #Open google timer in new window
+            note "<a href=\'https://www.google.com/search?q=30%20minute%20timer\' target=\'_blank\'>Use a 30 minute Google timer</a> to set a reminder to retrieve the transformants, at which point you will start the \'Plate Transformed Cells\' protocol."
+            image "Actions/Transformation/37_c_shaker_incubator.jpg"
+            note "While the transformants incubate, finish this protocol by completing the remaining tasks."
+        end
+```
+
+This also opens up a Google timer for one hour, which is useful. 
+
+The last step the tech needs to do is clean up, so: 
+```ruby
+        show do
+            title "Clean up"
+            check "Put all cuvettes into biohazardous waste."
+            check "Discard empty electrocompetent aliquot tubes into waste bin."
+            check "Return the styrofoam ice block and the aluminum tube rack."
+            image "Actions/Transformation/dump_dirty_cuvettes.jpg"
+        end
+```
+We also need to move all the output transformations to the 37C shaker, and we need to do so manually: 
+
+```ruby
+        operations.running.each do |op|
+            op.output(“Transformed E Coli”).item.move "37C shaker"
+        end
+```
+
+And that’s it! Not too bad. Make sure you have the correct number of `end`s, and you can start testing this protocol out on Aquarium immediately. 
+
+TIP: While writing a protocol, if you find yourself thinking, “Gosh, I wish there were a method I could use that would do (insert tedious thing here),” chances are, there is — look through the in-depth Aquarium documentation or search for a ruby method through Google. If there _isn’t_, you can make one yourself and stick it in a library. 
 
 ### Creating Items and Samples
 
