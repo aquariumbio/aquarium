@@ -35,10 +35,13 @@
             <table class='tiny-collection' ng-if="item.matrix">
               <tr ng-repeat="row in item.matrix track by $index">
                 <td ng-repeat="el in row track by $index" 
-                    ng-class="sample.id == el ? 'filled' : 'blank'">
+                    ng-class="sample.id == el ? 'filled' : el != -1 ? 'other' : 'blank'">
                 </td>
               </tr>
             </table>
+            <a ng-if="item.matrix" href="/items/{{item.id}}" target="_blank">
+              Collection details
+            </a>
           </div>
 
         </div>
