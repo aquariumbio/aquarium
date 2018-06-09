@@ -113,7 +113,7 @@ AQ.FieldValue.record_methods.choose_item = function(items) {
     if ( fv.role == 'input' && fv.num_wires == 0 ) {
       if ( !items[0].collection ) {
         fv.child_item_id = items[0].id;
-      } else {
+      } else if ( fv.row == null || fv.row == undefined || !fv.column == null || fv.column == undefined ) {
         fv.child_item_id = items[0].collection.id;
         items[0].collection.assign_first(fv);
       }
