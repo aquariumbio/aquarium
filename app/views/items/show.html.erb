@@ -8,11 +8,6 @@
   <% end %>
 </h1>
 
-  <%= 
-    render partial: '/posts/discussion', locals: { 
-    topic: @item,
-    button_class: 'btn-small' } %>
-
   <%= render @handler.show_item_partial %>
 
  <div class='well'>
