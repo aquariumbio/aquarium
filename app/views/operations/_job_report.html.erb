@@ -1,0 +1,57 @@
+<div style="position: relative; margin: 20px; width: 150%"
+     ng-if="current.job_report_object.status == 'ready' && current.job_report_object.jobs.length == 0">
+  <p>No jobs performed on {{current.job_report_date.toDateString()}}.</p>
+</div>
+
+<div style="position: relative; margin: 20px; width: 150%"
+     ng-if="current.job_report_object.status == 'waiting'">
+  <p>Preparing report.</p>
+</div>
+
+<div style="position: relative; margin: 20px; width: 150%">
+
+  <!-- Time grid -->
+  <div ng-repeat="box in current.job_report_object.hour_boxes"
+       ng-click="current.job_report_object.selection = null"
+       class="no-highlight"
+       style="position: absolute;
+              left: {{box.left}}px;
+              height: {{box.height}}px;
+              background: {{box.hour % 2 == 0 ? 'white' : '#eee'}};
+              border-left: 1px solid #ddd;
+              width: 60px;
+              font-size: 11px;
+              padding: 0 0 0 5px">
+    {{box.hour}}:00
+  </div>
+
+  <!-- Job boxes -->
+  <div ng-repeat="job in current.job_report_object.jobs track by $index"
+       style="position: absolute; 
+            background: {{job.color}};
+                   top: {{job.top}}px;
+                height: {{job.height}}px;
+                  left: {{job.left-current.job_report_object.min}}px; 
+                 width: {{job.width}}px">
+    <!-- This line intentionally left blank -->
+  </div>
+
+  <!-- Job names -->
+  <div ng-repeat="job in current.job_report_object.jobs track by $index"
+       
+       style="position: absolute; 
+                   top: {{job.top}}px;
+                cursor: pointer;
+                  left: {{job.left-current.job_report_object.min}}px;">
+        <span ng-click="current.job_report_object.selection = job"
+              class="no-highlight"
+              style="cursor: pointer;
+                     outline: {{job == current.job_report_object.selection ? '2pt solid orange' : 'none'}}">
+          &nbsp;{{job.id}}:{{job.operations[0].operation_type.name}}
+        </span>
+        <a href="/users/{{job.user.id}}" 
+           target="user" 
+           style="color: steelblue">({{job.user.login}})</span>
+  </div>
+
+</div>

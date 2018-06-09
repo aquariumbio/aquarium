@@ -4,7 +4,8 @@ class JobsController < ApplicationController
 
   def index
 
-    @users = User.all - User.includes(memberships: :group).where(memberships: { group_id: Group.find_by_name('retired') })
+    @users = User.all - User.includes(memberships: :group)
+                            .where(memberships: { group_id: Group.find_by_name('retired') })
     @groups = Group.includes(:memberships).all.reject { |g| g.memberships.length == 1 }
     @metacols = Metacol.where(status: 'RUNNING')
 
@@ -36,6 +37,23 @@ class JobsController < ApplicationController
 
   def upload
     redirect_to Upload.find(params[:id]).url
+  end
+
+  def report
+    begin
+      puts params[:date]
+      start = DateTime.parse(params[:date]).beginning_of_day
+      render json: Job.includes(:user, job_associations: { operation: :operation_type })
+                      .where("? < updated_at AND updated_at < ?", start, start+1.day)
+                      .select { |job| job.pc == Job.COMPLETED && job.job_associations.length > 0 }                          
+                      .to_json(include: [ :user, { job_associations: { include: { operation: { include: :operation_type } } } } ] )
+
+    rescue Exception => e
+      logger.info e
+      logger.info e.backtrace
+      render json: { error: e.to_s }
+    end
+
   end
 
 end

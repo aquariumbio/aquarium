@@ -167,6 +167,8 @@ Bioturk::Application.routes.draw do
   get 'stats/protocol_version_info'
   get 'jobs/index'
   get 'jobs/summary'
+  get 'jobs/report'
+
   match 'joblist', to: 'jobs#joblist'
 
   get '/items/store/:id',      to: 'items#store'
@@ -192,7 +194,6 @@ Bioturk::Application.routes.draw do
   match '/signin',     to: 'sessions#new'
   match '/signout',    to: 'sessions#destroy', via: :delete
   match '/analytics',  to: 'static_pages#analytics'
-  match '/jobchart',   to: 'static_pages#jobchart'
   match '/location',   to: 'static_pages#location'
   get '/dismiss',      to: 'static_pages#dismiss'
 

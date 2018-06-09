@@ -4,26 +4,33 @@
 
       <% if current_user && current_user.is_admin %>
 
-        <div ng-click="current.category_index = -1; current.switch_user = true; current.active_jobs = false""
+        <div ng-click="current.category_index = -1; current.switch_user = true; current.active_jobs = false; current.job_report = false"
              ng-class="current.switch_user ? 
                                  'no-highlight selected-category alt-category' : 
                                  'no-highlight unselected-category alt-category'">
             Switch User
         </div>
 
-        <div ng-click="current.category_index = -1; current.switch_user = false; current.active_jobs = true"
+        <div ng-click="current.category_index = -1; current.switch_user = false; current.active_jobs = true; current.job_report = false"
              ng-class="current.active_jobs ? 
                                  'no-highlight selected-category alt-category' : 
                                  'no-highlight unselected-category alt-category'">
             Active Jobs
-        </div>        
+        </div>     
+
+        <div ng-click="current.category_index = -1; current.switch_user = false; current.active_jobs = false; current.job_report = true; get_job_report()"
+             ng-class="current.job_report ? 
+                               'no-highlight selected-category alt-category' : 
+                               'no-highlight unselected-category alt-category'">
+            Activity Reports
+        </div>               
 
       <% end %>   
 
       <br>
 
       <div ng-repeat="cat in categories track by $index"
-          ng-click="current.category_index = $index; current.switch_user = false;; current.active_jobs = false""
+          ng-click="current.category_index = $index; current.switch_user = false;; current.active_jobs = false; current.job_report = false"
           ng-class="category_class($index)">
           {{cat}}
       </div>           
@@ -31,7 +38,7 @@
   </div>
 
   <table class='table table-condensed status-table'
-         ng-if='!current.switch_user && !current.active_jobs'>
+         ng-if='!current.switch_user && !current.active_jobs && !current.job_report'>
 
     <tr>
       <th class='operation-name'>
@@ -134,6 +141,27 @@
 
     </table><br>
 
+    <div ng-if="current.job_report">
+      <h2 class="md-title">&nbsp; Choose Report Date</h2>
+      <md-datepicker ng-model="current.job_report_date" 
+                     ng-change="get_job_report()"
+                     md-placeholder="Enter date"></md-datepicker>
+
+      <div ng-if="current.job_report_object.selection">
+         <h2 class="md-title">
+           &nbsp; 
+           Job 
+           <a href="/jobs/{{current.job_report_object.selection.id}}" target="job">
+             {{current.job_report_object.selection.id}}</a>
+           Operations
+         </h2>
+      <oplist-report operationtype="current.job_report_object.operations[0].operation_type"
+              operations="current.job_report_object.selection.operations"
+              status="done"
+              short="true"
+              jobid="job.id">         
+      </div>
+    </div>
 
   <% end %>
 

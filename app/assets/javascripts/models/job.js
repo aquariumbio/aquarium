@@ -1,4 +1,4 @@
-AQ.Job.record_methods.upgrade = function() {
+AQ.Job.record_methods.upgrade = function(raw_data) {
 
   var job = this;
 
@@ -24,7 +24,21 @@ AQ.Job.record_methods.upgrade = function() {
     ];
   }
 
-  return this;
+  if ( raw_data.job_associations ) {
+    delete job.operations;
+    job.operations = aq.collect(raw_data.job_associations, ja => {
+      let op = AQ.Operation.record(ja.operation);
+      return op;
+    });    
+  }    
+
+  if ( raw_data.user ) {  
+    delete user;
+    job.user = AQ.User.record(raw_data.user);
+  }
+
+  return job;
+
 }
 
 AQ.Job.record_getters.type = function() {

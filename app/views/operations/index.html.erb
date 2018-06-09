@@ -1,7 +1,8 @@
-<% provide(:title, 'Manager') %>
-
 <%= render partial: "/items/template" %>
 <%= render partial: 'operation_list' %> 
+<%= render partial: '/operations/operation_list_report' %>
+
+<% provide(:title, 'Manager') %>
 
 <%= content_for :class do %>operations<% end %>
 
@@ -21,75 +22,86 @@
 
 <%= content_for :specific_title do %>
 
-  <span ng-if="current.selected_user && current.filter_user">
+  <span ng-if="current.selected_user && current.filter_user && !current.job_report">
     &rang; {{current.selected_user.name}}
   </span>
 
-  <span ng-if="current.operation_type">
+  <span ng-if="current.operation_type && !current.job_report">
     &rang; {{current.operation_type.category}} &rang; {{current.operation_type.name}} &rang;
     <span class='capitalize'>
       {{current.status}}
     </span>
   </span>
+
+  <span ng-if="current.job_report">
+    &rang; Activity Report &rang; {{current.job_report_date.toDateString()}}
+  </span>
+
 <% end %>
 
 <% if current_user && current_user.is_admin %>
   <%= content_for :action1 do %>
+    <div ng-if=" !current.job_report">
+      <md-button aria-label="Schedule"  class='md-raised'
+        ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
+        ng-click="batch(current.operation_type)">
+        Schedule
+      </md-button>
 
-    <md-button aria-label="Schedule"  class='md-raised'
-      ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
-      ng-click="batch(current.operation_type)">
-      Schedule
-    </md-button>
-
-    <md-button aria-label="Retry" class='md-raised'
-      ng-if="current.status == 'error'"
-      ng-click="retry(current.operation_type)">
-      Retry
-    </md-button>
-
+      <md-button aria-label="Retry" class='md-raised'
+        ng-if="current.status == 'error'"
+        ng-click="retry(current.operation_type)">
+        Retry
+      </md-button>
+    </div>
   <% end %>
 <% end %>
 
 <% if current_user && current_user.is_admin %>
   <%= content_for :action2 do %>
-    <md-button aria-label="Click"  class='md-raised'
-      ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
-      ng-click="choose(current.operation_type,'pending',true)">
-      All
-    </md-button>
-    <md-button aria-label="Click"  class='md-raised'
-      ng-if="!current.operation_type.on_the_fly && current.status == 'error'"
-      ng-click="choose(current.operation_type,'error',true)">
-      All
-    </md-button>  
+    <div ng-if=" !current.job_report">  
+      <md-button aria-label="Click"  class='md-raised'
+        ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
+        ng-click="choose(current.operation_type,'pending',true)">
+        All
+      </md-button>
+      <md-button aria-label="Click"  class='md-raised'
+        ng-if="!current.operation_type.on_the_fly && current.status == 'error'"
+        ng-click="choose(current.operation_type,'error',true)">
+        All
+      </md-button>  
+    </div>
   <% end %>
 <% end %>
 
 <% if current_user && current_user.is_admin %>
   <%= content_for :action3 do %>
-    <md-button aria-label="Click" class='md-raised'
-      ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
-      ng-click="choose(current.operation_type,'pending',false)">
-      None
-    </md-button>
-    <md-button aria-label="Click"  class='md-raised'
-      ng-if="!current.operation_type.on_the_fly && current.status == 'error'"
-      ng-click="choose(current.operation_type,'error',false)">
-      None
-    </md-button>  
+    <div ng-if=" !current.job_report">  
+      <md-button aria-label="Click" class='md-raised'
+        ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
+        ng-click="choose(current.operation_type,'pending',false)">
+        None
+      </md-button>
+      <md-button aria-label="Click"  class='md-raised'
+        ng-if="!current.operation_type.on_the_fly && current.status == 'error'"
+        ng-click="choose(current.operation_type,'error',false)">
+        None
+      </md-button> 
+    </div> 
   <% end %>
 <% end %>
 
 <% if current_user && current_user.is_admin %>
   <%= content_for :action4 do %>
-    <md-button class="md-raised md-primary" ng-click="step_all()" ng-disabled="current.stepping">
-      <span ng-if="!current.stepping">Step All</span>
-      <span ng-if="current.stepping">
-        <md-progress-linear class="md-hue-2" md-diameter="20px" style="display: inline-block">
-        </md-progress-linear>       
-      </span>
-    </md-button>
+    <div ng-if=" !current.job_report">  
+      <md-button class="md-raised md-primary" ng-click="step_all()" ng-disabled="current.stepping">
+        <span ng-if="!current.stepping">Step All</span>
+        <span ng-if="current.stepping">
+          <md-progress-linear class="md-hue-2" md-diameter="20px" style="display: inline-block">
+          </md-progress-linear>       
+        </span>
+      </md-button>
+    </div>
   <% end %>
 <% end %>
 
@@ -97,60 +109,68 @@
 
    <%= render partial: '/data_associations/template' %> 
 
-   <div class='timing md-subhead timing-info'
-        ng-if="current.operation_type.timing && current.operation_type.timing.active">
-        Usually Scheduled {{current.operation_type.timing.as_string}}
-   </div>
+   <div ng-if="!current.job_report">
 
-  <oplist operationtype="current.operation_type"
-          operations="current.operation_type.operations"
-          status="current.status"
-          ng-if="current.operation_type && current.status != 'scheduled' && current.status != 'running'">
-  </oplist>
+     <div class='timing md-subhead timing-info'
+          ng-if="current.operation_type.timing && current.operation_type.timing.active">
+          Usually Scheduled {{current.operation_type.timing.as_string}}
+     </div>
 
-  <div ng-if="current.operation_type && current.status == 'scheduled' || current.status == 'running'">
+    <oplist operationtype="current.operation_type"
+            operations="current.operation_type.operations"
+            status="current.status"
+            ng-if="current.operation_type && current.status != 'scheduled' && current.status != 'running'">
+    </oplist>
 
-    <div ng-if="jobs.length > 0" ng-repeat="job_id in jobs" class='job'  style='margin: 16px'>
+    <div ng-if="current.operation_type && current.status == 'scheduled' || current.status == 'running'">
 
-      <md-toolbar class="job-toolbar">
+      <div ng-if="jobs.length > 0" ng-repeat="job_id in jobs" class='job'  style='margin: 16px'>
 
-        <div class='md-toolbar-tools'>
+        <md-toolbar class="job-toolbar">
 
-          <h2 flex md-truncate>
-            Job <a href="/jobs/{{job_id}}">{{job_id}}</a>
-            <span ng-if="debugging_job_id == job_id">
-              <md-progress-circular class="md-hue-2" md-diameter="20px" style="display: inline-block">
-              </md-progress-circular> 
-            </span>
-          </h2>
-        
-          <% if current_user && current_user.is_admin %>
-            <md-button ng-if="current.status != 'running'" class='md-small' ng-href="/krill/start?job={{job_id}}" aria-lable="Run">Run</md-button>
-            <% if Bioturk::Application.config.debug_tools %>
-              <md-button ng-if="current.status != 'running'" class='md-small' ng-click="debug(current.operation_type,job_id)" aria-lable="Debug">Debug</md-button>
+          <div class='md-toolbar-tools'>
+
+            <h2 flex md-truncate>
+              Job <a href="/jobs/{{job_id}}">{{job_id}}</a>
+              <span ng-if="debugging_job_id == job_id">
+                <md-progress-circular class="md-hue-2" md-diameter="20px" style="display: inline-block">
+                </md-progress-circular> 
+              </span>
+            </h2>
+          
+            <% if current_user && current_user.is_admin %>
+              <md-button ng-if="current.status != 'running'" class='md-small' ng-href="/krill/start?job={{job_id}}" aria-lable="Run">Run</md-button>
+              <% if Bioturk::Application.config.debug_tools %>
+                <md-button ng-if="current.status != 'running'" class='md-small' ng-click="debug(current.operation_type,job_id)" aria-lable="Debug">Debug</md-button>
+              <% end %>
+              <md-button ng-if="current.status != 'running'" class='md-small' ng-click="unschedule(current.operation_type,job_id)" aria-lable="Unschedule">Remove</md-button>
+              <md-button ng-if="current.status != 'running'" class='md-small' ng-click="$parent.choose(current.operation_type,'scheduled',true,job_id)" aria-label="All">All</md-button>
+              <md-button ng-if="current.status != 'running'" class='md-small' ng-click="$parent.choose(current.operation_type,'scheduled',false,job_id)" aria-lable="None">None</md-button>
             <% end %>
-            <md-button ng-if="current.status != 'running'" class='md-small' ng-click="unschedule(current.operation_type,job_id)" aria-lable="Unschedule">Remove</md-button>
-            <md-button ng-if="current.status != 'running'" class='md-small' ng-click="$parent.choose(current.operation_type,'scheduled',true,job_id)" aria-label="All">All</md-button>
-            <md-button ng-if="current.status != 'running'" class='md-small' ng-click="$parent.choose(current.operation_type,'scheduled',false,job_id)" aria-lable="None">None</md-button>
-          <% end %>
-        </div>
+          </div>
 
-      </md-toolbar>
+        </md-toolbar>
 
-      <oplist operation_type="current.operation_type"
-              operations="current.operation_type.operations"
-              status="current.status" 
-              jobid="job_id">
-      </oplist>
+        <oplist operation_type="current.operation_type"
+                operations="current.operation_type.operations"
+                status="current.status" 
+                jobid="job_id">
+        </oplist>
+
+      </div>
+
+      <h1 class="md-title" ng-if="jobs.length == 0">No operations</h1>
+
+      <h1 class="md-title" ng-if="!jobs">Loading operations ...</h1>    
 
     </div>
 
-    <h1 class="md-title" ng-if="jobs.length == 0">No operations</h1>
-
-    <h1 class="md-title" ng-if="!jobs">Loading operations ...</h1>    
+    <h1 class='md-title' ng-if="!current.operation_type">No operations selected</h1>
 
   </div>
 
-  <h1 class='md-title' ng-if="!current.operation_type">No operations selected</h1>
+  <div ng-if="current.job_report">  
+    <%= render partial: "job_report" %>
+  </div>
 
 <% end %>

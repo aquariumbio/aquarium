@@ -289,16 +289,14 @@
 })();
 
 function open_item_ui(id) {
+  console.log("ASD")
   try {
     angular.element($('#technicianCtrl')).scope().open_item_ui(id);
   } catch(e) {}
   try {
-    console.log("A");    
     let a = angular.element($('#operationTypesCtrl'));
-    console.log(a,a.scope());
     a.scope().open_item_ui(id);
-    console.log("B");
-  } catch(e) { console.log(e)}
+  } catch(e) { console.log(e) }
 } 
 
 function update_job_uploads() {

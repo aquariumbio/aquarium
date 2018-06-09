@@ -18,12 +18,16 @@ AQ.Operation.new_operation = function(operation_type, parent_module_id=0, x=100,
 
 }
 
-AQ.Operation.record_methods.upgrade = function() {
+AQ.Operation.record_methods.upgrade = function(raw_data) {
 
   let operation = this;
   operation.show_uploads = false;
 
-  return this;
+  if ( raw_data && raw_data.operation_type ) {
+    operation.operation_type = AQ.OperationType.record(raw_data.operation_type)
+  }
+
+  return operation;
 
 }
 

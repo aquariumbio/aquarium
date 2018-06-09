@@ -1,4 +1,3 @@
-
 (function () {
 
   let w = angular.module('aquarium');
@@ -42,6 +41,9 @@
             active: {}
           }
         }
+
+        $scope.current.job_report_date = new Date();
+        $scope.current.job_report_data = [];
 
         $interval(reload, 30000);
 
@@ -375,7 +377,15 @@
 
       }
 
+      $scope.get_job_report = function() {
+        $scope.current.job_report_object = new JobReport([], "waiting");
+        AQ.http.get(`/jobs/report?date=${$scope.current.job_report_date.toString()}`).then(reponse => {
+          $scope.current.job_report_object = new JobReport(reponse.data, "ready");
+        })
+      }   
+
     }]);
 
 })();
+
 
