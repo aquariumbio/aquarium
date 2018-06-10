@@ -5,6 +5,18 @@
 
 <%= content_for :sidebar do %>
 
+  <md-list>
+    <md-list-item id="chrome" class="md-3-line" layout-padding style="display: none">
+      <div class="md-list-item-text" layout="column">
+        <h2 class='md-title'>Chrome Not Detected</h2>
+        <h3 class='md-subtitle' style="color: red; font-weight: bold">Warning!</h3>
+        <p>You are not using Google Chrome. Some features may not be available. 
+           Aquarium has been tested extensively with Google Chrome and we highly recommend you use
+           it instead. Install it <a href="https://www.google.com/chrome/index.html">here</a>.</p>
+      </div>
+    </md-list-item>  
+  </md-list>
+
   <% if current_user.id != @user.id && current_user.is_admin %>
 
     <h1 class="warning">
@@ -50,7 +62,18 @@
 
 <%= content_for :main do %>
 
-  <md-content flex layout-fill layout-padding layout="row" ng-if="status.view == 'Information'">
+  <script type="text/javascript">    
+  $(function() {
+    if ( ! ( !!window.chrome && !!window.chrome.webstore) )  {
+      console.log("No chrome!")
+      $("#chrome").show()
+    }
+  });
+  </script>
+
+  <div  class='scrollable'>
+
+  <md-content flex layout-fill layout-padding layout="row" ng-if="status.view == 'Information'" class='md-white'>
 
     <div flex="33">
 
@@ -92,7 +115,7 @@
 
   <% if current_user.id == @user.id || current_user.is_admin %>
 
-    <md-content flex layout-fill layout-padding ng-if="status.view == 'Preferences'">
+    <md-content flex layout-fill layout-padding ng-if="status.view == 'Preferences'" class='md-white'>
     
       <md-list>
         <md-list-item ng-repeat="pref in preferences">
@@ -112,9 +135,23 @@
         </md-list-item>
       </md-list>
 
-    </md-content>  
+    </md-content> 
 
-    <md-content flex layout-fill layout-padding ng-if="status.view == 'Memberships'">
+    <md-content flex 
+                layout-fill 
+                ng-if="status.view == 'Statistics'"
+                class='md-white user-op-stats'>
+          
+        <div class="user-op-stat" ng-repeat="stat in user.stats">
+          <div class="name">{{stat.name}}</div>
+          <div class="done" style="width: {{stat.done}}px">&nbsp;</div>
+          <div class="error" style="width: {{stat.error}}px">&nbsp;</div>
+          <div class="number">{{stat.count}}</div>
+        </div>
+
+    </md-content>     
+
+    <md-content flex layout-fill layout-padding ng-if="status.view == 'Memberships'" class='md-white'>
           
       <md-list>
         <md-list-item class="md-2-line" ng-repeat="group in user.groups">
@@ -127,7 +164,7 @@
 
     </md-content>
 
-    <md-content flex layout-fill layout-padding ng-if="status.view == 'Change Password'">
+    <md-content flex layout-fill layout-padding ng-if="status.view == 'Change Password'" class='md-white'>
 
       <md-list>
 
@@ -155,7 +192,7 @@
 
     </md-content>
 
-    <md-content flex layout-fill layout-padding ng-if="status.view == 'Budgets'">
+    <md-content flex layout-fill layout-padding ng-if="status.view == 'Budgets'" class='md-white'>
 
       <md-list ng-repeat="uba in user.user_budget_associations" flex>
         <md-list-item ng-if="uba.budget && uba.budget.spent.this_month != null">
@@ -175,7 +212,7 @@
 
     </md-content>
 
-    <md-content flex layout-fill layout-padding ng-if="status.view == 'BIOFAB Agreement'">    
+    <md-content flex layout-fill layout-padding ng-if="status.view == 'BIOFAB Agreement'" class='md-white'>    
       <%= render partial: 'biofab_agreement' %>
       <hr>
       <% if current_user.id == @user.id %>      
@@ -183,14 +220,15 @@
                    ng-click="agree('biofab')"
                    ng-if="!user.params.biofab.value || user.params.biofab.value == 'false'">Agree</md-button>
       <% else %>
-      <p class='md-body-2'
+      <p class='md-title'
          ng-if="user.params.biofab.value != 'true'">This user has not agreed to this document.</p>
       <% end %>
-      <p class='md-body-2'
-         ng-if="user.params.biofab.value == 'true'">Agreed on {{user.params.biofab.updated_at|date}}.</p>
+      <p class='md-title'
+         ng-if="user.params.biofab.value == 'true'">
+         {{user.name}} agreed on {{user.params.biofab.updated_at|date}}.</p>
     </md-content>
 
-    <md-content flex layout-fill layout-padding ng-if="status.view == 'Aquarium Agreement'">    
+    <md-content flex layout-fill layout-padding ng-if="status.view == 'Aquarium Agreement'" class='md-white'>    
       <%= render partial: 'aquarium_agreement' %>
       <hr>
       <% if current_user.id == @user.id %>
@@ -198,14 +236,17 @@
                    ng-click="agree('aquarium')"
                    ng-if="!user.params.aquarium.value || user.params.aquarium.value == 'false'">Agree</md-button>
       <% else %>
-      <p class='md-body-2'
+      <p class='md-title'
          ng-if="user.params.aquarium.value != 'true'">This user has not agreed to this document.</p>
       <% end %>
-      <p class='md-body-2'
-         ng-if="user.params.aquarium.value == 'true'">Agreed on {{user.params.aquarium.updated_at|date}}.</p>
+      <p class='md-title'
+         ng-if="user.params.aquarium.value == 'true'">
+         {{user.name}} agreed on {{user.params.aquarium.updated_at|date}}.</p>
     </md-content>    
 
   <% end %>
+
+  </div>
 
 <% end %>
 

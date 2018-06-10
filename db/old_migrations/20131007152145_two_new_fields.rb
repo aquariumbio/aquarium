@@ -1,3 +1,5 @@
+
+
 class TwoNewFields < ActiveRecord::Migration
   def change
     add_column :sample_types, :field5name, :string

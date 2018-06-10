@@ -1,8 +1,10 @@
+
+
 class UsersController < ApplicationController
 
-  before_filter :signed_in_user, only: [:edit, :update]
-  before_filter :signed_in_user, only: [:index, :edit, :update]
-  before_filter :admin_user,     only: [:destroy, :new, :password, :index]
+  before_filter :signed_in_user, only: %i[edit update]
+  before_filter :signed_in_user, only: %i[index edit update]
+  before_filter :admin_user,     only: %i[destroy new password index]
 
   def new
     @user = User.new
@@ -27,18 +29,6 @@ class UsersController < ApplicationController
 
   end
 
-  def billing
-
-    @user = User.find(params[:id])
-    @report = TaskPrototype.cost_report @user.id
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @report }
-    end    
-
-  end
-
   def create
 
     if !params[:change_password]
@@ -59,7 +49,7 @@ class UsersController < ApplicationController
       else
         render 'new'
       end
- 
+
     else
 
       @user = User.find_by_login(params[:user][:login])
@@ -77,15 +67,14 @@ class UsersController < ApplicationController
 
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
 
     user = User.find(params[:id])
 
     unless user.id == current_user.id || current_user.is_admin
-      render json: { error: "User #{current_user.login} is not authorized to update user #{user.login}'s profile." }, status: 422
+      render json: { error: "User #{current_user.login} is not authorized to update user #{user.login}'s profile." }, status: :unprocessable_entity
       return
     end
 
@@ -93,22 +82,22 @@ class UsersController < ApplicationController
       user.name = params[:name]
       user.save
       unless user.errors.empty?
-        render json: { error: user.errors.full_messages.join('') }, status: 422
+        render json: { error: user.errors.full_messages.join('') }, status: :unprocessable_entity
         return
       end
     end
 
     params[:parameters].each do |p|
       plist = Parameter.where(user_id: user.id, id: p[:id])
-      if plist.length == 0 
+      if plist.empty?
         user.parameters.create key: p[:key], value: p[:value]
-      elsif plist.length == 1 
+      elsif plist.length == 1
         plist[0].value = p[:value]
         plist[0].save
         unless plist[0].errors.empty?
           render json: { error: plist[0].errors.full_messages.join('') }
           return
-        end        
+        end
       end
     end
 
@@ -121,7 +110,7 @@ class UsersController < ApplicationController
     user = User.find(params[:id])
 
     unless user.id == current_user.id || current_user.is_admin
-      render json: { error: "User #{current_user.login} is not authorized to change #{user.login}'s password." }, status: 422
+      render json: { error: "User #{current_user.login} is not authorized to change #{user.login}'s password." }, status: :unprocessable_entity
       return
     end
 
@@ -130,9 +119,9 @@ class UsersController < ApplicationController
     user.save
 
     if user.errors.empty?
-      redirect_to :users_url
+      render json: user
     else
-      render json: { error: user.errors.full_messages.join(', ') }, status: 422
+      render json: { error: user.errors.full_messages.join(', ') }, status: :unprocessable_entity
     end
 
   end
@@ -143,20 +132,20 @@ class UsersController < ApplicationController
 
     respond_to do |format|
 
-      format.html {
+      format.html do
 
         retired = Group.find_by_name('retired')
         rid = retired ? retired.id : -1
 
         @users = User.includes(memberships: :group)
-                     .select { |u| !u.member? rid }
-                     .sort { |a,b| a[:login] <=> b[:login] }
-                     .paginate(page: params[:page], :per_page => 15)    
+                     .reject { |u| u.member? rid }
+                     .sort { |a, b| a[:login] <=> b[:login] }
+                     .paginate(page: params[:page], per_page: 15)
 
-        render layout: 'aq2' 
+        render layout: 'aq2'
 
-      }
-      format.json { render json: User.includes(memberships: :group).all.sort { |a,b| a[:login] <=> b[:login] } }
+      end
+      format.json { render json: User.includes(memberships: :group).all.sort { |a, b| a[:login] <=> b[:login] } }
 
     end
 
@@ -168,6 +157,16 @@ class UsersController < ApplicationController
     render json: u
   end
 
+  def active
+
+    users = User.includes(memberships: :group)
+                .all
+                .reject { |u| u.groups.collect(&:name).member? 'retired' }
+
+    render json: users.collect { |u| { id: u.id, name: u.name, login: u.login } }
+
+  end
+
   def destroy
 
     u = User.find(params[:id])
@@ -177,9 +176,9 @@ class UsersController < ApplicationController
       m = Membership.new
       m.user_id = u.id
       m.group_id = ret.id
-      m.save    
-      flash[:success] = "The user has been disconnected. Why did they resist? We only wish to raise quality of life for all species."
-    else 
+      m.save
+      flash[:success] = 'The user has been disconnected. Why did they resist? We only wish to raise quality of life for all species.'
+    else
       flash[:error] = "Could not retire user because the 'retired' group does not exist. Go make it and try again."
     end
 
@@ -187,16 +186,20 @@ class UsersController < ApplicationController
 
   end
 
+  def stats
+    render json: User.find(params[:id]).stats
+  end  
+
   private
 
-    def correct_user
-      @user = User.find(params[:id])
-      redirect_to(root_path, notice: "You cannot edit someone else's profile") unless current_user?(@user)
-    end
+  def correct_user
+    @user = User.find(params[:id])
+    redirect_to(root_path, notice: "You cannot edit someone else's profile") unless current_user?(@user)
+  end
 
-    def admin_user
-      flash[:error] = "You do not have admin privileges" unless current_user.is_admin
-      redirect_to(root_path) unless current_user.is_admin
-    end
+  def admin_user
+    flash[:error] = 'You do not have admin privileges' unless current_user.is_admin
+    redirect_to(root_path) unless current_user.is_admin
+  end
 
 end

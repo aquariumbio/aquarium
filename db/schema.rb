@@ -11,19 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20170627173019) do
+ActiveRecord::Schema.define(:version => 20180529204642) do
 
   create_table "account_logs", :force => true do |t|
     t.integer  "row1"
     t.integer  "row2"
-    t.integer  "task_id"
     t.integer  "user_id"
     t.text     "note"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
 
-  add_index "account_logs", ["task_id"], :name => "index_account_log_associations_on_task_id"
   add_index "account_logs", ["user_id"], :name => "index_account_log_associations_on_user_id"
 
   create_table "accounts", :force => true do |t|
@@ -32,7 +30,6 @@ ActiveRecord::Schema.define(:version => 20170627173019) do
     t.integer  "user_id"
     t.integer  "budget_id"
     t.string   "category"
-    t.integer  "task_id"
     t.integer  "job_id"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
@@ -44,7 +41,6 @@ ActiveRecord::Schema.define(:version => 20170627173019) do
 
   add_index "accounts", ["budget_id"], :name => "index_accounts_on_budget_id"
   add_index "accounts", ["job_id"], :name => "index_accounts_on_job_id"
-  add_index "accounts", ["task_id"], :name => "index_accounts_on_task_id"
   add_index "accounts", ["user_id"], :name => "index_accounts_on_user_id"
 
   create_table "allowable_field_types", :force => true do |t|
@@ -67,16 +63,6 @@ ActiveRecord::Schema.define(:version => 20170627173019) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "blobs", :force => true do |t|
-    t.string   "sha"
-    t.string   "path"
-    t.text     "xml"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.text     "dir"
-    t.integer  "job_id"
-  end
-
   create_table "budgets", :force => true do |t|
     t.string   "name"
     t.float    "overhead"
@@ -88,21 +74,14 @@ ActiveRecord::Schema.define(:version => 20170627173019) do
     t.string   "phone"
   end
 
-  create_table "cart_items", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "item_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "codes", :force => true do |t|
     t.string   "name"
     t.text     "content"
     t.integer  "parent_id"
     t.string   "parent_class"
-    t.integer  "child_id"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+    t.integer  "user_id"
   end
 
   create_table "data_associations", :force => true do |t|
@@ -156,6 +135,22 @@ ActiveRecord::Schema.define(:version => 20170627173019) do
   add_index "field_values", ["field_type_id"], :name => "index_field_values_on_field_type_id"
   add_index "field_values", ["parent_id"], :name => "index_field_values_on_sample_id"
 
+  create_table "folder_contents", :force => true do |t|
+    t.integer  "sample_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.integer  "folder_id"
+    t.integer  "workflow_id"
+  end
+
+  create_table "folders", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "user_id"
+    t.integer  "parent_id"
+  end
+
   create_table "groups", :force => true do |t|
     t.string   "name"
     t.string   "description"
@@ -197,7 +192,6 @@ ActiveRecord::Schema.define(:version => 20170627173019) do
 
   create_table "jobs", :force => true do |t|
     t.string   "user_id"
-    t.string   "sha"
     t.text     "arguments"
     t.text     "state",              :limit => 2147483647
     t.datetime "created_at",                               :null => false
@@ -210,6 +204,13 @@ ActiveRecord::Schema.define(:version => 20170627173019) do
     t.datetime "latest_start_time"
     t.integer  "metacol_id"
     t.integer  "successor_id"
+  end
+
+  create_table "libraries", :force => true do |t|
+    t.string   "name"
+    t.string   "category"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "locators", :force => true do |t|
@@ -234,17 +235,6 @@ ActiveRecord::Schema.define(:version => 20170627173019) do
     t.integer  "group_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-  end
-
-  create_table "metacols", :force => true do |t|
-    t.string   "path"
-    t.string   "sha"
-    t.text     "state"
-    t.integer  "user_id"
-    t.string   "status"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.text     "message"
   end
 
   create_table "object_types", :force => true do |t|
@@ -279,12 +269,17 @@ ActiveRecord::Schema.define(:version => 20170627173019) do
     t.datetime "updated_at", :null => false
   end
 
+  add_index "operation_types", ["category", "name"], :name => "index_operation_types_on_category_and_name", :unique => true
+
   create_table "operations", :force => true do |t|
     t.integer  "operation_type_id"
     t.string   "status"
     t.integer  "user_id"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+    t.float    "x"
+    t.float    "y"
+    t.integer  "parent_id"
   end
 
   add_index "operations", ["operation_type_id"], :name => "index_operations_on_operation_type_id"
@@ -314,28 +309,14 @@ ActiveRecord::Schema.define(:version => 20170627173019) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.integer  "budget_id"
+    t.string   "name"
+    t.string   "status"
+    t.float    "cost_limit"
+    t.string   "folder"
+    t.text     "layout"
   end
 
   add_index "plans", ["user_id"], :name => "index_plans_on_user_id"
-
-  create_table "post_associations", :force => true do |t|
-    t.integer  "post_id"
-    t.integer  "sample_id"
-    t.integer  "item_id"
-    t.integer  "job_id"
-    t.integer  "task_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.string   "sha"
-  end
-
-  create_table "posts", :force => true do |t|
-    t.text     "content"
-    t.integer  "user_id"
-    t.integer  "parent_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
 
   create_table "sample_types", :force => true do |t|
     t.string   "name"
@@ -355,45 +336,6 @@ ActiveRecord::Schema.define(:version => 20170627173019) do
     t.text     "data"
   end
 
-  create_table "takes", :force => true do |t|
-    t.integer  "item_id"
-    t.integer  "job_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "task_notifications", :force => true do |t|
-    t.text     "content"
-    t.integer  "task_id"
-    t.integer  "job_id"
-    t.boolean  "read"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "task_prototypes", :force => true do |t|
-    t.string   "name"
-    t.string   "description"
-    t.text     "prototype"
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
-    t.string   "status_options"
-    t.string   "validator"
-    t.float    "cost",           :default => 1.0
-    t.string   "metacol"
-  end
-
-  create_table "tasks", :force => true do |t|
-    t.string   "name"
-    t.text     "specification"
-    t.string   "status"
-    t.datetime "created_at",                       :null => false
-    t.datetime "updated_at",                       :null => false
-    t.integer  "task_prototype_id"
-    t.integer  "user_id",           :default => 0
-    t.integer  "budget_id"
-  end
-
   create_table "timings", :force => true do |t|
     t.integer  "parent_id"
     t.string   "parent_class"
@@ -404,18 +346,6 @@ ActiveRecord::Schema.define(:version => 20170627173019) do
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end
-
-  create_table "touches", :force => true do |t|
-    t.integer  "item_id"
-    t.integer  "job_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.integer  "task_id"
-    t.integer  "metacol_id"
-  end
-
-  add_index "touches", ["item_id"], :name => "index_touches_on_item_id"
-  add_index "touches", ["job_id"], :name => "index_touches_on_job_id"
 
   create_table "uploads", :force => true do |t|
     t.integer  "job_id"

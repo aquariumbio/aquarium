@@ -1,14 +1,8 @@
 (function() {
 
-  var w;
- 
-  try {
-    w = angular.module('aquarium'); 
-  } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
-  } 
+  var w = angular.module('aquarium'); 
 
-  w.controller('codeCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
+  w.controller('codeCtrl', [ '$scope', '$http', '$attrs', '$cookies',
                   function (  $scope,   $http,   $attrs,   $cookies ) {
 
     $scope.editor = null;
@@ -21,15 +15,22 @@
       $scope.editor.gotoLine(1); 
     };
 
-    $scope.save = function(ot,name) {
-      if ( !ot[name].no_edit ) {
-        $http.post("/operation_types/code",{
-          id: ot.id,
-          name: name,
-          content: ot[name].content
+    $scope.save = function(code_object,component_name) {
+      var controller;
+      if ( code_object.model.model === "OperationType" ) {
+        controller = "operation_types";
+      } else if ( code_object.model.model === "Library" ) {
+        controller = "libraries";
+      }
+
+      if ( !code_object[component_name].no_edit ) {
+        $http.post( "/" + controller + "/code",{
+          id: code_object.id,
+          name: component_name,
+          content: code_object[component_name].content
         }).then(function(response) {
-          ot[name] = response.data;
-          ot.recompute_getter('versions')
+          code_object[component_name] = response.data;
+          code_object.recompute_getter('versions')
         });
       }
     }

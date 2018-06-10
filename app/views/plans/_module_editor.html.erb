@@ -1,0 +1,156 @@
+<!-- Modules Boxes -->
+
+<g ng-repeat="module in plan.modules" ng-if="plan.visible(module)"
+   ng-attr-transform="translate({{module.x}}, {{module.y}})">    
+
+  <rect ng-attr-width="{{module.width}}" 
+        ng-attr-height="{{module.height}}"
+        ng-attr-class="{{op_class(module)}}"
+        ng-mousedown="draggableMouseDown($event, module); nav.sidebar = 'node'" 
+        ng-mouseup="draggableMouseUp($event, module)" 
+        ng-mousemove="draggableMouseMove($event, module)"
+        ng-right-click="select(null); plan.open_module(module)"/>
+
+  <g ng-repeat="output in module.output track by $index">
+
+    <circle ng-attr-class="{{module_io_class(output, 'output')}}"
+            ng-attr-cx="{{module.width/2 + ($index - module.output.length/2.0+0.5)*snap}}"
+            ng-mousedown="ioMouseDown($event, module, output, 'output'); nav.sidebar = 'io'"
+            cy="0"
+            ng-attr-data-name="{{tv.value.name}}" />
+
+    <text ng-attr-x="{{module.width/2 + ($index - module.output.length/2.0 + 0.5)*snap + 4}}"
+          ng-attr-y="{{-10}}"
+          ng-if="output == current_io && output.origin"
+          class="field-name-help">
+      {{output.origin.io.name}}
+    </text>
+
+    <planner-cursor ng-if="output == current_io"
+            x="module.width/2 + ($index - module.output.length/2.0+0.5)*snap"
+            y="0" />
+            
+  </g>
+
+  <g ng-repeat="input in module.input track by $index">
+
+    <circle ng-if="!input.is_param"
+            ng-attr-class="{{module_io_class(input, 'input')}}"
+            ng-attr-cx="{{module.width/2 + ($index - module.input.length/2.0+0.5)*snap}}"            
+            ng-attr-cy="{{module.height}}" 
+            ng-mousedown="ioMouseDown($event, module, input, 'input'); nav.sidebar = 'io'" 
+            ng-attr-data-name="{{tv.value.name}}" />
+
+    <text ng-attr-x="{{module.width/2 + ($index - module.input.length/2.0 + 0.5)*snap + 4}}"  
+          ng-attr-y="{{module.height+18}}"
+          ng-if="input == current_io && input.destinations.length > 0"
+          class="field-name-help">
+      {{input.destinations[0].io.name}}
+    </text>                
+
+    <!-- Parameter -->
+    <rect ng-if="input.is_param"
+          ng-attr-class="{{parameter_io_class(input)}}"
+          ng-attr-x="{{module.width/2 + ($index - module.input.length/2.0+0.5)*snap-5}}"
+          ng-mousedown="ioMouseDown($event, module, input); nav.sidebar = 'io'" 
+          ng-attr-y="{{module.height-5}}" width="10" height="10" /> 
+
+    <planner-cursor ng-if="input == current_io"
+            x="module.width/2 + ($index - module.input.length/2.0+0.5)*snap"
+            y="module.height" />
+
+  </g>
+
+  <text ng-attr-x="{{module.width/2}}" y="35" class='module-name'>
+    {{module.name}}         <!-- {{module.id}} {{module.parent_id}},{{plan.current_module.id}}) -->
+  </text>
+
+  <text ng-attr-x="{{0}}" y="-4" class='op-cost'>
+    {{module.cost|currency}}
+  </text>  
+
+</g>
+
+<!-- Current Module Innards -->
+
+<g ng-id="plan.current_module.id != 0">
+
+  <!-- MODULE OUTPUT -->
+  <g ng-repeat="output in plan.current_module.output track by $index"
+     ng-attr-transform="translate({{output.x}}, {{output.y}})">    
+
+    <rect ng-attr-width="{{output.width}}" ng-attr-height="{{output.height}}"
+          ng-attr-class="{{op_class(output)}}"
+          ng-mousedown="draggableMouseDown($event, output)" 
+          ng-mouseup="draggableMouseUp($event, output)" 
+          ng-mousemove="draggableMouseMove($event, output)"/>   
+
+    <!-- IO -->
+    <circle class="field-value"
+            ng-attr-cx="{{output.width/2}}" 
+            ng-attr-cy="{{output.height}}" 
+            ng-mousedown="ioMouseDown($event, plan.current_module, output)" />
+
+    <text ng-attr-x="{{output.width/2}}"
+          ng-attr-y="{{output.height/2+6}}"
+          class="module-io-index">
+          {{$index}}
+    </text>
+
+    <planner-cursor ng-if="output == current_io" x="output.width/2"  y="output.height"/>                 
+
+  </g>  
+
+  <!-- MODULE INPUT -->
+  <g ng-repeat="input in plan.current_module.input track by $index"
+     ng-attr-transform="translate({{input.x}}, {{input.y}})">    
+
+    <rect ng-attr-width="{{input.width}}" ng-attr-height="{{input.height}}"
+          ng-attr-class="{{op_class(input)}}"
+          ng-mousedown="draggableMouseDown($event, input)" 
+          ng-mouseup="draggableMouseUp($event, input)" 
+          ng-mousemove="draggableMouseMove($event, input)"/>   
+
+    <!-- IO -->
+    <circle class="field-value"
+            ng-attr-cx="{{input.width/2}}" 
+            cy="0" /
+            ng-mousedown="ioMouseDown($event, plan.current_module, input)" />
+
+    <text ng-attr-x="{{input.width/2}}"
+          ng-attr-y="{{input.height/2+6}}"
+          class="module-io-index">
+          {{$index}}
+    </text>                 
+
+    <planner-cursor ng-if="input == current_io" x="input.width/2"  y="0"/>    
+
+  </g>  
+
+  <!-- TEXT BOXES -->
+
+  <g ng-repeat="box in plan.current_module.text_boxes track by $index"
+     ng-attr-transform="translate({{box.x}}, {{box.y}})">
+
+    <foreignObject ng-attr-width="{{box.width}}" ng-attr-height="{{box.height}}">
+      <body xmlns="http://www.w3.org/1999/xhtml">
+        <div class="text-box-content no-highlight"
+             ng-bind-html="box.rendered_content">
+        </div>
+      </body>
+    </foreignObject>
+
+    <rect ng-attr-width="{{box.width}}" ng-attr-height="{{box.height}}"
+          ng-attr-class="{{text_box_class(box)}}"
+          ng-mousedown="draggableMouseDown($event, box)" 
+          ng-mouseup="draggableMouseUp($event, box)" 
+          ng-mousemove="draggableMouseMove($event, box)"/>
+
+    <rect ng-attr-x="{{box.anchor.x-3}}" ng-attr-y="{{box.anchor.y-3}}"
+          ng-attr-class="{{text_box_anchor_class(box)}}"
+          ng-mousedown="draggableMouseDown($event, box.anchor)" 
+          ng-mouseup="draggableMouseUp($event, box.anchor)" 
+          ng-mousemove="draggableMouseMove($event, box.anchor)"/>
+  </g>
+
+</g>

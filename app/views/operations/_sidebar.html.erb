@@ -1,0 +1,168 @@
+<div layout="row">
+
+  <div layout="column" class="category-container">
+
+      <% if current_user && current_user.is_admin %>
+
+        <div ng-click="current.category_index = -1; current.switch_user = true; current.active_jobs = false; current.job_report = false"
+             ng-class="current.switch_user ? 
+                                 'no-highlight selected-category alt-category' : 
+                                 'no-highlight unselected-category alt-category'">
+            Switch User
+        </div>
+
+        <div ng-click="current.category_index = -1; current.switch_user = false; current.active_jobs = true; current.job_report = false"
+             ng-class="current.active_jobs ? 
+                                 'no-highlight selected-category alt-category' : 
+                                 'no-highlight unselected-category alt-category'">
+            Active Jobs
+        </div>     
+
+        <div ng-click="current.category_index = -1; current.switch_user = false; current.active_jobs = false; current.job_report = true; get_job_report()"
+             ng-class="current.job_report ? 
+                               'no-highlight selected-category alt-category' : 
+                               'no-highlight unselected-category alt-category'">
+            Activity Reports
+        </div>               
+
+      <% end %>   
+
+      <br>
+
+      <div ng-repeat="cat in categories track by $index"
+          ng-click="current.category_index = $index; current.switch_user = false;; current.active_jobs = false; current.job_report = false"
+          ng-class="category_class($index)">
+          {{cat}}
+      </div>           
+
+  </div>
+
+  <table class='table table-condensed status-table'
+         ng-if='!current.switch_user && !current.active_jobs && !current.job_report'>
+
+    <tr>
+      <th class='operation-name'>
+        <md-switch ng-model="current.show_completed" 
+                   aria-label="Show completed" 
+                   ng-click="toggle_show_completed()"
+                   style="padding-left: 16px; padding-top: 16px">
+          Completed
+        </md-switch>
+      </th>
+      <th ng-repeat="status in [ 'Waiting', 'Delayed', 'Pending', 'Deferred', 'Scheduled', 'Running', 'Error', 'Done' ]"
+          class='rotate'
+          ng-if="current.show_completed || ( status != 'Error' && status != 'Done' )">
+        <div><span>{{status}}</span></div>
+      </th>
+    </tr>
+
+    <tr ng-repeat="operation_type in operation_types | filter: { category: categories[current.category_index] }: true" 
+        ng-click="choose(operation_type)">
+      <td class="operation-name">
+        <span ng-class="timing_bullet(operation_type)">&#9679;</span>
+        {{operation_type.name}}
+      </td>
+      <td ng-repeat="status in [ 'waiting', 'delayed', 'pending', 'deferred', 'scheduled', 'running', 'error', 'done' ]"
+          ng-class="$parent.status_selector(operation_type,status)"
+          ng-click="$parent.select(operation_type,status)"
+          ng-if="current.show_completed || ( status != 'error' && status != 'done' )">
+          {{numbers[operation_type.id][status] ? numbers[operation_type.id][status] : 0}}
+      </td>
+    </tr>
+
+  </table>
+
+  <% if current_user && current_user.is_admin %>
+
+    <div ng-if='current.switch_user' class="switch-user-container">
+
+      <br>
+
+      <div ng-if="users && users.length > 0">
+
+        <div layout="row" layout-fill>
+
+          <div flex="60">
+            <md-switch ng-model="current.filter_user" 
+                       aria-label="Filter User"
+                       style="margin: 8px 0 0 32px">
+              Filter by User 
+            </md-switch>    
+          </div>
+
+          <div flex="40">
+            <md-button class='md-raised' 
+                       ng-click="select_user()">
+              Apply
+            </md-button>
+          </div>
+
+        </div>
+
+        <md-input-container layout-margin layout="column">
+          <md-select ng-model="current.selected_user" 
+                     class="md-plain-select">
+            <md-option ng-repeat="user in users" 
+                       ng-value="user"
+                       ng-selected="user.id == current.selected_user.id">
+              {{user.login}} ( {{user.name}} )
+            </md-option>
+          </md-select>
+        </md-input-container>
+
+      </div>
+
+      <div ng-if="!users || users.length == 0">
+        <p>Loading user list.</p>
+      </div>
+
+    </div>
+
+    <table ng-if="current.active_jobs" 
+           class='table table-condensed active-jobs-table'>
+
+      <tr>
+        <th>Id</th>
+        <th class="type">Type</th>
+        <th>User</th>
+        <th>Date</th>
+        <th></th>
+      </tr>
+
+      <tr ng-repeat="job in running_jobs">
+        <td><a href="/technician/{{job.id}}">{{job.id}}</a></td>
+        <td>{{job.type}}</td>
+        <td>{{job.user.login}}</td>
+        <td>{{job.created_at|date: 'M/d'}}</td>
+        <td class="zombie">
+          <span ng-if="krill_job_ids.indexOf(job.id) < 0">Zombie</span>
+        </td>
+      </tr>
+
+    </table><br>
+
+    <div ng-if="current.job_report">
+      <h2 class="md-title">&nbsp; Choose Report Date</h2>
+      <md-datepicker ng-model="current.job_report_date" 
+                     ng-change="get_job_report()"
+                     md-placeholder="Enter date"></md-datepicker>
+
+      <div ng-if="current.job_report_object.selection">
+         <h2 class="md-title">
+           &nbsp; 
+           Job 
+           <a href="/jobs/{{current.job_report_object.selection.id}}" target="job">
+             {{current.job_report_object.selection.id}}</a>
+           Operations
+         </h2>
+      <oplist-report operationtype="current.job_report_object.operations[0].operation_type"
+              operations="current.job_report_object.selection.operations"
+              status="done"
+              short="true"
+              jobid="job.id">         
+      </div>
+    </div>
+
+  <% end %>
+
+</div>

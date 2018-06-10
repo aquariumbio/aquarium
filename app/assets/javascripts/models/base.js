@@ -13,7 +13,11 @@ AQ.Base.prototype.super = function(name) {
 }
 
 AQ.Base.prototype.record = function(extras) {
-  return new AQ.Record(this,extras);
+  let record = new AQ.Record(this,extras);
+  if ( record.upgrade ) {
+    record.upgrade(extras);
+  }
+  return record;
 }
 
 AQ.Base.prototype.find = function(id) {
@@ -23,7 +27,7 @@ AQ.Base.prototype.find = function(id) {
       (response) => {
         resolve(base.record(response.data));
       },(response) => {
-        reject(response.data.errors);
+        reject(response.data);
       }
     );
   });
@@ -31,7 +35,7 @@ AQ.Base.prototype.find = function(id) {
 
 AQ.Base.prototype.find_by_name = function(name) {
   var base = this;
-  return new Promise(function(resolve,reject) {  
+  return new Promise(function(resolve,reject) {
     AQ.post('/json',{model: base.model, method: 'find_by_name', arguments: [ name ] }).then(
       (response) => {
         resolve(base.record(response.data));
@@ -57,7 +61,7 @@ AQ.Base.prototype.array_query = function(method,args,rest,opts={}) {
         }
         resolve(records);
       },(response) => {
-        reject(response.data.errors);
+        reject(response.data);
       }
     );
   });
@@ -76,7 +80,7 @@ AQ.Base.prototype.where = function(criteria,methods={},opts={}) {
 
 AQ.Base.prototype.exec = function(method, args) {
   var base = this;
-  return new Promise(function(resolve,reject) {  
+  return new Promise(function(resolve,reject) {
     AQ.post('/json',{model: base.model, method: method, arguments: args}).then(
       (response) => { resolve(response.data) },
       (response) => { reject(response.data.errors) }
@@ -86,14 +90,14 @@ AQ.Base.prototype.exec = function(method, args) {
 
 AQ.Base.prototype.new = function() {
   var base = this;
-  return new Promise(function(resolve,reject) {    
+  return new Promise(function(resolve,reject) {
     AQ.post('/json',{model: base.model, method: 'new'}).then(
       (response) => {
         resolve(base.record(response.data));
       }, (response) => {
         reject(response.data.errors);
       }
-    );  
+    );
   });
 }
 
@@ -109,8 +113,8 @@ AQ.Base.prototype.getter = function(child_model, child_name,id=null) {
     if ( base[hidden_name] ) {
       return base[hidden_name];
     } else if ( base[id_name] ) {
-      base[hidden_name] = {};    
-      child_model.find(base[id_name]).then((x) => { 
+      base[hidden_name] = {};
+      child_model.find(base[id_name]).then((x) => {
         base[hidden_name] = x;
         if ( base[hidden_name].location ) {
           // This is a hack to get the item popup to properly initialize, since ng-init
@@ -118,8 +122,8 @@ AQ.Base.prototype.getter = function(child_model, child_name,id=null) {
           base[hidden_name].new_location = base[hidden_name].location;
         }
         AQ.update();
-      });    
-      return null;  
+      });
+      return null;
     } else {
       return null;
     }
@@ -128,10 +132,11 @@ AQ.Base.prototype.getter = function(child_model, child_name,id=null) {
 
 }
 
-AQ.model_names = [                                       
-  "User", "Group", "SampleType", "Sample", "ObjectType", "Item", "UserBudgetAssociation", "Budget",
+AQ.model_names = [
+  "Account", "User", "Group", "SampleType", "Sample", "ObjectType", "Item", "UserBudgetAssociation", "Budget",
   "OperationType", "Operation", "FieldType", "FieldValue", "AllowableFieldType", "Wire", "Parameter",
-  "Plan", "PlanAssociation", "DataAssociation", "Job", "Upload", "Code", "Timing", "Collection" ];
+  "Plan", "PlanAssociation", "DataAssociation", "Job", "Upload", "Code", "Timing", "Collection",
+  "Library", "JobAssociation", "Locator" ];
 
 for ( var i=0; i<AQ.model_names.length; i++ ) {
   AQ[AQ.model_names[i]] = new AQ.Base(AQ.model_names[i]);

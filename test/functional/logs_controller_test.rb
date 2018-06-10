@@ -1,3 +1,5 @@
+
+
 require 'test_helper'
 
 class LogsControllerTest < ActionController::TestCase
@@ -5,18 +7,18 @@ class LogsControllerTest < ActionController::TestCase
     @log = logs(:one)
   end
 
-  test "should get index" do
+  test 'should get index' do
     get :index
     assert_response :success
     assert_not_nil assigns(:logs)
   end
 
-  test "should get new" do
+  test 'should get new' do
     get :new
     assert_response :success
   end
 
-  test "should create log" do
+  test 'should create log' do
     assert_difference('Log.count') do
       post :create, log: { data: @log.data, job: @log.job, protcol_name: @log.protcol_name, protocol_sha: @log.protocol_sha, type: @log.type, user: @log.user }
     end
@@ -24,22 +26,22 @@ class LogsControllerTest < ActionController::TestCase
     assert_redirected_to log_path(assigns(:log))
   end
 
-  test "should show log" do
+  test 'should show log' do
     get :show, id: @log
     assert_response :success
   end
 
-  test "should get edit" do
+  test 'should get edit' do
     get :edit, id: @log
     assert_response :success
   end
 
-  test "should update log" do
+  test 'should update log' do
     put :update, id: @log, log: { data: @log.data, job: @log.job, protcol_name: @log.protcol_name, protocol_sha: @log.protocol_sha, type: @log.type, user: @log.user }
     assert_redirected_to log_path(assigns(:log))
   end
 
-  test "should destroy log" do
+  test 'should destroy log' do
     assert_difference('Log.count', -1) do
       delete :destroy, id: @log
     end

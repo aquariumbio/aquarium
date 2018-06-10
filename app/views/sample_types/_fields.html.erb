@@ -7,6 +7,9 @@
       <% else %>
         <%= ft.ftype %>
       <% end %>
+      <% if ft.choices %>
+        : [ <%= ft.choices %> ]
+      <% end %>
     </li>
   <% end %>
 </ul>

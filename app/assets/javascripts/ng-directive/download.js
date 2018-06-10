@@ -1,12 +1,6 @@
 (function() {
 
-  var w;
-
-  try {
-    w = angular.module('aquarium'); 
-  } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
-  } 
+  var w = angular.module('aquarium'); 
 
   w.directive('download', function() {
 
@@ -64,13 +58,10 @@
 
       link: function($scope,$element,$attrs) {
 
-        console.log("fetching image")
-
         $scope.model.get_expiring_url().then(url => {
 
           var img = $("<image src='" + url + "'></a>");
           $($element).append(img);
-          console.log("fetched");
 
         })  
 

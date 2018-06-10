@@ -1,10 +1,12 @@
+
+
 module FieldTypePlanner
 
-  def can_produce fv
+  def can_produce(fv)
 
     case ftype
 
-    when "sample"
+    when 'sample'
 
       if fv.child_sample
 
@@ -14,7 +16,7 @@ module FieldTypePlanner
 
           allowable_field_types.each do |aft|
             puts "  #{aft.object_type ? aft.object_type.name : '?'} =? #{fv.object_type ? fv.object_type.name : '?'}"
-            if aft.sample_type && fv.sample_type == aft.sample_type && fv.object_type == aft.object_type            
+            if aft.sample_type && fv.sample_type == aft.sample_type && fv.object_type == aft.object_type
               puts "... yes.\e[39m"
               return true
             end
@@ -38,7 +40,7 @@ module FieldTypePlanner
         end
 
         puts " ... no.\e[39m"
-        return false
+        false
 
       else # fv says its a sample, but doesn't specify a sample
 
@@ -50,7 +52,7 @@ module FieldTypePlanner
 
           allowable_field_types.each do |aft|
             if !aft.sample_type && fv.object_type == aft.object_type
-              puts "\e[93m       #{self.name} can produce #{fv.name} \e[39m"
+              puts "\e[93m       #{name} can produce #{fv.name} \e[39m"
               return true
             end
           end
@@ -67,7 +69,7 @@ module FieldTypePlanner
 
     else # fv is not a sample
 
-      return false
+      false
 
     end
 
@@ -75,35 +77,30 @@ module FieldTypePlanner
 
   def random
 
-    if allowable_field_types.length == 0 
-      return [nil, nil]
+    if allowable_field_types.empty?
+      [nil, nil]
     else
       aft = allowable_field_types.sample
       if !aft.sample_type
-        return [ nil, aft ]
-      elsif
-        aft.sample_type.samples.length == 0
+        return [nil, aft]
+      elsif aft.sample_type.samples.empty?
         raise "There are no samples of type #{aft.sample_type.name}"
       elsif array
-        return [ aft.sample_type.samples.sample(3), aft ]
+        return [aft.sample_type.samples.sample(3), aft]
       else
-        return [ aft.sample_type.samples.sample, aft ]
+        return [aft.sample_type.samples.sample, aft]
       end
     end
 
   end
 
-  def choose_aft_for sample
+  def choose_aft_for(sample)
 
-    afts = allowable_field_types.select { |aft|
+    afts = allowable_field_types.select do |aft|
       aft.sample_type_id == sample.sample_type.id
-    }
-
-    if afts.length > 0 
-      afts.sample
-    else
-      nil
     end
+
+    afts.sample unless afts.empty?
 
   end
 

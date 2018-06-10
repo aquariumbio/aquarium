@@ -1,5 +1,4 @@
-
-<% protocol = ProtocolSummary.new({ protocol: @job.path, sha: @job.sha }) %>
+<% protocol = ProtocolSummary.new({ protocol: @job.path }) %>
 
 <div class='krill-log-summary'>
 
@@ -34,10 +33,12 @@
 
   <ul class='upload-list' layout-padding>
     <% @job.operations.each do |op| %>   
-      <li>
-        <span class="name"><%= op.id %></span>
-        (<span class="login"><%= link_to op.user.login, op.user %></span>)
-      </li>
+      <% if op.plan %>    
+        <li>
+          <span class="name"><%= op.id %> from plan <a href="/launcher?plan_id=<%= op.plan.id %>"><%= op.plan.id %></span>
+          (<span class="login"><%= link_to op.user.login, op.user %></span>)
+        </li>
+      <% end %>    
     <% end %>
   </ul>
 
@@ -59,4 +60,3 @@
   <% end %>
 
 </div>
-

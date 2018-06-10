@@ -3,6 +3,14 @@
 
   <!-- PLAN TEMPLATE -->
 
+  <md-button class='md-raised md-warn' 
+    ng-if="plan.deletable" 
+    ng-click="delete_plan(plan)"
+    ng-disabled="plan.deleting">
+    <span ng-if="plan.deleting">DELETING...</span>
+    <span ng-if="!plan.deleting">DELETE</span>
+  </md-button>
+
   <div class="md-subhead" ng-show="plan.cost_total != null">
     {{plan.budget.name}}:  {{plan.cost_so_far|currency}} / {{plan.cost_total|currency}}
   </div>
@@ -48,7 +56,7 @@
           </md-menu-item>
 
           <md-menu-item aria-label="Upload">
-            <md-button><upload record='oepration'></upload></md-button>
+            <md-button><upload record='operation'></upload></md-button>
           </md-menu-item>
 
         </md-menu-content>
@@ -86,7 +94,8 @@
     </div>
 
     <div flex="10" ng-if="fv.row == null">
-      <div item="fv.item" container="fv.item.object_type" sample="fv.item.sample"></div>
+      <div ng-if="fv.item" item="fv.item" container="fv.item.object_type" sample="fv.item.sample"></div>
+      <div ng-if="!fv.item">-</div>
     </div> 
 
     <div flex="10" ng-if="fv.row != null">
@@ -96,7 +105,9 @@
 
     <div flex="10" ng-if="!fv.value">{{fv.item.location}}</div> 
     <div flex="15" ng-if="!fv.value">{{fv.item.object_type.name}}</div>         
-    <div flex="55" ng-if="!fv.value">{{fv.child_sample.name}}</div> 
+    <div flex="55" ng-if="!fv.value">
+      <a href="/browser?sid={{fv.child_sample_id}}">{{fv.sample.name}}</a>
+    </div> 
     <div flex="80" ng-if="fv.value">{{fv.value}}</div>  
 
   </div>
@@ -118,7 +129,7 @@
   <!-- JOB TEMPLATE -->
 
   <span ng-if="operation.jobs && operation.jobs.length > 0">
-    <span ng-repeat="job in operation.jobs">
+    <div ng-repeat="job in operation.jobs">
       <span ng-bind-html="'Job ' + job.url | trust"></span>
       <span ng-if="job.pc == -2">
         <span ng-bind-html="'performed by ' + job.user.url | trust"></span>
@@ -131,7 +142,7 @@
         <span ng-bind-html="'last updated by ' + job.user.url | trust"></span>
         on {{operation.jobs[operation.jobs.length-1].updated_at|date}}
       </span>
-    </span>
+    </div>
   </span>
 
 </script>

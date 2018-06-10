@@ -1,6 +1,24 @@
 AQ.Item.getter(AQ.ObjectType,"object_type");
 AQ.Item.getter(AQ.Sample,"sample");
 
+AQ.Item.record_methods.upgrade = function(raw_data) {
+
+  let item = this;
+
+  if ( raw_data.sample ) {
+    item.sample = AQ.Sample.record(item.sample);
+  }
+
+  if ( raw_data.object_type ) {
+    item.object_type = AQ.ObjectType.record(item.object_type);
+  }
+
+  item.new_location = item.location;
+
+  // item.recompute_getter("data_associations")
+
+}
+
 AQ.Item.record_getters.url = function() {
   delete this.url;
   return this.url = "<a href='/items/" + this.id + "'>" + this.id + "</a>";
@@ -70,3 +88,37 @@ AQ.Item.record_methods.mark_as_deleted = function() {
   })
 
 }
+
+AQ.Item.record_methods.get_history = function() {
+
+  var item = this;
+
+  return new Promise(function(resolve, reject) {
+    AQ.get("/items/history/" + item.id).then(response => {
+      item.history = response.data;
+      aq.each(item.history, h => {
+        h.field_value = AQ.FieldValue.record(h.field_value);
+        h.operation = AQ.Operation.record(h.operation);
+        h.jobs = aq.collect(h.operation.jobs, job => {
+          return AQ.Job.record(job);
+        });
+      });
+      resolve(item.history);
+    })  
+  });
+
+}
+
+AQ.Item.record_getters.history = function() {
+  var item = this;
+  delete item.history; 
+  item.get_history();
+  return item.history;
+}
+
+AQ.Item.record_getters.is_collection = function() {
+  return false;
+}
+
+
+

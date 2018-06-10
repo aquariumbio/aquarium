@@ -6,7 +6,7 @@
       <a href='#' ng-click='item.modal=true' ng-init="item.modal=false">{{item.id}}</a>
     </span>
 
-    <div class='ng-modal item-modal' ng-show='item.modal'>
+    <div class='ng-modal item-modal' ng-if='item.modal'>
 
       <div class='ng-modal-overlay' ng-click='item.modal=false'></div>
 
@@ -20,7 +20,7 @@
         </md-toolbar>
          
         <div class="sample-name md-subhead" layout="row" layout-align="center center">
-          <a href="/browser?sid={{sample.id}}">{{sample.name}}</a>
+          <a href="/browser?sid={{sample.id}}" target="sample">{{sample.name}}</a>
         </div>
 
         <div layout="row">
@@ -35,10 +35,13 @@
             <table class='tiny-collection' ng-if="item.matrix">
               <tr ng-repeat="row in item.matrix track by $index">
                 <td ng-repeat="el in row track by $index" 
-                    ng-class="sample.id == el ? 'filled' : 'blank'">
+                    ng-class="sample.id == el ? 'filled' : el != -1 ? 'other' : 'blank'">
                 </td>
               </tr>
             </table>
+            <a ng-if="item.matrix" href="/items/{{item.id}}" target="_blank">
+              Collection details
+            </a>
           </div>
 
         </div>
@@ -70,12 +73,34 @@
         </div>
 
         <div class='data-associations'>
-          <da record="item"></da>  
+          <da record="item"></da>
           <br>
           <div layout="row" layout-align="center center">
             <md-button ng-click="item.new_data_association()" class="md-raised" aria-label="Add Data">Add Data</md-button>
             <md-button class="md-raised upload-button"><upload record='item' aria-label="Upload"></upload></md-button>
           </div>
+        </div>
+
+        <div class="history" ng-if="item.history.length > 0">
+          <h4 class="md-body-2">Item History</h4>
+          <table class='table' style="width: 100%">
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Operation Id</th>
+              <th>Operation Typte</th>
+              <th>Plan</th>
+              <th>Jobs</th>
+            </tr>
+            <tr ng-repeat="h in item.history">
+              <td>{{h.field_value.name}}</td>
+              <td>{{h.field_value.role}}</td>
+              <td>{{h.operation.id}}</td>
+              <td>{{h.operation.operation_type.name}}</td>
+              <td><a href="/launcher?plan_id={{h.operation.plan_associations[0].plan_id}}">{{h.operation.plan_associations[0].plan_id}}</a></td>
+              <td>Job{{h.operation.jobs.length==1 ? '' : 's'}}: <a ng-repeat="job in h.operation.jobs" href="/jobs/{{job.id}}">{{job.id}}</a>              
+            </tr>
+          </table>
         </div>
 
       </div>

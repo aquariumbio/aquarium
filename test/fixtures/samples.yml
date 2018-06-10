@@ -1,21 +1,15 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  name: MyString
+  name: First Sample
   sample_type_id: 1
-  owner: MyString
-  project: MyString
-  field1: MyString
-  field2: MyString
-  field3: MyString
-  field4: MyString
+  project: First Project
+  user_id: 1
+  description: "the first sample record"
 
 two:
-  name: MyString
-  sample_type_id: 1
-  owner: MyString
-  project: MyString
-  field1: MyString
-  field2: MyString
-  field3: MyString
-  field4: MyString
+  name: Second Sample
+  sample_type_id: 2
+  project: Second Project
+  user_id: 2
+  description: "the second sample record"

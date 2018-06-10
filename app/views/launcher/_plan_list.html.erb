@@ -1,36 +1,42 @@
 <script type="text/ng-template" id="plan_list">
 
   <div layout="row" layout-wrap ng-repeat-start="plan in plans" 
-       ng-class="plan.open ? 'plan-header plan-row plan-row-open' : 'plan-header plan-row'">
+       ng-class="plan.open ? 'plan-header plan-row plan-row-open clickable' : 'plan-header plan-row clickable'">
 
-    <div flex="25" class='no-wrap'>
-      <opener model="plan.open" class='no-highlight clickable no-margin'></opener>&nbsp;
-      <span class="md-body-2">{{plan.id}}: {{plan.operations[0].operation_type.name}}</span>
+    <div flex="25" class='no-wrap no-highlight'>
+      <input type='checkbox' ng-model='plan.selected' style="margin: -1px 5px 0 0">  
+      <span ng-click="plan.open = !plan.open">
+        <opener model="plan.open" class='no-highlight clickable no-margin' off="true"></opener>&nbsp;
+      </span>
+      <span class="md-body-2 no-highlight" ng-click="plan.open = !plan.open">
+        {{plan.id}}: {{plan.name ? plan.name : plan.operations[0].operation_type.name}}
+        <span ng-if="plan.user_id != current_user.id">({{plan.user.login}})</span>
+      </span>
     </div>
 
-    <div flex="55" class='no-wrap left-pad' ng-if="!plan.open">
+    <div flex="55" class='no-wrap left-pad no-highlight' ng-if="!plan.open" ng-click="plan.open = !plan.open">
       <span ng-repeat="fv in plan.operations[0].field_values | filter : { role: 'output' }" class='md-body-2 sample-name'>
-        {{fv.name}}: {{fv.child_sample.name}}
+        {{fv.name}}: <a href="/browser?sid={{fv.child_sample_id}}">{{fv.sample.name}}</a>
       </span>
     </div>      
 
-    <div flex="55" class='no-wrap left-pad' ng-if="plan.open">
+    <div flex="55" class='no-wrap left-pad no-highlight' ng-if="plan.open" ng-click="plan.open = !plan.open">
       <span ng-repeat="fv in plan.operations[0].field_values | filter : { role: 'output' }" class='md-body-2 sample-name'>
         {{fv.name}}: {{fv.child_sample.name}}
       </span>
     </div>
 
-    <div flex="10" class='no-wrap left-pad'>
-      <span ng-class="'md-body-2 status-'+plan.operations[0].status">
-        {{plan.operations[0].status}}
+    <div flex="10" class='no-wrap left-pad no-highlight' ng-click="plan.open = !plan.open">
+      <span ng-class="plan_state_class(plan)">
+        {{plan.state}}
       </span>
     </div>
 
-    <div flex="10" class='no-wrap' class='md-body-1' layout="row" layout-align="end center" ng-if="!plan.open">
+    <div flex="10" class='no-wrap' class='md-body-1 no-highlight' layout="row" layout-align="end center" ng-if="!plan.open" ng-click="plan.open = !plan.open">
       <div>{{plan.created_at|date}}</div>
     </div>
 
-    <div flex="10" ng-if="plan.open" layout="row" layout-align="end center">
+    <div flex="10" ng-if="plan.open" class='no-highlight' layout="row" layout-align="end center" ng-click="plan.open = !plan.open">
       <md-menu layout="row">
 
         <div class='detail-menu clickable'
@@ -46,7 +52,7 @@
 
           <md-menu-item aria-label="Cancel">
             <md-button ng-click="plan.cancel('Canceled via user interface')">Cancel</md-button>
-          </md-menu-item> 
+          </md-menu-item>         
 
           <% if Bioturk::Application.config.debug_tools %>
             <md-menu-item aria-label="Debug">
@@ -54,13 +60,13 @@
             </md-menu-item>
           <% end %>
 
-          <md-menu-item aria-label="Copy">
-            <md-button ng-disabled="plan.relaunching" ng-click="relaunch(plan)">Copy</md-button>
+          <md-menu-item aria-label="Edit">
+            <md-button ng-disabled="plan.relaunching" ng-click="edit(plan)">Edit/Design</md-button>
           </md-menu-item>
 
-          <md-menu-item aria-label="Replan">
+          <md-menu-item aria-label="Copy">
             <md-button ng-disabled="plan.relaunching" ng-click="replan(plan)">Replan</md-button>
-          </md-menu-item>           
+          </md-menu-item>          
 
           <md-menu-divider></md-menu-divider>
 
@@ -85,10 +91,10 @@
 
   <br />
 
-  <md-button ng-if="!no_more_plans"
+  <md-button ng-if="!no_more_plans && plans.length > 0"
     class='md-raised md-primary md-small' 
     ng-disabled="getting_plans"
-    ng-click="more_plans()">More</md-button>
+    ng-click="more_plans()">More</md-button>  
 
   <br /><br />
  

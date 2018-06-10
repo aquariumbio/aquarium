@@ -36,57 +36,25 @@ Sample.prototype.get_inventory = function(promise) {
     sample.items = aq.collect(response.data.items, function(raw) { 
       var i = AQ.Item.record(raw);
       return i;
-    });
-
-    promise();
+    });  
 
     sample.http.get('/browser/collections/' + sample.id + '.json').then(function(response) {
-      sample.collections = aq.collect(response.data.collections, function(raw) {
+
+      sample.collections = aq.collect(response.data.collections, function(raw) {       
         var c = AQ.Collection.record(raw);
         c.sample = AQ.Sample.record(sample);
         return c;
       });
+
+      console.log(["COLLECTIONS RETRIEVED", sample.collections]);
+
       sample.collection_containers = response.data.containers;
+
+      promise();
       
     });  
 
   });
-
-}
-
-Sample.prototype.num_items = function(container) {
-
-  var sample = this;
-
-  var items = aq.where(sample.items,function(i) {
-    return ( sample.show_deleted || i.location != 'deleted' ) && i.object_type_id == container.id;
-  });
-
-  return items.length;
-
-}
-
-Sample.prototype.num_collections = function(container) {
-
-  var sample = this;
-
-  var collections = aq.where(sample.collections,function(c) {
-    return ( sample.show_deleted || c.location != 'deleted' ) && c.object_type_id == container.id;
-  });
-
-  return collections.length;
-
-}
-
-Sample.prototype.visible_inventory = function() {
-
-  var sample = this;
-
-  var s = aq.sum(this.containers,function(con) {
-    return sample.num_items(con) + sample.num_collections(con);
-  });
-
-  return s;
 
 }
 

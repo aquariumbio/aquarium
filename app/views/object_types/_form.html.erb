@@ -155,6 +155,7 @@
   <br />
 
   <script>
+
     function check_if_sample_container() {
       var d = document.getElementById('sample_type_selector');
       if ( document.getElementById('object_type_handler').value == 'sample_container' ) {
@@ -164,12 +165,13 @@
           txt += '<option value=<%= st.id %>><%= st.name.downcase %></option>';
         <% end %>
         d.innerHTML = txt + '</select>';
-        console.log('asd');
       } else {
         d.style.display = 'none';
         d.innerHTML = "";
       }
     }
+    check_if_sample_container()
+
   </script>
 
 <% end %>

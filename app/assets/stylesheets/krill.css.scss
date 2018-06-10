@@ -27,7 +27,7 @@
 
 #krill-tools {
   // outline: 1pt solid black;
-  overflow: scroll;
+  overflow: none;
 }
 
 .krill-tools-tab {
@@ -148,7 +148,7 @@
   margin: 0;
   padding: 0px;
   position: relative;
-  overflow: scroll;
+  overflow: none;
   //outline: 4pt solid green;
   ul {
 

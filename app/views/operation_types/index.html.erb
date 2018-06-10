@@ -3,33 +3,61 @@
 <%= render partial: 'io_form' %>
 <%= render partial: 'show_block' %>
 <%= render partial: 'steps' %>     
-<%= render partial: 'code' %>   
+<%= render partial: 'code' %>  
+
+<%= render partial: '/uploads/upload_viewer' %>
+<%= render partial: "/items/template" %>
+<%= render partial: "/data_associations/list" %>
+<%= render partial: '/data_associations/template' %> 
 
 <%= content_for :class do %>operation_types<% end %>
-<%= content_for :controller do %>operationTypesCtrl as planner<% end %>    
+<%= content_for :controller do %>operationTypesCtrl<% end %>    
 <%= content_for :main_no_padding do %>true<% end %>
 
 <%= content_for :sidebar do %>
 
-  <div class="title">
+  <div class="title" ng-if="categories.length > 0">
     <h1 class="md-title">Categories</h1>
+  </div>
+
+  <div class="title" ng-if="categories.length == 0">
+    <h1 class="md-title">No Operation Types</h1>
   </div>
 
   <ul class='op-type-list'>    
 
     <li ng-repeat="category in categories track by $index">
 
-      <b ng-click="choose_category(category)" class="no-highlight clickable">
-        <span ng-if="current_category != category">&#9658;</span>
-        <span ng-if="current_category == category">&#9660;</span>             
-        {{category}}
-        ({{category_size(category)}})
+      <b class="no-highlight clickable">
+        <span ng-if="current_category != category" ng-click="choose_category(category)" class='clickable'>&#9658;</span>
+        <span ng-if="current_category == category" ng-click="choose_category(category)" class='clickable'>&#9660;</span>             
+        <span ng-click="choose_category(category)" class='clickable'>{{category}}</span>
+        <span ng-click="choose_category(category)" class='clickable'>({{category_size(category)}})</span>
+        <md-button class='md-small pull-right' 
+                   ng-if="current_category == category"
+                   ng-click="export_category(current_category)">Export</md-button>
       </b>
 
       <ul ng-if="current_category == category" class='op-type-sublist'>
-        <li ng-repeat="ot in operation_types | filter: { category: category } : true track by $index" 
-            ng-click="choose(ot)"
-            ng-class="ot_class(ot)">{{ot.name}}</li>
+
+        <li ng-if="(libraries | filter: { category: category } : true).length > 0">
+          Libraries:
+          <ul class='op-type-sublist'>
+            <li ng-repeat="lib in libraries | filter: { category: category } : true track by $index"
+                ng-click="choose_lib(lib)"
+                ng-class="lib_class(lib)">{{lib.name}}</li>
+          </ul>
+        </li>
+
+        <li ng-if="(operation_types | filter: { category: category } : true).length > 0">
+          Operation Types:
+          <ul class='op-type-sublist'>
+            <li ng-repeat="ot in operation_types | filter: { category: category } : true track by $index"
+                ng-click="choose(ot)"
+                ng-class="operation_type_class(ot)">{{ot.name}}</li>
+          </ul>
+        </li>
+
       </ul>
 
     </li>
@@ -41,7 +69,7 @@
 <% content_for :specific_title do %>
 
   <span ng-if="initialized">
-    &rang; {{current_category}} &rang; {{current_ot.name}}
+    &rang; {{current_category}} &rang; {{current_operation_type.name}}
   </span>
 
 <% end %>
@@ -51,19 +79,18 @@
 <% end %>
 
 <% content_for :action2 do %>
-      <label class="md-button md-raised">
-        Import <input type=file
-                        id="import"
-                        file="import"
-                        style="display: none;"
-                        custom-on-change="import">
-      </label>
+  <md-button class="md-raised" ng-click="new_library()">New Lib</md-button>
 <% end %>
 
 <% content_for :action3 do %>
-  <md-button class='md-raised' ng-if="current_category" ng-click="export_category(current_category)">
-    Export Category
-  </md-button>
+      <label ng-class="import_popup.loading ? 'md-button md-raised md-accent' : 'md-button md-raised'">
+        <span ng-if="import_popup.loading">Importing...</span>
+        <span ng-if="!import_popup.loading">Import</span>
+                <input type=file
+                        id="import"
+                        style="display: none;"
+                        custom-on-change="import">
+      </label>
 <% end %>
 
 <%= content_for :main do %>
@@ -78,9 +105,9 @@
         <md-progress-linear md-mode="indeterminate"></md-progress-linear>
       </div>
     </div>
-  </div>
+  </div> 
 
-  <div ng-show="operation_types && current_ot"> 
+  <div ng-show="operation_types && current_operation_type && current_operation_type.model.model == 'OperationType'">
 
     <md-nav-bar md-selected-nav-item="mode" nav-bar-aria-label="Operation Type Editing Modes" md-no-ink-bar='false'>
       <md-nav-item md-nav-click="set_mode('definition')" name='definition'>Def</md-nav-item>
@@ -97,19 +124,19 @@
 
       <%= render partial: 'definition' %>
 
-      <div ng-include="'code'" ng-init="name='protocol'"      ng-if="current_ot.protocol && mode == 'protocol'" ></div>
-      <div ng-include="'code'" ng-init="name='precondition'"  ng-if="current_ot.precondition && mode == 'precondition'"></div>
-      <div ng-include="'code'" ng-init="name='cost_model'"    ng-if="current_ot.cost_model && mode == 'cost'"></div>        
+      <div ng-include="'code'" ng-init="component_name='protocol'"      ng-if="current_operation_type.protocol && mode == 'protocol'" ></div>
+      <div ng-include="'code'" ng-init="component_name='precondition'"  ng-if="current_operation_type.precondition && mode == 'precondition'"></div>
+      <div ng-include="'code'" ng-init="component_name='cost_model'"    ng-if="current_operation_type.cost_model && mode == 'cost'"></div>
+      <div ng-include="'code'" ng-init="component_name='documentation'" ng-if="current_operation_type.documentation && mode == 'documentation'"></div>
 
-      <div ng-include="'code'" ng-init="name='documentation'" ng-if="current_ot.documentation && mode == 'documentation'"></div>
-      <div ng-if="current_ot.documentation && mode == 'documentation_view'" ng-controller="codeCtrl as code" layout-padding>
-        <div ng-bind-html="current_ot.rendered_docs"></div>
+      <div ng-if="current_operation_type.documentation && mode == 'documentation_view'" ng-controller="codeCtrl as code" layout-padding>
+        <div ng-bind-html="current_operation_type.rendered_docs"></div>
 
         <div class='code-controls'>
           <md-button class='md-raised md-medium'
-                      ng-click="save(current_ot,'documentation')" 
-                      ng-disabled="!current_ot.documentation.changed">Save</md-button>
-          <md-button class='md-raised md-medium' ng-click="edit_docs(current_ot)">Edit</md-button>
+                      ng-click="save(current_operation_type,'documentation')"
+                      ng-disabled="!current_operation_type.documentation.changed">Save</md-button>
+          <md-button class='md-raised md-medium' ng-click="edit_docs(current_operation_type)">Edit</md-button>
         </div>  
 
       </div>  
@@ -121,39 +148,30 @@
 
   </div>
 
-  <div class='ng-modal item-modal' ng-show='import_popup.show'>
-    <div class='ng-modal-overlay' ng-click='import_popup.show=false'></div>
-      <div class='ng-modal-dialog item-modal-content scrollable' layout-padding>
+  <div ng-show="operation_types && current_operation_type && current_operation_type.model.model == 'Library'">
 
-          <md-toolbar class="item-toolbar">
-            <div class="md-toolbar-tools">
-              <h2 flex md-truncate>Import Results</h2> 
-            </div>
-            <div class='item-close' ng-click='import_popup.show=false'>&times;</div>
-          </md-toolbar>
-
-          <p ng-if="import_popup.inconsistencies.length > 0"><b>
-            Import notes:
-          </b></p>
-
-          <ul>
-            <li ng-repeat="note in import_popup.notes">
-              {{note}}
-            </li>
-          </ul>
-
-          <p ng-if="import_popup.inconsistencies.length > 0"><b>
-            The following issues need to be addressed before this import can be completed:
-          </b></p>
-          <ul>
-            <li ng-repeat="i in import_popup.inconsistencies">
-              {{i}}
-            </li>
-          </ul>
-
+    <div layout="row" class="library-toolbar" layout-align="start start">
+      <div flex="5" class="library-label">Name:</div>
+      <div flex="20">
+        <input type='text' ng-model="current_operation_type.name" ng-change="change(current_operation_type)" style='width: 100%'>
+      </div>
+      <div flex="10" class="library-label">Category:</div>
+      <div flex="20">
+        <input type='text' ng-model="current_operation_type.category" ng-change="change(current_operation_type)" style='width: 100%'>
+      </div>        
+      <div flex="70">
+        <md-button class='md-raised md-small md-primary pull-right library-button' 
+                   ng-click="update_library(current_operation_type)"
+                   ng-disabled="!current_operation_type.changed">Update</md-button>
+        <md-button class='md-raised md-small pull-right library-button'
+                   ng-click="delete_library(current_operation_type)">Delete</md-button>
       </div>
     </div>
+
+    <div ng-include="'code'" ng-init="component_name='source'" ng-if="current_operation_type.source && mode == 'source'" ></div>
   </div>  
+
+  <%= render partial: 'import' %>  
 
 <% end %>
 

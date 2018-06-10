@@ -1,0 +1,67 @@
+<% if Rails.env.development? %>
+
+describe('AQ.Plan', function() {
+
+  describe('get_folders', function() {
+    it('should return a list of folders', function(done) {
+
+      AQ.User.find(1)
+        .then(user => AQ.Plan.get_folders(user.id))
+        .then(folders => {
+          folders.should.be.Array();
+          folders.length.should.be.greaterThan(0);  
+          folders.forEach(folder => !folder || folder.should.be.String());
+          done();
+        })
+        .catch(done)
+
+    }).async();
+  });
+
+  describe('load plan', function() {
+
+    it('should load a plan', function(done, results) {
+
+        let action = this;
+
+        AQ.OperationType
+            .all_fast(true)
+            .then(operation_types =>  AQ.operation_types = operation_types)
+            .then(() => AQ.Plan.load(9093))
+            .then(plan => {
+                action.log("Got plan " + plan.id);
+                plan.id.should.be.equal(9093);
+                plan.operations.should.be.Array();
+                plan.operations.forEach(operation => {
+                    operation.record_type.should.be.equal("Operation");
+                    operation.should.property("operation_type");
+                    operation.operation_type.record_type.should.be.equal("OperationType");
+                });
+                plan.wires.should.be.Array();
+                plan.wires.forEach(wire => {
+                    wire.record_type.should.be.equal("Wire");
+                    wire.from.record_type.should.be.equal("FieldValue");
+                    wire.to.record_type.should.be.equal("FieldValue");              
+                })
+                done();
+            })
+            .catch(done);
+
+    }).async();
+
+    it('should fail gracefully when it can\'t find a plan', function(done, results) {
+
+      AQ.Plan.load(987654321)
+          .then(plan => done("This should not execute"))
+          .catch(e => {
+              this.log("Successfully got an error message: " + e.errors);
+              done();
+          });
+
+    }).async();
+
+  });
+
+});
+
+<% end %>

@@ -1,12 +1,6 @@
 (function() {
 
-  var w;
- 
-  try {
-    w = angular.module('aquarium'); 
-  } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
-  } 
+  var w = angular.module('aquarium'); 
 
   w.controller('userCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', 
                   function (  $scope,   $http,   $attrs,   $cookies,   $sce ) {
@@ -18,7 +12,8 @@
     AQ.confirm = (msg) => { return confirm(msg); }
     AQ.sce = $sce;
 
-    $scope.views = [  "Information", "Preferences", "Memberships", "Change Password", "Budgets",
+    $scope.views = [  "Information", "Statistics", "Preferences", 
+                      "Memberships", "Change Password", "Budgets",
                       "BIOFAB Agreement", "Aquarium Agreement" ];    
 
     $scope.preferences = [

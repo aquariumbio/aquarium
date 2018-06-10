@@ -1,15 +1,9 @@
 (function() {
 
-  var w;
+  var w = angular.module('aquarium'); 
 
-  try {
-    w = angular.module('aquarium'); 
-  } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
-  } 
-
-  w.controller('developerCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
-                        function ( $scope,   $http,   $attrs,   $cookies ) {
+  w.controller('developerCtrl', [ '$scope', '$http', '$attrs', 'aqCookieManager',
+                        function ( $scope,   $http,   $attrs,   aqCookieManager ) {
 
     $scope.errors = [];
     $scope.messages = [];
@@ -44,7 +38,7 @@
       $scope.cookie.path = $scope.path;
       $scope.cookie.arguments = $scope.arguments;
       $scope.cookie.branch = $scope.branch;  
-      $cookies.putObject("developer", $scope.cookie);
+      aqCookieManager.put_object("developer", $scope.cookie);
 
       if ( path == "" ) {
         path = "_NOT_SPECIFIED_";
@@ -95,7 +89,7 @@
         }
 
         $scope.cookie.branch = $scope.branch;  
-        $cookies.putObject("developer", $scope.cookie);        
+        aqCookieManager.put_object("developer", $scope.cookie);
         $scope.busy = true;
         
         $http.post("/developer/save",{ path: $scope.path, content: $scope.editor.getValue(), branch: $scope.branch }).then(
@@ -207,7 +201,7 @@
 
     // Initialize 
 
-    $scope.cookie = $cookies.getObject("developer");
+    $scope.cookie = aqCookieManager.get_object("developer");
 
     if ( $scope.cookie && $scope.cookie.path ) {
       $scope.path = $scope.cookie.path;
@@ -216,7 +210,7 @@
       $scope.get();
     } else {
       $scope.cookie = { path: "", arguments: {}, branch: "master" };
-      $cookies.putObject("developer", $scope.cookie);
+      aqCookieManager.put_object("developer", $scope.cookie);
       $scope.path = "";
       $scope.arguments = {};
       $scope.branch = "master";

@@ -1,30 +1,18 @@
 (function() {
 
-  var w;
-
-  try {
-    w = angular.module('aquarium'); 
-  } catch (e) {
-    w = angular.module('aquarium', 
-          ['ngCookies','ui.ace','ngMaterial','ngMdIcons'], 
-          [ '$rootScopeProvider', function($rootScopeProvider) { 
-      // This is an apparently well known hack that prevents digest errors when recursively
-      // rendering templates that nest more than 10 levels.
-      $rootScopeProvider.digestTtl(25); 
-    }]);
-  } 
+  let w = angular.module('aquarium');
 
   w.config(['$locationProvider', function($locationProvider) {
       $locationProvider.html5Mode({ enabled: true, requireBase: false, rewriteLinks: false });
   }]);  
 
-  w.controller('browserCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', '$window',
-                     function (  $scope,   $http,   $attrs,   $cookies,   $sce ,  $window ) {
+  w.controller('browserCtrl', [ '$scope', '$http', '$attrs', 'aqCookieManager', '$sce', '$window',
+                     function (  $scope,   $http,   $attrs,   aqCookieManager,   $sce ,  $window ) {
 
     AQ.init($http);
     AQ.update = () => { $scope.$apply(); }
     AQ.confirm = (msg) => { return confirm(msg); }
-    AQ.sce = $sce;                  
+    AQ.sce = $sce;
 
     function cookie() {
 
@@ -41,7 +29,7 @@
         },
         create: {
           selected: $scope.views.create.selected,
-          samples: [],
+          samples: []
         },
         search: {
           selected: $scope.views.search.selected,
@@ -65,11 +53,11 @@
         user: $scope.views.user
       };
 
-      $cookies.putObject("browserViews", data);
+      aqCookieManager.put_object("browserViews", data);
 
     }
 
-    $scope.views = $cookies.getObject("browserViews");
+    $scope.views = aqCookieManager.get_object("browserViews");
 
     if ( !$scope.views || $scope.views.version != 2 ) {
 
@@ -137,7 +125,7 @@
           });
           if ( $scope.views.sample_type.selected && $scope.views.sample_type.selection ) {
             get_samples($scope.views.sample_type.selection);
-          }        
+          }     
         });     
         
       load_sample_names();   
@@ -359,6 +347,7 @@
         AQ.update();
       }).catch(() => alert("Could not find item with id " + $scope.views.search.item_id));
     }
+ 
 
     $scope.page_class = function(page) {
       var c = "page";
@@ -440,6 +429,7 @@
           $scope.views.create.samples = data.samples;
           $scope.messages = data.warnings;
           $scope.messages.push("Spreadsheet '" + f.name + "' processed. Review the new samples below and click 'Save' to save this data to Aquarium.");
+          $scope.select_view('create');
 
         } catch (e) {
 
@@ -450,7 +440,7 @@
 
       }
 
-      r.readAsBinaryString(f);
+      r.readAsText(f);
 
     }     
 

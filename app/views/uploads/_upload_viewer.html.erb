@@ -1,0 +1,41 @@
+<script type="text/ng-template" id="upload_viewer">
+
+    <a href="#" ng-click="show_dialog()">
+      {{record.upload_file_name}} 
+    </a>
+
+</script>
+
+<script type="text/ng-template" id="upload_viewer_dialog">
+
+  <md-dialog aria-label="Upload Details" class="upload-viewer">
+
+    <md-dialog-content layout-padding>
+
+      <h1 class="md-title">{{record.upload_file_name}}</h1>
+
+      <div>
+
+        <div ng-if="!is_image(record)">Preview Not Available<br>{{record.upload_content_type}}</div>
+
+        <downloadimage model="record" ng-if="is_image(record)"></downloadimage>
+
+        <hr>
+
+        <div class='download'>
+          <b>Download:</b> <download model="record"></download>
+          <div>{{record.upload_file_size|bytes}}</div>
+        </div>
+      </div>    
+
+    </md-dialog-content>
+
+    <md-divider></md-divider>
+
+    <md-dialog-actions>
+      <md-button ng-click="close_dialog()">Close</md-button>
+    </md-dialog-actions>
+
+  </md-dialog>
+
+</script>

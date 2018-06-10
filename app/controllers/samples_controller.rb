@@ -1,3 +1,5 @@
+
+
 class SamplesController < ApplicationController
 
   before_filter :signed_in_user
@@ -25,7 +27,7 @@ class SamplesController < ApplicationController
 
     respond_to do |format|
 
-      format.html {
+      format.html do
 
         if params[:delete]
 
@@ -36,33 +38,26 @@ class SamplesController < ApplicationController
             flash[:notice] = "Deleted item #{i.id}."
           else
             flash[:warning] = "Could not delete #{i.id}: #{i.errors.full_messages.join(', ')}"
-          end   
+          end
 
           i.reload
 
         end
 
-        @sample = Sample.includes(:sample_type,items: [locator: [:wizard]]).find(params[:id])
+        @sample = Sample.includes(:sample_type, items: [locator: [:wizard]]).find(params[:id])
         @sample_type = @sample.sample_type
 
-        if params[:toggle] 
+        if params[:toggle]
           @item = Item.find(params[:toggle])
-          @item.inuse = @item.inuse > 0 ? 0 : 1;
+          @item.inuse = @item.inuse > 0 ? 0 : 1
           @item.save
         end
 
-      }
+      end
 
-      format.json { 
-
-        render json: Sample
-          .find(params[:id])
-          .to_json(
-            include: { sample_type: { include: :object_types, methods: :field_types } },
-            methods: :field_values
-          )
-
-      }
+      format.json do
+        render json: Sample.find(params[:id]).full_json
+      end
 
     end
 
@@ -81,11 +76,9 @@ class SamplesController < ApplicationController
     @sample_type = @sample.sample_type
   end
 
-  def render_full_sample sid
+  def render_full_sample(sid)
     render json: Sample
-      .find(sid)
-      .to_json(include: { sample_type: { methods: :field_types } }, 
-               methods: :field_values)
+      .find(sid).full_json
   end
 
   # POST /samples
@@ -103,7 +96,7 @@ class SamplesController < ApplicationController
   # PUT /samples/1.json
   def update
     @sample = Sample.find(params[:sample][:id])
-    @sample.updater(params[:sample],current_user)
+    @sample.updater(params[:sample], current_user)
     if @sample.errors.empty?
       render_full_sample @sample.id
     else
@@ -118,7 +111,7 @@ class SamplesController < ApplicationController
     @sample = Sample.find(params[:id])
     id = @sample.sample_type_id
 
-    if @sample.items.length > 0 
+    if !@sample.items.empty?
       flash[:notice] = "Could not delete sample #{@sample.name} because there are items associated with it."
     else
       @sample.destroy
@@ -130,35 +123,18 @@ class SamplesController < ApplicationController
     end
   end
 
-  def project
+  def spreadsheet; end
 
-    if !params[:name]
+  def schema(sample_type)
 
-      @projects = Sample.uniq.pluck(:project).sort
+    fields = %w[name project]
 
-    else
-
-      @samples = Sample.where('project = ?', params[:name]).sort { |a,b|
-        [ a.sample_type.name, a.name ] <=> [ b.sample_type.name, b.name ]
-      }
-
-    end
-
-  end
-
-  def spreadsheet
-  end
-
-  def schema sample_type
-
-    fields = [ 'name', 'project' ]
-
-    (1..8).each do |i| 
+    (1..8).each do |i|
       fn = "field#{i}name".to_sym
-      ft = "field#{i}type".to_sym 
-      f = "field#{i}".to_sym 
+      ft = "field#{i}type".to_sym
+      f = "field#{i}".to_sym
 
-      if sample_type[ft] != 'not used' && sample_type[ft] !=nil 
+      if sample_type[ft] != 'not used' && !sample_type[ft].nil?
         fields.push sample_type[ft]
       else
         fields.push :unused
@@ -170,21 +146,17 @@ class SamplesController < ApplicationController
 
   end
 
-  def make_samples data
+  def make_samples(data)
 
     samples = []
 
-    if data.length == 0
-      redirect_to spreadsheet_path, notice: "Samples not imported. File contains no parsable data"
-    end
+    redirect_to spreadsheet_path, notice: 'Samples not imported. File contains no parsable data' if data.empty?
 
     name = data.shift[0]
     @sample_type = SampleType.find_by_name(name)
     @schema = schema @sample_type
 
-    if !@sample_type
-      redirect_to spreadsheet_path, notice: "Samples not imported. Could not find sample type #{name}"
-    end
+    redirect_to spreadsheet_path, notice: "Samples not imported. Could not find sample type #{name}" unless @sample_type
 
     data.each do |row|
 
@@ -205,8 +177,8 @@ class SamplesController < ApplicationController
       sample.user_id = current_user.id
       sample.sample_type_id = @sample_type.id
 
-      (2..(@schema.length-1)).each do |i|
-        ff = "field#{i-1}".to_sym
+      (2..(@schema.length - 1)).each do |i|
+        ff = "field#{i - 1}".to_sym
         sample[ff] = row[i]
       end
 
@@ -218,14 +190,14 @@ class SamplesController < ApplicationController
 
   end
 
-  def upgrade s, st
+  def upgrade(s, st)
 
     (1..8).each do |i|
-      n = st.fieldname i       
-      t = st.fieldtype i 
-      if t == [ 'string' ] || t == [ 'url' ] || t == [ 'number' ]
+      n = st.fieldname i
+      t = st.fieldtype i
+      if t == ['string'] || t == ['url'] || t == ['number']
         fv = s.field_values.new name: n, value: s["field#{i}"].to_s
-      elsif t != [ 'not used' ] && s["field#{i}"] && s["field#{i}"] != '-none-' && s["field#{i}"] != '' && s["field#{i}"] != 'NA'
+      elsif t != ['not used'] && s["field#{i}"] && s["field#{i}"] != '-none-' && s["field#{i}"] != '' && s["field#{i}"] != 'NA'
         c = Sample.find_by_name(s["field#{i}"])
         @messages << "Sample #{s.id}: #{n}: Could not find '#{s["field#{i}"]}' with type in #{t}." unless c
         fv = s.field_values.new(name: n, child_sample_id: c.id) if c
@@ -233,14 +205,14 @@ class SamplesController < ApplicationController
       fv.save if fv
     end
 
-    return s
+    s
 
   end
 
   def process_spreadsheet
 
     if !params[:spreadsheet]
-      redirect_to spreadsheet_path, notice: "No path specified"
+      redirect_to spreadsheet_path, notice: 'No path specified'
     else
 
       path = params[:spreadsheet].original_filename
@@ -251,7 +223,7 @@ class SamplesController < ApplicationController
 
       @samples = make_samples @data
 
-      if @samples.length > 0
+      unless @samples.empty?
         @samples.each do |s|
           s.save
           upgrade(s, s.sample_type)
@@ -263,4 +235,3 @@ class SamplesController < ApplicationController
   end
 
 end
-

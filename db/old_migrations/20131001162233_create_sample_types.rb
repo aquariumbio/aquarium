@@ -1,3 +1,5 @@
+
+
 class CreateSampleTypes < ActiveRecord::Migration
   def change
     create_table :sample_types do |t|
