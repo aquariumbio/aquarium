@@ -10,11 +10,11 @@
     <div class='flash md-body-2'><%= value %></div>
   <% end %>
 
-  <md-list ng-init="status.st = '<%= @first %>'">
+  <md-list ng-init="status.st = '<%= @first %>'" class='md-compact-list'>
 
     <% @sample_types.each do |sample_type| %>
       <md-list-item ng-click="status.st = '<%= sample_type.name %>'"
-                    ng-class="status.st == '<%= sample_type.name %>' ? 'md-body-2 selected' : 'md-body-2'">
+                    ng-class="status.st == '<%= sample_type.name %>' ? 'selected' : ''">
         <%= sample_type.name %>
       </md-list-item>
     <% end %>

@@ -63,6 +63,12 @@
       margin-top: 10px;
     }
 
+    .history {
+      margin-top: 10px;
+      border-top: 1pt solid #bbb;
+      padding: 10px;
+    }
+
     .tiny-collection {
       border: 1pt solid #aaa;
       padding: 1pt;
@@ -81,6 +87,10 @@
       }
       .filled {
         background: #aaf; 
+        cursor: pointer;
+      }
+      .other {
+        background: #cccccc; 
         cursor: pointer;
       }
       .blank {

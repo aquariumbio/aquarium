@@ -1,9 +1,16 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
 one:
+  id: 1
   job_id: 1
-  upload: 
+  upload_file_name: "junk.txt" 
+  upload_content_type: "text/plain" 
+  upload_file_size: 25
+  upload_updated_at: "2017-11-08 04:11:24"  
 
 two:
+  id: 2
   job_id: 1
-  upload: 
+  upload_file_name: "more_junk.txt"
+  upload_content_type: "text/plain" 
+  upload_file_size: 25
+  upload_updated_at: "2017-11-08 04:11:24"

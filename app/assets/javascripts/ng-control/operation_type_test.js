@@ -1,136 +1,159 @@
 (function() {
+  var w = angular.module("aquarium");
 
-  var w;
- 
-  try {
-    w = angular.module('aquarium'); 
-  } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
-  } 
-
-  w.controller('operationTypeTestCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', 
-                               function (  $scope,   $http,   $attrs,   $cookies,   $sce ) {
-
-    $scope.randomize = function(ot) {
-
-      if ( !ot.batch_size ) {
-        ot.batch_size = 1;
-      }
-
-      ot.test_operations = null;
-      ot.randomizing = true;
-
-      $http.get("/operation_types/" + ot.id + "/random/" + ot.batch_size).then(function(response) {
-        ot.randomizing = false;        
-        if ( response.data.error ) {
-          ot.test_error = response.data.error
-          if ( response.data.backtrace ) {
-            ot.test_error += response.data.backtrace[0]
-          }
-        } else {
-          ot.test_operations = response.data;
+  w.controller("operationTypeTestCtrl", [
+    "$scope",
+    "$http",
+    "$attrs",
+    "$cookies",
+    "$sce",
+    function($scope, $http, $attrs, $cookies, $sce) {
+      $scope.randomize = function(operation_type) {
+        if (!operation_type.batch_size) {
+          operation_type.batch_size = 1;
         }
-      });
 
-    }
+        operation_type.test_operations = null;
+        operation_type.randomizing = true;
 
-    $scope.save_and_test = function(ot) {
+        $http
+          .get(
+            "/operation_types/" +
+              operation_type.id +
+              "/random/" +
+              operation_type.batch_size
+          )
+          .then(
+            function successCallback(response) {
+              operation_type.randomizing = false;
+              operation_type.test_operations = response.data;
+            },
+            function failureCallback(response) {
+              operation_type.randomizing = false;
+              operation_type.test_error = response.data.error;
+              if (response.data.backtrace) {
+                operation_type.test_error += response.data.backtrace[0];
+              }
+            }
+          );
+      };
 
-      if ( !ot.protocol.no_edit ) {
+      $scope.sce = function(data) {
+        if (typeof data == "string") {
+          return $sce.trustAsHtml(data);
+        } else {
+          return $sce.trustAsHtml(JSON.stringify(data));
+        }
+      };
 
-        $http.post("/operation_types/code", {
-          id: ot.id,
-          name: "protocol",
-          content: ot.protocol.content
-        }).then(function(response) {
-          
-          if ( !ot.precondition.no_edit ) {
-            $http.post("/operation_types/code", {
-              id: ot.id,
-              name: "precondition",
-              content: ot.precondition.content
-            }).then(function(response) {
-              ot.precondition.changed = false;
-              $scope.test(ot);
+      $scope.save_and_test = function(operation_type) {
+        if (!operation_type.protocol.no_edit) {
+          $http
+            .post("/operation_types/code", {
+              id: operation_type.id,
+              name: "protocol",
+              content: operation_type.protocol.content
+            })
+            .then(function(response) {
+              operation_type.recompute_getter("protocol");
+
+              if (!operation_type.precondition.no_edit) {
+                $http
+                  .post("/operation_types/code", {
+                    id: operation_type.id,
+                    name: "precondition",
+                    content: operation_type.precondition.content
+                  })
+                  .then(function(response) {
+                    operation_type.precondition.changed = false;
+                    $scope.test(operation_type);
+                  });
+              }
             });
-          }
+        }
+      };
 
+      $scope.test = function(operation_type) {
+        if (
+          operation_type.test_operations &&
+          operation_type.test_operations.length > 0
+        ) {
+          operation_type.test_results = null;
+          operation_type.test_error = null;
+          operation_type.running_test = true;
+          $http
+            .post("/operation_types/test", operation_type.remove_predecessors())
+            .then(
+              function successCallback(response) {
+                operation_type.running_test = false;
+                aq.each(operation_type.field_types, ft =>
+                  ft.recompute_getter("predecessors")
+                );
+                operation_type.test_results = response.data;
+                operation_type.test_results.job.backtrace = JSON.parse(
+                  operation_type.test_results.job.state
+                );
+              },
+              function failureCallback(response) {
+                operation_type.running_test = false;
+                operation_type.test_error = response.data.error.replace(
+                  /\(eval\):/g,
+                  "Line "
+                );
+                console.log(operation_type.test_error);
+              }
+            );
+        }
+      };
+
+      $scope.content_type = function(line) {
+        var type = Object.keys(line)[0];
+        return type;
+      };
+
+      $scope.content_value = function(line) {
+        var k = Object.keys(line)[0];
+        if (typeof line[k] === "string") {
+          return $sce.trustAsHtml(line[k]);
+        } else {
+          return line[k];
+        }
+      };
+
+      $scope.table_class = function(cell) {
+        var c = "";
+        if (cell == null) {
+          c += " krill-td-null-cell";
+        } else if (cell.class) {
+          c += cell.class;
+        }
+        if (cell && cell.check) {
+          c += " krill-td-check";
+        }
+        if (cell && cell.type) {
+          c += " krill-td-input";
+        }
+        return c;
+      };
+
+      $scope.backtrace = function(step) {
+        var relevant_messages = step.backtrace;
+        return aq.collect(relevant_messages, function(msg) {
+          return msg.replace(/\(eval\):/g, "Line ");
+        });
+      };
+
+      $scope.is_part = function(ot, fv) {
+        var fts = aq.where(ot.field_types, function(ft) {
+          return ft.role == fv.role && ft.name == fv.name;
         });
 
-      }
-
+        if (fts.length > 0) {
+          return fts[0].part;
+        } else {
+          return false;
+        }
+      };
     }
-
-    $scope.test = function(ot) {
-      if ( ot.test_operations && ot.test_operations.length > 0 ) {
-        ot.test_results = null;
-        ot.test_error = null;
-        ot.running_test = true;
-        $http.post("/operation_types/test", ot.remove_predecessors()).then(function(response) {
-          ot.running_test = false;
-          aq.each(ot.field_types, ft => ft.recompute_getter('predecessors'));        
-          if ( response.data.error ) {
-            ot.test_error = response.data.error.replace(/\(eval\):/g, "Line ");
-            console.log(test_error);
-          } else {
-            ot.test_results = response.data;
-            ot.test_results.job.backtrace = JSON.parse(ot.test_results.job.state);
-          }
-        });
-      }
-    }
-
-    $scope.content_type = function(line) {
-      var type = Object.keys(line)[0];
-      return type;
-    }
-
-    $scope.content_value = function(line) {
-      var k = Object.keys(line)[0];
-      if ( typeof line[k] === "string" ) {
-        return $sce.trustAsHtml(line[k]);
-      } else {
-        return line[k];
-      }
-    }  
-
-    $scope.table_class = function(cell) {
-      var c = "";
-      if ( cell == null ) {
-        c += " krill-td-null-cell";
-      } else if ( cell.class ) {
-        c += cell.class;
-      }
-      if ( cell && cell.check ) {
-        c += " krill-td-check"
-      }
-      if ( cell && cell.type ) {
-        c += " krill-td-input"
-      }      
-      return c;
-    }
-
-    $scope.backtrace = function(step) {
-
-      var relevant_messages = step.backtrace;
-      return aq.collect(relevant_messages, function(msg) { return msg.replace(/\(eval\):/g, "Line ") });
-
-    }
-
-    $scope.is_part = function(ot,fv) {
-
-      var fts = aq.where(ot.field_types, function(ft) {
-        return ft.role == fv.role && ft.name == fv.name;
-      });
-
-      if ( fts.length > 0 ) {
-        return fts[0].part;
-      } else {  
-        return false;
-      }
-
-    }
-
-  }]);
-
+  ]);
 })();

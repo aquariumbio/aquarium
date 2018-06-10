@@ -1,8 +1,13 @@
-<% provide(:title,  "Edit" + @object_type.name) %>
+<% provide(:title,  "Edit " + @object_type.name) %>
 
 <%= content_for :controller do %>noCtrl<% end %>
 
 <% content_for :main do %>
+
+  <% flash.each do |key, value| %>
+    <div style="color: red; padding: 20px" class='well'><%= value %></div>
+  <% end %>
+
   <div layout-padding>
     <h2>Update Record for <%= @object_type.name %></h2>
 

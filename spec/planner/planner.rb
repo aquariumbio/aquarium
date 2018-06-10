@@ -1,11 +1,13 @@
-require "rails_helper"
-require_relative "gibson"
 
-RSpec.describe "Planner" do
 
-  context "plans" do
+require 'rails_helper'
+require_relative 'gibson'
 
-    it "makes plans" do
+RSpec.describe 'Planner' do
+
+  context 'plans' do
+
+    it 'makes plans' do
 
       # build_workflow
 
@@ -18,7 +20,7 @@ RSpec.describe "Planner" do
       if issues.empty?
         puts "No issues. \e[39m"
       else
-        puts "Issues: " + issues.join(', ') + " \e[39m"
+        puts 'Issues: ' + issues.join(', ') + " \e[39m"
       end
 
       gop.show_plan
@@ -26,7 +28,7 @@ RSpec.describe "Planner" do
       puts gop.serialize
 
       plan = gop.plans.first
-      puts "plan = #{plan.inspect}, ops = #{plan.operations.collect { |o| o.id }}"
+      puts "plan = #{plan.inspect}, ops = #{plan.operations.collect(&:id)}"
 
     end
 

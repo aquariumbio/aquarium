@@ -1,12 +1,6 @@
 (function() {
 
-  var w;
-
-  try {
-    w = angular.module('aquarium'); 
-  } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
-  } 
+  var w = angular.module('aquarium'); 
 
   w.directive("opener", function() {
 
@@ -14,14 +8,14 @@
 
       restrict: 'AE',
 
-      scope: { model: '=', invisible: '=', disabled: '=' },
+      scope: { model: '=', invisible: '=', disabled: '=', off: '=' },
 
       link: function($scope,$element,$attributes) {
 
         $scope.toggle = function() {
-          if ( !$scope.disabled ) {
+          if ( !$scope.disabled && !$scope.off ) {
             $scope.model = !$scope.model;
-          }
+          } 
         }
 
       },

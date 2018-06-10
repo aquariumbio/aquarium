@@ -1,12 +1,48 @@
 
 .operations {
 
-  .op-type {
+  .category-container {
+    padding-top: 4px;
+    padding-right: 8px;
+    /*border-right: 1px solid #eee;*/
+    /*border-bottom: 2px solid #eee;*/
+    width: 30%;
+  }
 
+  .selected-category, .unselected-category {
+    cursor: pointer;
+    font-size: 9pt;
+    overflow: hidden;
+    border: 1pt solid #ddd;
+    /*border-radius: 5px;*/
+    margin: 0 0 5px 0;
+    padding: 4px;
+    color: #999;
   }
-  .op-type-selected {
+
+ .unselected-category {   
+    background: #eee; 
+    &:hover {
+      background: #ccc;
+    };
+  }
+
+  .selected-category {
+    background: lightblue;
+    border: 1pt solid #aaf;    
+  }  
+
+  .active-category {
     font-weight: bold;
+    color: black;
   }
+
+  .alt-category {
+    font-weight: bold;
+    color: black;
+    background: #efe;
+  }  
+
   .op-type-none {
     color: #ccc;
   }  
@@ -70,7 +106,26 @@
     margin: 0;
   }
 
+  .switch-user-container {
+    width: 70%;    
+  }
+
+  .active-jobs-table {
+    font-size: 9pt;
+    width: 70%;    
+    .type {
+      width: 20%;;
+    }
+    .zombie {
+      font-size: 7pt;
+      color: orange;
+    }
+  }
+
   .status-table {
+
+    font-size: 9pt;
+    width: 70%;
 
     .operation-name {
       width: 66%;

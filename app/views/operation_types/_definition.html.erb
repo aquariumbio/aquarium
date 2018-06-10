@@ -3,41 +3,48 @@
   <form>
 
     <div class="row-fluid">
+
       <div class="span3">
-        <label class="label-bold">Operation Name (id: {{current_ot.id}})</label>
-        <input type='text' ng-model="current_ot.name" ng-change="change(current_ot)" style='width: 100%'>
+        <label class="label-bold">
+          Operation Name (id: {{current_operation_type.id}})
+          <input type='text' ng-model="current_operation_type.name" ng-change="change(current_operation_type)" style='width: 100%'>
+        </label>
       </div>
       <div class="span3">
-        <label class="label-bold">Category</label>
-        <input type='text' ng-model="current_ot.category" ng-change="change(current_ot)" style='width: 100%'>
+        <label class="label-bold">
+          Category
+          <input type='text' ng-model="current_operation_type.category" ng-change="change(current_operation_type)" style='width: 100%'>
+        </label>
       </div>   
       <div class="span2">
-        <label class="label-bold">On the fly?</label>
-        <input type='checkbox' ng-change="change(current_ot)" ng-model="current_ot.on_the_fly">
-      </div>
-      <div class="span1">
-        <label class="label-bold">Deployed?</label>
-        <input type='checkbox' ng-change="change(current_ot)" ng-model="current_ot.deployed">
+        <label class="label-bold">
+          <input type='checkbox' ng-change="change(current_operation_type)" ng-model="current_operation_type.on_the_fly">
+          On-the-fly?
+        </label>
+        <label class="label-bold">
+          <input type='checkbox' ng-change="change(current_operation_type)" ng-model="current_operation_type.deployed">
+          Deployed?
+        </label>
       </div>
 
       <div class="span3">
 
         <button class="btn btn-primary pull-right btn-mini" 
-                ng-click="save_ot(current_ot)" 
-                ng-disabled="!current_ot.changed"
+                ng-click="save_operation_type(current_operation_type)"
+                ng-disabled="!current_operation_type.changed"
                 style="margin-left: 5px">
-          <span ng-if="current_ot.id">Update</span>
-          <span ng-if="!current_ot.id">Save</span>
+          <span ng-if="current_operation_type.id">Update</span>
+          <span ng-if="!current_operation_type.id">Save</span>
         </button>
 
-        <button ng-if="!current_ot.deployed" 
+        <button ng-if="!current_operation_type.deployed"
                 class="btn btn-mini pull-right"  style="margin-left: 5px"
-                ng-click="delete_ot(current_ot)"><span>Delete</span></button>
+                ng-click="delete_operation_type(current_operation_type)"><span>Delete</span></button>
 
         <button class="btn btn-mini pull-right" style="margin-left: 5px"
-                ng-click="export_ot(current_ot)"><span>Export</span></button>
+                ng-click="export_operation_type(current_operation_type)"><span>Export</span></button>
 
-       <button class='btn btn-mini pull-right' ng-if="current_ot.id" ng-click="copy(current_ot)">Copy</button>
+       <button class='btn btn-mini pull-right' ng-if="current_operation_type.id" ng-click="copy(current_operation_type)">Copy</button>
 
       </div>
 
@@ -45,14 +52,15 @@
 
     <hr />
 
-    <div ng-if="current_ot.loading_field_types">Loading I/O Definitions ...</div>
+    <div ng-if="current_operation_type.loading_field_types">Loading I/O Definitions ...</div>
 
     <div class='row-fluid'>
+
       <div class='span6'>
         <label class="label-bold">
           Inputs
-          <a href="#" class="btn btn-mini pull-right" style="margin-left: 5px" ng-click="change(current_ot); add_io('input')">Add Input</a>
-          <a href="#" class="btn btn-mini pull-right" ng-click="change(current_ot); add_parameter('input')">Add Paramter</a>
+          <a href="#" class="btn btn-mini pull-right" style="margin-left: 5px" ng-click="change(current_operation_type); add_io('input')">Add Input</a>
+          <a href="#" class="btn btn-mini pull-right" ng-click="change(current_operation_type); add_parameter('input')">Add Parameter</a>
         </label>
         <div ng-include="'io_form'" onLoad="role = 'input'" ng-if="true"></div>
       </div>
@@ -60,14 +68,15 @@
       <div class='span6'>
         <label class="label-bold">
           Outputs
-          <a href="#" class="btn btn-mini pull-right" ng-click="change(current_ot); add_io('output')">Add Output</a>
+          <a href="#" class="btn btn-mini pull-right" ng-click="change(current_operation_type); add_io('output')">Add Output</a>
         </label>
         <div ng-include="'io_form'" onLoad="role = 'output'" ng-if="true"></div>
-        </div>
       </div>
+
+    </div>
 
   </form>
 
-  <!-- <pre>{{current_ot|json}}</pre -->
+  <!-- <pre>{{current_operation_type|json}}</pre -->
 
 </div>

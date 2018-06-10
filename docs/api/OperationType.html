@@ -1,0 +1,1996 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: OperationType
+  
+    &mdash; Aquarium Documentation
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "OperationType";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index (O)</a> &raquo;
+    
+    
+    <span class="title">OperationType</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: OperationType
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName">ActiveRecord::Base</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">ActiveRecord::Base</li>
+          
+            <li class="next">OperationType</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  <dl>
+      <dt>Includes:</dt>
+      <dd><span class='object_link'><a href="CodeHelper.html" title="CodeHelper (module)">CodeHelper</a></span>, <span class='object_link'><a href="FieldTyper.html" title="FieldTyper (module)">FieldTyper</a></span>, <span class='object_link'><a href="HasTiming.html" title="HasTiming (module)">HasTiming</a></span>, OperationTypeExport, OperationTypePlanner, OperationTypeRandom, OperationTypeWorkflow</dd>
+  </dl>
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>app/models/operation_type.rb</dd>
+  </dl>
+  
+</div>
+
+
+
+
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#numbers-class_method" title="numbers (class method)">.<strong>numbers</strong>(user = nil)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_input-instance_method" title="#add_input (instance method)">#<strong>add_input</strong>(name, sample_name, container_name, opts = {})  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_io-instance_method" title="#add_io (instance method)">#<strong>add_io</strong>(name, sample_name, container_name, role, opts)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_new_allowable_field_type-instance_method" title="#add_new_allowable_field_type (instance method)">#<strong>add_new_allowable_field_type</strong>(ft, newaft)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Update Methods for Field Types from Front End Start Here.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_new_field_type-instance_method" title="#add_new_field_type (instance method)">#<strong>add_new_field_type</strong>(newft)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_output-instance_method" title="#add_output (instance method)">#<strong>add_output</strong>(name, sample_name, container_name, opts = {})  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#cost_model-instance_method" title="#cost_model (instance method)">#<strong>cost_model</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#documentation-instance_method" title="#documentation (instance method)">#<strong>documentation</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#done-instance_method" title="#done (instance method)">#<strong>done</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#error_out_obsolete_operations-instance_method" title="#error_out_obsolete_operations (instance method)">#<strong>error_out_obsolete_operations</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#inputs-instance_method" title="#inputs (instance method)">#<strong>inputs</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#num_in_status-instance_method" title="#num_in_status (instance method)">#<strong>num_in_status</strong>(s)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#outputs-instance_method" title="#outputs (instance method)">#<strong>outputs</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pending-instance_method" title="#pending (instance method)">#<strong>pending</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#precondition-instance_method" title="#precondition (instance method)">#<strong>precondition</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#primed-instance_method" title="#primed (instance method)">#<strong>primed</strong>(ops)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#protocol-instance_method" title="#protocol (instance method)">#<strong>protocol</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#schedule-instance_method" title="#schedule (instance method)">#<strong>schedule</strong>(ops, user, group, opts = {})  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>end.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#schedule_aux-instance_method" title="#schedule_aux (instance method)">#<strong>schedule_aux</strong>(ops, user, group, opts = {})  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#stats-instance_method" title="#stats (instance method)">#<strong>stats</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#update_allowable_field_type-instance_method" title="#update_allowable_field_type (instance method)">#<strong>update_allowable_field_type</strong>(oldaft, newaft)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#update_field_type-instance_method" title="#update_field_type (instance method)">#<strong>update_field_type</strong>(oldft, newft)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#update_field_types-instance_method" title="#update_field_types (instance method)">#<strong>update_field_types</strong>(fts)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#waiting-instance_method" title="#waiting (instance method)">#<strong>waiting</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="HasTiming.html" title="HasTiming (module)">HasTiming</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="HasTiming.html#timing-instance_method" title="HasTiming#timing (method)">#timing</a></span>, <span class='object_link'><a href="HasTiming.html#timing=-instance_method" title="HasTiming#timing= (method)">#timing=</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="CodeHelper.html" title="CodeHelper (module)">CodeHelper</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="CodeHelper.html#code-instance_method" title="CodeHelper#code (method)">#code</a></span>, <span class='object_link'><a href="CodeHelper.html#new_code-instance_method" title="CodeHelper#new_code (method)">#new_code</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="FieldTyper.html" title="FieldTyper (module)">FieldTyper</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="FieldTyper.html#add_field-instance_method" title="FieldTyper#add_field (method)">#add_field</a></span>, <span class='object_link'><a href="FieldTyper.html#destroy_fields-instance_method" title="FieldTyper#destroy_fields (method)">#destroy_fields</a></span>, <span class='object_link'><a href="FieldTyper.html#export_field_types-instance_method" title="FieldTyper#export_field_types (method)">#export_field_types</a></span>, <span class='object_link'><a href="FieldTyper.html#field_types-instance_method" title="FieldTyper#field_types (method)">#field_types</a></span>, <span class='object_link'><a href="FieldTyper.html#save_field_types-instance_method" title="FieldTyper#save_field_types (method)">#save_field_types</a></span>, <span class='object_link'><a href="FieldTyper.html#type-instance_method" title="FieldTyper#type (method)">#type</a></span></p>
+
+  
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="numbers-class_method">
+  
+    .<strong>numbers</strong>(user = nil)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 366</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_numbers'>numbers</span> <span class='id identifier rubyid_user'>user</span><span class='op'>=</span><span class='kw'>nil</span>
+
+  <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_user'>user</span>
+    <span class='id identifier rubyid_ots'>ots</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="OperationType (class)">OperationType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_includes'>includes</span><span class='lparen'>(</span><span class='symbol'>:operations</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>deployed:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='label'>operations:</span> <span class='lbrace'>{</span> <span class='label'>user_id:</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='rbrace'>}</span><span class='rparen'>)</span>     
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_ots'>ots</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="OperationType (class)">OperationType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_includes'>includes</span><span class='lparen'>(</span><span class='symbol'>:operations</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>deployed:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_ots'>ots</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ot'>ot</span><span class='op'>|</span>
+
+    <span class='id identifier rubyid_pending'>pending</span> <span class='op'>=</span> <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_operations'>operations</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_o'>o</span><span class='op'>|</span> <span class='id identifier rubyid_o'>o</span><span class='period'>.</span><span class='id identifier rubyid_status'>status</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>pending</span><span class='tstring_end'>&quot;</span></span> <span class='rbrace'>}</span>
+    <span class='id identifier rubyid_pending_true_length'>pending_true_length</span> <span class='op'>=</span> <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_operations'>operations</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_o'>o</span><span class='op'>|</span> <span class='id identifier rubyid_o'>o</span><span class='period'>.</span><span class='id identifier rubyid_status'>status</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>pending</span><span class='tstring_end'>&quot;</span></span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_o'>o</span><span class='period'>.</span><span class='id identifier rubyid_precondition_value'>precondition_value</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
+
+    <span class='id identifier rubyid_result'>result</span><span class='lbracket'>[</span><span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='lbrace'>{</span>
+      <span class='label'>pending_true:</span>  <span class='id identifier rubyid_pending_true_length'>pending_true_length</span><span class='comma'>,</span>
+      <span class='label'>pending_false:</span> <span class='id identifier rubyid_pending'>pending</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>-</span> <span class='id identifier rubyid_pending_true_length'>pending_true_length</span><span class='comma'>,</span>  
+      <span class='label'>waiting:</span>       <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_num_in_status'>num_in_status</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>waiting</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='comma'>,</span>
+      <span class='label'>scheduled:</span>     <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_num_in_status'>num_in_status</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>scheduled</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='comma'>,</span>
+      <span class='label'>running:</span>       <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_num_in_status'>num_in_status</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>running</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='comma'>,</span>
+      <span class='label'>deferred:</span>      <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_num_in_status'>num_in_status</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>deferred</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='comma'>,</span>
+      <span class='label'>primed:</span>        <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_num_in_status'>num_in_status</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>primed</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='comma'>,</span>
+      <span class='label'>done:</span>          <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_num_in_status'>num_in_status</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>done</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='comma'>,</span>
+      <span class='label'>error:</span>         <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_num_in_status'>num_in_status</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>error</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='rbrace'>}</span>
+
+  <span class='rbrace'>}</span>
+
+  <span class='kw'>return</span> <span class='id identifier rubyid_result'>result</span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="add_input-instance_method">
+  
+    #<strong>add_input</strong>(name, sample_name, container_name, opts = {})  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_add_input'>add_input</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_sample_name'>sample_name</span><span class='comma'>,</span> <span class='id identifier rubyid_container_name'>container_name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='id identifier rubyid_add_field'>add_field</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_sample_name'>sample_name</span><span class='comma'>,</span> <span class='id identifier rubyid_container_name'>container_name</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>input</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="add_io-instance_method">
+  
+    #<strong>add_io</strong>(name, sample_name, container_name, role, opts)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+19
+20
+21</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 19</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_add_io'>add_io</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_sample_name'>sample_name</span><span class='comma'>,</span> <span class='id identifier rubyid_container_name'>container_name</span><span class='comma'>,</span> <span class='id identifier rubyid_role'>role</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span>
+  <span class='id identifier rubyid_add_field'>add_field</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_sample_name'>sample_name</span><span class='comma'>,</span> <span class='id identifier rubyid_container_name'>container_name</span><span class='comma'>,</span> <span class='id identifier rubyid_role'>role</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="add_new_allowable_field_type-instance_method">
+  
+    #<strong>add_new_allowable_field_type</strong>(ft, newaft)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Update Methods for Field Types from Front End Start Here</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 163</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_add_new_allowable_field_type'>add_new_allowable_field_type</span> <span class='id identifier rubyid_ft'>ft</span><span class='comma'>,</span> <span class='id identifier rubyid_newaft'>newaft</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_newaft'>newaft</span><span class='lbracket'>[</span><span class='symbol'>:sample_type</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_st'>st</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="SampleType.html" title="SampleType (class)">SampleType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_name'>find_by_name</span><span class='lparen'>(</span><span class='id identifier rubyid_newaft'>newaft</span><span class='lbracket'>[</span><span class='symbol'>:sample_type</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_st'>st</span> <span class='op'>=</span> <span class='kw'>nil</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_newaft'>newaft</span><span class='lbracket'>[</span><span class='symbol'>:object_type</span><span class='rbracket'>]</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_newaft'>newaft</span><span class='lbracket'>[</span><span class='symbol'>:object_type</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_ot'>ot</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="ObjectType.html" title="ObjectType (class)">ObjectType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_name'>find_by_name</span><span class='lparen'>(</span><span class='id identifier rubyid_newaft'>newaft</span><span class='lbracket'>[</span><span class='symbol'>:object_type</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_ot'>ot</span> <span class='op'>=</span> <span class='kw'>nil</span>
+  <span class='kw'>end</span>   
+
+  <span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_allowable_field_types'>allowable_field_types</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span><span class='lparen'>(</span>
+    <span class='label'>sample_type_id:</span> <span class='id identifier rubyid_st'>st</span> <span class='op'>?</span> <span class='id identifier rubyid_st'>st</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='op'>:</span> <span class='kw'>nil</span><span class='comma'>,</span>
+    <span class='label'>object_type_id:</span> <span class='id identifier rubyid_ot'>ot</span> <span class='op'>?</span> <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='op'>:</span> <span class='kw'>nil</span>
+  <span class='rparen'>)</span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="add_new_field_type-instance_method">
+  
+    #<strong>add_new_field_type</strong>(newft)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 204</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_add_new_field_type'>add_new_field_type</span> <span class='id identifier rubyid_newft'>newft</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:allowable_field_types</span><span class='rbracket'>]</span>
+
+    <span class='id identifier rubyid_sample_type_names'>sample_type_names</span> <span class='op'>=</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:allowable_field_types</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_aft'>aft</span><span class='op'>|</span> 
+      <span class='id identifier rubyid_aft'>aft</span><span class='lbracket'>[</span><span class='symbol'>:sample_type</span><span class='rbracket'>]</span> <span class='op'>?</span> <span class='id identifier rubyid_aft'>aft</span><span class='lbracket'>[</span><span class='symbol'>:sample_type</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span> <span class='op'>:</span> <span class='kw'>nil</span>
+    <span class='rbrace'>}</span>
+
+    <span class='id identifier rubyid_container_names'>container_names</span> <span class='op'>=</span>  <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:allowable_field_types</span><span class='rbracket'>]</span>
+      <span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_aft'>aft</span><span class='op'>|</span> <span class='id identifier rubyid_aft'>aft</span><span class='lbracket'>[</span><span class='symbol'>:object_type</span><span class='rbracket'>]</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_aft'>aft</span><span class='lbracket'>[</span><span class='symbol'>:object_type</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_aft'>aft</span><span class='lbracket'>[</span><span class='symbol'>:object_type</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span> <span class='rbrace'>}</span>
+      <span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_aft'>aft</span><span class='op'>|</span>            
+        <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Object type &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_aft'>aft</span><span class='lbracket'>[</span><span class='symbol'>:object_type</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39; not definied by browser for </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_ft'>ft</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>.</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='const'><span class='object_link'><a href="ObjectType.html" title="ObjectType (class)">ObjectType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_name'>find_by_name</span><span class='lparen'>(</span><span class='id identifier rubyid_aft'>aft</span><span class='lbracket'>[</span><span class='symbol'>:object_type</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_aft'>aft</span><span class='lbracket'>[</span><span class='symbol'>:object_type</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span>
+    <span class='rbrace'>}</span>          
+
+  <span class='kw'>else</span>
+
+    <span class='id identifier rubyid_sample_type_names'>sample_type_names</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_container_names'>container_names</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_add_io'>add_io</span><span class='lparen'>(</span>
+    <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='comma'>,</span> 
+    <span class='id identifier rubyid_sample_type_names'>sample_type_names</span><span class='comma'>,</span> 
+    <span class='id identifier rubyid_container_names'>container_names</span><span class='comma'>,</span> 
+    <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:role</span><span class='rbracket'>]</span><span class='comma'>,</span> 
+    <span class='label'>array:</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:array</span><span class='rbracket'>]</span><span class='comma'>,</span> 
+    <span class='label'>part:</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:part</span><span class='rbracket'>]</span><span class='comma'>,</span> 
+    <span class='label'>routing:</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:routing</span><span class='rbracket'>]</span><span class='comma'>,</span> 
+    <span class='label'>ftype:</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:ftype</span><span class='rbracket'>]</span><span class='comma'>,</span> 
+    <span class='label'>choices:</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:choices</span><span class='rbracket'>]</span>
+  <span class='rparen'>)</span>
+
+  <span class='kw'>return</span> <span class='id identifier rubyid_field_types'>field_types</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>name:</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>role:</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:role</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="add_output-instance_method">
+  
+    #<strong>add_output</strong>(name, sample_name, container_name, opts = {})  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+27
+28
+29</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 27</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_add_output'>add_output</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_sample_name'>sample_name</span><span class='comma'>,</span> <span class='id identifier rubyid_container_name'>container_name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='id identifier rubyid_add_field'>add_field</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_sample_name'>sample_name</span><span class='comma'>,</span> <span class='id identifier rubyid_container_name'>container_name</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>output</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span>   
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="cost_model-instance_method">
+  
+    #<strong>cost_model</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+55
+56
+57</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 55</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_cost_model'>cost_model</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_code'>code</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>cost_model</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="documentation-instance_method">
+  
+    #<strong>documentation</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+63
+64
+65</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 63</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_documentation'>documentation</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_code'>code</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>documentation</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="done-instance_method">
+  
+    #<strong>done</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+47
+48
+49</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 47</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_done'>done</span>
+  <span class='id identifier rubyid_operations'>operations</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span> <span class='label'>status:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>done</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="error_out_obsolete_operations-instance_method">
+  
+    #<strong>error_out_obsolete_operations</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 321</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_error_out_obsolete_operations'>error_out_obsolete_operations</span>
+
+  <span class='const'><span class='object_link'><a href="Operation.html" title="Operation (class)">Operation</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>operation_type_id:</span> <span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='label'>status:</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>pending</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>scheduled</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_op'>op</span><span class='op'>|</span>
+
+    <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_field_values'>field_values</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_fv'>fv</span><span class='op'>|</span>
+
+      <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_field_type'>field_type</span> <span class='op'>||</span> <span class='op'>!</span><span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_allowable_field_type'>allowable_field_type</span>
+        <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ERRORING OUT OP </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> 
+        <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_error'>error</span> <span class='symbol'>:obsolete</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>The operation type definition for this operation has changed too much since it was created.</span><span class='tstring_end'>&quot;</span></span>
+      <span class='kw'>end</span>
+
+    <span class='kw'>end</span>
+
+  <span class='kw'>end</span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="inputs-instance_method">
+  
+    #<strong>inputs</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+31
+32
+33</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 31</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_inputs'>inputs</span>
+  <span class='id identifier rubyid_field_types'>field_types</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ft'>ft</span><span class='op'>|</span> <span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_role'>role</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>input</span><span class='tstring_end'>&#39;</span></span> <span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="num_in_status-instance_method">
+  
+    #<strong>num_in_status</strong>(s)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+362
+363
+364</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 362</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_num_in_status'>num_in_status</span> <span class='id identifier rubyid_s'>s</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_operations'>operations</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_o'>o</span><span class='op'>|</span> <span class='id identifier rubyid_o'>o</span><span class='period'>.</span><span class='id identifier rubyid_status'>status</span> <span class='op'>==</span> <span class='id identifier rubyid_s'>s</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="outputs-instance_method">
+  
+    #<strong>outputs</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+35
+36
+37</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 35</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_outputs'>outputs</span>
+  <span class='id identifier rubyid_field_types'>field_types</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ft'>ft</span><span class='op'>|</span> <span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_role'>role</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>output</span><span class='tstring_end'>&#39;</span></span> <span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="pending-instance_method">
+  
+    #<strong>pending</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+43
+44
+45</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 43</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_pending'>pending</span>
+  <span class='id identifier rubyid_operations'>operations</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span> <span class='label'>status:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>pending</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="precondition-instance_method">
+  
+    #<strong>precondition</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+59
+60
+61</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 59</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_precondition'>precondition</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_code'>code</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>precondition</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="primed-instance_method">
+  
+    #<strong>primed</strong>(ops)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 98</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_primed'>primed</span> <span class='id identifier rubyid_ops'>ops</span>
+
+  <span class='id identifier rubyid_p'>p</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+
+  <span class='id identifier rubyid_ops'>ops</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_op'>op</span><span class='op'>|</span>
+    <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_input'>input</span><span class='op'>|</span>
+      <span class='id identifier rubyid_input'>input</span><span class='period'>.</span><span class='id identifier rubyid_predecessors'>predecessors</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_pred'>pred</span><span class='op'>|</span>
+        <span class='kw'>if</span> <span class='id identifier rubyid_pred'>pred</span><span class='period'>.</span><span class='id identifier rubyid_operation'>operation</span><span class='period'>.</span><span class='id identifier rubyid_status'>status</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>primed</span><span class='tstring_end'>&quot;</span></span>
+          <span class='id identifier rubyid_p'>p</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_pred'>pred</span><span class='period'>.</span><span class='id identifier rubyid_operation'>operation</span>
+        <span class='kw'>end</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_p'>p</span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="protocol-instance_method">
+  
+    #<strong>protocol</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+51
+52
+53</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 51</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_protocol'>protocol</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_code'>code</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>protocol</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="schedule-instance_method">
+  
+    #<strong>schedule</strong>(ops, user, group, opts = {})  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>end</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 133</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_schedule'>schedule</span> <span class='id identifier rubyid_ops'>ops</span><span class='comma'>,</span> <span class='id identifier rubyid_user'>user</span><span class='comma'>,</span> <span class='id identifier rubyid_group'>group</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span>
+
+  <span class='id identifier rubyid_ops_to_schedule'>ops_to_schedule</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_ops_to_defer'>ops_to_defer</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+
+  <span class='id identifier rubyid_ops'>ops</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_op'>op</span><span class='op'>|</span>
+
+    <span class='id identifier rubyid_pps'>pps</span> <span class='op'>=</span> <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_primed_predecessors'>primed_predecessors</span>
+
+    <span class='kw'>if</span> <span class='id identifier rubyid_pps'>pps</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>&gt;</span> <span class='int'>0</span>
+      <span class='id identifier rubyid_ops_to_schedule'>ops_to_schedule</span> <span class='op'>=</span> <span class='id identifier rubyid_ops_to_schedule'>ops_to_schedule</span> <span class='op'>+</span> <span class='id identifier rubyid_pps'>pps</span>
+      <span class='id identifier rubyid_ops_to_defer'>ops_to_defer</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_op'>op</span>
+    <span class='kw'>else</span> 
+      <span class='id identifier rubyid_ops_to_schedule'>ops_to_schedule</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_op'>op</span>
+    <span class='kw'>end</span>
+
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_deferred_job'>deferred_job</span> <span class='op'>=</span> <span class='id identifier rubyid_schedule_aux'>schedule_aux</span> <span class='id identifier rubyid_ops_to_defer'>ops_to_defer</span><span class='comma'>,</span> <span class='id identifier rubyid_user'>user</span><span class='comma'>,</span> <span class='id identifier rubyid_group'>group</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='label'>defer:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_job'>job</span> <span class='op'>=</span> <span class='id identifier rubyid_schedule_aux'>schedule_aux</span> <span class='id identifier rubyid_ops_to_schedule'>ops_to_schedule</span><span class='comma'>,</span> <span class='id identifier rubyid_user'>user</span><span class='comma'>,</span> <span class='id identifier rubyid_group'>group</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span>
+
+  <span class='lbracket'>[</span><span class='id identifier rubyid_job'>job</span><span class='comma'>,</span><span class='id identifier rubyid_ops_to_schedule'>ops_to_schedule</span><span class='rbracket'>]</span>
+  
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="schedule_aux-instance_method">
+  
+    #<strong>schedule_aux</strong>(ops, user, group, opts = {})  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 67</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_schedule_aux'>schedule_aux</span> <span class='id identifier rubyid_ops'>ops</span><span class='comma'>,</span> <span class='id identifier rubyid_user'>user</span><span class='comma'>,</span> <span class='id identifier rubyid_group'>group</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span>
+
+  <span class='id identifier rubyid_job'>job</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Job.html" title="Job (class)">Job</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+  
+  <span class='id identifier rubyid_job'>job</span><span class='period'>.</span><span class='id identifier rubyid_path'>path</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>operation.rb</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_job'>job</span><span class='period'>.</span><span class='id identifier rubyid_sha'>sha</span> <span class='op'>=</span> <span class='kw'>nil</span> <span class='comment'># lame, but this is how I signal to the krill manager
+</span>                <span class='comment'># that this is job is associated with an operation type
+</span>
+  <span class='id identifier rubyid_job'>job</span><span class='period'>.</span><span class='id identifier rubyid_pc'>pc</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Job.html" title="Job (class)">Job</a></span></span><span class='period'>.</span><span class='const'><span class='object_link'><a href="Job.html#NOT_STARTED-class_method" title="Job.NOT_STARTED (method)">NOT_STARTED</a></span></span>
+  <span class='id identifier rubyid_job'>job</span><span class='period'>.</span><span class='id identifier rubyid_set_arguments'>set_arguments</span><span class='lparen'>(</span><span class='lbrace'>{</span> <span class='label'>operation_type_id:</span> <span class='id identifier rubyid_id'>id</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_job'>job</span><span class='period'>.</span><span class='id identifier rubyid_group_id'>group_id</span> <span class='op'>=</span> <span class='id identifier rubyid_group'>group</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
+  <span class='id identifier rubyid_job'>job</span><span class='period'>.</span><span class='id identifier rubyid_submitted_by'>submitted_by</span> <span class='op'>=</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
+  <span class='id identifier rubyid_job'>job</span><span class='period'>.</span><span class='id identifier rubyid_desired_start_time'>desired_start_time</span> <span class='op'>=</span> <span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span>
+  <span class='id identifier rubyid_job'>job</span><span class='period'>.</span><span class='id identifier rubyid_latest_start_time'>latest_start_time</span> <span class='op'>=</span> <span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span> <span class='op'>+</span> <span class='int'>1</span><span class='period'>.</span><span class='id identifier rubyid_hour'>hour</span>
+  <span class='id identifier rubyid_job'>job</span><span class='period'>.</span><span class='id identifier rubyid_successor_id'>successor_id</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:successor</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='kw'>if</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:successor</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_job'>job</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+
+  <span class='id identifier rubyid_ops'>ops</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_op'>op</span><span class='op'>|</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:defer</span><span class='rbracket'>]</span>
+      <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_defer'>defer</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_schedule'>schedule</span>
+    <span class='kw'>end</span>
+    <span class='const'><span class='object_link'><a href="JobAssociation.html" title="JobAssociation (class)">JobAssociation</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span> <span class='label'>job_id:</span> <span class='id identifier rubyid_job'>job</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='label'>operation_id:</span> <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
+    <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_job'>job</span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="stats-instance_method">
+  
+    #<strong>stats</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 338</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_stats'>stats</span> 
+
+  <span class='id identifier rubyid_r'>r</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>done</span><span class='tstring_end'>&quot;</span></span> <span class='op'>=&gt;</span> <span class='int'>0</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>error</span><span class='tstring_end'>&quot;</span></span> <span class='op'>=&gt;</span> <span class='int'>0</span> <span class='rbrace'>}</span>
+
+  <span class='id identifier rubyid_operations'>operations</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_op'>op</span><span class='op'>|</span>
+    <span class='id identifier rubyid_r'>r</span><span class='lbracket'>[</span><span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_status'>status</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='int'>0</span>
+    <span class='id identifier rubyid_r'>r</span><span class='lbracket'>[</span><span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_status'>status</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_r'>r</span><span class='lbracket'>[</span><span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_status'>status</span><span class='rbracket'>]</span> <span class='op'>+</span> <span class='int'>1</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_r'>r</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>done</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='op'>+</span> <span class='id identifier rubyid_r'>r</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>error</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='op'>!=</span> <span class='int'>0</span> 
+    <span class='id identifier rubyid_r'>r</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>success</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_r'>r</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>done</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span> <span class='op'>/</span> <span class='lparen'>(</span> <span class='id identifier rubyid_r'>r</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>done</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='op'>+</span> <span class='id identifier rubyid_r'>r</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>error</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='rparen'>)</span>
+  <span class='kw'>else</span> 
+    <span class='id identifier rubyid_r'>r</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>success</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='float'>0.0</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_operations'>operations</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>&gt;</span> <span class='int'>0</span>
+    <span class='id identifier rubyid_r'>r</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>first_run</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_operations'>operations</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_updated_at'>updated_at</span>
+    <span class='id identifier rubyid_r'>r</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>last_run</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_operations'>operations</span><span class='period'>.</span><span class='id identifier rubyid_last'>last</span><span class='period'>.</span><span class='id identifier rubyid_updated_at'>updated_at</span>    
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_r'>r</span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="update_allowable_field_type-instance_method">
+  
+    #<strong>update_allowable_field_type</strong>(oldaft, newaft)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 184</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_update_allowable_field_type'>update_allowable_field_type</span> <span class='id identifier rubyid_oldaft'>oldaft</span><span class='comma'>,</span> <span class='id identifier rubyid_newaft'>newaft</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_newaft'>newaft</span><span class='lbracket'>[</span><span class='symbol'>:sample_type</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_st'>st</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="SampleType.html" title="SampleType (class)">SampleType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_name'>find_by_name</span><span class='lparen'>(</span><span class='id identifier rubyid_newaft'>newaft</span><span class='lbracket'>[</span><span class='symbol'>:sample_type</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_oldaft'>oldaft</span><span class='period'>.</span><span class='id identifier rubyid_sample_type_id'>sample_type_id</span> <span class='op'>=</span> <span class='id identifier rubyid_st'>st</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='kw'>if</span> <span class='id identifier rubyid_st'>st</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_oldaft'>oldaft</span><span class='period'>.</span><span class='id identifier rubyid_sample_type_id'>sample_type_id</span> <span class='op'>=</span> <span class='kw'>nil</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_newaft'>newaft</span><span class='lbracket'>[</span><span class='symbol'>:object_type</span><span class='rbracket'>]</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_newaft'>newaft</span><span class='lbracket'>[</span><span class='symbol'>:object_type</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_ot'>ot</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="ObjectType.html" title="ObjectType (class)">ObjectType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_name'>find_by_name</span><span class='lparen'>(</span><span class='id identifier rubyid_newaft'>newaft</span><span class='lbracket'>[</span><span class='symbol'>:object_type</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_oldaft'>oldaft</span><span class='period'>.</span><span class='id identifier rubyid_object_type_id'>object_type_id</span> <span class='op'>=</span> <span class='id identifier rubyid_ot'>ot</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='kw'>if</span> <span class='id identifier rubyid_ot'>ot</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_oldaft'>oldaft</span><span class='period'>.</span><span class='id identifier rubyid_sample_type_id'>sample_type_id</span> <span class='op'>=</span> <span class='kw'>nil</span>
+  <span class='kw'>end</span>   
+
+  <span class='id identifier rubyid_oldaft'>oldaft</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="update_field_type-instance_method">
+  
+    #<strong>update_field_type</strong>(oldft, newft)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 242</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_update_field_type'>update_field_type</span> <span class='id identifier rubyid_oldft'>oldft</span><span class='comma'>,</span> <span class='id identifier rubyid_newft'>newft</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_oldft'>oldft</span><span class='period'>.</span><span class='id identifier rubyid_ftype'>ftype</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sample</span><span class='tstring_end'>&#39;</span></span>
+
+    <span class='id identifier rubyid_oldft'>oldft</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_oldft'>oldft</span><span class='period'>.</span><span class='id identifier rubyid_routing'>routing</span> <span class='op'>=</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:routing</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_oldft'>oldft</span><span class='period'>.</span><span class='id identifier rubyid_array'>array</span> <span class='op'>=</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:array</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_oldft'>oldft</span><span class='period'>.</span><span class='id identifier rubyid_part'>part</span> <span class='op'>=</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:part</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_oldft'>oldft</span><span class='period'>.</span><span class='id identifier rubyid_preferred_operation_type_id'>preferred_operation_type_id</span> <span class='op'>=</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:preferred_operation_type_id</span><span class='rbracket'>]</span>   
+    <span class='id identifier rubyid_oldft'>oldft</span><span class='period'>.</span><span class='id identifier rubyid_preferred_field_type_id'>preferred_field_type_id</span> <span class='op'>=</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:preferred_field_type_id</span><span class='rbracket'>]</span>          
+
+    <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>PREF(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_oldft'>oldft</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>): </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:preferred_field_type_id</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+
+    <span class='id identifier rubyid_keepers'>keepers</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+
+    <span class='kw'>if</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:allowable_field_types</span><span class='rbracket'>]</span>
+
+      <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:allowable_field_types</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_newaft'>newaft</span><span class='op'>|</span>
+
+        <span class='id identifier rubyid_matching_afts'>matching_afts</span> <span class='op'>=</span> <span class='id identifier rubyid_oldft'>oldft</span><span class='period'>.</span><span class='id identifier rubyid_allowable_field_types'>allowable_field_types</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_aft'>aft</span><span class='op'>|</span> <span class='id identifier rubyid_aft'>aft</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='op'>==</span> <span class='id identifier rubyid_newaft'>newaft</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
+
+        <span class='kw'>if</span> <span class='id identifier rubyid_matching_afts'>matching_afts</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>==</span> <span class='int'>1</span>
+          <span class='id identifier rubyid_oldaft'>oldaft</span> <span class='op'>=</span> <span class='id identifier rubyid_matching_afts'>matching_afts</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span>
+          <span class='id identifier rubyid_keepers'>keepers</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_oldaft'>oldaft</span>
+          <span class='id identifier rubyid_update_allowable_field_type'>update_allowable_field_type</span> <span class='id identifier rubyid_oldaft'>oldaft</span><span class='comma'>,</span> <span class='id identifier rubyid_newaft'>newaft</span>
+        <span class='kw'>elsif</span> <span class='id identifier rubyid_matching_afts'>matching_afts</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>==</span> <span class='int'>0</span>
+          <span class='id identifier rubyid_keepers'>keepers</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_add_new_allowable_field_type'>add_new_allowable_field_type</span><span class='lparen'>(</span><span class='id identifier rubyid_oldft'>oldft</span><span class='comma'>,</span> <span class='id identifier rubyid_newaft'>newaft</span><span class='rparen'>)</span>
+        <span class='kw'>else</span>
+          <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>More than one allowable field type matched.</span><span class='tstring_end'>&quot;</span></span>
+        <span class='kw'>end</span>
+
+      <span class='kw'>end</span>
+
+    <span class='kw'>end</span>
+
+  <span class='kw'>else</span>
+
+    <span class='id identifier rubyid_oldft'>oldft</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_oldft'>oldft</span><span class='period'>.</span><span class='id identifier rubyid_ftype'>ftype</span> <span class='op'>=</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:ftype</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_oldft'>oldft</span><span class='period'>.</span><span class='id identifier rubyid_choices'>choices</span> <span class='op'>=</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:choices</span><span class='rbracket'>]</span>
+
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_oldft'>oldft</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+
+  <span class='id identifier rubyid_oldft'>oldft</span><span class='period'>.</span><span class='id identifier rubyid_allowable_field_types'>allowable_field_types</span><span class='period'>.</span><span class='id identifier rubyid_reject'>reject</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_aft'>aft</span><span class='op'>|</span> <span class='id identifier rubyid_keepers'>keepers</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span> <span class='id identifier rubyid_aft'>aft</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_aft'>aft</span><span class='op'>|</span>
+    <span class='id identifier rubyid_aft'>aft</span><span class='period'>.</span><span class='id identifier rubyid_destroy'>destroy</span>
+  <span class='kw'>end</span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="update_field_types-instance_method">
+  
+    #<strong>update_field_types</strong>(fts)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 293</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_update_field_types'>update_field_types</span> <span class='id identifier rubyid_fts'>fts</span>
+
+  <span class='id identifier rubyid_keepers'>keepers</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_fts'>fts</span>
+    <span class='id identifier rubyid_fts'>fts</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_newft'>newft</span><span class='op'>|</span>
+      <span class='id identifier rubyid_matching_fts'>matching_fts</span> <span class='op'>=</span> <span class='id identifier rubyid_field_types'>field_types</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_oldft'>oldft</span><span class='op'>|</span> <span class='id identifier rubyid_oldft'>oldft</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='op'>==</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_oldft'>oldft</span><span class='period'>.</span><span class='id identifier rubyid_role'>role</span> <span class='op'>==</span> <span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:role</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
+      <span class='kw'>if</span> <span class='id identifier rubyid_matching_fts'>matching_fts</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>==</span> <span class='int'>1</span>
+        <span class='id identifier rubyid_oldft'>oldft</span> <span class='op'>=</span> <span class='id identifier rubyid_matching_fts'>matching_fts</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span>
+        <span class='id identifier rubyid_keepers'>keepers</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_oldft'>oldft</span>
+        <span class='id identifier rubyid_update_field_type'>update_field_type</span> <span class='id identifier rubyid_oldft'>oldft</span><span class='comma'>,</span> <span class='id identifier rubyid_newft'>newft</span>
+      <span class='kw'>elsif</span> <span class='id identifier rubyid_matching_fts'>matching_fts</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>==</span> <span class='int'>0</span>
+        <span class='id identifier rubyid_keepers'>keepers</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_add_new_field_type'>add_new_field_type</span><span class='lparen'>(</span><span class='id identifier rubyid_newft'>newft</span><span class='rparen'>)</span>
+      <span class='kw'>else</span>
+        <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Multiple inputs (or outputs) named </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_newft'>newft</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_field_types'>field_types</span><span class='period'>.</span><span class='id identifier rubyid_reject'>reject</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ft'>ft</span><span class='op'>|</span> <span class='id identifier rubyid_keepers'>keepers</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span> <span class='id identifier rubyid_ft'>ft</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_ft'>ft</span><span class='op'>|</span>
+    <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>DELETING FT </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_role'>role</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_ft'>ft</span><span class='period'>.</span><span class='id identifier rubyid_destroy'>destroy</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_error_out_obsolete_operations'>error_out_obsolete_operations</span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="waiting-instance_method">
+  
+    #<strong>waiting</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+39
+40
+41</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/operation_type.rb', line 39</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_waiting'>waiting</span>
+  <span class='id identifier rubyid_operations'>operations</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span> <span class='label'>status:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>waiting</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Mon Oct  9 13:38:44 2017 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.9 (ruby-2.2.0).
+</div>
+
+    </div>
+  </body>
+</html>

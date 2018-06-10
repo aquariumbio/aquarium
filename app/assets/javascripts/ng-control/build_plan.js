@@ -1,37 +1,31 @@
 (function() {
 
-  var w;
-
-  try {
-    w = angular.module('aquarium'); 
-  } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
-  } 
+  var w = angular.module('aquarium'); 
 
   w.controller('buildPlanCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
                        function (  $scope,   $http,   $attrs,   $cookies ) {
     
     $scope.more = function(ot) {
       ot.operations.push(empty_goal(ot));
-    }
+    };
 
     $scope.drop = function(ot,op) {
       var index = ot.operations.indexOf(op);
       if (index > -1) {
         ot.operations.splice(index, 1);
       }      
-    }
+    };
 
     $scope.add_to_array = function(fvs,name) {
       if ( typeof fvs[name].sample == "string" ) {
         fvs[name].sample = [];
       }
       fvs[name].sample.push("");
-    }
+    };
 
     $scope.delete_from_fvs = function(fv,i) {
       fv.splice(i, 1);
-    }
+    };
 
     $scope.incomplete_field_types = function(goal, role) {
       // Only return field_types that have afts with sample types

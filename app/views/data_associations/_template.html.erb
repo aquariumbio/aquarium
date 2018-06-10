@@ -5,60 +5,69 @@
     <div layout="row" layout-wrap layout-align="start center"
          ng-if="record.data_associations.length > 0"
          ng-repeat="da in record.data_associations"
-         ng-init="da.new_value=da.value"
-         class="da-row">
+         ng-init="da.new_value=da.value">
 
-      <div flex="20" class="left-pad">
-        <span class='md-body-2' ng-if="!da.unsaved">{{da.key}}</span>
-        <input type='text' ng-if="da.unsaved" ng-model=da.key class="da-key">
-      </div>
+      <div layout="column" style="width: 100%; margin-bottom: 10px;">
 
-      <div flex="60" ng-controller="daCtrl">
+        <div>
+          <span class='md-body-2' ng-if="!da.unsaved">{{da.key}}</span>
+          <input type='text' ng-if="da.unsaved && !noedit" ng-model=da.key class="da-key" flex=70>
+        </div>
 
-        <input type='text' ng-model=da.new_value ng-if="!da.upload_id" class="da-input">
+        <div layout="row" style="width: 100%">
 
-        <div ng-if="da.upload_id">
+          <div flex="70" ng-controller="daCtrl">
 
-          <a href="#" ng-click="da.modal=true" ng-init="da.modal=false">
-            {{da.upload.upload_file_name}}
-          </a>
+            <input type='text' ng-model=da.new_value ng-if="!da.upload_id && !noedit" class="da-input">
 
-          <span ng-if="da.busy">uploading file...</span>
+            <span ng-if="noedit">: {{da.value}}</span>
 
-          <div modal='da.modal' title="da.key + ': ' + da.upload.upload_file_name" 
-               width='50%' height='70%' ng-if="da.modal">
-            <div class='da-upload'>
-              <downloadimage model="da.upload" ng-if="is_image(da)"></downloadimage>
-              <h4>Notes: </h4>
-              <textarea ng-model=da.new_value ng-init="da.new_value=da.value" class='value'></textarea>
-              <a href="#" class='btn btn-primary save' 
-                          ng-click="save(da)" 
-                          ng-disabled="da.new_value == da.value">Save Notes</a>
-              <div class='download'>
-                <b>Download:</b> <download model="da.upload"></download>
-              </div>
-            </div>    
-          </div>  
+            <div ng-if="da.upload_id">
+
+              <a href="#" ng-click="da.modal=true" ng-init="da.modal=false">
+                {{da.upload.upload_file_name}}
+              </a>
+
+              <span ng-if="da.busy">uploading file...</span>
+
+              <div modal='da.modal' title="da.key + ': ' + da.upload.upload_file_name" 
+                   width='50%' height='70%' ng-if="da.modal">
+                <div class='da-upload'>
+                  <downloadimage model="da.upload" ng-if="is_image(da)"></downloadimage>
+                  <h4>Notes: </h4>
+                  <textarea ng-model=da.new_value ng-init="da.new_value=da.value" class='value'></textarea>
+                  <a href="#" class='btn btn-primary save' 
+                              ng-click="save(da)" 
+                              ng-disabled="da.new_value == da.value">Save Notes</a>
+                  <div class='download'>
+                    <b>Download:</b> <download model="da.upload"></download>
+                  </div>
+                </div>    
+              </div>  
+
+            </div>
+
+          </div>
+
+          <div flex="30">
+            <div layout="row" layout-align="end center" ng-if="!noedit">
+              <a href="#" ng-click="save(da)" ng-if="da.new_value != da.value || da.unsaved" class="no-highlight">
+                <ng-md-icon icon="system_update_alt" size="22" aria-label="Save" style="fill: #444"></ng-md-icon>
+              </a>
+              <a href="#" ng-click="da.new_value=da.value" ng-if="da.new_value != da.value && !da.unsaved" class="no-highlight">
+                <ng-md-icon icon="undo" size="22" aria-label="Undo Change" style="fill: #444"></ng-md-icon>         
+              </a>
+              <a href="#"  ng-click="record.drop(da)" ng-if="da.unsaved" class="no-highlight">
+                <ng-md-icon icon="undo" size="22" aria-label="Undo Change" style="fill: #444"></ng-md-icon>                     
+              </a>                    
+              <a href="#"  ng-click="record.delete_data_association(da)" ng-if="!da.unsaved" class="no-highlight">
+                <ng-md-icon icon="delete" size="22" aria-label="Delete" style="fill: #444"></ng-md-icon>  
+              </a>
+            </div>
+          </div>
 
         </div>
 
-      </div>
-
-      <div flex="20">
-        <div layout="row" layout-align="end center">
-          <a href="#" ng-click="save(da)" ng-if="da.new_value != da.value || da.unsaved" class="no-highlight">
-            <ng-md-icon icon="system_update_alt" size="22" aria-label="Update Location" style="fill: #444"></ng-md-icon>
-          </a>
-          <a href="#" ng-click="da.new_value=da.value" ng-if="da.new_value != da.value && !da.unsaved" class="no-highlight">
-            <ng-md-icon icon="undo" size="22" aria-label="Undo Change" style="fill: #444"></ng-md-icon>         
-          </a>
-          <a href="#"  ng-click="record.drop(da)" ng-if="da.unsaved" class="no-highlight">
-            <ng-md-icon icon="undo" size="22" aria-label="Undo Change" style="fill: #444"></ng-md-icon>                     
-          </a>                    
-          <a href="#"  ng-click="record.delete_data_association(da)" ng-if="!da.unsaved" class="no-highlight">
-            <ng-md-icon icon="delete" size="22" aria-label="Delete" style="fill: #444"></ng-md-icon>  
-          </a>
-        </div>
       </div>
 
     </div>

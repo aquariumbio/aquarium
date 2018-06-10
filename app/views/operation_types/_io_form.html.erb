@@ -1,63 +1,70 @@
 <script type="text/ng-template" id="io_form">
 
-    <ul ng-repeat="io in current_ot.field_types" ng-if="io.role == role" class="io-list">
+    <ul ng-repeat="io in current_operation_type.field_types" ng-if="io.role == role" class="io-list">
 
       <div ng-if="io.ftype != 'sample'" class='row-fluid'>
         <div class="span4">
-          <label>&nbsp;<br />Parameter Name</label>
-          <input type="text" ng-model="io.name" class="input-fit" ng-change="change(current_ot)">
+          <label>&nbsp;<br />
+            Parameter Name
+            <input type="text" ng-model="io.name" class="input-fit" ng-change="change(current_operation_type)">
+          </label>
         </div>
         <div class="span5">
-          <label>Choices (Comma separated. Leave blank if unrestricted)</label>
+          <label>
+            Choices (Comma separated. Leave blank if unrestricted)
           <input type="text" 
                  ng-model="io.choices" 
                  class="input-fit" 
                  ng-disabled="io.ftype == 'json'"
-                 ng-change="change(current_ot)">
+                 ng-change="change(current_operation_type)">
+          </label>
         </div>      
         <div class="span2">
           <form>
           <label>
-            <input type='radio' value="number" ng-model="io.ftype" ng-change="change(current_ot)"> Number
+            <input type='radio' value="number" ng-model="io.ftype" ng-change="change(current_operation_type)"> Number
           </label>
           <label>
-            <input type='radio' value="string" ng-model="io.ftype" ng-change="change(current_ot)"> String
+            <input type='radio' value="string" ng-model="io.ftype" ng-change="change(current_operation_type)"> String
           </label>
          <label>
-            <input type='radio' value="json" ng-model="io.ftype" ng-change="change(current_ot)"> JSON
+            <input type='radio' value="json" ng-model="io.ftype" ng-change="change(current_operation_type)"> JSON
           </label>          
           </form>
         </div>       
         <div class="span1">
-          <a href="#" class="aft-remove pull-right" ng-click="change(current_ot); remove_io(io)">&times;</a>
+          <a href="#" class="aft-remove pull-right" ng-click="change(current_operation_type); remove_io(io)">&times;</a>
         </div>           
       </div>
 
       <div ng-if="io.ftype == 'sample'" class='row-fluid'>
 
         <div class="span5">
-          <label>Name</label>
-          <input type="text" ng-model="io.name" class="input-fit" ng-change="change(current_ot)">
+          <label>Name
+            <input type="text" ng-model="io.name" class="input-fit" ng-change="change(current_operation_type)">
+          </label>
         </div>
 
         <div class="span2">
-          <label>Routing ID</label>
-          <input type="text" ng-model="io.routing" class="input-fit" ng-change="change(current_ot)">
+          <label>
+            Routing ID
+            <input type="text" ng-model="io.routing" class="input-fit" ng-change="change(current_operation_type)">
+          </label>
         </div>        
 
         <div class="span1"></div>
 
         <div class="span3">
           <label>
-            <input type='checkbox' ng-model="io.array" ng-change="change(current_ot)"> Array? 
+            <input type='checkbox' ng-model="io.array" ng-change="change(current_operation_type)"> Array?
           </label>
           <label>
-            <input type='checkbox' ng-model="io.part" ng-change="change(current_ot)"> Part?
+            <input type='checkbox' ng-model="io.part" ng-change="change(current_operation_type)"> Part?
           </label>      
         </div>
 
         <div class="span1">
-          <a href="#" class="aft-remove pull-right" ng-click="change(current_ot); remove_io(io)">&times;</a>
+          <a href="#" class="aft-remove pull-right" ng-click="change(current_operation_type); remove_io(io)">&times;</a>
         </div>
 
       </div>
@@ -66,43 +73,45 @@
 
         <label>
           Sample types / containers
-          <a href="#" class="btn btn-mini pull-right" ng-click="change(current_ot); add_aft(io)">Add</a>
+          <a href="#" class="btn btn-mini pull-right" ng-click="change(current_operation_type); add_aft(io)">Add</a>
         </label>
 
         <li ng-repeat="aft in io.allowable_field_types">
           <div class="row-fluid">
             <div class="span5">
               <input type="text" ng-model="aft.sample_type.name" class="input-fit"  
-                    ng-change="change(current_ot)"sampletypecomplete>
+                    ng-change="change(current_operation_type)"sampletypecomplete>
             </div>
             <div class="span5">            
               <input type="text" ng-model="aft.object_type.name" class="input-fit" 
-                     ng-change="change(current_ot)" objecttypecomplete="aft.sample_type.name">
+                     ng-change="change(current_operation_type)" objecttypecomplete="aft.sample_type.name">
             </div>
             <div class="span2">            
-              <a href="#" class="aft-remove pull-right" ng-click="change(current_ot); remove_aft(io,aft)">&times;</a>    
+              <a href="#" class="aft-remove pull-right" ng-click="change(current_operation_type); remove_aft(io,aft)">&times;</a>
             </div>
           </div>
         </li>
 
-      <ul>     
+      </ul>
+
+      <div ng-if="io.role == 'input' && io.predecessors.length > 0">
+          Preferred Predecessor: 
+          <div ng-repeat="pred in io.predecessors" ng-if="pred.operation_type.id != current_operation_type.id">
+            <label>
+              <input type='checkbox' 
+                     ng-checked='io.preferred_operation_type_id == pred.operation_type.id && 
+                                 io.preferred_field_type_id == pred.field_type.id'
+                     ng-click='io.preferred_operation_type_id = io.preferred_operation_type_id ? null : pred.operation_type.id;
+                               io.preferred_field_type_id = pred.field_type.id;
+                               change(current_operation_type)'>
+              {{pred.operation_type.category}} : {{pred.operation_type.name}} : {{pred.field_type.name}}            
+            </label>
+          </div>
+        </li>
+      </div>      
 
     </ul>
 
-    <div ng-if="io.role == 'input' && io.predecessors.length > 0">
-        Preferred Predecessor: 
-        <div ng-repeat="pred in io.predecessors" ng-if="pred.operation_type.id != current_ot.id">
-          <label>
-            <input type='checkbox' 
-                   ng-checked='io.preferred_operation_type_id == pred.operation_type.id && 
-                               io.preferred_field_type_id == pred.field_type.id'
-                   ng-click='io.preferred_operation_type_id = io.preferred_operation_type_id ? null : pred.operation_type.id;
-                             io.preferred_field_type_id = pred.field_type.id;
-                             change(current_ot)'>
-            {{pred.operation_type.category}} : {{pred.operation_type.name}} : {{pred.field_type.name}}            
-          </label>
-        </div>
-      </li>
-    </div>
+
 
 </script>

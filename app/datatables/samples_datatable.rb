@@ -1,10 +1,12 @@
+
+
 class SamplesDatatable < Datatable
 
-  private  
+  private
 
-  def limit s
+  def limit(s)
     if s && s.length > 20
-      s[0,20] + '...'
+      s[0, 20] + '...'
     else
       s
     end
@@ -18,19 +20,19 @@ class SamplesDatatable < Datatable
         link_to(s.id, s),
         s.name,
         s.project,
-        limit( s.description ),
+        limit(s.description),
         s.owner
       ]
 
       fields = s.displayable_properties
 
       links = [
-        link_to(Rails.application.routes.url_helpers.edit_sample_path(s)) do 
+        link_to(Rails.application.routes.url_helpers.edit_sample_path(s)) do
           "<i class='icon-pencil'></i>".html_safe
         end,
-        link_to(s, method: :delete, data: { 
-          confirm: 'Are you sure you want to delete this sample definition? Note, deleting will fail if there are an items associated with this sample.' 
-        }) do
+        link_to(s, method: :delete, data: {
+                  confirm: 'Are you sure you want to delete this sample definition? Note, deleting will fail if there are an items associated with this sample.'
+                }) do
           "<i class='icon-remove'></i>".html_safe
         end
       ]
@@ -57,15 +59,15 @@ class SamplesDatatable < Datatable
     if params[:sSearch].present?
       key = params[:sSearch]
       u = User.find_by_login(key)
-      if u
-        samples = samples.where("sample_type_id = :stid and user_id like :uid", stid: params[:sample_type_id], uid: u.id)
-      elsif key.to_i != 0
-        samples = samples.where("sample_type_id = :stid and id like :search", stid: params[:sample_type_id], search: key.to_i )
-      else 
-        samples = samples.where("sample_type_id = :stid and ( name like :search or project like :search )", stid: params[:sample_type_id], search: "%#{key}%")
-      end
+      samples = if u
+                  samples.where('sample_type_id = :stid and user_id like :uid', stid: params[:sample_type_id], uid: u.id)
+                elsif key.to_i != 0
+                  samples.where('sample_type_id = :stid and id like :search', stid: params[:sample_type_id], search: key.to_i)
+                else
+                  samples.where('sample_type_id = :stid and ( name like :search or project like :search )', stid: params[:sample_type_id], search: "%#{key}%")
+                end
     else
-        samples = samples.where("sample_type_id = :stid", stid: params[:sample_type_id] )
+      samples = samples.where('sample_type_id = :stid', stid: params[:sample_type_id])
     end
 
     samples
@@ -73,9 +75,8 @@ class SamplesDatatable < Datatable
   end
 
   def sort_column
-    columns = %w[id name project description user_id field1 field2 field3 field4 field5 field6 field7 field8 ] # possibly redefine in children classes
+    columns = %w[id name project description user_id field1 field2 field3 field4 field5 field6 field7 field8] # possibly redefine in children classes
     columns[params[:iSortCol_0].to_i]
   end
 
 end
-

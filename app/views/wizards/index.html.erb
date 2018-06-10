@@ -1,40 +1,60 @@
-<h1>Location Wizards</h1>
+<% provide(:title, 'Wizards') %>
 
-<table class='table'>
-  <tr>
-    <th>Name (Click to Edit)</th>
-    <th>Description</th>   
-    <th>Form</th>
-    <th>Ranges</th>    
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<%= content_for :sidebar do %>
 
-<% def symb(i) 
-  if i >= 0
-    i
-  else
-    "&#8734;" # infinity symbol
-  end
-end %>
+<h2 class="md-title">About Wizards</h2>
 
-<% @wizards.each do |wizard| %>
-  <tr>
-    <td><%= link_to wizard.name, wizard %></td>
-    <td><%= wizard.description %></td>  
-    <% if wizard.spec[:fields] %>  
-      <td><%= (wizard.spec[:fields].collect { |f| f[:name] }).join('.') %></td>
-      <td><%= (wizard.spec[:fields].collect { |f| "[#{0},#{symb(f[:capacity]-1)}]" }).join('.').html_safe %></td>    
-    <% else %>
-      <td>-</td><td>-</td>
-    <% end %>
-    <td><%= link_to 'edit', edit_wizard_path(wizard) %></td>
-    <td><%= link_to 'x', wizard, method: :delete, data: { confirm: 'Are you sure you want to delete this wizard?' } %></td>
-  </tr>
+A location wizard is a bit of code that uses a schema to store new items. For example, Primers might be stored in a -20C freezer in 81 slot freezer boxes stored on shelves that contain 16 boxes. A location wizard for this scheme would have locations of the form M20.x.y.z where x is the shelf (or hotel as we call them in the Klavins lab), y is the box, and z is the slot in the box.
+
+A wizard works by setting up a table of all locations with the specified form that have evern been used. When a new item is made, the wizard finds the lowest available location for that item. Here W.x.y.z &lt; W.X.Y.Z if x &lt; X, or x=X and y&lt;Y, or x=X and y=Y, and z&lt;Z. If all available locations are taken, then wizard computes the next new location, adds it to the table of locations, and puts the item there. 
+
 <% end %>
-</table>
 
-<br />
+<%= content_for :specific_title do %>Location Wizards<% end %>
 
-<%= link_to 'New Wizard', new_wizard_path, class: "btn" %>
+<%= content_for :main do %>
+
+<div layout-padding>
+
+  <table class='table'>
+    <tr>
+      <th>Name (Click to Edit)</th>
+      <th>Description</th>   
+      <th>Form</th>
+      <th>Ranges</th>    
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+
+  <% def symb(i) 
+    if i >= 0
+      i
+    else
+      "&#8734;" # infinity symbol
+    end
+  end %>
+
+  <% @wizards.each do |wizard| %>
+    <tr>
+      <td><%= link_to wizard.name, wizard %></td>
+      <td><%= wizard.description %></td>  
+      <% if wizard.spec[:fields] %>  
+        <td><%= (wizard.spec[:fields].collect { |f| f[:name] }).join('.') %></td>
+        <td><%= (wizard.spec[:fields].collect { |f| "[#{0},#{symb(f[:capacity]-1)}]" }).join('.').html_safe %></td>    
+      <% else %>
+        <td>-</td><td>-</td>
+      <% end %>
+      <td><%= link_to 'edit', edit_wizard_path(wizard) %></td>
+      <td><%= link_to 'x', wizard, method: :delete, data: { confirm: 'Are you sure you want to delete this wizard?' } %></td>
+    </tr>
+  <% end %>
+  </table>
+
+</div>
+
+<% end %>
+
+<%= content_for :action1 do %>
+  <%= link_to 'New Wizard', new_wizard_path, class: "md-button md-primary md-raised" %>
+<% end %>

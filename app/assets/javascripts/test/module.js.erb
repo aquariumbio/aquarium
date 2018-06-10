@@ -1,0 +1,64 @@
+<% if Rails.env.development? %>
+
+shark.make_module_plan = function(sample) {
+
+  let plan =      AQ.Plan.new_plan("Module Usage Test"),
+      extract =   AQ.OperationType.find_cached("Extract Gel Slice").create(0, 160, 160),
+      run =       AQ.OperationType.find_cached("Run Gel").create(0, 160, 240),
+      pour =      AQ.OperationType.find_cached("Pour Gel").create(0, 360, 240),
+      pcr =       AQ.OperationType.find_cached("Make PCR Fragment").create(0, 160, 320),
+      rehydrate = AQ.OperationType.find_cached("Rehydrate Primer").create(0, 160, 400),
+      order =     AQ.OperationType.find_cached("Order Primer").create(0, 160, 480);
+
+  plan
+    .add_operation(extract)
+    .add_operation(run)
+    .add_operation(pour)
+    .add_operation(pcr)
+    .add_operation(rehydrate)
+    .add_operation(order);
+
+  plan.connect(order.output("Primer"),             order,     rehydrate.input("Primer"),   rehydrate);
+  plan.connect(rehydrate.output("Primer Aliquot"), rehydrate, pcr.input("Forward Primer"), pcr);
+  plan.connect(pcr.output("Fragment"),             pcr,       run.input("Fragment"),       run);  
+  plan.connect(pour.output("Lane"),                pour,      run.input("Gel"),            run);  
+  plan.connect(run.output("Fragment"),             run,       extract.input("Fragment"),   extract); 
+
+  pcr.set_aft(pcr.input("Template").field_type,pcr.input("Template").field_type.allowable_field_types[5]);
+
+  // Make a module 
+  extract.multiselect = true;
+  pour.multiselect = true;
+  run.multiselect = true;
+  module = plan.create_module();
+  plan.current_module = module;
+  module.name = "SUPER MOD";
+
+  // Wire up the output
+  module.add_output();
+  plan.connect(extract.output("Fragment"), extract, module.output[0], module);
+
+  order.input("Urgent?").value = "yes";  
+
+  return Promise
+     .resolve(plan)
+     .then(plan => plan.assign(extract.output("Fragment"), sample))
+     .then(plan => plan.choose_items());
+
+}
+
+describe('Modules', function() {
+
+  it("Should make and connect modules", function(done) {
+
+    shark.aq_setup()
+        .then(() => AQ.Sample.find_by_name("ADF3 left"))
+        .then(sample => shark.make_module_plan(sample))
+        .then(plan => plan.save(shark.current_user))
+        .then(plan => done())
+
+  }).async();
+
+});
+
+<% end %>

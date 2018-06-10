@@ -1,15 +1,9 @@
 (function() {
 
-  var w;
- 
-  try {
-    w = angular.module('aquarium'); 
-  } catch (e) {
-    w = angular.module('aquarium', ['ngCookies','ui.ace','ngMaterial']); 
-  } 
+  var w = angular.module('aquarium'); 
 
-  w.controller('launcherCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', 
-                      function (  $scope,   $http,   $attrs,   $cookies,   $sce ) {
+  w.controller('launcherCtrl', [ '$scope', '$http', '$attrs', '$cookies', '$sce', '$window',
+                      function (  $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) {
 
     AQ.init($http);
     AQ.update = () => { $scope.$apply(); }
@@ -24,10 +18,11 @@
 
     $scope.status = {
       sample_names: "Loading",
-      operation_types: "Loading",
       user_info: "Loading",
       plans: "Loading"
-    }
+    };
+
+    $scope.state = { folder: "__NO_FOLDER_SELECTED__" };
 
     AQ.User.active_users().then(users => {
 
@@ -38,33 +33,49 @@
         $scope.current_user = user;
         $scope.status.user_info = "Ready";      
         $scope.getting_plans = true;    
-        $scope.status.selected_user_id = $scope.current_user.id;  
+        $scope.state.selected_user_id = $scope.current_user.id;  
 
-        AQ.Plan.list($scope.plan_offset).then((plans) => {
+        var plan_promise;
 
-          $scope.plans = plans.reverse();        
-          $scope.status.plans = "Ready";        
+        if ( aq.url_params().plan_id ) {
+          plan_promise =  AQ.Plan.list(0,$scope.current_user,$scope.state.folder,aq.url_params().plan_id);
+          $scope.no_more_plans = true;
+          $scope.single_plan_query = true;
+          $scope.state.plan_id = aq.url_params().plan_id;          
+          $window.history.replaceState(null, document.title, "/launcher"); 
+        } else {
+          plan_promise =  AQ.Plan.list($scope.plan_offset)
+        }        
+
+        plan_promise.then((plans) => {
+
+          $scope.plans = plans.reverse();
           $scope.getting_plans = false;
 
-          AQ.OperationType.all_with_content(true).then((operation_types) => {
+          AQ.OperationType.all_with_field_types(true).then((operation_types) => {
 
             $scope.operation_types = aq.where(operation_types,ot => ot.deployed);
             AQ.OperationType.compute_categories($scope.operation_types);
             AQ.operation_types = $scope.operation_types;
             aq.each($scope.plans, (plan)=> { 
               plan.link_operation_types($scope.operation_types) 
-            });       
-
-            $scope.status.operation_types = "Ready";
-
-            AQ.get_sample_names().then(() =>  {
-              $scope.status.sample_names = "Ready";
             });
 
-            $scope.$apply();
+            AQ.Plan.get_folders().then(folders => {
+              $scope.folders = folders;
+              if ( !$scope.state.plan_id && !$scope.folders.includes($scope.state.folder) ) {
+                $scope.state.folder = null;
+              }
+
+              $scope.status.plans = "Ready";
+              $scope.$apply();
+
+            });
 
           });
+
         });
+
       });
 
     });
@@ -77,110 +88,83 @@
       delete $scope.error;
     }
 
-    $scope.io_focus = function(op,ft,fv) {
-      $scope.plan.current_operation = op;
-      $scope.plan.current_fv = fv;
-      $scope.plan.current_ft = ft;
-      delete $scope.plan.status;
-      aq.each($scope.plan.wires, w => {
-        aq.each(w.to_op.field_values, field_value => { 
-          field_value.selected = false;
-        })
-        aq.each(w.from_op.field_values, field_value => { 
-          field_value.selected = false;
-        })
-      })
-      fv.selected = true;
-    }
-
-    $scope.io_blur = function() {
-      $scope.plan.current_operation = null;
-      $scope.plan.current_fv = null;
-      $scope.plan.current_ft = null;  
-    }
-
-    $scope.select = function(operation_type) {
-
-      $scope.plan = AQ.Plan.record({
-        operations: [ 
-          AQ.Operation.record({
-            routing: {},
-            form: { input: {}, output: {} }
-          }).set_type(operation_type)
-        ]
-      });
-
-      $scope.plan.current_operation = $scope.plan.operations[0];
-
-    }
-
-    $scope.select_uba= function(user,s) {      
-      aq.each(user.user_budget_associations, uba => {
-        if ( uba.id == s.id ) {
-          uba.selected = true;
-          $scope.plan.uba = uba;
+    $scope.more_plans = function() {
+      $scope.plan_offset += 20;
+      $scope.getting_plans = true;
+      AQ.Plan.list($scope.plan_offset,$scope.current_user,$scope.state.folder).then((plans) => {
+        if ( plans.length == 0 ) {
+          $scope.no_more_plans = true;
         } else {
-          uba.selected = false;
+          $scope.getting_plans = false;
+          $scope.plans = $scope.plans.concat(plans.reverse());
+          aq.each(plans, (plan)=> { plan.link_operation_types($scope.operation_types) });
         }
-      });
+        $scope.$apply();        
+      });      
     }
 
-    $scope.unselect_ubas = function(user) {
-      aq.each(user.user_budget_associations, uba => {
-        if ( $scope.plan ) {
-          $scope.plan.uba = null;
-        }
-        uba.selected = false;
-      });
+    $scope.select_folder = function(folder) {
+      $scope.state.folder = folder;
+      $scope.plan_offset = 0;
+      $scope.getting_plans = true;
+      $scope.no_more_plans = false;
+      $scope.plans = [];
+      AQ.Plan.list($scope.plan_offset,$scope.current_user,$scope.state.folder).then((plans) => {
+        $scope.getting_plans = false;
+        $scope.plans = plans.reverse();
+        aq.each(plans, (plan)=> { plan.link_operation_types($scope.operation_types) });
+        $scope.$apply();        
+      });        
     }
 
-    $scope.remove_operation = function(op) {
-      aq.remove($scope.plan.operations,op);
-      if ( $scope.plan.operations.length == 0 ) {
-        $scope.plan = null;
-        $scope.unselect_ubas($scope.current_user);
+    $scope.select_user = function() {
+
+      AQ.User.find($scope.state.selected_user_id).then(user => {
+        $scope.current_user = user;
+        AQ.Plan.get_folders($scope.state.selected_user_id).then(folders => {
+          $scope.state.folder = null;
+          $scope.folders = folders;
+          AQ.Plan.list($scope.plan_offset,$scope.current_user,$scope.state.folder).then((plans) => {
+            $scope.plans = plans.reverse();        
+            $scope.status.plans = "Ready";        
+            $scope.getting_plans = false;        
+            AQ.update();
+          });
+        });
+      }).catch(data => {
+        console.log("Could not find user " + $scope.state.selected_user_id);
+        console.log(data)
+      })
+
+    }
+
+    $scope.delete_plan = function(plan) {
+      
+      plan.deleting = true;
+      AQ.http.delete("/plans/"+plan.id).then( () => {
+        aq.remove($scope.plans,plan);
+      })
+
+    }   
+
+    $scope.move = function(folder) {
+      if ( $scope.state.folder != folder ) {
+        var plans = aq.where($scope.plans, plan => plan.selected);
+        AQ.Plan.move(plans, folder).then(() => {
+          aq.each(plans, plan => {
+            aq.remove($scope.plans, plan)
+          })
+        })
       }
-      if ( $scope.plan ) {
-        $scope.plan.current_operation = null;
-      }
+    } 
+
+    $scope.move_to_new = function() {
+      var new_folder_name = window.prompt("New Folder Name");
+      $scope.folders.push(new_folder_name);
+      $scope.move(new_folder_name);
     }
 
-    $scope.add_goal = function() {
-
-      // aq.each($scope.plan.operations,op => op.closed = true)
-
-      var op = AQ.Operation.record({
-          routing: {},
-          form: { input: {}, output: {} }
-        }).set_type($scope.plan.operations[0].operation_type);
-
-      $scope.plan.operations.unshift(op)
-      $scope.plan.current_operation = op;
-
-    }
-
-    $scope.submit_plan = function() {
-      $scope.error = null;
-      $scope.plan.status = 'planning';
-      $scope.plan.submit($scope.current_user).then((plan) => {
-        $scope.plan = null;
-        $scope.unselect_ubas($scope.current_user);
-        $scope.mode = 'running';
-        plan.link_operation_types($scope.operation_types);
-        $scope.plans.unshift(plan);
-        aq.each($scope.plans,plan => plan.open = false);
-        plan.open = true;
-        aq.each(plan.operations,op => op.open = false);
-        $scope.$apply();
-      }).catch((error) => {
-        console.log(error)
-        delete $scope.plan.status;
-        $scope.error = error;
-        $scope.$apply();
-      });
-    }
-
-    $scope.relaunch = function(plan) {
+    $scope.relaunch = function(plan) { // a.k.a. Copy
 
       plan.relaunching = true;
 
@@ -193,88 +177,29 @@
         $scope.$apply();
       }).catch( ()=> {console.log("oops")});
 
-    }
+    }  
 
-    $scope.replan = function(plan) {
-
-      plan.copy().then(plan => {
-        $scope.plan = plan;
-        $scope.plan.current_operation = $scope.plan.operations[0];
-        $scope.set_mode('new');
-        $scope.$apply();
-      })
-
-    }
-
-    $scope.op_mode = function(op,m) {
-      var c = "btn btn-mini";
-      if ( op.mode == m ) {
-        c += " btn-primary";
+    $scope.plan_state_class = function(plan) {
+      var c = "status";
+      if ( plan.state == "Error" || plan.state == "Delayed" ) {
+        c += " status-error";
+      } else if ( plan.state == "Done" ) {
+        c += " status-done";
+      } else {
+        c += " status-pending";
       }
       return c;
     }
 
-    $scope.more_plans = function() {
-      $scope.plan_offset += 10;
-      $scope.getting_plans = true;
-      AQ.Plan.list($scope.plan_offset).then((plans) => {
-        if ( plans.length == 0 ) {
-          $scope.no_more_plans = true;
-        } else {
-          $scope.getting_plans = false;
-          $scope.plans = $scope.plans.concat(plans.reverse());
-          aq.each(plans, (plan)=> { plan.link_operation_types($scope.operation_types) });
-        }
-        $scope.$apply();        
-      });      
+    $scope.edit = function(plan) {
+      window.location = "/plans?plan_id=" + plan.id;
     }
 
-    $scope.choose_default_part = function(fv,item) {
-      if ( item.collection ) {
-      // used in _field_value_editor.html.erb to initialized collection choice
-        for ( var r=0; r<item.collection.matrix.length; r++ ) {
-          for ( var c=0; c<item.collection.matrix[r].length; c++ ) {
-            if ( item.collection.matrix[r][c] == fv.sid ) {
-              item.selected_row = r;
-              item.selected_column = c;
-            }
-          }
-        }
-      }
-    }
-
-    $scope.select_item = function(fv, item) {
-      aq.each(fv.items, i => {
-        if ( i.collection ) {
-          i.selected = (i.collection.id == item.collection.id);
-        } else {
-          i.selected = (i.id == item.id);        
-        }
-      });
-      fv.selected_item = item;
-    }
-
-    $scope.select_row_column = function(fv,element,item,r,c) {
-      if ( fv.sid == element ) {
-        item.selected_row = r;
-        item.selected_column = c;
-      }
-    }
-
-    $scope.select_user = function() {
-
-      AQ.User.find($scope.status.selected_user_id).then(user => {
-        $scope.current_user = user;
-        AQ.update();
-        AQ.Plan.list($scope.plan_offset,$scope.current_user).then((plans) => {
-          $scope.plans = plans.reverse();        
-          $scope.status.plans = "Ready";        
-          $scope.getting_plans = false;        
-          AQ.update();
-        });
-      });
-
-    }
+    $scope.replan = function(plan) {
+      plan.replan().then(newplan => {
+        window.location = "/plans?plan_id=" + newplan.id;
+      })
+    }    
 
   }]);
 

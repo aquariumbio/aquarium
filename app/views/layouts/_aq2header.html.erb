@@ -1,4 +1,4 @@
-<div class="header not-scrollable">
+<div class="header not-scrollable no-print">
 
   <md-toolbar class="main-toolbar md-hue-25">
 
@@ -12,6 +12,12 @@
         </div>
 
         <md-menu-content width="4" class="scrollable" flex>
+
+          <md-menu-item>
+            <md-button href="/static_pages/direct_purchase">Direct Purchase</md-button>
+          </md-menu-item>
+
+          <md-menu-divider></md-menu-divider>
 
           <md-menu-item>
             <md-button href="/logs">Logs</md-button>
@@ -78,21 +84,30 @@
         </div>
       </div>
 
-      <md-button aria-label="Planner" class="<%= yield(:title) == 'Planner' ? 'underlined' : '' %>">
-        <%= link_to "Planner", launcher_path %>
+      <md-button href="/launcher" aria-label="Designer" 
+                 class="main-button <%= yield(:title) == 'Designer' ? 'underlined' : '' %>">
+        <%= link_to "Designer", plans_path %>
       </md-button>
 
-      <md-button aria-label="Inventory" class="<%= yield(:title) == 'Inventory' ? 'underlined' : '' %>">
-        <a href="/browser">Inventory</a>
+      <md-button href="/launcher" aria-label="Planns"
+                 class="main-button <%= yield(:title) == 'Plans' ? 'underlined' : '' %>">
+        <%= link_to "Plans", launcher_path %>
       </md-button>
 
-      <% if current_user && current_user.is_admin %>
+      <md-button href="/operations" aria-label="Manager"
+                 class="main-button <%= yield(:title) == 'Manager' ? 'underlined' : '' %>">
+        <%= link_to "Manager", operations_path %>
+      </md-button>      
 
-        <md-button aria-label="Manager" class="<%= yield(:title) == 'Manager' ? 'underlined' : '' %>">
-          <%= link_to "Manager", operations_path %>
-        </md-button>
+      <md-button href="/browser" aria-label="Inventory"
+                 class="main-button <%= yield(:title) == 'Inventory' ? 'underlined' : '' %>">
+        <a href="/browser">Samples</a>
+      </md-button>
 
-        <md-button aria-label="Developer" class="<%= yield(:title) == 'Developer' ? 'underlined' : '' %>">
+      <% if current_user && current_user.is_admin %>        
+
+        <md-button href="/operation_types" aria-label="Developer"
+                   class="main-button <%= yield(:title) == 'Developer' ? 'underlined' : '' %>">
           <%= link_to "Developer", operation_types_path %>
         </md-button>
 

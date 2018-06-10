@@ -7,20 +7,26 @@
 
       <tr>
         <th class='selector'></th>
-        <th>Id</th>        
-        <th>Submitted by</th>
-        <th class='output'>Output</th>
+        <th class='id'>Op Id</th>
+        <th>User</th>
+        <th class="output">Data</th>
+        <th>Job(s)</th>
         <th>Plan</th>
         <th>Last Update</th>
+        <% if current_user && current_user.is_admin %>
+          <th ng-if="status != 'scheduled' && status != 'running'">
+        <% end %>
       </tr>
 
       <tr ng-repeat="op in operations"
           ng-if="!jobid || op.last_job.id == jobid">
 
         <td>
-          <input type='checkbox' 
-                 ng-model='op.selected' 
-                 ng-if="!ot.on_the_fly && ( status == 'pending_true' || status == 'scheduled')">
+          <% if current_user && current_user.is_admin %>
+            <input type='checkbox' 
+                   ng-model='op.selected' 
+                   ng-if="!operation_type.on_the_fly && ( status == 'pending' || status == 'scheduled' || status == 'error' )">
+          <% end %>
         </td>
 
         <td>{{op.id}}</td>
@@ -29,12 +35,49 @@
 
         <td>
           <ul class='input-list'>
-            <li ng-repeat="fv in op.field_values | filter: { role: 'output' }">
-              {{fv.name}}<span ng-if="fv.child_sample">: 
-                <a href="/browser?sid={{fv.child_sample.id}}">{{fv.child_sample.name}}</a>
+            <li ng-repeat="fv in op.field_values | filter: { role: 'output' } track by $index">
+              <span ng-if="$first"  style="width: 26px; display: inline-block"><b>out:</b></span>
+              <span ng-if="!$first" style="width: 26px; display: inline-block">&nbsp;</span>
+              {{fv.name}}
+              <span ng-if="fv.sample">: 
+                <a href="/browser?sid={{fv.sample.id}}">{{fv.sample_id}}: {{fv.sample.name}}</a>
+                <span ng-if="fv.item.object_type"> as {{fv.item.object_type.name}}</span>
+                <span ng-if="fv.child_item_id">
+                  ( <div ng-if="fv.child_item_id"
+                         item="fv.item" 
+                         container="fv.item.object_type" 
+                         sample="fv.sample"></div>
+                    <span ng-if="fv.row != null">[{{fv.row}},{{fv.column}}]</span> )
+                </span>                
               </span>
             </li>
-          </ul>              
+            <li ng-repeat="fv in op.field_values | filter: { role: 'input' } track by $index">
+              <span ng-if="$first"  style="width: 18px; display: inline-block"><b>in:</b></span>
+              <span ng-if="!$first" style="width: 18px; display: inline-block">&nbsp;</span>
+              {{fv.name}}
+              <span ng-if="fv.sample">: 
+                <a href="/browser?sid={{fv.sample.id}}">{{fv.sample_id}}: {{fv.sample.name}}</a>
+                <span ng-if="fv.child_item_id">
+                  ( <div ng-if="fv.child_item_id" 
+                         item="fv.item" 
+                         container="fv.item.object_type" 
+                         sample="fv.sample"></div>
+                    <span ng-if="fv.row != null">[{{fv.row}},{{fv.column}}]</span> )
+                </span>
+              </span>
+              <span ng-if="fv.value">{{fv.value}}</span>
+            </li>      
+            <li ng-repeat="da in op.data_associations">
+                <b>{{da.key}}:</b> {{da.value}}
+            </li>
+          </ul>
+        </td>
+
+        <td>
+          <div ng-if="op.jobs.length > 0" ng-repeat="job in op.jobs">
+            <a href="/jobs/{{job.id}}">{{job.id}}</a> (<span>{{job.status}}</span>)
+          </div>
+          <div ng-if="op.jobs.length == 0">--</div>          
         </td>
 
         <td>
@@ -44,12 +87,40 @@
 
         <td>{{op.updated_at|date}}</td>
 
+        <% if current_user && current_user.is_admin %>
+
+          <td ng-if="op.status != 'scheduled' && op.status != 'running'">
+
+            <md-menu layout="row">
+
+              <span ng-click="$mdMenu.open($event)"
+                    style="color: #333; font-size: 9pt; cursor: pointer"
+                    class="no-highlight">
+                <md-tooltip md-direction="bottom" md-delay="2500">Force operation to a different status.</md-tooltip>
+                {{op.status}}&#9660;
+              </span>
+
+              <md-menu-content width="4">
+                <md-menu-item ng-repeat="s in ['waiting', 'pending', 'deferred', 'delayed', 'done', 'error']" ng-if="op.status != s">
+                  <md-button ng-click="change_status(op,s)" aria-label="Change to {{s}}">
+                    {{s}}
+                  </md-button>
+                </md-menu-item>           
+              </md-menu-content>
+
+            </md-menu>
+
+          </td>
+
+        <% end %>
+
       </tr>
 
-      <tr ng-if="( status == 'error' || status == 'done' ) && operations.length < $parent.$parent.numbers[ot.id][status]">
+      <tr ng-if="( status == 'error' || status == 'done' ) && operations.length < $parent.$parent.numbers[operationtype.id][status]">
         <td></td>
         <td colspan=5 style='padding-top: 16px'>
-          <md-button class='md-raised md-primary md-small' ng-click="$parent.$parent.more(status)">More</md-button>
+          <md-button class='md-raised md-primary md-small' 
+                     ng-click="$parent.$parent.more(status)">More</md-button>
         </td>
       </tr>
 

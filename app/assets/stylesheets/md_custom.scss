@@ -2,6 +2,10 @@
 
 $buttonHighlight: rgb(73, 91, 281);
 
+.md-white {
+  background: white;
+}
+
 .md-button.md-small {
   width: 20px;
   height: 20px;
@@ -24,6 +28,16 @@ $buttonHighlight: rgb(73, 91, 281);
   margin: 5px;
 }
 
+.md-button.md-squished {
+  /*height: 24px;*/
+  /*line-height: 20px;*/
+  /*min-height: 20px;*/
+  vertical-align: top;
+  font-size: 12px;
+  padding: 0 0;
+  margin: 5px;
+}
+
 .md-button.md-highlight {
   background: $buttonHighlight;
 }
@@ -31,6 +45,7 @@ $buttonHighlight: rgb(73, 91, 281);
 /* LISTS *******************************************************************/
 
 .md-compact-list {
+
   .md-no-proxy {
     height: 28px;
     min-height: 28px;
@@ -39,9 +54,9 @@ $buttonHighlight: rgb(73, 91, 281);
     height: 28px;
     min-height: 28px;
   }  
-  .md-checkbox, .md-button, .md-list-item-inner, .md-secondary-container {
-    height: 28px;
-    min-height: 28px;    
+  .md-checkbox, .md-button, ._md-button-wrap, .md-list-item-inner, .md-secondary-container {
+    height: 28px !important;
+    min-height: 28px !important;    
   } 
   md-checkbox {
     margin: 4px !important;
@@ -56,6 +71,27 @@ $buttonHighlight: rgb(73, 91, 281);
     font-size: 10px;
     padding: 0 0;
     margin: 0;
+  }
+}
+
+.md-very-compact-list {
+
+  padding: 2px;
+
+  .md-no-proxy {
+    height: 20px;
+    min-height: 20px;
+  }
+  .md-proxy-focus {
+    height: 20px;
+    min-height: 20px;
+  }  
+  .md-checkbox, .md-button, ._md-button-wrap, .md-list-item-inner, .md-secondary-container {
+    height: 20px !important;
+    min-height: 20px !important;    
+  } 
+  md-checkbox {
+    margin: 4px !important;
   }
 }
 
@@ -76,4 +112,19 @@ $buttonHighlight: rgb(73, 91, 281);
     border: none !important;
  }
 
+}
+
+/* TABS *********************************************************************/
+
+.md-compact-tabs {
+  margin-top: 16px;
+  md-tabs-wrapper, md-tabs-canvas, md-pagination-wrapper, md-tabs-dummy-wrapper {
+    height: 24px;
+  }
+  .md-tab {
+    padding: 0px 10px 6px 10px !important;
+    font-size: 9pt;
+    .md-ripple-container {
+    }
+  }
 }

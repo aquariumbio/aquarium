@@ -1,3 +1,5 @@
+
+
 class AddTableToItem < ActiveRecord::Migration
   def change
     add_column :items, :table, :string

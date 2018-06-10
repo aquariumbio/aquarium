@@ -1,17 +1,21 @@
-AQ.Plan.record_methods.upgrade = function() {
-  var plan = this;
-  plan.operations = aq.collect(plan.operations, (op) => {
-    var operation = AQ.Operation.record(op);
-    operation.mode = 'io' // This is for the launcher
-    operation.field_values = aq.collect(operation.field_values,(fv) => {
-      return AQ.FieldValue.record(fv);  
-    })
-    op.jobs = aq.collect(op.jobs, job => {
-      return AQ.Job.record(job);
-    });    
-    return operation;
+AQ.Plan.new_plan = function(name)  {
+
+  var plan = AQ.Plan.record({
+    operations: [], 
+    wires: [], 
+    status: "planning", 
+    name: name
   });
-  plan.open = true;
+
+  plan.create_base_module();
+  return plan;
+
+}
+
+AQ.Plan.record_methods.add_operation = function(operation) {
+  let plan = this;
+  plan.operations.push(operation);
+  operation.plan = plan;
   return plan;
 }
 
@@ -39,37 +43,78 @@ AQ.Plan.record_methods.reload = function() {
           AQ.update();
         });
       });
+      plan.recompute_getter("deletable");
+      plan.recompute_getter("state");      
     });
   });
 
 }
 
-AQ.Plan.record_methods.export = function() {
+AQ.Plan.record_methods.save = function(user) {
 
-  var plan = this;
+  var plan = this,
+      before = plan,
+      user_query = user ? "?user_id=" + user.id : "";
 
-  return AQ.Plan.record({
-    operations: plan.operations_from_wires(),
-    wires: plan.wires,
-    user_budget_association: plan.uba
-  })
+  console.log("Saving plan '" + plan.name + "'")
 
+  plan.saving = true;
+
+  if ( plan.id ) {
+
+    return new Promise((resolve,reject) => {
+      AQ.http.put('/plans/' + plan.id + '.json'+user_query,plan.serialize()).then(response => {
+        delete plan.saving;
+        var p = AQ.Plan.record(response.data).marshall();   
+        AQ.Test.plan_diff(before,p)             
+        resolve(p);
+      }).catch(response => { 
+        console.log(response);
+        plan.errors = [ "PUT error" ]
+      });
+    });
+
+  } else {
+
+    return new Promise((resolve,reject) => {
+      AQ.post('/plans.json'+user_query,plan.serialize()).then(response => {
+        delete plan.saving;
+        var p = AQ.Plan.record(response.data).marshall();
+        AQ.Test.plan_diff(before,p)
+        resolve(p);
+      }).catch(response => { 
+        console.log(response.data.errors);
+        plan.errors = response.data.errors;
+      });
+    });
+
+  }
+
+}
+
+AQ.Plan.load = function(id) {
+  console.log("Loading plan " + id)
+  return new Promise((resolve,reject) => {
+    AQ.get("/plans/" + id + ".json").then(response => {   
+      try {
+        var up = AQ.Plan.record(response.data).marshall();
+        resolve(up);
+      } catch (e) {
+        reject(e)
+      }
+    }).catch(response => reject(response.data))
+  });
 }
 
 AQ.Plan.record_methods.submit = function(user) {
 
-  var plan = this.export(),
-      user_query = user ? "?user_id=" + user.id : "";
+  var original_plan = this,
+      plan = this.serialize(),
+      user_query = user ? "&user_id=" + user.id : "",
+      budget_query = "?budget_id=" + this.uba.budget_id;
 
-  return new Promise(function(resolve,reject) {
-    AQ.post('/launcher/submit'+user_query,plan).then(
-      (response) => {
-        resolve(AQ.Plan.record(response.data).upgrade());
-      }, (response) => {
-        reject(response.data.errors);
-      }
-    );
-  });
+  return AQ.get('/plans/start/'+plan.id+budget_query+user_query, plan)
+    .then(response => original_plan); // caller should reload the plan if needed to get updated operation status
 
 }
 
@@ -82,14 +127,13 @@ AQ.Plan.record_methods.cost_to_amount = function(c) {
 AQ.Plan.record_methods.estimate_cost = function() {
 
   var plan = this;
-  plan.estimating;
 
   if ( !plan.estimating ) {
   
     plan.estimating = true;
-    var exported_plan = plan.export();
+    var serializeed_plan = plan.serialize();
 
-    AQ.post('/launcher/estimate',exported_plan).then( response => {
+    return AQ.post('/launcher/estimate',serializeed_plan).then( response => {
 
       if ( response.data.errors ) {
 
@@ -100,8 +144,9 @@ AQ.Plan.record_methods.estimate_cost = function() {
         var errors = [];
 
         plan.cost = {
-          costs: response.data,
-          total: aq.sum(response.data, c => {
+          messages: response.data.messages,
+          costs: response.data.costs,
+          total: aq.sum(response.data.costs, c => {
             if ( c.error ) {
               errors.push(c.error.replace(/\(eval\)/g, 'cost'));
               return 0;
@@ -117,9 +162,9 @@ AQ.Plan.record_methods.estimate_cost = function() {
 
       } 
 
-      aq.each(plan.operations_from_wires(), op => {
-        aq.each(response.data, cost => {
-          if ( op.rid == cost.rid ) {
+      aq.each(plan.operations, op => {
+        aq.each(response.data.costs, cost => {
+          if ( op.id == cost.id ) {
             if ( !cost.error ) {
               op.cost = cost.total;  
             } else {
@@ -129,10 +174,14 @@ AQ.Plan.record_methods.estimate_cost = function() {
         });
       });
 
+      plan.base_module.compute_cost(plan);
+
       plan.estimating = false;
 
-    });
+    }).then(() => plan);
 
+  } else {
+    return Promise.resolve(plan);
   }
 
 }
@@ -140,6 +189,39 @@ AQ.Plan.record_methods.estimate_cost = function() {
 AQ.Plan.record_getters.cost_total = function() {
   delete this.cost_total;
   this.costs;
+}
+
+AQ.Plan.record_getters.transactions = function() {
+
+  delete this.transactions;
+  this.cost_so_far;
+  return [];
+
+}
+
+AQ.Plan.record_getters.cost_so_far = function() {
+
+  let plan = this,
+      opids = aq.collect(plan.operations, op => op.id);
+
+  delete plan.cost_so_far;
+
+  AQ.Account.where({operation_id: opids}).then(transactions => {
+    plan.transactions = transactions;
+    plan.cost_so_far = 0;
+    aq.each(transactions, t => {
+      if ( true || t.transaction_type == 'debit' ) {
+        plan.cost_so_far += t.amount * (1+t.markup_rate);
+      } else {
+        plan.cost_so_far -= t.amount * (1+t.markup_rate);
+      }
+    });
+    AQ.update();
+    console.log(plan.cost_so_far)
+  });
+
+  return plan.cost_so_far;
+
 }
 
 AQ.Plan.record_getters.costs = function() {
@@ -157,14 +239,15 @@ AQ.Plan.record_getters.costs = function() {
     aq.each(plan.costs, cost => {
       aq.each(plan.operations, op => {
         if ( cost.id == op.id ) {
-          op.cost = cost;
+          cost.total = plan.cost_to_amount(cost);
+          op.cost = cost.total;
           plan.cost_total += plan.cost_to_amount(cost);
           if ( op.status == "done" ) {
             plan.cost_so_far += plan.cost_to_amount(cost);
           }
         }
       })
-    })
+    });
 
   });
 
@@ -180,7 +263,9 @@ AQ.Plan.record_methods.cancel = function(msg) {
     AQ.get('/plans/cancel/' + plan.id + "/" + msg).then(
       (response) => { 
         plan.reload();
-        resolve(response.data)
+        resolve(response.data);
+        plan.recompute_getter("deletable");
+        plan.recompute_getter("state");        
       },
       (response) => { reject(response.data.errors) }
     );
@@ -198,12 +283,14 @@ AQ.Plan.record_methods.link_operation_types = function(operation_types) {
 
 }
 
-AQ.Plan.list = function(offset,user) {
+AQ.Plan.list = function(offset,user,folder,plan_id) {
 
-  var user_query = user ? "&user_id=" + user.id : "";
+  var user_query = user ? "&user_id=" + user.id : "",
+      plan_query = plan_id ? "&plan_id=" + plan_id : "",
+      folder_query = folder ? "&folder=" + folder : "";
 
   return new Promise(function(resolve,reject) {
-    AQ.get('/launcher/plans?offset='+offset+user_query).then(
+    AQ.get('/launcher/plans?offset='+offset+user_query+plan_query+folder_query).then(
       (response) => {
         AQ.Plan.num_plans = response.data.num_plans;
         resolve(aq.collect(response.data.plans,(p) => { 
@@ -217,7 +304,7 @@ AQ.Plan.list = function(offset,user) {
               }), (fv) => { return AQ.FieldValue.record(fv); })
             operation.jobs = aq.collect(op.jobs, job => {
               return AQ.Job.record(job);
-            });            
+            });
             return operation;
           });
           return plan;
@@ -238,18 +325,16 @@ AQ.Plan.record_methods.wire = function(from_op, from, to_op, to) {
     plan.wires = [];
   }
 
-  plan.wires.push(
-    AQ.Wire.record({
+  var wire = AQ.Wire.make({
       from_op: from_op,
       from: from,
       to_op: to_op,
       to: to
-    })
-  );
+    });
 
-  to.wired = true;
+  plan.wires.push(wire);
 
-  return plan;
+  return wire;
 
 }
 
@@ -259,7 +344,7 @@ AQ.Plan.record_methods.unwire = function(op) {
 
   aq.each(plan.wires, (wire) => {
     if ( wire.from_op == op || wire.to_op == op ) {
-      delete wire.to.wired;
+      wire.disconnect();    
       aq.remove(plan.wires,wire);
     }
   });
@@ -272,6 +357,22 @@ AQ.Plan.record_methods.remove_wires_to = function(op,fv) {
 
   aq.each(plan.wires, (wire) => {  
     if ( wire.to_op == op && wire.to == fv ) {
+      wire.disconnect();
+      aq.remove(plan.wires,wire);
+    }
+  });
+
+  return plan;
+
+}
+
+AQ.Plan.record_methods.remove_wires_from = function(op,fv) {
+
+  var plan = this;
+
+  aq.each(plan.wires, (wire) => {  
+    if ( wire.from_op == op && wire.from == fv ) {
+      wire.disconnect();
       aq.remove(plan.wires,wire);
     }
   });
@@ -295,124 +396,93 @@ AQ.Plan.record_methods.is_wired = function(op,fv) {
 
 }
 
-AQ.Plan.record_methods.propagate_down = function(fv,sid) {
 
-  var plan = this;
+AQ.Plan.record_methods.siblings = function(fv) {
 
-  aq.each(plan.wires, wire => {
-    if ( wire.to.rid === fv.rid ) {
-      wire.from_op.routing[wire.from.routing] = sid; 
-      if ( wire.from.role == 'output' ) {
-        wire.from_op.instantiate(plan,wire.from,sid)
-      }
-      aq.each(wire.from_op.field_values, subfv => {
-        if ( wire.from.route_compatible(subfv) ) {
-          plan.propagate_down(subfv,sid);
-        }
-      })
+  var plan = this,
+      from_module_io,
+      sibs = [];
+
+  aq.each(plan.base_module.all_wires, wire => {
+    if ( wire.to == fv && wire.from_module ) {
+      from_module_io = wire.from;
+    } 
+  });
+
+  aq.each(plan.base_module.all_wires, wire => {
+    if ( wire.to != fv && wire.to.record_type == "FieldValue" && wire.from == from_module_io ) {
+      sibs.push({ fv: wire.to, op: wire.to_op });
     }
   });
 
-  return plan;
+  return sibs;
 
 }
 
-AQ.Plan.record_methods.propagate_up = function(op,fv,sid) {
+AQ.Plan.record_methods.add_wire_from = function(fv,op,pred) {
 
-  var plan = this;
+  // pred is expected to be of the form { operation_type: ___, output: ___}
 
-  aq.each(op.field_values, other_fv => {
-    if ( fv.route_compatible(other_fv) ) {
-      aq.each(plan.wires, wire => {
-        if ( wire.from == other_fv ) {
-          wire.to_op.routing[wire.to.routing] = sid;
-          wire.to.sample_identifier = sid;
-          aq.each(wire.to_op.field_values, to_fv => {
-            if ( to_fv.route_compatible(wire.to) ) {
-              plan.propagate_up(wire.to_op,to_fv,sid)
-            }
-          })
-        }
-      })
-    }
-  })
+  let plan = this,
+      preop = AQ.Operation.new_operation(pred.operation_type, plan.current_module.id, op.x, op.y + 4*AQ.snap),
+      preop_output = preop.output(pred.output.name);
 
-  return plan;
-
-}
-
-AQ.Plan.record_methods.propagate = function(op,fv,sid) {
-
-  var plan = this;
-
-  if ( ! fv.field_type.array ) {
-
-    aq.each(op.field_values,io => {
-      if ( fv.route_compatible(io) ) {
-        plan.propagate_down(io,sid)
-      }  
-    })
-
-  } else {
-
-    plan.propagate_down(fv,sid)
-
-  }
-
-
-  plan.propagate_up(op,fv,sid);
-
-  return this;
-
-}
-
-AQ.Plan.record_methods.operations_from_wires = function() {
-
-  var plan = this, 
-      ops = [];
-
-  aq.each(plan.operations,(op) => {
-    ops.push(op);
-  });
-
-  aq.each(plan.wires, (wire) => {
-    if ( ops.indexOf(wire.from_op) < 0 ) { 
-      ops.push(wire.from_op);
-    }
-    if ( ops.indexOf(wire.to_op) < 0 ) { 
-      ops.push(wire.to_op);
-    }
-  })
-
-  return ops;
-
-}
-
-AQ.Plan.record_methods.add_wire = function(fv,op,pred) {
-
-  var plan = this;
-
-  var preop = operation = AQ.Operation.record({
-    routing: {},
-    form: { input: {}, output: {} }
-  }).set_type(pred.operation_type);
-
-  console.log("add_wire to " + op.operation_type.name + "(" + op.rid + ") from "
-                             + preop.operation_type.name + "(" + preop.rid + ") via "
-                             + fv.name + "(" + fv.rid + ")" );  
-
-  var preop_output = preop.output(pred.output.name);
-
+  plan.add_operation(preop);
   plan.remove_wires_to(op,fv);
-  plan.wire(preop,preop_output,op,fv);
+
+  let wire = plan.wire(preop,preop_output,op,fv),
+      sid = null;
 
   if ( fv.field_type.array ) {
-    plan.propagate(op,fv,fv.sample_identifier);
+    sid = fv.sample_identifier;
   } else {
-    plan.propagate(op,fv,op.routing[fv.routing])  
+    sid = op.routing[fv.routing]
   }
 
-  return preop;
+  if ( sid ) {
+    return AQ.Sample.find_by_identifier(sid)
+      .then(sample => plan.assign(fv,sample))
+      .then(plan => plan.choose_items())
+  } else {
+    return Promise.resolve(plan);
+  }
+
+}
+
+AQ.Plan.record_methods.add_wire_to = function(fv,op,suc) {
+
+  let plan = this,
+      postop = AQ.Operation.new_operation(suc.operation_type, plan.current_module.id, op.x, op.y - 4*AQ.snap),
+      postop_input = postop.input(suc.input.name);
+
+  plan.add_operation(postop);
+  plan.remove_wires_from(op,fv);
+
+  let wire = plan.wire(op,fv,postop,postop_input);  
+
+  if ( fv.field_type.array ) {
+    sid = fv.sample_identifier;
+  } else {
+    sid = op.routing[fv.routing]
+  }
+
+  if ( sid ) {
+    return AQ.Sample.find_by_identifier(sid)
+      .then(sample => plan.assign(fv,sample))
+      .then(plan => plan.choose_items())
+  } else {
+    return Promise.resolve(plan);
+  }
+
+  return Promise.resolve(plan);  
+
+}
+
+AQ.Plan.record_methods.remove_wire = function(wire) {
+
+  var plan = this;
+  wire.disconnect();
+  aq.remove(plan.wires, wire);
 
 }
 
@@ -421,17 +491,13 @@ AQ.Plan.record_methods.debug = function() {
   var plan = this;
   plan.debugging = true;
 
-  return new Promise(function(resolve,reject) {  
-
-    AQ.get("/plans/" + plan.id + "/debug").then(
-      response => {
-        console.log(response);
-        plan.reload();
-        plan.debugging = false;
-      }
-    );
-
-  });
+  return AQ.get("/plans/" + plan.id + "/debug").then(
+    response => {
+      plan.reload();
+      plan.debugging = false;
+      plan.recompute_getter("state");
+    }
+  ).then(() => plan);
   
 }
 
@@ -442,7 +508,7 @@ AQ.Plan.record_methods.relaunch = function() {
   return new Promise(function(resolve,reject) {
     AQ.get("/launcher/" + plan.id + "/relaunch").then(
       response => {
-        var p = AQ.Plan.record(response.data.plan).upgrade();
+        var p = AQ.Plan.record(response.data.plan).marshall();
         resolve(p,response.data.issues)
       },
       response => reject(null,response.data.issues)
@@ -499,3 +565,342 @@ AQ.Plan.record_methods.copy = function() {
   });
 
 }
+
+AQ.Plan.record_getters.deletable = function() {
+
+  var plan = this;
+
+  delete plan.deletable;
+  plan.deletable = true;
+
+  aq.each(plan.operations, op => {
+    if ( op.status != 'error' || op.jobs === undefined || op.jobs.length > 0 ) {
+      plan.deletable = false;
+    }
+  });
+
+  return plan.deletable;
+
+}
+
+AQ.Plan.record_methods.valid = function() {
+
+  var plan = this,
+      v = plan.operations.length > 0;
+
+  aq.each(plan.operations, op => {
+    aq.each(op.field_values, fv => {
+      v = v && fv.valid();
+    })
+  })
+
+  aq.each(plan.wires, wire => {
+    v = v && wire.consistent();
+  });
+
+  return v;
+
+}
+
+AQ.Plan.record_methods.destroy = function() {
+
+  var plan = this;
+
+  return new Promise(function(resolve,reject) {
+    AQ.http.delete("/plans/" + plan.id);
+    resolve();
+  });
+
+}
+
+AQ.Plan.move = function(plans, folder) {
+
+  var pids = aq.collect(plans, plan => plan.id);
+
+  return new Promise(function(resolve, reject) {
+
+    AQ.http.put("/plans/move", {pids: pids, folder: folder}).then(() => {
+      aq.each(plans, plan => {
+        plan.folder = folder;
+      });
+      resolve();
+    }).catch(reject);
+
+  });
+
+}
+
+AQ.Plan.get_folders = function(user_id=null) {
+
+  return new Promise(function(resolve, reject) {
+
+    var user_query = user_id ? "?user_id=" + user_id : "";
+
+    AQ.get("/plans/folders"+user_query).then(response => {
+      resolve(response.data.sort());
+    }).catch(reject);
+
+  });
+
+}
+
+AQ.Plan.record_getters.state = function() {
+
+  var plan = this;
+  delete plan.state;
+  plan.state = "Pending";
+
+  // if all ops are done, the done
+  var not_done = aq.where(plan.operations, op => op.status != "done" );
+  var errors = aq.where(plan.operations, op => op.status == "error" );
+  var delays = aq.where(plan.operations, op => op.status == "delayed" );
+
+  if ( not_done.length == 0 ) {
+    plan.state = "Done";
+  } else if ( errors.length > 0 ) {
+    plan.state = "Error";
+  } else if ( delays.length > 0 ) {
+    plan.state = "Delayed";
+  }
+
+  return plan.state;
+
+}
+
+AQ.Plan.record_methods.find_items = function() {
+
+  var plan = this;
+
+  aq.each(plan.operations, op => {
+    aq.each(op.field_values, fv => {
+      fv.recompute_getter("items")
+    })
+  })
+
+}
+
+AQ.Plan.record_methods.replan = function() {
+
+  var plan = this;
+
+  return new Promise(function(resolve, reject) {
+
+    AQ.get("/plans/replan/" + plan.id).then(response => {
+      resolve(response.data);
+    }).catch(reject);
+
+  });
+
+}
+
+AQ.Plan.record_methods.find_by_rid = function(rid) {
+
+  var plan = this, 
+      object = null;
+
+  aq.each(plan.operations, op => {
+    if ( op.rid == rid ) {
+      object = op;
+    } else {
+      aq.each(op.field_values, fv => {
+        if ( fv.rid == rid ) {
+          object = fv;
+        }
+      })
+    }
+  })
+
+  return object;
+
+}
+
+AQ.Plan.record_methods.find_by_id = function(id) {
+
+  var plan = this, 
+      object = null;
+
+  aq.each(plan.operations, op => {
+    if ( op.id == id ) {
+      object = op;
+    } else {
+      aq.each(op.field_values, fv => {
+        if ( fv.id == id ) {
+          object = fv;
+        }
+      })
+    }
+  })
+
+  return object;
+
+}
+
+AQ.Plan.record_methods.add_wire = function(from, from_op, to, to_op) {
+
+  if ( from.role == 'output' && from.field_type.can_produce(to) ) {
+    if ( ! this.reachable(to, from ) ) {
+      this.wires.push(AQ.Wire.make({
+        from_op: from_op,
+        from: from,
+        to_op: to_op,
+        to: to,
+        snap: AQ.snap
+      }));
+    } else {
+      alert("Cycle detected. Cannot create wire.")
+    }
+  } else if ( to.field_type.can_produce(from) ) {
+    if ( ! this.reachable(from,to) ) {
+      this.wires.push(AQ.Wire.make({
+        to_op: from_op,
+        to: from,
+        from_op: to_op,
+        from: to,
+        snap: AQ.snap
+      }));
+    } else {
+      alert("Cycle detected. Cannot create wire.")
+    }
+  }
+
+}
+
+AQ.Plan.record_methods.num_plan_wires_into = function(io) {
+
+  var plan = this;
+  return aq.where(plan.wires, w => w.to.rid == io.rid).length;
+
+}
+
+AQ.Plan.record_methods.num_module_wires_into = function(io) {
+
+  return this.base_module.num_wires_into(io);
+}
+
+AQ.Plan.record_methods.num_wires_into = function(io) {
+
+  var plan = this;
+  return plan.num_plan_wires_into(io) + plan.num_module_wires_into(io);
+
+}
+
+AQ.Plan.record_methods.recount_fv_wires = function() {
+
+  var plan = this;
+
+  aq.each(plan.operations, op => {
+    aq.each(op.field_values, fv => {
+      fv.num_wires = 0;
+    })
+  })  
+
+  aq.each(plan.wires, w => {
+    w.from.num_wires++;
+    w.to.num_wires++;
+  })
+
+}
+
+AQ.Plan.record_methods.create_text_box = function() {
+
+  let plan = this;
+  return plan.current_module.create_text_box();
+
+}
+
+AQ.Plan.record_methods.parent_operation = function(field_value) {
+  let plan = this;
+  for ( var i=0; i<plan.operations.length; i++ ) {
+    for ( var j=0; j<plan.operations[i].field_values.length; j++ ) {
+      if ( plan.operations[i].field_values[j] == field_value ) {
+        return plan.operations[i];
+      }
+    }
+  }
+  return null;
+}
+
+AQ.Plan.record_getters.leaves = function() {
+  let plan = this;
+  plan.mark_leaves();
+  return aq.where(plan.field_values(), fv => fv.leaf);
+}
+
+AQ.Plan.record_methods.choose_items = function() {
+
+  let plan = this;
+
+  return Promise.all(
+    aq.collect(plan.leaves, fv => fv.find_items(fv.child_sample_id))
+  ).then(() => {
+    return plan;
+  })
+
+}
+
+AQ.Plan.record_methods.show_assignments = function() {
+
+  var plan = this;
+
+  plan.field_values().forEach(fv => {
+    let str = fv.name + ": " + fv.sid;
+    if ( fv.child_item_id ) {
+      str += ", item id = " + fv.child_item_id;
+      if ( typeof fv.row == 'number' && typeof fv.column == 'number' ) {
+        str += `[${fv.row}, ${fv.column}]`
+      }
+    }
+    console.log(str);
+  });
+
+  return plan;
+
+}
+
+AQ.Plan.record_methods.operation = function(type_name, index=0) {
+
+  let plan = this,
+      operations = aq.where(plan.operations, op => op.operation_type.name == type_name);
+
+  if ( operations.length > index ) {
+    return operations[index];
+  } else {
+    raise(`Could not find operation ${index} of type '${type_name}' in plan '${plan.name}'`)
+  }
+
+}
+
+/* Returns true if this plan has active operations and new, inactive, operations.
+ */
+AQ.Plan.record_getters.has_new_ops = function() {
+  
+  let active   = aq.where(this.operations, op => op.status != 'planning').length,
+      inactive = aq.where(this.operations, op => op.status == 'planning').length;
+
+  return active > 0 && inactive > 0;
+
+}
+
+AQ.Plan.record_getters.saved = function() {
+
+  var plan = this;
+
+  if ( !plan.id ) {
+    return false;
+  } else {
+    for ( var i=0; i<plan.operations.length; i++) {
+      if ( !plan.operations[i].id ) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+
+}
+
+
+
+
+
+

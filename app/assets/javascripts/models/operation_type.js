@@ -57,10 +57,56 @@ AQ.OperationType.all_with_content = function(deployed) {
 
 }
 
-AQ.OperationType.numbers = function() {
+AQ.OperationType.deployed_with_timing = function() {
+
+  return new Promise(function(resolve, reject) {
+    
+    AQ.get("/operation_types/deployed_with_timing").then(raw_ots => {
+
+      let ots = aq.collect(raw_ots.data, raw_ot => {
+        let ot = AQ.OperationType.record(raw_ot);
+        ot.timing = AQ.Timing.record(ot.timing);
+        return ot;        
+      });
+
+      console.log(raw_ots)
+
+      resolve(ots);
+
+    })
+
+  });
+
+}
+
+AQ.OperationType.all_fast = function(deployed_only=false) {
+
+  return new Promise(function(resolve, reject) {
+
+    AQ.get("/plans/operation_types/"+deployed_only).then( response => {
+
+      ots = aq.collect(response.data, rot => {
+        var ot = AQ.OperationType.record(rot);
+        ot.upgrade_field_types();
+        return ot;
+      });
+
+      resolve(ots);
+
+    }).catch(reject);
+
+  });
+
+}
+
+AQ.OperationType.all_with_field_types = AQ.OperationType.all_fast;
+
+AQ.OperationType.numbers = function(user,filter) {
+
+  var id = user ? user.id : null;
 
   return new Promise(function(resolve,resject) {
-    AQ.get("/operation_types/numbers").then(response => {
+    AQ.get("/operation_types/numbers/" + id + "/" + filter).then(response => {
       resolve(response.data);
     })
   });
@@ -72,6 +118,11 @@ AQ.OperationType.numbers = function() {
 AQ.OperationType.record_methods.upgrade_field_types = function() {
   this.field_types = aq.collect(this.field_types,(ft) => { 
     var upgraded_ft = AQ.FieldType.record(ft);
+    upgraded_ft.allowable_field_types = aq.collect(ft.allowable_field_types, aft => {
+      var uaft = AQ.AllowableFieldType.record(aft);
+      uaft.upgrade();
+      return uaft;
+    });
     if ( ft.allowable_field_types.length > 0 ) {
       upgraded_ft.current_aft_id = ft.allowable_field_types[0].id;
     }
@@ -86,6 +137,46 @@ AQ.OperationType.record_methods.num_inputs = function() {
 AQ.OperationType.record_methods.num_outputs = function() {
   return aq.where(this.field_types,(ft) => { return ft.role === 'output' }).length;
 }
+
+AQ.OperationType.record_getters.inputs = function() {
+
+  var ot = this;
+  delete ot.inputs;
+
+  ot.inputs = aq.where(ot.field_types, ft => ft.role == 'input');
+
+  return ot.inputs;
+
+}
+
+AQ.OperationType.record_getters.outputs = function() {
+
+  var ot = this;
+  delete ot.outputs;
+
+  ot.outputs = aq.where(ot.field_types, ft => ft.role == 'output');
+
+  return ot.outputs;
+
+}
+
+AQ.OperationType.record_methods.io = function(name,role) {
+
+  var fts = aq.where(
+    this.field_types,
+    ft => ft.name == name && ft.role == role
+  );
+
+  if ( fts.length > 0 ) {
+    return fts[0];
+  } else {
+    throw "Attempted to access nonexistent " + role + " named '" + name + "'";
+  }
+
+}
+
+AQ.OperationType.record_methods.output = function(name) { return this.io(name, 'output'); }
+AQ.OperationType.record_methods.input = function(name) { return this.io(name, 'input');  }
 
 AQ.OperationType.record_methods.new_operation = function() {
   return new Promise(function(resolve,reject) {
@@ -102,7 +193,6 @@ AQ.OperationType.record_getters.stats = function() {
   
   AQ.get("/operation_types/"+ot.id+"/stats").then((response) => {
     ot.stats = response.data;
-    console.log(response.data)
   }).catch((response) => {
     console.log(["error", response.data]);
   })
@@ -145,28 +235,26 @@ AQ.OperationType.record_methods.unschedule = function(operations) {
 
 }
 
-AQ.OperationType.record_methods.code = function(name) {
+/*
+ * Returns the named component: protocol, documentation, cost_model, or precondition.
+ */
+AQ.OperationType.record_methods.code = function(component_name) {
 
-  var ot = this;
+  var operation_type = this;
 
-  delete ot[name];
-  ot[name]= { content: "Loading " + name, name: "name", no_edit: true };
+  delete operation_type[component_name];
+  operation_type[component_name]= { content: "Loading " + component_name, name: "name", no_edit: true };
 
-  AQ.Code.where({parent_class: "OperationType", parent_id: ot.id, name: name}).then(codes => {
+  AQ.Code.where({parent_class: "OperationType", parent_id: operation_type.id, name: component_name}).then(codes => {
     if ( codes.length > 0 ) {
-      latest = aq.where(codes,code => { return code.child_id == null });
-      if ( latest.length >= 1 ) {
-        ot[name] = latest[0];
-      } else {
-        ot[name]= { content: "# Add code here.", name: "name" };
-      }
+      operation_type[component_name] = codes[codes.length-1];
     } else { 
-      ot[name]= { content: "# Add code here.", name: "name" };
+      operation_type[component_name]= { content: "# Add code here.", name: "name" };
     }
     AQ.update();
   });
 
-  return ot[name];
+  return operation_type[component_name];
 
 }
 
@@ -246,30 +334,21 @@ AQ.OperationType.record_methods.remove_predecessors = function() {
 
 AQ.OperationType.record_getters.rendered_docs = function() {
 
-  var ot = this;
+  var operation_type = this;
   var md = window.markdownit();
   var docs = "Rendering..."
 
-  delete ot.rendered_docs;
+  delete operation_type.rendered_docs;
 
-  AQ.Code.where({parent_class: "OperationType", parent_id: ot.id, name: 'documentation'}).then(codes => {
-
+  AQ.Code.where({parent_class: "OperationType", parent_id: operation_type.id, name: 'documentation'}).then(codes => {
     if ( codes.length > 0 ) {
-      latest = aq.where(codes,code => { return code.child_id == null });
-      if ( latest.length >= 1 ) {
-        docs = latest[0].content;
-      } else {
-        docs = "This operation type has not yet been documented";
-      }
+      docs = codes[codes.length-1];
     } else { 
-      docs = "This operation type has not yet been documented";
+      docs = { content: "# Add code here.", name: "name" };
     }
-
-    ot.rendered_docs = AQ.sce.trustAsHtml(md.render(docs));
-
+    operation_type.rendered_docs = AQ.sce.trustAsHtml(md.render(docs.content));
     AQ.update();
-
-  });
+  });  
 
   return AQ.sce.trustAsHtml("Rendering ...");
 
@@ -289,4 +368,20 @@ AQ.OperationType.timing_sort_compare = function(ot1, ot2) {
 
 AQ.OperationType.sort_by_timing = function(ots) {
   return ots.sort(AQ.OperationType.timing_sort_compare);
+}
+
+AQ.OperationType.find_cached = function(name) {
+
+  if ( AQ.operation_types ) {
+    return aq.find(AQ.operation_types, ot => ot.name == name);
+  } else {
+    return null;
+  }
+
+}
+
+AQ.OperationType.record_methods.create = function(parent_module_id=0, x=100, y=100) {
+
+  return AQ.Operation.new_operation(this, parent_module_id, x, y);
+
 }

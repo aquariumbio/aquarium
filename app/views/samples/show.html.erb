@@ -20,10 +20,6 @@
           <%= @sample.user ? link_to( @sample.user.login, @sample.user ) : 'unknown' %>
         </li>
         <li> 
-          <b>Project:</b>
-          <%= link_to @sample.project, project_url(name: @sample.project) %>
-        </li>
-        <li> 
           <b>Created:</b>
           <%= @sample.created_at.to_formatted_s(:long) %> 
         </li>
@@ -46,12 +42,6 @@
 
     <div class='span3'>
       <div style='position: absolute; bottom: 0; right: 0'>
-
-        <%= 
-          render partial: '/posts/discussion', locals: { 
-          topic: @sample,
-          button_class: 'btn-small' } 
-        %>
 
         <%= link_to "Edit", edit_sample_path(@sample), class: 'btn btn-small btn-primary' %> 
         <%= link_to 'All', samples_path(sample_type_id: @sample.sample_type_id), class: 'btn btn-small' %>  

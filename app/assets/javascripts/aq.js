@@ -15,7 +15,7 @@ Aq.prototype.url_params = function() {
     aq.each(parts,part => {
       result[part.split('=')[0]] = part.split('=')[1];
     });
-  } 
+  }
   return result;
 }
 
@@ -77,7 +77,7 @@ Aq.prototype.nice_time = function(date,seconds) {
   } else {
     s = "";
   }
-  
+
   return h + ":" + m + s + " " + ap;
 
 }
@@ -107,6 +107,16 @@ Aq.prototype.each = function(array,f) {
 
   if ( array ) {
     for ( var i=0; i<array.length; i++ ) {
+      f(array[i],i);
+    }
+  }
+  return this;
+}
+
+Aq.prototype.each_in_reverse = function(array,f) {
+
+  if ( array ) {
+    for ( var i=array.length-1; i>=0; i-- ) {
       f(array[i],i);
     }
   }
@@ -231,17 +241,43 @@ Aq.prototype.query = function() {
   var o = {};
 
   if ( query_string ) {
-    
-    aq.each(query_string.split('&'), function(p) { 
+
+    aq.each(query_string.split('&'), function(p) {
       var key = p.split("=")[0],
           val = p.split("=")[1];
       o[key] = val;
     });
-    
-  } 
+
+  }
 
   return o;
 
+}
+
+Aq.prototype.url_path = function() {
+
+  return window.location.pathname.split("/");
+
+}
+
+Aq.prototype.member = function(set, element) {
+  return set.indexOf(element) >= 0;
+}
+
+Aq.prototype.first = function(list) {
+  if ( list.length > 0 ) {
+    return list[0];
+  } else {
+    raise("Could not take first element of empty list.")
+  }
+}
+
+Aq.prototype.last = function(list) {
+  if ( list.length > 0 ) {
+    return list[list.length-1];
+  } else {
+    raise("Could not take last element of empty list.")
+  }
 }
 
 aq = new Aq();

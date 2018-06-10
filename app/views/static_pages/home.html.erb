@@ -3,13 +3,36 @@
 
 <%= content_for :controller do %>homeCtrl<% end %>
 
-<% content_for :wider_sidebar do %>true<% end %>
+<% content_for :much_wider_sidebar do %>
+  true
+<% end %>
 
 <%= content_for :sidebar do %>
-  <md-content layout-align="center center" style="padding-left: 5px">
-    <h2 class='md-title'>Discussions</h2>
-  </md-content>
-  <iframe class='discussion-iframe' allowtransparency="true" src='/posts/'></iframe>
+
+  <div layout="column" layout-align="center center" style="margin-top: 16px">
+    <%= image_tag 'biofab-logo.jpg', style: 'width: 50%' %>
+  </div>
+  <md-list>
+    <md-list-item id="chrome" class="md-3-line" layout-padding style="display: none">
+      <div class="md-list-item-text" layout="column">
+        <h2 class='md-title'>Chrome Not Detected</h2>
+        <h3 class='md-subtitle' style="color: red; font-weight: bold">Warning!</h3>
+        <p>You are not using Google Chrome. Some features may not be available. 
+           Aquarium has been tested extensively with Google Chrome and we highly recommend you use
+           it instead. Install it <a href="https://www.google.com/chrome/index.html">here</a>.</p>
+      </div>
+    </md-list-item>  
+
+  <% @announcements.each do |a| %>
+    <md-list-item class="md-3-line" layout-padding>
+      <div class="md-list-item-text" layout="column">
+        <h2 class='md-title'><%= a.title %></h2>
+        <h3 class='md-subtitle'><%= a.created_at.strftime '%A %B %e, %Y' %></h3>
+        <p layout-padding><%= simple_format(a.message).html_safe %></p>
+      </div>
+    </md-list-item>
+  <% end %>
+  </md-list>
 <% end %>
 
 <% content_for :specific_title do %>
@@ -18,52 +41,118 @@
   Main
 <% end %>
 
+<% content_for :show_errors do %>true<% end %>
+
 <% content_for :main do %>
 
-  <% if @announcement %>
-    <div style="padding: 50px 50px 0 50px; position: relative">
-      <h4>Announcement: <%= @announcement.title %></h4>
-      <p><%= @announcement.created_at.strftime '%A %B %e, %Y' %></p>
-      <p><%= simple_format(@announcement.message).html_safe %></p>
-      <div class='close-x btn-small' style='position: absolute; top: 55px; right: 60px;'>
-        <a href='/dismiss' style="font-size: 24px">&times</a>
+  <style>
+    .box {
+      border: 1pt solid #bbb; 
+      border-radius: 4px; 
+      margin: 16px;
+    }
+    a {
+      color: #01579b;
+    }
+  </style>
+
+  <script type="text/javascript">    
+  $(function() {
+    if ( ! ( !!window.chrome && !!window.chrome.webstore) )  {
+      console.log("No chrome!")
+      $("#chrome").show()
+    }
+  });
+  </script>
+
+
+  <div layout="column" layout-padding>
+
+    <div layout="row">
+
+      <div flex="50" class="box">
+        <md-toolbar class="md-hue-4"><div class="md-toolbar-tools"><h2>Video Tutorial Series</h2></div></md-toolbar>
+        <p style="margin-left: 20px; margin-top: 10px; margin-bottom: 0px">
+           Garrett Newman has made a great series of videos on how to use Aquarium 2.0. Please start here if you are new
+           to the system.</p>
+
+        <md-list style="margin-left: 40px">
+          <md-list-item>
+            <ng-md-icon icon="videocam" size="24" aria-label="Help" style="fill: #444"></ng-md-icon> 
+            <h4>&nbsp;<a href="https://www.youtube.com/watch?v=ydN51ew1JmI&feature=youtu.be">1. Populating your Inventory</a></h4>
+          </md-list-item> 
+
+          <md-list-item>
+            <ng-md-icon icon="videocam" size="24" aria-label="Help" style="fill: #444"></ng-md-icon> 
+            <h4>&nbsp;<a href="https://www.youtube.com/watch?v=kYnDc8RIsNg&feature=youtu.be">
+              2a. Planning with Templates and Modules
+              <span style="background: yellow; color: black; padding: 3px; border: 1pt solid #ddd">New!!</span>
+            </a></h4>
+          </md-list-item>            
+
+          <md-list-item>
+            <ng-md-icon icon="videocam" size="24" aria-label="Help" style="fill: #444"></ng-md-icon> 
+            <h4>&nbsp;<a href="https://www.youtube.com/watch?v=xDrv4f2AZlM&feature=youtu.be">
+              2b. Building a Workflow (Old Version)
+            </a></h4>
+          </md-list-item>  
+
+          <md-list-item>
+            <ng-md-icon icon="videocam" size="24" aria-label="Help" style="fill: #444"></ng-md-icon> 
+            <h4>&nbsp;<a href="https://www.youtube.com/watch?v=WCTmuz5yBAo&feature=youtu.be">
+              4. Monitoring your Plan
+            </a></h4>
+          </md-list-item>  
+
+        </md-list>
+
       </div>
+
+      
+
+      <div flex="50" class="box">
+        <md-toolbar class="md-hue-4"><div class="md-toolbar-tools"><h2>Improve Aquarium</h2></div></md-toolbar>
+          <md-list>
+            <md-list-item>
+              <ng-md-icon icon="bug_report" size="52" aria-label="Bugs" style="fill: #444"></ng-md-icon> 
+              <p style="margin-left: 20px; margin-top: 10px">See <a href="/doc/md-viewer?doc=BugReportStyle">our guide</a> 
+              for information about how to describe a bug you've found or a feature
+              you'd like to see. We are using github to keep track of issues, bugs, and feature requests. Go to the 
+              <a href="https://github.com/klavinslab/aquarium-bugs/issues">aquarium-bugs issue list</a>
+              to submit a bug report or feature reqeust.<br><br>
+                <a href="mailto:biofab@uw.edu">Contact the BIOFAB</a> if you have any questions
+              </p>
+            </md-list-item>           
+          </md-list>
+      </div>
+
     </div>
-  <% end %>
 
-  <div style="padding: 50px">
-    <md-grid-list 
-        md-cols="2" md-cols-md="2"
-        md-row-height="4:1"
-        md-gutter="50px">   
+    <div layout="row">
 
-      <md-grid-tile class="big-link" md-rowspan="1" md-colspan="1">
-        <a href="/browser">
-          <h1 class="md-title">Manage Samples</h1>
-        </a>
-      </md-grid-tile>
+      <div flex="50" class="box">
+        <md-toolbar class="md-hue-4"><div class="md-toolbar-tools"><h2>We're on Slack</h2></div></md-toolbar>
+          <md-list>
+            <md-list-item>
+              <%= image_tag 'slack.png', style: 'width: 100px' %>
+              <p style="margin-left: 20px; margin-top: 10px">We have a Slack page for our users to
+              discuss their workflowsd and experiments with the BIOFAB staff. 
+              Sign up <a href="https://join.slack.com/t/uwbiofab/signup">here</a>. Anyone with a valid uw.edu
+              address should be able to sign up. If you want to use another email address, please let us know by
+              <a href="mailto:biofab@uw.edu">email</a>.</p>
+            </md-list-item>
+          </md-list>
+      </div>
 
-      <md-grid-tile class="big-link" md-rowspan="1" md-colspan="1">
-        <a href="/launcher">
-          <h1 class="md-title">Create and Manage Plans</h1>
-        </a>      
-      </md-grid-tile>
+      <div flex="50" class="box" style="border: none">
+      </div>      
 
-      <md-grid-tile class="big-link" md-rowspan="1" md-colspan="1">
-        <a href="/operations">
-           <h1 class="md-title">Manage Jobs</h1>
-        </a>      
-      </md-grid-tile>
+    </div>    
 
-      <md-grid-tile class="big-link" md-rowspan="1" md-colspan="1">
-        <a href="/operation_types">
-          <h1 class="md-title">Develop Workflows</h1>
-        </a> 
-      </md-grid-tile>
-
-    </md-grid-list>
+    
 
   </div>
+
 
 <% end %>
 

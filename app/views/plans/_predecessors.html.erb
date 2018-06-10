@@ -1,0 +1,41 @@
+<div ng-if="current_fv.is_sample && current_fv.role == 'input' && current_fv.predecessors.length > 0">
+
+  <md-subheader class="md-no-sticky">
+    Predecessors
+  </md-subheader>
+
+  <md-list class="md-compact-list">
+    <md-list-item ng-repeat="pred in current_fv.predecessors" 
+                  ng-if="pred.operation_type.id != current_op.operation_type.id"
+                  style="padding: 1px 16px 1px 16px">
+      <p><b>{{pred.operation_type.name}}</b></p>
+      <md-button
+        ng-class="current_fv.field_type.preferred_operation_type_id == pred.operation_type.id ? 
+                 'md-raised md-primary md-secondary md-button-in-list' :
+                 'md-raised md-secondary md-button-in-list'"
+        ng-click="add_predecessor(current_io,current_draggable,pred)">
+          <md-tooltip md-direction="bottom">
+            Use {{pred.operation_type.name}} 
+            from {{pred.operation_type.category}} 
+            to produce {{current_fv.name}}
+          </md-tooltip>
+          Add
+      </md-button>
+    </md-list-item>
+
+  </md-list>
+
+  <div class="backchain-msg" ng-if="current_fv.backchain_msg">
+    {{current_fv.backchain_msg}}
+    <div class="dismiss"
+      ng-click="current_fv.backchain_msg = false">
+      &times;
+    </div>
+  </div>
+
+</div>
+
+<md-subheader class="md-no-sticky"
+              ng-if="current_fv.is_sample && current_fv.predecessors.length == 0">
+  No Applicable Predecessors
+</md-subheader>

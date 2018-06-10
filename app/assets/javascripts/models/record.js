@@ -31,6 +31,8 @@ AQ.Record = function(model,data) {
 
   }
 
+  model.record_getters.record_type = function() { return this.model.model }
+
   for ( var method_name in model.record_getters ) {
 
     Object.defineProperty(
@@ -60,8 +62,10 @@ AQ.Record.prototype.recompute_getter = function(gname) {
 
 AQ.Record.prototype.init = function(data) {
   for ( var key in data ) {
-    delete this[key]
-    this[key] = data[key];
+    if ( key != 'rid' && typeof data[key] != "function" ) {
+      delete this[key]
+      this[key] = data[key];
+    }
   }
   return this;
 }
@@ -139,6 +143,16 @@ AQ.Record.prototype.new_data_association = function() {
     this.data_associations.push(da);
   }
 
+  console.log(this.data_associations)  
+
   return da;
 
 }
+
+AQ.Record.prototype.process_upload_complete = function() {
+
+  let record = this;
+  console.log("Completed upload!", record);
+
+}
+

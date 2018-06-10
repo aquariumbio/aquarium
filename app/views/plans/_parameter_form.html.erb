@@ -1,0 +1,49 @@
+<script type="text/ng-template" id="parameter-form">
+
+  <div layout="row">
+
+    <div flex="5">
+      <div class="io-type" ng-if="first && fv.role == 'input'">in:&nbsp;&nbsp;&nbsp;</div>
+    </div>
+
+    <div flex="10">
+      {{cfv.name}}
+    </div>
+
+    <div flex="80">
+
+      <input ng-if="cfv.field_type.choices_array.length == 0 && cfv.field_type.ftype != 'json'"
+             type="string" 
+             ng-model="cfv.value"
+             ng-focus="setiomethod(io,false,'input')"
+             ng-attr-id="{{'fv-'+cfv.rid}}"
+             placeholder="{{cfv.field_type.name}} ({{cfv.field_type.ftype}})">
+
+      <div ng-if="cfv.field_type.ftype == 'json'">
+
+        <textarea
+               ng-model="cfv.value"
+               style="width: 100%"
+               ng-focus="setiomethod(io,false,'input')"
+               ng-attr-id="{{'fv-'+cfv.rid}}"
+               placeholder="{{cfv.field_type.name}} (JSON)"></textarea>
+
+      </div>
+
+      <div ng-if="cfv.field_type.choices_array.length > 0  && cfv.field_type.ftype != 'json'"
+           class='select-container'>
+        <select ng-model="cfv.value"
+                ng-focus="setiomethod(io,false,'input')"
+                ng-attr-id="{{'fv-'+cfv.rid}}"
+                ng-options="choice for choice in cfv.field_type.choices_array">
+          <option value="" disabled selected>{{cfv.name}}</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div flex="5" class="array-remove-container"></div>  
+
+  </div>
+
+</script>

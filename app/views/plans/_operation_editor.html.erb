@@ -1,0 +1,89 @@
+
+<!-- OUTPUTS -->
+
+<div ng-repeat="tv in current_op.types_and_values | filter: { role: 'output' }"" 
+     ng-if="!operation.closed">
+  <div ng-if="!tv.array_add_button"
+       class="io-container">
+
+       <field-value-form 
+            cfv="tv.value"
+            op="current_op" 
+            io="tv.value"
+            role="'output'"
+            plan="plan"
+            first="$first"
+            setiomethod="set_current_io"></field-value-form>
+
+  </div>
+  <div ng-if="tv.array_add_button" layout="row" class="io-container">
+    <div flex="5"></div>
+    <div flex="10">{{tv.type.name}}</div>
+    <div flex="85" class="add-array">
+      <a href='#' ng-click="current_op.array_add(tv.type); 
+                            set_current_fv(current_op.field_values[current_op.field_values.length-1])" 
+                  class="md-button md-small md-raised">
+        Add
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- INPUTS -->
+
+<div ng-repeat="tv in current_op.types_and_values | filter: { role: 'input' }" 
+     ng-if="!operation.closed">
+
+  <div ng-if="!tv.array_add_button && tv.type.ftype != 'sample'" 
+       ng-init="fv = tv.value; io=fv.value"
+       class="io-container">
+
+    <parameter-form cfv="tv.value"
+                    io="tv.value"
+                    first="$first"
+                    setiomethod="set_current_io"></parameter-form>
+
+  </div>
+
+  <div ng-if="!tv.array_add_button && tv.type.ftype == 'sample'" 
+       class="io-container">
+
+       <field-value-form 
+            cfv="tv.value"
+            op="current_op" 
+            io="tv.value"
+            role="'input'"
+            plan="plan"
+            first="$first"
+            setiomethod="set_current_io"></field-value-form>
+
+  </div>
+
+  <div ng-if="tv.array_add_button" layout="row" class="io-container">
+    <div flex="5"></div>
+    <div flex="10">{{tv.type.name}}</div>
+    <div flex="85" class="add-array">
+      <a href='#' ng-click="current_op.array_add(tv.type)"
+                  class="md-button md-small md-raised">
+        Add 
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<!-- <div ng-if="operation.operation_type.num_inputs() > 0 && !operation.closed"
+    ng-repeat="ft in operation.operation_type.field_types |
+                  filter: { role: 'input', ftype: '!sample' }"
+    ng-include="'parameter_editor'">
+</div> -->
+
+<!-- NO SELECTON -->
+
+<div ng-if="!current_op" 
+     class='io-container' 
+     disabled="true" 
+     layout-padding>
+  No operation selected
+</div>
+

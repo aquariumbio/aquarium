@@ -1,3 +1,6 @@
+
+
+# @api krill
 class Upload < ActiveRecord::Base
 
   attr_accessible :job_id, :upload
@@ -7,29 +10,27 @@ class Upload < ActiveRecord::Base
   belongs_to :job
   has_many :data_associations
 
-  def name= n
+  def name=(n)
     self.upload_file_name = n
   end
 
   def name
-    self.upload_file_name
+    upload_file_name
   end
 
   def size
-    self.upload_file_size
-  end  
+    upload_file_size
+  end
 
   def url
-    self.upload.expiring_url(10)
+    upload.expiring_url(10)
   end
 
   def expiring_url
-    self.upload.expiring_url(10)
+    upload.expiring_url(10)
   end
 
-  def path
-    self.upload.path
-  end
+  delegate :path, to: :upload
 
   def export
     attributes

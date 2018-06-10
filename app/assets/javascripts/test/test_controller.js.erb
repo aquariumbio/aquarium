@@ -1,0 +1,41 @@
+(function() {
+
+  var w = angular.module('aquarium'); 
+
+  w.controller('testCtrl', [ '$scope', '$http', 
+                function (  $scope,   $http ) {
+
+    AQ.init($http);
+    AQ.update = () => { $scope.$apply(); }
+    AQ.confirm = (msg) => { return confirm(msg); }
+
+    <% if Rails.env.development? %>  
+
+      if ( aq.url_params().category ) {
+          $scope.path = [aq.url_params().category];
+          $scope.test = shark.test.subtests[$scope.path]
+      } else {
+          $scope.path = [];
+          $scope.test = shark.test;
+      }
+
+      $scope.shark = shark;
+      $scope.shark.associate_update(AQ.update);
+      $scope.shark.run($scope.path);
+      $scope.refresh = 0;
+
+      $scope.refresh = function() {
+        $scope.refresh++;
+      }
+
+    <% else %>
+      $scope.shark = { 
+        run: function() {
+          alert("Tests not availale in production")
+        }
+      }
+    <% end %>
+
+  }]);
+
+})();                    
