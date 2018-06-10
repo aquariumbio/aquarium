@@ -114,13 +114,12 @@ class WizardsController < ApplicationController
   def contents
 
     wizard = Wizard.find(params[:id])
-    if params[:box] != "undefined"
-      box = wizard.box(params[:box])
-    else
-      box = wizard.box(wizard.boxes.first)
-    end
 
-    render json: box.collect { |l| l.as_json(include: { item: { include: [:object_type, :sample] } } ) }
+    box_index = params[:box]
+    box_index = wizard.boxes.first if box_index == 'undefined'
+    box = wizard.box(box_index)
+
+    render json: box.collect { |l| l.as_json(include: { item: { include: [:object_type, :sample] } }) }
 
   end
 
