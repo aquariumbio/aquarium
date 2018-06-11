@@ -264,11 +264,18 @@ class Item < ActiveRecord::Base
 
   end
 
-  # Returns whether the Item is deleted
+  # Indicates whether this Item is deleted.
   #
-  # @return [Bool] Item deleted?
+  # @return [Bool] true if this Item is deleted, false otherwise
   def deleted?
     primitive_location == 'deleted'
+  end
+
+  # Indicates whether this Item is a Collection.
+  #
+  # @return [Bool] true if this Item is a Collection, false otherwise
+  def collection?
+    object_type.handler == 'collection'
   end
 
   # other methods ############################################################################
