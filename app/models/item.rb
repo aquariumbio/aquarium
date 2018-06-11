@@ -275,7 +275,7 @@ class Item < ActiveRecord::Base
   #
   # @return [Bool] true if this Item is a Collection, false otherwise
   def collection?
-    object_type.handler == 'collection'
+    object_type && object_type.handler == 'collection'
   end
 
   # other methods ############################################################################
