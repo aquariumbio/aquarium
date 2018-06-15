@@ -15,4 +15,4 @@ layout: default
 
 ---
 [Aquarium Code](https://github.com/klavinslab/aquarium)<br>
-[Klavins Lab](https://klavinslab.org)
+[Klavins Lab](http://klavinslab.org)
