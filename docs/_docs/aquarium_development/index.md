@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 permalink: /docs/aquarium_development/
 ---
 

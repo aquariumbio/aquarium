@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 permalink: /docs/protocol_development/
 ---
 # Aquarium Protocol Development
