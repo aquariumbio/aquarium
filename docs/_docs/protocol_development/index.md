@@ -118,7 +118,7 @@ Some configuration notes:
 ## Writing Protocols
 
 Protocols are written in the _Krill protocol language_, a domain specific language built using Ruby.
-The [Protocol tutorial](protocol_tutorial.md) gives an overview of using Krill to define protocols, and assumes a basic understanding of Ruby.
+The [Protocol tutorial](protocol_tutorial) gives an overview of using Krill to define protocols, and assumes a basic understanding of Ruby.
 
 If you are not familiar with Ruby, a good place to start is the [Ruby page](https://www.ruby-lang.org/en/) that has links to introductory tutorials as well as general documentation.
 There are also courses on Ruby that are available online, which may be the place to start if you don't already know how to program.
