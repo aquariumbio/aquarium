@@ -1,0 +1,10 @@
+- title: Configuration
+  docs:
+  - configuration
+  - protocol_development
+
+- title: User Roles
+  docs:
+  - designer
+  - manager
+  - technician
