@@ -1,5 +1,6 @@
 ---
 layout: default
+permalink: /docs/designer/
 ---
 
 # Experimental Plan Designer

@@ -1,5 +1,6 @@
 ---
 layout: default
+permalink: /docs/technician/
 ---
 # Technician
 

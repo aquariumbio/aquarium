@@ -1,5 +1,6 @@
 ---
 layout: default
+permalink: /docs/protocol-development/
 ---
 # Aquarium Protocol Development
 

@@ -1,5 +1,6 @@
 ---
 layout: default
+permalink: /docs/reporting-bugs/
 ---
 # Bug Reports and Feature Requests
 

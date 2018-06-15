@@ -4,14 +4,14 @@ layout: default
 
 # Aquarium Documentation
 
-* [Configuration](configuration/index.md)
+* [Configuration](docs/configuration/)
 * User Role Documentation:
-  * [Manager](manager/index.md)
-  * [Technician](technician/index.md)
-  * [Researcher/Experiment Designer](designer/index.md)
+  * [Manager](docs/manager/)
+  * [Technician](docs/technician/)
+  * [Researcher/Experiment Designer](docs/designer/)
 * Development Documentation:
-  * [Protocol Development](protocol_development/index.md)
-  * [Aquarium Development](aquarium_development/index.md)
+  * [Protocol Development](docs/protocol_development/)
+  * [Aquarium Development](docs/aquarium_development/)
 
 ---
 [Aquarium Code](https://github.com/klavinslab/aquarium)<br>
