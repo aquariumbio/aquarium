@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Protocol Tutorial
 
 This is an introduction to writing protocols for Aquarium in the Krill domain specific langauge.

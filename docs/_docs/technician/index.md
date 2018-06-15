@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Technician
 
 This document should outline, for each scenario/task that a technician has to perform, how the user uses the Aquarium interface.

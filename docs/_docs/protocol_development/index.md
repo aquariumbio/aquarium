@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Aquarium Protocol Development
 
 These guidelines are for building protocols to run in Aquarium.

@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 # Experimental Plan Designer
 
 This document should outline, for each scenario/task that a researcher/experimental planner has to perform, how the user uses the Aquarium interface.

@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 # Aquarium Documentation
 
 * [Configuration](configuration/index.md)

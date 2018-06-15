@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 # Aquarium Developer Guidelines
 
 These guidelines are intended for those working directly on Aquarium, though some details are shared with protocol development.
