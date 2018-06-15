@@ -172,6 +172,20 @@ class Operation < ActiveRecord::Base
     outputs.select { |o| o.name == name } .extend(IOList)
   end
 
+  # Expands an output array by num
+  def expand_output_array(name, num)
+    fv = op.output(name)
+    raise "FieldType #{name} is not an array. Cannot set output array." unless op.output(name).field_type.array
+    wires = fv.wires_as_source.map { |wire| wire }
+    op.set_output name, [fv.sample] * num, aft = fv.allowable_field_type
+
+    # Make sure wires are faithfully restored to first fv in array
+    wires.each do |wire|
+      wire.from_id = op.output_array(name).first.id
+      wire.save
+    end
+  end
+
   # @param name [String]
   # @param role [String]
   # @return [FieldValue]
