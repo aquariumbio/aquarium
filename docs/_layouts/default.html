@@ -1,14 +1,14 @@
-{% include top.html %}
+<!DOCTYPE html>
+<html>
+    {% include head.html %}
 
-<body class="wrap">
-  {% include header.html %}
-
-  <section class="main-content">
-    {{ content }}
-
-    {% include footer.html %}
-  </section>
-
-  {% include analytics.html %}
-</body>
+    <body>
+        {% include header.html %}
+        <main>
+            <article>
+                {{ content }}
+            </article>
+            {% include footer.html %}
+        </main>
+    </body>
 </html>
