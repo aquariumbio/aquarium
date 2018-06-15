@@ -1,6 +1,6 @@
 ---
 layout: default
-permalink: /docs/protocol-development/
+permalink: /docs/protocol_development/
 ---
 # Aquarium Protocol Development
 
@@ -196,4 +196,4 @@ Because Aquarium protocols are written in a Ruby DSL, you can edit protocols out
 This allows you to use an editor that you are comfortable with, and also use tools such as [Rubocop](https://rubocop.readthedocs.io/en/latest/) to check for issues in your protocol code.
 Many developers simply cut and paste the whole protocol or library code between the Aquarium and external editors.
 
-The [Parrotfish](https://klavinslab.org/parrotfish) tools currently being developed make this a little easier, allowing protocols to be pushed and pulled from an Aquarium instance using the command line.
+The [Parrotfish](http://klavinslab.org/parrotfish) tools currently being developed make this a little easier, allowing protocols to be pushed and pulled from an Aquarium instance using the command line.

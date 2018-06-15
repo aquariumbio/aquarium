@@ -1,6 +1,6 @@
 ---
 layout: default
-permalink: /docs/aquarium-development/
+permalink: /docs/aquarium_development/
 ---
 
 # Aquarium Developer Guidelines
