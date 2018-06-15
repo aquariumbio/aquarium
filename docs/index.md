@@ -10,8 +10,8 @@ layout: default
   * [Technician](docs/technician/)
   * [Researcher/Experiment Designer](docs/designer/)
 * Development Documentation:
-  * [Protocol Development](docs/protocol_development/)
-  * [Aquarium Development](docs/aquarium_development/)
+  * [Protocol Development](docs/protocol-development/)
+  * [Aquarium Development](docs/aquarium-development/)
 
 ---
 [Aquarium Code](https://github.com/klavinslab/aquarium)<br>
