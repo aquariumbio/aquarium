@@ -1,4 +1,5 @@
 ---
+title: Configuration
 layout: docs
 permalink: /docs/configuration/
 ---

@@ -1,8 +1,9 @@
 ---
+title: Technician Guide
 layout: docs
 permalink: /docs/technician/
 ---
-# Technician
+# Technician Guide
 
 This document should outline, for each scenario/task that a technician has to perform, how the user uses the Aquarium interface.
 

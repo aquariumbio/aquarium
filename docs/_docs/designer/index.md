@@ -1,4 +1,5 @@
 ---
+title: Plan Designer
 layout: docs
 permalink: /docs/designer/
 ---
