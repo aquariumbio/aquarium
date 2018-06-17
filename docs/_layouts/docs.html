@@ -9,7 +9,14 @@ layout: default
         {% include section_nav.html %}
     </div>
 
-    {% include docs_contents.html %}
+    <div class="unit one-fifth hide-on-mobiles">
+        <aside>
+            {% for section in site.data.docs %}
+                <h4>{{ section.title }}</h4>
+                {% include docs_ul.html items=section.docs %}
+            {% endfor %}
+        </aside>
+    </div>
 
     <div class="clear"></div>
 

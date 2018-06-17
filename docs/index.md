@@ -12,7 +12,3 @@ layout: default
 * Development Documentation:
   * [Protocol Development](docs/protocol_development/)
   * [Aquarium Development](docs/aquarium_development/)
-
----
-[Aquarium Code](https://github.com/klavinslab/aquarium)<br>
-[Klavins Lab](http://klavinslab.org)
