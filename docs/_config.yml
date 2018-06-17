@@ -1,0 +1,16 @@
+title: Aquarium
+description: The synthetic biology lab management system
+repository: https://github.com/klavinslab/aquarium
+timezone: America/Los_Angeles
+collections:
+  docs:
+    permalink: "/:collection/:path/"
+    output: true
+defaults:
+- scope:
+    path: _docs
+    type: docs
+  values:
+    layout: default
+theme: jekyll-theme-cayman
+show_releases: true
