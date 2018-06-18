@@ -1,4 +1,5 @@
 ---
+title: Aquarium
 layout: default
 ---
 
