@@ -5,7 +5,13 @@ permalink: /docs/manager/
 ---
 # Manager
 
-This document should outline, for each scenario/task that a manager has to perform, how the manager uses the Aquarium interface.
+A manager uses Aquarium to determine which operations are run together as a job, and to monitor how jobs are progressing.
 
-Images should go into the `docs/manager/images` directory and be referenced as
-![The Aquarium manager View](images/manager_tab.jpg "The manager tab")
+
+![categories](images/category-list.png)
+![jobs](images/scheduled-job.png)
+![selected category](images/selected-category.png)
+![selected operation](images/selected-operation.png)
+![technician-start](images/technician-start.png)
+![changed status](images/updated-status.png)
+

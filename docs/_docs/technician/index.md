@@ -5,7 +5,8 @@ permalink: /docs/technician/
 ---
 # Technician Guide
 
-This document should outline, for each scenario/task that a technician has to perform, how the user uses the Aquarium interface.
-
-Images should go into the `docs/technician/images` directory and be referenced as
-![The Aquarium Technician View](images/technician_view.jpg "The planner tab")
+![running-job](images/running-job.png)
+![ops-list](images/ops-list.png)
+![timer](images/timer.png)
+![uploads-list](images/uploads-list.png)
+![complete run](images/complete-protocol.png)
