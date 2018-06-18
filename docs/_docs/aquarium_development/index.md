@@ -4,7 +4,7 @@ layout: docs
 permalink: /docs/aquarium_development/
 ---
 
-# Aquarium Developer Guidelines
+# Aquarium Development Guide
 
 These guidelines are intended for those working directly on Aquarium, though some details are shared with protocol development.
 

@@ -41,6 +41,7 @@ If you are doing either protocol development or Aquarium development, we recomme
     - [npm](https://www.npmjs.com/get-npm)
     - A [MySQL](https://www.mysql.com) server (optional for a full, production level installation)
 
+
 2.  Get the Aquarium source code by either downloading the [latest release](https://github.com/klavinslab/aquarium/releases/latest) and uncompress, or cloning the working master branch with the command
 
     ```bash
