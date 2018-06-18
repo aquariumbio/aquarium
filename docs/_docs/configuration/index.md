@@ -137,8 +137,26 @@ from the `aquarium` directory.
 
 ## Adding users in Aquarium
 
-Once you have an account you can create other users by choosing `Admin->New User` in the menu.
-In the current implementation, a user must have administrative priviledge to access the protocol development tools.
+Once you have an account you can create other users by choosing `Users` in the menu at the top left of the Aquarium page:
+
+![choosing users](images/users/settings-menu.png)
+
+Then enter the user information and click **New User**
+
+![creating user](images/users/new-user.png)
+
+This will bring you to the user information page where user contact information should be entered:
+
+![new user page](images/users/new-user-page.png)
+
+The exclamation points on this page indicate that the user hasn't provided contact information, and has not agreed to usage terms.
+The user will need to login separately to agree to the usage terms.
+
+A user must have administrative priviledge to access the protocol development tools.
+For this, choose **Groups** from the settings menu, choose the group, and then click add:
+
+![add user to group](images/users/add-to-group.png)
+
 Also, a user must have an associated budget to run any workflows.
 
 ## Building the Inventory
