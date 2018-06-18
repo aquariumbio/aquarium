@@ -28,6 +28,4 @@ More importantly it provides a complete, executable description of the results o
   * [Aquarium Development Guide](docs/aquarium_development/)
   * [API](docs/api)
 
-# License
-
-Aquarium is open-source software. See the [license]({{ site.license.url }})
+# [License](https://github.com/klavinslab/aquarium/blob/master/license.md)
