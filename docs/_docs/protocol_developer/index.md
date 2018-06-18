@@ -3,6 +3,7 @@ title: Protocol Development
 layout: docs
 permalink: /docs/protocol_development/
 ---
+
 # Aquarium Protocol Development
 
 These guidelines are for building protocols to run in Aquarium.
@@ -46,75 +47,79 @@ However, protocol testing _should not_ be done on a production server, because p
 
 _These instructions are for setting up a local Aquarium and are not meant for production instances._
 
-1. Clone the Aquarium repository
+1.  Clone the Aquarium repository
 
-   ```bash
-   git clone git@github.com:klavinslab/aquarium.git
-   ```
-    Or, if using Docker Toolbox for Windows
     ```bash
-   git clone git@github.com:klavinslab/aquarium.git --config core.autocrlf=input
-   ```
+    git clone git@github.com:klavinslab/aquarium.git
+    ```
 
-2. Run the `development-setup.sh` script to setup the development environment
+    Or, if using Docker Toolbox for Windows
 
-   ```bash
-   cd aquarium
-   ./development-setup.sh
-   ```
-   Or, if using Docker Toolbox for Windows
-   ```bash
-   cd aquarium
-   ./development-setup.sh windows
-   ```
+    ```bash
+    git clone git@github.com:klavinslab/aquarium.git --config core.autocrlf=input
+    ```
 
-   This script moves default development configuration files into the correct place. You only need to run it once.
+2.  Run the `development-setup.sh` script to setup the development environment
 
-3. To build the docker images, run the command
+    ```bash
+    cd aquarium
+    ./development-setup.sh
+    ```
 
-   ```bash
-   docker-compose build
-   ```
+    Or, if using Docker Toolbox for Windows
 
-   For protocol development, this should only be necessary to do before running Aquarium for the first time after cloning or pulling the repository.
-Though, if you have trouble, try running this step again.
+    ```bash
+    cd aquarium
+    ./development-setup.sh windows
+    ```
 
-4. To start aquarium, run the command
+    This script moves default development configuration files into the correct place. You only need to run it once.
 
-   ```bash
-   docker-build up
-   ```
+3.  To build the docker images, run the command
 
-   which starts the services for Aquarium.
-   The first run will take longer, primarily because it is setting up the database.
+    ```bash
+    docker-compose build
+    ```
 
-   Once all of the services for Aquarium have started, visit `localhost:3000` with the Chrome browser and you will find the Aquarium login page. If running aquarium inside the docker toolbox VM, the address will be instead be `192.168.99.100:3000`.
-   The default database has a user login `neptune` with password `aquarium`.
+    For protocol development, this should only be necessary to do before running Aquarium for the first time after cloning or pulling the repository.
+    Though, if you have trouble, try running this step again.
 
-1. To halt the Aquarium services, first type `ctrl-c` in the terminal to stop the running containers, then remove the containers by running
+4.  To start aquarium, run the command
 
-   ```bash
-   docker-compose down
-   ```   
-   
+    ```bash
+    docker-build up
+    ```
+
+    which starts the services for Aquarium.
+    The first run will take longer, primarily because it is setting up the database.
+
+    Once all of the services for Aquarium have started, visit `localhost:3000` with the Chrome browser and you will find the Aquarium login page. If running aquarium inside the docker toolbox VM, the address will be instead be `192.168.99.100:3000`.
+    The default database has a user login `neptune` with password `aquarium`.
+
+5.  To halt the Aquarium services, first type `ctrl-c` in the terminal to stop the running containers, then remove the containers by running
+
+    ```bash
+    docker-compose down
+    ```
+
 Some configuration notes:
 
-1. When running Aquarium, you may notice a prominent name **Your Lab** in the upper lefthand corner. If this bugs you, you can change it to something you prefer. Do this by editing replacing the string at the end of the first line in `config/initializers/aquarium.rb`, which is currently
+1.  When running Aquarium, you may notice a prominent name **Your Lab** in the upper lefthand corner. If this bugs you, you can change it to something you prefer. Do this by editing replacing the string at the end of the first line in `config/initializers/aquarium.rb`, which is currently
 
-   ```ruby
-   Bioturk::Application.config.instance_name = 'Your Lab'
-   ```
+    ```ruby
+    Bioturk::Application.config.instance_name = 'Your Lab'
+    ```
 
-   You might change it to `'LOCAL'` or even `'George'`.
-   The choice is yours.
+    You might change it to `'LOCAL'` or even `'George'`.
+    The choice is yours.
 
-2. The Docker configuration stores the database files in `docker/db`.
+2.  The Docker configuration stores the database files in `docker/db`.
 
-   The database is initialized with the contents of docker/mysql_init/dump.sql`, but changes you make will persist between runs.
+    The database is initialized with the contents of docker/mysql_init/dump.sql`, but changes you make will persist between runs.
 
-   You can use a different database database dump by renaming it to this file, removing the contents of the `docker/db` directory and restarting Aquarium.
+    You can use a different database database dump by renaming it to this file, removing the contents of the `docker/db` directory and restarting Aquarium.
 
-3. Uploaded files will be placed in the directory `docker/s3`.
+3.  Uploaded files will be placed in the directory `docker/s3`.
 
 ## Writing Protocols
 
