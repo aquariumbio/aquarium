@@ -5,7 +5,7 @@ layout: default
 
 # About
 
-Aquarium is the software that runs the [UW BIOFAB](http://www.uwbiofab.org) a service in the [Klavins Lab](http://klavinslab.org) at the University of Washington.
+Aquarium is the software that runs the [UW BIOFAB](http://www.uwbiofab.org), a service in the [Klavins Lab](http://klavinslab.org) at the University of Washington.
 
 Aquarium makes it possible to specify how to obtain an experimental result in a lab.
 Protocols encoded in the Aquarium protocol language specify how to manipulate items in the inventory, and describe the capabilities the lab provides to researchers.
