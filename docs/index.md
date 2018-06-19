@@ -1,6 +1,5 @@
 ---
 title: Aquarium
-crumbtitle: Home
 layout: default
 ---
 

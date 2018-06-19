@@ -1,6 +1,5 @@
 ---
 title: Configuration
-crumbtitle: Configuration
 layout: docs
 permalink: /docs/configuration/
 ---

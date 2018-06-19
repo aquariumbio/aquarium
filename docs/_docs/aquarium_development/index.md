@@ -1,6 +1,5 @@
 ---
 title: Aquarium Developer Guidelines
-crumbtitle: Developer Guide
 layout: docs
 permalink: /docs/aquarium_development/
 ---
@@ -42,8 +41,5 @@ Follow the Aquarium [installation](Installation.md) instructions to get a local 
 ### Modifying the documentation/website
 
 The Aquarium project pages settings display the files in the `docs` directory of the `master` branch as the [project site](http://klavinslab.org/aquarium).
-
-The site uses [Jekyll Breadcrumbs](https://github.com/git-no/jekyll-breadcrumbs), v.2.0.0.
-
 
 ## Making an Aquarium Release

@@ -1,6 +1,5 @@
 ---
 title: Protocol Development Tutorial
-crumbtitle: Protocol Tutorial
 layout: default
 ---
 # Protocol Tutorial

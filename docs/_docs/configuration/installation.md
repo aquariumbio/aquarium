@@ -1,6 +1,5 @@
 ---
 title: Installation
-crumbtitle: Installation
 layout: docs
 ---
 

@@ -1,6 +1,5 @@
 ---
 title: Technician Guide
-crumbtitle: Technician
 layout: docs
 permalink: /docs/technician/
 ---
