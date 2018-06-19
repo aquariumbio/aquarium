@@ -1,4 +1,6 @@
-{% assign crumbs = page.url | remove: 'docs/' | remove:'/index.html' | split: '/' %}
+{% assign pagesuffix = page.url | remove: 'docs/' | remove:'/index.html' %}
+{% assign basepageurl = site.url | append: site.baseurl | append: pagesuffix %}
+{% assign crumbs = basepageurl | split: '/' %}
 
 <a href="/">Home</a>
 {% for crumb in crumbs offset: 1 %}
