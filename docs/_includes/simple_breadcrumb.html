@@ -2,7 +2,6 @@
 {% assign basepageurl = site.baseurl | append: pagesuffix %}
 {% assign crumbs = basepageurl | split: '/' %}
 
-<a href="/">Home</a>
 {% for crumb in crumbs offset: 1 %}
   {% if forloop.last %}
     / {{ crumb | replace:'-',' ' | remove:'.html' | capitalize }}
