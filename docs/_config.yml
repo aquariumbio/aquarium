@@ -14,3 +14,7 @@ defaults:
     layout: default
 theme: jekyll-theme-cayman
 show_releases: true
+breadcrumbs:
+  root:
+    hide: false  # show breadcrumbs on root/home page
+    image: false # Show image or title text

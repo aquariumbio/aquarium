@@ -57,27 +57,61 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><div id='filecontents'>
-<h1 id="label-AQUARIUM">AQUARIUM</h1>
-<ul><li>
-<p><a href="doc/Installation.md">Installation</a> : How to install Aquarium</p>
-</li><li>
-<p><a href="doc/Plankton.md">Plankton</a> : The protocol programming language.</p>
-</li><li>
-<p><a href="doc/Oyster.md">Oyster</a> : The process control language.</p>
-</li><li>
-<p><a href="doc/Predefined.md">Predefined Functions</a>: Basic functions for
-manipulating hashes, arrays, samples, etc. in Plankton and Oyster.</p>
-</li><li>
-<p><a href="doc/Locations.md">Locations</a> : Aquarium&#39;s freezer location
-system.</p>
-</li></ul>
+      <div id="content"><div id='filecontents'><h1>AQUARIUM : The Laboratory Operating System</h1>
+
+<h2>About</h2>
+
+<p>Aquarium gives you the means to specify, as precisely as possible, how to obtain an experimental result.
+Researchers encode protocols in Krill, the Aquarium protocol language, specifying how to manipulate items in the Aquarium inventory (test tubes, regents, DNA samples,, 96 well plates, etc.) using a combination of formal statements, informal descriptions, and photographs. Protocols are parameterized by &quot;tuning knobs&quot; (such as incubation times or reagent concentrations) that can be varied when the protocols are scheduled.
+The researcher strings together protocols into processes, specifying how the output samples of one protocol become the inputs to other protocols, and how protocols can be scheduled, parallelized, and controlled.</p>
+
+<p>Protocols and processes are scheduled and presented to technicians on touchscreen monitors placed throughout the lab.
+Every step is logged: who performed the step, which items were used, what data was gathered by which instruments, and how long it took. The data can be used to debug and improve the experiment.
+More importantly it provides a complete, executable description of the results obtained -- one that could be used by another lab running Aquarium to reproduce the result.</p>
+
+<p>Aquarium is a product of the <a href="http://klavinslab.org">Klavins Lab</a>.</p>
+
+<h2>Installation</h2>
+
+<ul>
+<li><a href="https://github.com/klavinslab/aquarium/doc/Installation.md">Installation</a> : How to install Aquarium.</li>
+<li><a href="https://github.com/klavinslab/aquadocked">Dockerized Aquarium</a> : Run Aquarium with Docker.</li>
+<li><a href="https://github.com/klavinslab/aquarium">Github</a> : The latest Aquarium code.</li>
+</ul>
+
+<h2>User Documentation</h2>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=ydN51ew1JmI&feature=youtu.be">Populating Inventory</a> : Video describing how to manage and create samples.</li>
+<li><a href="https://www.youtube.com/watch?v=kYnDc8RIsNg&feature=youtu.be">Planning Experiments</a> : Video describing how to build an experimental workflow.</li>
+<li><a href="https://www.youtube.com/watch?v=xDrv4f2AZlM&feature=youtu.be">Building a Workflow</a> : Video / Old version</li>
+<li><a href="https://www.youtube.com/watch?v=WCTmuz5yBAo&feature=youtu.be">Monitoring a Plan</a> : Video on how to track an experiment as it is being run.</li>
+<li><a href="http://todo.com">Managing the Lab</a> : TODO</li>
+<li><a href="http://todo.com">Defining new Sample Types</a> : TODO</li>
+<li><a href="doc/Locations.md">Locations</a> : Aquarium&#39;s freezer location system.</li>
+</ul>
+
+<h2>Documentation for Protocol Authors</h2>
+
+<ul>
+<li><a href="http://todo.com">Developer Interface</a> : How to develop protocols using the Aquarium IDE.</li>
+<li><a href="https://github.com/klavinslab/aquarium/doc/Krill.md">Krill</a> : How to write protocols in Ruby using Aquairum&#39;s Krill Library.</li>
+<li><a href="https://github.com/klavinslab/aquarium/doc/Opertations.md">Operations</a> : How to handle operations in protocol code.</li>
+<li><a href="https://github.com/klavinslab/aquarium/doc/DataAssociation.md">Data Associations</a> : How to associate data with items, operations, and plans.</li>
+<li><a href="http://klavinslab.org/aquarium-api/">Aquarium/Krill API Reference</a> : Detailed method reference.</li>
+</ul>
+
+<h2>Documentation for Developers</h2>
+
+<ul>
+<li><a href="https://github.com/klavinslab/trident">Trident</a> : A Python interface to Aquarium!</li>
+</ul>
 </div></div>
 
       <div id="footer">
-  Generated on Mon Oct  9 13:38:40 2017 by
+  Generated on Tue Jun 19 13:52:08 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.9 (ruby-2.2.0).
+  0.9.13 (ruby-2.2.0).
 </div>
 
     </div>

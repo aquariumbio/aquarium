@@ -178,7 +178,8 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Error the <span class='object_link'><a href="Operation.html" title="Operation (class)">Operation</a></span>.</p>
+<p>Set the <span class='object_link'><a href="Operation.html" title="Operation (class)">Operation</a></span> to “error”, and create a <span class='object_link'><a href="DataAssociation.html" title="DataAssociation (class)">DataAssociation</a></span> to  describe
+why the operation errored.</p>
 </div></span>
   
 </li>
@@ -246,8 +247,31 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Set <span class='object_link'><a href="Operation.html" title="Operation (class)">Operation</a></span> status to “pending”.</p>
+<p>Set <span class='object_link'><a href="Operation.html" title="Operation (class)">Operation</a></span> status to “pending” if its precondition evaluates to true;
+sets status to “delayed” otherwise.</p>
 </div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#retry-instance_method" title="#retry (instance method)">#<strong>retry</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
   
 </li>
 
@@ -425,7 +449,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Status</p>
+<p>The <span class='object_link'><a href="Operation.html" title="Operation (class)">Operation</a></span> status</p>
 </div>
       
     </li>
@@ -438,17 +462,17 @@
       <pre class="lines">
 
 
-8
 9
 10
 11
 12
 13
 14
-15</pre>
+15
+16</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 8</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 9</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_change_status'>change_status</span> <span class='id identifier rubyid_str'>str</span>
   <span class='id identifier rubyid_temp'>temp</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_status'>status</span>
@@ -478,13 +502,13 @@
       <pre class="lines">
 
 
-42
-43
-44
-45</pre>
+55
+56
+57
+58</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 42</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 55</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_defer'>defer</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Cannot defer operation </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'> from state </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_status'>status</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_status'>status</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>pending</span><span class='tstring_end'>&quot;</span></span>
@@ -507,7 +531,8 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Error the <span class='object_link'><a href="Operation.html" title="Operation (class)">Operation</a></span></p>
+<p>Set the <span class='object_link'><a href="Operation.html" title="Operation (class)">Operation</a></span> to “error”, and create a <span class='object_link'><a href="DataAssociation.html" title="DataAssociation (class)">DataAssociation</a></span> to  describe
+why the operation errored</p>
 
 
   </div>
@@ -539,7 +564,7 @@
       
         &mdash;
         <div class='inline'>
-<p>name of error</p>
+<p>Name of error</p>
 </div>
       
     </li>
@@ -576,13 +601,13 @@
       <pre class="lines">
 
 
-81
-82
-83
-84</pre>
+106
+107
+108
+109</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 81</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 106</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_error'>error</span> <span class='id identifier rubyid_error_type'>error_type</span><span class='comma'>,</span> <span class='id identifier rubyid_msg'>msg</span>
   <span class='id identifier rubyid_change_status'>change_status</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>error</span><span class='tstring_end'>&quot;</span></span>
@@ -608,12 +633,12 @@
       <pre class="lines">
 
 
-71
-72
-73</pre>
+94
+95
+96</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 71</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 94</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_finish'>finish</span>
   <span class='id identifier rubyid_change_status'>change_status</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>done</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_status'>status</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>running</span><span class='tstring_end'>&quot;</span></span>
@@ -638,23 +663,23 @@
       <pre class="lines">
 
 
-93
-94
-95
-96
-97
-98
-99
-100
-101
-102
-103
-104
-105
-106</pre>
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 93</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 125</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_items_from_predecessor'>get_items_from_predecessor</span>
 
@@ -687,7 +712,9 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Set <span class='object_link'><a href="Operation.html" title="Operation (class)">Operation</a></span> status to “pending”</p>
+<p>Set <span class='object_link'><a href="Operation.html" title="Operation (class)">Operation</a></span> status to “pending” if its precondition evaluates to true;
+sets status to “delayed” otherwise. This is particularly useful for
+operations that are not yet ready to be run or need to be run periodically.</p>
 
 
   </div>
@@ -708,18 +735,64 @@
       <pre class="lines">
 
 
-88
-89
-90
-91</pre>
+116
+117
+118
+119
+120
+121
+122
+123</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 88</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 116</span>
 
 <span class='kw'>def</span> <span class='kw'>redo</span>
-  <span class='id identifier rubyid_change_status'>change_status</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>pending</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>if</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_precondition_value'>precondition_value</span>
+      <span class='id identifier rubyid_change_status'>change_status</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>pending</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_change_status'>change_status</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>delayed</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
   <span class='comment'># TODO: Change preds to pending? At least on_the_fly_preds/
 </span><span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="retry-instance_method">
+  
+    #<strong>retry</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+37
+38
+39
+40
+41
+42
+43</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 37</span>
+
+<span class='kw'>def</span> <span class='kw'>retry</span>
+
+  <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Cannot restart operation </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'> because it is not in an error state</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_status'>status</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>error</span><span class='tstring_end'>&quot;</span></span> <span class='op'>||</span> <span class='id identifier rubyid_status'>status</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>done</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_change_status'>change_status</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>waiting</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_step'>step</span>
+
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -740,13 +813,13 @@
       <pre class="lines">
 
 
-37
-38
-39
-40</pre>
+50
+51
+52
+53</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 37</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 50</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_run'>run</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Cannot run operation </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'> from state </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_status'>status</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_status'>status</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>scheduled</span><span class='tstring_end'>&quot;</span></span>
@@ -772,13 +845,13 @@
       <pre class="lines">
 
 
-32
-33
-34
-35</pre>
+45
+46
+47
+48</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 32</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 45</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_schedule'>schedule</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Cannot schedule operation </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'> from state </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_status'>status</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_status'>status</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>pending</span><span class='tstring_end'>&quot;</span></span> <span class='op'>||</span> <span class='id identifier rubyid_status'>status</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>deferred</span><span class='tstring_end'>&quot;</span></span> <span class='op'>||</span> <span class='id identifier rubyid_status'>status</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>primed</span><span class='tstring_end'>&quot;</span></span>
@@ -804,7 +877,6 @@
       <pre class="lines">
 
 
-17
 18
 19
 20
@@ -817,10 +889,15 @@
 27
 28
 29
-30</pre>
+30
+31
+32
+33
+34
+35</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 17</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 18</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_start'>start</span>
 
@@ -830,7 +907,11 @@
     <span class='id identifier rubyid_change_status'>change_status</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>primed</span><span class='tstring_end'>&quot;</span></span>
   <span class='kw'>elsif</span> <span class='id identifier rubyid_leaf?'>leaf?</span> <span class='comment'># note that this op is considered a leaf if it has no preds, 
 </span>              <span class='comment'># or if its preds are all on_the_fly leaves
-</span>    <span class='id identifier rubyid_change_status'>change_status</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>pending</span><span class='tstring_end'>&quot;</span></span>
+</span>    <span class='kw'>if</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_precondition_value'>precondition_value</span>
+      <span class='id identifier rubyid_change_status'>change_status</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>pending</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_change_status'>change_status</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>delayed</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
   <span class='kw'>elsif</span>
     <span class='id identifier rubyid_change_status'>change_status</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>waiting</span><span class='tstring_end'>&quot;</span></span>
   <span class='kw'>end</span>
@@ -867,48 +948,68 @@
       <pre class="lines">
 
 
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
 63
 64
 65
 66
 67
 68
-69</pre>
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 50</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 63</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_step'>step</span> <span class='comment'># not to be confused with def self.step in Operation.rb
 </span>
   <span class='kw'>begin</span>
-    <span class='kw'>if</span> <span class='id identifier rubyid_ready?'>ready?</span>
+    <span class='id identifier rubyid_print'>print</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>op </span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>: </span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_status'>status</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_status'>status</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>scheduled</span><span class='tstring_end'>&quot;</span></span> <span class='op'>&amp;&amp;</span> 
+       <span class='id identifier rubyid_status'>status</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>running</span><span class='tstring_end'>&quot;</span></span> <span class='op'>&amp;&amp;</span> 
+       <span class='id identifier rubyid_status'>status</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>done</span><span class='tstring_end'>&quot;</span></span> <span class='op'>&amp;&amp;</span> 
+       <span class='id identifier rubyid_status'>status</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>error</span><span class='tstring_end'>&quot;</span></span> <span class='op'>&amp;&amp;</span>
+       <span class='id identifier rubyid_ready?'>ready?</span> <span class='comment'># in planner/operation_planner.rb
+</span>
+      <span class='id identifier rubyid_get_items_from_predecessor'>get_items_from_predecessor</span>
+
       <span class='kw'>if</span> <span class='id identifier rubyid_on_the_fly'>on_the_fly</span>
         <span class='id identifier rubyid_change_status'>change_status</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>primed</span><span class='tstring_end'>&quot;</span></span>
       <span class='kw'>elsif</span> <span class='id identifier rubyid_status'>status</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>deferred</span><span class='tstring_end'>&quot;</span></span>
         <span class='id identifier rubyid_change_status'>change_status</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>scheduled</span><span class='tstring_end'>&quot;</span></span>
-      <span class='kw'>else</span>
+      <span class='kw'>elsif</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_precondition_value'>precondition_value</span>
         <span class='id identifier rubyid_change_status'>change_status</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>pending</span><span class='tstring_end'>&quot;</span></span>
-        <span class='id identifier rubyid_get_items_from_predecessor'>get_items_from_predecessor</span>
+      <span class='kw'>else</span>
+        <span class='id identifier rubyid_change_status'>change_status</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>delayed</span><span class='tstring_end'>&quot;</span></span>
       <span class='kw'>end</span>
     <span class='kw'>end</span>
+    <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> ==&gt; </span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_status'>status</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
   <span class='kw'>rescue</span> <span class='const'>Exception</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
-    <span class='const'>Rails</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>COULD NOT STEP OPERATION </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='const'>Rails</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>COULD NOT STEP OPERATION </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
   <span class='kw'>end</span>    
 
-  <span class='comment'># TODO: Change deferred op to scheduled 
+  <span class='comment'># TODO: Change deferred op to scheduled
 </span>
 <span class='kw'>end</span></pre>
     </td>
@@ -931,11 +1032,11 @@
       <pre class="lines">
 
 
-47
-48</pre>
+60
+61</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 47</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/operation_status.rb', line 60</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_unbatch'>unbatch</span>
 <span class='kw'>end</span></pre>
@@ -949,9 +1050,9 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Oct  9 13:38:40 2017 by
+  Generated on Tue Jun 19 13:52:09 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.9 (ruby-2.2.0).
+  0.9.13 (ruby-2.2.0).
 </div>
 
     </div>
