@@ -1,5 +1,6 @@
 ---
-title: Plan Designer
+title: Workflow Designer
+crumbtitle: Designer
 layout: docs
 permalink: /docs/designer/
 ---

@@ -1,5 +1,6 @@
 ---
 title: Aquarium Developer Guidelines
+crumbtitle: Developer Guide
 layout: docs
 permalink: /docs/aquarium_development/
 ---

@@ -1,5 +1,6 @@
 ---
 title: Manager Guide
+crumbtitle: Manager
 layout: docs
 permalink: /docs/manager/
 ---
