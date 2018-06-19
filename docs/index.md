@@ -22,10 +22,10 @@ More importantly it provides a complete, executable description of the results o
 * User Role Documentation:
   * [Manager](docs/manager/)
   * [Technician](docs/technician/)
-  * [Researcher/Experiment Designer](docs/designer/)
+  * [Workflow Designer](docs/designer/)
   * [Protocol Developer](docs/protocol_developer/)
 * Development Documentation
-  * [Aquarium Development Guide](docs/aquarium_development/)
+  * [Aquarium Development](docs/aquarium_development/)
   * [API](api)
 
 # [License](https://github.com/klavinslab/aquarium/blob/master/license.md)
