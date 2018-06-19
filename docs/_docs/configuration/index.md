@@ -16,6 +16,7 @@ permalink: /docs/configuration/
     - [Create an Aquarium Account](#create-an-aquarium-account)
     - [Adding users in Aquarium](#adding-users-in-aquarium)
     - [Building the Inventory](#building-the-inventory)
+    - [Mapping the Lab](#mapping-the-lab)
 
 <!-- /TOC -->
 
@@ -68,3 +69,9 @@ For this, choose **Groups** from the settings menu, choose the group, and then c
 Also, a user must have an associated budget to run any workflows.
 
 ## Building the Inventory
+
+## Mapping the Lab
+
+Aquarium uses locations
+
+
