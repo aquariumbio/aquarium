@@ -1,15 +1,13 @@
 ---
 title: Protocol Development
 layout: docs
-permalink: /docs/protocol_development/
+permalink: /docs/protocol_developer/
 ---
 
 # Aquarium Protocol Development
 
 These guidelines are for building protocols to run in Aquarium.
 For documentation about working on Aquarium itself see the [Aquarium Developer Guidelines](aquarium_developer).
-
-[A CHANGE]
 
 ## Table of Contents
 
