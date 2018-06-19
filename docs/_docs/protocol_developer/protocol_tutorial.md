@@ -172,7 +172,7 @@ end
 The words `title` and `note` are functions that determine the appearance of the text on the constructed page.
 This example renders as
 
-![Using note displays text](images/tutorial/17_clean-up-note.png)
+![Using note displays text](../images/tutorial/17_clean-up-note.png)
 
 (To see this in action, add the show-block to the main method of the `BasicProtocol`.)
 
