@@ -6,7 +6,8 @@
     {% include header.html %}
     <main>
         <section class="main-content">
-            <b>{% include simple_breadcrumb.html %}</b>
+            {% include simple_breadcrumb.html %}
+            <b>{{ page.url }}</b>
             {{ content }}
             {% include footer.html %}
         </section>
