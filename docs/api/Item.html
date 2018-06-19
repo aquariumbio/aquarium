@@ -106,11 +106,9 @@
   
 </div>
 
-<h2>Overview</h2><div class="docstring">
+<div class="docstring">
   <div class="discussion">
     
-<p>Class that represents a physical object in the lab</p>
-
 
   </div>
 </div>
@@ -528,7 +526,7 @@
   
     <span class="summary_desc"><div class='inline'>
 <p>Sets item location to provided string or to string&#39;s associated
-location wizard if it exists.</p>
+location <span class='object_link'><a href="Wizard.html" title="Wizard (class)">Wizard</a></span> if it exists.</p>
 </div></span>
   
 </li>
@@ -553,7 +551,7 @@ location wizard if it exists.</p>
   
     <span class="summary_desc"><div class='inline'>
 <p>Sets item location to provided string or to string&#39;s associated
-location wizard if it exists.</p>
+location <span class='object_link'><a href="Wizard.html" title="Wizard (class)">Wizard</a></span> if it exists.</p>
 </div></span>
   
 </li>
@@ -731,7 +729,7 @@ location wizard if it exists.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Sets item location to empty slot based on location wizard.</p>
+<p>Sets item location to empty slot based on location <span class='object_link'><a href="Wizard.html" title="Wizard (class)">Wizard</a></span>.</p>
 </div></span>
   
 </li>
@@ -835,19 +833,21 @@ location wizard if it exists.</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-409
-410
-411
-412
-413
-414
-415
 416
 417
 418
@@ -868,10 +868,17 @@ location wizard if it exists.</p>
 433
 434
 435
-436</pre>
+436
+437
+438
+439
+440
+441
+442
+443</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 409</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 416</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_items_for'>items_for</span> <span class='id identifier rubyid_sid'>sid</span><span class='comma'>,</span> <span class='id identifier rubyid_oid'>oid</span>
 
@@ -915,17 +922,21 @@ location wizard if it exists.</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-190
-191
-192
-193
-194
 195
 196
 197
@@ -963,10 +974,15 @@ location wizard if it exists.</p>
 229
 230
 231
-232</pre>
+232
+233
+234
+235
+236
+237</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 190</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 195</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_make'>make</span> <span class='id identifier rubyid_params'>params</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span> 
   <span class='id identifier rubyid_o'>o</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>object_type:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>sample:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>location:</span> <span class='kw'>nil</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span> <span class='id identifier rubyid_opts'>opts</span>
@@ -1042,17 +1058,17 @@ location wizard if it exists.</p>
       <pre class="lines">
 
 
-360
-361
-362
-363
-364
-365
-366
-367</pre>
+367
+368
+369
+370
+371
+372
+373
+374</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 360</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 367</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_new_object'>new_object</span> <span class='id identifier rubyid_name'>name</span>
 
@@ -1076,19 +1092,21 @@ location wizard if it exists.</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-369
-370
-371
-372
-373
-374
-375
 376
 377
 378
@@ -1098,10 +1116,17 @@ location wizard if it exists.</p>
 382
 383
 384
-385</pre>
+385
+386
+387
+388
+389
+390
+391
+392</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 369</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 376</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_new_sample'>new_sample</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_spec'>spec</span>
 
@@ -1140,28 +1165,37 @@ location wizard if it exists.</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-312
-313
-314
-315
-316
-317
-318
 319
 320
 321
 322
 323
-324</pre>
+324
+325
+326
+327
+328
+329
+330
+331</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 312</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 319</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_all_attributes'>all_attributes</span>
 
@@ -1190,18 +1224,27 @@ location wizard if it exists.</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-300
-301
-302</pre>
+307
+308
+309</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 300</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 307</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_annotate'>annotate</span> <span class='id identifier rubyid_hash'>hash</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_set_data'>set_data</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_datum'>datum</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span> <span class='id identifier rubyid_hash'>hash</span><span class='rparen'>)</span>
@@ -1238,16 +1281,16 @@ location wizard if it exists.</p>
       <pre class="lines">
 
 
-287
-288
-289
-290
-291
-292
-293</pre>
+294
+295
+296
+297
+298
+299
+300</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 287</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 294</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_datum'>datum</span>
   <span class='kw'>begin</span>
@@ -1288,12 +1331,12 @@ location wizard if it exists.</p>
       <pre class="lines">
 
 
-296
-297
-298</pre>
+303
+304
+305</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 296</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 303</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_datum='>datum=</span> <span class='id identifier rubyid_d'>d</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='id identifier rubyid_d'>d</span><span class='period'>.</span><span class='id identifier rubyid_to_json'>to_json</span>
@@ -1347,12 +1390,12 @@ location wizard if it exists.</p>
       <pre class="lines">
 
 
-270
-271
-272</pre>
+277
+278
+279</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 270</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 277</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_deleted?'>deleted?</span>
   <span class='id identifier rubyid_primitive_location'>primitive_location</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>deleted</span><span class='tstring_end'>&#39;</span></span>
@@ -1371,27 +1414,36 @@ location wizard if it exists.</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-391
-392
-393
-394
-395
-396
-397
 398
 399
 400
 401
-402</pre>
+402
+403
+404
+405
+406
+407
+408
+409</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 391</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 398</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_export'>export</span>
   <span class='id identifier rubyid_a'>a</span> <span class='op'>=</span> <span class='id identifier rubyid_attributes'>attributes</span>
@@ -1419,22 +1471,31 @@ location wizard if it exists.</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-304
-305
-306
-307
-308
-309
-310</pre>
+311
+312
+313
+314
+315
+316
+317</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 304</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 311</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_features'>features</span>
   <span class='id identifier rubyid_f'>f</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>id:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='label'>location:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_location'>location</span><span class='comma'>,</span> <span class='label'>name:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_object_type'>object_type</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='rbrace'>}</span>
@@ -1457,18 +1518,27 @@ location wizard if it exists.</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-282
-283
-284</pre>
+289
+290
+291</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 282</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 289</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_data'>get_data</span>
   <span class='const'>JSON</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='label'>symbolize_names:</span> <span class='kw'>true</span>
@@ -1487,19 +1557,28 @@ location wizard if it exists.</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-41
 42
 43
-44</pre>
+44
+45</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 41</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 42</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inuse_less_than_quantity'>inuse_less_than_quantity</span>
   <span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span><span class='symbol'>:inuse</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>must non-negative and not greater than the quantity.</span><span class='tstring_end'>&quot;</span></span> <span class='rparen'>)</span> <span class='kw'>unless</span>
@@ -1554,18 +1633,18 @@ location wizard if it exists.</p>
       <pre class="lines">
 
 
-55
-56
 57
 58
 59
 60
 61
 62
-63</pre>
+63
+64
+65</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 55</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 57</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_location'>location</span>
   <span class='kw'>if</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_locator'>locator</span>
@@ -1625,13 +1704,13 @@ location wizard if it exists.</p>
       <pre class="lines">
 
 
-66
-67
 68
-69</pre>
+69
+70
+71</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 66</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 68</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_location='>location=</span> <span class='id identifier rubyid_x'>x</span>
   <span class='id identifier rubyid_move_to'>move_to</span> <span class='id identifier rubyid_x'>x</span>
@@ -1686,12 +1765,6 @@ location wizard if it exists.</p>
       <pre class="lines">
 
 
-249
-250
-251
-252
-253
-254
 255
 256
 257
@@ -1703,10 +1776,16 @@ location wizard if it exists.</p>
 263
 264
 265
-266</pre>
+266
+267
+268
+269
+270
+271
+272</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 249</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 255</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_mark_as_deleted'>mark_as_deleted</span> 
 
@@ -1752,7 +1831,7 @@ location wizard if it exists.</p>
 
 
 <p>Sets item location to provided string or to string&#39;s associated
-location wizard if it exists</p>
+location <span class='object_link'><a href="Wizard.html" title="Wizard (class)">Wizard</a></span> if it exists</p>
 
 
   </div>
@@ -1804,12 +1883,12 @@ location wizard if it exists</p>
       <pre class="lines">
 
 
-186
-187
-188</pre>
+191
+192
+193</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 186</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 191</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_move'>move</span> <span class='id identifier rubyid_locstr'>locstr</span>
   <span class='id identifier rubyid_move_to'>move_to</span> <span class='id identifier rubyid_locstr'>locstr</span>
@@ -1832,7 +1911,7 @@ location wizard if it exists</p>
   <div class="discussion">
     
 <p>Sets item location to provided string or to string&#39;s associated
-location wizard if it exists</p>
+location <span class='object_link'><a href="Wizard.html" title="Wizard (class)">Wizard</a></span> if it exists</p>
 
 
   </div>
@@ -1884,10 +1963,6 @@ location wizard if it exists</p>
       <pre class="lines">
 
 
-90
-91
-92
-93
 94
 95
 96
@@ -1964,10 +2039,14 @@ location wizard if it exists</p>
 167
 168
 169
-170</pre>
+170
+171
+172
+173
+174</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 90</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 94</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_move_to'>move_to</span> <span class='id identifier rubyid_locstr'>locstr</span> 
 
@@ -2092,20 +2171,20 @@ location wizard if it exists</p>
       <pre class="lines">
 
 
-172
-173
-174
-175
 176
 177
 178
 179
 180
 181
-182</pre>
+182
+183
+184
+185
+186</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 172</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 176</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_non_wizard_location?'>non_wizard_location?</span>
 
@@ -2132,18 +2211,27 @@ location wizard if it exists</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-387
-388
-389</pre>
+394
+395
+396</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 387</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 394</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_num_posts'>num_posts</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_post_associations'>post_associations</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span>
@@ -2162,18 +2250,27 @@ location wizard if it exists</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-49
 50
-51</pre>
+51
+52</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 49</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 50</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_primitive_location'>primitive_location</span>
   <span class='kw'>self</span><span class='lbracket'>[</span><span class='symbol'>:location</span><span class='rbracket'>]</span>
@@ -2192,27 +2289,36 @@ location wizard if it exists</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-234
-235
-236
-237
-238
 239
 240
 241
 242
 243
 244
-245</pre>
+245
+246
+247
+248
+249
+250</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 234</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 239</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_put_at'>put_at</span> <span class='id identifier rubyid_locstr'>locstr</span>
 
@@ -2240,19 +2346,28 @@ location wizard if it exists</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-36
 37
 38
-39</pre>
+39
+40</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 36</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 37</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_quantity_nonneg'>quantity_nonneg</span>
   <span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span><span class='symbol'>:quantity</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Must be non-negative.</span><span class='tstring_end'>&quot;</span></span> <span class='rparen'>)</span> <span class='kw'>unless</span>
@@ -2272,19 +2387,28 @@ location wizard if it exists</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-277
-278
-279
-280</pre>
+284
+285
+286
+287</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 277</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 284</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_data'>set_data</span> <span class='id identifier rubyid_d'>d</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='id identifier rubyid_d'>d</span><span class='period'>.</span><span class='id identifier rubyid_to_json'>to_json</span>
@@ -2304,18 +2428,27 @@ location wizard if it exists</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-71
-72
-73</pre>
+73
+74
+75</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 71</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 73</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_primitive_location'>set_primitive_location</span> <span class='id identifier rubyid_locstr'>locstr</span>
   <span class='id identifier rubyid_write_attribute'>write_attribute</span><span class='lparen'>(</span><span class='symbol'>:location</span><span class='comma'>,</span><span class='id identifier rubyid_locstr'>locstr</span><span class='rparen'>)</span> 
@@ -2337,8 +2470,8 @@ location wizard if it exists</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Sets item location to empty slot based on location wizard. By default sets
-to “Bench”</p>
+<p>Sets item location to empty slot based on location <span class='object_link'><a href="Wizard.html" title="Wizard (class)">Wizard</a></span>. By default
+sets to “Bench”</p>
 
 
   </div>
@@ -2370,18 +2503,18 @@ to “Bench”</p>
       <pre class="lines">
 
 
-77
-78
-79
 80
 81
 82
 83
 84
-85</pre>
+85
+86
+87
+88</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 77</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 80</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_store'>store</span>
   <span class='id identifier rubyid_wiz'>wiz</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Wizard.html" title="Wizard (class)">Wizard</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_name'>find_by_name</span><span class='lparen'>(</span><span class='id identifier rubyid_object_type'>object_type</span><span class='period'>.</span><span class='id identifier rubyid_prefix'>prefix</span><span class='rparen'>)</span>
@@ -2406,21 +2539,30 @@ to “Bench”</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-326
-327
-328</pre>
+333
+334
+335</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 326</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 333</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_s'>to_s</span>
-  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;a href=&#39;/items/</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39; class=&#39;aquarium-item&#39; id=&#39;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;&gt;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>&lt;/a&gt;</span><span class='tstring_end'>&quot;</span></span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;a href=&#39;#&#39; onclick=&#39;open_item_ui(</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>)&#39;&gt;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>&lt;/a&gt;</span><span class='tstring_end'>&quot;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2453,13 +2595,6 @@ to “Bench”</p>
       <pre class="lines">
 
 
-330
-331
-332
-333
-334
-335
-336
 337
 338
 339
@@ -2477,10 +2612,17 @@ to “Bench”</p>
 351
 352
 353
-354</pre>
+354
+355
+356
+357
+358
+359
+360
+361</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 330</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 337</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_upgrade'>upgrade</span> <span class='id identifier rubyid_force'>force</span><span class='op'>=</span><span class='kw'>false</span> <span class='comment'># upgrades data field to data association (if no data associations exist)
 </span>
@@ -2521,18 +2663,27 @@ to “Bench”</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-404
-405
-406</pre>
+411
+412
+413</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 404</span>
+      <pre class="code"><span class="info file"># File 'app/models/item.rb', line 411</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_week'>week</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_created_at'>created_at</span><span class='period'>.</span><span class='id identifier rubyid_strftime'>strftime</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>%W</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
@@ -2547,9 +2698,9 @@ to “Bench”</p>
 </div>
 
       <div id="footer">
-  Generated on Mon Oct  9 13:38:41 2017 by
+  Generated on Tue Jun 19 13:52:10 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.9 (ruby-2.2.0).
+  0.9.13 (ruby-2.2.0).
 </div>
 
     </div>
