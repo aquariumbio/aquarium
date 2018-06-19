@@ -3,7 +3,7 @@
 {% assign crumbs = basepageurl | split: '/' %}
 
 <a href="/">Home</a>
-{% for crumb in crumbs offset: 1 %}
+{% for crumb in crumbs offset: 2 %}
   {% if forloop.last %}
     / {{ crumb | replace:'-',' ' | remove:'.html' | capitalize }}
   {% else %}
