@@ -1,6 +1,8 @@
 {% assign pagesuffix = page.url | remove:'/index.html' %}
 {% assign basepageurl = site.baseurl | append: pagesuffix %}
 
+<b> {{ basepageurl }}</b><br>
+<b>{{ site.baseurl }}</b><br>
 {% if basepageurl != site.baseurl %}
   {% assign crumbs = basepageurl | split: '/' %}
   {% for crumb in crumbs offset: 1 %}
