@@ -1,4 +1,4 @@
-{% assign pagesuffix = page.url | remove: 'docs/' | remove:'/index.html' %}
+{% assign pagesuffix = page.url | remove:'/index.html' %}
 {% assign basepageurl = site.baseurl | append: pagesuffix %}
 {% assign crumbs = basepageurl | split: '/' %}
 
