@@ -75,7 +75,7 @@ And, in case the admonition hasn't yet settled in, **don't** use a production se
 
 1.  Starting from the developer tab, click the **New** button in the upper right corner.
 
-    ![the aquarium developer tab](images/tutorial/1_developer_tab.png)
+    ![the aquarium developer tab](../images/tutorial/1_developer_tab.png)
 
     This will create a new operation type in the current category.
 
