@@ -1,5 +1,5 @@
 ---
-title: Protocol Development
+title: Protocol Developer
 layout: docs
 permalink: /docs/protocol_developer/
 ---

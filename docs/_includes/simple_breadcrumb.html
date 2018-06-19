@@ -1,0 +1,13 @@
+{% assign pagesuffix = page.url | remove:'/index.html' %}
+{% assign basepageurl = site.baseurl | append: pagesuffix %}
+{% assign crumbs = basepageurl | split: '/' %}
+
+{% for crumb in crumbs offset: 1 %}
+  {% if forloop.last %}
+    / {{ crumb | replace:'-',' ' | remove:'.html' | capitalize }}
+  {% else %}
+    {% if crumb != "docs" %}
+      / <a href="{% assign crumb_limit = forloop.index | plus: 1 %}{% for crumb in crumbs limit: crumb_limit %}{{ crumb | append: '/' }}{% endfor %}">{{ crumb | replace:'-',' '  | replace:'_',' ' | remove:'.html' | capitalize }}</a>
+    {% endif %}
+  {% endif %}
+{% endfor %}
