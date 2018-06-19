@@ -247,11 +247,11 @@ plate = plate_list.first
 
 This call to `plate_list.first` will return `nil` if `plate_list` is empty, and you should always check for this situation before using `plate` for another purpose.
 
-A protocol may also deal with collections of samples.
-For instance, to perform an _E. coli_ transformation you need a batch of competent cell aliquots.
-In Aquarium, the entire batch is represented as a `Collection`, which is a type of `Item` that has multiple parts, one for each aliquot.
+See [Here for more details about Items](../../api/Item.html).
 
-TODO: more on items or at least links to API docs
+A special type of `Item`, called `Collection` is used to keep track of multiple `Samples`. While an `Item` has one `Sample` object, a `Collection` has an arbitrary amount of `Samples` associated with it. We refer to the slots for `Samples` in a `Collection`  as `Parts`. `Collections` have additional methods which allow protocols to smoothly interact with containers that can hold many things at once, like stripwells. A full stripwell can be represented as a `Collection`, while each individual well in the physical stripwell is represented as a `Part` of that `Collection`.
+
+To perform an _E. coli_ transformation you need a _batch_ of competent cell aliquots. We represent the entire batch as a `Collection`, and each aliquot as one `Part` of that `Collection`.
 
 To retrieve a batch of DH5&alpha;-competent cells from the -80C freezer at UW BIOFAB make this query:
 
@@ -266,16 +266,15 @@ This assigns a single item with object type `'E. coli Comp Cell Batch'` to the v
 The location `'M80C.2.0.21'` is a location in the -80C freezer at UW BIOFAB.
 (See the [location wizard](location_wizard.md) documentation for details on locations.)
 
-We can confirm that this `Item` is a `Collection` by testing `batch.collection?`.
-To be able to use the object as a `Collection` we call
+The return from the above query will be an ordinary `Item`. To be able to use the object as a `Collection` we call
 
 ```ruby
-c = collection_from batch
+batch = collection_from batch
 ```
 
 and then can use the `Collection` methods on the object.
 
-TODO: more on collections or at least links to API docs
+See [Here for more details about Collections](../../api/Collection.html).
 
 ### Practicing Queries
 
@@ -288,8 +287,6 @@ docker-compose run web rails c
 
 in the `aquarium` directory to start the Rails console.
 (If you have Aquairum setup to run on your machine without docker you can also just use the command `rails c`)
-
-TODO: explain how to run the rails console in docker
 
 The allowable queries are standard with Ruby on Rails `ActiveRecord` models.
 
