@@ -12,15 +12,14 @@ These guidelines are intended for those working directly on Aquarium, though som
 
 <!-- TOC -->
 
-- [Aquarium Developer Guidelines](#aquarium-developer-guidelines)
+- [Aquarium Development Guide](#aquarium-development-guide)
     - [Getting Started](#getting-started)
     - [Running Aquarium](#running-aquarium)
     - [Testing Aquarium](#testing-aquarium)
     - [Editing Aquarium](#editing-aquarium)
         - [Documenting changes](#documenting-changes)
         - [Formatting Aquarium code](#formatting-aquarium-code)
-        - [Modifying the documentation](#modifying-the-documentation)
-        - [Modifying the website](#modifying-the-website)
+        - [Modifying the documentation/website](#modifying-the-documentationwebsite)
     - [Making an Aquarium Release](#making-an-aquarium-release)
 
 <!-- /TOC -->
@@ -39,8 +38,11 @@ Follow the Aquarium [installation](Installation.md) instructions to get a local 
 
 ### Formatting Aquarium code
 
-### Modifying the documentation
+### Modifying the documentation/website
 
-### Modifying the website
+The Aquarium project pages settings display the files in the `docs` directory of the `master` branch as the [project site](http://klavinslab.org/aquarium).
+
+
+
 
 ## Making an Aquarium Release
