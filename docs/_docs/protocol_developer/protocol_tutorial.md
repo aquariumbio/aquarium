@@ -741,6 +741,8 @@ batch 78910: operation 10
 
 The tech would be told to label the first four comp cells from "1-5"; the `aliquotsLabelled` variable would go up by 5, so the next time the loop is run, it would tell the tech to label the next four comp cells "6-9"; once more, `aliquotsLabelled` would go up (this time by four), and, finally, the tech would be told to label the last comp cell as "10."
 
+Note: If you use this code in the tester interface with randomly generated operations, comp cell inputs will all be generated as part of a single batch, no matter how many operations you have. With this in mind, the expected output on the tester will actually be the tech being told to label all 10 comp cells from 1-10 in a single step.
+
 Now, we need to write the instructions for the actual transformation:
 
 ```ruby
