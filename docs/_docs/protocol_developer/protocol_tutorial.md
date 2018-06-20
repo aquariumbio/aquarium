@@ -400,7 +400,7 @@ Each instance of a protocol is contained within an `Operation`.
 An `Operation` is created by the user in the Aquarium planner as an specific instance of an `OperationType` and then batched together with other `Operations` of the same type into a `Job`, which is then performed by the technician.
 
 As an example: Suppose you have created an `OperationType` with the name "E. coli Transformation." You’ve written all the code you need, and now you’re read to run it.
-An `Operation` would be a specific instance of "E. coli Transformation" (the `OperationType`), and a `Job` would be a batch of "E. coli Transformation" `Operations` that have been submitted and are ready to run through the "E. coli Transformation" Protocol together. 
+An `Operation` would be a specific instance of "E. coli Transformation" (the `OperationType`), and a `Job` would be several "E. coli Transformation" `Operations` that have been submitted and are ready to run through the "E. coli Transformation" Protocol as a batch. 
 
 There are two ways to retrieve items within a protocol, and the two methods are called `retrieve` and `take`.
 Both of them instruct the technician to retrieve items.
