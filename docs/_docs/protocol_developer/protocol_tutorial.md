@@ -363,21 +363,9 @@ See the [Aquarium deployment instructions](deployment.md) for details.
 ### Provisioning Items
 
 Most protocols are performed at the bench, and can be thought of in three phases in which the technician (1) gets the necessary items, (2) does the protocol steps, and (3) disposes of or puts away any items.
-One approach to this first and last step is to use a pair of functions, `take` and `release` to provision a list of items, and the `release` function to return the items.
-For instance, the BLAH
+One approach to this first and last step is to use a pair of functions, `take` and `release`to provision a list of items. The `take` function instructs the technician to collect a list of items, and the `release` function instructs them to return the items.
 
-```ruby
-def main
-  sample = Sample.find_by_name("pMOD8")
-  pmod8_items = Item.where(sample_id: sample.id)
-  take(pmod8_items, interactive=true)
-  ...
-ensure
-  release pmod8_items
-end
-```
-
-TODO: BLAH
+For instance, Kapa HF Master Mix is a required ingredient for making PCR Fragments. The following code would instruct the technician to bring an Enzyme Stock containing Kapa HF Master Mix to bench at the `take` command. Then when the protocol is finished, `release ` instructs the technician to put the item back.
 
 From `Cloning/Make PCR Fragment`
 
@@ -385,14 +373,16 @@ From `Cloning/Make PCR Fragment`
 def main
   ...
 
-  kapa_stock_item_list = Sample.find_by_name('Kapa HF Master Mix').in('Enzyme Stock')
-  take(kapa_stock_item_list, interactive: true,  method: 'boxes')
+  kapa_stock_item = Sample.find_by_name('Kapa HF Master Mix').in('Enzyme Stock')
+  take [kapa_stock_item], interactive: true,  method: 'boxes'
 
   ...
 ensure
-  release kapa_stock_item_list, interactive: true
+  release [kapa_stock_item], interactive: true
 end
 ```
+
+`take` and `release` require a list of items as the first argument, which is why we wrap `kapa_stock_item` in brackets.
 
 ## Working With Items in Operations
 
