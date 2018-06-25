@@ -473,7 +473,7 @@ class Protocol
     end
   end
 
-  def operation_group_1_task(operation_group)
+  def operation_group_2_task(operation_group)
     show do
         title 'MAKE A REALISH EXAMPLE'
     end
