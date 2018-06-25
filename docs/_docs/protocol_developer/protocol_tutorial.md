@@ -559,7 +559,7 @@ Instruments frequently save the measurements to a file, and so the protocol cons
 ## Writing a Protocol
 
 To use a semi-realistic example, let’s write a simple version of the "E. coli Transformation" protocol from above.
-I won’t be going in-depth about all the methods being used, but I’ll leave categorizing each method (through the help of the [Aquarium docs](http://52.27.43.242/doc/index.html) and detailed [method reference](../../../api/index.html) as an exercise for the reader.
+I won’t be going in-depth about all the methods being used, but I’ll leave categorizing each method with the [method reference](../../../api/index.html) as an exercise for the reader.
 
 Before writing a protocol, it’s always important to ask questions about how you want to structure it, such as:
 
