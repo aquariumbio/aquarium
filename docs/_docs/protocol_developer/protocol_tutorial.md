@@ -541,11 +541,11 @@ end
 Another common protocol uses an instrument to measure a sample.
 Instruments frequently save the measurements to a file, and so the protocol consists of instructions for first taking the measurement, and then uploading the file(s).
 
-[data associations]
+TODO [data associations]
 
 ### Protocols that Modify Items
 
-[handling time: timers vs scheduling]
+TODO [handling time: timers vs scheduling]
 
 ## Writing a Protocol
 
@@ -772,7 +772,7 @@ In this case, it’s `index`, which is way to number things 1–n, where n is th
 
 `output_item` is exactly like `input_item`, but instead references the output. `end_table` is what signals the end of the table, and to display a table, `end_table` is necessary because that is what returns the fully-formed table.
 
-There are many table methods — refer to the more general [Operation documentation](http://52.27.43.242/doc/md-viewer?doc=Operations) for an overview.
+There are many table methods — refer to the more general [Operation documentation](http://<aq_url>/doc/md-viewer?doc=Operations) for an overview.
 
 The next step is to incubate the transformants:
 
