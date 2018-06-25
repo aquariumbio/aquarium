@@ -191,7 +191,7 @@ end
 
 which gives the output
 
-![Using check displays a checkbox](images/tutorial/18_clean-up-check.png)
+![Using check displays a checkbox](../images/tutorial/18_clean-up-check.png)
 
 where the technicians must tap each checkbox before they can move to the next page.
 
