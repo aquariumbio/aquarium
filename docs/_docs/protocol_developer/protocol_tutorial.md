@@ -647,7 +647,7 @@ This code sets a new comp cell batch as the "input" (through comp_cells.set) if 
 Data associations are a great tool to pass information through Aquarium.
 You can upload messages, measurements, pictures, files, passive-aggressive notes — it’s all good.
 Operations, samples, items, etc. all have data associations, which means it’s very easy to attach and retrieve information from all of these.
-For a more detailed breakdown, click [here](http://52.27.43.242/doc/md-viewer?doc=DataAssociation)
+For a more detailed breakdown, click [here](http://<aq_url>/doc/md-viewer?doc=DataAssociation)
 
 You also want to detract the comp cell aliquots used from the batch, so the online inventory is accurate.
 To do so, there’s a `remove_one` method included in a library, which is used like so:
@@ -659,7 +659,8 @@ operations.running.each { |op| comp_cells.collection.remove_one comp_cells.sampl
 Now that any potential operations without sufficient comp cells have errored out, it's time to do a `retrieve` and `make`.
 
 ```ruby
-operations.running.retrieve(only: ['Plasmid']).make
+operations.running.retrieve(only: ['Plasmid'])
+operations.running.make
 ```
 
 `retrieve` has an optional argument -- you can choose which inputs you want the tech to retrieve using 'only', which takes in an array argument.
