@@ -203,7 +203,7 @@ In addition to displaying technician instructions, we also want a protocol to ma
 For this, an Aquarium protocol manipulates _items_, where each item is a unique instance of a sample in a container.
 The item is the physical object that is manipulated.
 
-Concretely, an item is represented by an `Item` object, which consists of a `Sample` object, an `ObjectType` representing the container, as well as a location.
+Concretely, an item is represented by an `Item` object, which consists of a `Sample` object, an `ObjectType` representing the container, as well as a `location`.
 An example of an item would be a pMOD8 plasmid streaked onto an agar plate that is sitting on a lab bench.
 This plate would be represented as an `Item`, where the `Sample` is `'pMOD8'`, the `ObjectType` is `'E. coli Plate of Plasmid'`, with a location `'Bench'`.
 To access this item, we can query the Aquarium inventory.
@@ -350,15 +350,6 @@ You can also use the following static Collection methods for convienence
 
 - `Collection.spread sample_list, 'collection_type_name'` - Creates an appropriate number of collections of "collection_type_name" and fills collections with the sample_list.
   The sample list can be Samples, Items, or integers.
-
-### Common definitions and record identifiers
-
-It is tempting to use constant values to search with record identifiers, but these identifiers are determined by how the database is built and could change.
-So, use the sample names instead as demonstrated above.
-
-However, the catch is that the names you should use are also determined by the inventory of your Aquarium instance.
-To help maintain a common set of names, we provide a database dump with definitions of common types.
-See the [Aquarium deployment instructions](deployment.md) for details.
 
 ### Provisioning Items
 
