@@ -6,7 +6,7 @@ layout: default
 
 This is an introduction to writing protocols for Aquarium in the Krill domain specific langauge.
 We try to introduce the most common (and recommended) patterns in Krill, but this is not a comprehensive reference.
-See the [API documentation](../api/index.html) for more details on the functions that Krill provides.
+See the [API documentation](../../../api/index.html) for more details on the functions that Krill provides.
 
 If you haven't already, visit the [protocol developer documentation](../protocol_developer) for information about getting started.
 
@@ -248,7 +248,7 @@ plate = plate_list.first
 
 This call to `plate_list.first` will return `nil` if `plate_list` is empty, and you should always check for this situation before using `plate` for another purpose.
 
-See [Here for more details about Items](../../api/Item.html).
+See [Here for more details about Items](../../../api/Item.html).
 
 A special type of `Item`, called `Collection` is used to keep track of multiple `Samples`. While an `Item` has one `Sample` object, a `Collection` has an arbitrary amount of `Samples` associated with it. We refer to the slots for `Samples` in a `Collection`  as `Parts`. `Collections` have additional methods which allow protocols to smoothly interact with containers that can hold many things at once, like stripwells. A full stripwell can be represented as a `Collection`, while each individual well in the physical stripwell is represented as a `Part` of that `Collection`.
 
@@ -275,7 +275,7 @@ batch = collection_from batch
 
 and then can use the `Collection` methods on the object.
 
-See [Here for more details about Collections](../../api/Collection.html).
+See [Here for more details about Collections](../../../api/Collection.html).
 
 ### Practicing Queries
 
@@ -559,7 +559,7 @@ Instruments frequently save the measurements to a file, and so the protocol cons
 ## Writing a Protocol
 
 To use a semi-realistic example, let’s write a simple version of the "E. coli Transformation" protocol from above.
-I won’t be going in-depth about all the methods being used, but I’ll leave categorizing each method (through the help of the [Aquarium docs](http://52.27.43.242/doc/index.html) and detailed [method reference](http://klavinslab.org/aquarium-api/) as an exercise for the reader.
+I won’t be going in-depth about all the methods being used, but I’ll leave categorizing each method (through the help of the [Aquarium docs](http://52.27.43.242/doc/index.html) and detailed [method reference](../../../api/index.html) as an exercise for the reader.
 
 Before writing a protocol, it’s always important to ask questions about how you want to structure it, such as:
 
