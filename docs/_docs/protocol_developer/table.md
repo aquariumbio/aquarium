@@ -19,7 +19,12 @@ If you haven't already, visit the [protocol developer documentation](../protocol
 
 - [Table Documentation](#table-documentation)
     - [Table of Contents](#table-of-contents)
-    
+    - [Tables for Showcasing Data](#tables-for-showcasing-data)
+    - [Tables on OperationList](#tables-on-operationlist)
+        - [Mapping Operations to Respective Inputs or Outputs](#mapping-operations-to-respective-inputs-or-outputs)
+        - [Mapping Operations to Arbitrary Atributes](#mapping-operations-to-arbitrary-atributes)
+        - [Accepting Technician Input through Tables](#accepting-technician-input-through-tables)
+    - [Standalone Tables](#standalone-tables)
 
 <!-- /TOC -->
 
@@ -27,7 +32,7 @@ If you haven't already, visit the [protocol developer documentation](../protocol
 
 Often in a protocol it is useful to show a summarizing visualization of a lot of data at once. In Krill, `Tables` are an easy to use object that can accomplish this. Here is an example of a `Table` as seen from the technician view during a restriction digest protocol, which instructs the technician to add the appropriate enzymes to the correct well of the correct stripwell. A table is particularly useful here, where each operation can be parameterized with a different set of enzymes.
 
-![Enzyme table example](../images/developer/enzyme_table.png)
+![Enzyme table example](images/developer/enzyme_table.png)
 
 Inside a `show` block, a `Table` like this is displayed to the user with the `table` flag -- `table` is a flag just like `note`, `warning` and `image` which are interpreted by the `show` block to display the argument passed with it in a certain way. While `note` accepts a `String` argument and `image` expects a path to an image, The `table` flag accepts a `Table` object. Supposing that we already have a successfully generated `Table` stored in the variable `enzyme_tab`, showing it to the technician is simple
 
@@ -55,7 +60,7 @@ To create a `Table` with one column, called `simple_tab`
 ```
 
 When `simple_tab` is correctly displayed within a show block, in a `Job` of 5 `Operations` the technician might see something like this
-![Simple table example](../images/developer/simple_table.png)
+![Simple table example](images/developer/simple_table.png)
 
 ### Mapping Operations to Respective Inputs or Outputs
 
