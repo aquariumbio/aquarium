@@ -265,7 +265,7 @@ batch = Item.where(
 
 This assigns a single item with object type `'E. coli Comp Cell Batch'` to the variable `batch`.
 The location `'M80C.2.0.21'` is a location in the -80C freezer at UW BIOFAB.
-(See the [location wizard](location_wizard.md) documentation for details on locations.)
+(See the [location wizard](location.md) documentation for details on locations.)
 
 The return from the above query will be an ordinary `Item`. To be able to use the object as a `Collection` we call
 
@@ -647,7 +647,6 @@ This code sets a new comp cell batch as the "input" (through comp_cells.set) if 
 Data associations are a great tool to pass information through Aquarium.
 You can upload messages, measurements, pictures, files, passive-aggressive notes — it’s all good.
 Operations, samples, items, etc. all have data associations, which means it’s very easy to attach and retrieve information from all of these.
-For a more detailed breakdown, click [here](http://<aq_url>/doc/md-viewer?doc=DataAssociation)
 
 You also want to detract the comp cell aliquots used from the batch, so the online inventory is accurate.
 To do so, there’s a `remove_one` method included in a library, which is used like so:
@@ -773,7 +772,7 @@ In this case, it’s `index`, which is way to number things 1–n, where n is th
 
 `output_item` is exactly like `input_item`, but instead references the output. `end_table` is what signals the end of the table, and to display a table, `end_table` is necessary because that is what returns the fully-formed table.
 
-There are many table methods — refer to the more general [Operation documentation](http://<aq_url>/doc/md-viewer?doc=Operations) for an overview.
+There are many table methods — refer to the more in depth [Table Method Documentation](table.md) for a full overview.
 
 The next step is to incubate the transformants:
 
