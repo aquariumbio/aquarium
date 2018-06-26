@@ -19,6 +19,7 @@ More importantly it provides a complete, executable description of the results o
 # Documentation
 
 * [Configuration](docs/configuration/)
+* [Concepts](docs/concepts/)
 * User Role Documentation:
   * [Manager](docs/manager/)
   * [Technician](docs/technician/)
