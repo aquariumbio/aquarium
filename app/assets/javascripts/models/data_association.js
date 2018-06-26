@@ -23,3 +23,16 @@ AQ.DataAssociation.record_getters.value = function() {
   return da.value;
 
 }
+
+AQ.DataAssociation.record_methods.prepare_and_save = function() {
+
+  let da = this,
+      temp = {},
+      old_object = da.object;
+
+  temp[da.key] = da.new_value;
+  da.object = JSON.stringify(temp);
+
+  return da.save();
+
+}

@@ -899,7 +899,10 @@ AQ.Plan.record_getters.saved = function() {
 
 }
 
-
+AQ.Plan.record_methods.step_operations = function() {
+  console.log("AQ.Plan.step()")
+  return AQ.get("/operations/step?plan_id=" + this.id);
+}
 
 
 

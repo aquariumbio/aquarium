@@ -554,9 +554,6 @@ AQ.Operation.step_all = function() {
 }
 
 AQ.Operation.manager_list = function(criteria,options) {
-        // AQ.Operation.where(criteria, {
-        //   methods: ['user', 'field_values', 'plans', 'jobs']
-        // }, options).
 
   return new Promise(function(resolve,reject) {
 

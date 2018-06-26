@@ -248,11 +248,11 @@ plate = plate_list.first
 
 This call to `plate_list.first` will return `nil` if `plate_list` is empty, and you should always check for this situation before using `plate` for another purpose.
 
-A protocol may also deal with collections of samples.
-For instance, to perform an _E. coli_ transformation you need a batch of competent cell aliquots.
-In Aquarium, the entire batch is represented as a `Collection`, which is a type of `Item` that has multiple parts, one for each aliquot.
+See [Here for more details about Items](../../api/Item.html).
 
-TODO: more on items or at least links to API docs
+A special type of `Item`, called `Collection` is used to keep track of multiple `Samples`. While an `Item` has one `Sample` object, a `Collection` has an arbitrary amount of `Samples` associated with it. We refer to the slots for `Samples` in a `Collection`  as `Parts`. `Collections` have additional methods which allow protocols to smoothly interact with containers that can hold many things at once, like stripwells. A full stripwell can be represented as a `Collection`, while each individual well in the physical stripwell is represented as a `Part` of that `Collection`.
+
+To perform an _E. coli_ transformation you need a _batch_ of competent cell aliquots. We represent the entire batch as a `Collection`, and each aliquot as one `Part` of that `Collection`.
 
 To retrieve a batch of DH5&alpha;-competent cells from the -80C freezer at UW BIOFAB make this query:
 
@@ -267,16 +267,15 @@ This assigns a single item with object type `'E. coli Comp Cell Batch'` to the v
 The location `'M80C.2.0.21'` is a location in the -80C freezer at UW BIOFAB.
 (See the [location wizard](location_wizard.md) documentation for details on locations.)
 
-We can confirm that this `Item` is a `Collection` by testing `batch.collection?`.
-To be able to use the object as a `Collection` we call
+The return from the above query will be an ordinary `Item`. To be able to use the object as a `Collection` we call
 
 ```ruby
-c = collection_from batch
+batch = collection_from batch
 ```
 
 and then can use the `Collection` methods on the object.
 
-TODO: more on collections or at least links to API docs
+See [Here for more details about Collections](../../api/Collection.html).
 
 ### Practicing Queries
 
@@ -289,8 +288,6 @@ docker-compose run web rails c
 
 in the `aquarium` directory to start the Rails console.
 (If you have Aquairum setup to run on your machine without docker you can also just use the command `rails c`)
-
-TODO: explain how to run the rails console in docker
 
 The allowable queries are standard with Ruby on Rails `ActiveRecord` models.
 
@@ -397,22 +394,22 @@ ensure
 end
 ```
 
-### Working With Items in Operations
+## Working With Items in Operations
 
-Each instance of a protocol is contained within an operation.
-An operation is created by the user in the Aquarium planner and then batched together by the lab manager in the Aquarium manager into a job, which is then performed by the technician.
+Each instance of a protocol is contained within an `Operation`.
+An `Operation` is created by the user in the Aquarium planner as an specific instance of an `OperationType` and then batched together with other `Operations` of the same type into a `Job`, which is then performed by the technician.
 
-`Operations` also have an `OperationType`.
 As an example: Suppose you have created an `OperationType` with the name "E. coli Transformation." You’ve written all the code you need, and now you’re read to run it.
-An `Operation` would be a specific instance of "E. coli Transformation" (the `OperationType`), and a job would be a batch of operations that have been submitted and need to be run.
+An `Operation` would be a specific instance of "E. coli Transformation" (the `OperationType`), and a `Job` would be several "E. coli Transformation" `Operations` that have been submitted and are ready to run through the "E. coli Transformation" Protocol as a batch. 
 
 There are two ways to retrieve items within a protocol, and the two methods are called `retrieve` and `take`.
 Both of them instruct the technician to retrieve items.
 
-`retrieve` is used on what’s called an `OperationList`, which is exactly what it sounds like — a list of operations being used in a specific job.
-To access all the operations, we use `operations`. `retrieve` is used to retrieve all of the input items associated with an operation.
+`retrieve` is used on what’s called an `OperationList`, which is exactly what it sounds like — a list of `Operations` being used in a specific job.
+`retrieve` has two main purposes. First, it will fetch all of the input `Items` associated with each `Operation` in the `OperationsList` it is called on, enabling us to interact with these items in the protocol code. Next, it will generate show blocks for the tech to instruct them where to go to collect all of these input items, preparing them for the protocol.
 
-To instigate a "retrieve," you would write the following code:
+Inside a protocol, the `OperationsList` representing all `Operations` in the current `Job` is referred to by the symbol `operations`
+To perform a `retrieve`, you would write the following code:
 
 ```ruby
 class Protocol
@@ -425,7 +422,7 @@ end
 
 `take`, on the other hand, takes an argument that’s an array of items, which makes it ideal for retrieving items that aren’t included as explicit inputs in the definition of an operation — e.g., master mix for a PCR, which isn’t something the user should need to explicitly select.
 
-To instigate a retrieve, you would write something like the following code:
+To perform a `take`, you would write something like the following code:
 
 ```ruby
 class Protocol
@@ -445,6 +442,8 @@ Another important thing both `retrieve` and `take` do is "touch" the item, which
 This is extremely useful for troubleshooting.
 
 To put items away, you can use `release` (which is used in conjunction with `take` and takes the same arguments) and/or `operations.store` (which is used in conjunction with `operations.retrieve`).
+
+`make` is another important method used on an `OperationsList`. It is used in the same way as `retrieve`, but instead of fetching the existing input `Items` of each `Operation`, it generates new `Items` for the _outputs_ of each `Operation`. `make` does not show instructions to the user on how to create those `Items`... that's what the rest of the protocol is for!
 
 ## Managing Operations
 
@@ -522,7 +521,7 @@ Such protocols will follow these general steps:
 We saw earlier that we can write protocols that do these steps at a detailed level, but Aquarium provides functions that will do them over the inputs and outputs of the batched operations.
 So, we can write the protocol to manage these tasks relative to the batched operations, which is simpler.
 
-A protocol is able to refer to a batch of operation using the symbol `operations`, and calls `operations.retrieve`, `operations.make` and `operations.store` to perform the steps above.
+A protocol is able to refer to it's batch of operation using the symbol `operations`, and calls `operations.retrieve`, `operations.make` and `operations.store` to perform the steps above.
 
 As an example, the following protocol illustrates this pattern for [DOING SOMETHING].
 
@@ -549,7 +548,7 @@ The use of `ensure` in this example makes certain that `operations.store` is cal
 [Accessing Inputs and Outputs]
 
 ```ruby
-def operation_task(operation)
+def operation_task(op)
   show do
     title 'MAKE A REALISH EXAMPLE'
   end
@@ -575,7 +574,7 @@ I won’t be going in-depth about all the methods being used, but I’ll leave c
 Before writing a protocol, it’s always important to ask questions about how you want to structure it, such as:
 
 - Who’s going to be using it?
-- Will it be "batched" together with other protocols? (The answer to this one is usually 'yes'.)
+- Will operations be "batched" together for this protocol? (The answer to this one is usually 'yes'.)
 - What input/output structures do I want to use? Items, Collections, an array of items, etc. \* To figure this one out, it’s best to first ask yourself, "What are the pros/cons of doing it a specific way? Which operation types will be wired into this, which operation types will be successors?" A protocol is rarely intended to be used as a standalone — it’s almost always a part of a larger workflow, so it’s important to figure out how you’re going to structure the entire workflow instead of going in all gung-ho, guns a blazin’.
 
 Once you’ve figured out how you’re going to structure it, outlining the protocol is useful.
@@ -609,7 +608,7 @@ The output is "Transformed E Coli" with container "Transformed E. coli Aliquot,"
 This is the first section of the code, going through and trying to figure out whether or not there are enough comp cells for the operation:
 
 ```ruby
-def operation_task(operation)
+def operation_task(op)
   comp_cells = op.input("Comp Cells")
   # If current batch is empty
   if comp_cells.collection.empty?
@@ -621,25 +620,6 @@ def operation_task(operation)
     batches_of_cells = all_batches.select { |b| b.include? comp_cells.sample && !b.deleted? }.sort { |x| x.num_samples }
     batches_of_cells.reject! { |b| b == old_batch } # debug specific rejection to force replacement
     ...
-end
-```
-
-Each instance of a protocol is contained within an operation. An operation is created by the user in the Aquarium planner and then batched together by the lab manager in the Aquarium manager into a job, which is then performed by the technician.
-
-`Operations` also have an `OperationType`. As an example: Suppose you have created an `OperationType` with the name “E. coli Transformation.” You’ve written all the code you need, and now you’re read to run it. An `Operation` would be a specific instance of “E. coli Transformation” (the `OperationType`), and a job would be a batch of operations that have been submitted and need to be run.
-
-There are two ways to retrieve items within a protocol, and the two methods are called `retrieve` and `take`. Both of them instruct the technician to retrieve items.
-
-`retrieve` is used on what’s called an `OperationList`, which is exactly what it sounds like — a list of operations being used in a specific job. To access all the operations, we use `operations`. `retrieve` is used to retrieve all of the input items associated with an operation.
-
-To instigate a “retrieve,” you would write the following code:
-
-```ruby
-class Protocol
-  def main
-    operations.retrieve
-    …
-  end
 end
 ```
 
@@ -695,7 +675,7 @@ To do so, there’s a `remove_one` method included in a library, which is used l
 operations.running.each { |op| comp_cells.collection.remove_one comp_cells.sample }
 ```
 
-Now that any potential operations without sufficient comp cells have errored out, it's time to do a `retrieve` and `make`. `make` creates the outputs of the protocol.
+Now that any potential operations without sufficient comp cells have errored out, it's time to do a `retrieve` and `make`.
 
 ```ruby
 operations.running.retrieve(only: ['Plasmid']).make
@@ -725,33 +705,6 @@ Something to get used to, if you haven’t used Ruby before, is method chaining 
 This is the same thing as doing:
 `take`, on the other hand, takes an argument that’s an array of items, which makes it ideal for retrieving items that aren’t included as explicit inputs in the definition of an operation — e.g., master mix for a PCR, which isn’t something the user should need to explicitly select.
 
-To instigate a retrieve, you would write something like the following code:
-
-```ruby
-class Protocol
-  def main
-    sample = Sample.find_by_name(“pMOD8”)
-    items_to_retrieve = Item.where(sample_id: sample.id)
-    take items_to_retrieve
-    …
-  end
-end
-```
-
-This code first finds the sample “pMOD”, and then finds all the items that are associated with that sample. The technician is then instructed to retrieve all of them.
-
-Another important thing both `retrieve` and `take` do is “touch” the item, which allows us to keep a record of all the items used in a job. This is extremely useful for troubleshooting.
-
-To put items away, you can use `release` (which is used in conjunction with take and takes the same arguments) and/or `operations.store` (which is used in conjunction with `operations.retrieve`).
-
-```ruby
-  ops = operations.running
-  item_ids = ops.collect { … }
-  message = item_ids.join(",")
-  note "Retrieve and label … with the following ids: #{message}"
-```
-
-It’s easy to see why method chaining is preferred.
 
 The next part is to label all the tubes:
 
@@ -760,7 +713,7 @@ The next part is to label all the tubes:
   show do
     title 'Label aliquots'
     aliquotsLabeled = 0
-    operations.group_by { |op| comp_cells.item }.each do |batch, grouped_ops|
+    operations.group_by { |op| op.input("Comp Cells").item }.each do |batch, grouped_ops|
       if grouped_ops.size == 1
         check "Label the electrocompetent aliquot of #{grouped_ops.first.input("Comp Cells").sample.name} as #{aliquotsLabeled + 1}."
       else
@@ -787,6 +740,8 @@ batch 4567: operations 6, 7, 8, 9
 batch 78910: operation 10
 
 The tech would be told to label the first four comp cells from "1-5"; the `aliquotsLabelled` variable would go up by 5, so the next time the loop is run, it would tell the tech to label the next four comp cells "6-9"; once more, `aliquotsLabelled` would go up (this time by four), and, finally, the tech would be told to label the last comp cell as "10."
+
+Note: If you use this code in the tester interface with randomly generated operations, comp cell inputs will all be generated as part of a single batch, no matter how many operations you have. With this in mind, the expected output on the tester will actually be the tech being told to label all 10 comp cells from 1-10 in a single step.
 
 Now, we need to write the instructions for the actual transformation:
 

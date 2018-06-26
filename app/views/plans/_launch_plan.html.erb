@@ -38,12 +38,17 @@
   <!-- PLAN INFORMATION ///////////////////////////////////////////////////////////////// -->
   <div ng-if="plan.status != 'planning'">
 
-    <div><b>Cost (so far):</b> {{plan.cost_so_far|currency}}<span ng-if="plan.cost_so_far != 0 && !plan.cost_so_far">...calculating</span></div>
+    <div>
+      <b>Cost (so far):</b>
+      {{plan.cost_so_far|currency}}
+      <span ng-if="plan.cost_so_far != 0 && !plan.cost_so_far">...calculating</span>
+    </div>
     <div><b>Budget</b>: {{plan.budget.name}}</div>
     <div><b>Last Updated:</b> {{plan.updated_at|date}}</div>
     <div ng-if="plan.data_associations">
       <da record="plan" ng-if="plan.data_associations.length > 0" narrow=true></da>
       <hr>
+      <md-button class="md-raised md-medium md-primary" ng-click="step(plan)">Step</md-button>      
       <md-button class="md-raised md-medium" ng-click="plan.new_data_association()">Add Data</md-button>
       <md-button class="md-raised md-medium"><upload record='plan'></upload></md-button>
     </div>
