@@ -117,6 +117,28 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#all_operations-instance_method" title="#all_operations (instance method)">#<strong>all_operations</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#cancel_plans-instance_method" title="#cancel_plans (instance method)">#<strong>cancel_plans</strong>  &#x21d2; Object </a>
     
 
@@ -234,7 +256,49 @@
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="cancel_plans-instance_method">
+  <h3 class="signature first" id="all_operations-instance_method">
+  
+    #<strong>all_operations</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+111
+112
+113
+114
+115
+116
+117
+118
+119</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/helpers/job_operations.rb', line 111</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_all_operations'>all_operations</span>
+
+  <span class='id identifier rubyid_all_ops'>all_ops</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_operations'>operations</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_o'>o</span><span class='op'>|</span> <span class='id identifier rubyid_o'>o</span><span class='period'>.</span><span class='id identifier rubyid_plan'>plan</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_uniq'>uniq</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_plan'>plan</span><span class='op'>|</span>
+    <span class='id identifier rubyid_all_ops'>all_ops</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='id identifier rubyid_plan'>plan</span><span class='period'>.</span><span class='id identifier rubyid_operations'>operations</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_all_ops'>all_ops</span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="cancel_plans-instance_method">
   
     #<strong>cancel_plans</strong>  &#x21d2; <tt>Object</tt> 
   
@@ -564,9 +628,9 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Oct  9 13:38:40 2017 by
+  Generated on Tue Jun 19 13:52:08 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.9 (ruby-2.2.0).
+  0.9.13 (ruby-2.2.0).
 </div>
 
     </div>
