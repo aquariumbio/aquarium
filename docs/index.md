@@ -27,6 +27,7 @@ More importantly it provides a complete, executable description of the results o
   * [Protocol Developer](protocol_developer/)
 * Development Documentation
   * [Aquarium Development](aquarium_development/)
+  * [Protocol Tutorial](protocol_tutorial/)
   * [API](api)
 
 # [License](https://github.com/klavinslab/aquarium/blob/master/license.md)

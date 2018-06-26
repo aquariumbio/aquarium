@@ -30,13 +30,13 @@ A _protocol_ in Aquarium is the code that generates the instructions that the te
 To develop Aquarium protocols you will need to
 
 - [setup an Aquarium server to work with](../configuration/installation),
-- learn how to write protocols,
-- understand the development tools.
+- [learn how to write protocols](#writing-protocols),
+- [understand the development tools](#developer-tools).
 
 ## Writing Protocols
 
 Protocols are written in the _Krill protocol language_, a domain specific language built using Ruby.
-The [Protocol tutorial](protocol_tutorial) gives an overview of using Krill to define protocols, and assumes a basic understanding of Ruby.
+The [Protocol tutorial](../protocol_tutorial) gives an overview of using Krill to define protocols, and assumes a basic understanding of Ruby.
 
 If you are not familiar with Ruby, a good place to start is the [Ruby page](https://www.ruby-lang.org/en/) that has links to introductory tutorials as well as general documentation.
 There are also courses on Ruby that are available online, which may be the place to start if you don't already know how to program.
@@ -57,12 +57,12 @@ Clicking on the Developer tab in Aquarium brings you to a view similar to this o
 On the left is the list of operation types and libraries organized by category, and the right pane is the operation type definition view.
 When you open the tab, the definition for the first operation type in the first category is displayed; in this case, the `Make PCR Fragment` operation type from the `Cloning` category.
 
-![developer tab](images/developer/developer_tab.png)
+![developer tab](images/developer_tab.png)
 
 Under each category, the libraries and operation types defined in that category are listed.
 Clicking on the name of the library or operation type will open the definition in the view on the right.
 
-![category list](images/developer/category_list.png)
+![category list](images/category_list.png)
 
 Clicking on `New` creates a new operation type (`New Lib` creates a new library), and opens the definition view.
 
@@ -70,40 +70,40 @@ This allows you to set the operation type and category type names.
 
 [details]
 
-![definition tab](images/developer/definition_tab.png)
+![definition tab](images/definition_tab.png)
 
 Clicking on the **Protocol** tab opens the protocol editor.
 For a new operation type a default protocol is added to the editor when you first open it.
 [Keyboard shortcuts](https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts) are available.
 
-![protocol tab](images/developer/protocol_tab.png)
+![protocol tab](images/protocol_tab.png)
 
 Be sure to click **Save** at the bottom of the page before switching from the Developer tab.
 
 Clicking on the **Pre** tab shows the precondition for the operation type in a new editor.
 A default precondition that always returns `true` is created for new operation types.
 
-![precondition tab](images/developer/pre_tab.png)
+![precondition tab](images/pre_tab.png)
 
 The **Cost** tab shows the cost model for the operation type, which is function on an `Operation`.
 This function returns a map object with costs for `labor` and `materials` keys.
 The default function added for new operation types returns zero for both.
 
-![cost tab](images/developer/cost_tab.png)
+![cost tab](images/cost_tab.png)
 
 The **Docs** tab shows another editor, but this time for Markdown documentation for the operation type.
 
-![docs tab](images/developer/doc_tab.png)
+![docs tab](images/doc_tab.png)
 
 The **Timing** tab indicates when the operation type should be run in the lab.
 
-![timing tab](images/developer/timing_tab.png)
+![timing tab](images/timing_tab.png)
 
 The **Test** tab provides a way to run a quick test with the protocol.
 To run a test, specify the `Batch Size`, the number of operations to batch, click **Generate Operations** and then **Test**.
 This will generate random inputs for the operations and run the protocol.
 
-![test tab](images/developer/test_tab.png)
+![test tab](images/test_tab.png)
 
 Note that running tests this way doesn't allow testing assertions.
 Also, don't use the test tab on a production server.
