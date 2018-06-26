@@ -45,6 +45,7 @@ AQ.Plan.record_methods.reload = function() {
       });
       plan.recompute_getter("deletable");
       plan.recompute_getter("state");      
+      plan.recompute_getter("cost_so_far");          
     });
   });
 
@@ -55,8 +56,6 @@ AQ.Plan.record_methods.save = function(user) {
   var plan = this,
       before = plan,
       user_query = user ? "?user_id=" + user.id : "";
-
-  console.log("Saving plan '" + plan.name + "'")
 
   plan.saving = true;
 
@@ -208,16 +207,15 @@ AQ.Plan.record_getters.cost_so_far = function() {
 
   AQ.Account.where({operation_id: opids}).then(transactions => {
     plan.transactions = transactions;
-    plan.cost_so_far = 0;
+    plan.cost_so_far = 0.0;
     aq.each(transactions, t => {
-      if ( true || t.transaction_type == 'debit' ) {
+      if ( t.transaction_type == 'debit' ) {
         plan.cost_so_far += t.amount * (1+t.markup_rate);
       } else {
         plan.cost_so_far -= t.amount * (1+t.markup_rate);
       }
     });
     AQ.update();
-    console.log(plan.cost_so_far)
   });
 
   return plan.cost_so_far;
@@ -234,7 +232,6 @@ AQ.Plan.record_getters.costs = function() {
 
     plan.costs = response.data;
     plan.cost_total = 0;
-    plan.cost_so_far = 0;
 
     aq.each(plan.costs, cost => {
       aq.each(plan.operations, op => {
@@ -899,7 +896,10 @@ AQ.Plan.record_getters.saved = function() {
 
 }
 
-
+AQ.Plan.record_methods.step_operations = function() {
+  console.log("AQ.Plan.step()")
+  return AQ.get("/operations/step?plan_id=" + this.id);
+}
 
 
 
