@@ -19,7 +19,12 @@ If you haven't already, visit the [protocol developer documentation](../protocol
 
 - [Table Documentation](#table-documentation)
     - [Table of Contents](#table-of-contents)
-    
+    - [Tables for Showcasing Data](#tables-for-showcasing-data)
+    - [Tables on OperationList](#tables-on-operationlist)
+        - [Mapping Operations to Respective Inputs or Outputs](#mapping-operations-to-respective-inputs-or-outputs)
+        - [Mapping Operations to Arbitrary Atributes](#mapping-operations-to-arbitrary-atributes)
+        - [Accepting Technician Input through Tables](#accepting-technician-input-through-tables)
+    - [Standalone Tables](#standalone-tables)
 
 <!-- /TOC -->
 

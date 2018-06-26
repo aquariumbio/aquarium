@@ -1,7 +1,7 @@
 ---
 title: Configuration
 layout: docs
-permalink: /docs/configuration/
+permalink: /configuration/
 ---
 
 # Aquarium Configuration

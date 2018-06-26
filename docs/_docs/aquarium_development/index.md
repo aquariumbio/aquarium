@@ -1,7 +1,7 @@
 ---
 title: Aquarium Developer Guidelines
 layout: docs
-permalink: /docs/aquarium_development/
+permalink: /aquarium_development/
 ---
 
 # Aquarium Development Guide
@@ -110,7 +110,7 @@ The files in `docs/_layouts`, `docs/_includes`, `docs/_sass`, and `docs/assets/c
 The content of the site is located in the files in `docs/_docs` with each subdirectory having a `index.md` file that is loaded when the directory name is used (e.g., `klavinslab.org/aquarium/docs/manager` maps to the file `docs/_docs/manager/index.md`).
 These Markdown files have a `permalink` that determines this mapping.
 Each directory also has an images directory that the files in the directory can reference.
-(A catch is that files, other than `index.md` may have to use a path starting with `../images/` instead of `images/`.)
+
 
 ## Making an Aquarium Release
 

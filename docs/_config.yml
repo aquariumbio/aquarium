@@ -4,7 +4,7 @@ repository: https://github.com/klavinslab/aquarium
 timezone: America/Los_Angeles
 collections:
   docs:
-    permalink: "/:collection/:path/"
+    permalink: "/:path/"
     output: true
 defaults:
 - scope:

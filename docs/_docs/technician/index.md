@@ -1,7 +1,7 @@
 ---
 title: Technician Guide
 layout: docs
-permalink: /docs/technician/
+permalink: /technician/
 ---
 # Technician Guide
 

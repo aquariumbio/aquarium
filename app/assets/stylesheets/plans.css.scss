@@ -155,10 +155,32 @@
     font-size: 7pt;
     text-anchor: start;
     cursor: pointer;
-    pointer-events: none;
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;     
+  }
+
+  .op-edit-status {
+    fill: #666;
+    font-size: 11pt;
+    text-anchor: start;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none; 
+    &:hover {
+      fill: black;
+      opacity: 1;
+    }
+  }
+
+  .op-edit-rect {
+    fill: white;
+    stroke: black;
+    stroke-width: 1px;    
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;      
   }
 
   .op-retry {
@@ -167,7 +189,6 @@
     text-anchor: end;
     fill: black;
     cursor: pointer;
-    /*pointer-events: none;*/
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;   

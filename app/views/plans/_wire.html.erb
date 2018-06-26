@@ -1,10 +1,10 @@
 <polyline ng-attr-class="wire-hitline"
-          ng-mousedown="wireMouseDown($event, wire)" 
+          ng-mousedown="wireMouseDown($event, wire); clear_operation_selects();" 
           ng-attr-points="{{wire.path}}">
 </polyline>
 
 <polyline ng-attr-class="{{wire_class(wire)}}"
-          ng-mousedown="wireMouseDown($event, wire)" 
+          ng-mousedown="wireMouseDown($event, wire); clear_operation_selects();" 
           ng-attr-points="{{wire.path}}">
 </polyline>
 

@@ -1,7 +1,7 @@
 ---
 title: Workflow Designer
 layout: docs
-permalink: /docs/designer/
+permalink: /designer/
 ---
 
 # Experimental Plan Designer

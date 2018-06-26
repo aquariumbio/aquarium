@@ -249,27 +249,75 @@
     };
 
     /*
-     * Set the status of the operation back to 'waiting'
+     * Set the status of the operation
      */
-    $scope.try_again = function(operation) {
+    $scope.change_status = function(operation, new_status) {
 
       let confirm = $mdDialog.confirm()
-          .title("Attempt to rerun this operation?")
-          .textContent("Do you really want to try to rerun this operation?\n" + 
+          .title("Change status?")
+          .textContent("Really change status of operation " + operation.id + " to " + new_status + "?\n" + 
                        "This action may result in additional work for technicians and costs charged to your budget.")
-          .ariaLabel('Try Again')
+          .ariaLabel('Change Status')
           .ok('Yes')
-          .cancel('No');     
+          .cancel('No');
 
       $mdDialog
         .show(confirm)
         .then(() => {
           $scope.wait = true;
-          operation.retry().then(() => {
+          operation.set_status(new_status).then(() => {
             $scope.wait = false;
+            $scope.multiselect = {};            
             $scope.$apply();
           })
-        });
+        })
+        .catch(() => $scope.multiselect = {});      
+
+    }
+
+    /*
+     * Cancel the operation.
+     */
+    $scope.cancel_operation = function(operation) {
+
+      let prompt = $mdDialog.prompt()
+        .title('Cancel Operation?')
+        .textContent('Do you want to cancel this operation?')
+        .ariaLabel('Error Message')
+        .initialValue('Canceled by ' + $scope.current_user.name)
+        .ok('Cancel Operation')
+        .cancel('Do Not Cancel');
+
+      $mdDialog
+        .show(prompt)
+        .then(result => {
+            let da = operation.new_data_association();
+            da.key = "canceled_via_designer";
+            da.new_value = result;            
+            $scope.wait = true;
+            da.prepare_and_save();
+          })
+        .then(() => operation.set_status('error'))
+        .then(() => {
+          $scope.wait = false;
+          $scope.multiselect = {};
+          operation.recompute_getter("data_associations")
+        })
+        .catch(e => { console.log("Error" + e); $scope.multiselect = {} });
+      
+    }    
+
+    /*
+     * Step the operations in a plan.
+     */
+    $scope.step = function() {
+
+      $scope.wait = true;
+      $scope.plan
+        .step_operations()
+        .then(() => $scope.wait = false)
+        .then(() => $scope.reload() )
+        .catch(e => { console.log(e); $scope.wait = false })
 
     }
 
@@ -396,6 +444,7 @@
         ModuleIO.next_io_id = temp2;
         $scope.plan.paste_plan(p,$scope.last_place);
         inc_last_place();
+        $scope.clear_multiselect();        
         $scope.$apply();
       })
 

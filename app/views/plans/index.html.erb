@@ -65,9 +65,11 @@
 
   <planner-action ng-click="delete()"
                   icon="clear" name="Delete" 
-                  is_disabled=" (  current_draggable && current_draggable.status != 'planning' ) ||
+                  is_disabled=" (  current_draggable && 
+                                   current_draggable.record_type == 'operation' && 
+                                   current_draggable.status != 'planning' ) ||
                                 (  !current_draggable && !current_wire )"
-                  tooltip="Delete (Delete/Backspace)"></planner-action>    
+                  tooltip="Delete (Delete/Backspace)"></planner-action>
 
   <div style="width: 1px; height: 100%; border-left: 1pt solid #eee; margin: 5px"></div>
 
@@ -182,7 +184,7 @@
 
   <div class="plan-wait-overlay" ng-if=wait>
     <center layout-padding flex="50">
-      <h2 class="md-title">Attempting to change operation status and reload plan ...</h2>
+      <h2 class="md-title">Communicating with Aquarium ...</h2>
       <br />
       <md-progress-linear md-mode="indeterminate"></md-progress-linear>
     </center>
