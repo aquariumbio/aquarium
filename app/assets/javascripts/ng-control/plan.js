@@ -444,6 +444,7 @@
         ModuleIO.next_io_id = temp2;
         $scope.plan.paste_plan(p,$scope.last_place);
         inc_last_place();
+        $scope.clear_multiselect();        
         $scope.$apply();
       })
 
