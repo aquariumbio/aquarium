@@ -87,7 +87,13 @@ class OperationsController < ApplicationController
 
   def step
 
-    Operation.step
+    if params[:plan_id]
+      plan = Plan.find(params[:plan_id])
+      Operation.step plan.operations.select { |op| op.status != 'done' && op.status != 'error' }
+    else
+      Operation.step
+    end
+
     render json: { result: "ok" }
 
   end

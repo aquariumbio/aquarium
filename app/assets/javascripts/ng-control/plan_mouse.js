@@ -40,6 +40,10 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
    $scope.multiselect = {};
  }
 
+ $scope.clear_operation_selects = function() {
+  aq.each($scope.plan.operations, op => op.edit_status = false);
+ }
+
  // Global mouse events ////////////////////////////////////////////////////////////////////////
 
  $scope.mouseDown = function(evt) {
@@ -54,7 +58,9 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
       height: 0,
       active: true,
       dragging: false
-    }      
+    }
+
+    $scope.clear_operation_selects();
 
   }
 
