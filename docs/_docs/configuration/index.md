@@ -54,7 +54,7 @@ from the `aquarium` directory.
 
 Once you have an account you can create other users by choosing `Users` in the menu at the top left of the Aquarium page:
 
-![choosing users](images/users/settings-menu.png)
+![choosing users](configuration/images/users/settings-menu.png)
 
 Then enter the user information and click **New User**
 
