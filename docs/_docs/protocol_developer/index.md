@@ -1,7 +1,7 @@
 ---
 title: Protocol Developer
 layout: docs
-permalink: /docs/protocol_developer/
+permalink: /protocol_developer/
 ---
 
 # Aquarium Protocol Development

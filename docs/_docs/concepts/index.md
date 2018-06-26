@@ -1,3 +1,9 @@
+---
+title: Aquarium Concepts
+layout: docs
+permalink: /concepts/
+---
+
 # Aquarium Concepts
 
 This document introduces the basic concepts of Aquarium.

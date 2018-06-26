@@ -1,7 +1,7 @@
 ---
 title: Aquarium Developer Guidelines
 layout: docs
-permalink: /docs/aquarium_development/
+permalink: /aquarium_development/
 ---
 
 # Aquarium Development Guide

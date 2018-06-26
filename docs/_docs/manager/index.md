@@ -1,7 +1,7 @@
 ---
 title: Manager Guide
 layout: docs
-permalink: /docs/manager/
+permalink: /manager/
 ---
 # Manager
 
