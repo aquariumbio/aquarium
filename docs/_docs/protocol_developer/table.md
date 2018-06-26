@@ -111,7 +111,7 @@ Now, our completed transfer instruction `show` slide run with 3 operations looks
 
 Note the blue highlight around the destination item cells -- this indicates that the cells are checkable boxes. Once clicked, the cells turn solid blue.
 
-Two more tabling methods to be aware of are `input_collection` and `output_collection`. These methods work exactly like `input_item` and `output_collection`, except they are intended for use when the input or ouput of the `Operation` is a `Collection`. 
+Two other important tabling methods are `input_collection` and `output_collection`. These methods work exactly like `input_item` and `output_item`, except they are intended for use when the input or ouput of the `Operation` is a `Collection`. 
 
 ### Mapping Operations to Arbitrary Atributes
 
