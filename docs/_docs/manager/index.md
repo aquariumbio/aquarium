@@ -10,6 +10,7 @@ A manager uses Aquarium to determine which operations are run together as a job,
 As explained by the [Aquarium Concepts](../concepts/) document, a *job* is simply a batch of operations of the same operation type that are performed together.
 
 ## Using the Manager View to monitor lab activity
+![manager tab](images/manager-view.png)
 
 The left panel of the manager view has two parts.
 At the top are buttons that allows the manager to do common tasks they perform: switching to another user, displaying active jobs, and generating reports of activity.
