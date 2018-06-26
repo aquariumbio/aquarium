@@ -11,8 +11,8 @@
     <span ng-if="!plan.deleting">DELETE</span>
   </md-button>
 
-  <div class="md-subhead" ng-show="plan.cost_total != null">
-    {{plan.budget.name}}:  {{plan.cost_so_far|currency}} / {{plan.cost_total|currency}}
+  <div class="md-subhead" ng-if="plan.cost_so_far != null && plan.cost_total != null">
+    {{plan.budget.name}}:  {{plan.cost_so_far|currency}} of estimated {{plan.cost_total|currency}}
   </div>
 
   <da record="plan"></da>
