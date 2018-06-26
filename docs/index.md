@@ -18,15 +18,15 @@ More importantly it provides a complete, executable description of the results o
 
 # Documentation
 
-* [Configuration](docs/configuration/)
-* [Concepts](docs/concepts/)
+* [Configuration](configuration/)
+* [Concepts](concepts/)
 * User Role Documentation:
-  * [Manager](docs/manager/)
-  * [Technician](docs/technician/)
-  * [Workflow Designer](docs/designer/)
-  * [Protocol Developer](docs/protocol_developer/)
+  * [Manager](manager/)
+  * [Technician](technician/)
+  * [Workflow Designer](designer/)
+  * [Protocol Developer](protocol_developer/)
 * Development Documentation
-  * [Aquarium Development](docs/aquarium_development/)
+  * [Aquarium Development](aquarium_development/)
   * [API](api)
 
 # [License](https://github.com/klavinslab/aquarium/blob/master/license.md)
