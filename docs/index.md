@@ -31,7 +31,7 @@ More importantly it provides a complete, executable description of the results o
 
   - [Aquarium Development](aquarium_development/)
   - [Protocol Tutorial](protocol_tutorial/)
-  - [API](api)
+  - [Krill (Protocol) API](api)
   - [Trident Python API](https://github.com/klavinslab/trident)
 
 # [License](https://github.com/klavinslab/aquarium/blob/master/license.md)
