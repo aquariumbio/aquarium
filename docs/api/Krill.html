@@ -98,11 +98,11 @@
 <p class="children">
   
     
-      <strong class="modules">Modules:</strong> <span class='object_link'><a href="Krill/Base.html" title="Krill::Base (module)">Base</a></span>, <span class='object_link'><a href="Krill/Namespace.html" title="Krill::Namespace (module)">Namespace</a></span>, <span class='object_link'><a href="Krill/OperationList.html" title="Krill::OperationList (module)">OperationList</a></span>
+      <strong class="modules">Modules:</strong> <span class='object_link'><a href="Krill/Base.html" title="Krill::Base (module)">Base</a></span>, <span class='object_link'><a href="Krill/OperationList.html" title="Krill::OperationList (module)">OperationList</a></span>
     
   
     
-      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Krill/Box.html" title="Krill::Box (class)">Box</a></span>, <span class='object_link'><a href="Krill/ShowBlock.html" title="Krill::ShowBlock (class)">ShowBlock</a></span>, <span class='object_link'><a href="Krill/Table.html" title="Krill::Table (class)">Table</a></span>
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Krill/ShowBlock.html" title="Krill::ShowBlock (class)">ShowBlock</a></span>, <span class='object_link'><a href="Krill/Table.html" title="Krill::Table (class)">Table</a></span>
     
   
 </p>
@@ -113,157 +113,12 @@
 
 
 
-  
-    <h2>
-      Class Method Summary
-      <small><a href="#" class="summary_toggle">collapse</a></small>
-    </h2>
 
-    <ul class="summary">
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#get_arguments-class_method" title="get_arguments (class method)">.<strong>get_arguments</strong>(code)  &#x21d2; Object </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'></div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#make_namespace-class_method" title="make_namespace (class method)">.<strong>make_namespace</strong>(code)  &#x21d2; Object </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'></div></span>
-  
-</li>
-
-      
-    </ul>
-  
-
-
-
-  <div id="class_method_details" class="method_details_list">
-    <h2>Class Method Details</h2>
-
-    
-      <div class="method_details first">
-  <h3 class="signature first" id="get_arguments-class_method">
-  
-    .<strong>get_arguments</strong>(code)  &#x21d2; <tt>Object</tt> 
-  
-
-  
-
-  
-</h3><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/namespace.rb', line 27</span>
-
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_get_arguments'>get_arguments</span> <span class='id identifier rubyid_code'>code</span>
-
-  <span class='id identifier rubyid_p'>p</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_make_namespace'>make_namespace</span> <span class='id identifier rubyid_code'>code</span><span class='rparen'>)</span><span class='op'>::</span><span class='const'>Protocol</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
-
-  <span class='kw'>if</span> <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>arguments</span><span class='tstring_end'>&quot;</span></span>
-    <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_arguments'>arguments</span>
-  <span class='kw'>else</span>
-    <span class='lbrace'>{</span><span class='rbrace'>}</span>
-  <span class='kw'>end</span>
-
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="make_namespace-class_method">
-  
-    .<strong>make_namespace</strong>(code)  &#x21d2; <tt>Object</tt> 
-  
-
-  
-
-  
-</h3><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-19
-20
-21
-22
-23
-24
-25</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/namespace.rb', line 19</span>
-
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_make_namespace'>make_namespace</span> <span class='id identifier rubyid_code'>code</span>
-
-  <span class='id identifier rubyid_namespace'>namespace</span> <span class='op'>=</span> <span class='const'>Class</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='period'>.</span><span class='id identifier rubyid_extend'>extend</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="Krill/Namespace.html" title="Krill::Namespace (module)">Namespace</a></span></span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_namespace'>namespace</span><span class='period'>.</span><span class='id identifier rubyid_class_eval'>class_eval</span> <span class='id identifier rubyid_code'>code</span>
-  <span class='id identifier rubyid_namespace'>namespace</span>
-
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-  </div>
 
 </div>
 
       <div id="footer">
-  Generated on Tue Jun 19 13:52:09 2018 by
+  Generated on Wed Jun 27 08:22:37 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.13 (ruby-2.2.0).
 </div>

@@ -222,9 +222,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Update Methods for Field Types from Front End Start Here.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'>Update Methods for Field Types from Front End Start Here.</div></span>
   
 </li>
 
@@ -848,9 +846,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Update Methods for Field Types from Front End Start Here</p>
-
+    Update Methods for Field Types from Front End Start Here
 
   </div>
 </div>
@@ -1643,13 +1639,13 @@
 
 <span class='kw'>def</span> <span class='id identifier rubyid_schedule_aux'>schedule_aux</span> <span class='id identifier rubyid_ops'>ops</span><span class='comma'>,</span> <span class='id identifier rubyid_user'>user</span><span class='comma'>,</span> <span class='id identifier rubyid_group'>group</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span>
 
-  <span class='id identifier rubyid_job'>job</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Job.html" title="Job (class)">Job</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+  <span class='id identifier rubyid_job'>job</span> <span class='op'>=</span> <span class='const'>Job</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
   
   <span class='id identifier rubyid_job'>job</span><span class='period'>.</span><span class='id identifier rubyid_path'>path</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>operation.rb</span><span class='tstring_end'>&quot;</span></span>
   <span class='id identifier rubyid_job'>job</span><span class='period'>.</span><span class='id identifier rubyid_sha'>sha</span> <span class='op'>=</span> <span class='kw'>nil</span> <span class='comment'># lame, but this is how I signal to the krill manager
 </span>                <span class='comment'># that this is job is associated with an operation type
 </span>
-  <span class='id identifier rubyid_job'>job</span><span class='period'>.</span><span class='id identifier rubyid_pc'>pc</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Job.html" title="Job (class)">Job</a></span></span><span class='period'>.</span><span class='const'><span class='object_link'><a href="Job.html#NOT_STARTED-class_method" title="Job.NOT_STARTED (method)">NOT_STARTED</a></span></span>
+  <span class='id identifier rubyid_job'>job</span><span class='period'>.</span><span class='id identifier rubyid_pc'>pc</span> <span class='op'>=</span> <span class='const'>Job</span><span class='period'>.</span><span class='const'>NOT_STARTED</span>
   <span class='id identifier rubyid_job'>job</span><span class='period'>.</span><span class='id identifier rubyid_set_arguments'>set_arguments</span><span class='lparen'>(</span><span class='lbrace'>{</span> <span class='label'>operation_type_id:</span> <span class='id identifier rubyid_id'>id</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_job'>job</span><span class='period'>.</span><span class='id identifier rubyid_group_id'>group_id</span> <span class='op'>=</span> <span class='id identifier rubyid_group'>group</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
   <span class='id identifier rubyid_job'>job</span><span class='period'>.</span><span class='id identifier rubyid_submitted_by'>submitted_by</span> <span class='op'>=</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
@@ -1664,7 +1660,7 @@
     <span class='kw'>else</span>
       <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_schedule'>schedule</span>
     <span class='kw'>end</span>
-    <span class='const'><span class='object_link'><a href="JobAssociation.html" title="JobAssociation (class)">JobAssociation</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span> <span class='label'>job_id:</span> <span class='id identifier rubyid_job'>job</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='label'>operation_id:</span> <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
+    <span class='const'>JobAssociation</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span> <span class='label'>job_id:</span> <span class='id identifier rubyid_job'>job</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='label'>operation_id:</span> <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
     <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
   <span class='kw'>end</span>
 
@@ -2090,7 +2086,7 @@
 </div>
 
       <div id="footer">
-  Generated on Tue Jun 19 13:52:13 2018 by
+  Generated on Wed Jun 27 08:22:40 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.13 (ruby-2.2.0).
 </div>

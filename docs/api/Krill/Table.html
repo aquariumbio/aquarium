@@ -101,9 +101,7 @@
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>A class that makes making tables for calls to &#39;show&#39; easier.</p>
-
+    A class that makes making tables for calls to &#39;show&#39; easier.
 
   </div>
 </div>
@@ -113,9 +111,7 @@
     <p class="tag_title">Examples:</p>
     
       
-        <p class="example_title"><div class='inline'>
-<p>Create a table, add rows, and display it.</p>
-</div></p>
+        <p class="example_title"><div class='inline'>Create a table, add rows, and display it.</div></p>
       
       <pre class="example code"><code><span class='id identifier rubyid_t'>t</span> <span class='op'>=</span> <span class='const'>Table</span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="#initialize-instance_method" title="Krill::Table#initialize (method)">new</a></span></span><span class='lparen'>(</span>
   <span class='label'>a:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>First column</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
@@ -186,9 +182,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Select all columns.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'>Select all columns.</div></span>
   
 </li>
 
@@ -210,9 +204,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Append a row defined by the currently selectors.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'>Append a row defined by the currently selectors.</div></span>
   
 </li>
 
@@ -234,9 +226,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Choose which columns to display in a subsequent call to render.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'>Choose which columns to display in a subsequent call to render.</div></span>
   
 </li>
 
@@ -258,9 +248,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Clear the currently selected columns, and result from and to.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'>Clear the currently selected columns, and result from and to.</div></span>
   
 </li>
 
@@ -282,9 +270,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Add a column to the table.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'>Add a column to the table.</div></span>
   
 </li>
 
@@ -306,9 +292,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Define the row to start with in a subsequent call to render.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'>Define the row to start with in a subsequent call to render.</div></span>
   
 </li>
 
@@ -376,9 +360,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Create a table object, which makes making tables for calls to  show easier.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'>Create a table object, which makes making tables for calls to  show easier.</div></span>
   
 </li>
 
@@ -400,10 +382,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Return a matrix (Array or Arrays) representing the table for use in a call
-to &#39;show&#39;.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'>Return a matrix (Array or Arrays) representing the table for use in a call to &#39;show&#39;.</div></span>
   
 </li>
 
@@ -425,9 +404,7 @@ to &#39;show&#39;.</p>
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Set a value in the current row.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'>Set a value in the current row.</div></span>
   
 </li>
 
@@ -449,9 +426,7 @@ to &#39;show&#39;.</p>
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Define the row to end with (actually i-1) in a subsequent call to render.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'>Define the row to end with (actually i-1) in a subsequent call to render.</div></span>
   
 </li>
 
@@ -473,9 +448,8 @@ to &#39;show&#39;.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Create a table object, which makes making tables for calls to  show easier.</p>
-
+    Create a table object, which makes making tables for calls to 
+show easier.
 
   </div>
 </div>
@@ -495,10 +469,7 @@ to &#39;show&#39;.</p>
       
       
         &mdash;
-        <div class='inline'>
-<p>A list hash of the form { a: String, b: String, … } defining the columns of
-the table and their headings.</p>
-</div>
+        <div class='inline'>A list hash of the form { a: String, b: String, ... } defining the columns of the table and their headings.</div>
       
     </li>
   
@@ -555,9 +526,7 @@ the table and their headings.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Each column in the table can be used as a method.</p>
-
+    Each column in the table can be used as a method.
 
   </div>
 </div>
@@ -567,9 +536,7 @@ the table and their headings.</p>
     <p class="tag_title">Examples:</p>
     
       
-        <p class="example_title"><div class='inline'>
-<p>Suppose a table t has a row named :x. Then you can do</p>
-</div></p>
+        <p class="example_title"><div class='inline'>Suppose a table t has a row named :x. Then you can do</div></p>
       
       <pre class="example code"><code><span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_x'>x</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>whatever</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_append'>append</span></code></pre>
     
@@ -676,9 +643,7 @@ the table and their headings.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Select all columns.</p>
-
+    Select all columns.
 
   </div>
 </div>
@@ -695,9 +660,7 @@ the table and their headings.</p>
       
       
         &mdash;
-        <div class='inline'>
-<p>The table, can be chained.</p>
-</div>
+        <div class='inline'>The table, can be chained.</div>
       
     </li>
   
@@ -737,9 +700,7 @@ the table and their headings.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Append a row defined by the currently selectors.</p>
-
+    Append a row defined by the currently selectors.
 
   </div>
 </div>
@@ -756,9 +717,7 @@ the table and their headings.</p>
       
       
         &mdash;
-        <div class='inline'>
-<p>The table, can be chained.</p>
-</div>
+        <div class='inline'>The table, can be chained.</div>
       
     </li>
   
@@ -800,9 +759,7 @@ the table and their headings.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Choose which columns to display in a subsequent call to render.</p>
-
+    Choose which columns to display in a subsequent call to render.
 
   </div>
 </div>
@@ -820,9 +777,7 @@ the table and their headings.</p>
       
       
         &mdash;
-        <div class='inline'>
-<p>An array of column names, as in [:x, :y, :z].</p>
-</div>
+        <div class='inline'>An array of column names, as in [:x, :y, :z].</div>
       
     </li>
   
@@ -839,9 +794,7 @@ the table and their headings.</p>
       
       
         &mdash;
-        <div class='inline'>
-<p>The table, can be chained.</p>
-</div>
+        <div class='inline'>The table, can be chained.</div>
       
     </li>
   
@@ -881,9 +834,7 @@ the table and their headings.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Clear the currently selected columns, and result from and to.</p>
-
+    Clear the currently selected columns, and result from and to.
 
   </div>
 </div>
@@ -900,9 +851,7 @@ the table and their headings.</p>
       
       
         &mdash;
-        <div class='inline'>
-<p>The table, can be chained.</p>
-</div>
+        <div class='inline'>The table, can be chained.</div>
       
     </li>
   
@@ -946,9 +895,7 @@ the table and their headings.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Add a column to the table.</p>
-
+    Add a column to the table.
 
   </div>
 </div>
@@ -966,9 +913,7 @@ the table and their headings.</p>
       
       
         &mdash;
-        <div class='inline'>
-<p>The name of the column.</p>
-</div>
+        <div class='inline'>The name of the column.</div>
       
     </li>
   
@@ -982,9 +927,7 @@ the table and their headings.</p>
       
       
         &mdash;
-        <div class='inline'>
-<p>A string to use for the heading of the column.</p>
-</div>
+        <div class='inline'>A string to use for the heading of the column.</div>
       
     </li>
   
@@ -1001,9 +944,7 @@ the table and their headings.</p>
       
       
         &mdash;
-        <div class='inline'>
-<p>The table with the heading added to it, can be chained.</p>
-</div>
+        <div class='inline'>The table with the heading added to it, can be chained.</div>
       
     </li>
   
@@ -1043,9 +984,7 @@ the table and their headings.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Define the row to start with in a subsequent call to render.</p>
-
+    Define the row to start with in a subsequent call to render.
 
   </div>
 </div>
@@ -1063,9 +1002,7 @@ the table and their headings.</p>
       
       
         &mdash;
-        <div class='inline'>
-<p>The column to start with.</p>
-</div>
+        <div class='inline'>The column to start with.</div>
       
     </li>
   
@@ -1082,9 +1019,7 @@ the table and their headings.</p>
       
       
         &mdash;
-        <div class='inline'>
-<p>The table, can be chained.</p>
-</div>
+        <div class='inline'>The table, can be chained.</div>
       
     </li>
   
@@ -1230,10 +1165,7 @@ the table and their headings.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Return a matrix (Array or Arrays) representing the table for use in a call
-to &#39;show&#39;.</p>
-
+    Return a matrix (Array or Arrays) representing the table for use in a call to &#39;show&#39;.
 
   </div>
 </div>
@@ -1250,9 +1182,7 @@ to &#39;show&#39;.</p>
       
       
         &mdash;
-        <div class='inline'>
-<p>The table as an array or arrays.</p>
-</div>
+        <div class='inline'>The table as an array or arrays.</div>
       
     </li>
   
@@ -1306,9 +1236,7 @@ to &#39;show&#39;.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Set a value in the current row</p>
-
+    Set a value in the current row
 
   </div>
 </div>
@@ -1326,9 +1254,7 @@ to &#39;show&#39;.</p>
       
       
         &mdash;
-        <div class='inline'>
-<p>The name of the column</p>
-</div>
+        <div class='inline'>The name of the column</div>
       
     </li>
   
@@ -1342,9 +1268,7 @@ to &#39;show&#39;.</p>
       
       
         &mdash;
-        <div class='inline'>
-<p>value Value to set</p>
-</div>
+        <div class='inline'>value Value to set</div>
       
     </li>
   
@@ -1385,9 +1309,7 @@ to &#39;show&#39;.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Define the row to end with (actually i-1) in a subsequent call to render.</p>
-
+    Define the row to end with (actually i-1) in a subsequent call to render.
 
   </div>
 </div>
@@ -1405,9 +1327,7 @@ to &#39;show&#39;.</p>
       
       
         &mdash;
-        <div class='inline'>
-<p>The column to end just before.</p>
-</div>
+        <div class='inline'>The column to end just before.</div>
       
     </li>
   
@@ -1424,9 +1344,7 @@ to &#39;show&#39;.</p>
       
       
         &mdash;
-        <div class='inline'>
-<p>The table, can be chained.</p>
-</div>
+        <div class='inline'>The table, can be chained.</div>
       
     </li>
   
@@ -1460,7 +1378,7 @@ to &#39;show&#39;.</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Jun 19 13:52:13 2018 by
+  Generated on Wed Jun 27 08:22:40 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.13 (ruby-2.2.0).
 </div>
