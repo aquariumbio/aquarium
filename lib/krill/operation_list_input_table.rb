@@ -68,11 +68,11 @@ module Krill
     # Tags an input key for validation, by calling a validation
     # block for each operation
     #
-    # ==== Example (validate :some_key to have input value between 1 and 10)
-    # operations.start_table
-    #   .custom_input(:some_key, heading: "Input", type: "number") { |op| 1 }
-    #   .validate(:some_key) { |op, inputted_value| inputted_value.between?(1,10) }
-    #   .end_Table
+    # @example (validate :some_key to have input value between 1 and 10)
+    #   operations.start_table
+    #     .custom_input(:some_key, heading: "Input", type: "number") { |op| 1 }
+    #     .validate(:some_key) { |op, inputted_value| inputted_value.between?(1,10) }
+    #     .end_Table
     def validate key, &validation_block
       self.each do |op|
         validation = op.temporary[:validation] || Hash.new
@@ -84,15 +84,15 @@ module Krill
 
     # Sends message for valid and invalid inputs based on validation
     #
-    # ==== Example (validate :some_key to have input value between 1 and 10)
-    # operations.start_table
-    #   .custom_input(:some_key, heading: "Input", type: "number") { |op| 1 }
-    #   .validate(:some_key) { |op, inputted_value| inputted_value.between?(1,10) }
-    #   .validation_message(:some_key) { |op, key, val|
-    #     "Operation id #{op.id} with key #{key} had incorrect value #{val}" + \
-    #     "Value should be between 1 and 10."
-    #     }
-    #   .end_Table
+    # @example (validate :some_key to have input value between 1 and 10)
+    #   operations.start_table
+    #     .custom_input(:some_key, heading: "Input", type: "number") { |op| 1 }
+    #     .validate(:some_key) { |op, inputted_value| inputted_value.between?(1,10) }
+    #     .validation_message(:some_key) { |op, key, val|
+    #       "Operation id #{op.id} with key #{key} had incorrect value #{val}" + \
+    #       "Value should be between 1 and 10."
+    #       }
+    #     .end_Table
     def validation_message key, &message_block
       self.each do |op|
         message_hash = op.temporary[:validation_messages] || Hash.new
