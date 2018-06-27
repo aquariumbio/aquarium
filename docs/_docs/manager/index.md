@@ -5,12 +5,27 @@ permalink: /manager/
 ---
 # Manager
 
-A manager uses Aquarium to determine which operations are run together as a job, and to monitor how jobs are progressing.
+*This document assumes that you have read the [Aquarium Concepts](../concepts/) document*
 
-As explained by the [Aquarium Concepts](../concepts/) document, a *job* is simply a batch of operations of the same operation type that are performed together.
+A manager uses Aquarium to determine which operations are run together as a job, and to monitor how jobs are progressing.
+A *job* is simply a batch of operations of the same operation type that are performed together.
+
+## The Manager Tab
+
+The manager tab provides the information needed to manage lab operations as illustrated by this (redacted) screenshot of the manager tab for the UW BIOFAB production server.
+
+![manager tab](images/manager-view.png)
+
+The controls at the left of the screen allows the manager to determine which operations are displayed on the right.
+
+
+The far left of the screen provides controls that determine what information is displayed.
+
+The buttons at the top allow the manager to filter the 
+
+![manager tab regions](images/manager-regions.png)
 
 ## Using the Manager View to monitor lab activity
-![manager tab](images/manager-view.png)
 
 The left panel of the manager view has two parts.
 At the top are buttons that allows the manager to do common tasks they perform: switching to another user, displaying active jobs, and generating reports of activity.
