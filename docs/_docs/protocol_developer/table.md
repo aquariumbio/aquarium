@@ -95,12 +95,21 @@ There is another optional argument which allows `Table` cells to be designated a
     simple_tab = operations.start_table.input_item("Plasmid Source", heading: "Plasmid Stocks").output_item("Plasmid Destination", heading: "Destination Items", checkable: true).end_table
 ```
 
+This method chain is getting fairly long, it may be more readable if we put newlines between the method calls
+
+```ruby
+    simple_tab = operations.start_table
+                        .input_item("Plasmid Source", heading: "Plasmid Stocks")
+                        .output_item("Plasmid Destination", heading: "Destination Items", checkable: true)
+                        .end_table
+```
+
 Such a nice table of course deserves an equally polished `show` block
 
 ```ruby
     show do 
       title "Transfer Plasmid"
-      note "Pipet 10mL of each plasmid stock into the corresponding Destination Item"
+      note "Pipet 10µL of each plasmid stock into the corresponding Destination Item"
       table simple_tab
     end
 ```
@@ -109,13 +118,62 @@ Now, our completed transfer instruction `show` slide run with 3 operations looks
 
 ![Simple table example](images/simple_table-3.png)
 
-Note the blue highlight around the destination item cells -- this indicates that the cells are checkable boxes. Once clicked, the cells turn solid blue.
+Note the blue highlight around the destination item cells -- this indicates that the cells are checkable. Once clicked, the checkable cells turn solid blue.
 
 Two other important tabling methods are `input_collection` and `output_collection`. These methods work exactly like `input_item` and `output_item`, except they are intended for use when the input or ouput of the `Operation` is a `Collection`. 
 
-### Mapping Operations to Arbitrary Atributes
+### Mapping Operations to Arbitrary Attributes
 
-TODO [custom_column]
+`input_item` and `output_item` are convienent for displaying the inputs and outputs of each `Operation` in an `OperationsList`, but what if we want to display other information about an `Operation` besides the `Item ids` of its inputs and outputs?
+
+`custom_column` is a valuable method that we can call as part of the table generation method chain from an `OperationsList`. Like `input_item`, `custom_column` will add a column to the table, and the contents of each cell of this new column will be a function of the `Operation` that is associated to the row of the table the cell appears.
+
+While `input_item` maps each `Operation` to the `Item id` of a specified input, `custom_column` allows you to define the attribute that each `Operation` will be mapped to. `custom_column` does not automatically generate a heading, and so requires the `heading:` option to be defined. It also requires a code block to determine what attribute of the `Operations` will be mapped to. 
+
+To start off with a simple example, imagine that for some reason you would like to add a column to `simple_tab` which lists the `Operation id` that the transfer for that row is associated with. We could do that with a `custom_column` that displays `op.id` for each `op` in `operations`
+
+```ruby
+    simple_tab = operations.start_table
+                        .input_item("Plasmid Source", heading: "Plasmid Stocks")
+                        .output_item("Plasmid Destination", heading: "Destination Items", checkable: true)
+                        .custom_column(heading: "Operation id") { |op| op.id }
+                        .end_table
+```
+
+Here is the result of such a table
+
+![Simple table example](images/simple_table-4.png)
+
+(Note that this time the checkable cells have already all been clicked)
+
+A more exciting example might be to make a `custom_column` that lists a calculated volume of plasmid to transfer that is distinct between `Operations`, rather than just instructing to add 10µL to each as we had before. A clean way to accomplish this is by first storing the calculated value in the `temporary` hash of each `Operation`, and then mapping the each Operation to that value from the `custom_column`. For more on how the `temporary` hash works, see the [Operation Method Documentation](TODO). 
+
+In this somewhat contrived example, we calculate the volume of plasmid to transfer by dividing the length of the input Plasmid by 500.
+
+```ruby
+    # calculating volume to transfer
+    operations.each do |op|
+        plasmid_length = op.input("Plasmid Source").sample.properties[length].to_f
+        op.temporary[:transfer_volume] = plasmid_length / 500
+    end
+
+    # creating table
+    simple_tab = operations.start_table
+                        .input_item("Plasmid Source", heading: "Plasmid Stocks")
+                        .output_item("Plasmid Destination", heading: "Destination Items", checkable: true)
+                        .custom_column(heading: "Amount to transfer (µL)") { |op| op.temporary[:transfer_volume] }
+                        .end_table
+
+    # showing table
+    show do 
+      title "Transfer Plasmid"
+      table simple_tab
+    end
+```
+
+This general `Table` form is quite effective. It is commonly used in many Aquarium protocols
+
+![Simple table example](images/simple_table-5.png)
 
 ### Accepting Technician Input through Tables
 
