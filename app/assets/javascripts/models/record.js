@@ -139,9 +139,7 @@ AQ.Record.prototype.new_data_association = function() {
     parent_id: this.id
   });
 
-  // if ( typeof this.data_associations === "object" ) {
-  //   this.data_associations.push(da);
-  // }
+  this.data_associations.push(da);
 
   return da;
 
