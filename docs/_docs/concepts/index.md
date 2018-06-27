@@ -29,7 +29,7 @@ Here the sample is puc19-GFP, which has sample type of plasmid.
 
 ![samples and sample types](images/samples.png)
 
-An item *location* in Aquarium is a hierarchical description of where the item can be found.
+An item _location_ in Aquarium is a hierarchical description of where the item can be found.
 For instance, the UW BIOFAB location `M20.1.5.49` is a location in a box in a -20C freezer as illustrated by this diagram:
 
 ![location](images/location.png)
@@ -70,3 +70,25 @@ The manager can batch operations in to jobs as needed – in this case, the mana
 Jobs are then scheduled and assigned to a technician to perform.
 
 ![scheduled jobs](images/scheduled-jobs.png)
+
+## Operation States
+
+After a plan is launched, the operations in the plan move through several states:
+
+- _waiting_ – the operation is waiting for a predecessor in the plan to complete
+- _pending_ – the operation is ready to be scheduled by a manager
+- _scheduled_ – the job of the operation is ready to be started by a technician
+- _running_ – the job of the operation is being run by a technician
+- _complete_ – the jot of the operation has finished without error
+
+In addition, operations may have other states depending on the definition of the operation type.
+The most common relates to evaluation of the precondition of an operation. Each operation type has a precondition that must be true before an operation of that type can transition into pending.
+Most preconditions are trivially true, meaning they can always be run, but some have more complex preconditions that may fail.
+If the precondition of an operation fails, then the operation is put into the _delayed_ state.
+
+Less common is the _deferred_ state.
+This arises when an operation has a predecessor operation that has an _on-the-fly_ operation type.
+An operation type is marked as being _on-the-fly_ if the number of operations of that type is used to determine the number of operations of a dependent operation type.
+An example is running a gel: to run a gel, you need to pour a gel.
+The operation type `Pour Gel` must be on-the-fly because it is not clear how many gels to pour until a job is formed of corresponding `Run Gel` operations.
+Because of this relationship, the `Run Gel` operations must be batched before the `Pour Gel` operations can start, and will be _deferred_ until the `Pour Gel` operations complete.
