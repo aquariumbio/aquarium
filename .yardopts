@@ -1,6 +1,7 @@
 --output-dir ./docs/api
 --no-private
---quiet
+--api krill
+-M redcarpet
 
 --title "Aquarium Documentation"
 
