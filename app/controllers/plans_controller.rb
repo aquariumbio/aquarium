@@ -1,5 +1,3 @@
-
-
 class PlansController < ApplicationController
 
   before_filter :signed_in_user
@@ -14,8 +12,6 @@ class PlansController < ApplicationController
   end
 
   def create
-
-    puts "CREATING PLAN WITH USER_ID = #{params[:user_id]}"
 
     Marshall.user = if current_user.is_admin && params[:user_id] && params[:user_id] != current_user.id
                       User.find(params[:user_id])

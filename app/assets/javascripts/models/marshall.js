@@ -57,8 +57,16 @@ AQ.Operation.record_methods.marshall = function() {
     op.operation_type = ots[0];
   }
 
-  var input_index = 0, output_index = 0;
+  var updated_job_associations = [];
 
+  aq.each(op.job_associations, ja => {
+    let uja = AQ.JobAssociation.record(ja);
+    updated_job_associations.push(uja)
+  })
+
+  op.job_associations = updated_job_associations;
+
+  var input_index = 0, output_index = 0;
   var updated_field_values = [];
 
   aq.each(op.field_values,(fv) => {
@@ -73,6 +81,23 @@ AQ.Operation.record_methods.marshall = function() {
         ufv.num_wires = 0;
       }
     });
+
+    if ( fv.items && fv.items.length > 0 ) {
+      ufv.items = aq.collect(fv.items, item => {
+        if ( item.collection ) {
+          let i = item;
+          i.collection = AQ.Collection.record(i.collection);
+          return AQ.Item.record(item)
+        } else {
+          return AQ.Item.record(item)
+        }
+      });
+      if ( ufv.child_item_id ) {
+        try {
+          ufv.item = aq.find(ufv.items, i => i.id == ufv.child_item_id)
+        } catch(e) { /* easy way to check if item not in list */ }
+      }
+    }
 
     if ( !ufv.field_type ) {
 
@@ -118,9 +143,9 @@ AQ.Operation.record_methods.marshall = function() {
 
   });
 
-  op.jobs = aq.collect(op.jobs, job => {
-    return AQ.Job.record(job);
-  });
+  // op.jobs = aq.collect(op.jobs, job => {
+  //   return AQ.Job.record(job);
+  // });
 
   op.width = 160;
   op.height = 30; 

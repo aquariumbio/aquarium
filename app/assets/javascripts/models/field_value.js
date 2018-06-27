@@ -105,11 +105,10 @@ AQ.FieldValue.record_methods.choose_item = function(items) {
 
   let fv = this;
 
-  delete fv.items;
-  fv.items = items;
-
   // Only choose an item if one is not already chosen 
   if ( items.length > 0 && ( !fv.child_item_id || !aq.member(aq.collect(items, i => i.id), fv.child_item_id ) ) ) {
+    delete fv.items;
+    fv.items = items;    
     if ( fv.role == 'input' && fv.num_wires == 0 ) {
       if ( !items[0].collection ) {
         fv.child_item_id = items[0].id;

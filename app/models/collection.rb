@@ -139,7 +139,7 @@ class Collection < Item
   # class method?
   def to_sample_id(x)
     r = EMPTY
-    if x.class == Integer
+    if x.class == Integer || x.class == Fixnum # Not sure where "Integer" came from here ---ek
       r = x
     elsif x.class == Item
       if x.sample

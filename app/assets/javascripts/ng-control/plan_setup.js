@@ -82,7 +82,8 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
               $scope.$apply();        
             })
           }).catch(e => {
-            add_designer_message(`Could not find plan ${aq.url_params().plan_id} specified in URL`);
+            add_designer_message(`Could not load plan ${aq.url_params().plan_id} specified in URL`);
+            console.log(e)
             $scope.ready = true;
             $scope.$apply();            
           });

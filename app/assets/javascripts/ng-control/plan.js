@@ -411,15 +411,19 @@
 
     function load_aux(plan) {
       $scope.state.messages = [];
+      $scope.wait = true;
       AQ.Plan.load(plan.id).then(p => {
         $scope.plan = p;
-        $scope.plan.find_items();
+        // $scope.plan.check_for_items();
         $scope.select(null);
         aq.each($scope.plans, plan => plan.selected = false);
         $scope.select_uba_by_budget_id($scope.current_user, $scope.plan.budget_id); // in case this plan is already running
+        $scope.wait = false;
         $scope.$apply();
       }).catch(error => {
-        $scope.report_error("Could not read plan '" + plan.name + "'.", error.message, error.stack)
+        $scope.report_error("Could not read plan '" + plan.name + "'.", error.message, error.stack);
+        console.log(error)
+        $scope.wait = false;
       })
     }
 

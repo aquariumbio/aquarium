@@ -92,7 +92,6 @@ AQ.Plan.record_methods.save = function(user) {
 }
 
 AQ.Plan.load = function(id) {
-  console.log("Loading plan " + id)
   return new Promise((resolve,reject) => {
     AQ.get("/plans/" + id + ".json").then(response => {   
       try {
@@ -671,6 +670,20 @@ AQ.Plan.record_methods.find_items = function() {
   aq.each(plan.operations, op => {
     aq.each(op.field_values, fv => {
       fv.recompute_getter("items")
+    })
+  })
+
+}
+
+AQ.Plan.record_methods.check_for_items = function() {
+
+  var plan = this;
+
+  aq.each(plan.operations, op => {
+    aq.each(op.field_values, fv => {
+      if ( fv.items.length == 0 ) {
+        fv.recompute_getter("items")
+      }
     })
   })
 

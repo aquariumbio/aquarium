@@ -434,6 +434,11 @@ AQ.Operation.record_getters.jobs = function() {
     op.jobs = [];
     return [];
 
+  } else if ( op.job_associations ) {
+
+    op.jobs = aq.collect(op.job_associations, ja => AQ.Job.record(ja.job));
+    return op.jobs;
+    
   } else {
 
     AQ.JobAssociation.where({ operation_id: op.id }, { include: "job" }).then(jas => {
