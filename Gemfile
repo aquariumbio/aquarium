@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.22'
 gem 'bootstrap-sass', '2.3.2.0'
 gem 'yaml_db'
-gem 'paperclip'
+gem 'paperclip', '4.3.7'
 
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
@@ -24,6 +24,7 @@ group :development do
   gem 'binding_of_caller'
   gem 'meta_request'
   gem 'rspec-rails'
+  gem 'fakes3'
 end
 
 group :production do

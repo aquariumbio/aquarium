@@ -19,9 +19,6 @@ module Bioturk
 
   class Application < Rails::Application
 
-    # Paperclip
-    config.paperclip_defaults = { url: "/system/#{Rails.env}/:class/:attachment/:id_partition/:style/:filename" } if Rails.env != 'production'
-
     # config.threadsafe!
 
     # Settings in config/environments/* take precedence over those specified here.

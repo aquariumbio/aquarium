@@ -1,0 +1,5 @@
+# This directory is used to hold the s3 files from the Docker container.
+# Ignore the files
+*
+# but keep this file to include the directory
+!.gitignore

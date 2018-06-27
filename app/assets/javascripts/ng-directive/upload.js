@@ -45,9 +45,15 @@
           dataType: "json",
           url: "/json/upload.json?jobid="+scope.jobid,
           add: function(e,data) {
-            data.submit();
-            scope.record.uploading = true;
-            AQ.update();
+            data.submit()
+              .fail(function(j,status,error) {
+                alert("Error: unable to upload file");
+                scope.record.uploading = false;
+              })
+              .done(function(data, status, j) {
+                scope.record.uploading = true;
+                AQ.update();
+              });
           },        
           done: function(e,data) {
             var da = scope.record.new_data_association();
