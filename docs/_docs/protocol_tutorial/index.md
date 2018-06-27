@@ -1,12 +1,13 @@
 ---
 title: Protocol Development Tutorial
 layout: default
+permalink: /protocol_tutorial/
 ---
 # Protocol Tutorial
 
 This is an introduction to writing protocols for Aquarium in the Krill domain specific langauge.
 We try to introduce the most common (and recommended) patterns in Krill, but this is not a comprehensive reference.
-See the [API documentation](../api/index.html) for more details on the functions that Krill provides.
+See the [API documentation](../../../api/index.html) for more details on the functions that Krill provides.
 
 If you haven't already, visit the [protocol developer documentation](../protocol_developer) for information about getting started.
 
@@ -29,9 +30,8 @@ If you haven't already, visit the [protocol developer documentation](../protocol
         - [Practicing Queries](#practicing-queries)
         - [Creating Items and Samples](#creating-items-and-samples)
         - [Creating Collections](#creating-collections)
-        - [Common definitions and record identifiers](#common-definitions-and-record-identifiers)
         - [Provisioning Items](#provisioning-items)
-        - [Working With Items in Operations](#working-with-items-in-operations)
+    - [Working With Items in Operations](#working-with-items-in-operations)
     - [Managing Operations](#managing-operations)
     - [Protocol Patterns](#protocol-patterns)
         - [Protocols that Create New Items](#protocols-that-create-new-items)
@@ -75,21 +75,21 @@ And, in case the admonition hasn't yet settled in, **don't** use a production se
 
 1.  Starting from the developer tab, click the **New** button in the upper right corner.
 
-    ![the aquarium developer tab](../images/tutorial/1_developer_tab.png)
+    ![the aquarium developer tab](images/1_developer_tab.png)
 
     This will create a new operation type in the current category.
 
-    ![a new operation type](../images/tutorial/2_new_operation_type.png)
+    ![a new operation type](images/2_new_operation_type.png)
 
 2.  Change the operation type name and category and click the **Save** button.
 
-    ![renamed new operation type](../images/tutorial/3_new_operation_type2.png)
+    ![renamed new operation type](images/3_new_operation_type2.png)
 
     For this example, we use the name `BasicProtocol` and category `tutorial_neptune`.
 
 3.  Click **Protocol**, replace the body of the main method with the code `show { title 'Getting Started' }` like in our example, and click the **Save** button at the bottom right.
 
-    ![the protocol of the new operation type](../images/tutorial/4_basic_protocol.png)
+    ![the protocol of the new operation type](images/4_basic_protocol.png)
 
 ### Running a Protocol from the Developer Test Tab
 
@@ -97,15 +97,15 @@ The simplest way to run a protocol is by using testing in the Developer Tab.
 
 1.  Click **Test**
 
-    ![the test view](../images/tutorial/5_basic_protocol_test.png)
+    ![the test view](images/5_basic_protocol_test.png)
 
 2.  Click the **Generate Operations** button to generate instances of the operation type with random inputs
 
-    ![the test with operations](../images/tutorial/6_basic_protocol_test2.png)
+    ![the test with operations](images/6_basic_protocol_test2.png)
 
 3.  Click the **Test** button to run the operation(s) with the inputs and show the trace with any output
 
-    ![the test results](../images/tutorial/7_basic_protocol_test3.png)
+    ![the test results](images/7_basic_protocol_test3.png)
 
 In this case, we see the page title 'Getting Started' as output.
 
@@ -115,39 +115,39 @@ You can run the protocol so that it will show you the screens as the technician 
 
 1.  In the Developer **Def** view, click the **Deployed** checkbox
 
-    ![click the deploy box](../images/tutorial/8_deployed_basic_protocol.png)
+    ![click the deploy box](images/8_deployed_basic_protocol.png)
 
 2.  Click the **Designer** tab at the top of the page, click _Design_, and then choose your category under _Operation Types_
 
-    ![choosing operation for a plan](../images/tutorial/9_plan_design_view.png)
+    ![choosing operation for a plan](images/9_plan_design_view.png)
 
 3.  Click the operation type name `BasicProtocol` to add the operation to the plan
 
-    ![the basic protocol plan](../images/tutorial/10_basic_protocol_plan.png)
+    ![the basic protocol plan](images/10_basic_protocol_plan.png)
 
 4.  Save the plan, and then click **Launch**. You'll have to select and confirm your budget, and click _Submit_
 
-    ![confirm the budget for the plan](../images/tutorial/11_launch_basic_protocol_plan.png)
+    ![confirm the budget for the plan](images/11_launch_basic_protocol_plan.png)
 
 5.  Select the **Manager** tab, and click your category in the list on the left.
 
-    ![Selecting the job](../images/tutorial/12_pending_plan.png)
+    ![Selecting the job](images/12_pending_plan.png)
 
 6.  Click the pending job for `BasicProtocol`, click the _All_ button and click _Schedule_
 
-    ![Scheduling the job](../images/tutorial/13_selecting_basic_protocol_job.png)
+    ![Scheduling the job](images/13_selecting_basic_protocol_job.png)
 
 7.  Click the pending ID under **Jobs**
 
-    ![Selecting job](../images/tutorial/14_scheduling_basic_protocol_job.png)
+    ![Selecting job](images/14_scheduling_basic_protocol_job.png)
 
 8.  Click _Start_
 
-    ![Starting job](../images/tutorial/15_scheduled_basic_protocol_job.png)
+    ![Starting job](images/15_scheduled_basic_protocol_job.png)
 
 9.  Use the buttons in the Technician view to move through the protocol.
 
-    ![Basic Protocol in the Technician View](../images/tutorial/16_running_basic_protocol.png)
+    ![Basic Protocol in the Technician View](images/16_running_basic_protocol.png)
 
     Ordinarily, clicking **OK** will move to the next slide, but since there is only one there, the protocol will end.
 
@@ -172,7 +172,7 @@ end
 The words `title` and `note` are functions that determine the appearance of the text on the constructed page.
 This example renders as
 
-![Using note displays text](../images/tutorial/17_clean-up-note.png)
+![Using note displays text](images/17_clean-up-note.png)
 
 (To see this in action, add the show-block to the main method of the `BasicProtocol`.)
 
@@ -191,7 +191,7 @@ end
 
 which gives the output
 
-![Using check displays a checkbox](images/tutorial/18_clean-up-check.png)
+![Using check displays a checkbox](images/18_clean-up-check.png)
 
 where the technicians must tap each checkbox before they can move to the next page.
 
@@ -203,7 +203,7 @@ In addition to displaying technician instructions, we also want a protocol to ma
 For this, an Aquarium protocol manipulates _items_, where each item is a unique instance of a sample in a container.
 The item is the physical object that is manipulated.
 
-Concretely, an item is represented by an `Item` object, which consists of a `Sample` object, an `ObjectType` representing the container, as well as a location.
+Concretely, an item is represented by an `Item` object, which consists of a `Sample` object, an `ObjectType` representing the container, as well as a `location`.
 An example of an item would be a pMOD8 plasmid streaked onto an agar plate that is sitting on a lab bench.
 This plate would be represented as an `Item`, where the `Sample` is `'pMOD8'`, the `ObjectType` is `'E. coli Plate of Plasmid'`, with a location `'Bench'`.
 To access this item, we can query the Aquarium inventory.
@@ -248,7 +248,7 @@ plate = plate_list.first
 
 This call to `plate_list.first` will return `nil` if `plate_list` is empty, and you should always check for this situation before using `plate` for another purpose.
 
-See [Here for more details about Items](../../api/Item.html).
+See [Here for more details about Items](../../../api/Item.html).
 
 A special type of `Item`, called `Collection` is used to keep track of multiple `Samples`. While an `Item` has one `Sample` object, a `Collection` has an arbitrary amount of `Samples` associated with it. We refer to the slots for `Samples` in a `Collection`  as `Parts`. `Collections` have additional methods which allow protocols to smoothly interact with containers that can hold many things at once, like stripwells. A full stripwell can be represented as a `Collection`, while each individual well in the physical stripwell is represented as a `Part` of that `Collection`.
 
@@ -265,7 +265,7 @@ batch = Item.where(
 
 This assigns a single item with object type `'E. coli Comp Cell Batch'` to the variable `batch`.
 The location `'M80C.2.0.21'` is a location in the -80C freezer at UW BIOFAB.
-(See the [location wizard](location_wizard.md) documentation for details on locations.)
+(See the [location wizard](location.md) documentation for details on locations.)
 
 The return from the above query will be an ordinary `Item`. To be able to use the object as a `Collection` we call
 
@@ -275,7 +275,7 @@ batch = collection_from batch
 
 and then can use the `Collection` methods on the object.
 
-See [Here for more details about Collections](../../api/Collection.html).
+See [Here for more details about Collections](../../../api/Collection.html).
 
 ### Practicing Queries
 
@@ -351,33 +351,12 @@ You can also use the following static Collection methods for convienence
 - `Collection.spread sample_list, 'collection_type_name'` - Creates an appropriate number of collections of "collection_type_name" and fills collections with the sample_list.
   The sample list can be Samples, Items, or integers.
 
-### Common definitions and record identifiers
-
-It is tempting to use constant values to search with record identifiers, but these identifiers are determined by how the database is built and could change.
-So, use the sample names instead as demonstrated above.
-
-However, the catch is that the names you should use are also determined by the inventory of your Aquarium instance.
-To help maintain a common set of names, we provide a database dump with definitions of common types.
-See the [Aquarium deployment instructions](deployment.md) for details.
-
 ### Provisioning Items
 
 Most protocols are performed at the bench, and can be thought of in three phases in which the technician (1) gets the necessary items, (2) does the protocol steps, and (3) disposes of or puts away any items.
-One approach to this first and last step is to use a pair of functions, `take` and `release` to provision a list of items, and the `release` function to return the items.
-For instance, the BLAH
+One approach to this first and last step is to use a pair of functions, `take` and `release`to provision a list of items. The `take` function instructs the technician to collect a list of items, and the `release` function instructs them to return the items.
 
-```ruby
-def main
-  sample = Sample.find_by_name("pMOD8")
-  pmod8_items = Item.where(sample_id: sample.id)
-  take(pmod8_items, interactive=true)
-  ...
-ensure
-  release pmod8_items
-end
-```
-
-TODO: BLAH
+For instance, Kapa HF Master Mix is a required ingredient for making PCR Fragments. The following code would instruct the technician to bring an Enzyme Stock containing Kapa HF Master Mix to bench at the `take` command. Then when the protocol is finished, `release ` instructs the technician to put the item back.
 
 From `Cloning/Make PCR Fragment`
 
@@ -385,14 +364,16 @@ From `Cloning/Make PCR Fragment`
 def main
   ...
 
-  kapa_stock_item_list = Sample.find_by_name('Kapa HF Master Mix').in('Enzyme Stock')
-  take(kapa_stock_item_list, interactive: true,  method: 'boxes')
+  kapa_stock_item = Sample.find_by_name('Kapa HF Master Mix').in('Enzyme Stock')
+  take [kapa_stock_item], interactive: true,  method: 'boxes'
 
   ...
 ensure
-  release kapa_stock_item_list, interactive: true
+  release [kapa_stock_item], interactive: true
 end
 ```
+
+`take` and `release` require a list of items as the first argument, which is why we wrap `kapa_stock_item` in brackets.
 
 ## Working With Items in Operations
 
@@ -492,7 +473,7 @@ class Protocol
     end
   end
 
-  def operation_group_1_task(operation_group)
+  def operation_group_2_task(operation_group)
     show do
         title 'MAKE A REALISH EXAMPLE'
     end
@@ -560,16 +541,16 @@ end
 Another common protocol uses an instrument to measure a sample.
 Instruments frequently save the measurements to a file, and so the protocol consists of instructions for first taking the measurement, and then uploading the file(s).
 
-[data associations]
+TODO [data associations]
 
 ### Protocols that Modify Items
 
-[handling time: timers vs scheduling]
+TODO [handling time: timers vs scheduling]
 
 ## Writing a Protocol
 
 To use a semi-realistic example, let’s write a simple version of the "E. coli Transformation" protocol from above.
-I won’t be going in-depth about all the methods being used, but I’ll leave categorizing each method (through the help of the [Aquarium docs](http://52.27.43.242/doc/index.html) and detailed [method reference](http://klavinslab.org/aquarium-api/) as an exercise for the reader.
+I won’t be going in-depth about all the methods being used, but I’ll leave categorizing each method with the [method reference](../../../api/index.html) as an exercise for the reader.
 
 Before writing a protocol, it’s always important to ask questions about how you want to structure it, such as:
 
@@ -593,15 +574,15 @@ Comp cells are best represented as a batch, a plasmid as an item.
 The output is going to be a transformed _E. coli_ aliquot — also a plasmid.
 So:
 
-![input1](../images/tutorial/19_input_1.png)
+![input1](images/19_input_1.png)
 
-![input2](../images/tutorial/20_input_2.png)
+![input2](images/20_input_2.png)
 
 The "Plasmid" input represents the plasmid — I recommend you take a moment to get over that shocking revelation because there’s something even _more_ shocking coming: The "Comp Cells" input represents the comp cells.
 
 "Plasmid" has multiple sample type / container combinations, because a plasmid can be held in many different containers and you want to give the user as much flexibility as possible. "Comp Cell" only has one sample type / container combination because you only want to use _E. coli_ comp cells, which are all held in the same type of container — a batch.
 
-![output](../images/tutorial/21_outputs.png)
+![output](images/21_outputs.png)
 
 The output is "Transformed E Coli" with container "Transformed E. coli Aliquot," which will be plated after some incubation period.
 
@@ -628,7 +609,7 @@ To understand what’s happening here, the first thing you have to do is underst
 
 A `Collection` is represented as a matrix, and looks like the following:
 
-![collections](../images/tutorial/22_collections_example.png)
+![collections](images/22_collections_example.png)
 
 Each part of the collection is filled with a "7," which is the sample ID for DH5&alpha;.
 In the database, it’s stored like this:
@@ -666,7 +647,6 @@ This code sets a new comp cell batch as the "input" (through comp_cells.set) if 
 Data associations are a great tool to pass information through Aquarium.
 You can upload messages, measurements, pictures, files, passive-aggressive notes — it’s all good.
 Operations, samples, items, etc. all have data associations, which means it’s very easy to attach and retrieve information from all of these.
-For a more detailed breakdown, click [here](http://52.27.43.242/doc/md-viewer?doc=DataAssociation)
 
 You also want to detract the comp cell aliquots used from the batch, so the online inventory is accurate.
 To do so, there’s a `remove_one` method included in a library, which is used like so:
@@ -678,7 +658,8 @@ operations.running.each { |op| comp_cells.collection.remove_one comp_cells.sampl
 Now that any potential operations without sufficient comp cells have errored out, it's time to do a `retrieve` and `make`.
 
 ```ruby
-operations.running.retrieve(only: ['Plasmid']).make
+operations.running.retrieve(only: ['Plasmid'])
+operations.running.make
 ```
 
 `retrieve` has an optional argument -- you can choose which inputs you want the tech to retrieve using 'only', which takes in an array argument.
@@ -765,7 +746,7 @@ Now, we need to write the instructions for the actual transformation:
 This uses a new Aquarium object — `Table`.
 The table looks like this:
 
-![table](../images/tutorial/23_table.png)
+![table](images/23_table.png)
 
 I’m going to break down the block of code that displays this table, because the rest of the show block is pretty standard.
 
@@ -791,7 +772,7 @@ In this case, it’s `index`, which is way to number things 1–n, where n is th
 
 `output_item` is exactly like `input_item`, but instead references the output. `end_table` is what signals the end of the table, and to display a table, `end_table` is necessary because that is what returns the fully-formed table.
 
-There are many table methods — refer to the more general [Operation documentation](http://52.27.43.242/doc/md-viewer?doc=Operations) for an overview.
+There are many table methods — refer to the more in depth [Table Method Documentation](table.md) for a full overview.
 
 The next step is to incubate the transformants:
 

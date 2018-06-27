@@ -1,10 +1,10 @@
 title: Aquarium
-description: The synthetic biology lab management system
+description: The laboratory operating system
 repository: https://github.com/klavinslab/aquarium
 timezone: America/Los_Angeles
 collections:
   docs:
-    permalink: "/:collection/:path/"
+    permalink: "/:path/"
     output: true
 defaults:
 - scope:
