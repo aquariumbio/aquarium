@@ -39,7 +39,7 @@ AQ.Operation.record_methods.marshall = function() {
   // This code is somewhat redundant with AQ.Operation.record_methods.set_type, but different enough
   // that much of that menthod is repeated here. 
 
-  let op = this, s = new Date();
+  let op = this;
 
   op.routing = {};
   op.form = { input: {}, output: {} };

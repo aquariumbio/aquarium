@@ -27,6 +27,14 @@ AQ.Operation.record_methods.upgrade = function(raw_data) {
     operation.operation_type = AQ.OperationType.record(raw_data.operation_type)
   }
 
+  if ( !operation.x ) {
+    operation.x = 100;
+  }
+
+  if ( !operation.y ) {
+    operation.y = 100;
+  }
+
   return operation;
 
 }
