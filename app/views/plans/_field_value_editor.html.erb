@@ -19,7 +19,7 @@
           <md-checkbox
             ng-click="set_allowable_field_type(aft)"
             ng-checked="allowable_field_type_checked(aft)"
-            ng-disabled="current_fv.field_type.allowable_field_types.length === 1"
+            ng-disabled="current_fv.field_type.allowable_field_types.length === 1 || plan.status != 'planning'"
             aria-label="Item">
           </md-checkbox>
 
@@ -47,7 +47,7 @@
 
         <md-subheader class="md-no-sticky">
           Inventory: 
-          <span ng-if="current_fv.wired || current_fv.role == 'output'">(Not Used in Plan)</span>
+          <span ng-if="current_fv.wired || current_fv.role == 'output'">( Not Used in Plan )</span>
         </md-subheader>
 
         <md-list class='md-compact-list' ng-if="!current_fv.items[0].collection"> <!-- ITEMS //////// -->
@@ -119,7 +119,7 @@
     <md-subheader ng-if="current_fv.is_sample && current_fv.items.length == 0" 
                   class="md-no-sticky">
       <span ng-if="current_fv.wired || current_fv.role == 'output'"></span>
-      <span ng-if="!current_fv.wired && current_fv.role != 'output' && current_fv.child_sample_id" 
+      <span 
             class="no-inventory">No Inventory</span>
     </md-subheader>
 

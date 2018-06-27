@@ -649,8 +649,10 @@
         }
       } else if ( $scope.current_io.origin ) {
         return $scope.current_io.origin.op.form[$scope.current_fv.role][$scope.current_fv.name].aft_id == aft.id;
-      } else {
+      } else if ( $scope.current_io.destinations[0].op.form[$scope.current_fv.role][$scope.current_fv.name] ) {
         return $scope.current_io.destinations[0].op.form[$scope.current_fv.role][$scope.current_fv.name].aft_id == aft.id;
+      } else {
+        return null;
       }
 
     }

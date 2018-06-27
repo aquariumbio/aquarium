@@ -44,8 +44,8 @@ AQ.Plan.record_methods.reload = function() {
         });
       });
       plan.recompute_getter("deletable");
-      plan.recompute_getter("state");      
-      plan.recompute_getter("cost_so_far");          
+      plan.recompute_getter("state");
+      plan.recompute_getter("cost_so_far");      
     });
   });
 
@@ -92,11 +92,12 @@ AQ.Plan.record_methods.save = function(user) {
 }
 
 AQ.Plan.load = function(id) {
+  let start_time = new Date();
   return new Promise((resolve,reject) => {
     AQ.get("/plans/" + id + ".json").then(response => {   
       try {
-        var up = AQ.Plan.record(response.data).marshall();
-        resolve(up);
+        resolve(AQ.Plan.record(response.data).marshall());
+        console.log(`plan ${id} loaded in ${new Date() - start_time} ms`);
       } catch (e) {
         reject(e)
       }

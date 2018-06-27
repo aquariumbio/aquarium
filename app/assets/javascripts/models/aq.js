@@ -8,6 +8,7 @@ AQ.init = function(http) {
   AQ.next_record_id = 0;
   AQ.sample_cache = {}; // used by AQ.Sample.find_by_identifier
   AQ.sample_type_cache = {}; // used by AQ.Sample.find_by_identifier
+  AQ.sample_identifier_cache = {}; // used by AQ.to_sample_identifier
 
 }
 
@@ -39,16 +40,29 @@ AQ.sample_names_for = function(sample_type_name) {
 }
 
 AQ.to_sample_identifier = function(id) {
+
   var sid = "" + id + ": Name not found. AQ.sample_names may not be loaded";
-  for ( var st in AQ.sample_names ) {
-    aq.each(AQ.sample_names[st], s => {
-      var i = parseInt(s.split(": ")[0]);
-      if ( i == id ) {
-        sid = s;
-      }
-    })
+
+  if ( AQ.sample_identifier_cache[id] ) {
+
+    sid = AQ.sample_identifier_cache[id];
+
+  } else {
+
+    for ( var st in AQ.sample_names ) {
+      aq.each(AQ.sample_names[st], s => {
+        var i = parseInt(s.split(": ")[0]);
+        if ( i == id ) {
+          sid = s;
+          AQ.sample_identifier_cache[id] = s;
+        }
+      })
+    }
+
   }
+
   return sid;
+
 }
 
 AQ.id_from = function(sid) { 

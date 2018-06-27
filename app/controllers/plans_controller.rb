@@ -66,6 +66,7 @@ class PlansController < ApplicationController
   end
 
   def show
+    s = Time.now
     respond_to do |format|
       format.html do
         redirect_to plans_url(params)
@@ -73,7 +74,10 @@ class PlansController < ApplicationController
       format.json do
         p = Plan.find_by_id(params[:id])
         if p
-          render json: Serialize.serialize(p)
+          ps = Serialize.serialize(p)
+          logger.info "Completed serialize in #{Time.now - s}s"
+          render json: ps
+          logger.info "Completed show in #{Time.now - s}s"
         else
           render json: { errors: "Could not find plan with id #{params[:id]}" }, status: 404
         end

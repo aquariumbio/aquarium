@@ -136,7 +136,7 @@ AQ.FieldValue.record_methods.find_items = function(sid) {
   if ( fv.field_type.ftype == 'sample' && sample_id ) {
     promise = promise
       .then( () => AQ.items_for(sample_id,fv.aft.object_type_id) )
-      .then( items => fv.choose_item(items) )
+      .then( items => { fv.items = items; fv.choose_item(items) } )
       .then( () => AQ.update() )
   } else {
     fv.items = [];
@@ -156,17 +156,19 @@ AQ.FieldValue.record_getters.items = function() {
 
   var fv = this;
 
+  delete fv.items;
+
   if ( fv.child_sample_id ) {
 
-    delete fv.items;
     fv.find_items(""+fv.child_sample_id);
 
   } else {
 
-    delete fv.items;
     fv.items = [];
 
   }
+
+  return fv.items;
 
 }
 

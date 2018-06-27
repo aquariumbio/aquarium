@@ -39,7 +39,7 @@ AQ.Operation.record_methods.marshall = function() {
   // This code is somewhat redundant with AQ.Operation.record_methods.set_type, but different enough
   // that much of that menthod is repeated here. 
 
-  var op = this;
+  let op = this, s = new Date();
 
   op.routing = {};
   op.form = { input: {}, output: {} };
@@ -81,23 +81,6 @@ AQ.Operation.record_methods.marshall = function() {
         ufv.num_wires = 0;
       }
     });
-
-    if ( fv.items && fv.items.length > 0 ) {
-      ufv.items = aq.collect(fv.items, item => {
-        if ( item.collection ) {
-          let i = item;
-          i.collection = AQ.Collection.record(i.collection);
-          return AQ.Item.record(item)
-        } else {
-          return AQ.Item.record(item)
-        }
-      });
-      if ( ufv.child_item_id ) {
-        try {
-          ufv.item = aq.find(ufv.items, i => i.id == ufv.child_item_id)
-        } catch(e) { /* easy way to check if item not in list */ }
-      }
-    }
 
     if ( !ufv.field_type ) {
 
@@ -143,10 +126,6 @@ AQ.Operation.record_methods.marshall = function() {
 
   });
 
-  // op.jobs = aq.collect(op.jobs, job => {
-  //   return AQ.Job.record(job);
-  // });
-
   op.width = 160;
   op.height = 30; 
 
@@ -156,8 +135,8 @@ AQ.Operation.record_methods.marshall = function() {
 
 AQ.Plan.record_methods.marshall = function() {
 
-  var plan = this;
-  var marshalled_operations = [];
+  let plan = this,
+    marshalled_operations = [];
 
   aq.each(plan.operations, op => {
     var op = AQ.Operation.record(op).marshall();
@@ -195,7 +174,6 @@ AQ.Plan.record_methods.marshall = function() {
     });
     if ( !w.to || !w.from ) {
       skip_wires.push(w);
-      console.log("WARNING: Skipping wire, probably because operation was deleted.")
     }
   })
 
@@ -203,13 +181,14 @@ AQ.Plan.record_methods.marshall = function() {
 
   plan.layout = plan.marshall_layout();
   plan.open = true;
+
   return plan;
 
 }
 
 AQ.Plan.record_methods.marshall_layout = function() {
   
-  var plan = this;
+  let plan = this;
 
   Module.next_module_id = 0; 
   ModuleIO.next_io_id = 0;
@@ -229,5 +208,6 @@ AQ.Plan.record_methods.marshall_layout = function() {
   plan.current_module = plan.base_module;
 
   plan.base_module.associate_fvs();
+
 
 }
