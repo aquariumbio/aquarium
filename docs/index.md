@@ -21,14 +21,11 @@ More importantly it provides a complete, executable description of the results o
 - [Configuration](configuration/)
 - [Concepts](concepts/)
 - User Role Documentation:
-
   - [Manager](manager/)
   - [Technician](technician/)
   - [Workflow Designer](designer/)
   - [Protocol Developer](protocol_developer/)
-  
-- Development Documentation
-
+- Development Documentation:
   - [Aquarium Development](aquarium_development/)
   - [Protocol Tutorial](protocol_tutorial/)
   - [Krill (Protocol) API](api)
