@@ -128,7 +128,7 @@ Two other important tabling methods are `input_collection` and `output_collectio
 
 `custom_column` is a valuable method that we can call as part of the table generation method chain from an `OperationsList`. Like `input_item`, `custom_column` will add a column to the table, and the contents of each cell of this new column will be a function of the `Operation` that is associated to the row of the table the cell appears.
 
-While `input_item` maps each `Operation` to the `Item id` of a specified input, `custom_column` allows you to define the attribute that each `Operation` will be mapped to. `custom_column` does not automatically generate a heading, and so requires the `heading:` option to be defined. It also requires a code block to determine what attribute of the `Operations` will be mapped to. 
+While `input_item` maps each `Operation` to the `Item id` of a specified input, `custom_column` allows you to define the attribute that each `Operation` will be mapped to. `custom_column` does not automatically generate a useful heading, and so requires the `heading:` option to be defined. It also requires a code block to determine what attribute of the `Operations` will be mapped to. 
 
 To start off with a simple example, imagine that for some reason you would like to add a column to `simple_tab` which lists the `Operation id` that the transfer for that row is associated with. We could do that with a `custom_column` that displays `op.id` for each `op` in `operations`
 
@@ -146,7 +146,7 @@ Here is the result of such a table
 
 (Note that this time the checkable cells have already all been clicked)
 
-A more exciting example might be to make a `custom_column` that lists a calculated volume of plasmid to transfer that is distinct between `Operations`, rather than just instructing to transfer 10µL for every `Operation` as we had written before. A clean way to accomplish this is by first storing the calculated value in the `temporary` hash of each `Operation`, and then mapping the each Operation to that value from the `custom_column`. For more on how the `temporary` hash works, see the [Operation Method Documentation](TODO). 
+A more exciting example might be to make a `custom_column` that lists a calculated volume of plasmid to transfer that is distinct between `Operations`, rather than just instructing to transfer 10µL for every `Operation` as we had written before. A clean way to accomplish this is by first storing the calculated value in the `temporary` hash of each `Operation`, and then mapping the each Operation to that value from the `custom_column`. For more on how the `temporary` hash works, see the [Operation Method Documentation](TODO).
 
 In this somewhat contrived example, we calculate the volume of plasmid to transfer by dividing the length of the input Plasmid by 500.
 
@@ -177,8 +177,93 @@ This general `Table` form is quite effective. It is commonly used in many Aquari
 
 ### Accepting Technician Input through Tables
 
-[custom_input, validate, validation_message]
+`Tables` can also be used to ask technicians for data input, using the `custom_input` tabling method. `custom_input` works similarly to `custom_column`, taking a heading option, and a code block evaluated on every Operation in the OperationsList which fills in the cell with a default value. `custom_input` also takes a 2 new arguments. `key` is the first parameter of `custom_input`, it is required and used when storing the inputted data. Any inputted data by the technician into the cells of a `custom_input` column will be stored in the `temporary` hash of the `Operation` corresponding to the row of the table it was inputted on, and the `key` parameter determines the key of the `temporary` hash for that `Operation` which the new data will be stored under. `:type` is a option for `custom_input` which specifies what data type to accept as input. It is not a required option, and `custom_input` cells will default to accepting Strings.
+
+As an example, lets create an data input `Table` which asks the technician to measure and record the remaining volume of a plasmid stock
+
+```ruby
+record_volume_tab = operations.start_table
+                        .input_item("Plasmid Source")
+                        .custom_input(:plasmid_volume, type: "number", heading: "How much left in stock? (µL)") { |op| 0 }
+                        .end_table
+```
+
+The pencil symbol next to Table cells indicates to the technician that input is required.
+
+![Input table example](images/input_table-1.png)
+
+To use this inputted data in the rest of the protocol, we must access the temporary hash of the operations. The following code uses the inputted data to generate a `Table` that parrots back whatever data had just entered in the `record_volume_tab`
+
+```ruby
+volume_tab = operations.start_table
+                        .input_item("Plasmid Source")
+                        .custom_column(heading: "Remaining Volume (µL)") { |op| op.temporary[:plasmid_volume] }
+                        .end_table
+```
+
+Since we didn't change the default value for any of the rows, all of the entered volumes should be 0
+
+TODO [volume_tab picture] 
+
+When accepting any technician input, it can be useful to validate the input and make sure it is of an expected form. Most likely the workers of your own lab will not attempt to do a SQL injection attack from within a protocol, but ensuring the input is valid before storing it or using it for calculations can resolve many potential errors caused by technician typos.
+
+See the [API documentation on `validate` and `validation_message` tabling methods](../../../api/Krill/OperationList.html#validate-instance_method) for information on how to validate inputted data in a `Table`.
 
 ## Standalone Tables
-TODO [Table.new, custom column, custom input, simple 2darray tables]
 
+We have discussed so far how to build `Tables` where the rows correspond to the `Operations` of a protocol, but it is also possible to make tables that do not depend on an `OperationsList`.
+
+`Table.new` will return a `Table` object that we can then chain method calls onto it to add columns in a similar way to how we did with the `OperationsList` `Tables`. `add_column` does exactly this -- it takes a String header as the first parameter, and an array of cell content for the second parameter. 
+
+For instance, suppose we had a palindromic sequence of DNA in an array that we would like to display to the technician in a table with a two columns, one with the forward direction and one with the reverse. First we make the arrays
+
+```ruby
+three_to_five = ["G","G","A","T","C","C"]
+five_to_three = three_to_five.reverse
+```
+
+We use `Table.new`, and `add_column` to construct the `Table`
+
+```ruby
+standalone_tab = Table.new.add_column("3 to 5", three_to_five).add_column("5 to 3", five_to_three)
+```
+
+Notice that we do not have to call end_table to return a complete `Table` object for simpler standalone `Tables`. standalone_tab can be now placed in a show block as is
+
+```ruby
+show do
+    title "Important Sequence"
+    table standalone_tab
+end
+```
+
+The resulting table:
+
+![Standalone table example](images/standalone_table-1.png)
+
+There is another, perhaps simpler way to make standalone `Tables` in protocols, which relies on a special aspect of the `table` show block flag. As mentioned before, `table` will accept a `Table` object to display, but not yet mentioned is that it can also accept an ordinary 2d array to a display as a `Table`.
+
+With this in mind, we could display a similar table as above (without the headers) by just doing
+
+```ruby
+show do
+    title "Important Sequence"
+    table [three_to_five, five_to_three]
+end
+```
+
+Tabling on 2d arrays allows us a convienent way to display data about the `Parts` of a `Collection` to the technician, since much of the data associated with a `Collection` is stored as a 2d array. For example, supposing that one of the inputs for a protocol is called '96 Well' and accepts a `Collection`, we could display the `sample_matrix` of the `Collection` for each `Operation` using a `show` blocks like so
+
+```ruby
+operations.each do |op|
+    show do
+        title "Collection Samples - #{op.input("96 Well").collection.id}"
+        table op.input("96 Well").collection.matrix
+    end
+end
+```
+
+This would produce several `show` slides -- one for each `Operation` in the `Job` -- where each slide displays the 
+`Sample ids` of the contents of the '96 Well' input `Collection` for that `Operation`. Here is such a displayed `Collection`, where only the first 20 `Parts` of the `Collection` are filled with `Samples`. Empty slots are designated by `-1` 
+
+![Collection table example](images/collection_table-1.png)
