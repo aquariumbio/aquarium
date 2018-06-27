@@ -16,7 +16,15 @@ The manager tab provides the information needed to manage lab operations as illu
 
 ![manager tab](images/manager-view.png)
 
-The controls at the left of the screen allows the manager to determine which operations are displayed on the right.
+This screenshot shows that there are five `Run Gel` operations (in the `Cloning` category) that are **pending**, or ready to execute.
+(See [Starting a job](#starting-a-job) below for details on how run a job using these five operations.)
+
+The controls at the left of the screen allow the manager to determine which operations are displayed on the right.
+At the top left, are display controls:
+
+- **Switch User** – filter operations by user,
+- **Active Jobs** – filter operations by jobs that are active, and
+- **Activity Reports** – switch the display 
 
 
 The far left of the screen provides controls that determine what information is displayed.
