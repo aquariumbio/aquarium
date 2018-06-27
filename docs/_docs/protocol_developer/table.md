@@ -51,16 +51,16 @@ The rest of this documentation will be focused on how to generate these table ob
 
 ## Tables on OperationList
 
-Aquarium protocols are designed to work on arbitrarily large batches of `Operations` at once, so it is often the case that you will want to design a `Table` where some information about each operation is represented by a row of the table. The `Table` shown in the example picture above uses this paradigm.
+Aquarium protocols are designed to work on arbitrarily large batches of `Operations` at once, so it is often the case that you will want to design a `Table` where some information about each `Operation` is represented by a row of the table. The `Table` shown in the example picture above uses this paradigm.
 
-`OperationList` has many instance methods which make generating row-per-`Operation` style `Tables` a simpler process. Creating a `Table` from an `OperationsList` relies on _method chaining_ these instance methods. To begin the table generation process, `start_table` is called on an `OperationsList`, returing a intermediary Table-like object which is initially has one row for every `Operation` in the list, and zero columns. Further methods may be called on this intermediary object to add columns to the `Table`. When all desired columns have neen added, `end_table` is called to finish the method chain and return a usable `Table` object which is ready to show to the technician.
+`OperationList` has many instance methods which make generating row-per-`Operation` style `Tables` a simpler process. Creating a `Table` from an `OperationsList` relies on _method chaining_ these instance methods. To begin the table generation process, `start_table` is called on an `OperationsList`, returing a intermediary Table-like object which is initially has one row for every `Operation` in the list, and zero columns. Further methods may be called on this intermediary object to add columns to the `Table`. When all desired columns have been added, `end_table` is called to finish the method chain and return a usable `Table` object which is ready to show to the technician.
 
 To create a `Table` with one column, called `simple_tab`,
 ```ruby
     simple_tab = operations.start_table.input_item("Plasmid Source").end_table
 ```
 
-When `simple_tab` is correctly displayed within a show block, the technician might see something like this (in a `Job` of 5 `Operations`)
+When `simple_tab` is displayed within a show block, the technician might see something like this (in a `Job` of 5 `Operations`)
 
 ![Simple table example](images/simple_table-1.png)
 
@@ -76,7 +76,7 @@ We can achieve the same functionality with outputs, by using the `output_item` m
 Suppose that we wanted to create `simple_tab` with an additional column that shows the `Item id` for an output tube that we want to pipet our input plasmids into alongside the `Item id` of the input Plasmid stocks we will be pipetting from. An additional method is added to the chain to generate an additional column
 
 ```ruby
-simple_tab = operations.start_table.input_item("Plasmid Source").output_column("Plasmid Destination").end_table
+simple_tab = operations.start_table.input_item("Plasmid Source").output_item("Plasmid Destination").end_table
 ```
 
 Our `simple_tab` now could be very helpful for directing a technician to pipet from one item to another
@@ -165,7 +165,7 @@ simple_tab = operations.start_table
                     .end_table
 
 # showing table
-show do 
+show do
     title "Transfer Plasmid"
     table simple_tab
 end
@@ -188,7 +188,7 @@ record_volume_tab = operations.start_table
                         .end_table
 ```
 
-The pencil symbol next to Table cells indicates to the technician that input is required.
+The pencil symbol next to Table cells indicates to the technician that input is required
 
 ![Input table example](images/input_table-1.png)
 
@@ -207,7 +207,7 @@ TODO [volume_tab picture]
 
 When accepting any technician input, it can be useful to validate the input and make sure it is of an expected form. Most likely the workers of your own lab will not attempt to do a SQL injection attack from within a protocol, but ensuring the input is valid before storing it or using it for calculations can resolve many potential errors caused by technician typos.
 
-See the [API documentation on `validate` and `validation_message` tabling methods](../../../api/Krill/OperationList.html#validate-instance_method) for information on how to validate inputted data in a `Table`.
+Input validation is a more advanced concept, so we will not go into it here. See the [API documentation on `validate` and `validation_message` tabling methods](../../../api/Krill/OperationList.html#validate-instance_method) for information on how to validate inputted data in a `Table`.
 
 ## Standalone Tables
 
@@ -241,9 +241,9 @@ The resulting table:
 
 ![Standalone table example](images/standalone_table-1.png)
 
-There is another, perhaps simpler way to make standalone `Tables` in protocols, which relies on a special aspect of the `table` show block flag. As mentioned before, `table` will accept a `Table` object to display, but not yet mentioned is that it can also accept an ordinary 2d array to a display as a `Table`.
+There is another, perhaps simpler way to make standalone `Tables` in protocols, which relies on a special aspect of the `table` `show` block flag. As mentioned before, `table` will accept a `Table` object to display, but not yet mentioned is that it can also accept an ordinary 2d array to a display as a `Table`.
 
-With this in mind, we could display a similar table as above (without the headers) by just doing
+With this in mind, we could display a similar table as above (but without the headers) by just doing
 
 ```ruby
 show do
