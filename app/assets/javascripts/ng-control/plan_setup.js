@@ -79,6 +79,7 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
             }
             AQ.User.find(p.user_id).then(user => {
               $scope.current_user = user;
+              console.log(`Completed initialization in ${new Date() - start_time} ms`);
               $scope.$apply();        
             })
           }).catch(e => {
@@ -98,6 +99,8 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
 
   }
 
+  var start_time = new Date();
+
   AQ.User.active_users().then(users => {
 
     $scope.users = users;
@@ -113,7 +116,6 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
         AQ.OperationType.compute_categories($scope.operation_types);
         AQ.operation_types = $scope.operation_types;
         get_plans_and_templates();
-
 
       });
     });    

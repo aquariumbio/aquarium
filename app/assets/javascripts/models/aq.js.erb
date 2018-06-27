@@ -3,8 +3,47 @@ AQ = {};
 AQ.init = function(http) {
 
   AQ.http = http;
-  AQ.get = http.get;
-  AQ.post = http.post;
+
+  if ( '<%= Rails.env %>' == 'development' ) { // Controls whether to spit out query performance information
+
+    AQ.get = function() { 
+
+      let start_time = new Date(),
+          args = arguments;
+
+      return AQ.http.get.apply(null,args).then(result => {
+        let url = Array.from(args)[0],
+            elapsed = new Date() - start_time;
+        console.log(`%cGET %c${url} completed in %c${elapsed} ms`, 
+                    "font-weight: bold", "font-weight: normal", "color: orange");
+        return result;
+      })
+
+    }
+
+    AQ.post = function() { 
+
+      let start_time = new Date(),
+          args = arguments;
+
+      return AQ.http.post.apply(null,args).then(result => { 
+        let url = Array.from(args)[0],
+            data = JSON.stringify(Array.from(args)[1]).slice(0,100),
+            elapsed = new Date() - start_time;
+        console.log(`%cPOST %c${url}, ${data} ... completed in %c${elapsed} ms`, 
+                    "font-weight: bold", "font-weight: normal","color: orange");
+        return result;
+      })
+
+    }
+
+  } else {
+
+    AQ.get = AQ.http.get;
+    AQ.post = AQ.http.post;
+
+  }
+
   AQ.next_record_id = 0;
   AQ.sample_cache = {}; // used by AQ.Sample.find_by_identifier
   AQ.sample_type_cache = {}; // used by AQ.Sample.find_by_identifier

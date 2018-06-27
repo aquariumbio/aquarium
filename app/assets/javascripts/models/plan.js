@@ -97,7 +97,7 @@ AQ.Plan.load = function(id) {
     AQ.get("/plans/" + id + ".json").then(response => {   
       try {
         resolve(AQ.Plan.record(response.data).marshall());
-        console.log(`plan ${id} loaded in ${new Date() - start_time} ms`);
+        console.log(`Plan ${id} loaded in ${new Date() - start_time} ms`);
       } catch (e) {
         reject(e)
       }
