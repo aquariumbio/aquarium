@@ -36,7 +36,7 @@ Example from `Cloning/Restriction Digest`
 
 ![Enzyme table example](images/enzyme_table.png)
 
-Inside a `show` block, a `Table` like this is displayed to the technician with the `table` flag -- `table` is a flag just like `note`, `warning` and `image` which is interpreted by the `show` block to display the argument passed with it in a certain way. While `note` accepts a `String` argument and `image` expects a path to an image, the `table` flag accepts a `Table` object. Supposing that we already have a complete `Table` object stored in the variable `enzyme_tab`, showing it to the technician is simple
+Inside a `show` block, a `Table` like this is displayed to the technician with the `table` flag — `table` is a flag just like `note`, `warning` and `image` which is interpreted by the `show` block to display the argument passed with it in a certain way. While `note` accepts a `String` argument and `image` expects a path to an image, the `table` flag accepts a `Table` object. Supposing that we already have a complete `Table` object stored in the variable `enzyme_tab`, showing it to the technician is simple
 
 ```ruby
     show do
@@ -68,7 +68,7 @@ Notice that there is one row per operation, with a single column, headed 'Plasmi
 
 ### Mapping Operations to Respective Inputs or Outputs
 
-A commonly used type of Table in protocols is one that shows a a column of input `Items` alongside a column of output `Items` -- for example, you might need to have a table like this if your protocol will instruct technicians to pipet an input plasmid stock into a specific output tube for each `Operation`. 
+A commonly used type of Table in protocols is one that shows a a column of input `Items` alongside a column of output `Items` — for example, you might need to have a table like this if your protocol will instruct technicians to pipet an input plasmid stock into a specific output tube for each `Operation`. 
 
 The `input_item` tabling method requires one argument: the name of an input. It appends a column to a table, where the contents of the new table cells in that column are the corresponding input `Item id` for the `Operation` of that row and the given input name. Our `simple_tab` example above already uses this functionality to create its single column listing the `Item ids` of the input Plasmid Stocks for each `Operation`. 
 We can achieve the same functionality with outputs, by using the `output_item` method.  
@@ -118,7 +118,7 @@ Now, our completed transfer instruction `show` slide run with 3 operations looks
 
 ![Simple table example](images/simple_table-3.png)
 
-Note the blue highlight around the destination item cells -- this indicates that the cells are checkable. Once clicked, the checkable cells turn solid blue.
+Note the blue highlight around the destination item cells — this indicates that the cells are checkable. Once clicked, the checkable cells turn solid blue.
 
 Two other important tabling methods are `input_collection` and `output_collection`. These methods work exactly like `input_item` and `output_item`, except they are intended for use when the input or ouput of the `Operation` is a `Collection`. 
 
@@ -213,7 +213,7 @@ Input validation is a more advanced concept, so we will not go into it here. See
 
 We have discussed so far how to build `Tables` where the rows correspond to the `Operations` of a protocol, but it is also possible to make tables that do not depend on an `OperationsList`.
 
-`Table.new` will return a `Table` object that we can then chain method calls onto it to add columns in a similar way to how we did with the `OperationsList` `Tables`. `add_column` does exactly this -- it takes a String header as the first parameter, and an array of cell content for the second parameter. 
+`Table.new` will return a `Table` object that we can then chain method calls onto it to add columns in a similar way to how we did with the `OperationsList` `Tables`. `add_column` does exactly this — it takes a String header as the first parameter, and an array of cell content for the second parameter. 
 
 For instance, suppose we had a palindromic sequence of DNA in an array that we would like to display to the technician in a table with a two columns, one with the forward direction and one with the reverse. First we make the arrays
 
@@ -241,7 +241,7 @@ The resulting table:
 
 ![Standalone table example](images/standalone_table-1.png)
 
-There is another, perhaps simpler way to make standalone `Tables` in protocols, which relies on a special aspect of the `table` `show` block flag. As mentioned before, `table` will accept a `Table` object to display, but not yet mentioned is that it can also accept an ordinary 2d array to a display as a `Table`.
+There is another, perhaps simpler way to make standalone `Tables` in protocols, which relies on a special aspect of the `table` `show` block flag. As mentioned before, `table` will accept a `Table` object to display, but not yet mentioned is that it can also accept an ordinary 2d array to display.
 
 With this in mind, we could display a similar table as above (but without the headers) by just doing
 
@@ -263,7 +263,7 @@ operations.each do |op|
 end
 ```
 
-This would produce several `show` slides -- one for each `Operation` in the `Job` -- where each slide displays the 
+This would produce several `show` slides — one for each `Operation` in the `Job` — where each slide displays the 
 `Sample ids` of the contents of the '96 Well' input `Collection` for that `Operation`. Here is such a displayed `Collection`, where only the first 20 `Parts` of the `Collection` are filled with `Samples`. Empty slots are designated by `-1` 
 
 ![Collection table example](images/collection_table-1.png)
