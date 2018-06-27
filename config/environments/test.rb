@@ -1,7 +1,7 @@
 
 
 Bioturk::Application.configure do
-  # Paperclip => S3
+  # Paperclip => fakes3
   config.paperclip_defaults = {
     storage: :s3,
     s3_host_name: 's3.amazonaws.com', # dummy dns-name from fakes3

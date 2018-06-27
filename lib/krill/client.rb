@@ -8,7 +8,7 @@ module Krill
 
     def initialize
 
-      @hostname = 'localhost'
+      @hostname = Bioturk::Application.config.krill_hostname
       @port = Bioturk::Application.config.krill_port
 
     end

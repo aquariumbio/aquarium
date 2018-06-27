@@ -23,6 +23,9 @@ Gemfile.lock
 # Igmore the installation specific configuration file
 /config/initializers/aquarium.rb
 
+# Ignore the installation specific docker-compose file
+docker-compose.yml
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 
@@ -64,10 +67,6 @@ public/components
 
 .DS_Store
 
-docker/db
-
-
-
-
-
 Gemfile.lock
+
+docker-compose.yml

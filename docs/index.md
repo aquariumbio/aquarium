@@ -18,14 +18,17 @@ More importantly it provides a complete, executable description of the results o
 
 # Documentation
 
-* [Configuration](docs/configuration/)
-* User Role Documentation:
-  * [Manager](docs/manager/)
-  * [Technician](docs/technician/)
-  * [Workflow Designer](docs/designer/)
-  * [Protocol Developer](docs/protocol_developer/)
-* Development Documentation
-  * [Aquarium Development](docs/aquarium_development/)
-  * [API](api)
+- [Configuration](configuration/)
+- [Concepts](concepts/)
+- User Role Documentation:
+  - [Manager](manager/)
+  - [Technician](technician/)
+  - [Workflow Designer](designer/)
+  - [Protocol Developer](protocol_developer/)
+- Development Documentation:
+  - [Aquarium Development](aquarium_development/)
+  - [Protocol Tutorial](protocol_tutorial/)
+  - [Krill (Protocol) API](api)
+  - [Trident Python API](https://github.com/klavinslab/trident)
 
 # [License](https://github.com/klavinslab/aquarium/blob/master/license.md)
