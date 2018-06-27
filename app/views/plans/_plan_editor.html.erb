@@ -126,6 +126,8 @@
 
   </g>
 
+  <%= render partial: "module_editor" %>  
+
   <!-- OPERATION STATUS CHANGE BOXES -->
 
   <g ng-repeat="op in plan.operations" 
@@ -183,8 +185,6 @@
         ng-attr-y="{{multiselect_y()}}"
         ng-attr-width="{{multiselect_width()}}"
         ng-attr-height="{{multiselect_height()}}"/>
-
-  <%= render partial: "module_editor" %>
 
 </svg>
 

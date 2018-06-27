@@ -267,7 +267,10 @@
           $scope.wait = true;
           operation.set_status(new_status).then(() => {
             $scope.wait = false;
-            $scope.multiselect = {};            
+            $scope.multiselect = {};
+            $scope.state.messages.push(`Changed state of operation ${operation.id} to ${new_status}.` + 
+                                       `You may want to step the plan, via the "Plan Info" panel ` + 
+                                       `To ensure that the plan progresses properly.`);        
             $scope.$apply();
           })
         })
