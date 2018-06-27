@@ -92,7 +92,7 @@ But, there are many more [tags](http://www.rubydoc.info/gems/yard/file/docs/Tags
 Running the command
 
 ```bash
-yard
+yardoc
 ```
 
 will generate the documentation and write it to the directory `docs/api`.
@@ -107,10 +107,18 @@ The site is built from the [kramdown](https://kramdown.gettalong.org) flavor of 
 It riffs off of the [Cayman theme](https://github.com/pages-themes/cayman), set through the project pages settings for the Aquarium project.
 The files in `docs/_layouts`, `docs/_includes`, `docs/_sass`, and `docs/assets/css` define changes that override the theme defaults.
 
-The content of the site is located in the files in `docs/_docs` with each subdirectory having a `index.md` file that is loaded when the directory name is used (e.g., `klavinslab.org/aquarium/docs/manager` maps to the file `docs/_docs/manager/index.md`).
+The content of the site is located in the files in `docs/_docs` with each subdirectory having a `index.md` file that is loaded when the directory name is used (e.g., `klavinslab.org/aquarium/manager` maps to the file `docs/_docs/manager/index.md`).
 These Markdown files have a `permalink` that determines this mapping.
-Each directory also has an images directory that the files in the directory can reference.
+Because of the way that general permalinks are defined in `docs/_config.yml`, other markdown documents correspond to a URL with the file name.
+For instance, `klavingslab.org/aquarium/protocol_developer/table/` maps to the file `docs/_docs/protocol_developer/table.md`.
 
+To avoid issues creating links using standard Markdown hyperlinks, use the Liquid `link` tag that will do the mapping from the file path.
+This tag takes the absolute path relative to the `docs` directory, so use `{% link _docs/protocol_developer/index.md %}` to get the link for the file `docs/_docs/protocol_developer/index.md`.
+Using the link tag to reference image files in the `images` subdirectory for each topic will avoid discrepancies between a local preview and how the site is displayed on GitHub.
+
+Unfortunately, images linked this way will also not be rendered in a local preview.
+To see the pages rendered properly, install the `github-pages` gem, run `jekyll serve` from the `docs` directory, and visit `localhost:4000` with a browser.
+For more detail, see the [instructions](https://help.github.com/articles/setting-up-your-github-pages-site-locally-with-jekyll/) from GitHub.
 
 ## Making an Aquarium Release
 
