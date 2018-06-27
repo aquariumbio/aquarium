@@ -53,7 +53,7 @@ module Krill
     # Set a value in the current row
     #
     # @param [symbol] name The name of the column
-    # @param [] value Value to set
+    # @param [object] value Value to set
     def set name, value
       @selection[name] = value   
       self
