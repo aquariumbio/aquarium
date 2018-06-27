@@ -76,7 +76,7 @@ We can achieve the same functionality with outputs, by using the `output_item` m
 Suppose that we wanted to create `simple_tab` with an additional column that shows the `Item id` for an output tube that we want to pipet our input plasmids into alongside the `Item id` of the input Plasmid stocks we will be pipetting from. An additional method is added to the chain to generate an additional column
 
 ```ruby
-    simple_tab = operations.start_table.input_item("Plasmid Source").output_column("Plasmid Destination").end_table
+simple_tab = operations.start_table.input_item("Plasmid Source").output_column("Plasmid Destination").end_table
 ```
 
 Our `simple_tab` now could be very helpful for directing a technician to pipet from one item to another
@@ -86,32 +86,32 @@ Our `simple_tab` now could be very helpful for directing a technician to pipet f
 The headings for the columns of this `Table` have been automatically generated using the name of the input or output, but we can add an additional optional argument to `input_item` and `output_item` for specifying a custom column headings
 
 ```ruby
-    simple_tab = operations.start_table.input_item("Plasmid Source", heading: "Plasmid Stocks").output_item("Plasmid Destination", heading: "Destination Items").end_table
+simple_tab = operations.start_table.input_item("Plasmid Source", heading: "Plasmid Stocks").output_item("Plasmid Destination", heading: "Destination Items").end_table
 ```
 
 There is another optional argument which allows `Table` cells to be designated as checkable boxes, which the technician has to click on all of before moving onto the next slide. This is helpful for keeping track of which transfers have already been completed and which are still needed. We will set the output boxes as checkable
 
 ```ruby
-    simple_tab = operations.start_table.input_item("Plasmid Source", heading: "Plasmid Stocks").output_item("Plasmid Destination", heading: "Destination Items", checkable: true).end_table
+simple_tab = operations.start_table.input_item("Plasmid Source", heading: "Plasmid Stocks").output_item("Plasmid Destination", heading: "Destination Items", checkable: true).end_table
 ```
 
 This method chain is getting fairly long, it may be more readable if we put newlines between the method calls
 
 ```ruby
-    simple_tab = operations.start_table
-                        .input_item("Plasmid Source", heading: "Plasmid Stocks")
-                        .output_item("Plasmid Destination", heading: "Destination Items", checkable: true)
-                        .end_table
+simple_tab = operations.start_table
+                    .input_item("Plasmid Source", heading: "Plasmid Stocks")
+                    .output_item("Plasmid Destination", heading: "Destination Items", checkable: true)
+                    .end_table
 ```
 
 Such a nice table of course deserves an equally polished `show` block
 
 ```ruby
-    show do 
-      title "Transfer Plasmid"
-      note "Pipet 10µL of each plasmid stock into the corresponding Destination Item"
-      table simple_tab
-    end
+show do 
+    title "Transfer Plasmid"
+    note "Pipet 10µL of each plasmid stock into the corresponding Destination Item"
+    table simple_tab
+end
 ```
 
 Now, our completed transfer instruction `show` slide run with 3 operations looks like this:
@@ -133,11 +133,11 @@ While `input_item` maps each `Operation` to the `Item id` of a specified input, 
 To start off with a simple example, imagine that for some reason you would like to add a column to `simple_tab` which lists the `Operation id` that the transfer for that row is associated with. We could do that with a `custom_column` that displays `op.id` for each `op` in `operations`
 
 ```ruby
-    simple_tab = operations.start_table
-                        .input_item("Plasmid Source", heading: "Plasmid Stocks")
-                        .output_item("Plasmid Destination", heading: "Destination Items", checkable: true)
-                        .custom_column(heading: "Operation id") { |op| op.id }
-                        .end_table
+simple_tab = operations.start_table
+                    .input_item("Plasmid Source", heading: "Plasmid Stocks")
+                    .output_item("Plasmid Destination", heading: "Destination Items", checkable: true)
+                    .custom_column(heading: "Operation id") { |op| op.id }
+                    .end_table
 ```
 
 Here is the result of such a table
@@ -151,24 +151,24 @@ A more exciting example might be to make a `custom_column` that lists a calculat
 In this somewhat contrived example, we calculate the volume of plasmid to transfer by dividing the length of the input Plasmid by 500.
 
 ```ruby
-    # calculating volume to transfer
-    operations.each do |op|
-        plasmid_length = op.input("Plasmid Source").sample.properties[length].to_f
-        op.temporary[:transfer_volume] = plasmid_length / 500
-    end
+# calculating volume to transfer
+operations.each do |op|
+    plasmid_length = op.input("Plasmid Source").sample.properties[length].to_f
+    op.temporary[:transfer_volume] = plasmid_length / 500
+end
 
-    # creating table
-    simple_tab = operations.start_table
-                        .input_item("Plasmid Source", heading: "Plasmid Stocks")
-                        .output_item("Plasmid Destination", heading: "Destination Items", checkable: true)
-                        .custom_column(heading: "Amount to transfer (µL)") { |op| op.temporary[:transfer_volume] }
-                        .end_table
+# creating table
+simple_tab = operations.start_table
+                    .input_item("Plasmid Source", heading: "Plasmid Stocks")
+                    .output_item("Plasmid Destination", heading: "Destination Items", checkable: true)
+                    .custom_column(heading: "Amount to transfer (µL)") { |op| op.temporary[:transfer_volume] }
+                    .end_table
 
-    # showing table
-    show do 
-      title "Transfer Plasmid"
-      table simple_tab
-    end
+# showing table
+show do 
+    title "Transfer Plasmid"
+    table simple_tab
+end
 ```
 
 This general `Table` form is quite effective. It is commonly used in many Aquarium protocols
