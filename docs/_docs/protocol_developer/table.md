@@ -6,10 +6,10 @@ layout: default
 
 This is the documentation for generating and showing formatted `Tables`, for use in writing effective Aquarium protocols.
 
-This page will give examples and instructions on how to get started using `Tables`, but it is not a comprehensive reference for all `Table` related methods. 
-See the [API documentation]({% link api/index.html }) for more details on the functions that Krill provides.
+This page will give examples and instructions on how to get started using `Tables`, but it is not a comprehensive reference for all `Table` related methods.
+See the [API documentation]({% link /api/index.html }) for more details on the functions that Krill provides.
 
-If you haven't already, visit the [protocol developer documentation]({% link _docs/protocol_developer/index.md %}) for information about getting started.
+If you haven't already, visit the [protocol developer documentation]({% link /_docs/protocol_developer/index.md %}) for information about getting started.
 
 ---
 
