@@ -105,7 +105,7 @@ class OperationsController < ApplicationController
     ops = Operation.where(params[:criteria])
     ops = ops.limit(params[:options][:limit])   if params[:options] && params[:options][:limit] && params[:options][:limit].to_i > 0
     ops = ops.offset(params[:options][:offset]) if params[:options] && params[:options][:offset] && params[:options][:offset].to_i > 0
-    ops = ops.order('created_at DESC')          if params[:options] && params[:options][:reverse]
+    ops = ops.order('updated_at DESC')          if params[:options] && params[:options][:reverse]
     ops = ops.as_json
 
     op_ids = ops.collect { |op| op['id'] }
