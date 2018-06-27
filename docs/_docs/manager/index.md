@@ -16,22 +16,27 @@ A manager uses Aquarium to determine which operations are run together as a job;
 
 - [Manager](#manager)
     - [Table of Contents](#table-of-contents)
-    - [The Manager Tab](#the-manager-tab)
-        - [Scenario: Monitoring lab activity](#scenario-monitoring-lab-activity)
-        - [Scenario: Starting a job](#scenario-starting-a-job)
-        - [[Other scenarios]](#other-scenarios)
-    - [How managers use designer](#how-managers-use-designer)
+    - [Relevant Views](#relevant-views)
+        - [The Manager Tab](#the-manager-tab)
+        - [The Plan Tab](#the-plan-tab)
+        - [The Designer Tab](#the-designer-tab)
+    - [Scenario: Monitoring lab activity](#scenario-monitoring-lab-activity)
+    - [Scenario: Starting a job](#scenario-starting-a-job)
+    - [Scenario: Correcting a bad plan](#scenario-correcting-a-bad-plan)
+    - [other scenarios?](#other-scenarios)
 
 <!-- /TOC -->
 
-## The Manager Tab
+## Relevant Views
+
+### The Manager Tab
 
 The manager tab provides the information needed to manage lab operations as illustrated by this (redacted) screenshot of the manager tab for the UW BIOFAB production server.
 
 ![manager tab](images/manager-view.png)
 
 This screenshot shows that there are five `Run Gel` operations (in the `Cloning` category) that are **pending**, or ready to execute.
-(See [Starting a job](#starting-a-job) below for details on how run a job using these five operations.)
+(See [Starting a job](#scenario-starting-a-job) below for details on how run a job using these five operations.)
 
 The controls at the left of the screen allow the manager to determine which operations are displayed on the right.
 At the top left are display controls that include:
@@ -47,9 +52,13 @@ Clicking on a number for a particular operation type and operation state shows t
 
 It is also possible to display completed operations by clicking the slider at the top of the operation status panel.
 
-### Scenario: Monitoring lab activity
+### The Plan Tab
 
-The left panel of the manager view has two parts.
+### The Designer Tab
+
+## Scenario: Monitoring lab activity
+
+The left panel of the manager tab has two parts.
 At the top are buttons that allows the manager to do common tasks they perform: switching to another user, displaying active jobs, and generating reports of activity.
 At the bottom are buttons that control which categories of jobs are displayed in the right panel.
 This example shows three categories _cloning_, _manager_ and _tutorial_neptune_ with the tutorial selected.
@@ -63,21 +72,28 @@ This example shows one operation type with an operation that is **pending**, whi
 
 ![selected category](images/selected-category.png)
 
-The operation states are explain in the [concepts](../concepts/#operation-states)
+The operation states are explained in the [Aquarium Concepts](../concepts/#operation-states) document.
 
-### Scenario: Starting a job
+## Scenario: Starting a job
 
-Clicking the number in the pending spot will display all of the operations of the selected type and state.
+From the Manager Tab, clicking the number in the pending spot will display all of the operations of the selected type and state.
 These represent all of the jobs that can be selected and run as a job.
 
 ![selected operation](images/selected-operation.png)
 
-The manager selects the operations to be part of a job, and then clicks **run** to start the job
+Selecting the operations to be part of a job, and then clicking **run** starts the job
 
 ![jobs](images/scheduled-job.png)
+
+Clicking the job id in this window will open the technician view that shows the job ready to start:
+
 ![technician-start](images/technician-start.png)
+
+And, once the technician has started the job, the status will update in the operation status panel.
+
 ![changed status](images/updated-status.png)
 
-### [Other scenarios]
+## Scenario: Correcting a bad plan
 
-## How managers use designer
+## other scenarios?
+
