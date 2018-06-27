@@ -146,7 +146,7 @@ Here is the result of such a table
 
 (Note that this time the checkable cells have already all been clicked)
 
-A more exciting example might be to make a `custom_column` that lists a calculated volume of plasmid to transfer that is distinct between `Operations`, rather than just instructing to transfer 10µL for every `Operation` as we had written before. A clean way to accomplish this is by first storing the calculated value in the `temporary` hash of each `Operation`, and then mapping the each Operation to that value from the `custom_column`. For more on how the `temporary` hash works, see the [Operation Method Documentation](TODO).
+A more exciting example might be to make a `custom_column` that lists a calculated volume of plasmid to transfer that is distinct between `Operations`, rather than just instructing to transfer 10µL for every `Operation` as we had written before. A clean way to accomplish this is by first storing the calculated value in the `temporary` hash of each `Operation`, and then mapping the each Operation to that value from the `custom_column`. For more on how the `temporary` hash works, see the [Operation Method Documentation](Operation.md).
 
 In this somewhat contrived example, we calculate the volume of plasmid to transfer by dividing the length of the input Plasmid by 500.
 
@@ -177,14 +177,14 @@ This general `Table` form is quite effective. It is commonly used in many Aquari
 
 ### Accepting Technician Input through Tables
 
-`Tables` can also be used to ask technicians for data input, using the `custom_input` tabling method. `custom_input` works similarly to `custom_column`, taking a heading option, and a code block evaluated on every Operation in the OperationsList which fills in the cell with a default value. `custom_input` also takes a 2 new arguments. `key` is the first parameter of `custom_input`, it is required and used when storing the inputted data. Any inputted data by the technician into the cells of a `custom_input` column will be stored in the `temporary` hash of the `Operation` corresponding to the row of the table it was inputted on, and the `key` parameter determines the key of the `temporary` hash for that `Operation` which the new data will be stored under. `:type` is a option for `custom_input` which specifies what data type to accept as input. It is not a required option, and `custom_input` cells will default to accepting Strings.
+`Tables` can also be used to ask technicians for data input, using the `get` tabling method. `get` works similarly to `custom_column`, taking a heading option, and a code block evaluated on every Operation in the OperationsList which fills in the cell with a default value. `get` also takes a 2 new arguments. `key` is the first parameter of `get`, it is required and used when storing the inputted data. Any inputted data by the technician into the cells of a `get` column will be stored in the `temporary` hash of the `Operation` corresponding to the row of the table it was inputted on, and the `key` parameter determines the key of the `temporary` hash for that `Operation` which the new data will be stored under. `:type` is a option for `get` which specifies what data type to accept as input. It is not a required option, and `get` cells will default to accepting Strings.
 
 As an example, lets create an data input `Table` which asks the technician to measure and record the remaining volume of a plasmid stock
 
 ```ruby
 record_volume_tab = operations.start_table
                         .input_item("Plasmid Source")
-                        .custom_input(:plasmid_volume, type: "number", heading: "How much left in stock? (µL)") { |op| 0 }
+                        .get(:plasmid_volume, type: "number", heading: "How much left in stock? (µL)") { |op| 0 }
                         .end_table
 ```
 
@@ -195,15 +195,21 @@ The pencil symbol next to Table cells indicates to the technician that input is 
 To use this inputted data in the rest of the protocol, we must access the temporary hash of the operations. The following code uses the inputted data to generate a `Table` that parrots back whatever data had just entered in the `record_volume_tab`
 
 ```ruby
-volume_tab = operations.start_table
+parrot_tab = operations.start_table
                         .input_item("Plasmid Source")
                         .custom_column(heading: "Remaining Volume (µL)") { |op| op.temporary[:plasmid_volume] }
                         .end_table
 ```
 
-Since we didn't change the default value for any of the rows, all of the entered volumes should be 0
+Note that `parrot_tab` will not have access to the plasmid volumes unless it is generated after `record_volume_tab` has already been shown.
 
-TODO [volume_tab picture] 
+Suppose we filled in the input `Table` with the following values
+
+![Input table example](images/input_table-2.png)
+
+Then our parrot `Table` on the next slide would show 
+
+![Input table example](images/input_table-3.png) 
 
 When accepting any technician input, it can be useful to validate the input and make sure it is of an expected form. Most likely the workers of your own lab will not attempt to do a SQL injection attack from within a protocol, but ensuring the input is valid before storing it or using it for calculations can resolve many potential errors caused by technician typos.
 
