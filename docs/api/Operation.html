@@ -200,7 +200,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>Adds a new input to an operation, even if that operation doesn&#39;t specify the input in its definition.</div></span>
+    <span class="summary_desc"><div class='inline'><p>Adds a new input to an operation, even if that operation doesn&#39;t specify the input in its definition.</p>
+</div></span>
   
 </li>
 
@@ -420,7 +421,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>Inputs as Array extended with <span class='object_link'>IOList</span>.</div></span>
+    <span class="summary_desc"><div class='inline'><p>Inputs as Array extended with <span class='object_link'>IOList</span>.</p>
+</div></span>
   
 </li>
 
@@ -486,7 +488,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>STARTING PLANS.</div></span>
+    <span class="summary_desc"><div class='inline'><p>STARTING PLANS.</p>
+</div></span>
   
 </li>
 
@@ -508,7 +511,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>OperationType name.</div></span>
+    <span class="summary_desc"><div class='inline'><p>OperationType name.</p>
+</div></span>
   
 </li>
 
@@ -552,7 +556,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>Whether OperationType is on-the-fly.</div></span>
+    <span class="summary_desc"><div class='inline'><p>Whether OperationType is on-the-fly.</p>
+</div></span>
   
 </li>
 
@@ -596,7 +601,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>Outputs as Array extended with <span class='object_link'>IOList</span>.</div></span>
+    <span class="summary_desc"><div class='inline'><p>Outputs as Array extended with <span class='object_link'>IOList</span>.</p>
+</div></span>
   
 </li>
 
@@ -662,7 +668,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>interface with FieldValuer.</div></span>
+    <span class="summary_desc"><div class='inline'><p>interface with FieldValuer.</p>
+</div></span>
   
 </li>
 
@@ -684,7 +691,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>Passes an input item to an output (alternative to <span class='object_link'><a href="Krill/OperationList.html#make-instance_method" title="Krill::OperationList#make (method)">Krill::OperationList#make</a></span>).</div></span>
+    <span class="summary_desc"><div class='inline'><p>Passes an input item to an output (alternative to <span class='object_link'><a href="Krill/OperationList.html#make-instance_method" title="Krill::OperationList#make (method)">Krill::OperationList#make</a></span>).</p>
+</div></span>
   
 </li>
 
@@ -706,7 +714,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>The plan that contains this Operation.</div></span>
+    <span class="summary_desc"><div class='inline'><p>The plan that contains this Operation.</p>
+</div></span>
   
 </li>
 
@@ -838,7 +847,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>Assigns a Sample to an input.</div></span>
+    <span class="summary_desc"><div class='inline'><p>Assigns a Sample to an input.</p>
+</div></span>
   
 </li>
 
@@ -882,7 +892,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>Assigns a Sample to an output.</div></span>
+    <span class="summary_desc"><div class='inline'><p>Assigns a Sample to an output.</p>
+</div></span>
   
 </li>
 
@@ -1195,9 +1206,10 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    Adds a new input to an operation, even if that operation doesn&#39;t specify the input
+    <p>Adds a new input to an operation, even if that operation doesn&#39;t specify the input
 in its definition. Useful for example when an operation determines which enzymes it
-will use once launched.
+will use once launched.</p>
+
 
   </div>
 </div>
@@ -1207,7 +1219,8 @@ will use once launched.
     <p class="tag_title">Examples:</p>
     
       
-        <p class="example_title"><div class='inline'>Add input for items to discard</div></p>
+        <p class="example_title"><div class='inline'><p>Add input for items to discard</p>
+</div></p>
       
       <pre class="example code"><code><span class='id identifier rubyid_items'>items</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
   <span class='id identifier rubyid_items_in_inputs'>items_in_inputs</span> <span class='op'>=</span> <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_inputs'>inputs</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_input'>input</span><span class='op'>|</span> <span class='id identifier rubyid_input'>input</span><span class='period'>.</span><span class='id identifier rubyid_item'>item</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_uniq'>uniq</span>
@@ -1927,7 +1940,8 @@ will use once launched.
   
 </h3><div class="docstring">
   <div class="discussion">
-    Inputs as Array extended with <span class='object_link'>IOList</span>
+    <p>Inputs as Array extended with <span class='object_link'>IOList</span></p>
+
 
   </div>
 </div>
@@ -2085,7 +2099,8 @@ will use once launched.
   
 </h3><div class="docstring">
   <div class="discussion">
-    STARTING PLANS
+    <p>STARTING PLANS</p>
+
 
   </div>
 </div>
@@ -2169,7 +2184,8 @@ will use once launched.
   
 </h3><div class="docstring">
   <div class="discussion">
-    Returns OperationType name
+    <p>Returns OperationType name</p>
+
 
   </div>
 </div>
@@ -2186,7 +2202,8 @@ will use once launched.
       
       
         &mdash;
-        <div class='inline'>OperationType name</div>
+        <div class='inline'><p>OperationType name</p>
+</div>
       
     </li>
   
@@ -2301,7 +2318,8 @@ will use once launched.
   
 </h3><div class="docstring">
   <div class="discussion">
-    Returns Whether OperationType is on-the-fly
+    <p>Returns Whether OperationType is on-the-fly</p>
+
 
   </div>
 </div>
@@ -2318,7 +2336,8 @@ will use once launched.
       
       
         &mdash;
-        <div class='inline'>Whether OperationType is on-the-fly</div>
+        <div class='inline'><p>Whether OperationType is on-the-fly</p>
+</div>
       
     </li>
   
@@ -2423,7 +2442,8 @@ will use once launched.
   
 </h3><div class="docstring">
   <div class="discussion">
-    Outputs as Array extended with <span class='object_link'>IOList</span>
+    <p>Outputs as Array extended with <span class='object_link'>IOList</span></p>
+
 
   </div>
 </div>
@@ -2581,7 +2601,8 @@ will use once launched.
   
 </h3><div class="docstring">
   <div class="discussion">
-    interface with FieldValuer
+    <p>interface with FieldValuer</p>
+
 
   </div>
 </div>
@@ -2620,7 +2641,8 @@ will use once launched.
   
 </h3><div class="docstring">
   <div class="discussion">
-    Passes an input item to an output (alternative to <span class='object_link'><a href="Krill/OperationList.html#make-instance_method" title="Krill::OperationList#make (method)">Krill::OperationList#make</a></span>)
+    <p>Passes an input item to an output (alternative to <span class='object_link'><a href="Krill/OperationList.html#make-instance_method" title="Krill::OperationList#make (method)">Krill::OperationList#make</a></span>)</p>
+
 
   </div>
 </div>
@@ -2728,7 +2750,8 @@ will use once launched.
   
 </h3><div class="docstring">
   <div class="discussion">
-    Returns The plan that contains this Operation
+    <p>Returns The plan that contains this Operation</p>
+
 
   </div>
 </div>
@@ -2745,7 +2768,8 @@ will use once launched.
       
       
         &mdash;
-        <div class='inline'>The plan that contains this Operation</div>
+        <div class='inline'><p>The plan that contains this Operation</p>
+</div>
       
     </li>
   
@@ -3068,7 +3092,8 @@ will use once launched.
   
 </h3><div class="docstring">
   <div class="discussion">
-    Assigns a Sample to an input
+    <p>Assigns a Sample to an input</p>
+
 
   </div>
 </div>
@@ -3185,7 +3210,8 @@ will use once launched.
   
 </h3><div class="docstring">
   <div class="discussion">
-    Assigns a Sample to an output
+    <p>Assigns a Sample to an output</p>
+
 
   </div>
 </div>
@@ -3591,7 +3617,7 @@ will use once launched.
 </div>
 
       <div id="footer">
-  Generated on Wed Jun 27 08:22:39 2018 by
+  Generated on Wed Jun 27 08:47:35 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.13 (ruby-2.2.0).
 </div>
