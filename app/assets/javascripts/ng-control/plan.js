@@ -436,7 +436,6 @@
 
     $scope.load = function(plan) {
       save_first().then(() => load_aux(plan));
-      $scope.nav.help = false;
     };
 
     $scope.paste_plan = function(plan) {
@@ -679,10 +678,6 @@
         aq.remove($scope.plan.wires,wire);
       })
     }
-
-    $(function() {
-      $scope.help_markdown = $sce.trustAsHtml(window.markdownit().render($('#help-markdown').text())); 
-    });
 
   }]);
 

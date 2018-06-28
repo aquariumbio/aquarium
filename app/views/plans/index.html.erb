@@ -10,7 +10,6 @@
 <%= render partial: 'field_value_form' %>
 <%= render partial: 'parameter_form' %>
 <%= render partial: 'operation_viewer' %>
-<%= render partial: 'help_text' %>
 
 <% content_for :wider_sidebar do %>true<% end %>
 <% content_for :no_title do %>true<% end %>
@@ -122,12 +121,6 @@
                   icon="delete" name="Trash"
                   tooltip="Delete Plan"></planner-action>
 
-  <div style="width: 1px; height: 100%; border-left: 1pt solid #eee; margin: 5px"></div>
-
-  <planner-action ng-click="nav.help = true"
-                  icon="help" name="Help"
-                  tooltip="Show Help"></planner-action> 
-
 <% end %>
 
 <% content_for :main do %>
@@ -176,10 +169,6 @@
          <md-tooltip md-direction='bottom'>Close Module "{{plan.current_module.name}}"</md-tooltip>
     </div>    
 
-  </div>
-
-  <div ng-if="ready && nav.help">
-    <%= render partial: 'help' %>
   </div>
 
   <div class="plan-wait-overlay" ng-if=wait>
