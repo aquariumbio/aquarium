@@ -14,4 +14,4 @@ If you haven't already, visit the [protocol developer documentation]({{ site.bas
 
 ## Table of Contents
 
-#IN PROGRESS
+# IN PROGRESS
