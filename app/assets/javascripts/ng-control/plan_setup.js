@@ -33,104 +33,87 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
     return c;
   }
 
-  // INITIALIZATION /////////////////////////////////////////////////////////////////////////////
-
   $scope.refresh_plan_list = function() {
 
     return AQ.Plan.where({user_id: $scope.current_user.id})
       .then(plans => {
         $scope.plans = aq.where(plans, p => p.status != 'template');
         $scope.templates = aq.where(plans, p => p.status == 'template');
-        return AQ.Plan.get_folders($scope.current_user.id).then(folders => {
-          $scope.folders = folders;
-          $scope.state.loading_plans = false;
-          $scope.$apply();
-        });
-    });
+      })
+      .then(() => AQ.Plan.get_folders($scope.current_user.id))
+      .then(folders => {
+        $scope.folders = folders;
+        $scope.state.loading_plans = false;
+        $scope.$apply();
+      });
 
   }  
 
-  function close_folders() {
+  function choose_folder(p) {
     $scope.nav.folder = { uc: false, unsorted: false }
+    if ( p.folder ) {
+      $scope.nav.folder[p.folder] = true;
+    } else if ( p.status == 'planning ') {
+      $scope.nav.folder.uc = true;
+    } else {
+      $scope.nav.folder.unsorted = true;
+    }
   }
 
-  function get_plans_and_templates() {
+  function load_plan_from_url() {
 
-    $scope.refresh_plan_list()
-      .then(() => AQ.get_sample_names())
-      .then(() => { 
-
-      AQ.Plan.where({status: "system_template"}).then(templates => {
-
-        $scope.system_templates = templates;
-
-        if ( aq.url_params().plan_id ) {              
-          AQ.Plan.load(aq.url_params().plan_id).then(p => {
-            $window.history.replaceState(null, document.title, "/plans"); 
-            $scope.plan = p;
-            $scope.ready = true;
-            close_folders();
-            if ( p.folder ) {
-              $scope.nav.folder[p.folder] = true;
-            } else if ( p.status == 'planning ') {
-              $scope.nav.folder.uc = true;
-            } else {
-              $scope.nav.folder.unsorted = true;
-            }
-            AQ.User.find(p.user_id).then(user => {
-              $scope.current_user = user;
-              console.log(`Completed initialization in ${new Date() - start_time} ms`);
-              $scope.$apply();        
-            })
-          }).catch(e => {
-            add_designer_message(`Could not load plan ${aq.url_params().plan_id} specified in URL`);
-            console.log(e)
-            $scope.ready = true;
-            $scope.$apply();            
-          });
-        } else {
-          $scope.ready = true;
-          $scope.$apply();
-        }
-
-      });
-
-    });
+    return AQ.Plan.load(aq.url_params().plan_id)
+      .then(plan => {
+        $scope.plan = plan;       
+        choose_folder(plan);
+        $window.history.replaceState(null, document.title, "/plans");         
+      })
+     .then(() => AQ.User.find($scope.plan.user_id))
+     .then(user => $scope.current_user = user)
+     .catch(e => {
+       add_designer_message(`Could not load plan ${aq.url_params().plan_id} specified in URL`);
+       console.log(e);
+     });
 
   }
+
+  // INITIALIZATION /////////////////////////////////////////////////////////////////////////////
 
   var start_time = new Date();
 
-  AQ.User.active_users().then(users => {
-
-    $scope.users = users;
-
-    AQ.User.current().then((user) => {
-
+  AQ.User.active_users()
+    .then(users => $scope.users = users)
+    .then(() => AQ.User.current())
+    .then(user => {
       $scope.current_user = user;
       $scope.state.selected_user_id = user.id;
-
-      AQ.OperationType.all_fast(true).then((operation_types) => {
-
-        $scope.operation_types = aq.where(operation_types,ot => ot.deployed);
-        AQ.OperationType.compute_categories($scope.operation_types);
-        AQ.operation_types = $scope.operation_types;
-        get_plans_and_templates();
-
-      });
-    });    
-
-  });
+    })
+    .then(() => $scope.refresh_plan_list())
+    .then(() => AQ.get_sample_names())
+    .then(() => AQ.Plan.where({status: "system_template"}))
+    .then(templates => $scope.system_templates = templates)
+    .then(() => AQ.OperationType.all_fast(true))    
+    .then(operation_types => {
+      $scope.operation_types = aq.where(operation_types,ot => ot.deployed);
+      AQ.OperationType.compute_categories($scope.operation_types);
+      AQ.operation_types = $scope.operation_types;
+    })    
+    .then(() => aq.url_params().plan_id ? load_plan_from_url() : null)
+    .then(() => $scope.ready = true)
+    .then(() => $scope.$apply())
+    .then(() => console.log(`Completed initialization in ${new Date() - start_time} ms`) )
+     
+  // END INITIALIZATION /////////////////////////////////////////////////////////////////////////
 
   $scope.select_user = function() {
 
-    AQ.User.find($scope.state.selected_user_id).then(user => {
-      $scope.current_user = user;
-      get_plans_and_templates();
-    }).catch(data => {
-      console.log("Could not find user " + $scope.state.selected_user_id);
-      console.log(data)
-    })
+    AQ.User.find($scope.state.selected_user_id)
+      .then(user => $scope.current_user = user)
+      .then(() => $scope.refresh_plan_list())
+      .catch(data => {
+        console.log("Could not find user " + $scope.state.selected_user_id);
+        console.log(data)
+      })
 
   }
 

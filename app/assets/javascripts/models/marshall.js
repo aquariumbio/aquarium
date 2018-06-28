@@ -209,5 +209,4 @@ AQ.Plan.record_methods.marshall_layout = function() {
 
   plan.base_module.associate_fvs();
 
-
 }

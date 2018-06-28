@@ -1,5 +1,8 @@
 AQ.Operation.getter(AQ.User,"user");
 
+AQ.Operation.next_x = 100;
+AQ.Operation.next_y = 100;
+
 AQ.Operation.new_operation = function(operation_type, parent_module_id=0, x=100, y=100) {
 
   var op = AQ.Operation.record({
@@ -28,11 +31,13 @@ AQ.Operation.record_methods.upgrade = function(raw_data) {
   }
 
   if ( !operation.x ) {
-    operation.x = 100;
+    operation.x = AQ.Operation.next_x;
+    AQ.Operation.next_x += AQ.snap;
   }
 
   if ( !operation.y ) {
-    operation.y = 100;
+    operation.y = AQ.Operation.next_y;
+    AQ.Operation.next_y += AQ.snap;
   }
 
   return operation;
