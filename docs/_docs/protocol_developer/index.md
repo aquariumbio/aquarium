@@ -38,6 +38,12 @@ To develop Aquarium protocols you will need to
 Protocols are written in the _Krill protocol language_, a domain specific language built using Ruby.
 The [Protocol tutorial]({{ site.baseurl }}{% link _docs/protocol_development/protocol_tutorial.md %}) gives an overview of using Krill to define protocols, and assumes a basic understanding of Ruby.
 
+Documentation on specific protocol development topics are also available for reference
+- ~~[Operations]({{ site.baseurl }}{% link _docs/protocol_development/operation.md %}),~~
+- ~~[Show Blocks]({{ site.baseurl }}{% link _docs/protocol_development/show.md %}),~~
+- [Tables]({{ site.baseurl }}{% link _docs/protocol_development/table.md %}),
+- ~~[Locations]({{ site.baseurl }}{% link _docs/protocol_development/location.md %}),~~
+
 If you are not familiar with Ruby, a good place to start is the [Ruby page](https://www.ruby-lang.org/en/) that has links to introductory tutorials as well as general documentation.
 There are also courses on Ruby that are available online, which may be the place to start if you don't already know how to program.
 
