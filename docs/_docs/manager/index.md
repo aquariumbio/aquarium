@@ -6,7 +6,7 @@ permalink: /manager/
 
 # Manager
 
-_This document assumes that you have read the [Aquarium Concepts](../concepts/) document_
+_This document assumes that you have read the [Aquarium Concepts]({{ site.baseurl }}{% link _docs/concepts %}) document_
 
 A manager uses Aquarium to determine which operations are run together as a job; to monitor and control jobs; and to help users with problematic plans.
 
@@ -33,7 +33,7 @@ A manager uses Aquarium to determine which operations are run together as a job;
 
 The manager tab provides the information needed to manage lab operations as illustrated by this (redacted) screenshot of the manager tab for the UW BIOFAB production server.
 
-![manager tab](images/manager-view.png)
+![manager tab]({{ site.baseurl }}{% link _docs/manager/images/manager-view.png %})
 
 This screenshot shows that there are five `Run Gel` operations (in the `Cloning` category) that are **pending**, or ready to execute.
 (See [Starting a job](#scenario-starting-a-job) below for details on how run a job using these five operations.)
@@ -64,34 +64,34 @@ At the bottom are buttons that control which categories of jobs are displayed in
 This example shows three categories _cloning_, _manager_ and _tutorial_neptune_ with the tutorial selected.
 (These are the categories from the protocol development tutorial; in practice, there will be many more.)
 
-![categories](images/category-list.png)
+![categories]({{ site.baseurl }}{% link _docs/manager/images/category-list.png %})
 
 Once the category is selected, operation types will be displayed in the panel to the right of the buttons.
 Unless the **Completed** slider is clicked, these will be operation types with currently active operations, otherwise those with completed operations will also be shown.
 This example shows one operation type with an operation that is **pending**, which is the state of an operation that is ready to be performed by a technician.
 
-![selected category](images/selected-category.png)
+![selected category]({{ site.baseurl }}{% link _docs/manager/images/selected-category.png %})
 
-The operation states are explained in the [Aquarium Concepts](../concepts/#operation-states) document.
+The operation states are explained in the [Aquarium Concepts]({{ site.baseurl }}{% link _docs/concepts/#operation-states %}) document.
 
 ## Scenario: Starting a job
 
 From the Manager Tab, clicking the number in the pending spot will display all of the operations of the selected type and state.
 These represent all of the jobs that can be selected and run as a job.
 
-![selected operation](images/selected-operation.png)
+![selected operation]({{ site.baseurl }}{% link _docs/manager/images/selected-operation.png %})
 
 Selecting the operations to be part of a job, and then clicking **run** starts the job
 
-![jobs](images/scheduled-job.png)
+![jobs]({{ site.baseurl }}{% link _docs/manager/images/scheduled-job.png %})
 
 Clicking the job id in this window will open the technician view that shows the job ready to start:
 
-![technician-start](images/technician-start.png)
+![technician-start]({{ site.baseurl }}{% link _docs/manager/images/technician-start.png %})
 
 And, once the technician has started the job, the status will update in the operation status panel.
 
-![changed status](images/updated-status.png)
+![changed status]({{ site.baseurl }}{% link _docs/manager/images/updated-status.png %})
 
 ## Scenario: Correcting a bad plan
 
