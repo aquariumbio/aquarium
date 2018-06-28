@@ -64,7 +64,9 @@ public/components
 
 .DS_Store
 
-
+# local jekyll serve
+docs/_site/**
+docs/.sass-cache/**
 
 
 
