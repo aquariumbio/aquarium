@@ -146,7 +146,7 @@ Here is the result of such a table
 
 (Note that this time the checkable cells have already all been clicked)
 
-A more exciting example might be to make a `custom_column` that lists a calculated volume of plasmid to transfer that is distinct between `Operations`, rather than just instructing to transfer 10µL for every `Operation` as we had written before. A clean way to accomplish this is by first storing the calculated value in the `temporary` hash of each `Operation`, and then mapping the each Operation to that value from the `custom_column`. For more on how the `temporary` hash works, see the [Operation Method Documentation](Operation.md).
+A more exciting example might be to make a `custom_column` that lists a calculated volume of plasmid to transfer that is distinct between `Operations`, rather than just instructing to transfer 10µL for every `Operation` as we had written before. A clean way to accomplish this is by first storing the calculated value in the `temporary` hash of each `Operation`, and then mapping the each Operation to that value from the `custom_column`. For more on how the `temporary` hash works, see the [Operation Method Documentation](operation.md).
 
 In this somewhat contrived example, we calculate the volume of plasmid to transfer by dividing the length of the input Plasmid by 500.
 
@@ -192,7 +192,7 @@ The pencil symbol next to Table cells indicates to the technician that input is 
 
 ![Input table example](images/input_table-1.png)
 
-To use this inputted data in the rest of the protocol, we must access the temporary hash of the operations. The following code uses the inputted data to generate a `Table` that parrots back whatever data had just entered in the `record_volume_tab`
+To use this inputted data in the rest of the protocol, we can access the temporary hash of the operations. The following code uses the inputted data to generate a `Table` that parrots back whatever data had just entered in the `record_volume_tab`
 
 ```ruby
 parrot_tab = operations.start_table
@@ -210,6 +210,8 @@ Suppose we filled in the input `Table` with the following values
 Then our parrot `Table` on the next slide would show 
 
 ![Input table example](images/input_table-3.png) 
+
+The technician input data can also be accessed from the `ShowResponse` object returned by a `show` block in the same way as other technician input. See the [Show Block Documentation](show.md) for more details on how to access the input data in this way. 
 
 When accepting any technician input, it can be useful to validate the input and make sure it is of an expected form. Most likely the workers of your own lab will not attempt to do a SQL injection attack from within a protocol, but ensuring the input is valid before storing it or using it for calculations can resolve many potential errors caused by technician typos.
 
