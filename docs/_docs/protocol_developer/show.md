@@ -91,13 +91,36 @@ The most commonly used `ShowBlock` methods are the following:
 ## Dynamic ShowBlocks
 
 As already mentioned, we can achieve somewhat dynamic `ShowBlocks` by inserting ruby expressions into the Strings displayed by `note` using the ruby String insertion `#{}`.
-It is also possible to use complex ruby code within the code blocks of the `show` method to programatically decide how `ShowBlock` methods will be executed. For instance, 
+It is also possible to use complex ruby code within the code blocks of the `show` method to programatically decide how `ShowBlock` methods will be executed. 
+
+For instance, we could modify our earlier show block to give different instructions depending on the amount of `Operations` the protocol is run with
 
 ```ruby
     show do 
       title "Grab 1.5 mL tubes"   
-      note "Grab #{operations.length} 1.5 mL tubes"
+      if operations.length > 50
+        note "Go to the storeroom and bring back #{operations.length} 1.5 mL tubes to bench"
+      end
+      note "Grab #{operations.length} 1.5 mL tubes from bench"
     end
 ```
+
+Running this on the technician view, we would see an additional line of instruction being offered when the protocol is run with 51 or more `Operations`
+
+We can achieve powerful emergent behaviour by using ruby code inside `ShowBlocks`. Another example, using loops
+
+```ruby
+    show do 
+      title "Grab 1.5 mL tubes"   
+      operations.each do |op|
+        check "Grab a tube for operation: #{op.id}"
+      end
+    end
+```
+
+Here is the output on the Technician view for the latter example with 5 `Operations`
+
+![Serious Protocol]({{ site.baseurl }}{% link _docs/protocol_developer/images/show_images/5_dynamic_example.png %})
+
 
 ## Getting Technician Input
