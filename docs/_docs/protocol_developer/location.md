@@ -8,7 +8,7 @@ This is the documentation for interacting with the `location` of `Items` and `Co
 
 This page will give examples and instructions on how to get started interacting with `Location Wizards` to manage `Item` `locations`. 
 
-If you haven't already, visit the [protocol developer documentation](../protocol_developer) for information about getting started.
+If you haven't already, visit the [protocol developer documentation]({{ site.baseurl }}{% link _docs/protocol_developer/index.md %}) for information about getting started.
 
 ---
 
