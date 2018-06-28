@@ -37,7 +37,7 @@ Example from `Cloning/Restriction Digest`
 ![Enzyme table example]({{ site.baseurl }}{% link _docs/protocol_developer/images/table_images/1_
 enzyme_table.png %})
 
-Inside a `show` block, a `Table` like this is displayed to the technician with the `table` flag — `table` is a flag just like `note`, `warning` and `image` which is interpreted by the `show` block to display the argument passed with it in a certain way. While `note` accepts a `String` argument and `image` expects a path to an image, the `table` flag accepts a `Table` object. Supposing that we already have a complete `Table` object stored in the variable `enzyme_tab`, showing it to the technician is simple
+Inside a `ShowBlock`, a `Table` like this is displayed to the technician with the `table` flag — `table` is a flag just like `note`, `warning` and `image` which is interpreted by the `ShowBlock` to display the argument passed with it in a certain way. While `note` accepts a `String` argument and `image` expects a path to an image, the `table` flag accepts a `Table` object. Supposing that we already have a complete `Table` object stored in the variable `enzyme_tab`, showing it to the technician is simple
 
 ```ruby
     show do
@@ -105,7 +105,7 @@ simple_tab = operations.start_table
                     .end_table
 ```
 
-Such a nice table of course deserves an equally polished `show` block
+Such a nice table of course deserves an equally polished `ShowBlock`
 
 ```ruby
 show do 
@@ -212,7 +212,7 @@ Then our parrot `Table` on the next slide would show
 
 ![Input table example]({{ site.baseurl }}{% link _docs/protocol_developer/images/table_images/9_input_table-3.png %}) 
 
-The technician input data can also be accessed from the `ShowResponse` object returned by a `show` block in the same way as other technician input. See the [Show Block Documentation]({{ site.baseurl }}{% link _docs/protocol_developer/show.md %}) for more details on how to access the input data in this way. 
+The technician input data can also be accessed from the `ShowResponse` object returned by a `ShowBlock` in the same way as other technician input. See the [Show Block Documentation]({{ site.baseurl }}{% link _docs/protocol_developer/show.md %}) for more details on how to access the input data in this way. 
 
 When accepting any technician input, it can be useful to validate the input and make sure it is of an expected form. Most likely the workers of your own lab will not attempt to do a SQL injection attack from within a protocol, but ensuring the input is valid before storing it or using it for calculations can resolve many potential errors caused by technician typos.
 
@@ -250,7 +250,7 @@ The resulting table:
 
 ![Standalone table example]({{ site.baseurl }}{% link _docs/protocol_developer/images/table_images/10_standalone_table.png %})
 
-There is another, perhaps simpler way to make standalone `Tables` in protocols, which relies on a special aspect of the `table` `show` block flag. As mentioned before, `table` will accept a `Table` object to display, but not yet mentioned is that it can also accept an ordinary 2d array to display.
+There is another, perhaps simpler way to make standalone `Tables` in protocols, which relies on a special aspect of the `table` `ShowBlock` flag. As mentioned before, `table` will accept a `Table` object to display, but not yet mentioned is that it can also accept an ordinary 2d array to display.
 
 With this in mind, we could display a similar table as above (but without the headers) by just doing
 
@@ -261,7 +261,7 @@ show do
 end
 ```
 
-Tabling on 2d arrays allows us a convienent way to display data about the `Parts` of a `Collection` to the technician, since much of the data associated with a `Collection` is stored as a 2d array. For example, supposing that one of the inputs for a protocol is called '96 Well' and accepts a `Collection`, we could display the `sample_matrix` of the `Collection` for each `Operation` using a `show` blocks like so
+Tabling on 2d arrays allows us a convienent way to display data about the `Parts` of a `Collection` to the technician, since much of the data associated with a `Collection` is stored as a 2d array. For example, supposing that one of the inputs for a protocol is called '96 Well' and accepts a `Collection`, we could display the `sample_matrix` of the `Collection` for each `Operation` using a `ShowBlock`s like so
 
 ```ruby
 operations.each do |op|
