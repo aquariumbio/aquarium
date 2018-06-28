@@ -87,10 +87,6 @@
 
     }
 
-    .plan-editor-container::-webkit-scrollbar { 
-      display: none;
-    }    
-
     .plan-editor-container {
 
       position: relative;
@@ -98,12 +94,13 @@
       outline: none;
 
       .plan-editor {
-        /*background: linear-gradient(white, lightblue);*/
-        outline: 1pt solid green;
         margin: 50px;
-        border: none;
-        width: calc(100vw - 400px);
-        height: 250%;
+        border-top: none;
+        border-left: none;
+        border-right: 3px solid #eee;
+        border-bottom: 3px solid #eee;        
+        width: 8000px; /*calc(100vw - 400px);*/
+        height: 8000px;
         cursor: arrow;
         margin: 0px;
 
