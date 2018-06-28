@@ -17,6 +17,13 @@ If you haven't already, visit the [protocol developer documentation]({{ site.bas
 
 ## Table of Contents
 
+<!-- TOC -->
+
+- [Table Documentation](#table-documentation)
+    - [Table of Contents](#table-of-contents)
+
+<!-- /TOC -->
+
 
 
 ## Hello Technician
@@ -122,5 +129,23 @@ Here is the output on the Technician view for the latter example with 5 `Operati
 
 ![Serious Protocol]({{ site.baseurl }}{% link _docs/protocol_developer/images/show_images/5_dynamic_example.png %})
 
-
 ## Getting Technician Input
+
+There are two `ShowBlock` methods that are used to retrieve input from the technician: `get` and `select`. They work in the same way, except that `get` allows the technician to enter a String response, and `select` has the technician select an item from a dropdown menu.
+
+`get` provides a textbox for the technician to enter a String. Its first parameter is the type of input, as "number", or "text", and it also requires the `var:` option to hold a valid keyname, as the key that will be later used to access the inputted data. Here is the code for a simple show block that prompts the technician for a response
+
+```ruby
+show do
+    title "Please Respond"
+    note "What is your first name?"
+    get "text   ", var: :tech_name 
+end
+```
+
+This would display the following slide to the technician
+
+![User Input Example]({{ site.baseurl }}{% link _docs/protocol_developer/images/show_images/5_dynamic_example.png %})
+
+
+We can customize the textbox further with the `label:` and `default:` options
