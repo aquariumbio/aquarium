@@ -27,9 +27,11 @@ These guidelines are intended for those working directly on Aquarium, though som
 
 ## Getting Started
 
-Follow the Aquarium [installation](Installation.md) instructions to get a local copy of the Aquarium git repository.
+Follow the Aquarium [installation]({{ site.baseurl }}{% link _docs/configuration/installation.md) instructions to get a local copy of the Aquarium git repository.
 
 ## Running Aquarium
+
+With the development docker installation of Aquarium s
 
 ## Testing Aquarium
 
