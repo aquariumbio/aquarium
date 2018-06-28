@@ -36,7 +36,7 @@ Example from `Cloning/Restriction Digest`
 
 ![Enzyme table example]({{ site.baseurl }}{% link _docs/protocol_developer/images/enzyme_table.png %})
 
-Inside a `show` block, a `Table` like this is displayed to the technician with the `table` flag -- `table` is a flag just like `note`, `warning` and `image` which is interpreted by the `show` block to display the argument passed with it in a certain way. While `note` accepts a `String` argument and `image` expects a path to an image, the `table` flag accepts a `Table` object. Supposing that we already have a complete `Table` object stored in the variable `enzyme_tab`, showing it to the technician is simple
+Inside a `show` block, a `Table` like this is displayed to the technician with the `table` flag — `table` is a flag just like `note`, `warning` and `image` which is interpreted by the `show` block to display the argument passed with it in a certain way. While `note` accepts a `String` argument and `image` expects a path to an image, the `table` flag accepts a `Table` object. Supposing that we already have a complete `Table` object stored in the variable `enzyme_tab`, showing it to the technician is simple
 
 ```ruby
     show do
@@ -51,16 +51,16 @@ The rest of this documentation will be focused on how to generate these table ob
 
 ## Tables on OperationList
 
-Aquarium protocols are designed to work on arbitrarily large batches of `Operations` at once, so it is often the case that you will want to design a `Table` where some information about each operation is represented by a row of the table. The `Table` shown in the example picture above uses this paradigm.
+Aquarium protocols are designed to work on arbitrarily large batches of `Operations` at once, so it is often the case that you will want to design a `Table` where some information about each `Operation` is represented by a row of the table. The `Table` shown in the example picture above uses this paradigm.
 
-`OperationList` has many instance methods which make generating row-per-`Operation` style `Tables` a simpler process. Creating a `Table` from an `OperationsList` relies on _method chaining_ these instance methods. To begin the table generation process, `start_table` is called on an `OperationsList`, returing a intermediary Table-like object which is initially has one row for every `Operation` in the list, and zero columns. Further methods may be called on this intermediary object to add columns to the `Table`. When all desired columns have neen added, `end_table` is called to finish the method chain and return a usable `Table` object which is ready to show to the technician.
+`OperationList` has many instance methods which make generating row-per-`Operation` style `Tables` a simpler process. Creating a `Table` from an `OperationsList` relies on _method chaining_ these instance methods. To begin the table generation process, `start_table` is called on an `OperationsList`, returing a intermediary Table-like object which is initially has one row for every `Operation` in the list, and zero columns. Further methods may be called on this intermediary object to add columns to the `Table`. When all desired columns have been added, `end_table` is called to finish the method chain and return a usable `Table` object which is ready to show to the technician.
 
 To create a `Table` with one column, called `simple_tab`,
 ```ruby
     simple_tab = operations.start_table.input_item("Plasmid Source").end_table
 ```
 
-When `simple_tab` is correctly displayed within a show block, the technician might see something like this (in a `Job` of 5 `Operations`)
+When `simple_tab` is displayed within a show block, the technician might see something like this (in a `Job` of 5 `Operations`)
 
 ![Simple table example]({{ site.baseurl }}{% link _docs/protocol_developer/images/simple_table-1.png %})
 
@@ -68,7 +68,7 @@ Notice that there is one row per operation, with a single column, headed 'Plasmi
 
 ### Mapping Operations to Respective Inputs or Outputs
 
-A commonly used type of Table in protocols is one that shows a a column of input `Items` alongside a column of output `Items` -- for example, you might need to have a table like this if your protocol will instruct technicians to pipet an input plasmid stock into a specific output tube for each `Operation`. 
+A commonly used type of Table in protocols is one that shows a a column of input `Items` alongside a column of output `Items` — for example, you might need to have a table like this if your protocol will instruct technicians to pipet an input plasmid stock into a specific output tube for each `Operation`. 
 
 The `input_item` tabling method requires one argument: the name of an input. It appends a column to a table, where the contents of the new table cells in that column are the corresponding input `Item id` for the `Operation` of that row and the given input name. Our `simple_tab` example above already uses this functionality to create its single column listing the `Item ids` of the input Plasmid Stocks for each `Operation`. 
 We can achieve the same functionality with outputs, by using the `output_item` method.  
@@ -76,7 +76,7 @@ We can achieve the same functionality with outputs, by using the `output_item` m
 Suppose that we wanted to create `simple_tab` with an additional column that shows the `Item id` for an output tube that we want to pipet our input plasmids into alongside the `Item id` of the input Plasmid stocks we will be pipetting from. An additional method is added to the chain to generate an additional column
 
 ```ruby
-simple_tab = operations.start_table.input_item("Plasmid Source").output_column("Plasmid Destination").end_table
+simple_tab = operations.start_table.input_item("Plasmid Source").output_item("Plasmid Destination").end_table
 ```
 
 Our `simple_tab` now could be very helpful for directing a technician to pipet from one item to another
@@ -118,7 +118,7 @@ Now, our completed transfer instruction `show` slide run with 3 operations looks
 
 ![Simple table example]({{ site.baseurl }}{% link _docs/protocol_developer/images/simple_table-3.png %})
 
-Note the blue highlight around the destination item cells -- this indicates that the cells are checkable. Once clicked, the checkable cells turn solid blue.
+Note the blue highlight around the destination item cells — this indicates that the cells are checkable. Once clicked, the checkable cells turn solid blue.
 
 Two other important tabling methods are `input_collection` and `output_collection`. These methods work exactly like `input_item` and `output_item`, except they are intended for use when the input or ouput of the `Operation` is a `Collection`. 
 
@@ -146,7 +146,7 @@ Here is the result of such a table
 
 (Note that this time the checkable cells have already all been clicked)
 
-A more exciting example might be to make a `custom_column` that lists a calculated volume of plasmid to transfer that is distinct between `Operations`, rather than just instructing to transfer 10µL for every `Operation` as we had written before. A clean way to accomplish this is by first storing the calculated value in the `temporary` hash of each `Operation`, and then mapping the each Operation to that value from the `custom_column`. For more on how the `temporary` hash works, see the [Operation Method Documentation](TODO).
+A more exciting example might be to make a `custom_column` that lists a calculated volume of plasmid to transfer that is distinct between `Operations`, rather than just instructing to transfer 10µL for every `Operation` as we had written before. A clean way to accomplish this is by first storing the calculated value in the `temporary` hash of each `Operation`, and then mapping the each Operation to that value from the `custom_column`. For more on how the `temporary` hash works, see the [Operation Method Documentation](Operation.md).
 
 In this somewhat contrived example, we calculate the volume of plasmid to transfer by dividing the length of the input Plasmid by 500.
 
@@ -165,7 +165,7 @@ simple_tab = operations.start_table
                     .end_table
 
 # showing table
-show do 
+show do
     title "Transfer Plasmid"
     table simple_tab
 end
@@ -177,43 +177,49 @@ This general `Table` form is quite effective. It is commonly used in many Aquari
 
 ### Accepting Technician Input through Tables
 
-`Tables` can also be used to ask technicians for data input, using the `custom_input` tabling method. `custom_input` works similarly to `custom_column`, taking a heading option, and a code block evaluated on every Operation in the OperationsList which fills in the cell with a default value. `custom_input` also takes a 2 new arguments. `key` is the first parameter of `custom_input`, it is required and used when storing the inputted data. Any inputted data by the technician into the cells of a `custom_input` column will be stored in the `temporary` hash of the `Operation` corresponding to the row of the table it was inputted on, and the `key` parameter determines the key of the `temporary` hash for that `Operation` which the new data will be stored under. `:type` is a option for `custom_input` which specifies what data type to accept as input. It is not a required option, and `custom_input` cells will default to accepting Strings.
+`Tables` can also be used to ask technicians for data input, using the `get` tabling method. `get` works similarly to `custom_column`, taking a heading option, and a code block evaluated on every Operation in the OperationsList which fills in the cell with a default value. `get` also takes a 2 new arguments. `key` is the first parameter of `get`, it is required and used when storing the inputted data. Any inputted data by the technician into the cells of a `get` column will be stored in the `temporary` hash of the `Operation` corresponding to the row of the table it was inputted on, and the `key` parameter determines the key of the `temporary` hash for that `Operation` which the new data will be stored under. `:type` is a option for `get` which specifies what data type to accept as input. It is not a required option, and `get` cells will default to accepting Strings.
 
 As an example, lets create an data input `Table` which asks the technician to measure and record the remaining volume of a plasmid stock
 
 ```ruby
 record_volume_tab = operations.start_table
                         .input_item("Plasmid Source")
-                        .custom_input(:plasmid_volume, type: "number", heading: "How much left in stock? (µL)") { |op| 0 }
+                        .get(:plasmid_volume, type: "number", heading: "How much left in stock? (µL)") { |op| 0 }
                         .end_table
 ```
 
-The pencil symbol next to Table cells indicates to the technician that input is required.
+The pencil symbol next to Table cells indicates to the technician that input is required
 
 ![Input table example]({{ site.baseurl }}{% link _docs/protocol_developer/images/input_table-1.png %})
 
 To use this inputted data in the rest of the protocol, we must access the temporary hash of the operations. The following code uses the inputted data to generate a `Table` that parrots back whatever data had just entered in the `record_volume_tab`
 
 ```ruby
-volume_tab = operations.start_table
+parrot_tab = operations.start_table
                         .input_item("Plasmid Source")
                         .custom_column(heading: "Remaining Volume (µL)") { |op| op.temporary[:plasmid_volume] }
                         .end_table
 ```
 
-Since we didn't change the default value for any of the rows, all of the entered volumes should be 0
+Note that `parrot_tab` will not have access to the plasmid volumes unless it is generated after `record_volume_tab` has already been shown.
 
-TODO [volume_tab picture] 
+Suppose we filled in the input `Table` with the following values
+
+![Input table example](images/input_table-2.png)
+
+Then our parrot `Table` on the next slide would show 
+
+![Input table example](images/input_table-3.png) 
 
 When accepting any technician input, it can be useful to validate the input and make sure it is of an expected form. Most likely the workers of your own lab will not attempt to do a SQL injection attack from within a protocol, but ensuring the input is valid before storing it or using it for calculations can resolve many potential errors caused by technician typos.
 
-See the [API documentation on `validate` and `validation_message` tabling methods](../../../api/Krill/OperationList.html#validate-instance_method) for information on how to validate inputted data in a `Table`.
+Input validation is a more advanced concept, so we will not go into it here. See the [API documentation on `validate` and `validation_message` tabling methods](../../../api/Krill/OperationList.html#validate-instance_method) for information on how to validate inputted data in a `Table`.
 
 ## Standalone Tables
 
 We have discussed so far how to build `Tables` where the rows correspond to the `Operations` of a protocol, but it is also possible to make tables that do not depend on an `OperationsList`.
 
-`Table.new` will return a `Table` object that we can then chain method calls onto it to add columns in a similar way to how we did with the `OperationsList` `Tables`. `add_column` does exactly this -- it takes a String header as the first parameter, and an array of cell content for the second parameter. 
+`Table.new` will return a `Table` object that we can then chain method calls onto it to add columns in a similar way to how we did with the `OperationsList` `Tables`. `add_column` does exactly this — it takes a String header as the first parameter, and an array of cell content for the second parameter. 
 
 For instance, suppose we had a palindromic sequence of DNA in an array that we would like to display to the technician in a table with a two columns, one with the forward direction and one with the reverse. First we make the arrays
 
@@ -241,9 +247,9 @@ The resulting table:
 
 ![Standalone table example]({{ site.baseurl }}{% link _docs/protocol_developer/images/standalone_table-1.png %})
 
-There is another, perhaps simpler way to make standalone `Tables` in protocols, which relies on a special aspect of the `table` show block flag. As mentioned before, `table` will accept a `Table` object to display, but not yet mentioned is that it can also accept an ordinary 2d array to a display as a `Table`.
+There is another, perhaps simpler way to make standalone `Tables` in protocols, which relies on a special aspect of the `table` `show` block flag. As mentioned before, `table` will accept a `Table` object to display, but not yet mentioned is that it can also accept an ordinary 2d array to display.
 
-With this in mind, we could display a similar table as above (without the headers) by just doing
+With this in mind, we could display a similar table as above (but without the headers) by just doing
 
 ```ruby
 show do
@@ -263,7 +269,7 @@ operations.each do |op|
 end
 ```
 
-This would produce several `show` slides -- one for each `Operation` in the `Job` -- where each slide displays the 
+This would produce several `show` slides — one for each `Operation` in the `Job` — where each slide displays the 
 `Sample ids` of the contents of the '96 Well' input `Collection` for that `Operation`. Here is such a displayed `Collection`, where only the first 20 `Parts` of the `Collection` are filled with `Samples`. Empty slots are designated by `-1` 
 
 ![Collection table example]({{ site.baseurl }}{% link _docs/protocol_developer/images/collection_table-1.png %})
