@@ -10,10 +10,9 @@ This page will give examples and instructions on how to get started using `ShowB
 See the [API documentation]({{ site.baseurl }}{% link /api/index.html %}) for more details on the functions that Krill provides.
 
 If you haven't already, visit the [protocol developer documentation]({{ site.baseurl }}{% link _docs/protocol_developer/index.md %}) for information about getting started.
+In particular, for some good practice using `ShowBlocks` in a realistic protocol follow along with the []
 
 ---
-# IN PROGRESS
-
 
 ## Table of Contents
 
@@ -23,8 +22,6 @@ If you haven't already, visit the [protocol developer documentation]({{ site.bas
     - [Table of Contents](#table-of-contents)
 
 <!-- /TOC -->
-
-
 
 ## "Hello Technician"
 
@@ -195,7 +192,7 @@ Notice that this time we are storing data for each `Operation`, so we must param
 
 Here is what the slide would appear like to the technician
 
-TODO[picture of slide, using data hash with parameterized var:]
+![User Input Example]({{ site.baseurl }}{% link _docs/protocol_developer/images/show_images/8_input_block-3.png %})
 
 To use the data stored in the Check Plate example, we have to parameterize our hash access in the same way as we did while storing the data
 
