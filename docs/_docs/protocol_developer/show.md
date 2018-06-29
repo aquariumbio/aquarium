@@ -186,7 +186,7 @@ data = show do
     
     operations.each do |op|
         plate = op.input("Plate").item
-        select ["normal", "contamination", "lawn"], var: "status-#{plate.id}", label: "Choose whether there is contamination, a lawn, or whether it's normal."
+        select ["normal", "contamination", "lawn"], var: "status-#{plate.id}", label: "For plate #{plate}, choose whether there is contamination, a lawn, or whether it's normal."
     end
 end
 ```
