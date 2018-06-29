@@ -162,7 +162,7 @@ Now our textbox is a bit more informative
 
 ![User Input Example]({{ site.baseurl }}{% link _docs/protocol_developer/images/show_images/7_input_block-2.png %})
 
-Any input data from a ShowBlock is returned by the call to `show` that created the block in a `Hash`. The name that we entered as the option for var: will be the key of this hash that the relevant data is stored in.
+Any input data from a ShowBlock is returned by the call to `show` that created the block in a Hashlike object. The name that we entered as the option for var: will be the key of this hash that the relevant data is stored in.
 
 In order to access the name entered by the technician, we would have to capture the return of `show` in a variable, and then access it at the key `:tech_name`
 
@@ -191,8 +191,19 @@ data = show do
 end
 ```
 
-Notice that we are storing data for each `Operation`, so we must parameterize the `var:` option, otherwise all the selections would be stored under the same key in the data hash!
+Notice that this time we are storing data for each `Operation`, so we must parameterize the `var:` option, otherwise all the selections would be stored under the same key in the data hash.
 
 Here is what the slide would appear like to the technician
 
 TODO[picture of slide, using data hash with parameterized var:]
+
+To use the data stored in the Check Plate example, we have to parameterize our hash access in the same way as we did while storing the data
+
+```ruby
+operations.each do |op|
+    plate = op.input("Plate").item
+    data["status-#{plate.id}"] #=> <selection response for that Plate>
+end
+```
+
+Another convienent way to collect information relating to each `Operation` in an  `OperationList` is to accept technician responses through a input `Table` on the `OperationsList`. See the [Table Documentation on getting User Input]({{ site.basename }}{% link _docs/protocol_developer/table.md/accepting-technician-input-through-tables}) for more details.
