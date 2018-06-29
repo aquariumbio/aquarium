@@ -133,6 +133,23 @@ module Krill
       self
     end
 
+    # Append a column to the table which accepts user input
+    # Response data is stored under the key `table_input` in the data hash returned by `show`
+    # Note: data hash may not get properly populated in the protocol tester
+    # 
+    # @param name [String]  the heading of this column
+    # @param defaults [Array]  the default values of the cells of this column
+    # @param opts [Hash]  additional options
+    # @option key [String]  the key that can be used to access response data from ShowResponse hash  
+    # @option type [String]  defines type of user input -- can be either 'number' or 'text' 
+    # @return [Table] The table, can be chained
+    def add_response_column(name, defaults, opts = {key: name, type: 'number'})
+      values = defaults.each_with_index.map do |default, ii|
+        { type: opts[:type], opid: -1, key: "#{ii}__#{opts[:key]}", default: default || 0 }
+      end
+      add_column(name, values)
+    end
+
     private
 
     # @private
