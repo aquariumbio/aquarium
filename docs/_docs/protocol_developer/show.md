@@ -18,8 +18,12 @@ In particular, for some good practice using `ShowBlocks` in a realistic protocol
 
 <!-- TOC -->
 
-- [ShowBlock Documentation](#table-documentation)
+- [ShowBlock Documentation](#showblock-documentation)
     - [Table of Contents](#table-of-contents)
+    - ["Hello Technician"](#hello-technician)
+    - [ShowBlock Methods](#showblock-methods)
+    - [Dynamic ShowBlocks](#dynamic-showblocks)
+    - [Getting Technician Input](#getting-technician-input)
 
 <!-- /TOC -->
 
