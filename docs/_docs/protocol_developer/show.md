@@ -139,13 +139,60 @@ There are two `ShowBlock` methods that are used to retrieve input from the techn
 show do
     title "Please Respond"
     note "What is your first name?"
-    get "text   ", var: :tech_name 
+    get "text", var: :tech_name 
 end
 ```
 
 This would display the following slide to the technician
 
-![User Input Example]({{ site.baseurl }}{% link _docs/protocol_developer/images/show_images/5_dynamic_example.png %})
+![User Input Example]({{ site.baseurl }}{% link _docs/protocol_developer/images/show_images/6_input_block-1.png %})
 
 
 We can customize the textbox further with the `label:` and `default:` options
+
+```ruby
+show do
+    title "Please Respond"
+    note "What is your first name?"
+    get "text", var: :tech_name, label: "Enter name", default: "Joe Schmo" 
+end
+```
+
+Now our textbox is a bit more informative
+
+![User Input Example]({{ site.baseurl }}{% link _docs/protocol_developer/images/show_images/7_input_block-2.png %})
+
+Any input data from a ShowBlock is returned by the call to `show` that created the block in a `Hash`. The name that we entered as the option for var: will be the key of this hash that the relevant data is stored in.
+
+In order to access the name entered by the technician, we would have to capture the return of `show` in a variable, and then access it at the key `:tech_name`
+
+```ruby
+data = show do
+    title "Please Respond"
+    note "What is your first name?"
+    get "text", var: :tech_name, label: "Enter name", default: "Joe Schmo" 
+end
+
+data[:tech_name] #=> "Joe Schmo"
+```
+
+`select` has almost the same interface as get, except instead of giving a type as the first parameter, we must provide an array of selection options. For example, we might want to prompt the tech to report the status of a bacterial plate – whether it is normal, a lawn, or contaminated
+
+_Example from `Cloning/Check Plate`_
+
+```ruby
+data = show do
+    title "Report Plate status"
+    
+    operations.each do |op|
+        plate = op.input("Plate").item
+        select ["normal", "contamination", "lawn"], var: "status-#{plate.id}", label: "Choose whether there is contamination, a lawn, or whether it's normal."
+    end
+end
+```
+
+Notice that we are storing data for each `Operation`, so we must parameterize the `var:` option, otherwise all the selections would be stored under the same key in the data hash!
+
+Here is what the slide would appear like to the technician
+
+TODO[picture of slide, using data hash with parameterized var:]
