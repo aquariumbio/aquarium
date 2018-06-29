@@ -26,6 +26,7 @@ If you haven't already, visit the [protocol developer documentation]({{ site.bas
     - [Adding Inputs After the Protocol has Started](#adding-inputs-after-the-protocol-has-started)
 
 <!-- /TOC -->
+---
 
 ## The Operation Interface
 
