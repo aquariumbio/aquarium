@@ -7,16 +7,14 @@ class User < ActiveRecord::Base
   attr_accessible :login, :name, :password, :password_confirmation, :password_digest, :key
   has_secure_password
   has_many :samples
-  has_many :logs
   has_many :jobs
-  has_many :metacols
-  has_many :cart_items
   has_many :memberships
   has_many :account
   has_many :user_budget_associations
   has_many :budgets, through: :user_budget_associations
   has_many :plans
   has_many :parameters
+  has_many :codes
 
   before_create { |user| user.login = login.downcase }
   before_create :create_remember_token

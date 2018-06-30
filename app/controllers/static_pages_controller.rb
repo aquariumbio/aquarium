@@ -23,34 +23,10 @@ class StaticPagesController < ApplicationController
     redirect_to root_path
   end
 
-  def inventory_stats; end
-
-  def inventory_critical; end
-
   def template
     respond_to do |format|
       format.html { render layout: 'aq2' }
     end
-  end
-
-  def analytics
-    @jobs = Job.where('created_at >= :date', date: Time.now.weeks_ago(0.5))
-  end
-
-  def location
-
-    if params[:name] && params[:name] != 'undefined'
-      cookies.permanent[:location] = params[:name]
-    elsif params[:name] && params[:name] == 'undefined'
-      cookies.delete :location
-    end
-
-    @current_location = if cookies[:location]
-                          cookies[:location]
-                        else
-                          'undefined'
-                        end
-
   end
 
   def direct_purchase
