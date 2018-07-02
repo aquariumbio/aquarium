@@ -1,5 +1,4 @@
 
-
 Bioturk::Application.routes.draw do
 
   resources :timings, only: %i[update create]
@@ -153,18 +152,6 @@ Bioturk::Application.routes.draw do
   get 'krill/uploads'
   post 'krill/attach'
 
-  get 'stats/jobs'
-  get 'stats/users'
-  get 'stats/user_activity'
-  get 'stats/protocols'
-  get 'stats/outcomes'
-  get 'stats/samples'
-  get 'stats/objects'
-  get 'stats/processes'
-  get 'stats/empty'
-  get 'stats/timing'
-  get 'stats/user_items'
-  get 'stats/protocol_version_info'
   get 'jobs/index'
   get 'jobs/summary'
   get 'jobs/report'
@@ -193,16 +180,12 @@ Bioturk::Application.routes.draw do
 
   match '/signin',     to: 'sessions#new'
   match '/signout',    to: 'sessions#destroy', via: :delete
-  match '/analytics',  to: 'static_pages#analytics'
-  match '/location',   to: 'static_pages#location'
+
   get '/dismiss',      to: 'static_pages#dismiss'
 
   get '/static_pages/direct_purchase', to: 'static_pages#direct_purchase'
 
   match '/search', to: 'search#search'
-
-  match '/inventory_stats', to: 'static_pages#inventory_stats'
-  match '/cost_report', to: 'static_pages#cost_report'
 
   get '/delete_inventory', to: 'object_types#delete_inventory'
 
