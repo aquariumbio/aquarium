@@ -18,6 +18,18 @@ module Krill
       responses[var.to_sym]
     end
 
+    # TODO MODIFY FRONTEND TO RETURN THE ROW INDEX OF TABLE INPUTS ALONG WITH EVERYTHING ELSE
+    # CURRENTLY, ROW OF TABLE IS NOT KEPT TRACK OF BY :table_inputs. 
+
+    # The alternative is to complicate an existing hash var like opid or key with this information. 
+    # Not an ideal workaround for operationslist tables, since it breaks backwards compatibility, but
+    # it would work fine for the tables that can -only- be accessed by row anyway.
+    # Adding a complicated hash var only for standalone tables would also mean that standalone tables would
+    # work as a special case in get_table_response
+
+    # Another alternative is to change the interface of ShowResponse to ignore rows, and change the
+    # interface of add_response_column to accept a list of uniq keys rather than using one key for the whole column
+
     # Returns data recorded in a specified row of an input table
     # @param var [Symbol/String]  the table key specified to store data under
     #               in the get.
