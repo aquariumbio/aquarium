@@ -153,6 +153,7 @@
                  ng-model="step.response.inputs.table_inputs[cell.key][cell.operation_id].value"
                  data-opid="{{cell.operation.id}}" 
                  class="krill-table-input"
+                 row="{{cell.row}}"
                  ng-disabled="!step.response.in_progress">
           <span ng-if="!cell.type && cell.content == undefined"><span ng-bind-html="sce(cell)"></span></span>
           <span ng-if="!cell.type && cell.content != undefined && ( !cell.check || !step.response.in_progress )">
