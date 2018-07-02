@@ -44,7 +44,7 @@ module Krill
 
     # TODO merge normal responses with table response arrays, accessible by their key
     def responses
-      self.select { |key, value| key != :table_input && key != :timepoint }
+      self.select { |key, value| key != :table_input && key != :timestamp }
     end
 
     def timestamp
