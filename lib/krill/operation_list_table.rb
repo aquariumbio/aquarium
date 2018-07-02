@@ -171,8 +171,8 @@ module Krill
 
     # TODO ADD row tracking to operationslist tableinput hashes
     def get(key, opts)
-      @table.add_column(opts[:heading] || key.to_s, running.each_with_index.collect do |op, ii|
-        { type: opts[:type] || 'number', operation_id: op.id, key: key, default: opts[:default] || 0, row: ii }
+      @table.add_column(opts[:heading] || key.to_s, running.collect do |op|
+        { type: opts[:type] || 'number', operation_id: op.id, key: key, default: opts[:default] || 0 }
       end)
       self
     end

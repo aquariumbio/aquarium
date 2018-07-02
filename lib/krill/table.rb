@@ -152,8 +152,8 @@ module Krill
       # of each associated op as a convienence.
       # Putting -1 here will allows that the ShowResponse still will be populated with values
       # even though there are no op.temporary hashes to fill.
-      values = defaults.each_with_index.map do |default, ii|
-        { type: opts[:type], row: ii, key: opts[:key], default: default || 0 }
+      values = defaults.map do |default|
+        { type: opts[:type], key: opts[:key], default: default || 0 }
       end
       add_column(name, values)
     end
