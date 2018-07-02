@@ -61,7 +61,7 @@
     };
 
     $scope.table_input = function(cell,response) {
-      let x = aq.where(response.inputs.table_inputs, input => input.opid == cell.operation_id && input.key == cell.key && input.row == cell.row)[0];
+      let x = aq.where(response.inputs.table_inputs, input => input.opid == cell.operation_id && input.key == cell.key)[0];
       if ( x ) {
         return x.value;
       } else {
