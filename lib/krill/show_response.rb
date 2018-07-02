@@ -2,8 +2,9 @@ module Krill
 
   # @api krill
   class ShowResponse < Hash
+
     def helloworld
-    "hello world"
+      "hello world"
     end
     
     # Return the response that was stored under `var`. When used with 
