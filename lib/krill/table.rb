@@ -140,10 +140,16 @@ module Krill
     # @param name [String]  the heading of this column
     # @param defaults [Array]  the default values of the cells of this column
     # @param opts [Hash]  additional options
-    # @option key [String]  the key that can be used to access response data from ShowResponse hash  
-    # @option type [String]  defines type of user input -- can be either 'number' or 'text' 
+    # @option key [String]  the key that can be used to access response data from ShowResponse hash
+    # @option type [String]  defines type of user input -- can be either 'number' or 'text'
     # @return [Table] The table, can be chained
     def add_response_column(name, defaults, opts = {key: name, type: 'number'})
+      # Although we are creating an input table that is not associated to an operationslist
+      # we rely on the operationslist table input machinery (in operations_list_input_table)
+      # which requires an opid field so data can be automatically placed in the op.temporary hash
+      # of each associated op as a convienence.
+      # Putting -1 here will allows that the ShowResponse still will be populated with values
+      # even though there are no op.temporary hashes to fill.
       values = defaults.map do |default|
         { type: opts[:type], opid: -1, key: opts[:key], default: default || 0 }
       end
