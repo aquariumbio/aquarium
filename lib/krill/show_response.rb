@@ -13,7 +13,7 @@ module Krill
     # @param var [Symbol/String]  The var used for storing data
     #               in the get or select call from the ShowBlock
     def get_response var
-      responses[var]
+      responses[var.to_sym]
     end
 
     # Returns data recorded in a specified row of an input table
@@ -29,9 +29,9 @@ module Krill
         raise "get_table_data called with Invalid parameters - specify op or row, not both"
       when opts[op]
         opid = Operation.find(op).id # return op.id if passed an operation or the id itself
-        return self[:table_input].find { |resp| resp[:key] == var && resp[:opid] == opid }[:value]
+        return self[:table_input].find { |resp| resp[:key] == var.to_sym && resp[:opid] == opid }[:value]
       when opts[row]
-        return self[:table_input].find { |resp| resp[:key] == var && resp[:row] == row }[:value]
+        return self[:table_input].find { |resp| resp[:key] == var.to_sym && resp[:row] == row }[:value]
       else # neither op nor row was specified. Return an array of data in the same order as input row
         return self[:table_input].sort { |resp| resp[:row] }.map { |resp| resp[:value] }
       end
