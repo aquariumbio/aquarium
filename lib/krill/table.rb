@@ -143,6 +143,8 @@ module Krill
     # @option key [String]  the key that can be used to access response data from ShowResponse hash
     # @option type [String]  defines type of user input -- can be either 'number' or 'text'
     # @return [Table] The table, can be chained
+
+    # TODO make defaults hash merge correctly
     def add_response_column(name, defaults, opts = {key: name, type: 'number'})
       # Although we are creating an input table that is not associated to an operationslist
       # we rely on the operationslist table input machinery (in operations_list_input_table)
@@ -150,8 +152,8 @@ module Krill
       # of each associated op as a convienence.
       # Putting -1 here will allows that the ShowResponse still will be populated with values
       # even though there are no op.temporary hashes to fill.
-      values = defaults.map do |default|
-        { type: opts[:type], opid: -1, key: opts[:key], default: default || 0 }
+      values = defaults.each_with_index.map do |default, ii|
+        { type: opts[:type], row: ii, key: opts[:key], default: default || 0 }
       end
       add_column(name, values)
     end
