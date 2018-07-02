@@ -28,23 +28,23 @@ module Krill
     # @return [String/Fixnum]  the data inputted in the particular input cell specified
     #               by the column associated with `var`, 
     #               and the row associated with either `op` or `row`   
+    #               returns nil if the requested row/column pair doesn't exist
     def get_table_response var, opts = {}
-      if opts[:op] && opts[:row]
-        raise "get_table_data called with Invalid parameters - specify op or row, not both"
-      elsif self[:table_input].nil?
+      if (opts[:op] && opts[:row]) || (!opts[:op] && !opts[:row])
+        raise "get_table_data called with Invalid parameters - specify one of op or row, not both"
+      elsif self[:table_inputs].nil?
         return nil
       elsif opts[:op]
-        opid = Operation.find(op).id # return op.id if passed an operation or the id itself
-        return self[:table_input].find { |resp| resp[:key] == var.to_sym && resp[:opid] == opid }[:value]
+        opid = Operation.find(opts[:op]).id # return op.id if passed an operation or the id itself
+        target_table_input = self[:table_inputs].find { |ti| (ti[:key] == var) && (ti[:opid] == opid) }
       elsif opts[:row]
-        return self[:table_input].find { |resp| resp[:key] == var.to_sym && resp[:row] == row }[:value]
-      else # neither op nor row was specified. Return an array of data in the same order as input row
-        return self[:table_input].sort { |resp| resp[:row] }.map { |resp| resp[:value] }
+        target_table_input = self[:table_inputs].find { |ti| (ti[:key] == var) && (ti[:row] == opts[:row]) }
       end
+      return target_table_input[:value] if target_table_input
     end
 
     def get_table_responses_column var
-      self[:table_input].sort { |resp| resp[:row] }.map { |resp| resp[:value] } if self[:table_input]
+      self[:table_inputs].select { |ti| ti[:key] == var }.sort { |ti| ti[:row] }.map { |ti| ti[:value] } if self[:table_inputs]
     end
 
     # Returns a hash of user responses, each under the var name specified in the ShowBlock where 
@@ -52,8 +52,8 @@ module Krill
     # the rows of the table.
     # @return [Hash]  the response hash with all user input
     def responses
-      inline_responses = self.select { |key, value| key != :table_input && key != :timestamp }
-      table_response_keys = self[:table_input].map { |ti| ti[:key] }.uniq
+      inline_responses = self.select { |key, value| key != :table_inputs && key != :timestamp }
+      table_response_keys = self[:table_inputs] ? self[:table_inputs].map { |ti| ti[:key] }.uniq : []
       table_responses = Hash.new
       table_response_keys.each do |key|
         table_responses[key] = get_table_responses_column(key)
