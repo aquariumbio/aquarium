@@ -25,7 +25,7 @@ module Krill
           type: opts[:type],
           operation_id: temp_op.id,
           key: new_key,
-          default: d
+          default: d,
           row: row_index
         }
         row_index += 1
