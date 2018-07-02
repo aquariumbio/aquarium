@@ -144,7 +144,7 @@ module Krill
     # @option type [String]  defines type of user input -- can be either 'number' or 'text' 
     # @return [Table] The table, can be chained
     def add_response_column(name, defaults, opts = {key: name, type: 'number'})
-      values = defaults.each_with_index.map do |default, ii|
+      values = defaults.map do |default|
         { type: opts[:type], opid: -1, key: opts[:key], default: default || 0 }
       end
       add_column(name, values)
