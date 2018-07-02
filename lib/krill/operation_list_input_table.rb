@@ -13,6 +13,8 @@ module Krill
         # d = op.temporary[key] # Prefer to default to last inputted value
         d ||= default_block.call(op)
       end
+
+      row_index = 0
       @table.add_column opts[:heading], zip(default_values).map { |op, d|
         # Save a list of temporary keys to be deleted later
         new_key = _create_temp_key(key, op)
@@ -24,7 +26,9 @@ module Krill
           operation_id: temp_op.id,
           key: new_key,
           default: d
+          row: row_index
         }
+        row_index += 1
         style = opts[:style_block].call(op) if opts[:style_block]
         o.merge!(style) if style
         o
