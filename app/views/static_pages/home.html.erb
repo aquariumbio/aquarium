@@ -86,14 +86,16 @@
           <th>User</th>
           <th><%= section[:heading] %></th>
         </tr>
-        <% section[:board][0..9].each_with_index do |row,i| %>
-          <tr>
-            <td style="font-weight: <%= i == 0 ? 'bold' : 'normal'%>"><%= row[:user].name %></td>
-            <td class='stat'>
-              <div class="bar" style="width: calc( <%= row[:width] %>% - 5px )">&nbsp;</div>
-              <div class="value" style="">&nbsp;<%= row[section[:symbol]] %></div>
-            </td>
-          </tr>
+        <% unless section[:board].empty? 
+           section[:board][0..9].each_with_index do |row,i| %>
+            <tr>
+              <td style="font-weight: <%= i == 0 ? 'bold' : 'normal'%>"><%= row[:user].name %></td>
+              <td class='stat'>
+                <div class="bar" style="width: calc( <%= row[:width] %>% - 5px )">&nbsp;</div>
+                <div class="value" style="">&nbsp;<%= row[section[:symbol]] %></div>
+              </td>
+            </tr>
+          <% end %>
         <% end %>
       </table>
 

@@ -23,13 +23,17 @@ class StaticPagesController < ApplicationController
 
     compute_widths lb, assocs_sym
 
+    lb
+
   end
 
   def compute_widths board, sym
 
-    if board.length > 0
+    unless board.empty?
 
-      n = [9, board.length].min
+      puts board      
+
+      n = [9, board.length-1].min
       w = board[0][sym] - board[n][sym]
       w = 0.01 if w == 0 
       m = 90.0 / w
