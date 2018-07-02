@@ -13,6 +13,10 @@
       background: rgb(16,108,200);
       color: white;
     }
+    caption {
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
   }
 
   .stat {
@@ -34,3 +38,17 @@
 
 }
 
+.individual_stats {
+  margin: 15px 15px 0 15px;
+  padding: 0 15px 15px 15px;
+  border: 1pt solid #eee;
+  ul {
+    list-style: none;
+    margin-left: 0px;
+    li {
+      margin: 10px;
+      font-size: 12pt;
+      margin-left: 0px;
+    }
+  }
+}

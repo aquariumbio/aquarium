@@ -124,7 +124,25 @@
           <td><%= row[:plan].created_at.strftime("%b. %Y") %></td>
         </tr>
       <% end %>
-    </table>  
+    </table>
+
+    <div flex="50" class="individual_stats">
+      <h2 class="md-title">Key Statistics</h2>
+      <ul>
+        <li><b><%= @user_count %></b> Active Users</li>
+        <li><b><%= @sample_count %></b> Sample definitions</li>
+        <li><b><%= @item_count %></b> items in inventory</li>
+        <% if @last_item %>
+          <li><b><%= @last_item.id %></b>: Last Item ID
+            (<%= @last_item.object_type.name %> for
+             <%= @last_item.sample.user.name %>)</li>
+        <% end %>
+        <li><b><%= @deployed_op_count %></b> Operation Types deployed</li>
+        <li><b><%= @job_count %></b> Jobs performed in the last month</li>
+        <li><b><%= @wizard_count %></b> location wizards defined</li>
+        <li><b><%= @upload_count %></b> files uploaded</li>
+      </ul>
+    </div>
 
   </div>
 
