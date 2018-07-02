@@ -145,7 +145,7 @@ module Krill
     # @return [Table] The table, can be chained
     def add_response_column(name, defaults, opts = {key: name, type: 'number'})
       values = defaults.each_with_index.map do |default, ii|
-        { type: opts[:type], opid: -1, key: "#{ii}__#{opts[:key]}", default: default || 0 }
+        { type: opts[:type], opid: -1, key: opts[:key], default: default || 0 }
       end
       add_column(name, values)
     end
