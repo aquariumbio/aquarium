@@ -3,7 +3,8 @@ module Krill
   # @api krill
   # Not working, hash does not cleanly extend 
   # INSTEAD of extending hash, Try to make this a decorator class which includes enumerable and defines each
-  # ALSO try extending hash as a delegate class 
+  # ALSO try extending hash as a delegate class
+  require 'delegate'
   class ShowResponse < SimpleDelegator
 
     def helloworld
@@ -46,8 +47,8 @@ module Krill
       self.select { |key, value| key != :table_input && key != :timepoint }
     end
 
-    def timepoint
-      self[:timepoint]
+    def timestamp
+      self[:timestamp]
     end
   end
 end
