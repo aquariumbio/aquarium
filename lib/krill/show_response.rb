@@ -1,7 +1,10 @@
 module Krill
 
   # @api krill
-  class ShowResponse < Hash
+  # Not working, hash does not cleanly extend 
+  # INSTEAD of extending hash, Try to make this a decorator class which includes enumerable and defines each
+  # ALSO try extending hash as a delegate class 
+  class ShowResponse < SimpleDelegator
 
     def helloworld
       "hello world"
