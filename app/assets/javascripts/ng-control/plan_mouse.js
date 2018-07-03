@@ -40,6 +40,19 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
    $scope.multiselect = {};
  }
 
+ function draggables() {
+   return $scope.plan.operations.concat(
+     $scope.plan.modules,
+     $scope.plan.current_module.input,
+     $scope.plan.current_module.output,
+     $scope.plan.current_module.text_boxes
+   )
+ }
+
+ $scope.multiple_objects_selected = function() {
+   return aq.where(draggables(), op => op.multiselect).length != 0;
+ }
+
  $scope.clear_operation_selects = function() {
   aq.each($scope.plan.operations, op => op.edit_status = false);
  }
@@ -227,8 +240,6 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
 
   $scope.delete = function() {
 
-    console.log("delete")
-
     if ( $scope.current_wire && $scope.current_wire.record_type == "Wire" ) {
 
       $scope.plan.remove_wire($scope.current_wire);
@@ -254,7 +265,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
             $scope.$apply();
           })
         } else {
-          alert("Module can not be deleted because it contains active operations.")
+          alert("Module cannot be deleted because it contains active operations.")
         }
       } else {
         $scope.delete_object($scope.current_draggable);
@@ -271,7 +282,13 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
       });
 
       $scope.confirm_delete().then(() => {
-        aq.each(objects, obj => $scope.delete_object(obj));
+        aq.each(objects, obj => {
+          if ( obj.record_type != "Module" || obj.deletable($scope.plan) ) {
+            $scope.delete_object(obj);
+          } else {
+            alert("Module in multiple selection cannot be deleted because it contains active operations.");
+          }
+        });
         $scope.$apply();
       });
 
@@ -297,12 +314,17 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
       case "Backspace": 
       case "Delete":
         if ( $scope.current_draggable ) {
-          if ( $scope.current_draggable.record_type == 'Module' || $scope.current_draggable.record_type == 'ModuleIO' || $scope.current_draggable.status == 'planning' ) {
+          if ( $scope.current_draggable.record_type == 'Module' || 
+               $scope.current_draggable.record_type == 'ModuleIO' || 
+               $scope.current_draggable.status == 'planning' ) {
             $scope.delete();
           }
         }
         if ( $scope.current_wire ) {
           $scope.delete();         
+        }
+        if ( $scope.multiple_objects_selected() ) {
+          $scope.delete();
         }
         break;
 
