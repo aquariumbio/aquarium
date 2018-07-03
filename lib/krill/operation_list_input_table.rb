@@ -26,7 +26,6 @@ module Krill
           operation_id: temp_op.id,
           key: new_key,
           default: d,
-          row: row_index
         }
         row_index += 1
         style = opts[:style_block].call(op) if opts[:style_block]
