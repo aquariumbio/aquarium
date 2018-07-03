@@ -96,13 +96,44 @@ AQ.Plan.load = function(id) {
   return new Promise((resolve,reject) => {
     AQ.get("/plans/" + id + ".json").then(response => {   
       try {
-        resolve(AQ.Plan.record(response.data).marshall());
+        resolve(AQ.Plan.record(response.data).marshall().assign_items());
         console.log(`Plan ${id} loaded in ${new Date() - start_time} ms`);
       } catch (e) {
         reject(e)
       }
     }).catch(response => reject(response.data))
   });
+}
+
+AQ.Plan.record_getters.unassigned_inputs = function() {
+
+  let plan = this,
+      fvs = [];
+
+  aq.each(plan.operations, op => {
+    if ( op.status == "planning") {
+      aq.each(op.inputs, fv => {
+        if ( !fv.child_item_id && fv.num_wires == 0 ) {
+          fvs.push(fv)
+        }
+      })
+    }
+  })
+
+  return fvs;
+
+}
+
+AQ.Plan.record_methods.assign_items = function() {
+
+  let plan = this;
+
+  aq.each(plan.unassigned_inputs, input => {
+    input.find_items().then(() => AQ.update())
+  })
+
+  return plan;
+
 }
 
 AQ.Plan.record_methods.submit = function(user) {
@@ -914,7 +945,3 @@ AQ.Plan.record_methods.step_operations = function() {
   console.log("AQ.Plan.step()")
   return AQ.get("/operations/step?plan_id=" + this.id);
 }
-
-
-
-
