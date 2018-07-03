@@ -65,9 +65,9 @@ class KrillController < ApplicationController
 
       end
 
-    end
+    end 
 
-    Operation.step
+    Operation.step @job.operations.collect { |op| op.plan.operations }.flatten
 
     render json: { errors: errors, operations: @job.reload.operations, job: @job }
 

@@ -31,8 +31,6 @@ class StaticPagesController < ApplicationController
 
     unless board.empty?
 
-      puts board      
-
       n = [9, board.length-1].min
       w = board[0][sym] - board[n][sym]
       w = 0.01 if w == 0 
@@ -78,6 +76,20 @@ class StaticPagesController < ApplicationController
     @biggest_plans = done[0..20].select { |x| all.find { |y| x[:plan].id == y[:plan].id }[:ops] == x[:ops] }
 
     compute_widths @biggest_plans, :ops
+
+    retired_group_id = Group.find_by_name("retired")
+    retired_count = User.joins(:memberships)
+                        .where("users.id = memberships.user_id AND memberships.group_id = ?", retired_group_id)
+                        .count
+    @user_count = User.count - retired_count
+
+    @sample_count = Sample.count
+    @item_count = Item.where("location != 'deleted'").count
+    @last_item = Item.last
+    @deployed_op_count = OperationType.where(deployed: true).count
+    @job_count = Job.where("created_at > ? AND pc = -2", Date.today - 30.days).count
+    @wizard_count = Wizard.count
+    @upload_count = Upload.count
 
     respond_to do |format|
       format.html { render layout: 'aq2' }

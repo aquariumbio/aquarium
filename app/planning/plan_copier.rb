@@ -15,6 +15,8 @@ class PlanCopier
     @new_plan.name = @plan.name ? @plan.name + ' (copy)' : "Copy of plan #{@plan.id}"
     @new_plan.save
 
+    @new_plan.associate :replan, "Based on plan #{@plan.id}. Replanned #{Date.today}."
+
     copy_ops
     copy_wires
 

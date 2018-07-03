@@ -19,7 +19,7 @@
           <md-checkbox
             ng-click="set_allowable_field_type(aft)"
             ng-checked="allowable_field_type_checked(aft)"
-            ng-disabled="current_fv.field_type.allowable_field_types.length === 1 || plan.status != 'planning'"
+            ng-disabled="current_fv.field_type.allowable_field_types.length === 1 || current_op.status != 'planning'"
             aria-label="Item">
           </md-checkbox>
 
@@ -58,8 +58,13 @@
 
             <md-checkbox
               ng-click="select_item(current_fv,item)"
-              ng-checked="current_fv.child_item_id == item.id && !current_fv.wired"
-              ng-disabled="current_fv.wired || current_fv.role == 'output'"
+              ng-checked="current_fv.child_item_id == item.id"
+              ng-disabled="current_fv.wired || 
+                           current_fv.role == 'output' || (
+                             current_op.status == 'done' && 
+                             current_op.status == 'error' && 
+                             current_op.status == 'running' &&
+                             current_op.status == 'scheduled' )"
               aria-label="item">
             </md-checkbox>
 

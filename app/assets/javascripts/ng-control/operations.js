@@ -325,14 +325,14 @@
 
         var num = aq.where(operation_type.operations, op => op.last_job.id === job_id).length;
 
-        $http.get("/krill/debug/" + job_id).then(response => {
-          get_numbers().then(numbers => {
+        $http.get("/krill/debug/" + job_id)
+          .then(response => get_numbers())
+          .then(numbers => {
             $scope.numbers = numbers;
             aq.remove($scope.jobs, job_id);
             delete $scope.debugging_job_id;
-            $scope.$apply();
+            // $scope.$apply();
           });
-        })
 
       };
 

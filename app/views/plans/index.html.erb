@@ -67,7 +67,7 @@
                   is_disabled=" (  current_draggable && 
                                    current_draggable.record_type == 'operation' && 
                                    current_draggable.status != 'planning' ) ||
-                                (  !current_draggable && !current_wire )"
+                                (  !current_draggable && !current_wire && !multiple_objects_selected() )"
                   tooltip="Delete (Delete/Backspace)"></planner-action>
 
   <div style="width: 1px; height: 100%; border-left: 1pt solid #eee; margin: 5px"></div>

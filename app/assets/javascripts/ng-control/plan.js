@@ -270,7 +270,8 @@
             $scope.multiselect = {};
             $scope.state.messages.push(`Changed state of operation ${operation.id} to ${new_status}.` + 
                                        `You may want to step the plan, via the "Plan Info" panel ` + 
-                                       `To ensure that the plan progresses properly.`);        
+                                       `To ensure that the plan progresses properly.`);
+            operation.recompute_getter("data_associations")       
             $scope.$apply();
           })
         })
@@ -306,7 +307,7 @@
           $scope.multiselect = {};
           operation.recompute_getter("data_associations")
         })
-        .catch(e => { console.log("Error" + e); $scope.multiselect = {} });
+        .catch(e => { console.log(e.stack); $scope.multiselect = {} });
       
     }    
 
@@ -458,9 +459,17 @@
 
     $scope.new = function() {
       save_first("Save current plan before creating new plan?").then( () => {
-        $scope.plan = AQ.Plan.new_plan("Untitled Plan");
-        $scope.select(null);
-        $scope.$apply();
+        AQ.User.current()
+        .then(user => {
+          $scope.current_user = user;
+          $scope.state.selected_user_id = user.id;
+        })
+        .then(() => $scope.refresh_plan_list())
+        .then(() => {
+          $scope.plan = AQ.Plan.new_plan("Untitled Plan");
+          $scope.select(null);
+          $scope.$apply();
+        })
       });
     };
 
@@ -615,6 +624,10 @@
       }
 
       fv.assign_item(item);
+
+      if ( $scope.current_op != "planning" ) {
+        $scope.state.messages.push("Changed item for an active operation. Save this plan to effect your change.")
+      }
 
     };
 
