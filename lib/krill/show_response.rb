@@ -56,7 +56,7 @@ module Krill
     end
 
     def get_table_responses_column var
-      self[:table_inputs].select { |ti| ti[:key] == var }.sort { |ti| ti[:row] }.map { |ti| ti[:value] } if self[:table_inputs]
+      self[:table_inputs].select { |ti| ti[:key] == var }.sort { |x,y| x[:row] <=> y[:row] }.map { |ti| ti[:value] } if self[:table_inputs]
     end
 
     # Returns a hash of user responses, each under the var name specified in the ShowBlock where 
