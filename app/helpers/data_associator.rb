@@ -99,9 +99,7 @@ module DataAssociator
         upload_id: upload ? upload.id : nil
       )
       da.save
-      Rails.logger.info "New data association ${key}, id #{da.id}" if da.errors.empty?
       errors.add :data_association_error, "Could not save data association named '#{key}': #{da.errors.full_messages.join(', ')}" unless da.errors.empty?
-      Rails.logger.info da.errors.full_messages.join(', ') unless da.errors.empty?     
     else
       modify key, value, upload
     end
