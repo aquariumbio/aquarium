@@ -143,8 +143,6 @@ module Krill
     # @option key [String]  the key that can be used to access response data from ShowResponse hash
     # @option type [String]  defines type of user input -- can be either 'number' or 'text'
     # @return [Table] The table, can be chained
-
-    # TODO make defaults hash merge correctly
     def add_response_column(name, defaults, opts = {})
       default_opts = {key: name, type: 'number'}
       opts.merge default_opts
