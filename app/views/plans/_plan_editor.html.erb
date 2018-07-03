@@ -176,6 +176,18 @@
       </g>  
     </g>       
 
+    <g transform="translate(0,45)" ng-if="op.edit_status">
+      <g ng-if="op.status == 'delayed' || op.status == 'deferred'">
+        <rect width="160" height="28" class="op-edit-rect"></rect>
+        <text class="op-edit-status no-highlight" x="5" y="20"
+              ng-mousedown="cancel_operation(op)">Cancel</text>
+        <text class="op-edit-status no-highlight" 
+              x="147" y="13"
+              ng-mousedown="op.edit_status = false">&times;</text>      
+      </g>  
+    </g>       
+
+
   </g>  
 
   <!-- Selection Box -->
