@@ -126,6 +126,13 @@ module OperationStatus
     inputs.each do |i|
 
       Wire.where(to_id: i.id).each do |wire|
+        self.associate(
+          :input_item_replaced, 
+          "Input #{i.name} was #{i.child_item_id}, but was replaced by #{wire.from.child_item_id} " +
+          "(likely when its predecessor recomputed an output)",
+          nil,
+          duplicates: true
+        ) if i.child_item_id && i.child_item_id != wire.from.child_item_id
         i.child_item_id = wire.from.child_item_id
         i.row = wire.from.row
         i.column = wire.from.column

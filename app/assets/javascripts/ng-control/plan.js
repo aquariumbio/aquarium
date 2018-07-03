@@ -270,7 +270,8 @@
             $scope.multiselect = {};
             $scope.state.messages.push(`Changed state of operation ${operation.id} to ${new_status}.` + 
                                        `You may want to step the plan, via the "Plan Info" panel ` + 
-                                       `To ensure that the plan progresses properly.`);        
+                                       `To ensure that the plan progresses properly.`);
+            operation.recompute_getter("data_associations")       
             $scope.$apply();
           })
         })
