@@ -458,9 +458,17 @@
 
     $scope.new = function() {
       save_first("Save current plan before creating new plan?").then( () => {
-        $scope.plan = AQ.Plan.new_plan("Untitled Plan");
-        $scope.select(null);
-        $scope.$apply();
+        AQ.User.current()
+        .then(user => {
+          $scope.current_user = user;
+          $scope.state.selected_user_id = user.id;
+        })
+        .then(() => $scope.refresh_plan_list())
+        .then(() => {
+          $scope.plan = AQ.Plan.new_plan("Untitled Plan");
+          $scope.select(null);
+          $scope.$apply();
+        })
       });
     };
 
