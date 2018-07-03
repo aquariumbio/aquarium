@@ -145,15 +145,17 @@ module Krill
     # @return [Table] The table, can be chained
 
     # TODO make defaults hash merge correctly
-    def add_response_column(name, defaults, opts = {key: name, type: 'number'})
+    def add_response_column(name, defaults, opts = {})
+      default_opts = {key: name, type: 'number'}
+      opts.merge default_opts
       # Although we are creating an input table that is not associated to an operationslist
       # we rely on the operationslist table input machinery (in operations_list_input_table)
       # which requires an opid field so data can be automatically placed in the op.temporary hash
       # of each associated op as a convienence.
-      # Putting -1 here will allows that the ShowResponse still will be populated with values
-      # even though there are no op.temporary hashes to fill.
-      values = defaults.map do |default|
-        { type: opts[:type], key: opts[:key], default: default || 0}
+      # Putting unique negative numbers here will allow that the ShowResponse still will be populated with values
+      # even though there are no op.temporary hashes to fill (since no operations have negative ids)
+      values = defaults.each_with_index.map do |default, idx|
+        { type: opts[:type], operation_id: (-1 * idx - 1), key: opts[:key], default: default || 0}
       end
       add_column(name, values)
     end
