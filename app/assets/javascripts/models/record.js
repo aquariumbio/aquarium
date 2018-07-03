@@ -138,8 +138,10 @@ AQ.Record.prototype.new_data_association = function() {
     parent_class: this.model.model,
     parent_id: this.id
   });
-
-  this.data_associations.push(da);
+ 
+  if ( this.data_associations ) {
+    this.data_associations.push(da);
+  }
 
   return da;
 

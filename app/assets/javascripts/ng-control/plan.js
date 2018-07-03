@@ -306,7 +306,7 @@
           $scope.multiselect = {};
           operation.recompute_getter("data_associations")
         })
-        .catch(e => { console.log("Error" + e); $scope.multiselect = {} });
+        .catch(e => { console.log(e.stack); $scope.multiselect = {} });
       
     }    
 

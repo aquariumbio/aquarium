@@ -19,7 +19,7 @@
           <md-checkbox
             ng-click="set_allowable_field_type(aft)"
             ng-checked="allowable_field_type_checked(aft)"
-            ng-disabled="current_fv.field_type.allowable_field_types.length === 1 || plan.status != 'planning'"
+            ng-disabled="current_fv.field_type.allowable_field_types.length === 1 || current_op.status != 'planning'"
             aria-label="Item">
           </md-checkbox>
 
