@@ -624,6 +624,10 @@
 
       fv.assign_item(item);
 
+      if ( $scope.current_op != "planning" ) {
+        $scope.state.messages.push("Changed item for an active operation. Save this plan to effect your change.")
+      }
+
     };
 
     $scope.select_row_column = function(fv,sid,collection,r,c) {      
