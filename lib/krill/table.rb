@@ -133,6 +133,31 @@ module Krill
       self
     end
 
+    # Append a column to the table which accepts user input
+    # Response data is stored under the key `table_input` in the data hash returned by `show`
+    # Note: data hash may not get properly populated in the protocol tester
+    # 
+    # @param name [String]  the heading of this column
+    # @param defaults [Array]  the default values of the cells of this column
+    # @param opts [Hash]  additional options
+    # @option key [String]  the key that can be used to access response data from ShowResponse hash
+    # @option type [String]  defines type of user input -- can be either 'number' or 'text'
+    # @return [Table] The table, can be chained
+
+    # TODO make defaults hash merge correctly
+    def add_response_column(name, defaults, opts = {key: name, type: 'number'})
+      # Although we are creating an input table that is not associated to an operationslist
+      # we rely on the operationslist table input machinery (in operations_list_input_table)
+      # which requires an opid field so data can be automatically placed in the op.temporary hash
+      # of each associated op as a convienence.
+      # Putting -1 here will allows that the ShowResponse still will be populated with values
+      # even though there are no op.temporary hashes to fill.
+      values = defaults.map do |default|
+        { type: opts[:type], key: opts[:key], default: default || 0 }
+      end
+      add_column(name, values)
+    end
+
     private
 
     # @private
