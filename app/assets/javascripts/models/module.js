@@ -501,12 +501,12 @@ class Module {
     let module = this,
         answer = true;
 
-    console.log("Checking whether " + module.name + " can be deleted.")
+    console.log("Checking whether " + module.name + " can be deleted.",plan)
 
-    aq.each(plan.operations, op => answer = answer && ( op.parent_id == module.id && op.status == 'planning' ) );
-    aq.each(module.children, child => answer = answer && child.deletable() );
+    aq.each(plan.operations, op => answer = answer && ( op.parent_id != module.id || op.status == 'planning' ) );
+    aq.each(module.children, child => answer = answer && child.deletable(plan) );
 
-    console.log("answer = " + answer)
+    console.log("answer = " + answer, plan.operations)
 
     return answer;
 
