@@ -52,11 +52,11 @@ module Krill
       elsif opts[:row]
         target_table_input = self[:table_inputs].find { |ti| (ti[:key] == var) && (ti[:row] == opts[:row]) }
       end
-      return target_table_input[:value] if target_table_input
+      return target_table_input[:type] == 'number' : target_table_input[:value].to_f ? target_table_input[:value] if target_table_input
     end
 
     def get_table_responses_column var
-      self[:table_inputs].select { |ti| ti[:key] == var }.sort { |x,y| x[:row] <=> y[:row] }.map { |ti| ti[:value] } if self[:table_inputs]
+      self[:table_inputs].select { |ti| ti[:key] == var }.sort { |x,y| x[:row] <=> y[:row] }.map { |ti| ti[:type] == 'number' : ti[:value].to_f ? ti[:value] } if self[:table_inputs]
     end
 
     # Returns a hash of user responses, each under the var name specified in the ShowBlock where 
