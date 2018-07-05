@@ -4,10 +4,6 @@ module Krill
   require 'delegate'
   class ShowResponse < SimpleDelegator
 
-    def helloworld
-      "hello world"
-    end
-    
     # Return the response that was stored under `var`. When used with 
     # a key associated with a table response-set, returns a list of table responses
     # in order of the rows of the table.
@@ -18,18 +14,7 @@ module Krill
       responses[var.to_sym]
     end
 
-    # TODO MODIFY FRONTEND TO RETURN THE ROW INDEX OF TABLE INPUTS ALONG WITH EVERYTHING ELSE
-    # CURRENTLY, ROW OF TABLE IS NOT KEPT TRACK OF BY :table_inputs. 
-
-    # The alternative is to complicate an existing hash var like opid or key with this information. 
-    # Not an ideal workaround for operationslist tables, since it breaks backwards compatibility, but
-    # it would work fine for the tables that can -only- be accessed by row anyway.
-    # Adding a complicated hash var only for standalone tables would also mean that standalone tables would
-    # work as a special case in get_table_response
-
-    # Another alternative is to change the interface of ShowResponse to ignore rows, and change the
-    # interface of add_response_column to accept a list of uniq keys rather than using one key for the whole column
-
+    # TODO: exception on invalid op access 
     # Returns data recorded in a specified row of an input table
     # @param var [Symbol/String]  the table key specified to store data under
     #               in the get.
@@ -43,7 +28,7 @@ module Krill
     #               returns nil if the requested row/column pair doesn't exist
     def get_table_response var, opts = {}
       if (opts[:op] && opts[:row]) || (!opts[:op] && !opts[:row])
-        raise "get_table_data called with Invalid parameters - specify one of op or row, not both"
+        raise "get_table_response called with Invalid parameters - specify one of op or row, not both"
       elsif self[:table_inputs].nil?
         return nil
       elsif opts[:op]
@@ -53,10 +38,6 @@ module Krill
         target_table_input = self[:table_inputs].find { |ti| (ti[:key].to_sym == var.to_sym) && (ti[:row] == opts[:row]) }
       end
       return (target_table_input[:type] == 'number' ? target_table_input[:value].to_f : target_table_input[:value]) if target_table_input
-    end
-
-    def get_table_responses_column var
-      self[:table_inputs].select { |ti| ti[:key].to_sym == var.to_sym }.sort { |x,y| x[:row] <=> y[:row] }.map { |ti| ti[:type] == 'number' ? ti[:value].to_f : ti[:value] } if self[:table_inputs]
     end
 
     # Returns a hash of user responses, each under the var name specified in the ShowBlock where 
@@ -79,6 +60,11 @@ module Krill
     # @return [Integer]  Unix timestamp as seconds since 1970
     def timestamp
       self[:timestamp]
+    end
+
+    private
+    def get_table_responses_column var
+      self[:table_inputs].select { |ti| ti[:key].to_sym == var.to_sym }.sort { |x,y| x[:row] <=> y[:row] }.map { |ti| ti[:type] == 'number' ? ti[:value].to_f : ti[:value] } if self[:table_inputs]
     end
   end
 end
