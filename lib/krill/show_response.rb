@@ -14,7 +14,6 @@ module Krill
       responses[var.to_sym]
     end
 
-    # TODO: exception on invalid op access 
     # Returns data recorded in a specified row of an input table
     # @param var [Symbol/String]  the table key specified to store data under
     #               in the get.
