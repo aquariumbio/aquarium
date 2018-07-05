@@ -43,19 +43,14 @@ Bioturk::Application.configure do
   # Paperclip => fakes3
   config.paperclip_defaults = {
     storage: :s3,
-    bucket: 'development',
-    s3_host_name: 's3',
-    s3_protocol: 'http',
+    s3_host_name: "s3-#{ENV['AWS_REGION']}.amazonaws.com",
+    s3_permissions: :private,
     s3_credentials: {
-      access_key_id: 'THE_DUMMY_ACCESS_KEY_ID',
-      secret_access_key: 'THE_DUMMY_ACCESS_KEY',
-      s3_endpoint: 's3',
-      s3_port: 10001,
-      s3_force_path_style: true,
-      use_ssl: false,
+      bucket: ENV.fetch('S3_BUCKET_NAME'),
+      access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
+      secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY'),
       s3_region: ENV.fetch('AWS_REGION')
-    },
-    s3_permissions: 'private'
+    }
   }
 
   # AWS Simple Email Service Config
