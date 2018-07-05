@@ -70,7 +70,6 @@ class Collection < Item
     i.apportion(o.rows, o.columns)
     i.quantity = 1
     i.inuse = 0
-    i.location = 'Bench'
 
     if o
       i.object_type_id = o.id
@@ -89,9 +88,10 @@ class Collection < Item
         locator.save
       end
     else
+      i.location = 'Bench'
       i.save
     end
-    
+
     i
   end
 
