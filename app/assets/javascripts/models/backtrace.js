@@ -182,6 +182,13 @@ class Step {
 
   }
 
+  // TODO: distinguish table inputs by row, rather than by opid. Then add opid as 
+  // an optional attribute of that table input.
+  // This change will involve touching:
+  // the method below
+  // add_response_column in table.rb, 
+  // the table DOM element in operation_types/_show_block.html.erb
+  // the table DOM element in technician/_show_block.html.erb
   prepare_table_inputs() {
 
     var backend_table_inputs = [],
