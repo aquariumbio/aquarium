@@ -87,11 +87,12 @@ class Collection < Item
         i.locator_id = locator.id
         i.save
         locator.save
+      end
+    else
+      i.save
     end
     
-    i.save
     i
-
   end
 
   # Sets the matrix for the collection to an empty rxc matrix and saves the collection to the database.
