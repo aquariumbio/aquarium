@@ -14,15 +14,15 @@ The plan designer allows you to string together operatons to be applied to your 
 
 - [Designer](#plan-designer)
     - [Table of Contents](#table-of-contents)
-    - [Loading the Designer](*loading-the-designer)
-    - [Manipulating plans](*manipulating-plans)
-    - [Building new plans](*building-new-plans)
-    - [Using modules](*using-modules)
-    - [Using templates](*using-templates)
-    - [Launching plans](*launching-plans)
-    - [Viewing progress](*viewing-progress)
-    - [Data associated with a plan](*data-associated-with-a-plan)
-    - [Editing plans](*editing-plans)
+    - [Loading the Designer](#loading-the-designer)
+    - [Manipulating plans](#manipulating-plans)
+    - [Building new plans](#building-new-plans)
+    - [Using modules](#using-modules)
+    - [Using templates](#using-templates)
+    - [Launching plans](#launching-plans)
+    - [Viewing progress](#viewing-progress)
+    - [Data associated with a plan](#data-associated-with-a-plan)
+    - [Editing plans](#editing-plans)
 
 ## Loading the Designer
 
