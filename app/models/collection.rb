@@ -71,6 +71,24 @@ class Collection < Item
     i.quantity = 1
     i.inuse = 0
     i.location = 'Bench'
+
+    if o
+      i.object_type_id = o.id
+      wiz = Wizard.find_by_name(o.prefix)
+      locator = wiz.next if wiz
+      i.set_primitive_location locator.to_s if wiz
+    end
+
+    if locator
+      ActiveRecord::Base.transaction do
+        i.save
+        locator.item_id = i.id
+        locator.save
+        i.locator_id = locator.id
+        i.save
+        locator.save
+    end
+    
     i.save
     i
 
