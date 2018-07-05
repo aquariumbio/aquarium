@@ -28,16 +28,20 @@ module Krill
     #               returns nil if the requested row/column pair doesn't exist
     def get_table_response var, opts = {}
       if (opts[:op] && opts[:row]) || (!opts[:op] && !opts[:row])
-        raise "get_table_response called with Invalid parameters - specify one of op or row, not both"
+        raise TableCellUndefined, "Invalid parameters for get_table_response - specify one of op or row, not both"
       elsif self[:table_inputs].nil?
         return nil
       elsif opts[:op]
+        if self[:table_inputs].first[:opid] < 0
+          raise TableCellUndefined, "Invalid parameters for get_table_response - an :op option cannot be specified for a table that doesn't have operations corresponding to its rows"
+        end
         opid = Operation.find(opts[:op]).id # return op.id if passed an operation or the id itself
         target_table_input = self[:table_inputs].find { |ti| (ti[:key].to_sym == var.to_sym) && (ti[:opid] == opid) }
       elsif opts[:row]
         target_table_input = self[:table_inputs].find { |ti| (ti[:key].to_sym == var.to_sym) && (ti[:row] == opts[:row]) }
       end
-      return (target_table_input[:type] == 'number' ? target_table_input[:value].to_f : target_table_input[:value]) if target_table_input
+      raise TableCellUndefined if target_table_input.nil?
+      return (target_table_input[:type] == 'number' ? target_table_input[:value].to_f : target_table_input[:value])
     end
 
     # Returns a hash of user responses, each under the var name specified in the ShowBlock where 
@@ -65,6 +69,12 @@ module Krill
     private
     def get_table_responses_column var
       self[:table_inputs].select { |ti| ti[:key].to_sym == var.to_sym }.sort { |x,y| x[:row] <=> y[:row] }.map { |ti| ti[:type] == 'number' ? ti[:value].to_f : ti[:value] } if self[:table_inputs]
+    end
+  end
+  
+  class TableCellUndefined < StandardError
+    def initialize(msg="A table cell was picked out that is out of bounds or cannot exist")
+      super
     end
   end
 end
