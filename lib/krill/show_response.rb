@@ -48,15 +48,15 @@ module Krill
         return nil
       elsif opts[:op]
         opid = Operation.find(opts[:op]).id # return op.id if passed an operation or the id itself
-        target_table_input = self[:table_inputs].find { |ti| (ti[:key] == var) && (ti[:opid] == opid) }
+        target_table_input = self[:table_inputs].find { |ti| (ti[:key].to_sym == var.to_sym) && (ti[:opid] == opid) }
       elsif opts[:row]
-        target_table_input = self[:table_inputs].find { |ti| (ti[:key] == var) && (ti[:row] == opts[:row]) }
+        target_table_input = self[:table_inputs].find { |ti| (ti[:key].to_sym == var.to_sym) && (ti[:row] == opts[:row]) }
       end
-      return target_table_input[:type] == 'number' : target_table_input[:value].to_f ? target_table_input[:value] if target_table_input
+      return (target_table_input[:type] == 'number' ? target_table_input[:value].to_f : target_table_input[:value]) if target_table_input
     end
 
     def get_table_responses_column var
-      self[:table_inputs].select { |ti| ti[:key] == var }.sort { |x,y| x[:row] <=> y[:row] }.map { |ti| ti[:type] == 'number' : ti[:value].to_f ? ti[:value] } if self[:table_inputs]
+      self[:table_inputs].select { |ti| ti[:key].to_sym == var.to_sym }.sort { |x,y| x[:row] <=> y[:row] }.map { |ti| ti[:type] == 'number' ? ti[:value].to_f : ti[:value] } if self[:table_inputs]
     end
 
     # Returns a hash of user responses, each under the var name specified in the ShowBlock where 
@@ -68,7 +68,7 @@ module Krill
       table_response_keys = self[:table_inputs] ? self[:table_inputs].map { |ti| ti[:key] }.uniq : []
       table_responses = Hash.new
       table_response_keys.each do |key|
-        table_responses[key] = get_table_responses_column(key)
+        table_responses[key.to_sym] = get_table_responses_column(key)
       end
 
       inline_responses.merge(table_responses)
