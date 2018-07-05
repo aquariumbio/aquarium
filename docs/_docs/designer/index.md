@@ -4,6 +4,10 @@ layout: docs
 permalink: /designer/
 ---
 
+<!--
+  Written by Eric Klavins, July 2018
+  -->
+
 # Plan Designer
 
 The plan designer allows you to string together operatons to be applied to your samples. You can create complex experimental workflows, a.k.a. plans, with dozens of steps, associate specific samples and items from the inventory with their inputs, send the output of one operation to the input of another, estimate how much your plan will clost, monitor the progress of your plan as it is executed, and more. This document describes how to use every feature of the plan designer. It uses the operation types in Cloning workflow, which is included in the distrubition of Aquarium, as examples. Once you add your own operation types (using the Developer), you should be able manipulate them the same way. Besides the existence of the Cloning workflow in the designer, this document assumes you have populated the inventory with samples and items that can bs used for the inputs of plans. If not, you will need to add such inventory and reload the Designer.
@@ -53,25 +57,56 @@ The plan designer allows you to string together operatons to be applied to your 
 
 ## Building new plans
 
-**Add operations**:
+**Add operations**: To add operations to a plan, select the "Design" tab on the left sidebar. Then select "Operation Types" and a category of operation type, for example, "Cloning". You should see a list of operation types in that category. Click on one of them to add an operation of that type to your plan. For example, add "Order Primer" and "Rehydrate Primer" to a new plan. The operations will be placed in the plan workspace in somewhat arbitrary positions. Move them so that "Rehydrate Primer" is above "Order Primer". 
 
-**Associate samples and items**:
+> Note: The flow of information in an Aquarium plan is from the bottom of the screen to the top. Thus, the goal of your plan should be put at the top of the workspace and then first operations to be performed should be put at the bottom of the workspace.
 
-Note: The Designer page needs to be reloaded for it to see new samples. New items should show up if you simply reload the plan (using the Reload button in the main menu). If not, try saving your plan and reloading the page. 
+Selected operations will appear light blue. When you select an operation, information aboute the operation and how to use it will be shown in the left sidebar when the "Node" tabe is selected. You can select multiple operations by dragging a selection box around them using the mouse.
 
-**Associate parts of collections**:
+> Note: If you have not yet named your plan, the plan will given the same name as the first operation you add to the plan. You can always change this name later.
 
-**Add wires**:
+**Deleting operations**: To delete an operation, select it and click the `Delete` icon or press the "Delete" key on your keyboard. If multiple operations are selected, they will all be deleted. You cannot delete an active operation from a plan (although you can disconnect it and move it to the side). 
 
-**Use array inputs**:
+**Add wires**: To connect the output of an operation to the input of another, first select the desired output of the first operation. A pulsating circle will be place around the output and all inputs of other operations that are compatible with the output type of the first operation will appear cyan in color. Shift click one of these inputs and an arrow will connect the output to the input, indicating that they are now "wired" together. You can also first select an input and shift click on another output to wire operations together. For example, in a plan containing just "Rehydrate Primer" and "Order Primer", connect the output of "Order Primer" to the input of "Rehdrate Primer". 
 
-**Adding predecessors and successors**:
+> Note: Wires appear black if the I/O pins they connect are compatible. Otherwise, they appear orange. This occurs if they have different samples associated with them or if they have different Sample Type / Container Types chosen for then (see below). 
 
-**Seeing whether a plan is valid**:
+**Associate samples with I/O pins**: Select an input or an output circle, or an entire operation. At the bottom of the designer a list of all the inputs and outputs will appear. Start typing the name of a sample in one of the boxes. A list of samples whose names autocomplete what you have typed so far, and which are compatible with the input's sample type definition (defined in the Developer) will appear. Select one of the samples. At this point, the sample will be associated with the input or output **and** with all inputs and outputs the designer determines should have the same sample associated with them. For example, with the "Rehydrate Primer" and "Order Primer" operations wired together, the following inputs and outputs are considered "Equivalent" in terms of assigning samples: the "Primer" output of "Order Primer", the "Primer" input, the "Primer Aliquot" output and the "Primer Stock" outputs of "Rehydrate Primer". Assigning a sample to any one of these I/Os wil automatically associate the sample with the others.
 
-**Annotating a plan with textboxes**:
+> Note: In general, I/O pins are considered equivalant for assigning samples if (a) they are connected to each other or (b) they have the same routing id as defined in the definition of the operation type in the Developer. 
+
+> Note: When an output has a sample associated with it, it will appear green, indiciating that it is valid. If an input is not a "leaf" input (meaning there is a wire coming into it), the associating a sample with it will also turn it green. A leaf input will be green only if it has a sample and has an item associated with it (see below). If an I/O is not green it will show as orange, indicating that more information for that I/O is required before the plan can be launched.
+
+**Editing input parameters**: Inputs to operations can also be numerical, string, or JSON values. For example, the input to "Order Primer" is a string "Yes" or "No", which you can choose from the "Urgent" select box at the bottom of the designer when the "Order Primer" operation is selected.
+
+> Note: The Designer page needs to be reloaded for it to see new samples. New items should show up if you simply reload the plan (using the Reload button in the main menu). If not, try saving your plan and reloading the page. 
+
+**Associate Items**: Selecting an input will bring change the sidebar to "I/O". Two lists are shown. First, a list of all "Sample Type / Container Type" pairs will appear. If there are more than one (as defined in the Developer for the operation type), you can choose which one to use. The autocomplete for the sample name will respect the choice. Second, a list of inventory items associated with the chosen Sample Type / Container type will appear, along with their locations. When you assign a sample to an unwired input to an operation, the designer automatically chooses the first item in this list to associate with the input. You can choose a different one by clicking on the checkbox next to the item ID. You can click the item ID itself to view more information associated with the item. Inventory for wired inputs and outputs is displayed, but you cannot change it. Typically, the an operation will create new items for its outputs.
+
+The "Rehydrate Primer" input is of type Primer  with container type set to Lyophilized Primer, so cannot be changed. Furthermore, lyophilzed primers are turned into primer stocks by the operation, so typically there will be no inventory for this input (which is why it is wired to "Order Primer"). An example of an operation operation with multiple input types is the "Template" input of the "Make PCR Fragment" operation. Try adding such an operation and changing the Sample Type / Container Type for the "Template" input to "Fragment / Fragment Stock" and seeing which samples are available in the autocomplete.
+
+**Associate parts of collections**: The inputs to some operations are defined to be parts of larger collections of parts. For example, a lane in a gel or a well in a 96 well plate. Here, you can select not only which collection to use from the inventory, but also which element of the collection. For example, add a "Transform Cells" operation to your plan and set the "Comp Cells" input to "DH5apha". If you have any inventory, you will see a list of collections on the left. Next to each collection is a matrix of squares that are light blue if they have a matching sample in them. Click on one of them to select which element (or part) of the collection you would like to use.
+
+> Note: At this time Aquarium does not check that an item or an element of a collection is not used more than once in a plan. You should check this by hand if it is required.
+
+**Use array inputs**: Some operations have input and output arrays of elements when it is not defined a priori how many samples they operate on. For example, add an "Assemble Plasmid" operation to your plan. Select the operation and note the "Add" button undereath the "Fragment" Input. Click it and you will see another Fragment input appear. You can operate on these inputs just as you would a normal input. You can delete one of them by clicking the &times; symbol on the right of the input's sample box at the bottom of the designer. 
+
+**Adding predecessors and successors**: The types of inputs and outputs of operations have to match, and Aquarium uses the information to help you construct plans. For example, select an input to the "Assemble Plasmid" operation and associate a sample with it. Notice that with this input selected, a list of "Predecessors" for the "Assemble Plasmid" operation appear, in this case "Extract Gel Slice" and perhaps "Extract Gel Slice (Advanced)". The preferred predecessor will have a blue button next to it. Click it and a new operation will be added and wired to the input you selected. In addition, the sample information will be propagated to the new operation and the pulsating cursor will move to the first input of the new operation, where you can add another predecessor. In this way, plans can be constructed quickly. In a similar manner, you can add successors to outputs of operations. 
+
+**Annotating a plan with textboxes**: Clicking on the `Text` icon at the top of the designer will add a text box to your plan. You can move it and resize it. When a text box is selected, you can edit its contents at the bottom of the designer, where you can add any valid [Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) code (including plain text). You can even add images to your plan by linking images for example with
+
+    ![markdown icon](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png)
+
+In addition, you can add images uploaded to Aquarium. For example, if you have a gel image associated with operation 12345 you can put the image directly in the plan by making a text box with the code
+
+    ![gel](/uploads/operation/12345/gel)
+
+where 12345 is the operation id and "gel" is the name of the data association you want to view. Similarly, you can put images associated with items into plans with 
+
+    ![name](/uploads/item/12345/key)
 
 
+    
 
 ## Using modules
 
@@ -80,6 +115,8 @@ Note: The Designer page needs to be reloaded for it to see new samples. New item
 **Editing the name and documentation for a module**:
 
 **Adding inputs and outputs to a module:**
+
+**Deleting modules**:
 
 
 
