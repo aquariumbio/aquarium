@@ -107,7 +107,7 @@
   <planner-action ng-click="new(plan)" icon="note_add" name="New" tooltip="New Plan"></planner-action>
 
   <planner-action ng-click="save(plan)" 
-                  is-disabled="plan.saving || plan.operations.length == 0" 
+                  is-disabled="plan.saving" 
                   icon="save" name="Save"
                   tooltip="Save Plan (Ctrl-S)"></planner-action>
 
