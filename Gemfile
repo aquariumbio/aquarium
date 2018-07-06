@@ -2,6 +2,8 @@
 
 source 'https://rubygems.org'
 
+gem 'rspec', '3.0'
+
 gem 'rails', '3.2.22'
 gem 'bootstrap-sass', '2.3.2.0'
 gem 'yaml_db'
