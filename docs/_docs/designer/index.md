@@ -106,17 +106,23 @@ where 12345 is the operation id and "gel" is the name of the data association yo
     ![name](/uploads/item/12345/key)
 
 
-    
+
 
 ## Using modules
 
-**Creating and opening a module:**
+Modules are a way to visually group together operations (and other modules) to reduce clutter and to encapsulate common functions. For example, if a particular set of five operations is almost always used together, you can make them into a module whos inputs are the inputs to the first operation in the set, and whose outputs are the outputs of the last operation in the set. Then yu can make it into a template (see below) and use it over and over again.
 
-**Editing the name and documentation for a module**:
+**Creating a module:** To create a new module, click the `Module` icon. A selected box will appear, representing the module. You can open it by right clicking on it or by clicking the `Expand` icon. Opeing the module will replace the workspace with the contents of the module (which is empty for a newly created module). You can close the module by clicking the &times; symbol on the upper right of the workspace.
 
-**Adding inputs and outputs to a module:**
+**Editing the name and documentation for a module**: To change the name of a module and to edit the documentation associated with it, select the module, and click "Edit" on the left sidebar (assuming the "Node" tab is selected). You can change the name and edit markdown in the editor and save or discard your changes. 
 
-**Deleting modules**:
+> Note: The "Save" button for the name and documentation for a module does not save the plan. you will also need to click the `Save` icon on the upper right to do that.
+
+**Adding operations, inputs and outputs to a module:** With a module open, you can add operations and wires just as described above. In addition, you by clicking on the `Input` and `Output` icons you can add inputs and outputs to the module and connect then to the outputs and inputs odf operations within the module. With the module closed, inputs and outputs will appear as colored circles, just as they do with operations. You can also add modules to modules, creating a hierarchy of sub-plans as it were.
+
+**Turning a selection into a module**: You can quickly create a module by selecting any number or operations and modules and clicking the `Module` icon. Doing so will add the operations with the same connectivity to the module. Any operations in the selection that had unwired inputs will become inputs to the module, and any operations in the selection that had unwired outputs will become outputs of the module.
+
+**Deleting modules**: To delete a module, selecting and click the `Delete` icon or press the Delete Key on your keyboard. Modules can not be deleted if they or any of their sub modules contain active operations.
 
 
 
