@@ -129,11 +129,11 @@ Modules are a way to visually group together operations (and other modules) to r
 
 ## Using templates
 
-**Using system templates:**
+**Using templates**: Templates are parts of plans that you would like to use over and over. For example, you might want create a plan with a PCR whose product is run througha gel and purified, which involves five operations connected together in a certain way. Repeatedly building this subplan would be a tedious, so a template can be used that already has this sub plan in it. To add a subplan from a template to your plan, click on the "Design" tab on the left sidebar and select "Templates" (made by you) or "System Templates" (made by others and shared) and click on a template. The template's contents will be added to your plan. Clickin mutilple times adds multiple copies of the subplan. 
 
-**Creating your own templates:**
+**Creating templates:** To create a template, simply build a plan, give it a descriptive name, save it, and click the `Template` icon. A new entry will be put in the "Templates" folder under the "Design" tab. And you will be given an empty workspace to start editing a new plan.
 
-**Promoting and demoting templates:**
+**Promoting and demoting templates:** If you are in the admin group, you can share you templates with everyone else on the system by clicking the &#8679; icon next to the template name in the "Templates" folder. To revert a template (system or personal) back to a plan, click the &times; icon next to the template's name. This will move the template back into your "Unsorted" folder in the "Plans" sidebar.
 
 
 
@@ -158,8 +158,6 @@ Modules are a way to visually group together operations (and other modules) to r
 **Running an operation as a technician**:
 
 **Running an operation non-interactively**:
-
-
 
 
 
