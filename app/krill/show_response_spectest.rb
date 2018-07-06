@@ -5,7 +5,7 @@ Rspec.describe ShowResponse
 	it "translates the response hash from a show block into an object with a simpler interface" do
 		resp = ShowResponse.new({
 			table_inputs: [{:key=>"tblrespnskey", :opid=>3075, :row=>0, :value=>2, :type=>"number"}, {:key=>"tblrespnskey", :opid=>3076, :row=>1, :value=>1, :type=>"number"}, ],
-			timestamp: 123456789, measured_concentration: 53.2 
+			timestamp: 123456789, measured_concentration: 53.2, 9: 999
 		})
 
 		it "is backwards compatible with the original hash" do
@@ -15,6 +15,12 @@ Rspec.describe ShowResponse
 		it "returns the value at the given key like a ruby hash with get_response"  do
 		    expect(resp.get_response(:badkey)).to eq(nil)
 		    expect(resp.get_response(:measured_concentration)).to eq(53.2)
+		end
+
+		it "returns a response with the given var, whether passed a symbol, string, or integer"  do
+		    expect(resp.get_response("measured_concentration")).to eq(53.2)
+		    expect(resp.get_response(9)).to eq(999)
+		    expect(resp.get_response(:9)).to eq(999)
 		end
 		
 		it "hides table_inputs and timestamp from the client" do
@@ -32,6 +38,7 @@ Rspec.describe ShowResponse
 
 		it "returns a sorted array corresponding to rows of the table when the key is the name of an array with get_response" do
 			expect(resp.get_response(:tblrespnskey)).to eq([2, 1])
+			expect(resp.get_response("tblrespnskey")).to eq([2, 1])
 		end
 
 		it "returns the contents of a specific input cell of table with get_table_response when parameterized with an op or row" do
@@ -71,28 +78,28 @@ Rspec.describe ShowResponse
 			:timestamp=>1530914953.496
 		})
 
-		expect(resp.get_response(:table_inputs)).to eq(nil)
-	    expect(resp.get_response(:timestamp)).to eq(nil)
-	    expect(resp.get_response(:badkey)).to eq(nil)
-	    expect(resp.get_response(:response1)).to eq("SUPERLONGSTRINGSUPERLONGSTRINGSUPERLONGSTRINGSUPERLONGSTRINGSUPERLONGSTRING")
-		expect(resp.get_response(:response2)).to eq(1412312312312312312312412312312312)
-		expect(resp.get_response(:response3)).to eq("one more datum")
-		expect(resp.timestamp).to eq(1530914953.496)
-		expect(resp.get_response(:tblrespnskey)).to eq([2,1,3,4,5,6])
-		expect(resp.get_response(:tblrespnskey2)).to eq(["one", "two", "three", "four", "five", "six"])
-		expect(resp.get_response(:response2)).to eq(1412312312312312312312412312312312)
-		expect(resp.get_response(:response3)).to eq("one more datum")
+		expect(bigresp.get_response(:table_inputs)).to eq(nil)
+	    expect(bigresp.get_response(:timestamp)).to eq(nil)
+	    expect(bigresp.get_response(:badkey)).to eq(nil)
+	    expect(bigresp.get_response(:response1)).to eq("SUPERLONGSTRINGSUPERLONGSTRINGSUPERLONGSTRINGSUPERLONGSTRINGSUPERLONGSTRING")
+		expect(bigresp.get_response(:response2)).to eq(1412312312312312312312412312312312)
+		expect(bigresp.get_response(:response3)).to eq("one more datum")
+		expect(bigresp.timestamp).to eq(1530914953.496)
+		expect(bigresp.get_response(:tblrespnskey)).to eq([2,1,3,4,5,6])
+		expect(bigresp.get_response(:tblrespnskey2)).to eq(["one", "two", "three", "four", "five", "six"])
+		expect(bigresp.get_response(:response2)).to eq(1412312312312312312312412312312312)
+		expect(bigresp.get_response(:response3)).to eq("one more datum")
 		it "raises an error if you misuse the interface for get_table_response (which requires exactly one optional argument)" do
-			expect(resp.get_table_response(:measured_concentration)).to raise_error(TableCellUndefined)
-			expect(resp.get_table_response(:tblrespnskey2, op: 3079)).to raise_error(TableCellUndefined)
-			expect(resp.get_table_response(:tblrespnskey, op: 3079, row: 5)).to raise_error(TableCellUndefined)
+			expect(bigresp.get_table_response(:measured_concentration)).to raise_error(TableCellUndefined)
+			expect(bigresp.get_table_response(:tblrespnskey2, op: 3079)).to raise_error(TableCellUndefined)
+			expect(bigresp.get_table_response(:tblrespnskey, op: 3079, row: 5)).to raise_error(TableCellUndefined)
 		end
 
 		it "returns nil if you use the correct interface for get_table_response, but no such element exists" do
-			expect(resp.get_table_response(:tblrespnskey, op: 5000)).to eq(nil)
-			expect(resp.get_table_response(:tblrespnskey, op: Operation.find(3074)).to eq(nil)
-			expect(resp.get_table_response(:tblrespnskey, row: 100)).to eq(nil)
-			expect(resp.get_table_response(:tblrespnskey, op: 3079)).to eq(nil)
+			expect(bigresp.get_table_response(:tblrespnskey, op: 5000)).to eq(nil)
+			expect(bigresp.get_table_response(:tblrespnskey, op: Operation.find(3074)).to eq(nil)
+			expect(bigresp.get_table_response(:tblrespnskey, row: 100)).to eq(nil)
+			expect(bigresp.get_table_response(:tblrespnskey, op: 3079)).to eq(nil)
 		end
 	end
 		
