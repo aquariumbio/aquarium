@@ -49,7 +49,8 @@ AQ.Plan.record_methods.create_module = function() {
       selected_ops = aq.where(plan.operations, op => op.multiselect),
       current = plan.current_module, // have to call this first (getter with a side effect of 
                                      // making the current module if it doesn't exist)
-      selected_modules = aq.where(current.children, child => child.multiselect),  
+      selected_modules = aq.where(current.children, child => child.multiselect),
+      selected_textboxes = aq.where(current.text_boxes, box => box.multiselect),
       wires_to_be_moved = [];                                   
       x = 0, y = 0, n = 0;
 
@@ -66,6 +67,12 @@ AQ.Plan.record_methods.create_module = function() {
     x += op.x;
     y += op.y;
     n++;
+  });
+
+  console.log(selected_textboxes);
+  aq.each(selected_textboxes, box => {
+    aq.remove(current.text_boxes, box);
+    module.text_boxes.push(box);
   });
 
   aq.each(selected_modules, selected_module => {
