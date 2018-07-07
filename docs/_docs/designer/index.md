@@ -158,14 +158,31 @@ Modules are a way to visually group together operations (and other modules) to r
 
 ## Viewing progress
 
-**Understanding plan status**:
+**Operation status**: When a plan is being constructed, the status of each of its operations are set to `planning` and they are not seen by the manager. When a plan is launched, the status of all its operations are changed according to the finite state machine below.
 
-**Reloading plans**:
+![Plan Status](images/operation-status.png)
 
-**Running an operation as a technician**:
+The transitions from state to state are triggered as follows:
 
-**Running an operation non-interactively**:
+|     | Action   | Conditions on operation                        | Events that trigger the action |
+|:----|:---------|:-----------------------------------------------|:-------------------------------|
+| a)  | launch   | Has no predecessors                            | User launches the plan         |
+| b)  | launch   | Has predecessors                               | User launches the plan         |
+| c)  | launch   | Is marked "on the fly" and has no predecessors | User launches the plan         |
+| d1) | step     | All inputs are ready, predecessors are done, and precondition is **true** | Technician completes a job |
+| d2) | step     | All inputs are ready, predecessors are done, and precondition is **false** | Technician completes a job |
+| d3) | step     | All inputs are ready, predecessors are done, and precondition is **true** | Any event that updates the plan |
+| e)  | step     | Is marked "on the fly" and all inputs are ready | Technician completes a job |
+| f)  | batch    | Is pending | Manager batches operation into a job |
+| g)  | batch    | Is pending but has an "on the fly" predecessor | Manager batches operation into a job |
+| h)  | successor batched | Is marked "on the fly" and has successor that was batched into a job | Manager batches the operation’s on the fly successor (if there is one that is ready) into a job |
+| i)  | unbatch | Is scheduled | Was removed from a job by the manager |
+| j)  | start   | Is scheduled | Containing job is started by the manager of technician |
+| k)  | error   | | Operation is canceled, containing job is canceled, job's protocol code sets the operation to "error", or job's protocol crashes |
+| m)  | complete | Operation's job is running normally | Technician completes containing job |
+| n)  | pred-complete | Is deferred | Operation's "on the fly" predecessor completes |
 
+**Reloading plans**: When you are viewing an active plan in the designer and the state of some of the operations changes, those changes will not be reflected in the designer automatically. To see what is happening with the plan without reloading the entire page and navigating back to your plan, click the `Reload` icon.
 
 
 ## Data associated with a plan
@@ -190,4 +207,4 @@ Modules are a way to visually group together operations (and other modules) to r
 
 **Modifying which items are used by an operation**:
 
-**Stepping a plan**:
+**Stepping (i.e. updating) a plan**:
