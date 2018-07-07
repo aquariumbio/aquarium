@@ -187,11 +187,11 @@ The transitions from state to state are triggered as follows:
 
 ## Data associated with a plan
 
-**Viewing and associating values and files with a plan**:
+**Viewing and associating values and files with a plan**: Once a plan is launched, the jobs containing the operations will associate data from instruments and technician input with the plan. This data can be viewed in the "Plan Info" tab (which replaces the "Launch" tab once the plan is launched) on the left. You can delete data (be careful!) by clicking on the trashcan icon. You can add new data by clicking "Add Data". Replace "key" with a short name for the data, and enter in text below that. Click the first icon to the right to save the data and the revert icon to undo changes. To upload a file, click the upload button and choose a file. Once it is uploaded, its name will appear. Change the key to a short name for the kind of file it is, and then save the data association.
 
-**Viewing and associating values and files with an operation**:
+**Viewing and associating values and files with an operation**: You can similarly edit and add data to operations by clicking on the operation. This will bring up information about the operation on the bottom of the designer page. Choose "Add Data" or "Upload" from the menu in the upper right of the operation information area.
 
-**Viewing and associating values and files with an item**:
+**Viewing and associating values and files with an item**: Clicking on an item ID anywhere in the designer brings up an information dialog describing details about the item. You can edit or add data and upload files to associate with the item here, as well as move the item to a new location (be careful that you are actually moving the item in the lab to reflect this change).
 
 
 
