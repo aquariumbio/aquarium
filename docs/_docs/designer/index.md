@@ -10,23 +10,23 @@ permalink: /designer/
 
 # Plan Designer
 
+![Plan Designer](images/designer-overview.png)
+
 The plan designer allows you to string together operations to be applied to your samples. You can create complex experimental workflows, a.k.a. plans, with dozens of steps, associate specific samples and items from the inventory with their inputs, send the output of one operation to the input of another, estimate how much your plan will cost, monitor the progress of your plan as it is executed, and more. This document describes how to use every feature of the plan designer. It uses the operation types in Cloning workflow, which is included in the distribution of Aquarium, as examples. Once you add your own operation types (using the Developer), you should be able manipulate them the same way. Besides the existence of the Cloning workflow in the designer, this document assumes you have populated the inventory with samples and items that can be used for the inputs of plans. If not, you will need to add such inventory and reload the Designer.
 
 <!-- TOC -->
 
 ## Table of Contents
 
-- [Designer](#plan-designer)
-    - [Table of Contents](#table-of-contents)
-    - [Loading the Designer](#loading-the-designer)
-    - [Manipulating plans](#manipulating-plans)
-    - [Building new plans](#building-new-plans)
-    - [Using modules](#using-modules)
-    - [Using templates](#using-templates)
-    - [Launching plans](#launching-plans)
-    - [Viewing progress](#viewing-progress)
-    - [Data associated with a plan](#data-associated-with-a-plan)
-    - [Editing plans](#editing-plans)
+  - [Loading the Designer](#loading-the-designer)
+  - [Manipulating plans](#manipulating-plans)
+  - [Building new plans](#building-new-plans)
+  - [Using modules](#using-modules)
+  - [Using templates](#using-templates)
+  - [Launching plans](#launching-plans)
+  - [Viewing progress](#viewing-progress)
+  - [Data associated with a plan](#data-associated-with-a-plan)
+  - [Editing plans](#editing-plans)
 
 ## Loading the Designer
 
