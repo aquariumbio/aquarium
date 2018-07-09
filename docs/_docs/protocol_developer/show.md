@@ -207,4 +207,4 @@ operations.each do |op|
 end
 ```
 
-Another convienent way to collect information relating to each `Operation` in an  `OperationList` is to accept technician responses through a input `Table` on the `OperationsList`. See the [Table Documentation on getting User Input]({{ site.basename }}{% link _docs/protocol_developer/table.md/accepting-technician-input-through-tables}) for more details.
+Another convienent way to collect information relating to each `Operation` in an  `OperationList` is to accept technician responses through a input `Table` on the `OperationsList`. See the [Table Documentation on getting User Input]({{ site.basename }}{% link _docs/protocol_developer/table.md %}#accepting-technician-input-through-tables) for more details.
