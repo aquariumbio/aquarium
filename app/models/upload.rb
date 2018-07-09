@@ -9,6 +9,7 @@ class Upload < ActiveRecord::Base
 
   belongs_to :job
   has_many :data_associations
+  has_one :upload
 
   def name=(n)
     self.upload_file_name = n

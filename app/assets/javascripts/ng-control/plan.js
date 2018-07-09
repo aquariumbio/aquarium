@@ -199,7 +199,7 @@
       p.save().then(() => {
         $scope.templates.push(p);
         open_templates();
-        $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
+        $scope.plan = AQ.Plan.new_plan("Untitled Plan");
         $scope.select(null);  
         $scope.refresh_plan_list();
       })

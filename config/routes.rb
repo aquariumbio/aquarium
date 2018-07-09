@@ -3,6 +3,8 @@ Bioturk::Application.routes.draw do
 
   resources :timings, only: %i[update create]
 
+  get '/uploads/:type/:id/:key', to: 'uploads#show'  
+
   get '/json/current',             to: 'json#current'
   post '/json/items',              to: 'json#items'
   post '/json/save',               to: 'json#save'
