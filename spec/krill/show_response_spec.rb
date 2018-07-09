@@ -1,5 +1,5 @@
 # require_relative 'show_response'
-require '/aquarium/app/krill/show_response'
+require '/aquarium/lib/krill/show_response'
 require '/aquarium/config/environment'
 require '/aquarium/app/models/operation'
 include Krill
