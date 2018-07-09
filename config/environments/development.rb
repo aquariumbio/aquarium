@@ -39,6 +39,7 @@ Bioturk::Application.configure do
   # config.time_zone = "Pacific Time (US & Canada)"
 
   # Paperclip => S3
+
   config.paperclip_defaults = {
     storage: :s3,
     s3_host_name: "s3-#{ENV['AWS_REGION']}.amazonaws.com",
