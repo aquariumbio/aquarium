@@ -163,7 +163,7 @@ Now our textbox is a bit more informative
 
 ![User Input Example]({{ site.baseurl }}{% link _docs/protocol_developer/images/show_images/7_input_block-2.png %})
 
-Any input data from a `ShowBlock` is returned by the call to `show` that created the block as a `ShowResponse` object. The name that we entered as the option for var: will be what we use to request that piece of data from the ShowResponse.
+Any input data from a `ShowBlock` is returned by the call to `show` that created the block as a `ShowResponse` object. The name that we entered as the option for `:var` will be what we use to request that piece of data from the ShowResponse.
 
 In order to access the name entered by the technician, we capture ShowResponse in a variable called `responses`, and then request data for the key `:tech_name`
 
