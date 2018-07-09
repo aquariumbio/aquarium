@@ -13,7 +13,6 @@ module Krill
         # d = op.temporary[key] # Prefer to default to last inputted value
         d ||= default_block.call(op)
       end
-
       @table.add_column opts[:heading], zip(default_values).map { |op, d|
         # Save a list of temporary keys to be deleted later
         new_key = _create_temp_key(key, op)
