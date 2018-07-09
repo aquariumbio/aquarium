@@ -124,7 +124,12 @@ module Krill
 
     end
 
-    def add_column(name, values)
+
+    # Append a column to the table with a list of values
+    # 
+    # @param name [String]  the heading of this column
+    # @param values [Array]  the values of the cells of this column
+    def add_column name, values
       column(name.to_sym, name)
       values.each_with_index do |v, i|
         @rows[i] ||= {}
