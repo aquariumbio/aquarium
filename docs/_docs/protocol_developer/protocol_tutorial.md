@@ -75,21 +75,21 @@ And, in case the admonition hasn't yet settled in, **don't** use a production se
 
 1.  Starting from the developer tab, click the **New** button in the upper right corner.
 
-    ![the aquarium developer tab]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/1_developer_tab.png %})
+    ![the aquarium developer tab]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/1_developer_tab.png %})
 
     This will create a new operation type in the current category.
 
-    ![a new operation type]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/2_new_operation_type.png %})
+    ![a new operation type]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/2_new_operation_type.png %})
 
 2.  Change the operation type name and category and click the **Save** button.
 
-    ![renamed new operation type]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/3_new_operation_type2.png %})
+    ![renamed new operation type]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/3_new_operation_type2.png %})
 
     For this example, we use the name `BasicProtocol` and category `tutorial_neptune`.
 
 3.  Click **Protocol**, replace the body of the main method with the code `show { title 'Getting Started' }` like in our example, and click the **Save** button at the bottom right.
 
-    ![the protocol of the new operation type]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/4_basic_protocol.png %})
+    ![the protocol of the new operation type]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/4_basic_protocol.png %})
 
 ### Running a Protocol from the Developer Test Tab
 
@@ -97,15 +97,15 @@ The simplest way to run a protocol is by using testing in the Developer Tab.
 
 1.  Click **Test**
 
-    ![the test view]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/5_basic_protocol_test.png %})
+    ![the test view]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/5_basic_protocol_test.png %})
 
 2.  Click the **Generate Operations** button to generate instances of the operation type with random inputs
 
-    ![the test with operations]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/6_basic_protocol_test2.png %})
+    ![the test with operations]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/6_basic_protocol_test2.png %})
 
 3.  Click the **Test** button to run the operation(s) with the inputs and show the trace with any output
 
-    ![the test results]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/7_basic_protocol_test3.png %})
+    ![the test results]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/7_basic_protocol_test3.png %})
 
 In this case, we see the page title 'Getting Started' as output.
 
@@ -115,39 +115,39 @@ You can run the protocol so that it will show you the screens as the technician 
 
 1.  In the Developer **Def** view, click the **Deployed** checkbox
 
-    ![click the deploy box]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/8_deployed_basic_protocol.png %})
+    ![click the deploy box]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/8_deployed_basic_protocol.png %})
 
 2.  Click the **Designer** tab at the top of the page, click _Design_, and then choose your category under _Operation Types_
 
-    ![choosing operation for a plan]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/9_plan_design_view.png %})
+    ![choosing operation for a plan]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/9_plan_design_view.png %})
 
 3.  Click the operation type name `BasicProtocol` to add the operation to the plan
 
-    ![the basic protocol plan]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/10_basic_protocol_plan.png %})
+    ![the basic protocol plan]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/10_basic_protocol_plan.png %})
 
 4.  Save the plan, and then click **Launch**. You'll have to select and confirm your budget, and click _Submit_
 
-    ![confirm the budget for the plan]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/11_launch_basic_protocol_plan.png %})
+    ![confirm the budget for the plan]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/11_launch_basic_protocol_plan.png %})
 
 5.  Select the **Manager** tab, and click your category in the list on the left.
 
-    ![Selecting the job]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/12_pending_plan.png %})
+    ![Selecting the job]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/12_pending_plan.png %})
 
 6.  Click the pending job for `BasicProtocol`, click the _All_ button and click _Schedule_
 
-    ![Scheduling the job]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/13_selecting_basic_protocol_job.png %})
+    ![Scheduling the job]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/13_selecting_basic_protocol_job.png %})
 
 7.  Click the pending ID under **Jobs**
 
-    ![Selecting job]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/14_scheduling_basic_protocol_job.png %})
+    ![Selecting job]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/14_scheduling_basic_protocol_job.png %})
 
 8.  Click _Start_
 
-    ![Starting job]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/15_scheduled_basic_protocol_job.png %})
+    ![Starting job]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/15_scheduled_basic_protocol_job.png %})
 
 9.  Use the buttons in the Technician view to move through the protocol.
 
-    ![Basic Protocol in the Technician View]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/16_running_basic_protocol.png %})
+    ![Basic Protocol in the Technician View]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/16_running_basic_protocol.png %})
 
     Ordinarily, clicking **OK** will move to the next slide, but since there is only one there, the protocol will end.
 
@@ -172,7 +172,7 @@ end
 The words `title` and `note` are functions that determine the appearance of the text on the constructed page.
 This example renders as
 
-![Using note displays text]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/17_clean-up-note.png %})
+![Using note displays text]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/17_clean-up-note.png %})
 
 (To see this in action, add the show-block to the main method of the `BasicProtocol`.)
 
@@ -191,7 +191,7 @@ end
 
 which gives the output
 
-![Using check displays a checkbox]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/18_clean-up-check.png %})
+![Using check displays a checkbox]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/18_clean-up-check.png %})
 
 where the technicians must tap each checkbox before they can move to the next page.
 
@@ -574,15 +574,15 @@ Comp cells are best represented as a batch, a plasmid as an item.
 The output is going to be a transformed _E. coli_ aliquot — also a plasmid.
 So:
 
-![input1]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/19_input_1.png %})
+![input1]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/19_input_1.png %})
 
-![input2]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/20_input_2.png %})
+![input2]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/20_input_2.png %})
 
 The "Plasmid" input represents the plasmid — I recommend you take a moment to get over that shocking revelation because there’s something even _more_ shocking coming: The "Comp Cells" input represents the comp cells.
 
 "Plasmid" has multiple sample type / container combinations, because a plasmid can be held in many different containers and you want to give the user as much flexibility as possible. "Comp Cell" only has one sample type / container combination because you only want to use _E. coli_ comp cells, which are all held in the same type of container — a batch.
 
-![output]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/21_outputs.png %})
+![output]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/21_outputs.png %})
 
 The output is "Transformed E Coli" with container "Transformed E. coli Aliquot," which will be plated after some incubation period.
 
@@ -609,7 +609,7 @@ To understand what’s happening here, the first thing you have to do is underst
 
 A `Collection` is represented as a matrix, and looks like the following:
 
-![collections]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/22_collections_example.png %})
+![collections]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/22_collections_example.png %})
 
 Each part of the collection is filled with a "7," which is the sample ID for DH5&alpha;.
 In the database, it’s stored like this:
@@ -746,7 +746,7 @@ Now, we need to write the instructions for the actual transformation:
 This uses a new Aquarium object — `Table`.
 The table looks like this:
 
-![table]({{ site.baseurl }}{% _docs/protocol_developer/images/tutorial_images/23_table.png %})
+![table]({{ site.baseurl }}{% link _docs/protocol_developer/images/tutorial_images/23_table.png %})
 
 I’m going to break down the block of code that displays this table, because the rest of the show block is pretty standard.
 
@@ -772,7 +772,7 @@ In this case, it’s `index`, which is way to number things 1–n, where n is th
 
 `output_item` is exactly like `input_item`, but instead references the output. `end_table` is what signals the end of the table, and to display a table, `end_table` is necessary because that is what returns the fully-formed table.
 
-There are many table methods — refer to the more in depth [Table Method Documentation]({{ site.baseurl }}{% link _docs/protocol_developer/table.md) for a full overview.
+There are many table methods — refer to the more in depth [Table Method Documentation]({{ site.baseurl }}{% link _docs/protocol_developer/table.md %}) for a full overview.
 
 The next step is to incubate the transformants:
 

@@ -32,7 +32,7 @@ A `LocationWizard` is a bit of code that uses a schema to store new items.
 For example, Primers might be stored in a -20C freezer in 81 slot freezer boxes stored on shelves that contain 16 boxes.
 A `LocationWizard` for this scheme would have locations of the form M20.x.y.z where x is the shelf (or hotel as we call them in the Klavins lab), y is the box, and z is the slot in the box.
 
-![LocationWizard diagram]({{ site.basename }}{% link _docs/concepts/images/location.png %})
+![LocationWizard diagram]({{ site.baseurl }}{% link _docs/concepts/images/location.png %})
 
 A wizard works by setting up a table of all locations with the specified form.
 When a new item is made, the wizard finds the lowest available location for that item.
@@ -43,9 +43,9 @@ If all available locations are taken, then wizard computes the next new location
 
 The interface for creating a new `LocationWizard` can be found under the navigation menu in the upper left of Aquarium.
 
-![LocationWizard diagram]({{ site.basename }}{% link _docs/protocol_developer/images/location-images/1_nav_bar-1.png %})
+![LocationWizard diagram]({{ site.baseurl  }}{% link _docs/protocol_developer/images/location_images/1_nav_menu-1.png %})
 
-![LocationWizard diagram]({{ site.basename }}{% link _docs/protocol_developer/images/location-images/2_nav_bar-2.png %})
+![LocationWizard diagram]({{ site.baseurl  }}{% link _docs/protocol_developer/images/location_images/2_nav_menu-2.png %})
 
 There, at the bottom of the page, you can click "New Wizard".
 The wizard name should be short, such as "M20" as it will be used as the first part of the location.

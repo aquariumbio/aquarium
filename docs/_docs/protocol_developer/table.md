@@ -34,8 +34,7 @@ Often in a protocol it is useful to show a summarizing visualization of a lot of
 
 Example from `Cloning/Restriction Digest`
 
-![Enzyme table example]({{ site.baseurl }}{% link _docs/protocol_developer/images/table_images/1_
-enzyme_table.png %})
+![Enzyme table example]({{ site.baseurl }}{% link _docs/protocol_developer/images/table_images/1-enzyme_table.png %})
 
 Inside a `ShowBlock`, a `Table` like this is displayed to the technician with the `table` flag — `table` is a flag just like `note`, `warning` and `image` which is interpreted by the `ShowBlock` to display the argument passed with it in a certain way. While `note` accepts a `String` argument and `image` expects a path to an image, the `table` flag accepts a `Table` object. Supposing that we already have a complete `Table` object stored in the variable `enzyme_tab`, showing it to the technician is simple
 
@@ -227,7 +226,7 @@ See the [Show Block Documentation]({{ site.baseurl }}{% link _docs/protocol_deve
 
 When accepting any technician input, it can be useful to validate the input and make sure it is of an expected form. Most likely the workers of your own lab will not attempt to do a SQL injection attack from within a protocol, but ensuring the input is valid before storing it or using it for calculations can resolve many potential errors caused by technician typos.
 
-Input validation is a more advanced concept, so we will not go into it here. See the [API documentation on `validate` and `validation_message` tabling methods]({{ site.baseurl }}{% link /api/Krill/OperationList.html#validate-instance_method %}) for information on how to validate inputted data in a `Table`.
+Input validation is a more advanced concept, so we will not go into it here. See the [API documentation on `validate` and `validation_message` tabling methods]({{ site.baseurl }}{% link /api/Krill/OperationList.html %}#validate-instance_method) for information on how to validate inputted data in a `Table`.
 
 ## Standalone Tables
 

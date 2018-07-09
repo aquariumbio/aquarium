@@ -213,4 +213,4 @@ The `ShowResponse` also can give the timestamp of when the `ShowBlock` was shown
 responses.timestamp #=> <current time in seconds since 1970>
 ``` 
 
-Another convienent way to collect information relating to each `Operation` in an  `OperationList` is to accept technician responses through a input `Table` on the `OperationsList`. See the [Table Documentation on getting User Input]({{ site.basename }}{% link _docs/protocol_developer/table.md/accepting-technician-input-through-tables}) for more details.
+Another convienent way to collect information relating to each `Operation` in an  `OperationList` is to accept technician responses through a input `Table` on the `OperationsList`. See the [Table Documentation on getting User Input]({{ site.basename }}{% link _docs/protocol_developer/table.md %}#accepting-technician-input-through-tables) for more details.
