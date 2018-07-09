@@ -166,7 +166,7 @@ _These instructions are for setting up a local Aquarium and are not meant for pr
 4.  To start aquarium, run the command
 
     ```bash
-    docker-build up
+    docker-compose up
     ```
 
     which starts the services for Aquarium.

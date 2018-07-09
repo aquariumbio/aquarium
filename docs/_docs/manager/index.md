@@ -6,7 +6,7 @@ permalink: /manager/
 
 # Manager
 
-_This document assumes that you have read the [Aquarium Concepts]({{ site.baseurl }}{% link _docs/concepts %}) document_
+_This document assumes that you have read the [Aquarium Concepts]({{ site.baseurl }}{% link _docs/concepts/index.md %}) document_
 
 A manager uses Aquarium to determine which operations are run together as a job; to monitor and control jobs; and to help users with problematic plans.
 
@@ -72,7 +72,7 @@ This example shows one operation type with an operation that is **pending**, whi
 
 ![selected category]({{ site.baseurl }}{% link _docs/manager/images/selected-category.png %})
 
-The operation states are explained in the [Aquarium Concepts]({{ site.baseurl }}{% link _docs/concepts/#operation-states %}) document.
+The operation states are explained in the [Aquarium Concepts]({{ site.baseurl }}{% link _docs/concepts/index.md %}#operation-states) document.
 
 ## Scenario: Starting a job
 

@@ -11,7 +11,7 @@ Aquarium does track which users runs which jobs as a technician, so technicians 
 
 ## Running a Job
 
-A job is scheduled from the [manager interface]({{ site.baseurl }}{% link _docs/manager/#scenario-starting-a-job %}), and results in a screen like this on the **Manager Tab**:
+A job is scheduled from the [manager interface]({{ site.baseurl }}{% link _docs/manager/index.md %}#scenario-starting-a-job), and results in a screen like this on the **Manager Tab**:
 
 ![jobs]({{ site.baseurl }}{% link _docs/technician/images/scheduled-job.png %})
 
