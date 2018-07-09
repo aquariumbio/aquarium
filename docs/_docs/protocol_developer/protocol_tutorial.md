@@ -777,7 +777,7 @@ There are many table methods — refer to the more in depth [Table Method Docume
 The next step is to incubate the transformants:
 
 ```ruby
- show do
+        show do
             title 'Incubate transformants'
             check 'Grab a glass flask'
             check 'Place E. coli transformants inside flask laying sideways and place flask into shaking 37 C incubator.'
