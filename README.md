@@ -2,7 +2,7 @@
 
 ## Versions and Releases
 
-- The latest version is v2.201 and is available [here](https://github.com/klavinslab/aquarium/releases/tag/v2.201). If you would like to stay current with bug fixes, the [master](https://github.com/klavinslab/aquarium/tree/master) branch should always be stable and only a few commits ahead of the latest version. If you would like to play with the latest new features or help develop Aquarium, check out the [staging](https://github.com/klavinslab/aquarium/tree/staging) branch.  
+- The latest version is available [here](https://github.com/klavinslab/aquarium/releases/latest). If you would like to stay current with bug fixes, the [master](https://github.com/klavinslab/aquarium/tree/master) branch should always be stable and only a few commits ahead of the latest version. If you would like to play with the latest new features or help develop Aquarium, check out the [staging](https://github.com/klavinslab/aquarium/tree/staging) branch.  
 
 ## Documentation
 
