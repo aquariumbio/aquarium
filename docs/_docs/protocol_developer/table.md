@@ -177,27 +177,32 @@ This general `Table` form is quite effective. It is commonly used in many Aquari
 
 ### Accepting Technician Input through Tables
 
-`Tables` can also be used to ask technicians for data input, using the `get` tabling method. `get` works similarly to `custom_column`, taking a heading option, and a code block evaluated on every Operation in the OperationsList which fills in the cell with a default value. `get` also takes a 2 new arguments. `key` is the first parameter of `get`, it is required and used when storing the inputted data. Any inputted data by the technician into the cells of a `get` column will be stored in the `temporary` hash of the `Operation` corresponding to the row of the table it was inputted on, and the `key` parameter determines the key of the `temporary` hash for that `Operation` which the new data will be stored under. `:type` is a option for `get` which specifies what data type to accept as input. It is not a required option, and `get` cells will default to accepting Strings.
+`Tables` can also be used to ask technicians for data input, using the `get` tabling method. `get` works similarly to `custom_column`, taking a heading option, and a code block evaluated on every Operation in the OperationsList which fills in the cell with a default value. `get` also takes a 2 new arguments. `key` is the first parameter of `get`, it is required and used when storing the inputted data. Any inputted data by the technician into the cells of a `get` column will be stored in the `temporary` hash of the `Operation` corresponding to the row of the table it was inputted on, and the `key` parameter determines the key of the `temporary` hash for that `Operation` which the new data will be stored under. `:type` is a optionally argument for `get` which specifies what data type to accept as input, defaulting to 'text'.
 
-As an example, lets create an data input `Table` which asks the technician to measure and record the remaining volume of a plasmid stock
+As an example, lets create an data input `Table` which asks the technician to measure and record the remaining volume of a plasmid stock, and capture the input in a `ShowResponse` called `responses`
 
 ```ruby
 record_volume_tab = operations.start_table
                         .input_item("Plasmid Source")
                         .get(:plasmid_volume, type: "number", heading: "How much left in stock? (µL)") { |op| 0 }
                         .end_table
+
+responses = show do
+    title "Record Remaining Plasmid Stock Volumes"
+    table record_volume_tab
+end
 ```
 
 The pencil symbol next to Table cells indicates to the technician that input is required
 
 ![Input table example]({{ site.baseurl }}{% link _docs/protocol_developer/images/table_images/7_input_table-1.png %})
 
-To use this inputted data in the rest of the protocol, we can access the temporary hash of the operations. The following code uses the inputted data to generate a `Table` that parrots back whatever data had just entered in the `record_volume_tab`
+To use this inputted data in the rest of the protocol, we can access the input for a specific table cell from the `ShowResponse` object using `get_table_response`, parameterized with the name of the key we specified (`:plasmid_volume`), and a `row`, or an `Operation`. The following code uses the inputted data to generate a `Table` that parrots back whatever data had just entered in the `record_volume_tab`
 
 ```ruby
 parrot_tab = operations.start_table
                         .input_item("Plasmid Source")
-                        .custom_column(heading: "Remaining Volume (µL)") { |op| op.temporary[:plasmid_volume] }
+                        .custom_column(heading: "Remaining Volume (µL)") { |op| responses.get_table_response(:plasmid_volume, op: op) }
                         .end_table
 ```
 
@@ -209,9 +214,15 @@ Suppose we filled in the input `Table` with the following values
 
 Then our parrot `Table` on the next slide would show 
 
-![Input table example]({{ site.baseurl }}{% link _docs/protocol_developer/images/table_images/9_input_table-3.png %}) 
+![Input table example]({{ site.baseurl }}{% link _docs/protocol_developer/images/table_images/9_input_table-3.png %})
 
-The technician input data can also be accessed from the response data object returned by a `ShowBlock` in the same way as other technician input. See the [Show Block Documentation]({{ site.baseurl }}{% link _docs/protocol_developer/show.md %}) for more details on how to access the input data in this way. 
+We can also retrieve the table input data as a simple array of input values, in sorted order of the rows of the table, by using the more general `get_response` method
+
+```ruby
+responses.get_response(:plasmid_volume) #=> [1, 2, 3, 4, 5]
+```
+
+See the [Show Block Documentation]({{ site.baseurl }}{% link _docs/protocol_developer/show.md %}) for more details on how interact with `ShowBlock` input data. 
 
 When accepting any technician input, it can be useful to validate the input and make sure it is of an expected form. Most likely the workers of your own lab will not attempt to do a SQL injection attack from within a protocol, but ensuring the input is valid before storing it or using it for calculations can resolve many potential errors caused by technician typos.
 
