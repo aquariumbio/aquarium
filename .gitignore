@@ -24,6 +24,8 @@ docker-compose.yml
 
 # Igmore the installation specific configuration file
 /config/initializers/aquarium.rb
+/config/environments/development.rb
+/config/environments/original-development.notrb
 
 # Ignore the default SQLite database.
 /db/*.sqlite3
