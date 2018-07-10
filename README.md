@@ -1,17 +1,13 @@
 # AQUARIUM : The Laboratory Operating System
 
-Aquarium gives you the means to specify, as precisely as possible, how to obtain an experimental result.
-Researchers encode protocols in Krill, the Aquarium protocol language, specifying how to manipulate items in the Aquarium inventory (test tubes, regents, DNA samples, 96 well plates, etc.) using a combination of formal statements, informal descriptions, and photographs.
-Protocols are parameterized by "tuning knobs" (such as incubation times or reagent concentrations) that can be varied when the protocols are scheduled.
-The researcher strings together protocols into processes, specifying how the output samples of one protocol become the inputs to other protocols, and how protocols can be scheduled, parallelized, and controlled.
+## Versions and Releases
 
-Protocols and processes are scheduled and presented to technicians on touchscreen monitors placed throughout the lab.
-Every step is logged: who performed the step, which items were used, what data was gathered by which instruments, and how long it took. The data can be used to debug and improve the experiment.
-More importantly it provides a complete, executable description of the results obtained -- one that could be used by another lab running Aquarium to reproduce the result.
+- The latest version is v2.201 and is available [here](https://github.com/klavinslab/aquarium/releases/tag/v2.201). If you would like to stay current with bug fixes, the [master](https://github.com/klavinslab/aquarium/tree/master) branch should always be stable and only a few commits ahead of the latest version. If you would like to play with the latest new features or help develop Aquarium, check out the [staging](https://github.com/klavinslab/aquarium/tree/staging) branch.  
 
 ## Documentation
 
 - [Aquarium Project Pages](http://klavinslab.org/aquarium)
+  - [Installation](http://klavinslab.org/aquarium/configuration/installation/)
   - [Configuration](http://klavinslab.org/aquarium/configuration/)
   - [Concepts](http://klavinslab.org/aquarium/concepts/)
   - User Role Documentation:
@@ -22,7 +18,7 @@ More importantly it provides a complete, executable description of the results o
   - Development Documentation:
     - [Aquarium Development](http://klavinslab.org/aquarium/aquarium_development/)
     - [Protocol Tutorial](http://klavinslab.org/aquarium/protocol_tutorial/)
-    - [Krill (Protocol) API](api)
+    - [Krill (Protocol) API](http://klavinslab.org/aquarium/api)
     - [Trident Python API](https://github.com/klavinslab/trident)
 - Videos
   - [Populating Inventory](https://www.youtube.com/watch?v=ydN51ew1JmI&feature=youtu.be) : Video describing how to manage and create samples.
@@ -30,4 +26,4 @@ More importantly it provides a complete, executable description of the results o
   - [Building a Workflow](https://www.youtube.com/watch?v=xDrv4f2AZlM&feature=youtu.be) : Video / Old version
   - [Monitoring a Plan](https://www.youtube.com/watch?v=WCTmuz5yBAo&feature=youtu.be) : Video on how to track an experiment as it is being run.
 
-Aquarium is a project of the [Klavins Lab](http://klavinslab.org).
+Aquarium is a [Klavins Lab](http://klavinslab.org) project.
