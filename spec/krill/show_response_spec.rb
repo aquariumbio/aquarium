@@ -38,8 +38,8 @@ symbol, string, or integer" do
 	end
 
 	it "returns a ruby hash representing the data with responses" do
-    	expect(resp.responses()).to 
-    	eq({measured_concentration: 53.2, tblrespnskey: [2, 1]})
+    	expect(resp.responses()).to (
+    	eq({measured_concentration: 53.2, tblrespnskey: [2, 1]}) )
     end
 
     it "returns the timestamp of the showblock with timestamp()" do
@@ -62,14 +62,14 @@ get_table_response when parameterized with an op or row" do
 
 	it "raises an error if you misuse the interface for get_table_response \
 (which requires exactly one optional argument)" do
-		expect{resp.get_table_response(:measured_concentration)}.to 
-		raise_error(TableCellUndefined)
+		expect{resp.get_table_response(:measured_concentration)}.to (
+		raise_error(TableCellUndefined) )
 
-		expect{resp.get_table_response(:tblrespnskey)}.to 
-		raise_error(TableCellUndefined)
+		expect{resp.get_table_response(:tblrespnskey)}.to (
+		raise_error(TableCellUndefined) )
 
-		expect{resp.get_table_response(:tblrespnskey, op: 3075, row: 0)}.to 
-		raise_error(TableCellUndefined)
+		expect{resp.get_table_response(:tblrespnskey, op: 3075, row: 0)}.to (
+		raise_error(TableCellUndefined) )
 	end
 
 	it "works with large and complex response hashes" do
@@ -88,7 +88,7 @@ get_table_response when parameterized with an op or row" do
 				{key: "tblrespnskey2", opid: -2, row: 1, value: "two", type: "text"},
 				{key: "tblrespnskey2", opid: -3, row: 2, value: "three", type: "text"},
 			], 
-			response1: "SUPERLONGSTRINGSUPERLONGSTRINGSUPERLONG \
+			response1: "SUPERLONGSTRINGSUPERLONGSTRINGSUPERLONG\
 STRINGSUPERLONGSTRINGSUPERLONGSTRING",
 			response2: 1412312312312312312312412312312312,
 			response3: "one more datum",
@@ -101,12 +101,12 @@ STRINGSUPERLONGSTRINGSUPERLONGSTRING",
 
 	    expect(bigresp.get_response(:badkey)).to eq(nil)
 
-	    expect(bigresp.get_response(:response1)).to 
-	    eq("SUPERLONGSTRINGSUPERLONGSTRINGSUPERLONGSTRINGSUPERL \
-ONGSTRINGSUPERLONGSTRING")
+	    expect(bigresp.get_response(:response1)).to (
+	    eq("SUPERLONGSTRINGSUPERLONGSTRINGSUPERLONGSTRINGSUPERL\
+ONGSTRINGSUPERLONGSTRING"))
 
-		expect(bigresp.get_response(:response2)).to 
-		eq(1412312312312312312312412312312312)
+		expect(bigresp.get_response(:response2)).to (
+		eq(1412312312312312312312412312312312) )
 
 		expect(bigresp.get_response(:response3)).to eq("one more datum")
 
@@ -114,11 +114,11 @@ ONGSTRINGSUPERLONGSTRING")
 
 		expect(bigresp.get_response(:tblrespnskey)).to eq([2,1,3,4,5,6])
 
-		expect(bigresp.get_response(:tblrespnskey2)).to
-		eq(["one", "two", "three", "four", "five", "six"])
+		expect(bigresp.get_response(:tblrespnskey2)).to(
+		eq(["one", "two", "three", "four", "five", "six"]) )
 
-		expect(bigresp.get_response(:response2)).to 
-		eq(1412312312312312312312412312312312)
+		expect(bigresp.get_response(:response2)).to (
+		eq(1412312312312312312312412312312312) )
 
 		expect(bigresp.get_response(:response3)).to eq("one more datum")
 
@@ -131,19 +131,19 @@ ONGSTRINGSUPERLONGSTRING")
 
 		expect(bigresp.get_table_response(:tblrespnskey2, row: 0)).to eq("one")
 
-		expect{bigresp.get_table_response(:measured_concentration)}.to 
-		raise_error(TableCellUndefined)
+		expect{bigresp.get_table_response(:measured_concentration)}.to (
+		raise_error(TableCellUndefined) )
 
-		expect{bigresp.get_table_response(:tblrespnskey2, op: 3079)}.to 
-		raise_error(TableCellUndefined)
+		expect{bigresp.get_table_response(:tblrespnskey2, op: 3079)}.to (
+		raise_error(TableCellUndefined) )
 
-		expect{bigresp.get_table_response(:tblrespnskey, op: 3079, row: 5)}.to 
-		raise_error(TableCellUndefined)
+		expect{bigresp.get_table_response(:tblrespnskey, op: 3079, row: 5)}.to (
+		raise_error(TableCellUndefined) )
 
-		expect{bigresp.get_table_response(:tblrespnskey, op: 5000)}.to 
-		raise_error(ActiveRecord::RecordNotFound)
+		expect{bigresp.get_table_response(:tblrespnskey, op: 5000)}.to (
+		raise_error(ActiveRecord::RecordNotFound) )
 
-		expect{bigresp.get_table_response(:tblrespnskey, row: 100)}.to 
-		raise_error(TableCellUndefined)
+		expect{bigresp.get_table_response(:tblrespnskey, row: 100)}.to (
+		raise_error(TableCellUndefined) )
 	end	
 end
