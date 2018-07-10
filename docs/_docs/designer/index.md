@@ -197,14 +197,14 @@ The transitions from state to state are triggered as follows:
 
 ## Editing plans
 
-**Retrying operations**:
+**Retrying operations**: When an operation is completed, its status is set to either "done" or "error". In both cases, and especially in the latter case, you may want to retry the operation by setting its status back to "pending" or "waiting". To do this, click on the status underneath the operation and choose the desired new status. Which new status you choose depends on how much you are trying to redo. If you are simply retrying a single operation, then choose "pending". If you are retrying a whole string of operations, you should set the first one in the string to "pending" and the rest to "waiting", since the rest cannot start until the first complete successfully. Note that if you re-run an operation, it might use different inventory items and produce different inventory items. Thus, the items originally associated with the operation are noted as a data associations when you change an operation's status, and likely overwritten when the operation is run again.
 
-**Modifying a plan's connectivity**:
+**Modifying a plan's connectivity**: At any time while a plan is running, you can disconnect wires from a plan, and add new wires. Doing so will change what operations run next once other operations complete, so be careful. A common thing to do is to disconnect an subplan that was incorrect and place it to the side, and then insert a correct subplan in its place.
 
-**Adding new operations**:
+**Adding new operations**: You can add new operations to a running plan just as you would a plan that is under construction. New operations will show up white (as opposed to gray for active operations) and will have status "planning" (meaning no status shows up underneath them). Once you add new operations and connect them, you need to (a) save your plan and then (b) extend the plan. If there are no validation errors (orange I/O or wires) then click "Plan Info" and click the "EXTEND" button.
 
-**Canceling an operation**:
+**Canceling an operation**: An operation that is still pending or waiting can be canceled by clicking the status and choosing "Cancel". This will put the operation into an error state and add a message to the operation saying it was canceled.
 
-**Modifying which items are used by an operation**:
+**Modifying which items are used by an operation**: You cannot change which sample or container type an operation uses for its input once it has been launched. However, you can tell Aquarium to use a different item the next time it is run. To do so, clikc the input and look for a list of available inventory items on the left sidebar. Choose the item you wish to use. Note that if you are re-running an operation that used a different input the first time it ran, that information will be overwritten by the new choice the next time the operation is run.
 
-**Stepping (i.e. updating) a plan**:
+**Stepping (i.e. updating) a plan**: Sometimes the statuses of operations in a plan get stuck, in waiting for example. Or you changed the operation statuses and did need to make check preconditions. To force an update to any operations that need to be updated, go to the "Plan Info" tab on the lect sidebar and click the blue "STEP" button.
