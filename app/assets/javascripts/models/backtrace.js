@@ -137,7 +137,8 @@ class Step {
           }
           table_inputs[line.table[j][k].key][line.table[j][k].operation_id] = {
             value: line.table[j][k].default,
-            type: line.table[j][k].type              
+            type: line.table[j][k].type,
+            row: (j - 1) //j is 1-based, we want the row field to be zero based
           }
         }
       }
@@ -186,24 +187,22 @@ class Step {
   // an optional attribute of that table input.
   // This change will involve touching:
   // the method below
-  // add_response_column in table.rb, 
-  // the table DOM element in operation_types/_show_block.html.erb
-  // the table DOM element in technician/_show_block.html.erb
+  // new_table_inputs
+  // _show_block.html.erb in both operations and technician
   prepare_table_inputs() {
 
     var backend_table_inputs = [],
         frontend_table_inputs = this.response.inputs.table_inputs;
 
     for ( var key in frontend_table_inputs ) {
-      for (var row = 0; row < frontend_table_inputs[key].length; row++) {
-        opid = frontend_table_inputs[key][row]
+      for (var opid in frontend_table_inputs[key]) {
         backend_table_inputs.push({ 
           key: key, 
           opid: parseInt(opid),
-          row: row,
+          row: frontend_table_inputs[key][opid].row,
           value: frontend_table_inputs[key][opid].value,
           type: frontend_table_inputs[key][opid].type
-        })
+        });
       }
     }
 
