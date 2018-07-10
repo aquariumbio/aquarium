@@ -163,18 +163,18 @@ Now our textbox is a bit more informative
 
 ![User Input Example]({{ site.baseurl }}{% link _docs/protocol_developer/images/show_images/7_input_block-2.png %})
 
-Any input data from a ShowBlock is returned by the call to `show` that created the block in a Hashlike object. The name that we entered as the option for var: will be the key of this hash that the relevant data is stored in.
+Any input data from a `ShowBlock` is returned by the call to `show` that created the block as a `ShowResponse` object. The name that we entered as the option for `:var` will be what we use to request that piece of data from the ShowResponse.
 
-In order to access the name entered by the technician, we would have to capture the return of `show` in a variable, and then access it at the key `:tech_name`
+In order to access the name entered by the technician, we capture ShowResponse in a variable called `responses`, and then request data for the key `:tech_name`
 
 ```ruby
-data = show do
+responses = show do
     title "Please Respond"
     note "What is your first name?"
     get "text", var: :tech_name, label: "Enter name", default: "Joe Schmo" 
 end
 
-data[:tech_name] #=> "Joe Schmo"
+responses.get_response(:tech_name) #=> "Joe Schmo"
 ```
 
 `select` has almost the same interface as get, except instead of giving a type as the first parameter, we must provide an array of selection options. For example, we might want to prompt the tech to report the status of a bacterial plate – whether it is normal, a lawn, or contaminated
@@ -182,7 +182,7 @@ data[:tech_name] #=> "Joe Schmo"
 _Example from `Cloning/Check Plate`_
 
 ```ruby
-data = show do
+responses = show do
     title "Report Plate status"
     
     operations.each do |op|
@@ -203,8 +203,14 @@ To use the data stored in the Check Plate example, we have to parameterize our h
 ```ruby
 operations.each do |op|
     plate = op.input("Plate").item
-    data["status-#{plate.id}"] #=> <selection response for that Plate>
+    responses.get_response("status-#{plate.id}") #=> <selection response for that Plate>
 end
 ```
+
+The `ShowResponse` also can give the timestamp of when the `ShowBlock` was shown and responded to by the tech with the `timestamp` method. This returns a Unix time value.
+
+```ruby
+responses.timestamp #=> <current time in seconds since 1970>
+``` 
 
 Another convienent way to collect information relating to each `Operation` in an  `OperationList` is to accept technician responses through a input `Table` on the `OperationsList`. See the [Table Documentation on getting User Input]({{ site.basename }}{% link _docs/protocol_developer/table.md %}#accepting-technician-input-through-tables) for more details.

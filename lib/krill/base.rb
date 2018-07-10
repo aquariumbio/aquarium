@@ -28,7 +28,7 @@ module Krill
         Thread.stop
 
         # get technician input
-        input = JSON.parse(@job.reload.state, symbolize_names: true).last[:inputs]
+        input = ShowResponse.new(JSON.parse(@job.reload.state, symbolize_names: true).last[:inputs])
 
         # populate operations with table input data
         input[:table_inputs].each do |ti|
@@ -43,7 +43,7 @@ module Krill
       else
 
         # figure out default technician response
-        i = simulated_input_for page
+        i = ShowResponse.new(simulated_input_for page)
         @job.append_step operation: 'next', time: Time.now, inputs: i
 
         raise "Job #{jid} executed too many steps (50) in debug mode. Could be an infinite loop." if @job.pc > 500
