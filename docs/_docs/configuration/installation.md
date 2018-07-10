@@ -19,18 +19,17 @@ layout: docs
 
 ## Choosing your Approach
 
-Aquarium may be installed and run directly from source, or using Docker.
-The Docker configuration runs Aquarium in Rails development mode, so if you are installing a production system, you will need to to install from source.
+**Manual Installation**: Aquarium may be installed and run directly by first installing Ruby, Rails, MySQL, and possibly a web server. Users wishing to run Aquarium in production mode with many users should choose this approach. The UW BIOFAB, for example, runs Aquarium on an Amazon Web Services EC2 instance with nginx with the MySQL database running on a separate RDBMS instance. We describe some of the considerations for running Aquarium below, but expect that you and/or your system administrators will want to fine tune your instance beyond what we describe.
 
-We strongly encourage protocol developers to use Docker, because it eliminates several of the configuration details that users can encounter.
+**User Docker**: For users who want to run Aquarium on their laptops to evaluate it, develop new code, or serve a small lab, we have provided a Docker configuration script that runs Aquarium in the Rails development mode.
 
-We understand that it might seem simpler to set up a single instance of Aquarium and use that as the production server and protocol development.
-However, protocol testing _should not_ be done on a production server, because protocol errors can affect system performance, and protocols that create database entries can pollute your database.
+We strongly encourage protocol developers to use the Docker version in development mode, because it eliminates several of the configuration details that users encounter. Once a protocol runs well on a local instance, you can port it to your production instance using Aquarium's import method.
 
-## Running from Source
+We understand that it might seem simpler to set up a single instance of Aquarium and use it as the production server and for protocol development. However, protocol testing _should not_ be done on a production server, because protocol errors can affect system performance, and protocols that create database entries can pollute your production database.
+
+## Manual Installation
 
 These are the instructions to install Aquarium from the [source code](https://github.com/klavinslab/aquarium).
-If you are doing either protocol development or Aquarium development, we recommend you run Aquarium from Docker.
 
 1.  Ensure you have the following installed on your machine
 
@@ -67,7 +66,7 @@ If you are doing either protocol development or Aquarium development, we recomme
     This will configure Aquarium to use the default database for _development_ mode.
     You may configure different database servers for different modes.
     If you want to use MySQL, you will need to set up the server, and associate a username and password.
-    Though, the `test` mode for testing Aquarium system tests should use the `sqlite3` server.
+    The `test` mode for testing Aquarium system tests should use the `sqlite3` server.
 
 5)  Install the Ruby gems required by Aquarium with
 
