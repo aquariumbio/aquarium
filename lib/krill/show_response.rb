@@ -1,10 +1,17 @@
 module Krill
-
-  # @api krill
   require 'delegate'
+  # @api krill
+  # Defines a wrapper for the data hash that is returned by the `show` method, with
+  # a simplified interface, additional convienence methods,
+  # and abstraction of implementation details. This is a decorator class to be instantiated
+  # with a Hash.
+  # @requires  initialized with a Hash, which has a :timepoint value as a float, and 
+  #         a :table_inputs value as an array of hashes in the format expected from `show` return
+  #
   class ShowResponse < SimpleDelegator
 
     # Return the response that was stored under `var`. When used with 
+    #
     # a key associated with a table response-set, returns a list of table responses
     # in order of the rows of the table.
     #
@@ -15,6 +22,7 @@ module Krill
     end
 
     # Returns data recorded in a specified row of an input table
+    #
     # @param var [Symbol/String]  the table key specified to store data under
     #               in the get.
     # @param opts [Hash]  additional options
@@ -26,26 +34,24 @@ module Krill
     #               and the row associated with either `op` or `row`   
     #               returns nil if the requested row/column pair doesn't exist
     def get_table_response var, opts = {}
-      if (opts[:op] && opts[:row]) || (!opts[:op] && !opts[:row])
-        raise TableCellUndefined, "Invalid parameters for get_table_response - specify one of op or row, not both"
-      elsif self[:table_inputs].nil?
-        return nil
-      elsif opts[:op]
-        if self[:table_inputs].first[:opid] < 0
-          raise TableCellUndefined, "Invalid parameters for get_table_response - an :op option cannot be specified for a table that doesn't have operations corresponding to its rows"
-        end
+      raise TableCellUndefined, "Invalid parameters for get_table_response - specify one of op or row, not both" if (opts[:op] && opts[:row]) || (!opts[:op] && !opts[:row])
+      return nil if self[:table_inputs].nil?
+      target_table = self[:table_inputs].select { |ti| (ti[:key].to_sym == var.to_sym)
+      if opts[:op]
+        raise TableCellUndefined, "Invalid parameters for get_table_response - an :op option cannot be specified for a table that doesn't have operations corresponding to its rows" if self[:table_inputs].first[:opid] < 0
         opid = Operation.find(opts[:op]).id # return op.id if passed an operation or the id itself
-        target_table_input = self[:table_inputs].find { |ti| (ti[:key].to_sym == var.to_sym) && (ti[:opid] == opid) }
+        target_input_cell = target_table.find { |ti| ti[:opid] == opid }
       elsif opts[:row]
-        target_table_input = self[:table_inputs].find { |ti| (ti[:key].to_sym == var.to_sym) && (ti[:row] == opts[:row]) }
+        target_input_cell = target_table.find { |ti| ti[:row] == opts[:row] }
       end
-      raise TableCellUndefined if target_table_input.nil?
-      return (target_table_input[:type] == 'number' ? target_table_input[:value].to_f : target_table_input[:value])
+      raise TableCellUndefined if target_input_cell.nil?
+      return (target_input_cell[:type] == 'number' ? target_input_cell[:value].to_f : target_input_cell[:value])
     end
 
     # Returns a hash of user responses, each under the var name specified in the ShowBlock where 
     # the response was collected. Table responses are stored in this hash as a list in order of
     # the rows of the table.
+    #
     # @return [Hash]  the response hash with all user input
     def responses
       inline_responses = self.select { |key, value| key != :table_inputs && key != :timestamp }
@@ -60,6 +66,7 @@ module Krill
 
     # Returns a Unix timestamp of the timepoint when the showblock associated with this ShowResponse
     # was seen and interacted with by the technician
+    #
     # @return [Integer]  Unix timestamp as seconds since 1970
     def timestamp
       self[:timestamp]

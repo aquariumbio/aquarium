@@ -195,12 +195,12 @@ class Step {
         frontend_table_inputs = this.response.inputs.table_inputs;
 
     for ( var key in frontend_table_inputs ) {
-      for (var i = 0; i < frontend_table_inputs[key].length; i++) {
-        opid = frontend_table_inputs[key][i]
+      for (var row = 0; row < frontend_table_inputs[key].length; row++) {
+        opid = frontend_table_inputs[key][row]
         backend_table_inputs.push({ 
           key: key, 
           opid: parseInt(opid),
-          row: i,
+          row: row,
           value: frontend_table_inputs[key][opid].value,
           type: frontend_table_inputs[key][opid].type
         })
