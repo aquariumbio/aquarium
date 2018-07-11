@@ -46,18 +46,21 @@ module Krill
 
     # Put the string s at the top of the page. Usually only called once in a given call to show.
     # @param str [String]
+    # @return [void]
     def title(str)
       @parts.push(title: str)
     end
 
     # Put the string s in a smaller font on the page. Often called several times.
     # @param str [String]
+    # @return [void]
     def note(str)
       @parts.push(note: str)
     end
 
     # This is deprecated
     # @api private
+    # @return [void]
     def log(data)
       @parts.push(log: data)
     end
@@ -65,6 +68,7 @@ module Krill
     # Put the string s in bold, eye catching font on the page in hopes that the user might notice
     # it and heed your advice.
     # @param str [String]
+    # @return [void]
     def warning(str)
       @parts.push(warning: str)
     end
@@ -72,12 +76,14 @@ module Krill
     # Put the string s on the page, with a clickable checkbox in front of it. The user will need
     # to click all checkboxes on a given page before the "OK" button is enabled. 
     # @param str [String]
+    # @return [void]
     def check(str)
       @parts.push(check: str)
     end
 
     # Put the string s on the page, with a bullet in front of it, as in a bullet list.
     # @param str [String]
+    # @return [void]
     def bullet(str)
       @parts.push(bullet: str)
     end
@@ -107,7 +113,8 @@ module Krill
     #   show {
     #     title "A Table"
     #     table m
-    #   }    
+    #   }   
+    # @return [void] 
     def table(m)
       if m.class == Table
         @parts.push(table: m.all.render)
@@ -119,6 +126,7 @@ module Krill
     # Display information about the item i -- its id, its location, its object type, and its sample type 
     # (if any) -- so that the user can find it. 
     # @param i [Item]
+    # @return [void]
     def item(i)
       @parts.push(take: i)
     end
@@ -130,6 +138,8 @@ module Krill
     end
 
     # Display a break between other shown elements, such as between two notes.
+    #
+    # @return [void]
     def separator
       @parts.push(separator: true)
     end
@@ -137,6 +147,7 @@ module Krill
     # Display the image pointed to by **name** on the page. The **name** argument will be prepended
     # by the URL to the S3 url defined by Bioturk::Application.config.image_server_interface in
     # config/initializers/aquarium.rb
+    #
     # @example
     #   image "containers/bottle_1_liter.jpg"
     # @param name [String]
@@ -149,9 +160,11 @@ module Krill
     # You can specify the starting number of hours, minutes, and seconds, with for example
     # The initial option can be used to set the initial time on the timer and has field
     # hours, minutes, and seconds, all numerical.
+    #
     # @example
     #   timer initial: { hours: 0, minutes: 20, seconds: 30}
     # @option opts [Hash] :initial
+    # @return [void]
     def timer(opts = {})
       options = {
         initial: { hours: 0, minutes: 1, seconds: 0 },
@@ -162,12 +175,14 @@ module Krill
     end
 
     # Upload a file. The optional name specified by the :var option can be used to retrieve the upload.
+    #
     # @example
     #   response = show do
     #     upload var: "my var"
     #   end
     # See the [ShowRepsonse] documentation for how to manipulate uploads.
     # @option opts [String] :var
+    # @return [void]
     def upload(opts = {})
       options = {
         var: "upload_#{@@upload_counter}"
@@ -178,6 +193,7 @@ module Krill
 
     # This is deprecated
     # @api private
+    # @return [void]
     def transfer(x, y, routing)
 
       routing_details = routing
@@ -203,11 +219,13 @@ module Krill
     # key called something like get_12 or get_13 (for get number 12 or get number 13). The name 
     # of the variable name can be specified via the **var** option. A label for the input box can 
     # also be specified.
+    #
     # @param type [String] Either "text" or "number"
     # @option opts [String] :var The name of the resulting value in the ShowResponse object
     # @option opts [String] :label The label shown next to the input box
     # @option opts [String] :default The default value if the type is text
     # @option opts [Float] :default The default valye if the type is number
+    # @return [void]
     # @example
     #   data = show {
     #     title "An input example"
@@ -246,11 +264,13 @@ module Krill
     end
 
     # Display a selection of choices for the user. The options are the same as for **get**. For example,
+    #
     # param choices [List] A list of choices, either all strings or all numbers
     # @option opts [String] :var The name of the resulting value in the ShowResponse object
     # @option opts [String] :label The label shown next to the input box
     # @option opts [String] :default The default value if the type is text
     # @option opts [Float] :default The default valye if the type is number
+    # @return [void]
     # @example
     #   data = show {
     #     title "A Select Example"
