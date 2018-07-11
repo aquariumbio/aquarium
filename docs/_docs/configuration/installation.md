@@ -12,8 +12,6 @@ layout: docs
 - [Installing (and Running) Aquarium](#installing-and-running-aquarium)
     - [Table of Contents](#table-of-contents)
     - [Choosing your Approach](#choosing-your-approach)
-        - [Manual Installation](#manual-installation)
-        - [Docker Installation](#docker-installation)
     - [Manual Installation Instructions](#manual-installation-instructions)
     - [Docker Installation Instructions](#docker-installation-instructions)
 
@@ -21,8 +19,7 @@ layout: docs
 
 ## Choosing your Approach
 
-### Manual Installation
-
+**Manual Installation**:
 If your goal is to run Aquarium in production mode with many users, you should install and run Aquarium directly.
 This requires first installing Ruby, Rails, MySQL, and, depending on the deployment, a web server.
 The UW BIOFAB, for example, runs Aquarium on an Amazon Web Services EC2 instance using the web server [nginx](http://nginx.org) and the MySQL database running on a separate RDBMS instance.
@@ -30,17 +27,16 @@ We discuss some of the considerations for running Aquarium below, but your deplo
 
 [Jump to manual installation instructions](#manual-installation-instructions).
 
-### Docker Installation
-
+**Docker Installation**:
 If your goal is instead to run Aquarium on your laptops to evaluate it, develop new code, or serve a small lab, we have provided a Docker configuration script that runs Aquarium in the Rails development mode.
+
+[Jump to docker installation instructions](#docker-installation-instructions).
 
 We strongly encourage protocol developers to use the Docker version in development mode, because it eliminates several of the configuration details needed for production.
 Once a protocol runs well on a local instance, you can port it to your production instance using Aquarium's import method.
 
 We understand that it might seem simpler to set up a single instance of Aquarium and use it as the production server and for protocol development.
 However, protocol testing _should not_ be done on a production server, because protocol errors can affect system performance, and protocols that create database entries can pollute your production database.
-
-[Jump to docker installation instructions](#docker-installation-instructions).
 
 ## Manual Installation Instructions
 
