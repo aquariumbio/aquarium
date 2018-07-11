@@ -251,6 +251,13 @@ module Krill
     # @option opts [String] :label The label shown next to the input box
     # @option opts [String] :default The default value if the type is text
     # @option opts [Float] :default The default valye if the type is number
+    # @example
+    #   data = show {
+    #     title "A Select Example"
+    #     select [ "A", "B", "C" ], var: "choice", label: "Choose something", default: 1
+    #   }
+    #
+    #   choice = data[:choice]    
     def select(choices, opts = {})
       raise 'First argument to select should be an array of numbers or strings' unless is_proper_array choices
       options = {

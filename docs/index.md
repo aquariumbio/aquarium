@@ -17,11 +17,14 @@ Every step is logged: who performed the step, which items were used, what data w
 - [Installation](configuration/installation/)
 - [Configuration](configuration/)
 - [Concepts](concepts/)
-- User Role Documentation:
+- User Documentation:
+  - [Inventory Management](lims/)
   - [Manager](manager/)
   - [Technician](technician/)
   - [Workflow Designer](designer/)
   - [Protocol Developer](protocol_developer/)
+  - [User Management](users/)
+  - [Accounting](accounting/)
 - Development Documentation:
   - [Aquarium Development](aquarium_development/)
   - [Protocol Tutorial](protocol_tutorial/)

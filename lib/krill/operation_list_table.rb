@@ -5,6 +5,7 @@ module Krill
   # @api krill
   module OperationList
 
+    # @api krill
     # Begin building a table from {OperationList}
     # @option opts [Bool] :errored Include {Operation}s with status "error"
     # @example Make a table for pipetting primers into a stripwell for PCR
