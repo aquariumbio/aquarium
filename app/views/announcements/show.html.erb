@@ -1,20 +1,39 @@
-<p id="notice"><%= notice %></p>
+<% provide(:title, 'Announcement') %>
 
-<p>
-  <b>Title:</b>
-  <%= @announcement.title %>
-</p>
+<% content_for :controller do %>noCtrl<% end %>
 
-<p>
-  <b>Message:</b>
-  <%= @announcement.message %>
-</p>
+<% content_for :main do %>
 
-<p>
-  <b>Active:</b>
-  <%= @announcement.active %>
-</p>
+  <div layout-padding layout="row">
+
+    <div flex="25"></div>
+
+    <div flex="50">
+      <p>
+        <b>Title:</b>
+        <%= @announcement.title %>
+      </p>
+
+      <p>
+        <b>Message:</b>
+        <%= @announcement.message %>
+      </p>
+
+      <p>
+        <b>Active:</b>
+        <%= @announcement.active %>
+      </p>
 
 
-<%= link_to 'Edit', edit_announcement_path(@announcement) %> |
-<%= link_to 'Back', announcements_path %>
+      <%= link_to 'Edit', edit_announcement_path(@announcement) %> |
+      <%= link_to 'Back', announcements_path %>
+    </div>
+
+  </div>
+
+<% end %>
+
+
+
+
+
