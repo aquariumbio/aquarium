@@ -1,11 +1,11 @@
 
-
+# @api krill
 module Krill
 
+  # @api krill
   module OperationList
 
     # Begin building a table from {OperationList}
-    # @param opts [Hash]
     # @option opts [Bool] :errored Include {Operation}s with status "error"
     # @example Make a table for pipetting primers into a stripwell for PCR
     #  table operations.start_table
@@ -163,7 +163,7 @@ module Krill
 
     # Add column with list of input collection by the given input name
     #
-    # @requires  input by the given name is either a part or a collection
+    # Input by the given name is either a part or a collection
     # @param name [String]  the name of the input to display
     # @param opts [Hash]
     # @option heading [String] Column heading
@@ -172,7 +172,7 @@ module Krill
 
     # Add column with list of ouput collection by the given ouput name
     #
-    # @requires  output by the given name is either a part or a collection
+    # Output by the given name is either a part or a collection
     # @param name [String]  the name of the ouput to display
     # @param opts [Hash]
     # @option heading [String] Column heading
@@ -181,7 +181,7 @@ module Krill
 
     # Add column with list of input row indicies by the given input name
     #
-    # @requires  input by the given name is a part
+    # Input by the given name is a part
     # @param name [String]  the name of the input to display
     # @param opts [Hash]
     # @option heading [String] Column heading
@@ -190,7 +190,7 @@ module Krill
 
     # Add column with list of output row indicies by the given output name
     #
-    # @requires  output by the given name is a part
+    # Output by the given name is a part
     # @param name [String]  the name of the output to display
     # @param opts [Hash]
     # @option heading [String] Column heading
@@ -199,7 +199,7 @@ module Krill
 
     # Add column with list of input column indicies by the given input name
     #
-    # @requires  input by the given name is a part
+    # Input by the given name is a part
     # @param name [String]  the name of the input to display
     # @param opts [Hash]
     # @option heading [String] Column heading
@@ -208,7 +208,7 @@ module Krill
 
     # Add column with list of output row indicies by the given output name
     #
-    # @requires  output by the given name is a part
+    # Output by the given name is a part
     # @param name [String]  the name of the output to display
     # @param opts [Hash]
     # @option heading [String] Column heading
