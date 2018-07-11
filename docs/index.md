@@ -28,6 +28,4 @@ Every step is logged: who performed the step, which items were used, what data w
   - [Krill (Protocol) API](api)
   - [Trident Python API](https://github.com/klavinslab/trident)
 
-# The Code in on [GITHUB](https://github.com/klavinslab/aquarium)
-
 # [License](https://github.com/klavinslab/aquarium/blob/master/license.md)
