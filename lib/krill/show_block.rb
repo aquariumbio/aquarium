@@ -2,6 +2,32 @@
 
 module Krill
 
+  # The ShowBlock class implements the methods inside show blocks, which are used to interact with the technician. When
+  # a show block is encountered, it is used to construct a page of instructions for the technician. Execution is suspended
+  # until the user clicks "OK" in the protocol. The show method returns a ShowResponse object that contains any information
+  # entered by the user via get, select, or table inputs. 
+  # 
+  # The following is an example of a show block that demonstrates every method.  
+  #
+  # @example A show block with everything
+  #   item = Item.last
+  #   response = show do 
+  #     title "Title describing what the technician should do in this step"
+  #     note "Body text goes inside notes describing the details of this step of the protocol"
+  #     warning "A warning will be displayed vibrantly"
+  #     check "A checkbox will precede this text, and the user must click it to proceed"
+  #     bullet "For bullet lists"
+  #     table [ [ "A", "B" ], [ 1, 2 ] ]
+  #     item item
+  #     separator
+  #     image "/path/to/s3/image.jpg"
+  #     timer initial: { hours: 0, minutes: 2, seconds: 30 }
+  #     upload var: "my_upload"
+  #     get "text", var: "y", label: "Enter a string", default: "Hello World"
+  #     get "number", var: "z", label: "Enter a number", default: 555
+  #     select [ "A", "B", "C" ], var: "choice", label: "Choose something", default: 1
+  #  end
+  #
   # @api krill
   class ShowBlock
 
@@ -27,6 +53,8 @@ module Krill
       @parts.push(note: str)
     end
 
+    # This is deprecated
+    # @api private
     def log(data)
       @parts.push(log: data)
     end
@@ -55,6 +83,8 @@ module Krill
       @parts.push(take: t)
     end
 
+    # This is deprecated
+    # @api private
     def raw(p)
       @parts.concat p
     end
@@ -84,6 +114,8 @@ module Krill
       @parts.push(upload: options.merge(opts))
     end
 
+    # This is deprecated
+    # @api private
     def transfer(x, y, routing)
 
       routing_details = routing
@@ -114,6 +146,7 @@ module Krill
       @parts.push(input: (options.merge opts).merge(type: type))
     end
 
+    # @api private
     def is_proper_array(c)
       if c.class == Array
         if !c.empty?
@@ -142,11 +175,13 @@ module Krill
       @parts.push(select: (options.merge opts).merge(choices: choices))
     end
 
+    # @api private
     def run(&block)
       instance_eval(&block)
       @parts
     end
 
+    # @api private
     def method_missing(m, *args, &block)
 
       if m == :show
