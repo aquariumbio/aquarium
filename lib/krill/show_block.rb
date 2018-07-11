@@ -18,7 +18,7 @@ module Krill
   #     table [ [ "A", "B" ], [ 1, 2 ] ]
   #     item item
   #     separator
-  #     image "/path/to/s3/image.jpg"
+  #     image "path/to/s3/image.jpg"
   #     timer initial: { hours: 0, minutes: 2, seconds: 30 }
   #     upload var: "my_upload"
   #     get "text", var: "y", label: "Enter a string", default: "Hello World"

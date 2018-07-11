@@ -73,7 +73,7 @@
       var k = Object.keys(line)[0];
       if ( typeof line[k] === "string" ) {
         if ( !line.html ) {
-          line.html = $sce.trustAsHtml(line[k]); // avoind infinte digest loops by caching result in line
+          line.html = $sce.trustAsHtml(line[k]); // avoid infinte digest loops by caching result in line
         }
         return line.html;
       } else {

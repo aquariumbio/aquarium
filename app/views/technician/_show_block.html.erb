@@ -133,8 +133,9 @@
 <script type="text/ng-template" id="take">
   <div class='md-subhead content content-take'>
     Item <a href='#' ng-click='open_item_ui(content_value(line).id)'>{{content_value(line).id}}</a>:
-    {{content_value(line).name}} ({{content_value(line).sample}})
+    {{content_value(line).sample.sample_type.name}} ({{content_value(line).sample.name}})
     at {{content_value(line).location}}
+    <!-- {{line}} -->
   </div>
 </script>
 

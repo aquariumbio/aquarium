@@ -8,6 +8,9 @@ class Step {
 
     aq.each(step.display.content, line => {
       line._id = step.next_line_id;
+      if ( line.take ) {
+        line.take = AQ.Item.record(line.take);
+      }      
     });
 
     if ( response ) {
@@ -117,6 +120,7 @@ class Step {
         if ( line.table ) {
           step.response.inputs.table_inputs = step.new_table_inputs(line);
         }
+
       }
 
     }
