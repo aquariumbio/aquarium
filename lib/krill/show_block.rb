@@ -7,8 +7,6 @@ module Krill
   # until the user clicks "OK" in the protocol. The show method returns a ShowResponse object that contains any information
   # entered by the user via get, select, or table inputs. 
   # 
-  # The following is an example of a show block that demonstrates every method.  
-  #
   # @example A show block with everything
   #   item = Item.last
   #   response = show do 
@@ -26,7 +24,7 @@ module Krill
   #     get "text", var: "y", label: "Enter a string", default: "Hello World"
   #     get "number", var: "z", label: "Enter a number", default: 555
   #     select [ "A", "B", "C" ], var: "choice", label: "Choose something", default: 1
-  #  end
+  #   end
   #
   # @api krill
   class ShowBlock
@@ -40,15 +38,20 @@ module Krill
     # @api private
     @@upload_counter = 0
 
+    # @api private
     def initialize(base)
       @base = base
       @parts = []
     end
 
+    # Put the string s at the top of the page. Usually only called once in a given call to show.
+    # @param str [String]
     def title(str)
       @parts.push(title: str)
     end
 
+    # Put the string s in a smaller font on the page. Often called several times.
+    # @param str [String]
     def note(str)
       @parts.push(note: str)
     end
@@ -59,18 +62,52 @@ module Krill
       @parts.push(log: data)
     end
 
+    # Put the string s in bold, eye catching font on the page in hopes that the user might notice
+    # it and heed your advice.
+    # @param str [String]
     def warning(str)
       @parts.push(warning: str)
     end
 
+    # Put the string s on the page, with a clickable checkbox in front of it. The user will need
+    # to click all checkboxes on a given page before the "OK" button is enabled. 
+    # @param str [String]
     def check(str)
       @parts.push(check: str)
     end
 
+    # Put the string s on the page, with a bullet in front of it, as in a bullet list.
+    # @param str [String]
     def bullet(str)
       @parts.push(bullet: str)
     end
 
+
+    # Display a table represented by the matrix t. The method takes a 2x2 list of either numbers,
+    # strings, or hashes. In the case of hashes, the following fields can be present.
+    # 
+    # content: A number or string
+    # check: Whether the entry is checkable, true or false
+    # style: A hash containing css
+    #
+    #
+    # See the [Operations](md-viewer?doc=Operations) documentation for more information about
+    # how to construct tables automatically based on the inputs and outputs to a protocol's
+    # operation.    
+    # @param m [List]
+    # @example
+    #   show {
+    #     table [ [ "A", "B" ], [ 1, 2 ] ]
+    #   }    
+    # @example
+    #   m = [
+    #     [ "A", "Very", "Nice", { content: "Table", style: { color: "#f00" } } ],
+    #     [ { content: 1, check: true }, 2, 3, 4 ]
+    #   ]
+    #   show {
+    #     title "A Table"
+    #     table m
+    #   }    
     def table(m)
       if m.class == Table
         @parts.push(table: m.all.render)
@@ -79,8 +116,11 @@ module Krill
       end
     end
 
-    def item(t)
-      @parts.push(take: t)
+    # Display information about the item i -- its id, its location, its object type, and its sample type 
+    # (if any) -- so that the user can find it. 
+    # @param i [Item]
+    def item(i)
+      @parts.push(take: i)
     end
 
     # This is deprecated
@@ -89,14 +129,29 @@ module Krill
       @parts.concat p
     end
 
+    # Display a break between other shown elements, such as between two notes.
     def separator
       @parts.push(separator: true)
     end
 
+    # Display the image pointed to by **name** on the page. The **name** argument will be prepended
+    # by the URL to the S3 url defined by Bioturk::Application.config.image_server_interface in
+    # config/initializers/aquarium.rb
+    # @example
+    #   image "containers/bottle_1_liter.jpg"
+    # @param name [String]
     def image(name)
       @parts.push(image: "#{Bioturk::Application.config.image_server_interface}#{name}")
     end
 
+    # Show a rudimentary timer. By default, the timer starts at one minute and counts down. 
+    # It starts beeping when it gets to zero, and keeps beeping until the user clicks "OK". 
+    # You can specify the starting number of hours, minutes, and seconds, with for example
+    # The initial option can be used to set the initial time on the timer and has field
+    # hours, minutes, and seconds, all numerical.
+    # @example
+    #   timer initial: { hours: 0, minutes: 20, seconds: 30}
+    # @option opts [Hash] :initial
     def timer(opts = {})
       options = {
         initial: { hours: 0, minutes: 1, seconds: 0 },
@@ -106,6 +161,13 @@ module Krill
       @parts.push(timer: options)
     end
 
+    # Upload a file. The optional name specified by the :var option can be used to retrieve the upload.
+    # @example
+    #   response = show do
+    #     upload var: "my var"
+    #   end
+    # See the [ShowRepsonse] documentation for how to manipulate uploads.
+    # @option opts [String] :var
     def upload(opts = {})
       options = {
         var: "upload_#{@@upload_counter}"

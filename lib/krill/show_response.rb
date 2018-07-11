@@ -1,12 +1,14 @@
 module Krill
+
   require 'delegate'
+
   # @api krill
   # Defines a wrapper for the data hash that is returned by the `show` method, with
   # a simplified interface, additional convienence methods,
   # and abstraction of implementation details. This is a decorator class to be instantiated
   # with a Hash.
-  # @requires  initialized with a Hash, which has a :timepoint value as a float, and 
-  #         a :table_inputs value as an array of hashes in the format expected from `show` return
+  # Initialized with a Hash, which has a :timepoint value as a float, and 
+  # a :table_inputs value as an array of hashes in the format expected from `show` return
   #
   class ShowResponse < SimpleDelegator
 
