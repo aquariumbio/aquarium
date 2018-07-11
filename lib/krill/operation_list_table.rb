@@ -1,7 +1,8 @@
 
-
+# @api krill
 module Krill
 
+  # @api krill
   module OperationList
 
     # Begin building a table from {OperationList}

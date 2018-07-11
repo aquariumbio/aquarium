@@ -198,6 +198,25 @@ module Krill
 
     end
 
+    # Display an input box to the user to obtain data of some kind. If no options are supplied, 
+    # then the data is stored in a ShowResponse object returned by the **show** function with a 
+    # key called something like get_12 or get_13 (for get number 12 or get number 13). The name 
+    # of the variable name can be specified via the **var** option. A label for the input box can 
+    # also be specified.
+    # @param type [String] Either "text" or "number"
+    # @option opts [String] :var The name of the resulting value in the ShowResponse object
+    # @option opts [String] :label The label shown next to the input box
+    # @option opts [String] :default The default value if the type is text
+    # @option opts [Float] :default The default valye if the type is number
+    # @example
+    #   data = show {
+    #     title "An input example"
+    #     get "text", var: "y", label: "Enter a string", default: "Hello World"
+    #     get "number", var: "z", label: "Enter a number", default: 555
+    #   }
+    #
+    #   y = data[:y]
+    #   z = data[:z]
     def get(type, opts = {})
       raise "First argument to get should be either 'number' or 'text'" unless type == 'number' || type == 'text'
       options = {
@@ -226,6 +245,12 @@ module Krill
       end
     end
 
+    # Display a selection of choices for the user. The options are the same as for **get**. For example,
+    # param choices [List] A list of choices, either all strings or all numbers
+    # @option opts [String] :var The name of the resulting value in the ShowResponse object
+    # @option opts [String] :label The label shown next to the input box
+    # @option opts [String] :default The default value if the type is text
+    # @option opts [Float] :default The default valye if the type is number
     def select(choices, opts = {})
       raise 'First argument to select should be an array of numbers or strings' unless is_proper_array choices
       options = {
