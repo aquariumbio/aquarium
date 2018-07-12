@@ -36,6 +36,8 @@
 
     $scope.set_current_io = function(io,focus,role) {
 
+      $scope.nav.sidebar = 'io';
+
       var selected_fv_rid;
       $scope.current_io = io;
 

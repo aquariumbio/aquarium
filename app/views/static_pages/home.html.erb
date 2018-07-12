@@ -134,8 +134,8 @@
         <li><b><%= @item_count %></b> items in inventory</li>
         <% if @last_item %>
           <li><b><%= @last_item.id %></b>: Last Item ID
-            (<%= @last_item.object_type.name %> 
-             <%= @last_item.sample ? ' for ' + @last_item.sample.user.login : ''%>)</li>
+            ( <%= @last_item.object_type.name %> 
+              <%= @last_item.sample ? ' for ' + @last_item.sample.user.login : ''%>)</li>
         <% end %>
         <li><b><%= @deployed_op_count %></b> Operation Types deployed</li>
         <li><b><%= @job_count %></b> Jobs performed in the last month</li>

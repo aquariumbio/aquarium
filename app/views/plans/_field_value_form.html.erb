@@ -2,11 +2,6 @@
 
   <div layout="row">
 
-<!--     <div flex="5">
-      <div class="io-type" ng-if="first && cfv.role == 'input'">in:&nbsp;&nbsp;&nbsp;</div>
-      <div class="io-type" ng-if="first && cfv.role == 'output'">out:&nbsp;&nbsp;&nbsp;</div>    
-    </div> -->
-
     <div flex="15" class="fv-pad">
       &nbsp;<span ng-if="cfv != $parent.current_fv">{{cfv.name}}</span><b ng-if="cfv == $parent.current_fv">{{cfv.name}}</b>
       <span class='small'>({{ cfv.child_sample || cfv.item  || !cfv.value ? cfv.role : 'param'}})</span>
