@@ -1,3 +1,9 @@
+---
+title: Budget Manager
+layout: docs
+permalink: /budget_manager/
+---
+
 # Aquarium Accounting Interface
 
 # Defining Budgets

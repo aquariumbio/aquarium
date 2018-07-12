@@ -1,9 +1,15 @@
 ---
 title: Installation
 layout: docs
+permalink: /installation/
 ---
 
 # Installing (and Running) Aquarium
+
+We recommend that labs doing protocol development run at least two instances:
+the first, a "nursery" server that is shared within the lab for the purposes of trying out protocols under development, while the second is the production server that controls the lab.
+We use this arrangement in the Klavins lab to run the UW BIOFAB so that protocols can be evaluated without messing up the actual lab inventory.
+In addition, each protocol developer should run a local instance, which can be done easily with Docker.
 
 ## Table of Contents
 

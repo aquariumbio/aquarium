@@ -1,63 +1,26 @@
 ---
-title: Protocol Developer
+title: Developer Tools
 layout: docs
-permalink: /protocol_developer/
 ---
 
-# Aquarium Protocol Development
-
-These guidelines are for building protocols to run in Aquarium.
-For documentation about working on Aquarium itself see the [Aquarium Developer Guidelines]({{ site.baseurl }}{% link _docs/aquarium_development/index.md %}).
-
-## Table of Contents
-
-<!-- TOC -->
-
-- [Aquarium Protocol Development](#aquarium-protocol-development)
-    - [Table of Contents](#table-of-contents)
-    - [Introduction](#introduction)
-    - [Writing Protocols](#writing-protocols)
-    - [Developer Tools](#developer-tools)
-        - [Working in Aquarium](#working-in-aquarium)
-        - [Working with External Tools](#working-with-external-tools)
-
-<!-- /TOC -->
-
-## Introduction
-
-A _protocol_ in Aquarium is the code that generates the instructions that the technician will follow.
-
-To develop Aquarium protocols you will need to
-
-- [setup an Aquarium server to work with]({{ site.baseurl }}{% link _docs/configuration/index.md %}),
-- [learn how to write protocols](#writing-protocols),
-- [understand the development tools](#developer-tools).
-
-## Writing Protocols
-
-Protocols are written in the _Krill protocol language_, a domain specific language built using Ruby.
-The [Protocol tutorial]({{ site.baseurl }}{% link _docs/protocol_developer/protocol_tutorial.md %}) gives an overview of using Krill to define protocols, and assumes a basic understanding of Ruby.
-
-Documentation on specific protocol development topics are also available for reference
-
-- ~~[Operations]({{ site.baseurl }}{% link _docs/protocol_developer/operation.md %}),~~
-- ~~[Show Blocks]({{ site.baseurl }}{% link _docs/protocol_developer/show.md %}),~~
-- [Tables]({{ site.baseurl }}{% link _docs/protocol_developer/table.md %}),
-- ~~[Locations]({{ site.baseurl }}{% link _docs/protocol_developer/location.md %}),~~
-
-If you are not familiar with Ruby, a good place to start is the [Ruby page](https://www.ruby-lang.org/en/) that has links to introductory tutorials as well as general documentation.
-There are also courses on Ruby that are available online, which may be the place to start if you don't already know how to program.
-
-For the more advanced coding useful for library development, you should learn about object-oriented design.
-The [POODR](http://www.poodr.com) book is a good resource.
-
-## Developer Tools
+# Developer Tools
 
 Aquarium has a Developer tab that supports creating and editing new protocols, though it is also possible to work on protocols outside of Aquarium.
 
 Developers actually create an _operation type_, which includes the protocol as code along with several other components that are described below.
 
-### Working in Aquarium
+## Table of Contents
+
+<!-- TOC -->
+
+- [Developer Tools](#developer-tools)
+    - [Table of Contents](#table-of-contents)
+    - [Working in Aquarium](#working-in-aquarium)
+    - [Working with External Tools](#working-with-external-tools)
+
+<!-- /TOC -->
+
+## Working in Aquarium
 
 The Developer tab is the interface for working with operation types in Aquarium.
 Clicking on the Developer tab in Aquarium brings you to a view similar to this one.
@@ -115,7 +78,7 @@ This will generate random inputs for the operations and run the protocol.
 Note that running tests this way doesn't allow testing assertions.
 Also, don't use the test tab on a production server.
 
-### Working with External Tools
+## Working with External Tools
 
 Because Aquarium protocols are written in a Ruby DSL, you can edit protocols outside of Aquarium and copy them in.
 This allows you to use an editor that you are comfortable with, and also use tools such as [Rubocop](https://rubocop.readthedocs.io/en/latest/) to check for issues in your protocol code.

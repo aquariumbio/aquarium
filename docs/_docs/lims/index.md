@@ -1,10 +1,7 @@
 # The Aquarium LIMS
 
-## Defining Sample Types
 
-## Defining Containers (aka Obejct Types)
 
-## Defining Samples
 
 ## Creating Items
 
@@ -14,4 +11,3 @@
 
 ## Managing Collections
 
-## Defining Location Wizards

@@ -1,14 +1,12 @@
 ---
 title: Data Association Documentation
-layout: default
+layout: docs
 ---
 # Data Association Documentation
 
 This is the documentation for how to successfully use data associations to store data related to `Items`, `Collections`, `Plans`, and `Operations`.
 
 See the [API documentation]({{ site.baseurl }}{% link /api/index.html %}) for more details on the functions that Krill provides.
-
-If you haven't already, visit the [protocol developer documentation]({{ site.baseurl }}{% link _docs/protocol_developer/index.md %}) for information about getting started writing protocols.
 
 ---
 
