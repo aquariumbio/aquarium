@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 permalink: /docs/reporting-bugs/
 ---
 # Bug Reports and Feature Requests

@@ -27,7 +27,7 @@ These guidelines are intended for those working directly on Aquarium, though som
 
 ## Getting Started
 
-Follow the Aquarium [installation]({{ site.baseurl }}{% link _docs/configuration/installation.md %}) instructions to get a local copy of the Aquarium git repository.
+Follow the Aquarium [installation]({{ site.baseurl }}{% link _docs/installation/index.md %}) instructions to get a local copy of the Aquarium git repository.
 
 ## Running Aquarium
 
@@ -115,9 +115,9 @@ Because of the way that general permalinks are defined in `docs/_config.yml`, ot
 For instance, `klavingslab.org/aquarium/protocol_developer/table/` maps to the file `docs/_docs/protocol_developer/table.md`.
 
 To avoid issues creating links using standard Markdown hyperlinks, use the Liquid `link` tag that will do the mapping from the file path.
-This tag takes the absolute path relative to the `docs` directory, so use `{% link _docs/protocol_developer/index.md %}` to get the link for the file `docs/_docs/protocol_developer/index.md`.
+This tag takes the absolute path relative to the `docs` directory, so use `{% link _docs/installation/index.md %}` to get the link for the file `docs/_docs/installation/index.md`.
 However, this link will be relative to the `docs` directory, and to get the complete mapping we have to add the base URL for the site.
-So use `{{ site.baseurl }}{% link _docs/protocol_developer/index.md %}` to get the correct link on the generated page.
+So use `{{ site.baseurl }}{% link _docs/installation/index.md %}` to get the correct link on the generated page.
 Using the link tag to reference image files in the `images` subdirectory for each topic will avoid discrepancies between a local preview and how the site is displayed on GitHub.
 
 Unfortunately, images linked this way will actually not be rendered in a local preview.
