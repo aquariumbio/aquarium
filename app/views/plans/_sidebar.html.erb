@@ -27,7 +27,7 @@
 
 <div ng-if="state.messages.length > 0" class="message">
   <ul class="message-list">
-    <li ng-repeat="message in state.messages">
+    <li ng-repeat="message in state.messages track by $index">
       {{message}}
     </li>
   </ul>
