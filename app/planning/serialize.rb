@@ -15,7 +15,7 @@ module Serialize
     op_ids = ops.collect { |o| o.id }
     ot_ids = ops.collect { |o| o.operation_type_id }    
 
-    job_associations = JobAssociation.includes(:job).where(operation_id: op_ids).collect { |ja| ja.to_json(include: :job) }
+    job_associations = JobAssociation.includes(:job).where(operation_id: op_ids).collect { |ja| ja.as_json(include: :job) }
     operation_types = OperationType.where(id: ops.collect { |o| o['operation_type_id'] }).as_json
     field_types = FieldType.includes(allowable_field_types: %i[sample_type object_type])
                            .where(parent_class: 'OperationType', parent_id: ot_ids)
