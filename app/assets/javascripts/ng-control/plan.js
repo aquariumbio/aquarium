@@ -523,6 +523,14 @@
       
     };
 
+    $scope.cancel = function() {
+      if ( confirm("Are you sure you want to cancel all not-completed operations?") ) {
+        $scope.plan.cancel("Canceled via user inteface").then(() => {
+          $scope.reload();
+        })
+      }
+    }
+
     $scope.submit_plan = function() {
       $scope.state.planning = true;
       $scope.plan.submit().then(() => {
@@ -679,6 +687,14 @@
     };
 
     // Wires //////////////////////////////////////////////////////////////////////////////////////////
+
+    $scope.destinations_all_planning = function(module_input) {
+      let result = true;
+      aq.each(module_input.destinations, dest => {
+        result = result && ( dest.op.status == 'planning' );
+      });
+      return result;
+    }
 
     $scope.remove_orphan_wires = function() {
       let list = [];

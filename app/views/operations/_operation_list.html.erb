@@ -14,7 +14,7 @@
         <th>Plan</th>
         <th>Last Update</th>
         <% if current_user && current_user.is_admin %>
-          <th ng-if="status != 'scheduled' && status != 'running'">
+          <th ng-if="status != 'scheduled' && status != 'running'"></th>
         <% end %>
       </tr>
 
@@ -81,7 +81,7 @@
         </td>
 
         <td>
-          <a ng-repeat="plan in op.plans" href="/launcher?plan_id={{plan.id}}">{{plan.id}}{{$last ? '' : ', '}}</a>
+          <a ng-repeat="plan in op.plans" href="/plans?plan_id={{plan.id}}" target="designer">{{plan.id}}{{$last ? '' : ', '}}</a>
           <span ng-if="op.plans.length == 0">n/a</span>
         </td>
 

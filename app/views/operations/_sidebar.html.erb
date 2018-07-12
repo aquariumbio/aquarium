@@ -151,8 +151,12 @@
            Job 
            <a href="/jobs/{{current.job_report_object.selection.id}}" target="job">
              {{current.job_report_object.selection.id}}</a>
-           Operations
+           <br>
          </h2>
+         <ul>
+           <li>Scheduled: {{current.job_report_object.selection.created_at|date: 'short'}}</li>
+           <li>Last Update: {{current.job_report_object.selection.updated_at|date: 'short'}}</li>
+         </ul>
          <oplist-report operationtype="current.job_report_object.operations[0].operation_type"
               operations="current.job_report_object.selection.operations"
               status="done"

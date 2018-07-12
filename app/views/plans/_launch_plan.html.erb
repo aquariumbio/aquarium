@@ -12,6 +12,15 @@
       </div>
     <% end %>
 
+     <div ng-if="plan.id">
+       <a href="/launcher?plan_id={{plan.id}}" target="plan_list">View in Plan List Tab</a>
+       <br>
+       <md-button ng-click="cancel()"
+                  class="md-small md-warn md-raised">
+         Cancel
+       </md-button>
+    </div>
+
     <div ng-if="plan.status == 'planning' || plan.has_new_ops">
 
       <div ng-if="plan.estimating" layout="row" layout-align="center center">

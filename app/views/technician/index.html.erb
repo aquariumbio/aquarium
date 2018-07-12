@@ -36,7 +36,7 @@
     <md-content ng-if="mode=='steps'" layout-padding>
 
       <div>
-        <div><b>Job {{job.id}}</b>: {{job.created_at|date}}</div><br>
+        <div><b>Job <a href="/jobs/{{job.id}}">{{job.id}}</a></b>: {{job.created_at|date}}</div><br>
         <span class="md-title">Steps</span>
       </div>        
 
