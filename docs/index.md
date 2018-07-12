@@ -30,7 +30,7 @@ More importantly, Aquarium provides a complete, executable description of the re
   - [Managing users](users/)
   - [Managing budgets](budget_manager/)
 - Lab Protocol Definition
-  - [Defining Sample Types](protocol_developer/types)
+  - [Defining Types](protocol_developer/types)
   - [Defining Location Wizards](protocol_developer/location)
   - [Developer Tools](protocol_developer/tools/)
   - [Protocol Tutorial](protocol_tutorial/)
@@ -39,7 +39,7 @@ More importantly, Aquarium provides a complete, executable description of the re
     - [Show Blocks](protocol_developer/show)
     - [Tables](protocol_developer/table)
   - [Protocol (Krill) API](api)
-- [Trident Python API](http://klavinslab.org/trident)    
+- [Trident Python API](http://klavinslab.org/trident)
 - [Aquarium Development](aquarium_development/)
 
 # [License](https://github.com/klavinslab/aquarium/blob/master/license.md)
