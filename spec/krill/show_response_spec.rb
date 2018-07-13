@@ -10,7 +10,9 @@ RSpec.describe ShowResponse do
 			{key: "tblrespnskey", opid: 3075, row: 0, value: "2", type: "number"},
 			{key: "tblrespnskey", opid: 3076, row: 1, value: "1", type: "number"}, 
 		],
-		timestamp: 123456789, measured_concentration: 53.2
+		timestamp: 123456789,
+		measured_concentration: 53.2,
+		ups: [{id: 1, name: 'upname1'}, {id: 2, name: 'upname2'}]
 	})
 
 	it "is backwards compatible with the original hash" do expect(resp).to eq({
@@ -18,7 +20,9 @@ RSpec.describe ShowResponse do
 			{key: "tblrespnskey", opid: 3075, row: 0, value: "2", type: "number"},
 			{key: "tblrespnskey", opid: 3076, row: 1, value: "1", type: "number"},
 		],
-		timestamp: 123456789, measured_concentration: 53.2
+		timestamp: 123456789,
+		measured_concentration: 53.2
+		ups: [{id: 1, name: 'upname1'}, {id: 2, name: 'upname2'}]
 	})
 	end
 	
@@ -39,7 +43,7 @@ symbol, string, or integer" do
 
 	it "returns a ruby hash representing the data with responses" do
     	expect(resp.responses()).to (
-    	eq({measured_concentration: 53.2, tblrespnskey: [2, 1]}) )
+    	eq({measured_concentration: 53.2, tblrespnskey: [2, 1], ups: [Upload.find(1), Upload.find(2)]}) )
     end
 
     it "returns the timestamp of the showblock with timestamp()" do
@@ -70,6 +74,14 @@ get_table_response when parameterized with an op or row" do
 
 		expect{resp.get_table_response(:tblrespnskey, op: 3075, row: 0)}.to (
 		raise_error(TableCellUndefined) )
+	end
+
+	it "Retrieves uploaded files as an array with get_upload_response" do
+		expect(resp.get_upload_response(:ups)).to eq([Upload.find(1), Upload.find(2)])
+	end
+
+	it "Returns nil when get_upload_response is attempted on a key that is not an upload response" do
+		expect(resp.get_upload_response(:measured_concentration)).to eq(nil)
 	end
 
 	it "works with large and complex response hashes" do
