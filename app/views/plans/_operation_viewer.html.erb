@@ -104,14 +104,14 @@
       <span ng-bind-html="'Job ' + job.url | trust"></span>
       <span ng-if="job.pc == -2">
         <span ng-bind-html="'performed by ' + job.user.url | trust"></span>
-        on {{current_op.jobs[current_op.jobs.length-1].updated_at|date}}
+        on {{job.updated_at|date}}
       </span> 
       <span ng-if="job.pc == -1">
-        batched on {{current_op.jobs[current_op.jobs.length-1].created_at|date}}
+        batched on {{job.created_at|date}}
       </span>
       <span ng-if="job.pc >= 0">
         <span ng-bind-html="'last updated by ' + job.user.url | trust"></span>
-        on {{current_op.jobs[current_op.jobs.length-1].updated_at|date}}
+        on {{job.updated_at|date}}
       </span>
     </div>
   </span>
