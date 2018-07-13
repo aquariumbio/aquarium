@@ -80,10 +80,6 @@ get_table_response when parameterized with an op or row" do
 		expect(resp.get_response(:ups)).to eq([Upload.find(1), Upload.find(2)])
 	end
 
-	it "Returns nil when get_upload_response is attempted on a key that is not an upload response" do
-		expect(resp.get_upload_response(:measured_concentration)).to eq(nil)
-	end
-
 	it "works with large and complex response hashes" do
 		bigresp = ShowResponse.new({
 			table_inputs: [ 
