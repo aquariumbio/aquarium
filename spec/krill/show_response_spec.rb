@@ -76,8 +76,8 @@ get_table_response when parameterized with an op or row" do
 		raise_error(TableCellUndefined) )
 	end
 
-	it "Retrieves uploaded files as an array with get_upload_response" do
-		expect(resp.get_upload_response(:ups)).to eq([Upload.find(1), Upload.find(2)])
+	it "Retrieves uploaded files as an array of Upload with get_response" do
+		expect(resp.get_response(:ups)).to eq([Upload.find(1), Upload.find(2)])
 	end
 
 	it "Returns nil when get_upload_response is attempted on a key that is not an upload response" do

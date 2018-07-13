@@ -49,16 +49,6 @@ module Krill
       return (target_input_cell[:type] == 'number' ? target_input_cell[:value].to_f : target_input_cell[:value])
     end
 
-    # Returns a list of the Upload objects created from files uploaded in the ShowBlock
-    #
-    # @param var [Symbol/String]  the key that was specified to store data under in the `upload` call
-    # @return [Array<Upload>]  list of the Upload objects corresponding to the given key, or nil if the key
-    #               doesn't correspond to a valid list of uploads
-    def get_upload_response var
-      return nil if !is_upload?(var)
-      return self[var.to_sym].map {|up_hash| Upload.find(up_hash[:id])} 
-    end
-
     # Returns a hash of user responses, each under the var name specified in the ShowBlock where 
     # the response was collected. Table responses are stored in this hash as a list in order of
     # the rows of the table.
@@ -101,6 +91,16 @@ module Krill
     # @return [Boolean]  true if the key corresponds to a list of upload objects
     def is_upload? var
       return self[var.to_sym].is_a?(Array) && self[var.to_sym].all? { |up_hash| up_hash.is_a?(Hash) && up_hash.has_key?(:name) && up_hash.has_key?(:name)}
+    end
+
+    # Returns a list of the Upload objects created from files uploaded in the ShowBlock
+    #
+    # @param var [Symbol/String]  the key that was specified to store data under in the `upload` call
+    # @return [Array<Upload>]  list of the Upload objects corresponding to the given key, or nil if the key
+    #               doesn't correspond to a valid list of uploads
+    def get_upload_response var
+      return nil if !is_upload?(var)
+      return self[var.to_sym].map {|up_hash| Upload.find(up_hash[:id])} 
     end
   end
   
