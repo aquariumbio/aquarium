@@ -23,8 +23,8 @@ module Krill
 
     # Returns data recorded in a specified row of an input table
     #
-    # @param var [Symbol/String]  the table key specified to store data under
-    #               in the get.
+    # @param var [Symbol/String]  the table key that was specified to store data under
+    #               in the `get`.
     # @param opts [Hash]  additional options
     # @option op [Operation]  the Operation for which to retrieve the table data
     #               for, supposing the table was made on an OperationsList
@@ -49,20 +49,37 @@ module Krill
       return (target_input_cell[:type] == 'number' ? target_input_cell[:value].to_f : target_input_cell[:value])
     end
 
+    # Returns a list of the Upload objects created from files uploaded in the ShowBlock
+    #
+    # @param var [Symbol/String]  the key that was specified to store data under in the `upload` call
+    # @return [Array<Upload>]  list of the Upload objects corresponding to the given key, or nil if the key
+    #               doesn't correspond to a valid list of uploads
+    def get_upload_response var
+      return nil if !is_upload?(var)
+      return self[var.to_sym].map {|up_hash| Upload.find(up_hash[:id])} 
+    end
+
     # Returns a hash of user responses, each under the var name specified in the ShowBlock where 
     # the response was collected. Table responses are stored in this hash as a list in order of
     # the rows of the table.
     #
     # @return [Hash]  the response hash with all user input
     def responses
-      inline_responses = self.select { |key, value| key != :table_inputs && key != :timestamp }
+      inline_responses = self.select { |key, value| key != :table_inputs && key != :timestamp && !is_upload?(key) }
+      
+      upload_response_keys = self.select { |key, value| is_upload?(key) }.keys
+      upload_responses = Hash.new
+      upload_response_keys.each do |key|
+        upload_responses[key] = get_upload_response(key)
+      end
+
       table_response_keys = self[:table_inputs] ? self[:table_inputs].map { |ti| ti[:key] }.uniq : []
       table_responses = Hash.new
       table_response_keys.each do |key|
         table_responses[key.to_sym] = get_table_responses_column(key)
       end
 
-      inline_responses.merge(table_responses)
+      inline_responses.merge(table_responses).merge(upload_responses)
     end
 
     # Returns a Unix timestamp of the timepoint when the showblock associated with this ShowResponse
@@ -76,6 +93,14 @@ module Krill
     private
     def get_table_responses_column var
       self[:table_inputs].select { |ti| ti[:key].to_sym == var.to_sym }.sort { |x,y| x[:row] <=> y[:row] }.map { |ti| ti[:type] == 'number' ? ti[:value].to_f : ti[:value] } if self[:table_inputs]
+    end
+
+    # Checks to see if a given key corresponds to a list of upload objects
+    # 
+    # @param var [Symbol/String]  the key that was specified to store data under in the `upload` call
+    # @return [Boolean]  true if the key corresponds to a list of upload objects
+    def is_upload? var
+      return self[var.to_sym].is_a?(Array) && self[var.to_sym].all? { |up_hash| up_hash.is_a?(Hash) && up_hash.has_key?(:name) && up_hash.has_key?(:name)}
     end
   end
   
