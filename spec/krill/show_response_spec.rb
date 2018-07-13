@@ -21,7 +21,7 @@ RSpec.describe ShowResponse do
 			{key: "tblrespnskey", opid: 3076, row: 1, value: "1", type: "number"},
 		],
 		timestamp: 123456789,
-		measured_concentration: 53.2
+		measured_concentration: 53.2,
 		ups: [{id: 1, name: 'upname1'}, {id: 2, name: 'upname2'}]
 	})
 	end
