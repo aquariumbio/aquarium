@@ -32,7 +32,7 @@ Here the sample is puc19-GFP, which has sample type of plasmid.
 An item _location_ in Aquarium is a hierarchical description of where the item can be found.
 For instance, the UW BIOFAB location `M20.1.5.49` is a location in a box in a -20C freezer as illustrated by this diagram:
 
-<img src="{{ site.baseurl }}{% link _docs/concepts/images/location.png %}" width="50%">
+<img src="{{ site.baseurl }}{% link _docs/concepts/images/location.png %}" width="75%">
 
 ## Operations
 
