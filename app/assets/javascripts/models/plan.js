@@ -494,7 +494,7 @@ AQ.Plan.record_methods.add_wire_to = function(fv,op,suc) {
     sid = op.routing[fv.routing]
   }
 
-  if ( sid ) {
+  if ( op.status == "planning" && sid ) {
     return AQ.Sample.find_by_identifier(sid)
       .then(sample => plan.assign(fv,sample))
       .then(plan => plan.choose_items())
