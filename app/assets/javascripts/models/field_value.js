@@ -222,19 +222,41 @@ AQ.FieldValue.record_methods.valid = function() {
   var fv = this, 
       v = false;
 
+  fv.message = null;
+
   if ( fv.field_type.ftype != 'sample' ) {
+    // This fv is a paramter
+    // Return false unless it has a value
     v = !! fv.value;
+    if ( !v ) {
+      fv.message = `${fv.name} parameter not defined`;
+    }
   } else if ( fv.aft && fv.aft.sample_type_id ) {
+    // This fv specifies a sample type
+    // Make sure it has an associated sample
+    // Also make sure it is not a leaf, is not an input, or has an item associated with it
     v = !!fv.child_sample_id && ( fv.num_wires > 0 || fv.role == 'output' || !!fv.child_item_id );
+    if ( !v ) {
+    fv.message = `${fv.name} sample not defined or is a leaf with no associated item`;
+    }
   } else {
+    // This fv does not specify a sample type (i.e. it is a container with a handler != sample_container)
+    // In this case, make sure it is not a leaf, not an input, or has an item associated with it
     v = fv.num_wires > 0 || fv.role == 'output' || !!fv.child_item_id;
+    if ( !v ) {
+      fv.message = `${fv.name} is a non-sample and is a leaf with no associated item`;
+    }    
   }
 
   if ( fv.role == 'input' && 
-       fv.num_wires == 0 && 
-       fv.field_type.part && 
-       ( typeof fv.row != 'number' || typeof fv.column != 'number' ) ) {
+    fv.num_wires == 0 && 
+    fv.field_type.part && 
+    ( typeof fv.row != 'number' || typeof fv.column != 'number' ) ) {
+    // Return false it the fv is a collection part but its row and/or column are not defined
     v = false;
+    if ( !v ) {
+      fv.message = `${fv.name} is part of a collection but has either no row or column defined`;
+    }
   }
 
   return v;
