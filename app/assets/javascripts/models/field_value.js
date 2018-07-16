@@ -237,14 +237,14 @@ AQ.FieldValue.record_methods.valid = function() {
     // Also make sure it is not a leaf, is not an input, or has an item associated with it
     v = !!fv.child_sample_id && ( fv.num_wires > 0 || fv.role == 'output' || !!fv.child_item_id );
     if ( !v ) {
-    fv.message = `${fv.name} sample not defined or is a leaf with no associated item`;
+      fv.message = `${fv.name} invalid. sample: ${fv.child_sample_id}, wires: ${fv.num_wires}, role: ${fv.role}, item :${fv.child_item_id}`
     }
   } else {
     // This fv does not specify a sample type (i.e. it is a container with a handler != sample_container)
     // In this case, make sure it is not a leaf, not an input, or has an item associated with it
     v = fv.num_wires > 0 || fv.role == 'output' || !!fv.child_item_id;
     if ( !v ) {
-      fv.message = `${fv.name} is a non-sample and is a leaf with no associated item`;
+      fv.message = `${fv.name} invalid. wires: ${fv.num_wires}, role: ${fv.role}, item :${fv.child_item_id}`
     }    
   }
 
