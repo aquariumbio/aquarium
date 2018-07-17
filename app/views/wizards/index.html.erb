@@ -2,6 +2,22 @@
 
 <%= content_for :sidebar do %>
 
+<% unless @conflicts.empty? %>
+
+  <md-subheader class="md-title md-warn">
+    Conflicts Found!
+    Report this issue to an Aquarium Admin ASAP.
+  </md-subheader>
+  <ul>
+    <% @conflicts.each do |c| %>
+      <li>
+        <%= link_to c[:wizard].name, wizard_path(c[:wizard]) %>: <%= c[:conflicts].join(", ") %>
+      </li>
+    <% end %>
+  </ul>
+
+<% end %>
+
 <h2 class="md-title">About Wizards</h2>
 
 A location wizard is a bit of code that uses a schema to store new items. For example, Primers might be stored in a -20C freezer in 81 slot freezer boxes stored on shelves that contain 16 boxes. A location wizard for this scheme would have locations of the form M20.x.y.z where x is the shelf (or hotel as we call them in the Klavins lab), y is the box, and z is the slot in the box.

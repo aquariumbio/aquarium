@@ -10,6 +10,30 @@ class Wizard < ActiveRecord::Base
 
   has_many :locators
 
+  def self.conflicts
+
+    Wizard.all.collect { |wizard|
+      nums = Locator.where(wizard_id: wizard.id).pluck(:number)
+      { 
+        wizard: wizard, 
+        conflicts: nums.group_by{ |e| e }
+                       .select { |k, v| v.size > 1 }
+                       .map(&:first)
+                       .map { |i| wizard.int_to_location i }
+      }
+    }.reject { |x| x[:conflicts].empty? }
+
+  end
+
+  def conflicts
+    nums = Locator.where(wizard_id: id).pluck(:number)
+    nums.group_by{ |e| e }
+        .select { |k, v| v.size > 1 }
+        .map(&:first)
+        .map { |i| int_to_location i }    
+  end
+
+
   def spec # converts the specification into a reasonable ruby object
 
     if !specification || specification == 'null'

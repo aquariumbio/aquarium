@@ -4,6 +4,7 @@ class BrowserController < ApplicationController
   before_filter :up_to_date_user
 
   def browser
+    @conflicts = Wizard.conflicts
     respond_to do |format|
       format.html { render layout: 'aq2' }
     end
