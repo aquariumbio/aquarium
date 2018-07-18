@@ -134,7 +134,7 @@
         } catch(e) {
           i.data = {};
         }   
-        sample.items.push(i);
+        sample.items.push(AQ.Item.record(i));
      
       });
     }   
