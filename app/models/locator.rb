@@ -10,6 +10,7 @@ class Locator < ActiveRecord::Base
 
   # validate :no_collisions
   validate :has_wizard
+  validates :number, uniqueness: { scope: :wizard_id, message: "Should have max one locator per location" }
 
   def has_wizard
     errors.add(:no_wizard, 'no wizard') unless
