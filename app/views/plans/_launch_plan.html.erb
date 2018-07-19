@@ -48,8 +48,11 @@
   <div ng-if="plan.status != 'planning'">
 
     <div>
-      <b>Cost (so far):</b>
-      {{plan.cost_so_far|currency}}
+      <b>Assuming each operation is run once: </b>{{plan.cost_total|currency}}
+      <span ng-if="plan.cost_total != 0 && !plan.cost_total">...calculating</span>
+    </div>
+    <div>
+      <b>Cost so far:</b> {{plan.cost_so_far|currency}}
       <span ng-if="plan.cost_so_far != 0 && !plan.cost_so_far">...calculating</span>
     </div>
     <div><b>Budget</b>: {{plan.budget.name}}</div>

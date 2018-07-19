@@ -12,7 +12,7 @@
   </md-button>
 
   <div class="md-subhead" ng-if="plan.cost_so_far != null && plan.cost_total != null">
-    {{plan.budget.name}}:  {{plan.cost_so_far|currency}} of estimated {{plan.cost_total|currency}}
+    {{plan.budget.name}}:  {{plan.cost_so_far|currency}} of originally estimated {{plan.cost_total|currency}}
   </div>
 
   <da record="plan"></da>
@@ -38,8 +38,8 @@
     <div flex="10">
       <span ng-class="'md-body-2 status-'+operation.status">{{operation.status}}</span>
     </div>
-    <div flex="10" layout="row" layout-align="end center" ng-if="operation.status == 'done' && !operation.open">
-      <span class="md-body-2">{{operation.cost.total|currency}}</span>
+    <div flex="10" layout="row" layout-align="end center" ng-if="!operation.open">
+      <span class="md-body-1">{{operation.cost_so_far|currency}} / {{operation.cost|currency}}</span>
     </div>
     <div flex="10" layout="row" layout-align="end center" ng-if="operation.open">
       <md-menu layout="row">
