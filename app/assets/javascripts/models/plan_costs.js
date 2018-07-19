@@ -90,7 +90,6 @@ AQ.Plan.record_getters.cost_so_far = function() {
 
   AQ.Account.where({operation_id: opids}).then(transactions => {
     plan.transactions = transactions;
-    console.log(transactions)
     plan.cost_so_far = 0.0;
     aq.each(plan.operations, op => (op.cost_so_far = 0));
     aq.each(transactions, t => {
@@ -124,7 +123,6 @@ AQ.Plan.record_getters.costs = function() {
   delete plan.costs;
   plan.costs = [];
 
-  console.log("computing costs")
 
   AQ.get('/plans/costs/'+plan.id).then(response => {
 
@@ -137,15 +135,9 @@ AQ.Plan.record_getters.costs = function() {
           cost.total = plan.cost_to_amount(cost);
           op.cost = cost.total;
           plan.cost_total += plan.cost_to_amount(cost);
-          console.log("op.cost", op.cost)
-          // if ( op.status == "done" ) {
-          //   plan.cost_so_far += plan.cost_to_amount(cost);
-          // }
         }
       })
     });
-
-    console.log("Costs", plan.costs)
 
   });
 
