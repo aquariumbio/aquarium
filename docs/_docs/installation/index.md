@@ -214,7 +214,7 @@ To run Aquarium with Docker:
     ```
 
     which starts the services for Aquarium.
-    The first run sets up the database, and so will take longer.
+    The first run initializes the database, and will take longer than subsequent runs.
 
     Once all of the services for Aquarium have started, visit `localhost:3000` with the Chrome browser and you will find the Aquarium login page.
     If running aquarium inside the docker toolbox VM, the address will be instead be `192.168.99.100:3000`.
@@ -240,7 +240,7 @@ Some configuration notes:
 
 2.  The Docker configuration stores the database files in `docker/db`.
 
-    The database is initialized with the contents of docker/mysql_init/dump.sql`, but changes you make will persist between runs.
+    The database is initialized with the contents of `docker/mysql_init/dump.sql`, but changes you make will persist between runs.
 
     You can use a different database database dump by renaming it to this file, removing the contents of the `docker/db` directory and restarting Aquarium.
 
