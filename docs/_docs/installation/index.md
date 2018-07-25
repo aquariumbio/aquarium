@@ -244,4 +244,4 @@ Some configuration notes:
 
     You can use a different database database dump by renaming it to this file, removing the contents of the `docker/db` directory and restarting Aquarium.
 
-3.  Uploaded files will be placed in the directory `docker/s3`.
+3.  Uploaded files currently are not compatible with a docker installation. This feature is coming soon to the dockerized version, but in the mean time: if you need to locally test workflows that upload files, the manual installation will be necessary.
