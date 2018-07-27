@@ -200,6 +200,25 @@
   <div class='content' layout-fill layout="row" layout-align="center center">
     <b>Thank you <a href="/users/{{job.user.id}}">{{job.user.name}}!</a></b>
   </div>
+
+  <br>
+
+  <% 
+    all_ops = Job.find(params["job_id"]).operations
+    errored_ops = all_ops.select { |_op| _op.status ==  'error' }
+    good_ops = all_ops - errored_ops
+  %>
+  <div class='content' layout-fill layout="row" layout-align="center center">
+    <%= good_ops.length %> of <%= all_ops.length %> operations in this job have been completed successfully
+  </div>
+
+
+  <% if errored_ops.any? %>
+    <div class='content' layout-fill layout="row" layout-align="center center">
+      <b><%= "Operation".pluralize(errored_ops.length)%> <%= errored_ops.map { |_op| _op.id }.to_sentence %> <%= errored_ops.length == 1 ? "has" : "have"%> failed</b>
+    </div>
+  <% end %>
+
   <hr>
 
   <md-content class='md-white user-op-stats'>
@@ -234,5 +253,9 @@
 <script type="text/ng-template" id="aborted">
   <div class='content'>
     <h2 class="md-display-2 title">This job was canceled</h2>
+  </div>
+
+  <div class='content content-aborted'>
+    <b>All operations errored – report to a lab manager for further instructions</b>
   </div>
 </script>
