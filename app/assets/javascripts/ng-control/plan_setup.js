@@ -64,9 +64,10 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
 
     return AQ.Plan.load(aq.url_params().plan_id)
       .then(plan => {
-        $scope.plan = plan;       
+        $scope.plan = plan;     
         choose_folder(plan);
-        $window.history.replaceState(null, document.title, "/plans");         
+        $window.history.replaceState(null, document.title, "/plans");   
+        $scope.$apply();
       })
      .then(() => AQ.User.find($scope.plan.user_id))
      .then(user => $scope.current_user = user)
