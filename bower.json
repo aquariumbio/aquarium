@@ -18,6 +18,10 @@
   ],
   "dependencies": {
     "jquery": "latest",
+    "jquery-autocomplete": "latest",
+    "jquery-ui": "latest",
+    "jquery-cookie": "latest",
+    "jquery-file-upload": "latest",
     "underscore": "latest",
     "lodash": "latest",
     "ace-builds": "latest",
