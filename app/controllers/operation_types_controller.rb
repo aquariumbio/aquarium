@@ -184,7 +184,7 @@ class OperationTypesController < ApplicationController
         if !error
           ops_json = ops.as_json(methods: %i[field_values precondition_value])
           ops_json.each do |op|
-            op[:field_values] = op[:field_values].collect(&:full_json)
+            op["field_values"] = op["field_values"].collect(&:full_json)
           end
           render json: ops_json, status: :ok
         else

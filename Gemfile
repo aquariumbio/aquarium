@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.0.2'
+gem 'rails', '4.0.13'
 
 # Needed for rails 4.0.0 upgrade
 gem 'protected_attributes'

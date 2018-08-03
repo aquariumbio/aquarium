@@ -10,18 +10,18 @@
 <%= content_for :sidebar do %>
 
   <div layout="column" layout-align="center center" style="margin-top: 16px">
-    <%= image_tag 'biofab-logo.jpg', style: 'width: 50%' %>
+    <%= image_tag 'biofab-logo.jpg', class: 'logo' %>
   </div>
   <md-list>
     <md-list-item id="chrome" class="md-3-line" layout-padding style="display: none">
       <div class="md-list-item-text" layout="column">
         <h2 class='md-title'>Chrome Not Detected</h2>
         <h3 class='md-subtitle' style="color: red; font-weight: bold">Warning!</h3>
-        <p>You are not using Google Chrome. Some features may not be available. 
+        <p>You are not using Google Chrome. Some features may not be available.
            Aquarium has been tested extensively with Google Chrome and we highly recommend you use
            it instead. Install it <a href="https://www.google.com/chrome/index.html">here</a>.</p>
       </div>
-    </md-list-item>  
+    </md-list-item>
 
   <% @announcements.each do |a| %>
     <md-list-item class="md-3-line" layout-padding>
@@ -37,7 +37,7 @@
 
 <% content_for :specific_title do %>
   <%= Bioturk::Application.config.instance_name %>
-  &rang; 
+  &rang;
   Leader Boards (Last 3 months)
 <% end %>
 
@@ -47,8 +47,8 @@
 
   <style>
     .box {
-      border: 1pt solid #bbb; 
-      border-radius: 4px; 
+      border: 1pt solid #bbb;
+      border-radius: 4px;
       margin: 16px;
     }
     a {
@@ -56,7 +56,7 @@
     }
   </style>
 
-  <script type="text/javascript">    
+  <script type="text/javascript">
   $(function() {
     if ( ! ( !!window.chrome && !!window.chrome.webstore) )  {
       console.log("No chrome!")
@@ -67,17 +67,17 @@
 
   <div layout="row" class="leaderboard">
 
-    <% [ { board: @job_board, 
-           caption: "Most Protocols Completed", 
-           symbol: :jobs, 
+    <% [ { board: @job_board,
+           caption: "Most Protocols Completed",
+           symbol: :jobs,
            heading: "Jobs" },
-         { board: @sample_board, 
-           caption: "Most Samples", 
-           symbol: :samples, 
+         { board: @sample_board,
+           caption: "Most Samples",
+           symbol: :samples,
            heading: "Samples" },
-         { board: @plan_board, 
-           caption: "Most Plans Launched", 
-           symbol: :plans, 
+         { board: @plan_board,
+           caption: "Most Plans Launched",
+           symbol: :plans,
            heading: "Plans" }  ].each_with_index do |section,i| %>
 
       <table flex="33" style="<%= i == 2 ? 'margin-right: 15px' : '' %>">
@@ -86,7 +86,7 @@
           <th>User</th>
           <th><%= section[:heading] %></th>
         </tr>
-        <% unless section[:board].empty? 
+        <% unless section[:board].empty?
            section[:board][0..9].each_with_index do |row,i| %>
             <tr>
               <td style="font-weight: <%= i == 0 ? 'bold' : 'normal'%>"><%= row[:user].login %></td>
@@ -104,23 +104,23 @@
   </div>
 
   <div layout="row" class="leaderboard">
-    
+
     <table flex="50">
-      <caption>Biggest Fully Completed Plans</caption>    
+      <caption>Biggest Fully Completed Plans</caption>
       <tr>
-        <th>User</th>        
-        <th>Operations</th>      
+        <th>User</th>
+        <th>Operations</th>
         <th>Plan ID</th>
         <th>Date</th>
-      </tr>    
+      </tr>
       <% @biggest_plans[0..9].each_with_index do |row,i| %>
         <tr>
-          <td style="font-weight: <%= i == 0 ? 'bold' : 'normal'%>"><%= row[:user].login %></td>       
+          <td style="font-weight: <%= i == 0 ? 'bold' : 'normal'%>"><%= row[:user].login %></td>
           <td class='stat' style="width: 33%">
             <div class="bar" style="width: calc( <%= row[:width] %>% - 5px )">&nbsp;</div>
             <div class="value" style="">&nbsp;<%= row[:ops] %></div>
-          </td>             
-          <td><a href="/plans?plan_id=<%= row[:plan].id %>"><%= row[:plan].id %></td> 
+          </td>
+          <td><a href="/plans?plan_id=<%= row[:plan].id %>"><%= row[:plan].id %></td>
           <td><%= row[:plan].created_at.strftime("%b. %Y") %></td>
         </tr>
       <% end %>
@@ -134,7 +134,7 @@
         <li><b><%= @item_count %></b> items in inventory</li>
         <% if @last_item %>
           <li><b><%= @last_item.id %></b>: Last Item ID
-            ( <%= @last_item.object_type.name %> 
+            ( <%= @last_item.object_type.name %>
               <%= @last_item.sample ? ' for ' + @last_item.sample.user.login : ''%>)</li>
         <% end %>
         <li><b><%= @deployed_op_count %></b> Operation Types deployed</li>
