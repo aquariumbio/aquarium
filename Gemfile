@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Rails version
-gem 'rails', '4.1.16'
+gem 'rails', '4.2.10'
 
 # SQL adapter
 gem 'mysql2', '~> 0.3.17'

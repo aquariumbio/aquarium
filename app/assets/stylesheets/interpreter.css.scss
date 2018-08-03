@@ -27,7 +27,7 @@ $outlineStyle: #f00 dotted 0px;
   .pc_at {
     padding: 1px 2px 1px 10px;
     width: 92%;
-    background: #111;       
+    background: #111;
     color: #fff;
     font-size: 9pt;
     border-radius: 4px;
@@ -104,7 +104,7 @@ input::-webkit-inner-spin-button {
   &:before {
      content: '&nbsp;&nbsp;';
    }
-  
+
 }
 
 #note-textarea {
@@ -180,8 +180,8 @@ input::-webkit-inner-spin-button {
 }
 
 .take_item_quantity {
-  #display: inline-block; 
-  #width: 25%; 
+  #display: inline-block;
+  #width: 25%;
   #margin: 0px 10px 0px 0px;
   #padding: 10px;
 # border: 1pt solid blue;
@@ -192,8 +192,8 @@ input::-webkit-inner-spin-button {
 }
 
 .btn-more {
-  margin: 0 0 0 10px; 
-  padding: 0; 
+  margin: 0 0 0 10px;
+  padding: 0;
   #border: 1pt solid blue;
   vertical-align: -75%
 }
@@ -226,10 +226,10 @@ input::-webkit-inner-spin-button {
      list-style: none;
      width: 180px;
 
-     ul { 
+     ul {
        width: 200px;
 
-       ul { 
+       ul {
          width: 380px;
        }
 
@@ -262,7 +262,7 @@ input::-webkit-inner-spin-button {
   color: black;
   padding: 30px;
   margin: 20px;
-  width: 240px; 
+  width: 240px;
   font-size: 40pt;
 }
 
