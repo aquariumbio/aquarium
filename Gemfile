@@ -41,6 +41,7 @@ end
 group :development do
   gem 'fakes3'
   gem 'rspec-rails'
+  gem 'web-console', '~> 2.0'  
 end
 
 group :production do
