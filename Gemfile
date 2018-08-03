@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.0.0'
+gem 'rails', '4.0.2'
 
 # Needed for rails 4.0.0 upgrade
 gem 'protected_attributes'
@@ -30,7 +30,7 @@ end
 # in production environments by default.
 group :assets do
   gem 'closure-compiler'
-  gem 'bcrypt-ruby', '~> 3.0.0'
+  gem 'bcrypt-ruby', '~> 3.1.2'
 end
 
 gem 'rails-patch-json-encode'

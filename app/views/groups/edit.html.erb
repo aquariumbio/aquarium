@@ -1,8 +1,15 @@
 <% provide(:title, @group.name) %>
 
-<h1>Group <%= @group.name %></h1>
+<%= content_for :sidebar do %><% end %>
 
-<%= render 'form' %>
+<%= content_for :main do %>
+  <%= render 'form' %>
+<% end %>
 
-<%= link_to 'Show Group', @group, class: 'btn' %> 
-<%= link_to 'List', groups_path, class: 'btn' %>
+<%= content_for :action2 do %>
+  <%= link_to 'Cancel', @group, class: 'md-button md-raised' %>
+<% end %>
+
+<%= content_for :action1 do %>
+  <%= link_to 'All Groups', groups_path, class: 'md-button md-raised' %>
+<% end %>
