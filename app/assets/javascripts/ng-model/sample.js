@@ -9,10 +9,10 @@ Sample.prototype.find = function(id,promise) {
 
   this.http.get('/samples/' + id + '.json').then(function(response) {
 
-    for (var key in response.data) { 
+    for (var key in response.data) {
       sample[key] = response.data[key];
     }
-
+    
     sample.promote_data();
     sample.sample_type = new SampleType(sample.http).from(sample.sample_type);
     sample.complete_fields();
@@ -31,16 +31,16 @@ Sample.prototype.get_inventory = function(promise) {
 
   this.http.get('/browser/items/' + this.id + '.json').then(function(response) {
 
-    sample.containers = response.data.containers;    
+    sample.containers = response.data.containers;
 
-    sample.items = aq.collect(response.data.items, function(raw) { 
+    sample.items = aq.collect(response.data.items, function(raw) {
       var i = AQ.Item.record(raw);
       return i;
-    });  
+    });
 
     sample.http.get('/browser/collections/' + sample.id + '.json').then(function(response) {
 
-      sample.collections = aq.collect(response.data.collections, function(raw) {       
+      sample.collections = aq.collect(response.data.collections, function(raw) {
         var c = AQ.Collection.record(raw);
         c.sample = AQ.Sample.record(sample);
         return c;
@@ -51,8 +51,8 @@ Sample.prototype.get_inventory = function(promise) {
       sample.collection_containers = response.data.containers;
 
       promise();
-      
-    });  
+
+    });
 
   });
 
@@ -67,12 +67,12 @@ Sample.prototype.promote_data = function() {
     }
   } else if ( this.data == null ) {
     this.data = {};
-  }  
+  }
 }
 
 Sample.prototype.from = function(raw) {
 
-  for (var key in raw) { 
+  for (var key in raw) {
     this[key] = raw[key];
   }
 
@@ -254,10 +254,10 @@ Sample.prototype.assign_fv_aux = function( t, fv, value, sample_names, warnings 
   var choices = null;
 
   if ( t.choices ) {
-    choices = t.choices.split(',');    
+    choices = t.choices.split(',');
   }
 
-  if ( t.ftype == "number" ) {   
+  if ( t.ftype == "number" ) {
     var nchoices = aq.collect(choices,function(s) { return parseFloat(s); });
     if ( ! choices || nchoices.indexOf(parseInt(value)) >= 0 ) {
       fv.value = parseFloat(value);
@@ -265,10 +265,10 @@ Sample.prototype.assign_fv_aux = function( t, fv, value, sample_names, warnings 
       warnings.push("Value for field " + t.name + " should be one of " + t.choices + ".")
     }
   } else if ( t.ftype == "sample" ) {
-    if ( ! choices || choices.indexOf(value) >= 0 ) {    
+    if ( ! choices || choices.indexOf(value) >= 0 ) {
       fv.child_sample_name = this.lookup(value, sample_names,fv.allowable_child_types,warnings);
     } else {
-      warnings.push("Value for field " + t.name + " should be one of " + t.choices + ".")     
+      warnings.push("Value for field " + t.name + " should be one of " + t.choices + ".")
     }
   } else {
     fv.value = value;
