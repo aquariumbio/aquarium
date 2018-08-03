@@ -20,6 +20,7 @@ group :development do
   gem 'binding_of_caller'
   gem 'meta_request'
   gem 'fakes3'
+  gem 'rspec-rails'
 end
 
 group :production do
@@ -32,6 +33,8 @@ group :assets do
   gem 'closure-compiler'
   gem 'bcrypt-ruby', '~> 3.1.2'
 end
+
+gem 'paperclip'
 
 gem 'rails-patch-json-encode'
 gem 'oj'
