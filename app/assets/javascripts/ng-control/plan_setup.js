@@ -102,7 +102,7 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
     .then(() => aq.url_params().plan_id ? load_plan_from_url() : null)
     .then(() => $scope.ready = true)
     .then(() => $scope.$apply())
-    .then(() => console.log(`Completed initialization in ${new Date() - start_time} ms`) )
+    .then(() => console.log(`Completed initialization in ${new Date() - start_time} ms`) )    
      
   // END INITIALIZATION /////////////////////////////////////////////////////////////////////////
 
