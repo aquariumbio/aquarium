@@ -316,8 +316,9 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
         if ( $scope.current_draggable ) {
           if ( $scope.current_draggable.record_type == 'Module' || 
                $scope.current_draggable.record_type == 'ModuleIO' || 
-               $scope.current_draggable.status == 'planning' ) {
-            $scope.delete();
+               $scope.current_draggable.status == 'planning' ||
+               $scope.current_draggable.record_type == "TextBox" ) {
+            $scope.delete();               
           }
         }
         if ( $scope.current_wire ) {
