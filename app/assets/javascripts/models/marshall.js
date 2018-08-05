@@ -115,7 +115,7 @@ AQ.Operation.record_methods.marshall = function() {
 
       op.assign_sample(fv, AQ.to_sample_identifier(fv.child_sample_id));
 
-    } else if ( fv.field_type.routing ) {
+    } else if ( fv.field_type.routing && !op.routing[fv.field_type.routing] ) {
 
       op.routing[fv.field_type.routing] = "";
       
