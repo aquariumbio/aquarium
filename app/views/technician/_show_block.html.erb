@@ -198,8 +198,30 @@
   </div>
 
   <div class='content' layout-fill layout="row" layout-align="center center">
+      <b>Operations have finished</b>
+  </div>
+
+  <div class='content' layout-fill layout="row" layout-align="center center">
+    <table>
+      <tr>
+        <th style="width: 100px">operation</th>
+        <th style="width: 100px">status</th>
+      </tr>
+      <tr ng-repeat="op in job.operations">
+
+            <td>{{op.id}}</td>
+
+            <td>{{op.status}}</td>
+      </tr>
+    </table>
+  </div>
+
+  <br>
+
+  <div class='content' layout-fill layout="row" layout-align="center center">
     <b>Thank you <a href="/users/{{job.user.id}}">{{job.user.name}}!</a></b>
   </div>
+
   <hr>
 
   <md-content class='md-white user-op-stats'>
@@ -234,5 +256,9 @@
 <script type="text/ng-template" id="aborted">
   <div class='content'>
     <h2 class="md-display-2 title">This job was canceled</h2>
+  </div>
+
+  <div class='content content-aborted'>
+    <b>All operations errored – report to a lab manager for further instructions</b>
   </div>
 </script>
