@@ -202,44 +202,37 @@
   </div>
 
   <div class='content' layout-fill layout="row" layout-align="center center">
-    <table>
-      <tr>
-        <th style="width: 100px">operation</th>
-        <th style="width: 100px">status</th>
-      </tr>
-      <tr ng-repeat="op in job.operations">
-
-            <td>{{op.id}}</td>
-
-            <td>{{op.status}}</td>
-      </tr>
-    </table>
-  </div>
-
-  <br>
-
-  <div class='content' layout-fill layout="row" layout-align="center center">
     <b>Thank you <a href="/users/{{job.user.id}}">{{job.user.name}}!</a></b>
   </div>
 
-  <hr>
+  <div layout="row">
 
-  <md-content class='md-white user-op-stats'>
-      <div class="user-op-stat"?>
-        <div class="name">Operation Type</div>
-        <div class="done" style="width: 50px">Done</div>
-        <div class="error" style="width: 50px">Error</div>
-        <div class="number">Total Operations Performed</div>
-      </div>
-      <hr>
-      <div class="user-op-stat" ng-repeat="stat in job.user.stats">
-        <div class="name" ng-if="stat.name == job.operations[0].operation_type.name">{{stat.name}}</div>
-        <div class="name-subdued" ng-if="stat.name != job.operations[0].operation_type.name">{{stat.name}}</div>        
-        <div class="done" style="width: {{stat.done}}px">&nbsp;</div>
-        <div class="error" style="width: {{stat.error}}px">&nbsp;</div>
-        <div class="number">{{stat.count}}</div>
-      </div>
-  </md-content>  
+    <div flex=25 class='user-op-stats'>
+      <h2 class="md-title">Operation Outcomes</h2>
+      <oplist-short operationtype="job.operations[0].operation_type"
+              operations="job.operations"
+              status="running"
+              short="true"
+              brief="true"
+              jobid="job.id">
+      </oplist-short>
+    </div>  
+
+    <div flex=5></div>
+
+    <div flex=70 class='user-op-stats'>
+          <h2 class="md-title">Statistics</h2>
+          <p ng-if=!job.user.stats>Checking for statistics ...</p>
+          <div class="user-op-stat" ng-repeat="stat in job.user.stats">
+            <div class="name" ng-if="stat.name == job.operations[0].operation_type.name">{{stat.name}}</div>
+            <div class="name-subdued" ng-if="stat.name != job.operations[0].operation_type.name">{{stat.name}}</div>  
+            <div class="done" style="width: {{stat.done/2}}px">&nbsp;</div>
+            <div class="error" style="width: {{stat.error/2}}px">&nbsp;</div>
+            <div class="number">{{stat.count}}</div>
+          </div>
+    </div> 
+
+  </div>
 
 </script>
 
