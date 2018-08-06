@@ -4,6 +4,8 @@
 
     <span class="md-title" ng-if="plan">{{plan.name}}</span>
 
+    <p class="small-link">{{plan.link}}</p>
+
     <% if current_user && current_user.is_admin %>
       <div ng-if="current_user.id != <%= current_user.id %>">
         <span class='md-body other-user-alert'>

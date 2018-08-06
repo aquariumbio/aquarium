@@ -811,3 +811,8 @@ AQ.Plan.record_methods.step_operations = function() {
   console.log("AQ.Plan.step()")
   return AQ.get("/operations/step?plan_id=" + this.id);
 }
+
+AQ.Plan.record_getters.link = function() {
+  let plan = this;
+  return window.location.href.split("#")[0] + "?plan_id=" + plan.id;
+}
