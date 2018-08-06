@@ -5,7 +5,7 @@ class ObjectType < ActiveRecord::Base
 
   attr_accessible :cleanup, :data, :description, :handler, :max, :min, :name, :safety,
                   :vendor, :unit, :image, :cost, :release_method, :release_description,
-                  :sample_type_id, :created_at, :prefix
+                  :sample_type_id, :created_at, :prefix, :rows, :columns
 
   belongs_to :sample_type
 
