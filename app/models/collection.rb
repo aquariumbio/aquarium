@@ -331,7 +331,7 @@ class Collection < Item
     self.datum = d.merge(matrix: m)
   end
 
-  # With no options, returns the indices of the next element of the collections, skipping to the next column or row if necessary.
+  # With no options, returns the indices of the next element of the collection, skipping to the next column or row if necessary.
   # With the option skip_non_empty: true, returns the next non empty indices. Returns nil if [r,c] is the last element of the collection
   #
   # @param r [Integer] Row
