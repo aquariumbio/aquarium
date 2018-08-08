@@ -11,6 +11,8 @@ module Krill
       false
     end
 
+    # Show instructions to technician
+    # @see ShowBlock
     def show
 
       page = ShowBlock.new(self).run(&Proc.new)

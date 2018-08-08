@@ -50,6 +50,8 @@ module Krill
       Item.make({ quantity: 1, inuse: 0 }, sample: s, object_type: ot)
     end
 
+    # Same as Collection.new_collection
+    #
     # @see Collection.new_collection
     def new_collection(name)
       Collection.new_collection name
@@ -62,6 +64,8 @@ module Krill
       Collection.find id
     end
 
+    # Same as Collection.spread
+    #
     # @see Collection.spread
     def spread(samples, name, options = {})
       opts = { reverse: false }.merge(options)
