@@ -158,6 +158,8 @@
         </div>
         <div ng-if="current_draggable && current_draggable.record_type == 'TextBox'">
           <textarea class="text-box-editor" ng-model="current_draggable.markdown"></textarea>
+          <!-- Hack to angular to rerender markdown to re-render on kepresses -->
+          <div style="width: 0; height: 0; color: white">{{current_draggable.markdown}}</div> 
         </div>        
       </inner>
     </div>   

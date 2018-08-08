@@ -7,6 +7,8 @@ AQ.Sample.record_getters.identifier = function() {
 
 AQ.Sample.getter(AQ.User,"user");
 
+AQ.Sample.getter(AQ.SampleType,"sample_type");
+
 AQ.Sample.record_methods.upgrade = function() {
 
   let sample = this;

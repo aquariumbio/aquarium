@@ -8,13 +8,15 @@
       <h1 class="md-subhead">{{current_fv.role|capitalize}} name: {{current_fv.name}}</h1>
     </div>
 
+      <p layout-padding style="color: orange; font-weight: bold" ng-if="current_fv.message">{{current_fv.message}}</p>
+
       <md-subheader class="md-no-sticky" ng-if="current_fv.is_sample">
         Sample Type / Container Type
       </md-subheader>
 
       <md-list class='md-compact-list' ng-if="current_fv.is_sample">
 
-        <md-list-item ng-repeat="aft in current_fv.field_type.allowable_field_types">
+        <md-list-item ng-repeat="aft in current_fv.field_type.allowable_field_types" style="font-size: 14px">
 
           <md-checkbox
             ng-click="set_allowable_field_type(aft)"
@@ -23,9 +25,11 @@
             aria-label="Item">
           </md-checkbox>
 
-          <p style="height: 28px">
-            {{aft.sample_type_id ? aft.sample_type.name : 'No Sample Type'}} /         
-            {{aft.object_type_id ? aft.object_type.name : 'No Container'}}
+          <p style="height: 28px; overflow: hidden">
+            <span style="font-weight: normal">
+              {{aft.sample_type_id ? aft.sample_type.name : 'No Sample Type'}} /         
+              {{aft.object_type_id ? aft.object_type.name : 'No Container'}}
+            </span>
           </p>
 
         </md-list-item>

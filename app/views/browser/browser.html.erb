@@ -32,6 +32,23 @@
 <%= content_for :controller do %>browserCtrl as browser<% end %>
 
 <%= content_for :sidebar do %>
+
+  <% unless @conflicts.empty? %>
+
+    <md-subheader class="md-title md-warn">
+      Location wizard conflict(s) found!
+      Report this issue to an Aquarium Admin ASAP.
+    </md-subheader>
+    <ul>
+      <% @conflicts.each do |c| %>
+        <li>
+          <%= link_to c[:wizard].name, wizard_path(c[:wizard]) %>: <%= c[:conflicts].join(", ") %>
+        </li>
+      <% end %>
+    </ul>
+
+  <% end %>
+
   <%= render partial: "search_control" %>    
 <% end %>
 

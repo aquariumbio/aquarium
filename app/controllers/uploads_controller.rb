@@ -5,7 +5,7 @@ class UploadsController < ApplicationController
 
   def show
 
-    if params[:type] == "operation" || params[:type] == 'item'
+    if params[:type] == "operation" || params[:type] == 'item' || params[:type] == 'plan'
 
       das = DataAssociation.where(parent_class: params[:type].capitalize, parent_id: params[:id], key: params[:key])
 

@@ -51,7 +51,9 @@
       {{op.status}}
     </text>
 
-    <text ng-attr-x="{{0}}" y="-4" class='op-cost'>
+    <text ng-attr-x="{{0}}" y="-4" class='op-cost' ng-if="op.cost != null">
+      {{op.cost_so_far|currency}}
+      <tspan ng-if="op.cost_so_far != null">/</tspan>
       {{op.cost|currency}}
     </text>
 
@@ -186,7 +188,6 @@
               ng-mousedown="op.edit_status = false">&times;</text>      
       </g>  
     </g>       
-
 
   </g>  
 

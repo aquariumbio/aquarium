@@ -6,10 +6,10 @@
            ng-show="operations.length > 0">
 
       <tr>
-        <th style="width: 12%">Id</th>
-        <th style="width: 12%">Plan</th>
+        <th style="width: 14%">Id</th>
+        <th style="width: 14%">Plan</th>
         <th style="width: 20%">User</th>
-        <th style="width: 56%">I/O</th>
+        <th style="width: 52%">I/O</th>
       </tr>
 
       <tr ng-repeat="op in operations">
@@ -18,7 +18,7 @@
 
         <td>
           <a ng-repeat="plan in op.plans" 
-             href="/launcher?plan_id={{plan.id}}" 
+             href="/plans?plan_id={{plan.id}}" 
              target="plan {{plan.id}}">{{plan.id}}{{$last ? '' : ', '}}</a>
           <span ng-if="op.plans.length == 0">n/a</span>
         </td>

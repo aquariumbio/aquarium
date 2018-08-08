@@ -1,16 +1,14 @@
 ---
 title: ShowBlock Documentation
-layout: default
+layout: docs
 ---
+
 # ShowBlock Documentation
 
 This is the documentation for using `ShowBlocks` to display instructions on the technician view, for use in writing effective Aquarium protocols.
 
-This page will give examples and instructions on how to get started using `ShowBlocks`, but it is not a comprehensive reference for all `ShowBlock` related methods. 
+This page will give examples and instructions on how to get started using `ShowBlocks`, but it is not a comprehensive reference for all `ShowBlock` related methods.
 See the [API documentation]({{ site.baseurl }}{% link /api/index.html %}) for more details on the functions that Krill provides.
-
-If you haven't already, visit the [protocol developer documentation]({{ site.baseurl }}{% link _docs/protocol_developer/index.md %}) for information about getting started.
-In particular, for some good practice using `ShowBlocks` in a realistic protocol follow along with the []
 
 ---
 
@@ -34,8 +32,8 @@ In particular, for some good practice using `ShowBlocks` in a realistic protocol
 ```ruby
 class Protocol
   def main
-    show do 
-        note "Hello World" 
+    show do
+        note "Hello World"
     end
   end
 end
@@ -67,13 +65,13 @@ The above code produces a protocol with two steps
 
 You may have noticed that naked Strings cannot be placed directly into `ShowBlocks`. Any object intended for display to the technician must be in the block as an argument of a `ShowBlock` instance method.
 `note` is such an instance method. It takes a String and displays it directly on the technician view slide as a single line.
-`title` is another which does the same thing, except the String will be displayed as a header. 
+`title` is another which does the same thing, except the String will be displayed as a header.
 
 Many Show blocks are composed mostly of a single `title` call, and one or more `note` calls that liberally use string insertion. For instance, here is a show block that asks the technician to grab some amount of 1.5mL tubes
 
 ```ruby
-    show do 
-      title "Grab 1.5 mL tubes"   
+    show do
+      title "Grab 1.5 mL tubes"
       note "Grab #{operations.length} 1.5 mL tubes"
     end
 ```
@@ -91,21 +89,21 @@ The most commonly used `ShowBlock` methods are the following:
 - `title` - accepts a String, which is used as the header for this slide
 - `note` - accepts a String and appends it as a new line on the slide
 - `check` - accepts a String and appends it as a new line on the slide with a checkbox next to it
-- `warning`- accepts a String and appends it as a new line on the slide, bold and highlighted in yellow 
+- `warning`- accepts a String and appends it as a new line on the slide, bold and highlighted in yellow
 - `image` - accepts a filepath to a valid image, and displays it on the slide
-- `table` - accepts either a 2d array or a `Table` object, and displays it on the slide. See the [Table Documentation]({{ site.baseurl }}{% link _docs/protocol_developer/table.md %}) for more details on how to generate and display `Tables` to the technician. 
+- `table` - accepts either a 2d array or a `Table` object, and displays it on the slide. See the [Table Documentation]({{ site.baseurl }}{% link _docs/protocol_developer/table.md %}) for more details on how to generate and display `Tables` to the technician.
 - `get` - ask the technician for input which will be usable throughout the rest of the protocol. See the [Getting Technician Input Section](#getting_technician_input) for more details.
 
 ## Dynamic ShowBlocks
 
 As already mentioned, we can achieve somewhat dynamic `ShowBlocks` by inserting ruby expressions into the Strings displayed by `note` using the ruby String insertion `#{}`.
-It is also possible to use complex ruby code within the code blocks of the `show` method to programatically decide how `ShowBlock` methods will be executed. 
+It is also possible to use complex ruby code within the code blocks of the `show` method to programatically decide how `ShowBlock` methods will be executed.
 
 For instance, we could modify our earlier show block to give different instructions depending on the amount of `Operations` the protocol is run with
 
 ```ruby
-    show do 
-      title "Grab 1.5 mL tubes"   
+    show do
+      title "Grab 1.5 mL tubes"
       if operations.length > 50
         note "Go to the storeroom and bring back #{operations.length} 1.5 mL tubes to bench"
       end
@@ -118,8 +116,8 @@ Running this on the technician view, we would see an additional line of instruct
 We can achieve powerful emergent behaviour by using ruby code inside `ShowBlocks`. Another example, using loops
 
 ```ruby
-    show do 
-      title "Grab 1.5 mL tubes"   
+    show do
+      title "Grab 1.5 mL tubes"
       operations.each do |op|
         check "Grab a tube for operation: #{op.id}"
       end
@@ -140,7 +138,7 @@ There are two `ShowBlock` methods that are used to retrieve input from the techn
 show do
     title "Please Respond"
     note "What is your first name?"
-    get "text", var: :tech_name 
+    get "text", var: :tech_name
 end
 ```
 
@@ -148,14 +146,13 @@ This would display the following slide to the technician
 
 ![User Input Example]({{ site.baseurl }}{% link _docs/protocol_developer/images/show_images/6_input_block-1.png %})
 
-
 We can customize the textbox further with the `label:` and `default:` options
 
 ```ruby
 show do
     title "Please Respond"
     note "What is your first name?"
-    get "text", var: :tech_name, label: "Enter name", default: "Joe Schmo" 
+    get "text", var: :tech_name, label: "Enter name", default: "Joe Schmo"
 end
 ```
 
@@ -171,7 +168,7 @@ In order to access the name entered by the technician, we capture ShowResponse i
 responses = show do
     title "Please Respond"
     note "What is your first name?"
-    get "text", var: :tech_name, label: "Enter name", default: "Joe Schmo" 
+    get "text", var: :tech_name, label: "Enter name", default: "Joe Schmo"
 end
 
 responses.get_response(:tech_name) #=> "Joe Schmo"
@@ -184,7 +181,7 @@ _Example from `Cloning/Check Plate`_
 ```ruby
 responses = show do
     title "Report Plate status"
-    
+
     operations.each do |op|
         plate = op.input("Plate").item
         select ["normal", "contamination", "lawn"], var: "status-#{plate.id}", label: "For plate #{plate}, choose whether there is contamination, a lawn, or whether it's normal."
@@ -211,6 +208,6 @@ The `ShowResponse` also can give the timestamp of when the `ShowBlock` was shown
 
 ```ruby
 responses.timestamp #=> <current time in seconds since 1970>
-``` 
+```
 
-Another convienent way to collect information relating to each `Operation` in an  `OperationList` is to accept technician responses through a input `Table` on the `OperationsList`. See the [Table Documentation on getting User Input]({{ site.basename }}{% link _docs/protocol_developer/table.md %}#accepting-technician-input-through-tables) for more details.
+Another convienent way to collect information relating to each `Operation` in an `OperationList` is to accept technician responses through a input `Table` on the `OperationsList`. See the [Table Documentation on getting User Input]({{ site.basename }}{% link _docs/protocol_developer/table.md %}#accepting-technician-input-through-tables) for more details.

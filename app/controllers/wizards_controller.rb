@@ -7,6 +7,7 @@ class WizardsController < ApplicationController
   # GET /wizards.json
   def index
     @wizards = Wizard.all
+    @conflicts = Wizard.conflicts
 
     respond_to do |format|
       format.html { render layout: 'aq2' }
@@ -21,6 +22,7 @@ class WizardsController < ApplicationController
     @wizard = Wizard.find(params[:id])
     @boxes = @wizard.boxes
     @object_types = ObjectType.where(prefix: @wizard.name)
+    @conflicts = @wizard.conflicts
 
     @selected_box = if params[:box]
                       params[:box]

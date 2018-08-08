@@ -64,9 +64,10 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
 
     return AQ.Plan.load(aq.url_params().plan_id)
       .then(plan => {
-        $scope.plan = plan;       
+        $scope.plan = plan;     
         choose_folder(plan);
-        $window.history.replaceState(null, document.title, "/plans");         
+        $window.history.replaceState(null, document.title, "/plans");   
+        $scope.$apply();
       })
      .then(() => AQ.User.find($scope.plan.user_id))
      .then(user => $scope.current_user = user)
@@ -101,7 +102,7 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
     .then(() => aq.url_params().plan_id ? load_plan_from_url() : null)
     .then(() => $scope.ready = true)
     .then(() => $scope.$apply())
-    .then(() => console.log(`Completed initialization in ${new Date() - start_time} ms`) )
+    .then(() => console.log(`Completed initialization in ${new Date() - start_time} ms`) )    
      
   // END INITIALIZATION /////////////////////////////////////////////////////////////////////////
 

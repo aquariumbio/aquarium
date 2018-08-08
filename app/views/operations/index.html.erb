@@ -39,8 +39,9 @@
 
 <% end %>
 
-<% if current_user && current_user.is_admin %>
-  <%= content_for :action1 do %>
+<%= content_for :action1 do %>
+  <% if current_user && current_user.is_admin %>
+
     <div ng-if=" !current.job_report">
       <md-button aria-label="Schedule"  class='md-raised'
         ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
@@ -54,11 +55,14 @@
         Retry
       </md-button>
     </div>
+
   <% end %>
+
+  <md-button ng-if="current.job_report" ng-click="decrement_date()">PREV</md-button> 
 <% end %>
 
-<% if current_user && current_user.is_admin %>
-  <%= content_for :action2 do %>
+<%= content_for :action2 do %>
+  <% if current_user && current_user.is_admin %>
     <div ng-if=" !current.job_report">  
       <md-button aria-label="Click"  class='md-raised'
         ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
@@ -72,10 +76,13 @@
       </md-button>  
     </div>
   <% end %>
+
+  <md-button ng-if="current.job_report" ng-click="increment_date()">NEXT</md-button> 
+
 <% end %>
 
-<% if current_user && current_user.is_admin %>
-  <%= content_for :action3 do %>
+<%= content_for :action3 do %>
+  <% if current_user && current_user.is_admin %>
     <div ng-if=" !current.job_report">  
       <md-button aria-label="Click" class='md-raised'
         ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
@@ -91,8 +98,8 @@
   <% end %>
 <% end %>
 
-<% if current_user && current_user.is_admin %>
-  <%= content_for :action4 do %>
+<%= content_for :action4 do %>
+  <% if current_user && current_user.is_admin %>
     <div ng-if=" !current.job_report">  
       <md-button class="md-raised md-primary" ng-click="step_all()" ng-disabled="current.stepping">
         <span ng-if="!current.stepping">Step All</span>

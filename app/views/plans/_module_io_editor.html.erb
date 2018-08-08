@@ -1,10 +1,9 @@
 
 <!-- OUTPUTS -->
 
-<div ng-if="plan.status == 'planning'"
-     ng-repeat="output in current_draggable.output track by $index">
+<div ng-repeat="output in current_draggable.output track by $index">
 
-  <div ng-if="output.origin.io"
+  <div ng-if="output.origin.op.status == 'planning' && output.origin.io"
        class="io-container">
 
        <field-value-form 
@@ -17,14 +16,22 @@
             setiomethod="set_current_io"></field-value-form>
   </div>
 
+  <div ng-if="output.origin.op.status != 'planning' && output.origin.io"
+       layout="row"
+       ng-include="'io_row'"
+       ng-repeat="fv in [output.origin.io]"> <!-- note: ng-repeat hack to pass parameter to ng-include -->
+  </div>
+
 </div>
 
 <!-- INPUTS -->
 
-<div ng-if="plan.status == 'planning'"
+<div 
      ng-repeat="input in current_draggable.input track by $index">
 
-  <div ng-if="input.destinations.length > 0 && input.destinations[0].io.field_type.ftype == 'sample'" 
+  <div ng-if="destinations_all_planning(input) &&
+              input.destinations.length > 0 && 
+              input.destinations[0].io.field_type.ftype == 'sample'" 
        class="io-container">
 
        <field-value-form 
@@ -38,14 +45,23 @@
 
   </div>
 
+  <div ng-if="!destinations_all_planning(input) &&
+              input.destinations.length > 0 && 
+              input.destinations[0].io.field_type.ftype == 'sample'" 
+              layout="row"
+              ng-include="'io_row'"
+              ng-repeat="fv in [input.destinations[0].io]"> <!-- note: ng-repeat hack to pass parameter to ng-include -->
+  </div>
+
   <div ng-if="input.destinations.length > 0 && input.destinations[0].io.field_type.ftype != 'sample'" 
-       class="io-container">
+       class="io-container"
+       layout="row">
 
     <parameter-form cfv="input.destinations[0].io"
                     io="input"
                     first="$first"
-                    setiomethod="set_current_io"></parameter-form>
-    
+                    setiomethod="set_current_io"></parameter-form> 
+
   </div>  
 
 </div>

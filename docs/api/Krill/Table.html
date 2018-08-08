@@ -162,7 +162,31 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'><p>Append a column to the table with a list of values.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_response_column-instance_method" title="#add_response_column (instance method)">#<strong>add_response_column</strong>(name, defaults, opts = {})  &#x21d2; Table </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Append a column to the table which accepts user input Response data is stored under the key <code>table_input</code> in the data hash returned by <code>show</code> Note: data hash may not get properly populated in the protocol tester.</p>
+</div></span>
   
 </li>
 
@@ -368,7 +392,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'><p>Create a table object, which makes making tables for calls to  show easier.</p>
+    <span class="summary_desc"><div class='inline'><p>Create a table object, which makes making tables for calls to show easier.</p>
 </div></span>
   
 </li>
@@ -460,7 +484,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p>Create a table object, which makes making tables for calls to 
+    <p>Create a table object, which makes making tables for calls to
 show easier.</p>
 
 
@@ -496,25 +520,25 @@ show easier.</p>
       <pre class="lines">
 
 
-26
-27
 28
 29
 30
 31
 32
-33</pre>
+33
+34
+35</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 26</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 28</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span> <span class='id identifier rubyid_columns'>columns</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_columns'>columns</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='ivar'>@columns</span> <span class='op'>=</span> <span class='id identifier rubyid_columns'>columns</span>
   <span class='ivar'>@selection</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
   <span class='ivar'>@rows</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
   <span class='ivar'>@choice</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
   <span class='ivar'>@from</span> <span class='op'>=</span> <span class='int'>0</span>
-  <span class='ivar'>@to</span> <span class='op'>=</span> <span class='int'>100000</span>
+  <span class='ivar'>@to</span> <span class='op'>=</span> <span class='int'>100_000</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -565,23 +589,23 @@ show easier.</p>
       <pre class="lines">
 
 
-141
-142
-143
-144
-145
-146
-147
-148
-149</pre>
+173
+174
+175
+176
+177
+178
+179
+180
+181</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 141</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 173</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_method_missing'>method_missing</span> <span class='id identifier rubyid_m'>m</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_method_missing'>method_missing</span><span class='lparen'>(</span><span class='id identifier rubyid_m'>m</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
 
   <span class='kw'>if</span> <span class='ivar'>@columns</span><span class='lbracket'>[</span><span class='id identifier rubyid_m'>m</span><span class='rbracket'>]</span>
-    <span class='id identifier rubyid_set'>set</span><span class='lparen'>(</span><span class='id identifier rubyid_m'>m</span><span class='comma'>,</span><span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_set'>set</span><span class='lparen'>(</span><span class='id identifier rubyid_m'>m</span><span class='comma'>,</span> <span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='kw'>else</span>
     <span class='kw'>super</span>
   <span class='kw'>end</span>
@@ -610,12 +634,47 @@ show easier.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p>Append a column to the table with a list of values</p>
+
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>name</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>the heading of this column</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>values</span>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>the values of the cells of this column</p>
+</div>
+      
+    </li>
+  
+</ul>
+
 
 </div><table class="source_code">
   <tr>
@@ -623,25 +682,195 @@ show easier.</p>
       <pre class="lines">
 
 
-125
-126
-127
-128
-129
-130
-131
-132</pre>
+132
+133
+134
+135
+136
+137
+138
+139</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 125</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 132</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_add_column'>add_column</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_values'>values</span>
   <span class='id identifier rubyid_column'>column</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='comma'>,</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
+  <span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='comma'>,</span> <span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
     <span class='ivar'>@rows</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
     <span class='ivar'>@rows</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_v'>v</span>
   <span class='kw'>end</span>
   <span class='kw'>self</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="add_response_column-instance_method">
+  
+    #<strong>add_response_column</strong>(name, defaults, opts = {})  &#x21d2; <tt><span class='object_link'><a href="" title="Krill::Table (class)">Table</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Append a column to the table which accepts user input
+Response data is stored under the key <code>table_input</code> in the data hash returned by <code>show</code>
+Note: data hash may not get properly populated in the protocol tester</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>name</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>the heading of this column</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>defaults</span>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>the default values of the cells of this column</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>opts</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>additional options</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>key</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>a customizable set of options</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>type</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>a customizable set of options</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    
+    
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="" title="Krill::Table (class)">Table</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>The table, can be chained</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 151</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_add_response_column'>add_response_column</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_defaults'>defaults</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_default_opts'>default_opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='label'>key:</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>number</span><span class='tstring_end'>&#39;</span></span><span class='rbrace'>}</span>
+  <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span> <span class='id identifier rubyid_default_opts'>default_opts</span>
+  <span class='comment'># Although we are creating an input table that is not associated to an operationslist
+</span>  <span class='comment'># we rely on the operationslist table input machinery (in operations_list_input_table)
+</span>  <span class='comment'># which requires an opid field so data can be automatically placed in the op.temporary hash
+</span>  <span class='comment'># of each associated op as a convienence.
+</span>  <span class='comment'># Putting unique negative numbers here will allow that the ShowResponse still will be populated with values
+</span>  <span class='comment'># even though there are no op.temporary hashes to fill (since no operations have negative ids)
+</span>  <span class='id identifier rubyid_values'>values</span> <span class='op'>=</span> <span class='id identifier rubyid_defaults'>defaults</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_default'>default</span><span class='comma'>,</span> <span class='id identifier rubyid_idx'>idx</span><span class='op'>|</span>
+    <span class='lbrace'>{</span> <span class='label'>type:</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:type</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>operation_id:</span> <span class='lparen'>(</span><span class='op'>-</span><span class='int'>1</span> <span class='op'>*</span> <span class='id identifier rubyid_idx'>idx</span> <span class='op'>-</span> <span class='int'>1</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='label'>key:</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:key</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>default:</span> <span class='id identifier rubyid_default'>default</span> <span class='op'>||</span> <span class='int'>0</span><span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_add_column'>add_column</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_values'>values</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -690,13 +919,13 @@ show easier.</p>
       <pre class="lines">
 
 
-81
-82
 83
-84</pre>
+84
+85
+86</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 81</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 83</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_all'>all</span>
   <span class='ivar'>@choice</span> <span class='op'>=</span> <span class='ivar'>@columns</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span>
@@ -749,14 +978,14 @@ show easier.</p>
       <pre class="lines">
 
 
-73
-74
 75
 76
-77</pre>
+77
+78
+79</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 73</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 75</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_append'>append</span>
   <span class='ivar'>@rows</span> <span class='op'>&lt;&lt;</span> <span class='ivar'>@selection</span>
@@ -829,15 +1058,15 @@ show easier.</p>
       <pre class="lines">
 
 
-89
-90
 91
-92</pre>
+92
+93
+94</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 89</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 91</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_choose'>choose</span> <span class='id identifier rubyid_columns'>columns</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_choose'>choose</span><span class='lparen'>(</span><span class='id identifier rubyid_columns'>columns</span><span class='rparen'>)</span>
   <span class='ivar'>@choice</span> <span class='op'>=</span> <span class='id identifier rubyid_columns'>columns</span>
   <span class='kw'>self</span>
 <span class='kw'>end</span></pre>
@@ -888,20 +1117,20 @@ show easier.</p>
       <pre class="lines">
 
 
-64
-65
 66
 67
 68
-69</pre>
+69
+70
+71</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 64</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 66</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_clear'>clear</span>
   <span class='ivar'>@selection</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
   <span class='ivar'>@from</span> <span class='op'>=</span> <span class='int'>0</span>
-  <span class='ivar'>@to</span> <span class='op'>=</span> <span class='int'>100000</span>
+  <span class='ivar'>@to</span> <span class='op'>=</span> <span class='int'>100_000</span>
   <span class='kw'>self</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -985,15 +1214,15 @@ show easier.</p>
       <pre class="lines">
 
 
-40
-41
 42
-43</pre>
+43
+44
+45</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 40</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 42</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_column'>column</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_heading'>heading</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_column'>column</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_heading'>heading</span><span class='rparen'>)</span>
   <span class='ivar'>@columns</span><span class='lbracket'>[</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_heading'>heading</span>
   <span class='kw'>self</span>
 <span class='kw'>end</span></pre>
@@ -1063,16 +1292,16 @@ show easier.</p>
       <pre class="lines">
 
 
-97
-98
 99
 100
-101</pre>
+101
+102
+103</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 97</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 99</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_from'>from</span> <span class='id identifier rubyid_i'>i</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_from'>from</span><span class='lparen'>(</span><span class='id identifier rubyid_i'>i</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Table: from(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_i'>i</span><span class='embexpr_end'>}</span><span class='tstring_content'>) is out of range</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_i'>i</span> <span class='op'>&lt;</span> <span class='ivar'>@rows</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
   <span class='ivar'>@from</span> <span class='op'>=</span> <span class='id identifier rubyid_i'>i</span>
   <span class='kw'>self</span>
@@ -1119,14 +1348,14 @@ show easier.</p>
       <pre class="lines">
 
 
-49
-50
-51</pre>
+51
+52
+53</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 49</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 51</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_has_column?'>has_column?</span> <span class='id identifier rubyid_key'>key</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_has_column?'>has_column?</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='ivar'>@columns</span><span class='lbracket'>[</span><span class='id identifier rubyid_key'>key</span><span class='rbracket'>]</span> <span class='op'>!=</span> <span class='kw'>nil</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -1171,12 +1400,12 @@ show easier.</p>
       <pre class="lines">
 
 
-45
-46
-47</pre>
+47
+48
+49</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 45</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 47</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_columns?'>has_columns?</span>
   <span class='op'>!</span><span class='ivar'>@columns</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
@@ -1228,8 +1457,6 @@ show easier.</p>
       <pre class="lines">
 
 
-113
-114
 115
 116
 117
@@ -1238,20 +1465,22 @@ show easier.</p>
 120
 121
 122
-123</pre>
+123
+124
+125</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 113</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 115</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_render'>render</span>
 
   <span class='id identifier rubyid_heading'>heading</span> <span class='op'>=</span> <span class='ivar'>@choice</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span> <span class='ivar'>@columns</span><span class='lbracket'>[</span><span class='id identifier rubyid_c'>c</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
 
-  <span class='id identifier rubyid_body'>body</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='ivar'>@from</span><span class='op'>..</span><span class='lbracket'>[</span><span class='ivar'>@to</span><span class='comma'>,</span><span class='ivar'>@rows</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_min'>min</span><span class='op'>-</span><span class='int'>1</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
+  <span class='id identifier rubyid_body'>body</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='ivar'>@from</span><span class='op'>..</span><span class='lbracket'>[</span><span class='ivar'>@to</span><span class='comma'>,</span> <span class='ivar'>@rows</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_min'>min</span> <span class='op'>-</span> <span class='int'>1</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
     <span class='ivar'>@choice</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span> <span class='ivar'>@rows</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_c'>c</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
   <span class='kw'>end</span>
 
-  <span class='lbracket'>[</span> <span class='id identifier rubyid_heading'>heading</span> <span class='rbracket'>]</span> <span class='op'>+</span> <span class='id identifier rubyid_body'>body</span>
+  <span class='lbracket'>[</span><span class='id identifier rubyid_heading'>heading</span><span class='rbracket'>]</span> <span class='op'>+</span> <span class='id identifier rubyid_body'>body</span>
 
 <span class='kw'>end</span></pre>
     </td>
@@ -1318,13 +1547,13 @@ show easier.</p>
       <pre class="lines">
 
 
-57
-58
 59
-60</pre>
+60
+61
+62</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 57</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 59</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set'>set</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span>
   <span class='ivar'>@selection</span><span class='lbracket'>[</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_value'>value</span>   
@@ -1396,15 +1625,15 @@ show easier.</p>
       <pre class="lines">
 
 
-106
-107
 108
-109</pre>
+109
+110
+111</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 106</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/table.rb', line 108</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_to'>to</span> <span class='id identifier rubyid_i'>i</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_to'>to</span><span class='lparen'>(</span><span class='id identifier rubyid_i'>i</span><span class='rparen'>)</span>
   <span class='ivar'>@to</span> <span class='op'>=</span> <span class='id identifier rubyid_i'>i</span>
   <span class='kw'>self</span>
 <span class='kw'>end</span></pre>
@@ -1418,9 +1647,9 @@ show easier.</p>
 </div>
 
       <div id="footer">
-  Generated on Wed Jun 27 09:17:20 2018 by
+  Generated on Wed Jul 11 10:55:30 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.13 (ruby-2.2.0).
+  0.9.12 (ruby-2.2.0).
 </div>
 
     </div>

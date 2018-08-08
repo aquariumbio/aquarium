@@ -30,7 +30,9 @@
              <td class='name name-{{ft.ftype}}'><span ng-if="$first">{{ft.name}}:</span></td>
              <td class='modifer'></td>               
              <td class='value' ng-if="ft.ftype != 'url'">{{fv.value}}</td> 
-             <td class='value' ng-if="ft.ftype == 'url'"><a href='{{fv.value}}' class='url'>{{fv.value}}</a></td>                
+             <td class='value' ng-if="ft.ftype == 'url'">
+               <a href='{{fv.value}}' class='url' target="external-url">{{fv.value}}</a>
+             </td>                
            </tr>
 
            <tr ng-if="is_empty_array(sample,ft)">

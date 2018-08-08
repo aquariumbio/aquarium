@@ -29,8 +29,9 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
   }  
 
   function snap(obj) {
-    obj.x = Math.floor((obj.x+AQ.snap/2) / AQ.snap) * AQ.snap;
-    obj.y = Math.floor((obj.y+AQ.snap/2) / AQ.snap) * AQ.snap;      
+    let snap = AQ.snap / 2;
+    obj.x = Math.floor((obj.x+snap/2) / snap) * snap;
+    obj.y = Math.floor((obj.y+snap/2) / snap) * snap;      
   }
 
  $scope.multiselect = {};
@@ -316,8 +317,9 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
         if ( $scope.current_draggable ) {
           if ( $scope.current_draggable.record_type == 'Module' || 
                $scope.current_draggable.record_type == 'ModuleIO' || 
-               $scope.current_draggable.status == 'planning' ) {
-            $scope.delete();
+               $scope.current_draggable.status == 'planning' ||
+               $scope.current_draggable.record_type == "TextBox" ) {
+            $scope.delete();               
           }
         }
         if ( $scope.current_wire ) {

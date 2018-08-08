@@ -247,14 +247,14 @@
       <pre class="lines">
 
 
-34
-35
-36</pre>
+36
+37
+38</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/parameter.rb', line 34</span>
+      <pre class="code"><span class="info file"># File 'app/models/parameter.rb', line 36</span>
 
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_get'>get</span> <span class='id identifier rubyid_key'>key</span>
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_get'>get</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_get_string'>get_string</span> <span class='id identifier rubyid_key'>key</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -286,25 +286,25 @@
       <pre class="lines">
 
 
-14
-15
 16
 17
 18
 19
 20
 21
-22</pre>
+22
+23
+24</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/parameter.rb', line 14</span>
+      <pre class="code"><span class="info file"># File 'app/models/parameter.rb', line 16</span>
 
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_get_float'>get_float</span> <span class='id identifier rubyid_key'>key</span>
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_get_float'>get_float</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_p'>p</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Parameter (class)">Parameter</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_key'>find_by_key</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_p'>p</span>
     <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span>
   <span class='kw'>else</span>
-    <span class='id identifier rubyid_p'>p</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Parameter (class)">Parameter</a></span></span><span class='period'>.</span><span class='id identifier rubyid_make'><span class='object_link'><a href="#make-class_method" title="Parameter.make (method)">make</a></span></span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>0.0</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_p'>p</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Parameter (class)">Parameter</a></span></span><span class='period'>.</span><span class='id identifier rubyid_make'><span class='object_link'><a href="#make-class_method" title="Parameter.make (method)">make</a></span></span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>0.0</span><span class='tstring_end'>&#39;</span></span>
     <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
@@ -337,25 +337,25 @@
       <pre class="lines">
 
 
-24
-25
 26
 27
 28
 29
 30
 31
-32</pre>
+32
+33
+34</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/parameter.rb', line 24</span>
+      <pre class="code"><span class="info file"># File 'app/models/parameter.rb', line 26</span>
 
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_get_string'>get_string</span> <span class='id identifier rubyid_key'>key</span>
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_get_string'>get_string</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_p'>p</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Parameter (class)">Parameter</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_key'>find_by_key</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_p'>p</span>
     <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span>
   <span class='kw'>else</span>
-    <span class='id identifier rubyid_p'>p</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Parameter (class)">Parameter</a></span></span><span class='period'>.</span><span class='id identifier rubyid_make'><span class='object_link'><a href="#make-class_method" title="Parameter.make (method)">make</a></span></span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_p'>p</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Parameter (class)">Parameter</a></span></span><span class='period'>.</span><span class='id identifier rubyid_make'><span class='object_link'><a href="#make-class_method" title="Parameter.make (method)">make</a></span></span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span>
     <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
@@ -388,17 +388,17 @@
       <pre class="lines">
 
 
-8
-9
 10
 11
-12</pre>
+12
+13
+14</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/parameter.rb', line 8</span>
+      <pre class="code"><span class="info file"># File 'app/models/parameter.rb', line 10</span>
 
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_make'>make</span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span>
-  <span class='id identifier rubyid_p'>p</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Parameter (class)">Parameter</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='label'>key:</span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='label'>value:</span> <span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='label'>description:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Edit me</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_make'>make</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_p'>p</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Parameter (class)">Parameter</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='label'>key:</span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='label'>value:</span> <span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='label'>description:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Edit me</span><span class='tstring_end'>&#39;</span></span>
   <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
   <span class='id identifier rubyid_p'>p</span>
 <span class='kw'>end</span></pre>
@@ -412,9 +412,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Jun 27 09:17:18 2018 by
+  Generated on Wed Jul 11 10:55:29 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.13 (ruby-2.2.0).
+  0.9.12 (ruby-2.2.0).
 </div>
 
     </div>

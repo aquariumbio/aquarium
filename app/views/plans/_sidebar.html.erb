@@ -27,7 +27,7 @@
 
 <div ng-if="state.messages.length > 0" class="message">
   <ul class="message-list">
-    <li ng-repeat="message in state.messages">
+    <li ng-repeat="message in state.messages track by $index">
       {{message}}
     </li>
   </ul>
@@ -75,10 +75,26 @@
   <div ng-if="plan.saved && plan.valid() && nav.sidebar" ng-include="'launch_plan'"></div>
   <div ng-if="!plan.saved" layout-padding>This plan cannot be launched or extended because it has not been saved.</div>
   <div ng-if="plan.id && !plan.valid()" layout-padding>
-    This plan cannot be launched because it is not valid. All I/O should be defined (green), and all wires should be consistent (black).
-    Note that Aquarium does not currently check the validity of wires to and from modules, so they may appear black even if their source
-    and destination samples do not match. 
+    This plan cannot be launched because it is not valid or has no operations.
+    All I/O should be defined (green), and all wires should be consistent (black).
+    Note that Aquarium does not currently check the validity of wires to and from modules, 
+    so they may appear black even if their source and destination samples do not match. 
   </div>
+  <div ng-if="plan.id">
+
+    <hr>
+
+    <div ng-if="plan.data_associations">
+      <da record="plan" ng-if="plan.data_associations.length > 0" narrow=false></da>
+      <md-button class="md-raised md-medium" ng-click="plan.new_data_association()">Add Data</md-button>
+      <md-button class="md-raised md-medium"><upload record='plan'></upload></md-button>
+    </div>
+
+    <div ng-if="!plan.data_associations">    
+      Loading Data Associations
+    </div>
+
+  </div>    
 
 </div>
 

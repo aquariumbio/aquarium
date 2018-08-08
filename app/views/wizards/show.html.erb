@@ -20,6 +20,22 @@ end %>
 
 <%= content_for :sidebar do %>
 
+  <% unless @conflicts.empty? %>
+
+    <md-subheader class="md-title md-warn">
+      Conflicts Found!
+      Report this issue to an Aquarium Admin ASAP.
+    </md-subheader>
+    <ul>
+      <% @conflicts.each do |c| %>
+        <li>
+          <%= link_to @wizard.name, wizard_path(@wizard) %>: <%= @conflicts.join(", ") %>
+        </li>
+      <% end %>
+    </ul>
+
+  <% end %>
+
   <p id="notice"><%= notice %></p>
 
   <h2 class="md-title">Containers managed by <%= @wizard.name %></h2>

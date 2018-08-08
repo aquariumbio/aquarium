@@ -377,7 +377,20 @@
 
       }
 
+      $scope.decrement_date = function() {
+        $scope.current.job_report_date = new Date($scope.current.job_report_date);
+        $scope.current.job_report_date.setDate($scope.current.job_report_date.getDate()-1);
+        $scope.get_job_report();
+      }      
+
+      $scope.increment_date = function() {
+        $scope.current.job_report_date = new Date($scope.current.job_report_date);
+        $scope.current.job_report_date.setDate($scope.current.job_report_date.getDate()+1);
+        $scope.get_job_report();
+      }
+
       $scope.get_job_report = function() {
+        console.log($scope.current.job_report_date)
         $scope.current.job_report_object = new JobReport([], "waiting");
         AQ.http.get(`/jobs/report?date=${$scope.current.job_report_date.toString()}`).then(reponse => {
           $scope.current.job_report_object = new JobReport(reponse.data, "ready");

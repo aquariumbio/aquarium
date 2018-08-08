@@ -51,7 +51,9 @@ AQ.Operation.record_methods.marshall = function() {
   var ots = aq.where(AQ.operation_types, ot => ot.deployed && ot.id == op.operation_type_id);
 
   if ( ots.length != 1 ) {
-    add_designer_message("Operation " + op.id + " does not have a (deployed) operation type. Skipping.")
+    add_designer_message("Operation " + op.id + " does not have a (deployed) operation type. Not showing.")
+    add_designer_message("This plan uses obsolete operation definitions. " + 
+                         "Consider making a copy, which will make a fresh plan with no such problems.")    
     return null;
   } else {
     op.operation_type = ots[0];
@@ -84,9 +86,10 @@ AQ.Operation.record_methods.marshall = function() {
 
     if ( !ufv.field_type ) {
 
-      add_designer_message("Field type for " + ufv.role + " '" + ufv.name + "' of '" + op.operation_type.name + "'  is undefined. " + 
-            "This i/o has been dropped. " +
-            "The operation type may have changed since this plan was last saved and you probably should not trust this plan.")
+      add_designer_message("Field type for " + ufv.role + " '" + ufv.name + 
+                           "' of '" + op.operation_type.name + "'  is undefined. This i/o has been dropped. ");
+      add_designer_message("This plan uses obsolete operation definitions. " + 
+                           "Consider making a copy, which will make a fresh plan with no such problems.")          
 
     } else {
 
@@ -112,7 +115,7 @@ AQ.Operation.record_methods.marshall = function() {
 
       op.assign_sample(fv, AQ.to_sample_identifier(fv.child_sample_id));
 
-    } else if ( fv.field_type.routing ) {
+    } else if ( fv.field_type.routing && !op.routing[fv.field_type.routing] ) {
 
       op.routing[fv.field_type.routing] = "";
       

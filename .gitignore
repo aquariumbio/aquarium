@@ -19,11 +19,16 @@ Gemfile.lock
 # Ignore the actual docker-compose file
 docker-compose.yml
 
+# Ignore the copied version of development.rb that is created when the development-setup script replaces it 
+/config/environments/original-development.notrb
+
 # Ignore the actual database config file
 /config/database.yml
 
 # Igmore the installation specific configuration file
 /config/initializers/aquarium.rb
+/config/environments/development.rb
+/config/environments/original-development.notrb
 
 # Ignore the default SQLite database.
 /db/*.sqlite3
@@ -75,3 +80,6 @@ docs/.sass-cache/**
 
 
 Gemfile.lock
+
+# ignore vscode settings
+.vscode

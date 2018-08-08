@@ -1,15 +1,14 @@
 ---
 title: Protocol Development Tutorial
-layout: default
+layout: docs
 permalink: /protocol_tutorial/
 ---
+
 # Protocol Tutorial
 
 This is an introduction to writing protocols for Aquarium in the Krill domain specific langauge.
 We try to introduce the most common (and recommended) patterns in Krill, but this is not a comprehensive reference.
 See the [API documentation]({{ site.baseurl }}{% link /api/index.html %}) for more details on the functions that Krill provides.
-
-If you haven't already, visit the [protocol developer documentation]({{ site.baseurl }}{% link _docs/protocol_developer/index.md %}) for information about getting started.
 
 ---
 
@@ -45,7 +44,6 @@ If you haven't already, visit the [protocol developer documentation]({{ site.bas
 ## An Aquarium Protocol
 
 Each protocol is specified as part of an operation type, which also includes a declaration of the input/output of the protocol, pre-conditions for the protocol, a cost-model for the protocol, documentation and scheduling details for running the protocol in the lab.
-
 
 ## The Basic Protocol
 
@@ -250,7 +248,7 @@ This call to `plate_list.first` will return `nil` if `plate_list` is empty, and 
 
 See [Here for more details about Items]({{ site.baseurl }}{% link /api/Item.html %}).
 
-A special type of `Item`, called `Collection` is used to keep track of multiple `Samples`. While an `Item` has one `Sample` object, a `Collection` has an arbitrary amount of `Samples` associated with it. We refer to the slots for `Samples` in a `Collection`  as `Parts`. `Collections` have additional methods which allow protocols to smoothly interact with containers that can hold many things at once, like stripwells. A full stripwell can be represented as a `Collection`, while each individual well in the physical stripwell is represented as a `Part` of that `Collection`.
+A special type of `Item`, called `Collection` is used to keep track of multiple `Samples`. While an `Item` has one `Sample` object, a `Collection` has an arbitrary amount of `Samples` associated with it. We refer to the slots for `Samples` in a `Collection` as `Parts`. `Collections` have additional methods which allow protocols to smoothly interact with containers that can hold many things at once, like stripwells. A full stripwell can be represented as a `Collection`, while each individual well in the physical stripwell is represented as a `Part` of that `Collection`.
 
 To perform an _E. coli_ transformation you need a _batch_ of competent cell aliquots. We represent the entire batch as a `Collection`, and each aliquot as one `Part` of that `Collection`.
 
@@ -356,7 +354,7 @@ You can also use the following static Collection methods for convienence
 Most protocols are performed at the bench, and can be thought of in three phases in which the technician (1) gets the necessary items, (2) does the protocol steps, and (3) disposes of or puts away any items.
 One approach to this first and last step is to use a pair of functions, `take` and `release`to provision a list of items. The `take` function instructs the technician to collect a list of items, and the `release` function instructs them to return the items.
 
-For instance, Kapa HF Master Mix is a required ingredient for making PCR Fragments. The following code would instruct the technician to bring an Enzyme Stock containing Kapa HF Master Mix to bench at the `take` command. Then when the protocol is finished, `release ` instructs the technician to put the item back.
+For instance, Kapa HF Master Mix is a required ingredient for making PCR Fragments. The following code would instruct the technician to bring an Enzyme Stock containing Kapa HF Master Mix to bench at the `take` command. Then when the protocol is finished, `release` instructs the technician to put the item back.
 
 From `Cloning/Make PCR Fragment`
 
@@ -381,7 +379,7 @@ Each instance of a protocol is contained within an `Operation`.
 An `Operation` is created by the user in the Aquarium planner as an specific instance of an `OperationType` and then batched together with other `Operations` of the same type into a `Job`, which is then performed by the technician.
 
 As an example: Suppose you have created an `OperationType` with the name "E. coli Transformation." You’ve written all the code you need, and now you’re read to run it.
-An `Operation` would be a specific instance of "E. coli Transformation" (the `OperationType`), and a `Job` would be several "E. coli Transformation" `Operations` that have been submitted and are ready to run through the "E. coli Transformation" Protocol as a batch. 
+An `Operation` would be a specific instance of "E. coli Transformation" (the `OperationType`), and a `Job` would be several "E. coli Transformation" `Operations` that have been submitted and are ready to run through the "E. coli Transformation" Protocol as a batch.
 
 There are two ways to retrieve items within a protocol, and the two methods are called `retrieve` and `take`.
 Both of them instruct the technician to retrieve items.
@@ -685,7 +683,6 @@ This is a show block, letting the tech know to prepare the electroporator and la
 Something to get used to, if you haven’t used Ruby before, is method chaining — the practice of putting multiple methods in one line, e.g., `operations.running.collect { … }.join`.
 This is the same thing as doing:
 `take`, on the other hand, takes an argument that’s an array of items, which makes it ideal for retrieving items that aren’t included as explicit inputs in the definition of an operation — e.g., master mix for a PCR, which isn’t something the user should need to explicitly select.
-
 
 The next part is to label all the tubes:
 

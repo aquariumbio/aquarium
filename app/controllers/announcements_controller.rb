@@ -25,7 +25,7 @@ class AnnouncementsController < ApplicationController
     @announcement = Announcement.find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render layout: 'aq2' }
       format.json { render json: @announcement }
     end
   end
@@ -36,7 +36,7 @@ class AnnouncementsController < ApplicationController
     @announcement = Announcement.new
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render layout: 'aq2' }
       format.json { render json: @announcement }
     end
   end

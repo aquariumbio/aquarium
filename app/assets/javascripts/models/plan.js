@@ -148,140 +148,6 @@ AQ.Plan.record_methods.submit = function(user) {
 
 }
 
-AQ.Plan.record_methods.cost_to_amount = function(c) {
-  c.base = c.materials + c.labor * c.labor_rate;
-  c.total = c.base * ( 1.0 + c.markup_rate );
-  return c.total;
-}
-
-AQ.Plan.record_methods.estimate_cost = function() {
-
-  var plan = this;
-
-  if ( !plan.estimating ) {
-  
-    plan.estimating = true;
-    var serializeed_plan = plan.serialize();
-
-    return AQ.post('/launcher/estimate',serializeed_plan).then( response => {
-
-      if ( response.data.errors ) {
-
-        plan.cost = { error: response.data.errors };
-
-      } else {
-
-        var errors = [];
-
-        plan.cost = {
-          messages: response.data.messages,
-          costs: response.data.costs,
-          total: aq.sum(response.data.costs, c => {
-            if ( c.error ) {
-              errors.push(c.error.replace(/\(eval\)/g, 'cost'));
-              return 0;
-            } else {
-              return plan.cost_to_amount(c);
-            }
-          })
-        };
-
-        if ( errors.length > 0 ) {
-          plan.cost.error = errors.join(", ");
-        }
-
-      } 
-
-      aq.each(plan.operations, op => {
-        aq.each(response.data.costs, cost => {
-          if ( op.id == cost.id ) {
-            if ( !cost.error ) {
-              op.cost = cost.total;  
-            } else {
-              op.cost = cost.error;
-            }
-          }
-        });
-      });
-
-      plan.base_module.compute_cost(plan);
-
-      plan.estimating = false;
-
-    }).then(() => plan);
-
-  } else {
-    return Promise.resolve(plan);
-  }
-
-}
-
-AQ.Plan.record_getters.cost_total = function() {
-  delete this.cost_total;
-  this.costs;
-}
-
-AQ.Plan.record_getters.transactions = function() {
-
-  delete this.transactions;
-  this.cost_so_far;
-  return [];
-
-}
-
-AQ.Plan.record_getters.cost_so_far = function() {
-
-  let plan = this,
-      opids = aq.collect(plan.operations, op => op.id);
-
-  delete plan.cost_so_far;
-
-  AQ.Account.where({operation_id: opids}).then(transactions => {
-    plan.transactions = transactions;
-    plan.cost_so_far = 0.0;
-    aq.each(transactions, t => {
-      if ( t.transaction_type == 'debit' ) {
-        plan.cost_so_far += t.amount * (1+t.markup_rate);
-      } else {
-        plan.cost_so_far -= t.amount * (1+t.markup_rate);
-      }
-    });
-    AQ.update();
-  });
-
-  return plan.cost_so_far;
-
-}
-
-AQ.Plan.record_getters.costs = function() {
-
-  var plan = this;
-  delete plan.costs;
-  plan.costs = [];
-
-  AQ.get('/plans/costs/'+plan.id).then(response => {
-
-    plan.costs = response.data;
-    plan.cost_total = 0;
-
-    aq.each(plan.costs, cost => {
-      aq.each(plan.operations, op => {
-        if ( cost.id == op.id ) {
-          cost.total = plan.cost_to_amount(cost);
-          op.cost = cost.total;
-          plan.cost_total += plan.cost_to_amount(cost);
-          if ( op.status == "done" ) {
-            plan.cost_so_far += plan.cost_to_amount(cost);
-          }
-        }
-      })
-    });
-
-  });
-
-  return plan.costs;
-
-}
 
 AQ.Plan.record_methods.cancel = function(msg) {
 
@@ -494,7 +360,7 @@ AQ.Plan.record_methods.add_wire_to = function(fv,op,suc) {
     sid = op.routing[fv.routing]
   }
 
-  if ( sid ) {
+  if ( op.status == "planning" && sid ) {
     return AQ.Sample.find_by_identifier(sid)
       .then(sample => plan.assign(fv,sample))
       .then(plan => plan.choose_items())
@@ -944,4 +810,9 @@ AQ.Plan.record_getters.saved = function() {
 AQ.Plan.record_methods.step_operations = function() {
   console.log("AQ.Plan.step()")
   return AQ.get("/operations/step?plan_id=" + this.id);
+}
+
+AQ.Plan.record_getters.link = function() {
+  let plan = this;
+  return window.location.href.split("#")[0] + "?plan_id=" + plan.id;
 }

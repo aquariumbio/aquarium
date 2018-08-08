@@ -1,6 +1,6 @@
 <div layout="row">
 
-  <div layout="column" class="category-container">
+  <div layout="column" class="category-container" flex='25'>
 
       <% if current_user && current_user.is_admin %>
 
@@ -76,8 +76,6 @@
 
     <div ng-if='current.switch_user' class="switch-user-container">
 
-      <br>
-
       <div ng-if="users && users.length > 0">
 
         <div layout="row" layout-fill>
@@ -139,9 +137,9 @@
         </td>
       </tr>
 
-    </table><br>
+    </table>
 
-    <div ng-if="current.job_report">
+    <div ng-if="current.job_report" flex="75">
       <h2 class="md-title">&nbsp; Choose Report Date</h2>
       <md-datepicker ng-model="current.job_report_date" 
                      ng-change="get_job_report()"
@@ -153,13 +151,17 @@
            Job 
            <a href="/jobs/{{current.job_report_object.selection.id}}" target="job">
              {{current.job_report_object.selection.id}}</a>
-           Operations
+           <br>
          </h2>
-      <oplist-report operationtype="current.job_report_object.operations[0].operation_type"
+         <ul>
+           <li>Scheduled: {{current.job_report_object.selection.created_at|date: 'short'}}</li>
+           <li>Last Update: {{current.job_report_object.selection.updated_at|date: 'short'}}</li>
+         </ul>
+         <oplist-report operationtype="current.job_report_object.operations[0].operation_type"
               operations="current.job_report_object.selection.operations"
               status="done"
               short="true"
-              jobid="job.id">         
+              jobid="job.id"></oplist-report>        
       </div>
     </div>
 

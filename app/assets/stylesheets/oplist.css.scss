@@ -1,6 +1,14 @@
 .oplist {
   table {
     table-layout: fixed;
+    border: none !important;
+    td, th {
+      border-top: 1pt solid #bbb !important;
+      border-bottom: none !important;
+      border-left: none !important;
+      border-right: none !important;
+      text-align: left !important;
+    }
     .selector {
       width: 20px;
     }
@@ -9,6 +17,10 @@
     }
     .id {
       width: 50px;
+    }
+    .status-error {
+      color: red;
+      font-weight: bold;
     }
   }
 }

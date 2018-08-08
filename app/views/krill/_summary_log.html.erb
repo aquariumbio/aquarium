@@ -2,9 +2,9 @@
 
 <div class='krill-log-summary'>
 
-  <md-subheader class="header md-no-sticky">
+  <h2 class="md-title md-no-sticky">
     Summary
-  </md-subheader>
+  </h2>
 
   <p layout-padding>
 
@@ -27,20 +27,19 @@
 
   </p>
 
-  <md-subheader class="header md-no-sticky">
+  <h2 class="md-title md-no-sticky">
     Operations
-  </md-subheader>
+  </h2>
 
-  <ul class='upload-list' layout-padding>
-    <% @job.operations.each do |op| %>   
-      <% if op.plan %>    
-        <li>
-          <span class="name"><%= op.id %> from plan <a href="/launcher?plan_id=<%= op.plan.id %>"><%= op.plan.id %></span>
-          (<span class="login"><%= link_to op.user.login, op.user %></span>)
-        </li>
-      <% end %>    
-    <% end %>
-  </ul>
+  <div flex=100 class='user-op-stats'>
+    <oplist-short operationtype="job.operations[0].operation_type"
+            operations="job.operations"
+            status="running"
+            short="true"
+            brief="true"
+            jobid="job.id">
+    </oplist-short>
+  </div>    
 
   <% if @job.uploads.length > 0 %>
 
