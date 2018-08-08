@@ -58,6 +58,7 @@ module Krill
     end
 
     # Upgrade an item to a Collection
+    #
     # @param id [Item/Fixnum]  An Item, or an id of an item to be upgraded
     # @return [Collection]  the Collection that the item corresponds to, if any
     def collection_from(id)
@@ -73,6 +74,7 @@ module Krill
     end
 
     # Sorts items in place alphanumerically by freezer, hotel, box, then slot
+    #
     # @param items [Array<Item>]  list of items to sort
     def sort_by_location(items)
       return [] if items.empty?
