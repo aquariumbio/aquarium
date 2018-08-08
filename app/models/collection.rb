@@ -6,8 +6,6 @@ class Collection < Item
 
   EMPTY = -1 # definition of empty
 
-  # CLASS METHODS ###################################################################
-
   def self.every
     Item.joins(:object_type).where(object_types: { handler: 'collection' })
   end
@@ -68,8 +66,10 @@ class Collection < Item
     collections
   end
 
-  # METHODS #########################################################################
-
+  # Make an entirely new collection
+  # 
+  # @param name [String]  The name of the valid collection object type to make a collection with
+  # @return [Collection]  A new empty collection of type `name`
   def self.new_collection(name)
 
     o = ObjectType.find_by_name(name)
