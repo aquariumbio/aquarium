@@ -44,6 +44,16 @@ class Collection < Item
     plist
   end
 
+  # Creates as many new collections of type `name` 
+  # as will be necessary to hold every sample in the
+  # `samples` list. 
+  # 
+  # @param samples [Array<Sample>]  The list of samples to initiate collections with
+  # @param name [String]  The name of a valid collection object type that will be
+  #               created and populated with samples
+  # @return [Array<Collection>]  A list of newly created collections of type `name`
+  #                     that hold all given `samples`.  No more collections will be
+  #                     created than are needed to hold all the samples.
   def self.spread(samples, name, options = {})
     opts = { reverse: false }.merge(options)
     remaining = samples
