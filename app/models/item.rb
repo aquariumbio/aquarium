@@ -21,7 +21,7 @@ class Item < ActiveRecord::Base
                   :created_at, :collection_id, :locator_id,
                   :sample_attributes, :object_type_attributes, :location
 
-  # the sample inside this Item
+  # Gets the sample inside this Item.
   #
   # @return [Sample] kind of specimen contained in this Item, if any. 
   #             Some Items correspond to Samples and some do not. 
@@ -30,7 +30,7 @@ class Item < ActiveRecord::Base
   #             will have a corresponding Sample, whose name might be something like "pLAB1".
   accepts_nested_attributes_for :sample
 
-  # ObjectType of Item
+  # Gets the ObjectType of Item.
   #
   # @return [ObjectType]  type of object that this Item represents a
   #               unique physical instantiation of
@@ -60,7 +60,7 @@ class Item < ActiveRecord::Base
     self[:location]
   end
 
-  # the location of the Item
+  # Gets the location of the Item.
   #
   # @return [String] the description of the Item's physical location in the lab as a string
   def location
@@ -73,6 +73,8 @@ class Item < ActiveRecord::Base
     end
   end
 
+  # Sets the location of the Item.
+  #
   # @param x [String] the location string
   def location=(x)
     move_to x
@@ -83,7 +85,7 @@ class Item < ActiveRecord::Base
     write_attribute(:location, locstr)
   end
 
-  # Sets item location to empty slot based on location {Wizard}. By default sets to "Bench"
+  # Sets item location to empty slot based on location {Wizard}. By default sets to "Bench".
   #
   # @return [Item] self
   def store
@@ -96,7 +98,7 @@ class Item < ActiveRecord::Base
     end
   end
 
-  # Sets item location to provided string or to string's associated location {Wizard} if it exists
+  # Sets item location to provided string or to string's associated location {Wizard} if it exists.
   #
   # @param locstr [String] the location string
   # @return [Item] self
@@ -254,7 +256,7 @@ class Item < ActiveRecord::Base
 
   end
 
-  # Delete the Item (sets item's location to "deleted")
+  # Delete the Item (sets item's location to "deleted").
   #
   # @return [Bool] Item deleted?
   def mark_as_deleted

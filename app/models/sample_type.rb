@@ -9,7 +9,7 @@ class SampleType < ActiveRecord::Base
 
   attr_accessible :description
 
-  # Name of SampleType
+  # Gets name of SampleType.
   #
   # @return [String]  the name of the SampleType, as in "Primer"
   attr_accessible :name
