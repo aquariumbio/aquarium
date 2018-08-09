@@ -1,7 +1,7 @@
 
 
 # Class that represents a physical object in the lab
-
+# Has an {ObjectType} that declares what kind of physical thing it is, and may have a {Sample} defining the specimen that resides within. 
 # @api krill
 class Item < ActiveRecord::Base
 
@@ -18,10 +18,23 @@ class Item < ActiveRecord::Base
   # accessors ###########################################################
 
   attr_accessible :quantity, :inuse, :sample_id, :data, :object_type_id,
-                  :created_at, :collection_id, :locator_id, :location,
-                  :sample_attributes, :object_type_attributes
+                  :created_at, :collection_id, :locator_id,
+                  :sample_attributes, :object_type_attributes, :location
 
-  accepts_nested_attributes_for :sample, :object_type
+  # Gets the sample inside this Item.
+  #
+  # @return [Sample] kind of specimen contained in this Item, if any. 
+  #             Some Items correspond to Samples and some do not. 
+  #             For example, an Item whose object type is "1 L Bottle" 
+  #             does not correspond to a sample. An item whose ObjectType is "Plasmid Stock" 
+  #             will have a corresponding Sample, whose name might be something like "pLAB1".
+  accepts_nested_attributes_for :sample
+
+  # Gets the ObjectType of Item.
+  #
+  # @return [ObjectType]  type of object that this Item represents a
+  #               unique physical instantiation of
+  accepts_nested_attributes_for :object_type
 
   # validations #########################################################
 
@@ -47,9 +60,9 @@ class Item < ActiveRecord::Base
     self[:location]
   end
 
-  # Returns the location of the Item
+  # Gets the location of the Item.
   #
-  # @return [String] the location as a string
+  # @return [String] the description of the Item's physical location in the lab as a string
   def location
     if locator
       locator.to_s
@@ -60,6 +73,8 @@ class Item < ActiveRecord::Base
     end
   end
 
+  # Sets the location of the Item.
+  #
   # @param x [String] the location string
   def location=(x)
     move_to x
@@ -70,7 +85,7 @@ class Item < ActiveRecord::Base
     write_attribute(:location, locstr)
   end
 
-  # Sets item location to empty slot based on location {Wizard}. By default sets to "Bench"
+  # Sets item location to empty slot based on location {Wizard}. By default sets to "Bench".
   #
   # @return [Item] self
   def store
@@ -83,7 +98,7 @@ class Item < ActiveRecord::Base
     end
   end
 
-  # Sets item location to provided string or to string's associated location {Wizard} if it exists
+  # Sets item location to provided string or to string's associated location {Wizard} if it exists.
   #
   # @param locstr [String] the location string
   # @return [Item] self
@@ -241,7 +256,7 @@ class Item < ActiveRecord::Base
 
   end
 
-  # Delete the Item (sets item's location to "deleted")
+  # Delete the Item (sets item's location to "deleted").
   #
   # @return [Bool] Item deleted?
   def mark_as_deleted
