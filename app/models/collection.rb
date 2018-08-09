@@ -123,9 +123,9 @@ class Collection < Item
     sel.any?
   end
 
-  # Finds rows, cols in which block is true.
+  # Finds parts of collection in which block is true.
   #
-  # @return [Array<Array<Fixnum>>] array of form [[r1, c1], [r2, c2]]
+  # @return [Array<Array<Fixnum>>]  selected parts in the form [[r1, c1], [r2, c2]]
   def select
     raise 'need selection block' unless block_given?
     matrix.map.with_index do |row, r|
@@ -134,24 +134,24 @@ class Collection < Item
     end.select(&:any?).flatten(1)
   end
 
-  # Finds rows, cols that equal val.
+  # Finds parts that equal val.
   #
   # @param val [Fixnum, Sample, Item]
-  # @return [Array<Array<Fixnum>>] array of form [[r1, c1], [r2, c2]]
+  # @return [Array<Array<Fixnum>>] selected parts in the form [[r1, c1], [r2, c2]]
   def find(val)
     select { |x| x == to_sample_id(val) }
   end
 
   # Gets all empty rows, cols.
   #
-  # @return [Array<Array<Fixnum>>] array of form [[r1, c1], [r2, c2]]
+  # @return [Array<Array<Fixnum>>] empty parts in the form [[r1, c1], [r2, c2]]
   def get_empty
     select { |x| x == EMPTY }
   end
 
-  # Gets all non-empty rows, cols
+  # Gets all non-empty rows, cols.
   #
-  # @return [Array<Array<Fixnum>>] array of form [[r1, c1], [r2, c2]]
+  # @return [Array<Array<Fixnum>>] non-empty parts in the form [[r1, c1], [r2, c2]]
   def get_non_empty
     select { |x| x != EMPTY }
   end
@@ -269,9 +269,9 @@ class Collection < Item
 
   # Set the [r,c] entry of the matrix to id of the Sample s. If s=nil, then the [r,c] entry is cleared.
   #
-  # @param r [Integer] row
-  # @param c [Integer] column
-  # @param x [Fixnum, Sample, Item]
+  # @param r [Integer]  row
+  # @param c [Integer]  column
+  # @param x [Fixnum, Sample, Item]  new sample for that row
   def set(r, c, x)
     m = matrix
     d = dimensions
@@ -282,8 +282,9 @@ class Collection < Item
   end
 
   # Fill collecion with samples.
+  #
   # @param [Array<Sample>]  samples to put in collection
-  # @return [Array<Sample>]  samples that were not filled.
+  # @return [Array<Sample>]  samples that were not filled
   def add_samples(samples, options = {})
     opts = { reverse: false }.merge(options)
     non_empty_arr = get_empty
@@ -305,7 +306,8 @@ class Collection < Item
   #
   # @param sample_matrix [Array<Array<Sample>>, Array<Array<Fixnum>>]
   def associate(sample_matrix)
-
+    # TODO remove this method so that collections can inherit DataAssociator associate
+    # matrix=() does everything just fine and has a more informative method name
     m = get_data[:matrix]
 
     (0..sample_matrix.length - 1).each do |r|
@@ -324,6 +326,7 @@ class Collection < Item
 
   # @see #associate
   def set_matrix(m)
+    # TODO make this an alias of matrix=()
     associate m
   end
 
@@ -347,10 +350,10 @@ class Collection < Item
   # With no options, returns the indices of the next element of the collections, skipping to the next column or row if necessary.
   # With the option skip_non_empty: true, returns the next non empty indices. Returns nil if [r,c] is the last element of the collection.
   #
-  # @param r [Integer] Row
-  # @param c [Integer] Column
+  # @param r [Integer] row
+  # @param c [Integer] column
   # @param options [Hash]
-  # @option options [Bool] :skip_non_empty Return next non-empty indices
+  # @option options [Bool] :skip_non_empty  next non-empty indices
   def next(r, c, options = {})
 
     opts = { skip_non_empty: false }.merge options

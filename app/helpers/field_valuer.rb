@@ -146,7 +146,7 @@ module FieldValuer
 
   # Property hash which keeps track of important information.
   # 
-  # @return [Hash]  A hash of property keys and values for this model
+  # @return [Hash]  hash of property keys and values for this model
   def properties
 
     p = {}
