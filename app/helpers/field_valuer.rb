@@ -50,7 +50,7 @@ module FieldValuer
 
   end
 
-  # Change a property in the property hash for this object
+  # Changes a property in the property hash for this object.
   #
   # @param name [String]  the name of property to overwrite
   # @param val [Object]  the new value of the property 
@@ -144,7 +144,7 @@ module FieldValuer
 
   end
 
-  # property hash to keep track of important information
+  # Property hash which keeps track of important information.
   # 
   # @return [Hash]  A hash of property keys and values for this model
   def properties
