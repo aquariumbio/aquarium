@@ -4,7 +4,7 @@ module Krill
 
   module Base
 
-    # The {OperationList} for this job
+    # Gets the {OperationList} for this job.
     #
     # @return [OperationsList] the list of operations for this job
     def operations(opts = { force: false })
@@ -21,7 +21,7 @@ module Krill
 
     end
 
-    # The {OperationType} for this job
+    # Gets the {OperationType} for this job.
     #
     # @return [OperationType]
     def operation_type

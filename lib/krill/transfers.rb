@@ -7,10 +7,10 @@ module Krill
     # Displays a table to the user that describes how to load a number of samples into a collection.
     #
     # @param headings [Array<String>] describes how much to transfer of each ingredient
-    # @param ingredients [Array<Array<Item>>]  Items to be loaded from
+    # @param ingredients [Array<Array<Item>>]  items to be loaded from
     # @param collections [Array<Collections>]  the collections that will be loaded into
     # @yield [block]  {ShowBlock} style block
-    # @example shows the user a table that describes how to arrays of templates, forward primers, and reverse primers into a set of stripwell tubes. 
+    # @example shows the user a table that describes how to arrays of templates, forward primers, and reverse primers into a set of stripwell tubes
     #  load_samples(
     #    [ "Template, 1 µL", "Forward Primer, 2.5 µL", "Reverse Primer, 2.5 µL" ],
     #    [  templates,        forward_primers,          reverse_primers         ],
@@ -60,14 +60,14 @@ module Krill
 
     end # load_samples
 
-    # Displays a set of pages using the transfer method from show to
-    # the user to that describe how to transfer the individual 
-    # parts of some quantity of source wells to some quantity of destination wells.
+    # Displays a set of pages using the transfer method from show 
+    # that describe to the user how to transfer individual parts of some
+    # quantity of source wells to some quantity of destination wells.
     # Routing is computed automatically.
     #
-    # @param sources [Array<Collection>]  Collections that will be transfered from
-    # @param destinations [Array<Collection>]  The collections that will recieve new parts
-    #                             from the source collections.
+    # @param sources [Array<Collection>]  collections that will be transfered from
+    # @param destinations [Array<Collection>]  collections that will recieve new parts
+    #                             from the source collections
     # @yield [block]  {ShowBlock} style block
     # @example transfer all the wells in a set of stripwell tubes into the non-empty lanes of a set of gels
     #    transfer( stripwells, gels ) {
@@ -163,7 +163,7 @@ module Krill
     end # transfer
 
     # Opposite of load_samples, displays how to transfer sample
-    # from each part of a collection into distinct new Items
+    # from each part of a collection into distinct new Items.
     #
     # @param col [Collection]  the collection to distribute from
     # @param object_type_name [String]  the object type of the new items that will be made

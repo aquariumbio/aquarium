@@ -38,7 +38,7 @@ module Krill
       Item.new_object name
     end
 
-    # Create a new item with a {Sample} and {ObjectType}
+    # Create a new item with a {Sample} and {ObjectType}.
     #
     # @param name [String]  the name of the sample that will be instantiated into item
     # @param spec [String]  the name of the ObjectType that will be instantiated into item
@@ -50,14 +50,14 @@ module Krill
       Item.make({ quantity: 1, inuse: 0 }, sample: s, object_type: ot)
     end
 
-    # Same as Collection.new_collection
+    # This is the same as Collection.new_collection.
     #
     # @see Collection.new_collection
     def new_collection(name)
       Collection.new_collection name
     end
 
-    # Upgrade an item to a Collection
+    # Upgrade an item to a Collection.
     #
     # @param id [Item/Fixnum]  An Item, or an id of an item to be upgraded
     # @return [Collection]  the Collection that the item corresponds to, if any
@@ -65,7 +65,7 @@ module Krill
       Collection.find id
     end
 
-    # Same as Collection.spread
+    # This is the same as Collection.spread.
     #
     # @see Collection.spread
     def spread(samples, name, options = {})
@@ -73,7 +73,7 @@ module Krill
       Collection.spread samples, name, opts
     end
 
-    # Sorts items in place alphanumerically by freezer, hotel, box, then slot
+    # Sorts items in place alphanumerically by freezer, hotel, box, then slot.
     #
     # @param items [Array<Item>]  list of items to sort
     def sort_by_location(items)
@@ -213,7 +213,7 @@ module Krill
 
     end
 
-    # The other side of {take}, releases a list of items from being associated to the job
+    # The other side of {take}, releases a list of items from being associated to the job.
     #
     # @param items [Array<Items>]  the items that will be unassociated with this job
     # @param args [Hash]  additional optional arguments
