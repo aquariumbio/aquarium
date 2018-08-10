@@ -196,12 +196,13 @@ RSpec.describe Collection, type: :model do
       samples = (0...4).collect { |i| Array.new(6,s.id) }
       logger.info "D"      
       c.matrix = samples
+      logger.info "c.matrix = #{c.matrix}"
       logger.info "E"      
       p = [0,0]
       logger.info "F"      
       (0...4).each do |i|
         (0...6).each do |j|
-          logger.info "H #{i}, {j}"          
+          logger.info "H #{i}, #{j}"          
           raise "Next didn't align with #{p} != #{[i,j]}" unless p == [i,j]
           p = c.next(p[0],p[1])          
         end

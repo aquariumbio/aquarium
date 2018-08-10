@@ -34,6 +34,9 @@ gem 'redcarpet'
 gem 'paperclip'
 gem 'aws-sdk', '~> 1.7.1'
 
+# For bulk inserts (e.g. for loading a collection from a matrix)
+gem 'activerecord-import'
+
 group :test do
   gem 'sqlite3'
 end

@@ -329,20 +329,82 @@ class Collection < Item
     remaining
   end
 
+  # Takes a matrix of sample ids, samples or items and returns a matrix of only sample ids
+  def to_sample_id_matrix sample_matrix
+
+    dr = sample_matrix.length
+    dc = sample_matrix[0].length
+
+    sample_matrix_aux = Array.new(dr){Array.new(dc)}
+
+    # convert sample matrix into ids
+    (0...dr).each do |r|
+      (0...dc).each do |c|
+        klass = sample_matrix[r][c].class
+        if klass == Sample 
+          sample_matrix_aux[r][c] = sample_matrix[r][c].id
+        elsif klass == Item
+          sample_matrix_aux[r][c] = Item.sample_id
+        elsif klass == Fixnum && sample_matrix[r][c] > 0 
+          sample_matrix_aux[r][c] = sample_matrix[r][c]
+        else
+          sample_matrix_aux[r][c] = nil
+        end
+      end
+    end
+
+    sample_matrix_aux
+
+  end
+
   # Sets the matrix associated with the collection to the matrix m where m can be either a matrix of Samples or
   # a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix was associated with the collection is lost
   #
   # @param sample_matrix [Array<Array<Sample>>, Array<Array<Fixnum>>]
   def associate(sample_matrix)
-    @matrix_cache = nil
-    (0..sample_matrix.length - 1).each do |r|
-      (0..sample_matrix[r].length - 1).each do |c|
-        klass = sample_matrix[r][c].class
-        if klass == Sample || ( klass == Fixnum && sample_matrix[r][c] > 0 )
-          set r, c, sample_matrix[r][c]
+
+    dr = sample_matrix.length
+    dc = sample_matrix[0].length
+    sample_matrix_aux = to_sample_id_matrix sample_matrix  
+    
+    ActiveRecord::Base.transaction do
+
+      clear
+      @matrix_cache = nil
+
+      # create parts
+      parts = []
+      part_type = ObjectType.find_by_name("__Part")
+      collection_id_string = "__part_for_collection_#{id}__"
+      (0...dr).each do |r|
+        (0...dc).each do |c|
+          if sample_matrix_aux[r][c] != nil
+            parts << Item.new(quantity: 1, inuse: 0, sample_id: sample_matrix_aux[r][c], object_type_id: part_type.id, data: collection_id_string)
+          end
         end
       end
+      Item.import parts
+      parts = Item.where(data: collection_id_string) # get the parts just made so we have the ids
+      index = 0
+
+      # create part associations
+      pas = []
+      (0...dr).each do |r|
+        (0...dc).each do |c|
+          if sample_matrix_aux[r][c] != nil
+            pas << PartAssociation.new(collection_id: id, part_id: parts[index].id, row: r, column: c)
+            index += 1
+          end
+        end
+      end
+      PartAssociation.import pas
+
     end
+
+  end
+
+  def clear
+    part_associations.map(&:destroy)
   end
 
   # @see #associate
