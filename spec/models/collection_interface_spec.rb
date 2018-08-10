@@ -3,12 +3,57 @@ require 'rails_helper'
 RSpec.describe Collection, type: :model do
 
   # Tests new_collection
-  def example_collection
-    c = Collection.new_collection("Stripwell")
+  def example_collection name="Stripwell"
+    c = Collection.new_collection(name)
     c.save
     raise "Got save errors: #{c.errors.full_messages}" if c.errors.any?
     c
   end  
+
+  context 'associations' do
+
+    it "sets up the right associations" do
+      samples = Sample.all.sample(9)
+      collections = Collection.spread(samples, "Stripwell")
+      c = collections[0]
+      x = c.part_associations.map(&:id).sort
+      y = PartAssociation.where(collection_id: c.id).map(&:id).sort
+      raise "part association not working for collection" unless x == y
+    end
+
+  end
+
+  context 'collisions' do
+
+    it 'should not put two parts at the same location in the same collection' do
+
+      c = example_collection
+      d = example_collection
+
+      pa = PartAssociation.new collection_id: c.id, part_id: 1, row: 1, column: 2
+      pa.save
+      pa = PartAssociation.new collection_id: c.id, part_id: 2, row: 1, column: 2
+
+      begin
+        pa.save
+        raise "Collision allowed"
+      rescue Exception => e
+      end
+
+      pa = PartAssociation.new collection_id: c.id, part_id: 1, row: 2, column: 2
+      pa.save
+      pa = PartAssociation.new collection_id: d.id, part_id: 2, row: 2, column: 3
+
+      begin
+        pa.save
+        raise "Collision allowed"
+      rescue Exception => e
+        raise "Non collision detected" unless pa.errors.empty?  
+      end
+       
+    end  
+
+  end
 
   context 'construction' do
 
@@ -39,9 +84,13 @@ RSpec.describe Collection, type: :model do
     #         => find
     #           => to_sample_id
     it 'finds collections containing a specific sample' do
-      Collection.containing(Sample.find(4926)).each do |item|
-        collection = Collection.find(item.id) # TODO: Make it so that you don't have to do this
-        raise "Sample should be in collection" unless collection.position(4926) && collection.position_as_hash(4926)
+      c = example_collection
+      s = Sample.last
+      c.set 5,0,Sample.last      
+      Collection.containing(s).each do |item|
+        collection = item.becomes Collection # TODO: Make it so that you don't have to do this
+        raise "Sample should be in collection" unless collection.position(s.id) 
+        raise "Sample should be in collection" unless collection.position_as_hash(s.id)
       end
     end    
 
@@ -50,9 +99,12 @@ RSpec.describe Collection, type: :model do
     #         => find
     #           => to_sample_id    
     it 'finds parts and their containing collections with a specific sample' do
-      Collection.parts(Sample.find(4926)).each do |part|
-        collection = Collection.find(part[:collection].id) # TODO: Make it so that you don't have to do this
-        pos = collection.position_as_hash(4926)
+      c = example_collection
+      s = Sample.last
+      c.set 5,0,Sample.last         
+      Collection.parts(Sample.find(s)).each do |part|
+        collection = part[:collection].becomes Collection # TODO: Make it so that you don't have to do this
+        pos = collection.position_as_hash(s.id)
         raise "Sample should be in collection in specified slot" unless pos[:row] == part[:row] && pos[:column] = part[:column]
       end
     end        
@@ -86,8 +138,9 @@ RSpec.describe Collection, type: :model do
       c = example_collection
       samples = Sample.all.sample(12).collect { |s| [ s ] }
       c.set_matrix samples
+      m = c.matrix
       (0..11).each do |i|
-        c.matrix[i][0] == samples[i][0].id
+        raise "Setting matrix didn't work" unless m[i][0] == samples[i][0].id
       end
     end
 
@@ -97,15 +150,16 @@ RSpec.describe Collection, type: :model do
       c = example_collection
       samples = Sample.all.sample(12).collect { |s| [ s.id ] }
       c.matrix = samples
+      m = c.matrix  
       (0..11).each do |i|
-        raise "Setting matrix didn't work" unless c.matrix[i][0] == samples[i][0]
+        raise "Setting matrix didn't work" unless m[i][0] == samples[i][0]
       end
     end    
 
     # tests spread
     #         => add_samples
     #       matrix
-    it 'can sporead a bunch of samples accross multiple collections' do
+    it 'can spread a bunch of samples accross multiple collections' do
       samples = Sample.all.sample(17)
       collections = Collection.spread(samples, "Stripwell")
       sids1 = samples.map(&:id)
@@ -117,7 +171,7 @@ RSpec.describe Collection, type: :model do
     # test set_matrix
     #        => associate
     #      matrix
-    it 'sets a matrix of samples' do
+    it 'can add and subtract samples' do
       c = example_collection
       c.set 5,0,Sample.last        
       samples = Sample.all.sample(12).collect { |s| [ s ] }
@@ -128,20 +182,22 @@ RSpec.describe Collection, type: :model do
     end
 
     # test next
-    it 'sets a matrix of sample ids' do
-      c = example_collection
-      samples = (1..2).collect { |i| Sample.all.sample(3).map(&:id) }
+    it 'goes to the next samples' do
+      c = example_collection "24-Slot Tube Rack"
+      samples = (0...4).collect { |i| Sample.all.sample(6).map(&:id) }
       c.matrix = samples
       p = [0,0]
-      (0..1).each do |i|
-        (0..2).each do |j|
-          raise "Next didn't align" unless p == [i,j]
+      puts "samples = #{samples}"
+      puts "matrix = #{c.matrix}"
+      (0...4).each do |i|
+        (0...6).each do |j|
+          raise "Next didn't align WITH #{p} != #{[i,j]}" unless p == [i,j]
           p = c.next(p[0],p[1])          
         end
       end
       c.set 1, 1, -1
       raise "skip_non_empty option not working" unless c.next(0,0,skip_non_empty: true) == [1,1]
-      raise "edge condition didn't work" unless c.next(1,2) == [nil,nil]
+      raise "edge condition didn't work" unless c.next(3,5) == [nil,nil]
     end       
 
   end

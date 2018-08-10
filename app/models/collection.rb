@@ -4,6 +4,8 @@
 # @api krill
 class Collection < Item
 
+  has_many :part_associations, foreign_key: :collection_id
+
   EMPTY = -1 # definition of empty
 
   # CLASS METHODS ###################################################################
@@ -67,7 +69,7 @@ class Collection < Item
 
     i = Collection.new
     i.object_type_id = o.id
-    i.apportion(o.rows, o.columns)
+    #### i.apportion(o.rows, o.columns)
     i.quantity = 1
     i.inuse = 0
 
@@ -101,7 +103,7 @@ class Collection < Item
   # @param r [Integer] Row
   # @param c [Integer] Column
   def apportion(r, c)
-    self.matrix = Array.new(r, Array.new(c, EMPTY))
+    ### self.matrix = Array.new(r, Array.new(c, EMPTY))
   end
 
   # Whether the matrix includes x
@@ -129,7 +131,10 @@ class Collection < Item
   # @param val [Fixnum, Sample, Item]
   # @return [Array<Array<Fixnum>>] Array of form [[r1, c1], [r2, c2]]
   def find(val)
-    select { |x| x == to_sample_id(val) }
+    PartAssociation
+      .joins(:part)
+      .where("sample_id = ? AND collection_id = ?", to_sample_id(val), id)
+      .collect { |pa| [pa.row, pa.column] }
   end
 
   # Gets all empty rows, cols
@@ -177,6 +182,30 @@ class Collection < Item
     end
     r
   end
+
+  # Changes Item, String, or Sample to a sample
+  #
+  # class method?
+  def self.to_sample(x)
+    if x.class == Integer || ( x.class == Fixnum && x >= 0 ) # Not sure where "Integer" came from here ---ek
+      r = Sample.find(x)
+    elsif x.class == Item
+      if x.sample
+        r = x.sample
+      else
+        raise 'When the third argument to Collection.set is an item, it should be associated with a sample.'
+      end
+    elsif x.class == Sample
+      r = x
+    elsif x.class == String
+      r = Sample.find(x.split(':')[0].to_i)
+    elsif !x || x == -1
+      r = nil
+    else
+      raise "Expecting item, a sample, or a sample id, but got '#{x}' which is a #{x.class}"
+    end
+    r
+  end  
 
   # Adds sample, item, or number to collection
   #
@@ -261,22 +290,34 @@ class Collection < Item
   # @param c [Integer] Column
   # @param x [Fixnum, Sample, Item]
   def set(r, c, x)
-    m = matrix
-    d = dimensions
-    raise "Set matrix error: Indices #{r},#{c} greater than allowed for matrix dimensions #{d[0]}x#{d[1]}" if (r >= d[0]) || (c >= d[1])
-    m[r][c] = to_sample_id(x)
-    self.matrix = m
-    save
+    # TODO: Check dimensions
+    if x == EMPTY
+      pas = PartAssociation.where(collection_id: id, row: r, column: c)
+      if pas.length == 1
+        pas[0].destroy
+      end
+    else
+      s = Collection.to_sample(x)
+      part = Item.make({ quantity: 1, inuse: 0 }, sample: s, object_type: ObjectType.find_by_name("__Part"))
+      pas = PartAssociation.where(collection_id: id, row: r, column: c)
+      if pas.length == 1
+        pa = pas[0]
+        pa.part_id = part.id
+      else
+        pa = PartAssociation.new( collection_id: id, part_id: part.id,  row: r, column: c )
+      end
+      pa.save
+    end
   end
 
   # Fill collecion with samples
   # Return samples that were not filled
   def add_samples(samples, options = {})
     opts = { reverse: false }.merge(options)
-    non_empty_arr = get_empty
-    non_empty_arr.reverse! if opts[:reverse]
+    empties = get_empty
+    empties.reverse! if opts[:reverse]
     remaining = []
-    samples.zip(non_empty_arr).each do |s, rc|
+    samples.zip(empties).each do |s, rc|
       if rc.nil?
         remaining << s
       else
@@ -292,21 +333,14 @@ class Collection < Item
   #
   # @param sample_matrix [Array<Array<Sample>>, Array<Array<Fixnum>>]
   def associate(sample_matrix)
-
-    m = get_data[:matrix]
-
     (0..sample_matrix.length - 1).each do |r|
       (0..sample_matrix[r].length - 1).each do |c|
-        m[r][c] = if sample_matrix[r][c].class == Sample
-                    sample_matrix[r][c].id
-                  else
-                    sample_matrix[r][c]
-                  end
+        klass = sample_matrix[r][c].class
+        if klass == Sample || ( klass == Fixnum && sample_matrix[r][c] > 0 )
+          set r, c, sample_matrix[r][c]
+        end
       end
     end
-
-    self.matrix = m
-
   end
 
   # @see #associate
@@ -315,20 +349,24 @@ class Collection < Item
   end
 
   def get_matrix
-    datum[:matrix]
+    matrix
   end
 
   # Return matrix of {Sample} ids
   #
   # @return [Array<Array<Integer>>]
   def matrix
-    datum[:matrix]
+    r,c = self.dimensions
+    m = Array.new(r){Array.new(c, EMPTY)}
+    part_associations.where(collection_id: id).each do |pa|
+      m[pa.row][pa.column] = pa.part.sample_id if pa.row < r && pa.column < c
+    end
+    m
   end
 
   # Set the matrix associated with the collection to the matrix of Sample ids m. Whatever matrix was associated with the collection is lost
   def matrix=(m)
-    d = datum
-    self.datum = d.merge(matrix: m)
+    associate m
   end
 
   # With no options, returns the indices of the next element of the collection, skipping to the next column or row if necessary.
@@ -360,12 +398,11 @@ class Collection < Item
   #
   # @return [Array<Fixnum>]
   def dimensions
-    m = matrix
-    if m && m[0]
-      [m.length, m[0].length]
-    else
-      [0, 0]
-    end
+    # Should look up object type dims instead
+    dims = [object_type.rows,object_type.columns]
+    dims[0] = 12 unless dims[0] != nil
+    dims[1] = 1 unless dims[1] != nil
+    dims
   end
 
   # Returns a string describing the indices of the non empty elements in the collection. For example,
