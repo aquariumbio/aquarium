@@ -2,9 +2,6 @@ require 'rails_helper'
 
 RSpec.describe Collection, type: :model do
 
-  ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
-  logger = ActiveRecord::Base.logger
-
   # Tests new_collection
   def example_collection name="Stripwell"
     c = Collection.new_collection(name)
@@ -188,30 +185,19 @@ RSpec.describe Collection, type: :model do
 
     # test next
     it 'goes to the next samples' do
-      logger.info "A"
       c = example_collection "24-Slot Tube Rack"
-      logger.info "B"      
       s = test_sample
-      logger.info "C"      
       samples = (0...4).collect { |i| Array.new(6,s.id) }
-      logger.info "D"      
       c.matrix = samples
-      logger.info "c.matrix = #{c.matrix}"
-      logger.info "E"      
       p = [0,0]
-      logger.info "F"      
       (0...4).each do |i|
         (0...6).each do |j|
-          logger.info "H #{i}, #{j}"          
           raise "Next didn't align with #{p} != #{[i,j]}" unless p == [i,j]
           p = c.next(p[0],p[1])          
         end
       end
-      logger.info "I"
       c.set 1, 1, -1
-      logger.info "J"
       raise "skip_non_empty option not working" unless c.next(0,0,skip_non_empty: true) == [1,1]
-      logger.info "K"
       raise "edge condition didn't work" unless c.next(3,5) == [nil,nil]
     end       
 

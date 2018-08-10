@@ -26,6 +26,10 @@ class Collection < Item
     end
   end
 
+  def part_type
+    @part_type ||= ObjectType.find_by_name("__Part")
+  end
+
   # Returns first Array element from #find
   #
   # @see #find
@@ -69,7 +73,6 @@ class Collection < Item
 
     i = Collection.new
     i.object_type_id = o.id
-    #### i.apportion(o.rows, o.columns)
     i.quantity = 1
     i.inuse = 0
 
@@ -299,7 +302,7 @@ class Collection < Item
       end
     else
       s = Collection.to_sample(x)
-      part = Item.make({ quantity: 1, inuse: 0 }, sample: s, object_type: ObjectType.find_by_name("__Part"))
+      part = Item.make({ quantity: 1, inuse: 0 }, sample: s, object_type: part_type)
       pas = PartAssociation.where(collection_id: id, row: r, column: c)
       if pas.length == 1
         pa = pas[0]
@@ -374,7 +377,6 @@ class Collection < Item
 
       # create parts
       parts = []
-      part_type = ObjectType.find_by_name("__Part")
       collection_id_string = "__part_for_collection_#{id}__"
       (0...dr).each do |r|
         (0...dc).each do |c|
@@ -425,7 +427,7 @@ class Collection < Item
     else
       r,c = self.dimensions
       m = Array.new(r){Array.new(c, EMPTY)}
-      part_associations.where(collection_id: id).each do |pa|
+      PartAssociation.includes(:part).where(collection_id: id).each do |pa|
         m[pa.row][pa.column] = pa.part.sample_id if pa.row < r && pa.column < c
       end
       @matrix_cache = m
