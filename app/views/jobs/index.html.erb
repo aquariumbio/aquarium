@@ -1,20 +1,21 @@
 <% provide(:title, 'Jobs') %>
 
-<div class="row-fluid">
+<%= content_for :specific_title do %>
+<% end %>
 
-  <div class="span3">
-    <%= render partial: "sidebar" %>
-  </div>
+<%= content_for :sidebar do %>
+  <%= render partial: "sidebar" %>
+<% end %>
 
-  <div class="span9">
-    <%= render partial: "jobs" %>
-  </div>
+<%= content_for :main do %>
 
-</div>
+  <%= render partial: "jobs" %>
 
-<script>
-  $('#tabs a:first').tab('show');
- 
-  jl = new JobLister();
+  <script>
+    $('#tabs a:first').tab('show');
 
-</script>
+    jl = new JobLister();
+
+  </script>
+
+<% end %>

@@ -291,6 +291,7 @@ class Collection < Item
   # @param x [Fixnum, Sample, Item]
   def set(r, c, x)
     # TODO: Check dimensions
+    @matrix_cache = nil
     if x == EMPTY
       pas = PartAssociation.where(collection_id: id, row: r, column: c)
       if pas.length == 1
@@ -333,6 +334,7 @@ class Collection < Item
   #
   # @param sample_matrix [Array<Array<Sample>>, Array<Array<Fixnum>>]
   def associate(sample_matrix)
+    @matrix_cache = nil
     (0..sample_matrix.length - 1).each do |r|
       (0..sample_matrix[r].length - 1).each do |c|
         klass = sample_matrix[r][c].class
@@ -356,12 +358,17 @@ class Collection < Item
   #
   # @return [Array<Array<Integer>>]
   def matrix
-    r,c = self.dimensions
-    m = Array.new(r){Array.new(c, EMPTY)}
-    part_associations.where(collection_id: id).each do |pa|
-      m[pa.row][pa.column] = pa.part.sample_id if pa.row < r && pa.column < c
+    if @matrix_cache
+      @matrix_cache
+    else
+      r,c = self.dimensions
+      m = Array.new(r){Array.new(c, EMPTY)}
+      part_associations.where(collection_id: id).each do |pa|
+        m[pa.row][pa.column] = pa.part.sample_id if pa.row < r && pa.column < c
+      end
+      @matrix_cache = m
+      m
     end
-    m
   end
 
   # Set the matrix associated with the collection to the matrix of Sample ids m. Whatever matrix was associated with the collection is lost

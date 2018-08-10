@@ -1,9 +1,10 @@
+# coding: utf-8
 
 Bioturk::Application.routes.draw do
 
   resources :timings, only: %i[update create]
 
-  get '/uploads/:type/:id/:key', to: 'uploads#show'  
+  get '/uploads/:type/:id/:key', to: 'uploads#show'
 
   get '/json/current',             to: 'json#current'
   post '/json/items',              to: 'json#items'
@@ -117,8 +118,8 @@ Bioturk::Application.routes.draw do
   get 'wizards/contents/:id',               to: 'wizards#contents'
   resources :wizards
 
-  match 'item_list', to: 'items#item_list'
-  match 'upload', to: 'jobs#upload'
+  get 'item_list', to: 'items#item_list'
+  get 'upload', to: 'jobs#upload'
 
   get '/groups/names'
 
@@ -135,8 +136,8 @@ Bioturk::Application.routes.draw do
   resources :samples
   resources :sample_types
 
-  match '/spreadsheet', to: 'samples#spreadsheet'
-  match '/process_spreadsheet', to: 'samples#process_spreadsheet'
+  get '/spreadsheet', to: 'samples#spreadsheet'
+  get '/process_spreadsheet', to: 'samples#process_spreadsheet'
 
   get 'technician/:job_id', to: 'technician#index'
 
@@ -158,7 +159,7 @@ Bioturk::Application.routes.draw do
   get 'jobs/summary'
   get 'jobs/report'
 
-  match 'joblist', to: 'jobs#joblist'
+  get 'joblist', to: 'jobs#joblist'
 
   get '/items/store/:id',      to: 'items#store'
   get '/items/make/:sid/:oid', to: 'items#make'
@@ -176,23 +177,23 @@ Bioturk::Application.routes.draw do
 
   root to: 'static_pages#home'
 
-  match '/',            to: 'static_pages#home'
-  match '/template',    to: 'static_pages#template'
-  match '/test',        to: 'static_pages#test'
+  get '/',            to: 'static_pages#home'
+  get '/template',    to: 'static_pages#template'
+  get '/test',        to: 'static_pages#test'
 
-  match '/signin',     to: 'sessions#new'
-  match '/signout',    to: 'sessions#destroy', via: :delete
+  get '/signin',     to: 'sessions#new'
+  get '/signout',    to: 'sessions#destroy', via: :delete
 
   get '/dismiss',      to: 'static_pages#dismiss'
 
   get '/static_pages/direct_purchase', to: 'static_pages#direct_purchase'
 
-  match '/search', to: 'search#search'
+  get '/search', to: 'search#search'
 
   get '/delete_inventory', to: 'object_types#delete_inventory'
 
-  match '/signup', to: 'users#new'
-  match '/password', to: 'users#password'
+  get '/signup', to: 'users#new'
+  get '/password', to: 'users#password'
 
   get '/users/active',        to: 'users#active'
   get 'users/current',        to: 'users#current'
@@ -207,7 +208,7 @@ Bioturk::Application.routes.draw do
   resources :jobs, only: %i[index destroy show]
   resources :logs, only: %i[index show]
 
-  match '/logout', to: 'sessions#destroy'
-  match '/item', to: 'items#update'
+  get '/logout', to: 'sessions#destroy'
+  get '/item', to: 'items#update'
 
 end

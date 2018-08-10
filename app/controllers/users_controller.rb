@@ -152,7 +152,7 @@ class UsersController < ApplicationController
   end
 
   def current
-    u = current_user
+    u = current_user.as_json
     u[:memberships] = current_user.groups
     render json: u
   end
@@ -188,7 +188,7 @@ class UsersController < ApplicationController
 
   def stats
     render json: User.find(params[:id]).stats
-  end  
+  end
 
   private
 

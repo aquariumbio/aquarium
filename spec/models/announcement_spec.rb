@@ -3,5 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe Announcement, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  context "basics" do
+    it "gets some announcements" do
+      Announcement.last(5).reverse
+    end
+  end
 end

@@ -1,4 +1,4 @@
-<div class='tab-content'>
+<div class='tab-content' layout-padding>
 
   <div class="jobs-item-tab tab-pane active" id="pending">
     <h2>Pending Jobs</h2>
@@ -7,34 +7,12 @@
 
   <div class="jobs-item-tab tab-pane" id="future">
     <h2>Future Jobs</h2>
-    <%= render partial: "job_table", locals: { type: "future" } %>    
+    <%= render partial: "job_table", locals: { type: "future" } %>
   </div>
 
   <div class="jobs-item-tab tab-pane" id="active">
     <h2>Active Jobs</h2>
-    <%= render partial: "job_table", locals: { type: "active" } %>       
-  </div>    
-
-  <% @metacols.each do |m| %>
-
-    <div class="jobs-item-tab tab-pane" id="metacol-<%= m.id %>">
-      <h2>Metacol <%= link_to m.id, m %> : <%= m.path %></h2>
-      <p>
-        Submitted by <%= link_to m.user.login, m.user %> <%=  time_ago_in_words(m.created_at) %> ago.
-        <div class='row-fluid'>
-          <div class='span10'>
-            Last updated <%= time_ago_in_words(m.updated_at) %> ago.
-          </div>
-          <div class='span2'>
-            <a href='metacols/<%= m.id %>/stop' class='btn btn-mini btn-danger' data-confirm="Are you sure you want to cancel metacol <%= m.id %>? All associated jobs will be canceled as well.">
-              Cancel Metacol <%= m.id %>
-            </a>     
-          </div>
-        </div>
-      </p>
-      <%= render partial: "job_table", locals: { type: "metacol-#{m.id}" } %>        
-    </div>
-
-  <% end %>
+    <%= render partial: "job_table", locals: { type: "active" } %>
+  </div>
 
 </div>

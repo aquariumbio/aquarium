@@ -2,13 +2,18 @@ require 'rails_helper'
 
 RSpec.describe Collection, type: :model do
 
+  ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
+  logger = ActiveRecord::Base.logger
+
   # Tests new_collection
   def example_collection name="Stripwell"
     c = Collection.new_collection(name)
     c.save
     raise "Got save errors: #{c.errors.full_messages}" if c.errors.any?
     c
-  end  
+  end
+
+  test_sample = Sample.last
 
   context 'associations' do
 
@@ -70,8 +75,8 @@ RSpec.describe Collection, type: :model do
     #       set     
     it 'can set parts' do
       c = example_collection
-      c.set 5,0,Sample.last
-      raise "Did not set part" unless c.matrix[5][0] == Sample.last.id
+      c.set 5,0,test_sample
+      raise "Did not set part" unless c.matrix[5][0] == test_sample.id
       raise "string view incorrect" unless c.non_empty_string == "1,1 - 6, 1"            
     end
 
@@ -85,8 +90,8 @@ RSpec.describe Collection, type: :model do
     #           => to_sample_id
     it 'finds collections containing a specific sample' do
       c = example_collection
-      s = Sample.last
-      c.set 5,0,Sample.last      
+      s = test_sample
+      c.set 5,0,test_sample      
       Collection.containing(s).each do |item|
         collection = item.becomes Collection # TODO: Make it so that you don't have to do this
         raise "Sample should be in collection" unless collection.position(s.id) 
@@ -100,9 +105,9 @@ RSpec.describe Collection, type: :model do
     #           => to_sample_id    
     it 'finds parts and their containing collections with a specific sample' do
       c = example_collection
-      s = Sample.last
-      c.set 5,0,Sample.last         
-      Collection.parts(Sample.find(s)).each do |part|
+      s = test_sample
+      c.set 5,0,s      
+      Collection.parts(s).each do |part|
         collection = part[:collection].becomes Collection # TODO: Make it so that you don't have to do this
         pos = collection.position_as_hash(s.id)
         raise "Sample should be in collection in specified slot" unless pos[:row] == part[:row] && pos[:column] = part[:column]
@@ -123,12 +128,12 @@ RSpec.describe Collection, type: :model do
     #       include?
     it 'can set slots to samples' do
       c = example_collection
-      c.set 5,0,Sample.last  
+      c.set 5,0,test_sample  
       c.set 8,0,Sample.first
       raise "Slots not adding up" unless c.get_empty.length + c.get_non_empty.length == c.capacity
       raise "Non-empty not adding up" unless c.get_non_empty.length == c.num_samples
-      raise "include? not working" unless c.include?(Sample.last) && c.include?(Sample.last.id)
-      raise "select not working" unless c.select { |x| x == Sample.last.id }.length == 1
+      raise "include? not working" unless c.include?(test_sample) && c.include?(test_sample.id)
+      raise "select not working" unless c.select { |x| x == test_sample.id }.length == 1
     end
 
     # test set_matrix
@@ -148,7 +153,7 @@ RSpec.describe Collection, type: :model do
     #      matrix
     it 'sets a matrix of sample ids' do
       c = example_collection
-      samples = Sample.all.sample(12).collect { |s| [ s.id ] }
+      samples = Sample.where("id < 100").sample(12).collect { |s| [ s.id ] }
       c.matrix = samples
       m = c.matrix  
       (0..11).each do |i|
@@ -160,7 +165,7 @@ RSpec.describe Collection, type: :model do
     #         => add_samples
     #       matrix
     it 'can spread a bunch of samples accross multiple collections' do
-      samples = Sample.all.sample(17)
+      samples = Sample.where("id < 100").sample(17)
       collections = Collection.spread(samples, "Stripwell")
       sids1 = samples.map(&:id)
       sids2 = collections.map(&:matrix).flatten.reject { |sid| sid <= 0 }
@@ -173,30 +178,39 @@ RSpec.describe Collection, type: :model do
     #      matrix
     it 'can add and subtract samples' do
       c = example_collection
-      c.set 5,0,Sample.last        
-      samples = Sample.all.sample(12).collect { |s| [ s ] }
-      c.add_one(Sample.all.sample)
-      c.add_one(Sample.all.sample)  
+      c.set 5,0,test_sample     
+      s = test_sample
+      c.add_one(s)
+      c.add_one(s)  
       c.subtract_one 
       raise "add_one and subtract_one not adding up" unless c.get_non_empty.length == 2
     end
 
     # test next
     it 'goes to the next samples' do
+      logger.info "A"
       c = example_collection "24-Slot Tube Rack"
-      samples = (0...4).collect { |i| Sample.all.sample(6).map(&:id) }
+      logger.info "B"      
+      s = test_sample
+      logger.info "C"      
+      samples = (0...4).collect { |i| Array.new(6,s.id) }
+      logger.info "D"      
       c.matrix = samples
+      logger.info "E"      
       p = [0,0]
-      puts "samples = #{samples}"
-      puts "matrix = #{c.matrix}"
+      logger.info "F"      
       (0...4).each do |i|
         (0...6).each do |j|
-          raise "Next didn't align WITH #{p} != #{[i,j]}" unless p == [i,j]
+          logger.info "H #{i}, {j}"          
+          raise "Next didn't align with #{p} != #{[i,j]}" unless p == [i,j]
           p = c.next(p[0],p[1])          
         end
       end
+      logger.info "I"
       c.set 1, 1, -1
+      logger.info "J"
       raise "skip_non_empty option not working" unless c.next(0,0,skip_non_empty: true) == [1,1]
+      logger.info "K"
       raise "edge condition didn't work" unless c.next(3,5) == [nil,nil]
     end       
 

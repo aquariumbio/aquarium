@@ -12,7 +12,7 @@
     <div class='flash md-body-2'><%= value %></div>
   <% end %>
 
-    <%= form_for(@user) do |f| %>
+    <%= form_for(@user, :html => { :id => "new_user" } ) do |f| %>
 
       <%= render 'shared/error_messages' %>
 
@@ -20,13 +20,13 @@
       <%= f.text_field :name %>
 
       <%= f.label :login %>
-      <%= f.text_field :login %>
+      <%= f.text_field :login, id: "new_login" %>
 
       <%= f.label :password %>
-      <%= f.password_field :password %>
+      <%= f.password_field :password, id: "new_password" %>
 
       <%= f.label :password_confirmation, "Confirmation" %>
-      <%= f.password_field :password_confirmation %>
+      <%= f.password_field :password_confirmation, id: "new_confirmation" %>
 
       <%= f.submit "New User", class: "md-button md-raised md-primary" %>
 
@@ -34,12 +34,12 @@
 
     <hr>
 
-    <%= form_for(@user, html: { action: 'change_password' }) do |f| %>
+    <%= form_for(@user, html: { action: 'change_password', id: "change_user_password" }) do |f| %>
 
       <%= render 'shared/error_messages' %>
 
       <%= f.label :login %>
-      <%= f.select(:login, options_for_select( 
+      <%= f.select(:login, options_for_select(
             User.all.sort_by { |u| u.login }
                     .collect { |u| [ u.login, u.login ] }, current_user.id )) %>
 
@@ -56,7 +56,7 @@
       <%= f.submit "Change", class: "md-button md-raised md-primary" %>
       <%= link_to "Cancel", users_path, class: "md-button md-raised" %>
 
-    <% end %>  
+    <% end %>
 
   </div>
 
@@ -66,13 +66,15 @@
 
   <div layout-padding>
 
+    <%= will_paginate @users, previous_label: 'Previous', next_label: 'Next' %>
+
     <table class="table">
        <tr>
         <th>login</th>
         <th>Name</th>
         <th>Since</th>
         <th></th>
-        <th></th>    
+        <th></th>
        </tr>
        <%= render @users %>
     </table>

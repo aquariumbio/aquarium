@@ -10,14 +10,10 @@
  *
  *= require_self
  *= require_tree .
- *= require dataTables/jquery.dataTables
- *= require jquery.ui.datepicker
- *= require jquery.ui.menu
- *= require jquery.fileupload-ui
- */
+*/
 
 @media print
-{    
+{
     .no-print, .no-print *
     {
         display: none !important;
