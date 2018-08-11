@@ -14,7 +14,7 @@ class Collection < Item
     Item.joins(:object_type).where(object_types: { handler: 'collection' })
   end
 
-  def self.containing(s, ot = nil)
+  def self.old_containing(s, ot = nil)
     return [] unless s
     i = s.id.to_s
     r = Regexp.new '\[' + i + ',|,' + i + ',|,' + i + '\]|\[' + i + '\]'
@@ -24,6 +24,12 @@ class Collection < Item
     else
       Collection.every.select { |i| r =~ i.datum[:matrix].to_json }
     end
+  end
+
+  def self.containing(s, ot = nil)
+    return [] unless s
+    cids = PartAssociation.joins(:part).where("sample_id = ?", to_sample_id(s)).map(&:collection_id)
+    Collection.where(id: cids).select { |c| !ot || c.object_type_id == ot.id }
   end
 
   def part_type
@@ -164,7 +170,7 @@ class Collection < Item
   # Changes Item, String, or Sample to a sample.id for storing into a collection matrix. Maybe should be private
   #
   # class method?
-  def to_sample_id(x)
+  def self.to_sample_id(x)
     r = EMPTY
     if x.class == Integer || x.class == Fixnum # Not sure where "Integer" came from here ---ek
       r = x
@@ -184,6 +190,10 @@ class Collection < Item
       raise "The third argument to Collection.set should be an item, a sample, or a sample id, but it was '#{x}' which is a #{x.class}"
     end
     r
+  end
+
+  def to_sample_id(x)
+    Collection.to_sample_id(x)
   end
 
   # Changes Item, String, or Sample to a sample
@@ -498,6 +508,20 @@ class Collection < Item
       "1 - #{max[1] + 1}"
     end
 
+  end
+
+  def migrate
+    unless datum[:_migrated_]
+      if self.data
+        tempdata = JSON.parse(self.data, symbolize_names: true)
+        if tempdata[:matrix]
+          self.matrix = tempdata[:matrix]
+          tempdata.delete :matrix
+          tempdata[:_migrated_] = Date.today
+          self.set_data tempdata
+        end
+      end
+    end
   end
 
 end
