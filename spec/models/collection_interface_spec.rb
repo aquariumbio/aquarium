@@ -64,7 +64,7 @@ RSpec.describe Collection, type: :model do
     #       matrix
     it 'can make new collections' do
       c = example_collection
-      raise "Wrong size" unless c.matrix.length == 12 && c.matrix[0].length == 1
+      raise "Wrong size" unless c.matrix.length == 1 && c.matrix[0].length == 12
     end
 
     # tests new_collection
@@ -72,9 +72,9 @@ RSpec.describe Collection, type: :model do
     #       set     
     it 'can set parts' do
       c = example_collection
-      c.set 5,0,test_sample
-      raise "Did not set part" unless c.matrix[5][0] == test_sample.id
-      raise "string view incorrect" unless c.non_empty_string == "1,1 - 6, 1"            
+      c.set 0,5,test_sample
+      raise "Did not set part" unless c.matrix[0][5] == test_sample.id
+      raise "string view #{c.non_empty_string} incorrect" unless c.non_empty_string == "1 - 6"            
     end
 
   end
@@ -88,7 +88,7 @@ RSpec.describe Collection, type: :model do
     it 'finds collections containing a specific sample' do
       c = example_collection
       s = test_sample
-      c.set 5,0,test_sample      
+      c.set 0,5,test_sample      
       Collection.containing(s).each do |item|
         collection = item.becomes Collection # TODO: Make it so that you don't have to do this
         raise "Sample should be in collection" unless collection.position(s.id) 
@@ -103,7 +103,7 @@ RSpec.describe Collection, type: :model do
     it 'finds parts and their containing collections with a specific sample' do
       c = example_collection
       s = test_sample
-      c.set 5,0,s      
+      c.set 0,5,s      
       Collection.parts(s).each do |part|
         collection = part[:collection].becomes Collection # TODO: Make it so that you don't have to do this
         pos = collection.position_as_hash(s.id)
@@ -125,8 +125,8 @@ RSpec.describe Collection, type: :model do
     #       include?
     it 'can set slots to samples' do
       c = example_collection
-      c.set 5,0,test_sample  
-      c.set 8,0,Sample.first
+      c.set 0,5,test_sample  
+      c.set 0,8,Sample.first
       raise "Slots not adding up" unless c.get_empty.length + c.get_non_empty.length == c.capacity
       raise "Non-empty not adding up" unless c.get_non_empty.length == c.num_samples
       raise "include? not working" unless c.include?(test_sample) && c.include?(test_sample.id)
@@ -138,11 +138,11 @@ RSpec.describe Collection, type: :model do
     #      matrix
     it 'sets a matrix of samples' do
       c = example_collection
-      samples = Sample.all.sample(12).collect { |s| [ s ] }
+      samples = [ Sample.all.sample(12).collect { |s| s } ]
       c.set_matrix samples
       m = c.matrix
       (0..11).each do |i|
-        raise "Setting matrix didn't work" unless m[i][0] == samples[i][0].id
+        raise "Setting matrix didn't work" unless m[0][i] == samples[0][i].id
       end
     end
 
@@ -150,11 +150,11 @@ RSpec.describe Collection, type: :model do
     #      matrix
     it 'sets a matrix of sample ids' do
       c = example_collection
-      samples = Sample.where("id < 100").sample(12).collect { |s| [ s.id ] }
+      samples = [ Sample.where("id < 100").sample(12).collect { |s| s.id } ]
       c.matrix = samples
       m = c.matrix  
       (0..11).each do |i|
-        raise "Setting matrix didn't work" unless m[i][0] == samples[i][0]
+        raise "Setting matrix didn't work" unless m[0][i] == samples[0][i]
       end
     end    
 
@@ -175,7 +175,7 @@ RSpec.describe Collection, type: :model do
     #      matrix
     it 'can add and subtract samples' do
       c = example_collection
-      c.set 5,0,test_sample     
+      c.set 0,5,test_sample     
       s = test_sample
       c.add_one(s)
       c.add_one(s)  
