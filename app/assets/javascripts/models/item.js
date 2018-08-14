@@ -1,6 +1,10 @@
 AQ.Item.getter(AQ.ObjectType,"object_type");
 AQ.Item.getter(AQ.Sample,"sample");
 
+AQ.Item.record_getters.is_collection = function() {
+  return (this.object_type.handler == 'collection');
+}
+
 AQ.Item.record_methods.upgrade = function(raw_data) {
 
   let item = this;
@@ -93,8 +97,9 @@ AQ.Item.record_methods.get_history = function() {
 
   var item = this;
 
-  return new Promise(function(resolve, reject) {
-    AQ.get("/items/history/" + item.id).then(response => {
+  return AQ.get("/items/history/" + item.id)
+    .then(response => {
+      delete item.history;
       item.history = response.data;
       aq.each(item.history, h => {
         h.field_value = AQ.FieldValue.record(h.field_value);
@@ -103,9 +108,8 @@ AQ.Item.record_methods.get_history = function() {
           return AQ.Job.record(job);
         });
       });
-      resolve(item.history);
-    })  
-  });
+      return item.history;
+    })
 
 }
 
@@ -116,9 +120,35 @@ AQ.Item.record_getters.history = function() {
   return item.history;
 }
 
-AQ.Item.record_getters.is_collection = function() {
-  return false;
+AQ.Item.record_getters.jobs = function() {
+
+  var item = this;
+  delete item.jobs; 
+  item.jobs = [];
+
+  function remove_dups(joblist) {
+    let list = [];
+    aq.each(joblist, job => {
+      if ( aq.where(list, x => (x.id == job.id)).length == 0 ) {
+        list.push(job);
+      }
+    })
+    return list;
+  }
+
+  item.get_history().then(history => {
+    aq.each(history, h => {
+      item.jobs = item.jobs.concat(h.jobs);
+    })
+    item.jobs = remove_dups(item.jobs);
+  });
+
+  return item.jobs;
+
 }
 
+AQ.Collection.record_methods.get_history = AQ.Item.record_methods.get_history;
+AQ.Collection.record_getters.history = AQ.Item.record_getters.history;
+AQ.Collection.record_getters.jobs = AQ.Item.record_getters.jobs;
 
 

@@ -6,24 +6,38 @@ class Collection < Item
 
   has_many :part_associations, foreign_key: :collection_id
 
-  EMPTY = -1 # definition of empty
+  # COLLECTION INTERFACE #####################################################################
 
-  # CLASS METHODS ###################################################################
+  def part_matrix
+
+    r,c = self.dimensions
+    m = Array.new(r){Array.new(c)}
+
+    PartAssociation
+      .includes(part: [ { sample: [ :sample_type ] }, :object_type ] )
+      .where(collection_id: id)
+      .each do |pa| 
+        m[pa.row][pa.column] = pa.part
+      end
+
+    m
+
+  end
+
+  def part_matrix_as_json
+
+    j = part_matrix.as_json(include: [ { sample: { include: :sample_type } }, :object_type ] )
+    puts j
+    j
+
+  end
+
+  # ORIGINAL INTERFACE #######################################################################
+
+  EMPTY = -1 # definition of empty  
 
   def self.every
     Item.joins(:object_type).where(object_types: { handler: 'collection' })
-  end
-
-  def self.old_containing(s, ot = nil)
-    return [] unless s
-    i = s.id.to_s
-    r = Regexp.new '\[' + i + ',|,' + i + ',|,' + i + '\]|\[' + i + '\]'
-    if ot
-      Collection.includes(:object_type).where(object_type_id: ot.id)
-                .select { |i| r =~ i.datum[:matrix].to_json }
-    else
-      Collection.every.select { |i| r =~ i.datum[:matrix].to_json }
-    end
   end
 
   def self.containing(s, ot = nil)

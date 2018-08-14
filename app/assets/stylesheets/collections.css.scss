@@ -1,3 +1,57 @@
+.collection-editor {
+
+  position: relative;
+
+  table {
+
+    table-layout: fixed;
+    width: calc(100% - 1px);
+
+    td {
+      border: 5px solid black; 
+    }
+    tr:first-child td {
+      border-top: 0;
+    }
+    tr td:first-child {
+      border-left: 0;
+    }
+    tr td:last-child {
+      border-right: 0;
+    }
+
+    tr {
+      td {
+        border: 1pt solid #aaa;
+        padding: 5px;
+        vertical-align: top;
+        cursor: pointer;
+        user-select: none;
+      }
+      .no-part {
+        background: #eee;
+      }
+    }
+    .index {
+      background: rgb(16, 96, 158);
+      color: white;
+      font-weight: bold;
+    }
+
+  }
+
+  .selection-box {
+    position: absolute;
+    outline: 2px dashed black;
+    pointer-events: none;
+  }
+
+  .data-associations {
+    margin: 16px;
+  }
+
+}
+
 .collection {
   #border: 1pt solid black;
   display: inline-block;
