@@ -20,7 +20,7 @@
       <b>Position:</b> {{row}}, {{column}}<br>
       <div ng-if="part.id">
         <b>Part ID:</b> {{part.id}}<br>
-        <b>Sample:</b> <a href="/browser?sid={{part.sample_id}}" target="sample">{{part.sample.name}}</a><br>
+        <b>Sample {{part.sample.id}}:</b> <a href="/browser?sid={{part.sample_id}}" target="sample">{{part.sample.name}}</a><br>
         <b>Owner:</b> {{part.sample.user.name}}<br><br>
         <b ng-if="part.data_associations.length > 0">Data Associations:</b><br>
         <div class='data-associations'>
@@ -80,7 +80,9 @@
               ng-class="cell_class(part,$parent.$index,$index)"
               ng-click="select(part,$parent.$index,$index,$event)"
               data-selected="{{part.selected}}">
-            <span ng-if="part.rid">{{part.sample_id}}: {{part.sample.name}}</span>
+            <div ng-if="part.rid" class="sample-identifier">
+              <b>{{part.sample_id}}:</b> {{part.sample.name}}
+            </div>
           </td>
         </tr>
       </table>
@@ -94,6 +96,8 @@
       <md-button ng-click="assign_sample()"
                  ng-disabled="!info.sample_identifier"
                  class="md-raised md-primary">Assign</md-button>
+      <md-button ng-click="clear_parts()"
+                 class="md-raised">Clear</md-button>                 
     </div>
 
     <div layout-padding ng-if="selection.length > 0 && !samples_loaded">

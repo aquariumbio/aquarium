@@ -2,6 +2,8 @@ AQ.Collection.getter(AQ.ObjectType,"object_type");
 
 AQ.Collection.record_methods.upgrade = function(raw_data) {
 
+  console.log("here")
+
   let collection = this,
       m = raw_data.part_matrix_as_json;
 
@@ -86,6 +88,6 @@ AQ.Collection.record_methods.assign_sample_to_selection = function(sample_identi
   return AQ.post(`/collections/${collection.id}/assign_sample`, {
     sample_id: AQ.id_from(sample_identifier),
     pairs: collection.selected_pairs
-  });
+  }).then(response => AQ.Collection.record(response.data))
 
 }

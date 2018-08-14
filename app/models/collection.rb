@@ -32,6 +32,21 @@ class Collection < Item
 
   end
 
+  def assign_sample_to_pairs sample, pairs # of the form [ [r1,c1], [r2, c2] ... ]
+
+    pm = part_matrix
+
+    pairs.each do |r,c|
+      if pm[r][c] 
+        pm[r][c].sample_id = sample.id
+        pm[r][c].save
+      else
+        set r, c, sample
+      end
+    end
+
+  end
+
   # ORIGINAL INTERFACE #######################################################################
 
   EMPTY = -1 # definition of empty  

@@ -23,10 +23,15 @@
     tr {
       td {
         border: 1pt solid #aaa;
-        padding: 5px;
+        padding: 4px;
         vertical-align: top;
         cursor: pointer;
         user-select: none;
+        .sample-identifier {
+          font-size: 10pt;
+          overflow-x: hidden;
+          max-height: 60px;
+        }
       }
       .no-part {
         background: #eee;

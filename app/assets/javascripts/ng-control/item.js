@@ -2,8 +2,8 @@
 
   var w = angular.module('aquarium'); 
 
-  w.controller('itemCtrl', [ '$scope', '$http', '$mdDialog',
-                  function (  $scope,   $http,   $mdDialog ) {
+  w.controller('itemCtrl', [ '$scope', '$http', '$mdDialog', '$window', 
+                  function (  $scope,   $http,   $mdDialog,   $window ) {
 
     AQ.init($http);
     AQ.update = () => { $scope.$apply(); }
@@ -123,15 +123,30 @@
 
       let confirm = $mdDialog.confirm()
           .title('Associate Sample?')
-          .textContent("Associating sample with selection will discard any existing associations.")
+          .textContent("Associating sample with the selected will discard any existing associations.")
           .ariaLabel('Revert')
           .ok('Yes')
           .cancel('No');
 
-      $mdDialog.show(confirm).then(() => {
-        $scope.collection.assign_sample_to_selection($scope.info.sample_identifier)
-      }).catch(e => console.log("Sample not assigned",e))
+      let old_collection = $scope.collection;
 
+      $mdDialog
+        .show(confirm)
+        .then(() =>  $scope.collection.assign_sample_to_selection($scope.info.sample_identifier))
+        .then(collection => $scope.collection = collection)
+        .then(collection => copy_selection(old_collection, $scope.collection))
+        .catch(e => console.log("Sample not assigned",e))
+
+    }
+
+    function copy_selection(from,to) {
+      for ( var r=0; r<from.part_matrix.length; r++ ) {
+        for ( var c=0; c<from.part_matrix[r].length; c++ ) {
+          to.part_matrix[r][c].selected = from.part_matrix[r][c].selected;
+        }
+      }
+      store_selection();
+      update_selection_box();
     }
 
     function store_selection() {
@@ -162,6 +177,11 @@
 
     }
 
+    angular.element($window).bind('resize', function(){
+      update_selection_box();  
+      $scope.$apply();
+    });
+
     function update_selection_box() {
 
       setTimeout(function(){
@@ -190,7 +210,7 @@
 
         $scope.$apply();
 
-      },100);
+      },30);
 
     }
 
