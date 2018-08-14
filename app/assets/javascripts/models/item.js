@@ -172,14 +172,12 @@ AQ.Item.record_getters.history = function() {
   return item.history;
 }
 
-<<<<<<< 89e25df4fb4c98abdfdcd850eb335557583cb24b
 AQ.Item.record_getters.is_collection = function() {
   return false;
 }
 
 
 
-=======
 AQ.Item.record_getters.has_sequencing = function() {
   var item = this;
   console.log("Reached function AQ.Item.record_gettters.has_sequencing...");
@@ -190,4 +188,3 @@ AQ.Item.record_getters.has_sequencing = function() {
     return false;
   }
 }
->>>>>>> Added a small button to approve sequencing if item has a "sequencing results" data association. This should be removed if Klavins lab adds a better way to get user input.
