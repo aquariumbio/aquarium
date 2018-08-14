@@ -125,7 +125,9 @@ Bioturk::Application.routes.draw do
 
   resources :groups
 
-  resources :collections do
+  post '/collections/:id/assign_sample', to: 'collections#assign_sample'
+
+  resources :collections do # Not sure this is used anymore
     member do
       get 'associate'
       get 'dissociate'

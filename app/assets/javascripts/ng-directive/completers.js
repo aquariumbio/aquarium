@@ -28,6 +28,7 @@
         var types = $scope.samplecomplete;
         $($element).autocomplete({
           source: samples_for($scope.$parent.sample_names,types),
+          minLength: 3,          
           select: function(ev,ui) {
             $scope.ngModel = ui.item.value;
             $scope.$apply();
@@ -39,7 +40,6 @@
         }
 
         $scope.$watch(changed, function (v) {
-          console.log("Updating samplecomplete")
           types = $scope.samplecomplete;
           sample_names = $scope.$parent.sample_names;
           $($element).autocomplete({
@@ -55,6 +55,35 @@
     }
 
   });
+
+  w.directive("samplechooser", function() {
+
+    return {
+
+      restrict: 'A',
+
+      scope: { samplechooser: '=' },
+
+      link: function($scope,$element,$attributes) {
+
+        let samples = [];
+        for ( var type in AQ.sample_names ) {
+          samples = samples.concat(AQ.sample_names[type]);
+        }
+
+        $($element).autocomplete({
+          source: samples,
+          minLength: 3,
+          select: function(ev,ui) {
+            $scope.samplechooser = ui.item.value;
+            $scope.$apply();
+          }
+        });
+
+      }
+    }
+
+  });  
 
   w.directive("ftsamplecomplete", function() {
 

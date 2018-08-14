@@ -14,7 +14,7 @@ namespace :collections do
         description: "Part of a collection",
         min: 0,
         max: 1,
-        handler: "part",
+        handler: "sample_container",
         safety: "No safety information", 
         cleanup: "No cleanup information", 
         data: "No data", vendor: "No vendor information", 
