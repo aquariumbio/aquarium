@@ -14,11 +14,11 @@
 
         <md-toolbar class="item-toolbar">
           <div class="md-toolbar-tools">
-            <h2 flex md-truncate>Item {{item.id}}: {{container.name}}</h2> 
+            <h2 flex md-truncate>Item {{item.id}}: {{container.name}}</h2>
           </div>
           <div class='item-close' ng-click='item.modal=false'>&times;</div>
         </md-toolbar>
-         
+
         <div class="sample-name md-subhead" layout="row" layout-align="center center">
           <a href="/browser?sid={{sample.id}}" target="sample">{{sample.name}}</a>
         </div>
@@ -34,7 +34,7 @@
             <div ng-if="item.matrix">Position(s) in collection</div>
             <table class='tiny-collection' ng-if="item.matrix">
               <tr ng-repeat="row in item.matrix track by $index">
-                <td ng-repeat="el in row track by $index" 
+                <td ng-repeat="el in row track by $index"
                     ng-class="sample.id == el ? 'filled' : el != -1 ? 'other' : 'blank'">
                 </td>
               </tr>
@@ -48,38 +48,37 @@
 
         <div class="location-editor" layout="column" layout-wrap ng-if="item.location == 'deleted'">
           <div><b>Deleted on {{item.updated_at|date}}</b></div>
-          <% if current_user && current_user.is_admin %>          
+          <% if current_user && current_user.is_admin %>
             <div><md-button class='md-raised md-small' ng-click="item.store()">Restore</md-button></div>
           <% end %>
         </div>
 
         <div class="location-editor" layout="row" layout-wrap ng-if="item.location != 'deleted'">
           <div flex="20" class='md-body-2'>Location</div>
-          <div flex="60"><input type='text' class='location-input'
-                                ng-model="item.new_location"></div>
+          <div flex="60"><input type='text' class='location-input' ng-model="item.new_location"></div>
           <div flex="20" class='buttons'>
             <a href="#" ng-click="item.move(item.new_location)" ng-if="item.new_location != item.location">
               <ng-md-icon icon="system_update_alt" size="22" aria-label="Update Location" style="fill: #444"></ng-md-icon>
             </a>
             <a href="#" ng-click="item.new_location = item.location" ng-if="item.new_location != item.location">
-              <ng-md-icon icon="undo" size="22" aria-label="Undo" style="fill: #444"></ng-md-icon>  
+              <ng-md-icon icon="undo" size="22" aria-label="Undo" style="fill: #444"></ng-md-icon>
             </a>
             <% if current_user && current_user.is_admin %>
               <a href="#" ng-click="item.mark_as_deleted()" class="no-highlight">
-                <ng-md-icon icon="delete" size="22" aria-label="Delete" style="fill: #444"></ng-md-icon>  
-              </a>   
+                <ng-md-icon icon="delete" size="22" aria-label="Delete" style="fill: #444"></ng-md-icon>
+              </a>
             <% end %>
-		<a href="#" ng-click="item.mark_as_deleted()" class="no-highlight">
-               	<ng-md-icon icon="delete" size="22" aria-label="Delete" style="fill: red"></ng-md-icon>  
-		</a>
-	    <% end %>
- 
-	    <a href="#" ng-click="item.request_delete()" class="no-highlight">
-               	<ng-md-icon icon="delete" size="22" aria-label="Request delete" style="fill: #444"></ng-md-icon> 
- 
-	    <a href="#" ng-click="item.approve_sequencing()" ng-if="item.has_sequencing" class="no-highlight" style="position: relative; top: -5px">
-               	<md-icon md-svg-src='/assets/seq_ok.svg' aria-label="Approve sequencing" size="22" style="width: 45px; height: 20px"></md-icon>  
-	    </a>
+                <a href="#" ng-click="item.mark_as_deleted()" class="no-highlight">
+                <ng-md-icon icon="delete" size="22" aria-label="Delete" style="fill: red"></ng-md-icon>
+                </a>
+            <% end %>
+
+            <a href="#" ng-click="item.request_delete()" class="no-highlight">
+                <ng-md-icon icon="delete" size="22" aria-label="Request delete" style="fill: #444"></ng-md-icon>
+
+            <a href="#" ng-click="item.approve_sequencing()" ng-if="item.has_sequencing" class="no-highlight" style="position: relative; top: -5px">
+                <md-icon md-svg-src='/assets/seq_ok.svg' aria-label="Approve sequencing" size="22" style="width: 45px; height: 20px"></md-icon>
+            </a>
           </div>
         </div>
 
@@ -109,7 +108,7 @@
               <td>{{h.operation.id}}</td>
               <td>{{h.operation.operation_type.name}}</td>
               <td><a href="/launcher?plan_id={{h.operation.plan_associations[0].plan_id}}">{{h.operation.plan_associations[0].plan_id}}</a></td>
-              <td>Job{{h.operation.jobs.length==1 ? '' : 's'}}: <a ng-repeat="job in h.operation.jobs" href="/jobs/{{job.id}}">{{job.id}}</a>              
+              <td>Job{{h.operation.jobs.length==1 ? '' : 's'}}: <a ng-repeat="job in h.operation.jobs" href="/jobs/{{job.id}}">{{job.id}}</a>
             </tr>
           </table>
         </div>
@@ -121,3 +120,4 @@
   </span>
 
 </script>
+
