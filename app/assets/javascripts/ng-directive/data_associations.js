@@ -8,9 +8,13 @@
 
       restrict: 'AE',
 
-      scope: { record: '=', noedit: '=' },
+      scope: { record: '=', noedit: '=', keywidth: '=' },
 
       link: function($scope,$element,$attributes) {
+
+        if ( !$scope.keywidth ) {
+          $scope.keywidth = 10;
+        }
 
         $scope.new = function() {
 

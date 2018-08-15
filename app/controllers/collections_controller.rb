@@ -9,4 +9,10 @@ class CollectionsController < ApplicationController
     render json: @collection.as_json(methods: "part_matrix_as_json")
   end
 
+  def delete_selection
+    @collection = Collection.find(params[:id])
+    @collection.delete_selection(params[:pairs])
+    render json: @collection.as_json(methods: "part_matrix_as_json")
+  end  
+
 end

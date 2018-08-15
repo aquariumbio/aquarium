@@ -85,7 +85,7 @@
     <hr>
 
     <div ng-if="plan.data_associations">
-      <da record="plan" ng-if="plan.data_associations.length > 0" narrow=false></da>
+      <da record="plan" ng-if="plan.data_associations.length > 0" narrow=false keywidth=30></da>
       <md-button class="md-raised md-medium" ng-click="plan.new_data_association()">Add Data</md-button>
       <md-button class="md-raised md-medium"><upload record='plan'></upload></md-button>
     </div>

@@ -126,6 +126,7 @@ Bioturk::Application.routes.draw do
   resources :groups
 
   post '/collections/:id/assign_sample', to: 'collections#assign_sample'
+  post '/collections/:id/delete_selection', to: 'collections#delete_selection'
 
   resources :collections do # Not sure this is used anymore
     member do

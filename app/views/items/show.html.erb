@@ -51,9 +51,11 @@
     {{collection.object_type.name}}
 <% end %>
 
+<%= content_for :keydown do %>keydown($event)<% end %>
+
 <%= content_for :main do %>
 
-  <div ng-if="collection" ng-keydown="keydown($event)" class="collection-editor">
+  <div ng-if="collection" class="collection-editor">
 
     <div>
 
@@ -91,13 +93,14 @@
 
     <div layout-padding ng-if="selection.length > 0 && samples_loaded">
       <label>Assign Sample to Selection</label>
-      <input ng-class="choose-sample"
-             samplechooser="info.sample_identifier">
+      <input flex=50
+             class="choose-sample"
+             samplechooser="info.sample_identifier"><br>
       <md-button ng-click="assign_sample()"
                  ng-disabled="!info.sample_identifier"
-                 class="md-raised md-primary">Assign</md-button>
-      <md-button ng-click="clear_parts()"
-                 class="md-raised">Clear</md-button>                 
+                 class="md-raised md-primary">Assign</md-button><br>
+      <md-button ng-click="delete_parts()"
+                 class="md-raised">Delete</md-button>                 
     </div>
 
     <div layout-padding ng-if="selection.length > 0 && !samples_loaded">
@@ -105,7 +108,7 @@
     </div>
 
     <div ng-if="selection.length == 0" class='data-associations'>
-      <span class="md-title" ng-if="collection.data_associations.length > 0">Collection wide data associations</span>
+      <span class="md-title" ng-if="collection.data_associations.length > 0">Collection wide data associations</span><br><br>
       <da record="collection"></da>
       <br>
       <div layout="row" layout-align="center center">

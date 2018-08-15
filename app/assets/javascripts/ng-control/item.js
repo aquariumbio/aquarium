@@ -123,7 +123,7 @@
 
       let confirm = $mdDialog.confirm()
           .title('Associate Sample?')
-          .textContent("Associating sample with the selected will discard any existing associations.")
+          .textContent("Associating sample with the selected parts will discard any existing associations.")
           .ariaLabel('Revert')
           .ok('Yes')
           .cancel('No');
@@ -134,8 +134,30 @@
         .show(confirm)
         .then(() =>  $scope.collection.assign_sample_to_selection($scope.info.sample_identifier))
         .then(collection => $scope.collection = collection)
+        .then(collection => $scope.collection.recompute_getter('data_associations'))
         .then(collection => copy_selection(old_collection, $scope.collection))
         .catch(e => console.log("Sample not assigned",e))
+
+    }
+
+    $scope.delete_parts = function() {
+
+      let confirm = $mdDialog.confirm()
+          .title('Delete Sample from Collection?')
+          .textContent("Deleting samples from the selected parts will discard any existing associations.")
+          .ariaLabel('Revert')
+          .ok('Yes')
+          .cancel('No');
+
+      let old_collection = $scope.collection;
+
+      $mdDialog
+        .show(confirm)
+        .then(() =>  $scope.collection.delete_selection())
+        .then(collection => $scope.collection = collection)
+        .then(collection => $scope.collection.recompute_getter('data_associations'))
+        .then(collection => copy_selection(old_collection, $scope.collection))
+        .catch(e => console.log("Parts not deleted",e))  
 
     }
 

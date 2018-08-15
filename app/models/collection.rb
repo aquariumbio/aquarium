@@ -38,14 +38,48 @@ class Collection < Item
 
     pairs.each do |r,c|
       if pm[r][c] 
+        old_sample_id = pm[r][c].sample_id
         pm[r][c].sample_id = sample.id
         pm[r][c].save
+        associate(
+          :"Sample Reassigned", 
+          "The sample at #{r}, #{c} was changed from #{old_sample_id} to #{sample.id}.",
+          nil,
+          duplicates: true
+        )
       else
         set r, c, sample
       end
     end
 
   end
+
+  def delete_selection pairs # of the form [ [r1,c1], [r2, c2] ... ]
+
+    pairs.each do |r,c|
+
+      pas = PartAssociation.includes(:part).where(collection_id: id, row: r, column: c)
+
+      unless pas.empty?
+
+        pas[0].part.mark_as_deleted
+        pas[0].destroy
+
+        associate(
+          :"Part Deleted", 
+          "The sample at #{r}, #{c} was deleted. " + 
+          "It used to be sample #{pas[0].part.sample_id} via deleted part #{pas[0].part.id}.",
+          nil,
+          duplicates: true
+        )
+
+        puts "DONE!!!!!!!!!!!"
+
+      end
+
+    end
+
+  end  
 
   # ORIGINAL INTERFACE #######################################################################
 
@@ -403,7 +437,7 @@ class Collection < Item
   # a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix was associated with the collection is lost
   #
   # @param sample_matrix [Array<Array<Sample>>, Array<Array<Fixnum>>]
-  def associate(sample_matrix)
+  def associate_matrix(sample_matrix)
 
     dr = sample_matrix.length
     dc = sample_matrix[0].length
@@ -450,7 +484,7 @@ class Collection < Item
 
   # @see #associate
   def set_matrix(m)
-    associate m
+    associate_matrix m
   end
 
   def get_matrix
@@ -476,7 +510,7 @@ class Collection < Item
 
   # Set the matrix associated with the collection to the matrix of Sample ids m. Whatever matrix was associated with the collection is lost
   def matrix=(m)
-    associate m
+    associate_matrix m
   end
 
   # With no options, returns the indices of the next element of the collection, skipping to the next column or row if necessary.
