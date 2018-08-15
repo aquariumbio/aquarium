@@ -9,18 +9,18 @@ AQ.Sample.getter(AQ.User,"user");
 
 AQ.Sample.getter(AQ.SampleType,"sample_type");
 
-AQ.Sample.record_methods.upgrade = function() {
+AQ.Sample.record_methods.upgrade = function(raw_data) {
 
   let sample = this;
 
-  if ( sample.field_values ) {
-    for ( var i=0; i<sample.field_values.length; i++ ) {
-      sample.field_values[i] = AQ.FieldValue.record(sample.field_values[i]);
+  if ( raw_data.field_values ) {
+    for ( var i=0; i<raw_data.field_values.length; i++ ) {
+      sample.field_values[i] = AQ.FieldValue.record(raw_data.field_values[i]);
     }
   }
 
-  if ( sample.sample_type ) {
-    sample.sample_type = AQ.SampleType.record(sample.sample_type);
+  if ( raw_data.sample_type ) {
+    sample.sample_type = AQ.SampleType.record(raw_data.sample_type);
   }
 
   return this;
@@ -45,10 +45,10 @@ AQ.Sample.record_methods.complete_sample_type = function() {
         AQ.sample_type_cache[sample.sample_type_id] = sample.sample_type;
         return sample;
       })
-  }  
+  }
 }
 
-/* This method is used by the planner autocomplete method and planner assign methods, 
+/* This method is used by the planner autocomplete method and planner assign methods,
  * which is why it incluees field values (so subsamples can be looked up).
  */
 AQ.Sample.find_by_identifier = function(sid) {

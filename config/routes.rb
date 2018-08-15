@@ -3,7 +3,7 @@ Bioturk::Application.routes.draw do
 
   resources :timings, only: %i[update create]
 
-  get '/uploads/:type/:id/:key', to: 'uploads#show'  
+  get '/uploads/:type/:id/:key', to: 'uploads#show'
 
   get '/json/current',             to: 'json#current'
   post '/json/items',              to: 'json#items'
@@ -178,6 +178,7 @@ Bioturk::Application.routes.draw do
 
   match '/',            to: 'static_pages#home'
   match '/template',    to: 'static_pages#template'
+  match '/graph',    to: 'static_pages#graph'  
   match '/test',        to: 'static_pages#test'
 
   match '/signin',     to: 'sessions#new'

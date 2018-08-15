@@ -1,6 +1,17 @@
 
 AQ.FieldValue.getter(AQ.Item,"item","child_item_id");
 
+AQ.FieldValue.record_methods.upgrade = function(raw_data) {
+
+  let fv = this;
+
+  if ( raw_data.sample ) {
+    delete fv.sample;
+    fv.sample = AQ.Sample.record(raw_data.sample);
+  }
+
+}
+
 AQ.FieldValue.record_getters.is_sample = function() {
   return this.field_type.ftype == 'sample';
 }
@@ -32,7 +43,7 @@ AQ.FieldValue.record_getters.predecessors = function() {
     aq.each(ot.field_types,function(ft) {
       if ( ft.role == 'output' && ft.can_produce(fv) ) {
         preds.push({operation_type: ot, output: ft});
-      } 
+      }
     });
   });
 
@@ -51,7 +62,7 @@ AQ.FieldValue.record_getters.successors = function() {
     aq.each(ot.field_types,function(ft) {
       if ( ft.role == 'input' && ft.can_consume(fv) ) {
         sucs.push({operation_type: ot, input: ft});
-      } 
+      }
     });
   });
 
@@ -105,21 +116,21 @@ AQ.FieldValue.record_methods.choose_item = function(items) {
 
   let fv = this;
 
-  // Only choose an item if one is not already chosen 
+  // Only choose an item if one is not already chosen
   if ( items.length > 0 && ( !fv.child_item_id || !aq.member(aq.collect(items, i => i.id), fv.child_item_id ) ) ) {
     delete fv.items;
-    fv.items = items;    
+    fv.items = items;
     if ( fv.role == 'input' && fv.num_wires == 0 ) {
       if ( !items[0].collection ) {
         fv.child_item_id = items[0].id;
       } else {
-        if ( !fv.child_item_id || fv.row == null || fv.row == undefined || !fv.column == null || fv.column == undefined ) {        
+        if ( !fv.child_item_id || fv.row == null || fv.row == undefined || !fv.column == null || fv.column == undefined ) {
           fv.child_item_id = items[0].collection.id;
           items[0].collection.assign_first(fv);
         }
       }
     }
-  }  
+  }
 
   return fv.child_item_id;
 
@@ -214,12 +225,12 @@ AQ.FieldValue.record_methods.samp_id = function(operation) {
     return fv.sample_identifier;
   } else {
     return operation.routing[fv.routing];
-  } 
+  }
 }
 
 AQ.FieldValue.record_methods.valid = function() {
 
-  var fv = this, 
+  var fv = this,
       v = false;
 
   fv.message = null;
@@ -245,12 +256,12 @@ AQ.FieldValue.record_methods.valid = function() {
     v = fv.num_wires > 0 || fv.role == 'output' || !!fv.child_item_id;
     if ( !v ) {
       fv.message = `${fv.name} invalid. wires: ${fv.num_wires}, role: ${fv.role}, item :${fv.child_item_id}`
-    }    
+    }
   }
 
-  if ( fv.role == 'input' && 
-    fv.num_wires == 0 && 
-    fv.field_type.part && 
+  if ( fv.role == 'input' &&
+    fv.num_wires == 0 &&
+    fv.field_type.part &&
     ( typeof fv.row != 'number' || typeof fv.column != 'number' ) ) {
     // Return false it the fv is a collection part but its row and/or column are not defined
     v = false;
@@ -261,12 +272,12 @@ AQ.FieldValue.record_methods.valid = function() {
 
   return v;
 
-} 
+}
 
 AQ.FieldValue.record_methods.empty = function() {
   var fv = this;
   return fv.child_sample_id;
-} 
+}
 
 AQ.FieldValue.record_methods.assign = function(sample) {
 
@@ -279,7 +290,7 @@ AQ.FieldValue.record_methods.assign = function(sample) {
 
     if ( field_value.field_type && field_value.field_type.array ) {
       field_value.sample_identifier = sample.identifier;
-    } 
+    }
 
   } else {
 

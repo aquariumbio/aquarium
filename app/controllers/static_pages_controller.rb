@@ -10,15 +10,15 @@ class StaticPagesController < ApplicationController
     assocs = assoc + "s"
     assocs_sym = assocs.to_sym
 
-    lb = User.joins(assocs_sym) 
+    lb = User.joins(assocs_sym)
              .where("#{assocs}.created_at > ?", Date.today - num.month)
 
     lb = lb.where(extra) if extra
-    
-    lb = lb.select("users.*, COUNT(#{assocs}.id) count_accessor") 
-           .group('users.id') 
-           .collect { |u| { user: u, assocs_sym => u.count_accessor } } 
-           .sort { |a,b| a[assocs_sym] <=> b[assocs_sym] } 
+
+    lb = lb.select("users.*, COUNT(#{assocs}.id) count_accessor")
+           .group('users.id')
+           .collect { |u| { user: u, assocs_sym => u.count_accessor } }
+           .sort { |a,b| a[assocs_sym] <=> b[assocs_sym] }
            .reverse
 
     compute_widths lb, assocs_sym
@@ -33,7 +33,7 @@ class StaticPagesController < ApplicationController
 
       n = [9, board.length-1].min
       w = board[0][sym] - board[n][sym]
-      w = 0.01 if w == 0 
+      w = 0.01 if w == 0
       m = 90.0 / w
       b = (10 * (board[0][sym] - 10 * board[n][sym] ) ) / w
       board.each do |row|
@@ -50,7 +50,7 @@ class StaticPagesController < ApplicationController
 
     @sample_board = leader_board "sample"
     @job_board = leader_board "job"
-    @plan_board = leader_board "plan", "plans.budget_id IS NOT NULL"   
+    @plan_board = leader_board "plan", "plans.budget_id IS NOT NULL"
 
     done = Plan.joins(:plan_associations) \
       .joins(plan_associations: :operation) \
@@ -109,6 +109,12 @@ class StaticPagesController < ApplicationController
   end
 
   def template
+    respond_to do |format|
+      format.html { render layout: 'aq2' }
+    end
+  end
+
+  def graph
     respond_to do |format|
       format.html { render layout: 'aq2' }
     end

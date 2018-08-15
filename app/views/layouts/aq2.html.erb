@@ -11,6 +11,10 @@
     <%= csrf_meta_tags %>
     <%= favicon_link_tag 'favicon.ico' %>
 
+    <% if content_for? :extra_header_code %>
+      <%= yield :extra_header_code %>
+    <% end %>
+
   <script>
 
     // set the environment name for use in cookies
@@ -58,7 +62,7 @@
       position: fixed;
     }
 
-    .page-specific-nav::-webkit-scrollbar { 
+    .page-specific-nav::-webkit-scrollbar {
       display: none;
     }
 

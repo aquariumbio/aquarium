@@ -1,0 +1,36 @@
+<% provide(:title, 'Sample Graph') %>
+
+<%= content_for :extra_header_code do %>
+  <script src="/components/vis/dist/vis.js" type="text/javascript"></script>
+  <link href="/components/vis/dist/vis.css" media="all" rel="stylesheet" type="text/css" />
+<% end %>
+
+<style type="text/css">
+    #graph {
+        width: 1400px;
+        height: 900px;
+        border: 1px solid lightgray;
+    }
+</style>
+
+<%= content_for :controller do %>graphCtrl<% end %>
+
+<%= content_for :sidebar do %>
+<% end %>
+
+<%= content_for :specific_title do %>
+<% end %>
+
+<%= content_for :action1 do %>
+<% end %>
+
+<%= content_for :sidebar do %>
+Tools here
+<% end %>
+
+<%= content_for :main do %>
+
+  <div id="graph">
+  </div>
+
+<% end %>
