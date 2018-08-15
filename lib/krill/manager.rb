@@ -63,7 +63,8 @@ module Krill
           begin
             rval = @protocol.main
           rescue Exception => e
-            puts "#{@job.id}: EXCEPTION #{e} + #{e.backtrace[0, 10]}"
+            puts "#{@job.id}: EXCEPTION #{e}"
+            puts e.backtrace[0, 10]
             @base_object.error e
           else
             @job.reload.append_step operation: 'complete', rval: rval
@@ -109,7 +110,8 @@ module Krill
       begin
         rval = @protocol.main
       rescue Exception => e
-        puts "#{@job.id}: EXCEPTION #{e} + #{e.backtrace[0, 10]}"
+        puts "#{@job.id}: EXCEPTION #{e}"
+        puts e.backtrace[0, 10]
         @base_object.error e
       else
         @job.reload.append_step operation: 'complete', rval: rval

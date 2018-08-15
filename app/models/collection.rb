@@ -4,6 +4,51 @@
 # @api krill
 class Collection < Item
 
+  has_many :part_associations, foreign_key: :collection_id
+
+  # COLLECTION INTERFACE #####################################################################
+
+  def part_matrix
+
+    r,c = self.dimensions
+    m = Array.new(r){Array.new(c)}
+
+    PartAssociation
+      .includes(part: [ { sample: [ :sample_type ] }, :object_type ] )
+      .where(collection_id: id)
+      .each do |pa|
+        m[pa.row][pa.column] = pa.part
+      end
+
+    m
+
+  end
+
+  def part_matrix_as_json
+
+    j = part_matrix.as_json(include: [ { sample: { include: :sample_type } }, :object_type ] )
+    puts j
+    j
+
+  end
+
+  def assign_sample_to_pairs sample, pairs # of the form [ [r1,c1], [r2, c2] ... ]
+
+    pm = part_matrix
+
+    pairs.each do |r,c|
+      if pm[r][c]
+        pm[r][c].sample_id = sample.id
+        pm[r][c].save
+      else
+        set r, c, sample
+      end
+    end
+
+  end
+
+  # ORIGINAL INTERFACE #######################################################################
+
   EMPTY = -1 # definition of empty
 
   def self.every
@@ -12,14 +57,12 @@ class Collection < Item
 
   def self.containing(s, ot = nil)
     return [] unless s
-    i = s.id.to_s
-    r = Regexp.new '\[' + i + ',|,' + i + ',|,' + i + '\]|\[' + i + '\]'
-    if ot
-      Collection.includes(:object_type).where(object_type_id: ot.id)
-                .select { |i| r =~ i.datum[:matrix].to_json }
-    else
-      Collection.every.select { |i| r =~ i.datum[:matrix].to_json }
-    end
+    cids = PartAssociation.joins(:part).where("sample_id = ?", to_sample_id(s)).map(&:collection_id)
+    Collection.where(id: cids).select { |c| !ot || c.object_type_id == ot.id }
+  end
+
+  def part_type
+    @part_type ||= ObjectType.find_by_name("__Part")
   end
 
   # Returns first Array element from #find
@@ -42,10 +85,10 @@ class Collection < Item
     plist
   end
 
-  # Creates as many new collections of type `name` 
+  # Creates as many new collections of type `name`
   # as will be necessary to hold every sample in the
-  # `samples` list. 
-  # 
+  # `samples` list.
+  #
   # @param samples [Array<Sample>]  list of samples to initiate collections with
   # @param name [String]  the name of a valid collection object type that will be
   #               created and populated with samples
@@ -67,7 +110,7 @@ class Collection < Item
   end
 
   # Make an entirely new collection.
-  # 
+  #
   # @param name [String]  the name of the valid collection object type to make a collection with
   # @return [Collection]  new empty collection of type `name`
   def self.new_collection(name)
@@ -77,7 +120,6 @@ class Collection < Item
 
     i = Collection.new
     i.object_type_id = o.id
-    i.apportion(o.rows, o.columns)
     i.quantity = 1
     i.inuse = 0
 
@@ -111,7 +153,7 @@ class Collection < Item
   # @param r [Integer] row
   # @param c [Integer] column
   def apportion(r, c)
-    self.matrix = Array.new(r, Array.new(c, EMPTY))
+    ### self.matrix = Array.new(r, Array.new(c, EMPTY))
   end
 
   # Informs whether the matrix includes x.
@@ -139,7 +181,10 @@ class Collection < Item
   # @param val [Fixnum, Sample, Item]
   # @return [Array<Array<Fixnum>>] selected parts in the form [[r1, c1], [r2, c2]]
   def find(val)
-    select { |x| x == to_sample_id(val) }
+    PartAssociation
+      .joins(:part)
+      .where("sample_id = ? AND collection_id = ?", to_sample_id(val), id)
+      .collect { |pa| [pa.row, pa.column] }
   end
 
   # Gets all empty rows, cols.
@@ -163,11 +208,16 @@ class Collection < Item
     get_non_empty.size
   end
 
-  # Changes Item, String, or Sample to a sample.id for storing into a collection matrix. 
+  # Changes Item, String, or Sample to a sample.id for storing into a collection matrix.
   #
+<<<<<<< HEAD
   def to_sample_id(x)
     # class method?
     #Maybe should be private
+=======
+  # class method?
+  def self.to_sample_id(x)
+>>>>>>> origin/collections2.0
     r = EMPTY
     if x.class == Integer || x.class == Fixnum # Not sure where "Integer" came from here ---ek
       r = x
@@ -189,7 +239,39 @@ class Collection < Item
     r
   end
 
+<<<<<<< HEAD
   # Adds sample, item, or number to collection.
+=======
+  def to_sample_id(x)
+    Collection.to_sample_id(x)
+  end
+
+  # Changes Item, String, or Sample to a sample
+  #
+  # class method?
+  def self.to_sample(x)
+    if x.class == Integer || ( x.class == Fixnum && x >= 0 ) # Not sure where "Integer" came from here ---ek
+      r = Sample.find(x)
+    elsif x.class == Item
+      if x.sample
+        r = x.sample
+      else
+        raise 'When the third argument to Collection.set is an item, it should be associated with a sample.'
+      end
+    elsif x.class == Sample
+      r = x
+    elsif x.class == String
+      r = Sample.find(x.split(':')[0].to_i)
+    elsif !x || x == -1
+      r = nil
+    else
+      raise "Expecting item, a sample, or a sample id, but got '#{x}' which is a #{x.class}"
+    end
+    r
+  end
+
+  # Adds sample, item, or number to collection
+>>>>>>> origin/collections2.0
   #
   # @param x [Fixnum, Sample, Item]
   # @param options [Hash]
@@ -227,7 +309,7 @@ class Collection < Item
   end
 
   # Find last [r,c] that equals x and sets to EMPTY. If x.nil? then it finds the last non_empty slot. If reverse: false
-  # then finds the first [r,c] equal to x. Returns [r,c,sample_at_rc] if x is in collection, or nil if 
+  # then finds the first [r,c] equal to x. Returns [r,c,sample_at_rc] if x is in collection, or nil if
   # x is not found or the collection is empty.
   #
   # @param x [Fixnum, Sample, Item]
@@ -273,12 +355,25 @@ class Collection < Item
   # @param c [Integer]  column
   # @param x [Fixnum, Sample, Item]  new sample for that row
   def set(r, c, x)
-    m = matrix
-    d = dimensions
-    raise "Set matrix error: Indices #{r},#{c} greater than allowed for matrix dimensions #{d[0]}x#{d[1]}" if (r >= d[0]) || (c >= d[1])
-    m[r][c] = to_sample_id(x)
-    self.matrix = m
-    save
+    # TODO: Check dimensions
+    @matrix_cache = nil
+    if x == EMPTY
+      pas = PartAssociation.where(collection_id: id, row: r, column: c)
+      if pas.length == 1
+        pas[0].destroy
+      end
+    else
+      s = Collection.to_sample(x)
+      part = Item.make({ quantity: 1, inuse: 0 }, sample: s, object_type: part_type)
+      pas = PartAssociation.where(collection_id: id, row: r, column: c)
+      if pas.length == 1
+        pa = pas[0]
+        pa.part_id = part.id
+      else
+        pa = PartAssociation.new( collection_id: id, part_id: part.id,  row: r, column: c )
+      end
+      pa.save
+    end
   end
 
   # Fill collecion with samples.
@@ -287,10 +382,10 @@ class Collection < Item
   # @return [Array<Sample>]  samples that were not filled
   def add_samples(samples, options = {})
     opts = { reverse: false }.merge(options)
-    non_empty_arr = get_empty
-    non_empty_arr.reverse! if opts[:reverse]
+    empties = get_empty
+    empties.reverse! if opts[:reverse]
     remaining = []
-    samples.zip(non_empty_arr).each do |s, rc|
+    samples.zip(empties).each do |s, rc|
       if rc.nil?
         remaining << s
       else
@@ -301,11 +396,40 @@ class Collection < Item
     remaining
   end
 
+  # Takes a matrix of sample ids, samples or items and returns a matrix of only sample ids
+  def to_sample_id_matrix sample_matrix
+
+    dr = sample_matrix.length
+    dc = sample_matrix[0].length
+
+    sample_matrix_aux = Array.new(dr){Array.new(dc)}
+
+    # convert sample matrix into ids
+    (0...dr).each do |r|
+      (0...dc).each do |c|
+        klass = sample_matrix[r][c].class
+        if klass == Sample
+          sample_matrix_aux[r][c] = sample_matrix[r][c].id
+        elsif klass == Item
+          sample_matrix_aux[r][c] = Item.sample_id
+        elsif klass == Fixnum && sample_matrix[r][c] > 0
+          sample_matrix_aux[r][c] = sample_matrix[r][c]
+        else
+          sample_matrix_aux[r][c] = nil
+        end
+      end
+    end
+
+    sample_matrix_aux
+
+  end
+
   # Sets the matrix associated with the collection to the matrix m where m can be either a matrix of Samples or
   # a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix was associated with the collection is lost.
   #
   # @param sample_matrix [Array<Array<Sample>>, Array<Array<Fixnum>>]
   def associate(sample_matrix)
+<<<<<<< HEAD
     # TODO remove this method so that collections can inherit DataAssociator associate
     # matrix=() does everything just fine and has a more informative method name
     m = get_data[:matrix]
@@ -317,11 +441,50 @@ class Collection < Item
                   else
                     sample_matrix[r][c]
                   end
+=======
+
+    dr = sample_matrix.length
+    dc = sample_matrix[0].length
+    sample_matrix_aux = to_sample_id_matrix sample_matrix
+
+    ActiveRecord::Base.transaction do
+
+      clear
+      @matrix_cache = nil
+
+      # create parts
+      parts = []
+      collection_id_string = "__part_for_collection_#{id}__"
+      (0...dr).each do |r|
+        (0...dc).each do |c|
+          if sample_matrix_aux[r][c] != nil
+            parts << Item.new(quantity: 1, inuse: 0, sample_id: sample_matrix_aux[r][c], object_type_id: part_type.id, data: collection_id_string)
+          end
+        end
+>>>>>>> origin/collections2.0
       end
+      Item.import parts
+      parts = Item.where(data: collection_id_string) # get the parts just made so we have the ids
+      index = 0
+
+      # create part associations
+      pas = []
+      (0...dr).each do |r|
+        (0...dc).each do |c|
+          if sample_matrix_aux[r][c] != nil
+            pas << PartAssociation.new(collection_id: id, part_id: parts[index].id, row: r, column: c)
+            index += 1
+          end
+        end
+      end
+      PartAssociation.import pas
+
     end
 
-    self.matrix = m
+  end
 
+  def clear
+    part_associations.map(&:destroy)
   end
 
   # @see #associate
@@ -331,24 +494,38 @@ class Collection < Item
   end
 
   def get_matrix
-    datum[:matrix]
+    matrix
   end
 
   # Get matrix of {Sample} ids.
   #
   # @return [Array<Array<Integer>>]
   def matrix
-    datum[:matrix]
+    if @matrix_cache
+      @matrix_cache
+    else
+      r,c = self.dimensions
+      m = Array.new(r){Array.new(c, EMPTY)}
+      PartAssociation.includes(:part).where(collection_id: id).each do |pa|
+        m[pa.row][pa.column] = pa.part.sample_id if pa.row < r && pa.column < c
+      end
+      @matrix_cache = m
+      m
+    end
   end
 
   # Set the matrix associated with the collection to the matrix of Sample ids m, whatever matrix was associated with the collection is lost.
   def matrix=(m)
-    d = datum
-    self.datum = d.merge(matrix: m)
+    associate m
   end
 
+<<<<<<< HEAD
   # With no options, returns the indices of the next element of the collections, skipping to the next column or row if necessary.
   # With the option skip_non_empty: true, returns the next non empty indices. Returns nil if [r,c] is the last element of the collection.
+=======
+  # With no options, returns the indices of the next element of the collection, skipping to the next column or row if necessary.
+  # With the option skip_non_empty: true, returns the next non empty indices. Returns nil if [r,c] is the last element of the collection
+>>>>>>> origin/collections2.0
   #
   # @param r [Integer] row
   # @param c [Integer] column
@@ -376,12 +553,11 @@ class Collection < Item
   #
   # @return [Array<Fixnum>]
   def dimensions
-    m = matrix
-    if m && m[0]
-      [m.length, m[0].length]
-    else
-      [0, 0]
-    end
+    # Should look up object type dims instead
+    dims = [object_type.rows,object_type.columns]
+    dims[0] = 12 unless dims[0] != nil
+    dims[1] = 1 unless dims[1] != nil
+    dims
   end
 
   # Returns a string describing the indices of the non empty elements in the collection. For example,
@@ -406,6 +582,20 @@ class Collection < Item
       "1 - #{max[1] + 1}"
     end
 
+  end
+
+  def migrate
+    unless datum[:_migrated_]
+      if self.data
+        tempdata = JSON.parse(self.data, symbolize_names: true)
+        if tempdata[:matrix]
+          self.matrix = tempdata[:matrix]
+          tempdata.delete :matrix
+          tempdata[:_migrated_] = Date.today
+          self.set_data tempdata
+        end
+      end
+    end
   end
 
 end

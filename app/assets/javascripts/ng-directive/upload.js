@@ -1,6 +1,6 @@
 (function() {
 
-  var w = angular.module('aquarium'); 
+  var w = angular.module('aquarium');
 
   w.directive('customOnChange', function() {
     return {
@@ -10,7 +10,7 @@
         element.bind('change', function(event){
           var files = event.target.files;
           onChangeFunc(files);
-        });       
+        });
         element.bind('click', function(){
           element.val('');
         });
@@ -31,13 +31,13 @@
               + "  <span ng-if='record.uploading && !small'>Busy...</span>"
               + "  <span ng-if='!record.uploading && !small'>Upload</span>"
               + "  <span ng-if='record.uploading && small'>...</span>"
-              + "  <span ng-if='!record.uploading && small'><ng-md-icon icon='file_upload' size='14'/></span>"              
+              + "  <span ng-if='!record.uploading && small'><ng-md-icon icon='file_upload' size='14'/></span>"
               + "    <input type=file"
               + "      id='upload'"
               + "      file='upload'"
               + "      multiple"
               + "      style='display: none;'>"
-              + "</label>",       
+              + "</label>",
 
       link: function(scope,element,attrs) {
 
@@ -48,14 +48,14 @@
             scope.record.uploading = true;
             data.submit()
               .fail(function(j,status,error) {
-                alert("Error: unable to upload file");
+                alert(`Error: unable to upload file: ${error}`);
                 scope.record.uploading = false;
               })
               .done(function(data, status, j) {
                 scope.record.uploading = false;
                 AQ.update();
               });
-          },        
+          },
           done: function(e,data) {
             var da = scope.record.new_data_association();
             delete da.upload;
@@ -72,7 +72,7 @@
             } else {
               scope.record.uploading = false;
               scope.record.process_upload_complete();
-              AQ.update();  
+              AQ.update();
             }
           }
         });
@@ -90,7 +90,7 @@
 
     $scope.is_image = function(record) {
       return record.upload_content_type.split("/")[0] == "image";
-    }   
+    }
 
 
   }]);

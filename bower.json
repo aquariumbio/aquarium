@@ -17,7 +17,14 @@
     "tests"
   ],
   "dependencies": {
+    "jquery": "latest",
+    "jquery-autocomplete": "latest",
+    "jquery-ui": "latest",
+    "jquery-cookie": "latest",
+    "jquery-file-upload": "latest",
+    "jquery-ujs": "latest",
     "underscore": "latest",
+    "lodash": "latest",
     "ace-builds": "latest",
     "angular-material": "~1.1.3",
     "angular-cookies": "latest",
@@ -26,6 +33,8 @@
     "should": "latest",
     "markdown-it": "latest",
     "github-markdown-css": "latest",
+    "bootstrap-css": "2.3.2",
+    "datatables.net": "latest",
     "vis": "latest"
   },
   "resolutions": {

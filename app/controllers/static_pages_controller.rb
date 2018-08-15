@@ -46,7 +46,7 @@ class StaticPagesController < ApplicationController
 
   def home
 
-    @announcements = Announcement.find(:all, order: 'id desc', limit: 5)
+    @announcements = Announcement.last(5).reverse
 
     @sample_board = leader_board "sample"
     @job_board = leader_board "job"

@@ -15,4 +15,4 @@ end
 # with a rails class of the same name which we've never used (and didn't know about). The best thing to
 # do at some point would be to rename this class.
 
-puts "Found #{Collection.count} collections (to avoid 'wrong constant' error)"
+puts "Corrected 'wrong constant' error for collections #{Collection.count != nil}"

@@ -1,35 +1,55 @@
-<% if @group %>
+<% provide(:title, @group.name) %>
 
-  <% provide(:title, @group.name) %>
+<%= content_for :specific_title do %>
+<% end %>
 
-  <p id="notice"><%= notice %></p>
+<%= content_for :main do %>
 
-  <p>
-    <b>Name:</b>
-    <%= @group.name %>
-  </p>
+  <div layout-padding>
 
-  <p>
-    <b>Description:</b>
-    <%= @group.description %>
-  </p>
+    <p id="notice" class="alert alert-success" layout-padding><%= notice %></p>
 
-  <%= render 'memberships' %>
+    <%= render 'memberships' %>
 
-  <% if current_user && current_user.is_admin %>
-    <hr />
-    <%= link_to 'Edit details', edit_group_path(@group), class: 'btn' %> 
-  <% end %>
+  </div>
 
   <script>
    window.history.replaceState ( null, '', '/groups/<%= @group.id %>' );
   </script>
 
-<% else %>
-
-  <p>Unknown Group</p>
-
 <% end %>
 
-<%= link_to 'All Groups', groups_path, class: 'btn' %>
+<%= content_for :action1 do %>
+  <%= link_to 'All Groups', groups_path, class: 'md-button md-raised' %>
+<% end %>
 
+<% if current_user && current_user.is_admin %>'
+  <%= content_for :action2 do %>
+    <%= link_to 'Edit details', edit_group_path(@group), class: 'md-button md-raised' %>
+  <% end %>
+<% end %>
+
+<%= content_for :sidebar do %>
+
+  <div layout-padding>
+
+    <p>
+      <b>Description:</b>
+      <%= @group.description %>
+    </p>
+
+    <% if current_user && current_user.is_admin %>
+      <div class="dropdown" style="position: relative; z-index: 1000">
+        <a href="#" class="md-button md-raised dropdown-toggle" data-toggle="dropdown">Add Member <b class="caret"></b></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <% (User.all.sort { |x,y| x.login <=> y.login}).each do |u| %>
+              <li><%= link_to "#{u.login} ( #{u.name} )" , group_path(@group) + '?user_id=' + u.id.to_s %></li>
+            <% end %>
+          </ul>
+         </a>
+      </div>
+    <% end %>
+
+  </div>
+
+<% end %>

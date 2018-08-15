@@ -55,7 +55,7 @@ class Locator < ActiveRecord::Base
 
   def self.largest(wizard)
     # find greatest locator for this wizard, should always be the most recent
-    wizard.locators.last(order: 'id desc', limit: 1)
+    wizard.locators.order("id desc").first
   end
 
   def self.port(wizard)

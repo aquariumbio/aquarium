@@ -1,24 +1,126 @@
-<% provide(:title, "#{@item.id}") %>
+<%= render partial: '/data_associations/template' %> 
+<%= render partial: "/items/template" %>
 
-<h1>Item <%= @item.id %>
-  <% if @item.deleted? %>
-    : Deleted
-  <% else %>
-     at <%= @item.location %>
-  <% end %>
-</h1>
+<% provide(:title, "#{@item.object_type.handler == 'collection' ? 'Collection' : 'Item' } #{@item.id}") %>
 
-  <%= render @handler.show_item_partial %>
+<%= content_for :controller do %>itemCtrl<% end %>
 
- <div class='well'>
-  <h4>Data Associations</h4>
-  <ul>
-    <% @item.associations.each do |k,v| %>
-      <li><%= k %>: <%= v %></li>
-    <% end %>
-  </ul>
-</div>
+<%= content_for :sidebar do %>
+  <div ng-if="collection">
 
-<p>Locator_id: <%= @item.locator_id ? @item.locator_id : 'nil' %></p>
-<p>Locator.id: <%= @item.locator ? "id = #{@item.locator.id}, item_id = #{@item.locator.item_id}" : 'nil' %></p>
-<p>Primitive Location: <%= @item.primitive_location %></p>
+    <div ng-if="selection.length == 0">
+      <br>
+      <b>Created:</b> {{collection.created_at|date}}<br>
+      <b>Updated:</b> {{collection.created_at|date}}<br>
+      <b>Location:</b> {{collection.location}}<br>
+      <hr>
+    </div>
+
+    <div ng-if="part">
+      <b>Position:</b> {{row}}, {{column}}<br>
+      <div ng-if="part.id">
+        <b>Part ID:</b> {{part.id}}<br>
+        <b>Sample {{part.sample.id}}:</b> <a href="/browser?sid={{part.sample_id}}" target="sample">{{part.sample.name}}</a><br>
+        <b>Owner:</b> {{part.sample.user.name}}<br><br>
+        <b ng-if="part.data_associations.length > 0">Data Associations:</b><br>
+        <div class='data-associations'>
+          <da record="part"></da>
+          <br>
+          <div layout="row" layout-align="center center">
+            <md-button ng-click="part.new_data_association()" class="md-raised" aria-label="Add Data">Add Data</md-button>
+            <md-button class="md-raised upload-button"><upload record='part' aria-label="Upload"></upload></md-button>
+          </div>
+        </div>         
+      </div>
+      <div ng-if="!part.id">
+        No sample assigned
+      </div>
+    </div>
+
+    <div ng-if="selection.length > 1">
+      Multiple parts selected.<br>
+      Press <tt>Escape</tt> to clear.
+    </div>
+
+  </div>
+
+<% end %>
+
+<%= content_for :specific_title do %>
+  : {{item.object_type.name}}
+    {{collection.object_type.name}}
+<% end %>
+
+<%= content_for :main do %>
+
+  <div ng-if="collection" ng-keydown="keydown($event)" class="collection-editor">
+
+    <div>
+
+      <div class="selection-box"
+           ng-if="selection.length > 0"
+           style="top: {{selection_box.y}}px; 
+                  left: {{selection_box.x}}px;
+                  height: {{selection_box.height}}px;
+                  width: {{selection_box.width}}px;">
+      </div>    
+
+      <table>
+        <tr>
+          <td class="index" style="width: 30px" ng-click="select_all()"></td>
+          <td class="index" 
+              ng-repeat="part in collection.part_matrix[0] track by $index"
+              ng-click="select_column($index)">
+            {{$index}}
+          </td>
+        </tr>
+        <tr ng-repeat="row in collection.part_matrix track by $index">
+          <td class="index" ng-click="select_row($index)">{{$index}}</td>
+          <td ng-repeat="part in row track by $index"
+              ng-class="cell_class(part,$parent.$index,$index)"
+              ng-click="select(part,$parent.$index,$index,$event)"
+              data-selected="{{part.selected}}">
+            <div ng-if="part.rid" class="sample-identifier">
+              <b>{{part.sample_id}}:</b> {{part.sample.name}}
+            </div>
+          </td>
+        </tr>
+      </table>
+
+    </div>
+
+    <div layout-padding ng-if="selection.length > 0 && samples_loaded">
+      <label>Assign Sample to Selection</label>
+      <input ng-class="choose-sample"
+             samplechooser="info.sample_identifier">
+      <md-button ng-click="assign_sample()"
+                 ng-disabled="!info.sample_identifier"
+                 class="md-raised md-primary">Assign</md-button>
+      <md-button ng-click="clear_parts()"
+                 class="md-raised">Clear</md-button>                 
+    </div>
+
+    <div layout-padding ng-if="selection.length > 0 && !samples_loaded">
+      Loading sample names...
+    </div>
+
+    <div ng-if="selection.length == 0" class='data-associations'>
+      <span class="md-title" ng-if="collection.data_associations.length > 0">Collection wide data associations</span>
+      <da record="collection"></da>
+      <br>
+      <div layout="row" layout-align="center center">
+        <md-button ng-click="collection.new_data_association()" class="md-raised" aria-label="Add Data">Add Data</md-button>
+        <md-button class="md-raised upload-button"><upload record='collection' aria-label="Upload"></upload></md-button>
+      </div>
+    </div>    
+
+  </div>
+
+  <div ng-if="item" layout-padding>
+    This interface is primarily for viewing and editing collections.<br>
+    To inspect this item, click here:<div item="item" container="item.object_type" sample="item.sample"></div>
+  </div>
+
+
+<% end %>
+
