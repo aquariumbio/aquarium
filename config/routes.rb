@@ -179,10 +179,10 @@ Bioturk::Application.routes.draw do
 
   root to: 'static_pages#home'
 
-  match '/',            to: 'static_pages#home'
-  match '/template',    to: 'static_pages#template'
-  match '/graph',    to: 'static_pages#graph'
-  match '/test',        to: 'static_pages#test'
+  get '/',            to: 'static_pages#home'
+  get '/template',    to: 'static_pages#template'
+  get '/graph',       to: 'static_pages#graph'
+  get '/test',        to: 'static_pages#test'
 
   get '/signin',     to: 'sessions#new'
   get '/signout',    to: 'sessions#destroy', via: :delete
