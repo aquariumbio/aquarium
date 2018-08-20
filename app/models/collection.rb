@@ -6,7 +6,163 @@ class Collection < Item
 
   has_many :part_associations, foreign_key: :collection_id
 
-  # COLLECTION INTERFACE #####################################################################
+  # COLLECTION 2.0 ADDITIONS ####################################################################
+
+  def drop_data_matrix key
+    ids = data_matrix(key).flatten.compact.collect { |da| da.id }
+    DataAssociation.where(id: ids).destroy_all
+  end
+
+  def set_data_matrix key, matrix, offset: [0,0]
+
+    pm = part_matrix
+    r,c = dimensions
+    parts = []
+    pas = []
+    das = []
+
+    # REDO
+    # 1. make new pas
+    # 2. make new parts and bulk save to get ids
+    # 3. associate parts with pas
+    # 4. bulk save pas
+    # 5. make new das
+    # 6. bulk save pas
+
+    collection_id_string = "__part_for_collection_#{id}__"    
+
+    each_row_col(matrix,offset: offset) do |x,y,ox,oy|
+      if pm[ox][oy]
+        das << pm[ox][oy].lazy_associate(key, matrix[x][y])
+        # pm[ox][oy].associate(key, matrix[x][y])
+      else
+        parts << Item.new(quantity: 1, inuse: 0, object_type_id: part_type.id, data: collection_id_string)
+      end
+    end
+
+    Item.import parts unless parts.empty?
+    parts = Item.where(data: collection_id_string) # get the parts just made so we have the ids
+    index = 0
+
+    each_row_col(matrix, offset: offset) do |x,y,ox,oy|
+      if !pm[ox][oy]
+        pas << PartAssociation.new(collection_id: id, part_id: parts[index].id, row: ox, column: oy)
+        das << parts[index].lazy_associate(key, matrix[x][y])
+        index += 1
+      end
+    end
+
+    PartAssociation.import pas unless pas.empty?
+    DataAssociation.import das unless das.empty?  
+
+    pm
+
+  end
+
+  def new_data_matrix key
+    r,c = dimensions
+    set_data_matrix key, Array.new(r){Array.new(c,0.0)}
+  end
+
+  def print_data_matrix key
+    dm = data_matrix key
+    dm.each do |row|
+      vals = row.collect { |e| e ? e.value : '-' }
+      puts "#{vals.join(', ')}"
+    end
+  end
+
+  def set_part_data key, r, c, value
+
+    pm = part_association r, c
+    if pm
+      pm.part.associate key, value
+    else
+      pa = initialize_part r, c
+      pa.part.associate key, value
+    end
+
+  end
+
+  def get_part_data key, r, c
+
+    pa = part_association r, c
+    if pa && pa.part
+      pa.part.get key
+    else
+      nil
+    end
+
+  end
+
+  def each_row_col matrix, offset: [0,0]
+    dr, dc = dimensions
+    (0...matrix.length).each do |r|
+      (0...matrix[r].length).each do |c|  
+        x = r + offset[0]
+        y = c + offset[1]
+        if x < dr && y < dc     
+          yield r, c, x, y
+        end
+      end
+    end
+
+  end
+
+  def initialize_part r, c, sample: nil
+    
+    pa = part_association r, c
+
+    if pa
+      if !pa.part_id
+        part = Item.make({ quantity: 1, inuse: 0 }, sample: sample, object_type: part_type) 
+        pa.part_id = part.id
+        pa.save
+      end
+    else
+      part = Item.make({ quantity: 1, inuse: 0 }, sample: sample, object_type: part_type)      
+      pa = PartAssociation.new( collection_id: id, part_id: part.id,  row: r, column: c ) 
+      pa.save
+    end
+
+    pa
+
+  end
+
+  def part_association r, c
+    pas = PartAssociation.where(collection_id: id, row: r, column: c)
+    if pas.length == 1
+      pas[0]
+    else
+      nil
+    end
+  end
+
+  def data_matrix key
+
+    pas = part_associations
+    part_ids = pas.collect { |p| p.part_id }
+    das = DataAssociation.where(parent_class: "Item", parent_id: part_ids, key: key)
+
+    r,c = self.dimensions
+    m = Array.new(r){Array.new(c)}
+
+    pas.each do |pa|
+      m[pa.row][pa.column] = das.find { |da| da.parent_id == pa.part_id }
+    end
+
+    m
+
+  end
+
+  def part r, c
+    pas = PartAssociation.includes(:part).where(collection_id: id, row: r, column: c)
+    if pas.length == 1
+      pas[0].part
+    else
+      nil
+    end
+  end
 
   def part_matrix
 
@@ -26,9 +182,7 @@ class Collection < Item
 
   def part_matrix_as_json
 
-    j = part_matrix.as_json(include: [ { sample: { include: :sample_type } }, :object_type ] )
-    puts j
-    j
+    part_matrix.as_json(include: [ { sample: { include: :sample_type } }, :object_type ] )
 
   end
 
