@@ -88,9 +88,9 @@ class JsonController < ApplicationController
     end
 
     if params[:model][:model] == 'DataAssociation' && record.parent_class == 'Plan'
-      Operation.step(Plan.find(record.parent_id)
-                         .operations
-                         .reject { |op| %w[done error scheduled running].member?(op.status) })
+      plan = Plan.find(record.parent_id)
+      Operation.step(plan.operations
+                         .reject { |op| %w[planning done error scheduled running].member?(op.status) })
     end
 
     if record.errors.empty?

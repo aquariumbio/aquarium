@@ -105,7 +105,8 @@ KrillLog.prototype.table = function(action,x) {
 
         } else if ( x[i][j].type ) {
 
-          var td = $('<td>&#9656; '+action.inputs.table_inputs[i-1].value+'</td>');
+          sorted_table_inputs = action.inputs.table_inputs.sort(function(a, b){return a.row - b.row})
+          var td = $('<td>&#9656; '+JSON.stringify(sorted_table_inputs[i - 1].value)+'</td>');
 
         } else {
 

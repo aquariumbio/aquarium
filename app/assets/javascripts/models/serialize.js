@@ -90,7 +90,6 @@ AQ.FieldValue.record_methods.serialize = function() {
 
   aq.each(props, p => efv[p] = fv[p]); 
 
-
   if ( fv.field_type.array ) {
     efv.array = true;
   }

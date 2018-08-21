@@ -47,7 +47,7 @@
     <text x="0" y="40" 
           ng-attr-class="{{op_status_class(op) + ' no-highlight'}}"
           ng-if="op.status != 'planning'"
-          ng-click="op.edit_status = !op.edit_status">
+          ng-mousedown="statusMouseDown($event,op)">
       {{op.status}}
     </text>
 
@@ -188,7 +188,6 @@
               ng-mousedown="op.edit_status = false">&times;</text>      
       </g>  
     </g>       
-
 
   </g>  
 

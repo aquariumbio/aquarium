@@ -6,8 +6,6 @@ class Collection < Item
 
   EMPTY = -1 # definition of empty
 
-  # CLASS METHODS ###################################################################
-
   def self.every
     Item.joins(:object_type).where(object_types: { handler: 'collection' })
   end
@@ -44,6 +42,16 @@ class Collection < Item
     plist
   end
 
+  # Creates as many new collections of type `name` 
+  # as will be necessary to hold every sample in the
+  # `samples` list. 
+  # 
+  # @param samples [Array<Sample>]  list of samples to initiate collections with
+  # @param name [String]  the name of a valid collection object type that will be
+  #               created and populated with samples
+  # @return [Array<Collection>]  list of newly created collections of type `name`
+  #                     that hold all given `samples`.  No more collections will be
+  #                     created than are needed to hold all the samples
   def self.spread(samples, name, options = {})
     opts = { reverse: false }.merge(options)
     remaining = samples
@@ -58,8 +66,10 @@ class Collection < Item
     collections
   end
 
-  # METHODS #########################################################################
-
+  # Make an entirely new collection.
+  # 
+  # @param name [String]  the name of the valid collection object type to make a collection with
+  # @return [Collection]  new empty collection of type `name`
   def self.new_collection(name)
 
     o = ObjectType.find_by_name(name)
@@ -95,16 +105,16 @@ class Collection < Item
     i
   end
 
-  # Sets the matrix for the collection to an empty rxc matrix and saves the collection to the database.
-  # Whatever matrix was associated with the collection is lost
+  # Sets the matrix for the collection to an empty rxc matrix and saves the collection to the database,
+  # whatever matrix was associated with the collection is lost.
   #
-  # @param r [Integer] Row
-  # @param c [Integer] Column
+  # @param r [Integer] row
+  # @param c [Integer] column
   def apportion(r, c)
     self.matrix = Array.new(r, Array.new(c, EMPTY))
   end
 
-  # Whether the matrix includes x
+  # Informs whether the matrix includes x.
   #
   # @param x [Fixnum, Sample, Item]
   # @return [Boolean]
@@ -113,9 +123,9 @@ class Collection < Item
     sel.any?
   end
 
-  # Finds rows, cols in which block is true
+  # Finds parts of collection in which block is true.
   #
-  # @return [Array<Array<Fixnum>>] Array of form [[r1, c1], [r2, c2]]
+  # @return [Array<Array<Fixnum>>]  selected parts in the form [[r1, c1], [r2, c2]]
   def select
     raise 'need selection block' unless block_given?
     matrix.map.with_index do |row, r|
@@ -124,39 +134,40 @@ class Collection < Item
     end.select(&:any?).flatten(1)
   end
 
-  # Finds rows, cols that equal val
+  # Finds parts that equal val.
   #
   # @param val [Fixnum, Sample, Item]
-  # @return [Array<Array<Fixnum>>] Array of form [[r1, c1], [r2, c2]]
+  # @return [Array<Array<Fixnum>>] selected parts in the form [[r1, c1], [r2, c2]]
   def find(val)
     select { |x| x == to_sample_id(val) }
   end
 
-  # Gets all empty rows, cols
+  # Gets all empty rows, cols.
   #
-  # @return [Array<Array<Fixnum>>] Array of form [[r1, c1], [r2, c2]]
+  # @return [Array<Array<Fixnum>>] empty parts in the form [[r1, c1], [r2, c2]]
   def get_empty
     select { |x| x == EMPTY }
   end
 
-  # Gets all non-empty rows, cols
+  # Gets all non-empty rows, cols.
   #
-  # @return [Array<Array<Fixnum>>] Array of form [[r1, c1], [r2, c2]]
+  # @return [Array<Array<Fixnum>>] non-empty parts in the form [[r1, c1], [r2, c2]]
   def get_non_empty
     select { |x| x != EMPTY }
   end
 
-  # Returns the number of non empty slots in the matrix
+  # Returns the number of non empty slots in the matrix.
   #
   # @return [Fixnum]
   def num_samples
     get_non_empty.size
   end
 
-  # Changes Item, String, or Sample to a sample.id for storing into a collection matrix. Maybe should be private
+  # Changes Item, String, or Sample to a sample.id for storing into a collection matrix. 
   #
-  # class method?
   def to_sample_id(x)
+    # class method?
+    #Maybe should be private
     r = EMPTY
     if x.class == Integer || x.class == Fixnum # Not sure where "Integer" came from here ---ek
       r = x
@@ -178,11 +189,11 @@ class Collection < Item
     r
   end
 
-  # Adds sample, item, or number to collection
+  # Adds sample, item, or number to collection.
   #
   # @param x [Fixnum, Sample, Item]
   # @param options [Hash]
-  # @option options [Bool] :reverse Start from end of matrix
+  # @option options [Bool] :reverse start from end of matrix
   # @example
   #   c = Collection.find_by_id(1)
   #   c.matrix # [[-1, -1, 3], [4, -1, -1]]
@@ -216,11 +227,12 @@ class Collection < Item
   end
 
   # Find last [r,c] that equals x and sets to EMPTY. If x.nil? then it finds the last non_empty slot. If reverse: false
-  # then finds the first [r,c] equal to x. Returns [r,c,sample_at_rc] if x is in collection. or nil if x is not found or the col.empty?
+  # then finds the first [r,c] equal to x. Returns [r,c,sample_at_rc] if x is in collection, or nil if 
+  # x is not found or the collection is empty.
   #
   # @param x [Fixnum, Sample, Item]
   # @param options [Hash]
-  # @option options [Bool] :reverse Begin from the end of the matrix
+  # @option options [Bool] :reverse begin from the end of the matrix
   def subtract_one(x = nil, options = {})
     opts = { reverse: true }.merge(options)
     r = nil
@@ -243,23 +255,23 @@ class Collection < Item
     d[0] * d[1]
   end
 
-  # Whether the matrix has no EMPTY slots
+  # Whether the matrix has no EMPTY slots.
   #
   # @return [Bool]
   def full?
     get_empty.empty?
   end
 
-  # Whether the matrix is empty
+  # Whether the matrix is empty.
   #
   # @return [Bool]
   delegate :empty?, to: :get_non_empty
 
-  # Set the [r,c] entry of the matrix to id of the Sample s. If s=nil, then the [r,c] entry is cleared
+  # Set the [r,c] entry of the matrix to id of the Sample s. If s=nil, then the [r,c] entry is cleared.
   #
-  # @param r [Integer] Row
-  # @param c [Integer] Column
-  # @param x [Fixnum, Sample, Item]
+  # @param r [Integer]  row
+  # @param c [Integer]  column
+  # @param x [Fixnum, Sample, Item]  new sample for that row
   def set(r, c, x)
     m = matrix
     d = dimensions
@@ -269,8 +281,10 @@ class Collection < Item
     save
   end
 
-  # Fill collecion with samples
-  # Return samples that were not filled
+  # Fill collecion with samples.
+  #
+  # @param [Array<Sample>]  samples to put in collection
+  # @return [Array<Sample>]  samples that were not filled
   def add_samples(samples, options = {})
     opts = { reverse: false }.merge(options)
     non_empty_arr = get_empty
@@ -288,11 +302,12 @@ class Collection < Item
   end
 
   # Sets the matrix associated with the collection to the matrix m where m can be either a matrix of Samples or
-  # a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix was associated with the collection is lost
+  # a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix was associated with the collection is lost.
   #
   # @param sample_matrix [Array<Array<Sample>>, Array<Array<Fixnum>>]
   def associate(sample_matrix)
-
+    # TODO remove this method so that collections can inherit DataAssociator associate
+    # matrix=() does everything just fine and has a more informative method name
     m = get_data[:matrix]
 
     (0..sample_matrix.length - 1).each do |r|
@@ -311,6 +326,7 @@ class Collection < Item
 
   # @see #associate
   def set_matrix(m)
+    # TODO make this an alias of matrix=()
     associate m
   end
 
@@ -318,26 +334,26 @@ class Collection < Item
     datum[:matrix]
   end
 
-  # Return matrix of {Sample} ids
+  # Get matrix of {Sample} ids.
   #
   # @return [Array<Array<Integer>>]
   def matrix
     datum[:matrix]
   end
 
-  # Set the matrix associated with the collection to the matrix of Sample ids m. Whatever matrix was associated with the collection is lost
+  # Set the matrix associated with the collection to the matrix of Sample ids m, whatever matrix was associated with the collection is lost.
   def matrix=(m)
     d = datum
     self.datum = d.merge(matrix: m)
   end
 
   # With no options, returns the indices of the next element of the collections, skipping to the next column or row if necessary.
-  # With the option skip_non_empty: true, returns the next non empty indices. Returns nil if [r,c] is the last element of the collection
+  # With the option skip_non_empty: true, returns the next non empty indices. Returns nil if [r,c] is the last element of the collection.
   #
-  # @param r [Integer] Row
-  # @param c [Integer] Column
+  # @param r [Integer] row
+  # @param c [Integer] column
   # @param options [Hash]
-  # @option options [Bool] :skip_non_empty Return next non-empty indices
+  # @option options [Bool] :skip_non_empty  next non-empty indices
   def next(r, c, options = {})
 
     opts = { skip_non_empty: false }.merge options
@@ -356,7 +372,7 @@ class Collection < Item
 
   end
 
-  # Returns the dimensions of the matrix associated with the collection
+  # Returns the dimensions of the matrix associated with the collection.
   #
   # @return [Array<Fixnum>]
   def dimensions
@@ -370,7 +386,7 @@ class Collection < Item
 
   # Returns a string describing the indices of the non empty elements in the collection. For example,
   # the method might return the string "1,1 - 5,9" to indicate that collection contains samples in
-  # those indices. Note that the string is adjusted for viewing by the user, so starts with 1 instead of 0 for rows and columns
+  # those indices. Note that the string is adjusted for viewing by the user, so starts with 1 instead of 0 for rows and columns.
   #
   # @return [String]
   def non_empty_string

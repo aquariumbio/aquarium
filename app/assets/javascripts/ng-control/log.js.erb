@@ -1,0 +1,19 @@
+(function() {
+
+  var w = angular.module('aquarium'); 
+
+  w.controller('logCtrl', [ '$scope', '$http', 
+                function  (  $scope,   $http ) {
+
+    AQ.init($http);
+    AQ.update = () => { $scope.$apply(); }
+    AQ.confirm = (msg) => { return confirm(msg); }
+
+    $scope.status = {};
+    AQ.Job
+      .find(parseInt(aq.query().job))
+      .then(job => $scope.job = job );
+
+  }]);
+
+})();                    

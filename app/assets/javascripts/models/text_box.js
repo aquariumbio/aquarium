@@ -45,6 +45,7 @@ class TextBox {
   get rendered_content() {
     let box = this;
     let md = window.markdownit();
+    md.set({html: true})
     return AQ.sce.trustAsHtml(md.render(box.markdown));
   }
 

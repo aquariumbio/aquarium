@@ -738,6 +738,8 @@ AQ.Plan.record_methods.choose_items = function() {
 
   let plan = this;
 
+  aq.collect(plan.leaves, fv => fv.child_item_id = null );  
+
   return Promise.all(
     aq.collect(plan.leaves, fv => fv.find_items(fv.child_sample_id))
   ).then(() => {
@@ -810,4 +812,9 @@ AQ.Plan.record_getters.saved = function() {
 AQ.Plan.record_methods.step_operations = function() {
   console.log("AQ.Plan.step()")
   return AQ.get("/operations/step?plan_id=" + this.id);
+}
+
+AQ.Plan.record_getters.link = function() {
+  let plan = this;
+  return window.location.href.split("#")[0] + "?plan_id=" + plan.id;
 }
