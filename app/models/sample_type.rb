@@ -1,5 +1,5 @@
 
-
+# Meta-type of {Sample}. Many {Sample}s may exist of this Type.
 # @api krill
 class SampleType < ActiveRecord::Base
 
@@ -7,7 +7,12 @@ class SampleType < ActiveRecord::Base
 
   after_destroy :destroy_fields
 
-  attr_accessible :description, :name
+  attr_accessible :description
+
+  # Gets name of SampleType.
+  #
+  # @return [String]  the name of the SampleType, as in "Primer"
+  attr_accessible :name
 
   has_many :samples
   has_many :object_types

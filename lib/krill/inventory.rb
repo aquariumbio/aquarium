@@ -31,10 +31,17 @@ module Krill
     # an infinite loop when Base is inserted into the user's code ancestry. Put
     # them in the top level Krill module instead (as in Box) above.
 
+    # Create a new item with only an {ObjectType}
+    #
+    # @param name [String]  the name of the ObjectType that will be instantiated into item
     def new_object(name)
       Item.new_object name
     end
 
+    # Create a new item with a {Sample} and {ObjectType}.
+    #
+    # @param name [String]  the name of the sample that will be instantiated into item
+    # @param spec [String]  the name of the ObjectType that will be instantiated into item
     def new_sample(name, spec)
       s = Sample.find_by_name(name)
       ot = ObjectType.find_by_name(spec[:as])
@@ -43,20 +50,32 @@ module Krill
       Item.make({ quantity: 1, inuse: 0 }, sample: s, object_type: ot)
     end
 
+    # This is the same as Collection.new_collection.
+    #
+    # @see Collection.new_collection
     def new_collection(name)
       Collection.new_collection name
     end
 
+    # Upgrade an item to a Collection.
+    #
+    # @param id [Item/Fixnum]  An Item, or an id of an item to be upgraded
+    # @return [Collection]  the Collection that the item corresponds to, if any
     def collection_from(id)
       Collection.find id
     end
 
+    # This is the same as Collection.spread.
+    #
+    # @see Collection.spread
     def spread(samples, name, options = {})
       opts = { reverse: false }.merge(options)
       Collection.spread samples, name, opts
     end
 
-    # sorts items alphanumerically by freezer, hotel, box, then slot
+    # Sorts items in place alphanumerically by freezer, hotel, box, then slot.
+    #
+    # @param items [Array<Item>]  list of items to sort
     def sort_by_location(items)
       return [] if items.empty?
       locations = items.map { |item| item.location.split('.') }
@@ -68,7 +87,7 @@ module Krill
       end
       loc_strings = sorted_locations.map { |loc| "#{loc[0]}.#{loc[1]}.#{loc[2]}.#{loc[3]}" }
       items.sort_by! { |item| loc_strings.index(item.location) }
-    end # sort_by_location
+    end
 
     def boxes_for(items)
 
@@ -145,6 +164,16 @@ module Krill
 
     end
 
+    # Associate the item with the job running the protocol, until it is released (see {release}). 
+    # It also "touches" the item by the job, so that one can later determine that the item was used by the job.
+    #
+    # @param items [Array<Items>]  the items that will be associated with this job
+    # @param args [Hash]  additional optional arguments
+    # @option args [Boolean] :interactive  decide whether to show instructions to technician to find items,
+    #                 or to silently take the items
+    # @option args [String] :method  decide how to show instructions to technician
+    # @example taking a long list of items that goes through freezer boxes
+    #   take items, interactive: true,  method: "boxes"
     def take(items, args = {})
 
       user_shows = if block_given?
@@ -184,6 +213,15 @@ module Krill
 
     end
 
+    # The other side of {take}, releases a list of items from being associated to the job.
+    #
+    # @param items [Array<Items>]  the items that will be unassociated with this job
+    # @param args [Hash]  additional optional arguments
+    # @option args [Boolean] :interactive  decide whether to show instructions to technician to put items away,
+    #                 or to silently release the items
+    # @option args [String] :method  decide how to show instructions to technician
+    # @example releasing a long list of items that goes through freezer boxes
+    #   release items, interactive: true,  method: "boxes"
     def release(items, args = {})
 
       user_shows = if block_given?
