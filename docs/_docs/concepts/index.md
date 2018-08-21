@@ -47,7 +47,7 @@ In the diagram, the DNA input could be either a Maxiprep of Plasmid Library or a
 The type of the output depends on the types of the inputs.
 
 An _operation_ is a particular instance of an operation type with concrete inputs and outputs.
-This is illustrated in this diagram, which The diagram shows the bacterial transformation operation where the inputs are identified with particular items that exist in the inventory.
+This is illustrated in this diagram, which shows the bacterial transformation operation where the inputs are identified with particular items that exist in the inventory.
 
 <img src="{{ site.baseurl }}{% link _docs/concepts/images/operation.png %}" width="50%">
 
@@ -62,7 +62,7 @@ These operations may come from different plans of different researchers as illus
 <img src="{{ site.baseurl }}{% link _docs/concepts/images/planned-operations.png %}" width="50%">
 
 Operations that are ready at the same time can be grouped into jobs by the manager.
-Here the operations are batched into four jobs.
+The operations are batched into four jobs.
 The manager can batch operations in to jobs as needed – in this case, the manager chose to create jobs 2 and 3 separately even though the operations have the same operation type.
 
 <img src="{{ site.baseurl }}{% link _docs/concepts/images/batched-jobs.png %}" width="50%">
