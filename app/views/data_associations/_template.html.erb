@@ -18,7 +18,7 @@
           </div>
 
           <!-- The input box or upload info -->
-          <div flex="{{90-(keywidth ? keywidth : 15)}}" ng-controller="daCtrl">
+          <div flex="{{80-(keywidth ? keywidth : 15)}}" ng-controller="daCtrl">
 
             <input type='text' ng-model=da.new_value ng-if="!da.upload_id && !noedit" class="da-input">
 
@@ -52,7 +52,7 @@
           </div>
 
           <!-- The controls -->
-          <div flex="10">
+          <div flex="20">
             <div layout="row" layout-align="end center" ng-if="!noedit">
               <a href="#" ng-click="save(da)" ng-if="da.new_value != da.value || da.unsaved" class="no-highlight">
                 <ng-md-icon icon="system_update_alt" size="22" aria-label="Save" style="fill: #444"></ng-md-icon>

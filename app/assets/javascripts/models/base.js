@@ -136,7 +136,7 @@ AQ.model_names = [
   "Account", "User", "Group", "SampleType", "Sample", "ObjectType", "Item", "UserBudgetAssociation", "Budget",
   "OperationType", "Operation", "FieldType", "FieldValue", "AllowableFieldType", "Wire", "Parameter",
   "Plan", "PlanAssociation", "DataAssociation", "Job", "Upload", "Code", "Timing", "Collection",
-  "Library", "JobAssociation", "Locator" ];
+  "Library", "JobAssociation", "Locator", "PartAssociation" ];
 
 for ( var i=0; i<AQ.model_names.length; i++ ) {
   AQ[AQ.model_names[i]] = new AQ.Base(AQ.model_names[i]);

@@ -17,20 +17,19 @@
     </div>
 
     <div ng-if="part">
+      <h1 class="md-title" style="margin-bottom: 12px">
+        Sample {{part.sample.id}}
+      </h1>
+      <h1 class="md-subhead" style="margin-bottom: 12px">
+        <a href="/browser?sid={{part.sample_id}}" target="sample">{{part.sample.name}}</a>
+      </h1>
       <b>Position:</b> {{row}}, {{column}}<br>
       <div ng-if="part.id">
-        <b>Part ID:</b> {{part.id}}<br>
-        <b>Sample {{part.sample.id}}:</b> <a href="/browser?sid={{part.sample_id}}" target="sample">{{part.sample.name}}</a><br>
-        <b>Owner:</b> {{part.sample.user.name}}<br><br>
-        <b ng-if="part.data_associations.length > 0">Data Associations:</b><br>
-        <div class='data-associations'>
-          <da record="part"></da>
-          <br>
-          <div layout="row" layout-align="center center">
-            <md-button ng-click="part.new_data_association()" class="md-raised" aria-label="Add Data">Add Data</md-button>
-            <md-button class="md-raised upload-button"><upload record='part' aria-label="Upload"></upload></md-button>
-          </div>
-        </div>         
+        <b>Part ID:</b> {{part.id}}<br>      
+        <b>Type:</b> {{part.sample.sample_type.name}}<br>
+        <b>Owner:</b> {{part.sample.user.name}}<br>   
+        <b>Created:</b> {{part.sample.created_at|date}}<br>
+        <b>Updated:</b> {{part.sample.updated_at|date}}<br>        
       </div>
       <div ng-if="!part.id">
         No sample assigned
@@ -49,6 +48,50 @@
 <%= content_for :specific_title do %>
   : {{item.object_type.name}}
     {{collection.object_type.name}}
+  <span ng-if="mode == 'data'">: <b>{{key}}</b></span>
+<% end %>
+
+<%= content_for :action1 do %>  
+  <md-button class="md-raised" 
+             ng-if="mode == 'data'"
+             ng-click="undo_data_changes()"
+             ng-disabled='!data_changed() || saving'>
+    Undo
+  </md-button>
+<% end %>
+
+<%= content_for :action2 do %>  
+  <md-button class="md-raised md-warn"
+             ng-if="mode == 'data'"
+             ng-click="save_data()"
+             ng-disabled='!data_changed() || saving'>
+    <span ng-if="saving">Saving</span>
+    <span ng-if="!saving">Save</span>
+  </md-button> 
+<% end %>
+
+
+<%= content_for :action3 do %>
+  <md-menu>
+    <md-button ng-class="mode_class('data')"
+      ng-click="openMenu($mdMenu, $event)">Data</md-button>
+    <md-menu-content>
+      <md-menu-item ng-repeat="key in collection.data_keys">
+        <md-button ng-click="choose_data_key(key)">{{key}}</md-button>
+      </md-menu-item>
+      <md-menu-divider></md-menu-divider>   
+      <md-menu-item>
+        <md-button ng-click="new_data_key()">New Key</md-button>
+      </md-menu-item>         
+    </md-menu-content>
+  </md-menu>
+<% end %>
+
+<%= content_for :action4 do %>  
+  <md-button ng-class="mode_class('samples')"
+             ng-click="set_mode('samples')">
+             Samples
+  </md-button> 
 <% end %>
 
 <%= content_for :keydown do %>keydown($event)<% end %>
@@ -82,8 +125,14 @@
               ng-class="cell_class(part,$parent.$index,$index)"
               ng-click="select(part,$parent.$index,$index,$event)"
               data-selected="{{part.selected}}">
-            <div ng-if="part.rid" class="sample-identifier">
+            <div ng-if="mode == 'samples' && part.rid" class="sample-identifier">
               <b>{{part.sample_id}}:</b> {{part.sample.name}}
+            </div>
+            <div ng-if="mode == 'data' && part.rid && key == da.key"
+                 ng-repeat="da in part.data_associations"
+                 class="data-input">
+              <input ng-model="da.new_value" 
+                     ng-change="gang_data_associations(da.new_value)">
             </div>
           </td>
         </tr>
@@ -91,7 +140,7 @@
 
     </div>
 
-    <div layout-padding ng-if="selection.length > 0 && samples_loaded">
+    <div layout-padding ng-if="selection.length > 0 && samples_loaded && mode == 'samples'">
       <label>Assign Sample to Selection</label>
       <input flex=50
              class="choose-sample"
@@ -107,11 +156,10 @@
       Loading sample names...
     </div>
 
-    <div ng-if="selection.length == 0" class='data-associations'>
-      <span class="md-title" ng-if="collection.data_associations.length > 0">Collection wide data associations</span><br><br>
+    <div ng-if="selection.length == 0" class='data-associations' style="margin-top: 40px">
+      <h2 class="md-title" ng-if="true || collection.data_associations.length > 0">Collection wide data associations</h2>
       <da record="collection"></da>
-      <br>
-      <div layout="row" layout-align="center center">
+      <div layout="row" layout-align="left left">
         <md-button ng-click="collection.new_data_association()" class="md-raised" aria-label="Add Data">Add Data</md-button>
         <md-button class="md-raised upload-button"><upload record='collection' aria-label="Upload"></upload></md-button>
       </div>

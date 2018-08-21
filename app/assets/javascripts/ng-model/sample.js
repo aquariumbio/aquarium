@@ -46,8 +46,6 @@ Sample.prototype.get_inventory = function(promise) {
         return c;
       });
 
-      console.log(["COLLECTIONS RETRIEVED", sample.collections]);
-
       sample.collection_containers = response.data.containers;
 
       promise();

@@ -36,6 +36,9 @@
       .no-part {
         background: #eee;
       }
+      .no-padding {
+        padding: 0px !important;
+      }
     }
     .index {
       background: rgb(16, 96, 158);
@@ -58,6 +61,16 @@
 
   .data-associations {
     margin: 16px;
+  }
+
+  .data-input {
+    input {
+      margin: 0px;
+      border: none;
+      &:focus {
+        outline: none;
+      }
+    }
   }
 
 }

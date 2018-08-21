@@ -125,16 +125,18 @@ Bioturk::Application.routes.draw do
 
   resources :groups
 
+  post '/collections/save_data_associations', to: 'collections#save_data_associations'
   post '/collections/:id/assign_sample', to: 'collections#assign_sample'
   post '/collections/:id/delete_selection', to: 'collections#delete_selection'
+  get '/collections/:id', to: 'collections#show'
 
-  resources :collections do # Not sure this is used anymore
-    member do
-      get 'associate'
-      get 'dissociate'
-      get 'newitem'
-    end
-  end
+  # resources :collections do # Not sure this is used anymore
+  #   member do
+  #     get 'associate'
+  #     get 'dissociate'
+  #     get 'newitem'
+  #   end
+  # end
 
   resources :samples
   resources :sample_types

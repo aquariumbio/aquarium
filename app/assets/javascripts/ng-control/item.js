@@ -14,22 +14,111 @@
     $scope.last_click = [0,0];
     $scope.selection = [];
     $scope.samples_loaded = false;
+    $scope.mode = 'samples';
     $scope.info = { sample_identifier: null }; // Autocomlete needs a field of an object
 
     AQ.Item.where({id: $scope.item_id}, {include: "object_type"}).then(items => {
       if ( items.length != 1 ) {
         alert("Could not find item " + $scope.item_id)
       } else if ( items[0].is_collection ) {
-        AQ.Collection.where({id: $scope.item_id}, { include: "object_type", methods: ["part_matrix_as_json"]}).then(collections => {
-          $scope.collection = collections[0];
-          $scope.$apply();
-          AQ.get_sample_names().then(() => $scope.samples_loaded = true);
-          console.log($scope.collection)
-        })
+        AQ.Collection
+          .find_fast($scope.item_id)
+          .then(collection => {
+            $scope.collection = collection;
+            AQ.get_sample_names().then(() => $scope.samples_loaded = true);
+          })
       } else {
         $scope.item = items[0];
       }
     }); 
+
+    $scope.openMenu = function($mdMenu, ev) {
+      originatorEv = ev;
+      $mdMenu.open(ev);
+    };
+
+    $scope.new_data_key = function() {
+      let dialog = $mdDialog.prompt()
+          .title('New data key name?')
+          .textContent("What should the new data field be named?")
+          .ariaLabel('Key name')
+          .placeholder('key')
+          .initialValue('key')
+          .required(true)
+          .ok('OK')
+          .cancel('Cancel');
+
+      let old_collection = $scope.collection;
+
+      $mdDialog
+        .show(dialog)
+        .then(result => {
+          $scope.key = result;
+          $scope.collection.extend_data_association(result);
+          $scope.collection.recompute_getter('data_keys')
+          $scope.set_mode('data');
+        })
+        .catch(e => console.log("New data key not created",e));
+      
+    }
+
+    $scope.data_changed = function() {
+      let rval = false;
+      aq.each($scope.collection.parts, part => {
+        aq.each(part.data_associations, da => {
+          if ( da.value != da.new_value ) {
+            rval = true;
+          }
+        })
+      });
+      return rval;
+    }
+
+    $scope.undo_data_changes = function() {
+      aq.each($scope.collection.parts, part => {
+        aq.each(part.data_associations, da => {
+          if ( da.value != da.new_value ) {
+            da.set(da.value);
+          }
+        })
+      });
+    }
+
+    $scope.save_data = function() {
+      $scope.saving = true
+      $scope.collection.save_data_associations()
+            .then(() => $scope.saving = false)
+    }
+
+    $scope.choose_data_key = function(key) {
+      $scope.key = key;
+      $scope.collection.extend_data_association(key)
+      $scope.set_mode('data');
+    }
+
+    $scope.set_mode = function(mode) {
+      $scope.mode = mode;
+      $scope.clear_selection();
+    }
+
+    $scope.mode_class = function(mode) {
+      let c = "md-raised ";
+      if ( mode == $scope.mode ) {
+        c += "md-primary";
+      }
+      return c;
+    }
+
+    $scope.gang_data_associations = function(value) {
+      for ( var r=0; r<$scope.collection.part_matrix.length; r++ ) {
+        for ( var c = 0; c < $scope.collection.part_matrix[r].length; c++ ) {
+          if ( $scope.collection.part_matrix[r][c].record_type == "Item" && 
+               $scope.collection.part_matrix[r][c].selected ) {
+            $scope.collection.part_matrix[r][c].data_association($scope.key).new_value = value;
+          }
+        }
+      }
+    }
 
     $scope.clear_selection = function() {
       for ( var r=0; r<$scope.collection.part_matrix.length; r++ ) {
@@ -59,7 +148,7 @@
           for ( var j=c1; j<=c2; j++ ) {
             $scope.collection.part_matrix[i][j].selected = true;
           }
-        }     
+        }
 
       } else {
         
@@ -105,6 +194,9 @@
       let klass = "no-highlight";
       if ( !part.rid ) {
         klass += " no-part";
+      }
+      if ( $scope.mode == 'data' ) {
+        klass += " no-padding"
       }
       return klass;
     }
@@ -225,6 +317,9 @@
           }
           if ( $(this).position().top + $(this).outerHeight() > y2 ) {
             y2 = $(this).position().top + $(this).outerHeight()
+          }
+          if ( $scope.mode == 'data' ) {
+            $(this).find("input").focus();
           }
         });
 
