@@ -67,7 +67,7 @@ AQ.Collection.record_methods.save_data_associations = function() {
             da.id = updated_da.id;
             da.object = updated_da.object;
             da.updated_at = updated_da.updated_at;
-            da.recompute_getter('value')
+            da.recompute_getter('value');
           }
         });
       });

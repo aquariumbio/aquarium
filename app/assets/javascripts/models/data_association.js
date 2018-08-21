@@ -90,10 +90,11 @@ AQ.DataAssociation.base_methods = {
 
     temp[key] = value;
     da = AQ.DataAssociation.record({
-      key: key, 
+      key: key ? key : 'key', 
       object: JSON.stringify(temp),
       parent_class: record.record_type,
-      parent_id: record.id
+      parent_id: record.id,
+      unsaved: true
     })
 
     record.data_associations.push(da);
