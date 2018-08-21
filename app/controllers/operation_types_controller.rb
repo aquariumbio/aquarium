@@ -364,7 +364,7 @@ class OperationTypesController < ApplicationController
 
     begin
       ots = OperationType.where(category: params[:category]).collect(&:export)
-      
+
       render json: ots, status: :ok
     rescue Exception => e
       render json: { error: 'Could not export: ' + e.to_s + ', ' + e.backtrace[0] },
