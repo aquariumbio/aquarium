@@ -61,3 +61,5 @@ gem 'github-markup'
 gem 'rubocop'
 gem 'yard'
 gem 'yard-activerecord'
+
+gem 'PriorityQueue'
