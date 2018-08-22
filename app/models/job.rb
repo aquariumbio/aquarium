@@ -1,5 +1,9 @@
 
 
+# Defines a batch of executable {Operation}s of the same type that can be run together.
+# Jobs are executed with the `protocol` of the {OperationType}. Protocols must handle being able to 
+# run Jobs with varying amounts of Operations.
+# @api krill
 class Job < ActiveRecord::Base
 
   include JobOperations
@@ -9,6 +13,10 @@ class Job < ActiveRecord::Base
 
   has_many :job_associations
   # has_many :operations, through: :jobs_associations # not working for some reason
+
+  # A list of all {Operation}s in this Job. 
+  #
+  # @return [Array<Operation>]  operations in this Job
   def operations
     job_associations.collect(&:operation)
   end
@@ -95,6 +103,9 @@ class Job < ActiveRecord::Base
     save
   end
 
+  # Gets the login of the user who submitted this Job.
+  # 
+  # @return [String]  user login
   def submitter
     u = User.find_by_id(submitted_by)
     if u
@@ -104,6 +115,9 @@ class Job < ActiveRecord::Base
     end
   end
 
+  # Gets the login of the user who performed this Job.
+  #
+  # @return [String] user login
   def doer
     u = User.find_by_id(user_id.to_i)
     if u
@@ -180,6 +194,9 @@ class Job < ActiveRecord::Base
 
   end
 
+  # Get the value returned by the last line of the main method in the protocol which ran this Job.
+  #
+  # @return [Hash]  JSON parsed object which was returned by the Job 
   def return_value
 
     if /\.rb$/ =~ path
