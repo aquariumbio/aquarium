@@ -358,12 +358,29 @@ class OperationTypesController < ApplicationController
     end
   end
 
+  def lib_export
+    redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
+
+    begin
+      render json: [{
+                      name: name,
+                      category: category,
+                      lib = (Library.find(params[:id]) && Library.find(params[:id]).code) ? Library.find(params[:id]).code.content : ''
+                    }], status: :ok
+    rescue Exception => e
+      render json: { error: 'Could not export: ' + e.to_s + ', ' + e.backtrace[0] },
+             status: :internal_server_error
+    end
+  end
+
   def export_category
 
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     begin
       ots = OperationType.where(category: params[:category]).collect(&:export)
+
+      libs = Library.where(category: params[:category]).collect(&:lib_export)
 
       render json: ots, status: :ok
     rescue Exception => e
