@@ -83,6 +83,8 @@
 
               change: change,
 
+              minLength: 3,                
+
               open: function(event, ui) {
               
                   var $input = $(event.target),

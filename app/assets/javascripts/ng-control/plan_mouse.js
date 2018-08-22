@@ -55,7 +55,7 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
  }
 
  $scope.clear_operation_selects = function() {
-  aq.each($scope.plan.operations, op => op.edit_status = false);
+   aq.each($scope.plan.operations, op => op.edit_status = false);
  }
 
  // Global mouse events ////////////////////////////////////////////////////////////////////////
@@ -224,6 +224,11 @@ function PlanMouse($scope,$http,$attrs,$cookies,$sce,$window) {
     evt.stopImmediatePropagation();
 
   }    
+
+  $scope.statusMouseDown = function(evt,op) {
+    op.edit_status = !op.edit_status;
+    evt.stopImmediatePropagation();
+  }
 
   // Wire Events //////////////////////////////////////////////////////////////////////////
 
