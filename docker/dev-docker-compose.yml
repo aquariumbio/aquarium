@@ -68,7 +68,7 @@ services:
       - ./spec:/aquarium/spec
       - ./test:/aquairum/test
     networks:
-     - aquarium_net
+      - aquarium_net
     ports:
       - "3000:3000"
     depends_on:
