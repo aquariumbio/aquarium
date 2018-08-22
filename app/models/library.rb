@@ -9,4 +9,14 @@ class Library < ActiveRecord::Base
   validates :name, presence: true
   validates :category, presence: true
 
+
+  def export
+  	{ 
+  	  library: {
+	      name: name, 
+	  	  category: category, 
+	  	  code: code ? Library.find(params[:id]).code.content : '' 
+	  }
+  	}
+  end
 end
