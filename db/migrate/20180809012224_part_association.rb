@@ -5,7 +5,7 @@ class PartAssociation < ActiveRecord::Migration
       t.integer :collection_id
       t.integer :row
       t.integer :column
-      t.timestamps
+      t.timestamps null: true
     end
     add_index(:part_associations, [:collection_id, :row, :column], unique: true)
   end
