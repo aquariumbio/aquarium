@@ -1,6 +1,9 @@
 
-
-# An input, output, or parameter of an {Operation}
+# Simply put: a representation of an input, output, or parameter of an Operation.
+#
+# In more detail: an Item, Sample, or parameter of the inputs/outputs of an {Operation} or of the properties of a {Sample}
+# that can be verified as allowed for that {Operation} or {Sample} by the corresponding {FieldType} of
+# the respective parent {OperationType} or {SampleType}.
 # @api krill
 
 class FieldValue < ActiveRecord::Base
@@ -9,12 +12,22 @@ class FieldValue < ActiveRecord::Base
   include FieldValueKrill
 
   # belongs_to :sample # Not sure if this is used anywhere
+
   belongs_to :child_sample, class_name: 'Sample', foreign_key: :child_sample_id
   belongs_to :child_item, class_name: 'Item', foreign_key: :child_item_id
-  belongs_to :field_type
   belongs_to :allowable_field_type
 
-  attr_accessible :name, :child_item_id, :child_sample_id, :value, :role
+  # Gets the {FieldType} which defines this field value
+  #
+  # @return [FieldType]  the parent {FieldType}
+  belongs_to :field_type
+
+
+  # Gets name of FieldValue. Will be the same as the name of the Parent {FieldType}.
+  #
+  # @return [String]  the name of the FieldValue, as in "Forward Primer"
+  attr_accessible :name
+
   attr_accessible :field_type_id, :row, :column, :allowable_field_type_id
   attr_accessible :parent_class, :parent_id
 

@@ -1,5 +1,8 @@
 
-
+# Meta type of {FieldValue}.
+# An Item type, or parameter type of the inputs/outputs of an {OperationType} or of the properties of a {SampleType}.
+# FieldType holds a list of allowable values or objects for defining {Operations} or {Samples}
+# that would satisfy the specifications of their respective abstract {OperationType} or {SampleType}.
 # @api krill
 class FieldType < ActiveRecord::Base
 
@@ -24,6 +27,10 @@ class FieldType < ActiveRecord::Base
     super
   end
 
+  # Check whether the given value is allowed by this field type.
+  #
+  # @param val [Object]  the potential value to check
+  # @return [Boolean]  whether or not the value would be allowed
   def allowed?(val)
     case ftype
     when 'string', 'url'
