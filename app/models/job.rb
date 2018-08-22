@@ -1,6 +1,6 @@
 
 
-# Defines a batch of executable {Operations} of the same type that can be run together.
+# Defines a batch of executable {Operation}s of the same type that can be run together.
 # Jobs are executed with the `protocol` of the {OperationType}. Protocols must handle being able to 
 # run Jobs with varying amounts of Operations.
 # @api krill
@@ -14,7 +14,7 @@ class Job < ActiveRecord::Base
   has_many :job_associations
   # has_many :operations, through: :jobs_associations # not working for some reason
 
-  # A list of all {Operations} in this Job. 
+  # A list of all {Operation}s in this Job. 
   #
   # @return [Array<Operation>]  operations in this Job
   def operations

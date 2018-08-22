@@ -1,7 +1,7 @@
 
 # Meta type of {FieldValue}.
 # An Item type, or parameter type of the inputs/outputs of an {OperationType} or of the properties of a {SampleType}.
-# FieldType holds a list of allowable values or objects for defining {Operations} or {Samples}
+# FieldType holds a list of allowable values or objects for defining {Operation}s or {Sample}s
 # that would satisfy the specifications of their respective abstract {OperationType} or {SampleType}.
 # @api krill
 class FieldType < ActiveRecord::Base
