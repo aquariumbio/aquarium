@@ -20,12 +20,12 @@ class OperationType < ActiveRecord::Base
   # Gets name of OperationType.
   #
   # @return [String]  the name of the OperationType, as in "Rehydrate Primer"
-  attr_accessible :name, 
+  attr_accessible :name
 
   # Gets category of OperationType.
   #
   # @return [String]  the category of the OperationType, as in "Cloning"
-  attr_accessible :category, 
+  attr_accessible :category
 
 
   validates :name, presence: true
