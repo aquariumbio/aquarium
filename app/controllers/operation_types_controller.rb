@@ -364,8 +364,9 @@ class OperationTypesController < ApplicationController
 
     begin
       ots = OperationType.where(category: params[:category]).collect(&:export)
+      libs = Library.where(category: params[:category]).collect(&:export)
 
-      render json: ots, status: ok
+      render json: ots.concat(libs), status: :ok
     rescue Exception => e
       render json: { error: 'Could not export: ' + e.to_s + ', ' + e.backtrace[0] },
              status: :internal_server_error
@@ -384,7 +385,11 @@ class OperationTypesController < ApplicationController
 
       begin
         issues_list = params[:operation_types].collect do |x|
-          OperationType.import(x.merge(deployed: false), current_user)
+          if x.has_key?(:library)
+            Library.import(x, current_user)
+          else
+            OperationType.import(x.merge(deployed: false), current_user)
+          end
         end
 
         notes = issues_list.collect { |issues| issues[:notes] }.flatten

@@ -58,6 +58,7 @@ services:
       - AWS_SECRET_ACCESS_KEY="" 
       - AWS_REGION=""
     volumes:
+      - ./docs:/aquarium/docs
       - ./app:/aquarium/app
       - ./config:/aquarium/config
       - ./db:/aquarium/db
