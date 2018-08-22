@@ -8,6 +8,7 @@ gem 'mysql2', '~> 0.3.17'
 
 # Needed for rails 3.2 => 4.0 upgrade
 gem 'protected_attributes'
+gem 'tzinfo-data'
 
 # Json helpers
 gem 'rails-patch-json-encode'
