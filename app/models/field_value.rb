@@ -28,7 +28,7 @@ class FieldValue < ActiveRecord::Base
   # @return [String]  the name of the FieldValue, as in "Forward Primer"
   attr_accessible :name
 
-  attr_accessible :field_type_id, :row, :column, :allowable_field_type_id
+  attr_accessible :field_type_id, :row, :column, :allowable_field_type_id, :child_item_id, :child_sample_id, :value, :role
   attr_accessible :parent_class, :parent_id
 
   # Return associated {Sample}.
