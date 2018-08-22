@@ -103,7 +103,7 @@ class Job < ActiveRecord::Base
     save
   end
 
-  # Gets the login of the user who submitted this job
+  # Gets the login of the user who submitted this Job.
   # 
   # @return [String]  user login
   def submitter
@@ -115,7 +115,7 @@ class Job < ActiveRecord::Base
     end
   end
 
-  # Gets the login of the user who performed this job
+  # Gets the login of the user who performed this Job.
   #
   # @return [String] user login
   def doer

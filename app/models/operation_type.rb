@@ -44,7 +44,7 @@ class OperationType < ActiveRecord::Base
     add_field name, sample_name, container_name, 'output', opts
   end
 
-  # The input types of this OperationType
+  # The input types of this OperationType.
   #
   # @return [Array<FieldType>]  meta definitions of the inputs
   #           that would be required to instantiate an operation of this type.
@@ -53,7 +53,7 @@ class OperationType < ActiveRecord::Base
   end
 
 
-  # The output types of this OperationType
+  # The output types of this OperationType.
   #
   # @return [Array<FieldType>]  meta definitions of the outputs
   #           that could be produced by a successful operation of this type 

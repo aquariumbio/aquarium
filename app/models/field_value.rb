@@ -17,7 +17,7 @@ class FieldValue < ActiveRecord::Base
   belongs_to :child_item, class_name: 'Item', foreign_key: :child_item_id
   belongs_to :allowable_field_type
 
-  # Gets the {FieldType} which defines this field value
+  # Gets the {FieldType} which defines this field value.
   #
   # @return [FieldType]  the parent {FieldType}
   belongs_to :field_type
@@ -31,21 +31,21 @@ class FieldValue < ActiveRecord::Base
   attr_accessible :field_type_id, :row, :column, :allowable_field_type_id
   attr_accessible :parent_class, :parent_id
 
-  # Return associated {Sample}
+  # Return associated {Sample}.
   #
   # @return [Sample]
   def sample
     child_sample
   end
 
-  # Return associated {Item}
+  # Return associated {Item}.
   #
   # @return [Item]
   def item
     child_item
   end
 
-  # Return an html link to the item ui for the {Item} associated with this field value
+  # Return an html link to the item ui for the {Item} associated with this field value.
   #
   # @return [String]
   def item_link
@@ -242,7 +242,7 @@ class FieldValue < ActiveRecord::Base
     child_item.associate name, value if child_item_id
   end
 
-  # Set {Item}, {Collection}, or row or column
+  # Set {Item}, {Collection}, or row or column.
   #
   # @param opts [Hash]
   # @option opts [Item] :item
