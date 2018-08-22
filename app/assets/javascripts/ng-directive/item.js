@@ -9,7 +9,15 @@
 
       restrict: 'AE',
 
-      scope: { item: '=', container: "=", sample: "=", nolink: "=" },
+      scope: { 
+        item: '=', 
+        container: "=", 
+        sample: "=", 
+        nolink: "=", 
+        collection: "=?", 
+        row: "=?", 
+        column: "=?" 
+      },
 
       link: function($scope,$element,$attributes) {
 

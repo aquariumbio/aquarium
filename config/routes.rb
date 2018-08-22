@@ -127,6 +127,7 @@ Bioturk::Application.routes.draw do
 
   post '/collections/save_data_associations', to: 'collections#save_data_associations'
   post '/collections/:id/assign_sample', to: 'collections#assign_sample'
+  get '/collections/:id/raw_matrix', to: 'collections#raw_matrix'  
   post '/collections/:id/delete_selection', to: 'collections#delete_selection'
   get '/collections/:id', to: 'collections#show'
 

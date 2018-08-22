@@ -14,7 +14,11 @@
 
         <md-toolbar class="item-toolbar">
           <div class="md-toolbar-tools">
-            <h2 flex md-truncate>Item {{item.id}}: {{container.name}}</h2> 
+            <h2 flex md-truncate>
+              <span>Item {{item.id}}:</span>
+              <span ng-if="!collection">{{container.name}}</span>
+              <span ng-if="collection">Part {{row}}, {{column}} of {{collection.object_type.name}}</span>
+            </h2> 
           </div>
           <div class='item-close' ng-click='item.modal=false'>&times;</div>
         </md-toolbar>
@@ -25,35 +29,40 @@
 
         <div layout="row">
 
-          <div class='details md-body-2' flex="40">
+          <div class='details md-body-2' flex="60">
             <div class="created-at">Created: {{item.created_at|date}}</div>
             <div class="owner">Sample Owner: {{sample.user ? sample.user.name : item.sample.user.name}}</div>
+            <div ng-if="collection">
+              Part {{row}},{{column}} of {{collection.object_type.name}}
+              <a href="/items/{{collection.id}}" target="collection">{{collection.id}}</a>
+            </div>
+            <div>Location: {{collection.location}}</div>
           </div>
 
-          <div flex="60" layout="column" layout-align="center center">
-            <div ng-if="item.matrix">Position(s) in collection</div>
-            <table class='tiny-collection' ng-if="item.matrix">
+          <div flex="40" layout="column" layout-align="center center">
+            <div ng-if="container.handler == 'collection'">Position(s) in collection</div>
+            <table class='tiny-collection' ng-if="container.handler == 'collection'">
               <tr ng-repeat="row in item.matrix track by $index">
                 <td ng-repeat="el in row track by $index" 
                     ng-class="sample.id == el ? 'filled' : el != -1 ? 'other' : 'blank'">
                 </td>
               </tr>
             </table>
-            <a ng-if="item.matrix" href="/items/{{item.id}}" target="_blank">
+            <a ng-if="container.handler == 'collection'" href="/items/{{item.id}}" target="_blank">
               Collection details
             </a>
           </div>
 
         </div>
 
-        <div class="location-editor" layout="column" layout-wrap ng-if="item.location == 'deleted'">
+        <div class="location-editor" layout="column" layout-wrap ng-if="!collection && item.location == 'deleted'">
           <div><b>Deleted on {{item.updated_at|date}}</b></div>
           <% if current_user && current_user.is_admin %>          
             <div><md-button class='md-raised md-small' ng-click="item.store()">Restore</md-button></div>
           <% end %>
         </div>
 
-        <div class="location-editor" layout="row" layout-wrap ng-if="item.location != 'deleted'">
+        <div class="location-editor" layout="row" layout-wrap ng-if="!collection && item.location != 'deleted'">
           <div flex="20" class='md-body-2'>Location</div>
           <div flex="60"><input type='text' class='location-input'
                                 ng-model="item.new_location"></div>
@@ -81,8 +90,9 @@
           </div>
         </div>
 
-        <div class="history" ng-if="item.history.length > 0">
-          <h4 class="md-body-2">Item History</h4>
+        <div class="history" ng-if="( collection && collection.history.length > 0 ) || item.history.length > 0">
+          <h4 class="md-body-2" ng-if="!collection">History of {{container.name}} {{item.id}}</h4>
+          <h4 class="md-body-2" ng-if="collection"> History of {{collection.object_type.name}} {{collection.id}}</h4>        
           <table class='table' style="width: 100%">
             <tr>
               <th>Name</th>
@@ -92,13 +102,28 @@
               <th>Plan</th>
               <th>Jobs</th>
             </tr>
-            <tr ng-repeat="h in item.history">
-              <td>{{h.field_value.name}}</td>
+            <tr ng-repeat="h in (collection ? collection.history : item.history)">
+              <td>
+                {{h.field_value.name}}
+                <span ng-if="h.field_value.is_part">
+                [{{h.field_value.row}}, {{h.field_value.column}}]
+                </span>
+              </td>
               <td>{{h.field_value.role}}</td>
               <td>{{h.operation.id}}</td>
               <td>{{h.operation.operation_type.name}}</td>
-              <td><a href="/launcher?plan_id={{h.operation.plan_associations[0].plan_id}}">{{h.operation.plan_associations[0].plan_id}}</a></td>
-              <td>Job{{h.operation.jobs.length==1 ? '' : 's'}}: <a ng-repeat="job in h.operation.jobs" href="/jobs/{{job.id}}">{{job.id}}</a>              
+              <td>
+                <a href="/launcher?plan_id={{h.operation.plan_associations[0].plan_id}}">
+                  {{h.operation.plan_associations[0].plan_id}}
+                </a>
+              </td>
+              <td>
+                <ul style="list-style: none; margin: 0">
+                  <li ng-repeat="job in h.operation.jobs">
+                    <a href="/jobs/{{job.id}}">{{job.id}}</a>
+                  </li>
+                </ul>
+              </td>
             </tr>
           </table>
         </div>

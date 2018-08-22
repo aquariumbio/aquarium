@@ -52,15 +52,9 @@ AQ.Item.record_getters.matrix = function() {
   var item = this;
   delete item.matrix;
 
-  try {
-
-    var data = JSON.parse(item.data);
-
-    if ( data.matrix ) {
-      item.matrix = data.matrix
-    } 
-
-  } catch(e) {}
+  AQ.get(`/collections/${item.id}/raw_matrix`).then(response => {
+    item.matrix = response.data;
+  })
 
   return item.matrix;
 

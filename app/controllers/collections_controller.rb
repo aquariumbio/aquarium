@@ -58,4 +58,8 @@ class CollectionsController < ApplicationController
 
   end
 
+  def raw_matrix
+    render json: Collection.find(params[:id]).matrix
+  end
+
 end

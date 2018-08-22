@@ -45,18 +45,38 @@
               <!-- <span ng-if="!$first">&nbsp;</span> -->
               {{fv.name}}:
               <span ng-if="fv.child_item_id">
-                  <a href="#" ng-click="open_item_ui(fv.child_item_id)">{{fv.child_item_id}}</a>
-                  <span ng-if="fv.row != null">[{{fv.row}},{{fv.column}}]</span>
+                   
+                    <div ng-if="fv.child_item_id && !fv.is_part"
+                         item="fv.item" 
+                         container="fv.item.object_type" 
+                         sample="fv.sample"></div>
+                    <div ng-if="fv.child_item_id && fv.is_part"
+                         item="fv.part" 
+                         container="fv.part.object_type" 
+                         sample="fv.part.sample"
+                         collection="fv.item"
+                         row="fv.row"
+                         column=fv.column></div>
+
               </span>                
             </li>
             <li ng-repeat="fv in op.alt_field_values | filter: { role: 'input' } track by $index">
               <span ng-if="$first"><b>in:</b></span>
               <!-- <span ng-if="!$first">&nbsp;</span> -->
               {{fv.name}}:
-              <span ng-if="fv.child_item_id">
-                  <a href="#" ng-click="open_item_ui(fv.child_item_id)">{{fv.child_item_id}}</a>
-                  <span ng-if="fv.row != null">[{{fv.row}},{{fv.column}}]</span> 
-              </span>
+
+                    <div ng-if="fv.child_item_id && !fv.is_part"
+                         item="fv.item" 
+                         container="fv.item.object_type" 
+                         sample="fv.sample"></div>
+                    <div ng-if="fv.child_item_id && fv.is_part"
+                         item="fv.part" 
+                         container="fv.part.object_type" 
+                         sample="fv.part.sample"
+                         collection="fv.item"
+                         row="fv.row"
+                         column=fv.column></div>
+
               <span ng-if="fv.value">{{fv.value}}</span>
             </li>
           </ul>
