@@ -738,8 +738,6 @@ AQ.Plan.record_methods.choose_items = function() {
 
   let plan = this;
 
-  aq.collect(plan.leaves, fv => fv.child_item_id = null );  
-
   return Promise.all(
     aq.collect(plan.leaves, fv => fv.find_items(fv.child_sample_id))
   ).then(() => {

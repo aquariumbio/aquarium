@@ -311,6 +311,7 @@ AQ.FieldValue.record_methods.assign = function(sample) {
   if ( sample ) {
 
     field_value.child_sample_id = sample.id;
+    field_value.child_item_id = null;
     field_value.sid = sample.identifier;
 
     if ( field_value.field_type && field_value.field_type.array ) {
@@ -322,6 +323,7 @@ AQ.FieldValue.record_methods.assign = function(sample) {
     field_value.child_sample_id = null;
     field_value.sid = null;
     field_value.sample_identifier = null;
+    field_value.child_item_id = null;    
 
   }
 

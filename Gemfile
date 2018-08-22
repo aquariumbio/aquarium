@@ -57,3 +57,6 @@ group :assets do
   gem 'closure-compiler'
   gem 'bcrypt-ruby', '~> 3.1.2'
 end
+
+gem 'PriorityQueue'
+
