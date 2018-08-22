@@ -385,7 +385,11 @@ class OperationTypesController < ApplicationController
 
       begin
         issues_list = params[:operation_types].collect do |x|
-          OperationType.import(x.merge(deployed: false), current_user)
+          if x.has_key?(:library)
+            Library.import(x, current_user)
+          else
+            OperationType.import(x.merge(deployed: false), current_user)
+          end
         end
 
         notes = issues_list.collect { |issues| issues[:notes] }.flatten
