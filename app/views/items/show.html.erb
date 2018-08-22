@@ -5,6 +5,8 @@
 
 <%= content_for :controller do %>itemCtrl<% end %>
 
+<%= content_for :wider_sidebar do %>true<% end %>
+
 <%= content_for :sidebar do %>
   <div ng-if="collection">
 
@@ -12,8 +14,39 @@
       <br>
       <b>Created:</b> {{collection.created_at|date}}<br>
       <b>Updated:</b> {{collection.created_at|date}}<br>
-      <b>Location:</b> {{collection.location}}<br>
-      <hr>
+      <b>Location:</b> {{collection.location}}<br><br>
+      <table class='table' style="width: 100%; font-size: 9pt">
+        <tr>
+          <th>Name</th>
+          <th>Role</th>
+          <th>Operation Type</th>
+          <th>Plan</th>
+          <th>Jobs</th>
+        </tr>
+        <tr ng-repeat="h in collection.history">
+          <td>
+            {{h.field_value.name}}
+            <span ng-if="h.field_value.is_part">
+            [{{h.field_value.row}},{{h.field_value.column}}]
+            </span>
+          </td>
+          <td>{{h.field_value.role}}</td>
+          <td>{{h.operation.operation_type.name}}</td>
+          <td>
+            <a href="/launcher?plan_id={{h.operation.plan_associations[0].plan_id}}">
+              {{h.operation.plan_associations[0].plan_id}}
+            </a>
+          </td>
+          <td>
+            <ul style="list-style: none; margin: 0">
+              <li ng-repeat="job in h.operation.jobs">
+                <a href="/jobs/{{job.id}}">{{job.id}}</a>
+              </li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+
     </div>
 
     <div ng-if="part">
@@ -34,11 +67,14 @@
       <div ng-if="!part.id">
         No sample assigned
       </div>
+      <hr>
+      Press <tt>Escape</tt> to deselect this part.
     </div>
+
 
     <div ng-if="selection.length > 1">
       Multiple parts selected.<br>
-      Press <tt>Escape</tt> to clear.
+      Press <tt>Escape</tt> to deselect.
     </div>
 
   </div>
