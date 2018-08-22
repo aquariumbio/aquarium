@@ -61,13 +61,13 @@
     <md-content ng-if="mode=='operations'" layout-padding>
       <div>
         <span class="md-title">Operations</span>
-      </div>    
+      </div>
       <oplist-short operationtype="job.operations[0].operation_type"
               operations="job.operations"
               status="running"
               short="true"
               jobid="job.id">
-      </oplist>
+      </oplist-short>
     </md-content>
 
     <%= render partial: "uploads" %>

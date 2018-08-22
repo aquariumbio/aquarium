@@ -4,6 +4,9 @@ module Krill
 
   module Base
 
+    # Gets the {OperationList} for this job.
+    #
+    # @return [OperationsList] the list of operations for this job
     def operations(opts = { force: false })
 
       if opts[:force] || !@operations
@@ -18,6 +21,9 @@ module Krill
 
     end
 
+    # Gets the {OperationType} for this job.
+    #
+    # @return [OperationType]
     def operation_type
 
       ops = operations

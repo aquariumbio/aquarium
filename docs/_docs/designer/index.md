@@ -227,6 +227,10 @@ Similarly, you can put images associated with items into plans with
 
     ![name](/uploads/item/12345/key)
 
+You can also use images associated with plans via
+
+    ![name](/uploads/plan/12345/key)
+
 #### Using modules
 
 Modules are a way to visually group together operations (and other modules) to reduce clutter and to encapsulate common functions.

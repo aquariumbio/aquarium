@@ -30,17 +30,6 @@
 
       <% u = User.find_by_id(j.submitted_by); u = ( u ? u.login : 'nobody' ) %>
 
-      <% if j.metacol_id %>
-        <% m = Metacol.find_by_id(j.metacol_id) %>
-        <% if m %>
-          <td><%= u %> (<%= link_to "#{j.metacol_id}", m %>)</td>
-        <% else %>
-          <td>Unkown metacol</td>
-        <% end %>
-      <% else %>
-        <td><%= u %></td>
-      <% end %>
-
       <% if j.user_id && j.user_id.to_i > 0 %>
         <td><%= User.find(j.user_id).login %></td>
       <% else %>
@@ -83,7 +72,7 @@
       <% else %>
 
         <td>
-  
+
           <%= link_to interpreter_edit_path(job:j.id) do %>
             <% if (defined? editable) && editable %><i class='icon-edit'></i><% end %>
           <% end %>

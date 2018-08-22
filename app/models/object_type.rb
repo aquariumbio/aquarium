@@ -1,12 +1,29 @@
 
-
+# Defines the type of physical object that would be represented in an {Item} 
 # @api krill
 class ObjectType < ActiveRecord::Base
 
-  attr_accessible :cleanup, :data, :description, :handler, :max, :min, :name, :safety,
-                  :vendor, :unit, :image, :cost, :release_method, :release_description,
-                  :sample_type_id, :created_at, :prefix
 
+  attr_accessible :cleanup, :data, :description, :max, :min, :safety,
+                  :vendor, :unit, :image, :cost, :release_method, :release_description,
+                  :sample_type_id, :created_at, :prefix, :rows, :columns
+
+  # Gets name of ObjectType.
+  #
+  # @return [String]  the name of the ObjectType, as in "1 L Bottle"
+  attr_accessible :name
+
+  # Gets handler of ObjectType.
+  #
+  # @return [String] the name of the category that classifies the object type,
+  #               as in "liquid_media". The special handler "collection" is used to
+  #               show that items with this given object type are collections
+  attr_accessible :handler
+
+  # Gets SampleType for this ObjectType.
+  #
+  # @return [SampleType] type of Sample that is allowed to exist in an item with this
+  #             ObjectType as its container
   belongs_to :sample_type
 
   validates :name, presence: true

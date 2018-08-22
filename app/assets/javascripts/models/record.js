@@ -12,23 +12,12 @@ AQ.Record = function(model,data) {
     })(method_name);
   }
 
-  model.record_getters.data_associations = function() { // all records should have this getter, 
-                                                        // so its defined here
+  for ( fname in AQ.DataAssociation.base_methods ) {
+    model.record_methods[fname] = AQ.DataAssociation.base_methods[fname];
+  }
 
-    var record = this;
-    delete record.data_associations;
-
-    AQ.DataAssociation.where({parent_id: record.id, parent_class: record.model.model}).then((das) => {          
-      record.data_associations = das;
-      aq.each(record.data_associations,(da) => {
-        da.value = JSON.parse(da.object)[da.key];
-        da.upload = AQ.Upload.record(da.upload)
-      });
-      AQ.update();   
-    });
-
-    return null;
-
+  for ( fname in AQ.DataAssociation.base_getters ) {
+    model.record_getters[fname] = AQ.DataAssociation.base_getters[fname];
   }
 
   model.record_getters.record_type = function() { return this.model.model }

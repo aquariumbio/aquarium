@@ -326,8 +326,8 @@ specified in the get or select call of the ShowBlock</p>
       
       
         &mdash;
-        <div class='inline'><p>the table key specified to store data under
-in the get.</p>
+        <div class='inline'><p>the table key that was specified to store data under
+in the <code>get</code>.</p>
 </div>
       
     </li>
@@ -519,20 +519,34 @@ the rows of the table.</p>
 65
 66
 67
-68</pre>
+68
+69
+70
+71
+72
+73
+74
+75</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/krill/show_response.rb', line 59</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_responses'>responses</span>
-  <span class='id identifier rubyid_inline_responses'>inline_responses</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='id identifier rubyid_key'>key</span> <span class='op'>!=</span> <span class='symbol'>:table_inputs</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_key'>key</span> <span class='op'>!=</span> <span class='symbol'>:timestamp</span> <span class='rbrace'>}</span>
+  <span class='id identifier rubyid_inline_responses'>inline_responses</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='id identifier rubyid_key'>key</span> <span class='op'>!=</span> <span class='symbol'>:table_inputs</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_key'>key</span> <span class='op'>!=</span> <span class='symbol'>:timestamp</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_is_upload?'>is_upload?</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+  
+  <span class='id identifier rubyid_upload_response_keys'>upload_response_keys</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='id identifier rubyid_is_upload?'>is_upload?</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span>
+  <span class='id identifier rubyid_upload_responses'>upload_responses</span> <span class='op'>=</span> <span class='const'>Hash</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+  <span class='id identifier rubyid_upload_response_keys'>upload_response_keys</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
+    <span class='id identifier rubyid_upload_responses'>upload_responses</span><span class='lbracket'>[</span><span class='id identifier rubyid_key'>key</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_get_upload_response'>get_upload_response</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
   <span class='id identifier rubyid_table_response_keys'>table_response_keys</span> <span class='op'>=</span> <span class='kw'>self</span><span class='lbracket'>[</span><span class='symbol'>:table_inputs</span><span class='rbracket'>]</span> <span class='op'>?</span> <span class='kw'>self</span><span class='lbracket'>[</span><span class='symbol'>:table_inputs</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_ti'>ti</span><span class='op'>|</span> <span class='id identifier rubyid_ti'>ti</span><span class='lbracket'>[</span><span class='symbol'>:key</span><span class='rbracket'>]</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_uniq'>uniq</span> <span class='op'>:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
   <span class='id identifier rubyid_table_responses'>table_responses</span> <span class='op'>=</span> <span class='const'>Hash</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
   <span class='id identifier rubyid_table_response_keys'>table_response_keys</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
     <span class='id identifier rubyid_table_responses'>table_responses</span><span class='lbracket'>[</span><span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_get_table_responses_column'>get_table_responses_column</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
 
-  <span class='id identifier rubyid_inline_responses'>inline_responses</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='id identifier rubyid_table_responses'>table_responses</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_inline_responses'>inline_responses</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='id identifier rubyid_table_responses'>table_responses</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='id identifier rubyid_upload_responses'>upload_responses</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -582,12 +596,12 @@ was seen and interacted with by the technician</p>
       <pre class="lines">
 
 
-74
-75
-76</pre>
+81
+82
+83</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/show_response.rb', line 74</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/show_response.rb', line 81</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_timestamp'>timestamp</span>
   <span class='kw'>self</span><span class='lbracket'>[</span><span class='symbol'>:timestamp</span><span class='rbracket'>]</span>
@@ -602,9 +616,9 @@ was seen and interacted with by the technician</p>
 </div>
 
       <div id="footer">
-  Generated on Wed Jul 11 10:55:30 2018 by
+  Generated on Wed Aug 22 14:03:44 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.12 (ruby-2.2.0).
+  0.9.16 (ruby-2.3.7).
 </div>
 
     </div>

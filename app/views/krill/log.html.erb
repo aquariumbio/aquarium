@@ -1,6 +1,8 @@
 <% provide(:title, "Job #{@job.id}" ) %>
 
-<%= content_for :controller do %>noCtrl<% end %>
+<%= render partial: '/operations/operation_list_short' %> 
+
+<%= content_for :controller do %>logCtrl<% end %>
 
 <% content_for :specific_title do %>
   &rang; <%= @job.operations.length > 0 ? @job.operations.first.operation_type.name : 'Unknown Operation Type' %>

@@ -34,7 +34,7 @@
 
     return {
       restrict: 'E',
-      scope: { operations: '=', status: '=', operationtype: '=', jobid: '=' },
+      scope: { operations: '=', status: '=', operationtype: '=', jobid: '=', brief: '=' },
       replace: true,
       template: $('#operation-list-short').html(),
       link: function($scope,$element,$attributes) {

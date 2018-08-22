@@ -6,11 +6,15 @@ module Krill
   module Base
 
     # Returns true if and only if the protocol is bbeing run in debug mode.
+    #
     # @return [Boolean]
     def debug
       false
     end
 
+    # Show instructions to technician.
+    #
+    # @see ShowBlock
     def show
 
       page = ShowBlock.new(self).run(&Proc.new)

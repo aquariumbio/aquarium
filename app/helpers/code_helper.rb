@@ -5,7 +5,8 @@ module CodeHelper
   def code(name = nil)
 
     Code.where(parent_id: id, parent_class: self.class.to_s, name: name)
-        .first(order: 'id desc', limit: 1)
+        .order('id desc')
+        .first
 
   end
 

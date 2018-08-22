@@ -45,7 +45,7 @@ class ItemsController < ApplicationController
     flash.delete :error
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render layout: 'aq2' }
       format.json { render json: @item }
     end
 

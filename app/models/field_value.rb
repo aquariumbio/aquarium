@@ -50,6 +50,20 @@ class FieldValue < ActiveRecord::Base
     Collection.find(child_item.id) if child_item
   end
 
+  # Return the specified part of collection
+  #
+  # @param row [Fixnum]
+  # @param column [Fixnum]
+  # @return [Item]
+  def collection_part row, column
+    pas = PartAssociation.where(collection_id: child_item_id, row: row, column: column)
+    if pas.length == 1
+      pas[0].part
+    else
+      nil
+    end
+  end
+
   # Return associated parameter value.
   #
   # @return [Float, String, Hash, Sample, Item] The value of the

@@ -1,6 +1,7 @@
 
 
 # A named, biologically unique definition for an instance of a {SampleType}, such as a specific Primer, Fragment, Plasmid, or Yeast Strain
+# A Sample has many {Item}s in inventory
 # @api krill
 
 class Sample < ActiveRecord::Base
@@ -15,7 +16,17 @@ class Sample < ActiveRecord::Base
 
   after_destroy :destroy_fields
 
-  attr_accessible :name, :user_id, :project, :sample_type_id, :user_id, :description
+  attr_accessible :user_id, :project, :user_id, :description
+
+  # Gets the name of Sample.
+  #
+  # @return [String]  the name of the Sample. For example, a sample whose SampleType is "Plasmid" might be named "pLAB1"
+  attr_accessible :name
+
+  # Gets the SampleType id of sample.
+  #
+  # @return [Fixnum]  id referring to the SampleType of which this sample is an instance of
+  attr_accessible :sample_type_id
 
   belongs_to :sample_type
   belongs_to :user
@@ -151,9 +162,9 @@ class Sample < ActiveRecord::Base
 
   end
 
-  # Return all items of this {Sample} in the provided {ObjectType}
+  # Return all items of this {Sample} in the provided {ObjectType}.
   # @param container [String] {ObjectType} name
-  # @example Find a 1 kb ladder for gel electrophoresis
+  # @example find a 1 kb ladder for gel electrophoresis
   #   ladder_1k = Sample.find_by_name("1 kb Ladder").in("Ladder Aliquot")
   # @return [Array<Item>]
   def in(container)
@@ -171,7 +182,8 @@ class Sample < ActiveRecord::Base
     "<a href='/samples/#{id}' class='aquarium-item' id='#{id}'>#{id}</a>"
   end
 
-  # Return {User} who owns this {Sample}
+  # Get {User} who owns this {Sample}.
+  #
   # @return [User]
   def owner
     u = User.find_by_id(user_id)
@@ -182,6 +194,14 @@ class Sample < ActiveRecord::Base
     end
   end
 
+  # Make a new Item out of this sample, with some object type.
+  #
+  # @param object_type_name [String]  describes the object type 
+  #               that will be used to make a new Item  
+  # @return [Item]  an item associated with this sample and in 
+  #               the container described by `object_type_name` 
+  #               The location of the item is determined
+  #               by the location wizard
   def make_item(object_type_name)
 
     ot = ObjectType.find_by_name(object_type_name)
@@ -216,7 +236,7 @@ class Sample < ActiveRecord::Base
     )
 
     # rename field for compatibility with ng-control/sample.js
-    sample_hash[:field_values] = sample_hash.delete :full_field_values
+    sample_hash["field_values"] = sample_hash.delete "full_field_values"
 
     sample_hash
 

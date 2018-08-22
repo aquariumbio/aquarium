@@ -1,0 +1,14 @@
+.pagination {
+  a, .current, .previous_page, .next_page {
+    border: 1pt solid #aaa;
+    padding: 5px;
+    margin: 2px;
+    border-radius: 3px;
+  }
+  .current {
+    border: 1pt solid black;
+  }
+  .previous_page, .next_page {
+    border: 1pt solid #999;
+  }
+}

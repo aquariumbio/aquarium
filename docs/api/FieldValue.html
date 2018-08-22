@@ -321,6 +321,29 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#collection_part-instance_method" title="#collection_part (instance method)">#<strong>collection_part</strong>(row, column)  &#x21d2; Item </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Return the specified part of collection.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#copy_inventory-instance_method" title="#copy_inventory (instance method)">#<strong>copy_inventory</strong>(fv)  &#x21d2; Object </a>
     
 
@@ -611,20 +634,6 @@
       <pre class="lines">
 
 
-154
-155
-156
-157
-158
-159
-160
-161
-162
-163
-164
-165
-166
-167
 168
 169
 170
@@ -634,10 +643,24 @@
 174
 175
 176
-177</pre>
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 154</span>
+      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 168</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_create_item'>create_item</span><span class='lparen'>(</span><span class='id identifier rubyid_sample'>sample</span><span class='comma'>,</span> <span class='id identifier rubyid_ft'>ft</span><span class='comma'>,</span> <span class='id identifier rubyid_vals'>vals</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_vals'>vals</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span>
@@ -692,22 +715,22 @@
       <pre class="lines">
 
 
-106
-107
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118</pre>
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 106</span>
+      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 120</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_create_number'>create_number</span><span class='lparen'>(</span><span class='id identifier rubyid_sample'>sample</span><span class='comma'>,</span> <span class='id identifier rubyid_ft'>ft</span><span class='comma'>,</span> <span class='id identifier rubyid_vals'>vals</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_vals'>vals</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span>
@@ -751,20 +774,6 @@
       <pre class="lines">
 
 
-127
-128
-129
-130
-131
-132
-133
-134
-135
-136
-137
-138
-139
-140
 141
 142
 143
@@ -776,10 +785,24 @@
 149
 150
 151
-152</pre>
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 127</span>
+      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 141</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_create_sample'>create_sample</span><span class='lparen'>(</span><span class='id identifier rubyid_sample'>sample</span><span class='comma'>,</span> <span class='id identifier rubyid_ft'>ft</span><span class='comma'>,</span> <span class='id identifier rubyid_vals'>vals</span><span class='rparen'>)</span>
 
@@ -836,22 +859,22 @@
       <pre class="lines">
 
 
-92
-93
-94
-95
-96
-97
-98
-99
-100
-101
-102
-103
-104</pre>
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 92</span>
+      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 106</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_create_string'>create_string</span><span class='lparen'>(</span><span class='id identifier rubyid_sample'>sample</span><span class='comma'>,</span> <span class='id identifier rubyid_ft'>ft</span><span class='comma'>,</span> <span class='id identifier rubyid_vals'>vals</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_vals'>vals</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span>
@@ -895,15 +918,15 @@
       <pre class="lines">
 
 
-120
-121
-122
-123
-124
-125</pre>
+134
+135
+136
+137
+138
+139</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 120</span>
+      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 134</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_create_url'>create_url</span><span class='lparen'>(</span><span class='id identifier rubyid_sample'>sample</span><span class='comma'>,</span> <span class='id identifier rubyid_ft'>ft</span><span class='comma'>,</span> <span class='id identifier rubyid_vals'>vals</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_vals'>vals</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span>
@@ -941,25 +964,25 @@
       <pre class="lines">
 
 
-179
-180
-181
-182
-183
-184
-185
-186
-187
-188
-189
-190
-191
-192
 193
-194</pre>
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 179</span>
+      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 193</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_creator'>creator</span><span class='lparen'>(</span><span class='id identifier rubyid_sample'>sample</span><span class='comma'>,</span> <span class='id identifier rubyid_field_type'>field_type</span><span class='comma'>,</span> <span class='id identifier rubyid_raw'>raw</span><span class='rparen'>)</span> <span class='comment'># sample, field_type, raw_field_data
 </span>
@@ -1012,12 +1035,12 @@
       <pre class="lines">
 
 
-224
-225
-226</pre>
+238
+239
+240</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 224</span>
+      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 238</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_child_data'>child_data</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_child_item'>child_item</span><span class='period'>.</span><span class='id identifier rubyid_get'>get</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_child_item_id'>child_item_id</span>
@@ -1081,6 +1104,95 @@
 </div>
     
       <div class="method_details ">
+  <h3 class="signature " id="collection_part-instance_method">
+  
+    #<strong>collection_part</strong>(row, column)  &#x21d2; <tt><span class='object_link'><a href="Item.html" title="Item (class)">Item</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Return the specified part of collection</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>row</span>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>column</span>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Item.html" title="Item (class)">Item</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+58
+59
+60
+61
+62
+63
+64
+65</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 58</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_collection_part'>collection_part</span> <span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='id identifier rubyid_column'>column</span>
+  <span class='id identifier rubyid_pas'>pas</span> <span class='op'>=</span> <span class='const'>PartAssociation</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>collection_id:</span> <span class='id identifier rubyid_child_item_id'>child_item_id</span><span class='comma'>,</span> <span class='label'>row:</span> <span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='label'>column:</span> <span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_pas'>pas</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>==</span> <span class='int'>1</span>
+    <span class='id identifier rubyid_pas'>pas</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_part'>part</span>
+  <span class='kw'>else</span>
+    <span class='kw'>nil</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
   <h3 class="signature " id="copy_inventory-instance_method">
   
     #<strong>copy_inventory</strong>(fv)  &#x21d2; <tt>Object</tt> 
@@ -1104,15 +1216,15 @@
       <pre class="lines">
 
 
-252
-253
-254
-255
-256
-257</pre>
+266
+267
+268
+269
+270
+271</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 252</span>
+      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 266</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_copy_inventory'>copy_inventory</span><span class='lparen'>(</span><span class='id identifier rubyid_fv'>fv</span><span class='rparen'>)</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_child_item_id'>child_item_id</span> <span class='op'>=</span> <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_child_item_id'>child_item_id</span>
@@ -1149,15 +1261,15 @@
       <pre class="lines">
 
 
-217
-218
-219
-220
-221
-222</pre>
+231
+232
+233
+234
+235
+236</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 217</span>
+      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 231</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_export'>export</span>
   <span class='id identifier rubyid_attributes'>attributes</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span>
@@ -1194,22 +1306,22 @@
       <pre class="lines">
 
 
-264
-265
-266
-267
-268
-269
-270
-271
-272
-273
-274
-275
-276</pre>
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 264</span>
+      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 278</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_full_json'>full_json</span><span class='lparen'>(</span><span class='id identifier rubyid__options'>_options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_as_json'>as_json</span><span class='lparen'>(</span><span class='label'>include:</span> <span class='lbracket'>[</span>
@@ -1367,13 +1479,13 @@
       <pre class="lines">
 
 
-259
-260
-261
-262</pre>
+273
+274
+275
+276</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 259</span>
+      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 273</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_routing'>routing</span>
   <span class='id identifier rubyid_ft'>ft</span> <span class='op'>=</span> <span class='id identifier rubyid_field_type'>field_type</span>
@@ -1538,16 +1650,16 @@
       <pre class="lines">
 
 
-244
-245
-246
-247
-248
-249
-250</pre>
+258
+259
+260
+261
+262
+263
+264</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 244</span>
+      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 258</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set'>set</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_child_item_id'>child_item_id</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:item</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='kw'>if</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:item</span><span class='rbracket'>]</span>
@@ -1585,12 +1697,12 @@
       <pre class="lines">
 
 
-228
-229
-230</pre>
+242
+243
+244</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 228</span>
+      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 242</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_child_data'>set_child_data</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_child_item'>child_item</span><span class='period'>.</span><span class='id identifier rubyid_associate'>associate</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span> <span class='kw'>if</span> <span class='id identifier rubyid_child_item_id'>child_item_id</span>
@@ -1624,29 +1736,29 @@
       <pre class="lines">
 
 
-196
-197
-198
-199
-200
-201
-202
-203
-204
-205
-206
-207
-208
-209
 210
 211
 212
 213
 214
-215</pre>
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 196</span>
+      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 210</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_s'>to_s</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_child_sample_id'>child_sample_id</span>
@@ -1717,20 +1829,6 @@ definition</p>
       <pre class="lines">
 
 
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
 72
 73
 74
@@ -1749,10 +1847,24 @@ definition</p>
 87
 88
 89
-90</pre>
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'app/models/field_value.rb', line 72</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_val'>val</span>
 
@@ -1797,9 +1909,9 @@ definition</p>
 </div>
 
       <div id="footer">
-  Generated on Wed Jul 11 10:55:29 2018 by
+  Generated on Wed Aug 22 14:03:43 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.12 (ruby-2.2.0).
+  0.9.16 (ruby-2.3.7).
 </div>
 
     </div>
