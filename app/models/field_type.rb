@@ -14,7 +14,22 @@ class FieldType < ActiveRecord::Base
   has_one :preferred_operation_type
   has_one :preferred_field_type
 
-  attr_accessible :parent_id, :parent_class, :array, :choices, :name, :required, :ftype, :role, :part, :routing
+  # Gets name of FieldType.
+  #
+  # @return [String]  the name of the FieldValue, as in "Forward Primer"
+  attr_accessible :name
+
+  # Gets the id of the object to which this FieldType belongs.
+  #
+  # @return [Fixnum]  {Operation} or {Sample} id
+  attr_accessible :parent_id
+
+  # Gets the name of the class of the object to which this FieldType belongs.
+  #
+  # @return [String]  class of parent object, as in "SampleType"
+  attr_accessible :parent_class
+  
+  attr_accessible :array, :choices, :required, :ftype, :role, :part, :routing
   attr_accessible :preferred_operation_type_id, :preferred_field_type_id
 
   validates :name, presence: true
