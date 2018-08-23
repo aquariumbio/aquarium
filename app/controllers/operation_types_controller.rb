@@ -252,8 +252,6 @@ class OperationTypesController < ApplicationController
     # start a transaction
     ActiveRecord::Base.transaction do
 
-
-      puts params[:test_operations]
       # (re)build the operations
       ops = if params[:test_operations]
               make_test_ops(OperationType.find(params[:id]), params[:test_operations])
