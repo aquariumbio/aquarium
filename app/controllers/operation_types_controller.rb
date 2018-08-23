@@ -210,48 +210,31 @@ class OperationTypesController < ApplicationController
       op = ot.operations.create status: 'pending', user_id: test_op[:user_id]
 
       (ot.inputs + ot.outputs).each do |io|
-
-        if io.ftype != 'sample'
-
-          if io.choices != '' && !io.choices.nil?
-            op.set_property io.name, io.choices.split(',').sample, io.role, true, nil
+        test_fvs = test_op[:field_values].select { |fv| fv[:name] == io.name && fv[:role] == io.role }
+        if io.array && !test_fvs.empty?
+          aft = AllowableFieldType.find_by_id(test_fvs[0][:allowable_field_type_id])
+          samples = test_fvs.collect do |fv|
+            Sample.find_by_id(fv[:child_sample_id])
+          end
+          actual_fvs = op.set_property(io.name, samples, io.role, true, aft)
+          raise "Nil value Error: Could not set #{test_fvs}" unless actual_fvs
+        else # io is not an array
+          raise "Test Operation Error: This operationtype may have multiple io with the same name" unless test_fvs.one?
+          test_fv = test_fvs.first
+          if io.ftype == 'sample'
+            aft = AllowableFieldType.find_by_id(test_fv[:allowable_field_type_id])
+            actual_fv = op.set_property(test_fv[:name], Sample.find_by_id(test_fv[:child_sample_id]), test_fv[:role], true, aft)
+            raise "Nil value Error: Could not set #{test_fv}" unless actual_fv
+            raise "Active Record Error: Could not set #{test_fv}: #{actual_fv.errors.full_messages.join(', ')}" unless actual_fv.errors.empty?
           elsif io.ftype == 'number'
-            op.set_property io.name, rand(100), io.role, true, nil
-          elsif io.ftype == 'json'
-            op.set_property io.name, '{ "message": "random json parameters are hard to generate" }', io.role, true, nil
-          else
-            op.set_property(io.name, %w[Lorem ipsum dolor sit amet consectetur adipiscing elit].sample, io.role, true, nil)
+            op.set_property io.name, test_fv[:value].to_f, io.role, true, nil
+          else # string or json io
+            op.set_property io.name, test_fv[:value], io.role, true, nil
           end
-
-        elsif io.array
-
-          fvs = test_op[:field_values].select { |fv| fv[:name] == io.name && fv[:role] == io.role }
-          unless fvs.empty?
-            aft = AllowableFieldType.find_by_id(fvs[0][:allowable_field_type_id])
-            samples = fvs.collect do |fv|
-              Sample.find_by_id(fv[:child_sample_id])
-            end
-            actual_fvs = op.set_property(io.name, samples, io.role, true, aft)
-            raise "Nil value Error: Could not set #{fvs}" unless actual_fvs
-          end
-
-        else
-
-          fvlist = test_op[:field_values].select { |fv| fv[:name] == io.name && fv[:role] == io.role }
-          fv = fvlist[0]
-          aft = AllowableFieldType.find_by_id(fv[:allowable_field_type_id])
-          actual_fv = op.set_property(fv[:name], Sample.find_by_id(fv[:child_sample_id]), fv[:role], true, aft)
-          raise "Nil value Error: Could not set #{fv}" unless actual_fv
-          raise "Active Record Error: Could not set #{fv}: #{actual_fv.errors.full_messages.join(', ')}" unless actual_fv.errors.empty?
-
         end
-
       end
-
       op
-
     end
-
   end
 
   def test
@@ -269,6 +252,8 @@ class OperationTypesController < ApplicationController
     # start a transaction
     ActiveRecord::Base.transaction do
 
+
+      puts params[:test_operations]
       # (re)build the operations
       ops = if params[:test_operations]
               make_test_ops(OperationType.find(params[:id]), params[:test_operations])
