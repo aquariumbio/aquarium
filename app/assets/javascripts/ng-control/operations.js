@@ -180,7 +180,7 @@
         if (status === 'pending_true') {
           actual_status = 'pending';
         } else if (status === 'waiting') {
-          actual_status = ['pending', 'waiting'];
+          actual_status = 'waiting';
         } else {
           actual_status = status;
         }
