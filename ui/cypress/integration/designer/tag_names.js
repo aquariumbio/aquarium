@@ -17,9 +17,9 @@ describe('Tag names', function() {
     // so this is also testing that the submenu ids are
     // still getting made correctly (without accumlating old ids)
     cy.get('[data-sidebar=design]').click()
-    cy.get('[data-design=System_Templates]').click()
-    cy.get('[data-design=Your_Templates]').click()
-    cy.get('[data-design=Operation_Types]').click()
+    cy.get("[data-design='System Templates']").click()
+    cy.get("[data-design='Your Templates']").click()
+    cy.get("[data-design='Operation Types']").click()
 
     cy.get("[data-operation-type-category='Basic Cloning']").click()
 
@@ -28,6 +28,8 @@ describe('Tag names', function() {
     cy.get("[data-operation-box='Make PCR Fragment']").each(box => {
       cy.wrap(box).click()
     })
+
+    cy.get("#plan-editor-container").scrollTo(0,0)
 
   });
   
