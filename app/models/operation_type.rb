@@ -374,6 +374,9 @@ class OperationType < ActiveRecord::Base
     r.each do |status, ot_id, count|
       result[ot_id] ||= { planning: 0, waiting: 0, pending: 0, delayed: 0, deferred: 0, primed: 0, scheduled: 0, running: 0, error: 0, done: 0 }
       result[ot_id][status] = count
+      if status == 'primed'
+        result[ot_id][:waiting] = count
+      end
     end
 
     result
