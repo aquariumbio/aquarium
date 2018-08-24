@@ -500,4 +500,19 @@ $selected-sample-outline-color: #e0ffff;
     margin: 0 8px 0 8px;
   }
 
+  .sidebar {
+    hr {
+      margin: 5px;
+    }
+    .find-item {
+      margin-bottom: 20px;
+      input {
+        margin: 6px 0 0 10px;
+      }
+    }
+    .new-collection {
+      margin: 16px 0 10px 0;
+    }
+  }
+
 }

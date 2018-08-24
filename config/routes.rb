@@ -125,6 +125,7 @@ Bioturk::Application.routes.draw do
 
   resources :groups
 
+  put '/collections/:object_type_id', to: 'collections#new_collection'
   post '/collections/save_data_associations', to: 'collections#save_data_associations'
   post '/collections/:id/assign_sample', to: 'collections#assign_sample'
   get '/collections/:id/raw_matrix', to: 'collections#raw_matrix'  

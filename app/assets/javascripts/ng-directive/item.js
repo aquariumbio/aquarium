@@ -16,7 +16,8 @@
         nolink: "=", 
         collection: "=?", 
         row: "=?", 
-        column: "=?" 
+        column: "=?",
+        noColLink: "=?"
       },
 
       link: function($scope,$element,$attributes) {

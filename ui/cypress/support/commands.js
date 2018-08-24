@@ -24,3 +24,11 @@ Cypress.Commands.add("designer", () => {
     cy.wait(1000) 
 
 });
+
+Cypress.Commands.add("samples", () => {
+
+    cy.contains("Samples").click()
+    cy.url().should('equal', 'http://localhost:3000/browser')
+    cy.wait(1000) 
+
+});

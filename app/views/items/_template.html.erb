@@ -40,7 +40,7 @@
           </div>
 
           <div flex="40" layout="column" layout-align="center center">
-            <div ng-if="container.handler == 'collection'">Position(s) in collection</div>
+            <div ng-if="!noColLink && container.handler == 'collection'">Position(s) in collection</div>
             <table class='tiny-collection' ng-if="container.handler == 'collection'">
               <tr ng-repeat="row in item.matrix track by $index">
                 <td ng-repeat="el in row track by $index" 
@@ -48,7 +48,9 @@
                 </td>
               </tr>
             </table>
-            <a ng-if="container.handler == 'collection'" href="/items/{{item.id}}" target="_blank">
+            <a ng-if="!noColLink && container.handler == 'collection'"
+               href="/items/{{item.id}}"
+               target="_blank">
               Collection details
             </a>
           </div>

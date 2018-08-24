@@ -23,6 +23,13 @@ class CollectionsController < ApplicationController
 
   end
 
+  def new_collection
+
+    c = Collection.new_collection(ObjectType.find(params[:object_type_id]))
+    render json: c
+
+  end
+
   def assign_sample
     @collection = Collection.find(params[:id])
     @sample = Sample.find(params[:sample_id])

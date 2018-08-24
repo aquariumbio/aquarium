@@ -28,6 +28,11 @@ AQ.Collection.record_methods.upgrade = function(raw_data) {
 
 }
 
+AQ.Collection.new_collection = function(collection_type) {
+  return AQ.http.put(`/collections/${collection_type.id}`)
+           .then(response => AQ.Collection.record(response.data));
+}
+
 // Creates data associations for any parts that don't have a data association named key.
 AQ.Collection.record_methods.extend_data_association = function(key) {
 

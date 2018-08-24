@@ -368,9 +368,15 @@ class Collection < Item
   # 
   # @param name [String]  the name of the valid collection object type to make a collection with
   # @return [Collection]  new empty collection of type `name`
-  def self.new_collection(name)
+  def self.new_collection(ctype)
 
-    o = ObjectType.find_by_name(name)
+    if ctype.class == String
+      name = ctype
+      o = ObjectType.find_by_name(name)
+    else
+      o = ctype
+    end
+    
     raise "Could not find object type named '#{name}'." unless o
 
     i = Collection.new

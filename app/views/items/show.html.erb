@@ -14,8 +14,15 @@
       <br>
       <b>Created:</b> {{collection.created_at|date}}<br>
       <b>Updated:</b> {{collection.created_at|date}}<br>
-      <b>Location:</b> {{collection.location}}<br><br>
-      <table class='table' style="width: 100%; font-size: 9pt">
+      <b>Location:</b> {{collection.location}}<br>
+      <b>Edit global properties:   
+        <div item="collection" 
+             container="collection.object_type"
+             sample="collection.sample"
+             no-col-link=true></div><br><br>
+      <table class='table'
+             style="width: 100%; font-size: 9pt" 
+             ng-if="collection.history.length > 0">
         <tr>
           <th>Name</th>
           <th>Role</th>
@@ -191,15 +198,6 @@
     <div layout-padding ng-if="selection.length > 0 && !samples_loaded">
       Loading sample names...
     </div>
-
-    <div ng-if="selection.length == 0" class='data-associations' style="margin-top: 40px">
-      <h2 class="md-title" ng-if="true || collection.data_associations.length > 0">Collection wide data associations</h2>
-      <da record="collection"></da>
-      <div layout="row" layout-align="left left">
-        <md-button ng-click="collection.new_data_association()" class="md-raised" aria-label="Add Data">Add Data</md-button>
-        <md-button class="md-raised upload-button"><upload record='collection' aria-label="Upload"></upload></md-button>
-      </div>
-    </div>    
 
   </div>
 
