@@ -1,10 +1,30 @@
 <!-- NAVIGATION BUTTONS ////////////////////////////////////////////////////// -->
 
 <div layout="row" layout-align="space-between center" style="margin-top: 14px; margin-bottom: 14px">
-  <div ng-class="sidebar_button_class('plans')"  data-sidebar="plans"  ng-click="nav.sidebar = 'plans'; select(null); clear_multiselect()">Plans</div>
-  <div ng-class="sidebar_button_class('design')" data-sidebar="design" ng-click="nav.sidebar = 'design'; select(null); clear_multiselect()"">Design</div>
-  <div ng-class="sidebar_button_class('node')"   data-sidebar="node"   ng-click="nav.sidebar = 'node'">Node</div>
-  <div ng-class="sidebar_button_class('io')"     data-sidebar="io"     ng-click="nav.sidebar = 'io'">I/O</div>
+
+  <div ng-class="sidebar_button_class('plans')" 
+       data-sidebar="plans"
+       ng-click="nav.sidebar = 'plans'; select(null); clear_multiselect()">
+       Plans
+  </div>
+
+  <div ng-class="sidebar_button_class('design')"
+       data-sidebar="design"
+       ng-click="nav.sidebar = 'design'; select(null); clear_multiselect()"">
+       Design
+  </div>
+
+  <div ng-class="sidebar_button_class('node')"
+       data-sidebar="node"
+       ng-click="nav.sidebar = 'node'">
+       Node
+  </div>
+
+  <div ng-class="sidebar_button_class('io')"
+       data-sidebar="io"
+       ng-click="nav.sidebar = 'io'">
+       I/O
+  </div>
 
   <div ng-class="sidebar_button_class('launch')"
        data-sidebar="launch"
@@ -33,7 +53,7 @@
       {{message}}
     </li>
   </ul>
-  <div class="dismiss clickable" ng-click="state.messages = []">&times;</div>
+  <div class="dismiss clickable" ng-click="state.messages = []" id="dismiss-messages">&times;</div>
 </div>
 
 <ul ng-if="plan.errors.length > 0">
