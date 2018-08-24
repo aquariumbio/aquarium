@@ -14,7 +14,8 @@
              ng-model="cfv.value"
              ng-focus="setiomethod(io,false,'input')"
              ng-attr-id="{{'fv-'+cfv.rid}}"
-             placeholder="{{cfv.field_type.name}} ({{cfv.field_type.ftype}})">
+             placeholder="{{cfv.field_type.name}} ({{cfv.field_type.ftype}})"
+             ng-attr-data-parameter="{{cfv.name}}">
 
       <div ng-if="cfv.field_type.ftype == 'json'">
 
@@ -32,7 +33,8 @@
         <select ng-model="cfv.value"
                 ng-focus="setiomethod(io,false,'input')"
                 ng-attr-id="{{'fv-'+cfv.rid}}"
-                ng-options="choice for choice in cfv.field_type.choices_array">
+                ng-options="choice for choice in cfv.field_type.choices_array"
+                ng-attr-data-parameter-select="{{fv.name}}">
           <option value="" disabled selected>{{cfv.name}}</option>
         </select>
       </div>

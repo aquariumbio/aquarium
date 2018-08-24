@@ -82,8 +82,8 @@
       var op = AQ.Operation.new_operation(
         operation_type,
         $scope.plan.current_module.id,
-        60+3*AQ.snap + $scope.last_place,
-        60+2*AQ.snap + $scope.last_place);
+        64+4*AQ.snap + $scope.last_place,
+        64+4*AQ.snap + $scope.last_place);
 
       inc_last_place();
 
@@ -177,15 +177,19 @@
 
     $scope.save = function(plan) {
 
+      $scope.old_plan = null;
+      $scope.plan = null;
+
       plan.save($scope.current_user).then(saved_plan => {
         $scope.plan = saved_plan;
         $scope.select_uba_by_budget_id($scope.current_user, $scope.plan.budget_id)
-        $scope.state.loading_plans = true;
         $scope.select(null);
         $scope.nav.sidebar = "plans";
-        $scope.$apply();
         $scope.refresh_plan_list();
-      });
+      }).catch(e => {
+        $scope.plan = $scope.old_plan;
+        $scope.old_plan = null;
+      })
 
     };
 

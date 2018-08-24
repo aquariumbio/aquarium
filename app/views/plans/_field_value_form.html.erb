@@ -18,7 +18,10 @@
              ng-focus="setiomethod(io,false,role)"
              ng-model="op.routing[cfv.field_type.routing]"
              ng-if="cfv.field_type.ftype == 'sample' && !cfv.field_type.array && 
-                    op.form[cfv.field_type.role][cfv.name].aft.sample_type_id">
+                    op.form[cfv.field_type.role][cfv.name].aft.sample_type_id"
+             ng-attr-data-input-type="{{cfv.role}}"
+             ng-attr-data-input-op="{{op.operation_type.name}}"
+             ng-attr-data-input-name="{{cfv.name}}">
 
       <input type='string'
              fv="cfv"

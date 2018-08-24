@@ -1,19 +1,21 @@
 <!-- NAVIGATION BUTTONS ////////////////////////////////////////////////////// -->
 
 <div layout="row" layout-align="space-between center" style="margin-top: 14px; margin-bottom: 14px">
-  <div ng-class="sidebar_button_class('plans')"     ng-click="nav.sidebar = 'plans'; select(null); clear_multiselect()">Plans</div>
-  <div ng-class="sidebar_button_class('design')"    ng-click="nav.sidebar = 'design'; select(null); clear_multiselect()"">Design</div>
-  <div ng-class="sidebar_button_class('node')"      ng-click="nav.sidebar = 'node'">Node</div>
-  <div ng-class="sidebar_button_class('io')"        ng-click="nav.sidebar = 'io'">I/O</div>
+  <div ng-class="sidebar_button_class('plans')"  data-sidebar="plans"  ng-click="nav.sidebar = 'plans'; select(null); clear_multiselect()">Plans</div>
+  <div ng-class="sidebar_button_class('design')" data-sidebar="design" ng-click="nav.sidebar = 'design'; select(null); clear_multiselect()"">Design</div>
+  <div ng-class="sidebar_button_class('node')"   data-sidebar="node"   ng-click="nav.sidebar = 'node'">Node</div>
+  <div ng-class="sidebar_button_class('io')"     data-sidebar="io"     ng-click="nav.sidebar = 'io'">I/O</div>
 
-  <div ng-class="sidebar_button_class('launch')"    
+  <div ng-class="sidebar_button_class('launch')"
+       data-sidebar="launch"
        ng-click="nav.sidebar = 'launch'; plan.id && plan.valid() ? launch() : ''; select(null); clear_multiselect()""
        ng-if="plan.status=='planning'">
     Launch
   </div>
   <div ng-class="sidebar_button_class('launch')"
-        ng-if="plan && plan.status!='planning'"
-        ng-click="nav.sidebar = 'launch'; plan.estimate_cost(); select(null); clear_multiselect()"">
+       ng-if="plan && plan.status!='planning'"
+       data-sidebar="launch"
+       ng-click="nav.sidebar = 'launch'; plan.estimate_cost(); select(null); clear_multiselect()"">
     <span ng-if="plan.has_new_ops">Launch New</span>
     <span ng-if="!plan.has_new_ops">Plan Info</span>    
   </div>

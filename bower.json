@@ -37,6 +37,6 @@
     "datatables.net": "latest"
   },
   "resolutions": {
-    "jquery": ">= 1.8"
+    "jquery": "3.3.1"
   }
 }
