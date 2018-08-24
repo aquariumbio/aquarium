@@ -180,7 +180,7 @@
         if (status === 'pending_true') {
           actual_status = 'pending';
         } else if (status === 'waiting') {
-          actual_status = 'waiting';
+          actual_status = ['primed', 'waiting'];
         } else {
           actual_status = status;
         }
@@ -208,7 +208,7 @@
             op.field_values = aq.collect(op.field_values, fv => AQ.FieldValue.record(fv))
           });
           if (status === 'waiting') {
-            operation_type.operations = aq.where(operations, op => { return (op.status === 'pending' && !op.precondition_value) || op.status === 'waiting' });
+            operation_type.operations = aq.where(operations, op => { return (op.status === 'pending' && !op.precondition_value) || op.status === 'waiting' || op.status === 'primed' });
           } else if (status === 'pending_true') {
             operation_type.operations = aq.where(operations, op => op.status === "pending" && op.precondition_value);
           } else {
