@@ -35,6 +35,8 @@ function PlanSetup ( $scope,   $http,   $attrs,   $cookies,   $sce,   $window ) 
 
   $scope.refresh_plan_list = function() {
 
+    $scope.state.loading_plans = true;
+
     return AQ.Plan.where({user_id: $scope.current_user.id})
       .then(plans => {
         $scope.plans = aq.where(plans, p => p.status != 'template');

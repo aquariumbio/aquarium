@@ -76,9 +76,8 @@ public/components
 docs/_site/**
 docs/.sass-cache/**
 
-
-
-
+# ignore cyprus dependencies
+ui/node_modules
 
 Gemfile.lock
 

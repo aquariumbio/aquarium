@@ -1,0 +1,26 @@
+{
+  "name": "aquarium-ui-tests",
+  "version": "1.0.0",
+  "description": "Cyprus tests for the Aquarium front end",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klavinslab/aquarium.git"
+  },
+  "keywords": [
+    "cyprus",
+    "aquarium"
+  ],
+  "author": "Eric Klavins",
+  "license": "SEE LICENSE IN aquarium",
+  "bugs": {
+    "url": "https://github.com/klavinslab/aquarium/issues"
+  },
+  "homepage": "https://github.com/klavinslab/aquarium#readme",
+  "devDependencies": {
+    "cypress": "^3.1.0"
+  }
+}
