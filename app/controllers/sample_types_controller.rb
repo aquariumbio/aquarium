@@ -61,9 +61,13 @@ class SampleTypesController < ApplicationController
 
     st = SampleType.new params[:sample_type].except(:field_types)
     st.save
-    st.save_field_types(params[:sample_type][:field_types])
 
-    render json: { sample_type: st }
+    if st.errors.empty?
+      st.save_field_types(params[:sample_type][:field_types])
+      render json: { sample_type: st }
+    else
+      render json: { errors: st.errors }
+    end
 
   end
 

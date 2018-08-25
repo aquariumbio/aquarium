@@ -6,6 +6,22 @@ RSpec.describe SampleType, type: :model do
 
   context 'initialization' do
 
+    it "cannot have to sample types of the same name" do
+
+      name = "Wingbat"
+
+      st = SampleType.new name: name, description: 'A test sample type'
+      st.save
+
+      expect(st.errors.empty?).to be true        
+
+      st = SampleType.new name: name, description: 'A test sample type'
+      st.save   
+
+      expect(st.errors.empty?).to be false         
+
+    end
+
     it 'can have field types added to it' do
 
       st = SampleType.new name: 'Wingbat', description: 'A test sample type'
@@ -30,35 +46,6 @@ RSpec.describe SampleType, type: :model do
 
       aft2 = ft2.allowable_field_types.create sample_type_id: SampleType.find_by_name('Primer').id
       aft2.save
-
-      expect(aft2.errors.empty?).to be true
-
-      st.field_types.each do |ft|
-        puts ft.name
-        puts ft.ftype
-        ft.allowable_field_types.each do |aft|
-          puts "  #{aft.inspect}"
-          puts "    #{aft.sample_type.inspect}"
-        end
-        puts '-'
-      end
-
-      s = st.create_sample(
-        name: 'my_wingbat',
-        description: 'a wingbat test',
-        user_id: 1,
-        project: 'Auxin',
-        age: 123,
-        template: [] # SampleType.find_by_name("Primer").samples.first
-      )
-
-      puts s.errors.full_messages.join(',')
-      expect(s.errors.empty?).to be true
-
-      puts s.inspect
-      s.field_values.each do |fv|
-        puts "#{fv.name}: #{fv.val.inspect}"
-      end
 
     end
 

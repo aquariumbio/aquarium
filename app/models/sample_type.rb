@@ -17,7 +17,7 @@ class SampleType < ActiveRecord::Base
   has_many :samples
   has_many :object_types
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true  
   validates :description, presence: true
 
   def export
