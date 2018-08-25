@@ -19,7 +19,8 @@
 
 <% content_for :specific_title do %>
   <span ng-if="plan.id" id="plan_id">{{plan.id}}: </span>
-  <input type=text 
+  <input ng-if="ready"
+         type=text 
          class="plan-name-input" 
          ng-model="plan.name"
          id="plan-title-input">
@@ -30,7 +31,9 @@
 <% end %>
 
 <% content_for :sidebar do %>
-  <%= render partial: 'sidebar' %>
+  <div ng-if="ready">
+    <%= render partial: 'sidebar' %>
+  </div>
 <% end %>
 
 <% content_for :no_specific_padding do %>true<% end %>
@@ -39,11 +42,14 @@
 
   <button layout='column' 
           layout-align='center center'
-          ng-disabled='isDisabled'
+          ng-disabled='isDisabled || !$parent.ready'
           class='planner-action clickable no-highlight'
           ng-attr-data-action="{{name}}">
 
-    <ng-md-icon icon='{{icon}}' size='28' aria-label='{{name}}' ng-class="isDisabled ? 'disabled-icon' : 'active-icon'"/>
+    <ng-md-icon icon='{{icon}}' 
+                size='28' 
+                aria-label='{{name}}' 
+                ng-class=" ( isDisabled || !$parent.ready ) ? 'disabled-icon' : 'active-icon'"/>
 
     <span class='action-name'>{{name}}</span>
 
