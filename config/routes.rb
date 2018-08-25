@@ -188,8 +188,8 @@ Bioturk::Application.routes.draw do
   get '/template',    to: 'static_pages#template'
   get '/test',        to: 'static_pages#test'
 
-  get '/signin',     to: 'sessions#new'
-  get '/signout',    to: 'sessions#destroy', via: :delete
+  get '/signin',      to: 'sessions#new'
+  delete '/signout',  to: 'sessions#destroy'
 
   get '/dismiss',      to: 'static_pages#dismiss'
 

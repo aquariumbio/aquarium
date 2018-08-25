@@ -17,6 +17,14 @@ Cypress.Commands.add("login", () => {
 
 });
 
+Cypress.Commands.add("logout", () => {
+
+    cy.get('#user-specific-button').click()
+    cy.get('#signout-button').click();
+    cy.url().should('equal', 'http://localhost:3000/signout')
+
+});
+
 Cypress.Commands.add("designer", () => {
 
     cy.contains("Designer").click()
