@@ -145,9 +145,12 @@
             ng-class="table_class(cell,step)"
             ng-click="check(cell)"
             ng-style="cell.style">
-          <span ng-if="cell.type">
-            <ng-md-icon icon="create" size="16" aria-label="Input" style="fill: #444" class="input-icon"></ng-md-icon>
-          </span>
+          <ng-md-icon ng-if="cell.type"
+                      icon="create" 
+                      size="20"
+                      aria-label="Input" 
+                      style="fill: #444; position: absolute; left: 8px; top: 10px">
+          </ng-md-icon>
           <input ng-if="cell.type" 
                  dtype="{{cell.type}}" 
                  ng-model="step.response.inputs.table_inputs[cell.key][cell.operation_id].value"
