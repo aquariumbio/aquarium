@@ -8,6 +8,7 @@
       AQ.init($http);
       AQ.update = () => { $scope.$apply(); };
       AQ.confirm = (msg) => { return confirm(msg); };
+      AQ.config.no_items_in_backtrace = true;
 
       $scope.operation_types = [];
 
@@ -38,19 +39,23 @@
             selected_user: null,
             switch_user: false,
             active_jobs: false,
-            active: {}
+            active: {},
+            activity_report: { selected: false, date: new Date() }
           }
         }
 
-        $scope.current.job_report_date = new Date();
-        $scope.current.job_report_data = [];
+        $scope.current.activity_report.data = [];
 
         $interval(reload, 30000);
 
       }
 
       function init2() {
-        if ($scope.current.operation_type !== null && $scope.current.status !== null) {
+        if ( $scope.current.activity_report.selected ) {
+          $scope.get_job_report();
+        } else if ( $scope.current.active_jobs ) {
+          console.log("Active jobs should be highlighted")
+        } else if ( $scope.current.operation_type !== null && $scope.current.status !== null) {
           let operation_type = aq.find(AQ.operation_types, operation_type => operation_type.id === $scope.current.operation_type.id);
           if (operation_type) {
             $scope.current.category_index = $scope.categories.indexOf(operation_type.category);
@@ -132,12 +137,17 @@
 
       function store_cookie() {
         aqCookieManager.put_object("managerState", {
-          operation_type: { id: $scope.current.operation_type.id },
+          operation_type: { id: $scope.current.operation_type ? $scope.current.operation_type.id : null },
           status: $scope.current.status,
           category_index: $scope.current.category_index,
           show_completed: $scope.current.show_completed,
           selected_user: $scope.current.selected_user,
-          filter_user: $scope.current.filter_user
+          filter_user: $scope.current.filter_user,
+          active_jobs: $scope.current.active_jobs,
+          activity_report: { 
+            selected: $scope.current.activity_report.selected,
+            date: $scope.current.activity_report.date
+          }
         });
         console.log(aqCookieManager.get_object("managerState"));
       }
@@ -164,12 +174,24 @@
         $scope.current.show_completed = !$scope.current.show_completed;
       }
 
+      $scope.select_first_operation_type = function(cat_index) {
+        $scope.category_index = cat_index;
+        $scope.current.activity_report.selected = false;
+        store_cookie();        
+        let ots = aq.where($scope.operation_types, ot => ot.category == $scope.categories[$scope.category_index]);
+        if ( ots.length > 0 ) {
+          $scope.select(ots[0],"waiting", [])
+        }
+      }
+
       $scope.select = function (operation_type, status, selected_ops, append = false) {
 
         if (!append) {
           $scope.current.operation_type = operation_type;
           $scope.current.status = status;
           $scope.current.category_index = $scope.categories.indexOf(operation_type.category);
+          $scope.current.active_jobs = false;
+          $scope.current.activity_report.selected = false;
           store_cookie();
           delete operation_type.operations;
         }
@@ -377,23 +399,30 @@
 
       }
 
+      $scope.select_active_jobs = function() {
+        $scope.current.active_jobs = true;
+        $scope.current.activity_report.selected = false;
+        store_cookie();
+      }
+
       $scope.decrement_date = function() {
-        $scope.current.job_report_date = new Date($scope.current.job_report_date);
-        $scope.current.job_report_date.setDate($scope.current.job_report_date.getDate()-1);
+        $scope.current.activity_report.date = new Date($scope.current.activity_report.date);
+        $scope.current.activity_report.date.setDate($scope.current.activity_report.date.getDate()-1);
         $scope.get_job_report();
       }      
 
       $scope.increment_date = function() {
-        $scope.current.job_report_date = new Date($scope.current.job_report_date);
-        $scope.current.job_report_date.setDate($scope.current.job_report_date.getDate()+1);
+        $scope.current.activity_report.date = new Date($scope.current.activity_report.date);
+        $scope.current.activity_report.date.setDate($scope.current.activity_report.date.getDate()+1);
         $scope.get_job_report();
       }
 
       $scope.get_job_report = function() {
-        console.log($scope.current.job_report_date)
-        $scope.current.job_report_object = new JobReport([], "waiting");
-        AQ.http.get(`/jobs/report?date=${$scope.current.job_report_date.toString()}`).then(reponse => {
-          $scope.current.job_report_object = new JobReport(reponse.data, "ready");
+        $scope.current.activity_report.data = new JobReport([], "waiting");
+        AQ.http.get(`/jobs/report?date=${$scope.current.activity_report.date.toString()}`).then(reponse => {
+          $scope.current.activity_report.data = new JobReport(reponse.data, "ready");
+          $scope.current.activity_report.selected = true;
+          store_cookie();
         })
       }   
 

@@ -22,6 +22,9 @@ AQ.Base.prototype.record = function(extras) {
 
 AQ.Base.prototype.find = function(id) {
   let base = this;
+  // if ( base.model == "Item" ) {
+  //   debugger;
+  // }
   return new Promise(function(resolve,reject) {
     AQ.post('/json',{model: base.model, id: id}).then(
       (response) => {

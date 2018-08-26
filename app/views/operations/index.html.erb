@@ -22,19 +22,19 @@
 
 <%= content_for :specific_title do %>
 
-  <span ng-if="current.selected_user && current.filter_user && !current.job_report">
+  <span ng-if="current.selected_user && current.filter_user && !current.activity_report.selected">
     &rang; {{current.selected_user.name}}
   </span>
 
-  <span ng-if="current.operation_type && !current.job_report">
+  <span ng-if="current.operation_type && !current.activity_report.selected">
     &rang; {{current.operation_type.category}} &rang; {{current.operation_type.name}} &rang;
     <span class='capitalize'>
       {{current.status}}
     </span>
   </span>
 
-  <span ng-if="current.job_report">
-    &rang; Activity Report &rang; {{current.job_report_date.toDateString()}}
+  <span ng-if="current.activity_report.selected">
+    &rang; Activity Report &rang; {{current.activity_report.date|date}}
   </span>
 
 <% end %>
@@ -42,7 +42,7 @@
 <%= content_for :action1 do %>
   <% if current_user && current_user.is_admin %>
 
-    <div ng-if=" !current.job_report">
+    <div ng-if=" !current.activity_report.selected">
       <md-button aria-label="Schedule"  class='md-raised'
         ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
         ng-click="batch(current.operation_type)">
@@ -58,12 +58,12 @@
 
   <% end %>
 
-  <md-button ng-if="current.job_report" ng-click="decrement_date()">PREV</md-button> 
+  <md-button ng-if="current.activity_report.selected" ng-click="decrement_date()">PREV</md-button> 
 <% end %>
 
 <%= content_for :action2 do %>
   <% if current_user && current_user.is_admin %>
-    <div ng-if=" !current.job_report">  
+    <div ng-if=" !current.activity_report.selected">  
       <md-button aria-label="Click"  class='md-raised'
         ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
         ng-click="choose(current.operation_type,'pending',true)">
@@ -77,13 +77,13 @@
     </div>
   <% end %>
 
-  <md-button ng-if="current.job_report" ng-click="increment_date()">NEXT</md-button> 
+  <md-button ng-if="current.activity_report.selected" ng-click="increment_date()">NEXT</md-button> 
 
 <% end %>
 
 <%= content_for :action3 do %>
   <% if current_user && current_user.is_admin %>
-    <div ng-if=" !current.job_report">  
+    <div ng-if=" !current.activity_report.selected">  
       <md-button aria-label="Click" class='md-raised'
         ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
         ng-click="choose(current.operation_type,'pending',false)">
@@ -100,7 +100,7 @@
 
 <%= content_for :action4 do %>
   <% if current_user && current_user.is_admin %>
-    <div ng-if=" !current.job_report">  
+    <div ng-if=" !current.activity_report.selected">  
       <md-button class="md-raised md-primary" ng-click="step_all()" ng-disabled="current.stepping">
         <span ng-if="!current.stepping">Step All</span>
         <span ng-if="current.stepping">
@@ -116,7 +116,7 @@
 
    <%= render partial: '/data_associations/template' %> 
 
-   <div ng-if="!current.job_report">
+   <div ng-if="!current.activity_report.selected">
 
      <div class='timing md-subhead timing-info'
           ng-if="current.operation_type.timing && current.operation_type.timing.active">
@@ -176,7 +176,7 @@
 
   </div>
 
-  <div ng-if="current.job_report">  
+  <div ng-if="current.activity_report.selected">  
     <%= render partial: "job_report" %>
   </div>
 
