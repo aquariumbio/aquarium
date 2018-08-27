@@ -171,6 +171,7 @@
          </h2>
          <ul>
            <li>Scheduled: {{current.activity_report.data.selection.created_at|date: 'short'}}</li>
+           <li>Started: {{current.activity_report.data.selection.started_at|date: 'short'}}</li>
            <li>Last Update: {{current.activity_report.data.selection.updated_at|date: 'short'}}</li>
          </ul>
          <oplist-report operationtype="current.activity_report.data.operations[0].operation_type"
@@ -179,7 +180,7 @@
               short="true"
               jobid="job.id"></oplist-report>        
       </div>
-      
+
     </div>
 
   <% end %>

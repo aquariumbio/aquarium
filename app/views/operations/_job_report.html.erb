@@ -31,7 +31,7 @@
             background: {{job.color}};
                    top: {{job.top}}px;
                 height: {{job.height}}px;
-                  left: {{job.left-current.activity_report.data.min}}px; 
+                  left: {{job.left}}px; 
                  width: {{job.width}}px">
     <!-- This line intentionally left blank -->
   </div>
@@ -42,13 +42,14 @@
        style="position: absolute; 
                    top: {{job.top}}px;
                 cursor: pointer;
-                  left: {{job.left-current.activity_report.data.min}}px;">
+                  left: {{job.left}}px;">
         <span ng-click="current.activity_report.data.selection = job"
               class="no-highlight"
               style="cursor: pointer;
                      outline: {{job == current.activity_report.data.selection ? '2pt solid orange' : 'none'}}">
           &nbsp;{{job.id}}:{{job.operations[0].operation_type.name}}
         </span>
+        <span ng-if="!job.started_same_day">*</span>
         <a href="/users/{{job.user.id}}" 
            target="user" 
            style="color: steelblue">({{job.user.login}})</span>
