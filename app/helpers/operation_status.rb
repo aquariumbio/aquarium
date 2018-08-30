@@ -12,7 +12,6 @@ module OperationStatus
     temp = status
     self.status = str
     save
-    puts "changed status of operation #{id} from #{temp} to #{str}, with errors = [#{errors.full_messages.join(', ')}]"
     raise 'Could not change status' unless errors.empty?
     str
   end

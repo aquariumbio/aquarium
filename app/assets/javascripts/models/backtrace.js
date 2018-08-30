@@ -269,6 +269,11 @@ class Backtrace { // This should extend array, but the closure compiler used in
     return backtrace.array[backtrace.array.length-1];
   }
 
+  get second_to_last() {
+    let backtrace = this;
+    return backtrace.array[backtrace.array.length-2];
+  }  
+
   get ready() {
     if ( this.last ) {
       return this.last.ready;

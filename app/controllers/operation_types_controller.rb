@@ -3,6 +3,12 @@ class OperationTypesController < ApplicationController
   before_filter :signed_in_user
   before_filter :up_to_date_user
 
+  def test_all
+    respond_to do |format|
+      format.html { render layout: 'aq2' }
+    end
+  end
+
   def index
 
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
@@ -219,7 +225,7 @@ class OperationTypesController < ApplicationController
           actual_fvs = op.set_property(io.name, samples, io.role, true, aft)
           raise "Nil value Error: Could not set #{test_fvs}" unless actual_fvs
         else # io is not an array
-          raise "Test Operation Error: This operationtype may have multiple io with the same name" unless test_fvs.one?
+          raise "Test Operation Error: This operation type may have either zero or multiple io with the same name: #{io.name} (#{io.role}#{io.array ? ', array' : ''}) of type #{io.ftype}" unless io.ftype != 'sample' || test_fvs.one?
           test_fv = test_fvs.first
           if io.ftype == 'sample'
             aft = AllowableFieldType.find_by_id(test_fv[:allowable_field_type_id])
@@ -253,11 +259,17 @@ class OperationTypesController < ApplicationController
     ActiveRecord::Base.transaction do
 
       # (re)build the operations
-      ops = if params[:test_operations]
-              make_test_ops(OperationType.find(params[:id]), params[:test_operations])
-            else
-              []
-            end
+      begin
+        ops = if params[:test_operations]
+                make_test_ops(OperationType.find(params[:id]), params[:test_operations])
+              else
+                []
+              end
+      rescue Exception => e 
+        render json: { errors: [e.to_s] }, status: :unprocessable_entity
+        raise ActiveRecord::Rollback
+        return        
+      end
 
       plans = []
       ops.each do |op|

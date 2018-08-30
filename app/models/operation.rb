@@ -140,7 +140,6 @@ class Operation < ActiveRecord::Base
   # @param name [String]
   # @return [FieldValue]
   def get_input(name)
-    puts "================= FINDING #{name}"
     inputs.find { |i| i.name == name }
   end
 

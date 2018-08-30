@@ -1,0 +1,48 @@
+<% provide(:title,  "Test" ) %>
+
+<% content_for :controller do %>operationTypeTestAllCtrl<% end %>
+
+<% content_for :sidebar do %>
+
+  <h2 class="md-title">Categories:</h2>
+  <ul>
+   <li ng-repeat="category in categories">
+     <a href="#" ng-click="test_category(category)">{{category}}</a>
+   </li>
+  </ul>
+
+<% end %>
+
+<% content_for :specific_title do %>
+  <span ng-if="state.active_category">
+    / {{state.active_category}}
+    / {{state.done}} of {{state.num_tests}} done
+    / <span ng-if="state.num_errors == 1">1 error</span>
+      <span ng-if="state.num_errors != 1">{{state.num_errors}} errors</span>
+  </span>
+<% end %>
+
+
+<% content_for :main do %>
+
+  <div class="test-all-results">
+    <ul>
+      <li ng-repeat="test in tests track by $index">
+        <b>{{test.name}}:</b> <span ng-class="status_class(test.status)">{{test.status}}</span>
+        <div ng-if="test.error" class="error">
+          <b>{{test.error}}</b>
+        </div>
+        <div class="error"
+             ng-if="test.results.job.backtrace.last.type == 'aborted'">
+             <b>{{test.results.job.backtrace.second_to_last.display.message}}</b>
+             <ul>
+               <li ng-repeat="b in test.results.job.backtrace.second_to_last.display.backtrace track by $index">
+                 {{b}}
+               </li>
+             </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+<% end %>
