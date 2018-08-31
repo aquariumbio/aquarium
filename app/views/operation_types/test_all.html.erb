@@ -4,7 +4,7 @@
 
 <% content_for :sidebar do %>
 
-  <h2 class="md-title">Categories:</h2>
+  <h1 class="md-title">Categories</h1>
   <ul>
    <li ng-repeat="category in categories">
      <a href="#" ng-click="test_category(category)">{{category}}</a>
@@ -25,10 +25,19 @@
 
 <% content_for :main do %>
 
-  <div class="test-all-results">
+  <div class="test-all-results" 
+       ng-if="!tests || tests.length == 0">
+    Select a category to run a test.<br>
+    Note that testing a category is computationally intensive.<br>
+    Consider testing at night when no one else is using the system.
+  </div>
+
+  <div class="test-all-results" 
+       ng-if="tests && tests.length > 0">
     <ul>
       <li ng-repeat="test in tests track by $index">
-        <b>{{test.name}}:</b> <span ng-class="status_class(test.status)">{{test.status}}</span>
+        <b>{{test.name}}:</b>
+        <span ng-class="status_class(test.status)">{{test.status}}</span>
         <div ng-if="test.error" class="error">
           <b>{{test.error}}</b>
         </div>
