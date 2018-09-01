@@ -491,9 +491,11 @@ AQ.Plan.record_methods.valid = function() {
       v = plan.operations.length > 0;
 
   aq.each(plan.operations, op => {
-    aq.each(op.field_values, fv => {
-      v = v && fv.valid();
-    })
+    if ( op.status != 'error' ) {
+      aq.each(op.field_values, fv => {
+        v = v && fv.valid();
+      })
+    }
   })
 
   aq.each(plan.wires, wire => {

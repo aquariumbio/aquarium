@@ -303,7 +303,7 @@
         .then(result => {
             let da = operation.new_data_association();
             da.key = "canceled_via_designer";
-            da.new_value = result;            
+            da.set(result)
             $scope.wait = true;
             da.prepare_and_save();
           })
