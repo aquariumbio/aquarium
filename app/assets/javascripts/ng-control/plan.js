@@ -639,8 +639,8 @@
 
       fv.assign_item(item);
 
-      if ( $scope.current_op != "planning" ) {
-        $scope.state.messages.push("Changed item for an active operation. Save this plan to effect your change.")
+      if ( $scope.current_op.status != "planning" ) {
+        $scope.state.messages.push(`Changed item for an operation in state '${$scope.current_op.status}'. Save this plan to effect your change.`)
       }
 
     };
