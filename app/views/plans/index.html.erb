@@ -18,6 +18,7 @@
 <% content_for :no_main_scroll_decision do %>true<% end %>
 
 <% content_for :specific_title do %>
+  <div style="width: 100%">
   <span ng-if="plan.id" id="plan_id">{{plan.id}}: </span>
   <input ng-if="ready"
          type=text 
@@ -28,6 +29,7 @@
         ng-repeat="mod_name in plan.path_to_current_module() track by $index">
     &rang; {{mod_name}}
   </span>
+  </div>
 <% end %>
 
 <% content_for :sidebar do %>
@@ -147,7 +149,7 @@
     </div>
   </div>  
 
-  <div class="editor-main" layout="column" ng-if="ready && plan">
+  <div class="editor-main" layout="column" ng-if="ready">
 
     <div flex class="plan-editor-container scrollable"
          ng-keydown="keyDown($event)" tabindex="0"
@@ -184,7 +186,7 @@
 
   </div>
 
-  <div class="plan-wait-overlay" ng-if=wait>
+  <div class="plan-wait-overlay" ng-if="wait || plan.saving">
     <center layout-padding flex="50">
       <h2 class="md-title">Communicating with Aquarium ...</h2>
       <br />

@@ -177,18 +177,16 @@
 
     $scope.save = function(plan) {
 
-      $scope.old_plan = null;
-      $scope.plan = null;
-
       plan.save($scope.current_user).then(saved_plan => {
         $scope.plan = saved_plan;
         $scope.select_uba_by_budget_id($scope.current_user, $scope.plan.budget_id)
         $scope.select(null);
         $scope.nav.sidebar = "plans";
         $scope.refresh_plan_list();
+        $scope.state.saving = false;
       }).catch(e => {
-        $scope.plan = $scope.old_plan;
-        $scope.old_plan = null;
+        $scope.messages.push(e);
+        $scope.state.saving = false;
       })
 
     };

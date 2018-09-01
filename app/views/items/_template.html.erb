@@ -1,9 +1,18 @@
+<!--
+
+  item: The item to display
+  collection: If the item is a part, then collection is the collection of which it is a part
+  row, column: If the item is a part, its row and column
+  container: The item's object_type
+
+  -->
+
 <script type="text/ng-template" id="item_template">
 
   <span ng-init="item.new_location = item.location">
 
     <span ng-if="!nolink">
-      <a href='#' ng-click='item.modal=true' ng-init="item.modal=false">{{item.id}}</a>
+      <a href='#' data-target="#" ng-click='item.modal=true' ng-init="item.modal=false">{{item.id}}</a>
     </span>
 
     <div class='ng-modal item-modal' ng-if='item.modal'>
@@ -18,7 +27,7 @@
               <span>Item {{item.id}}:</span>
               <span ng-if="!collection">{{container.name}}</span>
               <span ng-if="collection">Part {{row}}, {{column}} of {{collection.object_type.name}}</span>
-            </h2> 
+            </h2>
           </div>
           <div class='item-close' ng-click='item.modal=false'>&times;</div>
         </md-toolbar>
@@ -40,7 +49,7 @@
                 Part {{row}},{{column}} of {{collection.object_type.name}}
                 <a href="/items/{{collection.id}}" target="collection">{{collection.id}}</a>
               </div>
-              <div>Location: {{collection.location}}</div>
+              <div ng-if="collection">Location: {{collection.location}}</div>
             </div>
 
             <div flex="40" layout="column" layout-align="center center">
@@ -82,9 +91,9 @@
                 <ng-md-icon icon="undo" size="22" aria-label="Undo" style="fill: #444"></ng-md-icon>  
               </a>
               <% if current_user && current_user.is_admin %>
-                <a href="#" ng-click="item.mark_as_deleted()" class="no-highlight">
+                <a href="#" data-target="#" ng-click="item.mark_as_deleted(); sample.show_deleted=true" class="no-highlight">
                   <ng-md-icon icon="delete" size="22" aria-label="Delete" style="fill: #444"></ng-md-icon>  
-                </a>   
+                </a>
               <% end %>
             </div>
           </div>

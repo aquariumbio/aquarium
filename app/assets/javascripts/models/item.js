@@ -5,6 +5,28 @@ AQ.Item.record_getters.is_collection = function() {
   return (this.object_type.handler == 'collection');
 }
 
+AQ.Item.record_getters.is_part = function() {
+  return (this.object_type.name == '__Part');
+}
+
+AQ.Item.record_getters.collection = function() {
+  let item = this;
+  if ( item.is_part ) {
+    delete item.collection;
+    AQ.PartAssociation
+      .where({part_id: item.id}, {include: { collection: { include: "object_type" }}})
+      .then(pas => {
+        if ( pas.length == 1 ) {
+          item.collection = pas[0].collection;
+          item.row = pas[0].row;
+          item.column = pas[0].column;
+        }
+      })
+  } else {
+    return undefined;
+  }
+}
+
 AQ.Item.record_methods.upgrade = function(raw_data) {
 
   let item = this;
@@ -86,6 +108,8 @@ AQ.Item.record_methods.mark_as_deleted = function() {
   })
 
 }
+
+AQ.Collection.record_methods.mark_as_deleted = AQ.Item.record_methods.mark_as_deleted;
 
 AQ.Item.record_methods.get_history = function() {
 
