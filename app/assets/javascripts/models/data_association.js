@@ -97,6 +97,8 @@ AQ.DataAssociation.base_methods = {
       unsaved: true
     })
 
+    record.data_associations.push(da)
+
     return da;
 
   }

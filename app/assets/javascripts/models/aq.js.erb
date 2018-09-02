@@ -5,7 +5,6 @@ AQ = {
 };
 
 AQ.check_signed_in = function(response) {
-  console.log("Check", response.data.error)
   if ( response.headers().status == "Not-logged-in" || response.data.error == "Not-logged-in" ) {
     window.location = "/signin";
   } else {

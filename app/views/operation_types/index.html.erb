@@ -118,6 +118,7 @@
       <md-nav-item ng-if="mode == 'documentation_view'" md-nav-click="set_mode('documentation')" name="documentation_view">Docs</md-nav-item>
       <md-nav-item md-nav-click="set_mode('timing')" name="timing">Timing</md-nav-item>
       <md-nav-item md-nav-click="set_mode('test')" name="test">Test</md-nav-item>
+      <md-nav-item md-nav-click="set_mode('data')" name="data">Data</md-nav-item>      
     </md-nav-bar>
 
     <div class="ot-part-container">
@@ -143,6 +144,7 @@
 
       <%= render partial: 'test' %>
       <%= render partial: 'timing' %>
+      <%= render partial: 'data' %>
 
     </div>
 

@@ -11,6 +11,7 @@ class OperationType < ActiveRecord::Base
   include OperationTypeWorkflow
   include OperationTypeRandom
   include HasTiming
+  include DataAssociator  
 
   has_many :operations
   # has_many :fts, foreign_key: "parent_id", class_name: "FieldType"

@@ -110,7 +110,7 @@ class JsonController < ApplicationController
       record.delete
       render json: record
     else
-      render json: { errors: ['Insufficient permission to delete'] }, status: :unprocessable_entity
+      render json: { errors: ["Insufficient permission to delete #{params[:model][:model]}"] }, status: :unprocessable_entity
     end
 
   end

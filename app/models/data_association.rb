@@ -37,9 +37,11 @@ class DataAssociation < ActiveRecord::Base
     elsif parent_class == 'Collection'
       return user.is_admin # since collections are managed by admins?
     elsif parent_class == 'Operation'
-      return true # since operations don't yet have owners
+      return true # since operations don't yet have owners (actually they do now, so this should be fixed)
     elsif parent_class == 'Plan'
       return true # plans don't have owners yet either
+    elsif parent_class == 'OperationType'
+      return true # operation types don't have owners yet either      
     end
 
   end
