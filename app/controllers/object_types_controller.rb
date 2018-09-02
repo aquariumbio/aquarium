@@ -89,10 +89,10 @@ class ObjectTypesController < ApplicationController
 
     respond_to do |format|
       if @object_type.save
-        format.html { redirect_to @object_type, notice: 'Object type was successfully created.' }
+        format.html { redirect_to object_types_url, notice: "Object type #{@object_type.name} was successfully created." }
         format.json { render json: @object_type, status: :created, location: @object_type }
       else
-        format.html { render action: 'new' }
+        format.html { render action: 'new', layout: 'aq2-plain' }
         format.json { render json: @object_type.errors, status: :unprocessable_entity }
       end
     end
