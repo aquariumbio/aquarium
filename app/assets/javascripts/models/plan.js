@@ -62,7 +62,7 @@ AQ.Plan.record_methods.save = function(user) {
   if ( plan.id ) {
 
     return new Promise((resolve,reject) => {
-      AQ.http.put('/plans/' + plan.id + '.json'+user_query,plan.serialize()).then(response => {
+      AQ.put('/plans/' + plan.id + '.json'+user_query,plan.serialize()).then(response => {
         delete plan.saving;
         var p = AQ.Plan.record(response.data).marshall();   
         AQ.Test.plan_diff(before,p)             

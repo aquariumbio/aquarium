@@ -4,6 +4,15 @@ AQ = {
   }
 };
 
+AQ.check_signed_in = function(response) {
+  console.log("Check", response.data.error)
+  if ( response.headers().status == "Not-logged-in" || response.data.error == "Not-logged-in" ) {
+    window.location = "/signin";
+  } else {
+    return response;
+  }
+}
+
 AQ.init = function(http) {
 
   AQ.http = http;
@@ -18,6 +27,7 @@ AQ.init = function(http) {
       return AQ.http.get.apply(null,args).then(result => {
         let url = Array.from(args)[0],
             elapsed = new Date() - start_time;
+        AQ.check_signed_in(result);
         console.log(`%cGET %c${url} completed in %c${elapsed} ms`, 
                     "font-weight: bold", "font-weight: normal", "color: orange");
         return result;
@@ -34,6 +44,7 @@ AQ.init = function(http) {
         let url = Array.from(args)[0],
             data = JSON.stringify(Array.from(args)[1]).slice(0,100),
             elapsed = new Date() - start_time;
+        AQ.check_signed_in(result);
         console.log(`%cPOST %c${url}, ${data} ... completed in %c${elapsed} ms`, 
                     "font-weight: bold", "font-weight: normal","color: orange");
         return result;
@@ -41,10 +52,35 @@ AQ.init = function(http) {
 
     }
 
+    AQ.put = function() { 
+
+      let start_time = new Date(),
+          args = arguments;
+
+      return AQ.http.put.apply(null,args).then(result => { 
+        let url = Array.from(args)[0],
+            elapsed = new Date() - start_time;
+        AQ.check_signed_in(result);
+        console.log(`%cPUT %c${url}, completed in %c${elapsed} ms`, 
+                    "font-weight: bold", "font-weight: normal","color: orange");
+        return result;
+      })
+
+    }    
+
   } else {
 
-    AQ.get = AQ.http.get;
-    AQ.post = AQ.http.post;
+    AQ.get = function() { 
+      return AQ.http.get.apply(null,args).then(AQ.check_signed_in);
+    }
+
+    AQ.post = function() { 
+      return AQ.http.post.apply(null,args).then(AQ.check_signed_in);
+    }
+
+    AQ.put = function() { 
+      return AQ.http.put.apply(null,args).then(AQ.check_signed_in);
+    }
 
   }
 
@@ -130,7 +166,7 @@ AQ.id_from = function(sid) {
 }
 
 AQ.sid_from = function(id) { 
-  
+  // ??
 }
 
 AQ.items_for = function(sample_id,object_type_id) {

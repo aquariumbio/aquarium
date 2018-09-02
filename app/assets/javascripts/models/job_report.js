@@ -39,7 +39,6 @@ class JobReport {
     )
 
     min_list.sort((a,b) => a-b);
-    console.log("min_list", min_list)
 
     if ( job_report.jobs.length > 0 ) {
       job_report.min = Math.floor(min_list[0]/60)*60 - 60;

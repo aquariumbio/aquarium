@@ -3,7 +3,10 @@
 class SessionsController < ApplicationController
 
   def new
+
+    response.headers['Status'] = 'Not-logged-in'
     render layout: 'blank.html.erb'
+    
   end
 
   def create

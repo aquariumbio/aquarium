@@ -419,7 +419,7 @@
 
       $scope.get_job_report = function() {
         $scope.current.activity_report.data = new JobReport([], "waiting");
-        AQ.http.get(`/jobs/report?date=${$scope.current.activity_report.date.toString()}`).then(reponse => {
+        AQ.get(`/jobs/report?date=${$scope.current.activity_report.date.toString()}`).then(reponse => {
           $scope.current.activity_report.data = new JobReport(reponse.data, "ready", $scope.current.activity_report.date);
           $scope.current.activity_report.selected = true;
           store_cookie();
