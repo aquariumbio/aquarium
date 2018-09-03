@@ -5,10 +5,18 @@
   <tr>
 
     <td style='width: 16px'>
-       <span class="project-expander" ng-if="!sample.open && !sample.edit" ng-click="toggle(sample)">&#9658;</span>
-       <span class="project-expander" ng-if="sample.open && !sample.edit"  ng-click="toggle(sample)">&#9660;</span>
-       <span class="project-expander" ng-if="sample.open && sample.edit">&#9660;</span>    
-    </td>      
+       <span class="project-expander" 
+             ng-if="!sample.open && !sample.edit" 
+             ng-click="toggle(sample)"
+             ng-attr-data-sample-header="{{sample.name}}">&#9658;</span>
+       <span class="project-expander" 
+             ng-if="sample.open && !sample.edit"
+             ng-click="toggle(sample)"
+             ng-attr-data-sample-header="{{sample.name}}">&#9660;</span>
+       <span class="project-expander"
+             ng-if="sample.open && sample.edit"
+             ng-attr-data-sample-header="{{sample.name}}">&#9660;</span>    
+    </td>
 
     <td class="sample-heading-name" ng-click="toggle(sample)">
        <span class="sample-id">{{sample.id}}:</span>
@@ -20,7 +28,7 @@
 
       <div ng-if="sample.open" class='pull-right'>
 
-        <a href="#" ng-if="sample.open && sample.inventory" 
+        <a ng-if="sample.open && sample.inventory" 
            class="btn btn-mini dropdown-toggle" 
            ng-click="toggle_show_deleted(sample)">
           <span ng-show="sample.show_deleted">Hide</span>
@@ -30,49 +38,56 @@
 
         <div class='btn-group' style="margin-right: 5px;">
 
-          <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
+          <a class="btn btn-mini dropdown-toggle"
+             data-toggle="dropdown"
+             data-sample-heading-button="actions"
+             ng-attr-data-sample-name="{{sample.name}}">
             Actions <span class="caret"></span>
           </a>
 
           <ul class='dropdown-menu dropdown-in-stl pull-left'>
 
            <li ng-show="sample.open && !no_edit && !sample.edit">
-             <a href='#' ng-click="toggle_inventory(sample)">
+             <a ng-click="toggle_inventory(sample)">
                <span ng-show="!sample.inventory">Inventory</span>
                <span ng-show="sample.inventory">Description</span>     
              </a>       
            </li>
 
            <li ng-show="!sample.edit && !no_edit && allowed(sample)">
-             <a href='#'ng-click="editing || edit(sample)">
+             <a ng-click="editing || edit(sample)">
                Edit
              </a>
            </li>
 
            <li ng-show="!sample.edit && !no_edit && !sample.inventory">
-             <a href='#'ng-click="copy(sample)">
+             <a ng-click="copy(sample)">
                Copy
              </a>
            </li>
 
            <li ng-show="sample.inventory" class='dropdown-submenu pull-left'>
-             <a tabindex="-1" href="#">New Item</a>
+             <a tabindex="-1"
+                data-sample-action="new-item"
+                ng-attr-data-sample-name="{{sample.name}}">New Item</a>
              <ul class='dropdown-menu dropdown-in-stl'>
                <li ng-repeat="container in sample.sample_type.object_types"
                    ng-click="new_item(sample,container)">
-                   <a href="#">{{container.name}}</a>
+                   <a href="#"
+                      ng-attr-data-new-item-choice="{{container.name}}"
+                      ng-attr-data-sample-name="{{sample.name}}">{{container.name}}</a>
                </li>
              </ul>
            </li>           
 
            <li ng-show="sample.edit && !no_cancel">
-             <a href="#" ng-click='view(sample)'>
+             <a ng-click='view(sample)'>
                Cancel
              </a>
            </li>
 
            <li ng-if="sample.edit && !no_cancel">
-             <a href="#" ng-click='save(sample)'>
+             <a ng-click='save(sample)'>
                Save
              </a>
            </li>

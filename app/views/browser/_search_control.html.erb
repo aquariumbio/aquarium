@@ -9,20 +9,33 @@
 
   <div class="search-part">
     <label>Sample Name or ID</label>
-    <input type="text" ng-model="views.search.query" style="width: 100%" samplecomplete="'all'">
+    <input type="text"
+           ng-model="views.search.query"
+           style="width: 100%" 
+           samplecomplete="'all'"
+           data-search-input="sample-identifier">
   </div>
 
   <div class="search-part">
     <label>Sample Type</label>
-    <input type="text" ng-model="views.search.sample_type" style="width: 100%" sampletypecomplete> 
+    <input type="text"
+           ng-model="views.search.sample_type"
+           style="width: 100%"
+           sampletypecomplete
+           data-search-input="sample-type"> 
   </div>
 
   <div class="search-part" layout="row">
     <div>
       <label>Project</label>
-      <input type="text" ng-model="views.search.project" style="width: 70%" projectcomplete>
+      <input type="text"
+             ng-model="views.search.project"
+             style="width: 70%"
+             projectcomplete
+             data-search-input="project">
     </div>
-    <md-switch ng-model='views.search.project_filter'>
+    <md-switch ng-model='views.search.project_filter'
+               data-search-switch="filter">
       Filter?
     </md-switch>    
   </div>
@@ -30,7 +43,11 @@
   <div class="search-part" layout="row">  
     <div>
       <label>User</label>
-      <input type="text" ng-model="views.search.user" style="width: 70%" usercomplete>    
+      <input type="text"
+             ng-model="views.search.user" 
+             style="width: 70%" 
+             usercomplete
+             data-search-input="user">    
     </div>
     <md-switch ng-model='views.search.user_filter'>
       Filter?
@@ -39,7 +56,8 @@
 
   <div layout="row" layout-align="center center">
     <md-button ng-class="views.search.selected ? 'md-raised md-primary' : 'md-raised'" 
-               ng-click="search(0); select_view('search')">Search</md-button> 
+               ng-click="search(0); select_view('search')"
+               data-search-button="search">Search</md-button> 
   </div>
 
   <hr>
@@ -53,7 +71,10 @@
                  class="md-raised" ng-click="item_search()">
         Find Item
       </md-button>    
-      <input type="text" style="width: 50%" ng-model="views.search.item_id">
+      <input type="text" 
+             style="width: 50%"
+             ng-model="views.search.item_id"
+             data-search-input="find-item">
     </div>
     <hr>
     <div layout="row"
@@ -62,13 +83,15 @@
       <md-menu>
         <md-button class="md-raised md-primary"
           ng-click="openCollectionMenu($mdMenu, $event)"
-          id="new-collection-button">
+          id="new-collection-button"
+          data-search-button="new-collection">
           New Collection
         </md-button>
         <md-menu-content>
           <md-menu-item ng-repeat="ctype in collection_types">
             <md-button ng-click="new_collection(ctype)"
-                       ng-attr-data-new-collection-type="{{ctype.name}}">{{ctype.name}}</md-button>
+                       ng-attr-data-new-collection-type="{{ctype.name}}"
+                       data-search-menu="collection-types">{{ctype.name}}</md-button>
           </md-menu-item>
         </md-menu-content>
       </md-menu>
