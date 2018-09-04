@@ -80,12 +80,8 @@ Cypress.Commands.add("data_association_not_present", (parent_class, parent_id, k
 
 Cypress.Commands.add("test_item_popup", (id) => {
 
-    cy.wrap(id)
-      .should('be.above', 0)      
-      .get(`[data-open-item-popup=${id}]`).click()
-
       // make sure basic info is present
-      .get(`[data-popup-title-item-id=${id}]`)
+    cy.get(`[data-popup-title-item-id=${id}]`)
       .get(`[data-popup-title-container-name='Primer Aliquot']`)
       .get(`[data-popup-title-sample-name='First Primer']`)
 

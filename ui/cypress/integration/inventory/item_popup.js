@@ -16,7 +16,7 @@ describe('Item Popups', function() {
       .get("[data-sample-header='First Primer']").click()
       .get("[data-sample-heading-button=actions]").click()
       .get("[data-sample-name='First Primer'][data-sample-action=new-item]")
-      .trigger('mouseover') // This doesn't work, hence the "force" in the next line
+      .trigger('mouseover') // This doesn't work, hence the "force" in the line after next
       .get("[data-sample-name='First Primer'][data-new-item-choice='Primer Aliquot']")
       .click({force: true})
 
@@ -24,7 +24,13 @@ describe('Item Popups', function() {
     cy.wait(['@newItem'])
       .then(xhr => {
         const id = xhr.response.body.item.id
-        cy.test_item_popup(id)
+        cy.wrap(id)
+          .should('be.above', 0)      
+          .get(`[data-open-item-popup=${id}]`).click()       
+          .test_item_popup(id)
+          .get("[data-search-input=find-item]").type(`${id}`)
+          .get("[data-search-button=find-item]").click()
+          .test_item_popup(id)
       })
 
   })
