@@ -6,7 +6,7 @@ AQ.Item.record_getters.is_collection = function() {
 }
 
 AQ.Item.record_getters.is_part = function() {
-  return (this.object_type.name == '__Part');
+  return (this.object_type && this.object_type.name == '__Part');
 }
 
 AQ.Item.record_getters.collection = function() {

@@ -98,7 +98,9 @@
   </div>  
   <div ng-if="plan.saved && plan.valid() && nav.sidebar" ng-include="'launch_plan'"></div>
   <div ng-if="!plan.saved" layout-padding>This plan cannot be launched or extended because it has not been saved.</div>
-  <div ng-if="plan.id && !plan.valid()" layout-padding>
+  <div ng-if="plan.id && !plan.valid()" 
+       layout-padding
+       data-invalid-plan="{{plan.id}}">
     This plan cannot be launched because it is not valid or has no operations.
     All I/O of non-errored operations should be defined (green), and all wires should be consistent (black).
     Note that Aquarium does not currently display the validity of wires to and from modules, 

@@ -129,7 +129,9 @@ class JsonController < ApplicationController
       if ot.handler == 'collection'
         render json: Collection.parts(sample, ot).as_json(methods: :matrix)
       else
-        render json: sample.items.reject { |i| i.deleted? || i.object_type_id != ot.id }
+        render json: sample.items
+                           .reject { |i| i.deleted? || i.object_type_id != ot.id }
+                           .as_json(include: :object_type)
       end
 
     elsif sample && !ot

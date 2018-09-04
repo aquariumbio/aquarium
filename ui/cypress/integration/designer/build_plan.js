@@ -53,10 +53,11 @@ describe('Build plan', function() {
     cy.get("#plan-title-input").clear().type("My Test Plan")
     cy.get("[data-action=Save]").click()
     cy.wait(['@savePlan', '@getBudget', '@getFolders']).then((xhrs) => {
-      cy.wrap(xhrs[0].response.body.id).should('be.above', 0)
+      const id = xhrs[0].response.body.id
+      cy.wrap(id).should('be.above', 0)
+        .get("[data-sidebar=launch]").click()
+        .get(`[data-invalid-plan=${id}]`).should('not.be.visible')
     })
-
-    cy.get("[data-sidebar=launch]").click()
 
   });
 
