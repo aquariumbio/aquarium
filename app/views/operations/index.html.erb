@@ -45,20 +45,24 @@
     <div ng-if=" !current.activity_report.selected">
       <md-button aria-label="Schedule"  class='md-raised'
         ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
-        ng-click="batch(current.operation_type)">
+        ng-click="batch(current.operation_type)"
+        data-manager-action="schedule">
         Schedule
       </md-button>
 
       <md-button aria-label="Retry" class='md-raised'
         ng-if="current.status == 'error'"
-        ng-click="retry(current.operation_type)">
+        ng-click="retry(current.operation_type)"
+        data-manager-action="retry">
         Retry
       </md-button>
     </div>
 
   <% end %>
 
-  <md-button ng-if="current.activity_report.selected" ng-click="decrement_date()">PREV</md-button> 
+  <md-button ng-if="current.activity_report.selected"
+             ng-click="decrement_date()"
+             data-manager-action="prev">PREV</md-button> 
 <% end %>
 
 <%= content_for :action2 do %>
@@ -66,18 +70,22 @@
     <div ng-if=" !current.activity_report.selected">  
       <md-button aria-label="Click"  class='md-raised'
         ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
-        ng-click="choose(current.operation_type,'pending',true)">
+        ng-click="choose(current.operation_type,'pending',true)"
+        data-manager-action="all">
         All
       </md-button>
       <md-button aria-label="Click"  class='md-raised'
         ng-if="!current.operation_type.on_the_fly && current.status == 'error'"
-        ng-click="choose(current.operation_type,'error',true)">
+        ng-click="choose(current.operation_type,'error',true)"
+        data-manager-action="all">
         All
       </md-button>  
     </div>
   <% end %>
 
-  <md-button ng-if="current.activity_report.selected" ng-click="increment_date()">NEXT</md-button> 
+  <md-button ng-if="current.activity_report.selected"
+             ng-click="increment_date()"
+             data-manager-action="next">NEXT</md-button> 
 
 <% end %>
 
@@ -86,12 +94,14 @@
     <div ng-if=" !current.activity_report.selected">  
       <md-button aria-label="Click" class='md-raised'
         ng-if="!current.operation_type.on_the_fly && current.status == 'pending'"
-        ng-click="choose(current.operation_type,'pending',false)">
+        ng-click="choose(current.operation_type,'pending',false)"
+        data-manager-action="none">
         None
       </md-button>
       <md-button aria-label="Click"  class='md-raised'
         ng-if="!current.operation_type.on_the_fly && current.status == 'error'"
-        ng-click="choose(current.operation_type,'error',false)">
+        ng-click="choose(current.operation_type,'error',false)"
+        data-manager-action="none">
         None
       </md-button> 
     </div> 
@@ -101,7 +111,10 @@
 <%= content_for :action4 do %>
   <% if current_user && current_user.is_admin %>
     <div ng-if=" !current.activity_report.selected">  
-      <md-button class="md-raised md-primary" ng-click="step_all()" ng-disabled="current.stepping">
+      <md-button class="md-raised md-primary"
+                 ng-click="step_all()"
+                 ng-disabled="current.stepping"
+                 data-manager-action="step all">
         <span ng-if="!current.stepping">Step All</span>
         <span ng-if="current.stepping">
           <md-progress-linear class="md-hue-2" md-diameter="20px" style="display: inline-block">
@@ -146,13 +159,33 @@
             </h2>
           
             <% if current_user && current_user.is_admin %>
-              <md-button ng-if="current.status != 'running'" class='md-small' ng-href="/krill/start?job={{job_id}}" aria-lable="Run">Run</md-button>
+              <md-button ng-if="current.status != 'running'"
+                         class='md-small'
+                         ng-href="/krill/start?job={{job_id}}"
+                         aria-lable="Run"
+                         data-manager-job-action="run">Run</md-button>
               <% if Bioturk::Application.config.debug_tools %>
-                <md-button ng-if="current.status != 'running'" class='md-small' ng-click="debug(current.operation_type,job_id)" aria-lable="Debug">Debug</md-button>
+                <md-button ng-if="current.status != 'running'"
+                           class='md-small'
+                           ng-click="debug(current.operation_type,job_id)"
+                           aria-lable="Debug"
+                           data-manager-job-action="debug">Debug</md-button>
               <% end %>
-              <md-button ng-if="current.status != 'running'" class='md-small' ng-click="unschedule(current.operation_type,job_id)" aria-lable="Unschedule">Remove</md-button>
-              <md-button ng-if="current.status != 'running'" class='md-small' ng-click="$parent.choose(current.operation_type,'scheduled',true,job_id)" aria-label="All">All</md-button>
-              <md-button ng-if="current.status != 'running'" class='md-small' ng-click="$parent.choose(current.operation_type,'scheduled',false,job_id)" aria-lable="None">None</md-button>
+              <md-button ng-if="current.status != 'running'"
+                         class='md-small'
+                         ng-click="unschedule(current.operation_type,job_id)"
+                         aria-lable="Unschedule"
+                         data-manager-job-action="remove">Remove</md-button>
+              <md-button ng-if="current.status != 'running'"
+                         class='md-small'
+                         ng-click="$parent.choose(current.operation_type,'scheduled',true,job_id)"
+                         aria-label="All"
+                         data-manager-job-action="all">All</md-button>
+              <md-button ng-if="current.status != 'running'"
+                         class='md-small'
+                         ng-click="$parent.choose(current.operation_type,'scheduled',false,job_id)"
+                         aria-lable="None"
+                         data-manager-job-action="none">None</md-button>
             <% end %>
           </div>
 

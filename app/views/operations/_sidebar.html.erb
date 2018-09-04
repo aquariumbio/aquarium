@@ -42,7 +42,8 @@
           ng-click="current.switch_user = false;
                     current.active_jobs = false;
                     select_first_operation_type($index)"
-          ng-class="category_class($index)">
+           ng-class="category_class($index)"
+           ng-attr-data-category-choice="{{cat}}">
           {{cat}}
       </div>           
 
@@ -76,7 +77,9 @@
       <td ng-repeat="status in [ 'waiting', 'delayed', 'pending', 'deferred', 'scheduled', 'running', 'error', 'done' ]"
           ng-class="$parent.status_selector(operation_type,status)"
           ng-click="$parent.select(operation_type,status)"
-          ng-if="current.show_completed || ( status != 'error' && status != 'done' )">
+          ng-if="current.show_completed || ( status != 'error' && status != 'done' )"
+          ng-attr-data-operation-type-name="{{operation_type.name}}"
+          ng-attr-data-status="{{status}}">
           {{numbers[operation_type.id][status] ? numbers[operation_type.id][status] : 0}}
       </td>
     </tr>

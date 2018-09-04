@@ -1,1 +1,3 @@
-{}
+{
+  "requestTimeout": 25000
+}

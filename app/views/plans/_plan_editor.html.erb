@@ -49,11 +49,13 @@
     <text x="0" y="40" 
           ng-attr-class="{{op_status_class(op) + ' no-highlight'}}"
           ng-if="op.status != 'planning'"
-          ng-mousedown="statusMouseDown($event,op)">
+          ng-mousedown="statusMouseDown($event,op)"
+          data-operation-info="status"
+          ng-attr-data-operation-name="{{op.operation_type.name}}">
       {{op.status}}
     </text>
 
-    <text ng-attr-x="{{0}}" y="-4" class='op-cost' ng-if="op.cost != null">
+    <text ng-attr-x="{{0}}" y="-4" class='op-cost' ng-if="op.cost != null" data-operation-info="cost">
       {{op.cost_so_far|currency}}
       <tspan ng-if="op.cost_so_far != null">/</tspan>
       {{op.cost|currency}}
