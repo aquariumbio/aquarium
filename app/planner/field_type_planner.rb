@@ -81,12 +81,16 @@ module FieldTypePlanner
       [nil, nil]
     else
       aft = allowable_field_types.sample
-      if !aft.sample_type
+      if array
+        if aft.sample_type
+          return [aft.sample_type.samples.sample(3), aft] 
+        else
+          return [[nil,nil,nil], aft]
+        end
+      elsif !aft.sample_type
         return [nil, aft]
       elsif aft.sample_type.samples.empty?
         raise "There are no samples of type #{aft.sample_type.name}"
-      elsif array
-        return [aft.sample_type.samples.sample(3), aft]
       else
         return [aft.sample_type.samples.sample, aft]
       end
@@ -97,7 +101,11 @@ module FieldTypePlanner
   def choose_aft_for(sample)
 
     afts = allowable_field_types.select do |aft|
-      aft.sample_type_id == sample.sample_type.id
+      begin
+        aft.sample_type_id == sample.sample_type.id  
+      rescue Exception => e
+        true
+      end
     end
 
     afts.sample unless afts.empty?
