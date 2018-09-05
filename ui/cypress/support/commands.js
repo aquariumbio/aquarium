@@ -2,6 +2,7 @@
 Cypress.Commands.add("login", () => {
 
     cy.server()
+      .route('GET', '/plans/operation_types/true').as('planOperationTypes')
       .route('GET', '/krill/debug/*').as('debugJob')  
       .route('POST', '/plans.json*').as('savePlan')
       .route('POST', '/json*').as('getBudget')  

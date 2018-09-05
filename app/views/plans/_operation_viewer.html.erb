@@ -52,7 +52,9 @@
 
   <div layout="row"
        ng-repeat-start="fv in current_op.field_values"
-       ng-include="'io_row'">
+       ng-include="'io_row'"
+       ng-attr-data-operation-viewer-field-value-name="{{fv.name}}"
+       ng-attr-data-operation-viewer-field-value-role="{{fv.role}}">
   </div>
 
   <div layout="column" ng-repeat-end layout-align="start stretch" ng-if="fv.open" class="plan-row plan-details">  

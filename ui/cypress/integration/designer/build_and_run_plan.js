@@ -72,7 +72,19 @@ describe('Build plan', function() {
       .operation_status_is('Rehydrate Primer',  'done')
       .operation_status_is('Make PCR Fragment', 'done')
       .operation_status_is('Pour Gel',          'done')
-      .operation_status_is('Run Gel',           'done')        
+      .operation_status_is('Run Gel',           'done')   
+
+    cy.choose_output('Rehydrate Primer',0)
+      .get("[data-operation-viewer-field-value-name='Primer Aliquot']" + 
+           "[data-operation-viewer-field-value-role=output]")
+      .within(() => {
+        cy.get("[data-open-item-popup]")
+          .click()
+          .get("[data-popup-title-item-id]").then(el => {
+            const id = el.data("popup-title-item-id")
+            cy.test_item_popup(id)
+          })
+      })
  
   });
 

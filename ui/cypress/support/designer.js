@@ -1,10 +1,8 @@
 Cypress.Commands.add("designer", () => {
-
-    cy.contains("Designer")
-      .click()
-      .url().should('equal', 'http://localhost:3000/plans')
-      .wait(1000) 
-
+  cy.contains("Designer")
+    .click()
+    .url().should('equal', 'http://localhost:3000/plans')
+    .wait('@planOperationTypes') 
 });
 
 Cypress.Commands.add("design_with", category => {
@@ -65,8 +63,8 @@ Cypress.Commands.add("choose_input", (name,index) => {
 });
 
 Cypress.Commands.add("choose_output", (name,index) => {
-  cy.get(`[data-output-of='${name}'][data-output-number=${index}]`)
-    .click()
+  cy.get(`[data-output-of='${name}'][data-output-number=${index}]`)     
+    .click({force: true})
 });
 
 Cypress.Commands.add("choose_successor", name => {
