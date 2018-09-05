@@ -8,7 +8,8 @@
        layout-align="space-between center">
     <div class="plan-list-name no-highlight"
          ng-click="load(p)"
-         ng-attr-data-load-plan="{{p.id}}">
+         ng-attr-data-load-plan="{{p.id}}"
+         ng-attr-data-plan-folder="{{folder}}">
       <b>{{p.id}}</b>: {{p.name ? p.name : "[Untitled]"}}
       <span ng-if="state.deleting_plan.id == p.id" style="color: orange"> ... deleting </span>
     </div>
@@ -57,7 +58,8 @@
 
   <div>
 
-    <h4 class='md-subhead clickable no-highlight' ng-click="nav.folder.uc = !nav.folder.uc">
+    <h4 class='md-subhead clickable no-highlight'
+        ng-click="nav.folder.uc = !nav.folder.uc">
 
     <span class='opener'
           data-plan-folder='under-construction'>
@@ -69,6 +71,7 @@
     <ul class='compact-list' ng-if="nav.folder.uc">
       <li ng-repeat="p in plans | filter: { status: 'planning' } | orderBy:'-'" 
           ng-include="'plan-list-element'" 
+          ng-init="folder = 'under construction'"
           ng-class="plan.id == p.id ? 'active-plan' : ''" 
           layout="row">
       </li>
@@ -80,7 +83,8 @@
 
   <div>
 
-    <h4 class='md-subhead clickable no-highlight' ng-click="nav.folder.unsorted = !nav.folder.unsorted">
+    <h4 class='md-subhead clickable no-highlight'
+        ng-click="nav.folder.unsorted = !nav.folder.unsorted">
       <span class='opener'
             data-plan-folder='unsorted'>
             {{nav.folder.unsorted ? '&#9660;' : '&#9658;'}}
@@ -89,9 +93,11 @@
       <span ng-include="'plan-move-button'" ng-if="nav.folder.unsorted"></span>
     </h4>
 
-    <ul class='compact-list' ng-if="nav.folder.unsorted">
+    <ul class='compact-list'
+        ng-if="nav.folder.unsorted">
       <li ng-repeat="p in plans | filter: { folder: '!', status: '!planning' } | orderBy:'-'" 
           ng-include="'plan-list-element'" 
+          ng-init="folder = 'unsorted'"          
           ng-class="plan.id == p.id ? 'active-plan' : ''" 
           layout="row">
       </li>
@@ -121,6 +127,7 @@
     <ul class='compact-list' ng-if="nav.folder[name]">
       <li ng-repeat="p in plans | filter: { folder: name, status: '!planning' } | orderBy:'-'" 
           ng-include="'plan-list-element'" 
+          ng-init="folder = name"
           ng-class="plan.id == p.id ? 'active-plan' : ''"
           layout="row">
       </li>

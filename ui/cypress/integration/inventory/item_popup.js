@@ -3,9 +3,6 @@ describe('Item Popups', function() {
 
   it('Enables items to be edited', function() {
 
-    cy.server()
-    cy.route('GET', '/items/make/5/1').as('newItem')  
-
     // Go to samples page
     cy.login()
       .samples()

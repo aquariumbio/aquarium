@@ -1,19 +1,24 @@
 
 Cypress.Commands.add("login", () => {
 
+    cy.server()
+      .route('GET', '/krill/debug/*').as('debugJob')  
+      .route('POST', '/plans.json*').as('savePlan')
+      .route('POST', '/json*').as('getBudget')  
+      .route('GET', '/plans/folders*').as('getFolders')        
+      .route('GET', '/items/make/5/1').as('newItem') 
+      .route('POST', '/operations/manager_list').as('managerList')  
+
     cy.viewport(1500, 900)
-
-    cy.visit('http://localhost:3000')
-
-    cy.get('#session_login')
+      .visit('http://localhost:3000')
+      .get('#session_login')
       .type('neptune')
-
-    cy.get('#session_password')
+      .get('#session_password')
       .type('aquarium')
 
     cy.contains('Sign in').click()
-    cy.url().should('equal', 'http://localhost:3000/')
-    cy.wait(100)  
+      .url().should('equal', 'http://localhost:3000/')
+      .wait(100)
 
 });
 
@@ -25,26 +30,10 @@ Cypress.Commands.add("logout", () => {
 
 });
 
-Cypress.Commands.add("designer", () => {
-
-    cy.contains("Designer").click()
-    cy.url().should('equal', 'http://localhost:3000/plans')
-    cy.wait(1000) 
-
-});
-
 Cypress.Commands.add("samples", () => {
 
     cy.contains("Samples").click()
     cy.url().should('equal', 'http://localhost:3000/browser')
-    cy.wait(1000) 
-
-});
-
-Cypress.Commands.add("manager", () => {
-
-    cy.contains("Manager").click()
-    cy.url().should('equal', 'http://localhost:3000/operations')
     cy.wait(1000) 
 
 });

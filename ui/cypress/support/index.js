@@ -15,7 +15,7 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
-import './operations'
+import './designer'
 import './items'
 import './data_associations'
 import './manager'
