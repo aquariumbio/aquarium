@@ -295,7 +295,7 @@
           op.set_status("pending").then(op => {
             for (var i = 0; i < op.outputs.length; i++) {
               op.outputs[i].item.mark_as_deleted()
-              // .clear_item().save();
+              op.outputs[i].clear_item().save();
             }            
             get_numbers().then(numbers => {
               $scope.numbers = numbers;
