@@ -12,6 +12,30 @@ RSpec.describe Collection, type: :model do
     c
   end
 
+  def make_96_well_pcr_collection
+    ot = ObjectType.find_by_name "96 qPCR collection" 
+    unless ot
+      ObjectType.new(
+        name: "96 qPCR collection" ,
+        description: "96 qPCR collection",
+        min: 0,
+        max: 1,
+        handler: "collection",
+        safety: "No safety information", 
+        cleanup: "No cleanup information", 
+        data: "No data", vendor: "No vendor information", 
+        unit: "part",
+        cost: 0.01, 
+        release_method: "return", 
+        release_description: "",
+        image: "",
+        prefix: "",
+        rows: 8,
+        columns: 12
+      ).save  
+    end
+  end
+
   test_sample = Sample.last
 
   context 'data' do
@@ -50,6 +74,7 @@ RSpec.describe Collection, type: :model do
       c.drop_data_matrix "x"
       c.drop_data_matrix "y"
 
+      make_96_well_pcr_collection
       d = example_collection "96 qPCR collection"      
       d.set_data_matrix "z", [ [ 100, 200 ], [ 400, 500 ] ], offset: [4, 3]
 
@@ -59,6 +84,7 @@ RSpec.describe Collection, type: :model do
 
     it "makes an empty data matrix" do
 
+      make_96_well_pcr_collection
       d = example_collection "96 qPCR collection" 
       d.new_data_matrix "x"
       m = d.data_matrix "x"

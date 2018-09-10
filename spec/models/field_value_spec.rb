@@ -28,8 +28,6 @@ RSpec.describe FieldValue, type: :model do
       op.set_output("Fragment", s)
       op.output("Fragment").set(item: gel, row: 1, column: 1)
 
-      puts op
-
       unless op.input("Fragment").collection_part(0,0).sample.id == s.id &&
              op.output("Fragment").collection_part(1,1).sample.id == s.id &&
              op.input("Fragment").collection_part(0,1) == nil
