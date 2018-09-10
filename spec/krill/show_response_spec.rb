@@ -1,6 +1,6 @@
 # require_relative 'show_response'
 require 'rails_helper'
-require '/aquarium/lib/krill/show_response'
+# require '/aquarium/lib/krill/show_response'
 include Krill
 # require_relative '../models/operation'
 
