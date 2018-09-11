@@ -52,6 +52,22 @@ Cypress.Commands.add("operation_status_is", (name,status) => {
       .then(el => expect(el.text()).to.match(new RegExp(status)))
 });
 
+Cypress.Commands.add("set_operation_status", (name,status) => {
+    cy.get(`[data-operation-info=status][data-operation-name='${name}']`)
+      .click()
+      if (status == "error") {
+        cy.get(`[ng-mousedown="cancel_operation(op)"]`)
+        .click()
+      } else {
+        cy.get(`[ng-mousedown="change_status(op,'${status}')"]`)
+        .click()
+      }
+      cy.get(".md-confirm-button")
+      .click()
+      .wait(1000)
+      .operation_status_is(name,status)
+});
+
 Cypress.Commands.add("add_operation", name => {
   cy.get(`[data-add-operation-type='${name}']`)
     .click()

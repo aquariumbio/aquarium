@@ -23,6 +23,12 @@ Cypress.Commands.add("manager_check_last_operation", () => {
     .click()
 });
 
+Cypress.Commands.add("manager_check_first_operation", () => {
+  cy.get(`[data-operation-checkbox]`)
+    .first()
+    .click()
+});
+
 Cypress.Commands.add("manager_action", action => {
     cy.get(`[data-manager-action='${action}']`)
       .click()    
