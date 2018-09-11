@@ -86,9 +86,15 @@ AQ.DataAssociation.base_methods = {
 
     let record = this,
         da,
-        temp = {};
+        temp = {},
+        klass = record.record_type;
 
     temp[key] = value;
+
+    if ( klass == "Item" || klass == "Collection" ) {
+      klass = [ "Item", "Collection" ]
+    }
+
     da = AQ.DataAssociation.record({
       key: key ? key : 'key', 
       object: JSON.stringify(temp),
