@@ -34,6 +34,7 @@ gem 'redcarpet'
 # For uploads and cloud storage
 gem 'paperclip'
 gem 'aws-sdk', '~> 1.7.1'
+gem 'aws-sdk-s3'
 
 # For bulk inserts (e.g. for loading a collection from a matrix)
 gem 'activerecord-import'
