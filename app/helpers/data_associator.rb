@@ -16,10 +16,14 @@ module DataAssociator
   # @param key [String] the key for the association
   # @return [Array<DataAssociation>] the array of associations with the key
   def data_associations(key = nil)
+    klass = self.class.to_s
+    if klass == "Item" || klass == "Collection"
+      klass = [ "Item", "Collection" ]
+    end
     if key
-      DataAssociation.includes(:upload).where(parent_id: id, parent_class: self.class.to_s, key: key.to_s)
+      DataAssociation.includes(:upload).where(parent_id: id, parent_class: klass, key: key.to_s)
     else
-      DataAssociation.includes(:upload).where(parent_id: id, parent_class: self.class.to_s)
+      DataAssociation.includes(:upload).where(parent_id: id, parent_class: klass)
     end
   end
 
