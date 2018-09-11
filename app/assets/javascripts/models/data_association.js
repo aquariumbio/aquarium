@@ -91,14 +91,10 @@ AQ.DataAssociation.base_methods = {
 
     temp[key] = value;
 
-    if ( klass == "Item" || klass == "Collection" ) {
-      klass = [ "Item", "Collection" ]
-    }
-
     da = AQ.DataAssociation.record({
       key: key ? key : 'key', 
       object: JSON.stringify(temp),
-      parent_class: record.record_type,
+      parent_class: klass,
       parent_id: record.id,
       unsaved: true
     })
@@ -118,7 +114,12 @@ AQ.DataAssociation.base_getters = {
     var record = this;
     delete record.data_associations;
 
-    AQ.DataAssociation.where({parent_id: record.id, parent_class: record.model.model}).then((das) => {          
+    let klass = record.record_type;
+    if ( klass == "Item" || klass == "Collection" ) {
+      klass = [ "Item", "Collection" ]
+    }    
+
+    AQ.DataAssociation.where({parent_id: record.id, parent_class: klass}).then((das) => {          
       record.data_associations = das;
       aq.each(record.data_associations,(da) => {
         da.value = JSON.parse(da.object)[da.key];
