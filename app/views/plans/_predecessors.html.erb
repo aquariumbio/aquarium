@@ -13,7 +13,8 @@
         ng-class="current_fv.field_type.preferred_operation_type_id == pred.operation_type.id ? 
                  'md-raised md-primary md-secondary md-button-in-list' :
                  'md-raised md-secondary md-button-in-list'"
-        ng-click="add_predecessor(current_io,current_draggable,pred)">
+        ng-click="add_predecessor(current_io,current_draggable,pred)"
+        ng-attr-data-predecessor="{{pred.operation_type.name}}">
           <md-tooltip md-direction="bottom">
             Use {{pred.operation_type.name}} 
             from {{pred.operation_type.category}} 

@@ -1,8 +1,8 @@
 (function() {
 
-  var w = angular.module('aquarium'); 
+  var w = angular.module('aquarium');
 
-  w.controller('homeCtrl', [ '$scope', '$http', '$attrs', '$cookies', 
+  w.controller('homeCtrl', [ '$scope', '$http', '$attrs', '$cookies',
                   function (  $scope,   $http,   $attrs,   $cookies ) {
 
 
@@ -10,4 +10,4 @@
 
   }]);
 
-})();                    
+})();

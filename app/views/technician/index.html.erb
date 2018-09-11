@@ -49,6 +49,10 @@
              ng-click="job.state.index = $index">
           {{$index+1}}. 
           <span ng-bind-html="sce(step.title)"></span>
+          <span ng-if="step.response && step.response.time"
+                class="step-time pull-right">
+                {{step.response.time|date: "h:mma"}}
+          </span>
        </div>
 
        <div ng-if="job.status == 'running' && !job.backtrace.complete">

@@ -15,7 +15,7 @@ class Operation < ActiveRecord::Base
 
   def destroy_field_values
     unless JobAssociation.where(operation_id: id).empty?
-      raise "Cannot destroy operation #{id} because it has jobs associated with it" 
+      raise "Cannot destroy operation #{id} because it has jobs associated with it"
     end
     fvs = FieldValue.where parent_class: "Operation", parent_id: id
     fvs.each do |fv|
@@ -25,7 +25,7 @@ class Operation < ActiveRecord::Base
       fv.destroy
     end
   end
-  
+
   def parent_type # interface with FieldValuer
     operation_type
   end
@@ -57,7 +57,8 @@ class Operation < ActiveRecord::Base
   # @return [Plan] The plan that contains this Operation
   def plan
     pset = plans
-    pset[0] unless pset.empty?
+    pset[0] unless pset.length == 0
+
   end
 
   # Assigns a Sample to an input
@@ -139,7 +140,6 @@ class Operation < ActiveRecord::Base
   # @param name [String]
   # @return [FieldValue]
   def get_input(name)
-    puts "================= FINDING #{name}"
     inputs.find { |i| i.name == name }
   end
 

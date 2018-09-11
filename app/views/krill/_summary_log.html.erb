@@ -18,7 +18,7 @@
     Submitted <%= @job.created_at.to_formatted_s(:long) %><br>
 
     <% if @job.pc == Job.COMPLETED %>
-      Completed <%= @job.updated_at.to_formatted_s(:long) %> 
+      Completed <%= @job.updated_at.to_formatted_s(:long) %>
     <% elsif @job.pc == Job.NOT_STARTED %>
       Pending
     <% else %>
@@ -29,6 +29,7 @@
 
   <h2 class="md-title md-no-sticky">
     Operations
+
   </h2>
 
   <div flex=100 class='user-op-stats'>

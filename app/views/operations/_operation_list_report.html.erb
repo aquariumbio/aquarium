@@ -30,12 +30,17 @@
             <li ng-repeat="fv in op.alt_field_values | filter: { role: 'output' } track by $index">
               <span ng-if="$first"><b>out:</b></span>
               {{fv.name}}:
-              <span ng-if="fv.child_item_id">
-                    <div ng-if="fv.child_item_id" 
+                    <div ng-if="fv.child_item_id && !fv.is_part"
                          item="fv.item" 
                          container="fv.item.object_type" 
-                         sample="fv.sample"></div> 
-                  <span ng-if="fv.row != null">[{{fv.row}},{{fv.column}}]</span>
+                         sample="fv.sample"></div>
+                    <div ng-if="fv.child_item_id && fv.is_part"
+                         item="fv.part" 
+                         container="fv.part.object_type" 
+                         sample="fv.part.sample"
+                         collection="fv.item"
+                         row="fv.row"
+                         column=fv.column></div>
               </span>                
             </li>
             <li ng-repeat="fv in op.alt_field_values | filter: { role: 'input' } track by $index">

@@ -1,6 +1,42 @@
 
 AQ.FieldValue.getter(AQ.Item,"item","child_item_id");
 
+AQ.FieldValue.record_getters.is_part = function() {
+  return this.row != null && this.column != null;
+}
+
+AQ.FieldValue.record_getters.part = function() {
+
+  let fv = this;
+
+  if ( fv.is_part ) {
+
+    delete fv.part;
+
+    AQ.PartAssociation.where({
+      collection_id: fv.child_item_id,
+      row: fv.row,
+      column: fv.column
+    }, {
+      include: "part"
+    }).then(pas => {
+      if ( pas.length == 1 ) {
+        fv.part = pas[0].part;
+      } else {
+        fv.part = null;
+      }
+    })
+
+    return undefined;
+
+  } else {
+
+    return undefined;
+
+  }
+
+}
+
 AQ.FieldValue.record_getters.is_sample = function() {
   return this.field_type.ftype == 'sample';
 }
@@ -275,6 +311,7 @@ AQ.FieldValue.record_methods.assign = function(sample) {
   if ( sample ) {
 
     field_value.child_sample_id = sample.id;
+    field_value.child_item_id = null;
     field_value.sid = sample.identifier;
 
     if ( field_value.field_type && field_value.field_type.array ) {
@@ -286,6 +323,7 @@ AQ.FieldValue.record_methods.assign = function(sample) {
     field_value.child_sample_id = null;
     field_value.sid = null;
     field_value.sample_identifier = null;
+    field_value.child_item_id = null;    
 
   }
 

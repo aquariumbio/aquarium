@@ -82,8 +82,8 @@
       var op = AQ.Operation.new_operation(
         operation_type,
         $scope.plan.current_module.id,
-        60+3*AQ.snap + $scope.last_place,
-        60+2*AQ.snap + $scope.last_place);
+        64+4*AQ.snap + $scope.last_place,
+        64+4*AQ.snap + $scope.last_place);
 
       inc_last_place();
 
@@ -180,12 +180,14 @@
       plan.save($scope.current_user).then(saved_plan => {
         $scope.plan = saved_plan;
         $scope.select_uba_by_budget_id($scope.current_user, $scope.plan.budget_id)
-        $scope.state.loading_plans = true;
         $scope.select(null);
         $scope.nav.sidebar = "plans";
-        $scope.$apply();
         $scope.refresh_plan_list();
-      });
+        $scope.state.saving = false;
+      }).catch(e => {
+        $scope.messages.push(e);
+        $scope.state.saving = false;
+      })
 
     };
 
@@ -299,7 +301,7 @@
         .then(result => {
             let da = operation.new_data_association();
             da.key = "canceled_via_designer";
-            da.new_value = result;            
+            da.set(result)
             $scope.wait = true;
             da.prepare_and_save();
           })
@@ -635,8 +637,8 @@
 
       fv.assign_item(item);
 
-      if ( $scope.current_op != "planning" ) {
-        $scope.state.messages.push("Changed item for an active operation. Save this plan to effect your change.")
+      if ( $scope.current_op.status != "planning" ) {
+        $scope.state.messages.push(`Changed item for an operation in state '${$scope.current_op.status}'. Save this plan to effect your change.`)
       }
 
     };

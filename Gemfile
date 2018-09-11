@@ -1,30 +1,52 @@
-
-
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.22'
-gem 'bootstrap-sass', '2.3.2.0'
-gem 'yaml_db'
-gem 'paperclip', '4.3.7'
+# Rails version
+gem 'rails', '4.2.10'
 
-gem 'will_paginate'
-gem 'bootstrap-will_paginate'
-gem 'sass-rails', '~> 3.2.3'
+# SQL adapter
 gem 'mysql2', '~> 0.3.17'
 
-gem 'nokogiri', '~> 1.7.1'
+# Needed for rails 3.2 => 4.0 upgrade
+gem 'protected_attributes'
+gem 'tzinfo-data'
+
+# Json helpers
+gem 'rails-patch-json-encode'
+gem 'oj'
+
+# Authentication and cross origin
+gem 'angular_rails_csrf', '2.1.1'
+gem 'rack-cors', require: 'rack/cors'
+
+# Style enforcer and linter
+gem 'rubocop'
+
+# For documentation
+gem 'yard'
+gem 'yard-activerecord'
+
+# Various style related gems
+gem 'will_paginate'
+gem 'sass-rails'
+gem 'github-markup'
+gem 'redcarpet'
+
+# For uploads and cloud storage
+gem 'paperclip'
 gem 'aws-sdk', '~> 1.7.1'
-gem 'test-unit'
+gem 'aws-sdk-s3'
+
+# For bulk inserts (e.g. for loading a collection from a matrix)
+gem 'activerecord-import'
 
 group :test do
   gem 'sqlite3'
 end
 
 group :development do
-  gem 'binding_of_caller'
-  gem 'meta_request'
-  gem 'rspec-rails'
   gem 'fakes3'
+  gem 'rspec-rails'
+  gem 'web-console', '~> 2.0'  
 end
 
 group :production do
@@ -34,31 +56,9 @@ end
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'coffee-rails'
   gem 'closure-compiler'
-  gem 'bcrypt-ruby', '~> 3.0.0'
+  gem 'bcrypt-ruby', '~> 3.1.2'
 end
 
-gem 'jquery-rails'
-gem 'jquery-ui-rails', '~> 4.2.1'
-gem 'jquery-datatables-rails'
-gem 'jquery-cookie-rails'
-gem 'jquery-fileupload-rails'
-
-gem 'flot-rails'
-
-gem 'underscore-rails'
-
-gem 'rails-patch-json-encode'
-gem 'oj'
-
-gem 'angular_rails_csrf', '2.1.1'
-
-gem 'rack-cors', require: 'rack/cors'
-
-gem 'redcarpet'
-gem 'github-markup'
-gem 'rubocop'
-gem 'yard'
-gem 'yard-activerecord'
 gem 'PriorityQueue'
+

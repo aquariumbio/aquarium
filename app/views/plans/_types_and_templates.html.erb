@@ -4,7 +4,8 @@
   <!-- TEMPLATES ///////////////////////////////////////////// -->
 
   <h4 class='md-subhead clickable no-highlight' 
-       ng-click="state.sidebar.system_templates = !state.sidebar.system_templates">
+       ng-click="state.sidebar.system_templates = !state.sidebar.system_templates"
+       data-design="System Templates">
       <span class='opener'>{{state.sidebar.system_templates ? '&#9660;' : '&#9658;'}}</span> 
       System Templates
   </h4>
@@ -27,7 +28,8 @@
   <span ng-if="system_templates.length == 0 && state.sidebar.system_templates" style="margin-left: 16px">No templates</span>
 
   <h4 class='md-subhead clickable no-highlight' 
-       ng-click="state.sidebar.your_templates = !state.sidebar.your_templates">
+       ng-click="state.sidebar.your_templates = !state.sidebar.your_templates"
+       data-design="Your Templates">
       <span class='opener'>{{state.sidebar.your_templates ? '&#9660;' : '&#9658;'}}</span> 
       Your Templates
   </h4>
@@ -68,7 +70,9 @@
 
   <!-- OPERATION TYPES /////////////////////////////////// -->
 
-  <h4 class='md-subhead clickable no-highlight' ng-click="state.sidebar.op_types = !state.sidebar.op_types">
+  <h4 class='md-subhead clickable no-highlight' 
+      ng-click="state.sidebar.op_types = !state.sidebar.op_types"
+      data-design="Operation Types">
     <span class='opener'>{{state.sidebar.op_types ? '&#9660;' : '&#9658;'}}</span>  
     Operation Types
   </h4>
@@ -77,7 +81,8 @@
        ng-if="state.sidebar.op_types">
     
     <md-header ng-click="state.current_category = (state.current_category == category ? null : category)"
-               class='clickable no-highlight' style="margin-left: 16px">
+               class='clickable no-highlight' style="margin-left: 16px"
+               ng-attr-data-operation-type-category="{{category}}">
       <span class='opener'>
         {{state.current_category == category ? '&#9660;' : '&#9658;'}}
       </span>
@@ -88,7 +93,7 @@
         style="margin-left: 28px"
         ng-if="state.current_category == category">
       <li ng-repeat="ot in operation_types | filter: { category: category } : true | orderBy:'name'">
-        <a href="#" ng-click="add_operation(ot)">
+        <a href="#" ng-click="add_operation(ot)" ng-attr-data-add-operation-type="{{ot.name}}">
         {{ot.name | limitTo:32:0}}
         {{ot.name.length > 32 ? '...' : ''}}
         </a>

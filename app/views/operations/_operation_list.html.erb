@@ -25,7 +25,8 @@
           <% if current_user && current_user.is_admin %>
             <input type='checkbox' 
                    ng-model='op.selected' 
-                   ng-if="!operation_type.on_the_fly && ( status == 'pending' || status == 'scheduled' || status == 'error' )">
+                   ng-if="!operation_type.on_the_fly && ( status == 'pending' || status == 'scheduled' || status == 'error' )"
+                   ng-attr-data-operation-checkbox="{{op.id}}">
           <% end %>
         </td>
 
@@ -43,11 +44,19 @@
                 <a href="/browser?sid={{fv.sample.id}}">{{fv.sample_id}}: {{fv.sample.name}}</a>
                 <span ng-if="fv.item.object_type"> as {{fv.item.object_type.name}}</span>
                 <span ng-if="fv.child_item_id">
-                  ( <div ng-if="fv.child_item_id"
+                  ( 
+                    <div ng-if="fv.child_item_id && !fv.is_part"
                          item="fv.item" 
                          container="fv.item.object_type" 
                          sample="fv.sample"></div>
-                    <span ng-if="fv.row != null">[{{fv.row}},{{fv.column}}]</span> )
+                    <div ng-if="fv.child_item_id && fv.is_part"
+                         item="fv.part" 
+                         container="fv.part.object_type" 
+                         sample="fv.part.sample"
+                         collection="fv.item"
+                         row="fv.row"
+                         column=fv.column></div>
+                  )
                 </span>                
               </span>
             </li>
@@ -58,11 +67,19 @@
               <span ng-if="fv.sample">: 
                 <a href="/browser?sid={{fv.sample.id}}">{{fv.sample_id}}: {{fv.sample.name}}</a>
                 <span ng-if="fv.child_item_id">
-                  ( <div ng-if="fv.child_item_id" 
+                  ( 
+                    <div ng-if="fv.child_item_id && !fv.is_part"
                          item="fv.item" 
                          container="fv.item.object_type" 
                          sample="fv.sample"></div>
-                    <span ng-if="fv.row != null">[{{fv.row}},{{fv.column}}]</span> )
+                    <div ng-if="fv.child_item_id && fv.is_part"
+                         item="fv.part" 
+                         container="fv.part.object_type" 
+                         sample="fv.part.sample"
+                         collection="fv.item"
+                         row="fv.row"
+                         column=fv.column></div>
+                  )
                 </span>
               </span>
               <span ng-if="fv.value">{{fv.value}}</span>
@@ -101,7 +118,7 @@
               </span>
 
               <md-menu-content width="4">
-                <md-menu-item ng-repeat="s in ['waiting', 'pending', 'deferred', 'delayed', 'done', 'error']" ng-if="op.status != s">
+                <md-menu-item ng-repeat="s in ['waiting', 'pending', 'deferred', 'primed', 'delayed', 'done', 'error']" ng-if="op.status != s">
                   <md-button ng-click="change_status(op,s)" aria-label="Change to {{s}}">
                     {{s}}
                   </md-button>

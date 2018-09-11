@@ -59,6 +59,17 @@
 
       <div id="content"><div id='filecontents'><h1>AQUARIUM : The Laboratory Operating System</h1>
 
+<p>Aquarium allows a researcher to specify precisely how to perform an experimental protocol so that lab personnel will run the protocol the same way, every time.</p>
+
+<p>Protocols, written in a Ruby DSL called Krill, encode how to manipulate Aquarium&#39;s inventory system (LIMS), compute formulae such as volumes, molarities, temperatures, and timing, as well as present lab technicians with images and detailed instructions.
+Protocols define formal unit operation types with typed inputs and outputs – allowing the researcher to construct a complex workflow by linking an output sample of one protocol to an input of another using the Aquarium graphical workflow designer.</p>
+
+<p>Protocols and processes are scheduled and presented to technicians on touchscreen monitors placed throughout the lab.
+Every step is logged: who performed the step, which items were used, what data was gathered by which instruments, and how long it took -- data that can be used to debug and improve the experiment.
+More importantly, Aquarium provides a complete, executable description of the results obtained – one that could be used by another lab running Aquarium to reproduce the result.</p>
+
+<p>Aquarium is the operating system of the <a href="http://www.uwbiofab.org">UW BIOFAB</a>, a service of the <a href="http://klavinslab.org">Klavins Lab</a> at the University of Washington.</p>
+
 <h2>Versions and Releases</h2>
 
 <ul>
@@ -99,9 +110,9 @@
 </div></div>
 
       <div id="footer">
-  Generated on Wed Jul 11 10:55:26 2018 by
+  Generated on Wed Aug 22 14:19:08 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.12 (ruby-2.2.0).
+  0.9.16 (ruby-2.3.7).
 </div>
 
     </div>

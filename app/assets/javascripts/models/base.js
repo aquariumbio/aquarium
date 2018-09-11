@@ -22,8 +22,11 @@ AQ.Base.prototype.record = function(extras) {
 
 AQ.Base.prototype.find = function(id) {
   let base = this;
+  // if ( base.model == "Item" ) {
+  //   debugger;
+  // }
   return new Promise(function(resolve,reject) {
-    AQ.post('/json',{model: base.model, id: id}).then(
+    AQ.post('/json.json',{model: base.model, id: id}).then(
       (response) => {
         resolve(base.record(response.data));
       },(response) => {
@@ -136,7 +139,7 @@ AQ.model_names = [
   "Account", "User", "Group", "SampleType", "Sample", "ObjectType", "Item", "UserBudgetAssociation", "Budget",
   "OperationType", "Operation", "FieldType", "FieldValue", "AllowableFieldType", "Wire", "Parameter",
   "Plan", "PlanAssociation", "DataAssociation", "Job", "Upload", "Code", "Timing", "Collection",
-  "Library", "JobAssociation", "Locator" ];
+  "Library", "JobAssociation", "Locator", "PartAssociation" ];
 
 for ( var i=0; i<AQ.model_names.length; i++ ) {
   AQ[AQ.model_names[i]] = new AQ.Base(AQ.model_names[i]);

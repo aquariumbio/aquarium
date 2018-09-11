@@ -19,21 +19,9 @@
   <% end %>
 
   <tr><td>
-  <% if current_user && current_user.is_admin %>
-    <span class="dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Add<b class="caret"></b></a>
-      <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-        <% (User.all.sort { |x,y| x.login <=> y.login}).each do |u| %>
-          <li><%= link_to "#{u.login} ( #{u.name} )" , group_path(@group) + '?user_id=' + u.id.to_s %></li>
-        <% end %>
-      </ul>
-     </a>
-    </span>
-  <% end %>
+
   </td><td></td><td></td></tr>
 
 
 
 </table>
-
-  

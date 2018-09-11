@@ -8,6 +8,11 @@ $bottom-margin: 12px;
     margin-bottom: 20px;
   }
 
+  .step-time {
+    font-size: 9pt;
+    color: #999;
+  }
+
   .op-table {
     font-size: 9pt !important;
   }
@@ -112,12 +117,14 @@ $bottom-margin: 12px;
       border-radius: 5px;
       border: 1pt solid  #999;
       width: 50%;
-      .input-icon {
-        svg {
-          margin-top: 22px;
-        }
-      }
     }
+
+      .input-icon {
+        display: inline-block;
+        svg {
+          margin-top: 22px !important;
+        }
+      }    
 
     .input-container {
        width: 100%;
@@ -201,7 +208,7 @@ $bottom-margin: 12px;
     }    
 
     .td-input {
-
+      position: relative;
     }
 
     .table-input {

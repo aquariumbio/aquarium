@@ -23,7 +23,12 @@ module OperationTypeRandom
 
           if samples[ft.routing]
             aft = ft.choose_aft_for(samples[ft.routing])
-            op.set_property ft.name, samples[ft.routing], ft.role, false, aft
+            if !ft.array
+              op.set_property ft.name, [samples[ft.routing]].flatten.first, ft.role, false, aft
+            else
+              op.set_property ft.name, [samples[ft.routing]]*3, ft.role, false, aft
+            end
+
           else
             random_sample, random_aft = ft.random
             op.set_property ft.name, random_sample, ft.role, false, random_aft

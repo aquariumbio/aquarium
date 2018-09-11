@@ -59,14 +59,20 @@
 
     $scope.save = function() {
 
-      if ( $scope.mode == 'new' ) {
+      if ( $scope.mode == 'new' ) {      
 
         $http.post('/sample_types.json', { sample_type: $scope.sample_type } ).
-          then(function(response) {
-            var st = response.data.sample_type;
-            $scope.messages.push("Created new sample with id " + st.id + ".")
-            $scope.stid = st.id;
-            $scope.mode = 'edit';
+          then(function(response) {     
+            if ( response.data.errors ) { 
+              for ( var key in response.data.errors ) {
+                $scope.messages.push(`ERROR: ${key}: ${response.data.errors[key]}`);
+              }
+            } else {
+              var st = response.data.sample_type;           
+              $scope.messages.push("Created new sample with id " + st.id + ".")
+              $scope.stid = st.id;
+              $scope.mode = 'edit';
+            }
           });
 
         } else {

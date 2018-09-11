@@ -86,7 +86,8 @@
             class='budget-checkbox'
             ng-click="select_uba(current_user,uba)"
             ng-checked="uba.selected"
-            ng-disabled="uba.budget.spent.this_month > uba.quota">
+            ng-disabled="uba.budget.spent.this_month > uba.quota"
+            ng-attr-data-sidebar-budget-checkbox="{{uba.budget.name}}">
           </md-checkbox>
           {{uba.budget.name}}
         </div>
@@ -108,7 +109,9 @@
       ng-click="submit_plan()"
       ng-disabled="plan.estimating || plan.cost.error || !plan.uba || state.planning"
       class="md-raised md-primary"
-      aria-label="Submit Plan">
+      aria-label="Submit Plan"
+      data-sidebar-action='submit'
+      ng-attr-data-plan-id="{{plan.id}}">
       <span ng-if="!state.planning && plan.status == 'planning'">Submit</span>
       <span ng-if="!state.planning && plan.status != 'planning'">Extend</span>      
       <span ng-if="state.planning">Planning...</span>        

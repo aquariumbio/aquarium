@@ -50,7 +50,6 @@ module FieldValueKrill
       self.child_item_id = @item.id
       save
     else
-      puts "COULD NOT MAKE ITEM FOR FV #{id} BECAUSE object_type = null"
     end
 
     @item

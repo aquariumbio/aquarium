@@ -9,7 +9,16 @@
 
       restrict: 'AE',
 
-      scope: { item: '=', container: "=", sample: "=", nolink: "=" },
+      scope: { 
+        item: '=', 
+        container: "=", 
+        sample: "=", 
+        nolink: "=", 
+        collection: "=?", 
+        row: "=?", 
+        column: "=?",
+        noColLink: "=?"
+      },
 
       link: function($scope,$element,$attributes) {
 

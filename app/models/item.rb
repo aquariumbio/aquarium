@@ -60,16 +60,25 @@ class Item < ActiveRecord::Base
     self[:location]
   end
 
-  # Gets the location of the Item.
+  # @private
+  def part_type
+    @@part_type ||= ObjectType.find_by_name("__Part")
+  end
+
+  # Returns the location of the Item
   #
   # @return [String] the description of the Item's physical location in the lab as a string
   def location
-    if locator
-      locator.to_s
-    elsif primitive_location
-      primitive_location
+    if object_type_id == part_type.id
+      'Part of Collection'
     else
-      'Unknown'
+      if locator
+        locator.to_s
+      elsif primitive_location
+        primitive_location
+      else
+        'Unknown'
+      end
     end
   end
 

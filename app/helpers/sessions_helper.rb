@@ -31,7 +31,12 @@ module SessionsHelper
   def signed_in_user
     unless signed_in?
       store_location
-      redirect_to signin_url, notice: 'Please sign in.'
+      if request.put?
+        response.headers["status"] = "Not-logged-in"
+        render json: { error: "Not-logged-in" }
+      else
+        redirect_to signin_url, notice: 'Please sign in.'
+      end
     end
   end
 

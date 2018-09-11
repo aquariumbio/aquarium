@@ -117,8 +117,8 @@
         }
       });
 
-      $http.get('/sample_types.json').
-        then(function(response) {
+      $http.get('/sample_types.json')
+        .then(function(response) {
           $scope.sample_types = response.data;
           $scope.sample_type_names = aq.collect(response.data,function(st) {
             return st.name;
@@ -126,7 +126,12 @@
           if ( $scope.views.sample_type.selected && $scope.views.sample_type.selection ) {
             get_samples($scope.views.sample_type.selection);
           }     
-        });     
+        })
+        .then(() => {
+          AQ.ObjectType.where({handler: "collection"}).then(ots => {
+            $scope.collection_types = ots;
+          })
+        })
         
       load_sample_names();   
 
@@ -134,6 +139,17 @@
         $scope.search(0);
       }            
 
+    }
+
+    $scope.openCollectionMenu = function($mdMenu, ev) {
+      originatorEv = ev;
+      $mdMenu.open(ev);      
+    }
+
+    $scope.new_collection = function(collection_type) {
+      AQ.Collection.new_collection(collection_type).then(collection => {
+        window.location = `/items/${collection.id}`;
+      })
     }
 
     $scope.get_projects = function(promise) {

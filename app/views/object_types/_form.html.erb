@@ -162,7 +162,10 @@
         d.style.display = 'block';
         txt = '<%= f.label :sample_type %><select id="object_type_sample_type_id" name="object_type[sample_type_id]">';
         <% SampleType.all.each do |st| %>
-          txt += '<option value=<%= st.id %>><%= st.name.downcase %></option>';
+          txt += "<option value=<%= st.id %>" +
+                          "<%= st.id == @object_type.sample_type_id ? ' selected' : '' %>>" +
+                    "<%= st.name.downcase %>" +
+                  "</option>";
         <% end %>
         d.innerHTML = txt + '</select>';
       } else {

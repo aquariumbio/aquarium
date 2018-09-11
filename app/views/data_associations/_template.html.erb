@@ -4,21 +4,36 @@
 
     <div layout="row" layout-wrap layout-align="start center"
          ng-if="record.data_associations.length > 0"
-         ng-repeat="da in record.data_associations"
+         ng-repeat="da in record.data_associations track by $index"
          ng-init="da.new_value=da.value">
 
       <div layout="column" style="width: 100%; margin-bottom: 10px;">
 
-        <div>
-          <span class='md-body-2' ng-if="!da.unsaved">{{da.key}}</span>
-          <input type='text' ng-if="da.unsaved && !noedit" ng-model=da.key class="da-key" flex=70>
-        </div>
-
         <div layout="row" style="width: 100%">
 
-          <div flex="70" ng-controller="daCtrl">
+          <div flex="{{keywidth ? keywidth : 15}}"> <!-- Either the key or an input box for the key -->
+            <span class='md-caption' ng-if="!da.unsaved">{{da.key}}</span>
+            <input type='text' 
+                   ng-if="da.unsaved && !noedit"
+                   ng-model=da.key
+                   class="da-key"
+                   flex=70
+                   data-association-input="key"
+                   ng-attr-data-association-parent-id="{{record.id}}"
+                   ng-attr-data-association-index="{{$index}}">
+            &nbsp;
+          </div>
 
-            <input type='text' ng-model=da.new_value ng-if="!da.upload_id && !noedit" class="da-input">
+          <!-- The input box or upload info -->
+          <div flex="{{80-(keywidth ? keywidth : 15)}}" ng-controller="daCtrl">
+
+            <input type='text'
+                   ng-model=da.new_value
+                   ng-if="!da.upload_id && !noedit" 
+                   class="da-input"
+                   data-association-input="value"
+                   ng-attr-data-association-parent-id="{{record.id}}"
+                   ng-attr-data-association-index="{{$index}}">
 
             <span ng-if="noedit">: {{da.value}}</span>
 
@@ -49,10 +64,17 @@
 
           </div>
 
-          <div flex="30">
+          <!-- The controls -->
+          <div flex="20">
             <div layout="row" layout-align="end center" ng-if="!noedit">
               <a href="#" ng-click="save(da)" ng-if="da.new_value != da.value || da.unsaved" class="no-highlight">
-                <ng-md-icon icon="system_update_alt" size="22" aria-label="Save" style="fill: #444"></ng-md-icon>
+                <ng-md-icon icon="system_update_alt" 
+                            size="22"
+                            aria-label="Save" 
+                            style="fill: #444"
+                            data-association-action="save"
+                            ng-attr-data-association-parent-id="{{record.id}}"
+                            ng-attr-data-association-index="{{$index}}"></ng-md-icon>
               </a>
               <a href="#" ng-click="da.new_value=da.value" ng-if="da.new_value != da.value && !da.unsaved" class="no-highlight">
                 <ng-md-icon icon="undo" size="22" aria-label="Undo Change" style="fill: #444"></ng-md-icon>         
@@ -61,7 +83,13 @@
                 <ng-md-icon icon="undo" size="22" aria-label="Undo Change" style="fill: #444"></ng-md-icon>                     
               </a>                    
               <a href="#"  ng-click="record.delete_data_association(da)" ng-if="!da.unsaved" class="no-highlight">
-                <ng-md-icon icon="delete" size="22" aria-label="Delete" style="fill: #444"></ng-md-icon>  
+                <ng-md-icon icon="clear" 
+                            size="18"
+                            aria-label="Delete" 
+                            style="fill: #444"
+                            data-association-action="delete"
+                            ng-attr-data-association-parent-id="{{record.id}}"
+                            ng-attr-data-association-index="{{$index}}"></ng-md-icon>  
               </a>
             </div>
           </div>

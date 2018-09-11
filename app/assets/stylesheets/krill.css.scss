@@ -413,11 +413,14 @@ font-size: $noteFontSize;
 
 .krill-table-input {
     display: inline-block;    
-    padding: 0;
+    padding: 6px;
+    font-size: 12pt;
     margin: 0 !important;
     border: none !important;
     height: 100% !important;
+    width: calc(100% - 60px);
     line-height: 100%;
+    position: relative;
     -webkit-appearance:none;
     -webkit-box-shadow: none !important;
     -moz-box-shadow: none !important;

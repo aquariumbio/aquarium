@@ -1,4 +1,4 @@
-<ul class="nav nav-list jobs-nav" id="tabs">
+<ul class="nav nav-list" id="tabs">
 
   <li class="nav-header">All Jobs</li>
 
@@ -10,22 +10,6 @@
 
   <li><a href="#active" data-toggle="tab" class='job-tab' id="active-tab">Active
       <span class="jobs-table-size" id="table-active-size"></span></a></li>
-
-  <li class="nav-header">Jobs by Metacol</li>
-
-  <% @metacols.each do |m| %>
-
-    <% name = m.path.split('/').last.split('.').first %>
-    <li>
-      <a href="#metacol-<%= m.id %>" data-toggle="tab" class='job-tab' id="metacol-<%= m.id %>-tab">
-        <b><%= m.id %>:</b>
-        <%= name %>
-        (<%= m.user.login %>)
-        <span class="jobs-table-size" id="table-metacol-<%= m.id %>-size"></span>
-      </a>
-    </li>
-
-  <% end %>  
 
   <li class="nav-header">Filter</li>
 
@@ -47,13 +31,13 @@
       <% @groups.each do |g| %>
         <option value='<%= g.id %>'><%= g.name %></option>
       <% end %>
-    </select>  
+    </select>
 
     <label class="radio">
       <input type="radio" name="optionsRadios" id="all-radio" value="option1">All
-    </label>      
+    </label>
 
-  </div>  
+  </div>
 
   <br />
 
@@ -65,5 +49,5 @@
   }
   if ( ! $.cookie('jobs-group') ) {
     $.cookie('jobs-group','<%= @groups.first.id %>')
-  }  
+  }
 </script>
