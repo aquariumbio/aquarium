@@ -315,6 +315,10 @@
 
         aq.each(ops, op => {
           op.set_status("pending").then(op => {
+            for (var i = 0; i < op.outputs.length; i++) {
+              op.outputs[i].item.mark_as_deleted()
+              op.outputs[i].clear_item().save();
+            }            
             get_numbers().then(numbers => {
               $scope.numbers = numbers;
               $scope.select(operation_type, 'pending', ops);
