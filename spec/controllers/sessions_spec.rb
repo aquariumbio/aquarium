@@ -6,11 +6,10 @@ RSpec.describe SessionsController, type: :controller do
 
   describe "Sessions" do
 
-    it "logs in an gets a tasty cookie" do
+    it "logs in and gets the remember_token cookie" do
 
       post :create, { session: { login: "neptune", password: "aquarium" } }, as: 'html'
-      raise "no remember token" unless response.cookies[remember_token_name]
-
+      expect(response.cookies).to have_key(remember_token_name)
     end
 
   end
