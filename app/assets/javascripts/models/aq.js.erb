@@ -70,14 +70,17 @@ AQ.init = function(http) {
   } else {
 
     AQ.get = function() { 
+      let args = arguments;
       return AQ.http.get.apply(null,args).then(AQ.check_signed_in);
     }
 
     AQ.post = function() { 
+      let args = arguments;
       return AQ.http.post.apply(null,args).then(AQ.check_signed_in);
     }
 
     AQ.put = function() { 
+      let args = arguments;     
       return AQ.http.put.apply(null,args).then(AQ.check_signed_in);
     }
 

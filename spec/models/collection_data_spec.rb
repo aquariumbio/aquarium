@@ -40,6 +40,15 @@ RSpec.describe Collection, type: :model do
 
   context 'data' do
 
+    it "gets data associations whether its an item or a collection" do
+      c = example_collection
+      c.associate :a, 1
+      i = Item.find(c.id)
+      i.associate :b, 2
+      raise "not all keys found" unless Collection.find(c.id).associations.keys.length == 2
+      raise "not all keys found" unless Item.find(c.id).associations.keys.length == 2      
+    end
+
     it "gets the right data association matrix" do
 
       c = example_collection

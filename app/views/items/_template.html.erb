@@ -14,7 +14,8 @@
     <span ng-if="!nolink">
       <a ng-click='item.modal=true'
          ng-init="item.modal=false"
-         ng-attr-data-open-item-popup="{{item.id}}">{{item.id}}</a>
+         ng-attr-data-open-item-popup="{{item.id}}"
+         class="clickable">{{item.id}}</a>
     </span>
 
     <div class='ng-modal item-modal' ng-if='item.modal'>
