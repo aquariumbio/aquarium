@@ -19,10 +19,6 @@ describe "session login", type: :request do
         remember_token_name = "remember_token_#{Bioturk::Application.environment_name}"
         expect(response.cookies).to have_key(remember_token_name)
         expect(response.cookies[remember_token_name]).to_not be_nil
-
-        response.cookies.each do |key, value|
-            puts "#{key}: #{value}"
-        end
     end
 
     it "does not return remember token with incorrect login" do
