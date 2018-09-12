@@ -59,7 +59,7 @@ describe('Build plan with retry', function() {
       .set_operation_status('Make PCR Fragment', 'pending')
       .set_operation_status('Make PCR Fragment', 'error')
 
-      var output_item_id
+      var output_item_id;
 
       cy.choose_output('Make PCR Fragment',0)
         .get("[data-operation-viewer-field-value-name='Fragment']" + 
@@ -70,7 +70,10 @@ describe('Build plan with retry', function() {
             cy.get("[data-open-item-popup]")
               .click()
               .wait(1000)
-              .get("[data-popup-title-item-id]").then(el => {
+              output_item_id = cy.get("[data-popup-title-item-id]")
+              console.log(cy.get("[data-popup-title-item-id]").getOwnPropertyNames())
+
+              cy.get("[data-popup-title-item-id]").then(el => {
                 output_item_id = el.data("popup-title-item-id")
                 cy.get(`[data-item-id=${output_item_id}][data-item-popup-action=close]`)
                 .click()
@@ -98,14 +101,8 @@ describe('Build plan with retry', function() {
         .get("[data-operation-viewer-field-value-name='Fragment']" + 
              "[data-operation-viewer-field-value-role=output]")
         .within(() => {
-          cy.get("[data-open-item-popup]").should('be.empty') //
+          cy.get("[data-open-item-popup]").should('not.exist')
         }) 
-
-      //ensure item is deleted
-      cy.samples()
-      .samples_search_item(output_item_id) //
-      .get(`[data-item-id=${output_item_id}][data-item-popup-action=restore]`)
-
   });
 
 })
