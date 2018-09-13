@@ -45,6 +45,15 @@ AQ.DataAssociation.record_getters.new_value = function() {
 
 }
 
+AQ.DataAssociation.record_getters.is_object = function() {
+
+  if ( !this.value ) {
+    return false;
+  } else { 
+    return typeof this.value != 'string';
+  }
+
+}
 
 AQ.DataAssociation.record_methods.prepare_and_save = function() {
 
