@@ -1,8 +1,6 @@
 
 
-class SessionsController < ApplicationController
-
-  skip_before_action :verify_authenticity_token  
+class SessionsController < ApplicationController 
 
   def new
 
