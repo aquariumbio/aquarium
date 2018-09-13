@@ -98,7 +98,7 @@
               },
               function failureCallback(response) {
                 operation_type.running_test = false;
-                operation_type.test_error = response.data.errors.join(", ")
+                operation_type.test_error = response.data.error;
               }
             );
         }
