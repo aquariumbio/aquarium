@@ -36,7 +36,8 @@ Cypress.Commands.add("test_item_popup", (id) => {
 
 
 Cypress.Commands.add("samples_search_item", (id) => {
-      cy.get(`[ng-model="views.search.item_id"]`)
+      cy.get(`[data-search-input="find-item"]`)
       .type(id)
-      .get(`[ng-click="item_search()"]`)
+      .get(`[data-search-button="find-item"]`)
+      .click
 })

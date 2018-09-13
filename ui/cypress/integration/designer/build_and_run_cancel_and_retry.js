@@ -31,7 +31,7 @@ describe('Build plan with retry', function() {
       .operation_status_is('Pour Gel',          'primed' )
       .operation_status_is('Run Gel',           'waiting')    
 
-    // run the plan
+    // run the plan (up to make pcr)
     cy.manager()
       .manager_category("Basic Cloning")
 
@@ -51,36 +51,44 @@ describe('Build plan with retry', function() {
       .manager_check_last_operation()
       .manager_action('schedule')
       .manager_job_action('debug')
-      cy.designer()   
+
+    // Check operation statuses
+    cy.designer()   
       .load_first_plan_in_folder('unsorted')
       .operation_status_is('Order Primer',      'done')
       .operation_status_is('Rehydrate Primer',  'done')
       .operation_status_is('Make PCR Fragment', 'done')
-      .set_operation_status('Make PCR Fragment', 'pending')
+
+    // Set make pcr to errored
+    cy.set_operation_status('Make PCR Fragment', 'pending')
       .set_operation_status('Make PCR Fragment', 'error')
 
-      var output_item_id;
+    // check that output of make pcr is here
+    cy.choose_output('Make PCR Fragment',0)
+      .get("[data-operation-viewer-field-value-name='Fragment']" + 
+           "[data-operation-viewer-field-value-role=output]")
+      .within(() => {
+        cy.get("[data-open-item-popup]").last()
+          .click()
+          .wait(1000)
+      })
 
-      cy.choose_output('Make PCR Fragment',0)
-        .get("[data-operation-viewer-field-value-name='Fragment']" + 
-             "[data-operation-viewer-field-value-role=output]")
-        .within(() => {
-          cy.get(`[ng-if="fv.is_part && (fv.part == undefined || fv.part != null)"]`)
-          .within(() => {
-            cy.get("[data-open-item-popup]")
-              .click()
-              .wait(1000)
-              output_item_id = cy.get("[data-popup-title-item-id]")
-              console.log(cy.get("[data-popup-title-item-id]").getOwnPropertyNames())
+    
+    cy.get("[data-popup-title-item-id]").then(el => {
+      let output_item_id = el.data("popup-title-item-id")
 
-              cy.get("[data-popup-title-item-id]").then(el => {
-                output_item_id = el.data("popup-title-item-id")
-                cy.get(`[data-item-id=${output_item_id}][data-item-popup-action=close]`)
-                .click()
-              })
-          })
+      // check location validity of item in popup
+      cy.get(`[data-item-id=${output_item_id}][data-item-popup-action=delete]`).click()
+        .get(`[data-item-id=${output_item_id}][data-item-popup-action=restore]`).click()          
+        .get(`[data-item-id=${output_item_id}][data-item-popup-input=location]`).then(input => {
+          expect(input.val()).to.eq("Bench")
         })
 
+      //close popup
+      cy.get(`[data-item-id=${output_item_id}][data-item-popup-action=close]`)
+        .click()
+    
+      // retry the errored make pcr operation
       cy.manager()
         .manager_category("Basic Cloning")
         .get(".md-thumb").click()
@@ -90,6 +98,7 @@ describe('Build plan with retry', function() {
         .manager_action('retry')
         .wait(1000)
 
+      // Check operation statuses
       cy.designer()   
         .load_first_plan_in_folder('unsorted')
         .operation_status_is('Order Primer',      'done')
@@ -103,6 +112,14 @@ describe('Build plan with retry', function() {
         .within(() => {
           cy.get("[data-open-item-popup]").should('not.exist')
         }) 
+
+      // ensure previous output item for retried operation has now been marked as deleted
+      cy.samples()
+        .samples_search_item(output_item_id)
+        .get(`[data-item-id=${output_item_id}][data-item-popup-action=restore]`)
+
+    })
+    
   });
 
 })
