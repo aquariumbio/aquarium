@@ -39,5 +39,5 @@ Cypress.Commands.add("samples_search_item", (id) => {
       cy.get(`[data-search-input="find-item"]`)
       .type(id)
       .get(`[data-search-button="find-item"]`)
-      .click
+      .click()
 })
