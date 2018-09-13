@@ -29,11 +29,21 @@
 
             <input type='text'
                    ng-model=da.new_value
-                   ng-if="!da.upload_id && !noedit" 
+                   ng-if="!da.upload_id && !noedit && !da.is_object" 
                    class="da-input"
                    data-association-input="value"
                    ng-attr-data-association-parent-id="{{record.id}}"
                    ng-attr-data-association-index="{{$index}}">
+
+            <textarea type='text'
+                   ng-model="da.new_value"
+                   json-text="da.new_value"
+                   ng-if="!da.upload_id && !noedit && da.is_object" 
+                   class="da-input"
+                   data-association-input="value"
+                   ng-attr-data-association-parent-id="{{record.id}}"
+                   ng-attr-data-association-index="{{$index}}"
+                   rows=4 />                   
 
             <span ng-if="noedit">: {{da.value}}</span>
 
