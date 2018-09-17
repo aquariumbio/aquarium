@@ -120,7 +120,13 @@ module Serialize
 
   def self.item_history(item)
 
-    fvs = FieldValue.where(parent_class: 'Operation', child_item_id: item.id)
+    if item.is_part
+      item_id = item.containing_collection.id
+    else
+      item_id = item.id
+    end
+
+    fvs = FieldValue.where(parent_class: 'Operation', child_item_id: item_id)
     op_ids = fvs.collect(&:parent_id)
     ops = Operation.includes(:jobs, :operation_type, :plan_associations).where(id: op_ids)
 

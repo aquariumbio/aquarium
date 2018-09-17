@@ -2,6 +2,10 @@
 
 Bioturk::Application.routes.draw do
 
+  post 'static_pages/explorer_jobs'
+  get 'static_pages/explorer'
+  get 'static_pages/item_trace/:id' => 'static_pages#item_trace'
+
   resources :timings, only: %i[update create]
 
   get '/uploads/:type/:id/:key', to: 'uploads#show'
