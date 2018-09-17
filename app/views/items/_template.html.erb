@@ -135,7 +135,7 @@
           <!-- History -->
           <div class="history" ng-if="( collection && collection.history.length > 0 ) || item.history.length > 0">
             <h4 class="md-body-2" ng-if="!collection">History of {{container.name}} {{item.id}}</h4>
-            <h4 class="md-body-2" ng-if="collection"> History of {{collection.object_type.name}} {{collection.id}}</h4>        
+
             <table class='table' style="width: 100%">
               <tr>
                 <th>Name</th>
@@ -145,7 +145,8 @@
                 <th>Plan</th>
                 <th>Jobs</th>
               </tr>
-              <tr ng-repeat="h in (collection ? collection.history : item.history)">
+              <tr ng-repeat="h in item.history"
+                  ng-if="row || column ? row == h.field_value.row && column == h.field_value.column : true">
                 <td>
                   {{h.field_value.name}}
                   <span ng-if="h.field_value.is_part">
