@@ -1,4 +1,7 @@
-<div ng-if="projects && sample_names && sample_type_names" layout="column" layout-padding>
+<div ng-if="projects && sample_names && sample_type_names"
+     layout="column"
+     layout-padding
+     class="sidebar">
 
   <div class="title">
     <h1 class="md-title">Search Parameters</h1>
@@ -6,20 +9,33 @@
 
   <div class="search-part">
     <label>Sample Name or ID</label>
-    <input type="text" ng-model="views.search.query" style="width: 100%" samplecomplete="'all'">
+    <input type="text"
+           ng-model="views.search.query"
+           style="width: 100%" 
+           samplecomplete="'all'"
+           data-search-input="sample-identifier">
   </div>
 
   <div class="search-part">
     <label>Sample Type</label>
-    <input type="text" ng-model="views.search.sample_type" style="width: 100%" sampletypecomplete> 
+    <input type="text"
+           ng-model="views.search.sample_type"
+           style="width: 100%"
+           sampletypecomplete
+           data-search-input="sample-type"> 
   </div>
 
   <div class="search-part" layout="row">
     <div>
       <label>Project</label>
-      <input type="text" ng-model="views.search.project" style="width: 70%" projectcomplete>
+      <input type="text"
+             ng-model="views.search.project"
+             style="width: 70%"
+             projectcomplete
+             data-search-input="project">
     </div>
-    <md-switch ng-model='views.search.project_filter'>
+    <md-switch ng-model='views.search.project_filter'
+               data-search-switch="filter">
       Filter?
     </md-switch>    
   </div>
@@ -27,7 +43,11 @@
   <div class="search-part" layout="row">  
     <div>
       <label>User</label>
-      <input type="text" ng-model="views.search.user" style="width: 70%" usercomplete>    
+      <input type="text"
+             ng-model="views.search.user" 
+             style="width: 70%" 
+             usercomplete
+             data-search-input="user">    
     </div>
     <md-switch ng-model='views.search.user_filter'>
       Filter?
@@ -36,24 +56,56 @@
 
   <div layout="row" layout-align="center center">
     <md-button ng-class="views.search.selected ? 'md-raised md-primary' : 'md-raised'" 
-               ng-click="search(0); select_view('search')">Search</md-button> 
+               ng-click="search(0); select_view('search')"
+               data-search-button="search">Search</md-button> 
   </div>
 
   <hr>
 
-  <div layout="column" layout-align="center center">
-    <input type="text" style="width: 50%" ng-model="views.search.item_id">
-    <md-button style="width: 30%; margin-bottom: 0px" class="md-raised" ng-click="item_search()">Find Item</md-button>
-  </div>
+  <div layout="column" class="extras">
 
-  <div item="views.search.item" 
-       container="views.search.item.object_type"
-       sample="views.search.item.sample"
-       nolink="true"></div>
+    <div layout="row"
+         layout-align="start center"
+         class="find-item">
+      <md-button style="width: 30%; margin-bottom: 0px" 
+                 class="md-raised" 
+                 ng-click="item_search()"
+                 data-search-button="find-item">
+        Find Item
+      </md-button>    
+      <input type="text" 
+             style="width: 50%"
+             ng-model="views.search.item_id"
+             data-search-input="find-item">
+    </div>
+    <hr>
+    <div layout="row"
+         layout-align="start center"
+         class="new-collection">    
+      <md-menu>
+        <md-button class="md-raised md-primary"
+          ng-click="openCollectionMenu($mdMenu, $event)"
+          id="new-collection-button"
+          data-search-button="new-collection">
+          New Collection
+        </md-button>
+        <md-menu-content>
+          <md-menu-item ng-repeat="ctype in collection_types">
+            <md-button ng-click="new_collection(ctype)"
+                       ng-attr-data-new-collection-type="{{ctype.name}}"
+                       data-search-menu="collection-types">{{ctype.name}}</md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+
+    </div>
+
+  </div>
 
   <hr>
   
-  <p style="line-height: 14pt"><b>To upload a spreadsheet</b>: Click "Upload" on the left and choose a file, which will add your
+  <p style="line-height: 14pt">
+  <b>To upload a spreadsheet</b>: Click "Upload" on the left and choose a file, which will add your
   new samples, but will not save them. Review the sample definitions and any warnings,
   and then click "Save". Spreadsheets should be in .csv format. The first entry of the first row should
   specify the sample type name. Remaining entries in the first row should be names of fields, the
@@ -61,5 +113,14 @@
   and can be empty (in which case the entry is ignored). The remaining rows specify the samples. In the 
   first column should be the name of the sample. All other columns correspond to their headings.
   Subsamples can be referred to by name or id. </p>  
+
+  <!-- item popup -->
+  <div item="views.search.item" 
+       container="views.search.item.object_type"
+       sample="views.search.item.sample"
+       collection="views.search.item.collection"
+       row="views.search.item.row"
+       column="views.search.item.column"
+       nolink="true"></div>
 
 </div>

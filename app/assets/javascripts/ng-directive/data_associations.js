@@ -8,7 +8,7 @@
 
       restrict: 'AE',
 
-      scope: { record: '=', noedit: '=' },
+      scope: { record: '=', noedit: '=', keywidth: '=?' },
 
       link: function($scope,$element,$attributes) {
 

@@ -16,10 +16,14 @@ module DataAssociator
   # @param key [String] the key for the association
   # @return [Array<DataAssociation>] the array of associations with the key
   def data_associations(key = nil)
+    klass = self.class.to_s
+    if klass == "Item" || klass == "Collection"
+      klass = [ "Item", "Collection" ]
+    end
     if key
-      DataAssociation.includes(:upload).where(parent_id: id, parent_class: self.class.to_s, key: key.to_s)
+      DataAssociation.includes(:upload).where(parent_id: id, parent_class: klass, key: key.to_s)
     else
-      DataAssociation.includes(:upload).where(parent_id: id, parent_class: self.class.to_s)
+      DataAssociation.includes(:upload).where(parent_id: id, parent_class: klass)
     end
   end
 
@@ -107,6 +111,30 @@ module DataAssociator
     self
 
   end
+
+  # Create a {DataAssociation} to this object to a value and an `Upload`, and with the given key.
+  # Does not save the association. For use with methods that collect a set of associations and
+  # save them all at once.
+  #
+  # If an association with the key exists, then do nothing.
+  #
+  # @param key [String] the key for the new association
+  # @param value [Object] the value for the new association (may be any serializable value)
+  # @example Associate concentration with an operation's input
+  #   da = op.input("Fragment").item.lazy_associate :concentration, 42
+  def lazy_associate(key, value)
+
+    da = DataAssociation.new(
+      parent_id: id,
+      parent_class: self.class.to_s,
+      key: key.to_s,
+      object: { key => value }.to_json,
+      upload_id: nil
+    )
+
+  end
+
+
 
   # Modifies the existing association for the key.
   # @see #associate

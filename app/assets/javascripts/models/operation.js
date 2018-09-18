@@ -602,9 +602,8 @@ AQ.Operation.manager_list = function(criteria,options) {
 AQ.Operation.record_methods.process_upload_complete = function() {
   let operation = this;
   try {
-    console.log("trying");
     update_job_uploads();
   } catch(e) {
-    console.log("failed", e)
+    console.log("process_upload_complete failed", e)
   }
 }

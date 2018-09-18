@@ -3,10 +3,13 @@
      ng-controller='sampleTypeEditCtrl as stec' 
      ng-init="stid = <%= @sample_type.id ? @sample_type.id : 0 %>">
 
+    <h1>{{sample_type.id ? "Editing" : "Defining New"}} Sample Type {{sample_type.id ? sample_type.id : ''}}</h1>     
+
   <div class='alert alert-success' ng-if="messages.length > 0">
     <button type="button" class="close" ng-click="clear_messages()">&times;</button>
     <h4 ng-if="messages.length == 1">1 Message</h4>
-    <h4 ng-if="messages.length > 1">{{messages.length}} Messages</h4>    
+    <h4 ng-if="messages.length > 1">{{messages.length}} Messages</h4>   
+    <br> 
     <ul>
       <li ng-repeat="m in messages track by $index">{{m}}</li>
     </ul>

@@ -22,6 +22,7 @@ class KrillController < ApplicationController
       if !server_result
         return redirect_to krill_error_path(job: @job.id, message: 'Krill server returned nil, which is a bad sign.', backtrace: [])
       elsif server_result[:error]
+        logger.info server_result[:error]
         return redirect_to krill_error_path(
           job: @job.id,
           message: ('server error: ' + server_result[:error][0, 512]).html_safe,
@@ -65,7 +66,7 @@ class KrillController < ApplicationController
 
       end
 
-    end 
+    end
 
     Operation.step @job.operations.collect { |op| op.plan.operations }.flatten
 

@@ -66,7 +66,9 @@ module FieldValuer
     fvs = field_values.select { |fv| fv.name == name && fv.role == role }
 
     if ft.array && val.class == Array
-
+      if (val.any? {|v| v.class == Array})
+        val = val.first
+      end
       new_fvs = val.collect do |v|
         fv = set_property_aux(ft, field_values.create(name: name, field_type_id: ft.id, role: role), v)
         fv.allowable_field_type_id = aft.id if aft

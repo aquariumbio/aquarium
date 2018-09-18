@@ -1,9 +1,21 @@
+<!--
+
+  item: The item to display
+  collection: If the item is a part, then collection is the collection of which it is a part
+  row, column: If the item is a part, its row and column
+  container: The item's object_type
+
+  -->
+
 <script type="text/ng-template" id="item_template">
 
   <span ng-init="item.new_location = item.location">
 
     <span ng-if="!nolink">
-      <a href='#' ng-click='item.modal=true' ng-init="item.modal=false">{{item.id}}</a>
+      <a ng-click='item.modal=true'
+         ng-init="item.modal=false"
+         ng-attr-data-open-item-popup="{{item.id}}"
+         class="clickable">{{item.id}}</a>
     </span>
 
     <div class='ng-modal item-modal' ng-if='item.modal'>
@@ -14,93 +26,152 @@
 
         <md-toolbar class="item-toolbar">
           <div class="md-toolbar-tools">
-            <h2 flex md-truncate>Item {{item.id}}: {{container.name}}</h2> 
+            <h2 flex md-truncate>
+              <span ng-attr-data-popup-title-item-id="{{item.id}}">Item {{item.id}}:</span>
+              <span ng-if="!collection"
+                    ng-attr-data-popup-title-container-name="{{container.name}}">{{container.name}}</span>
+              <span ng-if="collection">Part {{row}}, {{column}} of {{collection.object_type.name}}</span>
+            </h2>
           </div>
-          <div class='item-close' ng-click='item.modal=false'>&times;</div>
+          <div class='item-close' 
+               ng-click='item.modal=false'
+               data-item-popup-action="close"
+               ng-attr-data-item-id="{{item.id}}">&times;</div>
         </md-toolbar>
+
+        <div>        
          
-        <div class="sample-name md-subhead" layout="row" layout-align="center center">
-          <a href="/browser?sid={{sample.id}}" target="sample">{{sample.name}}</a>
-        </div>
-
-        <div layout="row">
-
-          <div class='details md-body-2' flex="40">
-            <div class="created-at">Created: {{item.created_at|date}}</div>
-            <div class="owner">Sample Owner: {{sample.user ? sample.user.name : item.sample.user.name}}</div>
+          <!-- Sample name -->
+          <div class="sample-name md-subhead" layout="row" layout-align="center center">
+            <a href="/browser?sid={{sample.id}}"
+               target="sample"
+               ng-attr-data-popup-title-sample-name="{{sample.name}}">{{sample.name}}</a>
           </div>
 
-          <div flex="60" layout="column" layout-align="center center">
-            <div ng-if="item.matrix">Position(s) in collection</div>
-            <table class='tiny-collection' ng-if="item.matrix">
-              <tr ng-repeat="row in item.matrix track by $index">
-                <td ng-repeat="el in row track by $index" 
-                    ng-class="sample.id == el ? 'filled' : el != -1 ? 'other' : 'blank'">
+          <!-- Item info and collection info (if applicable) -->
+          <div layout="row">
+
+            <div class='details md-body-2' flex="60">
+              <div class="created-at">Created: {{item.created_at|date}}</div>
+              <div class="owner">Sample Owner: {{sample.user ? sample.user.name : item.sample.user.name}}</div>
+              <div ng-if="collection">
+                Part {{row}},{{column}} of {{collection.object_type.name}}
+                <a href="/items/{{collection.id}}" target="collection">{{collection.id}}</a>
+              </div>
+              <div ng-if="collection">Location: {{collection.location}}</div>
+            </div>
+
+            <div flex="40" layout="column" layout-align="center center">
+              <div ng-if="!noColLink && container.handler == 'collection'">Position(s) in collection</div>
+              <table class='tiny-collection' ng-if="container.handler == 'collection'">
+                <tr ng-repeat="row in item.matrix track by $index">
+                  <td ng-repeat="el in row track by $index" 
+                      ng-class="sample.id == el ? 'filled' : el != -1 ? 'other' : 'blank'">
+                  </td>
+                </tr>
+              </table>
+              <a ng-if="!noColLink && container.handler == 'collection'"
+                 href="/items/{{item.id}}"
+                 target="_blank">
+                Collection details
+              </a>
+            </div>
+
+          </div>
+
+          <!-- Location for deleted items -->
+          <div class="location-editor" layout="column" layout-wrap ng-if="!collection && item.location == 'deleted'">
+            <div><b>Deleted on {{item.updated_at|date}}</b></div>
+            <% if current_user && current_user.is_admin %>          
+              <div><md-button class='md-raised md-small' 
+                              ng-click="item.store()"
+                              data-item-popup-action="restore"
+                              ng-attr-data-item-id="{{item.id}}">Restore</md-button></div>
+            <% end %>
+          </div>
+
+          <!-- Location for non-deleted items -->
+          <div class="location-editor" layout="row" layout-wrap ng-if="!collection && item.location != 'deleted'">
+            <div flex="20" class='md-body-2'>Location</div>
+            <div flex="60"><input type='text' 
+                                  class='location-input'
+                                  ng-model="item.new_location"
+                                  data-item-popup-input="location"
+                                  ng-attr-data-item-id="{{item.id}}"></div>
+            <div flex="20" class='buttons'>
+              <a href="#" ng-click="item.move(item.new_location)" ng-if="item.new_location != item.location">
+                <ng-md-icon icon="system_update_alt" size="22" aria-label="Update Location" style="fill: #444"></ng-md-icon>
+              </a>
+              <a href="#" ng-click="item.new_location = item.location" ng-if="item.new_location != item.location">
+                <ng-md-icon icon="undo" size="22" aria-label="Undo" style="fill: #444"></ng-md-icon>  
+              </a>
+              <% if current_user && current_user.is_admin %>
+                <a href="#" data-target="#" ng-click="item.mark_as_deleted(); sample.show_deleted=true" class="no-highlight">
+                  <ng-md-icon icon="delete" 
+                              size="22" 
+                              aria-label="Delete" 
+                              style="fill: #444"
+                              data-item-popup-action="delete"
+                              ng-attr-data-item-id="{{item.id}}"></ng-md-icon>  
+                </a>
+              <% end %>
+            </div>
+          </div>
+
+          <!-- Data -->
+          <div class='data-associations'>
+            <da record="item"></da>
+            <br>
+            <div layout="row" layout-align="center center">
+              <md-button ng-click="item.new_data_association()" 
+                         class="md-raised" 
+                         aria-label="Add Data"
+                         data-item-popup-action="new-data-association"
+                         ng-attr-data-item-id="{{item.id}}">Add Data</md-button>
+              <md-button class="md-raised upload-button"><upload record='item' aria-label="Upload"></upload></md-button>
+            </div>
+          </div>
+
+          <!-- History -->
+          <div class="history" ng-if="( collection && collection.history.length > 0 ) || item.history.length > 0">
+            <h4 class="md-body-2" ng-if="!collection">History of {{container.name}} {{item.id}}</h4>
+
+            <table class='table' style="width: 100%">
+              <tr>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Operation Id</th>
+                <th>Operation Type</th>
+                <th>Plan</th>
+                <th>Jobs</th>
+              </tr>
+              <tr ng-repeat="h in item.history"
+                  ng-if="row || column ? row == h.field_value.row && column == h.field_value.column : true">
+                <td>
+                  {{h.field_value.name}}
+                  <span ng-if="h.field_value.is_part">
+                  [{{h.field_value.row}},{{h.field_value.column}}]
+                  </span>
+                </td>
+                <td>{{h.field_value.role}}</td>
+                <td>{{h.operation.id}}</td>
+                <td>{{h.operation.operation_type.name}}</td>
+                <td>
+                  <a href="/launcher?plan_id={{h.operation.plan_associations[0].plan_id}}">
+                    {{h.operation.plan_associations[0].plan_id}}
+                  </a>
+                </td>
+                <td>
+                  <ul style="list-style: none; margin: 0">
+                    <li ng-repeat="job in h.operation.jobs">
+                      <a href="/jobs/{{job.id}}">{{job.id}}</a>
+                    </li>
+                  </ul>
                 </td>
               </tr>
             </table>
-            <a ng-if="item.matrix" href="/items/{{item.id}}" target="_blank">
-              Collection details
-            </a>
           </div>
 
-        </div>
-
-        <div class="location-editor" layout="column" layout-wrap ng-if="item.location == 'deleted'">
-          <div><b>Deleted on {{item.updated_at|date}}</b></div>
-          <% if current_user && current_user.is_admin %>          
-            <div><md-button class='md-raised md-small' ng-click="item.store()">Restore</md-button></div>
-          <% end %>
-        </div>
-
-        <div class="location-editor" layout="row" layout-wrap ng-if="item.location != 'deleted'">
-          <div flex="20" class='md-body-2'>Location</div>
-          <div flex="60"><input type='text' class='location-input'
-                                ng-model="item.new_location"></div>
-          <div flex="20" class='buttons'>
-            <a href="#" ng-click="item.move(item.new_location)" ng-if="item.new_location != item.location">
-              <ng-md-icon icon="system_update_alt" size="22" aria-label="Update Location" style="fill: #444"></ng-md-icon>
-            </a>
-            <a href="#" ng-click="item.new_location = item.location" ng-if="item.new_location != item.location">
-              <ng-md-icon icon="undo" size="22" aria-label="Undo" style="fill: #444"></ng-md-icon>  
-            </a>
-            <% if current_user && current_user.is_admin %>
-              <a href="#" ng-click="item.mark_as_deleted()" class="no-highlight">
-                <ng-md-icon icon="delete" size="22" aria-label="Delete" style="fill: #444"></ng-md-icon>  
-              </a>   
-            <% end %>
-          </div>
-        </div>
-
-        <div class='data-associations'>
-          <da record="item"></da>
-          <br>
-          <div layout="row" layout-align="center center">
-            <md-button ng-click="item.new_data_association()" class="md-raised" aria-label="Add Data">Add Data</md-button>
-            <md-button class="md-raised upload-button"><upload record='item' aria-label="Upload"></upload></md-button>
-          </div>
-        </div>
-
-        <div class="history" ng-if="item.history.length > 0">
-          <h4 class="md-body-2">Item History</h4>
-          <table class='table' style="width: 100%">
-            <tr>
-              <th>Name</th>
-              <th>Role</th>
-              <th>Operation Id</th>
-              <th>Operation Typte</th>
-              <th>Plan</th>
-              <th>Jobs</th>
-            </tr>
-            <tr ng-repeat="h in item.history">
-              <td>{{h.field_value.name}}</td>
-              <td>{{h.field_value.role}}</td>
-              <td>{{h.operation.id}}</td>
-              <td>{{h.operation.operation_type.name}}</td>
-              <td><a href="/launcher?plan_id={{h.operation.plan_associations[0].plan_id}}">{{h.operation.plan_associations[0].plan_id}}</a></td>
-              <td>Job{{h.operation.jobs.length==1 ? '' : 's'}}: <a ng-repeat="job in h.operation.jobs" href="/jobs/{{job.id}}">{{job.id}}</a>              
-            </tr>
-          </table>
         </div>
 
       </div>

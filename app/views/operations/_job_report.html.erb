@@ -1,18 +1,18 @@
 <div style="position: relative; margin: 20px; width: 150%"
-     ng-if="current.job_report_object.status == 'ready' && current.job_report_object.jobs.length == 0">
-  <p>No jobs performed on {{current.job_report_date.toDateString()}}.</p>
+     ng-if="current.activity_report.data.status == 'ready' && current.activity_report.data.jobs.length == 0">
+  <p>No jobs performed on {{current.activity_report.date|date}}.</p>
 </div>
 
 <div style="position: relative; margin: 20px; width: 150%"
-     ng-if="current.job_report_object.status == 'waiting'">
+     ng-if="current.activity_report.data.status == 'waiting'">
   <p>Preparing report.</p>
 </div>
 
 <div style="position: relative; width: 150%">
 
   <!-- Time grid -->
-  <div ng-repeat="box in current.job_report_object.hour_boxes"
-       ng-click="current.job_report_object.selection = null"
+  <div ng-repeat="box in current.activity_report.data.hour_boxes"
+       ng-click="current.activity_report.data.selection = null"
        class="no-highlight"
        style="position: absolute;
               left: {{box.left}}px;
@@ -26,29 +26,30 @@
   </div>
 
   <!-- Job boxes -->
-  <div ng-repeat="job in current.job_report_object.jobs track by $index"
+  <div ng-repeat="job in current.activity_report.data.jobs track by $index"
        style="position: absolute; 
             background: {{job.color}};
                    top: {{job.top}}px;
                 height: {{job.height}}px;
-                  left: {{job.left-current.job_report_object.min}}px; 
+                  left: {{job.left}}px; 
                  width: {{job.width}}px">
     <!-- This line intentionally left blank -->
   </div>
 
   <!-- Job names -->
-  <div ng-repeat="job in current.job_report_object.jobs track by $index"
+  <div ng-repeat="job in current.activity_report.data.jobs track by $index"
        
        style="position: absolute; 
                    top: {{job.top}}px;
                 cursor: pointer;
-                  left: {{job.left-current.job_report_object.min}}px;">
-        <span ng-click="current.job_report_object.selection = job"
+                  left: {{job.left}}px;">
+        <span ng-click="current.activity_report.data.selection = job"
               class="no-highlight"
               style="cursor: pointer;
-                     outline: {{job == current.job_report_object.selection ? '2pt solid orange' : 'none'}}">
+                     outline: {{job == current.activity_report.data.selection ? '2pt solid orange' : 'none'}}">
           &nbsp;{{job.id}}:{{job.operations[0].operation_type.name}}
         </span>
+        <span ng-if="!job.started_same_day">*</span>
         <a href="/users/{{job.user.id}}" 
            target="user" 
            style="color: steelblue">({{job.user.login}})</span>

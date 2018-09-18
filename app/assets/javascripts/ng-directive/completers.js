@@ -57,6 +57,35 @@
 
   });
 
+  w.directive("samplechooser", function() {
+
+    return {
+
+      restrict: 'A',
+
+      scope: { samplechooser: '=' },
+
+      link: function($scope,$element,$attributes) {
+
+        let samples = [];
+        for ( var type in AQ.sample_names ) {
+          samples = samples.concat(AQ.sample_names[type]);
+        }
+
+        $($element).autocomplete({
+          source: samples,
+          minLength: 3,
+          select: function(ev,ui) {
+            $scope.samplechooser = ui.item.value;
+            $scope.$apply();
+          }
+        });
+
+      }
+    }
+
+  });  
+
   w.directive("ftsamplecomplete", function() {
 
     samples_for = function(names,types) {

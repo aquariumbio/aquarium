@@ -10,18 +10,5 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
-//= require jquery
-//= require jquery_ujs
-//= require bootstrap
-//= require jquery.ui.datepicker
-//= require jquery.ui.menu
-//= require jquery.ui.autocomplete
-//= require jquery.cookie
-//= require jquery-fileupload/basic
-//= require dataTables/jquery.dataTables
-//= require jquery.flot
-//= require jquery.flot.resize
-//= require jquery.flot.time
-//= require underscore
-//= require_tree .
 
+//= require_tree .

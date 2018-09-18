@@ -52,7 +52,9 @@
 
   <div layout="row"
        ng-repeat-start="fv in current_op.field_values"
-       ng-include="'io_row'">
+       ng-include="'io_row'"
+       ng-attr-data-operation-viewer-field-value-name="{{fv.name}}"
+       ng-attr-data-operation-viewer-field-value-role="{{fv.role}}">
   </div>
 
   <div layout="column" ng-repeat-end layout-align="start stretch" ng-if="fv.open" class="plan-row plan-details">  
@@ -73,20 +75,38 @@
     <span class='small'>({{ fv.child_sample || fv.item  || !fv.value ? fv.role : 'param'}})</span>
   </div>
 
-  <div flex="15" ng-if="fv.row == null" class="fv-pad">
+  <!-- Simple item or entire collection -->
+  <div flex="15" ng-if="!fv.is_part" class="fv-pad">
     <div ng-if="fv.item" item="fv.item" container="fv.item.object_type" sample="fv.item.sample"></div>
     <div ng-if="!fv.item">No item</div>
   </div> 
 
-  <div flex="15" ng-if="fv.row != null" class="fv-pad">
+  <!-- Part of a collection -->
+  <div flex="15" ng-if="fv.is_part && (fv.part == undefined || fv.part != null)" class="fv-pad">
+    <div item="fv.part" container="fv.part.object_type" sample="fv.part.sample"
+         collection="fv.item" row="fv.row" column="fv.column"></div>
+  </div>
+
+  <!-- Part of a collection, but part is missing -->
+  <div flex="15" ng-if="fv.is_part && fv.part == null" class="fv-pad">
     <div item="fv.item" container="fv.item.object_type" sample="fv.item.sample ? fv.item.sample : fv.child_sample"></div>
-    <span ng-if="fv.row != null">[{{fv.row}},{{fv.column}}]</span>
+    <span ng-if="fv.row != null" style="color: orange">
+      [{{fv.row}},{{fv.column}}]
+    </span>
   </div>
 
   <div ng-if="!fv.item" flex="10" class="fv-pad">No location</div>
   <div ng-if="!fv.item" flex="20" class="fv-pad">No container</div> 
 
-  <div flex="10" ng-if="fv.item && !fv.value" class="fv-pad">{{fv.item.location}}</div> 
+  <!-- Location of item -->
+  <div flex="10" ng-if="fv.item && !fv.value && !fv.is_part" class="fv-pad">{{fv.item.location}}</div> 
+
+  <!-- Location of part in collection -->
+  <div flex="10" ng-if="fv.item && !fv.value && fv.is_part && fv.part" class="fv-pad">
+    <div item="fv.item" container="fv.item.object_type" sample="fv.item.sample ? fv.item.sample : fv.child_sample"></div>
+    [{{fv.row}},{{fv.column}}]
+  </div> 
+
   <div flex="20" ng-if="fv.item && !fv.value" class="fv-pad">{{fv.item.object_type.name}}</div>         
   <div flex="50" ng-if="!fv.value" class="fv-pad">
     <a href="/browser?sid={{fv.child_sample_id}}">{{fv.sample.name}}</a>

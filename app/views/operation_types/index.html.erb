@@ -2,16 +2,16 @@
 
 <%= render partial: 'io_form' %>
 <%= render partial: 'show_block' %>
-<%= render partial: 'steps' %>     
-<%= render partial: 'code' %>  
+<%= render partial: 'steps' %>
+<%= render partial: 'code' %>
 
 <%= render partial: '/uploads/upload_viewer' %>
 <%= render partial: "/items/template" %>
 <%= render partial: "/data_associations/list" %>
-<%= render partial: '/data_associations/template' %> 
+<%= render partial: '/data_associations/template' %>
 
 <%= content_for :class do %>operation_types<% end %>
-<%= content_for :controller do %>operationTypesCtrl<% end %>    
+<%= content_for :controller do %>operationTypesCtrl<% end %>
 <%= content_for :main_no_padding do %>true<% end %>
 
 <%= content_for :sidebar do %>
@@ -24,16 +24,16 @@
     <h1 class="md-title">No Operation Types</h1>
   </div>
 
-  <ul class='op-type-list'>    
+  <ul class='op-type-list'>
 
     <li ng-repeat="category in categories track by $index">
 
       <b class="no-highlight clickable">
         <span ng-if="current_category != category" ng-click="choose_category(category)" class='clickable'>&#9658;</span>
-        <span ng-if="current_category == category" ng-click="choose_category(category)" class='clickable'>&#9660;</span>             
+        <span ng-if="current_category == category" ng-click="choose_category(category)" class='clickable'>&#9660;</span>
         <span ng-click="choose_category(category)" class='clickable'>{{category}}</span>
         <span ng-click="choose_category(category)" class='clickable'>({{category_size(category)}})</span>
-        <md-button class='md-small pull-right' 
+        <md-button class='md-small pull-right'
                    ng-if="current_category == category"
                    ng-click="export_category(current_category)">Export</md-button>
       </b>
@@ -105,7 +105,7 @@
         <md-progress-linear md-mode="indeterminate"></md-progress-linear>
       </div>
     </div>
-  </div> 
+  </div>
 
   <div ng-show="operation_types && current_operation_type && current_operation_type.model.model == 'OperationType'">
 
@@ -118,7 +118,8 @@
       <md-nav-item ng-if="mode == 'documentation_view'" md-nav-click="set_mode('documentation')" name="documentation_view">Docs</md-nav-item>
       <md-nav-item md-nav-click="set_mode('timing')" name="timing">Timing</md-nav-item>
       <md-nav-item md-nav-click="set_mode('test')" name="test">Test</md-nav-item>
-    </md-nav-bar> 
+      <md-nav-item md-nav-click="set_mode('data')" name="data">Data</md-nav-item>      
+    </md-nav-bar>
 
     <div class="ot-part-container">
 
@@ -137,12 +138,13 @@
                       ng-click="save(current_operation_type,'documentation')"
                       ng-disabled="!current_operation_type.documentation.changed">Save</md-button>
           <md-button class='md-raised md-medium' ng-click="edit_docs(current_operation_type)">Edit</md-button>
-        </div>  
+        </div>
 
-      </div>  
+      </div>
 
       <%= render partial: 'test' %>
       <%= render partial: 'timing' %>
+      <%= render partial: 'data' %>
 
     </div>
 
@@ -158,9 +160,9 @@
       <div flex="10" class="library-label">Category:</div>
       <div flex="20">
         <input type='text' ng-model="current_operation_type.category" ng-change="change(current_operation_type)" style='width: 100%'>
-      </div>        
+      </div>
       <div flex="70">
-        <md-button class='md-raised md-small md-primary pull-right library-button' 
+        <md-button class='md-raised md-small md-primary pull-right library-button'
                    ng-click="update_library(current_operation_type)"
                    ng-disabled="!current_operation_type.changed">Update</md-button>
         <md-button class='md-raised md-small pull-right library-button'
@@ -169,13 +171,8 @@
     </div>
 
     <div ng-include="'code'" ng-init="component_name='source'" ng-if="current_operation_type.source && mode == 'source'" ></div>
-  </div>  
+  </div>
 
-  <%= render partial: 'import' %>  
+  <%= render partial: 'import' %>
 
 <% end %>
-
-
-
-
-

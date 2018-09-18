@@ -97,11 +97,9 @@ module Krill
       each_with_index do |op, _i|
         op_items = []
         op.inputs.select { |fv| opts[:only].empty? || opts[:only].include?(fv.name) }.each do |input|
-          puts input.inspect
           input.retrieve unless input.child_item || input.value
           if input.child_item_id
             op_items << input.child_item
-            puts "Adding #{input.child_item.inspect} to op_items"
           elsif !input.value
             op.set_status 'error'
             sname = input.child_sample ? input.child_sample.name : '-'
@@ -141,15 +139,10 @@ module Krill
 
       opts = { errored: false, role: 'output', only: [] }.merge custom_opts
 
-      puts "MAKE #{opts[:role]}"
-
       @output_collections = {}
       ops = select { |op| opts[:errored] || op.status != 'error' }
 
       ops.each_with_index do |op, i|
-
-        puts "  Make for op #{op.virtual? ? 'virtual' : op.id}"
-        puts "  opts = #{opts}"
 
         op.field_values.select { |fv| fv.role == opts[:role] && (opts[:only].blank? || opts[:only].member?(fv.name)) }.each do |fv|
 
@@ -157,8 +150,6 @@ module Krill
 
             rows = fv.object_type.rows || 1
             columns = fv.object_type.columns || 12
-
-            puts "    Making part for collection dim = #{rows}x#{columns}"
 
             size = rows * columns
 
@@ -176,9 +167,7 @@ module Krill
 
           else
 
-            puts "MAKING ITEM FOR FV #{fv.inspect}"
             fv.make
-            puts "GOT #{fv.inspect}"
 
           end # if
 

@@ -48,7 +48,7 @@ class JsonController < ApplicationController
     u = Upload.new
 
     File.open(params[:files][0].tempfile) do |f|
-      u.upload = f # just assign the logo attribute to a file
+      u.upload = f
       u.name = params[:files][0].original_filename
       u.job_id = params[:jobid] if params[:jobid]
       u.save
@@ -56,7 +56,7 @@ class JsonController < ApplicationController
 
     unless u.errors.empty?
       logger.info "ERRORS: #{u.errors.full_messages}"
-      render json: { error: u.errors.full_messages.to_s }
+      render json: { error: "Got error" + u.errors.full_messages.to_s }
       return
     end
 
@@ -110,7 +110,7 @@ class JsonController < ApplicationController
       record.delete
       render json: record
     else
-      render json: { errors: ['Insufficient permission to delete'] }, status: :unprocessable_entity
+      render json: { errors: ["Insufficient permission to delete #{params[:model][:model]}"] }, status: :unprocessable_entity
     end
 
   end
@@ -127,9 +127,11 @@ class JsonController < ApplicationController
     if sample && ot
 
       if ot.handler == 'collection'
-        render json: Collection.parts(sample, ot)
+        render json: Collection.parts(sample, ot).as_json(methods: :matrix)
       else
-        render json: sample.items.reject { |i| i.deleted? || i.object_type_id != ot.id }
+        render json: sample.items
+                           .reject { |i| i.deleted? || i.object_type_id != ot.id }
+                           .as_json(include: :object_type)
       end
 
     elsif sample && !ot

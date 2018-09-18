@@ -60,16 +60,31 @@ class Item < ActiveRecord::Base
     self[:location]
   end
 
-  # Gets the location of the Item.
+  # @private
+  def part_type
+    @@part_type ||= ObjectType.find_by_name("__Part")
+  end
+
+  # Returns true if the item is a part of a collection
+  # @return [Bool]
+  def is_part
+    object_type_id == part_type.id
+  end
+
+  # Returns the location of the Item
   #
   # @return [String] the description of the Item's physical location in the lab as a string
   def location
-    if locator
-      locator.to_s
-    elsif primitive_location
-      primitive_location
+    if is_part
+      'Part of Collection'
     else
-      'Unknown'
+      if locator
+        locator.to_s
+      elsif primitive_location
+        primitive_location
+      else
+        'Unknown'
+      end
     end
   end
 
@@ -291,6 +306,17 @@ class Item < ActiveRecord::Base
   # @return [Bool] true if this Item is a Collection, false otherwise
   def collection?
     object_type && object_type.handler == 'collection'
+  end
+
+  # Returns the parent Collection of this item, if it is a part. Otherwise, returns nil
+  # @return [Collection]
+  def containing_collection
+    pas = PartAssociation.where(part_id: self.id)
+    if pas.length == 1
+      pas[0].collection
+    else
+      nil
+    end
   end
 
   # other methods ############################################################################

@@ -1,19 +1,43 @@
 <!-- NAVIGATION BUTTONS ////////////////////////////////////////////////////// -->
 
-<div layout="row" layout-align="space-between center" style="margin-top: 14px; margin-bottom: 14px">
-  <div ng-class="sidebar_button_class('plans')"     ng-click="nav.sidebar = 'plans'; select(null); clear_multiselect()">Plans</div>
-  <div ng-class="sidebar_button_class('design')"    ng-click="nav.sidebar = 'design'; select(null); clear_multiselect()"">Design</div>
-  <div ng-class="sidebar_button_class('node')"      ng-click="nav.sidebar = 'node'">Node</div>
-  <div ng-class="sidebar_button_class('io')"        ng-click="nav.sidebar = 'io'">I/O</div>
+<div layout="row" 
+     layout-align="space-between center" 
+     style="margin-top: 14px; margin-bottom: 14px">
 
-  <div ng-class="sidebar_button_class('launch')"    
+  <div ng-class="sidebar_button_class('plans')" 
+       data-sidebar="plans"
+       ng-click="nav.sidebar = 'plans'; select(null); clear_multiselect()">
+       Plans
+  </div>
+
+  <div ng-class="sidebar_button_class('design')"
+       data-sidebar="design"
+       ng-click="nav.sidebar = 'design'; select(null); clear_multiselect()"">
+       Design
+  </div>
+
+  <div ng-class="sidebar_button_class('node')"
+       data-sidebar="node"
+       ng-click="nav.sidebar = 'node'">
+       Node
+  </div>
+
+  <div ng-class="sidebar_button_class('io')"
+       data-sidebar="io"
+       ng-click="nav.sidebar = 'io'">
+       I/O
+  </div>
+
+  <div ng-class="sidebar_button_class('launch')"
+       data-sidebar="launch"
        ng-click="nav.sidebar = 'launch'; plan.id && plan.valid() ? launch() : ''; select(null); clear_multiselect()""
        ng-if="plan.status=='planning'">
     Launch
   </div>
   <div ng-class="sidebar_button_class('launch')"
-        ng-if="plan && plan.status!='planning'"
-        ng-click="nav.sidebar = 'launch'; plan.estimate_cost(); select(null); clear_multiselect()"">
+       ng-if="plan && plan.status!='planning'"
+       data-sidebar="launch"
+       ng-click="nav.sidebar = 'launch'; plan.estimate_cost(); select(null); clear_multiselect()"">
     <span ng-if="plan.has_new_ops">Launch New</span>
     <span ng-if="!plan.has_new_ops">Plan Info</span>    
   </div>
@@ -31,7 +55,7 @@
       {{message}}
     </li>
   </ul>
-  <div class="dismiss clickable" ng-click="state.messages = []">&times;</div>
+  <div class="dismiss clickable" ng-click="state.messages = []" id="dismiss-messages">&times;</div>
 </div>
 
 <ul ng-if="plan.errors.length > 0">
@@ -74,10 +98,12 @@
   </div>  
   <div ng-if="plan.saved && plan.valid() && nav.sidebar" ng-include="'launch_plan'"></div>
   <div ng-if="!plan.saved" layout-padding>This plan cannot be launched or extended because it has not been saved.</div>
-  <div ng-if="plan.id && !plan.valid()" layout-padding>
+  <div ng-if="plan.id && !plan.valid()" 
+       layout-padding
+       data-invalid-plan="{{plan.id}}">
     This plan cannot be launched because it is not valid or has no operations.
-    All I/O should be defined (green), and all wires should be consistent (black).
-    Note that Aquarium does not currently check the validity of wires to and from modules, 
+    All I/O of non-errored operations should be defined (green), and all wires should be consistent (black).
+    Note that Aquarium does not currently display the validity of wires to and from modules, 
     so they may appear black even if their source and destination samples do not match. 
   </div>
   <div ng-if="plan.id">
@@ -85,7 +111,7 @@
     <hr>
 
     <div ng-if="plan.data_associations">
-      <da record="plan" ng-if="plan.data_associations.length > 0" narrow=false></da>
+      <da record="plan" ng-if="plan.data_associations.length > 0" narrow=false keywidth=30></da>
       <md-button class="md-raised md-medium" ng-click="plan.new_data_association()">Add Data</md-button>
       <md-button class="md-raised md-medium"><upload record='plan'></upload></md-button>
     </div>

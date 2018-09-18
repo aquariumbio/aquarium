@@ -117,20 +117,21 @@
 
         <md-button class="login"
                    ng-click="openMenu($mdMenu, $event)" 
-                   aria-label="<%= current_user.login %>">
+                   aria-label="<%= current_user.login %>"
+                   id="user-specific-button">
           &#x25CF; <%= current_user.login %>          
         </md-button>
 
         <md-menu-content width="3" class="scrollable">
           <md-menu-item>
-            <md-button href='/users/<%= current_user.id %>'>Profile</md-button>
+            <md-button href='/users/<%= current_user.id %>' id="profile-button">Profile</md-button>
           </md-menu-item>
           <md-menu-item>
-            <md-button href="/invoices">Invoices</md-button>
+            <md-button href="/invoices" id="invoices-button">Invoices</md-button>
           </md-menu-item>
           <md-menu-divider></md-menu-divider>          
           <md-menu-item>
-            <md-button href="/signout" data-method="delete">Signout</md-button>
+            <md-button href="/signout" data-method="delete" id="signout-button">Signout</md-button>
           </md-menu-item>         
         </md-menu-content>
 

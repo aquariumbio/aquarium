@@ -8,7 +8,9 @@
     "$cookies",
     "$sce",
     function($scope, $http, $attrs, $cookies, $sce) {
+
       $scope.randomize = function(operation_type) {
+
         if (!operation_type.batch_size) {
           operation_type.batch_size = 1;
         }
@@ -96,11 +98,7 @@
               },
               function failureCallback(response) {
                 operation_type.running_test = false;
-                operation_type.test_error = response.data.error.replace(
-                  /\(eval\):/g,
-                  "Line "
-                );
-                console.log(operation_type.test_error);
+                operation_type.test_error = response.data.error;
               }
             );
         }

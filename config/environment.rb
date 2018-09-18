@@ -11,8 +11,7 @@ rescue Mysql2::Error => e
   puts "Initialization failed with #{e.class}, message: #{e.message}"
 end
 
-# TODO: This doesn't work in application.rb / after_initialize because the Collection constant name conflicts
+# This next line doesn't work in application.rb / after_initialize because the Collection constant name conflicts
 # with a rails class of the same name which we've never used (and didn't know about). The best thing to
 # do at some point would be to rename this class.
-
-puts "Found #{Collection.count} collections (to avoid 'wrong constant' error)"
+Collection.count

@@ -17,6 +17,4 @@ fi
 cp docker/dev-docker-database.yml config/database.yml
 cp docker/dev-docker-aquarium.notrb config/initializers/aquarium.rb
 
-# not deleting the original development.rb environment
-mv config/environments/development.rb config/environments/original-development.notrb
 cp docker/dev-docker-development.rb config/environments/development.rb

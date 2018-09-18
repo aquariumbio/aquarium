@@ -1,5 +1,7 @@
-@import "bootstrap";
+// @import "bootstrap";
 @import "variables";
+
+
 
 @media (min-width: 980px) {
 }
@@ -187,9 +189,9 @@ margin-top:-4px !important;
 }
 
 #environment {
-  position: fixed; 
-  top: 28px; 
-  left: 21px; 
+  position: fixed;
+  top: 28px;
+  left: 21px;
   color: white;
 }
 
@@ -221,7 +223,7 @@ margin-top:-4px !important;
 /* footer */
 
 footer {
-  position: fixed; 
+  position: fixed;
   bottom: 0;
   display: none;
   margin-top: 15px;
@@ -232,12 +234,12 @@ footer {
   color: $lightGray;
   a {
     color: #555;
-    &:hover { 
+    &:hover {
       color: #222;
     }
-  }  
-  p { 
-    float: left; 
+  }
+  p {
+    float: left;
   }
   ul {
     float: right;
@@ -264,7 +266,7 @@ $grayMediumLight: #eaeaea;
 .debug_dump {
   clear: both;
   float: left;
-  width: 80%; 
+  width: 80%;
   font-size: 9pt;
   margin: 50px 50px 50px 50px;
   @include box_sizing;
@@ -344,12 +346,12 @@ input {
 
 img {
   border-radius: 5px;
-  margin-top:15px; 
+  margin-top:15px;
   border: 1pt solid grey;
 }
 
 .well {
-  opacity:.90; 
+  opacity:.90;
 }
 
 .location {
@@ -364,18 +366,18 @@ img {
 }
 
 .nice-check {
-  transform: scale(1.25); 
+  transform: scale(1.25);
   padding: 2px;
   margin: 6px !important;
   vertical-align: middle;
   position: relative;
   top: -1px;
-  *overflow: hidden;  
+  *overflow: hidden;
 }
 
 .bugico
-{ 
-   background:url(/assets/glyphicons-361-bug.png) left top; 
+{
+   background:url(/assets/glyphicons-361-bug.png) left top;
    width: 16px;
    height: 16px;
    background-size: 16px 16px;

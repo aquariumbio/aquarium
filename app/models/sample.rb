@@ -1,7 +1,7 @@
 
 
 # A named, biologically unique definition for an instance of a {SampleType}, such as a specific Primer, Fragment, Plasmid, or Yeast Strain
-# A Sample has many {Items} in inventory
+# A Sample has many {Item}s in inventory
 # @api krill
 
 class Sample < ActiveRecord::Base
@@ -236,7 +236,7 @@ class Sample < ActiveRecord::Base
     )
 
     # rename field for compatibility with ng-control/sample.js
-    sample_hash[:field_values] = sample_hash.delete :full_field_values
+    sample_hash["field_values"] = sample_hash.delete "full_field_values"
 
     sample_hash
 

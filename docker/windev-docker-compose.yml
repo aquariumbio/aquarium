@@ -59,7 +59,8 @@ services:
       - AWS_SECRET_ACCESS_KEY="" 
       - AWS_REGION=""
     volumes:
-      - ./app:/aquairum/app
+      - ./docs:/aquarium/docs
+      - ./app:/aquarium/app
       - ./config:/aquarium/config
       - ./db:/aquarium/db
       - ./lib:/aquarium/lib
@@ -68,7 +69,7 @@ services:
       - ./spec:/aquarium/spec
       - ./test:/aquairum/test
     networks:
-     - aquarium_net
+      - aquarium_net
     ports:
       - "3000:3000"
     depends_on:

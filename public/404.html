@@ -1,26 +1,69 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>The page you were looking for doesn't exist (404)</title>
-  <style type="text/css">
-    body { background-color: #fff; color: #666; text-align: center; font-family: arial, sans-serif; }
-    div.dialog {
-      width: 25em;
-      padding: 0 4em;
-      margin: 4em auto 0 auto;
-      border: 1px solid #ccc;
-      border-right-color: #999;
-      border-bottom-color: #999;
-    }
-    h1 { font-size: 100%; color: #f00; line-height: 1.5em; }
-  </style>
-</head>
 
-<body>
-  <!-- This file lives in public/404.html -->
-  <div class="dialog">
-    <h1>The page you were looking for doesn't exist.</h1>
-    <p>Please report this error to the development team asap.</p>
-  </div>
-</body>
+<html>
+  <head>
+
+    <title>Page not found (404)</title>
+
+    <style type="text/css">
+
+      body { 
+        background-color: #fff;
+        color: #666;
+        text-align: center;
+        font-family: arial, sans-serif;
+        padding: 0;
+        margin: 0;
+      }
+      .warn {
+        width: 100%;
+        margin-top: 100px;
+        text-align: center; 
+        padding: 0;
+      }
+      h1 {
+        font-size: 28px;
+        color: #aaa;
+        line-height: 1.5em;
+      }
+      .logo {
+        margin: 0;  
+        width: 100%;
+        font-size: 32px; 
+        text-decoration: none;
+        text-transform: uppercase;
+        color: rgb(0,255,34); 
+        font-weight: bold;    
+        background-image: linear-gradient(rgb(24, 86, 148), rgb(16, 108, 200));
+        text-align: left;  
+        padding: 6px;           
+        a {
+          color: darkblue;
+          text-decoration: none;  
+          &:hover {
+            text-decoration: none;
+          };                    
+        }
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+
+    <div class="logo">
+      <a href="/" class="logo">Aquarium</a>
+    </div>
+
+    <div class="warn">
+      <img src="/images/starfish-clipart-sad-9.png" 
+           width=200px
+           title="https://mbtskoudsalg.com"/>
+      <h1>The page you were looking for doesn't exist.</h1>
+    </div>
+
+  </body>
+
 </html>
+

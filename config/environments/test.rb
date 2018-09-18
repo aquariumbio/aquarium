@@ -1,6 +1,9 @@
 
 
 Bioturk::Application.configure do
+
+  config.eager_load = false
+
   # Paperclip => fakes3
   config.paperclip_defaults = {
     storage: :s3,

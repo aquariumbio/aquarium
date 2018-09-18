@@ -8,7 +8,7 @@ class Step {
 
     aq.each(step.display.content, line => {
       line._id = step.next_line_id;
-      if ( line.take && line.take.id ) {
+      if ( !AQ.config.no_items_in_backtrace && line.take && line.take.id ) {
         AQ.Item.find(line.take.id).then(item => line.take = item);
       }      
     });
@@ -268,6 +268,11 @@ class Backtrace { // This should extend array, but the closure compiler used in
     let backtrace = this;
     return backtrace.array[backtrace.array.length-1];
   }
+
+  get second_to_last() {
+    let backtrace = this;
+    return backtrace.array[backtrace.array.length-2];
+  }  
 
   get ready() {
     if ( this.last ) {

@@ -17,15 +17,6 @@
      aquarium_environment_name = '<%= Bioturk::Application.environment_name %>';
 
     $(function() {
-      $('.scrollable').on('wheel', function ( e ) {
-        var e0 = e.originalEvent,
-            delta = e0.wheelDelta || -e0.detail;
-        this.scrollTop -= delta/4;
-        e.preventDefault();
-      });
-    });
-
-    $(function() {
       $('.not-scrollable').on('wheel', function ( e ) {
         e.preventDefault();
       });
@@ -58,7 +49,7 @@
       position: fixed;
     }
 
-    .page-specific-nav::-webkit-scrollbar { 
+    .page-specific-nav::-webkit-scrollbar {
       display: none;
     }
 

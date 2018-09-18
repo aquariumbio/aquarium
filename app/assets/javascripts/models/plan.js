@@ -62,7 +62,7 @@ AQ.Plan.record_methods.save = function(user) {
   if ( plan.id ) {
 
     return new Promise((resolve,reject) => {
-      AQ.http.put('/plans/' + plan.id + '.json'+user_query,plan.serialize()).then(response => {
+      AQ.put('/plans/' + plan.id + '.json'+user_query,plan.serialize()).then(response => {
         delete plan.saving;
         var p = AQ.Plan.record(response.data).marshall();   
         AQ.Test.plan_diff(before,p)             
@@ -321,7 +321,11 @@ AQ.Plan.record_methods.add_wire_from = function(fv,op,pred) {
       preop = AQ.Operation.new_operation(pred.operation_type, plan.current_module.id, op.x, op.y + 4*AQ.snap),
       preop_output = preop.output(pred.output.name);
 
-  plan.add_operation(preop);
+  let num_wires_into = aq.where(op.plan.wires, wire => wire.to_op == op).length
+
+  plan.add_operation(preop); 
+  preop.x += ( preop.width + AQ.snap ) * num_wires_into;
+
   plan.remove_wires_to(op,fv);
 
   let wire = plan.wire(preop,preop_output,op,fv),
@@ -349,7 +353,11 @@ AQ.Plan.record_methods.add_wire_to = function(fv,op,suc) {
       postop = AQ.Operation.new_operation(suc.operation_type, plan.current_module.id, op.x, op.y - 4*AQ.snap),
       postop_input = postop.input(suc.input.name);
 
+  let num_wires_outof = aq.where(op.plan.wires, wire => wire.from_op == op).length
+
   plan.add_operation(postop);
+  postop.x += ( postop.width + AQ.snap ) * num_wires_outof; 
+
   plan.remove_wires_from(op,fv);
 
   let wire = plan.wire(op,fv,postop,postop_input);  
@@ -483,9 +491,11 @@ AQ.Plan.record_methods.valid = function() {
       v = plan.operations.length > 0;
 
   aq.each(plan.operations, op => {
-    aq.each(op.field_values, fv => {
-      v = v && fv.valid();
-    })
+    if ( op.status != 'error' ) {
+      aq.each(op.field_values, fv => {
+        v = v && fv.valid();
+      })
+    }
   })
 
   aq.each(plan.wires, wire => {
