@@ -426,7 +426,9 @@
 42
 43
 44
-45</pre>
+45
+46
+47</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'app/models/data_association.rb', line 32</span>
@@ -439,9 +441,11 @@
   <span class='kw'>elsif</span> <span class='id identifier rubyid_parent_class'>parent_class</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Collection</span><span class='tstring_end'>&#39;</span></span>
     <span class='kw'>return</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_is_admin'>is_admin</span> <span class='comment'># since collections are managed by admins?
 </span>  <span class='kw'>elsif</span> <span class='id identifier rubyid_parent_class'>parent_class</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Operation</span><span class='tstring_end'>&#39;</span></span>
-    <span class='kw'>return</span> <span class='kw'>true</span> <span class='comment'># since operations don&#39;t yet have owners
+    <span class='kw'>return</span> <span class='kw'>true</span> <span class='comment'># since operations don&#39;t yet have owners (actually they do now, so this should be fixed)
 </span>  <span class='kw'>elsif</span> <span class='id identifier rubyid_parent_class'>parent_class</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Plan</span><span class='tstring_end'>&#39;</span></span>
     <span class='kw'>return</span> <span class='kw'>true</span> <span class='comment'># plans don&#39;t have owners yet either
+</span>  <span class='kw'>elsif</span> <span class='id identifier rubyid_parent_class'>parent_class</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>OperationType</span><span class='tstring_end'>&#39;</span></span>
+    <span class='kw'>return</span> <span class='kw'>true</span> <span class='comment'># operation types don&#39;t have owners yet either      
 </span>  <span class='kw'>end</span>
 
 <span class='kw'>end</span></pre>
@@ -496,7 +500,7 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Aug 22 14:19:12 2018 by
+  Generated on Tue Sep 18 07:37:58 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.7).
 </div>
