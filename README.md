@@ -18,14 +18,13 @@ Aquarium is the operating system of the [UW BIOFAB](http://www.uwbiofab.org), a 
 ## Documentation
 
 - [Aquarium Project Pages](http://klavinslab.org/aquarium)
-  - [Installation](http://klavinslab.org/aquarium/configuration/installation/)
+  - [Installation](http://klavinslab.org/aquarium/installation/)
   - [Configuration](http://klavinslab.org/aquarium/configuration/)
   - [Concepts](http://klavinslab.org/aquarium/concepts/)
   - User Role Documentation:
     - [Manager](http://klavinslab.org/aquarium/manager/)
     - [Technician](http://klavinslab.org/aquarium/technician/)
     - [Workflow Designer](http://klavinslab.org/aquarium/designer/)
-    - [Protocol Developer](http://klavinslab.org/aquarium/protocol_developer/)
   - Development Documentation:
     - [Aquarium Development](http://klavinslab.org/aquarium/aquarium_development/)
     - [Protocol Tutorial](http://klavinslab.org/aquarium/protocol_tutorial/)
