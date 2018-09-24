@@ -15,7 +15,10 @@
       <a ng-click='item.modal=true'
          ng-init="item.modal=false"
          ng-attr-data-open-item-popup="{{item.id}}"
-         class="clickable">{{item.id}}</a>
+         class="clickable">
+         <span ng-if="!item.is_part">{{item.id}}</span>
+         <span ng-if="item.is_part">{{collection.id}}</span></a><span ng-if="item.is_part">[{{row}}][{{column}}]</span>           
+
     </span>
 
     <div class='ng-modal item-modal' ng-if='item.modal'>
@@ -30,7 +33,7 @@
               <span ng-attr-data-popup-title-item-id="{{item.id}}">Item {{item.id}}:</span>
               <span ng-if="!collection"
                     ng-attr-data-popup-title-container-name="{{container.name}}">{{container.name}}</span>
-              <span ng-if="collection">Part {{row}}, {{column}} of {{collection.object_type.name}}</span>
+              <span ng-if="collection">Part [{{row}}][{{column}}] of {{collection.object_type.name}} {{collection.id}}</span>
             </h2>
           </div>
           <div class='item-close' 
@@ -45,7 +48,7 @@
           <div class="sample-name md-subhead" layout="row" layout-align="center center">
             <a href="/browser?sid={{sample.id}}"
                target="sample"
-               ng-attr-data-popup-title-sample-name="{{sample.name}}">{{sample.name}}</a>
+               ng-attr-data-popup-title-sample-name="{{sample.name}}">{{sample.id}}: {{sample.name}}</a>
           </div>
 
           <!-- Item info and collection info (if applicable) -->
@@ -58,24 +61,40 @@
                 Part {{row}},{{column}} of {{collection.object_type.name}}
                 <a href="/items/{{collection.id}}" target="collection">{{collection.id}}</a>
               </div>
-              <div ng-if="collection">Location: {{collection.location}}</div>
+              <div ng-if="collection">Location of collection: {{collection.location}}</div>
             </div>
 
-            <div flex="40" layout="column" layout-align="center center">
-              <div ng-if="!noColLink && container.handler == 'collection'">Position(s) in collection</div>
-              <table class='tiny-collection' ng-if="container.handler == 'collection'">
-                <tr ng-repeat="row in item.matrix track by $index">
-                  <td ng-repeat="el in row track by $index" 
+            <div ng-if="!noColLink && collection"
+                 flex="40" layout="column" layout-align="center center">
+              <div>Position(s) in collection</div>
+              <table class='tiny-collection'>
+                <tr ng-repeat="r in collection.matrix track by $index">
+                  <td ng-repeat="el in r track by $index" 
                       ng-class="sample.id == el ? 'filled' : el != -1 ? 'other' : 'blank'">
                   </td>
                 </tr>
               </table>
-              <a ng-if="!noColLink && container.handler == 'collection'"
-                 href="/items/{{item.id}}"
+              <a href="/items/{{collection.id}}"
                  target="_blank">
                 Collection details
               </a>
             </div>
+
+            <div ng-if="!noColLink && container.handler == 'collection'"
+                 flex="40" layout="column" layout-align="center center">
+              <table class='tiny-collection'>
+                <tr ng-repeat="r in item.matrix track by $index">
+                  <td ng-repeat="el in r track by $index" 
+                      ng-class="el != -1 ? 'other' : 'blank'">
+                  </td>
+                </tr>
+              </table>
+              <a ng-if="!noColLink"
+                 href="/items/{{item.id}}"
+                 target="_blank">
+                Collection details
+              </a>
+            </div>            
 
           </div>
 
@@ -145,8 +164,8 @@
                 <th>Plan</th>
                 <th>Jobs</th>
               </tr>
-              <tr ng-repeat="h in item.history"
-                  ng-if="row || column ? row == h.field_value.row && column == h.field_value.column : true">
+              <tr ng-repeat="h in (collection ? collection.history : item.history)"
+                  ng-if="!item.is_part || ( row == h.field_value.row && column == h.field_value.column )">
                 <td>
                   {{h.field_value.name}}
                   <span ng-if="h.field_value.is_part">

@@ -70,7 +70,7 @@
     }
 
     .tiny-collection {
-      border: 1pt solid #aaa;
+      border: 1pt solid #aaa !important;
       padding: 1pt;
       margin: 5px;
       tr { 
@@ -81,7 +81,7 @@
       td {
         margin: 0;
         padding: 0;
-        border: 1pt solid #aaa;
+        border: 1pt solid #aaa !important;
         width: 10px;
         height: 10px;      
       }
