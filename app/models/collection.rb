@@ -197,6 +197,13 @@ class Collection < Item
 
   end
 
+  # Return the matrix of data association values associated with the given key
+  # @param key [String]
+  # @return [Array] an array of array of {DataAssociation} values
+  def data_matrix_values key
+    (data_matrix(key).map { |row| row.map { |da| da.value } })
+  end
+
   # Retrive the part at position r, c
   # @param r [Fixnum] the row
   # @param c [Fixnum] the column
