@@ -40,7 +40,7 @@
 
     <% if current_user && current_user.is_admin %>
       <div class="dropdown" style="position: relative; z-index: 1000">
-        <a href="#" class="md-button md-raised dropdown-toggle" data-toggle="dropdown">Add Member <b class="caret"></b></a>
+        <a class="md-button md-raised dropdown-toggle" data-toggle="dropdown">Add Member <b class="caret"></b></a>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
             <% (User.all.sort { |x,y| x.login <=> y.login}).each do |u| %>
               <li><%= link_to "#{u.login} ( #{u.name} )" , group_path(@group) + '?user_id=' + u.id.to_s %></li>
