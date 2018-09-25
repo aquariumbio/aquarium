@@ -101,7 +101,8 @@ module Krill
           if input.child_item_id
             op_items << input.child_item
           elsif !input.value
-            op.set_status 'error'
+            op.status = 'error'
+            op.save
             sname = input.child_sample ? input.child_sample.name : '-'
             oname = input.child_item ? input.child_item.object_type.name : '-'
             op.associate 'input error', "Could not find input #{input.name}: #{sname} / #{oname}"
