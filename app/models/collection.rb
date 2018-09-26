@@ -79,7 +79,7 @@ class Collection < Item
     end
 
     PartAssociation.import pas unless pas.empty?
-    DataAssociation.import das unless das.empty?  
+    DataAssociation.import das, on_duplicate_key_update: [:object] unless das.empty?  
 
     pm
 
