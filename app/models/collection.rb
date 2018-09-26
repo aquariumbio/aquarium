@@ -769,7 +769,7 @@ class Collection < Item
       r,c = self.dimensions
       m = Array.new(r){Array.new(c, EMPTY)}
       PartAssociation.includes(:part).where(collection_id: id).each do |pa|
-        m[pa.row][pa.column] = pa.part.sample_id if pa.row < r && pa.column < c
+        m[pa.row][pa.column] = pa.part.sample_id if pa.row < r && pa.column < c && pa.part.sample_id
       end
       @matrix_cache = m
       m
