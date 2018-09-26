@@ -52,7 +52,8 @@ class Collection < Item
     each_row_col(matrix,offset: offset) do |x,y,ox,oy|
       if pm[ox][oy]
         if dm[ox][oy]
-          dm[ox][oy].object = matrix[x][y].to_json
+          dm[ox][oy].object = {key => matrix[x][y]}.to_json
+          dm[ox][oy].upload = upload if upload
           das << dm[ox][oy]
         else
           das << pm[ox][oy].lazy_associate(key, matrix[x][y])
