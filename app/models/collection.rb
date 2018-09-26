@@ -11,6 +11,11 @@ class Collection < Item
 
   has_many :part_associations, foreign_key: :collection_id
 
+  def part_association_list
+    # this works but rails generated part_associations seems not to
+    PartAssociation.where collection_id: id
+  end
+
   # Remove all part data associations with the matching key
   # @param key [String]
   # @return [Collection] the collection, for chaining
@@ -41,12 +46,11 @@ class Collection < Item
     # 5. make new das
     # 6. bulk save pas
 
-    collection_id_string = "__part_for_collection_#{id}__"    
+    collection_id_string = SecureRandom.hex # random string used to identify saved parts  
 
     each_row_col(matrix,offset: offset) do |x,y,ox,oy|
       if pm[ox][oy]
         das << pm[ox][oy].lazy_associate(key, matrix[x][y])
-        # pm[ox][oy].associate(key, matrix[x][y])
       else
         parts << Item.new(quantity: 1, inuse: 0, object_type_id: part_type.id, data: collection_id_string)
       end
@@ -54,6 +58,10 @@ class Collection < Item
 
     Item.import parts unless parts.empty?
     parts = Item.where(data: collection_id_string) # get the parts just made so we have the ids
+    parts.each do |p|                              # erase temporary id
+      p.data = nil
+      p.save
+    end
     index = 0
 
     each_row_col(matrix, offset: offset) do |x,y,ox,oy|
@@ -182,8 +190,9 @@ class Collection < Item
   # @return [Array] an array of array of {DataAssociation}s
   def data_matrix(key)
 
-    pas = part_associations
-    part_ids = pas.collect { |p| p.part_id }
+    pas = part_association_list
+    part_ids = pas.collect { |p| p.part_id }.uniq
+
     das = DataAssociation.where(parent_class: "Item", parent_id: part_ids, key: key)
 
     r,c = self.dimensions
@@ -201,7 +210,7 @@ class Collection < Item
   # @param key [String]
   # @return [Array] an array of array of {DataAssociation} values
   def data_matrix_values key
-    (data_matrix(key).map { |row| row.map { |da| da.value } })
+    (data_matrix(key).map { |row| row.map { |da| da ? da.value : nil } })
   end
 
   # Retrive the part at position r, c
@@ -699,7 +708,7 @@ class Collection < Item
 
       # create parts
       parts = []
-      collection_id_string = "__part_for_collection_#{id}__"
+      collection_id_string = SecureRandom.hex # random string used to identify saved parts
       (0...dr).each do |r|
         (0...dc).each do |c|
           if sample_matrix_aux[r][c] != nil
@@ -709,6 +718,10 @@ class Collection < Item
       end
       Item.import parts
       parts = Item.where(data: collection_id_string) # get the parts just made so we have the ids
+      parts.each do |p|                              # erase temporary id
+        p.data = nil
+        p.save
+      end      
       index = 0
 
       # create part associations
@@ -728,7 +741,7 @@ class Collection < Item
   end
 
   def clear
-    part_associations.map(&:destroy)
+    part_association_list.map(&:destroy)
   end
 
   # @see #associate
