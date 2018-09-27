@@ -33,6 +33,7 @@ class Collection < Item
   def set_data_matrix(key, matrix, offset: [0,0])
 
     pm = part_matrix
+    dm = data_matrix(key)
     r,c = dimensions
     parts = []
     pas = []
@@ -50,7 +51,12 @@ class Collection < Item
 
     each_row_col(matrix,offset: offset) do |x,y,ox,oy|
       if pm[ox][oy]
-        das << pm[ox][oy].lazy_associate(key, matrix[x][y])
+        if dm[ox][oy]
+          dm[ox][oy].object = {key => matrix[x][y]}.to_json
+          das << dm[ox][oy]
+        else
+          das << pm[ox][oy].lazy_associate(key, matrix[x][y])
+        end
       else
         parts << Item.new(quantity: 1, inuse: 0, object_type_id: part_type.id, data: collection_id_string)
       end
@@ -73,7 +79,7 @@ class Collection < Item
     end
 
     PartAssociation.import pas unless pas.empty?
-    DataAssociation.import das unless das.empty?  
+    DataAssociation.import das, on_duplicate_key_update: [:object] unless das.empty?  
 
     pm
 
@@ -763,7 +769,7 @@ class Collection < Item
       r,c = self.dimensions
       m = Array.new(r){Array.new(c, EMPTY)}
       PartAssociation.includes(:part).where(collection_id: id).each do |pa|
-        m[pa.row][pa.column] = pa.part.sample_id if pa.row < r && pa.column < c
+        m[pa.row][pa.column] = pa.part.sample_id if pa.row < r && pa.column < c && pa.part.sample_id
       end
       @matrix_cache = m
       m
