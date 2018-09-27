@@ -20,6 +20,7 @@ AQ.Item.record_getters.collection = function() {
           item.collection = pas[0].collection;
           item.row = pas[0].row;
           item.column = pas[0].column;
+          AQ.update();
         }
       })
   } else {
@@ -103,7 +104,7 @@ AQ.Item.record_methods.mark_as_deleted = function() {
   AQ.http.delete("/items/" + item.id + ".json").then( response => {
     item.location = "deleted"
     item.new_location = "deleted";
-  }).catch( response => {    
+  }).catch( response => {
     alert(response.data);
   })
 
@@ -133,7 +134,7 @@ AQ.Item.record_methods.get_history = function() {
 
 AQ.Item.record_getters.history = function() {
   var item = this;
-  delete item.history; 
+  delete item.history;
   item.get_history();
   return item.history;
 }
@@ -141,7 +142,7 @@ AQ.Item.record_getters.history = function() {
 AQ.Item.record_getters.jobs = function() {
 
   var item = this;
-  delete item.jobs; 
+  delete item.jobs;
   item.jobs = [];
 
   function remove_dups(joblist) {
@@ -168,5 +169,3 @@ AQ.Item.record_getters.jobs = function() {
 AQ.Collection.record_methods.get_history = AQ.Item.record_methods.get_history;
 AQ.Collection.record_getters.history = AQ.Item.record_getters.history;
 AQ.Collection.record_getters.jobs = AQ.Item.record_getters.jobs;
-
-

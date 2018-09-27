@@ -63,6 +63,13 @@ class FieldValue < ActiveRecord::Base
     Collection.find(child_item.id) if child_item
   end
 
+  # Return associated {Part} if this fv refers to a part of a collection
+  #
+  # @return [Item]
+  def part
+    collection_part row, column
+  end
+
   # Return the specified part of collection
   #
   # @param row [Fixnum]
