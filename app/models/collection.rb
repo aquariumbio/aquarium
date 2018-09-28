@@ -23,7 +23,7 @@ class Collection < Item
   # Create or assign data to parts according to the given key and matrix.
   # @param key [String]
   # @param matrix [Array] an array of arrays of either numbers or strings whose dimensions are either equal to or small than the collection's dimensions
-  # @option [Array] :offset the offset used to compute which sub-matrix of parts to which the data should be assigned
+  # @param matrix [Array] :offset the offset used to compute which sub-matrix of parts to which the data should be assigned
   # @return [Array] the part matrix, with new data associations inserted if required
   def set_data_matrix(key, matrix, offset: [0,0])
 
@@ -308,7 +308,7 @@ class Collection < Item
   # Return a list of collections containing the given sample, and optionally of the given object
   # type.
   # @param s [Sample]
-  # @option ot [ObjectType]
+  # @param ot [ObjectType]
   # @return [ActiveRecord::Relation]
   def self.containing(s, ot = nil)
     return [] unless s
@@ -337,7 +337,7 @@ class Collection < Item
   # Get a list of the of the form \[ {row: r, column: c, collection: col}, ... \] containing
   # the specificed sample.
   # @param s [Sample]
-  # @option ot [ObjectType]
+  # @param ot [ObjectType]
   # @return [Array]  
   def self.parts(s, ot = nil)
     plist = []
