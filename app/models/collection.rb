@@ -23,7 +23,7 @@ class Collection < Item
   # Create or assign data to parts according to the given key and matrix.
   # @param key [String]
   # @param matrix [Array] an array of arrays of either numbers or strings whose dimensions are either equal to or small than the collection's dimensions
-  # @param matrix [Array] :offset the offset used to compute which sub-matrix of parts to which the data should be assigned
+  # @param offset [Array] the offset used to compute which sub-matrix of parts to which the data should be assigned
   # @return [Array] the part matrix, with new data associations inserted if required
   def set_data_matrix(key, matrix, offset: [0,0])
 
@@ -334,7 +334,7 @@ class Collection < Item
   end
 
   
-  # Get a list of the of the form \[ {row: r, column: c, collection: col}, ... \] containing
+  # Get a list of the of the form `{row: r, column: c, collection: col}, ...`  containing
   # the specificed sample.
   # @param s [Sample]
   # @param ot [ObjectType]
@@ -373,7 +373,7 @@ class Collection < Item
 
   # Make an entirely new collection.
   # 
-  # @param name [String]  the name of the valid collection object type to make a collection with
+  # @param ctype [String]  the name of the valid collection object type to make a collection with
   # @return [Collection]  new empty collection of type `name`
   def self.new_collection(ctype)
 
