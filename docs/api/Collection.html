@@ -231,7 +231,7 @@ promote the item using the ruby method becomes.</p>
   
 
   
-    <span class="summary_desc"><div class='inline'><p>Get a list of the of the form [ r, column: c, collection: col, ... ] containing the specificed sample.</p>
+    <span class="summary_desc"><div class='inline'><p>Get a list of the of the form <code>{row: r, column: c, collection: col}, ...</code>  containing the specificed sample.</p>
 </div></span>
   
 </li>
@@ -1297,39 +1297,15 @@ type.</p>
         <span class='name'>ot</span>
       
       
-        <span class='type'>(<tt>Hash</tt>)</span>
+        <span class='type'>(<tt><span class='object_link'><a href="ObjectType.html" title="ObjectType (class)">ObjectType</a></span></tt>)</span>
       
       
         <em class="default">(defaults to: <tt>nil</tt>)</em>
       
       
-        &mdash;
-        <div class='inline'><p>a customizable set of options</p>
-</div>
-      
     </li>
   
 </ul>
-
-  
-    
-    
-    
-    
-    <p class="tag_title">Options Hash (<tt>ot</tt>):</p>
-    <ul class="option">
-      
-        <li>
-          <span class="name"></span>
-          <span class="type">(<tt><span class='object_link'><a href="ObjectType.html" title="ObjectType (class)">ObjectType</a></span></tt>)</span>
-          <span class="default">
-            
-          </span>
-          
-        </li>
-      
-    </ul>
-  
 
 <p class="tag_title">Returns:</p>
 <ul class="return">
@@ -1392,7 +1368,7 @@ type.</p>
   
     <li>
       
-        <span class='name'>name</span>
+        <span class='name'>ctype</span>
       
       
         <span class='type'>(<tt>String</tt>)</span>
@@ -1529,7 +1505,7 @@ type.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p>Get a list of the of the form [ r, column: c, collection: col, ... ] containing
+    <p>Get a list of the of the form <code>{row: r, column: c, collection: col}, ...</code>  containing
 the specificed sample.</p>
 
 
@@ -1555,39 +1531,15 @@ the specificed sample.</p>
         <span class='name'>ot</span>
       
       
-        <span class='type'>(<tt>Hash</tt>)</span>
+        <span class='type'>(<tt><span class='object_link'><a href="ObjectType.html" title="ObjectType (class)">ObjectType</a></span></tt>)</span>
       
       
         <em class="default">(defaults to: <tt>nil</tt>)</em>
       
       
-        &mdash;
-        <div class='inline'><p>a customizable set of options</p>
-</div>
-      
     </li>
   
 </ul>
-
-  
-    
-    
-    
-    
-    <p class="tag_title">Options Hash (<tt>ot</tt>):</p>
-    <ul class="option">
-      
-        <li>
-          <span class="name"></span>
-          <span class="type">(<tt><span class='object_link'><a href="ObjectType.html" title="ObjectType (class)">ObjectType</a></span></tt>)</span>
-          <span class="default">
-            
-          </span>
-          
-        </li>
-      
-    </ul>
-  
 
 <p class="tag_title">Returns:</p>
 <ul class="return">
@@ -4585,28 +4537,20 @@ those indices. Note that the string is adjusted for viewing by the user, so star
   
     <li>
       
-        <span class='name'>[Array]</span>
+        <span class='name'>offset</span>
       
       
-        <span class='type'>(<tt>Hash</tt>)</span>
+        <span class='type'>(<tt>Array</tt>)</span>
       
       
       
         &mdash;
-        <div class='inline'><p>a customizable set of options</p>
+        <div class='inline'><p>the offset used to compute which sub-matrix of parts to which the data should be assigned</p>
 </div>
       
     </li>
   
 </ul>
-
-  
-    
-    
-    
-    
-    
-    
 
 <p class="tag_title">Returns:</p>
 <ul class="return">
@@ -5174,7 +5118,7 @@ x is not found or the collection is empty.</p>
 </div>
 
       <div id="footer">
-  Generated on Tue Sep 25 14:13:51 2018 by
+  Generated on Fri Sep 28 12:41:08 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.7).
 </div>
