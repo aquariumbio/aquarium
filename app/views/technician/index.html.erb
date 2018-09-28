@@ -2,8 +2,8 @@
 <%= render partial: 'uploads/upload_viewer' %>
 <%= render partial: "/items/template" %>
 <%= render partial: "/data_associations/list" %>
-<%= render partial: '/data_associations/template' %> 
-<%= render partial: '/operations/operation_list_short' %> 
+<%= render partial: '/data_associations/template' %>
+<%= render partial: '/operations/operation_list_short' %>
 
 <% provide(:title, "Job #{@job_id}") %>
 
@@ -29,7 +29,7 @@
       <md-button ng-class="mode_class('timer')"
                  ng-click="mode='timer'">
                  {{timer_button_text()}}
-      </md-button>   
+      </md-button>
 
     </div>
 
@@ -38,16 +38,16 @@
       <div>
         <div><b>Job <a href="/jobs/{{job.id}}">{{job.id}}</a></b>: {{job.created_at|date}}</div><br>
         <span class="md-title">Steps</span>
-      </div>        
+      </div>
 
         <span ng-if="!job.started">No steps</span>
 
         <div ng-repeat="step in job.backtrace.array track by $index"
-             ng-class="$index == job.state.index ? 
-                       'no-highlight step-index-selected' : 
+             ng-class="$index == job.state.index ?
+                       'no-highlight step-index-selected' :
                        'no-highlight step-index'"
              ng-click="job.state.index = $index">
-          {{$index+1}}. 
+          {{$index+1}}.
           <span ng-bind-html="sce(step.title)"></span>
           <span ng-if="step.response && step.response.time"
                 class="step-time pull-right">
@@ -56,7 +56,7 @@
        </div>
 
        <div ng-if="job.status == 'running' && !job.backtrace.complete">
-         <md-button class="md-raised md-medium md-warn" 
+         <md-button class="md-raised md-medium md-warn"
                     ng-click="cancel()">Cancel</md-button>
        </div>
 
@@ -97,7 +97,7 @@
         <span ng-if="job.backtrace.array[job.state.index].type == 'error'">!</span>
         <span ng-if="job.backtrace.array[job.state.index].type == 'aborted'">!</span>
         <span ng-if="job.backtrace.length == 0">!</span>
-      </span>  
+      </span>
       <span class="step-title">{{job.operations[0].operation_type.name}}</span>
     </span>
     <span ng-if="!job.started">
@@ -107,7 +107,7 @@
       &nbsp;[INCONSISTENT/ZOMBIE]
     </span>
     <span ng-if="job.backtrace && job.is_complete"
-          class="specific-title-complete">&nbsp;[COMPLETED] </span>  
+          class="specific-title-complete">&nbsp;[COMPLETED] </span>
   </span>
   <span ng-if="not_found" class="not-found">
     JOB {{job_id}} NOT FOUND
@@ -123,12 +123,12 @@
 <% end %>
 
 <% content_for :action2 do %>
-  <span class="ok" 
+  <span class="ok"
         ng-if="job.started">
     <md-button class='md-raised md-primary'
-               ng-disabled="job.state.index != job.backtrace.length-1 || 
-                            job.is_complete || 
-                            job.sending || 
+               ng-disabled="job.state.index != job.backtrace.length-1 ||
+                            job.is_complete ||
+                            job.sending ||
                             !job.backtrace.ready"
                ng-click="ok()">
       {{job.sending ? 'Waiting' : 'OK'}}
@@ -151,9 +151,9 @@
        class="step-container animate-show-hide">
 
       <div ng-if="step.type == 'display'"
-           ng-repeat="line in step.display.content" 
-           ng-include="content_type(line)" 
-           track by $index></div> 
+           ng-repeat="line in step.display.content"
+           ng-include="content_type(line)"
+           track by $index></div>
 
       <div ng-if="step.type == 'complete'" ng-include="'complete'"></div>
       <div ng-if="step.type == 'error'"    ng-include="'error'"></div>
@@ -162,7 +162,7 @@
       <% if current_user && current_user.is_admin %>
         <div class='pull-right'>
         <md-button ng-if="step.type == 'display'"
-                   class="md-medium md-raised" 
+                   class="md-medium md-raised"
                    ng-click="job.show_debug_info = !job.show_debug_info">
                  Debug
         </md-button>
@@ -179,13 +179,18 @@
 
       <div ng-if="job.show_debug_info">
         <pre>{{step.display|json}}</pre><hr>
-        <pre>{{step.response|json}}</pre>                      
+        <pre>{{step.response|json}}</pre>
       </div>
 
     </script>
   </div>
 
-  <div item="item" sample="item.sample" container="item.object_type" nolink='true'></div>
+  <div item="item"
+       sample="item.sample"
+       container="item.object_type"
+       collection="item.collection ? item.collection : null"
+       row="item.collection ? item.row : null"
+       column="item.collection ? item.column : null"
+       nolink='true'></div>
 
 <% end %>
-

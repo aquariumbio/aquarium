@@ -42,7 +42,7 @@ AQ.Collection.record_methods.extend_data_association = function(key) {
     aq.each(row, part => {
       if ( part.record_type == "Item" && !part.has_data_association(key) ) {
         part.new_data_association(key, null);
-      } 
+      }
     })
   })
 

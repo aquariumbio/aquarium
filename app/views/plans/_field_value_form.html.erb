@@ -17,36 +17,39 @@
              ng-attr-id="{{'fv-'+cfv.rid}}"
              ng-focus="setiomethod(io,false,role)"
              ng-model="op.routing[cfv.field_type.routing]"
-             ng-if="cfv.field_type.ftype == 'sample' && !cfv.field_type.array && 
+             ng-if="cfv.field_type.ftype == 'sample' && !cfv.field_type.array &&
                     op.form[cfv.field_type.role][cfv.name].aft.sample_type_id"
-             ng-attr-data-input-type="{{cfv.role}}"
-             ng-attr-data-input-op="{{op.operation_type.name}}"
-             ng-attr-data-input-name="{{cfv.name}}">
+             ng-attr-data-io-type="{{cfv.role}}"
+             ng-attr-data-io-op="{{op.operation_type.name}}"
+             ng-attr-data-io-name="{{cfv.name}}">
 
       <input type='string'
              fv="cfv"
              operation="op"
-             plan="plan"              
+             plan="plan"
              placeholder="{{op.form[cfv.field_type.role][cfv.name].aft.object_type.name}}"
              id="sample-io"
              ng-attr-id="{{'fv-'+cfv.rid}}"
-             ng-focus="setiomethod(io,false,role)"           
+             ng-focus="setiomethod(io,false,role)"
              ng-model="cfv.sample_identifier"
-             ng-if="cfv.field_type.ftype == 'sample' &&  cfv.field_type.array && 
-                    op.form[cfv.field_type.role][cfv.field_type.name].aft.sample_type_id">
+             ng-if="cfv.field_type.ftype == 'sample' &&  cfv.field_type.array &&
+                    op.form[cfv.field_type.role][cfv.field_type.name].aft.sample_type_id"
+             ng-attr-data-io-type="{{cfv.role}}"
+             ng-attr-data-io-op="{{op.operation_type.name}}"
+             ng-attr-data-io-name="{{cfv.name}}">
 
-      <span ng-if="cfv.field_type.ftype == 'sample' && 
+      <span ng-if="cfv.field_type.ftype == 'sample' &&
                    !op.form[cfv.field_type.role][cfv.field_type.name].aft.sample_type_id"
             ng-class="$current_cfv.rid == cfv.rid ? 'selected-input' : ''">
-        {{cfv.name}} 
+        {{cfv.name}}
       </span>
 
     </div>
 
     <div flex="5" class="array-remove-container">
-        <a href="#"  ng-if="cfv.field_type.array" 
+        <a href="#"  ng-if="cfv.field_type.array"
            ng-click="op.array_remove(cfv); remove_orphan_wires(cfv)">&times;</a>
-    </div>  
+    </div>
 
   </div>
 

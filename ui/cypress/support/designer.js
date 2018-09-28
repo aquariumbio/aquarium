@@ -2,7 +2,7 @@ Cypress.Commands.add("designer", () => {
   cy.contains("Designer")
     .click()
     .url().should('equal', 'http://localhost:3000/plans')
-    .wait('@planOperationTypes') 
+    .wait('@planOperationTypes')
 });
 
 Cypress.Commands.add("design_with", category => {
@@ -79,7 +79,7 @@ Cypress.Commands.add("choose_input", (name,index) => {
 });
 
 Cypress.Commands.add("choose_output", (name,index) => {
-  cy.get(`[data-output-of='${name}'][data-output-number=${index}]`)     
+  cy.get(`[data-output-of='${name}'][data-output-number=${index}]`)
     .click({force: true})
 });
 
@@ -99,12 +99,20 @@ Cypress.Commands.add("choose_operation_box", name => {
 });
 
 Cypress.Commands.add("associate_sample_to_output", (output_name,sample_name) => {
-  cy.get(`[data-input-type=output][data-input-name='${output_name}']`)
+  cy.get(`[data-io-type=output][data-io-name='${output_name}']`)
     .type(sample_name)
   cy.contains(sample_name)
     .click()
-    .wait(1000)    
-}); 
+    .wait(1000)
+});
+
+Cypress.Commands.add("associate_sample_to_input", (input_name,sample_name) => {
+  cy.get(`[data-io-type=input][data-io-name='${input_name}']`)
+    .type(sample_name)
+  cy.contains(sample_name)
+    .click()
+    .wait(1000)
+});
 
 Cypress.Commands.add("choose_operation_box", name => {
   cy.get(`[data-operation-box='${name}']`)
@@ -116,4 +124,18 @@ Cypress.Commands.add("define_parameter", (op_name,param,value) => {
     .click()
     .get(`[data-parameter='${param}']`)
     .type(value)
+});
+
+Cypress.Commands.add("choose_second_item", () => {
+  cy.get(`[data-item-number=1][data-item-list-part=checkbox]`)
+    .click()
+});
+
+Cypress.Commands.add("open_second_item", () => {
+  cy.get(`[data-item-number=1][data-item-list-part=item]`)
+    .click()
+});
+
+Cypress.Commands.add("get_first_item_checkbox", () => {
+  cy.get(`[data-item-number=0][data-item-list-part=checkbox]`)
 });
