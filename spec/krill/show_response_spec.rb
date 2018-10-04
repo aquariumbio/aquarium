@@ -12,7 +12,7 @@ RSpec.describe ShowResponse do
 		],
 		timestamp: 123456789,
 		measured_concentration: 53.2,
-		ups: [{id: 1, name: 'upname1'}, {id: 2, name: 'upname2'}]
+		# ups: [{id: 1, name: 'upname1'}, {id: 2, name: 'upname2'}]
 	})
 
 	it "is backwards compatible with the original hash" do expect(resp).to eq({
@@ -22,7 +22,7 @@ RSpec.describe ShowResponse do
 		],
 		timestamp: 123456789,
 		measured_concentration: 53.2,
-		ups: [{id: 1, name: 'upname1'}, {id: 2, name: 'upname2'}]
+		# ups: [{id: 1, name: 'upname1'}, {id: 2, name: 'upname2'}]
 	})
 	end
 	
