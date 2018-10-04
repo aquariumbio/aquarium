@@ -48,7 +48,7 @@ symbol, string, or integer" do
 
     it "returns the timestamp of the showblock with timestamp()" do
 		expect(resp.timestamp).to eq(123456789)
-	end
+	   end
 
 	it "returns a sorted array corresponding to rows of the table with \
 get_response when the given key is the name of an table response" do
