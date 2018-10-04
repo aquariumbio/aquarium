@@ -7,6 +7,7 @@ RUN apk update && apk add \
     mariadb-dev \
     mysql-client \
     nodejs \
+    nodejs-npm \
     sqlite-dev \
     git 
 
