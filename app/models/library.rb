@@ -11,23 +11,23 @@ class Library < ActiveRecord::Base
 
 
   def export
-  	{ 
-  	  library: {
-	      name: name, 
-	  	  category: category, 
-	  	  code_source: code('source') ? code('source').content : '' 
-	    }
-  	}
+  	 { 
+   	  library: {
+        name: name, 
+        category: category, 
+        code_source: code('source') ? code('source').content : '' 
+ 	    }
+   	}
   end
 
   def self.import(data, user)
-      obj = data[:library]
+    obj = data[:library]
 
-      lib = Library.new name: obj[:name], category: obj[:category]
-      lib.save
-      lib.new_code 'source', obj[:code_source], user
+    lib = Library.new name: obj[:name], category: obj[:category]
+    lib.save
+    lib.new_code 'source', obj[:code_source], user
 
-      issues = { notes: [], inconsistencies: [] }
-      issues
+    issues = { notes: [], inconsistencies: [] }
+    issues
   end
 end
