@@ -16,6 +16,22 @@ Bundler/OrderedGems:
 
 # Offense count: 7
 # Cop supports --auto-correct.
+# Configuration parameters: EnforcedStyleAlignWith.
+# SupportedStylesAlignWith: either, start_of_block, start_of_line
+Layout/BlockAlignment:
+  Exclude:
+    - 'spec/krill/show_response_spec.rb'
+
+# Offense count: 7
+# Cop supports --auto-correct.
+Layout/CommentIndentation:
+  Exclude:
+    - 'config/environments/development.rb'
+    - 'docker/dev-docker-development.rb'
+    - 'spec/krill/show_response_spec.rb'
+
+# Offense count: 7
+# Cop supports --auto-correct.
 # Configuration parameters: AllowAdjacentOneLineDefs, NumberOfEmptyLines.
 Layout/EmptyLineBetweenDefs:
   Exclude:
@@ -168,6 +184,7 @@ Layout/SpaceInsideBlockBraces:
 # SupportedStylesForEmptyBraces: space, no_space
 Layout/SpaceInsideHashLiteralBraces:
   Exclude:
+    - 'app/models/collection.rb'
     - 'lib/krill/find.rb'
     - 'lib/krill/operation_list_input_table.rb'
     - 'lib/krill/operation_list_table.rb'
@@ -977,7 +994,7 @@ Style/RaiseArgs:
   Exclude:
     - 'app/controllers/uploads_controller.rb'
 
-# Offense count: 1
+# Offense count: 4
 # Cop supports --auto-correct.
 Style/RedundantParentheses:
   Exclude:

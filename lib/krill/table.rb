@@ -145,8 +145,8 @@ module Krill
     # @param name [String]  the heading of this column
     # @param defaults [Array]  the default values of the cells of this column
     # @param opts [Hash]  additional options
-    # @option key [String]  the key that can be used to access response data from ShowResponse hash
-    # @option type [String]  defines type of user input -- can be either 'number' or 'text'
+    # @option opts [String] :key the key that can be used to access response data from ShowResponse hash
+    # @option opts [String] :type defines type of user input -- can be either 'number' or 'text'
     # @return [Table] The table, can be chained
     def add_response_column(name, defaults, opts = {})
       default_opts = {key: name, type: 'number'}

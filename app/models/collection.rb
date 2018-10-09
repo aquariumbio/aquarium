@@ -11,10 +11,15 @@ class Collection < Item
 
   has_many :part_associations, foreign_key: :collection_id
 
+  def part_association_list
+    # this works but rails generated part_associations seems not to
+    PartAssociation.where collection_id: id
+  end
+
   # Remove all part data associations with the matching key
   # @param key [String]
   # @return [Collection] the collection, for chaining
-  def drop_data_matrix key
+  def drop_data_matrix(key)
     ids = data_matrix(key).flatten.compact.collect { |da| da.id }
     DataAssociation.where(id: ids).destroy_all
     self
@@ -23,11 +28,12 @@ class Collection < Item
   # Create or assign data to parts according to the given key and matrix.
   # @param key [String]
   # @param matrix [Array] an array of arrays of either numbers or strings whose dimensions are either equal to or small than the collection's dimensions
-  # @option [Array] :offset the offset used to compute which sub-matrix of parts to which the data should be assigned
+  # @param offset [Array] the offset used to compute which sub-matrix of parts to which the data should be assigned
   # @return [Array] the part matrix, with new data associations inserted if required
-  def set_data_matrix key, matrix, offset: [0,0]
+  def set_data_matrix(key, matrix, offset: [0,0])
 
     pm = part_matrix
+    dm = data_matrix(key)
     r,c = dimensions
     parts = []
     pas = []
@@ -41,12 +47,16 @@ class Collection < Item
     # 5. make new das
     # 6. bulk save pas
 
-    collection_id_string = "__part_for_collection_#{id}__"    
+    collection_id_string = SecureRandom.hex # random string used to identify saved parts  
 
     each_row_col(matrix,offset: offset) do |x,y,ox,oy|
       if pm[ox][oy]
-        das << pm[ox][oy].lazy_associate(key, matrix[x][y])
-        # pm[ox][oy].associate(key, matrix[x][y])
+        if dm[ox][oy]
+          dm[ox][oy].object = {key => matrix[x][y]}.to_json
+          das << dm[ox][oy]
+        else
+          das << pm[ox][oy].lazy_associate(key, matrix[x][y])
+        end
       else
         parts << Item.new(quantity: 1, inuse: 0, object_type_id: part_type.id, data: collection_id_string)
       end
@@ -54,6 +64,10 @@ class Collection < Item
 
     Item.import parts unless parts.empty?
     parts = Item.where(data: collection_id_string) # get the parts just made so we have the ids
+    parts.each do |p|                              # erase temporary id
+      p.data = nil
+      p.save
+    end
     index = 0
 
     each_row_col(matrix, offset: offset) do |x,y,ox,oy|
@@ -65,7 +79,7 @@ class Collection < Item
     end
 
     PartAssociation.import pas unless pas.empty?
-    DataAssociation.import das unless das.empty?  
+    DataAssociation.import das, on_duplicate_key_update: [:object] unless das.empty?  
 
     pm
 
@@ -74,13 +88,13 @@ class Collection < Item
   # Create or assign zeros to all part data associations for the given key
   # @param key [String]
   # @return [Array] the part matrix, with new data associations inserted if required  
-  def new_data_matrix key
+  def new_data_matrix(key)
     r,c = dimensions
     set_data_matrix key, Array.new(r){Array.new(c,0.0)}
   end
 
   # @private
-  def print_data_matrix key
+  def print_data_matrix(key)
     dm = data_matrix key
     dm.each do |row|
       vals = row.collect { |e| e ? e.value : '-' }
@@ -95,7 +109,7 @@ class Collection < Item
   # @param value [Float|Fixnum|String]
   # @return [Array] the part matrix, with new data associations inserted if required  
   # @return [Collection] the collection, for chaining
-  def set_part_data key, r, c, value
+  def set_part_data(key, r, c, value)
 
     pm = part_association r, c
     if pm
@@ -115,7 +129,7 @@ class Collection < Item
   # param c [Fixnum] the column
   # @return [Array] the part matrix, with new data associations inserted if required  
   # @return [String|Float] The resulting data
-  def get_part_data key, r, c
+  def get_part_data(key, r, c)
 
     pa = part_association r, c
     if pa && pa.part
@@ -132,7 +146,7 @@ class Collection < Item
   #     # r, c will be the row and column of the matrix argument
   #     # x, y will be the row and column of the collection's part matrix
   #   }
-  def each_row_col matrix, offset: [0,0]
+  def each_row_col(matrix, offset: [0,0])
     dr, dc = dimensions
     (0...matrix.length).each do |r|
       (0...matrix[r].length).each do |c|  
@@ -147,7 +161,7 @@ class Collection < Item
   end
 
   # @private
-  def initialize_part r, c, sample: nil
+  def initialize_part(r, c, sample: nil)
     
     pa = part_association r, c
 
@@ -168,7 +182,7 @@ class Collection < Item
   end
 
   # @private
-  def part_association r, c
+  def part_association(r, c)
     pas = PartAssociation.where(collection_id: id, row: r, column: c)
     if pas.length == 1
       pas[0]
@@ -180,10 +194,11 @@ class Collection < Item
   # Return the matrix of data associations associated with the given key
   # @param key [String]
   # @return [Array] an array of array of {DataAssociation}s
-  def data_matrix key
+  def data_matrix(key)
 
-    pas = part_associations
-    part_ids = pas.collect { |p| p.part_id }
+    pas = part_association_list
+    part_ids = pas.collect { |p| p.part_id }.uniq
+
     das = DataAssociation.where(parent_class: "Item", parent_id: part_ids, key: key)
 
     r,c = self.dimensions
@@ -197,11 +212,18 @@ class Collection < Item
 
   end
 
+  # Return the matrix of data association values associated with the given key
+  # @param key [String]
+  # @return [Array] an array of array of {DataAssociation} values
+  def data_matrix_values key
+    (data_matrix(key).map { |row| row.map { |da| da ? da.value : nil } })
+  end
+
   # Retrive the part at position r, c
   # @param r [Fixnum] the row
   # @param c [Fixnum] the column
   # @return [Item] 
-  def part r, c
+  def part(r, c)
     pas = PartAssociation.includes(:part).where(collection_id: id, row: r, column: c)
     if pas.length == 1
       pas[0].part
@@ -237,7 +259,7 @@ class Collection < Item
   # @param sample [Sample]
   # @param pairs [Array] of the form [ [r1,c1], [r2, c2] ... ]
   # @return [Collection] can be chained
-  def assign_sample_to_pairs sample, pairs 
+  def assign_sample_to_pairs(sample, pairs) 
 
     pm = part_matrix
 
@@ -264,7 +286,7 @@ class Collection < Item
   # Unassign any existing sample associated with the parts at positions specified by pairs
   # @param pairs [Array] of the form [ [r1,c1], [r2, c2] ... ]
   # @return [Collection] can be chained
-  def delete_selection pairs
+  def delete_selection(pairs)
 
     pairs.each do |r,c|
 
@@ -301,7 +323,7 @@ class Collection < Item
   # Return a list of collections containing the given sample, and optionally of the given object
   # type.
   # @param s [Sample]
-  # @option ot [ObjectType]
+  # @param ot [ObjectType]
   # @return [ActiveRecord::Relation]
   def self.containing(s, ot = nil)
     return [] unless s
@@ -327,10 +349,10 @@ class Collection < Item
   end
 
   
-  # Get a list of the of the form \[ {row: r, column: c, collection: col}, ... \] containing
+  # Get a list of the of the form `{row: r, column: c, collection: col}, ...`  containing
   # the specificed sample.
   # @param s [Sample]
-  # @option ot [ObjectType]
+  # @param ot [ObjectType]
   # @return [Array]  
   def self.parts(s, ot = nil)
     plist = []
@@ -366,7 +388,7 @@ class Collection < Item
 
   # Make an entirely new collection.
   # 
-  # @param name [String]  the name of the valid collection object type to make a collection with
+  # @param ctype [String]  the name of the valid collection object type to make a collection with
   # @return [Collection]  new empty collection of type `name`
   def self.new_collection(ctype)
 
@@ -647,7 +669,7 @@ class Collection < Item
   end
 
   # Takes a matrix of sample ids, samples or items and returns a matrix of only sample ids
-  def to_sample_id_matrix sample_matrix
+  def to_sample_id_matrix(sample_matrix)
 
     dr = sample_matrix.length
     dc = sample_matrix[0].length
@@ -692,7 +714,7 @@ class Collection < Item
 
       # create parts
       parts = []
-      collection_id_string = "__part_for_collection_#{id}__"
+      collection_id_string = SecureRandom.hex # random string used to identify saved parts
       (0...dr).each do |r|
         (0...dc).each do |c|
           if sample_matrix_aux[r][c] != nil
@@ -702,6 +724,10 @@ class Collection < Item
       end
       Item.import parts
       parts = Item.where(data: collection_id_string) # get the parts just made so we have the ids
+      parts.each do |p|                              # erase temporary id
+        p.data = nil
+        p.save
+      end      
       index = 0
 
       # create part associations
@@ -721,7 +747,7 @@ class Collection < Item
   end
 
   def clear
-    part_associations.map(&:destroy)
+    part_association_list.map(&:destroy)
   end
 
   # @see #associate
@@ -743,7 +769,7 @@ class Collection < Item
       r,c = self.dimensions
       m = Array.new(r){Array.new(c, EMPTY)}
       PartAssociation.includes(:part).where(collection_id: id).each do |pa|
-        m[pa.row][pa.column] = pa.part.sample_id if pa.row < r && pa.column < c
+        m[pa.row][pa.column] = pa.part.sample_id if pa.row < r && pa.column < c && pa.part.sample_id
       end
       @matrix_cache = m
       m

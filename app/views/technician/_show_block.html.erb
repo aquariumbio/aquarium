@@ -19,11 +19,11 @@
 
 <script type="text/ng-template" id="check">
   <div class="checkbox-container">
-    <md-checkbox aria-label="Checkbox" 
+    <md-checkbox aria-label="Checkbox"
                  ng-checked="!step.response.in_progress"
                  ng-disabled="!step.response.in_progress"
                  ng-model="line.checked">
-      <span class="md-subhead" 
+      <span class="md-subhead"
             ng-bind-html="content_value(line)"></span>
     </md-checkbox>
   </div>
@@ -42,8 +42,8 @@
     <div flex>
       <span class='md-subhead'>{{content_value(line).label}}</span><br>
       <md-input-container class="select-container">
-        <md-select ng-model="step.response.inputs[line.select.var]" 
-                   aria-label="Select" 
+        <md-select ng-model="step.response.inputs[line.select.var]"
+                   aria-label="Select"
                    ng-disabled="!step.response.in_progress">
           <md-option ng-repeat="c in content_value(line).choices" ng-value="c">
             {{c}}
@@ -79,10 +79,10 @@
 <script type="text/ng-template" id="timer">
 
   <p class='md-subhead'>
-    Set timer for 
-      {{content_value(line).initial.hours}} hour(s), 
-      {{content_value(line).initial.minutes}} minutes(s), and 
-      {{content_value(line).initial.seconds}} second(s). 
+    Set timer for
+      {{content_value(line).initial.hours}} hour(s),
+      {{content_value(line).initial.minutes}} minutes(s), and
+      {{content_value(line).initial.seconds}} second(s).
     Proceed when time is up.
   </p>
 
@@ -102,7 +102,7 @@
     </ul>
 
     <form id="{{'upload-form-' + line.id}}" action="/krill/upload" method="post">
-      <input id="{{'upload-' + line._id}}" 
+      <input id="{{'upload-' + line._id}}"
              type="file"
              name="files[]"
              value="xyz"
@@ -116,9 +116,9 @@
     </form>
 
     <md-button
-      class="md-raised md-primary" 
-      ng-click="upload_config.associate_with_operations = false; 
-                upload_config.associate_with_plans = false; 
+      class="md-raised md-primary"
+      ng-click="upload_config.associate_with_operations = false;
+                upload_config.associate_with_plans = false;
                 start_upload(line._id)">Upload File(s)
     </md-button>
 
@@ -132,8 +132,12 @@
 
 <script type="text/ng-template" id="take">
   <div class='md-subhead content content-take'>
-    Item <a href='#' ng-click='open_item_ui(content_value(line).id)'>{{content_value(line).id}}</a>
-    ({{content_value(line).object_type.name}})
+    Item <a href='#' ng-click='open_item_ui(content_value(line).id)'>
+         <span ng-if="!content_value(line).is_part">{{content_value(line).id}}</span>
+         <span ng-if="content_value(line).is_part">{{content_value(line).collection.id}}</span></a>
+         <span ng-if="content_value(line).is_part">[{{content_value(line).row}}][{{content_value(line).column}}]</span>
+    </a>
+    <span ng-if="!content_value(line).is_part">({{content_value(line).object_type.name}})</span>
     at {{content_value(line).location}}
     </div>
 </script>
@@ -146,15 +150,15 @@
             ng-click="check(cell)"
             ng-style="cell.style">
           <ng-md-icon ng-if="cell.type"
-                      icon="create" 
+                      icon="create"
                       size="20"
-                      aria-label="Input" 
+                      aria-label="Input"
                       style="fill: #444; position: absolute; left: 8px; top: 10px">
           </ng-md-icon>
-          <input ng-if="cell.type" 
-                 dtype="{{cell.type}}" 
+          <input ng-if="cell.type"
+                 dtype="{{cell.type}}"
                  ng-model="step.response.inputs.table_inputs[cell.key][cell.operation_id].value"
-                 data-opid="{{cell.operation.id}}" 
+                 data-opid="{{cell.operation.id}}"
                  class="krill-table-input"
                  ng-disabled="!step.response.in_progress">
           <span ng-if="!cell.type && cell.content == undefined"><span ng-bind-html="sce(cell)"></span></span>
@@ -164,7 +168,7 @@
           <span ng-if="!cell.type && cell.content != undefined && cell.check && step.response.in_progress"
                 class="no-highlight">
             <span ng-bind-html="sce(cell.content)"></span>
-          </span>          
+          </span>
         </td>
       </tr>
     </table>
@@ -215,7 +219,7 @@
               brief="true"
               jobid="job.id">
       </oplist-short>
-    </div>  
+    </div>
 
     <div flex=5></div>
 
@@ -224,12 +228,12 @@
           <p ng-if=!job.user.stats>Checking for statistics ...</p>
           <div class="user-op-stat" ng-repeat="stat in job.user.stats">
             <div class="name" ng-if="stat.name == job.operations[0].operation_type.name">{{stat.name}}</div>
-            <div class="name-subdued" ng-if="stat.name != job.operations[0].operation_type.name">{{stat.name}}</div>  
+            <div class="name-subdued" ng-if="stat.name != job.operations[0].operation_type.name">{{stat.name}}</div>
             <div class="done" style="width: {{stat.done/2}}px">&nbsp;</div>
             <div class="error" style="width: {{stat.error/2}}px">&nbsp;</div>
             <div class="number">{{stat.count}}</div>
           </div>
-    </div> 
+    </div>
 
   </div>
 

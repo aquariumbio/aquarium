@@ -18,6 +18,11 @@ module Krill
     def show
 
       page = ShowBlock.new(self).run(&Proc.new)
+      finish_show(page)
+      
+    end
+
+    def finish_show(page)
 
       # increment pc
       @job ||= Job.find(jid)

@@ -194,7 +194,7 @@ promote the item using the ruby method becomes.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#new_collection-class_method" title="new_collection (class method)">.<strong>new_collection</strong>(name)  &#x21d2; Collection </a>
+      <a href="#new_collection-class_method" title="new_collection (class method)">.<strong>new_collection</strong>(ctype)  &#x21d2; Collection </a>
     
 
     
@@ -231,7 +231,7 @@ promote the item using the ruby method becomes.</p>
   
 
   
-    <span class="summary_desc"><div class='inline'><p>Get a list of the of the form [ r, column: c, collection: col, ... ] containing the specificed sample.</p>
+    <span class="summary_desc"><div class='inline'><p>Get a list of the of the form <code>{row: r, column: c, collection: col}, ...</code>  containing the specificed sample.</p>
 </div></span>
   
 </li>
@@ -492,6 +492,29 @@ promote the item using the ruby method becomes.</p>
 
   
     <span class="summary_desc"><div class='inline'><p>Return the matrix of data associations associated with the given key.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#data_matrix_values-instance_method" title="#data_matrix_values (instance method)">#<strong>data_matrix_values</strong>(key)  &#x21d2; Array </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Return the matrix of data association values associated with the given key.</p>
 </div></span>
   
 </li>
@@ -936,6 +959,28 @@ promote the item using the ruby method becomes.</p>
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#part_association_list-instance_method" title="#part_association_list (instance method)">#<strong>part_association_list</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#part_matrix-instance_method" title="#part_matrix (instance method)">#<strong>part_matrix</strong>  &#x21d2; Array </a>
     
 
@@ -1218,7 +1263,7 @@ promote the item using the ruby method becomes.</p>
   
   
   <h3 class="inherited">Methods inherited from <span class='object_link'><a href="Item.html" title="Item (class)">Item</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="Item.html#all_attributes-instance_method" title="Item#all_attributes (method)">#all_attributes</a></span>, <span class='object_link'><a href="Item.html#annotate-instance_method" title="Item#annotate (method)">#annotate</a></span>, <span class='object_link'><a href="Item.html#collection%3F-instance_method" title="Item#collection? (method)">#collection?</a></span>, <span class='object_link'><a href="Item.html#datum-instance_method" title="Item#datum (method)">#datum</a></span>, <span class='object_link'><a href="Item.html#datum=-instance_method" title="Item#datum= (method)">#datum=</a></span>, <span class='object_link'><a href="Item.html#deleted%3F-instance_method" title="Item#deleted? (method)">#deleted?</a></span>, <span class='object_link'><a href="Item.html#export-instance_method" title="Item#export (method)">#export</a></span>, <span class='object_link'><a href="Item.html#features-instance_method" title="Item#features (method)">#features</a></span>, <span class='object_link'><a href="Item.html#get_data-instance_method" title="Item#get_data (method)">#get_data</a></span>, <span class='object_link'><a href="Item.html#inuse_less_than_quantity-instance_method" title="Item#inuse_less_than_quantity (method)">#inuse_less_than_quantity</a></span>, <span class='object_link'><a href="Item.html#items_for-class_method" title="Item.items_for (method)">items_for</a></span>, <span class='object_link'><a href="Item.html#location-instance_method" title="Item#location (method)">#location</a></span>, <span class='object_link'><a href="Item.html#location=-instance_method" title="Item#location= (method)">#location=</a></span>, <span class='object_link'><a href="Item.html#make-class_method" title="Item.make (method)">make</a></span>, <span class='object_link'><a href="Item.html#mark_as_deleted-instance_method" title="Item#mark_as_deleted (method)">#mark_as_deleted</a></span>, <span class='object_link'><a href="Item.html#move-instance_method" title="Item#move (method)">#move</a></span>, <span class='object_link'><a href="Item.html#move_to-instance_method" title="Item#move_to (method)">#move_to</a></span>, <span class='object_link'><a href="Item.html#new_object-class_method" title="Item.new_object (method)">new_object</a></span>, <span class='object_link'><a href="Item.html#new_sample-class_method" title="Item.new_sample (method)">new_sample</a></span>, <span class='object_link'><a href="Item.html#non_wizard_location%3F-instance_method" title="Item#non_wizard_location? (method)">#non_wizard_location?</a></span>, <span class='object_link'><a href="Item.html#num_posts-instance_method" title="Item#num_posts (method)">#num_posts</a></span>, <span class='object_link'><a href="Item.html#object_type-instance_method" title="Item#object_type (method)">#object_type</a></span>, <span class='object_link'><a href="Item.html#primitive_location-instance_method" title="Item#primitive_location (method)">#primitive_location</a></span>, <span class='object_link'><a href="Item.html#put_at-instance_method" title="Item#put_at (method)">#put_at</a></span>, <span class='object_link'><a href="Item.html#quantity_nonneg-instance_method" title="Item#quantity_nonneg (method)">#quantity_nonneg</a></span>, <span class='object_link'><a href="Item.html#sample-instance_method" title="Item#sample (method)">#sample</a></span>, <span class='object_link'><a href="Item.html#set_data-instance_method" title="Item#set_data (method)">#set_data</a></span>, <span class='object_link'><a href="Item.html#set_primitive_location-instance_method" title="Item#set_primitive_location (method)">#set_primitive_location</a></span>, <span class='object_link'><a href="Item.html#store-instance_method" title="Item#store (method)">#store</a></span>, <span class='object_link'><a href="Item.html#to_s-instance_method" title="Item#to_s (method)">#to_s</a></span>, <span class='object_link'><a href="Item.html#upgrade-instance_method" title="Item#upgrade (method)">#upgrade</a></span>, <span class='object_link'><a href="Item.html#week-instance_method" title="Item#week (method)">#week</a></span></p>
+  <p class="inherited"><span class='object_link'><a href="Item.html#all_attributes-instance_method" title="Item#all_attributes (method)">#all_attributes</a></span>, <span class='object_link'><a href="Item.html#annotate-instance_method" title="Item#annotate (method)">#annotate</a></span>, <span class='object_link'><a href="Item.html#collection%3F-instance_method" title="Item#collection? (method)">#collection?</a></span>, <span class='object_link'><a href="Item.html#containing_collection-instance_method" title="Item#containing_collection (method)">#containing_collection</a></span>, <span class='object_link'><a href="Item.html#datum-instance_method" title="Item#datum (method)">#datum</a></span>, <span class='object_link'><a href="Item.html#datum=-instance_method" title="Item#datum= (method)">#datum=</a></span>, <span class='object_link'><a href="Item.html#deleted%3F-instance_method" title="Item#deleted? (method)">#deleted?</a></span>, <span class='object_link'><a href="Item.html#export-instance_method" title="Item#export (method)">#export</a></span>, <span class='object_link'><a href="Item.html#features-instance_method" title="Item#features (method)">#features</a></span>, <span class='object_link'><a href="Item.html#get_data-instance_method" title="Item#get_data (method)">#get_data</a></span>, <span class='object_link'><a href="Item.html#inuse_less_than_quantity-instance_method" title="Item#inuse_less_than_quantity (method)">#inuse_less_than_quantity</a></span>, <span class='object_link'><a href="Item.html#is_part-instance_method" title="Item#is_part (method)">#is_part</a></span>, <span class='object_link'><a href="Item.html#items_for-class_method" title="Item.items_for (method)">items_for</a></span>, <span class='object_link'><a href="Item.html#location-instance_method" title="Item#location (method)">#location</a></span>, <span class='object_link'><a href="Item.html#location=-instance_method" title="Item#location= (method)">#location=</a></span>, <span class='object_link'><a href="Item.html#make-class_method" title="Item.make (method)">make</a></span>, <span class='object_link'><a href="Item.html#mark_as_deleted-instance_method" title="Item#mark_as_deleted (method)">#mark_as_deleted</a></span>, <span class='object_link'><a href="Item.html#move-instance_method" title="Item#move (method)">#move</a></span>, <span class='object_link'><a href="Item.html#move_to-instance_method" title="Item#move_to (method)">#move_to</a></span>, <span class='object_link'><a href="Item.html#new_object-class_method" title="Item.new_object (method)">new_object</a></span>, <span class='object_link'><a href="Item.html#new_sample-class_method" title="Item.new_sample (method)">new_sample</a></span>, <span class='object_link'><a href="Item.html#non_wizard_location%3F-instance_method" title="Item#non_wizard_location? (method)">#non_wizard_location?</a></span>, <span class='object_link'><a href="Item.html#num_posts-instance_method" title="Item#num_posts (method)">#num_posts</a></span>, <span class='object_link'><a href="Item.html#object_type-instance_method" title="Item#object_type (method)">#object_type</a></span>, <span class='object_link'><a href="Item.html#primitive_location-instance_method" title="Item#primitive_location (method)">#primitive_location</a></span>, <span class='object_link'><a href="Item.html#put_at-instance_method" title="Item#put_at (method)">#put_at</a></span>, <span class='object_link'><a href="Item.html#quantity_nonneg-instance_method" title="Item#quantity_nonneg (method)">#quantity_nonneg</a></span>, <span class='object_link'><a href="Item.html#sample-instance_method" title="Item#sample (method)">#sample</a></span>, <span class='object_link'><a href="Item.html#set_data-instance_method" title="Item#set_data (method)">#set_data</a></span>, <span class='object_link'><a href="Item.html#set_primitive_location-instance_method" title="Item#set_primitive_location (method)">#set_primitive_location</a></span>, <span class='object_link'><a href="Item.html#store-instance_method" title="Item#store (method)">#store</a></span>, <span class='object_link'><a href="Item.html#to_s-instance_method" title="Item#to_s (method)">#to_s</a></span>, <span class='object_link'><a href="Item.html#upgrade-instance_method" title="Item#upgrade (method)">#upgrade</a></span>, <span class='object_link'><a href="Item.html#week-instance_method" title="Item#week (method)">#week</a></span></p>
 
   
   
@@ -1274,39 +1319,15 @@ type.</p>
         <span class='name'>ot</span>
       
       
-        <span class='type'>(<tt>Hash</tt>)</span>
+        <span class='type'>(<tt><span class='object_link'><a href="ObjectType.html" title="ObjectType (class)">ObjectType</a></span></tt>)</span>
       
       
         <em class="default">(defaults to: <tt>nil</tt>)</em>
       
       
-        &mdash;
-        <div class='inline'><p>a customizable set of options</p>
-</div>
-      
     </li>
   
 </ul>
-
-  
-    
-    
-    
-    
-    <p class="tag_title">Options Hash (<tt>ot</tt>):</p>
-    <ul class="option">
-      
-        <li>
-          <span class="name"></span>
-          <span class="type">(<tt><span class='object_link'><a href="ObjectType.html" title="ObjectType (class)">ObjectType</a></span></tt>)</span>
-          <span class="default">
-            
-          </span>
-          
-        </li>
-      
-    </ul>
-  
 
 <p class="tag_title">Returns:</p>
 <ul class="return">
@@ -1328,14 +1349,14 @@ type.</p>
       <pre class="lines">
 
 
-306
-307
-308
-309
-310</pre>
+328
+329
+330
+331
+332</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 306</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 328</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_containing'>containing</span><span class='lparen'>(</span><span class='id identifier rubyid_s'>s</span><span class='comma'>,</span> <span class='id identifier rubyid_ot'>ot</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='lbracket'>[</span><span class='rbracket'>]</span> <span class='kw'>unless</span> <span class='id identifier rubyid_s'>s</span>
@@ -1350,7 +1371,7 @@ type.</p>
       <div class="method_details ">
   <h3 class="signature " id="new_collection-class_method">
   
-    .<strong>new_collection</strong>(name)  &#x21d2; <tt><span class='object_link'><a href="" title="Collection (class)">Collection</a></span></tt> 
+    .<strong>new_collection</strong>(ctype)  &#x21d2; <tt><span class='object_link'><a href="" title="Collection (class)">Collection</a></span></tt> 
   
 
   
@@ -1369,7 +1390,7 @@ type.</p>
   
     <li>
       
-        <span class='name'>name</span>
+        <span class='name'>ctype</span>
       
       
         <span class='type'>(<tt>String</tt>)</span>
@@ -1408,28 +1429,6 @@ type.</p>
       <pre class="lines">
 
 
-371
-372
-373
-374
-375
-376
-377
-378
-379
-380
-381
-382
-383
-384
-385
-386
-387
-388
-389
-390
-391
-392
 393
 394
 395
@@ -1440,14 +1439,48 @@ type.</p>
 400
 401
 402
-403</pre>
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 371</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 393</span>
 
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_new_collection'>new_collection</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_new_collection'>new_collection</span><span class='lparen'>(</span><span class='id identifier rubyid_ctype'>ctype</span><span class='rparen'>)</span>
 
-  <span class='id identifier rubyid_o'>o</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="ObjectType.html" title="ObjectType (class)">ObjectType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_name'>find_by_name</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_ctype'>ctype</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span>
+    <span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='id identifier rubyid_ctype'>ctype</span>
+    <span class='id identifier rubyid_o'>o</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="ObjectType.html" title="ObjectType (class)">ObjectType</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_by_name'>find_by_name</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_o'>o</span> <span class='op'>=</span> <span class='id identifier rubyid_ctype'>ctype</span>
+  <span class='kw'>end</span>
+  
   <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Could not find object type named &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;.</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_o'>o</span>
 
   <span class='id identifier rubyid_i'>i</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="" title="Collection (class)">Collection</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
@@ -1494,7 +1527,7 @@ type.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p>Get a list of the of the form [ r, column: c, collection: col, ... ] containing
+    <p>Get a list of the of the form <code>{row: r, column: c, collection: col}, ...</code>  containing
 the specificed sample.</p>
 
 
@@ -1520,39 +1553,15 @@ the specificed sample.</p>
         <span class='name'>ot</span>
       
       
-        <span class='type'>(<tt>Hash</tt>)</span>
+        <span class='type'>(<tt><span class='object_link'><a href="ObjectType.html" title="ObjectType (class)">ObjectType</a></span></tt>)</span>
       
       
         <em class="default">(defaults to: <tt>nil</tt>)</em>
       
       
-        &mdash;
-        <div class='inline'><p>a customizable set of options</p>
-</div>
-      
     </li>
   
 </ul>
-
-  
-    
-    
-    
-    
-    <p class="tag_title">Options Hash (<tt>ot</tt>):</p>
-    <ul class="option">
-      
-        <li>
-          <span class="name"></span>
-          <span class="type">(<tt><span class='object_link'><a href="ObjectType.html" title="ObjectType (class)">ObjectType</a></span></tt>)</span>
-          <span class="default">
-            
-          </span>
-          
-        </li>
-      
-    </ul>
-  
 
 <p class="tag_title">Returns:</p>
 <ul class="return">
@@ -1574,16 +1583,16 @@ the specificed sample.</p>
       <pre class="lines">
 
 
-335
-336
-337
-338
-339
-340
-341</pre>
+357
+358
+359
+360
+361
+362
+363</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 335</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 357</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parts'>parts</span><span class='lparen'>(</span><span class='id identifier rubyid_s'>s</span><span class='comma'>,</span> <span class='id identifier rubyid_ot'>ot</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_plist'>plist</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
@@ -1678,22 +1687,22 @@ created than are needed to hold all the samples</p>
       <pre class="lines">
 
 
-353
-354
-355
-356
-357
-358
-359
-360
-361
-362
-363
-364
-365</pre>
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 353</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 375</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_spread'>spread</span><span class='lparen'>(</span><span class='id identifier rubyid_samples'>samples</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>reverse:</span> <span class='kw'>false</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
@@ -1740,29 +1749,29 @@ created than are needed to hold all the samples</p>
       <pre class="lines">
 
 
-497
-498
-499
-500
-501
-502
-503
-504
-505
-506
-507
-508
-509
-510
-511
-512
-513
-514
-515
-516</pre>
+525
+526
+527
+528
+529
+530
+531
+532
+533
+534
+535
+536
+537
+538
+539
+540
+541
+542
+543
+544</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 497</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 525</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_to_sample'>to_sample</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Integer</span> <span class='op'>||</span> <span class='lparen'>(</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Fixnum</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_x'>x</span> <span class='op'>&gt;=</span> <span class='int'>0</span> <span class='rparen'>)</span> <span class='comment'># Not sure where &quot;Integer&quot; came from here ---ek
@@ -1814,30 +1823,30 @@ created than are needed to hold all the samples</p>
       <pre class="lines">
 
 
-468
-469
-470
-471
-472
-473
-474
-475
-476
-477
-478
-479
-480
-481
-482
-483
-484
-485
-486
-487
-488</pre>
+496
+497
+498
+499
+500
+501
+502
+503
+504
+505
+506
+507
+508
+509
+510
+511
+512
+513
+514
+515
+516</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 468</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 496</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_to_sample_id'>to_sample_id</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_r'>r</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="#EMPTY-constant" title="Collection::EMPTY (constant)">EMPTY</a></span></span>
@@ -1966,22 +1975,22 @@ created than are needed to hold all the samples</p>
       <pre class="lines">
 
 
-536
-537
-538
-539
-540
-541
-542
-543
-544
-545
-546
-547
-548</pre>
+564
+565
+566
+567
+568
+569
+570
+571
+572
+573
+574
+575
+576</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 536</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 564</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_add_one'>add_one</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>reverse:</span> <span class='kw'>false</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
@@ -2062,24 +2071,24 @@ created than are needed to hold all the samples</p>
       <pre class="lines">
 
 
-627
-628
-629
-630
-631
-632
-633
-634
-635
-636
-637
-638
-639
-640
-641</pre>
+655
+656
+657
+658
+659
+660
+661
+662
+663
+664
+665
+666
+667
+668
+669</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 627</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 655</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_add_samples'>add_samples</span><span class='lparen'>(</span><span class='id identifier rubyid_samples'>samples</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>reverse:</span> <span class='kw'>false</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
@@ -2161,12 +2170,12 @@ whatever matrix was associated with the collection is lost.</p>
       <pre class="lines">
 
 
-410
-411
-412</pre>
+438
+439
+440</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 410</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 438</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_apportion'>apportion</span><span class='lparen'>(</span><span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_c'>c</span><span class='rparen'>)</span>
   <span class='comment'>### self.matrix = Array.new(r, Array.new(c, EMPTY))
@@ -2248,34 +2257,34 @@ whatever matrix was associated with the collection is lost.</p>
       <pre class="lines">
 
 
-240
-241
-242
-243
-244
-245
-246
-247
-248
-249
-250
-251
-252
-253
-254
-255
-256
-257
-258
-259
-260
-261
-262</pre>
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 240</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 262</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_assign_sample_to_pairs'>assign_sample_to_pairs</span> <span class='id identifier rubyid_sample'>sample</span><span class='comma'>,</span> <span class='id identifier rubyid_pairs'>pairs</span> 
+<span class='kw'>def</span> <span class='id identifier rubyid_assign_sample_to_pairs'>assign_sample_to_pairs</span><span class='lparen'>(</span><span class='id identifier rubyid_sample'>sample</span><span class='comma'>,</span> <span class='id identifier rubyid_pairs'>pairs</span><span class='rparen'>)</span> 
 
   <span class='id identifier rubyid_pm'>pm</span> <span class='op'>=</span> <span class='id identifier rubyid_part_matrix'>part_matrix</span>
 
@@ -2344,34 +2353,6 @@ a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix
       <pre class="lines">
 
 
-676
-677
-678
-679
-680
-681
-682
-683
-684
-685
-686
-687
-688
-689
-690
-691
-692
-693
-694
-695
-696
-697
-698
-699
-700
-701
-702
-703
 704
 705
 706
@@ -2383,10 +2364,42 @@ a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix
 712
 713
 714
-715</pre>
+715
+716
+717
+718
+719
+720
+721
+722
+723
+724
+725
+726
+727
+728
+729
+730
+731
+732
+733
+734
+735
+736
+737
+738
+739
+740
+741
+742
+743
+744
+745
+746
+747</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 676</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 704</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_associate_matrix'>associate_matrix</span><span class='lparen'>(</span><span class='id identifier rubyid_sample_matrix'>sample_matrix</span><span class='rparen'>)</span>
 
@@ -2401,8 +2414,8 @@ a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix
 
     <span class='comment'># create parts
 </span>    <span class='id identifier rubyid_parts'>parts</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
-    <span class='id identifier rubyid_collection_id_string'>collection_id_string</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>__part_for_collection_</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>__</span><span class='tstring_end'>&quot;</span></span>
-    <span class='lparen'>(</span><span class='int'>0</span><span class='op'>...</span><span class='id identifier rubyid_dr'>dr</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_r'>r</span><span class='op'>|</span>
+    <span class='id identifier rubyid_collection_id_string'>collection_id_string</span> <span class='op'>=</span> <span class='const'>SecureRandom</span><span class='period'>.</span><span class='id identifier rubyid_hex'>hex</span> <span class='comment'># random string used to identify saved parts
+</span>    <span class='lparen'>(</span><span class='int'>0</span><span class='op'>...</span><span class='id identifier rubyid_dr'>dr</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_r'>r</span><span class='op'>|</span>
       <span class='lparen'>(</span><span class='int'>0</span><span class='op'>...</span><span class='id identifier rubyid_dc'>dc</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span>
         <span class='kw'>if</span> <span class='id identifier rubyid_sample_matrix_aux'>sample_matrix_aux</span><span class='lbracket'>[</span><span class='id identifier rubyid_r'>r</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_c'>c</span><span class='rbracket'>]</span> <span class='op'>!=</span> <span class='kw'>nil</span>
           <span class='id identifier rubyid_parts'>parts</span> <span class='op'>&lt;&lt;</span> <span class='const'><span class='object_link'><a href="Item.html" title="Item (class)">Item</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='label'>quantity:</span> <span class='int'>1</span><span class='comma'>,</span> <span class='label'>inuse:</span> <span class='int'>0</span><span class='comma'>,</span> <span class='label'>sample_id:</span> <span class='id identifier rubyid_sample_matrix_aux'>sample_matrix_aux</span><span class='lbracket'>[</span><span class='id identifier rubyid_r'>r</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_c'>c</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>object_type_id:</span> <span class='id identifier rubyid_part_type'>part_type</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='label'>data:</span> <span class='id identifier rubyid_collection_id_string'>collection_id_string</span><span class='rparen'>)</span>
@@ -2411,7 +2424,11 @@ a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix
     <span class='kw'>end</span>
     <span class='const'><span class='object_link'><a href="Item.html" title="Item (class)">Item</a></span></span><span class='period'>.</span><span class='id identifier rubyid_import'>import</span> <span class='id identifier rubyid_parts'>parts</span>
     <span class='id identifier rubyid_parts'>parts</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Item.html" title="Item (class)">Item</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>data:</span> <span class='id identifier rubyid_collection_id_string'>collection_id_string</span><span class='rparen'>)</span> <span class='comment'># get the parts just made so we have the ids
-</span>    <span class='id identifier rubyid_index'>index</span> <span class='op'>=</span> <span class='int'>0</span>
+</span>    <span class='id identifier rubyid_parts'>parts</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_p'>p</span><span class='op'>|</span>                              <span class='comment'># erase temporary id
+</span>      <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='kw'>nil</span>
+      <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+    <span class='kw'>end</span>      
+    <span class='id identifier rubyid_index'>index</span> <span class='op'>=</span> <span class='int'>0</span>
 
     <span class='comment'># create part associations
 </span>    <span class='id identifier rubyid_pas'>pas</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
@@ -2457,13 +2474,13 @@ a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix
       <pre class="lines">
 
 
-579
-580
-581
-582</pre>
+607
+608
+609
+610</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 579</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 607</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_capacity'>capacity</span>
   <span class='id identifier rubyid_d'>d</span> <span class='op'>=</span> <span class='id identifier rubyid_dimensions'>dimensions</span>
@@ -2498,15 +2515,15 @@ a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix
       <pre class="lines">
 
 
-717
-718
-719</pre>
+749
+750
+751</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 717</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 749</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_clear'>clear</span>
-  <span class='id identifier rubyid_part_associations'>part_associations</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:destroy</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_part_association_list'>part_association_list</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:destroy</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2570,30 +2587,32 @@ a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix
       <pre class="lines">
 
 
-183
-184
-185
-186
-187
-188
-189
-190
-191
-192
-193
-194
-195
-196
 197
-198</pre>
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 183</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 197</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_data_matrix'>data_matrix</span> <span class='id identifier rubyid_key'>key</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_data_matrix'>data_matrix</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
 
-  <span class='id identifier rubyid_pas'>pas</span> <span class='op'>=</span> <span class='id identifier rubyid_part_associations'>part_associations</span>
-  <span class='id identifier rubyid_part_ids'>part_ids</span> <span class='op'>=</span> <span class='id identifier rubyid_pas'>pas</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_p'>p</span><span class='op'>|</span> <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_part_id'>part_id</span> <span class='rbrace'>}</span>
+  <span class='id identifier rubyid_pas'>pas</span> <span class='op'>=</span> <span class='id identifier rubyid_part_association_list'>part_association_list</span>
+  <span class='id identifier rubyid_part_ids'>part_ids</span> <span class='op'>=</span> <span class='id identifier rubyid_pas'>pas</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_p'>p</span><span class='op'>|</span> <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_part_id'>part_id</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_uniq'>uniq</span>
+
   <span class='id identifier rubyid_das'>das</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="DataAssociation.html" title="DataAssociation (class)">DataAssociation</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>parent_class:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Item</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>parent_id:</span> <span class='id identifier rubyid_part_ids'>part_ids</span><span class='comma'>,</span> <span class='label'>key:</span> <span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
 
   <span class='id identifier rubyid_r'>r</span><span class='comma'>,</span><span class='id identifier rubyid_c'>c</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_dimensions'>dimensions</span>
@@ -2605,6 +2624,78 @@ a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix
 
   <span class='id identifier rubyid_m'>m</span>
 
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="data_matrix_values-instance_method">
+  
+    #<strong>data_matrix_values</strong>(key)  &#x21d2; <tt>Array</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Return the matrix of data association values associated with the given key</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>key</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>an array of array of <span class='object_link'><a href="DataAssociation.html" title="DataAssociation (class)">DataAssociation</a></span> values</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+218
+219
+220</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 218</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_data_matrix_values'>data_matrix_values</span> <span class='id identifier rubyid_key'>key</span>
+  <span class='lparen'>(</span><span class='id identifier rubyid_data_matrix'>data_matrix</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_row'>row</span><span class='op'>|</span> <span class='id identifier rubyid_row'>row</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_da'>da</span><span class='op'>|</span> <span class='id identifier rubyid_da'>da</span> <span class='op'>?</span> <span class='id identifier rubyid_da'>da</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span> <span class='op'>:</span> <span class='kw'>nil</span> <span class='rbrace'>}</span> <span class='rbrace'>}</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2672,37 +2763,37 @@ a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix
       <pre class="lines">
 
 
-267
-268
-269
-270
-271
-272
-273
-274
-275
-276
-277
-278
-279
-280
-281
-282
-283
-284
-285
-286
-287
-288
 289
 290
 291
-292</pre>
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 267</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 289</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_delete_selection'>delete_selection</span> <span class='id identifier rubyid_pairs'>pairs</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_delete_selection'>delete_selection</span><span class='lparen'>(</span><span class='id identifier rubyid_pairs'>pairs</span><span class='rparen'>)</span>
 
   <span class='id identifier rubyid_pairs'>pairs</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_r'>r</span><span class='comma'>,</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span>
 
@@ -2771,16 +2862,16 @@ a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix
       <pre class="lines">
 
 
-780
-781
-782
-783
-784
-785
-786</pre>
+812
+813
+814
+815
+816
+817
+818</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 780</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 812</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_dimensions'>dimensions</span>
   <span class='comment'># Should look up object type dims instead
@@ -2851,16 +2942,16 @@ a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix
       <pre class="lines">
 
 
-17
-18
-19
-20
-21</pre>
+22
+23
+24
+25
+26</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 17</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 22</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_drop_data_matrix'>drop_data_matrix</span> <span class='id identifier rubyid_key'>key</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_drop_data_matrix'>drop_data_matrix</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_ids'>ids</span> <span class='op'>=</span> <span class='id identifier rubyid_data_matrix'>data_matrix</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_da'>da</span><span class='op'>|</span> <span class='id identifier rubyid_da'>da</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='rbrace'>}</span>
   <span class='const'><span class='object_link'><a href="DataAssociation.html" title="DataAssociation (class)">DataAssociation</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>id:</span> <span class='id identifier rubyid_ids'>ids</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_destroy_all'>destroy_all</span>
   <span class='kw'>self</span>
@@ -2909,24 +3000,24 @@ a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix
       <pre class="lines">
 
 
-135
-136
-137
-138
-139
-140
-141
-142
-143
-144
-145
-146
-147</pre>
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 135</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 149</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_each_row_col'>each_row_col</span> <span class='id identifier rubyid_matrix'>matrix</span><span class='comma'>,</span> <span class='label'>offset:</span> <span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span><span class='int'>0</span><span class='rbracket'>]</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_each_row_col'>each_row_col</span><span class='lparen'>(</span><span class='id identifier rubyid_matrix'>matrix</span><span class='comma'>,</span> <span class='label'>offset:</span> <span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_dr'>dr</span><span class='comma'>,</span> <span class='id identifier rubyid_dc'>dc</span> <span class='op'>=</span> <span class='id identifier rubyid_dimensions'>dimensions</span>
   <span class='lparen'>(</span><span class='int'>0</span><span class='op'>...</span><span class='id identifier rubyid_matrix'>matrix</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_r'>r</span><span class='op'>|</span>
     <span class='lparen'>(</span><span class='int'>0</span><span class='op'>...</span><span class='id identifier rubyid_matrix'>matrix</span><span class='lbracket'>[</span><span class='id identifier rubyid_r'>r</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span>  
@@ -2982,10 +3073,10 @@ a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix
       <pre class="lines">
 
 
-594</pre>
+622</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 594</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 622</span>
 
 <span class='id identifier rubyid_delegate'>delegate</span> <span class='symbol'>:empty?</span><span class='comma'>,</span> <span class='label'>to:</span> <span class='symbol'>:get_non_empty</span></pre>
     </td>
@@ -3050,15 +3141,15 @@ a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix
       <pre class="lines">
 
 
-438
-439
-440
-441
-442
-443</pre>
+466
+467
+468
+469
+470
+471</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 438</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 466</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_val'>val</span><span class='rparen'>)</span>
   <span class='const'>PartAssociation</span>
@@ -3109,12 +3200,12 @@ a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix
       <pre class="lines">
 
 
-587
-588
-589</pre>
+615
+616
+617</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 587</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 615</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_full?'>full?</span>
   <span class='id identifier rubyid_get_empty'>get_empty</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
@@ -3166,12 +3257,12 @@ a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix
       <pre class="lines">
 
 
-448
-449
-450</pre>
+476
+477
+478</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 448</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 476</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_empty'>get_empty</span>
   <span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='id identifier rubyid_x'>x</span> <span class='op'>==</span> <span class='const'><span class='object_link'><a href="#EMPTY-constant" title="Collection::EMPTY (constant)">EMPTY</a></span></span> <span class='rbrace'>}</span>
@@ -3205,12 +3296,12 @@ a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix
       <pre class="lines">
 
 
-726
-727
-728</pre>
+758
+759
+760</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 726</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 758</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_matrix'>get_matrix</span>
   <span class='id identifier rubyid_matrix'>matrix</span>
@@ -3262,12 +3353,12 @@ a matrix of sample ids. Only sample ids are saved to the matrix. Whatever matrix
       <pre class="lines">
 
 
-455
-456
-457</pre>
+483
+484
+485</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 455</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 483</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_non_empty'>get_non_empty</span>
   <span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='id identifier rubyid_x'>x</span> <span class='op'>!=</span> <span class='const'><span class='object_link'><a href="#EMPTY-constant" title="Collection::EMPTY (constant)">EMPTY</a></span></span> <span class='rbrace'>}</span>
@@ -3363,21 +3454,21 @@ param c [Fixnum] the column</p>
       <pre class="lines">
 
 
-118
-119
-120
-121
-122
-123
-124
-125
-126
-127</pre>
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 118</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 132</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_get_part_data'>get_part_data</span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_c'>c</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_get_part_data'>get_part_data</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_c'>c</span><span class='rparen'>)</span>
 
   <span class='id identifier rubyid_pa'>pa</span> <span class='op'>=</span> <span class='id identifier rubyid_part_association'>part_association</span> <span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_c'>c</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_pa'>pa</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_pa'>pa</span><span class='period'>.</span><span class='id identifier rubyid_part'>part</span>
@@ -3445,13 +3536,13 @@ param c [Fixnum] the column</p>
       <pre class="lines">
 
 
-418
-419
-420
-421</pre>
+446
+447
+448
+449</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 418</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 446</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_sel'>sel</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span> <span class='id identifier rubyid_x'>x</span>
@@ -3500,22 +3591,22 @@ param c [Fixnum] the column</p>
       <pre class="lines">
 
 
-733
-734
-735
-736
-737
-738
-739
-740
-741
-742
-743
-744
-745</pre>
+765
+766
+767
+768
+769
+770
+771
+772
+773
+774
+775
+776
+777</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 733</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 765</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_matrix'>matrix</span>
   <span class='kw'>if</span> <span class='ivar'>@matrix_cache</span>
@@ -3524,7 +3615,7 @@ param c [Fixnum] the column</p>
     <span class='id identifier rubyid_r'>r</span><span class='comma'>,</span><span class='id identifier rubyid_c'>c</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_dimensions'>dimensions</span>
     <span class='id identifier rubyid_m'>m</span> <span class='op'>=</span> <span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_r'>r</span><span class='rparen'>)</span><span class='lbrace'>{</span><span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_c'>c</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="#EMPTY-constant" title="Collection::EMPTY (constant)">EMPTY</a></span></span><span class='rparen'>)</span><span class='rbrace'>}</span>
     <span class='const'>PartAssociation</span><span class='period'>.</span><span class='id identifier rubyid_includes'>includes</span><span class='lparen'>(</span><span class='symbol'>:part</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>collection_id:</span> <span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_pa'>pa</span><span class='op'>|</span>
-      <span class='id identifier rubyid_m'>m</span><span class='lbracket'>[</span><span class='id identifier rubyid_pa'>pa</span><span class='period'>.</span><span class='id identifier rubyid_row'>row</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_pa'>pa</span><span class='period'>.</span><span class='id identifier rubyid_column'>column</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_pa'>pa</span><span class='period'>.</span><span class='id identifier rubyid_part'>part</span><span class='period'>.</span><span class='id identifier rubyid_sample_id'>sample_id</span> <span class='kw'>if</span> <span class='id identifier rubyid_pa'>pa</span><span class='period'>.</span><span class='id identifier rubyid_row'>row</span> <span class='op'>&lt;</span> <span class='id identifier rubyid_r'>r</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_pa'>pa</span><span class='period'>.</span><span class='id identifier rubyid_column'>column</span> <span class='op'>&lt;</span> <span class='id identifier rubyid_c'>c</span>
+      <span class='id identifier rubyid_m'>m</span><span class='lbracket'>[</span><span class='id identifier rubyid_pa'>pa</span><span class='period'>.</span><span class='id identifier rubyid_row'>row</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_pa'>pa</span><span class='period'>.</span><span class='id identifier rubyid_column'>column</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_pa'>pa</span><span class='period'>.</span><span class='id identifier rubyid_part'>part</span><span class='period'>.</span><span class='id identifier rubyid_sample_id'>sample_id</span> <span class='kw'>if</span> <span class='id identifier rubyid_pa'>pa</span><span class='period'>.</span><span class='id identifier rubyid_row'>row</span> <span class='op'>&lt;</span> <span class='id identifier rubyid_r'>r</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_pa'>pa</span><span class='period'>.</span><span class='id identifier rubyid_column'>column</span> <span class='op'>&lt;</span> <span class='id identifier rubyid_c'>c</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_pa'>pa</span><span class='period'>.</span><span class='id identifier rubyid_part'>part</span><span class='period'>.</span><span class='id identifier rubyid_sample_id'>sample_id</span>
     <span class='kw'>end</span>
     <span class='ivar'>@matrix_cache</span> <span class='op'>=</span> <span class='id identifier rubyid_m'>m</span>
     <span class='id identifier rubyid_m'>m</span>
@@ -3560,12 +3651,12 @@ param c [Fixnum] the column</p>
       <pre class="lines">
 
 
-748
-749
-750</pre>
+780
+781
+782</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 748</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 780</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_matrix='>matrix=</span><span class='lparen'>(</span><span class='id identifier rubyid_m'>m</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_associate_matrix'>associate_matrix</span> <span class='id identifier rubyid_m'>m</span>
@@ -3632,15 +3723,15 @@ param c [Fixnum] the column</p>
       <pre class="lines">
 
 
-77
-78
-79
-80</pre>
+91
+92
+93
+94</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 77</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 91</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_new_data_matrix'>new_data_matrix</span> <span class='id identifier rubyid_key'>key</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_new_data_matrix'>new_data_matrix</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_r'>r</span><span class='comma'>,</span><span class='id identifier rubyid_c'>c</span> <span class='op'>=</span> <span class='id identifier rubyid_dimensions'>dimensions</span>
   <span class='id identifier rubyid_set_data_matrix'>set_data_matrix</span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_r'>r</span><span class='rparen'>)</span><span class='lbrace'>{</span><span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_c'>c</span><span class='comma'>,</span><span class='float'>0.0</span><span class='rparen'>)</span><span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
@@ -3747,26 +3838,26 @@ With the option skip_non_empty: true, returns the next non empty indices. Return
       <pre class="lines">
 
 
-759
-760
-761
-762
-763
-764
-765
-766
-767
-768
-769
-770
-771
-772
-773
-774
-775</pre>
+791
+792
+793
+794
+795
+796
+797
+798
+799
+800
+801
+802
+803
+804
+805
+806
+807</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 759</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 791</span>
 
 <span class='kw'>def</span> <span class='kw'>next</span><span class='lparen'>(</span><span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_c'>c</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
 
@@ -3830,27 +3921,27 @@ those indices. Note that the string is adjusted for viewing by the user, so star
       <pre class="lines">
 
 
-793
-794
-795
-796
-797
-798
-799
-800
-801
-802
-803
-804
-805
-806
-807
-808
-809
-810</pre>
+825
+826
+827
+828
+829
+830
+831
+832
+833
+834
+835
+836
+837
+838
+839
+840
+841
+842</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 793</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 825</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_non_empty_string'>non_empty_string</span>
 
@@ -3913,12 +4004,12 @@ those indices. Note that the string is adjusted for viewing by the user, so star
       <pre class="lines">
 
 
-462
-463
-464</pre>
+490
+491
+492</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 462</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 490</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_num_samples'>num_samples</span>
   <span class='id identifier rubyid_get_non_empty'>get_non_empty</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span>
@@ -4000,25 +4091,66 @@ those indices. Note that the string is adjusted for viewing by the user, so star
       <pre class="lines">
 
 
-204
-205
-206
-207
-208
-209
-210
-211</pre>
+226
+227
+228
+229
+230
+231
+232
+233</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 204</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 226</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_part'>part</span> <span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_c'>c</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_part'>part</span><span class='lparen'>(</span><span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_c'>c</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_pas'>pas</span> <span class='op'>=</span> <span class='const'>PartAssociation</span><span class='period'>.</span><span class='id identifier rubyid_includes'>includes</span><span class='lparen'>(</span><span class='symbol'>:part</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>collection_id:</span> <span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='label'>row:</span> <span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='label'>column:</span> <span class='id identifier rubyid_c'>c</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_pas'>pas</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>==</span> <span class='int'>1</span>
     <span class='id identifier rubyid_pas'>pas</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_part'>part</span>
   <span class='kw'>else</span>
     <span class='kw'>nil</span>
   <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="part_association_list-instance_method">
+  
+    #<strong>part_association_list</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+14
+15
+16
+17</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 14</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_part_association_list'>part_association_list</span>
+  <span class='comment'># this works but rails generated part_associations seems not to
+</span>  <span class='const'>PartAssociation</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span> <span class='label'>collection_id:</span> <span class='id identifier rubyid_id'>id</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -4067,24 +4199,24 @@ those indices. Note that the string is adjusted for viewing by the user, so star
       <pre class="lines">
 
 
-215
-216
-217
-218
-219
-220
-221
-222
-223
-224
-225
-226
-227
-228
-229</pre>
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 215</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 237</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_part_matrix'>part_matrix</span>
 
@@ -4138,12 +4270,12 @@ those indices. Note that the string is adjusted for viewing by the user, so star
       <pre class="lines">
 
 
-320
-321
-322</pre>
+342
+343
+344</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 320</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 342</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_position'>position</span><span class='lparen'>(</span><span class='id identifier rubyid_s'>s</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_s'>s</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
@@ -4177,13 +4309,13 @@ those indices. Note that the string is adjusted for viewing by the user, so star
       <pre class="lines">
 
 
-324
-325
-326
-327</pre>
+346
+347
+348
+349</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 324</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 346</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_position_as_hash'>position_as_hash</span><span class='lparen'>(</span><span class='id identifier rubyid_s'>s</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_pos'>pos</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span> <span class='id identifier rubyid_to_sample_id'>to_sample_id</span><span class='lparen'>(</span><span class='id identifier rubyid_s'>s</span><span class='rparen'>)</span>
@@ -4225,12 +4357,12 @@ those indices. Note that the string is adjusted for viewing by the user, so star
       <pre class="lines">
 
 
-551
-552
-553</pre>
+579
+580
+581</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 551</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 579</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_remove_one'>remove_one</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_subtract_one'>subtract_one</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
@@ -4282,16 +4414,16 @@ those indices. Note that the string is adjusted for viewing by the user, so star
       <pre class="lines">
 
 
-426
-427
-428
-429
-430
-431
-432</pre>
+454
+455
+456
+457
+458
+459
+460</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 426</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 454</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_select'>select</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>need selection block</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -4379,30 +4511,30 @@ those indices. Note that the string is adjusted for viewing by the user, so star
       <pre class="lines">
 
 
-601
-602
-603
-604
-605
-606
-607
-608
-609
-610
-611
-612
-613
-614
-615
-616
-617
-618
-619
-620
-621</pre>
+629
+630
+631
+632
+633
+634
+635
+636
+637
+638
+639
+640
+641
+642
+643
+644
+645
+646
+647
+648
+649</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 601</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 629</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set'>set</span><span class='lparen'>(</span><span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_c'>c</span><span class='comma'>,</span> <span class='id identifier rubyid_x'>x</span><span class='rparen'>)</span>
   <span class='comment'># TODO: Check dimensions
@@ -4478,28 +4610,20 @@ those indices. Note that the string is adjusted for viewing by the user, so star
   
     <li>
       
-        <span class='name'>[Array]</span>
+        <span class='name'>offset</span>
       
       
-        <span class='type'>(<tt>Hash</tt>)</span>
+        <span class='type'>(<tt>Array</tt>)</span>
       
       
       
         &mdash;
-        <div class='inline'><p>a customizable set of options</p>
+        <div class='inline'><p>the offset used to compute which sub-matrix of parts to which the data should be assigned</p>
 </div>
       
     </li>
   
 </ul>
-
-  
-    
-    
-    
-    
-    
-    
 
 <p class="tag_title">Returns:</p>
 <ul class="return">
@@ -4525,11 +4649,6 @@ those indices. Note that the string is adjusted for viewing by the user, so star
       <pre class="lines">
 
 
-28
-29
-30
-31
-32
 33
 34
 35
@@ -4569,14 +4688,29 @@ those indices. Note that the string is adjusted for viewing by the user, so star
 69
 70
 71
-72</pre>
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 28</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 33</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_set_data_matrix'>set_data_matrix</span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_matrix'>matrix</span><span class='comma'>,</span> <span class='label'>offset:</span> <span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span><span class='int'>0</span><span class='rbracket'>]</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_set_data_matrix'>set_data_matrix</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_matrix'>matrix</span><span class='comma'>,</span> <span class='label'>offset:</span> <span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rparen'>)</span>
 
   <span class='id identifier rubyid_pm'>pm</span> <span class='op'>=</span> <span class='id identifier rubyid_part_matrix'>part_matrix</span>
+  <span class='id identifier rubyid_dm'>dm</span> <span class='op'>=</span> <span class='id identifier rubyid_data_matrix'>data_matrix</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_r'>r</span><span class='comma'>,</span><span class='id identifier rubyid_c'>c</span> <span class='op'>=</span> <span class='id identifier rubyid_dimensions'>dimensions</span>
   <span class='id identifier rubyid_parts'>parts</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
   <span class='id identifier rubyid_pas'>pas</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
@@ -4590,20 +4724,28 @@ those indices. Note that the string is adjusted for viewing by the user, so star
 </span>  <span class='comment'># 5. make new das
 </span>  <span class='comment'># 6. bulk save pas
 </span>
-  <span class='id identifier rubyid_collection_id_string'>collection_id_string</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>__part_for_collection_</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>__</span><span class='tstring_end'>&quot;</span></span>    
-
+  <span class='id identifier rubyid_collection_id_string'>collection_id_string</span> <span class='op'>=</span> <span class='const'>SecureRandom</span><span class='period'>.</span><span class='id identifier rubyid_hex'>hex</span> <span class='comment'># random string used to identify saved parts  
+</span>
   <span class='id identifier rubyid_each_row_col'>each_row_col</span><span class='lparen'>(</span><span class='id identifier rubyid_matrix'>matrix</span><span class='comma'>,</span><span class='label'>offset:</span> <span class='id identifier rubyid_offset'>offset</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='comma'>,</span><span class='id identifier rubyid_y'>y</span><span class='comma'>,</span><span class='id identifier rubyid_ox'>ox</span><span class='comma'>,</span><span class='id identifier rubyid_oy'>oy</span><span class='op'>|</span>
     <span class='kw'>if</span> <span class='id identifier rubyid_pm'>pm</span><span class='lbracket'>[</span><span class='id identifier rubyid_ox'>ox</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_oy'>oy</span><span class='rbracket'>]</span>
-      <span class='id identifier rubyid_das'>das</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_pm'>pm</span><span class='lbracket'>[</span><span class='id identifier rubyid_ox'>ox</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_oy'>oy</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_lazy_associate'>lazy_associate</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_matrix'>matrix</span><span class='lbracket'>[</span><span class='id identifier rubyid_x'>x</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_y'>y</span><span class='rbracket'>]</span><span class='rparen'>)</span>
-      <span class='comment'># pm[ox][oy].associate(key, matrix[x][y])
-</span>    <span class='kw'>else</span>
+      <span class='kw'>if</span> <span class='id identifier rubyid_dm'>dm</span><span class='lbracket'>[</span><span class='id identifier rubyid_ox'>ox</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_oy'>oy</span><span class='rbracket'>]</span>
+        <span class='id identifier rubyid_dm'>dm</span><span class='lbracket'>[</span><span class='id identifier rubyid_ox'>ox</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_oy'>oy</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_object'>object</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='id identifier rubyid_key'>key</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_matrix'>matrix</span><span class='lbracket'>[</span><span class='id identifier rubyid_x'>x</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_y'>y</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_to_json'>to_json</span>
+        <span class='id identifier rubyid_das'>das</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_dm'>dm</span><span class='lbracket'>[</span><span class='id identifier rubyid_ox'>ox</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_oy'>oy</span><span class='rbracket'>]</span>
+      <span class='kw'>else</span>
+        <span class='id identifier rubyid_das'>das</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_pm'>pm</span><span class='lbracket'>[</span><span class='id identifier rubyid_ox'>ox</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_oy'>oy</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_lazy_associate'>lazy_associate</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_matrix'>matrix</span><span class='lbracket'>[</span><span class='id identifier rubyid_x'>x</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_y'>y</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+    <span class='kw'>else</span>
       <span class='id identifier rubyid_parts'>parts</span> <span class='op'>&lt;&lt;</span> <span class='const'><span class='object_link'><a href="Item.html" title="Item (class)">Item</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='label'>quantity:</span> <span class='int'>1</span><span class='comma'>,</span> <span class='label'>inuse:</span> <span class='int'>0</span><span class='comma'>,</span> <span class='label'>object_type_id:</span> <span class='id identifier rubyid_part_type'>part_type</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='label'>data:</span> <span class='id identifier rubyid_collection_id_string'>collection_id_string</span><span class='rparen'>)</span>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
 
   <span class='const'><span class='object_link'><a href="Item.html" title="Item (class)">Item</a></span></span><span class='period'>.</span><span class='id identifier rubyid_import'>import</span> <span class='id identifier rubyid_parts'>parts</span> <span class='kw'>unless</span> <span class='id identifier rubyid_parts'>parts</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
   <span class='id identifier rubyid_parts'>parts</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Item.html" title="Item (class)">Item</a></span></span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>data:</span> <span class='id identifier rubyid_collection_id_string'>collection_id_string</span><span class='rparen'>)</span> <span class='comment'># get the parts just made so we have the ids
-</span>  <span class='id identifier rubyid_index'>index</span> <span class='op'>=</span> <span class='int'>0</span>
+</span>  <span class='id identifier rubyid_parts'>parts</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_p'>p</span><span class='op'>|</span>                              <span class='comment'># erase temporary id
+</span>    <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='op'>=</span> <span class='kw'>nil</span>
+    <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_index'>index</span> <span class='op'>=</span> <span class='int'>0</span>
 
   <span class='id identifier rubyid_each_row_col'>each_row_col</span><span class='lparen'>(</span><span class='id identifier rubyid_matrix'>matrix</span><span class='comma'>,</span> <span class='label'>offset:</span> <span class='id identifier rubyid_offset'>offset</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='comma'>,</span><span class='id identifier rubyid_y'>y</span><span class='comma'>,</span><span class='id identifier rubyid_ox'>ox</span><span class='comma'>,</span><span class='id identifier rubyid_oy'>oy</span><span class='op'>|</span>
     <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_pm'>pm</span><span class='lbracket'>[</span><span class='id identifier rubyid_ox'>ox</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id identifier rubyid_oy'>oy</span><span class='rbracket'>]</span>
@@ -4614,7 +4756,7 @@ those indices. Note that the string is adjusted for viewing by the user, so star
   <span class='kw'>end</span>
 
   <span class='const'>PartAssociation</span><span class='period'>.</span><span class='id identifier rubyid_import'>import</span> <span class='id identifier rubyid_pas'>pas</span> <span class='kw'>unless</span> <span class='id identifier rubyid_pas'>pas</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
-  <span class='const'><span class='object_link'><a href="DataAssociation.html" title="DataAssociation (class)">DataAssociation</a></span></span><span class='period'>.</span><span class='id identifier rubyid_import'>import</span> <span class='id identifier rubyid_das'>das</span> <span class='kw'>unless</span> <span class='id identifier rubyid_das'>das</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>  
+  <span class='const'><span class='object_link'><a href="DataAssociation.html" title="DataAssociation (class)">DataAssociation</a></span></span><span class='period'>.</span><span class='id identifier rubyid_import'>import</span> <span class='id identifier rubyid_das'>das</span><span class='comma'>,</span> <span class='label'>on_duplicate_key_update:</span> <span class='lbracket'>[</span><span class='symbol'>:object</span><span class='rbracket'>]</span> <span class='kw'>unless</span> <span class='id identifier rubyid_das'>das</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>  
 
   <span class='id identifier rubyid_pm'>pm</span>
 
@@ -4655,12 +4797,12 @@ those indices. Note that the string is adjusted for viewing by the user, so star
       <pre class="lines">
 
 
-722
-723
-724</pre>
+754
+755
+756</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 722</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 754</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_matrix'>set_matrix</span><span class='lparen'>(</span><span class='id identifier rubyid_m'>m</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_associate_matrix'>associate_matrix</span> <span class='id identifier rubyid_m'>m</span>
@@ -4781,24 +4923,24 @@ those indices. Note that the string is adjusted for viewing by the user, so star
       <pre class="lines">
 
 
-98
-99
-100
-101
-102
-103
-104
-105
-106
-107
-108
-109
-110</pre>
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 98</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 112</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_set_part_data'>set_part_data</span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_c'>c</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_set_part_data'>set_part_data</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_c'>c</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
 
   <span class='id identifier rubyid_pm'>pm</span> <span class='op'>=</span> <span class='id identifier rubyid_part_association'>part_association</span> <span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_c'>c</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_pm'>pm</span>
@@ -4896,25 +5038,25 @@ x is not found or the collection is empty.</p>
       <pre class="lines">
 
 
-562
-563
-564
-565
-566
-567
-568
-569
-570
-571
-572
-573
-574
-575
-576
-577</pre>
+590
+591
+592
+593
+594
+595
+596
+597
+598
+599
+600
+601
+602
+603
+604
+605</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 562</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 590</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_subtract_one'>subtract_one</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>reverse:</span> <span class='kw'>true</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
@@ -4961,12 +5103,12 @@ x is not found or the collection is empty.</p>
       <pre class="lines">
 
 
-490
-491
-492</pre>
+518
+519
+520</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 490</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 518</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_sample_id'>to_sample_id</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="" title="Collection (class)">Collection</a></span></span><span class='period'>.</span><span class='id identifier rubyid_to_sample_id'><span class='object_link'><a href="#to_sample_id-class_method" title="Collection.to_sample_id (method)">to_sample_id</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='rparen'>)</span>
@@ -5001,37 +5143,37 @@ x is not found or the collection is empty.</p>
       <pre class="lines">
 
 
-644
-645
-646
-647
-648
-649
-650
-651
-652
-653
-654
-655
-656
-657
-658
-659
-660
-661
-662
-663
-664
-665
-666
-667
-668
-669</pre>
+672
+673
+674
+675
+676
+677
+678
+679
+680
+681
+682
+683
+684
+685
+686
+687
+688
+689
+690
+691
+692
+693
+694
+695
+696
+697</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 644</span>
+      <pre class="code"><span class="info file"># File 'app/models/collection.rb', line 672</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_to_sample_id_matrix'>to_sample_id_matrix</span> <span class='id identifier rubyid_sample_matrix'>sample_matrix</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_to_sample_id_matrix'>to_sample_id_matrix</span><span class='lparen'>(</span><span class='id identifier rubyid_sample_matrix'>sample_matrix</span><span class='rparen'>)</span>
 
   <span class='id identifier rubyid_dr'>dr</span> <span class='op'>=</span> <span class='id identifier rubyid_sample_matrix'>sample_matrix</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
   <span class='id identifier rubyid_dc'>dc</span> <span class='op'>=</span> <span class='id identifier rubyid_sample_matrix'>sample_matrix</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span>
@@ -5067,7 +5209,7 @@ x is not found or the collection is empty.</p>
 </div>
 
       <div id="footer">
-  Generated on Wed Aug 22 14:19:11 2018 by
+  Generated on Fri Sep 28 12:41:08 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.7).
 </div>

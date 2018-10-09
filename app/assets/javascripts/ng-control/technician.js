@@ -12,7 +12,7 @@
     let job_id = parseInt(aq.url_path()[2]);
 
     $scope.job_id = job_id;
-    $scope.uploads = {}; 
+    $scope.uploads = {};
     $scope.selects = [];
     $scope.item = null;
     $scope.mode = "steps";
@@ -173,13 +173,13 @@
 
         var data = e.target.result;
         var fd = new FormData();
-        var uri = "/krill/upload?assoc_operations=" + $scope.upload_config.associate_with_operations + 
+        var uri = "/krill/upload?assoc_operations=" + $scope.upload_config.associate_with_operations +
                                     "&assoc_plans=" + $scope.upload_config.associate_with_plans;
         var xhr = new XMLHttpRequest();
 
         file.status = "sending";
         $scope.$apply();
-        
+
         xhr.open("POST", uri, true);
 
         xhr.onreadystatechange = function() {
@@ -208,11 +208,11 @@
         fd.append('file', file)
         fd.append('authenticity_token', $("#authenticity_token").val());
         fd.append('job', $scope.job.id)
-        xhr.send(fd);          
+        xhr.send(fd);
 
       }
 
-      r.readAsBinaryString(file);         
+      r.readAsBinaryString(file);
 
     }
 
@@ -220,10 +220,10 @@
       return function(files) {
         $scope.uploading = true;
         if ( files.length != 0 ) {
-          for ( var i=0; i<files.length; i++ ) {      
+          for ( var i=0; i<files.length; i++ ) {
             send_file(varname,id,files[i])
-          }        
-        } 
+          }
+        }
       }
     }
 
@@ -231,7 +231,7 @@
       $scope.job.advance().then(() => {
         if ( $scope.job.backtrace.last.timer && !$scope.job.backtrace.complete ) {
           show_timer($scope.job.backtrace.last.timer);
-        }        
+        }
         $scope.job.recompute_getter("operations");
       })
     }
@@ -255,8 +255,8 @@
     $scope.cancel = function() {
       if ( confirm("Are you sure you want to cancel this job?") ) {
         $scope.job.abort().then(response => {
-          AQ.Job.find($scope.job_id).then(job => {            
-            $scope.job = job;  
+          AQ.Job.find($scope.job_id).then(job => {
+            $scope.job = job;
             $scope.zombie = false;
             $scope.$apply();
           })
@@ -287,16 +287,20 @@
 })();
 
 function open_item_ui(id) {
-  console.log("ASD")
   try {
     angular.element($('#technicianCtrl')).scope().open_item_ui(id);
   } catch(e) {}
   try {
     let a = angular.element($('#operationTypesCtrl'));
     a.scope().open_item_ui(id);
-  } catch(e) { console.log(e) }
-} 
+  } catch(e) {}
+  try {
+    let a = angular.element($('#logCtrl'));
+    a.scope().open_item_ui(id);
+  }
+  catch(e) { console.log(e) }
+}
 
 function update_job_uploads() {
-  angular.element($('#technicianCtrl')).scope().update_job_uploads();  
+  angular.element($('#technicianCtrl')).scope().update_job_uploads();
 }

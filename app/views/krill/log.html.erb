@@ -1,6 +1,8 @@
 <% provide(:title, "Job #{@job.id}" ) %>
 
-<%= render partial: '/operations/operation_list_short' %> 
+<%= render partial: '/operations/operation_list_short' %>
+<%= render partial: "/items/template" %>
+<%= render partial: '/data_associations/template' %>
 
 <%= content_for :controller do %>logCtrl<% end %>
 
@@ -36,6 +38,14 @@
   <div flex layout-padding id='history'>
     <div id='history-json'></div>
   </div>
+
+  <div item="item"
+       sample="item.sample"
+       container="item.object_type"
+       collection="item.collection ? item.collection : null"
+       row="item.collection ? item.row : null"
+       column="item.collection ? item.column : null"
+       nolink='true'></div>
 
   <script>
     $(function() {

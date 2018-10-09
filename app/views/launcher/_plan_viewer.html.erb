@@ -93,14 +93,18 @@
       {{fv.name}} <span class='small'>({{ fv.child_sample || fv.item  || !fv.value ? fv.role : 'param'}})</span>
     </div>
 
-    <div flex="10" ng-if="fv.row == null">
+    <div flex="10" ng-if="!fv.is_part">
       <div ng-if="fv.item" item="fv.item" container="fv.item.object_type" sample="fv.item.sample"></div>
       <div ng-if="!fv.item">-</div>
     </div> 
 
-    <div flex="10" ng-if="fv.row != null">
-      <div item="fv.item" container="fv.item.object_type" sample="fv.item.sample ? fv.item.sample : fv.child_sample"></div>
-      <span ng-if="fv.row != null">[{{fv.row}},{{fv.column}}]</span>
+    <div flex="10" ng-if="fv.is_part">
+      <div item="fv.part"
+           container="fv.part.object_type" 
+           sample="fv.part.sample"
+           collection="fv.item"
+           row="fv.row"
+           column="fv.column"></div>
     </div>
 
     <div flex="10" ng-if="!fv.value">{{fv.item.location}}</div> 
