@@ -5,48 +5,49 @@ include Krill
 # require_relative '../models/operation'
 
 RSpec.describe ShowResponse do
-  resp = ShowResponse.new({
+  resp = ShowResponse.new(
     table_inputs: [
-      {key: "tblrespnskey", opid: 3075, row: 0, value: "2", type: "number"},
-      {key: "tblrespnskey", opid: 3076, row: 1, value: "1", type: "number"}, 
+      { key: "tblrespnskey", opid: 3075, row: 0, value: "2", type: "number" },
+      { key: "tblrespnskey", opid: 3076, row: 1, value: "1", type: "number" } 
     ],
     timestamp: 123456789,
     measured_concentration: 53.2,
     # ups: [{id: 1, name: 'upname1'}, {id: 2, name: 'upname2'}]
-  })
+  )
 
-  it "is backwards compatible with the original hash" do expect(resp).to eq({
-    table_inputs: [
-      {key: "tblrespnskey", opid: 3075, row: 0, value: "2", type: "number"},
-      {key: "tblrespnskey", opid: 3076, row: 1, value: "1", type: "number"},
-    ],
-    timestamp: 123456789,
-    measured_concentration: 53.2,
-    # ups: [{id: 1, name: 'upname1'}, {id: 2, name: 'upname2'}]
-  })
+  it "is backwards compatible with the original hash" do 
+    expect(resp).to eq(
+      table_inputs: [
+        { key: "tblrespnskey", opid: 3075, row: 0, value: "2", type: "number" },
+        { key: "tblrespnskey", opid: 3076, row: 1, value: "1", type: "number" }
+      ],
+      timestamp: 123456789,
+      measured_concentration: 53.2,
+      # ups: [{id: 1, name: 'upname1'}, {id: 2, name: 'upname2'}]
+    )
   end
   
   it "returns the value at the given key like a ruby hash with get_response" do
-      expect(resp.get_response(:badkey)).to eq(nil)
-      expect(resp.get_response(:measured_concentration)).to eq(53.2)
+    expect(resp.get_response(:badkey)).to eq(nil)
+    expect(resp.get_response(:measured_concentration)).to eq(53.2)
   end
 
   it "returns a response with the given var, whether passed a \
 symbol, string, or integer" do
-      expect(resp.get_response("measured_concentration")).to eq(53.2)
+    expect(resp.get_response("measured_concentration")).to eq(53.2)
   end
   
   it "hides table_inputs and timestamp from the client" do
     expect(resp.get_response(:table_inputs)).to eq(nil)
-      expect(resp.get_response(:timestamp)).to eq(nil)
+    expect(resp.get_response(:timestamp)).to eq(nil)
   end
 
-#    it "returns a ruby hash representing the data with responses" do
-#      expect(resp.responses()).to (
-#      eq({measured_concentration: 53.2, tblrespnskey: [2, 1], ups: [Upload.find(1), Upload.find(2)]}) )
-#    end
+  #    it "returns a ruby hash representing the data with responses" do
+  #      expect(resp.responses()).to (
+  #      eq({measured_concentration: 53.2, tblrespnskey: [2, 1], ups: [Upload.find(1), Upload.find(2)]}) )
+  #    end
 
-    it "returns the timestamp of the showblock with timestamp()" do
+  it "returns the timestamp of the showblock with timestamp()" do
     expect(resp.timestamp).to eq(123456789)
   end
 
