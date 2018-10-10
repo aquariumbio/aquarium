@@ -31,7 +31,25 @@ Follow the Aquarium [installation]({{ site.baseurl }}{% link _docs/installation/
 
 ## Running Aquarium
 
-With the development docker installation of Aquarium s
+As explained in the installation instructions, you can run Aquarium with
+
+```bash
+docker-compose up
+```
+
+and stop it with
+
+```bash
+docker-compose down
+```
+
+As you work on Aquarium, you will want to run commands that need the Aquarium Ruby environment (e.g., `rails` commands).
+To avoid having to do the manual installation steps,  you can simply precede each command with
+
+```bash
+docker-compose run -rm web
+```
+
 
 ## Testing Aquarium
 
@@ -68,6 +86,9 @@ def copy_associations(args)
   ...
 end
 ```
+
+Note that an argument with a default value is *not* an option, and should just be listed using the `@param` tag.
+
 
 Here are some ([borrowed](http://blog.joda.org/2012/11/javadoc-coding-standards.html)) style guidelines for documentation:
 
