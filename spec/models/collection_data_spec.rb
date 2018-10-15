@@ -42,36 +42,28 @@ RSpec.describe Collection, type: :model do
 
     it "doesn't screw up sample associations after setting data" do
 
-      plate = example_collection "96 qPCR collection" 
+      plate = example_collection "Stripwell" 
 
       id = test_sample.id
       
-      sample_matrix = JSON.parse("[ 
-        [#{id},#{id},#{id},#{id},#{id},null,null,null,null,null,null,null],
-        [null,null,null,null,null,null,null,null,null,null,null,null],
-        [null,null,null,null,null,null,null,null,null,null,null,null],
-        [null,null,null,null,null,null,null,null,null,null,null,null],
-        [null,null,null,null,null,null,null,null,null,null,null,null],
-        [null,null,null,null,null,null,null,null,null,null,null,null],
-        [null,null,null,null,null,null,null,null,null,null,null,null],
-        [null,null,null,null,null,null,null,null,null,null,null,null]]")
+      sample_matrix = JSON.parse("[[#{id},#{id},#{id},#{id},#{id},null,null,null,null,null,null,null]]")
           
-      data_matrix = (0..7).collect { |i| (0..11).collect { |j| 12*i+j } }
+      data_matrix = (0...1).collect { |i| (0..11).collect { |j| 12*i+j } }
       
       plate.associate_matrix(sample_matrix) 
 
       expect(plate.part_association_list.length).to equal(5)
 
       plate.set_data_matrix("x", data_matrix)
-      expect(plate.part_association_list.length).to equal(96)
+      expect(plate.part_association_list.length).to equal(12)
 
-      pa_matrix = (0..7).collect { |i| (0..11).collect { |j| plate.part_association i, j } }
+      pa_matrix = (0...1).collect { |i| (0..11).collect { |j| plate.part_association i, j } }
       part_id_matrix = pa_matrix.collect do |row|
         row.collect { |pa| pa ? pa.part_id : nil }
       end 
-           
-      expect(part_id_matrix.flatten.length).to equal(96)
 
+      expect(part_id_matrix.flatten.length).to equal(12)
+      expect(plate.num_samples).to equal(5)
     end    
 
     it "gets data associations whether its an item or a collection" do

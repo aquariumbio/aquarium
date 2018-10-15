@@ -6,7 +6,7 @@ permalink: /protocol_tutorial/
 
 # Protocol Tutorial
 
-This is an introduction to writing protocols for Aquarium in the Krill domain specific langauge.
+This is an introduction to writing protocols for Aquarium in the Krill domain specific language.
 We try to introduce the most common (and recommended) patterns in Krill, but this is not a comprehensive reference.
 See the [API documentation]({{ site.baseurl }}{% link /api/index.html %}) for more details on the functions that Krill provides.
 
@@ -175,7 +175,7 @@ This example renders as
 (To see this in action, add the show-block to the main method of the `BasicProtocol`.)
 
 We could also use `bullet` here instead of `note` for the list of tasks.
-However, we want to have the techinician confirm each step, and so use `check` instead:
+However, we want to have the technician confirm each step, and so use `check` instead:
 
 ```ruby
 show do
@@ -285,7 +285,7 @@ docker-compose run web rails c
 ```
 
 in the `aquarium` directory to start the Rails console.
-(If you have Aquairum setup to run on your machine without docker you can also just use the command `rails c`)
+(If you have Aquarium setup to run on your machine without docker you can also just use the command `rails c`)
 
 The allowable queries are standard with Ruby on Rails `ActiveRecord` models.
 
@@ -494,7 +494,7 @@ Such protocols will follow these general steps:
 
 1.  Tell the technician to get the input items.
 2.  Create IDs for the output items.
-3.  Give the technican instructions for how to make the output items.
+3.  Give the technician instructions for how to make the output items.
 4.  Tell the technician to put everything away.
 
 We saw earlier that we can write protocols that do these steps at a detailed level, but Aquarium provides functions that will do them over the inputs and outputs of the batched operations.
@@ -634,7 +634,7 @@ This lets the user know there weren’t enough comp cells of the correct strain 
           comp_cells.set collection: batches_of_cells.last
 
           # Display warning
-          op.associate :comp_cell_batch_replaced, "There were not enough comp cells for this operation.            	Replaced batch #{old_batch.id} with batch #{op.input(CELLS).collection.id}"
+          op.associate :comp_cell_batch_replaced, "There were not enough comp cells for this operation.               Replaced batch #{old_batch.id} with batch #{op.input(CELLS).collection.id}"
         end
       end
   end
