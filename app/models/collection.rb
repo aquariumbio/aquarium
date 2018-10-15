@@ -13,7 +13,7 @@ class Collection < Item
 
   def part_association_list
     # this works but rails generated part_associations seems not to
-    PartAssociation.where collection_id: id
+    PartAssociation.where(collection_id: id)
   end
 
   # Remove all part data associations with the matching key
@@ -90,12 +90,12 @@ class Collection < Item
   # @return [Array] the part matrix, with new data associations inserted if required  
   def new_data_matrix(key)
     r, c = dimensions
-    set_data_matrix key, Array.new(r) { Array.new(c, 0.0) }
+    set_data_matrix(key, Array.new(r) { Array.new(c, 0.0) })
   end
 
   # @private
   def print_data_matrix(key)
-    dm = data_matrix key
+    dm = data_matrix(key)
     dm.each do |row|
       vals = row.collect { |e| e ? e.value : '-' }
       puts "#{vals.join(', ')}"
@@ -111,11 +111,11 @@ class Collection < Item
   # @return [Collection] the collection, for chaining
   def set_part_data(key, r, c, value)
 
-    pm = part_association r, c
+    pm = part_association(r, c)
     if pm
       pm.part.associate key, value
     else
-      pa = initialize_part r, c
+      pa = initialize_part(r, c)
       pa.part.associate key, value
     end
 
@@ -131,9 +131,9 @@ class Collection < Item
   # @return [String|Float] The resulting data
   def get_part_data(key, r, c)
 
-    pa = part_association r, c
+    pa = part_association(r, c)
     if pa && pa.part
-      pa.part.get key
+      pa.part.get(key)
     else
       nil
     end
@@ -163,7 +163,7 @@ class Collection < Item
   # @private
   def initialize_part(r, c, sample: nil)
     
-    pa = part_association r, c
+    pa = part_association(r, c)
 
     if pa
       if !pa.part_id
