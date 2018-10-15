@@ -30,11 +30,11 @@ class Collection < Item
   # @param matrix [Array] an array of arrays of either numbers or strings whose dimensions are either equal to or small than the collection's dimensions
   # @param offset [Array] the offset used to compute which sub-matrix of parts to which the data should be assigned
   # @return [Array] the part matrix, with new data associations inserted if required
-  def set_data_matrix(key, matrix, offset: [0,0])
+  def set_data_matrix(key, matrix, offset: [0, 0])
 
     pm = part_matrix
     dm = data_matrix(key)
-    r,c = dimensions
+    r, c = dimensions
     parts = []
     pas = []
     das = []
@@ -49,10 +49,10 @@ class Collection < Item
 
     collection_id_string = SecureRandom.hex # random string used to identify saved parts  
 
-    each_row_col(matrix,offset: offset) do |x,y,ox,oy|
+    each_row_col(matrix, offset: offset) do |x, y, ox, oy|
       if pm[ox][oy]
         if dm[ox][oy]
-          dm[ox][oy].object = {key => matrix[x][y]}.to_json
+          dm[ox][oy].object = { key => matrix[x][y] }.to_json
           das << dm[ox][oy]
         else
           das << pm[ox][oy].lazy_associate(key, matrix[x][y])
@@ -70,7 +70,7 @@ class Collection < Item
     end
     index = 0
 
-    each_row_col(matrix, offset: offset) do |x,y,ox,oy|
+    each_row_col(matrix, offset: offset) do |x, y, ox, oy|
       if !pm[ox][oy]
         pas << PartAssociation.new(collection_id: id, part_id: parts[index].id, row: ox, column: oy)
         das << parts[index].lazy_associate(key, matrix[x][y])
@@ -89,8 +89,8 @@ class Collection < Item
   # @param key [String]
   # @return [Array] the part matrix, with new data associations inserted if required  
   def new_data_matrix(key)
-    r,c = dimensions
-    set_data_matrix key, Array.new(r){Array.new(c,0.0)}
+    r, c = dimensions
+    set_data_matrix key, Array.new(r) { Array.new(c, 0.0) }
   end
 
   # @private
@@ -146,7 +146,7 @@ class Collection < Item
   #     # r, c will be the row and column of the matrix argument
   #     # x, y will be the row and column of the collection's part matrix
   #   }
-  def each_row_col(matrix, offset: [0,0])
+  def each_row_col(matrix, offset: [0, 0])
     dr, dc = dimensions
     (0...matrix.length).each do |r|
       (0...matrix[r].length).each do |c|  
@@ -173,7 +173,7 @@ class Collection < Item
       end
     else
       part = Item.make({ quantity: 1, inuse: 0 }, sample: sample, object_type: part_type)      
-      pa = PartAssociation.new( collection_id: id, part_id: part.id,  row: r, column: c ) 
+      pa = PartAssociation.new(collection_id: id, part_id: part.id,  row: r, column: c) 
       pa.save
     end
 
@@ -201,8 +201,8 @@ class Collection < Item
 
     das = DataAssociation.where(parent_class: "Item", parent_id: part_ids, key: key)
 
-    r,c = self.dimensions
-    m = Array.new(r){Array.new(c)}
+    r, c = self.dimensions
+    m = Array.new(r) { Array.new(c) }
 
     pas.each do |pa|
       m[pa.row][pa.column] = das.find { |da| da.parent_id == pa.part_id }
@@ -215,7 +215,7 @@ class Collection < Item
   # Return the matrix of data association values associated with the given key
   # @param key [String]
   # @return [Array] an array of array of {DataAssociation} values
-  def data_matrix_values key
+  def data_matrix_values(key)
     (data_matrix(key).map { |row| row.map { |da| da ? da.value : nil } })
   end
 
@@ -236,11 +236,11 @@ class Collection < Item
   # @return [Array] an array of arrays of {Item}s -- dimensions match collection's dimensions
   def part_matrix
 
-    r,c = self.dimensions
-    m = Array.new(r){Array.new(c)}
+    r, c = self.dimensions
+    m = Array.new(r) { Array.new(c) }
 
     PartAssociation
-      .includes(part: [ { sample: [ :sample_type ] }, :object_type ] )
+      .includes(part: [{ sample: [:sample_type] }, :object_type])
       .where(collection_id: id)
       .each do |pa| 
         m[pa.row][pa.column] = pa.part
@@ -252,7 +252,7 @@ class Collection < Item
 
   # @private
   def part_matrix_as_json
-    part_matrix.as_json(include: [ { sample: { include: :sample_type } }, :object_type ] )
+    part_matrix.as_json(include: [{ sample: { include: :sample_type } }, :object_type])
   end
 
   # Assign samples to the parts at positions specified by pairs
@@ -263,7 +263,7 @@ class Collection < Item
 
     pm = part_matrix
 
-    pairs.each do |r,c|
+    pairs.each do |r, c|
       if pm[r][c] 
         old_sample_id = pm[r][c].sample_id
         pm[r][c].sample_id = sample.id
@@ -288,7 +288,7 @@ class Collection < Item
   # @return [Collection] can be chained
   def delete_selection(pairs)
 
-    pairs.each do |r,c|
+    pairs.each do |r, c|
 
       pas = PartAssociation.includes(:part).where(collection_id: id, row: r, column: c)
 
@@ -523,7 +523,7 @@ class Collection < Item
   #
   # class method?
   def self.to_sample(x)
-    if x.class == Integer || ( x.class == Fixnum && x >= 0 ) # Not sure where "Integer" came from here ---ek
+    if x.class == Integer || (x.class == Fixnum && x >= 0) # Not sure where "Integer" came from here ---ek
       r = Sample.find(x)
     elsif x.class == Item
       if x.sample
@@ -642,7 +642,7 @@ class Collection < Item
         pa = pas[0]
         pa.part_id = part.id
       else
-        pa = PartAssociation.new( collection_id: id, part_id: part.id,  row: r, column: c )
+        pa = PartAssociation.new(collection_id: id, part_id: part.id,  row: r, column: c)
       end
       pa.save
     end
@@ -674,7 +674,7 @@ class Collection < Item
     dr = sample_matrix.length
     dc = sample_matrix[0].length
 
-    sample_matrix_aux = Array.new(dr){Array.new(dc)}
+    sample_matrix_aux = Array.new(dr) { Array.new(dc) }
 
     # convert sample matrix into ids
     (0...dr).each do |r|
@@ -766,8 +766,8 @@ class Collection < Item
     if @matrix_cache
       @matrix_cache
     else
-      r,c = self.dimensions
-      m = Array.new(r){Array.new(c, EMPTY)}
+      r, c = self.dimensions
+      m = Array.new(r) { Array.new(c, EMPTY) }
       PartAssociation.includes(:part).where(collection_id: id).each do |pa|
         m[pa.row][pa.column] = pa.part.sample_id if pa.row < r && pa.column < c && pa.part.sample_id
       end
@@ -811,7 +811,7 @@ class Collection < Item
   # @return [Array<Fixnum>]
   def dimensions
     # Should look up object type dims instead
-    dims = [object_type.rows,object_type.columns]
+    dims = [object_type.rows, object_type.columns]
     dims[0] = 12 unless dims[0] != nil
     dims[1] = 1 unless dims[1] != nil
     dims
