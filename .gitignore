@@ -17,7 +17,7 @@ Gemfile.lock
 /doc/api
 
 # Ignore the actual docker-compose file
-docker-compose.yml
+/docker-compose.yml
 
 # Ignore the copied version of development.rb that is created when the development-setup script replaces it
 /config/environments/original-development.notrb
