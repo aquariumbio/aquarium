@@ -1,0 +1,67 @@
+# base docker-compose file for aquarium
+#
+# Defines services for Aquarium, Krill, database, and S3.  Uses Docker network 
+# address translation, and containers for MySQL, and the Minio S3 server.
+#
+# Initializes the database the first time MySQL is run from the database dump
+# in docker/mysql_init/dump.sql. If you want to use an alternative, replace this
+# file.
+#
+# To reininitialize the database with the original or an alternative dump file,
+# remove the docker/db directory with 
+#
+#   sudo rm -rf docker/db/*
+#
+# before running `docker-compose up`
+
+version: "3.6"
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    volumes:
+      - ./docker/db:/var/lib/mysql
+      - ./docker/mysql_init/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+    networks:
+     - aquarium_net
+
+  krill:
+    build: 
+      context: .
+    networks:
+     - aquarium_net
+    depends_on:
+      - db
+      - web
+
+  s3:
+    image: minio/minio:latest
+    volumes:
+      - ./docker/s3/data:/data
+      - ./docker/s3/config:/root/.minio
+    environment:
+      MINIO_ACCESS_KEY: aquarium_minio
+      MINIO_SECRET_KEY: KUNAzqrNifmM6GwNVZ8IP7dxZAkYjhnwc0bfdz0W
+      MINIO_REGION: us-west-1
+    command: server /data
+    networks:
+      - aquarium_net
+
+  web:
+    build:
+      context: .
+    volumes:
+      - ./app:/aquarium/app
+      - ./config:/aquarium/config
+      - ./db:/aquarium/db
+      - ./lib:/aquarium/lib
+      - ./log:/aquarium/log
+      - ./script:/aquarium/script
+    networks:
+      - aquarium_net
+    depends_on:
+      - db
+      - s3
+
+networks:
+  aquarium_net:
