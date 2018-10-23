@@ -8,17 +8,14 @@
 # For this case, you can instead manually delete the files from the windows file explorer.
 # sudo rm -rf docker/db/*       
 
+cp docker/docker-compose.yml .
+cp docker/docker-compose.dev.yml .
+cp docker/docker-compose.override.yml .
 
 if [[ $1 == "windows" ]]; then
     cp docker/windev-docker-compose.yml docker-compose.yml
-else
-    cp docker/dev-docker-compose.yml docker-compose.yml
 fi
-cp docker/dev-docker-database.yml config/database.yml
-cp docker/dev-docker-aquarium.notrb config/initializers/aquarium.rb
 
-cp docker/dev-docker-development.rb config/environments/development.rb
 
-mkdir -p docker/db
-mkdir -p docker/s3/data/development
-mkdir -p docker/s3/config
+
+
