@@ -45,7 +45,10 @@ end
 
 group :development do
   gem 'rspec-rails'
-  gem 'web-console', '~> 2.0'  
+  gem 'web-console', '~> 3.0'
+
+  # used to determine subnet for docker containers for web-console
+  gem 'ipaddress'
 end
 
 group :production do
