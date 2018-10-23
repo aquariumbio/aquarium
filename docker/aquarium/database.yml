@@ -1,0 +1,26 @@
+# database configuration for docker contained aquarium
+
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  host: db
+  port: 3306
+  username: aquarium
+  password: aSecretAquarium
+
+production:
+  <<: *default
+  database: production
+  pool: 100
+
+development:
+  <<: *default
+  database: development # the name of the MySQL database to use
+  pool: 5
+
+test:
+  adapter: sqlite3
+  database: db/test.sqlite3
+  pool: 5
+  timeout: 5000

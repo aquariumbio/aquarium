@@ -1,4 +1,6 @@
 
+require 'resolv'
+require 'ipaddress'
 
 Bioturk::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
@@ -62,15 +64,40 @@ Bioturk::Application.configure do
     }
   }
 
-  # AWS Simple Email Service Config
+  # when running in docker, web_console complains about rendering from container
+  # addresses.  May be sufficient to turn off the whining, but to be sure nothing
+  # is missed, this code whitelists the IP addresses of the services so that
+  # they are able to render to the console if needed.
+  # To do this, the following resolves service hostnames to IP addresses and
+  # then creates an array of address summaries that is used for whitelisting.
+  # It then turns off whining about IP addresses.
+  ip_list = []
+  service_names = ['db', 's3', 'krill', 'web', 'nginx']
+  service_names.each do |name|
+    begin
+      ip = Resolv.getaddress(name)
+      ip_list.push(IPAddress(ip))
+    rescue Resolv::ResolvError
+    end
+  end
+
+  service_ips = IPAddress::IPv4::summarize(*ip_list).map{|ip| ip.to_string}
+
+  # whitelist summarized IP addresses for services
+  config.web_console.whitelisted_ips = service_ips
+  # don't whine about other addresses
+  config.web_console.whiny_requests = false
+
+  # There is no substitute for AWS simple email service in development.
+  # It is possible to run tests with SES if you use it, but this 
 
   # AWS.config(
-#    region: ENV.fetch('AWS_REGION'),
-#    simple_email_service_endpoint: "email.#{ENV.fetch('AWS_REGION')}.amazonaws.com",
-#    simple_email_service_region: ENV.fetch('AWS_REGION'),
-#    ses: { region: ENV.fetch('AWS_REGION') },
-#    access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
-#    secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY')
-#  )
+  #   region: ENV.fetch('AWS_REGION'),
+  #   simple_email_service_endpoint: "email.#{ENV.fetch('AWS_REGION')}.amazonaws.com",
+  #   simple_email_service_region: ENV.fetch('AWS_REGION'),
+  #   ses: { region: ENV.fetch('AWS_REGION') },
+  #   access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
+  #   secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY')
+  # )
 
 end
