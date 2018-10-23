@@ -21,8 +21,8 @@ services:
       MYSQL_ROOT_PASSWORD: aSecretAquarium
 
   krill:
-    entrypoint: ["/aquarium/aquarium-entrypoint.sh"]
-    command: ["krill", "development"]
+    entrypoint: ["/aquarium/krill-entrypoint.sh"]
+    command: ["development"]
     ports:
       - "3500:3500"
 
@@ -32,7 +32,7 @@ services:
 
   web:
     entrypoint: ["/aquarium/aquarium-entrypoint.sh"]
-    command: ["web", "development"]
+    command: ["development"]
     environment:
       - AWS_ACCESS_KEY_ID="" 
       - AWS_SECRET_ACCESS_KEY="" 
