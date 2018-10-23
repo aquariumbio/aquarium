@@ -23,8 +23,8 @@ if [[ $1 == "development" || $1 == "production" ]]; then
     exec bundle exec rake assets:precompile
   fi
 
-  echo "Starting Rails server"
-  exec bundle exec rails server -e $1 -p 3000 -b '0.0.0.0'
+  echo "Starting Krill runner"
+  exec bundle exec rails runner -e $1 'Krill::Server.new.run(3500)'
 
 else
   # If the normal image startup flags were not given as arguments, 
