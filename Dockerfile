@@ -42,12 +42,3 @@ RUN chmod +x /aquarium/krill-entrypoint.sh
 RUN mkdir -p ./docker/db
 RUN mkdir -p ./docker/s3/data/development
 RUN mkdir -p ./docker/s3/config
-
-
-
-
-
-
-
-
-
