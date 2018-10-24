@@ -8,7 +8,7 @@ permalink: /installation/
 
 We recommend that labs doing protocol development run at least two instances:
 the first, a nursery server that is shared within the lab for the purposes of trying out protocols under development, while the second is the production server that controls the lab.
-We use this arrangement in the Klavins lab to run the UW BIOFAB so that protocols can be evaluated without messing up the actual lab inventory.
+We use this arrangement in the Klavins lab to run the UW BIOFAB so that protocols can be evaluated without affecting the actual lab inventory.
 In addition, each protocol developer should run a local instance, which can be done easily with Docker.
 
 ## Table of Contents
@@ -35,11 +35,11 @@ We discuss some of the considerations for running Aquarium below, but your deplo
 [Jump to manual installation instructions](#manual-installation-instructions).
 
 **Docker Installation**:
-If your goal is instead to run Aquarium on your laptop to evaluate it, develop new code, or serve a small lab, we have provided a Docker configuration script that runs Aquarium in the Rails development mode.
+If your goal is instead to run Aquarium on your laptop to evaluate it, develop new code, or serve a small lab, we have provided a Docker configuration scripts to run Aquarium.
 
 [Jump to docker installation instructions](#docker-installation-instructions).
 
-We strongly encourage protocol developers to use the Docker version in development mode, because it eliminates several of the configuration details needed for production.
+We strongly encourage protocol developers to use the Docker version in production mode, because it eliminates several of the manual configuration details.
 Once a protocol runs well on a local instance, you can port it to your production instance using import on the developer tab.
 
 We understand that it might seem simpler to set up a single instance of Aquarium and use it as the production server and for protocol development.
@@ -182,23 +182,7 @@ To run Aquarium with Docker:
     git clone git@github.com:klavinslab/aquarium.git --config core.autocrlf=input
     ```
 
-3.  Run the `development-setup.sh` script to setup the development environment
-
-    ```bash
-    cd aquarium
-    ./development-setup.sh
-    ```
-
-    If using Docker Toolbox for Windows
-
-    ```bash
-    cd aquarium
-    ./development-setup.sh windows
-    ```
-
-    This script moves default development configuration files into the correct place. You only need to run it once.
-
-4.  To build the docker images, run the command
+3.  To build the docker images, run the command
 
     ```bash
     docker-compose build
@@ -207,7 +191,7 @@ To run Aquarium with Docker:
     For protocol development, this should only be necessary before running Aquarium for the first time after cloning or pulling the repository.
     Though, run this step again if you have trouble and changes may have been made.
 
-5.  To start aquarium, run the command
+4.  To start aquarium on non-Windows platforms, run the command
 
     ```bash
     docker-compose up
@@ -216,20 +200,29 @@ To run Aquarium with Docker:
     which starts the services for Aquarium.
     The first run initializes the database, and will take longer than subsequent runs.
 
-    Once all of the services for Aquarium have started, visit `localhost:3000` with the Chrome browser and you will find the Aquarium login page.
-    If running aquarium inside the docker toolbox VM, the address will be instead be `192.168.99.100:3000`.
-    The default database has a user login `neptune` with password `aquarium`.
+    On Windows, instead use the command
 
-6.  To halt the Aquarium services, first type `ctrl-c` in the terminal to stop the running containers, then remove the containers by running
+    ```bash
+    docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.windows.yml
+    ```
+
+    Once all of the services for Aquarium have started, visit `localhost:3000` with the Chrome browser to find the Aquarium login page.
+    If running Aquarium inside the docker toolbox VM, the address will be instead be `192.168.99.100:3000`.
+    When started using the default database, aquarium has a single user with login `neptune` and password `aquarium`.
+
+5.  To halt the Aquarium services, first type `ctrl-c` in the terminal to stop the running containers, then remove the containers by running
 
     ```bash
     docker-compose down
     ```
 
-Some configuration notes:
+Some notes:
 
-1.  When running Aquarium, you may notice a prominent name **Your Lab** in the upper left-hand corner.
-    If this bugs you, you can change it to something you prefer by replacing the string at the end of the first line in `config/initializers/aquarium.rb`, which is currently
+1.  The base Aquarium Docker image uses configuration files located in `docker/aquarium` instead of the corresponding files in the `config` directory.
+    So, if you want to tweak the configuration of your Aquarium Docker installation, change these files.
+
+2.  When running Aquarium, you may notice a prominent name **Your Lab** in the upper left-hand corner.
+    If this bugs you, you can change it to something you prefer by replacing the string at the end of the first line in `docker/aquarium/aquarium.rb`, which is currently
 
     ```ruby
     Bioturk::Application.config.instance_name = 'Your Lab'
@@ -238,10 +231,13 @@ Some configuration notes:
     You might change it to `'LOCAL'` or even `'George'`.
     The choice is yours.
 
-2.  The Docker configuration stores the database files in `docker/db`.
+3.  The Docker configuration stores the database files in `docker/db`.
 
     The database is initialized with the contents of `docker/mysql_init/dump.sql`, but changes you make will persist between runs.
 
     You can use a different database database dump by renaming it to this file, removing the contents of the `docker/db` directory and restarting Aquarium.
 
-3.  Uploaded files currently are not compatible with a docker installation. This feature is coming soon to the dockerized version, but in the mean time: if you need to locally test workflows that upload files, the manual installation will be necessary.
+4.  The Docker configuration uses the directory `docker/s3` as the storage location of file uploads and is managed using [Minio](https://minio.io).
+    This is probably not the best choice for full production instances.
+
+5.  The Docker configuration uses a email testing container, meaning that email notifications will not work.
