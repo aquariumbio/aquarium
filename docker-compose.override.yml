@@ -23,6 +23,8 @@ services:
   web:
     entrypoint: ["/aquarium/aquarium-entrypoint.sh"]
     command: ["web", "production"]
+    volumes:
+      - webvolume:/aquarium
     environment:
       - AWS_ACCESS_KEY_ID="" 
       - AWS_SECRET_ACCESS_KEY="" 
@@ -35,12 +37,9 @@ services:
 
   nginx:
     image: nginx:stable-alpine
-    links:
-      - web
-    volumes_from:
-      - web
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/my_app.conf:ro
+      - ./docker/nginx.conf:/etc/nginx/conf.d/my_app.conf:ro
+      - webvolume:/aquarium
     ports:
       - "80:80"
     networks:
@@ -48,3 +47,6 @@ services:
 
 networks:
   aquarium_net:
+
+volumes:
+  webvolume:
