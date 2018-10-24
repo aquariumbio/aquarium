@@ -11,4 +11,3 @@ Bioturk::Application.config.angular_rails_csrf_options = {
   cookie_name: "XSRF-TOKEN_#{Bioturk::Application.environment_name}",
   header_name: "X-XSRF-TOKEN_#{Bioturk::Application.environment_name}"
 }
-

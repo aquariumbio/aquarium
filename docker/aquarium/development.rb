@@ -78,10 +78,11 @@ Bioturk::Application.configure do
       ip = Resolv.getaddress(name)
       ip_list.push(IPAddress(ip))
     rescue Resolv::ResolvError
+      puts "service #{name} not resolved"
     end
   end
 
-  service_ips = IPAddress::IPv4::summarize(*ip_list).map{|ip| ip.to_string}
+  service_ips = IPAddress::IPv4.summarize(*ip_list).map(&:to_string)
 
   # whitelist summarized IP addresses for services
   config.web_console.whitelisted_ips = service_ips
