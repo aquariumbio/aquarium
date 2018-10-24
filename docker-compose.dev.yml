@@ -1,0 +1,46 @@
+# development docker-compose file for aquarium
+#
+# Extends the base docker-compose file with details for the development
+# environment. Opens ports for Krill, S3 and Aquarium.
+#
+# See the base file for details on changing or resetting the database.
+#
+# 1. copy this file to aquarium/docker-compose.yml
+# 2. copy aquarium/config/dev-docker-database.yml to aquarium/config/database.yml
+# 3. copy aquarium/config/initializers/dev-docker-aquarium.rb to aquarium/config/initializers/aquarium.rb
+# 4. run 'docker-compose build'
+# 5. run 'docker-compose up'
+
+version: "3.6"
+services:
+  db:
+    environment:
+      MYSQL_DATABASE: development
+      MYSQL_USER: aquarium
+      MYSQL_PASSWORD: aSecretAquarium
+      MYSQL_ROOT_PASSWORD: aSecretAquarium
+
+  krill:
+    entrypoint: ["/aquarium/krill-entrypoint.sh"]
+    command: ["development"]
+    ports:
+      - "3500:3500"
+
+  s3:
+    ports:
+      - "9000:9000"
+
+  web:
+    entrypoint: ["/aquarium/aquarium-entrypoint.sh"]
+    command: ["development"]
+    environment:
+      - AWS_ACCESS_KEY_ID="" 
+      - AWS_SECRET_ACCESS_KEY="" 
+      - AWS_REGION=""
+    volumes:
+      - ./docs:/aquarium/docs
+      - ./spec:/aquarium/spec
+      - ./test:/aquairum/test
+    ports:
+      - "3000:3000"
+

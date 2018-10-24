@@ -1,0 +1,9 @@
+# docker-compose file for windows-specific details for aquarium
+
+version: "3.6"
+services:
+  db:
+    volumes:
+      - ./docker/db:/var/lib/mysql
+      - ./docker/mysql_init/:/docker-entrypoint-initdb.d/
+    command: --innodb-flush-method=O_DSYNC --innodb-use-native-aio=0 --log_bin=ON --server-id=1
