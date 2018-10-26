@@ -28,6 +28,9 @@ services:
   krill:
     build: 
       context: .
+    entrypoint: ["/aquarium/krill-entrypoint.sh"]
+    expose:
+      - "3500"   
     networks:
      - aquarium_net
     depends_on:
@@ -39,17 +42,32 @@ services:
     volumes:
       - ./docker/s3/data:/data
       - ./docker/s3/config:/root/.minio
+    command: server /data      
     environment:
       MINIO_ACCESS_KEY: aquarium_minio
       MINIO_SECRET_KEY: KUNAzqrNifmM6GwNVZ8IP7dxZAkYjhnwc0bfdz0W
       MINIO_REGION: us-west-1
-    command: server /data
+    expose:
+      - "9000"
+    networks:
+      - aquarium_net
+
+  nginx:
+    image: nginx:stable-alpine
+    volumes:
+      - webvolume:/aquarium
+    ports:
+      - "80:80"
+      - "9000:9000"
     networks:
       - aquarium_net
 
   web:
     build:
       context: .
+    entrypoint: ["/aquarium/aquarium-entrypoint.sh"]
+    expose:
+      - "3000"
     volumes:
       - ./app:/aquarium/app
       - ./config:/aquarium/config
@@ -57,6 +75,7 @@ services:
       - ./lib:/aquarium/lib
       - ./log:/aquarium/log
       - ./script:/aquarium/script
+      - webvolume:/aquarium
     networks:
       - aquarium_net
     depends_on:
@@ -65,3 +84,6 @@ services:
 
 networks:
   aquarium_net:
+
+volumes:
+  webvolume:

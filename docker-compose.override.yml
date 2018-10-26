@@ -10,43 +10,18 @@ services:
       MYSQL_ROOT_PASSWORD: aSecretAquarium
 
   krill:
-    entrypoint: ["/aquarium/aquarium-entrypoint.sh"]
-    command: ["krill", "production"]
-    expose:
-      - "3500"
-
-
-  s3:
-    expose:
-      - "9000"
+    command: ["production"]
 
   web:
-    entrypoint: ["/aquarium/aquarium-entrypoint.sh"]
-    command: ["web", "production"]
-    volumes:
-      - webvolume:/aquarium
+    command: ["production"]
     environment:
       - AWS_ACCESS_KEY_ID="" 
       - AWS_SECRET_ACCESS_KEY="" 
       - AWS_REGION=""
-    expose:
-      - "3000"
-    depends_on:
-      - db
-      - s3
 
   nginx:
-    image: nginx:stable-alpine
     volumes:
-      - ./docker/nginx.conf:/etc/nginx/conf.d/my_app.conf:ro
-      - webvolume:/aquarium
-    ports:
-      - "80:80"
-    networks:
-      - aquarium_net
+      - ./docker/nginx.production.conf:/etc/nginx/nginx.conf:ro
 
-networks:
-  aquarium_net:
 
-volumes:
-  webvolume:
+
