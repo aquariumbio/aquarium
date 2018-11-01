@@ -120,16 +120,17 @@ module DataAssociator
   #
   # @param key [String] the key for the new association
   # @param value [Object] the value for the new association (may be any serializable value)
+  # @param upload [Upload] the upload object (default: `nil`)
   # @example Associate concentration with an operation's input
   #   da = op.input("Fragment").item.lazy_associate :concentration, 42
-  def lazy_associate(key, value)
+  def lazy_associate(key, value, upload = nil)
 
     da = DataAssociation.new(
       parent_id: id,
       parent_class: self.class.to_s,
       key: key.to_s,
       object: { key => value }.to_json,
-      upload_id: nil
+      upload_id: upload ? upload.id : nil
     )
 
   end
