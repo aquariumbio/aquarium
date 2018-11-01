@@ -71,7 +71,8 @@ def make_sidebar categories, operation_type_specs, libraries, sample_types, obje
 
   html = "<ul class='list-unstyled'>\n"
   html += "<li><a href='#' onclick='load_overview()'>Overview</a></li>\n"
-
+  html += "<li><a href='#' onclick='load_license()'>License</a></li>\n"
+  
   categories.each do |c|
     html += "  <li><b>#{c}</b>\n"
     html += "    <ul>\n"

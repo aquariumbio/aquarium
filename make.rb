@@ -87,6 +87,19 @@ File.write(html_path + "/index.html", make_sidebar(categories, operation_type_sp
 # Copy auxilliary files
 FileUtils.copy(base_path + "/config.json", html_path + "/config.json")
 FileUtils.copy(base_path + "/README.md", html_path + "/README.md")
+FileUtils.copy(base_path + "/LICENSE.md", html_path + "/LICENSE.md")
 FileUtils.copy(src_path + "/aquadoc.css", css_path + "/aquadoc.css")
 FileUtils.copy(src_path + "/aquadoc.js",  js_path  + "/aquadoc.js")
 FileUtils.copy(src_path + "/markdown-it.js",  js_path  + "/markdown-it.js")
+
+# Make library docs
+Dir.chdir libraries_path
+system "touch README.md"
+Dir["*.rb"].each do |lib|
+  name = lib.split("/").last;
+  hname = name.split(".")[0] + ".html"
+  system "yardoc #{lib} --one-file"
+  system "mv doc/index.html #{hname}"
+end
+
+system "rm -rf doc"
