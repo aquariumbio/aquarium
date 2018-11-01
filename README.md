@@ -30,9 +30,9 @@ The config.json file should look something like
 
 Then run
 
-    ruby aquadoc Workflow_Name
+    ruby aquadoc MyWorkflow
 
-which will produce the directory
+from within the directory containing the MyWorkflow directory. This will produce the directory
 
     MyWorkflow/html
 
