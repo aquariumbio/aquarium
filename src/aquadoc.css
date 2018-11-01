@@ -1,0 +1,45 @@
+/*Set the row height to the viewport*/
+.row-height{
+  height: 100vh;
+}
+
+/*Set up the columns with a 100% height, body color and overflow scroll*/
+
+.left{
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.right{
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: scroll;
+}
+
+/*Remove the scrollbar from Chrome, Safari, Edge and IE*/
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+* {
+  -ms-overflow-style: none !important;
+}
+
+.sidebar {
+  border-right: 1pt solid #ddd;
+}
+
+.heading {
+  border-bottom: 1pt solid #ddd;
+  background-image:linear-gradient(120deg, #155799, #159957);
+  color: lightgreen;
+}
+
+.heading a {
+  color: lightgreen;
+}
+
+.title {
+  color: white;
+}
