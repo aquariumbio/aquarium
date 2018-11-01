@@ -39,14 +39,19 @@ services:
       - web
 
   s3:
-    build: .
-    command: fakes3 -r /mnt/s3 -p 10001
+    image: minio/minio:latest
     volumes:
-      - ./docker/s3:/mnt/s3
+      - ./docker/s3/data:/data
+      - ./docker/s3/config:/root/.minio
     ports:
-      - "10001:10001"
+      - "9000:9000"
+    environment:
+      MINIO_ACCESS_KEY: aquarium_minio
+      MINIO_SECRET_KEY: KUNAzqrNifmM6GwNVZ8IP7dxZAkYjhnwc0bfdz0W
+      MINIO_REGION: us-west-1
+    command: server /data
     networks:
-     - aquarium_net
+      - aquarium_net
 
   web:
     build:
