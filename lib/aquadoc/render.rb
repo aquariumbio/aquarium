@@ -1,17 +1,72 @@
 class Aquadoc
 
   def sample_type_link name
-    "<a href='#' onclick='load_sample_type(\"#{sanitize_filename name}\")'>#{name}</a>"
+    if name
+      "<a href='#' onclick='load_sample_type(\"#{sanitize_filename name}\")'>#{name}</a>"
+    else
+      "NO SAMPLE TYPE"
+    end
   end
 
   def object_type_link name
-    "<a href='#' onclick='load_object_type(\"#{sanitize_filename name}\")'>#{name}</a>"
+    if name
+      "<a href='#' onclick='load_object_type(\"#{sanitize_filename name}\")'>#{name}</a>"
+    else
+      "NO CONTAINER"
+    end
+  end
+
+  def field_type_md ft
+    str  = "- **#{ft[:name]}**"
+    str += " [#{ft[:routing]}]"
+    str += " (Array)" if ft[:array]
+    str += " Part of collection" if ft[:part]
+    str += "\n"
+    ft[:sample_types].zip(ft[:object_types]).each do |st,ot|
+      str += "  - " + sample_type_link(st) + " / " + object_type_link(ot) + "\n"
+    end
+    str
   end
 
   def op_type_md operation_type_spec
-    operation_type_spec[:operation_type][:name] + "\n" +
-     "===\n" +
-     operation_type_spec[:operation_type][:documentation]
+
+    ot = operation_type_spec[:operation_type]
+
+    str = "# " + ot[:name]    + "\n\n" +
+          ot[:documentation] + "\n\n"
+
+    inputs = ot[:field_types].select { |ft| ft[:role] == 'input' && ft[:ftype] == 'sample' }
+    params = ot[:field_types].select { |ft| ft[:role] == 'input' && ft[:ftype] != 'sample' }
+    outputs = ot[:field_types].select { |ft| ft[:role] == 'output' && ft[:ftype] == 'sample' }
+
+    str += "### Inputs\n\n" unless inputs.empty?
+
+    inputs.each do |input|
+      str += field_type_md input
+    end
+
+    str += "### Parameters\n\n" unless params.empty?
+
+    params.each do |p|
+      str += "- **#{p[:name]}**"
+      str += " [#{p[:choices]}]" if p[:choices]
+      str += "\n"
+    end
+
+    str += "### Outputs\n\n" unless outputs.empty?
+
+    outputs.each do |output|
+      str += field_type_md output
+    end
+
+    str += "### Precondition <a href='#' id='precondition'>[show]</a>\n"
+    str += "```ruby\n#{ot[:precondition]}\n```\n"
+
+    str += "### Protocol Code <a href='#' id='protocol'>[show]</a>\n"
+    str += "```ruby\n#{ot[:protocol]}\n```\n"
+
+    str
+
   end
 
   #
@@ -19,8 +74,7 @@ class Aquadoc
   #
   def sample_type_md sample_type
 
-    str = sample_type[:name] + "\n" +
-          "===\n" +
+    str = "# Sample Type: " + sample_type[:name] + "\n" +
           sample_type[:description] + "\n\n"
 
     sample_type[:field_types].each do |ft|
@@ -32,10 +86,6 @@ class Aquadoc
       end
     end
 
-    # str += "```json\n" +
-    #        JSON.pretty_generate(sample_type, space: '    ', space_before: '        ') + "\n" +
-    #        "```"
-
     str
 
   end
@@ -45,8 +95,7 @@ class Aquadoc
   #
   def object_type_md object_type
 
-    str = object_type[:name] + "\n" +
-          "===\n" +
+    str = "# Container: " + object_type[:name] + "\n" +
           object_type[:description] + "\n\n"
 
     if object_type[:handler] == 'collection'
@@ -60,10 +109,6 @@ class Aquadoc
     if object_type[:handler] == 'sample_container' && !object_type[:sample_type_name]
       str += "**Warning:** This container is marked as a sample comtainer, but has no link to a sample type.\n\n"
     end
-
-    # str += "```json\n" +
-    #        JSON.pretty_generate(object_type) + "\n" +
-    #        "```"
 
     str
 

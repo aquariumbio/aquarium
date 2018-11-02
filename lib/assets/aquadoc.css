@@ -48,3 +48,18 @@
   height: 100%;
   border: none;
 }
+
+#precondition {
+  font-size: 12pt;
+}
+
+#protocol {
+  font-size: 12pt;
+}
+
+.code-block {
+  border: 1pt solid #bbb;
+  margin-left: 16px;
+  display: none;
+  background: #efefef;
+}
