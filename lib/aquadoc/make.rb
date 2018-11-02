@@ -119,6 +119,29 @@ class Aquadoc
 
   end
 
+  def make_yard_docs
+
+    Dir.chdir @libraries_path
+    unless system "touch README.md"
+      raise "Could not write to #{@temp_dir}"
+    end
+    Dir["./*.rb"].each do |lib|
+      name = lib.split("/").last;
+      hname = name.split(".")[0] + ".html"
+      unless system "yardoc -p #{@assets_path}/yard_templates #{lib} --one-file --quiet"
+        raise "Could not run yardoc on #{lib}"
+      end
+      unless system "mv doc/index.html #{hname}"
+        raise "Could not move doc file for #{hname}"
+      end
+    end
+
+    system "rm -rf doc"
+
+    Dir.chdir @base_path
+
+  end
+
   def copy_assets
 
     FileUtils.copy(@base_path + "/config.json",     @html_path + "/config.json")
@@ -137,24 +160,7 @@ class Aquadoc
     make_md
     make_sidebar
     copy_assets
-
-    # Make library docs
-    Dir.chdir @libraries_path
-    unless system "touch README.md"
-      raise "Could not write to #{@temp_dir}"
-    end
-    Dir["./*.rb"].each do |lib|
-      name = lib.split("/").last;
-      hname = name.split(".")[0] + ".html"
-      unless system "yardoc -p #{@assets_path}/yard_templates #{lib} --one-file --quiet"
-        raise "Could not run yardoc on #{lib}"
-      end
-      unless system "mv doc/index.html #{hname}"
-        raise "Could not move doc file for #{hname}"
-      end
-    end
-
-    system "rm -rf doc"
+    make_yard_docs
 
   end
 

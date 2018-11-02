@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
     "lib/assets/yard_templates/default/onefile/html/layout.erb",
     "lib/assets/yard_templates/default/onefile/html/setup.rb"
   ]
-  s.add_runtime_dependency "yard", '~> 0'
+  s.add_runtime_dependency "yard", ">= 0.9.11"
   s.homepage    = 'http://klavinslab.org/protocols'
   s.license     = 'MIT'
   s.bindir      = 'bin'
