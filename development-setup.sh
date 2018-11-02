@@ -18,3 +18,7 @@ cp docker/dev-docker-database.yml config/database.yml
 cp docker/dev-docker-aquarium.notrb config/initializers/aquarium.rb
 
 cp docker/dev-docker-development.rb config/environments/development.rb
+
+mkdir -p docker/db
+mkdir -p docker/s3/data/development
+mkdir -p docker/s3/config

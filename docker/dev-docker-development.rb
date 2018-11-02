@@ -44,22 +44,22 @@ Bioturk::Application.configure do
 
   # config.time_zone = "Pacific Time (US & Canada)"
 
-  # Paperclip => fakes3
+  # Paperclip => minio
   config.paperclip_defaults = {
     storage: :s3,
-    bucket: 'development',
-    s3_host_name: 's3',
     s3_protocol: 'http',
+    s3_permissions: 'private',
+    s3_region: 'us-west-1', 
     s3_credentials: {
-      access_key_id: 'THE_DUMMY_ACCESS_KEY_ID',
-      secret_access_key: 'THE_DUMMY_ACCESS_KEY',
-      s3_endpoint: 's3',
-      s3_port: 10001,
-      s3_force_path_style: true,
-      use_ssl: false,
-      s3_region: ENV.fetch('AWS_REGION')
+      bucket: 'development',
+      access_key_id: 'aquarium_minio',
+      secret_access_key: 'KUNAzqrNifmM6GwNVZ8IP7dxZAkYjhnwc0bfdz0W'
     },
-    s3_permissions: 'private'
+    s3_host_name: 's3:9000',
+    s3_options: {
+      endpoint: "http://s3:9000", # for aws-sdk
+      force_path_style: true # for aws-sdk (required for minio)
+    }
   }
 
   # AWS Simple Email Service Config

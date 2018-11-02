@@ -26,9 +26,9 @@ if [[ $1 == "web" || $1 == "krill" ]] && [[ $2 == "development" || $2 == "produc
   elif [[ $2 == "development" ]]; then
     # define fake AWS info for development server
     export RAILS_ENV="development"
-    export AWS_ACCESS_KEY_ID="" 
-    export AWS_SECRET_ACCESS_KEY="" 
-    export AWS_REGION=""
+    export AWS_ACCESS_KEY_ID="THE_DUMMY_ACCESS_KEY_ID" 
+    export AWS_SECRET_ACCESS_KEY="THE_DUMMY_ACCESS_KEY" 
+    export AWS_REGION="us-west-1"
     export INSTANCE_NAME="LOCAL"
     export DEBUG_TOOLS="true"
   else 
