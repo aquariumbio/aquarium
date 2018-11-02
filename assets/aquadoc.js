@@ -23,28 +23,8 @@ function load_object_type(name) {
 
 function load_library(name) {
 
-  // $.ajax(
-  //   {
-  //     url: "libraries/" + name + '.rb',
-  //     success: function (data) {
-  //       let c = $("#content").empty().append($("<pre></pre>").append($("<code class='ruby'></code>").text(data)));
-  //       c.each(function(i, block) {
-  //         hljs.highlightBlock(block);
-  //
-  //       });
-  //     }
-  //   });
-
-  // $.ajax(
-  //   {
-  //     url: "libraries/" + name + '.html',
-  //     success: function (data) {
-  //       let c = $("#content").empty().html(data);
-  //     }
-  //   });
-  let tag = "<iframe class='lib-frame' src='libraries/" + name + ".html'></iframe>"
-  console.log(tag)
-  $("#content").empty().append(tag)
+  let tag = "<iframe class='lib-frame' src='libraries/" + name + ".html' scrolling='yes'></iframe>"
+  $("#content").empty().append(tag);
 
 }
 

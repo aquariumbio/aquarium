@@ -4,14 +4,13 @@
 }
 
 /*Set up the columns with a 100% height, body color and overflow scroll*/
-
 .left{
-  height: 100%;
+  height: calc(100% - 62px);
   overflow-y: scroll;
 }
 
 .right{
-  height: 100%;
+  height: calc(100% - 62px);
   overflow-y: scroll;
   overflow-x: scroll;
 }
