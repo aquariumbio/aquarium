@@ -1,18 +1,24 @@
 # Aquadoc
 
-The purpose of aquadoc is to generate a web page you can use to publish and share a set of Aquarium operation types and their protocols.
+The purpose of aquadoc is to generate a web page you can use to publish and
+share a set of Aquarium operation types and their protocols.
 
 ## Installation
 
-Under construction
+This gem is under construction, so it is not yet available on RubyGems. To install it from github do:
+
+    gem install specific_install
+    gem specific_install https://github.com/klavinslab/aquadoc
 
 ## Usage
 
-First, from the Aquarium Developer tab, export a set of categories and create a local directory of the form
+First, from the Aquarium Developer tab, export a set of categories and put them in a directory called categories.
+Then create a README.md, a LICENSE.md, and a config.json. Your directory structure should look like the following:
 
     MyWorkflow
     |
     + README.md
+    + LICENSE.md
     + config.json
     + categories
       |
@@ -30,9 +36,9 @@ The config.json file should look something like
 
 Then run
 
-    ruby aquadoc MyWorkflow
+    aquadoc
 
-from within the directory containing the MyWorkflow directory. This will produce the directory
+from within the MyWorkflow directory. This will produce the directory
 
     MyWorkflow/html
 
