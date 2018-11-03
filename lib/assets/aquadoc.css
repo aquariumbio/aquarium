@@ -33,6 +33,7 @@
   border-bottom: 1pt solid #ddd;
   background-image:linear-gradient(120deg, #155799, #159957);
   color: lightgreen;
+  position: relative;
 }
 
 .heading a {
@@ -58,8 +59,16 @@
 }
 
 .code-block {
-  border: 1pt solid #bbb;
+  border-left: 8px solid rgb(221, 221, 221);
   margin-left: 16px;
   display: none;
-  background: #efefef;
+}
+
+#aquadoc-link {
+  font-size: 11pt;
+  font-family: "Courier New"
+}
+
+#aquadoc-link a {
+  color: white;
 }
