@@ -2,7 +2,9 @@ class Aquadoc
 
   def sample_type_link name
     if name
-      "<a href='#' onclick='load_sample_type(\"#{sanitize_filename name}\")'>#{name}</a>"
+      "<a href='#' onclick='load_sample_type(\"#{
+        sanitize_filename name
+      }\")'>#{name}</a>"
     else
       "NO SAMPLE TYPE"
     end
@@ -10,7 +12,9 @@ class Aquadoc
 
   def object_type_link name
     if name
-      "<a href='#' onclick='load_object_type(\"#{sanitize_filename name}\")'>#{name}</a>"
+      "<a href='#' onclick='load_object_type(\"#{
+        sanitize_filename name
+      }\")'>#{name}</a>"
     else
       "NO CONTAINER"
     end
@@ -23,7 +27,8 @@ class Aquadoc
     str += " Part of collection" if ft[:part]
     str += "\n"
     ft[:sample_types].zip(ft[:object_types]).each do |st,ot|
-      str += "  - " + sample_type_link(st) + " / " + object_type_link(ot) + "\n"
+      str += "  - " + sample_type_link(st) +
+             " / " + object_type_link(ot) + "\n"
     end
     str
   end
@@ -77,12 +82,17 @@ class Aquadoc
     str = "# Sample Type: " + sample_type[:name] + "\n" +
           sample_type[:description] + "\n\n"
 
-    sample_type[:field_types].each do |ft|
-      if ft[:ftype] == 'sample'
-        str += "- **#{ft[:name]}:** "
-        str += ft[:allowable_field_types].collect { |aft| aft[:sample_type] ? sample_type_link(aft[:sample_type][:name]) : "?" }.join(", ") + "\n"
-      else
-        str += "- **#{ft[:name]}:** #{ft[:ftype]}\n"
+    if sample_type[:field_types]
+      sample_type[:field_types].each do |ft|
+        if ft[:ftype] == 'sample'
+          str += "- **#{ft[:name]}:** "
+          str += ft[:allowable_field_types].collect { |aft|
+            aft[:sample_type] ?
+            sample_type_link(aft[:sample_type][:name]) :
+            "?" }.join(", ") + "\n"
+        else
+          str += "- **#{ft[:name]}:** #{ft[:ftype]}\n"
+        end
       end
     end
 
@@ -117,17 +127,28 @@ class Aquadoc
   def make_sidebar
 
     html = "<ul class='list-unstyled'>\n"
-    html += "<li><a href='#' onclick='load_overview()'>Overview</a></li>\n"
-    html += "<li><a href='#' onclick='load_license()'>License</a></li>\n"
+    html += "<li><b>Overview</b>\n"
+    html += "  <ul>\n"
+    html += "    <li><a href='#' onclick='load_overview()'>Introduction</a></li>\n"
+    html += "    <li><a href='#' onclick='load_about()'>About this Workflow</a></li>\n"
+    html += "    <li><a href='#' onclick='load_license()'>License</a></li>\n"
+    html += "  </ul>"
 
     @categories.each do |c|
       html += "  <li><b>#{c}</b>\n"
       html += "    <ul>\n"
-      @operation_type_specs.select { |ots| ots[:operation_type][:category] == c }.each do |ots|
-        html += "      <li><a href='#' onclick='load_operation_type(\"#{sanitize_filename ots[:operation_type][:name]}\")'>#{ots[:operation_type][:name]}</a></li>\n"
+      @operation_type_specs.select { |ots| ots[:operation_type][:category] == c }
+                           .each do |ots|
+        html += "      " +
+                "<li><a href='#' onclick='load_operation_type(\"#{
+                  sanitize_filename ots[:operation_type][:name]
+                }\")'>#{ots[:operation_type][:name]}</a></li>\n"
       end
       @libraries.select { |lib| lib[:category] == c }.each do |lib|
-        html += "      <li>Library: <a href='#' onclick='load_library(\"#{sanitize_filename lib[:name]}\")'>#{lib[:name]}</a></li>\n"
+        html += "      " +
+                "<li>Library: <a href='#' onclick='load_library(\"#{
+                  sanitize_filename lib[:name]
+                }\")'>#{lib[:name]}</a></li>\n"
       end
       html += "    </ul>\n"
       html += "  </li>\n"
@@ -136,7 +157,10 @@ class Aquadoc
     html += "  <li><b>Sample Types</b>\n"
     html += "    <ul>\n"
     @sample_types.each do |st|
-      html +=  "      <li><a href='#' onclick='load_sample_type(\"#{sanitize_filename st[:name]}\")'>#{st[:name]}</a></li>\n"
+      html +=  "      " +
+               "<li><a href='#' onclick='load_sample_type(\"#{
+                 sanitize_filename st[:name]
+               }\")'>#{st[:name]}</a></li>\n"
     end
     html += "    </ul>\n"
     html += "  </li>\n"
@@ -144,7 +168,10 @@ class Aquadoc
     html += "  <li><b>Containers</b>\n"
     html += "    <ul>\n"
     @object_types.each do |ot|
-      html +=  "      <li><a href='#' onclick='load_object_type(\"#{sanitize_filename ot[:name]}\")'>#{ot[:name]}</a></li>\n"
+      html +=  "      " +
+               "<li><a href='#' onclick='load_object_type(\"#{
+                 sanitize_filename ot[:name]
+               }\")'>#{ot[:name]}</a></li>\n"
     end
     html += "    </ul>\n"
     html += "  </li>\n"

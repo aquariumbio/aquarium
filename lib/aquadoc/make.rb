@@ -44,6 +44,8 @@ class Aquadoc
     @sample_types_path = @html_path + "/sample_types"
     @object_types_path = @html_path + "/object_types"
 
+    @config_path = @base_path + "/config.json"
+
     @assets_path = assets_path_from_load_path + "/assets"
 
   end
@@ -69,7 +71,9 @@ class Aquadoc
     @libraries = []
 
     # Read in JSON category files and arrange the data into the above arrays
+    puts "Reading categories: #{@categories_directory}"
     Dir[@categories_directory].each do |c|
+      puts "c = #{c}"
       name = c.split("/").last;
       file = File.read(c);
       data = JSON.parse file, symbolize_names: true
@@ -150,16 +154,77 @@ class Aquadoc
     FileUtils.copy(@assets_path + "/aquadoc.js",    @js_path   + "/aquadoc.js")
   end
 
-  def make
+  def make_about_md
 
+    @config
+
+    str = <<~MD
+      # #{@config[:title]}, version #{@config[:version]}
+      #{@config[:description]}
+      
+      [#{@config[:repo]}](#{@config[:repo]})
+
+      &copy; #{@config[:copyright]}
+
+      ### Maintainer
+      - #{@config[:maintainer][:name]}, <#{@config[:maintainer][:email]}>
+
+      ### Authors
+      #{@config[:authors].collect { |a| "- #{a}"}.join("\n")}
+
+      ### Acknowledgements
+      #{@config[:acknowledgements].collect { |a| "- #{a}"}.join("\n")}
+
+      ### Details
+      These documents were automatically generated from [Aquarium](http://klavinslab.org)
+      categories using [aquadoc](https://github.com/klavinslab/aquadoc).
+    MD
+
+    File.write(@html_path + "/ABOUT.md",str)
+
+  end
+
+  def read_config
+
+    default_config = {
+      title: "No title specified",
+      description: "No description given",
+      copyright: "No copyright declared",
+      version: "no version info",
+      authors: [],
+      maintainer: {
+    	  name: "No maintainer",
+    	  email: "noone@nowehere"
+      },
+      acknowledgements: [],
+      repo: "no repository specified"
+    }
+
+    begin
+      file = File.read(@config_path)
+    rescue Exception => e
+      raise "Could not find config file at #{@config_path}"
+    end
+    begin
+      json = JSON.parse(file, symbolize_names: true)
+    rescue Exception => e
+      raise "Could not parse config file: #{e}"
+    end
+
+    @config = default_config.merge(json)
+
+  end
+
+  def make
     define_paths
+    read_config
     make_directories
     make_parts
     make_md
+    make_about_md
     make_sidebar
     copy_assets
     make_yard_docs
-
   end
 
 end
