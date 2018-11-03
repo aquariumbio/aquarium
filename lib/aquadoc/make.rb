@@ -143,13 +143,11 @@ class Aquadoc
   end
 
   def copy_assets
-
     FileUtils.copy(@base_path + "/config.json",     @html_path + "/config.json")
     FileUtils.copy(@base_path + "/README.md",       @html_path + "/README.md")
     FileUtils.copy(@base_path + "/LICENSE.md",      @html_path + "/LICENSE.md")
-    FileUtils.copy(@assets_path + "/aquadoc.css",     @css_path + "/aquadoc.css")
-    FileUtils.copy(@assets_path + "/aquadoc.js",      @js_path  + "/aquadoc.js")
-    FileUtils.copy(@assets_path + "/markdown-it.js",  @js_path  + "/markdown-it.js")
+    FileUtils.copy(@assets_path + "/aquadoc.css",   @css_path  + "/aquadoc.css")
+    FileUtils.copy(@assets_path + "/aquadoc.js",    @js_path   + "/aquadoc.js")
   end
 
   def make
