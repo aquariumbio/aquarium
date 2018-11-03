@@ -14,10 +14,8 @@ Gem::Specification.new do |s|
     "lib/assets/index_part_2.html",
     "lib/assets/aquadoc.css",
     "lib/assets/aquadoc.js",
-    "lib/assets/markdown-it.js",
     "lib/assets/yard_templates/default/onefile/html/layout.erb",
-    "lib/assets/yard_templates/default/onefile/html/setup.rb",
-    "lib/assets/bower.json"
+    "lib/assets/yard_templates/default/onefile/html/setup.rb"
   ]
   s.add_runtime_dependency "yard", ">= 0.9.11"
   s.homepage    = 'http://klavinslab.org/protocols'
