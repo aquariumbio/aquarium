@@ -4,25 +4,24 @@ The purpose of aquadoc is to generate a web page you can use to publish and
 share a set of [Aquarium](http://klavinslab.org/aquarium) operation types and their protocols.
 
 ## Installation
-
 This gem is under construction, so it is not yet available on RubyGems.
 To install it from github do:
-
-    gem install specific_install
-    gem specific_install https://github.com/klavinslab/aquadoc
+```bash
+gem install specific_install
+gem specific_install https://github.com/klavinslab/aquadoc
+```
 
 Alternatively, you can use docker, as in
-
-    git clone https://github.com/klavinslab/aquadoc.git
-    cd aquadoc
-    docker build -t aquadoc env
-    docker run -v /path/to/MyWorkflow:/home/MyWorkflow -it aquadoc bash
-    cd MyWorkflow
-
+```bash
+git clone https://github.com/klavinslab/aquadoc.git
+cd aquadoc
+docker build -t aquadoc env
+docker run -v /path/to/MyWorkflow:/home/MyWorkflow -it aquadoc bash
+cd MyWorkflow
+```
 where MyWorkflow is a directory containing your workflow as described below.
 
 ## Usage
-
 First, from the [Aquarium](http://klavinslab.org/aquarium) Developer tab,
 export a set of categories and put them in a directory called categories.
 Then create a README.md, a LICENSE.md, and a config.json.
@@ -42,10 +41,26 @@ Your directory structure should look like the following:
 The README.md file will be used as the front page of the resulting web page.
 The config.json file should look something like
 
-    {
-      "title": "My Workflow",
-      "authors": [ "First Last", "First Last" ]
-    }
+```json
+{
+  "title": "My Workflow",
+  "description": "A workflow for doing x, y and z",
+  "copyright": "2018 Me or My Organization",
+  "version": "0.0.1",
+  "authors": [
+    "First Last"
+  ],
+  "maintainer": {
+        "name": "First Last",
+        "email": "me@my.org"
+  },
+  "acknowledgements": [
+    "My Collaborator",
+    "My Lab Manager"
+  ],
+  "repo": "https://github.com/me/myworkflow"
+}
+```
 
 Then run
 

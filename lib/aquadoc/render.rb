@@ -124,6 +124,36 @@ class Aquadoc
 
   end
 
+  def make_about_md
+
+    @config
+
+    str = <<~MD
+      # #{@config[:title]}, version #{@config[:version]}
+      #{@config[:description]}
+
+      [#{@config[:repo]}](#{@config[:repo]})
+
+      &copy; #{@config[:copyright]}
+
+      ### Maintainer
+      - #{@config[:maintainer][:name]}, <#{@config[:maintainer][:email]}>
+
+      ### Authors
+      #{@config[:authors].collect { |a| "- #{a}"}.join("\n")}
+
+      ### Acknowledgements
+      #{@config[:acknowledgements].collect { |a| "- #{a}"}.join("\n")}
+
+      ### Details
+      These documents were automatically generated from [Aquarium](http://klavinslab.org)
+      categories using [aquadoc](https://github.com/klavinslab/aquadoc).
+    MD
+
+    File.write(@html_path + "/ABOUT.md",str)
+
+  end
+
   def make_sidebar
 
     html = "<ul class='list-unstyled'>\n"
