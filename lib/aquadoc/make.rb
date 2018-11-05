@@ -55,10 +55,10 @@ class Aquadoc
     FileUtils.mkdir_p @html_path
     FileUtils.mkdir_p @css_path
     FileUtils.mkdir_p @js_path
-    FileUtils.mkdir_p @libraries_path
-    FileUtils.mkdir_p @operation_types_path
-    FileUtils.mkdir_p @sample_types_path
-    FileUtils.mkdir_p @object_types_path
+    FileUtils.mkdir_p @libraries_path if @options[:libraries]
+    FileUtils.mkdir_p @operation_types_path if @options[:workflows]
+    FileUtils.mkdir_p @sample_types_path if @options[:inventory]
+    FileUtils.mkdir_p @object_types_path if @options[:inventory]
 
   end
 
@@ -71,9 +71,7 @@ class Aquadoc
     @libraries = []
 
     # Read in JSON category files and arrange the data into the above arrays
-    puts "Reading categories: #{@categories_directory}"
     Dir[@categories_directory].each do |c|
-      puts "c = #{c}"
       name = c.split("/").last;
       file = File.read(c);
       data = JSON.parse file, symbolize_names: true
@@ -105,20 +103,26 @@ class Aquadoc
   def make_md
 
     @categories.each do |c|
-      @operation_type_specs.select { |ots| ots[:operation_type][:category] == c }.each do |ots|
-        File.write(@operation_types_path + "/#{sanitize_filename ots[:operation_type][:name]}.md", op_type_md(ots))
+      if @options[:workflows]
+        @operation_type_specs.select { |ots| ots[:operation_type][:category] == c }.each do |ots|
+          File.write(@operation_types_path + "/#{sanitize_filename ots[:operation_type][:name]}.md", op_type_md(ots))
+        end
       end
-      @libraries.select { |lib| lib[:category] == c }.each do |lib|
-        File.write(@libraries_path + "/#{sanitize_filename lib[:name]}.rb", lib[:code_source])
+      if @options[:libraries]
+        @libraries.select { |lib| lib[:category] == c }.each do |lib|
+          File.write(@libraries_path + "/#{sanitize_filename lib[:name]}.rb", lib[:code_source])
+        end
       end
     end
 
-    @sample_types.each do |st|
-      File.write(@sample_types_path + "/#{sanitize_filename st[:name]}.md", sample_type_md(st))
-    end
+    if @options[:inventory]
+      @sample_types.each do |st|
+        File.write(@sample_types_path + "/#{sanitize_filename st[:name]}.md", sample_type_md(st))
+      end
 
-    @object_types.each do |ot|
-      File.write(@object_types_path + "/#{sanitize_filename ot[:name]}.md", object_type_md(ot))
+      @object_types.each do |ot|
+        File.write(@object_types_path + "/#{sanitize_filename ot[:name]}.md", object_type_md(ot))
+      end
     end
 
   end
@@ -185,7 +189,15 @@ class Aquadoc
 
   end
 
-  def make
+  def make opts={}
+
+    @options = {
+        inventory: true,
+        libraries: true,
+        workflows: true,
+        yard_docs: true
+    }.merge opts
+
     define_paths
     read_config
     make_directories
@@ -194,7 +206,7 @@ class Aquadoc
     make_about_md
     make_sidebar
     copy_assets
-    make_yard_docs
+    make_yard_docs if @options[:yard_docs] && @options[:libraries]
   end
 
 end

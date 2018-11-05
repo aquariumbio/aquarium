@@ -1,4 +1,38 @@
 #!/usr/bin/env ruby
 
 require 'aquadoc'
-Aquadoc.new.make
+
+opts = {}
+ARGV.each do |arg|
+
+  case arg
+
+  when "--no-workflows"
+    opts[:workflows] = false
+
+  when "--no-libraries"
+    opts[:libraries] = false
+
+  when "--no-inventory"
+    opts[:inventory] = false
+
+  when "--no-yard"
+    opts[:yard] = false
+
+  when "--help"
+
+    puts <<~HELP
+      aquadoc [options...]
+        --no-inventory     Do not include inventory definitions.
+        --no-libraries     Do not include library code.
+        --no-workflows     Do not include workflow (operation type) code.
+        --no-yard          Do not automatically generation library documentation
+                          using yard.
+    HELP
+    exit(0)
+
+  end
+
+end
+
+Aquadoc.new.make opts

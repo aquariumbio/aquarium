@@ -1,20 +1,24 @@
 class Aquadoc
 
   def sample_type_link name
-    if name
+    if @options[:inventory] && name
       "<a href='#' onclick='load_sample_type(\"#{
         sanitize_filename name
       }\")'>#{name}</a>"
+    elsif !@options[:inventory] && name
+      name
     else
       "NO SAMPLE TYPE"
     end
   end
 
   def object_type_link name
-    if name
+    if @options[:inventory] && name
       "<a href='#' onclick='load_object_type(\"#{
         sanitize_filename name
       }\")'>#{name}</a>"
+    elsif !@options[:inventory] && name
+      name
     else
       "NO CONTAINER"
     end
@@ -164,47 +168,55 @@ class Aquadoc
     html += "    <li><a href='#' onclick='load_license()'>License</a></li>\n"
     html += "  </ul>"
 
-    @categories.each do |c|
-      html += "  <li><b>#{c}</b>\n"
-      html += "    <ul>\n"
-      @operation_type_specs.select { |ots| ots[:operation_type][:category] == c }
-                           .each do |ots|
-        html += "      " +
-                "<li><a href='#' onclick='load_operation_type(\"#{
-                  sanitize_filename ots[:operation_type][:name]
-                }\")'>#{ots[:operation_type][:name]}</a></li>\n"
+    if @options[:workflows] && @options[:libraries]
+      @categories.each do |c|
+        html += "  <li><b>#{c}</b>\n"
+        html += "    <ul>\n"
+        if @options[:workflows]
+          @operation_type_specs.select { |ots| ots[:operation_type][:category] == c }
+                               .each do |ots|
+            html += "      " +
+                    "<li><a href='#' onclick='load_operation_type(\"#{
+                      sanitize_filename ots[:operation_type][:name]
+                    }\")'>#{ots[:operation_type][:name]}</a></li>\n"
+          end
+        end
+        if @options[:libraries]
+          @libraries.select { |lib| lib[:category] == c }.each do |lib|
+            html += "      " +
+                    "<li>Library: <a href='#' onclick='load_library(\"#{
+                      sanitize_filename lib[:name]
+                    }\")'>#{lib[:name]}</a></li>\n"
+          end
+        end
+        html += "    </ul>\n"
+        html += "  </li>\n"
       end
-      @libraries.select { |lib| lib[:category] == c }.each do |lib|
-        html += "      " +
-                "<li>Library: <a href='#' onclick='load_library(\"#{
-                  sanitize_filename lib[:name]
-                }\")'>#{lib[:name]}</a></li>\n"
+    end
+    
+    if @options[:inventory]
+      html += "  <li><b>Sample Types</b>\n"
+      html += "    <ul>\n"
+      @sample_types.each do |st|
+        html +=  "      " +
+                 "<li><a href='#' onclick='load_sample_type(\"#{
+                   sanitize_filename st[:name]
+                 }\")'>#{st[:name]}</a></li>\n"
+      end
+      html += "    </ul>\n"
+      html += "  </li>\n"
+
+      html += "  <li><b>Containers</b>\n"
+      html += "    <ul>\n"
+      @object_types.each do |ot|
+        html +=  "      " +
+                 "<li><a href='#' onclick='load_object_type(\"#{
+                   sanitize_filename ot[:name]
+                 }\")'>#{ot[:name]}</a></li>\n"
       end
       html += "    </ul>\n"
       html += "  </li>\n"
     end
-
-    html += "  <li><b>Sample Types</b>\n"
-    html += "    <ul>\n"
-    @sample_types.each do |st|
-      html +=  "      " +
-               "<li><a href='#' onclick='load_sample_type(\"#{
-                 sanitize_filename st[:name]
-               }\")'>#{st[:name]}</a></li>\n"
-    end
-    html += "    </ul>\n"
-    html += "  </li>\n"
-
-    html += "  <li><b>Containers</b>\n"
-    html += "    <ul>\n"
-    @object_types.each do |ot|
-      html +=  "      " +
-               "<li><a href='#' onclick='load_object_type(\"#{
-                 sanitize_filename ot[:name]
-               }\")'>#{ot[:name]}</a></li>\n"
-    end
-    html += "    </ul>\n"
-    html += "  </li>\n"
 
     html += "</ul>\n"
 
