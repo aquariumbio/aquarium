@@ -27,7 +27,7 @@ ARGV.each do |arg|
         --no-libraries     Do not include library code.
         --no-workflows     Do not include workflow (operation type) code.
         --no-yard          Do not automatically generation library documentation
-                          using yard.
+                           using yard.
     HELP
     exit(0)
 
