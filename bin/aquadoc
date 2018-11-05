@@ -17,7 +17,7 @@ ARGV.each do |arg|
     opts[:inventory] = false
 
   when "--no-yard"
-    opts[:yard] = false
+    opts[:yard_docs] = false
 
   when "--help"
 

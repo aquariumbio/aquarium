@@ -136,6 +136,8 @@ class Aquadoc
       # #{@config[:title]}, version #{@config[:version]}
       #{@config[:description]}
 
+      [[Download](#{zipname})]
+
       [#{@config[:repo]}](#{@config[:repo]})
 
       &copy; #{@config[:copyright]}
@@ -160,13 +162,15 @@ class Aquadoc
 
   def make_sidebar
 
-    html = "<ul class='list-unstyled'>\n"
-    html += "<li><b>Overview</b>\n"
-    html += "  <ul>\n"
-    html += "    <li><a href='#' onclick='load_overview()'>Introduction</a></li>\n"
-    html += "    <li><a href='#' onclick='load_about()'>About this Workflow</a></li>\n"
-    html += "    <li><a href='#' onclick='load_license()'>License</a></li>\n"
-    html += "  </ul>"
+    html = <<~HTML
+      <ul class='list-unstyled'>
+        <li><b>Overview</b>
+          <ul>
+            <li><a href='#' onclick='load_overview()'>Introduction</a></li>
+            <li><a href='#' onclick='load_about()'>About this Workflow</a></li>
+            <li><a href='#' onclick='load_license()'>License</a></li>
+          </ul>
+    HTML
 
     if @options[:workflows] && @options[:libraries]
       @categories.each do |c|
@@ -193,7 +197,7 @@ class Aquadoc
         html += "  </li>\n"
       end
     end
-    
+
     if @options[:inventory]
       html += "  <li><b>Sample Types</b>\n"
       html += "    <ul>\n"

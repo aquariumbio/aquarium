@@ -36,7 +36,7 @@ class Aquadoc
     @categories_path = @base_path + "/categories"
     @categories_directory = @categories_path + "/*.json"
 
-    @html_path = @base_path + "/html"
+    @html_path = @base_path + "/docs"
     @css_path = @html_path + "/css"
     @js_path = @html_path + "/js"
     @libraries_path = @html_path + "/libraries"
@@ -150,12 +150,21 @@ class Aquadoc
 
   end
 
+  def zipname
+    sanitize_filename(@config[:title]) + ".zip"
+  end
+
   def copy_assets
+
     FileUtils.copy(@base_path + "/config.json",     @html_path + "/config.json")
     FileUtils.copy(@base_path + "/README.md",       @html_path + "/README.md")
     FileUtils.copy(@base_path + "/LICENSE.md",      @html_path + "/LICENSE.md")
     FileUtils.copy(@assets_path + "/aquadoc.css",   @css_path  + "/aquadoc.css")
     FileUtils.copy(@assets_path + "/aquadoc.js",    @js_path   + "/aquadoc.js")
+
+    system "zip -r #{zipname} categories"
+    system "mv #{zipname} #{@html_path}"
+
   end
 
   def read_config
