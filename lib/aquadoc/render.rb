@@ -156,11 +156,12 @@ class Aquadoc
       categories using [aquadoc](https://github.com/klavinslab/aquadoc).
     MD
 
-    File.write(@html_path + "/ABOUT.md",str)
+    # File.write(@html_path + "/ABOUT.md",str)
+    @storage.write("ABOUT.md", str)
 
   end
 
-  def make_sidebar
+  def make_index
 
     html = <<~HTML
       <ul class='list-unstyled'>
@@ -172,7 +173,7 @@ class Aquadoc
           </ul>
     HTML
 
-    if @options[:workflows] && @options[:libraries]
+    if @options[:workflows] || @options[:libraries]
       @categories.each do |c|
         html += "  <li><b>#{c}</b>\n"
         html += "    <ul>\n"
@@ -224,10 +225,11 @@ class Aquadoc
 
     html += "</ul>\n"
 
-    part1 = file = File.read(@assets_path + "/index_part_1.html");
-    part2 = file = File.read(@assets_path + "/index_part_2.html");
+    part1 = file = File.read(@assets_path + "/index_part_1.html")
+    part2 = file = File.read(@assets_path + "/index_part_2.html")
 
-    File.write(@html_path + "/index.html", part1 + html + part2);
+    # File.write(@html_path + "/index.html", part1 + html + part2)
+    @storage.write("index.html", part1 + html + part2)
 
   end
 

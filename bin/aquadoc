@@ -31,8 +31,35 @@ ARGV.each do |arg|
     HELP
     exit(0)
 
+  else
+
+    puts "Unknown option: #{arg}"
+    exit(-1)
+
   end
 
 end
 
-Aquadoc.new.make opts
+begin
+  config = File.read("./config.json")
+  config = JSON.parse(config, symbolize_names: true)
+rescue Exception => e
+  raise "Could not find valid config file"
+end
+
+categories = []
+Dir["categories/*.json"].each do |c|
+  name = c.split("/").last;
+  file = File.read(c);
+  categories << JSON.parse(file, symbolize_names: true)
+end
+
+ag = Aquagit.new(config, categories, opts)
+
+if ag.authorized
+  ag.run
+else
+  puts "Could not authenticate with github"
+end
+
+# Aquadoc.new.make opts

@@ -10,12 +10,16 @@ Gem::Specification.new do |s|
     "lib/aquadoc.rb",
     "lib/aquadoc/make.rb",
     "lib/aquadoc/render.rb",
+    "lib/aquadoc/aquagit.rb",
     "lib/assets/index_part_1.html",
     "lib/assets/index_part_2.html",
     "lib/assets/aquadoc.css",
     "lib/assets/aquadoc.js",
     "lib/assets/yard_templates/default/onefile/html/layout.erb",
-    "lib/assets/yard_templates/default/onefile/html/setup.rb"
+    "lib/assets/yard_templates/default/onefile/html/setup.rb",
+    "lib/assets/DEFAULT_README.md",
+    "lib/assets/DEFAULT_LICENSE.md",
+    "lib/assets/nojekyll"   
   ]
   s.add_runtime_dependency "yard", ">= 0.9.11"
   s.homepage    = 'http://klavinslab.org/protocols'
