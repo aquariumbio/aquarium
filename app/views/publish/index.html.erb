@@ -1,0 +1,115 @@
+<% provide(:title, 'Publish') %>
+
+<%= content_for :class do %>publish<% end %>
+
+<%= content_for :controller do %>publishCtrl<% end %>
+
+<%= content_for :sidebar do %>
+
+  <h3>Categories</h3>
+
+  <ul>
+    <li ng-repeat="c in categories">
+      <span ng-click="c.open = !c.open" class='clickable no-highlight'>
+        <span class='opener'>{{c.open ? '&#9660;' : '&#9658;'}}</span> 
+        <span>{{c.name}}</span>
+      </span>
+      <span ng-if="c.open">
+        <a href='#' ng-click="set_selected(c,true)">[all]</a>
+        <a href='#' ng-click="set_selected(c, false)">[none]</a>        
+      </span>
+      <ul ng-if="c.open">
+        <li ng-repeat="member in c.members">
+          <input type=checkbox ng-model="member.selected" class="fix-checkbox"> {{member.name}}
+        </li>
+      </ul>
+    </li>
+  </ul>
+<% end %>
+
+<%= content_for :specific_title do %>
+<% end %>
+
+<%= content_for :main do %>
+
+  <div style="padding: 16px" layout='column'>
+
+    <div layout="row">
+      <div class="field" flex=50>
+        <label>Title</label>
+        <input ng-model="config.title">
+      </div>
+      <div class="field">
+        <label>Version</label>
+        <input ng-model="config.version">
+      </div>      
+    </div>
+    <div layout="row"> 
+      <div class="field" flex=50>
+        <label>Description</label>
+        <input ng-model="config.description">
+      </div>
+    </div>
+
+    <div layout="row">
+      <div class="field" flex=20>
+        <label>Maintaned By</label>
+        <input ng-model="config.maintainer.name">
+      </div>
+      <div class="field" flex=20>
+        <label>Maintainer Email</label>
+        <input ng-model="config.maintainer.email">
+      </div>
+    </div>    
+
+    <h2>Authors <md-button ng-click="config.authors.push({name: '', affilation: ''})">Add</md-button></h2>
+    <div layout="row" ng-repeat="author in config.authors track by $index"> 
+      <div class="field" flex=20>
+        <label>Name (First Last)</label>
+        <input ng-model="author.name">
+      </div>
+      <div class="field" flex=30>
+        <label>Affilation</label>
+        <input ng-model="author.affiliation">
+      </div>
+      <md-button ng-click="remove(config.authors,author)">Remove</md-button>      
+    </div>  
+
+    <h2>Acknowledgements <md-button ng-click="config.acknowledgements.push({name: '', affilation: ''})">Add</md-button></h2>
+    <div layout="row" ng-repeat="author in config.acknowledgements track by $index"> 
+      <div class="field" flex=20>
+        <label>Name (First Last)</label>
+        <input ng-model="author.name">
+      </div>
+      <div class="field" flex=30>
+        <label>Affilation</label>
+        <input ng-model="author.affiliation">
+      </div>
+      <md-button ng-click="remove(config.acknowledgements,author)">Remove</md-button>      
+    </div>      
+
+    <h2>Github Information</h2>
+    <div layout="row">
+      <div class="field" flex=20>
+        <label>Github User Name</label>
+        <input ng-model="github.user">
+      </div>
+      <div class="field" flex=20>
+        <label>Github Repository</label>
+        <input ng-model="github.repo">
+      </div>
+      <div class="field" flex=20 ng-if="github.access_token">
+        <label>Github Access Token</label>
+        <input ng-model="github.access_token">
+      </div>   
+      <div class="field no-token" flex=20 ng-if="!github.access_token">
+        <br>
+        No Access Token Defined
+      </div>           
+    </div>       
+
+  </div>
+
+<!--   <pre>{{config|json}}</pre> -->
+
+<% end %>

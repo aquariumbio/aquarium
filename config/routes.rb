@@ -2,6 +2,8 @@
 
 Bioturk::Application.routes.draw do
 
+  get '/publish', to: 'publish#index'
+
   post 'static_pages/explorer_jobs'
   get 'static_pages/explorer'
   get 'static_pages/item_trace/:id' => 'static_pages#item_trace'
