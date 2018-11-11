@@ -6,7 +6,7 @@
 
 <%= content_for :sidebar do %>
 
-  <h3>Categories</h3>
+  <h2>Choose Components</h2>
 
   <ul>
     <li ng-repeat="c in categories">
@@ -16,7 +16,7 @@
       </span>
       <span ng-if="c.open">
         <a href='#' ng-click="set_selected(c,true)">[all]</a>
-        <a href='#' ng-click="set_selected(c, false)">[none]</a>        
+        <a href='#' ng-click="set_selected(c,false)">[none]</a>        
       </span>
       <ul ng-if="c.open">
         <li ng-repeat="member in c.members">
@@ -28,88 +28,186 @@
 <% end %>
 
 <%= content_for :specific_title do %>
+
+  : {{config.title}}
+
 <% end %>
 
 <%= content_for :main do %>
 
-  <div style="padding: 16px" layout='column'>
+  <div ng-if="state.mode == 'github'" layout='column' class="publish-step">
+
+    <h2>Step 1: Github Information</h2>
+
+    <p>
+    Aquarium publishes workflows using your github account. 
+    Enter your Github user name into the user name field.
+    Enter the name of the repository you would like to use for your published workflow.
+    If this repository does not exist, Aquarium will make it for you.
+    If it does exist, then Aquarium will attempt to find a previously published workflow in it,
+    and use that workflow definition to help you edit and replace it.
+    To create an access token for Aquarium, go to your Github account, choose Settings,
+    click "Developer Settings", click "Personal Access Tokens", and click "Generate new token".
+    Then describe the token and be sure to the "repo" scope so that Aquarium can manipulate
+    your workflow repositories.
+    </p>
+
+    <div layout="row">
+      <div class="field" flex=20>
+        <label>User Name</label>
+        <input ng-model="config.github.user">
+      </div>
+      <div class="field" flex=20>
+        <label>Repository (new or existing)</label>
+        <input ng-model="config.github.repo">
+      </div>
+      <div class="field" flex=20>
+        <label>Access Token</label>
+        <input ng-model="config.github.access_token">
+      </div>
+    </div>
+
+    <p class="issue">{{state.error}}</p>
+
+    <div layout="row">
+      <md-button class="md-raised" ng-click="check_repo()" ng-disabled="state.working">Use Repo</md-button>
+    </div>
+
+  </div>
+
+  <div ng-if="state.mode == 'build'" layout='column' class="publish-step">
+
+    <h2>Step 2: Describe Your Workflow and Choose Components</h2>
+
+    <p class="field">
+      <b>{{num_objects()}} Operation Types and/or Libraries included in workflow.</b>
+    </p>
 
     <div layout="row">
       <div class="field" flex=50>
         <label>Title</label>
         <input ng-model="config.title">
       </div>
-      <div class="field">
-        <label>Version</label>
-        <input ng-model="config.version">
-      </div>      
+   
     </div>
     <div layout="row"> 
       <div class="field" flex=50>
         <label>Description</label>
         <input ng-model="config.description">
       </div>
+
     </div>
 
     <div layout="row">
-      <div class="field" flex=20>
+      <div class="field" flex=25>
+        <label>Version</label>
+        <input ng-model="config.version">
+      </div>   
+      <div class="field" flex=25>
+        <label>Copyright</label>
+        <input ng-model="config.copyright">
+      </div>
+    </div>      
+
+    <div layout="row">
+      <div class="field" flex=25>
         <label>Maintaned By</label>
         <input ng-model="config.maintainer.name">
       </div>
-      <div class="field" flex=20>
+      <div class="field" flex=25>
         <label>Maintainer Email</label>
         <input ng-model="config.maintainer.email">
       </div>
     </div>    
 
-    <h2>Authors <md-button ng-click="config.authors.push({name: '', affilation: ''})">Add</md-button></h2>
+    <h3>Authors <a href="#" class="add" 
+                   ng-click="config.authors.push({name: '', affilation: ''})">&plus;</a></h3>
     <div layout="row" ng-repeat="author in config.authors track by $index"> 
-      <div class="field" flex=20>
+      <div class="field" flex=25>
         <label>Name (First Last)</label>
         <input ng-model="author.name">
       </div>
-      <div class="field" flex=30>
+      <div class="field" flex=25>
         <label>Affilation</label>
         <input ng-model="author.affiliation">
       </div>
-      <md-button ng-click="remove(config.authors,author)">Remove</md-button>      
+      <div class="field" flex=25>
+        <label>&nbsp;</label>
+        <a href="#" class="remove" ng-click="remove(config.authors,author)">&times;</a>  
+      </div>         
     </div>  
 
-    <h2>Acknowledgements <md-button ng-click="config.acknowledgements.push({name: '', affilation: ''})">Add</md-button></h2>
+    <h3>Acknowledgements 
+        <a href="#"
+           class="add"
+           ng-click="config.acknowledgements.push({name: '', affilation: ''})">&plus;</a></h3>
     <div layout="row" ng-repeat="author in config.acknowledgements track by $index"> 
-      <div class="field" flex=20>
+      <div class="field" flex=25>
         <label>Name (First Last)</label>
         <input ng-model="author.name">
       </div>
-      <div class="field" flex=30>
+      <div class="field" flex=25>
         <label>Affilation</label>
         <input ng-model="author.affiliation">
       </div>
-      <md-button ng-click="remove(config.acknowledgements,author)">Remove</md-button>      
+      <div class="field" flex=25>
+        <label>&nbsp;</label>
+        <a href="#" class="remove" 
+           ng-click="remove(config.acknowledgements,author)">&times;</a>  
+      </div>               
     </div>      
 
-    <h2>Github Information</h2>
     <div layout="row">
-      <div class="field" flex=20>
-        <label>Github User Name</label>
-        <input ng-model="github.user">
-      </div>
-      <div class="field" flex=20>
-        <label>Github Repository</label>
-        <input ng-model="github.repo">
-      </div>
-      <div class="field" flex=20 ng-if="github.access_token">
-        <label>Github Access Token</label>
-        <input ng-model="github.access_token">
-      </div>   
-      <div class="field no-token" flex=20 ng-if="!github.access_token">
-        <br>
-        No Access Token Defined
-      </div>           
-    </div>       
-
+      <md-button class="md-raised" ng-click="review()" ng-disabled="state.working">Review</md-button>
+      <md-button class="md-raised" ng-click="state.mode = 'github'" ng-disabled="state.working">Go Back</md-button>      
+    </div>
+    
   </div>
 
-<!--   <pre>{{config|json}}</pre> -->
+  <div ng-if="state.mode == 'review'" layout='column' class="publish-step">
+
+  <h2>Step 3: Review</h2>
+
+    <h3>{{config.title}}</h3>
+    <p>{{config.description}}<br>
+        &copy; {{config.copyright}}<br>
+        <b>Target:</b> {{config.github.user}}/{{config.github.repo}}<br>
+        <b>Maintained by:</b> {{config.maintainer.name}} &lt;{{config.maintainer.email}}&gt;<br>
+    <b>Authors:</b><br>
+      <ul>
+        <li ng-repeat="a in config.authors">
+          {{a.name}}: {{a.affiliation}}
+        </li>
+      </ul>
+
+    <b>Acknowledgements:</b><br>
+      <ul>
+        <li ng-repeat="a in config.acknowledgements">
+          {{a.name}}: {{a.affiliation}}
+        </li>
+      </ul>
+  
+    <b>Contents:</b><br>
+      <div ng-repeat="c in categories | filter: has_selections()">
+        <b>{{c.name}}:</b>
+        <span ng-repeat="m in c.members | filter: { selected: true }">
+          {{m.name}}<span ng-if="!$last">, </span>
+        </span>
+      </div><br>
+
+    <div layout="row">
+      <md-button class="md-raised" ng-click="submit()" ng-disabled="state.working">Create/Update</md-button>
+      <md-button class="md-raised" ng-click="state.mode = 'build'" ng-disabled="state.working">Go Back</md-button>       
+    </div>
+
+  </div>  
+
+  <div ng-if="state.mode == 'submitted'" layout='column' class="publish-step">
+  
+    <h2>Workflow under construction</h2>
+    <p>You might have to wait a while for this. You can check progress here.</p>
+
+  </div>    
+
 
 <% end %>

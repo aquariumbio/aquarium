@@ -61,3 +61,6 @@ end
 
 gem 'PriorityQueue'
 
+# For aquadoc
+gem 'aquadoc', :git => 'https://github.com/klavinslab/aquadoc'
+

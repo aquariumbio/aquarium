@@ -5,17 +5,48 @@
   }
 
   .field {
-    margin-right: 16px !important;
+    padding: 0 8px 0 8px;
     input {
       padding: 4px;
     }
   }
 
-  .no-token {
+  .issue {
     color: red;
     font-weight: bold;
     font-size: 12pt;
     background: white;
+  }
+
+  .publish-step {
+    margin: 16px;
+  }
+
+  .add {
+    color: grey;
+    &:hover {
+      text-decoration: none;
+      color: black;
+    };
+  }
+
+  .remove {
+    font-size: 14pt;
+    color: grey;
+    font-weight: bold;
+    &:hover {
+      text-decoration: none;
+      color: black;
+    };
+  }  
+
+  h2 {
+    color: black;
+  }
+
+  h3 {
+    color: black;
+    font-size: 14pt;
   }
 
 }
