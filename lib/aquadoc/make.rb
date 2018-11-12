@@ -206,7 +206,8 @@ class Aquadoc
       }
     }
 
-    @config = default_config.merge(config)
+    konfig = JSON.parse(config.to_json, symbolize_names: true)
+    @config = default_config.merge(konfig)
 
     define_paths
 
