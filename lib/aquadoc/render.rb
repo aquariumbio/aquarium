@@ -108,8 +108,7 @@ class Aquadoc
   #
   def object_type_md object_type
 
-    str = "# Container: " + object_type[:name] + "\n" +
-          object_type[:description] + "\n\n"
+    str = "# Container: #{object_type[:name]}\n#{object_type[:description]}\n\n"
 
     if object_type[:handler] == 'collection'
       str += "#{object_type[:rows]} &times; #{object_type[:columns]} Collection\n\n"
