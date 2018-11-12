@@ -51,7 +51,8 @@ class Aquagit
         if Base64.decode64(file[:content]) != content
           @client.update_contents(@repo_info, path, "Aquadoc update", file[:sha], content)
         end
-      rescue
+      rescue Exception => e
+        puts "Warning: #{e}"
         @client.create_contents(@repo_info, path, "Aquadoc created file", content)
       end
     end
