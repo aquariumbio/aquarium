@@ -235,9 +235,8 @@ class Aquadoc
     make_md
     make_about_md
     make_index
-    copy_assets
-
     make_yard_docs if @options[:yard_docs] && @options[:libraries]
+    copy_assets    
 
   end
 
