@@ -83,8 +83,7 @@ class Aquadoc
   #
   def sample_type_md sample_type
 
-    str = "# Sample Type: " + sample_type[:name] + "\n" +
-          sample_type[:description] + "\n\n"
+    str = "# Sample Type: #{sample_type[:name]}\n#{sample_type[:description]}\n\n"
 
     if sample_type[:field_types]
       sample_type[:field_types].each do |ft|
