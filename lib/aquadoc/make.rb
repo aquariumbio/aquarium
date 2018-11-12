@@ -181,6 +181,9 @@ class Aquadoc
     @storage.write(".nojekyll", File.read(@assets_path + "/nojekyll"))
     @storage.write(zipname, @category_list.to_json)
 
+    @config[:github].delete(:access_token)
+    @storage.write("config.json", @config.to_json)
+
   end
 
   def initialize storage, config, category_list
