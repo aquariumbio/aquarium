@@ -81,6 +81,7 @@ class Aquagit
 
   def create_repo
     @repo = @client.create_repository(@repo_info[:repo], description: "An Aquarium Workflow")
+    puts "Created new repo: #{@repo_info[:repo]}"
   end
 
   def clone_repo
