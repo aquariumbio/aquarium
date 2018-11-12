@@ -8,9 +8,13 @@ class Aquadoc
   attr_accessor :html_path
 
   def sanitize_filename(filename)
-    fn = filename.split /(?<=.)\.(?=[^.])(?!.*\.[^.])/m
-    fn.map! { |s| s.gsub /[^a-z0-9\-]+/i, '_' }
-    return fn.join '.'
+    if filename
+      fn = filename.split /(?<=.)\.(?=[^.])(?!.*\.[^.])/m
+      fn.map! { |s| s.gsub /[^a-z0-9\-]+/i, '_' }
+      return fn.join '.'
+    else
+      "nil"
+    end
   end
 
   def context
