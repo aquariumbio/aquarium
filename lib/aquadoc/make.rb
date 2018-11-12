@@ -186,7 +186,7 @@ class Aquadoc
   def initialize storage, config, category_list
 
     @storage = storage
-    @category_list = category_list
+    @category_list = JSON.parse(category_list.to_json, symbolize_names: true)
 
     default_config = {
       title: "No title specified",
