@@ -52,7 +52,7 @@ class Aquagit
           @client.update_contents(@repo_info, path, "Aquadoc update", file[:sha], content)
         end
       rescue Exception => e
-        puts "Warning: #{e}"
+        puts "Note: #{e}"
         @client.create_contents(@repo_info, path, "Aquadoc created file", content)
       end
     end
@@ -81,6 +81,7 @@ class Aquagit
 
   def create_repo
     @repo = @client.create_repository(@repo_info[:repo], description: "An Aquarium Workflow")
+    sleep 5 # make sure repo is created before starting to add files
     puts "Created new repo: #{@repo_info[:repo]}"
   end
 
