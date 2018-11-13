@@ -47,19 +47,26 @@ class Aquagit
       end
     else
       begin
+        puts "A"
         file = @client.contents(@repo_info, path: path)
+        puts "B"
         if Base64.decode64(file[:content]) != content
+          puts "C"
           @client.update_contents(@repo_info, path, "Aquadoc update", file[:sha], content)
+          puts "D"
         end
       rescue Exception => e
         puts "Note: #{e}"
         begin
-          authenticate
+          puts "E"
           @client.create_contents(@repo_info, path, "Aquadoc created file", content)
+          puts "F"
         rescue Exception => e
           puts "Warning: Could not create #{path}: #{e}"
         end
+        puts "G"
       end
+      puts "H"
     end
 
   end
