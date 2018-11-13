@@ -4,6 +4,8 @@
 
 <%= content_for :controller do %>publishCtrl<% end %>
 
+<% content_for :wider_sidebar do %>true<% end %>
+
 <%= content_for :sidebar do %>
 
   <h2>Choose Components</h2>
@@ -33,6 +35,12 @@
 
 <% end %>
 
+<%= content_for :action1 do %>
+
+  <md-button href="/publish" class="md-raised" ng-if="state.mode=='submitted'">Start Over</md-button>
+
+<% end %>
+
 <%= content_for :main do %>
 
   <div ng-if="state.mode == 'github'" layout='column' class="publish-step">
@@ -58,10 +66,10 @@
         <input ng-model="config.github.user">
       </div>
       <div class="field" flex=20>
-        <label>Repository (new or existing)</label>
+        <label>Repository</label>
         <input ng-model="config.github.repo">
       </div>
-      <div class="field" flex=20>
+      <div class="field" flex=40>
         <label>Access Token</label>
         <input ng-model="config.github.access_token">
       </div>
@@ -78,6 +86,14 @@
   <div ng-if="state.mode == 'build'" layout='column' class="publish-step">
 
     <h2>Step 2: Describe Your Workflow and Choose Components</h2>
+
+    <div class="update-note">
+    <p><b>Note:</b> Aquarium found an existing published workflow at 
+      <a href="https://github.com/{{config.github.user}}/{{config.github.repo}}" target=github>
+        https://github.com/{{config.github.user}}/{{config.github.repo}}
+      </a> and has used it fill in this form and choose operation types. Please edit this
+      information and continue only if you want to <u>update</u> this repository.</p>
+    </div>
 
     <p class="field">
       <b>{{num_objects()}} Operation Types and/or Libraries included in workflow.</b>
@@ -208,12 +224,17 @@
   <div ng-if="state.mode == 'submitted'" layout='column' class="publish-step">
 
     <div ng-if="state.building">
+
       <h2>Workflow Submitted</h2>
-      <p>It could take several minutes to complete.</p>
+      <div><span class="wait-block" ng-repeat="a in state.attempts">&nbsp;</span></div>
+      <p>It may take several minutes to build the documentation for this workflow.</p>
+
     </div>
+
     <div ng-if="!state.building">
       <h2>Workflow Published!</h2>
-      <p>See <a href="https://github.com/{{config.github.user}}/{{config.github.repo}}" target=github>https://github.com/{{config.github.user}}/{{config.github.repo}}</a> for the results.</p>
+      <p>See <a href="https://github.com/{{config.github.user}}/{{config.github.repo}}" target=github>
+        https://github.com/{{config.github.user}}/{{config.github.repo}}</a> for the results.</p>
       <p>If you haven't done so already, publish the resulting web page by going go <a href="https://github.com/{{config.github.user}}/{{config.github.repo}}/settings" target=github>here</a>,
          and choosing Github Pages -&gt; Source -&gt; master branch. The resulting web page will be available here at 
          <a href="https://{{config.github.user}}.github.io//{{config.github.repo}}/" target=github>https://{{config.github.user}}.github.io//{{config.github.repo}}/</a>.

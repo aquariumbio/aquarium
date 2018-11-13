@@ -24,11 +24,13 @@ class PublishController < ApplicationController
         if repos.member?(params[:repo])
           begin
             file = client.contents({ repo: params[:repo], user: params[:user]}, path: "/config.json")
-            config = Base64.decode64(file[:content])
+            config = JSON.parse Base64.decode64(file[:content])
+            file = client.contents({ repo: params[:repo], user: params[:user]}, path: "/#{params[:repo]}.aq")
+            categories = JSON.parse Base64.decode64(file[:content])            
           rescue Exception => e
             resp.error("The Github repository '#{params[:repo]}' exists but does not contain a config.json file.", e)
           else
-            resp.ok(repo_exists: true, config: config)
+            resp.ok(repo_exists: true, config: config, categories: categories)
           end
         else
           resp.ok(repo_exists: false)
@@ -58,10 +60,10 @@ class PublishController < ApplicationController
         end
       end
 
-      Thread.new do
+      # Thread.new do
         ag = Aquagit.new(params[:config], categories)
         ag.run
-      end
+      # end
 
       resp.ok
 

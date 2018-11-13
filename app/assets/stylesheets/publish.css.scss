@@ -49,5 +49,21 @@
     font-size: 14pt;
   }
 
+  .wait-block {
+    background: #081;
+    width: 10px;
+    height: 10px;
+    margin: 1px;
+    display: inline-block;
+  }
+
+  .update-note {
+    background: lightyellow;
+    border: 1pt solid #aaa;
+    border-radius: 5px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
 }
 

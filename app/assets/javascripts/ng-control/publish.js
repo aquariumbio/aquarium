@@ -76,7 +76,8 @@
     $scope.state = {
       mode: "github",
       working: false,
-      error: null
+      error: null,
+      attempts: []
     }
 
     $scope.clear = function() {
@@ -102,6 +103,20 @@
       aq.remove(list,el)
     }
 
+    function select_components(categories) {
+      console.log(categories)
+      aq.each(categories, category => {
+        aq.each(category, component => {
+          console.log(component);
+          let type = component.library ? "library" : "operation_type";
+          let cat = aq.find($scope.categories, c => c.name == component[type].category);
+          cat.open = true;
+          let comp = aq.find(cat.members, m => m.name == component[type].name );
+          comp.selected = true;
+        })
+      });
+    }
+
     $scope.check_repo = function() {
       start_working();
       AQ.post("/publish/check_repo", $scope.config.github)
@@ -109,7 +124,11 @@
           console.log("response", response.data)
           if ( response.data.result == 'ok' ) {
             if ( response.data.repo_exists ) {
-              $scope.config = JSON.parse(response.data.config);
+              let access_token = $scope.config.github.access_token;
+              $scope.config = response.data.config;
+              $scope.config.github.access_token = access_token;
+              select_components(response.data.categories)
+              $scope.state.update = true;
             }
             $scope.state.mode = "build";            
           } else {
@@ -146,6 +165,10 @@
       });
     }
 
+    function make_attempt() {
+      $scope.state.attempts.push(Date());
+    }
+
     $scope.publish = function() {
       start_working();
       AQ.post("/publish/publish", { config: $scope.config, categories: selections() })
@@ -155,6 +178,7 @@
             $scope.state.mode = 'submitted';
             $scope.state.repo = response.data.repo;
             stop_working();
+            make_attempt();
             check_progress();
           } else {
             $scope.state.error = response.data.message;
@@ -166,10 +190,11 @@
 
     function check_progress() {
       $scope.state.building = true;
-      setTimeout(check_for_config,10000);
+      setTimeout(check_for_config,5000);
     }
 
     function check_for_config() {
+      make_attempt();
       AQ.post("/publish/ready", $scope.config.github)
         .then(response => {
           console.log("ready check", response.data)
