@@ -1,6 +1,6 @@
 # Aquadoc
 
-The purpose of aquadoc is to generate a web page you can use to publish and
+The purpose of aquadoc is to generate a github repository and web page (using github pages) you can use to publish and
 share a set of [Aquarium](http://klavinslab.org/aquarium) operation types and their protocols.
 
 ## Installation
@@ -21,16 +21,14 @@ cd MyWorkflow
 ```
 where MyWorkflow is a directory containing your workflow as described below.
 
-## Usage
+## Usage: Command Line
 First, from the [Aquarium](http://klavinslab.org/aquarium) Developer tab,
 export a set of categories and put them in a directory called categories.
-Then create a README.md, a LICENSE.md, and a config.json.
+Then create a config.json.
 Your directory structure should look like the following:
 
     MyWorkflow
     |
-    + README.md
-    + LICENSE.md
     + config.json
     + categories
       |
@@ -48,17 +46,20 @@ The config.json file should look something like
   "copyright": "2018 Me or My Organization",
   "version": "0.0.1",
   "authors": [
-    "First Last"
+    { "name": "First Last", "affiliation": "Organization Name" }
   ],
   "maintainer": {
         "name": "First Last",
         "email": "me@my.org"
   },
   "acknowledgements": [
-    "My Collaborator",
-    "My Lab Manager"
+    { "name": "First Last", "affiliation": "Organization Name" }
   ],
-  "repo": "https://github.com/me/myworkflow"
+  "github": {
+    "repo": "name",
+    "user": "login",
+    "access_token": "40 characters from github"
+  }
 }
 ```
 
@@ -73,3 +74,16 @@ from within the MyWorkflow directory. This will produce the directory
 which you can serve up using your favorite web server. Typically, the entire MyWorkflow directory
 would be turned into a github repository and github pages would be pointed to the html directory.
 You would use github versions, tags, and releases to maintain versions of your code.
+
+## Usage: API
+
+Given a list of categories and a configuration file, you can do
+
+```ruby
+require 'aquadoc'
+
+Aquadoc::Git()config, categories).run
+```
+
+to generate the github repo. See the [Aquarium](http://klavinslab.org/aquarium) documentation
+for more information.

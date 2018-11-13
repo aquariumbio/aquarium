@@ -1,0 +1,27 @@
+# <%= @config[:title] %>, version <%= @config[:version] %>
+
+<%= @config[:description] %>
+
+[[Download](<%= zipname %>)]
+
+[<%= @config[:repo] %>](<%= @config[:repo] %>)
+
+&copy; <%= @config[:copyright] %>
+
+### Maintainer
+- <%= @config[:maintainer][:name] %>, <# <%= @config[:maintainer][:email] %>>
+
+### Authors
+<% @config[:authors].each do |a| %>
+  - <%= a[:name] %>, <%= a[:affiliation] %>
+<% end %>
+
+### Acknowledgements
+<% @config[:acknowledgements].each do |a| %>
+  - <%= a[:name] %>, <%= a[:affiliation] %>
+<% end %>
+
+### Details
+These documents were automatically generated from
+[Aquarium](http://klavinslab.org) categories by
+[aquadoc](https://github.com/klavinslab/aquadoc).

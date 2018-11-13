@@ -1,0 +1,96 @@
+<html>
+
+  <head>
+
+    <!-- Third party javascript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.2/markdown-it.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+
+    <!-- Third party css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/vs.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
+    <!-- Local javascript and css -->
+    <script src="js/aquadoc.js"></script>
+    <link rel="stylesheet" href="css/aquadoc.css">
+
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="p-2 heading row">
+        <div class="col-11">
+          <h2>&nbsp;<a href="http://klavinslab.org/aquarium" class="aquarium-logo">AQUARIUM</a> | Protocols: <span id='title' class='title'><span></h2>
+        </div>
+        <div class="col-1" id="aquadoc-link">
+           Made by<br><a href="https://github.com/klavinslab/aquadoc">Aquadoc</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="p-3 col-3 left sidebar" id="aquadoc-sidebar">
+
+          <ul class='list-unstyled'>
+
+            <li><b>Overview</b>
+              <ul>
+                <li><a href='#' onclick='load_overview()'>Introduction</a></li>
+                <li><a href='#' onclick='load_about()'>About this Workflow</a></li>
+                <li><a href='#' onclick='load_license()'>License</a></li>
+              </ul>
+            </li>
+
+            <% if @options[:workflows] || @options[:libraries] %>
+              <% @categories.each do |c| %>
+                <li><b><%= c %></b>
+                  <ul>
+                    <% if @options[:workflows] %>
+                      <% @operation_type_specs.select { |ots| ots[:operation_type][:category] == c }.each do |ots| %>
+                        <li>
+                          <a href='#' onclick='load_operation_type("<%= sanitize_filename ots[:operation_type][:name] %>")'>
+                            <%= ots[:operation_type][:name] %>
+                          </a>
+                        </li>
+                      <% end %>
+                    <% end %>
+                    <% if @options[:libraries] %>
+                      <% @libraries.select { |lib| lib[:category] == c }.each do |lib| %>
+                        <li>Library: <a href='#' onclick='load_library("<%= sanitize_filename lib[:name] %>")'><%= lib[:name] %></a></li>
+                      <% end %>
+                    <% end %>
+                  </ul>
+                </li>
+              <% end %>
+            <% end %>
+
+            <% if @options[:inventory] %>
+              <li><b>Sample Types</b>
+                <ul>
+                  <% @sample_types.each do |st| %>
+                    <li><a href='#' onclick='load_sample_type("<%= sanitize_filename st[:name] %>")'><%= st[:name] %></a></li>
+                  <% end %>
+                </ul>
+              </li>
+              <li><b>Containers</b>
+                <ul>
+                  <% @object_types.each do |ot| %>
+                    <li><a href='#' onclick='load_object_type("<%= sanitize_filename ot[:name] %>")'><%= ot[:name] %></a></li>
+                  <% end %>
+                </ul>
+              </li>
+            <% end %>
+
+          </ul>
+
+        </div>
+
+        <div class="p-3 col-9 right" id="aquadoc-content">
+        </div>
+
+      </div> <!-- row -->
+
+    </div> <!-- -->
+
+  </body>
+
+</html>

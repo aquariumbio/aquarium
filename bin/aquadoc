@@ -44,7 +44,7 @@ begin
   config = File.read("./config.json")
   config = JSON.parse(config, symbolize_names: true)
 rescue Exception => e
-  raise "Could not find valid config file"
+  raise "Could not find valid config file: #{e}"
 end
 
 categories = []
@@ -54,7 +54,7 @@ Dir["categories/*.json"].each do |c|
   categories << JSON.parse(file, symbolize_names: true)
 end
 
-ag = Aquagit.new(config, categories, opts)
+ag = Aquadoc::Git.new(config, categories, opts)
 
 if ag.authorized
   ag.run
@@ -62,4 +62,4 @@ else
   puts "Could not authenticate with github"
 end
 
-# Aquadoc.new.make opts
+puts "\n"

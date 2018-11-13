@@ -1,0 +1,37 @@
+# <%= ot[:name] %>
+
+<%= ot[:documentation] %>
+
+<% unless inputs.empty? %>
+### Inputs
+<% end %>
+
+<% inputs.each do |input| %>
+<%= field_type_md input %>
+<% end %>
+
+<% unless params.empty? %>
+### Parameters
+<% end %>
+
+<% params.each do |p| %>
+- **<%= p[:name] %>** <% if p[:choices] %>[<%= p[:choices] %>]<% end %>
+<% end %>
+
+<% unless outputs.empty? %>
+### Outputs
+<% end %>
+
+<% outputs.each do |output| %>
+<%= field_type_md output %>
+<% end %>
+
+### Precondition <a href='#' id='precondition'>[show]</a>
+```ruby
+<%= ot[:precondition] %>
+```
+
+### Protocol Code <a href='#' id='protocol'>[show]</a>
+```ruby
+<%= ot[:protocol] %>
+```
