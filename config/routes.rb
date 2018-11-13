@@ -3,6 +3,8 @@
 Bioturk::Application.routes.draw do
 
   post '/publish/check_repo', to: 'publish#check_repo'
+  post '/publish/publish', to: 'publish#publish'  
+  post '/publish/ready', to: 'publish#ready'    
   get '/publish', to: 'publish#index'
 
   post 'static_pages/explorer_jobs'

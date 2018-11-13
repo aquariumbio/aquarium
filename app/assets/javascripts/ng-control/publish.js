@@ -68,14 +68,21 @@
       ],
       github: {
         user: "",
-        repo: ""
+        repo: "",
+        access_token: ""
       }
     };
 
     $scope.state = {
-      mode: "build",
+      mode: "github",
       working: false,
       error: null
+    }
+
+    $scope.clear = function() {
+      $scope.state.error = null;
+      $scope.state.details = null;
+      $scope.state.repo = null;
     }
 
     function start_working() {
@@ -99,9 +106,10 @@
       start_working();
       AQ.post("/publish/check_repo", $scope.config.github)
         .then(response => {
+          console.log("response", response.data)
           if ( response.data.result == 'ok' ) {
             if ( response.data.repo_exists ) {
-              $scope.config = response.data.config;
+              $scope.config = JSON.parse(response.data.config);
             }
             $scope.state.mode = "build";            
           } else {
@@ -113,12 +121,7 @@
 
     $scope.review = function() {
       $scope.state.mode = "review";
-    }
-
-    $scope.submit
-     = function() {
-      $scope.state.mode = "submitted";
-    }    
+    } 
 
     $scope.num_objects = function() {
       let n = 0;
@@ -132,6 +135,50 @@
         aq.each(category.members, m => r = r || m.selected);
         return r;
       }
+    }
+
+    function selections() {
+      return aq.collect(aq.where($scope.categories, c => $scope.has_selections()(c)), c => {
+        return {
+          name: c.name,
+          members: aq.where(c.members, m => m.selected)
+        }
+      });
+    }
+
+    $scope.publish = function() {
+      start_working();
+      AQ.post("/publish/publish", { config: $scope.config, categories: selections() })
+        .then(response => {
+          console.log(response.data)
+          if ( response.data.result == 'ok' ) {
+            $scope.state.mode = 'submitted';
+            $scope.state.repo = response.data.repo;
+            stop_working();
+            check_progress();
+          } else {
+            $scope.state.error = response.data.message;
+            $scope.state.details = response.data.error;
+            stop_working();
+          }
+        })
+    }
+
+    function check_progress() {
+      $scope.state.building = true;
+      setTimeout(check_for_config,10000);
+    }
+
+    function check_for_config() {
+      AQ.post("/publish/ready", $scope.config.github)
+        .then(response => {
+          console.log("ready check", response.data)
+          if ( response.data.ready ) {
+            $scope.state.building = false;
+          } else {
+            check_progress();
+          }
+        });
     }
 
   }]);

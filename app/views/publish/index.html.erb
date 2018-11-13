@@ -158,8 +158,8 @@
     </div>      
 
     <div layout="row">
-      <md-button class="md-raised" ng-click="review()" ng-disabled="state.working">Review</md-button>
-      <md-button class="md-raised" ng-click="state.mode = 'github'" ng-disabled="state.working">Go Back</md-button>      
+      <md-button class="md-raised" ng-click="review()" ng-disabled="num_objects() == 0 || state.working">Review</md-button>
+      <md-button class="md-raised" ng-click="clear(); state.mode = 'github'" ng-disabled="state.working">Go Back</md-button>      
     </div>
     
   </div>
@@ -187,7 +187,8 @@
         </li>
       </ul>
   
-    <b>Contents:</b><br>
+    <b>Contents:</b> <span class="issue" ng-if="num_objects()==0">No components selected to publish.</span><br>
+
       <div ng-repeat="c in categories | filter: has_selections()">
         <b>{{c.name}}:</b>
         <span ng-repeat="m in c.members | filter: { selected: true }">
@@ -195,19 +196,31 @@
         </span>
       </div><br>
 
+    <span class="issue">{{state.error}}<br>{{state.details}}</span><br>
+
     <div layout="row">
-      <md-button class="md-raised" ng-click="submit()" ng-disabled="state.working">Create/Update</md-button>
-      <md-button class="md-raised" ng-click="state.mode = 'build'" ng-disabled="state.working">Go Back</md-button>       
+      <md-button class="md-raised" ng-click="publish()" ng-disabled="num_objects() == 0 || state.working">Publish</md-button>
+      <md-button class="md-raised" ng-click="clear(); state.mode = 'build'" ng-disabled="state.working">Go Back</md-button>       
     </div>
 
   </div>  
 
   <div ng-if="state.mode == 'submitted'" layout='column' class="publish-step">
-  
-    <h2>Workflow under construction</h2>
-    <p>You might have to wait a while for this. You can check progress here.</p>
+
+    <div ng-if="state.building">
+      <h2>Workflow Submitted</h2>
+      <p>It could take several minutes to complete.</p>
+    </div>
+    <div ng-if="!state.building">
+      <h2>Workflow Published!</h2>
+      <p>See <a href="https://github.com/{{config.github.user}}/{{config.github.repo}}" target=github>https://github.com/{{config.github.user}}/{{config.github.repo}}</a> for the results.</p>
+      <p>If you haven't done so already, publish the resulting web page by going go <a href="https://github.com/{{config.github.user}}/{{config.github.repo}}/settings" target=github>here</a>,
+         and choosing Github Pages -&gt; Source -&gt; master branch. The resulting web page will be available here at 
+         <a href="https://{{config.github.user}}.github.io//{{config.github.repo}}/" target=github>https://{{config.github.user}}.github.io//{{config.github.repo}}/</a>.
+      <p>You should also edit the LICENSE.md which describes how user's can use your code. And you should edit the README.md which should describe in as much detail as you can muster how
+         to use workflow. Note that if you edit other files (besides LICENSE.md and README.md) in the repository and later publish and update, Aquarium may overwrite them.</p>
+    </div>
 
   </div>    
-
 
 <% end %>
