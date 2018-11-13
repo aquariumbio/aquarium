@@ -21,8 +21,10 @@
         <a href='#' ng-click="set_selected(c,false)">[none]</a>        
       </span>
       <ul ng-if="c.open">
-        <li ng-repeat="member in c.members">
-          <input type=checkbox ng-model="member.selected" class="fix-checkbox"> {{member.name}}
+        <li ng-repeat="member in c.members">         
+          <input type=checkbox ng-model="member.selected" class="fix-checkbox">
+          <span ng-if="member.record_type == 'Library'" class='lib-marker'>lib:</span>
+          {{member.name}}
         </li>
       </ul>
     </li>

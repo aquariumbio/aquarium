@@ -48,22 +48,23 @@ class PublishController < ApplicationController
 
     if params[:categories]
 
-      categories = params[:categories].collect do |category|
-        category[:members].collect do |member|
-          if member[:model][:model] == "Library"
-            Library.find(member[:id]).export
-          else
-            ex = OperationType.find(member[:id]).export
-            puts "#{ex[:operation_type][:name]} ==> #{ex[:object_types]}"
-            ex
+      Thread.new do
+
+        categories = params[:categories].collect do |category|
+          category[:members].collect do |member|
+            if member[:model][:model] == "Library"
+              Library.find(member[:id]).export
+            else
+              ex = OperationType.find(member[:id]).export
+              ex
+            end
           end
         end
-      end
 
-      # Thread.new do
-        ag = Aquagit.new(params[:config], categories)
+        ag = Aquadoc::Git.new(params[:config], categories)
         ag.run
-      # end
+
+      end
 
       resp.ok
 

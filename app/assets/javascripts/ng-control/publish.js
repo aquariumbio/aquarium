@@ -12,6 +12,18 @@
 
     $scope.status = {};
 
+    function compare_members(a,b) {
+      if ( a.record_type == b.record_type ) {
+        return a.name == b.name ? 0 : +(a.name > b.name) || -1
+      } else {
+        if ( a.record_type == "OperationType" ) {
+          return 1;
+        } else {
+          return 0;
+        }
+      }
+    }
+
     function init() {
 
       Promise.all([
@@ -29,9 +41,10 @@
           { 
             open: false, 
             name: name,
-            members: aq.where(objects, o => o.category == name).sort((a,b) => a.name == b.name ? 0 : +(a.name > b.name) || -1)
+            members: aq.where(objects, o => o.category == name).sort(compare_members)
           }
         ));
+
         $scope.$apply();
       }).then(() => AQ.Parameter.where({user_id: $scope.user.id, key: "email"}))
         .then(plist => {
@@ -166,6 +179,9 @@
     }
 
     function make_attempt() {
+      if ( $scope.state.attempts.length > 10 ) {
+        $scope.state.attempts = [];
+      }
       $scope.state.attempts.push(Date());
     }
 
@@ -190,14 +206,13 @@
 
     function check_progress() {
       $scope.state.building = true;
-      setTimeout(check_for_config,5000);
+      setTimeout(check_for_config,2500);
     }
 
     function check_for_config() {
       make_attempt();
       AQ.post("/publish/ready", $scope.config.github)
         .then(response => {
-          console.log("ready check", response.data)
           if ( response.data.ready ) {
             $scope.state.building = false;
           } else {
