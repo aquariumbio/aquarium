@@ -53,7 +53,11 @@ class Aquagit
         end
       rescue Exception => e
         puts "Note: #{e}"
-        @client.create_contents(@repo_info, path, "Aquadoc created file", content)
+        begin
+          @client.create_contents(@repo_info, path, "Aquadoc created file", content)
+        rescue Exception => e
+          puts "Warning: Could not create #{path}: #{e}"
+        end          
       end
     end
 
