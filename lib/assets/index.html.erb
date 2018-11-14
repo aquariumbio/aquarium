@@ -21,10 +21,14 @@
     <div class="container-fluid">
       <div class="p-2 heading row">
         <div class="col-11">
-          <h2>&nbsp;<a href="http://klavinslab.org/aquarium" class="aquarium-logo">AQUARIUM</a> | Protocols: <span id='title' class='title'><span></h2>
+          <h2>&nbsp;<a href="http://klavinslab.org/aquarium"
+                       class="aquarium-logo">AQUARIUM</a>
+            | Protocols: <span id='title' class='title'><span></h2>
         </div>
-        <div class="col-1" id="aquadoc-link">
-           Made by<br><a href="https://github.com/klavinslab/aquadoc">Aquadoc</a>
+        <div class="col-1 issues-link-container">
+          <a href="https://github.com/<%= @config[:github][:user] %>/<%= @config[:github][:repo] %>/issues"
+             class="btn btn-secondary btn-issues"
+             target=issues>Issues</a>
         </div>
       </div>
       <div class="row">
@@ -81,6 +85,10 @@
             <% end %>
 
           </ul>
+
+        <div id="aquadoc-link">
+           Made by <a href="https://github.com/klavinslab/aquadoc">Aquadoc</a>
+        </div>
 
         </div>
 

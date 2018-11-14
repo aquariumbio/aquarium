@@ -44,10 +44,6 @@ a {
   position: relative;
 }
 
-.heading a {
-  color: lightgreen;
-}
-
 .title {
   color: white;
 }
@@ -75,9 +71,18 @@ a {
 #aquadoc-link {
   font-size: 11pt;
   font-family: "Courier New";
-  text-align: right;  
+  text-align: right;
 }
 
 #aquadoc-link a {
   color: white;
+}
+
+.issues-link-container {
+  padding-top: 4px;
+}
+
+.btn-issues {
+  background: white;
+  color: black !important;
 }

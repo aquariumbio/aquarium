@@ -55,7 +55,6 @@ module Aquadoc
             @client.update_contents(@repo_info, path, "Aquadoc update", file[:sha], content)
           end
         rescue Exception => e
-          puts "Note: #{e}"
           begin
             @client.create_contents(@repo_info, path, "Aquadoc created file", content)
           rescue Exception => e
