@@ -97,6 +97,7 @@ module Aquadoc
         end
         if @options[:libraries]
           @libraries.select { |lib| lib[:category] == c }.each do |lib|
+            File.write(@temp_library_path + "/#{sanitize_filename lib[:name]}.rb", lib[:code_source])
             @storage.write("libraries/#{sanitize_filename lib[:name]}.rb", lib[:code_source])
           end
         end
@@ -116,10 +117,13 @@ module Aquadoc
 
     def make_yard_docs
 
+      puts "Making yard docs"
+
       Dir.chdir @temp_library_path
       unless system "touch README.md"
         raise "Could not write to #{@temp_dir}"
       end
+
       Dir["./*.rb"].each do |lib|
         name = lib.split("/").last;
         hname = name.split(".")[0] + ".html"
