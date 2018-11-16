@@ -141,8 +141,15 @@ module Aquadoc
 
     end
 
-    def zipname
+    def aq_file_name
       @config[:github][:repo] + ".aq"
+    end
+
+    def aq_file
+      {
+        config: @config,
+        components: @category_list.flatten
+      }
     end
 
     def copy_assets
@@ -155,9 +162,9 @@ module Aquadoc
       @storage.write("css/aquadoc.css", File.read(@assets_path + "/aquadoc.css"))
       @storage.write("js/aquadoc.js", File.read(@assets_path + "/aquadoc.js"))
       @storage.write(".nojekyll", File.read(@assets_path + "/nojekyll"))
-      @storage.write(zipname, @category_list.to_json)
 
       @config[:github].delete(:access_token)
+      @storage.write(aq_file_name, aq_file)
       @storage.write("config.json", @config.to_json)
 
     end
