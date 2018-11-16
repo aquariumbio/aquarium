@@ -1,3 +1,4 @@
+require "aquadoc/version.rb"
 require "aquadoc/make.rb"
 require "aquadoc/render.rb"
-require "aquadoc/aquagit.rb"
+require "aquadoc/git.rb"

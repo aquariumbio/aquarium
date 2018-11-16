@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'aquadoc'
-  s.version     = '0.0.0'
+  s.version     = '1.0.0'
   s.date        = '2018-11-02'
   s.summary     = "A Documentation Generator for Aquarium Workflows"
   s.description = "Use this tool to publish your workflows!"
@@ -10,15 +10,16 @@ Gem::Specification.new do |s|
     "lib/aquadoc.rb",
     "lib/aquadoc/make.rb",
     "lib/aquadoc/render.rb",
-    "lib/aquadoc/aquagit.rb",
+    "lib/aquadoc/git.rb",
     "lib/assets/index.html.erb",
+    "lib/aquadoc/version.rb",
     "lib/assets/aquadoc.css",
     "lib/assets/aquadoc.js",
     "lib/assets/yard_templates/default/onefile/html/layout.erb",
     "lib/assets/yard_templates/default/onefile/html/setup.rb",
     "lib/assets/ABOUT.md.erb",
     "lib/assets/operation_type.md.erb",
-    "lib/assets/field_type.md.erb",      
+    "lib/assets/field_type.md.erb",
     "lib/assets/object_type.md.erb",
     "lib/assets/sample_type.md.erb",
     "lib/assets/DEFAULT_README.md",

@@ -182,7 +182,8 @@ module Aquadoc
           repo: "none",
           user: "none",
           access_token: "none"
-        }
+        },
+        aquadoc_version: Aquadoc.version
       }
 
       konfig = JSON.parse(config.to_json, symbolize_names: true)
