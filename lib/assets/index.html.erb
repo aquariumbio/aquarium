@@ -15,9 +15,9 @@
       -->
 
     <!-- About this web page -->
-    <title>Aquarium Protool: <%= @config[:title] %></title>
+    <title><%= @config[:title] %></title>
     <meta name="description" content="<%= @config[:description] %>">
-    <meta name="author" content="<%= @config[:maintainer] %>">
+    <meta name="author" content="<%= @config[:maintainer][:name] %>">
     <meta name="keywords" content="Aquarium, Protocol, <%= @config[:keywords] ? @config[:keywords].join(', ') : 'No keywords' %>">
 
     <!-- Third party javascript -->
