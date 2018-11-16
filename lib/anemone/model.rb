@@ -25,10 +25,13 @@ module Anemone
 
           begin
             yield
-            rescue Exception => e
+          rescue Exception => e
             worker.status = "error"
             worker.message = e.to_s + ": " + e.backtrace.join(", ")
             worker.save
+            if worker.errors.any?
+              raise "Eror: Could not save worker #{worker.id} status"
+            end
           else
             worker.status = "done"
             worker.save
