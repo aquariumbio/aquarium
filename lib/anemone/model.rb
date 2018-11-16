@@ -18,26 +18,18 @@ module Anemone
       if self.status == "uninitialized"
 
         worker = self
-        Rails.logger.info "Worker #{worker.id} about to start"
-        Rails.logger.info "Worker #{worker.id} starting 1"
         worker.status = "running"
         worker.save
-        Rails.logger.info "Worker #{worker.id} starting 2"
 
         Thread.new do
 
           begin
-            Rails.logger.info "Worker #{worker.id} about to yeild"
             yield
-            Rails.logger.info "Worker #{worker.id} yeilded"
-          rescue Exception => e
-            Rails.logger.error "Worker #{worker.id} failed: #{e}"
-            Rails.logger.info "worker = #{worker.inspect}"
+            rescue Exception => e
             worker.status = "error"
-            worker.message = e.to_s
+            worker.message = e.to_s + ": " + e.backtrace.join(", ")
             worker.save
           else
-            Rails.logger.info "Worker #{worker.id} succeeded."
             worker.status = "done"
             worker.save
           end
