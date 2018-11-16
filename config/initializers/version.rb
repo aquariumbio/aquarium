@@ -1,9 +1,3 @@
-
-
-begin
-  Bioturk::Application.config.aquarium_version = `git rev-list HEAD --count`.strip
-rescue StandardError
-  Bioturk::Application.config.aquarium_version = 'unknown'
-end
+Bioturk::Application.config.aquarium_version = "2.5.0 alpha"
 
 puts "Aquarium Version #{Bioturk::Application.config.aquarium_version} Starting!"

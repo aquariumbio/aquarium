@@ -138,6 +138,19 @@
       </div>
     </div>    
 
+    <h3>Keywords <a href="#" class="add" 
+                    ng-click="config.keywords.push('')">&plus;</a></h3>
+    <div layout="row" ng-repeat="keyword in config.keywords track by $index"> 
+      <div class="field" flex=25>
+        <label>Keyword</label>
+        <input ng-model="config.keywords[$index]">
+      </div>
+      <div class="field" flex=25>
+        <label>&nbsp;</label>
+        <a href="#" class="remove" ng-click="remove(config.keywords,config.keywords[$index])">&times;</a>  
+      </div>         
+    </div>      
+
     <h3>Authors <a href="#" class="add" 
                    ng-click="config.authors.push({name: '', affilation: ''})">&plus;</a></h3>
     <div layout="row" ng-repeat="author in config.authors track by $index"> 
@@ -191,6 +204,9 @@
         &copy; {{config.copyright}}<br>
         <b>Target:</b> {{config.github.user}}/{{config.github.repo}}<br>
         <b>Maintained by:</b> {{config.maintainer.name}} &lt;{{config.maintainer.email}}&gt;<br>
+
+    <b>Keywords:</b> {{config.keywords.join(", ")}}<br>
+
     <b>Authors:</b><br>
       <ul>
         <li ng-repeat="a in config.authors">
@@ -246,10 +262,10 @@
 
     <div ng-if="!state.building && state.error != null">
       <h2>Error publishing workflow</h2>
-      <span class="issue">{{state.error}}</span><br>
+      <span class="issue">{{state.error}}</span><br><br>
       <p>Check <a href="https://github.com/{{config.github.user}}/{{config.github.repo}}" target=github>
                         https://github.com/{{config.github.user}}/{{config.github.repo}}</a> to see if
-        Aquarium published soe of your workflow, but encountered the above error before it couldcomplete.</p> 
+        Aquarium published some of your workflow, but encountered the above error before it could complete.</p> 
     </div>    
 
   </div>    

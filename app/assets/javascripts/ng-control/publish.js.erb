@@ -80,17 +80,19 @@
         }
       ],
       github: {
-        user: "",
-        repo: "",
-        access_token: ""
-      }
+        user: "snivalk",
+        repo: "anemone7",
+        access_token: "b18c92ec6ec67983a69dcb113a6e0758986ba8fd"
+      },
+      keywords: [],
+      aquarium_version: "<%= Bioturk::Application.config.aquarium_version %>"
     };
 
     $scope.state = {
       mode: "github",
       working: false,
       error: null,
-      attempts: []
+      attempts: [Date()]
     }
 
     $scope.clear = function() {
@@ -134,16 +136,34 @@
       });
     }
 
+    function set_config(config) {
+
+      let access_token = $scope.config.github.access_token;
+      $scope.config = config;
+
+      if ( ! $scope.config.keywords ) {
+        $scope.config.keywords = [];
+      }
+      if ( ! $scope.config.authors ) {
+        $scope.config.authors = [];
+      }
+      if ( ! $scope.config.acknowledgements ) {
+        $scope.config.acknowledgements = [];
+      }
+
+      $scope.config.aquarium_version = "<%= Bioturk::Application.config.aquarium_version %>";
+
+      $scope.config.github.access_token = access_token;
+
+    }
+
     $scope.check_repo = function() {
       start_working();
       AQ.post("/publish/check_repo", $scope.config.github)
         .then(response => {
-          console.log("response", response.data)
           if ( response.data.result == 'ok' ) {
             if ( response.data.repo_exists ) {
-              let access_token = $scope.config.github.access_token;
-              $scope.config = response.data.config;
-              $scope.config.github.access_token = access_token;
+              set_config(response.data.config);
               select_components(response.data.categories)
               $scope.state.update = true;
             } else {
@@ -201,14 +221,12 @@
             $scope.state.repo = response.data.repo;
             $scope.state.worker_id = response.data.worker_id;
             console.log(`wid = ${$scope.state.worker_id}`);
-            stop_working();
-            make_attempt();
             check_progress();
           } else {
             $scope.state.error = response.data.message;
             $scope.state.details = response.data.error;
-            stop_working();
           }
+          stop_working();          
         })
         .catch(response => stop_working())
     }
@@ -225,8 +243,13 @@
 
       w.retrieve()
        .then(worker => {
+        console.log("result", worker)
          if ( worker.status == 'done' ) {
            $scope.state.building = false;
+         } else if ( worker.status == 'error' ) {
+           $scope.state.building = false;
+           $scope.state.error = "Background worker error: " + worker.message;
+           $scope.$apply();          
          } else {
            check_progress();
          }
@@ -234,7 +257,7 @@
        })
        .catch(error => {
          $scope.state.building = false;
-         $scope.state.error = error;
+         $scope.state.error = "HTTP error: " + error;
          $scope.$apply();
        })
 
