@@ -8,7 +8,7 @@
 
 <%= content_for :sidebar do %>
 
-  <h2>Choose Components</h2>
+  <h3>&nbsp; Workflow Components</h3>
 
   <ul>
     <li ng-repeat="c in categories">
@@ -89,7 +89,7 @@
 
     <h2>Step 2: Describe Your Workflow and Choose Components</h2>
 
-    <div class="update-note">
+    <div class="update-note" ng-if="state.update">
     <p><b>Note:</b> Aquarium found an existing published workflow at 
       <a href="https://github.com/{{config.github.user}}/{{config.github.repo}}" target=github>
         https://github.com/{{config.github.user}}/{{config.github.repo}}
@@ -233,7 +233,7 @@
 
     </div>
 
-    <div ng-if="!state.building">
+    <div ng-if="!state.building && state.error == null">
       <h2>Workflow Published!</h2>
       <p>See <a href="https://github.com/{{config.github.user}}/{{config.github.repo}}" target=github>
         https://github.com/{{config.github.user}}/{{config.github.repo}}</a> for the results.</p>
@@ -243,6 +243,14 @@
       <p>You should also edit the LICENSE.md which describes how user's can use your code. And you should edit the README.md which should describe in as much detail as you can muster how
          to use workflow. Note that if you edit other files (besides LICENSE.md and README.md) in the repository and later publish and update, Aquarium may overwrite them.</p>
     </div>
+
+    <div ng-if="!state.building && state.error != null">
+      <h2>Error publishing workflow</h2>
+      <span class="issue">{{state.error}}</span><br>
+      <p>Check <a href="https://github.com/{{config.github.user}}/{{config.github.repo}}" target=github>
+                        https://github.com/{{config.github.user}}/{{config.github.repo}}</a> to see if
+        Aquarium published soe of your workflow, but encountered the above error before it couldcomplete.</p> 
+    </div>    
 
   </div>    
 

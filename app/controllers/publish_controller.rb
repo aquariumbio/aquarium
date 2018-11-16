@@ -48,7 +48,10 @@ class PublishController < ApplicationController
 
     if params[:categories]
 
-      Thread.new do
+      worker = Anemone::Worker.new name: "publisher"
+      worker.save
+
+      worker.run do
 
         categories = params[:categories].collect do |category|
           category[:members].collect do |member|
@@ -66,7 +69,7 @@ class PublishController < ApplicationController
 
       end
 
-      resp.ok
+      resp.ok worker_id: worker.id
 
     else
 
@@ -78,25 +81,5 @@ class PublishController < ApplicationController
 
   end
 
-  def ready
-
-    resp = AqResponse.new
-    client = Octokit::Client.new(:access_token => params[:access_token])
-
-    begin
-      file = client.contents({ repo: params[:repo], user: params[:user]}, path: "/config.json")
-      logger.info "Rate Limit Info: #{client.rate_limit}"
-      config = Base64.decode64(file[:content])
-      puts config.to_json
-    rescue Exception => e
-      puts e.to_s
-      resp.ok(ready: false)
-    else
-      resp.ok(ready: true)
-    end
-
-    render json: resp
-
-  end
 
 end

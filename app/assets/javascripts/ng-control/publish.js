@@ -123,9 +123,13 @@
           console.log(component);
           let type = component.library ? "library" : "operation_type";
           let cat = aq.find($scope.categories, c => c.name == component[type].category);
-          cat.open = true;
-          let comp = aq.find(cat.members, m => m.name == component[type].name );
-          comp.selected = true;
+          if ( cat ) {
+            cat.open = true;
+            let comp = aq.find(cat.members, m => m.name == component[type].name );
+            if ( comp ) {
+              comp.selected = true;
+            }
+          }
         })
       });
     }
@@ -142,6 +146,8 @@
               $scope.config.github.access_token = access_token;
               select_components(response.data.categories)
               $scope.state.update = true;
+            } else {
+              $scope.state.update = false;
             }
             $scope.state.mode = "build";            
           } else {
@@ -193,6 +199,8 @@
           if ( response.data.result == 'ok' ) {
             $scope.state.mode = 'submitted';
             $scope.state.repo = response.data.repo;
+            $scope.state.worker_id = response.data.worker_id;
+            console.log(`wid = ${$scope.state.worker_id}`);
             stop_working();
             make_attempt();
             check_progress();
@@ -202,23 +210,34 @@
             stop_working();
           }
         })
+        .catch(response => stop_working())
     }
 
     function check_progress() {
       $scope.state.building = true;
-      setTimeout(check_for_config,2500);
+      setTimeout(check_for_config,1000);
     }
 
     function check_for_config() {
       make_attempt();
-      AQ.post("/publish/ready", $scope.config.github)
-        .then(response => {
-          if ( response.data.ready ) {
-            $scope.state.building = false;
-          } else {
-            check_progress();
-          }
-        });
+
+      let w = new AnemoneWorker($scope.state.worker_id);
+
+      w.retrieve()
+       .then(worker => {
+         if ( worker.status == 'done' ) {
+           $scope.state.building = false;
+         } else {
+           check_progress();
+         }
+         $scope.$apply();
+       })
+       .catch(error => {
+         $scope.state.building = false;
+         $scope.state.error = error;
+         $scope.$apply();
+       })
+
     }
 
   }]);
