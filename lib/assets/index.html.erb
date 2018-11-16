@@ -18,7 +18,7 @@
     <title>Aquarium Protool: <%= @config[:title] %></title>
     <meta name="description" content="<%= @config[:description] %>">
     <meta name="author" content="<%= @config[:maintainer] %>">
-    <meta name="keywords" content="Aquarium, Protocol, <%= begin; @config[:keywords].join(', '); rescue Exception => e; e.to_s; end %>">
+    <meta name="keywords" content="Aquarium, Protocol, <%= @config[:keywords] ? @config[:keywords].join(', '): 'No keywords' %>">
 
     <!-- Third party javascript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.2/markdown-it.min.js"></script>
