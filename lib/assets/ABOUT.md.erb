@@ -8,17 +8,28 @@
 
 &copy; <%= @config[:copyright] %>
 
+### Keywords
+<% if @config[:keywords] %>
+  <% @config[:kewords].each do |w| %>
+  - <%= w %>
+  <% end %>
+<% end %>
+
 ### Maintainer
 - <%= @config[:maintainer][:name] %>, <# <%= @config[:maintainer][:email] %>>
 
 ### Authors
-<% @config[:authors].each do |a| %>
+<% if @config[:authors] %>
+  <% @config[:authors].each do |a| %>
   - <%= a[:name] %>, <%= a[:affiliation] %>
+  <% end %>
 <% end %>
 
 ### Acknowledgements
-<% @config[:acknowledgements].each do |a| %>
+<% if @config[:acknowledgements] %>
+  <% @config[:acknowledgements].each do |a| %>
   - <%= a[:name] %>, <%= a[:affiliation] %>
+  <% end %>
 <% end %>
 
 ### Details
