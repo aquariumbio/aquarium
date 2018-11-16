@@ -183,6 +183,7 @@ module Aquadoc
           user: "none",
           access_token: "none"
         },
+        keywords: [],
         aquadoc_version: Aquadoc.version
       }
 
