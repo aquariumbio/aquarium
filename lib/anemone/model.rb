@@ -29,7 +29,7 @@ module Anemone
             ActiveRecord::Base.transaction do
               worker.reload
               worker.status = "error"
-              worker.message = e.to_s + ": " + e.backtrace[0..2].join(", ")
+              worker.message = (e.to_s + ": " + e.backtrace[0..2].join(", "))[0..254]
               worker.save
             end
             if worker.errors.any?
