@@ -19,6 +19,7 @@ class PublishController < ApplicationController
         logger.info "Rate Limit Info: #{client.rate_limit}"
         repos = client.repositories.collect { |r| r.name }
       rescue Exception => e
+        logger.info(e)
         resp.error("Aquarium cannot access Github using the supplied access token.", e)
       else
         if repos.member?(params[:repo])
