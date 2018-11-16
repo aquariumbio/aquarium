@@ -27,10 +27,10 @@ module Anemone
             yield
           rescue Exception => e
             worker.status = "error"
-            worker.message = e.to_s + ": " + e.backtrace.join(", ")
+            worker.message = e.to_s + ": " + e.backtrace[0..2].join(", ")
             worker.save
             if worker.errors.any?
-              raise "Eror: Could not save worker #{worker.id} status: #{worker.errors.full_messages.join(', ')}"
+              raise "Error: Could not save worker #{worker.id} status: #{worker.errors.full_messages.join(', ')}"
             end
           else
             worker.status = "done"
@@ -41,7 +41,7 @@ module Anemone
 
       else
 
-        raise "Error: Worker #{worker.id} already has been run"
+        raise "Error: Worker already has been run"
 
       end
 
