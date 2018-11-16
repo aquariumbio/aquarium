@@ -12,9 +12,8 @@ end # returns immediately
 
 # later ...
 
-worker.reload.status
-w.status # either 'running', 'error', or 'done'
-reason = w.message if w.status == 'error' # if the job raised an exception
+worker.reload.status # either 'running', 'error', or 'done'
+reason = worker.message if w.status == 'error' # if the job raised an exception
 ```
 
 From the front end in javascript you can do
