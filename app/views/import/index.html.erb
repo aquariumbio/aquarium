@@ -1,0 +1,33 @@
+<% provide(:title, 'Import') %>
+
+<%= content_for :class do %>import<% end %>
+
+<%= content_for :controller do %>importCtrl<% end %>
+
+<% content_for :wider_sidebar do %>true<% end %>
+
+<%= content_for :sidebar do %>
+
+<% end %>
+
+<%= content_for :specific_title do %>
+
+<% end %>
+
+<%= content_for :action1 do %>
+
+      <label ng-class="import_popup.loading ? 'md-button md-raised md-accent' : 'md-button md-raised'">
+        <span ng-if="import_popup.loading">Loading ...</span>
+        <span ng-if="!import_popup.loading">Load</span>
+                <input type=file
+                        id="import"
+                        style="display: none;"
+                        custom-on-change="load">
+      </label>
+
+<% end %>
+
+<%= content_for :main do %>
+
+
+<% end %>
