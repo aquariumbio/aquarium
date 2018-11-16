@@ -11,7 +11,7 @@ class AnemoneWorker {
     return new Promise(function(resolve,reject) {
 
       let http = new XMLHttpRequest(); // Using raw Http request in case jquery
-                                       // is not available
+                                       // is not available in the host app.
 
       http.onreadystatechange = function(e) {
         if ( this.readyState == 4 && this.status == 200 ) {
