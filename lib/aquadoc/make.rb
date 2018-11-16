@@ -149,7 +149,7 @@ module Aquadoc
       {
         config: @config,
         components: @category_list.flatten
-      }
+      }.to_json
     end
 
     def copy_assets
