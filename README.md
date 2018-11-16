@@ -37,6 +37,12 @@ And then execute:
 ```bash
 $ bundle install
 ```
+
+Anemone also needs to make a table in your database. To do this, run
+```bash
+rake anenome:setup
+```
+
 To use the javascript interface, you'll also need to add
 
 ```javascript
