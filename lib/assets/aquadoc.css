@@ -84,5 +84,6 @@ a {
 
 .btn-issues {
   background: white;
+  opacity: 0.5;
   color: black !important;
 }
