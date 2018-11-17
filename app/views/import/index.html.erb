@@ -1,5 +1,13 @@
 <% provide(:title, 'Import') %>
 
+<script type="text/ng-template" id="component">
+  <b>{{component.name}}</b>
+  <span ng-if="component.existing" class="matches">
+    : Matches Type {{component.existing.id}}
+  </span>
+  <span ng-if="component.existing === null" class="new">: New</span>
+</script>
+
 <%= content_for :class do %>import<% end %>
 
 <%= content_for :controller do %>importCtrl<% end %>
@@ -7,6 +15,44 @@
 <% content_for :wider_sidebar do %>true<% end %>
 
 <%= content_for :sidebar do %>
+
+  <div ng-if="aq_file">
+    <div>
+      <h2>Operation Types</h2>
+      <ul>
+        <li ng-repeat="component in aq_file.operation_types">
+          <div ng-include="'component'"></div>
+        </li>
+      </ul>
+    </div>  
+
+    <div>
+      <h2>Libraries</h2>
+      <ul>
+        <li ng-repeat="component in aq_file.libraries">
+          <div ng-include="'component'"></div>
+        </li>
+      </ul>
+    </div>     
+    
+    <div>
+      <h2>Sample Types</h2>
+      <ul>
+        <li ng-repeat="component in aq_file.sample_types">
+          <div ng-include="'component'"></div>
+        </li>
+      </ul>
+    </div>   
+
+    <div>
+      <h2>Containers</h2>
+      <ul>
+        <li ng-repeat="component in aq_file.object_types">
+          <div ng-include="'component'"></div>
+        </li>
+      </ul>
+    </div> 
+  </div> 
 
 <% end %>
 
@@ -29,5 +75,28 @@
 
 <%= content_for :main do %>
 
+  <div ng-if="aq_file" layout-padding>
+    <h2>{{aq_file.config.title}}</h2>
+    <p>{{aq_file.config.description}}<br>
+        &copy; {{aq_file.config.copyright}}<br>
+        <b>Target:</b> {{aq_file.config.github.user}}/{{aq_file.config.github.repo}}<br>
+        <b>Maintained by:</b> {{aq_file.config.maintainer.name}} &lt;{{aq_file.config.maintainer.email}}&gt;<br>
+
+    <b>Keywords:</b> {{aq_file.config.keywords.join(", ")}}<br>
+
+    <b>Authors:</b><br>
+      <ul>
+        <li ng-repeat="a in aq_file.config.authors">
+          {{a.name}}: {{a.affiliation}}
+        </li>
+      </ul>
+
+    <b>Acknowledgements:</b><br>
+      <ul>
+        <li ng-repeat="a in aq_file.config.acknowledgements">
+          {{a.name}}: {{a.affiliation}}
+        </li>
+      </ul>
+  </div>
 
 <% end %>

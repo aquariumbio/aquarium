@@ -27,11 +27,11 @@ class PublishController < ApplicationController
             file = client.contents({ repo: params[:repo], user: params[:user]}, path: "/config.json")
             config = JSON.parse Base64.decode64(file[:content])
             file = client.contents({ repo: params[:repo], user: params[:user]}, path: "/#{params[:repo]}.aq")
-            categories = JSON.parse Base64.decode64(file[:content])            
+            aq_file = JSON.parse Base64.decode64(file[:content])            
           rescue Exception => e
             resp.error("The Github repository '#{params[:repo]}' exists but does not contain a config.json file.", e)
           else
-            resp.ok(repo_exists: true, config: config, categories: categories)
+            resp.ok(repo_exists: true, config: config, aq_file: aq_file)
           end
         else
           resp.ok(repo_exists: false)

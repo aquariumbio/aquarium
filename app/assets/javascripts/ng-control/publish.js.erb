@@ -118,22 +118,18 @@
       aq.remove(list,el)
     }
 
-    function select_components(categories) {
-      console.log(categories)
-      aq.each(categories, category => {
-        aq.each(category, component => {
-          console.log(component);
-          let type = component.library ? "library" : "operation_type";
-          let cat = aq.find($scope.categories, c => c.name == component[type].category);
-          if ( cat ) {
-            cat.open = true;
-            let comp = aq.find(cat.members, m => m.name == component[type].name );
-            if ( comp ) {
-              comp.selected = true;
-            }
+    function select_components(aq_file) {
+      aq.each(aq_file.components, component => {
+        let type = component.library ? "library" : "operation_type";
+        let cat = aq.find($scope.categories, c => c.name == component[type].category);
+        if ( cat ) {
+          cat.open = true;
+          let comp = aq.find(cat.members, m => m.name == component[type].name );
+          if ( comp ) {
+            comp.selected = true;
           }
-        })
-      });
+        }
+      })
     }
 
     function set_config(config) {
@@ -164,7 +160,7 @@
           if ( response.data.result == 'ok' ) {
             if ( response.data.repo_exists ) {
               set_config(response.data.config);
-              select_components(response.data.categories)
+              select_components(response.data.aq_file)
               $scope.state.update = true;
             } else {
               $scope.state.update = false;
