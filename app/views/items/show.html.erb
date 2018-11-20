@@ -174,7 +174,12 @@
             <div ng-if="mode == 'data' && part.rid && key == da.key"
                  ng-repeat="da in part.data_associations"
                  class="data-input">
-              <input ng-model="da.new_value" 
+              <input ng-if="da.is_object"
+                     ng-model="da.new_value"
+                     json-text="da.new_value"
+                     ng-change="gang_data_associations(da.new_value)">
+              <input ng-if="!da.is_object"
+                     ng-model="da.new_value"
                      ng-change="gang_data_associations(da.new_value)">
             </div>
           </td>
