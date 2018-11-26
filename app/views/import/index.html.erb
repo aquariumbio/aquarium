@@ -2,10 +2,10 @@
 
 <script type="text/ng-template" id="component">
   <b>{{component.name}}</b>
-  <span ng-if="component.existing" class="matches">
-    : Matches Type {{component.existing.id}}
-  </span>
-  <span ng-if="component.existing === null" class="new">: New</span>
+  <span ng-if="component.existing">(
+    {{component.existing.id}}
+  )</span>
+  <span ng-if="component.existing === null">(new)</span> 
 </script>
 
 <%= content_for :class do %>import<% end %>
@@ -16,38 +16,38 @@
 
 <%= content_for :sidebar do %>
 
-  <div ng-if="aq_file">
+  <div ng-if="importer">
     <div>
-      <h2>Operation Types</h2>
+      <h3>Operation Types</h3>
       <ul>
-        <li ng-repeat="component in aq_file.operation_types">
+        <li ng-repeat="component in importer.operation_types">
           <div ng-include="'component'"></div>
         </li>
       </ul>
     </div>  
 
     <div>
-      <h2>Libraries</h2>
+      <h3>Libraries</h3>
       <ul>
-        <li ng-repeat="component in aq_file.libraries">
+        <li ng-repeat="component in importer.libraries">
           <div ng-include="'component'"></div>
         </li>
       </ul>
     </div>     
     
     <div>
-      <h2>Sample Types</h2>
+      <h3>Sample Types</h3>
       <ul>
-        <li ng-repeat="component in aq_file.sample_types">
+        <li ng-repeat="component in importer.sample_types">
           <div ng-include="'component'"></div>
         </li>
       </ul>
     </div>   
 
     <div>
-      <h2>Containers</h2>
+      <h3>Containers</h3>
       <ul>
-        <li ng-repeat="component in aq_file.object_types">
+        <li ng-repeat="component in importer.object_types">
           <div ng-include="'component'"></div>
         </li>
       </ul>
@@ -73,27 +73,68 @@
 
 <% end %>
 
+<%= content_for :action2 do %>
+
+  <md-button ng-disabled="!importer || state.error || state.import_results"
+             class="md-raised md-primary"
+             ng-click="import()">
+    Import
+  </md-button>
+
+<% end %>
+
 <%= content_for :main do %>
 
-  <div ng-if="aq_file" layout-padding>
-    <h2>{{aq_file.config.title}}</h2>
-    <p>{{aq_file.config.description}}<br>
-        &copy; {{aq_file.config.copyright}}<br>
-        <b>Target:</b> {{aq_file.config.github.user}}/{{aq_file.config.github.repo}}<br>
-        <b>Maintained by:</b> {{aq_file.config.maintainer.name}} &lt;{{aq_file.config.maintainer.email}}&gt;<br>
+  <div ng-if="state.error" 
+       class="issue"
+       layout-padding>
+    {{state.error}}
+  </div>
 
-    <b>Keywords:</b> {{aq_file.config.keywords.join(", ")}}<br>
+  <div ng-if="state.import_results">
+    <h2 flex md-truncate>Import Results: 
+        <span ng-if="state.error" style="color: #900">FAILED</span>
+        <span ng-if="!state.error" style="color: #000">SUCCESS</span>        
+    </h2> 
+
+    <p ng-if="state.import_results.inconsistencies.length > 0"><b style="color: #900">
+      The following issues need to be addressed before this import can be completed:
+    </b></p>
+
+    <ul>
+      <li ng-repeat="i in import_popup.inconsistencies track by $index" style="color: #900">
+        {{i}}
+      </li>
+    </ul>          
+
+    <p>Notes:</p>
+    <ul>
+      <li ng-repeat="note in state.import_results.notes track by $index">
+        {{note}}
+      </li>
+    </ul>  
+
+  </div>
+
+  <div ng-if="importer" layout-padding>
+    <h2>{{importer.config.title}}</h2>
+    <p>{{importer.config.description}}<br>
+        &copy; {{importer.config.copyright}}<br>
+        <b>Target:</b> {{importer.config.github.user}}/{{importer.config.github.repo}}<br>
+        <b>Maintained by:</b> {{importer.config.maintainer.name}} &lt;{{importer.config.maintainer.email}}&gt;<br>
+
+    <b>Keywords:</b> {{importer.config.keywords.join(", ")}}<br>
 
     <b>Authors:</b><br>
       <ul>
-        <li ng-repeat="a in aq_file.config.authors">
+        <li ng-repeat="a in importer.config.authors">
           {{a.name}}: {{a.affiliation}}
         </li>
       </ul>
 
     <b>Acknowledgements:</b><br>
       <ul>
-        <li ng-repeat="a in aq_file.config.acknowledgements">
+        <li ng-repeat="a in importer.config.acknowledgements">
           {{a.name}}: {{a.affiliation}}
         </li>
       </ul>

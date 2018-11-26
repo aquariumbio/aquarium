@@ -1,4 +1,4 @@
-class AqFile {
+class Importer {
 
   constructor(content) {
     this.content = content;
@@ -23,8 +23,6 @@ class AqFile {
         aq.each(member.object_types, ot => this.object_types.push(ot));
       }
     });
-
-    console.log(this)
 
     return this;
 
@@ -62,4 +60,5 @@ class AqFile {
   }
 
 };
+
 

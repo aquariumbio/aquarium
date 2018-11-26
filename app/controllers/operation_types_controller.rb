@@ -379,6 +379,7 @@ class OperationTypesController < ApplicationController
     ActiveRecord::Base.transaction do
 
       begin
+
         issues_list = params[:operation_types].collect do |x|
           if x.has_key?(:library)
             Library.import(x, current_user)
@@ -391,18 +392,33 @@ class OperationTypesController < ApplicationController
         inconsistencies = issues_list.collect { |issues| issues[:inconsistencies] }.flatten
         error = true if inconsistencies.any?
 
-        notes << 'Import canceled due to inconsistencies. No changes made.' if inconsistencies.any?
+        if error
 
-        render json: {
-          operation_types: issues_list.collect { |issues| issues[:object_type] }.collect do |ot|
-            ot.as_json(methods: %i[field_types protocol precondition cost_model documentation timing])
-          end,
-          notes: notes.uniq,
-          inconsistencies: inconsistencies.uniq
-        }, status: :ok
+          render json: {
+            error: 'Aquarium import canceled due to inconsistencies. No changes made.',
+            operation_types: issues_list.collect { |issues| issues[:object_type] }.collect do |ot|
+              ot.as_json(methods: %i[field_types protocol precondition cost_model documentation timing])
+            end,
+            notes: notes.uniq,
+            inconsistencies: inconsistencies.uniq
+          }, status: :unprocessable_entity
+
+        else
+
+          render json: {
+            operation_types: issues_list.collect { |issues| issues[:object_type] }.collect do |ot|
+              ot.as_json(methods: %i[field_types protocol precondition cost_model documentation timing])
+            end,
+            notes: notes.uniq,
+            inconsistencies: inconsistencies.uniq
+          }, status: :ok
+
+        end
+
       rescue Exception => e
         error = true
-        render json: { error: 'Rails could not import operation types: ' + e.to_s + ': ' + e.backtrace.to_s, issues_list: issues_list },
+        render json: { error: e.to_s,
+                       backtrace: e.backtrace.to_s },
                status: :unprocessable_entity
       end
 
