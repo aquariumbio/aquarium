@@ -51,7 +51,7 @@ class SampleType < ActiveRecord::Base
 
     unless description == raw_sample_type[:description]
       results << "#{name} descriptions do not agree"
-      return false
+      return results
     end
 
     if raw_sample_type[:field_types]

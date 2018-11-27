@@ -19,8 +19,16 @@ class Importer {
         this.libraries.push(member.library);        
       } else {
         this.operation_types.push(member.operation_type);
-        aq.each(member.sample_types, st => this.sample_types.push(st));
-        aq.each(member.object_types, ot => this.object_types.push(ot));
+        aq.each(member.sample_types, st => {
+          if ( aq.where(this.sample_types, est => est.name == st.name ).length == 0 ) {
+            this.sample_types.push(st)
+          }
+        });
+        aq.each(member.object_types, ot => {
+          if ( aq.where(this.object_types, eot => eot.name == ot.name ).length == 0 ) {
+            this.object_types.push(ot)
+          }
+        });        
       }
     });
 
@@ -42,10 +50,10 @@ class Importer {
         .then(existing_comps => {
           if ( existing_comps.length >= 1 ) {
             comp.existing = existing_comps[0];
-            AQ.update();
           } else {
             comp.existing = null;
           }
+          AQ.update();
         })
 
     });

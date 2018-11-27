@@ -418,7 +418,7 @@ class OperationTypesController < ApplicationController
       rescue Exception => e
         error = true
         render json: { error: e.to_s,
-                       backtrace: e.backtrace.to_s },
+                       backtrace: e.backtrace },
                status: :unprocessable_entity
       end
 

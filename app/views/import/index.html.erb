@@ -75,69 +75,76 @@
 
 <%= content_for :action2 do %>
 
-  <md-button ng-disabled="!importer || state.error || state.import_results"
+  <md-button ng-disabled="!importer || state.import_results || state.importing"
              class="md-raised md-primary"
              ng-click="import()">
-    Import
+    <span ng-if="!state.importing">Import</span>
+    <span ng-if="state.importing">Processing</span>
   </md-button>
 
 <% end %>
 
 <%= content_for :main do %>
 
-  <div ng-if="state.error" 
-       class="issue"
-       layout-padding>
-    {{state.error}}
-  </div>
+  <div class="import-main-container">
 
-  <div ng-if="state.import_results">
-    <h2 flex md-truncate>Import Results: 
-        <span ng-if="state.error" style="color: #900">FAILED</span>
-        <span ng-if="!state.error" style="color: #000">SUCCESS</span>        
-    </h2> 
-
-    <p ng-if="state.import_results.inconsistencies.length > 0"><b style="color: #900">
-      The following issues need to be addressed before this import can be completed:
-    </b></p>
-
-    <ul>
-      <li ng-repeat="i in import_popup.inconsistencies track by $index" style="color: #900">
-        {{i}}
-      </li>
-    </ul>          
-
-    <p>Notes:</p>
-    <ul>
-      <li ng-repeat="note in state.import_results.notes track by $index">
-        {{note}}
-      </li>
-    </ul>  
-
-  </div>
-
-  <div ng-if="importer" layout-padding>
-    <h2>{{importer.config.title}}</h2>
-    <p>{{importer.config.description}}<br>
-        &copy; {{importer.config.copyright}}<br>
-        <b>Target:</b> {{importer.config.github.user}}/{{importer.config.github.repo}}<br>
-        <b>Maintained by:</b> {{importer.config.maintainer.name}} &lt;{{importer.config.maintainer.email}}&gt;<br>
-
-    <b>Keywords:</b> {{importer.config.keywords.join(", ")}}<br>
-
-    <b>Authors:</b><br>
-      <ul>
-        <li ng-repeat="a in importer.config.authors">
-          {{a.name}}: {{a.affiliation}}
-        </li>
+    <div ng-if="state.import_results.error" 
+         class="issue">
+      <span style="color: red">Error: </span>
+      {{state.import_results.error}}<br>
+      <ul ng-if="state.import_results.backtrace">
+        <li ng-repeat="b in state.import_results.backtrace|limitTo:1 track by $index">{{b}}</li>
       </ul>
+    </div>
 
-    <b>Acknowledgements:</b><br>
+    <div ng-if="state.import_results && !state.import_results.error" 
+         class="issue">
+      Workflow Successfully Imported!
+    </div>  
+
+    <div ng-if="state.import_results">
+
+      <h2 ng-if="state.import_results.inconsistencies.length > 0">Issues</h2>
+
       <ul>
-        <li ng-repeat="a in importer.config.acknowledgements">
-          {{a.name}}: {{a.affiliation}}
+        <li ng-repeat="i in state.import_results.inconsistencies track by $index" style="color: #900">
+          {{i}}
         </li>
-      </ul>
+      </ul>          
+
+      <h2>Import Log</h2>
+      <ul>
+        <li ng-repeat="note in state.import_results.notes track by $index">
+          {{note}}
+        </li>
+      </ul>  
+
+    </div>
+
+    <div ng-if="importer">
+      <h2>{{importer.config.title}}</h2>
+      <p>{{importer.config.description}}<br>
+          &copy; {{importer.config.copyright}}<br>
+          <b>Target:</b> {{importer.config.github.user}}/{{importer.config.github.repo}}<br>
+          <b>Maintained by:</b> {{importer.config.maintainer.name}} &lt;{{importer.config.maintainer.email}}&gt;<br>
+
+      <b>Keywords:</b> {{importer.config.keywords.join(", ")}}<br>
+
+      <b>Authors:</b><br>
+        <ul>
+          <li ng-repeat="a in importer.config.authors">
+            {{a.name}}: {{a.affiliation}}
+          </li>
+        </ul>
+
+      <b>Acknowledgements:</b><br>
+        <ul>
+          <li ng-repeat="a in importer.config.acknowledgements">
+            {{a.name}}: {{a.affiliation}}
+          </li>
+        </ul>
+    </div>
+
   </div>
 
 <% end %>

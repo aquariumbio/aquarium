@@ -35,16 +35,18 @@
 
     $scope.import = function() {
 
-      console.log($scope.importer.content.components)
+      $scope.state.importing = true;
 
       AQ.post("/operation_types/import", { operation_types: $scope.importer.content.components })
         .then(response => {
           console.log(response.data);
           $scope.state.import_results = response.data;
+          delete $scope.state.importing;
         })
         .catch(response => {
           console.log(response.data);
-          $scope.state.error = response.data.error;
+          $scope.state.import_results = response.data;
+          delete $scope.state.importing;          
         });
 
     }
