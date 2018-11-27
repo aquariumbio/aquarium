@@ -29,6 +29,7 @@
       </ul>
     </li>
   </ul>
+
 <% end %>
 
 <%= content_for :specific_title do %>
@@ -47,7 +48,7 @@
 
   <div ng-if="state.mode == 'github'" layout='column' class="publish-step">
 
-    <h2>Step 1: Github Information</h2>
+    <h2>Step 1: Publish to Github</h2>
 
     <p>
     Aquarium publishes workflows using your github account. 
@@ -87,7 +88,7 @@
 
     <br>
 
-    <h2>Step 1 Alternative: Export a .aq File</h2>
+    <h2>Step 1 Alternative: Export an .aq File</h2>
 
     <p>
     Select the components you would like to package on the left and download a resulting 
@@ -255,7 +256,7 @@
         </span>
       </div><br>
 
-    <span class="issue">{{state.error}}<br>{{state.details}}</span><br>
+    <span class="issue" ng-if="state.error">{{state.error}}<br>{{state.details}}</span><br>
 
     <div layout="row">
       <md-button class="md-raised" ng-click="publish()" ng-disabled="num_objects() == 0 || state.working">Publish</md-button>
@@ -279,8 +280,8 @@
       <p>See <a href="https://github.com/{{config.github.user}}/{{config.github.repo}}" target=github>
         https://github.com/{{config.github.user}}/{{config.github.repo}}</a> for the results.</p>
       <p>If you haven't done so already, publish the resulting web page by going go <a href="https://github.com/{{config.github.user}}/{{config.github.repo}}/settings" target=github>here</a>,
-         and choosing Github Pages -&gt; Source -&gt; master branch. The resulting web page will be available here at 
-         <a href="https://{{config.github.user}}.github.io//{{config.github.repo}}/" target=github>https://{{config.github.user}}.github.io//{{config.github.repo}}/</a>.
+         and choosing Github Pages -&gt; Source -&gt; master branch. The resulting web page will <it>eventually</it> be available at 
+         <a href="https://{{config.github.user}}.github.io/{{config.github.repo}}/" target=github>https://{{config.github.user}}.github.io/{{config.github.repo}}/</a> (be patient, github builds web pages from repos on its own time).</p> 
       <p>You should also edit the LICENSE.md which describes how user's can use your code. And you should edit the README.md which should describe in as much detail as you can muster how
          to use workflow. Note that if you edit other files (besides LICENSE.md and README.md) in the repository and later publish and update, Aquarium may overwrite them.</p>
     </div>

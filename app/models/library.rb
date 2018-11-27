@@ -32,7 +32,7 @@ class Library < ActiveRecord::Base
       lib.save
       lib.new_code 'source', obj[:code_source], user
 
-      issues = { notes: [], inconsistencies: [] }
+      issues = { notes: [ "Created new library #{obj[:name]} in category #{obj[:category]}" ], inconsistencies: [] }
       issues
   end
 end

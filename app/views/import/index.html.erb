@@ -82,13 +82,17 @@
     </h3>
 
     <h3 class="md-title" ng-if="importer && !state.import_results">
-      Choose options and click IMPORT to add these definitions to Aquarium.
+      Select options and click IMPORT to add these definitions to Aquarium.
     </h3>    
 
     <div ng-if="state.import_results.error" 
          class="issue">
       <span style="color: red">Error: </span>
       {{state.import_results.error}}
+      <ul>
+        <li ng-repeat="b in state.import_results.backtrace track by $index"
+            style="font-size: 10pt">{{b}}</li>
+      </ul>
     </div>
 
     <div ng-if="state.import_results && !state.import_results.error" 
@@ -122,8 +126,18 @@
         <h3>{{importer.config.title}}</h3>
         <p>{{importer.config.description}}<br>
             &copy; {{importer.config.copyright}}<br>
-            <b>Target:</b> {{importer.config.github.user}}/{{importer.config.github.repo}}<br>
+            <b>WebPage:</b> <a href="https://{{importer.config.github.user}}.github.io/{{importer.config.github.repo}}" target="aquadoc">
+                               https://{{importer.config.github.user}}.github.io/{{importer.config.github.repo}}
+                            </a><br>
+            <b>Github Link:</b> <a href="https://github.com/{{importer.config.github.user}}/{{importer.config.github.repo}}/" target="github">
+                               https://github.com/{{importer.config.github.user}}/{{importer.config.github.repo}}/
+                            </a><br>                           
             <b>Maintained by:</b> {{importer.config.maintainer.name}} &lt;{{importer.config.maintainer.email}}&gt;<br>
+
+
+        <b>Version:</b> {{importer.config.version}}<br>
+
+        <b>Aquarium Version:</b> {{importer.config.aquarium_version}}<br>
 
         <b>Keywords:</b> {{importer.config.keywords.join(", ")}}<br>
 

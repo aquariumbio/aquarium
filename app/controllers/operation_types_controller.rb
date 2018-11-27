@@ -394,7 +394,7 @@ class OperationTypesController < ApplicationController
                 libs[0].name = libs[0].name + " archived #{Time.now.to_i}"
                 libs[0].category = libs[0].category + " (old)"
                 libs[0].save
-                notes << "Changed name of Library '#{libs[0].name}'"
+                notes << "Changed name of existing Library to '#{libs[0].name}'"
                 raise libs[0].errors.full_messages.join(", ") if libs[0].errors.any?              
               elsif libs.length > 1
                 raise "Found multiple existing operation types named #{x[:library][:name]}"
@@ -421,7 +421,7 @@ class OperationTypesController < ApplicationController
                 ots[0].category = ots[0].category + " (old)"                
                 ots[0].deployed = false
                 ots[0].save
-                notes << "Changed name of OperationType to '#{ots[0].name}'"
+                notes << "Changed name of existing OperationType to '#{ots[0].name}'"
                 raise ots.errors.full_messages.join(", ") if ots[0].errors.any?
               elsif ots.length > 1
                 raise "Found multiple existing operation types named #{x[:operation_type][:name]}"
