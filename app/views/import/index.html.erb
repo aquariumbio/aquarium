@@ -16,43 +16,32 @@
 
 <%= content_for :sidebar do %>
 
-  <div ng-if="importer">
-    <div>
-      <h3>Operation Types</h3>
-      <ul>
-        <li ng-repeat="component in importer.operation_types">
-          <div ng-include="'component'"></div>
-        </li>
-      </ul>
-    </div>  
+  <div class="options-container">
+   
+    <md-content class="margin">
 
-    <div>
-      <h3>Libraries</h3>
-      <ul>
-        <li ng-repeat="component in importer.libraries">
-          <div ng-include="'component'"></div>
-        </li>
-      </ul>
-    </div>     
-    
-    <div>
-      <h3>Sample Types</h3>
-      <ul>
-        <li ng-repeat="component in importer.sample_types">
-          <div ng-include="'component'"></div>
-        </li>
-      </ul>
-    </div>   
+      <h2 class="md-title">Immediately deploy imported workflow?</h2>
 
-    <div>
-      <h3>Containers</h3>
-      <ul>
-        <li ng-repeat="component in importer.object_types">
-          <div ng-include="'component'"></div>
-        </li>
-      </ul>
-    </div> 
-  </div> 
+      <md-checkbox
+        ng-disabled="!importer || state.import_results || state.importing"
+        class="md-raised md-primary"
+        ng-model="options.deploy">
+        Deploy
+      </md-checkbox>
+
+      <h2 class="md-title">OperationType and Library conflict resolution</h2>
+
+      <md-radio-group
+          ng-model="options.resolution_method" 
+          ng-disabled="!importer || state.import_results || state.importing">
+        <md-radio-button value="fail" class="md-primary">Fail</md-radio-button>
+        <md-radio-button value="skip">Skip</md-radio-button>
+        <md-radio-button value="rename-existing">Rename existing</md-radio-button>
+      </md-radio-group>  
+
+    </md-content>
+
+  </div>
 
 <% end %>
 
@@ -88,13 +77,18 @@
 
   <div class="import-main-container">
 
+    <h3 class="md-title" ng-if="!importer">
+      Click LOAD to load a workflow from your local drive into your browser.
+    </h3>
+
+    <h3 class="md-title" ng-if="importer && !state.import_results">
+      Choose options and click IMPORT to add these definitions to Aquarium.
+    </h3>    
+
     <div ng-if="state.import_results.error" 
          class="issue">
       <span style="color: red">Error: </span>
-      {{state.import_results.error}}<br>
-      <ul ng-if="state.import_results.backtrace">
-        <li ng-repeat="b in state.import_results.backtrace|limitTo:1 track by $index">{{b}}</li>
-      </ul>
+      {{state.import_results.error}}
     </div>
 
     <div ng-if="state.import_results && !state.import_results.error" 
@@ -102,7 +96,7 @@
       Workflow Successfully Imported!
     </div>  
 
-    <div ng-if="state.import_results">
+    <div ng-if="state.import_results && (state.import_results.inconsistencies || state.import_results.notes)">
 
       <h2 ng-if="state.import_results.inconsistencies.length > 0">Issues</h2>
 
@@ -121,28 +115,74 @@
 
     </div>
 
-    <div ng-if="importer">
-      <h2>{{importer.config.title}}</h2>
-      <p>{{importer.config.description}}<br>
-          &copy; {{importer.config.copyright}}<br>
-          <b>Target:</b> {{importer.config.github.user}}/{{importer.config.github.repo}}<br>
-          <b>Maintained by:</b> {{importer.config.maintainer.name}} &lt;{{importer.config.maintainer.email}}&gt;<br>
+    <div layout="row">
 
-      <b>Keywords:</b> {{importer.config.keywords.join(", ")}}<br>
+      <div ng-if="importer" flex=50> <!-- Workflow Information -->
 
-      <b>Authors:</b><br>
-        <ul>
-          <li ng-repeat="a in importer.config.authors">
-            {{a.name}}: {{a.affiliation}}
-          </li>
-        </ul>
+        <h3>{{importer.config.title}}</h3>
+        <p>{{importer.config.description}}<br>
+            &copy; {{importer.config.copyright}}<br>
+            <b>Target:</b> {{importer.config.github.user}}/{{importer.config.github.repo}}<br>
+            <b>Maintained by:</b> {{importer.config.maintainer.name}} &lt;{{importer.config.maintainer.email}}&gt;<br>
 
-      <b>Acknowledgements:</b><br>
-        <ul>
-          <li ng-repeat="a in importer.config.acknowledgements">
-            {{a.name}}: {{a.affiliation}}
-          </li>
-        </ul>
+        <b>Keywords:</b> {{importer.config.keywords.join(", ")}}<br>
+
+        <b>Authors:</b><br>
+          <ul>
+            <li ng-repeat="a in importer.config.authors">
+              {{a.name}}: {{a.affiliation}}
+            </li>
+          </ul>
+
+        <b>Acknowledgements:</b><br>
+          <ul>
+            <li ng-repeat="a in importer.config.acknowledgements">
+              {{a.name}}: {{a.affiliation}}
+            </li>
+          </ul>
+        </p>
+
+      </div>
+
+      <div ng-if="importer" flex=50> <!-- Workflow Components -->
+        <div>
+          <h3>Operation Types</h3>
+          <ul>
+            <li ng-repeat="component in importer.operation_types">
+              <div ng-include="'component'"></div>
+            </li>
+          </ul>
+        </div>  
+
+        <div>
+          <h3>Libraries</h3>
+          <ul>
+            <li ng-repeat="component in importer.libraries">
+              <div ng-include="'component'"></div>
+            </li>
+          </ul>
+        </div>     
+        
+        <div>
+          <h3>Sample Types</h3>
+          <ul>
+            <li ng-repeat="component in importer.sample_types">
+              <div ng-include="'component'"></div>
+            </li>
+          </ul>
+        </div>   
+
+        <div>
+          <h3>Containers</h3>
+          <ul>
+            <li ng-repeat="component in importer.object_types">
+              <div ng-include="'component'"></div>
+            </li>
+          </ul>
+        </div> 
+
+      </div>
+
     </div>
 
   </div>

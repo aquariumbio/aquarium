@@ -12,6 +12,11 @@
 
     $scope.state = {};
 
+    $scope.options = {
+      deploy: false,
+      resolution_method: "fail" // or "remname-existing" or "skip"
+    }
+
     $scope.load = function() {
 
       let file = document.getElementById("import").files[0],
@@ -37,7 +42,7 @@
 
       $scope.state.importing = true;
 
-      AQ.post("/operation_types/import", { operation_types: $scope.importer.content.components })
+      AQ.post("/operation_types/import", { operation_types: $scope.importer.content.components, options: $scope.options })
         .then(response => {
           console.log(response.data);
           $scope.state.import_results = response.data;

@@ -381,11 +381,66 @@ class OperationTypesController < ApplicationController
       begin
 
         issues_list = params[:operation_types].collect do |x|
+
+          issues = { notes: [], inconsistencies: [] }
+          notes = []
+
           if x.has_key?(:library)
-            Library.import(x, current_user)
+            if params[:options][:resolution_method] == 'fail'
+              issues = Library.import(x, current_user)
+            elsif params[:options][:resolution_method] == 'rename-existing'
+              libs = Library.where(name: x[:library][:name], category: x[:library][:category])
+              if libs.length == 1
+                libs[0].name = libs[0].name + " archived #{Time.now.to_i}"
+                libs[0].category = libs[0].category + " (old)"
+                libs[0].save
+                notes << "Changed name of Library '#{libs[0].name}'"
+                raise libs[0].errors.full_messages.join(", ") if libs[0].errors.any?              
+              elsif libs.length > 1
+                raise "Found multiple existing operation types named #{x[:library][:name]}"
+              end
+              issues = Library.import(x, current_user) if libs.length <= 1
+            elsif params[:options][:resolution_method] == 'skip'
+              libs = Library.where(name: x[:library][:name], category: x[:library][:category])
+              issues = Library.import(x, current_user) if libs.length == 0
+              notes << "Skipping Library #{x[:library][:name]} because a library by the same name already exists." if libs.length > 0
+            else
+              raise "Unknown option '#{params[:options][:resolution_method]}' for resolution method"
+            end
+
           else
-            OperationType.import(x.merge(deployed: false), current_user)
+
+            x[:operation_type][:deployed] = params[:options][:deploy]
+
+            if params[:options][:resolution_method] == 'fail'
+              issues = OperationType.import(x, current_user)
+            elsif params[:options][:resolution_method] == 'rename-existing'
+              ots = OperationType.where(name: x[:operation_type][:name], category: x[:operation_type][:category])
+              if ots.length == 1
+                ots[0].name = ots[0].name + " archived #{Time.now.to_i}"
+                ots[0].category = ots[0].category + " (old)"                
+                ots[0].deployed = false
+                ots[0].save
+                notes << "Changed name of OperationType to '#{ots[0].name}'"
+                raise ots.errors.full_messages.join(", ") if ots[0].errors.any?
+              elsif ots.length > 1
+                raise "Found multiple existing operation types named #{x[:operation_type][:name]}"
+              end
+              issues = OperationType.import(x, current_user) if ots.length <= 1
+            elsif params[:options][:resolution_method] == 'skip'
+              ots = OperationType.where(name: x[:operation_type][:name], category: x[:operation_type][:category])
+              issues = OperationType.import(x, current_user) if ots.length == 0
+              notes << "Skipping OperationType #{x[:operation_type][:name]} because a type by the same name already exists." if ots.length > 0
+            else
+              raise "Unknown option '#{params[:options][:resolution_method]}' for resolution method"
+            end     
+
           end
+
+          issues[:notes] = issues[:notes] + notes
+
+          issues
+
         end
 
         notes = issues_list.collect { |issues| issues[:notes] }.flatten
@@ -417,6 +472,8 @@ class OperationTypesController < ApplicationController
 
       rescue Exception => e
         error = true
+        logger.info e.to_s
+        logger.info e.backtrace.to_s
         render json: { error: e.to_s,
                        backtrace: e.backtrace },
                status: :unprocessable_entity
