@@ -88,7 +88,7 @@ module Aquadoc
     def create_repo
       @repo = @client.create_repository(@repo_info[:repo],
         description: "#{@config[:title]}: An Aquarium Workflow",
-        website: "https://#{@config[:github][:user]}.github.io/#{@config[:github][:repo]}"
+        homepage: "https://#{@config[:github][:user]}.github.io/#{@config[:github][:repo]}"
       )
       sleep 5 # make sure repo is created before starting to add files
       puts "Created new repo: #{@repo_info[:repo]}"
