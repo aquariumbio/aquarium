@@ -77,11 +77,36 @@
       </div>
     </div>
 
-    <p class="issue">{{state.error}}</p>
+    <p class="issue" ng-if="state.error">{{state.error}}</p>
 
     <div layout="row">
-      <md-button class="md-raised" ng-click="check_repo()" ng-disabled="state.working">Use Repo</md-button>
+      <md-button class="md-raised" 
+                 ng-click="check_repo()"
+                 ng-disabled="state.working">Use Repo</md-button>
     </div>
+
+    <br>
+
+    <h2>Step 1 Alternative: Export a .aq File</h2>
+
+    <p>
+    Select the components you would like to package on the left and download a resulting 
+    .aq file directly. Useful for moving workflows around your instances of Aquarium (e.g. 
+    from a development instance to a production instance).
+    </p>  
+
+    <div layout="row">
+      <div class="field" flex=20>
+        <label>Workflow Name</label>
+        <input ng-model="config.export_title">
+      </div>
+    </div>    
+
+    <div layout="row">
+      <md-button class="md-raised" 
+                 ng-click="export_components()"
+                 ng-disabled="num_objects() == 0 || state.working">Export</md-button>
+    </div>    
 
   </div>
 

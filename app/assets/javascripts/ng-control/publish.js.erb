@@ -211,12 +211,10 @@
       start_working();
       AQ.post("/publish/publish", { config: $scope.config, categories: selections() })
         .then(response => {
-          console.log(response.data)
           if ( response.data.result == 'ok' ) {
             $scope.state.mode = 'submitted';
             $scope.state.repo = response.data.repo;
             $scope.state.worker_id = response.data.worker_id;
-            console.log(`wid = ${$scope.state.worker_id}`);
             check_progress();
           } else {
             $scope.state.error = response.data.message;
@@ -224,7 +222,7 @@
           }
           stop_working();          
         })
-        .catch(response => stop_working())
+        .catch(stop_working)
     }
 
     function check_progress() {
@@ -233,13 +231,13 @@
     }
 
     function check_for_config() {
+
       make_attempt();
 
       let w = new AnemoneWorker($scope.state.worker_id);
 
       w.retrieve()
        .then(worker => {
-        console.log("result", worker)
          if ( worker.status == 'done' ) {
            $scope.state.building = false;
          } else if ( worker.status == 'error' ) {
@@ -259,6 +257,26 @@
 
     }
 
+    $scope.export_components = function() {
+      start_working();
+      AQ.post("/publish/export", { 
+          categories: selections(), 
+          config: { title: $scope.config.export_title }
+        })
+        .then(response => {
+          stop_working();
+          let downloadLink = angular.element("<a></a>");    
+          downloadLink.attr("href", 'data:text/plain;charset=utf-8,' + encodeURIComponent(response.data.aq_file));
+          downloadLink.attr("download", $scope.config.export_title + ".aq");
+          downloadLink[0].click();          
+          
+        })
+        .catch(e => {
+          console.log(e)
+          stop_working()
+        })
+    }
+
   }]);
 
-})();                    
+})();

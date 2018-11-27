@@ -5,7 +5,8 @@ Bioturk::Application.routes.draw do
   get '/import', to: 'import#index'
 
   post '/publish/check_repo', to: 'publish#check_repo'
-  post '/publish/publish', to: 'publish#publish'     
+  post '/publish/publish', to: 'publish#publish'  
+  post '/publish/export', to: 'publish#export'        
   get '/publish', to: 'publish#index'
 
   post 'static_pages/explorer_jobs'

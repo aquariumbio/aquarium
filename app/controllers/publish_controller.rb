@@ -43,6 +43,19 @@ class PublishController < ApplicationController
 
   end
 
+  def categories
+    params[:categories].collect do |category|
+      category[:members].collect do |member|
+        if member[:model][:model] == "Library"
+          Library.find(member[:id]).export
+        else
+          ex = OperationType.find(member[:id]).export
+          ex
+        end
+      end
+    end    
+  end
+
   def publish
 
     resp = AqResponse.new
@@ -53,17 +66,6 @@ class PublishController < ApplicationController
       worker.save
 
       worker.run do
-
-        categories = params[:categories].collect do |category|
-          category[:members].collect do |member|
-            if member[:model][:model] == "Library"
-              Library.find(member[:id]).export
-            else
-              ex = OperationType.find(member[:id]).export
-              ex
-            end
-          end
-        end
 
         ag = Aquadoc::Git.new(params[:config], categories)
         ag.run
@@ -77,6 +79,25 @@ class PublishController < ApplicationController
       resp.error("No operation types selected.")
 
     end
+
+    render json: resp
+
+  end
+
+  def export
+
+    resp = AqResponse.new    
+
+    if params[:categories]
+
+      ar = Aquadoc::Render.new(nil, params[:config], categories)
+      resp.ok(aq_file: ar.aq_file)
+
+    else
+
+      resp.error("No operation types selected.")      
+
+    end    
 
     render json: resp
 
