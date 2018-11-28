@@ -102,7 +102,7 @@ module Krill
     #               doesn't correspond to a valid list of uploads
     def get_upload_response var
       return nil if !is_upload?(var)
-      return self[var.to_sym].map {|up_hash| Upload.find(up_hash[:id])} 
+      return Upload.find(self[var.to_sym].map {|up_hash| up_hash[:id]})
     end
   end
   
