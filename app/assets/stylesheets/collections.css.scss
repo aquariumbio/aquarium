@@ -64,9 +64,11 @@
   }
 
   .data-input {
-    input {
+    textarea {
       margin: 0px;
       border: none;
+      resize: none;
+      overflow: hidden;
       &:focus {
         outline: none;
       }
