@@ -81,6 +81,14 @@ module Aquadoc
 
     end
 
+    def make_js
+
+      template = File.read(@assets_path + "/aquadoc.js.erb")
+      template_erb = ERB.new(template, 0, "%<>")
+      @storage.write("js/aquadoc.js", template_erb.result(binding))
+
+    end
+
   end
 
 end

@@ -1,52 +1,139 @@
-a {
-  color: rgb(0, 85, 170);
+body {
+  margin: 0;
+  background: white;
 }
 
-.aquarium-logo {
-  color: lightgreen;
+.main {
+  margin: 24px;
+  background: white;
 }
 
-/*Set the row height to the viewport*/
-.row-height{
-  height: 100vh;
+.main-container {
+  background: white;
+  margin-right: 100px;
 }
 
-/*Set up the columns with a 100% height, body color and overflow scroll*/
-.left{
-  height: calc(100% - 62px);
+.header {
+  background: white !important;
+  color: #333 !important;
+  border-bottom: 1pt solid #99f;
+}
+
+.logo-container {
+  margin-top: 12px;
+}
+
+.logo, .tagline {
+  text-align: right;
+}
+
+.logo {
+  margin-top: 20px;
+  margin-bottom: 30px;
+  color: #003399;
+  font-weight: bold;
+}
+
+.aq {
+  background: linear-gradient(120deg, #eff, #aff);
+  padding: 0px 5px 10px 9px;
+  border-radius: 2px;
+  border: 1pt solid #99f;
+}
+
+.logo a {
+  text-decoration: none;
+  color: #003399;
+}
+
+.tagline {
+  margin-top: 0px;
+  color: #003399;
+}
+
+.aquarium {
+  font-weight: bold;
+  color: #003399;
+}
+
+.sidenav {
+  height: 100%;
   overflow-y: scroll;
+  border: none;
+  text-align: right;
 }
 
-.right{
-  height: calc(100% - 62px);
-  overflow-y: scroll;
-  overflow-x: scroll;
+.md-subheader-content {
+  text-align: right !important;
 }
 
-/*Remove the scrollbar from Chrome, Safari, Edge and IE*/
-::-webkit-scrollbar {
-    width: 0px;
-    background: transparent;
+.nav-list {
+  margin: 0;
+  padding: 0;
 }
 
-* {
-  -ms-overflow-style: none !important;
+.category-container {
+  padding-right: 0px;
+  text-align: right;
+  margin: 20px 0 10px 100px;
+  cursor: pointer;
+  text-transform: uppercase;
+  user-select: none;
 }
 
-.sidebar {
-  border-right: 1pt solid #ddd;
+.category-container:focus {
+  border: none;
+  text-shadow: none;
+  outline: none;
 }
 
-.heading {
-  border-bottom: 1pt solid #ddd;
-  background-image:linear-gradient(120deg, #155799, #159957);
-  color: lightgreen;
-  position: relative;
+.category-title {
+  text-align: right;
 }
 
-.title {
-  color: white;
+.nav-sublist li {
+  margin: 2px 0 12px 0;
+  font-size: 10pt;
 }
+
+.nav-sublist {
+  margin-bottom: 30px;
+  transform: scaleY(1);
+  transform-origin: top;
+  transition: transform 0.25s ease;
+}
+
+.nav-sublist.ng-hide {
+  transition: transform 0.25s ease;
+  transform: scaleY(0);
+}
+
+.nav-sublist li a {
+  text-decoration: none;
+  width: 100%;
+  display: inline-block;
+}
+
+.inactive-content a {
+  color: #777;
+  font-weight: normal;
+}
+
+.active-content a {
+  color: black;
+  font-weight: bold;
+}
+
+.content-frame {
+  height: 100%;
+  width: 100%;
+  border: none;
+}
+
+
+
+
+
 
 .lib-frame {
   width: 100%;
@@ -66,24 +153,4 @@ a {
   border-left: 8px solid rgb(221, 221, 221);
   margin-left: 16px;
   display: none;
-}
-
-#aquadoc-link {
-  font-size: 11pt;
-  font-family: "Courier New";
-  text-align: right;
-}
-
-#aquadoc-link a {
-  color: white;
-}
-
-.issues-link-container {
-  padding-top: 4px;
-}
-
-.btn-issues {
-  background: white;
-  opacity: 0.5;
-  color: black !important;
 }

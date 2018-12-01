@@ -130,7 +130,9 @@ module Aquadoc
         unless system "yardoc -p #{@assets_path}/yard_templates #{lib} --one-file --quiet"
           raise "Could not run yardoc on #{lib}"
         end
-        @storage.write("libraries/#{hname}", File.read("doc/index.html"))
+        Dir.chdir @base_path
+        @storage.write("libraries/#{hname}", File.read(@temp_library_path + "/doc/index.html"))
+        Dir.chdir @temp_library_path
         system "rm doc/index.html"
       end
 
@@ -160,7 +162,7 @@ module Aquadoc
       end
 
       @storage.write("css/aquadoc.css", File.read(@assets_path + "/aquadoc.css"))
-      @storage.write("js/aquadoc.js", File.read(@assets_path + "/aquadoc.js"))
+      make_js
       @storage.write(".nojekyll", File.read(@assets_path + "/nojekyll"))
 
       @config[:github].delete(:access_token)
