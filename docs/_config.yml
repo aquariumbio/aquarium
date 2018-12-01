@@ -12,7 +12,6 @@ defaults:
     type: docs
   values:
     layout: default
-theme: jekyll-theme-cayman
 show_releases: true
 breadcrumbs:
   root:
