@@ -28,7 +28,9 @@ In addition, each protocol developer should run a local instance, which can be d
 **Manual Installation**:
 If your goal is to run Aquarium in production mode with many users, you should install and run Aquarium manually.
 This requires first installing Ruby, Rails, MySQL, and, depending on the deployment, a web server.
-The UW BIOFAB, for example, runs Aquarium on an Amazon Web Services EC2 instance using the web server [nginx](http://nginx.org) and the MySQL database running on a separate RDBMS instance.
+The UW BIOFAB, for example, runs Aquarium on an Amazon Web Services EC2 instance using the web server
+<a href="http://nginx.org" target="newtab">nginx</a> and the MySQL database running on a separate
+RDBMS instance.
 
 We discuss some of the considerations for running Aquarium below, but your deployment may require fine-tuning beyond what we describe.
 
@@ -51,17 +53,18 @@ To manually install Aquarium in a production environment:
 
 1.  Ensure you have a Unix-like environment on your machine and have installed
 
-    - [git](https://git-scm.com)
-    - [Ruby](https://www.ruby-lang.org/en/) version 2.3.7
-    - [npm](https://www.npmjs.com/get-npm)
+    - <a href="https://git-scm.com" target="newtab">git</a>
+    - <a href="https://www.ruby-lang.org/en/" target="newtab">Ruby</a> version 2.3.7
+    - <a href="https://www.npmjs.com/get-npm" target="newtab">npm</a>
       <br><br>
 
-2.  Also, make sure that you have a [MySQL](https://www.mysql.com) server installed.
+2.  Also, make sure that you have a <a href="https://www.mysql.com" target="newtab">MySQL</a>
+    server installed.
 
     When installing Aquarium on AWS or another cloud service, you should use RDBMS or the database services available there.
 
 3.  Get the Aquarium source code by either downloading the
-    [latest release](https://github.com/klavinslab/aquarium/releases/latest),
+    <a href="https://github.com/klavinslab/aquarium/releases/latest" target="newtab">latest release</a>
     or cloning the repository.
 
     The latest release is available as either a zip or tar.gz file.
@@ -159,17 +162,17 @@ _These instructions are for setting up a local Aquarium and are not meant for pr
 
 To run Aquarium with Docker:
 
-1.  Install [Docker](https://docs.docker.com/install/) on your computer.
+1.  Install <a href="https://docs.docker.com/install/" target="newtab">Docker</a> on your computer.
 
     Note that our setup scripts are written for a Unix&trade; environment.
     They will work on OSX, Linux, or inside the Docker Toolbox VM on Windows.
     To run Aquarium on Windows your system either needs to meet the requirements of
-    [Docker for Windows](https://www.docker.com/docker-windows),
+    <a href="https://www.docker.com/docker-windows" target="newtab">Docker for Windows</a>
     or you have to use the older
-    [Docker Toolbox](https://docs.docker.com/toolbox/toolbox_install_windows/).
+    <a href="https://docs.docker.com/toolbox/toolbox_install_windows/" target="newtab">Docker Toolbox</a>.
 
-2.  Either get the latest release
-    [latest release](https://github.com/klavinslab/aquarium/releases/latest)
+2.  Either get the 
+    <a href="https://github.com/klavinslab/aquarium/releases/latest" target="newtab">latest release</a>
     and uncompress the file, or clone the Aquarium repository
 
     ```bash
