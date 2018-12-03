@@ -1,0 +1,67 @@
+var tagline = "Aquarium<br>Protocols";
+var documentation_url = "http://localhost:4000/aquarium";
+
+var navigation = [
+
+  {
+    category: "Overview",
+    contents: [
+      { name: "Introduction", type: "local-md", path: "README.md" },
+      { name: "About this Workflow", type: "local-md", path: "ABOUT.md" },
+      { name: "License", type: "local-md", path: "LICENSE.md" }
+    ]
+  },
+
+  <% if @options[:workflows] || @options[:libraries] %>
+    <% @categories.each do |c| %>
+      { category: '<%= c %>',
+        contents: [
+          <% if @options[:workflows] %>
+            <% @operation_type_specs.select { |ots| ots[:operation_type][:category] == c }.each do |ots| %>
+              {
+                name: '<%= ots[:operation_type][:name] %>',
+                path: '/operation_types/<%= sanitize_filename ots[:operation_type][:name] %>' + '.md',
+                type: "local-md"
+              },
+            <% end %>
+          <% end %>
+          <% if @options[:libraries] %>
+            <% @libraries.select { |lib| lib[:category] == c }.each do |lib| %>
+              {
+                name: 'Lib: <%= lib[:name] %>',
+                path: '/libraries/<%= sanitize_filename lib[:name] %>' + '.html',
+                type: "local-webpage"
+              },
+            <% end %>
+          <% end %>
+        ]
+      },
+    <% end %>
+  <% end %>
+
+  <% if @options[:inventory] %>
+    { category: "Sample Types",
+      contents: [
+        <% @sample_types.each do |st| %>
+          {
+            name: '<%= st[:name] %>',
+            path: '/sample_types/<%= sanitize_filename st[:name] %>'  + '.md',
+            type: "local-md"
+          },
+        <% end %>
+      ]
+    },
+    { category: "Containers",
+      contents: [
+        <% @object_types.each do |ot| %>
+          {
+            name: '<%= ot[:name] %>',
+            file: '/object_types/<%= sanitize_filename ot[:name] %>'  + '.md',
+            type: "local-md"
+          },
+        <% end %>
+      ]
+    }
+  <% end %>
+
+];

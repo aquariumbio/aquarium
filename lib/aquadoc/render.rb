@@ -75,17 +75,23 @@ module Aquadoc
 
     def make_index
 
-      template = File.read(@assets_path + "/index.html.erb")
-      template_erb = ERB.new(template, 0, "%<>")
-      @storage.write("index.html", template_erb.result(binding))
+      index = File.read(@assets_path + "/index.html")
+      @storage.write("index.html", index)
 
     end
 
     def make_js
 
-      template = File.read(@assets_path + "/aquadoc.js.erb")
+      # definitions
+      template = File.read(@assets_path + "/definitions.js.erb")
       template_erb = ERB.new(template, 0, "%<>")
-      @storage.write("js/aquadoc.js", template_erb.result(binding))
+      @storage.write("js/definitions.js", template_erb.result(binding))
+
+      # # aqauverse.js
+      # @storage.write("js/aquaverse.js", File.read(@assets_path + "/aquaverse.js"))
+      #
+      # # highlight.js
+      # @storage.write("js/highlight.js", File.read(@assets_path + "/highlight.js"))
 
     end
 

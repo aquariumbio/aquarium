@@ -161,7 +161,7 @@ module Aquadoc
         @storage.write("LICENSE.md", File.read(@assets_path + "/DEFAULT_LICENSE.md"))
       end
 
-      @storage.write("css/aquadoc.css", File.read(@assets_path + "/aquadoc.css"))
+      # @storage.write("css/aquaverse.css", File.read(@assets_path + "/aquaverse.css"))
       make_js
       @storage.write(".nojekyll", File.read(@assets_path + "/nojekyll"))
 
