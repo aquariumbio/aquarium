@@ -41,4 +41,5 @@ RUN chmod +x /aquarium/krill-entrypoint.sh
 # make sure the host has directories that the compose file is expecting
 RUN mkdir -p ./docker/db
 RUN mkdir -p ./docker/s3/data/development
+RUN mkdir -p ./docker/s3/data/production
 RUN mkdir -p ./docker/s3/config
