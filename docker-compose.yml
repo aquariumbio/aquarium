@@ -1,4 +1,4 @@
-# base docker-compose file for aquarium
+# Base docker-compose file for aquarium
 #
 # Defines services for Aquarium, Krill, database, and S3.  Uses Docker network 
 # address translation, and containers for MySQL, and the Minio S3 server.
