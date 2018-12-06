@@ -13,7 +13,7 @@ module FieldTyper
   end
 
   def export_field_types
-    fts = FieldType.includes(allowable_field_types: :sample_type).where(parent_class: self.class.to_s, parent_id: id)
+    fts = FieldType.includes(allowable_field_types: [:sample_type, :object_type]).where(parent_class: self.class.to_s, parent_id: id)
     fts.collect do |ft|
       rft = ft.as_json
       rft[:sample_types] = ft.allowable_field_types.collect { |aft| aft.sample_type ? aft.sample_type.name : nil }
