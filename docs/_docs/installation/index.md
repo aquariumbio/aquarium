@@ -203,7 +203,7 @@ To run Aquarium with Docker:
     On Windows, instead use the command
 
     ```bash
-    docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.windows.yml
+    docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.windows.yml up
     ```
 
     Once all of the services for Aquarium have started, visit `localhost:3000` with the Chrome browser to find the Aquarium login page.
