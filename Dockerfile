@@ -37,6 +37,8 @@ COPY ./docker/aquarium/database.yml /aquarium/config/database.yml
 COPY ./docker/aquarium/aquarium.rb /aquarium/config/initializers/aquarium.rb
 COPY ./docker/aquarium/development.rb /aquarium/config/environments/development.rb
 
+COPY ./docker/aquarium/puma.rb /aquarium/config/puma.rb
+
 RUN mkdir -p docker/db
 RUN mkdir -p docker/s3/data/development
 RUN mkdir -p docker/s3/config
