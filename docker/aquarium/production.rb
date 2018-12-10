@@ -14,7 +14,7 @@ Bioturk::Application.configure do
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
 
-  # Disable Rails's static asset server (Apache or nginx will already do this)
+  # Disable Rails static asset server (Apache or nginx will already do this)
   config.serve_static_files = true
 
   # Compress JavaScripts and CSS
@@ -45,8 +45,8 @@ Bioturk::Application.configure do
   # See everything in the log (default is :info)
   config.log_level = :error
 
-  # Limit the size of log files
-  config.logger = Logger.new(config.paths['log'].first, 1, 1024 * 1024)
+  # send logs to stdout for when running in Docker  
+  config.logger    = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
 
   # Prepend all log lines with the following tags
   # config.log_tags = [ :subdomain, :uuid ]

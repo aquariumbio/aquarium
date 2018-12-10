@@ -32,12 +32,8 @@ Bioturk::Application.configure do
   # Raise exception on mass assignment protection for Active Record models
   config.active_record.mass_assignment_sanitizer = :strict
 
-  # Log the query plan for queries taking more than this (works
-  # with SQLite, MySQL, and PostgreSQL)
-  # Not supported for rails 4
-  # config.active_record.auto_explain_threshold_in_seconds = 0.5
-
-  # config.logger = Logger.new(config.paths['log'].first, 1, 1024 * 1024)
+  # logging in Docker requires sending logs to STDOUT
+  config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
 
   # Assets
   config.assets.compress = false
@@ -72,7 +68,7 @@ Bioturk::Application.configure do
   # then creates an array of address summaries that is used for whitelisting.
   # It then turns off whining about IP addresses.
   ip_list = []
-  service_names = ['db', 's3', 'krill', 'web', 'nginx']
+  service_names = ['db', 's3', 'krill', 'app', 'web']
   service_names.each do |name|
     begin
       ip = Resolv.getaddress(name)
