@@ -1,21 +1,20 @@
-# this is just a copy of the standard production.rb, needs to be tailored to
-# run in docker -- move some things over from docker/aquarium/development.rb
+require 'resolv'
+require 'ipaddress'
 
 Bioturk::Application.configure do
+  # Settings specified here will take precedence over those in config/application.rb
 
   config.eager_load = true
 
-  # Settings specified here will take precedence over those in config/application.rb
-
-  # Code is not reloaded between requests
+  # Do not reload code -- for production
   config.cache_classes = true
 
   # Full error reports are disabled and caching is turned on
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
 
-  # Disable Rails static asset server (Apache or nginx will already do this)
-  config.serve_static_files = true
+  # Disable Rails's static asset server (Apache or nginx will already do this)
+  config.serve_static_files = false
 
   # Compress JavaScripts and CSS
   config.assets.compress = true
@@ -32,42 +31,11 @@ Bioturk::Application.configure do
   # Generate digests for assets URLs
   config.assets.digest = true
 
-  # Defaults to nil and saved in location specified by config.assets.prefix
-  # config.assets.manifest = YOUR_PATH
-
-  # Specifies the header that your server uses for sending files
-  # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
-  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
-
-  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
-
   # See everything in the log (default is :info)
   config.log_level = :error
 
-  # send logs to stdout for when running in Docker  
-  config.logger    = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
-
-  # Prepend all log lines with the following tags
-  # config.log_tags = [ :subdomain, :uuid ]
-
-  # Use a different logger for distributed setups
-  # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
-
-  # Use a different cache store in production
-  # config.cache_store = :mem_cache_store
-
-  # Enable serving of images, stylesheets, and JavaScripts from an asset server
-  # config.action_controller.asset_host = "http://assets.example.com"
-
-  # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-  # config.assets.precompile += %w( search.js )
-
-  # Disable delivery errors, bad email addresses will be ignored
-  # config.action_mailer.raise_delivery_errors = false
-
-  # Enable threaded mode
-  # config.threadsafe!
+  # Limit the size of log files
+  config.logger = Logger.new(config.paths['log'].first, 1, 1024 * 1024)
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation can not be found)
@@ -76,33 +44,59 @@ Bioturk::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
-  # Log the query plan for queries taking more than this (works
-  # with SQLite, MySQL, and PostgreSQL)
-  # config.active_record.auto_explain_threshold_in_seconds = 0.5
-
   # Paperclip => S3
 
+  # Paperclip => minio
   config.paperclip_defaults = {
     storage: :s3,
-    s3_host_name: "s3-#{ENV['AWS_REGION']}.amazonaws.com",
-    s3_permissions: :private,
+    s3_protocol: 'http',
+    s3_permissions: 'private',
+    s3_region: 'us-west-1', 
     s3_credentials: {
-      bucket: ENV.fetch('S3_BUCKET_NAME'),
-      access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
-      secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY'),
-      s3_region: ENV.fetch('AWS_REGION')
+      bucket: 'development',
+      access_key_id: 'aquarium_minio',
+      secret_access_key: 'KUNAzqrNifmM6GwNVZ8IP7dxZAkYjhnwc0bfdz0W'
+    },
+    s3_host_name: 's3:9000',
+    s3_options: {
+      endpoint: "http://s3:9000", # for aws-sdk
+      force_path_style: true # for aws-sdk (required for minio)
     }
   }
 
-  # AWS Simple Email Service Config
+  # when running in docker, web_console complains about rendering from container
+  # addresses.  May be sufficient to turn off the whining, but to be sure nothing
+  # is missed, this code whitelists the IP addresses of the services so that
+  # they are able to render to the console if needed.
+  # To do this, the following resolves service hostnames to IP addresses and
+  # then creates an array of address summaries that is used for whitelisting.
+  # It then turns off whining about IP addresses.
+  ip_list = []
+  service_names = ['db', 's3', 'krill', 'app']
+  service_names.each do |name|
+    begin
+      ip = Resolv.getaddress(name)
+      ip_list.push(IPAddress(ip))
+    rescue Resolv::ResolvError
+      puts "service #{name} not resolved"
+    end
+  end
 
-  AWS.config(
-    region: ENV.fetch('AWS_REGION'),
-    simple_email_service_endpoint: "email.#{ENV.fetch('AWS_REGION')}.amazonaws.com",
-    simple_email_service_region: ENV.fetch('AWS_REGION'),
-    ses: { region: ENV.fetch('AWS_REGION') },
-    access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
-    secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY')
-  )
+  service_ips = IPAddress::IPv4.summarize(*ip_list).map(&:to_string)
+
+  # whitelist summarized IP addresses for services
+  config.web_console.whitelisted_ips = service_ips
+  # don't whine about other addresses
+  config.web_console.whiny_requests = false
+
+  # AWS Simple Email Service Config
+  #AWS.config(
+  #  region: ENV.fetch('AWS_REGION'),
+  #  simple_email_service_endpoint: "email.#{ENV.fetch('AWS_REGION')}.amazonaws.com",
+  #  simple_email_service_region: ENV.fetch('AWS_REGION'),
+  #  ses: { region: ENV.fetch('AWS_REGION') },
+  #  access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
+  #  secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY')
+  #)
 
 end
