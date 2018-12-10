@@ -24,7 +24,7 @@ services:
     build: 
       context: .
       target: builder
-    entrypoint: ["/aquarium/aquarium-entrypoint.sh"]
+    entrypoint: ["/aquarium/krill-entrypoint.sh"]
     networks:
      - aquarium_net
     ports:

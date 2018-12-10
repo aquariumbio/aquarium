@@ -19,10 +19,10 @@ services:
       MYSQL_ROOT_PASSWORD: aSecretAquarium
 
   krill:
-    command: ["krill", "development"]
+    command: ["development"]
 
   web:
-    command: ["web", "development"]
+    command: ["development"]
     environment:
       - AWS_ACCESS_KEY_ID="" 
       - AWS_SECRET_ACCESS_KEY="" 
