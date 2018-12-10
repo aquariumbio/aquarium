@@ -16,10 +16,6 @@ Gemfile.lock
 # don't include the yardoc generated api directory
 /doc/api
 
-
-# Ignore the copied version of development.rb that is created when the development-setup script replaces it
-/config/environments/original-development.notrb
-
 # Ignore the actual database config file
 /config/database.yml
 
