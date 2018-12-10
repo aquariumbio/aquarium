@@ -19,7 +19,7 @@ services:
   krill:
     command: ["development"]
 
-  web:
+  app:
     command: ["development"]
     environment:
       - AWS_ACCESS_KEY_ID="" 

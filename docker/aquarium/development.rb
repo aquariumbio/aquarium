@@ -68,7 +68,7 @@ Bioturk::Application.configure do
   # then creates an array of address summaries that is used for whitelisting.
   # It then turns off whining about IP addresses.
   ip_list = []
-  service_names = ['db', 's3', 'krill', 'web']
+  service_names = ['db', 's3', 'krill', 'app']
   service_names.each do |name|
     begin
       ip = Resolv.getaddress(name)

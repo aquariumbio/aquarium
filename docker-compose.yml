@@ -16,44 +16,8 @@
 
 version: "3.6"
 services:
-  db:
-    image: mysql:5.7
-    restart: always
-    volumes:
-      - ./docker/db:/var/lib/mysql
-      - ./docker/mysql_init/dump.sql:/docker-entrypoint-initdb.d/dump.sql
-    networks:
-     - aquarium_net
-
-  krill:
-    build: 
-      context: .
-      target: localbuilder
-    entrypoint: ["/aquarium/krill-entrypoint.sh"]
-    networks:
-     - aquarium_net
-    ports:
-      - "3500:3500"
-    depends_on:
-      - db
-      - web
-
-  s3:
-    image: minio/minio:latest
-    volumes:
-      - ./docker/s3/data:/data
-      - ./docker/s3/config:/root/.minio
-    ports:
-      - "9000:9000"
-    environment:
-      MINIO_ACCESS_KEY: aquarium_minio
-      MINIO_SECRET_KEY: KUNAzqrNifmM6GwNVZ8IP7dxZAkYjhnwc0bfdz0W
-      MINIO_REGION: us-west-1
-    command: server /data
-    networks:
-      - aquarium_net
-
-  web:
+  app:
+    image: localbuilder
     build:
       context: .
       target: localbuilder
@@ -72,6 +36,41 @@ services:
     depends_on:
       - db
       - s3
+
+  db:
+    image: mysql:5.7
+    restart: always
+    volumes:
+      - ./docker/db:/var/lib/mysql
+      - ./docker/mysql_init/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+    networks:
+     - aquarium_net
+
+  krill:
+    image: localbuilder
+    entrypoint: ["/aquarium/krill-entrypoint.sh"]
+    networks:
+     - aquarium_net
+    ports:
+      - "3500:3500"
+    depends_on:
+      - db
+      - app
+
+  s3:
+    image: minio/minio:latest
+    volumes:
+      - ./docker/s3/data:/data
+      - ./docker/s3/config:/root/.minio
+    ports:
+      - "9000:9000"
+    environment:
+      MINIO_ACCESS_KEY: aquarium_minio
+      MINIO_SECRET_KEY: KUNAzqrNifmM6GwNVZ8IP7dxZAkYjhnwc0bfdz0W
+      MINIO_REGION: us-west-1
+    command: server /data
+    networks:
+      - aquarium_net
 
 networks:
   aquarium_net:
