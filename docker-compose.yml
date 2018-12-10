@@ -35,7 +35,7 @@ services:
      - aquarium_net
     depends_on:
       - db
-      - web
+      - app
 
   s3:
     image: minio/minio:latest
@@ -52,19 +52,23 @@ services:
     networks:
       - aquarium_net
 
-  nginx:
+  web:
     image: nginx:stable-alpine
     volumes:
-      - webvolume:/aquarium
+      - aquarium_volume:/aquarium
     ports:
       - "80:80"
       - "9000:9000"
     networks:
       - aquarium_net
+    depends_on:
+      - app
+      - s3
 
-  web:
+  app:
     build:
       context: .
+      target: localbuilder
     entrypoint: ["/aquarium/aquarium-entrypoint.sh"]
     expose:
       - "3000"
@@ -75,7 +79,7 @@ services:
       - ./lib:/aquarium/lib
       - ./log:/aquarium/log
       - ./script:/aquarium/script
-      - webvolume:/aquarium
+      - aquarium_volume:/aquarium
     networks:
       - aquarium_net
     depends_on:
@@ -86,4 +90,4 @@ networks:
   aquarium_net:
 
 volumes:
-  webvolume:
+  aquarium_volume:
