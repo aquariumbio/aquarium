@@ -18,8 +18,14 @@ In addition, each protocol developer should run a local instance, which can be d
 - [Installing and Running Aquarium](#installing-and-running-aquarium)
     - [Table of Contents](#table-of-contents)
     - [Choosing your Approach](#choosing-your-approach)
+    - [Getting Aquarium](#getting-aquarium)
     - [Manual Installation Instructions](#manual-installation-instructions)
     - [Docker Installation Instructions](#docker-installation-instructions)
+        - [Running Aquarium with Docker](#running-aquarium-with-docker)
+        - [Stopping Aquarium in Docker](#stopping-aquarium-in-docker)
+        - [Updating Aquarium](#updating-aquarium)
+        - [Changing the Database](#changing-the-database)
+        - [Notes](#notes)
 
 <!-- /TOC -->
 
@@ -45,13 +51,62 @@ Once a protocol runs well on a local instance, you can port it to your productio
 We understand that it might seem simpler to set up a single instance of Aquarium and use it as the production server and for protocol development.
 However, protocol testing _should not_ be done on a production server, because protocol errors can affect system performance, and protocols that create database entries can pollute your production database.
 
+## Getting Aquarium
+
+For both manual and Docker installations you will need to obtain the Aquarium source.
+Do this by using [git](https://git-scm.com) with the command
+
+```bash
+git clone https://github.com/klavinslab/aquarium.git
+```
+
+if you use a non-Windows system.
+On Windows use
+
+```bash
+git clone https://github.com/klavinslab/aquarium.git --config core.autocrlf=input
+```
+
+You will also probably want to choose the Aquarium version you want to use.
+First, change to the directory
+
+```bash
+cd aquarium
+```
+
+You can then get the last tagged commit of Aquarium by running the commands
+
+```bash
+latest=`git describe --tags`
+git checkout $latest
+```
+
+However, this may be more recent than the latest release.
+
+To determine the latest release, visit the [latest Aquarium release](https://github.com/klavinslab/aquarium/releases/latest) at Github, take note of the tag number (e.g., v2.4.2), and then checkout that version.
+For instance, if the tag is `v2.4.2` use the command
+```bash
+git checkout v2.4.2
+```
+
+(Don't use this command if you are doing development. 
+See the [git tagging documentation](https://git-scm.com/book/en/v2/Git-Basics-Tagging) for details.)
+
+You can also find older releases using the command
+
+```bash
+git tag
+```
+
+which lists all of the tagged commits.
+All the tags for releases start with the letter `v` followed by a sequence of numbers.
+
 ## Manual Installation Instructions
 
 To manually install Aquarium in a production environment:
 
 1.  Ensure you have a Unix-like environment on your machine and have installed
 
-    - [git](https://git-scm.com)
     - [Ruby](https://www.ruby-lang.org/en/) version 2.3.7
     - [npm](https://www.npmjs.com/get-npm)
       <br><br>
@@ -60,30 +115,7 @@ To manually install Aquarium in a production environment:
 
     When installing Aquarium on AWS or another cloud service, you should use RDBMS or the database services available there.
 
-3.  Get the Aquarium source code by either downloading the
-    [latest release](https://github.com/klavinslab/aquarium/releases/latest),
-    or cloning the repository.
-
-    The latest release is available as either a zip or tar.gz file.
-    Download the file that you are able to un-compress.
-    For instance, on a Unix machine, download the tar.gz file, and use the command
-
-    ```bash
-    tar xzf aquarium-v2.201.tar.gz
-    ```
-
-    Replacing the file name with the name for the latest release.
-
-    Alternatively, clone the repository and checkout the latest tagged commit
-
-    ```bash
-    git clone https://github.com/klavinslab/aquarium.git
-    cd aquarium
-    latest=`git describe --tags`
-    git checkout $latest
-    ```
-
-    Note: this version may be more recent than the latest release.
+3.  [Get the aquarium source](#get-aquarium).
 
 4.  Configure Aquarium by first creating the `aquarium/config/initializers/aquarium.rb` file
 
@@ -124,14 +156,11 @@ To manually install Aquarium in a production environment:
     bower install
     ```
 
-8.  Initialize the database with
+8.  Initialize the production database with
 
     ```bash
     RAILS_ENV=production rake db:schema:load
     ```
-
-    You can also set `RAILS_ENV` to `development` or `rehearse` in place of `production`.
-    Any mode that is specified in `database.yml` is okay.
 
 9.  For the production server, precompile the assets:
 
@@ -157,7 +186,9 @@ To manually install Aquarium in a production environment:
 
 _These instructions are for setting up a local Aquarium and are not meant for production instances._
 
-To run Aquarium with Docker:
+### Running Aquarium with Docker
+
+To run Aquarium in production with Docker on your computer:
 
 1.  Install [Docker](https://docs.docker.com/install/) on your computer.
 
@@ -168,19 +199,7 @@ To run Aquarium with Docker:
     or you have to use the older
     [Docker Toolbox](https://docs.docker.com/toolbox/toolbox_install_windows/).
 
-2.  Either get the latest release
-    [latest release](https://github.com/klavinslab/aquarium/releases/latest)
-    and uncompress the file, or clone the Aquarium repository
-
-    ```bash
-    git clone git@github.com:klavinslab/aquarium.git
-    ```
-
-    If using Docker Toolbox for Windows
-
-    ```bash
-    git clone git@github.com:klavinslab/aquarium.git --config core.autocrlf=input
-    ```
+2.  [Get the Aquarium source](#getting-aquarium).
 
 3.  To build the docker images, run the command
 
@@ -188,8 +207,7 @@ To run Aquarium with Docker:
     docker-compose build
     ```
 
-    For protocol development, this should only be necessary before running Aquarium for the first time after cloning or pulling the repository.
-    Though, run this step again if you have trouble and changes may have been made.
+    This should only be necessary before running Aquarium for the first time after cloning or pulling the repository.
 
 4.  To start aquarium on non-Windows platforms, run the command
 
@@ -198,7 +216,10 @@ To run Aquarium with Docker:
     ```
 
     which starts the services for Aquarium.
-    The first run initializes the database, and will take longer than subsequent runs.
+
+    > **Important**:
+    > The first run initializes the database, and so will be slower than subsequent runs.
+    > This can take longer than you think is reasonable, but let it finish unmolested.
 
     On Windows, instead use the command
 
@@ -207,37 +228,73 @@ To run Aquarium with Docker:
     ```
 
     Once all of the services for Aquarium have started, visit `localhost:3000` with the Chrome browser to find the Aquarium login page.
-    If running Aquarium inside the docker toolbox VM, the address will be instead be `192.168.99.100:3000`.
+    If running Aquarium inside the Docker toolbox VM, the address will be instead be `192.168.99.100:3000`.
     When started using the default database, aquarium has a single user with login `neptune` and password `aquarium`.
 
-5.  To halt the Aquarium services, first type `ctrl-c` in the terminal to stop the running containers, then remove the containers by running
+### Stopping Aquarium in Docker
 
-    ```bash
-    docker-compose down
-    ```
+To halt the Aquarium services, first type `ctrl-c` in the terminal to stop the running containers, then remove the containers by running
 
-Some notes:
+```bash
+docker-compose down
+```
 
-1.  The base Aquarium Docker image uses configuration files located in `docker/aquarium` instead of the corresponding files in the `config` directory.
+### Updating Aquarium
+
+When a new version of Aquarium comes available, run
+
+```bash
+git pull
+docker-compose build
+```
+
+to get and build the new version, and then run
+
+```bash
+docker-compose run --rm app rails db:migrate RAILS_ENV=production
+```
+
+to migrate the database.
+Finally, restart Aquarium with `docker-compose` as before.
+
+### Changing the Database
+
+Aquarium database files are stored in `docker/db`, which allows the database to persist between runs.
+If this directory is empty, such as the first time Aquarium is run, the database is initialized from the database dump `docker/mysql_init/dump.sql`.
+
+You can use a different database dump by renaming it to this file
+
+```bash
+mv my_dump.sql docker/mysql_init/dump.sql
+```
+
+and then removing the contents of the `docker/db` directory
+
+```bash
+rm -rf docker/db/*
+```
+
+and restarting Aquarium with `docker-compose` as before.
+
+> **Important**: If you swap in a large database dump, the database has to be reinitialized.
+> And the larger the database, the longer the initialization will take.
+> *Let the initialization finish.*
+
+### Notes
+
+1.  The Aquarium Docker image uses configuration files located in `docker/aquarium` instead of the corresponding files in the `config` directory.
     So, if you want to tweak the configuration of your Aquarium Docker installation, change these files.
 
-2.  When running Aquarium, you may notice a prominent name **Your Lab** in the upper left-hand corner.
-    If this bugs you, you can change it to something you prefer by replacing the string at the end of the first line in `docker/aquarium/aquarium.rb`, which is currently
+2.  When running Aquarium, you may notice a prominent **LOCAL** in the upper left-hand corner.
+    You can change this to something you prefer by replacing the string at the end of the first line in `docker/aquarium/aquarium.rb`, which is currently
 
     ```ruby
-    Bioturk::Application.config.instance_name = 'Your Lab'
+    Bioturk::Application.config.instance_name = 'LOCAL'
     ```
 
-    You might change it to `'LOCAL'` or even `'George'`.
-    The choice is yours.
+    For instance, you could replace `'LOCAL'` with `'Georgina'`.
 
-3.  The Docker configuration stores the database files in `docker/db`.
-
-    The database is initialized with the contents of `docker/mysql_init/dump.sql`, but changes you make will persist between runs.
-
-    You can use a different database database dump by renaming it to this file, removing the contents of the `docker/db` directory and restarting Aquarium.
-
-4.  The Docker configuration uses the directory `docker/s3` as the storage location of file uploads and is managed using [Minio](https://minio.io).
+3.  The Docker configuration uses the directory `docker/s3` as the storage location of file uploads and is managed using [Minio](https://minio.io).
     This is probably not the best choice for full production instances.
 
-5.  The Docker configuration uses a email testing container, meaning that email notifications will not work.
+4.  The Docker configuration does not provide an email testing container, meaning that email notifications will not work.

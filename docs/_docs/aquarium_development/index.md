@@ -23,6 +23,10 @@ These guidelines are intended for those working directly on Aquarium, though som
     - [Modifying the Site](#modifying-the-site)
     - [Making an Aquarium Release](#making-an-aquarium-release)
     - [Docker configuration](#docker-configuration)
+        - [Images](#images)
+        - [Database](#database)
+        - [Compose files](#compose-files)
+        - [Local web server](#local-web-server)
 
 <!-- /TOC -->
 
@@ -167,7 +171,7 @@ _this is a draft list_
 
 ## Docker configuration
 
-The Aquarium Docker configuration is given by, or at least uses, these files:
+The Aquarium Docker configuration is determined by these files:
 
 ```
 aquarium
@@ -187,14 +191,24 @@ aquarium
 `-- docker-compose.yml          # base compose file
 ```
 
-The `Dockerfile` configures an Aquarium image so that it is ready to be used by the docker-compose files.
-In particular, it installs required Gems and packages; copies rails configuration files from the `docker/aquarium` directory into the correct place in the image; and adds the `docker/aquarium-entrypoint.sh` and `docker/krill-entrypoint.sh` scripts for starting the Aquarium services.
-It also ensures that the `docker/db` and `docker/s3` directories needed for the database and [minio](https://minio.io) S3 server are created as required.
+### Images
+
+The `Dockerfile` configures two Aquarium images: `basebuilder` and `localbuilder`.
+The `basebuilder` configuration installs required Gems and JavaScript packages.
+The `localbuilder` configuration is defined so that it is ready to be used by the docker-compose files to run a local instance. So, the local configuration copies rails configuration files from the `docker/aquarium` directory into the correct place in the image; and adds the `docker/aquarium-entrypoint.sh` and `docker/krill-entrypoint.sh` scripts for starting the Aquarium services.
+The local configuration also ensures that the `docker/db` and `docker/s3` directories needed for the database and [minio](https://minio.io) S3 server are created on the host as required by the compose files.
+Ideally this step should happen elsewhere since it affects the host instead of the image, but it prevents the average user from having to run additional commands.
+
+The separation of the images allows configurations that don't assume a local instance is used, though currently there are none defined.
+
+### Database
 
 The `docker/mysql_init` directory contains the database dump that is used to initialize the database when it is run the first time.
 The MySQL service is configured to use the `docker/db` directory to store its files, and removing the contents of this directory will cause the database to initialize the next time the service is started.
 
-The docker-compose files are defined to allow Aquarium to be run in production or development modes and on Windows.
+### Compose files
+
+The docker-compose files are defined to allow Aquarium to be run locally in production or development modes and on Windows.
 Specifically, the files are meant to be combined as follows:
 
 - `docker-compose.yml` and `docker-compose.override.yml` runs production,
@@ -216,6 +230,11 @@ docker-compose up
 ```
 
 Running in production is the default configuration, because the most common usage of a local installation is by someone doing protocol development who will want to mirror the production server of the lab.
+
+### Local web server
+
+Access to the servers run by compose is handled by nginx.
+For the most part, most traffic should go directly to the Aquarium Puma server.
 
 Note that Aquarium allows files to be downloaded by returning a pre-authenticated link to the S3 server.
 **BLAH**
