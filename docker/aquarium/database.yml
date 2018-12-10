@@ -1,6 +1,7 @@
-# specify the database interface for development environment
+# database configuration for docker contained aquarium
+
 default: &default
-  adapter: mysql2 # the gem Rails uses to talk to the database
+  adapter: mysql2
   encoding: utf8
   reconnect: false
   host: db

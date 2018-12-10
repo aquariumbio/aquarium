@@ -1,5 +1,4 @@
 Bioturk::Application.config.instance_name = 'LOCAL'
-Bioturk::Application.config.github_path = 'https://github.com/yourlab'
 Bioturk::Application.config.image_server_interface = 'http://your.image.server'
 Bioturk::Application.config.vision_server_interface = ''
 
@@ -11,4 +10,3 @@ Bioturk::Application.config.angular_rails_csrf_options = {
   cookie_name: "XSRF-TOKEN_#{Bioturk::Application.environment_name}",
   header_name: "X-XSRF-TOKEN_#{Bioturk::Application.environment_name}"
 }
-
