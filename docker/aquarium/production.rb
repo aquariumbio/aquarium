@@ -1,43 +1,50 @@
-
 require 'resolv'
 require 'ipaddress'
 
 Bioturk::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
-  config.eager_load = false
+  config.eager_load = true
 
-  # Reload code on request -- for development
-  config.cache_classes = false
-  
-  # Show full error reports and disable caching
-  config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = false
+  # Do not reload code -- for production
+  config.cache_classes = true
 
-  # Log error messages when you accidentally call methods on nil.
-  config.whiny_nils = true
+  # Full error reports are disabled and caching is turned on
+  config.consider_all_requests_local       = false
+  config.action_controller.perform_caching = true
 
-  # Don't care if the mailer can't send
-  config.action_mailer.raise_delivery_errors = false
+  # Disable Rails's static asset server (Apache or nginx will already do this)
+  config.serve_static_files = false
 
-  # Print deprecation notices to the Rails logger
-  config.active_support.deprecation = :log
+  # Compress JavaScripts and CSS
+  config.assets.compress = true
+  require 'closure-compiler'
+  config.assets.js_compressor = Closure::Compiler.new(
+    compilation_level: 'SIMPLE_OPTIMIZATIONS',
+    language_in: 'ECMASCRIPT6',
+    language_out: 'ES5'
+  )
 
-  # Only use best-standards-support built into browsers
-  config.action_dispatch.best_standards_support = :builtin
+  # Don't fallback to assets pipeline if a precompiled asset is missed
+  config.assets.compile = false
 
-  # Raise exception on mass assignment protection for Active Record models
-  config.active_record.mass_assignment_sanitizer = :strict
+  # Generate digests for assets URLs
+  config.assets.digest = true
 
-  # logging in Docker requires sending logs to STDOUT
-  config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
+  # See everything in the log (default is :info)
+  config.log_level = :error
 
-  # Assets
-  config.assets.compress = false
-  #  config.serve_static_assets = false
-  config.assets.debug = false
+  # Limit the size of log files
+  config.logger = Logger.new(config.paths['log'].first, 1, 1024 * 1024)
 
-  # config.time_zone = "Pacific Time (US & Canada)"
+  # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
+  # the I18n.default_locale when a translation can not be found)
+  config.i18n.fallbacks = true
+
+  # Send deprecation notices to registered listeners
+  config.active_support.deprecation = :notify
+
+  # Paperclip => S3
 
   # Paperclip => minio
   config.paperclip_defaults = {
@@ -82,16 +89,14 @@ Bioturk::Application.configure do
   # don't whine about other addresses
   config.web_console.whiny_requests = false
 
-  # There is no substitute for AWS simple email service in development.
-  # It is possible to run tests with SES if you use it, but this 
-
-  # AWS.config(
-  #   region: ENV.fetch('AWS_REGION'),
-  #   simple_email_service_endpoint: "email.#{ENV.fetch('AWS_REGION')}.amazonaws.com",
-  #   simple_email_service_region: ENV.fetch('AWS_REGION'),
-  #   ses: { region: ENV.fetch('AWS_REGION') },
-  #   access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
-  #   secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY')
-  # )
+  # AWS Simple Email Service Config
+  #AWS.config(
+  #  region: ENV.fetch('AWS_REGION'),
+  #  simple_email_service_endpoint: "email.#{ENV.fetch('AWS_REGION')}.amazonaws.com",
+  #  simple_email_service_region: ENV.fetch('AWS_REGION'),
+  #  ses: { region: ENV.fetch('AWS_REGION') },
+  #  access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
+  #  secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY')
+  #)
 
 end
