@@ -1,4 +1,4 @@
-# docker-compose for windows-specific details for running aquarium
+# docker-compose file for windows-specific details for aquarium
 
 version: "3.6"
 services:

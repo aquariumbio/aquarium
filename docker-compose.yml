@@ -1,13 +1,18 @@
-# Docker compose file for development aquarium, which uses docker NAT, a mysql database container,
-# and a fake s3 container alongside the normal krill and web services.
+# Base docker-compose file for aquarium
 #
-# In order to run a development aquarium with all required containers, the following steps are required:
-# 0. optionally to start from fresh db: sudo rm -rf docker/db/*
-# 1. copy this file to aquarium/docker-compose.yml
-# 2. copy aquarium/config/dev-docker-database.yml to aquarium/config/database.yml
-# 3. copy aquarium/config/initializers/dev-docker-aquarium.rb to aquarium/config/initializers/aquarium.rb
-# 4. run 'docker-compose build'
-# 5. run 'docker-compose up'
+# Defines services for Aquarium, Krill, database, and S3.  Uses Docker network 
+# address translation, and containers for MySQL, and the Minio S3 server.
+#
+# Initializes the database the first time MySQL is run from the database dump
+# in docker/mysql_init/dump.sql. If you want to use an alternative, replace this
+# file.
+#
+# To reininitialize the database with the original or an alternative dump file,
+# remove the docker/db directory with 
+#
+#   sudo rm -rf docker/db/*
+#
+# before running `docker-compose up`
 
 version: "3.6"
 services:
@@ -23,7 +28,7 @@ services:
   krill:
     build: 
       context: .
-      target: builder
+      target: localbuilder
     entrypoint: ["/aquarium/krill-entrypoint.sh"]
     networks:
      - aquarium_net
@@ -51,7 +56,7 @@ services:
   web:
     build:
       context: .
-      target: builder
+      target: localbuilder
     entrypoint: ["/aquarium/aquarium-entrypoint.sh"]
     volumes:
       - ./app:/aquarium/app

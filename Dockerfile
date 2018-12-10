@@ -1,5 +1,5 @@
 ARG RUBY_VERSION=2.5
-FROM ruby:${RUBY_VERSION}-alpine AS builder
+FROM ruby:${RUBY_VERSION}-alpine AS basebuilder
 RUN apk update && apk add \
     build-base \
     file \
@@ -24,6 +24,9 @@ RUN echo '{ "directory": "public/components", "allow_root": true }' > /aquarium/
 RUN bower install --config.interactive=false --force
 
 COPY . /aquarium
+
+
+FROM basebuilder AS localbuilder
 
 COPY ./docker/aquarium-entrypoint.sh /aquarium/aquarium-entrypoint.sh
 RUN chmod +x /aquarium/aquarium-entrypoint.sh
