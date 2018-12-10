@@ -1,14 +1,22 @@
 # specify the database interface for development environment
-development:
+default: &default
   adapter: mysql2 # the gem Rails uses to talk to the database
   encoding: utf8
   reconnect: false
   host: db
   port: 3306
-  database: development # the name of the MySQL database to use
-  pool: 5
   username: aquarium
   password: aSecretAquarium
+
+production:
+  <<: *default
+  database: production
+  pool: 100
+
+development:
+  <<: *default
+  database: development # the name of the MySQL database to use
+  pool: 5
 
 test:
   adapter: sqlite3

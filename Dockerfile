@@ -23,6 +23,17 @@ COPY bower.json /aquarium/bower.json
 RUN echo '{ "directory": "public/components", "allow_root": true }' > /aquarium/.bowerrc
 RUN bower install --config.interactive=false --force
 
+COPY . /aquarium
+
 COPY ./docker/aquarium-entrypoint.sh /aquarium/aquarium-entrypoint.sh
 RUN chmod +x /aquarium/aquarium-entrypoint.sh
-COPY . /aquarium
+COPY ./docker/krill-entrypoint.sh /aquarium/krill-entrypoint.sh
+RUN chmod +x /aquarium/krill-entrypoint.sh
+
+COPY ./docker/aquarium/database.yml /aquarium/config/database.yml
+COPY ./docker/aquarium/aquarium.rb /aquarium/config/initializers/aquarium.rb
+COPY ./docker/aquarium/development.rb /aquarium/config/environments/development.rb
+
+RUN mkdir -p docker/db
+RUN mkdir -p docker/s3/data/development
+RUN mkdir -p docker/s3/config
