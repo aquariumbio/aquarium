@@ -1,0 +1,36 @@
+# Docker compose file for development aquarium, which uses docker NAT, a mysql database container,
+# and a fake s3 container alongside the normal krill and web services.
+#
+# In order to run a development aquarium with all required containers, the following steps are required:
+# 0. optionally to start from fresh db: sudo rm -rf docker/db/*
+# 1. copy this file to aquarium/docker-compose.yml
+# 2. copy aquarium/config/dev-docker-database.yml to aquarium/config/database.yml
+# 3. copy aquarium/config/initializers/dev-docker-aquarium.rb to aquarium/config/initializers/aquarium.rb
+# 4. run 'docker-compose build'
+# 5. run 'docker-compose up'
+
+version: "3.6"
+services:
+  db:
+    environment:
+      MYSQL_DATABASE: development
+      MYSQL_USER: aquarium
+      MYSQL_PASSWORD: aSecretAquarium
+      MYSQL_ROOT_PASSWORD: aSecretAquarium
+
+  krill:
+    command: ["krill", "development"]
+
+  web:
+    command: ["web", "development"]
+    environment:
+      - AWS_ACCESS_KEY_ID="" 
+      - AWS_SECRET_ACCESS_KEY="" 
+      - AWS_REGION=""
+    volumes:
+      - ./docs:/aquarium/docs
+      - ./spec:/aquarium/spec
+      - ./test:/aquairum/test
+    
+networks:
+  aquarium_net:
