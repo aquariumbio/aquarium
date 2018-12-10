@@ -22,6 +22,11 @@ These guidelines are intended for those working directly on Aquarium, though som
         - [Documenting Aquarium Ruby Code](#documenting-aquarium-ruby-code)
     - [Modifying the Site](#modifying-the-site)
     - [Making an Aquarium Release](#making-an-aquarium-release)
+    - [Docker configuration](#docker-configuration)
+        - [Images](#images)
+        - [Database](#database)
+        - [Compose files](#compose-files)
+        - [Local web server](#local-web-server)
 
 <!-- /TOC -->
 
@@ -31,25 +36,32 @@ Follow the Aquarium [installation]({{ site.baseurl }}{% link _docs/installation/
 
 ## Running Aquarium
 
-As explained in the installation instructions, you can run Aquarium with
+To run Aquarium in development mode using the Docker configuration (in a Unix-like environment), do the following:
 
-```bash
-docker-compose up
-```
+1. Build the docker images with
 
-and stop it with
+   ```bash
+   docker-compose build
+   ```
+
+2. Start Aquarium with
+
+   ```bash
+   docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+   ```
+
+Stop the services by typing `ctrl-c` followed by
 
 ```bash
 docker-compose down
 ```
 
 As you work on Aquarium, you will want to run commands that need the Aquarium Ruby environment (e.g., `rails` commands).
-To avoid having to do the manual installation steps,  you can simply precede each command with
+To avoid having to do the manual installation steps, you can simply precede each command with
 
 ```bash
-docker-compose run -rm web
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml run -rm web
 ```
-
 
 ## Testing Aquarium
 
@@ -87,8 +99,7 @@ def copy_associations(args)
 end
 ```
 
-Note that an argument with a default value is *not* an option, and should just be listed using the `@param` tag.
-
+Note that an argument with a default value is _not_ an option, and should just be listed using the `@param` tag.
 
 Here are some ([borrowed](http://blog.joda.org/2012/11/javadoc-coding-standards.html)) style guidelines for documentation:
 
@@ -151,7 +162,79 @@ _this is a draft list_
 
 1.  (make sure Rails tests pass)
 2.  Run rubocop, fix anything broken. Once done run `rubocop --auto-gen-config`.
-3.  Update API by running `yard`
+3.  Update API documentation by running `yard`
 4.  (make sure JS tests pass)
 5.  Make sure JS linting passes
 6.  Update change log
+7.  (create a tag for the repository)
+8.  (create a release on github)
+
+## Docker configuration
+
+The Aquarium Docker configuration is determined by these files:
+
+```
+aquarium
+|-- Dockerfile                  # defines the image for Aquarium
+|-- docker
+|   |-- aquarium                # Aquarium configuration files
+|   |-- aquarium-entrypoint.sh  # entrypoint for running Aquarium
+|   |-- db                      # directory to store database files
+|   |-- krill-entrypoint.sh     # entrypoint for running Krill
+|   |-- mysql_init              # database dump to initialize database
+|   |-- nginx.development.conf  # nginx configuration for development server
+|   |-- nginx.production.conf   # nginx configuration for production server
+|   `-- s3                      # directory for minio files
+|-- docker-compose.dev.yml      # development compose file
+|-- docker-compose.override.yml # production compose file
+|-- docker-compose.windows.yml  # windows compose file
+`-- docker-compose.yml          # base compose file
+```
+
+### Images
+
+The `Dockerfile` configures two Aquarium images: `basebuilder` and `localbuilder`.
+The `basebuilder` configuration installs required Gems and JavaScript packages.
+The `localbuilder` configuration is defined so that it is ready to be used by the docker-compose files to run a local instance. So, the local configuration copies rails configuration files from the `docker/aquarium` directory into the correct place in the image; and adds the `docker/aquarium-entrypoint.sh` and `docker/krill-entrypoint.sh` scripts for starting the Aquarium services.
+The local configuration also ensures that the `docker/db` and `docker/s3` directories needed for the database and [minio](https://minio.io) S3 server are created on the host as required by the compose files.
+Ideally this step should happen elsewhere since it affects the host instead of the image, but it prevents the average user from having to run additional commands.
+
+The separation of the images allows configurations that don't assume a local instance is used, though currently there are none defined.
+
+### Database
+
+The `docker/mysql_init` directory contains the database dump that is used to initialize the database when it is run the first time.
+The MySQL service is configured to use the `docker/db` directory to store its files, and removing the contents of this directory will cause the database to initialize the next time the service is started.
+
+### Compose files
+
+The docker-compose files are defined to allow Aquarium to be run locally in production or development modes and on Windows.
+Specifically, the files are meant to be combined as follows:
+
+- `docker-compose.yml` and `docker-compose.override.yml` runs production,
+- `docker-compose.yml` and `docker-compose.dev.yml` runs development, and
+- adding `docker-compose.windows.yml` allows MySQL to run on Windows.
+
+The order of the files is significant since the later files add or replace definitions from the base file.
+
+Note that the command for the first combination
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.override.yml up
+```
+
+is equivalent to the simpler command
+
+```bash
+docker-compose up
+```
+
+Running in production is the default configuration, because the most common usage of a local installation is by someone doing protocol development who will want to mirror the production server of the lab.
+
+### Local web server
+
+Access to the servers run by compose is handled by nginx.
+For the most part, most traffic should go directly to the Aquarium Puma server.
+
+Note that Aquarium allows files to be downloaded by returning a pre-authenticated link to the S3 server.
+**BLAH**
