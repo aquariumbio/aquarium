@@ -12,16 +12,16 @@ services:
   krill:
     command: ["production"]
 
-  web:
+  app:
     command: ["production"]
     environment:
       - AWS_ACCESS_KEY_ID="" 
       - AWS_SECRET_ACCESS_KEY="" 
       - AWS_REGION=""
 
-  nginx:
+  web:
     volumes:
-      - ./docker/nginx.production.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/nginx.production.conf:/etc/nginx/conf.d/production.conf:ro
 
 
 

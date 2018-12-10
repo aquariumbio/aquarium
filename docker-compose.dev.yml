@@ -19,7 +19,7 @@ services:
   krill:
     command: ["development"]
 
-  web:
+  app:
     command: ["development"]
     environment:
       - AWS_ACCESS_KEY_ID="" 
@@ -30,6 +30,6 @@ services:
       - ./spec:/aquarium/spec
       - ./test:/aquairum/test
 
-  nginx:
+  web:
     volumes:
-      - ./docker/nginx.development.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/nginx.development.conf:/etc/nginx/conf.d/development.conf:ro
