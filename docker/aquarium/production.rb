@@ -1,6 +1,3 @@
-require 'resolv'
-require 'ipaddress'
-
 Bioturk::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -13,7 +10,7 @@ Bioturk::Application.configure do
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
 
-  # Disable Rails's static asset server (Apache or nginx will already do this)
+  # Disable Rails static asset server (Apache or nginx will already do this)
   config.serve_static_files = false
 
   # Compress JavaScripts and CSS
@@ -25,7 +22,7 @@ Bioturk::Application.configure do
     language_out: 'ES5'
   )
 
-  # Don't fallback to assets pipeline if a precompiled asset is missed
+  # Don't fallback to assets pipeline if a pre-compiled asset is missed
   config.assets.compile = false
 
   # Generate digests for assets URLs
@@ -34,8 +31,8 @@ Bioturk::Application.configure do
   # See everything in the log (default is :info)
   config.log_level = :error
 
-  # Limit the size of log files
-  config.logger = Logger.new(config.paths['log'].first, 1, 1024 * 1024)
+  # logging in Docker requires sending logs to STDOUT
+  config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation can not be found)
@@ -43,8 +40,6 @@ Bioturk::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
-
-  # Paperclip => S3
 
   # Paperclip => minio
   config.paperclip_defaults = {
@@ -63,40 +58,5 @@ Bioturk::Application.configure do
       force_path_style: true # for aws-sdk (required for minio)
     }
   }
-
-  # when running in docker, web_console complains about rendering from container
-  # addresses.  May be sufficient to turn off the whining, but to be sure nothing
-  # is missed, this code whitelists the IP addresses of the services so that
-  # they are able to render to the console if needed.
-  # To do this, the following resolves service hostnames to IP addresses and
-  # then creates an array of address summaries that is used for whitelisting.
-  # It then turns off whining about IP addresses.
-  ip_list = []
-  service_names = ['db', 's3', 'krill', 'app']
-  service_names.each do |name|
-    begin
-      ip = Resolv.getaddress(name)
-      ip_list.push(IPAddress(ip))
-    rescue Resolv::ResolvError
-      puts "service #{name} not resolved"
-    end
-  end
-
-  service_ips = IPAddress::IPv4.summarize(*ip_list).map(&:to_string)
-
-  # whitelist summarized IP addresses for services
-  config.web_console.whitelisted_ips = service_ips
-  # don't whine about other addresses
-  config.web_console.whiny_requests = false
-
-  # AWS Simple Email Service Config
-  #AWS.config(
-  #  region: ENV.fetch('AWS_REGION'),
-  #  simple_email_service_endpoint: "email.#{ENV.fetch('AWS_REGION')}.amazonaws.com",
-  #  simple_email_service_region: ENV.fetch('AWS_REGION'),
-  #  ses: { region: ENV.fetch('AWS_REGION') },
-  #  access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
-  #  secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY')
-  #)
 
 end

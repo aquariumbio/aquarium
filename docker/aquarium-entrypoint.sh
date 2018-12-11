@@ -18,12 +18,13 @@ if [[ $1 == "development" ]]; then
   echo "Starting Rails server"
   exec bundle exec rails server -e $1 -p 3000 -b '0.0.0.0'
 elif [[ $1 == "production" ]]; then
-  # production server must have assets precompiled 
+  # Production server must have assets precompiled
+  # Note only works once db is up (e.g., can't be done in Dockerfile)
   # ALSO SEE application.rb lines 8:13
-  echo "precompiling assets"
+  echo "Precompiling assets"
   exec bundle exec rake assets:precompile
-
-  exec bundle exec puma -C config/puma.rb 
+  echo "Starting Rails server"
+  exec bundle exec puma -C config/production_puma.rb -e $1
 else
   # If the normal image startup flags were not given as arguments, 
   # then exec whatever arguments were given

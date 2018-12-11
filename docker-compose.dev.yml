@@ -9,6 +9,22 @@
 
 version: "3.6"
 services:
+  app:
+    build:
+      context: .
+      target: devbuilder
+    image: devbuilder
+    command: ["development"]
+    volumes:
+      - ./app:/aquarium/app
+      - ./config:/aquarium/config
+      - ./docker/aquarium/database.yml:/aquarium/config/database.yml
+      - ./docker/aquarium/aquarium.rb:/aquarium/config/initializers/aquarium.rb
+      - ./docker/aquarium/development.rb:/aquarium/config/environments/development.rb
+      - ./docs:/aquarium/docs
+      - ./spec:/aquarium/spec
+      - ./test:/aquairum/test
+      
   db:
     environment:
       MYSQL_DATABASE: development
@@ -17,19 +33,11 @@ services:
       MYSQL_ROOT_PASSWORD: aSecretAquarium
 
   krill:
+    image: devbuilder
     command: ["development"]
-
-  app:
-    command: ["development"]
-    environment:
-      - AWS_ACCESS_KEY_ID="" 
-      - AWS_SECRET_ACCESS_KEY="" 
-      - AWS_REGION=""
-    volumes:
-      - ./docs:/aquarium/docs
-      - ./spec:/aquarium/spec
-      - ./test:/aquairum/test
 
   web:
     volumes:
       - ./docker/nginx.development.conf:/etc/nginx/conf.d/development.conf:ro
+
+ 

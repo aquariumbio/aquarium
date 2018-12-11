@@ -16,6 +16,20 @@
 
 version: "3.6"
 services:
+  app:
+    entrypoint: ["/aquarium/aquarium-entrypoint.sh"]
+    volumes:
+      - ./db:/aquarium/db
+      - ./log:/aquarium/log
+      - aquarium_volume:/aquarium
+    networks:
+      - aquarium_net
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - s3
+
   db:
     image: mysql:5.7
     restart: always
@@ -26,13 +40,11 @@ services:
      - aquarium_net
 
   krill:
-    build: 
-      context: .
     entrypoint: ["/aquarium/krill-entrypoint.sh"]
-    expose:
-      - "3500"   
     networks:
      - aquarium_net
+    ports:
+      - "3500:3500"
     depends_on:
       - db
       - app
@@ -43,12 +55,12 @@ services:
       - ./docker/s3/data:/data
       - ./docker/s3/config:/root/.minio
     command: server /data      
+    ports:
+      - "9000:9000"
     environment:
       MINIO_ACCESS_KEY: aquarium_minio
       MINIO_SECRET_KEY: KUNAzqrNifmM6GwNVZ8IP7dxZAkYjhnwc0bfdz0W
       MINIO_REGION: us-west-1
-    expose:
-      - "9000"
     networks:
       - aquarium_net
 
@@ -63,27 +75,6 @@ services:
       - aquarium_net
     depends_on:
       - app
-      - s3
-
-  app:
-    build:
-      context: .
-      target: localbuilder
-    entrypoint: ["/aquarium/aquarium-entrypoint.sh"]
-    expose:
-      - "3000"
-    volumes:
-      - ./app:/aquarium/app
-      - ./config:/aquarium/config
-      - ./db:/aquarium/db
-      - ./lib:/aquarium/lib
-      - ./log:/aquarium/log
-      - ./script:/aquarium/script
-      - aquarium_volume:/aquarium
-    networks:
-      - aquarium_net
-    depends_on:
-      - db
       - s3
 
 networks:

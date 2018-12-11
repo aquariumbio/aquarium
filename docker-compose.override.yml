@@ -2,6 +2,13 @@
 
 version: "3.6"
 services:
+  app:
+    build:
+      context: .
+      target: prodbuilder
+    image: prodbuilder
+    command: ["production"]
+
   db:
     environment:
       MYSQL_DATABASE: production
@@ -10,18 +17,9 @@ services:
       MYSQL_ROOT_PASSWORD: aSecretAquarium
 
   krill:
+    image: prodbuilder
     command: ["production"]
-
-  app:
-    command: ["production"]
-    environment:
-      - AWS_ACCESS_KEY_ID="" 
-      - AWS_SECRET_ACCESS_KEY="" 
-      - AWS_REGION=""
 
   web:
     volumes:
       - ./docker/nginx.production.conf:/etc/nginx/conf.d/production.conf:ro
-
-
-
