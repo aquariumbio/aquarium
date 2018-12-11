@@ -41,7 +41,7 @@ To run Aquarium in development mode using the Docker configuration (in a Unix-li
 1. Build the docker images with
 
    ```bash
-   docker-compose build
+   docker-compose -f docker-compose.yml -f docker-compose.dev.yml build
    ```
 
 2. Start Aquarium with
@@ -49,6 +49,8 @@ To run Aquarium in development mode using the Docker configuration (in a Unix-li
    ```bash
    docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
    ```
+
+> NOTE: If you have previously run Aquarium in production mode you will have to run `rm -rf docker/db/*` before restarting in development mode.
 
 Stop the services by typing `ctrl-c` followed by
 
@@ -60,7 +62,7 @@ As you work on Aquarium, you will want to run commands that need the Aquarium Ru
 To avoid having to do the manual installation steps, you can simply precede each command with
 
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml run -rm web
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml run -rm app
 ```
 
 ## Testing Aquarium
@@ -165,6 +167,7 @@ _this is a draft list_
 3.  Update API documentation by running `yard`
 4.  (make sure JS tests pass)
 5.  Make sure JS linting passes
+6.  Update version number in [WHATEVER-THAT-FILE-IS]
 6.  Update change log
 7.  (create a tag for the repository)
 8.  (create a release on github)
@@ -193,18 +196,20 @@ aquarium
 
 ### Images
 
-The `Dockerfile` configures two Aquarium images: `basebuilder` and `localbuilder`.
-The `basebuilder` configuration installs required Gems and JavaScript packages.
-The `localbuilder` configuration is defined so that it is ready to be used by the docker-compose files to run a local instance. So, the local configuration copies rails configuration files from the `docker/aquarium` directory into the correct place in the image; and adds the `docker/aquarium-entrypoint.sh` and `docker/krill-entrypoint.sh` scripts for starting the Aquarium services.
-The local configuration also ensures that the `docker/db` and `docker/s3` directories needed for the database and [minio](https://minio.io) S3 server are created on the host as required by the compose files.
-Ideally this step should happen elsewhere since it affects the host instead of the image, but it prevents the average user from having to run additional commands.
+The `Dockerfile` configures Aquarium images `basebuilder`, `devbuilder` and `prodbuilder`.
+The `devbuilder` and `prodbuilder` images are configured to allow Aquarium to be run as a local instance in the development and production environments, while the `basebuilder` image contains the configuration common to both.
 
-The separation of the images allows configurations that don't assume a local instance is used, though currently there are none defined.
+The `basebuilder` configuration copies rails configuration files from the `docker/aquarium` directory into the correct place in the image; and adds the `docker/aquarium-entrypoint.sh` and `docker/krill-entrypoint.sh` scripts for starting the Aquarium services.
+The configuration also ensures that the `docker/db` and `docker/s3` directories needed for the database and [minio](https://minio.io) S3 server are created on the host as required by the compose files.
+The `devbuilder` and `prodbuilder` configurations build an image with environment specific files.
 
 ### Database
 
 The `docker/mysql_init` directory contains the database dump that is used to initialize the database when it is run the first time.
-The MySQL service is configured to use the `docker/db` directory to store its files, and removing the contents of this directory will cause the database to initialize the next time the service is started.
+The MySQL service is configured to use the `docker/db` directory to store its files, and removing the contents of this directory (`rm -rf docker/db/*`) will cause the database to initialize the next time the service is started.
+
+The contents of the `docker/db` directory also need to be removed when changing between running in production and development environments.
+If you want to save the contents of the database, you will have to perform a database dump from within the `app` container.
 
 ### Compose files
 
@@ -230,6 +235,22 @@ docker-compose up
 ```
 
 Running in production is the default configuration, because the most common usage of a local installation is by someone doing protocol development who will want to mirror the production server of the lab.
+
+The `docker-compose build` command needs to be run with the same file arguments as you are intending to run Aquarium.
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml build
+```
+
+This is the same for running a command within the service with `docker-compose run`, such as
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml run --rm app /bin/sh
+```
+
+which runs a shell within the container running Aquarium in the development environment.
+
+
 
 ### Local web server
 

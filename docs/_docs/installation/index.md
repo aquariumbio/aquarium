@@ -11,6 +11,12 @@ the first, a nursery server that is shared within the lab for the purposes of tr
 We use this arrangement in the Klavins lab to run the UW BIOFAB so that protocols can be evaluated without affecting the actual lab inventory.
 In addition, each protocol developer should run a local instance, which can be done easily with Docker.
 
+We strongly encourage protocol developers to use the Docker version in production mode, because it eliminates several of the manual configuration details.
+Once a protocol runs well on a local instance, you can port it to your production instance using import on the developer tab.
+
+We understand that it might seem simpler to set up a single instance of Aquarium and use it as the production server and for protocol development.
+However, protocol testing _should not_ be done on a production server, because protocol errors can affect system performance, and protocols that create database entries can pollute your production database.
+
 ## Table of Contents
 
 <!-- TOC -->
@@ -41,65 +47,36 @@ We discuss some of the considerations for running Aquarium below, but your deplo
 [Jump to manual installation instructions](#manual-installation-instructions).
 
 **Docker Installation**:
-If your goal is instead to run Aquarium on your laptop to evaluate it, develop new code, or serve a small lab, we have provided a Docker configuration scripts to run Aquarium.
+If your goal is instead to run Aquarium on your laptop to evaluate it, develop new code, or serve a small lab, we have provided Docker configuration scripts to run Aquarium with nearly all of the supporting services.
 
 [Jump to docker installation instructions](#docker-installation-instructions).
-
-We strongly encourage protocol developers to use the Docker version in production mode, because it eliminates several of the manual configuration details.
-Once a protocol runs well on a local instance, you can port it to your production instance using import on the developer tab.
-
-We understand that it might seem simpler to set up a single instance of Aquarium and use it as the production server and for protocol development.
-However, protocol testing _should not_ be done on a production server, because protocol errors can affect system performance, and protocols that create database entries can pollute your production database.
 
 ## Getting Aquarium
 
 For both manual and Docker installations you will need to obtain the Aquarium source.
-Do this by using [git](https://git-scm.com) with the command
+If you use a non-Windows system, do this by using [git](https://git-scm.com) with the command
 
 ```bash
 git clone https://github.com/klavinslab/aquarium.git
 ```
 
-if you use a non-Windows system.
 On Windows use
 
 ```bash
 git clone https://github.com/klavinslab/aquarium.git --config core.autocrlf=input
 ```
 
-You will also probably want to choose the Aquarium version you want to use.
-First, change to the directory
-
-```bash
-cd aquarium
-```
-
-You can then get the last tagged commit of Aquarium by running the commands
-
-```bash
-latest=`git describe --tags`
-git checkout $latest
-```
-
-However, this may be more recent than the latest release.
-
-To determine the latest release, visit the [latest Aquarium release](https://github.com/klavinslab/aquarium/releases/latest) at Github, take note of the tag number (e.g., v2.4.2), and then checkout that version.
+By default, this will give you the repository containing the bleeding edge version of Aquarium, and you will want to choose the Aquarium version you will use.
+The most definitive way to find the latest release is to visit the [latest Aquarium release](https://github.com/klavinslab/aquarium/releases/latest) page at Github, take note of the tag number (e.g., v2.4.2), and then checkout that version.
 For instance, if the tag is `v2.4.2` use the command
 ```bash
+cd aquarium
 git checkout v2.4.2
 ```
 
-(Don't use this command if you are doing development. 
+(Don't use this command if you are doing development.
 See the [git tagging documentation](https://git-scm.com/book/en/v2/Git-Basics-Tagging) for details.)
 
-You can also find older releases using the command
-
-```bash
-git tag
-```
-
-which lists all of the tagged commits.
-All the tags for releases start with the letter `v` followed by a sequence of numbers.
 
 ## Manual Installation Instructions
 
@@ -109,11 +86,11 @@ To manually install Aquarium in a production environment:
 
     - [Ruby](https://www.ruby-lang.org/en/) version 2.3.7
     - [npm](https://www.npmjs.com/get-npm)
-      <br><br>
+      <br>
 
 2.  Also, make sure that you have a [MySQL](https://www.mysql.com) server installed.
 
-    When installing Aquarium on AWS or another cloud service, you should use RDBMS or the database services available there.
+    When installing Aquarium on AWS use RDS, or, for another cloud service, use the database services available there.
 
 3.  [Get the aquarium source](#get-aquarium).
 
@@ -136,9 +113,6 @@ To manually install Aquarium in a production environment:
 
     You should change the _production_ mode configuration to point to your database server.
     And, in this case, you don't need to worry about the remainder of the `database.yml` file.
-
-    Otherwise, the default settings for the _development_ and _test_ modes should be sufficient, unless you want to use a full database in _development_ mode.
-    Regardless, the _test_ mode for running Aquarium system tests should use the `sqlite3` server.
 
 6.  Install the Ruby gems required by Aquarium with
 
@@ -168,7 +142,8 @@ To manually install Aquarium in a production environment:
     RAILS_ENV=production bundle exec rake assets:precompile
     ```
 
-10. To start Aquarium, run
+10. [THIS SHOULD REFER TO PUMA/NGINX CONFIG]
+To start Aquarium, run
 
     ```bash
     RAILS_ENV=production rails s
@@ -295,6 +270,5 @@ and restarting Aquarium with `docker-compose` as before.
     For instance, you could replace `'LOCAL'` with `'Georgina'`.
 
 3.  The Docker configuration uses the directory `docker/s3` as the storage location of file uploads and is managed using [Minio](https://minio.io).
-    This is probably not the best choice for full production instances.
 
-4.  The Docker configuration does not provide an email testing container, meaning that email notifications will not work.
+4.  The Docker configuration does not provide an email server container, meaning that email notifications will not work.
