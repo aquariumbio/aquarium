@@ -39,5 +39,3 @@ services:
   web:
     volumes:
       - ./docker/nginx.development.conf:/etc/nginx/conf.d/development.conf:ro
-
- 
