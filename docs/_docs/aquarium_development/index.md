@@ -15,6 +15,8 @@ These guidelines are intended for those working directly on Aquarium, though som
 - [Aquarium Development Guide](#aquarium-development-guide)
     - [Getting Started](#getting-started)
     - [Running Aquarium](#running-aquarium)
+        - [Initial steps](#initial-steps)
+        - [Commands](#commands)
     - [Testing Aquarium](#testing-aquarium)
     - [Editing Aquarium](#editing-aquarium)
         - [Documenting changes](#documenting-changes)
@@ -36,34 +38,70 @@ Follow the Aquarium [installation]({{ site.baseurl }}{% link _docs/installation/
 
 ## Running Aquarium
 
-To run Aquarium in development mode using the Docker configuration (in a Unix-like environment), do the following:
+To run Aquarium in development mode using the Docker configuration (in a Unix&trade;-like environment), do the following:
+
+### Initial steps
+
+1. If you have previously run Aquarium in production mode, run
+
+   ```bash
+   rm -rf docker/db/*
+   ```
+
+2. Make the `develop-compose.sh` script executable
+
+   ```bash
+   chmod u+x develop-compose.sh
+   ```
+
+   This script helps shorten the command you have to write.
+   Instead of starting each command with
+
+   ```bash
+   docker-compose -f docker-compose.yml -f docker-compose.dev.yml
+   ```
+
+   you only have to start with the script name
+
+   ```bash
+   ./develop-compose.sh
+   ```
+
+### Commands
 
 1. Build the docker images with
 
    ```bash
-   docker-compose -f docker-compose.yml -f docker-compose.dev.yml build
+   ./develop-compose.sh build
    ```
+
+   This should only be necessary the first time you run Aquarium in development mode, or any time you change the Aquarium configuration.
 
 2. Start Aquarium with
 
    ```bash
-   docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+   ./develop-compose.sh up
    ```
 
-> NOTE: If you have previously run Aquarium in production mode you will have to run `rm -rf docker/db/*` before restarting in development mode.
+   To stop the services, type `ctrl-c` followed by
 
-Stop the services by typing `ctrl-c` followed by
+   ```bash
+   docker-compose down
+   ```
 
-```bash
-docker-compose down
-```
+3. To run commands inside the Aquarium Ruby environment, precede each with
 
-As you work on Aquarium, you will want to run commands that need the Aquarium Ruby environment (e.g., `rails` commands).
-To avoid having to do the manual installation steps, you can simply precede each command with
+   ```bash
+   ./develop-compose.sh run --rm app
+   ```
 
-```bash
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml run -rm app
-```
+   Specifically, you can run a shell within the Aquarium container with the command
+
+   ```bash
+   ./develop-compose.sh run --rm app /bin/sh
+   ```
+
+   where you can run `rake` or even the rails console.
 
 ## Testing Aquarium
 

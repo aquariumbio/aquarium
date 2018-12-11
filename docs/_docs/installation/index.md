@@ -82,7 +82,7 @@ See the [git tagging documentation](https://git-scm.com/book/en/v2/Git-Basics-Ta
 
 To manually install Aquarium in a production environment:
 
-1.  Ensure you have a Unix-like environment on your machine and have installed
+1.  Ensure you have a Unix&trade;-like environment on your machine and have installed
 
     - [Ruby](https://www.ruby-lang.org/en/) version 2.3.7
     - [npm](https://www.npmjs.com/get-npm)
