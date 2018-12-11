@@ -1,0 +1,21 @@
+# production docker-compose
+
+version: "3.6"
+services:
+  app:
+    build:
+      context: .
+      target: prodbuilder
+    image: prodbuilder
+    command: ["production"]
+
+  db:
+    environment:
+      MYSQL_DATABASE: production
+      MYSQL_USER: aquarium
+      MYSQL_PASSWORD: aSecretAquarium
+      MYSQL_ROOT_PASSWORD: aSecretAquarium
+
+  krill:
+    image: prodbuilder
+    command: ["production"]

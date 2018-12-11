@@ -17,18 +17,10 @@
 version: "3.6"
 services:
   app:
-    image: localbuilder
-    build:
-      context: .
-      target: localbuilder
     entrypoint: ["/aquarium/aquarium-entrypoint.sh"]
     volumes:
-      - ./app:/aquarium/app
-      - ./config:/aquarium/config
       - ./db:/aquarium/db
-      - ./lib:/aquarium/lib
       - ./log:/aquarium/log
-      - ./script:/aquarium/script
     networks:
       - aquarium_net
     ports:
@@ -47,7 +39,6 @@ services:
      - aquarium_net
 
   krill:
-    image: localbuilder
     entrypoint: ["/aquarium/krill-entrypoint.sh"]
     networks:
      - aquarium_net
