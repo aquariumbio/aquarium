@@ -160,23 +160,29 @@ For more detail, see the [instructions](https://help.github.com/articles/setting
 
 ## Making an Aquarium Release
 
-_this is a draft list_
-
 1.  (make sure Rails tests pass)
-2.  Run rubocop, fix anything broken. Once done run `rubocop --auto-gen-config`.
+2.  Run `rubocop`, fix anything broken. Once done run `rubocop --auto-gen-config`.
 3.  Update API documentation by running `yard`
 4.  (make sure JS tests pass)
 5.  Make sure JS linting passes
-6.  Update version number in [WHATEVER-THAT-FILE-IS]
-6.  Update change log
-7.  (create a tag for the repository)
-8.  (create a release on github)
+6.  Update the version number in `config/initializers/version.rb` to the new version number.
+7.  (Update change log)
+8.  Create a tag for the new version:
+    ```bash
+    git tag -a v$NEWVERSION -m "Aquarium version $NEWVERSION"
+    git push --tags
+    ```
+9.  [Create a release on github](https://help.github.com/articles/creating-releases/).
+    Visit the [Aquarium releases page](https://github.com/klavinslab/aquarium/releases).
+    Click "Tags".
+    Click "add release notes" for the new tag, use the change log as the release notes.
+    Click "publish release".
 
 ## Docker configuration
 
 The Aquarium Docker configuration is determined by these files:
 
-```
+```bash
 aquarium
 |-- Dockerfile                  # defines the image for Aquarium
 |-- docker
@@ -249,8 +255,6 @@ docker-compose -f docker-compose.yml -f docker-compose.dev.yml run --rm app /bin
 ```
 
 which runs a shell within the container running Aquarium in the development environment.
-
-
 
 ### Local web server
 
