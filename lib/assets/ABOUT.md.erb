@@ -1,36 +1,26 @@
 # <%= @config[:title] %>, version <%= @config[:version] %>
 
-<%= @config[:description] %>
-
-[[Download](<%= aq_file_name %>)]
-
-[<%= @config[:repo] %>](<%= @config[:repo] %>)
+<%= @config[:description] %> [[Download](<%= aq_file_name %>)] [[Github Repo](<%= aq_repo_path %>)]
 
 &copy; <%= @config[:copyright] %>
 
-### Keywords
 <% if @config[:keywords] %>
-  <% @config[:keywords].each do |w| %>
-  - <%= w %>
-  <% end %>
+### Keywords
+<%= @config[:keywords].join ", " %>
 <% end %>
 
 ### Maintainer
 - <%= @config[:maintainer][:name] %>, <<%= @config[:maintainer][:email] %>>
 
 ### Authors
-<% if @config[:authors] %>
-  <% @config[:authors].each do |a| %>
+<% if @config[:authors] %><% @config[:authors].each do |a| %>
   - <%= a[:name] %>, <%= a[:affiliation] %>
-  <% end %>
-<% end %>
+<% end %><% end %>
 
 ### Acknowledgements
-<% if @config[:acknowledgements] %>
-  <% @config[:acknowledgements].each do |a| %>
+<% if @config[:acknowledgements] %><% @config[:acknowledgements].each do |a| %>
   - <%= a[:name] %>, <%= a[:affiliation] %>
-  <% end %>
-<% end %>
+<% end %><% end %>
 
 ### Details
 This workflow and these documents were automatically generated from

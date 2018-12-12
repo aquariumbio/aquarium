@@ -1,6 +1,5 @@
 
 - **<%= ft[:name] %>** [<%= ft[:routing] %>] <% if ft[:array] %>(Array)<% end %> <% if ft[:part] %>Part of collection<% end %>
-
 <% ft[:sample_types].zip(ft[:object_types]).each do |st,ot| %>
   - <%= sample_type_link(st) %> /  <%= object_type_link(ot) %>
 <% end %>

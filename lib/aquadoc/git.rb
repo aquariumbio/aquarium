@@ -12,7 +12,10 @@ module Aquadoc
       @opts = opts
       @config = config
       @repo = nil
-      @repo_info = { repo: @config[:github][:repo], user: @config[:github][:user] }
+      @repo_info = {
+        repo: @config[:github][:repo],
+        user: @config[:github][:organization] || @config[:github][:user]
+      }
       @access_token = config[:github][:access_token]
       @authorized = authenticate
       @create = nil
@@ -86,21 +89,23 @@ module Aquadoc
     end
 
     def create_repo
-      @repo = @client.create_repository(@repo_info[:repo],
+      opts = {
         description: "#{@config[:title]}: An Aquarium Workflow",
-        homepage: "https://#{@config[:github][:user]}.github.io/#{@config[:github][:repo]}/"
-      )
+        homepage: "https://#{@config[:github][:organization] || @config[:github][:user]}.github.io/#{@config[:github][:repo]}/"
+      }
+      opts[:organization] = @config[:github][:organization] if @config[:github][:organization]
+      @repo = @client.create_repository(@repo_info[:repo],opts)
       sleep 5 # make sure repo is created before starting to add files
       puts "Created new repo: #{@repo_info[:repo]}"
     end
 
-    def clone_repo
-      system "git clone https://github.com/#{@repo_info[:user]}/#{@repo_info[:repo]}.git"
-    end
-
-    def add_and_commit
-      system "(cd #{@repo_info[:repo]}; git add .; git commit -m 'Aquadoc update')"
-    end
+    # def clone_repo
+    #   system "git clone https://github.com/#{@repo_info[:user]}/#{@repo_info[:repo]}.git"
+    # end
+    #
+    # def add_and_commit
+    #   system "(cd #{@repo_info[:repo]}; git add .; git commit -m 'Aquadoc update')"
+    # end
 
   end
 

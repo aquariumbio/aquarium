@@ -53,8 +53,8 @@
           </svg>
 
         <h2 class="md-toolbar-item md-headline">
-          <span class="aquarium">AQUARIUM</span>
-          <span class="location">/ {{state.section.category}} / {{state.active_content.name}}</span>
+          <span class="aquarium">PROTOCOLS</span>
+          <span class="location">/ {{title}}</span>
         </h2>
       </div>
 
@@ -92,7 +92,8 @@
       <md-content flex class="main-container">
 
         <!-- Content from Aquarium Documtation -->
-        <div flex class="main main-frame" ng-if="state.active_content.type == 'aquarium-doc' || state.active_content.type == 'local-webpage'">
+        <div flex class="main main-frame"
+             ng-if="state.active_content.type == 'aquarium-doc' || state.active_content.type == 'local-webpage'">
           <iframe ng-attr-src="{{state.iframe_url}}"
                   ng-if="state.iframe_url"
                   class="content-frame">
@@ -100,7 +101,15 @@
         </div>
 
         <!-- Local md content -->
-        <div id="main-md" class="main markdown-body" ng-if="state.active_content.type == 'local-md'">
+        <div id="main-md"
+             class="main markdown-body"
+             ng-if="state.active_content.type == 'local-md'">
+        </div>
+
+        <!-- Local html content -->
+        <div id="main-html"
+             class="main"
+             ng-if="state.active_content.type == 'local-html'">
         </div>
 
       </md-content>

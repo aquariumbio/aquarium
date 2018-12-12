@@ -147,6 +147,10 @@ module Aquadoc
       @config[:github][:repo] + ".aq"
     end
 
+    def aq_repo_path
+      "https://github.com/#{@config[:github][:organization] || @config[:github][:user]}/#{@config[:github][:repo]}"
+    end
+
     def aq_file
       {
         config: @config,
