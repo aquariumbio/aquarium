@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-echo "Running aquarium entrypoint script with arguments: $*"
+echo "Running krill entrypoint script with arguments: $*"
 
 # see https://stackoverflow.com/questions/35022428/rails-server-is-still-running-in-a-new-opened-docker-container/38732187#38732187
 if [ -f tmp/pids/server.pid ]; then
