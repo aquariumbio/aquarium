@@ -25,6 +25,7 @@ Aquarium is the operating system of the [UW BIOFAB](http://www.uwbiofab.org), a 
   - [Designing plans (Designer)](designer/)
   - Viewing plan history (Plans)
   - [UW BIOFAB Protocols and Plans](biofab_protocols/)
+  - [Sharing](sharing/)
 - Lab Management
   - [Managing the lab (Manager)](manager/)
   - [Running jobs (Technician)](technician/)

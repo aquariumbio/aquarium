@@ -53,13 +53,14 @@
     <p>
     Aquarium publishes workflows using your github account. 
     Enter your Github user name into the user name field.
-    Enter the name of the repository you would like to use for your published workflow.
+    Enter the name of the repository you would like to create (or update) for your published workflow.
     If this repository does not exist, Aquarium will make it for you.
     If it does exist, then Aquarium will attempt to find a previously published workflow in it,
     and use that workflow definition to help you edit and replace it.
+    Optionally, you can specify a Github organization for which you are authorized to create repositories.
     To create an access token for Aquarium, go to your Github account, choose Settings,
     click "Developer Settings", click "Personal Access Tokens", and click "Generate new token".
-    Then describe the token and be sure to the "repo" scope so that Aquarium can manipulate
+    Then describe the token and be sure to click the "repo" scope so that Aquarium can manipulate
     your workflow repositories.
     </p>
 
@@ -69,14 +70,18 @@
         <input ng-model="config.github.user">
       </div>
       <div class="field" flex=20>
-        <label>Repository</label>
+        <label>Repository Name</label>
         <input ng-model="config.github.repo">
       </div>
+      <div class="field" flex=20>
+        <label>Organization (Optional)</label>
+        <input ng-model="config.github.organization">
+      </div>          
       <div class="field" flex=40>
         <label>Access Token</label>
         <input ng-model="config.github.access_token">
       </div>
-    </div>
+     </div>
 
     <p class="issue" ng-if="state.error">{{state.error}}</p>
 
