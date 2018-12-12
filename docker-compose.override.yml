@@ -8,6 +8,8 @@ services:
       target: prodbuilder
     image: prodbuilder
     command: ["production"]
+    volumes:
+      - assets:/aquarium/public/assets
 
   db:
     environment:
@@ -23,3 +25,7 @@ services:
   web:
     volumes:
       - ./docker/nginx.production.conf:/etc/nginx/conf.d/production.conf:ro
+
+
+volumes:
+  assets:

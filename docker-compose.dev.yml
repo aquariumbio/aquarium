@@ -16,15 +16,10 @@ services:
     image: devbuilder
     command: ["development"]
     volumes:
-      - ./app:/aquarium/app
-      - ./config:/aquarium/config
+      - .:/aquarium
       - ./docker/aquarium/database.yml:/aquarium/config/database.yml
       - ./docker/aquarium/aquarium.rb:/aquarium/config/initializers/aquarium.rb
       - ./docker/aquarium/development.rb:/aquarium/config/environments/development.rb
-      - ./docs:/aquarium/docs
-      - ./spec:/aquarium/spec
-      - ./test:/aquairum/test
-      
   db:
     environment:
       MYSQL_DATABASE: development

@@ -17,11 +17,11 @@
 version: "3.6"
 services:
   app:
-    entrypoint: ["/aquarium/aquarium-entrypoint.sh"]
+    entrypoint: ["/aquarium/docker/aquarium-entrypoint.sh"]
     volumes:
       - ./db:/aquarium/db
       - ./log:/aquarium/log
-      - aquarium_volume:/aquarium
+      
     networks:
       - aquarium_net
     ports:
@@ -40,7 +40,7 @@ services:
      - aquarium_net
 
   krill:
-    entrypoint: ["/aquarium/krill-entrypoint.sh"]
+    entrypoint: ["/aquarium/docker/krill-entrypoint.sh"]
     networks:
      - aquarium_net
     ports:
@@ -66,8 +66,6 @@ services:
 
   web:
     image: nginx:stable-alpine
-    volumes:
-      - aquarium_volume:/aquarium
     ports:
       - "80:80"
       - "9000:9000"
@@ -79,6 +77,3 @@ services:
 
 networks:
   aquarium_net:
-
-volumes:
-  aquarium_volume:
