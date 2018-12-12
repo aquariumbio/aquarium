@@ -5,10 +5,6 @@ docker/db/
 docker/mysql_init/
 docker/s3/
 docs/
-public/assets/
-public/doc/
-public/components/
-public/system/
 tmp/
 vendor/
 
@@ -20,4 +16,3 @@ vendor/
 
 docker-compose.*yml
 Dockerfile
-Gemfile.lock
