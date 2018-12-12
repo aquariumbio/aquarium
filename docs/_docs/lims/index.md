@@ -1,3 +1,9 @@
+---
+title: LIMS
+layout: docs
+permalink: /lims/
+---
+
 # The Aquarium LIMS
 
 
