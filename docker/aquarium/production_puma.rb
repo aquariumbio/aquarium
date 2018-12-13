@@ -6,7 +6,7 @@ workers Integer(ENV['WEB_CONCURRENCY'] || [1, `grep -c processor /proc/cpuinfo`.
 # Min and Max threads per worker
 threads 1, 6
 
-app_dir = File.expand_path("../..", __FILE__)
+app_dir = '/aquarium'
 shared_dir = "#{app_dir}/shared"
 
 # Default to production
@@ -17,7 +17,7 @@ environment rails_env
 bind "unix://#{shared_dir}/sockets/puma.sock"
 
 # Logging
-stdout_redirect(stdout = '/dev/stdout', stderr = '/dev/stderr', append = true)
+stdout_redirect "#{shared_dir}/log/puma.stdout.log", "#{shared_dir}/log/puma.stderr.log", true
 
 # Set master PID and state locations
 pidfile "#{shared_dir}/pids/puma.pid"
