@@ -5,11 +5,18 @@ services:
   app:
     build:
       context: .
-      target: prodbuilder
-    image: prodbuilder
+      target: basebuilder
+    image: basebuilder
     command: ["production"]
+    environment:
+      RAILS_ENV: production
+      RACK_ENV: production
     volumes:
       - assets:/aquarium/public/assets
+      - ./docker/aquarium/database.yml:/aquarium/config/database.yml
+      - ./docker/aquarium/aquarium.rb:/aquarium/config/initializers/aquarium.rb
+      - ./docker/aquarium/production.rb:/aquarium/config/environments/production.rb
+      - ./docker/aquarium/production_puma.rb:/aquarium/config/production_puma.rb
 
   db:
     environment:
@@ -19,7 +26,7 @@ services:
       MYSQL_ROOT_PASSWORD: aSecretAquarium
 
   krill:
-    image: prodbuilder
+    image: basebuilder
     command: ["production"]
 
   web:

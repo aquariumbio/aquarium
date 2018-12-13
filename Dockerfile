@@ -17,41 +17,18 @@ RUN mkdir -p /aquarium/shared
 WORKDIR /aquarium
 
 RUN npm install -g bower@latest
-COPY bower.json /aquarium/bower.json
-RUN echo '{ "directory": "public/components", "allow_root": true }' > /aquarium/.bowerrc
+COPY bower.json ./bower.json
+RUN echo '{ "directory": "public/components", "allow_root": true }' > ./.bowerrc
 RUN bower install --config.interactive=false --force
 
-COPY . /aquarium
+COPY Gemfile Gemfile.lock ./
+RUN gem install bundler && bundle install --jobs 20 --retry 5
+COPY . ./
 
-# copy configuration files to run Aquarium within Docker and
-# using the s3 and db services. 
-RUN chmod +x /aquarium/docker/aquarium-entrypoint.sh
-RUN chmod +x /aquarium/docker/krill-entrypoint.sh
+RUN chmod +x ./docker/aquarium-entrypoint.sh
+RUN chmod +x ./docker/krill-entrypoint.sh
 
-COPY ./docker/aquarium/database.yml /aquarium/config/database.yml
-COPY ./docker/aquarium/aquarium.rb /aquarium/config/initializers/aquarium.rb
-COPY ./docker/aquarium/development.rb /aquarium/config/environments/development.rb
-COPY ./docker/aquarium/production.rb /aquarium/config/environments/production.rb
-COPY ./docker/aquarium/production_puma.rb /aquarium/config/production_puma.rb
 
-RUN mkdir -p ./docker/db
-RUN mkdir -p ./docker/s3/data/development
-RUN mkdir -p ./docker/s3/config
 
-FROM basebuilder AS devbuilder
-ENV RAILS_ENV development 
-ENV RACK_ENV development
-WORKDIR /aquarium
-RUN gem install bundler
-COPY ./Gemfile /aquarium/Gemfile
-RUN bundle install
-
-FROM basebuilder AS prodbuilder
-ENV RAILS_ENV production 
-ENV RACK_ENV production
-WORKDIR /aquarium
-RUN gem install bundler
-COPY ./Gemfile /aquarium/Gemfile
-RUN bundle install
 
 
