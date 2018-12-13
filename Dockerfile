@@ -27,8 +27,3 @@ COPY . ./
 
 RUN chmod +x ./docker/aquarium-entrypoint.sh
 RUN chmod +x ./docker/krill-entrypoint.sh
-
-
-
-
-
