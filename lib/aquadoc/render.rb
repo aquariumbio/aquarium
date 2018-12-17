@@ -6,9 +6,7 @@ module Aquadoc
 
     def sample_type_link name
       if @options[:inventory] && name
-        "<a href='#' onclick='load_sample_type(\"#{
-          sanitize_filename name
-        }\")'>#{name}</a>"
+        "<a href='#' onclick='easy_select(\"Sample Types\", \"#{name}\")'>#{name}</a>"
       elsif !@options[:inventory] && name
         name
       else
@@ -18,9 +16,7 @@ module Aquadoc
 
     def object_type_link name
       if @options[:inventory] && name
-        "<a href='#' onclick='load_object_type(\"#{
-          sanitize_filename name
-        }\")'>#{name}</a>"
+        "<a href='#' onclick='easy_select(\"Containers\", \"#{name}\")'>#{name}</a>"
       elsif !@options[:inventory] && name
         name
       else

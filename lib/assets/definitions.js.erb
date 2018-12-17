@@ -76,7 +76,7 @@ var config = {
           <% @object_types.each do |ot| %>
             {
               name: '<%= ot[:name] %>',
-              file: 'object_types/<%= sanitize_filename ot[:name] %>'  + '.md',
+              path: 'object_types/<%= sanitize_filename ot[:name] %>'  + '.md',
               type: "local-md"
             },
           <% end %>
