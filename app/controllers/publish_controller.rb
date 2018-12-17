@@ -11,22 +11,25 @@ class PublishController < ApplicationController
 
     resp = AqResponse.new
 
+    github_user = params[:organization] || params[:user]
+
     if !params[:repo] || params[:repo].length == 0
       resp.error("A Github repository name must contain at least one character.")     
     else
       begin
         client = Octokit::Client.new(:access_token => params[:access_token])
         logger.info "Rate Limit Info: #{client.rate_limit}"
-        repos = client.repositories.collect { |r| r.name }
+        repos = client.repositories(github_user).collect { |r| r.name }
+        logger.info repos
       rescue Exception => e
         logger.info(e)
         resp.error("Aquarium cannot access Github using the supplied access token.", e)
       else
         if repos.member?(params[:repo])
           begin
-            file = client.contents({ repo: params[:repo], user: params[:user]}, path: "/config.json")
+            file = client.contents({ repo: params[:repo], user: github_user}, path: "/config.json")
             config = JSON.parse Base64.decode64(file[:content])
-            file = client.contents({ repo: params[:repo], user: params[:user]}, path: "/#{params[:repo]}.aq")
+            file = client.contents({ repo: params[:repo], user: github_user}, path: "/#{params[:repo]}.aq")
             aq_file = JSON.parse Base64.decode64(file[:content])            
           rescue Exception => e
             resp.error("The Github repository '#{params[:repo]}' exists but does not contain a config.json file.", e)

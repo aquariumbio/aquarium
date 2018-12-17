@@ -122,7 +122,7 @@
 
     <div class="update-note" ng-if="state.update">
     <p><b>Note:</b> Aquarium found an existing published workflow at 
-      <a href="https://github.com/{{config.github.user}}/{{config.github.repo}}" target=github>
+      <a href="https://github.com/{{config.github.organization || config.github.user}}/{{config.github.repo}}" target=github>
         https://github.com/{{config.github.user}}/{{config.github.repo}}
       </a> and has used it fill in this form and choose operation types. Please edit this
       information and continue only if you want to <u>update</u> this repository.</p>
@@ -233,7 +233,7 @@
     <h3>{{config.title}}</h3>
     <p>{{config.description}}<br>
         &copy; {{config.copyright}}<br>
-        <b>Target:</b> {{config.github.user}}/{{config.github.repo}}<br>
+        <b>Target:</b> {{config.github.organization || config.github.user}}/{{config.github.repo}}<br>
         <b>Maintained by:</b> {{config.maintainer.name}} &lt;{{config.maintainer.email}}&gt;<br>
 
     <b>Keywords:</b> {{config.keywords.join(", ")}}<br>
@@ -282,13 +282,21 @@
 
     <div ng-if="!state.building && state.error == null">
       <h2>Workflow Published!</h2>
-      <p>See <a href="https://github.com/{{config.github.user}}/{{config.github.repo}}" target=github>
-        https://github.com/{{config.github.user}}/{{config.github.repo}}</a> for the results.</p>
-      <p>If you haven't done so already, publish the resulting web page by going go <a href="https://github.com/{{config.github.user}}/{{config.github.repo}}/settings" target=github>here</a>,
-         and choosing Github Pages -&gt; Source -&gt; master branch. The resulting web page will <it>eventually</it> be available at 
-         <a href="https://{{config.github.user}}.github.io/{{config.github.repo}}/" target=github>https://{{config.github.user}}.github.io/{{config.github.repo}}/</a> (be patient, github builds web pages from repos on its own time).</p> 
-      <p>You should also edit the LICENSE.md which describes how user's can use your code. And you should edit the README.md which should describe in as much detail as you can muster how
-         to use workflow. Note that if you edit other files (besides LICENSE.md and README.md) in the repository and later publish and update, Aquarium may overwrite them.</p>
+      <p>See <a href="https://github.com/{{config.github.organization || config.github.user}}/{{config.github.repo}}" target=github>
+        https://github.com/{{config.github.organization || config.github.user}}/{{config.github.repo}}
+      </a>
+      for the results.</p>
+      <p>If you haven't done so already, publish the resulting web page by going go
+      <a href="https://github.com/{{config.github.organization || config.github.user}}/{{config.github.repo}}/settings" target=github>here</a>,
+      and choosing Github Pages -&gt; Source -&gt; master branch. The resulting web page will <it>eventually</it> be available at 
+      <a href="https://{{config.github.organization || config.github.user}}.github.io/{{config.github.repo}}/" target=github>
+        https://{{config.github.organization || config.github.user}}.github.io/{{config.github.repo}}/
+      </a>
+      (be patient, github builds web pages from repos on its own time).</p> 
+      <p>You should also edit the LICENSE.md which describes how user's can use your code.
+      And you should edit the README.md which should describe in as much detail as you can muster how to use workflow.
+      Note that if you edit other files (besides LICENSE.md and README.md) in the repository and later publish and update,
+      Aquarium may overwrite them.</p>
     </div>
 
     <div ng-if="!state.building && state.error != null">
