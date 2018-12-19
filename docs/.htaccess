@@ -1,2 +1,2 @@
 # Redirect old file path to new file path
-Redirect /aquarium/ http://klavinslab.org/aquaverse/
+Redirect /aquarium/index.html http://klavinslab.org/aquaverse/index.html
