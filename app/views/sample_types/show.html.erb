@@ -6,13 +6,6 @@
   <div layout-padding>
     <h1>Sample Type: <%= @sample_type.name %></h1>
 
-    <h2>
-    <% 
-      n = @sample_type.samples.all.length
-      s = pluralize n, @sample_type.name %>
-      Show all <%= link_to s, samples_path( sample_type_id: @sample_type.id )%>
-    </h2>
-
     <b>Description</b>: <%= @sample_type.description %>
 
     <h3>Fields</h3>

@@ -34,7 +34,7 @@ class ObjectTypesController < ApplicationController
     @image_url = "#{Bioturk::Application.config.image_server_interface}#{@object_type.image}"
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render layout: 'aq2' } # show.html.erb
       format.json { render json: @object_type }
     end
 
