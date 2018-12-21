@@ -6,6 +6,7 @@
 # Name of the instance (Change to the name of your lab)
 # 
 Bioturk::Application.config.instance_name = "Your Lab"
+Bioturk::Application.config.logo_path = "aquarium-logo.jpg"
 
 #
 # URLs
