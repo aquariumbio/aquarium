@@ -128,7 +128,7 @@ module OperationTypeExport
       SampleType.clean_up_allowable_field_types(data[:sample_types] ? data[:sample_types] : [])
 
       # Add any sample_type_ids to object_types now that all sample types have been made
-      ObjectType.clean_up_sample_type_links(data[:sample_types] ? data[:sample_types] : [])
+      ObjectType.clean_up_sample_type_links(data[:object_types] ? data[:object_types] : [])
 
       obj = data[:operation_type]
 
