@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180809012224) do
+ActiveRecord::Schema.define(version: 20181221174622) do
 
   create_table "account_logs", force: :cascade do |t|
     t.integer  "row1",       limit: 4
@@ -117,11 +117,11 @@ ActiveRecord::Schema.define(version: 20180809012224) do
 
   create_table "field_values", force: :cascade do |t|
     t.integer  "parent_id",               limit: 4
-    t.string   "value",                   limit: 255
+    t.text     "value",                   limit: 65535
     t.integer  "child_sample_id",         limit: 4
     t.integer  "child_item_id",           limit: 4
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.string   "name",                    limit: 255
     t.string   "parent_class",            limit: 255
     t.string   "role",                    limit: 255
