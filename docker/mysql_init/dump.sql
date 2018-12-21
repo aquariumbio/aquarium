@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.23, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.17, for osx10.10 (x86_64)
 --
--- Host: localhost    Database: development
+-- Host: localhost    Database: biofab
 -- ------------------------------------------------------
--- Server version	5.7.23
+-- Server version	5.7.17
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -126,7 +126,7 @@ CREATE TABLE `announcements` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -135,6 +135,7 @@ CREATE TABLE `announcements` (
 
 LOCK TABLES `announcements` WRITE;
 /*!40000 ALTER TABLE `announcements` DISABLE KEYS */;
+INSERT INTO `announcements` VALUES (1,'Welcome to Aquarium','If you are just starting Aquarium for the first time, you may need to add some content. Go to http://www.aquarium.bio/ and click on COMMUNITY and then Workflows to find protocols and workflows you can add to this instance of Aquarium. Enjoy!',1,'2018-12-21 17:58:04','2018-12-21 17:58:27');
 /*!40000 ALTER TABLE `announcements` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -275,7 +276,7 @@ DROP TABLE IF EXISTS `field_values`;
 CREATE TABLE `field_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT NULL,
-  `value` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `value` text COLLATE utf8_unicode_ci,
   `child_sample_id` int(11) DEFAULT NULL,
   `child_item_id` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
@@ -591,7 +592,7 @@ CREATE TABLE `object_types` (
   `rows` int(11) DEFAULT NULL,
   `columns` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -600,6 +601,7 @@ CREATE TABLE `object_types` (
 
 LOCK TABLES `object_types` WRITE;
 /*!40000 ALTER TABLE `object_types` DISABLE KEYS */;
+INSERT INTO `object_types` VALUES (1,'__Part','Part of a collection',0,1,'sample_container','No safety information','No cleanup information','No data','No vendor information','2018-12-21 17:59:09','2018-12-21 17:59:09','part',0.01,'return','',NULL,'','',NULL,NULL),(2,'Orphan','Part of a collection',0,1,'part','No safety information','No cleanup information','No data','No vendor information','2018-12-21 17:59:09','2018-12-21 17:59:09','part',0.01,'return','',NULL,'','',NULL,NULL);
 /*!40000 ALTER TABLE `object_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -857,7 +859,7 @@ CREATE TABLE `schema_migrations` (
 
 LOCK TABLES `schema_migrations` WRITE;
 /*!40000 ALTER TABLE `schema_migrations` DISABLE KEYS */;
-INSERT INTO `schema_migrations` VALUES ('20131029153603'),('20131029153634'),('20131111143554'),('20131111143621'),('20131113172448'),('20131113181345'),('20131119164152'),('20131119164208'),('20131122032927'),('20131223192901'),('20140131235419'),('20140404201838'),('20140404201900'),('20140404204258'),('20140408224245'),('20140428213241'),('20140507230919'),('20140508203643'),('20140513225335'),('20140616190537'),('20140714220057'),('20140907220135'),('20150124195318'),('20150124201744'),('20150129213358'),('20150129221830'),('20150212051010'),('20150212051027'),('20150213173621'),('20150222153442'),('20150326202149'),('20150405154727'),('20150515160553'),('20150515160619'),('20150719221125'),('20150719221226'),('20150719221253'),('20150719223053'),('20150720044538'),('20150828232337'),('20150923014954'),('20150923015030'),('20150923184243'),('20150924044044'),('20150926162327'),('20151027164741'),('20151029034310'),('20151118210640'),('20151203054202'),('20160128203950'),('20160128205317'),('20160128205943'),('20160129021809'),('20160129164244'),('20160129165100'),('20160330023703'),('20160330033810'),('20160330185947'),('20160330190634'),('20160411130601'),('20160411131711'),('20160412010529'),('20160427043024'),('20160427043546'),('20160429232330'),('20160429232408'),('20160429232434'),('20160430000308'),('20160430152749'),('20160514044605'),('20160526204339'),('20160607162741'),('20160615161649'),('20160720211005'),('20161113203042'),('20161219172133'),('20170330173426'),('20170421231924'),('20170426225719'),('20170504211619'),('20170504212208'),('20170604165355'),('20170627173019'),('20170725190809'),('20170729024546'),('20170806145525'),('20170813203843'),('20171103151518'),('20180509200425'),('20180529204642'),('20180809012224');
+INSERT INTO `schema_migrations` VALUES ('20131029153603'),('20131029153634'),('20131111143554'),('20131111143621'),('20131113172448'),('20131113181345'),('20131119164152'),('20131119164208'),('20131122032927'),('20131223192901'),('20140131235419'),('20140404201838'),('20140404201900'),('20140404204258'),('20140408224245'),('20140428213241'),('20140507230919'),('20140508203643'),('20140513225335'),('20140616190537'),('20140714220057'),('20140907220135'),('20150124195318'),('20150124201744'),('20150129213358'),('20150129221830'),('20150212051010'),('20150212051027'),('20150213173621'),('20150222153442'),('20150326202149'),('20150405154727'),('20150515160553'),('20150515160619'),('20150719221125'),('20150719221226'),('20150719221253'),('20150719223053'),('20150720044538'),('20150828232337'),('20150923014954'),('20150923015030'),('20150923184243'),('20150924044044'),('20150926162327'),('20151027164741'),('20151029034310'),('20151118210640'),('20151203054202'),('20160128203950'),('20160128205317'),('20160128205943'),('20160129021809'),('20160129164244'),('20160129165100'),('20160330023703'),('20160330033810'),('20160330185947'),('20160330190634'),('20160411130601'),('20160411131711'),('20160412010529'),('20160427043024'),('20160427043546'),('20160429232330'),('20160429232408'),('20160429232434'),('20160430000308'),('20160430152749'),('20160514044605'),('20160526204339'),('20160607162741'),('20160615161649'),('20160720211005'),('20161113203042'),('20161219172133'),('20170330173426'),('20170421231924'),('20170426225719'),('20170504211619'),('20170504212208'),('20170604165355'),('20170627173019'),('20170725190809'),('20170729024546'),('20170806145525'),('20170813203843'),('20171103151518'),('20180509200425'),('20180529204642'),('20180809012224'),('20181221174622');
 /*!40000 ALTER TABLE `schema_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1035,6 +1037,34 @@ LOCK TABLES `wizards` WRITE;
 /*!40000 ALTER TABLE `wizards` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wizards` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `workers`
+--
+
+DROP TABLE IF EXISTS `workers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `workers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `message` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `workers`
+--
+
+LOCK TABLES `workers` WRITE;
+/*!40000 ALTER TABLE `workers` DISABLE KEYS */;
+INSERT INTO `workers` VALUES (1,'publisher',NULL,'running','2018-11-16 16:09:14','2018-11-16 16:09:14'),(2,'publisher',NULL,'done','2018-11-16 16:10:31','2018-11-16 16:11:22'),(3,'publisher',NULL,'done','2018-11-16 16:11:16','2018-11-16 16:12:03'),(4,'publisher',NULL,'done','2018-11-16 16:15:00','2018-11-16 16:15:39'),(5,'publisher',NULL,'done','2018-11-16 16:16:19','2018-11-16 16:17:11'),(6,'publisher',NULL,'done','2018-11-16 16:19:23','2018-11-16 16:19:56'),(7,'publisher',NULL,'done','2018-11-16 17:45:28','2018-11-16 17:45:45'),(8,'publisher',NULL,'done','2018-11-16 17:48:08','2018-11-16 17:48:18'),(9,'publisher',NULL,'done','2018-11-16 18:43:18','2018-11-16 18:43:39'),(10,'publisher',NULL,'done','2018-11-16 18:46:03','2018-11-16 18:46:17'),(11,'publisher','undefined method `join\' for nil:NilClass\nDid you mean?  JSON','error','2018-11-16 18:48:41','2018-11-16 18:48:47'),(12,'publisher','undefined method `join\' for nil:NilClass\nDid you mean?  JSON','error','2018-11-16 18:54:15','2018-11-16 18:54:21'),(13,'publisher','undefined method `join\' for nil:NilClass\nDid you mean?  JSON','error','2018-11-16 18:55:55','2018-11-16 18:56:00'),(14,'publisher','undefined method `join\' for nil:NilClass\nDid you mean?  JSON','error','2018-11-16 19:01:31','2018-11-16 19:01:35'),(15,'publisher','undefined method `join\' for nil:NilClass\nDid you mean?  JSON','error','2018-11-16 19:02:46','2018-11-16 19:02:51'),(16,'publisher',NULL,'running','2018-11-16 19:08:07','2018-11-16 19:08:07'),(17,'publisher',NULL,'running','2018-11-16 19:14:15','2018-11-16 19:14:15'),(18,'publisher','undefined method `join\' for nil:NilClass\nDid you mean?  JSON: (erb):21:in `make_index\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `eval\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `block in result\'','error','2018-11-16 19:21:57','2018-11-16 19:22:02'),(19,'publisher','undefined method `join\' for nil:NilClass\nDid you mean?  JSON: (erb):21:in `make_index\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `eval\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `block in result\'','error','2018-11-16 19:24:08','2018-11-16 19:24:14'),(20,'publisher','undefined method `join\' for nil:NilClass\nDid you mean?  JSON: (erb):21:in `make_index\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `eval\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `block in result\'','error','2018-11-16 19:27:22','2018-11-16 19:27:28'),(21,'publisher','undefined method `join\' for nil:NilClass\nDid you mean?  JSON: (erb):21:in `make_index\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `eval\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `block in result\'','error','2018-11-16 19:30:01','2018-11-16 19:30:07'),(22,'publisher','undefined method `join\' for nil:NilClass\nDid you mean?  JSON: (erb):21:in `make_index\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `eval\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `block in result\'','error','2018-11-16 19:33:00','2018-11-16 19:33:05'),(23,'publisher',NULL,'done','2018-11-16 19:34:25','2018-11-16 19:34:39'),(24,'publisher',NULL,'done','2018-11-16 19:35:54','2018-11-16 19:36:09'),(25,'publisher','undefined method `each\' for nil:NilClass: (erb):20:in `make_about_md\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `eval\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `block in result\'','error','2018-11-16 20:41:04','2018-11-16 20:41:09'),(26,'publisher','undefined method `each\' for nil:NilClass: (erb):20:in `make_about_md\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `eval\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `block in result\'','error','2018-11-16 20:45:28','2018-11-16 20:45:33'),(27,'publisher','undefined method `each\' for nil:NilClass: (erb):13:in `make_about_md\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `eval\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `block in result\'','error','2018-11-16 20:47:12','2018-11-16 20:47:16'),(28,'publisher',NULL,'done','2018-11-16 20:48:39','2018-11-16 20:48:55'),(29,'publisher',NULL,'done','2018-11-16 20:53:35','2018-11-16 20:53:50'),(30,'publisher',NULL,'done','2018-11-16 20:54:37','2018-11-16 20:54:51'),(31,'publisher',NULL,'done','2018-11-16 20:55:41','2018-11-16 20:55:56'),(32,'publisher',NULL,'done','2018-11-16 21:58:44','2018-11-16 21:58:58'),(33,'publisher',NULL,'running','2018-11-16 22:02:27','2018-11-16 22:02:27'),(34,'publisher','undefined local variable or method `zipname\' for #<Aquadoc::Render:0x00007ffe86a82230>: (erb):5:in `make_about_md\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb.rb:861:in `eval\', /Users/ericklavins/.rvm/rubies/ruby-2.3.7/lib/ruby/2.3.0/erb','error','2018-11-16 22:07:51','2018-11-16 22:07:56'),(35,'publisher',NULL,'done','2018-11-16 22:09:37','2018-11-16 22:09:48'),(36,'publisher',NULL,'done','2018-11-16 22:12:31','2018-11-16 22:12:51'),(37,'publisher',NULL,'done','2018-11-16 22:17:24','2018-11-16 22:17:51'),(38,'publisher',NULL,'done','2018-11-16 22:22:22','2018-11-16 22:22:33'),(39,'publisher',NULL,'done','2018-11-27 23:09:12','2018-11-27 23:10:09'),(40,'publisher',NULL,'done','2018-11-27 23:28:01','2018-11-27 23:28:36'),(41,'publisher',NULL,'done','2018-11-27 23:30:47','2018-11-27 23:31:14'),(42,'publisher',NULL,'done','2018-11-27 23:34:57','2018-11-27 23:35:13'),(43,'publisher',NULL,'done','2018-11-27 23:36:23','2018-11-27 23:36:51'),(44,'publisher',NULL,'done','2018-11-27 23:41:27','2018-11-27 23:42:18'),(45,'publisher',NULL,'done','2018-12-12 18:29:44','2018-12-12 18:31:08'),(46,'publisher',NULL,'done','2018-12-17 21:35:41','2018-12-17 21:36:01'),(47,'publisher',NULL,'done','2018-12-17 21:45:33','2018-12-17 21:45:52'),(48,'publisher',NULL,'done','2018-12-17 22:15:09','2018-12-17 22:15:29'),(49,'publisher',NULL,'done','2018-12-17 22:30:15','2018-12-17 22:30:33'),(50,'publisher',NULL,'done','2018-12-17 22:37:31','2018-12-17 22:37:51'),(51,'publisher',NULL,'done','2018-12-17 22:48:07','2018-12-17 22:48:14'),(52,'publisher',NULL,'done','2018-12-17 23:11:22','2018-12-17 23:11:40');
+/*!40000 ALTER TABLE `workers` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -1045,4 +1075,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-31 22:48:27
+-- Dump completed on 2018-12-21 10:02:56
