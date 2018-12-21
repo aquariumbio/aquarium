@@ -391,4 +391,12 @@ ActiveRecord::Schema.define(version: 20180809012224) do
     t.string   "description",   limit: 255
   end
 
+  create_table "workers", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.string   "message",    limit: 255
+    t.string   "status",     limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
 end
