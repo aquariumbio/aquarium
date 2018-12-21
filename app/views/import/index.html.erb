@@ -17,19 +17,35 @@
 <%= content_for :sidebar do %>
 
   <div class="options-container">
+
+    <label ng-class="import_popup.loading ? 'md-button md-raised md-accent' : 'md-button md-raised'">
+      <span ng-if="import_popup.loading">Loading ...</span>
+      <span ng-if="!import_popup.loading">Load</span>
+              <input type=file
+                      id="import"
+                      style="display: none;"
+                      custom-on-change="load">
+    </label>
+
+    <md-button ng-disabled="!importer || state.import_results || state.importing"
+               class="md-raised md-primary"
+               ng-click="import()">
+      <span ng-if="!state.importing">Import</span>
+      <span ng-if="state.importing">Processing</span>
+    </md-button>
    
     <md-content class="margin">
 
-      <h2 class="md-title">Immediately deploy imported workflow?</h2>
+      <h2></h2>
 
       <md-checkbox
         ng-disabled="!importer || state.import_results || state.importing"
         class="md-raised md-primary"
         ng-model="options.deploy">
-        Deploy
+        Immediately deploy imported workflow?
       </md-checkbox>
 
-      <h2 class="md-title">OperationType and Library conflict resolution</h2>
+      <h2 class="md-title">OperationType Conflicts?</h2>
 
       <md-radio-group
           ng-model="options.resolution_method" 
@@ -46,30 +62,6 @@
 <% end %>
 
 <%= content_for :specific_title do %>
-
-<% end %>
-
-<%= content_for :action1 do %>
-
-      <label ng-class="import_popup.loading ? 'md-button md-raised md-accent' : 'md-button md-raised'">
-        <span ng-if="import_popup.loading">Loading ...</span>
-        <span ng-if="!import_popup.loading">Load</span>
-                <input type=file
-                        id="import"
-                        style="display: none;"
-                        custom-on-change="load">
-      </label>
-
-<% end %>
-
-<%= content_for :action2 do %>
-
-  <md-button ng-disabled="!importer || state.import_results || state.importing"
-             class="md-raised md-primary"
-             ng-click="import()">
-    <span ng-if="!state.importing">Import</span>
-    <span ng-if="state.importing">Processing</span>
-  </md-button>
 
 <% end %>
 
