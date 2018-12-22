@@ -226,7 +226,7 @@
         })
       })      
 
-    };
+    }; 
 
     $scope.revert_template = function(plan,openafter=true) {
 
