@@ -194,7 +194,8 @@
     function open_templates() {
       $scope.state.sidebar.templates = true;        
       $scope.state.sidebar.your_templates = true;
-      $scope.state.sidebar.system_templates = true;      
+      $scope.state.sidebar.system_templates = true;   
+      $scope.nav.sidebar = 'design';   
     }
 
     $scope.create_template = function(p) {
@@ -212,13 +213,14 @@
 
     $scope.create_system_template = function(p) {
 
+      $scope.plan = AQ.Plan.new_plan("Untitled Plan");
+      aq.remove($scope.templates, p); 
+
       AQ.Plan.load(p.id).then(p => {
         p.status = "system_template";
         p.save().then(() => {
-          aq.remove($scope.templates, p);  
           $scope.system_templates.push(p);
           open_templates();
-          $scope.plan = AQ.Plan.record({operations: [], wires: [], status: "planning", name: "Untitled Plan"});
           $scope.select(null);  
           $scope.$apply();    
         })
@@ -226,7 +228,7 @@
 
     };
 
-    $scope.revert_template = function(plan) {
+    $scope.revert_template = function(plan,openafter=true) {
 
       let confirm = $mdDialog.confirm()
           .title('Revert Template?')
@@ -242,7 +244,10 @@
           p.save().then(p => {
             aq.remove($scope.templates, plan);
             aq.remove($scope.system_templates, plan);
-            // $scope.plan = p
+            if ( openafter ) {
+              load_aux(p);
+              $scope.nav.sidebar = 'plans';
+            }
             $scope.refresh_plan_list();
             $scope.select(null);
             $scope.$apply();
