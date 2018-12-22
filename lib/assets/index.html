@@ -85,7 +85,7 @@
             <ul ng-show="section.open" class="nav-sublist">
               <li ng-repeat="content in section.contents"
                   ng-class="link_class(section,content)">
-                <a href="#" ng-click="select(section,content)">
+                <a class="clickable" ng-click="select(section,content)">
                   {{content.name}}
                 </a>
               </li>
