@@ -16,7 +16,12 @@ services:
     image: basebuilder
     command: ["development"]
     volumes:
-      - .:/aquarium
+      - ./app:/aquarium/app
+      - ./docs:/aquarium/docs
+      - ./lib:/aquarium/lib
+      - ./log:/aquarium/log
+      - ./test:/aquarium/test
+      - ./ui:/aquarium/ui
       - ./docker/aquarium/database.yml:/aquarium/config/database.yml
       - ./docker/aquarium/aquarium.rb:/aquarium/config/initializers/aquarium.rb
       - ./docker/aquarium/development.rb:/aquarium/config/environments/development.rb
