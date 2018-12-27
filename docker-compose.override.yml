@@ -12,7 +12,10 @@ services:
       RAILS_ENV: production
       RACK_ENV: production
     volumes:
-      - assets:/aquarium/public/assets
+      - public:/aquarium/public
+      - ./log:/aquarium/log
+      - logs:/aquarium/log
+      - shared:/aquarium/shared
       - ./docker/aquarium/database.yml:/aquarium/config/database.yml
       - ./docker/aquarium/aquarium.rb:/aquarium/config/initializers/aquarium.rb
       - ./docker/aquarium/production.rb:/aquarium/config/environments/production.rb
@@ -28,11 +31,21 @@ services:
   krill:
     image: basebuilder
     command: ["production"]
+    volumes:
+      - ./docker/aquarium/database.yml:/aquarium/config/database.yml
+      - ./docker/aquarium/aquarium.rb:/aquarium/config/initializers/aquarium.rb
+      - ./docker/aquarium/production.rb:/aquarium/config/environments/production.rb
+      - ./docker/aquarium/production_puma.rb:/aquarium/config/production_puma.rb
 
   web:
+    command: [nginx-debug, '-g', 'daemon off;']
     volumes:
-      - ./docker/nginx.production.conf:/etc/nginx/conf.d/production.conf:ro
-
+      - public:/aquarium/public
+      - logs:/aquarium/log
+      - shared:/aquarium/shared
+      - ./docker/nginx.production.conf:/etc/nginx/conf.d/default.conf:ro
 
 volumes:
-  assets:
+  public:
+  logs:
+  shared:
