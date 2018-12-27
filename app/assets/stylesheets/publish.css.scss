@@ -1,0 +1,74 @@
+.publish {
+
+  .fix-checkbox {
+    margin-top: 0px !important;
+  }
+
+  .field {
+    padding: 0 8px 0 8px;
+    input {
+      padding: 4px;
+    }
+  }
+
+  .issue {
+    color: red;
+    font-weight: bold;
+    font-size: 12pt;
+    background: white;
+  }
+
+  .publish-step {
+    margin: 16px;
+  }
+
+  .add {
+    color: grey;
+    &:hover {
+      text-decoration: none;
+      color: black;
+    };
+  }
+
+  .remove {
+    font-size: 14pt;
+    color: grey;
+    font-weight: bold;
+    &:hover {
+      text-decoration: none;
+      color: black;
+    };
+  }  
+
+  h2 {
+    color: black;
+  }
+
+  h3 {
+    color: black;
+    font-size: 14pt;
+  }
+
+  .wait-block {
+    background: #081;
+    width: 10px;
+    height: 10px;
+    margin: 1px;
+    display: inline-block;
+  }
+
+  .update-note {
+    background: lightyellow;
+    border: 1pt solid #aaa;
+    border-radius: 5px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .lib-marker {
+    color: #004d00;
+    font-weight: bold
+  }
+
+}
+

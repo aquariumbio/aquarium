@@ -1,0 +1,312 @@
+<% provide(:title, 'Publish') %>
+
+<%= content_for :class do %>publish<% end %>
+
+<%= content_for :controller do %>publishCtrl<% end %>
+
+<% content_for :wider_sidebar do %>true<% end %>
+
+<%= content_for :sidebar do %>
+
+  <h3>&nbsp; Workflow Components</h3>
+
+  <ul>
+    <li ng-repeat="c in categories">
+      <span ng-click="c.open = !c.open" class='clickable no-highlight'>
+        <span class='opener'>{{c.open ? '&#9660;' : '&#9658;'}}</span> 
+        <span>{{c.name}}</span>
+      </span>
+      <span ng-if="c.open">
+        <a href='#' ng-click="set_selected(c,true)">[all]</a>
+        <a href='#' ng-click="set_selected(c,false)">[none]</a>        
+      </span>
+      <ul ng-if="c.open">
+        <li ng-repeat="member in c.members">         
+          <input type=checkbox ng-model="member.selected" class="fix-checkbox">
+          <span ng-if="member.record_type == 'Library'" class='lib-marker'>lib:</span>
+          {{member.name}}
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+<% end %>
+
+<%= content_for :specific_title do %>
+
+  : {{config.title}}
+
+<% end %>
+
+<%= content_for :action1 do %>
+
+  <md-button href="/publish" class="md-raised" ng-if="state.mode=='submitted'">Start Over</md-button>
+
+<% end %>
+
+<%= content_for :main do %>
+
+  <div ng-if="state.mode == 'github'" layout='column' class="publish-step">
+
+    <h2>Step 1: Publish to Github</h2>
+
+    <p>
+    Aquarium publishes workflows using your github account. 
+    Enter your Github user name into the user name field.
+    Enter the name of the repository you would like to create (or update) for your published workflow.
+    If this repository does not exist, Aquarium will make it for you.
+    If it does exist, then Aquarium will attempt to find a previously published workflow in it,
+    and use that workflow definition to help you edit and replace it.
+    Optionally, you can specify a Github organization for which you are authorized to create repositories.
+    To create an access token for Aquarium, go to your Github account, choose Settings,
+    click "Developer Settings", click "Personal Access Tokens", and click "Generate new token".
+    Then describe the token and be sure to click the "repo" scope so that Aquarium can manipulate
+    your workflow repositories.
+    </p>
+
+    <div layout="row">
+      <div class="field" flex=20>
+        <label>User Name</label>
+        <input ng-model="config.github.user">
+      </div>
+      <div class="field" flex=20>
+        <label>Repository Name</label>
+        <input ng-model="config.github.repo">
+      </div>
+      <div class="field" flex=20>
+        <label>Organization (Optional)</label>
+        <input ng-model="config.github.organization">
+      </div>          
+      <div class="field" flex=40>
+        <label>Access Token</label>
+        <input ng-model="config.github.access_token">
+      </div>
+     </div>
+
+    <p class="issue" ng-if="state.error">{{state.error}}</p>
+
+    <div layout="row">
+      <md-button class="md-raised" 
+                 ng-click="check_repo()"
+                 ng-disabled="state.working">Use Repo</md-button>
+    </div>
+
+    <br>
+
+    <h2>Step 1 Alternative: Export an .aq File</h2>
+
+    <p>
+    Select the components you would like to package on the left and download a resulting 
+    .aq file directly. Useful for moving workflows around your instances of Aquarium (e.g. 
+    from a development instance to a production instance).
+    </p>  
+
+    <div layout="row">
+      <div class="field" flex=20>
+        <label>Workflow Name</label>
+        <input ng-model="config.export_title">
+      </div>
+    </div>    
+
+    <div layout="row">
+      <md-button class="md-raised" 
+                 ng-click="export_components()"
+                 ng-disabled="num_objects() == 0 || state.working">Export</md-button>
+    </div>    
+
+  </div>
+
+  <div ng-if="state.mode == 'build'" layout='column' class="publish-step">
+
+    <h2>Step 2: Describe Your Workflow and Choose Components</h2>
+
+    <div class="update-note" ng-if="state.update">
+    <p><b>Note:</b> Aquarium found an existing published workflow at 
+      <a href="https://github.com/{{config.github.organization || config.github.user}}/{{config.github.repo}}" target=github>
+        https://github.com/{{config.github.user}}/{{config.github.repo}}
+      </a> and has used it fill in this form and choose operation types. Please edit this
+      information and continue only if you want to <u>update</u> this repository.</p>
+    </div>
+
+    <p class="field">
+      <b>{{num_objects()}} Operation Types and/or Libraries included in workflow.</b>
+    </p>
+
+    <div layout="row">
+      <div class="field" flex=50>
+        <label>Title</label>
+        <input ng-model="config.title">
+      </div>
+   
+    </div>
+    <div layout="row"> 
+      <div class="field" flex=50>
+        <label>Description</label>
+        <input ng-model="config.description">
+      </div>
+
+    </div>
+
+    <div layout="row">
+      <div class="field" flex=25>
+        <label>Version</label>
+        <input ng-model="config.version">
+      </div>   
+      <div class="field" flex=25>
+        <label>Copyright</label>
+        <input ng-model="config.copyright">
+      </div>
+    </div>      
+
+    <div layout="row">
+      <div class="field" flex=25>
+        <label>Maintaned By</label>
+        <input ng-model="config.maintainer.name">
+      </div>
+      <div class="field" flex=25>
+        <label>Maintainer Email</label>
+        <input ng-model="config.maintainer.email">
+      </div>
+    </div>    
+
+    <h3>Keywords <a href="#" class="add" 
+                    ng-click="config.keywords.push('')">&plus;</a></h3>
+    <div layout="row" ng-repeat="keyword in config.keywords track by $index"> 
+      <div class="field" flex=25>
+        <label>Keyword</label>
+        <input ng-model="config.keywords[$index]">
+      </div>
+      <div class="field" flex=25>
+        <label>&nbsp;</label>
+        <a href="#" class="remove" ng-click="remove(config.keywords,config.keywords[$index])">&times;</a>  
+      </div>         
+    </div>      
+
+    <h3>Authors <a href="#" class="add" 
+                   ng-click="config.authors.push({name: '', affilation: ''})">&plus;</a></h3>
+    <div layout="row" ng-repeat="author in config.authors track by $index"> 
+      <div class="field" flex=25>
+        <label>Name (First Last)</label>
+        <input ng-model="author.name">
+      </div>
+      <div class="field" flex=25>
+        <label>Affilation</label>
+        <input ng-model="author.affiliation">
+      </div>
+      <div class="field" flex=25>
+        <label>&nbsp;</label>
+        <a href="#" class="remove" ng-click="remove(config.authors,author)">&times;</a>  
+      </div>         
+    </div>  
+
+    <h3>Acknowledgements 
+        <a href="#"
+           class="add"
+           ng-click="config.acknowledgements.push({name: '', affilation: ''})">&plus;</a></h3>
+    <div layout="row" ng-repeat="author in config.acknowledgements track by $index"> 
+      <div class="field" flex=25>
+        <label>Name (First Last)</label>
+        <input ng-model="author.name">
+      </div>
+      <div class="field" flex=25>
+        <label>Affilation</label>
+        <input ng-model="author.affiliation">
+      </div>
+      <div class="field" flex=25>
+        <label>&nbsp;</label>
+        <a href="#" class="remove" 
+           ng-click="remove(config.acknowledgements,author)">&times;</a>  
+      </div>               
+    </div>      
+
+    <div layout="row">
+      <md-button class="md-raised" ng-click="review()" ng-disabled="num_objects() == 0 || state.working">Review</md-button>
+      <md-button class="md-raised" ng-click="clear(); state.mode = 'github'" ng-disabled="state.working">Go Back</md-button>      
+    </div>
+    
+  </div>
+
+  <div ng-if="state.mode == 'review'" layout='column' class="publish-step">
+
+  <h2>Step 3: Review</h2>
+
+    <h3>{{config.title}}</h3>
+    <p>{{config.description}}<br>
+        &copy; {{config.copyright}}<br>
+        <b>Target:</b> {{config.github.organization || config.github.user}}/{{config.github.repo}}<br>
+        <b>Maintained by:</b> {{config.maintainer.name}} &lt;{{config.maintainer.email}}&gt;<br>
+
+    <b>Keywords:</b> {{config.keywords.join(", ")}}<br>
+
+    <b>Authors:</b><br>
+      <ul>
+        <li ng-repeat="a in config.authors">
+          {{a.name}}: {{a.affiliation}}
+        </li>
+      </ul>
+
+    <b>Acknowledgements:</b><br>
+      <ul>
+        <li ng-repeat="a in config.acknowledgements">
+          {{a.name}}: {{a.affiliation}}
+        </li>
+      </ul>
+  
+    <b>Contents:</b> <span class="issue" ng-if="num_objects()==0">No components selected to publish.</span><br>
+
+      <div ng-repeat="c in categories | filter: has_selections()">
+        <b>{{c.name}}:</b>
+        <span ng-repeat="m in c.members | filter: { selected: true }">
+          {{m.name}}<span ng-if="!$last">, </span>
+        </span>
+      </div><br>
+
+    <span class="issue" ng-if="state.error">{{state.error}}<br>{{state.details}}</span><br>
+
+    <div layout="row">
+      <md-button class="md-raised" ng-click="publish()" ng-disabled="num_objects() == 0 || state.working">Publish</md-button>
+      <md-button class="md-raised" ng-click="clear(); state.mode = 'build'" ng-disabled="state.working">Go Back</md-button>       
+    </div>
+
+  </div>  
+
+  <div ng-if="state.mode == 'submitted'" layout='column' class="publish-step">
+
+    <div ng-if="state.building">
+
+      <h2>Workflow Submitted</h2>
+      <div><span class="wait-block" ng-repeat="a in state.attempts">&nbsp;</span></div>
+      <p>It may take several minutes to build the documentation for this workflow.</p>
+
+    </div>
+
+    <div ng-if="!state.building && state.error == null">
+      <h2>Workflow Published!</h2>
+      <p>See <a href="https://github.com/{{config.github.organization || config.github.user}}/{{config.github.repo}}" target=github>
+        https://github.com/{{config.github.organization || config.github.user}}/{{config.github.repo}}
+      </a>
+      for the results.</p>
+      <p>If you haven't done so already, publish the resulting web page by going go
+      <a href="https://github.com/{{config.github.organization || config.github.user}}/{{config.github.repo}}/settings" target=github>here</a>,
+      and choosing Github Pages -&gt; Source -&gt; master branch. The resulting web page will <it>eventually</it> be available at 
+      <a href="https://{{config.github.organization || config.github.user}}.github.io/{{config.github.repo}}/" target=github>
+        https://{{config.github.organization || config.github.user}}.github.io/{{config.github.repo}}/
+      </a>
+      (be patient, github builds web pages from repos on its own time).</p> 
+      <p>You should also edit the LICENSE.md which describes how user's can use your code.
+      And you should edit the README.md which should describe in as much detail as you can muster how to use workflow.
+      Note that if you edit other files (besides LICENSE.md and README.md) in the repository and later publish and update,
+      Aquarium may overwrite them.</p>
+    </div>
+
+    <div ng-if="!state.building && state.error != null">
+      <h2>Error publishing workflow</h2>
+      <span class="issue">{{state.error}}</span><br><br>
+      <p>Check <a href="https://github.com/{{config.github.user}}/{{config.github.repo}}" target=github>
+                        https://github.com/{{config.github.user}}/{{config.github.repo}}</a> to see if
+        Aquarium published some of your workflow, but encountered the above error before it could complete.</p> 
+    </div>    
+
+  </div>    
+
+<% end %>

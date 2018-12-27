@@ -33,9 +33,6 @@
         <span ng-if="current_category == category" ng-click="choose_category(category)" class='clickable'>&#9660;</span>
         <span ng-click="choose_category(category)" class='clickable'>{{category}}</span>
         <span ng-click="choose_category(category)" class='clickable'>({{category_size(category)}})</span>
-        <md-button class='md-small pull-right'
-                   ng-if="current_category == category"
-                   ng-click="export_category(current_category)">Export</md-button>
       </b>
 
       <ul ng-if="current_category == category" class='op-type-sublist'>
@@ -80,17 +77,6 @@
 
 <% content_for :action2 do %>
   <md-button class="md-raised" ng-click="new_library()">New Lib</md-button>
-<% end %>
-
-<% content_for :action3 do %>
-      <label ng-class="import_popup.loading ? 'md-button md-raised md-accent' : 'md-button md-raised'">
-        <span ng-if="import_popup.loading">Importing...</span>
-        <span ng-if="!import_popup.loading">Import</span>
-                <input type=file
-                        id="import"
-                        style="display: none;"
-                        custom-on-change="import">
-      </label>
 <% end %>
 
 <%= content_for :main do %>
@@ -172,7 +158,5 @@
 
     <div ng-include="'code'" ng-init="component_name='source'" ng-if="current_operation_type.source && mode == 'source'" ></div>
   </div>
-
-  <%= render partial: 'import' %>
 
 <% end %>

@@ -254,7 +254,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#lazy_associate-instance_method" title="#lazy_associate (instance method)">#<strong>lazy_associate</strong>(key, value)  &#x21d2; Object </a>
+      <a href="#lazy_associate-instance_method" title="#lazy_associate (instance method)">#<strong>lazy_associate</strong>(key, value, upload = nil)  &#x21d2; Object </a>
     
 
     
@@ -419,7 +419,6 @@
       <pre class="lines">
 
 
-174
 175
 176
 177
@@ -429,10 +428,11 @@
 181
 182
 183
-184</pre>
+184
+185</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 174</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 175</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_append_notes'>append_notes</span><span class='lparen'>(</span><span class='id identifier rubyid_text'>text</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_da'>da</span> <span class='op'>=</span> <span class='id identifier rubyid_get_association'>get_association</span> <span class='symbol'>:notes</span>
@@ -908,7 +908,7 @@ Includes the upload object for the association if there is one.</p>
       <div class="method_details ">
   <h3 class="signature " id="lazy_associate-instance_method">
   
-    #<strong>lazy_associate</strong>(key, value)  &#x21d2; <tt>Object</tt> 
+    #<strong>lazy_associate</strong>(key, value, upload = nil)  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -970,6 +970,23 @@ save them all at once.</p>
       
     </li>
   
+    <li>
+      
+        <span class='name'>upload</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Upload.html" title="Upload (class)">Upload</a></span></tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>the upload object (default: <code>nil</code>)</p>
+</div>
+      
+    </li>
+  
 </ul>
 
 
@@ -979,7 +996,6 @@ save them all at once.</p>
       <pre class="lines">
 
 
-125
 126
 127
 128
@@ -989,19 +1005,20 @@ save them all at once.</p>
 132
 133
 134
-135</pre>
+135
+136</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 125</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 126</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_lazy_associate'>lazy_associate</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_lazy_associate'>lazy_associate</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='id identifier rubyid_upload'>upload</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
 
   <span class='id identifier rubyid_da'>da</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="DataAssociation.html" title="DataAssociation (class)">DataAssociation</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span>
     <span class='label'>parent_id:</span> <span class='id identifier rubyid_id'>id</span><span class='comma'>,</span>
     <span class='label'>parent_class:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span>
     <span class='label'>key:</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span>
     <span class='label'>object:</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_key'>key</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_value'>value</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_to_json'>to_json</span><span class='comma'>,</span>
-    <span class='label'>upload_id:</span> <span class='kw'>nil</span>
+    <span class='label'>upload_id:</span> <span class='id identifier rubyid_upload'>upload</span> <span class='op'>?</span> <span class='id identifier rubyid_upload'>upload</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='op'>:</span> <span class='kw'>nil</span>
   <span class='rparen'>)</span>
 
 <span class='kw'>end</span></pre>
@@ -1093,7 +1110,6 @@ save them all at once.</p>
       <pre class="lines">
 
 
-145
 146
 147
 148
@@ -1103,10 +1119,11 @@ save them all at once.</p>
 152
 153
 154
-155</pre>
+155
+156</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 145</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 146</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_modify'>modify</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='comma'>,</span> <span class='id identifier rubyid_upload'>upload</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_da'>da</span> <span class='op'>=</span> <span class='id identifier rubyid_get_association'>get_association</span> <span class='id identifier rubyid_key'>key</span>
@@ -1237,7 +1254,6 @@ save them all at once.</p>
       <pre class="lines">
 
 
-160
 161
 162
 163
@@ -1246,10 +1262,11 @@ save them all at once.</p>
 166
 167
 168
-169</pre>
+169
+170</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 160</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/data_associator.rb', line 161</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_notes='>notes=</span><span class='lparen'>(</span><span class='id identifier rubyid_text'>text</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_da'>da</span> <span class='op'>=</span> <span class='id identifier rubyid_get_association'>get_association</span> <span class='symbol'>:notes</span>
@@ -1349,7 +1366,7 @@ save them all at once.</p>
 </div>
 
       <div id="footer">
-  Generated on Fri Sep 28 12:41:05 2018 by
+  Generated on Wed Dec 19 11:11:57 2018 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.7).
 </div>
