@@ -1,10 +1,6 @@
-<<<<<<< HEAD:docker/aquarium/aquarium.rb
-Bioturk::Application.config.instance_name = 'LOCAL'
-=======
 Bioturk::Application.config.instance_name = 'Your Lab'
 Bioturk::Application.config.logo_path = "aquarium-logo.jpg"
 Bioturk::Application.config.github_path = 'https://github.com/yourlab'
->>>>>>> master:docker/dev-docker-aquarium.notrb
 Bioturk::Application.config.image_server_interface = 'http://your.image.server'
 Bioturk::Application.config.vision_server_interface = ''
 
