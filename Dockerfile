@@ -13,7 +13,9 @@ RUN apk update && apk add \
     git 
 
 RUN mkdir /aquarium
-RUN mkdir -p /aquarium/shared
+RUN mkdir -p /aquarium/shared/sockets
+RUN mkdir -p /aquarium/shared/log
+RUN mkdir -p /aquarium/shared/pids
 WORKDIR /aquarium
 
 RUN npm install -g bower@latest
