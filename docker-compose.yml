@@ -21,11 +21,10 @@ services:
     volumes:
       - ./db:/aquarium/db
       - ./log:/aquarium/log
-      
     networks:
       - aquarium_net
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     depends_on:
       - db
       - s3
@@ -43,8 +42,8 @@ services:
     entrypoint: ["/aquarium/docker/krill-entrypoint.sh"]
     networks:
      - aquarium_net
-    ports:
-      - "3500:3500"
+    expose:
+      - "3500"
     depends_on:
       - db
       - app
