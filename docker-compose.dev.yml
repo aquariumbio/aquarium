@@ -19,7 +19,6 @@ services:
       - ./app:/aquarium/app
       - ./docs:/aquarium/docs
       - ./lib:/aquarium/lib
-      - ./log:/aquarium/log
       - ./test:/aquarium/test
       - ./ui:/aquarium/ui
       - ./docker/aquarium/database.yml:/aquarium/config/database.yml
@@ -37,6 +36,7 @@ services:
     command: ["development"]
 
   web:
+    command: [nginx-debug, '-g', 'daemon off;']
     ports:
       - "3000:3000"
     volumes:
