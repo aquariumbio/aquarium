@@ -13,19 +13,25 @@ RUN apk update && apk add \
     git 
 
 RUN mkdir /aquarium
+
+# directories used by puma configuration in production
 RUN mkdir -p /aquarium/shared/sockets
 RUN mkdir -p /aquarium/shared/log
 RUN mkdir -p /aquarium/shared/pids
+
 WORKDIR /aquarium
 
+# install js components
 RUN npm install -g bower@latest
 COPY bower.json ./bower.json
 RUN echo '{ "directory": "public/components", "allow_root": true }' > ./.bowerrc
 RUN bower install --config.interactive=false --force
 
+# install gems needed by Aquarium
 COPY Gemfile Gemfile.lock ./
 RUN gem install bundler && bundle install --jobs 20 --retry 5
 COPY . ./
 
+# include entrypoint scripts for starting Aquarium and Krill
 RUN chmod +x ./docker/aquarium-entrypoint.sh
 RUN chmod +x ./docker/krill-entrypoint.sh
