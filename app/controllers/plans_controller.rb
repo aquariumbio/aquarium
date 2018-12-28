@@ -22,7 +22,7 @@ class PlansController < ApplicationController
     ActiveRecord::Base.transaction do
       begin
         @plan = Marshall.plan params
-      rescue Exception => e
+      rescue StandardError => e
         @plan = Plan.new
         @plan.errors.add :error, 'Mashall failed'
         @plan.errors.add :error, e.to_s + e.backtrace[0].to_s
@@ -50,7 +50,7 @@ class PlansController < ApplicationController
     ActiveRecord::Base.transaction do
       begin
         @plan = Marshall.plan_update params
-      rescue Exception => e
+      rescue StandardError => e
         @plan = Plan.new
         @plan.errors.add :error, e.to_s
       end
@@ -204,7 +204,7 @@ class PlansController < ApplicationController
 
       begin
         manager = Krill::Manager.new job.id, true, 'master', 'master'
-      rescue Exception => e
+      rescue StandardError => e
         error = e.to_s
       end
 
@@ -224,7 +224,7 @@ class PlansController < ApplicationController
           ops.each(&:run)
 
           manager.run
-        rescue Exception => e
+        rescue StandardError => e
           errors << 'Bug encountered while testing: ' + e.message + ' at ' + e.backtrace.join("\n") + '. '
         end # begin
 

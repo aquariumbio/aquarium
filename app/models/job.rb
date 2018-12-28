@@ -134,7 +134,7 @@ class Job < ActiveRecord::Base
     else
       JSON.parse(state)['stack'].first.reject { |k, _v| k == 'user_id' }
     end
-  rescue Exception => e
+  rescue StandardError => e
     { error: 'unable to parse arguments' }
 
   end
@@ -313,7 +313,7 @@ class Job < ActiveRecord::Base
         wp = WorkflowProcess.find(workflow_process.id)
         wp.record_result_of self
         wp.step
-      rescue Exception => e
+      rescue StandardError => e
         Rails.logger.info 'Error trying to step workflow process ' + e.to_s
       end
     end

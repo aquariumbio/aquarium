@@ -380,7 +380,7 @@ class Item < ActiveRecord::Base
         obj.each do |k, v|
           associate k, v
         end
-      rescue Exception => e
+      rescue StandardError => e
         self.notes = data if data
       end
 

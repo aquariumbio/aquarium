@@ -103,7 +103,7 @@ module FieldTypePlanner
     afts = allowable_field_types.select do |aft|
       begin
         aft.sample_type_id == sample.sample_type.id  
-      rescue Exception => e
+      rescue StandardError => e
         true
       end
     end

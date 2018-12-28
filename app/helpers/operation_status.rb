@@ -82,7 +82,7 @@ module OperationStatus
       end
     end
     puts " ==> #{status}"
-  rescue Exception => e
+  rescue StandardError => e
     Rails.logger.info "COULD NOT STEP OPERATION #{id}: #{e}"
 
     # TODO: Change deferred op to scheduled

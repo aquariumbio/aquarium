@@ -21,7 +21,7 @@ class PublishController < ApplicationController
         logger.info "Rate Limit Info: #{client.rate_limit}"
         repos = client.repositories(github_user).collect { |r| r.name }
         logger.info repos
-      rescue Exception => e
+      rescue StandardError => e
         logger.info(e)
         resp.error("Aquarium cannot access Github using the supplied access token.", e)
       else
@@ -31,7 +31,7 @@ class PublishController < ApplicationController
             config = JSON.parse Base64.decode64(file[:content])
             file = client.contents({ repo: params[:repo], user: github_user}, path: "/#{params[:repo]}.aq")
             aq_file = JSON.parse Base64.decode64(file[:content])            
-          rescue Exception => e
+          rescue StandardError => e
             resp.error("The Github repository '#{params[:repo]}' exists but does not contain a config.json file.", e)
           else
             resp.ok(repo_exists: true, config: config, aq_file: aq_file)

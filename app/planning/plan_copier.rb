@@ -22,7 +22,7 @@ class PlanCopier
 
     begin
       @base_module = JSON.parse @plan.layout, symbolize_names: true
-    rescue Exception => e
+    rescue StandardError => e
       @base_module = { id: 0 }
     end
 

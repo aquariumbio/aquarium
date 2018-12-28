@@ -157,7 +157,7 @@ class Plan < ActiveRecord::Base
 
       begin
         c = op.nominal_cost.merge(labor_rate: labor_rate, markup_rate: markup_rate, id: op.id)
-      rescue Exception => e
+      rescue StandardError => e
         c = {}
       end
 

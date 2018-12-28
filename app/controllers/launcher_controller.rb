@@ -86,7 +86,7 @@ class LauncherController < ApplicationController
 
       begin
         plan = Plan.find(params[:id])
-      rescue Exception => e
+      rescue StandardError => e
         error = e.to_s
         raise ActiveRecord::Rollback
       end
@@ -97,7 +97,7 @@ class LauncherController < ApplicationController
 
         begin
           c = op.nominal_cost.merge(labor_rate: labor_rate, markup_rate: markup, id: op.id)
-        rescue Exception => e
+        rescue StandardError => e
           c = { error: e.to_s + e.backtrace[0] }
         end
 
@@ -131,7 +131,7 @@ class LauncherController < ApplicationController
         op.save
         @id_map[op.id] = form_op[:rid]
         raise op.errors.full_messages.join(', ') unless op.errors.empty?
-      rescue Exception => e
+      rescue StandardError => e
         raise e.to_s
       end
     end
@@ -187,7 +187,7 @@ class LauncherController < ApplicationController
 
       begin
         plan, messages = plan_from params
-      rescue Exception => e
+      rescue StandardError => e
         render json: { errors: e }
         raise ActiveRecord::Rollback
       end

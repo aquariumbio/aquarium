@@ -36,7 +36,7 @@ class JsonController < ApplicationController
     result = result.as_json(include: params[:include], methods: params[:methods]) if params[:methods] && params[:include]
 
     render json: result
-  rescue Exception => e
+  rescue StandardError => e
     logger.info e.inspect
     logger.info e.backtrace
     render json: { errors: e.to_s }, status: :unprocessable_entity
@@ -147,7 +147,7 @@ class JsonController < ApplicationController
       render json: items
 
     end
-  rescue Exception => e
+  rescue StandardError => e
     render json: { errors: "Could not find sample: #{e}: #{e.backtrace}" }, status: :unprocessable_entity
 
   end

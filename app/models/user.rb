@@ -121,7 +121,7 @@ class User < ActiveRecord::Base
           body_text: "This email is better viewed with an email handler capable of rendering HTML\n\n#{message}",
           body_html: message
         )
-      rescue Exception => e
+      rescue StandardError => e
         Rails.logger.error "Emailer Error: #{e}"
       end
 

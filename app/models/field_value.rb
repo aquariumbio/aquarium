@@ -110,7 +110,7 @@ class FieldValue < ActiveRecord::Base
     when 'json'
       begin
         return JSON.parse value, symbolize_names: true
-      rescue Exception => e
+      rescue StandardError => e
         return { error: e, original_value: value }
       end
     when 'number'

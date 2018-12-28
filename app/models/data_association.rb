@@ -9,7 +9,7 @@ class DataAssociation < ActiveRecord::Base
   def full_object
 
     HashWithIndifferentAccess.new(JSON.parse(object, symbolize_names: true))
-  rescue Exception => e
+  rescue StandardError => e
     HashWithIndifferentAccess.new
 
   end

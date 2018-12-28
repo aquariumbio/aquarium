@@ -68,7 +68,7 @@ namespace :collections do
       unless c.datum[:_migrated_]
         begin
           c.migrate
-        rescue Exception => e
+        rescue StandardError => e
           c.associate :migration_error, "Could not migrate this collecton. Setting object type to orphan"
           c.associate :migration_error_msg, "Error: #{e}"
           c.object_type_id = orphan_type.id

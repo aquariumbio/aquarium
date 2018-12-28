@@ -131,7 +131,7 @@ class OperationTypesController < ApplicationController
 
         begin
           ot.update_field_types data[:field_types]
-        rescue Exception => e
+        rescue StandardError => e
           update_errors << e.to_s << e.backtrace.to_s
           logger.error("Error updating operation type field types: #{e.backtrace}")
           raise ActiveRecord::Rollback
@@ -182,7 +182,7 @@ class OperationTypesController < ApplicationController
         precondition_errors = ops.select do |op|
           begin
             op.precondition_value
-          rescue Exception => e
+          rescue StandardError => e
             error = true
           end
         end
@@ -200,7 +200,7 @@ class OperationTypesController < ApplicationController
         raise ActiveRecord::Rollback
 
       end
-    rescue Exception => e
+    rescue StandardError => e
       render json: { error: e.to_s, backtrace: e.backtrace },
              status: :unprocessable_entity
     end
@@ -265,7 +265,7 @@ class OperationTypesController < ApplicationController
               else
                 []
               end
-      rescue Exception => e 
+      rescue StandardError => e 
         render json: { errors: [e.to_s] }, status: :unprocessable_entity
         raise ActiveRecord::Rollback
         return        
@@ -289,7 +289,7 @@ class OperationTypesController < ApplicationController
 
       begin
         manager = Krill::Manager.new job.id, true, 'master', 'master'
-      rescue Exception => e
+      rescue StandardError => e
         error = e
       end
 
@@ -318,7 +318,7 @@ class OperationTypesController < ApplicationController
             job: job.reload
           },
                  status: :ok
-        rescue Exception => e
+        rescue StandardError => e
           logger.error 'Bug encountered while testing: ' + e.message + ' -- ' + e.backtrace.to_s
 
           e.backtrace.each do |b|
@@ -347,7 +347,7 @@ class OperationTypesController < ApplicationController
 
     begin
       render json: [OperationType.find(params[:id]).export], status: :ok
-    rescue Exception => e
+    rescue StandardError => e
       render json: { error: 'Could not export: ' + e.to_s + ', ' + e.backtrace[0] },
              status: :internal_server_error
     end
@@ -362,7 +362,7 @@ class OperationTypesController < ApplicationController
       libs = Library.where(category: params[:category]).collect(&:export)
 
       render json: ots.concat(libs), status: :ok
-    rescue Exception => e
+    rescue StandardError => e
       render json: { error: 'Could not export: ' + e.to_s + ', ' + e.backtrace[0] },
              status: :internal_server_error
     end
@@ -470,7 +470,7 @@ class OperationTypesController < ApplicationController
 
         end
 
-      rescue Exception => e
+      rescue StandardError => e
         error = true
         logger.info e.to_s
         logger.info e.backtrace.to_s
@@ -493,7 +493,7 @@ class OperationTypesController < ApplicationController
       ot = OperationType.find(params[:id]).copy current_user
       render json: { operation_type: ot.as_json(methods: %i[field_types protocol precondition cost_model documentation]) },
              status: :ok
-    rescue Exception => e
+    rescue StandardError => e
       render json: { error: 'Could not copy operation type: ' + e.to_s },
              status: :internal_server_error
     end

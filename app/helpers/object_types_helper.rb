@@ -78,7 +78,7 @@ module ObjectTypesHelper
 
       begin
         m = JSON.parse item.data, symbolize_names: true
-      rescue Exception => e
+      rescue StandardError => e
         m = nil
       end
 

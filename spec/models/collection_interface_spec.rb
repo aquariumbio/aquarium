@@ -63,7 +63,7 @@ RSpec.describe Collection, type: :model do
       begin
         pa.save
         raise "Collision allowed"
-      rescue Exception => e
+      rescue StandardError => e
       end
 
       pa = PartAssociation.new collection_id: c.id, part_id: 1, row: 2, column: 2
@@ -73,7 +73,7 @@ RSpec.describe Collection, type: :model do
       begin
         pa.save
         raise "Collision allowed"
-      rescue Exception => e
+      rescue StandardError => e
         raise "Non collision detected" unless pa.errors.empty?  
       end
        

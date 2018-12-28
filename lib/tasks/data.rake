@@ -39,7 +39,7 @@ namespace :data do
           end
 
         end
-      rescue Exception => e
+      rescue StandardError => e
         puts "Could not parse data for item #{item.id}: #{e}"
       end
 

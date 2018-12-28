@@ -31,7 +31,7 @@ module JobOperations # included in Job model
 
       begin
         c = op.nominal_cost.merge(labor_rate: labor_rate, markup_rate: markup_rate)
-      rescue Exception => e
+      rescue StandardError => e
         op.associate :cost_error, e.to_s
       else
         if op.plan && op.plan.budget_id

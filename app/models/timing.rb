@@ -7,7 +7,7 @@ class Timing < ActiveRecord::Base
   def days_of_week
 
     (JSON.parse days)
-  rescue Exception => e
+  rescue StandardError => e
     []
 
   end

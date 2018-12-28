@@ -318,7 +318,7 @@ class Operation < ActiveRecord::Base
 
     begin
       eval(operation_type.code('cost_model').content)
-    rescue Exception => e
+    rescue StandardError => e
       raise 'Could not evaluate cost function definition: ' + e.to_s
     end
 
@@ -327,7 +327,7 @@ class Operation < ActiveRecord::Base
 
     begin
       c = cost(self)
-    rescue Exception => e
+    rescue StandardError => e
       self.status = temp
       raise 'Could not evaluate cost function on the given operation: ' + e.to_s
     end
@@ -372,7 +372,7 @@ class Operation < ActiveRecord::Base
     begin
       eval(operation_type.code('precondition').content)
       rval = precondition(self)
-    rescue Exception => e
+    rescue StandardError => e
       Rails.logger.info "PRECONDITION FOR OPERATION #{id} crashed"
       plan.associate 'Precondition Evalution Error', e.message.to_s + ': ' + e.backtrace[0].to_s.sub('(eval)', 'line')
       rval = false # default if there is no precondition or it crashes

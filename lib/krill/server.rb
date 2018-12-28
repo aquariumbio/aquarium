@@ -35,7 +35,7 @@ module Krill
 
             begin
               status = @managers[jid].run
-            rescue Exception => e
+            rescue StandardError => e
               puts "Exception sent to client: #{e}"
               puts e.backtrace
               client.puts({ response: 'error', error: "Krill Server: #{command[:operation]} resulted in: #{e}: #{e.backtrace[0, 5]}" }.to_json)
@@ -51,7 +51,7 @@ module Krill
 
               begin
                 status = @managers[jid].send(command[:operation])
-              rescue Exception => e
+              rescue StandardError => e
                 str = "Krill Server: #{command[:operation]} on job #{jid} resulted in: #{e}: #{e.backtrace[0, 5]}."
                 client.puts({ response: 'error', error: str }.to_json)
                 @managers.delete(jid)
@@ -89,7 +89,7 @@ module Krill
             client.puts({ response: 'error', error: 'Unknown command' }.to_json)
 
           end
-        rescue Exception => e
+        rescue StandardError => e
           puts "Exception #{e}"
           puts e.backtrace
           client.puts({ response: 'error', error: e.to_s + ': ' + e.backtrace[0, 10].to_s }.to_json)

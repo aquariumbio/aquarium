@@ -109,7 +109,7 @@ class BrowserController < ApplicationController
           end
         end
       end
-    rescue Exception => e
+    rescue StandardError => e
       render json: { errors: [e.to_s, e.backtrace[0..5].join(', ')] }
     else
       if !@errors.empty?
@@ -125,7 +125,7 @@ class BrowserController < ApplicationController
     s = Sample.find(params[:id])
     begin
       data = JSON.parse(s.data)
-    rescue Exception => e
+    rescue StandardError => e
       data = {}
     end
     data[:note] = (params[:note] == '_EMPTY_' ? '' : params[:note])

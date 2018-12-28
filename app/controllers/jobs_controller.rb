@@ -48,7 +48,7 @@ class JobsController < ApplicationController
                     .where('? < updated_at AND updated_at < ?', start - 1.day, start + 1.day)
                     .select { |job| job.pc == Job.COMPLETED && job.job_associations.length > 0 }
                     .to_json(include: [:user, { job_associations: { include: { operation: { include: :operation_type } } } }])
-  rescue Exception => e
+  rescue StandardError => e
     render json: { error: e.to_s }
   end
 
