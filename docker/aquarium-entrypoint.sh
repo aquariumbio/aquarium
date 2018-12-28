@@ -14,6 +14,12 @@ while ! nc -z db 3306; do
   sleep 1 # wait for 1 second before check again
 done
 
+
+if [[ $1 == "production" || $1 == "development" ]]; then
+  # TODO: fix issue with git hosted gems
+  bundle install
+fi
+
 if [[ $1 == "development" ]]; then
   echo "Starting Rails server"
   exec bundle exec rails server -e $1 -p 3000 -b '0.0.0.0'

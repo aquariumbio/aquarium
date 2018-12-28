@@ -14,6 +14,11 @@ while ! nc -z db 3306; do
   sleep 1 # wait for 1 second before check again
 done
 
+if [[ $1 == "production" || $1 == "development" ]]; then
+  # TODO: fix issue with git hosted gems
+  bundle install
+fi
+
 if [[ $1 == "development" || $1 == "production" ]]; then
   echo "Starting Krill runner"
   exec bundle exec rails runner -e $1 'Krill::Server.new.run(3500)'
