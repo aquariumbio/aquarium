@@ -17,6 +17,10 @@ done
 if [[ $1 == "production" || $1 == "development" ]]; then
   # TODO: fix issue with git hosted gems
   bundle install
+
+  S3_IP=`dig s3 +short`
+  iptables -t nat -A OUTPUT -m addrtype --src-type LOCAL --dst-type LOCAL -p tcp --dport 9000 -j DNAT --to-destination $S3_IP:9000
+  iptables -t nat -A POSTROUTING -m addrtype --src-type LOCAL --dst-type UNICAST -j MASQUERADE
 fi
 
 if [[ $1 == "development" || $1 == "production" ]]; then
