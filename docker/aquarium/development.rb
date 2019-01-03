@@ -50,9 +50,9 @@ Bioturk::Application.configure do
       access_key_id: 'aquarium_minio',
       secret_access_key: 'KUNAzqrNifmM6GwNVZ8IP7dxZAkYjhnwc0bfdz0W'
     },
-    s3_host_name: 's3:9000',
+    s3_host_name: 'localhost:9000',
     s3_options: {
-      endpoint: "http://s3:9000", # for aws-sdk
+      endpoint: "http://localhost:9000", # for aws-sdk
       force_path_style: true # for aws-sdk (required for minio)
     }
   }
