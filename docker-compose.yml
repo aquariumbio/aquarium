@@ -28,6 +28,10 @@ services:
     depends_on:
       - db
       - s3
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      - net.ipv4.conf.all.route_localnet=1
 
   db:
     image: mysql:5.7
@@ -47,6 +51,10 @@ services:
     depends_on:
       - db
       - app
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      - net.ipv4.conf.all.route_localnet=1
 
   s3:
     image: minio/minio:latest
