@@ -1,16 +1,18 @@
 ARG RUBY_VERSION=2.5
 FROM ruby:${RUBY_VERSION}-alpine AS basebuilder
 RUN apk update && apk add \
+    bind-tools \
     build-base \
     file \
+    git \
     imagemagick \
+    iptables \
     mariadb-dev \
     mysql-client \
     nodejs \
     nodejs-npm \
     openjdk8-jre \
-    sqlite-dev \
-    git 
+    sqlite-dev
 
 RUN mkdir /aquarium
 
@@ -29,6 +31,7 @@ RUN bower install --config.interactive=false --force
 
 # install gems needed by Aquarium
 COPY Gemfile Gemfile.lock ./
+RUN gem update --system
 RUN gem install bundler && bundle install --jobs 20 --retry 5
 COPY . ./
 
