@@ -13,8 +13,8 @@ Aquarium is the operating system of the [UW BIOFAB](http://www.uwbiofab.org), a 
 
 ## Versions and Releases
 
-- The latest version is available [here](https://github.com/klavinslab/aquarium/releases/latest). If you would like to stay current with bug fixes, the [master](https://github.com/klavinslab/aquarium/tree/master) branch should almost always be stable and only a few commits ahead of the latest version. 
+- The latest version is available [here](https://github.com/klavinslab/aquarium/releases/latest). If you would like to stay current with bug fixes, the [master](https://github.com/klavinslab/aquarium/tree/master) branch should almost always be stable and only a few commits ahead of the latest version.
 
 ## Documentation
 
-Documention, including installation instructions, can be found at [aquarium.bio](http://www.aquarium.bio).
+Documentation, including installation instructions, can be found at [aquarium.bio](http://www.aquarium.bio).
