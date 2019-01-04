@@ -25,8 +25,8 @@ module OperationTypeExport
     sample_types = sample_types.uniq.as_json(methods: [:export_field_types])
 
     sample_types.each do |st|
-      st[:field_types] = st[:export_field_types]
-      st[:export_field_types] = nil
+      st["field_types"] = st["export_field_types"]
+      st.delete "export_field_types"
     end
 
     object_types = object_types.uniq.as_json(methods: [:sample_type_name])
@@ -128,14 +128,14 @@ module OperationTypeExport
       SampleType.clean_up_allowable_field_types(data[:sample_types] ? data[:sample_types] : [])
 
       # Add any sample_type_ids to object_types now that all sample types have been made
-      ObjectType.clean_up_sample_type_links(data[:sample_types] ? data[:sample_types] : [])
+      ObjectType.clean_up_sample_type_links(data[:object_types] ? data[:object_types] : [])
 
       obj = data[:operation_type]
 
       ot = OperationType.new name: obj[:name], category: obj[:category], deployed: obj[:deployed], on_the_fly: obj[:on_the_fly]
       ot.save
 
-      raise 'Could not save operation type: ' + ot.errors.full_messages.join(', ') unless ot.errors.empty?
+      raise "Could not save operation type '#{obj[:name]}': " + ot.errors.full_messages.join(', ') + "." unless ot.errors.empty?
 
       if obj[:field_types]
         obj[:field_types].each do |ft|

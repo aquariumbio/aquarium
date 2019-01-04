@@ -14,40 +14,31 @@ while ! nc -z db 3306; do
   sleep 1 # wait for 1 second before check again
 done
 
-if [[ $1 == "web" || $1 == "krill" ]] && [[ $2 == "development" || $2 == "production" ]]; then
-  # If container is run without exactly 2 arguments then start server
 
-  if [[ $2 == "production" ]]; then
-    # production server must have assets precompiled 
-    # ALSO SEE application.rb lines 8:13
-    export RAILS_ENV="production"
-    echo "precompiling assets"
-    exec bundle exec rake assets:precompile
-  elif [[ $2 == "development" ]]; then
-    # define fake AWS info for development server
-    export RAILS_ENV="development"
-    export AWS_ACCESS_KEY_ID="" 
-    export AWS_SECRET_ACCESS_KEY="" 
-    export AWS_REGION=""
-    export INSTANCE_NAME="LOCAL"
-    export DEBUG_TOOLS="true"
-  else 
-    echo "incoherent argument 2"
-    exit 1
-  fi
+if [[ $1 == "production" || $1 == "development" ]]; then
+  # TODO: fix issue with git hosted gems
+  bundle install
 
-  # depending on which service is being started, use the correct respective rails command
-  if [[ $1 == "web" ]]; then
-    echo "Starting Rails server"
-    exec bundle exec rails server -p 3000 -b '0.0.0.0'
-  elif [[ $1 ==  "krill" ]]; then
-    echo "Starting Krill runner"
-    exec bundle exec rails runner 'Krill::Server.new.run(3500)'
-  else
-    echo "incoherent argument 1"
-    exit 1
-  fi
+  # see https://serverfault.com/questions/551487/dnat-from-localhost-127-0-0-1
 
+  S3_IP=`dig s3 +short`
+  iptables -t nat -A OUTPUT -m addrtype --src-type LOCAL --dst-type LOCAL -p tcp --dport 9000 -j DNAT --to-destination $S3_IP:9000
+  iptables -t nat -A POSTROUTING -m addrtype --src-type LOCAL --dst-type UNICAST -j MASQUERADE
+fi
+
+if [[ $1 == "development" ]]; then
+  echo "Starting Rails server"
+  exec bundle exec rails server -e $1 -p 3000 -b '0.0.0.0'
+elif [[ $1 == "production" ]]; then
+  # Production server must have assets precompiled
+  # Note only works once db is up (e.g., can't be done in Dockerfile)
+  # ALSO SEE application.rb lines 8:13
+  # TODO: figure out why precompiling requires database and must be done here
+  echo "Precompiling assets"
+  RAILS_ENV=production
+  bundle exec rake assets:precompile
+  echo "Starting Rails server"
+  exec bundle exec puma -C config/production_puma.rb -e $1
 else
   # If the normal image startup flags were not given as arguments, 
   # then exec whatever arguments were given

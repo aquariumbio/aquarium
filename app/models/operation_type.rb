@@ -30,7 +30,11 @@ class OperationType < ActiveRecord::Base
 
 
   validates :name, presence: true
-  validates :name, uniqueness: { scope: :category, case_sensitive: false }
+  validates :name, uniqueness: { 
+    scope: :category, 
+    case_sensitive: false, 
+    message: "OperationType names must be unique within a given category. When importing, consider first moving existing operation types to a different category"
+  }
   validates :category, presence: true
 
   def add_io(name, sample_name, container_name, role, opts)

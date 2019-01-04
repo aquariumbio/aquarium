@@ -44,9 +44,11 @@ group :test do
 end
 
 group :development do
-  gem 'fakes3'
   gem 'rspec-rails'
-  gem 'web-console', '~> 2.0'  
+  gem 'web-console', '~> 3.0'
+
+  # used to determine subnet for docker containers for web-console
+  gem 'ipaddress'
 end
 
 group :production do
@@ -61,4 +63,10 @@ group :assets do
 end
 
 gem 'PriorityQueue'
+
+# Klavins lab gems
+gem 'aquadoc', :git => 'https://github.com/klavinslab/aquadoc'
+gem 'anemone', :git => 'https://github.com/klavinslab/anemone'
+
+
 

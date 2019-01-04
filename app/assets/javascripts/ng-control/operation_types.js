@@ -186,9 +186,13 @@
       };
 
       $scope.category_size = function(category) {
-        return aq.where($scope.operation_types, function(ot) {
+        let o = aq.where($scope.operation_types, function(ot) {
           return ot.category === category;
         }).length;
+        let l = aq.where($scope.libraries, function(lib) {
+          return lib.category === category;
+        }).length;
+        return o + l;
       };
 
       $scope.operation_type_class = function(operation_type) {

@@ -51,7 +51,7 @@ class SampleType < ActiveRecord::Base
 
     unless description == raw_sample_type[:description]
       results << "#{name} descriptions do not agree"
-      return false
+      return results
     end
 
     if raw_sample_type[:field_types]
@@ -131,23 +131,26 @@ class SampleType < ActiveRecord::Base
     st = SampleType.new name: raw_sample_type[:name], description: raw_sample_type[:description]
     st.save
 
-    raw_sample_type[:field_types].each do |rft|
+    if raw_sample_type[:field_types]
+      raw_sample_type[:field_types].each do |rft|
 
-      ft = FieldType.new(
-        name: rft[:name],
-        parent_id: st.id,
-        parent_class: 'SampleType',
-        array: rft[:array],
-        choices: rft[:choices],
-        required: rft[:required],
-        ftype: rft[:ftype],
-        role: rft[:role],
-        routing: rft[:routing]
-      )
+        ft = FieldType.new(
+          name: rft[:name],
+          parent_id: st.id,
+          parent_class: 'SampleType',
+          array: rft[:array],
+          choices: rft[:choices],
+          required: rft[:required],
+          ftype: rft[:ftype],
+          role: rft[:role],
+          routing: rft[:routing]
+        )
 
-      ft.save
+        ft.save
 
-      st.errors.add :field_type_creation, "Could not create field type named #{rft[:name]}: #{ft.errors.full_messages.join(', ')}" if ft.errors.any?
+        st.errors.add :field_type_creation, "Could not create field type named #{rft[:name]}: #{ft.errors.full_messages.join(', ')}" if ft.errors.any?
+
+      end
 
     end
 

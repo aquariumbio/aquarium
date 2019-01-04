@@ -9,6 +9,11 @@ class Library < ActiveRecord::Base
   validates :name, presence: true
   validates :category, presence: true
 
+  validates :name, uniqueness: { 
+    scope: :category, 
+    case_sensitive: false, 
+    message: "Library names must be unique within a given category. When importing, consider first moving existing libraries to a different category"
+  }  
 
   def export
   	 { 
@@ -27,7 +32,7 @@ class Library < ActiveRecord::Base
     lib.save
     lib.new_code 'source', obj[:code_source], user
 
-    issues = { notes: [], inconsistencies: [] }
-    issues
+      issues = { notes: [ "Created new library #{obj[:name]} in category #{obj[:category]}" ], inconsistencies: [] }
+      issues
   end
 end

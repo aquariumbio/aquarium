@@ -6,7 +6,7 @@
 <%= content_for :sidebar do %>
 
   <md-list>
-    <md-list-item id="chrome" class="md-3-line" layout-padding style="display: none">
+    <md-list-item id="notchrome" class="md-3-line" layout-padding style="display: none">
       <div class="md-list-item-text" layout="column">
         <h2 class='md-title'>Chrome Not Detected</h2>
         <h3 class='md-subtitle' style="color: red; font-weight: bold">Warning!</h3>
@@ -64,9 +64,10 @@
 
   <script type="text/javascript">    
   $(function() {
-    if ( ! ( !!window.chrome && !!window.chrome.webstore) )  {
+    console.log("Testing for chrome", !window.chrome)
+    if ( !window.chrome )  {
       console.log("No chrome!")
-      $("#chrome").show()
+      $("#notchrome").show()
     }
   });
   </script>
