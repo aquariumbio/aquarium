@@ -70,7 +70,7 @@ docs/.sass-cache/**
 # ignore cyprus dependencies
 ui/node_modules
 
-Gemfile.lock
-
 # ignore vscode settings
 .vscode
+
+# please do not ignore Gemfile.lock !!!
