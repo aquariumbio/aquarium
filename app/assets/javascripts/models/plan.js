@@ -667,7 +667,7 @@ AQ.Plan.record_methods.add_wire = function(from, from_op, to, to_op) {
     } else {
       alert("Cycle detected. Cannot create wire.")
     }
-  } else if ( to.field_type.can_produce(from) ) {
+  } else if ( to.role == 'output' && to.field_type.can_produce(from) ) {
     if ( ! this.reachable(from,to) ) {
       this.wires.push(AQ.Wire.make({
         to_op: from_op,

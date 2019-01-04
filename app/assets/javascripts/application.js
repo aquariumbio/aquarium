@@ -11,4 +11,6 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 
+//= require anemone
 //= require_tree .
+

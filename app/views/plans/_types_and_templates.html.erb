@@ -17,10 +17,10 @@
         ng-mouseleave="p.hover = false">
       <div style="margin-right: 5px">{{p.id}}: </div>
       <div flex><a href='#' class='no-highlight' ng-click="paste_plan(p)">{{p.name}}</a></div>
-      <div style="padding-left: 6px" ng-if="p.user_id == current_user.id"> 
+      <div style="padding-left: 6px" ng-if="p.user_id == current_user.id || <%= current_user.is_admin ? 'true' : 'false' %>"> 
         <a href='#' style="color: #333; font-size: 12pt" 
            ng-show="p.hover"
-           ng-click="revert_template(p)">&times;<md-tooltip md-direction='right'>Revert to Normal Plan</md-tooltip></a>                 
+           ng-click="revert_template(p,p.user_id == current_user.id)">&times;<md-tooltip md-direction='right'>Revert to Normal Plan</md-tooltip></a>                 
       </div> 
     </li>
   </ul>

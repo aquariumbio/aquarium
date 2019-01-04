@@ -1,3 +1,4 @@
+<% provide(:title, "AQUARIUM") %>
 
 <%= content_for :class do %>main-navigation<% end %>
 
@@ -10,10 +11,10 @@
 <%= content_for :sidebar do %>
 
   <div layout="column" layout-align="center center" style="margin-top: 16px">
-    <%= image_tag 'biofab-logo.jpg', class: "logo" %>
+    <%= image_tag Bioturk::Application.config.logo_path, class: "logo" %>
   </div>
   <md-list>
-    <md-list-item id="chrome" class="md-3-line" layout-padding style="display: none">
+    <md-list-item id="notchrome" class="md-3-line" layout-padding style="display: none">
       <div class="md-list-item-text" layout="column">
         <h2 class='md-title'>Chrome Not Detected</h2>
         <h3 class='md-subtitle' style="color: red; font-weight: bold">Warning!</h3>
@@ -58,9 +59,9 @@
 
   <script type="text/javascript">
   $(function() {
-    if ( ! ( !!window.chrome && !!window.chrome.webstore) )  {
+    if ( !window.chrome )  {
       console.log("No chrome!")
-      $("#chrome").show()
+      $("#notchrome").show()
     }
   });
   </script>

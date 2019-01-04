@@ -34,7 +34,7 @@ class ObjectTypesController < ApplicationController
     @image_url = "#{Bioturk::Application.config.image_server_interface}#{@object_type.image}"
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render layout: 'aq2' } # show.html.erb
       format.json { render json: @object_type }
     end
 
@@ -80,9 +80,10 @@ class ObjectTypesController < ApplicationController
   # POST /object_types
   # POST /object_types.json
   def create
+    
     @object_type = ObjectType.new(params[:object_type].except(:rows, :columns))
 
-    if params[:handler] == 'collection'
+    if params[:object_type][:handler] == 'collection'
       @object_type.rows = params[:object_type][:rows]
       @object_type.columns = params[:object_type][:columns]
     end

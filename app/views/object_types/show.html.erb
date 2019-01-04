@@ -1,43 +1,43 @@
 <% provide(:title, @object_type.name) %>
 
-<h1><%= @object_type.name %></h1>
+<%= content_for :controller do %>noCtrl<% end %>
 
-<div class="row-fluid">
+<% content_for :action1 do %>
 
-  <div class="span3 object-image">
-    <img src='<%= @image_url %>'></img>
+  <%= link_to 'Edit', 
+               edit_object_type_path(@object_type), 
+              class: "md-button md-raised" %>
+
+<% end %>
+
+<% content_for :action2 do %>
+
+  <% if @object_type.handler == 'sample_container' %>
+    <%= link_to 'Done', @object_type.sample_type, class: "md-button md-raised" %>
+  <% else %>
+    <%= link_to 'Done', object_types_path, class: "md-button md-raised" %>
+  <% end %>
+
+<% end %>
+
+<% content_for :main do %>
+
+  <div style="margin: 20px">
+
+    <h1><%= @object_type.name %></h1>
+
+    <div class="row-fluid">
+
+      <div class="span9 object-description">
+        <% wiz = Wizard.find_by_name(@object_type.prefix) %>
+        <% if wiz %>
+          <h3>Locations managed by the <%= link_to wiz.name, wiz %> wizard</h3>
+        <% end %>  
+        <%= render 'description' %>
+      </div>
+
+    </div>
+
   </div>
 
-  <div class="span9 object-description">
-    <% wiz = Wizard.find_by_name(@object_type.prefix) %>
-    <% if wiz %>
-      <h3>Locations managed by the <%= link_to wiz.name, wiz %> wizard</h3>
-    <% end %>  
-    <%= render 'description' %>
-  </div>
-
-</div>
-
-<br /> 
-
-<div class="row-fluid">
-
-  <div class="span8 current-inventory">
-    <%= render @handler.current_inventory_partial %>
-  </div>
-
-  <div class="span4 add-to-inventory">
-    <%= render @handler.new_item_partial %>
-  </div>
-
-</div>
-
-<br />
-
-<%= link_to 'Edit Object Type', edit_object_type_path(@object_type), class: "btn" %>
-
-<% if @object_type.handler == 'sample_container' %>
-  <%= link_to 'Done', @object_type.sample_type, class: "btn" %>
-<% else %>
-  <%= link_to 'Done', object_types_path, class: "btn" %>
 <% end %>
