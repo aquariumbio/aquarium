@@ -128,6 +128,8 @@ module Aquadoc
         name = lib.split("/").last;
         hname = name.split(".")[0] + ".html"
         unless system "yardoc -p #{@assets_path}/yard_templates #{lib} --one-file --quiet"
+          Dir.chdir @base_path
+          system "rm -rf #{@temp_library_path}"    
           raise "Could not run yardoc on #{lib}"
         end
         Dir.chdir @base_path
