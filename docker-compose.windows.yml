@@ -1,6 +1,6 @@
 # docker-compose file for windows-specific details for aquarium
 
-version: "3.6"
+version: "3.5"
 services:
   db:
     volumes:
