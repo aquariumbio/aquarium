@@ -179,7 +179,7 @@ module Krill
     #   response = show do
     #     upload var: "my var"
     #   end
-    # See the [ShowRepsonse] documentation for how to manipulate uploads.
+    # See the [ShowResponse] documentation for how to manipulate uploads.
     # @option opts [String] :var
     # @return [void]
     def upload(opts = {})
@@ -223,7 +223,7 @@ module Krill
     # @option opts [String] :var The name of the resulting value in the ShowResponse object
     # @option opts [String] :label The label shown next to the input box
     # @option opts [String] :default The default value if the type is text
-    # @option opts [Float] :default The default valye if the type is number
+    # @option opts [Float] :default The default value if the type is number
     # @return [void]
     # @example
     #   data = show {
@@ -268,7 +268,7 @@ module Krill
     # @option opts [String] :var The name of the resulting value in the ShowResponse object
     # @option opts [String] :label The label shown next to the input box
     # @option opts [String] :default The default value if the type is text
-    # @option opts [Float] :default The default valye if the type is number
+    # @option opts [Float] :default The default value if the type is number
     # @return [void]
     # @example
     #   data = show {

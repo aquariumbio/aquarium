@@ -4,7 +4,7 @@ module Krill
 
   # @api krill
   # Defines a wrapper for the data hash that is returned by the `show` method, with
-  # a simplified interface, additional convienence methods,
+  # a simplified interface, additional convenience methods,
   # and abstraction of implementation details. This is a decorator class to be instantiated
   # with a Hash.
   # Initialized with a Hash, which has a :timepoint value as a float, and 
