@@ -88,7 +88,6 @@ module Krill
       @parts.push(bullet: str)
     end
 
-
     # Display a table represented by the matrix t. The method takes a 2x2 list of either numbers,
     # strings, or hashes. In the case of hashes, the following fields can be present.
     # 
@@ -208,7 +207,7 @@ module Krill
 
       @parts.push(transfer: {
                     from: { id: x.id, type: x.object_type.name, rows: x.dimensions[0], cols: x.dimensions[1] },
-                    to:   { id: y.id, type: y.object_type.name, rows: y.dimensions[0], cols: y.dimensions[1] },
+                    to: { id: y.id, type: y.object_type.name, rows: y.dimensions[0], cols: y.dimensions[1] },
                     routing: routing_details
                   })
 
