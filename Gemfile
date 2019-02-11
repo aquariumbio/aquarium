@@ -41,7 +41,7 @@ gem 'activerecord-import'
 
 group :test do
   gem 'sqlite3'
-  gem 'factory_bot', '~> 5.0'
+  gem 'factory_bot_rails'
 end
 
 group :development do
