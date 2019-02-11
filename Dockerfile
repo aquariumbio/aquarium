@@ -25,10 +25,9 @@ RUN mkdir -p /aquarium/shared/pids
 WORKDIR /aquarium
 
 # install js components
-RUN npm install -g bower@latest
-COPY bower.json ./bower.json
-RUN echo '{ "directory": "public/components", "allow_root": true }' > ./.bowerrc
-RUN bower install --config.interactive=false --force
+COPY package.json ./package.json
+COPY yarn.lock ./yarn.lock
+RUN yarn install && yarn cache clean
 
 # install gems needed by Aquarium
 COPY Gemfile Gemfile.lock ./
