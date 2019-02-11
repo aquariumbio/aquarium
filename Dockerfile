@@ -12,6 +12,7 @@ RUN apk update && apk add \
     nodejs \
     nodejs-npm \
     openjdk8-jre \
+    yarn \
     sqlite-dev
 
 RUN mkdir /aquarium
