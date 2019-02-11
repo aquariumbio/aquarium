@@ -21,6 +21,6 @@ describe "session login", type: :request do
         login_attributes = {login: 'blah', password: 'blah'}
         post '/sessions.json', {session: login_attributes}, as: 'json'
         remember_token_name = "remember_token_#{Bioturk::Application.environment_name}"
-        expect(response.cookies).not.to have_key(remember_token_name)
+        expect(response.cookies).not_to have_key(remember_token_name)
     end
 end
