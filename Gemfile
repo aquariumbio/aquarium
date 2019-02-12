@@ -41,7 +41,6 @@ gem 'activerecord-import'
 
 group :test do
   gem 'sqlite3'
-  gem 'factory_bot_rails'
 end
 
 group :development do
@@ -50,6 +49,10 @@ group :development do
 
   # used to determine subnet for docker containers for web-console
   gem 'ipaddress'
+end
+
+group :development, :test do
+  gem 'factory_bot_rails'
 end
 
 group :production do
