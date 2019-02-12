@@ -2,6 +2,10 @@ require 'rails_helper'
 
 RSpec.describe Collection, type: :model do
 
+  let!(:stripwell_type) { create(:stripwell) }
+  let!(:test_sample) { create(:sample) }
+  let!(:sample_list) { create_list(:sample, 24) }
+
   # Tests new_collection
   def example_collection name="Stripwell"
     c = Collection.new_collection(name)
@@ -33,8 +37,6 @@ RSpec.describe Collection, type: :model do
       ).save  
     end
   end  
-
-  test_sample = Sample.last
 
   context 'associations' do
 
@@ -154,7 +156,7 @@ RSpec.describe Collection, type: :model do
       raise "Slots not adding up" unless c.get_empty.length + c.get_non_empty.length == c.capacity
       raise "Non-empty not adding up" unless c.get_non_empty.length == c.num_samples
       raise "include? not working" unless c.include?(test_sample) && c.include?(test_sample.id)
-      raise "select not working" unless c.select { |x| x == test_sample.id }.length == 1
+      expect(c.select { |x| x == test_sample.id }.length).to eq(2)
     end
 
     # test set_matrix
@@ -166,7 +168,7 @@ RSpec.describe Collection, type: :model do
       c.set_matrix samples
       m = c.matrix
       (0..11).each do |i|
-        raise "Setting matrix didn't work" unless m[0][i] == samples[0][i].id
+        expect(m[0][i]).to eq(samples[0][i].id)
       end
     end
 
@@ -174,24 +176,25 @@ RSpec.describe Collection, type: :model do
     #      matrix
     it 'sets a matrix of sample ids' do
       c = example_collection
-      samples = [ Sample.where("id < 100").sample(12).collect { |s| s.id } ]
+      samples = [ Sample.all.sample(12).collect { |s| s.id } ]
       c.matrix = samples
       m = c.matrix  
       (0..11).each do |i|
-        raise "Setting matrix didn't work" unless m[0][i] == samples[0][i]
+        expect(m[0][i]).to eq(samples[0][i])
       end
     end    
 
     # tests spread
     #         => add_samples
     #       matrix
-    it 'can spread a bunch of samples accross multiple collections' do
-      samples = Sample.where("id < 100").sample(17)
+    it 'can spread a bunch of samples across multiple collections' do
+      samples = Sample.all.sample(17)
       collections = Collection.spread(samples, "Stripwell")
       sids1 = samples.map(&:id)
       sids2 = collections.map(&:matrix).flatten.reject { |sid| sid <= 0 }
       raise "Example sample ids not found" unless sids1 == sids2
-      raise "full? returned unexpected value" unless collections[0].full? && !collections[1].full?
+      expect(collections[0]).to be_full
+      expect(collections[1]).not_to be_full
     end
 
     # test set_matrix

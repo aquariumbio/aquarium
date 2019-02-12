@@ -2,7 +2,10 @@ require 'rails_helper'
 
 RSpec.describe Collection, type: :model do
 
-  # ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
+  let!(:stripwell_type) { create(:stripwell) }
+  let!(:test_sample) { create(:sample) }
+
+  # TODO: change to properly use factories
 
   # Tests new_collection
   def example_collection name="Stripwell"
@@ -35,8 +38,6 @@ RSpec.describe Collection, type: :model do
       ).save  
     end
   end
-
-  test_sample = Sample.last
 
   context 'data' do
 
