@@ -5,7 +5,7 @@ module Krill
   # @api krill
   module Base
 
-    # Returns true if and only if the protocol is bbeing run in debug mode.
+    # Returns true if and only if the protocol is being run in debug mode.
     #
     # @return [Boolean]
     def debug

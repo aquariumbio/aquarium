@@ -11,8 +11,8 @@ gem 'protected_attributes'
 gem 'tzinfo-data'
 
 # Json helpers
-gem 'rails-patch-json-encode'
 gem 'oj'
+gem 'rails-patch-json-encode'
 
 # Authentication and cross origin
 gem 'angular_rails_csrf', '2.1.1'
@@ -26,15 +26,15 @@ gem 'yard'
 gem 'yard-activerecord'
 
 # Various style related gems
-gem 'will_paginate'
-gem 'sass-rails'
 gem 'github-markup'
 gem 'redcarpet'
+gem 'sass-rails'
+gem 'will_paginate'
 
 # For uploads and cloud storage
-gem 'paperclip'
 gem 'aws-sdk', '~> 1.7.1'
 gem 'aws-sdk-s3'
+gem 'paperclip'
 
 # For bulk inserts (e.g. for loading a collection from a matrix)
 gem 'activerecord-import'
@@ -58,15 +58,15 @@ end
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'closure-compiler'
   gem 'bcrypt-ruby', '~> 3.1.2'
+  gem 'closure-compiler'
 end
 
 gem 'PriorityQueue'
 
 # Klavins lab gems
-gem 'aquadoc', :git => 'https://github.com/klavinslab/aquadoc'
 gem 'anemone', :git => 'https://github.com/klavinslab/anemone'
+gem 'aquadoc', :git => 'https://github.com/klavinslab/aquadoc'
 
 
 

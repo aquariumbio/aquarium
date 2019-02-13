@@ -83,7 +83,7 @@
       </div>
      </div>
 
-    <p class="issue" ng-if="state.error">{{state.error}}</p>
+    <p class="publish-issue" ng-if="state.error">{{state.error}}</p>
 
     <div layout="row">
       <md-button class="md-raised" 
@@ -252,7 +252,7 @@
         </li>
       </ul>
   
-    <b>Contents:</b> <span class="issue" ng-if="num_objects()==0">No components selected to publish.</span><br>
+    <b>Contents:</b> <span class="publish-issue" ng-if="num_objects()==0">No components selected to publish.</span><br>
 
       <div ng-repeat="c in categories | filter: has_selections()">
         <b>{{c.name}}:</b>
@@ -261,7 +261,7 @@
         </span>
       </div><br>
 
-    <span class="issue" ng-if="state.error">{{state.error}}<br>{{state.details}}</span><br>
+    <span class="publish-issue" ng-if="state.error">{{state.error}}<br>{{state.details}}</span><br>
 
     <div layout="row">
       <md-button class="md-raised" ng-click="publish()" ng-disabled="num_objects() == 0 || state.working">Publish</md-button>
@@ -301,7 +301,7 @@
 
     <div ng-if="!state.building && state.error != null">
       <h2>Error publishing workflow</h2>
-      <span class="issue">{{state.error}}</span><br><br>
+      <span class="publish-issue">{{state.error}}</span><br><br>
       <p>Check <a href="https://github.com/{{config.github.user}}/{{config.github.repo}}" target=github>
                         https://github.com/{{config.github.user}}/{{config.github.repo}}</a> to see if
         Aquarium published some of your workflow, but encountered the above error before it could complete.</p> 

@@ -248,7 +248,7 @@ module Krill
 
         if k.class == Module
           eigenclass = class << self
-            self
+                         self
           end
           eigenclass.send(:include, mod) unless eigenclass.include? mod
           insert_base_class k, mod

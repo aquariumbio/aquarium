@@ -1,6 +1,6 @@
 # production docker-compose
 
-version: "3.6"
+version: "3.5"
 services:
   app:
     build:

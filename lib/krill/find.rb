@@ -55,7 +55,7 @@ module Krill
 
       reps =  { object_type: :object_types,
                 sample: :samples,
-                sample_type: :sample_types}
+                sample_type: :sample_types }
 
       spec.each do |k, v|
         if reps.key? k
