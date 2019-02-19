@@ -5,8 +5,8 @@ AllCops:
     - db/schema.rb
     - db/migrate/*
     - bin/*
-  TargetRubyVersion: 2.3
-  TargetRailsVersion: 3.0
+  TargetRubyVersion: 2.5
+  TargetRailsVersion: 4.2
 
 Rails:
   Enabled: true
