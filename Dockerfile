@@ -7,13 +7,15 @@ RUN apk update && apk add \
     git \
     imagemagick \
     iptables \
+    libxml2 \
+    libxslt \
     mariadb-dev \
     mysql-client \
     nodejs \
     nodejs-npm \
     openjdk8-jre \
-    yarn \
-    sqlite-dev
+    sqlite-dev \
+    yarn
 
 RUN mkdir /aquarium
 
@@ -32,7 +34,9 @@ RUN yarn install && yarn cache clean
 # install gems needed by Aquarium
 COPY Gemfile Gemfile.lock ./
 RUN gem update --system
-RUN gem install bundler && bundle install --jobs 20 --retry 5
+RUN gem install bundler && \
+    bundle config build.nokogiri --use-system-libraries \
+    bundle install --jobs 20 --retry 5
 COPY . ./
 
 # include entrypoint scripts for starting Aquarium and Krill
