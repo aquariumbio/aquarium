@@ -5,6 +5,7 @@ AllCops:
     - db/schema.rb
     - db/migrate/*
     - bin/*
+    - node_modules/*
   TargetRubyVersion: 2.5
   TargetRailsVersion: 4.2
 
