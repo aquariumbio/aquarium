@@ -58,8 +58,9 @@ awc.sh
 
 ots.json
 
-# ignore bower installed components
+# ignore yarn installed components
 public/components
+node_modules
 
 .DS_Store
 
