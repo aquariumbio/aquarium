@@ -12,8 +12,8 @@ services:
   app:
     build:
       context: .
-      target: basebuilder
-    image: basebuilder
+      target: aquarium
+    image: aquarium
     command: ["development"]
     volumes:
       - ./app:/aquarium/app
@@ -33,7 +33,7 @@ services:
       MYSQL_ROOT_PASSWORD: aSecretAquarium
 
   krill:
-    image: basebuilder
+    image: aquarium
     command: ["development"]
 
   web:

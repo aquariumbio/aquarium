@@ -1,6 +1,6 @@
 ARG RUBY_VERSION=2.5
 ARG ALPINE_VERSION=3.8
-FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION} AS basebuilder
+FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION} AS aquarium
 RUN apk update && apk add \
     bind-tools \
     build-base \
