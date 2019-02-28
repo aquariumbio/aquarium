@@ -4,7 +4,7 @@ class ProtocolTestBase
 
     attr_accessor :assertions, :logs, :backtrace, :error, :job
 
-    def initialize operation_type, current_user
+    def initialize(operation_type, current_user)
         @assertions = 0
         @operation_type = operation_type
         @current_user = current_user
@@ -17,7 +17,7 @@ class ProtocolTestBase
         @logs << msg
     end
 
-    def add_random_operations num
+    def add_random_operations(num)
         @operations = @operation_type.random(num)        
     end
 
