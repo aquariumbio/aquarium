@@ -2,13 +2,12 @@ class ProtocolTestBase
 
     include MiniTest::Assertions
 
-    attr_accessor :assertions, :logs, :backtrace, :error, :job
+    attr_accessor :assertions, :logs, :backtrace, :job
 
     def initialize(operation_type, current_user)
         @assertions = 0
         @operation_type = operation_type
         @current_user = current_user
-        @error = nil
         @job = nil
     end
 
@@ -50,25 +49,30 @@ class ProtocolTestBase
     end
 
     def execute
-        begin
-            manager = Krill::Manager.new @job.id, true, 'master', 'master'
-            @operations.extend(Krill::OperationList)
-            @operations.make(role: 'input')
-            @operations.each(&:run)
-            manager.run
-            @operations.each(&:reload)
-        rescue Exception => e
-            @error = e.to_s
-        end        
+        manager = Krill::Manager.new(@job.id, true, 'master', 'master')
+        @operations.extend(Krill::OperationList)
+        @operations.make(role: 'input')
+        @operations.each(&:run)
+        manager.run
+        @operations.each(&:reload)
     end
 
     def run
-
         build_plan
         make_job
         execute
-        @backtrace = @job.reload.backtrace 
-
+        @backtrace = @job.reload.backtrace
     end
 
+    def find_display_by_title(title)
+        displays_with_content.find { |d| d[:content][0][:title] == title }
+    end
+
+    def displays_with_content
+        displays.select { |d| d[:content].present? && d[:content][0].is_a?(Hash) }
+    end
+
+    def displays
+        @backtrace.select { |b| b[:operation] == 'display' }
+    end
 end
