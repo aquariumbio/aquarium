@@ -54,10 +54,6 @@ group :development do
   gem 'ipaddress'
 end
 
-group :development, :test do
-  gem 'factory_bot_rails'
-end
-
 group :production do
   gem 'puma'
 end
