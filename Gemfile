@@ -39,6 +39,9 @@ gem 'paperclip'
 # For bulk inserts (e.g. for loading a collection from a matrix)
 gem 'activerecord-import'
 
+# Factories for testing of aquarium and protocols
+gem 'factory_bot_rails'
+
 group :test do
   gem 'sqlite3'
 end
