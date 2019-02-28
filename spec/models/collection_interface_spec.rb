@@ -7,7 +7,7 @@ RSpec.describe Collection, type: :model do
   let!(:sample_list) { create_list(:sample, 24) }
 
   # Tests new_collection
-  def example_collection name="Stripwell"
+  def example_collection name = "Stripwell"
     c = Collection.new_collection(name)
     c.save
     raise "Got save errors: #{c.errors.full_messages}" if c.errors.any?
@@ -18,7 +18,7 @@ RSpec.describe Collection, type: :model do
     ot = ObjectType.find_by_name "24-Slot Tube Rack"
     unless ot
       ObjectType.new(
-        name: "24-Slot Tube Rack" ,
+        name: "24-Slot Tube Rack",
         description: "96 qPCR collection",
         min: 0,
         max: 1,
@@ -98,7 +98,7 @@ RSpec.describe Collection, type: :model do
     #       set     
     it 'can set parts' do
       c = example_collection
-      c.set 0,5,test_sample
+      c.set 0, 5, test_sample
       raise "Did not set part" unless c.matrix[0][5] == test_sample.id
       raise "string view #{c.non_empty_string} incorrect" unless c.non_empty_string == "1 - 6"            
     end
@@ -114,7 +114,7 @@ RSpec.describe Collection, type: :model do
     it 'finds collections containing a specific sample' do
       c = example_collection
       s = test_sample
-      c.set 0,5,test_sample      
+      c.set 0, 5, test_sample      
       Collection.containing(s).each do |item|
         collection = item.becomes Collection # TODO: Make it so that you don't have to do this
         raise "Sample should be in collection" unless collection.position(s.id) 
@@ -129,7 +129,7 @@ RSpec.describe Collection, type: :model do
     it 'finds parts and their containing collections with a specific sample' do
       c = example_collection
       s = test_sample
-      c.set 0,5,s      
+      c.set 0, 5, s      
       Collection.parts(s).each do |part|
         collection = part[:collection].becomes Collection # TODO: Make it so that you don't have to do this
         pos = collection.position_as_hash(s.id)
@@ -151,8 +151,8 @@ RSpec.describe Collection, type: :model do
     #       include?
     it 'can set slots to samples' do
       c = example_collection
-      c.set 0,5,test_sample  
-      c.set 0,8,Sample.first
+      c.set 0, 5, test_sample  
+      c.set 0, 8, Sample.first
       raise "Slots not adding up" unless c.get_empty.length + c.get_non_empty.length == c.capacity
       raise "Non-empty not adding up" unless c.get_non_empty.length == c.num_samples
       raise "include? not working" unless c.include?(test_sample) && c.include?(test_sample.id)
@@ -164,7 +164,7 @@ RSpec.describe Collection, type: :model do
     #      matrix
     it 'sets a matrix of samples' do
       c = example_collection
-      samples = [ Sample.all.sample(12).collect { |s| s } ]
+      samples = [Sample.all.sample(12).collect { |s| s }]
       c.set_matrix samples
       m = c.matrix
       (0..11).each do |i|
@@ -176,7 +176,7 @@ RSpec.describe Collection, type: :model do
     #      matrix
     it 'sets a matrix of sample ids' do
       c = example_collection
-      samples = [ Sample.all.sample(12).collect { |s| s.id } ]
+      samples = [Sample.all.sample(12).collect { |s| s.id }]
       c.matrix = samples
       m = c.matrix  
       (0..11).each do |i|
@@ -202,7 +202,7 @@ RSpec.describe Collection, type: :model do
     #      matrix
     it 'can add and subtract samples' do
       c = example_collection
-      c.set 0,5,test_sample     
+      c.set 0, 5, test_sample     
       s = test_sample
       c.add_one(s)
       c.add_one(s)  
@@ -216,18 +216,18 @@ RSpec.describe Collection, type: :model do
       make_24_well_tube_rack
       c = example_collection "24-Slot Tube Rack"
       s = test_sample
-      samples = (0...4).collect { |i| Array.new(6,s.id) }
+      samples = (0...4).collect { |i| Array.new(6, s.id) }
       c.matrix = samples
-      p = [0,0]
+      p = [0, 0]
       (0...4).each do |i|
         (0...6).each do |j|
-          raise "Next didn't align with #{p} != #{[i,j]}" unless p == [i,j]
-          p = c.next(p[0],p[1])          
+          raise "Next didn't align with #{p} != #{[i, j]}" unless p == [i, j]
+          p = c.next(p[0], p[1])          
         end
       end
       c.set 1, 1, -1
-      raise "skip_non_empty option not working" unless c.next(0,0,skip_non_empty: true) == [1,1]
-      raise "edge condition didn't work" unless c.next(3,5) == [nil,nil]
+      raise "skip_non_empty option not working" unless c.next(0, 0, skip_non_empty: true) == [1, 1]
+      raise "edge condition didn't work" unless c.next(3, 5) == [nil, nil]
     end       
 
   end
