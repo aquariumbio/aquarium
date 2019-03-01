@@ -31,11 +31,12 @@ class TestController < ApplicationController
                 .more(
                   exception_backtrace: e ? e.backtrace : [], 
                   backtrace: pt ? pt.backtrace : [], 
-                  log: pt ? pt.logs : [])
+                  log: pt ? pt.logs : []
+                )
           else
             resp.ok(message: "test complete", 
-                        log: pt.logs, 
-                  backtrace: pt.backtrace)
+                    log: pt.logs, 
+                    backtrace: pt.backtrace)
           end
         end
       rescue StandardError => error
@@ -47,7 +48,8 @@ class TestController < ApplicationController
             .more(
               exception_backtrace: e ? e.backtrace : [], 
               backtrace: pt ? pt.backtrace : [], 
-              log: pt ? pt.logs : [])
+              log: pt ? pt.logs : []
+            )
       end
 
       raise ActiveRecord::Rollback
