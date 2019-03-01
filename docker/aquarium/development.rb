@@ -82,9 +82,10 @@ Bioturk::Application.configure do
   # don't whine about other addresses
   config.web_console.whiny_requests = false
 
+  # Email notifications in Aquarium assume you ae using the AWS simple email service.
+  # To enable, uncomment the following code and set the corresponding environment variables in the docker-compose.override.yml file
   # There is no substitute for AWS simple email service in development.
-  # It is possible to run tests with SES if you use it, but this 
-
+  #
   # AWS.config(
   #   region: ENV.fetch('AWS_REGION'),
   #   simple_email_service_endpoint: "email.#{ENV.fetch('AWS_REGION')}.amazonaws.com",

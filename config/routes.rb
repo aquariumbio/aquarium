@@ -2,6 +2,8 @@
 
 Bioturk::Application.routes.draw do
 
+  get '/test/run/:id', to: 'test#run'
+
   get '/import', to: 'import#index'
 
   post '/publish/check_repo', to: 'publish#check_repo'

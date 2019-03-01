@@ -4,7 +4,7 @@ module Krill
 
   # @api krill
   # Defines a wrapper for the data hash that is returned by the `show` method, with
-  # a simplified interface, additional convienence methods,
+  # a simplified interface, additional convenience methods,
   # and abstraction of implementation details. This is a decorator class to be instantiated
   # with a Hash.
   # Initialized with a Hash, which has a :timepoint value as a float, and 
@@ -83,8 +83,9 @@ module Krill
     end
 
     private
+
     def get_table_responses_column var
-      self[:table_inputs].select { |ti| ti[:key].to_sym == var.to_sym }.sort { |x,y| x[:row] <=> y[:row] }.map { |ti| ti[:type] == 'number' ? ti[:value].to_f : ti[:value] } if self[:table_inputs]
+      self[:table_inputs].select { |ti| ti[:key].to_sym == var.to_sym }.sort { |x, y| x[:row] <=> y[:row] }.map { |ti| ti[:type] == 'number' ? ti[:value].to_f : ti[:value] } if self[:table_inputs]
     end
 
     # Checks to see if a given key corresponds to a list of upload objects
@@ -92,7 +93,7 @@ module Krill
     # @param var [Symbol/String]  the key that was specified to store data under in the `upload` call
     # @return [Boolean]  true if the key corresponds to a list of upload objects
     def is_upload? var
-      return self[var.to_sym].is_a?(Array) && self[var.to_sym].all? { |up_hash| up_hash.is_a?(Hash) && up_hash.has_key?(:name) && up_hash.has_key?(:name)}
+      return self[var.to_sym].is_a?(Array) && self[var.to_sym].all? { |up_hash| up_hash.is_a?(Hash) && up_hash.has_key?(:name) && up_hash.has_key?(:name) }
     end
 
     # Returns a list of the Upload objects created from files uploaded in the ShowBlock
@@ -102,12 +103,12 @@ module Krill
     #               doesn't correspond to a valid list of uploads
     def get_upload_response var
       return nil if !is_upload?(var)
-      return Upload.find(self[var.to_sym].map {|up_hash| up_hash[:id]})
+      return Upload.find(self[var.to_sym].map { |up_hash| up_hash[:id] })
     end
   end
   
   class TableCellUndefined < StandardError
-    def initialize(msg="A table cell was picked out that is out of bounds or cannot exist")
+    def initialize(msg = "A table cell was picked out that is out of bounds or cannot exist")
       super
     end
   end

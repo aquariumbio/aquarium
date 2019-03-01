@@ -58,8 +58,9 @@ awc.sh
 
 ots.json
 
-# ignore bower installed components
+# ignore yarn installed components
 public/components
+node_modules
 
 .DS_Store
 
@@ -70,7 +71,7 @@ docs/.sass-cache/**
 # ignore cyprus dependencies
 ui/node_modules
 
-Gemfile.lock
-
 # ignore vscode settings
 .vscode
+
+# please do not ignore Gemfile.lock !!!

@@ -10,7 +10,16 @@
 
   <h2 class="md-title">Editing Wizards</h2>
 
-  The wizard name should be short, such as "M20" as it will be used as the first part of the location. The description can be a sentence or so. The field names are used to remind the user what each field means. In the example above, we would use "Hotel", "Box", and "Slot". The capacity for the second two fields can be a finite, positive number. In the above example, we would use 16 for the Box field and 81 for the Slot field. The first field is always assumed to have infinite capacity (meaning you can go buy more freezers as you need them).  
+  <p>
+  Give the wizard name and description.
+  The name represents the type of location, and should be a short but mnemonic.
+  </p>
+
+  <p>
+  Field 1 is the primary location, e.g., which freezer; and fields 2 and 3 represent hierarchical sub-locations.
+  The name should descriptive of locations and sub-locations.
+  For capacities of sub-locations, give the capacity as a positive whole number, or 0 for sub-locations with no capacity limit.
+  </p>
 
 <% end %>
 

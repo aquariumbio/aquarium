@@ -20,9 +20,8 @@
 
 <h2 class="md-title">About Wizards</h2>
 
-A location wizard is a bit of code that uses a schema to store new items. For example, Primers might be stored in a -20C freezer in 81 slot freezer boxes stored on shelves that contain 16 boxes. A location wizard for this scheme would have locations of the form M20.x.y.z where x is the shelf (or hotel as we call them in the Klavins lab), y is the box, and z is the slot in the box.
-
-A wizard works by setting up a table of all locations with the specified form that have evern been used. When a new item is made, the wizard finds the lowest available location for that item. Here W.x.y.z &lt; W.X.Y.Z if x &lt; X, or x=X and y&lt;Y, or x=X and y=Y, and z&lt;Z. If all available locations are taken, then wizard computes the next new location, adds it to the table of locations, and puts the item there. 
+A location wizard manages the storage of new items in a location such as a freezer.
+When a new item is made, the wizard finds the first available location for that item.
 
 <% end %>
 
