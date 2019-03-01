@@ -19,6 +19,7 @@ services:
       - ./app:/aquarium/app
       - ./docs:/aquarium/docs
       - ./lib:/aquarium/lib
+      - ./spec:/aquarium/spec
       - ./test:/aquarium/test
       - ./ui:/aquarium/ui
       - ./docker/aquarium/database.yml:/aquarium/config/database.yml

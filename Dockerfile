@@ -1,5 +1,6 @@
 ARG RUBY_VERSION=2.5
-FROM ruby:${RUBY_VERSION}-alpine AS basebuilder
+ARG ALPINE_VERSION=3.8
+FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION} AS basebuilder
 RUN apk update && apk add \
     bind-tools \
     build-base \

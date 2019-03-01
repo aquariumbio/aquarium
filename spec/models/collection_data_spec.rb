@@ -2,10 +2,13 @@ require 'rails_helper'
 
 RSpec.describe Collection, type: :model do
 
-  # ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
+  let!(:stripwell_type) { create(:stripwell) }
+  let!(:test_sample) { create(:sample) }
+
+  # TODO: change to properly use factories
 
   # Tests new_collection
-  def example_collection name="Stripwell"
+  def example_collection name = "Stripwell"
     c = Collection.new_collection(name)
     c.save
     raise "Got save errors: #{c.errors.full_messages}" if c.errors.any?
@@ -16,7 +19,7 @@ RSpec.describe Collection, type: :model do
     ot = ObjectType.find_by_name "96 qPCR collection" 
     unless ot
       ObjectType.new(
-        name: "96 qPCR collection" ,
+        name: "96 qPCR collection",
         description: "96 qPCR collection",
         min: 0,
         max: 1,
@@ -36,8 +39,6 @@ RSpec.describe Collection, type: :model do
     end
   end
 
-  test_sample = Sample.last
-
   context 'data' do
 
     it "doesn't screw up sample associations after setting data" do
@@ -48,7 +49,7 @@ RSpec.describe Collection, type: :model do
       
       sample_matrix = JSON.parse("[[#{id},#{id},#{id},#{id},#{id},null,null,null,null,null,null,null]]")
           
-      data_matrix = (0...1).collect { |i| (0..11).collect { |j| 12*i+j } }
+      data_matrix = (0...1).collect { |i| (0..11).collect { |j| 12 * i + j } }
       
       plate.associate_matrix(sample_matrix) 
 
@@ -80,8 +81,8 @@ RSpec.describe Collection, type: :model do
       c = example_collection
       c.set 0, 0, Sample.last
       c.set 0, 3, Sample.last      
-      c.part(0,0).associate "x", 1.0
-      c.part(0,3).associate "y", "hello world"
+      c.part(0, 0).associate "x", 1.0
+      c.part(0, 3).associate "y", "hello world"
 
       m = c.data_matrix "x"
       raise "did not find association x" unless m[0][0].key == "x" && m[0][0].value == 1.0
@@ -98,20 +99,20 @@ RSpec.describe Collection, type: :model do
     it "can set data associations of parts" do
 
       c = example_collection
-      c.set_data_matrix "x", [ [ 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2 ] ]
-      c.set_data_matrix "y", [ [ "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L" ] ]
+      c.set_data_matrix "x", [[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2]]
+      c.set_data_matrix "y", [["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]]
 
-      raise "did not set matrix" unless c.get_part_data("x",0,11) == 1.2 && c.get_part_data("y",0,0) == "A"
+      raise "did not set matrix" unless c.get_part_data("x", 0, 11) == 1.2 && c.get_part_data("y", 0, 0) == "A"
 
       c.set_part_data "y", 0, 5, "f"
-      raise "did not set specific element" unless c.get_part_data("y",0,5) == "f"
+      raise "did not set specific element" unless c.get_part_data("y", 0, 5) == "f"
 
       c.drop_data_matrix "x"
       c.drop_data_matrix "y"
 
       make_96_well_pcr_collection
       d = example_collection "96 qPCR collection"      
-      d.set_data_matrix "z", [ [ 100, 200 ], [ 400, 500 ] ], offset: [4, 3]
+      d.set_data_matrix "z", [[100, 200], [400, 500]], offset: [4, 3]
 
       raise "did not set data matrix with offset" unless d.data_matrix("z")[5][4].value == 500
 
