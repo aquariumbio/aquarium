@@ -64,6 +64,18 @@ class ProtocolTestBase
     @backtrace = @job.reload.backtrace
   end
 
+  def error?
+    @job.error?
+  end
+
+  def error_message
+    @job.error_message
+  end
+
+  def error_backtrace
+    @job.error_backtrace
+  end
+
   def find_display_by_title(title)
     displays_with_content.find { |d| d[:content][0][:title] == title }
   end

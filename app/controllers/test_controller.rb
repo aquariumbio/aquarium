@@ -20,9 +20,9 @@ class TestController < ApplicationController
         pt.setup
         pt.run
 
-        if pt.job.error?
-          resp.error("Protocol error: #{pt.job.error_message}")
-              .more(backtrace: pt.job.error_backtrace, log: [])
+        if pt.error?
+          resp.error("Protocol error: #{pt.error_message}")
+              .more(backtrace: pt.error_backtrace, log: [])
         else
           begin
             pt.analyze
