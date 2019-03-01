@@ -39,10 +39,8 @@ class TestController < ApplicationController
                     backtrace: pt.backtrace)
           end
         end
-      rescue StandardError => error
-        resp.error("Test error: #{error.to_s}")
-            .more(exception_backtrace: error.backtrace,
-                  backtrace: [], log: [])
+      rescue SystemStackError, SyntaxError, StandardError => error
+        handle_error(error: error, response: resp)
       rescue Exception => e
         resp.error(e.to_s)
             .more(
@@ -58,6 +56,28 @@ class TestController < ApplicationController
 
     render json: resp
 
+  end
+
+  def handle_error(error:, response:)
+    backtrace = filter_backtrace(backtrace: error.backtrace)
+    error_trace = backtrace.map { |message| translate_trace(message: message) }
+    error_message = "Error in #{error_trace[-1]}: #{error.to_s}"
+                    
+    response.error(error_message)
+            .more(exception_backtrace: error_trace,
+                  type: 'test_error',
+                  backtrace: [], log: [])
+  end
+
+  # Filters the backtrace for eval lines
+  def filter_backtrace(backtrace:)
+    backtrace.reject { |msg| msg.match(/^\(eval\):\d+:in `.+'$/).nil? }.uniq
+  end
+
+  def translate_trace(message:)
+    line_number, method = message.match(/^\(eval\):(\d+):in `(.+)'$/).captures
+
+    "`#{method}` (line #{line_number})"
   end
 
 end
