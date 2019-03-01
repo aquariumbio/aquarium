@@ -26,10 +26,13 @@ class TestController < ApplicationController
         else
           begin
             pt.analyze
-          rescue Minitest::Assertion => e
-            resp.error("Test failed: #{e.to_s}")
+          rescue Minitest::Assertion => error
+            error_trace = filter_backtrace(backtrace: error.backtrace)
+                          .map { |message| translate_trace(message: message) }
+            resp.error("Assertion failed: #{error.to_s}")
                 .more(
-                  exception_backtrace: e ? e.backtrace : [], 
+                  error_type: 'assertion_failure',
+                  exception_backtrace: error_trace, 
                   backtrace: pt ? pt.backtrace : [], 
                   log: pt ? pt.logs : []
                 )
@@ -44,6 +47,7 @@ class TestController < ApplicationController
       rescue Exception => e
         resp.error(e.to_s)
             .more(
+              error_type: 'error',
               exception_backtrace: e ? e.backtrace : [], 
               backtrace: pt ? pt.backtrace : [], 
               log: pt ? pt.logs : []
@@ -59,14 +63,16 @@ class TestController < ApplicationController
   end
 
   def handle_error(error:, response:)
-    backtrace = filter_backtrace(backtrace: error.backtrace)
-    error_trace = backtrace.map { |message| translate_trace(message: message) }
+    error_trace = filter_backtrace(backtrace: error.backtrace)
+                  .map { |message| translate_trace(message: message) }
     error_message = "Error in #{error_trace[-1]}: #{error.to_s}"
                     
     response.error(error_message)
-            .more(exception_backtrace: error_trace,
-                  type: 'test_error',
-                  backtrace: [], log: [])
+            .more(
+              error_type: 'test_error',
+              exception_backtrace: error_trace,
+              backtrace: [], log: []
+            )
   end
 
   # Filters the backtrace for eval lines
