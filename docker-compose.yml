@@ -14,7 +14,7 @@
 #
 # before running `docker-compose up`
 
-version: "3.6"
+version: "3.5"
 services:
   app:
     entrypoint: ["/aquarium/docker/aquarium-entrypoint.sh"]

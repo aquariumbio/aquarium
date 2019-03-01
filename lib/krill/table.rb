@@ -124,7 +124,6 @@ module Krill
 
     end
 
-
     # Append a column to the table with a list of values
     # 
     # @param name [String]  the heading of this column
@@ -149,7 +148,7 @@ module Krill
     # @option opts [String] :type defines type of user input -- can be either 'number' or 'text'
     # @return [Table] The table, can be chained
     def add_response_column(name, defaults, opts = {})
-      default_opts = {key: name, type: 'number'}
+      default_opts = { key: name, type: 'number' }
       opts.merge default_opts
       # Although we are creating an input table that is not associated to an operationslist
       # we rely on the operationslist table input machinery (in operations_list_input_table)
@@ -158,7 +157,7 @@ module Krill
       # Putting unique negative numbers here will allow that the ShowResponse still will be populated with values
       # even though there are no op.temporary hashes to fill (since no operations have negative ids)
       values = defaults.each_with_index.map do |default, idx|
-        { type: opts[:type], operation_id: (-1 * idx - 1), key: opts[:key], default: default || 0}
+        { type: opts[:type], operation_id: (-1 * idx - 1), key: opts[:key], default: default || 0 }
       end
       add_column(name, values)
     end
