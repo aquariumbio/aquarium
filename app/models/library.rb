@@ -16,13 +16,13 @@ class Library < ActiveRecord::Base
   }  
 
   def export
-  	 { 
-   	  library: {
+    { 
+      library: {
         name: name, 
         category: category, 
         code_source: code('source') ? code('source').content : '' 
- 	    }
-   	}
+      }
+    }
   end
 
   def self.import(data, user)
@@ -32,7 +32,7 @@ class Library < ActiveRecord::Base
     lib.save
     lib.new_code 'source', obj[:code_source], user
 
-    issues = { notes: [ "Created new library #{obj[:name]} in category #{obj[:category]}" ], inconsistencies: [] }
+    issues = { notes: ["Created new library #{obj[:name]} in category #{obj[:category]}"], inconsistencies: [] }
     issues
   end
 end
