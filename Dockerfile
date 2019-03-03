@@ -1,6 +1,6 @@
 ARG RUBY_VERSION=2.5
 ARG ALPINE_VERSION=3.8
-FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION} AS basebuilder
+FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION} AS aquarium
 RUN apk update && apk add \
     bind-tools \
     build-base \
@@ -8,12 +8,15 @@ RUN apk update && apk add \
     git \
     imagemagick \
     iptables \
+    libxml2 \
+    libxslt \
     mariadb-dev \
     mysql-client \
     nodejs \
     nodejs-npm \
     openjdk8-jre \
-    sqlite-dev
+    sqlite-dev \
+    yarn
 
 RUN mkdir /aquarium
 
@@ -25,15 +28,16 @@ RUN mkdir -p /aquarium/shared/pids
 WORKDIR /aquarium
 
 # install js components
-RUN npm install -g bower@latest
-COPY bower.json ./bower.json
-RUN echo '{ "directory": "public/components", "allow_root": true }' > ./.bowerrc
-RUN bower install --config.interactive=false --force
+COPY package.json ./package.json
+COPY yarn.lock ./yarn.lock
+RUN yarn install && yarn cache clean
 
 # install gems needed by Aquarium
 COPY Gemfile Gemfile.lock ./
 RUN gem update --system
-RUN gem install bundler && bundle install --jobs 20 --retry 5
+RUN gem install bundler && \
+    bundle config build.nokogiri --use-system-libraries \
+    bundle install --jobs 20 --retry 5
 COPY . ./
 
 # include entrypoint scripts for starting Aquarium and Krill

@@ -1,8 +1,6 @@
 // @import "bootstrap";
 @import "variables";
 
-
-
 @media (min-width: 980px) {
 }
 
@@ -32,7 +30,12 @@ textarea {
 
 /* typography */
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   line-height: 1;
 }
 
@@ -56,7 +59,7 @@ h3 {
   margin: 16px 0 10px 0;
 }
 
-h4  {
+h4 {
 }
 
 .help {
@@ -65,7 +68,7 @@ h4  {
 }
 
 p {
-  line-height:2;
+  line-height: 2;
 }
 
 .small {
@@ -95,7 +98,7 @@ p {
 }
 
 .btn-small {
-  padding: 10px;;
+  padding: 10px;
 }
 
 .table {
@@ -110,18 +113,12 @@ p {
   }
 }
 
-input {
-#    padding: 10px !important;
-}
-
 .check {
-  -moz-appearance:none;
-  -webkit-appearance:none;
-  -o-appearance:none;
-top:50% !important;
-margin-top:-4px !important;
-#  padding: 10px;
-#  margin: 20px;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -o-appearance: none;
+  top: 50% !important;
+  margin-top: -4px !important;
   border-radius: 0px;
   height: 30px !important;
   width: 30px !important;
@@ -132,17 +129,16 @@ margin-top:-4px !important;
 }
 
 .file_upload {
-  #outline: 1pt dashed red;
-  input[type=file] {
+  input[type="file"] {
     display: none;
     height: 0px;
-    width:0px;
+    width: 0px;
     margin: 0;
     padding: 0;
   }
 }
 
-.file_upload{
+.file_upload {
   margin: 0 !important;
   padding: 0 !important;
   line-height: 0;
@@ -207,7 +203,7 @@ margin-top:-4px !important;
   float: left;
   margin-right: 10px;
   margin-left: 20px;
-  font-size: 1.0em;
+  font-size: 1em;
   font-family: courier;
   color: #aaa;
   letter-spacing: -1px;
@@ -296,7 +292,10 @@ aside {
 
 /* forms */
 
-input, textarea, select, .uneditable-input {
+input,
+textarea,
+select,
+.uneditable-input {
   border: 1px solid #bbb;
   width: 100%;
   padding: 10px;
@@ -342,12 +341,12 @@ input {
 
 img {
   border-radius: 5px;
-  margin-top:15px;
+  margin-top: 15px;
   border: 1pt solid grey;
 }
 
 .well {
-  opacity:.90;
+  opacity: 0.9;
 }
 
 .location {
@@ -357,7 +356,7 @@ img {
 }
 
 .code {
-  margin:10px;
+  margin: 10px;
   font-size: 9pt;
 }
 
@@ -371,16 +370,15 @@ img {
   *overflow: hidden;
 }
 
-.bugico
-{
-   background:url(/assets/glyphicons-361-bug.png) left top;
-   width: 16px;
-   height: 16px;
-   background-size: 16px 16px;
-   display: block;
-   float: left;
-   padding-top: 2px;
-   filter: invert(50%);
+.bugico {
+  background: url(/assets/glyphicons-361-bug.png) left top;
+  width: 16px;
+  height: 16px;
+  background-size: 16px 16px;
+  display: block;
+  float: left;
+  padding-top: 2px;
+  filter: invert(50%);
 }
 
 .aquarium-version {
@@ -388,13 +386,13 @@ img {
 }
 
 .scrollable-menu {
-    height: auto;
-    max-height: 550px;
-    overflow-x: hidden;
+  height: auto;
+  max-height: 550px;
+  overflow-x: hidden;
 }
 
 .scrollable-menu-small {
-    height: 200px;
-    max-height: 200px;
-    overflow-x: hidden;
+  height: 200px;
+  max-height: 200px;
+  overflow-x: hidden;
 }

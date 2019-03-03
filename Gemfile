@@ -28,7 +28,7 @@ gem 'yard-activerecord'
 # Various style related gems
 gem 'github-markup'
 gem 'redcarpet'
-gem 'sass-rails'
+gem 'sassc-rails'
 gem 'will_paginate'
 
 # For uploads and cloud storage
@@ -61,7 +61,7 @@ end
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'bcrypt-ruby', '~> 3.1.2'
+  gem 'bcrypt', '~> 3.1'
   gem 'closure-compiler'
 end
 

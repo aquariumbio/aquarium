@@ -1,4 +1,3 @@
-
 .take-note {
   margin: 15px 0 15px 5px;
 }
@@ -12,21 +11,19 @@
   list-style: none;
   li {
     margin: 3px;
-#    outline: 1pt dashed blue;
     height: 40px;
     position: relative;
-   .check {
-     float: left;
-     margin-top: 5px !important;
-   }
-   .id {
+    .check {
+      float: left;
+      margin-top: 5px !important;
+    }
+    .id {
       margin: 0 10px 0 10px;
       padding: 0 0 0 15px;
       line-height: 40px;
       font-weight: bold;
       width: 340px !important;
       height: 40px;
- #     outline: 1pt dashed orange;
       float: left;
       background: #eee;
       border: 1pt solid #ddd;
@@ -82,7 +79,6 @@
       font-weight: bold;
       width: 340px !important;
       height: 40px;
- #     outline: 1pt dashed orange;
       float: left;
       background: #eee;
       border: 1pt solid #ddd;
@@ -93,7 +89,6 @@
       line-height: 50px;
       width: 230px;
       padding: 0 0 0 0;
-#     outline: 1pt dashed orange;
     }
     .desired_quantity {
       line-height: 50px;
@@ -103,7 +98,6 @@
       padding: 0 0 0 10px;
       font-size: 14pt;
       font-weight: bold;
-      
     }
     .desired_quantity:before {
       content: "Quantity Required: ";
