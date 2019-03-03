@@ -22,7 +22,7 @@ class TestController < ApplicationController
 
         if pt.error?
           resp.error("Protocol error: #{pt.error_message}")
-              .more(backtrace: pt.error_backtrace, log: [])
+              .more(exception_backtrace: pt.error_backtrace, log: [])
         else
           begin
             pt.analyze
@@ -64,7 +64,7 @@ class TestController < ApplicationController
 
   def handle_error(error:, response:)
     error_trace = filter_backtrace(backtrace: error.backtrace)
-                  .map { |message| translate_trace(message: message) }
+                 .map { |message| translate_trace(message: message) }
     error_message = "Error in #{error_trace[-1]}: #{error.to_s}"
                     
     response.error(error_message)
