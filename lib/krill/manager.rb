@@ -65,9 +65,9 @@ module Krill
           rescue Exception => e
             puts "#{@job.id}: EXCEPTION #{e}"
             puts e.backtrace[0, 10]
-            @base_object.error e
+            @base_object.error(e)
           else
-            @job.reload.append_step operation: 'complete', rval: rval
+            @job.reload.append_step(operation: 'complete', rval: rval)
             appended_complete = true
           ensure
             if appended_complete
