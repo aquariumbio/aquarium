@@ -44,12 +44,13 @@ module FieldValueKrill
 
   def make
 
-    if object_type
+    if object_type && !self.child_item_id
       @item = Item.make({ quantity: 1, inuse: 0 }, sample: child_sample, object_type: object_type)
       @item.store if @item.location == 'Unknown'
       self.child_item_id = @item.id
       save
-    else
+    elsif object_type && self.child_item_id
+      Rails.logger.info "Item #{self.child_item_id} already assigned to field value"
     end
 
     @item
