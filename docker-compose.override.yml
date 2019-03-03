@@ -5,8 +5,8 @@ services:
   app:
     build:
       context: .
-      target: basebuilder
-    image: basebuilder
+      target: aquarium
+    image: aquarium
     command: ["production"]
     environment:
       RAILS_ENV: production
@@ -28,7 +28,7 @@ services:
       MYSQL_ROOT_PASSWORD: aSecretAquarium
 
   krill:
-    image: basebuilder
+    image: aquarium
     command: ["production"]
     volumes:
       - ./docker/aquarium/database.yml:/aquarium/config/database.yml
