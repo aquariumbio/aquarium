@@ -32,11 +32,15 @@ COPY package.json ./package.json
 COPY yarn.lock ./yarn.lock
 RUN yarn install --modules-folder public/node_modules && yarn cache clean
 
-# install gems needed by Aquarium
+# Change where bundler puts gems
+# see https://bundler.io/v2.0/guides/bundler_docker_guide.html
+ENV GEM_HOME="/usr/local/bundle"
+ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:$PATH
+
+# Install gems needed by Aquarium
 COPY Gemfile Gemfile.lock ./
 RUN gem update --system
 RUN gem install bundler && \
-    bundle config build.nokogiri --use-system-libraries \
     bundle install --jobs 20 --retry 5
 COPY . ./
 
