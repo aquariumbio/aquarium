@@ -30,7 +30,7 @@ WORKDIR /aquarium
 # install js components
 COPY package.json ./package.json
 COPY yarn.lock ./yarn.lock
-RUN yarn install && yarn cache clean
+RUN yarn install --modules-folder public/node_modules && yarn cache clean
 
 # install gems needed by Aquarium
 COPY Gemfile Gemfile.lock ./
