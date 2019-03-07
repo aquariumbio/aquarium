@@ -7,6 +7,7 @@ class ProtocolTestBase
   def initialize(operation_type, current_user)
     @assertions = 0
     @operation_type = operation_type
+    @operations = []
     @current_user = current_user
     @job = nil
   end
@@ -23,7 +24,7 @@ class ProtocolTestBase
   def add_operation
     op = @operation_type
          .operations
-         .create status: 'pending', user_id: @current_user.id
+         .create(status: 'pending', user_id: @current_user.id)
     @operations ||= []
     @operations << op
     op
@@ -32,10 +33,10 @@ class ProtocolTestBase
   def build_plan
     plans = []
     @operations.each do |op|
-      plan = Plan.new user_id: @current_user.id, budget_id: Budget.all.first.id
+      plan = Plan.new(user_id: @current_user.id, budget_id: Budget.all.first.id)
       plan.save
       plans << plan
-      pa = PlanAssociation.new operation_id: op.id, plan_id: plan.id
+      pa = PlanAssociation.new(operation_id: op.id, plan_id: plan.id)
       pa.save
     end        
   end
@@ -62,6 +63,10 @@ class ProtocolTestBase
     make_job
     execute
     @backtrace = @job.reload.backtrace
+  end
+
+  def operations_present?
+    @operations.present?
   end
 
   def error?

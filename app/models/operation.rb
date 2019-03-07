@@ -66,7 +66,7 @@ class Operation < ActiveRecord::Base
   # Assigns a Sample to an input, choosing an appropriate allowable_field_type
   # @param name [String]
   # @param sample [Sample]
-  def with_input name, sample
+  def with_input(name, sample)
       ft = operation_type.inputs.select { |i| i[:name] == name }.first
       aft = ft.choose_aft_for(sample)
       set_input name, sample, aft 
@@ -76,7 +76,7 @@ class Operation < ActiveRecord::Base
   # Assigns a Sample to an output, choosing an appropriate allowable_field_type
   # @param name [String]
   # @param sample [Sample]
-  def with_output name, sample
+  def with_output(name, sample)
       ft = operation_type.outputs.select { |i| i[:name] == name }.first
       aft = ft.choose_aft_for(sample)
       set_output name, sample, aft   
@@ -86,8 +86,8 @@ class Operation < ActiveRecord::Base
   # Assigns a value to an input parameter
   # @param name [String]
   # @param value 
-  def with_property name, value
-      set_property name, value, "input", false, nil
+  def with_property(name, value)
+      set_property(name, value, 'input', false, nil)
   end  
 
   # end methods used for testing via vs code
@@ -97,7 +97,7 @@ class Operation < ActiveRecord::Base
   # @param val [Sample]
   # @param aft [AllowableFieldType]
   def set_input(name, val, aft = nil)
-    set_property name, val, 'input', false, aft
+    set_property(name, val, 'input', false, aft)
   end
 
   # Assigns a Sample to an output
@@ -105,7 +105,7 @@ class Operation < ActiveRecord::Base
   # @param val [Sample]
   # @param aft [AllowableFieldType]
   def set_output(name, val, aft = nil)
-    set_property name, val, 'output', false, aft
+    set_property(name, val, 'output', false, aft)
   end
 
   # Adds a new input to an operation, even if that operation doesn't specify the input
@@ -427,7 +427,7 @@ class Operation < ActiveRecord::Base
     opts[:routing].each do |r|
       ot.field_types.select { |ft| ft.routing == r[:symbol] }.each do |ft|
         aft = ft.allowable_field_types[0]
-        op.set_property ft.name, r[:sample], ft.role, false, aft
+        op.set_property(ft.name, r[:sample], ft.role, false, aft)
       end
     end
 
