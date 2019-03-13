@@ -69,7 +69,7 @@ class Operation < ActiveRecord::Base
   def with_input(name, sample)
       ft = operation_type.inputs.select { |i| i[:name] == name }.first
       aft = ft.choose_aft_for(sample)
-      set_input name, sample, aft 
+      set_input(name, sample, aft)
       self       
   end 
 
@@ -389,11 +389,11 @@ class Operation < ActiveRecord::Base
   end
 
   def set_input_data(input_name, data_name, value)
-    set_child_data input_name, 'input', data_name, value
+    set_child_data(input_name, 'input', data_name, value)
   end
 
   def set_output_data(input_name, data_name, value)
-    set_child_data input_name, 'output', data_name, value
+    set_child_data(input_name, 'output', data_name, value)
   end
 
   def precondition_value

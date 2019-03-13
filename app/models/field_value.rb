@@ -260,7 +260,7 @@ class FieldValue < ActiveRecord::Base
   end
 
   def set_child_data(name, value)
-    child_item.associate name, value if child_item_id
+    child_item.associate(name, value) if child_item_id
   end
 
   # Set {Item}, {Collection}, or row or column.
