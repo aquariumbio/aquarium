@@ -70,7 +70,7 @@ module OperationTypeExport
         precondition: precondition ? precondition.content : '',
         cost_model: cost_model ? cost_model.content : '',
         documentation: documentation ? documentation.content : '',
-
+        test: test ? test.content : '',
         timing: timing ? timing.export : nil
 
       }
@@ -132,7 +132,7 @@ module OperationTypeExport
 
       obj = data[:operation_type]
 
-      ot = OperationType.new name: obj[:name], category: obj[:category], deployed: obj[:deployed], on_the_fly: obj[:on_the_fly]
+      ot = OperationType.new(name: obj[:name], category: obj[:category], deployed: obj[:deployed], on_the_fly: obj[:on_the_fly])
       ot.save
 
       raise "Could not save operation type '#{obj[:name]}': " + ot.errors.full_messages.join(', ') + "." unless ot.errors.empty?
@@ -151,10 +151,11 @@ module OperationTypeExport
         end
       end
 
-      ot.new_code 'protocol', obj[:protocol], user
-      ot.new_code 'precondition', obj[:precondition], user
-      ot.new_code 'cost_model', obj[:cost_model], user
-      ot.new_code 'documentation', obj[:documentation], user
+      ot.new_code('protocol', obj[:protocol], user)
+      ot.new_code('precondition', obj[:precondition], user)
+      ot.new_code('cost_model', obj[:cost_model], user)
+      ot.new_code('documentation', obj[:documentation], user)
+      ot.new_code('test', obj[:test], user)
 
       if obj[:timing]
         puts 'Timing: ' + obj[:timing].inspect
@@ -195,10 +196,11 @@ module OperationTypeExport
         end
       end
 
-      ot.new_code 'protocol', obj[:protocol], user
-      ot.new_code 'precondition', obj[:precondition], user
-      ot.new_code 'cost_model', obj[:cost_model], user
-      ot.new_code 'documentation', obj[:documentation], user
+      ot.new_code('protocol', obj[:protocol], user)
+      ot.new_code('precondition', obj[:precondition], user)
+      ot.new_code('cost_model', obj[:cost_model], user)
+      ot.new_code('documentation', obj[:documentation], user)
+      ot.new_code('test', obj[:test], user)
 
       if obj[:timing]
         puts 'Timing: ' + obj[:timing].inspect
