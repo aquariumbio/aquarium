@@ -155,7 +155,9 @@ module OperationTypeExport
       ot.new_code('precondition', obj[:precondition], user)
       ot.new_code('cost_model', obj[:cost_model], user)
       ot.new_code('documentation', obj[:documentation], user)
-      ot.new_code('test', obj[:test], user)
+      test_content = ''
+      test_content = obj[:test] if obj[:test]
+      ot.new_code('test', test_content, user)
 
       if obj[:timing]
         puts 'Timing: ' + obj[:timing].inspect
@@ -200,7 +202,9 @@ module OperationTypeExport
       ot.new_code('precondition', obj[:precondition], user)
       ot.new_code('cost_model', obj[:cost_model], user)
       ot.new_code('documentation', obj[:documentation], user)
-      ot.new_code('test', obj[:test], user)
+      test_content = ''
+      test_content = obj[:test] if obj[:test]
+      ot.new_code('test', test_content, user)
 
       if obj[:timing]
         puts 'Timing: ' + obj[:timing].inspect
