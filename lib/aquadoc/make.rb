@@ -25,14 +25,11 @@ module Aquadoc
     end
 
     def assets_path_from_load_path
-      paths = $LOAD_PATH.select do |p|
-        p.match 'aquadoc'
-      end
-      if paths.length == 1
-        paths[0]
-      else
-        raise "Could not find aquadoc assets directory in #{$LOAD_PATH}"
-      end
+      paths = $LOAD_PATH.select { |p| p.match('aquadoc') }
+      no_assets_msg = "Could not find aquadoc assets directory in #{$LOAD_PATH}"
+      raise no_assets_msg unless paths.length == 1
+
+      paths[0]
     end
 
     def define_paths
@@ -79,30 +76,46 @@ module Aquadoc
       @sample_types = @sample_types.uniq.sort_by { |st| st[:name] }
       @object_types = @object_types.uniq.sort_by { |st| st[:name] }
       @libraries = @libraries.sort_by { |lib| lib[:name] }
-      @operation_type_specs = @operation_type_specs.sort_by { |ots| ots[:operation_type][:name] }
+      @operation_type_specs = @operation_type_specs.sort_by do |ots|
+        ots[:operation_type][:name]
+      end
     end
 
     def make_md
       @categories.each do |c|
-        if @options[:workflows]
-          @operation_type_specs.select { |ots| ots[:operation_type][:category] == c }.each do |ots|
-            @storage.write("operation_types/#{sanitize_filename ots[:operation_type][:name]}.md", op_type_md(ots))
-          end
-        end
-        next unless @options[:libraries]
-        @libraries.select { |lib| lib[:category] == c }.each do |lib|
-          File.write(@temp_library_path + "/#{sanitize_filename lib[:name]}.rb", lib[:code_source])
-          @storage.write("libraries/#{sanitize_filename lib[:name]}.rb", lib[:code_source])
-        end
+        write_category_optype_markdown(category: c) if @options[:workflows]
+        write_category_library_markdown(category: c) if @options[:libraries]
       end
 
       return unless @options[:inventory]
       @sample_types.each do |st|
-        @storage.write("sample_types/#{sanitize_filename st[:name]}.md", sample_type_md(st))
+        @storage.write("sample_types/#{sanitize_filename st[:name]}.md",
+                       sample_type_md(st))
       end
 
       @object_types.each do |ot|
-        @storage.write("object_types/#{sanitize_filename ot[:name]}.md", object_type_md(ot))
+        @storage.write("object_types/#{sanitize_filename ot[:name]}.md",
+                       object_type_md(ot))
+      end
+    end
+
+    def write_category_optype_markdown(category:)
+      category_specs = @operation_type_specs.select do |ots|
+        ots[:operation_type][:category] == category
+      end
+      category_specs.each do |ots|
+        filename = sanitize_filename(ots[:operation_type][:name])
+        path = "operation_types/#{filename}.md"
+        @storage.write(path, op_type_md(ots))
+      end
+    end
+
+    def write_category_library_markdown(category:)
+      @libraries.select { |lib| lib[:category] == category }.each do |lib|
+        File.write(@temp_library_path + "/#{sanitize_filename lib[:name]}.rb",
+                   lib[:code_source])
+        @storage.write("libraries/#{sanitize_filename lib[:name]}.rb",
+                       lib[:code_source])
       end
     end
 
@@ -115,11 +128,12 @@ module Aquadoc
       Dir['./*.rb'].each do |lib|
         name = lib.split('/').last
         hname = name.split('.')[0] + '.html'
-        unless system "yardoc -p #{@assets_path}/yard_templates #{lib} --one-file --quiet"
-          raise "Could not run yardoc on #{lib}"
-        end
+        yard_cmd = "yardoc -p #{@assets_path}/yard_templates #{lib}" \
+                   ' --one-file --quiet'
+        raise "Could not run yardoc on #{lib}" unless system yard_cmd
         Dir.chdir @base_path
-        @storage.write("libraries/#{hname}", File.read(@temp_library_path + '/doc/index.html'))
+        @storage.write("libraries/#{hname}",
+                       File.read(@temp_library_path + '/doc/index.html'))
         Dir.chdir @temp_library_path
         system 'rm doc/index.html'
       end
@@ -135,7 +149,11 @@ module Aquadoc
     end
 
     def aq_repo_path
-      "https://github.com/#{@config[:github][:organization] || @config[:github][:user]}/#{@config[:github][:repo]}"
+      user = @config[:github][:user]
+      organization = @config[:github][:organization]
+      repository = @config[:github][:repo]
+
+      "https://github.com/#{organization || user}/#{repository}"
     end
 
     def aq_file
@@ -147,11 +165,12 @@ module Aquadoc
 
     def copy_assets
       if @options[:init]
-        @storage.write('README.md', File.read(@assets_path + '/DEFAULT_README.md'))
-        @storage.write('LICENSE.md', File.read(@assets_path + '/DEFAULT_LICENSE.md'))
+        @storage.write('README.md',
+                       File.read(@assets_path + '/DEFAULT_README.md'))
+        @storage.write('LICENSE.md',
+                       File.read(@assets_path + '/DEFAULT_LICENSE.md'))
       end
 
-      # @storage.write("css/aquaverse.css", File.read(@assets_path + "/aquaverse.css"))
       make_js
       @storage.write('.nojekyll', File.read(@assets_path + '/nojekyll'))
 

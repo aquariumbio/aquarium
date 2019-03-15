@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'octokit'
 require 'base64'
 require 'erb'
@@ -37,65 +39,58 @@ module Aquadoc
     end
 
     def write(path, content)
-      print path.split("/").last + " "
+      print path.split('/').last + ' '
 
       if @create
-        begin
-          @client.create_contents(@repo_info, path, "Aquadoc initial commit", content)
-        rescue Exception => e
-          puts "Warning: Could not create #{path}: #{e}"
-        end
+        create(path: path, message: 'Aquadoc initial commit', content: content)
       else
         begin
           file = @client.contents(@repo_info, path: path)
-          if Base64.decode64(file[:content]) != content
-            @client.update_contents(@repo_info, path, "Aquadoc update", file[:sha], content)
-          end
-        rescue Exception => e
-          begin
-            @client.create_contents(@repo_info, path, "Aquadoc created file", content)
-          rescue Exception => e
-            puts "Warning: Could not create #{path}: #{e}"
-          end
+          return if Base64.decode64(file[:content]) == content
+          @client.update_contents(
+            @repo_info, path, 'Aquadoc update', file[:sha], content
+          )
+        rescue StandardError
+          create(path: path, message: 'Aquadoc created file', content: content)
         end
       end
     end
 
+    def create(path:, message:, content:)
+      @client.create_contents(@repo_info, path, message, content)
+    rescue StandardError => error
+      puts "Warning: Could not create #{path}: #{error}"
+    end
+
     def authenticate
-      begin
-        @client = Octokit::Client.new(access_token: @access_token)
-        return true
-      rescue
-        return false
-      end
+      # TODO: add error handling
+      @client = Octokit::Client.new(access_token: @access_token)
+      true
+    rescue StandardError
+      false
     end
 
     def repo
       begin
         @repo ||= @client.repository(@repo_info)
-      rescue Exception => e
+      rescue StandardError
         @repo = nil
       end
       @repo
     end
 
     def create_repo
+      user = @config[:github][:user]
+      organization = @config[:github][:organization]
+      repository = @config[:github][:repo]
       opts = {
         description: "#{@config[:title]}: An Aquarium Workflow",
-        homepage: "https://#{@config[:github][:organization] || @config[:github][:user]}.github.io/#{@config[:github][:repo]}/"
+        homepage: "https://#{organization || user}.github.io/#{repository}/"
       }
-      opts[:organization] = @config[:github][:organization] if @config[:github][:organization]
+      opts[:organization] = organization if organization
       @repo = @client.create_repository(@repo_info[:repo], opts)
       sleep 5 # make sure repo is created before starting to add files
       puts "Created new repo: #{@repo_info[:repo]}"
     end
-
-    # def clone_repo
-    #   system "git clone https://github.com/#{@repo_info[:user]}/#{@repo_info[:repo]}.git"
-    # end
-    #
-    # def add_and_commit
-    #   system "(cd #{@repo_info[:repo]}; git add .; git commit -m 'Aquadoc update')"
-    # end
   end
 end

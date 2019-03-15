@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require 'aquadoc'
 
@@ -6,22 +7,22 @@ opts = {}
 ARGV.each do |arg|
   case arg
 
-  when "--no-workflows"
+  when '--no-workflows'
     opts[:workflows] = false
 
-  when "--no-libraries"
+  when '--no-libraries'
     opts[:libraries] = false
 
-  when "--no-inventory"
+  when '--no-inventory'
     opts[:inventory] = false
 
-  when "--no-yard"
+  when '--no-yard'
     opts[:yard_docs] = false
 
-  when "--local"
+  when '--local'
     opts[:local] = true
 
-  when "--help"
+  when '--help'
 
     puts <<~HELP
       aquadoc [options...]
@@ -43,29 +44,28 @@ ARGV.each do |arg|
 end
 
 begin
-  config = File.read("./config.json")
+  config = File.read('./config.json')
   config = JSON.parse(config, symbolize_names: true)
-rescue Exception => e
-  raise "Could not find valid config file: #{e}"
+rescue StandardError => error
+  raise "Could not find valid config file: #{error}"
 end
 
 categories = []
-Dir["categories/*.json"].each do |c|
-  name = c.split("/").last;
-  file = File.read(c);
+Dir['categories/*.json'].each do |c|
+  file = File.read(c)
   categories << JSON.parse(file, symbolize_names: true)
 end
 
-if opts[:local]
-  ag = Aquadoc::Local.new(config, categories, opts)
-else
-  ag = Aquadoc::Git.new(config, categories, opts)
-end
+ag = if opts[:local]
+       Aquadoc::Local.new(config, categories, opts)
+     else
+       Aquadoc::Git.new(config, categories, opts)
+     end
 
 if ag.authorized
   ag.run
 else
-  puts "Could not authenticate with github"
+  puts 'Could not authenticate with github'
 end
 
 puts "\n"
