@@ -10,8 +10,8 @@ module Aquadoc
 
     def sanitize_filename(filename)
       if filename
-        fn = filename.split /(?<=.)\.(?=[^.])(?!.*\.[^.])/m
-        fn.map! { |s| s.gsub /[^a-z0-9\-]+/i, '_' }
+        fn = filename.split(/(?<=.)\.(?=[^.])(?!.*\.[^.])/m)
+        fn.map! { |s| s.gsub(/[^a-z0-9\-]+/i, '_') }
         fn.join '.'
       else
         'nil'
