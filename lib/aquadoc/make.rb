@@ -1,51 +1,48 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require 'json'
 require 'fileutils'
 
 module Aquadoc
-
   class Render
-
     attr_accessor :html_path
 
     def sanitize_filename(filename)
       if filename
         fn = filename.split /(?<=.)\.(?=[^.])(?!.*\.[^.])/m
         fn.map! { |s| s.gsub /[^a-z0-9\-]+/i, '_' }
-        return fn.join '.'
+        fn.join '.'
       else
-        "nil"
+        'nil'
       end
     end
 
     def context
-      self.instance_variables.map do |attribute|
-        { attribute => self.instance_variable_get(attribute) }
+      instance_variables.map do |attribute|
+        { attribute => instance_variable_get(attribute) }
       end
     end
 
     def assets_path_from_load_path
-
-      paths = $LOAD_PATH.select { |p|
-        p.match "aquadoc"
-      }
+      paths = $LOAD_PATH.select do |p|
+        p.match 'aquadoc'
+      end
       if paths.length == 1
         paths[0]
       else
         raise "Could not find aquadoc assets directory in #{$LOAD_PATH}"
       end
-
     end
 
     def define_paths
       @base_path = Dir.pwd
-      @categories_path = @base_path + "/categories"
-      @categories_directory = @categories_path + "/*.json"
-      @html_path = @base_path + "/" + @config[:github][:repo]
-      @temp_library_path = @base_path + "/temp_library_path"
-      @config_path = @base_path + "/config.json"
-      @assets_path = assets_path_from_load_path + "/assets"
+      @categories_path = @base_path + '/categories'
+      @categories_directory = @categories_path + '/*.json'
+      @html_path = @base_path + '/' + @config[:github][:repo]
+      @temp_library_path = @base_path + '/temp_library_path'
+      @config_path = @base_path + '/config.json'
+      @assets_path = assets_path_from_load_path + '/assets'
     end
 
     def make_directories
@@ -53,7 +50,6 @@ module Aquadoc
     end
 
     def make_parts
-
       @categories = []
       @sample_types = []
       @object_types = []
@@ -84,22 +80,19 @@ module Aquadoc
       @object_types = @object_types.uniq.sort_by { |st| st[:name] }
       @libraries = @libraries.sort_by { |lib| lib[:name] }
       @operation_type_specs = @operation_type_specs.sort_by { |ots| ots[:operation_type][:name] }
-
     end
 
     def make_md
-
       @categories.each do |c|
         if @options[:workflows]
           @operation_type_specs.select { |ots| ots[:operation_type][:category] == c }.each do |ots|
             @storage.write("operation_types/#{sanitize_filename ots[:operation_type][:name]}.md", op_type_md(ots))
           end
         end
-        if @options[:libraries]
-          @libraries.select { |lib| lib[:category] == c }.each do |lib|
-            File.write(@temp_library_path + "/#{sanitize_filename lib[:name]}.rb", lib[:code_source])
-            @storage.write("libraries/#{sanitize_filename lib[:name]}.rb", lib[:code_source])
-          end
+        next unless @options[:libraries]
+        @libraries.select { |lib| lib[:category] == c }.each do |lib|
+          File.write(@temp_library_path + "/#{sanitize_filename lib[:name]}.rb", lib[:code_source])
+          @storage.write("libraries/#{sanitize_filename lib[:name]}.rb", lib[:code_source])
         end
       end
 
@@ -112,39 +105,34 @@ module Aquadoc
           @storage.write("object_types/#{sanitize_filename ot[:name]}.md", object_type_md(ot))
         end
       end
-
     end
 
     def make_yard_docs
-
-      puts "Making yard docs"
+      puts 'Making yard docs'
 
       Dir.chdir @temp_library_path
-      unless system "touch README.md"
-        raise "Could not write to #{@temp_dir}"
-      end
+      raise "Could not write to #{@temp_dir}" unless system 'touch README.md'
 
-      Dir["./*.rb"].each do |lib|
-        name = lib.split("/").last;
-        hname = name.split(".")[0] + ".html"
+      Dir['./*.rb'].each do |lib|
+        name = lib.split('/').last
+        hname = name.split('.')[0] + '.html'
         unless system "yardoc -p #{@assets_path}/yard_templates #{lib} --one-file --quiet"
           raise "Could not run yardoc on #{lib}"
         end
         Dir.chdir @base_path
-        @storage.write("libraries/#{hname}", File.read(@temp_library_path + "/doc/index.html"))
+        @storage.write("libraries/#{hname}", File.read(@temp_library_path + '/doc/index.html'))
         Dir.chdir @temp_library_path
-        system "rm doc/index.html"
+        system 'rm doc/index.html'
       end
 
-      system "rm -rf doc"
+      system 'rm -rf doc'
       system "rm -rf #{@temp_library_path}"
 
       Dir.chdir @base_path
-
     end
 
     def aq_file_name
-      @config[:github][:repo] + ".aq"
+      @config[:github][:repo] + '.aq'
     end
 
     def aq_repo_path
@@ -159,42 +147,39 @@ module Aquadoc
     end
 
     def copy_assets
-
       if @options[:init]
-        @storage.write("README.md", File.read(@assets_path + "/DEFAULT_README.md"))
-        @storage.write("LICENSE.md", File.read(@assets_path + "/DEFAULT_LICENSE.md"))
+        @storage.write('README.md', File.read(@assets_path + '/DEFAULT_README.md'))
+        @storage.write('LICENSE.md', File.read(@assets_path + '/DEFAULT_LICENSE.md'))
       end
 
       # @storage.write("css/aquaverse.css", File.read(@assets_path + "/aquaverse.css"))
       make_js
-      @storage.write(".nojekyll", File.read(@assets_path + "/nojekyll"))
+      @storage.write('.nojekyll', File.read(@assets_path + '/nojekyll'))
 
       @config[:github].delete(:access_token)
       @storage.write(aq_file_name, aq_file)
-      @storage.write("config.json", @config.to_json)
-
+      @storage.write('config.json', @config.to_json)
     end
 
-    def initialize storage, config, category_list
-
+    def initialize(storage, config, category_list)
       @storage = storage
       @category_list = JSON.parse(category_list.to_json, symbolize_names: true)
 
       default_config = {
-        title: "No title specified",
-        description: "No description given",
-        copyright: "No copyright declared",
-        version: "no version info",
+        title: 'No title specified',
+        description: 'No description given',
+        copyright: 'No copyright declared',
+        version: 'no version info',
         authors: [],
         maintainer: {
-      	  name: "No maintainer",
-      	  email: "noone@nowehere"
+          name: 'No maintainer',
+          email: 'noone@nowehere'
         },
         acknowledgements: [],
         github: {
-          repo: "none",
-          user: "none",
-          access_token: "none"
+          repo: 'none',
+          user: 'none',
+          access_token: 'none'
         },
         keywords: [],
         aquadoc_version: Aquadoc.version
@@ -204,21 +189,19 @@ module Aquadoc
       @config = default_config.merge(konfig)
 
       define_paths
-
     end
 
     def cleanup
       FileUtils.rm_rf(@html_path)
     end
 
-    def make opts={}
-
+    def make(opts = {})
       @options = {
-          inventory: true,
-          libraries: true,
-          workflows: true,
-          yard_docs: true,
-          init: true
+        inventory: true,
+        libraries: true,
+        workflows: true,
+        yard_docs: true,
+        init: true
       }.merge opts
 
       make_directories
@@ -228,9 +211,6 @@ module Aquadoc
       make_index
       make_yard_docs if @options[:yard_docs] && @options[:libraries]
       copy_assets
-
     end
-
   end
-
 end

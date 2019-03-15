@@ -3,9 +3,7 @@ require 'base64'
 require 'erb'
 
 module Aquadoc
-
   class Git
-
     attr_accessor :authorized
 
     def initialize config, categories, opts = {}
@@ -23,11 +21,9 @@ module Aquadoc
 
       system "git config --global user.email 'info@aquarium.com'"
       system "git config --global user.name 'Aquadoc'"
-
     end
 
     def run
-
       aquadoc = Render.new(self, @config, @categories)
 
       if !repo
@@ -38,11 +34,9 @@ module Aquadoc
       end
 
       aquadoc.make(@opts.merge(init: @create))
-
     end
 
     def write path, content
-
       print path.split("/").last + " "
 
       if @create
@@ -65,18 +59,15 @@ module Aquadoc
           end
         end
       end
-
     end
 
     def authenticate
-
       begin
         @client = Octokit::Client.new(:access_token => @access_token)
         return true
       rescue
         return false
       end
-
     end
 
     def repo
@@ -94,7 +85,7 @@ module Aquadoc
         homepage: "https://#{@config[:github][:organization] || @config[:github][:user]}.github.io/#{@config[:github][:repo]}/"
       }
       opts[:organization] = @config[:github][:organization] if @config[:github][:organization]
-      @repo = @client.create_repository(@repo_info[:repo],opts)
+      @repo = @client.create_repository(@repo_info[:repo], opts)
       sleep 5 # make sure repo is created before starting to add files
       puts "Created new repo: #{@repo_info[:repo]}"
     end
@@ -106,7 +97,5 @@ module Aquadoc
     # def add_and_commit
     #   system "(cd #{@repo_info[:repo]}; git add .; git commit -m 'Aquadoc update')"
     # end
-
   end
-
 end

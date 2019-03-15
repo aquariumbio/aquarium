@@ -4,7 +4,6 @@ require 'aquadoc'
 
 opts = {}
 ARGV.each do |arg|
-
   case arg
 
   when "--no-workflows"
@@ -41,7 +40,6 @@ ARGV.each do |arg|
     exit(-1)
 
   end
-
 end
 
 begin
