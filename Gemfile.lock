@@ -83,7 +83,7 @@ GEM
     builder (3.2.3)
     climate_control (0.2.0)
     closure-compiler (1.1.14)
-    concurrent-ruby (1.1.4)
+    concurrent-ruby (1.1.5)
     crass (1.0.4)
     debug_inspector (0.0.3)
     diff-lcs (1.3)
