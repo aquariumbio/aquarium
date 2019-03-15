@@ -26,8 +26,8 @@ Gem::Specification.new do |s|
     "lib/assets/DEFAULT_LICENSE.md",
     "lib/assets/nojekyll"
   ]
-  s.add_runtime_dependency "yard", "0.9.16"
   s.add_runtime_dependency "octokit", "4.13.0"
+  s.add_runtime_dependency "yard", "0.9.16"
   s.homepage    = 'http://klavinslab.org/protocols'
   s.license     = 'MIT'
   s.bindir      = 'bin'
