@@ -96,14 +96,13 @@ module Aquadoc
         end
       end
 
-      if @options[:inventory]
-        @sample_types.each do |st|
-          @storage.write("sample_types/#{sanitize_filename st[:name]}.md", sample_type_md(st))
-        end
+      return unless @options[:inventory]
+      @sample_types.each do |st|
+        @storage.write("sample_types/#{sanitize_filename st[:name]}.md", sample_type_md(st))
+      end
 
-        @object_types.each do |ot|
-          @storage.write("object_types/#{sanitize_filename ot[:name]}.md", object_type_md(ot))
-        end
+      @object_types.each do |ot|
+        @storage.write("object_types/#{sanitize_filename ot[:name]}.md", object_type_md(ot))
       end
     end
 
