@@ -130,7 +130,11 @@ module Aquadoc
         hname = name.split('.')[0] + '.html'
         yard_cmd = "yardoc -p #{@assets_path}/yard_templates #{lib}" \
                    ' --one-file --quiet'
-        raise "Could not run yardoc on #{lib}" unless system yard_cmd
+        unless system yard_cmd
+          Dir.chdir @base_path
+          system "rm -rf #{@temp_library_path}"    
+          raise "Could not run yardoc on #{lib}"
+        end
         Dir.chdir @base_path
         @storage.write("libraries/#{hname}",
                        File.read(@temp_library_path + '/doc/index.html'))
