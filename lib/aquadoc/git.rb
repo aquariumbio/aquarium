@@ -63,7 +63,7 @@ module Aquadoc
 
     def authenticate
       begin
-        @client = Octokit::Client.new(:access_token => @access_token)
+        @client = Octokit::Client.new(access_token: @access_token)
         return true
       rescue
         return false
