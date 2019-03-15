@@ -1,13 +1,13 @@
 source 'https://rubygems.org'
 
 # Rails version
-gem 'rails', '4.2.10'
+gem 'rails', '4.2.11.1'
 
 # SQL adapter
 gem 'mysql2', '~> 0.4.10'
 
 # Needed for rails 3.2 => 4.0 upgrade
-gem 'protected_attributes'
+gem 'protected_attributes_continued'
 gem 'tzinfo-data'
 
 # Json helpers
@@ -68,7 +68,7 @@ end
 gem 'PriorityQueue'
 
 # Klavins lab gems
-gem 'anemone', :git => 'https://github.com/klavinslab/anemone'
+gem 'anemone', :git => 'https://github.com/klavinslab/anemone', branch: 'rails_4_2_11_1'
 gem 'aquadoc', :git => 'https://github.com/klavinslab/aquadoc'
 
 

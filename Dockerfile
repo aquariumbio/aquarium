@@ -40,7 +40,8 @@ ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:$PATH
 # Install gems needed by Aquarium
 COPY Gemfile Gemfile.lock ./
 RUN gem update --system
-RUN gem install bundler && \
+# rails 4.2.11.1 requires bundler < 2.0
+RUN gem install bundler --version '< 2.0' && \
     bundle install --jobs 20 --retry 5
 COPY . ./
 
