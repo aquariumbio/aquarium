@@ -1,12 +1,11 @@
 # Aquadoc
 
-The purpose of aquadoc is to generate a github repository and web page (using github pages) you can use to publish and
-share a set of [Aquarium](http://klavinslab.org/aquarium) operation types and their protocols.
+The `aquadoc` gem will generate a github repository and web page to publish and share a set of [Aquarium](http://klavinslab.org/aquarium) operation types and their protocols.
+The generated web page that can be displayed using github pages.
 
 ## Installation
 
-This gem is under construction, so it is not yet available on RubyGems.
-To install it from github do:
+To install this gem
 
 ```bash
 gem install specific_install
@@ -29,7 +28,8 @@ where MyWorkflow is a directory containing your workflow as described below.
 
 First, from the [Aquarium](http://klavinslab.org/aquarium) Developer tab,
 export a set of categories and put them in a directory called categories.
-Then create a config.json.
+Then create a `config.json`.
+
 Your directory structure should look like the following:
 
     MyWorkflow
@@ -50,7 +50,9 @@ The config.json file should look something like
   "description": "A workflow for doing x, y and z",
   "copyright": "2018 Me or My Organization",
   "version": "0.0.1",
-  "authors": [{ "name": "First Last", "affiliation": "Organization Name" }],
+  "authors": [
+    { "name": "First Last", "affiliation": "Organization Name" }
+  ],
   "maintainer": {
     "name": "First Last",
     "email": "me@my.org"
@@ -74,8 +76,8 @@ from within the MyWorkflow directory. This will produce the directory
 
     MyWorkflow/html
 
-which you can serve up using your favorite web server. Typically, the entire MyWorkflow directory
-would be turned into a github repository and github pages would be pointed to the html directory.
+which you can serve up using your favorite web server.
+Typically, the entire MyWorkflow directory would be turned into a github repository and github pages would be pointed to the html directory.
 You would use github versions, tags, and releases to maintain versions of your code.
 
 ## Usage: API
@@ -88,5 +90,5 @@ require 'aquadoc'
 Aquadoc::Git()config, categories).run
 ```
 
-to generate the github repo. See the [Aquarium](http://klavinslab.org/aquarium) documentation
-for more information.
+to generate the github repo.
+See the [Aquarium](http://klavinslab.org/aquarium) documentation for more information.
