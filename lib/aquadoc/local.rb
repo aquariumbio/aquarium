@@ -3,7 +3,7 @@ require 'fileutils'
 
 module Aquadoc
   class Local
-    def initialize config, categories, opts = {}
+    def initialize(config, categories, opts = {})
       @opts = opts
       @config = config
       @repo = nil
@@ -22,7 +22,7 @@ module Aquadoc
       aquadoc.make(@opts)
     end
 
-    def write path, content
+    def write(path, content)
       puts "--> " + "docs/" + path
       File.write("docs/" + path, content);
     end

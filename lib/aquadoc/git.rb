@@ -6,7 +6,7 @@ module Aquadoc
   class Git
     attr_accessor :authorized
 
-    def initialize config, categories, opts = {}
+    def initialize(config, categories, opts = {})
       @opts = opts
       @config = config
       @repo = nil
@@ -36,7 +36,7 @@ module Aquadoc
       aquadoc.make(@opts.merge(init: @create))
     end
 
-    def write path, content
+    def write(path, content)
       print path.split("/").last + " "
 
       if @create

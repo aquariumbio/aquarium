@@ -2,7 +2,7 @@ require 'erb'
 
 module Aquadoc
   class Render
-    def sample_type_link name
+    def sample_type_link(name)
       if @options[:inventory] && name
         "<a href='#' onclick='easy_select(\"Sample Types\", \"#{name}\")'>#{name}</a>"
       elsif !@options[:inventory] && name
@@ -12,7 +12,7 @@ module Aquadoc
       end
     end
 
-    def object_type_link name
+    def object_type_link(name)
       if @options[:inventory] && name
         "<a href='#' onclick='easy_select(\"Containers\", \"#{name}\")'>#{name}</a>"
       elsif !@options[:inventory] && name
@@ -22,13 +22,13 @@ module Aquadoc
       end
     end
 
-    def field_type_md ft
+    def field_type_md(ft)
       template = File.read(@assets_path + "/field_type.md.erb")
       template_erb = ERB.new(template, 0, "%<>")
       template_erb.result(binding)
     end
 
-    def op_type_md operation_type_spec
+    def op_type_md(operation_type_spec)
       ot = operation_type_spec[:operation_type]
       inputs = ot[:field_types].select { |ft| ft[:role] == 'input' && ft[:ftype] == 'sample' }
       params = ot[:field_types].select { |ft| ft[:role] == 'input' && ft[:ftype] != 'sample' }
@@ -39,13 +39,13 @@ module Aquadoc
       template_erb.result(binding)
     end
 
-    def sample_type_md sample_type
+    def sample_type_md(sample_type)
       template = File.read(@assets_path + "/sample_type.md.erb")
       template_erb = ERB.new(template, 0, "%<>")
       template_erb.result(binding)
     end
 
-    def object_type_md object_type
+    def object_type_md(object_type)
       template = File.read(@assets_path + "/object_type.md.erb")
       template_erb = ERB.new(template, 0, "%<>")
       template_erb.result(binding)
