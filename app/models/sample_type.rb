@@ -113,6 +113,7 @@ class SampleType < ActiveRecord::Base
       make.each do |rst|
         st = SampleType.find_by_name rst[:name]
         next unless st
+
         st.create_afts_from_raw rst
         if st.errors.any?
           inconsistencies << "Could not create sample type #{rst[:name]}: #{st.errors.full_messages.join(', ')}"
@@ -163,6 +164,7 @@ class SampleType < ActiveRecord::Base
     field_types.each do |ft|
       raw_sample_type[:field_types].each do |rft|
         next unless ft.name == rft[:name]
+
         l = rft[:sample_types] ? rft[:sample_types].length : 0
         (0..l - 1).each do |i|
           st = SampleType.find_by_name(rft[:sample_types][i])
@@ -188,6 +190,7 @@ class SampleType < ActiveRecord::Base
       st.field_types.each do |ft|
         rst[:field_types].each do |rft|
           next unless ft.name == rft[:name] && ft.role == rft[:role] && ft.ftype == 'sample'
+
           names = rft[:sample_types]
           ft.allowable_field_types.each do |aft|
             names.delete aft.sample_type.name if names.member? aft.sample_type.name

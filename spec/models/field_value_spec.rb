@@ -11,6 +11,7 @@ RSpec.describe FieldValue, type: :model do
     c = Collection.new_collection(name)
     c.save
     raise "Got save errors: #{c.errors.full_messages}" if c.errors.any?
+
     c
   end
 

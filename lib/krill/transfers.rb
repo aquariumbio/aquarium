@@ -135,6 +135,7 @@ module Krill
         if sr && sources[s].matrix[sr][sc] == -1
           s += 1
           return unless s < sources.length
+
           sr = 0
           sc = 0
         end
@@ -144,14 +145,17 @@ module Krill
         unless sr
           s += 1
           return unless s < sources.length
+
           sr = 0
           sc = 0
         end
 
         # update destination indices
         next if dc
+
         d += 1
         return unless d < destinations.length
+
         dr = 0
         dc = 0
         dr, dc = destinations[d].next 0, 0, skip_non_empty: true unless destinations[d].matrix[dr][dc] == -1
@@ -194,6 +198,7 @@ module Krill
       (0..m.length - 1).each do |i|
         (0..m[i].length - 1).each do |j|
           next unless m[i][j] > 0 && !(opts[:except].include? [i, j])
+
           s = find(:sample, id: m[i][j])[0]
           item = Item.make({ quantity: 1, inuse: 0 }, sample: s, object_type: object_type)
           items.push item

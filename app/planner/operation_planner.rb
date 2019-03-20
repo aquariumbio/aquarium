@@ -56,6 +56,7 @@ module OperationPlanner
                     pred.status == 'done' ||
                     pred.status == 'unplanned' ||
                     pred.status == 'planning'
+
             @@ready_errors << "Operation #{id} is waiting for operation #{pred.id} which has status #{pred.status}"
             return false
 

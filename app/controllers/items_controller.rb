@@ -192,6 +192,7 @@ class ItemsController < ApplicationController
 
     Item.includes(:object_type, sample: %i[sample_type user], locator: [:wizard]).all.each do |i|
       next if i.deleted?
+
       oname = if i.object_type
                 i.object_type.name
               else

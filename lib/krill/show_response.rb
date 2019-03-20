@@ -38,16 +38,20 @@ module Krill
     def get_table_response var, opts = {}
       raise TableCellUndefined, "Invalid parameters for get_table_response - specify one of op or row, not both" if (opts[:op] && opts[:row]) || (!opts[:op] && !opts[:row])
       return nil if self[:table_inputs].nil?
+
       target_table = self[:table_inputs].select { |ti| (ti[:key].to_sym == var.to_sym) }
       return nil if target_table.empty?
+
       if opts[:op]
         raise TableCellUndefined, "Invalid parameters for get_table_response - an :op option cannot be specified for a table that doesn't have operations corresponding to its rows" if target_table.first[:opid] < 0
+
         opid = Operation.find(opts[:op]).id # return op.id if passed an operation or the id itself
         target_input_cell = target_table.find { |ti| ti[:opid] == opid }
       elsif opts[:row]
         target_input_cell = target_table.find { |ti| ti[:row] == opts[:row] }
       end
       raise TableCellUndefined if target_input_cell.nil?
+
       return (target_input_cell[:type] == 'number' ? target_input_cell[:value].to_f : target_input_cell[:value])
     end
 
@@ -103,6 +107,7 @@ module Krill
     #               doesn't correspond to a valid list of uploads
     def get_upload_response var
       return nil if !is_upload?(var)
+
       return Upload.find(self[var.to_sym].map { |up_hash| up_hash[:id] })
     end
   end

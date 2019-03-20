@@ -98,6 +98,7 @@ module Krill
     # @return [Table] The table, can be chained.
     def from(i)
       raise "Table: from(#{i}) is out of range" unless i < @rows.length
+
       @from = i
       self
     end

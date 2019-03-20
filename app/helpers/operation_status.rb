@@ -13,6 +13,7 @@ module OperationStatus
     self.status = str
     save
     raise 'Could not change status' unless errors.empty?
+
     str
   end
 
@@ -38,6 +39,7 @@ module OperationStatus
   def retry
 
     raise "Cannot restart operation #{id} because it is not in an error state" unless status == 'error' || status == 'done'
+
     change_status 'waiting'
     step
 
@@ -45,16 +47,19 @@ module OperationStatus
 
   def schedule
     raise "Cannot schedule operation #{id} from state #{status}" unless status == 'pending' || status == 'deferred' || status == 'primed'
+
     change_status 'scheduled'
   end
 
   def run
     raise "Cannot run operation #{id} from state #{status}" unless status == 'scheduled'
+
     change_status 'running'
   end
 
   def defer
     raise "Cannot defer operation #{id} from state #{status}" unless status == 'pending'
+
     change_status 'deferred'
   end
 

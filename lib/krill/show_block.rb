@@ -200,8 +200,10 @@ module Krill
       routing_details.each do |r|
         m = x.matrix
         raise 'm is null' unless m
+
         sid = m[r[:from][0]][r[:from][1]]
         raise "Tried to route from empty element #{[r[:from][0], r[:from][1]]} of collection #{x.id}" unless sid != -1
+
         r[:sample_name] = Sample.find(sid).name
       end
 
@@ -236,6 +238,7 @@ module Krill
     #   z = data[:z]
     def get(type, opts = {})
       raise "First argument to get should be either 'number' or 'text'" unless type == 'number' || type == 'text'
+
       options = {
         var: "get_#{@@get_counter}",
         label: "Enter a #{type}"
@@ -250,6 +253,7 @@ module Krill
         if !c.empty?
           t = c[0].class
           return false unless t == Integer || t == Float || t == String
+
           c.each do |x|
             return false if t != x.class
           end
@@ -279,6 +283,7 @@ module Krill
     #   choice = data[:choice]    
     def select(choices, opts = {})
       raise 'First argument to select should be an array of numbers or strings' unless is_proper_array choices
+
       options = {
         var: "select_#{@@select_counter}",
         label: 'Choose',

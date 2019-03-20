@@ -126,10 +126,12 @@ class Wizard < ActiveRecord::Base
 
   def has_correct_form(loc)
     return false unless loc.class == String
+
     c = caps
     parts = loc.split('.')
     return false unless parts[0] == name
     return false unless parts.length - 1 == c.length
+
     (1..c.length).each do |i|
       if i == 1
         return false unless parts[i].to_i >= 0

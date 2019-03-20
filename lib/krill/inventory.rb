@@ -47,6 +47,7 @@ module Krill
       ot = ObjectType.find_by_name(spec[:as])
       raise "Unknown sample #{name}" unless s
       raise "Unknown container #{spec[:as]}" unless ot
+
       Item.make({ quantity: 1, inuse: 0 }, sample: s, object_type: ot)
     end
 
@@ -78,6 +79,7 @@ module Krill
     # @param items [Array<Item>]  list of items to sort
     def sort_by_location(items)
       return [] if items.empty?
+
       locations = items.map { |item| item.location.split('.') }
       sorted_locations = locations.sort do |loc1, loc2|
         comp = loc1[0] <=> loc2[0]

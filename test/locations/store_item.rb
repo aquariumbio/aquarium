@@ -30,11 +30,13 @@ class Test
     puts 'Making item'
     i = make_item @ot, @samp
     raise "incorrect location #{i.location} for #{i.inspect}" unless i.location == "#{@wiz.name}.0.0.0"
+
     puts '      new location = ' + i.location
 
     puts 'Moving item'
     i.location = "#{@wiz.name}.0.1.4"
     raise "incorrect location #{i.location} for #{i.inspect}" unless i.location == "#{@wiz.name}.0.1.4"
+
     puts '      new location = ' + i.location
     puts "      locator = #{i.locator_id}"
 
@@ -44,12 +46,14 @@ class Test
     loc.reload
     raise "incorrect location #{i.location} for #{i.inspect}" unless i.location == 'Nether'
     raise "locator not updated for #{i.inspect} and #{loc.inspect}" unless i.locator_id.nil? && loc.item_id.nil?
+
     puts '      new location = ' + i.location
     puts "      locator = #{i.locator_id}"
 
     puts 'Restoring item'
     i.store
     raise "incorrect location #{i.location} for #{i.inspect}" unless i.location == "#{@wiz.name}.0.0.0"
+
     puts '      new location = ' + i.location
     puts "      locator = #{i.locator_id}"
 
@@ -59,11 +63,13 @@ class Test
     loc.reload
     raise "incorrect location #{i.location} for #{i.inspect}" unless i.location == 'Nether'
     raise "locator not updated for #{i.inspect} and #{loc.inspect}" unless i.locator_id.nil? && loc.item_id.nil?
+
     puts '      new location = ' + i.location
 
     puts 'Restoriong item via location='
     i.location = "#{@wiz.name}.0.0.7"
     raise "incorrect location #{i.location} for #{i.inspect}" unless i.location == "#{@wiz.name}.0.0.7"
+
     puts '      new location = ' + i.location
     puts "      locator = #{i.locator_id}"
 

@@ -192,6 +192,7 @@ class ObjectTypesController < ApplicationController
 
       inserts = all_inserts[max * i, max]
       next if inserts.empty?
+
       puts "inserting #{max * i} to #{max * i + max}"
       sql = "INSERT INTO #{to} (#{columns.join(',')}) VALUES #{inserts.join(',')}"
       ActiveRecord::Base.connection.execute sql

@@ -158,6 +158,7 @@ module Krill
 
       while running
         return 'not_ready' unless n < 10 * secs # wait two seconds
+
         n += 1
         sleep(0.1)
         @mutex.synchronize { running = @thread_status.running }

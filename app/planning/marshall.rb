@@ -185,6 +185,7 @@ module Marshall
     # for each plan operation, if it is not in x, then delete it
     p.operations.each do |pop|
       next if op_ids.member?(pop.id)
+
       pas = PlanAssociation.where(plan_id: p.id, operation_id: pop.id)
       pas.each(&:destroy)
       pop.destroy

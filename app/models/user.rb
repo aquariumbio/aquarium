@@ -104,6 +104,7 @@ class User < ActiveRecord::Base
 
     email_parameters = Parameter.where(user_id: id, key: 'email')
     raise "Email address not defined for user {id}: #{name}" if email_parameters.empty?
+
     from = 'aquarium@uwbiofab.org'
     to = email_parameters[0].value
 

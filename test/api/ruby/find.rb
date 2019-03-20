@@ -58,6 +58,7 @@ Test.verify('Find all users',
             }) do |response|
   puts ' --> ' + (response[:rows].collect do |r|
     return false unless r[:login]
+
     r[:login]
   end).join(', ')
   true
@@ -98,6 +99,7 @@ Test.verify('Get all items assocated with a sample', {
             }, loud: true) do |response|
   puts ' --> ' + (response[:rows].collect do |r|
     return false unless r[:id]
+
     r[:id]
   end).join(', ')
   true

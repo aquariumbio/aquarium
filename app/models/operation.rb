@@ -17,6 +17,7 @@ class Operation < ActiveRecord::Base
     unless JobAssociation.where(operation_id: id).empty?
       raise "Cannot destroy operation #{id} because it has jobs associated with it"
     end
+
     fvs = FieldValue.where parent_class: "Operation", parent_id: id
     fvs.each do |fv|
       Wire.where("from_id = #{fv.id} OR to_id = #{fv.id}").each do |wire|
@@ -452,6 +453,7 @@ class Operation < ActiveRecord::Base
     inputs.each do |i|
 
       next unless i.predecessors.count > 0
+
       i.predecessors.each do |pred|
         if pred.operation.on_the_fly
           return pred.operation.leaf?

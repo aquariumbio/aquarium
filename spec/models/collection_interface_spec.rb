@@ -11,6 +11,7 @@ RSpec.describe Collection, type: :model do
     c = Collection.new_collection(name)
     c.save
     raise "Got save errors: #{c.errors.full_messages}" if c.errors.any?
+
     c
   end
 
@@ -156,6 +157,7 @@ RSpec.describe Collection, type: :model do
       raise "Slots not adding up" unless c.get_empty.length + c.get_non_empty.length == c.capacity
       raise "Non-empty not adding up" unless c.get_non_empty.length == c.num_samples
       raise "include? not working" unless c.include?(test_sample) && c.include?(test_sample.id)
+
       expect(c.select { |x| x == test_sample.id }.length).to eq(2)
     end
 
@@ -193,6 +195,7 @@ RSpec.describe Collection, type: :model do
       sids1 = samples.map(&:id)
       sids2 = collections.map(&:matrix).flatten.reject { |sid| sid <= 0 }
       raise "Example sample ids not found" unless sids1 == sids2
+
       expect(collections[0]).to be_full
       expect(collections[1]).not_to be_full
     end
@@ -222,6 +225,7 @@ RSpec.describe Collection, type: :model do
       (0...4).each do |i|
         (0...6).each do |j|
           raise "Next didn't align with #{p} != #{[i, j]}" unless p == [i, j]
+
           p = c.next(p[0], p[1])          
         end
       end

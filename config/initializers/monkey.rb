@@ -54,6 +54,7 @@ class ActiveRecord::Base
   def self.import!(record_list)
     raise 'record_list not an Array of Hashes' unless record_list.is_a?(Array) && record_list.all? { |rec| rec.is_a? Hash }
     return record_list if record_list.empty?
+
     # Rails.logger.info "Inserting #{record_list.count} records"
     (1..record_list.count).step(200).each do |start|
       # Rails.logger.info "inserting ids: #{record_list[start-1..start+198].collect { |r| r['id'] }}"

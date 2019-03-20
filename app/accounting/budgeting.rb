@@ -26,6 +26,7 @@ module Budgeting
     user_budget_associations.collect do |uba|
       b = Budget.find_by_id(uba.budget_id)
       next unless b
+
       {
         budget: b,
         quota: uba.quota,

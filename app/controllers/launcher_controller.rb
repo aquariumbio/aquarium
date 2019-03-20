@@ -145,6 +145,7 @@ class LauncherController < ApplicationController
         )
         wire.save
         raise wire.errors.full_messages.join(', ') unless wire.errors.empty?
+
         wire.to_op.field_values.each do |fv| # remove inputs from non-leaves
           if fv.child_item_id
             fv.child_item_id = nil

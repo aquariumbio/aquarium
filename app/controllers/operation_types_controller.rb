@@ -226,6 +226,7 @@ class OperationTypesController < ApplicationController
           raise "Nil value Error: Could not set #{test_fvs}" unless actual_fvs
         else # io is not an array
           raise "Test Operation Error: This operation type may have illegal routing, or zero/multiple io with the same name: #{io.name} (#{io.role}#{io.array ? ', array' : ''}) of type #{io.ftype}" unless io.ftype != 'sample' || test_fvs.one?
+
           test_fv = test_fvs.first
           if io.ftype == 'sample'
             aft = AllowableFieldType.find_by_id(test_fv[:allowable_field_type_id])

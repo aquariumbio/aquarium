@@ -327,6 +327,7 @@ class Collection < Item
   # @return [ActiveRecord::Relation]
   def self.containing(s, ot = nil)
     return [] unless s
+
     cids = PartAssociation.joins(:part).where("sample_id = ?", to_sample_id(s)).map(&:collection_id)
     Collection.where(id: cids).select { |c| !ot || c.object_type_id == ot.id }
   end
@@ -381,6 +382,7 @@ class Collection < Item
       old_size = remaining.size
       remaining = c.add_samples(remaining, opts)
       raise "There was an error adding samples #{samples.map { |s| to_sample_id(s) }} to collection of type #{name}" if old_size <= remaining.size
+
       collections << c
     end
     collections
@@ -453,6 +455,7 @@ class Collection < Item
   # @return [Array<Array<Fixnum>>]  selected parts in the form [[r1, c1], [r2, c2]]
   def select
     raise 'need selection block' unless block_given?
+
     matrix.map.with_index do |row, r|
       cols_where = row.each_index.select { |i| Proc.new.call(row[i]) }
       cols_where.map { |c| [r, c] }
@@ -571,6 +574,7 @@ class Collection < Item
       r, c = get_empty.first
     end
     return nil if r.nil? || c.nil?
+
     set r, c, x
     [r, c, x]
   end
@@ -594,6 +598,7 @@ class Collection < Item
     sel = get_non_empty
     sel = find x unless x.nil?
     return nil if sel.empty?
+
     if opts[:reverse]
       r, c = sel.last
     else

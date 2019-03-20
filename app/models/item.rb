@@ -262,6 +262,7 @@ class Item < ActiveRecord::Base
 
     loc = Wizard.find_locator locstr
     return nil unless loc && loc.item_id.nil?
+
     loc.item_id = id
     item_id = loc.id
     transaction do
@@ -401,6 +402,7 @@ class Item < ActiveRecord::Base
     i = new
     olist = ObjectType.where('name = ?', name)
     raise "Could not find object type named '#{spec[:object_type]}'." if olist.empty?
+
     Item.make({ quantity: 1, inuse: 0 }, object_type: olist[0])
 
   end

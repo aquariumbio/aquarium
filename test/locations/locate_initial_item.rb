@@ -33,6 +33,7 @@ class Test
     i.save
     raise i.errors.full_messages.join(',') unless i.errors.empty?
     raise "incorrect location #{i.location} for #{i.inspect}" unless i.location == 'Nether'
+
     puts '      new location = ' + i.location
     puts "      locator = #{i.locator_id}"
 
@@ -42,6 +43,7 @@ class Test
     puts i.inspect.to_s
 
     raise "incorrect location #{i.location} for #{i.inspect}" unless i.location == locstr
+
     puts '      new location = ' + i.location
     puts "      locator = #{i.locator_id}"
 
