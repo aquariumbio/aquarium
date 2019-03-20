@@ -15,7 +15,7 @@ class TestController < ApplicationController
 
     ActiveRecord::Base.transaction do
       begin
-        resp = load_test(code: operation_type.code('test').content)
+        resp = load_test(code: operation_type.test.content)
         if resp.nil?
           test = ProtocolTest.new(operation_type, current_user)
           resp = pre_test(test: test)

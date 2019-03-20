@@ -94,6 +94,10 @@ class OperationType < ActiveRecord::Base
     code 'documentation'
   end
 
+  def test
+    code 'test'
+  end
+
   def schedule_aux(ops, user, group, opts = {})
 
     job = Job.new
