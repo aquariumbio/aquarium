@@ -57,7 +57,6 @@ class OperationType < ActiveRecord::Base
     field_types.select { |ft| ft.role == 'input' }
   end
 
-
   # The output types of this OperationType.
   #
   # @return [Array<FieldType>]  meta definitions of the outputs

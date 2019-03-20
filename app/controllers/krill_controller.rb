@@ -208,7 +208,6 @@ class KrillController < ApplicationController
 
   end
 
-
   def upload
 
     u = Upload.new

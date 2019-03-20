@@ -33,7 +33,6 @@ class Wizard < ActiveRecord::Base
         .map { |i| int_to_location i }    
   end
 
-
   def spec # converts the specification into a reasonable ruby object
 
     if !specification || specification == 'null'

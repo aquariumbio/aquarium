@@ -348,17 +348,17 @@ class Collection < Item
     pos = find to_sample_id(s)
     { row: pos.first[0], column: pos.first[1] }
   end
-
   
   # Get a list of the of the form `{row: r, column: c, collection: col}, ...`  containing
-  # the specificed sample.
-  # @param s [Sample]
-  # @param ot [ObjectType]
-  # @return [Array]  
-  def self.parts(s, ot = nil)
+  # the specified sample.
+  #
+  # @param sample [Sample]
+  # @param object_type [ObjectType]
+  # @return [Array]
+  def self.parts(sample, object_type = nil)
     plist = []
-    Collection.containing(s, ot).reject(&:deleted?).each do |c|
-      plist << Collection.find(c.id).position_as_hash(s).merge(collection: c)
+    Collection.containing(sample, object_type).reject(&:deleted?).each do |c|
+      plist << Collection.find(c.id).position_as_hash(sample).merge(collection: c)
     end
     plist
   end
