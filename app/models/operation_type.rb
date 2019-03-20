@@ -28,7 +28,6 @@ class OperationType < ActiveRecord::Base
   # @return [String]  the category of the OperationType, as in "Cloning"
   attr_accessible :category
 
-
   validates :name, presence: true
   validates :name, uniqueness: { 
     scope: :category, 

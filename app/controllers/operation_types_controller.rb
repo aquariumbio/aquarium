@@ -380,7 +380,6 @@ class OperationTypesController < ApplicationController
     ActiveRecord::Base.transaction do
 
       begin
-
         issues_list = params[:operation_types].collect do |x|
 
           issues = { notes: [], inconsistencies: [] }
@@ -470,7 +469,6 @@ class OperationTypesController < ApplicationController
           }, status: :ok
 
         end
-
       rescue Exception => e
         error = true
         logger.info e.to_s

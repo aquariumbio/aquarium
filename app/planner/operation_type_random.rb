@@ -25,7 +25,7 @@ module OperationTypeRandom
             if !ft.array
               op.set_property ft.name, [samples[ft.routing]].flatten.first, ft.role, false, aft
             else
-              op.set_property ft.name, [samples[ft.routing]]*3, ft.role, false, aft
+              op.set_property ft.name, [samples[ft.routing]] * 3, ft.role, false, aft
             end
 
           else

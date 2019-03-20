@@ -68,27 +68,27 @@ class Operation < ActiveRecord::Base
   # @param name [String]
   # @param sample [Sample]
   def with_input(name, sample)
-      ft = operation_type.inputs.select { |i| i[:name] == name }.first
-      aft = ft.choose_aft_for(sample)
-      set_input(name, sample, aft)
-      self       
+    ft = operation_type.inputs.select { |i| i[:name] == name }.first
+    aft = ft.choose_aft_for(sample)
+    set_input(name, sample, aft)
+    self       
   end 
 
   # Assigns a Sample to an output, choosing an appropriate allowable_field_type
   # @param name [String]
   # @param sample [Sample]
   def with_output(name, sample)
-      ft = operation_type.outputs.select { |i| i[:name] == name }.first
-      aft = ft.choose_aft_for(sample)
-      set_output name, sample, aft   
-      self     
+    ft = operation_type.outputs.select { |i| i[:name] == name }.first
+    aft = ft.choose_aft_for(sample)
+    set_output name, sample, aft   
+    self     
   end
 
   # Assigns a value to an input parameter
   # @param name [String]
   # @param value 
   def with_property(name, value)
-      set_property(name, value, 'input', false, nil)
+    set_property(name, value, 'input', false, nil)
   end  
 
   # end methods used for testing via vs code
