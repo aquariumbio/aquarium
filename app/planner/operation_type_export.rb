@@ -123,12 +123,27 @@ module OperationTypeExport
         return issues
       end
 
-      # Add any allowable field_type linkes that resolved to nil before the all sample type
+      # Add any allowable field_type links that resolved to nil before the all sample type
       # and object types were made
       SampleType.clean_up_allowable_field_types(data[:sample_types] ? data[:sample_types] : [])
 
       # Add any sample_type_ids to object_types now that all sample types have been made
       ObjectType.clean_up_sample_type_links(data[:object_types] ? data[:object_types] : [])
+
+      ot = simple_import(data, user)
+      issues[:notes] << "Created new operation type '#{ot.name}'"
+
+      issues[:operation_type] = ot
+
+      issues
+
+    end
+
+    # Import a serialized operation type.
+    #
+    # @param data [Hash] the data hash
+    # @param user [User] the user for creating code objects
+    def simple_import(data, user)
 
       obj = data[:operation_type]
 
@@ -167,79 +182,27 @@ module OperationTypeExport
         puts 'No Timing?'
       end
 
-      issues[:notes] << "Created new operation type '#{ot.name}'"
-
-      issues[:operation_type] = ot
-
-      issues
-
-    end
-
-    def simple_import(data, user)
-
-      obj = data[:operation_type]
-
-      ot = OperationType.new name: obj[:name], category: obj[:category], deployed: obj[:deployed], on_the_fly: obj[:on_the_fly]
-      ot.save
-
-      raise 'Could not save operation type: ' + ot.errors.full_messages.join(', ') unless ot.errors.empty?
-
-      if obj[:field_types]
-        obj[:field_types].each do |ft|
-          ot.add_io(
-            ft[:name], ft[:sample_types], ft[:object_types], ft[:role],
-            part: ft[:part],
-            array: ft[:array],
-            routing: ft[:routing],
-            ftype: ft[:ftype],
-            preferred_operation_type_id: ft[:preferred_operation_type_id],
-            preferred_field_type_id: ft[:preferred_field_type_id]
-          )
-        end
-      end
-
-      ot.new_code('protocol', obj[:protocol], user)
-      ot.new_code('precondition', obj[:precondition], user)
-      ot.new_code('cost_model', obj[:cost_model], user)
-      ot.new_code('documentation', obj[:documentation], user)
-      test_content = ''
-      test_content = obj[:test] if obj[:test]
-      ot.new_code('test', test_content, user)
-
-      if obj[:timing]
-        puts 'Timing: ' + obj[:timing].inspect
-        ot.timing = obj[:timing]
-        puts '  ==> ' + ot.timing.inspect
-      else
-        puts 'No Timing?'
-      end
-
       ot
 
     end
 
     def import_list(op_type_list)
-
       op_type_list.each do |ot|
         import ot
       end
-
     end
 
     def export_all(filename = nil)
-
       ots = OperationType.all.collect(&:export)
-
       File.write(filename, ots.to_json) if filename
 
       ots
-
     end
 
     def import_from_file(filename)
-
-      import_list(JSON.parse(File.open(filename, 'rb').read, symbolize_names: true))
-
+      import_list(
+        JSON.parse(File.open(filename, 'rb').read, symbolize_names: true)
+      )
     end
 
   end
