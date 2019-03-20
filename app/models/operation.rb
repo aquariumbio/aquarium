@@ -237,7 +237,7 @@ class Operation < ActiveRecord::Base
     block.call(self)
     inputs.each do |input|
       input.predecessors.each do |pred|
-        pred.operation.recurse &block
+        pred.operation.recurse(&block)
       end
     end
   end

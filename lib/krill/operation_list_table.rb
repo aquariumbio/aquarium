@@ -78,9 +78,11 @@ module Krill
     # @see #input_collection
     # @see #output_collection
     def collection(name, role, opts = {})
-      @table.add_column(opts[:heading] || "#{name} Collecton ID (#{role})", running.collect do |op|
+      entries = running.collect do |op|
         property op, :child_item_id, name, role, opts[:checkable]
-      end)
+      end
+      heading = opts[:heading] || "#{name} Collection ID (#{role})"
+      @table.add_column(heading, entries)
       self
     end
 
@@ -118,15 +120,18 @@ module Krill
     # @param opts [Hash]
     # @option heading [String] Column heading
     # @option checkable [Bool] Column cells can be clicked
-    def custom_column opts = { heading: "Custom Column", checkable: false }, &block
-      @table.add_column opts[:heading], running.collect(&block).collect { |x| 
+    def custom_column(opts = { heading: "Custom Column", checkable: false }, &block)
+      entries = running.collect(&block).collect do |x| 
         opts[:checkable] ? ({ content: x, check: true }) : x
-      }
+      end
+      @table.add_column(opts[:heading], entries)
+
       self
     end
 
     def operation_id(opts = { heading: 'Operation ID', checkable: false })
-      @table.add_column opts[:heading], running.collect(&:id)
+      @table.add_column(opts[:heading], running.collect(&:id))
+
       self
     end    
 

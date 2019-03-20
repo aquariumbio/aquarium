@@ -108,7 +108,7 @@ class OperationsController < ApplicationController
 
     op = Operation.find(params[:id])
     op.retry
-    Operation.step op.plan.operations.select { |op| op.status != 'done' && op.status != 'error' }
+    Operation.step(op.plan.operations.select { |op| op.status != 'done' && op.status != 'error' })
 
     render json: { status: op.status }
 
@@ -118,7 +118,7 @@ class OperationsController < ApplicationController
 
     if params[:plan_id]
       plan = Plan.find(params[:plan_id])
-      Operation.step plan.operations.select { |op| op.status != 'done' && op.status != 'error' }
+      Operation.step(plan.operations.select { |op| op.status != 'done' && op.status != 'error' })
     else
       Operation.step
     end
