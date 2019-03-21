@@ -1,14 +1,10 @@
 
 module OperationTypeRandom
-
   def routes
-
     field_types.collect(&:routing).uniq
-
   end
 
   def random(n = 1)
-
     users = User.all.sample(n)
 
     (0..n - 1).collect do |i|
@@ -35,26 +31,18 @@ module OperationTypeRandom
             samples[ft.routing] = random_sample
           end
 
+        elsif ft.choices != '' && !ft.choices.nil?
+          op.set_property ft.name, ft.choices.split(',').sample, ft.role, true, nil
+        elsif ft.type == 'number'
+          op.set_property ft.name, rand(100), ft.role, true, nil
+        elsif ft.ftype == 'json'
+          op.set_property ft.name, '{ "message": "random json parameters are hard to generate" }', ft.role, true, nil
         else
-
-          if ft.choices != '' && !ft.choices.nil?
-            op.set_property ft.name, ft.choices.split(',').sample, ft.role, true, nil
-          elsif ft.type == 'number'
-            op.set_property ft.name, rand(100), ft.role, true, nil
-          elsif ft.ftype == 'json'
-            op.set_property ft.name, '{ "message": "random json parameters are hard to generate" }', ft.role, true, nil
-          else
-            op.set_property(ft.name, %w[Lorem ipsum dolor sit amet consectetur adipiscing elit].sample, ft.role, true, nil)
-          end
-
+          op.set_property(ft.name, %w[Lorem ipsum dolor sit amet consectetur adipiscing elit].sample, ft.role, true, nil)
         end
-
       end
 
       op
-
     end
-
   end
-
 end
