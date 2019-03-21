@@ -336,10 +336,9 @@ class Operation < ActiveRecord::Base
   end
 
   def nominal_cost
-
     begin
-      eval(operation_type.code('cost_model').content)
-    rescue Exception => e
+      eval(operation_type.cost_model.content)
+    rescue SyntaxError, StandardError => e
       raise 'Could not evaluate cost function definition: ' + e.to_s
     end
 
@@ -348,7 +347,7 @@ class Operation < ActiveRecord::Base
 
     begin
       c = cost(self)
-    rescue Exception => e
+    rescue SystemStackError, SyntaxError, StandardError => e
       self.status = temp
       raise 'Could not evaluate cost function on the given operation: ' + e.to_s
     end
@@ -390,7 +389,7 @@ class Operation < ActiveRecord::Base
     rval = true
 
     begin
-      eval(operation_type.code('precondition').content)
+      eval(operation_type.precondition.content)
       rval = precondition(self)
     rescue Exception => e
       Rails.logger.info "PRECONDITION FOR OPERATION #{id} crashed"
