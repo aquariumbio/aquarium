@@ -13,7 +13,7 @@ class PublishController < ApplicationController
     github_user = params[:organization] || params[:user]
 
     if !params[:repo] || params[:repo].length == 0
-      resp.error("A Github repository name must contain at least one character.")     
+      resp.error("A Github repository name must contain at least one character.")
     else
       begin
         client = Octokit::Client.new(:access_token => params[:access_token])
@@ -26,10 +26,10 @@ class PublishController < ApplicationController
       else
         if repos.member?(params[:repo])
           begin
-            file = client.contents({ repo: params[:repo], user: github_user}, path: "/config.json")
+            file = client.contents({ repo: params[:repo], user: github_user }, path: "/config.json")
             config = JSON.parse Base64.decode64(file[:content])
-            file = client.contents({ repo: params[:repo], user: github_user}, path: "/#{params[:repo]}.aq")
-            aq_file = JSON.parse Base64.decode64(file[:content])            
+            file = client.contents({ repo: params[:repo], user: github_user }, path: "/#{params[:repo]}.aq")
+            aq_file = JSON.parse Base64.decode64(file[:content])
           rescue StandardError => e
             resp.error("The Github repository '#{params[:repo]}' exists but does not contain a config.json file.", e)
           else
@@ -54,7 +54,7 @@ class PublishController < ApplicationController
           ex
         end
       end
-    end    
+    end
   end
 
   def publish
@@ -77,13 +77,13 @@ class PublishController < ApplicationController
   end
 
   def export
-    resp = AqResponse.new    
+    resp = AqResponse.new
     if params[:categories]
       ar = Aquadoc::Render.new(nil, params[:config], categories)
       resp.ok(aq_file: ar.aq_file)
     else
-      resp.error("No operation types selected.")      
-    end    
+      resp.error("No operation types selected.")
+    end
 
     render json: resp
   end

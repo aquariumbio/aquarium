@@ -19,7 +19,7 @@ module Krill
 
       page = ShowBlock.new(self).run(&Proc.new)
       finish_show(page)
-      
+
     end
 
     def finish_show(page)

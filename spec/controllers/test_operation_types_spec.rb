@@ -19,7 +19,7 @@ RSpec.describe OperationTypesController, type: :controller do
         post :test, post_data
 
         ops = JSON.parse @response.body, symbolize_names: true
-        ops[:operations].each { |op| 
+        ops[:operations].each { |op|
           assert_equal "done", op[:status]
         }
 

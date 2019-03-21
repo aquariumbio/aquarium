@@ -4,7 +4,7 @@ RSpec.describe CodeHelper do
   let(:code) { create(:code) }
   let(:markdown) { create(:code, content: '# A document\n\nNot ruby code.') }
   let(:a_user) { create(:user) }
-  
+
   it 'example object has values from factory' do
     expect(code.name).to eq('the_code')
     expect(code.content).to eq('def the_code; end')

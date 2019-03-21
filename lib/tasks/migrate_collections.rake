@@ -15,12 +15,12 @@ namespace :collections do
         min: 0,
         max: 1,
         handler: "sample_container",
-        safety: "No safety information", 
-        cleanup: "No cleanup information", 
-        data: "No data", vendor: "No vendor information", 
+        safety: "No safety information",
+        cleanup: "No cleanup information",
+        data: "No data", vendor: "No vendor information",
         unit: "part",
-        cost: 0.01, 
-        release_method: "return", 
+        cost: 0.01,
+        release_method: "return",
         release_description: "",
         image: "",
         prefix: ""
@@ -32,27 +32,27 @@ namespace :collections do
     end
 
     unless orphan_type
-    
+
       orphan_type = ObjectType.new(
         name: "Orphan",
         description: "Part of a collection",
         min: 0,
         max: 1,
         handler: "part",
-        safety: "No safety information", 
-        cleanup: "No cleanup information", 
-        data: "No data", vendor: "No vendor information", 
+        safety: "No safety information",
+        cleanup: "No cleanup information",
+        data: "No data", vendor: "No vendor information",
         unit: "part",
-        cost: 0.01, 
-        release_method: "return", 
+        cost: 0.01,
+        release_method: "return",
         release_description: "",
         image: "",
         prefix: ""
-      )   
+      )
 
-      orphan_type.save 
+      orphan_type.save
 
-      raise "Could not create orphan type: #{part_type.errors.full_messages.join(',')}" unless orphan_type.errors.empty?    
+      raise "Could not create orphan type: #{part_type.errors.full_messages.join(',')}" unless orphan_type.errors.empty?
 
     end
 
@@ -63,7 +63,7 @@ namespace :collections do
     n = 0
     orphans = 0
     msg = "Starting migration"
-    items.each do |i|      
+    items.each do |i|
       c = (i.becomes Collection)
       unless c.datum[:_migrated_]
         begin

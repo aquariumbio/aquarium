@@ -7,12 +7,12 @@ module Krill
   # a simplified interface, additional convenience methods,
   # and abstraction of implementation details. This is a decorator class to be instantiated
   # with a Hash.
-  # Initialized with a Hash, which has a :timepoint value as a float, and 
+  # Initialized with a Hash, which has a :timepoint value as a float, and
   # a :table_inputs value as an array of hashes in the format expected from `show` return
   #
   class ShowResponse < SimpleDelegator
 
-    # Return the response that was stored under `var`. When used with 
+    # Return the response that was stored under `var`. When used with
     #
     # a key associated with a table response-set, returns a list of table responses
     # in order of the rows of the table.
@@ -32,8 +32,8 @@ module Krill
     #               for, supposing the table was made on an OperationsList
     # @option row [Integer]  the row index of the table for which to retrieve table data
     # @return [String/Fixnum]  the data inputted in the particular input cell specified
-    #               by the column associated with `var`, 
-    #               and the row associated with either `op` or `row`   
+    #               by the column associated with `var`,
+    #               and the row associated with either `op` or `row`
     #               returns nil if the requested row/column pair doesn't exist
     def get_table_response var, opts = {}
       raise TableCellUndefined, "Invalid parameters for get_table_response - specify one of op or row, not both" if (opts[:op] && opts[:row]) || (!opts[:op] && !opts[:row])
@@ -55,14 +55,14 @@ module Krill
       return (target_input_cell[:type] == 'number' ? target_input_cell[:value].to_f : target_input_cell[:value])
     end
 
-    # Returns a hash of user responses, each under the var name specified in the ShowBlock where 
+    # Returns a hash of user responses, each under the var name specified in the ShowBlock where
     # the response was collected. Table responses are stored in this hash as a list in order of
     # the rows of the table.
     #
     # @return [Hash]  the response hash with all user input
     def responses
       inline_responses = self.select { |key, value| key != :table_inputs && key != :timestamp && !is_upload?(key) }
-      
+
       upload_response_keys = self.select { |key, value| is_upload?(key) }.keys
       upload_responses = Hash.new
       upload_response_keys.each do |key|
@@ -93,7 +93,7 @@ module Krill
     end
 
     # Checks to see if a given key corresponds to a list of upload objects
-    # 
+    #
     # @param var [Symbol/String]  the key that was specified to store data under in the `upload` call
     # @return [Boolean]  true if the key corresponds to a list of upload objects
     def is_upload? var
@@ -111,7 +111,7 @@ module Krill
       return Upload.find(self[var.to_sym].map { |up_hash| up_hash[:id] })
     end
   end
-  
+
   class TableCellUndefined < StandardError
     def initialize(msg = "A table cell was picked out that is out of bounds or cannot exist")
       super

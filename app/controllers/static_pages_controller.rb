@@ -5,7 +5,7 @@ class StaticPagesController < ApplicationController
   before_filter :signed_in_user
   before_filter :up_to_date_user
 
-  def leader_board assoc, extra=nil, num=3
+  def leader_board assoc, extra = nil, num = 3
 
     assocs = assoc + "s"
     assocs_sym = assocs.to_sym
@@ -31,11 +31,11 @@ class StaticPagesController < ApplicationController
 
     unless board.empty?
 
-      n = [9, board.length-1].min
+      n = [9, board.length - 1].min
       w = board[0][sym] - board[n][sym]
       w = 0.01 if w == 0
       m = 90.0 / w
-      b = (10 * (board[0][sym] - 10 * board[n][sym] ) ) / w
+      b = (10 * (board[0][sym] - 10 * board[n][sym])) / w
       board.each do |row|
         row[:width] = m * row[sym] + b
       end

@@ -14,9 +14,9 @@ class Wizard < ActiveRecord::Base
 
     Wizard.all.collect { |wizard|
       nums = Locator.where(wizard_id: wizard.id).pluck(:number)
-      { 
-        wizard: wizard, 
-        conflicts: nums.group_by{ |e| e }
+      {
+        wizard: wizard,
+        conflicts: nums.group_by { |e| e }
                        .select { |k, v| v.size > 1 }
                        .map(&:first)
                        .map { |i| wizard.int_to_location i }
@@ -27,10 +27,10 @@ class Wizard < ActiveRecord::Base
 
   def conflicts
     nums = Locator.where(wizard_id: id).pluck(:number)
-    nums.group_by{ |e| e }
+    nums.group_by { |e| e }
         .select { |k, v| v.size > 1 }
         .map(&:first)
-        .map { |i| int_to_location i }    
+        .map { |i| int_to_location i }
   end
 
   def spec # converts the specification into a reasonable ruby object

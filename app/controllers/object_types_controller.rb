@@ -80,7 +80,7 @@ class ObjectTypesController < ApplicationController
   # POST /object_types
   # POST /object_types.json
   def create
-    
+
     @object_type = ObjectType.new(params[:object_type].except(:rows, :columns))
 
     if params[:object_type][:handler] == 'collection'

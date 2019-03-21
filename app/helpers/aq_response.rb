@@ -1,12 +1,12 @@
 class AqResponse < Hash
 
-  def self.ok extras={}
+  def self.ok extras = {}
     AqResponse.new.ok extras
   end
 
-  def self.error msg, error=nil
+  def self.error msg, error = nil
     AqResponse.new.error(msg, error)
-  end  
+  end
 
   def initialize
     self[:result] = nil
@@ -14,13 +14,13 @@ class AqResponse < Hash
     self[:error] = nil
   end
 
-  def ok extras={}
+  def ok extras = {}
     self[:result] = "ok"
     self.merge! extras
     self
   end
 
-  def error msg, error=nil
+  def error msg, error = nil
     self[:result] = "error"
     self[:message] = msg
     self[:error] = error.to_s

@@ -83,7 +83,7 @@ module FieldTypePlanner
       aft = allowable_field_types.sample
       if array
         if aft.sample_type
-          return [aft.sample_type.samples.sample(3), aft] 
+          return [aft.sample_type.samples.sample(3), aft]
         else
           return [[nil,nil,nil], aft]
         end
@@ -102,7 +102,7 @@ module FieldTypePlanner
 
     afts = allowable_field_types.select do |aft|
       begin
-        aft.sample_type_id == sample.sample_type.id  
+        aft.sample_type_id == sample.sample_type.id
       rescue Exception => e
         true
       end

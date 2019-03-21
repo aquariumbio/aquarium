@@ -23,7 +23,7 @@ class Invoice < ActiveRecord::Base
   def rows
     start_date = DateTime.new(year, month).change(offset: '-7:00')
     end_date = start_date.next_month
-    Account.includes(first_row_logs: :user, second_row_logs: :user)   
+    Account.includes(first_row_logs: :user, second_row_logs: :user)
            .where(user_id: user_id, budget_id: budget_id)
            .where("? <= created_at AND created_at < ?", start_date, end_date)
 

@@ -41,7 +41,7 @@ class DataAssociation < ActiveRecord::Base
     elsif parent_class == 'Plan'
       return true # plans don't have owners yet either
     elsif parent_class == 'OperationType'
-      return true # operation types don't have owners yet either      
+      return true # operation types don't have owners yet either
     end
 
   end

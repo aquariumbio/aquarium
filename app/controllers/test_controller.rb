@@ -31,8 +31,8 @@ class TestController < ApplicationController
         resp.error(e.to_s)
             .more(
               error_type: 'error',
-              exception_backtrace: e ? e.backtrace : [], 
-              backtrace: test ? test.backtrace : [], 
+              exception_backtrace: e ? e.backtrace : [],
+              backtrace: test ? test.backtrace : [],
               log: test ? test.logs : []
             )
       end
@@ -60,7 +60,7 @@ class TestController < ApplicationController
       resp = handle_error(error: error, phase_name: 'test loading')
     end
 
-    resp    
+    resp
   end
 
   # Runs the test `setup` method.
@@ -99,8 +99,8 @@ class TestController < ApplicationController
     rescue SystemStackError, SyntaxError, StandardError => error
       resp = handle_error(error: error, logs: test.logs)
     end
-  
-    resp 
+
+    resp
   end
 
   # Runs the test `analyze` method.
@@ -117,18 +117,18 @@ class TestController < ApplicationController
       resp.error("Assertion failed: #{error}")
           .more(
             error_type: 'assertion_failure',
-            exception_backtrace: error_trace, 
-            backtrace: test ? test.backtrace : [], 
+            exception_backtrace: error_trace,
+            backtrace: test ? test.backtrace : [],
             log: test ? test.logs : []
           )
     rescue SystemStackError, SyntaxError, StandardError => error
       resp = handle_error(error: error)
     else
-      resp.ok(message: "test complete", 
-              log: test.logs, 
+      resp.ok(message: "test complete",
+              log: test.logs,
               backtrace: test.backtrace)
     end
-  
+
     resp
   end
 

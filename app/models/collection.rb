@@ -1,9 +1,9 @@
 
 
-# A subclass of {Item} that has associated parts via the {PartAssociation} model. Stripwells, 
+# A subclass of {Item} that has associated parts via the {PartAssociation} model. Stripwells,
 # 96 well plates, and gels are examples. Note that you may in some cases be working with an item
 # that is also a {Collection}, which you can tell by checking that item.collection? In this case you
-# promote the item using the ruby method becomes. 
+# promote the item using the ruby method becomes.
 # @example Cast an item as a collection
 #   collection = item.becomes Collection
 # @api krill
@@ -47,7 +47,7 @@ class Collection < Item
     # 5. make new das
     # 6. bulk save pas
 
-    collection_id_string = SecureRandom.hex # random string used to identify saved parts  
+    collection_id_string = SecureRandom.hex # random string used to identify saved parts
 
     each_row_col(matrix, offset: offset) do |x, y, ox, oy|
       if pm[ox][oy]
@@ -79,7 +79,7 @@ class Collection < Item
     end
 
     PartAssociation.import pas unless pas.empty?
-    DataAssociation.import das, on_duplicate_key_update: [:object] unless das.empty?  
+    DataAssociation.import das, on_duplicate_key_update: [:object] unless das.empty?
 
     pm
 
@@ -87,7 +87,7 @@ class Collection < Item
 
   # Create or assign zeros to all part data associations for the given key
   # @param key [String]
-  # @return [Array] the part matrix, with new data associations inserted if required  
+  # @return [Array] the part matrix, with new data associations inserted if required
   def new_data_matrix(key)
     r, c = dimensions
     set_data_matrix(key, Array.new(r) { Array.new(c, 0.0) })
@@ -107,7 +107,7 @@ class Collection < Item
   # @param r [Fixnum] the row
   # @param c [Fixnum] the column
   # @param value [Float|Fixnum|String]
-  # @return [Array] the part matrix, with new data associations inserted if required  
+  # @return [Array] the part matrix, with new data associations inserted if required
   # @return [Collection] the collection, for chaining
   def set_part_data(key, r, c, value)
 
@@ -127,7 +127,7 @@ class Collection < Item
   # @param key [String]
   # @param r [Fixnum] the row
   # param c [Fixnum] the column
-  # @return [Array] the part matrix, with new data associations inserted if required  
+  # @return [Array] the part matrix, with new data associations inserted if required
   # @return [String|Float] The resulting data
   def get_part_data(key, r, c)
 
@@ -149,10 +149,10 @@ class Collection < Item
   def each_row_col(matrix, offset: [0, 0])
     dr, dc = dimensions
     (0...matrix.length).each do |r|
-      (0...matrix[r].length).each do |c|  
+      (0...matrix[r].length).each do |c|
         x = r + offset[0]
         y = c + offset[1]
-        if x < dr && y < dc     
+        if x < dr && y < dc
           yield r, c, x, y
         end
       end
@@ -162,18 +162,18 @@ class Collection < Item
 
   # @private
   def initialize_part(r, c, sample: nil)
-    
+
     pa = part_association(r, c)
 
     if pa
       if !pa.part_id
-        part = Item.make({ quantity: 1, inuse: 0 }, sample: sample, object_type: part_type) 
+        part = Item.make({ quantity: 1, inuse: 0 }, sample: sample, object_type: part_type)
         pa.part_id = part.id
         pa.save
       end
     else
-      part = Item.make({ quantity: 1, inuse: 0 }, sample: sample, object_type: part_type)      
-      pa = PartAssociation.new(collection_id: id, part_id: part.id,  row: r, column: c) 
+      part = Item.make({ quantity: 1, inuse: 0 }, sample: sample, object_type: part_type)
+      pa = PartAssociation.new(collection_id: id, part_id: part.id,  row: r, column: c)
       pa.save
     end
 
@@ -222,7 +222,7 @@ class Collection < Item
   # Retrive the part at position r, c
   # @param r [Fixnum] the row
   # @param c [Fixnum] the column
-  # @return [Item] 
+  # @return [Item]
   def part(r, c)
     pas = PartAssociation.includes(:part).where(collection_id: id, row: r, column: c)
     if pas.length == 1
@@ -242,7 +242,7 @@ class Collection < Item
     PartAssociation
       .includes(part: [{ sample: [:sample_type] }, :object_type])
       .where(collection_id: id)
-      .each do |pa| 
+      .each do |pa|
         m[pa.row][pa.column] = pa.part
       end
 
@@ -259,17 +259,17 @@ class Collection < Item
   # @param sample [Sample]
   # @param pairs [Array] of the form [ [r1,c1], [r2, c2] ... ]
   # @return [Collection] can be chained
-  def assign_sample_to_pairs(sample, pairs) 
+  def assign_sample_to_pairs(sample, pairs)
 
     pm = part_matrix
 
     pairs.each do |r, c|
-      if pm[r][c] 
+      if pm[r][c]
         old_sample_id = pm[r][c].sample_id
         pm[r][c].sample_id = sample.id
         pm[r][c].save
         associate(
-          :"Sample Reassigned", 
+          :"Sample Reassigned",
           "The sample at #{r}, #{c} was changed from #{old_sample_id} to #{sample.id}.",
           nil,
           duplicates: true
@@ -298,8 +298,8 @@ class Collection < Item
         pas[0].destroy
 
         associate(
-          :"Part Deleted", 
-          "The sample at #{r}, #{c} was deleted. " + 
+          :"Part Deleted",
+          "The sample at #{r}, #{c} was deleted. " +
           "It used to be sample #{pas[0].part.sample_id} via deleted part #{pas[0].part.id}.",
           nil,
           duplicates: true
@@ -311,9 +311,9 @@ class Collection < Item
 
     end
 
-  end  
+  end
 
-  EMPTY = -1 # definition of empty  
+  EMPTY = -1 # definition of empty
 
   # @private
   def self.every
@@ -348,7 +348,7 @@ class Collection < Item
     pos = find to_sample_id(s)
     { row: pos.first[0], column: pos.first[1] }
   end
-  
+
   # Get a list of the of the form `{row: r, column: c, collection: col}, ...`  containing
   # the specified sample.
   #
@@ -363,10 +363,10 @@ class Collection < Item
     plist
   end
 
-  # Creates as many new collections of type `name` 
+  # Creates as many new collections of type `name`
   # as will be necessary to hold every sample in the
-  # `samples` list. 
-  # 
+  # `samples` list.
+  #
   # @param samples [Array<Sample>]  list of samples to initiate collections with
   # @param name [String]  the name of a valid collection object type that will be
   #               created and populated with samples
@@ -389,7 +389,7 @@ class Collection < Item
   end
 
   # Make an entirely new collection.
-  # 
+  #
   # @param ctype [String]  the name of the valid collection object type to make a collection with
   # @return [Collection]  new empty collection of type `name`
   def self.new_collection(ctype)
@@ -400,7 +400,7 @@ class Collection < Item
     else
       o = ctype
     end
-    
+
     raise "Could not find object type named '#{name}'." unless o
 
     i = Collection.new
@@ -494,7 +494,7 @@ class Collection < Item
     get_non_empty.size
   end
 
-  # Changes Item, String, or Sample to a sample.id for storing into a collection matrix. 
+  # Changes Item, String, or Sample to a sample.id for storing into a collection matrix.
   #
   def self.to_sample_id(x)
     r = EMPTY
@@ -544,7 +544,7 @@ class Collection < Item
       raise "Expecting item, a sample, or a sample id, but got '#{x}' which is a #{x.class}"
     end
     r
-  end  
+  end
 
   # Adds sample, item, or number to collection
   #
@@ -585,7 +585,7 @@ class Collection < Item
   end
 
   # Find last [r,c] that equals x and sets to EMPTY. If x.nil? then it finds the last non_empty slot. If reverse: false
-  # then finds the first [r,c] equal to x. Returns [r,c,sample_at_rc] if x is in collection, or nil if 
+  # then finds the first [r,c] equal to x. Returns [r,c,sample_at_rc] if x is in collection, or nil if
   # x is not found or the collection is empty.
   #
   # @param x [Fixnum, Sample, Item]
@@ -685,11 +685,11 @@ class Collection < Item
     (0...dr).each do |r|
       (0...dc).each do |c|
         klass = sample_matrix[r][c].class
-        if klass == Sample 
+        if klass == Sample
           sample_matrix_aux[r][c] = sample_matrix[r][c].id
         elsif klass == Item
           sample_matrix_aux[r][c] = Item.sample_id
-        elsif klass == Fixnum && sample_matrix[r][c] > 0 
+        elsif klass == Fixnum && sample_matrix[r][c] > 0
           sample_matrix_aux[r][c] = sample_matrix[r][c]
         else
           sample_matrix_aux[r][c] = nil
@@ -710,8 +710,8 @@ class Collection < Item
 
     dr = sample_matrix.length
     dc = sample_matrix[0].length
-    sample_matrix_aux = to_sample_id_matrix sample_matrix  
-    
+    sample_matrix_aux = to_sample_id_matrix sample_matrix
+
     ActiveRecord::Base.transaction do
 
       clear
@@ -732,7 +732,7 @@ class Collection < Item
       parts.each do |p|                              # erase temporary id
         p.data = nil
         p.save
-      end      
+      end
       index = 0
 
       # create part associations

@@ -5,5 +5,4 @@ FactoryBot.define do
     deployed { true }
   end
 
-  
 end

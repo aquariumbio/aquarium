@@ -13,7 +13,7 @@ module Serialize
     ops = plan.operations
 
     op_ids = ops.collect { |o| o.id }
-    ot_ids = ops.collect { |o| o.operation_type_id }    
+    ot_ids = ops.collect { |o| o.operation_type_id }
 
     job_associations = JobAssociation.includes(:job).where(operation_id: op_ids).collect { |ja| ja.as_json(include: { job: { except: :state } }) }
     operation_types = OperationType.where(id: ops.collect { |o| o['operation_type_id'] }).as_json
@@ -59,9 +59,9 @@ module Serialize
 
   def self.get_aft_for fv, afts
     aft_list = afts.select { |aft| aft.id == fv["allowable_field_type_id"]  }
-    if aft_list.length > 0 
+    if aft_list.length > 0
       aft_list[0]
-    else 
+    else
       nil
     end
   end

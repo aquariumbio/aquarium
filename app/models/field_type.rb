@@ -28,7 +28,7 @@ class FieldType < ActiveRecord::Base
   #
   # @return [String]  class of parent object, as in "SampleType"
   attr_accessible :parent_class
-  
+
   attr_accessible :array, :choices, :required, :ftype, :role, :part, :routing
   attr_accessible :preferred_operation_type_id, :preferred_field_type_id
 

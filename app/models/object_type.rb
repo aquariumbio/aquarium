@@ -1,5 +1,5 @@
 
-# Defines the type of physical object that would be represented in an {Item} 
+# Defines the type of physical object that would be represented in an {Item}
 # @api krill
 class ObjectType < ActiveRecord::Base
 
