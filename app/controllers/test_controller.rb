@@ -114,7 +114,7 @@ class TestController < ApplicationController
     rescue Minitest::Assertion => error
       error_trace = filter_backtrace(backtrace: error.backtrace)
                     .map { |message| translate_trace(message: message) }
-      resp.error("Assertion failed: #{error.to_s}")
+      resp.error("Assertion failed: #{error}")
           .more(
             error_type: 'assertion_failure',
             exception_backtrace: error_trace, 
@@ -142,7 +142,7 @@ class TestController < ApplicationController
     error_trace = filter_backtrace(backtrace: error.backtrace)
                   .map { |message| translate_trace(message: message) }
     error_message = if error_trace[-1].present?
-                      "Error in #{error_trace[-1]}: #{error.to_s}"
+                      "Error in #{error_trace[-1]}: #{error}"
                     elsif (error.is_a? SyntaxError) && error.message.match(/^\(eval\):\d+: .+$/)
                       line_number, message = error.message.match(
                         /^\(eval\):(\d+): (.+)$/

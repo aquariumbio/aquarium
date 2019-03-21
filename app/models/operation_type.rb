@@ -28,7 +28,6 @@ class OperationType < ActiveRecord::Base
   # @return [String]  the category of the OperationType, as in "Cloning"
   attr_accessible :category
 
-
   validates :name, presence: true
   validates :name, uniqueness: { 
     scope: :category, 
@@ -78,7 +77,7 @@ class OperationType < ActiveRecord::Base
   end
 
   def protocol
-    code 'protocol'
+    code('protocol')
   end
 
   def cost_model
@@ -86,15 +85,15 @@ class OperationType < ActiveRecord::Base
   end
 
   def precondition
-    code 'precondition'
+    code('precondition')
   end
 
   def documentation
-    code 'documentation'
+    code('documentation')
   end
 
   def test
-    code 'test'
+    code('test')
   end
 
   def schedule_aux(ops, user, group, opts = {})

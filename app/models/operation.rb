@@ -11,14 +11,23 @@ class Operation < ActiveRecord::Base
   include OperationPlanner
   include OperationStatus
 
+  belongs_to :operation_type
+  belongs_to :user
+  has_many :job_associations
+  has_many :jobs, through: :job_associations
+
+  has_many :plan_associations
+  has_many :plans, through: :plan_associations
+
+  attr_accessible :status, :user_id, :x, :y, :parent_id
+
   before_destroy :destroy_field_values
 
   def destroy_field_values
-    unless JobAssociation.where(operation_id: id).empty?
-      raise "Cannot destroy operation #{id} because it has jobs associated with it"
-    end
+    msg = "Cannot destroy operation #{id} because it has jobs associated with it"
+    raise msg unless JobAssociation.where(operation_id: id).empty?
 
-    fvs = FieldValue.where parent_class: "Operation", parent_id: id
+    fvs = FieldValue.where(parent_class: "Operation", parent_id: id)
     fvs.each do |fv|
       Wire.where("from_id = #{fv.id} OR to_id = #{fv.id}").each do |wire|
         wire.destroy
@@ -30,16 +39,6 @@ class Operation < ActiveRecord::Base
   def parent_type # interface with FieldValuer
     operation_type
   end
-
-  belongs_to :operation_type
-  belongs_to :user
-  has_many :job_associations
-  has_many :jobs, through: :job_associations
-
-  has_many :plan_associations
-  has_many :plans, through: :plan_associations
-
-  attr_accessible :status, :user_id, :x, :y, :parent_id
 
   def virtual?
     false
@@ -57,38 +56,36 @@ class Operation < ActiveRecord::Base
 
   # @return [Plan] The plan that contains this Operation
   def plan
-    pset = plans
-    pset[0] unless pset.length == 0
-
+    plans[0] unless plans.empty?
   end
 
-  # Methods used for building operations for testing via vs code
+  # Methods used for building operations for testing via vscode
 
   # Assigns a Sample to an input, choosing an appropriate allowable_field_type
   # @param name [String]
   # @param sample [Sample]
   def with_input(name, sample)
-      ft = operation_type.inputs.select { |i| i[:name] == name }.first
-      aft = ft.choose_aft_for(sample)
-      set_input(name, sample, aft)
-      self       
+    ft = operation_type.inputs.select { |i| i[:name] == name }.first
+    aft = ft.choose_aft_for(sample)
+    set_input(name, sample, aft)
+    self       
   end 
 
   # Assigns a Sample to an output, choosing an appropriate allowable_field_type
   # @param name [String]
   # @param sample [Sample]
   def with_output(name, sample)
-      ft = operation_type.outputs.select { |i| i[:name] == name }.first
-      aft = ft.choose_aft_for(sample)
-      set_output name, sample, aft   
-      self     
+    ft = operation_type.outputs.select { |i| i[:name] == name }.first
+    aft = ft.choose_aft_for(sample)
+    set_output name, sample, aft   
+    self     
   end
 
   # Assigns a value to an input parameter
   # @param name [String]
   # @param value 
   def with_property(name, value)
-      set_property(name, value, 'input', false, nil)
+    set_property(name, value, 'input', false, nil)
   end  
 
   # end methods used for testing via vs code
@@ -127,37 +124,42 @@ class Operation < ActiveRecord::Base
   #   end
   def add_input(name, sample, container)
     items = Item.where(sample_id: sample.id, object_type_id: container.id).reject(&:deleted?)
+    return nil if items.empty?
 
-    if items.any?
+    item = items.first
+    create_input(name: name, item: item, sample: sample)
 
-      item = items.first
-
-      ft = FieldType.new(
-        name: name,
-        ftype: 'sample',
-        parent_class: 'OperationType',
-        parent_id: nil
-      )
-      ft.save
-
-      fv = FieldValue.new(
-        name: name,
-        child_item_id: item.id,
-        child_sample_id: sample.id,
-        role: 'input',
-        parent_class: 'Operation',
-        parent_id: id,
-        field_type_id: ft.id
-      )
-      fv.save
-
-      return item
-
-    end
-
-    nil
-
+    item
   end
+
+  def create_input(name:, item:, sample:)
+    field_type = create_field_type(name)
+    field_type.save
+
+    field_value = create_field_value(name, item, sample, field_type)
+    field_value.save
+  end
+
+  def create_field_type(name)
+    FieldType.new(
+      name: name,
+      ftype: 'sample',
+      parent_class: 'OperationType',
+      parent_id: nil
+    )
+  end
+
+  def create_field_value(name, item, sample, field_type)
+    FieldValue.new(
+      name: name,
+      child_item_id: item.id,
+      child_sample_id: sample.id,
+      role: 'input',
+      parent_class: 'Operation',
+      parent_id: id,
+      field_type_id: field_type.id
+    )
+  end  
 
   # @return [Array<FieldValue>]
   def inputs
@@ -237,7 +239,7 @@ class Operation < ActiveRecord::Base
     block.call(self)
     inputs.each do |input|
       input.predecessors.each do |pred|
-        pred.operation.recurse &block
+        pred.operation.recurse(&block)
       end
     end
   end
@@ -264,37 +266,29 @@ class Operation < ActiveRecord::Base
   end
 
   def successors
-
-    ops = []
-
+    successor_list = []
     outputs.each do |output|
       output.successors.each do |suc|
-        ops << suc.operation
+        successor_list << suc.operation
       end
     end
 
-    ops
-
+    successor_list
   end
 
   def predecessors
-
-    ops = []
-
+    predecessor_list = []
     inputs.each do |input|
       input.predecessors.each do |pred|
-        ops << pred.operation
+        predecessor_list << pred.operation
       end
     end
 
-    ops
-
+    predecessor_list
   end
 
   def primed_predecessors
-
     ops = []
-
     inputs.each do |input|
       input.predecessors.each do |pred|
         ops << pred.operation if pred.operation && pred.operation.status == 'primed'
@@ -302,11 +296,9 @@ class Operation < ActiveRecord::Base
     end
 
     ops
-
   end
 
   def siblings
-
     ops = outputs.collect do |output|
       output.wires_as_source.collect do |wire|
         wire.to.predecessors.collect(&:operation)
@@ -314,7 +306,6 @@ class Operation < ActiveRecord::Base
     end
 
     ops.flatten
-
   end
 
   def activate
@@ -338,19 +329,16 @@ class Operation < ActiveRecord::Base
   end
 
   def self.step(ops = nil)
-
     ops ||= Operation.includes(:operation_type)
                      .where("status = 'waiting' OR status = 'deferred' OR status = 'delayed' OR status = 'pending'")
 
     ops.each(&:step)
-
   end
 
   def nominal_cost
-
     begin
-      eval(operation_type.code('cost_model').content)
-    rescue Exception => e
+      eval(operation_type.cost_model.content)
+    rescue SyntaxError, StandardError => e
       raise 'Could not evaluate cost function definition: ' + e.to_s
     end
 
@@ -359,7 +347,7 @@ class Operation < ActiveRecord::Base
 
     begin
       c = cost(self)
-    rescue Exception => e
+    rescue SystemStackError, SyntaxError, StandardError => e
       self.status = temp
       raise 'Could not evaluate cost function on the given operation: ' + e.to_s
     end
@@ -376,11 +364,11 @@ class Operation < ActiveRecord::Base
   end
 
   def input_data(input_name, data_name)
-    child_data input_name, 'input', data_name
+    child_data(input_name, 'input', data_name)
   end
 
   def output_data(input_name, data_name)
-    child_data input_name, 'output', data_name
+    child_data(input_name, 'output', data_name)
   end
 
   def set_child_data(child_name, child_role, data_name, value)
@@ -398,11 +386,10 @@ class Operation < ActiveRecord::Base
   end
 
   def precondition_value
-
     rval = true
 
     begin
-      eval(operation_type.code('precondition').content)
+      eval(operation_type.precondition.content)
       rval = precondition(self)
     rescue Exception => e
       Rails.logger.info "PRECONDITION FOR OPERATION #{id} crashed"
@@ -411,11 +398,9 @@ class Operation < ActiveRecord::Base
     end
 
     rval
-
   end
 
   def add_successor(opts)
-
     ot = OperationType.find_by_name(opts[:type])
 
     op = ot.operations.create(
@@ -442,7 +427,6 @@ class Operation < ActiveRecord::Base
     )
 
     wire.save
-
   end
 
   ###################################################################################################

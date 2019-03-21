@@ -139,7 +139,7 @@ module OperationStatus
         ) if i.child_item_id && ( 
             i.child_item_id != wire.from.child_item_id ||
             i.row != wire.from.row ||
-            i.column != wire.from.column )
+            i.column != wire.from.column)
         i.child_item_id = wire.from.child_item_id
         i.row = wire.from.row
         i.column = wire.from.column

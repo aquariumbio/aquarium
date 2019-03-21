@@ -6,7 +6,7 @@ module Krill
 
     # Appends a column to an OperationsList table which accepts user input. Used in conjunction with show_with_input_table.
     # Consider using `get` instead, unless you have a specific reason to use this method
-    def custom_input key, opts = { heading: "Custom Input", checkable: false, type: "string", style_block: nil }, &default_block
+    def custom_input(key, opts = { heading: "Custom Input", checkable: false, type: "string", style_block: nil }, &default_block)
       self.each.with_index do |op, i|
         op.temporary[:uid] = i
       end
@@ -15,7 +15,7 @@ module Krill
         # d = op.temporary[key] # Prefer to default to last inputted value
         d ||= default_block.call(op)
       end
-      @table.add_column opts[:heading], zip(default_values).map { |op, d|
+      entries = zip(default_values).map do |op, d|
         # Save a list of temporary keys to be deleted later
         new_key = _create_temp_key(key, op)
         temporary_keys = op.temporary[:temporary_keys] || []
@@ -30,7 +30,9 @@ module Krill
         style = opts[:style_block].call(op) if opts[:style_block]
         o.merge!(style) if style
         o
-      }
+      end
+      @table.add_column(opts[:heading], entries)
+
       self
     end
 
