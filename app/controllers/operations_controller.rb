@@ -105,13 +105,14 @@ class OperationsController < ApplicationController
   end
 
   def retry
-
-    op = Operation.find(params[:id])
-    op.retry
-    Operation.step(op.plan.operations.select { |op| op.status != 'done' && op.status != 'error' })
+    operation = Operation.find(params[:id])
+    operation.retry
+    operation_list = operation.plan.operations.select do |op|
+      op.status != 'done' && op.status != 'error'
+    end
+    Operation.step(operation_list)
 
     render json: { status: op.status }
-
   end
 
   def step
