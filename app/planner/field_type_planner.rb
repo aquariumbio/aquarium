@@ -85,7 +85,7 @@ module FieldTypePlanner
         if aft.sample_type
           return [aft.sample_type.samples.sample(3), aft]
         else
-          return [[nil,nil,nil], aft]
+          return [[nil, nil, nil], aft]
         end
       elsif !aft.sample_type
         return [nil, aft]

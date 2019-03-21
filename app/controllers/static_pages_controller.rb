@@ -18,7 +18,7 @@ class StaticPagesController < ApplicationController
     lb = lb.select("users.*, COUNT(#{assocs}.id) count_accessor")
            .group('users.id')
            .collect { |u| { user: u, assocs_sym => u.count_accessor } }
-           .sort { |a,b| a[assocs_sym] <=> b[assocs_sym] }
+           .sort { |a, b| a[assocs_sym] <=> b[assocs_sym] }
            .reverse
 
     compute_widths lb, assocs_sym
@@ -59,7 +59,7 @@ class StaticPagesController < ApplicationController
       .select("plans.*, COUNT(plan_associations.id) op_count") \
       .group('plans.id') \
       .collect { |p| { plan: p, ops: p.op_count, user: p.user } } \
-      .sort { |a,b| a[:ops] <=> b[:ops] } \
+      .sort { |a, b| a[:ops] <=> b[:ops] } \
       .reverse
       .first(20)
 
@@ -70,7 +70,7 @@ class StaticPagesController < ApplicationController
       .select("plans.*, COUNT(plan_associations.id) op_count") \
       .group('plans.id') \
       .collect { |p| { plan: p, ops: p.op_count, user: p.user } } \
-      .sort { |a,b| a[:ops] <=> b[:ops] } \
+      .sort { |a, b| a[:ops] <=> b[:ops] } \
       .reverse
 
     @biggest_plans = done[0..20].select { |x| all.find { |y| x[:plan].id == y[:plan].id }[:ops] == x[:ops] }

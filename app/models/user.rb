@@ -146,7 +146,7 @@ class User < ActiveRecord::Base
       end
     end
 
-    data.collect { |k,v| { name: k }.merge v }.sort_by { |stat| stat[:count] }.reverse
+    data.collect { |k, v| { name: k }.merge v }.sort_by { |stat| stat[:count] }.reverse
 
   end
 
