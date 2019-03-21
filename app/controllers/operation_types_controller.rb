@@ -10,7 +10,6 @@ class OperationTypesController < ApplicationController
   end
 
   def index
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     respond_to do |format|
@@ -24,7 +23,6 @@ class OperationTypesController < ApplicationController
   end
 
   def create
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     ot = OperationType.new(
@@ -63,51 +61,39 @@ class OperationTypesController < ApplicationController
   end
 
   def destroy
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     ot = OperationType.find(params[:id])
-
+    resp = { ok: true }
+    status = :ok
     if ot.operations.count != 0
-      render json: { error: "Operation Type #{ot.name} has associated operations." },
-             status: :unprocessable_entity
+      resp = { error: "Operation Type #{ot.name} has associated operations." }
+      status = :unprocessable_entity
     elsif ot.deployed
-      render json: { error: "Operation Type #{ot.name} has been deployed." },
-             status: :unprocessable_entity
+      resp = { error: "Operation Type #{ot.name} has been deployed." }
+      status = :unprocessable_entity
     else
       ot.destroy
-      render json: { ok: true }, status: :ok
     end
-
+    render json: resp, status: status
   end
 
   def code
+    render json: {}, status: :ok if params[:no_edit]
 
-    if params[:no_edit]
+    ot = OperationType.find(params[:id])
+    code_object = ot.code(params[:name])
 
-      render json: {}, status: :ok
+    code_object = if code_object
+                    code_object.commit(params[:content], current_user)
+                  else
+                    ot.new_code(params[:name], params[:content], current_user)
+                  end
 
-    else
-
-      ot = OperationType.find(params[:id])
-      c = ot.code(params[:name])
-
-      unless params[:no_edit]
-        c = if c
-              c.commit(params[:content], current_user)
-            else
-              ot.new_code(params[:name], params[:content], current_user)
-            end
-      end
-
-      render json: c, status: :ok
-
-    end
-
+    render json: code_object, status: :ok
   end
 
   def update_from_ui(data, update_fields = true)
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     ot = OperationType.find(data[:id])
@@ -146,7 +132,6 @@ class OperationTypesController < ApplicationController
   end
 
   def update
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     ot = update_from_ui params
@@ -167,16 +152,12 @@ class OperationTypesController < ApplicationController
   end
 
   def random
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     ops_json = []
-
     begin
       ActiveRecord::Base.transaction do
-
         ops = OperationType.find(params[:id]).random(params[:num].to_i)
-
         error = false
 
         precondition_errors = ops.select do |op|
@@ -208,11 +189,9 @@ class OperationTypesController < ApplicationController
   end
 
   def make_test_ops(ot, tops)
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
     tops.collect do |test_op|
-
       op = ot.operations.create status: 'pending', user_id: test_op[:user_id]
 
       (ot.inputs + ot.outputs).each do |io|
@@ -245,12 +224,10 @@ class OperationTypesController < ApplicationController
   end
 
   def test
-
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
 
-    # save the operaton
-    ot = update_from_ui params, false
-
+    # save the operation
+    ot = update_from_ui(params, false)
     unless ot[:update_errors].empty?
       render json: { errors: ot[:update_errors] }, status: :unprocessable_entity
       return
