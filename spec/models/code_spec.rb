@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe CodeHelper do
   let(:code) { create(:code) }
-  let(:a_user) { create(:user)}
+  let(:a_user) { create(:user) }
   
   it 'example object has values from factory' do
     expect(code.name).to eq('the_code')
