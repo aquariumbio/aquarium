@@ -12,7 +12,7 @@ class ProtocolTestBase
     @job = nil
   end
 
-  def log msg
+  def log(msg)
     @logs ||= []
     @logs << msg
   end
