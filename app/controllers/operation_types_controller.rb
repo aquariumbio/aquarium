@@ -266,10 +266,9 @@ class OperationTypesController < ApplicationController
               else
                 []
               end
-      rescue Exception => e 
+      rescue StandardError => e 
         render json: { errors: [e.to_s] }, status: :unprocessable_entity
         raise ActiveRecord::Rollback
-        return        
       end
 
       plans = []
