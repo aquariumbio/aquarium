@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe CodeHelper do
   let(:mock_owner_class) { build_mock_class }
-  let!(:a_user) { create(:user)}
+  let!(:a_user) { create(:user) }
 
   before(:all) { create_table }
   after(:all) { drop_table }
@@ -32,7 +32,7 @@ RSpec.describe CodeHelper do
     code_object = @owner.new_code('the_code', 'def noop; end', a_user)
     expect(code_object.name).to eq('the_code')
     expect(code_object.content).to eq('def noop; end')
-    expect(code_object.parent_class).to eq("#{mock_owner_class}")
+    expect(code_object.parent_class).to eq(mock_owner_class.to_s)
     expect(code_object.user_id).to eq(a_user.id)
   end
 end
