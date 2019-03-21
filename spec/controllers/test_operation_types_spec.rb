@@ -29,5 +29,4 @@ RSpec.describe OperationTypesController, type: :controller do
 
   end
 
-end  
-
+end

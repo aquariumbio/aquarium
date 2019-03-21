@@ -2,7 +2,6 @@
 
 # Represents a code object for an operation type.
 #
-# 
 class Code < ActiveRecord::Base
   attr_accessible :name, :content, :parent_id, :parent_class, :user_id
 
@@ -46,6 +45,12 @@ class Code < ActiveRecord::Base
   # @return [Code] all objects with the same name and owner (parent)
   def versions
     Code.where(parent_id: parent_id, parent_class: parent_class, name: name)
+  end
+
+  # Loads the code content
+  def load
+    # TODO: check content type is krill before evaluating
+    eval(content)
   end
 
 end
