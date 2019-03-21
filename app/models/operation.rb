@@ -238,8 +238,8 @@ class Operation < ActiveRecord::Base
   def recurse(&block)
     block.call(self)
     inputs.each do |input|
-      input.predecessors.each do |pred|
-        pred.operation.recurse(&block)
+      input.predecessors.each do |predecessor|
+        predecessor.operation.recurse(&block)
       end
     end
   end
@@ -279,8 +279,8 @@ class Operation < ActiveRecord::Base
   def predecessors
     predecessor_list = []
     inputs.each do |input|
-      input.predecessors.each do |pred|
-        predecessor_list << pred.operation
+      input.predecessors.each do |predecessor|
+        predecessor_list << predecessor.operation
       end
     end
 
@@ -290,8 +290,8 @@ class Operation < ActiveRecord::Base
   def primed_predecessors
     ops = []
     inputs.each do |input|
-      input.predecessors.each do |pred|
-        ops << pred.operation if pred.operation && pred.operation.status == 'primed'
+      input.predecessors.each do |predecessor|
+        ops << predecessor.operation if predecessor.operation && predecessor.operation.status == 'primed'
       end
     end
 
@@ -337,7 +337,7 @@ class Operation < ActiveRecord::Base
 
   def nominal_cost
     begin
-      eval(operation_type.cost_model.content)
+      operation_type.cost_model.load
     rescue SyntaxError, StandardError => e
       raise 'Could not evaluate cost function definition: ' + e.to_s
     end
@@ -354,7 +354,6 @@ class Operation < ActiveRecord::Base
 
     self.status = temp
     c
-
   end
 
   def child_data(child_name, child_role, data_name)
@@ -386,18 +385,18 @@ class Operation < ActiveRecord::Base
   end
 
   def precondition_value
-    rval = true
+    result = true
 
     begin
-      eval(operation_type.precondition.content)
-      rval = precondition(self)
+      operation_type.precondition.load
+      result = precondition(self)
     rescue Exception => e
       Rails.logger.info "PRECONDITION FOR OPERATION #{id} crashed"
-      plan.associate 'Precondition Evalution Error', e.message.to_s + ': ' + e.backtrace[0].to_s.sub('(eval)', 'line')
-      rval = false # default if there is no precondition or it crashes
+      plan.associate 'Precondition Evaluation Error', e.message.to_s + ': ' + e.backtrace[0].to_s.sub('(eval)', 'line')
+      result = false # default if there is no precondition or it crashes
     end
 
-    rval
+    result
   end
 
   def add_successor(opts)
@@ -438,9 +437,9 @@ class Operation < ActiveRecord::Base
 
       next unless i.predecessors.count > 0
 
-      i.predecessors.each do |pred|
-        if pred.operation.on_the_fly
-          return pred.operation.leaf?
+      i.predecessors.each do |predecessor|
+        if predecessor.operation.on_the_fly
+          return predecessor.operation.leaf?
         else
           return false
         end

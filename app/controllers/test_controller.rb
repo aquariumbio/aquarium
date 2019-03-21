@@ -15,7 +15,7 @@ class TestController < ApplicationController
 
     ActiveRecord::Base.transaction do
       begin
-        resp = load_test(code: operation_type.test.content)
+        resp = load_test(code: operation_type.test)
         if resp.nil?
           test = ProtocolTest.new(operation_type, current_user)
           resp = pre_test(test: test)
@@ -55,7 +55,7 @@ class TestController < ApplicationController
   def load_test(code:)
     begin
       resp = nil
-      eval(code)
+      code.load
     rescue SyntaxError, StandardError => error
       resp = handle_error(error: error, phase_name: 'test loading')
     end
