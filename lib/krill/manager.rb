@@ -11,39 +11,32 @@ module Krill
     attr_accessor :thread
 
     def initialize(jid, debug, directory = 'master', branch = 'master')
+      @jid = jid
+      @debug = debug
 
       # Start new thread
       @mutex = Mutex.new
       @thread_status = ThreadStatus.new
       @thread_status.running = false
-      @debug = debug
 
-      # Get job info
-      @jid = jid
       @job = Job.find(jid)
+      raise "No path specified for job #{@job.id}. Cannot start." if @job.operations.empty?
 
-      if !@job.operations.empty?
-        @code = @job.operations.first.operation_type.code('protocol').content
-      else
-        raise "No path specified for job #{@job.id}. Cannot start."
-      end
-
-      initial_state = JSON.parse @job.state, symbolize_names: true
+      initial_state = JSON.parse(@job.state, symbolize_names: true)
       @args = initial_state[0][:arguments]
 
-      # Create Namespace
-      @namespace = Krill.make_namespace @code
+      @code = @job.operations.first.operation_type.protocol
+      @namespace = Krill.make_namespace(@code) # Create Namespace
 
       # Add base_class ancestor to user's code
       @base_class = make_base
-      insert_base_class @namespace, @base_class
+      insert_base_class(@namespace, @base_class)
 
       # Make a base object
       @base_object = Class.new.extend(@base_class)
 
       # Make protocol
       @protocol = @namespace::Protocol.new
-
     end
 
     ##################################################################################
@@ -51,11 +44,8 @@ module Krill
     #
 
     def start_thread
-
       @thread_status.running = true
-
       @thread = Thread.new do
-
         begin
           @job.start # what if this fails?
           appended_complete = false
@@ -82,11 +72,8 @@ module Krill
               @job.append_step operation: 'next', time: Time.now, inputs: {}
               @job.append_step operation: 'aborted', rval: {}
             end
-
             @job.save # what if this fails?
-
             ActiveRecord::Base.connection.close
-
             @mutex.synchronize { @thread_status.running = false }
           end
         rescue Exception => main_error
@@ -97,13 +84,10 @@ module Krill
             puts "#{@job.id}: Closing ActiveRecord connection"
           end
         end
-
       end
-
     end
 
     def debugger
-
       @job.start # what if this fails?
       appended_complete = false
 
@@ -139,7 +123,6 @@ module Krill
     end
 
     def run
-
       if @protocol.debug
         debugger
       else
@@ -147,11 +130,9 @@ module Krill
         wait 20 # This so that you wait until either the step is done or 20 seconds is up.
         # It doesn't have to wait the whole 20 seconds if the step finishes quickly.
       end
-
     end
 
     def wait(secs)
-
       n = 0
       running = true
       @mutex.synchronize { running = @thread_status.running }
@@ -171,47 +152,35 @@ module Krill
       else
         return 'ready'
       end
-
     end
 
     def check_again
-
       if @thread.alive?
         wait 20
       else
         'done'
       end
-
     end
 
     def continue
-
       if @thread.alive?
-
         @mutex.synchronize do
           unless @thread_status.running
             @thread_status.running = true
             @thread.wakeup
           end
         end
-
         wait 20
-
       else
-
         'done'
-
       end
-
     end
 
     def stop
-
       puts "Stopping job #{@job.id}"
 
       @thread.kill
       @mutex.synchronize { @thread_status.running = false }
-
     end
 
     #
@@ -219,13 +188,11 @@ module Krill
     ###########################################################################
 
     def make_base
-
       b = Module.new
       b.send(:include, Base)
-      b.module_eval "def jid; #{@jid}; end"
-      b.module_eval "def input; #{@args}; end"
-
-      b.module_eval 'def debug; true; end' if @debug
+      b.module_eval("def jid; #{@jid}; end")
+      b.module_eval("def input; #{@args}; end")
+      b.module_eval('def debug; true; end') if @debug
 
       manager_mutex = @mutex
       b.send :define_method, :mutex do
@@ -238,15 +205,11 @@ module Krill
       end
 
       b
-
     end
 
     def insert_base_class(obj, mod)
-
       obj.constants.each do |c|
-
         k = obj.const_get(c)
-
         if k.class == Module
           eigenclass = class << self
                          self
@@ -257,11 +220,8 @@ module Krill
           k.send(:include, mod) unless k.include? mod
           insert_base_class k, mod
         end
-
       end
-
     end
-
   end
 
 end
