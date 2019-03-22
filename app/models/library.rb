@@ -15,12 +15,16 @@ class Library < ActiveRecord::Base
     message: "Library names must be unique within a given category. When importing, consider first moving existing libraries to a different category"
   }
 
+  def source
+    code('source')
+  end
+
   def export
     {
       library: {
         name: name,
         category: category,
-        code_source: code('source') ? code('source').content : ''
+        code_source: source ? source.content : ''
       }
     }
   end
@@ -30,7 +34,7 @@ class Library < ActiveRecord::Base
 
     lib = Library.new name: obj[:name], category: obj[:category]
     lib.save
-    lib.new_code 'source', obj[:code_source], user
+    lib.new_code('source', obj[:code_source], user)
 
     issues = { notes: ["Created new library #{obj[:name]} in category #{obj[:category]}"], inconsistencies: [] }
     issues
