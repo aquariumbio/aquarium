@@ -190,9 +190,10 @@ class OperationTypesController < ApplicationController
 
   def make_test_ops(ot, tops)
     redirect_to root_path, notice: 'Administrative privileges required to access operation type definitions.' unless current_user.is_admin
+    return [] if tops.blank?
 
     tops.collect do |test_op|
-      op = ot.operations.create status: 'pending', user_id: test_op[:user_id]
+      op = ot.operations.create(status: 'pending', user_id: test_op[:user_id])
 
       (ot.inputs + ot.outputs).each do |io|
         test_fvs = test_op[:field_values].select { |fv| fv[:name] == io.name && fv[:role] == io.role }
@@ -213,14 +214,33 @@ class OperationTypesController < ApplicationController
             raise "Nil value Error: Could not set #{test_fv}" unless actual_fv
             raise "Active Record Error: Could not set #{test_fv}: #{actual_fv.errors.full_messages.join(', ')}" unless actual_fv.errors.empty?
           elsif io.ftype == 'number'
-            op.set_property io.name, test_fv[:value].to_f, io.role, true, nil
+            op.set_property(io.name, test_fv[:value].to_f, io.role, true, nil)
           else # string or json io
-            op.set_property io.name, test_fv[:value], io.role, true, nil
+            op.set_property(io.name, test_fv[:value], io.role, true, nil)
           end
         end
       end
       op
     end
+  end
+
+  def build_plan(operations)
+    plans = []
+    operations.each do |op|
+      plan = Plan.new(user_id: current_user.id, budget_id: Budget.all.first.id)
+      plan.save
+      plans << plan
+      pa = PlanAssociation.new(operation_id: op.id, plan_id: plan.id)
+      pa.save
+    end
+  end
+
+  def make_job(operation_type:, operations:, user:)
+    job, newops = operation_type.schedule(
+      operations,
+      user,
+      Group.find_by_name('technicians')
+    )
   end
 
   def test
@@ -238,35 +258,24 @@ class OperationTypesController < ApplicationController
 
       # (re)build the operations
       begin
-        ops = if params[:test_operations]
-                make_test_ops(OperationType.find(params[:id]), params[:test_operations])
-              else
-                []
-              end
+        operations = make_test_ops(OperationType.find(params[:id]), params[:test_operations])
       rescue StandardError => e
         render json: { errors: [e.to_s] }, status: :unprocessable_entity
         raise ActiveRecord::Rollback
       end
 
-      plans = []
-      ops.each do |op|
-        plan = Plan.new user_id: current_user.id, budget_id: Budget.all.first.id
-        plan.save
-        plans << plan
-        pa = PlanAssociation.new operation_id: op.id, plan_id: plan.id
-        pa.save
-      end
+      build_plan(operations)
 
-      ops = ops.select(&:precondition_value) if params[:use_precondition]
+      operations = operations.select(&:precondition_value) if params[:use_precondition]
 
       # run the protocol
       operation_type = ot[:op_type]
-      job, newops = operation_type.schedule(ops, current_user, Group.find_by_name('technicians'))
-      error = nil
+      make_job(operation_type: ot[:op_type], operations: operations, user: current_user)
 
+      error = nil
       begin
-        manager = Krill::Manager.new job.id, true, 'master', 'master'
-      rescue Exception => e
+        manager = Krill::Manager.new(job.id, true)
+      rescue SyntaxError, SystemStackError, StandardError => e
         error = e
       end
 
@@ -279,14 +288,12 @@ class OperationTypesController < ApplicationController
 
       else
         begin
-          ops.extend(Krill::OperationList)
-          ops.make(role: 'input')
-
-          ops.each(&:run)
-
+          # TODO: see ProtocolTestBase.execute
+          operations.extend(Krill::OperationList)
+          operations.make(role: 'input')
+          operations.each(&:run)
           manager.run
-
-          ops.each(&:reload)
+          operations.each(&:reload)
 
           # render the resulting data including the job and the operations
           render json: {
