@@ -97,7 +97,6 @@ class OperationType < ActiveRecord::Base
   end
 
   def schedule_aux(ops, user, group, opts = {})
-
     job = Job.new
 
     job.path = 'operation.rb'
@@ -121,14 +120,12 @@ class OperationType < ActiveRecord::Base
     end
 
     job
-
   end
 
-  def primed(ops)
-
+  def primed(operations)
     p = []
 
-    ops.each do |op|
+    operations.each do |op|
       op.inputs.each do |input|
         input.predecessors.each do |pred|
           p << pred.operation if pred.operation.status == 'primed'
@@ -137,32 +134,26 @@ class OperationType < ActiveRecord::Base
     end
 
     p
-
   end
 
-  def schedule(ops, user, group, opts = {})
-
+  def schedule(operations, user, group, opts = {})
     ops_to_schedule = []
     ops_to_defer = []
 
-    ops.each do |op|
-
+    operations.each do |op|
       pps = op.primed_predecessors
-
       if !pps.empty?
         ops_to_schedule += pps
         ops_to_defer << op
       else
         ops_to_schedule << op
       end
-
     end
 
-    deferred_job = schedule_aux ops_to_defer, user, group, opts.merge(defer: true)
-    job = schedule_aux ops_to_schedule, user, group, opts
+    deferred_job = schedule_aux(ops_to_defer, user, group, opts.merge(defer: true))
+    job = schedule_aux(ops_to_schedule, user, group, opts)
 
     [job, ops_to_schedule]
-
   end
 
   #
@@ -182,23 +173,23 @@ class OperationType < ActiveRecord::Base
 
   end
 
-  def update_allowable_field_type(oldaft, newaft)
+  def update_allowable_field_type(old_aft, new_aft)
 
-    if newaft[:sample_type]
-      st = SampleType.find_by_name(newaft[:sample_type][:name])
-      oldaft.sample_type_id = st.id if st
+    if new_aft[:sample_type]
+      st = SampleType.find_by_name(new_aft[:sample_type][:name])
+      old_aft.sample_type_id = st.id if st
     else
-      oldaft.sample_type_id = nil
+      old_aft.sample_type_id = nil
     end
 
-    if newaft[:object_type] && newaft[:object_type][:name] != ''
-      ot = ObjectType.find_by_name(newaft[:object_type][:name])
-      oldaft.object_type_id = ot.id if ot
+    if new_aft[:object_type] && new_aft[:object_type][:name] != ''
+      ot = ObjectType.find_by_name(new_aft[:object_type][:name])
+      old_aft.object_type_id = ot.id if ot
     else
-      oldaft.sample_type_id = nil
+      old_aft.sample_type_id = nil
     end
 
-    oldaft.save
+    old_aft.save
 
   end
 
