@@ -50,7 +50,7 @@ class ProtocolTestBase
   end
 
   def execute
-    manager = Krill::Manager.new(@job.id, true, 'master', 'master')
+    manager = Krill::Manager.new(@job.id, true)
     @operations.extend(Krill::OperationList)
     @operations.make(role: 'input')
     @operations.each(&:run)
