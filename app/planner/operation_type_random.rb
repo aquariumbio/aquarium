@@ -12,34 +12,35 @@ module OperationTypeRandom
       op = operations.create(status: 'pending', user_id: u.id)
       samples = {}
 
-      field_types.each do |ft|
-
-        if ft.ftype == 'sample'
-
-          if samples[ft.routing]
-            aft = ft.choose_aft_for(samples[ft.routing])
-            if !ft.array
-              op.set_property ft.name, [samples[ft.routing]].flatten.first, ft.role, false, aft
-            else
-              op.set_property ft.name, [samples[ft.routing]] * 3, ft.role, false, aft
-            end
-
+      field_types.each do |field_type|
+        if field_type.ftype == 'sample'
+          override_array = false
+          if samples[field_type.routing]
+            aft = field_type.choose_aft_for(samples[field_type.routing])
+            field_sample = if !field_type.array
+                             [samples[field_type.routing]].flatten.first
+                           else
+                             [samples[field_type.routing]] * 3
+                           end
           else
-            random_sample, random_aft = ft.random
-            op.set_property ft.name, random_sample, ft.role, false, random_aft
-            Rails.logger.info "Error adding property: #{op.errors.full_messages.join(', ')}" unless op.errors.empty?
-            samples[ft.routing] = random_sample
+            field_sample, aft = field_type.random
+            samples[field_type.routing] = random_sample
           end
-
-        elsif ft.choices != '' && !ft.choices.nil?
-          op.set_property ft.name, ft.choices.split(',').sample, ft.role, true, nil
-        elsif ft.type == 'number'
-          op.set_property ft.name, rand(100), ft.role, true, nil
-        elsif ft.ftype == 'json'
-          op.set_property ft.name, '{ "message": "random json parameters are hard to generate" }', ft.role, true, nil
         else
-          op.set_property(ft.name, %w[Lorem ipsum dolor sit amet consectetur adipiscing elit].sample, ft.role, true, nil)
+          override_array = true
+          aft = nil
+          field_sample = if field_type.choices != '' && !field_type.choices.nil?
+                           field_type.choices.split(',').sample
+                         elsif field_type.type == 'number'
+                           rand(100)
+                         elsif field_type.ftype == 'json'
+                           '{ "message": "random json parameters are hard to generate" }'
+                         else
+                           %w[Lorem ipsum dolor sit amet consectetur adipiscing elit].sample
+                         end
         end
+        op.set_property(field_type.name, field_sample, field_type.role, override_array, aft)
+        Rails.logger.info("Error adding property: #{op.errors.full_messages.join(', ')}") unless op.errors.empty?
       end
 
       op
