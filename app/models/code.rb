@@ -48,9 +48,9 @@ class Code < ActiveRecord::Base
   end
 
   # Loads the code content
-  def load
+  def load(binding: nil, source_name: '(eval)')
     # TODO: check content type is krill before evaluating
-    eval(content)
+    eval(content, binding, source_name)
   end
 
 end
