@@ -213,7 +213,7 @@ class OperationType < ActiveRecord::Base
       container_names = newft[:allowable_field_types]
                         .select { |aft| aft[:object_type] && aft[:object_type][:name] && aft[:object_type][:name] != '' }
                         .collect do |aft|
-        raise "Object type '#{aft[:object_type][:name]}' not definied by browser for #{ft[:name]}." unless ObjectType.find_by_name(aft[:object_type][:name])
+        raise "Object type '#{aft[:object_type][:name]}' not defined by browser for #{ft[:name]}." unless ObjectType.find_by_name(aft[:object_type][:name])
 
         aft[:object_type][:name]
       end
