@@ -393,7 +393,7 @@ class Operation < ActiveRecord::Base
       rval = precondition(self)
     rescue Exception => e
       Rails.logger.info "PRECONDITION FOR OPERATION #{id} crashed"
-      plan.associate 'Precondition Evalution Error', e.message.to_s + ': ' + e.backtrace[0].to_s.sub('(eval)', 'line')
+      plan.associate 'Precondition Evaluation Error', e.message.to_s + ': ' + e.backtrace[0].to_s.sub('(eval)', 'line')
       rval = false # default if there is no precondition or it crashes
     end
 

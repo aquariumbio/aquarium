@@ -123,8 +123,8 @@ class FieldValue < ActiveRecord::Base
 
   end
 
-  def self.create_string(sample, ft, vals)
-    vals.each do |v|
+  def self.create_string(sample, ft, values)
+    values.each do |v|
       if ft.choices && ft.choices != ''
         choices = ft.choices.split(',')
         unless choices.member? v
@@ -137,8 +137,8 @@ class FieldValue < ActiveRecord::Base
     end
   end
 
-  def self.create_number(sample, ft, vals)
-    vals.each do |v|
+  def self.create_number(sample, ft, values)
+    values.each do |v|
       if ft.choices && ft.choices != ''
         choices = ft.choices.split(',').collect(&:to_f)
         unless choices.member? v.to_f
@@ -151,16 +151,16 @@ class FieldValue < ActiveRecord::Base
     end
   end
 
-  def self.create_url(sample, ft, vals)
-    vals.each do |v|
+  def self.create_url(sample, ft, values)
+    values.each do |v|
       fv = sample.field_values.create name: ft.name, value: v
       fv.save
     end
   end
 
-  def self.create_sample(sample, ft, vals)
+  def self.create_sample(sample, ft, values)
 
-    vals.each do |v|
+    values.each do |v|
 
       if v.class == Sample
         child = v
@@ -185,8 +185,8 @@ class FieldValue < ActiveRecord::Base
     end
   end
 
-  def self.create_item(sample, ft, vals)
-    vals.each do |v|
+  def self.create_item(sample, ft, values)
+    values.each do |v|
       if v.class == Item
         item = v
       elsif v.class == Integer
@@ -212,18 +212,18 @@ class FieldValue < ActiveRecord::Base
 
   def self.creator(sample, field_type, raw) # sample, field_type, raw_field_data
 
-    vals = []
+    values = []
     if field_type.array
       if raw.class != Array
         sample.errors.add :array, "#{field_type.name} should be an array."
         raise ActiveRecord::Rollback
       end
-      vals = raw
+      values = raw
     else
-      vals = [raw]
+      values = [raw]
     end
 
-    method('create_' + field_type.ftype).call(sample, field_type, vals)
+    method('create_' + field_type.ftype).call(sample, field_type, values)
 
   end
 

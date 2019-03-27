@@ -52,7 +52,7 @@ class Plan < ActiveRecord::Base
 
       op.field_values.each do |fv|
         fv.wires_as_dest.each do |w|
-          puts "deleteing wire #{w.id}"
+          puts "deleting wire #{w.id}"
           w.delete
         end
         fv.wires_as_source.each do |w|
@@ -113,14 +113,14 @@ class Plan < ActiveRecord::Base
     fv_maps = []
 
     # Make new plan
-    newplan = Plan.new user_id: user_id, budget_id: budget_id
-    newplan.save
+    new_plan = Plan.new user_id: user_id, budget_id: budget_id
+    new_plan.save
 
     # Make new operations from old ones
     operations.each do |op|
-      newop = op.operation_type.operations.create status: 'planning', user_id: op.user_id
+      new_op = op.operation_type.operations.create status: 'planning', user_id: op.user_id
       op.field_values.each do |fv|
-        newfv = FieldValue.new(
+        new_fv = FieldValue.new(
           name: fv.name,
           child_sample_id: fv.child_sample_id,
           value: fv.value,
@@ -128,20 +128,20 @@ class Plan < ActiveRecord::Base
           field_type_id: fv.field_type_id,
           allowable_field_type_id: fv.allowable_field_type_id,
           parent_class: 'Operation',
-          parent_id: newop.id
+          parent_id: new_op.id
         )
-        newfv.save
-        fv_maps[fv.id] = newfv.id
+        new_fv.save
+        fv_maps[fv.id] = new_fv.id
       end
-      newplan.plan_associations.create operation_id: newop.id
+      new_plan.plan_associations.create operation_id: new_op.id
     end
 
     wires.each do |wire|
-      newwire = Wire.new from_id: fv_maps[wire.from_id], to_id: fv_maps[wire.to_id]
-      newwire.save
+      new_wire = Wire.new from_id: fv_maps[wire.from_id], to_id: fv_maps[wire.to_id]
+      new_wire.save
     end
 
-    newplan
+    new_plan
 
   end
 
