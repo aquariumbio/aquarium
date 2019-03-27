@@ -131,6 +131,7 @@ module Krill
     end
 
     # Produce items for {Operation}s
+    #
     # @param custom_opts [Hash]
     # @option custom_opts [Bool] :errored Include {Operation}s with status "error"
     # @option custom_opts [String] :role "input" or "output"
