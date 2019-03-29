@@ -61,23 +61,27 @@ class Operation < ActiveRecord::Base
 
   # Methods used for building operations for testing via vscode
 
-  # Assigns a Sample to an input, choosing an appropriate allowable_field_type
+  # Assigns a Sample to an input, choosing an appropriate allowable_field_type.
+  #
   # @param name [String]
   # @param sample [Sample]
   def with_input(name, sample)
     ft = operation_type.inputs.select { |i| i[:name] == name }.first
     aft = ft.choose_aft_for(sample)
     set_input(name, sample, aft)
+  
     self       
   end 
 
-  # Assigns a Sample to an output, choosing an appropriate allowable_field_type
+  # Assigns a Sample to an output, choosing an appropriate allowable_field_type.
+  #
   # @param name [String]
   # @param sample [Sample]
   def with_output(name, sample)
     ft = operation_type.outputs.select { |i| i[:name] == name }.first
     aft = ft.choose_aft_for(sample)
-    set_output name, sample, aft   
+    set_output(name, sample, aft)
+
     self     
   end
 
