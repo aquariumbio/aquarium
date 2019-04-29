@@ -7,6 +7,8 @@
 
 <% end %>
 
+<%= content_for :controller do %>noCtrl as noCtrl<% end %>
+
 <%= content_for :action1 do %>
 
   <md-button ng-href="/invoices/">All</md-button>
@@ -55,8 +57,6 @@
   <% end %>
 
   <hr>
-
-  <p>Contact <b>Amanda McCracken</b> (mccracken1029@gmail.com) with questions about this invoice.</p> 
 
 <% end %>    
 
