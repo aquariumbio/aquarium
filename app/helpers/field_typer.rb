@@ -13,6 +13,7 @@ module FieldTyper
   end
 
   def export_field_types
+    # TODO: serialize AFT as an object rather than parallel arrays
     fts = FieldType.includes(allowable_field_types: [:sample_type, :object_type]).where(parent_class: self.class.to_s, parent_id: id)
     fts.collect do |ft|
       rft = ft.as_json
