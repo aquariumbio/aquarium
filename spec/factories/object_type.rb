@@ -1,12 +1,13 @@
 FactoryBot.define do
   factory :object_type do
-    name { "an object_type" }
+    sequence(:name) { |n| "object_type_#{n}" }
     unit { "object" }
     min { 0 }
     max { 1 }
     release_method { "return" }
     description { "a container object type" }
     cost { 0.01 }
+    initialize_with { ObjectType.where(name: name).first_or_create } # singleton
 
     trait :collection_type do
       handler { 'collection' }

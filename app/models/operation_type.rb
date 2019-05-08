@@ -37,15 +37,15 @@ class OperationType < ActiveRecord::Base
   validates :category, presence: true
 
   def add_io(name, sample_name, container_name, role, opts)
-    add_field name, sample_name, container_name, role, opts
+    add_field(name, sample_name, container_name, role, opts)
   end
 
   def add_input(name, sample_name, container_name, opts = {})
-    add_field name, sample_name, container_name, 'input', opts
+    add_field(name, sample_name, container_name, 'input', opts)
   end
 
   def add_output(name, sample_name, container_name, opts = {})
-    add_field name, sample_name, container_name, 'output', opts
+    add_field(name, sample_name, container_name, 'output', opts)
   end
 
   # The input types of this OperationType.
