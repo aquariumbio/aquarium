@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe OperationTypesController, type: :controller do
 
+  before { skip("needs to be rewritten b/c relies on samples existing for all operation types in the database") }
+
   token_name = "remember_token_#{Bioturk::Application.environment_name}".to_sym
 
   describe "Tests operation types" do

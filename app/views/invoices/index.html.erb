@@ -33,25 +33,33 @@
 <% end %>
 
 <% content_for :sidebar do %>
+  <% if @monthly_invoices && @monthly_invoices[0] %>
+    <md-list ng-init="status.month = '<%= @monthly_invoices[0][:date] %>'">
 
-  <md-list ng-init="status.month = '<%= @monthly_invoices[0][:date] %>'">
+      <% @monthly_invoices.each do |invoices| %>
 
-    <% @monthly_invoices.each do |invoices| %>
+        <md-list-item ng-click="status.month = '<%= invoices[:date] %>'"
+                      ng-class="status.month == '<%= invoices[:date] %>' ? 'md-body-2 selected-view' : 'md-body-2'">
+          <p><%= invoices[:date].strftime("%B %Y") %></p>
+          <span>
+          <% if params[:all] %>
+            <%= number_to_currency(invoices[:entries].collect { |e| e[:spent] }.inject{|s,x| s + x}) %>
+          <% end %>
+          </span>
+        </md-list-item>
 
-      <md-list-item ng-click="status.month = '<%= invoices[:date] %>'"
-                    ng-class="status.month == '<%= invoices[:date] %>' ? 'md-body-2 selected-view' : 'md-body-2'">
-        <p><%= invoices[:date].strftime("%B %Y") %></p>
-        <span>
-        <% if params[:all] %>
-          <%= number_to_currency(invoices[:entries].collect { |e| e[:spent] }.inject{|s,x| s + x}) %>
-        <% end %>
-        </span>
-      </md-list-item>
+      <% end %>
 
-    <% end %>
-
-  </md-list>
-
+    </md-list>
+  <% else %>
+    <md-content flex layout-padding>
+      <h2 class="md-flex">No invoices</h2>
+      <p>
+      No jobs have been run.
+      Once some have been run invoices will appear on this page.
+      </p>
+    </md-content>
+  <% end %>
 <% end %>
 
 <%= content_for :main do %>

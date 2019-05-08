@@ -19,7 +19,6 @@ class Code < ActiveRecord::Base
       user_id: user.id
     )
     c.save
-
     c
   end
 

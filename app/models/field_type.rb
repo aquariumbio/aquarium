@@ -68,8 +68,8 @@ class FieldType < ActiveRecord::Base
   end
 
   def has_sample_type
-    asts = allowable_sample_types.select { |st| st }
-    !asts.empty?
+    sample_types = allowable_sample_types.select { |st| st }
+    !sample_types.empty?
   end
 
   def allowable_object_types

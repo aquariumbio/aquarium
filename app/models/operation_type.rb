@@ -37,15 +37,15 @@ class OperationType < ActiveRecord::Base
   validates :category, presence: true
 
   def add_io(name, sample_name, container_name, role, opts)
-    add_field name, sample_name, container_name, role, opts
+    add_field(name, sample_name, container_name, role, opts)
   end
 
   def add_input(name, sample_name, container_name, opts = {})
-    add_field name, sample_name, container_name, 'input', opts
+    add_field(name, sample_name, container_name, 'input', opts)
   end
 
   def add_output(name, sample_name, container_name, opts = {})
-    add_field name, sample_name, container_name, 'output', opts
+    add_field(name, sample_name, container_name, 'output', opts)
   end
 
   # The input types of this OperationType.
@@ -204,7 +204,7 @@ class OperationType < ActiveRecord::Base
       container_names = newft[:allowable_field_types]
                         .select { |aft| aft[:object_type] && aft[:object_type][:name] && aft[:object_type][:name] != '' }
                         .collect do |aft|
-        raise "Object type '#{aft[:object_type][:name]}' not definied by browser for #{ft[:name]}." unless ObjectType.find_by_name(aft[:object_type][:name])
+        raise "Object type '#{aft[:object_type][:name]}' not defined by browser for #{ft[:name]}." unless ObjectType.find_by_name(aft[:object_type][:name])
 
         aft[:object_type][:name]
       end

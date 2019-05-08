@@ -1,17 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe CodeHelper do
-  let(:mock_owner_class) { build_mock_class }
+  let(:mock_owner_class) { build_mock_code_class }
   let!(:a_user) { create(:user) }
 
-  before(:all) { create_table }
-  after(:all) { drop_table }
+  before(:all) { create_code_table }
+  after(:all) { drop_code_table }
 
   before(:each) do
     @owner = mock_owner_class.new
     @owner.save
   end
-
+  
   it 'has no code if not added' do
     expect(@owner.code).to be_nil
     expect(@owner.code('the_code')).to be_nil
@@ -37,18 +37,18 @@ RSpec.describe CodeHelper do
   end
 end
 
-def build_mock_class
+def build_mock_code_class
   Class.new(ActiveRecord::Base) do
     self.table_name = 'mock_owner_table'
     include CodeHelper
   end
 end
 
-def create_table
+def create_code_table
   ActiveRecord::Base.connection.create_table :mock_owner_table do |t|
   end
 end
 
-def drop_table
+def drop_code_table
   ActiveRecord::Base.connection.drop_table :mock_owner_table
 end
