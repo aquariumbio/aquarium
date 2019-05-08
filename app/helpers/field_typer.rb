@@ -68,22 +68,22 @@ module FieldTyper
 
   end
 
+  # NOTE: this assumes parallel arrays for AFT
   def add_field(name, sample_name, container_name, role, opts)
 
     raise "Can't add field to #{self.class} before it has been saved." unless id
 
-    snames = sample_name.class == String ? [sample_name] : sample_name
-    cnames = !container_name || container_name.class == String ? [container_name] : container_name
+    snames = sample_name.nil? || sample_name.is_a?(String) ? [sample_name] : sample_name
+    cnames = container_name.nil? || container_name.is_a?(String) ? [container_name] : container_name
 
     ft = field_types.create({ parent_id: id, name: name, ftype: 'sample', role: role }.merge(opts))
     ft.save
 
     if snames
       (0..snames.length - 1).each do |i|
-        sample = SampleType.find_by_name(snames[i])
-        container = ObjectType.find_by_name(cnames[i])
-        # raise "Could not find sample #{snames[i]}" unless sample
-        # raise "Could not find container #{cnames[i]}" unless container
+        sample = SampleType.find_by_name(snames[i]) if snames[i].present?
+        container = ObjectType.find_by_name(cnames[i]) if cnames[i].present?
+
         ft.allowable_field_types.create(
           sample_type_id: sample ? sample.id : nil,
           object_type_id: container ? container.id : nil
