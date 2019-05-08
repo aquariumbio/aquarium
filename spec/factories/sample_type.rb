@@ -9,6 +9,7 @@ FactoryBot.define do
   factory :sample_type do
     sequence(:name) { |n| "sample_#{n}" }
     description { "a sample type" }
+    initialize_with { SampleType.where(name: name).first_or_create } # singleton
 
     factory :sample_type_with_samples do
       transient do
