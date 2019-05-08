@@ -32,7 +32,7 @@ module OperationTypeExport
     object_types = object_types.uniq.as_json(methods: [:sample_type_name])
 
     # ISSUE: This code misses object types referred to by sub-samples of samples mentioned in the io.
-
+    # TODO: serialize AFTs instead of using parallel array for sample types and object types
     {
 
       sample_types: sample_types,
