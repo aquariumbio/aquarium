@@ -5,6 +5,4 @@ FactoryBot.define do
     deployed { true }
     initialize_with { OperationType.where(name: name, category: category).first_or_create }
   end
-
-  
 end
