@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html  lang="en">
+<html>
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -269,7 +269,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#custom_column-instance_method" title="#custom_column (instance method)">#<strong>custom_column</strong>(opts = {heading: &quot;Custom Column&quot;, checkable: false }, &amp;block)  &#x21d2; Object </a>
+      <a href="#custom_column-instance_method" title="#custom_column (instance method)">#<strong>custom_column</strong>(opts = { heading: &quot;Custom Column&quot;, checkable: false }, &amp;block)  &#x21d2; Object </a>
     
 
     
@@ -292,7 +292,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#custom_input-instance_method" title="#custom_input (instance method)">#<strong>custom_input</strong>(key, opts = {heading: &quot;Custom Input&quot;, checkable: false, type: &quot;string&quot;, style_block: nil}, &amp;default_block)  &#x21d2; Object </a>
+      <a href="#custom_input-instance_method" title="#custom_input (instance method)">#<strong>custom_input</strong>(key, opts = { heading: &quot;Custom Input&quot;, checkable: false, type: &quot;string&quot;, style_block: nil }, &amp;default_block)  &#x21d2; Object </a>
     
 
     
@@ -1138,7 +1138,6 @@
       <pre class="lines">
 
 
-275
 276
 277
 278
@@ -1149,10 +1148,11 @@
 283
 284
 285
-286</pre>
+286
+287</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list.rb', line 275</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list.rb', line 276</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_add_static_inputs'>add_static_inputs</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_sample_name'>sample_name</span><span class='comma'>,</span> <span class='id identifier rubyid_container_name'>container_name</span><span class='rparen'>)</span>
 
@@ -1196,8 +1196,6 @@
       <pre class="lines">
 
 
-38
-39
 40
 41
 42
@@ -1228,10 +1226,12 @@
 67
 68
 69
-70</pre>
+70
+71
+72</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_input_table.rb', line 38</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_input_table.rb', line 40</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_cleanup_input_table'>cleanup_input_table</span>
   <span class='id identifier rubyid_temp_op'>temp_op</span> <span class='op'>=</span> <span class='id identifier rubyid_first'>first</span>
@@ -1440,15 +1440,19 @@
 82
 83
 84
-85</pre>
+85
+86
+87</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 80</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_collection'>collection</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_role'>role</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
-  <span class='ivar'>@table</span><span class='period'>.</span><span class='id identifier rubyid_add_column'>add_column</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:heading</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'> Collecton ID (</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_role'>role</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_running'>running</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_op'>op</span><span class='op'>|</span>
+  <span class='id identifier rubyid_entries'>entries</span> <span class='op'>=</span> <span class='id identifier rubyid_running'>running</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_op'>op</span><span class='op'>|</span>
     <span class='id identifier rubyid_property'>property</span> <span class='id identifier rubyid_op'>op</span><span class='comma'>,</span> <span class='symbol'>:child_item_id</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_role'>role</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:checkable</span><span class='rbracket'>]</span>
-  <span class='kw'>end</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_heading'>heading</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:heading</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'> Collection ID (</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_role'>role</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span>
+  <span class='ivar'>@table</span><span class='period'>.</span><span class='id identifier rubyid_add_column'>add_column</span><span class='lparen'>(</span><span class='id identifier rubyid_heading'>heading</span><span class='comma'>,</span> <span class='id identifier rubyid_entries'>entries</span><span class='rparen'>)</span>
   <span class='kw'>self</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -1480,12 +1484,12 @@
       <pre class="lines">
 
 
-214
 215
-216</pre>
+216
+217</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list.rb', line 214</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list.rb', line 215</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_collection_column'>collection_column</span><span class='lparen'>(</span><span class='id identifier rubyid_fv'>fv</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'> Collection ID</span><span class='tstring_end'>&#39;</span></span>
@@ -1614,15 +1618,15 @@
       <pre class="lines">
 
 
-110
-111
 112
 113
 114
-115</pre>
+115
+116
+117</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 110</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 112</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_column'>column</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_role'>role</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='ivar'>@table</span><span class='period'>.</span><span class='id identifier rubyid_add_column'>add_column</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:heading</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'> Column (</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_role'>role</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_running'>running</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_op'>op</span><span class='op'>|</span>
@@ -1659,12 +1663,12 @@
       <pre class="lines">
 
 
-222
 223
-224</pre>
+224
+225</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list.rb', line 222</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list.rb', line 223</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_column_column'>column_column</span><span class='lparen'>(</span><span class='id identifier rubyid_fv'>fv</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'> Column</span><span class='tstring_end'>&#39;</span></span>
@@ -1677,7 +1681,7 @@
       <div class="method_details ">
   <h3 class="signature " id="custom_column-instance_method">
   
-    #<strong>custom_column</strong>(opts = {heading: &quot;Custom Column&quot;, checkable: false }, &amp;block)  &#x21d2; <tt>Object</tt> 
+    #<strong>custom_column</strong>(opts = { heading: &quot;Custom Column&quot;, checkable: false }, &amp;block)  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -1702,7 +1706,7 @@
         <span class='type'>(<tt>Hash</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>{heading: &quot;Custom Column&quot;, checkable: false }</tt>)</em>
+        <em class="default">(defaults to: <tt>{ heading: &quot;Custom Column&quot;, checkable: false }</tt>)</em>
       
       
     </li>
@@ -1752,20 +1756,24 @@
       <pre class="lines">
 
 
-121
-122
 123
 124
 125
-126</pre>
+126
+127
+128
+129
+130</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 121</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 123</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_custom_column'>custom_column</span> <span class='id identifier rubyid_opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='label'>heading:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Custom Column</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>checkable:</span> <span class='kw'>false</span> <span class='rbrace'>}</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span>
-  <span class='ivar'>@table</span><span class='period'>.</span><span class='id identifier rubyid_add_column'>add_column</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:heading</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_running'>running</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> 
+<span class='kw'>def</span> <span class='id identifier rubyid_custom_column'>custom_column</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>heading:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Custom Column</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>checkable:</span> <span class='kw'>false</span> <span class='rbrace'>}</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_entries'>entries</span> <span class='op'>=</span> <span class='id identifier rubyid_running'>running</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> 
     <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:checkable</span><span class='rbracket'>]</span> <span class='op'>?</span> <span class='lparen'>(</span><span class='lbrace'>{</span> <span class='label'>content:</span> <span class='id identifier rubyid_x'>x</span><span class='comma'>,</span> <span class='label'>check:</span> <span class='kw'>true</span> <span class='rbrace'>}</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='id identifier rubyid_x'>x</span>
-  <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+  <span class='ivar'>@table</span><span class='period'>.</span><span class='id identifier rubyid_add_column'>add_column</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:heading</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_entries'>entries</span><span class='rparen'>)</span>
+
   <span class='kw'>self</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -1776,7 +1784,7 @@
       <div class="method_details ">
   <h3 class="signature " id="custom_input-instance_method">
   
-    #<strong>custom_input</strong>(key, opts = {heading: &quot;Custom Input&quot;, checkable: false, type: &quot;string&quot;, style_block: nil}, &amp;default_block)  &#x21d2; <tt>Object</tt> 
+    #<strong>custom_input</strong>(key, opts = { heading: &quot;Custom Input&quot;, checkable: false, type: &quot;string&quot;, style_block: nil }, &amp;default_block)  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -1825,12 +1833,14 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
 32
 33
 34
-35</pre>
+35
+36
+37</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/krill/operation_list_input_table.rb', line 9</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_custom_input'>custom_input</span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='label'>heading:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Custom Input</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>checkable:</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>string</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>style_block:</span> <span class='kw'>nil</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_default_block'>default_block</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_custom_input'>custom_input</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>heading:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Custom Input</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>checkable:</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>string</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>style_block:</span> <span class='kw'>nil</span> <span class='rbrace'>}</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_default_block'>default_block</span><span class='rparen'>)</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span><span class='period'>.</span><span class='id identifier rubyid_with_index'>with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_op'>op</span><span class='comma'>,</span> <span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
     <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_temporary'>temporary</span><span class='lbracket'>[</span><span class='symbol'>:uid</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_i'>i</span>
   <span class='kw'>end</span>
@@ -1839,7 +1849,7 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
     <span class='comment'># d = op.temporary[key] # Prefer to default to last inputted value
 </span>    <span class='id identifier rubyid_d'>d</span> <span class='op'>||=</span> <span class='id identifier rubyid_default_block'>default_block</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_op'>op</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
-  <span class='ivar'>@table</span><span class='period'>.</span><span class='id identifier rubyid_add_column'>add_column</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:heading</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_default_values'>default_values</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_op'>op</span><span class='comma'>,</span> <span class='id identifier rubyid_d'>d</span><span class='op'>|</span>
+  <span class='id identifier rubyid_entries'>entries</span> <span class='op'>=</span> <span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_default_values'>default_values</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_op'>op</span><span class='comma'>,</span> <span class='id identifier rubyid_d'>d</span><span class='op'>|</span>
     <span class='comment'># Save a list of temporary keys to be deleted later
 </span>    <span class='id identifier rubyid_new_key'>new_key</span> <span class='op'>=</span> <span class='id identifier rubyid__create_temp_key'>_create_temp_key</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_op'>op</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_temporary_keys'>temporary_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_temporary'>temporary</span><span class='lbracket'>[</span><span class='symbol'>:temporary_keys</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
@@ -1854,7 +1864,9 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
     <span class='id identifier rubyid_style'>style</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:style_block</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_op'>op</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:style_block</span><span class='rbracket'>]</span>
     <span class='id identifier rubyid_o'>o</span><span class='period'>.</span><span class='id identifier rubyid_merge!'>merge!</span><span class='lparen'>(</span><span class='id identifier rubyid_style'>style</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_style'>style</span>
     <span class='id identifier rubyid_o'>o</span>
-  <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+  <span class='ivar'>@table</span><span class='period'>.</span><span class='id identifier rubyid_add_column'>add_column</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:heading</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_entries'>entries</span><span class='rparen'>)</span>
+
   <span class='kw'>self</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -2061,18 +2073,18 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
       <pre class="lines">
 
 
-225
-226
-227
-228
-229
-230</pre>
+230
+231
+232
+233
+234
+235</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 225</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 230</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get'>get</span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span>
-  <span class='ivar'>@table</span><span class='period'>.</span><span class='id identifier rubyid_add_column'>add_column</span><span class='lparen'>(</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:heading</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span> <span class='id identifier rubyid_running'>running</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_op'>op</span><span class='op'>|</span> 
+  <span class='ivar'>@table</span><span class='period'>.</span><span class='id identifier rubyid_add_column'>add_column</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:heading</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span> <span class='id identifier rubyid_running'>running</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_op'>op</span><span class='op'>|</span> 
     <span class='lbrace'>{</span> <span class='label'>type:</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:type</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>number</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>operation_id:</span> <span class='id identifier rubyid_op'>op</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='label'>key:</span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='label'>default:</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:default</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='int'>0</span> <span class='rbrace'>}</span>
   <span class='kw'>end</span><span class='rparen'>)</span>
   <span class='kw'>self</span>
@@ -2228,12 +2240,12 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
       <pre class="lines">
 
 
-172</pre>
+177</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 172</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 177</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_input_collection'>input_collection</span>  <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='semicolon'>;</span> <span class='id identifier rubyid_collection'>collection</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>input</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='semicolon'>;</span>  <span class='kw'>end</span></pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_input_collection'>input_collection</span>  <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='semicolon'>;</span> <span class='id identifier rubyid_collection'>collection</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>input</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='semicolon'>;</span>  <span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -2334,12 +2346,12 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
       <pre class="lines">
 
 
-208</pre>
+213</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 208</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 213</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_input_column'>input_column</span>      <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='semicolon'>;</span> <span class='id identifier rubyid_column'>column</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>     <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>input</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='semicolon'>;</span>  <span class='kw'>end</span></pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_input_column'>input_column</span>      <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='semicolon'>;</span> <span class='id identifier rubyid_column'>column</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>     <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>input</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='semicolon'>;</span>  <span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -2438,12 +2450,12 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
       <pre class="lines">
 
 
-139</pre>
+144</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 139</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 144</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_input_item'>input_item</span>        <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='semicolon'>;</span> <span class='id identifier rubyid_item'>item</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>       <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>input</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='semicolon'>;</span>  <span class='kw'>end</span></pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_input_item'>input_item</span>        <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='semicolon'>;</span> <span class='id identifier rubyid_item'>item</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>       <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>input</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='semicolon'>;</span>  <span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -2544,12 +2556,12 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
       <pre class="lines">
 
 
-190</pre>
+195</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 190</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 195</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_input_row'>input_row</span>         <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='semicolon'>;</span> <span class='id identifier rubyid_row'>row</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>        <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>input</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='semicolon'>;</span>  <span class='kw'>end</span></pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_input_row'>input_row</span>         <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='semicolon'>;</span> <span class='id identifier rubyid_row'>row</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>        <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>input</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='semicolon'>;</span>  <span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -2648,12 +2660,12 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
       <pre class="lines">
 
 
-155</pre>
+160</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 155</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 160</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_input_sample'>input_sample</span>      <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='semicolon'>;</span> <span class='id identifier rubyid_sample'>sample</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>     <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>input</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='semicolon'>;</span>  <span class='kw'>end</span></pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_input_sample'>input_sample</span>      <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='semicolon'>;</span> <span class='id identifier rubyid_sample'>sample</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>     <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>input</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='semicolon'>;</span>  <span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -2683,7 +2695,6 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
       <pre class="lines">
 
 
-226
 227
 228
 229
@@ -2730,10 +2741,11 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
 270
 271
 272
-273</pre>
+273
+274</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list.rb', line 226</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list.rb', line 227</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_io_table'>io_table</span><span class='lparen'>(</span><span class='id identifier rubyid_role'>role</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>input</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
 
@@ -2952,12 +2964,12 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
       <pre class="lines">
 
 
-210
 211
-212</pre>
+212
+213</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list.rb', line 210</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list.rb', line 211</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_item_column'>item_column</span><span class='lparen'>(</span><span class='id identifier rubyid_fv'>fv</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'> Item ID</span><span class='tstring_end'>&#39;</span></span>
@@ -3071,7 +3083,6 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
       <pre class="lines">
 
 
-139
 140
 141
 142
@@ -3113,10 +3124,11 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
 178
 179
 180
-181</pre>
+181
+182</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list.rb', line 139</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list.rb', line 140</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_make'>make</span><span class='lparen'>(</span><span class='id identifier rubyid_custom_opts'>custom_opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
 
@@ -3235,16 +3247,18 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
       <pre class="lines">
 
 
-128
-129
-130
-131</pre>
+132
+133
+134
+135
+136</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 128</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 132</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_operation_id'>operation_id</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>heading:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Operation ID</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>checkable:</span> <span class='kw'>false</span> <span class='rbrace'>}</span><span class='rparen'>)</span>
-  <span class='ivar'>@table</span><span class='period'>.</span><span class='id identifier rubyid_add_column'>add_column</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:heading</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_running'>running</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:id</span><span class='rparen'>)</span>
+  <span class='ivar'>@table</span><span class='period'>.</span><span class='id identifier rubyid_add_column'>add_column</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:heading</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_running'>running</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:id</span><span class='rparen'>)</span><span class='rparen'>)</span>
+
   <span class='kw'>self</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -3347,12 +3361,12 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
       <pre class="lines">
 
 
-181</pre>
+186</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 181</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 186</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_output_collection'>output_collection</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='semicolon'>;</span> <span class='id identifier rubyid_collection'>collection</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>output</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='semicolon'>;</span> <span class='kw'>end</span></pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_output_collection'>output_collection</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='semicolon'>;</span> <span class='id identifier rubyid_collection'>collection</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>output</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='semicolon'>;</span> <span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -3519,12 +3533,12 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
       <pre class="lines">
 
 
-217</pre>
+222</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 217</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 222</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_output_column'>output_column</span>     <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='semicolon'>;</span> <span class='id identifier rubyid_column'>column</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>     <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>output</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='semicolon'>;</span> <span class='kw'>end</span></pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_output_column'>output_column</span>     <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='semicolon'>;</span> <span class='id identifier rubyid_column'>column</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>     <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>output</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='semicolon'>;</span> <span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -3623,12 +3637,12 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
       <pre class="lines">
 
 
-147</pre>
+152</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 147</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 152</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_output_item'>output_item</span>       <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='semicolon'>;</span> <span class='id identifier rubyid_item'>item</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>       <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>output</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='semicolon'>;</span> <span class='kw'>end</span></pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_output_item'>output_item</span>       <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='semicolon'>;</span> <span class='id identifier rubyid_item'>item</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>       <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>output</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='semicolon'>;</span> <span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -3729,12 +3743,12 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
       <pre class="lines">
 
 
-199</pre>
+204</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 199</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 204</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_output_row'>output_row</span>        <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='semicolon'>;</span> <span class='id identifier rubyid_row'>row</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>        <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>output</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='semicolon'>;</span> <span class='kw'>end</span></pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_output_row'>output_row</span>        <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='semicolon'>;</span> <span class='id identifier rubyid_row'>row</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>        <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>output</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='semicolon'>;</span> <span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -3833,12 +3847,12 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
       <pre class="lines">
 
 
-163</pre>
+168</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 163</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 168</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_output_sample'>output_sample</span>     <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='semicolon'>;</span> <span class='id identifier rubyid_sample'>sample</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>     <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>output</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='semicolon'>;</span> <span class='kw'>end</span></pre>
+<span class='kw'>def</span> <span class='id identifier rubyid_output_sample'>output_sample</span>     <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='semicolon'>;</span> <span class='id identifier rubyid_sample'>sample</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>     <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>output</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span><span class='semicolon'>;</span> <span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -4007,15 +4021,15 @@ Consider using <code>get</code> instead, unless you have a specific reason to us
       <pre class="lines">
 
 
-232
-233
-234
-235
-236
-237</pre>
+237
+238
+239
+240
+241
+242</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 232</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 237</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_result'>result</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='ivar'>@table</span><span class='period'>.</span><span class='id identifier rubyid_add_column'>add_column</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:heading</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span> <span class='id identifier rubyid_running'>running</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_op'>op</span><span class='op'>|</span>
@@ -4327,15 +4341,15 @@ Show item retrieval instructions (unless verbose is false)</p>
       <pre class="lines">
 
 
-95
-96
 97
 98
 99
-100</pre>
+100
+101
+102</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 95</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_table.rb', line 97</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_row'>row</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_role'>role</span><span class='comma'>,</span> <span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='ivar'>@table</span><span class='period'>.</span><span class='id identifier rubyid_add_column'>add_column</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:heading</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'> Row (</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_role'>role</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_running'>running</span><span class='period'>.</span><span class='id identifier rubyid_collect'>collect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_op'>op</span><span class='op'>|</span>
@@ -4372,12 +4386,12 @@ Show item retrieval instructions (unless verbose is false)</p>
       <pre class="lines">
 
 
-218
 219
-220</pre>
+220
+221</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list.rb', line 218</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list.rb', line 219</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_row_column'>row_column</span><span class='lparen'>(</span><span class='id identifier rubyid_fv'>fv</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'> Row</span><span class='tstring_end'>&#39;</span></span>
@@ -4837,7 +4851,6 @@ Show item retrieval instructions (unless verbose is false)</p>
       <pre class="lines">
 
 
-190
 191
 192
 193
@@ -4855,10 +4868,11 @@ Show item retrieval instructions (unless verbose is false)</p>
 205
 206
 207
-208</pre>
+208
+209</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list.rb', line 190</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list.rb', line 191</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_store'>store</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>interactive:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='label'>method:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>boxes</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>errored:</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='label'>io:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>all</span><span class='tstring_end'>&#39;</span></span> <span class='rbrace'>}</span><span class='rparen'>)</span>
 
@@ -4924,17 +4938,17 @@ block for each operation</p>
       <pre class="lines">
 
 
-80
-81
 82
 83
 84
 85
 86
-87</pre>
+87
+88
+89</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_input_table.rb', line 80</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_input_table.rb', line 82</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_validate'>validate</span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_validation_block'>validation_block</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_op'>op</span><span class='op'>|</span>
@@ -4992,17 +5006,17 @@ block for each operation</p>
       <pre class="lines">
 
 
-100
-101
 102
 103
 104
 105
 106
-107</pre>
+107
+108
+109</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_input_table.rb', line 100</span>
+      <pre class="code"><span class="info file"># File 'lib/krill/operation_list_input_table.rb', line 102</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_validation_message'>validation_message</span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_message_block'>message_block</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_op'>op</span><span class='op'>|</span>
@@ -5022,7 +5036,7 @@ block for each operation</p>
 </div>
 
       <div id="footer">
-  Generated on Wed Dec 19 11:11:58 2018 by
+  Generated on Fri May 17 14:38:44 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.7).
 </div>

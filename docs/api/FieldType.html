@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html  lang="en">
+<html>
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -774,8 +774,8 @@ that would satisfy the specifications of their respective abstract <span class='
       <pre class="code"><span class="info file"># File 'app/models/field_type.rb', line 70</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_sample_type'>has_sample_type</span>
-  <span class='id identifier rubyid_asts'>asts</span> <span class='op'>=</span> <span class='id identifier rubyid_allowable_sample_types'>allowable_sample_types</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_st'>st</span><span class='op'>|</span> <span class='id identifier rubyid_st'>st</span> <span class='rbrace'>}</span>
-  <span class='op'>!</span><span class='id identifier rubyid_asts'>asts</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+  <span class='id identifier rubyid_sample_types'>sample_types</span> <span class='op'>=</span> <span class='id identifier rubyid_allowable_sample_types'>allowable_sample_types</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_st'>st</span><span class='op'>|</span> <span class='id identifier rubyid_st'>st</span> <span class='rbrace'>}</span>
+  <span class='op'>!</span><span class='id identifier rubyid_sample_types'>sample_types</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1090,7 +1090,7 @@ that would satisfy the specifications of their respective abstract <span class='
 </div>
 
       <div id="footer">
-  Generated on Wed Dec 19 11:12:01 2018 by
+  Generated on Fri May 17 14:38:46 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.16 (ruby-2.3.7).
 </div>
