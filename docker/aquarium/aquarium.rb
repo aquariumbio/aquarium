@@ -16,7 +16,7 @@ Bioturk::Application.config.logo_path = 'aquarium-logo.png'
 # URLs
 #
 Bioturk::Application.config.github_path = 'https://github.com/yourlab'
-Bioturk::Application.config.image_server_interface = 'http://your.image.server'
+Bioturk::Application.config.image_server_interface = 'http://localhost:9000/images/'
 Bioturk::Application.config.vision_server_interface = ''
 
 #
