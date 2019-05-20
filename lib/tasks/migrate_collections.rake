@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :collections do
 
   desc 'Migrate Collections to 2.0'
@@ -63,8 +65,8 @@ namespace :collections do
     n = 0
     orphans = 0
     msg = "Starting migration"
-    items.each do |i|
-      c = (i.becomes Collection)
+    items.each do |item|
+      c = (item.becomes Collection)
       unless c.datum[:_migrated_]
         begin
           c.migrate
@@ -78,7 +80,7 @@ namespace :collections do
       end
       n += 1
       print((0...msg.length).collect { |i| "\b" }.join(''))
-      p = sprintf("%.2f", 100.0 * n / items.length)
+      p = format("%.2f", 100.0 * n / items.length)
       msg = "#{p}\% complete. #{orphans} errors."
       print "\e[32m" + msg + "\e[0m"
     end
