@@ -66,7 +66,7 @@ RSpec.describe Collection, type: :model do
       begin
         pa.save
         raise "Collision allowed"
-      rescue Exception => e
+      rescue StandardError
       end
 
       pa = PartAssociation.new collection_id: c.id, part_id: 1, row: 2, column: 2
@@ -76,7 +76,7 @@ RSpec.describe Collection, type: :model do
       begin
         pa.save
         raise "Collision allowed"
-      rescue Exception => e
+      rescue StandardError
         raise "Non collision detected" unless pa.errors.empty?
       end
 
@@ -134,7 +134,7 @@ RSpec.describe Collection, type: :model do
       Collection.parts(s).each do |part|
         collection = part[:collection].becomes Collection # TODO: Make it so that you don't have to do this
         pos = collection.position_as_hash(s.id)
-        raise "Sample should be in collection in specified slot" unless pos[:row] == part[:row] && pos[:column] = part[:column]
+        raise "Sample should be in collection in specified slot" unless pos[:row] == part[:row] && pos[:column] == part[:column]
       end
     end
 

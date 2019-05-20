@@ -28,7 +28,7 @@ class UploadsController < ApplicationController
 
       else
 
-        raise ActionController::RoutingError.new('Upload file type #{upload.upload_content_type} not viewable')
+        raise ActionController::RoutingError.new("Upload file type #{upload.upload_content_type} not viewable")
 
       end
 

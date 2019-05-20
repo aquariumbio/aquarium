@@ -42,7 +42,7 @@ module Krill
         vhash = op.temporary[:validation]
         op.temporary[:temporary_keys].each do |temp_key|
           # Parse key
-          uid, key = temp_key.to_s.split('__')
+          _uid, key = temp_key.to_s.split('__')
           key = key.to_sym
           val = temp_op.temporary[temp_key]
 

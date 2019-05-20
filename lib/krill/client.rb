@@ -31,7 +31,7 @@ module Krill
       @socket.puts msg
 
       answer = ''
-      while line = @socket.gets
+      while (line = @socket.gets)
         answer += line.chop
       end
 

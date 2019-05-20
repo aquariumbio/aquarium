@@ -182,7 +182,7 @@ class OperationTypesController < ApplicationController
         precondition_errors = ops.select do |op|
           begin
             op.precondition_value
-          rescue Exception => e
+          rescue Exception
             error = true
           end
         end

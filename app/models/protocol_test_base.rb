@@ -42,7 +42,7 @@ class ProtocolTestBase
   end
 
   def make_job
-    @job, newops = @operation_type.schedule( # newops is not used here
+    @job, _newops = @operation_type.schedule( # newops is not used here
       @operations,
       @current_user,
       Group.find_by_name('technicians')

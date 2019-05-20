@@ -1,12 +1,12 @@
 class Array
 
   def conjoin(&block)
-    temp = collect &block
+    temp = collect(&block)
     temp.inject(true) { |a, b| a && b }
   end
 
   def disjoin(&block)
-    temp = collect &block
+    temp = collect(&block)
     temp.inject(false) { |a, b| a || b }
   end
 

@@ -77,7 +77,7 @@ namespace :collections do
         end
       end
       n += 1
-      print (0...msg.length).collect { |i| "\b" }.join('')
+      print((0...msg.length).collect { |i| "\b" }.join(''))
       p = sprintf("%.2f", 100.0 * n / items.length)
       msg = "#{p}\% complete. #{orphans} errors."
       print "\e[32m" + msg + "\e[0m"

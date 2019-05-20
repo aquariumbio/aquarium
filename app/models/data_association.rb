@@ -5,11 +5,9 @@ class DataAssociation < ActiveRecord::Base
   attr_accessible :parent_class, :key, :object, :parent_id, :upload_id
 
   def full_object
-
     HashWithIndifferentAccess.new(JSON.parse(object, symbolize_names: true))
-  rescue Exception => e
+  rescue StandardError
     HashWithIndifferentAccess.new
-
   end
 
   def value

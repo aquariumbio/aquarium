@@ -132,7 +132,7 @@ class StaticPagesController < ApplicationController
     plan.save
     op = dp.operations.create status: "pending", user_id: current_user.id, x: 100, y: 100, parent_id: 0
     op.associate_plan plan
-    job, operations = dp.schedule([op], current_user, Group.find_by_name(current_user.login))
+    job, _operations = dp.schedule([op], current_user, Group.find_by_name(current_user.login))
 
     redirect_to("/krill/start?job=#{job.id}")
 

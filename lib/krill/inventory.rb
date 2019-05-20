@@ -92,8 +92,6 @@ module Krill
     def boxes_for(items)
 
       boxes = {}
-      loc_matched_items = []
-      extras = []
 
       r = Regexp.new '(M20|M80|SF[0-9]*)\.[0-9]+\.[0-9]+\.[0-9]+'
 
@@ -135,10 +133,11 @@ module Krill
       end
 
       unless boxes.empty?
+        contents = boxes.keys.collect { |b| { content: b, check: true } }
         show do
           title 'Boxes Required'
           note 'You will need the following boxes from the freezer(s)'
-          table (boxes.keys.collect { |b| { content: b, check: true } }).each_slice(6).to_a
+          table contents.each_slice(6).to_a
         end
       end
 

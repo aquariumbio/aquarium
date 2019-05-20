@@ -133,9 +133,9 @@ namespace :workflow do
     seq.save
     seq.add_input('Plasmid', 'Plasmid', 'Plasmid Stock')
 
-    puts '---------------'
-    puts "\e[93mSeeded Operation Types\e[39m"
-    puts OperationType.all.collect { |ot| '  ' + ot.name }
+    puts('---------------')
+    puts("\e[93mSeeded Operation Types\e[39m")
+    puts(OperationType.all.collect { |ot| '  ' + ot.name })
 
     protocol = File.open('lib/tasks/default.rb', 'r').read
     OperationType.all.reject(&:protocol).each do |ot|
