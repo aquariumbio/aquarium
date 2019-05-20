@@ -30,8 +30,8 @@ Metrics/AbcSize:
 Metrics/CyclomaticComplexity:
   Enabled: false
 
-Metrics/AbcSize:
+Metrics/PerceivedComplexity:
   Enabled: false
 
-Metrics/PerceivedComplexity:
+Style/AsciiComments:
   Enabled: false
