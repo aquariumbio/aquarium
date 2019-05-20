@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module FieldValuePlanner
 
   extend ActiveSupport::Concern

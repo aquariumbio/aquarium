@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ObjectTypesHelper
 
   def make_handler(ot)

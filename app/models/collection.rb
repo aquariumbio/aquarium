@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A subclass of {Item} that has associated parts via the {PartAssociation} model. Stripwells,
 # 96 well plates, and gels are examples. Note that you may in some cases be working with an item
 # that is also a {Collection}, which you can tell by checking that item.collection? In this case you
@@ -128,14 +130,8 @@ class Collection < Item
   # @return [Array] the part matrix, with new data associations inserted if required
   # @return [String|Float] The resulting data
   def get_part_data(key, r, c)
-
     pa = part_association(r, c)
-    if pa && pa.part
-      pa.part.get(key)
-    else
-      nil
-    end
-
+    pa.part.get(key) if pa && pa.part
   end
 
   # Iterate over all rows and columns of the given matrix, adding the offset
@@ -182,11 +178,7 @@ class Collection < Item
   # @private
   def part_association(r, c)
     pas = PartAssociation.where(collection_id: id, row: r, column: c)
-    if pas.length == 1
-      pas[0]
-    else
-      nil
-    end
+    pas[0] if pas.length == 1
   end
 
   # Return the matrix of data associations associated with the given key
@@ -223,17 +215,12 @@ class Collection < Item
   # @return [Item]
   def part(r, c)
     pas = PartAssociation.includes(:part).where(collection_id: id, row: r, column: c)
-    if pas.length == 1
-      pas[0].part
-    else
-      nil
-    end
+    pas[0].part if pas.length == 1
   end
 
   # Retrive a matrix of all parts. If no part is present for a given row and column, that entry will be nil
   # @return [Array] an array of arrays of {Item}s -- dimensions match collection's dimensions
   def part_matrix
-
     r, c = self.dimensions
     m = Array.new(r) { Array.new(c) }
 
@@ -245,7 +232,6 @@ class Collection < Item
       end
 
     m
-
   end
 
   # @private
@@ -392,7 +378,7 @@ class Collection < Item
   # @return [Collection]  new empty collection of type `name`
   def self.new_collection(ctype)
 
-    if ctype.class == String
+    if ctype.is_a?(String)
       name = ctype
       o = ObjectType.find_by_name(name)
     else
@@ -496,24 +482,18 @@ class Collection < Item
   #
   def self.to_sample_id(x)
     r = EMPTY
-    if x.class == Integer || x.class == Fixnum # Not sure where "Integer" came from here ---ek
-      r = x
-    elsif x.class == Item
-      if x.sample
-        r = x.sample.id
-      else
-        raise 'When the third argument to Collection.set is an item, it should be associated with a sample.'
-      end
-    elsif x.class == Sample
-      r = x.id
-    elsif x.class == String
-      r = x.split(':')[0].to_i
-    elsif !x
-      r = EMPTY
-    else
-      raise "The third argument to Collection.set should be an item, a sample, or a sample id, but it was '#{x}' which is a #{x.class}"
+    return x if x.is_a?(Integer)
+
+    if x.is_a?(Item)
+      raise 'When the third argument to Collection.set is an item, it should be associated with a sample.' unless x.sample
+
+      return x.sample.id
     end
-    r
+    return x.id if x.is_a?(Sample)
+    return x.split(':')[0].to_i if x.is_a?(String)
+    return EMPTY if !x
+
+    raise "The third argument to Collection.set should be an item, a sample, or a sample id, but it was '#{x}' which is a #{x.class}"
   end
 
   def to_sample_id(x)
@@ -524,24 +504,18 @@ class Collection < Item
   #
   # class method?
   def self.to_sample(x)
-    if x.class == Integer || (x.class == Fixnum && x >= 0) # Not sure where "Integer" came from here ---ek
-      r = Sample.find(x)
-    elsif x.class == Item
-      if x.sample
-        r = x.sample
-      else
-        raise 'When the third argument to Collection.set is an item, it should be associated with a sample.'
-      end
-    elsif x.class == Sample
-      r = x
-    elsif x.class == String
-      r = Sample.find(x.split(':')[0].to_i)
-    elsif !x || x == -1
-      r = nil
-    else
-      raise "Expecting item, a sample, or a sample id, but got '#{x}' which is a #{x.class}"
+    return Sample.find(x) if x.is_a?(Integer) && x >= 0
+
+    if x.is_a?(Item)
+      raise 'When the third argument to Collection.set is an item, it should be associated with a sample.' unless x.sample
+
+      x.sample
     end
-    r
+    return x if x.is_a?(Sample)
+    return Sample.find(x.split(':')[0].to_i) if x.is_a?(String)
+    return nil if !x || x == -1
+
+    raise "Expecting item, a sample, or a sample id, but got '#{x}' which is a #{x.class}"
   end
 
   # Adds sample, item, or number to collection
@@ -682,16 +656,13 @@ class Collection < Item
     # convert sample matrix into ids
     (0...dr).each do |r|
       (0...dc).each do |c|
-        klass = sample_matrix[r][c].class
-        if klass == Sample
-          sample_matrix_aux[r][c] = sample_matrix[r][c].id
-        elsif klass == Item
-          sample_matrix_aux[r][c] = Item.sample_id
-        elsif klass == Fixnum && sample_matrix[r][c] > 0
-          sample_matrix_aux[r][c] = sample_matrix[r][c]
-        else
-          sample_matrix_aux[r][c] = nil
-        end
+        sample_matrix_aux[r][c] = if sample_matrix[r][c].is_a?(Sample)
+                                    sample_matrix[r][c].id
+                                  elsif sample_matrix[r][c].is_a?(Item)
+                                    Item.sample_id
+                                  elsif sample_matrix[r][c].is_a?(Integer) && sample_matrix[r][c] > 0
+                                    sample_matrix[r][c]
+                                  end
       end
     end
 
@@ -846,17 +817,16 @@ class Collection < Item
 
   # @private
   def migrate
-    unless datum[:_migrated_]
-      if self.data
-        tempdata = JSON.parse(self.data, symbolize_names: true)
-        if tempdata[:matrix]
-          self.matrix = tempdata[:matrix]
-          tempdata.delete :matrix
-          tempdata[:_migrated_] = Date.today
-          self.set_data tempdata
-        end
-      end
-    end
+    return if datum[:_migrated_]
+    return unless self.data
+
+    tempdata = JSON.parse(self.data, symbolize_names: true)
+    return unless tempdata[:matrix]
+
+    self.matrix = tempdata[:matrix]
+    tempdata.delete :matrix
+    tempdata[:_migrated_] = Date.today
+    self.set_data tempdata
   end
 
 end
