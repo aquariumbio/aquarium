@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Array
 
   def conjoin(&block)
@@ -76,7 +78,7 @@ class ActiveRecord::Base
 
     # If table has standard timestamps and they're not in the record list then add them to the record list
     time = ActiveRecord::Base.connection.quote(Time.now)
-    for field_name in %w[created_at updated_at]
+    %w[created_at updated_at].each do |field_name|
       if column_names.include?(field_name) && !key_list.include?(field_name)
         key_list << field_name
         value_list.each { |rec| rec << time }
