@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe OperationTypesController, type: :controller do
@@ -14,16 +16,16 @@ RSpec.describe OperationTypesController, type: :controller do
 
         cookies[token_name] = User.find(1).remember_token
 
-        get :random, { id: ot.id, num: 3 }
+        get :random, id: ot.id, num: 3
 
         post_data = ot.as_json
         post_data[:test_operations] = JSON.parse @response.body
         post :test, post_data
 
         ops = JSON.parse @response.body, symbolize_names: true
-        ops[:operations].each { |op|
+        ops[:operations].each do |op|
           assert_equal "done", op[:status]
-        }
+        end
 
       end
 

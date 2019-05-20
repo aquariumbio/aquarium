@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Collection, type: :model do
@@ -7,7 +9,7 @@ RSpec.describe Collection, type: :model do
   let!(:sample_list) { create_list(:sample, 24) }
 
   # Tests new_collection
-  def example_collection name = "Stripwell"
+  def example_collection(name = "Stripwell")
     c = Collection.new_collection(name)
     c.save
     raise "Got save errors: #{c.errors.full_messages}" if c.errors.any?
@@ -17,26 +19,26 @@ RSpec.describe Collection, type: :model do
 
   def make_24_well_tube_rack
     ot = ObjectType.find_by_name "24-Slot Tube Rack"
-    unless ot
-      ObjectType.new(
-        name: "24-Slot Tube Rack",
-        description: "96 qPCR collection",
-        min: 0,
-        max: 1,
-        handler: "collection",
-        safety: "No safety information",
-        cleanup: "No cleanup information",
-        data: "No data", vendor: "No vendor information",
-        unit: "part",
-        cost: 0.01,
-        release_method: "return",
-        release_description: "",
-        image: "",
-        prefix: "",
-        rows: 4,
-        columns: 6
-      ).save
-    end
+    return ot if ot
+
+    ObjectType.new(
+      name: "24-Slot Tube Rack",
+      description: "96 qPCR collection",
+      min: 0,
+      max: 1,
+      handler: "collection",
+      safety: "No safety information",
+      cleanup: "No cleanup information",
+      data: "No data", vendor: "No vendor information",
+      unit: "part",
+      cost: 0.01,
+      release_method: "return",
+      release_description: "",
+      image: "",
+      prefix: "",
+      rows: 4,
+      columns: 6
+    ).save
   end
 
   context 'associations' do

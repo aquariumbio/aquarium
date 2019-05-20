@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :operation_type do
     sequence(:name) { |n| "operation_type_#{n}" }

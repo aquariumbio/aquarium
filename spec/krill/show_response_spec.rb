@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # require_relative 'show_response'
 require 'rails_helper'
 # require '/aquarium/lib/krill/show_response'
@@ -6,28 +8,24 @@ include Krill
 
 RSpec.describe ShowResponse do
   resp = ShowResponse.new(
-    {
+    table_inputs: [
+      { key: "tblrespnskey", opid: 3075, row: 0, value: "2", type: "number" },
+      { key: "tblrespnskey", opid: 3076, row: 1, value: "1", type: "number" },
+    ],
+    timestamp: 123456789,
+    measured_concentration: 53.2
+    # ups: [{id: 1, name: 'upname1'}, {id: 2, name: 'upname2'}]
+  )
+
+  it "is backwards compatible with the original hash" do
+    expect(resp).to eq(
       table_inputs: [
         { key: "tblrespnskey", opid: 3075, row: 0, value: "2", type: "number" },
         { key: "tblrespnskey", opid: 3076, row: 1, value: "1", type: "number" },
       ],
       timestamp: 123456789,
-      measured_concentration: 53.2,
+      measured_concentration: 53.2
       # ups: [{id: 1, name: 'upname1'}, {id: 2, name: 'upname2'}]
-    }
-  )
-
-  it "is backwards compatible with the original hash" do
-    expect(resp).to eq(
-      {
-        table_inputs: [
-          { key: "tblrespnskey", opid: 3075, row: 0, value: "2", type: "number" },
-          { key: "tblrespnskey", opid: 3076, row: 1, value: "1", type: "number" },
-        ],
-        timestamp: 123456789,
-        measured_concentration: 53.2,
-        # ups: [{id: 1, name: 'upname1'}, {id: 2, name: 'upname2'}]
-      }
     )
   end
 
@@ -87,27 +85,25 @@ get_table_response when parameterized with an op or row" do
 
   it "works with large and complex response hashes" do
     bigresp = ShowResponse.new(
-      {
-        table_inputs: [
-          { key: "tblrespnskey", opid: 3075, row: 0, value: 2, type: "number" },
-          { key: "tblrespnskey", opid: 3076, row: 1, value: 1, type: "number" },
-          { key: "tblrespnskey", opid: 3077, row: 2, value: 3, type: "number" },
-          { key: "tblrespnskey", opid: 3078, row: 3, value: 4, type: "number" },
-          { key: "tblrespnskey", opid: 3080, row: 4, value: 5, type: "number" },
-          { key: "tblrespnskey", opid: 3079, row: 5, value: 6, type: "number" },
-          { key: "tblrespnskey2", opid: -4, row: 3, value: "four", type: "text" },
-          { key: "tblrespnskey2", opid: -5, row: 4, value: "five", type: "text" },
-          { key: "tblrespnskey2", opid: -6, row: 5, value: "six", type: "text" },
-          { key: "tblrespnskey2", opid: -1, row: 0, value: "one", type: "text" },
-          { key: "tblrespnskey2", opid: -2, row: 1, value: "two", type: "text" },
-          { key: "tblrespnskey2", opid: -3, row: 2, value: "three", type: "text" },
-        ],
-        response1: 'SUPERLONGSTRINGSUPERLONGSTRINGSUPERLONG'\
+      table_inputs: [
+        { key: "tblrespnskey", opid: 3075, row: 0, value: 2, type: "number" },
+        { key: "tblrespnskey", opid: 3076, row: 1, value: 1, type: "number" },
+        { key: "tblrespnskey", opid: 3077, row: 2, value: 3, type: "number" },
+        { key: "tblrespnskey", opid: 3078, row: 3, value: 4, type: "number" },
+        { key: "tblrespnskey", opid: 3080, row: 4, value: 5, type: "number" },
+        { key: "tblrespnskey", opid: 3079, row: 5, value: 6, type: "number" },
+        { key: "tblrespnskey2", opid: -4, row: 3, value: "four", type: "text" },
+        { key: "tblrespnskey2", opid: -5, row: 4, value: "five", type: "text" },
+        { key: "tblrespnskey2", opid: -6, row: 5, value: "six", type: "text" },
+        { key: "tblrespnskey2", opid: -1, row: 0, value: "one", type: "text" },
+        { key: "tblrespnskey2", opid: -2, row: 1, value: "two", type: "text" },
+        { key: "tblrespnskey2", opid: -3, row: 2, value: "three", type: "text" },
+      ],
+      response1: 'SUPERLONGSTRINGSUPERLONGSTRINGSUPERLONG'\
 'STRINGSUPERLONGSTRINGSUPERLONGSTRING',
-        response2: 1412312312312312312312412312312312,
-        response3: "one more datum",
-        timestamp: 1530914953.496
-      }
+      response2: 1412312312312312312312412312312312,
+      response3: "one more datum",
+      timestamp: 1530914953.496
     )
 
     expect(bigresp.get_response(:table_inputs)).to eq(nil)

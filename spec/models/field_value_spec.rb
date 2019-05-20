@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe FieldValue, type: :model do
@@ -7,7 +9,7 @@ RSpec.describe FieldValue, type: :model do
   let!(:stripwell_type) { create(:stripwell) }
 
   # Tests new_collection
-  def example_collection name = "Stripwell"
+  def example_collection(name = "Stripwell")
     c = Collection.new_collection(name)
     c.save
     raise "Got save errors: #{c.errors.full_messages}" if c.errors.any?
