@@ -3,7 +3,7 @@ class StaticPagesController < ApplicationController
   before_filter :signed_in_user
   before_filter :up_to_date_user
 
-  def leader_board assoc, extra=nil, num=3
+  def leader_board assoc, extra = nil, num = 3
 
     assocs = assoc + "s"
     assocs_sym = assocs.to_sym
@@ -16,7 +16,7 @@ class StaticPagesController < ApplicationController
     lb = lb.select("users.*, COUNT(#{assocs}.id) count_accessor")
            .group('users.id')
            .collect { |u| { user: u, assocs_sym => u.count_accessor } }
-           .sort { |a,b| a[assocs_sym] <=> b[assocs_sym] }
+           .sort { |a, b| a[assocs_sym] <=> b[assocs_sym] }
            .reverse
 
     compute_widths lb, assocs_sym
@@ -29,11 +29,11 @@ class StaticPagesController < ApplicationController
 
     unless board.empty?
 
-      n = [9, board.length-1].min
+      n = [9, board.length - 1].min
       w = board[0][sym] - board[n][sym]
       w = 0.01 if w == 0
       m = 90.0 / w
-      b = (10 * (board[0][sym] - 10 * board[n][sym] ) ) / w
+      b = (10 * (board[0][sym] - 10 * board[n][sym])) / w
       board.each do |row|
         row[:width] = m * row[sym] + b
       end
@@ -51,25 +51,25 @@ class StaticPagesController < ApplicationController
     @plan_board = leader_board "plan", "plans.budget_id IS NOT NULL"
 
     done = Plan.joins(:plan_associations) \
-      .joins(plan_associations: :operation) \
-      .includes(:user) \
-      .where("plans.created_at > ? AND operations.status = 'done'", Date.today - 3.month) \
-      .select("plans.*, COUNT(plan_associations.id) op_count") \
-      .group('plans.id') \
-      .collect { |p| { plan: p, ops: p.op_count, user: p.user } } \
-      .sort { |a,b| a[:ops] <=> b[:ops] } \
-      .reverse
-      .first(20)
+               .joins(plan_associations: :operation) \
+               .includes(:user) \
+               .where("plans.created_at > ? AND operations.status = 'done'", Date.today - 3.month) \
+               .select("plans.*, COUNT(plan_associations.id) op_count") \
+               .group('plans.id') \
+               .collect { |p| { plan: p, ops: p.op_count, user: p.user } } \
+               .sort { |a, b| a[:ops] <=> b[:ops] } \
+               .reverse
+               .first(20)
 
     all = Plan.joins(:plan_associations) \
-      .joins(plan_associations: :operation) \
-      .includes(:user) \
-      .where("plans.created_at > ?", Date.today - 3.month) \
-      .select("plans.*, COUNT(plan_associations.id) op_count") \
-      .group('plans.id') \
-      .collect { |p| { plan: p, ops: p.op_count, user: p.user } } \
-      .sort { |a,b| a[:ops] <=> b[:ops] } \
-      .reverse
+              .joins(plan_associations: :operation) \
+              .includes(:user) \
+              .where("plans.created_at > ?", Date.today - 3.month) \
+              .select("plans.*, COUNT(plan_associations.id) op_count") \
+              .group('plans.id') \
+              .collect { |p| { plan: p, ops: p.op_count, user: p.user } } \
+              .sort { |a, b| a[:ops] <=> b[:ops] } \
+              .reverse
 
     @biggest_plans = done[0..20].select { |x| all.find { |y| x[:plan].id == y[:plan].id }[:ops] == x[:ops] }
 

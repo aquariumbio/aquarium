@@ -1,4 +1,4 @@
-# Defines a type of lab procedure, with the input-types, output-types, and the instructions for converting inputs into outputs. 
+# Defines a type of lab procedure, with the input-types, output-types, and the instructions for converting inputs into outputs.
 # Executable unit {Operation}s can be instantiated from an OperationType, and specific inputs and outputs are then given.
 # @api krill
 class OperationType < ActiveRecord::Base
@@ -10,11 +10,11 @@ class OperationType < ActiveRecord::Base
   include OperationTypeWorkflow
   include OperationTypeRandom
   include HasTiming
-  include DataAssociator  
+  include DataAssociator
 
   has_many :operations
   # has_many :fts, foreign_key: "parent_id", class_name: "FieldType"
-  
+
   attr_accessible :deployed, :on_the_fly
 
   # Gets name of OperationType.
@@ -28,9 +28,9 @@ class OperationType < ActiveRecord::Base
   attr_accessible :category
 
   validates :name, presence: true
-  validates :name, uniqueness: { 
-    scope: :category, 
-    case_sensitive: false, 
+  validates :name, uniqueness: {
+    scope: :category,
+    case_sensitive: false,
     message: "OperationType names must be unique within a given category. When importing, consider first moving existing operation types to a different category"
   }
   validates :category, presence: true
@@ -58,7 +58,7 @@ class OperationType < ActiveRecord::Base
   # The output types of this OperationType.
   #
   # @return [Array<FieldType>]  meta definitions of the outputs
-  #           that could be produced by a successful operation of this type 
+  #           that could be produced by a successful operation of this type
   def outputs
     field_types.select { |ft| ft.role == 'output' }
   end

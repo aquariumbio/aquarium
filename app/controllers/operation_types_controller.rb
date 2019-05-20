@@ -266,7 +266,7 @@ class OperationTypesController < ApplicationController
               else
                 []
               end
-      rescue StandardError => e 
+      rescue StandardError => e
         render json: { errors: [e.to_s] }, status: :unprocessable_entity
         raise ActiveRecord::Rollback
       end
@@ -394,7 +394,7 @@ class OperationTypesController < ApplicationController
                 libs[0].category = libs[0].category + " (old)"
                 libs[0].save
                 notes << "Changed name of existing Library to '#{libs[0].name}'"
-                raise libs[0].errors.full_messages.join(", ") if libs[0].errors.any?              
+                raise libs[0].errors.full_messages.join(", ") if libs[0].errors.any?
               elsif libs.length > 1
                 raise "Found multiple existing operation types named #{x[:library][:name]}"
               end
@@ -417,7 +417,7 @@ class OperationTypesController < ApplicationController
               ots = OperationType.where(name: x[:operation_type][:name], category: x[:operation_type][:category])
               if ots.length == 1
                 ots[0].name = ots[0].name + " archived #{Time.now.to_i}"
-                ots[0].category = ots[0].category + " (old)"                
+                ots[0].category = ots[0].category + " (old)"
                 ots[0].deployed = false
                 ots[0].save
                 notes << "Changed name of existing OperationType to '#{ots[0].name}'"
@@ -432,7 +432,7 @@ class OperationTypesController < ApplicationController
               notes << "Skipping OperationType #{x[:operation_type][:name]} because a type by the same name already exists." if ots.length > 0
             else
               raise "Unknown option '#{params[:options][:resolution_method]}' for resolution method"
-            end     
+            end
 
           end
 

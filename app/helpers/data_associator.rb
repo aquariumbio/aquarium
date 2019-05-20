@@ -16,7 +16,7 @@ module DataAssociator
   def data_associations(key = nil)
     klass = self.class.to_s
     if klass == "Item" || klass == "Collection"
-      klass = [ "Item", "Collection" ]
+      klass = ["Item", "Collection"]
     end
     if key
       DataAssociation.includes(:upload).where(parent_id: id, parent_class: klass, key: key.to_s)

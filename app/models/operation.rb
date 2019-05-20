@@ -67,9 +67,9 @@ class Operation < ActiveRecord::Base
     ft = operation_type.inputs.select { |i| i[:name] == name }.first
     aft = ft.choose_aft_for(sample)
     set_input(name, sample, aft)
-  
-    self       
-  end 
+
+    self
+  end
 
   # Assigns a Sample to an output, choosing an appropriate allowable_field_type.
   #
@@ -80,15 +80,15 @@ class Operation < ActiveRecord::Base
     aft = ft.choose_aft_for(sample)
     set_output(name, sample, aft)
 
-    self     
+    self
   end
 
   # Assigns a value to an input parameter
   # @param name [String]
-  # @param value 
+  # @param value
   def with_property(name, value)
     set_property(name, value, 'input', false, nil)
-  end  
+  end
 
   # end methods used for testing via vs code
 
@@ -161,7 +161,7 @@ class Operation < ActiveRecord::Base
       parent_id: id,
       field_type_id: field_type.id
     )
-  end  
+  end
 
   # @return [Array<FieldValue>]
   def inputs

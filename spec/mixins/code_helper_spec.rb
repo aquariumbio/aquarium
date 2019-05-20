@@ -11,7 +11,7 @@ RSpec.describe CodeHelper do
     @owner = mock_owner_class.new
     @owner.save
   end
-  
+
   it 'has no code if not added' do
     expect(@owner.code).to be_nil
     expect(@owner.code('the_code')).to be_nil

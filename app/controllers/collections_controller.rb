@@ -9,16 +9,16 @@ class CollectionsController < ApplicationController
     raw[:part_matrix] = collection.part_matrix_as_json
     part_ids = []
     raw[:part_matrix].each { |row|
-      row.each { |part| 
+      row.each { |part|
         part_ids << part["id"] if part
       }
     }
     das = DataAssociation.where(parent_class: "Item", parent_id: part_ids)
     raw[:part_matrix].each { |row|
-      row.each { |part| 
+      row.each { |part|
         part[:data_associations] = das.select { |da| da.parent_id == part["id"] } if part
       }
-    }    
+    }
     render json: raw
 
   end

@@ -86,12 +86,12 @@ class User < ActiveRecord::Base
 
     return false if parameters.empty?
 
-    email  = ! parameters.find { |p| p.key == 'email' && p.value && !p.value.empty? }.nil?
-    phone  = ! parameters.find { |p| p.key == 'phone' && p.value && !p.value.empty? }.nil?
-    biofab = ! parameters.find { |p| p.key == 'biofab' && p.value && p.value == 'true' }.nil?
-    aq     = ! parameters.find { |p| p.key == 'aquarium' && p.value && p.value == 'true' }.nil?
+    email  = parameters.find { |p| p.key == 'email' && p.value && !p.value.empty? }
+    phone  = parameters.find { |p| p.key == 'phone' && p.value && !p.value.empty? }
+    biofab = parameters.find { |p| p.key == 'biofab' && p.value && p.value == 'true' }
+    aq     = parameters.find { |p| p.key == 'aquarium' && p.value && p.value == 'true' }
 
-    email && phone && biofab && aq
+    !email.nil? && !phone.nil? && !biofab.nil? && !aq.nil?
 
   end
 
@@ -142,11 +142,11 @@ class User < ActiveRecord::Base
         data[op.operation_type.name][:done] += 1 if op.status == "done"
         data[op.operation_type.name][:error] += 1 if op.status == "error"
       end
-    end    
+    end
 
-    data.collect { |k,v| { name: k }.merge v }.sort_by { |stat| stat[:count] }.reverse
+    data.collect { |k, v| { name: k }.merge v }.sort_by { |stat| stat[:count] }.reverse
 
-  end    
+  end
 
   private
 

@@ -72,7 +72,7 @@ class GroupsController < ApplicationController
   def edit
     @group = Group.find(params[:id])
     respond_to do |format|
-      format.html { render layout: 'aq2' } 
+      format.html { render layout: 'aq2' }
 
     end
   end

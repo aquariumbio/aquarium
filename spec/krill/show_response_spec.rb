@@ -9,7 +9,7 @@ RSpec.describe ShowResponse do
     {
       table_inputs: [
         { key: "tblrespnskey", opid: 3075, row: 0, value: "2", type: "number" },
-        { key: "tblrespnskey", opid: 3076, row: 1, value: "1", type: "number" }, 
+        { key: "tblrespnskey", opid: 3076, row: 1, value: "1", type: "number" },
       ],
       timestamp: 123456789,
       measured_concentration: 53.2,
@@ -17,7 +17,7 @@ RSpec.describe ShowResponse do
     }
   )
 
-  it "is backwards compatible with the original hash" do 
+  it "is backwards compatible with the original hash" do
     expect(resp).to eq(
       {
         table_inputs: [
@@ -30,7 +30,7 @@ RSpec.describe ShowResponse do
       }
     )
   end
-  
+
   it "returns the value at the given key like a ruby hash with get_response" do
     expect(resp.get_response(:badkey)).to eq(nil)
     expect(resp.get_response(:measured_concentration)).to eq(53.2)
@@ -40,7 +40,7 @@ RSpec.describe ShowResponse do
 symbol, string, or integer" do
     expect(resp.get_response("measured_concentration")).to eq(53.2)
   end
-  
+
   it "hides table_inputs and timestamp from the client" do
     expect(resp.get_response(:table_inputs)).to eq(nil)
     expect(resp.get_response(:timestamp)).to eq(nil)
@@ -101,7 +101,7 @@ get_table_response when parameterized with an op or row" do
           { key: "tblrespnskey2", opid: -1, row: 0, value: "one", type: "text" },
           { key: "tblrespnskey2", opid: -2, row: 1, value: "two", type: "text" },
           { key: "tblrespnskey2", opid: -3, row: 2, value: "three", type: "text" },
-        ], 
+        ],
         response1: 'SUPERLONGSTRINGSUPERLONGSTRINGSUPERLONG'\
 'STRINGSUPERLONGSTRINGSUPERLONGSTRING',
         response2: 1412312312312312312312412312312312,
@@ -161,5 +161,5 @@ get_table_response when parameterized with an op or row" do
 
     expect { bigresp.get_table_response(:tblrespnskey, row: 100) }.to (
     raise_error(TableCellUndefined))
-  end  
+  end
 end

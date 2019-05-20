@@ -194,10 +194,10 @@ class Sample < ActiveRecord::Base
 
   # Make a new Item out of this sample, with some object type.
   #
-  # @param object_type_name [String]  describes the object type 
-  #               that will be used to make a new Item  
-  # @return [Item]  an item associated with this sample and in 
-  #               the container described by `object_type_name` 
+  # @param object_type_name [String]  describes the object type
+  #               that will be used to make a new Item
+  # @return [Item]  an item associated with this sample and in
+  #               the container described by `object_type_name`
   #               The location of the item is determined
   #               by the location wizard
   def make_item(object_type_name)

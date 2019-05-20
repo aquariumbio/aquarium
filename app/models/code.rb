@@ -1,6 +1,6 @@
 # Represents a code object for an operation type.
 #
-# 
+#
 class Code < ActiveRecord::Base
   attr_accessible :name, :content, :parent_id, :parent_class, :user_id
 
@@ -18,7 +18,7 @@ class Code < ActiveRecord::Base
       user_id: user.id
     )
     c.save
-  
+
     c
   end
 

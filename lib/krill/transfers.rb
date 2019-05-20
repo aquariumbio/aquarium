@@ -58,7 +58,7 @@ module Krill
 
     end # load_samples
 
-    # Displays a set of pages using the transfer method from show 
+    # Displays a set of pages using the transfer method from show
     # that describe to the user how to transfer individual parts of some
     # quantity of source wells to some quantity of destination wells.
     # Routing is computed automatically.

@@ -12,12 +12,12 @@ RSpec.describe SampleType, type: :model do
       st = SampleType.new name: name, description: 'A test sample type'
       st.save
 
-      expect(st.errors.empty?).to be true        
+      expect(st.errors.empty?).to be true
 
       st = SampleType.new name: name, description: 'A test sample type'
-      st.save   
+      st.save
 
-      expect(st.errors.empty?).to be false         
+      expect(st.errors.empty?).to be false
 
     end
 

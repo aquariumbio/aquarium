@@ -69,7 +69,7 @@ class OperationsController < ApplicationController
     op.save
 
     op.associate(
-      :status_change, 
+      :status_change,
       "Status changed to #{params[:status]} on #{Date.today} by #{current_user.name}",
       nil,
       duplicates: true

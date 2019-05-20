@@ -46,7 +46,7 @@ Bioturk::Application.configure do
     storage: :s3,
     s3_protocol: 'http',
     s3_permissions: 'private',
-    s3_region: 'us-west-1', 
+    s3_region: 'us-west-1',
     s3_credentials: {
       bucket: 'development',
       access_key_id: 'aquarium_minio',

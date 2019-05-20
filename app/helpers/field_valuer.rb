@@ -51,7 +51,7 @@ module FieldValuer
   # Changes a property in the property hash for this object.
   #
   # @param name [String]  the name of property to overwrite
-  # @param val [Object]  the new value of the property 
+  # @param val [Object]  the new value of the property
   def set_property(name, val, role = nil, override_array = false, aft = nil)
 
     ft = field_type name, role
@@ -64,7 +64,7 @@ module FieldValuer
     fvs = field_values.select { |fv| fv.name == name && fv.role == role }
 
     if ft.array && val.class == Array
-      if (val.any? {|v| v.class == Array})
+      if (val.any? { |v| v.class == Array })
         val = val.first
       end
       new_fvs = val.collect do |v|
@@ -145,7 +145,7 @@ module FieldValuer
   end
 
   # Property hash which keeps track of important information.
-  # 
+  #
   # @return [Hash]  hash of property keys and values for this model
   def properties
 

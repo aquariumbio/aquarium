@@ -24,20 +24,20 @@ RSpec.describe Collection, type: :model do
         min: 0,
         max: 1,
         handler: "collection",
-        safety: "No safety information", 
-        cleanup: "No cleanup information", 
-        data: "No data", vendor: "No vendor information", 
+        safety: "No safety information",
+        cleanup: "No cleanup information",
+        data: "No data", vendor: "No vendor information",
         unit: "part",
-        cost: 0.01, 
-        release_method: "return", 
+        cost: 0.01,
+        release_method: "return",
         release_description: "",
         image: "",
         prefix: "",
         rows: 4,
         columns: 6
-      ).save  
+      ).save
     end
-  end  
+  end
 
   context 'associations' do
 
@@ -77,10 +77,10 @@ RSpec.describe Collection, type: :model do
         pa.save
         raise "Collision allowed"
       rescue Exception => e
-        raise "Non collision detected" unless pa.errors.empty?  
+        raise "Non collision detected" unless pa.errors.empty?
       end
-       
-    end  
+
+    end
 
   end
 
@@ -96,12 +96,12 @@ RSpec.describe Collection, type: :model do
 
     # tests new_collection
     #       matrix
-    #       set     
+    #       set
     it 'can set parts' do
       c = example_collection
       c.set 0, 5, test_sample
       raise "Did not set part" unless c.matrix[0][5] == test_sample.id
-      raise "string view #{c.non_empty_string} incorrect" unless c.non_empty_string == "1 - 6"            
+      raise "string view #{c.non_empty_string} incorrect" unless c.non_empty_string == "1 - 6"
     end
 
   end
@@ -115,35 +115,35 @@ RSpec.describe Collection, type: :model do
     it 'finds collections containing a specific sample' do
       c = example_collection
       s = test_sample
-      c.set 0, 5, test_sample      
+      c.set 0, 5, test_sample
       Collection.containing(s).each do |item|
         collection = item.becomes Collection # TODO: Make it so that you don't have to do this
-        raise "Sample should be in collection" unless collection.position(s.id) 
+        raise "Sample should be in collection" unless collection.position(s.id)
         raise "Sample should be in collection" unless collection.position_as_hash(s.id)
       end
-    end    
+    end
 
     # tests parts
     #         => position_as_hash
     #         => find
-    #           => to_sample_id    
+    #           => to_sample_id
     it 'finds parts and their containing collections with a specific sample' do
       c = example_collection
       s = test_sample
-      c.set 0, 5, s      
+      c.set 0, 5, s
       Collection.parts(s).each do |part|
         collection = part[:collection].becomes Collection # TODO: Make it so that you don't have to do this
         pos = collection.position_as_hash(s.id)
         raise "Sample should be in collection in specified slot" unless pos[:row] == part[:row] && pos[:column] = part[:column]
       end
-    end        
+    end
 
   end
 
   context 'setting and getting' do
 
     # tests new_collection
-    #       set     
+    #       set
     #       get_non_empty
     #       get_empty
     #       num_samples
@@ -152,7 +152,7 @@ RSpec.describe Collection, type: :model do
     #       include?
     it 'can set slots to samples' do
       c = example_collection
-      c.set 0, 5, test_sample  
+      c.set 0, 5, test_sample
       c.set 0, 8, Sample.first
       raise "Slots not adding up" unless c.get_empty.length + c.get_non_empty.length == c.capacity
       raise "Non-empty not adding up" unless c.get_non_empty.length == c.num_samples
@@ -180,11 +180,11 @@ RSpec.describe Collection, type: :model do
       c = example_collection
       samples = [Sample.all.sample(12).collect { |s| s.id }]
       c.matrix = samples
-      m = c.matrix  
+      m = c.matrix
       (0..11).each do |i|
         expect(m[0][i]).to eq(samples[0][i])
       end
-    end    
+    end
 
     # tests spread
     #         => add_samples
@@ -205,11 +205,11 @@ RSpec.describe Collection, type: :model do
     #      matrix
     it 'can add and subtract samples' do
       c = example_collection
-      c.set 0, 5, test_sample     
+      c.set 0, 5, test_sample
       s = test_sample
       c.add_one(s)
-      c.add_one(s)  
-      c.subtract_one 
+      c.add_one(s)
+      c.subtract_one
       raise "add_one and subtract_one not adding up" unless c.get_non_empty.length == 2
     end
 
@@ -226,13 +226,13 @@ RSpec.describe Collection, type: :model do
         (0...6).each do |j|
           raise "Next didn't align with #{p} != #{[i, j]}" unless p == [i, j]
 
-          p = c.next(p[0], p[1])          
+          p = c.next(p[0], p[1])
         end
       end
       c.set 1, 1, -1
       raise "skip_non_empty option not working" unless c.next(0, 0, skip_non_empty: true) == [1, 1]
       raise "edge condition didn't work" unless c.next(3, 5) == [nil, nil]
-    end       
+    end
 
   end
 

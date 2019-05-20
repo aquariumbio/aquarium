@@ -18,7 +18,7 @@ class ProtocolTestBase
   end
 
   def add_random_operations(num)
-    @operations = @operation_type.random(num)        
+    @operations = @operation_type.random(num)
   end
 
   def add_operation
@@ -28,7 +28,7 @@ class ProtocolTestBase
     @operations ||= []
     @operations << op
     op
-  end    
+  end
 
   def build_plan
     plans = []
@@ -38,15 +38,15 @@ class ProtocolTestBase
       plans << plan
       pa = PlanAssociation.new(operation_id: op.id, plan_id: plan.id)
       pa.save
-    end        
+    end
   end
 
   def make_job
     @job, newops = @operation_type.schedule( # newops is not used here
-      @operations, 
-      @current_user, 
+      @operations,
+      @current_user,
       Group.find_by_name('technicians')
-    )     
+    )
   end
 
   def execute

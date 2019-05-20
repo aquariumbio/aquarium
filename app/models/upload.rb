@@ -2,7 +2,7 @@
 class Upload < ActiveRecord::Base
 
   attr_accessible :job_id, :upload
-  has_attached_file :upload 
+  has_attached_file :upload
   do_not_validate_attachment_file_type :upload
 
   belongs_to :job

@@ -11,31 +11,30 @@ class UploadsController < ApplicationController
 
     else
 
-      raise ActionController::RoutingError.new('Upload parent type not found')       
+      raise ActionController::RoutingError.new('Upload parent type not found')
 
     end
 
     if das.length > 0 && das[0].upload_id
 
       upload = das[0].upload
- 
 
-      if ["image/jpeg", 
+      if ["image/jpeg",
           "image/tiff",
-          "image/png" ].member? upload.upload_content_type
+          "image/png"].member? upload.upload_content_type
 
-        file = open(upload.url) 
+        file = open(upload.url)
         send_file(file, :filename => upload.upload_file_name, :disposition => "inline")
 
-      else 
+      else
 
-        raise ActionController::RoutingError.new('Upload file type #{upload.upload_content_type} not viewable') 
+        raise ActionController::RoutingError.new('Upload file type #{upload.upload_content_type} not viewable')
 
       end
 
     else
 
-      raise ActionController::RoutingError.new('Upload Not Found') 
+      raise ActionController::RoutingError.new('Upload Not Found')
 
     end
 

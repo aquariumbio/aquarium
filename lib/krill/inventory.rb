@@ -164,7 +164,7 @@ module Krill
 
     end
 
-    # Associate the item with the job running the protocol, until it is released (see {release}). 
+    # Associate the item with the job running the protocol, until it is released (see {release}).
     # It also "touches" the item by the job, so that one can later determine that the item was used by the job.
     #
     # @param items [Array<Items>]  the items that will be associated with this job
