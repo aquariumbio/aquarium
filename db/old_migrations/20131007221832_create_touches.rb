@@ -1,5 +1,3 @@
-
-
 class CreateTouches < ActiveRecord::Migration
   def change
     create_table :touches do |t|

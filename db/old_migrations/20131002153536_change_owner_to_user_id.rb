@@ -1,5 +1,3 @@
-
-
 class ChangeOwnerToUserId < ActiveRecord::Migration
   def change
     remove_column :samples, :owner, :string

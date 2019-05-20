@@ -1,5 +1,3 @@
-
-
 class AddFieldsAndDescriptionToSamples < ActiveRecord::Migration
 
   def change

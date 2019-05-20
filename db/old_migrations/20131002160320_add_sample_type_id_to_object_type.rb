@@ -1,5 +1,3 @@
-
-
 class AddSampleTypeIdToObjectType < ActiveRecord::Migration
   def change
     add_column :object_types, :sample_type_id, :integer

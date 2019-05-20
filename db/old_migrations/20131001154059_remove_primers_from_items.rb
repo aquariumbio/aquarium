@@ -1,5 +1,3 @@
-
-
 class RemovePrimersFromItems < ActiveRecord::Migration
   def up
     remove_column :items, :table

@@ -1,5 +1,3 @@
-
-
 class AlterImageHandlingInObjectType < ActiveRecord::Migration
 
   def change
