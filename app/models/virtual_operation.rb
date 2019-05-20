@@ -1,5 +1,3 @@
-
-
 class VirtualOperation < Operation
 
   def virtual?

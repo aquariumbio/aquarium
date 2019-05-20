@@ -1,5 +1,3 @@
-
-
 module Marshall
 
   def self.user=(u)

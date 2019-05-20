@@ -1,5 +1,3 @@
-
-
 require 'test_helper'
 
 class MetacolsControllerTest < ActionController::TestCase

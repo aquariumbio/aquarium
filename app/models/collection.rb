@@ -1,5 +1,3 @@
-
-
 # A subclass of {Item} that has associated parts via the {PartAssociation} model. Stripwells, 
 # 96 well plates, and gels are examples. Note that you may in some cases be working with an item
 # that is also a {Collection}, which you can tell by checking that item.collection? In this case you
@@ -173,7 +171,7 @@ class Collection < Item
       end
     else
       part = Item.make({ quantity: 1, inuse: 0 }, sample: sample, object_type: part_type)      
-      pa = PartAssociation.new(collection_id: id, part_id: part.id,  row: r, column: c) 
+      pa = PartAssociation.new(collection_id: id, part_id: part.id, row: r, column: c) 
       pa.save
     end
 
@@ -647,7 +645,7 @@ class Collection < Item
         pa = pas[0]
         pa.part_id = part.id
       else
-        pa = PartAssociation.new(collection_id: id, part_id: part.id,  row: r, column: c)
+        pa = PartAssociation.new(collection_id: id, part_id: part.id, row: r, column: c)
       end
       pa.save
     end

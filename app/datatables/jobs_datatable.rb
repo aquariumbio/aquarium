@@ -1,5 +1,3 @@
-
-
 class JobsDatatable < Datatable
 
   private

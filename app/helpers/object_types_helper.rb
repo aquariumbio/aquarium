@@ -1,5 +1,3 @@
-
-
 module ObjectTypesHelper
 
   def make_handler(ot)

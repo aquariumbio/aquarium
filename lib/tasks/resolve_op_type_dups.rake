@@ -1,5 +1,3 @@
-
-
 desc 'Changes duplicate names in OperationTypes'
 task rename_optype_duplicates: [:environment] do
   # Find the categories for all operation types

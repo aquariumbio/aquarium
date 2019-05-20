@@ -129,7 +129,7 @@ Bioturk::Application.routes.draw do
 
   resources :posts, only: %i[index create]
 
-  get 'wizards/contents/:id',               to: 'wizards#contents'
+  get 'wizards/contents/:id', to: 'wizards#contents'
   resources :wizards
 
   get 'item_list', to: 'items#item_list'
@@ -205,7 +205,7 @@ Bioturk::Application.routes.draw do
   get '/signin',      to: 'sessions#new'
   delete '/signout',  to: 'sessions#destroy'
 
-  get '/dismiss',      to: 'static_pages#dismiss'
+  get '/dismiss', to: 'static_pages#dismiss'
 
   get '/static_pages/direct_purchase', to: 'static_pages#direct_purchase'
 

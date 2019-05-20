@@ -1,5 +1,3 @@
-
-
 require_relative 'testlib'
 
 n = 1000

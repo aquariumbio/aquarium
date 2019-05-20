@@ -1,5 +1,3 @@
-
-
 # @api krill
 class Locator < ActiveRecord::Base
 

@@ -1,5 +1,3 @@
-
-
 class SamplesController < ApplicationController
 
   before_filter :signed_in_user

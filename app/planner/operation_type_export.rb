@@ -1,5 +1,3 @@
-
-
 module OperationTypeExport
 
   def nl

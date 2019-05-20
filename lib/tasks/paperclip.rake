@@ -1,5 +1,3 @@
-
-
 namespace :paperclip do
 
   desc 'Upgrade to S3'

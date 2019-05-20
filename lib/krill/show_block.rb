@@ -1,5 +1,3 @@
-
-
 module Krill
 
   # The ShowBlock class implements the methods inside show blocks, which are used to interact with the technician. When

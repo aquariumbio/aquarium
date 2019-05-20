@@ -1,5 +1,3 @@
-
-
 namespace :technician do
 
   desc 'Submit jobs so that they can be tested with the technician interface'

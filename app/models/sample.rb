@@ -1,5 +1,3 @@
-
-
 # A named, biologically unique definition for an instance of a {SampleType}, such as a specific Primer, Fragment, Plasmid, or Yeast Strain
 # A Sample has many {Item}s in inventory
 # @api krill

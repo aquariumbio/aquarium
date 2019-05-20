@@ -1,5 +1,3 @@
-
-
 module JobOperations # included in Job model
 
   def set_op_status(str, force = false)

@@ -1,5 +1,3 @@
-
-
 #
 # SV := {
 #   field_name: CONSTRAINTS | SV

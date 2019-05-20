@@ -1,5 +1,3 @@
-
-
 class Invoice < ActiveRecord::Base
 
   attr_accessible :budget_id, :month, :user_id, :year, :status, :notes

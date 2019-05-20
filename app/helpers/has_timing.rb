@@ -1,5 +1,3 @@
-
-
 module HasTiming
 
   def timing

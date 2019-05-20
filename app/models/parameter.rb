@@ -1,5 +1,3 @@
-
-
 # @api krill
 class Parameter < ActiveRecord::Base
 

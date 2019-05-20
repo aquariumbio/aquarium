@@ -1,5 +1,3 @@
-
-
 class PlanCopier
 
   def initialize(plan_id)

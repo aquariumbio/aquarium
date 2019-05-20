@@ -1,5 +1,3 @@
-
-
 require 'test_helper'
 
 class ObjectTypeTest < ActiveSupport::TestCase

@@ -1,5 +1,3 @@
-
-
 class LogsDatatable < Datatable
 
   private

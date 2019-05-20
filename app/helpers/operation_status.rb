@@ -1,5 +1,3 @@
-
-
 # Module that includes status-related methods for {Operation}
 
 module OperationStatus

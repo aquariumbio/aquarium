@@ -1,5 +1,3 @@
-
-
 class PlanOptimizer
 
   def initialize(plan)

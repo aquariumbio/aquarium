@@ -58,7 +58,7 @@ module Serialize
   end
 
   def self.get_aft_for fv, afts
-    aft_list = afts.select { |aft| aft.id == fv["allowable_field_type_id"]  }
+    aft_list = afts.select { |aft| aft.id == fv["allowable_field_type_id"] }
     if aft_list.length > 0 
       aft_list[0]
     else 

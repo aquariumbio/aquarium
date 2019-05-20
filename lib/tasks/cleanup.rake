@@ -1,5 +1,3 @@
-
-
 namespace :cleanup do
 
   desc 'Clean up various things in ways that are hard to do with the UI'

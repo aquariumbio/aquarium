@@ -1,5 +1,3 @@
-
-
 namespace :rates do
 
   desc 'Summarize Costs'

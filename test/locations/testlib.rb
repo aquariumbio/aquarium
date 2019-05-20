@@ -1,5 +1,3 @@
-
-
 require 'securerandom'
 
 def pass

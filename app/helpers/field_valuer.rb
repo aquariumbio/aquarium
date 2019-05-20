@@ -1,5 +1,3 @@
-
-
 # @api krill
 module FieldValuer
 

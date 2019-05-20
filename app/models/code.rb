@@ -1,5 +1,3 @@
-
-
 # Represents a code object for an operation type.
 #
 # 

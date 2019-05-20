@@ -1,5 +1,3 @@
-
-
 require 'test_helper'
 
 class OperationControllerTest < ActionController::TestCase

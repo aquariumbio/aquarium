@@ -1,5 +1,3 @@
-
-
 namespace :mine do
 
   desc 'Mine data for learning'

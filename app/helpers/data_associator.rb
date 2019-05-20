@@ -1,5 +1,3 @@
-
-
 # Associates and manages {DataAssociation}s
 # @api krill
 

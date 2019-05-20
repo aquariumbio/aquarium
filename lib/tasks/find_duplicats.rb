@@ -1,5 +1,3 @@
-
-
 dups = []
 
 ObjectType.all.each do |a|

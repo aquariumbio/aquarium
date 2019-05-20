@@ -1,5 +1,3 @@
-
-
 class SamplesDatatable < Datatable
 
   private

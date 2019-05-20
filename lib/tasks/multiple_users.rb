@@ -1,5 +1,3 @@
-
-
 names = [
   %w[Borgman Joshua],
   %w[Chavali Venkata],

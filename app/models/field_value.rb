@@ -1,4 +1,3 @@
-
 # Simply put: a representation of an input, output, or parameter of an Operation.
 #
 # In more detail: an Item, Sample, or parameter of the inputs/outputs of an {Operation} or of the properties of a {Sample}
@@ -21,7 +20,6 @@ class FieldValue < ActiveRecord::Base
   #
   # @return [FieldType]  the parent {FieldType}
   belongs_to :field_type
-
 
   # Gets name of FieldValue. Will be the same as the name of the Parent {FieldType}.
   #

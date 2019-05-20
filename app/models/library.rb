@@ -1,5 +1,3 @@
-
-
 class Library < ActiveRecord::Base
 
   include CodeHelper

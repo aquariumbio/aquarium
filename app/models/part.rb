@@ -1,5 +1,3 @@
-
-
 class Part
 
   attr_accessor :collection, :x, :y

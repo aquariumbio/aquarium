@@ -1,5 +1,3 @@
-
-
 module IOList
 
   def items

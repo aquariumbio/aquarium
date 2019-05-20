@@ -1,5 +1,3 @@
-
-
 class Timing < ActiveRecord::Base
 
   attr_accessible :parent_class, :parent_id, :start, :stop, :days, :active

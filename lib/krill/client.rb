@@ -1,5 +1,3 @@
-
-
 require 'socket'
 
 module Krill

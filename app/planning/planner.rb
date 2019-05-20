@@ -1,5 +1,3 @@
-
-
 class Planner
 
   attr_accessor :errors

@@ -1,5 +1,3 @@
-
-
 module Paperclip
   class MediaTypeSpoofDetector
     def spoofed?

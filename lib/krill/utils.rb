@@ -1,5 +1,3 @@
-
-
 module Krill
 
   class ProtocolHandler

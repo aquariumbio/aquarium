@@ -1,5 +1,3 @@
-
-
 class SearchController < ApplicationController
 
   before_filter :signed_in_user

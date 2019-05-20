@@ -1,5 +1,3 @@
-
-
 module OperationTypePlanner
 
   def instantiate(output, desired_value)

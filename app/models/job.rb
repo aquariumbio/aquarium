@@ -1,5 +1,3 @@
-
-
 # Defines a batch of executable {Operation}s of the same type that can be run together.
 # Jobs are executed with the `protocol` of the {OperationType}. Protocols must handle being able to 
 # run Jobs with varying amounts of Operations.

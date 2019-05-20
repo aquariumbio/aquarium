@@ -1,5 +1,3 @@
-
-
 class Array
 
   def conjoin(&block)

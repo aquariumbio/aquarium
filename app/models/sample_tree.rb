@@ -1,5 +1,3 @@
-
-
 class SampleTree
 
   def initialize(sid)

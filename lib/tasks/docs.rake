@@ -1,5 +1,3 @@
-
-
 namespace :docs do
 
   desc 'Generate publicly accessible documentation'

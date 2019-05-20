@@ -1,4 +1,3 @@
-
 module OperationTypeRandom
 
   def routes

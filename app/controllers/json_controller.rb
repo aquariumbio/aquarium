@@ -61,7 +61,6 @@ class JsonController < ApplicationController
     end
 
     render json: u.as_json(methods: :url)
-
   rescue StandardError => e
     logger.error("Error in upload: #{e.to_s}")
     render json: { errors: e.to_s }, status: :internal_server_error

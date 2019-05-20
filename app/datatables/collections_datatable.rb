@@ -1,5 +1,3 @@
-
-
 class CollectionsDatatable < Datatable
 
   private

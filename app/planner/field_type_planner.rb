@@ -1,5 +1,3 @@
-
-
 module FieldTypePlanner
 
   def can_produce(fv)

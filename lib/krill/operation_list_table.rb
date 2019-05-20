@@ -1,4 +1,3 @@
-
 # @api krill
 module Krill
 

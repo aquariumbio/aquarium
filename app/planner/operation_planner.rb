@@ -1,5 +1,3 @@
-
-
 module OperationPlanner
 
   def associate_plan(plan)

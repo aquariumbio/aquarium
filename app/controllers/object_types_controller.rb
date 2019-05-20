@@ -1,4 +1,3 @@
-
 class ObjectTypesController < ApplicationController
 
   helper ObjectTypesHelper

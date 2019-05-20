@@ -1,6 +1,3 @@
-
-
-
 class AllowableFieldType < ActiveRecord::Base
 
   attr_accessible :sample_type_id, :object_type_id, :field_type_id

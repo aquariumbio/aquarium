@@ -1,5 +1,3 @@
-
-
 class User < ActiveRecord::Base
 
   include Budgeting

@@ -1,5 +1,3 @@
-
-
 class Wizard < ActiveRecord::Base
 
   attr_accessible :name, :specification, :description

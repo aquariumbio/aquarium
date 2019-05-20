@@ -1,5 +1,3 @@
-
-
 class Plan < ActiveRecord::Base
 
   include DataAssociator

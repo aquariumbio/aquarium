@@ -1,5 +1,3 @@
-
-
 class Wire < ActiveRecord::Base
 
   attr_accessible :from_id, :to_id, :active

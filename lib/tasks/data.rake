@@ -1,5 +1,3 @@
-
-
 namespace :data do
 
   desc 'Upgrade data json fields to DataAssociations'

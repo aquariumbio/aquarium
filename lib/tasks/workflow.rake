@@ -1,5 +1,3 @@
-
-
 namespace :workflow do
 
   desc 'Setup Workflow'

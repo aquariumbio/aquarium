@@ -1,5 +1,3 @@
-
-
 class Budget < ActiveRecord::Base
 
   has_many :user_budget_associations, dependent: :destroy

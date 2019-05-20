@@ -1,5 +1,3 @@
-
-
 module FieldValuePlanner
 
   extend ActiveSupport::Concern
