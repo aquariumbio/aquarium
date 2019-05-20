@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AqResponse < Hash
 
   def self.ok(extras = {})

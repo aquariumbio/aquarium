@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LibrariesController < ApplicationController
 
   before_filter :signed_in_user

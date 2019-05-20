@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FinderController < ApplicationController
 
   before_filter :signed_in_user
@@ -33,8 +35,11 @@ class FinderController < ApplicationController
 
   def samples
     spec = JSON.parse(params[:spec], symbolize_names: true)
-    s = Sample.joins(:sample_type).where(project: spec[:project], sample_types: { name: spec[:type] })
-    render json: (s.collect { |s| { id: s.id, name: s.name } }).uniq.sort { |a, b| a[:name] <=> b[:name] }
+    sample_list = Sample.joins(:sample_type).where(
+      project: spec[:project],
+      sample_types: { name: spec[:type] }
+    )
+    render json: (sample_list.collect { |s| { id: s.id, name: s.name } }).uniq.sort { |a, b| a[:name] <=> b[:name] }
   end
 
   def containers
