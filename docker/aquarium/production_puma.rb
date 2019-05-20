@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'bundler/setup'
 
 # https://gist.github.com/andrius/7c26a8deef10f3105a136f958b0d582d
