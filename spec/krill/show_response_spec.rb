@@ -44,10 +44,11 @@ symbol, string, or integer" do
     expect(resp.get_response(:timestamp)).to eq(nil)
   end
 
-  #    it "returns a ruby hash representing the data with responses" do
-  #      expect(resp.responses()).to (
-  #      eq({measured_concentration: 53.2, tblrespnskey: [2, 1], ups: [Upload.find(1), Upload.find(2)]}) )
-  #    end
+  it "returns a ruby hash representing the data with responses" do
+    expect(resp.responses).to (
+    eq(measured_concentration: 53.2, tblrespnskey: [2, 1]))
+    # eq(measured_concentration: 53.2, tblrespnskey: [2, 1], ups: [Upload.find(1), Upload.find(2)]))
+  end
 
   it "returns the timestamp of the showblock with timestamp()" do
     expect(resp.timestamp).to eq(123456789)
