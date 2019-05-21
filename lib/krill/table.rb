@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Krill
 
   # @api krill
@@ -54,7 +56,7 @@ module Krill
     #
     # @param [symbol] name The name of the column
     # @param [object] value Value to set
-    def set name, value
+    def set(name, value)
       @selection[name] = value
       self
     end
@@ -127,7 +129,7 @@ module Krill
     #
     # @param name [String]  the heading of this column
     # @param values [Array]  the values of the cells of this column
-    def add_column name, values
+    def add_column(name, values)
       column(name.to_sym, name)
       values.each_with_index do |v, i|
         @rows[i] ||= {}

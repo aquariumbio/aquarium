@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @api krill
 module FieldValueKrill
 
@@ -75,15 +77,13 @@ module FieldValueKrill
   end
 
   def make_part(collection, r, c)
+    return unless collection
 
-    if collection
-      collection.set r, c, child_sample
-      self.child_item_id = collection.id
-      self.row = r
-      self.column = c
-      save
-    end
-
+    collection.set r, c, child_sample
+    self.child_item_id = collection.id
+    self.row = r
+    self.column = c
+    save
   end
 
   def info

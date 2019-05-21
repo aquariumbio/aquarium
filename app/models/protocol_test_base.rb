@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProtocolTestBase
 
   include MiniTest::Assertions
@@ -12,7 +14,7 @@ class ProtocolTestBase
     @job = nil
   end
 
-  def log msg
+  def log(msg)
     @logs ||= []
     @logs << msg
   end
