@@ -304,7 +304,7 @@ class Item < ActiveRecord::Base
   # Returns the parent Collection of this item, if it is a part. Otherwise, returns nil
   # @return [Collection]
   def containing_collection
-    pas = PartAssociation.where(part_id: self.id)
+    pas = PartAssociation.where(part_id: id)
     pas[0].collection if pas.length == 1
   end
 

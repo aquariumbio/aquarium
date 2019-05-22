@@ -34,7 +34,7 @@ module Serialize
 
     wires = Wire.where('from_id in (?) OR to_id in (?)', fids, fids)
 
-    field_values = self.complete_field_values(field_values, field_types)
+    field_values = complete_field_values(field_values, field_types)
 
     sops = ops.as_json
 

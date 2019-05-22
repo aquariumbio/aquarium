@@ -7,7 +7,7 @@ module Krill
     # Appends a column to an OperationsList table which accepts user input. Used in conjunction with show_with_input_table.
     # Consider using `get` instead, unless you have a specific reason to use this method
     def custom_input(key, opts = { heading: "Custom Input", checkable: false, type: "string", style_block: nil })
-      self.each.with_index do |op, i|
+      each.with_index do |op, i|
         op.temporary[:uid] = i
       end
       temp_op = first
@@ -80,7 +80,7 @@ module Krill
     #     .validate(:some_key) { |op, inputted_value| inputted_value.between?(1,10) }
     #     .end_Table
     def validate(key, &validation_block)
-      self.each do |op|
+      each do |op|
         validation = op.temporary[:validation] || {}
         validation[key] = validation_block
         op.temporary[:validation] = validation
@@ -100,7 +100,7 @@ module Krill
     #       }
     #     .end_Table
     def validation_message(key, &message_block)
-      self.each do |op|
+      each do |op|
         message_hash = op.temporary[:validation_messages] || {}
         message_hash[key] = message_block
         op.temporary[:validation_messages] = message_hash

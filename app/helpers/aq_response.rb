@@ -18,7 +18,7 @@ class AqResponse < Hash
 
   def ok(extras = {})
     self[:result] = "ok"
-    self.merge! extras
+    merge! extras
     self
   end
 
@@ -30,7 +30,7 @@ class AqResponse < Hash
   end
 
   def more(stuff)
-    self.merge! stuff
+    merge! stuff
     self
   end
 

@@ -189,7 +189,7 @@ class Collection < Item
 
     das = DataAssociation.where(parent_class: "Item", parent_id: part_ids, key: key)
 
-    r, c = self.dimensions
+    r, c = dimensions
     m = Array.new(r) { Array.new(c) }
 
     pas.each do |pa|
@@ -219,7 +219,7 @@ class Collection < Item
   # Retrive a matrix of all parts. If no part is present for a given row and column, that entry will be nil
   # @return [Array] an array of arrays of {Item}s -- dimensions match collection's dimensions
   def part_matrix
-    r, c = self.dimensions
+    r, c = dimensions
     m = Array.new(r) { Array.new(c) }
 
     PartAssociation
@@ -732,7 +732,7 @@ class Collection < Item
     if @matrix_cache
       @matrix_cache
     else
-      r, c = self.dimensions
+      r, c = dimensions
       m = Array.new(r) { Array.new(c, EMPTY) }
       PartAssociation.includes(:part).where(collection_id: id).each do |pa|
         m[pa.row][pa.column] = pa.part.sample_id if pa.row < r && pa.column < c && pa.part.sample_id
@@ -810,15 +810,15 @@ class Collection < Item
   # @private
   def migrate
     return if datum[:_migrated_]
-    return unless self.data
+    return unless data
 
-    tempdata = JSON.parse(self.data, symbolize_names: true)
+    tempdata = JSON.parse(data, symbolize_names: true)
     return unless tempdata[:matrix]
 
     self.matrix = tempdata[:matrix]
     tempdata.delete :matrix
     tempdata[:_migrated_] = Date.today
-    self.set_data tempdata
+    set_data tempdata
   end
 
 end
