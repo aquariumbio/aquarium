@@ -71,11 +71,11 @@ class Collection < Item
     index = 0
 
     each_row_col(matrix, offset: offset) do |x, y, ox, oy|
-      unless pm[ox][oy]
-        pas << PartAssociation.new(collection_id: id, part_id: parts[index].id, row: ox, column: oy)
-        das << parts[index].lazy_associate(key, matrix[x][y])
-        index += 1
-      end
+      next if pm[ox][oy]
+
+      pas << PartAssociation.new(collection_id: id, part_id: parts[index].id, row: ox, column: oy)
+      das << parts[index].lazy_associate(key, matrix[x][y])
+      index += 1
     end
 
     PartAssociation.import pas unless pas.empty?
@@ -274,22 +274,20 @@ class Collection < Item
 
       pas = PartAssociation.includes(:part).where(collection_id: id, row: r, column: c)
 
-      unless pas.empty?
+      next if pas.empty?
 
-        pas[0].part.mark_as_deleted
-        pas[0].destroy
+      pas[0].part.mark_as_deleted
+      pas[0].destroy
 
-        associate(
-          :"Part Deleted",
-          "The sample at #{r}, #{c} was deleted. " \
-          "It used to be sample #{pas[0].part.sample_id} via deleted part #{pas[0].part.id}.",
-          nil,
-          duplicates: true
-        )
+      associate(
+        :"Part Deleted",
+        "The sample at #{r}, #{c} was deleted. " \
+        "It used to be sample #{pas[0].part.sample_id} via deleted part #{pas[0].part.id}.",
+        nil,
+        duplicates: true
+      )
 
-        puts "DONE!!!!!!!!!!!"
-
-      end
+      puts "DONE!!!!!!!!!!!"
 
     end
 
