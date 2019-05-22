@@ -71,7 +71,7 @@ class Collection < Item
     index = 0
 
     each_row_col(matrix, offset: offset) do |x, y, ox, oy|
-      if !pm[ox][oy]
+      unless pm[ox][oy]
         pas << PartAssociation.new(collection_id: id, part_id: parts[index].id, row: ox, column: oy)
         das << parts[index].lazy_associate(key, matrix[x][y])
         index += 1
@@ -158,7 +158,7 @@ class Collection < Item
     pa = part_association(r, c)
 
     if pa
-      if !pa.part_id
+      unless pa.part_id
         part = Item.make({ quantity: 1, inuse: 0 }, sample: sample, object_type: part_type)
         pa.part_id = part.id
         pa.save
@@ -281,7 +281,7 @@ class Collection < Item
 
         associate(
           :"Part Deleted",
-          "The sample at #{r}, #{c} was deleted. " +
+          "The sample at #{r}, #{c} was deleted. " \
           "It used to be sample #{pas[0].part.sample_id} via deleted part #{pas[0].part.id}.",
           nil,
           duplicates: true
@@ -489,7 +489,7 @@ class Collection < Item
     end
     return x.id if x.is_a?(Sample)
     return x.split(':')[0].to_i if x.is_a?(String)
-    return EMPTY if !x
+    return EMPTY unless x
 
     raise "The third argument to Collection.set should be an item, a sample, or a sample id, but it was '#{x}' which is a #{x.class}"
   end

@@ -86,7 +86,7 @@ namespace :collections do
     end
 
     orphan_ids = Item.where(object_type_id: orphan_type.id).map(&:id)
-    if !orphan_ids.empty?
+    unless orphan_ids.empty?
       puts "\nThe following collections were not migrated due to errors"
       puts orphan_ids.join(", ")
     end
