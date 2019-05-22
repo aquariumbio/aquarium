@@ -10,7 +10,7 @@ RSpec.describe ShowResponse do
   resp = ShowResponse.new(
     table_inputs: [
       { key: 'tblrespnskey', opid: 3075, row: 0, value: '2', type: 'number' },
-      { key: 'tblrespnskey', opid: 3076, row: 1, value: '1', type: 'number' },
+      { key: 'tblrespnskey', opid: 3076, row: 1, value: '1', type: 'number' }
     ],
     timestamp: 123456789,
     measured_concentration: 53.2
@@ -21,7 +21,7 @@ RSpec.describe ShowResponse do
     expect(resp).to eq(
       table_inputs: [
         { key: 'tblrespnskey', opid: 3075, row: 0, value: '2', type: 'number' },
-        { key: 'tblrespnskey', opid: 3076, row: 1, value: '1', type: 'number' },
+        { key: 'tblrespnskey', opid: 3076, row: 1, value: '1', type: 'number' }
       ],
       timestamp: 123456789,
       measured_concentration: 53.2
@@ -94,7 +94,7 @@ get_table_response when parameterized with an op or row" do
         { key: 'tblrespnskey2', opid: -6, row: 5, value: 'six', type: 'text' },
         { key: 'tblrespnskey2', opid: -1, row: 0, value: 'one', type: 'text' },
         { key: 'tblrespnskey2', opid: -2, row: 1, value: 'two', type: 'text' },
-        { key: 'tblrespnskey2', opid: -3, row: 2, value: 'three', type: 'text' },
+        { key: 'tblrespnskey2', opid: -3, row: 2, value: 'three', type: 'text' }
       ],
       response1: 'SUPERLONGSTRINGSUPERLONGSTRINGSUPERLONG'\
                  'STRINGSUPERLONGSTRINGSUPERLONGSTRING',
