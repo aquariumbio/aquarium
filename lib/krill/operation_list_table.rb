@@ -123,7 +123,7 @@ module Krill
     # @option checkable [Bool] Column cells can be clicked
     def custom_column(opts = { heading: "Custom Column", checkable: false }, &block)
       entries = running.collect(&block).collect do |x|
-        opts[:checkable] ? ({ content: x, check: true }) : x
+        opts[:checkable] ? { content: x, check: true } : x
       end
       @table.add_column(opts[:heading], entries)
 
