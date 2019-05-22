@@ -14,7 +14,7 @@ class PublishController < ApplicationController
 
     github_user = params[:organization] || params[:user]
 
-    if !params[:repo] || params[:repo].length == 0
+    if params[:repo].blank?
       resp.error("A Github repository name must contain at least one character.")
     else
       begin

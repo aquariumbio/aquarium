@@ -403,8 +403,8 @@ class OperationTypesController < ApplicationController
               issues = Library.import(x, current_user) if libs.length <= 1
             elsif params[:options][:resolution_method] == 'skip'
               libs = Library.where(name: x[:library][:name], category: x[:library][:category])
-              issues = Library.import(x, current_user) if libs.length == 0
-              notes << "Skipping Library #{x[:library][:name]} because a library by the same name already exists." if libs.length > 0
+              issues = Library.import(x, current_user) if libs.empty?
+              notes << "Skipping Library #{x[:library][:name]} because a library by the same name already exists." unless libs.empty?
             else
               raise "Unknown option '#{params[:options][:resolution_method]}' for resolution method"
             end
@@ -430,8 +430,8 @@ class OperationTypesController < ApplicationController
               issues = OperationType.import(x, current_user) if ots.length <= 1
             elsif params[:options][:resolution_method] == 'skip'
               ots = OperationType.where(name: x[:operation_type][:name], category: x[:operation_type][:category])
-              issues = OperationType.import(x, current_user) if ots.length == 0
-              notes << "Skipping OperationType #{x[:operation_type][:name]} because a type by the same name already exists." if ots.length > 0
+              issues = OperationType.import(x, current_user) if ots.empty?
+              notes << "Skipping OperationType #{x[:operation_type][:name]} because a type by the same name already exists." unless ots.empty?
             else
               raise "Unknown option '#{params[:options][:resolution_method]}' for resolution method"
             end
