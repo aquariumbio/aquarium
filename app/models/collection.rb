@@ -98,7 +98,7 @@ class Collection < Item
     dm = data_matrix(key)
     dm.each do |row|
       vals = row.collect { |e| e ? e.value : '-' }
-      puts "#{vals.join(', ')}"
+      puts vals.join(', ').to_s
     end
   end
 
